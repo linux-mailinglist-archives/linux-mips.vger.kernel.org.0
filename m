@@ -1,88 +1,295 @@
-Return-Path: <linux-mips+bounces-6813-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6814-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DCDE39DF0A0
-	for <lists+linux-mips@lfdr.de>; Sat, 30 Nov 2024 14:51:56 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E9409DF792
+	for <lists+linux-mips@lfdr.de>; Mon,  2 Dec 2024 02:09:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 14B42B20F0A
-	for <lists+linux-mips@lfdr.de>; Sat, 30 Nov 2024 13:51:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1BAC6B211B2
+	for <lists+linux-mips@lfdr.de>; Mon,  2 Dec 2024 01:09:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6688115530F;
-	Sat, 30 Nov 2024 13:51:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2708BF9DF;
+	Mon,  2 Dec 2024 01:09:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CRM4Pa6b"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kagcWz/x"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B993717741
-	for <linux-mips@vger.kernel.org>; Sat, 30 Nov 2024 13:51:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C63496FC3;
+	Mon,  2 Dec 2024 01:09:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1732974711; cv=none; b=ks/oRYAW1JuQcl93pQkV4y3qxjeRoYvMIzmpEv4a+jHtbwDSyXrdxI5RBbCI+ej4Qjwu/mS3TOUcJEsoLzyWYzjTYyWpR3wl4wH9nEaWdoEm1xLqoWCWAMy36pmtV5T6Fl9HO1qaj2hUWxHYRcXmH2iJGTmh3jL+ss/WlxrXdEA=
+	t=1733101770; cv=none; b=HIVND58gtmVE7Fco2nPQYSpioBT/neI2CTm3p084q8UFexEU2IYsFl87rGnVj8E4wEmPA67mOWSO4vl6EBs0TacvRnXYu8u6eiv+38YFdtpJoEsMy46Y0h7IR6aAlT1q/XySbUxjdo1/oOVrM+Bhm9LX4SSBVUwRVb5Cwj7o2cM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1732974711; c=relaxed/simple;
-	bh=nJGKyEgPdi0L2YjlTyrwVPUPWWXHUL2Ap8gDBc6cWms=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=bNgGu47/IAlGRkWGmUlCKRxTlyBn2hIKJXDapfK9/MVCOQeoaQOGFY6PL+/sr7fS9QZvoKoNn9Q8JnebKcG9z15LArsGG0NGtUlMCRDxRkHcyH3d9AJoAB3kurKBlAzFFopFXwY5VzV0F1zwhImGAr5fY7dV+5eXuamEId2x8C0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CRM4Pa6b; arc=none smtp.client-ip=209.85.208.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5d071f70b51so3516614a12.3
-        for <linux-mips@vger.kernel.org>; Sat, 30 Nov 2024 05:51:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1732974707; x=1733579507; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=nJGKyEgPdi0L2YjlTyrwVPUPWWXHUL2Ap8gDBc6cWms=;
-        b=CRM4Pa6bzF3hiQTgL5gKHwWUzKr34rJyRaSF7OJlBEBXKkVPvcKQXkXho0BXUwVfR6
-         oRVI2wzA71qe5BntzxBu1v6xYnTX/GZwKnQs7iHSEvqNhGRdz4dBw3BQ/7gd8xezdVAY
-         1B3/Y2Nx8jNM6mbGbxRJGwqSqCH1iJTdT7KdJTWCiq5fNNWP4j77U1qwCxrndAXKetxq
-         yym26AC7w6JM2oZm0hIlKkfHsz2ibFlLwPxBmV/ULKqWY8oXQwLoEZrHddo+6ooRsU05
-         OcMjCJl4vUKuIwdKSOFbURiFn02ovEhhQS71iG0s5AzRbTB3YUQnMl+6BJjQymQI4644
-         pcFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1732974707; x=1733579507;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=nJGKyEgPdi0L2YjlTyrwVPUPWWXHUL2Ap8gDBc6cWms=;
-        b=s3FrRMM6T9QZrkITh4Orxb2HTfHu2Aj1HrTVPOMAuCv9l40rpsGftCMcIEZr0M3A8m
-         yO5P/Nx1VL79h2XruSUTtOvGx1mZZFQGltPBi7IXx7zfVfVvC8rlm6N4r73It62accuQ
-         nuaSvcyZE42zOrjvQorq910PYHIiynf2ejXBxYSjBOvVBfa3wN2soUTva5RSdxmbQXJd
-         TiHQJR0BufEkmZEBqm+3cJvN17i9ZfyxIQyYOiLVgmrPqPG8iavOpLhhzzd+yvhDB8Er
-         6sRoUefFDEoqCmoBHbWY6fd102hqP6bjk726iDyw2EaazjXRHyDjvxUmytIFq36z7KeQ
-         BlYQ==
-X-Gm-Message-State: AOJu0YwtyEjjcEt72gqhmfS+Rg+A8g3qGLAjjPGUdyx/DXtq0jXo0Uk8
-	Sn+01zIBAwQZXxw3gKH9/uWHyX/wu3eIrbznAJiidPoh3mzsNUyXSRd8NsIQASdSLxWLVFURuNC
-	C3saNZX8MiHxU0Y8J/+1GMZHWRDM1Cbqo
-X-Gm-Gg: ASbGncvgrGljbn6mcavjJUD4BTCtEI8tHcNx294KF4jwP3Tc/ZtVfeoNsnzTWTfWP5M
-	NKZuAjZWZEPh9oarRuKJgjOS4c7d6vhUXEUa9CxRvDiYj5XjM5p/ToPmbZvY+cXlt
-X-Google-Smtp-Source: AGHT+IEOg9e8YRj5InmbN3ytzmKt8Gya8EE0oRhh36ZghBOkQf8tu0JnzcWPsvs2abm1kJij8rhx3rC3cOPmzKcePxI=
-X-Received: by 2002:a05:6402:27ca:b0:5d0:d5ba:57a2 with SMTP id
- 4fb4d7f45d1cf-5d0d5ba5e52mr183307a12.27.1732974707287; Sat, 30 Nov 2024
- 05:51:47 -0800 (PST)
+	s=arc-20240116; t=1733101770; c=relaxed/simple;
+	bh=12FcUtzxv5+whb5AQMtarw/zUncx3kLD/s7M8+WySlU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sPxosdL53YiODwiPnhPLcllGJ96rOVdCFjtohA7BZPBVA8SnV89rIcgyg+zEP4eu3iI0acN15xUy3Gnvh3vs54SbyQSA0IiDcNIJ/eEMbaFjL4msxDriaY1P7r8WWYjgzKxfR4n1wMqvd7IOIOkCzYoQ+3guXfMyjhemi0Q6IMY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kagcWz/x; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA984C4CECF;
+	Mon,  2 Dec 2024 01:09:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1733101769;
+	bh=12FcUtzxv5+whb5AQMtarw/zUncx3kLD/s7M8+WySlU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=kagcWz/xzzlX/ayo79ogwuKKR7S86e7FtER7xpn/1bqLLV/ldaW4GY2LRRrSjTYjF
+	 lk413CBdu4OdDDYqIHmkGrV1ltsl6w2KyMccUtpiEvmPNFhcdELStrOTuskQTakw3u
+	 fAOkyrfWGIX9v81yjQgmy6EKlh0fWwHquvq2PYxE97o/gNG3BVhZioVGxJgMDpfAt+
+	 RmqhlKfzWf6e4yBMNRec599PXv+LKbN/vZmIp07Yu/Pa10ydeRbIck/TtwaZgRwgFQ
+	 YFMXzkOvuNV6Ly6p0VesFm4+r9lMPK3xbQJoo2ylT+uhm9H+C7+VoCm5GsXOd8N0G0
+	 XBKmD3iqcF35w==
+From: Eric Biggers <ebiggers@kernel.org>
+To: linux-kernel@vger.kernel.org
+Cc: linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-crypto@vger.kernel.org,
+	linux-ext4@vger.kernel.org,
+	linux-f2fs-devel@lists.sourceforge.net,
+	linux-mips@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org,
+	x86@kernel.org
+Subject: [PATCH v4 00/19] Wire up CRC32 library functions to arch-optimized code
+Date: Sun,  1 Dec 2024 17:08:25 -0800
+Message-ID: <20241202010844.144356-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: DiTBho Down in The Bunny hole <downinthebunnyhole@gmail.com>
-Date: Sat, 30 Nov 2024 14:51:37 +0100
-Message-ID: <CAAZ8i81Q2WZpxqQdrVhsCBfFh7yVzD59QK0YTzQ=kcRNp1GNEQ@mail.gmail.com>
-Subject: SGI IP32, O2-R10K, support status?
-To: linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-hi
-The SGI O2 platform is a system known to have problems with DMA due to
-its "non-cache-coherent" nature.
+This patchset applies to v6.13-rc1 and is also available in git via:
 
-What state is the Linux kernel in?
-Any patch? Already upstream?
-Anyone working on this?
+    git fetch https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git crc32-lib-v4
 
-Please let me know.
+CRC32 is a family of common non-cryptographic integrity check algorithms
+that are fairly fast with a portable C implementation and become far
+faster still with the CRC32 or carryless multiplication instructions
+that most CPUs have.  9 architectures already have optimized code for at
+least some CRC32 variants; however, except for arm64 this optimized code
+was only accessible through the crypto API, not the library functions.
+
+This patchset fixes that so that the CRC32 library functions use the
+optimized code.  This allows users to just use the library instead of
+the crypto API.  This is much simpler and also improves performance due
+to eliminating the crypto API overhead including an indirect call.  Some
+examples of updating users are included at the end of the patchset.
+
+Note: crc32c() was a weird case.  It was a library function layered on
+top of the crypto API, which in turn is layered on top of the real
+library functions.  So while it was easy to use, it was still subject to
+the crypto API overhead.  This patchset provides CRC32C acceleration in
+the real library functions directly.
+
+The updated CRC32 library design is:
+
+- Each arch's CRC32 code (all variants) is in arch/$ARCH/lib/crc32*.
+  This adopts what arm64 and riscv already did.  Note, the crypto
+  directory is not used because CRC32 is not a cryptographic algorithm.
+
+- Weak symbols are no longer used.  Instead there are crc32*_base() and
+  crc32*_arch(), and the appropriate ones are called based on the
+  kconfig.  This is similar to how the ChaCha20 library code works.
+
+- Each arch's CRC32 library code is enabled by default when CRC32 is
+  enabled, but it can now be disabled, controlled by the choice that
+  previously controlled the base implementation only.  It can also now
+  be built as a module if CRC32 is a module too, in which case it will
+  be automatically loaded via direct symbol dependency when appropriate.
+
+- Instead of lots of pointless glue code that wires up each CRC32
+  variant to the crypto API for each architecture, we now just rely on
+  the existing shash algorithms that use the library functions.
+
+- As before, the library functions don't provide access to off-CPU
+  crypto accelerators.  But these appear to have very little, if any,
+  real-world relevance for CRC32 which is very fast on CPUs.
+
+A separate patchset applies a similar cleanup to CRC-T10DIF.
+
+Changed in v4:
+  - Rebased onto v6.13-rc1.
+  - Removed no-longer-needed CFI stubs from arch/arm/lib/crc32-core.S.
+  - Removed no-longer-needed definition of JBD_MAX_CHECKSUM_SIZE from jbd2.h.
+  - Removed no-longer-needed inclusion of <crypto/hash.h> from f2fs.h.
+  - Merged 'if' statements with the same condition in jbd2_journal_set_features.
+  - Added bcachefs dependency patch, as it wasn't merged in 6.13 as expected.
+  - Reordered CPU feature checks to before crypto_simd_usable(), so that
+    crypto_simd_usable() doesn't get called unnecessarily.
+  - For loongarch, use cpu_has_crc32() instead of cpu_has(CPU_FEATURE_CRC32),
+    for consistency with the rest of the loongarch code.
+  - Correctly set the new dependencies of CRYPTO_VPMSUM_TESTER.
+  - Added Reviewed-by's and Acked-by's.
+
+Changed in v3:
+  - Replaced crc32_optimizations global variable with
+    crc32_optimizations() function.
+  - Make ISCSI_TARGET keep selecting CRYPTO_HASH, since
+    iscsi_target_auth.c still uses the shash API for other algorithms.
+
+Changed in v2:
+  - Added a way to determine if the arch-optimized code is actually
+    being used at runtime, and used this to register the appropriate
+    shash algorithms with crypto API.
+  - Added a patch that converts iSCSI to use the library.
+  - Listed a bcachefs patch as a dependency.
+  - Added Ard's Reviewed-by.
+
+Eric Biggers (19):
+  lib/crc32: drop leading underscores from __crc32c_le_base
+  lib/crc32: improve support for arch-specific overrides
+  lib/crc32: expose whether the lib is really optimized at runtime
+  crypto: crc32 - don't unnecessarily register arch algorithms
+  arm/crc32: expose CRC32 functions through lib
+  loongarch/crc32: expose CRC32 functions through lib
+  mips/crc32: expose CRC32 functions through lib
+  powerpc/crc32: expose CRC32 functions through lib
+  s390/crc32: expose CRC32 functions through lib
+  sparc/crc32: expose CRC32 functions through lib
+  x86/crc32: update prototype for crc_pcl()
+  x86/crc32: update prototype for crc32_pclmul_le_16()
+  x86/crc32: expose CRC32 functions through lib
+  bcachefs: Explicitly select CRYPTO from BCACHEFS_FS
+  lib/crc32: make crc32c() go directly to lib
+  ext4: switch to using the crc32c library
+  jbd2: switch to using the crc32c library
+  f2fs: switch to using the crc32 library
+  scsi: target: iscsi: switch to using the crc32c library
+
+ arch/arm/Kconfig                              |   1 +
+ arch/arm/configs/milbeaut_m10v_defconfig      |   1 -
+ arch/arm/configs/multi_v7_defconfig           |   1 -
+ arch/arm/crypto/Kconfig                       |  14 -
+ arch/arm/crypto/Makefile                      |   2 -
+ arch/arm/crypto/crc32-ce-glue.c               | 247 ------------
+ arch/arm/lib/Makefile                         |   3 +
+ .../crc32-ce-core.S => lib/crc32-core.S}      |   5 +-
+ arch/arm/lib/crc32-glue.c                     | 123 ++++++
+ arch/arm64/Kconfig                            |   1 +
+ arch/arm64/lib/Makefile                       |   3 +-
+ arch/arm64/lib/crc32-glue.c                   |  25 +-
+ arch/loongarch/Kconfig                        |   1 +
+ arch/loongarch/configs/loongson3_defconfig    |   1 -
+ arch/loongarch/crypto/Kconfig                 |   9 -
+ arch/loongarch/crypto/Makefile                |   2 -
+ arch/loongarch/crypto/crc32-loongarch.c       | 300 ---------------
+ arch/loongarch/lib/Makefile                   |   2 +
+ arch/loongarch/lib/crc32-loongarch.c          | 135 +++++++
+ arch/mips/Kconfig                             |   5 +-
+ arch/mips/configs/eyeq5_defconfig             |   1 -
+ arch/mips/configs/eyeq6_defconfig             |   1 -
+ arch/mips/configs/generic/32r6.config         |   2 -
+ arch/mips/configs/generic/64r6.config         |   1 -
+ arch/mips/crypto/Kconfig                      |   9 -
+ arch/mips/crypto/Makefile                     |   2 -
+ arch/mips/crypto/crc32-mips.c                 | 354 ------------------
+ arch/mips/lib/Makefile                        |   2 +
+ arch/mips/lib/crc32-mips.c                    | 192 ++++++++++
+ arch/powerpc/Kconfig                          |   1 +
+ arch/powerpc/configs/powernv_defconfig        |   1 -
+ arch/powerpc/configs/ppc64_defconfig          |   1 -
+ arch/powerpc/crypto/Kconfig                   |  15 +-
+ arch/powerpc/crypto/Makefile                  |   2 -
+ arch/powerpc/crypto/crc32c-vpmsum_glue.c      | 173 ---------
+ arch/powerpc/crypto/crct10dif-vpmsum_asm.S    |   2 +-
+ arch/powerpc/lib/Makefile                     |   3 +
+ arch/powerpc/lib/crc32-glue.c                 |  92 +++++
+ .../{crypto => lib}/crc32-vpmsum_core.S       |   0
+ .../{crypto => lib}/crc32c-vpmsum_asm.S       |   0
+ arch/riscv/Kconfig                            |   1 +
+ arch/riscv/lib/Makefile                       |   3 +-
+ arch/riscv/lib/{crc32.c => crc32-riscv.c}     |  25 +-
+ arch/s390/Kconfig                             |   1 +
+ arch/s390/configs/debug_defconfig             |   1 -
+ arch/s390/configs/defconfig                   |   1 -
+ arch/s390/crypto/Kconfig                      |  12 -
+ arch/s390/crypto/Makefile                     |   2 -
+ arch/s390/crypto/crc32-vx.c                   | 306 ---------------
+ arch/s390/lib/Makefile                        |   3 +
+ arch/s390/lib/crc32-glue.c                    |  92 +++++
+ arch/s390/{crypto => lib}/crc32-vx.h          |   0
+ arch/s390/{crypto => lib}/crc32be-vx.c        |   0
+ arch/s390/{crypto => lib}/crc32le-vx.c        |   0
+ arch/sparc/Kconfig                            |   1 +
+ arch/sparc/crypto/Kconfig                     |  10 -
+ arch/sparc/crypto/Makefile                    |   4 -
+ arch/sparc/crypto/crc32c_glue.c               | 184 ---------
+ arch/sparc/lib/Makefile                       |   2 +
+ arch/sparc/lib/crc32_glue.c                   |  93 +++++
+ arch/sparc/{crypto => lib}/crc32c_asm.S       |   2 +-
+ arch/x86/Kconfig                              |   1 +
+ arch/x86/crypto/Kconfig                       |  22 --
+ arch/x86/crypto/Makefile                      |   7 -
+ arch/x86/crypto/crc32-pclmul_glue.c           | 202 ----------
+ arch/x86/crypto/crc32c-intel_glue.c           | 250 -------------
+ arch/x86/lib/Makefile                         |   4 +
+ arch/x86/lib/crc32-glue.c                     | 124 ++++++
+ .../crc32-pclmul_asm.S => lib/crc32-pclmul.S} |  19 +-
+ .../crc32c-3way.S}                            |  63 ++--
+ crypto/crc32_generic.c                        |   8 +-
+ crypto/crc32c_generic.c                       |  12 +-
+ drivers/target/iscsi/Kconfig                  |   4 +-
+ drivers/target/iscsi/iscsi_target.c           | 153 +++-----
+ drivers/target/iscsi/iscsi_target_login.c     |  50 ---
+ drivers/target/iscsi/iscsi_target_login.h     |   1 -
+ drivers/target/iscsi/iscsi_target_nego.c      |  21 +-
+ fs/bcachefs/Kconfig                           |   1 +
+ fs/ext4/Kconfig                               |   3 +-
+ fs/ext4/ext4.h                                |  25 +-
+ fs/ext4/super.c                               |  15 -
+ fs/f2fs/Kconfig                               |   3 +-
+ fs/f2fs/f2fs.h                                |  20 +-
+ fs/f2fs/super.c                               |  15 -
+ fs/jbd2/Kconfig                               |   2 -
+ fs/jbd2/journal.c                             |  30 +-
+ include/linux/crc32.h                         |  50 ++-
+ include/linux/crc32c.h                        |   7 +-
+ include/linux/jbd2.h                          |  33 +-
+ include/target/iscsi/iscsi_target_core.h      |   3 -
+ lib/Kconfig                                   |  80 ++--
+ lib/Makefile                                  |   1 -
+ lib/crc32.c                                   |  24 +-
+ lib/libcrc32c.c                               |  74 ----
+ 94 files changed, 1159 insertions(+), 2646 deletions(-)
+ delete mode 100644 arch/arm/crypto/crc32-ce-glue.c
+ rename arch/arm/{crypto/crc32-ce-core.S => lib/crc32-core.S} (98%)
+ create mode 100644 arch/arm/lib/crc32-glue.c
+ delete mode 100644 arch/loongarch/crypto/crc32-loongarch.c
+ create mode 100644 arch/loongarch/lib/crc32-loongarch.c
+ delete mode 100644 arch/mips/crypto/crc32-mips.c
+ create mode 100644 arch/mips/lib/crc32-mips.c
+ delete mode 100644 arch/powerpc/crypto/crc32c-vpmsum_glue.c
+ create mode 100644 arch/powerpc/lib/crc32-glue.c
+ rename arch/powerpc/{crypto => lib}/crc32-vpmsum_core.S (100%)
+ rename arch/powerpc/{crypto => lib}/crc32c-vpmsum_asm.S (100%)
+ rename arch/riscv/lib/{crc32.c => crc32-riscv.c} (91%)
+ delete mode 100644 arch/s390/crypto/crc32-vx.c
+ create mode 100644 arch/s390/lib/crc32-glue.c
+ rename arch/s390/{crypto => lib}/crc32-vx.h (100%)
+ rename arch/s390/{crypto => lib}/crc32be-vx.c (100%)
+ rename arch/s390/{crypto => lib}/crc32le-vx.c (100%)
+ delete mode 100644 arch/sparc/crypto/crc32c_glue.c
+ create mode 100644 arch/sparc/lib/crc32_glue.c
+ rename arch/sparc/{crypto => lib}/crc32c_asm.S (92%)
+ delete mode 100644 arch/x86/crypto/crc32-pclmul_glue.c
+ delete mode 100644 arch/x86/crypto/crc32c-intel_glue.c
+ create mode 100644 arch/x86/lib/crc32-glue.c
+ rename arch/x86/{crypto/crc32-pclmul_asm.S => lib/crc32-pclmul.S} (95%)
+ rename arch/x86/{crypto/crc32c-pcl-intel-asm_64.S => lib/crc32c-3way.S} (92%)
+ delete mode 100644 lib/libcrc32c.c
+
+
+base-commit: 40384c840ea1944d7c5a392e8975ed088ecf0b37
+-- 
+2.47.1
+
 
