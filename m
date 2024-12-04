@@ -1,68 +1,68 @@
-Return-Path: <linux-mips+bounces-6857-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6858-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D96A9E34DE
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Dec 2024 09:04:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 344D89E3560
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Dec 2024 09:30:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5C3A0161B62
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Dec 2024 08:03:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0214E168F3D
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Dec 2024 08:30:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0C9A1AC892;
-	Wed,  4 Dec 2024 07:59:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D452192D70;
+	Wed,  4 Dec 2024 08:30:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JclNz/p7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MIfLPvQn"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7B9D18D64B;
-	Wed,  4 Dec 2024 07:59:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACAF31865FA;
+	Wed,  4 Dec 2024 08:30:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733299155; cv=none; b=eKpeyM0bOmYY20QM/59SuDbOpy94MFvfHsX4wXgX0c/Saas3FeY98jYbrVHsozuvAFYY1Hum8Nc36cFmEvsJFeidOw85goU9m4vcp9tq+a6lvdqU/8PWR3Dyo39lvohnt7NF1iAn50YRPH7WXCjhXjU0tei2UiTNBFTytFAJbF8=
+	t=1733301031; cv=none; b=iHiEssxfWyQW5LF2Th1d8vp9/+kEVRSKdWRbgaPrs3KpWtsDgkpVta/aCaZXP8zABhs8ntnveNZ6nUOozwkMwzeV344aADTAY3B7aXBpid3+3I4akF06u53gcIxra5sJL7aNM1T92joizVyCOh9SFeInqxbba7/ji7lfEgqapvg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733299155; c=relaxed/simple;
-	bh=dla2OavfONZnuxYDO0na34UIfYLSxKvedCCKO3QRYZ8=;
+	s=arc-20240116; t=1733301031; c=relaxed/simple;
+	bh=gvOpS/CSU9zOtDTEg/2CzkuI1bv/x96uWiHEJDSy0l4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Un6UcDBRIfjzjS7+wZiPVwU61eHGqlLv/fNqDhP05/ERp2e+g8F/reZ5ole8dbadGd7rP220/xDBH2yhqvReBKJeR/cF2lyyQYCVFXfvw02mXxv+JUDxbIqZVR03LvF700lc9tkCMrc6qI+yR+300SIPbTtr7d+N+HZCGoSscbo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JclNz/p7; arc=none smtp.client-ip=192.198.163.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=TWUkq//3GzlxfMm9r1dPt6/dDQW15ngtAAEGmF04jjlzfxPv5y6oczLlTh4VNDRXXyZmPS5uWgliUw8mZPSvPqx61DDNjbHpEzd8ebeQPSk/7DYnfaK7S0QlwRY7nbSNLG9mWbvO/BINzbA+le7/WwgydzIZQUok4wLCyzcwfps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MIfLPvQn; arc=none smtp.client-ip=192.198.163.16
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733299154; x=1764835154;
+  t=1733301028; x=1764837028;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:content-transfer-encoding:in-reply-to;
-  bh=dla2OavfONZnuxYDO0na34UIfYLSxKvedCCKO3QRYZ8=;
-  b=JclNz/p7mx6mBdc8+/GR5bLQV831eJgwghDElIpENkaMKWTYquwfhhEP
-   9DI+v1eZk1dWy7hwM5v+bj82E8TaYPutObUucGpxmzKodiNxHGzW9hOaF
-   l1EHJu7gSRG1ALfC9h17B0wQW0ETCuNW/Z0XHF7E0CWfad4kesNh3FGBp
-   aFPD1NQfHJ20hUJLNsxEt77uI5SVZHB1PWG3p0eUXGnKLAM15zy/rgJyD
-   3JDE1V6UEnQZD7EACz0czz6GyLMF+FGpRBijvY9CI3gw321pIqgQ05aTu
-   h/YecjOaqfBUP1z77vUOWYYBLqIo2ShfG52GGgFyQrWY0McyS8cVxyeDF
-   w==;
-X-CSE-ConnectionGUID: UA2HucZnT3yrEoIIIE7bFw==
-X-CSE-MsgGUID: uj/f0C7XR0+oaw/YT2SVWg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11275"; a="37489212"
+  bh=gvOpS/CSU9zOtDTEg/2CzkuI1bv/x96uWiHEJDSy0l4=;
+  b=MIfLPvQnmGv5Fco+BW556A/JcHxsCop6UQc9CIFmWPTc92/2IVMcl60n
+   g0AXjtVzsQwo38/Tu77E1+j17Yi+rzGxdEkhopsHwB/IOiAxgo2twaP7L
+   KLNpHRg5SVxNJq1eLI9cwG9V88RtAKlOEogzeXql7/CIyU/M92vb4UHh9
+   OoC0FZDhRVMypuWygZ3a4GyyjDLrSYwl0K8x7xRZbGnIw8G26uTG/WUaj
+   S54sXHa8wbmGmSDNXbHWVgD1khhenWazoDbm0i2dVNwMzsv7vWD/KEuKe
+   RbuzSadfYkOsmkq9QF+Cpjb6s7xEi5l2FonNWNJDsQfd7T0Hqt4lxY8Om
+   Q==;
+X-CSE-ConnectionGUID: XyhH4beeSACckgSPli/IhQ==
+X-CSE-MsgGUID: O9WujM8zSXGUvDPZLtkUQw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11275"; a="21135969"
 X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
-   d="scan'208";a="37489212"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Dec 2024 23:59:13 -0800
-X-CSE-ConnectionGUID: PC4KpNUfSrGyLVf7P94GMw==
-X-CSE-MsgGUID: IfGixa41TfS8YD1r6539OA==
+   d="scan'208";a="21135969"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Dec 2024 00:30:28 -0800
+X-CSE-ConnectionGUID: 9J2fsjFmSYmXETH0NbSCQQ==
+X-CSE-MsgGUID: wTnypkPZRRqunuh3ulGTaQ==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="98707680"
+X-IronPort-AV: E=Sophos;i="6.12,207,1728975600"; 
+   d="scan'208";a="97760319"
 Received: from lkp-server02.sh.intel.com (HELO 1f5a171d57e2) ([10.239.97.151])
-  by orviesa003.jf.intel.com with ESMTP; 03 Dec 2024 23:59:09 -0800
+  by fmviesa003.fm.intel.com with ESMTP; 04 Dec 2024 00:30:24 -0800
 Received: from kbuild by 1f5a171d57e2 with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tIkHj-0002jB-1x;
-	Wed, 04 Dec 2024 07:59:01 +0000
-Date: Wed, 4 Dec 2024 15:58:08 +0800
+	id 1tIkly-0002lV-1c;
+	Wed, 04 Dec 2024 08:30:17 +0000
+Date: Wed, 4 Dec 2024 16:29:58 +0800
 From: kernel test robot <lkp@intel.com>
 To: =?unknown-8bit?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>,
 	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
@@ -80,7 +80,7 @@ Cc: oe-kbuild-all@lists.linux.dev, devicetree@vger.kernel.org,
 	=?unknown-8bit?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>
 Subject: Re: [PATCH 5/6] nvmem: rmem: add CRC validation for Mobileye EyeQ5
  NVMEM
-Message-ID: <202412041522.01H5Kj6F-lkp@intel.com>
+Message-ID: <202412041614.WGhDRXyh-lkp@intel.com>
 References: <20241203-rmem-v1-5-24f4970cf14e@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -103,37 +103,38 @@ url:    https://github.com/intel-lab-lkp/linux/commits/Th-o-Lebrun/dt-bindings-n
 base:   40384c840ea1944d7c5a392e8975ed088ecf0b37
 patch link:    https://lore.kernel.org/r/20241203-rmem-v1-5-24f4970cf14e%40bootlin.com
 patch subject: [PATCH 5/6] nvmem: rmem: add CRC validation for Mobileye EyeQ5 NVMEM
-config: arm-randconfig-002 (https://download.01.org/0day-ci/archive/20241204/202412041522.01H5Kj6F-lkp@intel.com/config)
-compiler: arm-linux-gnueabi-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241204/202412041522.01H5Kj6F-lkp@intel.com/reproduce)
+config: arc-randconfig-001 (https://download.01.org/0day-ci/archive/20241204/202412041614.WGhDRXyh-lkp@intel.com/config)
+compiler: arc-elf-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241204/202412041614.WGhDRXyh-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412041522.01H5Kj6F-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412041614.WGhDRXyh-lkp@intel.com/
 
-All errors (new ones prefixed by >>):
+All error/warnings (new ones prefixed by >>):
 
    drivers/nvmem/rmem.c: In function 'rmem_eyeq5_checksum':
-   drivers/nvmem/rmem.c:66:9: error: cleanup argument not a function
+>> drivers/nvmem/rmem.c:66:9: error: cleanup argument not a function
       66 |         void *buf __free(kfree) = NULL;
          |         ^~~~
-   drivers/nvmem/rmem.c:97:15: error: implicit declaration of function 'kmalloc'; did you mean 'mm_alloc'? [-Wimplicit-function-declaration]
+>> drivers/nvmem/rmem.c:97:15: error: implicit declaration of function 'kmalloc'; did you mean 'mm_alloc'? [-Werror=implicit-function-declaration]
       97 |         buf = kmalloc(header.size, GFP_KERNEL);
          |               ^~~~~~~
          |               mm_alloc
->> drivers/nvmem/rmem.c:97:13: error: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+>> drivers/nvmem/rmem.c:97:13: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
       97 |         buf = kmalloc(header.size, GFP_KERNEL);
          |             ^
+   cc1: some warnings being treated as errors
 
 
-vim +97 drivers/nvmem/rmem.c
+vim +66 drivers/nvmem/rmem.c
 
     62	
     63	static int rmem_eyeq5_checksum(struct rmem *priv)
     64	{
     65		struct rmem_eyeq5_header header;
-    66		void *buf __free(kfree) = NULL;
+  > 66		void *buf __free(kfree) = NULL;
     67		u32 computed_crc, *target_crc;
     68		size_t data_size;
     69		int ret;
