@@ -1,46 +1,46 @@
-Return-Path: <linux-mips+bounces-6879-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6880-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 075939E4942
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Dec 2024 00:35:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23FB49E4970
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Dec 2024 00:38:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 35A2C16AD72
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Dec 2024 23:33:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 881911689E5
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Dec 2024 23:36:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9C90213230;
-	Wed,  4 Dec 2024 23:28:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDB98216613;
+	Wed,  4 Dec 2024 23:29:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mLBBZRae"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kT4YZl4K"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D36F20CCC0;
-	Wed,  4 Dec 2024 23:28:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FF68213248;
+	Wed,  4 Dec 2024 23:29:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733354900; cv=none; b=uiTWlaxYE060G8DC57+i6GMPv0/aqVN3Ju3df/9HP9UQH2WaVVUiBZ8Ef0meg5/yngUIUCPzu79ZoSpvB7U0WTy/eBKrn8iwjCueFcID4Srq45VmQIHs5aCO7NftrA4W/sIHomg0uWjAb9dSRhzYLBRQrBuehCgeurHl3Bw1vTc=
+	t=1733354959; cv=none; b=kx7be2rkKW3CLHPUzJmr+fwzfsO52SuplOvCkTWr/Y0BScN2E4xztf/rymPhS06smGkBw3WeICz9donUAAaMggWIyOZfJjLuEjPZOXlGnn8LFyJceTi0i46i/iNr8SmIRS9N32WcoZ2PWEaGCWGImLfCLNX5Uq2IrHbbfmJu2Qg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733354900; c=relaxed/simple;
+	s=arc-20240116; t=1733354959; c=relaxed/simple;
 	bh=mzYkslIUXLeOFOh0aayYYVU2C1ENA1994A5krtiOfoY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GVXb2OtBvZcse9a41PNuMNzALhxs1L44s9hH0Sx4bFJ0+IGF+hxRgDfzG9Vf+NWLLkV1e4Zq7oN+rWIQ9rCUUTiM4shxYOBCMBbfuOLpRmnLWJ9bk6qi5svmeGD9HPMd7yXhSnxX7wYQFKeGvkNXD4SnI+j/mv0quvLClZ0XGDg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mLBBZRae; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F09FC4CECD;
-	Wed,  4 Dec 2024 23:28:18 +0000 (UTC)
+	 MIME-Version; b=TTFBbsQE7ezePrDbKhMLnx/4pVSQgpjHDdXjAmkXmoEFFAgKeepVCZ6sjLhzqS0TZ745KyCN/x7czJNFVJxECEXs0zSfsttmYPVyT4nS2Ii3yBc10nFpDl4w8nEa5Y08NEMj8ajoUKx642URZWGqpFURXyiEjKVwu+UD16XT/LQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kT4YZl4K; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC96CC4CECD;
+	Wed,  4 Dec 2024 23:29:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733354900;
+	s=k20201202; t=1733354959;
 	bh=mzYkslIUXLeOFOh0aayYYVU2C1ENA1994A5krtiOfoY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=mLBBZRaehrAp5keH1n3oXJqZuiFKnh6C+9DcnPLp4C57xlPfPqSMMGhNqAAZRFN9w
-	 hfVNfSLKLsbwTL/cHogdPZzodgwjjLb7bfVRHyJCHPhKcVLnv0IqmdhvYaw2aV237D
-	 aEdINgJDalASeVdDqRfXCWMIgCI+FkDJ6scOeBFLJVDrY7noRaCVap5zYNbaenlVJS
-	 BBuJDf6fHoR4CRstGHGyb9avqK4a67+ai0sD1meQ5SZkK2ND23r0lmWxi9rnehShve
-	 oOhcxQYQE7jgdVCaTqQ1SaG/8f17jdClfCXEVxQHY0YrQgLsqZNB4Y1wqS3ZQFWIYj
-	 XGhHCG29mxWCw==
+	b=kT4YZl4KNGvl2OU/tEb+q+0RwDZZ5/y9X5jn/WuSYtdLU0m5lIjmlXwSCTJ4hqie/
+	 AFIg3wmDFEy3LLUBVVpBHFoDXfsNBcgHaMPBVTCiE4NXgG4Pdq646bH7Okx1S1/S33
+	 ZolMtnjE1n+jy9VFAyJ7Sz45eVPEwwi742cGS8ktf4jipO4Wn8BYeneeh4E7yN7dmV
+	 L8mbIRcC3olHUJUiihCm+rinLkecQupQO6MM0OyENG95OQJSIjjT/3SVexjF5DVGWT
+	 mpMeRg8qQ/OtoBxhNBakEnEZJwChjXtwhz0c0DrZnwLOXWqbPLv0BGwLUUqYgDeHe/
+	 UfF5KcqPLj8Yg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -51,16 +51,16 @@ Cc: Xi Ruoyao <xry111@xry111.site>,
 	krzk+dt@kernel.org,
 	conor+dt@kernel.org,
 	si.yanteng@linux.dev,
-	jiaxun.yang@flygoat.com,
 	davem@davemloft.net,
+	jiaxun.yang@flygoat.com,
 	devicetree@vger.kernel.org,
 	linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 13/15] MIPS: Loongson64: DTS: Really fix PCIe port nodes for ls7a
-Date: Wed,  4 Dec 2024 17:16:07 -0500
-Message-ID: <20241204221627.2247598-13-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.11 13/15] MIPS: Loongson64: DTS: Really fix PCIe port nodes for ls7a
+Date: Wed,  4 Dec 2024 17:17:07 -0500
+Message-ID: <20241204221726.2247988-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241204221627.2247598-1-sashal@kernel.org>
-References: <20241204221627.2247598-1-sashal@kernel.org>
+In-Reply-To: <20241204221726.2247988-1-sashal@kernel.org>
+References: <20241204221726.2247988-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -69,7 +69,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.1
+X-stable-base: Linux 6.11.10
 Content-Transfer-Encoding: 8bit
 
 From: Xi Ruoyao <xry111@xry111.site>
