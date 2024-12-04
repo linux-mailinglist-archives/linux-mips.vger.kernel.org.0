@@ -1,46 +1,46 @@
-Return-Path: <linux-mips+bounces-6882-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6883-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A4D0A9E49A3
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Dec 2024 00:42:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD07E9E49AB
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Dec 2024 00:43:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D6E631882AC5
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Dec 2024 23:40:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D6B8916A89F
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Dec 2024 23:42:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F06E320E702;
-	Wed,  4 Dec 2024 23:30:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CD0021A45B;
+	Wed,  4 Dec 2024 23:30:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WXr40EYS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XyoeZmGY"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C51B1218AD3;
-	Wed,  4 Dec 2024 23:30:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D586020FAA1;
+	Wed,  4 Dec 2024 23:30:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733355033; cv=none; b=STahXOXpadlENGYYVQKp83/UUV/76TPpW4pNpKLdkBagBBS3xeLdp7EdXGEXjf3gdM6rqbX/WdXWeLlupnOi4Xbud+nDdaQwvjLznbv3dOrDAJfp17N2tjJmMxg2Yju4HDHKgqzI2vKC6bNWEriOli4SvIp/TmVd/gbC+vnrGME=
+	t=1733355052; cv=none; b=W5LnJLJoueltWSyr780iqOo9/iblcPPYBrUiiPCDUj//QP9EBHCajaI3raFwbiv+Y9o2rKau1Ful4UDQ8PPUemhd9OAovBmyYRKEkx/wyKueM03T7gnYjciSFGUhuoKh/a8xnEHF1hWlTuhYg6ZGBPudllE7yMx4c4fON8Ia4i0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733355033; c=relaxed/simple;
+	s=arc-20240116; t=1733355052; c=relaxed/simple;
 	bh=XBuvGby0z8J/djMb/bC2Slw9QCH+KEIqdOp+MIXupd4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ePLNvXpWKeB6CsDFzHqR/MjeTc0ABq8fb/7JYsiR/94PS+VsM342g8WnTM9FBzCS/b73Hg30f4+sxpjq2FyiPlqAQ2WFn14vqYVHLrTJ3dS5RvYCKLHQcPG9Ea6ScWktWw/McLOMQv2G+YMA4+xk98S+yDGo/JnjVTBs4HL6/Vo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WXr40EYS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85D20C4CECD;
-	Wed,  4 Dec 2024 23:30:31 +0000 (UTC)
+	 MIME-Version; b=BiJtDrGgRBie4nF3StTYnz9CqQwRs6NY3o45lRmb0aeAYyICMqDVyTIXIjrA9rwxzEd6QyYyR9h23tVs/W1uk9EkJxLLrUCnRytPI8I2MJAzeuJ0H1mVOAw+K5VHLFRYElz1GneCiBNKvK+3VFjwfcJzZg5v4T3Gk+LeVPtrXts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XyoeZmGY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D4E5C4CECD;
+	Wed,  4 Dec 2024 23:30:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733355033;
+	s=k20201202; t=1733355052;
 	bh=XBuvGby0z8J/djMb/bC2Slw9QCH+KEIqdOp+MIXupd4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=WXr40EYS1ykN4/KoVjg6x3LhNb8Inb92XdJWJQou/zoWRUBGUqQejtzAAt6udCc4c
-	 +P2rptPBWap41A+A1PhJzSbuFmvIPBFv8yw9NoqaGiEL9zYGMCrbe5z93JtgpTYpL1
-	 VW8iLd0dDC0rKMQwUfzeLqwZJvZk1Mqc9RsEpt6WA8w4l8ABWNPOh8RqBrI3VJrxTD
-	 BUCBVVBIbkStIa03hpJXZTRNZWfxbAbd09lEZj5QF9zUlJ7L4fDLsva4nVL9tFj7Ci
-	 Pt99ojn53n2u3+zFzCENeuNh20UmRhxdXt+D6v4X/5fkso4gqGhu1z/PC2W4GNz8TD
-	 VctgNCpyL/FAw==
+	b=XyoeZmGYxWIz2vfd6AxCvFJuH0f61oj1RmohSEd5eDJuRE0g36ixZlBoGdMycOjyE
+	 uw1yaK2IWa6fILTEHGG09QXcO0JzBCEK7ZySNp3f//WXGpQbiuE8gL13kV9vbK5x13
+	 W3em8JT9uI0Yq+Xcs+WxHSni/V9makBUOu7TW5hI97PJgu70V1DoXBnX9Wq6UAClRA
+	 JQ4lA1xh0ix5AUnEs4ueTYxj6Kb9JM4CN4vq+JV2VyROdAbc5XSY0vl5Mk11aeKoEs
+	 ldxmK2eQE0IgoUqRXdJ6zqagVY7NhMu71AcCw3QG3VU2j4fczpSskK3sfP+6wUOUe0
+	 b4BUoAZ01xUlQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -50,16 +50,16 @@ Cc: Xi Ruoyao <xry111@xry111.site>,
 	robh@kernel.org,
 	krzk+dt@kernel.org,
 	conor+dt@kernel.org,
+	davem@davemloft.net,
 	jiaxun.yang@flygoat.com,
-	si.yanteng@linux.dev,
 	devicetree@vger.kernel.org,
 	linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 6/8] MIPS: Loongson64: DTS: Really fix PCIe port nodes for ls7a
-Date: Wed,  4 Dec 2024 17:18:48 -0500
-Message-ID: <20241204221859.2248634-6-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 4/5] MIPS: Loongson64: DTS: Really fix PCIe port nodes for ls7a
+Date: Wed,  4 Dec 2024 17:19:20 -0500
+Message-ID: <20241204221925.2248843-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241204221859.2248634-1-sashal@kernel.org>
-References: <20241204221859.2248634-1-sashal@kernel.org>
+In-Reply-To: <20241204221925.2248843-1-sashal@kernel.org>
+References: <20241204221925.2248843-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -68,7 +68,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.119
+X-stable-base: Linux 5.15.173
 Content-Transfer-Encoding: 8bit
 
 From: Xi Ruoyao <xry111@xry111.site>
