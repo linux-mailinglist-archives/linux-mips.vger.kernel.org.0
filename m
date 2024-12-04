@@ -1,46 +1,46 @@
-Return-Path: <linux-mips+bounces-6883-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6884-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD07E9E49AB
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Dec 2024 00:43:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDB139E49C3
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Dec 2024 00:44:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D6B8916A89F
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Dec 2024 23:42:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4FC4A1881BD0
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Dec 2024 23:43:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CD0021A45B;
-	Wed,  4 Dec 2024 23:30:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 383CA21CA1D;
+	Wed,  4 Dec 2024 23:31:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XyoeZmGY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XltI0kLv"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D586020FAA1;
-	Wed,  4 Dec 2024 23:30:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C5FA21CA14;
+	Wed,  4 Dec 2024 23:31:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733355052; cv=none; b=W5LnJLJoueltWSyr780iqOo9/iblcPPYBrUiiPCDUj//QP9EBHCajaI3raFwbiv+Y9o2rKau1Ful4UDQ8PPUemhd9OAovBmyYRKEkx/wyKueM03T7gnYjciSFGUhuoKh/a8xnEHF1hWlTuhYg6ZGBPudllE7yMx4c4fON8Ia4i0=
+	t=1733355069; cv=none; b=cvVWCRXlFROGwC2L0MkFB8FfEY95fp4ahKiHeMKMsTvUMI+zhKsoi4pHHnI4juYavsCleufUVubyxGfxCDpyE51ZAeW08b44qPoWy921ikhW3PPBFph2a2tTxCw2XZlMUllOJv9mUOs1AuP6RSgv26sY6dCGSsOqDXTsU/biPBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733355052; c=relaxed/simple;
-	bh=XBuvGby0z8J/djMb/bC2Slw9QCH+KEIqdOp+MIXupd4=;
+	s=arc-20240116; t=1733355069; c=relaxed/simple;
+	bh=D/uZikPJRAFo/ZuGmwbk6hC/rh66CL3AU/IYr7sZlA0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BiJtDrGgRBie4nF3StTYnz9CqQwRs6NY3o45lRmb0aeAYyICMqDVyTIXIjrA9rwxzEd6QyYyR9h23tVs/W1uk9EkJxLLrUCnRytPI8I2MJAzeuJ0H1mVOAw+K5VHLFRYElz1GneCiBNKvK+3VFjwfcJzZg5v4T3Gk+LeVPtrXts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XyoeZmGY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D4E5C4CECD;
-	Wed,  4 Dec 2024 23:30:51 +0000 (UTC)
+	 MIME-Version; b=bWw7A6imPdQdQ8EqOnMnBqCwdNd2CCogsBgtQkKXGEBNOxyQDbB2X/yGi+yxKBODBXoxWrI+7LZGSq3/ydkkZtn6LE2em1P7Xp0+U5E5r55Qi2NRotcUzNvl0IEZ/uXEFQtg8BTXwwkJN8moXISz/ZB/FCk0VKyyf00EuIwlVrg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XltI0kLv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D9D1C4CECD;
+	Wed,  4 Dec 2024 23:31:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733355052;
-	bh=XBuvGby0z8J/djMb/bC2Slw9QCH+KEIqdOp+MIXupd4=;
+	s=k20201202; t=1733355068;
+	bh=D/uZikPJRAFo/ZuGmwbk6hC/rh66CL3AU/IYr7sZlA0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=XyoeZmGYxWIz2vfd6AxCvFJuH0f61oj1RmohSEd5eDJuRE0g36ixZlBoGdMycOjyE
-	 uw1yaK2IWa6fILTEHGG09QXcO0JzBCEK7ZySNp3f//WXGpQbiuE8gL13kV9vbK5x13
-	 W3em8JT9uI0Yq+Xcs+WxHSni/V9makBUOu7TW5hI97PJgu70V1DoXBnX9Wq6UAClRA
-	 JQ4lA1xh0ix5AUnEs4ueTYxj6Kb9JM4CN4vq+JV2VyROdAbc5XSY0vl5Mk11aeKoEs
-	 ldxmK2eQE0IgoUqRXdJ6zqagVY7NhMu71AcCw3QG3VU2j4fczpSskK3sfP+6wUOUe0
-	 b4BUoAZ01xUlQ==
+	b=XltI0kLvriY0ReqCWUt4uPC4BalrnXLtMIGkG06s1QkHKQs864QBuF7PtCEfv+2ij
+	 NOL6hPc2GPt0sLiUKuw4mHJ1ViACyzmTtcWmMmpyy0/97j5i9N9NOKU6DAwIrcx6uX
+	 6niBIXjQ8ldbXO5l38QiH/Y6VO4XK7ayRv3ZCEKv3Us3DnqbUQyyFubLrR/3oo/lAw
+	 /pp1PFHOmNJMErUYIU5I0f0OpNv73ywpwGArgmG7rrixBR1GOTYYBFmDykISz5+npu
+	 Os6R3hk8JGem48hSR+fiUJ6t2gyAKwKgFdZ/waFT3FrfNrVJoTquMn6cD2zG2iGD4r
+	 T9zF7ZQQqq+Ug==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -54,12 +54,12 @@ Cc: Xi Ruoyao <xry111@xry111.site>,
 	jiaxun.yang@flygoat.com,
 	devicetree@vger.kernel.org,
 	linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.15 4/5] MIPS: Loongson64: DTS: Really fix PCIe port nodes for ls7a
-Date: Wed,  4 Dec 2024 17:19:20 -0500
-Message-ID: <20241204221925.2248843-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.10 4/5] MIPS: Loongson64: DTS: Really fix PCIe port nodes for ls7a
+Date: Wed,  4 Dec 2024 17:19:37 -0500
+Message-ID: <20241204221942.2248973-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241204221925.2248843-1-sashal@kernel.org>
-References: <20241204221925.2248843-1-sashal@kernel.org>
+In-Reply-To: <20241204221942.2248973-1-sashal@kernel.org>
+References: <20241204221942.2248973-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -68,7 +68,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.15.173
+X-stable-base: Linux 5.10.230
 Content-Transfer-Encoding: 8bit
 
 From: Xi Ruoyao <xry111@xry111.site>
@@ -99,7 +99,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 60 insertions(+), 13 deletions(-)
 
 diff --git a/arch/mips/boot/dts/loongson/ls7a-pch.dtsi b/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
-index ed99ee316febb..1292e9ab282ad 100644
+index f99a7a11fded8..cdb1c40b4fd14 100644
 --- a/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
 +++ b/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
 @@ -63,7 +63,6 @@ pci@1a000000 {
@@ -110,7 +110,7 @@ index ed99ee316febb..1292e9ab282ad 100644
  			msi-parent = <&msi>;
  
  			reg = <0 0x1a000000 0 0x02000000>,
-@@ -227,7 +226,7 @@ phy1: ethernet-phy@1 {
+@@ -226,7 +225,7 @@ phy1: ethernet-phy@1 {
  				};
  			};
  
@@ -119,7 +119,7 @@ index ed99ee316febb..1292e9ab282ad 100644
  				compatible = "pci0014,7a19.1",
  						   "pci0014,7a19",
  						   "pciclass060400",
-@@ -237,12 +236,16 @@ pci_bridge@9,0 {
+@@ -236,12 +235,16 @@ pci_bridge@9,0 {
  				interrupts = <32 IRQ_TYPE_LEVEL_HIGH>;
  				interrupt-parent = <&pic>;
  
@@ -137,7 +137,7 @@ index ed99ee316febb..1292e9ab282ad 100644
  				compatible = "pci0014,7a09.1",
  						   "pci0014,7a09",
  						   "pciclass060400",
-@@ -252,12 +255,16 @@ pci_bridge@a,0 {
+@@ -251,12 +254,16 @@ pci_bridge@a,0 {
  				interrupts = <33 IRQ_TYPE_LEVEL_HIGH>;
  				interrupt-parent = <&pic>;
  
@@ -155,7 +155,7 @@ index ed99ee316febb..1292e9ab282ad 100644
  				compatible = "pci0014,7a09.1",
  						   "pci0014,7a09",
  						   "pciclass060400",
-@@ -267,12 +274,16 @@ pci_bridge@b,0 {
+@@ -266,12 +273,16 @@ pci_bridge@b,0 {
  				interrupts = <34 IRQ_TYPE_LEVEL_HIGH>;
  				interrupt-parent = <&pic>;
  
@@ -173,7 +173,7 @@ index ed99ee316febb..1292e9ab282ad 100644
  				compatible = "pci0014,7a09.1",
  						   "pci0014,7a09",
  						   "pciclass060400",
-@@ -282,12 +293,16 @@ pci_bridge@c,0 {
+@@ -281,12 +292,16 @@ pci_bridge@c,0 {
  				interrupts = <35 IRQ_TYPE_LEVEL_HIGH>;
  				interrupt-parent = <&pic>;
  
@@ -191,7 +191,7 @@ index ed99ee316febb..1292e9ab282ad 100644
  				compatible = "pci0014,7a19.1",
  						   "pci0014,7a19",
  						   "pciclass060400",
-@@ -297,12 +312,16 @@ pci_bridge@d,0 {
+@@ -296,12 +311,16 @@ pci_bridge@d,0 {
  				interrupts = <36 IRQ_TYPE_LEVEL_HIGH>;
  				interrupt-parent = <&pic>;
  
@@ -209,7 +209,7 @@ index ed99ee316febb..1292e9ab282ad 100644
  				compatible = "pci0014,7a09.1",
  						   "pci0014,7a09",
  						   "pciclass060400",
-@@ -312,12 +331,16 @@ pci_bridge@e,0 {
+@@ -311,12 +330,16 @@ pci_bridge@e,0 {
  				interrupts = <37 IRQ_TYPE_LEVEL_HIGH>;
  				interrupt-parent = <&pic>;
  
@@ -227,7 +227,7 @@ index ed99ee316febb..1292e9ab282ad 100644
  				compatible = "pci0014,7a29.1",
  						   "pci0014,7a29",
  						   "pciclass060400",
-@@ -327,12 +350,16 @@ pci_bridge@f,0 {
+@@ -326,12 +349,16 @@ pci_bridge@f,0 {
  				interrupts = <40 IRQ_TYPE_LEVEL_HIGH>;
  				interrupt-parent = <&pic>;
  
@@ -245,7 +245,7 @@ index ed99ee316febb..1292e9ab282ad 100644
  				compatible = "pci0014,7a19.1",
  						   "pci0014,7a19",
  						   "pciclass060400",
-@@ -342,12 +369,16 @@ pci_bridge@10,0 {
+@@ -341,12 +368,16 @@ pci_bridge@10,0 {
  				interrupts = <41 IRQ_TYPE_LEVEL_HIGH>;
  				interrupt-parent = <&pic>;
  
@@ -263,7 +263,7 @@ index ed99ee316febb..1292e9ab282ad 100644
  				compatible = "pci0014,7a29.1",
  						   "pci0014,7a29",
  						   "pciclass060400",
-@@ -357,12 +388,16 @@ pci_bridge@11,0 {
+@@ -356,12 +387,16 @@ pci_bridge@11,0 {
  				interrupts = <42 IRQ_TYPE_LEVEL_HIGH>;
  				interrupt-parent = <&pic>;
  
@@ -281,7 +281,7 @@ index ed99ee316febb..1292e9ab282ad 100644
  				compatible = "pci0014,7a19.1",
  						   "pci0014,7a19",
  						   "pciclass060400",
-@@ -372,12 +407,16 @@ pci_bridge@12,0 {
+@@ -371,12 +406,16 @@ pci_bridge@12,0 {
  				interrupts = <43 IRQ_TYPE_LEVEL_HIGH>;
  				interrupt-parent = <&pic>;
  
@@ -299,7 +299,7 @@ index ed99ee316febb..1292e9ab282ad 100644
  				compatible = "pci0014,7a29.1",
  						   "pci0014,7a29",
  						   "pciclass060400",
-@@ -387,12 +426,16 @@ pci_bridge@13,0 {
+@@ -386,12 +425,16 @@ pci_bridge@13,0 {
  				interrupts = <38 IRQ_TYPE_LEVEL_HIGH>;
  				interrupt-parent = <&pic>;
  
@@ -317,7 +317,7 @@ index ed99ee316febb..1292e9ab282ad 100644
  				compatible = "pci0014,7a19.1",
  						   "pci0014,7a19",
  						   "pciclass060400",
-@@ -402,9 +445,13 @@ pci_bridge@14,0 {
+@@ -401,9 +444,13 @@ pci_bridge@14,0 {
  				interrupts = <39 IRQ_TYPE_LEVEL_HIGH>;
  				interrupt-parent = <&pic>;
  
