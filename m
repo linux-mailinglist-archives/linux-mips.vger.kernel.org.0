@@ -1,270 +1,135 @@
-Return-Path: <linux-mips+bounces-6889-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6890-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 845739E516B
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Dec 2024 10:32:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 785B89E52C9
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Dec 2024 11:45:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 07B1518803F6
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Dec 2024 09:32:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BBC0C1881FD2
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Dec 2024 10:44:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47C7D1D2F54;
-	Thu,  5 Dec 2024 09:32:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA9FB206F3C;
+	Thu,  5 Dec 2024 10:42:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="i/UaASKS"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="L7j8QVgD"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CD2C2391A4;
-	Thu,  5 Dec 2024 09:32:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81DD5206F19
+	for <linux-mips@vger.kernel.org>; Thu,  5 Dec 2024 10:42:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733391166; cv=none; b=gBGUywnWWuhZ4L3c6Qb+TgEXm8qmovbRvgy5TwEQKBR2d6aaBGCI3kTJ3BlUBTJJEsNyKfxjrQFfEGfRBRPn/EHMQqS+1KEwRHwct4cnM+2Om1N34tRX3wH5wKm7OjPOyt29zPvgmZ0Fne97dWL3btErP4JInOTZv4PZet9P9a4=
+	t=1733395333; cv=none; b=diICN4GI5TuMRAJYQCpf+cLEhxcbqDlxXTNlRn29fI5cx4D4Wy8Ree/fRJl6y0CgZvR8g3XLFAOE/CdoWPfQx2s0NmnG9eE2FfODA8kBZ6UvANbxUeSfRkhfXetdwT+IHPrGNfVqTfU48BiJUmWnB0MHH4WZTIWbZE0GjaardXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733391166; c=relaxed/simple;
-	bh=ykpGI7/7XbRD3iJhq8FhOIZ6PUAW5EEEMoBDU5tKsV0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=AErPvsI9yrxe3fO7YVA+Gcti0aeJPhxrCeprAE16urODXGBaavIC/ZM6DNyD1azA0vgNJvj2UGT5+27dycETJ4OI2ajWX77tpNErhxiNOAHMx21H/lgj2bw6WDa1niiitt6QtnZN1T7gTYj2hHOMMENpzfye/uWcmBlpqW5Oy3s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=i/UaASKS; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4B56pThl001983;
-	Thu, 5 Dec 2024 09:32:09 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=60RIvD
-	UpT9S2Rm4TbMmqWTeMBYTo514g8EBdwknaRXA=; b=i/UaASKSeAMDruDOSS5qhp
-	W41mCMoqA6naB8gl2w/btSJK0wqsufpTqrnp9qugqIPogqZxKjTFoqZQT5M8PKbz
-	QNIMbzrLgAH3mll8DEvgamnKRyw/Z5+diz08H+x14sKO4IMqHa13cGm4P4jv2L4U
-	qh+JIVNnfgytosKqIxfRXfgTNUzDYl8JIj+xy3JPd81FIbgtOAYFCVD24pnro11k
-	ptRPhaNYX8oIVFq8kcIz6AlNRA/rC336x/0qrGOSCsIdszTwTLpngosg819GCBBF
-	A49gzbrxsVxWodOvrQYlgVXLohxZfy48Mlq/OIUl4BbTWBmrGv8jFkSA7tjTo1Fg
-	==
-Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 437r4pvrft-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 05 Dec 2024 09:32:09 +0000 (GMT)
-Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 4B556ReB005235;
-	Thu, 5 Dec 2024 09:32:08 GMT
-Received: from smtprelay03.wdc07v.mail.ibm.com ([172.16.1.70])
-	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 43a2kxqw0j-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 05 Dec 2024 09:32:08 +0000
-Received: from smtpav06.wdc07v.mail.ibm.com (smtpav06.wdc07v.mail.ibm.com [10.39.53.233])
-	by smtprelay03.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 4B59W8fv29753932
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 5 Dec 2024 09:32:08 GMT
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4E0765804E;
-	Thu,  5 Dec 2024 09:32:08 +0000 (GMT)
-Received: from smtpav06.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id EF3655803F;
-	Thu,  5 Dec 2024 09:32:00 +0000 (GMT)
-Received: from [9.43.63.110] (unknown [9.43.63.110])
-	by smtpav06.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Thu,  5 Dec 2024 09:32:00 +0000 (GMT)
-Message-ID: <eb8d6fbc-4c87-44cc-b69a-4a397ebc2e67@linux.ibm.com>
-Date: Thu, 5 Dec 2024 15:01:58 +0530
+	s=arc-20240116; t=1733395333; c=relaxed/simple;
+	bh=lBjSO4XZQcFnEk/bAzX1s58M9esiJswkbspXoeJzI6s=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=OQwjewiixgU9EqkDbQNIxGjDgaM3irvKtZyg8znj7/9tE6Db2gf39oPojIDdHzEFLoUQVp6C1sxtJ023RshGtV/sollmG7QQQHmVlyp9fKDesQUIwOo1xh4B6oIIUCJ5r4wVG0tUFFuhQQZwruxuV7I3WkuBxJolYttOHlWkiBc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=L7j8QVgD; arc=none smtp.client-ip=209.85.221.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-385db79aafbso27267f8f.1
+        for <linux-mips@vger.kernel.org>; Thu, 05 Dec 2024 02:42:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1733395330; x=1734000130; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FnoZGxzHG6LZDyvVjX+CssXgRHCJAKynJ1wSQcpNHJ0=;
+        b=L7j8QVgD4ePArRob4XZ4StNT6RNHNYc2feivBhj+XBFzzGbkDnbHBju+nZNkc9U7uc
+         5SuthXhG2KGt/HIRqRzaFb25EySmrsU2F+v5PiwEiuBo2OMhkAv+1iydzsLLrTQZkqyS
+         M8dMKMopfh6Xb5fFKHNqOmkG2Vz0UatQidUOha3Yr8fEmtPr8iCTU7FxYBum7K7La3mN
+         MAf5qGYyxQQ8HDQ8WEEvvxDDBSxiQx6k2+R/xJOWK0D5L/Iz9Ps06d2Y/zwsG9UXceLN
+         d19kNgmfVUFkCQ3U9KH2MmjtKmce/EKuYOtaZsxgiqknMoyChAzlNBOch9Itj1VaydyQ
+         WT1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733395330; x=1734000130;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=FnoZGxzHG6LZDyvVjX+CssXgRHCJAKynJ1wSQcpNHJ0=;
+        b=tYaP3KgCR8244gZ0j050MlOkzP0ya/YbjKhCUWjtmPHK0Kl+/giayH/RrkYthFIoXj
+         AJSQWmEtcXtbgD1xPHmP0ScmsvUGGNdA5RuyKIhWnxbgFUANYrFxhuWukHGxjDjoier1
+         6rVbzLW4q2g52an/Kv0xJeo+a9VcnqBxdcq+/UGwu/Z8ThWvUKKXFp2PhPkESPW3SYFm
+         Qn8y6cQJUxpsSnKnfMRS7mMZIbyICj3Zzf8FfQKz3nGFo4Xwp6ADpVet6ycJOr7zlQCt
+         2I7Jx/o6C1v2bCpZlpyQuixYgdmweaNqPMaN3GtrnEgwbHNrT1EnWuFr/PYmAYpnr75E
+         O7Yw==
+X-Forwarded-Encrypted: i=1; AJvYcCWV4mKc54EVnVGHzXMf2uuh1wSQ5WFE5Fde2crqaPxWUxOVZ7q40Trai3e62IASG9dZxbE7Llhs9kFx@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw0uUrb8t7J76EHWeEUESfuSRsb76h/GF29kACUv/P4efssxMDC
+	8cMmAJEDeDIOTw2UoWBY+OB8YEfyLzDBgC1Jc06tzfrA/TyAcMWoxHLtcXmWhyM=
+X-Gm-Gg: ASbGncu9MjnNCoB2yqdZXFI58QD2YtJz5mDfsBHgNskucfK61JdvUbJMCrZwT2Lvyjt
+	X2IUzAwD9RLRkLdLZLxno8QlN6NhiII9d85j0WR3yk1Bfu3pdt12TC3ejq8mA2fxN7h9X+1acem
+	KgBBj3r3tqJlJWCAMcBsc74ssPoWZ21VPO3xyxjY5dYLtAvXYRxITaxxQePwMV6ACRoszoq1WdV
+	2WV/FEpIDpdkzob2il8Gpc4SPp+WOoclTm908LLw6UDeMbNAKMrfez2qaESiAB3Yw==
+X-Google-Smtp-Source: AGHT+IGz3GjcyfBhQ5HlqLVmhmG7Qtmhnbj9BaPJEz/QzVaC6xVbnrbhQALk4UuX4nKmsjVBEJ+aKg==
+X-Received: by 2002:a5d:6d82:0:b0:385:e8e7:d0ac with SMTP id ffacd0b85a97d-385fde34d9bmr2947632f8f.13.1733395329824;
+        Thu, 05 Dec 2024 02:42:09 -0800 (PST)
+Received: from [127.0.1.1] ([178.197.223.165])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3861ecf406csm1662701f8f.3.2024.12.05.02.42.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 05 Dec 2024 02:42:09 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Lubomir Rintel <lkundrak@v3.sk>, 
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, Magnus Damm <magnus.damm@gmail.com>, 
+ Heiko Stuebner <heiko@sntech.de>, 
+ Kunihiko Hayashi <hayashi.kunihiko@socionext.com>, 
+ Masami Hiramatsu <mhiramat@kernel.org>, 
+ Paul Cercueil <paul@crapouillou.net>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Shengjiu Wang <shengjiu.wang@gmail.com>, Xiubo Li <Xiubo.Lee@gmail.com>, 
+ Nicolin Chen <nicoleotsuka@gmail.com>, Jaroslav Kysela <perex@perex.cz>, 
+ Takashi Iwai <tiwai@suse.com>, 
+ Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>, 
+ Adrien Grassein <adrien.grassein@gmail.com>, Adam Ford <aford173@gmail.com>, 
+ Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: linux-sound@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev, 
+ linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org, 
+ linux-mips@vger.kernel.org, alsa-devel@alsa-project.org, 
+ linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
+In-Reply-To: <cover.1727438777.git.geert+renesas@glider.be>
+References: <cover.1727438777.git.geert+renesas@glider.be>
+Subject: Re: (subset) [PATCH treewide 00/11] ASoC: Clean up
+ {hp,mic}-det-gpio handling
+Message-Id: <173339532775.70936.4554643874403091214.b4-ty@linaro.org>
+Date: Thu, 05 Dec 2024 11:42:07 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] tracing: Remove definition of trace_*_rcuidle()
-To: Steven Rostedt <rostedt@goodmis.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
-        Linux Trace Kernel <linux-trace-kernel@vger.kernel.org>,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Joel Fernandes <joel@joelfernandes.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-mips@vger.kernel.org, Paul Burton <paulburton@kernel.org>,
-        "Paul E. McKenney"
- <paulmck@kernel.org>,
-        Guenter Roeck <linux@roeck-us.net>
-References: <20241003181629.36209057@gandalf.local.home>
- <bddb02de-957a-4df5-8e77-829f55728ea2@roeck-us.net>
- <20241203155542.462b1b21@gandalf.local.home>
- <ee401848-f7a1-4877-b896-36bec32ca985@roeck-us.net>
- <20241203220153.3f81f12b@gandalf.local.home>
-Content-Language: en-US
-From: Madhavan Srinivasan <maddy@linux.ibm.com>
-In-Reply-To: <20241203220153.3f81f12b@gandalf.local.home>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: o04zhgZjbHsTW8kusHOZJFA4pxD-_NVG
-X-Proofpoint-ORIG-GUID: o04zhgZjbHsTW8kusHOZJFA4pxD-_NVG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
- priorityscore=1501 clxscore=1011 phishscore=0 malwarescore=0
- suspectscore=0 mlxscore=0 bulkscore=0 mlxlogscore=999 adultscore=0
- lowpriorityscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2411120000 definitions=main-2412050066
+X-Mailer: b4 0.14.2
 
 
+On Fri, 27 Sep 2024 14:42:15 +0200, Geert Uytterhoeven wrote:
+> 	Hi all,
+> 
+> The "gpio" suffix for GPIO consumers was deprecated a while ago, in
+> favor of the "gpios" suffix.  However, there are still several users of
+> the "hp-det-gpio" and "mic-det-gpio" properties, in DT bindings,
+> drivers, and DT source files.
+> 
+> [...]
 
-On 12/4/24 8:31 AM, Steven Rostedt wrote:
-> On Tue, 3 Dec 2024 17:48:33 -0800
-> Guenter Roeck <linux@roeck-us.net> wrote:
-> 
->> Hmm. If you say so. Note that powerpc has the same or a similar problem.
->>
->> [    0.142039][    T0] RCU not watching for tracepoint
->> [    0.142488][    T0]
->> [    0.142659][    T0] =============================
->> [    0.142755][    T0] WARNING: suspicious RCU usage
->> [    0.142914][    T0] 6.13.0-rc1-00058-ge75ce84aa5d3 #1 Not tainted
->> [    0.143082][    T0] -----------------------------
->> [    0.143178][    T0] kernel/notifier.c:586 notify_die called but RCU thinks we're quiescent!
->>
->>
->> [    0.152733][    T0] RCU not watching for tracepoint
->> [    0.152770][    T0]
->> [    0.152995][    T0] =============================
->> [    0.153092][    T0] WARNING: suspicious RCU usage
->> [    0.153187][    T0] 6.13.0-rc1-00058-ge75ce84aa5d3 #1 Not tainted
->> [    0.153301][    T0] -----------------------------
->> [    0.153394][    T0] include/linux/rcupdate.h:850 rcu_read_lock() used illegally while idle!
->>
->> [    0.165396][    T0] RCU not watching for tracepoint
->> [    0.165540][    T0]
->> [    0.165712][    T0] =============================
->> [    0.165811][    T0] WARNING: suspicious RCU usage
->> [    0.165909][    T0] 6.13.0-rc1-00058-ge75ce84aa5d3 #1 Not tainted
->> [    0.166026][    T0] -----------------------------
->> [    0.166122][    T0] include/linux/rcupdate.h:878 rcu_read_unlock() used illegally while idle!
->>
->> and many more.
-> 
-> Grumble. It's just that one file. I wonder if we could just do a hack like
-> this?
-> 
+Applied, thanks!
 
-Below patch fixes the issue in powerpc
-Tested-by: Madhavan Srinivasan <maddy@linux.ibm.com>
+[03/11] ARM: dts: marvell: mmp2-olpc-xo-1-75: Switch to {hp,mic}-det-gpios
+        https://git.kernel.org/krzk/linux-dt/c/62f95d8a4920706e94759a8f5e34677528530cf1
+[08/11] arm64: dts: uniphier: Switch to hp-det-gpios
+        https://git.kernel.org/krzk/linux-dt/c/751df73d825b3f7e6cad42ed333c28096635784d
 
-Thanks
-maddy
-
-> Paul?
-> 
-> diff --git a/kernel/trace/trace_preemptirq.c b/kernel/trace/trace_preemptirq.c
-> index 5c03633316a6..58098873efa9 100644
-> --- a/kernel/trace/trace_preemptirq.c
-> +++ b/kernel/trace/trace_preemptirq.c
-> @@ -10,11 +10,42 @@
->  #include <linux/module.h>
->  #include <linux/ftrace.h>
->  #include <linux/kprobes.h>
-> +#include <linux/hardirq.h>
->  #include "trace.h"
->  
->  #define CREATE_TRACE_POINTS
->  #include <trace/events/preemptirq.h>
->  
-> +/*
-> + * Use regular trace points on architectures that implement noinstr
-> + * tooling: these calls will only happen with RCU enabled, which can
-> + * use a regular tracepoint.
-> + *
-> + * On older architectures, RCU may not be watching in idle. In that
-> + * case, wake up RCU to watch while calling the tracepoint. These
-> + * aren't NMI-safe - so exclude NMI contexts:
-> + */
-> +#ifdef CONFIG_ARCH_WANTS_NO_INSTR
-> +#define trace(point, args)	trace_##point(args)
-> +#else
-> +#define trace(point, args)					\
-> +	do {							\
-> +		if (trace_##point##_enabled()) {		\
-> +			bool exit_rcu = false;			\
-> +			if (in_nmi())				\
-> +				break;				\
-> +			if (!IS_ENABLED(CONFIG_TINY_RCU) &&	\
-> +			    is_idle_task(current)) {		\
-> +				ct_irq_enter();			\
-> +				exit_rcu = true;		\
-> +			}					\
-> +			trace_##point(args);			\
-> +			if (exit_rcu)				\
-> +				ct_irq_exit();			\
-> +		}						\
-> +	} while (0)
-> +#endif
-> +
->  #ifdef CONFIG_TRACE_IRQFLAGS
->  /* Per-cpu variable to prevent redundant calls when IRQs already off */
->  static DEFINE_PER_CPU(int, tracing_irq_cpu);
-> @@ -28,7 +59,7 @@ static DEFINE_PER_CPU(int, tracing_irq_cpu);
->  void trace_hardirqs_on_prepare(void)
->  {
->  	if (this_cpu_read(tracing_irq_cpu)) {
-> -		trace_irq_enable(CALLER_ADDR0, CALLER_ADDR1);
-> +		trace(irq_enable, TP_ARGS(CALLER_ADDR0, CALLER_ADDR1));
->  		tracer_hardirqs_on(CALLER_ADDR0, CALLER_ADDR1);
->  		this_cpu_write(tracing_irq_cpu, 0);
->  	}
-> @@ -39,7 +70,7 @@ NOKPROBE_SYMBOL(trace_hardirqs_on_prepare);
->  void trace_hardirqs_on(void)
->  {
->  	if (this_cpu_read(tracing_irq_cpu)) {
-> -		trace_irq_enable(CALLER_ADDR0, CALLER_ADDR1);
-> +		trace(irq_enable, TP_ARGS(CALLER_ADDR0, CALLER_ADDR1));
->  		tracer_hardirqs_on(CALLER_ADDR0, CALLER_ADDR1);
->  		this_cpu_write(tracing_irq_cpu, 0);
->  	}
-> @@ -61,7 +92,7 @@ void trace_hardirqs_off_finish(void)
->  	if (!this_cpu_read(tracing_irq_cpu)) {
->  		this_cpu_write(tracing_irq_cpu, 1);
->  		tracer_hardirqs_off(CALLER_ADDR0, CALLER_ADDR1);
-> -		trace_irq_disable(CALLER_ADDR0, CALLER_ADDR1);
-> +		trace(irq_disable, TP_ARGS(CALLER_ADDR0, CALLER_ADDR1));
->  	}
->  
->  }
-> @@ -75,7 +106,7 @@ void trace_hardirqs_off(void)
->  	if (!this_cpu_read(tracing_irq_cpu)) {
->  		this_cpu_write(tracing_irq_cpu, 1);
->  		tracer_hardirqs_off(CALLER_ADDR0, CALLER_ADDR1);
-> -		trace_irq_disable(CALLER_ADDR0, CALLER_ADDR1);
-> +		trace(irq_disable, TP_ARGS(CALLER_ADDR0, CALLER_ADDR1));
->  	}
->  }
->  EXPORT_SYMBOL(trace_hardirqs_off);
-> @@ -86,13 +117,13 @@ NOKPROBE_SYMBOL(trace_hardirqs_off);
->  
->  void trace_preempt_on(unsigned long a0, unsigned long a1)
->  {
-> -	trace_preempt_enable(a0, a1);
-> +	trace(preempt_enable, TP_ARGS(a0, a1));
->  	tracer_preempt_on(a0, a1);
->  }
->  
->  void trace_preempt_off(unsigned long a0, unsigned long a1)
->  {
-> -	trace_preempt_disable(a0, a1);
-> +	trace(preempt_disable, TP_ARGS(a0, a1));
->  	tracer_preempt_off(a0, a1);
->  }
->  #endif
-> 
-> 
-> I tested this by forcing x86 to use this code, and it appeared to work.
-> 
-> -- Steve
-> 
-> 
+Best regards,
+-- 
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 
