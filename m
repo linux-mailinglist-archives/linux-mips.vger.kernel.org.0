@@ -1,242 +1,399 @@
-Return-Path: <linux-mips+bounces-6893-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6894-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 638D89E5D03
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Dec 2024 18:25:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8926B9E5D2E
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Dec 2024 18:33:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCF6E18825F2
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Dec 2024 17:24:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B042188323B
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Dec 2024 17:33:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63421224AFB;
-	Thu,  5 Dec 2024 17:24:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01B57226EC8;
+	Thu,  5 Dec 2024 17:33:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="jP47FIrX";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="IHxBnacu";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="jP47FIrX";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="IHxBnacu"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="oIYKvrFf"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2071.outbound.protection.outlook.com [40.107.244.71])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44AB22EB1F;
-	Thu,  5 Dec 2024 17:24:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733419495; cv=none; b=pYffi5QMD2ITCW3yoyQB41dNy8X1hpwBJihBufVB/SsIeQHN3IgXvPZNxg0ATm5Wfc3Ulpf3HKpmIjzzuSfHbRK8sxEogIrbJ42sTXbweMKkDmNHTtso5qgZHg/S+4x8nYIgPDNtiQBLIALNZpp+ZmSjC1JppNbiBGcKU0V4qxg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733419495; c=relaxed/simple;
-	bh=16pU3/VAYTh+D3dm8LOcVfpbDQqaVgE7cn5iHyJafHw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FeyHd0Tcu/BDXKOlnrCw27YG1HIWbMP+XCVzqmst6oiMDy/kmaCOqnnHrVky8sa0IUSQt8TQ54BJ7dVxuTTjcvV/Vk+CHfe98+5XgUpgYqKiXsvlxa8NM2eZ77OG/0vpu2OYAhcSKM02D4bC17jcw/zHMDRSVlsbxpC2B0Xmpcw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=jP47FIrX; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=IHxBnacu; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=jP47FIrX; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=IHxBnacu; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 26FE71F45E;
-	Thu,  5 Dec 2024 17:24:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1733419491; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=YLVXBpu8hX2IMUmLaDWa4TSaan2r+yBI/vCBSXLPPYk=;
-	b=jP47FIrXJhJO53LTxI7x8HQWPhXItNpXc/8ISAkDQmQn1nCjpolBExWN+hokJkFvJIrxHW
-	db6899M7qPFln7TP9txM1rOU4sTEhZ8iYMJr4djcRDjl2I5wQGC5p3p9s/5zCjCy/nedLU
-	rp9G8cHddgu2WcpgxV3tPCo/yDEM5pg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1733419491;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=YLVXBpu8hX2IMUmLaDWa4TSaan2r+yBI/vCBSXLPPYk=;
-	b=IHxBnacuZtnlPUv5JZm5zHJ4FAf0sDT/M1kpGT23miLdbngLdfWppZFB+nLIbfTxh2YGQk
-	TIdeBpc9iH7tHYCw==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=jP47FIrX;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=IHxBnacu
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1733419491; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=YLVXBpu8hX2IMUmLaDWa4TSaan2r+yBI/vCBSXLPPYk=;
-	b=jP47FIrXJhJO53LTxI7x8HQWPhXItNpXc/8ISAkDQmQn1nCjpolBExWN+hokJkFvJIrxHW
-	db6899M7qPFln7TP9txM1rOU4sTEhZ8iYMJr4djcRDjl2I5wQGC5p3p9s/5zCjCy/nedLU
-	rp9G8cHddgu2WcpgxV3tPCo/yDEM5pg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1733419491;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=YLVXBpu8hX2IMUmLaDWa4TSaan2r+yBI/vCBSXLPPYk=;
-	b=IHxBnacuZtnlPUv5JZm5zHJ4FAf0sDT/M1kpGT23miLdbngLdfWppZFB+nLIbfTxh2YGQk
-	TIdeBpc9iH7tHYCw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 05649132EB;
-	Thu,  5 Dec 2024 17:24:51 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id dJT7AOPhUWfXHgAAD6G6ig
-	(envelope-from <vbabka@suse.cz>); Thu, 05 Dec 2024 17:24:51 +0000
-Message-ID: <434596ce-5514-42f3-84f5-f8a70954f058@suse.cz>
-Date: Thu, 5 Dec 2024 18:24:50 +0100
-Precedence: bulk
-X-Mailing-List: linux-mips@vger.kernel.org
-List-Id: <linux-mips.vger.kernel.org>
-List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
-List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A67422147D;
+	Thu,  5 Dec 2024 17:32:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.71
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1733419980; cv=fail; b=qFfLSFYeMts4HpByRfkid9mMVZkFoYPdq69Oug2wAk8ZscD3OCBe0BGPcNAOdnpkv4DjgMBCQmCFpjRXkKk5QJ0DiC7tiCYmQVUsRaUeU8if4PZaT2crYiLozSNF0xAB/+ZXqQEwvdS72GFI2Se0ZjZ+bkp+Kwv00SUwwPhAWkg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1733419980; c=relaxed/simple;
+	bh=WyBaw1w/WhfrMwXJVMucUysJvWUa5IA8zy5IrYnVKmE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=qXcl3QhbTN1tTc+Mx7OjZWRwRPH4linN+1jJ63iEyPe2OI7gnTVQq6Mg/6lergmzJhbaGpckRzrAPh4lZ3Y2HyviPhbMCQH6MaFUaXQXtLpCrA0IoBRmz4ESKV6dg5O97674vMr4j2GsNj40dzUruiJHTAUOlVEAgrW0NtRetgk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=oIYKvrFf; arc=fail smtp.client-ip=40.107.244.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=buR9lwlmJqKnz7EuukbzyRYW0YP5l+q4QwrsLgt69Pg9hAae45ZLPZoE8c6SZhu4cfjh4alFG3yPkO2mvb4rxV0cyh1g9i3accdxaUKaGusDsI8EXsnVi8vhFW910tIj4/lwBjjnLKzSs+6lmn9aee7StV3r2ZLKONT9W+oUiPRszp1d9J19SaaGKZkW8NCGD7RpHhiD8zH2sP9OyNskl9QHvbbFXOwzdRxdf9rt3iwXl667TYBc69AczGhhE7JRc6QTTAcqKVtyd4eOiPMmYTL5ttOuQ+JCECOpXtZTY1TS7EcdaRLtUqEEiKjNJCm2h1IukRgiBCV4oNpGmMD8pA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RD68RHRBFpYK2dpzyxz/Bv978YFS8hyIveg+8Pjp81g=;
+ b=CJPrO7UDZ1q/mPdOjd+ENQTTGb4VArWm3BPLe/+ZmcLS670aTuzz6Hltv4T7QcoAvtszRwbgjcoEB9i3dNuAsUmeOx4SUs015ysdWjdTa45dAbdQLi9TjxUdgDtNYxkoiRwvYrmuuwesx5D/WuRQO07gx02gjqd0D87SvO2BSxtxdtZpFT+FtOXXRxa+G0k4UpxiNia2tPLuSorzPorrEhQK4odoY+0xzuUAzmhT91/ymiHdsu9nlS9xvwkGObwGyg2CSLYz/vd+xg2Qi8pOuBGJjMUmzH4UXY9wcoHigj3LBVHvprsyA/DwBJE5T8p9PYeMnw7n2y+pneUI014qjw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=RD68RHRBFpYK2dpzyxz/Bv978YFS8hyIveg+8Pjp81g=;
+ b=oIYKvrFfYKkom16T6RA/khWUboJVj5Zbpdjp8cWAqZiWorTCyj8sM45oktWVtu0eNR6UP9rlsOrJbwYvTkFOcFNuC2ub605NQm6lhab0tnULj9luP5B6MdU+HXmHQqGUPu4N261TJvuIUqzu8dnbbzOHK8O7QVdUUytnfHPbbIGQqN4BapAj3eDXKjzZUQql3ijUK1JhHccu9y1zLtEFV3GHUaT5RB+SJmD6vecAqyrWgp1pca3mvQzdaNCHMHtwk4V+QzfuOVlXIFCcKrhiOGsElpaByOHNFacIYZ+uw1OR6DKswRlUQMczMqfEtyqCsH9c5l2gYNbLDdbw6gJawQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com (2603:10b6:8:252::5) by
+ SA3PR12MB8024.namprd12.prod.outlook.com (2603:10b6:806:312::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8207.18; Thu, 5 Dec
+ 2024 17:32:55 +0000
+Received: from DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::5189:ecec:d84a:133a]) by DS7PR12MB9473.namprd12.prod.outlook.com
+ ([fe80::5189:ecec:d84a:133a%3]) with mapi id 15.20.8230.010; Thu, 5 Dec 2024
+ 17:32:55 +0000
+From: Zi Yan <ziy@nvidia.com>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Matthew Wilcox <willy@infradead.org>, Vlastimil Babka <vbabka@suse.cz>,
+ linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
+ David Hildenbrand <david@redhat.com>, Miaohe Lin <linmiaohe@huawei.com>,
+ Kefeng Wang <wangkefeng.wang@huawei.com>, John Hubbard <jhubbard@nvidia.com>,
+ "Huang, Ying" <ying.huang@intel.com>, Ryan Roberts <ryan.roberts@arm.com>,
+ Alexander Potapenko <glider@google.com>, Kees Cook <keescook@chromium.org>,
+ linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
 Subject: Re: [PATCH] mm: avoid zeroing user movable page twice with
  init_on_alloc=1
-Content-Language: en-US
-To: Zi Yan <ziy@nvidia.com>, Geert Uytterhoeven <geert@linux-m68k.org>,
- David Hildenbrand <david@redhat.com>
-Cc: Matthew Wilcox <willy@infradead.org>, linux-mm@kvack.org,
- Andrew Morton <akpm@linux-foundation.org>, Miaohe Lin
- <linmiaohe@huawei.com>, Kefeng Wang <wangkefeng.wang@huawei.com>,
- John Hubbard <jhubbard@nvidia.com>, "Huang, Ying" <ying.huang@intel.com>,
- Ryan Roberts <ryan.roberts@arm.com>, Alexander Potapenko
- <glider@google.com>, Kees Cook <keescook@chromium.org>,
- linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Date: Thu, 05 Dec 2024 12:32:52 -0500
+X-Mailer: MailMate (1.14r6065)
+Message-ID: <EF8F5058-83CA-45FE-8721-08224B489361@nvidia.com>
+In-Reply-To: <CAMuHMdV1hkwajxDWk6AWj_QR_qPkEni0u=tnQWdt1-M83NE0ig@mail.gmail.com>
 References: <20241011150304.709590-1-ziy@nvidia.com>
  <CAMuHMdV1hRp_NtR5YnJo=HsfgKQeH91J537Gh4gKk3PFZhSkbA@mail.gmail.com>
  <DAFE2913-0B32-484F-83BE-080C60362DB8@nvidia.com>
  <f64f8a9e-fda8-4f7a-85a2-0113de2feb6c@suse.cz>
  <9942C08D-C188-461C-B731-F08DE294CD2B@nvidia.com>
  <Z1CDbrrTn6RgNmYn@casper.infradead.org>
- <09B2AB6A-B122-4287-B97E-F800E511097E@nvidia.com>
- <995E365D-5B83-41B3-A46C-6493D203A761@nvidia.com>
- <CAMuHMdW4=HScVk2C+vkG_JqO9uMCF2VoJTuGqSi1-H=86e2RqQ@mail.gmail.com>
- <056a2305-db07-4168-868b-164493ff8587@redhat.com>
- <F3805AF4-1660-4CEA-868E-2D1F4A70BCB3@nvidia.com>
-From: Vlastimil Babka <vbabka@suse.cz>
-Autocrypt: addr=vbabka@suse.cz; keydata=
- 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
- EP+ylKVEKb0Q2A==
-In-Reply-To: <F3805AF4-1660-4CEA-868E-2D1F4A70BCB3@nvidia.com>
+ <B65776A4-D434-4D9F-9C42-1C45DAE5A72A@nvidia.com>
+ <CAMuHMdV1hkwajxDWk6AWj_QR_qPkEni0u=tnQWdt1-M83NE0ig@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Rspamd-Queue-Id: 26FE71F45E
-X-Spam-Score: -4.51
-X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-4.51 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ASN(0.00)[asn:25478, ipnet:::/0, country:RU];
-	MIME_TRACE(0.00)[0:+];
-	ARC_NA(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	MID_RHS_MATCH_FROM(0.00)[];
-	RCVD_TLS_ALL(0.00)[];
-	TO_DN_SOME(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	RCVD_COUNT_TWO(0.00)[2];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo,suse.cz:mid,suse.cz:dkim];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	DKIM_TRACE(0.00)[suse.cz:+]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
-X-Spam-Level: 
+Content-Transfer-Encoding: quoted-printable
+X-ClientProxiedBy: BN8PR04CA0025.namprd04.prod.outlook.com
+ (2603:10b6:408:70::38) To DS7PR12MB9473.namprd12.prod.outlook.com
+ (2603:10b6:8:252::5)
+Precedence: bulk
+X-Mailing-List: linux-mips@vger.kernel.org
+List-Id: <linux-mips.vger.kernel.org>
+List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
+List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB9473:EE_|SA3PR12MB8024:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2fc01005-c9c4-4770-1b54-08dd1552da44
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|7416014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?NDhvUzduN1pXZEV5bm5xZ1VKR2lnR3NtdmVsZ0M0MlN6dnZ2clZjNHRHNzY4?=
+ =?utf-8?B?d2svSnZnMlBlOGpGZmwwVnlxYm9nNk95OFYwa0tDSWhQeHJudUJBcjRqeEFX?=
+ =?utf-8?B?TTIrdldCT1JsUkpOUGlYNXZBZjVzbDhVUjZuRTBhZ3VibUxudHpKa0w1amt5?=
+ =?utf-8?B?UHhHSkR3cWdRbEhZRXZ1bWV4MzZHQjBRZDRQWG5pWW9XUXlvMnFEU1g2alFw?=
+ =?utf-8?B?enhJTWZUdWlyVmw3MlJabGdIenZGUEErUXgySUJXYjdKV21GV2RrQlJZZE9E?=
+ =?utf-8?B?Tm5NYitiVUdVY2czREM1Z256eWt1OEMzTmtrdGFBekNpaHY4ejFWcVZ3UE5X?=
+ =?utf-8?B?L3dEQzRvYk9kVDFGRmhDa0V0Zk1zSTJoN3g2YnBkbUc0anR1azFBVDMzYWl2?=
+ =?utf-8?B?OU1aek80MnhiQVNFZVlwL1pxK2N5cmJsMk1tTjFRMk9UU29mcjNKSVp4YWUr?=
+ =?utf-8?B?cTl0c0hHYzFid3Nrc3FOeGZKY2J4dU9VUGpkS0FjYnI4UGJtaVMxa1lCdjRZ?=
+ =?utf-8?B?Zm1lcWZBODlhQ3JnSkdhc3ExRDV3QzRXS0YrV0tBaEE5ME5CZmFhRkNQeko1?=
+ =?utf-8?B?KzhQcTVjUW5aSm8wdER3R0NmNkcyZTFHc01sa2dYK0hWMHh2VktLS0Nsc2dl?=
+ =?utf-8?B?c0hnZGhzV1JVdjRKU2hoWGVZcnVnUXdBWTNuSnFmYXREVGNBV0pSUW53OW5H?=
+ =?utf-8?B?bUpEZHp1TjNoQ25hbHl6ZlVQSy8yZ3lCZ3ZCUnVPMWJWSlI4M0phOUtXNDR4?=
+ =?utf-8?B?ZGYzYVpPMUswaEZtMkRWam1PenNaYXNqYVNWNVJqYmJ2SytYS1lDWjM5cjZH?=
+ =?utf-8?B?aUl3eWVDSExHSHJObzl2cHNXcDVnTVJ4QndHNTMrWHFNT0hRMW9ZV0FreXZs?=
+ =?utf-8?B?NlU4YWxGWmwzTXAzU3Z1c3Y0MFZ1TTlUbzY1SFdyMkdiU0RQSUFZMWtaTlZ5?=
+ =?utf-8?B?NzFOZDV3SDk5cWFhSkNFSnB4b1BpNlJEU0QvSzVjbjZXdHZJRlhTajBCOU5J?=
+ =?utf-8?B?V3QzNFF5b25rbVM1NkN4ZFd0R3psV0xGODV0ZDdhQndkZnRzRmZINlJ5bU1q?=
+ =?utf-8?B?aXZpOVR6bUZrYVNEdU5DNFRCOXhjS01ERGFTZjdNTzJ4UHU3RndWL3VEaEZI?=
+ =?utf-8?B?a0ZnZFJOUXdSdHprbU9mdjJlczVHblVsWDB2UGxzZmcrbFR1QStIQUxXbWZH?=
+ =?utf-8?B?S2tNK1ExSEZaN0JMdlBKTzF5M3dsMDBBYmdRbkNpMVdTck1HT2phaVhBZm5N?=
+ =?utf-8?B?VmREYm1PWFhFQ3hQNXdWTkgyVG9aWUlQQXN3ZkV0ekw4MlQxV1NjS2d0SmNO?=
+ =?utf-8?B?YWFXeHlQa01NTnliNi9ZYUdud3c3dG11VG0xd3l1MWFkY2VqZVlqUW5xWlR6?=
+ =?utf-8?B?MjJMUUVsYjl4Q0V2bVVOTWd4eXlramxLYURTS2pyZjAwVEd3OXgxWGcyQ2hn?=
+ =?utf-8?B?NVkySWltZ1lsYUx1YzN1d0l0RUdTWW5qNHpYY0dpcUVyRzQyNFN0NU91L3VH?=
+ =?utf-8?B?bVJNSjV3R3E2cGQxZ3BFLzhjUSthelk4eUxjdnNKTXFONk5ncnhWOTlyYWYx?=
+ =?utf-8?B?YmMxSWo1S0d3RnVLZElHVSswNFRHTG9QZmlYWWZWZE80VGpmTlFKWlREek5k?=
+ =?utf-8?B?ZllPS2tSbzZTbWJZZkZScitzNlo4NVJVd1AvemxHL3RLRytvbnJLTndvNFB2?=
+ =?utf-8?B?YmdNSFJNRno0SUhWaTNUOFlnZUZ6MEFGaG9kbUVaYlQ2K0krWEMyU0dieko5?=
+ =?utf-8?B?TnRTaDFhZElLTFBOWUo1dW02YnJBS0FtWWpjcSs5QzFsUmtsd3c3K3c3cTFm?=
+ =?utf-8?B?TjFjQk5tem9tVjVmcldVUT09?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB9473.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?NGptWGhSTlJWTmxvMXAvTER6YkF5VlFVb0VzREIrbW1EYWdGQmsvMUc5N1NG?=
+ =?utf-8?B?djZJZnJTd2VOSnFoSUJ4RVhTNXY4NnBSczJURC9Oc1Yvd2lQbDdtR0hYSWdI?=
+ =?utf-8?B?ZDEvYzFNcXV4N0x5cEFhMkQrY2VPTkU2V1NUYkovSCtqTkE4RjBnblN6bzBK?=
+ =?utf-8?B?ZWJVckp3NldaL1pvbElCQXBDekQrVGNnWHAvQnk5WnFCRzVGUDdUWXFmczhR?=
+ =?utf-8?B?NzVmMDFLeEZvV2xPWkFiNThzN2h3WTFzWkVNQnVCUWFsbHIrWUJJVitjM3Mw?=
+ =?utf-8?B?cFJraWswdkNrK1BHQjQ5d2swL0FlTmxEeWJJTWY4VFg5aTdTcDZ2RFdTM1V5?=
+ =?utf-8?B?Z00zTzZqUk16MW02RVV2OXpWcTNNY05SaVRPRW1ucVJySFNoMzZvWUJmOFll?=
+ =?utf-8?B?aXpjQlpPT2YrZE9BS3J5SFNtUUdDTldZKy94RG5wV25kN3NBVHRIM2RRRzdv?=
+ =?utf-8?B?TUVLOGkrM28zT2hUMHo1ZlRWSi9ZczBqc21XV1dxVmZ6dzJtUDdWZEVETjZR?=
+ =?utf-8?B?U29iM0lKM212VVZOTHpYZmoybXZGT0Voak5GaWxkeTJ2ZjVjWmxveGpLNjlC?=
+ =?utf-8?B?N08zWG5NdUQrWnFOSGJRRnFpeFRmNGF6L0hBSU5mWEZRQkt3cVpCSVYwUW5T?=
+ =?utf-8?B?OUhmRUk3OGw2QzFUTGhmbUpGWkU1SEtvWmk0SzRVbDdaOHpMQ3RKK3lROE5L?=
+ =?utf-8?B?cVJmQ1BkbjczcmRuYWx5UTBUcGVjRkdJWWlGeTZieTZqaDE4TDl0V21hUk4z?=
+ =?utf-8?B?RjdjdzdlR1hoOWFlcXVHL01OL2tpS0FZQ3JLN2k1Y1NwUzFJUnBPSm1kS3p6?=
+ =?utf-8?B?Z3lqczBETHFVQkNQSlU4aXZqbm1zZ1kvc0wyOWJqYk1tNnRpZ1VCZkk4ZU9y?=
+ =?utf-8?B?bHJVUGZXaml6bkhTbldrT2xZRm9zYUJQNytQY0x2RkYwMzVOaUtTeFFLdTJs?=
+ =?utf-8?B?VHpsdzZwRjhNeUQvNmU2S0F0TGRpTjYwZDBuQUVqQ3RkTGxaWThZaThOVERH?=
+ =?utf-8?B?RnA4Y1VxUHljNEprSVJaRlRoYy9zZEovUjZKN2NGN0k1OGxJVTZsMmppVi9H?=
+ =?utf-8?B?UGM0VGdYbnhkNWhDSlhGQjhnRnl0UzFOTEhpNzh4Y1QzWEFGZ1NMUHBpaHQv?=
+ =?utf-8?B?YmhZNGRWNk5rSUF0d3grcFRpT3BTdVRVemFoN0Jad2g0NG56czljQ0Q3c2F2?=
+ =?utf-8?B?bDRneWpBcVAxWlNySmJBTXNHcWtsejE2QjFlaXRxSmIyZzdwSk1GYkQ0NE1O?=
+ =?utf-8?B?a3R4TFJQLzlTT1kvcThWZ0dmeDAxU0lTdWtrQWxZQklWRXBQUXV2UHdBREtO?=
+ =?utf-8?B?Tis1a3ZrZ0loUjNMV1E1SmhtU1ZDK1ppWVNXQjgvOGZHOGRqL3ZzN2lMRjdE?=
+ =?utf-8?B?NnRrbzVDSXlnWktwMFJOVWhUekdBeTJnVnVIMXNDcHE3ZGhiVzR0dFROckt1?=
+ =?utf-8?B?aVF4b0Z6cjJMaGFXRWw4dnJMU3BvTUtpUU1EZGE3NEdUWlcwT3ZRR1ovcDZr?=
+ =?utf-8?B?Nk9lU1pIUmhGVWl0ZnVPR25CMlZkeVV6VEgyaXRWb0xWUmZacml4SkVZVVJp?=
+ =?utf-8?B?dm9JR2ZrcEZmMGNFYTk3cStqOGEvaUFhTmRQcWI1bmlNemxVRjU4OGI1ZFdF?=
+ =?utf-8?B?bDgwYkRJY3lLdGc4dy9UZHhqT2ZhcWwrTUl3ZUxJbFBwQ3NMZGkxS0JuRXk4?=
+ =?utf-8?B?VnZTQWdraGloU1hPYjhaSXVHMFl3ZDVINjhTUXZNS0psSzZvTnVIMjN6d0Nz?=
+ =?utf-8?B?dlZ3TFdWMTNSQzRwMlgrWjF3NmpPNmRxVHlmV0E3dld4WFZuVDJvSFJiSVgw?=
+ =?utf-8?B?bklXbnloZHJGTnZUQW1pYVNKY0tlNSs0NFlLRHJiWDV3MUVjYUdIZGJnclFK?=
+ =?utf-8?B?TU9OMGkxUXRKRUZEN21hK3Z6TEV3QnRJSTZNQ211eTI3WVZEaDQ4Z3RIWnpL?=
+ =?utf-8?B?Q0VCQXpWaGU4bEJOY1o2U293T0h1UC9CbEhWTEd2MEdJbjhXNXlKQWJaY3dm?=
+ =?utf-8?B?V0U4c1k2cVpaQnEzaSs2SHg1akVOSnN3cUFWUjl5MWdJci9YQTZuUzBmS0dK?=
+ =?utf-8?B?SnhaaHlFSFZCM2FKU2E4KzF0VUlRV2xQLzM5anRENVVJdVBpeTg4ZVV1d010?=
+ =?utf-8?Q?N6DA0Ffdy8Fy/HhCsy314yluc?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2fc01005-c9c4-4770-1b54-08dd1552da44
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB9473.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Dec 2024 17:32:55.1484
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: sTQn21v43l4QsEuCtNWfwfXfFW5BmRQ98xqkopYAcseyddflvK2t1CRjbQpZ5x4C
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR12MB8024
 
-On 12/5/24 17:05, Zi Yan wrote:
-> On 5 Dec 2024, at 3:10, David Hildenbrand wrote:
+On 5 Dec 2024, at 3:19, Geert Uytterhoeven wrote:
+
+> Hi Zi,
+>
+> On Wed, Dec 4, 2024 at 5:58=E2=80=AFPM Zi Yan <ziy@nvidia.com> wrote:
+>> On 4 Dec 2024, at 11:29, Matthew Wilcox wrote:
+>>> On Wed, Dec 04, 2024 at 11:16:51AM -0500, Zi Yan wrote:
+>>>>> So maybe the clearing done as part of page allocator isn't enough her=
+e.
+>>>>>
+>>>> Basically, mips needs to flush data cache if kmap address is aliased t=
+o
 >>>
->>> Kernel log confirms it's enabled:
->>> -mem auto-init: stack:off, heap alloc:off, heap free:off
->>> +mem auto-init: stack:off, heap alloc:on, heap free:off
+>>> People use "aliased" in contronym ways.  Do you mean "has a
+>>> non-congruent alias" or "has a congruent alias"?
 >>
->> If I'm not wrong that's expected ... because we'll be double-zeroing that memory, clearing the cache :)
+>> I mean if kmap address goes into a different cache line than userspace
+>> address, a cache flush is needed to make sure data is visible to
+>> userspace.
 >>
->> I guess the question is, how *effective* is CONFIG_INIT_ON_ALLOC_DEFAULT_ON on systems to prevent exposing un-zeroed data to userspace, when it doesn't end up doing the flush we really need.
-> 
-> Hi Geert,
-> 
-> Is it possible to run a 32bit kernel with HIGHMEM and
-> CONFIG_INIT_ON_ALLOC_DEFAULT_ON on the machine (of course with my patch
-> reverted)? Just to check my reasoning below.
-> 
-> Thanks.
-> 
-> 
-> Yes, it should work, since I forgot the actual issue is HIGHMEM+cache flush, not just cache flush is needed after clearing user page.
-> 
-> For arch which needs to flush cache after clearing user page, with HIGHMEM,
-> init_on_alloc first clears the page using kmap_addr0 without flushing
-> the cache, then clear_user_page() clears the page using kmap_addr1
-> with cache flush. After returning to userspace, the cache lines of
-> kmap_addr0 will be evicted and written back to RAM eventually, corrupting
-> user data with 0s, because no one flushes them before returning to userspace.
-> 
-> For a proper fix, I will add ARCH_HAS_OPS_AFTER_CLEAR_USER_PAGE and
-> make mips, sh, sparc, arm, xtensa, nios2, m68k, parisc, csky, arc, and powerpc
-> select it, then make alloc_zeroed() returns false if
-> ARCH_HAS_OPS_AFTER_CLEAR_USER_PAGE is enabled.
-> 
-> If my reasoning above is verified to be true, I will send a separate patch
-> to disable CONFIG_INIT_ON_ALLOC_DEFAULT_ON if HIGHMEM &&
-> ARCH_HAS_OPS_AFTER_CLEAR_USER_PAGE.
+>>>
+>>>> userspace address. This means when mips has THP on, the patch below
+>>>> is not enough to fix the issue.
+>>>>
+>>>> In post_alloc_hook(), it does not make sense to pass userspace address
+>>>> in to determine whether to flush dcache or not.
+>>>>
+>>>> One way to fix it is to add something like arch_userpage_post_alloc()
+>>>> to flush dcache if kmap address is aliased to userspace address.
+>>>> But my questions are that
+>>>> 1) if kmap address will always be the same for two separate kmap_local=
+() calls,
+>>>
+>>> No.  It just takes the next address in the stack.
+>>
+>> So this fix will not work, since it is possible that first kmap and seco=
+nd
+>> kmap have different pages_do_alias() return values.
+>>
+>> Another way would be to make a special case for mips, like below.
+>> But that looks ugly, let me think about it more.
+>>
+>> diff --git a/arch/mips/include/asm/page.h b/arch/mips/include/asm/page.h
+>> index bc3e3484c1bf..ef3c6f0b9159 100644
+>> --- a/arch/mips/include/asm/page.h
+>> +++ b/arch/mips/include/asm/page.h
+>> @@ -95,6 +95,19 @@ struct vm_area_struct;
+>>  extern void copy_user_highpage(struct page *to, struct page *from,
+>>         unsigned long vaddr, struct vm_area_struct *vma);
+>>
+>> +struct folio *vma_alloc_zeroed_movable_folio(struct vm_area_struct *vma=
+,
+>> +                                  unsigned long vaddr)
+>> + {
+>> +       struct folio *folio;
+>> +
+>> +       folio =3D vma_alloc_folio(GFP_HIGHUSER_MOVABLE, 0, vma, vaddr);
+>> +       if (folio)
+>> +               clear_user_highpage(&folio->page, vaddr);
+>> +
+>> +       return folio;
+>> + }
+>> +#define vma_alloc_zeroed_movable_folio vma_alloc_zeroed_movable_folio
+>> +
+>>  #define __HAVE_ARCH_COPY_USER_HIGHPAGE
+>>
+>>  /*
+>> diff --git a/mm/internal.h b/mm/internal.h
+>> index cb8d8e8e3ffa..d513fa683aa3 100644
+>> --- a/mm/internal.h
+>> +++ b/mm/internal.h
+>> @@ -1287,7 +1287,8 @@ void touch_pmd(struct vm_area_struct *vma, unsigne=
+d long addr,
+>>
+>>  static inline bool alloc_zeroed(void)
+>>  {
+>> -       return static_branch_maybe(CONFIG_INIT_ON_ALLOC_DEFAULT_ON,
+>> +       return !IS_ENABLED(CONFIG_MIPS) &&
+>> +               static_branch_maybe(CONFIG_INIT_ON_ALLOC_DEFAULT_ON,
+>>                         &init_on_alloc);
+>>  }
+>
+> After adding a missing static inline, #include <linux/gfp.h>, and still
+> getting compile failures, I gave up...
 
-If your reasoning is true, wouldn't any other user of kmap_local_page() of a
-highpage on such system also leave the cache unflushed in case the page is
-ever reused as a userspace page?
+Sorry about that.
 
-> Best Regards,
-> Yan, Zi
+Can you try the patch below (it compiles locally for mips and x86) to see
+if your issue is fixed? Can you please make THP always on in your config,
+since THP is also affected by the same issue? The patch you tested only
+fixed non THP config.
 
+Thanks. I appreciate your help. :)
+
+diff --git a/include/linux/highmem.h b/include/linux/highmem.h
+index 6e452bd8e7e3..d9beb8371daa 100644
+--- a/include/linux/highmem.h
++++ b/include/linux/highmem.h
+@@ -224,7 +224,13 @@ static inline
+ struct folio *vma_alloc_zeroed_movable_folio(struct vm_area_struct *vma,
+ 				   unsigned long vaddr)
+ {
+-	return vma_alloc_folio(GFP_HIGHUSER_MOVABLE | __GFP_ZERO, 0, vma, vaddr);
++	struct folio *folio;
++
++	folio =3D vma_alloc_folio(GFP_HIGHUSER_MOVABLE, 0, vma, vaddr);
++	if (folio && alloc_need_zeroing())
++		clear_user_highpage(&folio->page, vaddr);
++
++	return folio;
+ }
+ #endif
+
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index c39c4945946c..6ac0308c4380 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -4175,6 +4175,23 @@ static inline int do_mseal(unsigned long start, size=
+_t len_in, unsigned long fla
+ }
+ #endif
+
++/*
++ * alloc_need_zeroing checks if a user folio from page allocator needs to =
+be
++ * zeroed or not.
++ */
++static inline bool alloc_need_zeroing(void)
++{
++	/*
++	 * for user folios, arch with cache aliasing requires cache flush and
++	 * arc sets folio->flags, so always return false to make caller use
++	 * clear_user_page()/clear_user_highpage()
++	 */
++	return (IS_ENABLED(CONFIG_ARCH_HAS_CPU_CACHE_ALIASING) ||
++		IS_ENABLED(CONFIG_ARC)) ||
++	       !static_branch_maybe(CONFIG_INIT_ON_ALLOC_DEFAULT_ON,
++				   &init_on_alloc);
++}
++
+ int arch_get_shadow_stack_status(struct task_struct *t, unsigned long __us=
+er *status);
+ int arch_set_shadow_stack_status(struct task_struct *t, unsigned long stat=
+us);
+ int arch_lock_shadow_stack_status(struct task_struct *t, unsigned long sta=
+tus);
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index ee335d96fc39..107130a5413a 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -1176,11 +1176,12 @@ static struct folio *vma_alloc_anon_folio_pmd(struc=
+t vm_area_struct *vma,
+ 	folio_throttle_swaprate(folio, gfp);
+
+        /*
+-	* When a folio is not zeroed during allocation (__GFP_ZERO not used),
+-	* folio_zero_user() is used to make sure that the page corresponding
+-	* to the faulting address will be hot in the cache after zeroing.
++	* When a folio is not zeroed during allocation (__GFP_ZERO not used)
++	* or user folios require special handling, folio_zero_user() is used to
++	* make sure that the page corresponding to the faulting address will be
++	* hot in the cache after zeroing.
+ 	*/
+-	if (!alloc_zeroed())
++	if (alloc_need_zeroing())
+ 		folio_zero_user(folio, addr);
+ 	/*
+ 	 * The memory barrier inside __folio_mark_uptodate makes sure that
+diff --git a/mm/internal.h b/mm/internal.h
+index cb8d8e8e3ffa..3bd08bafad04 100644
+--- a/mm/internal.h
++++ b/mm/internal.h
+@@ -1285,12 +1285,6 @@ void touch_pud(struct vm_area_struct *vma, unsigned =
+long addr,
+ void touch_pmd(struct vm_area_struct *vma, unsigned long addr,
+ 	       pmd_t *pmd, bool write);
+
+-static inline bool alloc_zeroed(void)
+-{
+-	return static_branch_maybe(CONFIG_INIT_ON_ALLOC_DEFAULT_ON,
+-			&init_on_alloc);
+-}
+-
+ /*
+  * Parses a string with mem suffixes into its order. Useful to parse kerne=
+l
+  * parameters.
+diff --git a/mm/memory.c b/mm/memory.c
+index 75c2dfd04f72..cf1611791856 100644
+--- a/mm/memory.c
++++ b/mm/memory.c
+@@ -4733,12 +4733,12 @@ static struct folio *alloc_anon_folio(struct vm_fau=
+lt *vmf)
+ 			folio_throttle_swaprate(folio, gfp);
+ 			/*
+ 			 * When a folio is not zeroed during allocation
+-			 * (__GFP_ZERO not used), folio_zero_user() is used
+-			 * to make sure that the page corresponding to the
+-			 * faulting address will be hot in the cache after
+-			 * zeroing.
++			 * (__GFP_ZERO not used) or user folios require special
++			 * handling, folio_zero_user() is used to make sure
++			 * that the page corresponding to the faulting address
++			 * will be hot in the cache after zeroing.
+ 			 */
+-			if (!alloc_zeroed())
++			if (alloc_need_zeroing())
+ 				folio_zero_user(folio, vmf->address);
+ 			return folio;
+ 		}
+
+
+
+Best Regards,
+Yan, Zi
 
