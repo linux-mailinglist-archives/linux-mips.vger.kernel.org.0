@@ -1,54 +1,54 @@
-Return-Path: <linux-mips+bounces-6903-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6904-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 629C89E9B10
-	for <lists+linux-mips@lfdr.de>; Mon,  9 Dec 2024 16:59:55 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F38529E9B13
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Dec 2024 16:59:59 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BEEAD28298B
-	for <lists+linux-mips@lfdr.de>; Mon,  9 Dec 2024 15:59:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7F5271888AFE
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Dec 2024 15:59:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64CD713AD3F;
-	Mon,  9 Dec 2024 15:59:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C43113E02D;
+	Mon,  9 Dec 2024 15:59:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="MUr01IBH"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="FBvl4Bwt"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 977DB136358;
-	Mon,  9 Dec 2024 15:59:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D019136E21;
+	Mon,  9 Dec 2024 15:59:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733759981; cv=none; b=gtcOghAEnAt7vTd9PXMrvkpZFz3bVYBXkCQW2ZfOOvQs5MsBpZeAeDmRvsDddcsywTAgmQOUcneeRvLf+4e7tCpwvHEj91j7z3cHpAcqy96LBLQEfR7iD1kOVzUIbrTm4QEebk4u0aNLTf0NKCUgrOheboNo5d0n618MtDNgff8=
+	t=1733759982; cv=none; b=GViaW+WF05C0uWyChx1PEfdi1iQAI+kuw3yCCAV/Oy7yFwOknK2Z55KcU+hUQQNuzahaJxsHd2I01g69I1SqX3QMJtj84QdrH8Z85VOxrMUnGqVnFjwB3PDOwCg4Q1QkHXKWfa6K5iT9feQ0MVJwuXVwdHpiVZTIz3ndlcjpwXs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733759981; c=relaxed/simple;
-	bh=xQCMhd6sNmqzoVJsu+DPTvtqg8ej/py6WlhJVntLvWM=;
+	s=arc-20240116; t=1733759982; c=relaxed/simple;
+	bh=BCAbN9+hhUpSq62Zs2Q0dGIwhF6v/NoYlHMxxEJlrjQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DjCbaxDXCvCJHWv7iO58VtRdXUBoNWtlC55gZEBoZZJHttPPZXWq6Sn4/GtzUDtTumcI3okarnC9CtH5WwJ74t9CmAX7Y1e3AzDbbp/XBPDdyL+VjovKHhd0S/PWVQYNKDc0aREC1VE5keVN8kN7bQfOcXssWKTu5jvJSk0F1z4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=MUr01IBH; arc=none smtp.client-ip=217.70.183.200
+	 In-Reply-To:To:Cc; b=CKYvqSwpFbhE4+7htKQPe0XVFRqOoDVtESwD/1qb2MR/PuiZreBXf9GCCLpwu4ewGEsiHeNgOD1H7iSHZnJ/OrAfnCn4sr1u0JC+j3tpY7wm0pVVdB/DmtKsFjsWwVfpY2axIF/d8zXamVq084jCEQKQkEp8KXra5YYizoTp/LQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=FBvl4Bwt; arc=none smtp.client-ip=217.70.183.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 866F720002;
-	Mon,  9 Dec 2024 15:59:36 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 462AD20005;
+	Mon,  9 Dec 2024 15:59:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
 	t=1733759977;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=633wi9jbGbmh5aHGKOl+TzK8t9Yq9KUEmvEFtmIsafs=;
-	b=MUr01IBHsv8gjJuGOuFTUSwYBjE0+sIKC6cmCq29uAbAk1m+uBGGUtOgoWFz2GBPhvXWyN
-	SZJIW+dAJAXUR0gA01hsOU75SwKP3q2kYNposElmgs73H8LpYdM9BkA6gMVt+tZm/bauXj
-	PBTbtWxYJuK/7Ucwvbah/B9rQB55Cs1AFgqOpV8G/Tiw9961Nrn0xMjKzRRJjX3nEU5ifA
-	RkHjyHrQTjpTjuuUs9/+zNqTvz9gdOHCNdDoHVuxvR9VuoToTWd5FYKPTVkEUtT+Ipymsc
-	mYpANezYbI19JI9/wQao4/dYtC+D4sZWIkguOAiONddy/mjt4hiaCCL7higtFg==
+	bh=QIIUswryJGOD7vz1EWBwFcVso7Qevi29wufjM5nkywY=;
+	b=FBvl4BwtugjRw+Q/BBxmabHVufGyAHjmtF1fxbluOqiTlA9XKO9xthyAYOmOQMiiKoJWP5
+	X9iCndNzARnj4Ng55oGHYJ1ImZAPM8UDUpY3lGRzxTy3i8L8mro+v59tEPsRhOOl2ePVDe
+	pQGfYukhT5HMdye8ryV8TrdSiiSKeMjFRvIvf2yekrghNiKamSJYd9vERE1eXxi9utwWK1
+	H1O4bWXrK6LG+IJaaNQK+4uZgFYfVe5+dOMdyHIHFLYNpZSDjidEWAeKPiWxiCRxE8uZA7
+	/dcEamxNXa2Man5fTyrXX6aGT5djI8goFVN/i7+P/d4qnAiJAg5urcZABecxew==
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Mon, 09 Dec 2024 16:59:35 +0100
-Subject: [PATCH v2 1/6] dt-bindings: nvmem: rmem: Add
- mobileye,eyeq5-bootloader-config
+Date: Mon, 09 Dec 2024 16:59:36 +0100
+Subject: [PATCH v2 2/6] nvmem: specify ->reg_read/reg_write() expected
+ return values
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20241209-rmem-v2-1-cbc0e8c08a21@bootlin.com>
+Message-Id: <20241209-rmem-v2-2-cbc0e8c08a21@bootlin.com>
 References: <20241209-rmem-v2-0-cbc0e8c08a21@bootlin.com>
 In-Reply-To: <20241209-rmem-v2-0-cbc0e8c08a21@bootlin.com>
 To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>, 
@@ -75,28 +75,42 @@ Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
 X-Mailer: b4 0.14.2
 X-GND-Sasl: theo.lebrun@bootlin.com
 
-On Mobileye EyeQ5, the bootloader will put MAC addresses into memory.
-Declare that as reserved memory to be used by the kernel, exposing
-nvmem cells. That region has a 12-byte header and a 4-byte trailing CRC.
+Both ->reg_read() and ->reg_write() return values are not easy to
+deduce. Explicit that they should return zero on success (and negative
+values otherwise).
 
-Acked-by: Rob Herring (Arm) <robh@kernel.org>
+Such callbacks, in some alternative world, could return the number of
+bytes in the success case. That would be translated to errors in the
+nvmem core because of checks like:
+
+	ret = nvmem->reg_write(nvmem->priv, offset, val, bytes);
+	if (ret) {
+		// error case
+	}
+
+This mistake is not just theoretical, see commit
+28b008751aa2 ("nvmem: rmem: Fix return value of rmem_read()").
+
 Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 ---
- Documentation/devicetree/bindings/nvmem/rmem.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ include/linux/nvmem-provider.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/nvmem/rmem.yaml b/Documentation/devicetree/bindings/nvmem/rmem.yaml
-index 1ec0d09bcafa857c05ae722834c9e13bf63ee851..85f9f5de3906d2f1afce74ce001cf5db06e50806 100644
---- a/Documentation/devicetree/bindings/nvmem/rmem.yaml
-+++ b/Documentation/devicetree/bindings/nvmem/rmem.yaml
-@@ -16,6 +16,7 @@ properties:
-   compatible:
-     items:
-       - enum:
-+          - mobileye,eyeq5-bootloader-config
-           - raspberrypi,bootloader-config
-           - raspberrypi,bootloader-public-key
-       - const: nvmem-rmem
+diff --git a/include/linux/nvmem-provider.h b/include/linux/nvmem-provider.h
+index 3ebeaa0ded00c8d12230e5be7eed045a89a82669..515676ebe59875fa0ab8a4e772542bdc90ead8e3 100644
+--- a/include/linux/nvmem-provider.h
++++ b/include/linux/nvmem-provider.h
+@@ -92,8 +92,8 @@ struct nvmem_cell_info {
+  * @read_only:	Device is read-only.
+  * @root_only:	Device is accessibly to root only.
+  * @of_node:	If given, this will be used instead of the parent's of_node.
+- * @reg_read:	Callback to read data.
+- * @reg_write:	Callback to write data.
++ * @reg_read:	Callback to read data; return zero if successful.
++ * @reg_write:	Callback to write data; return zero if successful.
+  * @size:	Device size.
+  * @word_size:	Minimum read/write access granularity.
+  * @stride:	Minimum read/write access stride.
 
 -- 
 2.47.1
