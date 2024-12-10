@@ -1,68 +1,68 @@
-Return-Path: <linux-mips+bounces-6930-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6931-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 436049EB115
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Dec 2024 13:43:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EDB889EB3D4
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Dec 2024 15:47:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D739216AF78
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Dec 2024 12:42:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4BB5E168F5E
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Dec 2024 14:47:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42B2F1A76BC;
-	Tue, 10 Dec 2024 12:42:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5158719ADA2;
+	Tue, 10 Dec 2024 14:46:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TEGMHE8N"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jMBXDUUG"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC0071A76B6;
-	Tue, 10 Dec 2024 12:42:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AF491A01D4;
+	Tue, 10 Dec 2024 14:46:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733834567; cv=none; b=g2gA4qz0mERJ2MVllFs3uYnfr1d0GwGZmeG4yp399cvuyCtPoSOVvkYPACEClqh4ff63n1oLcqYNjS+25BL7hBU+PKmRUUu7ZBAvCPhSUNbMD1VvKJedGGFM0jfVB7BrXsYy7L5hzJT4NDG+gO7h14I0xRXFwoExDyzjFGCXnXw=
+	t=1733842013; cv=none; b=CQnvWpGRlp9h/vytl/UyYjX4MvZDEwVSD6pyyWtzZSJQsXH6vVE6orPdfZkfteKAJV1uBWLXgTB5VjbTh/V4UA39vtwUQLSEQsiV683tjGOGa/2QpjcLOAS1HDE/c/xBnQXyPcsZWlqNde0uGfK6kIXaQqAPifvpBP55Vr1WfKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733834567; c=relaxed/simple;
-	bh=2XWkD/yfjEhuZbsTfBejcrrLVZU1NcZkJQDTuM2rIMc=;
+	s=arc-20240116; t=1733842013; c=relaxed/simple;
+	bh=zCVNItat7KAJZV5fl9f36Lgf1b8uI6A148fvl6A9d1U=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LOF3YNdVfbUu4QacI8+9a1wPuL3ad+DhvcjKBsiKj219XVzdW33zGswqfvHH02SLSydhxC1kFUJNT9HqL31uXqbrR6Kzk2GiOLNDtrzbIMEuTYHoq0u206+BB4f9sLSC328z51q0gwPG+1PK3pQ/EYnlvRmBXZNT53u+z1SpjaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TEGMHE8N; arc=none smtp.client-ip=198.175.65.12
+	 Content-Type:Content-Disposition:In-Reply-To; b=kIQlRovUrBssmg5AKhVn0/kJ9CDBUD954osPu09/95kg9VnM5pwluvJBqx9vjoCNtxxgJtlPAtnBQTmSRM5sv7IIa+crRelMWZ5fUiYtZ4O5kTP5fpy2lfIu7Ig/a4j9XjJLlwCFqdBJfoDtZh0FP7VOXwGNjAsBYnu+5lXlLck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jMBXDUUG; arc=none smtp.client-ip=198.175.65.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1733834566; x=1765370566;
+  t=1733842011; x=1765378011;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=2XWkD/yfjEhuZbsTfBejcrrLVZU1NcZkJQDTuM2rIMc=;
-  b=TEGMHE8Nkzj8JesDi2kzRP5L0DOsX/rolAtv8j8MBnlX9LZ6wv4ATNoB
-   VJnuMDwlxMrOPrxhXY6a0LgI54tTH2QsYNY5B3s6tmpoX6Y2H+hwA/R4b
-   2nesEHhzhHGrVHLH/e2mnSvjt1XYrfbZOQYva5XCuHcm3XRlhZOqiLNnN
-   pI5w6omgDEayJK4rjhm57eZXf5bjK6Mu4b4rFB8eoCUMrN0+JNIRZ/I/7
-   TACX9R7l0gGnsSL4AzBy+elRVcOaTsWRElSPpcDwZ4C/8BuaqejDLLvOY
-   RnP5XXzW2nVnhij5Rq+qqJ98YrMbTmdys0tzapkEU4j/8vz+svuXOL2lb
-   w==;
-X-CSE-ConnectionGUID: 6zLH929YRdyL39hDOSKkug==
-X-CSE-MsgGUID: YNR8bQLmSZWkuQ7w7voVpg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11278"; a="45557333"
-X-IronPort-AV: E=Sophos;i="6.12,214,1728975600"; 
-   d="scan'208";a="45557333"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2024 04:42:45 -0800
-X-CSE-ConnectionGUID: PNJK2U7TRI6GrhJMzjBjFw==
-X-CSE-MsgGUID: 1gEgitiCTumWExA1EmlaFA==
+  bh=zCVNItat7KAJZV5fl9f36Lgf1b8uI6A148fvl6A9d1U=;
+  b=jMBXDUUG6jvk5mjQ9QLt5TzA/RqQZHdQlx5/L81Ho9I+IQKG/Qevpjpy
+   xj2CYHGrgx1TFG5m6Yr+TmgxkRWKLd8V3oYBSUUaOcUFfonaYVqwOylcj
+   S5AIZ0atueN2mpd1GjIaecAxl79dVXMUalcFVZynmHRt/FlsTbeAu39BM
+   V8pON+vIS9yiT4bNHZxqEM7PYQEGnOUh9Lj7RieSaN3M4LPS/04L5CjXO
+   yq4mM0rSnVQOumMgBaho909SzrvE1DecmKqRqyR/x0NZl+jTg0D/AzP/0
+   844fUkP/umWM1ARZu1w+wd1d/NT/XqXlU8dj/ZQC6DVcJuQDUqlPD0j9U
+   A==;
+X-CSE-ConnectionGUID: DtB3lTw0R+2z3qbR5SV8Jw==
+X-CSE-MsgGUID: UeHO0CSNQr6nTHfThLPygQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11282"; a="33918606"
+X-IronPort-AV: E=Sophos;i="6.12,222,1728975600"; 
+   d="scan'208";a="33918606"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Dec 2024 06:46:51 -0800
+X-CSE-ConnectionGUID: orNCXP5iSfORxIjovRQcxQ==
+X-CSE-MsgGUID: EY2JQNdjRmSVxx2IfMJGSA==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.12,222,1728975600"; 
-   d="scan'208";a="95741297"
+   d="scan'208";a="95264822"
 Received: from lkp-server01.sh.intel.com (HELO 82a3f569d0cb) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 10 Dec 2024 04:42:38 -0800
+  by fmviesa007.fm.intel.com with ESMTP; 10 Dec 2024 06:46:44 -0800
 Received: from kbuild by 82a3f569d0cb with local (Exim 4.96)
 	(envelope-from <lkp@intel.com>)
-	id 1tKzZT-0005Xl-2l;
-	Tue, 10 Dec 2024 12:42:35 +0000
-Date: Tue, 10 Dec 2024 20:41:53 +0800
+	id 1tL1VZ-0005fr-2R;
+	Tue, 10 Dec 2024 14:46:41 +0000
+Date: Tue, 10 Dec 2024 22:45:54 +0800
 From: kernel test robot <lkp@intel.com>
 To: Kalesh Singh <kaleshsingh@google.com>, akpm@linux-foundation.org,
 	vbabka@suse.cz, yang@os.amperecomputing.com, riel@surriel.com,
@@ -79,9 +79,9 @@ Cc: oe-kbuild-all@lists.linux.dev, linux@armlinux.org.uk,
 	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
 	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
 	linux-parisc@vger.kernel.org
-Subject: Re: [PATCH mm-unstable 11/17] mm: sh: Introduce arch_mmap_hint()
-Message-ID: <202412102044.uIAN0clk-lkp@intel.com>
-References: <20241210024119.2488608-12-kaleshsingh@google.com>
+Subject: Re: [PATCH mm-unstable 13/17] mm: sparc64: Introduce arch_mmap_hint()
+Message-ID: <202412102215.fF34r4Uo-lkp@intel.com>
+References: <20241210024119.2488608-14-kaleshsingh@google.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -90,7 +90,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241210024119.2488608-12-kaleshsingh@google.com>
+In-Reply-To: <20241210024119.2488608-14-kaleshsingh@google.com>
 
 Hi Kalesh,
 
@@ -100,73 +100,79 @@ kernel test robot noticed the following build warnings:
 
 url:    https://github.com/intel-lab-lkp/linux/commits/Kalesh-Singh/mm-Introduce-generic_mmap_hint/20241210-104424
 base:   https://git.kernel.org/pub/scm/linux/kernel/git/akpm/mm.git mm-everything
-patch link:    https://lore.kernel.org/r/20241210024119.2488608-12-kaleshsingh%40google.com
-patch subject: [PATCH mm-unstable 11/17] mm: sh: Introduce arch_mmap_hint()
-config: sh-randconfig-001-20241210 (https://download.01.org/0day-ci/archive/20241210/202412102044.uIAN0clk-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241210/202412102044.uIAN0clk-lkp@intel.com/reproduce)
+patch link:    https://lore.kernel.org/r/20241210024119.2488608-14-kaleshsingh%40google.com
+patch subject: [PATCH mm-unstable 13/17] mm: sparc64: Introduce arch_mmap_hint()
+config: sparc-randconfig-002-20241210 (https://download.01.org/0day-ci/archive/20241210/202412102215.fF34r4Uo-lkp@intel.com/config)
+compiler: sparc64-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241210/202412102215.fF34r4Uo-lkp@intel.com/reproduce)
 
 If you fix the issue in a separate patch/commit (i.e. not just a new version of
 the same patch/commit), kindly add following tags
 | Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202412102044.uIAN0clk-lkp@intel.com/
+| Closes: https://lore.kernel.org/oe-kbuild-all/202412102215.fF34r4Uo-lkp@intel.com/
 
 All warnings (new ones prefixed by >>):
 
-   arch/sh/mm/mmap.c: In function 'arch_get_unmapped_area':
->> arch/sh/mm/mmap.c:79:32: warning: unused variable 'vma' [-Wunused-variable]
-      79 |         struct vm_area_struct *vma;
-         |                                ^~~
->> arch/sh/mm/mmap.c:78:27: warning: unused variable 'mm' [-Wunused-variable]
-      78 |         struct mm_struct *mm = current->mm;
-         |                           ^~
-   arch/sh/mm/mmap.c: In function 'arch_get_unmapped_area_topdown':
-   arch/sh/mm/mmap.c:117:32: warning: unused variable 'vma' [-Wunused-variable]
-     117 |         struct vm_area_struct *vma;
-         |                                ^~~
+   arch/sparc/kernel/sys_sparc_64.c: In function 'arch_get_unmapped_area':
+>> arch/sparc/kernel/sys_sparc_64.c:135:13: warning: variable 'do_color_align' set but not used [-Wunused-but-set-variable]
+     135 |         int do_color_align;
+         |             ^~~~~~~~~~~~~~
 
 
-vim +/vma +79 arch/sh/mm/mmap.c
+vim +/do_color_align +135 arch/sparc/kernel/sys_sparc_64.c
 
-2261b9c7c2357a0 Kalesh Singh      2024-12-09   73  
-4a4a9be3ebdbf17 Paul Mundt        2008-11-12   74  unsigned long arch_get_unmapped_area(struct file *filp, unsigned long addr,
-25d4054cc97484f Mark Brown        2024-09-04   75  	unsigned long len, unsigned long pgoff, unsigned long flags,
-25d4054cc97484f Mark Brown        2024-09-04   76  	vm_flags_t vm_flags)
-4a4a9be3ebdbf17 Paul Mundt        2008-11-12   77  {
-4a4a9be3ebdbf17 Paul Mundt        2008-11-12  @78  	struct mm_struct *mm = current->mm;
-4a4a9be3ebdbf17 Paul Mundt        2008-11-12  @79  	struct vm_area_struct *vma;
-4a4a9be3ebdbf17 Paul Mundt        2008-11-12   80  	int do_colour_align;
-b80fa3cbb78c0fb Rick Edgecombe    2024-03-25   81  	struct vm_unmapped_area_info info = {};
-4a4a9be3ebdbf17 Paul Mundt        2008-11-12   82  
-4a4a9be3ebdbf17 Paul Mundt        2008-11-12   83  	if (flags & MAP_FIXED) {
-4a4a9be3ebdbf17 Paul Mundt        2008-11-12   84  		/* We do not accept a shared mapping if it would violate
-4a4a9be3ebdbf17 Paul Mundt        2008-11-12   85  		 * cache aliasing constraints.
-4a4a9be3ebdbf17 Paul Mundt        2008-11-12   86  		 */
-e77414e0aad6a1b Al Viro           2009-12-05   87  		if ((flags & MAP_SHARED) &&
-e77414e0aad6a1b Al Viro           2009-12-05   88  		    ((addr - (pgoff << PAGE_SHIFT)) & shm_align_mask))
-4a4a9be3ebdbf17 Paul Mundt        2008-11-12   89  			return -EINVAL;
-4a4a9be3ebdbf17 Paul Mundt        2008-11-12   90  		return addr;
-4a4a9be3ebdbf17 Paul Mundt        2008-11-12   91  	}
-4a4a9be3ebdbf17 Paul Mundt        2008-11-12   92  
-4a4a9be3ebdbf17 Paul Mundt        2008-11-12   93  	if (unlikely(len > TASK_SIZE))
-4a4a9be3ebdbf17 Paul Mundt        2008-11-12   94  		return -ENOMEM;
-4a4a9be3ebdbf17 Paul Mundt        2008-11-12   95  
-4a4a9be3ebdbf17 Paul Mundt        2008-11-12   96  	do_colour_align = 0;
-4a4a9be3ebdbf17 Paul Mundt        2008-11-12   97  	if (filp || (flags & MAP_SHARED))
-4a4a9be3ebdbf17 Paul Mundt        2008-11-12   98  		do_colour_align = 1;
-4a4a9be3ebdbf17 Paul Mundt        2008-11-12   99  
-2261b9c7c2357a0 Kalesh Singh      2024-12-09  100  	addr = arch_mmap_hint(filp, addr, len, pgoff, flags);
-2261b9c7c2357a0 Kalesh Singh      2024-12-09  101  	if (addr)
-4a4a9be3ebdbf17 Paul Mundt        2008-11-12  102  		return addr;
-4a4a9be3ebdbf17 Paul Mundt        2008-11-12  103  
-b4265f12340f809 Michel Lespinasse 2012-12-11  104  	info.length = len;
-b4265f12340f809 Michel Lespinasse 2012-12-11  105  	info.low_limit = TASK_UNMAPPED_BASE;
-b4265f12340f809 Michel Lespinasse 2012-12-11  106  	info.high_limit = TASK_SIZE;
-b4265f12340f809 Michel Lespinasse 2012-12-11  107  	info.align_mask = do_colour_align ? (PAGE_MASK & shm_align_mask) : 0;
-b4265f12340f809 Michel Lespinasse 2012-12-11  108  	info.align_offset = pgoff << PAGE_SHIFT;
-b4265f12340f809 Michel Lespinasse 2012-12-11  109  	return vm_unmapped_area(&info);
-4a4a9be3ebdbf17 Paul Mundt        2008-11-12  110  }
-ee1acbfabd5270b Paul Mundt        2009-05-07  111  
+aef9ae8eac4116 arch/sparc/kernel/sys_sparc_64.c Kalesh Singh      2024-12-09  131  
+25d4054cc97484 arch/sparc/kernel/sys_sparc_64.c Mark Brown        2024-09-04  132  unsigned long arch_get_unmapped_area(struct file *filp, unsigned long addr, unsigned long len, unsigned long pgoff, unsigned long flags, vm_flags_t vm_flags)
+^1da177e4c3f41 arch/sparc64/kernel/sys_sparc.c  Linus Torvalds    2005-04-16  133  {
+^1da177e4c3f41 arch/sparc64/kernel/sys_sparc.c  Linus Torvalds    2005-04-16  134  	unsigned long task_size = TASK_SIZE;
+^1da177e4c3f41 arch/sparc64/kernel/sys_sparc.c  Linus Torvalds    2005-04-16 @135  	int do_color_align;
+b80fa3cbb78c0f arch/sparc/kernel/sys_sparc_64.c Rick Edgecombe    2024-03-25  136  	struct vm_unmapped_area_info info = {};
+a8d457b29b017a arch/sparc/kernel/sys_sparc_64.c Oscar Salvador    2024-10-07  137  	bool file_hugepage = false;
+a8d457b29b017a arch/sparc/kernel/sys_sparc_64.c Oscar Salvador    2024-10-07  138  
+a8d457b29b017a arch/sparc/kernel/sys_sparc_64.c Oscar Salvador    2024-10-07  139  	if (filp && is_file_hugepages(filp))
+a8d457b29b017a arch/sparc/kernel/sys_sparc_64.c Oscar Salvador    2024-10-07  140  		file_hugepage = true;
+^1da177e4c3f41 arch/sparc64/kernel/sys_sparc.c  Linus Torvalds    2005-04-16  141  
+^1da177e4c3f41 arch/sparc64/kernel/sys_sparc.c  Linus Torvalds    2005-04-16  142  	if (flags & MAP_FIXED) {
+^1da177e4c3f41 arch/sparc64/kernel/sys_sparc.c  Linus Torvalds    2005-04-16  143  		/* We do not accept a shared mapping if it would violate
+^1da177e4c3f41 arch/sparc64/kernel/sys_sparc.c  Linus Torvalds    2005-04-16  144  		 * cache aliasing constraints.
+^1da177e4c3f41 arch/sparc64/kernel/sys_sparc.c  Linus Torvalds    2005-04-16  145  		 */
+a8d457b29b017a arch/sparc/kernel/sys_sparc_64.c Oscar Salvador    2024-10-07  146  		if (!file_hugepage && (flags & MAP_SHARED) &&
+^1da177e4c3f41 arch/sparc64/kernel/sys_sparc.c  Linus Torvalds    2005-04-16  147  		    ((addr - (pgoff << PAGE_SHIFT)) & (SHMLBA - 1)))
+^1da177e4c3f41 arch/sparc64/kernel/sys_sparc.c  Linus Torvalds    2005-04-16  148  			return -EINVAL;
+^1da177e4c3f41 arch/sparc64/kernel/sys_sparc.c  Linus Torvalds    2005-04-16  149  		return addr;
+^1da177e4c3f41 arch/sparc64/kernel/sys_sparc.c  Linus Torvalds    2005-04-16  150  	}
+^1da177e4c3f41 arch/sparc64/kernel/sys_sparc.c  Linus Torvalds    2005-04-16  151  
+^1da177e4c3f41 arch/sparc64/kernel/sys_sparc.c  Linus Torvalds    2005-04-16  152  	if (test_thread_flag(TIF_32BIT))
+d61e16df940e02 arch/sparc64/kernel/sys_sparc.c  David S. Miller   2006-03-17  153  		task_size = STACK_TOP32;
+a91690ddd05ab0 arch/sparc64/kernel/sys_sparc.c  David S. Miller   2006-03-17  154  	if (unlikely(len > task_size || len >= VA_EXCLUDE_START))
+^1da177e4c3f41 arch/sparc64/kernel/sys_sparc.c  Linus Torvalds    2005-04-16  155  		return -ENOMEM;
+^1da177e4c3f41 arch/sparc64/kernel/sys_sparc.c  Linus Torvalds    2005-04-16  156  
+^1da177e4c3f41 arch/sparc64/kernel/sys_sparc.c  Linus Torvalds    2005-04-16  157  	do_color_align = 0;
+a8d457b29b017a arch/sparc/kernel/sys_sparc_64.c Oscar Salvador    2024-10-07  158  	if ((filp || (flags & MAP_SHARED)) && !file_hugepage)
+^1da177e4c3f41 arch/sparc64/kernel/sys_sparc.c  Linus Torvalds    2005-04-16  159  		do_color_align = 1;
+^1da177e4c3f41 arch/sparc64/kernel/sys_sparc.c  Linus Torvalds    2005-04-16  160  
+aef9ae8eac4116 arch/sparc/kernel/sys_sparc_64.c Kalesh Singh      2024-12-09  161  	addr = arch_mmap_hint(filp, addr, len, pgoff, flags);
+aef9ae8eac4116 arch/sparc/kernel/sys_sparc_64.c Kalesh Singh      2024-12-09  162  	if (addr)
+^1da177e4c3f41 arch/sparc64/kernel/sys_sparc.c  Linus Torvalds    2005-04-16  163  		return addr;
+^1da177e4c3f41 arch/sparc64/kernel/sys_sparc.c  Linus Torvalds    2005-04-16  164  
+bb64f55019c7b0 arch/sparc/kernel/sys_sparc_64.c Michel Lespinasse 2012-12-11  165  	info.length = len;
+bb64f55019c7b0 arch/sparc/kernel/sys_sparc_64.c Michel Lespinasse 2012-12-11  166  	info.low_limit = TASK_UNMAPPED_BASE;
+bb64f55019c7b0 arch/sparc/kernel/sys_sparc_64.c Michel Lespinasse 2012-12-11  167  	info.high_limit = min(task_size, VA_EXCLUDE_START);
+a8d457b29b017a arch/sparc/kernel/sys_sparc_64.c Oscar Salvador    2024-10-07  168  	info.align_mask = get_align_mask(filp, flags);
+a8d457b29b017a arch/sparc/kernel/sys_sparc_64.c Oscar Salvador    2024-10-07  169  	if (!file_hugepage)
+bb64f55019c7b0 arch/sparc/kernel/sys_sparc_64.c Michel Lespinasse 2012-12-11  170  		info.align_offset = pgoff << PAGE_SHIFT;
+bb64f55019c7b0 arch/sparc/kernel/sys_sparc_64.c Michel Lespinasse 2012-12-11  171  	addr = vm_unmapped_area(&info);
+^1da177e4c3f41 arch/sparc64/kernel/sys_sparc.c  Linus Torvalds    2005-04-16  172  
+bb64f55019c7b0 arch/sparc/kernel/sys_sparc_64.c Michel Lespinasse 2012-12-11  173  	if ((addr & ~PAGE_MASK) && task_size > VA_EXCLUDE_END) {
+bb64f55019c7b0 arch/sparc/kernel/sys_sparc_64.c Michel Lespinasse 2012-12-11  174  		VM_BUG_ON(addr != -ENOMEM);
+bb64f55019c7b0 arch/sparc/kernel/sys_sparc_64.c Michel Lespinasse 2012-12-11  175  		info.low_limit = VA_EXCLUDE_END;
+bb64f55019c7b0 arch/sparc/kernel/sys_sparc_64.c Michel Lespinasse 2012-12-11  176  		info.high_limit = task_size;
+bb64f55019c7b0 arch/sparc/kernel/sys_sparc_64.c Michel Lespinasse 2012-12-11  177  		addr = vm_unmapped_area(&info);
+^1da177e4c3f41 arch/sparc64/kernel/sys_sparc.c  Linus Torvalds    2005-04-16  178  	}
+1363c3cd8603a9 arch/sparc64/kernel/sys_sparc.c  Wolfgang Wander   2005-06-21  179  
+bb64f55019c7b0 arch/sparc/kernel/sys_sparc_64.c Michel Lespinasse 2012-12-11  180  	return addr;
+^1da177e4c3f41 arch/sparc64/kernel/sys_sparc.c  Linus Torvalds    2005-04-16  181  }
+^1da177e4c3f41 arch/sparc64/kernel/sys_sparc.c  Linus Torvalds    2005-04-16  182  
 
 -- 
 0-DAY CI Kernel Test Service
