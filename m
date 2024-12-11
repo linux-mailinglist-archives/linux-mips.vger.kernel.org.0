@@ -1,70 +1,70 @@
-Return-Path: <linux-mips+bounces-6952-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6953-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C8419EDBA8
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Dec 2024 00:30:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A7829EDBAE
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Dec 2024 00:30:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3AE44188A11A
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Dec 2024 23:30:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8074F168BAA
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Dec 2024 23:30:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CCD21FD786;
-	Wed, 11 Dec 2024 23:28:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9F401F4E28;
+	Wed, 11 Dec 2024 23:28:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="znlqGrEf"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OXajPhuQ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-oa1-f73.google.com (mail-oa1-f73.google.com [209.85.160.73])
+Received: from mail-pf1-f201.google.com (mail-pf1-f201.google.com [209.85.210.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D1141FF601
-	for <linux-mips@vger.kernel.org>; Wed, 11 Dec 2024 23:28:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 148AB1FCF62
+	for <linux-mips@vger.kernel.org>; Wed, 11 Dec 2024 23:28:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733959707; cv=none; b=Q2Ytz22Jfyid8NvYRoZsTSp3HfIh7PzTBRz8l/c/MtLEqBTTT7ZkxkXKEvaYvqKmkxNoU+gpeLlVh/li6ogNip09Fyvv6u4LRZOggUgvwYyfhFYTnDPh8KNvVj6b8PC8ocv+oFOEIdVRwrP1Xp1kczvb8c+7FXgp9TEEzHRUPtA=
+	t=1733959709; cv=none; b=D68JJc2D3UhDtgDLxKHwqpBTbqyCpHoJF7STSxeBGvNY1jit/umSckD5yD3Qd14N0MqX3hn0OL3PsiwgB4r04V/xV57oVTQKbpelHj1dxgfxtNqM15YIG5rJ0on4ObEWdH+M5b0JPBDf9P7TgLWckgLNwrf4xNjyY4RT5OMcVSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733959707; c=relaxed/simple;
-	bh=IV94/17VU942v+SUppuhN1JByKB2U0oRaUQ8yQsFAy0=;
+	s=arc-20240116; t=1733959709; c=relaxed/simple;
+	bh=e6BnmSCV2QrrtoqE+kEeLZmDcpCmkfYXz43FlPij0LM=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=iHn2Z4USOmfUBoMdysHrkYB/DwwJ4S3QjEWHjWqI8rBDLNc8l5zDZYVo1PcXxVWctU44CzThFzlNPTLHcsgPe8QjvlqC1lNFE8jqFNKT2QayR5e69gMuuut9lGWZ9Yw4BSBvm0E2ifeHhStqXUNQnAm6bU1zh6gttZpJ9BaMsC4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kaleshsingh.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=znlqGrEf; arc=none smtp.client-ip=209.85.160.73
+	 To:Cc:Content-Type; b=W6ouEEnw0UfmKc8uslyJFBDQuphDFmqnYi5e33jEY5/xQIBA+uxsw+RjYrZBPTv0+fycBNugtuZ5IsyUh+Z1AZMCxQe797H8FZQdCXUlsonV50I6lI0fp2EajJGDiuqC3AbT3KAouA4dNOsI3+cT6r7NmPN/PYkWO7PrF9Gpvcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kaleshsingh.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OXajPhuQ; arc=none smtp.client-ip=209.85.210.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kaleshsingh.bounces.google.com
-Received: by mail-oa1-f73.google.com with SMTP id 586e51a60fabf-29e2bd938a1so3287419fac.3
-        for <linux-mips@vger.kernel.org>; Wed, 11 Dec 2024 15:28:25 -0800 (PST)
+Received: by mail-pf1-f201.google.com with SMTP id d2e1a72fcca58-728eb2e190cso13315b3a.3
+        for <linux-mips@vger.kernel.org>; Wed, 11 Dec 2024 15:28:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1733959704; x=1734564504; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1733959706; x=1734564506; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=z6Hm5oOLdBb7ho6/nkMyyfkvkknoYZ/+aPdlC1ktc9c=;
-        b=znlqGrEfDteMQMEQMrHRT/VFZUJqKn13qlRAuc49AQewDWPfUKRhcvh6q8eYf00wJ8
-         7sPyjtrzDi+CxOXMp/duiSD3d1jY4DXH9ebxKojNVFDc3+SEwUfGE3OiMi+QP20FKEGt
-         2holzL4AGj+DC70nyIuNYc2N4lBHVQEi8aliBAlG7SZ0xqhHaeZOF9S2dg+catQMaPSK
-         I84IL/pqaJlS2LFUpV8QkJUgiHNKSgRgGudxaAFuqH1EzEOWCe3h9LZIHxOpv6lxK2j2
-         7SR3zJN7xugwyWxp9T8sg59b3Ak2UEuJKzODXNmo9EEETb2BaBYdZuLWz6UNCRHgdPzm
-         fwnA==
+        bh=mzI/WChqoEagnx9fXIUsiKk2yVJ1VLNiv4KjzJVNd2U=;
+        b=OXajPhuQrIh+qiUrSPxrwqRABByE6r0uBtIra/NXAhrZWdRhgIXKn6oBQMg01UPGCE
+         36CnE3+f1S7sGsp2c9lfX3FK2LFG6yaMe1UwcVQtHOyfH4pB4efEP1nDAJPbeoEOUfPK
+         4t6z3rdpI4j7tYB3W0m1DJz3PCB+OO9lBVuPOvBd22D1rxzu3droH932qVtl9kbXTCPY
+         SVhWEV4FWmckLmjCH6qRgFKfR+JUindoxy8maZbdre66KeN4iV2DBwDKHAfaBXq8RmDd
+         LNPDeFLjao067G8USlrya6O0tfRLNcvx7Qu9KQOROGMgtjeB/l54BQzmqFdKImC3an7F
+         Kt3Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1733959704; x=1734564504;
+        d=1e100.net; s=20230601; t=1733959706; x=1734564506;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=z6Hm5oOLdBb7ho6/nkMyyfkvkknoYZ/+aPdlC1ktc9c=;
-        b=pCWcKTIvPtjYlEU1oyoTvtXTPWlcZYz1MnLfLXonT+9ThM19Ps9aA16MoofvHH9q/M
-         Xq85U9hKXKSySWjn7ZFAK14nwHhg8pq/j/VFaQLXBnwhpy/LUtGfDLFmsa6lSGms+I3m
-         8fDQWyh5VLSdovviTzZKBqhqoxA77zU/YwiJjCsTtU+H75pNn7XWvnMfbFDOYhzaFlP/
-         cwuXiWJUOcXTJcd7+x2pfzjn90El1zoGZXeExflBE+H8LYgJX52gvuWHZkyZCLTydN0p
-         mzWFx2A6wHX7aRYTOBvig+sqZ0Qhr/YQJ6VZgC5V+b2rpwLwib86sKZOfSo9c7hr6Mlu
-         OTsQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWyE7JeAoD8tBKpPBQpOrar+n+2qjPqhH8mv+rQ1xmH5Eq06CLjUi2tn+E6hJmuN8EHa0+wJzyfnIMk@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVpHj97b9uDAq/0qlaFs3RqEGGrUAyVxym4cgUgDRIJT9d5CuL
-	WaQvrOWX1Rnz/Hh1eOQVE516OfGB8Wc3DDfdi7a04UDWBQEYfWNgg4uJDNWt3qvagpgRzOHFG5u
-	0UEJvJrunI2uEN1h9QnQuig==
-X-Google-Smtp-Source: AGHT+IGQDLulfLF8RwhcJUV0HutTvJeMfbYLu8JUEjKppHvTG+7VWlPJjZzjhgEci5/4OsV71lgRhbIjtjk4C1ysLQ==
-X-Received: from oabrl17.prod.google.com ([2002:a05:6871:6511:b0:296:1589:4069])
+        bh=mzI/WChqoEagnx9fXIUsiKk2yVJ1VLNiv4KjzJVNd2U=;
+        b=RVSmkARYw6uWZ7eKZL4ozB7ZVv3TtD5co8GBXu+Vg/KQS8xJPFTHX0AWhtFW82Sm83
+         ybTxiaGf7c+PW+yYr/1OWrneJhr6BstMmkLE3pzcI3epMWfEG7mOQOwJIZBbrpoXKCg7
+         ABPyTZGD1A+/ML9GI4ZUave80ywjZ5migkIwMqdFwZexV0tnQHHOA9OJF9avT9+OOgwt
+         p7RL2KMP4a40vebRTxPIR0UHxHuDHd+hsVU2f5GyP3Vmnh0VAK29hXSEgYSsGZZadt60
+         Tvu570RbdOqJZu5lXT/26vd8fpU6TLP9IV+8d/rsodO/Zmf4UaDjnpe6RTBTaSi21Poc
+         C2LA==
+X-Forwarded-Encrypted: i=1; AJvYcCUEe6AZUREcLPc2CNFmOxUuFtN9fu1/aejjFvBG3pozl+NIobEgtIjs6lrWfS2CQOpGZ+Gv1nzWs1vZ@vger.kernel.org
+X-Gm-Message-State: AOJu0YzcdMUAUddUscBmXhZ5+IzNCbXal7lduzmOTYGtH5sdGP7gXjo0
+	VsxYzOGjz3Y9jtcgfVYAIwReZFXUAp0ObebRm5KFSwggj9lOxEERa6J5rFgJnwVSygHYtSfJAhr
+	dsiwZB/uJWtk1F6ElNXeqhA==
+X-Google-Smtp-Source: AGHT+IGnJnRJXQZ5IIc8W3PGTGxBtDfE/sIYeRjCrJpkHMTtOgcOp40OoEyKbTRESGUAjOdqxtzUpt2F+EP39npdAw==
+X-Received: from pfbcw14.prod.google.com ([2002:a05:6a00:450e:b0:728:e4d7:e3d3])
  (user=kaleshsingh job=prod-delivery.src-stubby-dispatcher) by
- 2002:a05:6870:224d:b0:29e:f61:3b62 with SMTP id 586e51a60fabf-2a38236803dmr971354fac.7.1733959704488;
- Wed, 11 Dec 2024 15:28:24 -0800 (PST)
-Date: Wed, 11 Dec 2024 15:27:52 -0800
+ 2002:a05:6a20:a10d:b0:1e1:aef4:9cdd with SMTP id adf61e73a8af0-1e1cea82ca5mr1784516637.1.1733959706098;
+ Wed, 11 Dec 2024 15:28:26 -0800 (PST)
+Date: Wed, 11 Dec 2024 15:27:53 -0800
 In-Reply-To: <20241211232754.1583023-1-kaleshsingh@google.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -74,8 +74,8 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20241211232754.1583023-1-kaleshsingh@google.com>
 X-Mailer: git-send-email 2.47.0.338.g60cca15819-goog
-Message-ID: <20241211232754.1583023-15-kaleshsingh@google.com>
-Subject: [PATCH mm-unstable v2 14/16] mm: xtensa: Introduce arch_mmap_hint()
+Message-ID: <20241211232754.1583023-16-kaleshsingh@google.com>
+Subject: [PATCH mm-unstable v2 15/16] mm: powerpc: Introduce arch_mmap_hint()
 From: Kalesh Singh <kaleshsingh@google.com>
 To: akpm@linux-foundation.org, vbabka@suse.cz, yang@os.amperecomputing.com, 
 	riel@surriel.com, david@redhat.com, minchan@kernel.org, jyescas@google.com
@@ -95,78 +95,69 @@ Cc: linux@armlinux.org.uk, tsbogend@alpha.franken.de,
 	Kalesh Singh <kaleshsingh@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Introduce xtensa arch_mmap_hint() and define HAVE_ARCH_MMAP_HINT.
-
-If a sufficiently sized hole doesn't exist at the hint address,
-fallback to searching the entire valid VA space instead of only
-the VA space above the hint address.
+Introduce powerpc arch_mmap_hint() and define HAVE_ARCH_MMAP_HINT.
+This is a preparatory patch, no functional change is introduced.
 
 Signed-off-by: Kalesh Singh <kaleshsingh@google.com>
 ---
+ arch/powerpc/include/asm/book3s/64/slice.h |  1 +
+ arch/powerpc/mm/book3s64/slice.c           | 31 ++++++++++++++++++++++
+ 2 files changed, 32 insertions(+)
 
-Changes in v2:
-  - MAP_FIXED case is also handled in arch_mmap_hint() since this is just a
-    special case of the hint addr being "enforced", per Yang Shi.
-  - Consolidate error handling in arch_mmap_hint().
-
- arch/xtensa/kernel/syscall.c | 31 +++++++++++++++++++++----------
- 1 file changed, 21 insertions(+), 10 deletions(-)
-
-diff --git a/arch/xtensa/kernel/syscall.c b/arch/xtensa/kernel/syscall.c
-index dc54f854c2f5..6bbe10c2a633 100644
---- a/arch/xtensa/kernel/syscall.c
-+++ b/arch/xtensa/kernel/syscall.c
-@@ -54,12 +54,12 @@ asmlinkage long xtensa_fadvise64_64(int fd, int advice,
- }
+diff --git a/arch/powerpc/include/asm/book3s/64/slice.h b/arch/powerpc/include/asm/book3s/64/slice.h
+index 5fbe18544cbd..89f629080e90 100644
+--- a/arch/powerpc/include/asm/book3s/64/slice.h
++++ b/arch/powerpc/include/asm/book3s/64/slice.h
+@@ -10,6 +10,7 @@
+ #endif
+ #define HAVE_ARCH_UNMAPPED_AREA
+ #define HAVE_ARCH_UNMAPPED_AREA_TOPDOWN
++#define HAVE_ARCH_MMAP_HINT
+ #endif
  
- #ifdef CONFIG_MMU
--unsigned long arch_get_unmapped_area(struct file *filp, unsigned long addr,
--		unsigned long len, unsigned long pgoff, unsigned long flags,
--		vm_flags_t vm_flags)
+ #define SLICE_LOW_SHIFT		28
+diff --git a/arch/powerpc/mm/book3s64/slice.c b/arch/powerpc/mm/book3s64/slice.c
+index bc9a39821d1c..b4067c57c778 100644
+--- a/arch/powerpc/mm/book3s64/slice.c
++++ b/arch/powerpc/mm/book3s64/slice.c
+@@ -647,6 +647,37 @@ static int file_to_psize(struct file *file)
+ }
+ #endif
+ 
++static unsigned long slice_mmap_hint(unsigned long addr, unsigned long len,
++				     unsigned long flags, unsigned int psize)
++{
++	unsigned long hint_addr = slice_get_unmapped_area(addr, len, flags, psize, 0);
++
++	if (IS_ERR_VALUE(hint_addr) || hint_addr == PAGE_ALIGN(addr))
++		return hint_addr;
++
++	return 0;
++}
++
 +unsigned long arch_mmap_hint(struct file *filp, unsigned long addr,
 +			     unsigned long len, unsigned long pgoff,
 +			     unsigned long flags)
- {
--	struct vm_area_struct *vmm;
--	struct vma_iterator vmi;
-+	if (len > TASK_SIZE)
-+		return -ENOMEM;
- 
- 	if (flags & MAP_FIXED) {
- 		/* We do not accept a shared mapping if it would violate
-@@ -71,16 +71,27 @@ unsigned long arch_get_unmapped_area(struct file *filp, unsigned long addr,
- 		return addr;
- 	}
- 
--	if (len > TASK_SIZE)
--		return -ENOMEM;
--	if (!addr)
--		addr = TASK_UNMAPPED_BASE;
--
- 	if (flags & MAP_SHARED)
- 		addr = COLOUR_ALIGN(addr, pgoff);
- 	else
- 		addr = PAGE_ALIGN(addr);
- 
-+	return generic_mmap_hint(filp, addr, len, pgoff, flags);
++{
++	unsigned int psize;
++
++	if (!addr)
++		return 0;
++
++	if (radix_enabled())
++		return generic_mmap_hint(filp, addr, len, pgoff, flags);
++
++	if (filp && is_file_hugepages(filp))
++		psize = file_to_psize(filp);
++	else
++		psize = mm_ctx_user_psize(&current->mm->context);
++
++	return slice_mmap_hint(addr, len, flags, psize);
 +}
 +
-+unsigned long arch_get_unmapped_area(struct file *filp, unsigned long addr,
-+		unsigned long len, unsigned long pgoff, unsigned long flags,
-+		vm_flags_t vm_flags)
-+{
-+	struct vm_area_struct *vmm;
-+	struct vma_iterator vmi;
-+
-+	addr = arch_mmap_hint(filp, addr, len, pgoff, flags);
-+	if (addr)
-+		return addr;
-+
-+	addr = TASK_UNMAPPED_BASE;
-+
- 	vma_iter_init(&vmi, current->mm, addr);
- 	for_each_vma(vmi, vmm) {
- 		/* At this point:  (addr < vmm->vm_end). */
+ unsigned long arch_get_unmapped_area(struct file *filp,
+ 				     unsigned long addr,
+ 				     unsigned long len,
 -- 
 2.47.0.338.g60cca15819-goog
 
