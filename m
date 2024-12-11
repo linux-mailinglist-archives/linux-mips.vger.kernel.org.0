@@ -1,158 +1,175 @@
-Return-Path: <linux-mips+bounces-6937-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6938-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C44229EDA1D
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Dec 2024 23:38:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F02B9EDB24
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Dec 2024 00:28:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 21103163878
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Dec 2024 22:38:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 75F8D1675E9
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Dec 2024 23:28:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A28E206F34;
-	Wed, 11 Dec 2024 22:32:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FF1F1F2C46;
+	Wed, 11 Dec 2024 23:28:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hia/ijUE"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iU7GxywT"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 567F4206F11;
-	Wed, 11 Dec 2024 22:32:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABDC61F2C3C
+	for <linux-mips@vger.kernel.org>; Wed, 11 Dec 2024 23:27:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733956376; cv=none; b=loqAeG45tfYkpfj5EIC3DV7/2LvW8YhGsCgSOjG9on38Re7XUs2yX58o7eeWsvX21eM0zTiO53BHey4I1LObaeGUzSWaQ/NMPdF6SYLrrvrm560eEeDZuJQoW5UBtzvXqkFv0+iERTAY4YeCUhfP9xarmG35h9EkyvliMyDqb4w=
+	t=1733959680; cv=none; b=fzFBBk3pLG6mvSq/eejohELPv+o+IyJFOi4Xb4T7uMxFRnw609CqJQPsV/qFaOBfkjSWACKcgSGkVyuecx9TXsiE6XGK57QmaajsUzQ2cP5bvxd4vwIFCemMBdC8NP3wJyxjFZbHk522dPlxIlf790PClq35GYr4EJoqEmGhhI4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733956376; c=relaxed/simple;
-	bh=1MJ06IwhKiUOka6t13pDPzzxerzMi81atHP/6c9+22c=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=eZ36vJSRX68Z8mxKCxAuJUi7KRy+LEEF4oW6GIGdJa5DqWgDiOfweGYj8mQ8xsCCcsP4CEvwrIvZfulNURDzl299HhSc5OoCFSsYHaC6B5okkG4Iqh0go2FvBLlALhVfTZS3BGTAeCB4yleH3i6VZS9aOZMqNWKOGy9wOAGnSQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hia/ijUE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A09FC4CED3;
-	Wed, 11 Dec 2024 22:32:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1733956376;
-	bh=1MJ06IwhKiUOka6t13pDPzzxerzMi81atHP/6c9+22c=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=Hia/ijUEuZBroxj7nHTcTLUeY0lUzwbIDShfmCnvrhgwkWkpcTiJx7pJ1rDHrcbYd
-	 v9xc5XYWsKCanEQ84GJFDJY00b2HgNbwArL4F0yC9b3PGcwDDt8RjKLjKLEhKLhhcd
-	 fmxIfg3UO49ThB7NCaSOMylOZeYdgxA9dXMqt5Zh24qGuiC5PnXYEzmSSsUEGzlsGM
-	 QIuCwUtbYZSKHZWQsPR/5JQlLYffzh4qHAuBe3D1CDOd8aIWP34Q5xS6MsQDi3t00y
-	 2Sa/0R/Urbix0SVQmgQhhgfeqd/s3orjw+NRpayKDn0m9Fbd2FqUvFGpLePlE4DJR6
-	 KkGTKHdygfE8A==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 710A8380A965;
-	Wed, 11 Dec 2024 22:33:13 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1733959680; c=relaxed/simple;
+	bh=tkYUgsJNBXav1rnN7mRsWNxCkvx1+/sVfFghfRuojcE=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=X+HWoQhGgoeXiApCVU25FkSv4BWtZiZ9JGMNCguW81aA3BH8Idgbqr2qCPQRW70jD+Vexjbqhx81L7YNJ/aobm+duK5QEA+JJHOBcnNNCI2sgBWEmPG80eM4LTSAzSFGdDQqmNA26FQfezi9v/N3GeETt3Ng0nqylxkR33fuGwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--kaleshsingh.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iU7GxywT; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--kaleshsingh.bounces.google.com
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-2efa0eb9cfeso28339a91.0
+        for <linux-mips@vger.kernel.org>; Wed, 11 Dec 2024 15:27:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1733959678; x=1734564478; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=5Y13tezS9osfEyeZZhDu0hB4QwVrkWFM3vdAGWXDL0s=;
+        b=iU7GxywTPRhv00BP/fgEg0NmrmdoZvsb18J0qNknuA9FMsK90V2SUmf3EHvcZEMqxJ
+         2K0leJKkuL/h0g5LyguBhaAzdCwf/ixV35hU2N28UlRo3iDCexPyZJlZ8ADVsUbzQdSu
+         36f6fBihpDkgrvms7FyRKG90XrZdvglESUBx38od50WwLvZKwzAq1mdoFtMhJK5InUC2
+         2maZR+72rUQpReNpLsRqs44RtGvHjZvqOxXIt3BomWgB01Pu7FsM0OeM7kooK/j+MkHg
+         7sUfGhlRaKTjZr3YSiu0HnafSMsqeck/TWmmYHeBvKSEXWEpIpYD65lm/dCdHhJMAwbD
+         3fsw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1733959678; x=1734564478;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5Y13tezS9osfEyeZZhDu0hB4QwVrkWFM3vdAGWXDL0s=;
+        b=cRxwkW46ZmPDbA+Fw6v42/3OfQr9MEgftZw+nShuGlSQPs29HTY7+LtIMkYjAGxp9F
+         YSFA5q5bWnCrRQ0aedbat9fmqF00iPKRHmLhhpjNXyINI2m/Ee9qAelZcJ3lQ0pUwa/0
+         zKW7VEEv8hQlGNPfUDGsVUWvopTfKdvcbKD5rqFQ6LBKejqiZHRHPpZGa0yIm9UC5tBE
+         ki8PD9IJjehdB6xWgewQey1188yugqmmjweKmJo80fnuABlz19HOYJAb1v/IXWd8UgBm
+         KG+Hfvsq/aYVzYMlAF7Ss4yMTkiMNREX7Ov/7D8F1GZru8ykNpgH6nVgCI5p++D74d90
+         1liA==
+X-Forwarded-Encrypted: i=1; AJvYcCWSA8CcXtb62QRz9iBo5VCGnQHyszdEepjHSQJc3A8w8X3FC/hAYEfh9n9O5MEUv3aXDgsDFllKB557@vger.kernel.org
+X-Gm-Message-State: AOJu0YwX+vmsCqP/WHx3Y+gCsp3bF436NWm5hkCZ48+SU07SUgAkkDoV
+	46ZjI770yfKDeoFfRleliHObYJJWAo0ylcwLgyc1IewsH5Xn4ZyFbRCVVlLuSwWDuQwBsocz8hJ
+	gOQKYg91x1p1/AzVXP1GpjA==
+X-Google-Smtp-Source: AGHT+IH+hxwnbTejsd5rMe6ZdiiLsQVYXh76CpSNZ1O0EO7ZME4Z+uiov/c6u6U8sBeYTnWqfHb7LFZNMZjeMUedcw==
+X-Received: from pjj11.prod.google.com ([2002:a17:90b:554b:b0:2ef:9866:6155])
+ (user=kaleshsingh job=prod-delivery.src-stubby-dispatcher) by
+ 2002:a17:90b:1f81:b0:2e2:c2b0:d03e with SMTP id 98e67ed59e1d1-2f13abc6e43mr1624666a91.5.1733959677870;
+ Wed, 11 Dec 2024 15:27:57 -0800 (PST)
+Date: Wed, 11 Dec 2024 15:27:38 -0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH 00/28] vdso: Preparations for generic data storage
-From: patchwork-bot+linux-riscv@kernel.org
-Message-Id: 
- <173395639200.1729195.15576952837564128066.git-patchwork-notify@kernel.org>
-Date: Wed, 11 Dec 2024 22:33:12 +0000
-References: <20241010-vdso-generic-base-v1-0-b64f0842d512@linutronix.de>
-In-Reply-To: <20241010-vdso-generic-base-v1-0-b64f0842d512@linutronix.de>
-To: =?utf-8?q?Thomas_Wei=C3=9Fschuh_=3Cthomas=2Eweissschuh=40linutronix=2Ede=3E?=@codeaurora.org
-Cc: linux-riscv@lists.infradead.org, guoren@kernel.org, hca@linux.ibm.com,
- gor@linux.ibm.com, agordeev@linux.ibm.com, borntraeger@linux.ibm.com,
- svens@linux.ibm.com, catalin.marinas@arm.com, will@kernel.org,
- paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
- linux@armlinux.org.uk, chenhuacai@kernel.org, kernel@xen0n.name,
- tytso@mit.edu, Jason@zx2c4.com, tsbogend@alpha.franken.de,
- dave.hansen@linux.intel.com, luto@kernel.org, peterz@infradead.org,
- tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, x86@kernel.org,
- hpa@zytor.com, mpe@ellerman.id.au, npiggin@gmail.com,
- christophe.leroy@csgroup.eu, naveen@kernel.org, maddy@linux.ibm.com,
- vincenzo.frascino@arm.com, linux-csky@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
- linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- namcao@linutronix.de
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.47.0.338.g60cca15819-goog
+Message-ID: <20241211232754.1583023-1-kaleshsingh@google.com>
+Subject: [PATCH mm-unstable v2 00/16] mm: Introduce arch_mmap_hint()
+From: Kalesh Singh <kaleshsingh@google.com>
+To: akpm@linux-foundation.org, vbabka@suse.cz, yang@os.amperecomputing.com, 
+	riel@surriel.com, david@redhat.com, minchan@kernel.org, jyescas@google.com
+Cc: linux@armlinux.org.uk, tsbogend@alpha.franken.de, 
+	James.Bottomley@HansenPartnership.com, ysato@users.sourceforge.jp, 
+	dalias@libc.org, glaubitz@physik.fu-berlin.de, davem@davemloft.net, 
+	andreas@gaisler.com, tglx@linutronix.de, bp@alien8.de, 
+	dave.hansen@linux.intel.com, x86@kernel.org, chris@zankel.net, 
+	jcmvbkbc@gmail.com, bhelgaas@google.com, jason.andryuk@amd.com, 
+	leitao@debian.org, linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	linux-csky@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, linux-mm@kvack.org, 
+	kernel-team@android.com, android-mm@google.com, 
+	Kalesh Singh <kaleshsingh@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hello:
+Hi all,
 
-This series was applied to riscv/linux.git (fixes)
-by Thomas Gleixner <tglx@linutronix.de>:
+This is v2 othe the arch_mmap_hint() series.
 
-On Thu, 10 Oct 2024 09:01:02 +0200 you wrote:
-> Historically each architecture defined their own datapage to store the
-> VDSO data. This stands in contrast to the generic nature of the VDSO
-> code itself.
-> We plan to introduce a generic framework for the management of the VDSO
-> data storage that can be used by all architectures and which works
-> together with the existing generic VDSO code.
-> 
-> [...]
+Changes in v2:
+  - MAP_FIXED case is also handled in arch_mmap_hint() since this is just a
+    special case of the hint addr being "enforced", per Yang Shi.
+  - Consolidate most of the error handling in arch_mmap_hint().
+  - Patch 16 ("mm: Fallback to generic_mmap_hint()") was folded into
+    Patch 2 ("mm: x86: Introduce arch_mmap_hint()")
 
-Here is the summary with links:
-  - [01/28] csky/vdso: Remove gettimeofday() and friends from VDSO
-    (no matching commit)
-  - [02/28] csky/vdso: Remove arch_vma_name()
-    (no matching commit)
-  - [03/28] s390/vdso: Drop LBASE_VDSO
-    (no matching commit)
-  - [04/28] arm64: vdso: Drop LBASE_VDSO
-    (no matching commit)
-  - [05/28] arm64: vdso: Use only one single vvar mapping
-    (no matching commit)
-  - [06/28] riscv: vdso: Use only one single vvar mapping
-    https://git.kernel.org/riscv/c/d34b60752fcb
-  - [07/28] arm: vdso: Remove assembly for datapage access
-    (no matching commit)
-  - [08/28] LoongArch: vDSO: Use vdso/datapage.h to access vDSO data
-    (no matching commit)
-  - [09/28] MIPS: vdso: Avoid name conflict around "vdso_data"
-    (no matching commit)
-  - [10/28] x86/mm/mmap: Remove arch_vma_name()
-    (no matching commit)
-  - [11/28] x86: vdso: Use __arch_get_vdso_data() to access vdso data
-    (no matching commit)
-  - [12/28] x86: vdso: Place vdso_data at beginning of vvar page
-    (no matching commit)
-  - [13/28] x86: vdso: Access rng data from kernel without vvar
-    (no matching commit)
-  - [14/28] x86: vdso: Allocate vvar page from C code
-    (no matching commit)
-  - [15/28] x86: vdso: Access timens vdso data without vvar.h
-    (no matching commit)
-  - [16/28] x86: vdso: Access rng vdso data without vvar.h
-    (no matching commit)
-  - [17/28] x86: vdso: Move the rng offset to vsyscall.h
-    (no matching commit)
-  - [18/28] x86: vdso: Access vdso data without vvar.h
-    (no matching commit)
-  - [19/28] x86: vdso: Delete vvar.h
-    (no matching commit)
-  - [20/28] x86: vdso: Split virtual clock pages into dedicated mapping
-    (no matching commit)
-  - [21/28] powerpc: vdso: Remove offset comment from 32bit vdso_arch_data
-    (no matching commit)
-  - [22/28] powerpc: procfs: Propagate error of remap_pfn_range()
-    (no matching commit)
-  - [23/28] powerpc/pseries/lparcfg: Fix printing of system_active_processors
-    (no matching commit)
-  - [24/28] powerpc/pseries/lparcfg: Use num_possible_cpus() for potential processors
-    (no matching commit)
-  - [25/28] powerpc: Add kconfig option for the systemcfg page
-    (no matching commit)
-  - [26/28] powerpc: Split systemcfg data out of vdso data page
-    (no matching commit)
-  - [27/28] powerpc: Split systemcfg struct definitions out from vdso
-    (no matching commit)
-  - [28/28] vdso: Rename struct arch_vdso_data to arch_vdso_time_data
-    (no matching commit)
+v1: https://lore.kernel.org/r/20241210024119.2488608-1-kaleshsingh@google.com/
 
-You are awesome, thank you!
+=======
+
+This series introduces arch_mmap_hint() to handle allocating VA space
+for the hint address.
+
+Patches 1-16 introduce this new helper and Patch 17 uses it to fix the
+issue of mmap hint being ignored in some cases due to THP alignment [1]
+
+[1] https://lore.kernel.org/r/20241118214650.3667577-1-kaleshsingh@google.com/
+
+Thanks,
+Kalesh
+
+
+Kalesh Singh (16):
+  mm: Introduce generic_mmap_hint()
+  mm: x86: Introduce arch_mmap_hint()
+  mm: arm: Introduce arch_mmap_hint()
+  mm: alpha: Introduce arch_mmap_hint()
+  mm: arc: Use generic_mmap_hint()
+  mm: csky: Introduce arch_mmap_hint()
+  mm: loongarch: Introduce arch_mmap_hint()
+  mm: mips: Introduce arch_align_mmap_hint()
+  mm: parisc: Introduce arch_align_mmap_hint()
+  mm: s390: Use generic_mmap_hint()
+  mm: sh: Introduce arch_mmap_hint()
+  mm: sparc32: Introduce arch_mmap_hint()
+  mm: sparc64: Introduce arch_mmap_hint()
+  mm: xtensa: Introduce arch_mmap_hint()
+  mm: powerpc: Introduce arch_mmap_hint()
+  mm: Respect mmap hint before THP alignment if allocation is possible
+
+ arch/alpha/include/asm/pgtable.h           |   1 +
+ arch/alpha/kernel/osf_sys.c                |  31 +++---
+ arch/arc/include/asm/pgtable.h             |   1 +
+ arch/arc/mm/mmap.c                         |  43 +++++----
+ arch/arm/include/asm/pgtable.h             |   1 +
+ arch/arm/mm/mmap.c                         | 107 +++++++++------------
+ arch/csky/abiv1/inc/abi/pgtable-bits.h     |   1 +
+ arch/csky/abiv1/mmap.c                     |  68 +++++++------
+ arch/loongarch/include/asm/pgtable.h       |   1 +
+ arch/loongarch/mm/mmap.c                   |  49 +++++-----
+ arch/mips/include/asm/pgtable.h            |   1 +
+ arch/mips/mm/mmap.c                        |  50 +++++-----
+ arch/parisc/include/asm/pgtable.h          |   1 +
+ arch/parisc/kernel/sys_parisc.c            |  53 +++++-----
+ arch/powerpc/include/asm/book3s/64/slice.h |   1 +
+ arch/powerpc/mm/book3s64/slice.c           |  31 ++++++
+ arch/s390/include/asm/pgtable.h            |   1 +
+ arch/s390/mm/mmap.c                        |  51 +++++-----
+ arch/sh/include/asm/pgtable.h              |   1 +
+ arch/sh/mm/mmap.c                          |  83 ++++++----------
+ arch/sparc/include/asm/pgtable_32.h        |   1 +
+ arch/sparc/include/asm/pgtable_64.h        |   1 +
+ arch/sparc/kernel/sys_sparc_32.c           |  33 ++++---
+ arch/sparc/kernel/sys_sparc_64.c           |  96 +++++++-----------
+ arch/x86/include/asm/pgtable_64.h          |   1 +
+ arch/x86/kernel/sys_x86_64.c               |  64 ++++++------
+ arch/xtensa/kernel/syscall.c               |  31 ++++--
+ include/linux/sched/mm.h                   |   9 ++
+ mm/huge_memory.c                           |  17 ++--
+ mm/mmap.c                                  |  86 +++++++++++------
+ 30 files changed, 491 insertions(+), 424 deletions(-)
+
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.47.0.338.g60cca15819-goog
 
 
