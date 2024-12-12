@@ -1,264 +1,240 @@
-Return-Path: <linux-mips+bounces-6963-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6964-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E39E49EE38E
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Dec 2024 11:00:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EED659EE728
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Dec 2024 13:56:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3288B2865F3
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Dec 2024 10:00:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A891E281A23
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Dec 2024 12:56:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EAD421018D;
-	Thu, 12 Dec 2024 10:00:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B5DB2139A7;
+	Thu, 12 Dec 2024 12:56:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="VdKfS77S"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n+7Fj8Of"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60946210198;
-	Thu, 12 Dec 2024 10:00:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFEC21714D7;
+	Thu, 12 Dec 2024 12:56:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1733997610; cv=none; b=P84PTuZ6nYOwETN/ZMbEV+DVSBEbjekIjUYbIF5QJoLN+g79Vw+DU/DPLeoy6XS9NGbbL4xQ0hym9F1fS22j1LfU7J+WyAPcUYFy+eXL9IrE3/HCu/gd5chmq22J02MZDpTOk+9zUBpcXymZoGGIGH27Y+ITgTkpRaB8fEnNzTI=
+	t=1734008169; cv=none; b=VYiLQG5UKJDnN7GJT3T0/B1Sk0ymuJHvhGzBvX0+vj5aT/jorEe+6Os18YsT5zgVYrjYMAo+ceyh/IjwxwM8mCKl4W7d8nZicmrVzytwt7YjzjuSBu+L1lEPuxwe71n8j9Jpvs/vg/i9+ReDYP/O8/9m0K0xCISWa+iivdhVUtM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1733997610; c=relaxed/simple;
-	bh=qDAv2Xv6N2kuxJQLsjfm1axhvIqwPsan4GylkV4QvzY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z0sfh8mVcSVFQtw7HPyI6pTih7ABhfzmpgb7h9cP8OhYaXWvf8amxXNV28x+n7WdLiP7pPxbaO7MFjLcrWgPGlLCnwBTt2naH5jkUaSzqRBfQpWV1Kc5smEe1CNWUVZh9P0yWe3Qk+m70o+MM+0UpPRTX5QP4IvhbCOqP1kyEEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=VdKfS77S; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=wA41zs323CaxwCsbLDOAz6jafr2ZMVwJEresqJ562hE=; b=VdKfS77SJboOdDhtPNF3vqvb86
-	UPC1q2HKZ90KAVOWlP7iooe6gv7dhK7+e0dKXQNRtNU0UEjRv4cTsIh9QYbDiXZ1h4jWgPCwdHZ0g
-	NHYAxxMY67JEcM+LPoOtH694kdgAb9lPWqDXjk/HUCumQgB+XwoKFFvwAHE8VtNmHdo2E74rVLUn+
-	mmDgYejw0tNQzdGErxsB0jWiR9kW7JpDhsAHn+KvBM232HWoEAF0jMejSGjSebb5HTZ1ffRTt8btF
-	Vv5vIZILY/TKJT22kt9DMVyjBckS/8dlYIB1+KdG6lp50lUHPLUw41/J2o7jxMiQUnddP66KqAbQC
-	Yt7MMrbQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:45064)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1tLfyz-00054Z-1C;
-	Thu, 12 Dec 2024 09:59:45 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.96)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1tLfys-0005FA-2P;
-	Thu, 12 Dec 2024 09:59:38 +0000
-Date: Thu, 12 Dec 2024 09:59:38 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc: lee@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	tsbogend@alpha.franken.de, hkallweit1@gmail.com,
-	markus.stockhausen@gmx.de, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	linux-mips@vger.kernel.org
-Subject: Re: [PATCH 4/4] net: mdio: Add RTL9300 MDIO driver
-Message-ID: <Z1q0CuDXe8VFuBfZ@shell.armlinux.org.uk>
-References: <20241211235342.1573926-1-chris.packham@alliedtelesis.co.nz>
- <20241211235342.1573926-5-chris.packham@alliedtelesis.co.nz>
+	s=arc-20240116; t=1734008169; c=relaxed/simple;
+	bh=xxZqH/jWseGtawnTC3Mff0BVdlHl78xupLUOsVLvfIc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=h97m2qr0YuxSTISiKvKnOoTDtM+ImDeCaMGv+kfvlMHzvKbOGsFLv6MuYiUi4/0C/noLndfAUhkTP1eBM4coXDZH+MLMNWTUcuknlXgTlxMT9ZqzGRxzftggvvjkWgWokGoseOGh8w/hRYwVHWvBN/KPudfE1fjdmCeSvwHPNwM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n+7Fj8Of; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AD1FDC4CECE;
+	Thu, 12 Dec 2024 12:56:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734008168;
+	bh=xxZqH/jWseGtawnTC3Mff0BVdlHl78xupLUOsVLvfIc=;
+	h=From:To:Cc:Subject:Date:From;
+	b=n+7Fj8Of8e5sts5EpMo7IcbPPQefDcygJTvJiXwpSImEu/euclZ6Bx4GqaPgB9BAS
+	 FC4B8FUtqKk2cwlm+G4MDUFBJxlGjy+Xyf+UGEHoh7ODAHRe5iul8cwad7BmocUNUO
+	 yQgv1x7MmFDwvvnAQtr0sJwLl7qC/O0URI3UfnyVQ9MTFZyjCr5vlk55V1qwVpYdi1
+	 QZKderZ8s7FSi4AC3RP01v7I+mr84s09Or5FW2yiFQ/NnidTgm0la/5eUMXMidG1uo
+	 huHO0dznecqL990+dZlovhbBYo/EoQ4Kvug0p3zf2r057/Y1qQayr/EDXOK4i4ZnQk
+	 B8d9Wq66KI53A==
+From: Arnd Bergmann <arnd@kernel.org>
+To: kvm@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Alexander Graf <graf@amazon.com>,
+	Crystal Wood <crwood@redhat.com>,
+	Anup Patel <anup@brainfault.org>,
+	Atish Patra <atishp@atishpatra.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Paul Durrant <paul@xen.org>,
+	Marc Zyngier <maz@kernel.org>,
+	linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	kvm-riscv@lists.infradead.org,
+	linux-riscv@lists.infradead.org
+Subject: [RFC 0/5] KVM: drop 32-bit host support on all architectures
+Date: Thu, 12 Dec 2024 13:55:11 +0100
+Message-Id: <20241212125516.467123-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241211235342.1573926-5-chris.packham@alliedtelesis.co.nz>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Dec 12, 2024 at 12:53:42PM +1300, Chris Packham wrote:
-> +#define SMI_GLB_CTRL			0x000
-> +#define   GLB_CTRL_INTF_SEL(intf)	BIT(16 + (intf))
-> +#define SMI_PORT0_15_POLLING_SEL	0x008
-> +#define SMI_ACCESS_PHY_CTRL_0		0x170
-> +#define SMI_ACCESS_PHY_CTRL_1		0x174
-> +#define   PHY_CTRL_RWOP			BIT(2)
+From: Arnd Bergmann <arnd@arndb.de>
 
-Presumably, reading the code, this bit is set when writing?
+I submitted a patch to remove KVM support for x86-32 hosts earlier
+this month, but there were still concerns that this might be useful for
+testing 32-bit host in general, as that remains supported on three other
+architectures. I have gone through those three now and prepared similar
+patches, as all of them seem to be equally obsolete.
 
-> +#define   PHY_CTRL_TYPE			BIT(1)
+Support for 32-bit KVM host on Arm hardware was dropped back in 2020
+because of lack of users, despite Cortex-A7/A15/A17 based SoCs being
+much more widely deployed than the other virtualization capable 32-bit
+CPUs (Intel Core Duo/Silverthorne, PowerPC e300/e500/e600, MIPS P5600)
+combined.
 
-Presumably, reading the code, this bit indicates we want to use clause
-45?
+It probably makes sense to drop all of these at the same time, provided
+there are no actual users remaining (not counting regression testing
+that developers might be doing). Please let me know if you are still
+using any of these machines, or think there needs to be deprecation
+phase first.
 
-> +#define   PHY_CTRL_CMD			BIT(0)
-> +#define   PHY_CTRL_FAIL			BIT(25)
-> +#define SMI_ACCESS_PHY_CTRL_2		0x178
-> +#define SMI_ACCESS_PHY_CTRL_3		0x17c
-> +#define SMI_PORT0_5_ADDR_CTRL		0x180
-> +
-> +#define MAX_PORTS       32
-> +#define MAX_SMI_BUSSES  4
-> +
-> +struct realtek_mdio_priv {
-> +	struct regmap *regmap;
-> +	u8 smi_bus[MAX_PORTS];
-> +	u8 smi_addr[MAX_PORTS];
-> +	bool smi_bus_isc45[MAX_SMI_BUSSES];
+      Arnd
 
-Not sure about the support for !C45 - you appear to set this if you
-find a PHY as a child of this device which has the PHY C45 compatible,
-but as you don't populate the C22 MDIO bus operations, I'm not sure
-how a C22 PHY can work.
+Link: https://lore.kernel.org/lkml/Z1B1phcpbiYWLgCD@google.com/
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Huacai Chen <chenhuacai@kernel.org>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Naveen N Rao <naveen@kernel.org>
+Cc: Madhavan Srinivasan <maddy@linux.ibm.com>
+Cc: Alexander Graf <graf@amazon.com>
+Cc: Crystal Wood <crwood@redhat.com>
+Cc: Anup Patel <anup@brainfault.org>
+Cc: Atish Patra <atishp@atishpatra.org>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Albert Ou <aou@eecs.berkeley.edu>
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: x86@kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc: David Woodhouse <dwmw2@infradead.org>
+Cc: Paul Durrant <paul@xen.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-mips@vger.kernel.org
+Cc: kvm@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: kvm-riscv@lists.infradead.org
+Cc: linux-riscv@lists.infradead.org
 
-> +	u32 reg_base;
-> +};
-> +
-> +static int realtek_mdio_wait_ready(struct realtek_mdio_priv *priv)
-> +{
-> +	u32 val;
-> +
-> +	return regmap_read_poll_timeout(priv->regmap, priv->reg_base + SMI_ACCESS_PHY_CTRL_1,
-> +					val, !(val & PHY_CTRL_CMD), 10, 500);
-> +}
-> +
-> +static int realtek_mdio_read_c45(struct mii_bus *bus, int phy_id, int dev_addr, int regnum)
-> +{
-> +	struct realtek_mdio_priv *priv = bus->priv;
-> +	u32 val;
-> +	int err;
-> +
-> +	err = realtek_mdio_wait_ready(priv);
-> +	if (err)
-> +		return err;
-> +
-> +	err = regmap_write(priv->regmap, priv->reg_base + SMI_ACCESS_PHY_CTRL_2, phy_id << 16);
-> +	if (err)
-> +		return err;
-> +
-> +	err = regmap_write(priv->regmap, priv->reg_base + SMI_ACCESS_PHY_CTRL_3,
-> +			   dev_addr << 16 | (regnum & 0xffff));
-> +	if (err)
-> +		return err;
-> +
-> +	err = regmap_write(priv->regmap, priv->reg_base + SMI_ACCESS_PHY_CTRL_1,
-> +			   PHY_CTRL_TYPE | PHY_CTRL_CMD);
-> +	if (err)
-> +		return err;
+Arnd Bergmann (5):
+  mips: kvm: drop support for 32-bit hosts
+  powerpc: kvm: drop 32-bit booke
+  powerpc: kvm: drop 32-bit book3s
+  riscv: kvm: drop 32-bit host support
+  x86: kvm drop 32-bit host support
 
-Maybe consider using a local variable for "regmap" and "reg_base" to
-reduce the line length/wrapping?
-
-> +static int realtek_mdiobus_init(struct realtek_mdio_priv *priv)
-> +{
-> +	u32 port_addr[5] = { };
-> +	u32 poll_sel[2] = { 0, 0 };
-> +	u32 glb_ctrl_mask = 0, glb_ctrl_val = 0;
-
-Please use reverse Christmas tree order.
-
-> +	int i, err;
-> +
-> +	for (i = 0; i < MAX_PORTS; i++) {
-> +		int pos;
-> +
-> +		if (priv->smi_bus[i] > 3)
-> +			continue;
-> +
-> +		pos = (i % 6) * 5;
-> +		port_addr[i / 6] |=  priv->smi_addr[i] << pos;
-
-s/  / /
-
-> +
-> +		pos = (i % 16) * 2;
-> +		poll_sel[i / 16] |= priv->smi_bus[i] << pos;
-> +	}
-> +
-> +	for (i = 0; i < MAX_SMI_BUSSES; i++) {
-> +		if (priv->smi_bus_isc45[i]) {
-> +			glb_ctrl_mask |= GLB_CTRL_INTF_SEL(i);
-> +			glb_ctrl_val |= GLB_CTRL_INTF_SEL(i);
-> +		}
-> +	}
-> +
-> +	err = regmap_bulk_write(priv->regmap, priv->reg_base + SMI_PORT0_5_ADDR_CTRL,
-> +				port_addr, 5);
-> +	if (err)
-> +		return err;
-> +
-> +	err = regmap_bulk_write(priv->regmap, priv->reg_base + SMI_PORT0_15_POLLING_SEL,
-> +				poll_sel, 2);
-> +	if (err)
-> +		return err;
-> +
-> +	err = regmap_update_bits(priv->regmap, priv->reg_base + SMI_GLB_CTRL,
-> +				 glb_ctrl_mask, glb_ctrl_val);
-> +	if (err)
-> +		return err;
-> +
-> +	return 0;
-> +}
-> +
-> +static int realtek_mdiobus_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct realtek_mdio_priv *priv;
-> +	struct fwnode_handle *child;
-> +	struct mii_bus *bus;
-> +	int err;
-> +
-> +	bus = devm_mdiobus_alloc_size(dev, sizeof(*priv));
-> +	if (!bus)
-> +		return -ENOMEM;
-> +
-> +	bus->name = "Reaktek Switch MDIO Bus";
-> +	bus->read_c45 = realtek_mdio_read_c45;
-> +	bus->write_c45 =  realtek_mdio_write_c45;
-> +	bus->parent = dev;
-> +	priv = bus->priv;
-> +
-> +	priv->regmap = syscon_node_to_regmap(dev->parent->of_node);
-> +	if (IS_ERR(priv->regmap))
-> +		return PTR_ERR(priv->regmap);
-> +
-> +	err = device_property_read_u32(dev, "reg", &priv->reg_base);
-> +	if (err)
-> +		return err;
-> +
-> +	snprintf(bus->id, MII_BUS_ID_SIZE, "%s", dev_name(dev));
-> +
-> +	device_for_each_child_node(dev, child) {
-> +		u32 pn, smi_addr[2];
-> +
-> +		err = fwnode_property_read_u32(child, "reg", &pn);
-> +		if (err)
-> +			return err;
-> +
-> +		if (pn > MAX_PORTS)
-> +			return dev_err_probe(dev, -EINVAL, "illegal port number %d\n", pn);
-
-You validate the port number.
-
-> +
-> +		err = fwnode_property_read_u32_array(child, "realtek,smi-address", smi_addr, 2);
-> +		if (err) {
-> +			smi_addr[0] = 0;
-> +			smi_addr[1] = pn;
-> +		}
-
-You don't validate the "smi_addr", so:
-
-	realtek,smi-address = <4, ...>;
-
-would silently overflow priv->smi_bus_isc45. However, I haven't checked
-whether the binding would warn about this.
-
-Thanks.
+ MAINTAINERS                                 |   2 +-
+ arch/mips/Kconfig                           |   3 -
+ arch/mips/include/asm/kvm_host.h            |   4 -
+ arch/mips/kvm/Kconfig                       |   1 +
+ arch/mips/kvm/emulate.c                     |   8 -
+ arch/mips/kvm/msa.S                         |  12 -
+ arch/mips/kvm/vz.c                          |  22 -
+ arch/powerpc/include/asm/kvm_book3s.h       |  19 -
+ arch/powerpc/include/asm/kvm_book3s_32.h    |  36 --
+ arch/powerpc/include/asm/kvm_book3s_asm.h   |  10 -
+ arch/powerpc/include/asm/kvm_booke.h        |   4 -
+ arch/powerpc/include/asm/kvm_booke_hv_asm.h |   2 -
+ arch/powerpc/kvm/Kconfig                    |  44 +-
+ arch/powerpc/kvm/Makefile                   |  30 --
+ arch/powerpc/kvm/book3s.c                   |  18 -
+ arch/powerpc/kvm/book3s_32_mmu_host.c       | 396 --------------
+ arch/powerpc/kvm/book3s_emulate.c           |  37 --
+ arch/powerpc/kvm/book3s_interrupts.S        |  11 -
+ arch/powerpc/kvm/book3s_mmu_hpte.c          |  12 -
+ arch/powerpc/kvm/book3s_pr.c                | 122 +----
+ arch/powerpc/kvm/book3s_rmhandlers.S        | 110 ----
+ arch/powerpc/kvm/book3s_segment.S           |  30 +-
+ arch/powerpc/kvm/booke.c                    | 264 ----------
+ arch/powerpc/kvm/booke.h                    |   8 -
+ arch/powerpc/kvm/booke_emulate.c            |  44 --
+ arch/powerpc/kvm/booke_interrupts.S         | 535 -------------------
+ arch/powerpc/kvm/bookehv_interrupts.S       |  10 -
+ arch/powerpc/kvm/e500.c                     | 553 --------------------
+ arch/powerpc/kvm/e500.h                     |  40 --
+ arch/powerpc/kvm/e500_emulate.c             | 100 ----
+ arch/powerpc/kvm/e500_mmu_host.c            |  54 --
+ arch/powerpc/kvm/e500mc.c                   |   5 +-
+ arch/powerpc/kvm/emulate.c                  |   2 -
+ arch/powerpc/kvm/powerpc.c                  |   2 -
+ arch/powerpc/kvm/trace_booke.h              |  14 -
+ arch/riscv/kvm/Kconfig                      |   2 +-
+ arch/riscv/kvm/aia.c                        | 105 ----
+ arch/riscv/kvm/aia_imsic.c                  |  34 --
+ arch/riscv/kvm/mmu.c                        |   8 -
+ arch/riscv/kvm/vcpu_exit.c                  |   4 -
+ arch/riscv/kvm/vcpu_insn.c                  |  12 -
+ arch/riscv/kvm/vcpu_sbi_pmu.c               |   8 -
+ arch/riscv/kvm/vcpu_sbi_replace.c           |   4 -
+ arch/riscv/kvm/vcpu_sbi_v01.c               |   4 -
+ arch/riscv/kvm/vcpu_timer.c                 |  20 -
+ arch/x86/kvm/Kconfig                        |   6 +-
+ arch/x86/kvm/Makefile                       |   4 +-
+ arch/x86/kvm/cpuid.c                        |   9 +-
+ arch/x86/kvm/emulate.c                      |  34 +-
+ arch/x86/kvm/fpu.h                          |   4 -
+ arch/x86/kvm/hyperv.c                       |   5 +-
+ arch/x86/kvm/i8254.c                        |   4 -
+ arch/x86/kvm/kvm_cache_regs.h               |   2 -
+ arch/x86/kvm/kvm_emulate.h                  |   8 -
+ arch/x86/kvm/lapic.c                        |   4 -
+ arch/x86/kvm/mmu.h                          |   4 -
+ arch/x86/kvm/mmu/mmu.c                      | 134 -----
+ arch/x86/kvm/mmu/mmu_internal.h             |   9 -
+ arch/x86/kvm/mmu/paging_tmpl.h              |   9 -
+ arch/x86/kvm/mmu/spte.h                     |   5 -
+ arch/x86/kvm/mmu/tdp_mmu.h                  |   4 -
+ arch/x86/kvm/smm.c                          |  19 -
+ arch/x86/kvm/svm/sev.c                      |   2 -
+ arch/x86/kvm/svm/svm.c                      |  23 +-
+ arch/x86/kvm/svm/vmenter.S                  |  20 -
+ arch/x86/kvm/trace.h                        |   4 -
+ arch/x86/kvm/vmx/main.c                     |   2 -
+ arch/x86/kvm/vmx/nested.c                   |  24 +-
+ arch/x86/kvm/vmx/vmcs.h                     |   2 -
+ arch/x86/kvm/vmx/vmenter.S                  |  25 +-
+ arch/x86/kvm/vmx/vmx.c                      | 117 +----
+ arch/x86/kvm/vmx/vmx.h                      |  23 +-
+ arch/x86/kvm/vmx/vmx_ops.h                  |   7 -
+ arch/x86/kvm/vmx/x86_ops.h                  |   2 -
+ arch/x86/kvm/x86.c                          |  74 +--
+ arch/x86/kvm/x86.h                          |   4 -
+ arch/x86/kvm/xen.c                          |  61 +--
+ 77 files changed, 63 insertions(+), 3356 deletions(-)
+ delete mode 100644 arch/powerpc/include/asm/kvm_book3s_32.h
+ delete mode 100644 arch/powerpc/kvm/book3s_32_mmu_host.c
+ delete mode 100644 arch/powerpc/kvm/booke_interrupts.S
+ delete mode 100644 arch/powerpc/kvm/e500.c
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+2.39.5
+
 
