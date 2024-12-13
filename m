@@ -1,346 +1,267 @@
-Return-Path: <linux-mips+bounces-6989-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6990-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D295A9EFF8D
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Dec 2024 23:53:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E945D9F0147
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Dec 2024 01:52:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B77A4168B16
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Dec 2024 22:53:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F399A164A73
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Dec 2024 00:51:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9119E1DE8AD;
-	Thu, 12 Dec 2024 22:53:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 982FC747F;
+	Fri, 13 Dec 2024 00:51:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="jxEXSEKi";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="td5Yp3w4"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="DskBrXLi"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BCE91DE4F0;
-	Thu, 12 Dec 2024 22:53:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734044004; cv=fail; b=Xj85LEP++HhK+y/KE3hPp7GR5PJT/QT7Jc85JDOoskcxef7q08XN12jWufXgLVvblgctLF4XkDxt7vD054GZEEmVJcigWMz/7AJBFCkRFSOZ74eA7yh3TdaJ7WsYrroT0g/VUtVpJb00QGYmPaaknVta8rcp8jDA+0CmmA8VWKg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734044004; c=relaxed/simple;
-	bh=KwpiwAz2ohzJR4/XQ25hUNq7eT1qinuIL2zXfeKYHqM=;
-	h=Date:From:To:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=EJeN5VOithXTAtJpM5uwP00gGMFJcwUvUitpDYeMR/DKrmZcTuL23dJY33g/3IJqJlQSM0FmuENQfhqPe++1nSwSCwBxPp7oZAvyOdnE2CFKjP7XwdhZVQfbzbJ1efFehL1FfJ/kxpXFUR0BEkpPJP/HAGa1yAGnlc1Wr0bgmJU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=jxEXSEKi; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=td5Yp3w4; arc=fail smtp.client-ip=205.220.165.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BCMgCKc023113;
-	Thu, 12 Dec 2024 22:51:44 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=
-	content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=corp-2023-11-20; bh=bnlxJ0qxYgOZ9Im+ef
-	CrHalg4ItFI/zq87QP6zYwQx4=; b=jxEXSEKiiBnD/Ouzn0DdbFRGoqKuD25PFa
-	Mc+d0OHFDSkb0YSciYf7JHgLuL39MYXicckmf2UKJXFYjZCt1d5VjZxfJcLoXYTS
-	bwF/3XY4cFiF3paBNGRDfUsMjS5Q81b/ndeY/7GwC6fSYCxWsnMmR2Sttzx3tVuD
-	1BvUciSNeEWTkNNTDnKJ9yjUKmoUwaIs1z4W2U1wVWJ+zbAU6rCGvRfOUg0DIET3
-	a8HK2wB3q3YaPmK5s99BnWx2kg6dkeMW4msPFJwGIXjs9yFyng2k3HHOy2QpqCwb
-	aOWa9ww1twYpOmfTfGnlNBexWom9eVXbXU3IGmYGHHuYcQZiPsJQ==
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 43cewtcen1-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 12 Dec 2024 22:51:44 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 4BCLe6dw019258;
-	Thu, 12 Dec 2024 22:51:43 GMT
-Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10lp2047.outbound.protection.outlook.com [104.47.55.47])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 43cctc1hdd-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 12 Dec 2024 22:51:43 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=X0Mv+wmBRp1+tpPH6KQxUB0ffeMV9uPxbVNUa8xxJDo2olu7s7Pz2nCSVQuyJAPa9RsjoDtsxyzcb67smrhp74g2aX5Dzw9pq0v3vodNJjrFeCKQq4Rvmt+5ROIM9luUA3YB732gkQBJk4IiT7uil3cmoAAGBXBeoc8AqfNW7cBQEM9gWRnmOqExxqgWRRTUhhQXVjicea8IbaYpyzKOvd8CSz5qaDKa0kWO1NGHWB9lX4g6wHn76UmBlUbCthKEQKytdmjY7VHxCxQ/DtDVxdrqVMbJfeTC3WTEEdtkZxo+HvED07rAv4YmT8ZJq8zye8H6JYJR4hDiXtHipEPOsw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bnlxJ0qxYgOZ9Im+efCrHalg4ItFI/zq87QP6zYwQx4=;
- b=CGY1HF+ZzjoLG9W8YzNpMCR/qaheUvMHNmvfe3tgbv2LtdtqF9WwbCJKU+KQ7H9GrJ6r6MOeeCuCdOU88isvOIKwE73HfxAuc1ZLgq7PSy0aBDs5nLnF5I7Toh8XSIux2rO5ei4mQNoIXxnw6zSPjmHMW2sxsn9Bfc1ZoIV+QiGPji78+egFvKeq+8/ltXTsaJZvvRqYFdoXAi8WnqwS21DEpq9/t5my4KhAnuOfR1oOtlcj5mVy+/acdnLDRUWlYH2TgejNGO1wsb/4NZc28+9xeRses+/KtAeMOfHutNwDaCZ/qoIBDgiljVcVfdfDO90ByuJI2jPzoD5r1/BtXQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bnlxJ0qxYgOZ9Im+efCrHalg4ItFI/zq87QP6zYwQx4=;
- b=td5Yp3w4GJw9L9U7ZwBjp0cPdTv+yTUBXmNpGgZQnxC+91+N3m7cLMS83OFdEVO6pAgAvcYdMqXH9gCmwfToP8d+/rl6mP4fdTmdra63zWF+1/usoUDbm8rykTmSxgToCwcYSsgHRvq5IaP4nMxNqjSvogniHpaXzmM0S2YiLT0=
-Received: from BYAPR10MB3366.namprd10.prod.outlook.com (2603:10b6:a03:14f::25)
- by SA2PR10MB4521.namprd10.prod.outlook.com (2603:10b6:806:117::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8251.16; Thu, 12 Dec
- 2024 22:51:38 +0000
-Received: from BYAPR10MB3366.namprd10.prod.outlook.com
- ([fe80::baf2:dff1:d471:1c9]) by BYAPR10MB3366.namprd10.prod.outlook.com
- ([fe80::baf2:dff1:d471:1c9%7]) with mapi id 15.20.8251.008; Thu, 12 Dec 2024
- 22:51:38 +0000
-Date: Thu, 12 Dec 2024 22:51:34 +0000
-From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-        Kalesh Singh <kaleshsingh@google.com>, akpm@linux-foundation.org,
-        vbabka@suse.cz, yang@os.amperecomputing.com, riel@surriel.com,
-        david@redhat.com, minchan@kernel.org, jyescas@google.com,
-        linux@armlinux.org.uk, tsbogend@alpha.franken.de,
-        James.Bottomley@hansenpartnership.com, ysato@users.sourceforge.jp,
-        dalias@libc.org, glaubitz@physik.fu-berlin.de, davem@davemloft.net,
-        andreas@gaisler.com, tglx@linutronix.de, bp@alien8.de,
-        dave.hansen@linux.intel.com, x86@kernel.org, chris@zankel.net,
-        jcmvbkbc@gmail.com, bhelgaas@google.com, jason.andryuk@amd.com,
-        leitao@debian.org, linux-alpha@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-mm@kvack.org,
-        kernel-team@android.com, android-mm@google.com,
-        Jann Horn <jannh@google.com>
-Subject: Re: [PATCH mm-unstable v2 00/16] mm: Introduce arch_mmap_hint()
-Message-ID: <1818e2ea-f170-4a9c-8d93-2a24f2755a41@lucifer.local>
-References: <20241211232754.1583023-1-kaleshsingh@google.com>
- <hmuzfspqjzb36xlj2x44keihacrrhzj5madqrfbcnhqouzredv@wo75achgkuh5>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <hmuzfspqjzb36xlj2x44keihacrrhzj5madqrfbcnhqouzredv@wo75achgkuh5>
-X-ClientProxiedBy: LO4P265CA0104.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:2c3::8) To BYAPR10MB3366.namprd10.prod.outlook.com
- (2603:10b6:a03:14f::25)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 025AC4C7D
+	for <linux-mips@vger.kernel.org>; Fri, 13 Dec 2024 00:51:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1734051118; cv=none; b=Ac36i2+ro6VPtC/0xtoCVpOTrhgyhGfUUAPAPXlTUeeNwan0f3Bo5fabMy9zy1SUDZtQAvBNwe3EV54cWuSGyam2c/JvBdTtJ4d2CPpE+fYOFx+RBTQ3ZT6H+V/jpk6PrkhtI11cfeepAzoJwnTIz1ARZEvNFISJfqE/GUhWbGs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1734051118; c=relaxed/simple;
+	bh=iFK9zQnpu6ftwjP/G/D6vMn2aMsIdos6kgQPzfkf7dk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FEV/4Me30ZR8/z9VCvfnKKlbb+yFuHWrL1R7ClDd0t+IGw5oBWQIsNa7uJE9ul0Hald5GqlbW0NCMRqVhqPnozDG1fz9hHzcTDciJj/JhBXUyiEM4TWBaI3Jf/0V6hYavqM2GlNrLTyI6L8OZbdRwvQyTOeyHf7wIrocH3xxtkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=DskBrXLi; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 01BD12C02A5;
+	Fri, 13 Dec 2024 13:51:48 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1734051108;
+	bh=GxzUAEXAkhjtp42vA7TWZCbw4NxpvcuOU0R6+v4w44w=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=DskBrXLimYwcT0camdDAg/BJMuNSuZsRlPLh4+NlS52gpZgZXXx0uIreTe+fkbvGn
+	 QnykWI4qGEiIdD4czWCAhisXluFIRvqmG+cvqm9Y7lK/P0cd36Z8Hl+isA9qKZeV/U
+	 XcPzhaxF2T2YdZ4kiinfqZ+0taKjItlBJaMCpc++OS8VSZmvpFoLNu7b68UyJfkLND
+	 WXlPQXcSwokp2nY2JoOB1KnunvN0MmtfLO3QayS5Nk7g8wilV6odvdzT3SLE/VIG2e
+	 8XQbsxoNnTwOwMvwISV7LJPFotn3X9SgEgycy4cSyZHrG8mfoVplXJj5BsRQP6m4sZ
+	 XJYON5ZnKfyWA==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B675b85230000>; Fri, 13 Dec 2024 13:51:47 +1300
+Received: from [10.33.22.30] (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+	by pat.atlnz.lc (Postfix) with ESMTP id A4DAD13EE00;
+	Fri, 13 Dec 2024 13:51:47 +1300 (NZDT)
+Message-ID: <6124c7a2-e949-452e-a88d-2d747cc0f776@alliedtelesis.co.nz>
+Date: Fri, 13 Dec 2024 13:51:47 +1300
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR10MB3366:EE_|SA2PR10MB4521:EE_
-X-MS-Office365-Filtering-Correlation-Id: e71b4607-5fd4-453a-2ca8-08dd1aff8970
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|1800799024|376014|366016|921020|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?XvXyyntWcT9X4fy+8awqqhelSxZTkYsjZfO6xT21jaa8pkPCoznyfuNbv7CJ?=
- =?us-ascii?Q?IfxgQItdbtZEdPVqGsdtfiXKvcmvL0zP3/4znxtZWz7QRG0PGFD2fRz/N41v?=
- =?us-ascii?Q?hwHetYaFLNchGTcH/4lPuJNIBuOfMOn1Vbt3wyPHPfdWi31OtymJpav3nUAV?=
- =?us-ascii?Q?keLNVKs0VMA0qGqe3PZ4o9Ist0xnFenF5p0oUdLZzPwAlz87cWyIQGWrw9Lo?=
- =?us-ascii?Q?jKC79L4B1VfT/e0/vlq1cRjJk/d7B0mhtUAjRfc/3uqmuGyt8TG+4Qo+27py?=
- =?us-ascii?Q?8O+Hau5XhwW+/h2d+XFlq7xEXog49fOFmQ8BPTYopNg8aBDmvZBE78CSCGgE?=
- =?us-ascii?Q?fkmdqMZlgSonMV/+jjpvufItmSk6ZgIHIoHQ9iWEYcfmMJNutoXTX+x3uKuO?=
- =?us-ascii?Q?S2RKnsle9BCDkQBO8Fp0XbP2MFHq/TuyBUafhQFpWEQ1E6FEh9e5lCDycEcb?=
- =?us-ascii?Q?lxLboi695oXEy6YD5/AsQnoqaWqLJf/tnj+sdn6tOIeLozQIpKuAlVOqCFTZ?=
- =?us-ascii?Q?NcWs6h/lR5NkxOnWS1S/r6psQP52CHOrP/PjmKfWQu4eZY3u76L+YR4YwayR?=
- =?us-ascii?Q?k1ggB2rLj9KLEwdtqQs834m+RABxiY/i/LZPhz7c9E9ZCI1tQWZXHoyON3jG?=
- =?us-ascii?Q?iM4A/cm8j93NmEqJ2pGHmkwOylv0Jg8/JuDPoqhNpRDf5Jt1yJHJMEmFmQve?=
- =?us-ascii?Q?DI0G45V57kyv/D2GbsolllQ411igYyOEDyc1Btk+iBPUH35nBWd4T2GSxQGF?=
- =?us-ascii?Q?kAYiqn6mdxY47z8eT4lSgd2QPOW4gWtzl2pV2pKoluAMFoGRMtQykEe16ewZ?=
- =?us-ascii?Q?MrlwubJnVrT4fI0IZARuQLdISGLrR44f/yisUsk2yBV/DCMEZoR4+zPc+HNr?=
- =?us-ascii?Q?kiJ4NZCTjKRlti2HjmqrX6gfQ7OwfE3fgOtkiwB7muty5BlLSPg33670D9fZ?=
- =?us-ascii?Q?5g/M00DVrWACWBVYryK4XRhZuoydlZHuPACeWrO5qeW+NvHuFFmaiyU3LxvR?=
- =?us-ascii?Q?yradFpMvk5PUcx6/ELvxmw5txTrw1DsE8Hd0QnvESzpQXTVskZCbf6GHgpKs?=
- =?us-ascii?Q?krFx+5tABDlrmnl1GqSLvlhm7DrnePZ4MDD5o3ceMGMDlBd+8B1MWYgV+YaS?=
- =?us-ascii?Q?XKCerVOdiqKppN8NKUVUHCDV8TS8UAMBSiNvzFA4Iz4ma+lXZURdlW639yxh?=
- =?us-ascii?Q?oyC0x0uQ50Tje/4VifPHpY1dNJ0wxPq7vMRz8q2t+lUC01e8NhllhCTRwx0b?=
- =?us-ascii?Q?o0i4PUJz7DYClymW0IybwvV+uZdt1/5BDkfrovgC65DGz8ySetfKbTKPKAGd?=
- =?us-ascii?Q?IWoN+Ef4RMX7mev5trXeVrOltxZKGoVJDqNRoJDnlQat+2eJO9HhfjmrcD74?=
- =?us-ascii?Q?4g59IBCxJhN7cxPSjVullgyiJjNGJJ2xTEhs/8zSTXGgbmSmID14um19aW7i?=
- =?us-ascii?Q?UdxN3U1DgxEbXlPOvwGT6gNl6j20mho/?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR10MB3366.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(376014)(366016)(921020)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?2dujTpFwwQ2JbBHbnIvGbZ3v+R4iXeuG0BHsfv01RVR1mba1OHMfoAAIfDYl?=
- =?us-ascii?Q?bgE+5lZ8SqgyBr79ZC3Tv70oLxpRHP2uHvnOEjqbN96P9i5jac1zZocQa2rQ?=
- =?us-ascii?Q?qjg7jeS78uO+84cl1PuZoh9+A0vks09oTiTqlUwud1Iphb+66K/tJfP5AIXW?=
- =?us-ascii?Q?AuCKeI4gNEs23Cg2pE0vk4eSz46ud/SUPmP66yMalxtDXcFgT8L8AumNRiF/?=
- =?us-ascii?Q?1r2tH63qLBcxjOtW6n8ZeUu2EEWuFHKzj5s6/LvdzTe/uSzjXlyxKwdP3yIs?=
- =?us-ascii?Q?3VFdrhf+ExVZT78k0H841TafFgzA3ZkJ/KUwhBwRPag5ALa//seL4WGsUFxc?=
- =?us-ascii?Q?fo4d9GssMhaa/uoiw8jAnxj7SMzG3rRTi2hoVqSJ4sxKcQVNvLFfLsifgqpI?=
- =?us-ascii?Q?OMvea0hRFNFbYEqJqIw5H8JqCHi3zhBODFYq2G2lFeiXOowyP28xBm4aYFJ1?=
- =?us-ascii?Q?2vMxkJw/YQpA7Gotny5eDMFFDuVL+77KkD6u40SsxHIaShm66yro750VK1Ji?=
- =?us-ascii?Q?GX586UXUXigYw2GBLnjQ+rRrjByPUFtjEIY2Vn+ierHf6YMLz/ec2+WNv1Dp?=
- =?us-ascii?Q?g+4zaKpnJH5QUuNXcmOz3dRJ73qd2+mvZ5BTRc2/HI6MGw05djuRiuJtrAfO?=
- =?us-ascii?Q?m7+cIq46gBvPaacHGN+5fQAaxdPr8FKX/YoNOoRH6T/19+UbqBo0+B1Y7tvk?=
- =?us-ascii?Q?iBcFTApuSftq7UAZd1gfICbffRl9BTHNaGJoA+j5Kc82lXdRGdY3ODCuchgp?=
- =?us-ascii?Q?ipIt/Fg1B/q1H71oxBgkqLV0a5tBzYzkiyYVuRsfIYJZrwLV2y8V7qNSIsAU?=
- =?us-ascii?Q?eHcJ8aBkz8juL0eIHDkArlbBF+ilDfst4/jCFuseaT/DEanCCfMa7AKptPda?=
- =?us-ascii?Q?knkY+BGQzEWnAfIWlMhR5GNWwEyY21YTemTfMgNB5IvpkY4x10KnofZFCO9v?=
- =?us-ascii?Q?YgAZmTqMuCigHQLAsRSun4NklUazzlyY4++b0yM28f/FH9WzNqnjIuXKC1oR?=
- =?us-ascii?Q?kynoShJQY5zi3XkhlOoSR8b37a8X5T4ly54ek/lSsIDDs36TwoKoaeCtGhOB?=
- =?us-ascii?Q?uTH+BN+OP1GP3cEhjldfG6qljN1zc8+G6cQH1I6JfecHSPPQLNPonIyIXUW3?=
- =?us-ascii?Q?lxRkTgM7Vn2eFTr3OTMq1NQlSiIsX9oT95dpbTcO/I62rC7pzvQ4t+IoTV1L?=
- =?us-ascii?Q?B9ysjMvgvdoyU/95iUc9Ouft5ae8tnYbeDftCSXLbkr+vutno4meMWUhRyMv?=
- =?us-ascii?Q?YX0nw4mQyanb47NgdPV9hjVGZazmEXUz0PIDU+njbymPuq2b1h8goT1ND010?=
- =?us-ascii?Q?9bmnmZh2sQ8hghLm1VvRgCxNRElcuLc9iVxiL4mXrdKj8ftlI5Cq7lfWpTcg?=
- =?us-ascii?Q?mzohYPnVM/vsJK0Zy9/tJm+FbNF1YdSHQCf6fI31Wa5elgRa14OvXbp9r/9h?=
- =?us-ascii?Q?LHLRnrJf07gQuYY1POha5AYPe686u/ExBw6487DrzbNch3mpeBvay9gU49Ck?=
- =?us-ascii?Q?7ZJRCVPAvHAMLWUeOn26Khf5q9iZHa2FRsVPBx8ojk2jlqbh8T1mVFcUyziG?=
- =?us-ascii?Q?0LWu+YkMYgZFnDVCGVI2tsyiN3LHGUw4oMQaSv/4+piuCB1wG5X2R4eKTMEW?=
- =?us-ascii?Q?6g=3D=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	XUPgrODeX1GP5LXCz3T9TRq5heOBws7XOg+qToZM9Fy09Vk9IrcjXgrTEstJY4UvrvyX9b9ALwN512H6R93jLFj9ko2phk7cvQS2bq+SsMOvUd+TujYaCVmXBBjcwUzm+YwSGgf9QKuke2WLKZ7dwe7BO2clsZMC3HZC9Cz7Mrtb76yvJmcJoo9LiyxqHJNMRPfPHTWX4AKAg3MV+UP5pkzJUNzj1uigbmwTSdK+RDKTEBw32UgPJC/y/ZHxq4LKDPdwlwYaSYWIvuGu4x8LVDjWC6dI3ZIoPgH/o1kMbM65cYyNPVvA8i+44JpNNZI4/rrkzmXW75OgR2/MjXSwftuRs3woXukIFtdjOClDE8KyBrhqSS/hAw3cQoJctnJj5sgZVAk9HrOZBeEm/nIfoYQRbCvaY0ngUVHgKvHr6lx6lfxCsXet23QuDRHFwYZgf9xCDf7zwL1WgR+XUfZ2KzkYwEeyRQ/6b/bxeSz/Cnge0mVZXdvTvqWgAVSRgs/4d0tGvdkg/a0MeYgM0p2RVxo8SsHev3NFl0yv+/lORqZ8Vgy14q8yyXYTayNdSl1RUVUpt1m7DdmaZxidgWjRWLgqM2URpxpqF9BVGkIONwY=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: e71b4607-5fd4-453a-2ca8-08dd1aff8970
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR10MB3366.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Dec 2024 22:51:38.4118
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: kfIhQJWQbroVXGszNVBZQFjIZ44YH7hLh0L4E+zaVp8e891Q32+FBpnhFGa7wBSeeVdpqNcwTrrWynoRqanur4ShYNOhFMCEZs1619bKuP0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR10MB4521
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2024-12-12_10,2024-12-12_03,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 malwarescore=0
- adultscore=0 spamscore=0 suspectscore=0 mlxlogscore=999 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2411120000 definitions=main-2412120164
-X-Proofpoint-ORIG-GUID: QC3GH825H80zpVuMC3twZ-SXgnV2ksM5
-X-Proofpoint-GUID: QC3GH825H80zpVuMC3twZ-SXgnV2ksM5
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH 4/4] net: mdio: Add RTL9300 MDIO driver
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>
+Cc: lee@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, tsbogend@alpha.franken.de,
+ hkallweit1@gmail.com, markus.stockhausen@gmx.de, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+ linux-mips@vger.kernel.org
+References: <20241211235342.1573926-1-chris.packham@alliedtelesis.co.nz>
+ <20241211235342.1573926-5-chris.packham@alliedtelesis.co.nz>
+ <Z1q0CuDXe8VFuBfZ@shell.armlinux.org.uk>
+Content-Language: en-US
+From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <Z1q0CuDXe8VFuBfZ@shell.armlinux.org.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=BNQQr0QG c=1 sm=1 tr=0 ts=675b8523 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=IkcTkHD0fZMA:10 a=RZcAm9yDv7YA:10 a=iDlK1bvE_E-H61UyTd4A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 
-NACK.
+Hi Russell,
 
-Resend this _as an RFC_, _with the correct maintainers and reviewers cc'd_.
+On 12/12/2024 22:59, Russell King (Oracle) wrote:
+> On Thu, Dec 12, 2024 at 12:53:42PM +1300, Chris Packham wrote:
+>> +#define SMI_GLB_CTRL			0x000
+>> +#define   GLB_CTRL_INTF_SEL(intf)	BIT(16 + (intf))
+>> +#define SMI_PORT0_15_POLLING_SEL	0x008
+>> +#define SMI_ACCESS_PHY_CTRL_0		0x170
+>> +#define SMI_ACCESS_PHY_CTRL_1		0x174
+>> +#define   PHY_CTRL_RWOP			BIT(2)
+> Presumably, reading the code, this bit is set when writing?
+Correct. I've tried to use the bit field names from the datasheet. RWOP 
+0=read, 1=write.
+>> +#define   PHY_CTRL_TYPE			BIT(1)
+> Presumably, reading the code, this bit indicates we want to use clause
+> 45?
 
-You've fundamentally violated kernel process and etiquette. I'd be more
-forgiving, but this is at v2 and you've not cc'd KEY people. Twice. This is
-totally unacceptable. See [0] if you are unsure of how to do so.
+Yes. Technically the datasheet says 0=normal register, 1=MMD register.
 
-You've also sent a 16 patch series (!) immediately prior to the holidays
-(!!) introducing an arch hook (!!!), which is strictly something we want to
-try to avoid or lessen in future, which you'd know, had you followed basic
-kernel etiquette and process and cc'd us on v1.
+>> +#define   PHY_CTRL_CMD			BIT(0)
+>> +#define   PHY_CTRL_FAIL			BIT(25)
+>> +#define SMI_ACCESS_PHY_CTRL_2		0x178
+>> +#define SMI_ACCESS_PHY_CTRL_3		0x17c
+>> +#define SMI_PORT0_5_ADDR_CTRL		0x180
+>> +
+>> +#define MAX_PORTS       32
+>> +#define MAX_SMI_BUSSES  4
+>> +
+>> +struct realtek_mdio_priv {
+>> +	struct regmap *regmap;
+>> +	u8 smi_bus[MAX_PORTS];
+>> +	u8 smi_addr[MAX_PORTS];
+>> +	bool smi_bus_isc45[MAX_SMI_BUSSES];
+> Not sure about the support for !C45 - you appear to set this if you
+> find a PHY as a child of this device which has the PHY C45 compatible,
+> but as you don't populate the C22 MDIO bus operations, I'm not sure
+> how a C22 PHY can work.
 
-Any discussion that will be had here with others we won't be cc'd on, it's
-16 patches, this isn't workable.
+Oops, yes I forgot to come back to C22. Most of the hardware I have 
+access to uses C45 so that's been my main test setup. I'll include C22 
+support in v2.
 
-I'm on holiday from next week, it's not really fair to put this all on Liam
-immediately prior to Christmas, so let's just examine this as an RFC first.
-
-I hate to think that I need to set lei rules to catch stuff like this, but
-clearly, I do. I will be updating these to check on all relevant
-files. Sigh.
-
-[0]: https://www.kernel.org/doc/html/latest/process/submitting-patches.html#select-the-recipients-for-your-patch
-
-On Thu, Dec 12, 2024 at 04:02:31PM -0500, Liam R. Howlett wrote:
+>> +	u32 reg_base;
+>> +};
+>> +
+>> +static int realtek_mdio_wait_ready(struct realtek_mdio_priv *priv)
+>> +{
+>> +	u32 val;
+>> +
+>> +	return regmap_read_poll_timeout(priv->regmap, priv->reg_base + SMI_ACCESS_PHY_CTRL_1,
+>> +					val, !(val & PHY_CTRL_CMD), 10, 500);
+>> +}
+>> +
+>> +static int realtek_mdio_read_c45(struct mii_bus *bus, int phy_id, int dev_addr, int regnum)
+>> +{
+>> +	struct realtek_mdio_priv *priv = bus->priv;
+>> +	u32 val;
+>> +	int err;
+>> +
+>> +	err = realtek_mdio_wait_ready(priv);
+>> +	if (err)
+>> +		return err;
+>> +
+>> +	err = regmap_write(priv->regmap, priv->reg_base + SMI_ACCESS_PHY_CTRL_2, phy_id << 16);
+>> +	if (err)
+>> +		return err;
+>> +
+>> +	err = regmap_write(priv->regmap, priv->reg_base + SMI_ACCESS_PHY_CTRL_3,
+>> +			   dev_addr << 16 | (regnum & 0xffff));
+>> +	if (err)
+>> +		return err;
+>> +
+>> +	err = regmap_write(priv->regmap, priv->reg_base + SMI_ACCESS_PHY_CTRL_1,
+>> +			   PHY_CTRL_TYPE | PHY_CTRL_CMD);
+>> +	if (err)
+>> +		return err;
+> Maybe consider using a local variable for "regmap" and "reg_base" to
+> reduce the line length/wrapping?
+Ok
+>> +static int realtek_mdiobus_init(struct realtek_mdio_priv *priv)
+>> +{
+>> +	u32 port_addr[5] = { };
+>> +	u32 poll_sel[2] = { 0, 0 };
+>> +	u32 glb_ctrl_mask = 0, glb_ctrl_val = 0;
+> Please use reverse Christmas tree order.
+Ok.
+>> +	int i, err;
+>> +
+>> +	for (i = 0; i < MAX_PORTS; i++) {
+>> +		int pos;
+>> +
+>> +		if (priv->smi_bus[i] > 3)
+>> +			continue;
+>> +
+>> +		pos = (i % 6) * 5;
+>> +		port_addr[i / 6] |=  priv->smi_addr[i] << pos;
+> s/  / /
+Ok.
+>> +
+>> +		pos = (i % 16) * 2;
+>> +		poll_sel[i / 16] |= priv->smi_bus[i] << pos;
+>> +	}
+>> +
+>> +	for (i = 0; i < MAX_SMI_BUSSES; i++) {
+>> +		if (priv->smi_bus_isc45[i]) {
+>> +			glb_ctrl_mask |= GLB_CTRL_INTF_SEL(i);
+>> +			glb_ctrl_val |= GLB_CTRL_INTF_SEL(i);
+>> +		}
+>> +	}
+>> +
+>> +	err = regmap_bulk_write(priv->regmap, priv->reg_base + SMI_PORT0_5_ADDR_CTRL,
+>> +				port_addr, 5);
+>> +	if (err)
+>> +		return err;
+>> +
+>> +	err = regmap_bulk_write(priv->regmap, priv->reg_base + SMI_PORT0_15_POLLING_SEL,
+>> +				poll_sel, 2);
+>> +	if (err)
+>> +		return err;
+>> +
+>> +	err = regmap_update_bits(priv->regmap, priv->reg_base + SMI_GLB_CTRL,
+>> +				 glb_ctrl_mask, glb_ctrl_val);
+>> +	if (err)
+>> +		return err;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int realtek_mdiobus_probe(struct platform_device *pdev)
+>> +{
+>> +	struct device *dev = &pdev->dev;
+>> +	struct realtek_mdio_priv *priv;
+>> +	struct fwnode_handle *child;
+>> +	struct mii_bus *bus;
+>> +	int err;
+>> +
+>> +	bus = devm_mdiobus_alloc_size(dev, sizeof(*priv));
+>> +	if (!bus)
+>> +		return -ENOMEM;
+>> +
+>> +	bus->name = "Reaktek Switch MDIO Bus";
+>> +	bus->read_c45 = realtek_mdio_read_c45;
+>> +	bus->write_c45 =  realtek_mdio_write_c45;
+>> +	bus->parent = dev;
+>> +	priv = bus->priv;
+>> +
+>> +	priv->regmap = syscon_node_to_regmap(dev->parent->of_node);
+>> +	if (IS_ERR(priv->regmap))
+>> +		return PTR_ERR(priv->regmap);
+>> +
+>> +	err = device_property_read_u32(dev, "reg", &priv->reg_base);
+>> +	if (err)
+>> +		return err;
+>> +
+>> +	snprintf(bus->id, MII_BUS_ID_SIZE, "%s", dev_name(dev));
+>> +
+>> +	device_for_each_child_node(dev, child) {
+>> +		u32 pn, smi_addr[2];
+>> +
+>> +		err = fwnode_property_read_u32(child, "reg", &pn);
+>> +		if (err)
+>> +			return err;
+>> +
+>> +		if (pn > MAX_PORTS)
+>> +			return dev_err_probe(dev, -EINVAL, "illegal port number %d\n", pn);
+> You validate the port number.
 >
-> + Lorenzo
+>> +
+>> +		err = fwnode_property_read_u32_array(child, "realtek,smi-address", smi_addr, 2);
+>> +		if (err) {
+>> +			smi_addr[0] = 0;
+>> +			smi_addr[1] = pn;
+>> +		}
+> You don't validate the "smi_addr", so:
 >
-> Can you please Cc the people listed in the maintainers on the files you
-> are submitting against?  You seemed to Cc everyone but the mmap.c file
-> maintainers?
-
-Thanks Liam.
-
-Also +Jann, another reviewer Kalesh missed (he only got Vlastimil and
-Andrew so 2/5... of those required...)
-
+> 	realtek,smi-address = <4, ...>;
 >
->
-> * Kalesh Singh <kaleshsingh@google.com> [241211 18:28]:
-> > Hi all,
-> >
-> > This is v2 othe the arch_mmap_hint() series.
-> >
-> > Changes in v2:
-> >   - MAP_FIXED case is also handled in arch_mmap_hint() since this is just a
-> >     special case of the hint addr being "enforced", per Yang Shi.
-> >   - Consolidate most of the error handling in arch_mmap_hint().
-> >   - Patch 16 ("mm: Fallback to generic_mmap_hint()") was folded into
-> >     Patch 2 ("mm: x86: Introduce arch_mmap_hint()")
-> >
-> > v1: https://lore.kernel.org/r/20241210024119.2488608-1-kaleshsingh@google.com/
-> >
-> > =======
-> >
-> > This series introduces arch_mmap_hint() to handle allocating VA space
-> > for the hint address.
->
-> Why?  Could we get more details in your cover letter please?  This
-> entire email has as much detail as the subject line.
+> would silently overflow priv->smi_bus_isc45. However, I haven't checked
+> whether the binding would warn about this.
 
-Yes the cover letter is ridiculously small for what that is doing.
+I'll make sure the smi bus and phy address are within an appropriate range.
 
->
-> I don't want more arch_ anything.  If we can do this in a more generic
-> way, then we should.
 
-ENTIRELY agreed.
-
->
-> >
-> > Patches 1-16 introduce this new helper and Patch 17 uses it to fix the
-> > issue of mmap hint being ignored in some cases due to THP alignment [1]
-> >
-> > [1] https://lore.kernel.org/r/20241118214650.3667577-1-kaleshsingh@google.com/
-> >
-> > Thanks,
-> > Kalesh
-> >
-> >
-> > Kalesh Singh (16):
-> >   mm: Introduce generic_mmap_hint()
-> >   mm: x86: Introduce arch_mmap_hint()
-> >   mm: arm: Introduce arch_mmap_hint()
-> >   mm: alpha: Introduce arch_mmap_hint()
-> >   mm: arc: Use generic_mmap_hint()
-> >   mm: csky: Introduce arch_mmap_hint()
-> >   mm: loongarch: Introduce arch_mmap_hint()
-> >   mm: mips: Introduce arch_align_mmap_hint()
-> >   mm: parisc: Introduce arch_align_mmap_hint()
-> >   mm: s390: Use generic_mmap_hint()
-> >   mm: sh: Introduce arch_mmap_hint()
-> >   mm: sparc32: Introduce arch_mmap_hint()
-> >   mm: sparc64: Introduce arch_mmap_hint()
-> >   mm: xtensa: Introduce arch_mmap_hint()
-> >   mm: powerpc: Introduce arch_mmap_hint()
-> >   mm: Respect mmap hint before THP alignment if allocation is possible
-> >
-> >  arch/alpha/include/asm/pgtable.h           |   1 +
-> >  arch/alpha/kernel/osf_sys.c                |  31 +++---
-> >  arch/arc/include/asm/pgtable.h             |   1 +
-> >  arch/arc/mm/mmap.c                         |  43 +++++----
-> >  arch/arm/include/asm/pgtable.h             |   1 +
-> >  arch/arm/mm/mmap.c                         | 107 +++++++++------------
-> >  arch/csky/abiv1/inc/abi/pgtable-bits.h     |   1 +
-> >  arch/csky/abiv1/mmap.c                     |  68 +++++++------
-> >  arch/loongarch/include/asm/pgtable.h       |   1 +
-> >  arch/loongarch/mm/mmap.c                   |  49 +++++-----
-> >  arch/mips/include/asm/pgtable.h            |   1 +
-> >  arch/mips/mm/mmap.c                        |  50 +++++-----
-> >  arch/parisc/include/asm/pgtable.h          |   1 +
-> >  arch/parisc/kernel/sys_parisc.c            |  53 +++++-----
-> >  arch/powerpc/include/asm/book3s/64/slice.h |   1 +
-> >  arch/powerpc/mm/book3s64/slice.c           |  31 ++++++
-> >  arch/s390/include/asm/pgtable.h            |   1 +
-> >  arch/s390/mm/mmap.c                        |  51 +++++-----
-> >  arch/sh/include/asm/pgtable.h              |   1 +
-> >  arch/sh/mm/mmap.c                          |  83 ++++++----------
-> >  arch/sparc/include/asm/pgtable_32.h        |   1 +
-> >  arch/sparc/include/asm/pgtable_64.h        |   1 +
-> >  arch/sparc/kernel/sys_sparc_32.c           |  33 ++++---
-> >  arch/sparc/kernel/sys_sparc_64.c           |  96 +++++++-----------
-> >  arch/x86/include/asm/pgtable_64.h          |   1 +
-> >  arch/x86/kernel/sys_x86_64.c               |  64 ++++++------
-> >  arch/xtensa/kernel/syscall.c               |  31 ++++--
-> >  include/linux/sched/mm.h                   |   9 ++
-> >  mm/huge_memory.c                           |  17 ++--
-> >  mm/mmap.c                                  |  86 +++++++++++------
-> >  30 files changed, 491 insertions(+), 424 deletions(-)
-
-Yuck. Is this copy/paste really necessary...
-
-> >
-> > --
-> > 2.47.0.338.g60cca15819-goog
-> >
-> >
 
