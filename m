@@ -1,93 +1,93 @@
-Return-Path: <linux-mips+bounces-7010-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7011-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 131EC9F071E
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Dec 2024 10:01:59 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 54E88188B83A
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Dec 2024 09:01:59 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F8881A8F68;
-	Fri, 13 Dec 2024 09:01:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="dK9y/1Fd";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="y9jkp9U1"
-X-Original-To: linux-mips@vger.kernel.org
-Received: from fout-b5-smtp.messagingengine.com (fout-b5-smtp.messagingengine.com [202.12.124.148])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C7E19F07BF
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Dec 2024 10:23:07 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40CBB187849;
-	Fri, 13 Dec 2024 09:01:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.148
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 078D4281022
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Dec 2024 09:23:06 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 344851B0103;
+	Fri, 13 Dec 2024 09:22:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="jPrxzkDW";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="O3J2GfBs"
+X-Original-To: linux-mips@vger.kernel.org
+Received: from fhigh-b6-smtp.messagingengine.com (fhigh-b6-smtp.messagingengine.com [202.12.124.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ABBF51B21A2;
+	Fri, 13 Dec 2024 09:22:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734080516; cv=none; b=sK3zQ7yDLb9LcOUHnQosmZOop29/Mfw5B9D2sk0fcWXu3dS4SDU4rE1sj0lwy3VOKTBk7C628ZGUV0pM0NSP58pZh8ybp/N1epL6fco9Vcwi+1n5JLSvrDPqU9isiqSacWTpor3rYf4Np88RaADuqMMy+cyNFoMDv+/hH7i8yyY=
+	t=1734081776; cv=none; b=skcpJEK6AHsKiDaVmJ4r4oXFbAuzR/UoADLgmS4GC7bygkUwwo5TAbbt8pUN94o7KOEoOLqs/TrxQxglJimhWgxpwIhETOU5qnUzceM6Fi8wRA0XacuNAjegeAogH+W2p4qCRbVAsQWWHF00aL8rTPyfpSoPxPhX4kqnzijqVIQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734080516; c=relaxed/simple;
-	bh=r/al+a+9ScfLtJlEpNiMaX4gdXx28SXRER11FdeTANc=;
+	s=arc-20240116; t=1734081776; c=relaxed/simple;
+	bh=l7QiCILD+TyAYh5PJNEJ39zLrVWBIrPnLOAuB2a5WaQ=;
 	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=IRojEWRqKmoJ2wy9Bdxqir+gRyU8LXGAl0N5/pTZBnA1guPk8zW7W2SOXuXJDwXtIPb2rJINsI3PNpxGQrL3kJM0TFRDiLXN3TJYbQcJqtdmZrAT/wSgL555RbWZUxTNVu3RPOCNEQsSNR5Nc9oQkaYeaSmXoNdmPlQqtYeRS9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=dK9y/1Fd; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=y9jkp9U1; arc=none smtp.client-ip=202.12.124.148
+	 Subject:Content-Type; b=ByMb+bcFnv+fBw3sju0ocxvSwGS+kOgCAA1npeT+dCbI5cFNdN3VPnz/HoC63+beOGL7f3/+Ftv3ppOyYYapz+bGmLOXYKvEo8wjzPtgy1r9tLNvf2AMwn+eFqONwOjJThw+QIiw1iG9MoI6gR/Tf+OV1XxKKbJx4uj8UPurjwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=jPrxzkDW; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=O3J2GfBs; arc=none smtp.client-ip=202.12.124.157
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
 Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfout.stl.internal (Postfix) with ESMTP id 6EFA31140122;
-	Fri, 13 Dec 2024 04:01:52 -0500 (EST)
+	by mailfhigh.stl.internal (Postfix) with ESMTP id B0E6725401EB;
+	Fri, 13 Dec 2024 04:22:51 -0500 (EST)
 Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Fri, 13 Dec 2024 04:01:53 -0500
+  by phl-compute-10.internal (MEProxy); Fri, 13 Dec 2024 04:22:52 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1734080512;
-	 x=1734166912; bh=KcDskYQHGeNJcKXr8vywUEry2qDL5/kORB9rm8d5fFw=; b=
-	dK9y/1FdaKVIktwmmYapHHaxHxKc0BP7khWZUu3r7h1f0sQlQa4dZFPSsaSQt+Iu
-	B59X/dAUbnp20AR2b786YF8D04YF58T1uzpW4lVTmgKyAEab9Odf3JWSG6PLCL2r
-	cIBOAzkixOIZmoUsK62qOojH4jNcAbztjeKbDhOgibIe3Pv/NGMWaHo/551gaUP3
-	sYnTI2POMGTHtEOcGVgbt5DO2eYOveMqn918pRMgcp7dbwcqpo9bBJLGMfiMBzQu
-	ZgX08C35wFu1QYADEBx+IIquX5cS6Xc25HusMbbwZaSKCdWGJy+GQnHJfrJeMFRA
-	ys2/b38Gqv72zFx/0driDw==
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1734081771;
+	 x=1734168171; bh=Suh2qqmp5LswXS6UM/NIeYadyUDj4ZrAq9xKXIGb2h0=; b=
+	jPrxzkDWUl3aZHiWpcBoRvsXR2+XkpZRfhXJtHWInIubTyhL2qirmziXdiwbVByj
+	37KmlWdS8nGgBphp0T19RTCsNtRKK+hLRhyZpXD7xqz8q0ZX+2Gv8ZcdCio9/P7d
+	9RZJ2DxPVvlO1ktsiRfJwaosVD01tZtpnb7T+F/dLIz4Mh0ngwfJbQMc5kJ+rov2
+	+fijSthBoEwYko7qCCSeafPMNm0jQGZ+XNG43SKu+JiZf+aGCDLGCf5CbN8kC8ti
+	oyzNPKT0z1S0OvW8KSruiJtj6cTUH9YgN/5cQYmiDs1wyaWOMtpcUTQ6INLHCRI9
+	aLXdn8s6LFtONQ3O9taeJQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1734080512; x=
-	1734166912; bh=KcDskYQHGeNJcKXr8vywUEry2qDL5/kORB9rm8d5fFw=; b=y
-	9jkp9U1MIwaisuqjg7nK41SoLvyk0NQkR82Usqh9Dw4HGzL7mRtCj1li+xZ9MUoS
-	T+iUdxLdpng7pksc/57Tbo2FGZLssQXYXp88cbvtg++tjPJvLhOu9qqwRxe+ZtPw
-	4VZcyTgnCWf6+CvTWGxl4WBTXuAHInOohNNk9cigaf/oW9YowizNTnLuvvEYhlw8
-	p/NNVd1Mz9oC0oDs7Mqxs4UJ9bMb1r0tT0IE+Z3nMIUpN6/PeX23PxN5DKw6xsXe
-	agDUIFGvMUWekQaR3CN8811GJyJW4h1kgALJ95ARgDCRa1aYbbE2asyLTMDV4til
-	4uK1t6tSG4opJ6lzQwIvg==
-X-ME-Sender: <xms:_vdbZ0qTnQBR86V-26V7PwhiMt6EEOYyMJdQegNWyfIcMUul5BQDMg>
-    <xme:_vdbZ6pOmhGV-0SqTm9SVZhXl3Esg36401-Xn-9c04EyxA_rLCt4YIUf7_WGeZQPr
-    h7mA5Z75gO13wD9K68>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrkeeigdduvdeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdej
-    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
-    guvgeqnecuggftrfgrthhtvghrnhepvdfhvdekueduveffffetgfdvveefvdelhedvvdeg
-    jedvfeehtdeggeevheefleejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepfeeh
-    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegsphesrghlihgvnhekrdguvgdprh
-    gtphhtthhopehtshgsohhgvghnugesrghlphhhrgdrfhhrrghnkhgvnhdruggvpdhrtghp
-    thhtohepghhrrghfsegrmhgriihonhdrtghomhdprhgtphhtthhopegrthhishhhphesrg
-    htihhshhhprghtrhgrrdhorhhgpdhrtghpthhtoheprghnuhhpsegsrhgrihhnfhgruhhl
-    thdrohhrghdprhgtphhtthhopegthhhrihhsthhophhhvgdrlhgvrhhohiestghsghhroh
-    huphdrvghupdhrtghpthhtohepphgrlhhmvghrsegurggssggvlhhtrdgtohhmpdhrtghp
-    thhtoheprghouhesvggvtghsrdgsvghrkhgvlhgvhidrvgguuhdprhgtphhtthhopehmph
-    gvsegvlhhlvghrmhgrnhdrihgurdgruh
-X-ME-Proxy: <xmx:_vdbZ5OSeAlRqL3zOYYLR1X80rYHtqF6jBXE73wHfeMrnsspuNFT7Q>
-    <xmx:_vdbZ77mbTrJNcWXjBhg21C-rqRNfaAmqyeKfarmU1qDt_y02i9PgA>
-    <xmx:_vdbZz63hVVtxzP8SiiuBk7PK7jRHjcw-DvalTx04b58_fplYVXqag>
-    <xmx:_vdbZ7hVn74LynEuieqMVfKOF46Ga4XVKlg6Bvd6Bg6xYi1WPJklbQ>
-    <xmx:APhbZ4YwaWQ6QTbli2kpKoPosiJj5J8RDuON2m1n3uQoKbesPqFgt2Ao>
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1734081771; x=
+	1734168171; bh=Suh2qqmp5LswXS6UM/NIeYadyUDj4ZrAq9xKXIGb2h0=; b=O
+	3J2GfBsFQXPk/CS3lrNw/2c+Fh6DQZ3psgwQDwf/B/6wK2En1fq1Aypf7BDPFEHb
+	L022F8LfZsLo02faH1m7Gj5aWDvJHLoUHsnWn8CItk8UKD9ERyN7XZZMWJv/24CL
+	ig86MxOlBgbJYB+LK4bYnv6lXm61XPjezwZfsyTZBcBLduSsRnT74mpaACIxkebW
+	QebqzGVTbgK0hZ8Uio+sjmBkdo4uwS9Oa+bcXI9uzKBoz357j0a1iDtn48i07eEU
+	mmPj9VOStcKN635SJp6XTHbbGJrT42uKf0AqZcD5LpbeIQgnJ9Q3ra/F4rr9Tb44
+	jKlXoc5F7QIb04fEYoAUw==
+X-ME-Sender: <xms:6fxbZ8cbkF26afbP7Uw1hkf_H38Fh11oDM-yNJGa6d0PcE2ArF0-Tw>
+    <xme:6fxbZ-O5usQ-e87TBG52kyiqtKuQOV6HTMo0BYy4yBr2y4eW1DK8kXdMrV6K9g3wa
+    rpdrNvH7EgiYcQngqI>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrkeejgddtfecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
+    tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnth
+    hsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredttden
+    ucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdrug
+    gvqeenucggtffrrghtthgvrhhnpeefhfehteffuddvgfeigefhjeetvdekteekjeefkeek
+    leffjeetvedvgefhhfeihfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluh
+    hsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnhgusegrrhhn
+    uggsrdguvgdpnhgspghrtghpthhtohepfeegpdhmohguvgepshhmthhpohhuthdprhgtph
+    htthhopegsphesrghlihgvnhekrdguvgdprhgtphhtthhopehtshgsohhgvghnugesrghl
+    phhhrgdrfhhrrghnkhgvnhdruggvpdhrtghpthhtohepghhrrghfsegrmhgriihonhdrtg
+    homhdprhgtphhtthhopegrthhishhhphesrghtihhshhhprghtrhgrrdhorhhgpdhrtghp
+    thhtoheprghnuhhpsegsrhgrihhnfhgruhhlthdrohhrghdprhgtphhtthhopegthhhrih
+    hsthhophhhvgdrlhgvrhhohiestghsghhrohhuphdrvghupdhrtghpthhtohepphgrlhhm
+    vghrsegurggssggvlhhtrdgtohhmpdhrtghpthhtoheprghouhesvggvtghsrdgsvghrkh
+    gvlhgvhidrvgguuhdprhgtphhtthhopehmphgvsegvlhhlvghrmhgrnhdrihgurdgruh
+X-ME-Proxy: <xmx:6fxbZ9hvJ7VrNnQc078U1u83tWUpKSRToRJoa8j-EOWOmJfPtIbcnA>
+    <xmx:6fxbZx8bSkAmb-X4rWVJqWoRGnxz-5_y3hCww268KffI1R17L9Mb6Q>
+    <xmx:6fxbZ4sqwxKhX4PHX9kgWYlvL_4XeISMqU7mNTF8B1AzNh3AKyQ-3A>
+    <xmx:6fxbZ4GbXJg1A10AnazbJxGKFkFv5d7UYbc2TlD2bXO5QedEV7dWYw>
+    <xmx:6_xbZ-OU0S3qhPukGD5bhxG0C27mOZ_-l47vOln1qMhT5Yf7FS27cFB3>
 Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id CD88F2220072; Fri, 13 Dec 2024 04:01:50 -0500 (EST)
+	id 02ED32220072; Fri, 13 Dec 2024 04:22:48 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -95,12 +95,11 @@ List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Fri, 13 Dec 2024 10:01:30 +0100
+Date: Fri, 13 Dec 2024 10:22:28 +0100
 From: "Arnd Bergmann" <arnd@arndb.de>
-To: "A. Wilcox" <AWilcox@wilcox-tech.com>,
- "Paolo Bonzini" <pbonzini@redhat.com>
-Cc: "Arnd Bergmann" <arnd@kernel.org>, kvm@vger.kernel.org,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+To: "Paolo Bonzini" <pbonzini@redhat.com>, "Arnd Bergmann" <arnd@kernel.org>,
+ kvm@vger.kernel.org
+Cc: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
  "Huacai Chen" <chenhuacai@kernel.org>,
  "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
  "Michael Ellerman" <mpe@ellerman.id.au>,
@@ -124,70 +123,66 @@ Cc: "Arnd Bergmann" <arnd@kernel.org>, kvm@vger.kernel.org,
  "Marc Zyngier" <maz@kernel.org>, linux-kernel@vger.kernel.org,
  linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
  kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org
-Message-Id: <1c8ce6c9-6693-4cfb-8e40-3a641734daff@app.fastmail.com>
-In-Reply-To: <CE1F96B2-7213-4352-B80F-6E669F5EED97@Wilcox-Tech.com>
+Message-Id: <062f7269-580e-4008-904a-919ca0bda482@app.fastmail.com>
+In-Reply-To: <6bc05f3c-f473-480d-b9a2-c8cd3c80a66c@redhat.com>
 References: <20241212125516.467123-1-arnd@kernel.org>
- <35E5C2A3-94AC-446B-A0A1-84B043DBC890@Wilcox-Tech.com>
- <6e971322-8b21-4d73-922c-a6032c6fe9bd@app.fastmail.com>
- <79b9abfe-cfb8-4ef0-8a4b-7b87787e6549@redhat.com>
- <CE1F96B2-7213-4352-B80F-6E669F5EED97@Wilcox-Tech.com>
-Subject: Re: [RFC 0/5] KVM: drop 32-bit host support on all architectures
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+ <20241212125516.467123-6-arnd@kernel.org>
+ <6bc05f3c-f473-480d-b9a2-c8cd3c80a66c@redhat.com>
+Subject: Re: [RFC 5/5] x86: kvm drop 32-bit host support
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Fri, Dec 13, 2024, at 09:42, A. Wilcox wrote:
+>n Thu, Dec 12, 2024, at 17:27, Paolo Bonzini wrote:
+> On 12/12/24 13:55, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>> 
+>> There are very few 32-bit machines that support KVM, the main exceptions
+>> are the "Yonah" Generation Xeon-LV and Core Duo from 2006 and the Atom
+>> Z5xx "Silverthorne" from 2008 that were all released just before their
+>> 64-bit counterparts.
 >
-> As for Power: I will admit I haven=E2=80=99t tested lately, but well i=
-nto
-> the 5 series (5.4, at least), you couldn=E2=80=99t boot a ppc32 Linux =
-kernel
-> on any 64-bit capable hardware.  It would throw what I believe was an
-> alignment error while quiescing OpenFirmware and toss you back to an
-> =E2=80=98ok >=E2=80=99 prompt.  Unfortunately I can=E2=80=99t find any=
- of the bug reports
-> or ML threads from the time - it was a known bug in the 2.6 days - but
-> the answer was always =E2=80=9Cwhy are you booting a ppc32 kernel on t=
-hat
-> hardware anyway?  It=E2=80=99s a ppc64 machine!=E2=80=9D  Is this a ca=
-se where
-> that would be accepted as a legitimate bug now?  It would be lovely
-> to use my largely-SMT 3.0 GHz Power9 box for more of my kernel testing
-> (where possible) instead of relying on a 933 MHz single-thread G4.
+> Unlike other architectures where you can't run a "short bitness" kernel 
+> at all, or 32-bit systems require hardware enablement that simply does 
+> not exist, the x86 situation is a bit different: 32-bit KVM would not be 
+> used on 32-bit processors, but on 64-bit kernels running 32-bit kernels; 
+> presumably on a machine with 4 or 8 GB of memory, above which you're 
+> hurting yourself even more, and for smaller guests where the limitations 
+> in userspace address space size don't matter.
+>
+> Apart from a bunch of CONFIG_X86_64 conditionals, the main issue that 
+> KVM has with 32-bit x86 is that they cannot read/write a PTE atomically 
+> (i.e. without tearing) and therefore they can't use the newer and more 
+> scalable page table management code.  So no objections from me for 
+> removing this support, but the justification should be the truth, i.e. 
+> developers don't care enough.
 
-I'm fairly sure we don't allow booting 32-bit kernels on
-the 64-bit IBM CPUs (g5, cell, POWER), but as Christophe
-mentioned earlier, you can apparently run a 32-bit e500
-kernel 64-bit QorIQ.
+Right, I should have updated the description based on the comments
+for the first version, especially after separating it from the patches
+that make it harder to run 32-bit kernels on 64-bit hardware.
 
-What I was thinking of is purely inside of qemu/kvm. I have
-not tried this myself, but I saw that there is code to handle
-this case in the kernel, at least for PR mode:
+I've updated the changelog now to
 
-static void kvmppc_set_pvr_pr(struct kvm_vcpu *vcpu, u32 pvr)
-{
-        u32 host_pvr;
+    x86: kvm drop 32-bit host support
+    
+    There are very few 32-bit machines that support KVM, the main exceptions
+    are the "Yonah" Generation Xeon-LV and Core Duo from 2006 and the Atom
+    Z5xx "Silverthorne" from 2008 that were all released just before their
+    64-bit counterparts.
+    
+    The main usecase for KVM in x86-32 kernels these days is to verify
+    that 32-bit KVM is still working, by running it on 64-bit hardware.
+    With KVM support on other 32-bit architectures going away, and x86-32
+    kernels on 64-bit hardware becoming more limited in available RAM,
+    this usecase becomes much less interesting.
+    
+    Remove this support to make KVM exclusive to 64-bit hosts on all
+    architectures, and stop testing 32-bit host mode.
+    
+    Link: https://lore.kernel.org/all/Z1B1phcpbiYWLgCD@google.com/
+    Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-        vcpu->arch.hflags &=3D ~BOOK3S_HFLAG_SLB;
-        vcpu->arch.pvr =3D pvr;
-        if ((pvr >=3D 0x330000) && (pvr < 0x70330000)) {
-                kvmppc_mmu_book3s_64_init(vcpu);
-                if (!to_book3s(vcpu)->hior_explicit)
-                        to_book3s(vcpu)->hior =3D 0xfff00000;
-                to_book3s(vcpu)->msr_mask =3D 0xffffffffffffffffULL;
-                vcpu->arch.cpu_type =3D KVM_CPU_3S_64;
-        } else
-        {
-                kvmppc_mmu_book3s_32_init(vcpu);
-                if (!to_book3s(vcpu)->hior_explicit)
-                        to_book3s(vcpu)->hior =3D 0;
-                to_book3s(vcpu)->msr_mask =3D 0xffffffffULL;
-                vcpu->arch.cpu_type =3D KVM_CPU_3S_32;
-        }
-...
-
-So I assumed this would work the same way as on x86 and arm,
-where you can use the 32-bit machine emulation from qemu but
-still enable KVM mode.
+which assumes that we end up going ahead with the powerpc
+patches. Does that work for you?
 
       Arnd
 
