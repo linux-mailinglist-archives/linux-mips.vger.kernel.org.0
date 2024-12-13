@@ -1,171 +1,194 @@
-Return-Path: <linux-mips+bounces-7001-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7002-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC1E59F05F2
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Dec 2024 09:04:14 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A53379F0637
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Dec 2024 09:20:17 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A8A45283EFB
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Dec 2024 08:04:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B291C168082
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Dec 2024 08:20:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D7CB199FA2;
-	Fri, 13 Dec 2024 08:04:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FBDC1A8F74;
+	Fri, 13 Dec 2024 08:20:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="kwRlWruO";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="wf5Gfd1b"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="GXvilEp7"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fhigh-b5-smtp.messagingengine.com (fhigh-b5-smtp.messagingengine.com [202.12.124.156])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CF9F192D7B;
-	Fri, 13 Dec 2024 08:04:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEF3F19993E
+	for <linux-mips@vger.kernel.org>; Fri, 13 Dec 2024 08:20:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734077051; cv=none; b=QDbxB8mCeYSp/KLzxW5nWHShBXcRlxJo40msc0NwBuFaI6UCFvOD8VGK5pmz6wxbct4/wyGBdQ2ofzqDQ8V92eO3GSHM3krr8YIBUhnCbOHSdoOERKqco8bN9V9+LNtUtkqaqnYifDYCp0CewMHYpdM9AL+NnKhHarKpTRfKqMM=
+	t=1734078014; cv=none; b=PP7zUw48txW5o5tAImF73rINZdVg1kUhk+fyJ5jmKL8Tg1PLZi89q9M1LZB6Y1uEzed1tVq/8bfiMEJMozLscW50yVXOCUatMNJORnP2qeh29Tp6OFp6TEDpoYSFvajMC64qgRxeakBx3Ou2WGojjntCq4gU9QJC2YzhiQ9qDdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734077051; c=relaxed/simple;
-	bh=SseRUNOOKUJAdxzVTz4HSQv3JlpkLlwSIWWX+XWKtgQ=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=bzuBsx8PH7eepgW1qCx9hHLMMJgpO4V0mDj5hkGUt7+c5pDn4IvvpOZEOitiD8SGETEU+pK1EJO06PYZ0BstuJpB3Q7Hz+LvMWhQvdfvYF0fwWId8NQ9XewNdh6uorH7NYIXptHgx72GvAmLbG1/roovg5jCZDGl8uPSOVp4hp4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=kwRlWruO; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=wf5Gfd1b; arc=none smtp.client-ip=202.12.124.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 54FCB25401E2;
-	Fri, 13 Dec 2024 03:04:04 -0500 (EST)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Fri, 13 Dec 2024 03:04:05 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1734077044;
-	 x=1734163444; bh=xkdaBG8UMFyF010HWwrn18x+gfYMEYxilRcPMsaZiVs=; b=
-	kwRlWruOQXnYuoGU4ct7wnbZzpq8GbzYC5uXTtj+ieZM03zuV+Tt9PLNpT0OkMP6
-	K+i+RioQx0MTsgKt/M2b/PppfO3/x8ivdmXMgbKUtmfNssVe+GGwRCqCkPq5bfbN
-	N8dyhtPQ4Y8dIw971ni0aAoroFXoZxvgetECTodVWa9EpbwIvPIt4iAHApW4roYn
-	PLrV8oyDOOASxjzAJyxzXvs+w4ofKcTCDsZGygnEaPjBbVKKTcJ7ROn5U4zmudTy
-	pHmGayBV63ZE/DwrQOOgYnfHnYBuEJEH5T2XxdxRUAamVnwYsphSP+hCQiLbMifs
-	oeM1bdqzKH8E+n2zDWnHaQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1734077044; x=
-	1734163444; bh=xkdaBG8UMFyF010HWwrn18x+gfYMEYxilRcPMsaZiVs=; b=w
-	f5Gfd1bCGgDhcncBvskPNse389eQ0QEfGBCs/NoAeMsbZBsXO0YkbIDC96jSrJMp
-	cNCa/5XjhA9LfhZLrr53T1E4loiHvDt1z6QQB8J1wFfiLQFQKw8FXuqapGsrT7H3
-	3aygnrdo/gs3YOJRdiVQ//Rs2j4wszfdrvufgk8UlHWrhRdlWosh1d47qkqAAYmB
-	khTX32HWGUwaBjac774RnINOTDWu5CQPe6Ug4YkIu7urQDpHwn157ajEAIblPN1d
-	PXruLjz38Mj0+8MiAVWehfM8jxaCtTPZqVTvceHDBYe0vw7bdf7vvMez/f94RXZJ
-	FGQnbO2l3OSOVvbmRJsgA==
-X-ME-Sender: <xms:cepbZwHYOLdK2uLiclp-OM6t1Q7gEnVCC9TlLMzbw6ClQ1So0jUu5g>
-    <xme:cepbZ5X6JlxRboE-OfGKmIOU19X6A6KLzaGL6IIsRwzSmlXK0mcMvG9MPVdsEZmsw
-    ZN8TN8gQeTOoFz0KY8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrkeeigdduudegucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdej
-    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
-    guvgeqnecuggftrfgrthhtvghrnhepvdfhvdekueduveffffetgfdvveefvdelhedvvdeg
-    jedvfeehtdeggeevheefleejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepfeeh
-    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopegsphesrghlihgvnhekrdguvgdprh
-    gtphhtthhopehtshgsohhgvghnugesrghlphhhrgdrfhhrrghnkhgvnhdruggvpdhrtghp
-    thhtohepghhrrghfsegrmhgriihonhdrtghomhdprhgtphhtthhopegrthhishhhphesrg
-    htihhshhhprghtrhgrrdhorhhgpdhrtghpthhtoheprghnuhhpsegsrhgrihhnfhgruhhl
-    thdrohhrghdprhgtphhtthhopegthhhrihhsthhophhhvgdrlhgvrhhohiestghsghhroh
-    huphdrvghupdhrtghpthhtohepphgrlhhmvghrsegurggssggvlhhtrdgtohhmpdhrtghp
-    thhtoheprghouhesvggvtghsrdgsvghrkhgvlhgvhidrvgguuhdprhgtphhtthhopehmph
-    gvsegvlhhlvghrmhgrnhdrihgurdgruh
-X-ME-Proxy: <xmx:cepbZ6LndnD8ZSZeGggeTF_B5V_DgMVWx-1ulNhV23ajSDoVV-Ti_w>
-    <xmx:cepbZyGY9wBofw83hXJKg-3q6hMTZIhwUkue-0Cp7reEPrBTSbMuKQ>
-    <xmx:cepbZ2UwyfQQq1czPmiqjUcFhf7znIqD5iwIE5qoLNE82ddwPCTk7Q>
-    <xmx:cepbZ1P1Jq82_ZoB3xLrj4H6gt9wqcGRFechLH3v8hR7FqCjabg6Sw>
-    <xmx:dOpbZw0XsZIrhDEJP9jq1aOwBLm0frAM5cG3_b5M1E0thNTIztJg5TAk>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 6A3682220072; Fri, 13 Dec 2024 03:04:01 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1734078014; c=relaxed/simple;
+	bh=ijr3IzqSxPiN+NYmYp1CosWmmhI03eZXSqAuemj7w1E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fHn2i/7aKzbGDF5FtCCpvnm0yMxnpb1I1CCoCATzHIoVpWfw2KzTmD9kplqOxH9/Q8B9H/IoU3Dr/svfNjSysUCtErPKFXZTDDV3L5tIHXSdKK1REvOu9F+P1Bpv03e2t6/ZeAw1Fd+m1JP1pYYNC+umVAcoesNWE+eLSFqgsYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=GXvilEp7; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1734078011;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=UV1wwUvDbgVjftsKa9dU87wk1sPiYCmEM4UeAtv1RqI=;
+	b=GXvilEp7JoxI9OBm9dTTOnRQEWeFGOwr5iv8dPr0Fsxf4GcvdPnzlGzKAWJ0WFOjtpJIC5
+	p1+J3nVyp9n0QCT8mESe9Y4j3hkxNKJQe1pBtOAFbNBbwkMj8lBgPNgYV7pyHY3hNOXWlU
+	xAtCeX/aNwmbtpvRDkHDq/wO/p//hRw=
+Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
+ [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-222-67ZCspaeNQaPbjkGtIc4ww-1; Fri, 13 Dec 2024 03:20:10 -0500
+X-MC-Unique: 67ZCspaeNQaPbjkGtIc4ww-1
+X-Mimecast-MFC-AGG-ID: 67ZCspaeNQaPbjkGtIc4ww
+Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-385e4a759e6so776265f8f.1
+        for <linux-mips@vger.kernel.org>; Fri, 13 Dec 2024 00:20:10 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734078009; x=1734682809;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UV1wwUvDbgVjftsKa9dU87wk1sPiYCmEM4UeAtv1RqI=;
+        b=SHSv6jkuTiK6TCpzqREJmoCmO2kFF2M9WCPQwcxfw/CHimxNQAL9eCJpWv30MXOcf3
+         fGXQHKRB66U1EAlE7ArbcmV8QSRtWN0guOozjUybWwoUCFxpH5YEIvaMfeKeUueH4WZE
+         7/e5FglpOty2kEHSsKoCsalyNldyRS1GSfZGZhlAkmYHgEtP3FrMVcXMdpaDzzH8hb55
+         2c/k9DB/yDUep09R0gKICScTE3OyqbnpQjGWz+zLL2hg54O8KDYWNiHCZ2J0Z434sPD8
+         m1fuZHT6y90B5zlg10U5Ou8vgJGWOG/2d5dQnqFvmqjEAotjF0kcsi8CtQ6UAnz/D3d2
+         VJrA==
+X-Forwarded-Encrypted: i=1; AJvYcCUbZEdFCtQXJXJo0tpHz69d5xhn3uvWi49AcRIe2cyaLY9wiX6RGTGc1xus34FHfyFnRAoWCw0onDOu@vger.kernel.org
+X-Gm-Message-State: AOJu0YzrJsgifaR+mHKClBN8u/7qUYjSJveGXERirUMo4bNaPnX0J0le
+	z54MRQ+z3R9RSGHKtOEChSMVaADV5IQt8HXChPgadndDiKHZtJycJ9L4zqbZz30xf5FtBgwklDH
+	veFjFKFc940b6SvXenKopw3ApANSFrJCRX0LTbNjEYKclU9oSR+zPwxX+iTs=
+X-Gm-Gg: ASbGncv06Z133O2hJw9i3H4zgp8gqQNPhYEfxPI+/AcTvzchOhqaoyg9kY1R0R2ozGj
+	Of5OYrdTMAvtk2TiW13apfJ1G9UEMgyw6Wcx1xxJR7TkQhG206ADqcNuKWD4bhUpccACOILUIz2
+	W2wgHSl0qeEe1JUxaUAx/3n/4Pt9zLWBvlGio8yBycNCnS7DztejmZiSoiX/ZwpJNGxQAr88/TV
+	VcMpRrkiqsJympQIXL7NLDeGvpKzKmIjnaIbHjNSKgqxy4IXuJezl/Yf3A=
+X-Received: by 2002:a05:6000:1a8e:b0:386:32ea:e70d with SMTP id ffacd0b85a97d-3888e0ba2f4mr910620f8f.50.1734078009104;
+        Fri, 13 Dec 2024 00:20:09 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFrCHiXBGnM5x0F9+IJDtAVhPlkiWHtx4O9ovcSIL7K/Npye3omEspq5dEzagyGc9xjVrwPFg==
+X-Received: by 2002:a05:6000:1a8e:b0:386:32ea:e70d with SMTP id ffacd0b85a97d-3888e0ba2f4mr910591f8f.50.1734078008749;
+        Fri, 13 Dec 2024 00:20:08 -0800 (PST)
+Received: from [192.168.10.3] ([151.81.118.45])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4362559ed8dsm42786805e9.23.2024.12.13.00.20.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Dec 2024 00:20:08 -0800 (PST)
+Message-ID: <79b9abfe-cfb8-4ef0-8a4b-7b87787e6549@redhat.com>
+Date: Fri, 13 Dec 2024 09:20:05 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Fri, 13 Dec 2024 09:03:30 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "A. Wilcox" <AWilcox@wilcox-tech.com>, "Arnd Bergmann" <arnd@kernel.org>
-Cc: kvm@vger.kernel.org, "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Huacai Chen" <chenhuacai@kernel.org>,
- "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
- "Michael Ellerman" <mpe@ellerman.id.au>,
- "Nicholas Piggin" <npiggin@gmail.com>,
- "Christophe Leroy" <christophe.leroy@csgroup.eu>,
- "Naveen N Rao" <naveen@kernel.org>,
- "Madhavan Srinivasan" <maddy@linux.ibm.com>,
- "Alexander Graf" <graf@amazon.com>, "Crystal Wood" <crwood@redhat.com>,
- "Anup Patel" <anup@brainfault.org>,
- "Atish Patra" <atishp@atishpatra.org>,
- "Paul Walmsley" <paul.walmsley@sifive.com>,
- "Palmer Dabbelt" <palmer@dabbelt.com>,
- "Albert Ou" <aou@eecs.berkeley.edu>,
- "Sean Christopherson" <seanjc@google.com>,
- "Paolo Bonzini" <pbonzini@redhat.com>,
- "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>,
- "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>,
- "Vitaly Kuznetsov" <vkuznets@redhat.com>,
- "David Woodhouse" <dwmw2@infradead.org>, "Paul Durrant" <paul@xen.org>,
- "Marc Zyngier" <maz@kernel.org>, linux-kernel@vger.kernel.org,
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC 0/5] KVM: drop 32-bit host support on all architectures
+To: Arnd Bergmann <arnd@arndb.de>, "A. Wilcox" <AWilcox@wilcox-tech.com>,
+ Arnd Bergmann <arnd@kernel.org>
+Cc: kvm@vger.kernel.org, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Huacai Chen <chenhuacai@kernel.org>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>,
+ Naveen N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Alexander Graf <graf@amazon.com>, Crystal Wood <crwood@redhat.com>,
+ Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Sean Christopherson <seanjc@google.com>, Thomas Gleixner
+ <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>,
+ Vitaly Kuznetsov <vkuznets@redhat.com>, David Woodhouse
+ <dwmw2@infradead.org>, Paul Durrant <paul@xen.org>,
+ Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
  linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
  kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org
-Message-Id: <6e971322-8b21-4d73-922c-a6032c6fe9bd@app.fastmail.com>
-In-Reply-To: <35E5C2A3-94AC-446B-A0A1-84B043DBC890@Wilcox-Tech.com>
 References: <20241212125516.467123-1-arnd@kernel.org>
  <35E5C2A3-94AC-446B-A0A1-84B043DBC890@Wilcox-Tech.com>
-Subject: Re: [RFC 0/5] KVM: drop 32-bit host support on all architectures
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+ <6e971322-8b21-4d73-922c-a6032c6fe9bd@app.fastmail.com>
+From: Paolo Bonzini <pbonzini@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=pbonzini@redhat.com; keydata=
+ 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
+In-Reply-To: <6e971322-8b21-4d73-922c-a6032c6fe9bd@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, Dec 13, 2024, at 04:51, A. Wilcox wrote:
-> On Dec 12, 2024, at 6:55=E2=80=AFAM, Arnd Bergmann <arnd@kernel.org> w=
-rote:
->> From: Arnd Bergmann <arnd@arndb.de>
->>=20
->> I submitted a patch to remove KVM support for x86-32 hosts earlier
->> this month, but there were still concerns that this might be useful f=
-or
->> testing 32-bit host in general, as that remains supported on three ot=
-her
->> architectures. I have gone through those three now and prepared simil=
-ar
->> patches, as all of them seem to be equally obsolete.
->>=20
->> Support for 32-bit KVM host on Arm hardware was dropped back in 2020
->> because of lack of users, despite Cortex-A7/A15/A17 based SoCs being
->> much more widely deployed than the other virtualization capable 32-bit
->> CPUs (Intel Core Duo/Silverthorne, PowerPC e300/e500/e600, MIPS P5600)
->> combined.
->
->
-> I do use 32-bit KVM on a Core Duo =E2=80=9CYonah=E2=80=9D and a Power =
-Mac G4 (MDD), for
-> purposes of bisecting kernel issues without having to reboot the host
-> machine (when it can be duplicated in a KVM environment).
->
-> I suppose it would still be possible to run the hosts on 6.12 LTS for
-> some time with newer guests, but it would be unfortunate.
+On 12/13/24 09:03, Arnd Bergmann wrote:
+> On Fri, Dec 13, 2024, at 04:51, A. Wilcox wrote:
+>> On Dec 12, 2024, at 6:55 AM, Arnd Bergmann <arnd@kernel.org> wrote:
+>>> From: Arnd Bergmann <arnd@arndb.de>
+>>>
+>>> I submitted a patch to remove KVM support for x86-32 hosts earlier
+>>> this month, but there were still concerns that this might be useful for
+>>> testing 32-bit host in general, as that remains supported on three other
+>>> architectures. I have gone through those three now and prepared similar
+>>> patches, as all of them seem to be equally obsolete.
+>>>
+>>> Support for 32-bit KVM host on Arm hardware was dropped back in 2020
+>>> because of lack of users, despite Cortex-A7/A15/A17 based SoCs being
+>>> much more widely deployed than the other virtualization capable 32-bit
+>>> CPUs (Intel Core Duo/Silverthorne, PowerPC e300/e500/e600, MIPS P5600)
+>>> combined.
+>>
+>>
+>> I do use 32-bit KVM on a Core Duo “Yonah” and a Power Mac G4 (MDD), for
+>> purposes of bisecting kernel issues without having to reboot the host
+>> machine (when it can be duplicated in a KVM environment).
+>>
+>> I suppose it would still be possible to run the hosts on 6.12 LTS for
+>> some time with newer guests, but it would be unfortunate.
+> 
+> Would it be an option for you to just test those kernels on 64-bit
+> machines? I assume you prefer to do native builds on 32-bit hardware
+> because that fits your workflow, but once you get into debugging
+> in a virtual machine, the results should generally be the same when
+> building and running on a 64-bit host for both x86-32 and ppc32-classic,
+> right?
 
-Would it be an option for you to just test those kernels on 64-bit
-machines? I assume you prefer to do native builds on 32-bit hardware
-because that fits your workflow, but once you get into debugging
-in a virtual machine, the results should generally be the same when
-building and running on a 64-bit host for both x86-32 and ppc32-classic,
-right?
+Certainly for x86-32; ppc32 should be able to use PR-state (aka trap and 
+emulate) KVM on a 64-bit host but it's a bit more picky.  Another 
+possibility for ppc32 is just emulation with QEMU.
 
-      Arnd
+Paolo
+
 
