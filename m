@@ -1,56 +1,56 @@
-Return-Path: <linux-mips+bounces-6999-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7000-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FEF79F04C3
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Dec 2024 07:25:11 +0100 (CET)
-Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C1169F05EA
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Dec 2024 09:02:52 +0100 (CET)
+Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
+	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 57227280C05
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Dec 2024 06:25:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C2AC1692C3
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Dec 2024 08:02:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DA6018B475;
-	Fri, 13 Dec 2024 06:25:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FD8018E37D;
+	Fri, 13 Dec 2024 08:02:25 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37FE713DDAA;
-	Fri, 13 Dec 2024 06:25:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACF2C187355;
+	Fri, 13 Dec 2024 08:02:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734071108; cv=none; b=vFGQ/6Wh5YJYa9cXGEbILw/b+fO8nED3NXt+YFeQWmRQ3tZ6ZTXk0m09OyJ1D4Mg93VmvPzYYPsLNzx1BEeEpAAM/Y4dHdXHz2zyn/+IGro6NuxvUuNsUyTHlN7Ld+mjoSpB2ZFVpisZ3GQ4FToylSOh1R1nEfS0exfwX6nLwmM=
+	t=1734076945; cv=none; b=hyhE4oo8R8hg/HNsaQH+KUTIvZCQWhxv860wNuSLYrhw/7TIcWoE/XES+a4PQXnUOiBRnvrrvpDY5IVKiLvj+nbzZc0gRSVvTGC130N+zZz2D024/dKe51syZf+eeok002/XitTcUQ1I/gKQdGnwIMARPzprlZSZWMeIJGx23Q0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734071108; c=relaxed/simple;
-	bh=h3KvM8+5gu1HSmwvWLHSNsLeIvLTcGNr7SBLsi/2IcI=;
+	s=arc-20240116; t=1734076945; c=relaxed/simple;
+	bh=FYED/8DUnjBkN3i+Sn9aK7jeJYFlZLNiQnfSwlxCUTo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kNMEK9TBZkZ+pouo3sadgXuJsFpujfZR1jtnWeN/LdFl1WdFP9+DxQplDAS3hhS0IgzAI0HP/uvnDKukF9OAYmasz8W4fpTf4OyQwKdgrz9Q/PpPPnlF1Obu5n7Vwcwh1/Sc8AEB2Z6HwSsLg/ctXr1ygEL/ZBW9BZSlSRHLUU0=
+	 In-Reply-To:Content-Type; b=l/IKVeTaxVcMvWg2XtiBpA0flq3AVpRppQERwiHV82eqdHpmdn0VmVfQEpbyElLRwHjOx/ls0+4Rz1QYCmnVLxJ512kd4hluyqhhyLz4yr8lPLPa9vfU68QiqS+6Ck9+iQoyrG9C9hOLsyUBvF6mBfwe5Dpm6fOABYDzQJH/Uy8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
 Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4Y8fTB6fpSz9str;
-	Fri, 13 Dec 2024 07:25:02 +0100 (CET)
+	by localhost (Postfix) with ESMTP id 4Y8hdT5hV5z9str;
+	Fri, 13 Dec 2024 09:02:21 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from pegase2.c-s.fr ([172.26.127.65])
 	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id JDOGWM-FGhTz; Fri, 13 Dec 2024 07:25:02 +0100 (CET)
+	with ESMTP id BkzwJyV56MEz; Fri, 13 Dec 2024 09:02:21 +0100 (CET)
 Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4Y8fTB5dPqz9stm;
-	Fri, 13 Dec 2024 07:25:02 +0100 (CET)
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4Y8hdT4bL5z9sST;
+	Fri, 13 Dec 2024 09:02:21 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id ACB7C8B773;
-	Fri, 13 Dec 2024 07:25:02 +0100 (CET)
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 87B638B773;
+	Fri, 13 Dec 2024 09:02:21 +0100 (CET)
 X-Virus-Scanned: amavisd-new at c-s.fr
 Received: from messagerie.si.c-s.fr ([127.0.0.1])
 	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id FXHjhDgv36wk; Fri, 13 Dec 2024 07:25:02 +0100 (CET)
+	with ESMTP id XDvAIJXlZlMl; Fri, 13 Dec 2024 09:02:21 +0100 (CET)
 Received: from [192.168.232.97] (unknown [192.168.232.97])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 4A60F8B763;
-	Fri, 13 Dec 2024 07:25:01 +0100 (CET)
-Message-ID: <1f1beb34-65cc-4038-a8b2-de8af3e0703e@csgroup.eu>
-Date: Fri, 13 Dec 2024 07:25:01 +0100
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 2B4EE8B763;
+	Fri, 13 Dec 2024 09:02:20 +0100 (CET)
+Message-ID: <0b1ea054-22bb-4380-a1e4-8be988d8746d@csgroup.eu>
+Date: Fri, 13 Dec 2024 09:02:19 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -58,10 +58,10 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC 2/5] powerpc: kvm: drop 32-bit booke
-To: Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
- kvm@vger.kernel.org
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+Subject: Re: [RFC 3/5] powerpc: kvm: drop 32-bit book3s
+To: Arnd Bergmann <arnd@kernel.org>, kvm@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
  Huacai Chen <chenhuacai@kernel.org>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
  Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
  Naveen N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>,
@@ -79,103 +79,66 @@ Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
  linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
  kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org
 References: <20241212125516.467123-1-arnd@kernel.org>
- <20241212125516.467123-3-arnd@kernel.org>
- <3589ad69-13df-40f1-88c2-55d39790bbac@csgroup.eu>
- <1633f30e-d885-4f31-a14d-11881e16deb9@app.fastmail.com>
+ <20241212125516.467123-4-arnd@kernel.org>
 Content-Language: fr-FR
 From: Christophe Leroy <christophe.leroy@csgroup.eu>
-In-Reply-To: <1633f30e-d885-4f31-a14d-11881e16deb9@app.fastmail.com>
+In-Reply-To: <20241212125516.467123-4-arnd@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 
 
-Le 12/12/2024 à 22:08, Arnd Bergmann a écrit :
-> On Thu, Dec 12, 2024, at 19:35, Christophe Leroy wrote:
->> Le 12/12/2024 à 13:55, Arnd Bergmann a écrit :
->>> From: Arnd Bergmann <arnd@arndb.de>
+Le 12/12/2024 à 13:55, Arnd Bergmann a écrit :
+> From: Arnd Bergmann <arnd@arndb.de>
 > 
->>>
->>> Support for 64-bit hosts remains unchanged, for both 32-bit and
->>> 64-bit guests.
->>>
+> Support for KVM on 32-bit Book III-s implementations was added in 2010
+> and supports PowerMac, CHRP, and embedded platforms using the Freescale G4
+> (mpc74xx), e300 (mpc83xx) and e600 (mpc86xx) CPUs from 2003 to 2009.
 > 
->>>    arch/powerpc/include/asm/kvm_book3s_32.h    |  36 --
->>>    arch/powerpc/include/asm/kvm_booke.h        |   4 -
->>>    arch/powerpc/include/asm/kvm_booke_hv_asm.h |   2 -
->>>    arch/powerpc/kvm/Kconfig                    |  22 +-
->>>    arch/powerpc/kvm/Makefile                   |  15 -
->>>    arch/powerpc/kvm/book3s_32_mmu_host.c       | 396 --------------
->>>    arch/powerpc/kvm/booke.c                    | 268 ----------
->>>    arch/powerpc/kvm/booke.h                    |   8 -
->>>    arch/powerpc/kvm/booke_emulate.c            |  44 --
->>>    arch/powerpc/kvm/booke_interrupts.S         | 535 -------------------
->>>    arch/powerpc/kvm/bookehv_interrupts.S       | 102 ----
->>>    arch/powerpc/kvm/e500.c                     | 553 --------------------
->>>    arch/powerpc/kvm/e500.h                     |  40 --
->>>    arch/powerpc/kvm/e500_emulate.c             | 100 ----
->>>    arch/powerpc/kvm/e500_mmu_host.c            |  54 --
->>>    arch/powerpc/kvm/e500mc.c                   |   5 +-
->>>    arch/powerpc/kvm/trace_booke.h              |  14 -
->>>    17 files changed, 4 insertions(+), 2194 deletions(-)
->>>    delete mode 100644 arch/powerpc/include/asm/kvm_book3s_32.h
->>>    delete mode 100644 arch/powerpc/kvm/book3s_32_mmu_host.c
->>>    delete mode 100644 arch/powerpc/kvm/booke_interrupts.S
->>>    delete mode 100644 arch/powerpc/kvm/e500.c
->>
->> Left over ?
->>
->> arch/powerpc/kernel/head_booke.h:#include <asm/kvm_asm.h>
->> arch/powerpc/kernel/head_booke.h:#include <asm/kvm_booke_hv_asm.h>
->> arch/powerpc/kernel/head_booke.h:       b
->> kvmppc_handler_\intno\()_\srr1
+> Earlier 603/604/750 machines might work but would be even more limited
+> by their available memory.
 > 
-> As far as I can tell, these are still needed for e5500/e6500,
-> but you know more about the platform than I do.
+> The only likely users of KVM on any of these were the final Apple
+> PowerMac/PowerBook/iBook G4 models with 2GB of RAM that were at the high
+> end 20 years ago but are just as obsolete as their x86-32 counterparts.
+> The code has been orphaned since 2023.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>   MAINTAINERS                               |   2 +-
+>   arch/powerpc/include/asm/kvm_book3s.h     |  19 ----
+>   arch/powerpc/include/asm/kvm_book3s_asm.h |  10 --
 
-$ git grep kvmppc_handler_ arch/powerpc/
-arch/powerpc/kvm/bookehv_interrupts.S: 
-_GLOBAL(kvmppc_handler_\intno\()_\srr1)
+pmac32_defconfig: something is going wrong with headers:
 
-In your patch you remove the include of head_booke.h from there:
+   CC      arch/powerpc/kernel/asm-offsets.s
+In file included from ./arch/powerpc/include/asm/book3s/64/mmu-hash.h:20,
+                  from ./arch/powerpc/include/asm/kvm_book3s_64.h:14,
+                  from ./arch/powerpc/include/asm/kvm_book3s.h:380,
+                  from ./arch/powerpc/include/asm/kvm_ppc.h:22,
+                  from ./arch/powerpc/include/asm/dbell.h:17,
+                  from arch/powerpc/kernel/asm-offsets.c:36:
+./arch/powerpc/include/asm/book3s/64/pgtable.h:17: warning: "_PAGE_EXEC" 
+redefined
+    17 | #define _PAGE_EXEC              0x00001 /* execute permission */
+       |
+In file included from ./arch/powerpc/include/asm/book3s/pgtable.h:8,
+                  from ./arch/powerpc/include/asm/pgtable.h:18,
+                  from ./include/linux/pgtable.h:6,
+                  from ./arch/powerpc/include/asm/kup.h:43,
+                  from ./arch/powerpc/include/asm/uaccess.h:8,
+                  from ./include/linux/uaccess.h:12,
+                  from ./include/linux/sched/task.h:13,
+                  from ./include/linux/sched/signal.h:9,
+                  from ./include/linux/rcuwait.h:6,
+                  from ./include/linux/percpu-rwsem.h:7,
+                  from ./include/linux/fs.h:33,
+                  from ./include/linux/compat.h:17,
+                  from arch/powerpc/kernel/asm-offsets.c:12:
+./arch/powerpc/include/asm/book3s/32/pgtable.h:30: note: this is the 
+location of the previous definition
+    30 | #define _PAGE_EXEC      0x200   /* software: exec allowed */
+       |
 
-diff --git a/arch/powerpc/kvm/bookehv_interrupts.S 
-b/arch/powerpc/kvm/bookehv_interrupts.S
-index 8b4a402217ba..c75350fc449e 100644
---- a/arch/powerpc/kvm/bookehv_interrupts.S
-+++ b/arch/powerpc/kvm/bookehv_interrupts.S
-@@ -18,13 +18,9 @@
-  #include <asm/asm-offsets.h>
-  #include <asm/bitsperlong.h>
 
--#ifdef CONFIG_64BIT
-  #include <asm/exception-64e.h>
-  #include <asm/hw_irq.h>
-  #include <asm/irqflags.h>
--#else
--#include "../kernel/head_booke.h" /* for THREAD_NORMSAVE() */
--#endif
-
-  #define LONGBYTES		(BITS_PER_LONG / 8)
-
-$ git grep head_booke.h
-arch/powerpc/kernel/asm-offsets.c:#include "head_booke.h"
-arch/powerpc/kernel/head_44x.S:#include "head_booke.h"
-arch/powerpc/kernel/head_85xx.S:#include "head_booke.h"
-
-$ git grep head_85xx.o
-arch/powerpc/kernel/Makefile:obj-$(CONFIG_PPC_85xx)             += 
-head_85xx.o
-
-CONFIG_PPC_85xx depends on CONFIG_PPC32.
-
-CONFIG_E5500_CPU and CONFIG_E6500_CPU both depend on CONFIG_PPC64.
-
-So yes it is used on e5500/e6500 but only when they run a 32 bits kernel 
-built with CONFIG_PPC_85xx. Isn't it what you want to get rid of with 
-this patch ?
-
-Am I missing something ?
-
-Christophe
 
