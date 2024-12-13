@@ -1,133 +1,181 @@
-Return-Path: <linux-mips+bounces-6997-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-6999-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 090049F0345
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Dec 2024 04:52:24 +0100 (CET)
-Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
-	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D3931884CE9
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Dec 2024 03:52:24 +0000 (UTC)
-Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C02E815B10D;
-	Fri, 13 Dec 2024 03:52:20 +0000 (UTC)
-X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.wilcox-tech.com (mail.wilcox-tech.com [45.32.83.9])
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FEF79F04C3
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Dec 2024 07:25:11 +0100 (CET)
+Received: from smtp.subspace.kernel.org (wormhole.subspace.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F7287DA62
-	for <linux-mips@vger.kernel.org>; Fri, 13 Dec 2024 03:52:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.32.83.9
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 57227280C05
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Dec 2024 06:25:10 +0000 (UTC)
+Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DA6018B475;
+	Fri, 13 Dec 2024 06:25:08 +0000 (UTC)
+X-Original-To: linux-mips@vger.kernel.org
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37FE713DDAA;
+	Fri, 13 Dec 2024 06:25:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734061940; cv=none; b=UrZYBYIIxpF10w9l5Fml7OS8NNznJV206/QK7URSYeSNnDoAcJPJEn8xoSJstuAJGpEzsCU0lUg7Cr0I5VxBkl5/5KokbAdvovqeHdCz2ZMS/B/h8PRu6aQB5C6gRw+EQBzQRG6rdWJH6wrgbTMj/8iprl1bQbChMOsRRLvQzwE=
+	t=1734071108; cv=none; b=vFGQ/6Wh5YJYa9cXGEbILw/b+fO8nED3NXt+YFeQWmRQ3tZ6ZTXk0m09OyJ1D4Mg93VmvPzYYPsLNzx1BEeEpAAM/Y4dHdXHz2zyn/+IGro6NuxvUuNsUyTHlN7Ld+mjoSpB2ZFVpisZ3GQ4FToylSOh1R1nEfS0exfwX6nLwmM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734061940; c=relaxed/simple;
-	bh=zTn3PxlxF5bcug/5oevEdlwocu+z7R8NRL4NpTujYK8=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=LfTw/tUvD6h9vuPiiLk/SDuI4MYUmwnC57cPmvahpdXqhjkwdHZosjhXV2Y3EjtcY9uTqvF4P/U6myGf7Q5gabMeH5xEAczpkXKVDAK0IIOUoqPmJ66HQwZUc5rblFB0fd3x8ltIxDdd+MlhNxEItr9oRLEiXAlsVPLpN0qjT98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=Wilcox-Tech.com; spf=pass smtp.mailfrom=Wilcox-Tech.com; arc=none smtp.client-ip=45.32.83.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=Wilcox-Tech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=Wilcox-Tech.com
-Received: (qmail 15664 invoked from network); 13 Dec 2024 03:51:32 -0000
-Received: from ip98-184-130-195.tu.ok.cox.net (HELO smtpclient.apple) (AWilcox@Wilcox-Tech.com@98.184.130.195)
-  by mail.wilcox-tech.com with ESMTPA; 13 Dec 2024 03:51:32 -0000
-Content-Type: text/plain;
-	charset=utf-8
+	s=arc-20240116; t=1734071108; c=relaxed/simple;
+	bh=h3KvM8+5gu1HSmwvWLHSNsLeIvLTcGNr7SBLsi/2IcI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kNMEK9TBZkZ+pouo3sadgXuJsFpujfZR1jtnWeN/LdFl1WdFP9+DxQplDAS3hhS0IgzAI0HP/uvnDKukF9OAYmasz8W4fpTf4OyQwKdgrz9Q/PpPPnlF1Obu5n7Vwcwh1/Sc8AEB2Z6HwSsLg/ctXr1ygEL/ZBW9BZSlSRHLUU0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4Y8fTB6fpSz9str;
+	Fri, 13 Dec 2024 07:25:02 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id JDOGWM-FGhTz; Fri, 13 Dec 2024 07:25:02 +0100 (CET)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4Y8fTB5dPqz9stm;
+	Fri, 13 Dec 2024 07:25:02 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id ACB7C8B773;
+	Fri, 13 Dec 2024 07:25:02 +0100 (CET)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id FXHjhDgv36wk; Fri, 13 Dec 2024 07:25:02 +0100 (CET)
+Received: from [192.168.232.97] (unknown [192.168.232.97])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 4A60F8B763;
+	Fri, 13 Dec 2024 07:25:01 +0100 (CET)
+Message-ID: <1f1beb34-65cc-4038-a8b2-de8af3e0703e@csgroup.eu>
+Date: Fri, 13 Dec 2024 07:25:01 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3774.600.62\))
-Subject: Re: [RFC 0/5] KVM: drop 32-bit host support on all architectures
-From: "A. Wilcox" <AWilcox@Wilcox-Tech.com>
-In-Reply-To: <20241212125516.467123-1-arnd@kernel.org>
-Date: Thu, 12 Dec 2024 21:51:26 -0600
-Cc: kvm@vger.kernel.org,
- Arnd Bergmann <arnd@arndb.de>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Huacai Chen <chenhuacai@kernel.org>,
- Jiaxun Yang <jiaxun.yang@flygoat.com>,
- Michael Ellerman <mpe@ellerman.id.au>,
- Nicholas Piggin <npiggin@gmail.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- Naveen N Rao <naveen@kernel.org>,
- Madhavan Srinivasan <maddy@linux.ibm.com>,
- Alexander Graf <graf@amazon.com>,
- Crystal Wood <crwood@redhat.com>,
- Anup Patel <anup@brainfault.org>,
- Atish Patra <atishp@atishpatra.org>,
- Paul Walmsley <paul.walmsley@sifive.com>,
- Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>,
- Sean Christopherson <seanjc@google.com>,
- Paolo Bonzini <pbonzini@redhat.com>,
- Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>,
- Vitaly Kuznetsov <vkuznets@redhat.com>,
- David Woodhouse <dwmw2@infradead.org>,
- Paul Durrant <paul@xen.org>,
- Marc Zyngier <maz@kernel.org>,
- linux-kernel@vger.kernel.org,
- linux-mips@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org,
- kvm-riscv@lists.infradead.org,
- linux-riscv@lists.infradead.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <35E5C2A3-94AC-446B-A0A1-84B043DBC890@Wilcox-Tech.com>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC 2/5] powerpc: kvm: drop 32-bit booke
+To: Arnd Bergmann <arnd@arndb.de>, Arnd Bergmann <arnd@kernel.org>,
+ kvm@vger.kernel.org
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Huacai Chen <chenhuacai@kernel.org>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Naveen N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Alexander Graf <graf@amazon.com>, Crystal Wood <crwood@redhat.com>,
+ Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Sean Christopherson <seanjc@google.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Vitaly Kuznetsov <vkuznets@redhat.com>,
+ David Woodhouse <dwmw2@infradead.org>, Paul Durrant <paul@xen.org>,
+ Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
+ linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org
 References: <20241212125516.467123-1-arnd@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-X-Mailer: Apple Mail (2.3774.600.62)
-
-On Dec 12, 2024, at 6:55=E2=80=AFAM, Arnd Bergmann <arnd@kernel.org> =
-wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->=20
-> I submitted a patch to remove KVM support for x86-32 hosts earlier
-> this month, but there were still concerns that this might be useful =
-for
-> testing 32-bit host in general, as that remains supported on three =
-other
-> architectures. I have gone through those three now and prepared =
-similar
-> patches, as all of them seem to be equally obsolete.
->=20
-> Support for 32-bit KVM host on Arm hardware was dropped back in 2020
-> because of lack of users, despite Cortex-A7/A15/A17 based SoCs being
-> much more widely deployed than the other virtualization capable 32-bit
-> CPUs (Intel Core Duo/Silverthorne, PowerPC e300/e500/e600, MIPS P5600)
-> combined.
+ <20241212125516.467123-3-arnd@kernel.org>
+ <3589ad69-13df-40f1-88c2-55d39790bbac@csgroup.eu>
+ <1633f30e-d885-4f31-a14d-11881e16deb9@app.fastmail.com>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <1633f30e-d885-4f31-a14d-11881e16deb9@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
 
-I do use 32-bit KVM on a Core Duo =E2=80=9CYonah=E2=80=9D and a Power =
-Mac G4 (MDD), for
-purposes of bisecting kernel issues without having to reboot the host
-machine (when it can be duplicated in a KVM environment).
 
-I suppose it would still be possible to run the hosts on 6.12 LTS for
-some time with newer guests, but it would be unfortunate.
+Le 12/12/2024 à 22:08, Arnd Bergmann a écrit :
+> On Thu, Dec 12, 2024, at 19:35, Christophe Leroy wrote:
+>> Le 12/12/2024 à 13:55, Arnd Bergmann a écrit :
+>>> From: Arnd Bergmann <arnd@arndb.de>
+> 
+>>>
+>>> Support for 64-bit hosts remains unchanged, for both 32-bit and
+>>> 64-bit guests.
+>>>
+> 
+>>>    arch/powerpc/include/asm/kvm_book3s_32.h    |  36 --
+>>>    arch/powerpc/include/asm/kvm_booke.h        |   4 -
+>>>    arch/powerpc/include/asm/kvm_booke_hv_asm.h |   2 -
+>>>    arch/powerpc/kvm/Kconfig                    |  22 +-
+>>>    arch/powerpc/kvm/Makefile                   |  15 -
+>>>    arch/powerpc/kvm/book3s_32_mmu_host.c       | 396 --------------
+>>>    arch/powerpc/kvm/booke.c                    | 268 ----------
+>>>    arch/powerpc/kvm/booke.h                    |   8 -
+>>>    arch/powerpc/kvm/booke_emulate.c            |  44 --
+>>>    arch/powerpc/kvm/booke_interrupts.S         | 535 -------------------
+>>>    arch/powerpc/kvm/bookehv_interrupts.S       | 102 ----
+>>>    arch/powerpc/kvm/e500.c                     | 553 --------------------
+>>>    arch/powerpc/kvm/e500.h                     |  40 --
+>>>    arch/powerpc/kvm/e500_emulate.c             | 100 ----
+>>>    arch/powerpc/kvm/e500_mmu_host.c            |  54 --
+>>>    arch/powerpc/kvm/e500mc.c                   |   5 +-
+>>>    arch/powerpc/kvm/trace_booke.h              |  14 -
+>>>    17 files changed, 4 insertions(+), 2194 deletions(-)
+>>>    delete mode 100644 arch/powerpc/include/asm/kvm_book3s_32.h
+>>>    delete mode 100644 arch/powerpc/kvm/book3s_32_mmu_host.c
+>>>    delete mode 100644 arch/powerpc/kvm/booke_interrupts.S
+>>>    delete mode 100644 arch/powerpc/kvm/e500.c
+>>
+>> Left over ?
+>>
+>> arch/powerpc/kernel/head_booke.h:#include <asm/kvm_asm.h>
+>> arch/powerpc/kernel/head_booke.h:#include <asm/kvm_booke_hv_asm.h>
+>> arch/powerpc/kernel/head_booke.h:       b
+>> kvmppc_handler_\intno\()_\srr1
+> 
+> As far as I can tell, these are still needed for e5500/e6500,
+> but you know more about the platform than I do.
 
-Best,
--arw
+$ git grep kvmppc_handler_ arch/powerpc/
+arch/powerpc/kvm/bookehv_interrupts.S: 
+_GLOBAL(kvmppc_handler_\intno\()_\srr1)
 
+In your patch you remove the include of head_booke.h from there:
 
->=20
-> It probably makes sense to drop all of these at the same time, =
-provided
-> there are no actual users remaining (not counting regression testing
-> that developers might be doing). Please let me know if you are still
-> using any of these machines, or think there needs to be deprecation
-> phase first.
->=20
->      Arnd
+diff --git a/arch/powerpc/kvm/bookehv_interrupts.S 
+b/arch/powerpc/kvm/bookehv_interrupts.S
+index 8b4a402217ba..c75350fc449e 100644
+--- a/arch/powerpc/kvm/bookehv_interrupts.S
++++ b/arch/powerpc/kvm/bookehv_interrupts.S
+@@ -18,13 +18,9 @@
+  #include <asm/asm-offsets.h>
+  #include <asm/bitsperlong.h>
 
---
-Anna Wilcox (she/her)
-SW Engineering: C++/Rust, DevOps, POSIX, Py/Ruby
-Wilcox Technologies Inc.  |  Ad=C3=A9lie Linux=
+-#ifdef CONFIG_64BIT
+  #include <asm/exception-64e.h>
+  #include <asm/hw_irq.h>
+  #include <asm/irqflags.h>
+-#else
+-#include "../kernel/head_booke.h" /* for THREAD_NORMSAVE() */
+-#endif
+
+  #define LONGBYTES		(BITS_PER_LONG / 8)
+
+$ git grep head_booke.h
+arch/powerpc/kernel/asm-offsets.c:#include "head_booke.h"
+arch/powerpc/kernel/head_44x.S:#include "head_booke.h"
+arch/powerpc/kernel/head_85xx.S:#include "head_booke.h"
+
+$ git grep head_85xx.o
+arch/powerpc/kernel/Makefile:obj-$(CONFIG_PPC_85xx)             += 
+head_85xx.o
+
+CONFIG_PPC_85xx depends on CONFIG_PPC32.
+
+CONFIG_E5500_CPU and CONFIG_E6500_CPU both depend on CONFIG_PPC64.
+
+So yes it is used on e5500/e6500 but only when they run a 32 bits kernel 
+built with CONFIG_PPC_85xx. Isn't it what you want to get rid of with 
+this patch ?
+
+Am I missing something ?
+
+Christophe
 
