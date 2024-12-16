@@ -1,183 +1,111 @@
-Return-Path: <linux-mips+bounces-7050-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7051-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C879A9F36AD
-	for <lists+linux-mips@lfdr.de>; Mon, 16 Dec 2024 17:54:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1553A9F37AD
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Dec 2024 18:36:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 95B381888A0F
-	for <lists+linux-mips@lfdr.de>; Mon, 16 Dec 2024 16:54:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 53F7A1674A9
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Dec 2024 17:36:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CBEA620B7F1;
-	Mon, 16 Dec 2024 16:48:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3265A206F17;
+	Mon, 16 Dec 2024 17:36:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TbD9eVXJ"
+	dkim=pass (2048-bit key) header.d=icenowy.me header.i=uwu@icenowy.me header.b="MSxLuYEp"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9971A2063D7;
-	Mon, 16 Dec 2024 16:48:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734367701; cv=none; b=oUFDPXfMecEt1P28KHYMn34YtsnUpwuomF1s7TV0CUY5tlT/pO+wY+pr57yQygtUujdF8MYjY/mjpT2qfDUaCAOX2ksXn1rJD875U2OPJza1WBLQaQLW7BxD4OqA00QK1mRaLT7WlpvQdxTXOfcTI2fYc+vifyKB7UrYBgYKe20=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734367701; c=relaxed/simple;
-	bh=OdhncL6PuYJrF3V6NaNai3NQcwLE2g+qf2jb4TEKVqk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=A8MbnuIKL0a9oI1P3s6eOTXjGyZXvbuazY9J9Y97NcP6o1j8B81eBmuIq1SvtjmafvwAlNUlYAg4iTUr0MVSGczroQ/rhatHnTabmSSbOiXWDkchb0lpGuUYiY2IFE3+9pYjn3ezaRbC4Mt5+GFO9eN3A2vSrB2DFbqRlAfutog=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TbD9eVXJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2128CC4CED0;
-	Mon, 16 Dec 2024 16:48:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734367701;
-	bh=OdhncL6PuYJrF3V6NaNai3NQcwLE2g+qf2jb4TEKVqk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TbD9eVXJ+w4Oxe0Ltt/14FzDaq8ZAVhhTUd2qjD8ThpkRerC1T9s98lIbExFySZs2
-	 /jKqQxhz4U2vV3fDiyMq/cpNC0GtXOeu9zXac009QRFlsBz3PQuE9z+FhfXRZv0x9o
-	 3BCYRS3vzF3piaUGqN91oyO8CEtbk5GUvba/uXcC+9W3EDctMUSOWwZHdaefOPeFul
-	 YdYBddBzWrndG7bS+popwCO3s+c0GfmK3fQLGzc97phjNRWuIfSLqMlEQonn7zqWBs
-	 c3hDpz2iSxrXdbhUKVtgUfs60T1wSAAatKOlGJyf47jIv4eZgW8Pj1djMp5dYSB5Fb
-	 xekx59oR7azdw==
-Date: Mon, 16 Dec 2024 16:48:14 +0000
-From: Simon Horman <horms@kernel.org>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc: lee@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	tsbogend@alpha.franken.de, hkallweit1@gmail.com,
-	linux@armlinux.org.uk, markus.stockhausen@gmx.de,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v2 4/4] net: mdio: Add RTL9300 MDIO driver
-Message-ID: <20241216164814.GH780307@kernel.org>
-References: <20241216031346.2626805-1-chris.packham@alliedtelesis.co.nz>
- <20241216031346.2626805-5-chris.packham@alliedtelesis.co.nz>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E38E2063E3;
+	Mon, 16 Dec 2024 17:36:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1734370568; cv=pass; b=hHvLzex43ZjeOHPnIxV3lgi8+vXM0PYTKk1VlyLvNpOqJzc0Tu49g2LoHNMV8lFJCyy1Gtx4H+hkRPsbZMwfcxndRUZFjn9AOpSW1uh82j8ug8++VTJVy39a5agjjYlREYe2gRe4cIVC2gw3wKo/Q/oemwhfIYBVt7Bj5NYJyWM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1734370568; c=relaxed/simple;
+	bh=4uLbzSoIoihEXjiVN7XdeY2bXtTwXBtAxxgJ+Vhg0QU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=GnuMpuHm0O4redncHkwPu/r8xalPJZuhFiEgiIhPQ9zev7BokpPoM9vMogmJQqkx16sVFJ1xmy0rzrPtw+ZpCwtL2vtO/18LGgnTpWqMSakKlDH2Y8o26mA/gFvHP3X3OTcqyim1wBvIrUaWO0qNkfavqPcL/0GF/aBotZqd3SQ=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=icenowy.me; spf=pass smtp.mailfrom=icenowy.me; dkim=pass (2048-bit key) header.d=icenowy.me header.i=uwu@icenowy.me header.b=MSxLuYEp; arc=pass smtp.client-ip=136.143.188.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=icenowy.me
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icenowy.me
+ARC-Seal: i=1; a=rsa-sha256; t=1734370532; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=Vp0Iu6WdbMoF1nXM5SnCyiFrgm+BDTTNnovEHr3eLz0NQKz/zfx5bJiDUaqTLXmjF/IrctuEI+gH9FH2yuTHr4mKE8vjWNgQLdOCcNLlLWX+VuREs3+vFPezAQ+a5uG0QzMVqUs7PHKCSEJaPqKy8BNTNMxyxicXMqB09eHc/6E=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1734370532; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=4+hbfmOKjnlASf4EoCiuUoXr7Qw32w/Un/7tGNMOLBU=; 
+	b=HQDuLCTZ4BGk/ey1MN57Y7Uzrf95t624UDRepS6W8RrQVfOU9woYFYU0R3qBb0gOXyNncdwA0eqyXxb9oCR31KMAlDpIzGDGEafpS98PielASxILX6jmfdmIdN6TK+rtOTHo79tGZKKWCn9IXklj8/zyig50B8OqEbNnYVnPasU=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=icenowy.me;
+	spf=pass  smtp.mailfrom=uwu@icenowy.me;
+	dmarc=pass header.from=<uwu@icenowy.me>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1734370532;
+	s=zmail2; d=icenowy.me; i=uwu@icenowy.me;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=4+hbfmOKjnlASf4EoCiuUoXr7Qw32w/Un/7tGNMOLBU=;
+	b=MSxLuYEpwZ0O8h0j+Rypp0FGvTc0pvs9ZgT8QwNZx7mgRBcUDkFoHWWd74rwVB+v
+	39XLkxIwAO6l4YoVHfRwn4Szqs4S1o9C8AvY0DNWbzlw+QbSluj72kknxpDK4vd0HsW
+	RlsqBp4epFR4A7FlQHsZf009W4uGWKV48qja8Y5XdL+0r/vGdV73AJE9PQq8LKQQpy5
+	BfjICz3nSFvNtAfyZhW5vRsvjc+VWJLE+h6hTX9leRL+rMI+IL86anX1HpdP6svU7Kr
+	JLDL/FWN8jViUZgWBukOTqDWUJLKQsIuvI1jx1nggx9XNk9/ALdSIayuGvyj02fadTf
+	z+qwqyv/Vw==
+Received: by mx.zohomail.com with SMTPS id 1734370530165398.6022361701732;
+	Mon, 16 Dec 2024 09:35:30 -0800 (PST)
+From: Icenowy Zheng <uwu@icenowy.me>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Baoquan He <bhe@redhat.com>,
+	Vivek Goyal <vgoyal@redhat.com>,
+	Dave Young <dyoung@redhat.com>,
+	kexec@lists.infradead.org,
+	Icenowy Zheng <uwu@icenowy.me>
+Subject: [PATCH] mips: disable CRASH_DUMP by default
+Date: Tue, 17 Dec 2024 01:35:14 +0800
+Message-ID: <20241216173514.495638-1-uwu@icenowy.me>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241216031346.2626805-5-chris.packham@alliedtelesis.co.nz>
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 
-On Mon, Dec 16, 2024 at 04:13:46PM +1300, Chris Packham wrote:
-> Add a driver for the MDIO controller on the RTL9300 family of Ethernet
-> switches with integrated SoC. There are 4 physical SMI interfaces on the
-> RTL9300 but access is done using the switch ports so a single MDIO bus
-> is presented to the rest of the system.
-> 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+On MIPS, the space of a crash dump kernel needs to be manually specified
+by both the debugee and the crash dump kernel PHYSICAL_START config
+option, and the default PHYSICAL_START config will make the kernel
+load quite higher, which isn't acceptable when using as a daily use
+kernel (and will even confuse some naive Loongson-3 bootloaders).
 
-...
+So I don't think a MIPS kernel should be built as a crash dump kernel by
+default, therefore this patch disables selecting CRASH_DUMP by default.
 
-> diff --git a/drivers/net/mdio/mdio-realtek-rtl.c b/drivers/net/mdio/mdio-realtek-rtl.c
+Signed-off-by: Icenowy Zheng <uwu@icenowy.me>
+---
+ arch/mips/Kconfig | 3 ---
+ 1 file changed, 3 deletions(-)
 
-...
-
-> +#define MAX_SMI_BUSSES  4
-> +#define MAX_SMI_ADDR	0x1f
-> +
-> +struct realtek_mdio_priv {
-> +	struct regmap *regmap;
-> +	u8 smi_bus[MAX_PORTS];
-> +	u8 smi_addr[MAX_PORTS];
-> +	bool smi_bus_isc45[MAX_SMI_BUSSES];
-> +	u32 reg_base;
-> +};
-
-...
-
-> +static int realtek_mdiobus_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct realtek_mdio_priv *priv;
-> +	struct fwnode_handle *child;
-> +	struct mii_bus *bus;
-> +	int err;
-> +
-> +	bus = devm_mdiobus_alloc_size(dev, sizeof(*priv));
-> +	if (!bus)
-> +		return -ENOMEM;
-> +
-> +	bus->name = "Reaktek Switch MDIO Bus";
-> +	bus->read = realtek_mdio_read_c22;
-> +	bus->write = realtek_mdio_write_c22;
-> +	bus->read_c45 = realtek_mdio_read_c45;
-> +	bus->write_c45 =  realtek_mdio_write_c45;
-> +	bus->parent = dev;
-> +	priv = bus->priv;
-> +
-> +	priv->regmap = syscon_node_to_regmap(dev->parent->of_node);
-> +	if (IS_ERR(priv->regmap))
-> +		return PTR_ERR(priv->regmap);
-> +
-> +	err = device_property_read_u32(dev, "reg", &priv->reg_base);
-> +	if (err)
-> +		return err;
-> +
-> +	snprintf(bus->id, MII_BUS_ID_SIZE, "%s", dev_name(dev));
-> +
-> +	device_for_each_child_node(dev, child) {
-> +		u32 pn, smi_addr[2];
-> +
-> +		err = fwnode_property_read_u32(child, "reg", &pn);
-> +		if (err)
-> +			return err;
-> +
-> +		if (pn >= MAX_PORTS)
-> +			return dev_err_probe(dev, -EINVAL, "illegal port number %d\n", pn);
-> +
-> +		err = fwnode_property_read_u32_array(child, "realtek,smi-address", smi_addr, 2);
-> +		if (err) {
-> +			smi_addr[0] = 0;
-> +			smi_addr[1] = pn;
-> +		}
-> +
-> +		if (smi_addr[0] > MAX_SMI_BUSSES)
-
-Hi Chris,
-
-Should this condition be
-
-		if (smi_addr[0] >= MAX_SMI_BUSSES)
-
-
-> +			return dev_err_probe(dev, -EINVAL, "illegal smi bus number %d\n",
-> +					     smi_addr[0]);
-> +
-> +		if (smi_addr[1] > MAX_SMI_ADDR)
-> +			return dev_err_probe(dev, -EINVAL, "illegal smi addr %d\n", smi_addr[1]);
-> +
-> +		if (fwnode_device_is_compatible(child, "ethernet-phy-ieee802.3-c45"))
-> +			priv->smi_bus_isc45[smi_addr[0]] = true;
-
-Otherwise it seems that smi_bus_isc45 may overflow here.
-
-Flagged by Smatch.
-
-> +
-> +		priv->smi_bus[pn] = smi_addr[0];
-> +		priv->smi_addr[pn] = smi_addr[1];
-> +	}
-> +
-> +	err = realtek_mdiobus_init(priv);
-> +	if (err)
-> +		return dev_err_probe(dev, err, "failed to initialise MDIO bus controller\n");
-> +
-> +	err = devm_of_mdiobus_register(dev, bus, dev->of_node);
-> +	if (err)
-> +		return dev_err_probe(dev, err, "cannot register MDIO bus\n");
-> +
-> +	return 0;
-> +}
-
-...
-
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index a33f05e1ad6d3..f80ea80d792f5 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -2873,9 +2873,6 @@ config ARCH_SUPPORTS_KEXEC
+ config ARCH_SUPPORTS_CRASH_DUMP
+ 	def_bool y
+ 
+-config ARCH_DEFAULT_CRASH_DUMP
+-	def_bool y
+-
+ config PHYSICAL_START
+ 	hex "Physical address where the kernel is loaded"
+ 	default "0xffffffff84000000"
 -- 
-pw-bot: changes-requested
+2.47.1
+
 
