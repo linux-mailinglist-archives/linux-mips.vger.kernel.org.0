@@ -1,119 +1,146 @@
-Return-Path: <linux-mips+bounces-7061-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7062-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACBAC9F48F9
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Dec 2024 11:35:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 81C9C9F4900
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Dec 2024 11:37:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F38DF165627
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Dec 2024 10:35:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B9C3616C929
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Dec 2024 10:37:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 981821E22F0;
-	Tue, 17 Dec 2024 10:35:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F02691E260D;
+	Tue, 17 Dec 2024 10:37:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P3T0rn98"
+	dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b="JHyqdCnA"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-001ae601.pphosted.com (mx0a-001ae601.pphosted.com [67.231.149.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 639701DF965;
-	Tue, 17 Dec 2024 10:35:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55B4F1DDC3F;
+	Tue, 17 Dec 2024 10:37:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=67.231.149.25
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734431716; cv=none; b=CcRxcHdxN9DsSrJJqAyd+GQuXmiHpW/FHfrJ4lef0AkDTjbnwW3NnXC+kYbfLL/Gm4lFk3RVAgMuQygSNCRcKmTgRnf2hb/gOHdbUgCzw1ia/Wg8QYyPDa0rf/gmni8xHnhoUibII4UklEZ/kM5RLq7Bp4V2ExkXSOSg2ROkz6g=
+	t=1734431847; cv=none; b=XE5VpPFqZW5U2Cc9LLEhdQe9X17IqZn9LXxnfQY5vbHZrqrJzQSsUt11lq8V6HnqMTGDuRdreNTvVPs4WS4Tq7F0DYYdUdrKaaFL872AFnMdaVDFIzlGJuo7hv44NQl9//uCZpja6oy/VvqYFZ7HWA/2LoREoFmY4zpdDiywG8k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734431716; c=relaxed/simple;
-	bh=yDjkBFyqDhWA0hUrGZUYVCNVEP+dZZGyN7HiHVpaSMk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rL+VGhF/Qej0tBXQVKo0zIPlxi7+KQ0U4utk24WeeCviZC9/nugh25bxx7UAaMCevD0mcl7AiiwGMjMKWYMv8hkFprR9dQUqxdJA9WFmH7hgyJoNTRbe4m35a2SAyNB6OTSeKm+Acp/OcYx5y6TSdap3WyiNpo00m4+bC7aFO9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P3T0rn98; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B086BC4CED3;
-	Tue, 17 Dec 2024 10:35:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734431715;
-	bh=yDjkBFyqDhWA0hUrGZUYVCNVEP+dZZGyN7HiHVpaSMk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=P3T0rn98p7PSCmN15nKpKFHWpMt1SUb4PDGaEFALSwbhHe6wVoSfClUJiXOMDe4Ab
-	 Pv1nn+CxhIO3vP/Z6qnkyALCPB9SRxgLeLRPkKIYbtWFxM7DFIELRH3tYPT+iG05Yy
-	 ovD2E/soNrbdfVx+oPRaSY5xq0otKd0KLRTYwlleKiGGSJbrPgxOcT6KerupBDPrDA
-	 heuiHKigf3IQ+sZLfYfDlL6SiRsdfFR7vVtxkdZBE8RAT1AlO89rhEyPqM3AOYqskc
-	 JrTnGdQnHiHH+suk4oa5+GEbFmMlWkt1jHT4cOE2tSAnhOVHtDjIcRMMwkQ0ayOLRu
-	 hDvDlPX/Gdw7w==
-Date: Tue, 17 Dec 2024 10:35:09 +0000
-From: Simon Horman <horms@kernel.org>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc: lee@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
-	conor+dt@kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
-	edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-	tsbogend@alpha.franken.de, hkallweit1@gmail.com,
-	linux@armlinux.org.uk, markus.stockhausen@gmx.de,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, linux-mips@vger.kernel.org,
-	Dan Carpenter <dan.carpenter@linaro.org>
-Subject: Re: [PATCH v2 4/4] net: mdio: Add RTL9300 MDIO driver
-Message-ID: <20241217103509.GO780307@kernel.org>
-References: <20241216031346.2626805-1-chris.packham@alliedtelesis.co.nz>
- <20241216031346.2626805-5-chris.packham@alliedtelesis.co.nz>
- <20241216164814.GH780307@kernel.org>
- <cf77f08d-0516-4adf-a701-9589f0d99eb5@alliedtelesis.co.nz>
+	s=arc-20240116; t=1734431847; c=relaxed/simple;
+	bh=O8dKluOujhFZHtu4NC9kbCIEXTbQRJR5JMVk02v4L/I=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z/jwIWvUVUaTkLsiUrmv6OgEqJAXV6aCxckwf/qjRoUCbfjP6maqGhsXswQzweinkrwfx6sq9usiFZpw9J31MGMrzau2HRT8FD7bp9JnKpUOeQ8C5MNx/XnzfpwylqT+X1wEjhfFucDBeD6AZNyuUlGDvrrrkU5jCqIr7PbbCEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com; spf=pass smtp.mailfrom=opensource.cirrus.com; dkim=pass (2048-bit key) header.d=cirrus.com header.i=@cirrus.com header.b=JHyqdCnA; arc=none smtp.client-ip=67.231.149.25
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=opensource.cirrus.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=opensource.cirrus.com
+Received: from pps.filterd (m0077473.ppops.net [127.0.0.1])
+	by mx0a-001ae601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BH4pZxb025779;
+	Tue, 17 Dec 2024 04:36:26 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=PODMain02222019; bh=DncSMB8awaOalGRsmX
+	KLNqehj2Q8AYTF94wrCAJZets=; b=JHyqdCnAmk49Rks7tVDdl3Y0WoutMvr9mB
+	x3iG4Gih0mGgeaQ7b7y6YZuqiBWOeWqniSGkkhacOVcylwjh8Ais2tnzOBK/LMn4
+	L0mw7++y/sEhaKUgqkptQ2STbN8qQslOWHFUNPyAGAbUW95HpYe45bEj6R2MacLE
+	dr3Wr5bd/vBehFbMarGrAwhRCuKkSl17WHMrxdePJ6CkIqY7VVHogsI1yu/xu+jW
+	Wa2jZzHOPe9mMk1J+kcKIRKz7s9P5ZOc7MRlf0NKePCETF34apari5BqsJ3qElvv
+	wKRhesX/OXcQJ4j4tQh4kn7cFQdc5GKOyJmpynrAUNV3yzmMWYUg==
+Received: from ediex02.ad.cirrus.com ([84.19.233.68])
+	by mx0a-001ae601.pphosted.com (PPS) with ESMTPS id 43h8a237vd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 17 Dec 2024 04:36:26 -0600 (CST)
+Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex02.ad.cirrus.com
+ (198.61.84.81) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.13; Tue, 17 Dec
+ 2024 10:36:23 +0000
+Received: from ediswmail9.ad.cirrus.com (198.61.86.93) by
+ anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
+ 15.2.1544.13 via Frontend Transport; Tue, 17 Dec 2024 10:36:23 +0000
+Received: from opensource.cirrus.com (ediswmail9.ad.cirrus.com [198.61.86.93])
+	by ediswmail9.ad.cirrus.com (Postfix) with ESMTPS id B0265820248;
+	Tue, 17 Dec 2024 10:36:23 +0000 (UTC)
+Date: Tue, 17 Dec 2024 10:36:22 +0000
+From: Charles Keepax <ckeepax@opensource.cirrus.com>
+To: Wolfram Sang <wsa+renesas@sang-engineering.com>
+CC: <linux-rtc@vger.kernel.org>,
+        Alexandre Belloni
+	<alexandre.belloni@bootlin.com>,
+        Yiting Deng <yiting.deng@amlogic.com>,
+        Xianwei Zhao <xianwei.zhao@amlogic.com>, Andrew Lunn <andrew@lunn.ch>,
+        Gregory Clement <gregory.clement@bootlin.com>,
+        Sebastian Hesselbarth
+	<sebastian.hesselbarth@gmail.com>,
+        Nicolas Ferre
+	<nicolas.ferre@microchip.com>,
+        Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+        Benson Leung <bleung@chromium.org>,
+        Guenter Roeck <groeck@chromium.org>,
+        Support Opensource <support.opensource@diasemi.com>,
+        Paul Cercueil
+	<paul@crapouillou.net>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Piotr Wojtaszczyk
+	<piotr.wojtaszczyk@timesys.com>,
+        Chanwoo Choi <cw00.choi@samsung.com>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Neil Armstrong
+	<neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        "Jerome
+ Brunet" <jbrunet@baylibre.com>,
+        Martin Blumenstingl
+	<martin.blumenstingl@googlemail.com>,
+        Eddie Huang <eddie.huang@mediatek.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Matthias Brugger
+	<matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno
+	<angelogioacchino.delregno@collabora.com>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang
+	<zhang.lyra@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
+        Jernej Skrabec
+	<jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        "Vincent
+ Shih" <vincent.sunplus@gmail.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Jonathan Hunter <jonathanh@nvidia.com>,
+        Michal Simek <michal.simek@amd.com>,
+        <linux-amlogic@lists.infradead.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <chrome-platform@lists.linux.dev>, <linux-mips@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-renesas-soc@vger.kernel.org>,
+        <linux-samsung-soc@vger.kernel.org>, <linux-sunxi@lists.linux.dev>,
+        <linux-tegra@vger.kernel.org>, <patches@opensource.cirrus.com>
+Subject: Re: [PATCH] rtc: use boolean values with device_init_wakeup()
+Message-ID: <Z2FUJhC1Iq5mmkEg@opensource.cirrus.com>
+References: <20241217071331.3607-2-wsa+renesas@sang-engineering.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <cf77f08d-0516-4adf-a701-9589f0d99eb5@alliedtelesis.co.nz>
+In-Reply-To: <20241217071331.3607-2-wsa+renesas@sang-engineering.com>
+X-Proofpoint-ORIG-GUID: ZFiaGqpxjixZfdP0EJY2r8mb04vfd9VM
+X-Proofpoint-GUID: ZFiaGqpxjixZfdP0EJY2r8mb04vfd9VM
+X-Proofpoint-Spam-Reason: safe
 
-+ Dan Carpenter
-
-On Tue, Dec 17, 2024 at 10:47:10AM +1300, Chris Packham wrote:
+On Tue, Dec 17, 2024 at 08:13:26AM +0100, Wolfram Sang wrote:
+> device_init_wakeup() second argument is a bool type. Use proper boolean
+> values when calling it to match the type and to produce unambiguous code
+> which is easier to understand.
 > 
-> On 17/12/2024 05:48, Simon Horman wrote:
-> > On Mon, Dec 16, 2024 at 04:13:46PM +1300, Chris Packham wrote:
-> > > Add a driver for the MDIO controller on the RTL9300 family of Ethernet
-> > > switches with integrated SoC. There are 4 physical SMI interfaces on the
-> > > RTL9300 but access is done using the switch ports so a single MDIO bus
-> > > is presented to the rest of the system.
-> > > 
-> > > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> ---
 
-...
+For the old Wolfson parts:
 
-> > > +		if (smi_addr[0] > MAX_SMI_BUSSES)
-> > Hi Chris,
-> > 
-> > Should this condition be
-> > 
-> > 		if (smi_addr[0] >= MAX_SMI_BUSSES)
-> Yes. You are correct.
-> > > +			return dev_err_probe(dev, -EINVAL, "illegal smi bus number %d\n",
-> > > +					     smi_addr[0]);
-> > > +
-> > > +		if (smi_addr[1] > MAX_SMI_ADDR)
-> > > +			return dev_err_probe(dev, -EINVAL, "illegal smi addr %d\n", smi_addr[1]);
-> > > +
-> > > +		if (fwnode_device_is_compatible(child, "ethernet-phy-ieee802.3-c45"))
-> > > +			priv->smi_bus_isc45[smi_addr[0]] = true;
-> > Otherwise it seems that smi_bus_isc45 may overflow here.
-> > 
-> > Flagged by Smatch.
-> 
-> Sounds like something I should start looking at for myself. Have you got a
-> link to share?
+Reviewed-by: Charles Keepax <ckeepax@opensource.cirrus.com>
 
-Hi Chris,
-
-Smatch is here: https://github.com/error27/smatch
-And my usage of it is informed by
-https://blogs.oracle.com/linux/post/smatch-static-analysis-tool-overview-by-dan-carpenter
-
-FWIIW, I run it usking kchecker on individual source files.
-
-I've also CCed the author, Dan Carpenter, for good measure.
-
-...
+Thanks,
+Charles
 
