@@ -1,158 +1,99 @@
-Return-Path: <linux-mips+bounces-7063-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7064-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EA4C9F4975
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Dec 2024 12:02:03 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 560ED9F4CFC
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Dec 2024 14:59:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE36B188CD16
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Dec 2024 11:02:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CBFED7A70E7
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Dec 2024 13:58:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A31B1CD215;
-	Tue, 17 Dec 2024 11:01:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1800B1F4732;
+	Tue, 17 Dec 2024 13:58:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Fa+hsAZq"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 161FD1DCB3F;
-	Tue, 17 Dec 2024 11:01:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 151221F471B
+	for <linux-mips@vger.kernel.org>; Tue, 17 Dec 2024 13:58:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734433318; cv=none; b=WHRgqJ1tg8fsekoAAVVWgclAAEr64mrZpdOy2YtqxzefYJd8eyzOClJ/FzBRQwsziA+kRUPJvpPSe9Rnvbb0LwTBQlQUjORZKRtXExyF5G0m83HjfTC44PBMwTk4ymJCVi2z8p+mYos3lECk5G/UtdF3uvTqczJcCOjy9byjZMw=
+	t=1734443905; cv=none; b=SacklqIySweBxK0oSIEHvDB5d0S/5wGfsygycYm3+0LW/CEO/Bf0wbn6pWe7C0ca10oWwNmHAfTl8eKvABrBoTPRH3h4uH7TmpsiVFri+I7+PX/iCnNCU9uM9R1PmHjK7uZPpkrzaqf4hw0/x4URY9m/k3TO09z7jnDsceVAA0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734433318; c=relaxed/simple;
-	bh=NrqjMZ+J+2WHaZCrdfnIKMWsZCnqh8duGYd7H0hLNEo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YAiUzT+SFmY3SDJT+UQ+wJfyvdS+jOLGq18rlCqbiOS+w6py3ZIUJbU/cx3aCPEzOnvJAP8pMD8J265+0WS0GqnItrT+3ZJt4RFv5wpaGydizARiZAqV4J1HYT7N/M6c969rfyBKUnaCCjtNdLinh3y2pa2g37mnIHovLm2Aag8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6FFEA1063;
-	Tue, 17 Dec 2024 03:02:23 -0800 (PST)
-Received: from donnerap.manchester.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CE4E93F528;
-	Tue, 17 Dec 2024 03:01:47 -0800 (PST)
-Date: Tue, 17 Dec 2024 11:01:40 +0000
-From: Andre Przywara <andre.przywara@arm.com>
-To: Wolfram Sang <wsa+renesas@sang-engineering.com>
-Cc: linux-rtc@vger.kernel.org, Alexandre Belloni
- <alexandre.belloni@bootlin.com>, Yiting Deng <yiting.deng@amlogic.com>,
- Xianwei Zhao <xianwei.zhao@amlogic.com>, Andrew Lunn <andrew@lunn.ch>,
- Gregory Clement <gregory.clement@bootlin.com>, Sebastian Hesselbarth
- <sebastian.hesselbarth@gmail.com>, Nicolas Ferre
- <nicolas.ferre@microchip.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>,
- Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>,
- Support Opensource <support.opensource@diasemi.com>, Paul Cercueil
- <paul@crapouillou.net>, Vladimir Zapolskiy <vz@mleia.com>, Piotr
- Wojtaszczyk <piotr.wojtaszczyk@timesys.com>, Chanwoo Choi
- <cw00.choi@samsung.com>, Krzysztof Kozlowski <krzk@kernel.org>, Neil
- Armstrong <neil.armstrong@linaro.org>, Kevin Hilman <khilman@baylibre.com>,
- Jerome Brunet <jbrunet@baylibre.com>, Martin Blumenstingl
- <martin.blumenstingl@googlemail.com>, Eddie Huang
- <eddie.huang@mediatek.com>, Sean Wang <sean.wang@mediatek.com>, Matthias
- Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
- <angelogioacchino.delregno@collabora.com>, Orson Zhai
- <orsonzhai@gmail.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, Chunyan
- Zhang <zhang.lyra@gmail.com>, Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec
- <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, Vincent
- Shih <vincent.sunplus@gmail.com>, Thierry Reding
- <thierry.reding@gmail.com>, Jonathan Hunter <jonathanh@nvidia.com>, Michal
- Simek <michal.simek@amd.com>, linux-amlogic@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, chrome-platform@lists.linux.dev,
- linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org,
- linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
- linux-samsung-soc@vger.kernel.org, linux-sunxi@lists.linux.dev,
- linux-tegra@vger.kernel.org, patches@opensource.cirrus.com
-Subject: Re: [PATCH] rtc: use boolean values with device_init_wakeup()
-Message-ID: <20241217110140.22c92138@donnerap.manchester.arm.com>
-In-Reply-To: <20241217071331.3607-2-wsa+renesas@sang-engineering.com>
-References: <20241217071331.3607-2-wsa+renesas@sang-engineering.com>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+	s=arc-20240116; t=1734443905; c=relaxed/simple;
+	bh=kMuWfQnRormK6Ps2tPKYK6JxmEozVsabAER7DIY1C1E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IRlnv53E9EZGOaGe7kzpWpYJGYcEE7tx19pS2WR/AdWREIAD68AXXxoxNW3Q+j6IHhTf2yTy4GNEoSquFoy8VSF1iOb/TRbzwdY91t4t/gzKfBYzFIZ3FzvbpJKdSXaFkAi8rfRYzN1/vh1UM1S3x+PA1wNSlzSRnMt7yxTYH1c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Fa+hsAZq; arc=none smtp.client-ip=209.85.167.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-54024aa9febso5265863e87.1
+        for <linux-mips@vger.kernel.org>; Tue, 17 Dec 2024 05:58:22 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1734443901; x=1735048701; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=kMuWfQnRormK6Ps2tPKYK6JxmEozVsabAER7DIY1C1E=;
+        b=Fa+hsAZqhG100CyApC81ZNwzVAMIhbiE2eyhTpVbDUW7Do+f6afDUF8cd/ypBBxgvg
+         doPDvCDRtBsLsEOY5gnU+PhJr9xl8fUL5k11duu2YC69R4SN9ZAoxkQT7PcO1J11yrC3
+         3LVoQR8jBaEmUjfGb/s51M3TaUBV6fKknA+Qw0b2XIRTWzxbBS931ky2/mejWa/j2THx
+         Q4IjRZb2oF7e7GcNm4oJLA+0HGf1ZjC9ysNLQ9CelXqAWJucvPMclugDygb0EXztmL7B
+         P3SE4YtWyGG1P+xL0peG83gA7AGT3LXwomugZcw4/jarMu9oVLm/h0ndiFTHlqlsbY/E
+         HreA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734443901; x=1735048701;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=kMuWfQnRormK6Ps2tPKYK6JxmEozVsabAER7DIY1C1E=;
+        b=iCHU6v1cKKAXj7vZPbryCuBPk6yXi9kEmHjl1jO21NhlBx7U/GXhcmhUarhzAAebmk
+         rAPYtlW5yHAKAI7jp/aHyEx55UhOZjvRcMX+JzOgHRFzi+cs14S5ivVSMseiEJoMHZvQ
+         vwhf+OV1jRV/hysznqccBYrD0kzszWcIJZNTCrBBCazXxOdpUNY7o+wC158FH09pPZ19
+         VbnydMotOsKBj2JZekxZjIoloA2kIpJ4TMVDxJF/ENDY0EUoKFLAuiDU6fRZ0XEV3xg3
+         LOWZVEZD0Al31tm5yBe5Fz5jhLCmsBqfFq4EU41rmGHlTc3Q3SWRQVeZr103JNxdJQo4
+         esAg==
+X-Forwarded-Encrypted: i=1; AJvYcCWYtTniNinosUxJ2zel4jww4SKyuyNQd5JTIVcjOvGGN4v2ymItRBbh6p7ltkv/BgozP2d4ge9zkSl/@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzw1MT+kEqmKCmSuC+AWJAubI7jsAsWXODdBP5/DkcmiLzfA2Nt
+	h6ZLmb+tsZqxwVxtM1j77OvWdT+PFJVNoXQVQ82xxwGGUWONVVGg3815UbuA55eWQ4hqfWrijWM
+	rVIa0RrVyfDXHsl+r6+73YyR8xWbF7J8fPuBQYA==
+X-Gm-Gg: ASbGnctXirJ9egvdhvjJn7GltbyiXECoI0jVla4PkoWKRBBev4dVsom+Kq0z20P1yy1
+	5ERtAmcaoQFVeYZGyKCNDWL6xFNzUo+84H7wjAw==
+X-Google-Smtp-Source: AGHT+IH/9Tb92jrnZIg/TBGrbg4bI20QwqIZed3/NmrjDjk8EJamXNZQXG+A//FMri3HGs5qzQON39JcdFZ7dtiiqiA=
+X-Received: by 2002:a05:6512:2203:b0:53e:2f9d:6a73 with SMTP id
+ 2adb3069b0e04-540857ff585mr5866585e87.0.1734443901223; Tue, 17 Dec 2024
+ 05:58:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+References: <9a5b38027ed674ca773fe28a3b3246631eae8834.1733404358.git.geert+renesas@glider.be>
+In-Reply-To: <9a5b38027ed674ca773fe28a3b3246631eae8834.1733404358.git.geert+renesas@glider.be>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Tue, 17 Dec 2024 14:58:09 +0100
+Message-ID: <CACRpkdYG_v_4mrZBzFVCRSpjg4SojeZ_hmoHTvMzf8k96tb2mA@mail.gmail.com>
+Subject: Re: [PATCH] pinctrl: ingenic: Replace seq_printf() by seq_puts()
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: Paul Cercueil <paul@crapouillou.net>, linux-mips@vger.kernel.org, 
+	linux-gpio@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 17 Dec 2024 08:13:26 +0100
-Wolfram Sang <wsa+renesas@sang-engineering.com> wrote:
+On Thu, Dec 5, 2024 at 2:13=E2=80=AFPM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
 
-> device_init_wakeup() second argument is a bool type. Use proper boolean
-> values when calling it to match the type and to produce unambiguous code
-> which is easier to understand.
-> 
-> Signed-off-by: Wolfram Sang <wsa+renesas@sang-engineering.com>
+> Simplify "seq_printf(p, "%s", ...)" to "seq_puts(p, ...)".
+>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 
-Verified via regexps that it's indeed this pattern: 1 => true, 0 => false.
+Patch applied!
 
-Reviewed-by: Andre Przywara <andre.przywara@arm.com>
-
-Cheers,
-Andre
-
-> ---
-> Created with a coccinelle script. I opted for a single patch because the change
-> is rather trivial. I can break out per driver if this is desired. If you
-> like the change at all, that is.
-> 
->  drivers/rtc/rtc-88pm80x.c       | 2 +-
->  drivers/rtc/rtc-88pm860x.c      | 2 +-
->  drivers/rtc/rtc-amlogic-a4.c    | 6 +++---
->  drivers/rtc/rtc-armada38x.c     | 2 +-
->  drivers/rtc/rtc-as3722.c        | 2 +-
->  drivers/rtc/rtc-at91rm9200.c    | 2 +-
->  drivers/rtc/rtc-at91sam9.c      | 2 +-
->  drivers/rtc/rtc-cadence.c       | 2 +-
->  drivers/rtc/rtc-cmos.c          | 2 +-
->  drivers/rtc/rtc-cpcap.c         | 2 +-
->  drivers/rtc/rtc-cros-ec.c       | 2 +-
->  drivers/rtc/rtc-da9055.c        | 2 +-
->  drivers/rtc/rtc-ds3232.c        | 2 +-
->  drivers/rtc/rtc-isl1208.c       | 2 +-
->  drivers/rtc/rtc-jz4740.c        | 2 +-
->  drivers/rtc/rtc-loongson.c      | 4 ++--
->  drivers/rtc/rtc-lp8788.c        | 2 +-
->  drivers/rtc/rtc-lpc32xx.c       | 2 +-
->  drivers/rtc/rtc-max77686.c      | 2 +-
->  drivers/rtc/rtc-max8925.c       | 2 +-
->  drivers/rtc/rtc-max8997.c       | 2 +-
->  drivers/rtc/rtc-meson-vrtc.c    | 2 +-
->  drivers/rtc/rtc-mpc5121.c       | 2 +-
->  drivers/rtc/rtc-mt6397.c        | 2 +-
->  drivers/rtc/rtc-mv.c            | 4 ++--
->  drivers/rtc/rtc-mxc.c           | 2 +-
->  drivers/rtc/rtc-mxc_v2.c        | 2 +-
->  drivers/rtc/rtc-omap.c          | 2 +-
->  drivers/rtc/rtc-palmas.c        | 2 +-
->  drivers/rtc/rtc-pic32.c         | 2 +-
->  drivers/rtc/rtc-pm8xxx.c        | 2 +-
->  drivers/rtc/rtc-pxa.c           | 2 +-
->  drivers/rtc/rtc-rc5t583.c       | 2 +-
->  drivers/rtc/rtc-rc5t619.c       | 2 +-
->  drivers/rtc/rtc-renesas-rtca3.c | 2 +-
->  drivers/rtc/rtc-rk808.c         | 2 +-
->  drivers/rtc/rtc-s3c.c           | 2 +-
->  drivers/rtc/rtc-s5m.c           | 2 +-
->  drivers/rtc/rtc-sa1100.c        | 2 +-
->  drivers/rtc/rtc-sc27xx.c        | 4 ++--
->  drivers/rtc/rtc-sh.c            | 2 +-
->  drivers/rtc/rtc-spear.c         | 4 ++--
->  drivers/rtc/rtc-sun6i.c         | 2 +-
->  drivers/rtc/rtc-sunplus.c       | 4 ++--
->  drivers/rtc/rtc-tegra.c         | 2 +-
->  drivers/rtc/rtc-test.c          | 2 +-
->  drivers/rtc/rtc-tps6586x.c      | 2 +-
->  drivers/rtc/rtc-tps65910.c      | 2 +-
->  drivers/rtc/rtc-twl.c           | 2 +-
->  drivers/rtc/rtc-wm831x.c        | 2 +-
->  drivers/rtc/rtc-wm8350.c        | 2 +-
->  drivers/rtc/rtc-xgene.c         | 4 ++--
->  drivers/rtc/rtc-zynqmp.c        | 4 ++--
->  53 files changed, 62 insertions(+), 62 deletions(-)
-> 
+Yours,
+Linus Walleij
 
