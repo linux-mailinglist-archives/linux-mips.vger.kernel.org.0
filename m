@@ -1,107 +1,182 @@
-Return-Path: <linux-mips+bounces-7081-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7082-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 211F49F6ACA
-	for <lists+linux-mips@lfdr.de>; Wed, 18 Dec 2024 17:12:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E440F9F6B55
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Dec 2024 17:37:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F300C1891E45
-	for <lists+linux-mips@lfdr.de>; Wed, 18 Dec 2024 16:12:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AD510166D70
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Dec 2024 16:36:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DD21149E16;
-	Wed, 18 Dec 2024 16:11:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A6841F8918;
+	Wed, 18 Dec 2024 16:36:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jYMWoojU"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="ZBQAOqwW";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="KqJZWQVI"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f49.google.com (mail-ed1-f49.google.com [209.85.208.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from flow-b3-smtp.messagingengine.com (flow-b3-smtp.messagingengine.com [202.12.124.138])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C687E130499
-	for <linux-mips@vger.kernel.org>; Wed, 18 Dec 2024 16:11:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C0711F7570;
+	Wed, 18 Dec 2024 16:36:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.138
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734538316; cv=none; b=aXszpkZJa4RpoQCfflh0QtTVr40mdhQGWKrk0UcBWwCE/9iCkOX+di/kCuI8dlQewK78x2edLvkyVXnbUg3TCLO0pEpEQ6oN4QzAs4fZ/QvbiywCBLuBDcxxvFzdutHuMcJYVSDntNagINav7VQzNrbEqQWFQ0Sn+pBKkVe39dQ=
+	t=1734539801; cv=none; b=NOUzGtVO1g4n481HtLImjmiuwrhrfGipot+ttMPP7vJF8090Yikz3XEBuiTIr+6PaVMvzSI4jPQyAOwM9ldwgQMshqO5XjsUdI7AW6Ho8ybvNrneCVWFKHBPNvlQ5ekSWGd12yCB9gU4nHJ6C/N7K72A9hVOrzf8Fn0X4XINPc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734538316; c=relaxed/simple;
-	bh=/bvKDB/kLVBNpoPpF0T6OswjGtsHNx7DLRYfjeWkwkY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Content-Type; b=CAVqe/GpsqOTClNwRrsfgNADSJ6pyBY6ie+Oegjb1xywPIJpRgsvo7xDvfnaAWpqa34S7NjL+r1dvdVKDFP5oCKF+GRlE8dwG3eCnBku18mTZDWeXJBJY31mq5REH/5qanLMyNaRtUp3NLyRP5H8rIf3W+ChP9/aEDd3Vi9lwzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jYMWoojU; arc=none smtp.client-ip=209.85.208.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f49.google.com with SMTP id 4fb4d7f45d1cf-5d3f65844deso10998781a12.0
-        for <linux-mips@vger.kernel.org>; Wed, 18 Dec 2024 08:11:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734538313; x=1735143113; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=37CAKQo+hCBaKGXrWvZUOLSd99eTOAsLmOGmu8Lvy6A=;
-        b=jYMWoojUcSRKRskwkxR5Ljr49WeMScalLivRu++hY9rcVILpNz3JHmDvN+y7XNiWZB
-         BQBRrX+py/78k9BewA/47SqN6IfeqmkfNrqMHTiQxNqKhEYQPxaqaoFXjCpe2ebpdMJe
-         TxsrTsFHjUcAL09clUr5SrTtqOCcj/RCwPrc+8Ss6/Wriyq1emL6CzYkjNd3V3Ip6Ovv
-         nJjpMxGSL48AeVPgEGP+WA7Q431r5dvYhhXketi3GUXPIcCB9p4M1Is0VC8CgUzDwgcN
-         1bqmm7O6Pm1Orwh/oaSS4H1kwBcnjw/3uad8LkCuBd7XUp/OvAOa4h0qSTwFLZ/w24Wt
-         KZDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734538313; x=1735143113;
-        h=to:subject:message-id:date:from:in-reply-to:references:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=37CAKQo+hCBaKGXrWvZUOLSd99eTOAsLmOGmu8Lvy6A=;
-        b=OrK26KtNAmSfxSbgVv/QKKgq+/e/6qsAFSY82FdoK1eOt4YBe48hx89E1YH1v7SjZd
-         6VdoN+QI/nRZ9Rhgj+8Eq3FdKdzhJszqjGmWzxGvZRfBZvsRp3U3tYVvM3wiTzcVFWr/
-         0/gFi0TVd9Nbs8Voq1eF4OhwfStZ9hX61zBu23HgQZlPGRrbSK7smOFqxg8A3yIR7pT9
-         8ar7tUMxc1KuL68Sw0FAxsdwDB756IBWhgZW6fN4iHrx3v+w/o3nnkn77bRyj23L1ar1
-         OQuUbiyHFRvVIr57l3ifB/6TwAr4ZD3SDH4WVE4EP7AWfgZxX0OA8p2j+uZ1UesxbBeV
-         MKrg==
-X-Gm-Message-State: AOJu0Yy/1uwGNFIFt5GqIAMOJFEtiBVIOeNCDfkP0VWvSLfJxNxGVf9o
-	siyeAI5PuCPUjvSUsmBxPGHzYJckNJYsp0oD44kkmJ3lclLN/kSMnBYwFtHgWA4DpyxYv6JUvEy
-	vKzUUSdSVF84j/VpW9h9VDks5/VE78Me2
-X-Gm-Gg: ASbGncs4rMX61eN0ECg0GqDD+teCvJj8iGu96sWCnKDxZtj2F7qkhcbQq0RBAoyR7jj
-	gNSPIj59BcQB1l9sN3FtzrUYwuET89ho5sNjK0RmofgL9QkVl6pN9BU7hNWMXSOZf0grkFA==
-X-Google-Smtp-Source: AGHT+IEbpIl0ad7JSbCUUXAuazPVsxZqTajoxLSX1J7vDnU1bjo3thOBFd06rftxtK4vBHUhYQu+WsF7QidPwKeod2c=
-X-Received: by 2002:a05:6402:13c8:b0:5d0:efaf:fb73 with SMTP id
- 4fb4d7f45d1cf-5d7ee3b307bmr2883534a12.15.1734538312781; Wed, 18 Dec 2024
- 08:11:52 -0800 (PST)
+	s=arc-20240116; t=1734539801; c=relaxed/simple;
+	bh=ECU7a7g+Yd5ux9s9u8W1DLTzWcr6VeDcVb9iJT8TVAY=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=FTb1dAu8FqdA9hldCAivGIvxvjMkXVVS5bGoXVSy4b+jFyomSgvdccPFlM/f/f99e6Jz1aF/CjGHgfJtKD3voDQXK/zm3Ti9mkvvLnWll0Bz2UpSDPSrISwbmaI8RKAzSwPeQj3dzX3p1uhhbm6W6+FECBgN2qQXaQICONbbtzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=ZBQAOqwW; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=KqJZWQVI; arc=none smtp.client-ip=202.12.124.138
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailflow.stl.internal (Postfix) with ESMTP id 604441D40442;
+	Wed, 18 Dec 2024 11:36:36 -0500 (EST)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-10.internal (MEProxy); Wed, 18 Dec 2024 11:36:37 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1734539796;
+	 x=1734546996; bh=nfvIer0zFabb2CSH4FYG5+b3Q6Xz7yeeSWmQEgNJheM=; b=
+	ZBQAOqwWg2K05L5uK2bYuwdACrxkLsoc2PIgD0cQgiEZ7YYzhpCxLlGgVZW3DVx6
+	RnHtDGYZacvkFOApE5i8PpEKXJJGSLMPZi1/7zYeCxngLwFiuC9mIs0r1MfRf1d7
+	ljvkEfr+wDzKKBBc+aurNSqkpq8ZRtQDdq0HUTxnfOR5XzEt97aJE7dwOdFVZ/hQ
+	G7NwA6xY0dgZ+/xg4YILY7/7WbCEybiUYNzp0z8/igRlYf8NVwKiJsF4kOTG+iqu
+	JyrXPLjrjW44Sllz4+cRSo0lIJniQhepEl9dIW9Ha7JzvHs7+IVaGL96wRRmTQVz
+	/xIay+l60aHEAef4QHVc4w==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1734539796; x=
+	1734546996; bh=nfvIer0zFabb2CSH4FYG5+b3Q6Xz7yeeSWmQEgNJheM=; b=K
+	qJZWQVI8dLKjsLZD5P9G0J1qUuKhEEsdqq+hKLVZma8PcO0rePXvzMeh3Gx+vBOD
+	4nrPDtjhBHF33PiCb2oLKtLN8BuhIxgjeQHXotN9690yJVqb/PXCqLhFT2gY2knP
+	SHOoAC5zDrv2o7AYcQSL9H9AgGMdlkVSHmV5ZjLFwBX52jgdNDzgyVppGNX1wod9
+	7ttZ7ZLraiTYPJxQ1MR/SR1x3wO/EGPAqJ0WFhEdeVI7D2KnDKbbNvBechT+mDuz
+	cpPDpxvu0YbekmHfrUlPuFeXsXgCSELupq6HK7beqkIp0QrURFeBQbSN0zMiN8me
+	L7v+l+rQqTjKGKfPI+cXQ==
+X-ME-Sender: <xms:EPpiZ2PhewnaDdeTezsY7UHZ-8MZHheQgg2o6m05zEshehzpenow1A>
+    <xme:EPpiZ08FeD-PHv9DfxkMbyU44Z2agIt5ndVb5bJvAT7p7tClm27qKJ2TH4eLJ14WB
+    FQJfPGZ_sMFiMW81M0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrleekgdeltdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdpuffr
+    tefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnth
+    hsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthhqredtredtjeen
+    ucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdrug
+    gvqeenucggtffrrghtthgvrhhnpedvhfdvkeeuudevfffftefgvdevfedvleehvddvgeej
+    vdefhedtgeegveehfeeljeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmh
+    grihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopeegiedp
+    mhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepsghpsegrlhhivghnkedruggvpdhrtg
+    hpthhtohepthhssghoghgvnhgusegrlhhphhgrrdhfrhgrnhhkvghnrdguvgdprhgtphht
+    thhopegtrghtrghlihhnrdhmrghrihhnrghssegrrhhmrdgtohhmpdhrtghpthhtohepvh
+    hinhgtvghniihordhfrhgrshgtihhnohesrghrmhdrtghomhdprhgtphhtthhopehlihhn
+    uhigsegrrhhmlhhinhhugidrohhrghdruhhkpdhrtghpthhtoheptghhrhhishhtohhphh
+    gvrdhlvghrohihsegtshhgrhhouhhprdgvuhdprhgtphhtthhopehprghlmhgvrhesuggr
+    sggsvghlthdrtghomhdprhgtphhtthhopegrohhusegvvggtshdrsggvrhhkvghlvgihrd
+    gvughupdhrtghpthhtohepmhhpvgesvghllhgvrhhmrghnrdhiugdrrghu
+X-ME-Proxy: <xmx:EPpiZ9SUEzmB8m4BWTnSvNTtSXRoY8pckW1eK5W5rKnWC0lS5naOKQ>
+    <xmx:EPpiZ2tCYDXsXEJFpJcBW2DlzBqmukOXYouat3DqxhmhFciRrpQLMQ>
+    <xmx:EPpiZ-ctkHakbRRswX0-1x3fLnbcgCLh6ogHHQVM_Yz1HDnHdPdaLw>
+    <xmx:EPpiZ62xeygOoJZVhzcxu1Lkfiip8AzfGhxGF4meBhl3PD_5MD0-1Q>
+    <xmx:FPpiZ3eUuVl_kIXn3EabUXk14dEdg5IU1747WEAAdir6NevQA5VhmJtW>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 5B4AC2220075; Wed, 18 Dec 2024 11:36:32 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAAZ8i80XG5eXSOuL+u23g9qs-vuTBMhjfzdiyeVoQJxkjHLSuA@mail.gmail.com>
- <CAAZ8i80EzZsaOztcm8zUOvHH38D5DWgvUdHar0Yx8FN8k4Nj6w@mail.gmail.com>
-In-Reply-To: <CAAZ8i80EzZsaOztcm8zUOvHH38D5DWgvUdHar0Yx8FN8k4Nj6w@mail.gmail.com>
-From: DiTBho Down in The Bunny hole <downinthebunnyhole@gmail.com>
-Date: Wed, 18 Dec 2024 17:11:41 +0100
-Message-ID: <CAAZ8i80hdrZtw64xtLnca4rXR9GmvXDy4zs781UyFum6Qg+uYQ@mail.gmail.com>
-Subject: bug, MIPS PCI CFGA_BUS
-To: linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Date: Wed, 18 Dec 2024 17:35:31 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ "Conor Dooley" <conor@kernel.org>
+Cc: "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+ "Helge Deller" <deller@gmx.de>, "Andy Lutomirski" <luto@kernel.org>,
+ "Thomas Gleixner" <tglx@linutronix.de>,
+ "Vincenzo Frascino" <vincenzo.frascino@arm.com>,
+ "Anna-Maria Gleixner" <anna-maria@linutronix.de>,
+ "Frederic Weisbecker" <frederic@kernel.org>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Catalin Marinas" <catalin.marinas@arm.com>,
+ "Will Deacon" <will@kernel.org>, "Theodore Ts'o" <tytso@mit.edu>,
+ "Jason A . Donenfeld" <Jason@zx2c4.com>,
+ "Paul Walmsley" <paul.walmsley@sifive.com>,
+ "Palmer Dabbelt" <palmer@dabbelt.com>,
+ "Albert Ou" <aou@eecs.berkeley.edu>,
+ "Huacai Chen" <chenhuacai@kernel.org>, "WANG Xuerui" <kernel@xen0n.name>,
+ "Russell King" <linux@armlinux.org.uk>,
+ "Heiko Carstens" <hca@linux.ibm.com>,
+ "Vasily Gorbik" <gor@linux.ibm.com>,
+ "Alexander Gordeev" <agordeev@linux.ibm.com>,
+ "Christian Borntraeger" <borntraeger@linux.ibm.com>,
+ "Sven Schnelle" <svens@linux.ibm.com>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Michael Ellerman" <mpe@ellerman.id.au>,
+ "Nicholas Piggin" <npiggin@gmail.com>,
+ "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+ "Naveen N Rao" <naveen@kernel.org>,
+ "Madhavan Srinivasan" <maddy@linux.ibm.com>,
+ "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, linux-parisc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-riscv@lists.infradead.org, loongarch@lists.linux.dev,
+ linux-s390@vger.kernel.org, linux-mips@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, Linux-Arch <linux-arch@vger.kernel.org>,
+ "Nam Cao" <namcao@linutronix.de>
+Message-Id: <137c0594-e178-4c91-bc8b-5f99b3ddb2f0@app.fastmail.com>
+In-Reply-To: 
+ <20241218162031-ee920684-db10-4f17-b1cb-50373d7ea954@linutronix.de>
+References: <20241216-vdso-store-rng-v1-0-f7aed1bdb3b2@linutronix.de>
+ <20241216-vdso-store-rng-v1-7-f7aed1bdb3b2@linutronix.de>
+ <20241218-action-matchbook-571b597b7f55@spud>
+ <20241218162031-ee920684-db10-4f17-b1cb-50373d7ea954@linutronix.de>
+Subject: Re: [PATCH 07/17] riscv: vdso: Switch to generic storage implementation
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-hi
-found a typo in a #define, see the char "_" is missing.
-It silently causes catastrophic consequences to miniPCI devices such
-as uart, crypto accelerators, wifi, ...
+On Wed, Dec 18, 2024, at 16:46, Thomas Wei=C3=9Fschuh wrote:
+> On Wed, Dec 18, 2024 at 03:08:28PM +0000, Conor Dooley wrote:
+>> On Mon, Dec 16, 2024 at 03:10:03PM +0100, Thomas Wei=C3=9Fschuh wrote:
 
-I found this bug from kernel 4.4 to kernel 6.12.
-I think it should be fixed
+>> Might be a clang thing, allmodconfig with clang doesn't build either.
+>
+> The proposed generic storage infrastructure currently expects that all
+> its users also use HAVE_GENERIC_VDSO.
+> I missed rv32 when checking this assumption.
+>
+> I can add a bunch of ifdefs into the storage code to handle this.
+>
+> Or we re-add the time vDSO functions which were removed in commit
+> d4c08b9776b3 ("riscv: Use latest system call ABI").
+> Today there are upstream ports of musl and glibc which can use them.
+> (currently musl even tries to use __vdso_clock_gettime() as 64-bit only
+> on rv32 due to a copy-and-paste error from its rv64 code)
 
-D.
+Adding back __vdso_clock_gettime() wouldn't work on rv32 because there
+is no fallback syscall for it, and it wouldn't really help since
+there is no existing userspace that uses time32 structures.
 
---- arch/mips/include/asm/h.original   2024-12-17 19:18:40.199000000 -0000
-+++ arch/mips/include/asm/mach-rc32434/pci.h    2024-12-17
-19:18:40.189000000 -0000
-@@ -167,7 +167,7 @@
- #define PCI_CFGA_DEV           0x0000f800
- #define PCI_CFGA_DEV_INTERN    0
- #define PCI_CFGA_BUS_BIT       16
--#define PCI CFGA_BUS           0x00ff0000
-+#define PCI_CFGA_BUS           0x00ff0000
- #define PCI_CFGA_BUS_TYPE0     0
- #define PCI_CFGA_EN            (1 << 31)
+> There is precedence in providing 64bit only vDSO functions, for example
+> __vdso_clock_gettime64() in arm.
+> I do have a small, so far untested, proof-of-concept patch for it.
+> This would even be less code than the ifdefs.
+>
+> What do you think about it?
 
-ReplyForward
-Add reaction
+Yes, simply exposing the normal time64 syscalls through vdso
+should be fine. I think this currently works on everything except
+rv32 and sparc32, probably because neither of them have actual
+users that are able to test.
+
+       Arnd
 
