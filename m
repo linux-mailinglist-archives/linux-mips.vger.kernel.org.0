@@ -1,477 +1,148 @@
-Return-Path: <linux-mips+bounces-7083-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7084-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2FDB9F73C7
-	for <lists+linux-mips@lfdr.de>; Thu, 19 Dec 2024 05:47:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB4E19F74D3
+	for <lists+linux-mips@lfdr.de>; Thu, 19 Dec 2024 07:33:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 42E41167FB5
-	for <lists+linux-mips@lfdr.de>; Thu, 19 Dec 2024 04:47:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B6A321892D4F
+	for <lists+linux-mips@lfdr.de>; Thu, 19 Dec 2024 06:33:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 176D3130E27;
-	Thu, 19 Dec 2024 04:46:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E5322165F9;
+	Thu, 19 Dec 2024 06:30:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gdb7rnlI"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="XMcC+wO5";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="lizvNDYm"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f43.google.com (mail-lf1-f43.google.com [209.85.167.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8F4033EA;
-	Thu, 19 Dec 2024 04:46:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C89321764D;
+	Thu, 19 Dec 2024 06:30:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734583618; cv=none; b=thH2Zze4bjnJQ/rGKvBx88XCl6BI8Fia/oeLgRcj1dex1f/Doj+YPoZtSRjnUa7ynSTyChX7mhg7eNx5uFBzdUzCuCM8hUqAyJrH1G701ChBkiUulMFihIEUS4VkItgM8gWab0EUIdmO6bcg2o4oSp/9z87fuMmsrzScxqdHWe4=
+	t=1734589831; cv=none; b=D8LLjF+nYrcIXLLgG4R/Yxqyj5LozZy+Af7ymJ/7bWPiCuKMoSkGrGdBrvEzjywoUHKh7LVgiiUiHIsa4TpF+0fDOF40SFiQ4ngLxyWiP6Eo+n9gp+qZfMO+FyjmFD8w5j+8C0UXr3P+qEslpiG5QRze8v4/c/52rZ3fEgGLUo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734583618; c=relaxed/simple;
-	bh=G5AlNQ0h/E+WomnfIEtRFBHVZmDPnnLhqMqabnVxpjg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CNi7dXXIigvpQqEFjfrrad2eg6vmFrM94oyQcWVIM1fyvCsMe53hFkuKQvfQJSn/0Uavs5CNLF6cX110OfuUcPk4gUwnVP3DsVPReK2WJZE/SZWowxwMeYOT2T3/pqvaULVoYGBv+eLW/YmAUhLNFbaXMkYc7tDsEKqp9D8CezA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gdb7rnlI; arc=none smtp.client-ip=209.85.167.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f43.google.com with SMTP id 2adb3069b0e04-53e3a90336eso349438e87.3;
-        Wed, 18 Dec 2024 20:46:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734583614; x=1735188414; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=etSrtAc0WIJRuJfEqsZg50IUc+HmOCHr9CUfEcD59Jw=;
-        b=gdb7rnlI51MVPI6zspZq83DkLlSVOaptqJjx736nC5y1nxJuCK0B2mLH05wV8O2ynr
-         f+KXmC4sX6YG8u2thAfjz6W3Zlzv91iuRFh+ZYgqLW2/dP/QFKExRvOfJ4HaLjs79nZk
-         C4YjXk8FhIKmM7y9pMpnfytuk3S1gdRLPmlge7FDQV0c0FsJtJHeOZIqmNE9xUkAQ3St
-         I90wrRQkj/kLIB+Qo4QENCAxDu7qG+YmAjcYLEaC6/lHTjlmZRwP9OX1EJk9EqTpRUhy
-         B4BHmYfSSOxCyOgkBkb9cUk41drMwbVO9C4M0ZjXWMK/WUG8+HaQCdQg9bzpMn+gWvwE
-         2X4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734583614; x=1735188414;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=etSrtAc0WIJRuJfEqsZg50IUc+HmOCHr9CUfEcD59Jw=;
-        b=ggxcT2fjWCZz6JlvWlnsgN16TdcbiZ3cY/OVAROnjgQ72539e+Mf06izWNH9Zu9CWM
-         PP1uMgHwjolGdeZIwm6eHqeTtOB77U3uqjbhh1+FGu3J3Uv6vFoVGhEZO4tnzHZ4KBE5
-         gdMftFF0+JHUnH0i+n5Q4aHO19idJD42BuMr+1qbBSrSIAehARzofO2RHNuKz0II5A0I
-         aY4hm3bb9UeHxhcq/13LfAxsTpfX5WbgH3znd9RMumxGu+Mt4Geh9sq1tmb6Optj19u3
-         wdDX+9yNx3jsVo8R73tFCNhMeD39x64bDmSGdBYTYgxmEKn/jdg1/lGoXHEcuVgF/6Vd
-         iPIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUi/1y2ijQeXuPiaNvVRRTW8q1XUKqDNQij1lUMuU3kYJt2lvOCoT6UT4BoAU07LnkotyhYIlmAGDwcmQ==@vger.kernel.org, AJvYcCUkc+XbaGUI1AErAoYhJ5M4qEj1T1V3smRONMF+1IaLXme/UJmMmifhgS0ONEAkELQYecHv1stQJwBV@vger.kernel.org, AJvYcCWybGNkJb9TNFHDcywC/128wwvAdF1poNGFNmSucq2rp0cn7HtSZBW8jz8BpzRAokM0z51VrR3g@vger.kernel.org, AJvYcCXdVupmVjpCOAashibj0T5c7Z0hnpEnjmoRr/MH99VftyUgN8JMJe5DjsmLMBZCeZK+l0YigcA4Qhy/JAl8@vger.kernel.org
-X-Gm-Message-State: AOJu0YyV8sWwfveZsgzggWlDYfLBwEbmLt5QLiW/xeJQcbkDOKD8MJoE
-	+dknhwUDVBhgznTXGm6bp4Sboxjb9r0PP5TIIYoDs55+LzaeItyak2lhpwhtW4J/u9GNXN0CH4U
-	HEvLWYdolTAbIRhh62Gp/oOh3904=
-X-Gm-Gg: ASbGncvNBaDDrEdB47v5SiYSqO354Pj3N34Qx2fCWrAWT6wSFCFVMUTZtQ+qBe6OC/n
-	sH1UdwKKQbBqFQ62S8GNPOf3e6Enf0Z+HPX8nUKV1jb4DwxC/WHCVB1CVaLjJwD7Ue3E5tGI=
-X-Google-Smtp-Source: AGHT+IH663yuEsfwmCuR7y6IfDbYYYRwI+rR2AqVj1XKFhGMv/1AFvKsVuIsojGYtMiBs7Ym0nJLC1YZ42ni/8mm2o8=
-X-Received: by 2002:a05:6512:10d4:b0:540:353a:df8f with SMTP id
- 2adb3069b0e04-541f46c4422mr1496469e87.44.1734583613513; Wed, 18 Dec 2024
- 20:46:53 -0800 (PST)
+	s=arc-20240116; t=1734589831; c=relaxed/simple;
+	bh=gx8EWvXEhDpBIT2WxmsZgF1bYeZS2CW4WJ1TCZh8HNA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VZSUywYZjzcx1cMkm8XHdH2L0N6i6wqG1KjsCzvS+/fituTCEASbCloCtGrHqKTnDvZ4Ru8o1M9AW76hkcl3mTo0hKnrWUDUt5n0UWNCq4+aW1oN2/WLgOrCrI4wGrdywih8Q25Ff/N5ic4b244bhsGQ5aCuQMjmfkxJB/aa+pc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=XMcC+wO5; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=lizvNDYm; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Thu, 19 Dec 2024 07:30:26 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1734589827;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=brEM+ootPH6y2/YCviVjC+RLeQ0QzlEBqocyy/WfD3U=;
+	b=XMcC+wO5/gyjwqszz2FEVmDMXZQx3pF5bzw/D/U+DhwYKJv9REWbX40X23G5YodGhMzxLG
+	1UAr8nKjyY0Kf1RGg/8CcSlJteWhtoj0+amS1nzNd19YUishyFWMegPVlkma7haH/l0bQx
+	UPXdUdr/bOcUjZEv7/IyAq5X8UvpyOl8Eoo1LOwkra69ZA9udzJSpGYhAqPejllDppzmui
+	/1w9LTvVZWo0hHFiKy1wqjTm8CZxIqay1gQlNDOetKKVwrQU522w45o4hbBkEqiMJm3FRu
+	2KrYtc6E7LcXV7UbkCQjg7cmZZOV9vw1zDDr9jgfGCnIhmX4pZsWlB8a3x2avw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1734589827;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=brEM+ootPH6y2/YCviVjC+RLeQ0QzlEBqocyy/WfD3U=;
+	b=lizvNDYmwqC1Sdr28wyZPYco75yXNbVdywOf7fbIN5mEEvywWt8AvsOHhKYx2j3f09NW7x
+	awEMWr7EktvpdPBA==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Conor Dooley <conor@kernel.org>, 
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, Andy Lutomirski <luto@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	Anna-Maria Gleixner <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>, 
+	"Jason A . Donenfeld" <Jason@zx2c4.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+	Russell King <linux@armlinux.org.uk>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Naveen N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org, loongarch@lists.linux.dev, 
+	linux-s390@vger.kernel.org, linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	Linux-Arch <linux-arch@vger.kernel.org>, Nam Cao <namcao@linutronix.de>
+Subject: Re: [PATCH 07/17] riscv: vdso: Switch to generic storage
+ implementation
+Message-ID: <20241219072552-7cd4512c-4f61-408a-9422-167a6f2810db@linutronix.de>
+References: <20241216-vdso-store-rng-v1-0-f7aed1bdb3b2@linutronix.de>
+ <20241216-vdso-store-rng-v1-7-f7aed1bdb3b2@linutronix.de>
+ <20241218-action-matchbook-571b597b7f55@spud>
+ <20241218162031-ee920684-db10-4f17-b1cb-50373d7ea954@linutronix.de>
+ <137c0594-e178-4c91-bc8b-5f99b3ddb2f0@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241216031346.2626805-1-chris.packham@alliedtelesis.co.nz> <20241216031346.2626805-5-chris.packham@alliedtelesis.co.nz>
-In-Reply-To: <20241216031346.2626805-5-chris.packham@alliedtelesis.co.nz>
-From: Luiz Angelo Daros de Luca <luizluca@gmail.com>
-Date: Thu, 19 Dec 2024 01:46:41 -0300
-Message-ID: <CAJq09z49uBPPZqDyc3O+4nVppKoKdrJunQnQKBUfQmwzdV+ZFQ@mail.gmail.com>
-Subject: Re: [PATCH v2 4/4] net: mdio: Add RTL9300 MDIO driver
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc: lee@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, tsbogend@alpha.franken.de, 
-	hkallweit1@gmail.com, linux@armlinux.org.uk, markus.stockhausen@gmx.de, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <137c0594-e178-4c91-bc8b-5f99b3ddb2f0@app.fastmail.com>
 
-Hello Chris,
+On Wed, Dec 18, 2024 at 05:35:31PM +0100, Arnd Bergmann wrote:
+> On Wed, Dec 18, 2024, at 16:46, Thomas Weißschuh wrote:
+> > On Wed, Dec 18, 2024 at 03:08:28PM +0000, Conor Dooley wrote:
+> >> On Mon, Dec 16, 2024 at 03:10:03PM +0100, Thomas Weißschuh wrote:
+> 
+> >> Might be a clang thing, allmodconfig with clang doesn't build either.
+> >
+> > The proposed generic storage infrastructure currently expects that all
+> > its users also use HAVE_GENERIC_VDSO.
+> > I missed rv32 when checking this assumption.
+> >
+> > I can add a bunch of ifdefs into the storage code to handle this.
+> >
+> > Or we re-add the time vDSO functions which were removed in commit
+> > d4c08b9776b3 ("riscv: Use latest system call ABI").
+> > Today there are upstream ports of musl and glibc which can use them.
+> > (currently musl even tries to use __vdso_clock_gettime() as 64-bit only
+> > on rv32 due to a copy-and-paste error from its rv64 code)
+> 
+> Adding back __vdso_clock_gettime() wouldn't work on rv32 because there
+> is no fallback syscall for it, and it wouldn't really help since
+> there is no existing userspace that uses time32 structures.
 
-> +++ b/drivers/net/mdio/mdio-realtek-rtl.c
+My original paragraph was worded confusingly.
+It was about re-adding time-related vDSO function *in general*, not the
+specific 32-bit ones.
+The new ones should be 64-bit only, indeed.
 
-I wonder if the name might be dubious in the future with other realtek
-products with MDIO. Realtek is quite a large company with many
-products. Would a version/model/family/usage in that name help a far
-future reader to identify what this file is about?
+> > There is precedence in providing 64bit only vDSO functions, for example
+> > __vdso_clock_gettime64() in arm.
+> > I do have a small, so far untested, proof-of-concept patch for it.
+> > This would even be less code than the ifdefs.
+> >
+> > What do you think about it?
+> 
+> Yes, simply exposing the normal time64 syscalls through vdso
+> should be fine. I think this currently works on everything except
+> rv32 and sparc32, probably because neither of them have actual
+> users that are able to test.
 
-How would this realtek MDIO driver interact with the
-drivers/net/dsa/realtek drivers? I guess it might not be too much as
-this is the SoC MDIO bus and not the user MDIO bus (also something
-called "realtek MDIO driver"). Also, the code logic there just rhymes
-with some register access implemented there.
+Should it use the specific _vdso_clock_gettime64() naming or leave out
+the 64 suffix?
 
-> @@ -0,0 +1,341 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * MDIO controller for RTL9300 switches with integrated SoC.
-> + *
-> + * The MDIO communication is abstracted by the switch. At the software level
-> + * communication uses the switch port to address the PHY with the actual MDIO
-> + * bus and address having been setup via the realtek,smi-address property.
-> + */
-> +
-> +#include <linux/mdio.h>
-> +#include <linux/mfd/syscon.h>
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/of_mdio.h>
-> +#include <linux/phy.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/property.h>
-> +#include <linux/regmap.h>
-> +
-> +#define SMI_GLB_CTRL                   0x000
-> +#define   GLB_CTRL_INTF_SEL(intf)      BIT(16 + (intf))
-> +#define SMI_PORT0_15_POLLING_SEL       0x008
-> +#define SMI_ACCESS_PHY_CTRL_0          0x170
-> +#define SMI_ACCESS_PHY_CTRL_1          0x174
-> +#define   PHY_CTRL_RWOP                        BIT(2)
-> +#define   PHY_CTRL_TYPE                        BIT(1)
-> +#define   PHY_CTRL_CMD                 BIT(0)
-> +#define   PHY_CTRL_FAIL                        BIT(25)
-> +#define SMI_ACCESS_PHY_CTRL_2          0x178
-> +#define SMI_ACCESS_PHY_CTRL_3          0x17c
-> +#define SMI_PORT0_5_ADDR_CTRL          0x180
-> +
-> +#define MAX_PORTS       28
-> +#define MAX_SMI_BUSSES  4
-> +#define MAX_SMI_ADDR   0x1f
-> +
-> +struct realtek_mdio_priv {
-> +       struct regmap *regmap;
-> +       u8 smi_bus[MAX_PORTS];
-> +       u8 smi_addr[MAX_PORTS];
-> +       bool smi_bus_isc45[MAX_SMI_BUSSES];
-> +       u32 reg_base;
-> +};
-> +
-> +static int realtek_mdio_wait_ready(struct realtek_mdio_priv *priv)
 
-All those realtek_mdio_* prefix might collide with realtek_mdio_* from
-drivers/net/dsa/realtek/realtek-mdio.c. This realtek_mdio_* is about a
-Realtek SoC MDIO interface with the switch. The other realtek_mdio_*
-is about the interface (MDIO or SMI) between (the other vendor) SoC
-and the switch. I don't know if the maintainers are OK with it but
-listing those symbols in alphabetic order from both sources might be
-confusing.
+General Note: I'll continue working on this next year.
 
-> +{
-> +       struct regmap *regmap = priv->regmap;
-> +       u32 reg_base = priv->reg_base;
-> +       u32 val;
-> +
-> +       return regmap_read_poll_timeout(regmap, reg_base + SMI_ACCESS_PHY_CTRL_1,
 
-All regmap funcs are adding reg_base to the register address. Isn't a
-remap job to do that sum? It just looks odd but I never worked with
-MFD. It looks like it is missing a subregmap-like variant.
-
-> +                                       val, !(val & PHY_CTRL_CMD), 10, 500);
-> +}
-> +
-> +static int realtek_mdio_read_c22(struct mii_bus *bus, int phy_id, int regnum)
-> +{
-> +       struct realtek_mdio_priv *priv = bus->priv;
-> +       struct regmap *regmap = priv->regmap;
-> +       u32 reg_base = priv->reg_base;
-> +       u32 val;
-> +       int err;
-> +
-> +       err = realtek_mdio_wait_ready(priv);
-> +       if (err)
-> +               return err;
-> +
-> +       err = regmap_write(regmap, reg_base + SMI_ACCESS_PHY_CTRL_2, phy_id << 16);
-> +       if (err)
-> +               return err;
-> +
-> +       err = regmap_write(regmap, reg_base + SMI_ACCESS_PHY_CTRL_1,
-> +                          regnum << 20 |  0x1f << 15 | 0xfff << 3 | PHY_CTRL_CMD);
-> +       if (err)
-> +               return err;
-> +
-> +       err = realtek_mdio_wait_ready(priv);
-> +       if (err)
-> +               return err;
-> +
-> +       err = regmap_read(regmap, reg_base + SMI_ACCESS_PHY_CTRL_2, &val);
-> +       if (err)
-> +               return err;
-> +
-> +       return val & 0xffff;
-> +}
-> +
-> +static int realtek_mdio_write_c22(struct mii_bus *bus, int phy_id, int regnum, u16 value)
-> +{
-> +       struct realtek_mdio_priv *priv = bus->priv;
-> +       struct regmap *regmap = priv->regmap;
-> +       u32 reg_base = priv->reg_base;
-> +       u32 val;
-> +       int err;
-> +
-> +       err = realtek_mdio_wait_ready(priv);
-> +       if (err)
-> +               return err;
-> +
-> +       err = regmap_write(regmap, reg_base + SMI_ACCESS_PHY_CTRL_0, BIT(phy_id));
-> +       if (err)
-> +               return err;
-> +
-> +       err = regmap_write(regmap, reg_base + SMI_ACCESS_PHY_CTRL_2, value << 16);
-> +       if (err)
-> +               return err;
-> +
-> +       err = regmap_write(regmap, reg_base + SMI_ACCESS_PHY_CTRL_1,
-> +                          regnum << 20 |  0x1f << 15 | 0xfff << 3 | PHY_CTRL_RWOP | PHY_CTRL_CMD);
-> +       if (err)
-> +               return err;
-> +
-> +       err = regmap_read_poll_timeout(regmap, reg_base + SMI_ACCESS_PHY_CTRL_1,
-> +                                      val, !(val & PHY_CTRL_CMD), 10, 100);
-> +       if (err)
-> +               return err;
-> +
-> +       if (val & PHY_CTRL_FAIL)
-> +               return -ENXIO;
-> +
-> +       return 0;
-> +}
-> +
-> +static int realtek_mdio_read_c45(struct mii_bus *bus, int phy_id, int dev_addr, int regnum)
-> +{
-> +       struct realtek_mdio_priv *priv = bus->priv;
-> +       struct regmap *regmap = priv->regmap;
-> +       u32 reg_base = priv->reg_base;
-> +       u32 val;
-> +       int err;
-> +
-> +       err = realtek_mdio_wait_ready(priv);
-> +       if (err)
-> +               return err;
-> +
-> +       err = regmap_write(regmap, reg_base + SMI_ACCESS_PHY_CTRL_2, phy_id << 16);
-> +       if (err)
-> +               return err;
-> +
-> +       err = regmap_write(regmap, reg_base + SMI_ACCESS_PHY_CTRL_3,
-> +                          dev_addr << 16 | (regnum & 0xffff));
-> +       if (err)
-> +               return err;
-> +
-> +       err = regmap_write(regmap, reg_base + SMI_ACCESS_PHY_CTRL_1,
-> +                          PHY_CTRL_TYPE | PHY_CTRL_CMD);
-> +       if (err)
-> +               return err;
-> +
-> +       err = realtek_mdio_wait_ready(priv);
-> +       if (err)
-> +               return err;
-> +
-> +       err = regmap_read(regmap, reg_base + SMI_ACCESS_PHY_CTRL_2, &val);
-> +       if (err)
-> +               return err;
-> +
-> +       return val & 0xffff;
-> +}
-> +
-> +static int realtek_mdio_write_c45(struct mii_bus *bus, int phy_id, int dev_addr,
-> +                                 int regnum, u16 value)
-> +{
-> +       struct realtek_mdio_priv *priv = bus->priv;
-> +       struct regmap *regmap = priv->regmap;
-> +       u32 reg_base = priv->reg_base;
-> +       u32 val;
-> +       int err;
-> +
-> +       err = realtek_mdio_wait_ready(priv);
-> +       if (err)
-> +               return err;
-> +
-> +       err = regmap_write(regmap, reg_base + SMI_ACCESS_PHY_CTRL_0, BIT(phy_id));
-> +       if (err)
-> +               return err;
-> +
-> +       err = regmap_write(regmap, reg_base + SMI_ACCESS_PHY_CTRL_2, value << 16);
-> +       if (err)
-> +               return err;
-> +
-> +       err = regmap_write(regmap, reg_base + SMI_ACCESS_PHY_CTRL_3,
-> +                          dev_addr << 16 | (regnum & 0xffff));
-> +       if (err)
-> +               return err;
-> +
-> +       err = regmap_write(regmap, reg_base + SMI_ACCESS_PHY_CTRL_1,
-> +                          PHY_CTRL_RWOP | PHY_CTRL_TYPE | PHY_CTRL_CMD);
-> +       if (err)
-> +               return err;
-> +
-> +       err = regmap_read_poll_timeout(regmap, reg_base + SMI_ACCESS_PHY_CTRL_1,
-> +                                      val, !(val & PHY_CTRL_CMD), 10, 100);
-> +       if (err)
-> +               return err;
-> +
-> +       if (val & PHY_CTRL_FAIL)
-> +               return -ENXIO;
-> +
-> +       return 0;
-> +}
-> +
-> +static int realtek_mdiobus_init(struct realtek_mdio_priv *priv)
-> +{
-> +       u32 glb_ctrl_mask = 0, glb_ctrl_val = 0;
-> +       struct regmap *regmap = priv->regmap;
-> +       u32 reg_base = priv->reg_base;
-> +       u32 port_addr[5] = { 0 };
-> +       u32 poll_sel[2] = { 0 };
-> +       int i, err;
-> +
-> +       /* Associate the port with the SMI interface and PHY */
-> +       for (i = 0; i < MAX_PORTS; i++) {
-> +               int pos;
-> +
-> +               if (priv->smi_bus[i] > 3)
-> +                       continue;
-> +
-> +               pos = (i % 6) * 5;
-> +               port_addr[i / 6] |= priv->smi_addr[i] << pos;
-> +
-> +               pos = (i % 16) * 2;
-> +               poll_sel[i / 16] |= priv->smi_bus[i] << pos;
-> +       }
-> +
-> +       /* Put the interfaces into C45 mode if required */
-> +       for (i = 0; i < MAX_SMI_BUSSES; i++) {
-> +               if (priv->smi_bus_isc45[i]) {
-> +                       glb_ctrl_mask |= GLB_CTRL_INTF_SEL(i);
-> +                       glb_ctrl_val |= GLB_CTRL_INTF_SEL(i);
-> +               }
-> +       }
-> +
-> +       err = regmap_bulk_write(regmap, reg_base + SMI_PORT0_5_ADDR_CTRL,
-> +                               port_addr, 5);
-> +       if (err)
-> +               return err;
-> +
-> +       err = regmap_bulk_write(regmap, reg_base + SMI_PORT0_15_POLLING_SEL,
-> +                               poll_sel, 2);
-> +       if (err)
-> +               return err;
-> +
-> +       err = regmap_update_bits(regmap, reg_base + SMI_GLB_CTRL,
-> +                                glb_ctrl_mask, glb_ctrl_val);
-> +       if (err)
-> +               return err;
-> +
-> +       return 0;
-> +}
-> +
-> +static int realtek_mdiobus_probe(struct platform_device *pdev)
-> +{
-> +       struct device *dev = &pdev->dev;
-> +       struct realtek_mdio_priv *priv;
-> +       struct fwnode_handle *child;
-> +       struct mii_bus *bus;
-> +       int err;
-> +
-> +       bus = devm_mdiobus_alloc_size(dev, sizeof(*priv));
-> +       if (!bus)
-> +               return -ENOMEM;
-> +
-> +       bus->name = "Reaktek Switch MDIO Bus";
-> +       bus->read = realtek_mdio_read_c22;
-> +       bus->write = realtek_mdio_write_c22;
-> +       bus->read_c45 = realtek_mdio_read_c45;
-> +       bus->write_c45 =  realtek_mdio_write_c45;
-> +       bus->parent = dev;
-> +       priv = bus->priv;
-> +
-> +       priv->regmap = syscon_node_to_regmap(dev->parent->of_node);
-> +       if (IS_ERR(priv->regmap))
-> +               return PTR_ERR(priv->regmap);
-> +
-> +       err = device_property_read_u32(dev, "reg", &priv->reg_base);
-> +       if (err)
-> +               return err;
-> +
-> +       snprintf(bus->id, MII_BUS_ID_SIZE, "%s", dev_name(dev));
-> +
-> +       device_for_each_child_node(dev, child) {
-> +               u32 pn, smi_addr[2];
-> +
-> +               err = fwnode_property_read_u32(child, "reg", &pn);
-> +               if (err)
-> +                       return err;
-> +
-> +               if (pn >= MAX_PORTS)
-> +                       return dev_err_probe(dev, -EINVAL, "illegal port number %d\n", pn);
-> +
-> +               err = fwnode_property_read_u32_array(child, "realtek,smi-address", smi_addr, 2);
-> +               if (err) {
-> +                       smi_addr[0] = 0;
-> +                       smi_addr[1] = pn;
-> +               }
-> +
-> +               if (smi_addr[0] > MAX_SMI_BUSSES)
-> +                       return dev_err_probe(dev, -EINVAL, "illegal smi bus number %d\n",
-> +                                            smi_addr[0]);
-> +
-> +               if (smi_addr[1] > MAX_SMI_ADDR)
-> +                       return dev_err_probe(dev, -EINVAL, "illegal smi addr %d\n", smi_addr[1]);
-> +
-> +               if (fwnode_device_is_compatible(child, "ethernet-phy-ieee802.3-c45"))
-> +                       priv->smi_bus_isc45[smi_addr[0]] = true;
-> +
-> +               priv->smi_bus[pn] = smi_addr[0];
-> +               priv->smi_addr[pn] = smi_addr[1];
-> +       }
-> +
-> +       err = realtek_mdiobus_init(priv);
-> +       if (err)
-> +               return dev_err_probe(dev, err, "failed to initialise MDIO bus controller\n");
-> +
-> +       err = devm_of_mdiobus_register(dev, bus, dev->of_node);
-> +       if (err)
-> +               return dev_err_probe(dev, err, "cannot register MDIO bus\n");
-> +
-> +       return 0;
-> +}
-> +
-> +static const struct of_device_id realtek_mdio_ids[] = {
-> +       { .compatible = "realtek,rtl9301-mdio" },
-> +       { .compatible = "realtek,rtl9302b-mdio" },
-> +       { .compatible = "realtek,rtl9302c-mdio" },
-> +       { .compatible = "realtek,rtl9303-mdio" },
-
-Do these different compatible strings really matter? AFAIK, compatible
-are not for listing all supported models/variants but to describe
-devices that have a different behavior and indicating that (with
-different strings) is needed to decide how the driver will work. If
-the driver does not use which compatible was set, it might indicate
-that we don't really need 4 compatible but 1.
-
-> +       {}
-> +};
-> +MODULE_DEVICE_TABLE(of, realtek_mdio_ids);
-> +
-> +static struct platform_driver rtl9300_mdio_driver = {
-> +       .probe = realtek_mdiobus_probe,
-> +       .driver = {
-> +               .name = "mdio-rtl9300",
-> +               .of_match_table = realtek_mdio_ids,
-> +       },
-> +};
-> +
-> +module_platform_driver(rtl9300_mdio_driver);
-> +
-> +MODULE_DESCRIPTION("RTL9300 MDIO driver");
-> +MODULE_LICENSE("GPL");
-> --
-> 2.47.1
->
->
-
-Regards,
-
-Luiz
+Thanks,
+Thomas
 
