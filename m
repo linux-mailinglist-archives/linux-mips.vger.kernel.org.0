@@ -1,98 +1,257 @@
-Return-Path: <linux-mips+bounces-7132-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7133-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 076E59FA15C
-	for <lists+linux-mips@lfdr.de>; Sat, 21 Dec 2024 16:22:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E02309FA29D
+	for <lists+linux-mips@lfdr.de>; Sat, 21 Dec 2024 22:49:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 251961888CB3
-	for <lists+linux-mips@lfdr.de>; Sat, 21 Dec 2024 15:22:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 87C70164570
+	for <lists+linux-mips@lfdr.de>; Sat, 21 Dec 2024 21:49:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E96C1FA8CB;
-	Sat, 21 Dec 2024 15:22:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D5D5619D06A;
+	Sat, 21 Dec 2024 21:48:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="YdRNNcyy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f9y2FsCZ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4FFAD1BCA0F;
-	Sat, 21 Dec 2024 15:22:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ED0D149C50;
+	Sat, 21 Dec 2024 21:48:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734794533; cv=none; b=hnbWZrRfgdStZ2aZBiIdCZGWmS7qFvQwtmc06f8zd+4iVrjTIFAR0nnJXPi2Krty2V36go1Nb7gPmIrnyA6RJChxoVBNs1RkzznxBeVI5TG7P6cQaYOmW7s+QfYg0ZH0wNDY7xs/2Jmdz2yLpouxasYD8/IqK+uotBXOXETc2Vg=
+	t=1734817739; cv=none; b=PDsy0nxWDlMGsD33t8d8lgdXAI1dPnf/spIL+La79XnjxZ+LNdRlGUZEMS2jK3x62HiCrVlVuZpFLTREqYfbRtrqqF92ObDGlVzM2A07Gd3ShOKEwjYFJvFFdt2noYpPSjVHNHRAReFqkC5SEhR5Irvr1+LkfW+e9RuDAsc+owo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734794533; c=relaxed/simple;
-	bh=dWV7QpT1MkssZtoO7Vd7/Fo2wC2sKS0EPXfsZYtSlLg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=RzN8NH/OIPfRoDisg6bc9T3xQ7/VKMm1aoMzBCHVBCbYtvCq8ZmAx3M7Ydr3mrXchBEsK5CMu72kdIXU+7LN6ginDBj8fmqCZ54CCr7jIU5hmI5swrx24/4vW5jFPdCU6at6mM4oU6FyhP31HV9r7mCUP/kdPeWA+ZOthgCI+5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=YdRNNcyy; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=uLE/FMM2CopcBAaw+i5BPoQ8Oav6ZVj6eheOBwHanNM=; b=YdRNNcyyVlzGCsI5hSDQyoTc/4
-	ZgnOQuDiBc49CBvHGOuPr5IGKUMwkuaP1a/Shq0O86q9T4wSDY8dhRrhYG6br/LmsjyzDFS3Pzp2m
-	5n4MPQpCKhUvhm+/2fLc4hdwNgf7m2MDeFiq7wmZ2+Ax3WwAX1xVC652+R6lutF+ntqY=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1tP1Is-002KUK-Gg; Sat, 21 Dec 2024 16:22:06 +0100
-Date: Sat, 21 Dec 2024 16:22:06 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Ariel Otilibili <ariel.otilibili-anieli@eurecom.fr>
-Cc: linux-media@vger.kernel.org, linux-mips@vger.kernel.org,
-	netdev@vger.kernel.org, linux-can@vger.kernel.org,
-	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-	Michael Chan <michael.chan@broadcom.com>,
-	Sunil Goutham <sgoutham@marvell.com>,
-	Geetha sowjanya <gakula@marvell.com>,
-	Subbaraya Sundeep <sbhatta@marvell.com>,
-	hariprasad <hkelam@marvell.com>,
-	Bharat Bhushan <bbhushan2@marvell.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Marc Kleine-Budde <mkl@pengutronix.de>,
-	Vincent Mailhol <mailhol.vincent@wanadoo.fr>
-Subject: Re: [PATCH v2 0/3] broadcom, ethernet/marvell,cx231xx,can/dev:
- Remove unused values and dead code
-Message-ID: <f6453f4c-5b9f-466f-b1f2-f7ab31df4e5e@lunn.ch>
-References: <20241221035352.1020228-1-ariel.otilibili-anieli@eurecom.fr>
- <20241221111454.1074285-1-ariel.otilibili-anieli@eurecom.fr>
+	s=arc-20240116; t=1734817739; c=relaxed/simple;
+	bh=liSnJKHt137nDINsiNS8bBle3Cakfhe3aWwZ4NxRgcA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KVCaq2fDMPm8IZ/djQ6UV18tjOZvy8WDm4SiGneHkGpUokHvWCIg7qASEdDjB1QxSrDGjIKEqwu+0v+S0cZlJFjjBiOSntV8+CFrz5YmPYJYZwYo0M+EIno4irANbQGHOWFSu9VF5kJmPVcJBrol9LbT6Cu/dCsNtE/sIgxqL9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f9y2FsCZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDA08C4CECE;
+	Sat, 21 Dec 2024 21:48:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734817739;
+	bh=liSnJKHt137nDINsiNS8bBle3Cakfhe3aWwZ4NxRgcA=;
+	h=From:To:Cc:Subject:Date:From;
+	b=f9y2FsCZXSDafB5TbgOF65PJ7LnEv+LO6b/B2wnLgowdZ6Rzly5Ph9Gnu5IvLiwLr
+	 Cytt5GW/+3ZIlLFHNp2Ne6ZsmfOYsIPAX5hMhGJbIIK97SehoSLQaoiM/R2ZCUQ3cm
+	 XELo0Bt0XTaJR0dDn/VelQXxX4uf2TkbBZBGLg/qbnYRNSXsIgW9KHdTX6KpOeIIgY
+	 2AnjB8pwrt0wr97UXs0ymdOIft+CgjBpbx5hfXbdjsgzA3Hm7yufnoAB1ROPWOwMZh
+	 j2a+QU4yvoLiaM3vOHQ6x8sMcVdQM00CK2/aDqbJEs+QNpcTNHoLfoWMr9gI/Vdjqx
+	 PkqvYDjziUKwQ==
+From: Arnd Bergmann <arnd@kernel.org>
+To: kvm@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Alexander Graf <graf@amazon.com>,
+	Crystal Wood <crwood@redhat.com>,
+	Anup Patel <anup@brainfault.org>,
+	Atish Patra <atishp@atishpatra.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Vitaly Kuznetsov <vkuznets@redhat.com>,
+	David Woodhouse <dwmw2@infradead.org>,
+	Paul Durrant <paul@xen.org>,
+	Marc Zyngier <maz@kernel.org>,
+	"A. Wilcox" <AWilcox@Wilcox-Tech.com>,
+	linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	kvm-riscv@lists.infradead.org,
+	linux-riscv@lists.infradead.org
+Subject: [PATCH v2 0/5] KVM: drop 32-bit host support on all architectures
+Date: Sat, 21 Dec 2024 22:42:18 +0100
+Message-Id: <20241221214223.3046298-1-arnd@kernel.org>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241221111454.1074285-1-ariel.otilibili-anieli@eurecom.fr>
+Content-Transfer-Encoding: 8bit
 
-On Sat, Dec 21, 2024 at 12:06:46PM +0100, Ariel Otilibili wrote:
-> Hello,
-> 
-> This series clears out the Coverity IDs 1487817, 1561102, 1497123,
-> & 1269153.
+From: Arnd Bergmann <arnd@arndb.de>
 
-Always start a new thread for a new version of a patch series.
+I've updated my RFC patches based on the feedback, changing mainly
+the powerpc code. 
 
-Also, please wait at least 24 hours before new revisions:
+I submitted a patch to remove KVM support for x86-32 hosts earlier
+this month, but there were still concerns that this might be useful for
+testing 32-bit host in general, as that remains supported on three other
+architectures. I have gone through those three now and prepared similar
+patches, as all of them seem to be equally obsolete.
 
-https://www.kernel.org/doc/html/latest/process/maintainer-netdev.html
+Support for 32-bit KVM host on Arm hardware was dropped back in 2020
+because of lack of users, despite Cortex-A7/A15/A17 based SoCs being
+much more widely deployed than the other virtualization capable 32-bit
+CPUs (Intel Core Duo/Silverthorne, PowerPC e300/e500/e600, MIPS P5600)
+combined.
 
-netdev is also closed to patches until the beginning of the new year.
+I hope this can get merged through the KVM tree as a whole series.
 
-
-    Andrew
+      Arnd
 
 ---
-pw-bot: cr
+v2 changes:
+ - rebase to kvm #next branch
+ - improve changelog text for x86
+ - many updates for powerpc, thanks to Christophe Leroy for suggestions
+
+Link: https://lore.kernel.org/lkml/Z1B1phcpbiYWLgCD@google.com/
+Link: https://lore.kernel.org/lkml/20241212125516.467123-1-arnd@kernel.org/
+
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Huacai Chen <chenhuacai@kernel.org>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Naveen N Rao <naveen@kernel.org>
+Cc: Madhavan Srinivasan <maddy@linux.ibm.com>
+Cc: Alexander Graf <graf@amazon.com>
+Cc: Crystal Wood <crwood@redhat.com>
+Cc: Anup Patel <anup@brainfault.org>
+Cc: Atish Patra <atishp@atishpatra.org>
+Cc: Paul Walmsley <paul.walmsley@sifive.com>
+Cc: Palmer Dabbelt <palmer@dabbelt.com>
+Cc: Albert Ou <aou@eecs.berkeley.edu>
+Cc: Sean Christopherson <seanjc@google.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>
+Cc: Ingo Molnar <mingo@redhat.com>
+Cc: Borislav Petkov <bp@alien8.de>
+Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: x86@kernel.org
+Cc: "H. Peter Anvin" <hpa@zytor.com>
+Cc: Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc: David Woodhouse <dwmw2@infradead.org>
+Cc: Paul Durrant <paul@xen.org>
+Cc: Marc Zyngier <maz@kernel.org>
+Cc: "A. Wilcox" <AWilcox@Wilcox-Tech.com>
+Cc: linux-kernel@vger.kernel.org
+Cc: linux-mips@vger.kernel.org
+Cc: kvm@vger.kernel.org
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: kvm-riscv@lists.infradead.org
+Cc: linux-riscv@lists.infradead.org
+
+Arnd Bergmann (5):
+  mips: kvm: drop support for 32-bit hosts
+  riscv: kvm: drop 32-bit host support
+  powerpc: kvm: drop 32-bit booke
+  powerpc: kvm: drop 32-bit book3s
+  x86: kvm drop 32-bit host support
+
+ MAINTAINERS                                 |   2 +-
+ arch/mips/Kconfig                           |   3 -
+ arch/mips/include/asm/kvm_host.h            |   4 -
+ arch/mips/kvm/Kconfig                       |   1 +
+ arch/mips/kvm/emulate.c                     |   8 -
+ arch/mips/kvm/msa.S                         |  12 -
+ arch/mips/kvm/vz.c                          |  22 -
+ arch/powerpc/include/asm/kvm_book3s.h       |  17 -
+ arch/powerpc/include/asm/kvm_book3s_32.h    |  36 --
+ arch/powerpc/include/asm/kvm_book3s_asm.h   |  10 -
+ arch/powerpc/include/asm/kvm_booke.h        |   4 -
+ arch/powerpc/include/asm/kvm_booke_hv_asm.h |   2 -
+ arch/powerpc/include/asm/kvm_host.h         |   2 +-
+ arch/powerpc/include/asm/kvm_ppc.h          |   2 +-
+ arch/powerpc/include/asm/processor.h        |   3 -
+ arch/powerpc/kernel/asm-offsets.c           |  21 +-
+ arch/powerpc/kernel/head_32.h               |  10 -
+ arch/powerpc/kernel/head_85xx.S             |  14 -
+ arch/powerpc/kernel/head_book3s_32.S        |   5 -
+ arch/powerpc/kernel/head_booke.h            |  39 --
+ arch/powerpc/kvm/Kconfig                    |  44 +-
+ arch/powerpc/kvm/Makefile                   |  30 --
+ arch/powerpc/kvm/book3s.c                   |  18 -
+ arch/powerpc/kvm/book3s_32_mmu_host.c       | 396 --------------
+ arch/powerpc/kvm/book3s_emulate.c           |  37 --
+ arch/powerpc/kvm/book3s_interrupts.S        |  11 -
+ arch/powerpc/kvm/book3s_mmu_hpte.c          |  12 -
+ arch/powerpc/kvm/book3s_pr.c                | 122 +----
+ arch/powerpc/kvm/book3s_rmhandlers.S        | 110 ----
+ arch/powerpc/kvm/book3s_segment.S           |  30 +-
+ arch/powerpc/kvm/booke.c                    | 268 ----------
+ arch/powerpc/kvm/booke.h                    |   8 -
+ arch/powerpc/kvm/booke_emulate.c            |  44 --
+ arch/powerpc/kvm/booke_interrupts.S         | 535 -------------------
+ arch/powerpc/kvm/bookehv_interrupts.S       | 102 ----
+ arch/powerpc/kvm/e500.c                     | 553 --------------------
+ arch/powerpc/kvm/e500.h                     |  40 --
+ arch/powerpc/kvm/e500_emulate.c             | 100 ----
+ arch/powerpc/kvm/e500_mmu_host.c            |  54 --
+ arch/powerpc/kvm/e500mc.c                   |   5 +-
+ arch/powerpc/kvm/emulate.c                  |   2 -
+ arch/powerpc/kvm/powerpc.c                  |   2 -
+ arch/powerpc/kvm/trace_booke.h              |  14 -
+ arch/riscv/kvm/Kconfig                      |   2 +-
+ arch/riscv/kvm/aia.c                        | 105 ----
+ arch/riscv/kvm/aia_imsic.c                  |  34 --
+ arch/riscv/kvm/mmu.c                        |   8 -
+ arch/riscv/kvm/vcpu_exit.c                  |   4 -
+ arch/riscv/kvm/vcpu_insn.c                  |  12 -
+ arch/riscv/kvm/vcpu_sbi_pmu.c               |   8 -
+ arch/riscv/kvm/vcpu_sbi_replace.c           |   4 -
+ arch/riscv/kvm/vcpu_sbi_v01.c               |   4 -
+ arch/riscv/kvm/vcpu_timer.c                 |  20 -
+ arch/x86/kvm/Kconfig                        |   6 +-
+ arch/x86/kvm/Makefile                       |   4 +-
+ arch/x86/kvm/cpuid.c                        |   2 +-
+ arch/x86/kvm/emulate.c                      |  34 +-
+ arch/x86/kvm/fpu.h                          |   4 -
+ arch/x86/kvm/hyperv.c                       |   5 +-
+ arch/x86/kvm/i8254.c                        |   4 -
+ arch/x86/kvm/kvm_cache_regs.h               |   2 -
+ arch/x86/kvm/kvm_emulate.h                  |   8 -
+ arch/x86/kvm/lapic.c                        |   4 -
+ arch/x86/kvm/mmu.h                          |   4 -
+ arch/x86/kvm/mmu/mmu.c                      | 134 -----
+ arch/x86/kvm/mmu/mmu_internal.h             |   9 -
+ arch/x86/kvm/mmu/paging_tmpl.h              |   9 -
+ arch/x86/kvm/mmu/spte.h                     |   5 -
+ arch/x86/kvm/mmu/tdp_mmu.h                  |   4 -
+ arch/x86/kvm/smm.c                          |  19 -
+ arch/x86/kvm/svm/sev.c                      |   2 -
+ arch/x86/kvm/svm/svm.c                      |  23 +-
+ arch/x86/kvm/svm/vmenter.S                  |  20 -
+ arch/x86/kvm/trace.h                        |   4 -
+ arch/x86/kvm/vmx/main.c                     |   2 -
+ arch/x86/kvm/vmx/nested.c                   |  24 +-
+ arch/x86/kvm/vmx/vmcs.h                     |   2 -
+ arch/x86/kvm/vmx/vmenter.S                  |  25 +-
+ arch/x86/kvm/vmx/vmx.c                      | 117 +----
+ arch/x86/kvm/vmx/vmx.h                      |  23 +-
+ arch/x86/kvm/vmx/vmx_ops.h                  |   7 -
+ arch/x86/kvm/vmx/x86_ops.h                  |   2 -
+ arch/x86/kvm/x86.c                          |  74 +--
+ arch/x86/kvm/x86.h                          |   4 -
+ arch/x86/kvm/xen.c                          |  61 +--
+ 85 files changed, 66 insertions(+), 3536 deletions(-)
+ delete mode 100644 arch/powerpc/include/asm/kvm_book3s_32.h
+ delete mode 100644 arch/powerpc/kvm/book3s_32_mmu_host.c
+ delete mode 100644 arch/powerpc/kvm/booke_interrupts.S
+ delete mode 100644 arch/powerpc/kvm/e500.c
+
+-- 
+2.39.5
+
 
