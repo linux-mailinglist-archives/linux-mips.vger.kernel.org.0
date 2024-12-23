@@ -1,684 +1,444 @@
-Return-Path: <linux-mips+bounces-7154-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7155-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 520C69FAA4B
-	for <lists+linux-mips@lfdr.de>; Mon, 23 Dec 2024 07:24:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2ECD09FAA7A
+	for <lists+linux-mips@lfdr.de>; Mon, 23 Dec 2024 07:32:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 64ED07A1AB9
-	for <lists+linux-mips@lfdr.de>; Mon, 23 Dec 2024 06:24:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 08A63161FDF
+	for <lists+linux-mips@lfdr.de>; Mon, 23 Dec 2024 06:32:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF481158DD9;
-	Mon, 23 Dec 2024 06:24:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A898158DD9;
+	Mon, 23 Dec 2024 06:32:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y5W+FrY8"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EQ/vQMq9"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82EC2433AB;
-	Mon, 23 Dec 2024 06:24:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13F2C74BE1;
+	Mon, 23 Dec 2024 06:32:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734935058; cv=none; b=VFIY+PW5eu7XbfmmLfnArkh7I7a/DBUHMrbDAGL98QVmQKC3VADhjODA/mS+6tNy4z83M8Yw0z4DNDOi9eBz/l16TTpeo9DJ8i3YyQkL4tIJc2iyr41anPsjbMbvbUkmNzYwrkClPlLbOEC7EOJqNwZ8ap++/gVuCSO2J46gY3U=
+	t=1734935549; cv=none; b=Lk1tUlklaCx2xjrIEq9kB3wbx0kSo6lfxpF8GfNr161kWXxx4kTjFIImxNO06wbS4CqI0/glqUcSftUqciecvZH9r1jFfikk1HcuVxyRtDA6eZt6RaYj6A6WNb1xTkVs+V5V8wkbUz4sv1bmX6ZJNNArZOkbRkCKsvFBzebEgO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734935058; c=relaxed/simple;
-	bh=+XYmnyeCKA/NNP5Boil33gaYCN1H9hG9wRGhS1nV858=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ghuw730YQDubfQrm5QQ2vKxHyJrkqrmjZHU4nW/BaQF1wBIWuNpsRUmDhxnsRlbX0Ft716rApscQteeACP1UMN8Z1cevATBOX+ujH9hbk6/mmIzjNF38Gzx+RyjHbbfQ0/IuCcRi3ho2ge5vapJSHkF2WxIAXBDxnNI1tSlcPug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y5W+FrY8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50C32C4CED4;
-	Mon, 23 Dec 2024 06:24:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734935057;
-	bh=+XYmnyeCKA/NNP5Boil33gaYCN1H9hG9wRGhS1nV858=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Y5W+FrY8w0EM2Smfh/R/k78XYYGOjJ5/jud4+Dj923D+Lla+o8UPZcM6Hax9KTmwG
-	 wrUWlVZpQ0DTqdsCD3hu7NXaFkOQw/CF3FD2WbruSHJU/a+u5l2D/NeIkCQ3m8HMal
-	 llhsYE/yfU8wMG9GKyUbpNXi4TCefJaNFElqBGfe2R6L7aQ9FmN4K4lFlqm69vAtZj
-	 ZzdHNPL/Fsla+7V/uE7szHdxxI1/HLshJ40zwqYRHr6o258UBPwzKMXCMrjwLm0WuI
-	 rWOIcd2jQ8PgHaP05FktPxGKYN4BF84iN0HxC8xMve0mySeM9NCpkilpNFEMFNSFee
-	 Jl3oCKbby3qdA==
-Date: Mon, 23 Dec 2024 01:24:04 -0500
-From: Guo Ren <guoren@kernel.org>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: kvm@vger.kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Alexander Graf <graf@amazon.com>, Crystal Wood <crwood@redhat.com>,
-	Anup Patel <anup@brainfault.org>,
-	Atish Patra <atishp@atishpatra.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	David Woodhouse <dwmw2@infradead.org>, Paul Durrant <paul@xen.org>,
-	Marc Zyngier <maz@kernel.org>,
-	"A. Wilcox" <AWilcox@wilcox-tech.com>, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 2/5] riscv: kvm: drop 32-bit host support
-Message-ID: <Z2kCBFC/G9wm2do+@gmail.com>
-References: <20241221214223.3046298-1-arnd@kernel.org>
- <20241221214223.3046298-3-arnd@kernel.org>
+	s=arc-20240116; t=1734935549; c=relaxed/simple;
+	bh=90yqIYIIHZUjlhfe9weFV2Ylfsm7njUUo8fuN4wLGP8=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=alu2jb2S65IHdxxVM+MS2uiEmy51Qsj9v50BsnL2508utSQQ47U72mmfYYsDD2CTQvZdDXjGFH3qnJ0u2r2daKn9V38W89VZggcJM5FwXdFZly4ALm89s5fa6mXGDZaZlRM4dbH+1iZVtByUMcV0HWBAEWOIELo3tUtvm8/LMJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EQ/vQMq9; arc=none smtp.client-ip=209.85.208.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-2ffd6b7d77aso49568371fa.0;
+        Sun, 22 Dec 2024 22:32:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734935544; x=1735540344; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=qVJvRPTBIFpD3yYTqLHsJbssgHiWsdf3cvr085jaL54=;
+        b=EQ/vQMq9uKDg1U9j1EaIM+FdpSE/drpMoc3a4CM450s1TvSPoxYymyT6DEvkLOwgVm
+         N0oFunBRPsu6gTkAPv+AYV7kXh/tsGt0rrAnuVvq6kBgYN+5oVtfeaBA0XSd668Jcadm
+         nivW3q+HWYHUXfT7MU1vs+Ds47liDijxkBbD1ciqGw8+q008AG7i20Ap+qWTNtSqSJJg
+         D7MfdmfSPhD/FgkURyyYZ74RzLqgzWPw/VSayyyZXVsR9xBSjgChCa7WErVLSHbG64pZ
+         ZfjCOR5pqjovqWjpxVWBi7rJSJqXWchVg/wgtrJ8AFriYG5Qsg9wBQv0F5gXMgX6op/M
+         kfNg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734935544; x=1735540344;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qVJvRPTBIFpD3yYTqLHsJbssgHiWsdf3cvr085jaL54=;
+        b=LWZCZav5g6POLxqZyyxoyX4CTKvUgNaF/3dMaKYEm5MNIjmnaMqj79DyXcf6Q7R3rL
+         PmUSNlOpEgPHdIkvFvBoPCsf3ZL27NDJgjjbws2KZJVx0MZiD/goK15DJW2s7YyHszih
+         upN8pumWtZ1gsdJC2ZZFsYhAAlsO0Oci0ibsBga3OYyrP3BODAsgAd7YLQW0dJYzc7+r
+         qkxb/S76jc6Z18ohynl6Q9tDy+UVF6SCsT793kxvdy1JtQodbvNLMH0SOLwxs8fVlfwy
+         UNSjAY4omFjrCZPtR7y7zEGiu5T2KRGDNNDriV/Q0sn1aN4uYtAgFxqBT5z0KkJe7+Us
+         ej4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVn0Y3FL0GkqALBqOj389sr2Uavd7QOk+C0SyXOuq2EnQkBEoAz9fwlS9B9+4Oral40QgX/1eOqMz0l@vger.kernel.org, AJvYcCWklntf5iMlPyasr7r5IRFaCsXJ0AQJ9aRe0+qBAHYcvnSMpckqApcttuGsQyLS3Ru2+VfYeNYOmUPf9LfJ@vger.kernel.org
+X-Gm-Message-State: AOJu0YwXTmPwi//nMw0/CWqKHIfLhuyUD94maSfPaJwSJ78vhKLnnXv2
+	pLUJ029hFMOI7T5DD1BzuvYlWEv+Nb+jdb+peyjDtL7dIOll8UVYJz5l6erMPqN33d6c9lJBvey
+	kV65a9QbD12+R+MU3FbOWiksMUvQ=
+X-Gm-Gg: ASbGncsNF05K6VX50Uoks93q3Q++Yx3g51mcSueZTjLemNdI03GOgxGauWAH1BI0fB7
+	V2Hlw4UhIuP5eVPnx775Jz9TIqbvNppvwqd+Kml4=
+X-Google-Smtp-Source: AGHT+IG60kb6cJfOMmZ1bG5/M5xMxjemR9Pdx5iDvLwYktHqnMK2Mgz4af/PZBelPrIoamMOdUtZcKKqUXO25sfXeRo=
+X-Received: by 2002:a05:651c:4007:b0:2ff:d7cf:a6cb with SMTP id
+ 38308e7fff4ca-304685506f3mr31586341fa.11.1734935543687; Sun, 22 Dec 2024
+ 22:32:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241221214223.3046298-3-arnd@kernel.org>
+From: wzs <wangzhengshu39@gmail.com>
+Date: Mon, 23 Dec 2024 14:32:11 +0800
+Message-ID: <CAGXGE_JWtMo8Qs=hsH=NULkDRFoYKYorKHACpqvqpYiO3am8eQ@mail.gmail.com>
+Subject: watchdog: BUG: soft lockup
+To: dianders@chromium.org, tglx@linutronix.de, liusong@linux.alibaba.com, 
+	akpm@linux-foundation.org, pmladek@suse.com, kernelfans@gmail.com, 
+	deller@gmx.de, npiggin@gmail.com, tsbogend@alpha.franken.de, 
+	James.Bottomley@hansenpartnership.com, jan.kiszka@siemens.com
+Cc: linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	yaoma@linux.alibaba.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Sat, Dec 21, 2024 at 10:42:20PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> KVM support on RISC-V includes both 32-bit and 64-bit host mode, but in
-> practice, all RISC-V SoCs that may use this are 64-bit:
-> 
-> As of linux-6.13, there is no mainline Linux support for any specific
-> 32-bit SoC in arch/riscv/, although the generic qemu model should work.
-> 
-> The available RV32 CPU implementations are mostly built for
-> microcontroller applications and are lacking a memory management
-> unit. There are a few CPU cores with an MMU, but those still lack the
-> hypervisor extensions needed for running KVM.
-> 
-> This is unlikely to change in the future, so remove the 32-bit host
-> code and simplify the test matrix.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  arch/riscv/kvm/Kconfig            |   2 +-
->  arch/riscv/kvm/aia.c              | 105 ------------------------------
->  arch/riscv/kvm/aia_imsic.c        |  34 ----------
->  arch/riscv/kvm/mmu.c              |   8 ---
->  arch/riscv/kvm/vcpu_exit.c        |   4 --
->  arch/riscv/kvm/vcpu_insn.c        |  12 ----
->  arch/riscv/kvm/vcpu_sbi_pmu.c     |   8 ---
->  arch/riscv/kvm/vcpu_sbi_replace.c |   4 --
->  arch/riscv/kvm/vcpu_sbi_v01.c     |   4 --
->  arch/riscv/kvm/vcpu_timer.c       |  20 ------
->  10 files changed, 1 insertion(+), 200 deletions(-)
-> 
-> diff --git a/arch/riscv/kvm/Kconfig b/arch/riscv/kvm/Kconfig
-> index 0c3cbb0915ff..7405722e4433 100644
-> --- a/arch/riscv/kvm/Kconfig
-> +++ b/arch/riscv/kvm/Kconfig
-> @@ -19,7 +19,7 @@ if VIRTUALIZATION
->  
->  config KVM
->  	tristate "Kernel-based Virtual Machine (KVM) support (EXPERIMENTAL)"
-> -	depends on RISCV_SBI && MMU
-> +	depends on RISCV_SBI && MMU && 64BIT
->  	select HAVE_KVM_IRQCHIP
->  	select HAVE_KVM_IRQ_ROUTING
->  	select HAVE_KVM_MSI
-> diff --git a/arch/riscv/kvm/aia.c b/arch/riscv/kvm/aia.c
-> index 19afd1f23537..a399a5a9af0e 100644
-> --- a/arch/riscv/kvm/aia.c
-> +++ b/arch/riscv/kvm/aia.c
-> @@ -66,33 +66,6 @@ static inline unsigned long aia_hvictl_value(bool ext_irq_pending)
->  	return hvictl;
->  }
->  
-> -#ifdef CONFIG_32BIT
-> -void kvm_riscv_vcpu_aia_flush_interrupts(struct kvm_vcpu *vcpu)
-> -{
-> -	struct kvm_vcpu_aia_csr *csr = &vcpu->arch.aia_context.guest_csr;
-> -	unsigned long mask, val;
-> -
-> -	if (!kvm_riscv_aia_available())
-> -		return;
-> -
-> -	if (READ_ONCE(vcpu->arch.irqs_pending_mask[1])) {
-> -		mask = xchg_acquire(&vcpu->arch.irqs_pending_mask[1], 0);
-> -		val = READ_ONCE(vcpu->arch.irqs_pending[1]) & mask;
-> -
-> -		csr->hviph &= ~mask;
-> -		csr->hviph |= val;
-> -	}
-> -}
-> -
-> -void kvm_riscv_vcpu_aia_sync_interrupts(struct kvm_vcpu *vcpu)
-> -{
-> -	struct kvm_vcpu_aia_csr *csr = &vcpu->arch.aia_context.guest_csr;
-> -
-> -	if (kvm_riscv_aia_available())
-> -		csr->vsieh = ncsr_read(CSR_VSIEH);
-> -}
-> -#endif
-> -
->  bool kvm_riscv_vcpu_aia_has_interrupts(struct kvm_vcpu *vcpu, u64 mask)
->  {
->  	int hgei;
-> @@ -101,12 +74,6 @@ bool kvm_riscv_vcpu_aia_has_interrupts(struct kvm_vcpu *vcpu, u64 mask)
->  	if (!kvm_riscv_aia_available())
->  		return false;
->  
-> -#ifdef CONFIG_32BIT
-> -	if (READ_ONCE(vcpu->arch.irqs_pending[1]) &
-> -	    (vcpu->arch.aia_context.guest_csr.vsieh & upper_32_bits(mask)))
-> -		return true;
-> -#endif
-> -
->  	seip = vcpu->arch.guest_csr.vsie;
->  	seip &= (unsigned long)mask;
->  	seip &= BIT(IRQ_S_EXT);
-> @@ -128,9 +95,6 @@ void kvm_riscv_vcpu_aia_update_hvip(struct kvm_vcpu *vcpu)
->  	if (!kvm_riscv_aia_available())
->  		return;
->  
-> -#ifdef CONFIG_32BIT
-> -	ncsr_write(CSR_HVIPH, vcpu->arch.aia_context.guest_csr.hviph);
-> -#endif
->  	ncsr_write(CSR_HVICTL, aia_hvictl_value(!!(csr->hvip & BIT(IRQ_VS_EXT))));
->  }
->  
-> @@ -147,22 +111,10 @@ void kvm_riscv_vcpu_aia_load(struct kvm_vcpu *vcpu, int cpu)
->  		nacl_csr_write(nsh, CSR_VSISELECT, csr->vsiselect);
->  		nacl_csr_write(nsh, CSR_HVIPRIO1, csr->hviprio1);
->  		nacl_csr_write(nsh, CSR_HVIPRIO2, csr->hviprio2);
-> -#ifdef CONFIG_32BIT
-> -		nacl_csr_write(nsh, CSR_VSIEH, csr->vsieh);
-> -		nacl_csr_write(nsh, CSR_HVIPH, csr->hviph);
-> -		nacl_csr_write(nsh, CSR_HVIPRIO1H, csr->hviprio1h);
-> -		nacl_csr_write(nsh, CSR_HVIPRIO2H, csr->hviprio2h);
-> -#endif
->  	} else {
->  		csr_write(CSR_VSISELECT, csr->vsiselect);
->  		csr_write(CSR_HVIPRIO1, csr->hviprio1);
->  		csr_write(CSR_HVIPRIO2, csr->hviprio2);
-> -#ifdef CONFIG_32BIT
-> -		csr_write(CSR_VSIEH, csr->vsieh);
-> -		csr_write(CSR_HVIPH, csr->hviph);
-> -		csr_write(CSR_HVIPRIO1H, csr->hviprio1h);
-> -		csr_write(CSR_HVIPRIO2H, csr->hviprio2h);
-> -#endif
->  	}
->  }
->  
-> @@ -179,22 +131,10 @@ void kvm_riscv_vcpu_aia_put(struct kvm_vcpu *vcpu)
->  		csr->vsiselect = nacl_csr_read(nsh, CSR_VSISELECT);
->  		csr->hviprio1 = nacl_csr_read(nsh, CSR_HVIPRIO1);
->  		csr->hviprio2 = nacl_csr_read(nsh, CSR_HVIPRIO2);
-> -#ifdef CONFIG_32BIT
-> -		csr->vsieh = nacl_csr_read(nsh, CSR_VSIEH);
-> -		csr->hviph = nacl_csr_read(nsh, CSR_HVIPH);
-> -		csr->hviprio1h = nacl_csr_read(nsh, CSR_HVIPRIO1H);
-> -		csr->hviprio2h = nacl_csr_read(nsh, CSR_HVIPRIO2H);
-> -#endif
->  	} else {
->  		csr->vsiselect = csr_read(CSR_VSISELECT);
->  		csr->hviprio1 = csr_read(CSR_HVIPRIO1);
->  		csr->hviprio2 = csr_read(CSR_HVIPRIO2);
-> -#ifdef CONFIG_32BIT
-> -		csr->vsieh = csr_read(CSR_VSIEH);
-> -		csr->hviph = csr_read(CSR_HVIPH);
-> -		csr->hviprio1h = csr_read(CSR_HVIPRIO1H);
-> -		csr->hviprio2h = csr_read(CSR_HVIPRIO2H);
-> -#endif
->  	}
->  }
->  
-> @@ -226,10 +166,6 @@ int kvm_riscv_vcpu_aia_set_csr(struct kvm_vcpu *vcpu,
->  	if (kvm_riscv_aia_available()) {
->  		((unsigned long *)csr)[reg_num] = val;
->  
-> -#ifdef CONFIG_32BIT
-> -		if (reg_num == KVM_REG_RISCV_CSR_AIA_REG(siph))
-> -			WRITE_ONCE(vcpu->arch.irqs_pending_mask[1], 0);
-> -#endif
->  	}
->  
->  	return 0;
-> @@ -282,19 +218,8 @@ static u8 aia_get_iprio8(struct kvm_vcpu *vcpu, unsigned int irq)
->  		hviprio = ncsr_read(CSR_HVIPRIO1);
->  		break;
->  	case 1:
-> -#ifndef CONFIG_32BIT
->  		hviprio = ncsr_read(CSR_HVIPRIO2);
->  		break;
-> -#else
-> -		hviprio = ncsr_read(CSR_HVIPRIO1H);
-> -		break;
-> -	case 2:
-> -		hviprio = ncsr_read(CSR_HVIPRIO2);
-> -		break;
-> -	case 3:
-> -		hviprio = ncsr_read(CSR_HVIPRIO2H);
-> -		break;
-> -#endif
->  	default:
->  		return 0;
->  	}
-> @@ -315,19 +240,8 @@ static void aia_set_iprio8(struct kvm_vcpu *vcpu, unsigned int irq, u8 prio)
->  		hviprio = ncsr_read(CSR_HVIPRIO1);
->  		break;
->  	case 1:
-> -#ifndef CONFIG_32BIT
-> -		hviprio = ncsr_read(CSR_HVIPRIO2);
-> -		break;
-> -#else
-> -		hviprio = ncsr_read(CSR_HVIPRIO1H);
-> -		break;
-> -	case 2:
->  		hviprio = ncsr_read(CSR_HVIPRIO2);
->  		break;
-> -	case 3:
-> -		hviprio = ncsr_read(CSR_HVIPRIO2H);
-> -		break;
-> -#endif
->  	default:
->  		return;
->  	}
-> @@ -340,19 +254,8 @@ static void aia_set_iprio8(struct kvm_vcpu *vcpu, unsigned int irq, u8 prio)
->  		ncsr_write(CSR_HVIPRIO1, hviprio);
->  		break;
->  	case 1:
-> -#ifndef CONFIG_32BIT
->  		ncsr_write(CSR_HVIPRIO2, hviprio);
->  		break;
-> -#else
-> -		ncsr_write(CSR_HVIPRIO1H, hviprio);
-> -		break;
-> -	case 2:
-> -		ncsr_write(CSR_HVIPRIO2, hviprio);
-> -		break;
-> -	case 3:
-> -		ncsr_write(CSR_HVIPRIO2H, hviprio);
-> -		break;
-> -#endif
->  	default:
->  		return;
->  	}
-> @@ -366,10 +269,8 @@ static int aia_rmw_iprio(struct kvm_vcpu *vcpu, unsigned int isel,
->  	unsigned long old_val;
->  	u8 prio;
->  
-> -#ifndef CONFIG_32BIT
->  	if (isel & 0x1)
->  		return KVM_INSN_ILLEGAL_TRAP;
-> -#endif
->  
->  	nirqs = 4 * (BITS_PER_LONG / 32);
->  	first_irq = (isel - ISELECT_IPRIO0) * 4;
-> @@ -577,12 +478,6 @@ void kvm_riscv_aia_enable(void)
->  	csr_write(CSR_HVICTL, aia_hvictl_value(false));
->  	csr_write(CSR_HVIPRIO1, 0x0);
->  	csr_write(CSR_HVIPRIO2, 0x0);
-> -#ifdef CONFIG_32BIT
-> -	csr_write(CSR_HVIPH, 0x0);
-> -	csr_write(CSR_HIDELEGH, 0x0);
-> -	csr_write(CSR_HVIPRIO1H, 0x0);
-> -	csr_write(CSR_HVIPRIO2H, 0x0);
-> -#endif
->  
->  	/* Enable per-CPU SGEI interrupt */
->  	enable_percpu_irq(hgei_parent_irq,
-> diff --git a/arch/riscv/kvm/aia_imsic.c b/arch/riscv/kvm/aia_imsic.c
-> index a8085cd8215e..16c44b10ee97 100644
-> --- a/arch/riscv/kvm/aia_imsic.c
-> +++ b/arch/riscv/kvm/aia_imsic.c
-> @@ -258,13 +258,7 @@ static u32 imsic_mrif_topei(struct imsic_mrif *mrif, u32 nr_eix, u32 nr_msis)
->  		eix = &mrif->eix[ei];
->  		eipend[0] = imsic_mrif_atomic_read(mrif, &eix->eie[0]) &
->  			    imsic_mrif_atomic_read(mrif, &eix->eip[0]);
-> -#ifdef CONFIG_32BIT
-> -		eipend[1] = imsic_mrif_atomic_read(mrif, &eix->eie[1]) &
-> -			    imsic_mrif_atomic_read(mrif, &eix->eip[1]);
-> -		if (!eipend[0] && !eipend[1])
-> -#else
->  		if (!eipend[0])
-> -#endif
->  			continue;
->  
->  		imin = ei * BITS_PER_TYPE(u64);
-> @@ -296,10 +290,8 @@ static int imsic_mrif_isel_check(u32 nr_eix, unsigned long isel)
->  	default:
->  		return -ENOENT;
->  	}
-> -#ifndef CONFIG_32BIT
->  	if (num & 0x1)
->  		return -EINVAL;
-> -#endif
->  	if ((num / 2) >= nr_eix)
->  		return -EINVAL;
->  
-> @@ -337,13 +329,9 @@ static int imsic_mrif_rmw(struct imsic_mrif *mrif, u32 nr_eix,
->  			return -EINVAL;
->  		eix = &mrif->eix[num / 2];
->  
-> -#ifndef CONFIG_32BIT
->  		if (num & 0x1)
->  			return -EINVAL;
->  		ei = (pend) ? &eix->eip[0] : &eix->eie[0];
-> -#else
-> -		ei = (pend) ? &eix->eip[num & 0x1] : &eix->eie[num & 0x1];
-> -#endif
->  
->  		/* Bit0 of EIP0 or EIE0 is read-only */
->  		if (!num)
-> @@ -395,10 +383,6 @@ static void imsic_vsfile_local_read(void *data)
->  			eix = &mrif->eix[i];
->  			eix->eip[0] = imsic_eix_swap(IMSIC_EIP0 + i * 2, 0);
->  			eix->eie[0] = imsic_eix_swap(IMSIC_EIE0 + i * 2, 0);
-> -#ifdef CONFIG_32BIT
-> -			eix->eip[1] = imsic_eix_swap(IMSIC_EIP0 + i * 2 + 1, 0);
-> -			eix->eie[1] = imsic_eix_swap(IMSIC_EIE0 + i * 2 + 1, 0);
-> -#endif
->  		}
->  	} else {
->  		mrif->eidelivery = imsic_vs_csr_read(IMSIC_EIDELIVERY);
-> @@ -407,10 +391,6 @@ static void imsic_vsfile_local_read(void *data)
->  			eix = &mrif->eix[i];
->  			eix->eip[0] = imsic_eix_read(IMSIC_EIP0 + i * 2);
->  			eix->eie[0] = imsic_eix_read(IMSIC_EIE0 + i * 2);
-> -#ifdef CONFIG_32BIT
-> -			eix->eip[1] = imsic_eix_read(IMSIC_EIP0 + i * 2 + 1);
-> -			eix->eie[1] = imsic_eix_read(IMSIC_EIE0 + i * 2 + 1);
-> -#endif
->  		}
->  	}
->  
-> @@ -469,10 +449,8 @@ static void imsic_vsfile_local_rw(void *data)
->  		break;
->  	case IMSIC_EIP0 ... IMSIC_EIP63:
->  	case IMSIC_EIE0 ... IMSIC_EIE63:
-> -#ifndef CONFIG_32BIT
->  		if (idata->isel & 0x1)
->  			break;
-> -#endif
->  		if (idata->write)
->  			imsic_eix_write(idata->isel, idata->val);
->  		else
-> @@ -536,10 +514,6 @@ static void imsic_vsfile_local_clear(int vsfile_hgei, u32 nr_eix)
->  	for (i = 0; i < nr_eix; i++) {
->  		imsic_eix_write(IMSIC_EIP0 + i * 2, 0);
->  		imsic_eix_write(IMSIC_EIE0 + i * 2, 0);
-> -#ifdef CONFIG_32BIT
-> -		imsic_eix_write(IMSIC_EIP0 + i * 2 + 1, 0);
-> -		imsic_eix_write(IMSIC_EIE0 + i * 2 + 1, 0);
-> -#endif
->  	}
->  
->  	csr_write(CSR_HSTATUS, old_hstatus);
-> @@ -573,10 +547,6 @@ static void imsic_vsfile_local_update(int vsfile_hgei, u32 nr_eix,
->  		eix = &mrif->eix[i];
->  		imsic_eix_set(IMSIC_EIP0 + i * 2, eix->eip[0]);
->  		imsic_eix_set(IMSIC_EIE0 + i * 2, eix->eie[0]);
-> -#ifdef CONFIG_32BIT
-> -		imsic_eix_set(IMSIC_EIP0 + i * 2 + 1, eix->eip[1]);
-> -		imsic_eix_set(IMSIC_EIE0 + i * 2 + 1, eix->eie[1]);
-> -#endif
->  	}
->  	imsic_vs_csr_write(IMSIC_EITHRESHOLD, mrif->eithreshold);
->  	imsic_vs_csr_write(IMSIC_EIDELIVERY, mrif->eidelivery);
-> @@ -667,10 +637,6 @@ static void imsic_swfile_update(struct kvm_vcpu *vcpu,
->  		eix = &mrif->eix[i];
->  		imsic_mrif_atomic_or(smrif, &seix->eip[0], eix->eip[0]);
->  		imsic_mrif_atomic_or(smrif, &seix->eie[0], eix->eie[0]);
-> -#ifdef CONFIG_32BIT
-> -		imsic_mrif_atomic_or(smrif, &seix->eip[1], eix->eip[1]);
-> -		imsic_mrif_atomic_or(smrif, &seix->eie[1], eix->eie[1]);
-> -#endif
->  	}
->  
->  	imsic_swfile_extirq_update(vcpu);
-> diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
-> index 1087ea74567b..2aee1100d450 100644
-> --- a/arch/riscv/kvm/mmu.c
-> +++ b/arch/riscv/kvm/mmu.c
-> @@ -19,15 +19,9 @@
->  #include <asm/page.h>
->  #include <asm/pgtable.h>
->  
-> -#ifdef CONFIG_64BIT
->  static unsigned long gstage_mode __ro_after_init = (HGATP_MODE_SV39X4 << HGATP_MODE_SHIFT);
->  static unsigned long gstage_pgd_levels __ro_after_init = 3;
->  #define gstage_index_bits	9
-> -#else
-> -static unsigned long gstage_mode __ro_after_init = (HGATP_MODE_SV32X4 << HGATP_MODE_SHIFT);
-> -static unsigned long gstage_pgd_levels __ro_after_init = 2;
-> -#define gstage_index_bits	10
-> -#endif
->  
->  #define gstage_pgd_xbits	2
->  #define gstage_pgd_size	(1UL << (HGATP_PAGE_SHIFT + gstage_pgd_xbits))
-> @@ -739,7 +733,6 @@ void kvm_riscv_gstage_update_hgatp(struct kvm_vcpu *vcpu)
->  
->  void __init kvm_riscv_gstage_mode_detect(void)
->  {
-> -#ifdef CONFIG_64BIT
->  	/* Try Sv57x4 G-stage mode */
->  	csr_write(CSR_HGATP, HGATP_MODE_SV57X4 << HGATP_MODE_SHIFT);
->  	if ((csr_read(CSR_HGATP) >> HGATP_MODE_SHIFT) == HGATP_MODE_SV57X4) {
-> @@ -758,7 +751,6 @@ void __init kvm_riscv_gstage_mode_detect(void)
->  
->  	csr_write(CSR_HGATP, 0);
->  	kvm_riscv_local_hfence_gvma_all();
-> -#endif
->  }
->  
->  unsigned long __init kvm_riscv_gstage_mode(void)
-> diff --git a/arch/riscv/kvm/vcpu_exit.c b/arch/riscv/kvm/vcpu_exit.c
-> index fa98e5c024b2..f5d598f6acfc 100644
-> --- a/arch/riscv/kvm/vcpu_exit.c
-> +++ b/arch/riscv/kvm/vcpu_exit.c
-> @@ -107,11 +107,7 @@ unsigned long kvm_riscv_vcpu_unpriv_read(struct kvm_vcpu *vcpu,
->  			".option push\n"
->  			".option norvc\n"
->  			"add %[ttmp], %[taddr], 0\n"
-> -#ifdef CONFIG_64BIT
->  			HLV_D(%[val], %[addr])
-> -#else
-> -			HLV_W(%[val], %[addr])
-> -#endif
->  			".option pop"
->  		: [val] "=&r" (val),
->  		  [taddr] "+&r" (taddr), [ttmp] "+&r" (ttmp)
-> diff --git a/arch/riscv/kvm/vcpu_insn.c b/arch/riscv/kvm/vcpu_insn.c
-> index 97dec18e6989..913c454bee26 100644
-> --- a/arch/riscv/kvm/vcpu_insn.c
-> +++ b/arch/riscv/kvm/vcpu_insn.c
-> @@ -78,11 +78,7 @@
->  
->  #define INSN_LEN(insn)		(INSN_IS_16BIT(insn) ? 2 : 4)
->  
-> -#ifdef CONFIG_64BIT
->  #define LOG_REGBYTES		3
-> -#else
-> -#define LOG_REGBYTES		2
-> -#endif
->  #define REGBYTES		(1 << LOG_REGBYTES)
->  
->  #define SH_RD			7
-> @@ -522,19 +518,16 @@ int kvm_riscv_vcpu_mmio_load(struct kvm_vcpu *vcpu, struct kvm_run *run,
->  	} else if ((insn & INSN_MASK_LBU) == INSN_MATCH_LBU) {
->  		len = 1;
->  		shift = 8 * (sizeof(ulong) - len);
-> -#ifdef CONFIG_64BIT
->  	} else if ((insn & INSN_MASK_LD) == INSN_MATCH_LD) {
->  		len = 8;
->  		shift = 8 * (sizeof(ulong) - len);
->  	} else if ((insn & INSN_MASK_LWU) == INSN_MATCH_LWU) {
->  		len = 4;
-> -#endif
->  	} else if ((insn & INSN_MASK_LH) == INSN_MATCH_LH) {
->  		len = 2;
->  		shift = 8 * (sizeof(ulong) - len);
->  	} else if ((insn & INSN_MASK_LHU) == INSN_MATCH_LHU) {
->  		len = 2;
-> -#ifdef CONFIG_64BIT
->  	} else if ((insn & INSN_MASK_C_LD) == INSN_MATCH_C_LD) {
->  		len = 8;
->  		shift = 8 * (sizeof(ulong) - len);
-> @@ -543,7 +536,6 @@ int kvm_riscv_vcpu_mmio_load(struct kvm_vcpu *vcpu, struct kvm_run *run,
->  		   ((insn >> SH_RD) & 0x1f)) {
->  		len = 8;
->  		shift = 8 * (sizeof(ulong) - len);
-> -#endif
->  	} else if ((insn & INSN_MASK_C_LW) == INSN_MATCH_C_LW) {
->  		len = 4;
->  		shift = 8 * (sizeof(ulong) - len);
-> @@ -645,13 +637,10 @@ int kvm_riscv_vcpu_mmio_store(struct kvm_vcpu *vcpu, struct kvm_run *run,
->  		len = 4;
->  	} else if ((insn & INSN_MASK_SB) == INSN_MATCH_SB) {
->  		len = 1;
-> -#ifdef CONFIG_64BIT
->  	} else if ((insn & INSN_MASK_SD) == INSN_MATCH_SD) {
->  		len = 8;
-> -#endif
->  	} else if ((insn & INSN_MASK_SH) == INSN_MATCH_SH) {
->  		len = 2;
-> -#ifdef CONFIG_64BIT
->  	} else if ((insn & INSN_MASK_C_SD) == INSN_MATCH_C_SD) {
->  		len = 8;
->  		data64 = GET_RS2S(insn, &vcpu->arch.guest_context);
-> @@ -659,7 +648,6 @@ int kvm_riscv_vcpu_mmio_store(struct kvm_vcpu *vcpu, struct kvm_run *run,
->  		   ((insn >> SH_RD) & 0x1f)) {
->  		len = 8;
->  		data64 = GET_RS2C(insn, &vcpu->arch.guest_context);
-> -#endif
->  	} else if ((insn & INSN_MASK_C_SW) == INSN_MATCH_C_SW) {
->  		len = 4;
->  		data32 = GET_RS2S(insn, &vcpu->arch.guest_context);
-> diff --git a/arch/riscv/kvm/vcpu_sbi_pmu.c b/arch/riscv/kvm/vcpu_sbi_pmu.c
-> index e4be34e03e83..0871265416fa 100644
-> --- a/arch/riscv/kvm/vcpu_sbi_pmu.c
-> +++ b/arch/riscv/kvm/vcpu_sbi_pmu.c
-> @@ -35,11 +35,7 @@ static int kvm_sbi_ext_pmu_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
->  		ret = kvm_riscv_vcpu_pmu_ctr_info(vcpu, cp->a0, retdata);
->  		break;
->  	case SBI_EXT_PMU_COUNTER_CFG_MATCH:
-> -#if defined(CONFIG_32BIT)
-> -		temp = ((uint64_t)cp->a5 << 32) | cp->a4;
-> -#else
->  		temp = cp->a4;
-> -#endif
->  		/*
->  		 * This can fail if perf core framework fails to create an event.
->  		 * No need to forward the error to userspace and exit the guest.
-> @@ -50,11 +46,7 @@ static int kvm_sbi_ext_pmu_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
->  						       cp->a2, cp->a3, temp, retdata);
->  		break;
->  	case SBI_EXT_PMU_COUNTER_START:
-> -#if defined(CONFIG_32BIT)
-> -		temp = ((uint64_t)cp->a4 << 32) | cp->a3;
-> -#else
->  		temp = cp->a3;
-> -#endif
->  		ret = kvm_riscv_vcpu_pmu_ctr_start(vcpu, cp->a0, cp->a1, cp->a2,
->  						   temp, retdata);
->  		break;
-> diff --git a/arch/riscv/kvm/vcpu_sbi_replace.c b/arch/riscv/kvm/vcpu_sbi_replace.c
-> index 9c2ab3dfa93a..9276140644d1 100644
-> --- a/arch/riscv/kvm/vcpu_sbi_replace.c
-> +++ b/arch/riscv/kvm/vcpu_sbi_replace.c
-> @@ -26,11 +26,7 @@ static int kvm_sbi_ext_time_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
->  	}
->  
->  	kvm_riscv_vcpu_pmu_incr_fw(vcpu, SBI_PMU_FW_SET_TIMER);
-> -#if __riscv_xlen == 32
-> -	next_cycle = ((u64)cp->a1 << 32) | (u64)cp->a0;
-> -#else
->  	next_cycle = (u64)cp->a0;
-> -#endif
->  	kvm_riscv_vcpu_timer_next_event(vcpu, next_cycle);
->  
->  	return 0;
-> diff --git a/arch/riscv/kvm/vcpu_sbi_v01.c b/arch/riscv/kvm/vcpu_sbi_v01.c
-> index 8f4c4fa16227..e06ba01392d6 100644
-> --- a/arch/riscv/kvm/vcpu_sbi_v01.c
-> +++ b/arch/riscv/kvm/vcpu_sbi_v01.c
-> @@ -35,11 +35,7 @@ static int kvm_sbi_ext_v01_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
->  		retdata->uexit = true;
->  		break;
->  	case SBI_EXT_0_1_SET_TIMER:
-> -#if __riscv_xlen == 32
-> -		next_cycle = ((u64)cp->a1 << 32) | (u64)cp->a0;
-> -#else
->  		next_cycle = (u64)cp->a0;
-> -#endif
->  		ret = kvm_riscv_vcpu_timer_next_event(vcpu, next_cycle);
->  		break;
->  	case SBI_EXT_0_1_CLEAR_IPI:
-> diff --git a/arch/riscv/kvm/vcpu_timer.c b/arch/riscv/kvm/vcpu_timer.c
-> index 96e7a4e463f7..fc32338b8cf8 100644
-> --- a/arch/riscv/kvm/vcpu_timer.c
-> +++ b/arch/riscv/kvm/vcpu_timer.c
-> @@ -71,12 +71,7 @@ static int kvm_riscv_vcpu_timer_cancel(struct kvm_vcpu_timer *t)
->  
->  static int kvm_riscv_vcpu_update_vstimecmp(struct kvm_vcpu *vcpu, u64 ncycles)
->  {
-> -#if defined(CONFIG_32BIT)
-> -	ncsr_write(CSR_VSTIMECMP, ncycles & 0xFFFFFFFF);
-> -	ncsr_write(CSR_VSTIMECMPH, ncycles >> 32);
-> -#else
->  	ncsr_write(CSR_VSTIMECMP, ncycles);
-> -#endif
->  	return 0;
->  }
->  
-> @@ -288,12 +283,7 @@ static void kvm_riscv_vcpu_update_timedelta(struct kvm_vcpu *vcpu)
->  {
->  	struct kvm_guest_timer *gt = &vcpu->kvm->arch.timer;
->  
-> -#if defined(CONFIG_32BIT)
-> -	ncsr_write(CSR_HTIMEDELTA, (u32)(gt->time_delta));
-> -	ncsr_write(CSR_HTIMEDELTAH, (u32)(gt->time_delta >> 32));
-> -#else
->  	ncsr_write(CSR_HTIMEDELTA, gt->time_delta);
-> -#endif
->  }
->  
->  void kvm_riscv_vcpu_timer_restore(struct kvm_vcpu *vcpu)
-> @@ -305,12 +295,7 @@ void kvm_riscv_vcpu_timer_restore(struct kvm_vcpu *vcpu)
->  	if (!t->sstc_enabled)
->  		return;
->  
-> -#if defined(CONFIG_32BIT)
-> -	ncsr_write(CSR_VSTIMECMP, (u32)t->next_cycles);
-> -	ncsr_write(CSR_VSTIMECMPH, (u32)(t->next_cycles >> 32));
-> -#else
->  	ncsr_write(CSR_VSTIMECMP, t->next_cycles);
-> -#endif
->  
->  	/* timer should be enabled for the remaining operations */
->  	if (unlikely(!t->init_done))
-> @@ -326,12 +311,7 @@ void kvm_riscv_vcpu_timer_sync(struct kvm_vcpu *vcpu)
->  	if (!t->sstc_enabled)
->  		return;
->  
-> -#if defined(CONFIG_32BIT)
->  	t->next_cycles = ncsr_read(CSR_VSTIMECMP);
-> -	t->next_cycles |= (u64)ncsr_read(CSR_VSTIMECMPH) << 32;
-> -#else
-> -	t->next_cycles = ncsr_read(CSR_VSTIMECMP);
-> -#endif
->  }
->  
->  void kvm_riscv_vcpu_timer_save(struct kvm_vcpu *vcpu)
-> -- 
-> 2.39.5
-I've tested this patch with my rv64 kvm environment, and it's okay.
+Hello,
+when fuzzing the Linux kernel,
+I triggered many "watch: BUG: soft lockup" warnings.
+I am not sure whether this is an issue with the kernel or with the
+fuzzing program I ran.
+(The same fuzzing program, when tested on kernel versions from
+Linux-6.7.0 to 6.12.0, triggers the 'watchdog: BUG: soft lockup'
+warning on some versions, while others do not. Linux 6.12.0 is the
+latest stable release where this error occurs.)
 
-Tested-by: Guo Ren <guoren@kernel.org>
-Acked-by: Guo Ren <guoren@kernel.org>
+The bug information I provided below is from the Linux-6.12.0 kernel.
+If you need bug information from other versions, I would be happy to provide it.
 
+kernel config :https://pastebin.com/i4LPXNAN
+console output :https://pastebin.com/uKVpvJ78
+
+The beginning part of the crash report is as follows:
+[283539.715873] rcu: INFO: rcu_preempt self-detected stall on CPU
+[283540.766023] watchdog: BUG: soft lockup - CPU#9 stuck for 64s!
+[kworker/u515:2:86301]
+[283540.766046] Modules linked in: raw_gadget(OE) dummy_hcd(OE)
+snd_ctl_led hid_sensor_hub hid_multitouch udc_core veth xt_conntrack
+nft_chain_nat xt_MASQUERADE bridge stp llc nf_conntrack_netlink
+xfrm_user xfrm_algo xt_addrtype nft_compat nf_tables overlay
+nfnetlink_cttimeout nfnetlink bnep intel_rapl_msr intel_rapl_common
+intel_uncore_frequency_common intel_pmc_core intel_vsec pmt_telemetry
+pmt_class openvswitch vsock_loopback vmw_vsock_virtio_transport_common
+nsh nf_conncount nf_nat nf_conntrack nf_defrag_ipv6 nf_defrag_ipv4
+kvm_intel psample snd_ens1371 crct10dif_pclmul libcrc32c
+polyval_clmulni snd_ac97_codec vmw_vsock_vmci_transport
+polyval_generic vsock sunrpc binfmt_misc gameport ghash_clmulni_intel
+kvm sha256_ssse3 sha1_ssse3 ac97_bus vmw_balloon aesni_intel
+crypto_simd
+[283545.281916] rcu: 2-...!: (137 ticks this GP)
+idle=ecec/1/0x4000000000000000 softirq=11168967/11168969 fqs=0
+[283545.291031]  snd_pcm cryptd snd_seq_midi btusb snd_seq_midi_event
+btrtl rapl nls_iso8859_1 btintel snd_rawmidi btbcm btmtk snd_seq
+[283545.301366] rcu: (t=73327 jiffies g=69763773 q=104 ncpus=16)
+[283545.301387] rcu: rcu_preempt kthread timer wakeup didn't happen
+for 73324 jiffies! g69763773 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x402
+[283545.307516] rcu: Possible timer handling issue on cpu=4
+timer-softirq=4703160
+[283545.308817]  input_leds snd_seq_device joydev bluetooth snd_timer
+serio_raw snd soundcore vmw_vmci mac_hid sch_fq_codel vmwgfx
+drm_ttm_helper ttm msr parport_pc ppdev lp
+[283545.316000] rcu: rcu_preempt kthread starved for 73327 jiffies!
+g69763773 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x402 ->cpu=4
+[283545.316032] rcu: Unless rcu_preempt kthread gets sufficient CPU
+time, OOM is now expected behavior.
+[283545.316035] rcu: RCU grace-period kthread stack dump:
+[283545.316038] task:rcu_preempt     state:I
+[283545.779182]  parport efi_pstore ip_tables x_tables autofs4
+hid_generic crc32_pclmul
+[283545.783533] ------------[ cut here ]------------
+[283545.785609]  psmouse usbhid hid mptspi mptscsih i2c_piix4 ahci
+mptbase e1000 libahci scsi_transport_spi i2c_smbus pata_acpi [last
+unloaded: raw_gadget(OE)]
+[283545.789981] CPU: 9 UID: 0 PID: 86301 Comm: kworker/u515:2 Tainted:
+G           OE      6.12.0 #1
+[283545.790017] Tainted: [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+[283545.790019] Hardware name: VMware, Inc. VMware Virtual
+Platform/440BX Desktop Reference Platform, BIOS 6.00 11/12/2020
+[283545.790027] Workqueue: events_freezable_pwr_efficient disk_events_workfn
+[283545.808817]  stack:29152 pid:17    tgid:17    ppid:2      flags:0x00004000
+[283545.808838] Call Trace:
+[283545.808843]  <TASK>
+[283545.803556] RIP: 0010:_raw_spin_unlock_irqrestore+0x21/0x60
+[283545.808853]  __schedule+0xc0c/0x4ee0
+[283545.841937] Code: 90 90 90 90 90 90 90 90 90 0f 1f 44 00 00 55 49
+89 f0 48 89 e5 c6 07 00 0f 1f 00 41 f7 c0 00 02 00 00 74 06 fb 0f 1f
+44 00 00 <65> ff 0d 20 8d e9 73 74 13 5d 31 c0 31 d2 31 c9 31 f6 31 ff
+45 31
+[283545.841978] RSP: 0018:ffffc900309af550 EFLAGS: 00000206
+[283545.841988] RAX: dffffc0000000000 RBX: ffff888114cf4000 RCX:
+0000000000000000
+[283545.841992] RDX: 1ffff1102299e802 RSI: 0000000000000246 RDI:
+ffff888106bcd000
+[283545.841995] RBP: ffffc900309af550 R08: 0000000000000246 R09:
+0000000000000000
+[283545.841997] R10: 0000000000000000 R11: 0000000000000000 R12:
+0000000000000000
+[283545.842001] R13: 0000000000000246 R14: ffff888114cf4010 R15:
+ffff88822caa4000
+[283545.842005] FS:  0000000000000000(0000) GS:ffff88862ea80000(0000)
+knlGS:0000000000000000
+[283545.846254] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[283545.787091] WARNING: CPU: 13 PID: 2974 at
+kernel/sched/deadline.c:1995 enqueue_dl_entity+0x167f/0x3300
+[283545.812128]  ? sched_clock_cpu+0x6a/0x520
+[283545.847597]  ? __kasan_check_write+0x14/0x30
+[283545.847607]  ? __pfx___schedule+0x10/0x10
+[283545.847616]  ? save_fpregs_to_fpstate+0xb0/0x230
+[283545.847621]  ? raw_spin_rq_unlock+0x17/0xa0
+[283545.847627]  schedule+0x83/0x350
+[283545.847634]  schedule_timeout+0x106/0x350
+[283545.847640]  ? __kasan_check_write+0x14/0x30
+[283545.847639] Modules linked in:
+[283545.847644]  ? __pfx_schedule_timeout+0x10/0x10
+[283545.847647]  raw_gadget(OE)
+[283545.847648]  ? __pfx__raw_spin_lock_irqsave+0x10/0x10
+[283545.847651]  dummy_hcd(OE) snd_ctl_led
+[283545.847652]  ? __pfx_process_timeout+0x10/0x10
+[283545.847657]  hid_sensor_hub hid_multitouch
+[283545.847659]  ? __kasan_check_write+0x14/0x30
+[283545.847664]  ? prepare_to_swait_event+0xb8/0x350
+[283545.847665] CR2: 00002a0000c65280 CR3: 000000011b16e000 CR4:
+0000000000752ef0
+[283545.847670]  udc_core veth xt_conntrack nft_chain_nat
+xt_MASQUERADE bridge stp llc nf_conntrack_netlink xfrm_user xfrm_algo
+xt_addrtype nft_compat nf_tables overlay nfnetlink_cttimeout nfnetlink
+bnep intel_rapl_msr intel_rapl_common
+[283545.847709] PKRU: 55555554
+[283545.847711]  intel_uncore_frequency_common intel_pmc_core
+[283545.847715] Call Trace:
+[283545.847718]  intel_vsec pmt_telemetry
+[283545.847720]  <IRQ>
+[283545.847723]  pmt_class openvswitch vsock_loopback
+vmw_vsock_virtio_transport_common nsh nf_conncount nf_nat nf_conntrack
+nf_defrag_ipv6 nf_defrag_ipv4 kvm_intel psample snd_ens1371
+crct10dif_pclmul libcrc32c polyval_clmulni snd_ac97_codec
+vmw_vsock_vmci_transport polyval_generic vsock sunrpc binfmt_misc
+gameport ghash_clmulni_intel kvm sha256_ssse3 sha1_ssse3 ac97_bus
+vmw_balloon aesni_intel crypto_simd snd_pcm cryptd snd_seq_midi btusb
+snd_seq_midi_event btrtl rapl nls_iso8859_1 btintel snd_rawmidi btbcm
+btmtk snd_seq input_leds snd_seq_device joydev bluetooth snd_timer
+serio_raw snd soundcore vmw_vmci mac_hid sch_fq_codel vmwgfx
+drm_ttm_helper ttm msr parport_pc ppdev lp parport efi_pstore
+ip_tables x_tables autofs4 hid_generic crc32_pclmul psmouse usbhid hid
+mptspi mptscsih i2c_piix4 ahci mptbase e1000 libahci
+scsi_transport_spi i2c_smbus pata_acpi [last unloaded: raw_gadget(OE)]
+[283545.847881] CPU: 13 UID: 1000 PID: 2974 Comm: gsd-housekeepin
+Tainted: G           OE      6.12.0 #1
+[283545.847888] Tainted: [O]=OOT_MODULE, [E]=UNSIGNED_MODULE
+[283545.847891] Hardware name: VMware, Inc. VMware Virtual
+Platform/440BX Desktop Reference Platform, BIOS 6.00 11/12/2020
+[283545.847895] RIP: 0010:enqueue_dl_entity+0x167f/0x3300
+[283545.847901] Code: e8 f6 bb 8b 00 4c 8b 5d c8 4c 8b 55 d0 e9 18 f7
+ff ff 85 c9 0f 84 51 fa ff ff 44 89 c6 4c 89 e7 e8 76 2b ff ff e9 41
+fa ff ff <0f> 0b e9 bb e9 ff ff 0f 0b e9 c2 ef ff ff 48 b8 00 00 00 00
+00 fc
+[283545.847905] RSP: 0018:ffffc90005fd6ce0 EFLAGS: 00010082
+[283545.847909] RAX: dffffc0000000000 RBX: ffff88862ecc7ca8 RCX:
+0000000000000001
+[283545.847912] RDX: 1ffff110c5d98f95 RSI: 0000000000000001 RDI:
+ffff88862ecc7ca8
+[283545.847915] RBP: ffffc90005fd6d40 R08: 0000000000000001 R09:
+0000000000000000
+[283545.847917] R10: 0000000000000000 R11: 0000000000000000 R12:
+ffff88862ecc7ca8
+[283545.847920] R13: ffff88862ecc7d80 R14: ffff88862ecc72c0 R15:
+dffffc0000000000
+[283545.847923] FS:  000073dc1824d800(0000) GS:ffff88862ec80000(0000)
+knlGS:0000000000000000
+[283545.847926] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+[283545.847928] CR2: 0000049400328000 CR3: 000000018a21c000 CR4:
+0000000000752ef0
+[283545.847965] PKRU: 55555554
+[283545.847968] Call Trace:
+[283545.847971]  <TASK>
+[283545.847668]  rcu_gp_fqs_loop+0x1a3/0x970
+[283545.848430]  ? rcu_gp_init+0x8b7/0x1410
+[283545.848436]  ? __pfx_rcu_gp_fqs_loop+0x10/0x10
+[283545.848440]  ? finish_swait+0x12a/0x1f0
+[283545.848445]  ? prepare_to_swait_event+0xb8/0x350
+[283545.848449]  rcu_gp_kthread+0x27a/0x430
+[283545.848452]  ? __pfx_rcu_gp_kthread+0x10/0x10
+[283545.848456]  ? __kasan_check_read+0x11/0x20
+[283545.847725]  ? show_regs+0x71/0x90
+[283545.848459]  ? __kthread_parkme+0x8f/0x150
+[283545.850678]  ? schedule+0x83/0x350
+[283545.850687]  kthread+0x2b5/0x390
+[283545.850691]  ? __pfx_rcu_gp_kthread+0x10/0x10
+[283545.850695]  ? __pfx_kthread+0x10/0x10
+[283545.850699]  ret_from_fork+0x43/0x90
+[283545.850705]  ? __pfx_kthread+0x10/0x10
+[283545.847975]  ? show_regs+0x71/0x90
+[283545.850100]  ? watchdog_timer_fn+0x305/0x3d0
+[283545.851262]  ? __hrtimer_run_queues+0x2f0/0x7b0
+[283545.851399]  ? __pfx_watchdog_timer_fn+0x10/0x10
+[283545.851405]  ? __pfx___hrtimer_run_queues+0x10/0x10
+[283545.851409]  ? hrtimer_interrupt+0x2bc/0x750
+[283545.850709]  ret_from_fork_asm+0x1a/0x30
+[283545.853112]  </TASK>
+[283545.853172] Sending NMI from CPU 2 to CPUs 0:
+[283545.850722]  ? __warn+0xd3/0x2d0
+[283545.854922]  ? enqueue_dl_entity+0x167f/0x3300
+[283545.851414]  ? __sysvec_apic_timer_interrupt+0x8e/0x310
+[283545.875438]  ? sysvec_apic_timer_interrupt+0x91/0xb0
+[283545.875446]  </IRQ>
+[283545.875449]  <TASK>
+[283545.875471]  ? asm_sysvec_apic_timer_interrupt+0x1b/0x20
+[283545.875483]  ? _raw_spin_unlock_irqrestore+0x21/0x60
+[283545.854928]  ? report_bug+0x2ad/0x300
+[283545.900589]  ? handle_bug+0x6e/0xc0
+[283545.900593]  ? exc_invalid_op+0x19/0x50
+[283545.900596]  ? asm_exc_invalid_op+0x1b/0x20
+[283545.900602]  ? enqueue_dl_entity+0x167f/0x3300
+[283545.900607]  ? update_cfs_group+0x274/0x2f0
+[283545.901798]  dl_server_start+0xd3/0x8a0
+[283545.901805]  enqueue_task_fair+0xb41/0x1830
+[283545.901810]  ? __pfx_sched_mm_cid_migrate_to+0x10/0x10
+[283545.901814]  enqueue_task+0x7f/0x540
+[283545.901819]  activate_task+0x5f/0xd0
+[283545.901822]  sched_balance_rq+0x13ba/0x3200
+[283545.901825]  ? sched_clock_cpu+0x6a/0x520
+[283545.901830]  ? sched_clock_noinstr+0x9/0x10
+[283545.901836]  ? __pfx_sched_balance_rq+0x10/0x10
+[283545.901841]  sched_balance_newidle+0x615/0x1040
+[283545.901845]  ? __pfx_sched_balance_newidle+0x10/0x10
+[283545.901848]  ? dequeue_entities+0x8ce/0x1330
+[283545.901852]  ? sched_clock_cpu+0x6a/0x520
+[283545.901856]  pick_next_task_fair+0x35/0xdb0
+[283545.901859]  ? dequeue_task_fair+0x232/0x5a0
+[283545.901863]  __pick_next_task+0x101/0x6d0
+[283545.901866]  __schedule+0x53e/0x4ee0
+[283545.901871]  ? update_stack_state+0x2d9/0x610
+[283545.901877]  ? __pfx___schedule+0x10/0x10
+[283545.901880]  ? _raw_write_unlock_irqrestore+0x80/0x90
+[283545.901883]  ? enqueue_hrtimer+0x10b/0x290
+[283545.901888]  ? hrtimer_start_range_ns+0x2f8/0xb60
+[283545.901892]  schedule+0x83/0x350
+[283545.901895]  schedule_hrtimeout_range_clock+0x15c/0x490
+[283545.901900]  ? __pfx_schedule_hrtimeout_range_clock+0x10/0x10
+[283545.901904]  ? __pfx_hrtimer_wakeup+0x10/0x10
+[283545.901908]  schedule_hrtimeout_range+0x13/0x30
+[283545.901912]  poll_schedule_timeout.constprop.0+0x79/0x100
+[283545.901916]  do_sys_poll+0x6f6/0xc10
+[283545.901921]  ? __pfx_do_sys_poll+0x10/0x10
+[283545.901925]  ? is_bpf_text_address+0x24/0x40
+[283545.901929]  ? kernel_text_address+0xd7/0xe0
+[283545.901933]  ? __kernel_text_address+0x12/0x50
+[283545.901936]  ? unwind_get_return_address+0x65/0xb0
+[283545.901940]  ? __pfx_stack_trace_consume_entry+0x10/0x10
+[283545.901945]  ? arch_stack_walk+0x9e/0x100
+[283545.901951]  ? __pfx_pollwake+0x10/0x10
+[283545.901954]  ? __pfx_pollwake+0x10/0x10
+[283545.901748] INFO: NMI handler (perf_event_nmi_handler) took too
+long to run: 2.846 msecs
+[283545.901956]  ? lockref_get_not_dead+0xd8/0x1f0
+[283545.904986]  ? putname+0xf4/0x150
+[283545.904991]  ? kasan_save_stack+0x3c/0x60
+[283545.904995]  ? kasan_save_stack+0x28/0x60
+[283545.904999]  ? kasan_save_track+0x18/0x70
+[283545.905002]  ? kasan_save_free_info+0x3b/0x60
+[283545.905006]  ? __kasan_slab_free+0x54/0x80
+[283545.905009]  ? kmem_cache_free+0x165/0x590
+[283545.905014]  ? putname+0xf4/0x150
+[283545.905017]  ? user_path_at+0x46/0x70
+[283545.905020]  ? user_statfs+0x8f/0x130
+[283545.905751]  ? __do_sys_statfs+0x87/0x120
+[283545.905757]  ? __x64_sys_statfs+0x54/0x80
+[283545.905760]  ? x64_sys_call+0xa30/0x2670
+[283545.905764]  ? do_syscall_64+0x7c/0x170
+[283545.905768]  ? entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[283545.905775]  ? try_to_unlazy+0x1cc/0x4b0
+[283545.905779]  ? terminate_walk+0x173/0x540
+[283545.905783]  ? path_lookupat+0x172/0x670
+[283545.905786]  ? x64_sys_call+0xa30/0x2670
+[283545.905790]  ? filename_lookup+0x1a6/0x520
+[283545.905793]  ? __pfx_timespec64_add_safe+0x10/0x10
+[283545.905797]  ? sched_clock_noinstr+0x9/0x10
+[283545.905802]  ? ktime_get_ts64+0x81/0x270
+[283545.905807]  __x64_sys_poll+0x180/0x500
+[283545.905811]  ? __pfx___x64_sys_poll+0x10/0x10
+[283545.905814]  ? lockref_put_return+0xd0/0x150
+[283545.905818]  ? __pfx_mntput_no_expire+0x10/0x10
+[283545.905823]  x64_sys_call+0x140e/0x2670
+[283545.905826]  do_syscall_64+0x7c/0x170
+[283545.905829]  ? mntput+0x57/0x90
+[283545.905832]  ? path_put+0x50/0x80
+[283545.905836]  ? user_statfs+0xbe/0x130
+[283545.905839]  ? __pfx_user_statfs+0x10/0x10
+[283545.905842]  ? __pfx_cp_new_stat+0x10/0x10
+[283545.907651]  ? __kasan_check_read+0x11/0x20
+[283545.907656]  ? _copy_to_user+0x3b/0x80
+[283545.909759]  ? __do_sys_statfs+0x101/0x120
+[283545.909764]  ? __pfx___do_sys_statfs+0x10/0x10
+[283545.909793]  ? __kasan_check_read+0x11/0x20
+[283545.909803]  ? fpregs_assert_state_consistent+0x21/0xb0
+[283545.909810]  ? syscall_exit_to_user_mode+0x4e/0x270
+[283545.909815]  ? do_syscall_64+0x88/0x170
+[283545.909818]  ? syscall_exit_to_user_mode+0x4e/0x270
+[283545.909821]  ? __kasan_check_read+0x11/0x20
+[283545.909825]  ? fpregs_assert_state_consistent+0x21/0xb0
+[283545.909829]  ? syscall_exit_to_user_mode+0x4e/0x270
+[283545.909832]  ? do_syscall_64+0x88/0x170
+[283545.909834]  ? clear_bhb_loop+0x15/0x70
+[283545.909838]  ? clear_bhb_loop+0x15/0x70
+[283545.909842]  ? clear_bhb_loop+0x15/0x70
+[283545.909845]  entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[283545.909849] RIP: 0033:0x73dc18118bcf
+[283545.909855] Code: 54 24 1c 48 89 74 24 10 48 89 7c 24 08 e8 39 7e
+f7 ff 8b 54 24 1c 48 8b 74 24 10 41 89 c0 48 8b 7c 24 08 b8 07 00 00
+00 0f 05 <48> 3d 00 f0 ff ff 77 31 44 89 c7 89 44 24 08 e8 7d 7e f7 ff
+8b 44
+[283545.909859] RSP: 002b:00007fffd38bae60 EFLAGS: 00000293 ORIG_RAX:
+0000000000000007
+[283545.909865] RAX: ffffffffffffffda RBX: 000073dc1844e7a0 RCX:
+000073dc18118bcf
+[283545.875487]  ata_scsi_queuecmd+0x180/0x200
+[283545.909868] RDX: 000000000000e9c5 RSI: 0000000000000002 RDI:
+00005b604981cec0
+[283545.909872] RBP: 00005b604981cec0 R08: 0000000000000000 R09:
+0000000000000000
+[283545.909875] R10: 0000000000000000 R11: 0000000000000293 R12:
+0000000000000002
+[283545.909874]  ? blk_mq_start_request+0xc1/0x770
+[283545.909878] R13: 00007fffd38baea4 R14: 000000000000e9c5 R15:
+00005b60497f9970
+[283545.909883]  </TASK>
+[283545.909886] ---[ end trace 0000000000000000 ]---
+[283545.909883]  scsi_queue_rq+0xb34/0x3320
+[283545.922100]  blk_mq_dispatch_rq_list+0x391/0x2570
+[283545.922107]  ? __kasan_check_read+0x11/0x20
+[283545.922113]  ? __pfx_blk_mq_dispatch_rq_list+0x10/0x10
+[283545.922118]  ? _raw_write_lock_nested+0x41/0xe0
+[283545.922123]  __blk_mq_sched_dispatch_requests+0x1dd/0x1620
+[283545.922127]  ? bio_kmalloc+0x23/0x40
+[283545.923317]  ? sr_check_events+0x1bc/0xa50
+[283545.924738]  ? cdrom_check_events+0x60/0x120
+[283545.925485]  ? __pfx___blk_mq_sched_dispatch_requests+0x10/0x10
+[283545.925491]  ? _raw_spin_lock+0x82/0xf0
+[283545.925495]  ? __pfx__raw_spin_lock+0x10/0x10
+[283545.925498]  ? policy_nodemask+0x239/0x360
+[283545.925504]  blk_mq_sched_dispatch_requests+0xb9/0x100
+[283545.925510]  blk_mq_run_hw_queue+0x32f/0x560
+[283545.925514]  blk_execute_rq+0x1a6/0x3d0
+[283545.925518]  ? __pfx_bio_add_pc_page+0x10/0x10
+[283545.925521]  ? __pfx_blk_execute_rq+0x10/0x10
+[283545.925526]  scsi_execute_cmd+0x39d/0xcc0
+[283545.925530]  ? __pfx__raw_spin_lock_irqsave+0x10/0x10
+[283545.925533]  ? __pfx_scsi_execute_cmd+0x10/0x10
+[283545.925536]  ? _raw_spin_lock+0x82/0xf0
+[283545.925539]  ? __kasan_check_write+0x14/0x30
+[283545.925542]  ? enqueue_timer+0xec/0x5b0
+[283545.925548]  sr_check_events+0x1bc/0xa50
+[283545.925552]  ? __pfx_sr_check_events+0x10/0x10
+[283545.925554]  ? __kasan_check_write+0x14/0x30
+[283545.925558]  ? _raw_spin_lock_irqsave+0x96/0x110
+[283545.925561]  ? rt_mutex_post_schedule+0x118/0x160
+[283545.925580]  ? add_timer_global+0x90/0xd0
+[283545.925584]  cdrom_check_events+0x60/0x120
+[283545.925587]  sr_block_check_events+0xab/0xe0
+[283545.925590]  disk_check_events+0xbb/0x3f0
+[283545.925594]  ? wake_up_process+0x15/0x30
+[283545.925597]  ? kick_pool+0x26c/0x680
+[283545.926093]  disk_events_workfn+0x19/0x30
+[283545.926100]  process_one_work+0x5f7/0x1060
+[283545.926104]  ? __kasan_check_write+0x14/0x30
+[283545.926109]  worker_thread+0x779/0x1200
+[283545.926112]  ? __pfx__raw_spin_lock_irqsave+0x10/0x10
+[283545.926117]  kthread+0x2b5/0x390
+[283545.926121]  ? __pfx_worker_thread+0x10/0x10
+[283545.926124]  ? __pfx_kthread+0x10/0x10
+[283545.926128]  ret_from_fork+0x43/0x90
+[283545.926132]  ? __pfx_kthread+0x10/0x10
+[283545.926136]  ret_from_fork_asm+0x1a/0x30
+[283545.926141]  </TASK>
 
