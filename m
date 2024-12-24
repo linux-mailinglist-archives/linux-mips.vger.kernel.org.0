@@ -1,65 +1,67 @@
-Return-Path: <linux-mips+bounces-7182-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7183-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04AB39FB9AE
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Dec 2024 07:12:46 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 016929FB9D4
+	for <lists+linux-mips@lfdr.de>; Tue, 24 Dec 2024 07:25:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 74483164566
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Dec 2024 06:12:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CEA057A1742
+	for <lists+linux-mips@lfdr.de>; Tue, 24 Dec 2024 06:25:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 340B11494D9;
-	Tue, 24 Dec 2024 06:12:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA0E515575C;
+	Tue, 24 Dec 2024 06:25:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="RVXu0FEv"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="WpqUKQxn"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
+Received: from bg5.exmail.qq.com (bg5.exmail.qq.com [43.155.80.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96F641487D5;
-	Tue, 24 Dec 2024 06:12:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.92.39.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B432A14AD02;
+	Tue, 24 Dec 2024 06:25:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=43.155.80.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735020761; cv=none; b=X/9MDL2cxhmNEYlHTVEVgHtAtebZsNnwn7CcnFhXkypydPMzPCZWUFJbEoX6wgvOAfXkckZL4q09HLWENUyO8gmB4fx4zoJq5JEF0z/ENoAgfBVRePcx5XLbmQ5S5ZaPZb9P9Oy8OVNN4ssOCks8zzfsuBs1aymipslp3nNx3a0=
+	t=1735021511; cv=none; b=Xe5Bv6lMDgylcKRZS/jgpfCA62oZzJvUOGjLZ8k0wzOTEgnelPDkExBQhCgUnOTe7cnsDwWuhFjEyT52SLWSrAd8M0bY+rGlwjmr23nDkmBS21XU/itKC5qlROvapFVATth92P3eHhYluT7jiTaNTeKJDGn/R8BubpvUUIF0/QI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735020761; c=relaxed/simple;
-	bh=0KwGciMbbMIvdCsfeKFBeBug/lObwJGpllXY4dqmF5g=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=vBsqEURYh1h1ZgGHcwZ8iJHV/vfaVZ6EzE9dc6EStxWxBOitReMV4sUv9TsQSFqy4xnAqb/FZLmRgJApb3TALTxO3B9W7U49thAWe0HOVnnUPY91smhY0zkHuxJCzLU6d+pThs0mql4E9XnJvyp4yETwUgaECtgFoNhSr5ESABk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=RVXu0FEv; arc=none smtp.client-ip=54.92.39.34
+	s=arc-20240116; t=1735021511; c=relaxed/simple;
+	bh=gI6L/dm3UYwCUEHYSc0gEFYXEyUSnVPicQ+haHeouoM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IyXItFoy0l1epvaSrP238B2hw3LmJDhStHcO55aJO2GycotvMBgQ9SIcW+tVM9PcaGsQe0d1I54N8YgA2Nlriwp5fiVpk91Znf6SHX4zNPAj+1T3L+wqwxEFsmm8HdgZcrvGiqEP0+HINYs4FDn98gxf45sUYDYc4DA6WiuLRHg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=WpqUKQxn; arc=none smtp.client-ip=43.155.80.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1735020688;
-	bh=IAzDc9MfMmq2YmPNIrP/dODV2uxxUZPudpTQKPDJALc=;
+	s=onoh2408; t=1735021424;
+	bh=D5RgOMTfMNG3T4lEn+2eXmIOePG2rUX9MJsUzZUqgOU=;
 	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=RVXu0FEvUlfdLeWm30nHmY7kJS2FwoQOzdydFq2axEfLGWMkrauzunPSc1la3wqdz
-	 LQiB6jEuqYi/nd1yJswnl9DGvq5QmXJ3HdscsroDt7zIZ22K8PmLSzw8BxeaGrpl0+
-	 dBI7Cg5Pvm3/N/i0U0fBb1VQYLy7I/yatu+UFlYI=
-X-QQ-mid: bizesmtpip3t1735020648tlxa9hx
-X-QQ-Originating-IP: tPZRCzswTjBVcac3tacxG9Z6CVY2UcrpN8n8sRX2X9E=
+	b=WpqUKQxnQhAsW8ypxgL7nS7znL7GlouXe7HYsUO04f9UpCUOwzfm3INNO78w1ny7X
+	 Jl2TQYOKkmb3wraWW1P7T5KiMIIQNGUufSFAm2IsvK1W9EED40p6wWKVUQcViLHHx8
+	 QllgubaTUz1a7TQNZvVFJ6E4lNM2eUCYqrW5k1Gk=
+X-QQ-mid: bizesmtpip2t1735021382tlkpp7d
+X-QQ-Originating-IP: fSCqsPsHjXsWYBOo7s1JGeDOqELBnx3Vqklc5JCP9Ak=
 Received: from localhost.localdomain ( [localhost])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 24 Dec 2024 14:10:46 +0800 (CST)
+	id ; Tue, 24 Dec 2024 14:23:00 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 2400545881246479525
+X-BIZMAIL-ID: 13834130958116600545
 From: WangYuli <wangyuli@uniontech.com>
 To: gregkh@linuxfoundation.org,
 	sashal@kernel.org,
 	stable@vger.kernel.org
 Cc: jiaxun.yang@flygoat.com,
 	tsbogend@alpha.franken.de,
+	rdunlap@infradead.org,
+	bhelgaas@google.com,
 	linux-mips@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	guanwentao@uniontech.com,
 	baimingcong@uniontech.com,
 	revy@deepin.org,
 	WangYuli <wangyuli@uniontech.com>
-Subject: [PATCH 5.4~6.6] MIPS: Probe toolchain support of -msym32
-Date: Tue, 24 Dec 2024 14:09:18 +0800
-Message-ID: <183F7B3F0A07AC93+20241224060918.15199-1-wangyuli@uniontech.com>
+Subject: [PATCH 6.1/6.6] MIPS: mipsregs: Set proper ISA level for virt extensions
+Date: Tue, 24 Dec 2024 14:22:39 +0800
+Message-ID: <38A42FE743EFB36A+20241224062239.19248-1-wangyuli@uniontech.com>
 X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -70,53 +72,97 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
-X-QQ-XMAILINFO: NSEFX6u+4l+K4yINnM6/bA/Wp3DrEuPgE13xTNC2cF0kKRo09Nvttn3X
-	gkyynssj37O0TD7CIx+YWHyVb1uuKsM8QB68al9IvwuYtWSWdUXYmYeIH3swrTVG/Sv5U1B
-	ohrTt12PcD4rvCGspDP2XcDGHhpg39VrvbzBG/nefM5kajWo6k8d9PiyxNBDZci1SSSxmMa
-	YhcrFK/GMr+blq47ZFrV8Xiurm7v8JSgyZ9aibRQlgHT8dxcqnDPjxfU38O5D1sCzUEe+MQ
-	PWJP3VHJ9Nxc3LzOda6g6z3mDuXMkDA+m6KV8XJNG+1Bf8R8c4huKMoF8X4eFEuTifIGBR1
-	5YSVvmprKqVBNQbJ8T3cqNEyQ6IQ/7+oFJaglZcANYz7XX4LUMlcAc+CQlz3byWBGFuPVxS
-	5m/qycf2qZU9DDoWJuop/Zpvvh4XfP/i6dc4DuK20JIyyK9gNy1+1+JOH05xuEP9zWVfi3Z
-	5FcTTt/Gj0/AUXzHP3DzgEmlFsq19r+NNRAx4gFDvtoYkdWr2DmZiHgevOx8e84ARQIbN81
-	fxK78Id84kHfUI6l+sK674QWqqzVoPuE7HhXeVLcbHQOgiJjq2I7e79965XT/7D+it+RbYm
-	cb3FmxinPQoUVCukgDCnR0GtLxoaqBHdSwG7b+y9UY6j6cs9F0C0JVZTnvHV77xR13bCqHZ
-	BWnzjNXtBGREDP/NJvZ7XcFkeMvitwGzqaEM+BiTwzLM7yIsgpHPSDXIB3TOniPiH/jBeRK
-	c8/dcQvIGEMrcZR3mApcuQJVof8xfLUrqlcBd4Zh1QclywucoFpZoFTTDrfNOFeqjJOfo5B
-	Tmo86kVwrfk0DO/UQp1qqXO4hxjaF1qNwat6wJuns71c2N6/5NNP8gTulhiSsuCt0cJ9glk
-	ALl1V+OiwurOkch6kAF5lo+D1eJ45vV4C9xdLBqA7Y7HsvrA7TSlVTn2gXYOD77EzD/zP+e
-	A6WIY2VVR7opq3ztQwQj6HRoIheKqeblZlzc=
-X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
+X-QQ-XMAILINFO: M83iEva+1QDBEPKVtHMlTQVrvJNp8TWOJe1d06JElp0Ie0A0x+Rx4qXv
+	jK9OfZ06rV1YpGswsaFxwZbpzCgb5mMx/ludi7x8fsQ8YMAbVd69d7FZ9xWT8TNHiopnvO1
+	ft6x5b+sr3SKLGSl2gIa14nat1p4t6kxI0xz2L8Qhnjfx4UmUZvz+B+sERWRTjZLcm6nsJ6
+	rpKpgoWEhEmKv1XJ7Rf82AWXa4OM/uEzjd75Dsc7leL08GWUXuQm323a6VwQd+0We7LcAOm
+	foZj0sAiR67O12fBKJyNG1leAPPafABVqFRVRk/npsxEN8VQh4N0evCYCAR+06+cPmAzk99
+	LJ92g9e30EL/hbiYuUYcfxPaxcwptMvYRKdflmqcbshD3wepWuLUo6zs3Ma8Ql+NkfAXUBp
+	ACYrFoh/2fX0mUJOSK3hYDLsuDWQdOPwV4nGQ3UptxbaqWi4d6nWV5egvjaAokt59/cEtwn
+	eOMiDp5AOj2c6CPpWywaNu+4tT7FB07fl7yWTGyIddpXew8drvieUd9VaF3h8iaX4Zb36/s
+	lMfx7DSPTTYQgtPLlwtnvNNUbUpmBtvOa5qRrdNDKbPPlwf66WgH5Kvqv34cqxCKWxd+/n/
+	qM7f32BWUCo+NPktGEv4EqGxrUarueIybS2OMjVbwRvPJtdCzwQtzmHdIQR9WXnk8ma7qXw
+	+bUIKnOFOIbUxzKn8Dh7Cat/zqUlAosjgCPRxZqQAFb77wGJ5eb+AlfhJggzaZKW8q27ktK
+	sqq/77fS8ldF8RgnvvmF3GzpujSXdayoFMzmSaKTSZPW63hEplfNr+baRRkEuIfxd45eCpr
+	xljQmcaGPcBP1FzZsckp5L2q8Nn+ukmS0b0djCVOXlDxb0f7Vv4YR8R5V/+hwa+RybI6BJD
+	FEg22ilyfAgMw/lsA2Wru+8jw0l2eApTatvtFCHH0m0KKPYTEMlarVJl22RUw19RZ+9mDkB
+	E3tGvFZFfSMUdOIWxCsNiFckFO04qft2b4ZXWsNfzu1UZ6aSOm76XSW1VXZduABqxL0Ug58
+	wwIvt+VouU09qVkVBk
+X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
 X-QQ-RECHKSPAM: 0
 
 From: Jiaxun Yang <jiaxun.yang@flygoat.com>
 
-[ Upstream commit 18ca63a2e23c5e170d2d7552b64b1f5ad019cd9b ]
+[ Upstream commit a640d6762a7d404644201ebf6d2a078e8dc84f97 ]
 
-msym32 is not supported by LLVM toolchain.
-Workaround by probe toolchain support of msym32 for KBUILD_SYM32
-feature.
+c994a3ec7ecc ("MIPS: set mips32r5 for virt extensions") setted
+some instructions in virt extensions to ISA level mips32r5.
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1544
+However TLB related vz instructions was leftover, also this
+shouldn't be done to a R5 or R6 kernel buid.
+
+Reorg macros to set ISA level as needed when _ASM_SET_VIRT
+is called.
+
 Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: WangYuli <wangyuli@uniontech.com>
 ---
- arch/mips/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/include/asm/mipsregs.h | 13 ++++++++-----
+ 1 file changed, 8 insertions(+), 5 deletions(-)
 
-diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-index f49807e1f19b..0888074f4dfe 100644
---- a/arch/mips/Makefile
-+++ b/arch/mips/Makefile
-@@ -299,7 +299,7 @@ drivers-$(CONFIG_PCI)		+= arch/mips/pci/
- ifdef CONFIG_64BIT
-   ifndef KBUILD_SYM32
-     ifeq ($(shell expr $(load-y) \< 0xffffffff80000000), 0)
--      KBUILD_SYM32 = y
-+      KBUILD_SYM32 = $(call cc-option-yn, -msym32)
-     endif
-   endif
- 
+diff --git a/arch/mips/include/asm/mipsregs.h b/arch/mips/include/asm/mipsregs.h
+index 2d53704d9f24..e959a6b1a325 100644
+--- a/arch/mips/include/asm/mipsregs.h
++++ b/arch/mips/include/asm/mipsregs.h
+@@ -2078,7 +2078,14 @@ do {									\
+ 		_ASM_INSN_IF_MIPS(0x4200000c)				\
+ 		_ASM_INSN32_IF_MM(0x0000517c)
+ #else	/* !TOOLCHAIN_SUPPORTS_VIRT */
+-#define _ASM_SET_VIRT ".set\tvirt\n\t"
++#if MIPS_ISA_REV >= 5
++#define _ASM_SET_VIRT_ISA
++#elif defined(CONFIG_64BIT)
++#define _ASM_SET_VIRT_ISA ".set\tmips64r5\n\t"
++#else
++#define _ASM_SET_VIRT_ISA ".set\tmips32r5\n\t"
++#endif
++#define _ASM_SET_VIRT _ASM_SET_VIRT_ISA ".set\tvirt\n\t"
+ #define _ASM_SET_MFGC0	_ASM_SET_VIRT
+ #define _ASM_SET_DMFGC0	_ASM_SET_VIRT
+ #define _ASM_SET_MTGC0	_ASM_SET_VIRT
+@@ -2099,7 +2106,6 @@ do {									\
+ ({ int __res;								\
+ 	__asm__ __volatile__(						\
+ 		".set\tpush\n\t"					\
+-		".set\tmips32r5\n\t"					\
+ 		_ASM_SET_MFGC0						\
+ 		"mfgc0\t%0, " #source ", %1\n\t"			\
+ 		_ASM_UNSET_MFGC0					\
+@@ -2113,7 +2119,6 @@ do {									\
+ ({ unsigned long long __res;						\
+ 	__asm__ __volatile__(						\
+ 		".set\tpush\n\t"					\
+-		".set\tmips64r5\n\t"					\
+ 		_ASM_SET_DMFGC0						\
+ 		"dmfgc0\t%0, " #source ", %1\n\t"			\
+ 		_ASM_UNSET_DMFGC0					\
+@@ -2127,7 +2132,6 @@ do {									\
+ do {									\
+ 	__asm__ __volatile__(						\
+ 		".set\tpush\n\t"					\
+-		".set\tmips32r5\n\t"					\
+ 		_ASM_SET_MTGC0						\
+ 		"mtgc0\t%z0, " #register ", %1\n\t"			\
+ 		_ASM_UNSET_MTGC0					\
+@@ -2140,7 +2144,6 @@ do {									\
+ do {									\
+ 	__asm__ __volatile__(						\
+ 		".set\tpush\n\t"					\
+-		".set\tmips64r5\n\t"					\
+ 		_ASM_SET_DMTGC0						\
+ 		"dmtgc0\t%z0, " #register ", %1\n\t"			\
+ 		_ASM_UNSET_DMTGC0					\
 -- 
 2.47.1
 
