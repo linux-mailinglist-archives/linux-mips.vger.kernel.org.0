@@ -1,59 +1,65 @@
-Return-Path: <linux-mips+bounces-7181-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7182-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B8089FB7FE
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Dec 2024 01:17:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04AB39FB9AE
+	for <lists+linux-mips@lfdr.de>; Tue, 24 Dec 2024 07:12:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 36D0F1884B44
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Dec 2024 00:17:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 74483164566
+	for <lists+linux-mips@lfdr.de>; Tue, 24 Dec 2024 06:12:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02CA717E4;
-	Tue, 24 Dec 2024 00:17:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 340B11494D9;
+	Tue, 24 Dec 2024 06:12:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="SeoanKNl"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="RVXu0FEv"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
+Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D03615D1;
-	Tue, 24 Dec 2024 00:17:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96F641487D5;
+	Tue, 24 Dec 2024 06:12:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.92.39.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734999466; cv=none; b=uPmpA9XcuQAPxZVxiSDnO5PbjmiwAyQa3u6K8IwryIDzrBvUsckVJrNgS+uR+vTd/Ng9sACG9tkV0maXtxBEM9+c+qA6QfJpXFHLHaqrwjEDc+SoxyW4jNb0W7rL+zwLumWFP0/p/+Rpmf2RY6u16mvUp/m5Qxngg1WIalnkf0M=
+	t=1735020761; cv=none; b=X/9MDL2cxhmNEYlHTVEVgHtAtebZsNnwn7CcnFhXkypydPMzPCZWUFJbEoX6wgvOAfXkckZL4q09HLWENUyO8gmB4fx4zoJq5JEF0z/ENoAgfBVRePcx5XLbmQ5S5ZaPZb9P9Oy8OVNN4ssOCks8zzfsuBs1aymipslp3nNx3a0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734999466; c=relaxed/simple;
-	bh=EzGiklqihK3WpPwiT+RE7XNoXEKO40pJsVrbdAguk5k=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=adpOswA0JlMzkpIegb9WzXSbIrNmtURbc6HaByWKVVo+TT3ONpOR6E/pZyU9+1G7RjzCZYkdNxcxVmx6II4fJVOsJd19mb+oka80a+WtzTdliqqZ0bxudHnAO6rs6Yblk/liFt3lYnFATbLAybms5rrqQYq8RJm168QEhmpR3xI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=SeoanKNl; arc=none smtp.client-ip=46.235.229.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-	; s=bytemarkmx; h=MIME-Version:Message-ID:Date:Subject:From:Content-Type:From
-	:Subject; bh=SkuAahAf8W+lppm/Zglud67b2SqLzah4TgosvvOEGfc=; b=SeoanKNlTVXq29FJ
-	Se633hZabWsrg+MaHfYYZ9NpwVqWvZ4Sud1lcMt7DH306m6HIBcRk2OIgGjCiEYLg7AsiPsHK6jKU
-	CK90YgXlpIxMsWK5sbzcXTrG5Q4bdi1NnGjcX1WSgpBijK2Z8GMpFHCBbuFiKORDvGtY8kSur8kh6
-	UV2bBhdQhsK/OfAUqVsA7UgvnhhMCJdwf5SR7KIZszhm9CqS6jb9pOY3+UaTY86Vx3W5izzSiaast
-	KlRlSWTyQAtHiKFqg6ud0DmNtGDHADveHGWlb1cOWzTRxHSbzKldfPToRmCqnxJr2Ey9ekcSkZXns
-	8d/+hakImSfq3X/5Kw==;
-Received: from localhost ([127.0.0.1] helo=dalek.home.treblig.org)
-	by mx.treblig.org with esmtp (Exim 4.96)
-	(envelope-from <linux@treblig.org>)
-	id 1tPsc3-006vtl-2U;
-	Tue, 24 Dec 2024 00:17:27 +0000
-From: linux@treblig.org
-To: florian.fainelli@broadcom.com,
-	bcm-kernel-feedback-list@broadcom.com,
-	tglx@linutronix.de
-Cc: linux-mips@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
+	s=arc-20240116; t=1735020761; c=relaxed/simple;
+	bh=0KwGciMbbMIvdCsfeKFBeBug/lObwJGpllXY4dqmF5g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=vBsqEURYh1h1ZgGHcwZ8iJHV/vfaVZ6EzE9dc6EStxWxBOitReMV4sUv9TsQSFqy4xnAqb/FZLmRgJApb3TALTxO3B9W7U49thAWe0HOVnnUPY91smhY0zkHuxJCzLU6d+pThs0mql4E9XnJvyp4yETwUgaECtgFoNhSr5ESABk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=RVXu0FEv; arc=none smtp.client-ip=54.92.39.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1735020688;
+	bh=IAzDc9MfMmq2YmPNIrP/dODV2uxxUZPudpTQKPDJALc=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=RVXu0FEvUlfdLeWm30nHmY7kJS2FwoQOzdydFq2axEfLGWMkrauzunPSc1la3wqdz
+	 LQiB6jEuqYi/nd1yJswnl9DGvq5QmXJ3HdscsroDt7zIZ22K8PmLSzw8BxeaGrpl0+
+	 dBI7Cg5Pvm3/N/i0U0fBb1VQYLy7I/yatu+UFlYI=
+X-QQ-mid: bizesmtpip3t1735020648tlxa9hx
+X-QQ-Originating-IP: tPZRCzswTjBVcac3tacxG9Z6CVY2UcrpN8n8sRX2X9E=
+Received: from localhost.localdomain ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Tue, 24 Dec 2024 14:10:46 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 2400545881246479525
+From: WangYuli <wangyuli@uniontech.com>
+To: gregkh@linuxfoundation.org,
+	sashal@kernel.org,
+	stable@vger.kernel.org
+Cc: jiaxun.yang@flygoat.com,
+	tsbogend@alpha.franken.de,
+	linux-mips@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	"Dr. David Alan Gilbert" <linux@treblig.org>
-Subject: [PATCH] irqchip/irq-brcmstb-l2: Replace brcmstb_l2_mask_and_ack by generic
-Date: Tue, 24 Dec 2024 00:17:27 +0000
-Message-ID: <20241224001727.149337-1-linux@treblig.org>
+	guanwentao@uniontech.com,
+	baimingcong@uniontech.com,
+	revy@deepin.org,
+	WangYuli <wangyuli@uniontech.com>
+Subject: [PATCH 5.4~6.6] MIPS: Probe toolchain support of -msym32
+Date: Tue, 24 Dec 2024 14:09:18 +0800
+Message-ID: <183F7B3F0A07AC93+20241224060918.15199-1-wangyuli@uniontech.com>
 X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -62,74 +68,55 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
+X-QQ-XMAILINFO: NSEFX6u+4l+K4yINnM6/bA/Wp3DrEuPgE13xTNC2cF0kKRo09Nvttn3X
+	gkyynssj37O0TD7CIx+YWHyVb1uuKsM8QB68al9IvwuYtWSWdUXYmYeIH3swrTVG/Sv5U1B
+	ohrTt12PcD4rvCGspDP2XcDGHhpg39VrvbzBG/nefM5kajWo6k8d9PiyxNBDZci1SSSxmMa
+	YhcrFK/GMr+blq47ZFrV8Xiurm7v8JSgyZ9aibRQlgHT8dxcqnDPjxfU38O5D1sCzUEe+MQ
+	PWJP3VHJ9Nxc3LzOda6g6z3mDuXMkDA+m6KV8XJNG+1Bf8R8c4huKMoF8X4eFEuTifIGBR1
+	5YSVvmprKqVBNQbJ8T3cqNEyQ6IQ/7+oFJaglZcANYz7XX4LUMlcAc+CQlz3byWBGFuPVxS
+	5m/qycf2qZU9DDoWJuop/Zpvvh4XfP/i6dc4DuK20JIyyK9gNy1+1+JOH05xuEP9zWVfi3Z
+	5FcTTt/Gj0/AUXzHP3DzgEmlFsq19r+NNRAx4gFDvtoYkdWr2DmZiHgevOx8e84ARQIbN81
+	fxK78Id84kHfUI6l+sK674QWqqzVoPuE7HhXeVLcbHQOgiJjq2I7e79965XT/7D+it+RbYm
+	cb3FmxinPQoUVCukgDCnR0GtLxoaqBHdSwG7b+y9UY6j6cs9F0C0JVZTnvHV77xR13bCqHZ
+	BWnzjNXtBGREDP/NJvZ7XcFkeMvitwGzqaEM+BiTwzLM7yIsgpHPSDXIB3TOniPiH/jBeRK
+	c8/dcQvIGEMrcZR3mApcuQJVof8xfLUrqlcBd4Zh1QclywucoFpZoFTTDrfNOFeqjJOfo5B
+	Tmo86kVwrfk0DO/UQp1qqXO4hxjaF1qNwat6wJuns71c2N6/5NNP8gTulhiSsuCt0cJ9glk
+	ALl1V+OiwurOkch6kAF5lo+D1eJ45vV4C9xdLBqA7Y7HsvrA7TSlVTn2gXYOD77EzD/zP+e
+	A6WIY2VVR7opq3ztQwQj6HRoIheKqeblZlzc=
+X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
+X-QQ-RECHKSPAM: 0
 
-From: "Dr. David Alan Gilbert" <linux@treblig.org>
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
 
-Replace brcmstb_l2_mask_and_ack() by the generic
-irq_gc_mask_disable_and_ack_set().
+[ Upstream commit 18ca63a2e23c5e170d2d7552b64b1f5ad019cd9b ]
 
-brcmstb_l2_mask_and_ack() was added by
-commit 49aa6ef0b439 ("irqchip/brcmstb-l2: Remove some processing from the
-handler") in September 2017 with a comment saying it was actually
-generic and someone should add it to the generic code.
+msym32 is not supported by LLVM toolchain.
+Workaround by probe toolchain support of msym32 for KBUILD_SYM32
+feature.
 
-commit 20608924cc2e ("genirq: generic chip: Add
-irq_gc_mask_disable_and_ack_set()") did that a few weeks later,
-however no one went back and took the original out.
-
-Build tested only.
-
-Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
+Link: https://github.com/ClangBuiltLinux/linux/issues/1544
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: WangYuli <wangyuli@uniontech.com>
 ---
- drivers/irqchip/irq-brcmstb-l2.c | 28 +---------------------------
- 1 file changed, 1 insertion(+), 27 deletions(-)
+ arch/mips/Makefile | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/irqchip/irq-brcmstb-l2.c b/drivers/irqchip/irq-brcmstb-l2.c
-index c988886917f7..db4c9721fcf2 100644
---- a/drivers/irqchip/irq-brcmstb-l2.c
-+++ b/drivers/irqchip/irq-brcmstb-l2.c
-@@ -61,32 +61,6 @@ struct brcmstb_l2_intc_data {
- 	u32 saved_mask; /* for suspend/resume */
- };
+diff --git a/arch/mips/Makefile b/arch/mips/Makefile
+index f49807e1f19b..0888074f4dfe 100644
+--- a/arch/mips/Makefile
++++ b/arch/mips/Makefile
+@@ -299,7 +299,7 @@ drivers-$(CONFIG_PCI)		+= arch/mips/pci/
+ ifdef CONFIG_64BIT
+   ifndef KBUILD_SYM32
+     ifeq ($(shell expr $(load-y) \< 0xffffffff80000000), 0)
+-      KBUILD_SYM32 = y
++      KBUILD_SYM32 = $(call cc-option-yn, -msym32)
+     endif
+   endif
  
--/**
-- * brcmstb_l2_mask_and_ack - Mask and ack pending interrupt
-- * @d: irq_data
-- *
-- * Chip has separate enable/disable registers instead of a single mask
-- * register and pending interrupt is acknowledged by setting a bit.
-- *
-- * Note: This function is generic and could easily be added to the
-- * generic irqchip implementation if there ever becomes a will to do so.
-- * Perhaps with a name like irq_gc_mask_disable_and_ack_set().
-- *
-- * e.g.: https://patchwork.kernel.org/patch/9831047/
-- */
--static void brcmstb_l2_mask_and_ack(struct irq_data *d)
--{
--	struct irq_chip_generic *gc = irq_data_get_irq_chip_data(d);
--	struct irq_chip_type *ct = irq_data_get_chip_type(d);
--	u32 mask = d->mask;
--
--	irq_gc_lock(gc);
--	irq_reg_writel(gc, mask, ct->regs.disable);
--	*ct->mask_cache &= ~mask;
--	irq_reg_writel(gc, mask, ct->regs.ack);
--	irq_gc_unlock(gc);
--}
--
- static void brcmstb_l2_intc_irq_handle(struct irq_desc *desc)
- {
- 	struct brcmstb_l2_intc_data *b = irq_desc_get_handler_data(desc);
-@@ -248,7 +222,7 @@ static int __init brcmstb_l2_intc_of_init(struct device_node *np,
- 	if (init_params->cpu_clear >= 0) {
- 		ct->regs.ack = init_params->cpu_clear;
- 		ct->chip.irq_ack = irq_gc_ack_set_bit;
--		ct->chip.irq_mask_ack = brcmstb_l2_mask_and_ack;
-+		ct->chip.irq_mask_ack = irq_gc_mask_disable_and_ack_set;
- 	} else {
- 		/* No Ack - but still slightly more efficient to define this */
- 		ct->chip.irq_mask_ack = irq_gc_mask_disable_reg;
 -- 
 2.47.1
 
