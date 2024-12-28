@@ -1,123 +1,145 @@
-Return-Path: <linux-mips+bounces-7188-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7189-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73E389FD9A6
-	for <lists+linux-mips@lfdr.de>; Sat, 28 Dec 2024 10:48:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6A899FDAD4
+	for <lists+linux-mips@lfdr.de>; Sat, 28 Dec 2024 14:55:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 23CAF18855B0
-	for <lists+linux-mips@lfdr.de>; Sat, 28 Dec 2024 09:48:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D6DE16095A
+	for <lists+linux-mips@lfdr.de>; Sat, 28 Dec 2024 13:55:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19AAC8635F;
-	Sat, 28 Dec 2024 09:48:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nnlv6RmS"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 910AE1607AA;
+	Sat, 28 Dec 2024 13:55:18 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com [209.85.217.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8854A8633E;
-	Sat, 28 Dec 2024 09:48:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59E8367A0D;
+	Sat, 28 Dec 2024 13:55:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735379309; cv=none; b=PfF/SzRWcsSLRcVJFQ/3ACZGrgY7qek/MZ2Pe/aSL7RTlCuE9OmMW9eSSVnyjqZqENe7YwPrAFwTOINUKKPbADEoK/Tp/0p80QEsEdpjQn7UR/YzNAFqj7R8ythfgmhX7SdMdMFIwwxMdSEcd4V+iqBkMfDk/aAh0VwBYqhaQcg=
+	t=1735394118; cv=none; b=SqMxbZCLbAAQzQizBgXuD7EisUX5gBerj6+K09uS/nfm6I9jcVZVRALK/PwSo6k11sB29khuH0wxn3DHyePMbJmzGVdGWlau9TcbQyaGGjrt3Mk8iA31suHHTfwXAe4ljjS1YqTs9DwOfm+1xkD+VSnG8Pl/V/Ks89TQYomyvGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735379309; c=relaxed/simple;
-	bh=3nWLLd8Rw+xKEQPANeGCnqSlWq3hAdpW+DJZ4DpfgpU=;
+	s=arc-20240116; t=1735394118; c=relaxed/simple;
+	bh=N2Y0tdP2ya5cC2WUSKApfz754N+JS5n0MEifSr0gup4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pfMZp+2NLuOjq7WeFDKLyYGZil8CtSw1enePB2cC8JzjybNuSKQGC9OlJlOaQyLjhYZVZv/DODXHzSCGPvLgiW0NYWCM9atRHmqGth9+tWJ4A5eEEwuT4goRLUEKGOH868Zpu9Zneeirfpylc7p2oO3a3uS61GkK+kkLqOxaR0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nnlv6RmS; arc=none smtp.client-ip=209.85.216.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	 To:Cc:Content-Type; b=HooLp0fM7s9x40FwTK5qMRTRFQ5TZjUukQrkfwuXLu8/VbyoC/11djzjS6OMDO+zOoxVSb5t6AvZ1Tk4RTECf4BqASjrctqcrsf78/eFxLv+arVmESw6KqONKNJAMrgWNvXhRK0JOw4x4vyyRba4GE8XZWr3F4nFK5VRhC3aWmw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2ee76befe58so9902422a91.2;
-        Sat, 28 Dec 2024 01:48:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735379306; x=1735984106; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3nWLLd8Rw+xKEQPANeGCnqSlWq3hAdpW+DJZ4DpfgpU=;
-        b=Nnlv6RmSTRv/GSJSFfxWmUFIbxVK8lpGWCqiT1I0q68f7lVT3IbeUJw82+pSagN+Eb
-         FyOnfEBRtadF2593AMSsFRHnIX9DME9Yv8D/gPV20eXQmTHcm9FIiHFn188EAW3AOUF/
-         GQPx4TjEYxDJXWH8T/wHOfDlWfaObi5GEDqtuE+Q1upe5aaIiRH9QZyDQcJ57w3+QvCR
-         0YWzBKzhC/OipjNs7BKo2529EqkelroRcN8FZbg9RdnWAv+75AzDI8YYCW/85SEx9+bM
-         XXv2sKJ2BNPO21l1dpBQUMi3msPNkSJPu/U9r9oVV57o/Is8vnbYiEDbQd19U/PNmPm6
-         cXpg==
+Received: by mail-vs1-f51.google.com with SMTP id ada2fe7eead31-4aff5b3845eso2750513137.2;
+        Sat, 28 Dec 2024 05:55:16 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735379306; x=1735984106;
+        d=1e100.net; s=20230601; t=1735394114; x=1735998914;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3nWLLd8Rw+xKEQPANeGCnqSlWq3hAdpW+DJZ4DpfgpU=;
-        b=TKrypXEJPZSDmCYZtRmdTnvpFnBcEAIvxwYv/q6vq8GkHGbrbVcBpX87ZAXxH+lKlX
-         9xv+tZ5YDrp0rqhQlGoaCvasLvl6o/0BF9l2q0KvxkniUhRXUZg+NJP7obqY4nKQv8aX
-         wvlRMq1r2pVDR4H7vLT+ezBwCs5I6QlAZOGoPhimGtUqCD2b4GaVBAqcHNLwpOGHw8ld
-         f6wxoNFnKMR6XoMcVtB/pbhAItm6EsF88n/2BwDKXGTXtlHmkE47M02VifZjRAYjGNgJ
-         YrK97VgNMkfLTxSzXfI8BPNZq5aJPUFYFtUpvoNrRkUfPIv5JmHa5KCiYddREgfjIeCM
-         eFQA==
-X-Forwarded-Encrypted: i=1; AJvYcCVIQ1H2n+I/3IdGCN1ZyvafTOvbN8qXgrKRBwPF7dDhf5fZB7p96ACbPDkSyRLwkl9NIUPWaYjAEWKvWz2e@vger.kernel.org, AJvYcCVZ0r/Wfa+xoC2aTJi/1cdZ30GLXXqesHI5DHv6Vd8gkcYFzvfmhDI/gnzNa0rTNlelu8VSoqcVSafn@vger.kernel.org, AJvYcCVi6IZJsy1I4eCzrEuuK/pxoqNgI4wzQXfkhdBd97ce8eu78sOgCEjt1jVzw6XmfNLh3chAiIOm2qg21Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw4RJYfu0wvrMsgVtSqpR3WjQz+5e4c19+eoDbQG3LsOa4D0ZJ+
-	vEA4qxoVYGsab0TwSy+1nP73SkCbZM7s7TG7Ei+2tc6LCIAg4Sa2niTBy+8s3+ptSIpdYxwRqKZ
-	0twrmGd6mhCUGSTTX7U7FIakr5wzoBg==
-X-Gm-Gg: ASbGnctxJV5hbZYgnP1ZnFcGEY9+OO7Zz9fYqwmOjJtSKFZySsYom2BqcdJZs1+gbfZ
-	UU+5wWM63fTTR5LEHlY4tgPDh4Li/EKYgMG3luLg=
-X-Google-Smtp-Source: AGHT+IFrTKOZSooS9ithv4i2QGULf7s56SwaHTCofLckzpstPzo9WY8xpi2n5YefoDo8jgufx3zLnRp/JHeYQ3OdsdY=
-X-Received: by 2002:a17:90a:d003:b0:2f2:a664:df1a with SMTP id
- 98e67ed59e1d1-2f452debea5mr42774425a91.2.1735379305736; Sat, 28 Dec 2024
- 01:48:25 -0800 (PST)
+        bh=1ulB3Yf+fkH5MLC4jt3SEiT76TCvud6P3XUQaFnmoGs=;
+        b=wDw176x6feGRqPfHNg4ShwKrjYip7PMSnvBj6S5pibCzP7BmwFq41IhoRv8BCUyQw9
+         WfKwIxg3Y4kIF9S08nlWS01ZgYc8zxRQSjTU4z1c1K/6QWg/pxAO3549KWrZDe65Oirf
+         B/0GPqqfpmXmstTulDnGzMTJBXEf3q9oTax0ekoq73HWWiW2JfAETWGwdy1WWCnL19Y8
+         aaG2YwrhGgm8+xBtDlzsKK6UHnfDB7euanfg7Rd9ozx7FIGUxGMh5L8GPWgvRWyQ/wZw
+         qveKDIeMuMWZH+KeIhZVJX8PZ2Van3aiXhjxoQcKuCyROSAkpQoK7sS1T8t7o/M3hCv9
+         MoYg==
+X-Forwarded-Encrypted: i=1; AJvYcCV5ODcAq3d/xXrfY4TL00MfRkWloKCsZr83gUiJHxSZpAixcnqZXFxfObqbn4L6EdhaY9epstV5mB9HxQ==@vger.kernel.org, AJvYcCX3PQz8FI8iJuZdtzo3TrKF2mQwE9bHIrU0n9SHcBMZQQWkDQjnC87DerBQS+i59vnFxHfmQdFxBuLidW4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+0gp5uAbyPIbLLxFGg9nQgY4f9ZFsO5B0UHE6mMOyF3zDpmt4
+	WFfGRTXQTwiCOXmQ+hKRff69luelMEGKmMy8fmL0ko3P9TktxiJsreSmBUsy
+X-Gm-Gg: ASbGncvxSccwEZdx5JmpB38UUni+D5dqYE5dqJ0kYrcgGtwJl7+f34z31hzr7/wrD0b
+	8uZL70o9ip5Gx2GLkmI1FJDP+qywF9hdOX79rgROgYkz4ZqG8PJsWrgBMkCW91XPRPtYTVuaJpY
+	Yxha4wAuPieN1SuremWrBWhzKVrR6uET4Z/xWWrxLrVI1pbpldVfwaNUFzP0fIDBeF/mp69HD4R
+	6UvHzusFOYhDGHu1rrg6bBSee5YBgQhPSJuAQpHz5d3jt8HcckNWFB9aMvMSfRfjnwCO64iL5BO
+	jo8lPWOb8oSE5LpXuqY=
+X-Google-Smtp-Source: AGHT+IGbeNhpt+74lydy0J53Jpm9mETFGBPPAN56aYSLzYNhiHTvLfXSiCIFh6rAsrI7YyPuTxBGSw==
+X-Received: by 2002:a05:6102:cc8:b0:4af:ef85:dae4 with SMTP id ada2fe7eead31-4b2cc313a2cmr24048870137.5.1735394114559;
+        Sat, 28 Dec 2024 05:55:14 -0800 (PST)
+Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com. [209.85.217.41])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4b2bf98d122sm3296722137.7.2024.12.28.05.55.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 28 Dec 2024 05:55:14 -0800 (PST)
+Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-4aff5b3845eso2750509137.2;
+        Sat, 28 Dec 2024 05:55:14 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU3Engqhf/xHv7zOXKRpJ+sFeVgOuKOFkWqkBnbAZH9Xw96FCE2OurrTdz4NJ1QPnXdDg9J/DE1L8OVVg==@vger.kernel.org, AJvYcCX+gmKvmh978nZ4kl88SMRj6vDQkA/GBIRaHP0uQ8uDHhaDWBjw5vzvkXvtyY7+zqMqnlEenSvcWGF69bc=@vger.kernel.org
+X-Received: by 2002:a05:6102:3f0f:b0:4af:df15:7d6d with SMTP id
+ ada2fe7eead31-4b2cc45f0bcmr22952488137.21.1735394113966; Sat, 28 Dec 2024
+ 05:55:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241207223335.17535-1-kylehendrydev@gmail.com>
- <20241224103645.1709996-1-noltari@gmail.com> <CACRpkdb=kD=sOeUskOZEYHJGbEaDRNyQzyHWGx=dAs7HYE+31Q@mail.gmail.com>
-In-Reply-To: <CACRpkdb=kD=sOeUskOZEYHJGbEaDRNyQzyHWGx=dAs7HYE+31Q@mail.gmail.com>
-From: =?UTF-8?B?w4FsdmFybyBGZXJuw6FuZGV6IFJvamFz?= <noltari@gmail.com>
-Date: Sat, 28 Dec 2024 10:47:50 +0100
-Message-ID: <CAKR-sGeVfd4VttzycUXMZDi=5eGYmQ8f5PfzQkgb_EF1cFqXiw@mail.gmail.com>
-Subject: Re: [PATCH v2] pinctrl: bcm63268: add gpio function
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, kylehendrydev@gmail.com, 
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	"open list:MIPS" <linux-mips@vger.kernel.org>, Jonas Gorski <jonas.gorski@gmail.com>
+References: <202412282326.0DSE4HbR-lkp@intel.com> <CAMuHMdUTtdQxyTUSd_NBiPvL6irb8p_2+=hk5PjUrXC4J=VrbA@mail.gmail.com>
+In-Reply-To: <CAMuHMdUTtdQxyTUSd_NBiPvL6irb8p_2+=hk5PjUrXC4J=VrbA@mail.gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Sat, 28 Dec 2024 14:55:02 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdVHGz=0d_bGOu7RtF7-ssgnNmHk=MwEbTK77=+UgKGmYA@mail.gmail.com>
+Message-ID: <CAMuHMdVHGz=0d_bGOu7RtF7-ssgnNmHk=MwEbTK77=+UgKGmYA@mail.gmail.com>
+Subject: Re: ERROR: modpost: "__delay" [drivers/net/mdio/mdio-cavium.ko] undefined!
+To: kernel test robot <lkp@intel.com>
+Cc: Andrew Lunn <andrew@lunn.ch>, oe-kbuild-all@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-El vie, 27 dic 2024 a las 17:17, Linus Walleij
-(<linus.walleij@linaro.org>) escribi=C3=B3:
+On Sat, Dec 28, 2024 at 2:50=E2=80=AFPM Geert Uytterhoeven <geert@linux-m68=
+k.org> wrote:
+> Hi Kernel Test Robot,
 >
-> On Tue, Dec 24, 2024 at 11:36=E2=80=AFAM =C3=81lvaro Fern=C3=A1ndez Rojas
-> <noltari@gmail.com> wrote:
->
-> > From: Kyle Hendry <kylehendrydev@gmail.com>
+> On Sat, Dec 28, 2024 at 2:36=E2=80=AFPM kernel test robot <lkp@intel.com>=
+ wrote:
+> > First bad commit (maybe !=3D root cause):
 > >
-> > There is no guarantee that the bootloader will leave the pin configurat=
-ion
-> > in a known default state, so pinctrl needs to be explicitly set in some
-> > cases. This patch adds a gpio function for drivers that need it, i.e.
-> > gpio-leds.
+> > tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
+git master
+> > head:   fd0584d220fe285dc45be43eede55df89ad6a3d9
+> > commit: a9770eac511ad82390b9f4a3c1728e078c387ac7 net: mdio: Move MDIO d=
+rivers into a new subdirectory
+> > date:   4 years, 4 months ago
+> > config: sh-randconfig-001-20241212 (https://download.01.org/0day-ci/arc=
+hive/20241228/202412282326.0DSE4HbR-lkp@intel.com/config)
+> > compiler: sh4-linux-gcc (GCC) 12.4.0
+> > reproduce (this is a W=3D1 build): (https://download.01.org/0day-ci/arc=
+hive/20241228/202412282326.0DSE4HbR-lkp@intel.com/reproduce)
 > >
-> > Signed-off-by: Kyle Hendry <kylehendrydev@gmail.com>
-> > Signed-off-by: =C3=81lvaro Fern=C3=A1ndez Rojas <noltari@gmail.com>
+> > If you fix the issue in a separate patch/commit (i.e. not just a new ve=
+rsion of
+> > the same patch/commit), kindly add following tags
+> > | Reported-by: kernel test robot <lkp@intel.com>
+> > | Closes: https://lore.kernel.org/oe-kbuild-all/202412282326.0DSE4HbR-l=
+kp@intel.com/
+> >
+> > All errors (new ones prefixed by >>, old ones prefixed by <<):
+> >
+> > >> ERROR: modpost: "__delay" [drivers/net/mdio/mdio-cavium.ko] undefine=
+d!
 >
-> This looks right to me, but can we get some review from some
-> of the Broadcom people? (Hm it's MIPS so I guess that means
-> Florian.)
->
-> Yours,
-> Linus Walleij
+> The real issue was introduced in commit 1eefee901fca0208
+> ("phy: mdio-octeon: Refactor into two files/modules").
 
-Thanks Linus :)
+Silly me: commit 2fd46f47be0f96be
+("netdev: mdio-octeon.c: Convert to use device tree.").
+But even before that, the driver used a different non-portable construct.
 
-BTW, I think that other bcm63xx pinctrl drivers need that fix too (or
-at least bcm6362).
-Can anyone confirm it?
+> Drivers must not use __delay() directly, as that is non-portable, and
+> doesn't work in the presence of cpufreq.
 
-Best regards,
-=C3=81lvaro.
+And looking at
+https://lore.kernel.org/all/202412282326.0DSE4HbR-lkp@intel.com
+all of this has been said before...
+
+Gr{oetje,eeting}s,
+
+                        Geert
+
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
+
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
