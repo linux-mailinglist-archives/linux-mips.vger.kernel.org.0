@@ -1,142 +1,147 @@
-Return-Path: <linux-mips+bounces-7191-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7192-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08AFC9FDF36
-	for <lists+linux-mips@lfdr.de>; Sun, 29 Dec 2024 15:23:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EAEC9FE230
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Dec 2024 04:12:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7622C1618F2
-	for <lists+linux-mips@lfdr.de>; Sun, 29 Dec 2024 14:23:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0C251188247F
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Dec 2024 03:12:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E56DF1509BD;
-	Sun, 29 Dec 2024 14:23:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B79C14F136;
+	Mon, 30 Dec 2024 03:12:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="ZF9fHw6u";
-	dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="sDNdeB15"
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="U4TKcd5D"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C7B32594A2;
-	Sun, 29 Dec 2024 14:23:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.52
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735482185; cv=pass; b=RDGVTOyxty09qQy6tX14UN8ifBtNLynzpYrXr8/BnToMQvLUZhOmzEpHOhe1SKEY7L8elLPGciSq8BcBhobvreL+UvKv9qPv/x4Vi92dyAPrLTRx9SpIxrXwurSVizeZM7jUN6ckqjA3C9fNwppqbdcLOGr/SZVgJ6L9mJnw7VI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735482185; c=relaxed/simple;
-	bh=BA1o9JnrH1VOUqUzTBG3XgNPzlgsB2q09+Oi6VRH170=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=bqXXFmbe+Yz9YFz0HiGHP1hUEkwAvcE+qFOT0PACjyBWHR1c2hGiz6mdp5tkbaMPs2tzw83uYmzlB5J6wSi+jFt6V+Q215MDWfHt+0WOD9EgAA15DlI/mQssDgzzhHzoSzdRoD4OETR/jJ7F3BqBbNCUSlss3z4mGrnfs+3lZ2s=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com; spf=pass smtp.mailfrom=goldelico.com; dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=ZF9fHw6u; dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=sDNdeB15; arc=pass smtp.client-ip=85.215.255.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goldelico.com
-ARC-Seal: i=1; a=rsa-sha256; t=1735482154; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=K4YIbJHAzBn2Aibtebd4/z1tOjsnt2ugXwv7YYeWJf1w6aTII0+Ax8jjM9oTBJnJhp
-    /eLtsCQ3pxIo0wVp0MzdxJiQGtu7yn5Va9nZXbJoFE5TZ1YAHztJAulE3KowrNQFPM6p
-    us5KNiIE1xSrUDtM86/456Ggvs/fSgGzVMaTSaOjn7TBwP7cKX9/BzDImKkfwUtABSAC
-    WOi4PRjqpV5Ym7+WUIhvSJ+mhONy1C4gr2J59rfutidk7q+QSxkQw8uSp09m9i2Y/W1Y
-    B2D0oxaKBdU4V6R3dPpgYgDrC/sWuLtUQ3GvdWUCt+CIQmtpPXKXVzoCNSkG8IEkyalr
-    WlRA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1735482154;
-    s=strato-dkim-0002; d=strato.com;
-    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=MxFHb0sA2rG1su7Y5qk0VowaQ6c5RnogIDqizas084M=;
-    b=eUxzQtHk0JX5t/sek41TAFhqK5hKngWmY8vtKZmQaaqFPOEAqZrxEivqSsPX2x6fw2
-    4CuiocAx70hPXv350A8qlppNI0PQdCaqnRbSbXN7kKKhln2m447Tqc6tD0/q4GQhE19S
-    w0pj/GVMONF2K51M18YEHVeXcUPC0KQSDr3A8JOevn2sWXtqAI9kvwxWNpzNAX4DvrGM
-    f+e8gACmB4EoHusKuyoP6ZpHnQ340SIgL2WDI1QP6VGe/yJ1Q2+LzQIDfPiDDepHSoJw
-    ZJ2E85yB7flzuKSMYOxPAjIghbiRBqmSgxjiCUeBkabv+sp60Qyal4i3vlPrNc96fkrb
-    u/mQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1735482154;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=MxFHb0sA2rG1su7Y5qk0VowaQ6c5RnogIDqizas084M=;
-    b=ZF9fHw6uWFEnqTqMdrYbMW9DSUKTTw7mcwwG7WFZ+oWYD2kKCesvz8OjvEbz1CUIQp
-    hY91Bk+FNoXE93n8FGgpgfu2n704h90yGRS2aoSrBJzg64oktEIhdrvEcTt+31CfGpFX
-    Y+oPXIPOYZqp9PdPEfjEVU6V8MX3wzvqWwbQ/6p8Kvj+TisLke6szXV4WtuvdgOvLvwB
-    6zTPy90v75/9coERyqcGHhl+GXA+i7XhUBOa40ip8CRmzqeELz4T0/1oyTRDF0qYUli5
-    vnL+wzbLLZ+2i9pi03jUQHCHuU55TQK0Y2S+kRBHZVgHo3g9iB+ef4/mwexYWT/ywjhX
-    enMA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1735482154;
-    s=strato-dkim-0003; d=goldelico.com;
-    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=MxFHb0sA2rG1su7Y5qk0VowaQ6c5RnogIDqizas084M=;
-    b=sDNdeB15WLnNfCxAul2311Icb2DLOiVqbWzCzoOXUiYdxSzdO7u5DEpDEUUuaCwm2a
-    xzl/ff17H4+Pjd7rwyBA==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0lFzL1yeDsZ"
-Received: from localhost.localdomain
-    by smtp.strato.de (RZmta 51.2.16 DYNA|AUTH)
-    with ESMTPSA id Q7e0790BTEMXjRn
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Sun, 29 Dec 2024 15:22:33 +0100 (CET)
-From: "H. Nikolaus Schaller" <hns@goldelico.com>
-To: Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Zhou Yanjie <zhouyanjie@wanyeetech.com>,
-	Paul Cercueil <paul@crapouillou.net>,
-	"H. Nikolaus Schaller" <hns@goldelico.com>
-Cc: linux-phy@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	letux-kernel@openphoenux.org,
-	kernel@pyra-handheld.com,
-	linux-mips@vger.kernel.org
-Subject: [PATCH RESEND] phy: ingenic: fix unbalanced regulator_disable() warning
-Date: Sun, 29 Dec 2024 15:22:27 +0100
-Message-ID: <96da5fe557f3b2501447358895bd78decc4633ef.1735482146.git.hns@goldelico.com>
-X-Mailer: git-send-email 2.47.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8BCEA1465AD
+	for <linux-mips@vger.kernel.org>; Mon, 30 Dec 2024 03:12:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1735528337; cv=none; b=azlxaZ/yqlvUQdcyB9lSGF3nyg2zi7GFDzEbA4DDF+isoXr1QqsmUuqDIT5BDFhGfIiAsQUhHdWxD6QGiXHPdA+S/JkiPUelEzfkYJZrIBlYwbHY6BhOq1FATkc40tNWM4hNysFVJEfUZKv9Za+vHhw+ddwZSiAX8s2xY2Cff7U=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1735528337; c=relaxed/simple;
+	bh=RByHVD3bvwf9OBgmvjYl7zmyuddvG3+m7GzmELh8Ojk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=BsCwKjsXLpGGkDYJ5gq8uLy4xJBoxzFTeN7NPwAioKmxD+QZUtzN1Y6s8GmMVlXV4JLQrUjJoABv8SgSbbTuFnTRKjAh8KtivgTKZwxNJYmRiY+Aw/MxB3iwmUhw7zsif05MLHyGrORRd4nrm9VaNyULb89Bfr9iVE6SMvePiZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=U4TKcd5D; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2166f1e589cso136672205ad.3
+        for <linux-mips@vger.kernel.org>; Sun, 29 Dec 2024 19:12:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1735528335; x=1736133135; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=00MV44O/wLuPQ/RpQp8S/rpHXiOskq9DnLB00pReqmw=;
+        b=U4TKcd5D4yLghx2l4BTUej/I4g4Z33Z5EuOg4tqgR1jpnnlPEVnqdX27VklOCdJMzj
+         VZOfTwRmpJpqPi2m4SQzuJdbXiHWuvKAigs0JOvPTR6wkY9L7u/t/zIoZO0s8AjE8VtS
+         2w7VNScCKvWQoQOa2cMwoDCdd6PpS3fw9sgx5WOBebldyJ9PZyFhF/9oGjf23X3wufGz
+         /8QxukHxfuamu8NP0HHvE/qQoFJfPM5DZGjRXAzmsJWZzDqGRubur3XHHzqmQrPPdktj
+         FPk97rpDrbb1LkLj+b2zZKuczfGTh5ngsdYU1MFuNTe13Mf/JBkMCsTv8QN52rmjXrVU
+         MyNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735528335; x=1736133135;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=00MV44O/wLuPQ/RpQp8S/rpHXiOskq9DnLB00pReqmw=;
+        b=rSqfyDy0adrZUJdBGTjTCXBchHeuHRGAi0OwxV10HRMM79F2n6PG/0GXPGSQIkH3SN
+         lfW0YVI0eJI3RodJ+u3lT4HHLwpoBTPHZ+ywto4sBEDBvcIXee2h+N2mTDimg1m2FFOu
+         pqF3phd2CRTdqBVgPo6e0RwbcDi2Vop402J+px4hfyRw6jyJvtOnSYRb5kvbueSuIqzG
+         enwJXNWwaNd1fOooVnDECpR0prMHcJ5Q824mirQ5gDw5CVekkV9E7VtBBgHAU6bMkFCv
+         5KYc7SsJleiNdvAOvxQ7HmQ2e8R20M1PDn0dPsENPOn1Ch08jgy2ymX/uMBOtkdSs4KD
+         Hm2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUDhlN1hD/H7h13kF0jc8xb9pgPQowX7Dxxs7msRNO13LEjetNg2VmJmF3lmslL7HdqgbqtdZOT/QwW@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxaprado9nqhT8HyNA4QOSlhdbBBNQUXqeZ/2NXfsGG1O1MWwb2
+	IEZOX6UGmVju084YPEFgOH+mkwJ+Uw3UZSrMVbhEX8ta0UBs7zSWh6VlDCgx9Vc=
+X-Gm-Gg: ASbGncupLAQ8TXDga2j7J4wtyVQNOWjpXWD5kzGwEyxm51fsoqMspXF2kLaWenfwIDK
+	d0HvQ5npGf+1Fe5d82FKTj+5iifQcudab2rVJHwSqpHKkBAVTHDEvUNChk67M5ZrkWI2jLf/N3J
+	ohNlrmFctYp29UCr0zHYSMKmNg4RK2RY4uRQfubnMJCVJPPEmDqKCZsdlRxHaCEpuSk14gP/aXh
+	1D3t0jlrpA5GDQxQikDLziW0v2YuKE5i2oTzAOwjIU7Hqqe0l1BTMnqHfrU2Y7WJ9cgwJi00QNZ
+	4h8E/g==
+X-Google-Smtp-Source: AGHT+IHVtuGTDJKnXgo1JS5AtVrvj0I/cg1dyieo6seko5BYBtWvsXqnYPIAVAFKhaTndzKmWg8VgQ==
+X-Received: by 2002:a05:6a20:9185:b0:1e5:7db5:d6e7 with SMTP id adf61e73a8af0-1e5e083f019mr66304616637.46.1735528334820;
+        Sun, 29 Dec 2024 19:12:14 -0800 (PST)
+Received: from [10.84.148.23] ([203.208.167.148])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72aad84eb45sm18191842b3a.88.2024.12.29.19.12.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 Dec 2024 19:12:14 -0800 (PST)
+Message-ID: <9cac5690-c570-4d43-a6bc-2b59b85497ae@bytedance.com>
+Date: Mon, 30 Dec 2024 11:12:00 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="us-ascii"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 15/17] mm: pgtable: remove tlb_remove_page_ptdesc()
+Content-Language: en-US
+To: Mike Rapoport <rppt@kernel.org>, akpm@linux-foundation.org,
+ kevin.brodsky@arm.com, peterz@infradead.org
+Cc: agordeev@linux.ibm.com, tglx@linutronix.de, david@redhat.com,
+ jannh@google.com, hughd@google.com, yuzhao@google.com, willy@infradead.org,
+ muchun.song@linux.dev, vbabka@kernel.org, lorenzo.stoakes@oracle.com,
+ rientjes@google.com, vishal.moola@gmail.com, arnd@arndb.de, will@kernel.org,
+ aneesh.kumar@kernel.org, npiggin@gmail.com, dave.hansen@linux.intel.com,
+ ryan.roberts@arm.com, linux-mm@kvack.org,
+ linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
+ linux-arch@vger.kernel.org, linux-csky@vger.kernel.org,
+ linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+ linux-openrisc@vger.kernel.org, linux-sh@vger.kernel.org,
+ linux-um@lists.infradead.org
+References: <cover.1734945104.git.zhengqi.arch@bytedance.com>
+ <b37435768345e0fcf7ea358f69b4a71767f0f530.1734945104.git.zhengqi.arch@bytedance.com>
+ <Z2_EPmOTUHhcBegW@kernel.org>
+From: Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <Z2_EPmOTUHhcBegW@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-if ingenic_usb_phy_exit is called the regulator is already disabled
-through ingenic_usb_phy_power_off() leading to
+Hi Mike,
 
-[    5.367301] WARNING: CPU: 0 PID: 20 at drivers/regulator/core.c:2953 _regulator_disable+0x200/0x230
-[    5.368209] unbalanced disables for regulator-dummy
-[    5.370364] Modules linked in: phy_ingenic_usb
-...
-[    5.373441] [<8054601c>] regulator_disable+0x40/0x80
-[    5.372952] [<c02450f8>] ingenic_usb_phy_exit+0x48/0x60 [phy_ingenic_usb]
-[    5.374283] [<8050839c>] phy_exit+0xd8/0x104
-[    5.373104] [<80657a24>] __dwc2_lowlevel_hw_disable+0xe0/0xe8
-[    5.373393] [<80658ad4>] dwc2_driver_probe+0x818/0x834
-...
+On 2024/12/28 17:26, Mike Rapoport wrote:
+> On Mon, Dec 23, 2024 at 05:41:01PM +0800, Qi Zheng wrote:
+>> Here we are explicitly dealing with struct page, and the following logic
+>> semms strange:
+>>
+>> tlb_remove_page_ptdesc((tlb), (page_ptdesc(pte)));
+>>
+>> tlb_remove_page_ptdesc
+>> --> tlb_remove_page(tlb, ptdesc_page(pt));
+>>
+>> So remove tlb_remove_page_ptdesc() and make callers call tlb_remove_page()
+>> directly.
+> 
+> Please don't. The ptdesc wrappers are there as a part of reducing the size
+> of struct page project [1].
+> 
+> For now struct ptdesc overlaps struct page, but the goal is to have them
+> separate and always operate on struct ptdesc when working with page tables.
 
-Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
----
+OK, so tlb_remove_page_ptdesc() and tlb_remove_ptdesc() are somewhat
+intermediate products of the project.
 
-Notes:
-    Resent because linux-mips@vger.kernel.org was not automatically added by
-    get_maintainer.pl (drivers/phy/ingenic missing in MAINTAINERS record?)
+Hi Andrew, can you help remove [PATCH v3 15/17], [PATCH v3 16/17] and
+[PATCH v3 17/17] from the mm-unstable branch?
 
- drivers/phy/ingenic/phy-ingenic-usb.c | 1 -
- 1 file changed, 1 deletion(-)
+For [PATCH v3 17/17], I can send it separately later, or Kevin Brodsky
+can help do this in his patch series. ;)
 
-diff --git a/drivers/phy/ingenic/phy-ingenic-usb.c b/drivers/phy/ingenic/phy-ingenic-usb.c
-index eb2721f72a4c1..35984dd8a1bd7 100644
---- a/drivers/phy/ingenic/phy-ingenic-usb.c
-+++ b/drivers/phy/ingenic/phy-ingenic-usb.c
-@@ -124,7 +124,6 @@ static int ingenic_usb_phy_exit(struct phy *phy)
- 	struct ingenic_usb_phy *priv = phy_get_drvdata(phy);
- 
- 	clk_disable_unprepare(priv->clk);
--	regulator_disable(priv->vcc_supply);
- 
- 	return 0;
- }
--- 
-2.47.0
+Thanks,
+Qi
+
+> 
+> [1] https://kernelnewbies.org/MatthewWilcox/Memdescs
+>   
 
 
