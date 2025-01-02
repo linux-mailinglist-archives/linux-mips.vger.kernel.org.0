@@ -1,135 +1,115 @@
-Return-Path: <linux-mips+bounces-7222-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7225-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF3069FFB5D
-	for <lists+linux-mips@lfdr.de>; Thu,  2 Jan 2025 17:10:44 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DEDE9FFC66
+	for <lists+linux-mips@lfdr.de>; Thu,  2 Jan 2025 17:55:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CABA43A2DE1
-	for <lists+linux-mips@lfdr.de>; Thu,  2 Jan 2025 16:10:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EB6297A1B21
+	for <lists+linux-mips@lfdr.de>; Thu,  2 Jan 2025 16:54:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFCA51ACEB4;
-	Thu,  2 Jan 2025 16:10:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EED71547C0;
+	Thu,  2 Jan 2025 16:54:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="BwaIL4AJ"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="kKgm3rMv"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbgau2.qq.com (smtpbgau2.qq.com [54.206.34.216])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A70101AF4C1
-	for <linux-mips@vger.kernel.org>; Thu,  2 Jan 2025 16:10:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5236E1F16B;
+	Thu,  2 Jan 2025 16:54:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.34.216
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735834240; cv=none; b=Yj4K6iv2ZU/Tk+xzj/Hnr80a0NP7kM33MUigSioK4wmXhdZhtZkKpBpCALEcUJd62hIh+GMQRetKcQA1xU8hBt9efasHBgUkwOd1HtlVBbBoAk5q5328PanX5h8dd0fb4F9NaPKob7cehgGA+8eAmgJyjdx+HloFWwDX1Aj8dZw=
+	t=1735836870; cv=none; b=JKdLBmsKRe0bgf+yl8nprzUBWwrQcFSmYI9Mze5B8bpkFTLXRGjTT33LTPaH9IYgmh/UNuGz5OaHi2la3TONnLrE79SZcLk2Itq1wSoog4i+h5elLzJTSeNA2SyK6F3+oRW5CL6PuJP2Y41chS7LSk1uQv3GhLs9EZUf00WOpiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735834240; c=relaxed/simple;
-	bh=pW2Vii24duUQKNBOuRttubvCOk1O/hZ6izDua/j2GBk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SLCUhrmTAQ/BTAvp7WgRzkQUxpD2qY0H5hkEzxA3xlXxhLdxpKs3FD/2DfDhlKzE3TzpQ9ale4T9EhSAoMkWH/BRkjvNoYdgGNdoUlura81ggvkbYrb97ueXXpMpKV6Ul4WT5HccYPkzyORaw7pZYgIW+ocQzWh3/RZ3KG10mPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=BwaIL4AJ; arc=none smtp.client-ip=209.85.128.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-43618283d48so83740015e9.1
-        for <linux-mips@vger.kernel.org>; Thu, 02 Jan 2025 08:10:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1735834237; x=1736439037; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=w2MW83ZlBEB0slMAIjVzh1uN6EJmqPsNX84g/jW2efg=;
-        b=BwaIL4AJxBxAkyMh+XqnD8OhhdfqA+kkzKSj2rWEPDF3kb7W4/sfRVdMrOA01o+h0j
-         zaPjOkh0he3oLs29H+coms7irY2wIVv/9Egfst3Us4nWkW5kw13fY5cdlca/23RA5lS3
-         2jiUi+uJbSdgL0vAhbN4SP9IN0BKftO+bqvUHBuA0cWVXNiniTh5ch/4Jt1AoJxLsxH+
-         7OehgtyXkooQ5cYrNm2lOzp7jzs16duwjkuTWGWRhI7pqhTR+EdxLTEtu+E7nkxw+Xqt
-         smVxKmsXeqelceg5dSACSbukCmL62j5lftBWgGGBQIm8Pk5Qe2VvOF13isoqHumdtczb
-         QZ1w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735834237; x=1736439037;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w2MW83ZlBEB0slMAIjVzh1uN6EJmqPsNX84g/jW2efg=;
-        b=pXdLfxHUyaoILuoS8CeMkmzaZbwujjMvB0DQ/zhwMdbHJMoYb/6q6sBOE7EvZ6fLtD
-         sNFeVHdzLx1+JefxnCYIrshevTOwaZbh/2U4YVMmgCMyJqmp4V8bJ/qrVpWER+bm98xn
-         tGOjej6i1KzNdJBbSTak0WDIjxkdg6/cfHdEpx0pfQkuhagwEmhtVLdbGDZ8oLG+4tUD
-         5XcLM7kKqe54bhMeBFdQWp2duq5OESnzNd3yQY3u7MPfSGmfVPR/kAH2jB/aim5bNTVu
-         imDSmIQp16y7zOoQZ35pkbMQD/sNumnNuFEbe04h1LgYVpZ6npOrrZ3H63+vvzc1u+ZU
-         3ryw==
-X-Forwarded-Encrypted: i=1; AJvYcCV1E9RtNQu7iPo4UAAi+qoSwL+iYeUoYC0TNFfLsAPsTl8BqJzIQjb927+D82KGElVqtNOeRMUqenGI@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZni3Bv7l31qkgP57lbmppArAp15vwcM6WO3r7xb+qLJTfuS3u
-	IIYew3nhp8ONQ/RDNYo1MHc2615TXCkn3gY9e+P5Zkuk8ipSffuwH/cVhZtE3sc=
-X-Gm-Gg: ASbGncsIoAj2mxGynAQHklKVtR47bcwEug7C9aAuxXiUtWvUtV5MzePlnARD4gbzDgV
-	acOP4B4rY1n7ElzahQVcmVorhSWvaG7g5QDEK/rjIkT7Bm8MGHsuZM1YR6RusXihCckRDQPK5BE
-	2SK+yCpXv4RQZdgmDTot5SSt7RBUyrI3Z7U3r399FoXpsyTU6oK0q2sm4L3/TjCeZaZwa9+/fO0
-	xdnyIOjgBCBp7t4iA95d8iU1ole1pMzZ727aeyBl56vYD5Ds4JdnPAYlg==
-X-Google-Smtp-Source: AGHT+IErl4BqanoYDVUAZsHsogjaaRwncA1U/OXvBzPwYOV5N8q9kJ/EGpWxK0q8/x1dmkcwBA2jNg==
-X-Received: by 2002:a05:600c:35d2:b0:434:a929:42bb with SMTP id 5b1f17b1804b1-436686464cemr420475395e9.18.1735834237013;
-        Thu, 02 Jan 2025 08:10:37 -0800 (PST)
-Received: from pathway.suse.cz ([176.114.240.50])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43656b11aecsm489101735e9.23.2025.01.02.08.10.35
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jan 2025 08:10:36 -0800 (PST)
-Date: Thu, 2 Jan 2025 17:10:33 +0100
-From: Petr Mladek <pmladek@suse.com>
-To: wzs <wangzhengshu39@gmail.com>
-Cc: dianders@chromium.org, tglx@linutronix.de, liusong@linux.alibaba.com,
-	akpm@linux-foundation.org, kernelfans@gmail.com, deller@gmx.de,
-	npiggin@gmail.com, tsbogend@alpha.franken.de,
-	James.Bottomley@hansenpartnership.com, jan.kiszka@siemens.com,
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	yaoma@linux.alibaba.com
-Subject: Re: watchdog: BUG: soft lockup
-Message-ID: <Z3a6eQHwjRdwnDXp@pathway.suse.cz>
-References: <CAGXGE_JWtMo8Qs=hsH=NULkDRFoYKYorKHACpqvqpYiO3am8eQ@mail.gmail.com>
+	s=arc-20240116; t=1735836870; c=relaxed/simple;
+	bh=WKBhCnvtMIY0gTCieqrMhUbL9KKmSsXX0ThPSNaPwls=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=txXqFDXgXhjE4/OgE4XT0h2Okjr/96FnMynmIoTUGoOztgRHXsH4TR5OTvMEXnXG0VkldQBEoBOY53Kjp4oFuKk2hE2hXctHZ0//x/f0fGBDGv4c9tC/tykD9SR8zNRaeLMg7gNO1JWccNDF8Rw7Bhfoj6U3gioE8x43oEh1zMk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=kKgm3rMv; arc=none smtp.client-ip=54.206.34.216
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1735836823;
+	bh=MGRV4JGUlwRUQzrhpkSdmx2FoinaZwX3vwgwN4+ubic=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=kKgm3rMvViCUwIdsVeFZnzBhSk+uQ8gnb0jmNueSavcjt0WEU0VawPd4z0cKOVQAc
+	 Ip/cNYwVssmBIPSQN2Jfq98a2MnCrMuw5UyHYUIRUVUC3E4/CpmiMaTV/6EgOioZKn
+	 XWcwaJrrA8aMy1jyTBnBpJQhwa4z/e3c/ryG3zHQ=
+X-QQ-mid: bizesmtpip2t1735836780t05d0rc
+X-QQ-Originating-IP: 7Ti20rk5NQiroZTWd+ILbIe3fPVqsLzx1brMy7bfJNI=
+Received: from avenger-OMEN-by-HP-Gaming-Lapto ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Fri, 03 Jan 2025 00:52:58 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 7390309620555676409
+From: WangYuli <wangyuli@uniontech.com>
+To: macro@orcam.me.uk
+Cc: baimingcong@uniontech.com,
+	gregkh@linuxfoundation.org,
+	guanwentao@uniontech.com,
+	jiaxun.yang@flygoat.com,
+	linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	revy@deepin.org,
+	sashal@kernel.org,
+	stable@vger.kernel.org,
+	tsbogend@alpha.franken.de,
+	wangyuli@uniontech.com,
+	chenhuacai@kernel.org
+Subject: Re: Re: [PATCH 5.4~6.6] MIPS: Probe toolchain support of -msym32
+Date: Fri,  3 Jan 2025 00:52:58 +0800
+Message-ID: <8AC8E4D8519CF8E4+20250102165258.57525-1-wangyuli@uniontech.com>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <alpine.DEB.2.21.2501020550110.20821@angie.orcam.me.uk>
+References: <alpine.DEB.2.21.2501020550110.20821@angie.orcam.me.uk>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAGXGE_JWtMo8Qs=hsH=NULkDRFoYKYorKHACpqvqpYiO3am8eQ@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
+X-QQ-XMAILINFO: Mf+wQkWJ2TuYBMzfbZT7ecSDB0dI4ood/OxEkTzSJHLy1N6AsQiOX2XQ
+	xy22vrjWCuWCRIZehXizuyIZwLrIkXOrtYoRNxnOuEnYjLcpbXcYoSrmHGbv3nP5Jnje7/y
+	bUNMZi1vPKftMy7TyY5DZVHvRYmJC9LxoTGhB2G+pt2ZT7HMrHFdjqSKOrN/xfpFpqoQEhl
+	xlOVBbXTsu4k/rXYY73hUT2kUDmgc8DQNi806SIJzApo3fxPv39yG53R/dMY989mu7gqEq8
+	4ClCyrt6Jcx6kg+s32SohUjDMrF6sg/m8BCpIKnNbO/a0EMFeHiiupARd4AcckbgwGDl86r
+	szUPcMJrauBcx+kpaybzKUcrB6Cyxy/eYQ4+0lrwcB1eMaggbwft+e+B6ddSkpljcSYO/KL
+	9qynecwJ6Fa0tUb2XCwJbxq0v7Y3KNqxtvuCx8s6qrzfI8HV/VZojmvSJ/t8n3jzdED5DIt
+	7Ol8nDQSYsFaBMV4m6bh8sOmNJojmnxPnmdl75aCkHWPn8oloC3ylDNb6M7muuA8VOLDura
+	a2DEL+Lf7dEkV/hSjQny7Z3yCab1+LQ+OXowpR6ZeTD7VVUtFdOEu20Ce80hB4dgX8RwQcj
+	b+odPuv6c8pUcIKrDrx0aKqLkOt6k12yfF21eNaJDbIAZzIKbI3yxcLEC9kNxESSPU8t36b
+	3IHvLzCXGVVEvZId4ImtLxYTRweeWz6aOEnYfVvEEgZp70pLFJD7hy05zEDhFG3hkgy7khW
+	46mSgIlfiqc9H6My0ELD/WOHtYF2n968Pv01Skzphzm2rfqAHoaCrbX60hZWauuxK5AiNoz
+	cjCwcr0OMMTNcBligi6aWVddBuHL7149FwsNYcIkpNo0X7gRFhUb5SGHNcUwS+4FyKYCWsi
+	Cxv2ASYHc3JOth0AlMRwIsCpQrepI626vvVO1wfbKYWXNBBu4lbcrKeDx0QTFBpyS+JeqzH
+	GPmTZbg9n/5ksWrn+M3U1LKmplkFoozM2247frgn8Ta1lN2igsxzq+swrOBmYQPmxYP8QyY
+	9ME5DSmQ==
+X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
+X-QQ-RECHKSPAM: 0
 
-On Mon 2024-12-23 14:32:11, wzs wrote:
-> Hello,
-> when fuzzing the Linux kernel,
-> I triggered many "watch: BUG: soft lockup" warnings.
-> I am not sure whether this is an issue with the kernel or with the
-> fuzzing program I ran.
-> (The same fuzzing program, when tested on kernel versions from
-> Linux-6.7.0 to 6.12.0, triggers the 'watchdog: BUG: soft lockup'
-> warning on some versions, while others do not. Linux 6.12.0 is the
-> latest stable release where this error occurs.)
+Are you suggesting that a commit from v6.8 reintroduced a regression that
+was fixed in v6.6?
 
-I am not sure if I understand the above correctly.
+If so, we should address this issue in the mainline first before backporting.
 
-Did you test also kernel versions older than 6.7.0 or newer then 6.12.0?
+As a general rule, we avoid introducing out-of-tree commits to linux-stable
+except for reverts.
 
-Was the result random? Like for example, did you saw the problem
-on 6.7.0 and 6.12.0 but not on 6.9.0?
+For this patch, merging it into linux-stable is crucial, as it would prevent
+certain configurations like loongson3_defconfig from building the kernel with
+clang.
 
-Did you try to run the test more times with the same version of the
-kernel? Was it reproducible?
+To fix follow error with clang-19:
+	clang: error: unknown argument: '-msym32'
 
-I guess that the problem is in all versions but it is not 100%
-reproducible. So that the softlockup happens or does not happen by chance.
-
-
-> The bug information I provided below is from the Linux-6.12.0 kernel.
-> If you need bug information from other versions, I would be happy to provide it.
-> 
-> kernel config :https://pastebin.com/i4LPXNAN
-> console output :https://pastebin.com/uKVpvJ78
-
-It would be great to see at least three logs. It might help to find
-a common pattern.
-
-Also it would be great to provide a full log if possible. Or at least
-the boot part and few more lines before the crash.
-
-Best Regards,
-Petr
+Thanks,
+--
+WangYuli
 
