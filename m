@@ -1,79 +1,77 @@
-Return-Path: <linux-mips+bounces-7230-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7231-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E230A00356
-	for <lists+linux-mips@lfdr.de>; Fri,  3 Jan 2025 04:56:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5519CA00377
+	for <lists+linux-mips@lfdr.de>; Fri,  3 Jan 2025 05:44:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1523F1629EF
-	for <lists+linux-mips@lfdr.de>; Fri,  3 Jan 2025 03:56:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 240F1163003
+	for <lists+linux-mips@lfdr.de>; Fri,  3 Jan 2025 04:44:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 461181A38E3;
-	Fri,  3 Jan 2025 03:56:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 765DF14901B;
+	Fri,  3 Jan 2025 04:44:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="K26r34FV"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="WwxS6LV7"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5417E1514E4
-	for <linux-mips@vger.kernel.org>; Fri,  3 Jan 2025 03:56:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4B1BA47
+	for <linux-mips@vger.kernel.org>; Fri,  3 Jan 2025 04:44:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735876609; cv=none; b=qUVaOFecdn2hQJwFWxOu2bygjH6pA+orpk54+ODMuPjpcfwzjT/5wUJqG7bSSWRZ4CBmuQBqPfZNtJRelMJyHJTLTZvZi/gp67Gnw9XSLO4tS8o8t30rPL6nnOQ2Powzh+uYZxtvSEnwKNuarJDjNIKkyRTEpBq1d9O7RRbNcA8=
+	t=1735879445; cv=none; b=l6kixOXsUk1tGXK5NYW0iCcX1mQVhWkcGE/UwkT6R0Tdac5d1G/W022yyg0E9F/58igVGPf0360MyWhbuoL5iw0wvGs4GPJz/E48OOseDB/IBoPTT/q9RRy/kaEqVKgTEUWSLuF5lq9I3iCu7G0jPEu+oTH7Qg/HwIKfVFD8m04=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735876609; c=relaxed/simple;
-	bh=1jkG8vOEuzvlWn7ntVxS/sK5whSZ5XgibAKAEgNYiaM=;
+	s=arc-20240116; t=1735879445; c=relaxed/simple;
+	bh=xPYQZM/CGAlZBJw4fYVluKL36NCUquniUuAYCz603wM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gPfuCcvdcZ4S2Div7otLhhBklKRSPCR4sHgOfcKCtC/cJuT5PeWFvZk/cYEl8VvGgFBZKxLInGO8CzNIk7d2OLYZPhBsACYR+eQo4hDfNOSz7CSiA70xgt3POJ0uIfq7PEAHjjgQfJcFgKH8GnH7cIdLa8YLl8QRBR1TMqgxsgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=K26r34FV; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2161eb95317so168525915ad.1
-        for <linux-mips@vger.kernel.org>; Thu, 02 Jan 2025 19:56:47 -0800 (PST)
+	 In-Reply-To:Content-Type; b=LDPuvwlEardukYyk697mEyLqiN2HgZJQFFMMZmGL24z33kXzCPUcXWDu2VkFZGm5ndRDHbdgvrIVJBuSSyyKhE496R4ev4H22w7zAoRmvHJ6y/1eCQkZt4GRJFqnc1xipl3nyCPkyO4xHOwGAtpHGrNDnkq3WpZoVmGknJ0/5E4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=WwxS6LV7; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-2166f1e589cso199544445ad.3
+        for <linux-mips@vger.kernel.org>; Thu, 02 Jan 2025 20:44:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1735876607; x=1736481407; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZAFSLXktiWezwRLeMqNHQIZ8a5HqagkfYDHtpNVk3Hg=;
-        b=K26r34FVNTcZwPLj6f4ymNKka4VUcf//GDw1A2+SRAXLmH79YjVz5gnL3hdKoBv6Q8
-         d2LDSBnBWpcTeZKujlqZzaWcjPk1CvU6Qh+BT6PDL/7g7DGNRV45hNfVTP4JaJ5tjP7p
-         KX1G2SLI+NWh7+IcSIWJyskJXQdMiRveP9cId8eM8ihs87TozkikaX1PEMoylMqfDicK
-         gTYUyPGwlXGsug+rZTCC7jB0fgBwqaAmbu/4kFkUPhvoSzduW4gZa9V6WMgu9Ru3sie6
-         bnNEJMnJYfA9pO/3U56/e1WDKOrQp+Ix3SpVgasoq15vFqlvTNpbwViVfr85ArS/2V/M
-         q7fg==
+        d=broadcom.com; s=google; t=1735879443; x=1736484243; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=Fk7taE5M7bddKxaCZpDwAIYeTaopdvBCG+mZ+qksddM=;
+        b=WwxS6LV7u0UTYctNIEYX8S+8OQouM0fWc0Tszg9ypKXwH+kWfErlCb6K3vNFgKyocL
+         mjez8pTyPrbpnaBmIDe3tMLBM11HlCiVIltDVIT3k2RX9rVL356om/cnVAI969UbqbYW
+         VAhXHTaxWrN/11/XmotgNqRpWacVO92aIzVP0=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735876607; x=1736481407;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZAFSLXktiWezwRLeMqNHQIZ8a5HqagkfYDHtpNVk3Hg=;
-        b=Ts5v5aymmfJJpiAZR1ZjX257y6XPBh3XE8ywCb4jmeVreuySdVM3bzZwaBJ2SBxA5m
-         qmjCd/3BGgbAnhYHGqlafkSgxilzvg+l12SmbBIp5Jyh6kDWh4ql4CGzAjcA5TWzC6SJ
-         9Dhp8JDYlPKV8pGNRjbIYsZ/9jMY0xU2ajiQWu8/FfI2br1CXZcqr39wdt39fguAiEV7
-         UwVesiStkwPz+AWhAC0jAwKZm+T44dopUgK4S6JJiyf4cvPCBhXjR/Xooh7TNDu7X1h/
-         jiA9SiiKEH4Pt41JUm0bqSwk/XKUxq5I13tI8pT8Bf5xQNgtcQKOjS1/Ux3TK6bww0mq
-         93Ug==
-X-Forwarded-Encrypted: i=1; AJvYcCWBDbkhYc1I/qjSzflQrHAS6bC8N/Ig5nNmq5gRH7eOOajECBgurzKNmGewEHYMJ21RgS+ifXJ1tdoJ@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQ0LraWe4wsXmqAI0yOGqHVfMp1Vx4RUIGKAnDwOmxZmdevsKq
-	I0u94qM8y9YfH5BpudVGMjlKDj/XifbLmAqRdL2ilxBf4t48j4rXlWjzdeMiV4s=
-X-Gm-Gg: ASbGncv1oCkqaBoiTev3n4AxBstMwkho4z0pDURbih4s+noMBQg/8cWctpU5dS5XdqE
-	Jm1EcDYPHjXRZLCKdxotRWLvv/dZVDKADmvWuG86P6ETeaM9c9HQrPCyYhBuTNAqIWUbmo3SsYp
-	IMOetUd0t9Tp90uQGho2i52C1yGLdZV+hTu+D9IZjE3etkc8Nz1tlpl2PnEY22paINd4zCLUUsE
-	SmJZCixn7poc4sbH8aV6nddnv0YzRUhQY2pjYsRser/NK7bhr9tORMt6emHSmUEzzJ/c0gkodCx
-	R76jAw==
-X-Google-Smtp-Source: AGHT+IEc/ggyHLTYoMeUluV4bigOVwXpofNkIsaBMCcId3pHP1FalWdw/+NGvDWYCJeax838Cotn8g==
-X-Received: by 2002:a05:6a21:158d:b0:1e1:ca91:b0e3 with SMTP id adf61e73a8af0-1e5e0800420mr68823527637.36.1735876606776;
-        Thu, 02 Jan 2025 19:56:46 -0800 (PST)
-Received: from [10.84.148.23] ([203.208.167.148])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72aad8dbafesm25847661b3a.128.2025.01.02.19.56.34
+        d=1e100.net; s=20230601; t=1735879443; x=1736484243;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Fk7taE5M7bddKxaCZpDwAIYeTaopdvBCG+mZ+qksddM=;
+        b=E/XmMJkd/eBmB4bZVewa7kibYPYaEv630eR/y87omSP09Lcwg1Mr6Xm1hMfHhrSRA6
+         WNMe73HskWhP+U5Hnq2N0gaTR0Jebc0kXWZ+st+mKZHGpNJMVvYVmdHe1BzzoIYsGoRg
+         VG1sXDAfg+1GyyTjPi87iJKehOLPzH62eyR8yEcpKhcAbU17IXd0dfPd1mBSCorqYZdH
+         nkB40or5RtYhWhR5YOGkbhzvEYvNsy7g0UD9Cn7wolghkyJFK5NEgnZMKuRcQb5E22Px
+         TO/XL5hhj7C3znXolfhhRWorqyUomfMW+b3Vt167hQvY0IuuAog5h3cqJ0tqdmocPOVO
+         NiyA==
+X-Gm-Message-State: AOJu0Yw3+UBmXXtVMuuP8h2gtRBSXkuDBq9Q8/3oRHw7dRj3SiSOterf
+	RpbZC24tXKHH96LzvZzlHhrgeMfNJRB0qYprqpZp/Ta1uLhHZlkfdusXYjgZQsPinL3RlQ1Wd3A
+	=
+X-Gm-Gg: ASbGncv8TXjtNpzUo+yNhI2yDJb2IVXmhJvOb7/WtPHJA/pSG0JdnqIJJeYz6jj0YQ/
+	UJGPa+eb9CodbOmiW+nHSiXsyzwHMsIGlEACmiKA/7GyCAeNi3fTRgxDk3epxlPoL2r8AkRckNP
+	2uGb/NnWqkNxFBKN67Kjl/LoTzBezr8hsotZBCWk0Rkq3394EQr5BU89eGqXPlVAZRQfdXEDB/7
+	alrxpnDnXOrA9FC3r/wQFCm8xJ9TIdDA/USe0CeevBVftoc2KcJBXeIF9Rs2wc/NrKXvHtaPV9Z
+	KPw1T8H7Jb0BahZSBpX7he+rERIibat6evtWzfegX33b7RbkRw==
+X-Google-Smtp-Source: AGHT+IGfL9IJcm5g1F+XudcPCuXzEDmZxlbJTOeco5ykbb2a4RWAPmxzVgwPccNB9ns/vm1aAjdQEw==
+X-Received: by 2002:a17:903:120d:b0:216:5af7:5a8e with SMTP id d9443c01a7336-219e6ebdc17mr717628075ad.26.1735879443169;
+        Thu, 02 Jan 2025 20:44:03 -0800 (PST)
+Received: from [192.168.1.185] (syn-047-229-241-210.res.spectrum.com. [47.229.241.210])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc9cde7esm235139825ad.152.2025.01.02.20.44.01
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 02 Jan 2025 19:56:46 -0800 (PST)
-Message-ID: <1cea8c66-626e-434f-aafd-9d44d37f5cc4@bytedance.com>
-Date: Fri, 3 Jan 2025 11:56:32 +0800
+        Thu, 02 Jan 2025 20:44:02 -0800 (PST)
+Message-ID: <c50cbdae-61c0-484a-a5f1-9a9e08ff42b7@broadcom.com>
+Date: Thu, 2 Jan 2025 20:44:02 -0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -81,65 +79,74 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 00/15] move pagetable_*_dtor() to __tlb_remove_table()
+Subject: Re: [PATCH] irqchip/irq-brcmstb-l2: Replace brcmstb_l2_mask_and_ack
+ by generic
+To: linux@treblig.org, bcm-kernel-feedback-list@broadcom.com,
+ tglx@linutronix.de
+Cc: linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+References: <20241224001727.149337-1-linux@treblig.org>
 Content-Language: en-US
-To: Kevin Brodsky <kevin.brodsky@arm.com>
-Cc: peterz@infradead.org, agordeev@linux.ibm.com, palmer@dabbelt.com,
- tglx@linutronix.de, david@redhat.com, jannh@google.com, hughd@google.com,
- yuzhao@google.com, willy@infradead.org, muchun.song@linux.dev,
- vbabka@kernel.org, lorenzo.stoakes@oracle.com, akpm@linux-foundation.org,
- rientjes@google.com, vishal.moola@gmail.com, arnd@arndb.de, will@kernel.org,
- aneesh.kumar@kernel.org, npiggin@gmail.com, dave.hansen@linux.intel.com,
- rppt@kernel.org, ryan.roberts@arm.com, linux-mm@kvack.org,
- linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org,
- linux-arch@vger.kernel.org, linux-csky@vger.kernel.org,
- linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
- linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
- linux-openrisc@vger.kernel.org, linux-sh@vger.kernel.org,
- linux-um@lists.infradead.org
-References: <cover.1735549103.git.zhengqi.arch@bytedance.com>
- <04b0a778-7a6b-4df3-b40e-ca76adddb243@arm.com>
-From: Qi Zheng <zhengqi.arch@bytedance.com>
-In-Reply-To: <04b0a778-7a6b-4df3-b40e-ca76adddb243@arm.com>
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
+ xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
+ M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
+ JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
+ PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
+ KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
+ AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
+ IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
+ ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
+ bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
+ Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
+ tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
+ TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
+ zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
+ WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
+ IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
+ U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
+ 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
+ pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
+ MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
+ IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
+ gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
+ obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
+ N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
+ CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
+ C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
+ wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
+ EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
+ fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
+ MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
+ 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
+ 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
+In-Reply-To: <20241224001727.149337-1-linux@treblig.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 
-On 2025/1/3 01:00, Kevin Brodsky wrote:
-> On 30/12/2024 10:07, Qi Zheng wrote:
->> Qi Zheng (13):
->>    Revert "mm: pgtable: make ptlock be freed by RCU"
->>    mm: pgtable: add statistics for P4D level page table
->>    arm64: pgtable: use mmu gather to free p4d level page table
->>    s390: pgtable: add statistics for PUD and P4D level page table
->>    mm: pgtable: introduce pagetable_dtor()
->>    arm: pgtable: move pagetable_dtor() to __tlb_remove_table()
->>    arm64: pgtable: move pagetable_dtor() to __tlb_remove_table()
->>    riscv: pgtable: move pagetable_dtor() to __tlb_remove_table()
->>    x86: pgtable: move pagetable_dtor() to __tlb_remove_table()
->>    s390: pgtable: also move pagetable_dtor() of PxD to
->>      __tlb_remove_table()
->>    mm: pgtable: introduce generic __tlb_remove_table()
->>    mm: pgtable: move __tlb_remove_table_one() in x86 to generic file
->>    mm: pgtable: introduce generic pagetable_dtor_free()
+On 12/23/2024 4:17 PM, linux@treblig.org wrote:
+> From: "Dr. David Alan Gilbert" <linux@treblig.org>
 > 
-> Aside from the nit on patch 4 and the request for clarification on patch
-> 10, this is looking good to me, so for the whole series (aside from my
-> own patches of course):
+> Replace brcmstb_l2_mask_and_ack() by the generic
+> irq_gc_mask_disable_and_ack_set().
 > 
-> Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
-
-Thanks for your review!
-
+> brcmstb_l2_mask_and_ack() was added by
+> commit 49aa6ef0b439 ("irqchip/brcmstb-l2: Remove some processing from the
+> handler") in September 2017 with a comment saying it was actually
+> generic and someone should add it to the generic code.
 > 
-> And happy new year!
-
-Happy New Year!! :)
-
+> commit 20608924cc2e ("genirq: generic chip: Add
+> irq_gc_mask_disable_and_ack_set()") did that a few weeks later,
+> however no one went back and took the original out.
 > 
-> Cheers,
-> - Kevin
+> Build tested only.
+> 
+> Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
+
+Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+-- 
+Florian
+
 
