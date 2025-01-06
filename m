@@ -1,156 +1,233 @@
-Return-Path: <linux-mips+bounces-7253-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7254-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01A0DA01C01
-	for <lists+linux-mips@lfdr.de>; Sun,  5 Jan 2025 22:25:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CC69A01E53
+	for <lists+linux-mips@lfdr.de>; Mon,  6 Jan 2025 04:50:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2C2907A191D
-	for <lists+linux-mips@lfdr.de>; Sun,  5 Jan 2025 21:24:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 086533A1CA2
+	for <lists+linux-mips@lfdr.de>; Mon,  6 Jan 2025 03:50:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC04D7DA95;
-	Sun,  5 Jan 2025 21:25:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 496B316DECB;
+	Mon,  6 Jan 2025 03:50:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=o2.pl header.i=@o2.pl header.b="BOHsus9s"
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="b4N51bm+"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C9158821
-	for <linux-mips@vger.kernel.org>; Sun,  5 Jan 2025 21:24:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.222.135.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5377414B94B
+	for <linux-mips@vger.kernel.org>; Mon,  6 Jan 2025 03:49:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736112300; cv=none; b=VUXEcljDainXyY5Y7TLDFtzaTDJQYTrjcK5kG0qw715KmkFkSOPSPfQzBKQ5/vmNiZAnFslzhkBDMWn24xQV8V4I/I4ego2Xc4vcdp47/F0wqZykzMZ5xo/gySjfavUeyy1aNYi5UL8BgpQWyztQCoG1MKuScVlKW1CpaXKzCJQ=
+	t=1736135401; cv=none; b=BucU3PrD+SOhe8k2mn4m8j5YkvpAhWKR7/QUwzb0ifjoA9aZsGzC/A3A3bsUDVKYyHnlhpLYnTO+J5003po1/aox0yxmSfhtGJBWHYNqWrIzRRWBq+qEmUgpsHCmm9hzVi4udDRckNAF4zZgVt9+Ru/tCYAt65BPoqx/oVSto1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736112300; c=relaxed/simple;
-	bh=SsjA84wrFwgPhCFGRkJsChg53z08c4e8e2KhZm+mi/w=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=PnT8JJOnHfRdpo50tUC2OXyfTDhxcyuYRzDZxOXqRkHmdUpV/IU5T/rEIQKzvaWKzL/xOIWtuomCpSWGsEjoup3nYqVhkMm+cUWqlwjEWK7hqSatNF4kNzLGnA+0VH1PzzanTZ8l8zH8rXndSghWnfFTIHRNSOzrItvtHjK10V0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=o2.pl; spf=pass smtp.mailfrom=o2.pl; dkim=pass (2048-bit key) header.d=o2.pl header.i=@o2.pl header.b=BOHsus9s; arc=none smtp.client-ip=193.222.135.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=o2.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=o2.pl
-Received: (wp-smtpd smtp.tlen.pl 1367 invoked from network); 5 Jan 2025 22:18:14 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=20241105;
-          t=1736111895; bh=VnLPdnjsaycnpSx/pL4+U4RdKV4dB9Ee+hdEOWVTlfk=;
-          h=From:To:Cc:Subject;
-          b=BOHsus9s/rllxnUMSJbXELLZkfUjDTx5aphRrpGpIfn6Ku7N57GIuh3wlc1/Tg/bi
-           KXQCdZgsDwjKPq12V80Ec8KVXmPG2uT7b6E66UFij/Ubfy04ZA0C1sJiC+59O8Bkku
-           sGgyWbIOMlh20ySGwhYs1X8wiWt2zfIeNEaUhqqkfEfz8m3EZoGHX/UnqVBXF4mOFX
-           hh8kE2/7lKoWn/qE+o5Wxerngb4kB0LWwiEAPY0CrC3s1Y8EZbGFK5lAMVnTfy4Gr9
-           Jv14+dX/PqHYy6BAM6UWYL0NUlo29XVWAtnmP1iaRibsIyvRczwQPZ9mvT87F0CNg9
-           ek7H3/1dK3zzg==
-Received: from unknown (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[37.109.144.183])
-          (envelope-sender <mat.jonczyk@o2.pl>)
-          by smtp.tlen.pl (WP-SMTPD) with SMTP
-          for <linux-mips@vger.kernel.org>; 5 Jan 2025 22:18:14 +0100
-From: =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
-To: linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
-	stable@vger.kernel.org,
-	Dengcheng Zhu <dzhu@wavecomp.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Ming Wang <wangming01@loongson.cn>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: [PATCH] mips/math-emu: fix emulation of the prefx instruction
-Date: Sun,  5 Jan 2025 22:18:06 +0100
-Message-Id: <20250105211806.421305-1-mat.jonczyk@o2.pl>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1736135401; c=relaxed/simple;
+	bh=4dk7AAJmezfFi3ZfUWBsyuZRMbx4LQ4Y67CoiCMSr1k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Eayf3cCX6XwDKEYpFPRUhg4mIvx2/5U+f67Uo9gUvw6Vuk0PG/HeDtM1yRBVLzdpz/SsFozOEzZpCCuh5SdFVJ6ExFixSi9nlgcICruvn+mMZ+XNlKRceDnuKQoZ4BEGFxoHUhhbnkyp+kkhBXdXkRi9vjZMkOH4m8i0S2EpaEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=b4N51bm+; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2efded08c79so15670632a91.0
+        for <linux-mips@vger.kernel.org>; Sun, 05 Jan 2025 19:49:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1736135398; x=1736740198; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=M/CQCfwbCGmNbncAnjTVlLDBhrllfolDtdV4jFWfmgY=;
+        b=b4N51bm+5ySmYCAAyjdX6ff237xAtmlGkxKFy/7WJODVou3GxVwNmKyE0vdFbXu5FV
+         HimJUI6lCu35w6OvX3FWLN5DLsAVB0/vY2hd0dIv4yPdhz1lJDHT6NEZ1f/nF/YoNxOe
+         ixziRkNULlpHzxcfnM5iplY9rUFj8PInfkzRTSO0eLPbU1Guy+rJJUPMjK1saUkRu8S7
+         rhK1JIQ7fVjbR2E5BhtDu/Y9LmNp/TXkBqBxPS8j1slVDGC2CEEEm+hJVP8808GGslE5
+         YUEo3glRfEMH80+stASPYBTHnFRBdLlR4C866/vM9hNYWlj9YlN8KOIUPvT4hTHk2BWi
+         JDwA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736135398; x=1736740198;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=M/CQCfwbCGmNbncAnjTVlLDBhrllfolDtdV4jFWfmgY=;
+        b=QSuLjOTcagLI1TeN9c4aYEXMCgPGxCzkLSG5FsRhlnblNQvEO65pTZE7L8guOIGIrn
+         I6FRugn+YLfYkZogWmTb+EUswp8xzHntzKNoddSbZDcDZJ/528VHmphmIoCVsVA5qz4E
+         VQLEX0Ky80Pq1E/dRBJmq8lbo4cuJa/WZuBAD+cUFBAhcsQnnYQMgq2b4OsQrbKloBaf
+         sHCpoYVPMFlukWmQ89ErMfQtihrwPK9GoIoLLztoJoHwM+nhmd9YyUp/WSSCQKJe9kXi
+         qbew2TaZ+hfsO7TzeP2DSxAwyffoMINZ3N7BgknmVfi+ygb/BPZRxV6Dy9G3W0OAPnu/
+         6ExQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXADs2DqqLK1BHPswb8NkoV5bIUszOieBAki10hE/iFzDRO70BC9oWXPQ3FdAYpdmQlxACgnnQVI7Vr@vger.kernel.org
+X-Gm-Message-State: AOJu0YxUAJiktyNPWQXtZZT3exvM6op22eg60D2uqccKEck0AyrOu4x/
+	maOgZoZTJxCBpN4npYSKSIfvGkHm7z/MEXbTgjNyhTGxYOJZWnR52gDrZKtXjqM=
+X-Gm-Gg: ASbGncvEJMmR3j8q8ijR+N7E/mafJ5EogsAsC3DCCv24TamiqTPJDBXork1V+foYOg+
+	Blvd6tpqeioCPNxQSpn+yesexM7R8sRBpn83mi9T4vOzQ3EED7IeA8a7x2IptC2jXyOvVzSbb98
+	s09gccvJAxvaRj+yj3oIjKBLhM6crkY0UtW66FGKcCvzc7ix3c2SjaJlvJtnofwmxt3wOhVO24I
+	zJpX8/C9QzhL1YcKidAFvgrOg0Yte1PrT9nA/WfzREnfrPXppbGnRSHhtBYxN1vrFRGzBDG0Ca/
+	8JOwtw==
+X-Google-Smtp-Source: AGHT+IHpHJsHb9mpdlPf1WMyDHeUmOQ71xKKXnSQB+gdiLoxCAO6i7uhLAJzOXuDIN6Nxvn4zgv7zA==
+X-Received: by 2002:a17:90b:53c8:b0:2ee:c2df:5d30 with SMTP id 98e67ed59e1d1-2f452eb11e2mr54849162a91.26.1736135398510;
+        Sun, 05 Jan 2025 19:49:58 -0800 (PST)
+Received: from [10.84.148.23] ([203.208.167.150])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f447799048sm32821110a91.10.2025.01.05.19.49.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 05 Jan 2025 19:49:58 -0800 (PST)
+Message-ID: <de8756aa-dbf7-4f6f-91f0-934270397192@bytedance.com>
+Date: Mon, 6 Jan 2025 11:49:41 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 10/15] riscv: pgtable: move pagetable_dtor() to
+ __tlb_remove_table()
+Content-Language: en-US
+To: Kevin Brodsky <kevin.brodsky@arm.com>, peterz@infradead.org,
+ akpm@linux-foundation.org
+Cc: agordeev@linux.ibm.com, palmer@dabbelt.com, tglx@linutronix.de,
+ david@redhat.com, jannh@google.com, hughd@google.com, yuzhao@google.com,
+ willy@infradead.org, muchun.song@linux.dev, vbabka@kernel.org,
+ lorenzo.stoakes@oracle.com, rientjes@google.com, vishal.moola@gmail.com,
+ arnd@arndb.de, will@kernel.org, aneesh.kumar@kernel.org, npiggin@gmail.com,
+ dave.hansen@linux.intel.com, rppt@kernel.org, ryan.roberts@arm.com,
+ linux-mm@kvack.org, linux-arm-kernel@lists.infradead.org,
+ linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+ linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-kernel@vger.kernel.org, x86@kernel.org, linux-arch@vger.kernel.org,
+ linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+ linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+ linux-sh@vger.kernel.org, linux-um@lists.infradead.org
+References: <cover.1735549103.git.zhengqi.arch@bytedance.com>
+ <0e8f0b3835c15e99145e0006ac1020ae45a2b166.1735549103.git.zhengqi.arch@bytedance.com>
+ <1b09335c-f0b6-4ccb-9800-5fb22f7e8083@arm.com>
+ <ebce5e05-5e46-4c6e-94a0-bcf3655a862b@bytedance.com>
+ <7e2c26c8-f5df-4833-a93f-3409b00b58fd@arm.com>
+ <e9fe97d4-99d5-443e-b722-43903655a76e@bytedance.com>
+ <31e1a033-00a7-4953-81e7-0caedd0227a9@bytedance.com>
+ <d9a14211-4bbd-4fb6-ba87-a555a40bb67a@arm.com>
+From: Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <d9a14211-4bbd-4fb6-ba87-a555a40bb67a@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-WP-MailID: 149f5602e58afcfd9f26f783a5147466
-X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 000000A [sROE]                               
 
-Currently, installation of Debian 12.8 for mipsel fails on machines
-without an FPU [1]. This is caused by the fact that zstd (which is used
-for initramfs compression) executes the prefx instruction, which is not
-emulated properly by the kernel.
+Hi Kevin,
 
-The prefx (Prefetch Indexed) instruction fetches data from memory into
-the cache without any side effects. Though functionally unrelated, it
-requires an FPU [2].
+On 2025/1/3 21:27, Kevin Brodsky wrote:
+> On 03/01/2025 10:35, Qi Zheng wrote:
+>> On 2025/1/3 17:13, Qi Zheng wrote:
+>>> On 2025/1/3 16:02, Kevin Brodsky wrote:
+>>>> On 03/01/2025 04:48, Qi Zheng wrote:
+>>>>> [...]
+>>>>>
+>>>>> In __tlb_batch_free_encoded_pages(), we can indeed detect PageTable()
+>>>>> and call pagetable_dtor() to dtor the page table pages.
+>>>>> But __tlb_batch_free_encoded_pages() is also used to free normal pages
+>>>>> (not page table pages), so I don't want to add overhead there.
+>>>>
+>>>> Interesting, can a tlb batch refer to pages than are not PTPs then?
+>>>
+>>> Yes, you can see the caller of __tlb_remove_folio_pages() or
+>>> tlb_remove_page_size().
+> 
+> I had a brief look but clearly not a good enough one! I hadn't realised
+> that "table" in tlb_remove_table() means PTP, while "page" in
+> tlb_remove_page() can mean any page, and it's making more sense now.
+> 
+> [...]
+> 
+>>>
+>>> For arm, the call to pagetable_dtor() is indeed missed in the
+>>> non-MMU_GATHER_RCU_TABLE_FREE case. This needs to be fixed. But we
+>>> can't fix this by adding pagetable_dtor() to tlb_remove_table(),
+>>> because some architectures call tlb_remove_table() but don't support
+>>> page table statistics, like sparc.
+> 
+> When I investigated this for my own series, I found that the only case
+> where ctor/dtor are not called for page-sized page tables is 32-bit
+> sparc (see table at the end of [1]). However only 64-bit sparc makes use
+> of tlb_remove_table() (at PTE level, where ctor/dtor are already called).
 
-Bytecode format of this instruction ends on "001111" binary:
+Thanks for providing this information.
 
-	(prefx instruction format) & 0x0000003f = 0x0000000f
+> 
+> So really calling pagetable_dtor() from tlb_remove_table() in the
+> non-MMU_GATHER_TABLE_FREE case seems to be the obvious thing to do.
 
-The code in fpux_emu() runs like so:
+Right. Currently, only powerpc, sparc and x86 will directly call
+tlb_remove_table(), and all of them are in the MMU_GATHER_TABLE_FREE
+case. Therefore, I think the modification you mentioned below is
+feasible.
 
-	#define MIPSInst(x) x
-	#define MIPSInst_FMA_FFMT(x) (MIPSInst(x) & 0x00000007)
-	#define MIPSInst_FUNC(x) (MIPSInst(x) & 0x0000003f)
-	enum cop1x_func { ..., pfetch_op = 0x0f, ... };
+In summary, currently only arm calls tlb_remove_table() in the
+non-MMU_GATHER_RCU_TABLE_FREE case. So I think we can add this fix
+directly to patch #8. If I haven't missed anything, I'll send an
+updated patch #8.
 
-	...
+> 
+> Once this is done, we should be able to replace all those confusing
+> calls to tlb_remove_page() on PTPs with tlb_remove_table() and remove
+> the explicit call to pagetable_dtor(). AIUI this is essentially what
+> Peter suggested on v3 [2].
 
-	switch (MIPSInst_FMA_FFMT(ir)) {
-	...
+Since this patch series is mainly for bug fix, I think that these things
+can be done in separate patch series later.
 
-	case 0x3:
-		if (MIPSInst_FUNC(ir) != pfetch_op)
-			return SIGILL;
+> 
+> [1]
+> https://lore.kernel.org/linux-mm/20241219164425.2277022-1-kevin.brodsky@arm.com/
+> [2]
+> https://lore.kernel.org/linux-mm/20250103111457.GC22934@noisy.programming.kicks-ass.net/
+> 
+> [...]
+> 
+>> Or can we just not let tlb_remove_table() fall back to
+>> tlb_remove_page()? Like the following:
+>>
+>> diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
+>> index a59205863f431..354ffaa4bd120 100644
+>> --- a/include/asm-generic/tlb.h
+>> +++ b/include/asm-generic/tlb.h
+>> @@ -195,8 +195,6 @@
+>>    *  various ptep_get_and_clear() functions.
+>>    */
+>>
+>> -#ifdef CONFIG_MMU_GATHER_TABLE_FREE
+>> -
+>>   struct mmu_table_batch {
+>>   #ifdef CONFIG_MMU_GATHER_RCU_TABLE_FREE
+>>          struct rcu_head         rcu;
+>> @@ -219,16 +217,6 @@ static inline void __tlb_remove_table(void *table)
+>>
+>>   extern void tlb_remove_table(struct mmu_gather *tlb, void *table);
+>>
+>> -#else /* !CONFIG_MMU_GATHER_HAVE_TABLE_FREE */
+>> -
+>> -/*
+>> - * Without MMU_GATHER_TABLE_FREE the architecture is assumed to have
+>> page based
+>> - * page directories and we can use the normal page batching to free
+>> them.
+>> - */
+>> -#define tlb_remove_table(tlb, page) tlb_remove_page((tlb), (page))
+> 
+> We still need a different implementation of tlb_remove_table() in this
+> case. We could define it inline here:
+> 
+> static inline void tlb_remove_table(struct mmu_gather *tlb, void *table)
+> {
+>      struct page *page = table;
+> 
+>      pagetable_dtor(page_ptdesc(page));
+>      tlb_remove_page(page);
+> }
 
-		/* ignore prefx operation */
-		break;
+Right. As I said above, will add this to the updated patch #8.
 
-	default:
-		return SIGILL;
-	}
+Thanks!
 
-That snippet above contains a logic error and the
-	if (MIPSInst_FUNC(ir) != pfetch_op)
-comparison always fires.
-
-When MIPSInst_FUNC(ir) is equal to pfetch_op, ir must end on 001111
-binary. In this case, MIPSInst_FMA_FFMT(ir) must be equal to 0x7, which
-does not match that case label.
-
-This causes emulation failure for the prefx instruction. Fix it.
-
-This has been broken by
-commit 919af8b96c89 ("MIPS: Make definitions of MIPSInst_FMA_{FUNC,FMTM} consistent with MIPS64 manual")
-which modified the MIPSInst_FMA_FFMT macro without updating the users.
-
-Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-Cc: stable@vger.kernel.org # after 3 weeks
-Cc: Dengcheng Zhu <dzhu@wavecomp.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Ming Wang <wangming01@loongson.cn>
-Cc: Tiezhu Yang <yangtiezhu@loongson.cn>
-Fixes: 919af8b96c89 ("MIPS: Make definitions of MIPSInst_FMA_{FUNC,FMTM} consistent with MIPS64 manual")
-
-[1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1091858
-[2] MIPS Architecture For Programmers Volume II-A: The MIPS32 Instruction Set
-
----
-
-Tested in QEMU for mipsel and mips64el.
----
- arch/mips/math-emu/cp1emu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/mips/math-emu/cp1emu.c b/arch/mips/math-emu/cp1emu.c
-index 265bc57819df..c89e70df43d8 100644
---- a/arch/mips/math-emu/cp1emu.c
-+++ b/arch/mips/math-emu/cp1emu.c
-@@ -1660,7 +1660,7 @@ static int fpux_emu(struct pt_regs *xcp, struct mips_fpu_struct *ctx,
- 		break;
- 	}
- 
--	case 0x3:
-+	case 0x7:
- 		if (MIPSInst_FUNC(ir) != pfetch_op)
- 			return SIGILL;
- 
--- 
-2.25.1
-
+> 
+> - Kevin
 
