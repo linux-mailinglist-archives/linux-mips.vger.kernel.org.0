@@ -1,135 +1,95 @@
-Return-Path: <linux-mips+bounces-7287-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7288-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58F35A043A8
-	for <lists+linux-mips@lfdr.de>; Tue,  7 Jan 2025 16:04:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F3A9A04CFD
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Jan 2025 00:02:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 438B37A1461
-	for <lists+linux-mips@lfdr.de>; Tue,  7 Jan 2025 15:03:58 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0A69C7A2061
+	for <lists+linux-mips@lfdr.de>; Tue,  7 Jan 2025 23:02:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C5F11F2398;
-	Tue,  7 Jan 2025 15:03:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="rdj4BTKq"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D0311E4113;
+	Tue,  7 Jan 2025 23:02:03 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89B981F1319;
-	Tue,  7 Jan 2025 15:03:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DF1E1E0E0A;
+	Tue,  7 Jan 2025 23:02:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736262238; cv=none; b=cSeOTXKcFLTs27HTcv/TfLhk4Da3EoDATxJi0TlWutJ6B9XuQx0wUjuh9jn1qsCJ06j1zMgZgHUSCzbEHFTeC3Z8fNcU8sAL3quPmRHHoVYPrJ7OlsG5dJNj0Tl22OjOm3u0AaTH7s2DrhdY6pLLO3Pzf2zTgK2E26sS9pFgKvo=
+	t=1736290923; cv=none; b=NEHDnL+11KYczsg1HfqLIewrx7QwshmGGmBxMCOrKnl0gtR4evN/Rz5ZbjOxVr8ANKj9rEzB/FiQjNXRaECcMCySvYUtU7lxOIPD53Q4PZSoby6wONcUEuHtZ/POVtR5ITDKzvdlojaKp1VpYQzQSQE+2ZZYFHrxlfwg3djoKe4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736262238; c=relaxed/simple;
-	bh=r02ypHE2EsKzJCKXFySKfOuCF4xrzUgVMqfy3L+w+Lk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=otz/URyyE43X5BEF88Ra26q9K3wksTmKDpwC0H5QWQldiOWw/YInkDsaSNkCJXxu40QTyGznWQCbY4pfNVPuJMPeEQxLxKs+4d9rgPNsGDi+tc10jdU0bckLgaZ5y976sBnEvIrnh05ATL+uvtAkgcbcEXG7AUxt47ZH+lUzc7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=rdj4BTKq; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50785q0m018311;
-	Tue, 7 Jan 2025 15:02:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=nGMTr1inoVWG3ARe8QoGoEOSwdCntu
-	qZy8bhdK6O/ME=; b=rdj4BTKquX38fA+V7vs9vGrg6z7HxUyoh1JCIFg2qPrBrc
-	ovRrqMTxob92ukiN9TlpZCs7CVUaqv6rh4Mi5tAIkhlcCaduaExoYeYLzmHkaH1C
-	S0jV8pQzj2Q2N++he2cxLihvsXN9Ws2JTtsztsnqZdNHB0F+gy5J9PuEu1tgZtJk
-	XpYyXE/McfMm5JLsDDKSEa0f3gOdZvqdAytY6OUzDZe71qUCT9y2i1ZigqqwPHmx
-	1mK+SyY6FXGKya5ump+AzYcnbek4K8yEjS0n+sKJkfNM1URBoiNo/3Sb4PjRN+s0
-	zgkOb4fRUrznizbOxQ8cOjfYiVbiPNEGSmJygikg==
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4410f39tfg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 07 Jan 2025 15:02:55 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 507E2w4n027938;
-	Tue, 7 Jan 2025 15:02:54 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 43yhhk2t7y-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 07 Jan 2025 15:02:54 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 507F2nAY55837076
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 7 Jan 2025 15:02:50 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C602420043;
-	Tue,  7 Jan 2025 15:02:49 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 683182004D;
-	Tue,  7 Jan 2025 15:02:48 +0000 (GMT)
-Received: from li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com (unknown [9.155.204.135])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Tue,  7 Jan 2025 15:02:48 +0000 (GMT)
-Date: Tue, 7 Jan 2025 16:02:47 +0100
-From: Alexander Gordeev <agordeev@linux.ibm.com>
-To: Guo Weikang <guoweikang.kernel@gmail.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Mike Rapoport <rppt@kernel.org>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-        Christoph Lameter <cl@linux.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Sam Creasey <sammy@sammy.net>, Huacai Chen <chenhuacai@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Oreoluwa Babatunde <quic_obabatun@quicinc.com>,
-        rafael.j.wysocki@intel.com, Palmer Dabbelt <palmer@rivosinc.com>,
-        Hanjun Guo <guohanjun@huawei.com>,
-        Easwar Hariharan <eahariha@linux.microsoft.com>,
-        Johannes Berg <johannes.berg@intel.com>,
-        Ingo Molnar <mingo@kernel.org>, Dave Hansen <dave.hansen@intel.com>,
-        Christian Brauner <brauner@kernel.org>, KP Singh <kpsingh@kernel.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Matt Turner <mattst88@gmail.com>, Russell King <linux@armlinux.org.uk>,
-        WANG Xuerui <kernel@xen0n.name>, Michael Ellerman <mpe@ellerman.id.au>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>, Helge Deller <deller@gmx.de>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Naveen N Rao <naveen@kernel.org>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Geoff Levand <geoff@infradead.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
-        Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-        Alexander Potapenko <glider@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Yoshinori Sato <ysato@users.sourceforge.jp>,
-        Rich Felker <dalias@libc.org>,
-        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-        Andreas Larsson <andreas@gaisler.com>,
-        Richard Weinberger <richard@nod.at>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Johannes Berg <johannes@sipsolutions.net>,
-        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-        kasan-dev@googlegroups.com, linux-s390@vger.kernel.org,
-        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
-        linux-um@lists.infradead.org, linux-acpi@vger.kernel.org,
-        xen-devel@lists.xenproject.org, linux-omap@vger.kernel.org,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-mm@kvack.org, linux-pm@vger.kernel.org,
-        Xi Ruoyao <xry111@xry111.site>
-Subject: Re: [PATCH v7] mm/memblock: Add memblock_alloc_or_panic interface
-Message-ID: <Z31CF9f//ZD+VH59@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
-References: <20241222111537.2720303-1-guoweikang.kernel@gmail.com>
+	s=arc-20240116; t=1736290923; c=relaxed/simple;
+	bh=eewKFwXwVyNsBh0nwKFE4AtEZK8ybowe7wgEkOHOryU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=XUWtm56J/dThRbOofjn+swrhbvuG8bkYpadThUuEMJZNB5DA7Qmf8fIT0fr/BMXQ5Zaxn1UpjBxai6756UYc8rw4A0Lx3ntlLiJySyhJb40fXaJY2mSiSpuoJCccEDan7iiVaWo5KdDF6o7HE9DxgsXla+wkDZncXLWhg7Kwoqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
+Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
+	by vmicros1.altlinux.org (Postfix) with ESMTP id 3F6F272C8F5;
+	Wed,  8 Jan 2025 02:01:53 +0300 (MSK)
+Received: by mua.local.altlinux.org (Postfix, from userid 508)
+	id 2CA007CCB3A; Wed,  8 Jan 2025 01:01:53 +0200 (IST)
+Date: Wed, 8 Jan 2025 01:01:53 +0200
+From: "Dmitry V. Levin" <ldv@strace.io>
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: Eugene Syromyatnikov <evgsyr@gmail.com>,
+	Mike Frysinger <vapier@gentoo.org>,
+	Renzo Davoli <renzo@cs.unibo.it>,
+	Davide Berardi <berardi.dav@gmail.com>,
+	strace-devel@lists.strace.io, Vineet Gupta <vgupta@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+	Brian Cain <bcain@quicinc.com>, Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Michal Simek <monstr@monstr.eu>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>,
+	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+	Stafford Horne <shorne@gmail.com>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Richard Weinberger <richard@nod.at>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+	Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+	Shuah Khan <shuah@kernel.org>, linux-snps-arc@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+	linux-um@lists.infradead.org, linux-arch@vger.kernel.org,
+	linux-kselftest@vger.kernel.org
+Subject: [PATCH 0/6] ptrace: introduce PTRACE_SET_SYSCALL_INFO API
+Message-ID: <20250107230153.GA30560@strace.io>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -138,168 +98,85 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241222111537.2720303-1-guoweikang.kernel@gmail.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: by_phAXyWBB4rrGUxAvoGmZnyCdgAMa_
-X-Proofpoint-ORIG-GUID: by_phAXyWBB4rrGUxAvoGmZnyCdgAMa_
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=985
- spamscore=0 lowpriorityscore=0 adultscore=0 malwarescore=0 impostorscore=0
- bulkscore=0 phishscore=0 suspectscore=0 priorityscore=1501 clxscore=1011
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
- definitions=main-2501070126
 
-On Sun, Dec 22, 2024 at 07:15:37PM +0800, Guo Weikang wrote:
+PTRACE_SET_SYSCALL_INFO is a generic ptrace API that complements
+PTRACE_GET_SYSCALL_INFO by letting the ptracer modify details of
+system calls the tracee is blocked in.
 
-Hi Guo,
+This API allows ptracers to obtain and modify system call details
+in a straightforward and architecture-agnostic way.
 
-> Before SLUB initialization, various subsystems used memblock_alloc to
-> allocate memory. In most cases, when memory allocation fails, an immediate
-> panic is required. To simplify this behavior and reduce repetitive checks,
-> introduce `memblock_alloc_or_panic`. This function ensures that memory
-> allocation failures result in a panic automatically, improving code
-> readability and consistency across subsystems that require this behavior.
+Current implementation supports changing only those bits of system call
+information that are used by strace, namely, syscall number, syscall
+arguments, and syscall return value.
 
-I believe, you also want to make similar function against memblock_alloc_low().
+Support of changing additional details returned by PTRACE_GET_SYSCALL_INFO,
+such as instruction pointer and stack pointer, could be added later
+if needed, by re-using struct ptrace_syscall_info.reserved to specify
+the additional details that should be set.  Currently, the reserved
+field of struct ptrace_syscall_info must be initialized with zeroes;
+arch, instruction_pointer, and stack_pointer fields are ignored.
 
-Please, find s390 comments below.
+PTRACE_SET_SYSCALL_INFO currently supports only PTRACE_SYSCALL_INFO_ENTRY,
+PTRACE_SYSCALL_INFO_EXIT, and PTRACE_SYSCALL_INFO_SECCOMP operations.
+Other operations could be added later if needed.
 
+Ideally, PTRACE_SET_SYSCALL_INFO should have been introduced along with
+PTRACE_GET_SYSCALL_INFO, but it didn't happen.  The last straw that
+convinced me to implement PTRACE_SET_SYSCALL_INFO was apparent failure
+to provide an API of changing the first system call argument on riscv
+architecture [1].
+
+ptrace(2) man page:
+
+long ptrace(enum __ptrace_request request, pid_t pid, void *addr, void *data);
 ...
+PTRACE_SET_SYSCALL_INFO
+       Modify information about the system call that caused the stop.
+       The "data" argument is a pointer to struct ptrace_syscall_info
+       that specifies the system call information to be set.
+       The "addr" argument should be set to sizeof(struct ptrace_syscall_info)).
 
-> diff --git a/arch/s390/kernel/numa.c b/arch/s390/kernel/numa.c
-> index ddc1448ea2e1..a33e20f73330 100644
-> --- a/arch/s390/kernel/numa.c
-> +++ b/arch/s390/kernel/numa.c
-> @@ -22,10 +22,7 @@ void __init numa_setup(void)
->  	node_set(0, node_possible_map);
->  	node_set_online(0);
->  	for (nid = 0; nid < MAX_NUMNODES; nid++) {
-> -		NODE_DATA(nid) = memblock_alloc(sizeof(pg_data_t), 8);
-> -		if (!NODE_DATA(nid))
-> -			panic("%s: Failed to allocate %zu bytes align=0x%x\n",
-> -			      __func__, sizeof(pg_data_t), 8);
-> +		NODE_DATA(nid) = memblock_alloc_or_panic(sizeof(pg_data_t), 8);
->  	}
+[1] https://lore.kernel.org/all/59505464-c84a-403d-972f-d4b2055eeaac@gmail.com/
 
-Please, also remove the cycle body brackets.
+Dmitry V. Levin (6):
+  Revert "arch: remove unused function syscall_set_arguments()"
+  syscall.h: add syscall_set_arguments() on remaining
+    HAVE_ARCH_TRACEHOOK arches
+  syscall.h: introduce syscall_set_nr()
+  ptrace_get_syscall_info: factor out ptrace_get_syscall_info_op
+  ptrace: introduce PTRACE_SET_SYSCALL_INFO request
+  selftests/ptrace: add a test case for PTRACE_SET_SYSCALL_INFO
 
->  	NODE_DATA(0)->node_spanned_pages = memblock_end_of_DRAM() >> PAGE_SHIFT;
->  	NODE_DATA(0)->node_id = 0;
-> diff --git a/arch/s390/kernel/setup.c b/arch/s390/kernel/setup.c
-> index 0ce550faf073..1298f0860733 100644
-> --- a/arch/s390/kernel/setup.c
-> +++ b/arch/s390/kernel/setup.c
-> @@ -376,11 +376,7 @@ static unsigned long __init stack_alloc_early(void)
->  {
->  	unsigned long stack;
->  
-> -	stack = (unsigned long)memblock_alloc(THREAD_SIZE, THREAD_SIZE);
-> -	if (!stack) {
-> -		panic("%s: Failed to allocate %lu bytes align=0x%lx\n",
-> -		      __func__, THREAD_SIZE, THREAD_SIZE);
-> -	}
-> +	stack = (unsigned long)memblock_alloc_or_panic(THREAD_SIZE, THREAD_SIZE);
->  	return stack;
->  }
->  
-> @@ -504,10 +500,7 @@ static void __init setup_resources(void)
->  	bss_resource.end = __pa_symbol(__bss_stop) - 1;
->  
->  	for_each_mem_range(i, &start, &end) {
-> -		res = memblock_alloc(sizeof(*res), 8);
-> -		if (!res)
-> -			panic("%s: Failed to allocate %zu bytes align=0x%x\n",
-> -			      __func__, sizeof(*res), 8);
-> +		res = memblock_alloc_or_panic(sizeof(*res), 8);
->  		res->flags = IORESOURCE_BUSY | IORESOURCE_SYSTEM_RAM;
->  
->  		res->name = "System RAM";
-> @@ -526,10 +519,7 @@ static void __init setup_resources(void)
->  			    std_res->start > res->end)
->  				continue;
->  			if (std_res->end > res->end) {
-> -				sub_res = memblock_alloc(sizeof(*sub_res), 8);
-> -				if (!sub_res)
-> -					panic("%s: Failed to allocate %zu bytes align=0x%x\n",
-> -					      __func__, sizeof(*sub_res), 8);
-> +				sub_res = memblock_alloc_or_panic(sizeof(*sub_res), 8);
->  				*sub_res = *std_res;
->  				sub_res->end = res->end;
->  				std_res->start = res->end + 1;
-> @@ -816,9 +806,7 @@ static void __init setup_randomness(void)
->  {
->  	struct sysinfo_3_2_2 *vmms;
->  
-> -	vmms = memblock_alloc(PAGE_SIZE, PAGE_SIZE);
-> -	if (!vmms)
-> -		panic("Failed to allocate memory for sysinfo structure\n");
-> +	vmms = memblock_alloc_or_panic(PAGE_SIZE, PAGE_SIZE);
->  	if (stsi(vmms, 3, 2, 2) == 0 && vmms->count)
->  		add_device_randomness(&vmms->vm, sizeof(vmms->vm[0]) * vmms->count);
->  	memblock_free(vmms, PAGE_SIZE);
-> diff --git a/arch/s390/kernel/smp.c b/arch/s390/kernel/smp.c
-> index 822d8e6f8717..d77aaefb59bd 100644
-> --- a/arch/s390/kernel/smp.c
-> +++ b/arch/s390/kernel/smp.c
-> @@ -611,9 +611,9 @@ void __init smp_save_dump_ipl_cpu(void)
->  	if (!dump_available())
->  		return;
->  	sa = save_area_alloc(true);
-> -	regs = memblock_alloc(512, 8);
-> -	if (!sa || !regs)
-> +	if (!sa)
->  		panic("could not allocate memory for boot CPU save area\n");
+ arch/arc/include/asm/syscall.h                |  20 +
+ arch/arm/include/asm/syscall.h                |  25 +
+ arch/arm64/include/asm/syscall.h              |  20 +
+ arch/csky/include/asm/syscall.h               |  13 +
+ arch/hexagon/include/asm/syscall.h            |  14 +
+ arch/loongarch/include/asm/syscall.h          |  15 +
+ arch/m68k/include/asm/syscall.h               |   7 +
+ arch/microblaze/include/asm/syscall.h         |   7 +
+ arch/mips/include/asm/syscall.h               |  53 +++
+ arch/nios2/include/asm/syscall.h              |  16 +
+ arch/openrisc/include/asm/syscall.h           |  13 +
+ arch/parisc/include/asm/syscall.h             |  19 +
+ arch/powerpc/include/asm/syscall.h            |  15 +
+ arch/riscv/include/asm/syscall.h              |  16 +
+ arch/s390/include/asm/syscall.h               |  19 +
+ arch/sh/include/asm/syscall_32.h              |  19 +
+ arch/sparc/include/asm/syscall.h              |  17 +
+ arch/um/include/asm/syscall-generic.h         |  19 +
+ arch/x86/include/asm/syscall.h                |  43 ++
+ arch/xtensa/include/asm/syscall.h             |  18 +
+ include/asm-generic/syscall.h                 |  30 ++
+ include/linux/ptrace.h                        |   3 +
+ include/uapi/linux/ptrace.h                   |   3 +-
+ kernel/ptrace.c                               | 154 ++++++-
+ tools/testing/selftests/ptrace/Makefile       |   2 +-
+ .../selftests/ptrace/set_syscall_info.c       | 436 ++++++++++++++++++
+ 26 files changed, 994 insertions(+), 22 deletions(-)
+ create mode 100644 tools/testing/selftests/ptrace/set_syscall_info.c
 
-Please, replace memblock_alloc() with memblock_alloc_or_panic() in
-save_area_alloc() and remove the error handling here and also in
-smp_save_dump_secondary_cpus().
-
-> +	regs = memblock_alloc_or_panic(512, 8);
->  	copy_oldmem_kernel(regs, __LC_FPREGS_SAVE_AREA, 512);
->  	save_area_add_regs(sa, regs);
->  	memblock_free(regs, 512);
-> @@ -792,10 +792,7 @@ void __init smp_detect_cpus(void)
->  	u16 address;
->  
->  	/* Get CPU information */
-> -	info = memblock_alloc(sizeof(*info), 8);
-> -	if (!info)
-> -		panic("%s: Failed to allocate %zu bytes align=0x%x\n",
-> -		      __func__, sizeof(*info), 8);
-> +	info = memblock_alloc_or_panic(sizeof(*info), 8);
->  	smp_get_core_info(info, 1);
->  	/* Find boot CPU type */
->  	if (sclp.has_core_type) {
-> diff --git a/arch/s390/kernel/topology.c b/arch/s390/kernel/topology.c
-> index 0fd56a1cadbd..cf5ee6032c0b 100644
-> --- a/arch/s390/kernel/topology.c
-> +++ b/arch/s390/kernel/topology.c
-> @@ -548,10 +548,7 @@ static void __init alloc_masks(struct sysinfo_15_1_x *info,
->  		nr_masks *= info->mag[TOPOLOGY_NR_MAG - offset - 1 - i];
->  	nr_masks = max(nr_masks, 1);
->  	for (i = 0; i < nr_masks; i++) {
-> -		mask->next = memblock_alloc(sizeof(*mask->next), 8);
-> -		if (!mask->next)
-> -			panic("%s: Failed to allocate %zu bytes align=0x%x\n",
-> -			      __func__, sizeof(*mask->next), 8);
-> +		mask->next = memblock_alloc_or_panic(sizeof(*mask->next), 8);
->  		mask = mask->next;
->  	}
->  }
-> @@ -569,10 +566,7 @@ void __init topology_init_early(void)
->  	}
->  	if (!MACHINE_HAS_TOPOLOGY)
->  		goto out;
-> -	tl_info = memblock_alloc(PAGE_SIZE, PAGE_SIZE);
-> -	if (!tl_info)
-> -		panic("%s: Failed to allocate %lu bytes align=0x%lx\n",
-> -		      __func__, PAGE_SIZE, PAGE_SIZE);
-> +	tl_info = memblock_alloc_or_panic(PAGE_SIZE, PAGE_SIZE);
->  	info = tl_info;
->  	store_topology(info);
->  	pr_info("The CPU configuration topology of the machine is: %d %d %d %d %d %d / %d\n",
-
-Thanks!
+-- 
+ldv
 
