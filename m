@@ -1,215 +1,151 @@
-Return-Path: <linux-mips+bounces-7314-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7315-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 69F38A06181
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Jan 2025 17:17:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CFFFA06358
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Jan 2025 18:27:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E8B2A7A2FF0
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Jan 2025 16:17:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 758FC1636D1
+	for <lists+linux-mips@lfdr.de>; Wed,  8 Jan 2025 17:27:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6943203704;
-	Wed,  8 Jan 2025 16:14:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A7F11FF7D5;
+	Wed,  8 Jan 2025 17:27:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Qc2i4Tp0"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="kp4SZkr+"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEDE1202F97;
-	Wed,  8 Jan 2025 16:14:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 179D21FF61A
+	for <linux-mips@vger.kernel.org>; Wed,  8 Jan 2025 17:27:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736352870; cv=none; b=gVY5ru9rsp43kqkzNz542Dgu06pEZBQ5t6lwWP/4v6nFYR0OmrbGSl4Gth2n5GbpVgUPRiaZf0AgUQdqTAUC/CfTtSn7vfwkpgp8UjM+D4iudefbga3g08J18sdO5TcC2MxU30ChVWOiPqFRqLGztrqVRyLL8tDNJQ7bMzujeok=
+	t=1736357255; cv=none; b=oaKaYVITZJYFOLzPXq4OUgciEliBfY5bSrmkpJ3/bFHpKjTndqrCKaXfcm7bcuUv8cgmVZiV1WWvX1qLD06JYsup1nqAJMqQ2fKTcuGf42Z3EUqeg9Uk7PyU36iUnoVIzoRMA/lW1eb5OqUo/MxEd9L2b7ykR5txzcQfCO3W5V8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736352870; c=relaxed/simple;
-	bh=ZVFqFMhIUaIyHR1ntHU0QNWhp55G1M8JaiO4HLQZLH8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L86onav+R9mFUytpzkUSvlC5CdPOvT7GTp9x2epMPI+Ffdk2vr4yDVI3akao+HwRgb3Shf3UTI0vyohPtwfX92N4casZtZJ4Xo0oIetKOgFXaPU1Hc/yxuf0xBrYtL8xe4AmO3LgOv3sq00prhMJMkgjTldFGfugai7kAWkGzj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Qc2i4Tp0; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 508Ew0Hd008979;
-	Wed, 8 Jan 2025 16:13:02 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=/0pEosJAtrrq7+AZfl2ID181pVMDXx
-	vqRB1iDHPru/M=; b=Qc2i4Tp0uvBRyl+jGtaMLwYGZKKaztQUee3zrazLkmkths
-	BKjfeh5hc4DNF+FovJkBB/fHbU/DPDjRCbIEh/eMZyHyvXxayMqu9FBQFJOug4QH
-	iQGB7QT793mBW00g/2e5RWsTUnIRvzEqsPYZoZ1xrycOjY77mjmhxD3Tr58vKYfh
-	i5WI1PseA+GU3nr66lZ1WH05bULNRioNAgJgAm9VNeTRLQ4pRSeX+RYdvIB2cetS
-	GTBBs7NBz+M3Z6MiU02DQX/J9dzcrcbfHP6qZ8C6ajXXZ6zofEYRDTTx4bda1nof
-	mnWd9f4JhtWC7wiQ3TFYDev/txCoPQl/rsnDG/uQ==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 441hupu905-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 08 Jan 2025 16:13:02 +0000 (GMT)
-Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 508GD1K1025958;
-	Wed, 8 Jan 2025 16:13:01 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 441hupu901-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 08 Jan 2025 16:13:01 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 508CW5fH003630;
-	Wed, 8 Jan 2025 16:13:00 GMT
-Received: from smtprelay04.fra02v.mail.ibm.com ([9.218.2.228])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 43yfat8qq7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 08 Jan 2025 16:13:00 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay04.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 508GCwru8061280
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 8 Jan 2025 16:12:58 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B38D720040;
-	Wed,  8 Jan 2025 16:12:58 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 1575720043;
-	Wed,  8 Jan 2025 16:12:58 +0000 (GMT)
-Received: from li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com (unknown [9.155.204.135])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Wed,  8 Jan 2025 16:12:58 +0000 (GMT)
-Date: Wed, 8 Jan 2025 17:12:56 +0100
-From: Alexander Gordeev <agordeev@linux.ibm.com>
-To: Qi Zheng <zhengqi.arch@bytedance.com>
-Cc: peterz@infradead.org, kevin.brodsky@arm.com, alex@ghiti.fr,
-        andreas@gaisler.com, palmer@dabbelt.com, tglx@linutronix.de,
-        david@redhat.com, jannh@google.com, hughd@google.com,
-        yuzhao@google.com, willy@infradead.org, muchun.song@linux.dev,
-        vbabka@kernel.org, lorenzo.stoakes@oracle.com,
-        akpm@linux-foundation.org, rientjes@google.com, vishal.moola@gmail.com,
-        arnd@arndb.de, will@kernel.org, aneesh.kumar@kernel.org,
-        npiggin@gmail.com, dave.hansen@linux.intel.com, rppt@kernel.org,
-        ryan.roberts@arm.com, linux-mm@kvack.org,
-        linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        x86@kernel.org, linux-arch@vger.kernel.org, linux-csky@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
-        linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-        linux-openrisc@vger.kernel.org, linux-sh@vger.kernel.org,
-        linux-um@lists.infradead.org
-Subject: Re: [PATCH v5 06/17] s390: pgtable: add statistics for PUD and P4D
- level page table
-Message-ID: <Z36kCF6tgnzkIRDM@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
-References: <cover.1736317725.git.zhengqi.arch@bytedance.com>
- <4707dffce228ccec5c6662810566dd12b5741c4b.1736317725.git.zhengqi.arch@bytedance.com>
+	s=arc-20240116; t=1736357255; c=relaxed/simple;
+	bh=uFSUfP1qtRuzGaG+XFGpp6Zt99NNZ4zrYvsYvHahhsA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=egm/u4Vq699UxQT7KY7QW6mVByRVXZLh6QeLgrkZqImjFPmeowCVSP2rVo0qcmbuTdXDZYBimFJgZj9ZBMpBgAo5MSk0x6zf3cU9KU36wHizejuW5I3c7jsXsKAXC9ZyX/arMIQ5eenScYQYXyUciVvysWn89hKZwIFX5ylAxSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=kp4SZkr+; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-53f22fd6832so41791e87.1
+        for <linux-mips@vger.kernel.org>; Wed, 08 Jan 2025 09:27:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1736357251; x=1736962051; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uFSUfP1qtRuzGaG+XFGpp6Zt99NNZ4zrYvsYvHahhsA=;
+        b=kp4SZkr+bhTDSDZIwfjJrTf1/59qzWvHmfXAjf0I9Z9qsC74CUDsMYt40qXaKwEaNO
+         KKsjJ4yLvsTZNXMZsMOPcFy94LRKGC1abdrPpdP4dJdTgqXQ2ykCqr7oXbMkRnu2e7Rc
+         he8E3KwtO3US2lT+N9cBJ2I+upuUn+IKR2DyM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736357251; x=1736962051;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uFSUfP1qtRuzGaG+XFGpp6Zt99NNZ4zrYvsYvHahhsA=;
+        b=rKBKFARB4lbtFlP6rBxC6mn/9Nq9zGW5cPGVL3nKuQjd6KPvK+d3Z76nivShCmvYzi
+         ugKpwoIh66jbYgoQtZ5h0arM6PNLOnzV6inDSVylLQIVX0IK7AI8yT3yWrARUCFfDe7k
+         Ovu4hDIPeOKqTP1XtSIHuORLR8pxj1cFkmaB8lVX3WCttncE4ZMFZw+DOITq5+xjC81v
+         xJsnWBLDA26L3WybQv8/H1F2y4GaXLUIGTLSNAgTlqW8PuejsIPBDN9ihu5LAVJqAf24
+         F3KamgOFYv+zZbCCagvBmvJPXmQUI1ivYY3WtDJR3cbG1glLfGYO9fxQgux5Ci0aDWcC
+         R7Fw==
+X-Forwarded-Encrypted: i=1; AJvYcCVL8zqfm+Ly2iDltBMKobQKFHoIuwMUcm7Xi8i9ka1O2XBH1Emv/2J0oJRWLNDzvANy8oUfsO7QKNYh@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx++c5HY+43SFFMWXtxhbv5Flj3yHlCzyqMVMmhQ/iuEkKBh1Il
+	VhJlI+81xc/x2+9PavBHIG9dMQwkQoKW83g6ZyTzWIDgFUntuobNfsQCTXmoFyswC2pC+OnqEd7
+	71g==
+X-Gm-Gg: ASbGncu4+F5pb7dNYNSMR9jnIGQLExbnQaH/L8UM0hQdNzQ6X8KsW9J38O89jGCRasV
+	SUMgVESReJRJi2Y/8PldOr1nz8LeXqaIfSgDAJ3gOWrI0kCNmZ+dHvo0DsPtX78UI7YWZk8fcUt
+	X4pkA8uSEwaR74mJNl+YHkb3LiO5E81FC6G2oLW9HvEh84aLXpyfXrTrGLNTozD9Xdrf1nXLwnq
+	CotAN2hRdBYp6sr9lA5clnWXtuktA5iOUNkl+WvYQIUmRR35qOHoy9U/R1mj9WEQ5Q+6Jj89kCb
+	f4GQriOU0FL+FzmILzPk
+X-Google-Smtp-Source: AGHT+IGrU2pc6XbsoBHsJ4QxX9MCVwBlJD7xvVTOL37Nln0D9SdUl5MFwagrtC0WuQ8fJBk+mClMcg==
+X-Received: by 2002:a05:6512:3d8a:b0:53f:a8c0:22a7 with SMTP id 2adb3069b0e04-54284810ea7mr975751e87.38.1736357250996;
+        Wed, 08 Jan 2025 09:27:30 -0800 (PST)
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com. [209.85.167.42])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5422381381csm5631442e87.165.2025.01.08.09.27.29
+        for <linux-mips@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jan 2025 09:27:29 -0800 (PST)
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5426fcb3c69so27756e87.3
+        for <linux-mips@vger.kernel.org>; Wed, 08 Jan 2025 09:27:29 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXsEo08Uo6mCw069FWoTz5G/MlIlAnhtma09VzrPu1a0pmKmWqcnIp8E/8CBmzd5mCwf8uHERVp2N32@vger.kernel.org
+X-Received: by 2002:a05:6512:2354:b0:540:21f1:e9e7 with SMTP id
+ 2adb3069b0e04-542845b9b94mr1068026e87.16.1736357249082; Wed, 08 Jan 2025
+ 09:27:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4707dffce228ccec5c6662810566dd12b5741c4b.1736317725.git.zhengqi.arch@bytedance.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: KUhXNS6aArO_tUV9i1PAsm9yGShhoIw3
-X-Proofpoint-GUID: AEhKKtU-rxWzLnMSxQ4AI9AzMP3tXlSR
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-15_01,2024-10-11_01,2024-09-30_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 adultscore=0
- clxscore=1011 mlxscore=0 malwarescore=0 priorityscore=1501
- lowpriorityscore=0 spamscore=0 bulkscore=0 impostorscore=0 mlxlogscore=890
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2501080133
+References: <CAGXGE_JWtMo8Qs=hsH=NULkDRFoYKYorKHACpqvqpYiO3am8eQ@mail.gmail.com>
+In-Reply-To: <CAGXGE_JWtMo8Qs=hsH=NULkDRFoYKYorKHACpqvqpYiO3am8eQ@mail.gmail.com>
+From: Doug Anderson <dianders@chromium.org>
+Date: Wed, 8 Jan 2025 09:27:17 -0800
+X-Gmail-Original-Message-ID: <CAD=FV=VOjzdBvyx9-g=Mvv6SJvur5ogtUbRfR3oCFpQoQ4VK3w@mail.gmail.com>
+X-Gm-Features: AbW1kvZ7WHp39ciL3QA7T0aXBTFHS6WcSbmLSDiGkRPVgTELV5ossj5Zmm_Z_6A
+Message-ID: <CAD=FV=VOjzdBvyx9-g=Mvv6SJvur5ogtUbRfR3oCFpQoQ4VK3w@mail.gmail.com>
+Subject: Re: watchdog: BUG: soft lockup
+To: wzs <wangzhengshu39@gmail.com>
+Cc: tglx@linutronix.de, liusong@linux.alibaba.com, akpm@linux-foundation.org, 
+	pmladek@suse.com, kernelfans@gmail.com, deller@gmx.de, npiggin@gmail.com, 
+	tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com, 
+	jan.kiszka@siemens.com, linux-kernel@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, yaoma@linux.alibaba.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 08, 2025 at 02:57:22PM +0800, Qi Zheng wrote:
-> Like PMD and PTE level page table, also add statistics for PUD and P4D
-> page table.
-> 
-> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-> Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
-> Cc: linux-s390@vger.kernel.org
-> ---
->  arch/s390/include/asm/pgalloc.h | 29 +++++++++++++++++++++--------
->  arch/s390/include/asm/tlb.h     |  2 ++
->  2 files changed, 23 insertions(+), 8 deletions(-)
-> 
-> diff --git a/arch/s390/include/asm/pgalloc.h b/arch/s390/include/asm/pgalloc.h
-> index 7b84ef6dc4b6d..a0c1ca5d8423c 100644
-> --- a/arch/s390/include/asm/pgalloc.h
-> +++ b/arch/s390/include/asm/pgalloc.h
-> @@ -53,29 +53,42 @@ static inline p4d_t *p4d_alloc_one(struct mm_struct *mm, unsigned long address)
->  {
->  	unsigned long *table = crst_table_alloc(mm);
->  
-> -	if (table)
-> -		crst_table_init(table, _REGION2_ENTRY_EMPTY);
-> +	if (!table)
-> +		return NULL;
-> +	crst_table_init(table, _REGION2_ENTRY_EMPTY);
-> +	pagetable_p4d_ctor(virt_to_ptdesc(table));
-> +
->  	return (p4d_t *) table;
->  }
->  
->  static inline void p4d_free(struct mm_struct *mm, p4d_t *p4d)
->  {
-> -	if (!mm_p4d_folded(mm))
-> -		crst_table_free(mm, (unsigned long *) p4d);
-> +	if (mm_p4d_folded(mm))
-> +		return;
-> +
-> +	pagetable_p4d_dtor(virt_to_ptdesc(p4d));
-> +	crst_table_free(mm, (unsigned long *) p4d);
->  }
->  
->  static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long address)
->  {
->  	unsigned long *table = crst_table_alloc(mm);
-> -	if (table)
-> -		crst_table_init(table, _REGION3_ENTRY_EMPTY);
-> +
-> +	if (!table)
-> +		return NULL;
-> +	crst_table_init(table, _REGION3_ENTRY_EMPTY);
-> +	pagetable_pud_ctor(virt_to_ptdesc(table));
-> +
->  	return (pud_t *) table;
->  }
->  
->  static inline void pud_free(struct mm_struct *mm, pud_t *pud)
->  {
-> -	if (!mm_pud_folded(mm))
-> -		crst_table_free(mm, (unsigned long *) pud);
-> +	if (mm_pud_folded(mm))
-> +		return;
-> +
-> +	pagetable_pud_dtor(virt_to_ptdesc(pud));
-> +	crst_table_free(mm, (unsigned long *) pud);
->  }
->  
->  static inline pmd_t *pmd_alloc_one(struct mm_struct *mm, unsigned long vmaddr)
-> diff --git a/arch/s390/include/asm/tlb.h b/arch/s390/include/asm/tlb.h
-> index e95b2c8081eb8..907d57a68145c 100644
-> --- a/arch/s390/include/asm/tlb.h
-> +++ b/arch/s390/include/asm/tlb.h
-> @@ -122,6 +122,7 @@ static inline void p4d_free_tlb(struct mmu_gather *tlb, p4d_t *p4d,
->  {
->  	if (mm_p4d_folded(tlb->mm))
->  		return;
-> +	pagetable_p4d_dtor(virt_to_ptdesc(p4d));
->  	__tlb_adjust_range(tlb, address, PAGE_SIZE);
->  	tlb->mm->context.flush_mm = 1;
->  	tlb->freed_tables = 1;
-> @@ -140,6 +141,7 @@ static inline void pud_free_tlb(struct mmu_gather *tlb, pud_t *pud,
->  {
->  	if (mm_pud_folded(tlb->mm))
->  		return;
-> +	pagetable_pud_dtor(virt_to_ptdesc(pud));
->  	tlb->mm->context.flush_mm = 1;
->  	tlb->freed_tables = 1;
->  	tlb->cleared_p4ds = 1;
+Hi,
 
-Acked-by: Alexander Gordeev <agordeev@linux.ibm.com>
+On Sun, Dec 22, 2024 at 10:32=E2=80=AFPM wzs <wangzhengshu39@gmail.com> wro=
+te:
+>
+> Hello,
+> when fuzzing the Linux kernel,
+> I triggered many "watch: BUG: soft lockup" warnings.
+> I am not sure whether this is an issue with the kernel or with the
+> fuzzing program I ran.
+> (The same fuzzing program, when tested on kernel versions from
+> Linux-6.7.0 to 6.12.0, triggers the 'watchdog: BUG: soft lockup'
+> warning on some versions, while others do not. Linux 6.12.0 is the
+> latest stable release where this error occurs.)
+>
+> The bug information I provided below is from the Linux-6.12.0 kernel.
+> If you need bug information from other versions, I would be happy to prov=
+ide it.
+>
+> kernel config :https://pastebin.com/i4LPXNAN
+> console output :https://pastebin.com/uKVpvJ78
 
-Thanks!
+IMO it's nearly always a bug if userspace can cause the kernel to soft
+lockup. I'd expect this isn't a bug in the soft lockup detector but a
+problem in whatever part of the kernel you're fuzzing. For some
+details of the soft lockup detector, see
+`Documentation/admin-guide/lockup-watchdogs.rst`.
+
+Presumably you're fuzzing the kernel in a way that causes it to enter
+a big loop while preemption is disabled, or something like that.
+Presumably the kernel should be detecting something invalid that
+userspace did and that would keep it from looping so long.
+
+I tried looking at your pastebin and probably what's going on is
+somewhere hidden in there, but unfortunately the beginning of the logs
+are a bit jumbled since it looks like the RCU warning and the soft
+lockup warning happened at about the same time and their stuff is
+jumbled. There's also a lot of tasks to go through. Honestly, it's
+probably less work just to look at whatever you were trying to fuzz to
+help you pinpoint the problem.
+
+I'll also note that you seem to be using KASAN and are running in a
+virtual machine. It's not inconceivable that's contributing to your
+problems. KASAN makes things _a lot_ slower and a VM may be getting
+its time stolen by the host.
+
+-Doug
 
