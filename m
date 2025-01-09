@@ -1,151 +1,160 @@
-Return-Path: <linux-mips+bounces-7315-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7316-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CFFFA06358
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Jan 2025 18:27:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60DF0A07039
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Jan 2025 09:44:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 758FC1636D1
-	for <lists+linux-mips@lfdr.de>; Wed,  8 Jan 2025 17:27:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 976A63A69CD
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Jan 2025 08:44:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A7F11FF7D5;
-	Wed,  8 Jan 2025 17:27:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 243C7215065;
+	Thu,  9 Jan 2025 08:44:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="kp4SZkr+"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="fe9N0bg7";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="WMs4FOZr"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a4-smtp.messagingengine.com (fhigh-a4-smtp.messagingengine.com [103.168.172.155])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 179D21FF61A
-	for <linux-mips@vger.kernel.org>; Wed,  8 Jan 2025 17:27:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58C1521504D;
+	Thu,  9 Jan 2025 08:44:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.155
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736357255; cv=none; b=oaKaYVITZJYFOLzPXq4OUgciEliBfY5bSrmkpJ3/bFHpKjTndqrCKaXfcm7bcuUv8cgmVZiV1WWvX1qLD06JYsup1nqAJMqQ2fKTcuGf42Z3EUqeg9Uk7PyU36iUnoVIzoRMA/lW1eb5OqUo/MxEd9L2b7ykR5txzcQfCO3W5V8=
+	t=1736412243; cv=none; b=tm9A7AjhSPbQig1YM3SSlVQln0JKZKdSw00fbNs2SWT+8GavEFxemXjm7tfyMAuTuIIjKu4AbHaohhlYaoCnKPXLp1vBieZIotW/3WBHNEm5Rv0yr8frUPrIei3/MIDj8ur6N7OgYjibKRjPnZ0OrWMMMxVX3ipJ7Z3D0OIQRJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736357255; c=relaxed/simple;
-	bh=uFSUfP1qtRuzGaG+XFGpp6Zt99NNZ4zrYvsYvHahhsA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=egm/u4Vq699UxQT7KY7QW6mVByRVXZLh6QeLgrkZqImjFPmeowCVSP2rVo0qcmbuTdXDZYBimFJgZj9ZBMpBgAo5MSk0x6zf3cU9KU36wHizejuW5I3c7jsXsKAXC9ZyX/arMIQ5eenScYQYXyUciVvysWn89hKZwIFX5ylAxSc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=kp4SZkr+; arc=none smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-53f22fd6832so41791e87.1
-        for <linux-mips@vger.kernel.org>; Wed, 08 Jan 2025 09:27:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1736357251; x=1736962051; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uFSUfP1qtRuzGaG+XFGpp6Zt99NNZ4zrYvsYvHahhsA=;
-        b=kp4SZkr+bhTDSDZIwfjJrTf1/59qzWvHmfXAjf0I9Z9qsC74CUDsMYt40qXaKwEaNO
-         KKsjJ4yLvsTZNXMZsMOPcFy94LRKGC1abdrPpdP4dJdTgqXQ2ykCqr7oXbMkRnu2e7Rc
-         he8E3KwtO3US2lT+N9cBJ2I+upuUn+IKR2DyM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736357251; x=1736962051;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uFSUfP1qtRuzGaG+XFGpp6Zt99NNZ4zrYvsYvHahhsA=;
-        b=rKBKFARB4lbtFlP6rBxC6mn/9Nq9zGW5cPGVL3nKuQjd6KPvK+d3Z76nivShCmvYzi
-         ugKpwoIh66jbYgoQtZ5h0arM6PNLOnzV6inDSVylLQIVX0IK7AI8yT3yWrARUCFfDe7k
-         Ovu4hDIPeOKqTP1XtSIHuORLR8pxj1cFkmaB8lVX3WCttncE4ZMFZw+DOITq5+xjC81v
-         xJsnWBLDA26L3WybQv8/H1F2y4GaXLUIGTLSNAgTlqW8PuejsIPBDN9ihu5LAVJqAf24
-         F3KamgOFYv+zZbCCagvBmvJPXmQUI1ivYY3WtDJR3cbG1glLfGYO9fxQgux5Ci0aDWcC
-         R7Fw==
-X-Forwarded-Encrypted: i=1; AJvYcCVL8zqfm+Ly2iDltBMKobQKFHoIuwMUcm7Xi8i9ka1O2XBH1Emv/2J0oJRWLNDzvANy8oUfsO7QKNYh@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx++c5HY+43SFFMWXtxhbv5Flj3yHlCzyqMVMmhQ/iuEkKBh1Il
-	VhJlI+81xc/x2+9PavBHIG9dMQwkQoKW83g6ZyTzWIDgFUntuobNfsQCTXmoFyswC2pC+OnqEd7
-	71g==
-X-Gm-Gg: ASbGncu4+F5pb7dNYNSMR9jnIGQLExbnQaH/L8UM0hQdNzQ6X8KsW9J38O89jGCRasV
-	SUMgVESReJRJi2Y/8PldOr1nz8LeXqaIfSgDAJ3gOWrI0kCNmZ+dHvo0DsPtX78UI7YWZk8fcUt
-	X4pkA8uSEwaR74mJNl+YHkb3LiO5E81FC6G2oLW9HvEh84aLXpyfXrTrGLNTozD9Xdrf1nXLwnq
-	CotAN2hRdBYp6sr9lA5clnWXtuktA5iOUNkl+WvYQIUmRR35qOHoy9U/R1mj9WEQ5Q+6Jj89kCb
-	f4GQriOU0FL+FzmILzPk
-X-Google-Smtp-Source: AGHT+IGrU2pc6XbsoBHsJ4QxX9MCVwBlJD7xvVTOL37Nln0D9SdUl5MFwagrtC0WuQ8fJBk+mClMcg==
-X-Received: by 2002:a05:6512:3d8a:b0:53f:a8c0:22a7 with SMTP id 2adb3069b0e04-54284810ea7mr975751e87.38.1736357250996;
-        Wed, 08 Jan 2025 09:27:30 -0800 (PST)
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com. [209.85.167.42])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5422381381csm5631442e87.165.2025.01.08.09.27.29
-        for <linux-mips@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jan 2025 09:27:29 -0800 (PST)
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5426fcb3c69so27756e87.3
-        for <linux-mips@vger.kernel.org>; Wed, 08 Jan 2025 09:27:29 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXsEo08Uo6mCw069FWoTz5G/MlIlAnhtma09VzrPu1a0pmKmWqcnIp8E/8CBmzd5mCwf8uHERVp2N32@vger.kernel.org
-X-Received: by 2002:a05:6512:2354:b0:540:21f1:e9e7 with SMTP id
- 2adb3069b0e04-542845b9b94mr1068026e87.16.1736357249082; Wed, 08 Jan 2025
- 09:27:29 -0800 (PST)
+	s=arc-20240116; t=1736412243; c=relaxed/simple;
+	bh=8H6BygMIu1Z3lOz7VJer5HBaeLon7BbM/2AemECWP4M=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=TtRCOAb94qp+nr72YBtuJ8J3LnG7nFeDL/TkJ5boBJnvGPfZPjq+T6P4Jg9hfyp7eiQwX5pceSfUkW4WuOZiZlR/yl8W0BSocPEAYiA0Wf78fluj6LXN3ddI7/SInxX/uL/Cf7HhV6Ld/VYj60PJ/KtQoYp8QJwXZUeqIfRy2+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=fe9N0bg7; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=WMs4FOZr; arc=none smtp.client-ip=103.168.172.155
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 827DD11401AD;
+	Thu,  9 Jan 2025 03:44:00 -0500 (EST)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-10.internal (MEProxy); Thu, 09 Jan 2025 03:44:00 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1736412240;
+	 x=1736498640; bh=tigQXaY52+f4nEMAt97v+LIiKFSTsAzA1NT4bvf0HiY=; b=
+	fe9N0bg73wO77VQ4hqkdowFETgmawdiJkIJ7feHkc1xwiGI6bjrneI9VRNPt8R/Y
+	AfM+d3TjPmW3YAzAkVa51dyDZNBccqlYSDinIu2qUyQdWg2D7rIsJIRpiXIWaYKa
+	qGPo7HW/c4ykNqxs6niZ/0rGLxDGo/ph25fBKW0WqiTA/TwfzvVqg6RPhaRChmAP
+	eXQ1AcyxNeCw/SetMXBSvxku1nuGuoc3GQ+Tk83BNUhQaFa/tlI5qhPySefRGfOi
+	HmgQqxI7fwe0obN3W4ULH9Be8nlo7VDQ/sEQJvU0i2K/MVRm92GDvIq2vzZoxcEG
+	WF/0OFdNCds2zGrkyAJY2Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1736412240; x=
+	1736498640; bh=tigQXaY52+f4nEMAt97v+LIiKFSTsAzA1NT4bvf0HiY=; b=W
+	Ms4FOZrnkuG0wcIfRkrKCxcQVXFUegr6R+YARwAfJIuWjUXAhthkbJJonWrSmNQV
+	nTj+BzuhqgC2X7FC9pp9yOicsTiw6HZnJo+uMz9UTagKGRKeLkp6aJg20zFeQ4EH
+	ylFpyD1Q2J5n0cHRI5h+XWpp5MFLfI/3ogEwwY9TwYtr66LH8Q3rkf2o3zkavXrp
+	/fJKf7FhuMBcu0NXBhMoaE83BaWOb9kXFWV4ajoyDexUAQNpDS8zL02SK+NMO3Qk
+	UiLSTrKvBc6Q+rSmaoyRzrFlswW/P8Ol3IeQ/V3/GpEEUsI1F+wJbtC4KCoAft0F
+	nxnxistGx8pA+H1/NHH4A==
+X-ME-Sender: <xms:Tox_Z7saN7uAizgebebXFs4arIf4Fbvasl3tKa-d28EvnC8IV1vZdg>
+    <xme:Tox_Z8d_1E7BGD7NztUjAAlmcQOXskaeejLfpx-qXPCnkYlNQCuHgjSN5gB4FIhjL
+    vlsFg9Ty7chZdAIzHs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudeghedguddvfecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
+    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
+    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
+    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedu
+    kedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepiigvhhgrseguvggsihgrnhdroh
+    hrghdprhgtphhtthhopehsrghmsehgvghnthhoohdrohhrghdprhgtphhtthhopehmrght
+    thhsthekkeesghhmrghilhdrtghomhdprhgtphhtthhopehkvggvsheskhgvrhhnvghlrd
+    horhhgpdhrtghpthhtohepphgruhhlmhgtkheskhgvrhhnvghlrdhorhhgpdhrtghpthht
+    oheplhhinhhugidqmhhmsehkvhgrtghkrdhorhhgpdhrtghpthhtoheprhhitghhrghrug
+    drhhgvnhguvghrshhonheslhhinhgrrhhordhorhhgpdhrtghpthhtohepghgvvghrthes
+    lhhinhhugidqmheikehkrdhorhhgpdhrtghpthhtoheplhhoohhnghgrrhgthheslhhish
+    htshdrlhhinhhugidruggvvh
+X-ME-Proxy: <xmx:Tox_Z-yJG9BDEken2s0M3eerfXdoiYzTQuz_W6_cs78rrA5f7p1eAQ>
+    <xmx:Tox_Z6MtF2yRnJBHrhp6lXiIWi4Xem7EtuSbx_4krv84BDYGnJz0UA>
+    <xmx:Tox_Z7-kZoGjhfeHoPFFMTdht9yvKI3oVci-mB4v5bIklRS71FpB2g>
+    <xmx:Tox_Z6VbslOI5gJ0HBaX3YihZjBTqrydLvJWJmUucTay1E8H8eLlaQ>
+    <xmx:UIx_Z4iX2WwoRqQTPJ2GNboLPBjbISPSUatlpTe2Jx2hAK8pSMNp1XHw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 9B5FE2220072; Thu,  9 Jan 2025 03:43:58 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAGXGE_JWtMo8Qs=hsH=NULkDRFoYKYorKHACpqvqpYiO3am8eQ@mail.gmail.com>
-In-Reply-To: <CAGXGE_JWtMo8Qs=hsH=NULkDRFoYKYorKHACpqvqpYiO3am8eQ@mail.gmail.com>
-From: Doug Anderson <dianders@chromium.org>
-Date: Wed, 8 Jan 2025 09:27:17 -0800
-X-Gmail-Original-Message-ID: <CAD=FV=VOjzdBvyx9-g=Mvv6SJvur5ogtUbRfR3oCFpQoQ4VK3w@mail.gmail.com>
-X-Gm-Features: AbW1kvZ7WHp39ciL3QA7T0aXBTFHS6WcSbmLSDiGkRPVgTELV5ossj5Zmm_Z_6A
-Message-ID: <CAD=FV=VOjzdBvyx9-g=Mvv6SJvur5ogtUbRfR3oCFpQoQ4VK3w@mail.gmail.com>
-Subject: Re: watchdog: BUG: soft lockup
-To: wzs <wangzhengshu39@gmail.com>
-Cc: tglx@linutronix.de, liusong@linux.alibaba.com, akpm@linux-foundation.org, 
-	pmladek@suse.com, kernelfans@gmail.com, deller@gmx.de, npiggin@gmail.com, 
-	tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com, 
-	jan.kiszka@siemens.com, linux-kernel@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, yaoma@linux.alibaba.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Date: Thu, 09 Jan 2025 09:43:38 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
+ "Richard Henderson" <richard.henderson@linaro.org>,
+ "Matt Turner" <mattst88@gmail.com>,
+ "Eric W. Biederman" <ebiederm@xmission.com>, "Kees Cook" <kees@kernel.org>,
+ "Paul E. McKenney" <paulmck@kernel.org>, linux-alpha@vger.kernel.org,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Cc: "Michael Cree" <mcree@orcon.net.nz>, "Sam James" <sam@gentoo.org>,
+ "Maciej W. Rozycki" <macro@orcam.me.uk>,
+ "Geert Uytterhoeven" <geert@linux-m68k.org>,
+ "Michael Karcher" <kernel@mkarcher.dialup.fu-berlin.de>,
+ "Chris Hofstaedtler" <zeha@debian.org>, util-linux@vger.kernel.org,
+ linux-mips@vger.kernel.org, loongarch@lists.linux.dev
+Message-Id: <678ee681-12c3-4e79-a04b-495daf343846@app.fastmail.com>
+In-Reply-To: <24f03227-1b55-4e50-b6e9-7ac74fda2602@app.fastmail.com>
+References: <20250103140148.370368-1-glaubitz@physik.fu-berlin.de>
+ <24f03227-1b55-4e50-b6e9-7ac74fda2602@app.fastmail.com>
+Subject: Re: [PATCH] alpha: Fix personality flag propagation across an exec
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Hi,
-
-On Sun, Dec 22, 2024 at 10:32=E2=80=AFPM wzs <wangzhengshu39@gmail.com> wro=
-te:
+On Thu, Jan 9, 2025, at 09:01, Arnd Bergmann wrote:
+> On Fri, Jan 3, 2025, at 15:01, John Paul Adrian Glaubitz wrote:
 >
-> Hello,
-> when fuzzing the Linux kernel,
-> I triggered many "watch: BUG: soft lockup" warnings.
-> I am not sure whether this is an issue with the kernel or with the
-> fuzzing program I ran.
-> (The same fuzzing program, when tested on kernel versions from
-> Linux-6.7.0 to 6.12.0, triggers the 'watchdog: BUG: soft lockup'
-> warning on some versions, while others do not. Linux 6.12.0 is the
-> latest stable release where this error occurs.)
+>> 
+>>  #define SET_PERSONALITY(EX)					\
+>> -	set_personality(((EX).e_flags & EF_ALPHA_32BIT)		\
+>> -	   ? PER_LINUX_32BIT : PER_LINUX)
+>> +	set_personality((((EX).e_flags & EF_ALPHA_32BIT)	\
+>> +	   ? PER_LINUX_32BIT : PER_LINUX) | (current->personality & (~PER_MASK)))
 >
-> The bug information I provided below is from the Linux-6.12.0 kernel.
-> If you need bug information from other versions, I would be happy to prov=
-ide it.
+> This looks wrong to me: since ADDR_LIMIT_32BIT is not part of
+> PER_MASK, executing a regular binary from a taso binary no longer
+> reverts back to the entire 64-bit address space.
 >
-> kernel config :https://pastebin.com/i4LPXNAN
-> console output :https://pastebin.com/uKVpvJ78
+> It seems that the behavior on most other architectures changed in 2012
+> commit 16f3e95b3209 ("cross-arch: don't corrupt personality flags upon
+> exec()").
+>
+> At the time, the same bug existed on mips, parisc and tile, but those
+> got fixed quickly.
 
-IMO it's nearly always a bug if userspace can cause the kernel to soft
-lockup. I'd expect this isn't a bug in the soft lockup detector but a
-problem in whatever part of the kernel you're fuzzing. For some
-details of the soft lockup detector, see
-`Documentation/admin-guide/lockup-watchdogs.rst`.
+Correction: from what I can tell, mips still has the bug (and now
+also loongarch), it's just in SET_PERSONALITY2() now instead of
+SET_PERSONALITY():
 
-Presumably you're fuzzing the kernel in a way that causes it to enter
-a big loop while preemption is disabled, or something like that.
-Presumably the kernel should be detecting something invalid that
-userspace did and that would keep it from looping so long.
+        current->personality &= ~READ_IMPLIES_EXEC;
+        ...
+        p = personality(current->personality);                          \
+        if (p != PER_LINUX32 && p != PER_LINUX)                         \
+                set_personality(PER_LINUX);                             \
 
-I tried looking at your pastebin and probably what's going on is
-somewhere hidden in there, but unfortunately the beginning of the logs
-are a bit jumbled since it looks like the RCU warning and the soft
-lockup warning happened at about the same time and their stuff is
-jumbled. There's also a lot of tasks to go through. Honestly, it's
-probably less work just to look at whatever you were trying to fuzz to
-help you pinpoint the problem.
+personality() only returns the lower 8 bits (execution domain),
+so if any of them are set (BSD/HPUX/IRIX32/IRIX64/...), both
+the upper and the lower bits are cleared, otherwise neither
+of them are.
 
-I'll also note that you seem to be using KASAN and are running in a
-virtual machine. It's not inconceivable that's contributing to your
-problems. KASAN makes things _a lot_ slower and a VM may be getting
-its time stolen by the host.
+The behavior on the other architectures is that we clear the
+lower bits but keep the upper ones.
 
--Doug
+      Arnd
 
