@@ -1,51 +1,46 @@
-Return-Path: <linux-mips+bounces-7396-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7394-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 973B4A0A38E
-	for <lists+linux-mips@lfdr.de>; Sat, 11 Jan 2025 13:19:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 93702A0A388
+	for <lists+linux-mips@lfdr.de>; Sat, 11 Jan 2025 13:18:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 932D03AA4EC
-	for <lists+linux-mips@lfdr.de>; Sat, 11 Jan 2025 12:19:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9984F3A8EA0
+	for <lists+linux-mips@lfdr.de>; Sat, 11 Jan 2025 12:18:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 922A51922E1;
-	Sat, 11 Jan 2025 12:18:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01E9F19597F;
+	Sat, 11 Jan 2025 12:18:41 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B278B19DF98;
-	Sat, 11 Jan 2025 12:18:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EECA613BC0C;
+	Sat, 11 Jan 2025 12:18:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736597925; cv=none; b=W4fyGShQshCc+LE0XOKgA+OGWazf/vjiTSfnYnTO4/7a04obcysrNGm8K5MNGBs6768ohEudecjDMq1yzCtEI+E316IPGXogKx0ZQmE6yWp5Tdx2wCJ0W0UTyIb5+7W9OwiLj7i1Bx0H3HqC31bE1FvvC/Y1MIpfNfi35lK1pBo=
+	t=1736597920; cv=none; b=gxh6p1/cjeQxzNihr2YjFtrNGriTdWRxEOW3Q6M6TCqlAxfTSdw+3j0jTajyjbXk7FUN8vN+KAaQgs0dZLflNfBrwyYl8mHKQ+bSeC0VNMIa2AgnizddZdcVMvfV8lVCgrVgTxor1BT4BGwM13zSZ6e4Ww4x+/iOYlogruytYDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736597925; c=relaxed/simple;
-	bh=G0j+rxfkOVl3z9RAPt9oe6aH0XqdmyhM1QLNxNwzeqc=;
+	s=arc-20240116; t=1736597920; c=relaxed/simple;
+	bh=ek4H6zRZpOfFJBTcCsQxktyEeVXezOIY1lmHjJrH2Vs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=V4iVgN9BSAbq7d3GW8jvMaHYTxZBpeRxCJ/du1n+KoFO3TyQdDPqst5VzmxTIwo6aX0Kuepu9+w+pxMjiWEUHLiauddfG8z0RCcV60IEH9s5Nn9qrpVuKl9X0rbnscL4obqTDlsZuI9e9B0gEgkxIGpkr5VCBpOOfNder7szoVo=
+	 Content-Type:Content-Disposition:In-Reply-To; b=sKlyIcLQ3dNTqc0zrze/Qp8DC1Pb6BwSPc5oF6dbuu0q3h0dw5aBr1E985I4ZL+zzcYMTJDfh3Hp9Li2Zp0IZb+dIFVGRbOcjzqLV5T23tTRQNwV0nYk9pDWFa/EERtfvmRKMscmJk32p7D96KTph58ION/I4iNPOOnCguNKVTM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1tWaRL-0006NS-00; Sat, 11 Jan 2025 13:18:07 +0100
+	id 1tWaRL-0006NU-00; Sat, 11 Jan 2025 13:18:07 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 19C70C06B0; Sat, 11 Jan 2025 13:02:25 +0100 (CET)
-Date: Sat, 11 Jan 2025 13:02:25 +0100
+	id 6D80FC06E5; Sat, 11 Jan 2025 13:02:55 +0100 (CET)
+Date: Sat, 11 Jan 2025 13:02:55 +0100
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: WangYuli <wangyuli@uniontech.com>
-Cc: rostedt@goodmis.org, mhiramat@kernel.org, mark.rutland@arm.com,
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org, xzhong86@163.com, wuzhangjin@gmail.com,
-	srostedt@redhat.com, linux-mips@linux-mips.org,
-	ralf@duck.linux-mips.net, jeffbai@aosc.io, zhanjun@uniontech.com,
-	guanwentao@uniontech.com, jiaxun.yang@flygoat.com,
-	gregory.clement@bootlin.com, philmd@linaro.org, tglx@linutronix.de,
-	rppt@kernel.org
-Subject: Re: [RESEND PATCH] MIPS: ftrace: Declare ftrace_get_parent_ra_addr()
- as static
-Message-ID: <Z4Jd0aiLQY2KYRmS@alpha.franken.de>
-References: <527F9AFF0430AB45+20250104144708.18438-1-wangyuli@uniontech.com>
+To: Xi Ruoyao <xry111@xry111.site>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+	Icenowy Zheng <icenowy@aosc.io>
+Subject: Re: [PATCH] Revert "MIPS: csrc-r4k: Select HAVE_UNSTABLE_SCHED_CLOCK
+ if SMP && 64BIT"
+Message-ID: <Z4Jd7+VqnS5jLvm0@alpha.franken.de>
+References: <20241223092041.257941-1-xry111@xry111.site>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -54,44 +49,50 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <527F9AFF0430AB45+20250104144708.18438-1-wangyuli@uniontech.com>
+In-Reply-To: <20241223092041.257941-1-xry111@xry111.site>
 
-On Sat, Jan 04, 2025 at 10:47:08PM +0800, WangYuli wrote:
-> Declare ftrace_get_parent_ra_addr() as static to suppress clang
-> compiler warning that 'no previous prototype'. This function is
-> not intended to be called from other parts.
+On Mon, Dec 23, 2024 at 05:20:41PM +0800, Xi Ruoyao wrote:
+> This reverts commit 426fa8e4fe7bb914b5977cbce453a9926bf5b2e6.
 > 
-> Fix follow error with clang-19:
+> The commit has caused two issues on Loongson 3A4000:
 > 
-> arch/mips/kernel/ftrace.c:251:15: error: no previous prototype for function 'ftrace_get_parent_ra_addr' [-Werror,-Wmissing-prototypes]
->   251 | unsigned long ftrace_get_parent_ra_addr(unsigned long self_ra, unsigned long
->       |               ^
-> arch/mips/kernel/ftrace.c:251:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
->   251 | unsigned long ftrace_get_parent_ra_addr(unsigned long self_ra, unsigned long
->       | ^
->       | static
-> 1 error generated.
+> 1. The timestamp in dmesg become erratic, like:
 > 
-> Signed-off-by: WangYuli <wangyuli@uniontech.com>
+>     [3.736957] amdgpu 0000:04:00.0: ... ...
+>     [3.748895] [drm] Initialized amdgpu ... ...
+>     [18446744073.381141] amdgpu 0000:04:00:0: ... ...
+>     [1.613326] igb 0000:03:00.0 enp3s0: ... ...
+> 
+> 2. More seriously, some workloads (for example, the test
+>    stdlib/test-cxa_atexit2 in the Glibc test suite) triggers an RCU
+>    stall and hang the system with a high probably (4 hangs out of 5
+>    tests).
+> 
+> Revert this commit to use jiffie on Loongson MIPS systems and fix these
+> issues for now.  The root cause may need more investigation.
+> 
+> Cc: stable@vger.kernel.org # 6.11+
+> Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> Cc: Icenowy Zheng <icenowy@aosc.io>
+> Signed-off-by: Xi Ruoyao <xry111@xry111.site>
 > ---
->  arch/mips/kernel/ftrace.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  arch/mips/Kconfig | 1 -
+>  1 file changed, 1 deletion(-)
 > 
-> diff --git a/arch/mips/kernel/ftrace.c b/arch/mips/kernel/ftrace.c
-> index 8c401e42301c..f39e85fd58fa 100644
-> --- a/arch/mips/kernel/ftrace.c
-> +++ b/arch/mips/kernel/ftrace.c
-> @@ -248,7 +248,7 @@ int ftrace_disable_ftrace_graph_caller(void)
->  #define S_R_SP	(0xafb0 << 16)	/* s{d,w} R, offset(sp) */
->  #define OFFSET_MASK	0xffff	/* stack offset range: 0 ~ PT_SIZE */
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index 467b10f4361a..5078ebf071ec 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -1084,7 +1084,6 @@ config CSRC_IOASIC
 >  
-> -unsigned long ftrace_get_parent_ra_addr(unsigned long self_ra, unsigned long
-> +static unsigned long ftrace_get_parent_ra_addr(unsigned long self_ra, unsigned long
->  		old_parent_ra, unsigned long parent_ra_addr, unsigned long fp)
->  {
->  	unsigned long sp, ip, tmp;
+>  config CSRC_R4K
+>  	select CLOCKSOURCE_WATCHDOG if CPU_FREQ
+> -	select HAVE_UNSTABLE_SCHED_CLOCK if SMP && 64BIT
+>  	bool
+>  
+>  config CSRC_SB1250
 > -- 
-> 2.45.2
+> 2.47.1
 
 applied to mips-next.
 
