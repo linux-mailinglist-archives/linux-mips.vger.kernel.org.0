@@ -1,171 +1,265 @@
-Return-Path: <linux-mips+bounces-7390-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7391-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53BD2A0A29C
-	for <lists+linux-mips@lfdr.de>; Sat, 11 Jan 2025 11:10:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88475A0A2DA
+	for <lists+linux-mips@lfdr.de>; Sat, 11 Jan 2025 11:37:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EE1E57A360B
-	for <lists+linux-mips@lfdr.de>; Sat, 11 Jan 2025 10:10:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 89AAC3AA3E3
+	for <lists+linux-mips@lfdr.de>; Sat, 11 Jan 2025 10:37:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7120E1632F3;
-	Sat, 11 Jan 2025 10:10:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FFD71917CD;
+	Sat, 11 Jan 2025 10:37:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="Z+gkIE1H";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Wsj5qPnT"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="ASehAqLW"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fout-a7-smtp.messagingengine.com (fout-a7-smtp.messagingengine.com [103.168.172.150])
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2DE20156F54;
-	Sat, 11 Jan 2025 10:10:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B485D190665;
+	Sat, 11 Jan 2025 10:37:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736590218; cv=none; b=oSmENs8emgS8vFbbFxvyGleIOAUL2VDdN/F5bLEOv4+sR9yl2JpBXgAIxzHl+UDKqvLavP+G1HKF8aG9JEvfxZP/PYCx5Z+yStwABQ7nhlAAcqKvtwKFFADRN69AkWJqycj/rHwALy3thsW4FkzsSjkgA5cegvaby7csuEiEY6A=
+	t=1736591848; cv=none; b=WKp9Rqy5hovBFpP4PiOEInTGpDyJ43IoQoCtXyISrZN5kXSXmAqFt4+ggk2gL5cncpUHp1/vnb8lu7kdOHpiktNfteRY5KR4cceFbRr0WfPK0rAlsTugaCi5fqFBa7PX3HgaT6WZsZq0ZJ1nFsyzgEfy2q0BaqDApFrzPKKrdQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736590218; c=relaxed/simple;
-	bh=+pePf+vX2sOiCsqc53oErDobopFjS3fed6qpiuZppOU=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=jl/THN9wyeDq9Wb66WEHawwjE20bE76849Sb1pDtDcVigIvycetjVC9EGXnFh7YWx2v6M+QKwbp/G6eWjOYUBXOqtxLxreRCxT0mXi52UIbh74GH/uM5yIgep/BYbV9kob8PFe/VIS8bhcWakmbo1ubIratMuS3JNjPiUwxUQMs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=Z+gkIE1H; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Wsj5qPnT; arc=none smtp.client-ip=103.168.172.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
-	by mailfout.phl.internal (Postfix) with ESMTP id 1A0091380143;
-	Sat, 11 Jan 2025 05:10:15 -0500 (EST)
-Received: from phl-imap-12 ([10.202.2.86])
-  by phl-compute-09.internal (MEProxy); Sat, 11 Jan 2025 05:10:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1736590215;
-	 x=1736676615; bh=7HBp2SadmpOAT3FBbLsoTTEospLUqzeWu04/XaaaIhA=; b=
-	Z+gkIE1HT6cmRLSeLASmMkUkePV2U9LJ3xF9wN6Vg2v1S0RlLwGT+I9LCZJW7cHv
-	wJ+W5nn8buTd4B/2GjditvSSR/VBc1O7lnTabZmS8A50xmZes6m7VWq7LZANC8r1
-	1Il031haWA9psYA1E6kqTQs0AmNiVRQUkL2t4dFjK0hOkkikRZo1+zWrzm0ado0y
-	436OnPTnzwg4pp1gvQ3tCmbs7bbnwQ6P5fi0zaB9gxFPR76DwPnh27B1EzZhSRnL
-	X47V53gm0e7HaBiN7ErM0ROdrr1ZKFZLlyHTordxhAel06HexXj+V594K387SQpZ
-	VIPRRFejEz2PS0ColBCQwQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1736590215; x=
-	1736676615; bh=7HBp2SadmpOAT3FBbLsoTTEospLUqzeWu04/XaaaIhA=; b=W
-	sj5qPnT2po1/J7IEJdHW7TwvwqFJBVIcdaioUXfmHg3Bn1QT+S69Pj8XUsNCVFiD
-	B3frfZnuABQsaN5RE0ODK2c6LGfi0AiAAYc0m/8298mQyOKjezggEb5lp8+Z2PZ/
-	vJVuEl1l31oVxo7e45Uovfd39LDqsBCpCZ0hYBFIlsjzE5eymL6JRO/i9CeUyEVF
-	Ur6/MloxE7HZasqugsb55wPUhmTlI7YnzJiPJx2HI+q7H9m3V9N5YAPYHYOxErET
-	NyppVfMgDPlcVx7IZcfRN8vtifvE1lJn+PyWsZXEWAugb+k7OgLpWq5VzwK11bm+
-	suV8GRIu1gpdYmRi9k8lQ==
-X-ME-Sender: <xms:hkOCZ1ABH1d1rzemBgubB0NzQgD9CBVavoUau2KtdUrTwsfKnTBf-Q>
-    <xme:hkOCZziLF9EmABuaaMlReI0txHnmkYCNinbZKxRHCJF7LTJqYkyGW8cbPGvYgG5My
-    Z5HHhUVC8TgZN6DQpg>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudehtddgudduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdej
-    necuhfhrohhmpedflfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfh
-    hlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepjeehfeduvddtgffgvdffkeet
-    hefhlefgvdevvdekuefffeekheehgeevhfevteejnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgr
-    thdrtghomhdpnhgspghrtghpthhtohepiedpmhhouggvpehsmhhtphhouhhtpdhrtghpth
-    htohepthhssghoghgvnhgusegrlhhphhgrrdhfrhgrnhhkvghnrdguvgdprhgtphhtthho
-    pehitggvnhhofiihsegrohhstgdrihhopdhrtghpthhtoheplhhinhhugidqkhgvrhhnvg
-    hlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqmhhiphhs
-    sehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhtrggslhgvsehvghgvrh
-    drkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepgihrhiduudduseigrhihudduuddrshhi
-    thgv
-X-ME-Proxy: <xmx:hkOCZwnvGg1_1qMNVbhFSF1ZETFYY00PQYlwxiqHwMPJD5GjHB4bJg>
-    <xmx:hkOCZ_xIaTZSLbWSXtlVZPmEgW7HnYfof0XsieLCUYPAE_XYUwfOrg>
-    <xmx:hkOCZ6Q_-s6ZZxf9mPvztr5o03kZn7aNrvWBY-9i6jH8Hh9_G2rq0g>
-    <xmx:hkOCZyYN0VnF2yIMaGqN_zzx6MyhFxgh1wUTwdfbfxK54OvoaC3jVg>
-    <xmx:h0OCZ5Faj6AtsYFINV63ALUBj9k7MksLrc92j60s7CoUyi_90qBwC1i8>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 5FB651C20066; Sat, 11 Jan 2025 05:10:14 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1736591848; c=relaxed/simple;
+	bh=J9qfsHnXvzG51XmIMehDBrHTZVBnIEv6EQBMFJ4Eidc=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=lKe+btBN+SzVSyPMSSN1eRVplpXXZ44goCXaCgXwOoJBxU1ZEPSqjdObW23vndkkDl0HqVxoCYMgbSZWilzocyLhkJVFDNW4rNFLVsR42agW1N2h6VohPeGAEY5WOwyJWBgr4xvSEZULIv4lDIxzEJeC+Gp09tbqrsdl7WonSMM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=ASehAqLW; arc=none smtp.client-ip=130.133.4.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
+	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=s+65UPhjiNYX126VZsqD9OJK1GZ2ijFtoFRRiqh52Rg=; t=1736591844; x=1737196644; 
+	b=ASehAqLW1K643oQutwRP6dQWsTfsKLDGmFHcyGpnGiwh7pGhgQfkGStrath0hpQ5PVFBwvqyJWB
+	Wmew03FtaKMsT2NDl67dKPholK6EUHfQd6/G90/gAc9s5rh37F1684ZHw6RI/2AsFRYO1TxjrE20W
+	Lidbbif026NyxDQ9o1hmAcDADjXqg4TcYAxXWwIPfB5diwQa/embPiUfOA0HOElw2/DzHJtERhGWe
+	i/zT1VGXSx+/DluUr+6SguNDMYq0WvhwckJni4UrSwiQSD+sWW/BzzKjZkX+a3NLcrueUsY7P3dIl
+	AzWaFj38dho54djXfZchZFyZF0mAIR8omOQA==;
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.98)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1tWYrh-00000000tpC-1n5X; Sat, 11 Jan 2025 11:37:13 +0100
+Received: from p57bd9274.dip0.t-ipconnect.de ([87.189.146.116] helo=[192.168.178.61])
+          by inpost2.zedat.fu-berlin.de (Exim 4.98)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1tWYrh-00000002S89-0gIa; Sat, 11 Jan 2025 11:37:13 +0100
+Message-ID: <2758fa70d237ff972b0c8d7114777dc4a20c8f3b.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH] alpha/elf: Fix misc/setarch test of util-linux by
+ removing 32bit support
+From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To: "Eric W. Biederman" <ebiederm@xmission.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Richard Henderson	
+ <richard.henderson@linaro.org>, Matt Turner <mattst88@gmail.com>, Kees Cook
+	 <kees@kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	linux-alpha@vger.kernel.org, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org,  Michael Cree <mcree@orcon.net.nz>, Sam James
+ <sam@gentoo.org>, "Maciej W. Rozycki" <macro@orcam.me.uk>,  Geert
+ Uytterhoeven <geert@linux-m68k.org>, Michael Karcher
+ <kernel@mkarcher.dialup.fu-berlin.de>, Chris Hofstaedtler	
+ <zeha@debian.org>, util-linux@vger.kernel.org, linux-mips@vger.kernel.org, 
+	loongarch@lists.linux.dev
+Date: Sat, 11 Jan 2025 11:37:12 +0100
+In-Reply-To: <87jzb2tdb7.fsf_-_@email.froward.int.ebiederm.org>
+References: <20250103140148.370368-1-glaubitz@physik.fu-berlin.de>
+		<24f03227-1b55-4e50-b6e9-7ac74fda2602@app.fastmail.com>
+		<678ee681-12c3-4e79-a04b-495daf343846@app.fastmail.com>
+		<bff3cfad8a87799101891b4f786c5104db9dab13.camel@physik.fu-berlin.de>
+		<82d33a2d-dffe-4268-a175-4536b3f9c07f@app.fastmail.com>
+		<cc420e1a843da3cf349607369851c338f4049c4e.camel@physik.fu-berlin.de>
+	 <87jzb2tdb7.fsf_-_@email.froward.int.ebiederm.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.2 
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Sat, 11 Jan 2025 10:09:55 +0000
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Xi Ruoyao" <xry111@xry111.site>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
-Cc: "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- linux-kernel@vger.kernel.org,
- "stable@vger.kernel.org" <stable@vger.kernel.org>,
- "Icenowy Zheng" <icenowy@aosc.io>
-Message-Id: <ea1fc568-91b7-4781-b870-ae90675214e3@app.fastmail.com>
-In-Reply-To: <20241223092041.257941-1-xry111@xry111.site>
-References: <20241223092041.257941-1-xry111@xry111.site>
-Subject: Re: [PATCH] Revert "MIPS: csrc-r4k: Select HAVE_UNSTABLE_SCHED_CLOCK if SMP &&
- 64BIT"
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-ZEDAT-Hint: PO
 
+Hi Eric,
 
+On Fri, 2025-01-10 at 18:16 -0600, Eric W. Biederman wrote:
+> Richard Henderson <richard.henderson@linaro.org> writes[1]:
+>=20
+> > There was a Spec benchmark (I forget which) which was memory bound and =
+ran
+> > twice as fast with 32-bit pointers.
+> >=20
+> > I copied the idea from DEC to the ELF abi, but never did all the other =
+work
+> > to allow the toolchain to take advantage.
+> >=20
+> > Amusingly, a later Spec changed the benchmark data sets to not fit into=
+ a
+> > 32-bit address space, specifically because of this.
+> >=20
+> > I expect one could delete the ELF bit and personality and no one would
+> > notice. Not even the 10 remaining Alpha users.
+>=20
+> In [2] it was pointed out that parts of setarch weren't working
+> properly on alpha because it has it's own SET_PERSONALITY
+> implementation.  In the discussion that followed Richard Henderson
+> pointed out that the 32bit pointer support for alpha was never
+> completed.
+>=20
+> Fix this by removing alpha's 32bit pointer support.
+>=20
+> As a bit of paranoia refuse to execute any alpha binaries that hafe
+                                                                 ^^^^ hafe-=
+>have
 
-=E5=9C=A82024=E5=B9=B412=E6=9C=8823=E6=97=A5=E5=8D=81=E4=BA=8C=E6=9C=88 =
-=E4=B8=8A=E5=8D=889:20=EF=BC=8CXi Ruoyao=E5=86=99=E9=81=93=EF=BC=9A
-> This reverts commit 426fa8e4fe7bb914b5977cbce453a9926bf5b2e6.
->
-> The commit has caused two issues on Loongson 3A4000:
->
-> 1. The timestamp in dmesg become erratic, like:
->
->     [3.736957] amdgpu 0000:04:00.0: ... ...
->     [3.748895] [drm] Initialized amdgpu ... ...
->     [18446744073.381141] amdgpu 0000:04:00:0: ... ...
->     [1.613326] igb 0000:03:00.0 enp3s0: ... ...
->
-> 2. More seriously, some workloads (for example, the test
->    stdlib/test-cxa_atexit2 in the Glibc test suite) triggers an RCU
->    stall and hang the system with a high probably (4 hangs out of 5
->    tests).
->
-> Revert this commit to use jiffie on Loongson MIPS systems and fix these
-> issues for now.  The root cause may need more investigation.
->
-> Cc: stable@vger.kernel.org # 6.11+
-> Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> Cc: Icenowy Zheng <icenowy@aosc.io>
+> the EF_ALPHA_32BIT flag set.  Just to fail explicitly in case someone
+> somewhere has binaries that trying to use alpha's 32bit pointer
+                            ^^^ are
 
-Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-
-It's indeed problematic in some scenarios.
-
-Let's revert for now.
-
-Thanks
-- Jiaxun
-
-> Signed-off-by: Xi Ruoyao <xry111@xry111.site>
+> support.
+>=20
+> [1] https://lkml.kernel.org/r/CAFXwXrkgu=3D4Qn-v1PjnOR4SG0oUb9LSa0g6QXpBq=
+4ttm52pJOQ@mail.gmail.com
+> [2] https://lkml.kernel.org/r/20250103140148.370368-1-glaubitz@physik.fu-=
+berlin.de
+> Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
 > ---
->  arch/mips/Kconfig | 1 -
->  1 file changed, 1 deletion(-)
->
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index 467b10f4361a..5078ebf071ec 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -1084,7 +1084,6 @@ config CSRC_IOASIC
+>  arch/alpha/include/asm/elf.h       |  6 +-----
+>  arch/alpha/include/asm/pgtable.h   |  2 +-
+>  arch/alpha/include/asm/processor.h |  8 ++------
+>  arch/alpha/kernel/osf_sys.c        | 11 ++---------
+>  4 files changed, 6 insertions(+), 21 deletions(-)
 >=20
->  config CSRC_R4K
->  	select CLOCKSOURCE_WATCHDOG if CPU_FREQ
-> -	select HAVE_UNSTABLE_SCHED_CLOCK if SMP && 64BIT
->  	bool
->=20
->  config CSRC_SB1250
-> --=20
-> 2.47.1
+> diff --git a/arch/alpha/include/asm/elf.h b/arch/alpha/include/asm/elf.h
+> index 4d7c46f50382..50c82187e60e 100644
+> --- a/arch/alpha/include/asm/elf.h
+> +++ b/arch/alpha/include/asm/elf.h
+> @@ -74,7 +74,7 @@ typedef elf_fpreg_t elf_fpregset_t[ELF_NFPREG];
+>  /*
+>   * This is used to ensure we don't load something for the wrong architec=
+ture.
+>   */
+> -#define elf_check_arch(x) ((x)->e_machine =3D=3D EM_ALPHA)
+> +#define elf_check_arch(x) (((x)->e_machine =3D=3D EM_ALPHA) && !((x)->e_=
+flags & EF_ALPHA_32BIT))
+> =20
+>  /*
+>   * These are used to set parameters in the core dumps.
+> @@ -137,10 +137,6 @@ extern int dump_elf_task(elf_greg_t *dest, struct ta=
+sk_struct *task);
+>  	: amask (AMASK_CIX) ? "ev6" : "ev67");	\
+>  })
+> =20
+> -#define SET_PERSONALITY(EX)					\
+> -	set_personality(((EX).e_flags & EF_ALPHA_32BIT)		\
+> -	   ? PER_LINUX_32BIT : PER_LINUX)
+> -
+>  extern int alpha_l1i_cacheshape;
+>  extern int alpha_l1d_cacheshape;
+>  extern int alpha_l2_cacheshape;
+> diff --git a/arch/alpha/include/asm/pgtable.h b/arch/alpha/include/asm/pg=
+table.h
+> index 635f0a5f5bbd..02e8817a8921 100644
+> --- a/arch/alpha/include/asm/pgtable.h
+> +++ b/arch/alpha/include/asm/pgtable.h
+> @@ -360,7 +360,7 @@ static inline pte_t pte_swp_clear_exclusive(pte_t pte=
+)
+> =20
+>  extern void paging_init(void);
+> =20
+> -/* We have our own get_unmapped_area to cope with ADDR_LIMIT_32BIT.  */
+> +/* We have our own get_unmapped_area */
+>  #define HAVE_ARCH_UNMAPPED_AREA
+> =20
+>  #endif /* _ALPHA_PGTABLE_H */
+> diff --git a/arch/alpha/include/asm/processor.h b/arch/alpha/include/asm/=
+processor.h
+> index 55bb1c09fd39..5dce5518a211 100644
+> --- a/arch/alpha/include/asm/processor.h
+> +++ b/arch/alpha/include/asm/processor.h
+> @@ -8,23 +8,19 @@
+>  #ifndef __ASM_ALPHA_PROCESSOR_H
+>  #define __ASM_ALPHA_PROCESSOR_H
+> =20
+> -#include <linux/personality.h>	/* for ADDR_LIMIT_32BIT */
+> -
+>  /*
+>   * We have a 42-bit user address space: 4TB user VM...
+>   */
+>  #define TASK_SIZE (0x40000000000UL)
+> =20
+> -#define STACK_TOP \
+> -  (current->personality & ADDR_LIMIT_32BIT ? 0x80000000 : 0x00120000000U=
+L)
+> +#define STACK_TOP (0x00120000000UL)
+> =20
+>  #define STACK_TOP_MAX	0x00120000000UL
+> =20
+>  /* This decides where the kernel will search for a free chunk of vm
+>   * space during mmap's.
+>   */
+> -#define TASK_UNMAPPED_BASE \
+> -  ((current->personality & ADDR_LIMIT_32BIT) ? 0x40000000 : TASK_SIZE / =
+2)
+> +#define TASK_UNMAPPED_BASE (TASK_SIZE / 2)
+> =20
+>  /* This is dead.  Everything has been moved to thread_info.  */
+>  struct thread_struct { };
+> diff --git a/arch/alpha/kernel/osf_sys.c b/arch/alpha/kernel/osf_sys.c
+> index 86185021f75a..a08e8edef1a4 100644
+> --- a/arch/alpha/kernel/osf_sys.c
+> +++ b/arch/alpha/kernel/osf_sys.c
+> @@ -1210,8 +1210,7 @@ SYSCALL_DEFINE1(old_adjtimex, struct timex32 __user=
+ *, txc_p)
+>  	return ret;
+>  }
+> =20
+> -/* Get an address range which is currently unmapped.  Similar to the
+> -   generic version except that we know how to honor ADDR_LIMIT_32BIT.  *=
+/
+> +/* Get an address range which is currently unmapped. */
+> =20
+>  static unsigned long
+>  arch_get_unmapped_area_1(unsigned long addr, unsigned long len,
+> @@ -1230,13 +1229,7 @@ arch_get_unmapped_area(struct file *filp, unsigned=
+ long addr,
+>  		       unsigned long len, unsigned long pgoff,
+>  		       unsigned long flags, vm_flags_t vm_flags)
+>  {
+> -	unsigned long limit;
+> -
+> -	/* "32 bit" actually means 31 bit, since pointers sign extend.  */
+> -	if (current->personality & ADDR_LIMIT_32BIT)
+> -		limit =3D 0x80000000;
+> -	else
+> -		limit =3D TASK_SIZE;
+> +	unsigned long limit =3D TASK_SIZE;
+> =20
+>  	if (len > limit)
+>  		return -ENOMEM;
+
+Looks good to me besides the two spelling mistakes above in the comment.
+
+Reviewed-by: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+
+Will also test and report back shortly.
+
+Adrian
 
 --=20
-- Jiaxun
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
 
