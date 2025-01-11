@@ -1,145 +1,88 @@
-Return-Path: <linux-mips+bounces-7401-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7400-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5B2AA0A41A
-	for <lists+linux-mips@lfdr.de>; Sat, 11 Jan 2025 15:20:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4844A0A417
+	for <lists+linux-mips@lfdr.de>; Sat, 11 Jan 2025 15:20:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A76D16AB8B
-	for <lists+linux-mips@lfdr.de>; Sat, 11 Jan 2025 14:20:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDE4216A197
+	for <lists+linux-mips@lfdr.de>; Sat, 11 Jan 2025 14:20:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43A021AC429;
-	Sat, 11 Jan 2025 14:20:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 962EF1B815;
+	Sat, 11 Jan 2025 14:20:14 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60C4C29D0E;
-	Sat, 11 Jan 2025 14:20:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00CD42770C;
+	Sat, 11 Jan 2025 14:20:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736605216; cv=none; b=UpCZUrAVw6+OO4FSxH4xC/zLTEZAcnRJqgoeHvwU3b/Ocg+AYciZBBuhZJOoGA8TggEizMFexhBBFgygNxxw1x3CCg9Wx4BqTTevt7JuBBIs9mCoTP3ZK6XF3GBEtUp79PX/qPPjYow0PfjD58mSBzGwLTivfJ2lkeXTyJwlWHk=
+	t=1736605214; cv=none; b=RZqqbGNAyI3wE++5fx5Deg9XbytRLeziZd8TM1x2VAC/YKjO7F7NAxDDH1BYXny6ji64yuA2eJxNU0zR8qSJaxHZTZ5mPGiNw5bQp39b2O19bx0GgmeQc390vzQjcYDnC0lZXLr29l2i60XIJyregyI30t5fJHZuaEKQMSD3Mgw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736605216; c=relaxed/simple;
-	bh=xDn/s38PFdttbcUthOXq3YbothiXXATHIAepu25Xy3s=;
+	s=arc-20240116; t=1736605214; c=relaxed/simple;
+	bh=w7yexyLRd1FLXd94DFmYlZxC0e2unhO1Dq/ERUzYCgM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=m6X2S7wZNwVEcAm7MQZhqGV5b0lx8PzkFAPNr0x/X3ROf5vqEyasIu+uLg2zy3w66ADOB33HK1+dJx/cJGhJlp5JlzJ0x+hGjY8LsriCsiLrechvTw2UYwDTYBbVnEOkQolzJVHKUm/YIazX0sWlUEvLEqpFTqt09q6j7dLb3d8=
+	 Content-Type:Content-Disposition:In-Reply-To; b=KQrx2NW0RQHpHKq5M19mglKBiRbqkD8BkN/k43u4dSLjXnTXFQjIVZ8j8YLYuovBYi35seirIt1CvoRCOnMciVAJfJRvgsPIk2yIZeamwovrUHqzbgvScqFOOv25lyDoVTxEBQteGAxsYErpEBMFpal6GZpMOd0FnP5Jn6Xmel8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1tWcLH-00075W-00; Sat, 11 Jan 2025 15:19:59 +0100
+	id 1tWcLH-00075Y-00; Sat, 11 Jan 2025 15:19:59 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 98F25C010B; Sat, 11 Jan 2025 14:16:40 +0100 (CET)
-Date: Sat, 11 Jan 2025 14:16:40 +0100
+	id E0F44C06A4; Sat, 11 Jan 2025 14:17:14 +0100 (CET)
+Date: Sat, 11 Jan 2025 14:17:14 +0100
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+To: Masahiro Yamada <masahiroy@kernel.org>
 Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org, Dengcheng Zhu <dzhu@wavecomp.com>,
-	Ming Wang <wangming01@loongson.cn>,
-	Tiezhu Yang <yangtiezhu@loongson.cn>
-Subject: Re: [PATCH] mips/math-emu: fix emulation of the prefx instruction
-Message-ID: <Z4JvONDiaYkQLAv/@alpha.franken.de>
-References: <20250105211806.421305-1-mat.jonczyk@o2.pl>
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Paul Cercueil <paul@crapouillou.net>, Rob Herring <robh@kernel.org>,
+	UNGLinuxDriver@microchip.com, devicetree@vger.kernel.org
+Subject: Re: [PATCH] MIPS: migrate to generic rule for built-in DTBs
+Message-ID: <Z4JvWqZQgsw6tZZ6@alpha.franken.de>
+References: <20241222000416.2577633-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250105211806.421305-1-mat.jonczyk@o2.pl>
+In-Reply-To: <20241222000416.2577633-1-masahiroy@kernel.org>
 
-On Sun, Jan 05, 2025 at 10:18:06PM +0100, Mateusz Jończyk wrote:
-> Currently, installation of Debian 12.8 for mipsel fails on machines
-> without an FPU [1]. This is caused by the fact that zstd (which is used
-> for initramfs compression) executes the prefx instruction, which is not
-> emulated properly by the kernel.
+On Sun, Dec 22, 2024 at 09:04:13AM +0900, Masahiro Yamada wrote:
+> Commit 654102df2ac2 ("kbuild: add generic support for built-in boot
+> DTBs") introduced generic support for built-in DTBs.
 > 
-> The prefx (Prefetch Indexed) instruction fetches data from memory into
-> the cache without any side effects. Though functionally unrelated, it
-> requires an FPU [2].
+> Select GENERIC_BUILTIN_DTB and BUILTIN_DTB_ALL when the built-in DTB
+> support is enabled.
 > 
-> Bytecode format of this instruction ends on "001111" binary:
+> DTBs compiled under arch/mips/boot/dts/ will be wrapped by the generic
+> rule in scripts/Makefile.vmlinux.
 > 
-> 	(prefx instruction format) & 0x0000003f = 0x0000000f
-> 
-> The code in fpux_emu() runs like so:
-> 
-> 	#define MIPSInst(x) x
-> 	#define MIPSInst_FMA_FFMT(x) (MIPSInst(x) & 0x00000007)
-> 	#define MIPSInst_FUNC(x) (MIPSInst(x) & 0x0000003f)
-> 	enum cop1x_func { ..., pfetch_op = 0x0f, ... };
-> 
-> 	...
-> 
-> 	switch (MIPSInst_FMA_FFMT(ir)) {
-> 	...
-> 
-> 	case 0x3:
-> 		if (MIPSInst_FUNC(ir) != pfetch_op)
-> 			return SIGILL;
-> 
-> 		/* ignore prefx operation */
-> 		break;
-> 
-> 	default:
-> 		return SIGILL;
-> 	}
-> 
-> That snippet above contains a logic error and the
-> 	if (MIPSInst_FUNC(ir) != pfetch_op)
-> comparison always fires.
-> 
-> When MIPSInst_FUNC(ir) is equal to pfetch_op, ir must end on 001111
-> binary. In this case, MIPSInst_FMA_FFMT(ir) must be equal to 0x7, which
-> does not match that case label.
-> 
-> This causes emulation failure for the prefx instruction. Fix it.
-> 
-> This has been broken by
-> commit 919af8b96c89 ("MIPS: Make definitions of MIPSInst_FMA_{FUNC,FMTM} consistent with MIPS64 manual")
-> which modified the MIPSInst_FMA_FFMT macro without updating the users.
-> 
-> Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-> Cc: stable@vger.kernel.org # after 3 weeks
-> Cc: Dengcheng Zhu <dzhu@wavecomp.com>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Ming Wang <wangming01@loongson.cn>
-> Cc: Tiezhu Yang <yangtiezhu@loongson.cn>
-> Fixes: 919af8b96c89 ("MIPS: Make definitions of MIPSInst_FMA_{FUNC,FMTM} consistent with MIPS64 manual")
-> 
-> [1] https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1091858
-> [2] MIPS Architecture For Programmers Volume II-A: The MIPS32 Instruction Set
-> 
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
 > ---
 > 
-> Tested in QEMU for mipsel and mips64el.
-> ---
->  arch/mips/math-emu/cp1emu.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/math-emu/cp1emu.c b/arch/mips/math-emu/cp1emu.c
-> index 265bc57819df..c89e70df43d8 100644
-> --- a/arch/mips/math-emu/cp1emu.c
-> +++ b/arch/mips/math-emu/cp1emu.c
-> @@ -1660,7 +1660,7 @@ static int fpux_emu(struct pt_regs *xcp, struct mips_fpu_struct *ctx,
->  		break;
->  	}
->  
-> -	case 0x3:
-> +	case 0x7:
->  		if (MIPSInst_FUNC(ir) != pfetch_op)
->  			return SIGILL;
->  
-> -- 
-> 2.25.1
+>  arch/mips/Kconfig                         | 2 ++
+>  arch/mips/Makefile                        | 3 ---
+>  arch/mips/boot/dts/Makefile               | 2 --
+>  arch/mips/boot/dts/brcm/Makefile          | 2 --
+>  arch/mips/boot/dts/cavium-octeon/Makefile | 2 --
+>  arch/mips/boot/dts/ingenic/Makefile       | 2 --
+>  arch/mips/boot/dts/lantiq/Makefile        | 2 --
+>  arch/mips/boot/dts/loongson/Makefile      | 2 --
+>  arch/mips/boot/dts/mscc/Makefile          | 3 ---
+>  arch/mips/boot/dts/mti/Makefile           | 2 --
+>  arch/mips/boot/dts/pic32/Makefile         | 2 --
+>  arch/mips/boot/dts/ralink/Makefile        | 2 --
+>  12 files changed, 2 insertions(+), 24 deletions(-)
 
 applied to mips-next.
 
-Thomas.
+Thomas,
 
 -- 
 Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
