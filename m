@@ -1,244 +1,161 @@
-Return-Path: <linux-mips+bounces-7387-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7388-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8C8DA09F93
-	for <lists+linux-mips@lfdr.de>; Sat, 11 Jan 2025 01:41:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id EC5CBA09FE9
+	for <lists+linux-mips@lfdr.de>; Sat, 11 Jan 2025 02:16:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4051B188ED19
-	for <lists+linux-mips@lfdr.de>; Sat, 11 Jan 2025 00:41:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DDE08188F998
+	for <lists+linux-mips@lfdr.de>; Sat, 11 Jan 2025 01:17:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34A8B184E;
-	Sat, 11 Jan 2025 00:41:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAE293EA71;
+	Sat, 11 Jan 2025 01:16:41 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11ED1179A3;
-	Sat, 11 Jan 2025 00:41:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.70.13.231
+Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 196C94C83;
+	Sat, 11 Jan 2025 01:16:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736556069; cv=none; b=PF4OgWndXo6nXmf2HLzAnZ/pM5lGosnlHmNdUnYg0cOOnAxiXTIJQh1Dm+Ph3gzp3uGlnxdfkmrjkdqHa9jobEpuNptwdJ+F7YFPtumgppCyyA93uqgJHUbsHDtzr9QNxDd6WpbJO7uN6QOiaoPhBkpbVDPUpuwNclAw68dEv88=
+	t=1736558201; cv=none; b=H4XhUnXAFdTPj9Azb1xOQHQ1+bvOUSXSmi3b9Isl5v53gxRo6tW9EgpfBQb+UToeAFv3Nd6muRRP70kiG7l5llciW0YGEDUPXWcgFxyjFuRS2sztCw/X4AU0Ak2QXAtAheg49FcDa0PQLfo+gORS06XGJ7AIfR3omnr5otksU9Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736556069; c=relaxed/simple;
-	bh=aUAiZMQHz04oOhO75f12tRErgfPPkpLVq8SbCELVEhI=;
-	h=From:To:Cc:References:Date:In-Reply-To:Message-ID:MIME-Version:
-	 Content-Type:Subject; b=MD46VVRCHgKS/T7tJuPGpv9Q9qa2q+VaAnVVO72VnRgFaoihFVWpHk8sf2vrpIfdtbv+ABG8Pm6nnWjEb8hsnl1JYNQcA+MUmr1px0D/gDdkusdExoyeMbWnVsvz6hbybd92FRVFG9yQ6A2E4W8qSdQXwTE7z9lcNJ1Pd0VY2KI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com; spf=pass smtp.mailfrom=xmission.com; arc=none smtp.client-ip=166.70.13.231
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xmission.com
-Received: from in01.mta.xmission.com ([166.70.13.51]:52578)
-	by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <ebiederm@xmission.com>)
-	id 1tWPBj-00F6GA-2j; Fri, 10 Jan 2025 17:17:15 -0700
-Received: from ip72-198-198-28.om.om.cox.net ([72.198.198.28]:42048 helo=email.froward.int.ebiederm.org.xmission.com)
-	by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.93)
-	(envelope-from <ebiederm@xmission.com>)
-	id 1tWPBh-00CzIE-Tg; Fri, 10 Jan 2025 17:17:14 -0700
-From: "Eric W. Biederman" <ebiederm@xmission.com>
-To: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-Cc: Arnd Bergmann <arnd@arndb.de>,  Richard Henderson
- <richard.henderson@linaro.org>,  Matt Turner <mattst88@gmail.com>,  Kees
- Cook <kees@kernel.org>,  "Paul E. McKenney" <paulmck@kernel.org>,
-  linux-alpha@vger.kernel.org,  linux-mm@kvack.org,
-  linux-kernel@vger.kernel.org,  Michael Cree <mcree@orcon.net.nz>,  Sam
- James <sam@gentoo.org>,  "Maciej W. Rozycki" <macro@orcam.me.uk>,  Geert
- Uytterhoeven <geert@linux-m68k.org>,  Michael Karcher
- <kernel@mkarcher.dialup.fu-berlin.de>,  Chris Hofstaedtler
- <zeha@debian.org>,  util-linux@vger.kernel.org,
-  linux-mips@vger.kernel.org,  loongarch@lists.linux.dev
-References: <20250103140148.370368-1-glaubitz@physik.fu-berlin.de>
-	<24f03227-1b55-4e50-b6e9-7ac74fda2602@app.fastmail.com>
-	<678ee681-12c3-4e79-a04b-495daf343846@app.fastmail.com>
-	<bff3cfad8a87799101891b4f786c5104db9dab13.camel@physik.fu-berlin.de>
-	<82d33a2d-dffe-4268-a175-4536b3f9c07f@app.fastmail.com>
-	<cc420e1a843da3cf349607369851c338f4049c4e.camel@physik.fu-berlin.de>
-Date: Fri, 10 Jan 2025 18:16:28 -0600
-In-Reply-To: <cc420e1a843da3cf349607369851c338f4049c4e.camel@physik.fu-berlin.de>
-	(John Paul Adrian Glaubitz's message of "Thu, 09 Jan 2025 10:12:03
-	+0100")
-Message-ID: <87jzb2tdb7.fsf_-_@email.froward.int.ebiederm.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
+	s=arc-20240116; t=1736558201; c=relaxed/simple;
+	bh=sQ0hKscqgkFbQlYbywE8EkWkGZ06l86yKwob99Aviyk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SUR2hGFDLTEiNTvLBamVMhQScwC1jkMv6ZS/+BGzNawd6+eb1mK1L7TtZzVWcY6vSEyToM/Yz8zNpBIhC5JR9K4ZzBxg7iNABGmymxVx2MCOcggFDcr2K37NQZUbpCtIO5aPKoqoPnJJtR/kIGLEhOiapCddIRbptKuO41VJQls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
+Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
+	by vmicros1.altlinux.org (Postfix) with ESMTP id 3DA2E72C97D;
+	Sat, 11 Jan 2025 04:16:32 +0300 (MSK)
+Received: by mua.local.altlinux.org (Postfix, from userid 508)
+	id 2736C7CCB3A; Sat, 11 Jan 2025 03:16:32 +0200 (IST)
+Date: Sat, 11 Jan 2025 03:16:32 +0200
+From: "Dmitry V. Levin" <ldv@strace.io>
+To: Sven Schnelle <svens@linux.ibm.com>
+Cc: Oleg Nesterov <oleg@redhat.com>,
+	Eugene Syromyatnikov <evgsyr@gmail.com>,
+	Mike Frysinger <vapier@gentoo.org>,
+	Renzo Davoli <renzo@cs.unibo.it>,
+	Davide Berardi <berardi.dav@gmail.com>,
+	strace-devel@lists.strace.io, Vineet Gupta <vgupta@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Brian Cain <bcain@quicinc.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Michal Simek <monstr@monstr.eu>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>,
+	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+	Stafford Horne <shorne@gmail.com>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Richard Weinberger <richard@nod.at>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+	Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+	linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-hexagon@vger.kernel.org,
+	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+	linux-um@lists.infradead.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH 3/6] syscall.h: introduce syscall_set_nr()
+Message-ID: <20250111011632.GA1724@strace.io>
+References: <20250107230438.GC30633@strace.io>
+ <yt9dzfjz6rw5.fsf@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-XM-SPF: eid=1tWPBh-00CzIE-Tg;;;mid=<87jzb2tdb7.fsf_-_@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=72.198.198.28;;;frm=ebiederm@xmission.com;;;spf=pass
-X-XM-AID: U2FsdGVkX19QbIllH2f8XF6Psw43DyF7Jy4S+gf143M=
-X-Spam-Level: *
-X-Spam-Report: 
-	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
-	*  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-	*      [score: 0.5000]
-	*  0.7 XMSubLong Long Subject
-	*  1.0 _Welcome_To_PayPal02 BODY: No description available.
-	* -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
-	*      [sa05 1397; Body=1 Fuz1=1 Fuz2=1]
-	*  0.4 FVGT_m_MULTI_ODD Contains multiple odd letter combinations
-	*  0.0 T_TooManySym_01 4+ unique symbols in subject
-X-Spam-DCC: XMission; sa05 1397; Body=1 Fuz1=1 Fuz2=1 
-X-Spam-Combo: *;John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-X-Spam-Relay-Country: 
-X-Spam-Timing: total 590 ms - load_scoreonly_sql: 0.04 (0.0%),
-	signal_user_changed: 10 (1.7%), b_tie_ro: 9 (1.5%), parse: 1.09 (0.2%),
-	 extract_message_metadata: 16 (2.7%), get_uri_detail_list: 3.2 (0.5%),
-	tests_pri_-2000: 22 (3.7%), tests_pri_-1000: 3.2 (0.5%),
-	tests_pri_-950: 1.23 (0.2%), tests_pri_-900: 0.99 (0.2%),
-	tests_pri_-90: 84 (14.3%), check_bayes: 78 (13.2%), b_tokenize: 13
-	(2.2%), b_tok_get_all: 22 (3.7%), b_comp_prob: 3.1 (0.5%),
-	b_tok_touch_all: 37 (6.2%), b_finish: 0.88 (0.1%), tests_pri_0: 438
-	(74.3%), check_dkim_signature: 0.59 (0.1%), check_dkim_adsp: 2.9
-	(0.5%), poll_dns_idle: 1.02 (0.2%), tests_pri_10: 2.2 (0.4%),
-	tests_pri_500: 8 (1.3%), rewrite_mail: 0.00 (0.0%)
-Subject: [PATCH] alpha/elf: Fix misc/setarch test of util-linux by removing
- 32bit support
-X-SA-Exim-Connect-IP: 166.70.13.51
-X-SA-Exim-Rcpt-To: loongarch@lists.linux.dev, linux-mips@vger.kernel.org, util-linux@vger.kernel.org, zeha@debian.org, kernel@mkarcher.dialup.fu-berlin.de, geert@linux-m68k.org, macro@orcam.me.uk, sam@gentoo.org, mcree@orcon.net.nz, linux-kernel@vger.kernel.org, linux-mm@kvack.org, linux-alpha@vger.kernel.org, paulmck@kernel.org, kees@kernel.org, mattst88@gmail.com, richard.henderson@linaro.org, arnd@arndb.de, glaubitz@physik.fu-berlin.de
-X-SA-Exim-Mail-From: ebiederm@xmission.com
-X-SA-Exim-Scanned: No (on out01.mta.xmission.com); SAEximRunCond expanded to false
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <yt9dzfjz6rw5.fsf@linux.ibm.com>
+
+On Fri, Jan 10, 2025 at 08:37:46AM +0100, Sven Schnelle wrote:
+> "Dmitry V. Levin" <ldv@strace.io> writes:
+> 
+> > Similar to syscall_set_arguments() that complements
+> > syscall_get_arguments(), introduce syscall_set_nr()
+> > that complements syscall_get_nr().
+> >
+> > syscall_set_nr() is going to be needed along with
+> > syscall_set_arguments() on all HAVE_ARCH_TRACEHOOK
+> > architectures to implement PTRACE_SET_SYSCALL_INFO API.
+[...]
+> > diff --git a/arch/s390/include/asm/syscall.h b/arch/s390/include/asm/syscall.h
+> > index b3dd883699e7..1c0e349fd5c9 100644
+> > --- a/arch/s390/include/asm/syscall.h
+> > +++ b/arch/s390/include/asm/syscall.h
+> > @@ -24,6 +24,13 @@ static inline long syscall_get_nr(struct task_struct *task,
+> >  		(regs->int_code & 0xffff) : -1;
+> >  }
+> >  
+> > +static inline void syscall_set_nr(struct task_struct *task,
+> > +				  struct pt_regs *regs,
+> > +				  int nr)
+> > +{
+> 
+> I think there should be a
+> 
+> 	if (!test_pt_regs_flags(regs, PIF_SYSCALL))
+> 		return;
+> 
+> before the modification so a user can't accidentally change int_code
+> when ptrace stopped in a non-syscall path.
+
+The reason why syscall_get_nr() has this check on s390 (and similar checks
+on arc, powerpc, and sparc) is that syscall_get_nr() can be called while
+the target task is not in syscall.
+
+Unlike syscall_get_nr(), syscall_set_nr() can be called only when the
+target task is stopped for tracing on entering syscall: the description in
+include/asm-generic/syscall.h explicitly states that, and the follow-up
+patch that introduces PTRACE_SET_SYSCALL_INFO adds a syscall_set_nr() call
+when the tracee is stopped on entering syscall in either
+PTRACE_SYSCALL_INFO_ENTRY or PTRACE_SYSCALL_INFO_SECCOMP state.
+
+I don't mind adding a check, but syscall_set_nr() invocation while the
+target task is not in syscall wouldn't be a result of user actions but
+a kernel programing error, and in that case WARN_ON_ONCE() would be more
+appropriate.
+
+If calling syscall_set_nr() while the target task is not in syscall was
+legal, then syscall_set_nr() would have been designed to return a value
+indicating the status of operation.
+
+Anyway, I'll add an explanatory comment to syscall_set_nr() on all
+architectures where syscall_get_nr() has a check.
 
 
-Richard Henderson <richard.henderson@linaro.org> writes[1]:
-
-> There was a Spec benchmark (I forget which) which was memory bound and ran
-> twice as fast with 32-bit pointers.
->
-> I copied the idea from DEC to the ELF abi, but never did all the other work
-> to allow the toolchain to take advantage.
->
-> Amusingly, a later Spec changed the benchmark data sets to not fit into a
-> 32-bit address space, specifically because of this.
->
-> I expect one could delete the ELF bit and personality and no one would
-> notice. Not even the 10 remaining Alpha users.
-
-In [2] it was pointed out that parts of setarch weren't working
-properly on alpha because it has it's own SET_PERSONALITY
-implementation.  In the discussion that followed Richard Henderson
-pointed out that the 32bit pointer support for alpha was never
-completed.
-
-Fix this by removing alpha's 32bit pointer support.
-
-As a bit of paranoia refuse to execute any alpha binaries that hafe
-the EF_ALPHA_32BIT flag set.  Just to fail explicitly in case someone
-somewhere has binaries that trying to use alpha's 32bit pointer
-support.
-
-[1] https://lkml.kernel.org/r/CAFXwXrkgu=4Qn-v1PjnOR4SG0oUb9LSa0g6QXpBq4ttm52pJOQ@mail.gmail.com
-[2] https://lkml.kernel.org/r/20250103140148.370368-1-glaubitz@physik.fu-berlin.de
-Signed-off-by: "Eric W. Biederman" <ebiederm@xmission.com>
----
- arch/alpha/include/asm/elf.h       |  6 +-----
- arch/alpha/include/asm/pgtable.h   |  2 +-
- arch/alpha/include/asm/processor.h |  8 ++------
- arch/alpha/kernel/osf_sys.c        | 11 ++---------
- 4 files changed, 6 insertions(+), 21 deletions(-)
-
-diff --git a/arch/alpha/include/asm/elf.h b/arch/alpha/include/asm/elf.h
-index 4d7c46f50382..50c82187e60e 100644
---- a/arch/alpha/include/asm/elf.h
-+++ b/arch/alpha/include/asm/elf.h
-@@ -74,7 +74,7 @@ typedef elf_fpreg_t elf_fpregset_t[ELF_NFPREG];
- /*
-  * This is used to ensure we don't load something for the wrong architecture.
-  */
--#define elf_check_arch(x) ((x)->e_machine == EM_ALPHA)
-+#define elf_check_arch(x) (((x)->e_machine == EM_ALPHA) && !((x)->e_flags & EF_ALPHA_32BIT))
- 
- /*
-  * These are used to set parameters in the core dumps.
-@@ -137,10 +137,6 @@ extern int dump_elf_task(elf_greg_t *dest, struct task_struct *task);
- 	: amask (AMASK_CIX) ? "ev6" : "ev67");	\
- })
- 
--#define SET_PERSONALITY(EX)					\
--	set_personality(((EX).e_flags & EF_ALPHA_32BIT)		\
--	   ? PER_LINUX_32BIT : PER_LINUX)
--
- extern int alpha_l1i_cacheshape;
- extern int alpha_l1d_cacheshape;
- extern int alpha_l2_cacheshape;
-diff --git a/arch/alpha/include/asm/pgtable.h b/arch/alpha/include/asm/pgtable.h
-index 635f0a5f5bbd..02e8817a8921 100644
---- a/arch/alpha/include/asm/pgtable.h
-+++ b/arch/alpha/include/asm/pgtable.h
-@@ -360,7 +360,7 @@ static inline pte_t pte_swp_clear_exclusive(pte_t pte)
- 
- extern void paging_init(void);
- 
--/* We have our own get_unmapped_area to cope with ADDR_LIMIT_32BIT.  */
-+/* We have our own get_unmapped_area */
- #define HAVE_ARCH_UNMAPPED_AREA
- 
- #endif /* _ALPHA_PGTABLE_H */
-diff --git a/arch/alpha/include/asm/processor.h b/arch/alpha/include/asm/processor.h
-index 55bb1c09fd39..5dce5518a211 100644
---- a/arch/alpha/include/asm/processor.h
-+++ b/arch/alpha/include/asm/processor.h
-@@ -8,23 +8,19 @@
- #ifndef __ASM_ALPHA_PROCESSOR_H
- #define __ASM_ALPHA_PROCESSOR_H
- 
--#include <linux/personality.h>	/* for ADDR_LIMIT_32BIT */
--
- /*
-  * We have a 42-bit user address space: 4TB user VM...
-  */
- #define TASK_SIZE (0x40000000000UL)
- 
--#define STACK_TOP \
--  (current->personality & ADDR_LIMIT_32BIT ? 0x80000000 : 0x00120000000UL)
-+#define STACK_TOP (0x00120000000UL)
- 
- #define STACK_TOP_MAX	0x00120000000UL
- 
- /* This decides where the kernel will search for a free chunk of vm
-  * space during mmap's.
-  */
--#define TASK_UNMAPPED_BASE \
--  ((current->personality & ADDR_LIMIT_32BIT) ? 0x40000000 : TASK_SIZE / 2)
-+#define TASK_UNMAPPED_BASE (TASK_SIZE / 2)
- 
- /* This is dead.  Everything has been moved to thread_info.  */
- struct thread_struct { };
-diff --git a/arch/alpha/kernel/osf_sys.c b/arch/alpha/kernel/osf_sys.c
-index 86185021f75a..a08e8edef1a4 100644
---- a/arch/alpha/kernel/osf_sys.c
-+++ b/arch/alpha/kernel/osf_sys.c
-@@ -1210,8 +1210,7 @@ SYSCALL_DEFINE1(old_adjtimex, struct timex32 __user *, txc_p)
- 	return ret;
- }
- 
--/* Get an address range which is currently unmapped.  Similar to the
--   generic version except that we know how to honor ADDR_LIMIT_32BIT.  */
-+/* Get an address range which is currently unmapped. */
- 
- static unsigned long
- arch_get_unmapped_area_1(unsigned long addr, unsigned long len,
-@@ -1230,13 +1229,7 @@ arch_get_unmapped_area(struct file *filp, unsigned long addr,
- 		       unsigned long len, unsigned long pgoff,
- 		       unsigned long flags, vm_flags_t vm_flags)
- {
--	unsigned long limit;
--
--	/* "32 bit" actually means 31 bit, since pointers sign extend.  */
--	if (current->personality & ADDR_LIMIT_32BIT)
--		limit = 0x80000000;
--	else
--		limit = TASK_SIZE;
-+	unsigned long limit = TASK_SIZE;
- 
- 	if (len > limit)
- 		return -ENOMEM;
 -- 
-2.41.0
-
+ldv
 
