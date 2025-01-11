@@ -1,49 +1,51 @@
-Return-Path: <linux-mips+bounces-7393-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7396-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB31FA0A386
-	for <lists+linux-mips@lfdr.de>; Sat, 11 Jan 2025 13:18:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 973B4A0A38E
+	for <lists+linux-mips@lfdr.de>; Sat, 11 Jan 2025 13:19:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A93F01886FDF
-	for <lists+linux-mips@lfdr.de>; Sat, 11 Jan 2025 12:18:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 932D03AA4EC
+	for <lists+linux-mips@lfdr.de>; Sat, 11 Jan 2025 12:19:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED1C519007D;
-	Sat, 11 Jan 2025 12:18:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 922A51922E1;
+	Sat, 11 Jan 2025 12:18:45 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2DD124B256;
-	Sat, 11 Jan 2025 12:18:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B278B19DF98;
+	Sat, 11 Jan 2025 12:18:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736597919; cv=none; b=gTd3+PXq93IzWqRQXlg8rE58eglW/dpy1c8RFAgUoE9CS0EmHc4H3Pw3VPmx7EaIXxMpKzKKbG3tHqFnpfAND0qu9MO0KOacubTeZ12estm1h7219CRH8Mvy8Ru85mKmAmlhXdYs7/+6WIjFoEle1WSZRU7sZWV+Ag6pWSslcFc=
+	t=1736597925; cv=none; b=W4fyGShQshCc+LE0XOKgA+OGWazf/vjiTSfnYnTO4/7a04obcysrNGm8K5MNGBs6768ohEudecjDMq1yzCtEI+E316IPGXogKx0ZQmE6yWp5Tdx2wCJ0W0UTyIb5+7W9OwiLj7i1Bx0H3HqC31bE1FvvC/Y1MIpfNfi35lK1pBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736597919; c=relaxed/simple;
-	bh=UmWPSvVHGudK79ybSla34ZPn49vrlIQZLmbrAPk2ynI=;
+	s=arc-20240116; t=1736597925; c=relaxed/simple;
+	bh=G0j+rxfkOVl3z9RAPt9oe6aH0XqdmyhM1QLNxNwzeqc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OxnJyjyUXdMHw74kwkDB+KQ5nC8t8Feq++xS18LreXiQ3Acf4eOol9bfO/809Sg4ePC1IPqprA6417K5aofCLUjBJvU7QbnsCasNBN90NTLkiYf3nGrEboeVp7N8aVOV5L1mVltOp8OxqMgveCZHz+Pm3AehSLDofRGQNop8eQY=
+	 Content-Type:Content-Disposition:In-Reply-To; b=V4iVgN9BSAbq7d3GW8jvMaHYTxZBpeRxCJ/du1n+KoFO3TyQdDPqst5VzmxTIwo6aX0Kuepu9+w+pxMjiWEUHLiauddfG8z0RCcV60IEH9s5Nn9qrpVuKl9X0rbnscL4obqTDlsZuI9e9B0gEgkxIGpkr5VCBpOOfNder7szoVo=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1tWaRL-0006NQ-00; Sat, 11 Jan 2025 13:18:07 +0100
+	id 1tWaRL-0006NS-00; Sat, 11 Jan 2025 13:18:07 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 14000C06A4; Sat, 11 Jan 2025 13:02:02 +0100 (CET)
-Date: Sat, 11 Jan 2025 13:02:02 +0100
+	id 19C70C06B0; Sat, 11 Jan 2025 13:02:25 +0100 (CET)
+Date: Sat, 11 Jan 2025 13:02:25 +0100
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Thorsten Blum <thorsten.blum@linux.dev>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Huang Pei <huangpei@loongson.cn>,
-	Vladimir Kondratiev <vladimir.kondratiev@intel.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: traps: Use str_enabled_disabled() in
- parity_protection_init()
-Message-ID: <Z4Jdum7jgDg7EzDa@alpha.franken.de>
-References: <20250109215524.195008-2-thorsten.blum@linux.dev>
+To: WangYuli <wangyuli@uniontech.com>
+Cc: rostedt@goodmis.org, mhiramat@kernel.org, mark.rutland@arm.com,
+	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org, xzhong86@163.com, wuzhangjin@gmail.com,
+	srostedt@redhat.com, linux-mips@linux-mips.org,
+	ralf@duck.linux-mips.net, jeffbai@aosc.io, zhanjun@uniontech.com,
+	guanwentao@uniontech.com, jiaxun.yang@flygoat.com,
+	gregory.clement@bootlin.com, philmd@linaro.org, tglx@linutronix.de,
+	rppt@kernel.org
+Subject: Re: [RESEND PATCH] MIPS: ftrace: Declare ftrace_get_parent_ra_addr()
+ as static
+Message-ID: <Z4Jd0aiLQY2KYRmS@alpha.franken.de>
+References: <527F9AFF0430AB45+20250104144708.18438-1-wangyuli@uniontech.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -52,20 +54,44 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250109215524.195008-2-thorsten.blum@linux.dev>
+In-Reply-To: <527F9AFF0430AB45+20250104144708.18438-1-wangyuli@uniontech.com>
 
-On Thu, Jan 09, 2025 at 10:55:23PM +0100, Thorsten Blum wrote:
-> Remove hard-coded strings by using the str_enabled_disabled() helper
-> function.
+On Sat, Jan 04, 2025 at 10:47:08PM +0800, WangYuli wrote:
+> Declare ftrace_get_parent_ra_addr() as static to suppress clang
+> compiler warning that 'no previous prototype'. This function is
+> not intended to be called from other parts.
 > 
-> Use pr_info() instead of printk(KERN_INFO) to silence multiple
-> checkpatch warnings.
+> Fix follow error with clang-19:
 > 
-> Suggested-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+> arch/mips/kernel/ftrace.c:251:15: error: no previous prototype for function 'ftrace_get_parent_ra_addr' [-Werror,-Wmissing-prototypes]
+>   251 | unsigned long ftrace_get_parent_ra_addr(unsigned long self_ra, unsigned long
+>       |               ^
+> arch/mips/kernel/ftrace.c:251:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+>   251 | unsigned long ftrace_get_parent_ra_addr(unsigned long self_ra, unsigned long
+>       | ^
+>       | static
+> 1 error generated.
+> 
+> Signed-off-by: WangYuli <wangyuli@uniontech.com>
 > ---
->  arch/mips/kernel/traps.c | 17 +++++++++--------
->  1 file changed, 9 insertions(+), 8 deletions(-)
+>  arch/mips/kernel/ftrace.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/mips/kernel/ftrace.c b/arch/mips/kernel/ftrace.c
+> index 8c401e42301c..f39e85fd58fa 100644
+> --- a/arch/mips/kernel/ftrace.c
+> +++ b/arch/mips/kernel/ftrace.c
+> @@ -248,7 +248,7 @@ int ftrace_disable_ftrace_graph_caller(void)
+>  #define S_R_SP	(0xafb0 << 16)	/* s{d,w} R, offset(sp) */
+>  #define OFFSET_MASK	0xffff	/* stack offset range: 0 ~ PT_SIZE */
+>  
+> -unsigned long ftrace_get_parent_ra_addr(unsigned long self_ra, unsigned long
+> +static unsigned long ftrace_get_parent_ra_addr(unsigned long self_ra, unsigned long
+>  		old_parent_ra, unsigned long parent_ra_addr, unsigned long fp)
+>  {
+>  	unsigned long sp, ip, tmp;
+> -- 
+> 2.45.2
 
 applied to mips-next.
 
