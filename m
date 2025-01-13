@@ -1,68 +1,68 @@
-Return-Path: <linux-mips+bounces-7414-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7415-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A8F8A0B61E
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jan 2025 12:53:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE4A9A0BC75
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jan 2025 16:47:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9468A1884B64
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jan 2025 11:53:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EFA2D3A5A1D
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jan 2025 15:46:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98B671CAA87;
-	Mon, 13 Jan 2025 11:53:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E27D720F069;
+	Mon, 13 Jan 2025 15:45:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="BsQUyE0M"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CaYg3fuh"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60E401A8F98;
-	Mon, 13 Jan 2025 11:53:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAF481CA8D;
+	Mon, 13 Jan 2025 15:45:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736769184; cv=none; b=lf9+4Cyl8WgYFyo+mea9/tbjdaKJsVJcKclv1mZo3BuDwOznQ+gCqsuEGYwZ9c5vkKV7Vnioft2EYDPAxIY/yhNvvli2T2k3WRSbvxnWgNsDTlC2vVdKCr/4sRN2Zvwlz/1n44m+XrVP6T/OHqh2od1cGYiVCKwAn6FIRalK5+8=
+	t=1736783148; cv=none; b=ESuW8UcZNsUCqayUfUiw2L7xGilfAxnzNIaIx4OyPX9D0gGTo584UYYop8CLhzUoljUAugGxgsF9zoYpI3Kx8ljQ6Po/WDRnVnNx0BWrj7psvhYcPegxXUiggrWjn9ErLeH6ySwQx7e5gL8KbKlapdo4EVJl0s9rSfPRZcLIRI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736769184; c=relaxed/simple;
-	bh=rj/R/90a7hLmRewZhsY/bA19NAKxOytvjRKPzmkvmTI=;
+	s=arc-20240116; t=1736783148; c=relaxed/simple;
+	bh=60LzQbPzHHlZESJ4NVxt/prktxqPSG6D4w8hg7eDv0s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ph5UHDZj8SctAe/n4dSxSzPf5SOWIgf9qofjQeghexuNNs/lz4wN6bcqmaDLF+XgxcfJoPaY2WgVQCNAcLAyrmn0mftazyNfxrqt8rJdNWtjR+QNaIGS8u+qB18vvX0PmT7wevSjkuKdsX+lHOFmmOn7pWLeaLxXPTe+ja5ICt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=BsQUyE0M; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 549FF40E01F9;
-	Mon, 13 Jan 2025 11:52:55 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id xmIsbErgUaWY; Mon, 13 Jan 2025 11:52:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1736769173; bh=qSbRHcCxicQ2oaohgQJ8xn6gI1z5hxVzGPJ9KcO78ak=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BsQUyE0MpgT/tvDuXqOP2by5wxaln0pgDMNsyorzlEBunwnsVmYg6L2A1phKwPV7s
-	 kprzy+NBoNbYbHsJnT3YmhuYEeQN554Y35wC/mmKzG9UGAMJVta9IWmsj8KPfG/LMv
-	 XfD6aFYfx/eAJf4Z4WMS7uJGUgv47TyMQcsEz3kYN83euyk5ovQcb00rZstpPUl+k2
-	 XbESf4MoT3jT5DSHXgpKMVuLAP/j4GxI90mVoMrz7jo6PB/bu04vVroAIHe+P4wncu
-	 uMqHlK64sB5NHbaPMUduXTl1y6aXJwv3ihwZQc6RG0KfSGp8H2vD36ht30yi+eeqLV
-	 QWhvaRrxLFVJpiCA6H19MvlreYEL+92uTMcoce80ej/6rD/fnlBL+Ga63CK5k96ts0
-	 n2vTOs2LhW2VMmg+88LAPYd8NjdMMEnfr6zy1QtfqPlktXHYlwN/tkF4apvCcnQ3VS
-	 CTn1EUlTZTFJseWRU7RWGhnI4DqXJUlXgdmWfAh0Hogqv0/+Bj8DIm/1FQJ6J6gGJO
-	 EwdXtvJeMUKmR9tsmgnfLa4Pn6Qe8PTZ85dV6YjZqO3pPejIvC42f/ZubgkapbMYf6
-	 dhQef/RqIIoxyOJiBZ0pWPWElWKBrNqe3G6IJPjHGPHPAherBr5S2sILxabshks3Oo
-	 quZ4q2rdiiJ34vO8+Ur4yrU0=
-Received: from zn.tnic (pd953008e.dip0.t-ipconnect.de [217.83.0.142])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B4E3940E0269;
-	Mon, 13 Jan 2025 11:51:56 +0000 (UTC)
-Date: Mon, 13 Jan 2025 12:51:51 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
-	Mike Rapoport <rppt@kernel.org>,
+	 Content-Type:Content-Disposition:In-Reply-To; b=lMVVRI1Kwb87wJnK14x7oTRyEZ4ZzkV20rjaJc2Np2AgV8nuKqICXBgInkuBoH/i8ai+1cduoEZAMKQv7ZcU6EfHABnHMfz5TQo/FqpfZ8FulpAU0MA9N8N58EQJ7cRKcyipo/VSVzHpfqyX6uaa4zcWeewCqzby/KOajuzRY54=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CaYg3fuh; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736783147; x=1768319147;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=60LzQbPzHHlZESJ4NVxt/prktxqPSG6D4w8hg7eDv0s=;
+  b=CaYg3fuhcxr4GemQ4Txnf8G1L7Idva5ZgdhvG+4fhnZ/GB33X/fSERO3
+   iJ9sIUHGaVCT+VS58317Va0bLii7n8BOIMuTTkwvOa6elLZg3CD1lBK4i
+   Zmxe70ncX81GoeC/crdPlLARMuMET83kGht3tYuwDSK/hhgjuotbDXojJ
+   4oqRHZUl6O0zkpHpyCBufhynujiSuVB/UfDuynPEXmz4SmUpwRb1w4imy
+   BsTkLUsRVJfz+gQ414FJdTzvABynsA+T2g/2RMICnJHFDqNCYAtHavoZ8
+   MrBOD1Eu3mdhS35sazKw0lyBy+2QTEO78EQvt+gK+lMDB6/ZjfSysYxn+
+   A==;
+X-CSE-ConnectionGUID: HRt2wGq8R4SGirM2oZ6T/w==
+X-CSE-MsgGUID: /LhkySK1QSa43thfN/MF6g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="36340461"
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="36340461"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jan 2025 07:45:45 -0800
+X-CSE-ConnectionGUID: Ol8QfgiyQwSLVDwPBFYHzA==
+X-CSE-MsgGUID: hKZ+hXyrRXSC8nJOTWvklg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="104692355"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.74])
+  by fmviesa008.fm.intel.com with SMTP; 13 Jan 2025 07:45:33 -0800
+Received: by stinkbox (sSMTP sendmail emulation); Mon, 13 Jan 2025 17:45:32 +0200
+Date: Mon, 13 Jan 2025 17:45:32 +0200
+From: Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To: Borislav Petkov <bp@alien8.de>
+Cc: Mike Rapoport <rppt@kernel.org>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Luis Chamberlain <mcgrof@kernel.org>,
 	Andreas Larsson <andreas@gaisler.com>,
@@ -86,6 +86,7 @@ Cc: Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
 	Michael Ellerman <mpe@ellerman.id.au>,
 	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
 	Richard Weinberger <richard@nod.at>,
 	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
 	Stafford Horne <shorne@gmail.com>,
@@ -101,48 +102,47 @@ Cc: Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>,
 	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
 	linux-mips@vger.kernel.org, linux-mm@kvack.org,
 	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.or
-Subject: Re: [PATCH] x86: Disable EXECMEM_ROX support
-Message-ID: <20250113115151.GDZ4T-VwIq_6ZafRE4@fat_crate.local>
+	linux-parisc@vger.kernel.o
+Subject: Re: [REGRESSION] Re: [PATCH v7 8/8] x86/module: enable ROX caches
+ for module text on 64 bit
+Message-ID: <Z4U1HGUfFLJH8Y55@intel.com>
 References: <20241023162711.2579610-1-rppt@kernel.org>
  <20241023162711.2579610-9-rppt@kernel.org>
  <Z4QM_RFfhNX_li_C@intel.com>
  <20250112190755.GCZ4QTC01KzoZkxel9@fat_crate.local>
- <20250113111116.GF5388@noisy.programming.kicks-ass.net>
- <20250113112934.GA8385@noisy.programming.kicks-ass.net>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250113112934.GA8385@noisy.programming.kicks-ass.net>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250112190755.GCZ4QTC01KzoZkxel9@fat_crate.local>
+X-Patchwork-Hint: comment
 
-On Mon, Jan 13, 2025 at 12:29:34PM +0100, Peter Zijlstra wrote:
-> On Mon, Jan 13, 2025 at 12:11:16PM +0100, Peter Zijlstra wrote:
+On Sun, Jan 12, 2025 at 08:07:55PM +0100, Borislav Petkov wrote:
+> On Sun, Jan 12, 2025 at 08:42:05PM +0200, Ville Syrjälä wrote:
+> > On Wed, Oct 23, 2024 at 07:27:11PM +0300, Mike Rapoport wrote:
+> > > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> > > 
+> > > Enable execmem's cache of PMD_SIZE'ed pages mapped as ROX for module
+> > > text allocations on 64 bit.
+> > 
+> > Hi,
+> > 
+> > This breaks resume from hibernation on my Alderlake laptop.
+> > 
+> > Fortunately this still reverts cleanly.
 > 
-> > There's definiltely breakage with that module_writable_address()
-> > nonsense in alternative.c that will not be fixed by that patch.
-> > 
-> > The very simplest thing at this point is to remove:
-> > 
-> >      select ARCH_HAS_EXECMEM_ROX             if X86_64
-> > 
-> > and try again next cycle.
+> Does that hunk in the mail here fix it?
 > 
-> Boris asked I send it as a proper patch, so here goes. Perhaps next time
-> let x86 merge x86 code :/
+> https://lore.kernel.org/all/Z4DwPkcYyZ-tDKwY@kernel.org/
 
-I just love it how this went in without a single x86 maintainer Ack, it broke
-a bunch of things and then it is still there instead of getting reverted.
-
-Let's not do this again please.
+Still blows up with that one.
 
 -- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+Ville Syrjälä
+Intel
 
