@@ -1,145 +1,138 @@
-Return-Path: <linux-mips+bounces-7411-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7412-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4B08A0B112
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jan 2025 09:27:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9A0CA0B529
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jan 2025 12:11:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A5C1916536C
-	for <lists+linux-mips@lfdr.de>; Mon, 13 Jan 2025 08:27:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C5BB21881B68
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jan 2025 11:11:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B370E233139;
-	Mon, 13 Jan 2025 08:27:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2520B22F146;
+	Mon, 13 Jan 2025 11:11:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="K867550L"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="QyUDxo68"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com [209.85.208.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CED0C233146;
-	Mon, 13 Jan 2025 08:27:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07F44187554;
+	Mon, 13 Jan 2025 11:11:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736756836; cv=none; b=TLGcKROZjoW/dibhaedyOydiLynEjDR8qmIWqgofw4VBw/3s7KMXvltxXYwUjUvGi6fe1SCj1ux/SECi8LKkac0pH17hfMZNsOvUmK/w8HpXotHBOnvsdIGvrdep2GSZzIHBJqnPqDCxffynZktzOlIcjPgsQeWfd1C9O27Do4M=
+	t=1736766683; cv=none; b=Ywv/nPpmIafdiydBuhEHJXT5nk5EGDr80OSeYKwPmlMLDrhDHjWarw0/PgS4PUQGLLVknqS9HBcQZ4Nyl/Ksm8OlE8PETBrzPHWXYF+V/ZqMJ+sUSBFO3giHL/669RpbpGihVezOkVMYcIxiFCGOyW3c1EnoK6v1xMbjR1ZeeNw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736756836; c=relaxed/simple;
-	bh=m7czTCt5DgRu7CfYHHHSqcATvcfKa0xxPZ0cCCGUQX8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I97PEbr4OIE/sIO9e5/7f64nsfGwj2JsL2XRAUnBcFTZyikT4gBZUdJrA3RwYFR2KFUQCU/PIiCHBo4piGU6gV6R8gHsqLUpbtEVbspT+uniJT4omAmlEjuxRT6CpqipeDBnIcylxjswq1XOx23sCQVmMsgQIO3vpFA7T+JvHzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=K867550L; arc=none smtp.client-ip=209.85.208.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-30613037309so13925961fa.3;
-        Mon, 13 Jan 2025 00:27:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736756833; x=1737361633; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m7czTCt5DgRu7CfYHHHSqcATvcfKa0xxPZ0cCCGUQX8=;
-        b=K867550LjvOFDmP5OshC4v4C2xfB7CjXjGpsSM3gRYleLlgBNZBjk/Qx/RyU4ZhWLQ
-         dUFn2+53Qjnae2MOeCFvt464/6JJjp6QbSXK42mH7CZC77J0d5DV5KHZqdqaZLYtTzjU
-         2QDwpajGeY4UuzbajBJuRbxXrEzldPTYCXj8WGfZuxix2eUc6zJUeAp/E2eKbngYBgMy
-         Un6ZdSP4bXM3xD2G0TiGowdC4kQptyR7Mj3j/yw75G6AAo2Vy2rTtG+UwoSmpRz4sebH
-         q5FcUGHyQ71pr8eIpBPA2Cfoog2KroTBBj1kU62Qy/IIb4iv4Ni3Sa9yog6SbkSVZ5ps
-         z3Ww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736756833; x=1737361633;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=m7czTCt5DgRu7CfYHHHSqcATvcfKa0xxPZ0cCCGUQX8=;
-        b=pz8oatH+xuh07GhsJ2pCk3gmg4PiX9dXxvspqgHw1+e67Gj2hboiKE4t7WJVfC46Zc
-         YaqPwaYA1p6Wlz8CAQZ0xsAEKJAiSsNCyXdkmN94r0stTv+vy2hfXxl13pOfCCqKOoKk
-         Q7c7Gvq43bb1PZB9TaruzZ0KqgIijp/c6YMkmw/UdK+yDfhs2lItrNcs/Dilc/P55ujn
-         yYdX0Xqqj6TjoaRLJM3B0H1FTcQ0ou/O+diTb7pzjYqbVLeiyBYlHQPUKKebeouortlS
-         tUpa0/1F13on3hLOQvoXjfS+LWBrKp/lD/ORDydZK/3PzmWmr0tjM4zDnj0SA7NLYMqN
-         tVzA==
-X-Forwarded-Encrypted: i=1; AJvYcCU072DaC0I9tMwEAYDFt3wLeXwjM6Jojoc7Wdi8iei9ArpOA3/nNRSZhx6KSg+H4p76DCizwZ3U/OWy8kM=@vger.kernel.org, AJvYcCUXaOQeS3L+GabD5kljMbQREUL4HDKki5Y06t79O4GGkmucgZPjS7wYHSX+2eOCdrMkVSHuU3dtasItMtlo@vger.kernel.org, AJvYcCUusGUdtaLXDZIZEUmE5P+yNH84MTLgmAmSal+z31xrNmLXFlDsG9KM9VoDutQtxj2ga7NIUMRwO2l6WQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz44uBroLIrr7pqPzYdg02j4Cz64OR2U6zU9bIbwLgolgJB6gS5
-	A19SPhHPT5fI46KQ0WE6vXiA7XfIDU8Zx8myGSKGb2Dt7I1hAgKq+Y1bFA05NJOw7TRd+oFS4vF
-	xyrdgRmL41Sj6DYXxzjm2u19oM/7+QNTp
-X-Gm-Gg: ASbGncssgfiqbTaptHwepaFke3PI3+7Bje1syxn7UWq4V5HsHV0BMuAN3maNAK/inw7
-	N29m7jS2NQlxdZgRYBOn+LrOtOcui6Upe3qLJ
-X-Google-Smtp-Source: AGHT+IHbnPn6i9h7YBUlLi8m5aMfqWXK89UzEp3V6TTJV5vWAk5yvS0/3N9anCOG7Usk3SgfvFBd5HW9NsEBwWHSpx4=
-X-Received: by 2002:a2e:a716:0:b0:300:4362:40 with SMTP id 38308e7fff4ca-305f463cf58mr41312191fa.36.1736756831112;
- Mon, 13 Jan 2025 00:27:11 -0800 (PST)
+	s=arc-20240116; t=1736766683; c=relaxed/simple;
+	bh=ONKN8fq0iP0VC62UEpQtN5Nmm165/LMTCyM9flI8nJA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NdSlismQnPk2L1Bcyx47XceufHVyS0FCLCykC+UJS1M8PoUz1jU/hCbFZuWUL0OwMRHht/DIVSnUlnsVR2Frhmv7mcaMaqGt3gk7ROmJg07GcgAj0aWc/yKlIN8DyfJbSWr7nOOk+9MiXdtTjuDT+kPcWRIqPLqfSjALNidS88s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=QyUDxo68; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Transfer-Encoding:
+	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
+	Sender:Reply-To:Content-ID:Content-Description;
+	bh=qj0XqtoExeVFzH/0zurjfq7xU6GfRici48V+bRozJOU=; b=QyUDxo6884XncYuqYHzTOCqFhP
+	MJCHu9a4GRwdc2gzh5B2GGjOVCLjQQf/G/U7qmHwI17hAY1iN75xRQXZxeLGWu2r1IqKnZpyhJLDh
+	hIuO5PZHdwSPf5wZW6TqT3qcud0nyXMDVNWDhVWthft1Bnu+Kcj3mv+vxETbGCx0QJOf9qMcwsms+
+	nqHs/Wgi5QapoBbNUV5Co3c/+0Nu0ObKp+3f0PdvoSv/EyJ2MD7vobCUSztpqsbNNqvMOm1sEmva6
+	MTgfeJGjb7Ed6OquAEAdfsZxBI82GyxEwWFFo9IdPl3Yqv95YLHEjIJQwF7fzvfeJC+e9a3V3YyCz
+	FdRvrBKQ==;
+Received: from 77-249-17-89.cable.dynamic.v4.ziggo.nl ([77.249.17.89] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tXILk-0000000AHYu-4BnK;
+	Mon, 13 Jan 2025 11:11:18 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 27A6730057A; Mon, 13 Jan 2025 12:11:16 +0100 (CET)
+Date: Mon, 13 Jan 2025 12:11:16 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Borislav Petkov <bp@alien8.de>
+Cc: Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Luis Chamberlain <mcgrof@kernel.org>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Kent Overstreet <kent.overstreet@linux.dev>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
+	Stafford Horne <shorne@gmail.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
+	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org,
+	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.or
+Subject: Re: [REGRESSION] Re: [PATCH v7 8/8] x86/module: enable ROX caches
+ for module text on 64 bit
+Message-ID: <20250113111116.GF5388@noisy.programming.kicks-ass.net>
+References: <20241023162711.2579610-1-rppt@kernel.org>
+ <20241023162711.2579610-9-rppt@kernel.org>
+ <Z4QM_RFfhNX_li_C@intel.com>
+ <20250112190755.GCZ4QTC01KzoZkxel9@fat_crate.local>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAGXGE_JWtMo8Qs=hsH=NULkDRFoYKYorKHACpqvqpYiO3am8eQ@mail.gmail.com>
- <CAD=FV=VOjzdBvyx9-g=Mvv6SJvur5ogtUbRfR3oCFpQoQ4VK3w@mail.gmail.com>
-In-Reply-To: <CAD=FV=VOjzdBvyx9-g=Mvv6SJvur5ogtUbRfR3oCFpQoQ4VK3w@mail.gmail.com>
-From: wzs <wangzhengshu39@gmail.com>
-Date: Mon, 13 Jan 2025 16:27:00 +0800
-X-Gm-Features: AbW1kvaZRDwF8NRC6pRwpBV01fZRcE__7p5mkdq9ZI2BSDV4bxbnWk5RbAlBpYo
-Message-ID: <CAGXGE_JaVxfpsGh4qqJ4zb3smaV3EFYPggtF9cEQvv_BtBR+Cw@mail.gmail.com>
-Subject: Re: watchdog: BUG: soft lockup
-To: Doug Anderson <dianders@chromium.org>
-Cc: tglx@linutronix.de, liusong@linux.alibaba.com, akpm@linux-foundation.org, 
-	pmladek@suse.com, kernelfans@gmail.com, deller@gmx.de, npiggin@gmail.com, 
-	tsbogend@alpha.franken.de, James.Bottomley@hansenpartnership.com, 
-	jan.kiszka@siemens.com, linux-kernel@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, yaoma@linux.alibaba.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250112190755.GCZ4QTC01KzoZkxel9@fat_crate.local>
 
-Thanks for the tip!
+On Sun, Jan 12, 2025 at 08:07:55PM +0100, Borislav Petkov wrote:
+> On Sun, Jan 12, 2025 at 08:42:05PM +0200, Ville Syrjälä wrote:
+> > On Wed, Oct 23, 2024 at 07:27:11PM +0300, Mike Rapoport wrote:
+> > > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+> > > 
+> > > Enable execmem's cache of PMD_SIZE'ed pages mapped as ROX for module
+> > > text allocations on 64 bit.
+> > 
+> > Hi,
+> > 
+> > This breaks resume from hibernation on my Alderlake laptop.
+> > 
+> > Fortunately this still reverts cleanly.
+> 
+> Does that hunk in the mail here fix it?
+> 
+> https://lore.kernel.org/all/Z4DwPkcYyZ-tDKwY@kernel.org/
 
-Doug Anderson <dianders@chromium.org> =E4=BA=8E2025=E5=B9=B41=E6=9C=889=E6=
-=97=A5=E5=91=A8=E5=9B=9B 01:33=E5=86=99=E9=81=93=EF=BC=9A
->
-> Hi,
->
-> On Sun, Dec 22, 2024 at 10:32=E2=80=AFPM wzs <wangzhengshu39@gmail.com> w=
-rote:
-> >
-> > Hello,
-> > when fuzzing the Linux kernel,
-> > I triggered many "watch: BUG: soft lockup" warnings.
-> > I am not sure whether this is an issue with the kernel or with the
-> > fuzzing program I ran.
-> > (The same fuzzing program, when tested on kernel versions from
-> > Linux-6.7.0 to 6.12.0, triggers the 'watchdog: BUG: soft lockup'
-> > warning on some versions, while others do not. Linux 6.12.0 is the
-> > latest stable release where this error occurs.)
-> >
-> > The bug information I provided below is from the Linux-6.12.0 kernel.
-> > If you need bug information from other versions, I would be happy to pr=
-ovide it.
-> >
-> > kernel config :https://pastebin.com/i4LPXNAN
-> > console output :https://pastebin.com/uKVpvJ78
->
-> IMO it's nearly always a bug if userspace can cause the kernel to soft
-> lockup. I'd expect this isn't a bug in the soft lockup detector but a
-> problem in whatever part of the kernel you're fuzzing. For some
-> details of the soft lockup detector, see
-> `Documentation/admin-guide/lockup-watchdogs.rst`.
->
-> Presumably you're fuzzing the kernel in a way that causes it to enter
-> a big loop while preemption is disabled, or something like that.
-> Presumably the kernel should be detecting something invalid that
-> userspace did and that would keep it from looping so long.
->
-> I tried looking at your pastebin and probably what's going on is
-> somewhere hidden in there, but unfortunately the beginning of the logs
-> are a bit jumbled since it looks like the RCU warning and the soft
-> lockup warning happened at about the same time and their stuff is
-> jumbled. There's also a lot of tasks to go through. Honestly, it's
-> probably less work just to look at whatever you were trying to fuzz to
-> help you pinpoint the problem.
->
-> I'll also note that you seem to be using KASAN and are running in a
-> virtual machine. It's not inconceivable that's contributing to your
-> problems. KASAN makes things _a lot_ slower and a VM may be getting
-> its time stolen by the host.
->
-> -Doug
+There's definiltely breakage with that module_writable_address()
+nonsense in alternative.c that will not be fixed by that patch.
+
+The very simplest thing at this point is to remove:
+
+     select ARCH_HAS_EXECMEM_ROX             if X86_64
+
+and try again next cycle.
 
