@@ -1,144 +1,148 @@
-Return-Path: <linux-mips+bounces-7408-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7409-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C0083A0AB9F
-	for <lists+linux-mips@lfdr.de>; Sun, 12 Jan 2025 20:09:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BEBCA0AEC7
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jan 2025 06:33:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 95A1C3A3922
-	for <lists+linux-mips@lfdr.de>; Sun, 12 Jan 2025 19:09:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 33F8218846BC
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Jan 2025 05:33:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E5671C1F15;
-	Sun, 12 Jan 2025 19:09:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="lLayJPA/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E22E414A60C;
+	Mon, 13 Jan 2025 05:33:48 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from out01.mta.xmission.com (out01.mta.xmission.com [166.70.13.231])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A35F1BC07A;
-	Sun, 12 Jan 2025 19:09:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9D252F852;
+	Mon, 13 Jan 2025 05:33:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=166.70.13.231
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736708950; cv=none; b=KHl1tVn5ZYPQscMuHUy7H8xcfQw4JO+xa7WESCUAMJvQfuMUZ9eevmBkfnh8ZY3pyQjgibCMNV5xy4SrqozE4OuhmwXyaEb6bV/0ms6GkO9BCoCeP6ZhpELRLah7adcPegEp6ZerUE7xfSfV2AUma6zBr+ViUeXDLRTQ1ggFhcM=
+	t=1736746428; cv=none; b=SSwT0Y+NFQgHpHyCTiRs+GJWzz+NhPJyUYr8QKZkwdNgVjvUvYPi9wj8sgs36Wg4Crcd0/C3nwKSChZt7H6J1JHCp6dbK2bA/qs4NLN3d40hJCMMZ4wpPWmSGL9NcPVEXHuD8vKnFTBMp2tj8qTPB757f6oOo+mhDl7wegGqhhI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736708950; c=relaxed/simple;
-	bh=uU+fWbBPYakP3S/IJj7SvmN49d/K9LmqXINmzlkX728=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OYi7qt/XM2i2PQPNkRC0hWaZoWkTEU6vYrq+sAs4Bk1KeWeMmJDmr+hKjfC44Qsyoy5vrUXYslchdMCynNAP6yg1ekpscLcD4RRt089wiCyMcaxu1DLx5t8aKMX3QqixPRr2hBAXz2HF/xl41ywctcFMheAwWVsZb0gdCoalmmY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=fail (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=lLayJPA/ reason="signature verification failed"; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id D3A2740E0163;
-	Sun, 12 Jan 2025 19:09:03 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id tMvUK_r9nR5q; Sun, 12 Jan 2025 19:08:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1736708938; bh=aLAfkjw74RRvWtCHgEL4sAt3h2Wr05yapxhTRn2aLsM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lLayJPA/rT4foGXRe+yvpsShqvoq+dPGmKurefnXwDIubIdBYwiiMqfLOuXZiVGgc
-	 MF9WFxHHRygWF98WRYLe84/Q+hZa78mxEY2n+5NNT0ozk1XbnQP0xZTbKM25XQz4eW
-	 +yqV5JvIbcszJ7/oE+Y4P2mhYF5WjSSw2EcbomAxk+ljrnjLEPf5GiAndVSB2FgyTH
-	 +Te+dEinRxl6FpNLbjrOtlLNwfW6datkFkRfzCm8l1Z006ad2yauMO8gRvkPs9bB1G
-	 63z9Dv5qq3jYZzuyCpMdv/nDg8UB8lQtTj+Nr8GySo8f/75Ekn2P5bFNiLbx+wB8n/
-	 f14QaGx9WBCa/ac7O2I49pxsA3+DlPkTj0GLNIQ/rxjmvIQadhI5WI8YzpmDxHbr0p
-	 OnpCPhEA2DxR2y05U+xswnyukBd/vcEbPAgYEGcKT4dSvCMc4/0nJzlGUeIJJ8PKv7
-	 SCPVP23T7BxaRXiEOCyvmXdZdtnXrXlFmo9xfgY3LkNy41KBoebZfSy3hXf9eZfMnf
-	 BIEDs9gA2+RRZd1euWwMQD0bQZR6U0AvSaiSfqZ7U/XsMJedES1t8NGD6RqCJ6s0a4
-	 ZgnwvfTXZQUanL3UL3v6qqKF2nJ9bsCq8XP2crFGgo67EQSdd9+64USArbQi/zgCnM
-	 Wa6XaNFBMbnkkVL6C4szOaCE=
-Received: from zn.tnic (pd953008e.dip0.t-ipconnect.de [217.83.0.142])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id B34C040E02BF;
-	Sun, 12 Jan 2025 19:08:01 +0000 (UTC)
-Date: Sun, 12 Jan 2025 20:07:55 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Ville =?utf-8?B?U3lyasOkbMOk?= <ville.syrjala@linux.intel.com>
-Cc: Mike Rapoport <rppt@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Luis Chamberlain <mcgrof@kernel.org>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
-	Arnd Bergmann <arnd@arndb.de>, Brian Cain <bcain@quicinc.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
-	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Kent Overstreet <kent.overstreet@linux.dev>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Michal Simek <monstr@monstr.eu>, Oleg Nesterov <oleg@redhat.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Richard Weinberger <richard@nod.at>,
-	Russell King <linux@armlinux.org.uk>, Song Liu <song@kernel.org>,
-	Stafford Horne <shorne@gmail.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Vineet Gupta <vgupta@kernel.org>, Will Deacon <will@kernel.org>,
-	bpf@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org,
-	linux-modules@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.or
-Subject: Re: [REGRESSION] Re: [PATCH v7 8/8] x86/module: enable ROX caches
- for module text on 64 bit
-Message-ID: <20250112190755.GCZ4QTC01KzoZkxel9@fat_crate.local>
-References: <20241023162711.2579610-1-rppt@kernel.org>
- <20241023162711.2579610-9-rppt@kernel.org>
- <Z4QM_RFfhNX_li_C@intel.com>
+	s=arc-20240116; t=1736746428; c=relaxed/simple;
+	bh=6kgf0Y1DnjB7/4vkH8/ROm9TSERfddva2KwyJlW1rSc=;
+	h=From:To:Cc:References:Date:In-Reply-To:Message-ID:MIME-Version:
+	 Content-Type:Subject; b=eOLLDhiZyCESVtKjD2/jOFafDOMGR7EUn/EnoISKV+PjOb6XBONwmCw3KJQAEVe6MB5byZhXz49NSNJsFTQujyfMdJ98dt/hVJx9wDsNcJZO7VAdGImWajvfmjtS8k/kw+eDCdoR71FK9gI3f2BFEzPxcybLB9kSH28WETLOKdc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com; spf=pass smtp.mailfrom=xmission.com; arc=none smtp.client-ip=166.70.13.231
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=xmission.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=xmission.com
+Received: from in01.mta.xmission.com ([166.70.13.51]:43564)
+	by out01.mta.xmission.com with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <ebiederm@xmission.com>)
+	id 1tXD4v-000YH6-OQ; Sun, 12 Jan 2025 22:33:33 -0700
+Received: from ip72-198-198-28.om.om.cox.net ([72.198.198.28]:36184 helo=email.froward.int.ebiederm.org.xmission.com)
+	by in01.mta.xmission.com with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.93)
+	(envelope-from <ebiederm@xmission.com>)
+	id 1tXD4u-00HTmM-DJ; Sun, 12 Jan 2025 22:33:33 -0700
+From: "Eric W. Biederman" <ebiederm@xmission.com>
+To: Ivan Kokshaysky <ink@unseen.parts>
+Cc: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,  Arnd Bergmann
+ <arnd@arndb.de>,  Richard Henderson <richard.henderson@linaro.org>,  Matt
+ Turner <mattst88@gmail.com>,  Kees Cook <kees@kernel.org>,  "Paul E.
+ McKenney" <paulmck@kernel.org>,  linux-alpha@vger.kernel.org,
+  linux-mm@kvack.org,  linux-kernel@vger.kernel.org,  Michael Cree
+ <mcree@orcon.net.nz>,  Sam James <sam@gentoo.org>,  "Maciej W. Rozycki"
+ <macro@orcam.me.uk>,  Geert Uytterhoeven <geert@linux-m68k.org>,  Michael
+ Karcher <kernel@mkarcher.dialup.fu-berlin.de>,  Chris Hofstaedtler
+ <zeha@debian.org>,  util-linux@vger.kernel.org,
+  linux-mips@vger.kernel.org,  loongarch@lists.linux.dev
+References: <20250103140148.370368-1-glaubitz@physik.fu-berlin.de>
+	<24f03227-1b55-4e50-b6e9-7ac74fda2602@app.fastmail.com>
+	<678ee681-12c3-4e79-a04b-495daf343846@app.fastmail.com>
+	<bff3cfad8a87799101891b4f786c5104db9dab13.camel@physik.fu-berlin.de>
+	<82d33a2d-dffe-4268-a175-4536b3f9c07f@app.fastmail.com>
+	<cc420e1a843da3cf349607369851c338f4049c4e.camel@physik.fu-berlin.de>
+	<87jzb2tdb7.fsf_-_@email.froward.int.ebiederm.org>
+	<Z4KN_aOT6uZRAm8a@minute>
+Date: Sun, 12 Jan 2025 23:32:54 -0600
+In-Reply-To: <Z4KN_aOT6uZRAm8a@minute> (Ivan Kokshaysky's message of "Sat, 11
+	Jan 2025 16:27:57 +0100")
+Message-ID: <875xmjth15.fsf@email.froward.int.ebiederm.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.2 (gnu/linux)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Z4QM_RFfhNX_li_C@intel.com>
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+X-XM-SPF: eid=1tXD4u-00HTmM-DJ;;;mid=<875xmjth15.fsf@email.froward.int.ebiederm.org>;;;hst=in01.mta.xmission.com;;;ip=72.198.198.28;;;frm=ebiederm@xmission.com;;;spf=pass
+X-XM-AID: U2FsdGVkX19mzMcFcnq2MyXKMRJsTojlTxbl78vUQO0=
+X-Spam-Level: 
+X-Spam-Report: 
+	* -1.0 ALL_TRUSTED Passed through trusted hosts only via SMTP
+	*  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+	*      [score: 0.4714]
+	*  0.7 XMSubLong Long Subject
+	*  0.0 T_TM2_M_HEADER_IN_MSG BODY: No description available.
+	* -0.0 DCC_CHECK_NEGATIVE Not listed in DCC
+	*      [sa06 1397; Body=1 Fuz1=1 Fuz2=1]
+	*  0.0 T_TooManySym_01 4+ unique symbols in subject
+X-Spam-DCC: XMission; sa06 1397; Body=1 Fuz1=1 Fuz2=1 
+X-Spam-Combo: ;Ivan Kokshaysky <ink@unseen.parts>
+X-Spam-Relay-Country: 
+X-Spam-Timing: total 763 ms - load_scoreonly_sql: 0.09 (0.0%),
+	signal_user_changed: 12 (1.5%), b_tie_ro: 10 (1.3%), parse: 1.27
+	(0.2%), extract_message_metadata: 18 (2.3%), get_uri_detail_list: 1.68
+	(0.2%), tests_pri_-2000: 14 (1.8%), tests_pri_-1000: 3.4 (0.5%),
+	tests_pri_-950: 1.28 (0.2%), tests_pri_-900: 1.07 (0.1%),
+	tests_pri_-90: 441 (57.9%), check_bayes: 430 (56.3%), b_tokenize: 8
+	(1.1%), b_tok_get_all: 8 (1.1%), b_comp_prob: 2.4 (0.3%),
+	b_tok_touch_all: 407 (53.4%), b_finish: 1.12 (0.1%), tests_pri_0: 256
+	(33.5%), check_dkim_signature: 0.84 (0.1%), check_dkim_adsp: 2.7
+	(0.4%), poll_dns_idle: 0.89 (0.1%), tests_pri_10: 2.8 (0.4%),
+	tests_pri_500: 9 (1.2%), rewrite_mail: 0.00 (0.0%)
+Subject: Re: [PATCH] alpha/elf: Fix misc/setarch test of util-linux by
+ removing 32bit support
+X-SA-Exim-Connect-IP: 166.70.13.51
+X-SA-Exim-Rcpt-To: loongarch@lists.linux.dev, linux-mips@vger.kernel.org, util-linux@vger.kernel.org, zeha@debian.org, kernel@mkarcher.dialup.fu-berlin.de, geert@linux-m68k.org, macro@orcam.me.uk, sam@gentoo.org, mcree@orcon.net.nz, linux-kernel@vger.kernel.org, linux-mm@kvack.org, linux-alpha@vger.kernel.org, paulmck@kernel.org, kees@kernel.org, mattst88@gmail.com, richard.henderson@linaro.org, arnd@arndb.de, glaubitz@physik.fu-berlin.de, ink@unseen.parts
+X-SA-Exim-Mail-From: ebiederm@xmission.com
+X-SA-Exim-Scanned: No (on out01.mta.xmission.com); SAEximRunCond expanded to false
 
-On Sun, Jan 12, 2025 at 08:42:05PM +0200, Ville Syrj=C3=A4l=C3=A4 wrote:
-> On Wed, Oct 23, 2024 at 07:27:11PM +0300, Mike Rapoport wrote:
-> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> >=20
-> > Enable execmem's cache of PMD_SIZE'ed pages mapped as ROX for module
-> > text allocations on 64 bit.
->=20
-> Hi,
->=20
-> This breaks resume from hibernation on my Alderlake laptop.
->=20
-> Fortunately this still reverts cleanly.
+Ivan Kokshaysky <ink@unseen.parts> writes:
 
-Does that hunk in the mail here fix it?
+> On Fri, Jan 10, 2025 at 06:16:28PM -0600, Eric W. Biederman wrote:
+>> 
+>> Richard Henderson <richard.henderson@linaro.org> writes[1]:
+>> 
+>> > There was a Spec benchmark (I forget which) which was memory bound and ran
+>> > twice as fast with 32-bit pointers.
+>> >
+>> > I copied the idea from DEC to the ELF abi, but never did all the other work
+>> > to allow the toolchain to take advantage.
+>> >
+>> > Amusingly, a later Spec changed the benchmark data sets to not fit into a
+>> > 32-bit address space, specifically because of this.
+>> >
+>> > I expect one could delete the ELF bit and personality and no one would
+>> > notice. Not even the 10 remaining Alpha users.
+>> 
+>> In [2] it was pointed out that parts of setarch weren't working
+>> properly on alpha because it has it's own SET_PERSONALITY
+>> implementation.  In the discussion that followed Richard Henderson
+>> pointed out that the 32bit pointer support for alpha was never
+>> completed.
+>> 
+>> Fix this by removing alpha's 32bit pointer support.
+>> 
+>> As a bit of paranoia refuse to execute any alpha binaries that hafe
+>> the EF_ALPHA_32BIT flag set.  Just to fail explicitly in case someone
+>> somewhere has binaries that trying to use alpha's 32bit pointer
+>> support.
+>
+> In general I agree, but then someone ought to remove the "--taso" option
+> from GNU ld, which produces such binaries.
 
-https://lore.kernel.org/all/Z4DwPkcYyZ-tDKwY@kernel.org/
+Please feel free to write such a patch.  I don't know the GNU ld process
+well enough to write that patch.
 
---=20
-Regards/Gruss,
-    Boris.
+It would be good to remove dead code and confusing code from GNU ld,
+as well as from the linux kernel.
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Eric
 
