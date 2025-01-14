@@ -1,88 +1,147 @@
-Return-Path: <linux-mips+bounces-7444-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7446-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7801FA1106E
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jan 2025 19:47:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 890EFA1107F
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jan 2025 19:51:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B0C381885F3B
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jan 2025 18:47:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1343C3A5CCA
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jan 2025 18:51:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E07C1CAA9B;
-	Tue, 14 Jan 2025 18:47:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F03D31FBBC5;
+	Tue, 14 Jan 2025 18:51:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="iY8ASPzh"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="vdWQ5sxL";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="pz/BH6xB"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1179818952C;
-	Tue, 14 Jan 2025 18:47:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EF351B21AD;
+	Tue, 14 Jan 2025 18:51:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736880422; cv=none; b=ohOPIVoZdXCbrQMIGz2mAsC6slWxPxz2pWdsRiLSr6lr6D2mhPO/YNdLpk9WnHU3Anx/EQ0YEX8E0Or+3XDPS48bfuocWie3Z0VPhytJZANPgbE6GEZ+Z+nhpqk8jJZJ/UfTfAMr+Prky8uwzKirqdRaSiIlszyoKFbVNCUZlOs=
+	t=1736880684; cv=none; b=h7QJA/ELXxuTGlnHa6Y1c57grQtSYwnnZv/pwvEgNhPpEwx10ax5KRC7fc0CnEdhZOENeGvvMc9lAvbNMEhv95tEYwWL9/nuwsH5dmoxWS0vlTNtZidgIkm1rZM0lI2NOsTUvx4l817iGeQ8RlF4nlsYhKrFiI3QQrxAuwyv7OU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736880422; c=relaxed/simple;
-	bh=/tw8aglFNZRlLWFhZqECPDQfsOTghx5QIxIq2HJjy/Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O9M1CSZaWzUSicvPghaSl+fF0LkXIeHVazN9Mc3iuey8KBxvrvTSydjEZdkXmigcHFQ971/zDe9A5p1lSuRsS9Wes/3r6RENawp75VsHiWEUqdfZk6i+L08Gkuyv+OXATrTusltxvNrPRrz4Qk8HgCqvX/OzWAinnTObDiNffaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=iY8ASPzh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 235B0C4CEDD;
-	Tue, 14 Jan 2025 18:47:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1736880421;
-	bh=/tw8aglFNZRlLWFhZqECPDQfsOTghx5QIxIq2HJjy/Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=iY8ASPzh+tRr0Vn1P+3Y4HmMKEGXVp6T3Ca6OwBPZR8IzgCOv86HXi5DF9utCIi6Z
-	 SURbRfR3449IzsAio0u9KnyEO1sNOcAvAHXdQqMrPznpGkYcgE51iKoNmShjqSwHCx
-	 yOPpqUZIhiqeAiRFaG9HJAaq6dTlOtl07gDGRW1U=
-Date: Tue, 14 Jan 2025 19:46:58 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Arnd Bergmann <arnd@arndb.de>, Baoquan He <bhe@redhat.com>,
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org,
-	Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
-Subject: Re: [PATCH] MIPS: pci-legacy: Override pci_address_to_pio
-Message-ID: <2025011441-mountable-glitch-da1b@gregkh>
-References: <20250114-malta-io-fixes-v1-1-74ef1dc402ec@flygoat.com>
+	s=arc-20240116; t=1736880684; c=relaxed/simple;
+	bh=tgNjXSfJZZXt0y/ddetLU6Vx/9hH6IFbQHS06fJyvAs=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=CFx1T497rGXGB36HAy3aKe5mwx8Rq6MkOfKLAfsUbRBcc4ti7BRQP2tQV9IM9uha+b2YuoKkTo5igjScEU0ErJvAXXyjNcrRCsC/JAJc7TEsO0BXqS7U2f0FtsQsoVRjpZ+Sot0t78hypCH6xqERKdgJLFV5o7EhDsRaNSwmIMA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=vdWQ5sxL; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=pz/BH6xB; arc=none smtp.client-ip=103.168.172.156
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 168B911401FF;
+	Tue, 14 Jan 2025 13:51:22 -0500 (EST)
+Received: from phl-imap-12 ([10.202.2.86])
+  by phl-compute-09.internal (MEProxy); Tue, 14 Jan 2025 13:51:22 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1736880682;
+	 x=1736967082; bh=tgNjXSfJZZXt0y/ddetLU6Vx/9hH6IFbQHS06fJyvAs=; b=
+	vdWQ5sxLoPHcKmk5Zypii9xdfdEZQVunn7b2b8wA/Sel9IgMHLiX0hYgnfGKKxQq
+	bkdSI4aSSNxq8t/rPRyqhcruT2RrXPdZ2Cm2DMwalVXaI0S6osoqt2M87KREtMOI
+	+8FZRtcXK8vzHjp2Vcof1B9XQXPMtPziwgmFnXdWKYs3vknBZHN56zEUBNZViohh
+	zvJjlU2HFRGRCgqvlmWit1u7BU1TRb68cYIbuMAHLARrCihLoywVmCr+0p032cDo
+	NMjgH7ThJyyzMx4Wl8njUAkJsC2FBUMsaA8S1+Lz3/Fz0eF21y1wA3pkoJWO/7zJ
+	+SleihWOn+crBqo9mz0fXg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1736880682; x=
+	1736967082; bh=tgNjXSfJZZXt0y/ddetLU6Vx/9hH6IFbQHS06fJyvAs=; b=p
+	z/BH6xB7W/yRwmBpxVtHxbvVCv+THWqpIoxgy4xQqzS3hF2TR9rb7Zcc3IDRotrP
+	9WGEQEee3ENhLAVcU0Vxgv9Zi8zBBTGeNWe8tn7YbKUxOVNG2yc93RgvB7iB7gWZ
+	uPrbWHLGnoDWcbzjpF9fM011VymFLwApOfFOafY6+I7szz6LaSIBh4uDaFbT+J6d
+	+h/7lsPGcZRX7vGOoGjf6gqVOoUhVgakwwmn9/39u8KCfpuKJVLEezCLPVv2eI3k
+	o6vHi6ULbU3lMflwdQ27a3/Qm4/wxqQkd1qtMkw+6UJJWqYvnDWetOAk2ejleUue
+	9e/aBbkO7koZDPFxC67oA==
+X-ME-Sender: <xms:KbKGZzr9FW9Lchwso7bxP5Qm25AkjO68N1q6uJl_wDl2ksDKL2hl8w>
+    <xme:KbKGZ9oJTRNGMIZv7lG7xoY66qNpIPi9qpSXYxoi1_Fy33EL07yg3D5WSL6_mYQ5U
+    mwLuO8d2Zzbu2lTRM0>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudehiedguddujecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthhqredtredt
+    jeenucfhrhhomhepfdflihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgse
+    hflhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpeejheefuddvtdfggfdvffek
+    teehhfelgfdvvedvkeeuffefkeehheegvefhveetjeenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghho
+    rghtrdgtohhmpdhnsggprhgtphhtthhopeejpdhmohguvgepshhmthhpohhuthdprhgtph
+    htthhopehtshgsohhgvghnugesrghlphhhrgdrfhhrrghnkhgvnhdruggvpdhrtghpthht
+    oheprghrnhgusegrrhhnuggsrdguvgdprhgtphhtthhopehmrghtrdhjohhntgiihihkse
+    hovddrphhlpdhrtghpthhtohepsghhvgesrhgvughhrghtrdgtohhmpdhrtghpthhtohep
+    lhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoh
+    eplhhinhhugidqmhhiphhssehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
+    shhtrggslhgvsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:KbKGZwNm_4bbPkWMiE9ZoA6u6QZ1ZsxO2_LI3KyQlHqXrjZPtXgpsg>
+    <xmx:KbKGZ26NDNozuMhkrQxVor9r7nFncVEqFyduzQCl09COmbuuG-NZSw>
+    <xmx:KbKGZy7QFCAEqf0jQ8hkID0jovd8SETefKq0JQG1h_fblYhP7ihwtA>
+    <xmx:KbKGZ-iTNKuvfxkXy2HaK8gGqp-hTxbYnFNenjf9XjuvFpXUMR_ldg>
+    <xmx:KrKGZ_skRYrv1AgFJWnKoRDXQ7FUJAqIujGHoVZtLL7vpb_ZjAGzrOmk>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 98FB81C20066; Tue, 14 Jan 2025 13:51:21 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Date: Tue, 14 Jan 2025 18:51:02 +0000
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: =?UTF-8?Q?Mateusz_Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Arnd Bergmann" <arnd@arndb.de>, "Baoquan He" <bhe@redhat.com>
+Cc: "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ linux-kernel@vger.kernel.org,
+ "stable@vger.kernel.org" <stable@vger.kernel.org>
+Message-Id: <28d6ed91-a5de-4a0d-8e76-9e79375a9db3@app.fastmail.com>
+In-Reply-To: <6946ae6b-814c-4916-9428-e823c83aed3d@o2.pl>
+References: <20250114-malta-io-fixes-v1-1-74ef1dc402ec@flygoat.com>
+ <6946ae6b-814c-4916-9428-e823c83aed3d@o2.pl>
+Subject: Re: [PATCH] MIPS: pci-legacy: Override pci_address_to_pio
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250114-malta-io-fixes-v1-1-74ef1dc402ec@flygoat.com>
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 14, 2025 at 06:11:58PM +0000, Jiaxun Yang wrote:
-> pci-legacy systems are not using logic_pio to managed PIO
-> allocations, thus the generic pci_address_to_pio won't work
-> when PCI_IOBASE is defined.
-> 
-> Override the function to use architecture implementation to
-> fix the problem.
-> 
-> Cc: stable@vger.kernel.org
-> Fixes: 4bfb53e7d317 ("mips: add <asm-generic/io.h> including")
-> Reported-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-> Closes: https://lore.kernel.org/r/99f75c66-4c2d-45dc-a808-b5ba440c7551@app.fastmail.com/
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
-> This is a quick fix for fixes tree and stable backporting.
-> In long term, we should get logic_pio accept fixed mapping,
-> and make PCI core code aware of platforms not using vmap
-> for PCI_IOBASE.
 
-Why not do the real work now.  Don't worry about stable kernels, fix it
-properly.
 
-thanks,
+=E5=9C=A82025=E5=B9=B41=E6=9C=8814=E6=97=A5=E4=B8=80=E6=9C=88 =E4=B8=8B=E5=
+=8D=886:42=EF=BC=8CMateusz Jo=C5=84czyk=E5=86=99=E9=81=93=EF=BC=9A
+[...]
+>
+> Hello,
+>
+> Thank you for this patch, I'm testing it right now.
+>
+> Shouldn't this be #ifndef-ed CONFIG_MACH_LOONGSON64 and perhaps=20
+> CONFIG_RALINK?
 
-greg k-h
+Hi Mateusz,
+
+Those platforms are not using PCI_DRIVERS_LEGACY, so won't be affected
+by this patch.
+
+PCI_DRIVERS_GENERIC systems are handling logic_pio properly, so no need
+for this workaround.
+
+Thanks
+>
+> Loongson64 explicitly calls logic_pio_register_range(), so seems not t=
+o=20
+> need this. Ralink also
+> defined PCI_IOBASE a long time ago.
+>
+> Greetings,
+>
+> Mateusz
+
+--=20
+- Jiaxun
 
