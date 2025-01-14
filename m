@@ -1,124 +1,151 @@
-Return-Path: <linux-mips+bounces-7449-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7450-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5070EA110DC
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jan 2025 20:10:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 76B22A1110A
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jan 2025 20:20:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 047133A03F9
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jan 2025 19:10:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 86531168BDF
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jan 2025 19:20:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 192BC1FA8DE;
-	Tue, 14 Jan 2025 19:10:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 955501FA14A;
+	Tue, 14 Jan 2025 19:20:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="pPSLPGZw";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="vLapo5pt"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AC371B85FA;
-	Tue, 14 Jan 2025 19:10:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from fout-a1-smtp.messagingengine.com (fout-a1-smtp.messagingengine.com [103.168.172.144])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A1481E495;
+	Tue, 14 Jan 2025 19:20:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736881839; cv=none; b=mTy/cYu/bJTqz4npTrdIlsNO95RzkOdY8sutkutGnBGxd3OJlEjHj+77U+R7ikpgrFOapKwUaN9LNILaAhP7jR7Z8jCfiaYexsYMwEfSzvp7747MVrzprxYZXER6DX5i8kcC96473Obp3lCignfwdSFvwtrFGYGhP1rbepUh4Fs=
+	t=1736882431; cv=none; b=mmjtsbduNbHGLpJqtl9RAiV5NChkLCNDcHaAF1VJ7GUEo+D0cBqOP6Bh24iI140aFGxTt/1LMNsQ+qVQO3kHMJwdGyL8UEgsc6diQPTNiSBRaNAee5gDjehfEAwrTJt6S/Zkpgjo0jsDD37Fxr5mINNp+2+Teggyvkz5y2+24Uo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736881839; c=relaxed/simple;
-	bh=r2ye69cdwNDbsX3S2TzJaJ3k24emtxeCPGVD/kKC9YY=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=hfUC3F7tHMO3piVXaWoDduf4FF4egMgRytdnww5+dRThOBTsiagMRjYY1/TkpuDT62+S4jbwIn73o1eBlVNzh+y6GsvOvapIm6lKkXtixX0+QVfTgAJ3oF3z4tEu6Tada7PaNF3oFCfJoR1OXlQ4eURGSRQCIUUb7JcTvf47G+4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id E09EC92009C; Tue, 14 Jan 2025 20:10:34 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id DA84C92009B;
-	Tue, 14 Jan 2025 19:10:34 +0000 (GMT)
-Date: Tue, 14 Jan 2025 19:10:34 +0000 (GMT)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Arnd Bergmann <arnd@arndb.de>
-cc: Geert Uytterhoeven <geert@linux-m68k.org>, 
-    Jiaxun Yang <jiaxun.yang@flygoat.com>, 
-    =?UTF-8?Q?Mateusz_Jo=C5=84czyk?= <mat.jonczyk@o2.pl>, 
-    "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, 
-    Linux-Arch <linux-arch@vger.kernel.org>, linux-kernel@vger.kernel.org, 
-    Baoquan He <bhe@redhat.com>, 
-    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-    Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-    regressions@lists.linux.dev
-Subject: Re: [REGRESSION] mipsel: no RTC CMOS on the Malta platform in QEMU
-In-Reply-To: <13d0c3f1-7e6b-4f25-ae00-9e41a15ec36c@app.fastmail.com>
-Message-ID: <alpine.DEB.2.21.2501141707380.50458@angie.orcam.me.uk>
-References: <90b5b76d-25b6-4cdc-91ed-07ac930dc519@o2.pl> <99f75c66-4c2d-45dc-a808-b5ba440c7551@app.fastmail.com> <CAMuHMdXbuRLgDP2JtmdhnJF=AhpPa88356KU1yF1f8GMirWrcQ@mail.gmail.com> <08fe1ebb-b9c4-46c7-a6ab-5a336ec3b771@app.fastmail.com>
- <alpine.DEB.2.21.2501141605550.50458@angie.orcam.me.uk> <13d0c3f1-7e6b-4f25-ae00-9e41a15ec36c@app.fastmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1736882431; c=relaxed/simple;
+	bh=kZRBKpHdQX1zFPZVOWGK1gU9ZS8qndaTw8JFbZYANAs=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=HhoqK41HWFWoPGFA99pdQgIFnTbz35k5rhNU2jSlXatF7zl3WpXfw2IFOh1ucamfRKLppuVPu6hNTMHlDaf7oK0PbzEuMMmejUEiEHTwl7hoNLCSi8MbtZrU5D3y4+OpS/zx/PuMgZiPaJ4FfTAR1BKX3WSP08I5xa88oZ2QCKA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=pPSLPGZw; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=vLapo5pt; arc=none smtp.client-ip=103.168.172.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
+	by mailfout.phl.internal (Postfix) with ESMTP id 9B4BC13802A3;
+	Tue, 14 Jan 2025 14:20:28 -0500 (EST)
+Received: from phl-imap-12 ([10.202.2.86])
+  by phl-compute-09.internal (MEProxy); Tue, 14 Jan 2025 14:20:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1736882428;
+	 x=1736968828; bh=pPgwFjXpd7GFlw2n/9FPXAtr2bxArsjbYMjfJ456tT8=; b=
+	pPSLPGZwHpxO/H07gwezVe0mU2FDjOe1uLCw7dh+/Pq2P7ui5kBJYsrf4ug7/iAr
+	3GW05CKJwfc4ji6r5E4G4s0YT3jhCTabX60y1x3e0SxAMtcLZc/y96mJslpDN2x4
+	i00C0ABRMD5ruL882Lecm0zANWnrGhNoAFwaJXHhbTCpwF0ysHpHq0aizgYAntBF
+	/WipoVHWjwr9XGTkklbYv5QghM5dLPm1Xy5pP4HCX+DcyjpdYeuvqOJVJLX4NUwh
+	rM8cVmPuh9IoLfQcaTHZzoIRT0FOesGgfjVO3ijndJufvFhsrCLhje8PMcB8S0Ww
+	x1PBeAMvbtU+fMaWN7veQg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1736882428; x=
+	1736968828; bh=pPgwFjXpd7GFlw2n/9FPXAtr2bxArsjbYMjfJ456tT8=; b=v
+	Lapo5ptdtv8dP+T9gFhhXpDyzuHyNz28F3ElXAzWCNhrM9aDhQq47CTsdjNvWkRF
+	8sq5mNNnGBknZyXnSsKOTyKAUVUuec0V76c0d+jVHWCs7opZtlM7FZK5xDGKWrJr
+	V9YiPFN9F0WAMrJy4XMRSOK/HaiG6PPnXASqHM2qEZeizZyMwhF5do/RRhxfPp7K
+	37BwBku0HJteA72FpJeCMR1YXqD07Z5HjCvhTVVDPb6+l05jy8ak2SK3DvP04S+2
+	H+8s+356ef7eLsIIT+23NqAF3BpwqEhSBRfaFraRU0QoHczJH8vRw2hunhf9cveN
+	XOq90TuQgtKP64EdPU1lA==
+X-ME-Sender: <xms:_LiGZ2yuJAKUo1DcA-1nFFd1sez-PlKpafy26lxzRVVVRoccdDJkvw>
+    <xme:_LiGZyRo2ZmWviyWNDMmWrsauKs5zIPzXPLgv51J7Wce66fBkBJXswpa3X3sCwOLM
+    EIQAsRC1s3FMwqB6sM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudehiedguddvvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthhqredtredt
+    jeenucfhrhhomhepfdflihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgse
+    hflhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpeejheefuddvtdfggfdvffek
+    teehhfelgfdvvedvkeeuffefkeehheegvefhveetjeenucevlhhushhtvghrufhiiigvpe
+    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghho
+    rghtrdgtohhmpdhnsggprhgtphhtthhopeejpdhmohguvgepshhmthhpohhuthdprhgtph
+    htthhopehtshgsohhgvghnugesrghlphhhrgdrfhhrrghnkhgvnhdruggvpdhrtghpthht
+    oheprghrnhgusegrrhhnuggsrdguvgdprhgtphhtthhopehmrghtrdhjohhntgiihihkse
+    hovddrphhlpdhrtghpthhtohepsghhvgesrhgvughhrghtrdgtohhmpdhrtghpthhtohep
+    lhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoh
+    eplhhinhhugidqmhhiphhssehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
+    shhtrggslhgvsehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:_LiGZ4UHsgVutYrAyAR8At3c9Q5TgpCLqaKJpsXsG7F7862d4RNEzQ>
+    <xmx:_LiGZ8gdDumUbujWOVU3Rf6Ufygun_s1ImN_yW3uYEEtF1hGjE_1LQ>
+    <xmx:_LiGZ4AiaAopLgUtVWyQonMIBdr2psYdL7aggoAB3nGJdw7dtSsSLQ>
+    <xmx:_LiGZ9JMPEy0r2abOR01rrM_6dELvRyPq1hKPTJqWqfRAsBQ8LLqQw>
+    <xmx:_LiGZ62GCgm3WOlYY2P7PFZvGe3euKI0B8vSf_hEBfhTaI8rjXd3Ou2_>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 504431C20067; Tue, 14 Jan 2025 14:20:28 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Date: Tue, 14 Jan 2025 19:20:09 +0000
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Arnd Bergmann" <arnd@arndb.de>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Baoquan He" <bhe@redhat.com>
+Cc: "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ linux-kernel@vger.kernel.org,
+ "stable@vger.kernel.org" <stable@vger.kernel.org>,
+ =?UTF-8?Q?Mateusz_Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+Message-Id: <fb3aa671-45bc-4d57-b90b-2056eeed0ea6@app.fastmail.com>
+In-Reply-To: <5ef27e01-2c5a-400a-be32-d3bcdeea6d26@app.fastmail.com>
+References: <20250114-malta-io-fixes-v1-1-74ef1dc402ec@flygoat.com>
+ <5ef27e01-2c5a-400a-be32-d3bcdeea6d26@app.fastmail.com>
+Subject: Re: [PATCH] MIPS: pci-legacy: Override pci_address_to_pio
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 14 Jan 2025, Arnd Bergmann wrote:
 
-> >> Yes, I think this would make the most sense, but the ordering
-> >> with the PCI initialization needs to be done carefully,
-> >> to ensure that PCI_IOBASE has its final value before the first
-> >> call to pci_remap_iospace().
-> >
-> >  Is defining PCI_IOBASE going to do the right thing for non-PCI MIPS 
-> > platforms, or should the definition be #ifdef CONFIG_PCI rather than 
-> > unconditional?  FWIW I think all PCI MIPS platforms support port I/O.
-> 
-> PCI_IOBASE should be defined whenever CONFIG_HAS_IOPORT is set.
 
- Right, this will be more correctly scoped, so #ifdef CONFIG_HAS_IOPORT 
-then.
+=E5=9C=A82025=E5=B9=B41=E6=9C=8814=E6=97=A5=E4=B8=80=E6=9C=88 =E4=B8=8B=E5=
+=8D=887:03=EF=BC=8CArnd Bergmann=E5=86=99=E9=81=93=EF=BC=9A
+> On Tue, Jan 14, 2025, at 19:11, Jiaxun Yang wrote:
+>>=20
+>> +unsigned long pci_address_to_pio(phys_addr_t address)
+>> +{
+>> +	if (address > IO_SPACE_LIMIT)
+>> +		return (unsigned long)-1;
+>> +
+>> +	return (unsigned long) address;
+>> +}
+>> +
+>>  /*
+>
+> Isn't the argument to this function a CPU physical address? I
+> don't think there is a point comparing it to IO_SPACE_LIMIT
+> on architectures where I/O space is memory mapped.
 
-> Ideally that should allow using the generic inb/outb and
-> ioread/iowrite helpers from include/asm-generic/io.h, but
-> unfortunately those don't support the address swizzling required
-> on SGI and Octeon platforms.
+Actually not. It seems like the argument here is just raw PIO offset,
+without applying mips_io_port_base.
 
- Address swizzling should be generic: for an endianness boundary crossing 
-depending on its wiring there's always either a byte-lane or a bit-lane 
-matching policy (of course both may be implemented in the same system via 
-different mapping windows, such as with the Broadcom SiByte BCM1250 SoC 
-though we only use one in Linux, or with some kind of a bus configuration 
-register) and either byte swapping or address swizzling is required 
-accordingly for the relevant use cases.  But I guess for just a bunch of 
-systems that implement the bit-lane matching policy there's little 
-incentive for complicating the generic helpers.
+We should validate it to ensure it's within the range specified by
+mips_io_port_base (which is sized by IO_SPACE_LIMIT).
 
-> These platforms look like they currently set a NULL pointer
-> as the I/O port base:
-> 
-> arch/mips/alchemy/common/setup.c:       set_io_port_base(0);
-> arch/mips/ath79/setup.c:        set_io_port_base(KSEG1);
-> arch/mips/bcm63xx/setup.c:      set_io_port_base(0);
-> arch/mips/bmips/setup.c:        set_io_port_base(0);
-> arch/mips/lantiq/prom.c:        set_io_port_base((unsigned long) KSEG1);
-> 
-> At least some of these, possibly all, also have a PCI or PCMCIA
-> host controller driver that sets a different value later
-> when that bus is probed.
+Thanks
+>
+> I see that you copied the above from the the non-PCI_IOBASE case
+> of drivers/pci/pci.c, but that only really makes sense for
+> architectures that have special port I/O instructions (x86,
+> ia64) or that use logic_pio.
+>
+>       Arnd
 
-$ grep set_io_port_base arch/mips/pci/*
-
-reveals some, i.e. alchemy, and bmips I believe uses the generic handler.  
-Other ones may not support port I/O after all, especially where the 
-platform in question is meant to be used in PCI device mode.
-
-> I don't see any I/O space getting set up for ath25, dec, ingenic,
-> loongson32, pic32, eyeq, nintendo64, and realtek-rtl. It looks to
-> me like any I/O port access on these turns into a misaligned NULL
-> pointer dereference, but there is a good chance I'm missing how
-> it gets set up there.
-
- There's no PCI with the dec platform (i.e. either no I/O bus at all or 
-TURBOchannel), so the PCI I/O space is irrelevant, and obviously the MIPS 
-architecture has no native I/O space.  I don't know about the other ones, 
-but I supppose at least some of them could be SoCs or systems with no PCI 
-either.
-
-  Maciej
+--=20
+- Jiaxun
 
