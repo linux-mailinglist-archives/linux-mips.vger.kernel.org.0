@@ -1,92 +1,94 @@
-Return-Path: <linux-mips+bounces-7446-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7447-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 890EFA1107F
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jan 2025 19:51:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6432DA11089
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jan 2025 19:56:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1343C3A5CCA
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jan 2025 18:51:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C1D81887206
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jan 2025 18:56:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F03D31FBBC5;
-	Tue, 14 Jan 2025 18:51:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD1C01FBC8A;
+	Tue, 14 Jan 2025 18:56:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="vdWQ5sxL";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="pz/BH6xB"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="YQxkEXKT";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="d7dMxaCe"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EF351B21AD;
-	Tue, 14 Jan 2025 18:51:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04B881FA8DE;
+	Tue, 14 Jan 2025 18:56:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736880684; cv=none; b=h7QJA/ELXxuTGlnHa6Y1c57grQtSYwnnZv/pwvEgNhPpEwx10ax5KRC7fc0CnEdhZOENeGvvMc9lAvbNMEhv95tEYwWL9/nuwsH5dmoxWS0vlTNtZidgIkm1rZM0lI2NOsTUvx4l817iGeQ8RlF4nlsYhKrFiI3QQrxAuwyv7OU=
+	t=1736880976; cv=none; b=Wv4g0rpnMS5X9Yk42QRGB6exZ2+dYKIgx8ChZRmmBdWkCBRdEbp4azwP+ZgEbo7v+SOw6/w06UQN/ryVTAlFAK0ZyypyNlhwF98bJVZYefd428J/mpupcYLjsJ3BGCcwyfe3QHsxfaA7qyAasPs5A3DsCCF4k8mD1Fk/KzSTwfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736880684; c=relaxed/simple;
-	bh=tgNjXSfJZZXt0y/ddetLU6Vx/9hH6IFbQHS06fJyvAs=;
+	s=arc-20240116; t=1736880976; c=relaxed/simple;
+	bh=sryMc1/odiijiFjmySjacbNnYwGd1t/SJgxvfx2Xmlo=;
 	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=CFx1T497rGXGB36HAy3aKe5mwx8Rq6MkOfKLAfsUbRBcc4ti7BRQP2tQV9IM9uha+b2YuoKkTo5igjScEU0ErJvAXXyjNcrRCsC/JAJc7TEsO0BXqS7U2f0FtsQsoVRjpZ+Sot0t78hypCH6xqERKdgJLFV5o7EhDsRaNSwmIMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=vdWQ5sxL; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=pz/BH6xB; arc=none smtp.client-ip=103.168.172.156
+	 Subject:Content-Type; b=u4In/O1qlXpWWn/kVjgphTrPq5VXbIYlJ/w+WiVjqbSJxsy5Bb/EV7WEYKYW3fSMYiCvzwn1Y+B50itXPdcnFVze21I5NJ8/yaSvX+gsdh6SSMW+cSs9wL8tz5KqS6LHm8eaez9y+tYhKq/rr3w9k5NYbit4eZrdNi0XGr/5jm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=YQxkEXKT; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=d7dMxaCe; arc=none smtp.client-ip=103.168.172.156
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
 Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 168B911401FF;
-	Tue, 14 Jan 2025 13:51:22 -0500 (EST)
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 2BE861140214;
+	Tue, 14 Jan 2025 13:56:13 -0500 (EST)
 Received: from phl-imap-12 ([10.202.2.86])
-  by phl-compute-09.internal (MEProxy); Tue, 14 Jan 2025 13:51:22 -0500
+  by phl-compute-09.internal (MEProxy); Tue, 14 Jan 2025 13:56:13 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
 	cc:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1736880682;
-	 x=1736967082; bh=tgNjXSfJZZXt0y/ddetLU6Vx/9hH6IFbQHS06fJyvAs=; b=
-	vdWQ5sxLoPHcKmk5Zypii9xdfdEZQVunn7b2b8wA/Sel9IgMHLiX0hYgnfGKKxQq
-	bkdSI4aSSNxq8t/rPRyqhcruT2RrXPdZ2Cm2DMwalVXaI0S6osoqt2M87KREtMOI
-	+8FZRtcXK8vzHjp2Vcof1B9XQXPMtPziwgmFnXdWKYs3vknBZHN56zEUBNZViohh
-	zvJjlU2HFRGRCgqvlmWit1u7BU1TRb68cYIbuMAHLARrCihLoywVmCr+0p032cDo
-	NMjgH7ThJyyzMx4Wl8njUAkJsC2FBUMsaA8S1+Lz3/Fz0eF21y1wA3pkoJWO/7zJ
-	+SleihWOn+crBqo9mz0fXg==
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1736880973;
+	 x=1736967373; bh=sfOwtkEr60lvj7i8fxk0VyRDF5MitfefAC4m/DiGyuc=; b=
+	YQxkEXKTIPbD8b46EhZTI4NP6RNTJwbB0q0jQJRhCp4ZUqw1PTOVPTZs3MvjZxyX
+	Fr4949VHpNgE353gWJALBszecJ6PeYtPBgcp3aU3GsBCDxfpJ6Anw9r0ZR3k5f+r
+	CIxiwMJp+VhZI5R8RRmRserpfvSFOwX49FczBa3zSsg/wu0CuQM/D7IflBNqg9D0
+	quil5J+vzMCgb16pc8+iOjiF35its7D5r4aifb2oufnTzuGE5t0FWXIpzOBodWtM
+	A4uL0xrfwX1J9YSRv3JPT88NWyI/ozSzcBuNtExzgC5qERTUPZAA/7S9qxXh7WTw
+	ii5Ft2aq6jdcaYx9Prl+fg==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1736880682; x=
-	1736967082; bh=tgNjXSfJZZXt0y/ddetLU6Vx/9hH6IFbQHS06fJyvAs=; b=p
-	z/BH6xB7W/yRwmBpxVtHxbvVCv+THWqpIoxgy4xQqzS3hF2TR9rb7Zcc3IDRotrP
-	9WGEQEee3ENhLAVcU0Vxgv9Zi8zBBTGeNWe8tn7YbKUxOVNG2yc93RgvB7iB7gWZ
-	uPrbWHLGnoDWcbzjpF9fM011VymFLwApOfFOafY6+I7szz6LaSIBh4uDaFbT+J6d
-	+h/7lsPGcZRX7vGOoGjf6gqVOoUhVgakwwmn9/39u8KCfpuKJVLEezCLPVv2eI3k
-	o6vHi6ULbU3lMflwdQ27a3/Qm4/wxqQkd1qtMkw+6UJJWqYvnDWetOAk2ejleUue
-	9e/aBbkO7koZDPFxC67oA==
-X-ME-Sender: <xms:KbKGZzr9FW9Lchwso7bxP5Qm25AkjO68N1q6uJl_wDl2ksDKL2hl8w>
-    <xme:KbKGZ9oJTRNGMIZv7lG7xoY66qNpIPi9qpSXYxoi1_Fy33EL07yg3D5WSL6_mYQ5U
-    mwLuO8d2Zzbu2lTRM0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudehiedguddujecutefuodetggdotefrod
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1736880973; x=
+	1736967373; bh=sfOwtkEr60lvj7i8fxk0VyRDF5MitfefAC4m/DiGyuc=; b=d
+	7dMxaCep49mDrsNFYZRq5OG8vSLxgstIo8s3fg92YMuU+2ql1quyzGmqZxc+X0dv
+	chPdfz2+LWPEa0s114j9EMU4ZgfQjovIeL7bQKmYqqKRaCuHOMIh0U5xh6Pba+14
+	pno9w5up10rfM/qUPGY2ybZMaUTc2mTYCHsNBwQ1CKO2XmBC03au37R7zp0ElCxx
+	Y1xO7XmmjFbhDfVdEcoetxnp0wpnN14JZVoClF/M2qGuL+AZ7jCaUTAXXgq4dytA
+	jU1CSG257AOaQoLUTi7p29lbqFKKXU1+NflXlvyFNH7BV9LLZLbAJCWAqvXBgae8
+	f4dXnWPUQwT6gq9s7xjJQ==
+X-ME-Sender: <xms:TbOGZ5MIMMcRsj10u2d9fbNOmK3LK-lQnMDdy7sFkl1gPj9a7OL0Hg>
+    <xme:TbOGZ7_UoaD9DPAgm2xBMKj8hh97sqRoUTOE5ITJxP5XRcIYheJfDxIJtFF5TsJRs
+    kv32RfyCcRsCjOJUPc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudehiedguddukecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
     uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
     hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthhqredtredt
     jeenucfhrhhomhepfdflihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgse
-    hflhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpeejheefuddvtdfggfdvffek
-    teehhfelgfdvvedvkeeuffefkeehheegvefhveetjeenucevlhhushhtvghrufhiiigvpe
-    dtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhihghho
-    rghtrdgtohhmpdhnsggprhgtphhtthhopeejpdhmohguvgepshhmthhpohhuthdprhgtph
-    htthhopehtshgsohhgvghnugesrghlphhhrgdrfhhrrghnkhgvnhdruggvpdhrtghpthht
-    oheprghrnhgusegrrhhnuggsrdguvgdprhgtphhtthhopehmrghtrdhjohhntgiihihkse
-    hovddrphhlpdhrtghpthhtohepsghhvgesrhgvughhrghtrdgtohhmpdhrtghpthhtohep
-    lhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoh
-    eplhhinhhugidqmhhiphhssehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
-    shhtrggslhgvsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:KbKGZwNm_4bbPkWMiE9ZoA6u6QZ1ZsxO2_LI3KyQlHqXrjZPtXgpsg>
-    <xmx:KbKGZ26NDNozuMhkrQxVor9r7nFncVEqFyduzQCl09COmbuuG-NZSw>
-    <xmx:KbKGZy7QFCAEqf0jQ8hkID0jovd8SETefKq0JQG1h_fblYhP7ihwtA>
-    <xmx:KbKGZ-iTNKuvfxkXy2HaK8gGqp-hTxbYnFNenjf9XjuvFpXUMR_ldg>
-    <xmx:KrKGZ_skRYrv1AgFJWnKoRDXQ7FUJAqIujGHoVZtLL7vpb_ZjAGzrOmk>
+    hflhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpeffkeevtedtueevfefhkefh
+    udfggeetjeffjeduueehueejgfeludevkedutdeuheenucffohhmrghinhepkhgvrhhnvg
+    hlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhho
+    mhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomhdpnhgspghrtghpthhtoh
+    epkedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepthhssghoghgvnhgusegrlhhp
+    hhgrrdhfrhgrnhhkvghnrdguvgdprhgtphhtthhopegrrhhnugesrghrnhgusgdruggvpd
+    hrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhr
+    tghpthhtohepmhgrthdrjhhonhgtiiihkhesohdvrdhplhdprhgtphhtthhopegshhgvse
+    hrvgguhhgrthdrtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghr
+    rdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhmihhpshesvhhgvghrrd
+    hkvghrnhgvlhdrohhrghdprhgtphhtthhopehsthgrsghlvgesvhhgvghrrdhkvghrnhgv
+    lhdrohhrgh
+X-ME-Proxy: <xmx:TbOGZ4SHf4Mn5J6Bflmy4CCGDCNNwJ0ihT7K5OSCQNQiFgyiku_L3A>
+    <xmx:TbOGZ1u3oDuNfvdBq8zAV3hUGFog57IOI44_IwtabZKA7qJfBZsFsw>
+    <xmx:TbOGZxeYUfaR7WRLkdQE9WueDUbKj7gqKRATEJrR99QsKSAyxPA3Rw>
+    <xmx:TbOGZx0IfdcZ1nqltUHlaxh-gvY4trJ_y4PMDKXSGTjv1AnYN07zcg>
+    <xmx:TbOGZ7sMtgVh2Wd5BBS7-iej3L4yBsjcpfRDjGI48z97djN-sScjuIi5>
 Feedback-ID: ifd894703:Fastmail
 Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 98FB81C20066; Tue, 14 Jan 2025 13:51:21 -0500 (EST)
+	id E8E3E1C20066; Tue, 14 Jan 2025 13:56:12 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -94,18 +96,19 @@ List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 14 Jan 2025 18:51:02 +0000
+Date: Tue, 14 Jan 2025 18:55:53 +0000
 From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: =?UTF-8?Q?Mateusz_Jo=C5=84czyk?= <mat.jonczyk@o2.pl>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Arnd Bergmann" <arnd@arndb.de>, "Baoquan He" <bhe@redhat.com>
-Cc: "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
+Cc: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Arnd Bergmann" <arnd@arndb.de>, "Baoquan He" <bhe@redhat.com>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
  linux-kernel@vger.kernel.org,
- "stable@vger.kernel.org" <stable@vger.kernel.org>
-Message-Id: <28d6ed91-a5de-4a0d-8e76-9e79375a9db3@app.fastmail.com>
-In-Reply-To: <6946ae6b-814c-4916-9428-e823c83aed3d@o2.pl>
+ "stable@vger.kernel.org" <stable@vger.kernel.org>,
+ =?UTF-8?Q?Mateusz_Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+Message-Id: <7fdfbadf-3ed9-4b95-84cc-418cbc9e1997@app.fastmail.com>
+In-Reply-To: <2025011441-mountable-glitch-da1b@gregkh>
 References: <20250114-malta-io-fixes-v1-1-74ef1dc402ec@flygoat.com>
- <6946ae6b-814c-4916-9428-e823c83aed3d@o2.pl>
+ <2025011441-mountable-glitch-da1b@gregkh>
 Subject: Re: [PATCH] MIPS: pci-legacy: Override pci_address_to_pio
 Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
@@ -113,34 +116,43 @@ Content-Transfer-Encoding: quoted-printable
 
 
 =E5=9C=A82025=E5=B9=B41=E6=9C=8814=E6=97=A5=E4=B8=80=E6=9C=88 =E4=B8=8B=E5=
-=8D=886:42=EF=BC=8CMateusz Jo=C5=84czyk=E5=86=99=E9=81=93=EF=BC=9A
-[...]
+=8D=886:46=EF=BC=8CGreg KH=E5=86=99=E9=81=93=EF=BC=9A
+> On Tue, Jan 14, 2025 at 06:11:58PM +0000, Jiaxun Yang wrote:
+>> pci-legacy systems are not using logic_pio to managed PIO
+>> allocations, thus the generic pci_address_to_pio won't work
+>> when PCI_IOBASE is defined.
+>>=20
+>> Override the function to use architecture implementation to
+>> fix the problem.
+>>=20
+>> Cc: stable@vger.kernel.org
+>> Fixes: 4bfb53e7d317 ("mips: add <asm-generic/io.h> including")
+>> Reported-by: Mateusz Jo=C5=84czyk <mat.jonczyk@o2.pl>
+>> Closes: https://lore.kernel.org/r/99f75c66-4c2d-45dc-a808-b5ba440c755=
+1@app.fastmail.com/
+>> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>> ---
+>> This is a quick fix for fixes tree and stable backporting.
+>> In long term, we should get logic_pio accept fixed mapping,
+>> and make PCI core code aware of platforms not using vmap
+>> for PCI_IOBASE.
 >
-> Hello,
->
-> Thank you for this patch, I'm testing it right now.
->
-> Shouldn't this be #ifndef-ed CONFIG_MACH_LOONGSON64 and perhaps=20
-> CONFIG_RALINK?
+> Why not do the real work now.  Don't worry about stable kernels, fix it
+> properly.
 
-Hi Mateusz,
+:-( Sadly the long-term solution is going to be a huge effort across
+architectures, and I'm not even sure if people will agree with my approa=
+ch.
+So I'd prefer get this fix applied first and kick up discussions on a
+long-term solution.=20
 
-Those platforms are not using PCI_DRIVERS_LEGACY, so won't be affected
-by this patch.
-
-PCI_DRIVERS_GENERIC systems are handling logic_pio properly, so no need
-for this workaround.
+Will post RFC shortly.=20
 
 Thanks
 >
-> Loongson64 explicitly calls logic_pio_register_range(), so seems not t=
-o=20
-> need this. Ralink also
-> defined PCI_IOBASE a long time ago.
+> thanks,
 >
-> Greetings,
->
-> Mateusz
+> greg k-h
 
 --=20
 - Jiaxun
