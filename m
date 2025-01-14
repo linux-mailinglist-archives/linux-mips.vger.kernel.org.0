@@ -1,94 +1,92 @@
-Return-Path: <linux-mips+bounces-7447-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7448-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6432DA11089
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jan 2025 19:56:22 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6D59A110B0
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jan 2025 20:03:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C1D81887206
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Jan 2025 18:56:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0EFB07A2DE5
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Jan 2025 19:03:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD1C01FBC8A;
-	Tue, 14 Jan 2025 18:56:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE7D71C07DC;
+	Tue, 14 Jan 2025 19:03:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="YQxkEXKT";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="d7dMxaCe"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="8i+QxXZz";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="pxlpCv63"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fhigh-a5-smtp.messagingengine.com (fhigh-a5-smtp.messagingengine.com [103.168.172.156])
+Received: from fout-b5-smtp.messagingengine.com (fout-b5-smtp.messagingengine.com [202.12.124.148])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 04B881FA8DE;
-	Tue, 14 Jan 2025 18:56:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D12751B85FA;
+	Tue, 14 Jan 2025 19:03:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736880976; cv=none; b=Wv4g0rpnMS5X9Yk42QRGB6exZ2+dYKIgx8ChZRmmBdWkCBRdEbp4azwP+ZgEbo7v+SOw6/w06UQN/ryVTAlFAK0ZyypyNlhwF98bJVZYefd428J/mpupcYLjsJ3BGCcwyfe3QHsxfaA7qyAasPs5A3DsCCF4k8mD1Fk/KzSTwfY=
+	t=1736881417; cv=none; b=fTInD+SGcNr1ooahJy5PpF45Vqpqjb6ni3M0l+bXyA2H8/c2WM7mvk9/4MyL5JuOuydwcw4o1G1unLV1qm1bPnpfQGvsdwE+m4SO2Dlpy16/fUFWPFeBk0bk33lj6dZRVS+JYkAtfS39dcJkfFMaRUel3M2UvFz6j21hvWhyi/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736880976; c=relaxed/simple;
-	bh=sryMc1/odiijiFjmySjacbNnYwGd1t/SJgxvfx2Xmlo=;
+	s=arc-20240116; t=1736881417; c=relaxed/simple;
+	bh=NMOAE+XTrHT0Fb3RXjtVahrnpUUJh1ohvcdtz1NvNeg=;
 	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=u4In/O1qlXpWWn/kVjgphTrPq5VXbIYlJ/w+WiVjqbSJxsy5Bb/EV7WEYKYW3fSMYiCvzwn1Y+B50itXPdcnFVze21I5NJ8/yaSvX+gsdh6SSMW+cSs9wL8tz5KqS6LHm8eaez9y+tYhKq/rr3w9k5NYbit4eZrdNi0XGr/5jm0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=YQxkEXKT; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=d7dMxaCe; arc=none smtp.client-ip=103.168.172.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 2BE861140214;
-	Tue, 14 Jan 2025 13:56:13 -0500 (EST)
-Received: from phl-imap-12 ([10.202.2.86])
-  by phl-compute-09.internal (MEProxy); Tue, 14 Jan 2025 13:56:13 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
+	 Subject:Content-Type; b=XY6bBAT41Z54NXQV88rVy8ACag+ebVX6p/s5QTia3dL2J7KI3u/PnxBGL8NFME++Uqu3ow03D3f2woMGAYpRMIUTGZlWc+ChlHYUm1QNitinEsGVCETvN7YnLvU974B/Rn3UZO6GLGvMj/d+3yzmWlX2B935eX33jcGNTDR8Q8U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=8i+QxXZz; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=pxlpCv63; arc=none smtp.client-ip=202.12.124.148
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfout.stl.internal (Postfix) with ESMTP id AE51D1140099;
+	Tue, 14 Jan 2025 14:03:33 -0500 (EST)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-10.internal (MEProxy); Tue, 14 Jan 2025 14:03:33 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1736880973;
-	 x=1736967373; bh=sfOwtkEr60lvj7i8fxk0VyRDF5MitfefAC4m/DiGyuc=; b=
-	YQxkEXKTIPbD8b46EhZTI4NP6RNTJwbB0q0jQJRhCp4ZUqw1PTOVPTZs3MvjZxyX
-	Fr4949VHpNgE353gWJALBszecJ6PeYtPBgcp3aU3GsBCDxfpJ6Anw9r0ZR3k5f+r
-	CIxiwMJp+VhZI5R8RRmRserpfvSFOwX49FczBa3zSsg/wu0CuQM/D7IflBNqg9D0
-	quil5J+vzMCgb16pc8+iOjiF35its7D5r4aifb2oufnTzuGE5t0FWXIpzOBodWtM
-	A4uL0xrfwX1J9YSRv3JPT88NWyI/ozSzcBuNtExzgC5qERTUPZAA/7S9qxXh7WTw
-	ii5Ft2aq6jdcaYx9Prl+fg==
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1736881413;
+	 x=1736967813; bh=MVfw8sweruAkXHon45bPN6yehLWpW4KW/lAmzafe/Xw=; b=
+	8i+QxXZzo9TCh9Pki4DZszIdB6bxovg+VDb1fgO32EYgrx4VazOWvpUFC0BTLihp
+	aTU1DXg1WEKmOOTwDNW2C1+GYAWssV7LF63MJGoeo9vPjUmBbzEoXxNFTYK0JWQP
+	bBk8tTU77jiH3Tv2KIMPKMgax9NJJqbrKwlqme/jAaJ1YMJUCnBAa1f+tDNCFFFM
+	1W3jTUiFk9y2pdFziU2/jQfyw/j0jSv3I3PiJAIDdM+coNpFIDZOII6+YolJH0fY
+	0GTZM+WRtYxdf5oRaE/TFKHC62uEKaCPUYD1iDwwo7Hy2kDA+2mdUj0qrL0LUlBr
+	ru/LEgq9yMHFQblKTt8AFQ==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1736880973; x=
-	1736967373; bh=sfOwtkEr60lvj7i8fxk0VyRDF5MitfefAC4m/DiGyuc=; b=d
-	7dMxaCep49mDrsNFYZRq5OG8vSLxgstIo8s3fg92YMuU+2ql1quyzGmqZxc+X0dv
-	chPdfz2+LWPEa0s114j9EMU4ZgfQjovIeL7bQKmYqqKRaCuHOMIh0U5xh6Pba+14
-	pno9w5up10rfM/qUPGY2ybZMaUTc2mTYCHsNBwQ1CKO2XmBC03au37R7zp0ElCxx
-	Y1xO7XmmjFbhDfVdEcoetxnp0wpnN14JZVoClF/M2qGuL+AZ7jCaUTAXXgq4dytA
-	jU1CSG257AOaQoLUTi7p29lbqFKKXU1+NflXlvyFNH7BV9LLZLbAJCWAqvXBgae8
-	f4dXnWPUQwT6gq9s7xjJQ==
-X-ME-Sender: <xms:TbOGZ5MIMMcRsj10u2d9fbNOmK3LK-lQnMDdy7sFkl1gPj9a7OL0Hg>
-    <xme:TbOGZ7_UoaD9DPAgm2xBMKj8hh97sqRoUTOE5ITJxP5XRcIYheJfDxIJtFF5TsJRs
-    kv32RfyCcRsCjOJUPc>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudehiedguddukecutefuodetggdotefrod
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1736881413; x=
+	1736967813; bh=MVfw8sweruAkXHon45bPN6yehLWpW4KW/lAmzafe/Xw=; b=p
+	xlpCv63RhmHSgq2ePkoHeXn5lXWuwKbrKO1bUSMm/jkbcY3jcjXJQmEkPwYJqwmB
+	zQzub0LWPK+NdBadOy7S+yXdMtvA/Q2Ch4eCLkInf3/z76AvbB78vaLLE6dTcCh5
+	J8Y+5RDrHFdWED1UIQimTDeWrl2WDfHXKQpm/6MEnhHR+ZKtk4nxAscD6wQOHjnz
+	kIf2PSpbfpJMVlsAwZj5DOGMQLj+N6R3tPqbbM84wHW3QSxpoFynOM+z0C7h5jMH
+	YuB5Ls9te1tgPRkZ6ONkZ6YZ9/XKoWuODe12ZUTcKybZFhEYCFMnQkPJhVq2oEz3
+	DZBH3sZ5A6Ae0UVxiLXJg==
+X-ME-Sender: <xms:BLWGZ0TLh7-7hiFOWwLPzfkXNSiMc0CNclITZh8xPK9C-COKIRTveA>
+    <xme:BLWGZxzAFjAQltE7IwM-MdX1eKX0g2RfmwQDGEa9I3WWMZ1th2PYv-5dYrHXSCgm7
+    0h94KfahmZlUu6qEjk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudehiedguddulecutefuodetggdotefrod
     ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
     uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthhqredtredt
-    jeenucfhrhhomhepfdflihgrgihunhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgse
-    hflhihghhorghtrdgtohhmqeenucggtffrrghtthgvrhhnpeffkeevtedtueevfefhkefh
-    udfggeetjeffjeduueehueejgfeludevkedutdeuheenucffohhmrghinhepkhgvrhhnvg
-    hlrdhorhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhho
-    mhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomhdpnhgspghrtghpthhtoh
-    epkedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepthhssghoghgvnhgusegrlhhp
-    hhgrrdhfrhgrnhhkvghnrdguvgdprhgtphhtthhopegrrhhnugesrghrnhgusgdruggvpd
-    hrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhr
-    tghpthhtohepmhgrthdrjhhonhgtiiihkhesohdvrdhplhdprhgtphhtthhopegshhgvse
-    hrvgguhhgrthdrtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghr
-    rdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhmihhpshesvhhgvghrrd
-    hkvghrnhgvlhdrohhrghdprhgtphhtthhopehsthgrsghlvgesvhhgvghrrdhkvghrnhgv
-    lhdrohhrgh
-X-ME-Proxy: <xmx:TbOGZ4SHf4Mn5J6Bflmy4CCGDCNNwJ0ihT7K5OSCQNQiFgyiku_L3A>
-    <xmx:TbOGZ1u3oDuNfvdBq8zAV3hUGFog57IOI44_IwtabZKA7qJfBZsFsw>
-    <xmx:TbOGZxeYUfaR7WRLkdQE9WueDUbKj7gqKRATEJrR99QsKSAyxPA3Rw>
-    <xmx:TbOGZx0IfdcZ1nqltUHlaxh-gvY4trJ_y4PMDKXSGTjv1AnYN07zcg>
-    <xmx:TbOGZ7sMtgVh2Wd5BBS7-iej3L4yBsjcpfRDjGI48z97djN-sScjuIi5>
-Feedback-ID: ifd894703:Fastmail
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
+    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
+    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
+    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopeej
+    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehtshgsohhgvghnugesrghlphhhrg
+    drfhhrrghnkhgvnhdruggvpdhrtghpthhtohepjhhirgiguhhnrdihrghnghesfhhlhihg
+    ohgrthdrtghomhdprhgtphhtthhopehmrghtrdhjohhntgiihihksehovddrphhlpdhrtg
+    hpthhtohepsghhvgesrhgvughhrghtrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgv
+    rhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqmh
+    hiphhssehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhtrggslhgvsehv
+    ghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:BLWGZx1MeUMGMMAfPVm-2a5w5RIZT0FsYvK4RfaLpb8P3wcNEMeLQg>
+    <xmx:BLWGZ4DipkrJQoH4scDMklsxdJzDziyaobRaP-pRj8HfWwEJEOoXyw>
+    <xmx:BLWGZ9g00cIc28VEQ4xHrkM5fQyI59JvLyqupQ38jVpVKI32REy0PA>
+    <xmx:BLWGZ0oslHByfh3P809TO_nu7xHmjdtPeEbBrj7CGAUx9nyjwtcmlA>
+    <xmx:BbWGZ4WJTvfUU9d48PpajejRMruuFgpD8C7Yy6068U_ZeU9wtu9rAyXx>
+Feedback-ID: i56a14606:Fastmail
 Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id E8E3E1C20066; Tue, 14 Jan 2025 13:56:12 -0500 (EST)
+	id B16BF2220072; Tue, 14 Jan 2025 14:03:32 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -96,64 +94,40 @@ List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 14 Jan 2025 18:55:53 +0000
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>
-Cc: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Arnd Bergmann" <arnd@arndb.de>, "Baoquan He" <bhe@redhat.com>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- linux-kernel@vger.kernel.org,
- "stable@vger.kernel.org" <stable@vger.kernel.org>,
- =?UTF-8?Q?Mateusz_Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
-Message-Id: <7fdfbadf-3ed9-4b95-84cc-418cbc9e1997@app.fastmail.com>
-In-Reply-To: <2025011441-mountable-glitch-da1b@gregkh>
+Date: Tue, 14 Jan 2025 20:03:12 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Jiaxun Yang" <jiaxun.yang@flygoat.com>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Baoquan He" <bhe@redhat.com>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org, =?UTF-8?Q?Mateusz_Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+Message-Id: <5ef27e01-2c5a-400a-be32-d3bcdeea6d26@app.fastmail.com>
+In-Reply-To: <20250114-malta-io-fixes-v1-1-74ef1dc402ec@flygoat.com>
 References: <20250114-malta-io-fixes-v1-1-74ef1dc402ec@flygoat.com>
- <2025011441-mountable-glitch-da1b@gregkh>
 Subject: Re: [PATCH] MIPS: pci-legacy: Override pci_address_to_pio
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
+On Tue, Jan 14, 2025, at 19:11, Jiaxun Yang wrote:
+> 
+> +unsigned long pci_address_to_pio(phys_addr_t address)
+> +{
+> +	if (address > IO_SPACE_LIMIT)
+> +		return (unsigned long)-1;
+> +
+> +	return (unsigned long) address;
+> +}
+> +
+>  /*
 
+Isn't the argument to this function a CPU physical address? I
+don't think there is a point comparing it to IO_SPACE_LIMIT
+on architectures where I/O space is memory mapped.
 
-=E5=9C=A82025=E5=B9=B41=E6=9C=8814=E6=97=A5=E4=B8=80=E6=9C=88 =E4=B8=8B=E5=
-=8D=886:46=EF=BC=8CGreg KH=E5=86=99=E9=81=93=EF=BC=9A
-> On Tue, Jan 14, 2025 at 06:11:58PM +0000, Jiaxun Yang wrote:
->> pci-legacy systems are not using logic_pio to managed PIO
->> allocations, thus the generic pci_address_to_pio won't work
->> when PCI_IOBASE is defined.
->>=20
->> Override the function to use architecture implementation to
->> fix the problem.
->>=20
->> Cc: stable@vger.kernel.org
->> Fixes: 4bfb53e7d317 ("mips: add <asm-generic/io.h> including")
->> Reported-by: Mateusz Jo=C5=84czyk <mat.jonczyk@o2.pl>
->> Closes: https://lore.kernel.org/r/99f75c66-4c2d-45dc-a808-b5ba440c755=
-1@app.fastmail.com/
->> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->> ---
->> This is a quick fix for fixes tree and stable backporting.
->> In long term, we should get logic_pio accept fixed mapping,
->> and make PCI core code aware of platforms not using vmap
->> for PCI_IOBASE.
->
-> Why not do the real work now.  Don't worry about stable kernels, fix it
-> properly.
+I see that you copied the above from the the non-PCI_IOBASE case
+of drivers/pci/pci.c, but that only really makes sense for
+architectures that have special port I/O instructions (x86,
+ia64) or that use logic_pio.
 
-:-( Sadly the long-term solution is going to be a huge effort across
-architectures, and I'm not even sure if people will agree with my approa=
-ch.
-So I'd prefer get this fix applied first and kick up discussions on a
-long-term solution.=20
-
-Will post RFC shortly.=20
-
-Thanks
->
-> thanks,
->
-> greg k-h
-
---=20
-- Jiaxun
+      Arnd
 
