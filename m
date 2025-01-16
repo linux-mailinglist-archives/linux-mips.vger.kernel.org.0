@@ -1,101 +1,129 @@
-Return-Path: <linux-mips+bounces-7474-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7475-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8486BA1350C
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Jan 2025 09:14:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9155A13663
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Jan 2025 10:16:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 36CB31882E42
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Jan 2025 08:14:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EFF10167C89
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Jan 2025 09:16:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AF8E1D5CEA;
-	Thu, 16 Jan 2025 08:12:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AF791AAA1D;
+	Thu, 16 Jan 2025 09:16:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="cVzLE1Hh";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="cYfU2YjK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JV4TXkrj"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEE6D19AD8B;
-	Thu, 16 Jan 2025 08:12:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08037139566;
+	Thu, 16 Jan 2025 09:16:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737015129; cv=none; b=Ljj7zDxSIocXCxIS2fFCecC3Wh7F4GvReAb4wNp48QeziNWd1Php3zkhCCcOeaWp9yJ7GFPIvuaLOqsUu1Z1RRTmbSQefvt7YGcmkTmdtty4oLFJhgNirsvXdSwcIbgwkPjMPCCC3IPw9jclG/4RLPXEhTWYEMtNacF2yJkUCIo=
+	t=1737018968; cv=none; b=tQ4VSXXZ/pJBlBZFXHXxCqib0l7DUy493kDUYbGtHE7FWb6ER0HZt/pNv3XLXy48j5sH41L7ouBkQjucNnYoaEH/idqYSfZWD7qDFm9JwDPfe8GjaUFlEK1U9To8fvnOrvmFjxMbVmFg+zD7sxBQdRLH+t4oE/TqvtLcb8Fd15o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737015129; c=relaxed/simple;
-	bh=87DUQAkMQtP6wu7zVv3R8Q8EM514dyATOSBIijElrdQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=ELMRXmnCftLW1sOXas0iosjMh/vBh+qIBPWs1ZBAl4DlEj/+MrVSMzvCBgRSp8SvypO+SOSPlAKxGnSV/hbLS1bsrLuLfuItE++nr3L8D06UGm4pms/33wxkOjMLUg44CdYWhA3sFwaS8f1t0sPR+7ZE23USe1U5n1oVD4Ahz+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=cVzLE1Hh; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=cYfU2YjK; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1737015125;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=AP5V8h9bz4N4y+UufT2Bd637DqN1KpVRAX/7F9z8sMc=;
-	b=cVzLE1Hh6gWDZEJ7GeazV4QKljmFr7aSPP1ZM5v2l6SfYH6z48oOEjlHGWqaLrN7BHeAS4
-	vUhSk8ki3zrxFCgsEjPooHv/kIZwjFfwHlCFDI71QvugzHY6HH5i5CtcIaf/POze3oemPX
-	ImnbtU/x2dabRN4rlhJgKeiQaImkJYnZt+2MdlWO6vnMSiSCaSTLCFP7T9VoqnMKs7dV/T
-	HxP0BJWxw/uBeLFnrEX44l40SsbhE2gqqgF38HopjjGGTbX9P490pEAWNwhLwW1AR42mgl
-	3NYxBgbBsrjlA/LuwKMrXCJKm3dKDIb9m/uZtYmSr3FRAVz6D5pkEcolPIEMPw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1737015125;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=AP5V8h9bz4N4y+UufT2Bd637DqN1KpVRAX/7F9z8sMc=;
-	b=cYfU2YjK4EiPkUKB+SIf376TOC73FmI4Kkle9mwlGMroMpmlm56SN+vz9tPQPXmpZbUgG+
-	sXN9CdZYeD3u4TBQ==
-To: linux@treblig.org, florian.fainelli@broadcom.com
-Cc: bcm-kernel-feedback-list@broadcom.com, x86@kernel.org,
- oe-kbuild-all@lists.linux.dev, linux-mips@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, "Dr.
- David Alan Gilbert" <linux@treblig.org>
-Subject: Re: [PATCH v2] irqchip/irq-brcmstb-l2: Replace
- brcmstb_l2_mask_and_ack() by generic function
-In-Reply-To: <20250116005920.626822-1-linux@treblig.org>
-References: <20250116005920.626822-1-linux@treblig.org>
-Date: Thu, 16 Jan 2025 09:12:04 +0100
-Message-ID: <87ed13b2jv.ffs@tglx>
+	s=arc-20240116; t=1737018968; c=relaxed/simple;
+	bh=6uD4hemte7JNqodZhzLp3q7ItAzSf4JIf+Tuyq8lFTY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QJFq0Eouz3M85TE8lI5cMVpL3XugKRTkLSSh7b00jocpCa6EDVfV378PysPTEFS5+g8OiGooQWNUC2teom3/t4pScOaj00DTkcXsu392+d1povqk1K8k9e6xDB7MDcpzdw/10jYxPQ9EI0AK1XiUw40IAJadFKZM0wJg1vDgcdE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JV4TXkrj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A216DC4CED6;
+	Thu, 16 Jan 2025 09:16:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737018967;
+	bh=6uD4hemte7JNqodZhzLp3q7ItAzSf4JIf+Tuyq8lFTY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=JV4TXkrjBlGGn4yZq9kwBAIMDsgyGDeQsUJ99AphGcnG19jJSTfpa9rdTmjbkkaWZ
+	 R27KqtVM7ided1VJbOA1/VdB347Y4GlWVpgi4BFfKE0fb5XtHQhGc2BQeZDyKP9grP
+	 er6jZHfzL0C+LZkO/Q3trV1HJzGTWierdZP4x+rhD610vDSL/DE6+MX9YsVOgI6MXb
+	 sFSkLJ7R4EyxONWFyhVUA4zkCUlsZKDmbPjQdIy8yPes04GPjbMPZGrdpjAL0WjThD
+	 V4g3B2dRYZs/x5YSpiT5vskWDf0KML/LBrhW/3qCsybSX/HVkFJ/wVuPv/1S0xL+vF
+	 Bt7tepBqLDbOw==
+Message-ID: <228a0b1b-68ec-40d2-b379-e9894a34cb57@kernel.org>
+Date: Thu, 16 Jan 2025 10:15:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/6] dt-bindings: clock: add clock and reset definitions
+ for Ralink SoCs
+To: Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+ linux-clk@vger.kernel.org
+Cc: sboyd@kernel.org, mturquette@baylibre.com, tsbogend@alpha.franken.de,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+ p.zabel@pengutronix.de, linux-mips@vger.kernel.org,
+ devicetree@vger.kernel.org, yangshiji66@outlook.com,
+ linux-kernel@vger.kernel.org
+References: <20250115153019.407646-1-sergio.paracuellos@gmail.com>
+ <20250115153019.407646-2-sergio.paracuellos@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
+ FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJgPO8PBQkUX63hAAoJEBuTQ307
+ QWKbBn8P+QFxwl7pDsAKR1InemMAmuykCHl+XgC0LDqrsWhAH5TYeTVXGSyDsuZjHvj+FRP+
+ gZaEIYSw2Yf0e91U9HXo3RYhEwSmxUQ4Fjhc9qAwGKVPQf6YuQ5yy6pzI8brcKmHHOGrB3tP
+ /MODPt81M1zpograAC2WTDzkICfHKj8LpXp45PylD99J9q0Y+gb04CG5/wXs+1hJy/dz0tYy
+ iua4nCuSRbxnSHKBS5vvjosWWjWQXsRKd+zzXp6kfRHHpzJkhRwF6ArXi4XnQ+REnoTfM5Fk
+ VmVmSQ3yFKKePEzoIriT1b2sXO0g5QXOAvFqB65LZjXG9jGJoVG6ZJrUV1MVK8vamKoVbUEe
+ 0NlLl/tX96HLowHHoKhxEsbFzGzKiFLh7hyboTpy2whdonkDxpnv/H8wE9M3VW/fPgnL2nPe
+ xaBLqyHxy9hA9JrZvxg3IQ61x7rtBWBUQPmEaK0azW+l3ysiNpBhISkZrsW3ZUdknWu87nh6
+ eTB7mR7xBcVxnomxWwJI4B0wuMwCPdgbV6YDUKCuSgRMUEiVry10xd9KLypR9Vfyn1AhROrq
+ AubRPVeJBf9zR5UW1trJNfwVt3XmbHX50HCcHdEdCKiT9O+FiEcahIaWh9lihvO0ci0TtVGZ
+ MCEtaCE80Q3Ma9RdHYB3uVF930jwquplFLNF+IBCn5JRzsFNBFVDXDQBEADNkrQYSREUL4D3
+ Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
+ MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
+ OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
+ GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
+ 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
+ YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
+ 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
+ BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
+ JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
+ 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
+ YpsFAmA872oFCRRflLYACgkQG5NDfTtBYpvScw/9GrqBrVLuJoJ52qBBKUBDo4E+5fU1bjt0
+ Gv0nh/hNJuecuRY6aemU6HOPNc2t8QHMSvwbSF+Vp9ZkOvrM36yUOufctoqON+wXrliEY0J4
+ ksR89ZILRRAold9Mh0YDqEJc1HmuxYLJ7lnbLYH1oui8bLbMBM8S2Uo9RKqV2GROLi44enVt
+ vdrDvo+CxKj2K+d4cleCNiz5qbTxPUW/cgkwG0lJc4I4sso7l4XMDKn95c7JtNsuzqKvhEVS
+ oic5by3fbUnuI0cemeizF4QdtX2uQxrP7RwHFBd+YUia7zCcz0//rv6FZmAxWZGy5arNl6Vm
+ lQqNo7/Poh8WWfRS+xegBxc6hBXahpyUKphAKYkah+m+I0QToCfnGKnPqyYIMDEHCS/RfqA5
+ t8F+O56+oyLBAeWX7XcmyM6TGeVfb+OZVMJnZzK0s2VYAuI0Rl87FBFYgULdgqKV7R7WHzwD
+ uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
+ 7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
+ 5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
+In-Reply-To: <20250115153019.407646-2-sergio.paracuellos@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-David!
+On 15/01/2025 16:30, Sergio Paracuellos wrote:
+> Add clock and reset missing definitions for RT2880, RT305X, RT3352, RT3383,
+> RT5350, MT7620 and MT76X8 Ralink SoCs. Update bindings to clarify clock and
+> reset cells depending on these new introduced constants so consumer nodes
+> can easily use the correct one in DTS files.
 
-On Thu, Jan 16 2025 at 00:59, linux@treblig.org wrote:
-> Replace brcmstb_l2_mask_and_ack() by the generic
-> irq_gc_mask_disable_and_ack_set().
->
-> brcmstb_l2_mask_and_ack() was added in commit 49aa6ef0b439
-> ("irqchip/brcmstb-l2: Remove some processing from the handler") in
-> September 2017 with a comment saying it was actually generic and someone
-> should add it to the generic code.
->
-> commit 20608924cc2e ("genirq: generic chip: Add
-> irq_gc_mask_disable_and_ack_set()") did that a few weeks later, however no
-> one went back and took the brcmstb variant out.
+I asked to explain why these should be in the bindings. Usage by DTS
+alone, if driver does not use them, is not the reason as I explained
+last time. The reason is that your driver actually depends on these
+specific numbers because how it is written.
 
-That's too late. The original patch is already applied and I'm not going
-to redo the whole branch for this minor hickup. I've converted it to a
-delta fix.
+Or I understood it wrong and this is purely for DTS?
 
-> Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
-> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
-
-You cannot add my Signed-off-by to a new submission.
-
-Thanks,
-
-        tglx
+Best regards,
+Krzysztof
 
