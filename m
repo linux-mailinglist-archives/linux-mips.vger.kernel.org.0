@@ -1,172 +1,138 @@
-Return-Path: <linux-mips+bounces-7479-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7481-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78F3BA137E1
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Jan 2025 11:29:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90940A1386A
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Jan 2025 11:59:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 93A501673C5
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Jan 2025 10:29:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B4EF3A750B
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Jan 2025 10:59:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C24D1DE2AA;
-	Thu, 16 Jan 2025 10:29:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D66031DE3AB;
+	Thu, 16 Jan 2025 10:59:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="FM40lE/0"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="cu+X2rrj"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA94A1DDC23;
-	Thu, 16 Jan 2025 10:29:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 049171DE3A4;
+	Thu, 16 Jan 2025 10:59:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737023386; cv=none; b=A595hOrXKfPPjn1zNMJZVvmhdgs96Oj8tE0Z4KuC5L4loRiDAODODOsmMTnARyKe7OgMIc3vQA/0jUK6kKB7VuIUW/pHsQFMvbEQ+u+txdDskl8kEtl4RpzubThWuTL+DFXs3nZVf/mUOxfjC0MG1s4uJe8oRX1oYTaKXlsanho=
+	t=1737025173; cv=none; b=m9TgD6Q1nyvP3FEXZt9etq9/qhtBsX1ExLRv83p9yCFzVTGgwK2FMrF8a6TL29yuYDNMJljzOufERZXw6TG/OzEQ2jPpdg3aJNdM1Hll/SJbrgvblDCfva9rx10yK8DON2wOmQ4lqDZzBXTzS0lQtIeXdFhdUe5QVsZQ+E+6oGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737023386; c=relaxed/simple;
-	bh=jP/wVz8lrlZOPBRiVe05XfWlnjrVaTJVXBj2co85OLg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ec6S3Zr1e+ctfKTo9ahF8l68NZdlGgZ/Yg2lCNAuqoezOZOOOFb63Pp4A8Wx/mEqi7ki9U+bfm9vmUfe35Q39B7ylC3DeA7W56w8ZqeSC0/698iuXUqcAuOoMnjBrHOdSaBgkyJSCPExxV5ZaGCxIwk6VfE6cM8J6f4hSWbPKz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=FM40lE/0; arc=none smtp.client-ip=65.109.113.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
-Received: from localhost (localhost.localdomain [127.0.0.1])
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id C3C7840E02BE;
-	Thu, 16 Jan 2025 10:29:39 +0000 (UTC)
-X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
-Received: from mail.alien8.de ([127.0.0.1])
-	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id MFOmT_gDX9aa; Thu, 16 Jan 2025 10:29:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
-	t=1737023375; bh=GQBvA11kyxIGOlMc4gw5ALfkgQqX/TyrIH9O3oAvLFA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FM40lE/0clitssFsEKe5JK0a143dAnkAItQNq6yMfahZmpGeSTt09D5HGf0pFLbt8
-	 ulpp29oYaFstDERke8ThqjtXoN04wo6eTBNIkCpJpYEXzS9U9b6shsRrnjlVJY+eKW
-	 TBn1/+CZ9ngMH08pwT66FQz7AXQy6uCPmHYlis0QOsac6iB9mWKsXjQbzbnmjnFYRL
-	 rZuO8syduQMjrFLSjkGi0HDUyE5i/fs8xiEFxdQfkwB7MgmrqT5n5XzifvkD8pCoqz
-	 5X1jUm0gItWfUGbyRkcvKB+w0NCTaoWmvE8UGl8msx3A8F9pgsooW7AjKtjxpPd8Lg
-	 Fb16TJfn+gMvgYR9ZsMlvBBT0VyKZ8xqAHFUwbZBUJJBetncTrqjjppvD9l7XGyf4m
-	 juTTN1zpyhjrfd7TJsAviRyvUSFuCvbml3Dt2L9NGpEIVm/zwFrWYVYuT654H8gFk2
-	 2Yj2R3th9hwTaGTH/t/mjjo+AyzreQe3eFBzv5ejybagmNkRrbkC3tIXtHARl+Igxz
-	 KDg7YnAEPlNEP63WkcD8y4HxsuP37idpXVeYFeL/U5iPMx4eRF2w1AcbW6UgXuHjtO
-	 b3RYhp+4K4Ia7A1PVcGG9NkyVI2JCvCFPMGn35tDMiM9QmJ3MEVxqzNgvDl6r7hKMW
-	 MGq/1HBafOJLETwhOQ5EmCKY=
-Received: from zn.tnic (p200300ea971f93c3329c23fFFEa6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971f:93c3:329c:23ff:fea6:a903])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
-	(No client certificate requested)
-	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9F55140E028B;
-	Thu, 16 Jan 2025 10:27:52 +0000 (UTC)
-Date: Thu, 16 Jan 2025 11:27:47 +0100
-From: Borislav Petkov <bp@alien8.de>
-To: Brendan Jackman <jackmanb@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-	Brian Cain <bcain@quicinc.com>, Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Michal Simek <monstr@monstr.eu>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>,
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-	Stafford Horne <shorne@gmail.com>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Richard Weinberger <richard@nod.at>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Christoph Lameter <cl@linux.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, x86@kernel.org,
-	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org, kvm@vger.kernel.org,
-	linux-efi@vger.kernel.org
-Subject: Re: [PATCH RFC v2 01/29] mm: asi: Make some utility functions
- noinstr compatible
-Message-ID: <20250116102747.GAZ4jfI9HG3K-PW7nf@fat_crate.local>
-References: <20250110-asi-rfc-v2-v2-0-8419288bc805@google.com>
- <20250110-asi-rfc-v2-v2-1-8419288bc805@google.com>
- <20250116001858.GDZ4hQctZe_PFvJ0AJ@fat_crate.local>
+	s=arc-20240116; t=1737025173; c=relaxed/simple;
+	bh=hzbr8u3GzR8n6lml4w/5G6XN55lwyIy0yVr5g/YHkjU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=K4oPhbt3RQA9cdKTgQzT4zLm2zFlHpn+36fSftbOIKcgziK3s2PExl+qtf/f5m6+ZXxBgUGNiY6WV4kfHsycgTYqb/bWPqquLDsAKFYdZGo50GIju0Lb8oq+/eWIIhHA30ZO4QP+zZFOtTw0fhMnCYBC0+QXa9SaPagXQML5wyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=cu+X2rrj; arc=none smtp.client-ip=217.70.183.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 79FC6E0007;
+	Thu, 16 Jan 2025 10:59:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1737025168;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=yuyaXHAY47z3uFO53zBgofYEVSBIL1GlxK0FAhoHtd0=;
+	b=cu+X2rrjszsYqy5jJz4BnhRBjQAPEw4aYsHlmcfBQgxa8hiN+FN2Tvmlj3Pg1/wUyd9Dtl
+	MhYfAoPQuXmSpoiy0g9LCwBo9WdnY86d7uIlJvhSl3VuLm/3FEVjvrc+PrhvaczKfCW/+k
+	e0LLdJI1L7qBLHARWHep2lXL8WBysd6B10WpMrQkRQ1rj2NuszmZGDICNe0N2RzjhVmRjR
+	HAJwgU1xWwNXpY0NrFsjLmZcJCHpgTj6WX9nIbE0UdkU7Bw4jp4sFV+bEFo7yEEQuC/YH8
+	BLlrUQXWUKdwhLzeqGpFMbyIBDmWpzgDiu36lIr2acOJvVdfJQ1IizGBWeNeAg==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+Subject: [PATCH v2 0/5] MIPS: Allow using multi-cluster with a broken HCI.
+Date: Thu, 16 Jan 2025 11:59:18 +0100
+Message-Id: <20250116-cluster-hci-broken-v2-0-fc52cfb7a19e@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250116001858.GDZ4hQctZe_PFvJ0AJ@fat_crate.local>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAIbmiGcC/32NQQ6CMBBFr0Jm7ZhORSCuvIdhUcogE7ElLTYaw
+ t2tHMDNT95P/vsrRA7CES7FCoGTRPEugz4UYEfj7ozSZwatdElEZ7TTKy4ccLSCXfAPdtiUytT
+ NUGtjGPJwDjzIe5fe2syjxMWHz/6R6Nf+1SVChUpVp6rJSdRfO++XSdzR+ie027Z9AWNi1j22A
+ AAA
+X-Change-ID: 20241115-cluster-hci-broken-840a78f72aae
+To: Aleksandar Rikalo <arikalo@gmail.com>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Jiaxun Yang <jiaxun.yang@flygoat.com>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-mips@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Gregory CLEMENT <gregory.clement@bootlin.com>
+X-Mailer: b4 0.14.2
+X-GND-Sasl: gregory.clement@bootlin.com
 
-On Thu, Jan 16, 2025 at 01:18:58AM +0100, Borislav Petkov wrote:
-> Long story short, lemme try to poke around tomorrow to try to figure out what
-> actually happens. It could be caused by the part of Rik's patches and this one
-> inlining things. We'll see...
+Hello,
 
-Looks transient... The very similar guest boots fine on another machine. Let's
-watch this...
+Some CM3.5 reports indicate that Hardware Cache Initialization is
+complete, but in reality it's not the case. They also incorrectly show
+that Hardware Cache Initialization is supported. Unfortunately, it is
+not possible to detect this issue at runtime and the information has
+to be passed by the device tree.
 
+I initially proposed to add this information as a CPU property, but as
+rightfully pointed out by Jiaxun, it should be more of a Coherence
+Manager property. A few months ago, Jiaxun proposed a series to pass
+the address of the CM through the device tree when it was not possible
+to get it at runtime. This series introduced the binding for the CM
+that I reused. However, there were some parts of this series that were
+commented on and needed to be addressed, and I don't have the hardware
+for it. Therefore, I've kept only the binding and relaxed the need for
+the reg property for the eyeq6 case.
+
+My initial proposal was integrated into the series set by Aleksandar
+here [1]. And the series adding the CM binding was here: [2]. The
+patches 1,2,3, and 5 have no dependencies while patch 4 should depend
+on this series [1]. Actually, those five patches should replace
+patches 10, 11, and 12.
+
+Gregory
+
+[1]: https://lore.kernel.org/all/20241028175935.51250-1-arikalo@gmail.com/
+[2]: https://lore.kernel.org/all/20240612-cm_probe-v2-5-a5b55440563c@flygoat.com/
+
+Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+---
+Changes in v2:
+- Use compatible string instead of property
+- Link to v1: https://lore.kernel.org/r/20241115-cluster-hci-broken-v1-0-00636800611d@bootlin.com
+
+---
+Gregory CLEMENT (4):
+      dt-bindings: mips: mips-cm: Add a new compatible string for EyeQ6
+      MIPS: cm: Detect CM quirks from device tree
+      MIPS: CPS: Support broken HCI for multicluster
+      MIPS: mobileye: dts: eyeq6h: Enable cluster support
+
+Jiaxun Yang (1):
+      dt-bindings: mips: Document mti,mips-cm
+
+ .../devicetree/bindings/mips/mti,mips-cm.yaml      | 58 ++++++++++++++++++++++
+ arch/mips/boot/dts/mobileye/eyeq6h.dtsi            |  4 ++
+ arch/mips/include/asm/mips-cm.h                    | 22 ++++++++
+ arch/mips/kernel/mips-cm.c                         | 14 ++++++
+ arch/mips/kernel/smp-cps.c                         |  5 +-
+ 5 files changed, 102 insertions(+), 1 deletion(-)
+---
+base-commit: ffc2ac99f7a0dccb6389ea5e318a95965d882dba
+change-id: 20241115-cluster-hci-broken-840a78f72aae
+
+Best regards,
 -- 
-Regards/Gruss,
-    Boris.
+Grégory CLEMENT, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
-https://people.kernel.org/tglx/notes-about-netiquette
 
