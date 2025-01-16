@@ -1,52 +1,53 @@
-Return-Path: <linux-mips+bounces-7481-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7480-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90940A1386A
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Jan 2025 11:59:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4280FA13867
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Jan 2025 11:59:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B4EF3A750B
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Jan 2025 10:59:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A522D1886F28
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Jan 2025 10:59:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D66031DE3AB;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6221C1DE2B8;
 	Thu, 16 Jan 2025 10:59:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="cu+X2rrj"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="UnelgxJ0"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 049171DE3A4;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0B9A1DE3A3;
 	Thu, 16 Jan 2025 10:59:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737025173; cv=none; b=m9TgD6Q1nyvP3FEXZt9etq9/qhtBsX1ExLRv83p9yCFzVTGgwK2FMrF8a6TL29yuYDNMJljzOufERZXw6TG/OzEQ2jPpdg3aJNdM1Hll/SJbrgvblDCfva9rx10yK8DON2wOmQ4lqDZzBXTzS0lQtIeXdFhdUe5QVsZQ+E+6oGQ=
+	t=1737025173; cv=none; b=h/lHjG1G9rX1dgncWYiF0PF5jwtWgE30RghuODEjIieCIzxu89paR3oXRUBwa1+6+hagV+qr60uZzOE3AASN6tJZHMdXhfiJbjsdGWq018z2jdxWnPQ5+YU4K5hMgvF960XbdwIKydAUq8NA0QoSG81jzN5KEkMrBpqrrD6hKzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1737025173; c=relaxed/simple;
-	bh=hzbr8u3GzR8n6lml4w/5G6XN55lwyIy0yVr5g/YHkjU=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=K4oPhbt3RQA9cdKTgQzT4zLm2zFlHpn+36fSftbOIKcgziK3s2PExl+qtf/f5m6+ZXxBgUGNiY6WV4kfHsycgTYqb/bWPqquLDsAKFYdZGo50GIju0Lb8oq+/eWIIhHA30ZO4QP+zZFOtTw0fhMnCYBC0+QXa9SaPagXQML5wyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=cu+X2rrj; arc=none smtp.client-ip=217.70.183.196
+	bh=eoV6lxlvqojTH5I8IK+bRgUIfzC8TKqdHbpitLaZsbc=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=Cecsd2tPbW90iewnHblcfFIF7yz7hir+7hv/+vo56WsTg+lp6pYjGFduW1+SSKRT/8eVEMA4grmhvOYYaCWhrbuB0Jfdb5ISpwp0aNxrErTrOjg8EiGpRyVVd9SnWxFsppv7UM86zrqo8QkIYLo05plWVJuIU/mKN40TPOw9wzo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=UnelgxJ0; arc=none smtp.client-ip=217.70.183.198
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 79FC6E0007;
-	Thu, 16 Jan 2025 10:59:27 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 75622C0008;
+	Thu, 16 Jan 2025 10:59:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1737025168;
+	t=1737025169;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=yuyaXHAY47z3uFO53zBgofYEVSBIL1GlxK0FAhoHtd0=;
-	b=cu+X2rrjszsYqy5jJz4BnhRBjQAPEw4aYsHlmcfBQgxa8hiN+FN2Tvmlj3Pg1/wUyd9Dtl
-	MhYfAoPQuXmSpoiy0g9LCwBo9WdnY86d7uIlJvhSl3VuLm/3FEVjvrc+PrhvaczKfCW/+k
-	e0LLdJI1L7qBLHARWHep2lXL8WBysd6B10WpMrQkRQ1rj2NuszmZGDICNe0N2RzjhVmRjR
-	HAJwgU1xWwNXpY0NrFsjLmZcJCHpgTj6WX9nIbE0UdkU7Bw4jp4sFV+bEFo7yEEQuC/YH8
-	BLlrUQXWUKdwhLzeqGpFMbyIBDmWpzgDiu36lIr2acOJvVdfJQ1IizGBWeNeAg==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zCAZNOipVi7ghlFkXkXZ6lZoGOE8/OrsAqyo1CTDsBU=;
+	b=UnelgxJ0/2eFcGdgIXFcx0qCgTFrqMO/p1G/jpWygXnIL9UQ8Iazn2a6pH3LfDcpUI4Zq+
+	dJ4biQXXr7YAY4UN6QNIbA1wNGmtBoM5+CIgTuhdP2cp8YdMFAGAil5DLvT2ZvWNou+5lA
+	jlOzgr1LLF/ztERUPGXPp9/G++u5+4ZxawU/uFegYZIW2zfuMnpXuuFd9xnLx2jVwjSyX5
+	xqOcmpiglaEKFlRwSVtHKrV+NWKNN9lLa9mtgGnPpCWerNNj7E/nQW1T8Ot7w2M65OVRKF
+	jwEjqL+uBEVlgILuhAjm2A5AAcQxNDpzxRpn8dG1P5nO2W7N1cih16Y8AlAO7A==
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
-Subject: [PATCH v2 0/5] MIPS: Allow using multi-cluster with a broken HCI.
-Date: Thu, 16 Jan 2025 11:59:18 +0100
-Message-Id: <20250116-cluster-hci-broken-v2-0-fc52cfb7a19e@bootlin.com>
+Date: Thu, 16 Jan 2025 11:59:19 +0100
+Subject: [PATCH v2 1/5] dt-bindings: mips: Document mti,mips-cm
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -54,12 +55,10 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAIbmiGcC/32NQQ6CMBBFr0Jm7ZhORSCuvIdhUcogE7ElLTYaw
- t2tHMDNT95P/vsrRA7CES7FCoGTRPEugz4UYEfj7ozSZwatdElEZ7TTKy4ccLSCXfAPdtiUytT
- NUGtjGPJwDjzIe5fe2syjxMWHz/6R6Nf+1SVChUpVp6rJSdRfO++XSdzR+ie027Z9AWNi1j22A
- AAA
-X-Change-ID: 20241115-cluster-hci-broken-840a78f72aae
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250116-cluster-hci-broken-v2-1-fc52cfb7a19e@bootlin.com>
+References: <20250116-cluster-hci-broken-v2-0-fc52cfb7a19e@bootlin.com>
+In-Reply-To: <20250116-cluster-hci-broken-v2-0-fc52cfb7a19e@bootlin.com>
 To: Aleksandar Rikalo <arikalo@gmail.com>, 
  Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
  Jiaxun Yang <jiaxun.yang@flygoat.com>, Rob Herring <robh@kernel.org>, 
@@ -74,65 +73,62 @@ Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
 X-Mailer: b4 0.14.2
 X-GND-Sasl: gregory.clement@bootlin.com
 
-Hello,
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
 
-Some CM3.5 reports indicate that Hardware Cache Initialization is
-complete, but in reality it's not the case. They also incorrectly show
-that Hardware Cache Initialization is supported. Unfortunately, it is
-not possible to detect this issue at runtime and the information has
-to be passed by the device tree.
+Add devicetree binding documentation for MIPS Coherence Manager.
 
-I initially proposed to add this information as a CPU property, but as
-rightfully pointed out by Jiaxun, it should be more of a Coherence
-Manager property. A few months ago, Jiaxun proposed a series to pass
-the address of the CM through the device tree when it was not possible
-to get it at runtime. This series introduced the binding for the CM
-that I reused. However, there were some parts of this series that were
-commented on and needed to be addressed, and I don't have the hardware
-for it. Therefore, I've kept only the binding and relaxed the need for
-the reg property for the eyeq6 case.
-
-My initial proposal was integrated into the series set by Aleksandar
-here [1]. And the series adding the CM binding was here: [2]. The
-patches 1,2,3, and 5 have no dependencies while patch 4 should depend
-on this series [1]. Actually, those five patches should replace
-patches 10, 11, and 12.
-
-Gregory
-
-[1]: https://lore.kernel.org/all/20241028175935.51250-1-arikalo@gmail.com/
-[2]: https://lore.kernel.org/all/20240612-cm_probe-v2-5-a5b55440563c@flygoat.com/
-
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
 Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 ---
-Changes in v2:
-- Use compatible string instead of property
-- Link to v1: https://lore.kernel.org/r/20241115-cluster-hci-broken-v1-0-00636800611d@bootlin.com
+ .../devicetree/bindings/mips/mti,mips-cm.yaml      | 38 ++++++++++++++++++++++
+ 1 file changed, 38 insertions(+)
 
----
-Gregory CLEMENT (4):
-      dt-bindings: mips: mips-cm: Add a new compatible string for EyeQ6
-      MIPS: cm: Detect CM quirks from device tree
-      MIPS: CPS: Support broken HCI for multicluster
-      MIPS: mobileye: dts: eyeq6h: Enable cluster support
+diff --git a/Documentation/devicetree/bindings/mips/mti,mips-cm.yaml b/Documentation/devicetree/bindings/mips/mti,mips-cm.yaml
+new file mode 100644
+index 0000000000000000000000000000000000000000..9f500804737d23e19f50a9326168686c05d3a54e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mips/mti,mips-cm.yaml
+@@ -0,0 +1,38 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mips/mti,mips-cm.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: MIPS Coherence Manager
++
++description: |
++  Defines a location of the MIPS Coherence Manager registers.
++
++maintainers:
++  - Jiaxun Yang <jiaxun.yang@flygoat.com>
++
++properties:
++  compatible:
++    const: mti,mips-cm
++
++  reg:
++    description:
++      Base address and size of an unoccupied region in system's MMIO address
++      space, which will be used to map the MIPS CM global control registers
++      block. It is conventionally decided by the system integrator.
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    coherency-manager@1fbf8000 {
++      compatible = "mti,mips-cm";
++      reg = <0x1bde8000 0x8000>;
++    };
++...
 
-Jiaxun Yang (1):
-      dt-bindings: mips: Document mti,mips-cm
-
- .../devicetree/bindings/mips/mti,mips-cm.yaml      | 58 ++++++++++++++++++++++
- arch/mips/boot/dts/mobileye/eyeq6h.dtsi            |  4 ++
- arch/mips/include/asm/mips-cm.h                    | 22 ++++++++
- arch/mips/kernel/mips-cm.c                         | 14 ++++++
- arch/mips/kernel/smp-cps.c                         |  5 +-
- 5 files changed, 102 insertions(+), 1 deletion(-)
----
-base-commit: ffc2ac99f7a0dccb6389ea5e318a95965d882dba
-change-id: 20241115-cluster-hci-broken-840a78f72aae
-
-Best regards,
 -- 
-Grégory CLEMENT, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.45.2
 
 
