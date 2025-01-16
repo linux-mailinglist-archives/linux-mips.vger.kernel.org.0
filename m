@@ -1,133 +1,194 @@
-Return-Path: <linux-mips+bounces-7493-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7494-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65EF0A13DCE
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Jan 2025 16:36:55 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3F9CA13FBF
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Jan 2025 17:45:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A2F9D188C17C
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Jan 2025 15:36:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1B62E16A89C
+	for <lists+linux-mips@lfdr.de>; Thu, 16 Jan 2025 16:45:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA67722BAC1;
-	Thu, 16 Jan 2025 15:36:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F21122D4DA;
+	Thu, 16 Jan 2025 16:45:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RywjzES5"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="Ii/k/+mE"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA60722B8CD;
-	Thu, 16 Jan 2025 15:36:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88E061DE4F8;
+	Thu, 16 Jan 2025 16:45:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737041799; cv=none; b=Sa8i5XUk/Q9bb/jaaZW16efRgT1px7zFmqlVwZqKAnwnM/NGgQZC20b7z7rHZ7RzzW9Suzrq0iUo3wHlJDwNEJ1bKcfsGDgM8/fFBOk79oK0lP4MnSE82TSicc2VNIstCHJdfKgGMj6uxsCcpcdULkbQ0oQk7a5wq56Lp+JRnCc=
+	t=1737045905; cv=none; b=dkWP4G1bxj/w1Wrys3Mvkw/s/SqC0OFY7Twp1ont1Byy0qqY/0IfauoeDtljB6jIYm93CZ8cX9AFp3bEs/RtcoMXSdwwwiBWstbucS35KBHY/k6Hn2HEXB/exwiFoHEaArURTT1Wgz6wwNTyNDu5mJmSbXAqqBUA4nEejN9xbrc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737041799; c=relaxed/simple;
-	bh=4ccIzb3E0CgJH6Xfmx3OHzv1JbAlmJUp0qoF4Pr9SDY=;
+	s=arc-20240116; t=1737045905; c=relaxed/simple;
+	bh=gzIeXtvT+o21ai8GfLNJEIL4JMGkaC8ofbxalttfEtY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aM6yoAV/Cvh3FtCOm7AIMVAljGkZ5AA8kkFr2XPEcc4qEECPZIHeWD7M3KlXke2bsqB8gP8+6DdRE+YEO0iJnFOYAn4ptFCpczeTjlHo/r5OGECSb9iolCXzFK8k4JsszubUVBpBtj9Oym3HMY5f6vMTuODOn121NKVSkZao19M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RywjzES5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0CD3C4CEE3;
-	Thu, 16 Jan 2025 15:36:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737041799;
-	bh=4ccIzb3E0CgJH6Xfmx3OHzv1JbAlmJUp0qoF4Pr9SDY=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=dIQTDhq6U+vpRTL5z0aD0cgX5hjE82nuBHEoLulj6kIgMTNRRovdF7uzUaqwyBvd6qHfvZOQKXPd3FuenpFqT1IQyUOq9RTWffAoHLRmLFwqo0qAovZ+9BUfKfyausvBGSysfSnPfGxpu63TSjcTwNGNdnbfoLHQOVEZVu9QoDE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=Ii/k/+mE; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id CA9C340E015F;
+	Thu, 16 Jan 2025 16:44:59 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id w_qUMcx4OXut; Thu, 16 Jan 2025 16:44:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1737045896; bh=WgoKIzz0OYQgA951gA+dXClPJUSxVjM8SRERMxXCGDE=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=RywjzES5BjPH8MApjg98YEqoo93PJMOtQWHmo+9zWQTOAVXgmrQVsPVvG32NXzYJH
-	 VBqetBtRk5fFav5FmMNMCZs6JytxxJjjMeGACaPsQc3hdC12/rFJ/VkyIolAfPhrBk
-	 KAk0QlCVGv5YBr1bgQPUFhtlVBuspLOcCsVky3OX5TdnHmkek40/12vGoB1hVFpycY
-	 jm5qUCpQFrlmZ7v6GdNXizTixoC9Q58Pf1cFwliiRgkUpQu70AXsfi1yjT2UKKG/5s
-	 OPPJ5V9l00QMvkWa2OP2ftNmAxWmU0xWGpXzTtI6j6w/I1MzSP+syVE3jNVL2jRAWu
-	 T9519Ra1feleg==
-Date: Thu, 16 Jan 2025 09:36:37 -0600
-From: Rob Herring <robh@kernel.org>
-To: Gregory CLEMENT <gregory.clement@bootlin.com>
-Cc: Aleksandar Rikalo <arikalo@gmail.com>,
+	b=Ii/k/+mEQxhvi2cUq/OXag0RZzqM3+5gAKnmstJm1M3emqPqpm+FuBuTOkVG6z7Xf
+	 jK+idKpC77Q5Bb60bZEBETOeIYeybsV/OSz+HtCJkvQFCOANvCv50k0v7NDa6SMX+M
+	 eW8d/Kr6ZqmS72pz22a2f/+VjuvWRZi/DggF/7WWes5sPk2G2kgdDpbQuINvEg40Bw
+	 N23oo0oWrzyrbeWzAdiyVuD5Yw3mo37WXbbioRprWVaR2YxBJ0EXK+Gl4VR5xC9PZr
+	 OEgpLDhSThdeD7i1O5+lXsNAoSSCiqPlPw+UuhcmOIMMGEIbCewfQxWy1tU8HF3OLo
+	 971HvVXWqqaYqOUXF6C1rkTZJSjg6i1KL8jPchO1X57XYToTkMPLyPzCkyoYJKp2F/
+	 Q31hRdIdEbLaR8cpz5o5mXbI7I5fBMqVNSBbod4oBwfFPYgChEyFgfhZOsoRk9Bs8B
+	 Mq20gwUu5GXJt+hzn0MH9j0zSLA7eW0zjtMDtDIwaj3DW5gUm514gGFeEzI1eUM7E8
+	 OlSpl1gBnv9+jHVUT6Im6NNIQMxUYvTlP22zuE4gO60oYZW58v76F1ovgaGaD+UBVR
+	 WxxI3+3u6J2jlTd3rFkC2SVxOeTNpyK1mHsXzhJ+es/K1LUAYRL+ghsyJTRL2GcbTo
+	 vQ/6kTLCL9KspKSVn+JOGlao=
+Received: from zn.tnic (p200300ea971f934f329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:971f:934f:329c:23ff:fea6:a903])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id AF48840E0286;
+	Thu, 16 Jan 2025 16:43:11 +0000 (UTC)
+Date: Thu, 16 Jan 2025 17:43:05 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Brendan Jackman <jackmanb@google.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+	Brian Cain <bcain@quicinc.com>, Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Michal Simek <monstr@monstr.eu>,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/5] dt-bindings: mips: mips-cm: Add a new compatible
- string for EyeQ6
-Message-ID: <20250116153637.GA2567996-robh@kernel.org>
-References: <20250116-cluster-hci-broken-v2-0-fc52cfb7a19e@bootlin.com>
- <20250116-cluster-hci-broken-v2-2-fc52cfb7a19e@bootlin.com>
+	Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>,
+	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+	Stafford Horne <shorne@gmail.com>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Richard Weinberger <richard@nod.at>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Juri Lelli <juri.lelli@redhat.com>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+	Valentin Schneider <vschneid@redhat.com>,
+	Uladzislau Rezki <urezki@gmail.com>,
+	Christoph Hellwig <hch@infradead.org>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>,
+	Namhyung Kim <namhyung@kernel.org>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
+	Christoph Lameter <cl@linux.com>,
+	Sean Christopherson <seanjc@google.com>,
+	Paolo Bonzini <pbonzini@redhat.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, x86@kernel.org,
+	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org,
+	linux-trace-kernel@vger.kernel.org,
+	linux-perf-users@vger.kernel.org, kvm@vger.kernel.org,
+	linux-efi@vger.kernel.org, Junaid Shahid <junaids@google.com>
+Subject: Re: [PATCH RFC v2 02/29] x86: Create
+ CONFIG_MITIGATION_ADDRESS_SPACE_ISOLATION
+Message-ID: <20250116164305.GEZ4k3Gd2IoJpJzEIl@fat_crate.local>
+References: <20250110-asi-rfc-v2-v2-0-8419288bc805@google.com>
+ <20250110-asi-rfc-v2-v2-2-8419288bc805@google.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250116-cluster-hci-broken-v2-2-fc52cfb7a19e@bootlin.com>
+In-Reply-To: <20250110-asi-rfc-v2-v2-2-8419288bc805@google.com>
 
-On Thu, Jan 16, 2025 at 11:59:20AM +0100, Gregory CLEMENT wrote:
-> The CM3.5 used on EyeQ6 reports that Hardware Cache Initialization is
-> complete, but in reality it's not the case. It also incorrectly
-> indicates that Hardware Cache Initialization is supported. This new
-> compatible string allows warning about this broken feature that cannot
-> be detected at runtime.
-> 
-> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-> ---
->  .../devicetree/bindings/mips/mti,mips-cm.yaml      | 24 ++++++++++++++++++++--
->  1 file changed, 22 insertions(+), 2 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/mips/mti,mips-cm.yaml b/Documentation/devicetree/bindings/mips/mti,mips-cm.yaml
-> index 9f500804737d23e19f50a9326168686c05d3a54e..4713673f0cfc7785bb183917ee382a815ebfe9e1 100644
-> --- a/Documentation/devicetree/bindings/mips/mti,mips-cm.yaml
-> +++ b/Documentation/devicetree/bindings/mips/mti,mips-cm.yaml
-> @@ -14,7 +14,12 @@ maintainers:
+On Fri, Jan 10, 2025 at 06:40:28PM +0000, Brendan Jackman wrote:
+> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+> index 7b9a7e8f39acc8e9aeb7d4213e87d71047865f5c..5a50582eb210e9d1309856a737d32b76fa1bfc85 100644
+> --- a/arch/x86/Kconfig
+> +++ b/arch/x86/Kconfig
+> @@ -2519,6 +2519,20 @@ config MITIGATION_PAGE_TABLE_ISOLATION
 >  
->  properties:
->    compatible:
-> -    const: mti,mips-cm
-> +    oneOf:
-> +      - const: mti,mips-cm
-> +      - const: mti,eyeq6-cm
-
-Being a mobileye device, the vendor prefix should be mobileye.
-
-> +        description:
-> +          On EyeQ6 the HCI (Hardware Cache Initialization) information for
-> +          the L2 cache in multi-cluster configuration is broken.
+>  	  See Documentation/arch/x86/pti.rst for more details.
 >  
->    reg:
->      description:
-> @@ -25,14 +30,29 @@ properties:
->  
->  required:
->    - compatible
-> -  - reg
->  
->  additionalProperties: false
->  
-> +if:
-> +  properties:
-> +    compatible:
-> +      contains:
-> +        const: mti,eyeq6-cm
-> +then:
-> +  properties:
-> +    reg: false
-> +else:
-> +  required:
-> +    - reg
+> +config MITIGATION_ADDRESS_SPACE_ISOLATION
+> +	bool "Allow code to run with a reduced kernel address space"
+> +	default n
+> +	depends on X86_64 && !PARAVIRT && !UML
+> +	help
+> +	  This feature provides the ability to run some kernel code
 
-How does one access this block with no registers? Is this some subset of 
-a larger block? If so, need to define that block first.
+s/This feature provide/Provide/
 
-These 2 blocks don't look related and the only property shared is 
-'compatible'. This should be a separate doc.
+> +	  with a reduced kernel address space. This can be used to
+> +	  mitigate some speculative execution attacks.
+> +
+> +	  The !PARAVIRT dependency is only because of lack of testing; in theory
+> +	  the code is written to work under paravirtualization. In practice
+> +	  there are likely to be unhandled cases, in particular concerning TLB
+> +	  flushes.
 
-Rob
+Right, this paragraph should be under the "---" line too until PARAVIRT gets
+tested, ofc.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
 
