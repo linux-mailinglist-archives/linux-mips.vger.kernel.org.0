@@ -1,77 +1,77 @@
-Return-Path: <linux-mips+bounces-7515-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7516-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3EF9AA162C2
-	for <lists+linux-mips@lfdr.de>; Sun, 19 Jan 2025 16:45:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79D28A162C7
+	for <lists+linux-mips@lfdr.de>; Sun, 19 Jan 2025 16:46:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D67F7188574A
-	for <lists+linux-mips@lfdr.de>; Sun, 19 Jan 2025 15:45:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B1893A6327
+	for <lists+linux-mips@lfdr.de>; Sun, 19 Jan 2025 15:45:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B43E11DFE15;
-	Sun, 19 Jan 2025 15:45:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4041B1E009B;
+	Sun, 19 Jan 2025 15:45:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jQz0rx1p"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EO5hGU+y"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E08061DFD95;
-	Sun, 19 Jan 2025 15:45:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 550721DF74B;
+	Sun, 19 Jan 2025 15:45:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737301502; cv=none; b=ERUbIyiQ9mWyqRDG25ADkd8lL7UxnJz6LfrJyJGC9m0A4TvBBCU38raXC1CRbfIOAt88Z6MbsIJ6mSm9biH1gO1QKA5nv6fWqANfXoVkGyHjZSsVaMJr9WSjknk2n3PZ+fHgqHL78AGCv/AEd5inKHliwYtzv60o9JQXuIrQHik=
+	t=1737301504; cv=none; b=lr5MPY7sKY21mgUnjPEpYIzhNTDL7mN4wKBkwe1J4i4Y2Rb6fU2e/kqECU6IwU906GN9TguToqbFmbPsn4/E3NDwvn9zxS8cbOKlLLE0DpW5NjZdhfNxeTgib4YnjMPn/7o3svdAK60mRGnMdb1Ev7QmfOkVlb8Vd8xhT/DrcIg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737301502; c=relaxed/simple;
-	bh=j1bB0LohY6Q4ZWswaHmpsEMNIOAEiiDhiYORQ5U0qBA=;
+	s=arc-20240116; t=1737301504; c=relaxed/simple;
+	bh=u8xwRiiCuQLkhGAjzAw29/lLxgn/oUBnngKnpNkEa0o=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=PeMMuN+op/mUiGx1w3MGAqUbgRqow45XjKebpN8mwnVc+vSQjrF29NpF3tSxmsY4TJOizB6kJII8eYeBvrJyj+p+BYGVsa5AKL4hdWP6UzLgfXA+D9JRaO1h/XTH2ScZEmXSIYP44Jr8VKsVlbpdO4Ew0/uYXAtiDzPHTQ5GEyA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jQz0rx1p; arc=none smtp.client-ip=209.85.128.54
+	 MIME-Version; b=p+i7sUcFB93fpiZreqbvrjpY17PHvNBUQVLedknNAPrpE8tZsGDsX0XwYUpAk5O1eK/i/rEKwaR/2h35Del7EFKIKgru6uPbq2SaY1YxIzq34rS+gThaCSyBWqOsaVNtjZP3f+8npBA1WS3j53fsBjZ0u8xQoGn2btTi0mGhNPA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EO5hGU+y; arc=none smtp.client-ip=209.85.221.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-436326dcb1cso24577935e9.0;
-        Sun, 19 Jan 2025 07:45:00 -0800 (PST)
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-385df53e559so2822062f8f.3;
+        Sun, 19 Jan 2025 07:45:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737301498; x=1737906298; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1737301500; x=1737906300; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=9MK30M1/4LGOcL0ZrPE9gPryc2MA/RdOwp1GOptQnIo=;
-        b=jQz0rx1pIWFmyGcDqt1ZIOJOhhil8HTIXdUACMgRogE4rPR1LiVThuUofgbR8MNLvL
-         jsE8O0SbmIcNus5r+Epku34m3bt9CgzCVOPt0fn6rRyzw6FkUpzYrIrAOB3CBy2SvZnr
-         sZ1fIcpm1B60RnN1DA8ZButkBXuJTVBtmFuowsLqIAWAQ3gZJw/bvJH1/Rb+RIbNE62Y
-         FVY25FBbLfUVpWTG2F5+3eBJlxVNS1BbObLGpudV+4GqVhVT7KQqjtyoEKbUlKH2Aspl
-         kEpzIsJ/GipqKC0KyEPRtC+jqx8Q+rGGtMryu9Sz+kslCchnkvUEzrsbbEeWIWyY2Z0x
-         4mQQ==
+        bh=Bx/Vz3lnnQGL+fWlhChgYUST4mHwANO098Y8yGy2x8w=;
+        b=EO5hGU+y40QpCoJvSKDGgwXw6HGLAlkcZB0APa2GQXPOnLpCINfzlb4CR5PKJpqOfG
+         vR76MKCSKT2ngojFQfbsuIg6561DfLtzH3OuWhxPX3Od/HPeDL6nVTo4xQsHVNfFvS+C
+         eCMpirXgpk+ria0DOfZEFtWe0Wg3lvyLs5gEzh7Z5LlAngqLZD4ZQeftVxM5WWigtSQa
+         2tYavCzuSSwzVEayjmivld7EAtnWD3QLd2/ALFwd7xjjRAm1SIcURH4/0WzLYRrjw9Hj
+         vUdkF1IHt6oOUWojURx3Wqvf2tjvBeq0PHXB1YwlRil5JXHqw22QuE6WFANztI+y4q4C
+         d5Iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737301498; x=1737906298;
+        d=1e100.net; s=20230601; t=1737301500; x=1737906300;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9MK30M1/4LGOcL0ZrPE9gPryc2MA/RdOwp1GOptQnIo=;
-        b=X3FeACjBMx/80/87IZ5qTczQOGc7OilKcNvRVRpyXiQ9KSFWHCBsmbrHlDz8RcCw1f
-         +cJ7h90LiW4SvoUpXkA/VDcaL1jGdr9LzhIOd486w32ApAwZwTa4SeNK3P6WRwTDMGd4
-         LDvJO7eg3dXQJ7gASHI3nNpHSrL0cw/IAegHOhQ3Cv60bbmx1vgKLZk1JVAtC3DvYCo/
-         r/Scnm232bHehLd4xn/sXHXesXE64up+sBViuEjrklVX+nEH5KRYZALTL9ueSSCU99mx
-         g++z4RJtPQQa1kGHj40HkZ15ld/S9DtZ4uYjX0CeRGE9JGHl8JfDc1wed275JpsrmQv6
-         OTbg==
-X-Forwarded-Encrypted: i=1; AJvYcCW4Ue79orwUP5sW+mur3/JMPcAFTgqT1wnQgHklpVhuG3DX9JR7sRVntuC4Fgh6+Q+5ynuqYGb61NVJA8qq@vger.kernel.org, AJvYcCWBMkpU5VmOK8Z+UkoE1RG5LX6XprjAgBW7A/T1ok5xZDj7E/yYFKN6lK9giQhXZpBjezb/wmHbTpBS@vger.kernel.org, AJvYcCWzdqQGMTSslhPyp6JAmIU+9bM4XQG/zqXnA1rrnOAxLP+594/NvzZfk27GuF6QlTJNLXy+l7T8egOUPQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxfbfif2yINmN9Zpunh83myIuipr4CQobrV+wP1HKjX2xtMjwWU
-	Fnwe5cTpquu8YPhy8xUg6SM1Kc8LHSOgFhHTCp3/w5fqSgomPI651P4WpQ==
-X-Gm-Gg: ASbGncv+HGh0wDCF+5g3vVgQ6Wlz2qC+1rDU3tdpr3EJQENDLL2DRf2FpKYj4GLI+r0
-	tZaJslbXG7iBLw4beEPINbVXWEweo/D0EBpO7p5L9vW7AtLoxCDgr8uJ30el8KhZdcd5bx1V5Ib
-	i4lVQ6pjzOGIAOFZ/4pDFm6LB882KRhqynmHzjvHGNcISIdejI1QtBcHLRE+mBs5kKtLW8Uz8wE
-	xTeki7XQU24P0jLRy6tYVxN077JaEyrg9v1ae15meaJK/yhJG9uHm8G6ZPeE58C0R8yZRQBWVn5
-	qrU/kdEHB8vcLuzY2gs2d66CRcncbCLrhkXxKJrH8BUU2PhC/pg9WoNz+iym
-X-Google-Smtp-Source: AGHT+IEpuOcwhndfyvWYPRAI3p1i6MxAq5drgewlnyxnKTDOpi0mw1sBE9reqq+g/zwydm07CMJssg==
-X-Received: by 2002:a05:600c:1c93:b0:42a:a6d2:3270 with SMTP id 5b1f17b1804b1-43891426ebcmr78545355e9.21.1737301498564;
-        Sun, 19 Jan 2025 07:44:58 -0800 (PST)
+        bh=Bx/Vz3lnnQGL+fWlhChgYUST4mHwANO098Y8yGy2x8w=;
+        b=com/awLPik5biJC4QmDfbrq2TwrP10o91TtruTNnYyoAqSrwoOX+YNYnABEPqtmLGy
+         AMC9i6DIO5vY4bEX6SmGOBLm5j0B8wfXDArWB6HAUtATwknZCx5xr4zgz4z/CijTS5L/
+         QaHX3vzJGWUv/hzg8MJ57WQIyzGYxx5Vv6oC+s/w9kjb0sbKoljyuaxuBG6UVvu+1gEu
+         863NzaepFAtvKa8nv2DRnQPQd7+DaueasfSd0UBXJYg16ZzZg4Z/s3rE+e00bedXdHwP
+         pg6ESzjH+rIWQXWmFvPCEX6zxn4vQMBvj+Er/6VxMllQvJjrej8rSdx2yhEcwRBHYecd
+         30ew==
+X-Forwarded-Encrypted: i=1; AJvYcCVky0a+LmIRz2kud3XlefxJNoCvK118Fj6OpcDvBo4WHPbG1SP52PJQiB2+1FvCSPoUwWRQf0UyaRI9@vger.kernel.org, AJvYcCWZ8RVvDf1eJsURAfNquXoEcWCHv44MST8yL8U5DZ339VWySNP+v3Kz7gtramovIFXpu5N6Iz9pnzaTnLbE@vger.kernel.org, AJvYcCXiFZeBgaGgE9ALXa8Ovy+XBoDxtHvcJzmEBeZaWM98t8QPjdJYRWbq0NsX2Rf2A1/yfqFGfzRYMxxvHw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0xPPGXbjIr85mdOfTHpGxSPty7b9ez1NCyfwml0s/0XKMboqu
+	BuoGPkHwLoc3lz1EsSRKi669a1WhpX9u+68KHCjfMpYT6G+s72Y3fMOInw==
+X-Gm-Gg: ASbGnctOZWY1S++hmE8Nq+Xu1FbzaoHaymNcTPzhJ79ziezHWk9RYwXB6QIGybVWMHi
+	kjqRNyNeLVIzLwWhkYsBKmCyEfz6sv2lUOyU0tIR1h/lfxq+02FKjlJWgtN4URr2946CBtzKQdJ
+	tLPHkEzx19DSE4FgUPCQNkKO0HFzx+dxzAWMPDWykkBTkLmohcaVcukzYcRi5WSHAy/LDtUHHiv
+	y4GoLO2aRPoSwqBX4yFQTIEvWNLctzPTp2tv2/B422IQcgayniAC2RQag/9wL3fI8OO3XPcxNJ2
+	LqfHUC0dQNY57+Pg5sQPaZEbd5uRCUOC98q7xPP3bkG5l93fZleUHcRANgd9
+X-Google-Smtp-Source: AGHT+IHNjv6tIXcJHFJJCtwYlJ7zWvZ9G3rS4DULFBXzvZw22e2N1RTUgmcUtBZ893WfMDTRyk/MTw==
+X-Received: by 2002:a5d:64e4:0:b0:385:e35e:9da8 with SMTP id ffacd0b85a97d-38bf56635bemr9449648f8f.18.1737301499960;
+        Sun, 19 Jan 2025 07:44:59 -0800 (PST)
 Received: from localhost.localdomain (249.red-88-10-54.dynamicip.rima-tde.net. [88.10.54.249])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4389046885esm104532655e9.36.2025.01.19.07.44.57
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4389046885esm104532655e9.36.2025.01.19.07.44.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 19 Jan 2025 07:44:57 -0800 (PST)
+        Sun, 19 Jan 2025 07:44:59 -0800 (PST)
 From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 To: linux-clk@vger.kernel.org
 Cc: sboyd@kernel.org,
@@ -87,9 +87,9 @@ Cc: sboyd@kernel.org,
 	devicetree@vger.kernel.org,
 	yangshiji66@outlook.com,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 4/6] mips: dts: ralink: rt3883: update system controller node and its consumers
-Date: Sun, 19 Jan 2025 16:44:45 +0100
-Message-Id: <20250119154447.462857-5-sergio.paracuellos@gmail.com>
+Subject: [PATCH v2 5/6] mips: dts: ralink: mt7620a: update system controller node and its consumers
+Date: Sun, 19 Jan 2025 16:44:46 +0100
+Message-Id: <20250119154447.462857-6-sergio.paracuellos@gmail.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20250119154447.462857-1-sergio.paracuellos@gmail.com>
 References: <20250119154447.462857-1-sergio.paracuellos@gmail.com>
@@ -101,19 +101,19 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Current RT3883 device tree file system controller node is wrong since it is
+Current MT7620A device tree file system controller node is wrong since it is
 not matching bindings. Hence, update it to match current bindings updating
 it also to use new introduced clock constants.
 
 Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 ---
- arch/mips/boot/dts/ralink/rt3883.dtsi | 10 ++++++++--
+ arch/mips/boot/dts/ralink/mt7620a.dtsi | 10 ++++++++--
  1 file changed, 8 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/boot/dts/ralink/rt3883.dtsi b/arch/mips/boot/dts/ralink/rt3883.dtsi
-index 61132cf157e5..11d111a06037 100644
---- a/arch/mips/boot/dts/ralink/rt3883.dtsi
-+++ b/arch/mips/boot/dts/ralink/rt3883.dtsi
+diff --git a/arch/mips/boot/dts/ralink/mt7620a.dtsi b/arch/mips/boot/dts/ralink/mt7620a.dtsi
+index 1f6e5320f486..d66045948a83 100644
+--- a/arch/mips/boot/dts/ralink/mt7620a.dtsi
++++ b/arch/mips/boot/dts/ralink/mt7620a.dtsi
 @@ -1,4 +1,6 @@
  // SPDX-License-Identifier: GPL-2.0
 +#include <dt-bindings/clock/mediatek,mtmips-sysc.h>
@@ -126,9 +126,9 @@ index 61132cf157e5..11d111a06037 100644
  		#size-cells = <1>;
  
 -		sysc@0 {
--			compatible = "ralink,rt3883-sysc", "ralink,rt3050-sysc";
+-			compatible = "ralink,mt7620a-sysc";
 +		sysc: syscon@0 {
-+			compatible = "ralink,rt3883-sysc", "syscon";
++			compatible = "ralink,mt7620-sysc", "syscon";
  			reg = <0x0 0x100>;
 +			#clock-cells = <1>;
 +			#reset-cells = <1>;
@@ -136,10 +136,10 @@ index 61132cf157e5..11d111a06037 100644
  
  		intc: intc@200 {
 @@ -50,6 +54,8 @@ uartlite@c00 {
- 			compatible = "ralink,rt3883-uart", "ralink,rt2880-uart", "ns16550a";
+ 			compatible = "ralink,mt7620a-uart", "ralink,rt2880-uart", "ns16550a";
  			reg = <0xc00 0x100>;
  
-+			clocks = <&sysc RT3883_CLK_UARTLITE>;
++			clocks = <&sysc MT7620_CLK_UARTLITE>;
 +
  			interrupt-parent = <&intc>;
  			interrupts = <12>;
