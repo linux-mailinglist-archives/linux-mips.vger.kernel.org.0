@@ -1,78 +1,84 @@
-Return-Path: <linux-mips+bounces-7560-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7561-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0B74A17473
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 23:00:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D338FA1750C
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Jan 2025 00:36:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EF59D3A435B
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 22:00:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E05BB3A06FD
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 23:36:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40DAA19992D;
-	Mon, 20 Jan 2025 22:00:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KSz3FXjO"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B9B41E47C4;
+	Mon, 20 Jan 2025 23:36:21 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1544214830F;
-	Mon, 20 Jan 2025 22:00:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13361155A52;
+	Mon, 20 Jan 2025 23:36:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737410439; cv=none; b=fcsETn2K5kKkEzJyWyQt3VjP1UurF60cEgfMs65GGwBsUwLhGTOpl/Pf9bQOKvcZZEwVr8M3r9jXSnPf4JRM9oaV1iSbm7B37i2uKiJLbkFTrlrN48w5vPyOry+FbAn6vRLeYy7fNhBfXry4ozZ1zxtX2GtLGM648aU5AHcbryg=
+	t=1737416181; cv=none; b=AVHb7mqhFm/WgozO38o1T895hpfUgEPCL3vPcvbu4l5qQ/x95hABLNC4r0mZ7I0G6h/CZHEZzjuyw/pzCmVSka+du7HLgoWzjqr4eWPFONlqXH3x74ggry5CExqXAKk/Jzs8VmH95bFyNvzFO3JJ2LDOvVLOV1/V8URYCe+2/gs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737410439; c=relaxed/simple;
-	bh=QydTgFx2tlV3wKwstA1o+PHgPAeyZHx6Y5RneVhyBxY=;
+	s=arc-20240116; t=1737416181; c=relaxed/simple;
+	bh=Vh6vt8JqtKH+T0gvo2bfIDrRVBaugQjXkHlYCH6XpRM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y2IUcQP83b2rJKxDw+vyWiL0EWmgM2ep1d2a+pw6L19uiA5WtciArG0pVoff+Nxpz6cWcw3FMLgOyZYgUjl6pgAJMtCJv00iDqYFZRIYFl4l23BY+zkgvB6LBfnfXGi2cCy9NjO1w8uRukwHFiCVylGZK98Sobm5O8IrNWwt75o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KSz3FXjO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CE52C4CEDD;
-	Mon, 20 Jan 2025 22:00:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737410438;
-	bh=QydTgFx2tlV3wKwstA1o+PHgPAeyZHx6Y5RneVhyBxY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=KSz3FXjOnhJSy+OViALjtWEPph6mytJgOz7i+y2ylB3MRrDTtCgGvj0l0Q7+IrAp3
-	 FDZjbc0e4xG5lsHdKOy5Np6xziYExDu53QsRIY3Es3iEy+LN5e9HYrOjhH9FZJ+1J0
-	 VTMd8hZDRbZTSxa3X2V/4ff5u3s0fwEtbQxq9bnIcUte1Kp7xJaCFimsbXMH2q2qS2
-	 yTG4CSaiUXI3AA0MRE0BAOyPOvxH3N0B0Np1MxXQnJ5PCmA1KcqRl4Yxtz5eHVYtLU
-	 fgOU6Ej9LTu906sGjQPavBoyxR8u0j/cNfI6mR/ymR4X++b35Z3gtnzba6AzrLVCOb
-	 XiMhu1kEiP31Q==
-Date: Mon, 20 Jan 2025 14:00:35 -0800
-From: Kees Cook <kees@kernel.org>
-To: Oleg Nesterov <oleg@redhat.com>
-Cc: Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH 4/4] seccomp: remove the 'sd' argument from
- __seccomp_filter()
-Message-ID: <202501201400.3518CED7C@keescook>
-References: <20250120134409.GA21241@redhat.com>
- <20250120134505.GA21290@redhat.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=mLezJ/zyNM7xRYRFlnFkdDgVUL7WusbUFucKK2xhEX7XoYePDHkry0MVXD0GY8oBA67WR+EXfLCigqyLOIDkrBs0UApKMfKYSo+Sgfjo1fiUsBw57n4AgwN0sT1hh1MFPq2VOzW2IbG96p1WkRPirF62tQFSTemgK7CTRoFvy38=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1ta18z-0006Eo-00; Tue, 21 Jan 2025 00:25:21 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id DDCAFC013E; Mon, 20 Jan 2025 20:41:05 +0100 (CET)
+Date: Mon, 20 Jan 2025 20:41:05 +0100
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Arnd Bergmann <arnd@arndb.de>, Baoquan He <bhe@redhat.com>,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org,
+	Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
+Subject: Re: [PATCH] MIPS: pci-legacy: Override pci_address_to_pio
+Message-ID: <Z46m0T_cNdpCfkCf@alpha.franken.de>
+References: <20250114-malta-io-fixes-v1-1-74ef1dc402ec@flygoat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250120134505.GA21290@redhat.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250114-malta-io-fixes-v1-1-74ef1dc402ec@flygoat.com>
 
-On Mon, Jan 20, 2025 at 02:45:05PM +0100, Oleg Nesterov wrote:
-> After the previous change 'sd' is always NULL.
+On Tue, Jan 14, 2025 at 06:11:58PM +0000, Jiaxun Yang wrote:
+> pci-legacy systems are not using logic_pio to managed PIO
+> allocations, thus the generic pci_address_to_pio won't work
+> when PCI_IOBASE is defined.
 > 
-> Signed-off-by: Oleg Nesterov <oleg@redhat.com>
+> Override the function to use architecture implementation to
+> fix the problem.
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 4bfb53e7d317 ("mips: add <asm-generic/io.h> including")
+> Reported-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
+> Closes: https://lore.kernel.org/r/99f75c66-4c2d-45dc-a808-b5ba440c7551@app.fastmail.com/
+> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> ---
+> This is a quick fix for fixes tree and stable backporting.
+> In long term, we should get logic_pio accept fixed mapping,
+> and make PCI core code aware of platforms not using vmap
+> for PCI_IOBASE.
+> ---
+>  arch/mips/pci/pci-legacy.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 
-Reviewed-by: Kees Cook <kees@kernel.org>
+applied to mips-next.
+
+Thomas.
 
 -- 
-Kees Cook
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
