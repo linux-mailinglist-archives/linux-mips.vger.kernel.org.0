@@ -1,163 +1,129 @@
-Return-Path: <linux-mips+bounces-7554-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7555-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71C17A16EE8
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 16:01:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 666F0A1709E
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 17:47:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 811623A4AB7
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 15:01:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F5F71615A2
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 16:47:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 732501E0DD9;
-	Mon, 20 Jan 2025 15:01:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 954001E0E08;
+	Mon, 20 Jan 2025 16:47:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="fFPQW4CA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZCvif5tA"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 670031B982E;
-	Mon, 20 Jan 2025 15:01:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60AD01E9B01;
+	Mon, 20 Jan 2025 16:47:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737385303; cv=none; b=Bc4NFATKtzZga5QJvXbXQxJ85rldef2/WC1HU7IEy4hK6GfBn31JyRRN6mx+54cO1vOEZuFymcSiXQMXknZoMH6pJ6+s6VhSbL+QdfW5cGqa+VjoRZDa/WqUd4MBh5JX3FR8eiqvBps/Ux9kWDk9GKZ1JK/q3/1gIgyZw0vFyTA=
+	t=1737391621; cv=none; b=lT53blrV5hlIFxVBBd3SyXcNOEq8kKFh/aabfnTKhNbwZ8S7cwXqlFYlWGlos/EjmJvFgyNpCEnwclInBr8ekxrvoRCSk3Kwgvl7TYqNxOVePfkRKSL4Xx6yFrNumacP4brtWXjJTrlLVEDYAb/2OMRVxqNrJo0C3ALYFa59daU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737385303; c=relaxed/simple;
-	bh=fUZy/f3iv+e7r7B0v5YQupln/qBLiJ/ZjUYAwryee1k=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Cz3ZQNKMV4zGOpcwsp71NcxI+/H6/nQ69sUvSbhjBo2TScjV+L2Iu7nHM3nJGkswfTkzNiOwL2UT5X39VHpnDigW/ymF8bM/V3HXBOc8hS6p2uwxjTJQq6nz+6X9PpJQG9Gy4Oyty8WG9hYbvW2MRSYFkRAUsZJM+NjsDxK19+E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=fFPQW4CA; arc=none smtp.client-ip=217.70.183.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id AD968E0002;
-	Mon, 20 Jan 2025 15:01:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1737385293;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zKhxk7+Fda/Wv8tla9DbvJyAAOL1sQ8gUN049EB9HcU=;
-	b=fFPQW4CAdVMpPhOmELtha/GLUMMpELhtFBz3W6kgFPsdNPErYrRy8lXjhvla2cFsK2+2vw
-	1mw5YMqbwMkZGxJUVMvD06qJEhc0BH3wyAm8JTnUfpvKwhLcM58TLUpNrG6Fkk1bs2QfH+
-	yHwA5XeDhK1ccSdTqrdEAd5ibP1kyBE812kA/iK2WkjQm2AjQp//Sc0UIHCkbHSOu7k8Vf
-	UXGz9u/jaERH9sIk7NK4MaV7jlKbSe+foBTkoSQR/iS4Xo7gGMV06E3+F8S4Xe352TxqgX
-	sMKCv85FgjJI5FVNqzXEhbXFemrYH2GTsYmyMbV7a9OpgAbKUgBQ6Tq8muohLg==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-To: Rob Herring <robh@kernel.org>
-Cc: Aleksandar Rikalo <arikalo@gmail.com>, Thomas Bogendoerfer
- <tsbogend@alpha.franken.de>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Vladimir Kondratiev
- <vladimir.kondratiev@mobileye.com>, =?utf-8?Q?Th=C3=A9o?= Lebrun
- <theo.lebrun@bootlin.com>,
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, linux-mips@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/5] dt-bindings: mips: Document mti,mips-cm
-In-Reply-To: <20250116153110.GA2495012-robh@kernel.org>
-References: <20250116-cluster-hci-broken-v2-0-fc52cfb7a19e@bootlin.com>
- <20250116-cluster-hci-broken-v2-1-fc52cfb7a19e@bootlin.com>
- <20250116153110.GA2495012-robh@kernel.org>
-Date: Mon, 20 Jan 2025 16:01:32 +0100
-Message-ID: <87r04xv8ab.fsf@BLaptop.bootlin.com>
+	s=arc-20240116; t=1737391621; c=relaxed/simple;
+	bh=rMXqi3CvQdBhxQuQUtGFMKS1HqKvz1G9dJMq89/Pnt8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=GXlHGH/VHqrCNqrDJG7W8LGxaZDkgZHlsWjLAs8SBNGYi+OX2CA2W2rEGX9MwkeEjlKfVc2BIVF2COVZ+KJhfS3iNbsqC3BemcoRY8NSw7JFIJcjcL++Yamf4r0wwXOTHEDJZJcFSxplBALstXBHHzww08MifH+2Nae95TqI2Ug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZCvif5tA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57728C4CEDD;
+	Mon, 20 Jan 2025 16:46:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737391621;
+	bh=rMXqi3CvQdBhxQuQUtGFMKS1HqKvz1G9dJMq89/Pnt8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ZCvif5tAJe7q+y5YiB16KetQzGE0mTrdsZ9kbM4DnUV18dfvEWok2/zt2AP0FJSRI
+	 VVlhnqM6cVfN4nWUcg9qfeHrLQyfFQpvGbPench7v3pYgM/Az6FWfpasJ8jZVuwLdi
+	 fz73nE68OzYRFa4l82OIavyjrqzCObz0zcdNp07lhFlBsgX+ASEo2P6QWwLW2ApVHZ
+	 kkIGcc9aLCuK9w30cYD1MliIh+Fr6ilsVSQNtCrC81llQfk6b7kc93ZWzaRgi65/Bp
+	 ao8TXqXIGhywtz2BrEm8GZ65PKIimoHXl4SZj4FZY/N7i/1UphBPm5s/9HVU0fZRFm
+	 PA22i7SsqJNXQ==
+Message-ID: <c49aa6ea-8be3-4cfb-a2f0-18c4e635527b@kernel.org>
+Date: Mon, 20 Jan 2025 17:46:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-Sasl: gregory.clement@bootlin.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/6] dt-bindings: clock: add clock definitions for
+ Ralink SoCs
+To: Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+ linux-clk@vger.kernel.org
+Cc: sboyd@kernel.org, mturquette@baylibre.com, tsbogend@alpha.franken.de,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+ p.zabel@pengutronix.de, linux-mips@vger.kernel.org,
+ devicetree@vger.kernel.org, yangshiji66@outlook.com,
+ linux-kernel@vger.kernel.org
+References: <20250120092146.471951-1-sergio.paracuellos@gmail.com>
+ <20250120092146.471951-2-sergio.paracuellos@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <20250120092146.471951-2-sergio.paracuellos@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Rob,
-
-> On Thu, Jan 16, 2025 at 11:59:19AM +0100, Gregory CLEMENT wrote:
->> From: Jiaxun Yang <jiaxun.yang@flygoat.com>
->>=20
->> Add devicetree binding documentation for MIPS Coherence Manager.
->>=20
->> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
->> ---
->>  .../devicetree/bindings/mips/mti,mips-cm.yaml      | 38 +++++++++++++++=
-+++++++
->>  1 file changed, 38 insertions(+)
->>=20
->> diff --git a/Documentation/devicetree/bindings/mips/mti,mips-cm.yaml b/D=
-ocumentation/devicetree/bindings/mips/mti,mips-cm.yaml
->> new file mode 100644
->> index 0000000000000000000000000000000000000000..9f500804737d23e19f50a932=
-6168686c05d3a54e
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/mips/mti,mips-cm.yaml
->> @@ -0,0 +1,38 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/mips/mti,mips-cm.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: MIPS Coherence Manager
->> +
->> +description: |
->
-> Don't need '|'.
-
-OK
-
->
->> +  Defines a location of the MIPS Coherence Manager registers.
->
-> Say what the h/w block does.
-
-Managing coherency ? :)
-
-However, more seriously, I can provide additional details based on what
-I have written in my previous emails.
-
->
->> +
->> +maintainers:
->> +  - Jiaxun Yang <jiaxun.yang@flygoat.com>
->> +
->> +properties:
->> +  compatible:
->> +    const: mti,mips-cm
->
-> Convince me a genericish compatible is okay here.
-
-well this componenant is really named Coherence Manager in the MIPS
-related document. For example in p4 of
-https://training.mips.com/cps_mips/PDF/CPS_Introduction.pdf and also
-https://training.mips.com/cps_mips/PDF/Coherency_Manager.pdf.
+On 20/01/2025 10:21, Sergio Paracuellos wrote:
+> Add clock missing definitions for RT2880, RT305X, RT3352, RT3383, RT5350,
+> MT7620 and MT76X8 Ralink SoCs. Update bindings to clarify clock depending
+> on these new introduced constants so consumer nodes can easily use the
+> correct one in DTS files matching properly what is being used in driver
+> code (clock IDs are implicitly used there).
+> 
+> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> ---
 
 
->
->> +
->> +  reg:
->> +    description:
->> +      Base address and size of an unoccupied region in system's MMIO ad=
-dress
->> +      space, which will be used to map the MIPS CM global control regis=
-ters
->> +      block. It is conventionally decided by the system integrator.
->
-> What is decided? The address? That's not relevant.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Since reusing the description from Jiaxun, I'm unable to speak on his
-behalf. From my perspective, it simply implies that the value to be
-written should originate from the datasheet of the System-on-Chip (SoC),
-as the address is is specific to the integration into a given
-SoC.
-
-Gregory
-
---=20
-Gr=C3=A9gory CLEMENT, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Best regards,
+Krzysztof
 
