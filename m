@@ -1,93 +1,178 @@
-Return-Path: <linux-mips+bounces-7562-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7563-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04120A17510
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Jan 2025 00:36:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C430EA1751E
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Jan 2025 00:58:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F4233A68CF
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 23:36:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60FE3188A563
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 23:58:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27FD51E47C4;
-	Mon, 20 Jan 2025 23:36:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A4201F0E32;
+	Mon, 20 Jan 2025 23:58:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="MY3PoJB3"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E24C5155A52;
-	Mon, 20 Jan 2025 23:36:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+Received: from aposti.net (aposti.net [89.234.176.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 875E41EEA5F;
+	Mon, 20 Jan 2025 23:58:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.234.176.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737416186; cv=none; b=VHoOBS4gFR4tb69TsyVrCtpZbX289unXbX752MuHm7RfGI6cfbbUjQ6s9rdVxX2YLEttuhohkicPmQ+k+zixcEXZ57Cvaqj1N9B1zMB92O1w7qbAUfYmoOh0OHXDNumJ5RBq6z6zqW1zIFcF3JDiCUhfU0CfdeyUnbWVRYtfdM4=
+	t=1737417494; cv=none; b=EvJKQGXRbYAb4qjpWQ64rv0nEnEhRzAY98zPozz1hJeCDvP7W2wPFg6IwYduqLoF5be+ul6aLmuQmULMnVyGZltIo3pAC+/qVUpGpeUD/mszMurAky3iTpn+0VJJUT6RemoeSuoBCkcc1z9P1Qg3oAoeHADwjY89aVw+T964Hek=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737416186; c=relaxed/simple;
-	bh=ymF9x7S+Akphj0N+B81ZiZVyzQT2APWSc9IDU7jgIwM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g8Q58PhC3Y7BueWZ9TFBuCUdKmVt1GVh5s/uVKtcTZSSVqOHADq2pHKq4f04QMB8AqhY5BltpTXiH6B0N6MwVn+3Ua4MjAvu3XTV7G40TbK+87Jf9RluQGnTkYg1V2NH/g9eU63U7a3fIhvlBjYlSugBGc8X/XZIa/f0ChyZvtY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1ta18z-0006Eq-00; Tue, 21 Jan 2025 00:25:21 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 1A345C014E; Mon, 20 Jan 2025 20:41:28 +0100 (CET)
-Date: Mon, 20 Jan 2025 20:41:28 +0100
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Thorsten Blum <thorsten.blum@linux.dev>
-Cc: Huacai Chen <chenhuacai@kernel.org>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Loongson64: env: Use str_on_off() helper in
- prom_lefi_init_env()
-Message-ID: <Z46m6MHmRMfUnVrD@alpha.franken.de>
-References: <20250115090134.918023-2-thorsten.blum@linux.dev>
+	s=arc-20240116; t=1737417494; c=relaxed/simple;
+	bh=X7XkJHJJePFk96UIZAhtCRmPeQpsM03ev+h9+VwScas=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=dGfIMsk1BkCxNeZ42NmVaw2Hxz84oG63JwulBX2nt/E2Zr7vcT0lNXNysr+6xXtfuCqCOrzgz5ykSraUMozk8sIgq5n+QWoqtNn70pvZOm7DL1QwqgybvuicUuoSAL0uKRMOjRboxPb4mv5O4mn31r9G6AD4q8pDJKPld+s6U1Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net; spf=pass smtp.mailfrom=crapouillou.net; dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b=MY3PoJB3; arc=none smtp.client-ip=89.234.176.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crapouillou.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+	s=mail; t=1737416955;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=vb+cZhxGdLsBtYABfJWi+gMxt2Bz2rrH5ztnMW0VGro=;
+	b=MY3PoJB3fzwPtDfAIMG4l2lWi8xrA08Tbln3l+koIj+YmfHqWrZ8H8/E1ykQ89gYz2yuj5
+	Dyrr5x+I/g3Dcpx53gJUY5iYJJ83yXPq3iYz9labBithfS2ln3tDDVdVDiJ0nNeOXwesh3
+	Yz1eZVxMrFkGuaO4bT32LcpkiGRxfzA=
+Message-ID: <b32939c57f1faff7ae33c072d5824d8225735de6.camel@crapouillou.net>
+Subject: Re: [PATCH] dma: jz4780: fix call balance of jzdma->clk handling
+ routines
+From: Paul Cercueil <paul@crapouillou.net>
+To: Vitalii Mordan <mordan@ispras.ru>
+Cc: Vinod Koul <vkoul@kernel.org>, Alex Smith <alex.smith@imgtec.com>, 
+ Zubair Lutfullah Kakakhel	 <Zubair.Kakakhel@imgtec.com>,
+ linux-mips@vger.kernel.org, 	dmaengine@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Fedor Pchelkin	 <pchelkin@ispras.ru>, Alexey
+ Khoroshilov <khoroshilov@ispras.ru>, Vadim Mutilin	 <mutilin@ispras.ru>,
+ lvc-project@linuxtesting.org
+Date: Tue, 21 Jan 2025 00:48:13 +0100
+In-Reply-To: <20250120135059.302273-1-mordan@ispras.ru>
+References: <20250120135059.302273-1-mordan@ispras.ru>
+Autocrypt: addr=paul@crapouillou.net; prefer-encrypt=mutual;
+ keydata=mQENBF0KhcEBCADkfmrzdTOp/gFOMQX0QwKE2WgeCJiHPWkpEuPH81/HB2dpjPZNW03ZM
+ LQfECbbaEkdbN4YnPfXgcc1uBe5mwOAPV1MBlaZcEt4M67iYQwSNrP7maPS3IaQJ18ES8JJ5Uf5Uz
+ FZaUawgH+oipYGW+v31cX6L3k+dGsPRM0Pyo0sQt52fsopNPZ9iag0iY7dGNuKenaEqkYNjwEgTtN
+ z8dt6s3hMpHIKZFL3OhAGi88wF/21isv0zkF4J0wlf9gYUTEEY3Eulx80PTVqGIcHZzfavlWIdzhe
+ +rxHTDGVwseR2Y1WjgFGQ2F+vXetAB8NEeygXee+i9nY5qt9c07m8mzjABEBAAG0JFBhdWwgQ2VyY
+ 3VlaWwgPHBhdWxAY3JhcG91aWxsb3UubmV0PokBTgQTAQoAOBYhBNdHYd8OeCBwpMuVxnPua9InSr
+ 1BBQJdCoXBAhsDBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEHPua9InSr1BgvIH/0kLyrI3V0f
+ 33a6D3BJwc1grbygPVYGuC5l5eMnAI+rDmLR19E2yvibRpgUc87NmPEQPpbbtAZt8On/2WZoE5OIP
+ dlId/AHNpdgAtGXo0ZX4LGeVPjxjdkbrKVHxbcdcnY+zzaFglpbVSvp76pxqgVg8PgxkAAeeJV+ET
+ 4t0823Gz2HzCL/6JZhvKAEtHVulOWoBh368SYdolp1TSfORWmHzvQiCCCA+j0cMkYVGzIQzEQhX7U
+ rf9N/nhU5/SGLFEi9DcBfXoGzhyQyLXflhJtKm3XGB1K/pPulbKaPcKAl6rIDWPuFpHkSbmZ9r4KF
+ lBwgAhlGy6nqP7O3u7q23hRU=
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250115090134.918023-2-thorsten.blum@linux.dev>
 
-On Wed, Jan 15, 2025 at 10:01:35AM +0100, Thorsten Blum wrote:
-> Remove hard-coded strings by using the str_on_off() helper function.
-> 
-> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+Hi Vitalii,
+
+Le lundi 20 janvier 2025 =C3=A0 16:50 +0300, Vitalii Mordan a =C3=A9crit=C2=
+=A0:
+> If the clock jzdma->clk was not enabled in jz4780_dma_probe(), it
+> should
+> not be disabled in any path.
+>=20
+> Conversely, if it was enabled in jz4780_dma_probe(), it must be
+> disabled
+> in all error paths to ensure proper cleanup.
+>=20
+> Use the devm_clk_get_enabled() helper function to ensure proper call
+> balance for jzdma->clk.
+>=20
+> Found by Linux Verification Center (linuxtesting.org) with Klever.
+>=20
+> Fixes: d894fc6046fe ("dmaengine: jz4780: add driver for the Ingenic
+> JZ4780 DMA controller")
+> Signed-off-by: Vitalii Mordan <mordan@ispras.ru>
+
+Acked-by: Paul Cercueil <paul@crapouillou.net>
+
+Cheers,
+-Paul
+
+
 > ---
->  arch/mips/loongson64/env.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/mips/loongson64/env.c b/arch/mips/loongson64/env.c
-> index 09ff05269861..be8d2ad10750 100644
-> --- a/arch/mips/loongson64/env.c
-> +++ b/arch/mips/loongson64/env.c
-> @@ -17,6 +17,7 @@
->  #include <linux/dma-map-ops.h>
->  #include <linux/export.h>
->  #include <linux/pci_ids.h>
-> +#include <linux/string_choices.h>
->  #include <asm/bootinfo.h>
->  #include <loongson.h>
->  #include <boot_param.h>
-> @@ -162,7 +163,7 @@ void __init prom_lefi_init_env(void)
->  		dma_default_coherent = !eirq_source->dma_noncoherent;
->  	}
->  
-> -	pr_info("Firmware: Coherent DMA: %s\n", dma_default_coherent ? "on" : "off");
-> +	pr_info("Firmware: Coherent DMA: %s\n", str_on_off(dma_default_coherent));
->  
->  	loongson_sysconf.restart_addr = boot_p->reset_system.ResetWarm;
->  	loongson_sysconf.poweroff_addr = boot_p->reset_system.Shutdown;
-> -- 
-> 2.47.1
+> =C2=A0drivers/dma/dma-jz4780.c | 14 ++++----------
+> =C2=A01 file changed, 4 insertions(+), 10 deletions(-)
+>=20
+> diff --git a/drivers/dma/dma-jz4780.c b/drivers/dma/dma-jz4780.c
+> index 100057603fd4..ff9c387fd8c1 100644
+> --- a/drivers/dma/dma-jz4780.c
+> +++ b/drivers/dma/dma-jz4780.c
+> @@ -896,15 +896,13 @@ static int jz4780_dma_probe(struct
+> platform_device *pdev)
+> =C2=A0		return -EINVAL;
+> =C2=A0	}
+> =C2=A0
+> -	jzdma->clk =3D devm_clk_get(dev, NULL);
+> +	jzdma->clk =3D devm_clk_get_enabled(dev, NULL);
+> =C2=A0	if (IS_ERR(jzdma->clk)) {
+> -		dev_err(dev, "failed to get clock\n");
+> +		dev_err(dev, "failed to get and enable clock\n");
+> =C2=A0		ret =3D PTR_ERR(jzdma->clk);
+> =C2=A0		return ret;
+> =C2=A0	}
+> =C2=A0
+> -	clk_prepare_enable(jzdma->clk);
+> -
+> =C2=A0	/* Property is optional, if it doesn't exist the value will
+> remain 0. */
+> =C2=A0	of_property_read_u32_index(dev->of_node, "ingenic,reserved-
+> channels",
+> =C2=A0				=C2=A0=C2=A0 0, &jzdma->chan_reserved);
+> @@ -972,7 +970,7 @@ static int jz4780_dma_probe(struct
+> platform_device *pdev)
+> =C2=A0
+> =C2=A0	ret =3D platform_get_irq(pdev, 0);
+> =C2=A0	if (ret < 0)
+> -		goto err_disable_clk;
+> +		return ret;
+> =C2=A0
+> =C2=A0	jzdma->irq =3D ret;
+> =C2=A0
+> @@ -980,7 +978,7 @@ static int jz4780_dma_probe(struct
+> platform_device *pdev)
+> =C2=A0			=C2=A0 jzdma);
+> =C2=A0	if (ret) {
+> =C2=A0		dev_err(dev, "failed to request IRQ %u!\n", jzdma-
+> >irq);
+> -		goto err_disable_clk;
+> +		return ret;
+> =C2=A0	}
+> =C2=A0
+> =C2=A0	ret =3D dmaenginem_async_device_register(dd);
+> @@ -1002,9 +1000,6 @@ static int jz4780_dma_probe(struct
+> platform_device *pdev)
+> =C2=A0
+> =C2=A0err_free_irq:
+> =C2=A0	free_irq(jzdma->irq, jzdma);
+> -
+> -err_disable_clk:
+> -	clk_disable_unprepare(jzdma->clk);
+> =C2=A0	return ret;
+> =C2=A0}
+> =C2=A0
+> @@ -1015,7 +1010,6 @@ static void jz4780_dma_remove(struct
+> platform_device *pdev)
+> =C2=A0
+> =C2=A0	of_dma_controller_free(pdev->dev.of_node);
+> =C2=A0
+> -	clk_disable_unprepare(jzdma->clk);
+> =C2=A0	free_irq(jzdma->irq, jzdma);
+> =C2=A0
+> =C2=A0	for (i =3D 0; i < jzdma->soc_data->nb_channels; i++)
 
-applied to mips-next.
-
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
 
