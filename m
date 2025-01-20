@@ -1,142 +1,161 @@
-Return-Path: <linux-mips+bounces-7539-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7540-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10E0BA1685C
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 09:46:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13AF1A16931
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 10:22:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB29A1888CA6
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 08:46:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F0BC81694AE
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 09:22:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E025194096;
-	Mon, 20 Jan 2025 08:46:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B40481ABEC1;
+	Mon, 20 Jan 2025 09:21:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HgAITaHj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B71/Z0fv"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 885EF7E1;
-	Mon, 20 Jan 2025 08:46:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D57871885A1;
+	Mon, 20 Jan 2025 09:21:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737362787; cv=none; b=d91ioWN824CJQ4yO+qNomhNESqrDgILT4lpnoaP7SxUYZjyNqymh0vuaGzAF83go2/jkUez3rLTNOursNfJvF229hcX+stBQ33hTytfJ7eb7ZPOG/fC/W6dd9SQm1gQ0ev8UeqBy1+3Gp8ze+lQ1i/PKjKbRedJqjFjXyS6KGcw=
+	t=1737364913; cv=none; b=d1KQ7VlopHEQz/+Ltf/Tpkv5aLIsFm1T6RewmTlHWmxktRYAHflVT4hyKd2GY5Zm2J0XPMZuyGvVzdXEAH/rcnUu4BPHjRUDjDDS96cW/LWOXXarXFR46o3ibcb6LK2Ra3PQI/Fs2S0oeGE7XW5MMszNuYJFbdSujqUCQ3nNBDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737362787; c=relaxed/simple;
-	bh=I6VYdCkvVp6Id+7Z9kSbDZ31aJ/qnRE1whPBf1zCdqk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fLbYxmN9kXmQls16Z8P8jtdcyYkcgDYF3yWS7RYiOaqtGCxdet1N8BpgAmxf6094RVN4Av6x6YlrrZAYXpkrUZTIMYhL4dZJayy4EsI6kkpDcdEEj2gpHhbtysEFjA+/PMG16UDq6Fq+s6yAFQZB9BK1l6ffIC4LQZpBMdV6eQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HgAITaHj; arc=none smtp.client-ip=209.85.216.43
+	s=arc-20240116; t=1737364913; c=relaxed/simple;
+	bh=IWwgl6VMXJu7yraH76C5LIm9Vk9IG6t0KaiISs/faYE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=U9SG4zMRyDdbS+UUQK0fddQnRyq730GcJ1Uf+AXnCyyRs/0Vs2TzLD2WDv6BUEKeZHdmo+jynR2V2Kx8QRb9VFiLTCLl2b2/dfl2izvuAgeDj2DWgjdN24p6Jfod7T2A8dHJ7Upu9yoqbRMDPhCuXAgtAvKZ1vmmTQW8wv8R38k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B71/Z0fv; arc=none smtp.client-ip=209.85.128.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2ee9a780de4so5345588a91.3;
-        Mon, 20 Jan 2025 00:46:26 -0800 (PST)
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-4363dc916ceso32133595e9.0;
+        Mon, 20 Jan 2025 01:21:51 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737362786; x=1737967586; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xYv+axPnGZz6oNqmw8V96Dy3RmKP9Ehg7MAl9Q2i8GU=;
-        b=HgAITaHjeLc8/BHH1rEBW6b9m8gY3DRXAn01INAVBHyjNJcJ+bfUbp+ula462GeB5N
-         MvN4cLF/qCHk8V0FB2ZgDInOYQ+Yrs9tbIYKRaEGYTU/bFP2RHox0wfatA8TbR3ITMmM
-         JBPrZm6fk5fMWAgxlSyQFNx/5bGyegZW7ltuigUxplQ2ciwn+dHYDvd2YVvu6SErIXLM
-         p5lxelRrWJHn22a8YUqLafw9hqmXj03bCuQeCnhiKNGjjZBkKyY2HXQENDZTPD/thG5p
-         il2BTvvVSJMwKo5+E8jU8A+mx5d9l6j416Yr96OPMzyVlucanHfTLkATByo239v2Oywd
-         B8rA==
+        d=gmail.com; s=20230601; t=1737364910; x=1737969710; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=hzka/3o1r/eZ9YDCKi8zcYXbaHUSqQQBefdYfgn1zq8=;
+        b=B71/Z0fvy0Lmjg2ysNyQYiPSF/t2GdoVhNvLDqoAfKfh1tpK+lwKRHxJ5uXFjQRVFH
+         v+jVbWjACSj6Wp0JVaLwZ+qRmBY6bBNES+Vqk6jV6bpSOqaGl/DF21ID8vnJttYp1GPE
+         f+rTNH89GlCh3OZ2aQ+g0aT1TjCzdAyNCxhEhfUMXdDIadRuYFoWet6sTJDHzK1ujjC1
+         w1nRBJU23qxmfi8TQNqkWSAeBcUwE6jNNqSRnKJa6Ck+tBnqUOrkz6dNRq4W8UZdtap6
+         s4XsYwjXzRFVgnXGv6sn9htVaNO7sa5a+D/UbnexhOgo8QePW0xetWAYEXEOB68WiRKj
+         9z+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737362786; x=1737967586;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xYv+axPnGZz6oNqmw8V96Dy3RmKP9Ehg7MAl9Q2i8GU=;
-        b=ryuaNjn7YVsBRTuLP5fQc/821/RCyBvqtgpHUPWKAQIJcp+at9aHbAKVcB7+/02Z5q
-         /YMTLMEVpKdq/UD5jsGqjstKfFtaBSixbRduQjlFU9H8lK+pBCBncFsnU4D2Nyb3ajnm
-         T+TpAgz3a4TUCt2D4KV3p3zGLychtWtYDhQDX66zbyjkuINwZyCjAP1NBlk0UDZriEUr
-         jmEleLtM9wuJS0aPRDffvTtSvJYGZCC0UZs+5+gzRetm7O+lAQFtcUeHaoZPtQ2BOsB0
-         uN8SiNk2s45TxdnmMgyceta0Gi0Hq0tr7higOEmOMcwPfsl+LYMJXMdT0UzD/+9gOfBK
-         UtIg==
-X-Forwarded-Encrypted: i=1; AJvYcCVQWfUk+aszxxTBr2Ix5cQZjRdgLcGwTOA/Cy+L+WjgZK1XcUKvsQqmZTny7KWSGndIclpuXufMzcTT@vger.kernel.org, AJvYcCVowQBAK4NAflvZAt5WFd0k2BKQruuj4hwDx/7pjGNRV1WEjHGdqHH72n53DajvsNrCjwQYWUUqtNEWTpGX@vger.kernel.org, AJvYcCXpadowP4IyeGW1Rbcrp9B+bL82BDdz+EuYIs60AqZsFEylkdixB8mUuVVfcZKW7jYb8JYOoKbkXg9gUQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5Pjdoww+hOziuKtOOw77iH6ul+SWzMRfg5lFp6grKQfy76Ba3
-	CAd94oyQ04tbMAEASjObjfvKzeoM6ZAv6nH5V/oCjcGkD6ilRKu4DvDpjKQEBvWn2bCV99GTtN1
-	wpZe5DHt11Q8/gpnrxsARKob5NUU=
-X-Gm-Gg: ASbGncvOaMoNF3tn6BsULYGqO3Ds92OxjwdWGO/kelQ257t4HeQIzKjGYeW5Uj5y0vM
-	qcA2MiHe0m5Zl/W1UfNjFVcfcVg29aCNOscXrCing93OOd8X15g==
-X-Google-Smtp-Source: AGHT+IHa03UWz7nHbos0urTgmAQdrgNRVid/T8tle2nvKN9JHJg3fUXyCQgMmnGueIGf2++IxvNLDV6fYAz1TfWZS/o=
-X-Received: by 2002:a17:90b:1f8b:b0:2f6:539:3cd8 with SMTP id
- 98e67ed59e1d1-2f782ca2291mr19433543a91.18.1737362785664; Mon, 20 Jan 2025
- 00:46:25 -0800 (PST)
+        d=1e100.net; s=20230601; t=1737364910; x=1737969710;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hzka/3o1r/eZ9YDCKi8zcYXbaHUSqQQBefdYfgn1zq8=;
+        b=f8pHC7/tJS0F3ZLx5JSBTl4frXcq2QwEKq3X7T7jattiwre42vhRHMiWzM1TBfyVRW
+         D3sK5bfySjfbCED9ErlQwHVb/6Dck0LUS9jj2avyu+jMAO3fZWye4exIzFxBprVPv8Q3
+         zHHbPMeziRBQRFwxO/KxcHlFVi7BVjfbx0vBH/06ipUUe3DFE7Cr48JRkA3uMsksILdE
+         p/7WQgWYesdrh2Dh4b14oQe0Shk2IfWbdQRtjLAnmpx15aqBQ9lWiq0iZjcKu0pFauyb
+         szdwhYnfvm7WOOIqX8/O5LQ6QHlr3pmYWpnE8NcWC1W9Qfs2pggTR6KvNKHprYLYq4cb
+         RKEw==
+X-Forwarded-Encrypted: i=1; AJvYcCUs0oNLpj1fGyZ2i0Phe0PfZhm+CDsk6FX5zX3c2EqcXv5T3xMdOW1t4G92Gj78QcCnQd5nurSG9cZA@vger.kernel.org, AJvYcCVXSM+9fYl/ByZHTENcBBSr4i4RV5PRTUUP99YP7xNAZ3KZjayGas17dUSqezJYAS7rIcXW2tlKrNZqlK6w@vger.kernel.org, AJvYcCWOeLFRq2hkteTk/IbgRjfMqa04YhaDbE36i2Rcz4Y+l+8tqosvoRvDU+VrgyJsvVsjwik70HQbDHVYsA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxOJ4ulmpVH5XZtKPprz/t2w6LR+sPEpkkj8BGy0nAqxAiC2q8V
+	t/0IuwZF7v1FOMUllSImmNr1imxuDqoc6SXGtckLdKnuTDQC3HV5I2pGqQ==
+X-Gm-Gg: ASbGncvW+uX3HNN2moQXj/0OmYsO2SN/fYcSQRI+rKVq8R9JfiEiaz9G13AtTcH7mro
+	7JTe2rmOmU485VXVLVsXwxwtwjn6FJ9SYpKUe9AjbbJDpyrjcA6FPWplj99CbxZoSEKZ4JSsDd4
+	XTCJFqFy0uF3L37KXJJSzedEDsWKdo7hOe9MlmFiCf9Brw9beSN2gQvCnhDVcsIcPJQr+bkb+oO
+	nFcbp15kEKCq5i7DSoCiO3VTF4q5pnLhoe49I5E4CAsVW7Atl5uOK9tW2tNMlqhCmVsA4VK27GN
+	HKywehOyfizZSfo1eKxx8VY2E09lnoHZfHU92ZxMBNXW+02aRQbBsfQQ98jU
+X-Google-Smtp-Source: AGHT+IH6C8G8MqRz9ppPw9iU2FlYj3hyMtKwz8pjQQF5w961y9AYKRYK5mjPzG63IsOB3lohoD5Y1w==
+X-Received: by 2002:a05:600c:5692:b0:436:76bf:51cc with SMTP id 5b1f17b1804b1-437c6b2dcf4mr162408705e9.12.1737364909431;
+        Mon, 20 Jan 2025 01:21:49 -0800 (PST)
+Received: from localhost.localdomain (249.red-88-10-54.dynamicip.rima-tde.net. [88.10.54.249])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-438a1ec39a3sm80680175e9.16.2025.01.20.01.21.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 20 Jan 2025 01:21:48 -0800 (PST)
+From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+To: linux-clk@vger.kernel.org
+Cc: sboyd@kernel.org,
+	mturquette@baylibre.com,
+	tsbogend@alpha.franken.de,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com,
+	p.zabel@pengutronix.de,
+	linux-mips@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	yangshiji66@outlook.com,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/6] mips: dts: ralink: update system controller nodes and its consumers
+Date: Mon, 20 Jan 2025 10:21:40 +0100
+Message-Id: <20250120092146.471951-1-sergio.paracuellos@gmail.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250119154447.462857-1-sergio.paracuellos@gmail.com>
- <20250119154447.462857-2-sergio.paracuellos@gmail.com> <20250120-expert-fox-of-argument-c4dcde@krzk-bin>
-In-Reply-To: <20250120-expert-fox-of-argument-c4dcde@krzk-bin>
-From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date: Mon, 20 Jan 2025 09:46:12 +0100
-X-Gm-Features: AbW1kvZLmY07mSomBZjLQ_sAy4yq2w_CVWCU0vSF7ZMxwjulnJJB74-pKIRVauU
-Message-ID: <CAMhs-H9bFka-U5F4qX-FsJtnKcZ3eYf_ZPy=READa=HqrzoOQA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/6] dt-bindings: clock: add clock and reset
- definitions for Ralink SoCs
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: linux-clk@vger.kernel.org, sboyd@kernel.org, mturquette@baylibre.com, 
-	tsbogend@alpha.franken.de, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, matthias.bgg@gmail.com, 
-	angelogioacchino.delregno@collabora.com, p.zabel@pengutronix.de, 
-	linux-mips@vger.kernel.org, devicetree@vger.kernel.org, 
-	yangshiji66@outlook.com, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Jan 20, 2025 at 8:45=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel.or=
-g> wrote:
->
-> On Sun, Jan 19, 2025 at 04:44:42PM +0100, Sergio Paracuellos wrote:
-> > +#endif /* _DT_BINDINGS_CLK_MTMIPS_H */
-> > diff --git a/include/dt-bindings/reset/mediatek,mtmips-sysc.h b/include=
-/dt-bindings/reset/mediatek,mtmips-sysc.h
-> > new file mode 100644
-> > index 000000000000..1bc6024b1f22
-> > --- /dev/null
-> > +++ b/include/dt-bindings/reset/mediatek,mtmips-sysc.h
-> > @@ -0,0 +1,152 @@
-> > +/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
-> > +/*
-> > + * Author: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-> > + */
-> > +
-> > +#ifndef _DT_BINDINGS_RST_MTMIPS_H
-> > +#define _DT_BINDINGS_RST_MTMIPS_H
-> > +
-> > +/* Ralink RT-2880 resets */
-> > +
-> > +#define RT2880_RST_SYS               0
-> > +#define RT2880_RST_I2C               9
-> > +#define RT2880_RST_FE                18
->
-> These do not look correct. I understood from previous discussions that
-> driver relies on these for its internal operation. It looks true for
-> clocks, but does not look true here at all. This is register bit passed
-> to the hardware (and I explicitly mentioned last time: that I expect
-> these not being register bits passed to hardware).
+Hi all!
 
-I thought you were referring to reg addresses and interrupts since
-there was no comment in the reset part in v1. Anyway, it is clear now,
-thanks.
+Ralinks SoCs have a system controller node which serves as clock and reset
+providers for the rest of the world. This patch series introduces clock
+definitions for these SoCs. The clocks are registered in the driver using
+a bunch of arrays in specific order so these definitions represent the assigned
+identifier that is used when this happens so client nodes can easily use it
+to specify the clock which they consume without the need of checking driver code.
 
->
-> None of the resets are bindings - these are just hardware constants.
+DTS files which are currently on tree are not matching system controller
+bindings. So all of them are updated to properly match them.
 
-Understood. Will drop this file and update dts.
+I'd like this series to go through kernel mips git tree if possible.
 
->
-> Best regards,
-> Krzysztof
+Thanks in advance for your time.
 
-Thanks,
+Changes in v3:
+- Address Krzysztof comments in v2 (Thanks!):
+  + Drop reset include file since what it was defined there were hardware
+    constants and no binding related indexes at all.
+  + Update patches for not referring to this reset removed file.
+
+Changes in v2:
+- Redo commit messages in all the patches in the series to clarify why the changes
+  are needed asked by Krzysztof in v1.
+  
+v2 of this series:
+- https://lore.kernel.org/linux-clk/20250119154447.462857-1-sergio.paracuellos@gmail.com/T/#t 
+
+v1 of this series:
+- https://lore.kernel.org/linux-clk/20250115153019.407646-1-sergio.paracuellos@gmail.com/T/#t
+
+Best regards,
     Sergio Paracuellos
+
+Sergio Paracuellos (6):
+  dt-bindings: clock: add clock definitions for Ralink SoCs
+  mips: dts: ralink: rt2880: update system controller node and its
+    consumers
+  mips: dts: ralink: rt3050: update system controller node and its
+    consumers
+  mips: dts: ralink: rt3883: update system controller node and its
+    consumers
+  mips: dts: ralink: mt7620a: update system controller node and its
+    consumers
+  mips: dts: ralink: mt7628a: update system controller node and its
+    consumers
+
+ .../bindings/clock/mediatek,mtmips-sysc.yaml  |  11 +-
+ arch/mips/boot/dts/ralink/mt7620a.dtsi        |  10 +-
+ arch/mips/boot/dts/ralink/mt7628a.dtsi        |  38 +++--
+ arch/mips/boot/dts/ralink/rt2880.dtsi         |  10 +-
+ arch/mips/boot/dts/ralink/rt3050.dtsi         |  10 +-
+ arch/mips/boot/dts/ralink/rt3883.dtsi         |  10 +-
+ .../dt-bindings/clock/mediatek,mtmips-sysc.h  | 130 ++++++++++++++++++
+ 7 files changed, 196 insertions(+), 23 deletions(-)
+ create mode 100644 include/dt-bindings/clock/mediatek,mtmips-sysc.h
+
+-- 
+2.25.1
+
 
