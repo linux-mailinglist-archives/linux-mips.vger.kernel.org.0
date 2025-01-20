@@ -1,59 +1,59 @@
-Return-Path: <linux-mips+bounces-7528-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7529-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67A93A164C7
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 02:20:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF19AA164C9
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 02:21:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 53944164AE4
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 01:20:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 82CD1188607F
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 01:21:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 215FC33E7;
-	Mon, 20 Jan 2025 01:20:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47194ECC;
+	Mon, 20 Jan 2025 01:21:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="nsfdcC3m"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="1aYANt67"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8273B2F32
-	for <linux-mips@vger.kernel.org>; Mon, 20 Jan 2025 01:20:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD6E7CA6B
+	for <linux-mips@vger.kernel.org>; Mon, 20 Jan 2025 01:21:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737336047; cv=none; b=OgffElprSuo0TNYNhpmo49/SpeQgDKc/6Kd67N36vXR/JpHN0ADBAEu8DBU83T+JVWwDkXvN4XitB6UubN38de13/nGUCZ+d3ADnyz9s+AAT5gJkHOqzbD1W1diab9Vbmjh3ALM1PA6Z1enFnfyAdnZjND0EyzrPewNokNIeb34=
+	t=1737336085; cv=none; b=RP52GUxY+DcBe+SKcf7/HzbitZT4zmyL126LtH5RFrj2a9R8l7OhS5/CiDV+nFfHVkIgalyIcUacFMoEKJBFIZDXiCo7CXnDe+3UYJcSuBefwrGuFW8qwMDG4cvCZTcV7RALYRaV2vjlrRnEWPzjiQZMmkTMgt3XQy5w6MKrmzs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737336047; c=relaxed/simple;
-	bh=YrZF61om/tFxn2PDVQvPCVpQwpQeAZNXDN8DajmvyE8=;
+	s=arc-20240116; t=1737336085; c=relaxed/simple;
+	bh=qRb1CdzoGjgfZDTUVPthhnCJCTa4a/xgiWmZKN84E7c=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IKYrofECI1V3xT7UWfGz8Vn1llWFnuEK1ag/wgZF2KS7o7RwZ9ZpQBjfpi7X2JIhrsUbyYWO/6GCvqb70Mgza9oFPsYpoI6lCBkO/6C4cEPWKrglR6DHKpnMDSzEk2D5R0oCXoFg6puzYJwlJypKEHkY8+gJj1nvaIB0aHTvgik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=nsfdcC3m; arc=none smtp.client-ip=202.36.163.20
+	 In-Reply-To:Content-Type; b=OeWG1LYgc8RkfHpM7NyKNn6gS35VR+juFDJ0smOoUSKwiL897Fa/poWeVGyuPUy1n1GcIircrX0RsvjZGxuVniLyZaQWJXRynMjNoFQ/xULEeWutCvMTt8JIkA/JJ4HhBImaIEsg/V57c5IeTEiZpKjXJyWWZU7WGMnR6b+Vib4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=1aYANt67; arc=none smtp.client-ip=202.36.163.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
 Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 322E82C00BF;
-	Mon, 20 Jan 2025 14:20:41 +1300 (NZDT)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 4FCCF2C00BF;
+	Mon, 20 Jan 2025 14:21:22 +1300 (NZDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1737336041;
-	bh=RjBDsf8JQ41bWnEiekWtwjCT7pDbQSPdaI6t/ewHAIY=;
+	s=mail181024; t=1737336082;
+	bh=AJc8wv5nelhzOuRm3tx7BmCwwFbrkATugWKV4LuMI5s=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=nsfdcC3m4ek+S98UGpYWyaEnkrqPiQoRkPv4/GNoBChb2LnWTgRBLRpXDRE958VcE
-	 I+z6jyNqFferbQTyzoHOzDeDooNHFnGSWii5Wr3MtqnIAdFKS4tqBF0cdqfHAL3Ui6
-	 Hlt+nLLkcPv1hZHI5c9vwYwtB7T5fFjzCS0vlSR2ZeqAWvxK5YOZIDZMZC+2Sid/8b
-	 YS6xgpsvdWG2xD/XEH5TaMM6+fhblJkP5COIHWZubXj+M9i8Sah1LsOKdGp45JtHGM
-	 UhlnFwd5M4tNvDCfmecu7CZktLr24J39H8Hota/US1VCKHwtCVypmdulPmfrXh4ide
-	 TOacR0L0ow7uA==
+	b=1aYANt67fcOyb6fRZsCdSHLFRY6UoS26GRPZmMjm5WFE56aGb0ea+sc77OuzxIq28
+	 BwH08W/sAH/5+d4k5+38vkEP9/lSrxc3uTTTO8sLzZwhz2zhjd9kUA8LGQfdcvZ9RC
+	 FUR7/cmOOVRHu17K6uszru+t/IFkymdgfD9nRKW6SyYABga65wEUh70ft+sthKnhs5
+	 1+E8gZCsRZmWj4hcWXJ1++thpcYanpD9aX9VfKcwuDGgpIoRhSVTxWxH/7z0mU3Vdo
+	 cGna7aXqRARY8Fj5cYH0E2JfhneDinr7LKO2V+9g0ZIk+J/p97pL52aWyyX15yOi7a
+	 9mktbOs2CQFxg==
 Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B678da4e80000>; Mon, 20 Jan 2025 14:20:40 +1300
+	id <B678da5110000>; Mon, 20 Jan 2025 14:21:21 +1300
 Received: from [10.33.22.30] (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-	by pat.atlnz.lc (Postfix) with ESMTP id 0014F13ED5A;
-	Mon, 20 Jan 2025 14:20:39 +1300 (NZDT)
-Message-ID: <081f0734-086c-4c5a-9d68-5d7735f4cca9@alliedtelesis.co.nz>
-Date: Mon, 20 Jan 2025 14:20:39 +1300
+	by pat.atlnz.lc (Postfix) with ESMTP id 3120A13ED5A;
+	Mon, 20 Jan 2025 14:21:21 +1300 (NZDT)
+Message-ID: <44dd0df0-90d4-401d-bf13-3d51188118df@alliedtelesis.co.nz>
+Date: Mon, 20 Jan 2025 14:21:21 +1300
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -61,200 +61,70 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH 1/9] mips: dts: realtek: Decouple RTL930x base DTSI
+Subject: Re: [PATCH 2/9] mips: dts: realtek: Clean up CPU clocks
 To: Sander Vanheule <sander@svanheule.net>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
  <conor+dt@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
  devicetree@vger.kernel.org, linux-mips@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 References: <20250119183424.259353-1-sander@svanheule.net>
- <20250119183424.259353-2-sander@svanheule.net>
+ <20250119183424.259353-3-sander@svanheule.net>
 Content-Language: en-US
 From: Chris Packham <chris.packham@alliedtelesis.co.nz>
-In-Reply-To: <20250119183424.259353-2-sander@svanheule.net>
+In-Reply-To: <20250119183424.259353-3-sander@svanheule.net>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=BNQQr0QG c=1 sm=1 tr=0 ts=678da4e8 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=IkcTkHD0fZMA:10 a=VdSt8ZQiCzkA:10 a=jU52IrjdAAAA:8 a=iCwdE0GJ44WkcL9GdY4A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=udjdHy_fWrGJRxLc5KTh:22
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=BNQQr0QG c=1 sm=1 tr=0 ts=678da511 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=IkcTkHD0fZMA:10 a=VdSt8ZQiCzkA:10 a=jU52IrjdAAAA:8 a=17Lssa-Y1r_eypPUbaAA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=udjdHy_fWrGJRxLc5KTh:22
 X-SEG-SpamProfiler-Score: 0
 x-atlnz-ls: pat
 
-Hi Sander
+Hi Sander,
 
 On 20/01/2025 07:34, Sander Vanheule wrote:
-> The RTL930x SoC series is sufficiently different to warrant its own base
-> dtsi. This ensures no properties need to be deleted or overwritten, and
-> prevents accidental inclusions of updates from rtl83xx.dtsi.
+> The referenced CPU clock does not require any additional #clock-cells,
+> so drop the extraneous '0' in the referenced CPU clock.
+>
+> The binding for MIPS cpus also does not allow for the clock-names
+> property, so just drop it.
+>
+> This resolves some error message from 'dtbs_check':
+>      cpu@0: clocks: [[4], [0]] is too long
+>      'clock-names' does not match any of the regexes: 'pinctrl-[0-9]+'
 >
 > Signed-off-by: Sander Vanheule <sander@svanheule.net>
-
 Reviewed-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 Tested-by: Chris Packham <chris.packham@alliedtelesis.co.nz> # For RTL9302C
-
 > ---
->   arch/mips/boot/dts/realtek/rtl930x.dtsi | 133 +++++++++++++++---------
->   1 file changed, 83 insertions(+), 50 deletions(-)
+>   arch/mips/boot/dts/realtek/rtl838x.dtsi | 3 +--
+>   arch/mips/boot/dts/realtek/rtl930x.dtsi | 3 +--
+>   2 files changed, 2 insertions(+), 4 deletions(-)
 >
-> diff --git a/arch/mips/boot/dts/realtek/rtl930x.dtsi b/arch/mips/boot/dts/realtek/rtl930x.dtsi
-> index 17577457d159..67261d6fcaa7 100644
-> --- a/arch/mips/boot/dts/realtek/rtl930x.dtsi
-> +++ b/arch/mips/boot/dts/realtek/rtl930x.dtsi
-> @@ -1,10 +1,23 @@
->   // SPDX-License-Identifier: GPL-2.0-or-later OR BSD-2-Clause
->   
-> -#include "rtl83xx.dtsi"
-> -
->   / {
->   	compatible = "realtek,rtl9302-soc";
->   
-> +	#address-cells = <1>;
-> +	#size-cells = <1>;
-> +
-> +	aliases {
-> +		serial0 = &uart0;
-> +		serial1 = &uart1;
-> +	};
-> +
-> +	cpuintc: cpuintc {
-> +		compatible = "mti,cpu-interrupt-controller";
-> +		#address-cells = <0>;
-> +		#interrupt-cells = <1>;
-> +		interrupt-controller;
-> +	};
-> +
->   	cpus {
->   		#address-cells = <1>;
->   		#size-cells = <0>;
-> @@ -58,64 +71,84 @@ i2c1: i2c@388 {
->   			status = "disabled";
+> diff --git a/arch/mips/boot/dts/realtek/rtl838x.dtsi b/arch/mips/boot/dts/realtek/rtl838x.dtsi
+> index 722106e39194..d2c6baabb38c 100644
+> --- a/arch/mips/boot/dts/realtek/rtl838x.dtsi
+> +++ b/arch/mips/boot/dts/realtek/rtl838x.dtsi
+> @@ -9,8 +9,7 @@ cpu@0 {
+>   			device_type = "cpu";
+>   			compatible = "mips,mips4KEc";
+>   			reg = <0>;
+> -			clocks = <&baseclk 0>;
+> -			clock-names = "cpu";
+> +			clocks = <&baseclk>;
 >   		};
 >   	};
-> -};
 >   
-> -&soc {
-> -	ranges = <0x0 0x18000000 0x20000>;
-> +	soc: soc@18000000 {
-> +		compatible = "simple-bus";
-> +		#address-cells = <1>;
-> +		#size-cells = <1>;
-> +		ranges = <0x0 0x18000000 0x20000>;
+> diff --git a/arch/mips/boot/dts/realtek/rtl930x.dtsi b/arch/mips/boot/dts/realtek/rtl930x.dtsi
+> index 67261d6fcaa7..f2e57ea3a60c 100644
+> --- a/arch/mips/boot/dts/realtek/rtl930x.dtsi
+> +++ b/arch/mips/boot/dts/realtek/rtl930x.dtsi
+> @@ -26,8 +26,7 @@ cpu@0 {
+>   			device_type = "cpu";
+>   			compatible = "mips,mips34Kc";
+>   			reg = <0>;
+> -			clocks = <&baseclk 0>;
+> -			clock-names = "cpu";
+> +			clocks = <&baseclk>;
+>   		};
+>   	};
 >   
-> -	intc: interrupt-controller@3000 {
-> -		compatible = "realtek,rtl9300-intc", "realtek,rtl-intc";
-> -		reg = <0x3000 0x18>, <0x3018 0x18>;
-> -		interrupt-controller;
-> -		#interrupt-cells = <1>;
-> +		intc: interrupt-controller@3000 {
-> +			compatible = "realtek,rtl9300-intc", "realtek,rtl-intc";
-> +			reg = <0x3000 0x18>, <0x3018 0x18>;
-> +			interrupt-controller;
-> +			#interrupt-cells = <1>;
->   
-> -		interrupt-parent = <&cpuintc>;
-> -		interrupts = <2>, <3>, <4>, <5>, <6>, <7>;
-> -	};
-> +			interrupt-parent = <&cpuintc>;
-> +			interrupts = <2>, <3>, <4>, <5>, <6>, <7>;
-> +		};
->   
-> -	spi0: spi@1200 {
-> -		compatible = "realtek,rtl8380-spi";
-> -		reg = <0x1200 0x100>;
-> +		spi0: spi@1200 {
-> +			compatible = "realtek,rtl8380-spi";
-> +			reg = <0x1200 0x100>;
->   
-> -		#address-cells = <1>;
-> -		#size-cells = <0>;
-> -	};
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +		};
->   
-> -	timer0: timer@3200 {
-> -		compatible = "realtek,rtl9302-timer", "realtek,otto-timer";
-> -		reg = <0x3200 0x10>, <0x3210 0x10>, <0x3220 0x10>,
-> -		    <0x3230 0x10>, <0x3240 0x10>;
-> +		timer0: timer@3200 {
-> +			compatible = "realtek,rtl9302-timer", "realtek,otto-timer";
-> +			reg = <0x3200 0x10>, <0x3210 0x10>, <0x3220 0x10>,
-> +			    <0x3230 0x10>, <0x3240 0x10>;
->   
-> -		interrupt-parent = <&intc>;
-> -		interrupts = <7>, <8>, <9>, <10>, <11>;
-> -		clocks = <&lx_clk>;
-> -	};
-> +			interrupt-parent = <&intc>;
-> +			interrupts = <7>, <8>, <9>, <10>, <11>;
-> +			clocks = <&lx_clk>;
-> +		};
->   
-> -	snand: spi@1a400 {
-> -		compatible = "realtek,rtl9301-snand";
-> -		reg = <0x1a400 0x44>;
-> -		interrupt-parent = <&intc>;
-> -		interrupts = <19>;
-> -		clocks = <&lx_clk>;
-> -		#address-cells = <1>;
-> -		#size-cells = <0>;
-> -		status = "disabled";
-> -	};
-> -};
-> +		snand: spi@1a400 {
-> +			compatible = "realtek,rtl9301-snand";
-> +			reg = <0x1a400 0x44>;
-> +			interrupt-parent = <&intc>;
-> +			interrupts = <19>;
-> +			clocks = <&lx_clk>;
-> +			#address-cells = <1>;
-> +			#size-cells = <0>;
-> +			status = "disabled";
-> +		};
->   
-> -&uart0 {
-> -	/delete-property/ clock-frequency;
-> -	clocks = <&lx_clk>;
-> +		uart0: serial@2000 {
-> +			compatible = "ns16550a";
-> +			reg = <0x2000 0x100>;
->   
-> -	interrupt-parent = <&intc>;
-> -	interrupts = <30>;
-> -};
-> +			clocks = <&lx_clk>;
->   
-> -&uart1 {
-> -	/delete-property/ clock-frequency;
-> -	clocks = <&lx_clk>;
-> +			interrupt-parent = <&intc>;
-> +			interrupts = <30>;
->   
-> -	interrupt-parent = <&intc>;
-> -	interrupts = <31>;
-> -};
-> +			reg-io-width = <1>;
-> +			reg-shift = <2>;
-> +			fifo-size = <1>;
-> +			no-loopback-test;
->   
-> +			status = "disabled";
-> +		};
-> +
-> +		uart1: serial@2100 {
-> +			compatible = "ns16550a";
-> +			reg = <0x2100 0x100>;
-> +
-> +			clocks = <&lx_clk>;
-> +
-> +			interrupt-parent = <&intc>;
-> +			interrupts = <31>;
-> +
-> +			reg-io-width = <1>;
-> +			reg-shift = <2>;
-> +			fifo-size = <1>;
-> +			no-loopback-test;
-> +
-> +			status = "disabled";
-> +		};
-> +	};
-> +};
 
