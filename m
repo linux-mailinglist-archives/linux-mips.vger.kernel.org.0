@@ -1,78 +1,87 @@
-Return-Path: <linux-mips+bounces-7561-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7562-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D338FA1750C
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Jan 2025 00:36:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04120A17510
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Jan 2025 00:36:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E05BB3A06FD
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 23:36:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F4233A68CF
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 23:36:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B9B41E47C4;
-	Mon, 20 Jan 2025 23:36:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27FD51E47C4;
+	Mon, 20 Jan 2025 23:36:26 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13361155A52;
-	Mon, 20 Jan 2025 23:36:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E24C5155A52;
+	Mon, 20 Jan 2025 23:36:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737416181; cv=none; b=AVHb7mqhFm/WgozO38o1T895hpfUgEPCL3vPcvbu4l5qQ/x95hABLNC4r0mZ7I0G6h/CZHEZzjuyw/pzCmVSka+du7HLgoWzjqr4eWPFONlqXH3x74ggry5CExqXAKk/Jzs8VmH95bFyNvzFO3JJ2LDOvVLOV1/V8URYCe+2/gs=
+	t=1737416186; cv=none; b=VHoOBS4gFR4tb69TsyVrCtpZbX289unXbX752MuHm7RfGI6cfbbUjQ6s9rdVxX2YLEttuhohkicPmQ+k+zixcEXZ57Cvaqj1N9B1zMB92O1w7qbAUfYmoOh0OHXDNumJ5RBq6z6zqW1zIFcF3JDiCUhfU0CfdeyUnbWVRYtfdM4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737416181; c=relaxed/simple;
-	bh=Vh6vt8JqtKH+T0gvo2bfIDrRVBaugQjXkHlYCH6XpRM=;
+	s=arc-20240116; t=1737416186; c=relaxed/simple;
+	bh=ymF9x7S+Akphj0N+B81ZiZVyzQT2APWSc9IDU7jgIwM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mLezJ/zyNM7xRYRFlnFkdDgVUL7WusbUFucKK2xhEX7XoYePDHkry0MVXD0GY8oBA67WR+EXfLCigqyLOIDkrBs0UApKMfKYSo+Sgfjo1fiUsBw57n4AgwN0sT1hh1MFPq2VOzW2IbG96p1WkRPirF62tQFSTemgK7CTRoFvy38=
+	 Content-Type:Content-Disposition:In-Reply-To; b=g8Q58PhC3Y7BueWZ9TFBuCUdKmVt1GVh5s/uVKtcTZSSVqOHADq2pHKq4f04QMB8AqhY5BltpTXiH6B0N6MwVn+3Ua4MjAvu3XTV7G40TbK+87Jf9RluQGnTkYg1V2NH/g9eU63U7a3fIhvlBjYlSugBGc8X/XZIa/f0ChyZvtY=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1ta18z-0006Eo-00; Tue, 21 Jan 2025 00:25:21 +0100
+	id 1ta18z-0006Eq-00; Tue, 21 Jan 2025 00:25:21 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id DDCAFC013E; Mon, 20 Jan 2025 20:41:05 +0100 (CET)
-Date: Mon, 20 Jan 2025 20:41:05 +0100
+	id 1A345C014E; Mon, 20 Jan 2025 20:41:28 +0100 (CET)
+Date: Mon, 20 Jan 2025 20:41:28 +0100
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Arnd Bergmann <arnd@arndb.de>, Baoquan He <bhe@redhat.com>,
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org,
-	Mateusz =?utf-8?Q?Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
-Subject: Re: [PATCH] MIPS: pci-legacy: Override pci_address_to_pio
-Message-ID: <Z46m0T_cNdpCfkCf@alpha.franken.de>
-References: <20250114-malta-io-fixes-v1-1-74ef1dc402ec@flygoat.com>
+To: Thorsten Blum <thorsten.blum@linux.dev>
+Cc: Huacai Chen <chenhuacai@kernel.org>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Loongson64: env: Use str_on_off() helper in
+ prom_lefi_init_env()
+Message-ID: <Z46m6MHmRMfUnVrD@alpha.franken.de>
+References: <20250115090134.918023-2-thorsten.blum@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250114-malta-io-fixes-v1-1-74ef1dc402ec@flygoat.com>
+In-Reply-To: <20250115090134.918023-2-thorsten.blum@linux.dev>
 
-On Tue, Jan 14, 2025 at 06:11:58PM +0000, Jiaxun Yang wrote:
-> pci-legacy systems are not using logic_pio to managed PIO
-> allocations, thus the generic pci_address_to_pio won't work
-> when PCI_IOBASE is defined.
+On Wed, Jan 15, 2025 at 10:01:35AM +0100, Thorsten Blum wrote:
+> Remove hard-coded strings by using the str_on_off() helper function.
 > 
-> Override the function to use architecture implementation to
-> fix the problem.
+> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+> ---
+>  arch/mips/loongson64/env.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
 > 
-> Cc: stable@vger.kernel.org
-> Fixes: 4bfb53e7d317 ("mips: add <asm-generic/io.h> including")
-> Reported-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
-> Closes: https://lore.kernel.org/r/99f75c66-4c2d-45dc-a808-b5ba440c7551@app.fastmail.com/
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
-> This is a quick fix for fixes tree and stable backporting.
-> In long term, we should get logic_pio accept fixed mapping,
-> and make PCI core code aware of platforms not using vmap
-> for PCI_IOBASE.
-> ---
->  arch/mips/pci/pci-legacy.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
+> diff --git a/arch/mips/loongson64/env.c b/arch/mips/loongson64/env.c
+> index 09ff05269861..be8d2ad10750 100644
+> --- a/arch/mips/loongson64/env.c
+> +++ b/arch/mips/loongson64/env.c
+> @@ -17,6 +17,7 @@
+>  #include <linux/dma-map-ops.h>
+>  #include <linux/export.h>
+>  #include <linux/pci_ids.h>
+> +#include <linux/string_choices.h>
+>  #include <asm/bootinfo.h>
+>  #include <loongson.h>
+>  #include <boot_param.h>
+> @@ -162,7 +163,7 @@ void __init prom_lefi_init_env(void)
+>  		dma_default_coherent = !eirq_source->dma_noncoherent;
+>  	}
+>  
+> -	pr_info("Firmware: Coherent DMA: %s\n", dma_default_coherent ? "on" : "off");
+> +	pr_info("Firmware: Coherent DMA: %s\n", str_on_off(dma_default_coherent));
+>  
+>  	loongson_sysconf.restart_addr = boot_p->reset_system.ResetWarm;
+>  	loongson_sysconf.poweroff_addr = boot_p->reset_system.Shutdown;
+> -- 
+> 2.47.1
 
 applied to mips-next.
 
