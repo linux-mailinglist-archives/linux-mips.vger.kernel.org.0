@@ -1,234 +1,355 @@
-Return-Path: <linux-mips+bounces-7546-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7547-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA54FA16952
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 10:23:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93AFFA16AB8
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 11:29:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E44133A77E0
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 09:23:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9E4493A387A
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 10:29:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADDCF1BC09A;
-	Mon, 20 Jan 2025 09:22:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A52341B413E;
+	Mon, 20 Jan 2025 10:29:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aJ+HzOp3"
+	dkim=pass (2048-bit key) header.d=svanheule.net header.i=@svanheule.net header.b="Y1ci6FWv"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from polaris.svanheule.net (polaris.svanheule.net [84.16.241.116])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD8441B87D5;
-	Mon, 20 Jan 2025 09:22:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 811E91B414F
+	for <linux-mips@vger.kernel.org>; Mon, 20 Jan 2025 10:29:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.241.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737364924; cv=none; b=mSEBkT5thv5ceF2+jzEFFmUXAeIO/NTurGFeg6xmQy1pMMm0XM8JRbvYJ8LFoY830FQHzNRl1H01/Ug5pL3FUiver+CSeY2V/NxC7Q+dowWcCt/h2XA7K1BO0X4OhvfdD8E0TVGBZuuNpFD4uvTfgLh1P/WwvaOJ5NTj3WrkHYw=
+	t=1737368952; cv=none; b=d31I41SuShNQLGZs3XJAov3eEPHBw4LUTt1NhbxBWS3DqeGijm1tc2hkqncnJMaJFc2B2pLPj+AtYxb41djOdvVhfwNs2fbkk7zqqn5WOi+pNHkTnnzvb6iMMzrUgvUQ6lFkh0jGsMDQ2FjVKUY5wE54beTClQDkTi7yQZ689rU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737364924; c=relaxed/simple;
-	bh=0Ib6CCZCXGLLnxvNMqthiY5L7ImeJqbIkZLt8Kg4k+8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=rygq/FNDL9ET9brmoljv1wDvTX5w+rdNQZ9wUDRbYKBJVEb3C3nHNNP5NDifTTyEhEz0kPGUGXDAp0gCaMWrgLl7coPY8sH/wfjR1kdPCKc3e4xKSlDhPEQ/9T3y1hHsVDBDPGpUyCjQjGDolmFMO2UkiOryoMx0w4Lpv9C/r+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aJ+HzOp3; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4361e89b6daso28618025e9.3;
-        Mon, 20 Jan 2025 01:22:02 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737364920; x=1737969720; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7SYOrmjXULZWrV3aYpbPZPuiNow+yUL2z22OQoOzio8=;
-        b=aJ+HzOp3CFwDNKkMfO2d78qzEMg8pU2hzQiTEYMTEGW2ZLKJp3nSTbIZpS0gEhrZBk
-         hn73Y5Qr//QpkqX6/YLmJey0wpqIW7AqSzhVyj3a2UeAWNobhjL/goWNQUg66w8f3ik2
-         lKwfAmJbPe60HrnXogAFi7Unol9QM3SkoasanYshmJ8VYC7WAip1dOihoX2TwTz2NcIU
-         PWmdKKeB+CPmzSnMOzncF7PLCsrdGSStlTlPdQtaPgJ61LWWHP9lfifBXA4GsdSyVEFO
-         NVDFOlL3nxhv4Z1JU5Dw9LKG4k7mq+9lMtmzD+KhhH3llEfyM1eCehCkp9DR/dbjdgfV
-         Vh+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737364920; x=1737969720;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7SYOrmjXULZWrV3aYpbPZPuiNow+yUL2z22OQoOzio8=;
-        b=GRiAdApbNYYQEMBMvJkoMHR2FThBPaLHKENymggMuCpQeRzVvB0PlY1ddfX1Yw2AON
-         6xoN0N9gvWO+++TR5qGro0Z2+ZydMhwgOdtkp/EaNdo8o351QnLFdSMsKUd9i7Y8M/ML
-         7MbZ3sKWFa18XLDWxu6nV635wXY8xqizAdPyu4JUuyKLoAgo4NHsTSJphQmTbeFDgFUw
-         ZYvC9CwXtdTtC/SpIDyZTFIrMEKS3FeRX/utUxfVw5pbhgOe5tnQg8SJ0W0oZ3Cdrde5
-         +8Elf6fusg5Jv/yCxvYZ0N0xhy/dNJ8Ti1fr41Lo4leMN+Y1antDxRoHwXfSee8Q+msH
-         OnCg==
-X-Forwarded-Encrypted: i=1; AJvYcCV1bC0U/54yugQU2oa454XWgRykgKd7F7vcL0A7vI3NIyZm5y3FckteezomkA6aG5rIqbiqPA2Vc9TJ7FvR@vger.kernel.org, AJvYcCVgLxgT6QsczGET7Y9djr8NsCJhP1LCVMkVVr+d9IAhISz5ue9mCNsk8zCSiv+unC46npcGSpgHc8lG@vger.kernel.org, AJvYcCX0QW3htkDZ18KC4vZMURC7ndSZ41lDXOwnEFHgIbduwt59XkfQ/vEQ2t3lt7YItvRjpbTSiaHx4gdcqQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywqxevh/i66oNaxMPIOwy42ZKMA5ciLY//z7v0iCqzSn60KnfkT
-	FXSlvPW06rEzq8kND2MDferqBkVIrDVGovclKqpLY+v2uAtKG90DD3TRtA==
-X-Gm-Gg: ASbGncvoK+j5ALb2ZcdzNO2fd7zV6Gfv/Wa/EDtyq+O2HXENni7u0xrFACDP26Pc+/o
-	df0r5CUbN2iFEFxdMs6Pzp2fWeZgrBgR368mdY8waVzlbF+AuyOyJIH3/XPPUz8sU3+luWU/Ye7
-	WH6F3kBzawSkMUyDzgznWaJY+aLIMGEouccuJakqyN1L7SOwpx5miDAe6n4ca/NZh0nLxnaWXW0
-	sSRTOBnDFaAl/B72IvwjvL0QZFNJY5pQpDQiCnn3Vl1f1T1uqg667hGSEZJbYTW4tovse09Yiec
-	/SoCjPaxE5/awcmp/MahoJV1JWRkcYXYI4S8pUmwFTJhce2Zk0MmfbtMVW3C
-X-Google-Smtp-Source: AGHT+IHesuI++LiyfBLPMict7L94Ay4gDQBJEaEzfY+4QdPcPx0zi/sAUAqEQhwYiVXRVfds4GFb3g==
-X-Received: by 2002:a05:600c:46cb:b0:434:f1e9:afb3 with SMTP id 5b1f17b1804b1-438913bea88mr108869335e9.3.1737364920277;
-        Mon, 20 Jan 2025 01:22:00 -0800 (PST)
-Received: from localhost.localdomain (249.red-88-10-54.dynamicip.rima-tde.net. [88.10.54.249])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-438a1ec39a3sm80680175e9.16.2025.01.20.01.21.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jan 2025 01:21:59 -0800 (PST)
-From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-To: linux-clk@vger.kernel.org
-Cc: sboyd@kernel.org,
-	mturquette@baylibre.com,
-	tsbogend@alpha.franken.de,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com,
-	p.zabel@pengutronix.de,
-	linux-mips@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	yangshiji66@outlook.com,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 6/6] mips: dts: ralink: mt7628a: update system controller node and its consumers
-Date: Mon, 20 Jan 2025 10:21:46 +0100
-Message-Id: <20250120092146.471951-7-sergio.paracuellos@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20250120092146.471951-1-sergio.paracuellos@gmail.com>
-References: <20250120092146.471951-1-sergio.paracuellos@gmail.com>
+	s=arc-20240116; t=1737368952; c=relaxed/simple;
+	bh=pzXPx9tFLkGyZxuUHk3rwrFmRMCwAhLKeu65smPL7rc=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=ppi+Ir0C4HU/jwWK2DXo5Gu8tQLytAalrzv8I0njk+2xyk8BNbSNd2HyNrAXGvbvANv0B5yIQKXd6bMWwcZfHKg+zDkHqOydKwGUG7eOcEFhBp+TTnaxS7kBN/prPItjvf7gx1l6Ni1nNGhPH5qa6aFSgsNfqo150ILajhHUEWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=svanheule.net; spf=pass smtp.mailfrom=svanheule.net; dkim=pass (2048-bit key) header.d=svanheule.net header.i=@svanheule.net header.b=Y1ci6FWv; arc=none smtp.client-ip=84.16.241.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=svanheule.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=svanheule.net
+Received: from [192.168.90.237] (unknown [94.110.49.146])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sander@svanheule.net)
+	by polaris.svanheule.net (Postfix) with ESMTPSA id 9C71C5A8555;
+	Mon, 20 Jan 2025 11:29:06 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+	s=mail1707; t=1737368947;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9IYvDYWDDz8bQtTYvekPdCA3x3++SHn4tXjMEWG1df0=;
+	b=Y1ci6FWvrrOPzkfGjIJEoeUQ+7wsfRr1Zlylddl1RwzPujxT8it1Db9jgp19LR2RcDOksr
+	6HXa8npzc+dVgF9fZclK1PI6gOhpJvsfMtXo/c5pST4+nd9e+5sFDtm9xJktrp74Pt09Bh
+	6l9PBiRqlYs/yfVtNmmZGOc1pKJA+n8+gLIez0pc1EPhb9Xlz7KerQR3G+gxL/SiIkAr5e
+	qPzfg9VjGM3J3ljYirr2IIx0wuf6gbKegg94kCjtm2CbFWQDfvWjxXNR7UsKkeiyY2uYWQ
+	LiKCqNzY1wkDx1ceFFmBGo59LOpSESwYTis/jRXqX48ja/joEZ1c/oWM5XkrhA==
+Message-ID: <d4194a1560ff297e5ab3e6eae6d51b7c9d469381.camel@svanheule.net>
+Subject: Re: [PATCH v4 4/4] net: mdio: Add RTL9300 MDIO driver
+From: Sander Vanheule <sander@svanheule.net>
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>, lee@kernel.org, 
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ andrew+netdev@lunn.ch, 	davem@davemloft.net, edumazet@google.com,
+ kuba@kernel.org, pabeni@redhat.com, 	tsbogend@alpha.franken.de,
+ hkallweit1@gmail.com, linux@armlinux.org.uk, 	markus.stockhausen@gmx.de
+Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-mips@vger.kernel.org
+Date: Mon, 20 Jan 2025 11:28:44 +0100
+In-Reply-To: <20250120040214.2538839-5-chris.packham@alliedtelesis.co.nz>
+References: <20250120040214.2538839-1-chris.packham@alliedtelesis.co.nz>
+	 <20250120040214.2538839-5-chris.packham@alliedtelesis.co.nz>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
 
-Current MT7628A device tree file system controller node is wrong since it is
-not matching bindings. Hence, update it to match current bindings updating
-it also to use new introduced clock constants.
+Hi Chris,
 
-Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- arch/mips/boot/dts/ralink/mt7628a.dtsi | 38 ++++++++++++++++----------
- 1 file changed, 24 insertions(+), 14 deletions(-)
+On Mon, 2025-01-20 at 17:02 +1300, Chris Packham wrote:
+> Add a driver for the MDIO controller on the RTL9300 family of Ethernet
+> switches with integrated SoC. There are 4 physical SMI interfaces on the
+> RTL9300 however access is done using the switch ports. The driver takes
+> the MDIO bus hierarchy from the DTS and uses this to configure the
+> switch ports so they are associated with the correct PHY. This mapping
+> is also used when dealing with software requests from phylib.
+>=20
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
 
-diff --git a/arch/mips/boot/dts/ralink/mt7628a.dtsi b/arch/mips/boot/dts/ralink/mt7628a.dtsi
-index 45a15e005cc4..309966049c56 100644
---- a/arch/mips/boot/dts/ralink/mt7628a.dtsi
-+++ b/arch/mips/boot/dts/ralink/mt7628a.dtsi
-@@ -1,4 +1,5 @@
- // SPDX-License-Identifier: GPL-2.0
-+#include <dt-bindings/clock/mediatek,mtmips-sysc.h>
- 
- / {
- 	#address-cells = <1>;
-@@ -16,11 +17,6 @@ cpu@0 {
- 		};
- 	};
- 
--	resetc: reset-controller {
--		compatible = "ralink,rt2880-reset";
--		#reset-cells = <1>;
--	};
--
- 	cpuintc: interrupt-controller {
- 		#address-cells = <0>;
- 		#interrupt-cells = <1>;
-@@ -36,9 +32,11 @@ palmbus@10000000 {
- 		#address-cells = <1>;
- 		#size-cells = <1>;
- 
--		sysc: system-controller@0 {
--			compatible = "ralink,mt7620a-sysc", "syscon";
-+		sysc: syscon@0 {
-+			compatible = "ralink,mt7628-sysc", "syscon";
- 			reg = <0x0 0x60>;
-+			#clock-cells = <1>;
-+			#reset-cells = <1>;
- 		};
- 
- 		pinmux: pinmux@60 {
-@@ -138,7 +136,7 @@ watchdog: watchdog@100 {
- 			compatible = "mediatek,mt7621-wdt";
- 			reg = <0x100 0x30>;
- 
--			resets = <&resetc 8>;
-+			resets = <&sysc 8>;
- 			reset-names = "wdt";
- 
- 			interrupt-parent = <&intc>;
-@@ -154,7 +152,7 @@ intc: interrupt-controller@200 {
- 			interrupt-controller;
- 			#interrupt-cells = <1>;
- 
--			resets = <&resetc 9>;
-+			resets = <&sysc 9>;
- 			reset-names = "intc";
- 
- 			interrupt-parent = <&cpuintc>;
-@@ -190,7 +188,9 @@ spi: spi@b00 {
- 			pinctrl-names = "default";
- 			pinctrl-0 = <&pinmux_spi_spi>;
- 
--			resets = <&resetc 18>;
-+			clocks = <&sysc MT76X8_CLK_SPI1>;
-+
-+			resets = <&sysc 18>;
- 			reset-names = "spi";
- 
- 			#address-cells = <1>;
-@@ -206,7 +206,9 @@ i2c: i2c@900 {
- 			pinctrl-names = "default";
- 			pinctrl-0 = <&pinmux_i2c_i2c>;
- 
--			resets = <&resetc 16>;
-+			clocks = <&sysc MT76X8_CLK_I2C>;
-+
-+			resets = <&sysc 16>;
- 			reset-names = "i2c";
- 
- 			#address-cells = <1>;
-@@ -222,7 +224,9 @@ uart0: uartlite@c00 {
- 			pinctrl-names = "default";
- 			pinctrl-0 = <&pinmux_uart0_uart>;
- 
--			resets = <&resetc 12>;
-+			clocks = <&sysc MT76X8_CLK_UART0>;
-+
-+			resets = <&sysc 12>;
- 			reset-names = "uart0";
- 
- 			interrupt-parent = <&intc>;
-@@ -238,7 +242,9 @@ uart1: uart1@d00 {
- 			pinctrl-names = "default";
- 			pinctrl-0 = <&pinmux_uart1_uart>;
- 
--			resets = <&resetc 19>;
-+			clocks = <&sysc MT76X8_CLK_UART1>;
-+
-+			resets = <&sysc 19>;
- 			reset-names = "uart1";
- 
- 			interrupt-parent = <&intc>;
-@@ -254,7 +260,9 @@ uart2: uart2@e00 {
- 			pinctrl-names = "default";
- 			pinctrl-0 = <&pinmux_uart2_uart>;
- 
--			resets = <&resetc 20>;
-+			clocks = <&sysc MT76X8_CLK_UART2>;
-+
-+			resets = <&sysc 20>;
- 			reset-names = "uart2";
- 
- 			interrupt-parent = <&intc>;
-@@ -290,6 +298,8 @@ wmac: wmac@10300000 {
- 		compatible = "mediatek,mt7628-wmac";
- 		reg = <0x10300000 0x100000>;
- 
-+		clocks = <&sysc MT76X8_CLK_WMAC>;
-+
- 		interrupt-parent = <&cpuintc>;
- 		interrupts = <6>;
- 
--- 
-2.25.1
+[...]
 
+
+> diff --git a/drivers/net/mdio/mdio-realtek-rtl9300.c b/drivers/net/mdio/m=
+dio-realtek-rtl9300.c
+> new file mode 100644
+> index 000000000000..a9b894eff407
+> --- /dev/null
+> +++ b/drivers/net/mdio/mdio-realtek-rtl9300.c
+> @@ -0,0 +1,417 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * MDIO controller for RTL9300 switches with integrated SoC.
+> + *
+> + * The MDIO communication is abstracted by the switch. At the software l=
+evel
+> + * communication uses the switch port to address the PHY with the actual=
+ MDIO
+> + * bus and address having been setup via the realtek,smi-address propert=
+y.
+
+realtek,smi-address is a leftover from a previous spin?
+
+> + */
+> +
+> +#include <linux/cleanup.h>
+> +#include <linux/mdio.h>
+> +#include <linux/mfd/syscon.h>
+> +#include <linux/mod_devicetable.h>
+> +#include <linux/mutex.h>
+> +#include <linux/of_mdio.h>
+> +#include <linux/phy.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/property.h>
+> +#include <linux/regmap.h>
+> +
+> +#define SMI_GLB_CTRL			0xca00
+> +#define=C2=A0=C2=A0 GLB_CTRL_INTF_SEL(intf)	BIT(16 + (intf))
+> +#define SMI_PORT0_15_POLLING_SEL	0xca08
+> +#define SMI_ACCESS_PHY_CTRL_0		0xcb70
+> +#define SMI_ACCESS_PHY_CTRL_1		0xcb74
+> +#define=C2=A0=C2=A0 PHY_CTRL_RWOP			BIT(2)
+
+With
+
+#define PHY_CTRL_WRITE		BIT(2)
+#define PHY_CTRL_READ		0
+
+you could use both macros in the write/read functions. Now I have to go and=
+ parse the write/read
+functions to see what it means when this bit is set.
+
+> +#define=C2=A0=C2=A0 PHY_CTRL_TYPE			BIT(1)
+
+Similar here:
+#define	PHY_CTRL_TYPE_C22	0
+#define PHY_CTRL_TYPE_C45	BIT(1)
+
+> +#define=C2=A0=C2=A0 PHY_CTRL_CMD			BIT(0)
+> +#define=C2=A0=C2=A0 PHY_CTRL_FAIL			BIT(25)
+> +#define SMI_ACCESS_PHY_CTRL_2		0xcb78
+> +#define SMI_ACCESS_PHY_CTRL_3		0xcb7c
+> +#define SMI_PORT0_5_ADDR_CTRL		0xcb80
+> +
+> +#define MAX_PORTS=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 28
+> +#define MAX_SMI_BUSSES=C2=A0 4
+> +#define MAX_SMI_ADDR	0x1f
+> +
+> +struct rtl9300_mdio_priv;
+> +
+> +struct rtl9300_mdio_chan {
+> +	struct rtl9300_mdio_priv *priv;
+> +	u8 smi_bus;
+> +};
+> +
+> +struct rtl9300_mdio_priv {
+> +	struct regmap *regmap;
+> +	struct mutex lock; /* protect HW access */
+> +	u8 smi_bus[MAX_PORTS];
+> +	u8 smi_addr[MAX_PORTS];
+> +	bool smi_bus_isc45[MAX_SMI_BUSSES];
+Nit: add an underscore: smi_bus_is_c45
+
+> +	struct mii_bus *bus[MAX_SMI_BUSSES];
+> +};
+> +
+> +static int rtl9300_mdio_phy_to_port(struct mii_bus *bus, int phy_id)
+> +{
+> +	struct rtl9300_mdio_chan *chan =3D bus->priv;
+> +	struct rtl9300_mdio_priv *priv =3D chan->priv;
+> +	int i;
+> +
+> +	for (i =3D 0; i < MAX_PORTS; i++)
+> +		if (priv->smi_bus[i] =3D=3D chan->smi_bus &&
+> +		=C2=A0=C2=A0=C2=A0 priv->smi_addr[i] =3D=3D phy_id)
+> +			return i;
+
+This may break if some lower port numbers are not configured by the user, e=
+.g. phy 0-7 on bus 0 are
+mapped to ports 8-15 and ports 0-7 are unused.
+When looking up the port number of phy 0 on bus 0, you would get a match on=
+ an unconfigured port
+(port 0) since smi_bus/smi_addr are zero-initialized. This could be fixed b=
+y adding a bitmap
+indicating which ports are actually configured.
+
+> +
+> +	return -ENOENT;
+> +}
+
+[...]
+
+> +static int rtl9300_mdio_read_c22(struct mii_bus *bus, int phy_id, int re=
+gnum)
+> +{
+
+[...]
+
+> +	err =3D regmap_write(regmap, SMI_ACCESS_PHY_CTRL_1,
+> +			=C2=A0=C2=A0 regnum << 20 |=C2=A0 0x1f << 15 | 0xfff << 3 | PHY_CTRL_=
+CMD);
+
+You could use FIELD_PREP() to pack the bitfields.
+
+> +	if (err)
+> +		return err;
+> +
+> +	err =3D rtl9300_mdio_wait_ready(priv);
+> +	if (err)
+> +		return err;
+> +
+> +	err =3D regmap_read(regmap, SMI_ACCESS_PHY_CTRL_2, &val);
+> +	if (err)
+> +		return err;
+> +
+> +	return val & 0xffff;
+
+... and FIELD_GET() to unpack.
+
+> +}
+> +
+
+[...]
+
+> +
+> +static int rtl9300_mdiobus_init(struct rtl9300_mdio_priv *priv)
+> +{
+> +	u32 glb_ctrl_mask =3D 0, glb_ctrl_val =3D 0;
+> +	struct regmap *regmap =3D priv->regmap;
+> +	u32 port_addr[5] =3D { 0 };
+> +	u32 poll_sel[2] =3D { 0 };
+> +	int i, err;
+> +
+> +	/* Associate the port with the SMI interface and PHY */
+> +	for (i =3D 0; i < MAX_PORTS; i++) {
+> +		int pos;
+> +
+> +		if (priv->smi_bus[i] > 3)
+> +			continue;
+> +
+> +		pos =3D (i % 6) * 5;
+> +		port_addr[i / 6] |=3D priv->smi_addr[i] << pos;
+> +
+> +		pos =3D (i % 16) * 2;
+> +		poll_sel[i / 16] |=3D priv->smi_bus[i] << pos;
+
+I've read the discussion on v1-v3 and had a quick look at the available doc=
+umentation. Thinking out
+loud here, so you can correct me if I'm making any false assumptions.
+
+As I understand, the SoC has four physical MDIO/MDC pin pairs. Using the DT=
+ description, phy-s are
+matched with to specific MDIO bus. PORT_ADDR tells the switch which phy add=
+ress a port maps to.
+POLL_SEL then tells the MDIO controller which bus this port (phy) is assign=
+ed to. I have the
+impression this [port] <-> [bus, phy] mapping is completely arbitrary. If c=
+onfigured correctly, it
+can probably serve as a convenience to match a front panel port number to a=
+ specific phy.
+
+If the port numbers are in fact arbitrary, I think they could be hidden fro=
+m the user, removing the
+need for a custom DT property. You could probably populate the port numbers=
+ one by one as phy-s are
+enumerated, as you are already storing the assigned port number in the MDIO=
+ controller's private
+data.
+
+One complication this might have, is that I suspect these port numbers are =
+not used exclusively by
+the MDIO controller, but also by the switch itself. So then there may have =
+to be a way to resolve
+(auto-assigned) port numbers outside of this driver too.
+
+> +	}
+> +
+> +	/* Put the interfaces into C45 mode if required */
+> +	for (i =3D 0; i < MAX_SMI_BUSSES; i++) {
+> +		if (priv->smi_bus_isc45[i]) {
+> +			glb_ctrl_mask |=3D GLB_CTRL_INTF_SEL(i);
+
+Can't glb_ctrl_mask be fixed to GENMASK(19, 16)?
+
+> +			glb_ctrl_val |=3D GLB_CTRL_INTF_SEL(i);
+> +		}
+> +	}
+
+[...]
+
+> +static int rtl9300_mdiobus_probe_one(struct device *dev, struct rtl9300_=
+mdio_priv *priv,
+> +				=C2=A0=C2=A0=C2=A0=C2=A0 struct fwnode_handle *node)
+> +{
+> +	struct rtl9300_mdio_chan *chan;
+> +	struct fwnode_handle *child;
+> +	struct mii_bus *bus;
+> +	u32 smi_bus;
+> +	int err;
+> +
+> +	err =3D fwnode_property_read_u32(node, "reg", &smi_bus);
+> +	if (err)
+> +		return err;
+> +
+> +	if (smi_bus >=3D MAX_SMI_BUSSES)
+> +		return dev_err_probe(dev, -EINVAL, "illegal smi bus number %d\n", smi_=
+bus);
+> +
+> +	fwnode_for_each_child_node(node, child) {
+> +		u32 smi_addr;
+> +		u32 pn;
+> +
+> +		err =3D fwnode_property_read_u32(child, "reg", &smi_addr);
+> +		if (err)
+> +			return err;
+
+[...]
+
+> +
+> +		priv->smi_bus[pn] =3D smi_bus;
+> +		priv->smi_addr[pn] =3D smi_addr;
+
+Nitpicking a bit here, but perhaps the code might be a tad bit easier to re=
+ad for the non-Realtek
+initiated by renaming:
+  - smi_bus -> mdio_bus or just bus_id (matching the mii_bus *bus member)
+  - smi_addr -> phy_addr
+
+> +	}
+
+[...]
+
+> +static int rtl9300_mdiobus_probe(struct platform_device *pdev)
+> +{
+
+[...]
+
+> +
+> +	if (device_get_child_node_count(dev) >=3D MAX_SMI_BUSSES)
+> +		return dev_err_probe(dev, -EINVAL, "Too many SMI busses\n");
+
+This seems redundant with the MAX_SMI_BUSSES comparison in probe_one().
+
+Best,
+Sander
 
