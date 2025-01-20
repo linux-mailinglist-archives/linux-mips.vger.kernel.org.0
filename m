@@ -1,147 +1,163 @@
-Return-Path: <linux-mips+bounces-7553-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7554-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5773AA16DCA
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 14:51:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71C17A16EE8
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 16:01:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E18618892E9
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 13:51:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 811623A4AB7
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 15:01:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EA7D1E25E4;
-	Mon, 20 Jan 2025 13:51:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 732501E0DD9;
+	Mon, 20 Jan 2025 15:01:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b="E1IJHDTv"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="fFPQW4CA"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B1EB1E22FC;
-	Mon, 20 Jan 2025 13:51:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.149.199.84
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 670031B982E;
+	Mon, 20 Jan 2025 15:01:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737381095; cv=none; b=JnCm0k1bW9CxezFfRegAVZLswGMBj2syMuHp8/RJuFYUFPiXAae2nJgXYm4F4GY3tL0DBK7bPU6iRM+qgLvesEOPsP40PeOQpBkt3wjPRurIbGl+fSPjd5ht6+pvhOsiteCzEf59JGW9unDwVMQuZ88fD3Qz71bJQ5gE7hljhiE=
+	t=1737385303; cv=none; b=Bc4NFATKtzZga5QJvXbXQxJ85rldef2/WC1HU7IEy4hK6GfBn31JyRRN6mx+54cO1vOEZuFymcSiXQMXknZoMH6pJ6+s6VhSbL+QdfW5cGqa+VjoRZDa/WqUd4MBh5JX3FR8eiqvBps/Ux9kWDk9GKZ1JK/q3/1gIgyZw0vFyTA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737381095; c=relaxed/simple;
-	bh=7YGT9tUI3LWn0O0I8oAOKgITzrbbgZqghLIdS12F2hU=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Z73FoB/b6VLk5p7D2yKZnUVK6R3IewJclovl/8N+9HxvTwKVY6iIrBz2ouv6N80aBwOkn4W4K6rCiIaaDwbXPNzfGo+muTze90vvH8sKWA18SKvYnAb/ZLvSPXSBq1enYvxXEGWtsvjIN//rFUe8Ki9cdq3je4g+2ui9kWZbMB8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru; spf=pass smtp.mailfrom=ispras.ru; dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b=E1IJHDTv; arc=none smtp.client-ip=83.149.199.84
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ispras.ru
-Received: from ldvnode.intra.ispras.ru (unknown [10.10.2.153])
-	by mail.ispras.ru (Postfix) with ESMTPSA id 3AD74518E774;
-	Mon, 20 Jan 2025 13:51:23 +0000 (UTC)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 3AD74518E774
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
-	s=default; t=1737381083;
-	bh=4fySs5N2hrgu1v7dESWSAZhLMeG95wbe2hEzl7vKhpQ=;
-	h=From:To:Cc:Subject:Date:From;
-	b=E1IJHDTvqBHJm7dbbahgUlwSa4+5XcwV8y+7MbJUK7H9FBUNAAzSih34ogh7V84te
-	 4/uFef46+gGG0HcU4JUlO9VNs1XkhrAjRoQ5MRTpHji2nXAbILIFVRbNC10tvF46Mo
-	 9epbmpVXtnmVLWrsAHvHeqxWFmYNvbluk5Utp8a0=
-From: Vitalii Mordan <mordan@ispras.ru>
-To: Paul Cercueil <paul@crapouillou.net>
-Cc: Vitalii Mordan <mordan@ispras.ru>,
-	Vinod Koul <vkoul@kernel.org>,
-	Alex Smith <alex.smith@imgtec.com>,
-	Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>,
-	linux-mips@vger.kernel.org,
-	dmaengine@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Fedor Pchelkin <pchelkin@ispras.ru>,
-	Alexey Khoroshilov <khoroshilov@ispras.ru>,
-	Vadim Mutilin <mutilin@ispras.ru>,
-	lvc-project@linuxtesting.org
-Subject: [PATCH] dma: jz4780: fix call balance of jzdma->clk handling routines
-Date: Mon, 20 Jan 2025 16:50:59 +0300
-Message-Id: <20250120135059.302273-1-mordan@ispras.ru>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1737385303; c=relaxed/simple;
+	bh=fUZy/f3iv+e7r7B0v5YQupln/qBLiJ/ZjUYAwryee1k=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Cz3ZQNKMV4zGOpcwsp71NcxI+/H6/nQ69sUvSbhjBo2TScjV+L2Iu7nHM3nJGkswfTkzNiOwL2UT5X39VHpnDigW/ymF8bM/V3HXBOc8hS6p2uwxjTJQq6nz+6X9PpJQG9Gy4Oyty8WG9hYbvW2MRSYFkRAUsZJM+NjsDxK19+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=fFPQW4CA; arc=none smtp.client-ip=217.70.183.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id AD968E0002;
+	Mon, 20 Jan 2025 15:01:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1737385293;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=zKhxk7+Fda/Wv8tla9DbvJyAAOL1sQ8gUN049EB9HcU=;
+	b=fFPQW4CAdVMpPhOmELtha/GLUMMpELhtFBz3W6kgFPsdNPErYrRy8lXjhvla2cFsK2+2vw
+	1mw5YMqbwMkZGxJUVMvD06qJEhc0BH3wyAm8JTnUfpvKwhLcM58TLUpNrG6Fkk1bs2QfH+
+	yHwA5XeDhK1ccSdTqrdEAd5ibP1kyBE812kA/iK2WkjQm2AjQp//Sc0UIHCkbHSOu7k8Vf
+	UXGz9u/jaERH9sIk7NK4MaV7jlKbSe+foBTkoSQR/iS4Xo7gGMV06E3+F8S4Xe352TxqgX
+	sMKCv85FgjJI5FVNqzXEhbXFemrYH2GTsYmyMbV7a9OpgAbKUgBQ6Tq8muohLg==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+To: Rob Herring <robh@kernel.org>
+Cc: Aleksandar Rikalo <arikalo@gmail.com>, Thomas Bogendoerfer
+ <tsbogend@alpha.franken.de>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Vladimir Kondratiev
+ <vladimir.kondratiev@mobileye.com>, =?utf-8?Q?Th=C3=A9o?= Lebrun
+ <theo.lebrun@bootlin.com>,
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>, linux-mips@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/5] dt-bindings: mips: Document mti,mips-cm
+In-Reply-To: <20250116153110.GA2495012-robh@kernel.org>
+References: <20250116-cluster-hci-broken-v2-0-fc52cfb7a19e@bootlin.com>
+ <20250116-cluster-hci-broken-v2-1-fc52cfb7a19e@bootlin.com>
+ <20250116153110.GA2495012-robh@kernel.org>
+Date: Mon, 20 Jan 2025 16:01:32 +0100
+Message-ID: <87r04xv8ab.fsf@BLaptop.bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: gregory.clement@bootlin.com
 
-If the clock jzdma->clk was not enabled in jz4780_dma_probe(), it should
-not be disabled in any path.
+Hi Rob,
 
-Conversely, if it was enabled in jz4780_dma_probe(), it must be disabled
-in all error paths to ensure proper cleanup.
+> On Thu, Jan 16, 2025 at 11:59:19AM +0100, Gregory CLEMENT wrote:
+>> From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>>=20
+>> Add devicetree binding documentation for MIPS Coherence Manager.
+>>=20
+>> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+>> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+>> ---
+>>  .../devicetree/bindings/mips/mti,mips-cm.yaml      | 38 +++++++++++++++=
++++++++
+>>  1 file changed, 38 insertions(+)
+>>=20
+>> diff --git a/Documentation/devicetree/bindings/mips/mti,mips-cm.yaml b/D=
+ocumentation/devicetree/bindings/mips/mti,mips-cm.yaml
+>> new file mode 100644
+>> index 0000000000000000000000000000000000000000..9f500804737d23e19f50a932=
+6168686c05d3a54e
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/mips/mti,mips-cm.yaml
+>> @@ -0,0 +1,38 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/mips/mti,mips-cm.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: MIPS Coherence Manager
+>> +
+>> +description: |
+>
+> Don't need '|'.
 
-Use the devm_clk_get_enabled() helper function to ensure proper call
-balance for jzdma->clk.
+OK
 
-Found by Linux Verification Center (linuxtesting.org) with Klever.
+>
+>> +  Defines a location of the MIPS Coherence Manager registers.
+>
+> Say what the h/w block does.
 
-Fixes: d894fc6046fe ("dmaengine: jz4780: add driver for the Ingenic JZ4780 DMA controller")
-Signed-off-by: Vitalii Mordan <mordan@ispras.ru>
----
- drivers/dma/dma-jz4780.c | 14 ++++----------
- 1 file changed, 4 insertions(+), 10 deletions(-)
+Managing coherency ? :)
 
-diff --git a/drivers/dma/dma-jz4780.c b/drivers/dma/dma-jz4780.c
-index 100057603fd4..ff9c387fd8c1 100644
---- a/drivers/dma/dma-jz4780.c
-+++ b/drivers/dma/dma-jz4780.c
-@@ -896,15 +896,13 @@ static int jz4780_dma_probe(struct platform_device *pdev)
- 		return -EINVAL;
- 	}
- 
--	jzdma->clk = devm_clk_get(dev, NULL);
-+	jzdma->clk = devm_clk_get_enabled(dev, NULL);
- 	if (IS_ERR(jzdma->clk)) {
--		dev_err(dev, "failed to get clock\n");
-+		dev_err(dev, "failed to get and enable clock\n");
- 		ret = PTR_ERR(jzdma->clk);
- 		return ret;
- 	}
- 
--	clk_prepare_enable(jzdma->clk);
--
- 	/* Property is optional, if it doesn't exist the value will remain 0. */
- 	of_property_read_u32_index(dev->of_node, "ingenic,reserved-channels",
- 				   0, &jzdma->chan_reserved);
-@@ -972,7 +970,7 @@ static int jz4780_dma_probe(struct platform_device *pdev)
- 
- 	ret = platform_get_irq(pdev, 0);
- 	if (ret < 0)
--		goto err_disable_clk;
-+		return ret;
- 
- 	jzdma->irq = ret;
- 
-@@ -980,7 +978,7 @@ static int jz4780_dma_probe(struct platform_device *pdev)
- 			  jzdma);
- 	if (ret) {
- 		dev_err(dev, "failed to request IRQ %u!\n", jzdma->irq);
--		goto err_disable_clk;
-+		return ret;
- 	}
- 
- 	ret = dmaenginem_async_device_register(dd);
-@@ -1002,9 +1000,6 @@ static int jz4780_dma_probe(struct platform_device *pdev)
- 
- err_free_irq:
- 	free_irq(jzdma->irq, jzdma);
--
--err_disable_clk:
--	clk_disable_unprepare(jzdma->clk);
- 	return ret;
- }
- 
-@@ -1015,7 +1010,6 @@ static void jz4780_dma_remove(struct platform_device *pdev)
- 
- 	of_dma_controller_free(pdev->dev.of_node);
- 
--	clk_disable_unprepare(jzdma->clk);
- 	free_irq(jzdma->irq, jzdma);
- 
- 	for (i = 0; i < jzdma->soc_data->nb_channels; i++)
--- 
-2.25.1
+However, more seriously, I can provide additional details based on what
+I have written in my previous emails.
 
+>
+>> +
+>> +maintainers:
+>> +  - Jiaxun Yang <jiaxun.yang@flygoat.com>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: mti,mips-cm
+>
+> Convince me a genericish compatible is okay here.
+
+well this componenant is really named Coherence Manager in the MIPS
+related document. For example in p4 of
+https://training.mips.com/cps_mips/PDF/CPS_Introduction.pdf and also
+https://training.mips.com/cps_mips/PDF/Coherency_Manager.pdf.
+
+
+>
+>> +
+>> +  reg:
+>> +    description:
+>> +      Base address and size of an unoccupied region in system's MMIO ad=
+dress
+>> +      space, which will be used to map the MIPS CM global control regis=
+ters
+>> +      block. It is conventionally decided by the system integrator.
+>
+> What is decided? The address? That's not relevant.
+
+Since reusing the description from Jiaxun, I'm unable to speak on his
+behalf. From my perspective, it simply implies that the value to be
+written should originate from the datasheet of the System-on-Chip (SoC),
+as the address is is specific to the integration into a given
+SoC.
+
+Gregory
+
+--=20
+Gr=C3=A9gory CLEMENT, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
