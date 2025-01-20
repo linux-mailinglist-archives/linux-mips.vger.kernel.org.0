@@ -1,164 +1,147 @@
-Return-Path: <linux-mips+bounces-7552-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7553-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A5A2A16DB1
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 14:46:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5773AA16DCA
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 14:51:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 98BB7168C33
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 13:45:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E18618892E9
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 13:51:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 006FC1E1049;
-	Mon, 20 Jan 2025 13:45:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EA7D1E25E4;
+	Mon, 20 Jan 2025 13:51:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="frcv4X/u"
+	dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b="E1IJHDTv"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail.ispras.ru (mail.ispras.ru [83.149.199.84])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FFB91E1C16
-	for <linux-mips@vger.kernel.org>; Mon, 20 Jan 2025 13:45:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B1EB1E22FC;
+	Mon, 20 Jan 2025 13:51:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.149.199.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737380747; cv=none; b=pRH4T7sEm8M4dFGOH1TY+VdjxP8Zt3ZE1d4hFQr0dSSouTLJrCi6QSzgSl1PVNeBK66eWahj571hE9ZpMF4dK6YYSGq8s5xi91Zg4rG8rMLsAPaxJJBEF0UNvKrM2Z0qxccAuldV7EpXaDxyUymDxMRjIifvXl023PHAs5kXdNE=
+	t=1737381095; cv=none; b=JnCm0k1bW9CxezFfRegAVZLswGMBj2syMuHp8/RJuFYUFPiXAae2nJgXYm4F4GY3tL0DBK7bPU6iRM+qgLvesEOPsP40PeOQpBkt3wjPRurIbGl+fSPjd5ht6+pvhOsiteCzEf59JGW9unDwVMQuZ88fD3Qz71bJQ5gE7hljhiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737380747; c=relaxed/simple;
-	bh=m6lBuiJiZTJ5oH6fmhz8BBqdF09sFJ9n+qTcFvOk+mQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=hkDLJ3SqHynPo/PwYZ10X835A23yd2wjlpr9shQJD/2MNJNXGFYGge6Hdljd55jOY/RuVoLDvarNsaakIi7EL9TLh1jNKrYyUxeaqSIoHQqSj/eCLNa73vmSEqzM8xzVUO7bWcQ9PMiEUwHHnL5nFbiBCrzPeZ2w0MhoyCc+yuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=frcv4X/u; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1737380744;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to; bh=vfOTmMY2VnDeaFEXs43JEC9lE4+T6jIeb61gvtSteOc=;
-	b=frcv4X/uRDbhz5unS74OsgImT3UJZoYUtQrRWywnDqM2HNyU9RfVAAeQnf8r/UjHgDZoFv
-	HCrSV4W4JP1o4uEnmvGjrvw73R3Juez7PjZ6ATO5sgZ5enwZAezLx8393bOEguC0GD4QpH
-	UcRCszqwhrhE6dT/udY71I7cBdMo/qU=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-661-fqR8ZUFLPRugcQokSWegpg-1; Mon,
- 20 Jan 2025 08:45:38 -0500
-X-MC-Unique: fqR8ZUFLPRugcQokSWegpg-1
-X-Mimecast-MFC-AGG-ID: fqR8ZUFLPRugcQokSWegpg
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 773751954196;
-	Mon, 20 Jan 2025 13:45:36 +0000 (UTC)
-Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.225.104])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id EA41619560A3;
-	Mon, 20 Jan 2025 13:45:31 +0000 (UTC)
-Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
-	oleg@redhat.com; Mon, 20 Jan 2025 14:45:11 +0100 (CET)
-Date: Mon, 20 Jan 2025 14:45:05 +0100
-From: Oleg Nesterov <oleg@redhat.com>
-To: Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>,
-	Will Drewry <wad@chromium.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Subject: [PATCH 4/4] seccomp: remove the 'sd' argument from __seccomp_filter()
-Message-ID: <20250120134505.GA21290@redhat.com>
+	s=arc-20240116; t=1737381095; c=relaxed/simple;
+	bh=7YGT9tUI3LWn0O0I8oAOKgITzrbbgZqghLIdS12F2hU=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=Z73FoB/b6VLk5p7D2yKZnUVK6R3IewJclovl/8N+9HxvTwKVY6iIrBz2ouv6N80aBwOkn4W4K6rCiIaaDwbXPNzfGo+muTze90vvH8sKWA18SKvYnAb/ZLvSPXSBq1enYvxXEGWtsvjIN//rFUe8Ki9cdq3je4g+2ui9kWZbMB8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru; spf=pass smtp.mailfrom=ispras.ru; dkim=pass (1024-bit key) header.d=ispras.ru header.i=@ispras.ru header.b=E1IJHDTv; arc=none smtp.client-ip=83.149.199.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ispras.ru
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ispras.ru
+Received: from ldvnode.intra.ispras.ru (unknown [10.10.2.153])
+	by mail.ispras.ru (Postfix) with ESMTPSA id 3AD74518E774;
+	Mon, 20 Jan 2025 13:51:23 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.ispras.ru 3AD74518E774
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ispras.ru;
+	s=default; t=1737381083;
+	bh=4fySs5N2hrgu1v7dESWSAZhLMeG95wbe2hEzl7vKhpQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=E1IJHDTvqBHJm7dbbahgUlwSa4+5XcwV8y+7MbJUK7H9FBUNAAzSih34ogh7V84te
+	 4/uFef46+gGG0HcU4JUlO9VNs1XkhrAjRoQ5MRTpHji2nXAbILIFVRbNC10tvF46Mo
+	 9epbmpVXtnmVLWrsAHvHeqxWFmYNvbluk5Utp8a0=
+From: Vitalii Mordan <mordan@ispras.ru>
+To: Paul Cercueil <paul@crapouillou.net>
+Cc: Vitalii Mordan <mordan@ispras.ru>,
+	Vinod Koul <vkoul@kernel.org>,
+	Alex Smith <alex.smith@imgtec.com>,
+	Zubair Lutfullah Kakakhel <Zubair.Kakakhel@imgtec.com>,
+	linux-mips@vger.kernel.org,
+	dmaengine@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Fedor Pchelkin <pchelkin@ispras.ru>,
+	Alexey Khoroshilov <khoroshilov@ispras.ru>,
+	Vadim Mutilin <mutilin@ispras.ru>,
+	lvc-project@linuxtesting.org
+Subject: [PATCH] dma: jz4780: fix call balance of jzdma->clk handling routines
+Date: Mon, 20 Jan 2025 16:50:59 +0300
+Message-Id: <20250120135059.302273-1-mordan@ispras.ru>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250120134409.GA21241@redhat.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+Content-Transfer-Encoding: 8bit
 
-After the previous change 'sd' is always NULL.
+If the clock jzdma->clk was not enabled in jz4780_dma_probe(), it should
+not be disabled in any path.
 
-Signed-off-by: Oleg Nesterov <oleg@redhat.com>
+Conversely, if it was enabled in jz4780_dma_probe(), it must be disabled
+in all error paths to ensure proper cleanup.
+
+Use the devm_clk_get_enabled() helper function to ensure proper call
+balance for jzdma->clk.
+
+Found by Linux Verification Center (linuxtesting.org) with Klever.
+
+Fixes: d894fc6046fe ("dmaengine: jz4780: add driver for the Ingenic JZ4780 DMA controller")
+Signed-off-by: Vitalii Mordan <mordan@ispras.ru>
 ---
- kernel/seccomp.c | 21 ++++++++-------------
- 1 file changed, 8 insertions(+), 13 deletions(-)
+ drivers/dma/dma-jz4780.c | 14 ++++----------
+ 1 file changed, 4 insertions(+), 10 deletions(-)
 
-diff --git a/kernel/seccomp.c b/kernel/seccomp.c
-index c29dfe82139e..75e293d3c1a1 100644
---- a/kernel/seccomp.c
-+++ b/kernel/seccomp.c
-@@ -1213,13 +1213,12 @@ static int seccomp_do_user_notification(int this_syscall,
- 	return -1;
+diff --git a/drivers/dma/dma-jz4780.c b/drivers/dma/dma-jz4780.c
+index 100057603fd4..ff9c387fd8c1 100644
+--- a/drivers/dma/dma-jz4780.c
++++ b/drivers/dma/dma-jz4780.c
+@@ -896,15 +896,13 @@ static int jz4780_dma_probe(struct platform_device *pdev)
+ 		return -EINVAL;
+ 	}
+ 
+-	jzdma->clk = devm_clk_get(dev, NULL);
++	jzdma->clk = devm_clk_get_enabled(dev, NULL);
+ 	if (IS_ERR(jzdma->clk)) {
+-		dev_err(dev, "failed to get clock\n");
++		dev_err(dev, "failed to get and enable clock\n");
+ 		ret = PTR_ERR(jzdma->clk);
+ 		return ret;
+ 	}
+ 
+-	clk_prepare_enable(jzdma->clk);
+-
+ 	/* Property is optional, if it doesn't exist the value will remain 0. */
+ 	of_property_read_u32_index(dev->of_node, "ingenic,reserved-channels",
+ 				   0, &jzdma->chan_reserved);
+@@ -972,7 +970,7 @@ static int jz4780_dma_probe(struct platform_device *pdev)
+ 
+ 	ret = platform_get_irq(pdev, 0);
+ 	if (ret < 0)
+-		goto err_disable_clk;
++		return ret;
+ 
+ 	jzdma->irq = ret;
+ 
+@@ -980,7 +978,7 @@ static int jz4780_dma_probe(struct platform_device *pdev)
+ 			  jzdma);
+ 	if (ret) {
+ 		dev_err(dev, "failed to request IRQ %u!\n", jzdma->irq);
+-		goto err_disable_clk;
++		return ret;
+ 	}
+ 
+ 	ret = dmaenginem_async_device_register(dd);
+@@ -1002,9 +1000,6 @@ static int jz4780_dma_probe(struct platform_device *pdev)
+ 
+ err_free_irq:
+ 	free_irq(jzdma->irq, jzdma);
+-
+-err_disable_clk:
+-	clk_disable_unprepare(jzdma->clk);
+ 	return ret;
  }
  
--static int __seccomp_filter(int this_syscall, const struct seccomp_data *sd,
--			    const bool recheck_after_trace)
-+static int __seccomp_filter(int this_syscall, const bool recheck_after_trace)
- {
- 	u32 filter_ret, action;
-+	struct seccomp_data sd;
- 	struct seccomp_filter *match = NULL;
- 	int data;
--	struct seccomp_data sd_local;
+@@ -1015,7 +1010,6 @@ static void jz4780_dma_remove(struct platform_device *pdev)
  
- 	/*
- 	 * Make sure that any changes to mode from another thread have
-@@ -1227,12 +1226,9 @@ static int __seccomp_filter(int this_syscall, const struct seccomp_data *sd,
- 	 */
- 	smp_rmb();
+ 	of_dma_controller_free(pdev->dev.of_node);
  
--	if (!sd) {
--		populate_seccomp_data(&sd_local);
--		sd = &sd_local;
--	}
-+	populate_seccomp_data(&sd);
+-	clk_disable_unprepare(jzdma->clk);
+ 	free_irq(jzdma->irq, jzdma);
  
--	filter_ret = seccomp_run_filters(sd, &match);
-+	filter_ret = seccomp_run_filters(&sd, &match);
- 	data = filter_ret & SECCOMP_RET_DATA;
- 	action = filter_ret & SECCOMP_RET_ACTION_FULL;
- 
-@@ -1290,13 +1286,13 @@ static int __seccomp_filter(int this_syscall, const struct seccomp_data *sd,
- 		 * a reload of all registers. This does not goto skip since
- 		 * a skip would have already been reported.
- 		 */
--		if (__seccomp_filter(this_syscall, NULL, true))
-+		if (__seccomp_filter(this_syscall, true))
- 			return -1;
- 
- 		return 0;
- 
- 	case SECCOMP_RET_USER_NOTIF:
--		if (seccomp_do_user_notification(this_syscall, match, sd))
-+		if (seccomp_do_user_notification(this_syscall, match, &sd))
- 			goto skip;
- 
- 		return 0;
-@@ -1338,8 +1334,7 @@ static int __seccomp_filter(int this_syscall, const struct seccomp_data *sd,
- 	return -1;
- }
- #else
--static int __seccomp_filter(int this_syscall, const struct seccomp_data *sd,
--			    const bool recheck_after_trace)
-+static int __seccomp_filter(int this_syscall, const bool recheck_after_trace)
- {
- 	BUG();
- 
-@@ -1363,7 +1358,7 @@ int __secure_computing(void)
- 		__secure_computing_strict(this_syscall);  /* may call do_exit */
- 		return 0;
- 	case SECCOMP_MODE_FILTER:
--		return __seccomp_filter(this_syscall, NULL, false);
-+		return __seccomp_filter(this_syscall, false);
- 	/* Surviving SECCOMP_RET_KILL_* must be proactively impossible. */
- 	case SECCOMP_MODE_DEAD:
- 		WARN_ON_ONCE(1);
+ 	for (i = 0; i < jzdma->soc_data->nb_channels; i++)
 -- 
-2.25.1.362.g51ebf55
+2.25.1
 
 
