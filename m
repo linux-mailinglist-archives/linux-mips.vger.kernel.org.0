@@ -1,178 +1,131 @@
-Return-Path: <linux-mips+bounces-7563-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7564-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C430EA1751E
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Jan 2025 00:58:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F1A40A17FD8
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Jan 2025 15:31:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60FE3188A563
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Jan 2025 23:58:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C068D1887860
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Jan 2025 14:31:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A4201F0E32;
-	Mon, 20 Jan 2025 23:58:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDF1E1B4237;
+	Tue, 21 Jan 2025 14:31:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="MY3PoJB3"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BWTUe7vl"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from aposti.net (aposti.net [89.234.176.197])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 875E41EEA5F;
-	Mon, 20 Jan 2025 23:58:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.234.176.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B2E11F1508
+	for <linux-mips@vger.kernel.org>; Tue, 21 Jan 2025 14:31:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737417494; cv=none; b=EvJKQGXRbYAb4qjpWQ64rv0nEnEhRzAY98zPozz1hJeCDvP7W2wPFg6IwYduqLoF5be+ul6aLmuQmULMnVyGZltIo3pAC+/qVUpGpeUD/mszMurAky3iTpn+0VJJUT6RemoeSuoBCkcc1z9P1Qg3oAoeHADwjY89aVw+T964Hek=
+	t=1737469885; cv=none; b=MO6BnoKPsDFYVy1bdepksrjR9scTtImVQo2B65oP7LP8s9xLBWaYe+akAfKqVe/tXM8u6/idg0xaWBPnuD5W7LNBebpDqZG4PfnhC0MMtQCqmbq74Nk5YWT9546jjv5PZ+rx0xQ6g8a6yxEVq49KVlH5dCZAEK4t20XDK/AdeLg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737417494; c=relaxed/simple;
-	bh=X7XkJHJJePFk96UIZAhtCRmPeQpsM03ev+h9+VwScas=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=dGfIMsk1BkCxNeZ42NmVaw2Hxz84oG63JwulBX2nt/E2Zr7vcT0lNXNysr+6xXtfuCqCOrzgz5ykSraUMozk8sIgq5n+QWoqtNn70pvZOm7DL1QwqgybvuicUuoSAL0uKRMOjRboxPb4mv5O4mn31r9G6AD4q8pDJKPld+s6U1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net; spf=pass smtp.mailfrom=crapouillou.net; dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b=MY3PoJB3; arc=none smtp.client-ip=89.234.176.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crapouillou.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-	s=mail; t=1737416955;
+	s=arc-20240116; t=1737469885; c=relaxed/simple;
+	bh=QKnYRc3Pixg7SCAJOgEmX8GpqnC9liD+Mi5ZMIeQvJ8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lcLdKJRjClD3+GGowDjOXMZgNRb8P18LkNi8RZZHKi/9dtc9eGTbIfR28Tp/cCs+Ac8uGK5hHXx0PkNSqpjlW0mURsr0eOcsCz81JlMgZuyEBLRg6tbWrUnnv/WulFOVbnxM36qJzsRooA83fLEf4li6dS5o0caHTTHwVMq61Tk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BWTUe7vl; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1737469882;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=vb+cZhxGdLsBtYABfJWi+gMxt2Bz2rrH5ztnMW0VGro=;
-	b=MY3PoJB3fzwPtDfAIMG4l2lWi8xrA08Tbln3l+koIj+YmfHqWrZ8H8/E1ykQ89gYz2yuj5
-	Dyrr5x+I/g3Dcpx53gJUY5iYJJ83yXPq3iYz9labBithfS2ln3tDDVdVDiJ0nNeOXwesh3
-	Yz1eZVxMrFkGuaO4bT32LcpkiGRxfzA=
-Message-ID: <b32939c57f1faff7ae33c072d5824d8225735de6.camel@crapouillou.net>
-Subject: Re: [PATCH] dma: jz4780: fix call balance of jzdma->clk handling
- routines
-From: Paul Cercueil <paul@crapouillou.net>
-To: Vitalii Mordan <mordan@ispras.ru>
-Cc: Vinod Koul <vkoul@kernel.org>, Alex Smith <alex.smith@imgtec.com>, 
- Zubair Lutfullah Kakakhel	 <Zubair.Kakakhel@imgtec.com>,
- linux-mips@vger.kernel.org, 	dmaengine@vger.kernel.org,
- linux-kernel@vger.kernel.org, Fedor Pchelkin	 <pchelkin@ispras.ru>, Alexey
- Khoroshilov <khoroshilov@ispras.ru>, Vadim Mutilin	 <mutilin@ispras.ru>,
- lvc-project@linuxtesting.org
-Date: Tue, 21 Jan 2025 00:48:13 +0100
-In-Reply-To: <20250120135059.302273-1-mordan@ispras.ru>
-References: <20250120135059.302273-1-mordan@ispras.ru>
-Autocrypt: addr=paul@crapouillou.net; prefer-encrypt=mutual;
- keydata=mQENBF0KhcEBCADkfmrzdTOp/gFOMQX0QwKE2WgeCJiHPWkpEuPH81/HB2dpjPZNW03ZM
- LQfECbbaEkdbN4YnPfXgcc1uBe5mwOAPV1MBlaZcEt4M67iYQwSNrP7maPS3IaQJ18ES8JJ5Uf5Uz
- FZaUawgH+oipYGW+v31cX6L3k+dGsPRM0Pyo0sQt52fsopNPZ9iag0iY7dGNuKenaEqkYNjwEgTtN
- z8dt6s3hMpHIKZFL3OhAGi88wF/21isv0zkF4J0wlf9gYUTEEY3Eulx80PTVqGIcHZzfavlWIdzhe
- +rxHTDGVwseR2Y1WjgFGQ2F+vXetAB8NEeygXee+i9nY5qt9c07m8mzjABEBAAG0JFBhdWwgQ2VyY
- 3VlaWwgPHBhdWxAY3JhcG91aWxsb3UubmV0PokBTgQTAQoAOBYhBNdHYd8OeCBwpMuVxnPua9InSr
- 1BBQJdCoXBAhsDBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEHPua9InSr1BgvIH/0kLyrI3V0f
- 33a6D3BJwc1grbygPVYGuC5l5eMnAI+rDmLR19E2yvibRpgUc87NmPEQPpbbtAZt8On/2WZoE5OIP
- dlId/AHNpdgAtGXo0ZX4LGeVPjxjdkbrKVHxbcdcnY+zzaFglpbVSvp76pxqgVg8PgxkAAeeJV+ET
- 4t0823Gz2HzCL/6JZhvKAEtHVulOWoBh368SYdolp1TSfORWmHzvQiCCCA+j0cMkYVGzIQzEQhX7U
- rf9N/nhU5/SGLFEi9DcBfXoGzhyQyLXflhJtKm3XGB1K/pPulbKaPcKAl6rIDWPuFpHkSbmZ9r4KF
- lBwgAhlGy6nqP7O3u7q23hRU=
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	 in-reply-to:in-reply-to:references:references;
+	bh=6GmbrizBccdqBYi6hb4h7oEWiAa4+DQ5hN9o7ZNXkI4=;
+	b=BWTUe7vlaEKY5XXoI11B7p9d67TmH4YVjmpRqJ76dU20QNeIxUyilOb/g9woU1zteK/g8f
+	5JV7EZZvm2yxq7uKTMQ9Z7buifuEjQOCs0CZgScqw+fBKPm7AUMsuW5jKnNke4giRfI8w1
+	3032vv/jL8bd7VBVyZfy8x5jgsBwB4E=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-328-OpeHi3p_NmG1prZqbVPb9w-1; Tue,
+ 21 Jan 2025 09:31:14 -0500
+X-MC-Unique: OpeHi3p_NmG1prZqbVPb9w-1
+X-Mimecast-MFC-AGG-ID: OpeHi3p_NmG1prZqbVPb9w
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id C15C21955BD2;
+	Tue, 21 Jan 2025 14:31:11 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.224.31])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id A06E019560A7;
+	Tue, 21 Jan 2025 14:31:06 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Tue, 21 Jan 2025 15:30:45 +0100 (CET)
+Date: Tue, 21 Jan 2025 15:30:39 +0100
+From: Oleg Nesterov <oleg@redhat.com>
+To: Kees Cook <kees@kernel.org>
+Cc: Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 2/4] seccomp: kill the dead code in the
+ !CONFIG_HAVE_ARCH_SECCOMP_FILTER version of __secure_computing()
+Message-ID: <20250121143038.GB3422@redhat.com>
+References: <20250120134409.GA21241@redhat.com>
+ <20250120134452.GA21275@redhat.com>
+ <202501201353.168E6AAC8@keescook>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202501201353.168E6AAC8@keescook>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-Hi Vitalii,
+On 01/20, Kees Cook wrote:
+>
+> On Mon, Jan 20, 2025 at 02:44:52PM +0100, Oleg Nesterov wrote:
+> > Depending on CONFIG_HAVE_ARCH_SECCOMP_FILTER, __secure_computing(NULL)
+> > will crash or not, this is not consistent/safe.
+>
+> Right now this never happens because there are no callers.
+>
+> > Fortunately, if CONFIG_HAVE_ARCH_SECCOMP_FILTER=n, __secure_computing()
+> > has no callers, these architectures use secure_computing_strict().
+>
+> As you say here.
+>
+> > Also, after the previous change __secure_computing(sd) is always called
+> > with sd == NULL, so it is clear that we can remove the code which makes
+> > no sense.
+>
+> However, after this change, if someone were to *add* a caller, it would
+> bypass strict mode.
 
-Le lundi 20 janvier 2025 =C3=A0 16:50 +0300, Vitalii Mordan a =C3=A9crit=C2=
-=A0:
-> If the clock jzdma->clk was not enabled in jz4780_dma_probe(), it
-> should
-> not be disabled in any path.
->=20
-> Conversely, if it was enabled in jz4780_dma_probe(), it must be
-> disabled
-> in all error paths to ensure proper cleanup.
->=20
-> Use the devm_clk_get_enabled() helper function to ensure proper call
-> balance for jzdma->clk.
->=20
-> Found by Linux Verification Center (linuxtesting.org) with Klever.
->=20
-> Fixes: d894fc6046fe ("dmaengine: jz4780: add driver for the Ingenic
-> JZ4780 DMA controller")
-> Signed-off-by: Vitalii Mordan <mordan@ispras.ru>
+OK, thanks, I agree this is not consistent, even if I think that
+!CONFIG_HAVE_ARCH_SECCOMP_FILTER arches should not add a new caller.
 
-Acked-by: Paul Cercueil <paul@crapouillou.net>
+> Instead of "return 0", it seems like it'd be better
+> to remove the function entirely (and maybe add a comment about calling
+> secure_computing_strict() directly)?
 
-Cheers,
--Paul
+This means that __secure_computing() will be defined even if !CONFIG_SECCOMP,
+but it won't be defined if CONFIG_SECCOMP && !CONFIG_HAVE_ARCH_SECCOMP_FILTER.
 
+How about
 
-> ---
-> =C2=A0drivers/dma/dma-jz4780.c | 14 ++++----------
-> =C2=A01 file changed, 4 insertions(+), 10 deletions(-)
->=20
-> diff --git a/drivers/dma/dma-jz4780.c b/drivers/dma/dma-jz4780.c
-> index 100057603fd4..ff9c387fd8c1 100644
-> --- a/drivers/dma/dma-jz4780.c
-> +++ b/drivers/dma/dma-jz4780.c
-> @@ -896,15 +896,13 @@ static int jz4780_dma_probe(struct
-> platform_device *pdev)
-> =C2=A0		return -EINVAL;
-> =C2=A0	}
-> =C2=A0
-> -	jzdma->clk =3D devm_clk_get(dev, NULL);
-> +	jzdma->clk =3D devm_clk_get_enabled(dev, NULL);
-> =C2=A0	if (IS_ERR(jzdma->clk)) {
-> -		dev_err(dev, "failed to get clock\n");
-> +		dev_err(dev, "failed to get and enable clock\n");
-> =C2=A0		ret =3D PTR_ERR(jzdma->clk);
-> =C2=A0		return ret;
-> =C2=A0	}
-> =C2=A0
-> -	clk_prepare_enable(jzdma->clk);
-> -
-> =C2=A0	/* Property is optional, if it doesn't exist the value will
-> remain 0. */
-> =C2=A0	of_property_read_u32_index(dev->of_node, "ingenic,reserved-
-> channels",
-> =C2=A0				=C2=A0=C2=A0 0, &jzdma->chan_reserved);
-> @@ -972,7 +970,7 @@ static int jz4780_dma_probe(struct
-> platform_device *pdev)
-> =C2=A0
-> =C2=A0	ret =3D platform_get_irq(pdev, 0);
-> =C2=A0	if (ret < 0)
-> -		goto err_disable_clk;
-> +		return ret;
-> =C2=A0
-> =C2=A0	jzdma->irq =3D ret;
-> =C2=A0
-> @@ -980,7 +978,7 @@ static int jz4780_dma_probe(struct
-> platform_device *pdev)
-> =C2=A0			=C2=A0 jzdma);
-> =C2=A0	if (ret) {
-> =C2=A0		dev_err(dev, "failed to request IRQ %u!\n", jzdma-
-> >irq);
-> -		goto err_disable_clk;
-> +		return ret;
-> =C2=A0	}
-> =C2=A0
-> =C2=A0	ret =3D dmaenginem_async_device_register(dd);
-> @@ -1002,9 +1000,6 @@ static int jz4780_dma_probe(struct
-> platform_device *pdev)
-> =C2=A0
-> =C2=A0err_free_irq:
-> =C2=A0	free_irq(jzdma->irq, jzdma);
-> -
-> -err_disable_clk:
-> -	clk_disable_unprepare(jzdma->clk);
-> =C2=A0	return ret;
-> =C2=A0}
-> =C2=A0
-> @@ -1015,7 +1010,6 @@ static void jz4780_dma_remove(struct
-> platform_device *pdev)
-> =C2=A0
-> =C2=A0	of_dma_controller_free(pdev->dev.of_node);
-> =C2=A0
-> -	clk_disable_unprepare(jzdma->clk);
-> =C2=A0	free_irq(jzdma->irq, jzdma);
-> =C2=A0
-> =C2=A0	for (i =3D 0; i < jzdma->soc_data->nb_channels; i++)
+	__secure_computing()
+	{
+		return secure_computing_strict(syscall_get_nr(...));
+	}
+
+in the "#ifndef CONFIG_HAVE_ARCH_SECCOMP_FILTER" section near
+secure_computing_strict() in kernel/seccomp.c ?
+
+Oleg.
 
 
