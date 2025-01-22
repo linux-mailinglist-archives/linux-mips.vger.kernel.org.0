@@ -1,47 +1,47 @@
-Return-Path: <linux-mips+bounces-7568-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7569-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C063A18D6D
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Jan 2025 09:12:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0EB1A18D75
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Jan 2025 09:14:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC87F188B4ED
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Jan 2025 08:12:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 20D28161E8D
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Jan 2025 08:14:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D1CB1C3BF8;
-	Wed, 22 Jan 2025 08:12:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 511D91C3C01;
+	Wed, 22 Jan 2025 08:14:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VJY8JU6a"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ddgU4ZR7"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA5D928EC;
-	Wed, 22 Jan 2025 08:12:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 200FE196;
+	Wed, 22 Jan 2025 08:14:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737533534; cv=none; b=ixAGDenIxk7sKCmp8jLLEif5ms2OXfDwemyFOAJFmS5hu/EltKfqzeNq9aCC+MzfWKXajvlZ+QtUGyJH8ZgUQ8PlOFuWrEPOA6URgz+RdNLjunU+XFyPwP2eSb3fuyiIhOgc/TlBoorVXWAtBo6Y+EUBY+D20S8FZTZwVIeIm1k=
+	t=1737533666; cv=none; b=KyWBcu5GgUmza7tOatPryH5zIUjpGV4/y/V5dj71rWSNZxjIrDVfrDK92plrfo2z3RNg1/m8/a9IgEIHz7/KjZreOtcjvav7kRxZcNkwsXuqS1pecB+597+bcI71TM3biTvLGuYT9CmybIzHhQfDbC7UmprGsYTxUldqDF2Gbv0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737533534; c=relaxed/simple;
-	bh=8dfD8T9slxyqvjv+a/7JdKQSjrUalt7kDJ67Az7uV18=;
+	s=arc-20240116; t=1737533666; c=relaxed/simple;
+	bh=uqq4XjpWOJLJlKj11MwPE8w4neu4toSKao0wV6l7vlM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mep428ynX4de+u5a8S21rTekgyyjn61oWfNY83g9FdWVCCpYyfbshM4sVaZcuqsWRGilHlmBcUUOItUIi+dA8p9f0L+2/gaioauelz4iCBXAFzI17F3+CL0px1FA7qya9oVKphngD5iIsXT2unQNoV8sWLnykpZ5LsYxtoAvDpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VJY8JU6a; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EB91C4CED6;
-	Wed, 22 Jan 2025 08:12:12 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=U9nrU7fWg/Wdk39ptNRnaqr6BRDMKWxp7ggARuFwQdVPft3MsOgSrOQV80z2vwevskD6z0PtZRhO9NB9WPFvMLe/faXbgyoCGIolk66Sfm4jKR8LyPjK/m+MgoUPSolLXnfYCd8xQKzTyjRp1EilAuy7CZ3xvVL1MkJxpZLCM+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ddgU4ZR7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3C5BC4CED6;
+	Wed, 22 Jan 2025 08:14:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737533533;
-	bh=8dfD8T9slxyqvjv+a/7JdKQSjrUalt7kDJ67Az7uV18=;
+	s=k20201202; t=1737533665;
+	bh=uqq4XjpWOJLJlKj11MwPE8w4neu4toSKao0wV6l7vlM=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VJY8JU6a0JA5UOk3aomt0QBobiFv5vYkrzk2JxihHbJEmMLqiASGXxbyBu8XgUsYf
-	 auRHk5iWR8E8FQN0jh5+NLrT5V/qrYjfcZXl5qlwaPMZONE0YjFdCYuLuJWKVJMZy0
-	 r9xBOOCbuc1WNnYBxBOtlLIiSo+LTuw9xq1MvXVR0C2ATDYMwAqlMWOxd6P+32Gm6k
-	 avMQkwDC+cvIRN/IBbnLerEzvLIJxuH6i1PSaNEvSR4J1LgyO8ZSNZ4/h5MTyljQ/0
-	 YP7wRHmqi0L/l/woZ84nWDyNxXXYPBHOYYFwG7+1Zu6qOjQUbSzsdMSSEsVGDjpQOF
-	 tPbHlX0SUYTrw==
-Date: Wed, 22 Jan 2025 09:12:10 +0100
+	b=ddgU4ZR7ztPgvA7UkozItyZ95c1ocP9C/FHhbW+fiSPlp0G6ywQOXjw/XmFLv2a+N
+	 wJdVahvIWYH+78nU2bD0dsrpSObLI46yVWhb36F6sAsqVp84SnteFJvA5zUNl2KxIY
+	 unjPB9dSSG+ZW/xcyz4rNnKzIhhzYJVb9mHU8J9f+n3MoVe2hcPknD613jGwdeQ8vz
+	 1C8y8ncn/viJLp3hfVRsFMncMJoTFnH3+yXzXNXjADNBTexEF8/AbB+1zCyu2kXeMg
+	 06o4atmE2HLNxdgR74cEglgWzNXF6CQBUk9gooJ+eKdqnxId7/pOdO/fJ7RpBHWxQg
+	 +dV1KXsOl0UmA==
+Date: Wed, 22 Jan 2025 09:14:21 +0100
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Chris Packham <chris.packham@alliedtelesis.co.nz>
 Cc: lee@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
@@ -50,10 +50,11 @@ Cc: lee@kernel.org, robh@kernel.org, krzk+dt@kernel.org,
 	hkallweit1@gmail.com, linux@armlinux.org.uk, sander@svanheule.net, 
 	markus.stockhausen@gmx.de, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
 	netdev@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v4 1/4] dt-bindings: net: Add Realtek MDIO controller
-Message-ID: <20250122-obedient-owl-from-ganymede-4a8343@krzk-bin>
+Subject: Re: [PATCH v4 2/4] dt-bindings: mfd: Add MDIO interface to
+ rtl9301-switch
+Message-ID: <20250122-macho-flat-sawfly-7ca93d@krzk-bin>
 References: <20250120040214.2538839-1-chris.packham@alliedtelesis.co.nz>
- <20250120040214.2538839-2-chris.packham@alliedtelesis.co.nz>
+ <20250120040214.2538839-3-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -62,101 +63,56 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250120040214.2538839-2-chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <20250120040214.2538839-3-chris.packham@alliedtelesis.co.nz>
 
-On Mon, Jan 20, 2025 at 05:02:11PM +1300, Chris Packham wrote:
-> Add dtschema for the MDIO controller found in the RTL9300 SoCs. The
-> controller is slightly unusual in that direct MDIO communication is not
-> possible. We model the MDIO controller with the MDIO buses as child
-> nodes and the PHYs as children of the buses. Because we do need the
-> switch port number to actually communicate over the MDIO bus this needs
-> to be supplied via the "realtek,port" property.
+On Mon, Jan 20, 2025 at 05:02:12PM +1300, Chris Packham wrote:
+> The MDIO controller is part of the switch on the RTL9300 family of
+> devices. Add a $ref to the mfd binding for these devices.
 > 
 > Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 > ---
 > 
+
+You need to explain merging dependencies. Nothing in cover letter,
+nothing here, but this *CANNOT* be merged independently.
+
 > Notes:
 >     Changes in v4:
->     - Model the MDIO controller with the buses as child nodes. We still need
->       to deal with the switch port number so this is represented with the
->       "realtek,port" property which needs to be added to the MDIO bus
->       children (i.e. the PHYs)
->     - Because the above is quite a departure from earlier I've dropped the
->       r-by
+>     - There is a single MDIO controller that has MDIO buses as children
 >     Changes in v3:
->     - Add r-by from Connor
+>     - None
 >     Changes in v2:
 >     - None
 > 
->  .../bindings/net/realtek,rtl9301-mdio.yaml    | 93 +++++++++++++++++++
->  1 file changed, 93 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/net/realtek,rtl9301-mdio.yaml
+>  .../bindings/mfd/realtek,rtl9301-switch.yaml  | 24 +++++++++++++++++++
+>  1 file changed, 24 insertions(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/net/realtek,rtl9301-mdio.yaml b/Documentation/devicetree/bindings/net/realtek,rtl9301-mdio.yaml
-> new file mode 100644
-> index 000000000000..e3ecb1b4afd3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/realtek,rtl9301-mdio.yaml
-> @@ -0,0 +1,93 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/realtek,rtl9301-mdio.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> diff --git a/Documentation/devicetree/bindings/mfd/realtek,rtl9301-switch.yaml b/Documentation/devicetree/bindings/mfd/realtek,rtl9301-switch.yaml
+> index f053303ab1e6..c19d2c209434 100644
+> --- a/Documentation/devicetree/bindings/mfd/realtek,rtl9301-switch.yaml
+> +++ b/Documentation/devicetree/bindings/mfd/realtek,rtl9301-switch.yaml
+> @@ -28,6 +28,9 @@ properties:
+>    reg:
+>      maxItems: 1
+>  
+> +  mdio-controller:
+> +    $ref: /schemas/net/realtek,rtl9301-mdio.yaml#
 > +
-> +title: Realtek RTL9300 MDIO Controller
+>    '#address-cells':
+>      const: 1
+>  
+> @@ -110,5 +113,26 @@ examples:
+>            };
+>          };
+>        };
 > +
-> +maintainers:
-> +  - Chris Packham <chris.packham@alliedtelesis.co.nz>
-> +
-> +properties:
-> +  compatible:
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - realtek,rtl9302b-mdio
-> +              - realtek,rtl9302c-mdio
-> +              - realtek,rtl9303-mdio
-> +          - const: realtek,rtl9301-mdio
-> +      - const: realtek,rtl9301-mdio
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-> +
-> +patternProperties:
-> +  '^mdio-bus@[0-4]$':
-> +    $ref: mdio.yaml#
-> +
-> +    properties:
-> +      reg:
-> +        maxItems: 1
-> +
-> +    required:
-> +      - reg
-> +
-> +    patternProperties:
-> +      '^ethernet-phy(@[a-f0-9]+)?':
+> +      mdio-controller {
 
-Why is the unit address optional?
+No, no resources here, no unit address. Look at other nodes - they have
+the resource, the address. Mixing such nodes is clear indication this is
+not correct hardware description and you do this only for Linux.
 
-> +        type: object
-> +        $ref: ethernet-phy.yaml#
-> +
-> +        properties:
-> +          realtek,port:
-> +            $ref: /schemas/types.yaml#/definitions/uint32
-> +            description:
-> +              The MDIO communication on the RTL9300 is abstracted by the switch. At
-> +              the software level communication uses the switch port to address the
-> +              PHY with the actual MDIO bus and address having been setup via the
-> +              parent mdio-bus and reg property.
-
-I don't quite get why this cannot be the 'reg' property. I understood that
-'reg' of this node is not really used? Or you meant here this 'reg', not
-parent's 'reg'?
+Fold child device into parent.
 
 Best regards,
 Krzysztof
