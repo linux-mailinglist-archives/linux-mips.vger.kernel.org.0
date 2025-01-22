@@ -1,156 +1,164 @@
-Return-Path: <linux-mips+bounces-7567-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7568-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83FC6A18D0E
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Jan 2025 08:50:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C063A18D6D
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Jan 2025 09:12:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB8F61697B8
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Jan 2025 07:50:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EC87F188B4ED
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Jan 2025 08:12:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 612461C1F1F;
-	Wed, 22 Jan 2025 07:50:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D1CB1C3BF8;
+	Wed, 22 Jan 2025 08:12:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="WKfRRI1l"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VJY8JU6a"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 765BD28EC;
-	Wed, 22 Jan 2025 07:50:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EA5D928EC;
+	Wed, 22 Jan 2025 08:12:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737532240; cv=none; b=ZQx/9NafyJYtlK+MBl6X/ya6Du8vH/i33X0TFCpLXG+oRbgQuHxgSAyWEYp8RrwSk0iZ4pfZmJyHn0+QFuFdDdRbU40kzs8KZHMnFtyBXLqwK8VLMG8bpVj2coU7jR4BmZuuEDh2X4GS+92RtAPzah+zR8b6dYlOYoo/V3gGUuY=
+	t=1737533534; cv=none; b=ixAGDenIxk7sKCmp8jLLEif5ms2OXfDwemyFOAJFmS5hu/EltKfqzeNq9aCC+MzfWKXajvlZ+QtUGyJH8ZgUQ8PlOFuWrEPOA6URgz+RdNLjunU+XFyPwP2eSb3fuyiIhOgc/TlBoorVXWAtBo6Y+EUBY+D20S8FZTZwVIeIm1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737532240; c=relaxed/simple;
-	bh=IEhcvheF4V81iZY+p0ALVQuZPTmOS4DOoc5c5f3Go8g=;
+	s=arc-20240116; t=1737533534; c=relaxed/simple;
+	bh=8dfD8T9slxyqvjv+a/7JdKQSjrUalt7kDJ67Az7uV18=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Weh6X46oLsD8r7CM037wijSYWke/zVmZ3jBLT9dw6IlBUEh+0r+1cLXU0sfzWSByIFcjXUUF0pC2BEy8HZyaBNwUhWyfg/MFTm5IH57HTKsSIySMMQtTkZz6eG9eAJ40WOoNgSXqD4jDhRXVqIEucsNlC52UMdVzmOxMtmBtZ7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=WKfRRI1l; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50M2A4Je009705;
-	Wed, 22 Jan 2025 07:49:59 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=YOmEKaCYp7BVYdSA921evwSGcBIDRQ
-	EOB9Qf7IL5hrk=; b=WKfRRI1lHye/PfeRq0CM+invZscqmJxiyfMJj6RqKDo+k0
-	oHw8bxFR10u4InxfkGzbtPQRnmjjRIxYD+e4Hdc6VNWvxRNBhElChMEKYTQww/ne
-	kooQLVgHcJbjlXo8YwFiHbBQ8lYIn1j20/tkdmwE9rGrifbH6of2GaRERifgPxvN
-	e6jGjgMPTSpOWNSK//eRAMpTyDt03PLcgP0/2Qj42QpNbLO975g3w4J/8kekr9qF
-	dPd8DDCPlAQUGXVLnf/2L8EUh+BlP8RuxoA5walvWUcYL4qLgoLMxpcBdMKwAzI/
-	K9cmGJQE5Hsas24CZr5x5+mJxBXMWUxPL2+9HvXg==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44aee1bs75-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 22 Jan 2025 07:49:59 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 50M4kx3X019330;
-	Wed, 22 Jan 2025 07:49:58 GMT
-Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 448pmsfk01-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 22 Jan 2025 07:49:58 +0000
-Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
-	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 50M7nu1d48300472
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 22 Jan 2025 07:49:56 GMT
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B223620040;
-	Wed, 22 Jan 2025 07:49:56 +0000 (GMT)
-Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4B9362004B;
-	Wed, 22 Jan 2025 07:49:56 +0000 (GMT)
-Received: from osiris (unknown [9.152.212.60])
-	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Wed, 22 Jan 2025 07:49:56 +0000 (GMT)
-Date: Wed, 22 Jan 2025 08:49:54 +0100
-From: Heiko Carstens <hca@linux.ibm.com>
-To: Alexander Gordeev <agordeev@linux.ibm.com>
-Cc: Kevin Brodsky <kevin.brodsky@arm.com>, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        "Mike Rapoport (IBM)" <rppt@kernel.org>,
-        Ryan Roberts <ryan.roberts@arm.com>,
-        Thomas Gleixner <tglx@linutronix.de>, Will Deacon <will@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Qi Zheng <zhengqi.arch@bytedance.com>, linux-alpha@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-s390@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-        linux-um@lists.infradead.org, loongarch@lists.linux.dev,
-        x86@kernel.org
-Subject: Re: [PATCH v2 6/6] mm: Introduce ctor/dtor at PGD level
-Message-ID: <20250122074954.8685-A-hca@linux.ibm.com>
-References: <20250103184415.2744423-1-kevin.brodsky@arm.com>
- <20250103184415.2744423-7-kevin.brodsky@arm.com>
- <Z4/NTRDBXEEimdvc@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=mep428ynX4de+u5a8S21rTekgyyjn61oWfNY83g9FdWVCCpYyfbshM4sVaZcuqsWRGilHlmBcUUOItUIi+dA8p9f0L+2/gaioauelz4iCBXAFzI17F3+CL0px1FA7qya9oVKphngD5iIsXT2unQNoV8sWLnykpZ5LsYxtoAvDpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VJY8JU6a; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EB91C4CED6;
+	Wed, 22 Jan 2025 08:12:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737533533;
+	bh=8dfD8T9slxyqvjv+a/7JdKQSjrUalt7kDJ67Az7uV18=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VJY8JU6a0JA5UOk3aomt0QBobiFv5vYkrzk2JxihHbJEmMLqiASGXxbyBu8XgUsYf
+	 auRHk5iWR8E8FQN0jh5+NLrT5V/qrYjfcZXl5qlwaPMZONE0YjFdCYuLuJWKVJMZy0
+	 r9xBOOCbuc1WNnYBxBOtlLIiSo+LTuw9xq1MvXVR0C2ATDYMwAqlMWOxd6P+32Gm6k
+	 avMQkwDC+cvIRN/IBbnLerEzvLIJxuH6i1PSaNEvSR4J1LgyO8ZSNZ4/h5MTyljQ/0
+	 YP7wRHmqi0L/l/woZ84nWDyNxXXYPBHOYYFwG7+1Zu6qOjQUbSzsdMSSEsVGDjpQOF
+	 tPbHlX0SUYTrw==
+Date: Wed, 22 Jan 2025 09:12:10 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Chris Packham <chris.packham@alliedtelesis.co.nz>
+Cc: lee@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
+	kuba@kernel.org, pabeni@redhat.com, tsbogend@alpha.franken.de, 
+	hkallweit1@gmail.com, linux@armlinux.org.uk, sander@svanheule.net, 
+	markus.stockhausen@gmx.de, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	netdev@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v4 1/4] dt-bindings: net: Add Realtek MDIO controller
+Message-ID: <20250122-obedient-owl-from-ganymede-4a8343@krzk-bin>
+References: <20250120040214.2538839-1-chris.packham@alliedtelesis.co.nz>
+ <20250120040214.2538839-2-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Z4/NTRDBXEEimdvc@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: qTola2ylJwUaTSt4IdPRfZSdT02Tio3Q
-X-Proofpoint-GUID: qTola2ylJwUaTSt4IdPRfZSdT02Tio3Q
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-01-22_03,2025-01-22_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 clxscore=1011
- lowpriorityscore=0 mlxlogscore=674 priorityscore=1501 bulkscore=0
- spamscore=0 malwarescore=0 phishscore=0 suspectscore=0 mlxscore=0
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2501220053
+In-Reply-To: <20250120040214.2538839-2-chris.packham@alliedtelesis.co.nz>
 
-On Tue, Jan 21, 2025 at 05:37:33PM +0100, Alexander Gordeev wrote:
-> On Fri, Jan 03, 2025 at 06:44:15PM +0000, Kevin Brodsky wrote:
+On Mon, Jan 20, 2025 at 05:02:11PM +1300, Chris Packham wrote:
+> Add dtschema for the MDIO controller found in the RTL9300 SoCs. The
+> controller is slightly unusual in that direct MDIO communication is not
+> possible. We model the MDIO controller with the MDIO buses as child
+> nodes and the PHYs as children of the buses. Because we do need the
+> switch port number to actually communicate over the MDIO bus this needs
+> to be supplied via the "realtek,port" property.
 > 
-> Hi Kevin,
-> ...
-> > diff --git a/arch/s390/include/asm/pgalloc.h b/arch/s390/include/asm/pgalloc.h
-> > index 5fced6d3c36b..b19b6ed2ab53 100644
-> > --- a/arch/s390/include/asm/pgalloc.h
-> > +++ b/arch/s390/include/asm/pgalloc.h
-> > @@ -130,11 +130,18 @@ static inline void pud_populate(struct mm_struct *mm, pud_t *pud, pmd_t *pmd)
-> >  
-> >  static inline pgd_t *pgd_alloc(struct mm_struct *mm)
-> >  {
-> > -	return (pgd_t *) crst_table_alloc(mm);
-> > +	unsigned long *table = crst_table_alloc(mm);
-> > +
-> > +	if (!table)
-> > +		return NULL;
+> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+> ---
 > 
-> I do not know status of this series, but FWIW, this call is missed:
+> Notes:
+>     Changes in v4:
+>     - Model the MDIO controller with the buses as child nodes. We still need
+>       to deal with the switch port number so this is represented with the
+>       "realtek,port" property which needs to be added to the MDIO bus
+>       children (i.e. the PHYs)
+>     - Because the above is quite a departure from earlier I've dropped the
+>       r-by
+>     Changes in v3:
+>     - Add r-by from Connor
+>     Changes in v2:
+>     - None
 > 
-> 	crst_table_init(table, _REGION1_ENTRY_EMPTY); 
+>  .../bindings/net/realtek,rtl9301-mdio.yaml    | 93 +++++++++++++++++++
+>  1 file changed, 93 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/net/realtek,rtl9301-mdio.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/net/realtek,rtl9301-mdio.yaml b/Documentation/devicetree/bindings/net/realtek,rtl9301-mdio.yaml
+> new file mode 100644
+> index 000000000000..e3ecb1b4afd3
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/net/realtek,rtl9301-mdio.yaml
+> @@ -0,0 +1,93 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/net/realtek,rtl9301-mdio.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Realtek RTL9300 MDIO Controller
+> +
+> +maintainers:
+> +  - Chris Packham <chris.packham@alliedtelesis.co.nz>
+> +
+> +properties:
+> +  compatible:
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - realtek,rtl9302b-mdio
+> +              - realtek,rtl9302c-mdio
+> +              - realtek,rtl9303-mdio
+> +          - const: realtek,rtl9301-mdio
+> +      - const: realtek,rtl9301-mdio
+> +
+> +  '#address-cells':
+> +    const: 1
+> +
+> +  '#size-cells':
+> +    const: 0
+> +
+> +patternProperties:
+> +  '^mdio-bus@[0-4]$':
+> +    $ref: mdio.yaml#
+> +
+> +    properties:
+> +      reg:
+> +        maxItems: 1
+> +
+> +    required:
+> +      - reg
+> +
+> +    patternProperties:
+> +      '^ethernet-phy(@[a-f0-9]+)?':
 
-Why is that missing?
+Why is the unit address optional?
 
-A pgd table can be a Region1, Region2, or Region3 table. The only caller of
-this function is mm_init() via mm_alloc_pgd(); and right after mm_alloc_pgd()
-there is a call to init_new_context() which will initialize the pgd correctly.
+> +        type: object
+> +        $ref: ethernet-phy.yaml#
+> +
+> +        properties:
+> +          realtek,port:
+> +            $ref: /schemas/types.yaml#/definitions/uint32
+> +            description:
+> +              The MDIO communication on the RTL9300 is abstracted by the switch. At
+> +              the software level communication uses the switch port to address the
+> +              PHY with the actual MDIO bus and address having been setup via the
+> +              parent mdio-bus and reg property.
 
-I guess what really gets odd, and might be broken (haven't checked yet) is
-what happens on dynamic upgrade of page table levels (->crst_table_upgrade()).
+I don't quite get why this cannot be the 'reg' property. I understood that
+'reg' of this node is not really used? Or you meant here this 'reg', not
+parent's 'reg'?
 
-With that a pgd may become a pud, and with that we get an imbalance with
-the ctor/dtor calls for the various page table levels when they get freed
-again. Plus, at first glance, it looks also broken that we have open-coded
-crst_alloc() calls instead of using the "proper" page table allocation API
-within crst_table_upgrade(), which again would cause an imbalance.
+Best regards,
+Krzysztof
+
 
