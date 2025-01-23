@@ -1,105 +1,229 @@
-Return-Path: <linux-mips+bounces-7585-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7587-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3902FA1A274
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Jan 2025 12:03:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6ECF8A1A316
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Jan 2025 12:38:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E6FC81887FCD
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Jan 2025 11:03:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D241188C880
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Jan 2025 11:38:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05AF620F070;
-	Thu, 23 Jan 2025 11:02:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDCCB20E31C;
+	Thu, 23 Jan 2025 11:38:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="NeQmVH94"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="m1XJP3g8"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B89C720E6E5;
-	Thu, 23 Jan 2025 11:02:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68A1D20E32B
+	for <linux-mips@vger.kernel.org>; Thu, 23 Jan 2025 11:38:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737630131; cv=none; b=bjO2Jpx7NFVlBJ+mdMzV8vBC8AE9J29TorMm9TUHnNb8BbWnaE7wlqpizck7BcQOuWEygJFWfe86l2Kb4/QbO0ZeSGMPqDyF18kKfb8IGG2syHKjO02IJEcWANkRUvYHjMyOy+s2Ny8DD24EtZByxxbChYpqXaqSEyCeHJxgewQ=
+	t=1737632283; cv=none; b=nry9dyclqtF18z149DnfUhBq1ViZGlgD6ODfSTGU/ZROKgPkNh16XNvz1rChrby/1NqyZqfvvNh/ED0Xp3KoEuyf809NYi7NcO9/gvZNsPpSKOQN1z34bg7cW/EzaJaRWB48vaKEtQ9+iTjQKlRoq79L07f/KMNcalfmPnWyII8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737630131; c=relaxed/simple;
-	bh=nyoBjJeplMqsP6hiHUlqfIT5u31Sy7DAgdVBnnvQX4Q=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=WDfdA9CcXkGZtXE6YgxP5jeHrmNp56+9aTp3OJLNyabMzWYeVIK/RF740lw7X6G9IElze451tHONyaWaMLrFFEzIjFwXP5viPIbkUbuNsEEcPz+P1gduA5HhArPkeXjG1/Nqva8TRiDRoZL2ZfSw1QzTc+paC/QuyOuK7z/MbTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=NeQmVH94; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C2790C000B;
-	Thu, 23 Jan 2025 11:02:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1737630128;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=z+xrqkHkD3Qz7CE8k+Ni75tjNz0Jjog+QmgQtGZGrmk=;
-	b=NeQmVH94j1VwlXNf7q6BUMpHMqPqZ0A2CT7zkp+dnSTi79v4atNIi5fqZM2tCs5HTCrnox
-	p50/3rp4TU0iWubfwfNUFukL/lF98sasoVmdLY7k/pNpWp4qk7FopG/cmF2IjULM8jv22L
-	bb6WZhLeY+2rLf/EsZcKTlFxHiu9UmhTM0JZazTfw1au3RXMHpRSKwp+B/m7BL179PKfWy
-	Jh+OzO66iH/NkRIwXxCT8WlV+2+KnQudzP0rNW1CvLcpRXcNGvCf+QiCU/Al1qq300Mmca
-	Ss0R69NESEFTyqYJ4Dt2p8xOvIW6B1JIzHqjhkOYLceoJwG+6fKqW3pqnjTCpw==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-Date: Thu, 23 Jan 2025 12:01:58 +0100
-Subject: [PATCH v3 5/5] MIPS: mobileye: dts: eyeq6h: Enable cluster support
+	s=arc-20240116; t=1737632283; c=relaxed/simple;
+	bh=1elHtZeKz6sg8Ec3OUJiSdayZG26nY1iLQravuemXyc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kFoDXUDd7ajqavycH0qeirzRrAoUC+VsndgOXNs9XkbZFlIJued20cDGtP+yPFQ9HaJkBuZhRh07oz4VdQp6zsbdtAr62Zqzotji5696izZqWAynWAGlNmXNblZmdN++4B3HJhcWlbBcRNVyfqw8a/qiF5INafKuODN1e/Yy2oM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=m1XJP3g8; arc=none smtp.client-ip=209.85.216.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2efded08c79so1225094a91.0
+        for <linux-mips@vger.kernel.org>; Thu, 23 Jan 2025 03:38:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1737632281; x=1738237081; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=G5e0D4ceKro9Yb8N26UgxQagAkkEg3LLRP/2T93ftQc=;
+        b=m1XJP3g8AzZ+JeuIq516eVik7b+vYL/DqXlz1JIXdBftZgozqxIxxIdWj4ASSnF3KB
+         12OlgDhHktPFBSdLAL0l0hIBNIl126IlS8f4I3hg3nvZa5h5fOKB9yUxN+pNHtDZgqDB
+         0d6kRXrxqDWoUY4YoWL95lElfifjOAdRCDB2W6XTB8DAy3PGVFQ2N/zY3LYnu7/GlVSw
+         wJSbrxeCkPpJIyTPuvjx8W8mznwaexFyvMKg6Ueg9f4KSur9/RYXg8oas4g7YM55wYIb
+         rB5ZgyOuohcQ4oevLgyTJS/VZ1/dQ7cMFOBOaNR0TrsuiteCCdTMv/QeXduRLpOWhgtd
+         /W0Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737632281; x=1738237081;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=G5e0D4ceKro9Yb8N26UgxQagAkkEg3LLRP/2T93ftQc=;
+        b=aKvzqtc4gDrbEKnyExwCDjUAzIT04TeDSwXynGCPqw74nj6qDZQ8tM/CQ7ySr0kDJB
+         rPbmSkdwcDP+S/9/zG4pEWpYNLLJA2hSiwKOCvk21RrdPxQ+lwMdHPR71Nzyo3Bm5Xk+
+         cHAaX9hI3ixCbqXnzAh0j0Pfd31q8qLErWHISaHgT1J7KJGKvTwnJ5E+bjiOyRYfc8Ph
+         awlLYRgS/r/9rUZZmy1daiZ44NnUYxpGEqjC6qIqJ/0gKXMefKoDa1OZQbPJleUEy6/n
+         sMUDIBwxTDRgpyrDFa7RpBwTuwecmFWksmreVcO1Ixv5mu/ctrz8N46jcyVg/3IKIrFn
+         uDlQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU2WfSU4oDY+YXd0fbLnJg/tETB7q/vKK3TrIyMtx1rQs3ehi2l+DDDeo5WfEykFmyOwCTBlNSxs8Ju@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz16ld2vLRp7rUcoUv4oXT2zCd3JYRsYYnaZrxs3f9xeBLUjiu0
+	YfRQ3fxTvgnscZE+ADFUzHJdJTQTugcSXdH851dnNJ7+Vm8JpBVpAvrap5/dhN0=
+X-Gm-Gg: ASbGncthxFVvtVR/Bf0g8yAk1H+OLLDNUWQfv3Wb3eRnZP2fzI4LLshJqThDE41izzK
+	xt8fL5xmeVib4ustHZCI7mWecoyhKzK/dH03xVMcunXC08Dsf1Ct6ldM0Ovvn0IX2S9MLew+1IV
+	hLkm0UG6P8+DuG5Ul1tVX+nloI8Lt6fpe7YjLGXaYZEb9EqdgsU7zf40q9a7Hop3DwqHaEWNk4C
+	CrYMOEPkYyTPddD0//xNmd/JIy39rB81ZxInEx5j3iFtCj55SMJ5XmjoYefBaLBYM1UM56ydmeO
+	nxyrGyE=
+X-Google-Smtp-Source: AGHT+IGtsIzzGfAcKL/PEpiuES32TcQcp9F7OLmJOeJMP9wYjML8Ng6LAzORWCaFKdsDKOmTsmrEHA==
+X-Received: by 2002:a17:90b:5206:b0:2f4:f7f8:fc8b with SMTP id 98e67ed59e1d1-2f782d4ed77mr37302192a91.27.1737632280204;
+        Thu, 23 Jan 2025 03:38:00 -0800 (PST)
+Received: from localhost ([122.172.84.139])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f7e6a5e2b2sm3705966a91.3.2025.01.23.03.37.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jan 2025 03:37:59 -0800 (PST)
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Fabio Estevam <festevam@gmail.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Hector Martin <marcan@marcan.st>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Kevin Hilman <khilman@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Markus Mayer <mmayer@broadcom.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Naveen N Rao <naveen@kernel.org>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Sven Peter <sven@svenpeter.dev>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	WANG Xuerui <kernel@xen0n.name>
+Cc: linux-pm@vger.kernel.org,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	arm-scmi@vger.kernel.org,
+	asahi@lists.linux.dev,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	linux-mips@vger.kernel.org,
+	linux-omap@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-tegra@vger.kernel.org,
+	loongarch@lists.linux.dev
+Subject: [PATCH 00/33] cpufreq: manage common sysfs attributes from core
+Date: Thu, 23 Jan 2025 17:05:36 +0530
+Message-Id: <cover.1737631669.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250123-cluster-hci-broken-v3-5-8a7ec57cbf68@bootlin.com>
-References: <20250123-cluster-hci-broken-v3-0-8a7ec57cbf68@bootlin.com>
-In-Reply-To: <20250123-cluster-hci-broken-v3-0-8a7ec57cbf68@bootlin.com>
-To: Aleksandar Rikalo <arikalo@gmail.com>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Jiaxun Yang <jiaxun.yang@flygoat.com>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-mips@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Gregory CLEMENT <gregory.clement@bootlin.com>
-X-Mailer: b4 0.14.2
-X-GND-Sasl: gregory.clement@bootlin.com
+Content-Transfer-Encoding: 8bit
 
-The CM3.5 device used in EyeQ6H SoCs incorrectly reports the status
-for Hardware Cache Initialization (HCI). This commit adds the
-compatible string for the CM to acknowledge this issue, which enables
-the use of the second CPU cluster.
+Hello,
 
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
----
- arch/mips/boot/dts/mobileye/eyeq6h.dtsi | 4 ++++
- 1 file changed, 4 insertions(+)
+Most of the drivers add available and boost frequencies related attributes. This
+patch series tries to avoid duplication and simplify driver's code by managing
+these from core code.
 
-diff --git a/arch/mips/boot/dts/mobileye/eyeq6h.dtsi b/arch/mips/boot/dts/mobileye/eyeq6h.dtsi
-index 4a1a43f351d39625b520a16d035cacd2e29d157c..dabd5ed778b739b62f5c6e7348f1837a207dbb6c 100644
---- a/arch/mips/boot/dts/mobileye/eyeq6h.dtsi
-+++ b/arch/mips/boot/dts/mobileye/eyeq6h.dtsi
-@@ -32,6 +32,10 @@ cpu_intc: interrupt-controller {
- 		#interrupt-cells = <1>;
- 	};
- 
-+	coherency-manager {
-+		compatible = "mobileye,eyeq6-cm";
-+	};
-+
- 	xtal: clock-30000000 {
- 		compatible = "fixed-clock";
- 		#clock-cells = <0>;
+A quick search revealed that only the drivers that set the
+policy->freq_table field, enable these attributes. Which makes sense as
+well, since the show_available_freqs() helper works only if the
+freq_table is present.
+
+In order to simplify drivers, create the relevant sysfs files forcefully
+from cpufreq core.
+
+Pushed here:
+
+git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/core-attr
+
+--
+Viresh
+
+Viresh Kumar (33):
+  cpufreq: Always create freq-table related sysfs file
+  cpufreq: dt: Stop setting cpufreq_driver->attr field
+  cpufreq: acpi: Stop setting common freq attributes
+  cpufreq: apple: Stop setting cpufreq_driver->attr field
+  cpufreq: bmips: Stop setting cpufreq_driver->attr field
+  cpufreq: brcmstb: Stop setting common freq attributes
+  cpufreq: davinci: Stop setting cpufreq_driver->attr field
+  cpufreq: e_powersaver: Stop setting cpufreq_driver->attr field
+  cpufreq: elanfreq: Stop setting cpufreq_driver->attr field
+  cpufreq: imx6q: Stop setting cpufreq_driver->attr field
+  cpufreq: kirkwood: Stop setting cpufreq_driver->attr field
+  cpufreq: longhaul: Stop setting cpufreq_driver->attr field
+  cpufreq: loongson: Stop setting cpufreq_driver->attr field
+  cpufreq: mediatek: Stop setting cpufreq_driver->attr field
+  cpufreq: omap: Stop setting cpufreq_driver->attr field
+  cpufreq: p4: Stop setting cpufreq_driver->attr field
+  cpufreq: pasemi: Stop setting cpufreq_driver->attr field
+  cpufreq: pmac: Stop setting cpufreq_driver->attr field
+  cpufreq: powernow: Stop setting cpufreq_driver->attr field
+  cpufreq: powernv: Stop setting common freq attributes
+  cpufreq: qcom: Stop setting cpufreq_driver->attr field
+  cpufreq: qoriq: Stop setting cpufreq_driver->attr field
+  cpufreq: sc520_freq: Stop setting cpufreq_driver->attr field
+  cpufreq: scmi: Stop setting cpufreq_driver->attr field
+  cpufreq: scpi: Stop setting cpufreq_driver->attr field
+  cpufreq: sh: Stop setting cpufreq_driver->attr field
+  cpufreq: spear: Stop setting cpufreq_driver->attr field
+  cpufreq: speedstep: Stop setting cpufreq_driver->attr field
+  cpufreq: tegra: Stop setting cpufreq_driver->attr field
+  cpufreq: vexpress: Stop setting cpufreq_driver->attr field
+  cpufreq: virtual: Stop setting cpufreq_driver->attr field
+  cpufreq: Remove cpufreq_generic_attrs
+  cpufreq: Stop checking for duplicate available/boost freq attributes
+
+ drivers/cpufreq/acpi-cpufreq.c         |  1 -
+ drivers/cpufreq/apple-soc-cpufreq.c    |  8 --------
+ drivers/cpufreq/bmips-cpufreq.c        |  1 -
+ drivers/cpufreq/brcmstb-avs-cpufreq.c  |  1 -
+ drivers/cpufreq/cpufreq-dt.c           |  8 --------
+ drivers/cpufreq/cpufreq.c              | 15 +++++++++++++++
+ drivers/cpufreq/davinci-cpufreq.c      |  1 -
+ drivers/cpufreq/e_powersaver.c         |  1 -
+ drivers/cpufreq/elanfreq.c             |  1 -
+ drivers/cpufreq/freq_table.c           |  8 --------
+ drivers/cpufreq/imx6q-cpufreq.c        |  1 -
+ drivers/cpufreq/kirkwood-cpufreq.c     |  1 -
+ drivers/cpufreq/longhaul.c             |  1 -
+ drivers/cpufreq/loongson2_cpufreq.c    |  1 -
+ drivers/cpufreq/loongson3_cpufreq.c    |  1 -
+ drivers/cpufreq/mediatek-cpufreq-hw.c  |  1 -
+ drivers/cpufreq/mediatek-cpufreq.c     |  1 -
+ drivers/cpufreq/omap-cpufreq.c         |  1 -
+ drivers/cpufreq/p4-clockmod.c          |  1 -
+ drivers/cpufreq/pasemi-cpufreq.c       |  1 -
+ drivers/cpufreq/pmac32-cpufreq.c       |  1 -
+ drivers/cpufreq/pmac64-cpufreq.c       |  1 -
+ drivers/cpufreq/powernow-k6.c          |  1 -
+ drivers/cpufreq/powernow-k7.c          |  1 -
+ drivers/cpufreq/powernow-k8.c          |  1 -
+ drivers/cpufreq/powernv-cpufreq.c      |  2 --
+ drivers/cpufreq/qcom-cpufreq-hw.c      |  7 -------
+ drivers/cpufreq/qoriq-cpufreq.c        |  1 -
+ drivers/cpufreq/sc520_freq.c           |  1 -
+ drivers/cpufreq/scmi-cpufreq.c         |  8 --------
+ drivers/cpufreq/scpi-cpufreq.c         |  1 -
+ drivers/cpufreq/sh-cpufreq.c           |  1 -
+ drivers/cpufreq/spear-cpufreq.c        |  1 -
+ drivers/cpufreq/speedstep-centrino.c   |  1 -
+ drivers/cpufreq/speedstep-ich.c        |  1 -
+ drivers/cpufreq/speedstep-smi.c        |  1 -
+ drivers/cpufreq/tegra186-cpufreq.c     |  1 -
+ drivers/cpufreq/tegra194-cpufreq.c     |  1 -
+ drivers/cpufreq/vexpress-spc-cpufreq.c |  1 -
+ drivers/cpufreq/virtual-cpufreq.c      |  1 -
+ include/linux/cpufreq.h                |  1 -
+ 41 files changed, 15 insertions(+), 75 deletions(-)
 
 -- 
-2.45.2
+2.31.1.272.g89b43f80a514
 
 
