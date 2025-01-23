@@ -1,128 +1,138 @@
-Return-Path: <linux-mips+bounces-7580-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7581-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5CBB3A1A1B6
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Jan 2025 11:19:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FA8DA1A26B
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Jan 2025 12:02:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B5113AB6E2
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Jan 2025 10:19:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9C1C3ADAF3
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Jan 2025 11:02:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E531920D4FD;
-	Thu, 23 Jan 2025 10:19:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3535C20E031;
+	Thu, 23 Jan 2025 11:02:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ILiLn5cW"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="dmCe+yBT"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CFBE14AD19;
-	Thu, 23 Jan 2025 10:19:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9D2920DD79;
+	Thu, 23 Jan 2025 11:02:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737627572; cv=none; b=KFLkXnid7dG8FBFmBNXKH17Un9caGWSYCJ5aDxS827ErEfu0tylvAFbKgval7Fl/zEN2POcWnR0wueW+H8lSIh7V1MWTNz9ju1LVVeUiDMD4U3Ande/5OiNflv4kZRkNlZSHBrB2bZOXhBztjRIxIpDOBAn66v/5ioau7UKQMy8=
+	t=1737630128; cv=none; b=O8ideNKF2nlJxk97pwm18jRwxWIoJZJbkJrN3xTw459tORiRMIL3ECjGJuCZjQdXgBPLtt1eu6m47FZNYuzavFuZXcgKbZuKZS4LXLUBN1v3KUEsPJUxT+JsJ0xpnc8Z4qx440zInCuOuewbr2pVN4rG+LcAhbVWv5Ql+68AJh4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737627572; c=relaxed/simple;
-	bh=qbpoKDddi362Sy79+0mWxpFtU06yaHegDxpYwpUh0XE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fKFVSpIZkmQib023qFKWU+jEbjKnmaBeMkpMLjpFUuQ9Wb6ve9JtHU75caUOyOqeu128Iw5bR0vUb9VAOPXHb/mgvkYgqNWBTsc9ENVAHJOLfqYUKAlBE+4D2muDnS05MQi9I5/FvkqsJSZbFslhFnBzSgZ7CShkxzPWkcWSyvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ILiLn5cW; arc=none smtp.client-ip=209.85.222.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f170.google.com with SMTP id af79cd13be357-7b98a2e3b3eso35275485a.2;
-        Thu, 23 Jan 2025 02:19:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737627570; x=1738232370; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qbpoKDddi362Sy79+0mWxpFtU06yaHegDxpYwpUh0XE=;
-        b=ILiLn5cWlxaC7TkTCefSQIwVdDlBtYWWwDuBdIu3Y+zg+VOZ1rg1qIs9i7oXzlcYwh
-         aCFgie9LK9dtjuvZ4Q436tPqcEIk6ssWGNWxS7D4MAVOuduE+wWyQ8CaZlxiVDf4eUJS
-         bB8ImR44JLz9egNTC6XPy+nHCkCJ7+cdvtIAedlVanFpYFzStqIj49tOmTbqQbZkYd5K
-         Uh4dmJqyW8yLqXzogqRlJ2Ru7BE8NjJnHF+jB1JfVGImVCit9+ZmmR/ms+48wBcveBc9
-         hlIvOmJ404jR61gDAUWS6HqcVa1Z0IIM+itP0cFZt0/7hmeVxSxSuahUmJR8ROxgy/8K
-         +MnQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737627570; x=1738232370;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qbpoKDddi362Sy79+0mWxpFtU06yaHegDxpYwpUh0XE=;
-        b=w5Q+DtQx14mxmf9GcZz8LWFoMsWBqKvV8jLCzMLfNGJENwRXnWSxl/xIp3I44Hye1o
-         6VmKW2h9tMVIS/XEg6NlytZlB/P74xBhRQxv8NXQZpJqiCCTnLm3t5eHCVcj0cpHcCnc
-         PKVwkEj7ygmvKRiYuTeEhIcTCGYmZ2OVuiZjM0/NKRmlpTBv8BBh06de+4UASpw7QdN6
-         lquHBn0IKBeEiGF6Y9qfpVaG3G4iRv5IHHsTWiKtSCz80Rn1IGJ5KYkc6rDwciby/cnx
-         L4/nRF+zMegwr7KA46+e9W9r+/ekXMyql7IWAPX/2NLDXth5nSi+sZluOinXdHvSNOdm
-         T1eg==
-X-Forwarded-Encrypted: i=1; AJvYcCUwXCs+FpO9+/wygEV8Hhyf1TovYQexdTMYoC4HqLkWY0YlfiMaA/pUa2Z7aN1EJO+/M/z8U8tfcxfo@vger.kernel.org, AJvYcCV4aKZ94S5+tOswJrGSETQXGRq2+P86EALtkgerYx+uAtn5EYQmiED/qCsRXeF52NWjcEoAjs/WcxAmDGP3@vger.kernel.org, AJvYcCWEHTtIjqgyTYqJNj4woNkxUXx9M5POOnR0i5gBXN+WsFqQcBuZd0qJn4WFgRr/uuj99RVEYBwNHtCaxA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyyFwL8B6zN/7XkvzwUhrhJYOLOjrWc5GYZwed90YZC5nLMsq66
-	YV1BFMD5HiOE+NK6f9DjoCTTS1qd06oVhqxSY94RcZnBF1ECotWq8deoPT69Z1pdC7Kv6ce35ea
-	ApMPnjythLPO47In3NW2IO3HsOVo=
-X-Gm-Gg: ASbGncsoh3yHyqQoETzN/L9hinke7sBpe0WqrVEcR7NOJ4Kzv4qsjynTBuqbk3Sz3fI
-	yTw0JePteR/RhYTjnyGiE9xibyaj+Nw8JvjxGrqkBC023+8Hr27yPtQo5j455BWI=
-X-Google-Smtp-Source: AGHT+IE3ApFWnXNjyAzEBLDjCwvKVt3XG27QuphNd6AZj2pIwExOdYR4bhFPT8VmeyAd+0Z5nJnC7QsQL4WAeCPCJBU=
-X-Received: by 2002:a05:620a:468a:b0:7b1:543d:c99 with SMTP id
- af79cd13be357-7be632024ebmr3682303785a.24.1737627570078; Thu, 23 Jan 2025
- 02:19:30 -0800 (PST)
+	s=arc-20240116; t=1737630128; c=relaxed/simple;
+	bh=nWZKPaU/sVitw02m1p8ZjGNj05UUtvrBLX7NWqob6nw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=UhXPYjqca/npWv/IZ/e36MyenVxCMV1yzZo6BKsCCS2FrX2PMCvUpqbh92Y56LkR7GF/dexOVyWmP5ysi2NR9zT1XJzn9CDdOx7/exzqeDXC8JHXqk2hdjYgk1YO2hEcR9CPhSTxEL4UbSZhsznPzkke1bQk9K5ZcWVsJeZLmDk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=dmCe+yBT; arc=none smtp.client-ip=217.70.183.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 67ECEE0006;
+	Thu, 23 Jan 2025 11:02:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1737630123;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=w1fu0SJV+JBUbRVhDayZd5JkmE/6nQ70nEA5yOhZebw=;
+	b=dmCe+yBTZ5Of9a8j680B6qTlPuKiKOtbbq3WQ0n+2yrC3nAQc3Pnrq9pRm4FwIpJh3MbXS
+	SNTHhSs+hu6HY529JliNKvtpsNDD0E9n1EF32JM9MCbKK1T1oc+q9lO7PNRcuDhLJrxH5s
+	9+0Abv597K+yT1Aj8TVou67Q070c1Asbp5Wx8QGUNJGOfsJ2ewgk3tyIo3Zn2LlzIX1dR5
+	VLr+eO5a9owy02FBGF3eSgtLrY6y26x1bzLkZqOuEta+c7rCc9VJo0aYSRTjTmkY23h9BK
+	K09wy9mAlNYdxdlXZEKlNhX0/MeCroTOyJaZAQbJ7oRtpZjFBQQRrPoT3jCXLg==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+Subject: [PATCH v3 0/5] MIPS: Allow using multi-cluster with a broken HCI.
+Date: Thu, 23 Jan 2025 12:01:53 +0100
+Message-Id: <20250123-cluster-hci-broken-v3-0-8a7ec57cbf68@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241028175935.51250-1-arikalo@gmail.com> <87ed0uvqf7.fsf@BLaptop.bootlin.com>
-In-Reply-To: <87ed0uvqf7.fsf@BLaptop.bootlin.com>
-From: Aleksandar Rikalo <arikalo@gmail.com>
-Date: Thu, 23 Jan 2025 11:19:20 +0100
-X-Gm-Features: AbW1kvZBOb2fecymAIB3ioxucNgvNDIj2lpX15S6YQDnZ88q2SUMY8BIT2Tf8R4
-Message-ID: <CAGQJe6qBpQhBwhoLss8Y4MRurRs2p6_vym5XAiMmnHqd=nQC8w@mail.gmail.com>
-Subject: Re: [PATCH v8 00/13] MIPS: Support I6500 multi-cluster configuration
-To: Gregory CLEMENT <gregory.clement@bootlin.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, Theo Lebrun <theo.lebrun@bootlin.com>, 
-	Arnd Bergmann <arnd@arndb.de>, devicetree@vger.kernel.org, 
-	Djordje Todorovic <djordje.todorovic@htecgroup.com>, Chao-ying Fu <cfu@wavecomp.com>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Greg Ungerer <gerg@kernel.org>, Hauke Mehrtens <hauke@hauke-m.de>, 
-	Ilya Lipnitskiy <ilya.lipnitskiy@gmail.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
-	Marc Zyngier <maz@kernel.org>, Paul Burton <paulburton@kernel.org>, 
-	Peter Zijlstra <peterz@infradead.org>, Serge Semin <fancer.lancer@gmail.com>, 
-	Tiezhu Yang <yangtiezhu@loongson.cn>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAKEhkmcC/33NzQrCMAzA8VcZPVtpuk938j3EQ9elLjhbaWdRx
+ t7dbuBBEC+BfyC/zCygJwyszWbmMVIgZ1Pku4zpQdkLcupTMylkAQAl1+MjTOj5oIl33l3R8qY
+ Qqm5MLZVClg7vHg09N/R0Tj1QmJx/bT8irNu/XAQuuBBVXjVpAvTHzrlpJLvX7sZWMMoPUgqA6
+ iciE2J0KbXpagUH/EaWZXkDu0RSEPsAAAA=
+X-Change-ID: 20241115-cluster-hci-broken-840a78f72aae
+To: Aleksandar Rikalo <arikalo@gmail.com>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Jiaxun Yang <jiaxun.yang@flygoat.com>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-mips@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Gregory CLEMENT <gregory.clement@bootlin.com>
+X-Mailer: b4 0.14.2
+X-GND-Sasl: gregory.clement@bootlin.com
 
-On Wed, Jan 22, 2025 at 4:06=E2=80=AFPM Gregory CLEMENT
-<gregory.clement@bootlin.com> wrote:
->
-> Hello Aleksandar,
->
-> > Taken from Paul Burton MIPS repo with minor changes from Chao-ying Fu.
-> > Tested with 64r6el_defconfig on Boston board in 2 cluster/2 VPU and
-> > 1 cluster/4 VPU configurations.
->
-> I tested your series on top of v6.13, with some patches already
-> merged. Only the patch "[PATCH v8 09/13] MIPS: CPS: Boot CPUs in
-> secondary clusters" encountered a merge issue. You can review the fixed
-> version I created as an attachment.
->
-> With the v2 series I sent a few days ago, cluster support continued to
-> work on EyeQ5 and EyeQ6. However, for specific needs requiring support
-> of EyeQ6, I will send a new version that takes into account the feedback
-> received.
->
-> Gregory
+Hello,
 
-Hello Gregory,
+Some CM3.5 reports indicate that Hardware Cache Initialization is
+complete, but in reality it's not the case. They also incorrectly show
+that Hardware Cache Initialization is supported. Unfortunately, it is
+not possible to detect this issue at runtime and the information has
+to be passed by the device tree.
 
-Thank you for your time.
+In this third version, I rebased on v6.13. I also addressed remarks
+made by Rob and Krzysztof, and endeavored to add more explanation
+about CM, explaining why we now need to represent it in the device
+tree.
 
-I agree with the change in the attachment. Will you send it to the
-list or should I do it as a v9 version of the series?
+My initial proposal was integrated into the series set by Aleksandar
+here [1]. And the series adding the CM binding was here: [2]. The
+patches 1,2,3, and 5 have no dependencies while patch 4 should depend
+on this series [1]. Actually, those five patches should replace
+patches 10, 11, and 12.
 
-Aleksandar
+Gregory
+
+[1]: https://lore.kernel.org/all/20241028175935.51250-1-arikalo@gmail.com/
+[2]: https://lore.kernel.org/all/20240612-cm_probe-v2-5-a5b55440563c@flygoat.com/
+
+Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+---
+Changes in v3:
+- Provide a more detailed explanation about the CM in the device tree binding.
+- Make the reg property optional for all compatible strings.
+- Use "mobileye" instead of "mti" for the eyeq6-cm compatible string.
+- Address and correct the formatting issues in example and description.
+- Link to v2: https://lore.kernel.org/r/20250116-cluster-hci-broken-v2-0-fc52cfb7a19e@bootlin.com
+
+Changes in v2:
+- Use compatible string instead of property
+- Link to v1: https://lore.kernel.org/r/20241115-cluster-hci-broken-v1-0-00636800611d@bootlin.com
+
+---
+Gregory CLEMENT (5):
+      dt-bindings: mips: Document mti,mips-cm
+      dt-bindings: mips: mips-cm: Add a new compatible string for EyeQ6
+      MIPS: cm: Detect CM quirks from device tree
+      MIPS: CPS: Support broken HCI for multicluster
+      MIPS: mobileye: dts: eyeq6h: Enable cluster support
+
+ .../devicetree/bindings/mips/mti,mips-cm.yaml      | 57 ++++++++++++++++++++++
+ arch/mips/boot/dts/mobileye/eyeq6h.dtsi            |  4 ++
+ arch/mips/include/asm/mips-cm.h                    | 22 +++++++++
+ arch/mips/kernel/mips-cm.c                         | 14 ++++++
+ arch/mips/kernel/smp-cps.c                         |  5 +-
+ 5 files changed, 101 insertions(+), 1 deletion(-)
+---
+base-commit: 24da360081efcc12be3f346b6822a91fcb142027
+change-id: 20241115-cluster-hci-broken-840a78f72aae
+
+Best regards,
+-- 
+Grégory CLEMENT, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 
