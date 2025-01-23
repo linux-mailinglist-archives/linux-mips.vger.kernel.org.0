@@ -1,118 +1,106 @@
-Return-Path: <linux-mips+bounces-7577-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7578-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9C87A19D00
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Jan 2025 03:44:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D87AA19D5E
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Jan 2025 04:42:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F2FCA16181A
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Jan 2025 02:44:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1C593A63ED
+	for <lists+linux-mips@lfdr.de>; Thu, 23 Jan 2025 03:42:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B074B20330;
-	Thu, 23 Jan 2025 02:44:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26612126C02;
+	Thu, 23 Jan 2025 03:42:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PKlN++My"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="VT3UG3Xv"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 331EF2F2A;
-	Thu, 23 Jan 2025 02:44:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3A783A8D0;
+	Thu, 23 Jan 2025 03:42:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737600255; cv=none; b=oZQcgUSSYS66L3g6VmZAevyOn8H/LheN38VeQJo+gozDT6UBaUSCsu/tBAQ2MXggufYsWk0GXD2IPJCFNF8Zezacpv55gUQ8M6UJjvOGwUjlq9ioHuxD1Q1wjNeBeiansNNPtjCDwD46hJwgCq7IMfE7dH7ZS6MZm09l619SI7w=
+	t=1737603723; cv=none; b=oW9Cmg9j3zUjjofn7Rt47k1p4m0VvmMbf4YED7gbvA9MgZ7jkRKc0vKkQg1D6ptruB6SsZIY067QXoOLRAFi0/WoYWql9pZ82yvC5huOdQt4a1tarS/UrpUKCP+fFUph5g1qMOnXBaIRPpKUU8380ZK2T3FdIOHMBK4LokfOgx8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737600255; c=relaxed/simple;
-	bh=BHRaS/Fh0hOYeBHKAKUOaA/KSubP21xzru6vjTfJRZU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KsqvNfRmpmKH3YNjjtupse7b0jkXdikfEylJwqmIVqdPfjIY6JHxsQlD9u3aEU68nojNq9jVqrd3UcimGhK5CPus0WW7shgLwpHjAPzrYCeNre3zv8Dc8wRQKmFYx58zLGYEahN/WilrkxGJQ80NR7hpnVjI2NFaLgOQVe1TUfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PKlN++My; arc=none smtp.client-ip=209.85.219.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e4419a47887so623503276.0;
-        Wed, 22 Jan 2025 18:44:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737600253; x=1738205053; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BHRaS/Fh0hOYeBHKAKUOaA/KSubP21xzru6vjTfJRZU=;
-        b=PKlN++MyDDElnABqTOMlEGwoa9DYWfxzWJ8yHbvl7NkxmBdsWmsFkgguIY1hXXoZor
-         kcDD2TWLe6FrWx+j/V3kbQeySWJE8sHHLkPWqJQydS9So06WtHimA7OXyywdXqNN+IR2
-         8E0wG8O3O9yw3xQ/Phknu3TPSKGfUDZH6fw23fILn2cNJyYy8e0rXCwQyTE70jtUm1+i
-         DeB8wfAJ9NSX0UbhsYBLtkUtvSHi/cQJEMqmbevTDoFHNwiPHNfOxEfAu+ASSqxt0+Fo
-         DYocMtC56AVgyOg/32eBLeAVU/WyVPOqXZgdO5pVtUREhDZM/qbL6+IxE9evHv1UJJjT
-         5JQg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737600253; x=1738205053;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=BHRaS/Fh0hOYeBHKAKUOaA/KSubP21xzru6vjTfJRZU=;
-        b=uaGO/hvJRrmElJweMalV3L4Ext1ndcAy1wnSa0l+HsmqkvJ7AiiEbi7dLQy1HxPckN
-         PYcYAPcnZ4Y7LfeVju16O1T97aIGcV9Jxoe2jwBiDe90+qV9l5UI3wkXBVyU/2NH/1vZ
-         3gjJ4PpxoBl3asiEIFOX+CrMad0k4LxkIVkHA0X8bvDVa4pF4Pg5+LxAKWqj9J1xfUvR
-         rtlmNPlTUGW+Tr+TPYCGruoHzYMpOddfMBksOJKPDXEX/18tOtOprd5UsFD3nxz3PPAT
-         7gcRrJVD+4flRcah8CD/2il6cKhov3nMn5OB4F+iP7P8ZApd7ep93Nt72pWZBQrM/BO9
-         x9ug==
-X-Forwarded-Encrypted: i=1; AJvYcCVNtICgLq6iv/Z6fH1jjutcxB/dv570R+RTs2+FI9MfDWqJhGxqp7KGw1ETILJbeiIuKQpaDi5BZP3j2Q==@vger.kernel.org, AJvYcCVmpPbSXVm46aPekknI4EqW6fCpimp4hvY1fjbJ+Tq5mDF5LhKL4qfBjpQDsrB/Js1OsocwPIcGFha8tFA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz//7unKN37S/jeZvRg9WuZOeIy9BpPaFuBqkSFA/l3JRso3saw
-	H6QpWVclvtjBeI4fETQGV7dJ0xtjMrDz+5E0Faw01QfCAYU2yj87XKcDQimTW6RrnHFuQEFyGZN
-	DhF8w/6ceSHBjkjCxs5zNO79sqxtP618Blto=
-X-Gm-Gg: ASbGncv+3xVVT4+qY0PG+m5bjyMdTBJwpdZCoTxmEhHQuT13OoK+0F7+2upUKpIf6/v
-	AyqOpV4ZMCOxlViS6DypGoHniolknL3vqnmF6QUtL2enGi8/v/ZpkfwiBmESECtChE5edc3ufuk
-	BxdrM55l6SiaMvX4ZAtk0=
-X-Google-Smtp-Source: AGHT+IHSrwfIDdR9x7tNetjN4qYI7hbscKNTrnYHVX7qU/xN/4CEVwC/xa/boDVp+4RwiT0JhJsN+3hSHF7yXgmB6lA=
-X-Received: by 2002:a05:690c:62c4:b0:6ef:6448:bade with SMTP id
- 00721157ae682-6f6eb941502mr176402017b3.36.1737600253096; Wed, 22 Jan 2025
- 18:44:13 -0800 (PST)
+	s=arc-20240116; t=1737603723; c=relaxed/simple;
+	bh=3RY4k2zboVV5daIxlBEkCjdDsAZaLavxRnGu8nEYbec=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ugba9sDAOAS3LjSJAaeqzcYWKg4A8zGnpyN6DmXtGmc+3ZKujAMQQjGHwKx234vuDNXLSBNoLAFJPlpzSOa7Nrv9p1+vzo/NIVebWBMIXT5xh2F+pBPr+HMEZbj0eE/Sm/cgAvAYO1D3kcvvTpylBQlN8glUYaxMV0w6ZT/lUwA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=VT3UG3Xv; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=nxV6h48oOYNUXilv2b43vdsiPZOgrDsSq3hXRcY+eoY=; b=VT3UG3XvlCtX+ofHf2rAlwAlGk
+	Eg1t/wU6mPNFAxoymJ2dNMDPTLpf86x/ZLPF6018Q/qpmJH5grMNzIdgyCwQ2QNxJpBOLlvZfEwQ9
+	vhlzgRl0sM6S5go6ZxogW8bkU2jGoDEuZ2+YdrG3PlVunEPfs9+NFMvravK5IBcMDvnc=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1tao66-0078OE-Du; Thu, 23 Jan 2025 04:41:38 +0100
+Date: Thu, 23 Jan 2025 04:41:38 +0100
+From: Andrew Lunn <andrew@lunn.ch>
+To: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+Cc: Sander Vanheule <sander@svanheule.net>,
+	"lee@kernel.org" <lee@kernel.org>,
+	"robh@kernel.org" <robh@kernel.org>,
+	"krzk+dt@kernel.org" <krzk+dt@kernel.org>,
+	"conor+dt@kernel.org" <conor+dt@kernel.org>,
+	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
+	"davem@davemloft.net" <davem@davemloft.net>,
+	"edumazet@google.com" <edumazet@google.com>,
+	"kuba@kernel.org" <kuba@kernel.org>,
+	"pabeni@redhat.com" <pabeni@redhat.com>,
+	"tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
+	"hkallweit1@gmail.com" <hkallweit1@gmail.com>,
+	"linux@armlinux.org.uk" <linux@armlinux.org.uk>,
+	"markus.stockhausen@gmx.de" <markus.stockhausen@gmx.de>,
+	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH v4 4/4] net: mdio: Add RTL9300 MDIO driver
+Message-ID: <11d7fe78-958d-409f-a979-25cc1bc933a2@lunn.ch>
+References: <20250120040214.2538839-1-chris.packham@alliedtelesis.co.nz>
+ <20250120040214.2538839-5-chris.packham@alliedtelesis.co.nz>
+ <d4194a1560ff297e5ab3e6eae6d51b7c9d469381.camel@svanheule.net>
+ <63d6cf16-9581-4736-8592-bc5836fa51af@alliedtelesis.co.nz>
+ <faa4cf6e-40eb-4509-b3f0-198a9a45ccbd@lunn.ch>
+ <09bd2f04-96d6-4dba-92ee-22ccbd7f584f@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250120015254.124447-1-gch981213@gmail.com> <0625de4d-35c5-40c8-b81c-583a949c2e2a@app.fastmail.com>
-In-Reply-To: <0625de4d-35c5-40c8-b81c-583a949c2e2a@app.fastmail.com>
-From: Chuanhong Guo <gch981213@gmail.com>
-Date: Thu, 23 Jan 2025 10:43:40 +0800
-X-Gm-Features: AWEUYZnjdb64WFOyZbxYhAtaa3EVbJnQY2H6Xdc7ecp3nibLPrnmXgR49A9bPnU
-Message-ID: <CAJsYDVKTka25bpLVDh4W6p5mzo_zKY13=gO8r-VSsyOtm2v6sQ@mail.gmail.com>
-Subject: Re: [PATCH] mips: add support for Siflower MIPS SoCs
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"paulburton@kernel.org" <paulburton@kernel.org>, 
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <09bd2f04-96d6-4dba-92ee-22ccbd7f584f@alliedtelesis.co.nz>
 
-On Wed, Jan 22, 2025 at 8:05=E2=80=AFPM Jiaxun Yang <jiaxun.yang@flygoat.co=
-m> wrote:
->
->
->
-> =E5=9C=A82025=E5=B9=B41=E6=9C=8820=E6=97=A5=E4=B8=80=E6=9C=88 =E4=B8=8A=
-=E5=8D=881:52=EF=BC=8CChuanhong Guo=E5=86=99=E9=81=93=EF=BC=9A
-> > Siflower MIPS SoCs like SF19A2890 uses dual-core MIPS InterAptiv
-> > processor, built-in GMAC, USB, dual-band WiFi and various other
-> > peripherals.
-> > Notably, it uses some ARM PLxxx peripherals, and ARM_AMBA is
-> > selected for the drivers.
-> > Most devices on the market with this chip come with 64M or less
-> > DRAM. A kmalloc.h with malloc alignment override is added to
-> > conserve memory, and a MACH_SIFLOWER_MIPS is created with reduced
-> > features instead of using the generic kernel.
-> >
-> > Signed-off-by: Chuanhong Guo <gch981213@gmail.com>
->
-> Hmm, why not using MIPS_GENERIC.
+On Wed, Jan 22, 2025 at 11:02:14PM +0000, Chris Packham wrote:
+> Hi Andrew,
+> 
+> On 23/01/2025 10:47, Andrew Lunn wrote:
+> >> I believe the POLL_SEL configuration actually affects an internal port
+> >> polling unit. From the datasheets I have it seems pretty configurable, you
+> >> can tell it which phy registers to poll and what values indicate link
+> >> up/down (the defaults are conveniently setup to match the Realtek PHYs).
+> > You need to disable this. The linux PHY driver is driving the PHY, and
+> > the hardware has no idea what Linux is doing. Say the driver has
+> > changed the page to read a temperature sensor, when the switch does a
+> > poll. Rather than reading the link status, it gets some random value
+> > from the page containing the temperature sensor.
+> 
+> There's a mask that can be set via a register that can disable polling 
+> for a port. The trick will be deciding when to do so.
 
-Mainly to override MIPS_L1_CACHE_SHIFT and ARCH_DMA_MINALIGN.
-This saves about 1MB of memory if I remember correctly.
+On probe. And leave is disabled. phylink will provide you with all the
+information you need about link up, what the link speed is etc. There
+is no need for PPU.
 
---=20
-Regards,
-Chuanhong Guo
+	Andrew
 
