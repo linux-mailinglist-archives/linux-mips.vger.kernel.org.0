@@ -1,222 +1,218 @@
-Return-Path: <linux-mips+bounces-7600-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7601-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A909A1AD4B
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Jan 2025 00:40:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E55D1A1B4D2
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Jan 2025 12:39:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3EE2D1655C1
-	for <lists+linux-mips@lfdr.de>; Thu, 23 Jan 2025 23:40:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 92EDE3A3093
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Jan 2025 11:39:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9922F1D5AA9;
-	Thu, 23 Jan 2025 23:40:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 624D4207A03;
+	Fri, 24 Jan 2025 11:39:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="AQCb1dR9"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="KTnsm3fI"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BDFE1D432D
-	for <linux-mips@vger.kernel.org>; Thu, 23 Jan 2025 23:40:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 928E31E495;
+	Fri, 24 Jan 2025 11:39:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737675641; cv=none; b=A4uKRimxa0U2PbG1IJImsVTABSiQzWw0Zlmp7Dhs3Eh2pqwkjTIZzR3WagGLJoxiGcje7w29YEd8SUgYwkA7PLbzAXiGdRFaDBZE1EcoESRrot+eDeZjgIWTDut69/CbFx1C5nYkg5hlPzEy7a0yZoN+bHnx3HyK6T2CpPLppSw=
+	t=1737718751; cv=none; b=PWQiCH57XCMyxoEAFzc9NqVbycgqLaA0+Ef3qmYzbcaO3Iu5u1vrAbi9Pn8+tUdSUcXjwsxobSSsprJClxTkA2P9w3Vz61Ws2fB048VI8CjE4XtIpZnA0NzPf2JPcmMTzoOQqxhvbJikbSyTJ0vWK4KHWLMMWX+wk/PZ6xzwCa4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737675641; c=relaxed/simple;
-	bh=naGJoKlusPjeDx6rLgV25UEz3eA5xe0K9N5YUejszx4=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=VYSOIAMB+w2gRty7uSsdlmSYxCBD8VmtzbKOo0MXUHTvi89bmsZfmeLLshH/51CRWj3qZLHxGYH2dkU8FgYa1VU4Dq2Rm9YRNOn2awm/Nm6l3Cm+pORH4s94HiS50I+zTL7BfMBegK4UVUVZC1XGCY3JzyAAAjA2+hTvJxZfZts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=AQCb1dR9; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id AFBF12C0358;
-	Fri, 24 Jan 2025 12:40:30 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1737675630;
-	bh=naGJoKlusPjeDx6rLgV25UEz3eA5xe0K9N5YUejszx4=;
-	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
-	b=AQCb1dR9zJsRNa8VCkE+wls1Z0vvi1OHX63fF8CML8jIyyT08yoqShxGnNygkTDtC
-	 wuof7kvCGsIAUekwt6OFZ+wiAlWadETUeDSE9iprArCdBUDzdS0sBoHWYHr+4PHwBv
-	 3WRUOZOt+K5MGflw9gx6rPvX6TiJPVS1tEYLS0oQ+fSLjUAPvXqQSLfIts/ACj89cE
-	 8sZeIm/DqpDyO3GiPb9AR+kY5dB8yrvATSH7FoF+xzs5PCvIXQPGelhKe11pxt1TnV
-	 ABecOBybCNdUzyDUmYu4SmMtO9+fCjnIdMTz0dmMUSr9HIr4FiVKcC8ThIVSwP7ITl
-	 oyVI9PTYe3n9w==
-Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B6792d36e0001>; Fri, 24 Jan 2025 12:40:30 +1300
-Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
- svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.14; Fri, 24 Jan 2025 12:40:30 +1300
-Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
- svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
- 15.02.1544.014; Fri, 24 Jan 2025 12:40:30 +1300
-From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
-To: Andrew Lunn <andrew@lunn.ch>
-CC: Krzysztof Kozlowski <krzk@kernel.org>, "lee@kernel.org" <lee@kernel.org>,
-	"robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
-	<krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
-	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, "davem@davemloft.net"
-	<davem@davemloft.net>, "edumazet@google.com" <edumazet@google.com>,
-	"kuba@kernel.org" <kuba@kernel.org>, "pabeni@redhat.com" <pabeni@redhat.com>,
-	"tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
-	"hkallweit1@gmail.com" <hkallweit1@gmail.com>, "linux@armlinux.org.uk"
-	<linux@armlinux.org.uk>, "sander@svanheule.net" <sander@svanheule.net>,
-	"markus.stockhausen@gmx.de" <markus.stockhausen@gmx.de>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCH v4 1/4] dt-bindings: net: Add Realtek MDIO controller
-Thread-Topic: [PATCH v4 1/4] dt-bindings: net: Add Realtek MDIO controller
-Thread-Index: AQHbavAadjwojqGz4UuNGuTShat73rMhmt0AgAJkrgCAABdsAIAAGZmA
-Date: Thu, 23 Jan 2025 23:40:30 +0000
-Message-ID: <b03b5d67-2df6-40da-adea-2339445797b2@alliedtelesis.co.nz>
-References: <20250120040214.2538839-1-chris.packham@alliedtelesis.co.nz>
- <20250120040214.2538839-2-chris.packham@alliedtelesis.co.nz>
- <20250122-obedient-owl-from-ganymede-4a8343@krzk-bin>
- <6b026af2-62bc-4b7d-abc7-d4c6a99bd848@alliedtelesis.co.nz>
- <95923d9b-bf37-4256-a342-f71f4d814383@lunn.ch>
-In-Reply-To: <95923d9b-bf37-4256-a342-f71f4d814383@lunn.ch>
-Accept-Language: en-NZ, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <5821FB4ED200D04BBDCF7F33145896E5@alliedtelesis.co.nz>
-Content-Transfer-Encoding: base64
+	s=arc-20240116; t=1737718751; c=relaxed/simple;
+	bh=6s6DXIgDFig0P+E+BIR3foVvmNYtosrPp0s6Pb8ybOM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pzthLUX7TpQwP9aLh566sOrcPG24KWH3HqcF3OgZlPAw6BxDdt5xiDRT06qnAYgn0PaKXoJpXYDHg2ZoqrOgzUbhAq1p/eZDEXdGLIi+B1UMS2IBMnb52gEHECKzmLzQ38pXB5ix2tjTDUmgZlEVFtyOZdZMMJxwysmPlKdjRcE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=KTnsm3fI; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=rRSCJVP4ndkq+xRdOcjvb/DEkivJMHzPDW1Wja0Gha4=; b=KTnsm3fI9AVUkSyp8H79u1gvIz
+	aIz07uHBUUDNqQHPOsEPfJaMlksY/+r3dYGd0Gxfpw5KxMpfMD2FkouQIrcub+WAKrKn4xeI8Yrxy
+	/JWF1La3cgVbC0hS1rEVG+rtaI340Lq6gd4Djr1FIB0Kz/QdwfC916H5opJ/qJgBtdfvMLYBk235I
+	kMi7ATe4rFN6fjRcPB6ph4dPJ+0AcEoI5og8pTmRk87vqFQTj1juTejBclTopp7UdySCyr2k2P1Tr
+	FhWEsbRpsHNUOuErEvqkxZ+fKWTUj17WehlSgkP6BiYr8gJ0MX2YIaiVPOt2otMzzaFVFlloWy0Ak
+	neR9SFMg==;
+Received: from 77-249-17-89.cable.dynamic.v4.ziggo.nl ([77.249.17.89] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tbI1X-0000000Dzku-05Il;
+	Fri, 24 Jan 2025 11:38:55 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 5F707300619; Fri, 24 Jan 2025 12:38:54 +0100 (CET)
+Date: Fri, 24 Jan 2025 12:38:54 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Qi Zheng <zhengqi.arch@bytedance.com>
+Cc: kevin.brodsky@arm.com, riel@surriel.com, vishal.moola@gmail.com,
+	david@redhat.com, jannh@google.com, hughd@google.com,
+	willy@infradead.org, yuzhao@google.com, muchun.song@linux.dev,
+	akpm@linux-foundation.org, will@kernel.org, aneesh.kumar@kernel.org,
+	npiggin@gmail.com, arnd@arndb.de, dave.hansen@linux.intel.com,
+	rppt@kernel.org, alexghiti@rivosinc.com, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+	linux-openrisc@vger.kernel.org, linux-sh@vger.kernel.org,
+	linux-um@lists.infradead.org, x86@kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 4/5] x86: pgtable: unconditionally use tlb_remove_table()
+Message-ID: <20250124113854.GA15996@noisy.programming.kicks-ass.net>
+References: <cover.1737637631.git.zhengqi.arch@bytedance.com>
+ <00bf7935d65826eee547ac195d7854b1c946dbc5.1737637631.git.zhengqi.arch@bytedance.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=BNQQr0QG c=1 sm=1 tr=0 ts=6792d36e a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=VdSt8ZQiCzkA:10 a=g0uezqWfbaqGTy7dc40A:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-SEG-SpamProfiler-Score: 0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <00bf7935d65826eee547ac195d7854b1c946dbc5.1737637631.git.zhengqi.arch@bytedance.com>
 
-DQpPbiAyNC8wMS8yMDI1IDExOjA4LCBBbmRyZXcgTHVubiB3cm90ZToNCj4+Pj4gKyAgICAgICAg
-cHJvcGVydGllczoNCj4+Pj4gKyAgICAgICAgICByZWFsdGVrLHBvcnQ6DQo+Pj4+ICsgICAgICAg
-ICAgICAkcmVmOiAvc2NoZW1hcy90eXBlcy55YW1sIy9kZWZpbml0aW9ucy91aW50MzINCj4+Pj4g
-KyAgICAgICAgICAgIGRlc2NyaXB0aW9uOg0KPj4+PiArICAgICAgICAgICAgICBUaGUgTURJTyBj
-b21tdW5pY2F0aW9uIG9uIHRoZSBSVEw5MzAwIGlzIGFic3RyYWN0ZWQgYnkgdGhlIHN3aXRjaC4g
-QXQNCj4+Pj4gKyAgICAgICAgICAgICAgdGhlIHNvZnR3YXJlIGxldmVsIGNvbW11bmljYXRpb24g
-dXNlcyB0aGUgc3dpdGNoIHBvcnQgdG8gYWRkcmVzcyB0aGUNCj4+Pj4gKyAgICAgICAgICAgICAg
-UEhZIHdpdGggdGhlIGFjdHVhbCBNRElPIGJ1cyBhbmQgYWRkcmVzcyBoYXZpbmcgYmVlbiBzZXR1
-cCB2aWEgdGhlDQo+Pj4+ICsgICAgICAgICAgICAgIHBhcmVudCBtZGlvLWJ1cyBhbmQgcmVnIHBy
-b3BlcnR5Lg0KPj4+IEkgZG9uJ3QgcXVpdGUgZ2V0IHdoeSB0aGlzIGNhbm5vdCBiZSB0aGUgJ3Jl
-ZycgcHJvcGVydHkuIEkgdW5kZXJzdG9vZCB0aGF0DQo+Pj4gJ3JlZycgb2YgdGhpcyBub2RlIGlz
-IG5vdCByZWFsbHkgdXNlZD8gT3IgeW91IG1lYW50IGhlcmUgdGhpcyAncmVnJywgbm90DQo+Pj4g
-cGFyZW50J3MgJ3JlZyc/DQo+PiBJdCdzIGlzIGEgYml0IGNvbmZ1c2luZyAoYW55IHN1Z2dlc3Rp
-b25zIGZvciBpbXByb3ZpbmcgdGhlIGRlc2NyaXB0aW9uDQo+PiBhbmQvb3IgY29tbWl0IG1lc3Nh
-Z2UgYXJlIHdlbGNvbWUpLg0KPiBJIGRvbid0IGtub3cgaWYgaXQgd2lsbCBhY3R1YWxseSBoZWxw
-LCBidXQuLi4uDQo+DQo+IFdlIGhhdmUgdHdvIGVudGFuZ2xlZCBjb25maWd1cmF0aW9ucyBoZXJl
-Lg0KPg0KPiAxKSBZb3UgaGF2ZSA0IE1ESU8gYnVzc2VzIHdoaWNoIHlvdSBuZWVkIHRvIGRlc2Ny
-aWJlIHVzaW5nIG1kaW8ueWFtbA0KPiAgICAgSW4gdGhpcyBiaW5kaW5nLCByZWcgaXMgdGhlIGFk
-ZHJlc3Mgb2YgdGhlIGRldmljZSBvbiB0aGUgYnVzLCBpbg0KPiAgICAgdGhlIHJhbmdlIDAtMzEu
-DQo+DQo+IDIpIFRoZSBoYXJkd2FyZSB3YXMgYSBwb29sIG9mIFBIWXMgd2hpY2ggeW91IGNhbiBt
-YXAgdG8gYWRkcmVzcyBvbiB0aGUNCj4gICAgIE1ESU8gYnVzc2VzLg0KPg0KPiBSYXRoZXIgdGhh
-biBjb21iaW5pbmcgdGhlbSwgbWF5YmUgaXQgd291bGQgYmUgYmV0dGVyIHRvIGtlZXAgdGhlbQ0K
-PiBzZXBhcmF0ZS4gSXQgaXMgcHJvYmFibHkgbW9yZSBlcnJvciBwcm9uZSwgYnV0IHNpbXBsZXIg
-dG8NCj4gdW5kZXJzdGFuZC4gQW5kIGhvcGVmdWxseSBlcnJvcnMgcmVzdWx0IGluIFBIWXMgbm90
-IGJlaW5nIGZvdW5kIGR1cmluZw0KPiBwcm9iZSwgc28gdGhlIHByb2JsZW1zIGFyZSBvYnZpb3Vz
-Lg0KPg0KPiBNYXliZSB5b3UgY2FuIGFjdHVhbGx5IHVzZSBwaGFuZGxlcy4gWW91IGhhdmUgdGhl
-IHVzdWFsIE1ESU8gYnVzDQo+IG5vZGVzOg0KPg0KPiAgICAgIG1kaW9ANWMwMzAwMDAgew0KPiAg
-ICAgICAgICAjYWRkcmVzcy1jZWxscyA9IDwxPjsNCj4gICAgICAgICAgI3NpemUtY2VsbHMgPSA8
-MD47DQo+DQo+ICAgICAgICAgIGV0aHBoeTA6IGV0aGVybmV0LXBoeUAxIHsNCj4gICAgICAgICAg
-ICAgIHJlZyA9IDwxPjsNCj4gICAgICAgICAgfTsNCj4NCj4gICAgICAgICAgZXRocGh5MTogZXRo
-ZXJuZXQtcGh5QDMgew0KPiAgICAgICAgICAgICAgcmVnID0gPDM+Ow0KPiAgICAgICAgICB9Ow0K
-PiAgICAgIH07DQo+DQo+ICAgICAgbWRpb0A1YzA0MDAwMCB7DQo+ICAgICAgICAgICNhZGRyZXNz
-LWNlbGxzID0gPDE+Ow0KPiAgICAgICAgICAjc2l6ZS1jZWxscyA9IDwwPjsNCj4NCj4gICAgICAg
-ICAgZXRocGh5MjogZXRoZXJuZXQtcGh5QDEgew0KPiAgICAgICAgICAgICAgcmVnID0gPDE+Ow0K
-PiAgICAgICAgICB9Ow0KPg0KPiAgICAgICAgICBldGhwaHkzOiBldGhlcm5ldC1waHlAMyB7DQo+
-ICAgICAgICAgICAgICByZWcgPSA8Mz47DQo+ICAgICAgICAgIH07DQo+ICAgICAgfTsNCj4NCj4g
-ICAgICBtZGlvQDVjMDUwMDAwIHsNCj4gICAgICAgICAuLi4NCj4gICAgICB9DQo+DQo+ICAgICAg
-bWRpb0A1YzA2MDAwMCB7DQo+ICAgICAgICAgLi4uDQo+ICAgICAgfQ0KPg0KPiAgICAgIEFuZCB0
-aGVuIGEgbm9kZSB3aGljaCBpcyBhIGxpc3Qgb2YgUEhZIHBoYW5kbGVzOg0KPg0KPiAgICAgIFsm
-ZXRocGh5MCwgJmV0aHBoeTEsICZldGhwaHkyLCAmZXRocGh5MywgLi4uLl0NCj4NCj4gVGhlIDB0
-aCBlbnRyeSBpbiB0aGUgbGlzdCB0ZWxscyB5b3UgaGF2ZSB0byBtYXAgdGhlIDB0aCBQSFkgaW4g
-dGhlDQo+IHBvb2wgdG8gYW4gTURJTyBidXMgYW5kIGFkZHJlc3MuIEZvbGxvdyB0aGUgcGhhbmRs
-ZSB0byBnZXQgdGhlIE1ESU8NCj4gYnVzIGFuZCB0aGUgYWRkcmVzcyBvbiB0aGUgYnVzLg0KDQpB
-IGZ1bGxlciBkdHMgd291bGQgYmUgc29tZXRoaW5nIGxpa2UgdGhpcyAoZm9yIHRoZSA4LXBvcnQg
-Ym9hcmQgSSBoYXZlIA0KaW4gZnJvbnQgb2YgbWUpDQoNCiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqAgbWRpby1jb250cm9sbGVyQGNhMDAgew0KIMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgY29tcGF0aWJsZSA9ICJyZWFsdGVrLHJ0bDkzMDEtbWRp
-byI7DQogwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZWcg
-PSA8MHhjYTAwPjsNCg0KIMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqAgbWRpby1idXNAMCB7DQogwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmVnID0gPDB4MDA+Ow0KIMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGV0aHBoeTA6
-IGV0aGVybmV0LXBoeUAwIHsNCiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmVnID0gPDB4MDA+Ow0K
-IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjb21wYXRpYmxlID0gDQoiZXRoZXJuZXQtcGh5LWllZWU4
-MDIuMy1jNDUiOw0KIMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIH07DQogwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZXRocGh5MTogZXRoZXJuZXQtcGh5QDEgew0K
-IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZWcgPSA8MHgwMT47DQogwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgIGNvbXBhdGlibGUgPSANCiJldGhlcm5ldC1waHktaWVlZTgwMi4zLWM0NSI7DQogwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAg
-fTsNCiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoCBldGhwaHkyOiBldGhlcm5ldC1waHlAMiB7DQogwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgIHJlZyA9IDwweDAyPjsNCiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgY29tcGF0aWJsZSA9IA0K
-ImV0aGVybmV0LXBoeS1pZWVlODAyLjMtYzQ1IjsNCiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCB9Ow0KIMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGV0aHBoeTM6
-IGV0aGVybmV0LXBoeUAzIHsNCiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmVnID0gPDB4MDM+Ow0K
-IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjb21wYXRpYmxlID0gDQoiZXRoZXJuZXQtcGh5LWllZWU4
-MDIuMy1jNDUiOw0KIMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIH07DQogwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoCB9Ow0KIMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqAgbWRpby1idXNAMSB7DQogwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmVnID0gPDB4MDE+Ow0KIMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGV0aHBo
-eTQ6IGV0aGVybmV0LXBoeUA4IHsNCiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgcmVnID0gPDB4MDA+
-Ow0KIMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBjb21wYXRpYmxlID0gDQoiZXRoZXJuZXQtcGh5LWll
-ZWU4MDIuMy1jNDUiOw0KIMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgIH07DQogwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgZXRocGh5NTogZXRoZXJuZXQtcGh5QDkg
-ew0KIMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZWcgPSA8MHgwMT47DQogwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgIGNvbXBhdGlibGUgPSANCiJldGhlcm5ldC1waHktaWVlZTgwMi4zLWM0NSI7DQogwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqAgfTsNCiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoCBldGhwaHk2OiBldGhlcm5ldC1waHlAMTAgew0KIMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoCByZWcgPSA8MHgwMj47DQogwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGNvbXBhdGlibGUg
-PSANCiJldGhlcm5ldC1waHktaWVlZTgwMi4zLWM0NSI7DQogwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfTsNCiDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCBldGhw
-aHk3OiBldGhlcm5ldC1waHlAMTEgew0KIMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCByZWcgPSA8MHgw
-Mz47DQogwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIGNvbXBhdGlibGUgPSANCiJldGhlcm5ldC1waHkt
-aWVlZTgwMi4zLWM0NSI7DQogwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgfTsNCiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgIH07DQogwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoCByZWFsdGVrLHBvcnRzID0gWyZldGhwaHkwLCAmZXRocGh5MSwgJmV0aHBo
-eTIsIA0KJmV0aHBoeTMsDQogwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIMKgIC8qIG5lZWQg
-YSBnYXAgaGVyZSANCmFzIHRoZXJlIGFyZSA0IHVudXNlZCBwb3J0cyovDQogwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCAwLCAwLCAwLCAwLA0KIMKgwqDCoMKgwqDC
-oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
-wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAgJmV0aHBoeTQsICZldGhwaHk1LCANCiZl
-dGhwaHk2LCAmZXRocGh5N107DQogwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgIH07DQoN
-CkkgY291bGQgcHJvYmFibHkgbWFrZSBpdCB3b3JrIGJ1dCBJJ20gbm90IHN1cmUgdGhhdCBpdCBp
-cyBhbnkgbW9yZSANCnVuZGVyc3RhbmRhYmxlLg0K
+On Thu, Jan 23, 2025 at 09:26:17PM +0800, Qi Zheng wrote:
+> If the CONFIG_MMU_GATHER_TABLE_FREE is disabled, the tlb_remove_table()
+> will fall back to pagetable_dtor() + tlb_remove_page(). So let's use
+> tlb_remove_table() unconditionally to free page table pages.
+> 
+> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+> Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+
+I think we can clean up more :-)
+
+
+diff --git a/arch/x86/hyperv/mmu.c b/arch/x86/hyperv/mmu.c
+index cc8c3bd0e7c2..1f7c3082a36d 100644
+--- a/arch/x86/hyperv/mmu.c
++++ b/arch/x86/hyperv/mmu.c
+@@ -239,5 +239,4 @@ void hyperv_setup_mmu_ops(void)
+ 
+ 	pr_info("Using hypercall for remote TLB flush\n");
+ 	pv_ops.mmu.flush_tlb_multi = hyperv_flush_tlb_multi;
+-	pv_ops.mmu.tlb_remove_table = tlb_remove_table;
+ }
+diff --git a/arch/x86/include/asm/paravirt.h b/arch/x86/include/asm/paravirt.h
+index 041aff51eb50..38a632a282d4 100644
+--- a/arch/x86/include/asm/paravirt.h
++++ b/arch/x86/include/asm/paravirt.h
+@@ -91,11 +91,6 @@ static inline void __flush_tlb_multi(const struct cpumask *cpumask,
+ 	PVOP_VCALL2(mmu.flush_tlb_multi, cpumask, info);
+ }
+ 
+-static inline void paravirt_tlb_remove_table(struct mmu_gather *tlb, void *table)
+-{
+-	PVOP_VCALL2(mmu.tlb_remove_table, tlb, table);
+-}
+-
+ static inline void paravirt_arch_exit_mmap(struct mm_struct *mm)
+ {
+ 	PVOP_VCALL1(mmu.exit_mmap, mm);
+diff --git a/arch/x86/include/asm/paravirt_types.h b/arch/x86/include/asm/paravirt_types.h
+index fea56b04f436..e26633c00455 100644
+--- a/arch/x86/include/asm/paravirt_types.h
++++ b/arch/x86/include/asm/paravirt_types.h
+@@ -134,8 +134,6 @@ struct pv_mmu_ops {
+ 	void (*flush_tlb_multi)(const struct cpumask *cpus,
+ 				const struct flush_tlb_info *info);
+ 
+-	void (*tlb_remove_table)(struct mmu_gather *tlb, void *table);
+-
+ 	/* Hook for intercepting the destruction of an mm_struct. */
+ 	void (*exit_mmap)(struct mm_struct *mm);
+ 	void (*notify_page_enc_status_changed)(unsigned long pfn, int npages, bool enc);
+diff --git a/arch/x86/kernel/kvm.c b/arch/x86/kernel/kvm.c
+index 7a422a6c5983..3be9b3342c67 100644
+--- a/arch/x86/kernel/kvm.c
++++ b/arch/x86/kernel/kvm.c
+@@ -838,7 +838,6 @@ static void __init kvm_guest_init(void)
+ #ifdef CONFIG_SMP
+ 	if (pv_tlb_flush_supported()) {
+ 		pv_ops.mmu.flush_tlb_multi = kvm_flush_tlb_multi;
+-		pv_ops.mmu.tlb_remove_table = tlb_remove_table;
+ 		pr_info("KVM setup pv remote TLB flush\n");
+ 	}
+ 
+diff --git a/arch/x86/kernel/paravirt.c b/arch/x86/kernel/paravirt.c
+index 527f5605aa3e..2aa251d0b308 100644
+--- a/arch/x86/kernel/paravirt.c
++++ b/arch/x86/kernel/paravirt.c
+@@ -180,7 +180,6 @@ struct paravirt_patch_template pv_ops = {
+ 	.mmu.flush_tlb_kernel	= native_flush_tlb_global,
+ 	.mmu.flush_tlb_one_user	= native_flush_tlb_one_user,
+ 	.mmu.flush_tlb_multi	= native_flush_tlb_multi,
+-	.mmu.tlb_remove_table	= tlb_remove_table,
+ 
+ 	.mmu.exit_mmap		= paravirt_nop,
+ 	.mmu.notify_page_enc_status_changed	= paravirt_nop,
+diff --git a/arch/x86/mm/pgtable.c b/arch/x86/mm/pgtable.c
+index 3bc8ad282b27..b1c1f72c1fd1 100644
+--- a/arch/x86/mm/pgtable.c
++++ b/arch/x86/mm/pgtable.c
+@@ -18,14 +18,6 @@ EXPORT_SYMBOL(physical_mask);
+ #define PGTABLE_HIGHMEM 0
+ #endif
+ 
+-#ifndef CONFIG_PARAVIRT
+-static inline
+-void paravirt_tlb_remove_table(struct mmu_gather *tlb, void *table)
+-{
+-	tlb_remove_table(tlb, table);
+-}
+-#endif /* !CONFIG_PARAVIRT */
+-
+ gfp_t __userpte_alloc_gfp = GFP_PGTABLE_USER | PGTABLE_HIGHMEM;
+ 
+ pgtable_t pte_alloc_one(struct mm_struct *mm)
+@@ -53,7 +45,7 @@ early_param("userpte", setup_userpte);
+ void ___pte_free_tlb(struct mmu_gather *tlb, struct page *pte)
+ {
+ 	paravirt_release_pte(page_to_pfn(pte));
+-	paravirt_tlb_remove_table(tlb, page_ptdesc(pte));
++	tlb_remove_table(tlb, page_ptdesc(pte));
+ }
+ 
+ #if CONFIG_PGTABLE_LEVELS > 2
+@@ -67,21 +59,21 @@ void ___pmd_free_tlb(struct mmu_gather *tlb, pmd_t *pmd)
+ #ifdef CONFIG_X86_PAE
+ 	tlb->need_flush_all = 1;
+ #endif
+-	paravirt_tlb_remove_table(tlb, virt_to_ptdesc(pmd));
++	tlb_remove_table(tlb, virt_to_ptdesc(pmd));
+ }
+ 
+ #if CONFIG_PGTABLE_LEVELS > 3
+ void ___pud_free_tlb(struct mmu_gather *tlb, pud_t *pud)
+ {
+ 	paravirt_release_pud(__pa(pud) >> PAGE_SHIFT);
+-	paravirt_tlb_remove_table(tlb, virt_to_ptdesc(pud));
++	tlb_remove_table(tlb, virt_to_ptdesc(pud));
+ }
+ 
+ #if CONFIG_PGTABLE_LEVELS > 4
+ void ___p4d_free_tlb(struct mmu_gather *tlb, p4d_t *p4d)
+ {
+ 	paravirt_release_p4d(__pa(p4d) >> PAGE_SHIFT);
+-	paravirt_tlb_remove_table(tlb, virt_to_ptdesc(p4d));
++	tlb_remove_table(tlb, virt_to_ptdesc(p4d));
+ }
+ #endif	/* CONFIG_PGTABLE_LEVELS > 4 */
+ #endif	/* CONFIG_PGTABLE_LEVELS > 3 */
+diff --git a/arch/x86/xen/mmu_pv.c b/arch/x86/xen/mmu_pv.c
+index 2c70cd35e72c..a0b371557125 100644
+--- a/arch/x86/xen/mmu_pv.c
++++ b/arch/x86/xen/mmu_pv.c
+@@ -2141,7 +2141,6 @@ static const typeof(pv_ops) xen_mmu_ops __initconst = {
+ 		.flush_tlb_kernel = xen_flush_tlb,
+ 		.flush_tlb_one_user = xen_flush_tlb_one_user,
+ 		.flush_tlb_multi = xen_flush_tlb_multi,
+-		.tlb_remove_table = tlb_remove_table,
+ 
+ 		.pgd_alloc = xen_pgd_alloc,
+ 		.pgd_free = xen_pgd_free,
 
