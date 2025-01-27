@@ -1,63 +1,63 @@
-Return-Path: <linux-mips+bounces-7611-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7612-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42985A1DC7E
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Jan 2025 20:10:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8760DA1DC95
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Jan 2025 20:18:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 97F50161C27
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Jan 2025 19:10:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D63433A413D
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Jan 2025 19:17:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D20919066D;
-	Mon, 27 Jan 2025 19:10:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4932518A6CE;
+	Mon, 27 Jan 2025 19:17:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gvk0PWtI"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lFxj5rfm"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F281718F2EF;
-	Mon, 27 Jan 2025 19:10:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20AB217B50A;
+	Mon, 27 Jan 2025 19:17:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738005025; cv=none; b=fAseiYRFI9Qm7BCxbgXuXKNPEhYXQ7fWZydz5idTtd8GEQVrt3KVgAh/BT4mdBdREQNtFURjTGrmMmM6Udrtk0YDGI+Em2ojk5nNxtX5SrnIdWemQW/1qOZdwST4Yzogu4mdxrkI4sK5tVJod42qLibQ3CRqXXTQjXJpchDHojI=
+	t=1738005477; cv=none; b=QsuzMFLCBbriOkcW+QM708X5JsS0iXQhyxPaI5R2R+Uc5uzHRoyFVMyCYQ5ydqkEyvM6z+XwWki5hT20PBKdRXZm3QdcW7fLQRjdA6JzeHd/Oz7j4VGKUFrNtCCIMHpczmSuAUDjW/el6r4j83BxK+4iqVeH7evZyuabtsyq7F8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738005025; c=relaxed/simple;
-	bh=X94lK3V/Fj6hpoRE42JLuvJwqVqjWC8XWjv0P5rafyk=;
+	s=arc-20240116; t=1738005477; c=relaxed/simple;
+	bh=r9YoCzMn+S7Rp21hkZ42NQlHWCOwaqNEe0i3f9P/rhc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NsgLPgvIdayMlwxjNH3tzi5DkIU3553xJ+zvs8CQ/n6LGg/wThgn5N8wB043QpULRPlxkzDGiYIq7jiY/QznjBT/GueuwYDJ7K7gB1r56y3cmSD1Jj/wVRZ6IEKspRZ5joF/1iILsS0NGUz5UKkpF9YGllPZpIGliVEyuMjUG90=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gvk0PWtI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E405C4CED2;
-	Mon, 27 Jan 2025 19:10:24 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=RQ/YqLrq3YJSYtxcAvvi6u6igPxspWYxkfpSNO7ItpR+KnZ9jGNMg5JJgnqQJyl8hmaX0roLWXEZR1b4t4Ax8CS/Q78SkG67HqB+kS8yPYY+7AIcUmUH/2I5uCWQATSrB2HKYwCQLm4wLBBqPf5ArNBH1/vMycdo+NohLXPTUUQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lFxj5rfm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86628C4CED2;
+	Mon, 27 Jan 2025 19:17:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738005024;
-	bh=X94lK3V/Fj6hpoRE42JLuvJwqVqjWC8XWjv0P5rafyk=;
+	s=k20201202; t=1738005476;
+	bh=r9YoCzMn+S7Rp21hkZ42NQlHWCOwaqNEe0i3f9P/rhc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Gvk0PWtIGAWmC9OZGJwbMjMunPtiC9a2S6qfH3PuVCaMcPQX25JcHzMXeV5PM1fMI
-	 dTxMQZb6Z6pxwvPMSSM0pxvQj2+X+NsdX3iSARyh5ebZaroLKQsXR/uobsrYDLGptu
-	 nDnacjh6Vk6bpCs6XzdNkURBK6ZIDJB+lVDrAR05eb26z69awdNioFy5uggG2eDlGY
-	 Nh6yl4J14V3ZWawOLxZjhMochZ9f8vWFUeRg3gXkIXPPHOqmEQ1lCR2sPWH5hg1n8d
-	 gxf9wpoyR22J5oHfbkd/M9BFBqR7Y7VsShbxMgOtORa6ze3mq3f9AwsfLkKLoXLzte
-	 DfDdrKx24baqw==
-Date: Mon, 27 Jan 2025 13:10:23 -0600
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Gregory CLEMENT <gregory.clement@bootlin.com>
-Cc: Aleksandar Rikalo <arikalo@gmail.com>, linux-kernel@vger.kernel.org,
-	Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	b=lFxj5rfm0IvZCUg/tO+0gBKuTznDKVK80+04mTG8YN1sFlvh2MJwAuIZMiTjG9A6i
+	 Zj3XKiNoNTB3HjMLBZfUs/wmfkT0rscnJ518VQLQjH6La8oJDOjP0V+WgMTgys1SZR
+	 jiPgowA8IKkJUH0X7Sqta7HcPXUC40RQmwa+6vHSadAxGbi7LpSQG0i83yFSsj6e09
+	 vp+dwfJiiCBLQdkpMVTuZ3no03/rXMX42JsDnDG7o4aguNZutfDGGdO9mG9fvXoAIY
+	 1/g3PpUQh2x1t2aEEYavbMnvun0Md/mwcEmOfVW860NZYefJiCQUke9jFTVpD/gtxU
+	 JPFv+07PAiAtw==
+Date: Mon, 27 Jan 2025 11:17:52 -0800
+From: Kees Cook <kees@kernel.org>
+To: Oleg Nesterov <oleg@redhat.com>
+Cc: Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
-	linux-mips@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>
-Subject: Re: [PATCH v3 2/5] dt-bindings: mips: mips-cm: Add a new compatible
- string for EyeQ6
-Message-ID: <173800502284.693501.69494037886244544.robh@kernel.org>
-References: <20250123-cluster-hci-broken-v3-0-8a7ec57cbf68@bootlin.com>
- <20250123-cluster-hci-broken-v3-2-8a7ec57cbf68@bootlin.com>
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 2/4] seccomp: kill the dead code in the
+ !CONFIG_HAVE_ARCH_SECCOMP_FILTER version of __secure_computing()
+Message-ID: <202501271117.E00B5250@keescook>
+References: <20250120134409.GA21241@redhat.com>
+ <20250120134452.GA21275@redhat.com>
+ <202501201353.168E6AAC8@keescook>
+ <20250121143038.GB3422@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -66,22 +66,21 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250123-cluster-hci-broken-v3-2-8a7ec57cbf68@bootlin.com>
+In-Reply-To: <20250121143038.GB3422@redhat.com>
 
-
-On Thu, 23 Jan 2025 12:01:55 +0100, Gregory CLEMENT wrote:
-> The CM3.5 used on EyeQ6 reports that Hardware Cache Initialization is
-> complete, but in reality it's not the case. It also incorrectly
-> indicates that Hardware Cache Initialization is supported. This new
-> compatible string allows warning about this broken feature that cannot
-> be detected at runtime.
+On Tue, Jan 21, 2025 at 03:30:39PM +0100, Oleg Nesterov wrote:
+> How about
 > 
-> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-> ---
->  Documentation/devicetree/bindings/mips/mti,mips-cm.yaml | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
+> 	__secure_computing()
+> 	{
+> 		return secure_computing_strict(syscall_get_nr(...));
+> 	}
 > 
+> in the "#ifndef CONFIG_HAVE_ARCH_SECCOMP_FILTER" section near
+> secure_computing_strict() in kernel/seccomp.c ?
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Yeah, that should be good.
 
+-- 
+Kees Cook
 
