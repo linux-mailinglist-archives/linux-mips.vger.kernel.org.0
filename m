@@ -1,131 +1,102 @@
-Return-Path: <linux-mips+bounces-7607-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7608-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F40BEA1D8FD
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Jan 2025 16:05:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B559A1DA16
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Jan 2025 17:02:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 376421887502
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Jan 2025 15:05:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF5131888F4D
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Jan 2025 16:03:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7AC877102;
-	Mon, 27 Jan 2025 15:05:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26519433CB;
+	Mon, 27 Jan 2025 16:02:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="an/mRK4i"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E1777080E;
-	Mon, 27 Jan 2025 15:05:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 426152AD21;
+	Mon, 27 Jan 2025 16:02:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737990331; cv=none; b=j0ot1Fk5YpVJG3GgsfjawpnFDV8n+MCqxtrgV8JuxjzbrQ9+j3QCCM9orivVAFDJkxpq+I/C2CGmTmGddpUHbN01O6smW+/Lu+DZPIXkFN84iGtfgnSWuMcIWybC+VMGCvvCJIYl7/MZKScfOgBI9d6HLAwQ1z9sdwkEvn9tVYw=
+	t=1737993773; cv=none; b=C2L4TApDzRPPIta5M3F4uVy9Ai5rCIVefUu7uhQxJNwqJt0pb5SQ3mGUAAwbJJYwiVOtMaCVxZUsXZZobHMHAQbU3EWW1ZG+0YXnc2f7X/kCWc3tKMJaMXqaZQKG9CJps6ssdPEFtcyNeu0iCoVipYhHBMf45RT4oeXY+6f7OOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737990331; c=relaxed/simple;
-	bh=Qj0q49a+A5bbmXs6vmC7DkwR5iQrCI/wG6QO4qjwfQ0=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=vDJDZZQYo3N4zslvIQT8N4ENmzE788uMIvfFTrY/hrepCdl5Tz4VLXMItNHJZmSe42Kx5vNrQfCPF83LgbMEsMstTRsJjX3yPiLE90cyDPpTMQjRPDmBDwFMJ7QPipFoxPi9NaN3xM8U8xU8Fo2DolovCZlT9ScX8sIg8JA0ths=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1tcQfo-00064A-00; Mon, 27 Jan 2025 16:05:12 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 580A7C013E; Mon, 27 Jan 2025 16:05:05 +0100 (CET)
-Date: Mon, 27 Jan 2025 16:05:05 +0100
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: torvalds@linux-foundation.org
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] MIPS changes for v6.14
-Message-ID: <Z5egoYZfTQvFYzx1@alpha.franken.de>
+	s=arc-20240116; t=1737993773; c=relaxed/simple;
+	bh=kcQe7aG2j2Myj05tFg2s8RbzUcJCMxaTNaK+Rxg8E4s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=n2ldUt5ivyupnRZYkw92QppkH6VYnKFHWOWZjwcw9Ol/vp/awhIQ5GupZdyBrfUUWLSqjiQxkUqi5bWmc45s2yhMF6HXaASagFHfIVE4p4xznCc1iFUk2UELSa0lQIt/Q2UCBHasTMiM1OnDJjKSFghldc5AAbxe5p3NMwxQRE0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=an/mRK4i; arc=none smtp.client-ip=90.155.92.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=SXnX6yfCJ4lo25sKBuf0Jih5OsMg7kJt7yHBT/wi2JQ=; b=an/mRK4icZzCqPPHMN609Ff0wL
+	Qs2pgoOW69THhWB5T5gY6nH/4fK6Y72Gx049NYy4Jjyug2T3/ZqGxinuzmLsukap/98K7qe6Bqwy6
+	7MFOHakKvuHQ9yFf/ZaTeVhJH7QQNtJt3R+A5YsNVDHyFh2+dFXHFqOqCuLPafjvgw/Ko394Ybr25
+	5i168RQSG388+3kPTU4tUR6sth73mFYsatyAk065qko7xleaRiAMsQW6PIOD1KtmnXAMGvNjM/h8P
+	qmlTj2NGgL7VPHXjuGCxbahpRIiTN3LvPQJXH47YXPZraFzPsPy0cSXa1hMT4QUnZnKtVWB2tSt2P
+	1b8AU+gg==;
+Received: from 77-249-17-89.cable.dynamic.v4.ziggo.nl ([77.249.17.89] helo=noisy.programming.kicks-ass.net)
+	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tcRZN-0000000Eiwv-24hm;
+	Mon, 27 Jan 2025 16:02:37 +0000
+Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
+	id 145F93004DE; Mon, 27 Jan 2025 17:02:37 +0100 (CET)
+Date: Mon, 27 Jan 2025 17:02:36 +0100
+From: Peter Zijlstra <peterz@infradead.org>
+To: Qi Zheng <zhengqi.arch@bytedance.com>
+Cc: kevin.brodsky@arm.com, riel@surriel.com, vishal.moola@gmail.com,
+	david@redhat.com, jannh@google.com, hughd@google.com,
+	willy@infradead.org, yuzhao@google.com, muchun.song@linux.dev,
+	akpm@linux-foundation.org, will@kernel.org, aneesh.kumar@kernel.org,
+	npiggin@gmail.com, arnd@arndb.de, dave.hansen@linux.intel.com,
+	rppt@kernel.org, alexghiti@rivosinc.com, linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+	linux-openrisc@vger.kernel.org, linux-sh@vger.kernel.org,
+	linux-um@lists.infradead.org, x86@kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH 4/5] x86: pgtable: unconditionally use tlb_remove_table()
+Message-ID: <20250127160236.GJ16742@noisy.programming.kicks-ass.net>
+References: <cover.1737637631.git.zhengqi.arch@bytedance.com>
+ <00bf7935d65826eee547ac195d7854b1c946dbc5.1737637631.git.zhengqi.arch@bytedance.com>
+ <20250124113854.GA15996@noisy.programming.kicks-ass.net>
+ <45651097-c056-49e3-9cc8-c289c1c0030d@bytedance.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
+In-Reply-To: <45651097-c056-49e3-9cc8-c289c1c0030d@bytedance.com>
 
-The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
+On Fri, Jan 24, 2025 at 09:00:58PM +0800, Qi Zheng wrote:
+> 
+> 
+> On 2025/1/24 19:38, Peter Zijlstra wrote:
+> > On Thu, Jan 23, 2025 at 09:26:17PM +0800, Qi Zheng wrote:
+> > > If the CONFIG_MMU_GATHER_TABLE_FREE is disabled, the tlb_remove_table()
+> > > will fall back to pagetable_dtor() + tlb_remove_page(). So let's use
+> > > tlb_remove_table() unconditionally to free page table pages.
+> > > 
+> > > Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+> > > Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > 
+> > I think we can clean up more :-)
+> 
+> Yes, but Rik van Riel has already done the same thing in his patch series
+> [1], so I was originally planning to wait for his patch to be
+> merged into the linux-next branch, and then rebase this series onto his
+> patch.
 
-  Linux 6.13-rc1 (2024-12-01 14:28:56 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.14
-
-for you to fetch changes up to df1b8d6e89db0edd572a1e375f5d3dd5575b9a9b:
-
-  MIPS: pci-legacy: Override pci_address_to_pio (2025-01-20 20:39:23 +0100)
-
-----------------------------------------------------------------
-Cleanups and fixes
-
-----------------------------------------------------------------
-Ism Hong (1):
-      mips: fix shmctl/semctl/msgctl syscall for o32
-
-Jiaxun Yang (1):
-      MIPS: pci-legacy: Override pci_address_to_pio
-
-Kexy Biscuit (2):
-      MIPS: Loongson64: remove ROM Size unit in boardinfo
-      MIPS: Loongson: Add comments for interface_info
-
-Masahiro Yamada (1):
-      MIPS: migrate to generic rule for built-in DTBs
-
-Mateusz Jończyk (1):
-      mips/math-emu: fix emulation of the prefx instruction
-
-Rong Xu (1):
-      MIPS: Add a blank line after __HEAD
-
-Thomas Bogendoerfer (1):
-      MIPS: kernel: Rename read/write_c0_ecc to read/writec0_errctl
-
-Thorsten Blum (2):
-      MIPS: traps: Use str_enabled_disabled() in parity_protection_init()
-      MIPS: Loongson64: env: Use str_on_off() helper in prom_lefi_init_env()
-
-WangYuli (1):
-      MIPS: ftrace: Declare ftrace_get_parent_ra_addr() as static
-
-Xi Ruoyao (1):
-      Revert "MIPS: csrc-r4k: Select HAVE_UNSTABLE_SCHED_CLOCK if SMP && 64BIT"
-
-liujing (1):
-      MIPS: Fix the wrong format specifier
-
- arch/mips/Kconfig                                  |  3 +-
- arch/mips/Makefile                                 |  3 --
- arch/mips/boot/dts/Makefile                        |  2 -
- arch/mips/boot/dts/brcm/Makefile                   |  2 -
- arch/mips/boot/dts/cavium-octeon/Makefile          |  2 -
- arch/mips/boot/dts/ingenic/Makefile                |  2 -
- arch/mips/boot/dts/lantiq/Makefile                 |  2 -
- arch/mips/boot/dts/loongson/Makefile               |  2 -
- arch/mips/boot/dts/mscc/Makefile                   |  3 --
- arch/mips/boot/dts/mti/Makefile                    |  2 -
- arch/mips/boot/dts/pic32/Makefile                  |  2 -
- arch/mips/boot/dts/ralink/Makefile                 |  2 -
- arch/mips/include/asm/mach-loongson64/boot_param.h |  8 ++--
- arch/mips/include/asm/mipsregs.h                   |  4 +-
- arch/mips/kernel/cevt-bcm1480.c                    |  2 +-
- arch/mips/kernel/ftrace.c                          |  2 +-
- arch/mips/kernel/head.S                            |  1 +
- arch/mips/kernel/mips-mt.c                         |  7 ++--
- arch/mips/kernel/spram.c                           |  4 --
- arch/mips/kernel/syscalls/syscall_o32.tbl          |  6 +--
- arch/mips/kernel/traps.c                           | 47 +++++++++++-----------
- arch/mips/loongson64/boardinfo.c                   |  2 -
- arch/mips/loongson64/env.c                         |  3 +-
- arch/mips/math-emu/cp1emu.c                        |  2 +-
- arch/mips/pci/pci-legacy.c                         |  8 ++++
- 25 files changed, 52 insertions(+), 71 deletions(-)
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Duh, yeah, I've actually seen those patches and totally forgot he did
+that... -ETOOMUCHEMAIL :/
 
