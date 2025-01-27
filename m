@@ -1,94 +1,94 @@
-Return-Path: <linux-mips+bounces-7613-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7614-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFE4CA1FF94
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Jan 2025 22:21:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 925B0A2000D
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Jan 2025 22:43:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 198171613A6
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Jan 2025 21:21:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3DCC3A5E88
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Jan 2025 21:43:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B0AE1A76BC;
-	Mon, 27 Jan 2025 21:21:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C4241D89F8;
+	Mon, 27 Jan 2025 21:43:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="3PKolcEy";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="bz+FYU/R"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="RhDpFeTe";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="X/EF7ghQ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fout-a2-smtp.messagingengine.com (fout-a2-smtp.messagingengine.com [103.168.172.145])
+Received: from fout-b7-smtp.messagingengine.com (fout-b7-smtp.messagingengine.com [202.12.124.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FC82748D;
-	Mon, 27 Jan 2025 21:21:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E9D4190664;
+	Mon, 27 Jan 2025 21:43:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738012876; cv=none; b=REeqXECjD3BvwDDLyfZnkNmzkI3qeaTWIgREA1+I6rZoNYXY2U5ei75oF1H1c+Z8XZpTU2EB8KSue1hpQVpc4zfXabjvs+K97KZ/V5SZr9ywuIlIHlunsX6ov7/crQpeas+DsrjrlPaBIO0iAUDVn9GC0f1u1o+2lwK0gbRJryc=
+	t=1738014221; cv=none; b=hPxtcoz69yeVncVJC/QuAleIbezeXUEFwZ+pY/DVMLAQGzkMl8M6AiPSKmR0emSf3ihOPO8DI3YUcT6dX426huQniXxwrdLi/nGBkUi0EvAEutZd1X9ferURL2mW/gaMXbcwNB2UHUDHZGdxztqhYz57VOtFMT53NkdFqczV1ZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738012876; c=relaxed/simple;
-	bh=0b/fo0yI52aIyVI38HXgA6loIx7ZP7HGYMG7pW77FOo=;
+	s=arc-20240116; t=1738014221; c=relaxed/simple;
+	bh=btFMGF0l0jNhP3EztGvtxGOBdYKRNVHIlfwFFvFLHnw=;
 	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=WRatlcHcBp3jOiEfM8sBZCq5/IU2FXpJqxBVy7TrT+lfsnIn/j/WpYrjaEn8gkytM2Td7TmEPviWCy+oA1ReUng5thBobOQrTy/Cm3Fucta5gXY3QHoN3mBwM/Uv0qXFJnO0YfIIiF3HlrPutRvTBVP1G1hD9yN8B9wADKY/yS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=3PKolcEy; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=bz+FYU/R; arc=none smtp.client-ip=103.168.172.145
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfout.phl.internal (Postfix) with ESMTP id 41E5A1380B4C;
-	Mon, 27 Jan 2025 16:21:12 -0500 (EST)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Mon, 27 Jan 2025 16:21:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
+	 Subject:Content-Type; b=ooB0H2+SLqZ4PHk5uZUOb8CtX3gcAaL4K5Bxka8gi2Hw/80/rowj1SdN1WKXoaJUu6ImyY0eFpgAvw6dvrNVG1ZI+4teIN5PqzcnkLMBe73/ERu/w6u3Ued9RH1dYtoJm7MVUe2QHF7nCydUzQzPrAe8oXIKbwiBBrwi9MvZW0M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=RhDpFeTe; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=X/EF7ghQ; arc=none smtp.client-ip=202.12.124.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from phl-compute-09.internal (phl-compute-09.phl.internal [10.202.2.49])
+	by mailfout.stl.internal (Postfix) with ESMTP id A2B8A114014F;
+	Mon, 27 Jan 2025 16:43:37 -0500 (EST)
+Received: from phl-imap-12 ([10.202.2.86])
+  by phl-compute-09.internal (MEProxy); Mon, 27 Jan 2025 16:43:38 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
 	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1738012872;
-	 x=1738099272; bh=2zJxbQQBsfzQs1lWLDT7LyQftL6HYC6qxDKNVzdJCXM=; b=
-	3PKolcEysBwaCmAKKQZbDdKxBGCyzhIIAEuZ0T2hMLDmBiezj994EZUqml5YqzK8
-	yD8MCb/+H0whyCA/VkJ3iERpRoM2lPy9fb594J549Dv1oOV7HcFvSqOwM7+pqWqn
-	Qkgp7/zxSyFc8aQZj5ievw6MakxS9NU5LtKQAszDtNNjEVDCk7qFi+SpgBVrpxw8
-	sblZJhnXVvJ5YwGxruc4Qm0sa0E4kY6AUQ1m+Eqn+sX9Hu4LNJ5W1dSqT21GIOy0
-	Vs/nhEkvE7XHydn2sDlT8olAaTeEWAMf+lsPjDZTRnp4Ryv6PN6ZW2MDfHjIra9z
-	Guk5T5r/u+NtRZNbYMk5Rw==
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1738014217;
+	 x=1738100617; bh=UCxpzQHjRe5ProJN41gRZFDzvEjuC1U2OY/rjzYivPs=; b=
+	RhDpFeTevnFgafM5InT8qPaILRBcl0+GeGtLNfGO0UkvA6pfMIbb2QbjGK2ZILiK
+	Ddh3xMgJTa8Nu3xmp+RmRZTswakZieMJzpt1nmucQNt0vLZpDZY+AWbW48TWc39E
+	LklrPY6Af/q4lXRa0rF+mYauyVCSxpsq74Mswdl1MCccWqP9C8JpXetEV9TzOanW
+	XihAvSo5eZK9+04cnGhsJ9feAuA01XaP7VksbPKX7I56hHENbf/dj79CEE6+2pFK
+	C/aF0V4iE2GvjruNUE9RZglJGi/kdUNNnVKVjA6HNsbX6TNWn/Qp6oKOa5gZ0PsJ
+	sM9KCsiTcWz+w6sZrw6jlA==
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
 	messagingengine.com; h=cc:cc:content-transfer-encoding
 	:content-type:content-type:date:date:feedback-id:feedback-id
 	:from:from:in-reply-to:in-reply-to:message-id:mime-version
 	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1738012872; x=
-	1738099272; bh=2zJxbQQBsfzQs1lWLDT7LyQftL6HYC6qxDKNVzdJCXM=; b=b
-	z+FYU/RS9Gp3Q4LeilbR8eX0W1TKikJouW5kEug1vxj10iP+12etTHQMyo3NYla3
-	F/8XjkcEP69jfkzzC+jMDIYiRqNOsFJD+K/FFFiBfkgF62XxUf8ifpupojeqC2PZ
-	sjhq64DVo+3LKo4oiu1jup3g6omZSbaSigo37FCdIAQpgzpzutUQ+LcwqqLwft5j
-	vrEs7mIJMlrQ0ho3BZNCwoinU8HabSOIlrhEorZluPEWfBL1puNT3m0yrvt7iFUv
-	tpJ6MogFYmfgXdYw7BQn3RopYfloGsnLJujVXs3M3Qq3JdRSNsDslFy4o2syDPW7
-	AG42A+7d+I3tsbGpOszjw==
-X-ME-Sender: <xms:x_iXZzx_YU5nMqyt-sB1tuijwIIJKkibpY8H5ivW83IBU0QYuWhvcQ>
-    <xme:x_iXZ7QwGZNJmDqot3rJOELmByrdLbCzHe6xPZh5mHHS1_0MggQ-0BqFPOq92r_rW
-    ODFFa0INO5JXSDuQYA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudejgedgudegvdehucetufdoteggodetrf
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1738014217; x=
+	1738100617; bh=UCxpzQHjRe5ProJN41gRZFDzvEjuC1U2OY/rjzYivPs=; b=X
+	/EF7ghQ3UIFV5XUlo3yIcdEUJfxWKGc5p97976Z4lmDxS5IfwUMi2PdZ3w0v3QhB
+	9Cp/yQC63LxEkhd5RQdkLHhinoSdl18GEgO2AFQ44XlGCKIhryeuFNhpjcamIxMs
+	+Usfb8wQ54dWlfgNJPJ7+tra2Et+0SOChwOCgdSy+b1TY8EoQKQIuwCpR+AjdtpT
+	oY7iDTjlUZMk44HDrl+Mll5JkQDlJRZvbdX24CwBCPAwEEgjevlSh2xWQmqkKz/T
+	FBH9uGpedTZlHo/9n0bMqTurerBGdGk7UDtbNImN3DcIQB9086g3xIaciLeJCetK
+	Kx2iQYQiNhYobmEOFtiVA==
+X-ME-Sender: <xms:Cf6XZyj_FlrqH9fqvvmrxRgohU2suZvDk_EipLcZnztqLWd9pdsklg>
+    <xme:Cf6XZzCw3jXeTdRulKjG62EZk1QKbAEzPMgs1MuPBQSce_XhgmNggX7qfzwlkRJ9w
+    uIWJLUBnGo35CE-EcU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudejgedgudegfedtucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
     pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
-    tddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
-    gsrdguvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeet
-    fefggfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
-    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
-    ledpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepthhssghoghgvnhgusegrlhhphh
-    grrdhfrhgrnhhkvghnrdguvgdprhgtphhtthhopehjvghffhiguhestghhrhhomhhiuhhm
-    rdhorhhgpdhrtghpthhtohepihhsmhdrhhhonhhgsehgmhgrihhlrdgtohhmpdhrtghpth
-    htoheptghgiihonhgvshesghhoohhglhgvmhgrihhlrdgtohhmpdhrtghpthhtohepsghr
-    rghunhgvrheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghkphhmsehlihhnuhigqd
-    hfohhunhgurghtihhonhdrohhrghdprhgtphhtthhopehhtggrsehlihhnuhigrdhisghm
-    rdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvg
-    hlrdhorhhgpdhrtghpthhtoheplhhinhhugidqmhhiphhssehvghgvrhdrkhgvrhhnvghl
-    rdhorhhg
-X-ME-Proxy: <xmx:x_iXZ9XMyzgqszbtH860qupsYs6Oo6eav6vr0Img9C4fdAweb1Py_w>
-    <xmx:x_iXZ9gADRhBsaiXQZ3m27Z_K0z687EBZVt0kdNRhLTcsj062bnE8Q>
-    <xmx:x_iXZ1Awrz872-GTfjt9qdkRf3PEtH3Hb1ws8aXgRiB37E-Sfq41-g>
-    <xmx:x_iXZ2IOpu2BNwZPZQPjEydWSjG96Lvw7kvQSUTNlR21jLjf0-xBPQ>
-    <xmx:yPiXZ52Ui-tCy7gFNjeBL9un5IWSMnDZGYQZCR2fMKmyPg3KwhRCgmhJ>
-Feedback-ID: i56a14606:Fastmail
+    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertder
+    tdejnecuhfhrohhmpedflfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghngh
+    esfhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepjeehfeduvddtgffgvdff
+    keethefhlefgvdevvdekuefffeekheehgeevhfevteejnecuvehluhhsthgvrhfuihiivg
+    eptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihg
+    ohgrthdrtghomhdpnhgspghrtghpthhtohepudefpdhmohguvgepshhmthhpohhuthdprh
+    gtphhtthhopehtshgsohhgvghnugesrghlphhhrgdrfhhrrghnkhgvnhdruggvpdhrtghp
+    thhtohepghhrvghgohhrhidrtghlvghmvghnthessghoohhtlhhinhdrtghomhdprhgtph
+    htthhopehthhgvohdrlhgvsghruhhnsegsohhothhlihhnrdgtohhmpdhrtghpthhtohep
+    thhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtoh
+    eprghrihhkrghlohesghhmrghilhdrtghomhdprhgtphhtthhopegtohhnohhrodguthes
+    khgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhriihkodgutheskhgvrhhnvghlrdhorh
+    hgpdhrtghpthhtoheprhhosghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehtrgif
+    fhhikhdrsggrhihouhhksehmohgsihhlvgihvgdrtghomh
+X-ME-Proxy: <xmx:Cf6XZ6F8vAV0ALE9d3kPE6kHgXbG5SauMhOSl61cURbng6eZckpipQ>
+    <xmx:Cf6XZ7QiiZAiu0-_DHyJStp--OJmpYWod0HWWTUgXvDUTvCGWU2oCg>
+    <xmx:Cf6XZ_xCxRFO_ipK-YoedjDbOlSE3YZ1l3_8vDCvHyGbPc6j8jokyg>
+    <xmx:Cf6XZ56JYpQTzjqjpqiPR90mXXtRD0b2qIWD-nrS6gEr-Gfje8Wk3w>
+    <xmx:Cf6XZyopveRRLdUew8blSyMtbZOld_L1QARk-6ZLgXehZnVsJEVbbimd>
+Feedback-ID: ifd894703:Fastmail
 Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 1D54A2220072; Mon, 27 Jan 2025 16:21:11 -0500 (EST)
+	id 21FE11C20066; Mon, 27 Jan 2025 16:43:37 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -96,56 +96,91 @@ List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Mon, 27 Jan 2025 22:20:49 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Ism Hong" <ism.hong@gmail.com>
-Cc: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Christian Brauner" <brauner@kernel.org>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Heiko Carstens" <hca@linux.ibm.com>, "Jeff Xu" <jeffxu@chromium.org>,
- =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
- "open list:MIPS" <linux-mips@vger.kernel.org>,
- "open list" <linux-kernel@vger.kernel.org>
-Message-Id: <5427df64-658d-4377-89be-963ee7bb68ee@app.fastmail.com>
-In-Reply-To: <20250106115227.1365643-1-ism.hong@gmail.com>
-References: <20250106115227.1365643-1-ism.hong@gmail.com>
-Subject: Re: [PATCH] mips: fix shmctl/semctl/msgctl syscall for o32
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Date: Mon, 27 Jan 2025 21:43:16 +0000
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Gregory CLEMENT" <gregory.clement@bootlin.com>,
+ "Aleksandar Rikalo" <arikalo@gmail.com>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Rob Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+ "Conor Dooley" <conor+dt@kernel.org>
+Cc: "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>,
+ =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
+ "Tawfik Bayouk" <tawfik.bayouk@mobileye.com>,
+ "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <afa2e874-c078-4c3e-b485-d948a0bb6a6f@app.fastmail.com>
+In-Reply-To: <20250123-cluster-hci-broken-v3-2-8a7ec57cbf68@bootlin.com>
+References: <20250123-cluster-hci-broken-v3-0-8a7ec57cbf68@bootlin.com>
+ <20250123-cluster-hci-broken-v3-2-8a7ec57cbf68@bootlin.com>
+Subject: Re: [PATCH v3 2/5] dt-bindings: mips: mips-cm: Add a new compatible string for
+ EyeQ6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 6, 2025, at 12:52, Ism Hong wrote:
-> The commit 275f22148e87 ("ipc: rename old-style shmctl/semctl/msgctl
-> syscalls") switched various architectures to use sys_old_*ctl() with
-> ipc_parse_version, including mips n32/n64. However, for mips o32, commit
-> 0d6040d46817 ("arch: add split IPC system calls where needed") added
-> separate IPC syscalls without properly using the old-style handlers.
+
+
+=E5=9C=A82025=E5=B9=B41=E6=9C=8823=E6=97=A5=E4=B8=80=E6=9C=88 =E4=B8=8A=E5=
+=8D=8811:01=EF=BC=8CGregory CLEMENT=E5=86=99=E9=81=93=EF=BC=9A
+> The CM3.5 used on EyeQ6 reports that Hardware Cache Initialization is
+> complete, but in reality it's not the case. It also incorrectly
+> indicates that Hardware Cache Initialization is supported. This new
+> compatible string allows warning about this broken feature that cannot
+> be detected at runtime.
 >
-> This causes applications using uClibc-ng to fail with -EINVAL when
-> calling semctl/shmctl/msgctl with IPC_64 flag, as uClibc-ng uses the
-> syscall numbers from kernel headers to determine whether to use the IPC
-> multiplexer or split syscalls. In contrast, glibc is unaffected as it
-> uses a unified feature test macro __ASSUME_DIRECT_SYSVIPC_SYSCALLS
-> (disabled for mips-o32) to make this decision.
+> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+> ---
+>  Documentation/devicetree/bindings/mips/mti,mips-cm.yaml | 12 ++++++++=
++++-
+>  1 file changed, 11 insertions(+), 1 deletion(-)
 >
-> Fix this by switching the o32 ABI entries for semctl, shmctl and msgctl
-> to use the old-style handlers, matching the behavior of other
-> architectures and fixing compatibility with uClibc-ng.
+> diff --git a/Documentation/devicetree/bindings/mips/mti,mips-cm.yaml=20
+> b/Documentation/devicetree/bindings/mips/mti,mips-cm.yaml
+> index=20
+> 4324b2306535f1bf66c44b1f96be9094ee282041..d129d6382847768dc026336d8d2c=
+7328b6b81f9b=20
+> 100644
+> --- a/Documentation/devicetree/bindings/mips/mti,mips-cm.yaml
+> +++ b/Documentation/devicetree/bindings/mips/mti,mips-cm.yaml
+> @@ -19,7 +19,12 @@ maintainers:
+>=20
+>  properties:
+>    compatible:
+> -    const: mti,mips-cm
+> +    oneOf:
+> +      - const: mti,mips-cm
+> +      - const: mobileye,eyeq6-cm
+> +        description:
+> +          On EyeQ6 the HCI (Hardware Cache Initialization) informatio=
+n for
+> +          the L2 cache in multi-cluster configuration is broken.
+>=20
+>    reg:
+>      description:
+> @@ -44,4 +49,9 @@ examples:
+>        compatible =3D "mti,mips-cm";
+>        reg =3D <0x1bde8000 0x8000>;
+>      };
+> +
+> +  - |
+> +    coherency-manager {
+> +      compatible =3D "mobileye,eyeq6-cm";
+
+I think =E2=80=9Cmobileye,eyeq6-cm=E2=80=9D, =E2=80=9Cmti,mips-cm=E2=80=9D=
+ would describe the hardware better as eyeq6=E2=80=99s CM is just a spec=
+ial variant of mips-cm.
+
+But I=E2=80=99m fine with leaving it as is.
+
+
+Thanks
+
+> +    };
+>  ...
 >
-> Signed-off-by: Ism Hong <ism.hong@gmail.com>
+> --=20
+> 2.45.2
 
-I just saw this making it into mainline and had another look, sorry
-I hadn't caught it earlier.
-
-It was an intentional decision to use the new-style IPC_64
-semantics on architectures that didn't already have the
-separate system call.
-
-You may not like that choice, but it's been done this way
-for seven years now, and as far as I can tell, glibc relies
-on this behavior.
-
-I think this commit should be reverted, and uclibc be changed
-to implement the kernel ABI for these syscalls.
-
-      Arnd
+--=20
+- Jiaxun
 
