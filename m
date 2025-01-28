@@ -1,93 +1,71 @@
-Return-Path: <linux-mips+bounces-7628-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7629-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD976A20E4A
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Jan 2025 17:17:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A462FA20E6D
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Jan 2025 17:23:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 966067A2BF5
-	for <lists+linux-mips@lfdr.de>; Tue, 28 Jan 2025 16:16:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D1DE73A49FF
+	for <lists+linux-mips@lfdr.de>; Tue, 28 Jan 2025 16:23:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A060B1D5AAD;
-	Tue, 28 Jan 2025 16:17:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E79071D63D6;
+	Tue, 28 Jan 2025 16:23:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="OSv+uuah"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D32981917D9;
-	Tue, 28 Jan 2025 16:17:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C02A1AA1FE;
+	Tue, 28 Jan 2025 16:23:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738081060; cv=none; b=N8e+6MzkZqFw4CPMDBOkH0se1UD3vtw6BeOTcD9M0bM0G3jvDGX+8MWv6605jBTDj+7dLrknwa7WWrCEl3Xnx8vCzT1PjAbONRDBE7Imjq3R/H6P3mrh6OW01NsKt1LD3X9XXjKIFs9uFRVM0FNB3SG/6j6QrKC8Fzu49DsXHUI=
+	t=1738081412; cv=none; b=nEJbGjgBZ3u6QQGIG6vvI62UrCIhu3VGJvGHJbKVUhrq3EIks/RodP43kJ9UrF0rds0x/s/2lIfKw4aLuCYhkfB/hBCIgXjSRGZ8TTM814yIiOtmQSFV6alcPC/5ypyjW6dmeuImRM7at4m7wlaEO7XS2/mFopfWsAEZMy6gthQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738081060; c=relaxed/simple;
-	bh=1rAnESrp98XX9zn6uey7DNA9KhLQZqbja+I9R0d1iyg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DbXj+tzvwhIfJ/URP67Sf1lTFPRQLiFFaeie8S9NK5OZGzpr2lLZGjhGf4bOadRbJxWHK8AXWLoFmtTnkQWXirE40MGf9O0O/jjVfHU+nm1oNS3f1fTkdPdGDzGaRdJ0jS5mKwH+eMqJRCe3oRkZLIjynCqGCn6DAKeI+MAhVyw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
-Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
-	by vmicros1.altlinux.org (Postfix) with ESMTP id CDC6672C97D;
-	Tue, 28 Jan 2025 19:17:37 +0300 (MSK)
-Received: by mua.local.altlinux.org (Postfix, from userid 508)
-	id B9EE97CCB3A; Tue, 28 Jan 2025 18:17:37 +0200 (IST)
-Date: Tue, 28 Jan 2025 18:17:37 +0200
-From: "Dmitry V. Levin" <ldv@strace.io>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Oleg Nesterov <oleg@redhat.com>, linux-snps-arc@lists.infradead.org,
-	Rich Felker <dalias@libc.org>, Thomas Gleixner <tglx@linutronix.de>,
-	Andreas Larsson <andreas@gaisler.com>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	x86@kernel.org, Arnd Bergmann <arnd@arndb.de>,
-	linux-mips@vger.kernel.org,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	Guo Ren <guoren@kernel.org>, "H. Peter Anvin" <hpa@zytor.com>,
-	sparclinux@vger.kernel.org, linux-hexagon@vger.kernel.org,
-	WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>,
-	Eugene Syromyatnikov <evgsyr@gmail.com>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Jonas Bonn <jonas@southpole.se>, linux-s390@vger.kernel.org,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	linux-sh@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
-	Helge Deller <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>,
-	Russell King <linux@armlinux.org.uk>, linux-csky@vger.kernel.org,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Ingo Molnar <mingo@redhat.com>, Vineet Gupta <vgupta@kernel.org>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	strace-devel@lists.strace.io, linux-arch@vger.kernel.org,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Mike Frysinger <vapier@gentoo.org>,
-	Davide Berardi <berardi.dav@gmail.com>,
-	Renzo Davoli <renzo@cs.unibo.it>, linux-um@lists.infradead.org,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Charlie Jenkins <charlie@rivosinc.com>,
-	Naveen N Rao <naveen@kernel.org>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-	Borislav Petkov <bp@alien8.de>, loongarch@lists.linux.dev,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Stafford Horne <shorne@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	Brian Cain <bcain@quicinc.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-parisc@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-	Dinh Nguyen <dinguyen@kernel.org>, linux-riscv@lists.infradead.org,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Richard Weinberger <richard@nod.at>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Alexey Gladkov <legion@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v3 2/6] syscall.h: add syscall_set_arguments() and
- syscall_set_return_value()
-Message-ID: <20250128161737.GD11869@strace.io>
-References: <20250128091626.GB8601@strace.io>
- <df7441ae-e478-4a40-aaa7-461d9b589e06@csgroup.eu>
+	s=arc-20240116; t=1738081412; c=relaxed/simple;
+	bh=08Gs03T39FQeLfYc4DMLMcovI+nRd3HZQ+wnQ3AVNSc=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=WwkxV6x3BH4ybW4L7+8nCvkbyw3pp5TvGghdH4b9pM/UsSMNZBM9VHOwOdIp6nDQGEPCYFTdmj+5Rwdlziq1H3UUTcvAz4aVs/Uzy/lGEnsilACbI3g8RNEkT/aCuLxd1EQvoPY7UL+ctk+yK6EBvLzmB+3u5mqfui6I62/6hg4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=OSv+uuah; arc=none smtp.client-ip=217.70.183.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 9DCF7FF802;
+	Tue, 28 Jan 2025 16:23:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1738081408;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UISrEYUv5egLukU1TttywZkjVzOvJAxp/VRzu80B0B0=;
+	b=OSv+uuahAzEa1ARoziqtWPzIrM/mDRHukpcKZdaEaFQEBNtI840FpNF2IRIMqr3Zg6Qn74
+	i4hwXVPesslIrd/eYmIxv0tfLATja8RAqrj9f0X7YvVlErR9VWbhHGKaXOTD3/ir6uVo1q
+	LTvJaOrfc12o2Y2o8oXhBJ0jqWt8uJ1OkGHHNifgKCye8PhHGPPUDlf+yWZjEXCPYPhbKp
+	7GsZ4jjgziLfNhwj2JmaUk25SFxCbdIv/FkDHVdamGaqCFUsrk9T9MoruVK5T7AThNEz7t
+	92IiDVlMICKuTsrTO0ALtcjWOXkb5PZjSHOMyVP9rfU+yPUz79/AjXjwQHZ3Xg==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>, Rob Herring <robh@kernel.org>
+Cc: Aleksandar Rikalo <arikalo@gmail.com>, Thomas Bogendoerfer
+ <tsbogend@alpha.franken.de>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Vladimir Kondratiev
+ <vladimir.kondratiev@mobileye.com>, =?utf-8?Q?Th=C3=A9o?= Lebrun
+ <theo.lebrun@bootlin.com>,
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>, "linux-mips@vger.kernel.org"
+ <linux-mips@vger.kernel.org>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/5] dt-bindings: mips: mips-cm: Add a new compatible
+ string for EyeQ6
+In-Reply-To: <bf08785b-9963-4539-92ef-b73c3abe8c19@app.fastmail.com>
+References: <20250123-cluster-hci-broken-v3-0-8a7ec57cbf68@bootlin.com>
+ <20250123-cluster-hci-broken-v3-2-8a7ec57cbf68@bootlin.com>
+ <afa2e874-c078-4c3e-b485-d948a0bb6a6f@app.fastmail.com>
+ <CAL_JsqKXYruNn+MtxbvCCWU2OmqeV-uAyyzN+F-ppSJVscr91w@mail.gmail.com>
+ <bf08785b-9963-4539-92ef-b73c3abe8c19@app.fastmail.com>
+Date: Tue, 28 Jan 2025 17:23:26 +0100
+Message-ID: <87tt9iucu9.fsf@BLaptop.bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -95,26 +73,96 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <df7441ae-e478-4a40-aaa7-461d9b589e06@csgroup.eu>
+Content-Transfer-Encoding: quoted-printable
+X-GND-Sasl: gregory.clement@bootlin.com
 
-On Tue, Jan 28, 2025 at 04:04:34PM +0100, Christophe Leroy wrote:
-> Le 28/01/2025 à 10:16, Dmitry V. Levin a écrit :
-> > These functions are going to be needed on all HAVE_ARCH_TRACEHOOK
-> > architectures to implement PTRACE_SET_SYSCALL_INFO API.
-> 
-> The subject is misleading. syscall_set_return_value() already exists on 
-> most architectures and was not addressed by commit 7962c2eddbfe.
-> 
-> Maybe it would be better to handle syscall_set_return_value() in a 
-> separate commit.
+> =E5=9C=A82025=E5=B9=B41=E6=9C=8827=E6=97=A5=E4=B8=80=E6=9C=88 =E4=B8=8B=
+=E5=8D=8810:07=EF=BC=8CRob Herring=E5=86=99=E9=81=93=EF=BC=9A
+>> On Mon, Jan 27, 2025 at 3:43=E2=80=AFPM Jiaxun Yang <jiaxun.yang@flygoat=
+.com> wrote:
+>>>
+>>>
+>>>
+>>> =E5=9C=A82025=E5=B9=B41=E6=9C=8823=E6=97=A5=E4=B8=80=E6=9C=88 =E4=B8=8A=
+=E5=8D=8811:01=EF=BC=8CGregory CLEMENT=E5=86=99=E9=81=93=EF=BC=9A
+>>> > The CM3.5 used on EyeQ6 reports that Hardware Cache Initialization is
+>>> > complete, but in reality it's not the case. It also incorrectly
+>>> > indicates that Hardware Cache Initialization is supported. This new
+>>> > compatible string allows warning about this broken feature that cannot
+>>> > be detected at runtime.
+>>> >
+>>> > Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+>>> > ---
+>>> >  Documentation/devicetree/bindings/mips/mti,mips-cm.yaml | 12 +++++++=
+++++-
+>>> >  1 file changed, 11 insertions(+), 1 deletion(-)
+>>> >
+>>> > diff --git a/Documentation/devicetree/bindings/mips/mti,mips-cm.yaml
+>>> > b/Documentation/devicetree/bindings/mips/mti,mips-cm.yaml
+>>> > index
+>>> > 4324b2306535f1bf66c44b1f96be9094ee282041..d129d6382847768dc026336d8d2=
+c7328b6b81f9b
+>>> > 100644
+>>> > --- a/Documentation/devicetree/bindings/mips/mti,mips-cm.yaml
+>>> > +++ b/Documentation/devicetree/bindings/mips/mti,mips-cm.yaml
+>>> > @@ -19,7 +19,12 @@ maintainers:
+>>> >
+>>> >  properties:
+>>> >    compatible:
+>>> > -    const: mti,mips-cm
+>>> > +    oneOf:
+>>> > +      - const: mti,mips-cm
+>>> > +      - const: mobileye,eyeq6-cm
+>>> > +        description:
+>>> > +          On EyeQ6 the HCI (Hardware Cache Initialization) informati=
+on for
+>>> > +          the L2 cache in multi-cluster configuration is broken.
+>>> >
+>>> >    reg:
+>>> >      description:
+>>> > @@ -44,4 +49,9 @@ examples:
+>>> >        compatible =3D "mti,mips-cm";
+>>> >        reg =3D <0x1bde8000 0x8000>;
+>>> >      };
+>>> > +
+>>> > +  - |
+>>> > +    coherency-manager {
+>>> > +      compatible =3D "mobileye,eyeq6-cm";
+>>>
+>>> I think =E2=80=9Cmobileye,eyeq6-cm=E2=80=9D, =E2=80=9Cmti,mips-cm=E2=80=
+=9D would describe the hardware better as eyeq6=E2=80=99s CM is just a spec=
+ial variant of mips-cm.
+>>
+>> Is s/w that only understands =E2=80=9Cmti,mips-cm=E2=80=9D useful on eye=
+q6 chip? If
+>> so, I agree. If not, then a fallback compatible is not useful.
+>
+> Yes, mobileye,eyeq6-cm only enable an additional bug workaround in softwa=
+re.
+>
 
-syscall_set_return_value() is being added only on hexagon.
-I didn't think it worth a separate commit, but it's certainly possible
-to split this commit into two.
+Having "mti,mips-cm" is not useful for the EyeQ6 chip. On the EyeQ6, we
+obtain all relevant information related to CM dynamically without
+needing this compatible string.
 
+> The programming interfaces and so on remains unchanged.
 
--- 
-ldv
+Even without a compatible string, we are able to utilize the CM. At
+present, there is no node in the device tree, and apart from the
+hardware being faulty, we do not need it.
+
+>
+> Also other firmware components like U-Boot doesn=E2=80=99t need to be awa=
+re of
+> eyeq6 variant.
+
+It's the same for the firmware; they don't need to have "mti, mips-cm"
+information, as they can retrieve all they need dynamically.
+
+Gregory
+
+--=20
+Gr=C3=A9gory CLEMENT, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
