@@ -1,115 +1,151 @@
-Return-Path: <linux-mips+bounces-7637-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7638-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45D58A21F14
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Jan 2025 15:26:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09A4DA2244B
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Jan 2025 19:53:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B0D1D1881F79
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Jan 2025 14:26:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 62F601675C0
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Jan 2025 18:53:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E97ED14A635;
-	Wed, 29 Jan 2025 14:26:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94D8C1E25FE;
+	Wed, 29 Jan 2025 18:52:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="AkpUuYOb"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="S8NhS24c"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0915113D51E
-	for <linux-mips@vger.kernel.org>; Wed, 29 Jan 2025 14:26:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF9401E0DFE
+	for <linux-mips@vger.kernel.org>; Wed, 29 Jan 2025 18:52:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738160807; cv=none; b=rqcaaUlPbQc/ZQw7sIc5U96gkyyGMvSGoQO3U764J7VZKDTIVgY1c+bVzXnDhfTDHt2aX9mHm4zJKfcx8e/PNoZ6aayCZDxaRjxljvrqlwzl07SdgYmsB0SpbBysSMP0Tf8GdyQE1Fc3ZX96CgNu/KTmqne21lAh5tz5hgJZ+2M=
+	t=1738176779; cv=none; b=X3Bv0hm7Zp5aB84MYqDbCDrjAzO1EF3pYUe54+EaloDHMX4l8jj11qDSQNejCOT9B5D5xp/eb+s3040/bY7xu6JuJaPukTPUBO//l0NUMD+TJLOExLM2f6GXYZjTsmUhHbf9gjQm5U26j68N2y/IbHEk069s9ZmIvA5YDPb6+50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738160807; c=relaxed/simple;
-	bh=Jwe7mBceHrKCWCe+WWOlzsCntFwRsEjHulxFCd8Sbfc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=d28aABXLRqk1dBH9EUWIIfurQkbgbmjPhF5nZzMGxIxXi+1ROQx1hgy1em+PcGgC7+/zhojq2jmwG2Ug7Z39kvwVzah9EbL9kWSjUSWGsGsw8Nm2J+bv1fl1LlUvZC93LRV0AiJ18y0UjoF5HB0VOzVoOOUMpq/H7svs3W8ikbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=AkpUuYOb; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-543cc81ddebso5553749e87.1
-        for <linux-mips@vger.kernel.org>; Wed, 29 Jan 2025 06:26:45 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1738160804; x=1738765604; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Jwe7mBceHrKCWCe+WWOlzsCntFwRsEjHulxFCd8Sbfc=;
-        b=AkpUuYOb7MRfKp3EUCzIgyIUMU3p1tqrwuSs1m6F+MqAh0mczPjbKnjl6c6hOhWz48
-         BYIJlb51qGBaq53gr+yAueXzRiQhShi4Pi/9XyUKlk8RCW1a7TRvv1RxmCtodKzJiR4i
-         mTWMpHEQrswMMONNmPG1XCsOAoYSt2jkPcz3zXR1E++3VE7VXE2BT38xkO8TwiOUq4B2
-         XyDLnaV/1wEvCDdLnl28Ogl3yqwm5lXY0UwNsfDONzaWRNmTDJ2A/O7VXzLOvv5BEbjE
-         q+uJHh8ZZmmFUmje8dIiwLRe3TneycAT0EgNfXa64gDNcNP2gDKdKiIu3qYM6/XOp19R
-         LTuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738160804; x=1738765604;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Jwe7mBceHrKCWCe+WWOlzsCntFwRsEjHulxFCd8Sbfc=;
-        b=ty8VpQXIKJ0Z1uXoBu30BkywcEr34mV1AjlrEht/Q3kPMIE2nsZCv9ck5wUwmXnpU9
-         cB1qmw+zOAFFWvxmc2DxHV3ffLCAKOt7fQLrhertg7g2gb7yseGMJTENli3Y7V+2kMee
-         ZXu4HNhieAcM2ZeS4JmZ7LxJapDuCZO1Wk6LzkATJIF1DgenwfjEUmd7bM9qq2C/rLPc
-         FsrMxTw0x0cqCQMY7cRg5VRr1/5cD4pLWf/UQ3kt/nItQslDJmWMjOaveZZYVuEKcryV
-         hWsf72jKbL6V9V+ARE+5PtXymLhf1aCCD1sRD4ERegJ/w509hF5nWrjYVQXk+XaMlZz6
-         NYww==
-X-Forwarded-Encrypted: i=1; AJvYcCUOukSh9mxbk3aT8IHTzyTGoierpBEQCn18Vgf6uAM3A3BDqC3jlBPKNBdm8x9Dgzql1al6a/pO2r+R@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz6lefIHbZn6SiVFnVuc+wcOm4rLJ0lFEZsVVRvDj2BINbjXDHK
-	bqFvmaj1v7LrDu93Tv8ZJMvnEZl1wH24pbEpYZL+mmz2OgxKxlnTCg5oYb2Dnb+JMumTzTEk4lQ
-	QwQ2iLu6SonoIxKNWqiahv+Wf3vvT8wLK35QwdQ==
-X-Gm-Gg: ASbGncuSK5R0X9ramjCVy8f+QPITNX61nD6+HO1HBvh8w/ak6bjgnw94AwqRPDI9myM
-	lJlgwULRlx7zppWyYf1pdBu4j8jJctklnNNRnDs/NLFZsgl3X8SKMsB7oDLWFSgCoBb4wAhN3
-X-Google-Smtp-Source: AGHT+IHw1F/lo1/Ko4z7pikW4LFnEDu5Ve1ZScMGRFoM5rAS+hq7npeLgI/60jvet6gNCQddPeFB19H+PtzGDKVNdzI=
-X-Received: by 2002:a05:6512:4802:b0:542:28dc:a2b3 with SMTP id
- 2adb3069b0e04-543e4beac65mr993160e87.22.1738160803896; Wed, 29 Jan 2025
- 06:26:43 -0800 (PST)
+	s=arc-20240116; t=1738176779; c=relaxed/simple;
+	bh=kXUWf4bzCULNMipXU787lKMp83ROSa9zL6s2oSKQfIo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fw+me6JLTaBht+f5lfZwZlYU0eZRJGU9wtFGnNBST7Wl/Zkml0Vk24NPxE+jvkcU6wpFZhlibY3LKLhud2KL0QCKjg79MI3b7gusPICQIAX4/028Pcf0mxVWKoOwUe3xiZDWCOEIOubyW3uZlUsO6xx0RbZS7SFpBzAhToyM3Ek=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=S8NhS24c; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1738176776;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=vlOChQEKTp5JX+pbfAOT77vMe8ez+6+Y0ab8kJl+7mw=;
+	b=S8NhS24cBFyw9xHRBXz4nbAcpFniUGozGgL/sEA0dAGeBNI6CBn1GQdQjY3sTqJN99jDpG
+	yfjtcmefUdbQ0vOOIoFlbRBXYffp9rBipdKh3tXCawaRtdoUla0CR/sBrOamFT7+7M3D8r
+	cZa/HafofEVD1ycLj9jQmZ7/9+fnvFU=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-47--D-VqdZWMCuKFM53jcF7wQ-1; Wed,
+ 29 Jan 2025 13:52:52 -0500
+X-MC-Unique: -D-VqdZWMCuKFM53jcF7wQ-1
+X-Mimecast-MFC-AGG-ID: -D-VqdZWMCuKFM53jcF7wQ
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 396CC19560BA;
+	Wed, 29 Jan 2025 18:52:48 +0000 (UTC)
+Received: from dhcp-27-174.brq.redhat.com (unknown [10.45.226.29])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with SMTP id 3326919560AA;
+	Wed, 29 Jan 2025 18:52:16 +0000 (UTC)
+Received: by dhcp-27-174.brq.redhat.com (nbSMTP-1.00) for uid 1000
+	oleg@redhat.com; Wed, 29 Jan 2025 19:52:21 +0100 (CET)
+Date: Wed, 29 Jan 2025 19:51:49 +0100
+From: Oleg Nesterov <oleg@redhat.com>
+To: "Dmitry V. Levin" <ldv@strace.io>
+Cc: Alexey Gladkov <legion@kernel.org>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	Eugene Syromyatnikov <evgsyr@gmail.com>,
+	Mike Frysinger <vapier@gentoo.org>,
+	Renzo Davoli <renzo@cs.unibo.it>,
+	Davide Berardi <berardi.dav@gmail.com>,
+	strace-devel@lists.strace.io, Vineet Gupta <vgupta@kernel.org>,
+	Russell King <linux@armlinux.org.uk>, Will Deacon <will@kernel.org>,
+	Guo Ren <guoren@kernel.org>, Brian Cain <bcain@quicinc.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Michal Simek <monstr@monstr.eu>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>,
+	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+	Stafford Horne <shorne@gmail.com>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Richard Weinberger <richard@nod.at>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+	Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+	Shuah Khan <shuah@kernel.org>, linux-snps-arc@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+	linux-um@lists.infradead.org, linux-arch@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-api@vger.kernel.org
+Subject: Re: [PATCH v3 0/6] ptrace: introduce PTRACE_SET_SYSCALL_INFO API
+Message-ID: <20250129185149.GA25901@redhat.com>
+References: <20250128091445.GA8257@strace.io>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250128150228.GA15298@redhat.com> <20250128150307.GA15325@redhat.com>
-In-Reply-To: <20250128150307.GA15325@redhat.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Wed, 29 Jan 2025 15:26:32 +0100
-X-Gm-Features: AWEUYZl3XKXbgInDRKrHV1u1-_zdCdB6TJlCed9nhE-D94gFzevJM-mPjaUlV5g
-Message-ID: <CACRpkdbEKYz_GFYeuBLsSv3xD3qjGjoDh16GWgzfdOfwRjOdYw@mail.gmail.com>
-Subject: Re: [PATCH v2 2/4] seccomp: fix the __secure_computing() stub for !HAVE_ARCH_SECCOMP_FILTER
-To: Oleg Nesterov <oleg@redhat.com>
-Cc: Kees Cook <kees@kernel.org>, Andy Lutomirski <luto@amacapital.net>, Will Drewry <wad@chromium.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Thomas Gleixner <tglx@linutronix.de>, 
-	Peter Zijlstra <peterz@infradead.org>, linux-kernel@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250128091445.GA8257@strace.io>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-On Tue, Jan 28, 2025 at 4:03=E2=80=AFPM Oleg Nesterov <oleg@redhat.com> wro=
-te:
-
-> Depending on CONFIG_HAVE_ARCH_SECCOMP_FILTER, __secure_computing(NULL)
-> will crash or not. This is not consistent/safe, especially considering
-> that after the previous change __secure_computing(sd) is always called
-> with sd =3D=3D NULL.
+On 01/28, Dmitry V. Levin wrote:
 >
-> Fortunately, if CONFIG_HAVE_ARCH_SECCOMP_FILTER=3Dn, __secure_computing()
-> has no callers, these architectures use secure_computing_strict(). Yet
-> it make sense make __secure_computing(NULL) safe in this case.
->
-> Note also that with this change we can unexport secure_computing_strict()
-> and change the current callers to use __secure_computing(NULL).
->
-> Fixes: 8cf8dfceebda ("seccomp: Stub for !HAVE_ARCH_SECCOMP_FILTER")
-> Signed-off-by: Oleg Nesterov <oleg@redhat.com>
+>     * ptrace: Add explicit padding to the end of struct ptrace_syscall_info,
+>       simplify obtaining of user ptrace_syscall_info,
+>       do not introduce PTRACE_SYSCALL_INFO_SIZE_VER0
+>     * ptrace: Change the return type of ptrace_set_syscall_info_* functions
+>       from "unsigned long" to "int"
+>     * ptrace: Add -ERANGE check to ptrace_set_syscall_info_exit,
+>       add comments to -ERANGE checks
+>     * ptrace: Update comments about supported syscall stops
+>     * selftests: Extend set_syscall_info test, fix for mips n32
 
-I had no idea it was this complex, thanks a lot for looking into this Oleg!
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Again, I can't review 1-3, I know nothing about the non-x86 architectures.
 
-Yours,
-Linus Walleij
+As for 4-6, feel free to add
+
+Reviewed-by: Oleg Nesterov <oleg@redhat.com>
+
 
