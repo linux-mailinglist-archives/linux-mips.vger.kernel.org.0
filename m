@@ -1,247 +1,153 @@
-Return-Path: <linux-mips+bounces-7643-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7644-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A63FA22C9C
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Jan 2025 12:38:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD8E1A23091
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Jan 2025 15:46:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 730333A9B20
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Jan 2025 11:38:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B090188517A
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Jan 2025 14:46:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAFEC1DDC19;
-	Thu, 30 Jan 2025 11:38:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7C591E376C;
+	Thu, 30 Jan 2025 14:46:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="py0si/7i"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="E5cqgLH5"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08FC51AB507;
-	Thu, 30 Jan 2025 11:38:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60A121DDD1;
+	Thu, 30 Jan 2025 14:46:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738237125; cv=none; b=MFmy5Qm5UPUqK+6pfIIjlRvuPdoionzD1jMSusVQFLZW0qKFMt8ylz5wbt3S9Qg8Csa7wHysfw00E8p8/S4ZXyrIwHv3vo4Uvqu4wrZ916G5buB9v8RxeGvUQA087+3D795AHZShc7rkuroAh/m5aGp7J2tTKC1rJX+Q6svxjLY=
+	t=1738248393; cv=none; b=lsA1sRTGHRz2AhxH3RwNQ6IXp/Grsoa3fGFss8wwDKaotm4I8hCHfwVkDi/ValVb4e4wygZUFnwOdQQVVSxRHq2hsv5r5kTsZn7z9gqOlNTELNTif8nfbbXf1ax55KL8rU4l+U1jBq+qmxe6fust+wDdPvrg2GCtivQICtywUEQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738237125; c=relaxed/simple;
-	bh=jmiaRDktbJa4wMJVa0qU3LftfvlPnAN8/Soy8xz+2dw=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Q5h28uomGtKf9LzkYrpXFn9xJT4asW1MUj4lbYhCt1/YX7d3P+1oS+riLsMoVjiip1IQVKoHnK3h+WByLMDFuMO0Bvz0t/q+qf4efkCpVFasf10otOqkzUrK/KzPeZzoG5DdMe637HHJ42Z3W2HsDrj/ZT9z0n7uIGuaWicuJVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=py0si/7i; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356516.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50U3S03G009805;
-	Thu, 30 Jan 2025 11:36:36 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=BpEfUaBr1Cw8QWsiOsJ1W6pndXsaAO
-	xt2vlVbbXMbZU=; b=py0si/7i7sYpYpgY+Cd85pkVNtrLlOqwSMEhmRUcKRZj7F
-	AdWm9g97BBEh/k1QMz1gyW8k5eUcYgkXR7GTOMktSJAFpG3LMbyg98XYXGPU8sUo
-	eqeaQ4p53wCU0NhpBpfouxy1ummA3PnohqoCPPT9kZK6xXqL8bMd1HPK3stTNTCc
-	i9hgrzpbOa8Oy7fd/8G+IJIcqiisWNhctW460864Z4NJPiiQN3G8K0UqP+6d4dzH
-	cmzmA7ITybYy/TOKFRbQlq2Z27a5FDfLohiHJU8VcETS6330kiMTctNfd+g/5c0g
-	zhFPjq0jgTlDsz9Dp+ySr7XDG4pHCTnnLQrHeZDw==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44fq5tvqhw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 30 Jan 2025 11:36:36 +0000 (GMT)
-Received: from m0356516.ppops.net (m0356516.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 50UBWjRY023426;
-	Thu, 30 Jan 2025 11:36:35 GMT
-Received: from ppma13.dal12v.mail.ibm.com (dd.9e.1632.ip4.static.sl-reverse.com [50.22.158.221])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44fq5tvqhs-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 30 Jan 2025 11:36:35 +0000 (GMT)
-Received: from pps.filterd (ppma13.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma13.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 50U947Bm022193;
-	Thu, 30 Jan 2025 11:36:34 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma13.dal12v.mail.ibm.com (PPS) with ESMTPS id 44dcgjwkcf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 30 Jan 2025 11:36:34 +0000
-Received: from smtpav05.fra02v.mail.ibm.com (smtpav05.fra02v.mail.ibm.com [10.20.54.104])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 50UBaU8D29491780
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 30 Jan 2025 11:36:30 GMT
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B3743200BB;
-	Thu, 30 Jan 2025 11:36:30 +0000 (GMT)
-Received: from smtpav05.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 2B194200BC;
-	Thu, 30 Jan 2025 11:36:30 +0000 (GMT)
-Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
-	by smtpav05.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Thu, 30 Jan 2025 11:36:30 +0000 (GMT)
-From: Sven Schnelle <svens@linux.ibm.com>
-To: "Dmitry V. Levin" <ldv@strace.io>
-Cc: linux-snps-arc@lists.infradead.org, Rich Felker <dalias@libc.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Andreas Larsson
- <andreas@gaisler.com>,
-        John Paul Adrian Glaubitz
- <glaubitz@physik.fu-berlin.de>,
-        x86@kernel.org, Arnd Bergmann
- <arnd@arndb.de>,
-        linux-kernel@vger.kernel.org,
-        "James E.J. Bottomley"
- <James.Bottomley@HansenPartnership.com>,
-        Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, sparclinux@vger.kernel.org,
-        linux-hexagon@vger.kernel.org, WANG Xuerui
- <kernel@xen0n.name>,
-        Will Deacon <will@kernel.org>,
-        Eugene Syromyatnikov
- <evgsyr@gmail.com>,
-        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-        Jonas Bonn <jonas@southpole.se>, linux-s390@vger.kernel.org,
-        Alexander
- Gordeev <agordeev@linux.ibm.com>,
-        Madhavan Srinivasan
- <maddy@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Yoshinori Sato
- <ysato@users.sourceforge.jp>, linux-sh@vger.kernel.org,
-        Michael Ellerman
- <mpe@ellerman.id.au>, Helge Deller <deller@gmx.de>,
-        Huacai Chen
- <chenhuacai@kernel.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Dave Hansen
- <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>, Vineet
- Gupta <vgupta@kernel.org>,
-        Christian Borntraeger
- <borntraeger@linux.ibm.com>,
-        strace-devel@lists.strace.io, linux-arch@vger.kernel.org,
-        Albert Ou <aou@eecs.berkeley.edu>, Mike
- Frysinger <vapier@gentoo.org>,
-        Davide Berardi <berardi.dav@gmail.com>,
-        Renzo Davoli <renzo@cs.unibo.it>, linux-um@lists.infradead.org,
-        Heiko
- Carstens <hca@linux.ibm.com>,
-        Charlie Jenkins <charlie@rivosinc.com>,
-        Naveen N Rao <naveen@kernel.org>, Nicholas Piggin <npiggin@gmail.com>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Borislav Petkov
- <bp@alien8.de>, loongarch@lists.linux.dev,
-        Paul Walmsley
- <paul.walmsley@sifive.com>,
-        Stafford Horne <shorne@gmail.com>,
-        linux-arm-kernel@lists.infradead.org, Brian Cain <bcain@quicinc.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        linux-parisc@vger.kernel.org, linux-openrisc@vger.kernel.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        Oleg
- Nesterov <oleg@redhat.com>, Dinh Nguyen <dinguyen@kernel.org>,
-        linux-riscv@lists.infradead.org, Palmer Dabbelt <palmer@dabbelt.com>,
-        Richard Weinberger <richard@nod.at>,
-        Johannes Berg
- <johannes@sipsolutions.net>,
-        Alexey Gladkov <legion@kernel.org>,
-        "David
- S. Miller" <davem@davemloft.net>
-Subject: Re: [PATCH v3 2/6] syscall.h: add syscall_set_arguments() and
- syscall_set_return_value()
-In-Reply-To: <20250130112207.GA6617@strace.io> (Dmitry V. Levin's message of
-	"Thu, 30 Jan 2025 13:22:07 +0200")
-References: <20250128091626.GB8601@strace.io> <yt9dwmecya4g.fsf@linux.ibm.com>
-	<20250130112207.GA6617@strace.io>
-Date: Thu, 30 Jan 2025 12:36:29 +0100
-Message-ID: <yt9dsep0y1mq.fsf@linux.ibm.com>
-User-Agent: Gnus/5.13 (Gnus v5.13)
+	s=arc-20240116; t=1738248393; c=relaxed/simple;
+	bh=n40KgGfq4R3RPQRYAd/cIB5irFErGwpGuPD89/Kd30w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=OO7cibY58rL4NPgMYY6MDvbhexURAMkHhSQWvm4N8ZV048Br8Io/sLG0TUeafLqsEhEDxpH568CRCX5eSklT6HKx6fj69oH1j2cf40ykJl8yGU9f1CazvzeGmIRROnaEVCvJ9ncaxxfy/G7IxJIkfvgQIm39mdR+QKkfSc9nqYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=E5cqgLH5; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2166f1e589cso21890165ad.3;
+        Thu, 30 Jan 2025 06:46:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738248391; x=1738853191; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=r8qNxMXCgnej9fTeqFuWVgt08SyBzUFps2b0/X6hKCE=;
+        b=E5cqgLH5FtrZwOw4yhDdHQkvc5gH5vw+ULBZRIQpx6OdEtAr4E/ZNmoLPSVDYJS1TV
+         +5Ff9sn5Fqr0dah8us82lPj3M079/X6GY0rV8gyGHYAz/CNhJmE0vwzSAjtKuG6HM8rc
+         Pl4Jw6dvUlUOVOiPh0aNgl6rM6X8i/qiXDJIwNhu2Bf23mm4KHgF9ymSO2ljfkacsREU
+         5FRfzs806e+KTv0hkTaK+NbYCMP/ZtXbwANhKQFw0zxFYvqzRCfHwl7+eKFKsGyiqPZa
+         YAkHTGrq6825qtZqztMcFZ7nmhb5yfXJeKrZ4t4OVO+BwMEPlAZEWbn3qgeJ0NUgNwzz
+         AvOA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738248391; x=1738853191;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=r8qNxMXCgnej9fTeqFuWVgt08SyBzUFps2b0/X6hKCE=;
+        b=THwVGHfblQ2JIKHnT+S9RrsuquTnXXW5fbGGEXWVkEBcAFF0i6jy/uygajqCNy0zt/
+         tzIoP6WBBz+pq8o7FbbmcH4JsGKw6BaPV4ttc0PkC0Muc4TMgdFcZ1RsYiYtUbo2ORQS
+         Hgao8iJIVxzulGhaADAT8Uv+e1SL97T2Y7DGF68WuXGHJsjuFeoyYImWp54yn3w2SSVd
+         5GhF+fX+4ciDxiMORONMMS0wSRPwHLEA+J9y9Osd+N5+KwBygFhuSjuo1HAls/qro6HP
+         LcPWoHgymwp7mQg3cgbFeM4/h571jl1zkMP8Ng4z9FQGdZqxnRGdv294EfU6Kk6s76T1
+         cjiA==
+X-Forwarded-Encrypted: i=1; AJvYcCU9aAn3qa1WPAY6yKsu+SM2fzjApc4UOzzjWb/Nfwwpx6WX54v+yvpgUb5nO6N3FD6EBfeJE+To0sR9jj4=@vger.kernel.org, AJvYcCXRuEXlLt/yGBI2FQqx+S9zXVdF0sk22gzIKCa/sJBz1zKBWWMzwJU2Xohx5nX9+GSEZbN7JsTBpt0b5g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOipQMPJsV026mSo8CPPebJcgbHpCP1tAiY3nFHKexm0sDCHVu
+	YEPzOGrh3ixcnasnvRZjw2D8l4PLYuDGcK4hY9O2FOtVQInW3lRY
+X-Gm-Gg: ASbGncsmUYZf00pkBfHYMVZlDYOq+uMhi1fdyN7yFPo6YqkjRdo/96kWP9Mcg/RIx2o
+	rMq8yzK+g0lpSPDJUdnhAw2kkBRjPQ/RpVgGC63gH4wU/8ZCq8ceAgjQtInBuchfnVJMb+X9h6R
+	0gyVdvekDhD39VU4eHlB0qbA/2fDHH3YviT0f6Z7YYemQHP2/na3MF7qckSvlk/W6ay/ch6yn1G
+	dpIuS/UD6MrNeTixlY4I98fNSoahaMfLVrV8AJs0pUvX5PiVhmqrmV8CxUcHyNJl4Qy3LKlQ3ea
+	7qzmsz9HwEG+ecpvOXywo5YE9eEbxK8uJNj5VYz/OI77KJ+RjwLOD1sR0PyUeWhojuwG
+X-Google-Smtp-Source: AGHT+IElmKsyKIeuSlrMpwizU7bksy5wTpGQU6CRdT2tmwDjlv0NRKupiacbNPo8vNKEQjj9pE1VYA==
+X-Received: by 2002:a05:6a20:2583:b0:1e1:af74:a236 with SMTP id adf61e73a8af0-1ed7a537caamr11860969637.21.1738248391485;
+        Thu, 30 Jan 2025 06:46:31 -0800 (PST)
+Received: from [192.168.50.88] (36-229-232-242.dynamic-ip.hinet.net. [36.229.232.242])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-acebe8568fesm1457638a12.40.2025.01.30.06.46.28
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 30 Jan 2025 06:46:30 -0800 (PST)
+Message-ID: <6d0659c3-fd86-4eab-879f-d9b149462358@gmail.com>
+Date: Thu, 30 Jan 2025 22:46:26 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: 3aUZNse446PGQfVafhK1HcR2G4gnMUaQ
-X-Proofpoint-ORIG-GUID: 64WUIlsja2UYCCT0QvJj0Ow022g8u5FP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-01-30_06,2025-01-30_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- mlxlogscore=982 lowpriorityscore=0 impostorscore=0 phishscore=0
- adultscore=0 priorityscore=1501 clxscore=1015 mlxscore=0 malwarescore=0
- spamscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2501300089
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] mips: fix shmctl/semctl/msgctl syscall for o32
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Christian Brauner <brauner@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Heiko Carstens
+ <hca@linux.ibm.com>, Jeff Xu <jeffxu@chromium.org>,
+ =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
+ "open list:MIPS" <linux-mips@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>
+References: <20250106115227.1365643-1-ism.hong@gmail.com>
+ <5427df64-658d-4377-89be-963ee7bb68ee@app.fastmail.com>
+Content-Language: en-US
+From: Ism Hong <ism.hong@gmail.com>
+In-Reply-To: <5427df64-658d-4377-89be-963ee7bb68ee@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-"Dmitry V. Levin" <ldv@strace.io> writes:
+Arnd Bergmann 於 2025/1/28 清晨5:20 寫道:
+> On Mon, Jan 6, 2025, at 12:52, Ism Hong wrote:
+>> The commit 275f22148e87 ("ipc: rename old-style shmctl/semctl/msgctl
+>> syscalls") switched various architectures to use sys_old_*ctl() with
+>> ipc_parse_version, including mips n32/n64. However, for mips o32, commit
+>> 0d6040d46817 ("arch: add split IPC system calls where needed") added
+>> separate IPC syscalls without properly using the old-style handlers.
+>>
+>> This causes applications using uClibc-ng to fail with -EINVAL when
+>> calling semctl/shmctl/msgctl with IPC_64 flag, as uClibc-ng uses the
+>> syscall numbers from kernel headers to determine whether to use the IPC
+>> multiplexer or split syscalls. In contrast, glibc is unaffected as it
+>> uses a unified feature test macro __ASSUME_DIRECT_SYSVIPC_SYSCALLS
+>> (disabled for mips-o32) to make this decision.
+>>
+>> Fix this by switching the o32 ABI entries for semctl, shmctl and msgctl
+>> to use the old-style handlers, matching the behavior of other
+>> architectures and fixing compatibility with uClibc-ng.
+>>
+>> Signed-off-by: Ism Hong <ism.hong@gmail.com>
+> 
+> I just saw this making it into mainline and had another look, sorry
+> I hadn't caught it earlier.
+> 
+> It was an intentional decision to use the new-style IPC_64
+> semantics on architectures that didn't already have the
+> separate system call.
+> 
+> You may not like that choice, but it's been done this way
+> for seven years now, and as far as I can tell, glibc relies
+> on this behavior.
+> 
+> I think this commit should be reverted, and uclibc be changed
+> to implement the kernel ABI for these syscalls.
+> 
+>        Arnd
 
-> On Thu, Jan 30, 2025 at 09:33:03AM +0100, Sven Schnelle wrote:
->> "Dmitry V. Levin" <ldv@strace.io> writes:
->> 
->> > These functions are going to be needed on all HAVE_ARCH_TRACEHOOK
->> > architectures to implement PTRACE_SET_SYSCALL_INFO API.
->> >
->> > This partially reverts commit 7962c2eddbfe ("arch: remove unused
->> > function syscall_set_arguments()") by reusing some of old
->> > syscall_set_arguments() implementations.
->> >
->> > Signed-off-by: Dmitry V. Levin <ldv@strace.io>
->> > Tested-by: Charlie Jenkins <charlie@rivosinc.com>
->> > Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
->> > ---
->> >  arch/arc/include/asm/syscall.h        | 14 +++++++++++
->> >  arch/arm/include/asm/syscall.h        | 13 ++++++++++
->> >  arch/arm64/include/asm/syscall.h      | 13 ++++++++++
->> >  arch/csky/include/asm/syscall.h       | 13 ++++++++++
->> >  arch/hexagon/include/asm/syscall.h    | 14 +++++++++++
->> >  arch/loongarch/include/asm/syscall.h  |  8 ++++++
->> >  arch/mips/include/asm/syscall.h       | 32 ++++++++++++++++++++++++
->> >  arch/nios2/include/asm/syscall.h      | 11 ++++++++
->> >  arch/openrisc/include/asm/syscall.h   |  7 ++++++
->> >  arch/parisc/include/asm/syscall.h     | 12 +++++++++
->> >  arch/powerpc/include/asm/syscall.h    | 10 ++++++++
->> >  arch/riscv/include/asm/syscall.h      |  9 +++++++
->> >  arch/s390/include/asm/syscall.h       | 12 +++++++++
->> >  arch/sh/include/asm/syscall_32.h      | 12 +++++++++
->> >  arch/sparc/include/asm/syscall.h      | 10 ++++++++
->> >  arch/um/include/asm/syscall-generic.h | 14 +++++++++++
->> >  arch/x86/include/asm/syscall.h        | 36 +++++++++++++++++++++++++++
->> >  arch/xtensa/include/asm/syscall.h     | 11 ++++++++
->> >  include/asm-generic/syscall.h         | 16 ++++++++++++
->> >  19 files changed, 267 insertions(+)
->> >
->> > diff --git a/arch/s390/include/asm/syscall.h b/arch/s390/include/asm/syscall.h
->> > index 27e3d804b311..b3dd883699e7 100644
->> > --- a/arch/s390/include/asm/syscall.h
->> > +++ b/arch/s390/include/asm/syscall.h
->> > @@ -78,6 +78,18 @@ static inline void syscall_get_arguments(struct task_struct *task,
->> >  	args[0] = regs->orig_gpr2 & mask;
->> >  }
->> >  
->> > +static inline void syscall_set_arguments(struct task_struct *task,
->> > +					 struct pt_regs *regs,
->> > +					 const unsigned long *args)
->> > +{
->> > +	unsigned int n = 6;
->> > +
->> > +	while (n-- > 0)
->> > +		if (n > 0)
->> > +			regs->gprs[2 + n] = args[n];
->> > +	regs->orig_gpr2 = args[0];
->> > +}
->> 
->> Could that be changed to something like:
->> 
->> for (int n = 1; n < 6; n++)
->>         regs->gprs[2 + n] = args[n];
->> regs->orig_gpr2 = args[0];
->> 
->> I think this is way easier to parse.
->
-> I don't mind changing syscall_set_arguments() this way, but it just
-> mirrors syscall_get_arguments(), so I think it would be better if these
-> two functions were written in the same style.  Would you like to change
-> syscall_get_arguments() as well?
+Hi Arnd,
 
-Oh. I'll prepare a patch for syscall_get_arguments(), wasn't aware
-that this function looks the same. I'll send this via the s390 tree, so
-it's independent of your patch series. Thanks!
+Thank you for your explanation, and sorry for the late reply due to the 
+Chinese New Year.
+
+ From your response, I understand that the preferred solution would be 
+to modify uClibc to align the behavior of semctl/shmctl/msgctl with 
+glibc and musl by adopting a unified feature test macro. If that is the 
+case, I will work on preparing a patch for uClibc accordingly.
+
+Please let me know if you have any suggestions or if I have 
+misunderstood anything.
+
+Thanks,
+Ism
 
