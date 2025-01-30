@@ -1,122 +1,174 @@
-Return-Path: <linux-mips+bounces-7641-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7642-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41C5DA22BE6
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Jan 2025 11:49:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BDF87A22C6D
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Jan 2025 12:22:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4A2C83A1C04
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Jan 2025 10:49:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ED8BE1886859
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Jan 2025 11:22:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32C7C1B85CA;
-	Thu, 30 Jan 2025 10:49:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9201D1C173C;
+	Thu, 30 Jan 2025 11:22:18 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0EF6286A9;
-	Thu, 30 Jan 2025 10:49:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C7301A7046;
+	Thu, 30 Jan 2025 11:22:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738234158; cv=none; b=CMDHLkJIEFJhgZyQZRv1C+oXIMEwOeH8norZeSWPv/jBtLc6S6YiRNu+kh+Y85dhoi1XhQM0SMec2HQHSPfRPgqTqu4e2K3WAkDQOrVKNCNro9NYEZnPNzV6wQ1veniAy6rf4V9PUQKvHU4L8vp1XP7wFp+2Epfh1LVhX6U6vJ4=
+	t=1738236138; cv=none; b=f8A/GY7YpDB9uvdOgPQyj9O6X3C85aHtx9/LJ/tPbkvuWkE07FJVZ4jbjV9KomO4gSNGeW6XCX1bdxMjmJU4Hffa5eY+dt2tOfhS0zCTr8mWjunm1sUGh75TLyYHq/NgMW99Ip3V3Wln52TlmR5MA58Amcnu9qcii9vtr8KGPC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738234158; c=relaxed/simple;
-	bh=0RTanvAzYD+EF8kxdht5R+xzJ2uGLD4tho9tZLyYhd4=;
-	h=From:To:Subject:Date:Message-Id:MIME-Version; b=dsuVBM2h7m20D6Vjwp1pr16GfWTrRARQg0t1wCCBK6Fz6MWiwGme/vLM919yn19nu4QuJpNSf4tQgRL9CpvuqnQk69j60Y1qhck0XAfVHfWvtLbTh76JMZoi/sWkn2f19kBfQPTx2qTkvyp3bAqcL298Mm+rvTnMStFhCHUPlrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=fail smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=alpha.franken.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id CCE5B21843;
-	Thu, 30 Jan 2025 10:49:12 +0000 (UTC)
-Authentication-Results: smtp-out1.suse.de;
-	none
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id AFAA21364B;
-	Thu, 30 Jan 2025 10:49:12 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id bCLBKihZm2dzMAAAD6G6ig
-	(envelope-from <tsbogend@alpha.franken.de>); Thu, 30 Jan 2025 10:49:12 +0000
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] Revert "mips: fix shmctl/semctl/msgctl syscall for o32"
-Date: Thu, 30 Jan 2025 11:48:56 +0100
-Message-Id: <20250130104857.56251-1-tsbogend@alpha.franken.de>
-X-Mailer: git-send-email 2.35.3
+	s=arc-20240116; t=1738236138; c=relaxed/simple;
+	bh=MghFTWMvhJ+aN7aFXsfim1mSQbCrS8tySxPnq4M2kjM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RH296WwIxTpxaq2ZXqI58hPWdhLFwSIXuhVTSqpnlXuO+n97xZKm/kN4PJWmnG6MMLA6agUxGzuuX4SReAzNyFDJsOgu8rvAnPfZlVVnPovc7dG0rdGbUV4jZ9ulEu0jE/e/vHNeBAe7uIerZ+WEHDqAN2nYfLjILMq55QeD1JE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
+Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
+	by vmicros1.altlinux.org (Postfix) with ESMTP id 2997B72C97E;
+	Thu, 30 Jan 2025 14:22:08 +0300 (MSK)
+Received: by mua.local.altlinux.org (Postfix, from userid 508)
+	id F28277CCB3A; Thu, 30 Jan 2025 13:22:07 +0200 (IST)
+Date: Thu, 30 Jan 2025 13:22:07 +0200
+From: "Dmitry V. Levin" <ldv@strace.io>
+To: Sven Schnelle <svens@linux.ibm.com>
+Cc: linux-snps-arc@lists.infradead.org, Rich Felker <dalias@libc.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Andreas Larsson <andreas@gaisler.com>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	x86@kernel.org, Arnd Bergmann <arnd@arndb.de>,
+	linux-kernel@vger.kernel.org,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Guo Ren <guoren@kernel.org>, linux-csky@vger.kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, sparclinux@vger.kernel.org,
+	linux-hexagon@vger.kernel.org, WANG Xuerui <kernel@xen0n.name>,
+	Will Deacon <will@kernel.org>,
+	Eugene Syromyatnikov <evgsyr@gmail.com>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Jonas Bonn <jonas@southpole.se>, linux-s390@vger.kernel.org,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	linux-sh@vger.kernel.org, Michael Ellerman <mpe@ellerman.id.au>,
+	Helge Deller <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Ingo Molnar <mingo@redhat.com>, Vineet Gupta <vgupta@kernel.org>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	strace-devel@lists.strace.io, linux-arch@vger.kernel.org,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Mike Frysinger <vapier@gentoo.org>,
+	Davide Berardi <berardi.dav@gmail.com>,
+	Renzo Davoli <renzo@cs.unibo.it>, linux-um@lists.infradead.org,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Charlie Jenkins <charlie@rivosinc.com>,
+	Naveen N Rao <naveen@kernel.org>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+	Borislav Petkov <bp@alien8.de>, loongarch@lists.linux.dev,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Stafford Horne <shorne@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	Brian Cain <bcain@quicinc.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-parisc@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	Oleg Nesterov <oleg@redhat.com>, Dinh Nguyen <dinguyen@kernel.org>,
+	linux-riscv@lists.infradead.org,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Richard Weinberger <richard@nod.at>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Alexey Gladkov <legion@kernel.org>,
+	"David S. Miller" <davem@davemloft.net>
+Subject: Re: [PATCH v3 2/6] syscall.h: add syscall_set_arguments() and
+ syscall_set_return_value()
+Message-ID: <20250130112207.GA6617@strace.io>
+References: <20250128091626.GB8601@strace.io>
+ <yt9dwmecya4g.fsf@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Score: -2.80
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	MID_CONTAINS_FROM(1.00)[];
-	NEURAL_HAM_LONG(-1.00)[-0.999];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCPT_COUNT_TWO(0.00)[2];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FROM_EQ_ENVFROM(0.00)[];
-	TO_DN_NONE(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	RCVD_TLS_ALL(0.00)[]
-X-Spam-Flag: NO
-X-Spam-Level: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <yt9dwmecya4g.fsf@linux.ibm.com>
 
-This reverts commit bc7584e009c39375294794f7ca751a6b2622c425.
+On Thu, Jan 30, 2025 at 09:33:03AM +0100, Sven Schnelle wrote:
+> "Dmitry V. Levin" <ldv@strace.io> writes:
+> 
+> > These functions are going to be needed on all HAVE_ARCH_TRACEHOOK
+> > architectures to implement PTRACE_SET_SYSCALL_INFO API.
+> >
+> > This partially reverts commit 7962c2eddbfe ("arch: remove unused
+> > function syscall_set_arguments()") by reusing some of old
+> > syscall_set_arguments() implementations.
+> >
+> > Signed-off-by: Dmitry V. Levin <ldv@strace.io>
+> > Tested-by: Charlie Jenkins <charlie@rivosinc.com>
+> > Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
+> > ---
+> >  arch/arc/include/asm/syscall.h        | 14 +++++++++++
+> >  arch/arm/include/asm/syscall.h        | 13 ++++++++++
+> >  arch/arm64/include/asm/syscall.h      | 13 ++++++++++
+> >  arch/csky/include/asm/syscall.h       | 13 ++++++++++
+> >  arch/hexagon/include/asm/syscall.h    | 14 +++++++++++
+> >  arch/loongarch/include/asm/syscall.h  |  8 ++++++
+> >  arch/mips/include/asm/syscall.h       | 32 ++++++++++++++++++++++++
+> >  arch/nios2/include/asm/syscall.h      | 11 ++++++++
+> >  arch/openrisc/include/asm/syscall.h   |  7 ++++++
+> >  arch/parisc/include/asm/syscall.h     | 12 +++++++++
+> >  arch/powerpc/include/asm/syscall.h    | 10 ++++++++
+> >  arch/riscv/include/asm/syscall.h      |  9 +++++++
+> >  arch/s390/include/asm/syscall.h       | 12 +++++++++
+> >  arch/sh/include/asm/syscall_32.h      | 12 +++++++++
+> >  arch/sparc/include/asm/syscall.h      | 10 ++++++++
+> >  arch/um/include/asm/syscall-generic.h | 14 +++++++++++
+> >  arch/x86/include/asm/syscall.h        | 36 +++++++++++++++++++++++++++
+> >  arch/xtensa/include/asm/syscall.h     | 11 ++++++++
+> >  include/asm-generic/syscall.h         | 16 ++++++++++++
+> >  19 files changed, 267 insertions(+)
+> >
+> > diff --git a/arch/s390/include/asm/syscall.h b/arch/s390/include/asm/syscall.h
+> > index 27e3d804b311..b3dd883699e7 100644
+> > --- a/arch/s390/include/asm/syscall.h
+> > +++ b/arch/s390/include/asm/syscall.h
+> > @@ -78,6 +78,18 @@ static inline void syscall_get_arguments(struct task_struct *task,
+> >  	args[0] = regs->orig_gpr2 & mask;
+> >  }
+> >  
+> > +static inline void syscall_set_arguments(struct task_struct *task,
+> > +					 struct pt_regs *regs,
+> > +					 const unsigned long *args)
+> > +{
+> > +	unsigned int n = 6;
+> > +
+> > +	while (n-- > 0)
+> > +		if (n > 0)
+> > +			regs->gprs[2 + n] = args[n];
+> > +	regs->orig_gpr2 = args[0];
+> > +}
+> 
+> Could that be changed to something like:
+> 
+> for (int n = 1; n < 6; n++)
+>         regs->gprs[2 + n] = args[n];
+> regs->orig_gpr2 = args[0];
+> 
+> I think this is way easier to parse.
 
-The split IPC system calls for o32 have been introduced with modern
-version only. Changing this breaks ABI.
+I don't mind changing syscall_set_arguments() this way, but it just
+mirrors syscall_get_arguments(), so I think it would be better if these
+two functions were written in the same style.  Would you like to change
+syscall_get_arguments() as well?
 
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
----
- arch/mips/kernel/syscalls/syscall_o32.tbl | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
-index e8a57c206758..349b8aad1159 100644
---- a/arch/mips/kernel/syscalls/syscall_o32.tbl
-+++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
-@@ -382,15 +382,15 @@
- 368	o32	io_pgetevents			sys_io_pgetevents_time32	compat_sys_io_pgetevents
- # room for arch specific calls
- 393	o32	semget				sys_semget
--394	o32	semctl				sys_old_semctl		compat_sys_old_semctl
-+394	o32	semctl				sys_semctl			compat_sys_semctl
- 395	o32	shmget				sys_shmget
--396	o32	shmctl				sys_old_shmctl		compat_sys_old_shmctl
-+396	o32	shmctl				sys_shmctl			compat_sys_shmctl
- 397	o32	shmat				sys_shmat			compat_sys_shmat
- 398	o32	shmdt				sys_shmdt
- 399	o32	msgget				sys_msgget
- 400	o32	msgsnd				sys_msgsnd			compat_sys_msgsnd
- 401	o32	msgrcv				sys_msgrcv			compat_sys_msgrcv
--402	o32	msgctl				sys_old_msgctl		compat_sys_old_msgctl
-+402	o32	msgctl				sys_msgctl			compat_sys_msgctl
- 403	o32	clock_gettime64			sys_clock_gettime		sys_clock_gettime
- 404	o32	clock_settime64			sys_clock_settime		sys_clock_settime
- 405	o32	clock_adjtime64			sys_clock_adjtime		sys_clock_adjtime
 -- 
-2.35.3
-
+ldv
 
