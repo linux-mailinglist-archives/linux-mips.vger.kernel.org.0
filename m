@@ -1,99 +1,236 @@
-Return-Path: <linux-mips+bounces-7639-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7640-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 119F6A229E1
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Jan 2025 09:55:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5035DA22A43
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Jan 2025 10:27:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 201C73A5DAF
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Jan 2025 08:55:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A3DA5166A98
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Jan 2025 09:27:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B13B81B3920;
-	Thu, 30 Jan 2025 08:55:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE8A61B425D;
+	Thu, 30 Jan 2025 09:27:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="GwOLwzTm"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79EA018FDC5;
-	Thu, 30 Jan 2025 08:55:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4184518F2DD;
+	Thu, 30 Jan 2025 09:27:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738227345; cv=none; b=p+sHJ95NWhkKOCE+imrZZeiLukLXOTWqsvNb9oauXJurWxviH6yTpL93kb3LrWSfvMqdqKX8RU6zMBpdkjNivEiDLzxyx3/81GXU2ep14G1yv4FN4sLNUJrBQ82+UC6xwD5JJDgXTWRb444a3zxLVAzAYFGooKzoshU/cTm7CXs=
+	t=1738229263; cv=none; b=TijTey/3tCMVkuAePfQs1bDkIU15vnydKOsVJohXkC3MbaICmiDZJnPfixiECU+poYX2fAI8Xo2CuwHjnE7FYSO4xwytt+/NztsdnFx0aKTbYpVtHElAFq/uz1w+u8CgKraq9Q6HcwvM7jH82luNva6ZVHooJ2JPwz7lzA7Ok4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738227345; c=relaxed/simple;
-	bh=NVe5gcGxKytAdRjOGh1/oBUf3kIsABQCzXovlrZB5iU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gxoXzCvxVeoxx1MVjHx7V+bQnOx9rFw56YrHCHclOJWv+vKOu49fR2qlQQb8byBCjdyS1Ig81Nca3HvjyXiWp8CR4tgyQxNZjiRgoRrR50MtiwrqZhosf4NvgxBtfIbcdl1FeOdmrA42zaKC0HRK8tMEbRQpNyB6QFfedbKwDi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1tdQKa-0001yN-00; Thu, 30 Jan 2025 09:55:24 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 50ABFC013E; Thu, 30 Jan 2025 09:55:14 +0100 (CET)
-Date: Thu, 30 Jan 2025 09:55:14 +0100
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Ism Hong <ism.hong@gmail.com>, Christian Brauner <brauner@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Heiko Carstens <hca@linux.ibm.com>, Jeff Xu <jeffxu@chromium.org>,
-	Christian =?iso-8859-1?Q?G=F6ttsche?= <cgzones@googlemail.com>,
-	"open list:MIPS" <linux-mips@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] mips: fix shmctl/semctl/msgctl syscall for o32
-Message-ID: <Z5s-csyOKMCvH3ct@alpha.franken.de>
-References: <20250106115227.1365643-1-ism.hong@gmail.com>
- <5427df64-658d-4377-89be-963ee7bb68ee@app.fastmail.com>
+	s=arc-20240116; t=1738229263; c=relaxed/simple;
+	bh=gKOaLLBI8U3R5sv9YWNTY+T70jxJcyjJHQyFlHGWRlE=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=Um4Xt4MikYcykLrzJdzPsqTVUCTeY5MPWfNlXeSKMEGk33PC4UZKXPYPBSwC40iqdvKeCzQbt4ZNQNuqHf/JVo42r80Ztt+Yp+KIGm8S4fYjzV8ZPEpariISUSQgaVwLqKxkyZx0fWP2v0b3wTEEvfXfhEgnJ1P6PgoN27zHW4Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=GwOLwzTm; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50U5OAmX012556;
+	Thu, 30 Jan 2025 09:25:35 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=ENEt8TNFIIQna4oUkl6ZCfI1AZ3n0X
+	WJoliPvJndSUA=; b=GwOLwzTmFKIJ+S/G/NDcueBX18kFIQDozO4Emp5FNyAE83
+	LlV8nb0N5Bm6GmF5rJqj+NqKVtw41Fu0SdvorBdgMNdaaBYADm/bLytgCkSMwXuA
+	iwBm6dlH41JVpb/ySdvAi7UUJVaC/ZdRGzHWxxHx7TTRfvejugAD9ULeVB2y7y6P
+	SAsUNb0P96I/u5Laf36dVl5YhZS2/9Dx+cCv0EEOC1hCePh9PimW1Fq0lCgz8Npv
+	BG1V0Ms7SqQOkVthuXoWasQs9yCyIkH3v4NRg30eAfifJVDwlW+u1J8spbIuh7M/
+	fmg4P7PW5a4zD9z6VHTFRUR0ynPP4BvYS/C0wQmQ==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44g38810r5-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 30 Jan 2025 09:25:35 +0000 (GMT)
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 50U9P48j030487;
+	Thu, 30 Jan 2025 09:25:34 GMT
+Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44g38810r1-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 30 Jan 2025 09:25:34 +0000 (GMT)
+Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 50U5FMJt018905;
+	Thu, 30 Jan 2025 09:25:33 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 44dd01n2ct-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 30 Jan 2025 09:25:33 +0000
+Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 50U9PSJL47907140
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Thu, 30 Jan 2025 09:25:28 GMT
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 7F98F200D7;
+	Thu, 30 Jan 2025 08:33:04 +0000 (GMT)
+Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id B9EC7200D6;
+	Thu, 30 Jan 2025 08:33:03 +0000 (GMT)
+Received: from tuxmaker.linux.ibm.com (unknown [9.152.85.9])
+	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Thu, 30 Jan 2025 08:33:03 +0000 (GMT)
+From: Sven Schnelle <svens@linux.ibm.com>
+To: "Dmitry V. Levin" <ldv@strace.io>
+Cc: Oleg Nesterov <oleg@redhat.com>, Alexey Gladkov <legion@kernel.org>,
+        Charlie Jenkins <charlie@rivosinc.com>,
+        Eugene Syromyatnikov
+ <evgsyr@gmail.com>,
+        Mike Frysinger <vapier@gentoo.org>, Renzo Davoli
+ <renzo@cs.unibo.it>,
+        Davide Berardi <berardi.dav@gmail.com>, strace-devel@lists.strace.io,
+        Vineet Gupta <vgupta@kernel.org>,
+        Russell
+ King <linux@armlinux.org.uk>, Will Deacon <will@kernel.org>,
+        Guo Ren
+ <guoren@kernel.org>, Brian Cain <bcain@quicinc.com>,
+        Huacai Chen
+ <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+        Thomas
+ Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen
+ <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>,
+        Stefan
+ Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne
+ <shorne@gmail.com>,
+        "James E.J. Bottomley"
+ <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Michael Ellerman
+ <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe
+ Leroy <christophe.leroy@csgroup.eu>,
+        Naveen N Rao <naveen@kernel.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt
+ <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>, Heiko Carstens
+ <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander
+ Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger
+ <borntraeger@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.sourceforge.jp>,
+        Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz
+ <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andreas Larsson <andreas@gaisler.com>,
+        Richard Weinberger
+ <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Thomas Gleixner
+ <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov
+ <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, Chris Zankel
+ <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann
+ <arnd@arndb.de>,
+        linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+        linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
+        linux-um@lists.infradead.org, linux-arch@vger.kernel.org
+Subject: Re: [PATCH v3 2/6] syscall.h: add syscall_set_arguments() and
+ syscall_set_return_value()
+In-Reply-To: <20250128091626.GB8601@strace.io> (Dmitry V. Levin's message of
+	"Tue, 28 Jan 2025 11:16:26 +0200")
+References: <20250128091626.GB8601@strace.io>
+Date: Thu, 30 Jan 2025 09:33:03 +0100
+Message-ID: <yt9dwmecya4g.fsf@linux.ibm.com>
+User-Agent: Gnus/5.13 (Gnus v5.13)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <5427df64-658d-4377-89be-963ee7bb68ee@app.fastmail.com>
+Content-Type: text/plain
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: _PT8AYkS--OiAY9k3Cx2fgjUXkzP0l7n
+X-Proofpoint-GUID: HYavPV8yQaPduF9AV11zSUaS5ZQTGJu6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-01-30_05,2025-01-29_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ mlxlogscore=851 phishscore=0 clxscore=1011 adultscore=0 priorityscore=1501
+ spamscore=0 impostorscore=0 malwarescore=0 suspectscore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2501300069
 
-On Mon, Jan 27, 2025 at 10:20:49PM +0100, Arnd Bergmann wrote:
-> On Mon, Jan 6, 2025, at 12:52, Ism Hong wrote:
-> > The commit 275f22148e87 ("ipc: rename old-style shmctl/semctl/msgctl
-> > syscalls") switched various architectures to use sys_old_*ctl() with
-> > ipc_parse_version, including mips n32/n64. However, for mips o32, commit
-> > 0d6040d46817 ("arch: add split IPC system calls where needed") added
-> > separate IPC syscalls without properly using the old-style handlers.
-> >
-> > This causes applications using uClibc-ng to fail with -EINVAL when
-> > calling semctl/shmctl/msgctl with IPC_64 flag, as uClibc-ng uses the
-> > syscall numbers from kernel headers to determine whether to use the IPC
-> > multiplexer or split syscalls. In contrast, glibc is unaffected as it
-> > uses a unified feature test macro __ASSUME_DIRECT_SYSVIPC_SYSCALLS
-> > (disabled for mips-o32) to make this decision.
-> >
-> > Fix this by switching the o32 ABI entries for semctl, shmctl and msgctl
-> > to use the old-style handlers, matching the behavior of other
-> > architectures and fixing compatibility with uClibc-ng.
-> >
-> > Signed-off-by: Ism Hong <ism.hong@gmail.com>
-> 
-> I just saw this making it into mainline and had another look, sorry
-> I hadn't caught it earlier.
-> 
-> It was an intentional decision to use the new-style IPC_64
-> semantics on architectures that didn't already have the
-> separate system call.
-> 
-> You may not like that choice, but it's been done this way
-> for seven years now, and as far as I can tell, glibc relies
-> on this behavior.
-> 
-> I think this commit should be reverted, and uclibc be changed
-> to implement the kernel ABI for these syscalls.
+"Dmitry V. Levin" <ldv@strace.io> writes:
 
-I've prepared the revert
+> These functions are going to be needed on all HAVE_ARCH_TRACEHOOK
+> architectures to implement PTRACE_SET_SYSCALL_INFO API.
+>
+> This partially reverts commit 7962c2eddbfe ("arch: remove unused
+> function syscall_set_arguments()") by reusing some of old
+> syscall_set_arguments() implementations.
+>
+> Signed-off-by: Dmitry V. Levin <ldv@strace.io>
+> Tested-by: Charlie Jenkins <charlie@rivosinc.com>
+> Reviewed-by: Charlie Jenkins <charlie@rivosinc.com>
+> ---
+>  arch/arc/include/asm/syscall.h        | 14 +++++++++++
+>  arch/arm/include/asm/syscall.h        | 13 ++++++++++
+>  arch/arm64/include/asm/syscall.h      | 13 ++++++++++
+>  arch/csky/include/asm/syscall.h       | 13 ++++++++++
+>  arch/hexagon/include/asm/syscall.h    | 14 +++++++++++
+>  arch/loongarch/include/asm/syscall.h  |  8 ++++++
+>  arch/mips/include/asm/syscall.h       | 32 ++++++++++++++++++++++++
+>  arch/nios2/include/asm/syscall.h      | 11 ++++++++
+>  arch/openrisc/include/asm/syscall.h   |  7 ++++++
+>  arch/parisc/include/asm/syscall.h     | 12 +++++++++
+>  arch/powerpc/include/asm/syscall.h    | 10 ++++++++
+>  arch/riscv/include/asm/syscall.h      |  9 +++++++
+>  arch/s390/include/asm/syscall.h       | 12 +++++++++
+>  arch/sh/include/asm/syscall_32.h      | 12 +++++++++
+>  arch/sparc/include/asm/syscall.h      | 10 ++++++++
+>  arch/um/include/asm/syscall-generic.h | 14 +++++++++++
+>  arch/x86/include/asm/syscall.h        | 36 +++++++++++++++++++++++++++
+>  arch/xtensa/include/asm/syscall.h     | 11 ++++++++
+>  include/asm-generic/syscall.h         | 16 ++++++++++++
+>  19 files changed, 267 insertions(+)
+>
+> diff --git a/arch/s390/include/asm/syscall.h b/arch/s390/include/asm/syscall.h
+> index 27e3d804b311..b3dd883699e7 100644
+> --- a/arch/s390/include/asm/syscall.h
+> +++ b/arch/s390/include/asm/syscall.h
+> @@ -78,6 +78,18 @@ static inline void syscall_get_arguments(struct task_struct *task,
+>  	args[0] = regs->orig_gpr2 & mask;
+>  }
+>  
+> +static inline void syscall_set_arguments(struct task_struct *task,
+> +					 struct pt_regs *regs,
+> +					 const unsigned long *args)
+> +{
+> +	unsigned int n = 6;
+> +
+> +	while (n-- > 0)
+> +		if (n > 0)
+> +			regs->gprs[2 + n] = args[n];
+> +	regs->orig_gpr2 = args[0];
+> +}
 
-Thomas.
+Could that be changed to something like:
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+for (int n = 1; n < 6; n++)
+        regs->gprs[2 + n] = args[n];
+regs->orig_gpr2 = args[0];
+
+I think this is way easier to parse.
 
