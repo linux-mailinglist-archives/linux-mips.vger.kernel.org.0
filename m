@@ -1,621 +1,379 @@
-Return-Path: <linux-mips+bounces-7650-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7651-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05DE5A23875
-	for <lists+linux-mips@lfdr.de>; Fri, 31 Jan 2025 02:03:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B340A23893
+	for <lists+linux-mips@lfdr.de>; Fri, 31 Jan 2025 02:17:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A621A3A89CA
-	for <lists+linux-mips@lfdr.de>; Fri, 31 Jan 2025 01:03:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 994BB3A4B5E
+	for <lists+linux-mips@lfdr.de>; Fri, 31 Jan 2025 01:17:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3246B28377;
-	Fri, 31 Jan 2025 01:02:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DD4122097;
+	Fri, 31 Jan 2025 01:16:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="N7hw4pZQ"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="0bMziXlQ"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09D4D250F8
-	for <linux-mips@vger.kernel.org>; Fri, 31 Jan 2025 01:02:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47709CA6F
+	for <linux-mips@vger.kernel.org>; Fri, 31 Jan 2025 01:16:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738285354; cv=none; b=Rx+DdS8KFpSyV3mZ2acbBQplpw9wYG7G4r7kC9AMQK4qefKolxf8fiP2cnEjxakBLwK4AJ8T9P4YTeIb76bLu2/6cOCMrlF5u+sVWfEQnJ8Whyp1vsDeKckQzGTphSUPEd7pFZGTI2DryzUmmnBC8AhMf6aR4fTdStJYem8FqWY=
+	t=1738286219; cv=none; b=l7VuHgWVuUpP9MgPGP+RrrKNr1gM5fBI+iVRijZnSyMEBKRCSIcyWm6HXmZSl2I2GNMGXoTxY1ix6xJ5LJyvBSBAgUoQrT9LGWNAS1d5Kf6ZUkeopb/BhAUYk+hzk3IAW29ZLg8ROVTfYMez4UEoVi2Zbxyo6bdPDfsl9l0GMaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738285354; c=relaxed/simple;
-	bh=TSyLfj439DDAYhVTfjp27kz400NPLNm8/u2qemOyDcM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=t8uf83lubnPppk711Qb1EYEqB+fO0GkaGyW2+ugPBnTA6QYv/DVfPj7i8E2jrGgrI5/OnJIw8iOcHQ/vzO3ngB5+dxaNBLjzrU3KmvfAuPwPZloiSgjEdB3TrH1wT/V3aAcL8L8XCIpIKcBvgSvXB7dLWnbzfMadr8PulF2TtyU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=N7hw4pZQ; arc=none smtp.client-ip=202.36.163.20
+	s=arc-20240116; t=1738286219; c=relaxed/simple;
+	bh=wrxo0f+42zmg7xG2GeSefVTi6iMVXPCV6z8QU9Y6tVI=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=AW044bkrnuIwx1cHONIGpGIjXnclgWCSh3KUGDlBXrwK2/6aX7vrtsBH/x+loO3O43JvFg7T84dHwSjriWNKojxUQVB9IkpqiJVj9mIljGHwJv1DuM2BtcGdGQ3g2MnprihMcObUCa/5n3qSxKueCre5Jnr+Ih6l2FY7n0gKL9M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=0bMziXlQ; arc=none smtp.client-ip=202.36.163.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
 Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id AB0E42C0125;
-	Fri, 31 Jan 2025 14:02:30 +1300 (NZDT)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 04C8B2C019A;
+	Fri, 31 Jan 2025 14:16:53 +1300 (NZDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1738285350;
-	bh=BjTHw9MdM9s5UjZintrwqlYxmBfW2wHuQ18gd2IymiQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=N7hw4pZQdK3km4/h1ybtAQh31+r0KyfaFpo2LqlSNM3kIy7twEjbnsJPgarJ69cIZ
-	 70CA3FrUe+LSROpXaEaS/+sUA0U8I5ky+HZtCFwbBQVMW3t9ZirI7NtDiRM7imUoSS
-	 QN8pxRnplUPT2FpmgQGMKIvSBp4rZfTwFUN37KkAsgJnupAq59hw8xws2pC7li5oGl
-	 jFKegjIES5W0nSlEMZbTuI0Ki0l1D3v19bOqDK16pYlhMohZs4vZeLFfZkDeGIPyCe
-	 Nve2+/jb4pVVpqzNMOwHGjlUXjIP32JwtBTqto1fkHvygc6OBBhG3/jXxPeeKANMx5
-	 lgYPgDpxwl1hg==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B679c21260000>; Fri, 31 Jan 2025 14:02:30 +1300
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-	by pat.atlnz.lc (Postfix) with ESMTP id 6451213EE2B;
-	Fri, 31 Jan 2025 14:02:30 +1300 (NZDT)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-	id 6284E2809C0; Fri, 31 Jan 2025 14:02:30 +1300 (NZDT)
-From: Chris Packham <chris.packham@alliedtelesis.co.nz>
-To: lee@kernel.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	tsbogend@alpha.franken.de,
-	hkallweit1@gmail.com,
-	linux@armlinux.org.uk,
-	sander@svanheule.net,
-	markus.stockhausen@gmx.de
-Cc: devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH v5 4/4] net: mdio: Add RTL9300 MDIO driver
-Date: Fri, 31 Jan 2025 14:01:51 +1300
-Message-ID: <20250131010151.2527688-5-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250131010151.2527688-1-chris.packham@alliedtelesis.co.nz>
+	s=mail181024; t=1738286213;
+	bh=wrxo0f+42zmg7xG2GeSefVTi6iMVXPCV6z8QU9Y6tVI=;
+	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+	b=0bMziXlQDndd/mWitl5ISl68iKJTyn79tKGF2Mm58e7oB+sBXvs2uFowe9E6TCx1+
+	 0/dN/CssnqGasnTEzAL/XWNu65AT18SZjSNKlk5po1MOolLEVnGUNoiBnSeKfSNTGx
+	 H/vEUDalJIe4kfMiN+86OxRNUYsIx+E30vQEjBfrLV0iJIgg+FLJSIzW/hNN5S90Iw
+	 W3KXmEvn6Ry81zFMou1DmGkDAekS0J0H4uBcBiLM/hgaHyF38HLovzN5zexDGZqaSs
+	 62gcWu6DxFr7p9AE3TODVsfcIZAIvI7x5VGXyijXIgwJGTOMPfq9RVqFGcdy0ZwTTz
+	 bOFQtq1AODHpw==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B679c24840001>; Fri, 31 Jan 2025 14:16:52 +1300
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8:f753:6de:11c0:a008) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Fri, 31 Jan 2025 14:16:52 +1300
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1544.014; Fri, 31 Jan 2025 14:16:52 +1300
+From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To: "lee@kernel.org" <lee@kernel.org>, "robh@kernel.org" <robh@kernel.org>,
+	"krzk+dt@kernel.org" <krzk+dt@kernel.org>, "conor+dt@kernel.org"
+	<conor+dt@kernel.org>, "andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>,
+	"davem@davemloft.net" <davem@davemloft.net>, "edumazet@google.com"
+	<edumazet@google.com>, "kuba@kernel.org" <kuba@kernel.org>,
+	"pabeni@redhat.com" <pabeni@redhat.com>, "tsbogend@alpha.franken.de"
+	<tsbogend@alpha.franken.de>, "hkallweit1@gmail.com" <hkallweit1@gmail.com>,
+	"linux@armlinux.org.uk" <linux@armlinux.org.uk>, "sander@svanheule.net"
+	<sander@svanheule.net>, "markus.stockhausen@gmx.de"
+	<markus.stockhausen@gmx.de>
+CC: "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH v5 4/4] net: mdio: Add RTL9300 MDIO driver
+Thread-Topic: [PATCH v5 4/4] net: mdio: Add RTL9300 MDIO driver
+Thread-Index: AQHbc3vNmkAyLfLb5E6KNEvNlW8+urMvOrgA
+Date: Fri, 31 Jan 2025 01:16:52 +0000
+Message-ID: <3a501891-3181-40fc-b4a4-6340bfc9250a@alliedtelesis.co.nz>
 References: <20250131010151.2527688-1-chris.packham@alliedtelesis.co.nz>
+ <20250131010151.2527688-5-chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <20250131010151.2527688-5-chris.packham@alliedtelesis.co.nz>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <4CBDE72065E8834DBF1DF0DB44B04077@alliedtelesis.co.nz>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=QNvLRRLL c=1 sm=1 tr=0 ts=679c2126 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=VdSt8ZQiCzkA:10 a=lorn_ZLQiSlGyWFY7CwA:9 a=3ZKOabzyN94A:10
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=QNvLRRLL c=1 sm=1 tr=0 ts=679c2484 a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=VdSt8ZQiCzkA:10 a=JDxAIOVrYFoOeHhHnwQA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
 X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
 
-Add a driver for the MDIO controller on the RTL9300 family of Ethernet
-switches with integrated SoC. There are 4 physical SMI interfaces on the
-RTL9300 however access is done using the switch ports. The driver takes
-the MDIO bus hierarchy from the DTS and uses this to configure the
-switch ports so they are associated with the correct PHY. This mapping
-is also used when dealing with software requests from phylib.
-
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
-
-Notes:
-    Changes in v5:
-    - Reword out of date comment
-    - Use GENMASK/FIELD_PREP where appropriate
-    - Introduce port validity bitmap.
-    - Use more obvious names for PHY_CTRL_READ/WRITE and
-      PHY_CTRL_TYPE_C45/C22
-    Changes in v4:
-    - rename to realtek-rtl9300
-    - s/realtek_/rtl9300_/
-    - add locking to support concurrent access
-    - The dtbinding now represents the MDIO bus hierarchy so we consume t=
-his
-      information and use it to configure the switch port to MDIO bus+add=
-r.
-    Changes in v3:
-    - Fix (another) off-by-one error
-    Changes in v2:
-    - Add clause 22 support
-    - Remove commented out code
-    - Formatting cleanup
-    - Set MAX_PORTS correctly for MDIO interface
-    - Fix off-by-one error in pn check
-
- drivers/net/mdio/Kconfig                |   7 +
- drivers/net/mdio/Makefile               |   1 +
- drivers/net/mdio/mdio-realtek-rtl9300.c | 436 ++++++++++++++++++++++++
- 3 files changed, 444 insertions(+)
- create mode 100644 drivers/net/mdio/mdio-realtek-rtl9300.c
-
-diff --git a/drivers/net/mdio/Kconfig b/drivers/net/mdio/Kconfig
-index 4a7a303be2f7..058fcdaf6c18 100644
---- a/drivers/net/mdio/Kconfig
-+++ b/drivers/net/mdio/Kconfig
-@@ -185,6 +185,13 @@ config MDIO_IPQ8064
- 	  This driver supports the MDIO interface found in the network
- 	  interface units of the IPQ8064 SoC
-=20
-+config MDIO_REALTEK_RTL9300
-+	tristate "Realtek RTL9300 MDIO interface support"
-+	depends on MACH_REALTEK_RTL || COMPILE_TEST
-+	help
-+	  This driver supports the MDIO interface found in the Realtek
-+	  RTL9300 family of Ethernet switches with integrated SoC.
-+
- config MDIO_REGMAP
- 	tristate
- 	help
-diff --git a/drivers/net/mdio/Makefile b/drivers/net/mdio/Makefile
-index 1015f0db4531..c23778e73890 100644
---- a/drivers/net/mdio/Makefile
-+++ b/drivers/net/mdio/Makefile
-@@ -19,6 +19,7 @@ obj-$(CONFIG_MDIO_MOXART)		+=3D mdio-moxart.o
- obj-$(CONFIG_MDIO_MSCC_MIIM)		+=3D mdio-mscc-miim.o
- obj-$(CONFIG_MDIO_MVUSB)		+=3D mdio-mvusb.o
- obj-$(CONFIG_MDIO_OCTEON)		+=3D mdio-octeon.o
-+obj-$(CONFIG_MDIO_REALTEK_RTL9300)	+=3D mdio-realtek-rtl9300.o
- obj-$(CONFIG_MDIO_REGMAP)		+=3D mdio-regmap.o
- obj-$(CONFIG_MDIO_SUN4I)		+=3D mdio-sun4i.o
- obj-$(CONFIG_MDIO_THUNDER)		+=3D mdio-thunder.o
-diff --git a/drivers/net/mdio/mdio-realtek-rtl9300.c b/drivers/net/mdio/m=
-dio-realtek-rtl9300.c
-new file mode 100644
-index 000000000000..d2ee66890caf
---- /dev/null
-+++ b/drivers/net/mdio/mdio-realtek-rtl9300.c
-@@ -0,0 +1,436 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * MDIO controller for RTL9300 switches with integrated SoC.
-+ *
-+ * The MDIO communication is abstracted by the switch. At the software l=
-evel
-+ * communication uses the switch port to address the PHY. We work out th=
-e
-+ * mapping based on the MDIO bus described in device tree and the realte=
-k,port
-+ * property.
-+ */
-+
-+#include <linux/bitfield.h>
-+#include <linux/bitmap.h>
-+#include <linux/bits.h>
-+#include <linux/cleanup.h>
-+#include <linux/find.h>
-+#include <linux/mdio.h>
-+#include <linux/mfd/syscon.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/mutex.h>
-+#include <linux/of_mdio.h>
-+#include <linux/phy.h>
-+#include <linux/platform_device.h>
-+#include <linux/property.h>
-+#include <linux/regmap.h>
-+
-+#define SMI_GLB_CTRL			0xca00
-+#define   GLB_CTRL_INTF_SEL(intf)	BIT(16 + (intf))
-+#define SMI_PORT0_15_POLLING_SEL	0xca08
-+#define SMI_POLL_CTRL			0xca90
-+#define SMI_ACCESS_PHY_CTRL_0		0xcb70
-+#define SMI_ACCESS_PHY_CTRL_1		0xcb74
-+#define   PHY_CTRL_WRITE		BIT(2)
-+#define   PHY_CTRL_READ			0
-+#define   PHY_CTRL_TYPE_C45		BIT(1)
-+#define   PHY_CTRL_TYPE_C22		0
-+#define   PHY_CTRL_CMD			BIT(0)
-+#define   PHY_CTRL_FAIL			BIT(25)
-+#define SMI_ACCESS_PHY_CTRL_2		0xcb78
-+#define SMI_ACCESS_PHY_CTRL_3		0xcb7c
-+#define SMI_PORT0_5_ADDR_CTRL		0xcb80
-+
-+#define MAX_PORTS       28
-+#define MAX_SMI_BUSSES  4
-+#define MAX_SMI_ADDR	0x1f
-+
-+struct rtl9300_mdio_priv {
-+	struct regmap *regmap;
-+	struct mutex lock; /* protect HW access */
-+	DECLARE_BITMAP(valid_ports, MAX_PORTS);
-+	u8 smi_bus[MAX_PORTS];
-+	u8 smi_addr[MAX_PORTS];
-+	bool smi_bus_is_c45[MAX_SMI_BUSSES];
-+	struct mii_bus *bus[MAX_SMI_BUSSES];
-+};
-+
-+struct rtl9300_mdio_chan {
-+	struct rtl9300_mdio_priv *priv;
-+	u8 mdio_bus;
-+};
-+
-+static int rtl9300_mdio_phy_to_port(struct mii_bus *bus, int phy_id)
-+{
-+	struct rtl9300_mdio_chan *chan =3D bus->priv;
-+	struct rtl9300_mdio_priv *priv =3D chan->priv;
-+	int i;
-+
-+	for (i =3D find_first_bit(priv->valid_ports, MAX_PORTS);
-+	     i < MAX_PORTS;
-+	     i =3D find_next_bit(priv->valid_ports, MAX_PORTS, i + 1))
-+		if (priv->smi_bus[i] =3D=3D chan->mdio_bus &&
-+		    priv->smi_addr[i] =3D=3D phy_id)
-+			return i;
-+
-+	return -ENOENT;
-+}
-+
-+static int rtl9300_mdio_wait_ready(struct rtl9300_mdio_priv *priv)
-+{
-+	struct regmap *regmap =3D priv->regmap;
-+	u32 val;
-+
-+	lockdep_assert_held(&priv->lock);
-+
-+	return regmap_read_poll_timeout(regmap, SMI_ACCESS_PHY_CTRL_1,
-+					val, !(val & PHY_CTRL_CMD), 10, 1000);
-+}
-+
-+static int rtl9300_mdio_read_c22(struct mii_bus *bus, int phy_id, int re=
-gnum)
-+{
-+	struct rtl9300_mdio_chan *chan =3D bus->priv;
-+	struct rtl9300_mdio_priv *priv =3D chan->priv;
-+	struct regmap *regmap =3D priv->regmap;
-+	int port;
-+	u32 val;
-+	int err;
-+
-+	guard(mutex)(&priv->lock);
-+
-+	port =3D rtl9300_mdio_phy_to_port(bus, phy_id);
-+	if (port < 0)
-+		return port;
-+
-+	err =3D rtl9300_mdio_wait_ready(priv);
-+	if (err)
-+		return err;
-+
-+	err =3D regmap_write(regmap, SMI_ACCESS_PHY_CTRL_2, port << 16);
-+	if (err)
-+		return err;
-+
-+	val =3D FIELD_PREP(GENMASK(24, 20), regnum) |
-+	      FIELD_PREP(GENMASK(19, 15), 0x1f) |
-+	      FIELD_PREP(GENMASK(14, 3), 0xfff) |
-+	      PHY_CTRL_READ | PHY_CTRL_TYPE_C22 | PHY_CTRL_CMD;
-+	err =3D regmap_write(regmap, SMI_ACCESS_PHY_CTRL_1, val);
-+	if (err)
-+		return err;
-+
-+	err =3D rtl9300_mdio_wait_ready(priv);
-+	if (err)
-+		return err;
-+
-+	err =3D regmap_read(regmap, SMI_ACCESS_PHY_CTRL_2, &val);
-+	if (err)
-+		return err;
-+
-+	return FIELD_GET(GENMASK(15, 0), val);
-+}
-+
-+static int rtl9300_mdio_write_c22(struct mii_bus *bus, int phy_id, int r=
-egnum, u16 value)
-+{
-+	struct rtl9300_mdio_chan *chan =3D bus->priv;
-+	struct rtl9300_mdio_priv *priv =3D chan->priv;
-+	struct regmap *regmap =3D priv->regmap;
-+	int port;
-+	u32 val;
-+	int err;
-+
-+	guard(mutex)(&priv->lock);
-+
-+	port =3D rtl9300_mdio_phy_to_port(bus, phy_id);
-+	if (port < 0)
-+		return port;
-+
-+	err =3D rtl9300_mdio_wait_ready(priv);
-+	if (err)
-+		return err;
-+
-+	err =3D regmap_write(regmap, SMI_ACCESS_PHY_CTRL_0, BIT(port));
-+	if (err)
-+		return err;
-+
-+	err =3D regmap_write(regmap, SMI_ACCESS_PHY_CTRL_2, value << 16);
-+	if (err)
-+		return err;
-+
-+	val =3D FIELD_PREP(GENMASK(24, 20), regnum) |
-+	      FIELD_PREP(GENMASK(19, 15), 0x1f) |
-+	      FIELD_PREP(GENMASK(14, 3), 0xfff) |
-+	      PHY_CTRL_WRITE | PHY_CTRL_TYPE_C22 | PHY_CTRL_CMD;
-+	err =3D regmap_write(regmap, SMI_ACCESS_PHY_CTRL_1, val);
-+	if (err)
-+		return err;
-+
-+	err =3D regmap_read_poll_timeout(regmap, SMI_ACCESS_PHY_CTRL_1,
-+				       val, !(val & PHY_CTRL_CMD), 10, 100);
-+	if (err)
-+		return err;
-+
-+	if (val & PHY_CTRL_FAIL)
-+		return -ENXIO;
-+
-+	return 0;
-+}
-+
-+static int rtl9300_mdio_read_c45(struct mii_bus *bus, int phy_id, int de=
-v_addr, int regnum)
-+{
-+	struct rtl9300_mdio_chan *chan =3D bus->priv;
-+	struct rtl9300_mdio_priv *priv =3D chan->priv;
-+	struct regmap *regmap =3D priv->regmap;
-+	int port;
-+	u32 val;
-+	int err;
-+
-+	guard(mutex)(&priv->lock);
-+
-+	port =3D rtl9300_mdio_phy_to_port(bus, phy_id);
-+	if (port < 0)
-+		return port;
-+
-+	err =3D rtl9300_mdio_wait_ready(priv);
-+	if (err)
-+		return err;
-+
-+	val =3D FIELD_PREP(GENMASK(31, 16), port);
-+	err =3D regmap_write(regmap, SMI_ACCESS_PHY_CTRL_2, val);
-+	if (err)
-+		return err;
-+
-+	val =3D FIELD_PREP(GENMASK(20, 16), dev_addr) |
-+	      FIELD_PREP(GENMASK(15, 0), regnum);
-+	err =3D regmap_write(regmap, SMI_ACCESS_PHY_CTRL_3, val);
-+	if (err)
-+		return err;
-+
-+	err =3D regmap_write(regmap, SMI_ACCESS_PHY_CTRL_1,
-+			   PHY_CTRL_READ | PHY_CTRL_TYPE_C45 | PHY_CTRL_CMD);
-+	if (err)
-+		return err;
-+
-+	err =3D rtl9300_mdio_wait_ready(priv);
-+	if (err)
-+		return err;
-+
-+	err =3D regmap_read(regmap, SMI_ACCESS_PHY_CTRL_2, &val);
-+	if (err)
-+		return err;
-+
-+	return FIELD_GET(GENMASK(15, 0), val);
-+}
-+
-+static int rtl9300_mdio_write_c45(struct mii_bus *bus, int phy_id, int d=
-ev_addr,
-+				  int regnum, u16 value)
-+{
-+	struct rtl9300_mdio_chan *chan =3D bus->priv;
-+	struct rtl9300_mdio_priv *priv =3D chan->priv;
-+	struct regmap *regmap =3D priv->regmap;
-+	int port;
-+	u32 val;
-+	int err;
-+
-+	guard(mutex)(&priv->lock);
-+
-+	port =3D rtl9300_mdio_phy_to_port(bus, phy_id);
-+	if (port < 0)
-+		return port;
-+
-+	err =3D rtl9300_mdio_wait_ready(priv);
-+	if (err)
-+		return err;
-+
-+	err =3D regmap_write(regmap, SMI_ACCESS_PHY_CTRL_0, BIT(port));
-+	if (err)
-+		return err;
-+
-+	val =3D FIELD_PREP(GENMASK(31, 16), value);
-+	err =3D regmap_write(regmap, SMI_ACCESS_PHY_CTRL_2, val);
-+	if (err)
-+		return err;
-+
-+	val =3D FIELD_PREP(GENMASK(20, 16), dev_addr) |
-+	      FIELD_PREP(GENMASK(15, 0), regnum);
-+	err =3D regmap_write(regmap, SMI_ACCESS_PHY_CTRL_3, val);
-+	if (err)
-+		return err;
-+
-+	err =3D regmap_write(regmap, SMI_ACCESS_PHY_CTRL_1,
-+			   PHY_CTRL_TYPE_C45 | PHY_CTRL_WRITE | PHY_CTRL_CMD);
-+	if (err)
-+		return err;
-+
-+	err =3D regmap_read_poll_timeout(regmap, SMI_ACCESS_PHY_CTRL_1,
-+				       val, !(val & PHY_CTRL_CMD), 10, 100);
-+	if (err)
-+		return err;
-+
-+	if (val & PHY_CTRL_FAIL)
-+		return -ENXIO;
-+
-+	return 0;
-+}
-+
-+static int rtl9300_mdiobus_init(struct rtl9300_mdio_priv *priv)
-+{
-+	u32 glb_ctrl_mask =3D 0, glb_ctrl_val =3D 0;
-+	struct regmap *regmap =3D priv->regmap;
-+	u32 port_addr[5] =3D { 0 };
-+	u32 poll_sel[2] =3D { 0 };
-+	int i, err;
-+
-+	/* Associate the port with the SMI interface and PHY */
-+	for (i =3D find_first_bit(priv->valid_ports, MAX_PORTS);
-+	     i < MAX_PORTS;
-+	     i =3D find_next_bit(priv->valid_ports, MAX_PORTS, i + 1)) {
-+		int pos;
-+
-+		pos =3D (i % 6) * 5;
-+		port_addr[i / 6] |=3D (priv->smi_addr[i] & 0x1f) << pos;
-+
-+		pos =3D (i % 16) * 2;
-+		poll_sel[i / 16] |=3D (priv->smi_bus[i] & 0x3) << pos;
-+	}
-+
-+	/* Stop the PPU from interfering */
-+	err =3D regmap_update_bits(regmap, SMI_POLL_CTRL, priv->valid_ports, 0)=
-;
-+	if (err)
-+		return err;
-+
-+	/* Put the interfaces into C45 mode if required */
-+	glb_ctrl_mask =3D GENMASK(19, 16);
-+	for (i =3D 0; i < MAX_SMI_BUSSES; i++)
-+		if (priv->smi_bus_is_c45[i])
-+			glb_ctrl_val |=3D GLB_CTRL_INTF_SEL(i);
-+
-+	err =3D regmap_bulk_write(regmap, SMI_PORT0_5_ADDR_CTRL,
-+				port_addr, 5);
-+	if (err)
-+		return err;
-+
-+	err =3D regmap_bulk_write(regmap, SMI_PORT0_15_POLLING_SEL,
-+				poll_sel, 2);
-+	if (err)
-+		return err;
-+
-+	err =3D regmap_update_bits(regmap, SMI_GLB_CTRL,
-+				 glb_ctrl_mask, glb_ctrl_val);
-+	if (err)
-+		return err;
-+
-+	return 0;
-+}
-+
-+static int rtl9300_mdiobus_probe_one(struct device *dev, struct rtl9300_=
-mdio_priv *priv,
-+				     struct fwnode_handle *node)
-+{
-+	struct rtl9300_mdio_chan *chan;
-+	struct fwnode_handle *child;
-+	struct mii_bus *bus;
-+	u32 mdio_bus;
-+	int err;
-+
-+	err =3D fwnode_property_read_u32(node, "reg", &mdio_bus);
-+	if (err)
-+		return err;
-+
-+	if (mdio_bus >=3D MAX_SMI_BUSSES)
-+		return dev_err_probe(dev, -EINVAL, "illegal smi bus number %d\n", mdio=
-_bus);
-+
-+	fwnode_for_each_child_node(node, child) {
-+		u32 addr;
-+		u32 pn;
-+
-+		err =3D fwnode_property_read_u32(child, "reg", &addr);
-+		if (err)
-+			return err;
-+
-+		err =3D fwnode_property_read_u32(child, "realtek,port", &pn);
-+		if (err)
-+			return err;
-+
-+		if (pn >=3D MAX_PORTS)
-+			return dev_err_probe(dev, -EINVAL, "illegal port number %d\n", pn);
-+
-+		if (fwnode_device_is_compatible(child, "ethernet-phy-ieee802.3-c45"))
-+			priv->smi_bus_is_c45[mdio_bus] =3D true;
-+
-+		bitmap_set(priv->valid_ports, pn, 1);
-+		priv->smi_bus[pn] =3D mdio_bus;
-+		priv->smi_addr[pn] =3D addr;
-+	}
-+
-+	bus =3D devm_mdiobus_alloc_size(dev, sizeof(*chan));
-+	if (!bus)
-+		return -ENOMEM;
-+
-+	bus->name =3D "Reaktek Switch MDIO Bus";
-+	bus->read =3D rtl9300_mdio_read_c22;
-+	bus->write =3D rtl9300_mdio_write_c22;
-+	bus->read_c45 =3D rtl9300_mdio_read_c45;
-+	bus->write_c45 =3D  rtl9300_mdio_write_c45;
-+	bus->parent =3D dev;
-+	chan =3D bus->priv;
-+	chan->mdio_bus =3D mdio_bus;
-+	chan->priv =3D priv;
-+
-+	snprintf(bus->id, MII_BUS_ID_SIZE, "%s-%d", dev_name(dev), mdio_bus);
-+
-+	err =3D devm_of_mdiobus_register(dev, bus, to_of_node(node));
-+	if (err)
-+		return dev_err_probe(dev, err, "cannot register MDIO bus\n");
-+
-+	return 0;
-+}
-+
-+static int rtl9300_mdiobus_probe(struct platform_device *pdev)
-+{
-+	struct device *dev =3D &pdev->dev;
-+	struct rtl9300_mdio_priv *priv;
-+	struct fwnode_handle *child;
-+	int err;
-+
-+	priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	err =3D devm_mutex_init(dev, &priv->lock);
-+	if (err)
-+		return err;
-+
-+	priv->regmap =3D syscon_node_to_regmap(dev->parent->of_node);
-+	if (IS_ERR(priv->regmap))
-+		return PTR_ERR(priv->regmap);
-+
-+	platform_set_drvdata(pdev, priv);
-+
-+	device_for_each_child_node(dev, child) {
-+		err =3D rtl9300_mdiobus_probe_one(dev, priv, child);
-+		if (err)
-+			return err;
-+	}
-+
-+	err =3D rtl9300_mdiobus_init(priv);
-+	if (err)
-+		return dev_err_probe(dev, err, "failed to initialise MDIO bus controll=
-er\n");
-+
-+	return 0;
-+}
-+
-+static const struct of_device_id rtl9300_mdio_ids[] =3D {
-+	{ .compatible =3D "realtek,rtl9301-mdio" },
-+	{}
-+};
-+MODULE_DEVICE_TABLE(of, rtl9300_mdio_ids);
-+
-+static struct platform_driver rtl9300_mdio_driver =3D {
-+	.probe =3D rtl9300_mdiobus_probe,
-+	.driver =3D {
-+		.name =3D "mdio-rtl9300",
-+		.of_match_table =3D rtl9300_mdio_ids,
-+	},
-+};
-+
-+module_platform_driver(rtl9300_mdio_driver);
-+
-+MODULE_DESCRIPTION("RTL9300 MDIO driver");
-+MODULE_LICENSE("GPL");
---=20
-2.48.1
-
+DQpPbiAzMS8wMS8yMDI1IDE0OjAxLCBDaHJpcyBQYWNraGFtIHdyb3RlOg0KPiBBZGQgYSBkcml2
+ZXIgZm9yIHRoZSBNRElPIGNvbnRyb2xsZXIgb24gdGhlIFJUTDkzMDAgZmFtaWx5IG9mIEV0aGVy
+bmV0DQo+IHN3aXRjaGVzIHdpdGggaW50ZWdyYXRlZCBTb0MuIFRoZXJlIGFyZSA0IHBoeXNpY2Fs
+IFNNSSBpbnRlcmZhY2VzIG9uIHRoZQ0KPiBSVEw5MzAwIGhvd2V2ZXIgYWNjZXNzIGlzIGRvbmUg
+dXNpbmcgdGhlIHN3aXRjaCBwb3J0cy4gVGhlIGRyaXZlciB0YWtlcw0KPiB0aGUgTURJTyBidXMg
+aGllcmFyY2h5IGZyb20gdGhlIERUUyBhbmQgdXNlcyB0aGlzIHRvIGNvbmZpZ3VyZSB0aGUNCj4g
+c3dpdGNoIHBvcnRzIHNvIHRoZXkgYXJlIGFzc29jaWF0ZWQgd2l0aCB0aGUgY29ycmVjdCBQSFku
+IFRoaXMgbWFwcGluZw0KPiBpcyBhbHNvIHVzZWQgd2hlbiBkZWFsaW5nIHdpdGggc29mdHdhcmUg
+cmVxdWVzdHMgZnJvbSBwaHlsaWIuDQo+DQo+IFNpZ25lZC1vZmYtYnk6IENocmlzIFBhY2toYW0g
+PGNocmlzLnBhY2toYW1AYWxsaWVkdGVsZXNpcy5jby5uej4NCj4gLS0tDQo+DQo+IE5vdGVzOg0K
+PiAgICAgIENoYW5nZXMgaW4gdjU6DQo+ICAgICAgLSBSZXdvcmQgb3V0IG9mIGRhdGUgY29tbWVu
+dA0KPiAgICAgIC0gVXNlIEdFTk1BU0svRklFTERfUFJFUCB3aGVyZSBhcHByb3ByaWF0ZQ0KPiAg
+ICAgIC0gSW50cm9kdWNlIHBvcnQgdmFsaWRpdHkgYml0bWFwLg0KPiAgICAgIC0gVXNlIG1vcmUg
+b2J2aW91cyBuYW1lcyBmb3IgUEhZX0NUUkxfUkVBRC9XUklURSBhbmQNCj4gICAgICAgIFBIWV9D
+VFJMX1RZUEVfQzQ1L0MyMg0KPiAgICAgIENoYW5nZXMgaW4gdjQ6DQo+ICAgICAgLSByZW5hbWUg
+dG8gcmVhbHRlay1ydGw5MzAwDQo+ICAgICAgLSBzL3JlYWx0ZWtfL3J0bDkzMDBfLw0KPiAgICAg
+IC0gYWRkIGxvY2tpbmcgdG8gc3VwcG9ydCBjb25jdXJyZW50IGFjY2Vzcw0KPiAgICAgIC0gVGhl
+IGR0YmluZGluZyBub3cgcmVwcmVzZW50cyB0aGUgTURJTyBidXMgaGllcmFyY2h5IHNvIHdlIGNv
+bnN1bWUgdGhpcw0KPiAgICAgICAgaW5mb3JtYXRpb24gYW5kIHVzZSBpdCB0byBjb25maWd1cmUg
+dGhlIHN3aXRjaCBwb3J0IHRvIE1ESU8gYnVzK2FkZHIuDQo+ICAgICAgQ2hhbmdlcyBpbiB2MzoN
+Cj4gICAgICAtIEZpeCAoYW5vdGhlcikgb2ZmLWJ5LW9uZSBlcnJvcg0KPiAgICAgIENoYW5nZXMg
+aW4gdjI6DQo+ICAgICAgLSBBZGQgY2xhdXNlIDIyIHN1cHBvcnQNCj4gICAgICAtIFJlbW92ZSBj
+b21tZW50ZWQgb3V0IGNvZGUNCj4gICAgICAtIEZvcm1hdHRpbmcgY2xlYW51cA0KPiAgICAgIC0g
+U2V0IE1BWF9QT1JUUyBjb3JyZWN0bHkgZm9yIE1ESU8gaW50ZXJmYWNlDQo+ICAgICAgLSBGaXgg
+b2ZmLWJ5LW9uZSBlcnJvciBpbiBwbiBjaGVjaw0KPg0KPiAgIGRyaXZlcnMvbmV0L21kaW8vS2Nv
+bmZpZyAgICAgICAgICAgICAgICB8ICAgNyArDQo+ICAgZHJpdmVycy9uZXQvbWRpby9NYWtlZmls
+ZSAgICAgICAgICAgICAgIHwgICAxICsNCj4gICBkcml2ZXJzL25ldC9tZGlvL21kaW8tcmVhbHRl
+ay1ydGw5MzAwLmMgfCA0MzYgKysrKysrKysrKysrKysrKysrKysrKysrDQo+ICAgMyBmaWxlcyBj
+aGFuZ2VkLCA0NDQgaW5zZXJ0aW9ucygrKQ0KPiAgIGNyZWF0ZSBtb2RlIDEwMDY0NCBkcml2ZXJz
+L25ldC9tZGlvL21kaW8tcmVhbHRlay1ydGw5MzAwLmMNCj4NCj4gZGlmZiAtLWdpdCBhL2RyaXZl
+cnMvbmV0L21kaW8vS2NvbmZpZyBiL2RyaXZlcnMvbmV0L21kaW8vS2NvbmZpZw0KPiBpbmRleCA0
+YTdhMzAzYmUyZjcuLjA1OGZjZGFmNmMxOCAxMDA2NDQNCj4gLS0tIGEvZHJpdmVycy9uZXQvbWRp
+by9LY29uZmlnDQo+ICsrKyBiL2RyaXZlcnMvbmV0L21kaW8vS2NvbmZpZw0KPiBAQCAtMTg1LDYg
+KzE4NSwxMyBAQCBjb25maWcgTURJT19JUFE4MDY0DQo+ICAgCSAgVGhpcyBkcml2ZXIgc3VwcG9y
+dHMgdGhlIE1ESU8gaW50ZXJmYWNlIGZvdW5kIGluIHRoZSBuZXR3b3JrDQo+ICAgCSAgaW50ZXJm
+YWNlIHVuaXRzIG9mIHRoZSBJUFE4MDY0IFNvQw0KPiAgIA0KPiArY29uZmlnIE1ESU9fUkVBTFRF
+S19SVEw5MzAwDQo+ICsJdHJpc3RhdGUgIlJlYWx0ZWsgUlRMOTMwMCBNRElPIGludGVyZmFjZSBz
+dXBwb3J0Ig0KPiArCWRlcGVuZHMgb24gTUFDSF9SRUFMVEVLX1JUTCB8fCBDT01QSUxFX1RFU1QN
+Cj4gKwloZWxwDQo+ICsJICBUaGlzIGRyaXZlciBzdXBwb3J0cyB0aGUgTURJTyBpbnRlcmZhY2Ug
+Zm91bmQgaW4gdGhlIFJlYWx0ZWsNCj4gKwkgIFJUTDkzMDAgZmFtaWx5IG9mIEV0aGVybmV0IHN3
+aXRjaGVzIHdpdGggaW50ZWdyYXRlZCBTb0MuDQo+ICsNCj4gICBjb25maWcgTURJT19SRUdNQVAN
+Cj4gICAJdHJpc3RhdGUNCj4gICAJaGVscA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVycy9uZXQvbWRp
+by9NYWtlZmlsZSBiL2RyaXZlcnMvbmV0L21kaW8vTWFrZWZpbGUNCj4gaW5kZXggMTAxNWYwZGI0
+NTMxLi5jMjM3NzhlNzM4OTAgMTAwNjQ0DQo+IC0tLSBhL2RyaXZlcnMvbmV0L21kaW8vTWFrZWZp
+bGUNCj4gKysrIGIvZHJpdmVycy9uZXQvbWRpby9NYWtlZmlsZQ0KPiBAQCAtMTksNiArMTksNyBA
+QCBvYmotJChDT05GSUdfTURJT19NT1hBUlQpCQkrPSBtZGlvLW1veGFydC5vDQo+ICAgb2JqLSQo
+Q09ORklHX01ESU9fTVNDQ19NSUlNKQkJKz0gbWRpby1tc2NjLW1paW0ubw0KPiAgIG9iai0kKENP
+TkZJR19NRElPX01WVVNCKQkJKz0gbWRpby1tdnVzYi5vDQo+ICAgb2JqLSQoQ09ORklHX01ESU9f
+T0NURU9OKQkJKz0gbWRpby1vY3Rlb24ubw0KPiArb2JqLSQoQ09ORklHX01ESU9fUkVBTFRFS19S
+VEw5MzAwKQkrPSBtZGlvLXJlYWx0ZWstcnRsOTMwMC5vDQo+ICAgb2JqLSQoQ09ORklHX01ESU9f
+UkVHTUFQKQkJKz0gbWRpby1yZWdtYXAubw0KPiAgIG9iai0kKENPTkZJR19NRElPX1NVTjRJKQkJ
+Kz0gbWRpby1zdW40aS5vDQo+ICAgb2JqLSQoQ09ORklHX01ESU9fVEhVTkRFUikJCSs9IG1kaW8t
+dGh1bmRlci5vDQo+IGRpZmYgLS1naXQgYS9kcml2ZXJzL25ldC9tZGlvL21kaW8tcmVhbHRlay1y
+dGw5MzAwLmMgYi9kcml2ZXJzL25ldC9tZGlvL21kaW8tcmVhbHRlay1ydGw5MzAwLmMNCj4gbmV3
+IGZpbGUgbW9kZSAxMDA2NDQNCj4gaW5kZXggMDAwMDAwMDAwMDAwLi5kMmVlNjY4OTBjYWYNCj4g
+LS0tIC9kZXYvbnVsbA0KPiArKysgYi9kcml2ZXJzL25ldC9tZGlvL21kaW8tcmVhbHRlay1ydGw5
+MzAwLmMNCj4gQEAgLTAsMCArMSw0MzYgQEANCj4gKy8vIFNQRFgtTGljZW5zZS1JZGVudGlmaWVy
+OiBHUEwtMi4wLW9ubHkNCj4gKy8qDQo+ICsgKiBNRElPIGNvbnRyb2xsZXIgZm9yIFJUTDkzMDAg
+c3dpdGNoZXMgd2l0aCBpbnRlZ3JhdGVkIFNvQy4NCj4gKyAqDQo+ICsgKiBUaGUgTURJTyBjb21t
+dW5pY2F0aW9uIGlzIGFic3RyYWN0ZWQgYnkgdGhlIHN3aXRjaC4gQXQgdGhlIHNvZnR3YXJlIGxl
+dmVsDQo+ICsgKiBjb21tdW5pY2F0aW9uIHVzZXMgdGhlIHN3aXRjaCBwb3J0IHRvIGFkZHJlc3Mg
+dGhlIFBIWS4gV2Ugd29yayBvdXQgdGhlDQo+ICsgKiBtYXBwaW5nIGJhc2VkIG9uIHRoZSBNRElP
+IGJ1cyBkZXNjcmliZWQgaW4gZGV2aWNlIHRyZWUgYW5kIHRoZSByZWFsdGVrLHBvcnQNCj4gKyAq
+IHByb3BlcnR5Lg0KPiArICovDQo+ICsNCj4gKyNpbmNsdWRlIDxsaW51eC9iaXRmaWVsZC5oPg0K
+PiArI2luY2x1ZGUgPGxpbnV4L2JpdG1hcC5oPg0KPiArI2luY2x1ZGUgPGxpbnV4L2JpdHMuaD4N
+Cj4gKyNpbmNsdWRlIDxsaW51eC9jbGVhbnVwLmg+DQo+ICsjaW5jbHVkZSA8bGludXgvZmluZC5o
+Pg0KPiArI2luY2x1ZGUgPGxpbnV4L21kaW8uaD4NCj4gKyNpbmNsdWRlIDxsaW51eC9tZmQvc3lz
+Y29uLmg+DQo+ICsjaW5jbHVkZSA8bGludXgvbW9kX2RldmljZXRhYmxlLmg+DQo+ICsjaW5jbHVk
+ZSA8bGludXgvbXV0ZXguaD4NCj4gKyNpbmNsdWRlIDxsaW51eC9vZl9tZGlvLmg+DQo+ICsjaW5j
+bHVkZSA8bGludXgvcGh5Lmg+DQo+ICsjaW5jbHVkZSA8bGludXgvcGxhdGZvcm1fZGV2aWNlLmg+
+DQo+ICsjaW5jbHVkZSA8bGludXgvcHJvcGVydHkuaD4NCj4gKyNpbmNsdWRlIDxsaW51eC9yZWdt
+YXAuaD4NCj4gKw0KPiArI2RlZmluZSBTTUlfR0xCX0NUUkwJCQkweGNhMDANCj4gKyNkZWZpbmUg
+ICBHTEJfQ1RSTF9JTlRGX1NFTChpbnRmKQlCSVQoMTYgKyAoaW50ZikpDQo+ICsjZGVmaW5lIFNN
+SV9QT1JUMF8xNV9QT0xMSU5HX1NFTAkweGNhMDgNCj4gKyNkZWZpbmUgU01JX1BPTExfQ1RSTAkJ
+CTB4Y2E5MA0KPiArI2RlZmluZSBTTUlfQUNDRVNTX1BIWV9DVFJMXzAJCTB4Y2I3MA0KPiArI2Rl
+ZmluZSBTTUlfQUNDRVNTX1BIWV9DVFJMXzEJCTB4Y2I3NA0KPiArI2RlZmluZSAgIFBIWV9DVFJM
+X1dSSVRFCQlCSVQoMikNCj4gKyNkZWZpbmUgICBQSFlfQ1RSTF9SRUFECQkJMA0KPiArI2RlZmlu
+ZSAgIFBIWV9DVFJMX1RZUEVfQzQ1CQlCSVQoMSkNCj4gKyNkZWZpbmUgICBQSFlfQ1RSTF9UWVBF
+X0MyMgkJMA0KPiArI2RlZmluZSAgIFBIWV9DVFJMX0NNRAkJCUJJVCgwKQ0KPiArI2RlZmluZSAg
+IFBIWV9DVFJMX0ZBSUwJCQlCSVQoMjUpDQo+ICsjZGVmaW5lIFNNSV9BQ0NFU1NfUEhZX0NUUkxf
+MgkJMHhjYjc4DQo+ICsjZGVmaW5lIFNNSV9BQ0NFU1NfUEhZX0NUUkxfMwkJMHhjYjdjDQo+ICsj
+ZGVmaW5lIFNNSV9QT1JUMF81X0FERFJfQ1RSTAkJMHhjYjgwDQo+ICsNCj4gKyNkZWZpbmUgTUFY
+X1BPUlRTICAgICAgIDI4DQo+ICsjZGVmaW5lIE1BWF9TTUlfQlVTU0VTICA0DQo+ICsjZGVmaW5l
+IE1BWF9TTUlfQUREUgkweDFmDQo+ICsNCj4gK3N0cnVjdCBydGw5MzAwX21kaW9fcHJpdiB7DQo+
+ICsJc3RydWN0IHJlZ21hcCAqcmVnbWFwOw0KPiArCXN0cnVjdCBtdXRleCBsb2NrOyAvKiBwcm90
+ZWN0IEhXIGFjY2VzcyAqLw0KPiArCURFQ0xBUkVfQklUTUFQKHZhbGlkX3BvcnRzLCBNQVhfUE9S
+VFMpOw0KPiArCXU4IHNtaV9idXNbTUFYX1BPUlRTXTsNCj4gKwl1OCBzbWlfYWRkcltNQVhfUE9S
+VFNdOw0KPiArCWJvb2wgc21pX2J1c19pc19jNDVbTUFYX1NNSV9CVVNTRVNdOw0KPiArCXN0cnVj
+dCBtaWlfYnVzICpidXNbTUFYX1NNSV9CVVNTRVNdOw0KPiArfTsNCj4gKw0KPiArc3RydWN0IHJ0
+bDkzMDBfbWRpb19jaGFuIHsNCj4gKwlzdHJ1Y3QgcnRsOTMwMF9tZGlvX3ByaXYgKnByaXY7DQo+
+ICsJdTggbWRpb19idXM7DQo+ICt9Ow0KPiArDQo+ICtzdGF0aWMgaW50IHJ0bDkzMDBfbWRpb19w
+aHlfdG9fcG9ydChzdHJ1Y3QgbWlpX2J1cyAqYnVzLCBpbnQgcGh5X2lkKQ0KPiArew0KPiArCXN0
+cnVjdCBydGw5MzAwX21kaW9fY2hhbiAqY2hhbiA9IGJ1cy0+cHJpdjsNCj4gKwlzdHJ1Y3QgcnRs
+OTMwMF9tZGlvX3ByaXYgKnByaXYgPSBjaGFuLT5wcml2Ow0KPiArCWludCBpOw0KPiArDQo+ICsJ
+Zm9yIChpID0gZmluZF9maXJzdF9iaXQocHJpdi0+dmFsaWRfcG9ydHMsIE1BWF9QT1JUUyk7DQo+
+ICsJICAgICBpIDwgTUFYX1BPUlRTOw0KPiArCSAgICAgaSA9IGZpbmRfbmV4dF9iaXQocHJpdi0+
+dmFsaWRfcG9ydHMsIE1BWF9QT1JUUywgaSArIDEpKQ0KPiArCQlpZiAocHJpdi0+c21pX2J1c1tp
+XSA9PSBjaGFuLT5tZGlvX2J1cyAmJg0KPiArCQkgICAgcHJpdi0+c21pX2FkZHJbaV0gPT0gcGh5
+X2lkKQ0KPiArCQkJcmV0dXJuIGk7DQo+ICsNCj4gKwlyZXR1cm4gLUVOT0VOVDsNCj4gK30NCj4g
+Kw0KPiArc3RhdGljIGludCBydGw5MzAwX21kaW9fd2FpdF9yZWFkeShzdHJ1Y3QgcnRsOTMwMF9t
+ZGlvX3ByaXYgKnByaXYpDQo+ICt7DQo+ICsJc3RydWN0IHJlZ21hcCAqcmVnbWFwID0gcHJpdi0+
+cmVnbWFwOw0KPiArCXUzMiB2YWw7DQo+ICsNCj4gKwlsb2NrZGVwX2Fzc2VydF9oZWxkKCZwcml2
+LT5sb2NrKTsNCj4gKw0KPiArCXJldHVybiByZWdtYXBfcmVhZF9wb2xsX3RpbWVvdXQocmVnbWFw
+LCBTTUlfQUNDRVNTX1BIWV9DVFJMXzEsDQo+ICsJCQkJCXZhbCwgISh2YWwgJiBQSFlfQ1RSTF9D
+TUQpLCAxMCwgMTAwMCk7DQo+ICt9DQo+ICsNCj4gK3N0YXRpYyBpbnQgcnRsOTMwMF9tZGlvX3Jl
+YWRfYzIyKHN0cnVjdCBtaWlfYnVzICpidXMsIGludCBwaHlfaWQsIGludCByZWdudW0pDQo+ICt7
+DQo+ICsJc3RydWN0IHJ0bDkzMDBfbWRpb19jaGFuICpjaGFuID0gYnVzLT5wcml2Ow0KPiArCXN0
+cnVjdCBydGw5MzAwX21kaW9fcHJpdiAqcHJpdiA9IGNoYW4tPnByaXY7DQo+ICsJc3RydWN0IHJl
+Z21hcCAqcmVnbWFwID0gcHJpdi0+cmVnbWFwOw0KPiArCWludCBwb3J0Ow0KPiArCXUzMiB2YWw7
+DQo+ICsJaW50IGVycjsNCj4gKw0KPiArCWd1YXJkKG11dGV4KSgmcHJpdi0+bG9jayk7DQo+ICsN
+Cj4gKwlwb3J0ID0gcnRsOTMwMF9tZGlvX3BoeV90b19wb3J0KGJ1cywgcGh5X2lkKTsNCj4gKwlp
+ZiAocG9ydCA8IDApDQo+ICsJCXJldHVybiBwb3J0Ow0KPiArDQo+ICsJZXJyID0gcnRsOTMwMF9t
+ZGlvX3dhaXRfcmVhZHkocHJpdik7DQo+ICsJaWYgKGVycikNCj4gKwkJcmV0dXJuIGVycjsNCj4g
+Kw0KPiArCWVyciA9IHJlZ21hcF93cml0ZShyZWdtYXAsIFNNSV9BQ0NFU1NfUEhZX0NUUkxfMiwg
+cG9ydCA8PCAxNik7DQo+ICsJaWYgKGVycikNCj4gKwkJcmV0dXJuIGVycjsNCj4gKw0KPiArCXZh
+bCA9IEZJRUxEX1BSRVAoR0VOTUFTSygyNCwgMjApLCByZWdudW0pIHwNCj4gKwkgICAgICBGSUVM
+RF9QUkVQKEdFTk1BU0soMTksIDE1KSwgMHgxZikgfA0KPiArCSAgICAgIEZJRUxEX1BSRVAoR0VO
+TUFTSygxNCwgMyksIDB4ZmZmKSB8DQo+ICsJICAgICAgUEhZX0NUUkxfUkVBRCB8IFBIWV9DVFJM
+X1RZUEVfQzIyIHwgUEhZX0NUUkxfQ01EOw0KPiArCWVyciA9IHJlZ21hcF93cml0ZShyZWdtYXAs
+IFNNSV9BQ0NFU1NfUEhZX0NUUkxfMSwgdmFsKTsNCj4gKwlpZiAoZXJyKQ0KPiArCQlyZXR1cm4g
+ZXJyOw0KPiArDQo+ICsJZXJyID0gcnRsOTMwMF9tZGlvX3dhaXRfcmVhZHkocHJpdik7DQo+ICsJ
+aWYgKGVycikNCj4gKwkJcmV0dXJuIGVycjsNCj4gKw0KPiArCWVyciA9IHJlZ21hcF9yZWFkKHJl
+Z21hcCwgU01JX0FDQ0VTU19QSFlfQ1RSTF8yLCAmdmFsKTsNCj4gKwlpZiAoZXJyKQ0KPiArCQly
+ZXR1cm4gZXJyOw0KPiArDQo+ICsJcmV0dXJuIEZJRUxEX0dFVChHRU5NQVNLKDE1LCAwKSwgdmFs
+KTsNCj4gK30NCj4gKw0KPiArc3RhdGljIGludCBydGw5MzAwX21kaW9fd3JpdGVfYzIyKHN0cnVj
+dCBtaWlfYnVzICpidXMsIGludCBwaHlfaWQsIGludCByZWdudW0sIHUxNiB2YWx1ZSkNCj4gK3sN
+Cj4gKwlzdHJ1Y3QgcnRsOTMwMF9tZGlvX2NoYW4gKmNoYW4gPSBidXMtPnByaXY7DQo+ICsJc3Ry
+dWN0IHJ0bDkzMDBfbWRpb19wcml2ICpwcml2ID0gY2hhbi0+cHJpdjsNCj4gKwlzdHJ1Y3QgcmVn
+bWFwICpyZWdtYXAgPSBwcml2LT5yZWdtYXA7DQo+ICsJaW50IHBvcnQ7DQo+ICsJdTMyIHZhbDsN
+Cj4gKwlpbnQgZXJyOw0KPiArDQo+ICsJZ3VhcmQobXV0ZXgpKCZwcml2LT5sb2NrKTsNCj4gKw0K
+PiArCXBvcnQgPSBydGw5MzAwX21kaW9fcGh5X3RvX3BvcnQoYnVzLCBwaHlfaWQpOw0KPiArCWlm
+IChwb3J0IDwgMCkNCj4gKwkJcmV0dXJuIHBvcnQ7DQo+ICsNCj4gKwllcnIgPSBydGw5MzAwX21k
+aW9fd2FpdF9yZWFkeShwcml2KTsNCj4gKwlpZiAoZXJyKQ0KPiArCQlyZXR1cm4gZXJyOw0KPiAr
+DQo+ICsJZXJyID0gcmVnbWFwX3dyaXRlKHJlZ21hcCwgU01JX0FDQ0VTU19QSFlfQ1RSTF8wLCBC
+SVQocG9ydCkpOw0KPiArCWlmIChlcnIpDQo+ICsJCXJldHVybiBlcnI7DQo+ICsNCj4gKwllcnIg
+PSByZWdtYXBfd3JpdGUocmVnbWFwLCBTTUlfQUNDRVNTX1BIWV9DVFJMXzIsIHZhbHVlIDw8IDE2
+KTsNCj4gKwlpZiAoZXJyKQ0KPiArCQlyZXR1cm4gZXJyOw0KPiArDQo+ICsJdmFsID0gRklFTERf
+UFJFUChHRU5NQVNLKDI0LCAyMCksIHJlZ251bSkgfA0KPiArCSAgICAgIEZJRUxEX1BSRVAoR0VO
+TUFTSygxOSwgMTUpLCAweDFmKSB8DQo+ICsJICAgICAgRklFTERfUFJFUChHRU5NQVNLKDE0LCAz
+KSwgMHhmZmYpIHwNCj4gKwkgICAgICBQSFlfQ1RSTF9XUklURSB8IFBIWV9DVFJMX1RZUEVfQzIy
+IHwgUEhZX0NUUkxfQ01EOw0KPiArCWVyciA9IHJlZ21hcF93cml0ZShyZWdtYXAsIFNNSV9BQ0NF
+U1NfUEhZX0NUUkxfMSwgdmFsKTsNCj4gKwlpZiAoZXJyKQ0KPiArCQlyZXR1cm4gZXJyOw0KPiAr
+DQo+ICsJZXJyID0gcmVnbWFwX3JlYWRfcG9sbF90aW1lb3V0KHJlZ21hcCwgU01JX0FDQ0VTU19Q
+SFlfQ1RSTF8xLA0KPiArCQkJCSAgICAgICB2YWwsICEodmFsICYgUEhZX0NUUkxfQ01EKSwgMTAs
+IDEwMCk7DQo+ICsJaWYgKGVycikNCj4gKwkJcmV0dXJuIGVycjsNCj4gKw0KPiArCWlmICh2YWwg
+JiBQSFlfQ1RSTF9GQUlMKQ0KPiArCQlyZXR1cm4gLUVOWElPOw0KPiArDQo+ICsJcmV0dXJuIDA7
+DQo+ICt9DQo+ICsNCj4gK3N0YXRpYyBpbnQgcnRsOTMwMF9tZGlvX3JlYWRfYzQ1KHN0cnVjdCBt
+aWlfYnVzICpidXMsIGludCBwaHlfaWQsIGludCBkZXZfYWRkciwgaW50IHJlZ251bSkNCj4gK3sN
+Cj4gKwlzdHJ1Y3QgcnRsOTMwMF9tZGlvX2NoYW4gKmNoYW4gPSBidXMtPnByaXY7DQo+ICsJc3Ry
+dWN0IHJ0bDkzMDBfbWRpb19wcml2ICpwcml2ID0gY2hhbi0+cHJpdjsNCj4gKwlzdHJ1Y3QgcmVn
+bWFwICpyZWdtYXAgPSBwcml2LT5yZWdtYXA7DQo+ICsJaW50IHBvcnQ7DQo+ICsJdTMyIHZhbDsN
+Cj4gKwlpbnQgZXJyOw0KPiArDQo+ICsJZ3VhcmQobXV0ZXgpKCZwcml2LT5sb2NrKTsNCj4gKw0K
+PiArCXBvcnQgPSBydGw5MzAwX21kaW9fcGh5X3RvX3BvcnQoYnVzLCBwaHlfaWQpOw0KPiArCWlm
+IChwb3J0IDwgMCkNCj4gKwkJcmV0dXJuIHBvcnQ7DQo+ICsNCj4gKwllcnIgPSBydGw5MzAwX21k
+aW9fd2FpdF9yZWFkeShwcml2KTsNCj4gKwlpZiAoZXJyKQ0KPiArCQlyZXR1cm4gZXJyOw0KPiAr
+DQo+ICsJdmFsID0gRklFTERfUFJFUChHRU5NQVNLKDMxLCAxNiksIHBvcnQpOw0KPiArCWVyciA9
+IHJlZ21hcF93cml0ZShyZWdtYXAsIFNNSV9BQ0NFU1NfUEhZX0NUUkxfMiwgdmFsKTsNCj4gKwlp
+ZiAoZXJyKQ0KPiArCQlyZXR1cm4gZXJyOw0KPiArDQo+ICsJdmFsID0gRklFTERfUFJFUChHRU5N
+QVNLKDIwLCAxNiksIGRldl9hZGRyKSB8DQo+ICsJICAgICAgRklFTERfUFJFUChHRU5NQVNLKDE1
+LCAwKSwgcmVnbnVtKTsNCj4gKwllcnIgPSByZWdtYXBfd3JpdGUocmVnbWFwLCBTTUlfQUNDRVNT
+X1BIWV9DVFJMXzMsIHZhbCk7DQo+ICsJaWYgKGVycikNCj4gKwkJcmV0dXJuIGVycjsNCj4gKw0K
+PiArCWVyciA9IHJlZ21hcF93cml0ZShyZWdtYXAsIFNNSV9BQ0NFU1NfUEhZX0NUUkxfMSwNCj4g
+KwkJCSAgIFBIWV9DVFJMX1JFQUQgfCBQSFlfQ1RSTF9UWVBFX0M0NSB8IFBIWV9DVFJMX0NNRCk7
+DQo+ICsJaWYgKGVycikNCj4gKwkJcmV0dXJuIGVycjsNCj4gKw0KPiArCWVyciA9IHJ0bDkzMDBf
+bWRpb193YWl0X3JlYWR5KHByaXYpOw0KPiArCWlmIChlcnIpDQo+ICsJCXJldHVybiBlcnI7DQo+
+ICsNCj4gKwllcnIgPSByZWdtYXBfcmVhZChyZWdtYXAsIFNNSV9BQ0NFU1NfUEhZX0NUUkxfMiwg
+JnZhbCk7DQo+ICsJaWYgKGVycikNCj4gKwkJcmV0dXJuIGVycjsNCj4gKw0KPiArCXJldHVybiBG
+SUVMRF9HRVQoR0VOTUFTSygxNSwgMCksIHZhbCk7DQo+ICt9DQo+ICsNCj4gK3N0YXRpYyBpbnQg
+cnRsOTMwMF9tZGlvX3dyaXRlX2M0NShzdHJ1Y3QgbWlpX2J1cyAqYnVzLCBpbnQgcGh5X2lkLCBp
+bnQgZGV2X2FkZHIsDQo+ICsJCQkJICBpbnQgcmVnbnVtLCB1MTYgdmFsdWUpDQo+ICt7DQo+ICsJ
+c3RydWN0IHJ0bDkzMDBfbWRpb19jaGFuICpjaGFuID0gYnVzLT5wcml2Ow0KPiArCXN0cnVjdCBy
+dGw5MzAwX21kaW9fcHJpdiAqcHJpdiA9IGNoYW4tPnByaXY7DQo+ICsJc3RydWN0IHJlZ21hcCAq
+cmVnbWFwID0gcHJpdi0+cmVnbWFwOw0KPiArCWludCBwb3J0Ow0KPiArCXUzMiB2YWw7DQo+ICsJ
+aW50IGVycjsNCj4gKw0KPiArCWd1YXJkKG11dGV4KSgmcHJpdi0+bG9jayk7DQo+ICsNCj4gKwlw
+b3J0ID0gcnRsOTMwMF9tZGlvX3BoeV90b19wb3J0KGJ1cywgcGh5X2lkKTsNCj4gKwlpZiAocG9y
+dCA8IDApDQo+ICsJCXJldHVybiBwb3J0Ow0KPiArDQo+ICsJZXJyID0gcnRsOTMwMF9tZGlvX3dh
+aXRfcmVhZHkocHJpdik7DQo+ICsJaWYgKGVycikNCj4gKwkJcmV0dXJuIGVycjsNCj4gKw0KPiAr
+CWVyciA9IHJlZ21hcF93cml0ZShyZWdtYXAsIFNNSV9BQ0NFU1NfUEhZX0NUUkxfMCwgQklUKHBv
+cnQpKTsNCj4gKwlpZiAoZXJyKQ0KPiArCQlyZXR1cm4gZXJyOw0KPiArDQo+ICsJdmFsID0gRklF
+TERfUFJFUChHRU5NQVNLKDMxLCAxNiksIHZhbHVlKTsNCj4gKwllcnIgPSByZWdtYXBfd3JpdGUo
+cmVnbWFwLCBTTUlfQUNDRVNTX1BIWV9DVFJMXzIsIHZhbCk7DQo+ICsJaWYgKGVycikNCj4gKwkJ
+cmV0dXJuIGVycjsNCj4gKw0KPiArCXZhbCA9IEZJRUxEX1BSRVAoR0VOTUFTSygyMCwgMTYpLCBk
+ZXZfYWRkcikgfA0KPiArCSAgICAgIEZJRUxEX1BSRVAoR0VOTUFTSygxNSwgMCksIHJlZ251bSk7
+DQo+ICsJZXJyID0gcmVnbWFwX3dyaXRlKHJlZ21hcCwgU01JX0FDQ0VTU19QSFlfQ1RSTF8zLCB2
+YWwpOw0KPiArCWlmIChlcnIpDQo+ICsJCXJldHVybiBlcnI7DQo+ICsNCj4gKwllcnIgPSByZWdt
+YXBfd3JpdGUocmVnbWFwLCBTTUlfQUNDRVNTX1BIWV9DVFJMXzEsDQo+ICsJCQkgICBQSFlfQ1RS
+TF9UWVBFX0M0NSB8IFBIWV9DVFJMX1dSSVRFIHwgUEhZX0NUUkxfQ01EKTsNCj4gKwlpZiAoZXJy
+KQ0KPiArCQlyZXR1cm4gZXJyOw0KPiArDQo+ICsJZXJyID0gcmVnbWFwX3JlYWRfcG9sbF90aW1l
+b3V0KHJlZ21hcCwgU01JX0FDQ0VTU19QSFlfQ1RSTF8xLA0KPiArCQkJCSAgICAgICB2YWwsICEo
+dmFsICYgUEhZX0NUUkxfQ01EKSwgMTAsIDEwMCk7DQo+ICsJaWYgKGVycikNCj4gKwkJcmV0dXJu
+IGVycjsNCj4gKw0KPiArCWlmICh2YWwgJiBQSFlfQ1RSTF9GQUlMKQ0KPiArCQlyZXR1cm4gLUVO
+WElPOw0KPiArDQo+ICsJcmV0dXJuIDA7DQo+ICt9DQo+ICsNCj4gK3N0YXRpYyBpbnQgcnRsOTMw
+MF9tZGlvYnVzX2luaXQoc3RydWN0IHJ0bDkzMDBfbWRpb19wcml2ICpwcml2KQ0KPiArew0KPiAr
+CXUzMiBnbGJfY3RybF9tYXNrID0gMCwgZ2xiX2N0cmxfdmFsID0gMDsNCj4gKwlzdHJ1Y3QgcmVn
+bWFwICpyZWdtYXAgPSBwcml2LT5yZWdtYXA7DQo+ICsJdTMyIHBvcnRfYWRkcls1XSA9IHsgMCB9
+Ow0KPiArCXUzMiBwb2xsX3NlbFsyXSA9IHsgMCB9Ow0KPiArCWludCBpLCBlcnI7DQo+ICsNCj4g
+KwkvKiBBc3NvY2lhdGUgdGhlIHBvcnQgd2l0aCB0aGUgU01JIGludGVyZmFjZSBhbmQgUEhZICov
+DQo+ICsJZm9yIChpID0gZmluZF9maXJzdF9iaXQocHJpdi0+dmFsaWRfcG9ydHMsIE1BWF9QT1JU
+Uyk7DQo+ICsJICAgICBpIDwgTUFYX1BPUlRTOw0KPiArCSAgICAgaSA9IGZpbmRfbmV4dF9iaXQo
+cHJpdi0+dmFsaWRfcG9ydHMsIE1BWF9QT1JUUywgaSArIDEpKSB7DQo+ICsJCWludCBwb3M7DQo+
+ICsNCj4gKwkJcG9zID0gKGkgJSA2KSAqIDU7DQo+ICsJCXBvcnRfYWRkcltpIC8gNl0gfD0gKHBy
+aXYtPnNtaV9hZGRyW2ldICYgMHgxZikgPDwgcG9zOw0KPiArDQo+ICsJCXBvcyA9IChpICUgMTYp
+ICogMjsNCj4gKwkJcG9sbF9zZWxbaSAvIDE2XSB8PSAocHJpdi0+c21pX2J1c1tpXSAmIDB4Mykg
+PDwgcG9zOw0KPiArCX0NCj4gKw0KPiArCS8qIFN0b3AgdGhlIFBQVSBmcm9tIGludGVyZmVyaW5n
+ICovDQo+ICsJZXJyID0gcmVnbWFwX3VwZGF0ZV9iaXRzKHJlZ21hcCwgU01JX1BPTExfQ1RSTCwg
+cHJpdi0+dmFsaWRfcG9ydHMsIDApOw0KPiArCWlmIChlcnIpDQo+ICsJCXJldHVybiBlcnI7DQpk
+cml2ZXJzL25ldC9tZGlvL21kaW8tcmVhbHRlay1ydGw5MzAwLmM6Mjk1OjYxOiB3YXJuaW5nOiBw
+YXNzaW5nIA0KYXJndW1lbnQgMyBvZiAncmVnbWFwX3VwZGF0ZV9iaXRzJyBtYWtlcyBpbnRlZ2Vy
+IGZyb20gcG9pbnRlciB3aXRob3V0IGEgDQpjYXN0IFstV2ludC1jb252ZXJzaW9uXQ0KIMKgIDI5
+NSB8wqDCoMKgwqDCoMKgwqDCoCBlcnIgPSByZWdtYXBfdXBkYXRlX2JpdHMocmVnbWFwLCBTTUlf
+UE9MTF9DVFJMLCANCnByaXYtPnZhbGlkX3BvcnRzLCAwKTsNCiDCoMKgwqDCoMKgIHwgfn5+fl5+
+fn5+fn5+fn5+fn4NCiDCoMKgwqDCoMKgIHwgfA0KIMKgwqDCoMKgwqAgfCBsb25nIHVuc2lnbmVk
+IGludCAqDQoNCmRhcm4gbm90IHN1cmUgaG93IEkgbWlzc2VkIHRoYXQuDQoNCj4gKw0KPiArCS8q
+IFB1dCB0aGUgaW50ZXJmYWNlcyBpbnRvIEM0NSBtb2RlIGlmIHJlcXVpcmVkICovDQo+ICsJZ2xi
+X2N0cmxfbWFzayA9IEdFTk1BU0soMTksIDE2KTsNCj4gKwlmb3IgKGkgPSAwOyBpIDwgTUFYX1NN
+SV9CVVNTRVM7IGkrKykNCj4gKwkJaWYgKHByaXYtPnNtaV9idXNfaXNfYzQ1W2ldKQ0KPiArCQkJ
+Z2xiX2N0cmxfdmFsIHw9IEdMQl9DVFJMX0lOVEZfU0VMKGkpOw0KPiArDQo+ICsJZXJyID0gcmVn
+bWFwX2J1bGtfd3JpdGUocmVnbWFwLCBTTUlfUE9SVDBfNV9BRERSX0NUUkwsDQo+ICsJCQkJcG9y
+dF9hZGRyLCA1KTsNCj4gKwlpZiAoZXJyKQ0KPiArCQlyZXR1cm4gZXJyOw0KPiArDQo+ICsJZXJy
+ID0gcmVnbWFwX2J1bGtfd3JpdGUocmVnbWFwLCBTTUlfUE9SVDBfMTVfUE9MTElOR19TRUwsDQo+
+ICsJCQkJcG9sbF9zZWwsIDIpOw0KPiArCWlmIChlcnIpDQo+ICsJCXJldHVybiBlcnI7DQo+ICsN
+Cj4gKwllcnIgPSByZWdtYXBfdXBkYXRlX2JpdHMocmVnbWFwLCBTTUlfR0xCX0NUUkwsDQo+ICsJ
+CQkJIGdsYl9jdHJsX21hc2ssIGdsYl9jdHJsX3ZhbCk7DQo+ICsJaWYgKGVycikNCj4gKwkJcmV0
+dXJuIGVycjsNCj4gKw0KPiArCXJldHVybiAwOw0KPiArfQ0KPiArDQo+ICtzdGF0aWMgaW50IHJ0
+bDkzMDBfbWRpb2J1c19wcm9iZV9vbmUoc3RydWN0IGRldmljZSAqZGV2LCBzdHJ1Y3QgcnRsOTMw
+MF9tZGlvX3ByaXYgKnByaXYsDQo+ICsJCQkJICAgICBzdHJ1Y3QgZndub2RlX2hhbmRsZSAqbm9k
+ZSkNCj4gK3sNCj4gKwlzdHJ1Y3QgcnRsOTMwMF9tZGlvX2NoYW4gKmNoYW47DQo+ICsJc3RydWN0
+IGZ3bm9kZV9oYW5kbGUgKmNoaWxkOw0KPiArCXN0cnVjdCBtaWlfYnVzICpidXM7DQo+ICsJdTMy
+IG1kaW9fYnVzOw0KPiArCWludCBlcnI7DQo+ICsNCj4gKwllcnIgPSBmd25vZGVfcHJvcGVydHlf
+cmVhZF91MzIobm9kZSwgInJlZyIsICZtZGlvX2J1cyk7DQo+ICsJaWYgKGVycikNCj4gKwkJcmV0
+dXJuIGVycjsNCj4gKw0KPiArCWlmIChtZGlvX2J1cyA+PSBNQVhfU01JX0JVU1NFUykNCj4gKwkJ
+cmV0dXJuIGRldl9lcnJfcHJvYmUoZGV2LCAtRUlOVkFMLCAiaWxsZWdhbCBzbWkgYnVzIG51bWJl
+ciAlZFxuIiwgbWRpb19idXMpOw0KPiArDQo+ICsJZndub2RlX2Zvcl9lYWNoX2NoaWxkX25vZGUo
+bm9kZSwgY2hpbGQpIHsNCj4gKwkJdTMyIGFkZHI7DQo+ICsJCXUzMiBwbjsNCj4gKw0KPiArCQll
+cnIgPSBmd25vZGVfcHJvcGVydHlfcmVhZF91MzIoY2hpbGQsICJyZWciLCAmYWRkcik7DQo+ICsJ
+CWlmIChlcnIpDQo+ICsJCQlyZXR1cm4gZXJyOw0KPiArDQo+ICsJCWVyciA9IGZ3bm9kZV9wcm9w
+ZXJ0eV9yZWFkX3UzMihjaGlsZCwgInJlYWx0ZWsscG9ydCIsICZwbik7DQo+ICsJCWlmIChlcnIp
+DQo+ICsJCQlyZXR1cm4gZXJyOw0KPiArDQo+ICsJCWlmIChwbiA+PSBNQVhfUE9SVFMpDQo+ICsJ
+CQlyZXR1cm4gZGV2X2Vycl9wcm9iZShkZXYsIC1FSU5WQUwsICJpbGxlZ2FsIHBvcnQgbnVtYmVy
+ICVkXG4iLCBwbik7DQo+ICsNCj4gKwkJaWYgKGZ3bm9kZV9kZXZpY2VfaXNfY29tcGF0aWJsZShj
+aGlsZCwgImV0aGVybmV0LXBoeS1pZWVlODAyLjMtYzQ1IikpDQo+ICsJCQlwcml2LT5zbWlfYnVz
+X2lzX2M0NVttZGlvX2J1c10gPSB0cnVlOw0KPiArDQo+ICsJCWJpdG1hcF9zZXQocHJpdi0+dmFs
+aWRfcG9ydHMsIHBuLCAxKTsNCj4gKwkJcHJpdi0+c21pX2J1c1twbl0gPSBtZGlvX2J1czsNCj4g
+KwkJcHJpdi0+c21pX2FkZHJbcG5dID0gYWRkcjsNCj4gKwl9DQo+ICsNCj4gKwlidXMgPSBkZXZt
+X21kaW9idXNfYWxsb2Nfc2l6ZShkZXYsIHNpemVvZigqY2hhbikpOw0KPiArCWlmICghYnVzKQ0K
+PiArCQlyZXR1cm4gLUVOT01FTTsNCj4gKw0KPiArCWJ1cy0+bmFtZSA9ICJSZWFrdGVrIFN3aXRj
+aCBNRElPIEJ1cyI7DQo+ICsJYnVzLT5yZWFkID0gcnRsOTMwMF9tZGlvX3JlYWRfYzIyOw0KPiAr
+CWJ1cy0+d3JpdGUgPSBydGw5MzAwX21kaW9fd3JpdGVfYzIyOw0KPiArCWJ1cy0+cmVhZF9jNDUg
+PSBydGw5MzAwX21kaW9fcmVhZF9jNDU7DQo+ICsJYnVzLT53cml0ZV9jNDUgPSAgcnRsOTMwMF9t
+ZGlvX3dyaXRlX2M0NTsNCj4gKwlidXMtPnBhcmVudCA9IGRldjsNCj4gKwljaGFuID0gYnVzLT5w
+cml2Ow0KPiArCWNoYW4tPm1kaW9fYnVzID0gbWRpb19idXM7DQo+ICsJY2hhbi0+cHJpdiA9IHBy
+aXY7DQo+ICsNCj4gKwlzbnByaW50ZihidXMtPmlkLCBNSUlfQlVTX0lEX1NJWkUsICIlcy0lZCIs
+IGRldl9uYW1lKGRldiksIG1kaW9fYnVzKTsNCj4gKw0KPiArCWVyciA9IGRldm1fb2ZfbWRpb2J1
+c19yZWdpc3RlcihkZXYsIGJ1cywgdG9fb2Zfbm9kZShub2RlKSk7DQo+ICsJaWYgKGVycikNCj4g
+KwkJcmV0dXJuIGRldl9lcnJfcHJvYmUoZGV2LCBlcnIsICJjYW5ub3QgcmVnaXN0ZXIgTURJTyBi
+dXNcbiIpOw0KPiArDQo+ICsJcmV0dXJuIDA7DQo+ICt9DQo+ICsNCj4gK3N0YXRpYyBpbnQgcnRs
+OTMwMF9tZGlvYnVzX3Byb2JlKHN0cnVjdCBwbGF0Zm9ybV9kZXZpY2UgKnBkZXYpDQo+ICt7DQo+
+ICsJc3RydWN0IGRldmljZSAqZGV2ID0gJnBkZXYtPmRldjsNCj4gKwlzdHJ1Y3QgcnRsOTMwMF9t
+ZGlvX3ByaXYgKnByaXY7DQo+ICsJc3RydWN0IGZ3bm9kZV9oYW5kbGUgKmNoaWxkOw0KPiArCWlu
+dCBlcnI7DQo+ICsNCj4gKwlwcml2ID0gZGV2bV9remFsbG9jKGRldiwgc2l6ZW9mKCpwcml2KSwg
+R0ZQX0tFUk5FTCk7DQo+ICsJaWYgKCFwcml2KQ0KPiArCQlyZXR1cm4gLUVOT01FTTsNCj4gKw0K
+PiArCWVyciA9IGRldm1fbXV0ZXhfaW5pdChkZXYsICZwcml2LT5sb2NrKTsNCj4gKwlpZiAoZXJy
+KQ0KPiArCQlyZXR1cm4gZXJyOw0KPiArDQo+ICsJcHJpdi0+cmVnbWFwID0gc3lzY29uX25vZGVf
+dG9fcmVnbWFwKGRldi0+cGFyZW50LT5vZl9ub2RlKTsNCj4gKwlpZiAoSVNfRVJSKHByaXYtPnJl
+Z21hcCkpDQo+ICsJCXJldHVybiBQVFJfRVJSKHByaXYtPnJlZ21hcCk7DQo+ICsNCj4gKwlwbGF0
+Zm9ybV9zZXRfZHJ2ZGF0YShwZGV2LCBwcml2KTsNCj4gKw0KPiArCWRldmljZV9mb3JfZWFjaF9j
+aGlsZF9ub2RlKGRldiwgY2hpbGQpIHsNCj4gKwkJZXJyID0gcnRsOTMwMF9tZGlvYnVzX3Byb2Jl
+X29uZShkZXYsIHByaXYsIGNoaWxkKTsNCj4gKwkJaWYgKGVycikNCj4gKwkJCXJldHVybiBlcnI7
+DQo+ICsJfQ0KPiArDQo+ICsJZXJyID0gcnRsOTMwMF9tZGlvYnVzX2luaXQocHJpdik7DQo+ICsJ
+aWYgKGVycikNCj4gKwkJcmV0dXJuIGRldl9lcnJfcHJvYmUoZGV2LCBlcnIsICJmYWlsZWQgdG8g
+aW5pdGlhbGlzZSBNRElPIGJ1cyBjb250cm9sbGVyXG4iKTsNCj4gKw0KPiArCXJldHVybiAwOw0K
+PiArfQ0KPiArDQo+ICtzdGF0aWMgY29uc3Qgc3RydWN0IG9mX2RldmljZV9pZCBydGw5MzAwX21k
+aW9faWRzW10gPSB7DQo+ICsJeyAuY29tcGF0aWJsZSA9ICJyZWFsdGVrLHJ0bDkzMDEtbWRpbyIg
+fSwNCj4gKwl7fQ0KPiArfTsNCj4gK01PRFVMRV9ERVZJQ0VfVEFCTEUob2YsIHJ0bDkzMDBfbWRp
+b19pZHMpOw0KPiArDQo+ICtzdGF0aWMgc3RydWN0IHBsYXRmb3JtX2RyaXZlciBydGw5MzAwX21k
+aW9fZHJpdmVyID0gew0KPiArCS5wcm9iZSA9IHJ0bDkzMDBfbWRpb2J1c19wcm9iZSwNCj4gKwku
+ZHJpdmVyID0gew0KPiArCQkubmFtZSA9ICJtZGlvLXJ0bDkzMDAiLA0KPiArCQkub2ZfbWF0Y2hf
+dGFibGUgPSBydGw5MzAwX21kaW9faWRzLA0KPiArCX0sDQo+ICt9Ow0KPiArDQo+ICttb2R1bGVf
+cGxhdGZvcm1fZHJpdmVyKHJ0bDkzMDBfbWRpb19kcml2ZXIpOw0KPiArDQo+ICtNT0RVTEVfREVT
+Q1JJUFRJT04oIlJUTDkzMDAgTURJTyBkcml2ZXIiKTsNCj4gK01PRFVMRV9MSUNFTlNFKCJHUEwi
+KTs=
 
