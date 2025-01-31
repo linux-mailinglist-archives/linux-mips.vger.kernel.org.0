@@ -1,137 +1,130 @@
-Return-Path: <linux-mips+bounces-7645-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7646-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68C8DA23516
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Jan 2025 21:32:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED70CA23866
+	for <lists+linux-mips@lfdr.de>; Fri, 31 Jan 2025 02:02:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D6040166E82
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Jan 2025 20:32:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 599803A739E
+	for <lists+linux-mips@lfdr.de>; Fri, 31 Jan 2025 01:02:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B559A17ADE8;
-	Thu, 30 Jan 2025 20:32:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D9C91BC41;
+	Fri, 31 Jan 2025 01:02:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="uQ0xlPb8";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="IbIFrljo"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="oV/uYThs"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 578498831;
-	Thu, 30 Jan 2025 20:32:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40D5CEED8
+	for <linux-mips@vger.kernel.org>; Fri, 31 Jan 2025 01:02:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738269140; cv=none; b=FnfFkKWHL3NbDTk+2Ykjdi7OXOjx3F8J624U3cCWRRxG5wRdsSjOPVTrMFivUSSmIIwq/cZGtrFRjL5KOpBJAua30dZcxwgR+NFlVEZOQZ0bK5w5uBCicdjff9+yvGmHyRAWcrUI6Ja010UN2MmJnmJ0YyINhIch2k0chtSETlc=
+	t=1738285335; cv=none; b=SSN6bi+tZSvecrVze3kM8xMF7H/G08F/0VOEhCqkFudcSpQCQPUF/+IyHwMPEvhLztqjn7pow9egCJn3LdtwtitOUJjJ7asaiMGKdftJOpCgtUuWziym/ohRViGGpRI2EJs86YSRoJvvGiXFzTV+vYh+zZw/VFgCIS+jR7PPvuI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738269140; c=relaxed/simple;
-	bh=iaYNHhhLXkbq7mJkf42ccF01YsDpTZFYGrwSniKMFqs=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=e8kvxJDiMU3AyZY3C7ADnSo+pg14sMBQvhJvtpkN0G71nq0XfFCJdAvP2AQFsWoPPcfFKbHSd8jo/om7ynGN9C0ETIH/byGlxnD8CelQ9CxINpDK6ibHktM+zLGaTtbHhXv8InWDYTA6xBfFBpV+QvydPSLspU4D2EJE88pEFRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=uQ0xlPb8; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=IbIFrljo; arc=none smtp.client-ip=103.168.172.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 1AE9111400C3;
-	Thu, 30 Jan 2025 15:32:15 -0500 (EST)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Thu, 30 Jan 2025 15:32:15 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1738269135;
-	 x=1738355535; bh=VcCOIC2laycN9FXXC+nh5F2ghWSkgsT/FDZobV9yOt4=; b=
-	uQ0xlPb8DXKpdNoB8uIrKmM1tCWW8njAgtauEQw1sMHpn8YaZvEAwLKKEUBQnWWX
-	6t2eSkQhXEPRVjogo3vIUMxqKKQjybcmBKPiTwo3xjXQTefa2IOZB2IYDzfWRRw3
-	U0XdzCRjLdQn0vQmU8Dgj1V51GaQRzWHYxgzAPJSBKVr5Y6X1gHTS0NZP/X/JILl
-	1strp3vonViGOHbmC9vNvKcNkN2jlmfwMiMoRFxicmqYMW+RdvhjTosKnSIslFpX
-	SfzqDeq8shyDx1HrVf8dupttjhPNFSLA8xY0QJm4b5Yn+wIDToh1eACmJSDZ5gNm
-	y2O0GypL2ldlarLyXutKRA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1738269135; x=
-	1738355535; bh=VcCOIC2laycN9FXXC+nh5F2ghWSkgsT/FDZobV9yOt4=; b=I
-	bIFrljoX7TB4oaoFM+rXUCS/Ss17OROYcs5ey/rEnOQ1+9Cc0nRFZISrfMelIrcY
-	SUWVYNeZHN0MNNAOfCE8JS8D+H6Td6ZI0dZ+DY0Ughzsk9hT8ScmiAliWHMyyUcK
-	PW9ZQCqU1uJvu32obTGLZoNnKOXir5KQr2n2WJSa5+iTdEme3ectDNtbVQYF5obu
-	ojAXTB0vzOfR9OvAlwvz2JFdkb7uVAmGHZxGjxrr5/3qlh5xN/AdksrIplH8y5o1
-	RHaqSkNbGVoggsJErl8Anxs65a7xuFAsH1SDtq0Xd9ETYO7k/kMulV5D9tqY1/+j
-	SokMMdF/B3BMmxVFpZkDg==
-X-ME-Sender: <xms:zeGbZ6uiG17WGJVwSVXjLjbuPnRoTy7mTrPVmuEiREjyw8w65uFL0g>
-    <xme:zeGbZ_cAhG2nL_fc-yRgtWsgsSX5j6-d0E3jQ9JK_hxqqf830x5s327bEBhuvOBkl
-    -ombqnwS3gjFTkW7A0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeikedtucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdej
-    necuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrd
-    guvgeqnecuggftrfgrthhtvghrnhepvdfhvdekueduveffffetgfdvveefvdelhedvvdeg
-    jedvfeehtdeggeevheefleejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpe
-    hmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepledp
-    mhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepthhssghoghgvnhgusegrlhhphhgrrd
-    hfrhgrnhhkvghnrdguvgdprhgtphhtthhopehjvghffhiguhestghhrhhomhhiuhhmrdho
-    rhhgpdhrtghpthhtohepihhsmhdrhhhonhhgsehgmhgrihhlrdgtohhmpdhrtghpthhtoh
-    eptghgiihonhgvshesghhoohhglhgvmhgrihhlrdgtohhmpdhrtghpthhtohepsghrrghu
-    nhgvrheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghkphhmsehlihhnuhigqdhfoh
-    hunhgurghtihhonhdrohhrghdprhgtphhtthhopehhtggrsehlihhnuhigrdhisghmrdgt
-    ohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrd
-    horhhgpdhrtghpthhtoheplhhinhhugidqmhhiphhssehvghgvrhdrkhgvrhhnvghlrdho
-    rhhg
-X-ME-Proxy: <xmx:zeGbZ1yrJkf4MkPNPf9F1iuLBZHLe3uoJuC63Hr7-SyqbBt5ZXpTjw>
-    <xmx:zeGbZ1MKHw8m0Y6oua2CbKQTGrzs_jyL3AC8muZY5uB9DmlZsbRn5w>
-    <xmx:zeGbZ6-7RQ5DSm16FL4irshjJWTuZ_x2PN5OgDmzheFjafXAuhgycw>
-    <xmx:zeGbZ9W_igLwCO76kLWPpBCq9fEWgE7Mb0kOdoipQk84-cNP9CWL4w>
-    <xmx:z-GbZ-Qih7uTQSUr9S5gS038wsmKz3-uN8lERuPCRqd6pJgWbrnKQeIB>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id A8CD92220072; Thu, 30 Jan 2025 15:32:13 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1738285335; c=relaxed/simple;
+	bh=Z/5cIqgu/W+LDyHnLi8DCYXWccNyGI+A2bSSP4iDs2Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RyuVUEKgj8l1944HXc/dWvMx39/MC763U9OmwzwZ3Jso8yPSQ/SaJYe/02zzB13cRrY04/sCkZ9m44JDaaVifLfOr1/CX6WAz2oHalSB0mQDMDSLWchswDQpupI5mXgQHDgxmI93ffUzf+gq31l/zOuUT1HHQEu6h8y0I0uW9zw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=oV/uYThs; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id AC7AB2C0125;
+	Fri, 31 Jan 2025 14:02:03 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1738285323;
+	bh=yes7xD9tFz1XhfYUV2iwA1QJwcuq/M7YoaqeIkqKH+w=;
+	h=From:To:Cc:Subject:Date:From;
+	b=oV/uYThs+99GpFfnJjJ6TahkFtsImnlkIc9DFpMyNhOk0SKaCJfTM/qGa3JWwKJqx
+	 55kif8rj9a+8vzszjKeaK8TfJz48DePpIK4a7Yrhlpx38hf03IYDvm1+O/AtdAqduT
+	 Xysl46W+ZZ5A6NnEKPCJ5MRRTTFQfal8yOczTw/o/xJEO9cHHNETe/vIarLpEthQXQ
+	 t+Nh/ai+IEI1pGqfHJqX5yAySkgz4SrC5UuLfnSW6TrO4apiKkEDNdwn49rHq8cUhM
+	 Ynoo9YaQ7Ublh/hdUbNYtkWHBfre8kaIZx3FO4dR97qxKKeGIr2DR9Ac1oThsSaAQF
+	 FFHClFDzoKECg==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B679c210b0000>; Fri, 31 Jan 2025 14:02:03 +1300
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+	by pat.atlnz.lc (Postfix) with ESMTP id 3F8F113EE2B;
+	Fri, 31 Jan 2025 14:02:03 +1300 (NZDT)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+	id 3CE732809C0; Fri, 31 Jan 2025 14:02:03 +1300 (NZDT)
+From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+To: lee@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	andrew+netdev@lunn.ch,
+	davem@davemloft.net,
+	edumazet@google.com,
+	kuba@kernel.org,
+	pabeni@redhat.com,
+	tsbogend@alpha.franken.de,
+	hkallweit1@gmail.com,
+	linux@armlinux.org.uk,
+	sander@svanheule.net,
+	markus.stockhausen@gmx.de
+Cc: devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	netdev@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH v5 0/4] RTL9300 MDIO driver
+Date: Fri, 31 Jan 2025 14:01:47 +1300
+Message-ID: <20250131010151.2527688-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Thu, 30 Jan 2025 21:31:52 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Ism Hong" <ism.hong@gmail.com>
-Cc: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Christian Brauner" <brauner@kernel.org>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Heiko Carstens" <hca@linux.ibm.com>, "Jeff Xu" <jeffxu@chromium.org>,
- =?UTF-8?Q?Christian_G=C3=B6ttsche?= <cgzones@googlemail.com>,
- "open list:MIPS" <linux-mips@vger.kernel.org>,
- "open list" <linux-kernel@vger.kernel.org>
-Message-Id: <7afff28d-45e0-4e15-bb37-270856403bf7@app.fastmail.com>
-In-Reply-To: <6d0659c3-fd86-4eab-879f-d9b149462358@gmail.com>
-References: <20250106115227.1365643-1-ism.hong@gmail.com>
- <5427df64-658d-4377-89be-963ee7bb68ee@app.fastmail.com>
- <6d0659c3-fd86-4eab-879f-d9b149462358@gmail.com>
-Subject: Re: [PATCH] mips: fix shmctl/semctl/msgctl syscall for o32
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=QNvLRRLL c=1 sm=1 tr=0 ts=679c210b a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=VdSt8ZQiCzkA:10 a=VwQbUJbxAAAA:8 a=2fb9Dq4sOb5bA3HnAgEA:9 a=3ZKOabzyN94A:10
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 
-On Thu, Jan 30, 2025, at 15:46, Ism Hong wrote:
-> Arnd Bergmann =E6=96=BC 2025/1/28 =E6=B8=85=E6=99=A85:20 =E5=AF=AB=E9=81=
-=93:
->
-> Thank you for your explanation, and sorry for the late reply due to th=
-e=20
-> Chinese New Year.
->
->  From your response, I understand that the preferred solution would be=20
-> to modify uClibc to align the behavior of semctl/shmctl/msgctl with=20
-> glibc and musl by adopting a unified feature test macro. If that is th=
-e=20
-> case, I will work on preparing a patch for uClibc accordingly.
+This series adds a driver for the MDIO controller on the RTL9300 family
+of devices. The controller is a little unique in that we can't access the=
+ SMI
+interfaces directly. This means we need to use the hardware description f=
+rom
+the DTS to compute a mapping of switch port to mdio bus/address.
 
-Yes, that is correct. I think musl doesn't call the separate
-syscalls if the architecture provides the old-style socket() syscall,
-so it's not affected either way, but glibc needs the revert.
+Note that the dt-bindings: mfd patch is dependent on the dt-bindings: net=
+ patch.
 
-     Arnd
+Gmail seems to have decided to throttle mail coming from our domain so th=
+ere
+has been some things I've responded to that have hit lore.kernel.org but =
+may
+not have been delivered directly. So sorry if it looks like I've ignored
+something. That's also why I haven't send this round out earlier as hopef=
+ully
+we've done enough to get of Google's naughty list.
+
+Chris Packham (4):
+  dt-bindings: net: Add Realtek MDIO controller
+  dt-bindings: mfd: Add MDIO interface to rtl9301-switch
+  mips: dts: realtek: Add MDIO controller
+  net: mdio: Add RTL9300 MDIO driver
+
+ .../bindings/mfd/realtek,rtl9301-switch.yaml  |  29 ++
+ .../bindings/net/realtek,rtl9301-mdio.yaml    |  98 ++++
+ arch/mips/boot/dts/realtek/rtl930x.dtsi       |  33 ++
+ drivers/net/mdio/Kconfig                      |   7 +
+ drivers/net/mdio/Makefile                     |   1 +
+ drivers/net/mdio/mdio-realtek-rtl9300.c       | 436 ++++++++++++++++++
+ 6 files changed, 604 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/realtek,rtl9301=
+-mdio.yaml
+ create mode 100644 drivers/net/mdio/mdio-realtek-rtl9300.c
+
+--=20
+2.48.1
+
 
