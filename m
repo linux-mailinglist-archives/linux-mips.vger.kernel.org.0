@@ -1,104 +1,94 @@
-Return-Path: <linux-mips+bounces-7655-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7656-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9ED77A23A2C
-	for <lists+linux-mips@lfdr.de>; Fri, 31 Jan 2025 08:33:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A82F2A23B74
+	for <lists+linux-mips@lfdr.de>; Fri, 31 Jan 2025 10:32:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1757C168AE4
-	for <lists+linux-mips@lfdr.de>; Fri, 31 Jan 2025 07:33:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 22497161736
+	for <lists+linux-mips@lfdr.de>; Fri, 31 Jan 2025 09:32:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ACF614F117;
-	Fri, 31 Jan 2025 07:33:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cnh6Fw06"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 182FF14B08A;
+	Fri, 31 Jan 2025 09:32:26 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66E3B149E17;
-	Fri, 31 Jan 2025 07:33:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE9F7374FF;
+	Fri, 31 Jan 2025 09:32:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738308811; cv=none; b=q4VbdASInt/i3k5u3yYP7jmAdU/VronisI988DbWGiC3VBgoV2dZ+u3lzhe2w6UaUm7OvAjJ/mVRfkEQwbm4VGoLOGK0RGwACulviXCf1POuA+I6U3amyEQYIN0wynIZvYTJhE/lWQ4lqjA7cuEkzh00sGNIwMp7LVDT94vUePk=
+	t=1738315946; cv=none; b=ldoWtq5dnY6nYb9tNL/ozxLZ9dCLkGHC8LeqrUMyN68rSjhFpZLgHmyboYctQP8H9E18Vwd8/FzhFylAQqsxBUX98/J3b+tYuvCZ3n0M05VtiWOBU7Ho/6DNVM4BwwXFUkTbgvXkbq3ToCQT/LqweTIsStu3hwf+CWvLJBQ80I8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738308811; c=relaxed/simple;
-	bh=RrcEqfM8xh3vtNFdU206o/TsdmNNzA0MjZxnlkbVUGs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cDNmWAeaUruZT6E0ozHNJ6NzAWgpLDiAmC2p93gxYiUoT20q/ihIM0JRaaVdIN5hYiU8k9EajkZ5rxu1IeupcLldvxgjoaKuKsd9gOLfWVLzONiCojwMGOpkq2YJc3r/vj5/5H3A4ZNUNMSAV04uniuW/HO9mR4vwawpE7uDJMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cnh6Fw06; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B939AC4CED1;
-	Fri, 31 Jan 2025 07:33:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738308810;
-	bh=RrcEqfM8xh3vtNFdU206o/TsdmNNzA0MjZxnlkbVUGs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=cnh6Fw06xdbvU9JBvK6ctaABa6Xotu0HNcayzftQpLLghct+vf8fgKOpYKC+7vawV
-	 ZfhgZ+zxDEohWMdkV4C3KEp5L4NKUhmqbIfFoyRfMK/dSSBCorx2pxFo4aBG8YnHgQ
-	 GRw1Zi0kGI8h9vXL/VedLuavLI+agpzWkoE3D6xXNoe6GnfL7Kd+u46LWzQJAlEKVk
-	 +E/vUKN/vZshU/AIpPqP9xoJoP3gD7U+eXDBhShKNYNe5+h7anUUGw9QoSlJt/YvKR
-	 s0kt/XyTCmF/o3KZvMkeBs0fuO8mqdFaezdFx/rzFi7BipDEXgG3oC17AQB0y8MFd0
-	 A/KGVwSVfdJaw==
-Date: Fri, 31 Jan 2025 08:33:27 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc: lee@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com, 
-	kuba@kernel.org, pabeni@redhat.com, tsbogend@alpha.franken.de, 
-	hkallweit1@gmail.com, linux@armlinux.org.uk, sander@svanheule.net, 
-	markus.stockhausen@gmx.de, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v5 2/4] dt-bindings: mfd: Add MDIO interface to
- rtl9301-switch
-Message-ID: <20250131-kind-rapid-kagu-7fc4c5@krzk-bin>
-References: <20250131010151.2527688-1-chris.packham@alliedtelesis.co.nz>
- <20250131010151.2527688-3-chris.packham@alliedtelesis.co.nz>
+	s=arc-20240116; t=1738315946; c=relaxed/simple;
+	bh=r3LAuR0iEd1V4hhMgeKfMRZCn+au/X7a1OyVrkOBnlk=;
+	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=f7LZyqwIeZb144AqR0ElXeckjSx2lSxndSkcLzUZwPZe1+ZxgQVTsV0bc3lVCPVY6GG9GSkMF2IQm8csoPWIa9Ar712o/u3Pr7SUnwXSMi1DTs1IB2L3HR6yRnI7AXxzyDBb9/cul1yAdzT6dEnKBlZaFkyuQypPcZ1VOFSGW2E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1tdnNk-0003hP-00; Fri, 31 Jan 2025 10:32:12 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 4E023C0147; Fri, 31 Jan 2025 10:32:00 +0100 (CET)
+Date: Fri, 31 Jan 2025 10:32:00 +0100
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Revert "mips: fix shmctl/semctl/msgctl syscall for o32"
+Message-ID: <Z5yYkMSPJcYme1kX@alpha.franken.de>
+References: <20250130104857.56251-1-tsbogend@alpha.franken.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250131010151.2527688-3-chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <20250130104857.56251-1-tsbogend@alpha.franken.de>
 
-On Fri, Jan 31, 2025 at 02:01:49PM +1300, Chris Packham wrote:
->  .../bindings/mfd/realtek,rtl9301-switch.yaml  | 29 +++++++++++++++++++
->  1 file changed, 29 insertions(+)
+On Thu, Jan 30, 2025 at 11:48:56AM +0100, Thomas Bogendoerfer wrote:
+> This reverts commit bc7584e009c39375294794f7ca751a6b2622c425.
 > 
-> diff --git a/Documentation/devicetree/bindings/mfd/realtek,rtl9301-switch.yaml b/Documentation/devicetree/bindings/mfd/realtek,rtl9301-switch.yaml
-> index f053303ab1e6..89e10213a4ee 100644
-> --- a/Documentation/devicetree/bindings/mfd/realtek,rtl9301-switch.yaml
-> +++ b/Documentation/devicetree/bindings/mfd/realtek,rtl9301-switch.yaml
-> @@ -28,6 +28,9 @@ properties:
->    reg:
->      maxItems: 1
->  
-> +  mdio-controller:
-> +    $ref: /schemas/net/realtek,rtl9301-mdio.yaml#
-> +
+> The split IPC system calls for o32 have been introduced with modern
+> version only. Changing this breaks ABI.
+> 
+> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> ---
+>  arch/mips/kernel/syscalls/syscall_o32.tbl | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/mips/kernel/syscalls/syscall_o32.tbl b/arch/mips/kernel/syscalls/syscall_o32.tbl
+> index e8a57c206758..349b8aad1159 100644
+> --- a/arch/mips/kernel/syscalls/syscall_o32.tbl
+> +++ b/arch/mips/kernel/syscalls/syscall_o32.tbl
+> @@ -382,15 +382,15 @@
+>  368	o32	io_pgetevents			sys_io_pgetevents_time32	compat_sys_io_pgetevents
+>  # room for arch specific calls
+>  393	o32	semget				sys_semget
+> -394	o32	semctl				sys_old_semctl		compat_sys_old_semctl
+> +394	o32	semctl				sys_semctl			compat_sys_semctl
+>  395	o32	shmget				sys_shmget
+> -396	o32	shmctl				sys_old_shmctl		compat_sys_old_shmctl
+> +396	o32	shmctl				sys_shmctl			compat_sys_shmctl
+>  397	o32	shmat				sys_shmat			compat_sys_shmat
+>  398	o32	shmdt				sys_shmdt
+>  399	o32	msgget				sys_msgget
+>  400	o32	msgsnd				sys_msgsnd			compat_sys_msgsnd
+>  401	o32	msgrcv				sys_msgrcv			compat_sys_msgrcv
+> -402	o32	msgctl				sys_old_msgctl		compat_sys_old_msgctl
+> +402	o32	msgctl				sys_msgctl			compat_sys_msgctl
+>  403	o32	clock_gettime64			sys_clock_gettime		sys_clock_gettime
+>  404	o32	clock_settime64			sys_clock_settime		sys_clock_settime
+>  405	o32	clock_adjtime64			sys_clock_adjtime		sys_clock_adjtime
+> -- 
+> 2.35.3
 
-So this mdio-controller looks duplicated now. Why is it needed?
+applied to mips-next.
 
->    '#address-cells':
->      const: 1
->  
-> @@ -41,6 +44,10 @@ patternProperties:
->    'i2c@[0-9a-f]+$':
->      $ref: /schemas/i2c/realtek,rtl9301-i2c.yaml#
->  
-> +  'mdio-controller@[0-9a-f]+$':
-> +    $ref: /schemas/net/realtek,rtl9301-mdio.yaml#
-> +
-> +
+Thomas.
 
-Just one blank line.
-
-
-Best regards,
-Krzysztof
-
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
