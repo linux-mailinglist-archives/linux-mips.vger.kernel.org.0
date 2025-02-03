@@ -1,162 +1,239 @@
-Return-Path: <linux-mips+bounces-7661-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7662-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B451A2501E
-	for <lists+linux-mips@lfdr.de>; Sun,  2 Feb 2025 22:34:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 459F1A2520E
+	for <lists+linux-mips@lfdr.de>; Mon,  3 Feb 2025 06:43:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8FCAD188403F
-	for <lists+linux-mips@lfdr.de>; Sun,  2 Feb 2025 21:34:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BAEDA1622BB
+	for <lists+linux-mips@lfdr.de>; Mon,  3 Feb 2025 05:43:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFCE11FBE87;
-	Sun,  2 Feb 2025 21:34:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CCA6126BF9;
+	Mon,  3 Feb 2025 05:43:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.net header.i=j.neuschaefer@gmx.net header.b="lNI4wnLn"
+	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="fGufbaGE"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E15C1581F9;
-	Sun,  2 Feb 2025 21:34:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3671278F49
+	for <linux-mips@vger.kernel.org>; Mon,  3 Feb 2025 05:43:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738532072; cv=none; b=JMkQXVCIIaxe+MPj1VK1E5tO4dgOLSXB05rU93VyXpNWxB8VSQ5DWinCke6UnpJIwmyXKScSWVwKXBHow5vF2FPb99xvctcrDGXv9i1iWgUK/PcdfTvvNIDkPOT2pnF8wb1XJxKzN/3HXbmNxU0W8IUnYao/uq5OiD+6Y6vk1Xw=
+	t=1738561409; cv=none; b=P3tZtINtIcmGNtaSOykas8rc7r9+zVrCVwNJ333IEQoCOCkjtZPy0Y2HZVLC+CXkZVz86p2b+YY8JHiX3SPv1soiauWzrn/OTqhLLzyLJaho7aHIB1VUEZETFADV7g6V8lVCcE84+UhyggaofM5pYt6gtEQEuSYJP32BCiknZTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738532072; c=relaxed/simple;
-	bh=4hvX3V+SUJqChF35x8aAIao5Jeu/dWFA1HRIIuZm9jU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HepBznRg9r4J/XI4A3cszGboL4dtvaE7nLLjiZ+vwJGT9IDskjE1+6PbK+ix5OsEsCqsrRForimwi/hcmqoYg6xZJfGCaNxkWtdw/BGAKYurKwtI9OucaRuJGC1yjWarBB+xaJo4wqnxi4UMiWamvYy7lnEQwIEPRrClUpOnJOo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=j.neuschaefer@gmx.net header.b=lNI4wnLn; arc=none smtp.client-ip=212.227.15.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
-	s=s31663417; t=1738532026; x=1739136826; i=j.neuschaefer@gmx.net;
-	bh=G2eHfhQuejodnDOibyT663weFQ71Yl8E8QZl/5oxVv0=;
-	h=X-UI-Sender-Class:Date:From:To:Cc:Subject:Message-ID:References:
-	 MIME-Version:Content-Type:Content-Transfer-Encoding:In-Reply-To:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=lNI4wnLn373mkDHyreS/4go2WqLLFqysiF0LW3XiW1x/TglUrcPjkWZnauK8Ui1R
-	 XU0ggv4mZdMXv3WIM/qA8OqL7HzNFmRqsXPGeFv9qLqrDmBT9CieOrZXNo3TRsVwk
-	 5M5fmis0I0ZqKFicCRUGYCSGRY00DySlih9CvpHUYhrtW0TI+4+LHWAK3xKKq9uiR
-	 AF9sgaalNQduw0ptfF6P0GLSwGBTtZ2Sbnp0wUl9NT0xaO+o63RoPV2h2xRaj9KRH
-	 T47MTCEDaWQ9lzGI6z2ONFo/9+tBc9+MSvoR7Cu76PREt+9/X+8/eolBYqU9OY5tI
-	 ME/oP5Cwa5qXcTCPKA==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([89.1.210.218]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MAfYw-1tlHAA11D6-007KTC; Sun, 02
- Feb 2025 22:33:46 +0100
-Date: Sun, 2 Feb 2025 22:33:36 +0100
-From: =?utf-8?Q?J=2E_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To: "A. Wilcox" <AWilcox@wilcox-tech.com>
-Cc: Arnd Bergmann <arnd@kernel.org>, kvm@vger.kernel.org,
-	Arnd Bergmann <arnd@arndb.de>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Alexander Graf <graf@amazon.com>, Crystal Wood <crwood@redhat.com>,
-	Anup Patel <anup@brainfault.org>,
-	Atish Patra <atishp@atishpatra.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Vitaly Kuznetsov <vkuznets@redhat.com>,
-	David Woodhouse <dwmw2@infradead.org>, Paul Durrant <paul@xen.org>,
-	Marc Zyngier <maz@kernel.org>, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 4/5] powerpc: kvm: drop 32-bit book3s
-Message-ID: <Z5_ksID8Gv_Tg5F7@probook>
-References: <20241221214223.3046298-1-arnd@kernel.org>
- <20241221214223.3046298-5-arnd@kernel.org>
- <9B9E07F0-3373-4F59-BE4C-E6C425B3C36D@Wilcox-Tech.com>
+	s=arc-20240116; t=1738561409; c=relaxed/simple;
+	bh=NmcLSvXof+RXtFnk6pi3gTBVMg9ZHRhnQX1L7fgcdGs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IllizkXijTFxL6iS1VaErwS8luXL5hPgUXYbBvD8ZO9n2Wh68NWv8IdBSag4tR6H3W329rfK5aLdzA8OzH2jyfstQ8fOscWlilGIQBirhgeQNFTsxD5VFnssXmtS6OMmTxGn8XXZmosmyeG785WUMJZlfXBiPWifQSrRpTbQvVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=fGufbaGE; arc=none smtp.client-ip=209.85.166.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
+Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-3d0062fb20bso34242795ab.2
+        for <linux-mips@vger.kernel.org>; Sun, 02 Feb 2025 21:43:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=sifive.com; s=google; t=1738561406; x=1739166206; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Abrmc3V+wCkg7+h5ECgKA37T7F550/MzIW2BgVmGe00=;
+        b=fGufbaGEkoB9wwhUDmv3ORJMmPRU9GJLjkZ3LhKzikdukXvOUWdnAQTniO5qzy6GgC
+         1k+nBfKB19dksMpiMncup4YsZ5myb4LvEML3vQpXaUkFdUPoVJwDc2R7wE91FvLH4AWM
+         wrlX8vdzUFeIEahw8kf9WSF3QuxRnIPVMrPuCU35Y/TE/dEAvPR7Alom24s5xzI7NWOE
+         QXVjrPcshHgnorH3Dpa3qp5wlcgqfQTQyvOD8jAcILdyGFGNQ25aZb1cN9YwmnYvfuuO
+         fjtI2h1dhace8kRmgUdaHPESqosIF2kNfRIGdelSbWt/GbGiPAyfhtB+X2wsofImGM/9
+         Cklg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738561406; x=1739166206;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Abrmc3V+wCkg7+h5ECgKA37T7F550/MzIW2BgVmGe00=;
+        b=W2+ADGnNL+xmVqH5k6JvP4QvJY1GcWluwTjexElLTtGE9CKOoeTHJS5y8RC57U9EYX
+         zA8GSU+/ie48DtUXvVF0W1y4JOUn4BeZGPvHueIeiEpEFM1JBCzrSSVfd+95n/KboVhx
+         AhnDYxnMUXUZ29hwxWs6MPhRO88/aCtd1CSqYb2L1fiyXFSXLBKwKHlOsk273IihcUQS
+         8uf3kwtAHuhrUuYTrlCp5Db86htC4bbea/dwEtwFes7TI2pWV8S6iKZCTzCG6bMzdKnX
+         rAEnALr/tiRFjkgC/ZqOpb8cFWOXEtroImbWdthkIhKdsMPNNyrVY4fbojtAiPrWEQEd
+         UQ/A==
+X-Forwarded-Encrypted: i=1; AJvYcCXaJbQjLcCnQ8Q90zEDUTQVX4iVhbVkGKvwDeT/TO5bflcUlaWqfuYB4zp/r90ltVr3waC4cT18cxgD@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrJ5sdUbVN9k3CAgplvH78QrlteZfjGqLNda4dJEGh3nDlw5Hm
+	c7wOZASBULPCcULgBWqUn4oQBlZpZG44kjsK77QH0cJPjyMycenv2CN506cBhtI=
+X-Gm-Gg: ASbGncs04dhYwoa1t/vG4zXDFVT0wyzWm0lgHaTGLuKuGS0qSRgil6V7rJbEnRb0Zrp
+	xX7lnKBa8K5FJisCrvjx7m3gaBaGP3SB5rd+mvASgNyZx062BZHFgQNJq93Xei+NStO9GhdbHJt
+	Y6w1ietps5Gip+QSfZaTCyJVp/hcSJTl2Vfc3n3ad45qo+hP/JzXftSbgz2ft6xb09c1D+j4pJf
+	WliY9Kvryw+scsiHDpUuiNTX4SVj9PGv6E3R9XCZhF0GHvevdaV3RNtAx5gP3hJqU+3U8YUcL1t
+	os3vk+3bWW6VCCSC/L5+/vQy/4kMDI0TAOAheas=
+X-Google-Smtp-Source: AGHT+IHl4RRDfRdJ9K6Cx6v8dXThe6D880Ogx8BJ2U75l88ormi4P0wAtnHOCwaBHFLWcb6LIw7+7w==
+X-Received: by 2002:a05:6e02:1fc2:b0:3ce:78ab:dcd1 with SMTP id e9e14a558f8ab-3cffe4a7bf1mr175908815ab.19.1738561406189;
+        Sun, 02 Feb 2025 21:43:26 -0800 (PST)
+Received: from [100.64.0.1] ([165.188.116.9])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3d018c28ea5sm15310115ab.35.2025.02.02.21.43.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 02 Feb 2025 21:43:25 -0800 (PST)
+Message-ID: <44468c97-06e6-4bfe-930d-444ab7ead90d@sifive.com>
+Date: Sun, 2 Feb 2025 23:43:22 -0600
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <9B9E07F0-3373-4F59-BE4C-E6C425B3C36D@Wilcox-Tech.com>
-X-Provags-ID: V03:K1:9/xKYk+mj967yFEydW37x3unDxvlzZDdriScJwSUFGFBVPwz408
- R4O7IVTtnXePPO+gVIX8jktVCSK3SLk5KSpqblHo9ocA7Uo1TTIFaSqN1IJ0B/nSnHdz+v4
- BQJUDyiTjBjastoDpF/hhIklw774C2Nk4pN/wxnwAA2nZ2/XzPYAWN671OjQUfPE/hjZF1w
- siMMlhFzAtG6iMd99XMIg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:lvJI8XggPhM=;4W9A0Oo2CZWjUIca1pWrNgsKvKX
- z8V5mRgOrYvpaHbx85mspd7QV2ItcjEq+fbuEkib8xY69HipoOK+VJcOAfiLKjAnQJa/cEWvo
- CyiUn1zvL9+XgfNLjZDQvyYLO0OegTg5uO6ds6wuAoImA3OZR02zmCDlQoBOZ9Os/C7ncaKHX
- 70bHqXPyIx5rnA5PX8W9/Gx/G2VS6JmbZloyyR+qYGwoXMa82ikMXsHgpXshd/zLqq4sSRHoV
- brXeZgfYB3/4Q/i8lba34oeUVPvRB47g7yr3WhGmhykJVM3QHf5w+IWCNM4T4JwjPSqcbUnBy
- pW5753Wdt1o3+XSulwpYV+SF3ehRAAk8zx7oc1eskQUwPEFPv3oL1tNRzd7KDJ7QGTMXKcMRR
- yJQnkoyomns15uYcWXEWc4eJ0Q3nqODjrT7/oPRM6PfF1axZPTcN9Ivt/coi8oAHzidpeZRw0
- 1Nj7DtAAuIiIqTiXFnM71/83afL3vQKgrXVDhbGQ1eHgcUKHDNURj8Ov+oopEjNcqjdlWGWoN
- y/06JKYTlBaAC0sx1Fr8k1oOerFxYn2v0A6Nocs597aQ1BLqzSDJUkMmq+p9P2Xm8dVSsGGu4
- +4an3otnMm7ZdorWY7g0UeLINMt1RvZyhf3fM1MuxetqEnqnIxXuoEaAUo/5g5Axxnc7d+90+
- CqQvSZiR32dd7HV8x/oBhj3492A7USPGpPBHD4yhGucmE0EQGVrTjkK8T9VYH8nj9cnnIYytQ
- c78FwW3q6Jv7eRX43bsv6QZUi4Y1zzlJYyE8P/w9Z+DTvFNbOjo4v0JtfT9UWCC2FhaBW9Oqe
- anaWkC6cv6od7SLhWicorQPsOM2UcDiSTAWA1JBBk92fj+U5TadCXASiSa9qQiymc4ZHM3yzO
- lM7OUKempveM0+57H8oZtb5No0NKCLwN9BQw0eLJ5IAWaDGAEIDJxt+ql7gxKacp5U/eU07Qj
- +x4rzmw88GtPCbybRi41JUDTYLunI5I5clPvmpGMh+Q+iArBl4xRCVHV5M51h1gBJZkv85dmD
- aH2sWMqQaEJ7FBWhGUSRu1GLj09VqIO7JAoY2C9TpRmf/ao9g02EJaYOiaCtGJWsPsri7Jq9g
- rHR6DYNhdqLKm2SF8kAE86rpcJ8B0HKl2UyhO/OCxLvlUOemuYGVqW3BDk5RgNpYgKaXWeuiW
- ThzTcYCT9+ztyzdFsFjgwtA56kVcQc7C+VVodKwz9RtObFvhrK1yC2CXdCA+KcPiSnCTKvqes
- 2EQX8ZYBWmYwZFGRWQrJtQmcKMRszV78bn8FnLMJ/9/2KEifFR7S9q34teR7+FFb4iUM9FW6x
- 3zyl/UGrzimjzwEO+HD7CetGSspTpweqegk7AqIu8he+lY=
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/5] riscv: kvm: drop 32-bit host support
+To: Arnd Bergmann <arnd@kernel.org>, kvm@vger.kernel.org
+Cc: Arnd Bergmann <arnd@arndb.de>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Huacai Chen <chenhuacai@kernel.org>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Christophe Leroy <christophe.leroy@csgroup.eu>,
+ Naveen N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Alexander Graf <graf@amazon.com>, Crystal Wood <crwood@redhat.com>,
+ Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Sean Christopherson <seanjc@google.com>, Paolo Bonzini
+ <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Vitaly Kuznetsov <vkuznets@redhat.com>,
+ David Woodhouse <dwmw2@infradead.org>, Paul Durrant <paul@xen.org>,
+ Marc Zyngier <maz@kernel.org>, "A. Wilcox" <AWilcox@Wilcox-Tech.com>,
+ linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+ linux-riscv@lists.infradead.org
+References: <20241221214223.3046298-1-arnd@kernel.org>
+ <20241221214223.3046298-3-arnd@kernel.org>
+From: Samuel Holland <samuel.holland@sifive.com>
+Content-Language: en-US
+In-Reply-To: <20241221214223.3046298-3-arnd@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sat, Dec 21, 2024 at 08:13:12PM -0600, A. Wilcox wrote:
-> On Dec 21, 2024, at 3:42=E2=80=AFPM, Arnd Bergmann <arnd@kernel.org> wro=
-te:
-> >
-> > From: Arnd Bergmann <arnd@arndb.de>
-> >
-> > Support for KVM on 32-bit Book III-s implementations was added in 2010
-> > and supports PowerMac, CHRP, and embedded platforms using the Freescal=
-e G4
-> > (mpc74xx), e300 (mpc83xx) and e600 (mpc86xx) CPUs from 2003 to 2009.
-> >
-> > Earlier 603/604/750 machines might work but would be even more limited
-> > by their available memory.
-> >
-> > The only likely users of KVM on any of these were the final Apple
-> > PowerMac/PowerBook/iBook G4 models with 2GB of RAM that were at the hi=
-gh
-> > end 20 years ago but are just as obsolete as their x86-32 counterparts=
-.
-> > The code has been orphaned since 2023.
-> >
-> > There is still a need to support 32-bit guests in order to better
-> > debug problems on ppc32 kernels. This should work in theory on both
-> > 64-bit booke and on 64-bit book3s hosts, but it would be good to
-> > confirm that this is still the case before the known working option
-> > gets removed.
-[...]
-> That said, I would like to keep the support alive for more than just
-> ppc32 kernel testing.  There are plenty of Power Macs with enough
-> memory to run some environments within KVM.  Ad=C3=A9lie=E2=80=99s new r=
-elease
-> boots a full XFCE desktop in under 300 MB RAM, so even a 1 GB machine
-> has enough memory to run AmigaOS, Mac OS 9, or another XFCE in KVM.
+Hi Arnd,
 
-FWIW, I second this. I do intend to get KVM to run on my e300-based
-board for some relatively light guests such as Mac OS 9. I suspect I
-won't be able to contribute much to the maintenance, though.
+On 2024-12-21 3:42 PM, Arnd Bergmann wrote:
+> From: Arnd Bergmann <arnd@arndb.de>
+> 
+> KVM support on RISC-V includes both 32-bit and 64-bit host mode, but in
+> practice, all RISC-V SoCs that may use this are 64-bit:
+> 
+> As of linux-6.13, there is no mainline Linux support for any specific
+> 32-bit SoC in arch/riscv/, although the generic qemu model should work.
+> 
+> The available RV32 CPU implementations are mostly built for
+> microcontroller applications and are lacking a memory management
+> unit. There are a few CPU cores with an MMU, but those still lack the
+> hypervisor extensions needed for running KVM.
+> 
+> This is unlikely to change in the future, so remove the 32-bit host
+> code and simplify the test matrix.
+> 
+> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> ---
+>  arch/riscv/kvm/Kconfig            |   2 +-
+>  arch/riscv/kvm/aia.c              | 105 ------------------------------
+>  arch/riscv/kvm/aia_imsic.c        |  34 ----------
+>  arch/riscv/kvm/mmu.c              |   8 ---
+>  arch/riscv/kvm/vcpu_exit.c        |   4 --
+>  arch/riscv/kvm/vcpu_insn.c        |  12 ----
+>  arch/riscv/kvm/vcpu_sbi_pmu.c     |   8 ---
+>  arch/riscv/kvm/vcpu_sbi_replace.c |   4 --
+>  arch/riscv/kvm/vcpu_sbi_v01.c     |   4 --
+>  arch/riscv/kvm/vcpu_timer.c       |  20 ------
+>  10 files changed, 1 insertion(+), 200 deletions(-)
+> 
+> diff --git a/arch/riscv/kvm/Kconfig b/arch/riscv/kvm/Kconfig
+> index 0c3cbb0915ff..7405722e4433 100644
+> --- a/arch/riscv/kvm/Kconfig
+> +++ b/arch/riscv/kvm/Kconfig
+> @@ -19,7 +19,7 @@ if VIRTUALIZATION
+>  
+>  config KVM
+>  	tristate "Kernel-based Virtual Machine (KVM) support (EXPERIMENTAL)"
+> -	depends on RISCV_SBI && MMU
+> +	depends on RISCV_SBI && MMU && 64BIT
+>  	select HAVE_KVM_IRQCHIP
+>  	select HAVE_KVM_IRQ_ROUTING
+>  	select HAVE_KVM_MSI
+> diff --git a/arch/riscv/kvm/aia.c b/arch/riscv/kvm/aia.c
+> index 19afd1f23537..a399a5a9af0e 100644
+> --- a/arch/riscv/kvm/aia.c
+> +++ b/arch/riscv/kvm/aia.c
+> @@ -66,33 +66,6 @@ static inline unsigned long aia_hvictl_value(bool ext_irq_pending)
+>  	return hvictl;
+>  }
+>  
+> -#ifdef CONFIG_32BIT
+> -void kvm_riscv_vcpu_aia_flush_interrupts(struct kvm_vcpu *vcpu)
+> -{
+> -	struct kvm_vcpu_aia_csr *csr = &vcpu->arch.aia_context.guest_csr;
+> -	unsigned long mask, val;
+> -
+> -	if (!kvm_riscv_aia_available())
+> -		return;
+> -
+> -	if (READ_ONCE(vcpu->arch.irqs_pending_mask[1])) {
+> -		mask = xchg_acquire(&vcpu->arch.irqs_pending_mask[1], 0);
+> -		val = READ_ONCE(vcpu->arch.irqs_pending[1]) & mask;
+> -
+> -		csr->hviph &= ~mask;
+> -		csr->hviph |= val;
+> -	}
+> -}
+> -
+> -void kvm_riscv_vcpu_aia_sync_interrupts(struct kvm_vcpu *vcpu)
+> -{
+> -	struct kvm_vcpu_aia_csr *csr = &vcpu->arch.aia_context.guest_csr;
+> -
+> -	if (kvm_riscv_aia_available())
+> -		csr->vsieh = ncsr_read(CSR_VSIEH);
+> -}
+> -#endif
+> -
+>  bool kvm_riscv_vcpu_aia_has_interrupts(struct kvm_vcpu *vcpu, u64 mask)
+>  {
+>  	int hgei;
+> @@ -101,12 +74,6 @@ bool kvm_riscv_vcpu_aia_has_interrupts(struct kvm_vcpu *vcpu, u64 mask)
+>  	if (!kvm_riscv_aia_available())
+>  		return false;
+>  
+> -#ifdef CONFIG_32BIT
+> -	if (READ_ONCE(vcpu->arch.irqs_pending[1]) &
+> -	    (vcpu->arch.aia_context.guest_csr.vsieh & upper_32_bits(mask)))
+> -		return true;
+> -#endif
+> -
+>  	seip = vcpu->arch.guest_csr.vsie;
+>  	seip &= (unsigned long)mask;
+>  	seip &= BIT(IRQ_S_EXT);
+> @@ -128,9 +95,6 @@ void kvm_riscv_vcpu_aia_update_hvip(struct kvm_vcpu *vcpu)
+>  	if (!kvm_riscv_aia_available())
+>  		return;
+>  
+> -#ifdef CONFIG_32BIT
+> -	ncsr_write(CSR_HVIPH, vcpu->arch.aia_context.guest_csr.hviph);
+> -#endif
+>  	ncsr_write(CSR_HVICTL, aia_hvictl_value(!!(csr->hvip & BIT(IRQ_VS_EXT))));
+>  }
+>  
+> @@ -147,22 +111,10 @@ void kvm_riscv_vcpu_aia_load(struct kvm_vcpu *vcpu, int cpu)
+>  		nacl_csr_write(nsh, CSR_VSISELECT, csr->vsiselect);
+>  		nacl_csr_write(nsh, CSR_HVIPRIO1, csr->hviprio1);
+>  		nacl_csr_write(nsh, CSR_HVIPRIO2, csr->hviprio2);
+> -#ifdef CONFIG_32BIT
+> -		nacl_csr_write(nsh, CSR_VSIEH, csr->vsieh);
+> -		nacl_csr_write(nsh, CSR_HVIPH, csr->hviph);
+> -		nacl_csr_write(nsh, CSR_HVIPRIO1H, csr->hviprio1h);
+> -		nacl_csr_write(nsh, CSR_HVIPRIO2H, csr->hviprio2h);
+> -#endif
 
-Best regards,
-J. Neusch=C3=A4fer
+One minor cleanup: since this patch removes all accesses to these 32-bit-only
+high-half CSRs, the corresponding members should also be removed from struct
+kvm_vcpu_aia_csr in asm/kvm_aia.h.
+
+Regards,
+Samuel
+
 
