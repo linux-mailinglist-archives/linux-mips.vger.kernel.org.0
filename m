@@ -1,239 +1,165 @@
-Return-Path: <linux-mips+bounces-7662-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7663-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 459F1A2520E
-	for <lists+linux-mips@lfdr.de>; Mon,  3 Feb 2025 06:43:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15194A252A4
+	for <lists+linux-mips@lfdr.de>; Mon,  3 Feb 2025 08:00:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BAEDA1622BB
-	for <lists+linux-mips@lfdr.de>; Mon,  3 Feb 2025 05:43:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B62C83A3D1A
+	for <lists+linux-mips@lfdr.de>; Mon,  3 Feb 2025 06:59:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CCA6126BF9;
-	Mon,  3 Feb 2025 05:43:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="fGufbaGE"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E2131D63DD;
+	Mon,  3 Feb 2025 06:59:58 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-il1-f175.google.com (mail-il1-f175.google.com [209.85.166.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3671278F49
-	for <linux-mips@vger.kernel.org>; Mon,  3 Feb 2025 05:43:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.175
+Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73F5D1DA31D;
+	Mon,  3 Feb 2025 06:59:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738561409; cv=none; b=P3tZtINtIcmGNtaSOykas8rc7r9+zVrCVwNJ333IEQoCOCkjtZPy0Y2HZVLC+CXkZVz86p2b+YY8JHiX3SPv1soiauWzrn/OTqhLLzyLJaho7aHIB1VUEZETFADV7g6V8lVCcE84+UhyggaofM5pYt6gtEQEuSYJP32BCiknZTk=
+	t=1738565998; cv=none; b=dwmMg7k7RVfksFg/HymeCw9zMGH9cFQjVqdeYzfng9qorfrr+MN45e+LMwQecP72xoGhwZHK3cBQnmt8oIl3oAGVvg/QH3rD/G+RhBvAI9UZvAUedEI6U0X2TnLrSOKBy0zapSW+/eciDz77FIQidSmRcMGYW/NF8XWHaMgvsw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738561409; c=relaxed/simple;
-	bh=NmcLSvXof+RXtFnk6pi3gTBVMg9ZHRhnQX1L7fgcdGs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IllizkXijTFxL6iS1VaErwS8luXL5hPgUXYbBvD8ZO9n2Wh68NWv8IdBSag4tR6H3W329rfK5aLdzA8OzH2jyfstQ8fOscWlilGIQBirhgeQNFTsxD5VFnssXmtS6OMmTxGn8XXZmosmyeG785WUMJZlfXBiPWifQSrRpTbQvVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=fGufbaGE; arc=none smtp.client-ip=209.85.166.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-il1-f175.google.com with SMTP id e9e14a558f8ab-3d0062fb20bso34242795ab.2
-        for <linux-mips@vger.kernel.org>; Sun, 02 Feb 2025 21:43:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1738561406; x=1739166206; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Abrmc3V+wCkg7+h5ECgKA37T7F550/MzIW2BgVmGe00=;
-        b=fGufbaGEkoB9wwhUDmv3ORJMmPRU9GJLjkZ3LhKzikdukXvOUWdnAQTniO5qzy6GgC
-         1k+nBfKB19dksMpiMncup4YsZ5myb4LvEML3vQpXaUkFdUPoVJwDc2R7wE91FvLH4AWM
-         wrlX8vdzUFeIEahw8kf9WSF3QuxRnIPVMrPuCU35Y/TE/dEAvPR7Alom24s5xzI7NWOE
-         QXVjrPcshHgnorH3Dpa3qp5wlcgqfQTQyvOD8jAcILdyGFGNQ25aZb1cN9YwmnYvfuuO
-         fjtI2h1dhace8kRmgUdaHPESqosIF2kNfRIGdelSbWt/GbGiPAyfhtB+X2wsofImGM/9
-         Cklg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738561406; x=1739166206;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Abrmc3V+wCkg7+h5ECgKA37T7F550/MzIW2BgVmGe00=;
-        b=W2+ADGnNL+xmVqH5k6JvP4QvJY1GcWluwTjexElLTtGE9CKOoeTHJS5y8RC57U9EYX
-         zA8GSU+/ie48DtUXvVF0W1y4JOUn4BeZGPvHueIeiEpEFM1JBCzrSSVfd+95n/KboVhx
-         AhnDYxnMUXUZ29hwxWs6MPhRO88/aCtd1CSqYb2L1fiyXFSXLBKwKHlOsk273IihcUQS
-         8uf3kwtAHuhrUuYTrlCp5Db86htC4bbea/dwEtwFes7TI2pWV8S6iKZCTzCG6bMzdKnX
-         rAEnALr/tiRFjkgC/ZqOpb8cFWOXEtroImbWdthkIhKdsMPNNyrVY4fbojtAiPrWEQEd
-         UQ/A==
-X-Forwarded-Encrypted: i=1; AJvYcCXaJbQjLcCnQ8Q90zEDUTQVX4iVhbVkGKvwDeT/TO5bflcUlaWqfuYB4zp/r90ltVr3waC4cT18cxgD@vger.kernel.org
-X-Gm-Message-State: AOJu0YxrJ5sdUbVN9k3CAgplvH78QrlteZfjGqLNda4dJEGh3nDlw5Hm
-	c7wOZASBULPCcULgBWqUn4oQBlZpZG44kjsK77QH0cJPjyMycenv2CN506cBhtI=
-X-Gm-Gg: ASbGncs04dhYwoa1t/vG4zXDFVT0wyzWm0lgHaTGLuKuGS0qSRgil6V7rJbEnRb0Zrp
-	xX7lnKBa8K5FJisCrvjx7m3gaBaGP3SB5rd+mvASgNyZx062BZHFgQNJq93Xei+NStO9GhdbHJt
-	Y6w1ietps5Gip+QSfZaTCyJVp/hcSJTl2Vfc3n3ad45qo+hP/JzXftSbgz2ft6xb09c1D+j4pJf
-	WliY9Kvryw+scsiHDpUuiNTX4SVj9PGv6E3R9XCZhF0GHvevdaV3RNtAx5gP3hJqU+3U8YUcL1t
-	os3vk+3bWW6VCCSC/L5+/vQy/4kMDI0TAOAheas=
-X-Google-Smtp-Source: AGHT+IHl4RRDfRdJ9K6Cx6v8dXThe6D880Ogx8BJ2U75l88ormi4P0wAtnHOCwaBHFLWcb6LIw7+7w==
-X-Received: by 2002:a05:6e02:1fc2:b0:3ce:78ab:dcd1 with SMTP id e9e14a558f8ab-3cffe4a7bf1mr175908815ab.19.1738561406189;
-        Sun, 02 Feb 2025 21:43:26 -0800 (PST)
-Received: from [100.64.0.1] ([165.188.116.9])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3d018c28ea5sm15310115ab.35.2025.02.02.21.43.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 02 Feb 2025 21:43:25 -0800 (PST)
-Message-ID: <44468c97-06e6-4bfe-930d-444ab7ead90d@sifive.com>
-Date: Sun, 2 Feb 2025 23:43:22 -0600
+	s=arc-20240116; t=1738565998; c=relaxed/simple;
+	bh=L+9dWtVflSZ3wYxMdOOqIm+skRJepeS50G6D4E8vvRI=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=ULVsHkyLe0we+IyeOWQRgM2C2p2gM/Z4MAUzdOxv4R8DP5j7aiKhKsDk6ACp7fvb5E+wRofhqpdunSDmUKga60IWRmLB2qrlFC8Oq31dUs3UUKiqfB5UyTREG6IJ2/n9Eb1hvHV0xMJQkISpbfSnoMJkKjQ3PK3lkTd54PHNFyo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
+Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
+	by vmicros1.altlinux.org (Postfix) with ESMTP id 270A672C8FB;
+	Mon,  3 Feb 2025 09:59:55 +0300 (MSK)
+Received: by mua.local.altlinux.org (Postfix, from userid 508)
+	id 1407E7CCB3A; Mon,  3 Feb 2025 08:59:55 +0200 (IST)
+Date: Mon, 3 Feb 2025 08:59:55 +0200
+From: "Dmitry V. Levin" <ldv@strace.io>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: "Maciej W. Rozycki" <macro@orcam.me.uk>,
+	Oleg Nesterov <oleg@redhat.com>, Alexey Gladkov <legion@kernel.org>,
+	Eugene Syromyatnikov <evgsyr@gmail.com>,
+	Mike Frysinger <vapier@gentoo.org>,
+	Renzo Davoli <renzo@cs.unibo.it>,
+	Davide Berardi <berardi.dav@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	strace-devel@lists.strace.io, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v4 1/7] mips: fix mips_get_syscall_arg() for o32
+Message-ID: <20250203065954.GB14120@strace.io>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/5] riscv: kvm: drop 32-bit host support
-To: Arnd Bergmann <arnd@kernel.org>, kvm@vger.kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Huacai Chen <chenhuacai@kernel.org>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- Naveen N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>,
- Alexander Graf <graf@amazon.com>, Crystal Wood <crwood@redhat.com>,
- Anup Patel <anup@brainfault.org>, Atish Patra <atishp@atishpatra.org>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Sean Christopherson <seanjc@google.com>, Paolo Bonzini
- <pbonzini@redhat.com>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Vitaly Kuznetsov <vkuznets@redhat.com>,
- David Woodhouse <dwmw2@infradead.org>, Paul Durrant <paul@xen.org>,
- Marc Zyngier <maz@kernel.org>, "A. Wilcox" <AWilcox@Wilcox-Tech.com>,
- linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
- linux-riscv@lists.infradead.org
-References: <20241221214223.3046298-1-arnd@kernel.org>
- <20241221214223.3046298-3-arnd@kernel.org>
-From: Samuel Holland <samuel.holland@sifive.com>
-Content-Language: en-US
-In-Reply-To: <20241221214223.3046298-3-arnd@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250203065849.GA14120@strace.io>
 
-Hi Arnd,
+This makes ptrace/get_syscall_info selftest pass on mips o32 and
+mips64 o32 by fixing the following two test assertions:
 
-On 2024-12-21 3:42 PM, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
-> 
-> KVM support on RISC-V includes both 32-bit and 64-bit host mode, but in
-> practice, all RISC-V SoCs that may use this are 64-bit:
-> 
-> As of linux-6.13, there is no mainline Linux support for any specific
-> 32-bit SoC in arch/riscv/, although the generic qemu model should work.
-> 
-> The available RV32 CPU implementations are mostly built for
-> microcontroller applications and are lacking a memory management
-> unit. There are a few CPU cores with an MMU, but those still lack the
-> hypervisor extensions needed for running KVM.
-> 
-> This is unlikely to change in the future, so remove the 32-bit host
-> code and simplify the test matrix.
-> 
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  arch/riscv/kvm/Kconfig            |   2 +-
->  arch/riscv/kvm/aia.c              | 105 ------------------------------
->  arch/riscv/kvm/aia_imsic.c        |  34 ----------
->  arch/riscv/kvm/mmu.c              |   8 ---
->  arch/riscv/kvm/vcpu_exit.c        |   4 --
->  arch/riscv/kvm/vcpu_insn.c        |  12 ----
->  arch/riscv/kvm/vcpu_sbi_pmu.c     |   8 ---
->  arch/riscv/kvm/vcpu_sbi_replace.c |   4 --
->  arch/riscv/kvm/vcpu_sbi_v01.c     |   4 --
->  arch/riscv/kvm/vcpu_timer.c       |  20 ------
->  10 files changed, 1 insertion(+), 200 deletions(-)
-> 
-> diff --git a/arch/riscv/kvm/Kconfig b/arch/riscv/kvm/Kconfig
-> index 0c3cbb0915ff..7405722e4433 100644
-> --- a/arch/riscv/kvm/Kconfig
-> +++ b/arch/riscv/kvm/Kconfig
-> @@ -19,7 +19,7 @@ if VIRTUALIZATION
->  
->  config KVM
->  	tristate "Kernel-based Virtual Machine (KVM) support (EXPERIMENTAL)"
-> -	depends on RISCV_SBI && MMU
-> +	depends on RISCV_SBI && MMU && 64BIT
->  	select HAVE_KVM_IRQCHIP
->  	select HAVE_KVM_IRQ_ROUTING
->  	select HAVE_KVM_MSI
-> diff --git a/arch/riscv/kvm/aia.c b/arch/riscv/kvm/aia.c
-> index 19afd1f23537..a399a5a9af0e 100644
-> --- a/arch/riscv/kvm/aia.c
-> +++ b/arch/riscv/kvm/aia.c
-> @@ -66,33 +66,6 @@ static inline unsigned long aia_hvictl_value(bool ext_irq_pending)
->  	return hvictl;
->  }
->  
-> -#ifdef CONFIG_32BIT
-> -void kvm_riscv_vcpu_aia_flush_interrupts(struct kvm_vcpu *vcpu)
-> -{
-> -	struct kvm_vcpu_aia_csr *csr = &vcpu->arch.aia_context.guest_csr;
-> -	unsigned long mask, val;
-> -
-> -	if (!kvm_riscv_aia_available())
-> -		return;
-> -
-> -	if (READ_ONCE(vcpu->arch.irqs_pending_mask[1])) {
-> -		mask = xchg_acquire(&vcpu->arch.irqs_pending_mask[1], 0);
-> -		val = READ_ONCE(vcpu->arch.irqs_pending[1]) & mask;
-> -
-> -		csr->hviph &= ~mask;
-> -		csr->hviph |= val;
-> -	}
-> -}
-> -
-> -void kvm_riscv_vcpu_aia_sync_interrupts(struct kvm_vcpu *vcpu)
-> -{
-> -	struct kvm_vcpu_aia_csr *csr = &vcpu->arch.aia_context.guest_csr;
-> -
-> -	if (kvm_riscv_aia_available())
-> -		csr->vsieh = ncsr_read(CSR_VSIEH);
-> -}
-> -#endif
-> -
->  bool kvm_riscv_vcpu_aia_has_interrupts(struct kvm_vcpu *vcpu, u64 mask)
->  {
->  	int hgei;
-> @@ -101,12 +74,6 @@ bool kvm_riscv_vcpu_aia_has_interrupts(struct kvm_vcpu *vcpu, u64 mask)
->  	if (!kvm_riscv_aia_available())
->  		return false;
->  
-> -#ifdef CONFIG_32BIT
-> -	if (READ_ONCE(vcpu->arch.irqs_pending[1]) &
-> -	    (vcpu->arch.aia_context.guest_csr.vsieh & upper_32_bits(mask)))
-> -		return true;
-> -#endif
-> -
->  	seip = vcpu->arch.guest_csr.vsie;
->  	seip &= (unsigned long)mask;
->  	seip &= BIT(IRQ_S_EXT);
-> @@ -128,9 +95,6 @@ void kvm_riscv_vcpu_aia_update_hvip(struct kvm_vcpu *vcpu)
->  	if (!kvm_riscv_aia_available())
->  		return;
->  
-> -#ifdef CONFIG_32BIT
-> -	ncsr_write(CSR_HVIPH, vcpu->arch.aia_context.guest_csr.hviph);
-> -#endif
->  	ncsr_write(CSR_HVICTL, aia_hvictl_value(!!(csr->hvip & BIT(IRQ_VS_EXT))));
->  }
->  
-> @@ -147,22 +111,10 @@ void kvm_riscv_vcpu_aia_load(struct kvm_vcpu *vcpu, int cpu)
->  		nacl_csr_write(nsh, CSR_VSISELECT, csr->vsiselect);
->  		nacl_csr_write(nsh, CSR_HVIPRIO1, csr->hviprio1);
->  		nacl_csr_write(nsh, CSR_HVIPRIO2, csr->hviprio2);
-> -#ifdef CONFIG_32BIT
-> -		nacl_csr_write(nsh, CSR_VSIEH, csr->vsieh);
-> -		nacl_csr_write(nsh, CSR_HVIPH, csr->hviph);
-> -		nacl_csr_write(nsh, CSR_HVIPRIO1H, csr->hviprio1h);
-> -		nacl_csr_write(nsh, CSR_HVIPRIO2H, csr->hviprio2h);
-> -#endif
+1. get_syscall_info test assertion on mips o32:
+  # get_syscall_info.c:218:get_syscall_info:Expected exp_args[5] (3134521044) == info.entry.args[4] (4911432)
+  # get_syscall_info.c:219:get_syscall_info:wait #1: entry stop mismatch
 
-One minor cleanup: since this patch removes all accesses to these 32-bit-only
-high-half CSRs, the corresponding members should also be removed from struct
-kvm_vcpu_aia_csr in asm/kvm_aia.h.
+2. get_syscall_info test assertion on mips64 o32:
+  # get_syscall_info.c:209:get_syscall_info:Expected exp_args[2] (3134324433) == info.entry.args[1] (18446744072548908753)
+  # get_syscall_info.c:210:get_syscall_info:wait #1: entry stop mismatch
 
-Regards,
-Samuel
+The first assertion is fixed for mips o32 by using struct pt_regs.pad0
+instead of get_user() to obtain syscall arguments.  This approach works
+due to this piece in arch/mips/kernel/scall32-o32.S:
 
+        /*
+         * Ok, copy the args from the luser stack to the kernel stack.
+         */
+
+        .set    push
+        .set    noreorder
+        .set    nomacro
+
+    load_a4: user_lw(t5, 16(t0))		# argument #5 from usp
+    load_a5: user_lw(t6, 20(t0))		# argument #6 from usp
+    load_a6: user_lw(t7, 24(t0))		# argument #7 from usp
+    load_a7: user_lw(t8, 28(t0))		# argument #8 from usp
+    loads_done:
+
+        sw	t5, 16(sp)		# argument #5 to ksp
+        sw	t6, 20(sp)		# argument #6 to ksp
+        sw	t7, 24(sp)		# argument #7 to ksp
+        sw	t8, 28(sp)		# argument #8 to ksp
+        .set	pop
+
+        .section __ex_table,"a"
+        PTR_WD	load_a4, bad_stack_a4
+        PTR_WD	load_a5, bad_stack_a5
+        PTR_WD	load_a6, bad_stack_a6
+        PTR_WD	load_a7, bad_stack_a7
+        .previous
+
+arch/mips/kernel/scall64-o32.S has analogous code for mips64 o32 that
+allows obtaining syscall arguments from struct pt_regs.regs[4..11]
+instead of get_user().
+
+The second assertion is fixed by truncating 64-bit values to 32-bit
+syscall arguments.
+
+Signed-off-by: Dmitry V. Levin <ldv@strace.io>
+---
+ arch/mips/include/asm/syscall.h | 32 ++++++++------------------------
+ 1 file changed, 8 insertions(+), 24 deletions(-)
+
+diff --git a/arch/mips/include/asm/syscall.h b/arch/mips/include/asm/syscall.h
+index ebdf4d910af2..b3f00ede8bb3 100644
+--- a/arch/mips/include/asm/syscall.h
++++ b/arch/mips/include/asm/syscall.h
+@@ -57,37 +57,21 @@ static inline void mips_syscall_update_nr(struct task_struct *task,
+ static inline void mips_get_syscall_arg(unsigned long *arg,
+ 	struct task_struct *task, struct pt_regs *regs, unsigned int n)
+ {
+-	unsigned long usp __maybe_unused = regs->regs[29];
+-
++#ifdef CONFIG_32BIT
+ 	switch (n) {
+ 	case 0: case 1: case 2: case 3:
+ 		*arg = regs->regs[4 + n];
+-
+-		return;
+-
+-#ifdef CONFIG_32BIT
+-	case 4: case 5: case 6: case 7:
+-		get_user(*arg, (int *)usp + n);
+ 		return;
+-#endif
+-
+-#ifdef CONFIG_64BIT
+ 	case 4: case 5: case 6: case 7:
+-#ifdef CONFIG_MIPS32_O32
+-		if (test_tsk_thread_flag(task, TIF_32BIT_REGS))
+-			get_user(*arg, (int *)usp + n);
+-		else
+-#endif
+-			*arg = regs->regs[4 + n];
+-
++		*arg = regs->pad0[n];
+ 		return;
+-#endif
+-
+-	default:
+-		BUG();
+ 	}
+-
+-	unreachable();
++#else
++	*arg = regs->regs[4 + n];
++	if ((IS_ENABLED(CONFIG_MIPS32_O32) &&
++	     test_tsk_thread_flag(task, TIF_32BIT_REGS)))
++		*arg = (unsigned int)*arg;
++#endif
+ }
+ 
+ static inline long syscall_get_error(struct task_struct *task,
+-- 
+ldv
 
