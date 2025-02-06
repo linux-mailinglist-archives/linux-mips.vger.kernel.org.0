@@ -1,136 +1,161 @@
-Return-Path: <linux-mips+bounces-7705-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7706-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA1EBA2A5C6
-	for <lists+linux-mips@lfdr.de>; Thu,  6 Feb 2025 11:27:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C03FA2A6A6
+	for <lists+linux-mips@lfdr.de>; Thu,  6 Feb 2025 12:02:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 02B013A67A7
-	for <lists+linux-mips@lfdr.de>; Thu,  6 Feb 2025 10:27:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C2CD7188971C
+	for <lists+linux-mips@lfdr.de>; Thu,  6 Feb 2025 11:02:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C0C4226881;
-	Thu,  6 Feb 2025 10:27:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 931B7227B87;
+	Thu,  6 Feb 2025 11:00:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="dmumk0CX"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="YGZTZnxX";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="gSo8yfFy"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from bg1.exmail.qq.com (bg1.exmail.qq.com [114.132.65.219])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30ABF226553;
-	Thu,  6 Feb 2025 10:27:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.132.65.219
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82A2E2288EC;
+	Thu,  6 Feb 2025 11:00:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738837645; cv=none; b=Ok3rQiepy+YWPfcxVQCLbxkCk0GUkRfr6ZLmWOIPF6JwoUAThpHTPxdNbMIsOCuE3BVR10KcFgNNEO1XaRskdQhojaA+/ITbWtJ1XO4OEY8GtxNhAspq2c1esFBZDFa5pjLZIS/TPLmYziIrch4+AJx0unlh6Evl2tajS4t07xA=
+	t=1738839605; cv=none; b=QpxMT13luwscfuRBNXqs+61Z6pk4AbMiBx+FsYQyetuz0uu+HoQqMg6Wdjj6eUbkHeq78WVJGMlvIO4GznmJ1M7kVe31U3EzV0AkWIlEZ1P4QRt93Qkx1QI2y7DfTI7JH+wXcKAgjhHrh6wkmXJEl48oFnQCqPBSyI5fi1sMrbg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738837645; c=relaxed/simple;
-	bh=ty4Eujbi3JXutVV8JchgtpSnzXyS57fNPP7x8fwv3Cc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Elccwfj5ewuui8SUHiXhvwUYUCJBW5rJ/JWA890MSOvKgC/F3IkLXBV6xEYUogWI7LHbKua2mj6kA+J9rZ2lyuZxZCweFOCPVRKEFfg8J+mFwX7gKWsmjKZS4B9P+mlZpDWxO82YPqUJJETBTuT9o+O8I1TbNKni1ZjA2Hk3seM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=dmumk0CX; arc=none smtp.client-ip=114.132.65.219
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1738837566;
-	bh=flV33qDbCktrhjYaUTG2DPPSAd2dWkCXdepsMeSnBJ8=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=dmumk0CX8WGpa/Z82vdJ4IRu6Bf7eY4i+16r2YCJBPPqdHz1KUOPLZ6THwMWcWKfY
-	 oH34pGfYJAaJNC7xXJXIdhROnHnwvlDTn1iCL3vf+y1Fd3J/ngG/wQX+U918uuD9rO
-	 xuZfXNBYRvnegedfhl08AkhXr86RkexYGqzET4SM=
-X-QQ-mid: bizesmtpip4t1738837559tgprquo
-X-QQ-Originating-IP: YmVy3874EstnoparGauVHa6MhyYnp0d0n3DAgaqWRRQ=
-Received: from localhost.localdomain ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Thu, 06 Feb 2025 18:25:57 +0800 (CST)
-X-QQ-SSF: 0000000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 5688250677626398646
-From: WangYuli <wangyuli@uniontech.com>
-To: gregkh@linuxfoundation.org,
-	sashal@kernel.org,
-	stable@vger.kernel.org
-Cc: rostedt@goodmis.org,
-	mhiramat@kernel.org,
-	mark.rutland@arm.com,
-	tsbogend@alpha.franken.de,
-	linux-kernel@vger.kernel.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	WangYuli <wangyuli@uniontech.com>,
-	=?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>
-Subject: [PATCH 5.4~6.13] MIPS: ftrace: Declare ftrace_get_parent_ra_addr() as static
-Date: Thu,  6 Feb 2025 18:25:48 +0800
-Message-ID: <6832B20AFE3B7328+20250206102548.95302-1-wangyuli@uniontech.com>
-X-Mailer: git-send-email 2.47.2
+	s=arc-20240116; t=1738839605; c=relaxed/simple;
+	bh=xQ1t5p/G1PuTyMUQl7uec82DUkXuAxu+nr72fhZ0FqQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=L34PNd4Pms0OpTc29xkdbMK8Bhe5NuvGv/i4Hj0C7t/PkC/LSHDxAPwDlxWPfK2W+YYGa7Q1kOo5N8njwZUMipUcMNVloauY0W0CyWyj9khsSh6p5U8DeFeuMY0iu8MUitDzQSZeuOn0PW6RzTMuxuShbCDVAqvtiPocyGKr5os=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=YGZTZnxX; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=gSo8yfFy; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Thu, 6 Feb 2025 11:59:59 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1738839601;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ru5WdIbpSL0IOKGQMyXAT/ZbwjxtTCZKvCRArp1oQDE=;
+	b=YGZTZnxXjpdI6oZKS05b+5XvnP+boGHN1C9QVygV7IAjLA8pAEovdmFAH8xFn7WI+w/Xhp
+	8K+GjBJMH0JXK40pNxioacxcseFzn+iXVx4WoYt+J0VaxAt6ID0MNK8tJHkPrEinPnHwJG
+	q7T7uflCus2GZC60/Vo9hxiLt7lbmMt3uhYS5TbYuilZ8s9n9kIooocVm9DSgR45+vozV8
+	mKs7HvnUnL+HLLe1fD2OiCIYZL6f6ix3Bee88IjX4iDMFE94To0mtXdotTD+DhoAabPdO5
+	+hTLhUwkR8YuE1I+6rX+payvbnygcsEtyByLEI0nCsLk7XsBFKKaA2MPCL7vew==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1738839601;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=ru5WdIbpSL0IOKGQMyXAT/ZbwjxtTCZKvCRArp1oQDE=;
+	b=gSo8yfFya9Ajm2CmxNsGxQ1eCLyB3wbR/PEUj366khtBpyQwoXLrVFgUwGilu8dL/eMyJd
+	VQWqN9SewyqCZ4BQ==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: David Woodhouse <dwmw2@infradead.org>
+Cc: "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	Helge Deller <deller@gmx.de>, Andy Lutomirski <luto@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>, 
+	"Jason A. Donenfeld" <Jason@zx2c4.com>, Paul Walmsley <paul.walmsley@sifive.com>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+	Russell King <linux@armlinux.org.uk>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Naveen N Rao <naveen@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Guo Ren <guoren@kernel.org>, linux-parisc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, loongarch@lists.linux.dev, linux-s390@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-arch@vger.kernel.org, 
+	Nam Cao <namcao@linutronix.de>, linux-csky@vger.kernel.org, 
+	"Ridoux, Julien" <ridouxj@amazon.com>, "Luu, Ryan" <rluu@amazon.com>, kvm <kvm@vger.kernel.org>
+Subject: Re: [PATCH v3 00/18] vDSO: Introduce generic data storage
+Message-ID: <20250206110648-ec4cf3d0-0aef-4feb-a859-c69e53ab110c@linutronix.de>
+References: <20250204-vdso-store-rng-v3-0-13a4669dfc8c@linutronix.de>
+ <ff83dc5c91b4e46bcf2d99680ec6af250fb05b27.camel@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
-X-QQ-XMAILINFO: M135ko5REW2alb6372CGYhiZ+aMCzPVWw0sIl38J0eO6ryeBc6Ks962c
-	0j2G+sdqngN6dk/kIK+VYDL0hE737vMoAwUC2TGPKF28HN0ZRzBcfbBeuoIo1vjHJkQVT1h
-	ckRfpkFEV1s/Q7YSJKan95K+MpbjGv14ldicVHVv6kCy+gmqKYBbUeNX/vHL8lge0OQGfL/
-	eeIVG5dXGx8VkKoOTOFbaZvRPvz2g9IGH36jyGwxs6oFDtRKWT91zPVbhom+c1ro4TggioN
-	zzsn6/Hpm1Oc0LTW93MQ4f+iWQaAbagtE4erK1pYClcN99TFZswge9mSTKLYbWlZcHiYIIP
-	Asp0TPl6450JJgK16aFAUdogcrt8Awsq68Tagz/gjQL003dSkfw4qhJv+b9rGtK3MDhtbsc
-	VYuoruhLA7OHRjdVy9mtGEjr2GWGXa9JNsXtYV/bpEE/K/cjA7mWKA4PJAwBy614IzE6mtT
-	RRJE1a22a92e9dChwO+UaXJOTDk214L5BhGPRt9ijlZ6urypd6Aqm3m+9SAL5rTnrIviEP6
-	ejCw5wPE8UoHXOC8bunnN5jN+cUFzCTxQhqMMBvjiv64BEt9DA1uul+1zKz6uGefvmGysFS
-	Yhkexjloyj7OWXIft06NlctVwtVqqg7nkLQk2acpO5Xi0P3Xfc2fukPGJg0AJTrmzPOYSng
-	9Iy5iYQkKPJzUx2+jh0rR3j38Gr+n7Y66F0xxn4838QMk3OOCtKpS+j1IN4ocZx+LOQ6Hmp
-	1F43Iup9vyzeJRYj9vEjCrvH0NaUlB4f2RHKk1S+dOoanKA58GLrIGhBrCqANOi02s2RH/7
-	3Cv1e3MMeq0r/UYPwL07NAa8dC0FJFhk70mLSMFdtegU0Ia493oLHUBFBKIqOjqwEeIRaSV
-	crV5yWGeUEj+LSzgqs6nuE3VM9eHGnyTZmwaCt/sQ1WOrFTvsk3/N+mPom4BmJnXWYQditU
-	Dn2yYcUIMQh3FhwQFc8jQ3ca6w8u1eBhBDZcfbfQrDk4OzA5dV0F1HlPYDdV+3wJvkKspI6
-	z/syDtYQ==
-X-QQ-XMRINFO: M/715EihBoGSf6IYSX1iLFg=
-X-QQ-RECHKSPAM: 0
+In-Reply-To: <ff83dc5c91b4e46bcf2d99680ec6af250fb05b27.camel@infradead.org>
 
-commit ddd068d81445b17ac0bed084dfeb9e58b4df3ddd upstream.
+On Thu, Feb 06, 2025 at 09:31:42AM +0000, David Woodhouse wrote:
+> On Tue, 2025-02-04 at 13:05 +0100, Thomas Weiﬂschuh wrote:
+> > Currently each architecture defines the setup of the vDSO data page on
+> > its own, mostly through copy-and-paste from some other architecture.
+> > Extend the existing generic vDSO implementation to also provide generic
+> > data storage.
+> > This removes duplicated code and paves the way for further changes to
+> > the generic vDSO implementation without having to go through a lot of
+> > per-architecture changes.
+> > 
+> > Based on v6.14-rc1 and intended to be merged through the tip tree.
 
-Declare ftrace_get_parent_ra_addr() as static to suppress clang
-compiler warning that 'no previous prototype'. This function is
-not intended to be called from other parts.
+Note: The real answer will need to come from the timekeeping
+maintainers, my personal two cents below.
 
-Fix follow error with clang-19:
+> Thanks for working on this. Is there a plan to expose the time data
+> directly to userspace in a form which is usable *other* than by
+> function calls which get the value of the clock at a given moment?
 
-arch/mips/kernel/ftrace.c:251:15: error: no previous prototype for function 'ftrace_get_parent_ra_addr' [-Werror,-Wmissing-prototypes]
-  251 | unsigned long ftrace_get_parent_ra_addr(unsigned long self_ra, unsigned long
-      |               ^
-arch/mips/kernel/ftrace.c:251:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
-  251 | unsigned long ftrace_get_parent_ra_addr(unsigned long self_ra, unsigned long
-      | ^
-      | static
-1 error generated.
+There are no current plans that I am aware of.
 
-Signed-off-by: WangYuli <wangyuli@uniontech.com>
-Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
-Reviewed-by: Philippe Mathieu-Daud√© <philmd@linaro.org>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: WangYuli <wangyuli@uniontech.com>
----
- arch/mips/kernel/ftrace.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> For populating the vmclock deviceπ we need to know the actual
+> relationship between the hardware counter (TSC, arch timer, etc.) and
+> real time in order to propagate that to the guest.
+> 
+> I see two options for doing this:
+> 
+>  1. Via userspace, exposing the vdso time data (and a notification when
+>     it changes?) and letting the userspace VMM populate the vmclock.
+>     This is complex for x86 because of TSC scaling; in fact userspace
+>     doesn't currently know the precise scaling from host to guest TSC
+>     so we'd have to be able to extract that from KVM.
 
-diff --git a/arch/mips/kernel/ftrace.c b/arch/mips/kernel/ftrace.c
-index 8c401e42301c..f39e85fd58fa 100644
---- a/arch/mips/kernel/ftrace.c
-+++ b/arch/mips/kernel/ftrace.c
-@@ -248,7 +248,7 @@ int ftrace_disable_ftrace_graph_caller(void)
- #define S_R_SP	(0xafb0 << 16)	/* s{d,w} R, offset(sp) */
- #define OFFSET_MASK	0xffff	/* stack offset range: 0 ~ PT_SIZE */
- 
--unsigned long ftrace_get_parent_ra_addr(unsigned long self_ra, unsigned long
-+static unsigned long ftrace_get_parent_ra_addr(unsigned long self_ra, unsigned long
- 		old_parent_ra, unsigned long parent_ra_addr, unsigned long fp)
- {
- 	unsigned long sp, ip, tmp;
--- 
-2.47.2
+Exposing the raw vdso time data is problematic as it precludes any
+evolution to its datastructures, like the one we are currently doing.
 
+An additional, trimmed down and stable data structure could be used.
+But I don't think it makes sense. The vDSO is all about a stable
+highlevel function interface on top of an unstable data interface.
+However the vmclock needs the lowlevel data to populate its own
+datastructure, wrapping raw data access in function calls is unnecessary.
+If no functions are involved then the vDSO is not needed. The data can
+be maintained separately in any other place in the kernel and accessed
+or mapped by userspace from there.
+Also the vDSO does not have an active notification mechanism, this would
+probably be implemented through a filedescriptor, but then the data
+can also be mapped through exactly that fd.
+
+>  2. In kernel, asking KVM to populate the vmclock structure much like
+>     it does other pvclocks shared with the guest. KVM/x86 already uses
+>     pvclock_gtod_register_notifier() to hook changes; should we expand
+>     on that? The problem with that notifier is that it seems to be
+>     called far more frequently than I'd expect.
+
+This sounds better, especially as any custom ABI from the host kernel to
+the VMM would look a lot like the vmclock structure anyways.
+
+Timekeeper updates are indeed very frequent, but what are the concrete
+issues? That frequency is fine for regular vDSO data page updates,
+updating the vmclock data page should be very similar.
+The timekeeper core can pass context to the notifier callbacks, maybe
+this can be used to skip some expensive steps where possible.
+
+> π https://gitlab.com/qemu-project/qemu/-/commit/3634039b93cc5
 
