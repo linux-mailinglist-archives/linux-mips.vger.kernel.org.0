@@ -1,59 +1,59 @@
-Return-Path: <linux-mips+bounces-7714-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7715-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41900A2E19A
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Feb 2025 00:48:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B4454A2E19E
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Feb 2025 00:49:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00A243A5D51
-	for <lists+linux-mips@lfdr.de>; Sun,  9 Feb 2025 23:48:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 497583A5EB0
+	for <lists+linux-mips@lfdr.de>; Sun,  9 Feb 2025 23:48:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B785117B402;
-	Sun,  9 Feb 2025 23:48:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A79111AF0C3;
+	Sun,  9 Feb 2025 23:48:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="XWLopJGM"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="ffV6HIhR"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2661717B50A
-	for <linux-mips@vger.kernel.org>; Sun,  9 Feb 2025 23:48:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC2F11B0F16
+	for <linux-mips@vger.kernel.org>; Sun,  9 Feb 2025 23:48:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739144889; cv=none; b=eP1hQqrmpD4z+f4HyfgE6IFnrxD4Dk7QTucUFxJ9VWOS4DNGwr4eVGgfglNJ4osp6hy1nvoAOXfMUJbzZwfLozR1hpHihPiSLsesykev5+IAd1XohlciQsD6jN1yEguS/vpDl97h68ABy5pRpilH/beFUDqWvI/1/+P0MVYLKZ4=
+	t=1739144894; cv=none; b=KNR8uCtJQsSUi7Eggnt6AQI627bD2QmCJnJ6JjWbkjSagyNITfbjET4fvuzF6r9N6UsCafmBPEjUWniFYEUk5VJE/UmLWVu8B8C1f5xbgra/YK70tnScnHJ3Aw2gSI2R8q/Ob5m5HVCH4t5ODX//mRbQFjYbgQRxp7fwuvAcCjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739144889; c=relaxed/simple;
-	bh=RHuOaB7d+UjSjoFMhnWKkDFLOPSIwKQCOC9zA/g1HOs=;
+	s=arc-20240116; t=1739144894; c=relaxed/simple;
+	bh=vRCgLpcUVx0wKULsadSL0xFdXjndGNJOD53CNfruH70=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Tvf2tETg6ShauTSwy9J9TP6nYyTIP4eJRZsiUDNzy++z0v2jqeDh2i+6Aw9Gx5qSxjfdKP6QwpXzu3b8ZeICfLbQhn+rsW2pLN2igjByhJrHYcW+1Y1JAywDcr8nTdM7OSB1jeOmW4I0y0MKQwPiBRPyc3B0VNqWvtR52BMpb4U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=XWLopJGM; arc=none smtp.client-ip=202.36.163.20
+	 MIME-Version; b=CMXxuTjtxwTN8VqekRnmTan6/lwBMFva7tuV4MjyaLEKpK3NtFt9/HRhBXjT/Vjhc+AJiPrgzEZp5AJHmmvpX4wSGjd6q4oXa1V3lPSHFOFjUKxpvgTTAabWdjZBbWq3psLMAFnG9OHesQZikNNOHobUhYCv3Fue5pPFP2vWzbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=ffV6HIhR; arc=none smtp.client-ip=202.36.163.20
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
 Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id A413B2C045C;
-	Mon, 10 Feb 2025 12:48:06 +1300 (NZDT)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 2E9BF2C047F;
+	Mon, 10 Feb 2025 12:48:11 +1300 (NZDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1739144886;
-	bh=jZNBKo8BJn+Cpmm+/0ORd6aDcui99DR/5RTy8qbveT4=;
+	s=mail181024; t=1739144891;
+	bh=xOKn8zxK8enZbzoMFVOYM1tSF7siyAiiWT9kTl1Kl4w=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=XWLopJGMGrlJcInZzkimYEBZFSeCBIF7gWnR3iaO1eh2qXRrphl7xw9u6T6AGAc7h
-	 ekvKmNOG43sI4Y5dMDt2Z467EJ80jKL+/vE2+e+qXcvKolRW6rSpLL9+NW536JUm68
-	 l5ji76YIXXpes0WCqMHSEbpZ0nmHTa1DKkbgvX11NH1g4vT9eJnV9x0d8uwHDuHm6V
-	 p0rNfo+QXIATmJbcI45NCtqa9CNjNLCeZktbKKmmDOSGX1rKJ4EkyJJj0WAacGuM/I
-	 eFatMxrfMoVLZqxo+k2ByCYAlb4BVfR3nu/6MsUR3F2DD0y7ZKZ9hj8DsBDfL5het9
-	 4FWeUoRwSthtA==
+	b=ffV6HIhRnMQGuHostvhfLE2ta89z9W6K09pbkmj+IEvs5xvKMdKh1ja0xpbYaoptu
+	 3fKIt2/Y/t71PktSQ0B6VRgsW2mp09TyfV/3Te3SJivaKkGihm53HCoF63NqhqJJGv
+	 v3wxad93oz6EeQ1TVpIVheTuYI06GCbkOpMaHFvEaCIIxEXmhgA+458qRW1zJ9Y2gd
+	 tDO4hl1acFonNwry1UTqPvCOWBAD/G4/Ub/6mggPX6+3IdWJlaNygqOM/FSG0R+CVs
+	 rwPPbxZwMClkg5XXDOnzgwX6ZUwNdentfKehEjAO/2xmxV8Nh87slYIzI5ziRU8yyQ
+	 gYtJDdXtWNF+A==
 Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B67a93eb60000>; Mon, 10 Feb 2025 12:48:06 +1300
+	id <B67a93eba0000>; Mon, 10 Feb 2025 12:48:10 +1300
 Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-	by pat.atlnz.lc (Postfix) with ESMTP id 4DB3C13ED4A;
-	Mon, 10 Feb 2025 12:48:06 +1300 (NZDT)
+	by pat.atlnz.lc (Postfix) with ESMTP id BD6A613ED4A;
+	Mon, 10 Feb 2025 12:48:10 +1300 (NZDT)
 Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-	id 3D028280789; Mon, 10 Feb 2025 12:48:06 +1300 (NZDT)
+	id ABECB280789; Mon, 10 Feb 2025 12:48:10 +1300 (NZDT)
 From: Chris Packham <chris.packham@alliedtelesis.co.nz>
 To: lee@kernel.org,
 	robh@kernel.org,
@@ -70,9 +70,9 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-mips@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH net-next 2/5] dt-bindings: net: Add switch ports and interrupts to RTL9300
-Date: Mon, 10 Feb 2025 12:47:48 +1300
-Message-ID: <20250209234751.460404-3-chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH net-next 3/5] dt-bindings: net: Add Realtek MDIO controller
+Date: Mon, 10 Feb 2025 12:47:49 +1300
+Message-ID: <20250209234751.460404-4-chris.packham@alliedtelesis.co.nz>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250209234751.460404-1-chris.packham@alliedtelesis.co.nz>
 References: <20250209234751.460404-1-chris.packham@alliedtelesis.co.nz>
@@ -83,104 +83,194 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=QNvLRRLL c=1 sm=1 tr=0 ts=67a93eb6 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=T2h4t0Lz3GQA:10 a=VwQbUJbxAAAA:8 a=ONnuDqgNxj6Q2WPecnAA:9 a=3ZKOabzyN94A:10 a=o4McRIDJWpQDfD5EwD6I:22
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=QNvLRRLL c=1 sm=1 tr=0 ts=67a93eba a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=T2h4t0Lz3GQA:10 a=VwQbUJbxAAAA:8 a=gEfo2CItAAAA:8 a=c9Y0P7eFa9iVWmZcgD4A:9 a=3ZKOabzyN94A:10 a=sptkURWiP4Gy88Gu7hUp:22
 X-SEG-SpamProfiler-Score: 0
 x-atlnz-ls: pat
 
-Add bindings for the ethernet-switch and interrupt properties for the
-RTL9300.
+Add dtschema for the MDIO controller found in the RTL9300 Ethernet
+switch. The controller is slightly unusual in that direct MDIO
+communication is not possible. We model the MDIO controller with the
+MDIO buses as child nodes and the PHYs as children of the buses. The
+mapping of switch port number to MDIO bus/addr requires the
+ethernet-ports sibling to provide the mapping via the phy-handle
+property.
 
 Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
 ---
 
 Notes:
-    This is tecnically v7 of [1] changes from that are:
-    - Use ethernet-switch.yaml#/$defs/ethernet-ports
-    - Enforce "ethernet-ports" be used instead of just "ports"
-    - Add interrupts for the switch block
+    This is technically v7 of [1] and [2] which are combined now that
+    rtl9301-switch.yaml under net/ the only change from those is that the
+    $ref: in rtl9301-switch.yaml can now use a relative path
    =20
-    [1] - https://lore.kernel.org/lkml/20250204030249.1965444-2-chris.pac=
+    I could technically do away with the reg property on the mdio-control=
+ler
+    node. I don't currently need to use it in my driver and it looks like
+    the register offsets are the same between the RTL9300 and RTL9310.
+   =20
+    [1] - https://lore.kernel.org/lkml/20250204030249.1965444-6-chris.pac=
+kham@alliedtelesis.co.nz/
+    [2] - https://lore.kernel.org/lkml/20250204030249.1965444-4-chris.pac=
 kham@alliedtelesis.co.nz/
 
- .../bindings/net/realtek,rtl9301-switch.yaml  | 30 +++++++++++++++++++
- 1 file changed, 30 insertions(+)
+ .../bindings/net/realtek,rtl9301-mdio.yaml    | 86 +++++++++++++++++++
+ .../bindings/net/realtek,rtl9301-switch.yaml  | 31 +++++++
+ 2 files changed, 117 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/net/realtek,rtl9301=
+-mdio.yaml
 
-diff --git a/Documentation/devicetree/bindings/net/realtek,rtl9301-switch=
-.yaml b/Documentation/devicetree/bindings/net/realtek,rtl9301-switch.yaml
-index d0a93d5f03aa..5d29647bea2d 100644
---- a/Documentation/devicetree/bindings/net/realtek,rtl9301-switch.yaml
-+++ b/Documentation/devicetree/bindings/net/realtek,rtl9301-switch.yaml
-@@ -14,6 +14,8 @@ description:
-   number of different peripherals are accessed through a common register=
- block,
-   represented here as a syscon node.
-=20
-+$ref: ethernet-switch.yaml#/$defs/ethernet-ports
+diff --git a/Documentation/devicetree/bindings/net/realtek,rtl9301-mdio.y=
+aml b/Documentation/devicetree/bindings/net/realtek,rtl9301-mdio.yaml
+new file mode 100644
+index 000000000000..02e4e33e9969
+--- /dev/null
++++ b/Documentation/devicetree/bindings/net/realtek,rtl9301-mdio.yaml
+@@ -0,0 +1,86 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/net/realtek,rtl9301-mdio.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
 +
- properties:
-   compatible:
-     items:
-@@ -28,12 +30,23 @@ properties:
-   reg:
-     maxItems: 1
-=20
-+  interrupts:
-+    maxItems: 2
++title: Realtek RTL9300 MDIO Controller
 +
-+  interrupt-names:
-+    items:
-+      - const: switch
-+      - const: nic
++maintainers:
++  - Chris Packham <chris.packham@alliedtelesis.co.nz>
 +
-   '#address-cells':
-     const: 1
-=20
-   '#size-cells':
-     const: 1
-=20
-+  ethernet-ports:
-+    type: object
++properties:
++  compatible:
++    oneOf:
++      - items:
++          - enum:
++              - realtek,rtl9302b-mdio
++              - realtek,rtl9302c-mdio
++              - realtek,rtl9303-mdio
++          - const: realtek,rtl9301-mdio
++      - const: realtek,rtl9301-mdio
 +
- patternProperties:
-   'reboot@[0-9a-f]+$':
-     $ref: /schemas/power/reset/syscon-reboot.yaml#
-@@ -44,6 +57,8 @@ patternProperties:
- required:
-   - compatible
-   - reg
-+  - interrupts
-+  - interrupt-names
-=20
- additionalProperties: false
-=20
-@@ -52,6 +67,9 @@ examples:
-     ethernet-switch@1b000000 {
-       compatible =3D "realtek,rtl9301-switch", "syscon", "simple-mfd";
-       reg =3D <0x1b000000 0x10000>;
-+      interrupt-parent =3D <&intc>;
-+      interrupts =3D <23>, <24>;
-+      interrupt-names =3D "switch", "nic";
-       #address-cells =3D <1>;
-       #size-cells =3D <1>;
-=20
-@@ -110,5 +128,17 @@ examples:
-           };
-         };
-       };
++  '#address-cells':
++    const: 1
 +
-+      ethernet-ports {
++  '#size-cells':
++    const: 0
++
++  reg:
++    maxItems: 1
++
++patternProperties:
++  '^mdio-bus@[0-3]$':
++    $ref: mdio.yaml#
++
++    properties:
++      reg:
++        maxItems: 1
++
++    required:
++      - reg
++
++    patternProperties:
++      '^ethernet-phy@[a-f0-9]+$':
++        type: object
++        $ref: ethernet-phy.yaml#
++        unevaluatedProperties: false
++
++    unevaluatedProperties: false
++
++required:
++  - compatible
++  - reg
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    mdio-controller@ca00 {
++      compatible =3D "realtek,rtl9301-mdio";
++      reg =3D <0xca00 0x200>;
++      #address-cells =3D <1>;
++      #size-cells =3D <0>;
++
++      mdio-bus@0 {
++        reg =3D <0>;
 +        #address-cells =3D <1>;
 +        #size-cells =3D <0>;
 +
-+        port@0 {
++        ethernet-phy@0 {
++          compatible =3D "ethernet-phy-ieee802.3-c45";
 +          reg =3D <0>;
 +        };
-+        port@1 {
-+          reg =3D <1>;
++      };
++
++      mdio-bus@1 {
++        reg =3D <1>;
++        #address-cells =3D <1>;
++        #size-cells =3D <0>;
++
++        ethernet-phy@0 {
++          compatible =3D "ethernet-phy-ieee802.3-c45";
++          reg =3D <0>;
 +        };
 +      };
-     };
++    };
+diff --git a/Documentation/devicetree/bindings/net/realtek,rtl9301-switch=
+.yaml b/Documentation/devicetree/bindings/net/realtek,rtl9301-switch.yaml
+index 5d29647bea2d..80eabc170669 100644
+--- a/Documentation/devicetree/bindings/net/realtek,rtl9301-switch.yaml
++++ b/Documentation/devicetree/bindings/net/realtek,rtl9301-switch.yaml
+@@ -54,6 +54,9 @@ patternProperties:
+   'i2c@[0-9a-f]+$':
+     $ref: /schemas/i2c/realtek,rtl9301-i2c.yaml#
 =20
++  'mdio-controller@[0-9a-f]+$':
++    $ref: realtek,rtl9301-mdio.yaml#
++
+ required:
+   - compatible
+   - reg
+@@ -129,15 +132,43 @@ examples:
+         };
+       };
+=20
++      mdio-controller@ca00 {
++        compatible =3D "realtek,rtl9301-mdio";
++        reg =3D <0xca00 0x200>;
++        #address-cells =3D <1>;
++        #size-cells =3D <0>;
++
++        mdio-bus@0 {
++          reg =3D <0>;
++          #address-cells =3D <1>;
++          #size-cells =3D <0>;
++
++          phy1: ethernet-phy@0 {
++            reg =3D <0>;
++          };
++        };
++        mdio-bus@1 {
++          reg =3D <1>;
++          #address-cells =3D <1>;
++          #size-cells =3D <0>;
++
++          phy2: ethernet-phy@0 {
++            reg =3D <0>;
++          };
++        };
++      };
++
+       ethernet-ports {
+         #address-cells =3D <1>;
+         #size-cells =3D <0>;
+=20
+         port@0 {
+           reg =3D <0>;
++          phy-handle =3D <&phy1>;
+         };
+         port@1 {
+           reg =3D <1>;
++          phy-handle =3D <&phy2>;
+         };
+       };
+     };
 --=20
 2.48.1
 
