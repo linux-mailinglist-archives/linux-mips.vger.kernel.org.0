@@ -1,77 +1,77 @@
-Return-Path: <linux-mips+bounces-7728-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7729-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F12BBA312FD
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Feb 2025 18:28:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04E97A31302
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Feb 2025 18:29:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 63B993A2A34
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Feb 2025 17:28:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4A55F16850A
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Feb 2025 17:28:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44D19262D39;
-	Tue, 11 Feb 2025 17:28:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D526263895;
+	Tue, 11 Feb 2025 17:28:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="Fnhp/kpW"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="dzKp9Uga"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D31E262D1E
-	for <linux-mips@vger.kernel.org>; Tue, 11 Feb 2025 17:28:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FF55262D2D
+	for <linux-mips@vger.kernel.org>; Tue, 11 Feb 2025 17:28:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739294912; cv=none; b=OQi82EqxNBq6s02piQjvNrIqKHFPycWT3wDPlHeLICm9ds+98NBfktsKxH5IBX/rK7do3bdE7YpmJF1nEUGGo/uMMdXGxUN5EPq/sr2NyhY0Q2PZNlITBJHOimoF/8JZmTN1kDZEd+NJNtY5uSQT78srS+DTocT8ImnMF2CQXfQ=
+	t=1739294913; cv=none; b=DYphRxb0VRIMJ80C47LFJV+VOcdNe5SAyAwnnjvcHSXgkB4jYb5kxoS7iuZXKHhMKU4phgyktRTg9Xt7XIxSxyyA03QozUZwPP2KixW3U9Tj0ZWZZngpklFlBmRwzkyKC/zmzUl6LPuOboEf2ckqy+23PywE1/jMTAddrGb/U5I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739294912; c=relaxed/simple;
-	bh=L2mc7++2m+KbwXPJfmeanEsMndjpINIhEyR+p/vnM+0=;
+	s=arc-20240116; t=1739294913; c=relaxed/simple;
+	bh=JaT81TlS5JMrK8kOZ5IZdpgPZCU4QD/jFNP5Hu5Ari0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=c9w0kxUrpTB3DYtkNtBsSi7gttKepZo6Q8KcXlmM3TL1WOBMJ2AoL8gjg6M1Q8rzpcnkk1d0nNRTQ+4eWA/qnxcQ8LxfR0ofGHCKyPCl+KQR9QlQuaoWSyOtgSy/fzzBQVJnrvm4h5nVYVx6Vigltkg3IbfFIeXIZDbqUI0nJ9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=Fnhp/kpW; arc=none smtp.client-ip=209.85.221.44
+	 MIME-Version:Content-Type; b=HWcZgGJMZwioWFkpXuGmguc7jyy3IVUfl6OAGnpM4ngMlZbTsmZbslpWIb63LVBffAUsn0ooFmXK/ElQPqviX0IkYhUwmdesqrkoKO5Dmo/Fg1a7GJtnrXXuoQEU/lE14rxxVpvIr06cbSyvLnKQSuH4LixXXTAf/p9EORzOhKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=dzKp9Uga; arc=none smtp.client-ip=209.85.128.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-38dc6d9b292so2497131f8f.2
-        for <linux-mips@vger.kernel.org>; Tue, 11 Feb 2025 09:28:29 -0800 (PST)
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-4362bae4d7dso39192915e9.1
+        for <linux-mips@vger.kernel.org>; Tue, 11 Feb 2025 09:28:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1739294907; x=1739899707; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1739294910; x=1739899710; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XRpmne0VBcJf7jZbKVrpAIB9gKqtJmCGDdvQHW0V2jE=;
-        b=Fnhp/kpWy26zCmDlS+7E/PqgYtKlUyBQD+13KweG+yCARAV7VOeKs/5/7qXQfz19rK
-         +RbI9ZVTxjwyGbJ9b60Ji5Rp4vnyNgs+fjoJhmNEw2E9rekpaqP8U3Nk9tj/nJPxAXWG
-         E6uLI6B3T29/RYF9a4ZWrPUy4bfJnx5HRfAba99Q/JhjHXFAJnernIoWpvw3kI9E8l1r
-         hOBX0dZTb9fLMElE6AauDmJsYh+sOCjzcZ/Nj5dfQxAxbjAYQrJD08G7k1i5a2eybDUp
-         cwBdaZ/2/WgVw5RMhPSYIdf2Ex5qaG318lbSY+05Xr2ubYA2quEyRu1dvmUlB5XC4d1A
-         2XGQ==
+        bh=vS3u0ChTSEKOd8+Sz6F6ngUlw65dB3dACQW1SqE48AI=;
+        b=dzKp9UgamZyHG5RUuhYq6yRHit9jyAS3eReyoagIqHpO4CBGPhdGThhQB3bUehmaQk
+         y7XZn8rHeNIeHXU1P65sc5N7C2E88qcF+aeCTC9JUzFYGvPpsNg9tV9rhIAg+vRMiEyY
+         uT7gkfdCcDON5VKnse5dK+i27Gle+zxgENMjS3z0KMbZm0/LSbmW2q+ysIu63kc5/LAy
+         h5zFyR9sVEmkWyF6E2IXpEIlgrN5RbmwcnSXl5T+7VHDH3Gr4Km0eLvxFUKnnLTuXpNa
+         o6yIt20gBHmiF2rXQ6J91AYIrMdyGOI7vIGOQeCW0gkxxtCuWxbmWZsej6fhCgTdPqo1
+         y7Ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739294907; x=1739899707;
+        d=1e100.net; s=20230601; t=1739294910; x=1739899710;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XRpmne0VBcJf7jZbKVrpAIB9gKqtJmCGDdvQHW0V2jE=;
-        b=EUbAWCdRfUwGv3KZGP1jEstbXbtJVlf7S6Ih4L25mZJmKILETRPHIPvbbIsx+fquuV
-         4v2I0+L3kA7LCl1JK1t5+NJzBiwhIFUgaEyWY3TBGKNlA1IW+bqt4rSth5Nasid7Qxx4
-         T3IvsYZPmxx/gPc/awfFSIy1+w9g7AG4pMInWF4pquvG49h4sQNAQ0xGMUmPA92ubHtq
-         Y8JE1D3JvKolmwKxAT2lP0KG/OEsPi+03iPY6AX6fRw7qPZpU8lyk5JirXAsSRexWPO+
-         nn9xoe9q3PBEBj5RorRA4+QHZVMdNDxkcIHD9PYd1tgMnZoVWZOBznpa/e9x49CZB/gb
-         ANPw==
-X-Forwarded-Encrypted: i=1; AJvYcCXt4NCYfgMrJ/bCMLpd5nBySztsZkBzPyaAdoxtWdPjlZ9+gnytqyptaaOke3RhynPpWiM8DGwE+0Nj@vger.kernel.org
-X-Gm-Message-State: AOJu0YwMttrty9kmDjgNe7nmRb1t/nCgfmeVz404xiGAEpVJbt7SFDgB
-	+WHejJ816vn6sjkEKGnSTZJBkkpwcCQH/QIBafPOznI11ioCo9YjCUN8SZ/4Y24=
-X-Gm-Gg: ASbGncuU3Gzjp/z1rpzEoS2fEZ0bOIH/QO6Fx0z/v3OJ2p5nEVc2bNLCe39AD/Gp91S
-	BXNej1QShTeHwM/E/yI4Pj2B5aIGmzbQDoNBX/K/Jz03XfyfVzDd/krSuAzFyb1L57T/jVYe0i4
-	lXbbsotQzCtl+wbU4OvMz8dYONm7q1bmfhjAu78dJPUcAT9tsiy0b1ywsyDhMMbru/Btyq5gZOA
-	7RSSmjSEV4dh3UxxBqE8l+sbmH7sUpwetjdo/nDuUy5+ilthyd7/RFzYluAvR354ZwCNb9L7VEL
-	bqRF9KY1phrNc0NurQ==
-X-Google-Smtp-Source: AGHT+IGy2T23PgwDmJGcN14Q/mCFh4UYzD0ptO9o4GXW666CumGfNzzI0RhLancAMnBStTnS1c8Jkg==
-X-Received: by 2002:a05:6000:1f82:b0:38d:e1b1:be99 with SMTP id ffacd0b85a97d-38de4193da8mr3997996f8f.23.1739294907528;
-        Tue, 11 Feb 2025 09:28:27 -0800 (PST)
+        bh=vS3u0ChTSEKOd8+Sz6F6ngUlw65dB3dACQW1SqE48AI=;
+        b=r1POUZT2OA/htTcx/VV3XAEE/iDNhXy8+SnU5v/AKI8TYJLbrhm+sXo/GV6QFMHnHR
+         akTUiaikG0MKiVNwHdVFXrBl+oDjSVwWg0ZrHcG/EbErEewhaA1J0CKsVFEYyg53Z/2I
+         pJPgW7ikB1AMf+xD9exaNn3MRUwpOaO7HbaGNP51C/jj6CNxBAYKqLD9sIUc/H4brbpJ
+         gPbF1lW8BdyyHavDBJxObyShylIQtnsjYkwoD2EzfuDL6sWJkTTCVQ7Mhcm4byvHbk2G
+         yw7tVOemCEJJ8uxuOurkDYrufKAa8AfZO+48HB7+uYX5fSATSb+2bwTK1EbyyKoUREtR
+         kqcw==
+X-Forwarded-Encrypted: i=1; AJvYcCUD6yVdIQ6qTzjbLE0sjCwar9rITvE8kmlA3xh8WIBmSR+Dbn5AASKzptVY9QTtid44YkjC9W4wOoLx@vger.kernel.org
+X-Gm-Message-State: AOJu0Yza3hpMIl+e9d60dnUfkhjX8NlZ8tHQjhtlNrkF+YtlLtKGevXa
+	8V8u0h4jdl6LaC83/LchRwwCNtj8NNKo5Vf6S3cdMQDafiaBAxsCI82kF9fbOJI=
+X-Gm-Gg: ASbGnctS1LOwpI5ufkcFbU6NX7V1c751YbGsgEL9f6ZpvTnmsgqOHtO4pGuPFvhsekb
+	xY0sBgQwPnS1Y2/tDKr9hiz6p6k6qZbpRobdSpUGp8nI+0naxDrltKRfRJ1QZYTuy9bkZClFtcS
+	xchPLTPTF0QtzZJT8d9RTcTgxI4SGq8s/9OKHD0iKxl4TJs/u4zLRHxuXxQY8i7sHIu+J+DqXX/
+	PJRyfSNMi+8LYM8pTLLV+DdCzN00RXk0kapTofQjsp1m/VZQmUZI/cppX/hTH9TrRnWvJtBwUet
+	U1OB6FMqR1iUkZ9svw==
+X-Google-Smtp-Source: AGHT+IHqQL8DP1JxgbD5VCseSPJliBuud4+TKe0/7TKQBN2dXAAu4cWiVWufhhODSvakeasxOn/B7w==
+X-Received: by 2002:a5d:6c66:0:b0:38a:418e:1177 with SMTP id ffacd0b85a97d-38dc8d9202dmr13638587f8f.11.1739294909768;
+        Tue, 11 Feb 2025 09:28:29 -0800 (PST)
 Received: from toaster.lan ([2a01:e0a:3c5:5fb1:fc0c:6c04:7ae0:c5c2])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-38dc6c80df2sm13691082f8f.18.2025.02.11.09.28.25
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-38dc6c80df2sm13691082f8f.18.2025.02.11.09.28.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Feb 2025 09:28:26 -0800 (PST)
+        Tue, 11 Feb 2025 09:28:29 -0800 (PST)
 From: Jerome Brunet <jbrunet@baylibre.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Dave Ertman <david.m.ertman@intel.com>,
@@ -120,9 +120,9 @@ Cc: Jerome Brunet <jbrunet@baylibre.com>,
 	imx@lists.linux.dev,
 	linux-arm-kernel@lists.infradead.org,
 	linux-amlogic@lists.infradead.org
-Subject: [PATCH v3 1/7] driver core: auxiliary bus: add device creation helpers
-Date: Tue, 11 Feb 2025 18:27:58 +0100
-Message-ID: <20250211-aux-device-create-helper-v3-1-7edb50524909@baylibre.com>
+Subject: [PATCH v3 2/7] reset: mpfs: use the auxiliary device creation helper
+Date: Tue, 11 Feb 2025 18:27:59 +0100
+Message-ID: <20250211-aux-device-create-helper-v3-2-7edb50524909@baylibre.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250211-aux-device-create-helper-v3-0-7edb50524909@baylibre.com>
 References: <20250211-aux-device-create-helper-v3-0-7edb50524909@baylibre.com>
@@ -134,155 +134,102 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4290; i=jbrunet@baylibre.com;
- h=from:subject:message-id; bh=L2mc7++2m+KbwXPJfmeanEsMndjpINIhEyR+p/vnM+0=;
- b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBnq4g2Jb64zhGo4nYo4f11I5GNQZEAzlSZ9Yo5d
- ngkcisRo/6JAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCZ6uINgAKCRDm/A8cN/La
- hf93D/9ySJRRpTfhwXJWNiKfMhcJCrBwzYVVixaTTNiJUGMkApqchMSmB0zNWhrawPaDlId3Qiv
- auxx3nD/C8QUQGOe3pmyimoKTtJX68sya3tWzYS13H4Sa0H9qFl2RM0zYZ2KeIfFaB5bXjAyZbp
- 8AafPJDeusV3rANuFGpxeUk8OJf2I26NERiAMf4JIeYfEk+DdUX/qaaekow/K+zX0friJeeHzfS
- n3nNP0mPksNRZ70HmTScJgvfPOEIO1hH8exi8I+Ge5RadGPr4ZAvrdduyqDrUcI+eC7Vw/vJkNh
- sW2YMStxssdA3V4ydPTzpH9vn+vlpXW1isL2h2lNUHHsZ6qQneIycJfGJCCYP1GDRky2C6AtPib
- l71wFmbfhXQPTnOmW1byyhQNUf2DG0Kse6unCPxWmU2O+bBwnBvUp3XtMEU/LOPI0MGCpZctNwz
- teda+aTYeFlWq/IRpLHb256e0QTj8OwBd64Y8+cWTJlY3OJswpzqv3zklJ0nKa5VDXQDUjv8dE/
- 3Z3LHSVu21jO5GhGjKjzeZeJVnbohnbeTurbB9m0HLLQkVNy1b6qdMD98Y9uIm1F0V6fv5ak8Ji
- vqYRsnbb3UUjcLUi7RMxyNaRwF7lp8opYquywNB5WMkoWzbD21tWKnQOr6ID3hMTihGNxCRzIyH O4UjCmzh9bo+k5A==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2220; i=jbrunet@baylibre.com;
+ h=from:subject:message-id; bh=JaT81TlS5JMrK8kOZ5IZdpgPZCU4QD/jFNP5Hu5Ari0=;
+ b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBnq4g2b7ztdhzPOxtPtSHwTFX2Q+o4rv+DEa9t5
+ h6A3WVIiOaJAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCZ6uINgAKCRDm/A8cN/La
+ hfOYD/99mpDDUk+53d/ZanCMbwJ18FpyC1UiheDU5tolp1TjYQ6xJZCD+FUPxTFT7MftJJcmhYU
+ ppgXsxWu0vXkLiqwtls3vqypBiQP+/Br9Qd5XQWkcZy/dc3ZG2zA3FYPdrfq+GhBMRIkGuLuHTL
+ o7EuhQ8gx6YcEgqWCA6gSH/AN/YL2kOG6F+B5JEBMrI37awyyaz1Rygwhyl0qItpoUOWJamW9JV
+ wIpocIeEtV+MlTG1Kbg1WF84EI6JwAjfM5JOZjn65GDvReg9Ar7nhjkfw9C+PcnPZH0HZyY/RsO
+ 2nb7YpQYtDrCuTOtHOVSR7fA8CD/QL0C/aSz1PBFOUFaQHD5znSEvuNqIZ9MPROPDFGwWQTygho
+ 2baf6O6czt8zk+qqtahPDzlgKfvfXO6FmH4Hb1xyCFSAyBR2DoZV+W2xJP1brfagyAH+hw0+twD
+ 635z1DYFdgPAGxz2iXJxZK24JpVoR9CrB33x3a2TEwdc/KaNUt7ax6Lt2f81O587Z+7O8L6/JP4
+ XoAxgdGRTcmsl4S9zAEnByChdEI4wOcGAX/bdK2ZG0vy8N1L3IoKJnpRT+bFUN4v+dlR2ppl9wt
+ u0Jd4hipB0voUxKyhN6Eu4LjGycuGC96lmkrjExZld1DdDEdciaO1sLFUKFZ592SZ9dz1emyXb5 8Aak+H6IrmLmDhg==
 X-Developer-Key: i=jbrunet@baylibre.com; a=openpgp; fpr=F29F26CF27BAE1A9719AE6BDC3C92AAF3E60AED9
 Content-Transfer-Encoding: 8bit
 
-Add helper functions to create a device on the auxiliary bus.
+The auxiliary device creation of this driver is simple enough to
+use the available auxiliary device creation helper.
 
-This is meant for fairly simple usage of the auxiliary bus, to avoid having
-the same code repeated in the different drivers.
+Use it and remove some boilerplate code.
 
-Suggested-by: Stephen Boyd <sboyd@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>
 Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 ---
- drivers/base/auxiliary.c      | 88 +++++++++++++++++++++++++++++++++++++++++++
- include/linux/auxiliary_bus.h | 10 +++++
- 2 files changed, 98 insertions(+)
+ drivers/reset/reset-mpfs.c | 52 +++-------------------------------------------
+ 1 file changed, 3 insertions(+), 49 deletions(-)
 
-diff --git a/drivers/base/auxiliary.c b/drivers/base/auxiliary.c
-index afa4df4c5a3f371b91d8dd8c4325495d32ad1291..0f697c9c243dc9a50498a52362806db594345faf 100644
---- a/drivers/base/auxiliary.c
-+++ b/drivers/base/auxiliary.c
-@@ -385,6 +385,94 @@ void auxiliary_driver_unregister(struct auxiliary_driver *auxdrv)
+diff --git a/drivers/reset/reset-mpfs.c b/drivers/reset/reset-mpfs.c
+index 574e59db83a4fcf30b60cb5f638607a2ec7b0580..bbea64862181877eb7ae51fdaa9e50ffac17c908 100644
+--- a/drivers/reset/reset-mpfs.c
++++ b/drivers/reset/reset-mpfs.c
+@@ -155,62 +155,16 @@ static int mpfs_reset_probe(struct auxiliary_device *adev,
+ 	return devm_reset_controller_register(dev, rcdev);
  }
- EXPORT_SYMBOL_GPL(auxiliary_driver_unregister);
  
-+static void auxiliary_device_release(struct device *dev)
-+{
-+	struct auxiliary_device *auxdev = to_auxiliary_dev(dev);
-+
-+	kfree(auxdev);
-+}
-+
-+static struct auxiliary_device *auxiliary_device_create(struct device *dev,
-+							const char *modname,
-+							const char *devname,
-+							void *platform_data,
-+							int id)
-+{
-+	struct auxiliary_device *auxdev;
-+	int ret;
-+
-+	auxdev = kzalloc(sizeof(*auxdev), GFP_KERNEL);
-+	if (!auxdev)
-+		return ERR_PTR(-ENOMEM);
-+
-+	auxdev->id = id;
-+	auxdev->name = devname;
-+	auxdev->dev.parent = dev;
-+	auxdev->dev.platform_data = platform_data;
-+	auxdev->dev.release = auxiliary_device_release;
-+	device_set_of_node_from_dev(&auxdev->dev, dev);
-+
-+	ret = auxiliary_device_init(auxdev);
-+	if (ret) {
-+		kfree(auxdev);
-+		return ERR_PTR(ret);
-+	}
-+
-+	ret = __auxiliary_device_add(auxdev, modname);
-+	if (ret) {
-+		/*
-+		 * NOTE: It may look odd but auxdev should not be freed
-+		 * here. auxiliary_device_uninit() calls device_put()
-+		 * which call the device release function, freeing auxdev.
-+		 */
-+		auxiliary_device_uninit(auxdev);
-+		return ERR_PTR(ret);
-+	}
-+
-+	return auxdev;
-+}
-+
-+static void auxiliary_device_destroy(void *_auxdev)
-+{
-+	struct auxiliary_device *auxdev = _auxdev;
-+
-+	auxiliary_device_delete(auxdev);
-+	auxiliary_device_uninit(auxdev);
-+}
-+
-+/**
-+ * __devm_auxiliary_device_create - create a device on the auxiliary bus
-+ * @dev: parent device
-+ * @modname: module name used to create the auxiliary driver name.
-+ * @devname: auxiliary bus device name
-+ * @platform_data: auxiliary bus device platform data
-+ * @id: auxiliary bus device id
-+ *
-+ * Device managed helper to create an auxiliary bus device.
-+ * The device create matches driver 'modname.devname' on the auxiliary bus.
-+ */
-+struct auxiliary_device *__devm_auxiliary_device_create(struct device *dev,
-+							const char *modname,
-+							const char *devname,
-+							void *platform_data,
-+							int id)
-+{
-+	struct auxiliary_device *auxdev;
-+	int ret;
-+
-+	auxdev = auxiliary_device_create(dev, modname, devname, platform_data, id);
-+	if (IS_ERR(auxdev))
-+		return auxdev;
-+
-+	ret = devm_add_action_or_reset(dev, auxiliary_device_destroy,
-+				       auxdev);
-+	if (ret)
-+		return ERR_PTR(ret);
-+
-+	return auxdev;
-+}
-+EXPORT_SYMBOL_GPL(__devm_auxiliary_device_create);
-+
- void __init auxiliary_bus_init(void)
+-static void mpfs_reset_unregister_adev(void *_adev)
+-{
+-	struct auxiliary_device *adev = _adev;
+-
+-	auxiliary_device_delete(adev);
+-	auxiliary_device_uninit(adev);
+-}
+-
+-static void mpfs_reset_adev_release(struct device *dev)
+-{
+-	struct auxiliary_device *adev = to_auxiliary_dev(dev);
+-
+-	kfree(adev);
+-}
+-
+-static struct auxiliary_device *mpfs_reset_adev_alloc(struct device *clk_dev)
+-{
+-	struct auxiliary_device *adev;
+-	int ret;
+-
+-	adev = kzalloc(sizeof(*adev), GFP_KERNEL);
+-	if (!adev)
+-		return ERR_PTR(-ENOMEM);
+-
+-	adev->name = "reset-mpfs";
+-	adev->dev.parent = clk_dev;
+-	adev->dev.release = mpfs_reset_adev_release;
+-	adev->id = 666u;
+-
+-	ret = auxiliary_device_init(adev);
+-	if (ret) {
+-		kfree(adev);
+-		return ERR_PTR(ret);
+-	}
+-
+-	return adev;
+-}
+-
+ int mpfs_reset_controller_register(struct device *clk_dev, void __iomem *base)
  {
- 	WARN_ON(bus_register(&auxiliary_bus_type));
-diff --git a/include/linux/auxiliary_bus.h b/include/linux/auxiliary_bus.h
-index 65dd7f15437474468acf0e28f6932a7ff2cfff2c..c098568eeed2a518b055afbf1f1e68623a2c109a 100644
---- a/include/linux/auxiliary_bus.h
-+++ b/include/linux/auxiliary_bus.h
-@@ -254,6 +254,16 @@ int __auxiliary_driver_register(struct auxiliary_driver *auxdrv, struct module *
+ 	struct auxiliary_device *adev;
+-	int ret;
  
- void auxiliary_driver_unregister(struct auxiliary_driver *auxdrv);
+-	adev = mpfs_reset_adev_alloc(clk_dev);
++	adev = devm_auxiliary_device_create(clk_dev, "reset-mpfs",
++					    (__force void *)base, 666u);
+ 	if (IS_ERR(adev))
+ 		return PTR_ERR(adev);
  
-+struct auxiliary_device *__devm_auxiliary_device_create(struct device *dev,
-+							const char *modname,
-+							const char *devname,
-+							void *platform_data,
-+							int id);
-+
-+#define devm_auxiliary_device_create(dev, devname, platform_data, id) \
-+	__devm_auxiliary_device_create(dev, KBUILD_MODNAME, devname,  \
-+				       platform_data, id)
-+
- /**
-  * module_auxiliary_driver() - Helper macro for registering an auxiliary driver
-  * @__auxiliary_driver: auxiliary driver struct
+-	ret = auxiliary_device_add(adev);
+-	if (ret) {
+-		auxiliary_device_uninit(adev);
+-		return ret;
+-	}
+-
+-	adev->dev.platform_data = (__force void *)base;
+-
+-	return devm_add_action_or_reset(clk_dev, mpfs_reset_unregister_adev, adev);
++	return 0;
+ }
+ EXPORT_SYMBOL_NS_GPL(mpfs_reset_controller_register, "MCHP_CLK_MPFS");
+ 
 
 -- 
 2.45.2
