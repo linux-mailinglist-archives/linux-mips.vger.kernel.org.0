@@ -1,51 +1,51 @@
-Return-Path: <linux-mips+bounces-7724-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7725-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BF93A30DC6
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Feb 2025 15:08:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F1EBA30DC8
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Feb 2025 15:09:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D7CA618870ED
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Feb 2025 14:08:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6EC901661C2
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Feb 2025 14:09:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2263E24C698;
-	Tue, 11 Feb 2025 14:08:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7ABB24E4A5;
+	Tue, 11 Feb 2025 14:08:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="mIGZgNwF"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="PptvngAB"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpbg150.qq.com (smtpbg150.qq.com [18.132.163.193])
+Received: from smtpbgbr2.qq.com (smtpbgbr2.qq.com [54.207.22.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC6FC24C67A;
-	Tue, 11 Feb 2025 14:08:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.132.163.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF15024C693;
+	Tue, 11 Feb 2025 14:08:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.22.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739282928; cv=none; b=d4k98nDRu8LPRblDKcpH8pMW2oyOrLfAaUg3ToKT1ven8G2nj7K2N1MPH6gP9JVpyWRO/jC28fDjjIZzO75q3bKGrxLX+3vhxE83GMS/rtQgFkK7pv2ZvkeoPFuaQjt0DMAkprNMyFYKmpVhF44NBIIaBTFucaaMSQ+xS8eukCc=
+	t=1739282931; cv=none; b=mgVO2RqcR8QV2S+DIFSMsVCp9suxmoVbjQA7wRLkeW7Ifget+f7kM4pLaeHBMk6B2Ohl7QB252REPMDNEomQdxQtOhUrV5S3Jp9wnjhNMopZ/aFC+GwtEA3siKvbKDHY+utB624Bv/pEg4xypz6Suivxo3XZaCkmBj6NYd+Y/lA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739282928; c=relaxed/simple;
-	bh=0PFh1OG9X//IBm62qDANGEQPsFHlL0salMfKyoQEYmE=;
+	s=arc-20240116; t=1739282931; c=relaxed/simple;
+	bh=WtJVMQ8yDwCl7UipIjMdTEXhTCs6Dshe3buPZGiM+pM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dGOFzcCBFhHYjoFpH4gBTtDLYVdvzwpdY3WL9MW+y4ZaWgeS2S7B6x9+3ZWemk78oa28oVagMpQrgvmosvI0PGRjSgP2s3Zcffol6GkQ29oPNn1xF8SrQixESQAkUm4d/Kxhn6VnTm+q52Rz/qNr3T1y6yd4kbhm0N4DsNJfdPg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=mIGZgNwF; arc=none smtp.client-ip=18.132.163.193
+	 MIME-Version; b=in0Z06i+K1MJioWkVz9t0z4ePZR9qifWOU95NJs6jNYZGrTsYzJHucmofaBbA5WPSjjT6MbHxowfgYvRe4I2QEvct6bJ1ZnlGZV8zgpwkOOFLUcDz30zHjPM6oaU+2etvPwAnCsBmNr0n08H8o0Phr5JoQIENZNsxM/1ch0B/mU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=PptvngAB; arc=none smtp.client-ip=54.207.22.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1739282879;
-	bh=Ye9E/OOxaG1qDTj2JmfnAhMxyR9NraXuwREP5ViG3jg=;
+	s=onoh2408; t=1739282892;
+	bh=WoRh/PPiIYouSfJbTU6aDWpN1x1Ps0+hunfZbraMdHg=;
 	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=mIGZgNwFwmY1FBjx3hGpWnKVot1tw7F8qD2MBBbUH4iDm04DvCtMXvzadL8JiVSoO
-	 MO0Wt7IpR7kkFxFQ12KyU2mDz9MmdrgTrSfiZdCDdNyec1/WjLPEJOeT4qi4KJBvk6
-	 EOb34gbxKDMxbCqYMWYyFj4kXnzxAD3H0OUjBz4A=
-X-QQ-mid: bizesmtpip3t1739282869t48piuu
-X-QQ-Originating-IP: wqSrQbwuHDK5cNCHMi6h+ZDxwJYJixw9ggcSfwm96/k=
+	b=PptvngAB96zgzEDukQaKZKU5eIyGBVoA5VWEbqo4xHSTpunABn84uHOwVskUySSqf
+	 WNvtKYkML3wtbRqsfs5l1Ibm16m3bjBGgNcWamrF2tugOolFTAMS4xV16LrgEbKhhX
+	 Z5MXBDuA9VTKJeU22fs9nBulR+cV2tB8CnrdbF/8=
+X-QQ-mid: bizesmtpip3t1739282881tuk3cxa
+X-QQ-Originating-IP: oClZrs5x708hcG28Y/AVu/UM56g1mXGABjx0bdi4ObU=
 Received: from localhost.localdomain ( [localhost])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 11 Feb 2025 22:07:48 +0800 (CST)
+	id ; Tue, 11 Feb 2025 22:07:52 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 5207954684755876973
+X-BIZMAIL-ID: 10022984226363110058
 From: WangYuli <wangyuli@uniontech.com>
 To: wangyuli@uniontech.com
 Cc: tsbogend@alpha.franken.de,
@@ -55,10 +55,11 @@ Cc: tsbogend@alpha.franken.de,
 	masahiroy@kernel.org,
 	jiaxun.yang@flygoat.com,
 	zhanjun@uniontech.com,
-	guanwentao@uniontech.com
-Subject: [PATCH 1/2] MIPS: Eliminate Redundant KBUILD_SYM32 Checks
-Date: Tue, 11 Feb 2025 22:07:39 +0800
-Message-ID: <4EACDB7E6DA201A2+20250211140740.1812778-1-wangyuli@uniontech.com>
+	guanwentao@uniontech.com,
+	Chen Linxuan <chenlinxuan@uniontech.com>
+Subject: [PATCH 2/2] MIPS: Explicitly check KBUILD_SYM32=n
+Date: Tue, 11 Feb 2025 22:07:40 +0800
+Message-ID: <D23DC9B8BD1C245D+20250211140740.1812778-2-wangyuli@uniontech.com>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <41107E6D3A125047+20250211135616.1807966-1-wangyuli@uniontech.com>
 References: <41107E6D3A125047+20250211135616.1807966-1-wangyuli@uniontech.com>
@@ -71,46 +72,65 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: bizesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
-X-QQ-XMAILINFO: NDjjYYC84KgIMmaP6860sI42p41k0TtaUILug9Nr6/9uQ0oXTxUPrfhv
-	Gj1dHdYkfiS/cYewO9w1ZNWF/lC2OJ9TnYzHUCSrCPeBRtJL0Q54acdT8enrhasli9bi+Gd
-	vvmWksBzTDtTLlQJfWHhsF3TYT1X14+Bo5S3RcH2ZQiS1aqeJ74ohBSr3MbFlgWADR1AFIK
-	2ATiJp4l2XxMu26fWBeF8a5sOjDhhQhzsC0BN+pEOnKCCjYAMhzWqaucxY/QpLHwz2/9Jv3
-	AalEJbCMx9fAIB0OPm/EjC2/qGazxWYhEbx2oE0AxLAV5d6VAbaqItZUtyOkVgisWPZMEJ0
-	ZSv5AW2QwD6t5ycVBt2Dy4GPFO9YeMoRtfVAJcbVUR43wnx0E3cw57j2WAO9ElVxacPFakP
-	UNOSHJJWWB8koOoUNmfBbYbVots0duA48AiXN5IVG5FTMlKRgCArX7hFReQew9DRtKm59lz
-	wVuKKDU3Pu7PWMxsJo8X6T94Z8Pu1upWKDfNcVa2rhOEiD3V8vBZ6X1hSnuy+XS6ua0wdEJ
-	GNM738FaniCLSt/bTg7RNXZk9ducBLGRIr652yvZH4KX653VzTLnYkgEzo83bDHBrw74k5I
-	Bml2tKbiePF6XW3/ZSO+ZLB1Ol6o6a8hogjbvW2tM7gOF4gf+zySvjHnjstbHUOsOxK07bv
-	jHevO92D0xkD6XU0MVv/lIQj72KsF1QTWiuv5QGmJVlxwmLeJ4M63Z6L1wtWxNOAHvww3f4
-	GP9QrOhEvGYSXcM89hfM/uTcofbIq1/ebSGcPg3R8ECM53BITR2sUM7r2pWZ8USS6Q1ZN71
-	atHrxLBZMZ1LQy9e6jHaS8575PPKko4ieL0wVSd5ecTJ2/5DP8LmHf5rHofo69ydvW1Rig3
-	b8WR39ki5oCjAQMg8V+vsbAJeyWbcROpvm07keCHKGbV2Z/uZgVsWWk/+ROKRiQ99CsWGd+
-	6DCis4wCYZ5CP1bf8eHEouIB0vbs6Z4m56mH/wXABKph8pfczsfHYlkhyYM38DrxTNUObWi
-	/AwNY1ETW+grkHcWn2iu6/VIXGTrY=
-X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
+X-QQ-XMAILINFO: NiFdmnmiW14ny/S2xcUarv1Rczmj5gFNP2I7aS+K3xT57ZHhaO4rkENo
+	yka5BbrqGVDSph/qZQndq7CCK43bfi3btA723iypO/uhME/2mZX8NGxf2+qpUkenrwCBg7Q
+	/jcBLUFxQzxeFjk1YMcOZaxuxvlP61gcG/5XVnvO8JyB5jVVJsnHA+O8szo2kR8Opyhnexb
+	ZeZBFU3+NGMyzQBsEbmX8kdPGXl0yqOl6JO1TDjUoIjvRZ8htUWQQQpnYAPk6o7ixsysoWM
+	ZyRNo5E3Oc8k7mzkaBZUI3krekun8fMI/7p+E+MnfNePcVoeRsrA/+9Cm+/tjmpVwRy3xIA
+	yfNCuwCmpD52fX7615ApCnbVN1Lcyw9vBMkUvnNfWvQ3IxkeEq0sQx9mFHarPp8Gd2MXB6I
+	aG8JAmLWP+EeHaBTcUpuTqPW2jpRFxUpH7JMkrjiBpVaVxRcLGO4FpH5qGxvNVbTYBzqkB8
+	eATEOCAmdSxSTp/Jq/qHFNGDTJNTGInJCyh2xF8FkpjL++BSCiq8NJDJvNZvnNtJd0yynMs
+	a7rAg9RlnC2nlmUmg/jsJV6uxRmEe1WJjsskXTWGxZDzy2y3rmTRbgzSJGXo9qMWCs+fUdd
+	fjoAJoXE/TanRqzeCRkSV37mARpkgHGJUNSnOZwfb8uyb53CF+vahw2WIMwIOr5FpdiNx6O
+	Js2GWyXmWNgk16pQB/fg9lNUbCR61GY7/6tJoQH/3XJMKiczBBT1j6Z4N4Znn6eJeuI8L7P
+	rt9F+ZpjexivHZcT2tz7vf5Zs1hAepXmwwXEy6gA5flqkDE0Hi/G5D5D7KRi3jiaWr4bJWq
+	AamvxPsNFgeKGlcfvKysgC1GaOJJU2E033MECIeu37zobNiXmunQlKLaExY4YW4liU/jbdj
+	fQRlcH0YWhYJ5dNgFq/bQBB4KbANKU+ENYjopLuXpwsWa8/jBNtE78OzhSeRdQlK/abtAIs
+	p/h4UhvCe5A47mus9JhT8SuAeRSsiSvZNO6IBwANeAodVLqAKMJl7WUit4MBb9wqjzfhli/
+	ExmgAQo8h0aXAYQG40
+X-QQ-XMRINFO: Nq+8W0+stu50PRdwbJxPCL0=
 X-QQ-RECHKSPAM: 0
 
-Given that KBUILD_SYM32=y is a prerequisite for this statement to be
-executed, it's logically redundant to verify KBUILD_SYM32 is y again.
+During make module_install, the need_compiler variable becomes 0,
+so Makefile.compiler isn't included.
 
+This results in call cc-option-yn returning nothing.
+
+Add a check for KBUILD_SYM32=n to avoid the
+"CONFIG_CPU_DADDI_WORKAROUNDS unsupported without -msym32" error
+when KBUILD_SYM32 is unset (meaning it's not 'y' or 'n').
+
+Fixes: 805b2e1d427a ("kbuild: include Makefile.compiler only when compiler is needed")
+Fixes: 18ca63a2e23c ("MIPS: Probe toolchain support of -msym32")
+Reported-by: Maciej W. Rozycki <macro@orcam.me.uk>
+Closes: https://lore.kernel.org/all/alpine.DEB.2.21.2501030535080.49841@angie.orcam.me.uk/
+Co-developed-by: Chen Linxuan <chenlinxuan@uniontech.com>
+Signed-off-by: Chen Linxuan <chenlinxuan@uniontech.com>
 Signed-off-by: WangYuli <wangyuli@uniontech.com>
 ---
- arch/mips/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ arch/mips/Makefile | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
 diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-index be8cb44a89fd..962eb749ed23 100644
+index 962eb749ed23..2a0bf69c842b 100644
 --- a/arch/mips/Makefile
 +++ b/arch/mips/Makefile
-@@ -302,7 +302,7 @@ ifdef CONFIG_64BIT
-   endif
- 
+@@ -304,8 +304,13 @@ ifdef CONFIG_64BIT
    ifeq ($(KBUILD_SYM32), y)
--    cflags-$(KBUILD_SYM32) += -msym32 -DKBUILD_64BIT_SYM32
-+    cflags-y += -msym32 -DKBUILD_64BIT_SYM32
+     cflags-y += -msym32 -DKBUILD_64BIT_SYM32
    else
-     ifeq ($(CONFIG_CPU_DADDI_WORKAROUNDS), y)
-       $(error CONFIG_CPU_DADDI_WORKAROUNDS unsupported without -msym32)
+-    ifeq ($(CONFIG_CPU_DADDI_WORKAROUNDS), y)
+-      $(error CONFIG_CPU_DADDI_WORKAROUNDS unsupported without -msym32)
++# During make module_install, the need_compiler variable
++# becomes 0, so Makefile.compiler isn't included.
++# This results in call cc-option-yn returning nothing.
++    ifeq ($(KBUILD_SYM32), n)
++      ifeq ($(CONFIG_CPU_DADDI_WORKAROUNDS), y)
++        $(error CONFIG_CPU_DADDI_WORKAROUNDS unsupported without -msym32)
++      endif
+     endif
+   endif
+ endif
 -- 
 2.47.2
 
