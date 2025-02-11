@@ -1,187 +1,167 @@
-Return-Path: <linux-mips+bounces-7739-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7740-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0A59A31546
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Feb 2025 20:28:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52F30A3172F
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Feb 2025 22:06:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3CEDA16737C
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Feb 2025 19:28:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F15093A2691
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Feb 2025 21:06:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FEB1267F79;
-	Tue, 11 Feb 2025 19:24:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D65BC264F95;
+	Tue, 11 Feb 2025 21:06:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="H1mk6Diq";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="kpJwh4ER"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="lIYAB+CH"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from flow-a1-smtp.messagingengine.com (flow-a1-smtp.messagingengine.com [103.168.172.136])
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 744B6267F67;
-	Tue, 11 Feb 2025 19:24:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AADD2641CA
+	for <linux-mips@vger.kernel.org>; Tue, 11 Feb 2025 21:06:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739301870; cv=none; b=ozkpFW1S6Y+Kj4zsGYLayzJzldIlmn5jyuxiTBWOEGkU4oRB/x7IwADSFuN5SwTMcJS+ce2XJa1MjeKO3L1vrCF3DRP8LXoVYuGnTUE5c16+9EuER+ttCxVbY3urquXoP48qCkrP2SlUj2raZ2fjcGLGh7NmsO2nNYU6zMTKPac=
+	t=1739308004; cv=none; b=Pl7kex1mBx+UjEgdBQcufpwUgjguEjcfHrPaGp3KRYQmAG5fzDMEYJb/n4e3tZWS/0n2NNYGwDkdGIiS4+yX8787SAVi+UIUSuEfJ2qQidg5/fUDsxAaQ/9yQfjXeWkQRv/uthJHJGR0+xS6q36lkVkUVADZS2hotrJz1djSmRg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739301870; c=relaxed/simple;
-	bh=c3d2vNEaLKWV5MP/R/ATr1E1H0RvMwxHYf1Cp5qlV3I=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=P2UyWOC1qw7OhZcdqBzsiXLhZ1BD7ZxTuGLBbab+C4skTev0MlQXYnUY8NtGIaACbXOBch4QVCFBgCd3PO1KLnBfhum1y8GCDawbjtDS2cVFtG4e7zOn3m6gvNgUUaZGVE9PfO4GxS1hw7b//Rma3GV6VFMhPC9osuUK+XyBXoc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=H1mk6Diq; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=kpJwh4ER; arc=none smtp.client-ip=103.168.172.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailflow.phl.internal (Postfix) with ESMTP id 33B60201429;
-	Tue, 11 Feb 2025 14:24:27 -0500 (EST)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Tue, 11 Feb 2025 14:24:27 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1739301867;
-	 x=1739309067; bh=c3d2vNEaLKWV5MP/R/ATr1E1H0RvMwxHYf1Cp5qlV3I=; b=
-	H1mk6DiqkFxdaYDq+XrnH8tSDTT8Wz0IzX6XL6dUXhL78edeBCmXPGsNalqy0uVh
-	qfVX/eprmx9jfhnZLIibSxEnb/yvox+Psohl6D+biy1usicOOYfycAQ2/lHbv7lM
-	ms22mxqpOENU1kVoeVGl9qKtHG5mrujViCEqY0VqdFfcppxn9atgtNyvfUPWmoke
-	iSaUJwdmeT5vL2m9nOgiPbOQ8inT6fzN26/QdI3b3ROKoE+2F5hJFKlCRtQC3y3c
-	pNkD/sKqZig+fogqosYE5BTnVmyK6o10RK5f/h5GDNzrhM5tSiEXUMV0Q3nN/9rS
-	xa4XKlLduvuE5qltdHFuwA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1739301867; x=
-	1739309067; bh=c3d2vNEaLKWV5MP/R/ATr1E1H0RvMwxHYf1Cp5qlV3I=; b=k
-	pJwh4ERJCdsI83YQZOuod4nqq8kn1u8tNVYkl/OjbgBveJxUNjHPRWiuP/sMWePe
-	hWZL7RWcLgrDzeKv5GrR3PoYeTufoc3U4SB55vLC3FbOavO5wEdBzvHuqivBxaRF
-	6YUgMOaaWBUp0mJhL6e90goXp5VxfeaB5fOPaZMtqvaTzZGmRI8co5Pb+1yhZ1Jd
-	+tqS4S/sXSHnDsDIvtzzmvXuOx5xRuW4+VXNR41QorPX56/udIxvXWKZq54TC1r5
-	JYZoW9xCcEKfQyyQAwd/KvNTPMcZsKIIArH5WPCoYAMp23vY3HTia10D0pKRzo20
-	tsZ725bobRorlkRPbnT9Q==
-X-ME-Sender: <xms:56OrZ_4r1fGeTYVnaod-wO2NzZ2NHYdVHCIZdYDdVEN3CUE3aLipBw>
-    <xme:56OrZ04LaJcJB8g_4vy2jK4AcZwVH4jm5wnhLceIhsETEDChYT_p2vDhAdsalScNE
-    UHLbNjYgU53zxr38K0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdegudekfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
-    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
-    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
-    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopeeh
-    tddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepsghpsegrlhhivghnkedruggvpd
-    hrtghpthhtohepthhssghoghgvnhgusegrlhhphhgrrdhfrhgrnhhkvghnrdguvgdprhgt
-    phhtthhopegtrghtrghlihhnrdhmrghrihhnrghssegrrhhmrdgtohhmpdhrtghpthhtoh
-    eplhhinhhugiesrghrmhhlihhnuhigrdhorhhgrdhukhdprhgtphhtthhopegthhhrihhs
-    thhophhhvgdrlhgvrhhohiestghsghhrohhuphdrvghupdhrtghpthhtohepuggrvhgvmh
-    esuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhopehmihgtseguihhgihhkohgurdhn
-    vghtpdhrtghpthhtohepmhhpvgesvghllhgvrhhmrghnrdhiugdrrghupdhrtghpthhtoh
-    eprghnughrvggrshesghgrihhslhgvrhdrtghomh
-X-ME-Proxy: <xmx:56OrZ2c8vfiXY8n3dexb_wHcIKTMgG6o3iBcrDJCGSo83cktB116vA>
-    <xmx:56OrZwKurjJ9VsGmWmqTvUmqikgs5yszNjLYSbIodcQKb37uQS1vVg>
-    <xmx:56OrZzKn0eY8SDxacs2AIw8al8AHb-BF-N93qSumfcz0FNW0tdUaZQ>
-    <xmx:56OrZ5y4eaI6MBsTqZJwzGJSKmez8ij-IaW_MKIlyU1hTpHti9F-SA>
-    <xmx:66OrZ5ZaEgYHz5-gr-91ZnpSgt3C2jX-ZjBTONvD9HLTwxOizyBpb0N7>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 6103B2220072; Tue, 11 Feb 2025 14:24:23 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1739308004; c=relaxed/simple;
+	bh=J+hVs6e//vHFgi0b32SqEreWeRMT7ejhN0dTtr8MH1o=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=X+Mda52Hkl68NZlz+Cysx12PdBdxbWtk3eXDpQyKXjnG4QRzzjlsbWcKmDyn7/qmSH4Y/4wOAwZ7YbG6AQTK4BJFFIpCBFjCpOO0gukJphgb9QfYil40IHScu4TXiFFwbpY1Rl7Dgn3M4QleVomw7Dii0lCEu69RmOzNOlpSTWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=lIYAB+CH; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 942F72C02A8;
+	Wed, 12 Feb 2025 10:06:34 +1300 (NZDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1739307994;
+	bh=J+hVs6e//vHFgi0b32SqEreWeRMT7ejhN0dTtr8MH1o=;
+	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+	b=lIYAB+CHbcZDmFuBg8DDXyAJrKEibG7KpIPj3siBkWC2vx6tKwIFBm7/U87cqoexT
+	 2kqWC8geetfg+zKKopgBGdMrr3r3wADwnpYGBREWP8tXPI7kfT9ZLcKbKfwEPGK4pw
+	 3kYnkxJQe6Sbl7KLE+MA59mX2Tgk6nTqdMf40Yap2f+i0k6FS+ePCjiA5HyCsr4/an
+	 QGD14c9IiGjKBQHa4/hxgSG+hlH8gguLkCCeewtuFmqYuMTGJnE41k4GMlwtZcSWew
+	 XS6eF7dXzcsFS8YM8mu103YK2+kfCISEqeBVaYv4dvpkof/6pF/XHtU45j+EeggGga
+	 HARBcwefWR/EA==
+Received: from svr-chch-ex2.atlnz.lc (Not Verified[2001:df5:b000:bc8::76]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B67abbbda0001>; Wed, 12 Feb 2025 10:06:34 +1300
+Received: from svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) by
+ svr-chch-ex2.atlnz.lc (2001:df5:b000:bc8::76) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14; Wed, 12 Feb 2025 10:06:34 +1300
+Received: from svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567]) by
+ svr-chch-ex2.atlnz.lc ([fe80::a9eb:c9b7:8b52:9567%15]) with mapi id
+ 15.02.1544.014; Wed, 12 Feb 2025 10:06:34 +1300
+From: Chris Packham <Chris.Packham@alliedtelesis.co.nz>
+To: Sander Vanheule <sander@svanheule.net>, "lee@kernel.org" <lee@kernel.org>,
+	"robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
+	<krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>,
+	"andrew+netdev@lunn.ch" <andrew+netdev@lunn.ch>, "davem@davemloft.net"
+	<davem@davemloft.net>, "edumazet@google.com" <edumazet@google.com>,
+	"kuba@kernel.org" <kuba@kernel.org>, "pabeni@redhat.com" <pabeni@redhat.com>,
+	"tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
+	"hkallweit1@gmail.com" <hkallweit1@gmail.com>, "linux@armlinux.org.uk"
+	<linux@armlinux.org.uk>, "daniel@makrotopia.org" <daniel@makrotopia.org>,
+	"markus.stockhausen@gmx.de" <markus.stockhausen@gmx.de>
+CC: "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Subject: Re: [PATCH net-next v6 4/6] net: mdio: Add RTL9300 MDIO driver
+Thread-Topic: [PATCH net-next v6 4/6] net: mdio: Add RTL9300 MDIO driver
+Thread-Index: AQHbdrFbzRDaB5FJKUWZObR7MHYqebM+M/KAgAOWZYA=
+Date: Tue, 11 Feb 2025 21:06:34 +0000
+Message-ID: <bdfe3418-19c0-4c1e-b5f0-9bbe07b1db2c@alliedtelesis.co.nz>
+References: <20250204030249.1965444-1-chris.packham@alliedtelesis.co.nz>
+ <20250204030249.1965444-5-chris.packham@alliedtelesis.co.nz>
+ <091a2e9cc6fedd99f35da124f67a54b69478648f.camel@svanheule.net>
+In-Reply-To: <091a2e9cc6fedd99f35da124f67a54b69478648f.camel@svanheule.net>
+Accept-Language: en-NZ, en-US
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="utf-8"
+Content-ID: <50E13F01366D854B9E2AAF0631479E51@alliedtelesis.co.nz>
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 11 Feb 2025 20:24:02 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Andrey Albershteyn" <aalbersh@redhat.com>,
- "Richard Henderson" <richard.henderson@linaro.org>,
- "Matt Turner" <mattst88@gmail.com>,
- "Russell King" <linux@armlinux.org.uk>,
- "Catalin Marinas" <catalin.marinas@arm.com>,
- "Will Deacon" <will@kernel.org>,
- "Geert Uytterhoeven" <geert@linux-m68k.org>,
- "Michal Simek" <monstr@monstr.eu>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
- "Helge Deller" <deller@gmx.de>,
- "Madhavan Srinivasan" <maddy@linux.ibm.com>,
- "Michael Ellerman" <mpe@ellerman.id.au>,
- "Nicholas Piggin" <npiggin@gmail.com>,
- "Christophe Leroy" <christophe.leroy@csgroup.eu>,
- "Naveen N Rao" <naveen@kernel.org>, "Heiko Carstens" <hca@linux.ibm.com>,
- "Vasily Gorbik" <gor@linux.ibm.com>,
- "Alexander Gordeev" <agordeev@linux.ibm.com>,
- "Christian Borntraeger" <borntraeger@linux.ibm.com>,
- "Sven Schnelle" <svens@linux.ibm.com>,
- "Yoshinori Sato" <ysato@users.sourceforge.jp>,
- "Rich Felker" <dalias@libc.org>,
- "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
- "David S . Miller" <davem@davemloft.net>,
- "Andreas Larsson" <andreas@gaisler.com>,
- "Andy Lutomirski" <luto@kernel.org>,
- "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>,
- "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, "Chris Zankel" <chris@zankel.net>,
- "Max Filippov" <jcmvbkbc@gmail.com>,
- "Alexander Viro" <viro@zeniv.linux.org.uk>,
- "Christian Brauner" <brauner@kernel.org>, "Jan Kara" <jack@suse.cz>,
- =?UTF-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
- =?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>
-Cc: linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-m68k@lists.linux-m68k.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
- linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-security-module@vger.kernel.org,
- linux-api@vger.kernel.org, Linux-Arch <linux-arch@vger.kernel.org>,
- linux-xfs@vger.kernel.org
-Message-Id: <f4276a02-57cd-4703-be3c-4210e4a033a9@app.fastmail.com>
-In-Reply-To: <20250211-xattrat-syscall-v3-1-a07d15f898b2@kernel.org>
-References: <20250211-xattrat-syscall-v3-1-a07d15f898b2@kernel.org>
-Subject: Re: [PATCH v3] fs: introduce getfsxattrat and setfsxattrat syscalls
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=QNvLRRLL c=1 sm=1 tr=0 ts=67abbbda a=Xf/6aR1Nyvzi7BryhOrcLQ==:117 a=xqWC_Br6kY4A:10 a=75chYTbOgJ0A:10 a=IkcTkHD0fZMA:10 a=T2h4t0Lz3GQA:10 a=VwQbUJbxAAAA:8 a=JlFAmtSrY9ouPlbKkEYA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
+X-SEG-SpamProfiler-Score: 0
 
-On Tue, Feb 11, 2025, at 18:22, Andrey Albershteyn wrote:
-> From: Andrey Albershteyn <aalbersh@redhat.com>
->
-> Introduce getfsxattrat and setfsxattrat syscalls to manipulate inode
-> extended attributes/flags. The syscalls take parent directory fd and
-> path to the child together with struct fsxattr.
->
-> This is an alternative to FS_IOC_FSSETXATTR ioctl with a difference
-> that file don't need to be open as we can reference it with a path
-> instead of fd. By having this we can manipulated inode extended
-> attributes not only on regular files but also on special ones. This
-> is not possible with FS_IOC_FSSETXATTR ioctl as with special files
-> we can not call ioctl() directly on the filesystem inode using fd.
->
-> This patch adds two new syscalls which allows userspace to get/set
-> extended inode attributes on special files by using parent directory
-> and a path - *at() like syscall.
->
-> Also, as vfs_fileattr_set() is now will be called on special files
-> too, let's forbid any other attributes except projid and nextents
-> (symlink can have an extent).
->
-> CC: linux-api@vger.kernel.org
-> CC: linux-fsdevel@vger.kernel.org
-> CC: linux-xfs@vger.kernel.org
-> Signed-off-by: Andrey Albershteyn <aalbersh@redhat.com>
-
-I checked the syscall.tbl additions and the ABI to ensure that
-it follows the usual guidelines and is portable across
-all architectures, this looks good. Thanks for addressing
-my v1 comments:
-
-Acked-by: Arnd Bergmann <arnd@arndb.de>
-
-Disclaimer: I have no idea if the new syscalls are a good
-idea or if they are fit for the purpose, I trust the
-VFS maintainers will take care of reviewing that.
+SGkgU2FuZGVyLA0KDQpJJ2xsIGhvbGQgb2ZmIG9uIHNlbmRpbmcgdjcgdW50aWwgSSBzb3J0IG91
+dCB0aGUgbWVzcyBJJ3ZlIG1hZGUgd2l0aCB0aGUgDQpkdC1iaW5kaW5ncyAoc3B1biBvZmYgaW50
+byBhIGRpZmZlcmVudCBzZXJpZXMgWzFdKQ0KDQpbMV0gLSANCmh0dHBzOi8vbG9yZS5rZXJuZWwu
+b3JnL2xrbWwvMjAyNTAyMDkyMzQ3NTEuNDYwNDA0LTEtY2hyaXMucGFja2hhbUBhbGxpZWR0ZWxl
+c2lzLmNvLm56Lw0KDQpPbiAxMC8wMi8yMDI1IDAzOjE5LCBTYW5kZXIgVmFuaGV1bGUgd3JvdGU6
+DQo+IEhpIENocmlzLA0KPg0KPiBPbiBUdWUsIDIwMjUtMDItMDQgYXQgMTY6MDIgKzEzMDAsIENo
+cmlzIFBhY2toYW0gd3JvdGU6DQo+PiBBZGQgYSBkcml2ZXIgZm9yIHRoZSBNRElPIGNvbnRyb2xs
+ZXIgb24gdGhlIFJUTDkzMDAgZmFtaWx5IG9mIEV0aGVybmV0DQo+PiBzd2l0Y2hlcyB3aXRoIGlu
+dGVncmF0ZWQgU29DLiBUaGVyZSBhcmUgNCBwaHlzaWNhbCBTTUkgaW50ZXJmYWNlcyBvbiB0aGUN
+Cj4+IFJUTDkzMDAgaG93ZXZlciBhY2Nlc3MgaXMgZG9uZSB1c2luZyB0aGUgc3dpdGNoIHBvcnRz
+LiBUaGUgZHJpdmVyIHRha2VzDQo+PiB0aGUgTURJTyBidXMgaGllcmFyY2h5IGZyb20gdGhlIERU
+UyBhbmQgdXNlcyB0aGlzIHRvIGNvbmZpZ3VyZSB0aGUNCj4+IHN3aXRjaCBwb3J0cyBzbyB0aGV5
+IGFyZSBhc3NvY2lhdGVkIHdpdGggdGhlIGNvcnJlY3QgUEhZLiBUaGlzIG1hcHBpbmcNCj4+IGlz
+IGFsc28gdXNlZCB3aGVuIGRlYWxpbmcgd2l0aCBzb2Z0d2FyZSByZXF1ZXN0cyBmcm9tIHBoeWxp
+Yi4NCj4+DQo+PiBTaWduZWQtb2ZmLWJ5OiBDaHJpcyBQYWNraGFtIDxjaHJpcy5wYWNraGFtQGFs
+bGllZHRlbGVzaXMuY28ubno+DQo+PiAtLS0NCj4+DQo+PiBOb3RlczoNCj4+ICDCoMKgwqAgQ2hh
+bmdlcyBpbiB2NjoNCj4+ICDCoMKgwqAgLSBQYXJzZSBwb3J0LT5waHkgbWFwcGluZyBmcm9tIGRl
+dmljZXRyZWUgcmVtb3ZpbmcgdGhlIG5lZWQgZm9yIHRoZQ0KPj4gIMKgwqDCoMKgwqAgcmVhbHRl
+ayxwb3J0IHByb3BlcnR5DQo+IEdvb2QgdG8gc2VlIHlvdSBmb3VuZCBhIHdheSB0byBkbyB0aGlz
+IQ0KPg0KPg0KPj4gKy8qDQo+PiArICogTURJTyBjb250cm9sbGVyIGZvciBSVEw5MzAwIHN3aXRj
+aGVzIHdpdGggaW50ZWdyYXRlZCBTb0MuDQo+PiArICoNCj4+ICsgKiBUaGUgTURJTyBjb21tdW5p
+Y2F0aW9uIGlzIGFic3RyYWN0ZWQgYnkgdGhlIHN3aXRjaC4gQXQgdGhlIHNvZnR3YXJlIGxldmVs
+DQo+PiArICogY29tbXVuaWNhdGlvbiB1c2VzIHRoZSBzd2l0Y2ggcG9ydCB0byBhZGRyZXNzIHRo
+ZSBQSFkuIFdlIHdvcmsgb3V0IHRoZQ0KPj4gKyAqIG1hcHBpbmcgYmFzZWQgb24gdGhlIE1ESU8g
+YnVzIGRlc2NyaWJlZCBpbiBkZXZpY2UgdHJlZSBhbmQgdGhlIHJlYWx0ZWsscG9ydA0KPj4gKyAq
+IHByb3BlcnR5Lg0KPj4gKyAqLw0KPiBOZWVkcyBhbiB1cGRhdGUgYWdhaW4gOy0pDQpZZXAgd2ls
+bCBkby4NCj4+ICtzdGF0aWMgaW50IHJ0bDkzMDBfbWRpb19waHlfdG9fcG9ydChzdHJ1Y3QgbWlp
+X2J1cyAqYnVzLCBpbnQgcGh5X2lkKQ0KPj4gK3sNCj4+ICsJc3RydWN0IHJ0bDkzMDBfbWRpb19j
+aGFuICpjaGFuID0gYnVzLT5wcml2Ow0KPj4gKwlzdHJ1Y3QgcnRsOTMwMF9tZGlvX3ByaXYgKnBy
+aXYgPSBjaGFuLT5wcml2Ow0KPj4gKwlpbnQgaTsNCj4+ICsNCj4+ICsJZm9yIChpID0gZmluZF9m
+aXJzdF9iaXQocHJpdi0+dmFsaWRfcG9ydHMsIE1BWF9QT1JUUyk7DQo+PiArCcKgwqDCoMKgIGkg
+PCBNQVhfUE9SVFM7DQo+PiArCcKgwqDCoMKgIGkgPSBmaW5kX25leHRfYml0KHByaXYtPnZhbGlk
+X3BvcnRzLCBNQVhfUE9SVFMsIGkgKyAxKSkNCj4gWW91IGNvdWxkIHVzZSB0aGUgZm9yX2VhY2hf
+c2V0X2JpdChpLCBwcml2LT52YWxpZF9wb3J0cywgTUFYX1BPUlRTKSBsb29wIG1hY3JvLg0KDQpJ
+IGZpZ3VyZWQgdGhlcmUgbXVzdCBiZSBhIHdyYXBwZXIgZm9yIHRoaXMgaWRpb20gYnV0IEkgY291
+bGRuJ3QgZmluZCBpdCANCmZvciBsb29raW5nLg0KDQo+PiArc3RhdGljIGludCBydGw5MzAwX21k
+aW9fcmVhZF9jMjIoc3RydWN0IG1paV9idXMgKmJ1cywgaW50IHBoeV9pZCwgaW50IHJlZ251bSkN
+Cj4+ICt7DQo+IFsuLi5dDQo+PiArDQo+PiArCWVyciA9IHJlZ21hcF93cml0ZShyZWdtYXAsIFNN
+SV9BQ0NFU1NfUEhZX0NUUkxfMiwgcG9ydCA8PCAxNik7DQo+IEFub3RoZXIgY2FuZGlkYXRlIGZv
+ciBGSUVMRF9QUkVQKCkNClllcC4gVGhlcmUncyBhIGNvdXBsZSBtb3JlIHRvby4NCj4NCj4+ICsJ
+aWYgKGVycikNCj4+ICsJCXJldHVybiBlcnI7DQo+PiArDQo+PiArCXZhbCA9IEZJRUxEX1BSRVAo
+R0VOTUFTSygyNCwgMjApLCByZWdudW0pIHwNCj4+ICsJwqDCoMKgwqDCoCBGSUVMRF9QUkVQKEdF
+Tk1BU0soMTksIDE1KSwgMHgxZikgfA0KPj4gKwnCoMKgwqDCoMKgIEZJRUxEX1BSRVAoR0VOTUFT
+SygxNCwgMyksIDB4ZmZmKSB8DQo+IFlvdSBjb3VsZCB1c2UgI2RlZmluZS1zIGZvciB0aGUgR0VO
+TUFTSygpIGZpZWxkIG1hc2tzIHRvbywgc2ltaWxhciB0byBQSFlfQ1RSTF8qLiBUaGF0DQo+IHdv
+dWxkIG1ha2Ugd2hhdCB5b3UncmUgc2V0dGluZyBhIGJpdCBjbGVhcmVyLCBjb21wYXJlZCB0byB0
+aGVzZSBsaXRlcmFsIHZhbHVlcy4NClN1cmUgd2lsbCBkby4NCj4gTml0OiBZb3UncmUgYWxzbyBz
+ZXR0aW5nIGFsbC1vbmUgdmFsdWVzLCBzbyBHRU5NQVNLKDE5LCAxNSkgYW5kIEdFTk1BU0soMTQs
+IDMpIGJ5DQo+IHRoZW1zZWx2ZXMgYXJlIHN1ZmZpY2llbnQuIEUuZy4gUEhZX0NUUkxfTk9fUEFH
+RV9QQVJLIGFuZCBQSFlfQ1RSTF9OT19QQUdFX1NFTEVDVC4NCg0KVGhpcyBwYXJ0IEknbSBub3Qg
+cGxhbm5pbmcgb24gZG9pbmcuIFJpZ2h0IG5vdyBJIGFtIGp1c3Qgc2V0dGluZyB0aGVtIHRvIA0K
+YWxsLW9uZXMgYnV0IHRoZSBzYW1lIGNvZGUgbWF5IGVuZCB1cCBuZWVkaW5nIHRvIGdyb3cgcGFn
+ZSBsb2dpYyANCihSZWFsdGVrJ3MgU0RLIGhhcyBjb2RlIHRoYXQgYWRkcyBwYWdlIHJlYWQvd3Jp
+dGUgZnVuY3Rpb25zIHRvIHBoeWxpYikuDQoNCj4+ICtzdGF0aWMgaW50IHJ0bDkzMDBfbWRpb2J1
+c19wcm9iZShzdHJ1Y3QgcGxhdGZvcm1fZGV2aWNlICpwZGV2KQ0KPj4gK3sNCj4gWy4uLl0NCj4+
+ICsNCj4+ICsJZGV2aWNlX2Zvcl9lYWNoX2NoaWxkX25vZGUoZGV2LCBjaGlsZCkgew0KPj4gKwkJ
+ZXJyID0gcnRsOTMwMF9tZGlvYnVzX3Byb2JlX29uZShkZXYsIHByaXYsIGNoaWxkKTsNCj4gSW4g
+eW91ciBuZXh0IHBhdGNoIHlvdSB1c2UgJ3N0YXR1cyA9ICJkaXNhYmxlZCInIGZvciB0aGUgYmFz
+ZSBkdHNpLiBZb3UgbWF5IHdhbnQgdG8gdXNlDQo+IGZ3bm9kZV9mb3JfZWFjaF9hdmFpbGFibGVf
+Y2hpbGRfbm9kZSgpIGluIHRoYXQgY2FzZSwgc28gdW51c2VkIGJ1c3NlcyBhcmUgbm90IHByb2Jl
+ZC4NCg0KSG1tLCB0aGUgZXhpc3RpbmcgY29kZSBpcyBvbmx5IHJlZ2lzdGVyaW5nIHR3byBtZGlv
+IGJ1c2VzLiBBbHRob3VnaCBJIA0KY2FuJ3Qgc2VlIHdoeSBpdCdzIG5vdCBhdHRlbXB0aW5nIHRv
+IHRvIHJlZ2lzdGVyIHRoZSBvdGhlciB0d28uDQoNCkFoIE9LLiBJdCdzIGJlY2F1c2UgZGV2aWNl
+X2Zvcl9lYWNoX2NoaWxkX25vZGUoKSB3cmFwcyANCmRldmljZV9nZXRfbmV4dF9jaGlsZF9ub2Rl
+KCkgd2hpY2ggY2FsbHMgZndub2RlX2dldF9uZXh0X2NoaWxkX25vZGUoKSANCndoaWNoIGNhbGxz
+IG9mX2Z3bm9kZV9nZXRfbmV4dF9jaGlsZF9ub2RlKCkgd2hpY2ggZG9lcyB0aGUgYXZhaWxhYmxl
+IA0KY2hlY2sgd2l0aCBvZl9nZXRfbmV4dF9hdmFpbGFibGVfY2hpbGQoKS4NCg0KU28gSSBkb24n
+dCB0aGluayB0aGVyZSdzIGFueSBjaGFuZ2UgdG8gYmUgbWFkZSBoZXJlLg0K
 
