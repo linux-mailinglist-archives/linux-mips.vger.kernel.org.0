@@ -1,77 +1,77 @@
-Return-Path: <linux-mips+bounces-7730-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7731-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E97C9A31305
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Feb 2025 18:29:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DBFFA31311
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Feb 2025 18:30:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6498C3A3068
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Feb 2025 17:29:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5610118815F9
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Feb 2025 17:29:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 208CF264613;
-	Tue, 11 Feb 2025 17:28:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 865E426462F;
+	Tue, 11 Feb 2025 17:28:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="SjDKsjlf"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="A5L3XSOE"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D17E2638A7
-	for <linux-mips@vger.kernel.org>; Tue, 11 Feb 2025 17:28:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3ADAE2638B9
+	for <linux-mips@vger.kernel.org>; Tue, 11 Feb 2025 17:28:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739294917; cv=none; b=aIu1CEC1YYKuSFCAIVwxdKymcpnnWnKMGgrxxfMFcY80aOO3GSZ4ARDEyMoJbw0pGWCiiYD473KXHcHsGjAiaHixaE1v8IVyIjMI/VaIX4yuOGmYVKFk5MDtfz0wEFYSfh86b1F7B/uHyyBWaNoBTdIKlBFH6Z0ybzg2W+Uu05c=
+	t=1739294918; cv=none; b=aa798PayyX+PAbcUYLS5fVWMdTkTP9bx5UfcUX7owWW6NmAaLCgcCnn3ob/fQJuAqKh5P0MhZIg6x2VBQ60btwS3XtbDYPt3T+SnYSbjfpC65ToXSLjdROLpT8KXfDPqLudZPUVO0rWKvaZwGRLtu9RFN9PCc82kVkrngSsSSRo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739294917; c=relaxed/simple;
-	bh=4I/YUW3hUfV7LW4vqIimfK2wLippJhEosTDRns8e2Tk=;
+	s=arc-20240116; t=1739294918; c=relaxed/simple;
+	bh=qoSrX8iU6ZsOmDdt2vcxpMmdn8e+H5V+wLsqMb+WXTw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=GX0i+pZQ630RSNQhQQJVIHZtw7Gt0HCmpYq5ZVjIb9ufnHL1SZk1H2CpHTllvrc7XGvfb+MUUOBLoKwpUVbD8mMZGDxzMm/G87vs63j6ZlQbRY6+Gw3LtZkcnIY5LauFX7Ic5NxRob/qu1JKuG0GROPePsCBPx4VL/9xfuK0JeU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=SjDKsjlf; arc=none smtp.client-ip=209.85.221.44
+	 MIME-Version:Content-Type; b=SLTEMaWHp3QHe5N72n1tdxe8UCY2KUlGJd5G/KnYS4G/YYo4jXHqw3E49nufnRXbCvakhI9Ex9VHA2oPZYiFtHC+9L4AqqIpfkbOLw/4KuXJJNwihFO4aj6l59+4TIhtgs5q1AX9gbpZGIMd3FXUpdmOXTaHjPVBUvRqfOXTDho=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=A5L3XSOE; arc=none smtp.client-ip=209.85.221.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-38dc1dfd9f2so3886153f8f.3
-        for <linux-mips@vger.kernel.org>; Tue, 11 Feb 2025 09:28:34 -0800 (PST)
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-38dd011ff8bso3384157f8f.0
+        for <linux-mips@vger.kernel.org>; Tue, 11 Feb 2025 09:28:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1739294912; x=1739899712; darn=vger.kernel.org;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1739294914; x=1739899714; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=O2biH2pTKEoyD3yCVVt7sf7r+6yC9eORZimpeabOUGQ=;
-        b=SjDKsjlfU7ysmQrydqCMPSMIAFoaCWi42m3TnHTHDXbczuHFXOhJ9c9T1xTF4JPir5
-         pjuF1oWC7teFQEWPpEn7EqmA6gathLcDqWc8tMLxXSzJqukyN1dpWiddaE2hqC/DsoMp
-         GasDLhsFKLcCuvdhz5O6/gHuh3QF8uzuymwC9jnBqhOVHsv6jmGB+sh3Mq2wMceHNaMl
-         0JPKe6mIAH5y38qwmMK5Yv3IB7fN8aRf8/i4VBIRxjkp3v92BstRt6oeb2b7jHsKzrAl
-         6uIWggib/y2fBAvYsyZORLryQ2P3QOnfRVn2rxf6cwfUIUsd5E5ZOm7N8DdINc565jJu
-         v1pA==
+        bh=gDYe4zVCJHl1J7zmO8YwQPUsImFhukXxkzdj3E5Ja/8=;
+        b=A5L3XSOEaczVKW8AeMfejVaXZdguYtpi/ASfz7IMcWD320p4Y4/TWOMkA8s5UEHg2T
+         4T8t81j0xe+/6RPMMF+j5R2yLS97dc46a4F5r7b0w1gHitT7tdIBN0s/6rP8KnO/IXSv
+         2Ny/LiAN2dWspjN1+M+P6lOyWND23JYOcjIsw3w8dz4iPrmAwo2t5MsdHiQFlOdV9Wql
+         hCjIcBoPjsWL/vk0vWqsyBCV5Xg9TxxU2t5OlMcloo2l6XQwyLhvyPl6iWWYvXXXopPj
+         obYtH2pBgv0bd4Sa9bxHcEP/E/X/3/00kImO6x3SH+eH6Myk5+3a+RuSLvDjuoDAPdPF
+         9dsg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739294912; x=1739899712;
+        d=1e100.net; s=20230601; t=1739294914; x=1739899714;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=O2biH2pTKEoyD3yCVVt7sf7r+6yC9eORZimpeabOUGQ=;
-        b=wtVr41uNNu3eK62TQNipOIWdKNzqeeztMp1sgNHxZjZgobnQZjcXmfox47PiCjIaNe
-         b+FcKor6QCfnR8zQ5cKFXUNScPOBwO0OvbmkUKNsXu26SPTJKlpngWs9sSedu1OBJ3a0
-         K/k0Qie+h0nNef3/QEjWfFNtVk4QWxn98epRuJBeJqbrgWB0nOssy1SvUClwEJ2nWSr1
-         A5OPnBlp2eslwnZtABdFoESWPvKs38/gVE4ZLXnttvOspHb9HmpXVKErzf7ijlgzBfsy
-         2uqKeiiNSt2wxfuANQJOWA8QLeRsqGkAHrf8/uuwxXb+eVEoh7QwCuL1Q6RBQLqTI58z
-         q0mw==
-X-Forwarded-Encrypted: i=1; AJvYcCX+zvOAHsaJ7MUeotehcFsqUcMZIsoWDmzs2o/XnQFd+8VGuzhL7snrd7JUGKS8d+Oz1JHcuEi3SJ/m@vger.kernel.org
-X-Gm-Message-State: AOJu0YxL0W1D+PZP2Et3KEB2FaVcvg9gbtQp6hDXJN1iwvrRjXgvoAII
-	FO3UDdahvJ2OwjqhWh2bWZMbXN1QMvNM+3jugohgeT03aNyLkn0BVKs3R9TSdoA=
-X-Gm-Gg: ASbGncvZwHQLNGeq/uzcfHPsEl/iUj24iuUkebmquX7zCzYy4NkhipPAILU1zD8jSpt
-	pDZsFfI5CQ5Jo7vjD5RvskJBxIxZ0m1aBSHAvjuiBK2kCsygyeXAqyXO8ThmtJ6VNXt2v6mkIRL
-	aTePB8Vy0JezS4ZBZX0L54FMfXV/sjRUfbFkoZRIJnYw/PBuQRrNFou1qVht+zRroI9g0mTEToE
-	poQst6836LXPPIqnFSbP3SMQRgEXixpQO7gAGTA4iYsdtQDNDIVQGN9CTBJB+vQlmYFkcXRVWUh
-	8NgHLFWPIw7Ic5RXQQ==
-X-Google-Smtp-Source: AGHT+IE/lWpaI6pWVO8Sv+YQSGH06MG0caNle2AbW37wTjANlrKJ9s7lqNySg7B+IZ8uIOLB+l1Tjw==
-X-Received: by 2002:a5d:47aa:0:b0:38d:d69e:1314 with SMTP id ffacd0b85a97d-38dd69e1ba1mr9007347f8f.9.1739294912415;
-        Tue, 11 Feb 2025 09:28:32 -0800 (PST)
+        bh=gDYe4zVCJHl1J7zmO8YwQPUsImFhukXxkzdj3E5Ja/8=;
+        b=nbXuQ10gd5wbZnVakQ3Ewfcfg7DwE5zOVQhWxmJX1Uq6CBwDmUrJI/XOpzULxDVGv0
+         Fvzctk90iQfomouWXxRO9N0DFbDeY2Vx3ZorcAx1uHMVtLZ6XCr5fzgNb4aIimOgHlG5
+         v/srQIxBPsOKV3KKe8W/MY3odVeCL+q5DDv/mwShfhpHDU59akFqI7pN/USk18mgvqws
+         LR05Rul9NSD8NG+h34rwQ9QRD3/G+HhqYU/eCTpArT1MOudJl382nXMmhlfjRRhoT32/
+         vWw6W4M7+JA0yTyUSkOaCpftFekFSHxgFCmkVCXkuwjdxeDud9EdRsrtfmWzfJl0SkHu
+         bFVA==
+X-Forwarded-Encrypted: i=1; AJvYcCUaQCs8Lp96girHtUrMpG1xmHpqM1491TSrU770Zk9foMi0R2PWZUCpOW7aKSF1yOJPXPHqYk9aUS2F@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzi97dBGdXwYTf5hx1suMxsRcrICNbH/9Dy+segUE4PQIChgey3
+	c9W/dddhbntZUCzV1mrEc2lcwru6LuDgwO9i6Pk1051hLDruQEZd5Z4IOExUjjo=
+X-Gm-Gg: ASbGncvvbWImQHGFXnNeRQpq6p8vZe0rhj2WXXO9un8gTAFuG0WHPPS7qvIsP1OPAwG
+	rLp+hmba9uvXid53nOrk3lslbL42p4KhgwSj1Ud2FrL8ssp1Htu7+oa3ryspwf7BNWjnpPj4atY
+	yLbya522f933KFrOtxDAriEGBDYym7nKpyrvW6Hz0aVGhlaNw95RDDY1ZzxvrUX2HHP5INC4fvu
+	tAb3LqqsV7jLAZJ6eltNphMwnWngQt1a3x1CwHCOdJw6FI+3XsImcli6LYhSLhKB8aElo0U9CXX
+	c+sOHXbV9fi2JIqyDg==
+X-Google-Smtp-Source: AGHT+IHFkzaOXapiWN4/SxKHetf09scMUxofFapehDhsYxM6Mf+yjBALSpgOHKp7OlGFg6yNQWYZRQ==
+X-Received: by 2002:a5d:5f8b:0:b0:38d:cf33:31a1 with SMTP id ffacd0b85a97d-38de92887dbmr644098f8f.23.1739294914574;
+        Tue, 11 Feb 2025 09:28:34 -0800 (PST)
 Received: from toaster.lan ([2a01:e0a:3c5:5fb1:fc0c:6c04:7ae0:c5c2])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-38dc6c80df2sm13691082f8f.18.2025.02.11.09.28.29
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-38dc6c80df2sm13691082f8f.18.2025.02.11.09.28.32
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Feb 2025 09:28:31 -0800 (PST)
+        Tue, 11 Feb 2025 09:28:34 -0800 (PST)
 From: Jerome Brunet <jbrunet@baylibre.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	Dave Ertman <david.m.ertman@intel.com>,
@@ -120,9 +120,9 @@ Cc: Jerome Brunet <jbrunet@baylibre.com>,
 	imx@lists.linux.dev,
 	linux-arm-kernel@lists.infradead.org,
 	linux-amlogic@lists.infradead.org
-Subject: [PATCH v3 3/7] drm/bridge: ti-sn65dsi86: use the auxiliary device creation helper
-Date: Tue, 11 Feb 2025 18:28:00 +0100
-Message-ID: <20250211-aux-device-create-helper-v3-3-7edb50524909@baylibre.com>
+Subject: [PATCH v3 4/7] platform: arm64: lenovo-yoga-c630: use the auxiliary device creation helper
+Date: Tue, 11 Feb 2025 18:28:01 +0100
+Message-ID: <20250211-aux-device-create-helper-v3-4-7edb50524909@baylibre.com>
 X-Mailer: git-send-email 2.45.2
 In-Reply-To: <20250211-aux-device-create-helper-v3-0-7edb50524909@baylibre.com>
 References: <20250211-aux-device-create-helper-v3-0-7edb50524909@baylibre.com>
@@ -134,19 +134,19 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4038; i=jbrunet@baylibre.com;
- h=from:subject:message-id; bh=4I/YUW3hUfV7LW4vqIimfK2wLippJhEosTDRns8e2Tk=;
- b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBnq4g3KBrsjz/YbGJrLq2rlkWwu0SsOmQVpTCXu
- VtviTS8naaJAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCZ6uINwAKCRDm/A8cN/La
- hV5wD/9CJGF/RCRwHbIbJXrKSWU73Zd91U9+X8P+nRRrN2lbOiILtbHRZF2AXs7l2tOiLDUVf4G
- hypCmzHSVFVgMR06Q7kXrEbTRx0O2Ul1Q07H0IFD4k0xt58ug/V7ezrJ8lMEcM/FcwImcVkoYJ8
- lwmjvrONgcgoZBExdOnJlv1UD+Dddr4Wi+sWDLmDALlFjbDYuQrfZjHc4L2zc9ve8rHjnU0pC6f
- YMm6EjEhHMcFgsbKge/+kkfDcTqsuk4jfLytI2sF2jHT2cwesgQfceYXMsqKePtNCuHTv8Tpp1b
- 5nWhj/l8S+yLfIAiVNy2nxba00yx5R4v4NoCPZCX05JCtquBC2WB4CNUzhQYHyHMMQ+ePGN7JKm
- NVtRFVPUx9oJOjGRhqWRi88hiSwNg4QPj+OFtWuOs7D51J/yTJdD5XMgYgADimBsSrLGtGB/1r/
- IorMXfmpkm0xw+RREwA4WKwLMT/KLgfShgDVdmOk4Kbnh4GrUvX/Rspym/xjVfg9es+PgegGjWK
- rCix4SNzCGiSAgOwWvJGJDOCAjzpvnzAHYXnvgCoFs75RSMC9B2KvyOk+IQ1l+9g5tLRkthUfJX
- P2X8n0M0gtdsistRrOtkv7GakcFOKAF6ZmIzmj/mW2xQRBXpnMf+sa95bdok5/LFdpbKMw5knAN dqVQqlnz7A0W1ig==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2003; i=jbrunet@baylibre.com;
+ h=from:subject:message-id; bh=qoSrX8iU6ZsOmDdt2vcxpMmdn8e+H5V+wLsqMb+WXTw=;
+ b=owEBbQKS/ZANAwAKAeb8Dxw38tqFAcsmYgBnq4g4/dIaY7N0MjawcCtYO6owHszhAtyjcgr7D
+ 3Gd3AdMv6qJAjMEAAEKAB0WIQT04VmuGPP1bV8btxvm/A8cN/LahQUCZ6uIOAAKCRDm/A8cN/La
+ hR9uEACtV/xHFmThUeYWuRuZeLIZDjRSGPPZEm0NF1IUEyqMa+/w0GkdSU2I/GhBRDekpL969e+
+ flE7DvZyypim/I0FZ9+E91BhWYhmSRaSfH/9/AKcVVKiogJILw22nAQLwHQAU4pI9XrwljjuAbt
+ MSgI6Qhm5jlq1GlYCQ/hou9AbHVR9B2Oe4/YFrBkUNxEblpZLIcnrsPVO2FY5baXHpZvJ2k5CAZ
+ MSpgdClj9yIkdl580XYiAPYYvwvjElVhwesa1zzt/XSJ1Idm/YRnZRAjDFe/uief6LxhKmzn8Cq
+ PTKk6exeDtcsIhy2ONXg2237HCo0rho1EMRdeb/E1B5sDTqLMLKfHFYyvFYva/imfWDg260QPE8
+ SB0ucc4PEGbCTcI28Hh+JdOrNP9ChRaJgfsOqR+3qLLQgWYBJ5ScIXYmp0UW91AvMrtqrwf9ySl
+ UBWBVpazEhLxSaE9ItQoc2xzaUOqL71se/uZnoCaqvztP8gDdl+8GXSP2/fps5dhBhhCYQi0gi2
+ n4q1VatCARnM9Gq2nM8qG9+sE/r+6AOa9faLGrXdf3ZP5y7Z1f9I1TqXigFb/dco4k7vTWAFo3Z
+ /tSZVYtq1SnEy4BRJqk9nLxSPeko3sbBy6g+ly8JaELAzWpBynghDBX7iUt8qUwY3k22TI1x6Zi chvp+TE0JiJbh2Q==
 X-Developer-Key: i=jbrunet@baylibre.com; a=openpgp; fpr=F29F26CF27BAE1A9719AE6BDC3C92AAF3E60AED9
 Content-Transfer-Encoding: 8bit
 
@@ -157,128 +157,68 @@ Use it and remove some boilerplate code.
 
 Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 ---
- drivers/gpu/drm/bridge/ti-sn65dsi86.c | 84 +++++++++--------------------------
- 1 file changed, 20 insertions(+), 64 deletions(-)
+ drivers/platform/arm64/lenovo-yoga-c630.c | 42 +++----------------------------
+ 1 file changed, 4 insertions(+), 38 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/ti-sn65dsi86.c b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
-index e4d9006b59f1b975cf63e26b221e985206caf867..e583b8ba1fd4f27d98e03d4382e0417bbd50436f 100644
---- a/drivers/gpu/drm/bridge/ti-sn65dsi86.c
-+++ b/drivers/gpu/drm/bridge/ti-sn65dsi86.c
-@@ -454,62 +454,6 @@ static void ti_sn65dsi86_debugfs_init(struct ti_sn65dsi86 *pdata)
- 	debugfs_create_file("status", 0600, debugfs, pdata, &status_fops);
+diff --git a/drivers/platform/arm64/lenovo-yoga-c630.c b/drivers/platform/arm64/lenovo-yoga-c630.c
+index 1f05c9a6a89d5ee146144062f5d2e36795c56639..921a93d4ea39ac54344cc964e2805e974cc7e808 100644
+--- a/drivers/platform/arm64/lenovo-yoga-c630.c
++++ b/drivers/platform/arm64/lenovo-yoga-c630.c
+@@ -191,50 +191,16 @@ void yoga_c630_ec_unregister_notify(struct yoga_c630_ec *ec, struct notifier_blo
  }
+ EXPORT_SYMBOL_GPL(yoga_c630_ec_unregister_notify);
  
--/* -----------------------------------------------------------------------------
-- * Auxiliary Devices (*not* AUX)
-- */
--
--static void ti_sn65dsi86_uninit_aux(void *data)
+-static void yoga_c630_aux_release(struct device *dev)
 -{
--	auxiliary_device_uninit(data);
+-	struct auxiliary_device *adev = to_auxiliary_dev(dev);
+-
+-	kfree(adev);
 -}
 -
--static void ti_sn65dsi86_delete_aux(void *data)
+-static void yoga_c630_aux_remove(void *data)
 -{
--	auxiliary_device_delete(data);
+-	struct auxiliary_device *adev = data;
+-
+-	auxiliary_device_delete(adev);
+-	auxiliary_device_uninit(adev);
 -}
 -
--static void ti_sn65dsi86_aux_device_release(struct device *dev)
--{
--	struct auxiliary_device *aux = container_of(dev, struct auxiliary_device, dev);
--
--	kfree(aux);
--}
--
--static int ti_sn65dsi86_add_aux_device(struct ti_sn65dsi86 *pdata,
--				       struct auxiliary_device **aux_out,
--				       const char *name)
--{
--	struct device *dev = pdata->dev;
--	struct auxiliary_device *aux;
+ static int yoga_c630_aux_init(struct device *parent, const char *name,
+ 			      struct yoga_c630_ec *ec)
+ {
+ 	struct auxiliary_device *adev;
 -	int ret;
 -
--	aux = kzalloc(sizeof(*aux), GFP_KERNEL);
--	if (!aux)
+-	adev = kzalloc(sizeof(*adev), GFP_KERNEL);
+-	if (!adev)
 -		return -ENOMEM;
 -
--	aux->name = name;
--	aux->dev.parent = dev;
--	aux->dev.release = ti_sn65dsi86_aux_device_release;
--	device_set_of_node_from_dev(&aux->dev, dev);
--	ret = auxiliary_device_init(aux);
+-	adev->name = name;
+-	adev->id = 0;
+-	adev->dev.parent = parent;
+-	adev->dev.release = yoga_c630_aux_release;
+-	adev->dev.platform_data = ec;
+ 
+-	ret = auxiliary_device_init(adev);
 -	if (ret) {
--		kfree(aux);
+-		kfree(adev);
 -		return ret;
 -	}
--	ret = devm_add_action_or_reset(dev, ti_sn65dsi86_uninit_aux, aux);
--	if (ret)
+-
+-	ret = auxiliary_device_add(adev);
+-	if (ret) {
+-		auxiliary_device_uninit(adev);
 -		return ret;
--
--	ret = auxiliary_device_add(aux);
--	if (ret)
--		return ret;
--	ret = devm_add_action_or_reset(dev, ti_sn65dsi86_delete_aux, aux);
--	if (!ret)
--		*aux_out = aux;
--
--	return ret;
--}
--
- /* -----------------------------------------------------------------------------
-  * AUX Adapter
-  */
-@@ -671,7 +615,12 @@ static int ti_sn_aux_probe(struct auxiliary_device *adev,
- 	 * The eDP to MIPI bridge parts don't work until the AUX channel is
- 	 * setup so we don't add it in the main driver probe, we add it now.
- 	 */
--	return ti_sn65dsi86_add_aux_device(pdata, &pdata->bridge_aux, "bridge");
-+	pdata->bridge_aux = devm_auxiliary_device_create(pdata->dev, "bridge",
-+							 NULL, 0);
-+	if (IS_ERR(pdata->bridge_aux))
-+		return PTR_ERR(pdata->bridge_aux);
-+
+-	}
++	adev = devm_auxiliary_device_create(parent, name, ec, 0);
++	if (IS_ERR(adev))
++		return PTR_ERR(adev);
+ 
+-	return devm_add_action_or_reset(parent, yoga_c630_aux_remove, adev);
 +	return 0;
  }
  
- static const struct auxiliary_device_id ti_sn_aux_id_table[] = {
-@@ -1950,15 +1899,17 @@ static int ti_sn65dsi86_probe(struct i2c_client *client)
- 	 */
- 
- 	if (IS_ENABLED(CONFIG_OF_GPIO)) {
--		ret = ti_sn65dsi86_add_aux_device(pdata, &pdata->gpio_aux, "gpio");
--		if (ret)
--			return ret;
-+		pdata->gpio_aux = devm_auxiliary_device_create(pdata->dev, "gpio",
-+							       NULL, 0);
-+		if (IS_ERR(pdata->gpio_aux))
-+			return PTR_ERR(pdata->gpio_aux);
- 	}
- 
- 	if (IS_ENABLED(CONFIG_PWM)) {
--		ret = ti_sn65dsi86_add_aux_device(pdata, &pdata->pwm_aux, "pwm");
--		if (ret)
--			return ret;
-+		pdata->pwm_aux = devm_auxiliary_device_create(pdata->dev, "pwm",
-+							      NULL, 0);
-+		if (IS_ERR(pdata->pwm_aux))
-+			return PTR_ERR(pdata->pwm_aux);
- 	}
- 
- 	/*
-@@ -1967,7 +1918,12 @@ static int ti_sn65dsi86_probe(struct i2c_client *client)
- 	 * AUX channel is there and this is a very simple solution to the
- 	 * dependency problem.
- 	 */
--	return ti_sn65dsi86_add_aux_device(pdata, &pdata->aux_aux, "aux");
-+	pdata->aux_aux = devm_auxiliary_device_create(pdata->dev, "aux",
-+						      NULL, 0);
-+	if (IS_ERR(pdata->aux_aux))
-+		return PTR_ERR(pdata->aux_aux);
-+
-+	return 0;
- }
- 
- static const struct i2c_device_id ti_sn65dsi86_id[] = {
+ static int yoga_c630_ec_probe(struct i2c_client *client)
 
 -- 
 2.45.2
