@@ -1,95 +1,174 @@
-Return-Path: <linux-mips+bounces-7743-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7744-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C333DA31F4E
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Feb 2025 07:44:46 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEEA0A32121
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Feb 2025 09:31:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0AE963A548A
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Feb 2025 06:44:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9FDF47A25FF
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Feb 2025 08:30:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D64C41FF1A9;
-	Wed, 12 Feb 2025 06:44:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B06E62054FC;
+	Wed, 12 Feb 2025 08:31:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="MDr0TNRs"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D54C1FCF4F;
-	Wed, 12 Feb 2025 06:44:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from smtpbgjp3.qq.com (smtpbgjp3.qq.com [54.92.39.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC34E1DED5F;
+	Wed, 12 Feb 2025 08:31:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.92.39.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739342674; cv=none; b=cPOgB77VGVEQBi08px/07fZJfutgnXL7s9StkOmLKz5GqJsWY5lvq5FCMJEOJoWVGJ+vUPLqX94YCKIQgHH9WsYoecpmtv0S/U74pMWZhMmHohDylnnslTyBTg72ES0Sd8n9MT2fa93ntfdF53AkybwEcc8JJACh6K7ZCETk4Ps=
+	t=1739349101; cv=none; b=hGsFQEpGh/DvtD1E+Mw54mpPAQJXbsLnLHDXbfwsUMso0SC/k5naDkC1ZbUuWDo1Xdtnl+CJjwqjwxLeLStEoQpMEEDpVDkC84f/DHOH8vTeoqOXeP6QuNjSMbah8LvVVAMDVdz/8VPxXxQfCl1uBxa00Ijyz/i5gaom15njfn8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739342674; c=relaxed/simple;
-	bh=+Jfg4OzS1vKOMOlhVXTVHrU4Gw5UHqFa4g5yO+1hLi4=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=h3qmoGm/FYwAaqMf6JSlt6aRneVTtv2OJz29hlaN3flumgKTE4dJm459yMW39JgUpRIdpKnVF3X47cIhoPNr3hZQLHGyGhscVYccadFeceifl8kPEfUFm3mbjeN/qUhyxF987U4hJpCeQi3Lkq/U/IC0hYIw22XhqhOz1qsFBTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 85C9392009C; Wed, 12 Feb 2025 07:44:30 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 7FCB492009B;
-	Wed, 12 Feb 2025 06:44:30 +0000 (GMT)
-Date: Wed, 12 Feb 2025 06:44:30 +0000 (GMT)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: WangYuli <wangyuli@uniontech.com>
-cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-    linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
-    masahiroy@kernel.org, jiaxun.yang@flygoat.com, zhanjun@uniontech.com, 
-    guanwentao@uniontech.com, Chen Linxuan <chenlinxuan@uniontech.com>
-Subject: Re: [PATCH 2/2] MIPS: Explicitly check KBUILD_SYM32=n
-In-Reply-To: <D23DC9B8BD1C245D+20250211140740.1812778-2-wangyuli@uniontech.com>
-Message-ID: <alpine.DEB.2.21.2502120612000.65342@angie.orcam.me.uk>
-References: <41107E6D3A125047+20250211135616.1807966-1-wangyuli@uniontech.com> <D23DC9B8BD1C245D+20250211140740.1812778-2-wangyuli@uniontech.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1739349101; c=relaxed/simple;
+	bh=jKmnbO01U7PB1ktXnak6Z7V9ixmJZFoi1KmEdzP/atQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=NpzhXfnu5ozenwwLzqe93DdYanU8JHTO3baT1EtdmwFLXfuGlpXeMRZroHsd5wiZcgLiBD4mvdZPtgZPQy+KRD/H7kPasoFvKb+Z43nN152R8zUQjNvjpufsKxLCbReZAaEJlGcodhtvY89BZyDmyUaUJLRo4Scswgp+YSw9xG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=MDr0TNRs; arc=none smtp.client-ip=54.92.39.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1739349044;
+	bh=jKmnbO01U7PB1ktXnak6Z7V9ixmJZFoi1KmEdzP/atQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=MDr0TNRsoaKrZaTsSZrz0IQk9fjlhL+GfDKybLppuAjCVsGP6at3besprbK4FJF09
+	 Z2FxPYXjlVJFixr/5hD/Zglb2IMdi+MZLNRScis14vTBhLzldFnULnmc/UCVcki9mI
+	 F7oJZm+dWkvg6uwH89g+uYS2ntw9C4XtvFVamRyo=
+X-QQ-mid: bizesmtpip2t1739349011tbs791d
+X-QQ-Originating-IP: +hRE0UJYdhCLplKuLNaNXFDgVUeA7iaIbJVTl434Lns=
+Received: from [IPV6:240e:668:120a::206:15b] ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Wed, 12 Feb 2025 16:30:09 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 8806388869146915300
+Message-ID: <030FDC391902ED7E+d1a2171f-9a91-48eb-8520-a02ff7e786b4@uniontech.com>
+Date: Wed, 12 Feb 2025 16:30:09 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] MIPS: Explicitly check KBUILD_SYM32=n
+To: "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+ masahiroy@kernel.org, jiaxun.yang@flygoat.com, zhanjun@uniontech.com,
+ guanwentao@uniontech.com, Chen Linxuan <chenlinxuan@uniontech.com>
+References: <41107E6D3A125047+20250211135616.1807966-1-wangyuli@uniontech.com>
+ <D23DC9B8BD1C245D+20250211140740.1812778-2-wangyuli@uniontech.com>
+ <alpine.DEB.2.21.2502120612000.65342@angie.orcam.me.uk>
+Content-Language: en-US
+From: WangYuli <wangyuli@uniontech.com>
+Autocrypt: addr=wangyuli@uniontech.com; keydata=
+ xjMEZoEsiBYJKwYBBAHaRw8BAQdAyDPzcbPnchbIhweThfNK1tg1imM+5kgDBJSKP+nX39DN
+ IVdhbmdZdWxpIDx3YW5neXVsaUB1bmlvbnRlY2guY29tPsKJBBMWCAAxFiEEa1GMzYeuKPkg
+ qDuvxdofMEb0C+4FAmaBLIgCGwMECwkIBwUVCAkKCwUWAgMBAAAKCRDF2h8wRvQL7g0UAQCH
+ 3mrGM0HzOaARhBeA/Q3AIVfhS010a0MZmPTRGVfPbwD/SrncJwwPAL4GiLPEC4XssV6FPUAY
+ 0rA68eNNI9cJLArOOARmgSyJEgorBgEEAZdVAQUBAQdA88W4CTLDD9fKwW9PB5yurCNdWNS7
+ VTL0dvPDofBTjFYDAQgHwngEGBYIACAWIQRrUYzNh64o+SCoO6/F2h8wRvQL7gUCZoEsiQIb
+ DAAKCRDF2h8wRvQL7sKvAP4mBvm7Zn1OUjFViwkma8IGRGosXAvMUFyOHVcl1RTgFQEAuJkU
+ o9ERi7qS/hbUdUgtitI89efbY0TVetgDsyeQiwU=
+In-Reply-To: <alpine.DEB.2.21.2502120612000.65342@angie.orcam.me.uk>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------fb0TDSB84pRB0hFv1UzjXwFZ"
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
+X-QQ-XMAILINFO: MINkqr8Ftjsm4CeG/ZL0D56a+kaKAZFGb+KwOdoMKyId9/CJILnpL8Id
+	pT/93hT4PCDuVVSCA+VEAo78IWB26JL8m+KNyTMal0+0lrVUOMEFCi744kFTo85XuzQ+kJV
+	cnS8bBnf7kOjcmA0SE7C7otdJ9d30EyAdyTNgpl6FdHxSc7xhHq58yGRJ437H9+G1vmNe2i
+	BMVCqol7m9OhT1+xNkf7l1UKJqZJMqXs9j3/0hajf3nb/d15INYdU75lPkman33YgXCiz+/
+	s02BOWvoy7HnigdB1FO1pjaqU5sQT+xIvO6dSnLRaAk2aPn2ybYr7zH259JwjTF2WRY32rM
+	Zwe0MwzhWIS4gPsg45D6L3OBvFO6jxMUbQW6meKfsohuwgTP2TkX/JjCLh67O8k2Ppo40uY
+	rS374NM+yKRl5yqai8ZnpcwjO9rmxBGWd1kkUAsoWn9a/dzV/spvoy+ciNDA2d1Vr9w6CSJ
+	EqwFTjZNwKvbYk7Igfgs+1epXsOfcg/MatTeCMv5oz3oEiBjdRmoB+JrmbPyCLPdSBdNBMS
+	U+RiiC6af0z+7VmdsujZOTC+vaE6zPzX6YWjv+WsuYnzRdIfskV5bCTasSIZTX9NydO9WzJ
+	qLngAjcwam9Y7/RdTZOrcNK80h30OhLay8/+TwWNLycBbmCFL13VINydCT5Cqd7ZJy5ZEy3
+	CR0vqpsKpb01V+nLmtRkiUdJl3iXWwH1xwJf5cDzyAgfeI1QFIw9h6lfDiQntwCWPFtOVqH
+	cTWdS0KyT7N5XFEiHU3r8ps2j7zexi+CnDtrHuWG/XsknsMmjvVH1/9bavYFVMBqPI7/eAb
+	LRotXfQU1+rhIoNnw0OK9FwZWUZbpnO6WvGIp+a+jFiR0EkVDSinziUyQAMNQ0i8YSPMPu5
+	iF6xspPpJXm2toTZn5uUEH07Vqe4mVJD0bM3ai4M1xZw11t9fa7ZGx4UpWsSOLrblG/Joz2
+	9PnhTXQtPdiLZTPZ6y0yaDQkvenp7ISdhl9VXlK1Jl4vnRKzmBNv+1EmsBtSLaeStYS9vSv
+	qciufknWc4++gzALRO5lJFT/qOPqisfGy2k1hcDkohy5RtiJcTEw27w2cwsdg=
+X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
+X-QQ-RECHKSPAM: 0
 
-On Tue, 11 Feb 2025, WangYuli wrote:
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------fb0TDSB84pRB0hFv1UzjXwFZ
+Content-Type: multipart/mixed; boundary="------------0JYSzbnNmAlGqpICg0m9kdWN";
+ protected-headers="v1"
+From: WangYuli <wangyuli@uniontech.com>
+To: "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+ masahiroy@kernel.org, jiaxun.yang@flygoat.com, zhanjun@uniontech.com,
+ guanwentao@uniontech.com, Chen Linxuan <chenlinxuan@uniontech.com>
+Message-ID: <d1a2171f-9a91-48eb-8520-a02ff7e786b4@uniontech.com>
+Subject: Re: [PATCH 2/2] MIPS: Explicitly check KBUILD_SYM32=n
+References: <41107E6D3A125047+20250211135616.1807966-1-wangyuli@uniontech.com>
+ <D23DC9B8BD1C245D+20250211140740.1812778-2-wangyuli@uniontech.com>
+ <alpine.DEB.2.21.2502120612000.65342@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2502120612000.65342@angie.orcam.me.uk>
 
-> During make module_install, the need_compiler variable becomes 0,
-> so Makefile.compiler isn't included.
-> 
-> This results in call cc-option-yn returning nothing.
-> 
-> Add a check for KBUILD_SYM32=n to avoid the
-> "CONFIG_CPU_DADDI_WORKAROUNDS unsupported without -msym32" error
-> when KBUILD_SYM32 is unset (meaning it's not 'y' or 'n').
+--------------0JYSzbnNmAlGqpICg0m9kdWN
+Content-Type: multipart/mixed; boundary="------------vxlzmYTZu00HKN3nLVM2Qejw"
 
- Jeez, just wrap it into `ifdef need-compiler' as I told you previously.  
+--------------vxlzmYTZu00HKN3nLVM2Qejw
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
- This stuff isn't used with `make modules_install', none of the compiler 
-flags matter as the compiler isn't ever called, which is obvious from 
-Makefile.compiler not being included in the first place.  I only did not 
-do it with commit a79a404e6c22 ("MIPS: Fix CONFIG_CPU_DADDI_WORKAROUNDS 
-`modules_install' regression"), because I was unaware about this LLVM's 
-limitation and GCC version requirements at the time implied the presence 
-of this feature at all times.
+SGkgTWFjaWVqLA0KDQpZb3VyIHJlcGx5IGlzIGEgbGl0dGxlIGJpdCBjb25mdXNpbmcsIHNv
+IGxldCBtZSByZXBocmFzZSB0byBtYWtlIHN1cmUgSSANCmdvdCB0aGlzIHJpZ2h0Og0KDQpU
+aGVyZSBhcmUgZXhwcmVzc2lvbiBhbmQgc3BlbGxpbmcgZXJyb3JzIGluIG15IGNvbW1pdCBt
+ZXNzYWdlIGFuZCBjb2RlIA0KY29tbWVudHMsIG5lY2Vzc2l0YXRpbmcgYSBwYXRjaCB2MiBm
+b3IgY29ycmVjdGlvbnMsIGlzIHRoYXQgcmlnaHQ/DQoNCkFzIGZvciB3aGV0aGVyIHRvIGNo
+ZWNrIG5lZWQtY29tcGlsZXIgb3IgS0JVSUxEX1NZTTMyIGluIHRoZSBjb2RlLCB0aGUgDQpl
+ZmZlY3QgaXMgZXNzZW50aWFsbHkgdGhlIHNhbWUsIGNvcnJlY3Q/DQoNClRoYW5rcywNCg0K
+LS0NCg0KV2FuZ1l1bGkNCg0K
+--------------vxlzmYTZu00HKN3nLVM2Qejw
+Content-Type: application/pgp-keys; name="OpenPGP_0xC5DA1F3046F40BEE.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xC5DA1F3046F40BEE.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
 
- See also commit 4fe4a6374c4d ("MIPS: Only fiddle with CHECKFLAGS if 
-`need-compiler'") for a similar change from the same series[1].
+-----BEGIN PGP PUBLIC KEY BLOCK-----
 
- Also need-compiler is nil rather than 0 in the relevant case.
+xjMEZoEsiBYJKwYBBAHaRw8BAQdAyDPzcbPnchbIhweThfNK1tg1imM+5kgDBJSK
+P+nX39DNIVdhbmdZdWxpIDx3YW5neXVsaUB1bmlvbnRlY2guY29tPsKJBBMWCAAx
+FiEEa1GMzYeuKPkgqDuvxdofMEb0C+4FAmaBLIgCGwMECwkIBwUVCAkKCwUWAgMB
+AAAKCRDF2h8wRvQL7g0UAQCH3mrGM0HzOaARhBeA/Q3AIVfhS010a0MZmPTRGVfP
+bwD/SrncJwwPAL4GiLPEC4XssV6FPUAY0rA68eNNI9cJLArOOARmgSyJEgorBgEE
+AZdVAQUBAQdA88W4CTLDD9fKwW9PB5yurCNdWNS7VTL0dvPDofBTjFYDAQgHwngE
+GBYIACAWIQRrUYzNh64o+SCoO6/F2h8wRvQL7gUCZoEsiQIbDAAKCRDF2h8wRvQL
+7sKvAP4mBvm7Zn1OUjFViwkma8IGRGosXAvMUFyOHVcl1RTgFQEAuJkUo9ERi7qS
+/hbUdUgtitI89efbY0TVetgDsyeQiwU=3D
+=3DBlkq
+-----END PGP PUBLIC KEY BLOCK-----
 
- Please also double-check your change description before posting, at least 
-when it comes to referring to codebase artifacts:
+--------------vxlzmYTZu00HKN3nLVM2Qejw--
 
-s/module_install/modules_install/
-s/need_compiler/need-compiler/
+--------------0JYSzbnNmAlGqpICg0m9kdWN--
 
-This is stuff people may be grepping for.
+--------------fb0TDSB84pRB0hFv1UzjXwFZ
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
 
-References:
+-----BEGIN PGP SIGNATURE-----
 
-[1] "MIPS: Fix build issues from the introduction of `need-compiler'", 
-    <https://lore.kernel.org/r/alpine.DEB.2.21.2307180025120.62448@angie.orcam.me.uk/>
+wnsEABYIACMWIQRrUYzNh64o+SCoO6/F2h8wRvQL7gUCZ6xcEQUDAAAAAAAKCRDF2h8wRvQL7q2y
+AP9Eidu3oPeJ87oNZZhy4+daHyKf+S+4GHZdhzKT1bahzQEAydFuZi2/FDAim4aN01H0/hDEf6as
+xBdKkqIaLy7CRwk=
+=pmho
+-----END PGP SIGNATURE-----
 
-  Maciej
+--------------fb0TDSB84pRB0hFv1UzjXwFZ--
+
 
