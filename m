@@ -1,156 +1,133 @@
-Return-Path: <linux-mips+bounces-7749-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7750-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD82CA328DE
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Feb 2025 15:41:54 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61CA7A32923
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Feb 2025 15:51:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E67667A2CE2
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Feb 2025 14:40:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4B0951606E8
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Feb 2025 14:51:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91DBE210F4B;
-	Wed, 12 Feb 2025 14:41:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E9FB211463;
+	Wed, 12 Feb 2025 14:51:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="GvBu9t56"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="U6fKO9ZN"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8491210191;
-	Wed, 12 Feb 2025 14:41:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB0FB21127E;
+	Wed, 12 Feb 2025 14:51:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739371308; cv=none; b=Jb0nqIdAVx43AzbXW2rn3BQlIv0sQk+0X72/c9TATCz75foH7lujikGthIssUYSDIQ2Z2lh6bZ0enCN7Cg7l8lgawgC4lLc154DdeOJTz0RO8Ka23Z2JPNw5JHQ7zbK7vPq9xDB/PPM/Eg1wv6kIsWVosJ7ql5SU+Q4413JGiZA=
+	t=1739371901; cv=none; b=qKiBz0MvvRhovXqAqtVd4UXgvx/Lr2+/3e/nHt7jklOYriuL2fjeb4pyT2S9rHoueLajj8stfSa6mvK5DO67TI6ZjebObUlGD02IFMzljRAmlAN+js7SVRF/b9HMTQa2Bb7dYlIBvnqI3QNpAIp8+AloGSM3cukNIRihe/We09o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739371308; c=relaxed/simple;
-	bh=6VsvBgPqBd5Zqef3iWLEMJWJApBWl49CoJqvuwZAeiw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=NbzMgA6HDIsrUztWrvqnRq4YSPBCn86U3VjlsqhmYl2g5q0ZD2e1DvSfK5LpwM7QR86/RHgXCVGne9FBqOYdxHQEyVKtZYdM+/0V08V05NZTsr+H4Ob9f1vLn7MAF6Ei7pCqdlpgUbba7orFD1GKdr9ZNlXHKrgCrmUiQKryVdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=GvBu9t56; arc=none smtp.client-ip=217.70.183.195
+	s=arc-20240116; t=1739371901; c=relaxed/simple;
+	bh=3D5jTxu4ZxbcqJgUxTp0ZDvRAq7lWG2tJ7vUZuiqwlE=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=h13OXknQ+195vF+1pzTld8yQH7P8hvUsRU3I5DBywtiP5ycl4KUxIqfAIzs5TdNnlg2qGOpADD7pzNM0pMxlzGNNqwoamRlJ4bA5Q3VHqiI5sGfzr6FI//CsWTxL7rDorudgdc/P6yg60++t01jt993g/3SsrTHnW4LWnVUgy/8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=U6fKO9ZN; arc=none smtp.client-ip=217.70.183.196
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1FDCF204A5;
-	Wed, 12 Feb 2025 14:41:38 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id ED301443C0;
+	Wed, 12 Feb 2025 14:51:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1739371303;
+	t=1739371896;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=hV58UJrNiafKUEEBYyT5622rc4906GKqOPPegyEjpJc=;
-	b=GvBu9t563kxnFl8vpKqJnl1NlFNwRhwgqpgwrV/WKHt+P/P2VyItdyvSR8e7YpylVkrJFh
-	ZambmdwrU19UQNsfxlqJs00qmG1mJgRSWTe8ObzqtbHpk8slTgRKlELpQzT2avGKq6lyJb
-	LL8HprxNBtH1BHLc61viq/yj9L1DFSAe2WWN2RQe9dFql+ICrfKfp8CUe3mO2pCCPgX8tS
-	TP6aR8s3Mrn/9Z42s8BUVceDzlUrOyyDuDl6gLHzqZEXHOkCL7Q/nrgv8UdwGzqRqtay8e
-	1kA/qjLYuimHcatcpaPr75L+A1gxNamRx4P/B6fzdeCUHAvX/o80W0TZ2LG1gg==
-From: =?UTF-8?q?Th=C3=A9o=20Lebrun?= <theo.lebrun@bootlin.com>
-To: jbrunet@baylibre.com
-Cc: Laurent.pinchart@ideasonboard.com,
-	abelvesa@kernel.org,
-	airlied@gmail.com,
-	andrzej.hajda@intel.com,
-	arnd@arndb.de,
-	bryan.odonoghue@linaro.org,
-	conor.dooley@microchip.com,
-	daire.mcnamara@microchip.com,
-	dakr@kernel.org,
-	david.m.ertman@intel.com,
-	dianders@chromium.org,
-	dri-devel@lists.freedesktop.org,
-	festevam@gmail.com,
-	gregkh@linuxfoundation.org,
-	gregory.clement@bootlin.com,
-	hdegoede@redhat.com,
-	ilpo.jarvinen@linux.intel.com,
-	imx@lists.linux.dev,
-	ira.weiny@intel.com,
-	jernej.skrabec@gmail.com,
-	jonas@kwiboo.se,
-	kernel@pengutronix.de,
-	khilman@baylibre.com,
-	linux-amlogic@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-clk@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	maarten.lankhorst@linux.intel.com,
-	martin.blumenstingl@googlemail.com,
-	mripard@kernel.org,
-	mturquette@baylibre.com,
-	neil.armstrong@linaro.org,
-	p.zabel@pengutronix.de,
-	peng.fan@nxp.com,
-	platform-driver-x86@vger.kernel.org,
-	rafael@kernel.org,
-	rfoss@kernel.org,
-	s.hauer@pengutronix.de,
-	sboyd@kernel.org,
-	shawnguo@kernel.org,
-	simona@ffwll.ch,
-	theo.lebrun@bootlin.com,
-	tzimmermann@suse.de,
-	vladimir.kondratiev@mobileye.com
-Subject: [PATCH] reset: eyeq: drop device_set_of_node_from_dev() done by parent
-Date: Wed, 12 Feb 2025 15:41:26 +0100
-Message-ID: <20250212144126.120231-1-theo.lebrun@bootlin.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250211-aux-device-create-helper-v3-5-7edb50524909@baylibre.com>
-References: <20250211-aux-device-create-helper-v3-5-7edb50524909@baylibre.com>
+	bh=G/S4xKTURHeontyYyIzF3UhaW4swbeEI4cyVPn5z26I=;
+	b=U6fKO9ZNbkAvP9nETMzRxyvHoJnDJ7jaL/OauAXgoJPMATOp1FY+sVOfPlMNUxnUwPF6wg
+	ZlD1LL6+ruLQa/f/nipAbKXCBiyDhkoBKm2hg3F5q7eMNluI30OaarujKUXId0RW8W2poo
+	L15MihjxtV2AhfLqaM/Nye/6p/7KfLRJ/D9ueWjthDftoiak+mzn6bkQ3jbOXG+earg0Lq
+	WGBujDNU7bu/gcKYQ2Hxd4lTxNlnY6rDVTSn0P+pNXRyze2oUjfbPKHWCtplhtHE82U6rD
+	3PmD9mHPj6cZqFOqmcE0bWszE+WUhefQydOPqfYL4e1fb+XBR9TNAukWimuPvQ==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Date: Wed, 12 Feb 2025 15:51:32 +0100
+Message-Id: <D7QJVKCWO1C0.2GIZNZ9FUF96I@bootlin.com>
+Subject: Re: [PATCH v3 5/7] clk: eyeq: use the auxiliary device creation
+ helper
+Cc: <linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+ <dri-devel@lists.freedesktop.org>, <platform-driver-x86@vger.kernel.org>,
+ <linux-mips@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+ <imx@lists.linux.dev>, <linux-arm-kernel@lists.infradead.org>,
+ <linux-amlogic@lists.infradead.org>, "Philipp Zabel"
+ <p.zabel@pengutronix.de>
+To: "Jerome Brunet" <jbrunet@baylibre.com>, "Greg Kroah-Hartman"
+ <gregkh@linuxfoundation.org>, "Dave Ertman" <david.m.ertman@intel.com>,
+ "Ira Weiny" <ira.weiny@intel.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ "Stephen Boyd" <sboyd@kernel.org>, "Arnd Bergmann" <arnd@arndb.de>, "Danilo
+ Krummrich" <dakr@kernel.org>, "Conor Dooley" <conor.dooley@microchip.com>,
+ "Daire McNamara" <daire.mcnamara@microchip.com>, "Philipp Zabel"
+ <p.zabel@pengutronix.de>, "Douglas Anderson" <dianders@chromium.org>,
+ "Andrzej Hajda" <andrzej.hajda@intel.com>, "Neil Armstrong"
+ <neil.armstrong@linaro.org>, "Robert Foss" <rfoss@kernel.org>, "Laurent
+ Pinchart" <Laurent.pinchart@ideasonboard.com>, "Jonas Karlman"
+ <jonas@kwiboo.se>, "Jernej Skrabec" <jernej.skrabec@gmail.com>, "Maarten
+ Lankhorst" <maarten.lankhorst@linux.intel.com>, "Maxime Ripard"
+ <mripard@kernel.org>, "Thomas Zimmermann" <tzimmermann@suse.de>, "David
+ Airlie" <airlied@gmail.com>, "Simona Vetter" <simona@ffwll.ch>, "Hans de
+ Goede" <hdegoede@redhat.com>, =?utf-8?q?Ilpo_J=C3=A4rvinen?=
+ <ilpo.jarvinen@linux.intel.com>, "Bryan O'Donoghue"
+ <bryan.odonoghue@linaro.org>, "Vladimir Kondratiev"
+ <vladimir.kondratiev@mobileye.com>, "Gregory CLEMENT"
+ <gregory.clement@bootlin.com>, "Michael Turquette"
+ <mturquette@baylibre.com>, "Abel Vesa" <abelvesa@kernel.org>, "Peng Fan"
+ <peng.fan@nxp.com>, "Shawn Guo" <shawnguo@kernel.org>, "Sascha Hauer"
+ <s.hauer@pengutronix.de>, "Pengutronix Kernel Team"
+ <kernel@pengutronix.de>, "Fabio Estevam" <festevam@gmail.com>, "Kevin
+ Hilman" <khilman@baylibre.com>, "Martin Blumenstingl"
+ <martin.blumenstingl@googlemail.com>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: aerc 0.20.1-0-g2ecb8770224a
+References: <20250211-aux-device-create-helper-v3-0-7edb50524909@baylibre.com> <20250211-aux-device-create-helper-v3-5-7edb50524909@baylibre.com>
+In-Reply-To: <20250211-aux-device-create-helper-v3-5-7edb50524909@baylibre.com>
 X-GND-State: clean
-X-GND-Score: 0
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeggeduhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvfevufffkffojghfgggtgfesthekredtredtjeenucfhrhhomhepvfhhrohoucfnvggsrhhunhcuoehthhgvohdrlhgvsghruhhnsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeghfejhfdviefftedvieetfedugeefvedtfedujefhhedvhefggfduhfefueektdenucfkphepvdgrtddumegtsgdugeemheehieemjegrtddtmeeiieegsgemfhdtfhhfmehfvgdutdemlegvfhgunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdugeemheehieemjegrtddtmeeiieegsgemfhdtfhhfmehfvgdutdemlegvfhgupdhhvghlohepthhlvggsqdgsohhothhlihhnqdhffidqtddvrddrpdhmrghilhhfrhhomhepthhhvghordhlvggsrhhunhessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepgeejpdhrtghpthhtohepjhgsrhhunhgvthessggrhihlihgsrhgvrdgtohhmpdhrtghpthhtohepnfgruhhrvghnthdrphhinhgthhgrrhhtsehiuggvrghsohhnsghorghrugdrtghomhdprhgtphhtthhopegrsggvlhhvvghsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghirhhlihgvugesghhmr
- ghilhdrtghomhdprhgtphhtthhopegrnhgurhiivghjrdhhrghjuggrsehinhhtvghlrdgtohhmpdhrtghpthhtoheprghrnhgusegrrhhnuggsrdguvgdprhgtphhtthhopegsrhihrghnrdhoughonhhoghhhuhgvsehlihhnrghrohdrohhrghdprhgtphhtthhopegtohhnohhrrdguohholhgvhiesmhhitghrohgthhhiphdrtghomh
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeggedujecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepggfgtgffkffuvefvhffofhgjsehtqhertdertdejnecuhfhrohhmpefvhhorohcunfgvsghruhhnuceothhhvghordhlvggsrhhunhessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepudetledtveejvdekleeujefhvdelieeutedvgfevffffkeeugefhhfeiudeljeevnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudegmeehheeimeejrgdttdemieeigegsmehftdhffhemfhgvuddtmeelvghfugenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudegmeehheeimeejrgdttdemieeigegsmehftdhffhemfhgvuddtmeelvghfugdphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomhepthhhvghordhlvggsrhhunhessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepgeeipdhrtghpthhtohepjhgsrhhunhgvthessggrhihlihgsrhgvrdgtohhmpdhrtghpthhtohepghhrvghgkhhhsehlihhnuhigfhhouhhnuggrthhiohhnrdhorhhgpdhrtghpthhtohepuggrvhhiugdrmhdrvghrthhmrghnsehin
+ hhtvghlrdgtohhmpdhrtghpthhtohepihhrrgdrfigvihhnhiesihhnthgvlhdrtghomhdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshgsohihugeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghrnhgusegrrhhnuggsrdguvgdprhgtphhtthhopegurghkrheskhgvrhhnvghlrdhorhhg
 X-GND-Sasl: theo.lebrun@bootlin.com
 
-Our parent driver (clk-eyeq) now does the
-	device_set_of_node_from_dev(dev, dev->parent)
-call through the newly introduced devm_auxiliary_device_create() helper.
+Hello Jerome,
 
-Doing it again in the reset-eyeq probe would be redundant.
-Drop both the WARN_ON() and the device_set_of_node_from_dev() call.
-Also fix the following comment that talks about "our newfound OF node".
+On Tue Feb 11, 2025 at 6:28 PM CET, Jerome Brunet wrote:
+> The auxiliary device creation of this driver is simple enough to
+> use the available auxiliary device creation helper.
+>
+> Use it and remove some boilerplate code.
+>
+> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
 
-Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
----
- drivers/reset/reset-eyeq.c | 13 ++-----------
- 1 file changed, 2 insertions(+), 11 deletions(-)
+Tested the series, it works. However:
+ - The newly introduced helper does a
+   device_set_of_node_from_dev(child_device, parent_device) call which
+   used to be done by our reset-eyeq child.
+ - reset-eyeq also did a WARN_ON(dev->of_node) to validate it didn't
+   have an OF node at probe (checking its assumptions).
+ - We can remove both. See patch that got sent as a reply.
 
-diff --git a/drivers/reset/reset-eyeq.c b/drivers/reset/reset-eyeq.c
-index 02d50041048b..8018fa895427 100644
---- a/drivers/reset/reset-eyeq.c
-+++ b/drivers/reset/reset-eyeq.c
-@@ -420,17 +420,8 @@ static int eqr_probe(struct auxiliary_device *adev,
- 	int ret;
- 
- 	/*
--	 * We are an auxiliary device of clk-eyeq. We do not have an OF node by
--	 * default; let's reuse our parent's OF node.
--	 */
--	WARN_ON(dev->of_node);
--	device_set_of_node_from_dev(dev, dev->parent);
--	if (!dev->of_node)
--		return -ENODEV;
--
--	/*
--	 * Using our newfound OF node, we can get match data. We cannot use
--	 * device_get_match_data() because it does not match reused OF nodes.
-+	 * Get match data. We cannot use device_get_match_data() because it does
-+	 * not accept reused OF nodes; see device_set_of_node_from_dev().
- 	 */
- 	match = of_match_node(dev->driver->of_match_table, dev->of_node);
- 	if (!match || !match->data)
--- 
-2.48.1
+With that additional patch:
+
+Tested-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>  # On Mobileye EyeQ5
+
+Note: Philipp Zabel has been CCed on the patch and this email as the
+reset maintainer.
+
+Thanks,
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
 
