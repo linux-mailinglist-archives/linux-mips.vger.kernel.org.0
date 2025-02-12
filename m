@@ -1,197 +1,155 @@
-Return-Path: <linux-mips+bounces-7748-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7749-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC8A1A32636
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Feb 2025 13:49:40 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD82CA328DE
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Feb 2025 15:41:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6E5451884EDD
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Feb 2025 12:49:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E67667A2CE2
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Feb 2025 14:40:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ED9020E008;
-	Wed, 12 Feb 2025 12:49:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91DBE210F4B;
+	Wed, 12 Feb 2025 14:41:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="cl+rNPKR";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="PTK+ISsi"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="GvBu9t56"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7E7A20A5CB;
-	Wed, 12 Feb 2025 12:49:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8491210191;
+	Wed, 12 Feb 2025 14:41:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739364562; cv=none; b=dffI+l33cqBWErXT/05uLKGWxom+RKRPGohCNziweTz1Lgd9gO0erYBZ/uwDyOPeOFjo4ld3fli/VzpemIsy+cBopEVzN1qbHyW0MsNXuppKRLj+y7QV4PFjBjZS0FjSTDuB5UBud6zSe8IsVaUrqODxZKOg7bgItu6JlT48ufc=
+	t=1739371308; cv=none; b=Jb0nqIdAVx43AzbXW2rn3BQlIv0sQk+0X72/c9TATCz75foH7lujikGthIssUYSDIQ2Z2lh6bZ0enCN7Cg7l8lgawgC4lLc154DdeOJTz0RO8Ka23Z2JPNw5JHQ7zbK7vPq9xDB/PPM/Eg1wv6kIsWVosJ7ql5SU+Q4413JGiZA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739364562; c=relaxed/simple;
-	bh=Ki0geKqiotb7MNz6x+v8X77O0WmfIbS8RbGuA4eQZjo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=dns9b55exvIgBnedUvcXPt3enMiY2GHN8wh/NUSnRqS8tA544FuHuROZWpmIXFrzsy7hWVxyVQ20grx9tyeyCJz2fxVeJp2RPHAh3drnEJ3g+3TYD4qKBQYvFwtpjaon/BLZkr4AFbWxw38t5Wv4gB9sOX3Otwfv3dHflKNWd/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=cl+rNPKR; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=PTK+ISsi; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1739364558;
+	s=arc-20240116; t=1739371308; c=relaxed/simple;
+	bh=6VsvBgPqBd5Zqef3iWLEMJWJApBWl49CoJqvuwZAeiw=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=NbzMgA6HDIsrUztWrvqnRq4YSPBCn86U3VjlsqhmYl2g5q0ZD2e1DvSfK5LpwM7QR86/RHgXCVGne9FBqOYdxHQEyVKtZYdM+/0V08V05NZTsr+H4Ob9f1vLn7MAF6Ei7pCqdlpgUbba7orFD1GKdr9ZNlXHKrgCrmUiQKryVdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=GvBu9t56; arc=none smtp.client-ip=217.70.183.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 1FDCF204A5;
+	Wed, 12 Feb 2025 14:41:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1739371303;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=VfBrN75f8h+uEuGhED42HwCyXiiO8jFgRTxqPcj2O+Q=;
-	b=cl+rNPKRaaTBh62w7oiiSM1M3DNpYR0LUo4dwEVn+QhuzRBGhiGg9wC4Mycqs+s6zUDrW6
-	sh4hxBqjKg4Jtnf3azYthU4vWgbLFsQHQ0Ku0ZlXx3coGXNTnJ2EUCAs/0rY2G1MHDkxi9
-	pMtGS5wXIl+NNGeHH0BFnyA+zFCKqLtg8TcbavQPabXU1MhMARD1JiibqgUZ1FnowN/RsN
-	HW6oCsA8k96p0alan3oTXMZ5xXR9crGpCCc8tepfl0IIc4Jir8iERcSElJ7h5RyItdJ4Kj
-	7dKfpGMVp/Ss/f6UlwhvhhgpwFqygi3i8ZiJnU2tZvmqamFshdlwBwGtF4syXw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1739364558;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VfBrN75f8h+uEuGhED42HwCyXiiO8jFgRTxqPcj2O+Q=;
-	b=PTK+ISsi6zORO6UZMD23AevzyGYLcw2wB0UCxsEGFJ7csQJhsAPbhQbjCjbYpnjgxMU++Z
-	O5Yk3xUuL8pg1WCQ==
-Date: Wed, 12 Feb 2025 13:49:13 +0100
-Subject: [PATCH 2/2] kunit: qemu_configs: Add MIPS configurations
+	bh=hV58UJrNiafKUEEBYyT5622rc4906GKqOPPegyEjpJc=;
+	b=GvBu9t563kxnFl8vpKqJnl1NlFNwRhwgqpgwrV/WKHt+P/P2VyItdyvSR8e7YpylVkrJFh
+	ZambmdwrU19UQNsfxlqJs00qmG1mJgRSWTe8ObzqtbHpk8slTgRKlELpQzT2avGKq6lyJb
+	LL8HprxNBtH1BHLc61viq/yj9L1DFSAe2WWN2RQe9dFql+ICrfKfp8CUe3mO2pCCPgX8tS
+	TP6aR8s3Mrn/9Z42s8BUVceDzlUrOyyDuDl6gLHzqZEXHOkCL7Q/nrgv8UdwGzqRqtay8e
+	1kA/qjLYuimHcatcpaPr75L+A1gxNamRx4P/B6fzdeCUHAvX/o80W0TZ2LG1gg==
+From: =?UTF-8?q?Th=C3=A9o=20Lebrun?= <theo.lebrun@bootlin.com>
+To: jbrunet@baylibre.com
+Cc: Laurent.pinchart@ideasonboard.com,
+	abelvesa@kernel.org,
+	airlied@gmail.com,
+	andrzej.hajda@intel.com,
+	arnd@arndb.de,
+	bryan.odonoghue@linaro.org,
+	conor.dooley@microchip.com,
+	daire.mcnamara@microchip.com,
+	dakr@kernel.org,
+	david.m.ertman@intel.com,
+	dianders@chromium.org,
+	dri-devel@lists.freedesktop.org,
+	festevam@gmail.com,
+	gregkh@linuxfoundation.org,
+	gregory.clement@bootlin.com,
+	hdegoede@redhat.com,
+	ilpo.jarvinen@linux.intel.com,
+	imx@lists.linux.dev,
+	ira.weiny@intel.com,
+	jernej.skrabec@gmail.com,
+	jonas@kwiboo.se,
+	kernel@pengutronix.de,
+	khilman@baylibre.com,
+	linux-amlogic@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	maarten.lankhorst@linux.intel.com,
+	martin.blumenstingl@googlemail.com,
+	mripard@kernel.org,
+	mturquette@baylibre.com,
+	neil.armstrong@linaro.org,
+	p.zabel@pengutronix.de,
+	peng.fan@nxp.com,
+	platform-driver-x86@vger.kernel.org,
+	rafael@kernel.org,
+	rfoss@kernel.org,
+	s.hauer@pengutronix.de,
+	sboyd@kernel.org,
+	shawnguo@kernel.org,
+	simona@ffwll.ch,
+	theo.lebrun@bootlin.com,
+	tzimmermann@suse.de,
+	vladimir.kondratiev@mobileye.com
+Subject: [PATCH] reset: eyeq: drop device_set_of_node_from_dev() done by parent
+Date: Wed, 12 Feb 2025 15:41:26 +0100
+Message-ID: <20250212144126.120231-1-theo.lebrun@bootlin.com>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20250211-aux-device-create-helper-v3-5-7edb50524909@baylibre.com>
+References: <20250211-aux-device-create-helper-v3-5-7edb50524909@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250212-kunit-mips-v1-2-eb49c9d76615@linutronix.de>
-References: <20250212-kunit-mips-v1-0-eb49c9d76615@linutronix.de>
-In-Reply-To: <20250212-kunit-mips-v1-0-eb49c9d76615@linutronix.de>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Paul Burton <paulburton@kernel.org>, 
- Brendan Higgins <brendan.higgins@linux.dev>, 
- David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1739364553; l=4132;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=Ki0geKqiotb7MNz6x+v8X77O0WmfIbS8RbGuA4eQZjo=;
- b=Ar6njH5ZwFpZSFlfL1oDpY8zPN35HzEyLXIMywlPj1uWAZiUPpdn6ZZLsvvohpPE78uwrRv5R
- Fno8E8H5e5uAAlSMTnyfTO/B4NXkcQ+rnzg8iezaz7YPkfn1SMMgjaL
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+X-GND-State: clean
+X-GND-Score: 0
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeggeduhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucenucfjughrpefhvfevufffkffojghfgggtgfesthekredtredtjeenucfhrhhomhepvfhhrohoucfnvggsrhhunhcuoehthhgvohdrlhgvsghruhhnsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeghfejhfdviefftedvieetfedugeefvedtfedujefhhedvhefggfduhfefueektdenucfkphepvdgrtddumegtsgdugeemheehieemjegrtddtmeeiieegsgemfhdtfhhfmehfvgdutdemlegvfhgunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdugeemheehieemjegrtddtmeeiieegsgemfhdtfhhfmehfvgdutdemlegvfhgupdhhvghlohepthhlvggsqdgsohhothhlihhnqdhffidqtddvrddrpdhmrghilhhfrhhomhepthhhvghordhlvggsrhhunhessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepgeejpdhrtghpthhtohepjhgsrhhunhgvthessggrhihlihgsrhgvrdgtohhmpdhrtghpthhtohepnfgruhhrvghnthdrphhinhgthhgrrhhtsehiuggvrghsohhnsghorghrugdrtghomhdprhgtphhtthhopegrsggvlhhvvghsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghirhhlihgvugesghhmr
+ ghilhdrtghomhdprhgtphhtthhopegrnhgurhiivghjrdhhrghjuggrsehinhhtvghlrdgtohhmpdhrtghpthhtoheprghrnhgusegrrhhnuggsrdguvgdprhgtphhtthhopegsrhihrghnrdhoughonhhoghhhuhgvsehlihhnrghrohdrohhrghdprhgtphhtthhopegtohhnohhrrdguohholhgvhiesmhhitghrohgthhhiphdrtghomh
+X-GND-Sasl: theo.lebrun@bootlin.com
 
-Add basic support to run various MIPS variants via kunit_tool using the
-virtualized malta platform.
+Our parent driver (clk-eyeq) now does the
+	device_set_of_node_from_dev(dev, dev->parent)
+call through the newly introduced devm_auxiliary_device_create() helper.
 
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+Doing it again in the reset-eyeq probe would be redundant.
+Drop both the WARN_ON() and the device_set_of_node_from_dev() call.
+Also fix the following comment that talks about "our newfound OF node".
+
+Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 ---
- tools/testing/kunit/qemu_configs/mips.py     | 18 ++++++++++++++++++
- tools/testing/kunit/qemu_configs/mips64.py   | 19 +++++++++++++++++++
- tools/testing/kunit/qemu_configs/mips64el.py | 19 +++++++++++++++++++
- tools/testing/kunit/qemu_configs/mipsel.py   | 18 ++++++++++++++++++
- 4 files changed, 74 insertions(+)
+ drivers/reset/reset-eyeq.c | 13 ++-----------
+ 1 file changed, 2 insertions(+), 11 deletions(-)
 
-diff --git a/tools/testing/kunit/qemu_configs/mips.py b/tools/testing/kunit/qemu_configs/mips.py
-new file mode 100644
-index 0000000000000000000000000000000000000000..8899ac157b30bd2ee847eacd5b90fe6ad4e5fb04
---- /dev/null
-+++ b/tools/testing/kunit/qemu_configs/mips.py
-@@ -0,0 +1,18 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+from ..qemu_config import QemuArchParams
-+
-+QEMU_ARCH = QemuArchParams(linux_arch='mips',
-+                           kconfig='''
-+CONFIG_32BIT=y
-+CONFIG_CPU_BIG_ENDIAN=y
-+CONFIG_MIPS_MALTA=y
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+CONFIG_POWER_RESET=y
-+CONFIG_POWER_RESET_SYSCON=y
-+''',
-+                           qemu_arch='mips',
-+                           kernel_path='vmlinuz',
-+                           kernel_command_line='console=ttyS0',
-+                           extra_qemu_params=['-M', 'malta'])
-diff --git a/tools/testing/kunit/qemu_configs/mips64.py b/tools/testing/kunit/qemu_configs/mips64.py
-new file mode 100644
-index 0000000000000000000000000000000000000000..1478aed05b94da4914f34c6a8affdcfe34eb88ea
---- /dev/null
-+++ b/tools/testing/kunit/qemu_configs/mips64.py
-@@ -0,0 +1,19 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+from ..qemu_config import QemuArchParams
-+
-+QEMU_ARCH = QemuArchParams(linux_arch='mips',
-+                           kconfig='''
-+CONFIG_CPU_MIPS64_R2=y
-+CONFIG_64BIT=y
-+CONFIG_CPU_BIG_ENDIAN=y
-+CONFIG_MIPS_MALTA=y
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+CONFIG_POWER_RESET=y
-+CONFIG_POWER_RESET_SYSCON=y
-+''',
-+                           qemu_arch='mips64',
-+                           kernel_path='vmlinuz',
-+                           kernel_command_line='console=ttyS0',
-+                           extra_qemu_params=['-M', 'malta', '-cpu', '5KEc'])
-diff --git a/tools/testing/kunit/qemu_configs/mips64el.py b/tools/testing/kunit/qemu_configs/mips64el.py
-new file mode 100644
-index 0000000000000000000000000000000000000000..300c711d7a82500b2ebcb4cf1467b6f72b5c17aa
---- /dev/null
-+++ b/tools/testing/kunit/qemu_configs/mips64el.py
-@@ -0,0 +1,19 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+from ..qemu_config import QemuArchParams
-+
-+QEMU_ARCH = QemuArchParams(linux_arch='mips',
-+                           kconfig='''
-+CONFIG_CPU_MIPS64_R2=y
-+CONFIG_64BIT=y
-+CONFIG_CPU_LITTLE_ENDIAN=y
-+CONFIG_MIPS_MALTA=y
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+CONFIG_POWER_RESET=y
-+CONFIG_POWER_RESET_SYSCON=y
-+''',
-+                           qemu_arch='mips64el',
-+                           kernel_path='vmlinuz',
-+                           kernel_command_line='console=ttyS0',
-+                           extra_qemu_params=['-M', 'malta', '-cpu', '5KEc'])
-diff --git a/tools/testing/kunit/qemu_configs/mipsel.py b/tools/testing/kunit/qemu_configs/mipsel.py
-new file mode 100644
-index 0000000000000000000000000000000000000000..3d3543315b45776d0e77fb5c00c8c0a89eafdffd
---- /dev/null
-+++ b/tools/testing/kunit/qemu_configs/mipsel.py
-@@ -0,0 +1,18 @@
-+# SPDX-License-Identifier: GPL-2.0
-+
-+from ..qemu_config import QemuArchParams
-+
-+QEMU_ARCH = QemuArchParams(linux_arch='mips',
-+                           kconfig='''
-+CONFIG_32BIT=y
-+CONFIG_CPU_LITTLE_ENDIAN=y
-+CONFIG_MIPS_MALTA=y
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+CONFIG_POWER_RESET=y
-+CONFIG_POWER_RESET_SYSCON=y
-+''',
-+                           qemu_arch='mipsel',
-+                           kernel_path='vmlinuz',
-+                           kernel_command_line='console=ttyS0',
-+                           extra_qemu_params=['-M', 'malta'])
-
+diff --git a/drivers/reset/reset-eyeq.c b/drivers/reset/reset-eyeq.c
+index 02d50041048b..8018fa895427 100644
+--- a/drivers/reset/reset-eyeq.c
++++ b/drivers/reset/reset-eyeq.c
+@@ -420,17 +420,8 @@ static int eqr_probe(struct auxiliary_device *adev,
+ 	int ret;
+ 
+ 	/*
+-	 * We are an auxiliary device of clk-eyeq. We do not have an OF node by
+-	 * default; let's reuse our parent's OF node.
+-	 */
+-	WARN_ON(dev->of_node);
+-	device_set_of_node_from_dev(dev, dev->parent);
+-	if (!dev->of_node)
+-		return -ENODEV;
+-
+-	/*
+-	 * Using our newfound OF node, we can get match data. We cannot use
+-	 * device_get_match_data() because it does not match reused OF nodes.
++	 * Get match data. We cannot use device_get_match_data() because it does
++	 * not accept reused OF nodes; see device_set_of_node_from_dev().
+ 	 */
+ 	match = of_match_node(dev->driver->of_match_table, dev->of_node);
+ 	if (!match || !match->data)
 -- 
 2.48.1
 
