@@ -1,46 +1,48 @@
-Return-Path: <linux-mips+bounces-7757-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7758-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A10EA33EE6
-	for <lists+linux-mips@lfdr.de>; Thu, 13 Feb 2025 13:17:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F3CCA33EE9
+	for <lists+linux-mips@lfdr.de>; Thu, 13 Feb 2025 13:17:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 92198188E491
-	for <lists+linux-mips@lfdr.de>; Thu, 13 Feb 2025 12:17:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 19233188E491
+	for <lists+linux-mips@lfdr.de>; Thu, 13 Feb 2025 12:17:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BB0322156C;
-	Thu, 13 Feb 2025 12:16:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A376F2139C8;
+	Thu, 13 Feb 2025 12:17:00 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52CCA15383A;
-	Thu, 13 Feb 2025 12:16:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E82322170F;
+	Thu, 13 Feb 2025 12:16:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739449015; cv=none; b=CwXLKI6CkueTXYjGynGhBB69xXo1q+h2nKtlU1Xvr5jNtY1xxaHZCH6/iZ0XKquFJTAXveJOkH6EhpqScCVtfbvSYpzeOWInbR+GgCaO8qmNK8bzchZ3iAdHfZwB56LoTIo6CgmfHA9JrVQi6RcT5ngsnQQ9Izz7gGYuHmSDIP8=
+	t=1739449020; cv=none; b=VPoMY3hU5q37rYeYhgojsd057l2y/G9Ar6DgCImGC+Zo0OvoupQpGBL3Oza+ZMqf561cXnKKmufL8z+KBEUuRuJQJBUmC5b5ab05O5nHUHnY9wz9DvvPdvhL4hbbiy+8cSr5vQyZGhKQCi2da1p/mRj1IWRul4pKFPvqL9ixQHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739449015; c=relaxed/simple;
-	bh=7h4/miE/eb7wVe6jGvFdG24fyoi8YCdWW5S8Ddbk6ZE=;
+	s=arc-20240116; t=1739449020; c=relaxed/simple;
+	bh=NIEdyetbCs06dTp+Vd4v7oHrstjMbPO12/RYfOF1GpQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BPjAEm4+Ww6jgCBsBlOAiF8YOyQB5w545kbMTAqo3UOA4FU3Wtp8u0IssJwy4tZGdtzYD4YfmPPqwcEyRk43BbV/f++Nq1MzIgt9cVEBcTTxEOJiRIZ+FhRzcoC6KHU+nOuy0D0t50Q84uhcadFhi7VWqf9KGlM8J9LeyiMXz1I=
+	 Content-Type:Content-Disposition:In-Reply-To; b=PJ4u1cQ+QwzbxFiuhzLyzCiKuIMjFmmA9mTbCVWmOPkfW+HLMquvR3FcBGcKQguBTfXoTQSkchLntyKnfrw9mW0/ql9hP30+zeNU4katVcNoSBfnVgpauM6IXPDPJsidaKCxIeKF/wKOcznKC3xFBU8blZEw+gY7/bJcDR8Rb9w=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1tiXeU-0008Sz-00; Thu, 13 Feb 2025 12:45:06 +0100
+	id 1tiXeU-0008Sx-00; Thu, 13 Feb 2025 12:45:06 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 31B61C0135; Thu, 13 Feb 2025 12:44:17 +0100 (CET)
-Date: Thu, 13 Feb 2025 12:44:17 +0100
+	id DEB86C03B4; Thu, 13 Feb 2025 12:44:35 +0100 (CET)
+Date: Thu, 13 Feb 2025 12:44:35 +0100
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: Oleg Nesterov <oleg@redhat.com>, "Dmitry V. Levin" <ldv@strace.io>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Export syscall stack arguments properly for remote
- use
-Message-ID: <Z63bEfoSJnLumOCa@alpha.franken.de>
+To: "Dmitry V. Levin" <ldv@strace.io>
+Cc: "Maciej W. Rozycki" <macro@orcam.me.uk>,
+	Oleg Nesterov <oleg@redhat.com>, Alexey Gladkov <legion@kernel.org>,
+	Eugene Syromyatnikov <evgsyr@gmail.com>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>, strace-devel@lists.strace.io,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: fix mips_get_syscall_arg() for o32
+Message-ID: <Z63bI66KShw7Au_s@alpha.franken.de>
 References: <alpine.DEB.2.21.2502101732120.65342@angie.orcam.me.uk>
+ <20250211230209.GA19616@strace.io>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -49,84 +51,84 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2502101732120.65342@angie.orcam.me.uk>
+In-Reply-To: <20250211230209.GA19616@strace.io>
 
-On Tue, Feb 11, 2025 at 06:22:30PM +0000, Maciej W. Rozycki wrote:
-> We have several places across the kernel where we want to access another 
-> task's syscall arguments, such as ptrace(2), seccomp(2), etc., by making 
-> a call to syscall_get_arguments().
+On Wed, Feb 12, 2025 at 01:02:09AM +0200, Dmitry V. Levin wrote:
+> This makes ptrace/get_syscall_info selftest pass on mips o32 and
+> mips64 o32 by fixing the following two test assertions:
 > 
-> This works for register arguments right away by accessing the task's 
-> `regs' member of `struct pt_regs', however for stack arguments seen with 
-> 32-bit/o32 kernels things are more complicated.  Technically they ought 
-> to be obtained from the user stack with calls to an access_remote_vm(), 
-> but we have an easier way available already.
+> 1. get_syscall_info test assertion on mips o32:
+>   # get_syscall_info.c:218:get_syscall_info:Expected exp_args[5] (3134521044) == info.entry.args[4] (4911432)
+>   # get_syscall_info.c:219:get_syscall_info:wait #1: entry stop mismatch
 > 
-> So as to be able to access syscall stack arguments as regular function 
-> arguments following the MIPS calling convention we copy them over from 
-> the user stack to the kernel stack in arch/mips/kernel/scall32-o32.S, in 
-> handle_sys(), to the current stack frame's outgoing argument space at 
-> the top of the stack, which is where the handler called expects to see 
-> its incoming arguments.  This area is also pointed at by the `pt_regs'
-> pointer obtained by task_pt_regs().
+> 2. get_syscall_info test assertion on mips64 o32:
+>   # get_syscall_info.c:209:get_syscall_info:Expected exp_args[2] (3134324433) == info.entry.args[1] (18446744072548908753)
+>   # get_syscall_info.c:210:get_syscall_info:wait #1: entry stop mismatch
 > 
-> Make the o32 stack argument space a proper member of `struct pt_regs' 
-> then, by renaming the existing member from `pad0' to `args' and using 
-> generated offsets to access the space.  No functional change though.
+> The first assertion happens due to mips_get_syscall_arg() trying to access
+> another task's context but failing to do it properly because get_user() it
+> calls just peeks at the current task's context.  It usually does not crash
+> because the default user stack always gets assigned the same VMA, but it
+> is pure luck which mips_get_syscall_arg() wouldn't have if e.g. the stack
+> was switched (via setcontext(3) or however) or a non-default process's
+> thread peeked at, and in any case irrelevant data is obtained just as
+> observed with the test case.
 > 
-> With the change in place the o32 kernel stack frame layout at the entry 
-> to a syscall handler invoked by handle_sys() is therefore as follows:
+> mips_get_syscall_arg() ought to be using access_remote_vm() instead to
+> retrieve the other task's stack contents, but given that the data has been
+> already obtained and saved in `struct pt_regs' it would be an overkill.
 > 
-> $sp + 68 -> |         ...         | <- pt_regs.regs[9]
->             +---------------------+
-> $sp + 64 -> |         $t0         | <- pt_regs.regs[8]
->             +---------------------+
-> $sp + 60 -> |   $a3/argument #4   | <- pt_regs.regs[7]
->             +---------------------+
-> $sp + 56 -> |   $a2/argument #3   | <- pt_regs.regs[6]
->             +---------------------+
-> $sp + 52 -> |   $a1/argument #2   | <- pt_regs.regs[5]
->             +---------------------+
-> $sp + 48 -> |   $a0/argument #1   | <- pt_regs.regs[4]
->             +---------------------+
-> $sp + 44 -> |         $v1         | <- pt_regs.regs[3]
->             +---------------------+
-> $sp + 40 -> |         $v0         | <- pt_regs.regs[2]
->             +---------------------+
-> $sp + 36 -> |         $at         | <- pt_regs.regs[1]
->             +---------------------+
-> $sp + 32 -> |        $zero        | <- pt_regs.regs[0]
->             +---------------------+
-> $sp + 28 -> |  stack argument #8  | <- pt_regs.args[7]
->             +---------------------+
-> $sp + 24 -> |  stack argument #7  | <- pt_regs.args[6]
->             +---------------------+
-> $sp + 20 -> |  stack argument #6  | <- pt_regs.args[5]
->             +---------------------+
-> $sp + 16 -> |  stack argument #5  | <- pt_regs.args[4]
->             +---------------------+
-> $sp + 12 -> | psABI space for $a3 | <- pt_regs.args[3]
->             +---------------------+
-> $sp +  8 -> | psABI space for $a2 | <- pt_regs.args[2]
->             +---------------------+
-> $sp +  4 -> | psABI space for $a1 | <- pt_regs.args[1]
->             +---------------------+
-> $sp +  0 -> | psABI space for $a0 | <- pt_regs.args[0]
->             +---------------------+
+> The first assertion is fixed for mips o32 by using struct pt_regs.args
+> instead of get_user() to obtain syscall arguments.  This approach works
+> due to this piece in arch/mips/kernel/scall32-o32.S:
 > 
-> holding user data received and with the first 4 frame slots reserved by 
-> the psABI for the compiler to spill the incoming arguments from $a0-$a3 
-> registers (which it sometimes does according to its needs) and the next 
-> 4 frame slots designated by the psABI for any stack function arguments 
-> that follow.  This data is also available for other tasks to peek/poke 
-> at as reqired and where permitted.
+>         /*
+>          * Ok, copy the args from the luser stack to the kernel stack.
+>          */
 > 
-> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+>         .set    push
+>         .set    noreorder
+>         .set    nomacro
+> 
+>     load_a4: user_lw(t5, 16(t0))		# argument #5 from usp
+>     load_a5: user_lw(t6, 20(t0))		# argument #6 from usp
+>     load_a6: user_lw(t7, 24(t0))		# argument #7 from usp
+>     load_a7: user_lw(t8, 28(t0))		# argument #8 from usp
+>     loads_done:
+> 
+>         sw	t5, PT_ARG4(sp)		# argument #5 to ksp
+>         sw	t6, PT_ARG5(sp)		# argument #6 to ksp
+>         sw	t7, PT_ARG6(sp)		# argument #7 to ksp
+>         sw	t8, PT_ARG7(sp)		# argument #8 to ksp
+>         .set	pop
+> 
+>         .section __ex_table,"a"
+>         PTR_WD	load_a4, bad_stack_a4
+>         PTR_WD	load_a5, bad_stack_a5
+>         PTR_WD	load_a6, bad_stack_a6
+>         PTR_WD	load_a7, bad_stack_a7
+>         .previous
+> 
+> arch/mips/kernel/scall64-o32.S has analogous code for mips64 o32 that
+> allows fixing the issue by obtaining syscall arguments from struct
+> pt_regs.regs[4..11] instead of the erroneous use of get_user().
+> 
+> The second assertion is fixed by truncating 64-bit values to 32-bit
+> syscall arguments.
+> 
+> Fixes: c0ff3c53d4f9 ("MIPS: Enable HAVE_ARCH_TRACEHOOK.")
+> Signed-off-by: Dmitry V. Levin <ldv@strace.io>
 > ---
->  arch/mips/include/asm/ptrace.h |    4 ++--
->  arch/mips/kernel/asm-offsets.c |    6 ++++++
->  arch/mips/kernel/scall32-o32.S |    8 ++++----
->  3 files changed, 12 insertions(+), 6 deletions(-)
+> 
+> This started as a part of PTRACE_SET_SYSCALL_INFO API series[1].
+> It has been rebased on top of [2] as suggested by Maciej in [3].
+> 
+> [1] https://lore.kernel.org/all/20250210113336.GA887@strace.io/
+> [2] https://lore.kernel.org/all/alpine.DEB.2.21.2502101732120.65342@angie.orcam.me.uk/
+> [3] https://lore.kernel.org/all/alpine.DEB.2.21.2502111530080.65342@angie.orcam.me.uk/
+> 
+>  arch/mips/include/asm/syscall.h | 32 ++++++++------------------------
+>  1 file changed, 8 insertions(+), 24 deletions(-)
 
 applied to mips-fixes
 
