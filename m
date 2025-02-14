@@ -1,68 +1,85 @@
-Return-Path: <linux-mips+bounces-7766-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7768-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4465EA35AEC
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Feb 2025 10:56:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19850A35BDB
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Feb 2025 11:51:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 19B103AA772
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Feb 2025 09:56:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1C1FC3A6C97
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Feb 2025 10:51:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F24A0253B46;
-	Fri, 14 Feb 2025 09:56:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80E362627F8;
+	Fri, 14 Feb 2025 10:51:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="HDPpDJFs"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="I/EAPNtQ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD9C32586D2;
-	Fri, 14 Feb 2025 09:56:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63C01245026
+	for <linux-mips@vger.kernel.org>; Fri, 14 Feb 2025 10:51:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739526977; cv=none; b=bQ6TlRidZpoIUT0TCXQ2yjSP4wAAK+RhawqhgmjaIk1RRNwGSEEMq3MJGzn88nxn6JRl8iGjJV5IYDfs/yG7BxqSCfyJQLePH8WaCtacb1FxklZLsyK9LX0QIppSYqNkf9o877WnfCkL2bGowCWyG6BHQi3XVHKuCG9zHxjnKvs=
+	t=1739530268; cv=none; b=RPEMhx76cJmk4oKrifPzxtVGe8//GFN9PcyIv1JJHQbFStrD/WpaWR8bnbr9QSqsp1tArMf9LIjV9kf26O1RkH/nUcSuOwc9zimk9tUbXuPoMebIT8GGMWeifrmE77U9hPw9v3pqTYwKnmx90iKdRyFCbzpxzAl1Fg6znhFVt3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739526977; c=relaxed/simple;
-	bh=/PufZwqWVimIvDJ4/wjK3f7QfsYqtKpkCV8G3C59qHM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YaOuJU6fP/pPByXe1u1/Kw/YP1J0uogacactsX0d1TjT4n0XV+vdUdphE/aOUqANk/LxEzK9565Zv/pyzjSep4hquDVW1KI6mGFWpHu4mnnkpQcuLBIrRvrmOi1K8iNlLm76rnNEpMD9qNG5g6AA849VMmcmWT2kUWRzhwinXdQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=HDPpDJFs; arc=none smtp.client-ip=54.206.16.166
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1739526943;
-	bh=rWxgDkWT3SNrx50PWh9YGg/Cq7PqeLp2YzPZdThzNAI=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=HDPpDJFsIuJ6i74NBFqsX+OPmvGjl2rlnP2DNROpvINXUcAQJZ2CKh9DXF2uKlvja
-	 TJUKwrTRPVIjvM1cnvYILuTDHVbCMgLlygpeLsemBiuMGxH+HQYLAOw7R3qW6FfBW3
-	 zvjZigk/KjNA/S6gxQrbUlthunRyYkjUBpnJ+Rrg=
-X-QQ-mid: bizesmtpip2t1739526933t1d2myj
-X-QQ-Originating-IP: kHvtQo+ABm9+6mqznQlCq5NZW+eJquBxVSU3r1vqfB4=
-Received: from localhost.localdomain ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Fri, 14 Feb 2025 17:55:30 +0800 (CST)
-X-QQ-SSF: 0002000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 2994338102361065913
-From: WangYuli <wangyuli@uniontech.com>
-To: wangyuli@uniontech.com
-Cc: chenlinxuan@uniontech.com,
-	guanwentao@uniontech.com,
-	linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	macro@orcam.me.uk,
-	masahiroy@kernel.org,
-	niecheng1@uniontech.com,
-	tsbogend@alpha.franken.de,
-	zhanjun@uniontech.com
-Subject: [PATCH v2 2/2] MIPS: Eliminate Redundant KBUILD_SYM32 Checks
-Date: Fri, 14 Feb 2025 17:55:23 +0800
-Message-ID: <36DD6436DDFA21E6+20250214095523.175229-2-wangyuli@uniontech.com>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <F49F5EE9975F29EA+20250214094758.172055-1-wangyuli@uniontech.com>
-References: <F49F5EE9975F29EA+20250214094758.172055-1-wangyuli@uniontech.com>
+	s=arc-20240116; t=1739530268; c=relaxed/simple;
+	bh=uOmdwsErYI2TXvFPdID0TlewhOZbmAK4WYQksi9Me8k=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eAT7FMCHppToGD31Cjcu8joSyy0xwNp9AiTLoZPOg2c9lzcbdf+TX56p394V2wqsAPUsRpypQn0jxt38RgpkMDRneskQr1wHS1BJlkE/ZnYy8B0MzCVt9C8XZ9c6lbTVPXkvCRHpqV+cez0LEkvE2WXG5Cf/yHgSnbK3zd5haEI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=I/EAPNtQ; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-ab744d5e567so351236366b.1
+        for <linux-mips@vger.kernel.org>; Fri, 14 Feb 2025 02:51:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1739530260; x=1740135060; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iKrRYi2DcewiQ8UFnMsHdUIKuoHMXLq1gLMqIZNXnR4=;
+        b=I/EAPNtQ3ZQuUbk3GSDv55zl+qgRzROIp+GBol8h9qQQvCKpL9aUdFAMiUgS4G2VpT
+         LSkT9aFZG/k6qod1d85Z/rDLXU0l1m4lKgURKkMqgCQAko7/EoOA58VDB0hGS6I6iHga
+         5s+AN9AWuiATV3IIzFKSrXiyIUxFv1AmKtGrVcMBWBJaeX08EwkIimetVm2g6+IBF+46
+         FkxqZr0mL1wbRKmklUm5Csl0s1g88KBji8palCc1fj4Taxop8Ld9hoTbamDidpssmNoz
+         pv5E002bXO8tV+jOYKg5hqnBURcfhoEn2FfPTFKu6qxr6zmIuCyvTVM3LYn5JU24wvbj
+         HLWQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739530260; x=1740135060;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iKrRYi2DcewiQ8UFnMsHdUIKuoHMXLq1gLMqIZNXnR4=;
+        b=pVqxI/XIgPDSbhRX5Qo3DuOp61kcrXEZnQyC8JMDW+5MrCBw334n9u3H5pvG5AJR9/
+         VnReoykz1MU9BEf4e77VVJQLesNKYdf3Ah9Lby1B90j7Sn7pw8FgTD4bYQCeDAzmEwTG
+         MLMgUvYW+jVw51XJ4XGTgVhmtGzaoL684yO5CO/5vfcSMiIOQ8uNfYk6u8OyjBYCaCqP
+         Rld4xH40m1RNRVkqRSqZbu+n2V62TppS7SdqS9LNCGlh5xCRGCWzy1w192WvvG8xk9a/
+         c+OOhTlkXK9d/On2YREsC+8TU0h55xgR5ufkedvb986tXbYpp7GDZVMu8Oi/TDH/lo7k
+         XTdQ==
+X-Gm-Message-State: AOJu0Yzq4OgCYx27is/J6q0Pjmg7sWlLr3EK1cxOzrYB6vyOXDn07Df3
+	QSLNgjZm0SsNXkYRHUBW9MGJt4TAJ62t110iLRo894fdhnBibwec8yDPh23l4biqrbcf3324YNh
+	Y
+X-Gm-Gg: ASbGncvECAMDXQiT1hoc3Y4nR9+zw+XZGXHpLcEfuqiIPX2dfplVqyhp41ACQ42wnK8
+	l4mONipfHvmJEqLOU/689Hh95cp2pNH4YX1ixo1jmZvJCPxG1U/ISXi2BEaIfp1alnv09rhW2Kp
+	+1E7c+LwnH/9RG6V9F1AaBSickV//bESfVd3GoCqcyhlvip1WChfzkEW322DqaZwG6Iokj6QrNW
+	Ee9awvUdf3ndbWGvscWi+DMFoUi/kcyuNepV387ygKrXNuo00nN/mlTHrRR3bUzRU0wljypowSO
+	kUNVVCwwdw5Gr+p/+vRyyqQj7gjgpH4WS/9j/ac=
+X-Google-Smtp-Source: AGHT+IF+nI8uaFR5F3xBn/U31UKTP0rILJYX53CQrzbkQArWkDkAxcpVmIkFW+KNudbG4M+h4swvsA==
+X-Received: by 2002:a17:907:2d88:b0:ab7:b896:b80c with SMTP id a640c23a62f3a-aba50fa0b94mr511634166b.9.1739530260452;
+        Fri, 14 Feb 2025 02:51:00 -0800 (PST)
+Received: from localhost.localdomain ([2a00:6d43:105:c401:e307:1a37:2e76:ce91])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aba532575b8sm314551266b.44.2025.02.14.02.50.59
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 14 Feb 2025 02:51:00 -0800 (PST)
+From: Marco Crivellari <marco.crivellari@suse.com>
+To: linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Marco Crivellari <marco.crivellari@suse.com>,
+	Frederic Weisbecker <frederic@kernel.org>
+Subject: [PATCH 0/1] MIPS: Fix idle VS timer enqueue
+Date: Fri, 14 Feb 2025 11:50:46 +0100
+Message-ID: <20250214105047.150835-1-marco.crivellari@suse.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -70,50 +87,30 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
-X-QQ-XMAILINFO: MWxexosv2xAzR66ufJOV9v17pHqcG5/T5P+R7jXzDzXNC7Qq3uJqnk/4
-	k95A5Wmx+h1Xo6Y3Npwkw6ubj4b/Y681oHT8vtxSC6sJ7aBaVsJhDiJIT6ehr1g3dUYfP0F
-	Tj+IWtSLuxnfh773OqiU+6RhpxFZPQ7IS7BspMrfPslWxDtMO3Ps1DPUnFw6dhYp7ylPxYn
-	2NjREB/qWMIg+kg1dkqWyBhC3uK6Lbn7hFH3rZ0RhU9yrlDj9FA/swRlGVgSZf294Ufxqw9
-	924oFF/bedq4yJZtmhlQYBjEqqIMDchnUbI/8pRuTnUZO1WN2IohDAKzv3eMqmuchr8tilz
-	u29cMEY6C8zh6JS927wZRN3/B3ibJg9f1/ph0Jgvb8Pilzy75PXKMw6yflJwYrmK5/MgwSg
-	Iffv/NDTjsQRMk4uWekOWWc5UVFSGR4IaZTbXuXGAnnnixjX3wcZsK4tddF3entGmQ8Zfe3
-	AdOZg3+ni88aIt+Pk0ISQXlcsqdZC2glIYNe51h6xow0uCf2fRPz5cFbG9abXqkpZTfRlLT
-	YchJGy/Os/4FyPtcmj3GoTlErECmCigihEVLLFjDPHXez3GXTogvOhkclIsymHzCJ4CThi0
-	NcfYSlLLZByqI1/4ScZx6a47msLSEbfIjZbjSmnIZUx1TguVYE2bSETmBGTeJ8+dvbFQcqQ
-	LJKBMcrUfcT7Pm0R4bupQa/uS+w/mNbDRof4wt0nQTqAY30QgBUInyj08nMCQE3/dM+q0VD
-	u/XfgszC9QQrfPZFoZ7sY1Q8Kr9swh6wahQaM7ZzA5xAh5dqbDj/oG1NX9umoQDZYvhkg8H
-	zn971JHuvV/eIO6lc88sNwtDCRwOH+P8fasjcpGwjrQuIpkafoOZqf2SX5shKuPzjQTVh6B
-	HciK+I4c0HtTmlxt4tC0D6JxZTQYWul1iVKk0WGfXNTHiHNw15mmhhU5a7E4vdN8BupAXrl
-	/8dTpVZUaUNXX2VZi7wKSCFPccPBiYqX056BiO6hr0DhVLar6u+8Ob3tGhF7ibQFqrkIoiv
-	IRcDsgNlKD58wDkZ3AHvgbb3WCFFGb8aODz3X+0an9mVt6+SUgeSwE0/eNHSy35RnKNFiZS
-	+lFRrqSc7DoWSDntukHHvx7TvV1CGVA6A==
-X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
-X-QQ-RECHKSPAM: 0
 
-Given that KBUILD_SYM32=y is a prerequisite for this statement to be
-executed, it's logically redundant to verify KBUILD_SYM32 is y again.
+This patch aims to fix idle routine while the CPU receive an interrupt,
+because __r4k_wait() only checks if TIF_NEED_RESCHED is set before 
+going to sleep.
+The same behavior has been changed in LoongArch [1].
 
-Signed-off-by: WangYuli <wangyuli@uniontech.com>
----
- arch/mips/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Code (cross) compiled successfully and I manage to test it on a VM
+emulating a malta board. I ran QEMU with:
 
-diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-index 4d8339d2f20f..005174ae3892 100644
---- a/arch/mips/Makefile
-+++ b/arch/mips/Makefile
-@@ -302,7 +302,7 @@ ifdef CONFIG_64BIT
-   endif
- 
-   ifeq ($(KBUILD_SYM32), y)
--    cflags-$(KBUILD_SYM32) += -msym32 -DKBUILD_64BIT_SYM32
-+    cflags-y += -msym32 -DKBUILD_64BIT_SYM32
-   else
- # Do not fiddle with the compilation flags when no compiler is
- # going to be used. To get rid of spurious errors.
+qemu-system-mips64el -M malta -m 2G -kernel vmlinux -serial stdio -drive \
+file=rootfs.ext2,format=raw -append "rootwait root=/dev/sda" -cpu 5Kc
+
+rootfs generated using buildroot (malta default configuration).
+
+- [1] https://github.com/chenhuacai/linux/commit/a8aa673ea46c03b3f62992ffa4ffe810ac84f6e3
+
+Marco Crivellari (1):
+  MIPS: Fix idle VS timer enqueue
+
+ arch/mips/kernel/genex.S | 36 ++++++++++++++++++++----------------
+ arch/mips/kernel/idle.c  |  1 -
+ 2 files changed, 20 insertions(+), 17 deletions(-)
+
 -- 
-2.47.2
+2.48.1
 
 
