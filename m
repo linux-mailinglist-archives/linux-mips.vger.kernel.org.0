@@ -1,50 +1,58 @@
-Return-Path: <linux-mips+bounces-7779-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7780-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35399A36687
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Feb 2025 20:54:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B6327A367BB
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Feb 2025 22:46:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E407118845B0
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Feb 2025 19:54:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8FAE318979E5
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Feb 2025 21:45:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFA921C84CA;
-	Fri, 14 Feb 2025 19:54:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F8931DC9AC;
+	Fri, 14 Feb 2025 21:45:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="raqnuDzq"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D86311C84B7;
-	Fri, 14 Feb 2025 19:54:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01F0218A6D4;
+	Fri, 14 Feb 2025 21:45:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739562885; cv=none; b=eE1T7a/mjMypTzX7AZ/wcNFLxcFPgc1zMmgEqD18BKjDezIUMaugwCoayV3gRBWDCvrfrgMsOSsBsjl89ItlvgK6oCwa1pYQnVmSvtAt3tsKYQiLfXVOjt9FAAs646Ci8XlDMDJayCLGg6PNV5IBS+oMlkNX2qZush09FiWU9T4=
+	t=1739569530; cv=none; b=VPSVVAosuoqpr9z8mOeMlWKXCbY5jWThE3B7yT3JfWWvab5KZyuhTWVEMfVwK4im1tHpK2gIDirppdeD4CIVHJkphKlNByNQAHsGuuuw9AKnhMpUKvLIThJSR/+6G1HNGXA7aMhHiGifBTCa29WkLp/XUZD2iHpmLuJGkiQaY1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739562885; c=relaxed/simple;
-	bh=I7GtKu8xGhniZm9RkZA41tbT5M4GN+3wrQPkrwjVDPI=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=RLeaQUyZU/9nKhPOv+UzULCaCkbUHYdYnjcsBn+jRAyHNp4B+74yAHPqU3JbO3vwQsSdw4McNSg1koRjbSBncbGawuvQozTZGDUm4q2LrF1pSMw/CFwr3Z0Zwz3UfDV4ntJjxsXy7R86AagGF30X2SVHmh0lUiR9wvjlic7UzgY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 6236792009D; Fri, 14 Feb 2025 20:54:35 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 5F97B92009C;
-	Fri, 14 Feb 2025 19:54:35 +0000 (GMT)
-Date: Fri, 14 Feb 2025 19:54:35 +0000 (GMT)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: WangYuli <wangyuli@uniontech.com>
-cc: chenlinxuan@uniontech.com, guanwentao@uniontech.com, 
-    linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
-    masahiroy@kernel.org, niecheng1@uniontech.com, 
-    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, zhanjun@uniontech.com
-Subject: Re: [PATCH v2 1/2] MIPS: dec: Only check -msym32 when need
- compiler
-In-Reply-To: <11D1B8A01F6006BF+20250214095523.175229-1-wangyuli@uniontech.com>
-Message-ID: <alpine.DEB.2.21.2502141914410.65342@angie.orcam.me.uk>
-References: <F49F5EE9975F29EA+20250214094758.172055-1-wangyuli@uniontech.com> <11D1B8A01F6006BF+20250214095523.175229-1-wangyuli@uniontech.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1739569530; c=relaxed/simple;
+	bh=Tgu8c487qpSf1JKB3abGCdZ+fVqXR6+ogPiAKyoojU8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=uD6iuzKit9x4Yh0iOnNZG+d7rrfw/yhTdl84rCGe8o1UlQilgmHaDzs0FEewbe5nsgOtE9+djGxTsDNwVGmySNpgBRYYAIN//xnGazUCQVv6iW/khYhMTOJFWaFnR9MEvw/PmyV7k+zY8b4lv2UZoARnusbijUPG4pRixAgN9vY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=raqnuDzq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB95BC4CED1;
+	Fri, 14 Feb 2025 21:45:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739569529;
+	bh=Tgu8c487qpSf1JKB3abGCdZ+fVqXR6+ogPiAKyoojU8=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=raqnuDzqxhWY4N/YiQgksHu9BEcFLn37zQFHJeewh64NdxF52Mb7djkMP9MlRznlW
+	 oACDX2dhWr8bXHSVrBmz45pht+4+juGqmRR4WA47+nxP00HnIB6dEdgQofIFFPEwP6
+	 85Q8AlTwfUKq3XhU9mccBVB/LqjmPqBVPR5l5ukrNMO4aeAf+XY/wQGl1OkuCCic3W
+	 4ckRrzOvTu+XF2Ju5czVu7ADB6u/o3pj3hG6WN+od4YQBHWv4j7WPZ1VYSqvRu/A//
+	 4vKtB9/qQidYyLRcxmmZoyjCC0MQqiepiByPYZh9t8yUmsWvnNJ3jCoEnXA0oEOw4u
+	 pCi/dfvnkGPCQ==
+Date: Fri, 14 Feb 2025 13:45:28 -0800
+From: Jakub Kicinski <kuba@kernel.org>
+To: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org
+Cc: Chris Packham <chris.packham@alliedtelesis.co.nz>, lee@kernel.org,
+ andrew+netdev@lunn.ch, davem@davemloft.net, edumazet@google.com,
+ pabeni@redhat.com, tsbogend@alpha.franken.de, linux-kernel@vger.kernel.org,
+ netdev@vger.kernel.org, linux-mips@vger.kernel.org,
+ devicetree@vger.kernel.org
+Subject: Re: [PATCH net-next 0/5] dt-bindings: net: realtek,rtl9301-switch
+Message-ID: <20250214134528.4630b6b2@kernel.org>
+In-Reply-To: <20250209234751.460404-1-chris.packham@alliedtelesis.co.nz>
+References: <20250209234751.460404-1-chris.packham@alliedtelesis.co.nz>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -52,57 +60,13 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Fri, 14 Feb 2025, WangYuli wrote:
+On Mon, 10 Feb 2025 12:47:46 +1300 Chris Packham wrote:
+>   dt-bindings: net: Move realtek,rtl9301-switch to net
+>   dt-bindings: net: Add switch ports and interrupts to RTL9300
+>   dt-bindings: net: Add Realtek MDIO controller
 
-> During make modules_install, the need-compiler variable becomes null,
-> so Makefile.compiler isn't included.
-> 
-> This results in call cc-option-yn returning nothing.
-> 
-> To get rid of spurious "CONFIG_CPU_DADDI_WORKAROUNDS unsupported
-> without -msym32" error, just wrap it into `ifdef need-compiler'.
-
- I think this needs to say explicitly that `make modules_install' is one 
-of the targets that does not require or use the compiler and consequently 
-does not require compilation flag variables such as `cflags-y' either.  
-Therefore this target sets `need-compiler' to nil so as to disable all the 
-unnecessary compiler logic and we can also use it here for this purpose, 
-avoiding triggering logic that does rely on the compiler which is only 
-needed at the compilation stage.
-
- Otherwise the unfamiliar reader will still have to guess why it is safe 
-to exclude this part as it's not mentioned explicitly.
-
- See the second paragraph of the change description of commit 4fe4a6374c4d 
-("MIPS: Only fiddle with CHECKFLAGS if `need-compiler'") for justification 
-I gave for the use of `need-compiler' there.
-
-> diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-> index be8cb44a89fd..4d8339d2f20f 100644
-> --- a/arch/mips/Makefile
-> +++ b/arch/mips/Makefile
-> @@ -304,8 +304,12 @@ ifdef CONFIG_64BIT
->    ifeq ($(KBUILD_SYM32), y)
->      cflags-$(KBUILD_SYM32) += -msym32 -DKBUILD_64BIT_SYM32
->    else
-> -    ifeq ($(CONFIG_CPU_DADDI_WORKAROUNDS), y)
-> -      $(error CONFIG_CPU_DADDI_WORKAROUNDS unsupported without -msym32)
-> +# Do not fiddle with the compilation flags when no compiler is
-> +# going to be used. To get rid of spurious errors.
-> +    ifdef need-compiler
-> +      ifeq ($(CONFIG_CPU_DADDI_WORKAROUNDS), y)
-> +        $(error CONFIG_CPU_DADDI_WORKAROUNDS unsupported without -msym32)
-> +      endif
->      endif
->    endif
->  endif
-
- The comment is not correctly aligned with code here, but as I say I don't 
-think it's really needed in the first place and then the `ifdef' ought to 
-wrap the whole conditional for clarity, because none of this stuff is used 
-(and then the call to `cc-option-yn' as you say will always yield nothing, 
-because the variable will not have been defined).
-
-  Maciej
+AFAIU we're waiting for a review from DT maintainers on this one,
+is this series on your radar?
 
