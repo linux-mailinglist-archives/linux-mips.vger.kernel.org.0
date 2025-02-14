@@ -1,290 +1,325 @@
-Return-Path: <linux-mips+bounces-7774-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7775-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65FABA36270
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Feb 2025 16:58:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF91FA362CB
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Feb 2025 17:16:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E000518936B8
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Feb 2025 15:58:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94FDD1667FF
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Feb 2025 16:16:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 449AD26738A;
-	Fri, 14 Feb 2025 15:57:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAEE3267397;
+	Fri, 14 Feb 2025 16:16:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="Obkl0/L1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZsjKg8Fn"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F223D2673A6
-	for <linux-mips@vger.kernel.org>; Fri, 14 Feb 2025 15:57:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739548658; cv=none; b=UviIPvvXX7eWRBUhCHxaFh8l9TnAFVbWYrtZ0zpgI3OK/pkrIf6Ozi5D769GoTGgUMKfYm1SV6Lp1XOUUspuWTpIHw7TqNvmhDTjhOre9uLFidjD18apVhspt5473f5YRPMr/h+4jQv/iyFMCNcq8ZjG2iZadamYJtkJ2AVj0TA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739548658; c=relaxed/simple;
-	bh=D1wbEsB7TFyizka/IHeRNqhm2Jh1CbExzVJuyDFMVEE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pbkPNqDp6lfUrKAIhQ/EK66blAj+dWHSbKcYgXQZToFOwP96xmjYd2VQtzx52y5sou6I1wAP8MJURwV8u0WPjKGg/GK1o+WXRx6L2WRIu7u3keeN8KnNc7bEMz3VtrC2rC7sAPLJeKx/RGgd0p1QALWpQJuhfKYz8+ryJNeDJqw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=Obkl0/L1; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-5452c2805bcso698912e87.2
-        for <linux-mips@vger.kernel.org>; Fri, 14 Feb 2025 07:57:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1739548654; x=1740153454; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WHx17WFnnFivJUIFv2m7lVrUVyw09kYPGsIsDDqzOlQ=;
-        b=Obkl0/L1x2AiN7doUxuzjyi0YeaCXQArwsDYJJLgVvCZes/rl7E1XKWDht/ipvDzRw
-         hLTH3D52oNM0lIlQxkpmi0py1tSSAauL2dNlaPpCbff6hELXVrAg0FefXJPs1J/0Yz/G
-         qoitE9y2dWuox0PRZrwvkZN1NXh1MyGbLAh36ZjmT0Sm+y//k7XT+FSgGIaxjbLjZXpw
-         M8MzYevFpiKxMyo0TSoM+zRdtPd+RhxnqQjIw/Q0Xf0r8SXhJGBAooiSOqfe0NSvDzJS
-         /Dv1JMzao1KCiXUts3qz/UcwIr1KOO4rIdpaOlI2MSxSIZJ7riwlWjDKCvL09OE9NzK0
-         4SVQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739548654; x=1740153454;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WHx17WFnnFivJUIFv2m7lVrUVyw09kYPGsIsDDqzOlQ=;
-        b=iC6P3w6V9yJaSXuvrbnZuDnZp/v4ozGxUjsXWpFs9goltDcqS5MIpgKr3HXMcirMqx
-         0j6GwHxT/0mrcghoxrx6tPguewQTCKCNQEL0gCkAa7et2kynacPfcNBtqDrqq352pSrN
-         i41wjwGOz44frspqD7b4o+eCrDsD9Tvl8eIsA6RZBzmV78HJT2XuT0bznc5JT+Y+42cB
-         JhCbKUlcXho4Sw1dsI8SyaiUOJ0BNY9JkiVir7L46WY5rrK+/oKXNQMTS74or1GuIT9z
-         aqHPAvA3RhPjs9Azfwc90ON+Ho8XoyvIIlcvCXw8zum+Hb7fy0DXPgsOPC3cC2aWgyp7
-         s/zw==
-X-Gm-Message-State: AOJu0Yw0yx+L61s+3WmLwzd49ISAq64EdcSYTkYeDiZqAn4aG05EQZGt
-	nwZy1sXa3dDOVwBqmkic4bPMA9Hb4xpiwSjmDwatY9sErWotdvRXiQeF/iWol0lrIT6t+EDpGON
-	ap7T5g+S1edul9BGCnNIFI11ufbRd6nIy13E74w==
-X-Gm-Gg: ASbGncvYr6HY2xOcLeIVEaewwlsdzIqnY/edp9vtHsTyX7SsyutRm2ZoGQUhRuVN3bu
-	velfQxW/2K2EonJxiuUyE/GapmW2Fu9XmO90F6GMiPXOKkvrNnuzv9jte5sSiUOzLVPXXiYMKQu
-	eiWWIA6sj9xYpsfZV1ACbltslqVBYkDw==
-X-Google-Smtp-Source: AGHT+IF6cLtumKw5gwUmJWDnoposzLT4HXNcBKi3JpGDWlZkrz1UmThgne6q7oRD/FA6ofAqMRYp7Q+YqVZLueSHux0=
-X-Received: by 2002:a05:6512:1111:b0:545:6cf:6f3e with SMTP id
- 2adb3069b0e04-5451dde81aemr2973561e87.49.1739548653921; Fri, 14 Feb 2025
- 07:57:33 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D81D42753FD;
+	Fri, 14 Feb 2025 16:16:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.19
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739549786; cv=fail; b=cO9Gc4ZI0a6h4Yqnzh2VPLH0+Pbn8kS+miB+5FoIQKqwZEL8Z4iwHOmEcnpUr9IYntmj59accfe/nAozgLV2yFoA8D7/G0BTYx6otwEPAcDBI7iP1bslY1jIB+XotOU7TOcbVTemktf4yRUjKFagHuW0Ve7SyIZJTguvTFb7VB4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739549786; c=relaxed/simple;
+	bh=3+W77FPa4qYi/p6jHkS5N5D1r20bLrH3MqSoHPLJ/Sg=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=rJMxL0EnOEpZ8FTPnH9wtH5nBE1i1tzpJq8RZq4at82hnv+ITJUHWLHUefdr4QSuQnSVQtjMj1267PjgC9ILpK3iJEqpIVGBSRHBUHldYKwvAOmiGP+mqAVK+960qDKHtd0bqLJlMjENLJm6GrqIaY5Z50K1bOuWTHhprBMRDyw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZsjKg8Fn; arc=fail smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739549786; x=1771085786;
+  h=date:from:to:cc:subject:message-id:references:
+   in-reply-to:mime-version;
+  bh=3+W77FPa4qYi/p6jHkS5N5D1r20bLrH3MqSoHPLJ/Sg=;
+  b=ZsjKg8Fn+NjzOtzezLtAHputkXUCogOHU7jTCpqGFsBJbBTSU8hxk+0d
+   qWXfHBBbtJWSQVKGp/Skl/ujDmgEnh+2ckWat5l5k57T2rfwoUOcEifHt
+   S1aFPKCCEUP7Gf3DdIuAshy8eWEczQK15AmgwlIDEuUTe6zyyWf7Ii47O
+   t7QXCxzRRbr6hkhRhu7gFMOVfqQYTnmBozYZVT5Xjq0NCiByOf3Ifxoei
+   hWwboHd+B6abIIct/puzAWF4YzAXhh2MXmdcSx//iP66MKFQKzi+iXqrb
+   HBEpF93A+EwSuoVpFoNz86Nt3mH563N/bCbHHrgfxQHeYwc/insSnhiyM
+   Q==;
+X-CSE-ConnectionGUID: BpUlpXrGTaShF8BeYcxFFQ==
+X-CSE-MsgGUID: hRYeyiHfTHysFUUzgat7BQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11345"; a="40165445"
+X-IronPort-AV: E=Sophos;i="6.13,286,1732608000"; 
+   d="scan'208";a="40165445"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2025 08:16:25 -0800
+X-CSE-ConnectionGUID: 7qmMv8xtTFWkAPFj2yX80Q==
+X-CSE-MsgGUID: PNuie8B+Q46bwQCuQ+GVVQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,286,1732608000"; 
+   d="scan'208";a="113471618"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by fmviesa007.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 14 Feb 2025 08:16:22 -0800
+Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44; Fri, 14 Feb 2025 08:16:21 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14 via Frontend Transport; Fri, 14 Feb 2025 08:16:21 -0800
+Received: from NAM02-BN1-obe.outbound.protection.outlook.com (104.47.51.44) by
+ edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.44; Fri, 14 Feb 2025 08:16:20 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=E6QomcEqmbb/BfP0RwJ1Ifh3BHhWZWFbcJN90pdm2+ocB/4czXowD5kd11pIU6comzMovnaI2yU6qifpevw4m8rWY2WAip2qaaDHVh3QX1tMAX+WYUDnsKuR71dV6owqjh0Ixg6sxaU22ljgEGSmQoRSfDRuOAX/+V8sDNei6/YW3YyepgyQvOw1Kf2LXWn8IV4YfT199NxS6ssXcdmeGsqGwCA11HlxcH+HYkCaGkJx/rYA+4af7OGuSPmKSK5GgWWpZR9d1FviJWVfUI1ICLC5GPPqvdB7nsFyCDPQdLnNdbO4yZDZ9Ix8/ZIovXEalQ4CpgnOk6dVtM54drShNA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=hT+R+9FVXkyT/l4dyUBzdD2xUY0sPG1U/xKrzpzmj8I=;
+ b=n1Tngb7dQbzn6QuT8BzAesTgXwy7oOl/Jl9E4UzLLmRbAlNwyqRafPJROzrZ4iFf8RDWElg47cZTGYpZizMmg2YGbIlKyANpurfSXmb0GxEf7PtXco7n1NVTWuHxBiuVNIhFn109odQ04NVbA3iJPZo7FujojSAcMBhyEq3KxwiOQxcPz2pzUY1fRkoamXi9T/a2N126iyZe8f4+sAVTXWhezcON22tWepHYD+piDcquHwgU/ZbXvFaeBEaajuNc/NNiKTbMlT8kujfnuK2QS7yjsjlxS/UkPvSJDvjpQfJRnTpfh6H0SMcEFmDyvzp4qmAlJoQe6+pStq7go5gmXQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com (2603:10b6:806:25c::17)
+ by CY5PR11MB6138.namprd11.prod.outlook.com (2603:10b6:930:2a::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.14; Fri, 14 Feb
+ 2025 16:15:50 +0000
+Received: from SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::cf7d:9363:38f4:8c57]) by SA1PR11MB6733.namprd11.prod.outlook.com
+ ([fe80::cf7d:9363:38f4:8c57%5]) with mapi id 15.20.8445.013; Fri, 14 Feb 2025
+ 16:15:50 +0000
+Date: Fri, 14 Feb 2025 10:15:36 -0600
+From: Ira Weiny <ira.weiny@intel.com>
+To: Jerome Brunet <jbrunet@baylibre.com>, Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>, Dave Ertman <david.m.ertman@intel.com>, "Ira
+ Weiny" <ira.weiny@intel.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+	"Stephen Boyd" <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>, Danilo
+ Krummrich <dakr@kernel.org>, Conor Dooley <conor.dooley@microchip.com>, Daire
+ McNamara <daire.mcnamara@microchip.com>, Philipp Zabel
+	<p.zabel@pengutronix.de>, Douglas Anderson <dianders@chromium.org>, Andrzej
+ Hajda <andrzej.hajda@intel.com>, Neil Armstrong <neil.armstrong@linaro.org>,
+	"Robert Foss" <rfoss@kernel.org>, Laurent Pinchart
+	<Laurent.pinchart@ideasonboard.com>, Jonas Karlman <jonas@kwiboo.se>, "Jernej
+ Skrabec" <jernej.skrabec@gmail.com>, Maarten Lankhorst
+	<maarten.lankhorst@linux.intel.com>, Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>, Hans de Goede <hdegoede@redhat.com>, Ilpo
+ =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>, Bryan O'Donoghue
+	<bryan.odonoghue@linaro.org>, Vladimir Kondratiev
+	<vladimir.kondratiev@mobileye.com>, Gregory CLEMENT
+	<gregory.clement@bootlin.com>, =?iso-8859-1?Q?Th=E9o?= Lebrun
+	<theo.lebrun@bootlin.com>, Michael Turquette <mturquette@baylibre.com>, "Abel
+ Vesa" <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>, Shawn Guo
+	<shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, "Pengutronix
+ Kernel Team" <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
+	Kevin Hilman <khilman@baylibre.com>, Martin Blumenstingl
+	<martin.blumenstingl@googlemail.com>
+CC: Jerome Brunet <jbrunet@baylibre.com>, <linux-kernel@vger.kernel.org>,
+	<linux-riscv@lists.infradead.org>, <dri-devel@lists.freedesktop.org>,
+	<platform-driver-x86@vger.kernel.org>, <linux-mips@vger.kernel.org>,
+	<linux-clk@vger.kernel.org>, <imx@lists.linux.dev>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-amlogic@lists.infradead.org>
+Subject: Re: [PATCH v3 6/7] clk: clk-imx8mp-audiomix: use the auxiliary
+ device creation helper
+Message-ID: <67af6c284c349_1614f3294dd@iweiny-mobl.notmuch>
+References: <20250211-aux-device-create-helper-v3-0-7edb50524909@baylibre.com>
+ <20250211-aux-device-create-helper-v3-6-7edb50524909@baylibre.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20250211-aux-device-create-helper-v3-6-7edb50524909@baylibre.com>
+X-ClientProxiedBy: MW4PR03CA0343.namprd03.prod.outlook.com
+ (2603:10b6:303:dc::18) To SA1PR11MB6733.namprd11.prod.outlook.com
+ (2603:10b6:806:25c::17)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250214105047.150835-1-marco.crivellari@suse.com>
- <20250214105047.150835-2-marco.crivellari@suse.com> <CAAhV-H4qY9FOm4C4kBCerM4j+CcezL-Dkitb8gbVZCYjjCxQDA@mail.gmail.com>
-In-Reply-To: <CAAhV-H4qY9FOm4C4kBCerM4j+CcezL-Dkitb8gbVZCYjjCxQDA@mail.gmail.com>
-From: Marco Crivellari <marco.crivellari@suse.com>
-Date: Fri, 14 Feb 2025 16:57:22 +0100
-X-Gm-Features: AWEUYZk6Vjn3NzgRt01zDBdJAFiUfGq908c3RjrX1jgAjpL0SbUS3Wge4zdYVXs
-Message-ID: <CAAofZF4PVYehyonsmyTC=gKTgucs-jZYzzoQ2dvFcqK9YgsKVw@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: Fix idle VS timer enqueue
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Frederic Weisbecker <frederic@kernel.org>, 
-	Anna-Maria Behnsen <anna-maria@linutronix.de>, Thomas Gleixner <tglx@linutronix.de>, 
-	Peter Zijlstra <peterz@infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SA1PR11MB6733:EE_|CY5PR11MB6138:EE_
+X-MS-Office365-Filtering-Correlation-Id: 085784fe-299f-4d7f-4a20-08dd4d12d940
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|7416014|1800799024|366016|7053199007|921020;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?WDq0UZPwEJiXbsJOv7ccnrPWbO0EvkG8FJtIemmabvlVsnJ+jZSrAQw8XWZf?=
+ =?us-ascii?Q?aX14bSRSU/SUhIu1grRFiV0S3JRyZnzhz1PgXLNhaIv07srvcXpJyzYwgtFy?=
+ =?us-ascii?Q?jNQP6i+/5FnXl+W1hRqjui7ySJ8atD9on0vlfWmjiUFjGIiWtDwMZdZCzHzs?=
+ =?us-ascii?Q?njgd4ECbVlPkkdfuaSZAcb6AUbKEMDnwA6MOlTyYcgbPQu5SV1LOOu2vWI+A?=
+ =?us-ascii?Q?aUgoAfW2APZeviRAehV/WB7FnMRbyvlGCSSc5W7hY/o19KqHrNXP/8g6LvoW?=
+ =?us-ascii?Q?d6tgx8ki/6OB/yELHPfGwvjWxb6j1oWxfIex0JLXEeZKiBweZdaDW2vzXYml?=
+ =?us-ascii?Q?yV5UJIpuMH77MbDkBNzvaFMShxqPhgryOVD6PIC1nTj4M1csHamJFa9lhLzb?=
+ =?us-ascii?Q?asXSf76MPILlxTszXsiJ0CNCJOxEWA4KTASyU1FA6zqKjsoJduWfwD6I3XnC?=
+ =?us-ascii?Q?veSU8HfZSW3EXY1rEvy69ziXJfyDoP0jHDuJEADTP4iKMWPQFHK7bvUyf+3R?=
+ =?us-ascii?Q?gZll7cm9oNkmCKWS0Y20fbaL0P9JxlFJXpbhZ1jgfDqEWckbnPkHBjqG0PGP?=
+ =?us-ascii?Q?fFfl4IXWdyfph046JYiWed2yAGfnIw6uHwEY4wJ0oaY+kx6IxKNoKVszNXth?=
+ =?us-ascii?Q?Ef/tzuH3+iYF9HfOIun7Ry0FzRNxx8Y4mjH8BQ+ZhAQKmrYIUfPImBDuPQY3?=
+ =?us-ascii?Q?uOJVZxR5AhoFfHs6eCwkdS9gjDH5aF/s4MaeVDYQQpjdLrxcsyU6yZKdd9aF?=
+ =?us-ascii?Q?JwSYetlfg8CQK4qOAkuAljkpNyKiLE4vV8kjdBMe5aKis8pVI4qHzOsUHvxw?=
+ =?us-ascii?Q?6JCTcelbh5zo0qh2WbgwYGCpORRUYcBeqwgwn40jBsFrCRwJ7/EYDFIQ45JG?=
+ =?us-ascii?Q?GVYdFCY27nSG3BXMlHrQY2j/QUyiyyocN4wNi5HV9kqGoayYGLm1QFmqngir?=
+ =?us-ascii?Q?/re3coRWFWABrFW6eoYoFhSkUcwfZXAjr9UWQxCzyfqXEWzqprlHbWjPsW1p?=
+ =?us-ascii?Q?fldWcCVRrwF2NMGvvVwBgxxnfwAf98H2wD/cH62h5zXR+k5XnweigkYRlVSx?=
+ =?us-ascii?Q?Ifh2jCUhcz+8cMJiLyE4hIjX/ODvvCFRJmrSZU5CA5TdYPi13ovYj8wI7Hqi?=
+ =?us-ascii?Q?LN6no32iIpFtfgLYB3J0Iq8XDmgzRSuKUa33YkcLPxn51x0Uj0Kvh3lTCLC3?=
+ =?us-ascii?Q?mILg8opLr0o+ovZqBelQ8eODNS4UFu5HAP7m9YfpsGWb9jIQwby24dKKih/a?=
+ =?us-ascii?Q?YhtlKV1wcywZalwJWWLYL5Hqc8k/fXiHNq3u9dih/DoXAW/98LZLQJmXzPkN?=
+ =?us-ascii?Q?mIvz7uf3o7cblYIIk21/NipZnd/VU5q+vuZc5QFlwSt8qGHM3tvaLPQOcRWa?=
+ =?us-ascii?Q?XqBPWu4tbKb6WuWA9aQt5D0tkFG+vEitqfltu6uTsINbyB9oaggHakp8Dyq5?=
+ =?us-ascii?Q?kjdr/qPHnQY=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SA1PR11MB6733.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(1800799024)(366016)(7053199007)(921020);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?1k3Affq2l9akXSjbiEChWZzpkpmkykXrhmm3D7a3VmzIdwqmFvctan4I9N+0?=
+ =?us-ascii?Q?Dnrhq03pyX4pz0rWdTxkJerE6N8SLpDdxOWDqFFXuS2WYwiB0BAn1cooQwFu?=
+ =?us-ascii?Q?I7Du791V02dzbnoYQ4lYZzqY1u7P68HwDQ1pp+0AI/oLAoBnmzvLIfyQtXV8?=
+ =?us-ascii?Q?qhAzTGVYQdYVg/efqUv43cXJKBuJr0KqIC4B827MIh+2/3yXt51hZlyLZKam?=
+ =?us-ascii?Q?cLeb1rpMpwvPHs5UKO9lr/vP1w3SZCtsbExUnrfazvznIOrvb0eFUBQ33dD/?=
+ =?us-ascii?Q?2Rp+aZ8JIXa75kcwWrSCfFWZm3HQ1N74EoDQH9Qm8UjldX+bkiEmVSLbNkIz?=
+ =?us-ascii?Q?qs71GKdZTxbPPcqbLKkAefP8w56uIyUXwOK+2IO+c22xhZUwOfnHkA/Uv+pZ?=
+ =?us-ascii?Q?bUodu6nZH3GbryO0N7zsDF6WLLy8EvRkBUJH/oXLKLAVETqELBu1e3m23cCo?=
+ =?us-ascii?Q?sbPeA3Q4e+2QnrSF4s3KbfiL4CCBd9yu6a83lp7Ps4c6IuQUT48FxvSNHMaE?=
+ =?us-ascii?Q?9rvxz7C9cpJz8NroHHvWDIsKi021cyvLw3KGPDflxHeNNPRD+RIh6KUhX6El?=
+ =?us-ascii?Q?uoLMphxp31Ig6YeVW7mI19r9p5MrznDbWjrisfQriZ8Nvog9dvd+Wx1CyA6c?=
+ =?us-ascii?Q?yeaMuy36hw8TVcJJNiJvm/xy2B1CLYurNedAQx8zswpHfZNupzQgWyB4m+JC?=
+ =?us-ascii?Q?pHSOOLROfRj+qde26q6O09eDU4D16Xq9j/X2a+j+N2g1ZrKia57nNzuqreu9?=
+ =?us-ascii?Q?VrlZS++2hAj1796xezFw0pZ8nBFnNqjKrFyjrUW3u18AlcyXaZlePr8ZRFJP?=
+ =?us-ascii?Q?Pf5N+8p1fMsUoY2J4bLr6yus/f0vRtA5xcd2ly+9W0Mvi5qRoz/q+D1NejO8?=
+ =?us-ascii?Q?3yd4Cva0zQjdDDL0Z7yXmk5KVdUMiJ6dalyWIWxpo4fk2ZVzGcDcc8Zrr9TR?=
+ =?us-ascii?Q?ez83nB7buYTGl838hVeCwSZMEZ3h1hZV2fEfJ3FZHe//fvficARxXC/Gs5lZ?=
+ =?us-ascii?Q?IKkFjIQ5tofLbApGPTbFMupmYMcRGCgbnbhHN1onELEOy846wgoLSOMr4N0P?=
+ =?us-ascii?Q?QDJ9QUZCuMWOzLASGOK/I3tWnZrRdBrk92yvHdV+CObZwrJWZNDYZ7+bFVBc?=
+ =?us-ascii?Q?iPzLvk3MvN21RdQtKvKco5ldY/1WU9+cSiUEAyR05PXgMm652jvUwyv6ATha?=
+ =?us-ascii?Q?tbYiaFJ1MfTuOXfT+mLnEGHiPWTcQeF1qal5XE1jMIHcre1Q28YhvvB0OVJi?=
+ =?us-ascii?Q?BpP+Y5D5+OH06VRMXFbkmVHmlhEb288byZJriLFpV1GDkM6CWpbRQ1BZzAvw?=
+ =?us-ascii?Q?TTtx0Jrn2FZ0foijeLC9e6GD+Tb0OdNkkR+F3Ufsld+AzzmQJFGpfDEhMDEK?=
+ =?us-ascii?Q?51yjlUVXcd+8OlpIQlvumR6PytQU6FwNVr6EkAVPJ8t6kw1Xg6DcSLpUc1E8?=
+ =?us-ascii?Q?76pQHIDWz0P7GgAy/XeqNLdQBluRXbsRQh7pTooJCCuykJTvFvRH95s0zl+z?=
+ =?us-ascii?Q?Kgc/o7OxIY5StQHrS68FXm5AUy5gTMN7AdQ+mDfuYf4Am0ufd5EdVHouFKIB?=
+ =?us-ascii?Q?/G6bYLPKdo1hvSU/zxVpRjwRU5c7H5nm6Vdkgl83?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 085784fe-299f-4d7f-4a20-08dd4d12d940
+X-MS-Exchange-CrossTenant-AuthSource: SA1PR11MB6733.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 14 Feb 2025 16:15:50.7545
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /dc2AQ22RE1hFaoyRwWWpHXWNqChlSkEk+yf4qeuDx3KluUNZJ5PuGXHBvad4xcmM+WJWc2KoeNrTMW9emCxfA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR11MB6138
+X-OriginatorOrg: intel.com
 
-Hi, thanks for the replies!
+Jerome Brunet wrote:
+> The auxiliary device creation of this driver is simple enough to
+> use the available auxiliary device creation helper.
+> 
+> Use it and remove some boilerplate code.
+> 
+> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+> ---
+>  drivers/clk/imx/clk-imx8mp-audiomix.c | 56 ++++-------------------------------
+>  1 file changed, 6 insertions(+), 50 deletions(-)
+> 
+> diff --git a/drivers/clk/imx/clk-imx8mp-audiomix.c b/drivers/clk/imx/clk-imx8mp-audiomix.c
+> index c409fc7e061869988f83c7df3ef7860500426323..988a5fffeb4e0e481ec57038d9d1f1b43432fc98 100644
+> --- a/drivers/clk/imx/clk-imx8mp-audiomix.c
+> +++ b/drivers/clk/imx/clk-imx8mp-audiomix.c
+> @@ -228,64 +228,20 @@ struct clk_imx8mp_audiomix_priv {
+>  	struct clk_hw_onecell_data clk_data;
+>  };
+>  
+> -#if IS_ENABLED(CONFIG_RESET_CONTROLLER)
 
-Huacai: I used the '1' label when I compiled the first time, but I
-noticed this warning, so I decided to use the label to avoid this:
+I see the Kconfig ...
 
-"WARNING: modpost: vmlinux: section mismatch in reference:
-rollback_except_vec_vi+0x4 (section: .text) -> except_vec4 (section:
-.init.text)"
+        select AUXILIARY_BUS if RESET_CONTROLLER
 
-By the way, I will use the 1 label like you suggested.
+But I don't see how this code is omitted without AUXILIARY_BUS.  Is this
+kconfig check safe to remove?
 
-> For MIPS the rollback region is not 3 instructions, and so you cannot
-> use 0xc below. I think there is no chance for the wait instruction
-> after this patch.
+Ira
 
-About this, does it look better if i don't change this part of the
-code (except for PTR_LA  k1, 1b) ?
-eg.
-
-@@ -136,7 +144,7 @@ LEAF(__r4k_wait)
-       .set    push
-       .set    noat
-       MFC0    k0, CP0_EPC
--       PTR_LA  k1, __r4k_wait
-+       PTR_LA  k1, 1b
-       ori     k0, 0x1f        /* 32 byte rollback region */
-       xori    k0, 0x1f
-       bne     k0, k1, \handler
-
-So the real change would be:
-
--       /* start of rollback region */
--       LONG_L  t0, TI_FLAGS($28)
-+       /* start of idle interrupt region */
-+       MFC0    k0, CP0_STATUS
-       nop
--       andi    t0, _TIF_NEED_RESCHED
--       bnez    t0, 1f
--        nop
-+       /* Enable Interrupt */
-+       ori     k0, 0x1f
-+       xori    k0, 0x1e
-+       MTC0    k0, CP0_STATUS
-       nop
-       nop
-
-Maybe what I'm going to say is silly...
-But considering the region should be a power of 2, maybe can also be
-changed with:
-ori   k0, 0x0f
-addi  k0, 1
-
-Thanks for your time!
-
-On Fri, Feb 14, 2025 at 3:47=E2=80=AFPM Huacai Chen <chenhuacai@kernel.org>=
- wrote:
->
-> Hi, Marco,
->
-> On Fri, Feb 14, 2025 at 6:51=E2=80=AFPM Marco Crivellari
-> <marco.crivellari@suse.com> wrote:
-> >
-> > MIPS re-enables interrupts on its idle routine and performs
-> > a TIF_NEED_RESCHED check afterwards before putting the CPU to sleep.
-> >
-> > The IRQs firing between the check and the 'wait' instruction may set th=
-e
-> > TIF_NEED_RESCHED flag. In order to deal with this possible race, IRQs
-> > interrupting __r4k_wait() rollback their return address to the
-> > beginning of __r4k_wait() so that TIF_NEED_RESCHED is checked
-> > again before going back to sleep.
-> >
-> > However idle IRQs can also queue timers that may require a tick
-> > reprogramming through a new generic idle loop iteration but those timer=
-s
-> > would go unnoticed here because __r4k_wait() only checks
-> > TIF_NEED_RESCHED. It doesn't check for pending timers.
-> >
-> > Fix this with fast-forwarding idle IRQs return address to the end of th=
-e
-> > idle routine instead of the beginning, so that the generic idle loop
-> > handles both TIF_NEED_RESCHED and pending timers.
-> >
-> > Signed-off-by: Marco Crivellari <marco.crivellari@suse.com>
-> > ---
-> >  arch/mips/kernel/genex.S | 36 ++++++++++++++++++++----------------
-> >  arch/mips/kernel/idle.c  |  1 -
-> >  2 files changed, 20 insertions(+), 17 deletions(-)
-> >
-> > diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
-> > index a572ce36a24f..a78d5132c940 100644
-> > --- a/arch/mips/kernel/genex.S
-> > +++ b/arch/mips/kernel/genex.S
-> > @@ -104,18 +104,16 @@ handle_vcei:
-> >
-> >         __FINIT
-> >
-> > -       .align  5       /* 32 byte rollback region */
-> > +       .align  5
-> >  LEAF(__r4k_wait)
-> >         .set    push
-> >         .set    noreorder
-> > -       /* start of rollback region */
-> > -       LONG_L  t0, TI_FLAGS($28)
-> > -       nop
-> > -       andi    t0, _TIF_NEED_RESCHED
-> > -       bnez    t0, 1f
-> > -        nop
-> > -       nop
-> > -       nop
-> > +       /* start of idle interrupt region */
-> > +       MFC0    k0, CP0_STATUS
-> > +       /* Enable Interrupt */
-> > +       ori     k0, 0x1f
-> > +       xori    k0, 0x1e
-> > +       MTC0    k0, CP0_STATUS
-> >  #ifdef CONFIG_CPU_MICROMIPS
-> >         nop
-> >         nop
-> > @@ -123,11 +121,17 @@ LEAF(__r4k_wait)
-> >         nop
-> >  #endif
-> >         .set    MIPS_ISA_ARCH_LEVEL_RAW
-> > +       /*
-> > +        * If an interrupt lands here, between enabling interrupts abov=
-e and
-> > +        * going idle on the next instruction, we must *NOT* go idle si=
-nce the
-> > +        * interrupt could have set TIF_NEED_RESCHED or caused a timer =
-to need
-> > +        * resched. Fall through -- see rollback_handler below -- and h=
-ave
-> > +        * the idle loop take care of things.
-> > +        */
-> >         wait
-> > -       /* end of rollback region (the region size must be power of two=
-) */
-> > -1:
-> > +       /* end of idle interrupt region (the region size must be power =
-of two) */
-> > +SYM_INNER_LABEL(__r4k_wait_exit, SYM_L_LOCAL)
-> You can also use label 1 as the LoongArch version.
->
-> >         jr      ra
-> > -        nop
-> >         .set    pop
-> >         END(__r4k_wait)
-> >
-> > @@ -136,10 +140,10 @@ LEAF(__r4k_wait)
-> >         .set    push
-> >         .set    noat
-> >         MFC0    k0, CP0_EPC
-> > -       PTR_LA  k1, __r4k_wait
-> > -       ori     k0, 0x1f        /* 32 byte rollback region */
-> > -       xori    k0, 0x1f
-> > -       bne     k0, k1, \handler
-> > +       PTR_LA  k1, __r4k_wait_exit
-> > +       /* 3 instructions rollback region */
-> For MIPS the rollback region is not 3 instructions, and so you cannot
-> use 0xc below. I think there is no chance for the wait instruction
-> after this patch.
->
-> Huacai
->
-> > +       ori     k0, k0, 0x0c
-> > +       bne     k0, k1, \handler
-> >         MTC0    k0, CP0_EPC
-> >         .set pop
-> >         .endm
-> > diff --git a/arch/mips/kernel/idle.c b/arch/mips/kernel/idle.c
-> > index 5abc8b7340f8..1f74c0589f7e 100644
-> > --- a/arch/mips/kernel/idle.c
-> > +++ b/arch/mips/kernel/idle.c
-> > @@ -37,7 +37,6 @@ static void __cpuidle r3081_wait(void)
-> >
-> >  void __cpuidle r4k_wait(void)
-> >  {
-> > -       raw_local_irq_enable();
-> >         __r4k_wait();
-> >         raw_local_irq_disable();
-> >  }
-> > --
-> > 2.48.1
-> >
-> >
+> -
+> -static void clk_imx8mp_audiomix_reset_unregister_adev(void *_adev)
+> -{
+> -	struct auxiliary_device *adev = _adev;
+> -
+> -	auxiliary_device_delete(adev);
+> -	auxiliary_device_uninit(adev);
+> -}
+> -
+> -static void clk_imx8mp_audiomix_reset_adev_release(struct device *dev)
+> +static int clk_imx8mp_audiomix_reset_controller_register(struct device *dev)
+>  {
+> -	struct auxiliary_device *adev = to_auxiliary_dev(dev);
+> -
+> -	kfree(adev);
+> -}
+> -
+> -static int clk_imx8mp_audiomix_reset_controller_register(struct device *dev,
+> -							 struct clk_imx8mp_audiomix_priv *priv)
+> -{
+> -	struct auxiliary_device *adev __free(kfree) = NULL;
+> -	int ret;
+> +	struct auxiliary_device *adev;
+>  
+>  	if (!of_property_present(dev->of_node, "#reset-cells"))
+>  		return 0;
+>  
+> -	adev = kzalloc(sizeof(*adev), GFP_KERNEL);
+> -	if (!adev)
+> -		return -ENOMEM;
+> -
+> -	adev->name = "reset";
+> -	adev->dev.parent = dev;
+> -	adev->dev.release = clk_imx8mp_audiomix_reset_adev_release;
+> -
+> -	ret = auxiliary_device_init(adev);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = auxiliary_device_add(adev);
+> -	if (ret) {
+> -		auxiliary_device_uninit(adev);
+> -		return ret;
+> -	}
+> -
+> -	return devm_add_action_or_reset(dev, clk_imx8mp_audiomix_reset_unregister_adev,
+> -					no_free_ptr(adev));
+> -}
+> -
+> -#else /* !CONFIG_RESET_CONTROLLER */
+> +	adev = devm_auxiliary_device_create(dev, "reset", NULL, 0);
+> +	if (IS_ERR_OR_NULL(adev))
+> +		return PTR_ERR(adev);
+>  
+> -static int clk_imx8mp_audiomix_reset_controller_register(struct device *dev,
+> -							 struct clk_imx8mp_audiomix_priv *priv)
+> -{
+>  	return 0;
+>  }
+>  
+> -#endif /* !CONFIG_RESET_CONTROLLER */
+> -
+>  static void clk_imx8mp_audiomix_save_restore(struct device *dev, bool save)
+>  {
+>  	struct clk_imx8mp_audiomix_priv *priv = dev_get_drvdata(dev);
+> @@ -408,7 +364,7 @@ static int clk_imx8mp_audiomix_probe(struct platform_device *pdev)
+>  	if (ret)
+>  		goto err_clk_register;
+>  
+> -	ret = clk_imx8mp_audiomix_reset_controller_register(dev, priv);
+> +	ret = clk_imx8mp_audiomix_reset_controller_register(dev);
+>  	if (ret)
+>  		goto err_clk_register;
+>  
+> 
+> -- 
+> 2.45.2
+> 
 
 
-
---=20
-
-Marco Crivellari
-
-L3 Support Engineer, Technology & Product
-
-
-
-
-marco.crivellari@suse.com
 
