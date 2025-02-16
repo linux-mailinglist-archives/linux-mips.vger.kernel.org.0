@@ -1,113 +1,79 @@
-Return-Path: <linux-mips+bounces-7788-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7789-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 456AFA3752E
-	for <lists+linux-mips@lfdr.de>; Sun, 16 Feb 2025 16:42:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 51875A37707
+	for <lists+linux-mips@lfdr.de>; Sun, 16 Feb 2025 19:59:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 67C4D7A270D
-	for <lists+linux-mips@lfdr.de>; Sun, 16 Feb 2025 15:41:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 58AF216A2A1
+	for <lists+linux-mips@lfdr.de>; Sun, 16 Feb 2025 18:58:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 984A315F3FF;
-	Sun, 16 Feb 2025 15:42:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D5BC1A3146;
+	Sun, 16 Feb 2025 18:58:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CsNYw0q2"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2E45E567;
-	Sun, 16 Feb 2025 15:42:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67C2C1A3142;
+	Sun, 16 Feb 2025 18:58:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739720525; cv=none; b=TG3u3NDTCdAOpJiKEDGSyLhKiUd0RDfkhLypLsOjDGmJYsD3KhTMNVsgFjBoKeVAxi8dsVXlmvJzoXfj25LrwAm3iLPbnhPfJv9cGHtFYURQ4Ech1m1vFRAOM1BoO5J/2DHGB8npymumwPjp1q/YvOfuZobntjR0hKnrf7ClxzY=
+	t=1739732309; cv=none; b=j61fqvYaNiNeQ0o1/3RrSJBc1VF2xPiT7QCR2Kkn287+k+LQV3Wj0nJY9vWoKj+sXr7TdHHiBHxWHV/1945KPQD4MKcsC5Y/aJp1DxrQt3qHq2S1EC0imMYvIsqNwcQzun+waI/Xz8GFOjnZGi1SrZYqA7m1QwMcjphqzLkPK1U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739720525; c=relaxed/simple;
-	bh=eSzKgV/qkiFhJkkCzIQX0Z+jgrhpsUclZiqEZFUe9z8=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=EFQJUbTnxvYto+4BOb/tXtV9PUBj9VyNfNCQxGKIklex8K82YjSoI6uZZ+j9Zuzlg51sMkAEfBzLXug98xAEAoIQIZLBf2JVZ/e6Bree1JDMB8PKZp/709boCP1YxQb6dTLXYvQK0/RfwhuUJTpCOiNz95gxtOuGLnCHjagLc80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 5DB2792009C; Sun, 16 Feb 2025 16:41:55 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 574B892009B;
-	Sun, 16 Feb 2025 15:41:55 +0000 (GMT)
-Date: Sun, 16 Feb 2025 15:41:55 +0000 (GMT)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-cc: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>, 
-    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-    linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-    linux-mips@vger.kernel.org, llvm@lists.linux.dev
-Subject: Re: [PATCH] tools/nolibc: add support for N64 and N32 ABIs
-In-Reply-To: <20250212-nolibc-mips-n32-v1-1-6892e58d1321@weissschuh.net>
-Message-ID: <alpine.DEB.2.21.2502161523290.65342@angie.orcam.me.uk>
-References: <20250212-nolibc-mips-n32-v1-1-6892e58d1321@weissschuh.net>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1739732309; c=relaxed/simple;
+	bh=gDto6+ipu9Aw3edQ/Qi8AtN/wE+7raJ24pYo70xP7Go=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=HhycuZsvl7nRTa8W7zOB0IGtJPZIfjZ4zSjnhLfVStP67e5pjYBYsDqoRqmX8W1Lom6qDnMrHYeg+I3CBEIUvLakFYrHY9wyJU95JhhjmdcPQsboQTP+ts+0nGOdg4NzM6baoh9ycHtp3wk92jAX2+LXOQinD4V5eC5mfe+l2h4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CsNYw0q2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4825CC4CEDD;
+	Sun, 16 Feb 2025 18:58:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739732309;
+	bh=gDto6+ipu9Aw3edQ/Qi8AtN/wE+7raJ24pYo70xP7Go=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=CsNYw0q2iiodv404+sTCKtpu8/V5MYIsSgcnC8uJzKTVGbvG2LYiIEdx+QKh9N6LP
+	 JDcLiLH+D8nREK7L7glRVGXYE0tYIpOqyPVPS88KoeFmD40EO7mcap2+mmfa9rN32s
+	 YtvzhtuoSeY9fpdUxT3TWrBe0NXfIsez1vnNe3fJn/shPXIqVmz41LrVTiuuU27SGK
+	 Cl32HHtswxExh1BZBlTIZq643l6IgSX1JEdfSUVZCwRxXMgI3/D78JK5pgr8M899we
+	 F5zerCErR1I6SDj4j9HF9TGxxY/Im0QdKJigsYJ3sDQo/xiXklYiDryvuErzPdKrAN
+	 LRbhq5aOxJ1Zg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70C42380AA7F;
+	Sun, 16 Feb 2025 18:59:00 +0000 (UTC)
+Subject: Re: [GIT PULL] MIPS fixes for v6.14
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <Z7GyFB5hAays_aII@alpha.franken.de>
+References: <Z7GyFB5hAays_aII@alpha.franken.de>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <Z7GyFB5hAays_aII@alpha.franken.de>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.14_1
+X-PR-Tracked-Commit-Id: 733a90561ad0a4a74035d2d627098da85d43b592
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: b878a1c072a4912e14a38e90a8b1883d4c513d9d
+Message-Id: <173973233909.2551255.3314508367701846025.pr-tracker-bot@kernel.org>
+Date: Sun, 16 Feb 2025 18:58:59 +0000
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: torvalds@linux-foundation.org, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
 
-On Wed, 12 Feb 2025, Thomas Weißschuh wrote:
+The pull request you sent on Sun, 16 Feb 2025 10:38:28 +0100:
 
-> diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
-> index 753a8ed2cf695f0b5eac4b5e4d317fdb383ebf93..638520a3427a985fdbd5f5a49b55853bbadeee75 100644
-> --- a/tools/include/nolibc/arch-mips.h
-> +++ b/tools/include/nolibc/arch-mips.h
-> @@ -190,13 +257,33 @@ void __attribute__((weak, noreturn)) __nolibc_entrypoint __no_stack_protector __
->  		"1:\n"
->  		".cpload $ra\n"
->  		"move  $a0, $sp\n"       /* save stack pointer to $a0, as arg1 of _start_c */
-> +
-> +#if defined(_ABIO32)
->  		"addiu $sp, $sp, -4\n"   /* space for .cprestore to store $gp              */
->  		".cprestore 0\n"
->  		"li    $t0, -8\n"
->  		"and   $sp, $sp, $t0\n"  /* $sp must be 8-byte aligned                     */
->  		"addiu $sp, $sp, -16\n"  /* the callee expects to save a0..a3 there        */
-> -		"lui $t9, %hi(_start_c)\n" /* ABI requires current function address in $t9 */
-> +#else
-> +		"daddiu $sp, $sp, -8\n"  /* space for .cprestore to store $gp              */
-> +		".cpsetup $ra, 0, 1b\n"
-> +		"li    $t0, -16\n"
-> +		"and   $sp, $sp, $t0\n"  /* $sp must be 16-byte aligned                    */
-> +#endif
+> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.14_1
 
- Why is this code breaking stack alignment just to have to fix it up two 
-instructions down the line?  Or is it that the incoming $sp is not aligned 
-in the first place (in which case we're having a deeper problem).
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/b878a1c072a4912e14a38e90a8b1883d4c513d9d
 
-> +
-> +		/* ABI requires current function address in $t9 */
-> +#if defined(_ABIO32) || defined(_ABIN32)
-> +		"lui $t9, %hi(_start_c)\n"
->  		"ori $t9, %lo(_start_c)\n"
-> +#else
-> +		"lui  $t9, %highest(_start_c)\n"
-> +		"ori  $t9, %higher(_start_c)\n"
-> +		"dsll $t9, 0x10\n"
-> +		"ori  $t9, %hi(_start_c)\n"
-> +		"dsll $t9, 0x10\n"
-> +		"ori  $t9, %lo(_start_c)\n"
+Thank you!
 
- This could be optimised using a temporary (e.g. $at, but I guess any will 
-do as I gather we don't have any ABI abnormalities here).
-
-> +#endif
-> +
->  		"jalr $t9\n"             /* transfer to c runtime
-> */
->  		" nop\n"                 /* delayed slot
-
- On an unrelated matter JALR above ought to be JAL (or otherwise there's 
-no point in using the .cprestore pseudo-op).  And I fail to see why this 
-code has to be "noreorder" (except for the .cpload piece, of course), it's 
-just asking for troubles.
-
-  Maciej
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
