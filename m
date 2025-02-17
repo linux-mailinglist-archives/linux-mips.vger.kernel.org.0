@@ -1,79 +1,158 @@
-Return-Path: <linux-mips+bounces-7789-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7790-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51875A37707
-	for <lists+linux-mips@lfdr.de>; Sun, 16 Feb 2025 19:59:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B118A37C67
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Feb 2025 08:40:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 58AF216A2A1
-	for <lists+linux-mips@lfdr.de>; Sun, 16 Feb 2025 18:58:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A3F303AF3DA
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Feb 2025 07:40:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D5BC1A3146;
-	Sun, 16 Feb 2025 18:58:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6C9219048F;
+	Mon, 17 Feb 2025 07:40:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CsNYw0q2"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="vhUT1NOd";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Vi+VlE+N"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67C2C1A3142;
-	Sun, 16 Feb 2025 18:58:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2834A17B425;
+	Mon, 17 Feb 2025 07:40:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739732309; cv=none; b=j61fqvYaNiNeQ0o1/3RrSJBc1VF2xPiT7QCR2Kkn287+k+LQV3Wj0nJY9vWoKj+sXr7TdHHiBHxWHV/1945KPQD4MKcsC5Y/aJp1DxrQt3qHq2S1EC0imMYvIsqNwcQzun+waI/Xz8GFOjnZGi1SrZYqA7m1QwMcjphqzLkPK1U=
+	t=1739778049; cv=none; b=Ys+v4wKRwOj21HThS2wzUqmj4IGp13sBecFtcFRLkUEsbMvKkhsAt/plC1UwC9nqrzJJ3Yo2/wbryGYfFLlcuQSJuatqeYhM/zg6AdmpUoUtXj5sOdH+hEtXh7C/LhD2uJAfLmIScfF25dPVFDEKfd3QAUVINT4NhZe4dPqE54I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739732309; c=relaxed/simple;
-	bh=gDto6+ipu9Aw3edQ/Qi8AtN/wE+7raJ24pYo70xP7Go=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=HhycuZsvl7nRTa8W7zOB0IGtJPZIfjZ4zSjnhLfVStP67e5pjYBYsDqoRqmX8W1Lom6qDnMrHYeg+I3CBEIUvLakFYrHY9wyJU95JhhjmdcPQsboQTP+ts+0nGOdg4NzM6baoh9ycHtp3wk92jAX2+LXOQinD4V5eC5mfe+l2h4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CsNYw0q2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4825CC4CEDD;
-	Sun, 16 Feb 2025 18:58:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739732309;
-	bh=gDto6+ipu9Aw3edQ/Qi8AtN/wE+7raJ24pYo70xP7Go=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=CsNYw0q2iiodv404+sTCKtpu8/V5MYIsSgcnC8uJzKTVGbvG2LYiIEdx+QKh9N6LP
-	 JDcLiLH+D8nREK7L7glRVGXYE0tYIpOqyPVPS88KoeFmD40EO7mcap2+mmfa9rN32s
-	 YtvzhtuoSeY9fpdUxT3TWrBe0NXfIsez1vnNe3fJn/shPXIqVmz41LrVTiuuU27SGK
-	 Cl32HHtswxExh1BZBlTIZq643l6IgSX1JEdfSUVZCwRxXMgI3/D78JK5pgr8M899we
-	 F5zerCErR1I6SDj4j9HF9TGxxY/Im0QdKJigsYJ3sDQo/xiXklYiDryvuErzPdKrAN
-	 LRbhq5aOxJ1Zg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70C42380AA7F;
-	Sun, 16 Feb 2025 18:59:00 +0000 (UTC)
-Subject: Re: [GIT PULL] MIPS fixes for v6.14
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <Z7GyFB5hAays_aII@alpha.franken.de>
-References: <Z7GyFB5hAays_aII@alpha.franken.de>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <Z7GyFB5hAays_aII@alpha.franken.de>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.14_1
-X-PR-Tracked-Commit-Id: 733a90561ad0a4a74035d2d627098da85d43b592
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: b878a1c072a4912e14a38e90a8b1883d4c513d9d
-Message-Id: <173973233909.2551255.3314508367701846025.pr-tracker-bot@kernel.org>
-Date: Sun, 16 Feb 2025 18:58:59 +0000
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: torvalds@linux-foundation.org, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+	s=arc-20240116; t=1739778049; c=relaxed/simple;
+	bh=GlhY5963uKLghWT9UMDfwza9mzMJBnGIVIpZq0UF6Ao=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=p9MQrsyOEFrHCASX4SAV+IrINnidMOWhJFdJymJUNJzi4SJ5bCWbnrdr21VOqgLVjaQC3aN3gI3J6sXNoynF+kP0COnYShrTPqn1HVYW+BMBoP/nWjqZYbVXwGqk1HNnDu35BkaxvgBnoEEBETGQOePd1RCUO/Pf2w+ZxXemIGY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=vhUT1NOd; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Vi+VlE+N; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1739778046;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=a7pcXwEMvphmTY2pbZCwuEUxQvypKwXeKfbqt+7td9Y=;
+	b=vhUT1NOdxZ56WfhZi+IDFBppyU46xpNwku0m3zwtuoQnCyDRmniSZTbyaCSxiMZZnBHLGn
+	drNEinoecXW3DGqsVw8V1ZbNUqXgvuCsamn683Fr2vysESuyIYvR4PsD+CHvWwK4LgfrX4
+	yYJVIA1FeJRYkLf7vlbMJULZgPU9nom/yE5y6gQdVQN9+pPUBbpl52+bBHo9MuAIqWB3u6
+	IxQm3ukRCe+b7WKy2Kn4MImvml9LQL4iwYMwpXdB7yl0lrMFyeYYYwPfJZSC0N6ydFWzG6
+	RtAn3ihpv5tN8Sigm8pabD3ecwj7TZp6EJMmR6BYju26Frh4h8CpYkSgC/S49g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1739778046;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=a7pcXwEMvphmTY2pbZCwuEUxQvypKwXeKfbqt+7td9Y=;
+	b=Vi+VlE+NRBF+Upfa1bESGClJsp8XT0SNEuWMyW2zocCJxv8cV+eM3qyUhyGJgZDz6ctMTV
+	XQPTUDBzSqObxJBg==
+Date: Mon, 17 Feb 2025 08:40:44 +0100
+Subject: [PATCH] MIPS: Don't use %pK through printk
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250217-restricted-pointers-mips-v1-1-694313640c98@linutronix.de>
+X-B4-Tracking: v=1; b=H4sIAPvnsmcC/x3MQQqEMAxA0atI1ga0UurMVcRFaaNmYS1JEUG8u
+ 8XlW/x/g5IwKfybG4ROVj5SRd82EDafVkKO1WA6YzvTOxTSIhwKRcwHp0KiuHNWNMFZ+/NjHJy
+ Hmmehha9vPc3P8wJLq3RuagAAAA==
+X-Change-ID: 20250217-restricted-pointers-mips-2c7559a8d37a
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Huacai Chen <chenhuacai@kernel.org>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ kvm@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1739778046; l=3032;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=GlhY5963uKLghWT9UMDfwza9mzMJBnGIVIpZq0UF6Ao=;
+ b=O3Mza39w/Ezu6XV3CmC/cgeL/AqgjxqBCKbclm7AlS1dqWFrWoZEGTqzuYm9kIxg0unGHpuMZ
+ lnQyFhRL8rDD1HTqDCeqqfN675g4cWgnKULFVYe7Swdj+mXveF6cX8Q
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-The pull request you sent on Sun, 16 Feb 2025 10:38:28 +0100:
+Restricted pointers ("%pK") are not meant to be used through printk().
+It can unintentionally expose security sensitive, raw pointer values.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.14_1
+Use regular pointer formatting instead.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/b878a1c072a4912e14a38e90a8b1883d4c513d9d
+Link: https://lore.kernel.org/lkml/20250113171731-dc10e3c1-da64-4af0-b767-7c7070468023@linutronix.de/
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+ arch/mips/kernel/relocate.c | 10 +++++-----
+ arch/mips/kvm/mips.c        |  2 +-
+ arch/mips/mm/physaddr.c     |  2 +-
+ 3 files changed, 7 insertions(+), 7 deletions(-)
 
-Thank you!
+diff --git a/arch/mips/kernel/relocate.c b/arch/mips/kernel/relocate.c
+index cda7983e7c18d421535253a2406a523f6d1166e7..7f1c136ad85062806b90042d6760a2a7a354593d 100644
+--- a/arch/mips/kernel/relocate.c
++++ b/arch/mips/kernel/relocate.c
+@@ -138,7 +138,7 @@ static int __init reloc_handler(u32 type, u32 *loc_orig, u32 *loc_new,
+ 		apply_r_mips_hi16_rel(loc_orig, loc_new, offset);
+ 		break;
+ 	default:
+-		pr_err("Unhandled relocation type %d at 0x%pK\n", type,
++		pr_err("Unhandled relocation type %d at 0x%p\n", type,
+ 		       loc_orig);
+ 		return -ENOEXEC;
+ 	}
+@@ -439,10 +439,10 @@ static void show_kernel_relocation(const char *level)
+ {
+ 	if (__kaslr_offset > 0) {
+ 		printk(level);
+-		pr_cont("Kernel relocated by 0x%pK\n", (void *)__kaslr_offset);
+-		pr_cont(" .text @ 0x%pK\n", _text);
+-		pr_cont(" .data @ 0x%pK\n", _sdata);
+-		pr_cont(" .bss  @ 0x%pK\n", __bss_start);
++		pr_cont("Kernel relocated by 0x%p\n", (void *)__kaslr_offset);
++		pr_cont(" .text @ 0x%p\n", _text);
++		pr_cont(" .data @ 0x%p\n", _sdata);
++		pr_cont(" .bss  @ 0x%p\n", __bss_start);
+ 	}
+ }
+ 
+diff --git a/arch/mips/kvm/mips.c b/arch/mips/kvm/mips.c
+index 60b43ea85c125fe9a204abfd3dd5339708a22ee1..7b0de05d39f261f8ea2067284984fc9332e6a4f2 100644
+--- a/arch/mips/kvm/mips.c
++++ b/arch/mips/kvm/mips.c
+@@ -316,7 +316,7 @@ int kvm_arch_vcpu_create(struct kvm_vcpu *vcpu)
+ 	 * we allocate is out of range, just give up now.
+ 	 */
+ 	if (!cpu_has_ebase_wg && virt_to_phys(gebase) >= 0x20000000) {
+-		kvm_err("CP0_EBase.WG required for guest exception base %pK\n",
++		kvm_err("CP0_EBase.WG required for guest exception base %p\n",
+ 			gebase);
+ 		err = -ENOMEM;
+ 		goto out_free_gebase;
+diff --git a/arch/mips/mm/physaddr.c b/arch/mips/mm/physaddr.c
+index f9b8c85e984334dedd23ff7acc8c39e5e14f040a..a6b1bf82057a1db62eba14eea9cdddb04e29650b 100644
+--- a/arch/mips/mm/physaddr.c
++++ b/arch/mips/mm/physaddr.c
+@@ -30,7 +30,7 @@ static inline bool __debug_virt_addr_valid(unsigned long x)
+ phys_addr_t __virt_to_phys(volatile const void *x)
+ {
+ 	WARN(!__debug_virt_addr_valid((unsigned long)x),
+-	     "virt_to_phys used for non-linear address: %pK (%pS)\n",
++	     "virt_to_phys used for non-linear address: %p (%pS)\n",
+ 	     x, x);
+ 
+ 	return __virt_to_phys_nodebug(x);
 
+---
+base-commit: 0ad2507d5d93f39619fc42372c347d6006b64319
+change-id: 20250217-restricted-pointers-mips-2c7559a8d37a
+
+Best regards,
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+
 
