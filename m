@@ -1,137 +1,206 @@
-Return-Path: <linux-mips+bounces-7804-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7805-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C428CA3897F
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Feb 2025 17:39:23 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADC1CA38B14
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Feb 2025 19:11:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 31EA916A9C6
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Feb 2025 16:38:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 71B88188D5FA
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Feb 2025 18:11:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECC89225760;
-	Mon, 17 Feb 2025 16:37:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 350AC23536C;
+	Mon, 17 Feb 2025 18:11:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TpP6C3zL"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="h9Q9Ldcv"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1356C226547;
-	Mon, 17 Feb 2025 16:37:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E335517DE2D
+	for <linux-mips@vger.kernel.org>; Mon, 17 Feb 2025 18:10:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739810258; cv=none; b=GRs1erigjBGdO1SdbGi3hAdeLJq6Y7+4I4U70X2cGcgUXYsPOSUazfPjxSxvL/R5GKoio3sJPWwCnhFKlbRNMt9y2vfgaJaqFXDoHwnwn7XzHLCzIg0NT8MHPI4pHalrpDpzNi2PaozWE3pQjRhmpHvdUklsYhyBymwrqBceKUs=
+	t=1739815862; cv=none; b=WGDRKxjfCI9qIhRhqR8m3MUBIqjVMoiJNZsb3XLjsPLsSI11Xt1yz5KK4LQmGDs403I4auJw2ssAMr2vliKq0ohSgwTV50UdX0XDJmUVgran3g6D1Xc24wPTi4lmbjBS7sdB8/SLrIoEOYjeK0eoUvFzOPPf1iBC+0EO19UYWVc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739810258; c=relaxed/simple;
-	bh=u6waITdVDCY6g9EHT0QMDOQubhyZX/Ph56utqfGWkrA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BgEd7FiOp0Sm3cGLME8WpBNSqMtEufWJJwI7C00jnfGnSkBQzjPiAqlmV6iIcErSI337mOaKxpgMtD9CzsYLgC515CzNKNgDLXUghELAzi2IU4zhlka6cML99f1T0Svo3l6Zpht1vEH9fdsXVO7YmRnlAyc1vwrCCK3Pv+jZzqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TpP6C3zL; arc=none smtp.client-ip=209.85.221.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-38f3ea6207cso1241590f8f.3;
-        Mon, 17 Feb 2025 08:37:36 -0800 (PST)
+	s=arc-20240116; t=1739815862; c=relaxed/simple;
+	bh=+LVuhMm4/4IRWnEOXMkAQzqq62/PlHDeymErvUeBidk=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=AQWohsOhE9BSjZtVqnQTJlaDHcZaj1gCwTTd7ExwhP7nyzVOe3Dwh/Mw4nSVHii5Y2AtUgWC1WCPGmmAa25La+uH9tT8QBh8oMIW4ULYFYVQmQu1G/VOifKdrHaxriG+90IssMqmpn66ekOFxSNdoBWw+yJhXwRAWzCr+wZLZG4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=h9Q9Ldcv; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-38f286b5281so2158096f8f.1
+        for <linux-mips@vger.kernel.org>; Mon, 17 Feb 2025 10:10:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739810255; x=1740415055; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VcpOOuxQgTIkODYzKhCUSbyWoJK/c0mt1V0DRu+9cfQ=;
-        b=TpP6C3zL40Z9c7wbtwZ0BgCY7UQC5tp0M715oHQ2/3BSD9/jgcIFtZp/uDusy+B8RM
-         /TtnEMXxvDrTO5hLoAwX/39g2tuSg7RwWocmLizu9QRiIkumeaZ04XzG6AW/GciNc9rC
-         hqMeLlRJsQJA1F78xXK73KQqkUHMJWt+3PGv7RhgHcvW67X4GJvvkWalOxiVhmay4jtt
-         1xMKhjkXcJaC+kfX/7u6FzFqeb3fX1kg4beqRlAUKVrjFd8YGWwZ1UYClKMwZpUiM8xA
-         kJGoaBRoJdJDvP9H+McbKaxb6bj4AkfUsv/qyOyzVNpSfA//gWQIvWDa1VifeWALGKiE
-         iKRQ==
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1739815858; x=1740420658; darn=vger.kernel.org;
+        h=mime-version:message-id:date:user-agent:references:in-reply-to
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=WYdQMpmWfwfRPZrNOq/JI6U8Fyr73ByGTD+9Af1nU7I=;
+        b=h9Q9LdcvKJavN/GMUzW7WoMBUj9hTQJkk6CNQ25jgzMyqIbEpobg08+aZqKeuJGovz
+         ci0Rf3Epyn59Xo0hYLEbCMF5drcL/2u+Misdyw3PIIRNMkqSacU/YWvag6kJqfo25RGA
+         sOZnQ7QjLyKGg67A3GqD/tYAjCRiGA+2Mb7QpUCN1sMBNT75BlR1i5Vo0GowlhkoCOpJ
+         LpvymOZwvGsxWaMsn9HwRatf63LNma+EjSfTKmcJ2P6o6zp0VjftAkLR3H9YbgXxOUnz
+         DgdDq2+WdFSs5lUDhIrGmolWKJjxTm1DkGn0IMeBaWcVXaL0LsqqAXNjvqgQRu4+HZEX
+         FUag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739810255; x=1740415055;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VcpOOuxQgTIkODYzKhCUSbyWoJK/c0mt1V0DRu+9cfQ=;
-        b=A1LiEYK8hUwObgGRhHrumFJLGnjBjWf3jI7baLLJISD82ZRUrZRx29a43FsIaVCMK6
-         nQfhh9A/mlc6FEpOGSfkxVF75X7eUFzbtQa2IXMDFcS3glSt0zdaLxfXPHCwYYZb3xkV
-         6PGo+cRcYwnFmWqQedbtRz6k11EjBnpciIcm0Bpgl3fDwUn2ldnnT5MvLqNcJaKzd2u8
-         aAIyBag4ISmNjvb57tdjL02YVPBK19mA+Mawn0E7X2JrlOKtgbmGIGWUGN8LUs9H4smC
-         OU4yhAylSDqWodwhstH7CKZGgIRwLgecDO9JNKIMH57H0dBdLKS5iLeesb+XY3jo+Q0x
-         sZ+g==
-X-Forwarded-Encrypted: i=1; AJvYcCUJiuP4dAXBx8qH5jDNsTsieHQ6HyLomNevVgXz3G6TlN50uJNViNEU7H5RjuAFjBbGAHik3F1+tXe4@vger.kernel.org, AJvYcCUiidFw8Wzq0sv42P2aGhRafYPGEEPEnvtYdq3Yw96hFKE77hnNZOY2254Nqey7ukK9zo1oDqS2yHLWLGEg@vger.kernel.org, AJvYcCVJM4iKdxXB2n58tNkiL9K1ugLeb3rjpfsy/dwyC7uBZ+ByAY7DJNGC+pwf2wxZKaQ6JzhegpaDoKY=@vger.kernel.org, AJvYcCX05ntAfarKdAHldLT/6pcpPmlGxCfitBL1LVTDn952qHf8KfXrUxYUUgqYi1/W5cTBCbt3EZSi5CCt@vger.kernel.org, AJvYcCXwYp8prhNTSzuqspm6QDQE2j3/8NtmexyOkZGTU2ByoeLuQknoCmEyxn99u/Sh8Ee9aD7EllueAl+/hg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkXGHrMnjXEDoctuV3cZW0roRyTkld0Iu6WDuSLedP4pHAXzaH
-	KA4mI7LnbUAARyG4xQREtZroqdSP/7HwuDug88GeHzGnz6B/Vn/DvEblxA==
-X-Gm-Gg: ASbGnct4MHVCA+M5ECfETK6JXxzmIDDS9rwo/Ty3FeSfg3ryWeThyo0Auw7WVrcbSEX
-	tQqA09QTs1FBobLeOFCU1CZXVkGddXSRcaVPJV4OTpB6oPY88ASf4mt4MSEPw+Cfb+Md/Yhyr8C
-	Q+KretuIiWfypdZLkUjREfGu51FMbrhCI4aoa4m0MspKQHU70a0YJKt3Av45EUJc3J5TVPOmdFl
-	+aogFXcwVl2KtnXwdF1pQE1WqOHeOqwHxbqxxAUfCLvGoU99k3pq7KcEqI2pQJJlEKixiIItfwY
-	ip8ZyvcToA1RjA9De4lTE7fhx+ZHxwKpsnfiBBG8gshK+q23VmB5v6yBmkiwkbUkZ5+jUam3sr7
-	Oz/vwV60=
-X-Google-Smtp-Source: AGHT+IHfk4fhCYlLR37pJBvXWtv75DWNoeEDbdc68Ccdk3uRnLzXu0R2uoxz3Sfrv9nYBkbSbSFitQ==
-X-Received: by 2002:a05:6000:4007:b0:38f:2b59:b550 with SMTP id ffacd0b85a97d-38f34167df2mr8240262f8f.50.1739810255313;
-        Mon, 17 Feb 2025 08:37:35 -0800 (PST)
-Received: from localhost (p200300e41f22a600f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f22:a600:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-38f2591570esm12881221f8f.59.2025.02.17.08.37.33
+        d=1e100.net; s=20230601; t=1739815858; x=1740420658;
+        h=mime-version:message-id:date:user-agent:references:in-reply-to
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WYdQMpmWfwfRPZrNOq/JI6U8Fyr73ByGTD+9Af1nU7I=;
+        b=o81uQMlnxL0w4SmIyA4cWsZYHI1Qnsy43AWMUxDwn0ZN4oR3eHXXs/U6bUhKcMZD35
+         ssjjHkvSdCAlp/TusMdnTM8xaN7pRRlIawLRK8FFu5JSEGQ8Tgdf4745GEPJB6IogJ5s
+         On6LVh4ecAt0ovc+Fe/rQQi/P8KHrUwUSClpfu7l1p+fu0RIXNVMHM7gFk0L4jx0h2C8
+         s+IXgROKURAYLhE4HGd07Ve0jzvxEhtnnGr6O6XFjk7sCZBLFRZHZhrTbD8iPOHb4KMK
+         G4L4d03HwoKg4arykhS1gvpGFwiBT3iLyVTWib9WeNOPb2fizjoGo/YX5YV3qYFQHj+n
+         f5eQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVl+uJb30kUN+KAV2wHc0fVROc5jp3UULTBI4Y3V1I/vWh77b/ZhEMxXEJN/DtVu92OBoc7CJFH14b4@vger.kernel.org
+X-Gm-Message-State: AOJu0YzE5Bx3Zv6wirIrL3RvE3Ydj18hlNIhwDyKf2ZTgAiR3DvVS6B8
+	oQk0DPvsRrXRaB5xpbO+cqxrb6M6Puw7ykwQrDdlGUQ8HIEl4u8SSs9O6ESxrCU=
+X-Gm-Gg: ASbGncvk4pkhvBMaxnQfpxmMXfvUvS/w0tXe+zrQGU7g+p2d1koLFc4k+p4a9ojdP8w
+	fXJr8FdWAc7ARtawOoXYXQqX1GlMqrhmEfhU2yLsHV0iMD0yRFfxtDqE++ClXGRTkLWLRm3NdN1
+	mb2BWSdqOVChNIzcw2jOBqCe3Y+pb/cCyWuGJFlDoZzGY1H1Chxerxp5GsAtfaFEQKXdzWOX9KP
+	kl8DdkPHs5i6H/PVJxVsGwc9yb10uYLaYM8vCF1HEXirMB8g15J+KAxhr4Tl1Ws/7MfgcE3YFn4
+	F64884lGlIDIbw==
+X-Google-Smtp-Source: AGHT+IFTAKZ9BquOVY29sEYMChLDnuqHcqVlSqR4NiZlMjD4bUMe9qRI5EU9r/6iyIf02WCX+Y2KzA==
+X-Received: by 2002:a5d:4cca:0:b0:38a:2b34:e13e with SMTP id ffacd0b85a97d-38f33f28c01mr7768806f8f.18.1739815856721;
+        Mon, 17 Feb 2025 10:10:56 -0800 (PST)
+Received: from localhost ([2a01:e0a:3c5:5fb1:a529:8667:e9bd:7f7])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-4395afaf052sm155075695e9.13.2025.02.17.10.10.54
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Feb 2025 08:37:34 -0800 (PST)
-From: Thierry Reding <thierry.reding@gmail.com>
+        Mon, 17 Feb 2025 10:10:55 -0800 (PST)
+From: Jerome Brunet <jbrunet@baylibre.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: x86@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org,
-	linux-mips@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-sh@vger.kernel.org,
-	linux-pci@vger.kernel.org,
-	linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 7/7] soc/tegra: pmc: Derive PMC context from syscore ops
-Date: Mon, 17 Feb 2025 17:37:13 +0100
-Message-ID: <20250217163713.211949-8-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250217163713.211949-1-thierry.reding@gmail.com>
-References: <20250217163713.211949-1-thierry.reding@gmail.com>
+Cc: Dave Ertman <david.m.ertman@intel.com>,  Ira Weiny
+ <ira.weiny@intel.com>,  "Rafael J. Wysocki" <rafael@kernel.org>,  Stephen
+ Boyd <sboyd@kernel.org>,  Arnd Bergmann <arnd@arndb.de>,  Danilo Krummrich
+ <dakr@kernel.org>,  Conor Dooley <conor.dooley@microchip.com>,  Daire
+ McNamara <daire.mcnamara@microchip.com>,  Philipp Zabel
+ <p.zabel@pengutronix.de>,  Douglas Anderson <dianders@chromium.org>,
+  Andrzej Hajda <andrzej.hajda@intel.com>,  Neil Armstrong
+ <neil.armstrong@linaro.org>,  Robert Foss <rfoss@kernel.org>,  Laurent
+ Pinchart <Laurent.pinchart@ideasonboard.com>,  Jonas Karlman
+ <jonas@kwiboo.se>,  Jernej Skrabec <jernej.skrabec@gmail.com>,  Maarten
+ Lankhorst <maarten.lankhorst@linux.intel.com>,  Maxime Ripard
+ <mripard@kernel.org>,  Thomas Zimmermann <tzimmermann@suse.de>,  David
+ Airlie <airlied@gmail.com>,  Simona Vetter <simona@ffwll.ch>,  Hans de
+ Goede <hdegoede@redhat.com>,  Ilpo =?utf-8?Q?J=C3=A4rvinen?=
+ <ilpo.jarvinen@linux.intel.com>,  Bryan O'Donoghue
+ <bryan.odonoghue@linaro.org>,  Vladimir Kondratiev
+ <vladimir.kondratiev@mobileye.com>,  Gregory CLEMENT
+ <gregory.clement@bootlin.com>,  =?utf-8?Q?Th=C3=A9o?= Lebrun
+ <theo.lebrun@bootlin.com>,
+  Michael Turquette <mturquette@baylibre.com>,  Abel Vesa
+ <abelvesa@kernel.org>,  Peng Fan <peng.fan@nxp.com>,  Shawn Guo
+ <shawnguo@kernel.org>,  Sascha Hauer <s.hauer@pengutronix.de>,
+  Pengutronix Kernel Team <kernel@pengutronix.de>,  Fabio Estevam
+ <festevam@gmail.com>,  Kevin Hilman <khilman@baylibre.com>,  Martin
+ Blumenstingl <martin.blumenstingl@googlemail.com>,
+  linux-kernel@vger.kernel.org,  linux-riscv@lists.infradead.org,
+  dri-devel@lists.freedesktop.org,  platform-driver-x86@vger.kernel.org,
+  linux-mips@vger.kernel.org,  linux-clk@vger.kernel.org,
+  imx@lists.linux.dev,  linux-arm-kernel@lists.infradead.org,
+  linux-amlogic@lists.infradead.org
+Subject: Re: [PATCH v3 1/7] driver core: auxiliary bus: add device creation
+ helpers
+In-Reply-To: <2025021501-tamer-sank-142a@gregkh> (Greg Kroah-Hartman's message
+	of "Sat, 15 Feb 2025 07:53:12 +0100")
+References: <20250211-aux-device-create-helper-v3-0-7edb50524909@baylibre.com>
+	<20250211-aux-device-create-helper-v3-1-7edb50524909@baylibre.com>
+	<2025021437-washout-stonewall-d13e@gregkh>
+	<1jwmdsxugx.fsf@starbuckisacylon.baylibre.com>
+	<2025021501-tamer-sank-142a@gregkh>
+User-Agent: mu4e 1.12.8; emacs 29.4
+Date: Mon, 17 Feb 2025 19:10:54 +0100
+Message-ID: <1jikp8xx01.fsf@starbuckisacylon.baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-From: Thierry Reding <treding@nvidia.com>
+On Sat 15 Feb 2025 at 07:53, Greg Kroah-Hartman <gregkh@linuxfoundation.org> wrote:
 
-Rather than relying on a global variable, make use of the fact that the
-syscore ops are embedded in the PMC context and can be obtained via
-container_of().
+[...]
 
-Signed-off-by: Thierry Reding <treding@nvidia.com>
----
- drivers/soc/tegra/pmc.c | 3 +++
- 1 file changed, 3 insertions(+)
+>> 
+>> >
+>> >> +							int id)
+>> >> +{
+>> >> +	struct auxiliary_device *auxdev;
+>> >> +	int ret;
+>> >> +
+>> >> +	auxdev = kzalloc(sizeof(*auxdev), GFP_KERNEL);
+>> >> +	if (!auxdev)
+>> >> +		return ERR_PTR(-ENOMEM);
+>> >
+>> > Ick, who cares what the error value really is?  Why not just do NULL or
+>> > a valid pointer?  That makes the caller much simpler to handle, right?
+>> >
+>> 
+>> Sure why not
 
-diff --git a/drivers/soc/tegra/pmc.c b/drivers/soc/tegra/pmc.c
-index 6a3923e1c792..ea26c2651497 100644
---- a/drivers/soc/tegra/pmc.c
-+++ b/drivers/soc/tegra/pmc.c
-@@ -3143,6 +3143,7 @@ static void tegra186_pmc_process_wake_events(struct tegra_pmc *pmc, unsigned int
- 
- static void tegra186_pmc_wake_syscore_resume(struct syscore_ops *ops)
- {
-+	struct tegra_pmc *pmc = container_of(ops, struct tegra_pmc, syscore);
- 	u32 status, mask;
- 	unsigned int i;
- 
-@@ -3156,6 +3157,8 @@ static void tegra186_pmc_wake_syscore_resume(struct syscore_ops *ops)
- 
- static int tegra186_pmc_wake_syscore_suspend(struct syscore_ops *ops)
- {
-+	struct tegra_pmc *pmc = container_of(ops, struct tegra_pmc, syscore);
-+
- 	wke_read_sw_wake_status(pmc);
- 
- 	/* flip the wakeup trigger for dual-edge triggered pads
+I have tried the 'NULL or valid' approach. In the consumers,
+which mostly return an integer from their various init function, I got
+this weird to come up with one from NULL. EINVAL, ENOMEM, etc ... can't
+really pick one.
+
+It is actually easier to pass something along.
+
+>> 
+>> >> +
+>> >> +	auxdev->id = id;
+>> >> +	auxdev->name = devname;
+>> >> +	auxdev->dev.parent = dev;
+>> >> +	auxdev->dev.platform_data = platform_data;
+>> >> +	auxdev->dev.release = auxiliary_device_release;
+>> >> +	device_set_of_node_from_dev(&auxdev->dev, dev);
+>> >> +
+>> >> +	ret = auxiliary_device_init(auxdev);
+>> >
+>> > Only way this will fail is if you forgot to set parent or a valid name.
+>> > So why not check for devname being non-NULL above this?
+>> 
+>> If auxiliary_device_init() ever changes it would be easy to forget to
+>> update that and lead to something nasty to debug, don't you think ?
+>
+> Yes, this is being more defensive, I take back my objection, thanks.
+>
+>> >> +	if (ret) {
+>> >> +		kfree(auxdev);
+>> >> +		return ERR_PTR(ret);
+>> >> +	}
+>> >> +
+>> >> +	ret = __auxiliary_device_add(auxdev, modname);
+>> >> +	if (ret) {
+>> >> +		/*
+>> >> +		 * NOTE: It may look odd but auxdev should not be freed
+>> >> +		 * here. auxiliary_device_uninit() calls device_put()
+>> >> +		 * which call the device release function, freeing auxdev.
+>> >> +		 */
+>> >> +		auxiliary_device_uninit(auxdev);
+>> >
+>> > Yes it is odd, are you SURE you should be calling device_del() on the
+>> > device if this fails?  auxiliary_device_uninit(), makes sense so why not
+>> > just call that here?
+>> 
+>> I'm confused ... I am call auxiliary_device_uninit() here. What do you
+>> mean ? 
+>
+> Oh wow, I got this wrong, sorry, I was thinking you were calling
+> auxiliary_device_destroy().  Nevermind, ugh, it was a long day...
+>
+
+No worries
+
+> thanks,
+>
+> greg k-h
+
 -- 
-2.48.1
-
+Jerome
 
