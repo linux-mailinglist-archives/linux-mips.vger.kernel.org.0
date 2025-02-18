@@ -1,119 +1,166 @@
-Return-Path: <linux-mips+bounces-7824-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7825-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4482A39CAD
-	for <lists+linux-mips@lfdr.de>; Tue, 18 Feb 2025 14:01:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F2FBA39DFE
+	for <lists+linux-mips@lfdr.de>; Tue, 18 Feb 2025 14:54:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B7A63B0A11
-	for <lists+linux-mips@lfdr.de>; Tue, 18 Feb 2025 13:01:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5FBF173019
+	for <lists+linux-mips@lfdr.de>; Tue, 18 Feb 2025 13:51:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B1CB25C6FF;
-	Tue, 18 Feb 2025 13:01:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="VQzKTkTZ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CA9B2417E6;
+	Tue, 18 Feb 2025 13:51:04 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpbgau2.qq.com (smtpbgau2.qq.com [54.206.34.216])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 682BA2475E3;
-	Tue, 18 Feb 2025 13:01:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.34.216
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72BB3238D42;
+	Tue, 18 Feb 2025 13:51:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739883684; cv=none; b=hwNmSnPS/YnLadeRqcMcv1JrRaXPH7xwq0tZpckq15HJslVkSW1WD6ElGKPJvXLEjlPSdlKMZvyJSmO1k8KGQ7SBvRboayRPiNm2dKpHcFYfFN80XRlrUc7i8aFF82jv0dMbwZ5yxb7LzjysYRM5GuXuAC3md2sZrFNQJWWEF/s=
+	t=1739886664; cv=none; b=ht93FRXFRPxAmKEr99PPHW4SL2hz7zRD07OdB5DhZlVSMAWeRZr6DdDw2/iNgt/CeEqqDLOECyX5ZVIRjKHwb/kYXoN8PyYfOZ5fR1wmwpSCabndZdwnxfcDTgUGYzKrkfXYjgEMoDSrH86RprowOrtZUw5RZ7+k0ONtsvYbGkk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739883684; c=relaxed/simple;
-	bh=REMDhOVh7pJ5KFuQlenUTEO944Cb9VC/25T5owjMRlw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=bTMFNwJc34yV1TD7sUlaqkvA9oG9h8MPhi+Pu+IagFlBMi5cIGY6ZZVcSBG3YDh3Hx56QiVK6MeyKDCVi3RZleU/Od6XSviMAJKKLfGV1wTO+xw7/hi3haxP75WXaFjDHgFNusW7W/B9BkyfGtWsreRtprIMSw7aDtIVIpu7FTA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=VQzKTkTZ; arc=none smtp.client-ip=54.206.34.216
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1739883638;
-	bh=vu9AhJ+sH4SiA9VYYHMJNNq3mIbaKW1m2kie1eFfosk=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=VQzKTkTZtAF89B1DWJjhgmqKu+3UVYMKg8dJLKnoFvxxwn+jUflmN5kPSW6Du83Nk
-	 ZNCnBjj06tV91TrNnRsO2bQktndPzdCxJ2gd8QVzAmQPcaPuJpHloC2F/7PpOERbxe
-	 6YYrOYvbZN4HAO/s5hVBZczx0PDZBtLpgqaMWz84=
-X-QQ-mid: bizesmtpip4t1739883626tcxbnq6
-X-QQ-Originating-IP: kYssLISZAcBG86zvva6DvONeMTAgztYYkGvTh2hosiU=
-Received: from localhost.localdomain ( [localhost])
-	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 18 Feb 2025 21:00:24 +0800 (CST)
-X-QQ-SSF: 0002000000000000000000000000000
-X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 14385670806022170288
-From: WangYuli <wangyuli@uniontech.com>
-To: wangyuli@uniontech.com
-Cc: chenlinxuan@uniontech.com,
-	guanwentao@uniontech.com,
-	linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	macro@orcam.me.uk,
-	niecheng1@uniontech.com,
-	tsbogend@alpha.franken.de,
-	zhanjun@uniontech.com,
-	geert@linux-m68k.org,
-	herbert@gondor.apana.org.au,
-	ebiggers@google.com,
-	ardb@kernel.org
-Subject: [PATCH 7/7] MIPS: decstation_64_defconfig: Compile the kernel with warnings as errors
-Date: Tue, 18 Feb 2025 21:00:15 +0800
-Message-ID: <5CD9CFC46F6AC7FE+20250218130015.668651-2-wangyuli@uniontech.com>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <487CE8AA937621E2+20250218125101.663980-1-wangyuli@uniontech.com>
-References: <487CE8AA937621E2+20250218125101.663980-1-wangyuli@uniontech.com>
+	s=arc-20240116; t=1739886664; c=relaxed/simple;
+	bh=Svyq+hoIa69MUfHkJrjLQz9GxkX+VevwbxKnKao3l+g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qEBtyftNLzsAbNSeCYlAzWqpLSt0CZTKReKDrI1eabkjn7DdDhjFJVzD7tioPOsp10aJq6sm5CqNa9lXkyx/NN5+7MY6+8ioY3kAZG/6SjAJqXs3pAcbnPbgzt8tlb8AmYvd1UlcCtBjC7zsO0UFrugjQz5E/vP6ayeIwGWOXt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1tkO01-00054x-00; Tue, 18 Feb 2025 14:50:57 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id AD83BC0135; Tue, 18 Feb 2025 14:50:46 +0100 (CET)
+Date: Tue, 18 Feb 2025 14:50:46 +0100
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: Marco Crivellari <marco.crivellari@suse.com>,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Peter Zijlstra <peterz@infradead.org>,
+	"Maciej W . Rozycki" <macro@orcam.me.uk>
+Subject: Re: [PATCH v2 1/1] MIPS: Fix idle VS timer enqueue
+Message-ID: <Z7SQNhL0FYGkX0Ng@alpha.franken.de>
+References: <20250218090203.43137-1-marco.crivellari@suse.com>
+ <20250218090203.43137-2-marco.crivellari@suse.com>
+ <Z7R2GqWOufd8l6NZ@alpha.franken.de>
+ <CAAhV-H7ygGqCYyQf_tvFrgEBR6uva35auGP9yhxQFqw4mpQBwA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-QQ-SENDSIZE: 520
-Feedback-ID: bizesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
-X-QQ-XMAILINFO: NikuFQrTsu3BJQDMA2+Etm1PHjFA8b62Q2dOGzF7I/DYNyRmYBQ2dLpu
-	hKQ0LpY6WYFbPrzVxcgZIcUceQnVS5IlyavqmVw8pLP4eooQzm/9GoY8jIMycNhF//Wb6ch
-	X2B0pr1SeSKUi9p0ODmu/LpLcJU6sGyemThoaSXjHidnnwYmvG2b0u4tdiMz3paEK5oCEEO
-	boUM36TnGeliw7lwvCEhe7JQWIuG+d+QDrFagSp7HcruHCUu1hYsaKtgqlhJbraC8Tf7n2m
-	Y+rPMkNPvg3KYHmxFaRunWsfd8ZcXtwVMxZmEywCY3rr3cDkXMvwrHe5xzObuKCXJENstz/
-	N+rld3HnYsIv9eFe90KprARbfTkuY62fnkjp8d3g69LlnUErt9LMkUQaMtOIctTm28/cyPu
-	rYOv2BiTNlW7SWcWxxx2epiPcpa/VfkIlvkktm6G76ajly1Znvh/GiXiEHQr2LZXatupFi/
-	h2SaA5QXXnctgfuokqvI/idsEOphtQ1b0kfwFXc7ELY/KIWd1IqJbbH05sjVeyFv3fZi7jw
-	F+CNTIg5jELuMqUhbz50FtpWpnqvHAZ5Fb2UQXyI+IbpbbVeFCRKwAgfspioYtmpwCpIWGi
-	73A1zU4LiEdMOvNTwU35YNYIqfxW79cCizjYkGk5bLQYWSMbL9GL5kZYls+T7tLvWNmuCx5
-	ApePES6NzGcauRXIZ+xX+9inGAf6n0yTJce5khahpPjKZyGTmAaQKMTf9QxVzIFSB0WHx6W
-	iQH1bIHwO+SJk35GMMrIcfC7iw5ajidDBA06GpDViZXNzgtSADvCqPJL1RqJFlQK9uVYw+/
-	MkRQYiMsJFMvyQS19GkcO3kqsKD4i72qM45ITvQHB3TH3Bgs2aaBR+PgqnLbAcoc+GRkyLA
-	XLZQ5mWukHyTIzwN9jxvVBAIcQe0T1mLAO+5ikybOyVgF9SoFSTlX6UXPMq74pN3CMY+hyU
-	nM38aQeE9AjgsQ47FjOnXLkxviTMpwAtNU2IjGseKY8ojZqSyrknjyVsANSP+j9rfL/0mgS
-	Wlkvx4/ZeIslGxu1mJIs7oN0HCmn9tPul/GJGRddIdHUTuiT5unagylYnQXv7ykr1Z1DIs4
-	AdptKaASB6lgpPQ48s67nlL91ZXZxTD8mZV13ajwJfnvwb5qxvhquSOKFiEjuiXJknImn8e
-	XPzH
-X-QQ-XMRINFO: M/715EihBoGSf6IYSX1iLFg=
-X-QQ-RECHKSPAM: 0
+In-Reply-To: <CAAhV-H7ygGqCYyQf_tvFrgEBR6uva35auGP9yhxQFqw4mpQBwA@mail.gmail.com>
 
-All compilation issues under decstation_64_defconfig have been
-resolved, and it is now safe to enable CONFIG_WERROR now.
+On Tue, Feb 18, 2025 at 08:14:43PM +0800, Huacai Chen wrote:
+> Hi, Thomas,
+> 
+> On Tue, Feb 18, 2025 at 7:59 PM Thomas Bogendoerfer
+> <tsbogend@alpha.franken.de> wrote:
+> >
+> > On Tue, Feb 18, 2025 at 10:02:03AM +0100, Marco Crivellari wrote:
+> > > MIPS re-enables interrupts on its idle routine and performs
+> > > a TIF_NEED_RESCHED check afterwards before putting the CPU to sleep.
+> > >
+> > > The IRQs firing between the check and the 'wait' instruction may set the
+> > > TIF_NEED_RESCHED flag. In order to deal with this possible race, IRQs
+> > > interrupting __r4k_wait() rollback their return address to the
+> > > beginning of __r4k_wait() so that TIF_NEED_RESCHED is checked
+> > > again before going back to sleep.
+> > >
+> > > However idle IRQs can also queue timers that may require a tick
+> > > reprogramming through a new generic idle loop iteration but those timers
+> > > would go unnoticed here because __r4k_wait() only checks
+> > > TIF_NEED_RESCHED. It doesn't check for pending timers.
+> > >
+> > > Fix this with fast-forwarding idle IRQs return address to the end of the
+> > > idle routine instead of the beginning, so that the generic idle loop
+> > > handles both TIF_NEED_RESCHED and pending timers.
+> > >
+> > > Signed-off-by: Marco Crivellari <marco.crivellari@suse.com>
+> > > ---
+> > >  arch/mips/kernel/genex.S | 39 +++++++++++++++++++++------------------
+> > >  arch/mips/kernel/idle.c  |  1 -
+> > >  2 files changed, 21 insertions(+), 19 deletions(-)
+> > >
+> > > diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
+> > > index a572ce36a24f..9747b216648f 100644
+> > > --- a/arch/mips/kernel/genex.S
+> > > +++ b/arch/mips/kernel/genex.S
+> > > @@ -104,25 +104,27 @@ handle_vcei:
+> > >
+> > >       __FINIT
+> > >
+> > > -     .align  5       /* 32 byte rollback region */
+> > > +     .align  5
+> > >  LEAF(__r4k_wait)
+> > >       .set    push
+> > >       .set    noreorder
+> > > -     /* start of rollback region */
+> > > -     LONG_L  t0, TI_FLAGS($28)
+> > > -     nop
+> > > -     andi    t0, _TIF_NEED_RESCHED
+> > > -     bnez    t0, 1f
+> > > -      nop
+> > > -     nop
+> > > -     nop
+> > > -#ifdef CONFIG_CPU_MICROMIPS
+> > > -     nop
+> > > -     nop
+> > > -     nop
+> > > -     nop
+> > > -#endif
+> >
+> > My quick search didnn't find the reason for the extra NOPs on MICROMIPS, but
+> > they are here for a purpose. I might still need them...
+> The original code needs #ifdef CONFIG_CPU_MICROMIPS because nop in
+> MICROMIPS is 2 bytes, so need another four nop to align. But _ssnop is
+> always 4 bytes, so we can remove #ifdefs.
 
-Signed-off-by: WangYuli <wangyuli@uniontech.com>
----
- arch/mips/configs/decstation_64_defconfig | 1 +
- 1 file changed, 1 insertion(+)
+ic
 
-diff --git a/arch/mips/configs/decstation_64_defconfig b/arch/mips/configs/decstation_64_defconfig
-index cf8e72164e40..66bf399bbd66 100644
---- a/arch/mips/configs/decstation_64_defconfig
-+++ b/arch/mips/configs/decstation_64_defconfig
-@@ -1,3 +1,4 @@
-+CONFIG_WERROR=y
- CONFIG_SYSVIPC=y
- CONFIG_POSIX_MQUEUE=y
- CONFIG_HIGH_RES_TIMERS=y
+> > > +     _ssnop
+> > > +     _ssnop
+> > > +     _ssnop
+> >
+> > instead of handcoded hazard nops, use __irq_enable_hazard for that
+> No, I don't think so, this region should make sure be 32 bytes on each
+> platform, but __irq_enable_hazard is not consistent, 3 _ssnop is the
+> fallback implementation but available for all MIPS.
+
+you are right for most cases, but there is one case
+
+#elif (defined(CONFIG_CPU_MIPSR1) && !defined(CONFIG_MIPS_ALCHEMY)) || \
+        defined(CONFIG_CPU_BMIPS)
+
+which uses
+
+#define __irq_enable_hazard                                             \
+        ___ssnop;                                                       \
+        ___ssnop;                                                       \
+        ___ssnop;                                                       \
+        ___ehb
+
+if MIPSR1 || BMIPS needs "rollback" handler 3 ssnnop would be wrong as
+irq enable hazard.
+
+> > But I doubt this works, because the wait instruction is not aligned to
+> > a 32 byte boundary, but the code assuemes this, IMHO.
+> Why? After this patch we only use 4 byte instructions.
+
+I've should have looked at the compiled output, sorry for the noise
+
+Still this construct feels rather fragile.
+
+Thomas.
+
 -- 
-2.47.2
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
