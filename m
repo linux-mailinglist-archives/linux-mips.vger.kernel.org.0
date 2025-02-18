@@ -1,59 +1,51 @@
-Return-Path: <linux-mips+bounces-7826-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7827-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63238A3A08C
-	for <lists+linux-mips@lfdr.de>; Tue, 18 Feb 2025 15:56:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37F97A3A10D
+	for <lists+linux-mips@lfdr.de>; Tue, 18 Feb 2025 16:24:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B696D18865BC
-	for <lists+linux-mips@lfdr.de>; Tue, 18 Feb 2025 14:55:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 57D161700F6
+	for <lists+linux-mips@lfdr.de>; Tue, 18 Feb 2025 15:23:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C99E26AA8E;
-	Tue, 18 Feb 2025 14:55:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MD+0QgKC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40E2526B94A;
+	Tue, 18 Feb 2025 15:23:25 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D00AE269B09;
-	Tue, 18 Feb 2025 14:55:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56B2226B961;
+	Tue, 18 Feb 2025 15:23:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739890547; cv=none; b=KqW7WaUuPSxGQeLLcH6+jZVL9vLFtIsJWaJMPO1a6oqWYlP6Acw69BCf0Rumuy6CYDJDAqMgc7YGMzHv+kmRTkRGxwWZ4aJ1BiqcqA/fZH++5lWJMpT0epvcmnV7mmVg/CwwOhYy59goHFpky1uFrvcINR+up24e1lPl6lumYQA=
+	t=1739892205; cv=none; b=NeROiBEqhv1gqvm+HrcB8puYRfR6WAp7xKRxP44znT1nyHXlkuWZWgwiZl8czkpFs82AWAAZQZ+mKprmcrv43/DQhZyaIRVHcUrW93QheeElgeUQ28ZiqIrlEESpGiWzLPnJCiIWyyBV+ohD06hn1UgCNoXjquOhuOS3cP37Gdw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739890547; c=relaxed/simple;
-	bh=/V5shWYAkK7wZryKPoRAfySkogLDBURQNFw7pVIC40M=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=m/IvLFagxxIb5cObyEcaVjVTbvTcoAAa5hOLfzCVkH7sUuXoYC9w/E/ApBKT3s/55N2B9x550XrFhRD2ouxFa0RlU15Svcdwc1Xj8A6bNeU6k4HcrJayjposUdoKEoOh1bsj9TcMZmVgQnQcHz1mW/xROOfDXL40Hnd3HnxZ5yA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MD+0QgKC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8022C4CEE2;
-	Tue, 18 Feb 2025 14:55:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739890547;
-	bh=/V5shWYAkK7wZryKPoRAfySkogLDBURQNFw7pVIC40M=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=MD+0QgKCaE0dGGJzjvw3Nvb68g0GeZDCzKqF3DTO6u3ZQ27KW7U7xt5k/cOAHvm8z
-	 NowOSj7jgQVVJ9vkAQo2vxQ+jFFlexsjmmtnKF8gDgjFjZMMgzTeTBR++0Ptw2rFTY
-	 IUjyLPW8Y0KcXnqxk0Jf0OFDeKIQI2DhKqkOF1eJQlHrG445GDXhOk8KvanQcbkAm1
-	 PsCnr67qTT2fpJAfMnb9DUlFQiZCuQ0mEeTuNINZY5HoG6JmRiF54vblHRl2w99SKH
-	 +C45fmu0vgGkY2a+gnh9FbDoL4QY5IeZluSgN1HfxGPvigDeQ60nrO3XI3iCGjixaJ
-	 q0qEjtE9c/SYQ==
-Date: Tue, 18 Feb 2025 06:55:45 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- lee@kernel.org, andrew+netdev@lunn.ch, davem@davemloft.net,
- edumazet@google.com, pabeni@redhat.com, tsbogend@alpha.franken.de,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-mips@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH net-next 0/5] dt-bindings: net: realtek,rtl9301-switch
-Message-ID: <20250218065545.533bab5f@kernel.org>
-In-Reply-To: <20250214134528.4630b6b2@kernel.org>
-References: <20250209234751.460404-1-chris.packham@alliedtelesis.co.nz>
-	<20250214134528.4630b6b2@kernel.org>
+	s=arc-20240116; t=1739892205; c=relaxed/simple;
+	bh=ZRzHzw60MPpYpyLscH3ZqbXx+Bz1tkZ5fJIKSb7q0SY=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=QO+6My0SKvx2XCiCoAUnivrb96tMwfsWKqOmYt00C7kr2FfMmB7ZrsrXhNRshk+V8OL8VQOupyBHo9natVoIgBHEijUn00rquF05KW7SBAvRCNOXTcoFOXrrjxrui9JXBXTT233vaKxe9Nc6R36FITWPKAxpbnIfOFed0sD8SRY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id 911CE92009C; Tue, 18 Feb 2025 16:23:19 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id 8D5B392009B;
+	Tue, 18 Feb 2025 15:23:19 +0000 (GMT)
+Date: Tue, 18 Feb 2025 15:23:19 +0000 (GMT)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+cc: Huacai Chen <chenhuacai@kernel.org>, 
+    Marco Crivellari <marco.crivellari@suse.com>, linux-mips@vger.kernel.org, 
+    linux-kernel@vger.kernel.org, Frederic Weisbecker <frederic@kernel.org>, 
+    Anna-Maria Behnsen <anna-maria@linutronix.de>, 
+    Thomas Gleixner <tglx@linutronix.de>, 
+    Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v2 1/1] MIPS: Fix idle VS timer enqueue
+In-Reply-To: <Z7SQNhL0FYGkX0Ng@alpha.franken.de>
+Message-ID: <alpine.DEB.2.21.2502181447490.65342@angie.orcam.me.uk>
+References: <20250218090203.43137-1-marco.crivellari@suse.com> <20250218090203.43137-2-marco.crivellari@suse.com> <Z7R2GqWOufd8l6NZ@alpha.franken.de> <CAAhV-H7ygGqCYyQf_tvFrgEBR6uva35auGP9yhxQFqw4mpQBwA@mail.gmail.com> <Z7SQNhL0FYGkX0Ng@alpha.franken.de>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -61,20 +53,111 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
 
-On Fri, 14 Feb 2025 13:45:28 -0800 Jakub Kicinski wrote:
-> On Mon, 10 Feb 2025 12:47:46 +1300 Chris Packham wrote:
-> >   dt-bindings: net: Move realtek,rtl9301-switch to net
-> >   dt-bindings: net: Add switch ports and interrupts to RTL9300
-> >   dt-bindings: net: Add Realtek MDIO controller  
+On Tue, 18 Feb 2025, Thomas Bogendoerfer wrote:
+
+> > > > diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
+> > > > index a572ce36a24f..9747b216648f 100644
+> > > > --- a/arch/mips/kernel/genex.S
+> > > > +++ b/arch/mips/kernel/genex.S
+> > > > @@ -104,25 +104,27 @@ handle_vcei:
+> > > >
+> > > >       __FINIT
+> > > >
+> > > > -     .align  5       /* 32 byte rollback region */
+> > > > +     .align  5
+> > > >  LEAF(__r4k_wait)
+> > > >       .set    push
+> > > >       .set    noreorder
+> > > > -     /* start of rollback region */
+> > > > -     LONG_L  t0, TI_FLAGS($28)
+> > > > -     nop
+> > > > -     andi    t0, _TIF_NEED_RESCHED
+> > > > -     bnez    t0, 1f
+> > > > -      nop
+> > > > -     nop
+> > > > -     nop
+> > > > -#ifdef CONFIG_CPU_MICROMIPS
+> > > > -     nop
+> > > > -     nop
+> > > > -     nop
+> > > > -     nop
+> > > > -#endif
+> > >
+> > > My quick search didnn't find the reason for the extra NOPs on MICROMIPS, but
+> > > they are here for a purpose. I might still need them...
+> > The original code needs #ifdef CONFIG_CPU_MICROMIPS because nop in
+> > MICROMIPS is 2 bytes, so need another four nop to align. But _ssnop is
+> > always 4 bytes, so we can remove #ifdefs.
 > 
-> AFAIU we're waiting for a review from DT maintainers on this one,
-> is this series on your radar?
+> ic
 
-Not sure why we're getting no reviews here.
-Chris, could you repost? Maybe we'll get this back into people's review
-queues that way..
--- 
-pw-bot: defer
+ This was wrong anyway (and I had arguments about it with people back in 
+the time, but it was a hopeless battle).  Instead `.align ...' or an 
+equivalent pseudo-op (`.balign', etc.) should have been used, removing the 
+fragility of this piece or the need for CONFIG_CPU_MICROMIPS conditional.  
+Here and in other places.
+
+> > > > +     _ssnop
+> > > > +     _ssnop
+> > > > +     _ssnop
+> > >
+> > > instead of handcoded hazard nops, use __irq_enable_hazard for that
+> > No, I don't think so, this region should make sure be 32 bytes on each
+> > platform, but __irq_enable_hazard is not consistent, 3 _ssnop is the
+> > fallback implementation but available for all MIPS.
+> 
+> you are right for most cases, but there is one case
+> 
+> #elif (defined(CONFIG_CPU_MIPSR1) && !defined(CONFIG_MIPS_ALCHEMY)) || \
+>         defined(CONFIG_CPU_BMIPS)
+> 
+> which uses
+> 
+> #define __irq_enable_hazard                                             \
+>         ___ssnop;                                                       \
+>         ___ssnop;                                                       \
+>         ___ssnop;                                                       \
+>         ___ehb
+> 
+> if MIPSR1 || BMIPS needs "rollback" handler 3 ssnnop would be wrong as
+> irq enable hazard.
+
+ Indeed, EHB must always be included, because for R2+ CPUs SSNOP doesn't 
+clear the hazard (it never clears, but with earlier CPUs it just stalls 
+the pipeline long enough for the hazard to eventually clear by itself).
+
+> > > But I doubt this works, because the wait instruction is not aligned to
+> > > a 32 byte boundary, but the code assuemes this, IMHO.
+> > Why? After this patch we only use 4 byte instructions.
+> 
+> I've should have looked at the compiled output, sorry for the noise
+
+ Umm, there's the commit description to document justification for such 
+changes made and it's not the reviewer's duty to chase every such detail 
+that has been omitted from a submission.
+
+ FAOD this is a request to include this detail in v3.
+
+> Still this construct feels rather fragile.
+
+ I think `.align', etc. can still be used to ensure enough space has been 
+consumed and if you want to make a code sequence's size check, then a 
+piece such as:
+
+0:
+	nop
+	nop
+	nop
+	nop
+1:
+	.ifne	1b - 0b - 32
+	.error	"code consistency verification failure"
+	.endif
+
+should do even where alignment does not matter.  And you could possibly do 
+smarter stuff with `.rept' if (1b - 0b) turns out below rather than above 
+the threshold required, but I'm leaving it as an exercise for the reader.
+
+  Maciej
 
