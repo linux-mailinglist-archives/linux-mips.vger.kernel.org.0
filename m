@@ -1,126 +1,96 @@
-Return-Path: <linux-mips+bounces-7853-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7854-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB20FA3BD72
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Feb 2025 12:51:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 66809A3BD75
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Feb 2025 12:52:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A7C66168166
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Feb 2025 11:51:33 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 435D7169672
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Feb 2025 11:52:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7826A1DF27F;
-	Wed, 19 Feb 2025 11:51:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AE6B1DED70;
+	Wed, 19 Feb 2025 11:52:07 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C2C0286291;
-	Wed, 19 Feb 2025 11:51:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34E40286291;
+	Wed, 19 Feb 2025 11:52:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739965887; cv=none; b=CuEWf5SWQfZJFbQjOpULphS2Ya4xiVevWOs1IdKj5nRdHihHpP8LSoxdeu1adk7YLpJj5tUGJwUV0NfTp18r8rie4SLRXh9XtOOQiYl3fBkDF8ZmcGLZghrixJh/W0lW5Xqm+QCWhdFOOOeaRL8KoedA/Dbqj8toY5wlCO4R1wI=
+	t=1739965927; cv=none; b=ZEpYzLrgg+3VeoA4kv7aEPUmsmgRYdePi6GNkTuq0YU4G5y1Tpk2PXrBARgAATNfgkCUURh8WOMt8Ys6ya5Z1PeMCwQd2MXzEQ5V2C3145hOU8RVofuEfrtsGsHSHlQjFbBWbLeyntdhjLiL5pNbQVPB8rPXvCMZw6RPhjkf/w4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739965887; c=relaxed/simple;
-	bh=Ita7kNj5CCYwIzI8chMNb3gXZL0/nvoaYRkBK0HTYoE=;
+	s=arc-20240116; t=1739965927; c=relaxed/simple;
+	bh=vrUYosQoceRE+Qxq6ZkfIGNIJkHF30yAY3d6CnC8kNQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PFy1wk4sDQNrXCvsfQEMDK/MU58oYXTNJisEAWJBZAc430O+AJjva0fCKvJ3PmAeKzepqvp3EgHabTDa5T9M0la3EZMsFu0FcaLBKzJS2tp67ttZdRTeLU5O0mCIZim0wGmQdq95b6eV4x2mKQQny1ifmB/ETpdDeS8nsgw4cDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1tkibo-0001XT-00; Wed, 19 Feb 2025 12:51:20 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 49308C024D; Wed, 19 Feb 2025 12:50:54 +0100 (CET)
-Date: Wed, 19 Feb 2025 12:50:54 +0100
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: daniel.lezcano@linaro.org
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Serge Semin <fancer.lancer@gmail.com>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Paul Burton <paulburton@kernel.org>, Chao-ying Fu <cfu@mips.com>,
-	Djordje Todorovic <djordje.todorovic@htecgroup.com>,
-	Aleksandar Rikalo <arikalo@gmail.com>
-Subject: Re: [PATCH v9 1/4] clocksource: mips-gic-timer: Enable counter when
- CPUs start
-Message-ID: <Z7XFnshoa_VS91HN@alpha.franken.de>
-References: <20250129123250.711910-1-arikalo@gmail.com>
- <20250129123250.711910-2-arikalo@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZFrxlAIY0gBz1gM3cLA06NDeHGEydwuvVEQS0EW2OoxaJHnH/ElSi8wNTZ/86i8/c0YURgjm6brWGLROQs9FssohlQ8iNO4hWPT5ziHXqnlAAHfazeXdYdJa0+3wVObRaxpuk2kPA2CA621eemGSLOnF5Jt0s0S0RqMp8Kt7Nnw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C01EC4CED1;
+	Wed, 19 Feb 2025 11:52:03 +0000 (UTC)
+Date: Wed, 19 Feb 2025 11:52:01 +0000
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: Anshuman Khandual <anshuman.khandual@arm.com>
+Cc: linux-mm@kvack.org, Ryan Roberts <ryan.roberts@arm.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-snps-arc@lists.infradead.org, linux-riscv@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, linux-parisc@vger.kernel.org,
+	linux-csky@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-s390@vger.kernel.org, linux-arch@vger.kernel.org,
+	loongarch@lists.linux.dev, linux-sh@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm/ioremap: Pass pgprot_t to ioremap_prot() instead of
+ unsigned long
+Message-ID: <Z7XF4Y3FIbSrSP9u@arm.com>
+References: <20250218101954.415331-1-anshuman.khandual@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250129123250.711910-2-arikalo@gmail.com>
+In-Reply-To: <20250218101954.415331-1-anshuman.khandual@arm.com>
 
-On Wed, Jan 29, 2025 at 01:32:47PM +0100, Aleksandar Rikalo wrote:
-> From: Paul Burton <paulburton@kernel.org>
+On Tue, Feb 18, 2025 at 03:49:54PM +0530, Anshuman Khandual wrote:
+> From: Ryan Roberts <ryan.roberts@arm.com>
 > 
-> In multi-cluster MIPS I6500 systems there is a GIC in each cluster,
-> each with its own counter. When a cluster powers up the counter will
-> be stopped, with the COUNTSTOP bit set in the GIC_CONFIG register.
+> ioremap_prot() currently accepts pgprot_val parameter as an unsigned long,
+> thus implicitly assuming that pgprot_val and pgprot_t could never be bigger
+> than unsigned long. But this assumption soon will not be true on arm64 when
+> using D128 pgtables. In 128 bit page table configuration, unsigned long is
+> 64 bit, but pgprot_t is 128 bit.
 > 
-> In single cluster systems, it has been fine to clear COUNTSTOP once
-> in gic_clocksource_of_init() to start the counter. In multi-cluster
-> systems, this will only have started the counter in the boot cluster,
-> and any CPUs in other clusters will find their counter stopped which
-> will break the GIC clock_event_device.
+> Passing platform abstracted pgprot_t argument is better as compared to size
+> based data types. Let's change the parameter to directly pass pgprot_t like
+> another similar helper generic_ioremap_prot().
 > 
-> Resolve this by having CPUs clear the COUNTSTOP bit when they come
-> online, using the existing gic_starting_cpu() CPU hotplug callback. This
-> will allow CPUs in secondary clusters to ensure that the cluster's GIC
-> counter is running as expected.
+> Without this change in place, D128 configuration does not work on arm64 as
+> the top 64 bits gets silently stripped when passing the protection value to
+> this function.
 > 
-> Signed-off-by: Paul Burton <paulburton@kernel.org>
-> Signed-off-by: Chao-ying Fu <cfu@wavecomp.com>
-> Signed-off-by: Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
-> Signed-off-by: Aleksandar Rikalo <arikalo@gmail.com>
-> Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
-> Tested-by: Serge Semin <fancer.lancer@gmail.com>
-> Tested-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-> ---
->  drivers/clocksource/mips-gic-timer.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/clocksource/mips-gic-timer.c b/drivers/clocksource/mips-gic-timer.c
-> index 7907b740497a..abb685a080a5 100644
-> --- a/drivers/clocksource/mips-gic-timer.c
-> +++ b/drivers/clocksource/mips-gic-timer.c
-> @@ -115,6 +115,9 @@ static void gic_update_frequency(void *data)
->  
->  static int gic_starting_cpu(unsigned int cpu)
->  {
-> +	/* Ensure the GIC counter is running */
-> +	clear_gic_config(GIC_CONFIG_COUNTSTOP);
-> +
->  	gic_clockevent_cpu_init(cpu, this_cpu_ptr(&gic_clockevent_device));
->  	return 0;
->  }
-> @@ -288,9 +291,6 @@ static int __init gic_clocksource_of_init(struct device_node *node)
->  			pr_warn("Unable to register clock notifier\n");
->  	}
->  
-> -	/* And finally start the counter */
-> -	clear_gic_config(GIC_CONFIG_COUNTSTOP);
-> -
->  	/*
->  	 * It's safe to use the MIPS GIC timer as a sched clock source only if
->  	 * its ticks are stable, which is true on either the platforms with
-> -- 
-> 2.25.1
+> Cc: Andrew Morton <akpm@linux-foundation.org>
+> Cc: linux-arm-kernel@lists.infradead.org
+> Cc: linux-snps-arc@lists.infradead.org
+> Cc: linux-riscv@lists.infradead.org
+> Cc: linuxppc-dev@lists.ozlabs.org
+> Cc: linux-parisc@vger.kernel.org
+> Cc: linux-csky@vger.kernel.org
+> Cc: linux-mips@vger.kernel.org
+> Cc: linux-s390@vger.kernel.org
+> Cc: linux-arch@vger.kernel.org
+> Cc: loongarch@lists.linux.dev
+> Cc: linux-sh@vger.kernel.org
+> Cc: linux-mm@kvack.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: Ryan Roberts <ryan.roberts@arm.com>
+> Co-developed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
 
-Daniel are you ok to take this patch trough the mips tree ? If yes,
-could I get an ack for it ?
+For arm64:
 
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
 
