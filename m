@@ -1,204 +1,205 @@
-Return-Path: <linux-mips+bounces-7846-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7847-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94D86A3AFE1
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Feb 2025 04:03:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 817E7A3B791
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Feb 2025 10:16:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6EA0016E91C
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Feb 2025 03:03:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0528F17D39C
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Feb 2025 09:10:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82D6185C5E;
-	Wed, 19 Feb 2025 03:03:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B020D1AF0C8;
+	Wed, 19 Feb 2025 09:06:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JLgVTn4F"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PReTmFs1"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58EA128628D;
-	Wed, 19 Feb 2025 03:03:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EFF51DF721
+	for <linux-mips@vger.kernel.org>; Wed, 19 Feb 2025 09:06:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739934217; cv=none; b=X3N/tDOSkZL3PDiKZFhx+DVWqhkyjCOyQzm7XwsQSTKR3M+CI2QIj75LyY3WvT/H0afLkn9eLlHJ9twosbHdt3INR9xNeaqiUdFFoSCFwRLzSc5RDy+bG5Tofi1Vqxa7qTiEwuqnZZYe4rWRKlHtKhJwSnQ8RPfR+ZtnyYYSKCU=
+	t=1739955968; cv=none; b=iv0E333wn+SDfllPKCU7OkM88xOQDo0dbOHGcev6VXygSX/zA0hacjuXbzHBEAbk5/ZGh6FJaMrmw9B0DRe3GFgvV+3zF7Eoanb25HeebgfTlMpfbdf6hmR5tHyNv+nzsXhhCneIMLIQ1Gj1oWmUPgYLSMdQ60WnIjH1qf3nmuQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739934217; c=relaxed/simple;
-	bh=823YSGjZ/fts8Pi6bH2rMVqoh69XMYl9RqrZLvNxu8M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fRTo5Kyxty/7nLQ5vUWi99TZVkJCpmO8sDD05FUUC7EtDzrIbcaIfWegdIKGZhCMQQKB75VHcXVB3bvg93YEMJG+2QEZYaJxALDEMN5Dwm2ylC555Nj2Y80X3D20aWmGeLM3TdG1/o8ntIPPHrPyT5H5z0U0mTVHEjnHsHgMeAQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JLgVTn4F; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA279C4CEE7;
-	Wed, 19 Feb 2025 03:03:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739934216;
-	bh=823YSGjZ/fts8Pi6bH2rMVqoh69XMYl9RqrZLvNxu8M=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=JLgVTn4FgXFMrOnavtyFMsGJ8f1SeqmyTt857+q9K/pzuzdjFMn+p/pvwDNPb74OD
-	 cEK2vlV2d1yqoQwbYjrRMjZwKFWsOhvMbz2n17l6tKRqrk4+zwFs6FYR76ymj2x8WF
-	 y8aTjG81BXAS1FeGuvyEP233SRJ8nAHUZ4gSqk7dUpOGSbwJU/iZt6ox7W4jBG/pje
-	 6XD23kjDBr5OOSWleXHb2dU9cn/kUo93k6AKJNfG+t1oJpThIw8AN70AzfsKsDcoUV
-	 MbNktgNiBVvvoXK1Ns7yf61TJ8+V6GgoRnbTenDH9D5anqAn5Z1vZGEEHVGEG2L5O8
-	 orOM0OKa5qr3Q==
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5e04f87584dso4542674a12.3;
-        Tue, 18 Feb 2025 19:03:36 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU/9vBbMKMR4yKTZAT6LccxvKGMQbpT2O4Id6cQpUhPnjzag0tUki2mY6qNmzYq/uPhuH6gzXrtD8z69w==@vger.kernel.org, AJvYcCXXbH3Sse66VcWPe7xum0lgyz1STyI9hcVcfw2TLaKZWZf69dCvsFCBAJoo4X/TQoa0ZapA/nYvWnGMCVk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzd8dCUEGCPGAt2IDdGaLDC0PMWa1yK00MzKBkyxO8gPMHqwcss
-	RRqS8H7eMWWvTQwz5MD+nY+dCfgI84EsqBogMiFJtGijprCPAVVd49JVfN0n9ZjMaOhSU1yPyTE
-	T9wpEs8nXKZO64EbAfiZidqONG6w=
-X-Google-Smtp-Source: AGHT+IE2X9/VM9AUZTraUPRmg4QJ5cYjqTloHovVNqu75KCSz8bGRkLf2c/KZFgTwjSWHd44Akd+FzRmk3bdyyI1Huc=
-X-Received: by 2002:a17:906:478d:b0:aba:5e50:6984 with SMTP id
- a640c23a62f3a-abbcccd156amr156510866b.2.1739934215330; Tue, 18 Feb 2025
- 19:03:35 -0800 (PST)
+	s=arc-20240116; t=1739955968; c=relaxed/simple;
+	bh=Ll4Hm33BOP6BRDteNaeEkalteukRrEcf/dQJ2Kgc9eE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ddymI6+HXWG/KtlQYj1wvkX4T7Ah66XZ7074KrB3bljAOB1LYL4YuyPf12epxLNFNwUMkaPiZJi1NSgYyF0fJ5JsAwe4ilPetIKOF2Q6NdPnT34arHPQDzzzTTdsWACg4m2vMsGb+AGmc4FFmxn/1qCHRcCPXfqny9ytlkImb3w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PReTmFs1; arc=none smtp.client-ip=209.85.167.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-54626a71b40so2374756e87.3
+        for <linux-mips@vger.kernel.org>; Wed, 19 Feb 2025 01:06:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1739955965; x=1740560765; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=JParjzdc5yBYoG0m5UmXTy5mjDiWwZLgHUFOravZSiI=;
+        b=PReTmFs1TguXQvzw4JHw6oj6EisZHwVxZ0CeL8wrXLAJlbmx6ZY267eHem9cbm5Ymf
+         n0AZsRflHSMLcA33EavM/PQaGi8IhfjZJFVSK3WtgceUHb60BEPeD2RCAk2AUj6bTa7Q
+         7I9Hty5dboMTRxUIGj8D9k9ZMOdaIPhDqddVSpL8T7uYIddLcZZ+tZbPTS/HMOLbDAx1
+         lTY4x9mji9qRrZFmBvYPthjpAySOwUiHK5G112Ccz6/Ac3+CM50+Nbb3YTKgGtlEJ6B2
+         5j4lAjV541IwUb4vlypVj9vTNzsrixIxdRafjJaULDorJWTwdARSgnOGxbB9kYdmRmrl
+         TZnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739955965; x=1740560765;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=JParjzdc5yBYoG0m5UmXTy5mjDiWwZLgHUFOravZSiI=;
+        b=gL7Taw4UrSMK37ZeUE4YZ/zsNmv2zWBWgB4BK1r8Dsxq69NmjxpWIHt8GqUMqaU3Bq
+         TNhU7YILw61iK/XfbgdTx1c7lpOho7fhEAwL3h9QHP7aqlRYQjDsr3CcdVhqikzNxX6x
+         tXCmIm3vQ/1KkH5nAVlTL0jhDjCyY5Gt3xKe6RuL3p0E911oFXHPgQohhpV9mLzVxgUj
+         LlZx/K8dIWNUE2g1cTTnCtL//v3oUBsU9QZNwfLzheN6Kdg21cEj2r7R9VY+LRfpLa98
+         wPAQtQf1dV9IsOUEv1JB9hvkj1NqOV8hqm+G3pOSjEAd8rL5AKvGff/P8yaRVp2VFPU0
+         00vg==
+X-Forwarded-Encrypted: i=1; AJvYcCXzsJm4Z0ZXvrc9PHDu1qCTGcjM0yKuP72Nf/wMTH6SXVCiuKOMLQNPB+hPtTKssGviE2G2e5sow0uY@vger.kernel.org
+X-Gm-Message-State: AOJu0YyyJMF1bvYkh63gUNqdwJwRsNZf5mNNVN5Zv1plglGBFhHD/EeA
+	/Qk3wwAXNYoMK2zo67xF6lGtXFqkXef3xUP8BQwoNc0YSD+CNMGsZTNM6ssVlhs=
+X-Gm-Gg: ASbGncsf/6QAgqjhPJYjhczbcDV2SDXAFoXG1FDD3ZcCygJKeQKWv+35dp8n8gLTOhb
+	kwQ9BjbZAi2ziQPVUlhffL0BxjYHLFwF2SdoHQapREtB+gqdTzDF5FV+Ahzq8sWzybjA+NZ3ig3
+	G1gLxoivnA8Vd50zL4ObO4oc7hKKV8gLPSN64BInnqZ+qIXKOinQyrHosFgohZKKbf2yJCJJev2
+	aweqWjRfS43RD+nvPXjbPZRl4aif7Rq9MZKHcU+uD6+Jk4jLhSFIvVAekp+uZDBOgmOG3GSruvm
+	MAE43kfSjFIbY0fBEA1CRv6K0ty4r5n6ezikTsef+34qSw0tvYzzEUNdhjSK6rSenlo4mqs=
+X-Google-Smtp-Source: AGHT+IHm7rrZGF7gWE8rLuZPX4nvDlV3DcFc5Uk1QwC4R6ncjGo7U2SoOER3uymDvhu6BZaa/4okgQ==
+X-Received: by 2002:a05:6512:3a94:b0:545:10bc:20ca with SMTP id 2adb3069b0e04-5452fe583c4mr6368433e87.24.1739955964491;
+        Wed, 19 Feb 2025 01:06:04 -0800 (PST)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-54530df9016sm1454714e87.36.2025.02.19.01.06.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 19 Feb 2025 01:06:04 -0800 (PST)
+Date: Wed, 19 Feb 2025 11:06:02 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Jerome Brunet <jbrunet@baylibre.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Dave Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+	Danilo Krummrich <dakr@kernel.org>, Conor Dooley <conor.dooley@microchip.com>, 
+	Daire McNamara <daire.mcnamara@microchip.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Douglas Anderson <dianders@chromium.org>, Andrzej Hajda <andrzej.hajda@intel.com>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
+	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman <jonas@kwiboo.se>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
+	Hans de Goede <hdegoede@redhat.com>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
+	Bryan O'Donoghue <bryan.odonoghue@linaro.org>, Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+	Gregory CLEMENT <gregory.clement@bootlin.com>, =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>, 
+	Michael Turquette <mturquette@baylibre.com>, Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	Kevin Hilman <khilman@baylibre.com>, Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, dri-devel@lists.freedesktop.org, 
+	platform-driver-x86@vger.kernel.org, linux-mips@vger.kernel.org, linux-clk@vger.kernel.org, 
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-amlogic@lists.infradead.org
+Subject: Re: [PATCH v4 1/8] driver core: auxiliary bus: add device creation
+ helpers
+Message-ID: <crtrciitrlqkxh5mxvnbdjy6zoxny5onse7xgbw7biozg6myux@grp3ketgl2uh>
+References: <20250218-aux-device-create-helper-v4-0-c3d7dfdea2e6@baylibre.com>
+ <20250218-aux-device-create-helper-v4-1-c3d7dfdea2e6@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250218090203.43137-1-marco.crivellari@suse.com>
- <20250218090203.43137-2-marco.crivellari@suse.com> <Z7R2GqWOufd8l6NZ@alpha.franken.de>
- <CAAhV-H7ygGqCYyQf_tvFrgEBR6uva35auGP9yhxQFqw4mpQBwA@mail.gmail.com> <Z7SQNhL0FYGkX0Ng@alpha.franken.de>
-In-Reply-To: <Z7SQNhL0FYGkX0Ng@alpha.franken.de>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Wed, 19 Feb 2025 11:03:25 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7cizXw-zta7sW+AKP3UiqRE52K7YdDhH7YoCr=LaCGWA@mail.gmail.com>
-X-Gm-Features: AWEUYZnoQ-H6kd4mjCfLOeaxVKSFbu3Y_rLlZZyNV02vMzdET83OZIZqllnOTKY
-Message-ID: <CAAhV-H7cizXw-zta7sW+AKP3UiqRE52K7YdDhH7YoCr=LaCGWA@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] MIPS: Fix idle VS timer enqueue
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Marco Crivellari <marco.crivellari@suse.com>, linux-mips@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Frederic Weisbecker <frederic@kernel.org>, 
-	Anna-Maria Behnsen <anna-maria@linutronix.de>, Thomas Gleixner <tglx@linutronix.de>, 
-	Peter Zijlstra <peterz@infradead.org>, "Maciej W . Rozycki" <macro@orcam.me.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250218-aux-device-create-helper-v4-1-c3d7dfdea2e6@baylibre.com>
 
-On Tue, Feb 18, 2025 at 9:51=E2=80=AFPM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
-> On Tue, Feb 18, 2025 at 08:14:43PM +0800, Huacai Chen wrote:
-> > Hi, Thomas,
-> >
-> > On Tue, Feb 18, 2025 at 7:59=E2=80=AFPM Thomas Bogendoerfer
-> > <tsbogend@alpha.franken.de> wrote:
-> > >
-> > > On Tue, Feb 18, 2025 at 10:02:03AM +0100, Marco Crivellari wrote:
-> > > > MIPS re-enables interrupts on its idle routine and performs
-> > > > a TIF_NEED_RESCHED check afterwards before putting the CPU to sleep=
-.
-> > > >
-> > > > The IRQs firing between the check and the 'wait' instruction may se=
-t the
-> > > > TIF_NEED_RESCHED flag. In order to deal with this possible race, IR=
-Qs
-> > > > interrupting __r4k_wait() rollback their return address to the
-> > > > beginning of __r4k_wait() so that TIF_NEED_RESCHED is checked
-> > > > again before going back to sleep.
-> > > >
-> > > > However idle IRQs can also queue timers that may require a tick
-> > > > reprogramming through a new generic idle loop iteration but those t=
-imers
-> > > > would go unnoticed here because __r4k_wait() only checks
-> > > > TIF_NEED_RESCHED. It doesn't check for pending timers.
-> > > >
-> > > > Fix this with fast-forwarding idle IRQs return address to the end o=
-f the
-> > > > idle routine instead of the beginning, so that the generic idle loo=
-p
-> > > > handles both TIF_NEED_RESCHED and pending timers.
-> > > >
-> > > > Signed-off-by: Marco Crivellari <marco.crivellari@suse.com>
-> > > > ---
-> > > >  arch/mips/kernel/genex.S | 39 +++++++++++++++++++++---------------=
----
-> > > >  arch/mips/kernel/idle.c  |  1 -
-> > > >  2 files changed, 21 insertions(+), 19 deletions(-)
-> > > >
-> > > > diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
-> > > > index a572ce36a24f..9747b216648f 100644
-> > > > --- a/arch/mips/kernel/genex.S
-> > > > +++ b/arch/mips/kernel/genex.S
-> > > > @@ -104,25 +104,27 @@ handle_vcei:
-> > > >
-> > > >       __FINIT
-> > > >
-> > > > -     .align  5       /* 32 byte rollback region */
-> > > > +     .align  5
-> > > >  LEAF(__r4k_wait)
-> > > >       .set    push
-> > > >       .set    noreorder
-> > > > -     /* start of rollback region */
-> > > > -     LONG_L  t0, TI_FLAGS($28)
-> > > > -     nop
-> > > > -     andi    t0, _TIF_NEED_RESCHED
-> > > > -     bnez    t0, 1f
-> > > > -      nop
-> > > > -     nop
-> > > > -     nop
-> > > > -#ifdef CONFIG_CPU_MICROMIPS
-> > > > -     nop
-> > > > -     nop
-> > > > -     nop
-> > > > -     nop
-> > > > -#endif
-> > >
-> > > My quick search didnn't find the reason for the extra NOPs on MICROMI=
-PS, but
-> > > they are here for a purpose. I might still need them...
-> > The original code needs #ifdef CONFIG_CPU_MICROMIPS because nop in
-> > MICROMIPS is 2 bytes, so need another four nop to align. But _ssnop is
-> > always 4 bytes, so we can remove #ifdefs.
->
-> ic
->
-> > > > +     _ssnop
-> > > > +     _ssnop
-> > > > +     _ssnop
-> > >
-> > > instead of handcoded hazard nops, use __irq_enable_hazard for that
-> > No, I don't think so, this region should make sure be 32 bytes on each
-> > platform, but __irq_enable_hazard is not consistent, 3 _ssnop is the
-> > fallback implementation but available for all MIPS.
->
-> you are right for most cases, but there is one case
->
-> #elif (defined(CONFIG_CPU_MIPSR1) && !defined(CONFIG_MIPS_ALCHEMY)) || \
->         defined(CONFIG_CPU_BMIPS)
->
-> which uses
->
-> #define __irq_enable_hazard                                             \
->         ___ssnop;                                                       \
->         ___ssnop;                                                       \
->         ___ssnop;                                                       \
->         ___ehb
->
-> if MIPSR1 || BMIPS needs "rollback" handler 3 ssnnop would be wrong as
-> irq enable hazard.
-Emm, this is a problem. I think we can add _ehb after 3 _ssnop. And
-then change the below "daddiu k0, 1" to "PTR_ADDIU k0, 5".
+On Tue, Feb 18, 2025 at 08:29:46PM +0100, Jerome Brunet wrote:
+> Add helper functions to create a device on the auxiliary bus.
+> 
+> This is meant for fairly simple usage of the auxiliary bus, to avoid having
+> the same code repeated in the different drivers.
+> 
+> Suggested-by: Stephen Boyd <sboyd@kernel.org>
+> Cc: Arnd Bergmann <arnd@arndb.de>
+> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+> ---
+>  drivers/base/auxiliary.c      | 108 ++++++++++++++++++++++++++++++++++++++++++
+>  include/linux/auxiliary_bus.h |  17 +++++++
+>  2 files changed, 125 insertions(+)
+> 
+> diff --git a/drivers/base/auxiliary.c b/drivers/base/auxiliary.c
+> index afa4df4c5a3f371b91d8dd8c4325495d32ad1291..a6d46c2759be81a0739f07528d5959c2a76eb8a8 100644
+> --- a/drivers/base/auxiliary.c
+> +++ b/drivers/base/auxiliary.c
+> @@ -385,6 +385,114 @@ void auxiliary_driver_unregister(struct auxiliary_driver *auxdrv)
+>  }
+>  EXPORT_SYMBOL_GPL(auxiliary_driver_unregister);
+>  
+> +static void auxiliary_device_release(struct device *dev)
+> +{
+> +	struct auxiliary_device *auxdev = to_auxiliary_dev(dev);
+> +
+> +	kfree(auxdev);
+> +}
+> +
+> +/**
+> + * auxiliary_device_create - create a device on the auxiliary bus
+> + * @dev: parent device
+> + * @modname: module name used to create the auxiliary driver name.
+> + * @devname: auxiliary bus device name
+> + * @platform_data: auxiliary bus device platform data
+> + * @id: auxiliary bus device id
+> + *
+> + * Helper to create an auxiliary bus device.
+> + * The device created matches driver 'modname.devname' on the auxiliary bus.
+> + */
+> +struct auxiliary_device *auxiliary_device_create(struct device *dev,
+> +						 const char *modname,
+> +						 const char *devname,
+> +						 void *platform_data,
+> +						 int id)
+> +{
+> +	struct auxiliary_device *auxdev;
+> +	int ret;
+> +
+> +	auxdev = kzalloc(sizeof(*auxdev), GFP_KERNEL);
+> +	if (!auxdev)
+> +		return NULL;
+> +
+> +	auxdev->id = id;
+> +	auxdev->name = devname;
+> +	auxdev->dev.parent = dev;
+> +	auxdev->dev.platform_data = platform_data;
+> +	auxdev->dev.release = auxiliary_device_release;
+> +	device_set_of_node_from_dev(&auxdev->dev, dev);
+> +
+> +	ret = auxiliary_device_init(auxdev);
+> +	if (ret) {
+> +		kfree(auxdev);
+> +		return NULL;
+> +	}
+> +
+> +	ret = __auxiliary_device_add(auxdev, modname);
+> +	if (ret) {
 
-Maybe there is a better solution, but I think this is the simplest.
+This loses possible error return values from __auxiliary_device_add().
+I'd suggest to return ERR_PTR(ret) here and in the
+auxiliary_device_init() chunks and ERR_PTR(-ENOMEM) in case of kzalloc()
+failure.
 
-Huacai
+> +		/*
+> +		 * It may look odd but auxdev should not be freed here.
+> +		 * auxiliary_device_uninit() calls device_put() which call
+> +		 * the device release function, freeing auxdev.
+> +		 */
+> +		auxiliary_device_uninit(auxdev);
+> +		return NULL;
+> +	}
+> +
+> +	return auxdev;
+> +}
+> +EXPORT_SYMBOL_GPL(auxiliary_device_create);
+> +
 
->
-> > > But I doubt this works, because the wait instruction is not aligned t=
-o
-> > > a 32 byte boundary, but the code assuemes this, IMHO.
-> > Why? After this patch we only use 4 byte instructions.
->
-> I've should have looked at the compiled output, sorry for the noise
->
-> Still this construct feels rather fragile.
->
-> Thomas.
->
-> --
-> Crap can work. Given enough thrust pigs will fly, but it's not necessaril=
-y a
-> good idea.                                                [ RFC1925, 2.3 =
-]
+-- 
+With best wishes
+Dmitry
 
