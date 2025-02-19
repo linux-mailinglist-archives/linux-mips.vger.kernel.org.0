@@ -1,210 +1,139 @@
-Return-Path: <linux-mips+bounces-7855-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7856-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1881A3BDCB
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Feb 2025 13:08:32 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACDC0A3BE50
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Feb 2025 13:38:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE11B16933A
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Feb 2025 12:08:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2EC357A637F
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Feb 2025 12:37:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D8801DF977;
-	Wed, 19 Feb 2025 12:08:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AEC81DED62;
+	Wed, 19 Feb 2025 12:38:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JLRk6MhQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="G0F1ro7W"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 327621CF5E2
-	for <linux-mips@vger.kernel.org>; Wed, 19 Feb 2025 12:08:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D3861C8618
+	for <linux-mips@vger.kernel.org>; Wed, 19 Feb 2025 12:38:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739966908; cv=none; b=DH2tgEnJ8shUcIxx+pTsHWtZy2IyLFVGDGKYXcyIFCfHxABiTlqWdvi1OH3f9JFGtgbt87vPijKyqqQorbF9hIwfkEaaNCxRVo32fcdlVcCr/ZJjR7BOkftmRV1a0JivkbkmHmNOu3nFvYxGXQFfnmst/RAjX5w3KOp3PyRXKAA=
+	t=1739968730; cv=none; b=s+KKOxgpTW2IEY2wI6bLAqANFoMkJlG+h6CW3ZMjVGEKmTI8UzRK1ZkSXxFdUBcUhkollulZX4sHwO0KGlv1200+LKBeYFAn76M8LGHRUNRsenM4Ln7iSSHCKk09Sfa1o0hXjl9qpFBJ6HC7yzS4ww2UR1t65Y3kXrp2XLhb3NI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739966908; c=relaxed/simple;
-	bh=uE8CUjR58RLwuzsqmPJ2Twtd7ZBgQ7uMjtufoLK9fYs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tELhEx+h1PbesJMN1a089vGXEKGv5SieU3H+R1l4pa/GLwr5xLG7/NGPRqjGlMFYBFZ9nT5AwFYFF+FLWDdbvzXnri1L/3Hm3KqFL8zsV+4z/s2SMhmjwH0/NuTHdjbpF2cxrbrskJRa5+NCMiOJXCO9Z8JRuvlY5N7LXAYueqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JLRk6MhQ; arc=none smtp.client-ip=209.85.167.41
+	s=arc-20240116; t=1739968730; c=relaxed/simple;
+	bh=ZZIZuTeaAoFO/P3zdlI6Eu5y/BY1YCPLBFDq51YFA1M=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=barILJFOrMcEJBEzD4hJuzUjEgm6/E2TSnkJUeaCQdO2kapDxU69/7jjXQ9N1BW25OgEEDDCl8o7vlpO5TMJeX/74QjXP53iipkluwjlwPTt4umJcVi5XKGzMfFoaqtbqWBs14jLG7+hTuyyZaZTg8tjYNnHmRxRsR/v2U31SPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=G0F1ro7W; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-543d8badc30so7700222e87.0
-        for <linux-mips@vger.kernel.org>; Wed, 19 Feb 2025 04:08:26 -0800 (PST)
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4398e3dfc66so24836405e9.0
+        for <linux-mips@vger.kernel.org>; Wed, 19 Feb 2025 04:38:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1739966905; x=1740571705; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=kfNES95aCHrH5DW7HOssGE1cf0vTi0kl2N0MBpHNSOY=;
-        b=JLRk6MhQsI0egle9P/i5LwAyjj3vcerxgF3i5jjK8fqWvJZ23Dcy49YQs/LKCz50ec
-         lpGbdcNdoF4soVNTBp/2BmH3BvqpXN6W12QDoasuLNhEwqLBi+kiEx3OyUMzph0CeJGG
-         cG29ZFq/O/0YXeiO6ILOZ8Ubxsu3A5VWUqnMTnkkyXqgJK+jaQ0i54JbPzLQeS+vfTCx
-         CgsuyfP7movhUeItO23to2InSpjGHsrsxY6oKvWiW7vvCjOjhpYZ2ZTTCwoLTCuAcTGq
-         Z2VzaJYxIclGqUrTmCSov7RCtO1sWUfeoOY4ItVPNVtp3WxsCCZsO6fat0KyNG7cWVx/
-         kF2Q==
+        d=linaro.org; s=google; t=1739968727; x=1740573527; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=4wj3JrNUhg35mjfieRS2TI+7IeiK1zMMxQs4U9cM29c=;
+        b=G0F1ro7WuMopAkx4nWm1fesaru8jeYKdmx6wsceqcpeJwpR7lwgiz0he68aqgHLQOB
+         SP4WF5cRhb7URYm5egE+Nj6/++cCvBd+F3AhO6r093quWp39YRrJTK/xEMrmx5A9dqsP
+         0Ul5XpnANKbkUBYA3o7CwGs/T9ZTDHYjhrUaWEI+hyQtAnW17k8Fe7eebbfixVu7DN2m
+         QB6G9JGA+jlaRmX8zDRuGyymXkmE/6l+DaH/aNyhT++HRcmkap2vesB0vuqsObh/kCvh
+         yQ+jHS+affElNj40jGsqPY+qJWcdULyp0ULk9lVANgdajlPdVu4C6orHxkSUA80znUgp
+         tD9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739966905; x=1740571705;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=kfNES95aCHrH5DW7HOssGE1cf0vTi0kl2N0MBpHNSOY=;
-        b=Z09khaQl7ePcz5G3bI1Rzr+cMPQg2BWQi9hZsNuFzfAQHQAD0eI4c+oOl0bAGFpYL2
-         HH5FMz5DYw23G2Knb80c29Y+A4+oM1/civuDlvz0g5E/8wt1f/oKMvr7j8xgsZ20hN6x
-         wG0Cj2kisSwX4LQHfaIbqU3Rs5Golmevug9EuYUz3KCS+wXKmDFhvUP51i/xPMTJ93Na
-         yuUjm3ETR8zyiz5m+2/89vGWup9xyDo3rbMXF16XQgN1ABa5QvyNaF6Npo5sw3KDKSx8
-         45MtZnkD2i+M2wi9KFVGfEV97tp2cMKUbKVGSaNnwqUfahgFxACvidQ/ic25sQjlPtQh
-         76Pg==
-X-Forwarded-Encrypted: i=1; AJvYcCV2jokEGDCeM9Ai1D7WRVtVPBv2NSPntGgc6g4zx2iyAtNWGlffYJDpfz6DZsbn16agufu2qTG7ddLJ@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxWaGSyfGFlMEPknSWXohZJ3bum5WiZC0RlS1Hb2pQoltK4vIB
-	504Yl+h9sVxLo3VDJ9G+Ap62I9yMSBevxsI9vxGiG3LEwM3AlrRP5TIo1P0pEK8=
-X-Gm-Gg: ASbGnctN7k7WdqsslS6Tkpac+RIxMez+mqkmixTb9rqPy1LHzAjqDZDA4IlXf0cHYAE
-	kXnsFcx5TCYAzT5b2B1JW5dpy7IzmP/xnB9o0qZVu/EmVjiTQ8K/1EdFnU7aSs0Qh6u3FcMg7dW
-	MMzp+T9kj2M+LNrmH58ONRJwTEluy14GHDvSkVg2bboU2VW3Lyr+oW66CtXj2qLkYzQmMjZjTfu
-	PCm6k+QFw5KxSmHk+N5c3UR5+cAcQJscHxnMqCF7bSMUJGTk+4AhawNVaIXh4O4xsc4cDl6vwaX
-	Q2kLOLspoB+SZz02+m+C/G7nnfBfBHRcM+lg3aLVcXmLN7BMK/1A4FB+JZCWmYchnHL2q8c=
-X-Google-Smtp-Source: AGHT+IFMLOpDHMHA4h3/Gxx2zV0fjSL0lgJbRphbGzyITSKOMSUgTcKxT5mQ7K/tT3lwL8tk5JoMMA==
-X-Received: by 2002:ac2:4e05:0:b0:545:62c:4b29 with SMTP id 2adb3069b0e04-5452fe5bedcmr6706804e87.22.1739966905285;
-        Wed, 19 Feb 2025 04:08:25 -0800 (PST)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5461cfdd5a2sm1148260e87.39.2025.02.19.04.08.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Feb 2025 04:08:24 -0800 (PST)
-Date: Wed, 19 Feb 2025 14:08:22 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: Jerome Brunet <jbrunet@baylibre.com>, 
-	Dave Ertman <david.m.ertman@intel.com>, Ira Weiny <ira.weiny@intel.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
-	Danilo Krummrich <dakr@kernel.org>, Conor Dooley <conor.dooley@microchip.com>, 
-	Daire McNamara <daire.mcnamara@microchip.com>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Douglas Anderson <dianders@chromium.org>, Andrzej Hajda <andrzej.hajda@intel.com>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
-	Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, Jonas Karlman <jonas@kwiboo.se>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
-	Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
-	Hans de Goede <hdegoede@redhat.com>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>, Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
-	Gregory CLEMENT <gregory.clement@bootlin.com>, =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>, 
-	Michael Turquette <mturquette@baylibre.com>, Abel Vesa <abelvesa@kernel.org>, Peng Fan <peng.fan@nxp.com>, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Kevin Hilman <khilman@baylibre.com>, Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, dri-devel@lists.freedesktop.org, 
-	platform-driver-x86@vger.kernel.org, linux-mips@vger.kernel.org, linux-clk@vger.kernel.org, 
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	linux-amlogic@lists.infradead.org
-Subject: Re: [PATCH v4 1/8] driver core: auxiliary bus: add device creation
- helpers
-Message-ID: <eskvhtljnrkhm6vmqy52gkweexj3tcethejeywcoib4la72jcl@ojuqcazpvht4>
-References: <20250218-aux-device-create-helper-v4-0-c3d7dfdea2e6@baylibre.com>
- <20250218-aux-device-create-helper-v4-1-c3d7dfdea2e6@baylibre.com>
- <crtrciitrlqkxh5mxvnbdjy6zoxny5onse7xgbw7biozg6myux@grp3ketgl2uh>
- <2025021922-spongy-swirl-0746@gregkh>
+        d=1e100.net; s=20230601; t=1739968727; x=1740573527;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4wj3JrNUhg35mjfieRS2TI+7IeiK1zMMxQs4U9cM29c=;
+        b=f6m/CdqYIp2jWHqGM5Q3W8xrDss10nh+MtDsc83CsG5KDdA+NiC+aPXtvc12Iqz5Av
+         HePBOyrcKJ+Jx6A/L+Yd1NpPqUEUAykZRm3co6V/oZ22gMCGh2xjXNkR4hZfWnPcaKKS
+         ak7FgcCLoc1+3LOk0jwGW4fEb5eveeyMh2lfsCNESyZU43es01KmEielVhtqQgYytysn
+         5V/HhSc22QyhT0BQPEJyqEkLQYA1t+U/3aeHgELP0O5oI9sBc6mcxttnCPAR8PZ5NnLf
+         LJQCmuVx4n3hh3Kzxq2kNPF2gMqlpYizUNxM5EXcq6gmHpGaNvSlio4Vv6bnidkBej5J
+         iZ/A==
+X-Forwarded-Encrypted: i=1; AJvYcCWXAgQPm0RGM9piw4LlRvuPdUva807+ndVGAKwEVL1P6SrOH3wGD3V2WEugSCW7SMBvq5qy3OvPCwsW@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw9dR6gcc7gyL8Rg8CmUaVEu1PpaE/LbPiyGYaS7Ta1iHCNQWwB
+	swEntTFchoiR4LT6qjk53ykNXgcC4MqD5UAEPJ6h5jeBDiU49dDxVPldm+sQZh8=
+X-Gm-Gg: ASbGncuVSzFpteSh5nLS+KZc0wI0Cv5OvQgTZDzOVcw6Opn1xsMLtN+M0XhME+wkSRn
+	4H6WOSN4Rl/GZe302ZMLA56mO1Ts9H4WeL69QW99WNWT7JyGzE5nc8N7i+2HpSPg1CcUcW6s/Xr
+	HY1uVj375jSpqSG6uRGlZbEHE23NnxgOYCtfTLacppcbqVAb36eWTS95eePhNuXuY+VDJnRXb8X
+	qrtl/m8fVaI+kLj9dWK8BYVy0UjA2wu1JnEXaAamcuLCiaWsUBHGUOb/FQ3mp9qStcLw7gPIU6Y
+	iCQgMTNy4Zl/kLowIm/x14WsuqBCtd1x81FQP6ww5DykRxI8cYh3NEU=
+X-Google-Smtp-Source: AGHT+IEHJKEFS1/VXZbvg78fmSTXn4dztJg0x/bM2Gn3fvw76lknofTT3eKLDhhDFYuIqpL40BKnFQ==
+X-Received: by 2002:a05:600c:5124:b0:439:6ab6:5d45 with SMTP id 5b1f17b1804b1-43999ddae20mr30956125e9.28.1739968726833;
+        Wed, 19 Feb 2025 04:38:46 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-38f258b43d4sm17488976f8f.4.2025.02.19.04.38.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 19 Feb 2025 04:38:46 -0800 (PST)
+Message-ID: <c65a86a5-fc65-4144-b780-ed9e8a59f1ab@linaro.org>
+Date: Wed, 19 Feb 2025 13:38:45 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <2025021922-spongy-swirl-0746@gregkh>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 1/4] clocksource: mips-gic-timer: Enable counter when
+ CPUs start
+To: Aleksandar Rikalo <arikalo@gmail.com>, linux-mips@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Thomas Gleixner <tglx@linutronix.de>,
+ Gregory CLEMENT <gregory.clement@bootlin.com>,
+ Serge Semin <fancer.lancer@gmail.com>, Jiaxun Yang
+ <jiaxun.yang@flygoat.com>, Paul Burton <paulburton@kernel.org>,
+ Chao-ying Fu <cfu@mips.com>,
+ Djordje Todorovic <djordje.todorovic@htecgroup.com>
+References: <20250129123250.711910-1-arikalo@gmail.com>
+ <20250129123250.711910-2-arikalo@gmail.com>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20250129123250.711910-2-arikalo@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Wed, Feb 19, 2025 at 11:13:14AM +0100, Greg Kroah-Hartman wrote:
-> On Wed, Feb 19, 2025 at 11:06:02AM +0200, Dmitry Baryshkov wrote:
-> > On Tue, Feb 18, 2025 at 08:29:46PM +0100, Jerome Brunet wrote:
-> > > Add helper functions to create a device on the auxiliary bus.
-> > > 
-> > > This is meant for fairly simple usage of the auxiliary bus, to avoid having
-> > > the same code repeated in the different drivers.
-> > > 
-> > > Suggested-by: Stephen Boyd <sboyd@kernel.org>
-> > > Cc: Arnd Bergmann <arnd@arndb.de>
-> > > Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
-> > > ---
-> > >  drivers/base/auxiliary.c      | 108 ++++++++++++++++++++++++++++++++++++++++++
-> > >  include/linux/auxiliary_bus.h |  17 +++++++
-> > >  2 files changed, 125 insertions(+)
-> > > 
-> > > diff --git a/drivers/base/auxiliary.c b/drivers/base/auxiliary.c
-> > > index afa4df4c5a3f371b91d8dd8c4325495d32ad1291..a6d46c2759be81a0739f07528d5959c2a76eb8a8 100644
-> > > --- a/drivers/base/auxiliary.c
-> > > +++ b/drivers/base/auxiliary.c
-> > > @@ -385,6 +385,114 @@ void auxiliary_driver_unregister(struct auxiliary_driver *auxdrv)
-> > >  }
-> > >  EXPORT_SYMBOL_GPL(auxiliary_driver_unregister);
-> > >  
-> > > +static void auxiliary_device_release(struct device *dev)
-> > > +{
-> > > +	struct auxiliary_device *auxdev = to_auxiliary_dev(dev);
-> > > +
-> > > +	kfree(auxdev);
-> > > +}
-> > > +
-> > > +/**
-> > > + * auxiliary_device_create - create a device on the auxiliary bus
-> > > + * @dev: parent device
-> > > + * @modname: module name used to create the auxiliary driver name.
-> > > + * @devname: auxiliary bus device name
-> > > + * @platform_data: auxiliary bus device platform data
-> > > + * @id: auxiliary bus device id
-> > > + *
-> > > + * Helper to create an auxiliary bus device.
-> > > + * The device created matches driver 'modname.devname' on the auxiliary bus.
-> > > + */
-> > > +struct auxiliary_device *auxiliary_device_create(struct device *dev,
-> > > +						 const char *modname,
-> > > +						 const char *devname,
-> > > +						 void *platform_data,
-> > > +						 int id)
-> > > +{
-> > > +	struct auxiliary_device *auxdev;
-> > > +	int ret;
-> > > +
-> > > +	auxdev = kzalloc(sizeof(*auxdev), GFP_KERNEL);
-> > > +	if (!auxdev)
-> > > +		return NULL;
-> > > +
-> > > +	auxdev->id = id;
-> > > +	auxdev->name = devname;
-> > > +	auxdev->dev.parent = dev;
-> > > +	auxdev->dev.platform_data = platform_data;
-> > > +	auxdev->dev.release = auxiliary_device_release;
-> > > +	device_set_of_node_from_dev(&auxdev->dev, dev);
-> > > +
-> > > +	ret = auxiliary_device_init(auxdev);
-> > > +	if (ret) {
-> > > +		kfree(auxdev);
-> > > +		return NULL;
-> > > +	}
-> > > +
-> > > +	ret = __auxiliary_device_add(auxdev, modname);
-> > > +	if (ret) {
-> > 
-> > This loses possible error return values from __auxiliary_device_add().
+On 29/01/2025 13:32, Aleksandar Rikalo wrote:
+> From: Paul Burton <paulburton@kernel.org>
 > 
-> Why does that really matter?
-
-At the very least the caller (or caller of a caller) can call
-dev_err_probe() or dev_err("%pe"). With the current implementation as
-everybody maps NULL to -ENOMEM the error message will be cryptic.
-
-Or just having a cryptic value in the logs.
-
-> > I'd suggest to return ERR_PTR(ret) here and in the
-> > auxiliary_device_init() chunks and ERR_PTR(-ENOMEM) in case of kzalloc()
-> > failure.
+> In multi-cluster MIPS I6500 systems there is a GIC in each cluster,
+> each with its own counter. When a cluster powers up the counter will
+> be stopped, with the COUNTSTOP bit set in the GIC_CONFIG register.
 > 
-> Will the caller do something different based on the error value here?
-> All we care is that this worked or not, the specific error isn't going
-> to matter for device creation like this.
+> In single cluster systems, it has been fine to clear COUNTSTOP once
+> in gic_clocksource_of_init() to start the counter. In multi-cluster
+> systems, this will only have started the counter in the boot cluster,
+> and any CPUs in other clusters will find their counter stopped which
+> will break the GIC clock_event_device.
+> 
+> Resolve this by having CPUs clear the COUNTSTOP bit when they come
+> online, using the existing gic_starting_cpu() CPU hotplug callback. This
+> will allow CPUs in secondary clusters to ensure that the cluster's GIC
+> counter is running as expected.
+> 
+> Signed-off-by: Paul Burton <paulburton@kernel.org>
+> Signed-off-by: Chao-ying Fu <cfu@wavecomp.com>
+> Signed-off-by: Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
+> Signed-off-by: Aleksandar Rikalo <arikalo@gmail.com>
+> Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+> Tested-by: Serge Semin <fancer.lancer@gmail.com>
+> Tested-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+> ---
 
-The caller might not, the developer might.
+Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+
 
 -- 
-With best wishes
-Dmitry
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
