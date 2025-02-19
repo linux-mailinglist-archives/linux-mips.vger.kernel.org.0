@@ -1,168 +1,204 @@
-Return-Path: <linux-mips+bounces-7845-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7846-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6480BA3A816
-	for <lists+linux-mips@lfdr.de>; Tue, 18 Feb 2025 20:54:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 94D86A3AFE1
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Feb 2025 04:03:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E31107A4654
-	for <lists+linux-mips@lfdr.de>; Tue, 18 Feb 2025 19:52:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6EA0016E91C
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Feb 2025 03:03:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 092B41EFF89;
-	Tue, 18 Feb 2025 19:52:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82D6185C5E;
+	Wed, 19 Feb 2025 03:03:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="adf+xkBs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JLgVTn4F"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71541271269
-	for <linux-mips@vger.kernel.org>; Tue, 18 Feb 2025 19:52:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58EA128628D;
+	Wed, 19 Feb 2025 03:03:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739908360; cv=none; b=FLsUh0gotOBSJ696UkEa/ufQOKnkKZy72Qr9pJ5jDeYsveu8+o2Oii+Pnc8AimpMUTR/9YKpyZpaVlvaYNEo5HaaOQonyE30nqU5zDrh6XF27/JsvR/guJ9JYyvV2Tm/+mQiKAnH5S1OSeuRMTpiwgjC1oxg4M7W+QE3xA8q+8I=
+	t=1739934217; cv=none; b=X3N/tDOSkZL3PDiKZFhx+DVWqhkyjCOyQzm7XwsQSTKR3M+CI2QIj75LyY3WvT/H0afLkn9eLlHJ9twosbHdt3INR9xNeaqiUdFFoSCFwRLzSc5RDy+bG5Tofi1Vqxa7qTiEwuqnZZYe4rWRKlHtKhJwSnQ8RPfR+ZtnyYYSKCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739908360; c=relaxed/simple;
-	bh=a6UE8wMAI9FZv9/ryS9Bcv0eROubbnj/uI47miCzcbY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=dfR+iaOtGYAKwXXZIjBbz0KSh1RWRJHbs3RU0+au1+CDmUot/PX2AQyo3PgleUvN2YrDC86IUm53v7j9si1sUxwlEFXdu+jjZ1r+iwhPZm/zeQrIMsZPmPfXAUMII3O3jqqR1hHshPK0apez+3z1mTs4Lbp5b324evdux3r/d3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=adf+xkBs; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 35F742C00BE;
-	Wed, 19 Feb 2025 08:52:38 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1739908358;
-	bh=l/upjVotxSoO3Ct3ZBm+CDlsrjYDM2i5ETyqoJk0qzc=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=adf+xkBsykOLDcipD5TksS5rbomqGs1pRb3Kn4h8zEh08qJFiFyl7z8b0ime1w4Pj
-	 eNPUGyJ+NzAW4zkymr0U9AJU/D0BiQ+pZKUw2pdM4gnK42e3q5KATMazF+y/ktsqY9
-	 SJWyK7Sybv9sgKKhIwtrsmI/G0MlcQMwrTJDib0zGb2gbpOqCdI72fcu/nwaewHQIL
-	 ah1fVKJr5V1sE0vuZfzmzHSbTLZTS7ZtNQruvfJ7Q853MytnlBw0wMmz7KsU7WZlAm
-	 MmAfz+YcOLKX6UZNK8v4oV1aQlo4bj5Ve0Xtz/FGSsdSZn4f04oWwIeRDssJ1kFrB7
-	 A3Is1uNo8y89A==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B67b4e5050000>; Wed, 19 Feb 2025 08:52:37 +1300
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-	by pat.atlnz.lc (Postfix) with ESMTP id C1FD713EE36;
-	Wed, 19 Feb 2025 08:52:37 +1300 (NZDT)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-	id BEB022804FB; Wed, 19 Feb 2025 08:52:37 +1300 (NZDT)
-From: Chris Packham <chris.packham@alliedtelesis.co.nz>
-To: lee@kernel.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	andrew+netdev@lunn.ch,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	tsbogend@alpha.franken.de
-Cc: devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [RESEND PATCH net-next 5/5] mips: dts: cameo-rtl9302c: Add switch block
-Date: Wed, 19 Feb 2025 08:52:16 +1300
-Message-ID: <20250218195216.1034220-6-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250218195216.1034220-1-chris.packham@alliedtelesis.co.nz>
-References: <20250218195216.1034220-1-chris.packham@alliedtelesis.co.nz>
+	s=arc-20240116; t=1739934217; c=relaxed/simple;
+	bh=823YSGjZ/fts8Pi6bH2rMVqoh69XMYl9RqrZLvNxu8M=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fRTo5Kyxty/7nLQ5vUWi99TZVkJCpmO8sDD05FUUC7EtDzrIbcaIfWegdIKGZhCMQQKB75VHcXVB3bvg93YEMJG+2QEZYaJxALDEMN5Dwm2ylC555Nj2Y80X3D20aWmGeLM3TdG1/o8ntIPPHrPyT5H5z0U0mTVHEjnHsHgMeAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JLgVTn4F; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA279C4CEE7;
+	Wed, 19 Feb 2025 03:03:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739934216;
+	bh=823YSGjZ/fts8Pi6bH2rMVqoh69XMYl9RqrZLvNxu8M=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=JLgVTn4FgXFMrOnavtyFMsGJ8f1SeqmyTt857+q9K/pzuzdjFMn+p/pvwDNPb74OD
+	 cEK2vlV2d1yqoQwbYjrRMjZwKFWsOhvMbz2n17l6tKRqrk4+zwFs6FYR76ymj2x8WF
+	 y8aTjG81BXAS1FeGuvyEP233SRJ8nAHUZ4gSqk7dUpOGSbwJU/iZt6ox7W4jBG/pje
+	 6XD23kjDBr5OOSWleXHb2dU9cn/kUo93k6AKJNfG+t1oJpThIw8AN70AzfsKsDcoUV
+	 MbNktgNiBVvvoXK1Ns7yf61TJ8+V6GgoRnbTenDH9D5anqAn5Z1vZGEEHVGEG2L5O8
+	 orOM0OKa5qr3Q==
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5e04f87584dso4542674a12.3;
+        Tue, 18 Feb 2025 19:03:36 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU/9vBbMKMR4yKTZAT6LccxvKGMQbpT2O4Id6cQpUhPnjzag0tUki2mY6qNmzYq/uPhuH6gzXrtD8z69w==@vger.kernel.org, AJvYcCXXbH3Sse66VcWPe7xum0lgyz1STyI9hcVcfw2TLaKZWZf69dCvsFCBAJoo4X/TQoa0ZapA/nYvWnGMCVk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzd8dCUEGCPGAt2IDdGaLDC0PMWa1yK00MzKBkyxO8gPMHqwcss
+	RRqS8H7eMWWvTQwz5MD+nY+dCfgI84EsqBogMiFJtGijprCPAVVd49JVfN0n9ZjMaOhSU1yPyTE
+	T9wpEs8nXKZO64EbAfiZidqONG6w=
+X-Google-Smtp-Source: AGHT+IE2X9/VM9AUZTraUPRmg4QJ5cYjqTloHovVNqu75KCSz8bGRkLf2c/KZFgTwjSWHd44Akd+FzRmk3bdyyI1Huc=
+X-Received: by 2002:a17:906:478d:b0:aba:5e50:6984 with SMTP id
+ a640c23a62f3a-abbcccd156amr156510866b.2.1739934215330; Tue, 18 Feb 2025
+ 19:03:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20250218090203.43137-1-marco.crivellari@suse.com>
+ <20250218090203.43137-2-marco.crivellari@suse.com> <Z7R2GqWOufd8l6NZ@alpha.franken.de>
+ <CAAhV-H7ygGqCYyQf_tvFrgEBR6uva35auGP9yhxQFqw4mpQBwA@mail.gmail.com> <Z7SQNhL0FYGkX0Ng@alpha.franken.de>
+In-Reply-To: <Z7SQNhL0FYGkX0Ng@alpha.franken.de>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Wed, 19 Feb 2025 11:03:25 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H7cizXw-zta7sW+AKP3UiqRE52K7YdDhH7YoCr=LaCGWA@mail.gmail.com>
+X-Gm-Features: AWEUYZnoQ-H6kd4mjCfLOeaxVKSFbu3Y_rLlZZyNV02vMzdET83OZIZqllnOTKY
+Message-ID: <CAAhV-H7cizXw-zta7sW+AKP3UiqRE52K7YdDhH7YoCr=LaCGWA@mail.gmail.com>
+Subject: Re: [PATCH v2 1/1] MIPS: Fix idle VS timer enqueue
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Marco Crivellari <marco.crivellari@suse.com>, linux-mips@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Frederic Weisbecker <frederic@kernel.org>, 
+	Anna-Maria Behnsen <anna-maria@linutronix.de>, Thomas Gleixner <tglx@linutronix.de>, 
+	Peter Zijlstra <peterz@infradead.org>, "Maciej W . Rozycki" <macro@orcam.me.uk>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=ccpxrWDM c=1 sm=1 tr=0 ts=67b4e505 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=T2h4t0Lz3GQA:10 a=VwQbUJbxAAAA:8 a=PSQZVNSXpqiPPuIuS3oA:9 a=3ZKOabzyN94A:10 a=Ouh7WndvZ0esTx3naE_M:22
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
 
-Add the switch port and phys to the cameo-rtl9302c-2x-rtl8224-2xge
-board.
-
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
+On Tue, Feb 18, 2025 at 9:51=E2=80=AFPM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+>
+> On Tue, Feb 18, 2025 at 08:14:43PM +0800, Huacai Chen wrote:
+> > Hi, Thomas,
+> >
+> > On Tue, Feb 18, 2025 at 7:59=E2=80=AFPM Thomas Bogendoerfer
+> > <tsbogend@alpha.franken.de> wrote:
+> > >
+> > > On Tue, Feb 18, 2025 at 10:02:03AM +0100, Marco Crivellari wrote:
+> > > > MIPS re-enables interrupts on its idle routine and performs
+> > > > a TIF_NEED_RESCHED check afterwards before putting the CPU to sleep=
+.
+> > > >
+> > > > The IRQs firing between the check and the 'wait' instruction may se=
+t the
+> > > > TIF_NEED_RESCHED flag. In order to deal with this possible race, IR=
+Qs
+> > > > interrupting __r4k_wait() rollback their return address to the
+> > > > beginning of __r4k_wait() so that TIF_NEED_RESCHED is checked
+> > > > again before going back to sleep.
+> > > >
+> > > > However idle IRQs can also queue timers that may require a tick
+> > > > reprogramming through a new generic idle loop iteration but those t=
+imers
+> > > > would go unnoticed here because __r4k_wait() only checks
+> > > > TIF_NEED_RESCHED. It doesn't check for pending timers.
+> > > >
+> > > > Fix this with fast-forwarding idle IRQs return address to the end o=
+f the
+> > > > idle routine instead of the beginning, so that the generic idle loo=
+p
+> > > > handles both TIF_NEED_RESCHED and pending timers.
+> > > >
+> > > > Signed-off-by: Marco Crivellari <marco.crivellari@suse.com>
+> > > > ---
+> > > >  arch/mips/kernel/genex.S | 39 +++++++++++++++++++++---------------=
 ---
+> > > >  arch/mips/kernel/idle.c  |  1 -
+> > > >  2 files changed, 21 insertions(+), 19 deletions(-)
+> > > >
+> > > > diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
+> > > > index a572ce36a24f..9747b216648f 100644
+> > > > --- a/arch/mips/kernel/genex.S
+> > > > +++ b/arch/mips/kernel/genex.S
+> > > > @@ -104,25 +104,27 @@ handle_vcei:
+> > > >
+> > > >       __FINIT
+> > > >
+> > > > -     .align  5       /* 32 byte rollback region */
+> > > > +     .align  5
+> > > >  LEAF(__r4k_wait)
+> > > >       .set    push
+> > > >       .set    noreorder
+> > > > -     /* start of rollback region */
+> > > > -     LONG_L  t0, TI_FLAGS($28)
+> > > > -     nop
+> > > > -     andi    t0, _TIF_NEED_RESCHED
+> > > > -     bnez    t0, 1f
+> > > > -      nop
+> > > > -     nop
+> > > > -     nop
+> > > > -#ifdef CONFIG_CPU_MICROMIPS
+> > > > -     nop
+> > > > -     nop
+> > > > -     nop
+> > > > -     nop
+> > > > -#endif
+> > >
+> > > My quick search didnn't find the reason for the extra NOPs on MICROMI=
+PS, but
+> > > they are here for a purpose. I might still need them...
+> > The original code needs #ifdef CONFIG_CPU_MICROMIPS because nop in
+> > MICROMIPS is 2 bytes, so need another four nop to align. But _ssnop is
+> > always 4 bytes, so we can remove #ifdefs.
+>
+> ic
+>
+> > > > +     _ssnop
+> > > > +     _ssnop
+> > > > +     _ssnop
+> > >
+> > > instead of handcoded hazard nops, use __irq_enable_hazard for that
+> > No, I don't think so, this region should make sure be 32 bytes on each
+> > platform, but __irq_enable_hazard is not consistent, 3 _ssnop is the
+> > fallback implementation but available for all MIPS.
+>
+> you are right for most cases, but there is one case
+>
+> #elif (defined(CONFIG_CPU_MIPSR1) && !defined(CONFIG_MIPS_ALCHEMY)) || \
+>         defined(CONFIG_CPU_BMIPS)
+>
+> which uses
+>
+> #define __irq_enable_hazard                                             \
+>         ___ssnop;                                                       \
+>         ___ssnop;                                                       \
+>         ___ssnop;                                                       \
+>         ___ehb
+>
+> if MIPSR1 || BMIPS needs "rollback" handler 3 ssnnop would be wrong as
+> irq enable hazard.
+Emm, this is a problem. I think we can add _ehb after 3 _ssnop. And
+then change the below "daddiu k0, 1" to "PTR_ADDIU k0, 5".
 
-Notes:
-    This is technically v7 of [1]. Differences from that are that I've
-    omitted the MDIO busses and PHYs while I'm trying to sort out the swi=
-tch
-    bindings. I'll add these back in a follow up series.
-   =20
-    [1] - https://lore.kernel.org/lkml/20250204030249.1965444-7-chris.pac=
-kham@alliedtelesis.co.nz/
+Maybe there is a better solution, but I think this is the simplest.
 
- .../cameo-rtl9302c-2x-rtl8224-2xge.dts        | 48 +++++++++++++++++++
- 1 file changed, 48 insertions(+)
+Huacai
 
-diff --git a/arch/mips/boot/dts/realtek/cameo-rtl9302c-2x-rtl8224-2xge.dt=
-s b/arch/mips/boot/dts/realtek/cameo-rtl9302c-2x-rtl8224-2xge.dts
-index 6789bf374044..51306c104b01 100644
---- a/arch/mips/boot/dts/realtek/cameo-rtl9302c-2x-rtl8224-2xge.dts
-+++ b/arch/mips/boot/dts/realtek/cameo-rtl9302c-2x-rtl8224-2xge.dts
-@@ -71,3 +71,51 @@ partition@1180000 {
- 		};
- 	};
- };
-+
-+&switch0 {
-+	ethernet-ports {
-+		#address-cells =3D <1>;
-+		#size-cells =3D <0>;
-+
-+		port@0 {
-+			reg =3D <0>;
-+			phy-mode =3D "usxgmii";
-+		};
-+		port@1 {
-+			reg =3D <1>;
-+			phy-mode =3D "usxgmii";
-+		};
-+		port@2 {
-+			reg =3D <2>;
-+			phy-mode =3D "usxgmii";
-+		};
-+		port@3 {
-+			reg =3D <3>;
-+			phy-mode =3D "usxgmii";
-+		};
-+		port@16 {
-+			reg =3D <16>;
-+			phy-mode =3D "usxgmii";
-+		};
-+		port@17 {
-+			reg =3D <17>;
-+			phy-mode =3D "usxgmii";
-+		};
-+		port@18 {
-+			reg =3D <18>;
-+			phy-mode =3D "usxgmii";
-+		};
-+		port@19 {
-+			reg =3D <19>;
-+			phy-mode =3D "usxgmii";
-+		};
-+		port@24{
-+			reg =3D <24>;
-+			phy-mode =3D "10gbase-r";
-+		};
-+		port@25{
-+			reg =3D <25>;
-+			phy-mode =3D "10gbase-r";
-+		};
-+	};
-+};
---=20
-2.48.1
-
+>
+> > > But I doubt this works, because the wait instruction is not aligned t=
+o
+> > > a 32 byte boundary, but the code assuemes this, IMHO.
+> > Why? After this patch we only use 4 byte instructions.
+>
+> I've should have looked at the compiled output, sorry for the noise
+>
+> Still this construct feels rather fragile.
+>
+> Thomas.
+>
+> --
+> Crap can work. Given enough thrust pigs will fly, but it's not necessaril=
+y a
+> good idea.                                                [ RFC1925, 2.3 =
+]
 
