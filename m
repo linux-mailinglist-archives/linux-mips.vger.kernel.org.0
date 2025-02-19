@@ -1,136 +1,150 @@
-Return-Path: <linux-mips+bounces-7863-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7864-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9FCA5A3C5DC
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Feb 2025 18:16:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CED01A3C7A7
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Feb 2025 19:34:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A0B717A69D8
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Feb 2025 17:15:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D3A73BDB41
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Feb 2025 18:30:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59A9F21423A;
-	Wed, 19 Feb 2025 17:16:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0535215041;
+	Wed, 19 Feb 2025 18:25:01 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6425C8F58;
-	Wed, 19 Feb 2025 17:16:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2657A215051;
+	Wed, 19 Feb 2025 18:24:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739985368; cv=none; b=ZsXURLcP01yG782DM514f6OtvM8vz04uNmpDnuDCi0qAbwnpBxs28oOI9tZhkPS52hYeZSYPGAid9Yp4rC2doCKPOQXzKGYEchVtl9h6C3WH4OVn++TqoiFmXJ8B+JDAYtit/HPjorAX2q9+37GYj2dHc38Pbxhe87va/NTC4Ug=
+	t=1739989501; cv=none; b=FO0psq/YwBdIUoQ2ILfSP/W27PeW+0HbRUTBt6PWuwEnLIklRtuHDPtfMyrxf316+EnMRSGMxi3ah4ay9iRJQ5uJLVmyU23C9nQQouHhv7ZGsqifKNxIOoArZbRZEWmV/syjYVyaMK/C1Ozwg+1LH1muVeKe66bZTPzZ+BOCagk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739985368; c=relaxed/simple;
-	bh=7QI0wT4+63qh/XUmz07BMZkRninTpYvjv4idET9mc5E=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=EeoKwkDoiuqkVws/peZWoQR4G4vxfLjIos7nUrbWYOymatWtUs8xmrwi8IDwQJs1wZ7BjqW7cUV9E35cyjt2UO+knXQXxVygshZbsg5ElhdSdQPN2T8aOTjjNBM33NnzZM5BfoR/+/Hy9Vrrt2jdOTudOCDuE6mIY8GKP7GnOAU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 247399200B3; Wed, 19 Feb 2025 18:16:05 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 1E09592009E;
-	Wed, 19 Feb 2025 17:16:05 +0000 (GMT)
-Date: Wed, 19 Feb 2025 17:16:05 +0000 (GMT)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: "Dmitry V. Levin" <ldv@strace.io>
-cc: Andrew Morton <akpm@linux-foundation.org>, Oleg Nesterov <oleg@redhat.com>, 
-    Alexey Gladkov <legion@kernel.org>, 
-    Eugene Syromyatnikov <evgsyr@gmail.com>, 
-    Charlie Jenkins <charlie@rivosinc.com>, Helge Deller <deller@gmx.de>, 
-    Mike Frysinger <vapier@gentoo.org>, Renzo Davoli <renzo@cs.unibo.it>, 
-    Davide Berardi <berardi.dav@gmail.com>, Vineet Gupta <vgupta@kernel.org>, 
-    Russell King <linux@armlinux.org.uk>, 
-    Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-    Brian Cain <bcain@quicinc.com>, Huacai Chen <chenhuacai@kernel.org>, 
-    WANG Xuerui <kernel@xen0n.name>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-    Michal Simek <monstr@monstr.eu>, 
-    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-    Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>, 
-    Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>, 
-    Stafford Horne <shorne@gmail.com>, 
-    "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
-    Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-    Christophe Leroy <christophe.leroy@csgroup.eu>, 
-    Naveen N Rao <naveen@kernel.org>, 
-    Madhavan Srinivasan <maddy@linux.ibm.com>, 
-    Paul Walmsley <paul.walmsley@sifive.com>, 
-    Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-    Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-    Alexander Gordeev <agordeev@linux.ibm.com>, 
-    Christian Borntraeger <borntraeger@linux.ibm.com>, 
-    Sven Schnelle <svens@linux.ibm.com>, 
-    Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
-    John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
-    "David S. Miller" <davem@davemloft.net>, 
-    Andreas Larsson <andreas@gaisler.com>, Richard Weinberger <richard@nod.at>, 
-    Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
-    Johannes Berg <johannes@sipsolutions.net>, 
-    Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-    Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
-    x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-    Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, 
-    Arnd Bergmann <arnd@arndb.de>, strace-devel@lists.strace.io, 
-    linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org, 
-    linux-arm-kernel@lists.infradead.org, linux-hexagon@vger.kernel.org, 
-    loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org, 
-    linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org, 
-    linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-    linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-    linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
-    linux-um@lists.infradead.org, linux-arch@vger.kernel.org
+	s=arc-20240116; t=1739989501; c=relaxed/simple;
+	bh=GrTE54XdDfZtzydkNGUD7OCxsGhwSrKF0d0bl5d69OU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Is07F+nF3jBy3/C66xAlfGn7STJKpHt+9UgeumPz4ENMJwMLVFeNnjNler6Szc947pLpl/mZyOokQPI/LKlR+SCxQELjYenWDQSzycrOYZtXJJJzim6J97c1tInns6iwOdWiPX1SMhkCKe8S9llMJ/ayR6r6u9XouIuhP7t1BgI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
+Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
+	by vmicros1.altlinux.org (Postfix) with ESMTP id 58E4472C8F5;
+	Wed, 19 Feb 2025 21:24:52 +0300 (MSK)
+Received: by mua.local.altlinux.org (Postfix, from userid 508)
+	id 3EF437CCB3A; Wed, 19 Feb 2025 20:24:52 +0200 (IST)
+Date: Wed, 19 Feb 2025 20:24:52 +0200
+From: "Dmitry V. Levin" <ldv@strace.io>
+To: "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Oleg Nesterov <oleg@redhat.com>, Alexey Gladkov <legion@kernel.org>,
+	Eugene Syromyatnikov <evgsyr@gmail.com>,
+	strace-devel@lists.strace.io, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v6 3/6] syscall.h: introduce syscall_set_nr()
-In-Reply-To: <20250217091034.GD18175@strace.io>
-Message-ID: <alpine.DEB.2.21.2502191658530.65342@angie.orcam.me.uk>
+Message-ID: <20250219182451.GA14216@strace.io>
 References: <20250217091034.GD18175@strace.io>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+ <alpine.DEB.2.21.2502191658530.65342@angie.orcam.me.uk>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.2502191658530.65342@angie.orcam.me.uk>
 
-On Mon, 17 Feb 2025, Dmitry V. Levin wrote:
+On Wed, Feb 19, 2025 at 05:16:05PM +0000, Maciej W. Rozycki wrote:
+> On Mon, 17 Feb 2025, Dmitry V. Levin wrote:
+> 
+> > diff --git a/arch/mips/include/asm/syscall.h b/arch/mips/include/asm/syscall.h
+> > index ea050b23d428..b956b015641c 100644
+> > --- a/arch/mips/include/asm/syscall.h
+> > +++ b/arch/mips/include/asm/syscall.h
+> > @@ -41,6 +41,20 @@ static inline long syscall_get_nr(struct task_struct *task,
+> >  	return task_thread_info(task)->syscall;
+> >  }
+> >  
+> > +static inline void syscall_set_nr(struct task_struct *task,
+> > +				  struct pt_regs *regs,
+> > +				  int nr)
+> > +{
+> > +	/*
+> > +	 * New syscall number has to be assigned to regs[2] because
+> > +	 * syscall_trace_entry() loads it from there unconditionally.
+> 
+>  That label is called `trace_a_syscall' in arch/mips/kernel/scall64-o32.S 
+> instead.  To bring some order and avoid an inaccuracy here should the odd 
+> one be matched to the other three?
 
-> diff --git a/arch/mips/include/asm/syscall.h b/arch/mips/include/asm/syscall.h
-> index ea050b23d428..b956b015641c 100644
-> --- a/arch/mips/include/asm/syscall.h
-> +++ b/arch/mips/include/asm/syscall.h
-> @@ -41,6 +41,20 @@ static inline long syscall_get_nr(struct task_struct *task,
->  	return task_thread_info(task)->syscall;
->  }
->  
-> +static inline void syscall_set_nr(struct task_struct *task,
-> +				  struct pt_regs *regs,
-> +				  int nr)
-> +{
-> +	/*
-> +	 * New syscall number has to be assigned to regs[2] because
-> +	 * syscall_trace_entry() loads it from there unconditionally.
+Apparently, there are two instances of syscall_trace_entry(), one
+n32_syscall_trace_entry(), one trace_a_syscall(), and each of them
+is calling syscall_trace_enter(), not to be confused with
+syscall_trace_entry():
 
- That label is called `trace_a_syscall' in arch/mips/kernel/scall64-o32.S 
-instead.  To bring some order and avoid an inaccuracy here should the odd 
-one be matched to the other three?
+scall32-o32.S-syscall_trace_entry:
+scall32-o32.S-	SAVE_STATIC
+scall32-o32.S-	move	a0, sp
+scall32-o32.S-
+scall32-o32.S:	jal	syscall_trace_enter
+scall32-o32.S-
+scall32-o32.S-	bltz	v0, 1f			# seccomp failed? Skip syscall
+scall32-o32.S-
+scall32-o32.S-	RESTORE_STATIC
+scall32-o32.S-	lw	v0, PT_R2(sp)		# Restore syscall (maybe modified)
+--
+scall64-n32.S-n32_syscall_trace_entry:
+scall64-n32.S-	SAVE_STATIC
+scall64-n32.S-	move	a0, sp
+scall64-n32.S:	jal	syscall_trace_enter
+scall64-n32.S-
+scall64-n32.S-	bltz	v0, 1f			# seccomp failed? Skip syscall
+scall64-n32.S-
+scall64-n32.S-	RESTORE_STATIC
+scall64-n32.S-	ld	v0, PT_R2(sp)		# Restore syscall (maybe modified)
+--
+scall64-n64.S-syscall_trace_entry:
+scall64-n64.S-	SAVE_STATIC
+scall64-n64.S-	move	a0, sp
+scall64-n64.S:	jal	syscall_trace_enter
+scall64-n64.S-
+scall64-n64.S-	bltz	v0, 1f			# seccomp failed? Skip syscall
+scall64-n64.S-
+scall64-n64.S-	RESTORE_STATIC
+scall64-n64.S-	ld	v0, PT_R2(sp)		# Restore syscall (maybe modified)
+--
+scall64-o32.S-trace_a_syscall:
+scall64-o32.S-	SAVE_STATIC
+scall64-o32.S-	sd	a4, PT_R8(sp)		# Save argument registers
+scall64-o32.S-	sd	a5, PT_R9(sp)
+scall64-o32.S-	sd	a6, PT_R10(sp)
+scall64-o32.S-	sd	a7, PT_R11(sp)		# For indirect syscalls
+scall64-o32.S-
+scall64-o32.S-	move	a0, sp
+scall64-o32.S:	jal	syscall_trace_enter
+scall64-o32.S-
+scall64-o32.S-	bltz	v0, 1f			# seccomp failed? Skip syscall
+scall64-o32.S-
+scall64-o32.S-	RESTORE_STATIC
+scall64-o32.S-	ld	v0, PT_R2(sp)		# Restore syscall (maybe modified)
 
-> +	 *
-> +	 * Consequently, if the syscall was indirect and nr != __NR_syscall,
-> +	 * then after this assignment the syscall will cease to be indirect.
-> +	 */
-> +	task_thread_info(task)->syscall = regs->regs[2] = nr;
-> +}
-> +
->  static inline void mips_syscall_update_nr(struct task_struct *task,
->  					  struct pt_regs *regs)
->  {
+I'd change the wording of my comment rather than try to disentangle this.
+After all, the most important here is that the new syscall number is
+loaded from regs[2] right after the syscall_trace_enter() invocation.
 
- Otherwise:
+Would you be OK with the following wording:
+	/*
+	 * New syscall number has to be assigned to regs[2] because it is
+	 * loaded from there unconditionally after syscall_trace_enter()
+	 * invocation.
+	 *
+	 * Consequently, if the syscall was indirect and nr != __NR_syscall,
+	 * then after this assignment the syscall will cease to be indirect.
+	 */
+?
 
-Reviewed-by: Maciej W. Rozycki <macro@orcam.me.uk>
 
-for this part, thank you!
-
-  Maciej
+-- 
+ldv
 
