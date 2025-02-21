@@ -1,99 +1,117 @@
-Return-Path: <linux-mips+bounces-7888-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7889-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5A09A3F6CA
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Feb 2025 15:06:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEE61A3F6CE
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Feb 2025 15:06:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 27075189896C
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Feb 2025 14:06:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3EFDA1898BED
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Feb 2025 14:06:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDEFD20E307;
-	Fri, 21 Feb 2025 14:05:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00FB020E33A;
+	Fri, 21 Feb 2025 14:05:46 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2B671BCA07;
-	Fri, 21 Feb 2025 14:05:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C261433DE;
+	Fri, 21 Feb 2025 14:05:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740146745; cv=none; b=G7XQ8pszPEGV9gN21UrvVFi4Wz6nyqwBINAqgCoA/AIBv7TrfXGD7FzorCz6QCbwn+KZyHPAwbPK17oNpKlfuezadEg/zHYzIQ2Pxc22JNnE48dHe9G2d/4MyhiN5oN+2TZJ9d9OldAv1ADzppB78pttsEcO+ArjGWuXWm6C0TQ=
+	t=1740146745; cv=none; b=QaB7WwsE9Qo4/vfDVbx4arlImn+3VWOvp3lhqA+IZzh/pU3BnxLkDlHIU4XqnFX9FaH3l8Z2z+Qn2EmXUnSZ7at3Be0Ul5h8UsmneDnNl0JYtx/KWCuTKfebmtKGhtimCMUuEYnEzhm1ECm8991aEDIHAEQRs87f2gpXAwy72WY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1740146745; c=relaxed/simple;
-	bh=xU7/wEZfiw+9Pn0wYe4JOCCx45ck0D30lzuetNbvIYw=;
+	bh=YiJ/Qghnk0jq0ET6Vz0pUevyXrZcESw1J1T+Ctvxad8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BAMXJ+B18qzn+L1pgufpMMJBZ1AlkF3ht2G76gVNV64ul5BgApeqe1cKIIG8/YJ0V6ErDVgGSCIKN4m/ZB3TmyAmoh8yncQey3kA3FupCn2KKPC+BfTxorihugoaXsjlpkhIRW/yWUCIcHXMYtmwJyXyF/kJNyxqJQIeo450gog=
+	 Content-Type:Content-Disposition:In-Reply-To; b=U0Nbnwj5i7TpXJ040QggwdUKEDmvDSJSSrX+NHRcSlxrDon7YSIwhaVLeARxS49EXQGdEetzbfbS9/jVoe6fBXiiAMEP67KLPhKImJbihCi/BjJhB3eUnO07ZK5GiUkxD4QqtZuQPwAgPkG6x0SaY3vllrGgKfsB90Nd7bGmVn4=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1tlTet-00007t-00; Fri, 21 Feb 2025 15:05:39 +0100
+	id 1tlTet-00007v-00; Fri, 21 Feb 2025 15:05:39 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id C0706C0135; Fri, 21 Feb 2025 15:03:14 +0100 (CET)
-Date: Fri, 21 Feb 2025 15:03:14 +0100
+	id BF6E6C03B4; Fri, 21 Feb 2025 15:04:35 +0100 (CET)
+Date: Fri, 21 Feb 2025 15:04:35 +0100
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc: linux-clk@vger.kernel.org, sboyd@kernel.org, mturquette@baylibre.com,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-	p.zabel@pengutronix.de, linux-mips@vger.kernel.org,
-	devicetree@vger.kernel.org, yangshiji66@outlook.com,
+To: Gregory CLEMENT <gregory.clement@bootlin.com>
+Cc: Aleksandar Rikalo <arikalo@gmail.com>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/6] mips: dts: ralink: update system controller nodes
- and its consumers
-Message-ID: <Z7iHorlRgtsi1LOo@alpha.franken.de>
-References: <20250120092146.471951-1-sergio.paracuellos@gmail.com>
- <CAMhs-H-VevC+_=HxhMU6-at0bKut_JqdgO7j2detuB4s8R_QFQ@mail.gmail.com>
+Subject: Re: [PATCH v3 0/5] MIPS: Allow using multi-cluster with a broken HCI.
+Message-ID: <Z7iH83W6Og2AA92f@alpha.franken.de>
+References: <20250123-cluster-hci-broken-v3-0-8a7ec57cbf68@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMhs-H-VevC+_=HxhMU6-at0bKut_JqdgO7j2detuB4s8R_QFQ@mail.gmail.com>
+In-Reply-To: <20250123-cluster-hci-broken-v3-0-8a7ec57cbf68@bootlin.com>
 
-On Fri, Feb 21, 2025 at 11:48:34AM +0100, Sergio Paracuellos wrote:
-> Hi Thomas,
+On Thu, Jan 23, 2025 at 12:01:53PM +0100, Gregory CLEMENT wrote:
+> Hello,
 > 
-> El El lun, 20 ene 2025 a las 10:21, Sergio Paracuellos <
-> sergio.paracuellos@gmail.com> escribió:
+> Some CM3.5 reports indicate that Hardware Cache Initialization is
+> complete, but in reality it's not the case. They also incorrectly show
+> that Hardware Cache Initialization is supported. Unfortunately, it is
+> not possible to detect this issue at runtime and the information has
+> to be passed by the device tree.
 > 
-> > Hi all!
-> >
-> > Ralinks SoCs have a system controller node which serves as clock and reset
-> > providers for the rest of the world. This patch series introduces clock
-> > definitions for these SoCs. The clocks are registered in the driver using
-> > a bunch of arrays in specific order so these definitions represent the
-> > assigned
-> > identifier that is used when this happens so client nodes can easily use it
-> > to specify the clock which they consume without the need of checking
-> > driver code.
-> >
-> > DTS files which are currently on tree are not matching system controller
-> > bindings. So all of them are updated to properly match them.
-> >
-> > I'd like this series to go through kernel mips git tree if possible.
-> >
-> > Thanks in advance for your time.
-> >
-> > Changes in v3:
-> > - Address Krzysztof comments in v2 (Thanks!):
-> >   + Drop reset include file since what it was defined there were hardware
-> >     constants and no binding related indexes at all.
-> >   + Update patches for not referring to this reset removed file.
+> In this third version, I rebased on v6.13. I also addressed remarks
+> made by Rob and Krzysztof, and endeavored to add more explanation
+> about CM, explaining why we now need to represent it in the device
+> tree.
 > 
+> My initial proposal was integrated into the series set by Aleksandar
+> here [1]. And the series adding the CM binding was here: [2]. The
+> patches 1,2,3, and 5 have no dependencies while patch 4 should depend
+> on this series [1]. Actually, those five patches should replace
+> patches 10, 11, and 12.
 > 
-> I was expecting this series going through the mips tree.
+> Gregory
+> 
+> [1]: https://lore.kernel.org/all/20241028175935.51250-1-arikalo@gmail.com/
+> [2]: https://lore.kernel.org/all/20240612-cm_probe-v2-5-a5b55440563c@flygoat.com/
+> 
+> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+> ---
+> Changes in v3:
+> - Provide a more detailed explanation about the CM in the device tree binding.
+> - Make the reg property optional for all compatible strings.
+> - Use "mobileye" instead of "mti" for the eyeq6-cm compatible string.
+> - Address and correct the formatting issues in example and description.
+> - Link to v2: https://lore.kernel.org/r/20250116-cluster-hci-broken-v2-0-fc52cfb7a19e@bootlin.com
+> 
+> Changes in v2:
+> - Use compatible string instead of property
+> - Link to v1: https://lore.kernel.org/r/20241115-cluster-hci-broken-v1-0-00636800611d@bootlin.com
+> 
+> ---
+> Gregory CLEMENT (5):
+>       dt-bindings: mips: Document mti,mips-cm
+>       dt-bindings: mips: mips-cm: Add a new compatible string for EyeQ6
+>       MIPS: cm: Detect CM quirks from device tree
+>       MIPS: CPS: Support broken HCI for multicluster
+>       MIPS: mobileye: dts: eyeq6h: Enable cluster support
+> 
+>  .../devicetree/bindings/mips/mti,mips-cm.yaml      | 57 ++++++++++++++++++++++
+>  arch/mips/boot/dts/mobileye/eyeq6h.dtsi            |  4 ++
+>  arch/mips/include/asm/mips-cm.h                    | 22 +++++++++
+>  arch/mips/kernel/mips-cm.c                         | 14 ++++++
+>  arch/mips/kernel/smp-cps.c                         |  5 +-
+>  5 files changed, 101 insertions(+), 1 deletion(-)
 
-  DTC     arch/mips/boot/dts/ralink/rt3883_eval.dtb
-Error: /local/tbogendoerfer/korg/linux/arch/mips/boot/dts/ralink/rt3883.dtsi:2.1-9 syntax error
-FATAL ERROR: Unable to parse input tree
-
-that's what I get after applying the series building for RT3883.
+series applied to mips-next.
 
 Thomas.
 
