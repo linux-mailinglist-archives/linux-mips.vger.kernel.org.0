@@ -1,85 +1,119 @@
-Return-Path: <linux-mips+bounces-7893-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7892-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20A99A3F8F9
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Feb 2025 16:37:38 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1272FA3F919
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Feb 2025 16:41:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BD3AB7A45A7
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Feb 2025 15:36:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9527704696
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Feb 2025 15:37:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADF211DDA1E;
-	Fri, 21 Feb 2025 15:37:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C2901D5172;
+	Fri, 21 Feb 2025 15:37:17 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 216471B2182;
-	Fri, 21 Feb 2025 15:37:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A83D58632E;
+	Fri, 21 Feb 2025 15:37:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740152238; cv=none; b=mn64WmIjZ0jefh4AS1u+PQxCml/sBThxuOlZgJ8cxkS6OEctr08P4q5VTfOzeeKDVBKkvV8be9n5xMpIT/Vod6CKJKMbSHSGNz/7a5pefhHjUmEnDxnJtbmTjd1qKBe7QxeCpZIG6sNNNlcQtIghhtXyKj7eBjTd/EgNPuSESuA=
+	t=1740152237; cv=none; b=YeBgsEAzQhgyDtrpk/atys9jr/QK3BcJmzaBPk60z9VXLZLn+387GtBdagNkEPAy4DeoX3XzWxTfFWcb93y5WzvMHKzJglvM+bpBaKWw1NiykYma/vYMzHcRQBmII7HonSPDtutAY0knHkznv/zx+WgHeMkWW6L2Z0DXsJiVyI8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740152238; c=relaxed/simple;
-	bh=sQl+NDH4ucP23zlzdeyljU809ENGdXus6bFkv3gGXLA=;
+	s=arc-20240116; t=1740152237; c=relaxed/simple;
+	bh=fNwEUMICWArtXN6ij1vQ7gWszyVTypN8591MquG7YJ8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oXxnxC9KqwlyJgSdhvRTMeo5AT5ZWRY+kLFCjLc3yCXld3m98LJWYgqUREKh8rcuYDWS3JtLACsfffNDwaQ4n51dR7cJUXt9KvQyP8X/ZhljdARENnNuex2IIfHVRJScD1iHUnSnEVzgf4BPjlEGYpYuwd9/oK8EV/CvCcgluzo=
+	 Content-Type:Content-Disposition:In-Reply-To; b=u0IcOx151YsOl3fv+o1XxCFOKebfRzigU3gRaXdx5gbdXsLUtO2cf8j6UKq6SN4H5/K+vnotN4YG7DRVg9hq7bH73Nw3pr3A4YVwNV0Ph8jOhjoS1v2wNDnULEkcD1HeefAyNWXuTOjFiSLSkB23utZDQFJsXhnaC3Oxgs0DT98=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1tlV5S-0001AM-00; Fri, 21 Feb 2025 16:37:10 +0100
+	id 1tlV5S-0001AO-00; Fri, 21 Feb 2025 16:37:10 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 4C698C0135; Fri, 21 Feb 2025 16:27:25 +0100 (CET)
-Date: Fri, 21 Feb 2025 16:27:25 +0100
+	id CA4BEC0135; Fri, 21 Feb 2025 16:36:34 +0100 (CET)
+Date: Fri, 21 Feb 2025 16:36:34 +0100
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Sander Vanheule <sander@svanheule.net>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>,
-	devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+To: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc: linux-clk@vger.kernel.org, sboyd@kernel.org, mturquette@baylibre.com,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+	p.zabel@pengutronix.de, linux-mips@vger.kernel.org,
+	devicetree@vger.kernel.org, yangshiji66@outlook.com,
 	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/9] mips: dts: Split Realtek devicetrees
-Message-ID: <Z7ibXewhvwU1d1G3@alpha.franken.de>
-References: <20250119183424.259353-1-sander@svanheule.net>
+Subject: Re: [PATCH v3 0/6] mips: dts: ralink: update system controller nodes
+ and its consumers
+Message-ID: <Z7idguBa2bxZRoxX@alpha.franken.de>
+References: <20250120092146.471951-1-sergio.paracuellos@gmail.com>
+ <CAMhs-H-VevC+_=HxhMU6-at0bKut_JqdgO7j2detuB4s8R_QFQ@mail.gmail.com>
+ <Z7iHorlRgtsi1LOo@alpha.franken.de>
+ <CAMhs-H-fcWU-rz_3FeAuRe0xdCMmvffX2zrZwwmt=8RYpY4Lyg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250119183424.259353-1-sander@svanheule.net>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMhs-H-fcWU-rz_3FeAuRe0xdCMmvffX2zrZwwmt=8RYpY4Lyg@mail.gmail.com>
 
-On Sun, Jan 19, 2025 at 07:34:15PM +0100, Sander Vanheule wrote:
-> This patch series intends to clean up the base includes, shared between
-> hardware devicetrees. To get rid of some dtbs_check warnings, some cpu
-> clock prorerties are also modified.
+On Fri, Feb 21, 2025 at 03:50:09PM +0100, Sergio Paracuellos wrote:
+> Hi Thomas,
 > 
-> To indicate why the split-up is required, the series concludes with
-> adding some CPU peripherals to rtl838x.dtsi, which are then used to add
-> a gpio-restart for the Cisco SG220-26P.
+> On Fri, Feb 21, 2025 at 3:05 PM Thomas Bogendoerfer
+> <tsbogend@alpha.franken.de> wrote:
+> >
+> > On Fri, Feb 21, 2025 at 11:48:34AM +0100, Sergio Paracuellos wrote:
+> > > Hi Thomas,
+> > >
+> > > El El lun, 20 ene 2025 a las 10:21, Sergio Paracuellos <
+> > > sergio.paracuellos@gmail.com> escribió:
+> > >
+> > > > Hi all!
+> > > >
+> > > > Ralinks SoCs have a system controller node which serves as clock and reset
+> > > > providers for the rest of the world. This patch series introduces clock
+> > > > definitions for these SoCs. The clocks are registered in the driver using
+> > > > a bunch of arrays in specific order so these definitions represent the
+> > > > assigned
+> > > > identifier that is used when this happens so client nodes can easily use it
+> > > > to specify the clock which they consume without the need of checking
+> > > > driver code.
+> > > >
+> > > > DTS files which are currently on tree are not matching system controller
+> > > > bindings. So all of them are updated to properly match them.
+> > > >
+> > > > I'd like this series to go through kernel mips git tree if possible.
+> > > >
+> > > > Thanks in advance for your time.
+> > > >
+> > > > Changes in v3:
+> > > > - Address Krzysztof comments in v2 (Thanks!):
+> > > >   + Drop reset include file since what it was defined there were hardware
+> > > >     constants and no binding related indexes at all.
+> > > >   + Update patches for not referring to this reset removed file.
+> > >
+> > >
+> > > I was expecting this series going through the mips tree.
+> >
+> >   DTC     arch/mips/boot/dts/ralink/rt3883_eval.dtb
+> > Error: /local/tbogendoerfer/korg/linux/arch/mips/boot/dts/ralink/rt3883.dtsi:2.1-9 syntax error
+> > FATAL ERROR: Unable to parse input tree
 > 
-> Sander Vanheule (9):
->   mips: dts: realtek: Decouple RTL930x base DTSI
->   mips: dts: realtek: Clean up CPU clocks
->   mips: dts: realtek: Add address to SoC node name
->   mips: dts: realtek: Fold rtl83xx into rtl838x
->   mips: dts: realtek: Add SoC IRQ node for RTL838x
->   mips: dts: realtek: Correct uart interrupt-parent
->   mips: dts: realtek: Replace uart clock property
->   mips: dts: realtek: Add RTL838x SoC peripherals
->   mips: dts: realtek: Add restart to Cisco SG220-26P
-> 
->  arch/mips/boot/dts/realtek/cisco_sg220-26.dts |  10 +-
->  arch/mips/boot/dts/realtek/rtl838x.dtsi       | 111 +++++++++++++-
->  arch/mips/boot/dts/realtek/rtl83xx.dtsi       |  59 --------
->  arch/mips/boot/dts/realtek/rtl930x.dtsi       | 136 +++++++++++-------
->  4 files changed, 202 insertions(+), 114 deletions(-)
->  delete mode 100644 arch/mips/boot/dts/realtek/rtl83xx.dtsi
+> Weird, it looks like dtc is not happy with the "include" line with new
+> definitions? Are you getting this only with rt3883? Since all the
+> patches are almost the same and I compile tested this before sending..
+> Something got corrupted? I don't have my laptop now to check but I
+> will recheck again on monday.
 
-series applied to mips-next
+rt2880_eval.dts:/include/ "rt2880.dtsi"
+rt3052_eval.dts:#include "rt3050.dtsi"
+rt3883_eval.dts:/include/ "rt3883.dtsi"
+
+rt3052 works, rt2880 and rt3883 don't.
+
+changing the /include/ to #include makes them compile.
 
 Thomas.
 
