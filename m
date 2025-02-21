@@ -1,123 +1,264 @@
-Return-Path: <linux-mips+bounces-7897-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7898-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4D96A3FD43
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Feb 2025 18:20:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C3E0A3FD87
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Feb 2025 18:32:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 82D02424F74
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Feb 2025 17:19:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 465BE426171
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Feb 2025 17:32:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F41D24FC0D;
-	Fri, 21 Feb 2025 17:19:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33C932505C4;
+	Fri, 21 Feb 2025 17:32:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ijHunvv5"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C512424FBE8;
-	Fri, 21 Feb 2025 17:19:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9279235955;
+	Fri, 21 Feb 2025 17:32:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740158389; cv=none; b=P1FEvQw/6hUcyyz2uFfInzUV+vjt3/jaXKo8IJnXZs5QxLggiJZ+qveigJEOHAJqr1qxH6FZde6oLDDgJa8MZ3wFlocccqmjO0Ac0rIT/2RXMETqNQZ41J6m7c1iq8VPwARbp0Xuwk6D4gkdB9sXOlFYgCest+h4PHzo0oLfAOU=
+	t=1740159123; cv=none; b=oLv6y1OkMXFM/p/408F33kSmW4mE0IgWMSB4Ff2KsmiGqg7znv44YRrerFZRXn9sRIeZSBVgtLJ+tdqD7lVBVQT4DNy4Bi0Vtnl5gGDDhlgCaV47PkCe1udZ+397KHj2vl2CBiu7wX/QFyCzgz8rhKp5RTWL4MTBMDqT9Wj4E1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740158389; c=relaxed/simple;
-	bh=sPJHQfpUupiT6nv3HxYQj2vh/Kzsci4cr5S3NYoTg+M=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SowsPYnV8xVC1PhWJcdzxDiEDS2nYTpmrj5SUE/p4grlugnbmFEdG0Bch/bBAtfGQkCCdQK4cNKe4kcsW6x99MnSyxRDDUGXvrYPmjhCsxOinz5MCRmspKQzJ2LQYYPPY9zaMO3btG7tRVVaTPqbAd+Mdo28tXZKjtgYvX0GnIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1tlWgj-00028K-00; Fri, 21 Feb 2025 18:19:45 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 17851C03B4; Fri, 21 Feb 2025 18:18:57 +0100 (CET)
-Date: Fri, 21 Feb 2025 18:18:57 +0100
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Cc: linux-clk@vger.kernel.org, sboyd@kernel.org, mturquette@baylibre.com,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
-	p.zabel@pengutronix.de, linux-mips@vger.kernel.org,
-	devicetree@vger.kernel.org, yangshiji66@outlook.com,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 0/6] mips: dts: ralink: update system controller nodes
- and its consumers
-Message-ID: <Z7i1gV3tlcR22u-W@alpha.franken.de>
-References: <20250120092146.471951-1-sergio.paracuellos@gmail.com>
+	s=arc-20240116; t=1740159123; c=relaxed/simple;
+	bh=VgWxCpwf2Q9KFMIddgUkc2CYRnkLJjOOEXo3QLe5ToE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LwviaYhorPV7VCNQatiOdwUus43vQqfATNx5v2m2j010FDlE1tZPlvBuQ9tTgT1AkEbrTPEwQSzIauEgTkZsL5LjBVw0BMhm0MCRJqVDCRL4d1QYHTfoLZioAlsRfVZYX35/x/+hwVnFL131hDLFg8nEzf8IeJdTsyrlVym47nc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ijHunvv5; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-221206dbd7eso50503265ad.2;
+        Fri, 21 Feb 2025 09:32:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740159121; x=1740763921; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QZTfoZLKdGhieUhqNYuabAUMhySDG/Lsaab0mVAiuGk=;
+        b=ijHunvv5LuBZEwGp0skc8ozrfSXxe9VuyCPUkUxQyn7aZgWiyDiumpmHw+In3vJzfU
+         ZSKQ0PCSmmIOOxDnDBt3FwwYS5RMx2zogqQj5+TS0Lk09aQWDtCdnqhK3fqK1rJWoj8z
+         wBKtjB1n5jr47zUktrA0WTVe4JKeA8T2P+lKq8iHcDrra3vp8iihOvjadzK+Ur9RGaqq
+         uOeGpkgbzJZ5NLM+d16h4spYtXmvew8RmHo80MKxfBO4P1rASmEk1kM3PadgJ2OLKXhE
+         mKUFGjYafXoIA12fP5Cl8JYYkou3WEm+2CfYhKz7qW2dXLAJlF8WlJVxnATZ/KZJTFwQ
+         a0Pw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740159121; x=1740763921;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QZTfoZLKdGhieUhqNYuabAUMhySDG/Lsaab0mVAiuGk=;
+        b=C+f2BCF/UoxD8XHjdP3lGCy0G+Dy3bcLgnYEBNUGwcSWiARJTrdKLAfJcMNHAvsyz4
+         A3XuBt8+KCL0N/mdctcJTWmVAnOsfrlXWL6DWoN7rSKVcmDmr3meGVFTPeI9RnJRx4pf
+         ffs2M9OLL5GBPDqQWcuqbLeYNWNRNtFdRC/6LGrwE1GkBbDvZpitBSfmxH7edkIkcnGa
+         87KSVejOO+RFYxO6v8hCbb50jwWLvz4Sbkjgc/K1OGod+AS2HzTNiGaOOuEqwU71ZuqW
+         DOGqqzaQRsKye8EtWPneDgR5x9FeGF7iyYq6V5fheFf8teWUADOvhwkiYtStBs83244K
+         culg==
+X-Forwarded-Encrypted: i=1; AJvYcCUjm/1pXThXFv23EmDyBGABdnktgVfyTwemTw6TqZuKRmgfjYreU5/q4lIhFVTS1XcwotUshekAkFG6@vger.kernel.org, AJvYcCVm4u7gQLMacYFXA10XdLj4g+23ruGHCcKft/Y7xLMpLClKYZ6dn7XQfJ2zmQrP0l94TBIqP95If5GIGQ==@vger.kernel.org, AJvYcCVqbxBplpDgOVUrjZYRaT0MQB+BLQTFMU6BumQlxxIm8WDjs8YZFkZPT9am1LXjFDi2mC2doEQDbOfRZxLt@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywbpl53hfqaGP2RoHF6PaaNIdvI7Tydj0SRM2W3N0ylgATJkpBA
+	sAy3m/r1YbqCxWY08QrLLwnTVEablPykdKzxbIjz6N6KbG0ja2C5PsiQXcnvtYBD+T7Zwn/eBlb
+	gy1GS7mSSyIKVczHNjmz4Ma59hv2XAdndnCM=
+X-Gm-Gg: ASbGncvZ6Zhtq57qe632qldyIY2knTiDOOpGJZ5WMIigYD7mRL4oxMEhclTM7Jf82Sy
+	35ZeFIk24mHWSLVQbnj/0AeD6TpWWQwvyXXHkpdknlggvbWn++cIFi6A62prL+szoX5+4TN2u8h
+	2MNLs50A==
+X-Google-Smtp-Source: AGHT+IGvX6qvGMn+KIoSiym6cWI0/nkZPpF6Z96ZqNT2izY3BoWxN63KfbmCr+lFl0lhQj/RNR4+SRdsolaQeSBPF+s=
+X-Received: by 2002:a17:90b:4fd2:b0:2fc:2a9c:21de with SMTP id
+ 98e67ed59e1d1-2fce7b0814emr6701344a91.35.1740159120658; Fri, 21 Feb 2025
+ 09:32:00 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250120092146.471951-1-sergio.paracuellos@gmail.com>
+References: <20250120092146.471951-1-sergio.paracuellos@gmail.com>
+ <20250120092146.471951-7-sergio.paracuellos@gmail.com> <Z7i1aDGiHLsOFYyz@alpha.franken.de>
+In-Reply-To: <Z7i1aDGiHLsOFYyz@alpha.franken.de>
+From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date: Fri, 21 Feb 2025 18:31:51 +0100
+X-Gm-Features: AWEUYZmfPnR0Xkg3hXec_be0Y2VGoRk2tcCq1Cvh3Y4Iuwhnyr8MUjUABCqx5YI
+Message-ID: <CAMhs-H-8N766PMZMwmV8B3e=65pPZHA4ntnRWDMoqR-U_xULfA@mail.gmail.com>
+Subject: Re: [PATCH v3 6/6] mips: dts: ralink: mt7628a: update system
+ controller node and its consumers
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-clk@vger.kernel.org, sboyd@kernel.org, mturquette@baylibre.com, 
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com, 
+	p.zabel@pengutronix.de, linux-mips@vger.kernel.org, 
+	devicetree@vger.kernel.org, yangshiji66@outlook.com, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 20, 2025 at 10:21:40AM +0100, Sergio Paracuellos wrote:
-> Hi all!
-> 
-> Ralinks SoCs have a system controller node which serves as clock and reset
-> providers for the rest of the world. This patch series introduces clock
-> definitions for these SoCs. The clocks are registered in the driver using
-> a bunch of arrays in specific order so these definitions represent the assigned
-> identifier that is used when this happens so client nodes can easily use it
-> to specify the clock which they consume without the need of checking driver code.
-> 
-> DTS files which are currently on tree are not matching system controller
-> bindings. So all of them are updated to properly match them.
-> 
-> I'd like this series to go through kernel mips git tree if possible.
-> 
-> Thanks in advance for your time.
-> 
-> Changes in v3:
-> - Address Krzysztof comments in v2 (Thanks!):
->   + Drop reset include file since what it was defined there were hardware
->     constants and no binding related indexes at all.
->   + Update patches for not referring to this reset removed file.
-> 
-> Changes in v2:
-> - Redo commit messages in all the patches in the series to clarify why the changes
->   are needed asked by Krzysztof in v1.
->   
-> v2 of this series:
-> - https://lore.kernel.org/linux-clk/20250119154447.462857-1-sergio.paracuellos@gmail.com/T/#t 
-> 
-> v1 of this series:
-> - https://lore.kernel.org/linux-clk/20250115153019.407646-1-sergio.paracuellos@gmail.com/T/#t
-> 
-> Best regards,
->     Sergio Paracuellos
-> 
-> Sergio Paracuellos (6):
->   dt-bindings: clock: add clock definitions for Ralink SoCs
->   mips: dts: ralink: rt2880: update system controller node and its
->     consumers
->   mips: dts: ralink: rt3050: update system controller node and its
->     consumers
->   mips: dts: ralink: rt3883: update system controller node and its
->     consumers
->   mips: dts: ralink: mt7620a: update system controller node and its
->     consumers
->   mips: dts: ralink: mt7628a: update system controller node and its
->     consumers
-> 
->  .../bindings/clock/mediatek,mtmips-sysc.yaml  |  11 +-
->  arch/mips/boot/dts/ralink/mt7620a.dtsi        |  10 +-
->  arch/mips/boot/dts/ralink/mt7628a.dtsi        |  38 +++--
->  arch/mips/boot/dts/ralink/rt2880.dtsi         |  10 +-
->  arch/mips/boot/dts/ralink/rt3050.dtsi         |  10 +-
->  arch/mips/boot/dts/ralink/rt3883.dtsi         |  10 +-
->  .../dt-bindings/clock/mediatek,mtmips-sysc.h  | 130 ++++++++++++++++++
->  7 files changed, 196 insertions(+), 23 deletions(-)
->  create mode 100644 include/dt-bindings/clock/mediatek,mtmips-sysc.h
+On Fri, Feb 21, 2025 at 6:19=E2=80=AFPM Thomas Bogendoerfer
+<tsbogend@alpha.franken.de> wrote:
+>
+> On Mon, Jan 20, 2025 at 10:21:46AM +0100, Sergio Paracuellos wrote:
+> > Current MT7628A device tree file system controller node is wrong since =
+it is
+> > not matching bindings. Hence, update it to match current bindings updat=
+ing
+> > it also to use new introduced clock constants.
+> >
+> > Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> > ---
+> >  arch/mips/boot/dts/ralink/mt7628a.dtsi | 38 ++++++++++++++++----------
+> >  1 file changed, 24 insertions(+), 14 deletions(-)
+> >
+> > diff --git a/arch/mips/boot/dts/ralink/mt7628a.dtsi b/arch/mips/boot/dt=
+s/ralink/mt7628a.dtsi
+> > index 45a15e005cc4..309966049c56 100644
+> > --- a/arch/mips/boot/dts/ralink/mt7628a.dtsi
+> > +++ b/arch/mips/boot/dts/ralink/mt7628a.dtsi
+> > @@ -1,4 +1,5 @@
+> >  // SPDX-License-Identifier: GPL-2.0
+> > +#include <dt-bindings/clock/mediatek,mtmips-sysc.h>
+> >
+> >  / {
+> >       #address-cells =3D <1>;
+> > @@ -16,11 +17,6 @@ cpu@0 {
+> >               };
+> >       };
+> >
+> > -     resetc: reset-controller {
+> > -             compatible =3D "ralink,rt2880-reset";
+> > -             #reset-cells =3D <1>;
+> > -     };
+> > -
+> >       cpuintc: interrupt-controller {
+> >               #address-cells =3D <0>;
+> >               #interrupt-cells =3D <1>;
+> > @@ -36,9 +32,11 @@ palmbus@10000000 {
+> >               #address-cells =3D <1>;
+> >               #size-cells =3D <1>;
+> >
+> > -             sysc: system-controller@0 {
+> > -                     compatible =3D "ralink,mt7620a-sysc", "syscon";
+> > +             sysc: syscon@0 {
+> > +                     compatible =3D "ralink,mt7628-sysc", "syscon";
+> >                       reg =3D <0x0 0x60>;
+> > +                     #clock-cells =3D <1>;
+> > +                     #reset-cells =3D <1>;
+> >               };
+> >
+> >               pinmux: pinmux@60 {
+> > @@ -138,7 +136,7 @@ watchdog: watchdog@100 {
+> >                       compatible =3D "mediatek,mt7621-wdt";
+> >                       reg =3D <0x100 0x30>;
+> >
+> > -                     resets =3D <&resetc 8>;
+> > +                     resets =3D <&sysc 8>;
+> >                       reset-names =3D "wdt";
+> >
+> >                       interrupt-parent =3D <&intc>;
+> > @@ -154,7 +152,7 @@ intc: interrupt-controller@200 {
+> >                       interrupt-controller;
+> >                       #interrupt-cells =3D <1>;
+> >
+> > -                     resets =3D <&resetc 9>;
+> > +                     resets =3D <&sysc 9>;
+> >                       reset-names =3D "intc";
+> >
+> >                       interrupt-parent =3D <&cpuintc>;
+> > @@ -190,7 +188,9 @@ spi: spi@b00 {
+> >                       pinctrl-names =3D "default";
+> >                       pinctrl-0 =3D <&pinmux_spi_spi>;
+> >
+> > -                     resets =3D <&resetc 18>;
+> > +                     clocks =3D <&sysc MT76X8_CLK_SPI1>;
+> > +
+> > +                     resets =3D <&sysc 18>;
+> >                       reset-names =3D "spi";
+> >
+> >                       #address-cells =3D <1>;
+> > @@ -206,7 +206,9 @@ i2c: i2c@900 {
+> >                       pinctrl-names =3D "default";
+> >                       pinctrl-0 =3D <&pinmux_i2c_i2c>;
+> >
+> > -                     resets =3D <&resetc 16>;
+> > +                     clocks =3D <&sysc MT76X8_CLK_I2C>;
+> > +
+> > +                     resets =3D <&sysc 16>;
+> >                       reset-names =3D "i2c";
+> >
+> >                       #address-cells =3D <1>;
+> > @@ -222,7 +224,9 @@ uart0: uartlite@c00 {
+> >                       pinctrl-names =3D "default";
+> >                       pinctrl-0 =3D <&pinmux_uart0_uart>;
+> >
+> > -                     resets =3D <&resetc 12>;
+> > +                     clocks =3D <&sysc MT76X8_CLK_UART0>;
+> > +
+> > +                     resets =3D <&sysc 12>;
+> >                       reset-names =3D "uart0";
+> >
+> >                       interrupt-parent =3D <&intc>;
+> > @@ -238,7 +242,9 @@ uart1: uart1@d00 {
+> >                       pinctrl-names =3D "default";
+> >                       pinctrl-0 =3D <&pinmux_uart1_uart>;
+> >
+> > -                     resets =3D <&resetc 19>;
+> > +                     clocks =3D <&sysc MT76X8_CLK_UART1>;
+> > +
+> > +                     resets =3D <&sysc 19>;
+> >                       reset-names =3D "uart1";
+> >
+> >                       interrupt-parent =3D <&intc>;
+> > @@ -254,7 +260,9 @@ uart2: uart2@e00 {
+> >                       pinctrl-names =3D "default";
+> >                       pinctrl-0 =3D <&pinmux_uart2_uart>;
+> >
+> > -                     resets =3D <&resetc 20>;
+> > +                     clocks =3D <&sysc MT76X8_CLK_UART2>;
+> > +
+> > +                     resets =3D <&sysc 20>;
+> >                       reset-names =3D "uart2";
+> >
+> >                       interrupt-parent =3D <&intc>;
+> > @@ -290,6 +298,8 @@ wmac: wmac@10300000 {
+> >               compatible =3D "mediatek,mt7628-wmac";
+> >               reg =3D <0x10300000 0x100000>;
+> >
+> > +             clocks =3D <&sysc MT76X8_CLK_WMAC>;
+> > +
+> >               interrupt-parent =3D <&cpuintc>;
+> >               interrupts =3D <6>;
+> >
+> > --
+> > 2.25.1
+>
+> I get
+>
+>   DTC     arch/mips/boot/dts/ralink/vocore2.dtb
+> /local/tbogendoerfer/korg/linux/arch/mips/boot/dts/ralink/mt7628a.dtsi:27=
+5.28-284.4: ERROR (phandle_references): /usb-phy@10120000: Reference to non=
+-existent node or label "resetc"
+>
+> /local/tbogendoerfer/korg/linux/arch/mips/boot/dts/ralink/mt7628a.dtsi:27=
+5.28-284.4: ERROR (phandle_references): /usb-phy@10120000: Reference to non=
+-existent node or label "resetc"
+>
+> ERROR: Input tree has errors, aborting (use -f to force output)
+>
+> for CONFIG_DTB_VOCORE2=3Dy and a similair failure for CONFIG_DTB_OMEGA2P=
+=3Dy
+>
+> I'll apply rest of the series, please send a fixed patch for mt7628a
 
-applied patches 1-5 to mips-next
+Sure, thanks a lot!
 
-Thomas.
+Best regards,
+     Sergio Paracuellos
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+>
+> Thomas.
+>
+> --
+> Crap can work. Given enough thrust pigs will fly, but it's not necessaril=
+y a
+> good idea.                                                [ RFC1925, 2.3 =
+]
 
