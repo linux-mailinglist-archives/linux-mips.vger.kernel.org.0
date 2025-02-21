@@ -1,192 +1,103 @@
-Return-Path: <linux-mips+bounces-7887-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7888-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 314BDA3F0F2
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Feb 2025 10:51:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A5A09A3F6CA
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Feb 2025 15:06:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC8F91884C69
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Feb 2025 09:48:53 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 27075189896C
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Feb 2025 14:06:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8C222045B0;
-	Fri, 21 Feb 2025 09:45:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="oRbDChC6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDEFD20E307;
+	Fri, 21 Feb 2025 14:05:45 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F03F201246;
-	Fri, 21 Feb 2025 09:45:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2B671BCA07;
+	Fri, 21 Feb 2025 14:05:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740131132; cv=none; b=IMFbciEe+BQcMHfyzr3gz8TF8Msypbxgnb1TyIBprvynNRMBKacQH5pcelO41rTu0FwNJ/B81aXk3PAOf3Qg3bcu24mxI26b1sLdKSn/4T3AakJUzpQfEqRZxh+QjvcDjTrL/qYBocnZ6qm6qE6WA1xbOqGRaRhuTA0Uh8RiZfc=
+	t=1740146745; cv=none; b=G7XQ8pszPEGV9gN21UrvVFi4Wz6nyqwBINAqgCoA/AIBv7TrfXGD7FzorCz6QCbwn+KZyHPAwbPK17oNpKlfuezadEg/zHYzIQ2Pxc22JNnE48dHe9G2d/4MyhiN5oN+2TZJ9d9OldAv1ADzppB78pttsEcO+ArjGWuXWm6C0TQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740131132; c=relaxed/simple;
-	bh=/KcGc01eSsUrerPGVPWSAYZtIfEjNnei9zlH7mBhz24=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=hQ2Gdys1FbPvwh0LuNv5D/+fkwKFZfi8iukOZtkxVQfhyCTWhpeg17xc1DtZG+C5SWbsaXFLEbNHk4BXtr5Tu7WsvJjtFdhAk4wbMBqjSelPos9rPnvoauK6hcF+yiiF7bGjlFowJRnS0npdBHEB75LRxjQKi6Uwi/R8SjrXF8E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=oRbDChC6; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0DBEB43299;
-	Fri, 21 Feb 2025 09:45:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1740131122;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UpG//t1awC6TTYgGgCG1xSqQY/MSKf51OZV8VicRJJw=;
-	b=oRbDChC6bFmowtU0JHKSoS4k/X7btTZpHcZ8WaDUz442bJdEC9M9nY5L1e0roqJh/FCl7q
-	feEJmVov/RmYcssEDj9U0icJtAxEz8rlJHUF+9MeL5X5VErjTkJVh/e9LfqncMHDh08d3h
-	dt2/pSgtDxz5LTHXOFl29bNKYPWhuHWUBbS0qDq1UdT+LK6A6zJUqE4gClKK639bpcA78M
-	L5nsCrV3tZ3nvI1TljibJKR2Y8dVpozUtdQvDIjq6ry/3YRE8OL+Aa+J2vnEBl5HL2KcLN
-	LUtyBX15132MvBzMSIHCVZ9MxNSTelYGtBsN4QNK0y2clxl8LP5FwfUCePo7GQ==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>, Rob Herring <robh@kernel.org>,
- Aleksandar Rikalo <arikalo@gmail.com>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Vladimir
- Kondratiev <vladimir.kondratiev@mobileye.com>, =?utf-8?Q?Th=C3=A9o?= Lebrun
- <theo.lebrun@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/5] dt-bindings: mips: mips-cm: Add a new compatible
- string for EyeQ6
-In-Reply-To: <Z7hJVnJSg3C9lmLY@alpha.franken.de>
-References: <20250123-cluster-hci-broken-v3-0-8a7ec57cbf68@bootlin.com>
- <20250123-cluster-hci-broken-v3-2-8a7ec57cbf68@bootlin.com>
- <afa2e874-c078-4c3e-b485-d948a0bb6a6f@app.fastmail.com>
- <CAL_JsqKXYruNn+MtxbvCCWU2OmqeV-uAyyzN+F-ppSJVscr91w@mail.gmail.com>
- <bf08785b-9963-4539-92ef-b73c3abe8c19@app.fastmail.com>
- <87tt9iucu9.fsf@BLaptop.bootlin.com> <Z7hJVnJSg3C9lmLY@alpha.franken.de>
-Date: Fri, 21 Feb 2025 10:45:21 +0100
-Message-ID: <877c5jskb2.fsf@BLaptop.bootlin.com>
+	s=arc-20240116; t=1740146745; c=relaxed/simple;
+	bh=xU7/wEZfiw+9Pn0wYe4JOCCx45ck0D30lzuetNbvIYw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BAMXJ+B18qzn+L1pgufpMMJBZ1AlkF3ht2G76gVNV64ul5BgApeqe1cKIIG8/YJ0V6ErDVgGSCIKN4m/ZB3TmyAmoh8yncQey3kA3FupCn2KKPC+BfTxorihugoaXsjlpkhIRW/yWUCIcHXMYtmwJyXyF/kJNyxqJQIeo450gog=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1tlTet-00007t-00; Fri, 21 Feb 2025 15:05:39 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id C0706C0135; Fri, 21 Feb 2025 15:03:14 +0100 (CET)
+Date: Fri, 21 Feb 2025 15:03:14 +0100
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc: linux-clk@vger.kernel.org, sboyd@kernel.org, mturquette@baylibre.com,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	matthias.bgg@gmail.com, angelogioacchino.delregno@collabora.com,
+	p.zabel@pengutronix.de, linux-mips@vger.kernel.org,
+	devicetree@vger.kernel.org, yangshiji66@outlook.com,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 0/6] mips: dts: ralink: update system controller nodes
+ and its consumers
+Message-ID: <Z7iHorlRgtsi1LOo@alpha.franken.de>
+References: <20250120092146.471951-1-sergio.paracuellos@gmail.com>
+ <CAMhs-H-VevC+_=HxhMU6-at0bKut_JqdgO7j2detuB4s8R_QFQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdeileejudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefujghffffkgggtgfesthhqredttddtjeenucfhrhhomhepifhrvghgohhrhicuvefngffogffpvfcuoehgrhgvghhorhihrdgtlhgvmhgvnhhtsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpefghfegvdehgfdtjedvtefhvdeikefgteeuhfeukeettefgvdeuueettddtkeegveenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdugeemheehieemjegrtddtmedukeeitgemfhgvsgefmegtfhegtdemsgdtrgejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdugeemheehieemjegrtddtmedukeeitgemfhgvsgefmegtfhegtdemsgdtrgejpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehgrhgvghhorhihrdgtlhgvmhgvnhhtsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedufedprhgtphhtthhopehtshgsohhgvghnugesrghlphhhrgdrfhhrrghnkhgvnhdruggvpdhrtghpthhtohepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomhdprhgtphhtthhopehrohgsh
- heskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghrihhkrghlohesghhmrghilhdrtghomhdprhgtphhtthhopehkrhiikhdoughtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegtohhnohhrodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepvhhlrgguihhmihhrrdhkohhnughrrghtihgvvhesmhhosghilhgvhigvrdgtohhmpdhrtghpthhtohepthhhvghordhlvggsrhhunhessghoohhtlhhinhdrtghomh
-X-GND-Sasl: gregory.clement@bootlin.com
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAMhs-H-VevC+_=HxhMU6-at0bKut_JqdgO7j2detuB4s8R_QFQ@mail.gmail.com>
 
-Hello Thomas,
+On Fri, Feb 21, 2025 at 11:48:34AM +0100, Sergio Paracuellos wrote:
+> Hi Thomas,
+> 
+> El El lun, 20 ene 2025 a las 10:21, Sergio Paracuellos <
+> sergio.paracuellos@gmail.com> escribió:
+> 
+> > Hi all!
+> >
+> > Ralinks SoCs have a system controller node which serves as clock and reset
+> > providers for the rest of the world. This patch series introduces clock
+> > definitions for these SoCs. The clocks are registered in the driver using
+> > a bunch of arrays in specific order so these definitions represent the
+> > assigned
+> > identifier that is used when this happens so client nodes can easily use it
+> > to specify the clock which they consume without the need of checking
+> > driver code.
+> >
+> > DTS files which are currently on tree are not matching system controller
+> > bindings. So all of them are updated to properly match them.
+> >
+> > I'd like this series to go through kernel mips git tree if possible.
+> >
+> > Thanks in advance for your time.
+> >
+> > Changes in v3:
+> > - Address Krzysztof comments in v2 (Thanks!):
+> >   + Drop reset include file since what it was defined there were hardware
+> >     constants and no binding related indexes at all.
+> >   + Update patches for not referring to this reset removed file.
+> 
+> 
+> I was expecting this series going through the mips tree.
 
-> On Tue, Jan 28, 2025 at 05:23:26PM +0100, Gregory CLEMENT wrote:
->> > =E5=9C=A82025=E5=B9=B41=E6=9C=8827=E6=97=A5=E4=B8=80=E6=9C=88 =E4=B8=
-=8B=E5=8D=8810:07=EF=BC=8CRob Herring=E5=86=99=E9=81=93=EF=BC=9A
->> >> On Mon, Jan 27, 2025 at 3:43=E2=80=AFPM Jiaxun Yang <jiaxun.yang@flyg=
-oat.com> wrote:
->> >>>
->> >>>
->> >>>
->> >>> =E5=9C=A82025=E5=B9=B41=E6=9C=8823=E6=97=A5=E4=B8=80=E6=9C=88 =E4=B8=
-=8A=E5=8D=8811:01=EF=BC=8CGregory CLEMENT=E5=86=99=E9=81=93=EF=BC=9A
->> >>> > The CM3.5 used on EyeQ6 reports that Hardware Cache Initialization=
- is
->> >>> > complete, but in reality it's not the case. It also incorrectly
->> >>> > indicates that Hardware Cache Initialization is supported. This new
->> >>> > compatible string allows warning about this broken feature that ca=
-nnot
->> >>> > be detected at runtime.
->> >>> >
->> >>> > Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
->> >>> > ---
->> >>> >  Documentation/devicetree/bindings/mips/mti,mips-cm.yaml | 12 ++++=
-+++++++-
->> >>> >  1 file changed, 11 insertions(+), 1 deletion(-)
->> >>> >
->> >>> > diff --git a/Documentation/devicetree/bindings/mips/mti,mips-cm.ya=
-ml
->> >>> > b/Documentation/devicetree/bindings/mips/mti,mips-cm.yaml
->> >>> > index
->> >>> > 4324b2306535f1bf66c44b1f96be9094ee282041..d129d6382847768dc026336d=
-8d2c7328b6b81f9b
->> >>> > 100644
->> >>> > --- a/Documentation/devicetree/bindings/mips/mti,mips-cm.yaml
->> >>> > +++ b/Documentation/devicetree/bindings/mips/mti,mips-cm.yaml
->> >>> > @@ -19,7 +19,12 @@ maintainers:
->> >>> >
->> >>> >  properties:
->> >>> >    compatible:
->> >>> > -    const: mti,mips-cm
->> >>> > +    oneOf:
->> >>> > +      - const: mti,mips-cm
->> >>> > +      - const: mobileye,eyeq6-cm
->> >>> > +        description:
->> >>> > +          On EyeQ6 the HCI (Hardware Cache Initialization) inform=
-ation for
->> >>> > +          the L2 cache in multi-cluster configuration is broken.
->> >>> >
->> >>> >    reg:
->> >>> >      description:
->> >>> > @@ -44,4 +49,9 @@ examples:
->> >>> >        compatible =3D "mti,mips-cm";
->> >>> >        reg =3D <0x1bde8000 0x8000>;
->> >>> >      };
->> >>> > +
->> >>> > +  - |
->> >>> > +    coherency-manager {
->> >>> > +      compatible =3D "mobileye,eyeq6-cm";
->> >>>
->> >>> I think =E2=80=9Cmobileye,eyeq6-cm=E2=80=9D, =E2=80=9Cmti,mips-cm=E2=
-=80=9D would describe the hardware better as eyeq6=E2=80=99s CM is just a s=
-pecial variant of mips-cm.
->> >>
->> >> Is s/w that only understands =E2=80=9Cmti,mips-cm=E2=80=9D useful on =
-eyeq6 chip? If
->> >> so, I agree. If not, then a fallback compatible is not useful.
->> >
->> > Yes, mobileye,eyeq6-cm only enable an additional bug workaround in sof=
-tware.
->> >
->>=20
->> Having "mti,mips-cm" is not useful for the EyeQ6 chip. On the EyeQ6, we
->> obtain all relevant information related to CM dynamically without
->> needing this compatible string.
->>=20
->> > The programming interfaces and so on remains unchanged.
->>=20
->> Even without a compatible string, we are able to utilize the CM. At
->> present, there is no node in the device tree, and apart from the
->> hardware being faulty, we do not need it.
->>=20
->> >
->> > Also other firmware components like U-Boot doesn=E2=80=99t need to be =
-aware of
->> > eyeq6 variant.
->>=20
->> It's the same for the firmware; they don't need to have "mti, mips-cm"
->> information, as they can retrieve all they need dynamically.
->
-> so it the current patch version correct ? If yes and nothing else is
-> outstanding, I'm going to apply the series.
+  DTC     arch/mips/boot/dts/ralink/rt3883_eval.dtb
+Error: /local/tbogendoerfer/korg/linux/arch/mips/boot/dts/ralink/rt3883.dtsi:2.1-9 syntax error
+FATAL ERROR: Unable to parse input tree
 
-Thank you for taking care of it. From my perspective, this patch is the
-correct version, and you can apply this series.
+that's what I get after applying the series building for RT3883.
 
-Gregory
+Thomas.
 
->
-> Thomas.
->
-> --=20
-> Crap can work. Given enough thrust pigs will fly, but it's not necessaril=
-y a
-> good idea.                                                [ RFC1925, 2.3 ]
-
---=20
-Gr=C3=A9gory CLEMENT, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
