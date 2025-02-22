@@ -1,123 +1,114 @@
-Return-Path: <linux-mips+bounces-7908-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7909-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2443EA4074D
-	for <lists+linux-mips@lfdr.de>; Sat, 22 Feb 2025 11:14:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 44753A407BD
+	for <lists+linux-mips@lfdr.de>; Sat, 22 Feb 2025 12:00:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C184F17FA9A
-	for <lists+linux-mips@lfdr.de>; Sat, 22 Feb 2025 10:14:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4E4D3B5230
+	for <lists+linux-mips@lfdr.de>; Sat, 22 Feb 2025 10:57:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E49E9207E02;
-	Sat, 22 Feb 2025 10:14:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 723ED20A5CE;
+	Sat, 22 Feb 2025 10:57:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="E0xbOLPR";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="z74TsqYt"
+	dkim=pass (2048-bit key) header.d=svanheule.net header.i=@svanheule.net header.b="UBjpuwuv"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from polaris.svanheule.net (polaris.svanheule.net [84.16.241.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A593A20766E;
-	Sat, 22 Feb 2025 10:14:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FF86209F5D
+	for <linux-mips@vger.kernel.org>; Sat, 22 Feb 2025 10:57:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=84.16.241.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740219269; cv=none; b=HLxKPDO0PKCwa4LpjbJCpQFjRuEgaOl6imvrzmy5jHWcdVFIuWi+qqFOiNPUAcyZbpLrPYzn6/BB+YMaTnuqk/4GCrYWd7H4yRF9KZ2ch3jSMbxvqwsJLhsaYDETZlEro+XlrXZVvh5Wlniuxm8CkOFRxy02ZE3aGdylYi9tUL8=
+	t=1740221862; cv=none; b=MdN0m+4RsInxjme4n+K4Qyeeh1uz+sDn+A3ZuMJbEoSgXrPB29CN0YQlRzhQRtszmNxW63kJGebB/eP1VUXolVJ4BiQE6JnBH5FJ772g0lzJTA92+uY9YaC5O3Mq3KpwGcCs8E3ZNzL4v3l6KtGrdCQyhFo9ENgu15SFb6Ggzrw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740219269; c=relaxed/simple;
-	bh=ygaPhnEWXxg0PTIQSnFt/u2T3zJiHAt9hR7zOE9Myuo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=SflJThYgdUAK1XP1AAmE2Tk2Ph+dTBnkhkvnTIcKNiTl0p9OI0+qxt4hfPyrfn4KfdPFgxpdtCmMEtOUC+uw4e19WrwERiccYJ2iDDq9+X9bbtPPG9L1FEgmqgy6Z5Q7aZQgjg/WZE9PeqnMmA5Yf3U8+Aid1woJV00jw/G837E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=E0xbOLPR; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=z74TsqYt; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1740219265;
+	s=arc-20240116; t=1740221862; c=relaxed/simple;
+	bh=JVxlEJht2x5RnrXe4+WJyXGYRUS9jHA+W18zxZ2QD0A=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=hDSAx60691wes/JQnF8802KZMWfr90rM1hBB5JxveG/CxZRRo1IUEpw/l1p/r62eNJ9SeyRAoGflDrJI5Ds18FPGdCEOZ09ZtLanD+E8jyOUJSE4EwsXpsvq9WguU5cx2FVueUxFDrvLV7QbP1z+Z+0GKgNg+vAq52+oh6nSMEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=svanheule.net; spf=pass smtp.mailfrom=svanheule.net; dkim=pass (2048-bit key) header.d=svanheule.net header.i=@svanheule.net header.b=UBjpuwuv; arc=none smtp.client-ip=84.16.241.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=svanheule.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=svanheule.net
+Received: from [192.168.90.187] (unknown [94.110.49.146])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: sander@svanheule.net)
+	by polaris.svanheule.net (Postfix) with ESMTPSA id 74ADE5C0430;
+	Sat, 22 Feb 2025 11:57:31 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svanheule.net;
+	s=mail1707; t=1740221852;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=NYt57ZYgbjy6ej8hXDty7Cfp9Tf5nA32oYEo7YLt3U4=;
-	b=E0xbOLPRJ+XD/M3Ao9By6szoKCsyLxcxtVTGsSbhAcE5NU1NK5C2+Dfl+zJ4+rpk8p2vce
-	IgpgL+eLpTnyqk83xyrJHvEqqHTXl3g07KURIn1lsZ0aq6OKRUYTD54okHfdjXqNbDsSjC
-	8vSMloBPM2AV4QgA0stwUEWMG6uZx3A9biypqi3p4tS6E2BLtlPpYMDvXniwVQOifJQaz1
-	6Qig6O/uBgxjjBbGrOo71YvA2kL4peLeza5WOnn/Kdf4/Lf3rBALBWYLzmAVI3S8o31rMK
-	Fy+Fe19AlwTl2IsoJXlYAVNRDdBMW1sP8B0maDlcTMTjaB57ZbWi7eIerkehlg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1740219265;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NYt57ZYgbjy6ej8hXDty7Cfp9Tf5nA32oYEo7YLt3U4=;
-	b=z74TsqYtERi/FO28k1WNxuOk/eCrttvKrCalx/NPgzVgRgvry4d1qCKiaSmbcNlhBsMonW
-	bE0L5AunrFXssYCw==
-To: Xi Ruoyao <xry111@xry111.site>, Thomas =?utf-8?Q?Wei=C3=9Fschuh?=
- <thomas.weissschuh@linutronix.de>, "James E.J. Bottomley"
- <James.Bottomley@HansenPartnership.com>, Helge
- Deller <deller@gmx.de>, Andy Lutomirski <luto@kernel.org>, Vincenzo
- Frascino <vincenzo.frascino@arm.com>, Anna-Maria Behnsen
- <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Catalin
- Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Theodore
- Ts'o <tytso@mit.edu>, "Jason A. Donenfeld" <Jason@zx2c4.com>, Paul
- Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>, Huacai Chen <chenhuacai@kernel.org>,
- WANG Xuerui <kernel@xen0n.name>, Russell King <linux@armlinux.org.uk>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger
- <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>, Michael Ellerman
- <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, Christophe
- Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>,
- Madhavan
- Srinivasan <maddy@linux.ibm.com>, Ingo Molnar <mingo@redhat.com>, Borislav
- Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, Arnd Bergmann
- <arnd@arndb.de>, Guo Ren <guoren@kernel.org>
-Cc: linux-parisc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org,
- loongarch@lists.linux.dev, linux-s390@vger.kernel.org,
- linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-arch@vger.kernel.org, Nam Cao <namcao@linutronix.de>,
- linux-csky@vger.kernel.org
-Subject: Re: [PATCH v3 09/18] riscv: vdso: Switch to generic storage
- implementation
-In-Reply-To: <1adbf1603237b654a2948ae13692c6b6db0ab7eb.camel@xry111.site>
-References: <20250204-vdso-store-rng-v3-0-13a4669dfc8c@linutronix.de>
- <20250204-vdso-store-rng-v3-9-13a4669dfc8c@linutronix.de>
- <1adbf1603237b654a2948ae13692c6b6db0ab7eb.camel@xry111.site>
-Date: Sat, 22 Feb 2025 11:14:23 +0100
-Message-ID: <87a5aegubk.ffs@tglx>
+	bh=JVxlEJht2x5RnrXe4+WJyXGYRUS9jHA+W18zxZ2QD0A=;
+	b=UBjpuwuv87ExHHcV6HC+rinBCYljQ32a3tDSvwugfMzVfNBoBIFvm0UYJTel7A7ciWm8SI
+	nRQIPaCwBFg0IP5G31OINfGMqU9E5zfHGNq/8BoImjdQ+HKvQjTtVB1iXIa6qnHmKBwUaZ
+	OTfrAlPpUtka0IOcnCZqpZBgLA/c7pMt+9MTbIjS/SXcASL/u2wd+Hqq0WSbK7WU9ZvJVR
+	0ck5h/LiO/VSczk6UVB/h66Gvs9+vhcWhVN/o22cGTNvxXIVy4CIm4LMDdOtMt+wt/6eGN
+	S0JVE8MAfJDKFP0Etfjj2JeOCxMikoCmViW9h11Km+POZJ3mmzzcoBj/4ProvA==
+Message-ID: <c758dab6497284a6eb5b962c1b0d4619d4fb322e.camel@svanheule.net>
+Subject: Re: [PATCH 0/9] mips: dts: Split Realtek devicetrees
+From: Sander Vanheule <sander@svanheule.net>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+  Conor Dooley <conor+dt@kernel.org>, Chris Packham
+ <chris.packham@alliedtelesis.co.nz>, 	devicetree@vger.kernel.org,
+ linux-mips@vger.kernel.org, 	linux-kernel@vger.kernel.org
+Date: Sat, 22 Feb 2025 11:57:30 +0100
+In-Reply-To: <Z7ibXewhvwU1d1G3@alpha.franken.de>
+References: <20250119183424.259353-1-sander@svanheule.net>
+	 <Z7ibXewhvwU1d1G3@alpha.franken.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
 
-On Sat, Feb 22 2025 at 16:17, Xi Ruoyao wrote:
-> On Tue, 2025-02-04 at 13:05 +0100, Thomas Wei=C3=9Fschuh wrote:
->> The generic storage implementation provides the same features as the
->> custom one. However it can be shared between architectures, making
->> maintenance easier.
->>=20
->> Co-developed-by: Nam Cao <namcao@linutronix.de>
->> Signed-off-by: Nam Cao <namcao@linutronix.de>
->> Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
->
-> I made a RISC-V vDSO getrandom implementation on top of this and it
-> works fine.  I'll submit it when this is merged.
+Hi Thomas,
 
-You can submit it right now. If it's reviewed and if Jason agrees, this
-can be merged through the timers/vdso branch on top of the pending
-changes.
+On Fri, 2025-02-21 at 16:27 +0100, Thomas Bogendoerfer wrote:
+> On Sun, Jan 19, 2025 at 07:34:15PM +0100, Sander Vanheule wrote:
+> > This patch series intends to clean up the base includes, shared between
+> > hardware devicetrees. To get rid of some dtbs_check warnings, some cpu
+> > clock prorerties are also modified.
+> >=20
+> > To indicate why the split-up is required, the series concludes with
+> > adding some CPU peripherals to rtl838x.dtsi, which are then used to add
+> > a gpio-restart for the Cisco SG220-26P.
+> >=20
+> > Sander Vanheule (9):
+> > =C2=A0 mips: dts: realtek: Decouple RTL930x base DTSI
+> > =C2=A0 mips: dts: realtek: Clean up CPU clocks
+> > =C2=A0 mips: dts: realtek: Add address to SoC node name
+> > =C2=A0 mips: dts: realtek: Fold rtl83xx into rtl838x
+> > =C2=A0 mips: dts: realtek: Add SoC IRQ node for RTL838x
+> > =C2=A0 mips: dts: realtek: Correct uart interrupt-parent
+> > =C2=A0 mips: dts: realtek: Replace uart clock property
+> > =C2=A0 mips: dts: realtek: Add RTL838x SoC peripherals
+> > =C2=A0 mips: dts: realtek: Add restart to Cisco SG220-26P
+> >=20
+> > =C2=A0arch/mips/boot/dts/realtek/cisco_sg220-26.dts |=C2=A0 10 +-
+> > =C2=A0arch/mips/boot/dts/realtek/rtl838x.dtsi=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 | 111 +++++++++++++-
+> > =C2=A0arch/mips/boot/dts/realtek/rtl83xx.dtsi=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 |=C2=A0 59 --------
+> > =C2=A0arch/mips/boot/dts/realtek/rtl930x.dtsi=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 | 136 +++++++++++-------
+> > =C2=A04 files changed, 202 insertions(+), 114 deletions(-)
+> > =C2=A0delete mode 100644 arch/mips/boot/dts/realtek/rtl83xx.dtsi
+>=20
+> series applied to mips-next
 
-Thanks for testing it!
+Thanks!
 
-       tglx
+Best,
+Sander
 
