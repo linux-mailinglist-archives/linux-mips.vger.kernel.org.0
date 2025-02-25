@@ -1,392 +1,198 @@
-Return-Path: <linux-mips+bounces-7958-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7960-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7717BA44785
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Feb 2025 18:12:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DCB7A44DCD
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Feb 2025 21:40:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 25A3D175B00
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Feb 2025 17:10:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 46A8E16CBB5
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Feb 2025 20:36:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C55219E966;
-	Tue, 25 Feb 2025 17:09:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68CEF20D51E;
+	Tue, 25 Feb 2025 20:34:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="AGIt1U3l"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GCTyihQ/"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2091919AA58;
-	Tue, 25 Feb 2025 17:09:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 308941448E3;
+	Tue, 25 Feb 2025 20:34:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740503353; cv=none; b=fokV6n3C9pDFsTqFbWG1dwToOloVuLtBc+zgp1kxkKA86Sx5/sLsDz7bpNazTd4rf28zZPNENbU4qv3TbThs8LwjOM9bjtfqI1UvgTkt8mPfZ0N/VI3ZvXlcxnaT4rUiOokB1DHwLqn43RDS58sB1bHqqKHXmNW5v7Q5w6dOPLM=
+	t=1740515686; cv=none; b=F2p5tOjySuBqv/hN/G4l2YDNnrmnI0WymtaqX2Mt/TW4K+E/ad/4hWPECJ26fN/mE06jPlqCirBU6IHiEK4nMBcd2XqIQU+wdwKmhyFiC1djM8i6sFOXE8mp0ifMZsGHF6yh4ZLS73uvxzxI8vwL8LyVei3uwqp8W03Z0P1oUjo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740503353; c=relaxed/simple;
-	bh=fbtK/DeC9RhX+XdpZ8rYzaCI9N8rTTZCIBBEn0NP5U4=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=ZS2upLfBj/1rgNH8/pXalEYy+UnaRWscmVu7sx+5vLw+jBfmuJDWX9H+hGczFvNJ3ZqK5Fq/Fq7WGkyuu0HDRz4ZxqcE4/RundNp5qrgQArZy3AR3tznVdICF3PpbPwtUUdlCVddnJoqhT9fACvmdaL1CPnnpCw94XdpUgc3mwM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=AGIt1U3l; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1740503338;
-	bh=fbtK/DeC9RhX+XdpZ8rYzaCI9N8rTTZCIBBEn0NP5U4=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=AGIt1U3luHcjk1wNbEF/Hk6d3qjkMDnJRdYzOKvYtLVHX3H4pIzgKVxYaK18Gsm5i
-	 x+Kscaqr/WhYtxBYMe7rvN8unMWt56otl54lQzcom7VspwwQbUOp63a2dO3BWqu8j4
-	 yr5CxWiCJZ+HSA+oybz+9LB89wArREX4wNNX1jCo=
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Date: Tue, 25 Feb 2025 18:02:38 +0100
-Subject: [PATCH v2 4/4] tools/nolibc: MIPS: add support for N64 and N32
- ABIs
+	s=arc-20240116; t=1740515686; c=relaxed/simple;
+	bh=BRDE49GDK1WZQtOVWzMxOTVjKgnZs4mLJeGOsJR4KcY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ni1RrSHaKfp711JMMLwThXNesiPTzabJSRHR7R29m4FMdHRgAl5MnZB+9sJZL2r04gvYvRzXMXbqJAggNm0ms7qeJEW2PLEFquQJPTCCE9U8gS8knwIkZhz0+X+9uPQoKemH+L1FU9XTWw6sm9QuSkApA+2eXJrJ3B7/NL4QJ40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GCTyihQ/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 61A12C4CEDD;
+	Tue, 25 Feb 2025 20:34:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740515685;
+	bh=BRDE49GDK1WZQtOVWzMxOTVjKgnZs4mLJeGOsJR4KcY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GCTyihQ/b2fTjWjL/w3eMUhECoP7pQUVh6qE6TXIEJ1BjHjigwTdvaXZ8aa1oOZW9
+	 oKgOEDdFkHlCFZJGO4qmPSlQfmqTMdR4q6AaRRkwLGJ3tn5IsA6CVTfZngMu04uwvU
+	 USQQvX2Ui2Py5GmeTon0UPIp4jb3Kllog7qTR84ZVlGPWnNhBglvmgANXSDfz/nF8C
+	 fe6Ei8S+wY4QXqwkmTNtltifZ28vYDexOBzcB6Jx/JDAMQqYWr6bIziStGJLhdUGBs
+	 KFr35I0nEjHgGeGnYKE+sCz27ig69d53549TBv6xK6RZKoaFrkcXukrE4yB0TGFtgY
+	 hJMWUKlbR87Lg==
+Received: by pali.im (Postfix)
+	id 5A20189B; Tue, 25 Feb 2025 21:34:32 +0100 (CET)
+Date: Tue, 25 Feb 2025 21:34:32 +0100
+From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To: "Darrick J. Wong" <djwong@kernel.org>
+Cc: Christian Brauner <brauner@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Amir Goldstein <amir73il@gmail.com>,
+	Andrey Albershteyn <aalbersh@redhat.com>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Matt Turner <mattst88@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Michal Simek <monstr@monstr.eu>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S . Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+	=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>,
+	linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
+	Linux-Arch <linux-arch@vger.kernel.org>, linux-xfs@vger.kernel.org,
+	Theodore Ts'o <tytso@mit.edu>
+Subject: Re: [PATCH v3] fs: introduce getfsxattrat and setfsxattrat syscalls
+Message-ID: <20250225203432.o2lxjbimka4jldrx@pali>
+References: <20250211-xattrat-syscall-v3-1-a07d15f898b2@kernel.org>
+ <20250221181135.GW21808@frogsfrogsfrogs>
+ <CAOQ4uxgyYBFqkq6cQsso4LxJsPJ4uECOdskXmz-nmGhhV5BQWg@mail.gmail.com>
+ <20250224-klinke-hochdekoriert-3f6be89005a8@brauner>
+ <6b51ffa2-9d67-4466-865e-e703c1243352@app.fastmail.com>
+ <20250225-strom-kopflos-32062347cd13@brauner>
+ <3c860dc0-ba8d-4324-b286-c160b7d8d2c4@app.fastmail.com>
+ <20250225-testfahrt-seilwinde-64e6f44c01ce@brauner>
+ <20250225155926.GD6265@frogsfrogsfrogs>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250225-nolibc-mips-n32-v2-4-664b47d87fa0@weissschuh.net>
-References: <20250225-nolibc-mips-n32-v2-0-664b47d87fa0@weissschuh.net>
-In-Reply-To: <20250225-nolibc-mips-n32-v2-0-664b47d87fa0@weissschuh.net>
-To: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
- linux-mips@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1740503008; l=16065;
- i=linux@weissschuh.net; s=20221212; h=from:subject:message-id;
- bh=fbtK/DeC9RhX+XdpZ8rYzaCI9N8rTTZCIBBEn0NP5U4=;
- b=h/cNlSC956ZPDHdI6QUkeP5VHKx+YbN/0pE2Ps5NkdnrvtgPgDqDC1uLeD8X+FWeqRtgelXzB
- 7bbfxPAGvuoCIVb/7WUqfvzwt2V7MtCsauBiyo3g+0Dy3lFNvdE8YY1
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519;
- pk=KcycQgFPX2wGR5azS7RhpBqedglOZVgRPfdFSPB1LNw=
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250225155926.GD6265@frogsfrogsfrogs>
+User-Agent: NeoMutt/20180716
 
-Add support for the MIPS 64bit N64 and ILP32 N32 ABIs.
+On Tuesday 25 February 2025 07:59:26 Darrick J. Wong wrote:
+> On Tue, Feb 25, 2025 at 12:24:08PM +0100, Christian Brauner wrote:
+> > On Tue, Feb 25, 2025 at 11:40:51AM +0100, Arnd Bergmann wrote:
+> > > On Tue, Feb 25, 2025, at 11:22, Christian Brauner wrote:
+> > > > On Tue, Feb 25, 2025 at 09:02:04AM +0100, Arnd Bergmann wrote:
+> > > >> On Mon, Feb 24, 2025, at 12:32, Christian Brauner wrote:
+> > > >> 
+> > > >> The ioctl interface relies on the existing behavior, see
+> > > >> 0a6eab8bd4e0 ("vfs: support FS_XFLAG_COWEXTSIZE and get/set of
+> > > >> CoW extent size hint") for how it was previously extended
+> > > >> with an optional flag/word. I think that is fine for the syscall
+> > > >> as well, but should be properly documented since it is different
+> > > >> from how most syscalls work.
+> > > >
+> > > > If we're doing a new system call I see no reason to limit us to a
+> > > > pre-existing structure or structure layout.
+> > > 
+> > > Obviously we could create a new structure, but I also see no
+> > > reason to do so. The existing ioctl interface was added in
+> > > in 2002 as part of linux-2.5.35 with 16 bytes of padding, half
+> > > of which have been used so far.
+> > > 
+> > > If this structure works for another 23 years before we run out
+> > > of spare bytes, I think that's good enough. Building in an
+> > > incompatible way to handle potential future contents would
+> > > just make it harder to use for any userspace that wants to
+> > > use the new syscalls but still needs a fallback to the
+> > > ioctl version.
+> > 
+> > The fact that this structure has existed since the dawn of time doesn't
+> > mean it needs to be retained when adding a completely new system call.
+> > 
+> > People won't mix both. They either switch to the new interface because
+> > they want to get around the limitations of the old interface or they
+> > keep using the old interface and the associated workarounds.
+> > 
+> > In another thread they keep arguing about new extensions for Windows
+> > that are going to be added to the ioctl interface and how to make it fit
+> > into this. That just shows that it's very hard to predict from the
+> > amount of past changes how many future changes are going to happen. And
+> > if an interface is easy to extend it might well invite new changes that
+> > people didn't want to or couldn't make using the old interface.
+> 
+> Agreed, I don't think it's hard to enlarge struct fsxattr in the
+> existing ioctl interface; either we figure out how to make the kernel
+> fill out the "missing" bytes with an internal getfsxattr call, or we
+> make it return some errno if we would be truncating real output due to
+> struct size limits and leave a note in the manpage that "EL3HLT means
+> use a bigger structure definition"
+> 
+> Then both interfaces can plod along for another 30 years. :)
+> 
+> --D
 
-In addition to different byte orders and ABIs there are also different
-releases of the MIPS architecture. To avoid blowing up the test matrix,
-only add a subset of all possible test combinations.
+For Windows attributes, there are for sure needed new 11 bits for
+attributes which can be both get and set, additional 4 bits for get-only
+attributes, and plus there are 9 reserved bits (which Windows can start
+using it and exporting over NTFS or SMB). And it is possible that
+Windows can reuse some bits which were previously assigned for things
+which today does not appear on NTFS.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
----
- tools/include/nolibc/arch-mips.h            | 105 ++++++++++++++++++++++++----
- tools/testing/selftests/nolibc/Makefile     |  28 +++++++-
- tools/testing/selftests/nolibc/run-tests.sh |   2 +-
- 3 files changed, 118 insertions(+), 17 deletions(-)
+I think that fsx_xflags does not have enough free bits for all these
+attributes. So it would be really nice to design API/ABI in away which
+can be extended for new fields.
 
-diff --git a/tools/include/nolibc/arch-mips.h b/tools/include/nolibc/arch-mips.h
-index 4f0b969f66af610d3c986f3ff0e1c3f3a0be16b5..0cbac63b249adf80ecbf70ba074f9ea5d56d9278 100644
---- a/tools/include/nolibc/arch-mips.h
-+++ b/tools/include/nolibc/arch-mips.h
-@@ -10,7 +10,7 @@
- #include "compiler.h"
- #include "crt.h"
- 
--#if !defined(_ABIO32)
-+#if !defined(_ABIO32) && !defined(_ABIN32) && !defined(_ABI64)
- #error Unsupported MIPS ABI
- #endif
- 
-@@ -32,11 +32,32 @@
-  *   - the arguments are cast to long and assigned into the target registers
-  *     which are then simply passed as registers to the asm code, so that we
-  *     don't have to experience issues with register constraints.
-+ *
-+ * Syscalls for MIPS ABI N32, same as ABI O32 with the following differences :
-+ *   - arguments are in a0, a1, a2, a3, t0, t1, t2, t3.
-+ *     t0..t3 are also known as a4..a7.
-+ *   - stack is 16-byte aligned
-  */
- 
-+#if defined(_ABIO32)
-+
- #define _NOLIBC_SYSCALL_CLOBBERLIST \
- 	"memory", "cc", "at", "v1", "hi", "lo", \
- 	"t0", "t1", "t2", "t3", "t4", "t5", "t6", "t7", "t8", "t9"
-+#define _NOLIBC_SYSCALL_STACK_RESERVE "addiu $sp, $sp, -32\n"
-+#define _NOLIBC_SYSCALL_STACK_UNRESERVE "addiu $sp, $sp, 32\n"
-+
-+#else /* _ABIN32 || _ABI64 */
-+
-+/* binutils, GCC and clang disagree about register aliases, use numbers instead. */
-+#define _NOLIBC_SYSCALL_CLOBBERLIST \
-+	"memory", "cc", "at", "v1", \
-+	"10", "11", "12", "13", "14", "15", "24", "25"
-+
-+#define _NOLIBC_SYSCALL_STACK_RESERVE
-+#define _NOLIBC_SYSCALL_STACK_UNRESERVE
-+
-+#endif /* _ABIO32 */
- 
- #define my_syscall0(num)                                                      \
- ({                                                                            \
-@@ -44,9 +65,9 @@
- 	register long _arg4 __asm__ ("a3");                                   \
- 									      \
- 	__asm__ volatile (                                                    \
--		"addiu $sp, $sp, -32\n"                                       \
-+		_NOLIBC_SYSCALL_STACK_RESERVE                                 \
- 		"syscall\n"                                                   \
--		"addiu $sp, $sp, 32\n"                                        \
-+		_NOLIBC_SYSCALL_STACK_UNRESERVE                               \
- 		: "=r"(_num), "=r"(_arg4)                                     \
- 		: "r"(_num)                                                   \
- 		: _NOLIBC_SYSCALL_CLOBBERLIST                                 \
-@@ -61,9 +82,9 @@
- 	register long _arg4 __asm__ ("a3");                                   \
- 									      \
- 	__asm__ volatile (                                                    \
--		"addiu $sp, $sp, -32\n"                                       \
-+		_NOLIBC_SYSCALL_STACK_RESERVE                                 \
- 		"syscall\n"                                                   \
--		"addiu $sp, $sp, 32\n"                                        \
-+		_NOLIBC_SYSCALL_STACK_UNRESERVE                               \
- 		: "=r"(_num), "=r"(_arg4)                                     \
- 		: "0"(_num),                                                  \
- 		  "r"(_arg1)                                                  \
-@@ -80,9 +101,9 @@
- 	register long _arg4 __asm__ ("a3");                                   \
- 									      \
- 	__asm__ volatile (                                                    \
--		"addiu $sp, $sp, -32\n"                                       \
-+		_NOLIBC_SYSCALL_STACK_RESERVE                                 \
- 		"syscall\n"                                                   \
--		"addiu $sp, $sp, 32\n"                                        \
-+		_NOLIBC_SYSCALL_STACK_UNRESERVE                               \
- 		: "=r"(_num), "=r"(_arg4)                                     \
- 		: "0"(_num),                                                  \
- 		  "r"(_arg1), "r"(_arg2)                                      \
-@@ -100,9 +121,9 @@
- 	register long _arg4 __asm__ ("a3");                                   \
- 									      \
- 	__asm__ volatile (                                                    \
--		"addiu $sp, $sp, -32\n"                                       \
-+		_NOLIBC_SYSCALL_STACK_RESERVE                                 \
- 		"syscall\n"                                                   \
--		"addiu $sp, $sp, 32\n"                                        \
-+		_NOLIBC_SYSCALL_STACK_UNRESERVE                               \
- 		: "=r"(_num), "=r"(_arg4)                                     \
- 		: "0"(_num),                                                  \
- 		  "r"(_arg1), "r"(_arg2), "r"(_arg3)                          \
-@@ -120,9 +141,9 @@
- 	register long _arg4 __asm__ ("a3") = (long)(arg4);                    \
- 									      \
- 	__asm__ volatile (                                                    \
--		"addiu $sp, $sp, -32\n"                                       \
-+		_NOLIBC_SYSCALL_STACK_RESERVE                                 \
- 		"syscall\n"                                                   \
--		"addiu $sp, $sp, 32\n"                                        \
-+		_NOLIBC_SYSCALL_STACK_UNRESERVE                               \
- 		: "=r" (_num), "=r"(_arg4)                                    \
- 		: "0"(_num),                                                  \
- 		  "r"(_arg1), "r"(_arg2), "r"(_arg3), "r"(_arg4)              \
-@@ -131,6 +152,8 @@
- 	_arg4 ? -_num : _num;                                                 \
- })
- 
-+#if defined(_ABIO32)
-+
- #define my_syscall5(num, arg1, arg2, arg3, arg4, arg5)                        \
- ({                                                                            \
- 	register long _num __asm__ ("v0") = (num);                            \
-@@ -141,10 +164,10 @@
- 	register long _arg5 = (long)(arg5);                                   \
- 									      \
- 	__asm__ volatile (                                                    \
--		"addiu $sp, $sp, -32\n"                                       \
-+		_NOLIBC_SYSCALL_STACK_RESERVE                                 \
- 		"sw %7, 16($sp)\n"                                            \
- 		"syscall\n"                                                   \
--		"addiu $sp, $sp, 32\n"                                        \
-+		_NOLIBC_SYSCALL_STACK_UNRESERVE                               \
- 		: "=r" (_num), "=r"(_arg4)                                    \
- 		: "0"(_num),                                                  \
- 		  "r"(_arg1), "r"(_arg2), "r"(_arg3), "r"(_arg4), "r"(_arg5)  \
-@@ -164,11 +187,53 @@
- 	register long _arg6 = (long)(arg6);                                   \
- 									      \
- 	__asm__ volatile (                                                    \
--		"addiu $sp, $sp, -32\n"                                       \
-+		_NOLIBC_SYSCALL_STACK_RESERVE                                 \
- 		"sw %7, 16($sp)\n"                                            \
- 		"sw %8, 20($sp)\n"                                            \
- 		"syscall\n"                                                   \
--		"addiu $sp, $sp, 32\n"                                        \
-+		_NOLIBC_SYSCALL_STACK_UNRESERVE                               \
-+		: "=r" (_num), "=r"(_arg4)                                    \
-+		: "0"(_num),                                                  \
-+		  "r"(_arg1), "r"(_arg2), "r"(_arg3), "r"(_arg4), "r"(_arg5), \
-+		  "r"(_arg6)                                                  \
-+		: _NOLIBC_SYSCALL_CLOBBERLIST                                 \
-+	);                                                                    \
-+	_arg4 ? -_num : _num;                                                 \
-+})
-+
-+#else /* _ABIN32 || _ABI64 */
-+
-+#define my_syscall5(num, arg1, arg2, arg3, arg4, arg5)                        \
-+({                                                                            \
-+	register long _num __asm__ ("v0") = (num);                            \
-+	register long _arg1 __asm__ ("$4") = (long)(arg1);                    \
-+	register long _arg2 __asm__ ("$5") = (long)(arg2);                    \
-+	register long _arg3 __asm__ ("$6") = (long)(arg3);                    \
-+	register long _arg4 __asm__ ("$7") = (long)(arg4);                    \
-+	register long _arg5 __asm__ ("$8") = (long)(arg5);                    \
-+									      \
-+	__asm__ volatile (                                                    \
-+		"syscall\n"                                                   \
-+		: "=r" (_num), "=r"(_arg4)                                    \
-+		: "0"(_num),                                                  \
-+		  "r"(_arg1), "r"(_arg2), "r"(_arg3), "r"(_arg4), "r"(_arg5)  \
-+		: _NOLIBC_SYSCALL_CLOBBERLIST                                 \
-+	);                                                                    \
-+	_arg4 ? -_num : _num;                                                 \
-+})
-+
-+#define my_syscall6(num, arg1, arg2, arg3, arg4, arg5, arg6)                  \
-+({                                                                            \
-+	register long _num __asm__ ("v0")  = (num);                           \
-+	register long _arg1 __asm__ ("$4") = (long)(arg1);                    \
-+	register long _arg2 __asm__ ("$5") = (long)(arg2);                    \
-+	register long _arg3 __asm__ ("$6") = (long)(arg3);                    \
-+	register long _arg4 __asm__ ("$7") = (long)(arg4);                    \
-+	register long _arg5 __asm__ ("$8") = (long)(arg5);                    \
-+	register long _arg6 __asm__ ("$9") = (long)(arg6);                    \
-+									      \
-+	__asm__ volatile (                                                    \
-+		"syscall\n"                                                   \
- 		: "=r" (_num), "=r"(_arg4)                                    \
- 		: "0"(_num),                                                  \
- 		  "r"(_arg1), "r"(_arg2), "r"(_arg3), "r"(_arg4), "r"(_arg5), \
-@@ -178,15 +243,25 @@
- 	_arg4 ? -_num : _num;                                                 \
- })
- 
-+#endif /* _ABIO32 */
-+
- /* startup code, note that it's called __start on MIPS */
- void __start(void);
- void __attribute__((weak, noreturn)) __nolibc_entrypoint __no_stack_protector __start(void)
- {
- 	__asm__ volatile (
- 		"move  $a0, $sp\n"       /* save stack pointer to $a0, as arg1 of _start_c */
-+#if defined(_ABIO32)
- 		"addiu $sp, $sp, -16\n"  /* the callee expects to save a0..a3 there        */
-+#endif /* _ABIO32 */
- 		"lui $t9, %hi(_start_c)\n" /* ABI requires current function address in $t9 */
- 		"ori $t9, %lo(_start_c)\n"
-+#if defined(_ABI64)
-+		"lui  $t0, %highest(_start_c)\n"
-+		"ori  $t0, %higher(_start_c)\n"
-+		"dsll $t0, 0x20\n"
-+		"or   $t9, $t0\n"
-+#endif /* _ABI64 */
- 		"jalr $t9\n"             /* transfer to c runtime                          */
- 	);
- 	__nolibc_entrypoint_epilogue();
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 14fc8c7e7c3067efddf0f729890fb78df731efb3..7db2a7b1c94ff79cd9410c66205aa1dc5fdcb4f8 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -52,6 +52,10 @@ ARCH_ppc64       = powerpc
- ARCH_ppc64le     = powerpc
- ARCH_mips32le    = mips
- ARCH_mips32be    = mips
-+ARCH_mipsn32le   = mips
-+ARCH_mipsn32be   = mips
-+ARCH_mips64le    = mips
-+ARCH_mips64be    = mips
- ARCH_riscv32     = riscv
- ARCH_riscv64     = riscv
- ARCH_s390x       = s390
-@@ -65,6 +69,10 @@ IMAGE_arm64      = arch/arm64/boot/Image
- IMAGE_arm        = arch/arm/boot/zImage
- IMAGE_mips32le   = vmlinuz
- IMAGE_mips32be   = vmlinuz
-+IMAGE_mipsn32le  = vmlinuz
-+IMAGE_mipsn32be  = vmlinuz
-+IMAGE_mips64le   = vmlinuz
-+IMAGE_mips64be   = vmlinuz
- IMAGE_ppc        = vmlinux
- IMAGE_ppc64      = vmlinux
- IMAGE_ppc64le    = arch/powerpc/boot/zImage
-@@ -85,6 +93,10 @@ DEFCONFIG_arm64      = defconfig
- DEFCONFIG_arm        = multi_v7_defconfig
- DEFCONFIG_mips32le   = malta_defconfig
- DEFCONFIG_mips32be   = malta_defconfig generic/eb.config
-+DEFCONFIG_mipsn32le  = malta_defconfig generic/64r2.config
-+DEFCONFIG_mipsn32be  = malta_defconfig generic/64r6.config generic/eb.config
-+DEFCONFIG_mips64le   = malta_defconfig generic/64r6.config
-+DEFCONFIG_mips64be   = malta_defconfig generic/64r2.config generic/eb.config
- DEFCONFIG_ppc        = pmac32_defconfig
- DEFCONFIG_ppc64      = powernv_be_defconfig
- DEFCONFIG_ppc64le    = powernv_defconfig
-@@ -108,7 +120,11 @@ QEMU_ARCH_x86        = x86_64
- QEMU_ARCH_arm64      = aarch64
- QEMU_ARCH_arm        = arm
- QEMU_ARCH_mips32le   = mipsel  # works with malta_defconfig
--QEMU_ARCH_mips32be  = mips
-+QEMU_ARCH_mips32be   = mips
-+QEMU_ARCH_mipsn32le  = mips64el
-+QEMU_ARCH_mipsn32be  = mips64
-+QEMU_ARCH_mips64le   = mips64el
-+QEMU_ARCH_mips64be   = mips64
- QEMU_ARCH_ppc        = ppc
- QEMU_ARCH_ppc64      = ppc64
- QEMU_ARCH_ppc64le    = ppc64
-@@ -121,6 +137,8 @@ QEMU_ARCH_loongarch  = loongarch64
- QEMU_ARCH            = $(QEMU_ARCH_$(XARCH))
- 
- QEMU_ARCH_USER_ppc64le = ppc64le
-+QEMU_ARCH_USER_mipsn32le = mipsn32el
-+QEMU_ARCH_USER_mipsn32be = mipsn32
- QEMU_ARCH_USER         = $(or $(QEMU_ARCH_USER_$(XARCH)),$(QEMU_ARCH_$(XARCH)))
- 
- QEMU_BIOS_DIR = /usr/share/edk2/
-@@ -138,6 +156,10 @@ QEMU_ARGS_arm64      = -M virt -cpu cortex-a53 -append "panic=-1 $(TEST:%=NOLIBC
- QEMU_ARGS_arm        = -M virt -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_mips32le   = -M malta -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_mips32be   = -M malta -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-+QEMU_ARGS_mipsn32le  = -M malta -cpu 5KEc -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-+QEMU_ARGS_mipsn32be  = -M malta -cpu I6400 -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-+QEMU_ARGS_mips64le   = -M malta -cpu I6400 -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-+QEMU_ARGS_mips64be   = -M malta -cpu 5KEc -append "panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_ppc        = -M g3beige -append "console=ttyS0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_ppc64      = -M powernv -append "console=hvc0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
- QEMU_ARGS_ppc64le    = -M powernv -append "console=hvc0 panic=-1 $(TEST:%=NOLIBC_TEST=%)"
-@@ -167,6 +189,10 @@ CFLAGS_s390x = -m64
- CFLAGS_s390 = -m31
- CFLAGS_mips32le = -EL -mabi=32 -fPIC
- CFLAGS_mips32be = -EB -mabi=32
-+CFLAGS_mipsn32le = -EL -mabi=n32 -fPIC -march=mips64r2
-+CFLAGS_mipsn32be = -EB -mabi=n32 -march=mips64r6
-+CFLAGS_mips64le = -EL -mabi=64 -march=mips64r6
-+CFLAGS_mips64be = -EB -mabi=64 -march=mips64r2
- CFLAGS_STACKPROTECTOR ?= $(call cc-option,-mstack-protector-guard=global $(call cc-option,-fstack-protector-all))
- CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 -W -Wall -Wextra \
- 		$(call cc-option,-fno-stack-protector) $(call cc-option,-Wmissing-prototypes) \
-diff --git a/tools/testing/selftests/nolibc/run-tests.sh b/tools/testing/selftests/nolibc/run-tests.sh
-index b5ded13bdda2702bbc3b84f7e5249fe79bca6dc6..dff5c1aac4d333b8264373e67d753dfb55e9c7c0 100755
---- a/tools/testing/selftests/nolibc/run-tests.sh
-+++ b/tools/testing/selftests/nolibc/run-tests.sh
-@@ -20,7 +20,7 @@ llvm=
- all_archs=(
- 	i386 x86_64
- 	arm64 arm
--	mips32le mips32be
-+	mips32le mips32be mipsn32le mipsn32be mips64le mips64be
- 	ppc ppc64 ppc64le
- 	riscv32 riscv64
- 	s390x s390
+Also another two points, for this new syscalls. I have not looked at the
+current changes (I was added to CC just recently), but it would be nice:
 
--- 
-2.48.1
+1) If syscall API allows to operate on the symlink itself. This is
+   because NTFS and also SMB symlink also contains attributes. ioctl
+   interface currently does not support to get/set these symlink
+   attributes.
 
+2) If syscall API contains ability to just change subset of attributes.
+   And provide an error reporting to userspace if userspace application
+   is trying to set attribute which is not supported by the filesystem.
+   This error reporting is needed for possible "cp -a" or possible
+   "rsync" implementation which informs when some metadata cannot be
+   backup/restored. There are more filesystems which supports only
+   subset of attributes, this applies also for windows attributes.
+   For example UDF fs supports only "hidden" attribute.
 
