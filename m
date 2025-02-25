@@ -1,253 +1,173 @@
-Return-Path: <linux-mips+bounces-7929-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7930-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 214DCA43390
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Feb 2025 04:20:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D960AA433C4
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Feb 2025 04:46:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 587C33A7EFC
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Feb 2025 03:20:26 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4E360189D27D
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Feb 2025 03:46:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 866E3242934;
-	Tue, 25 Feb 2025 03:20:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 062CE13D509;
+	Tue, 25 Feb 2025 03:46:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H4M+le/3"
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="gdYlHQw6"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50C965B211;
-	Tue, 25 Feb 2025 03:20:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF1E2B64A
+	for <linux-mips@vger.kernel.org>; Tue, 25 Feb 2025 03:46:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740453631; cv=none; b=ofeq/718QgHVoOIExxwyLKY0PJh/aJnFbxbtgzecLnrLM3IkS0L9YO/cSNyEvnFjvvs55RaH2HCTdru6s49uIEM93/W67dxldUKSlDvLlJMyTA8kn7+TQSxwEIFVm32Tw9ylQfS2Fh2EcZ7wvlrg5Q4KcqRCEzI7l9w4se0H4GI=
+	t=1740455181; cv=none; b=YPAG8YKaytUW1jMAF6Dfpc2e7XY9GxiriJTtA0i4PQ1bT0rg88vBclPepzn1lrFgKmbJ+4w4g+4xG/rGL6rE9DIJxR6DAZUTlOhMqswPZDCL0WRmemZb72RW7Zh0agXEBrengop26uyVqXdYKFytfzWn3DTSdSDjaIVgvvT5ZUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740453631; c=relaxed/simple;
-	bh=CEMxrTVuEVr72S8cFbXt9nDGTNNrQnf5MK8YvJiXqqs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZRIAxfZnmfN5MU3B7XenKvvV4CuQwmbwNlm06pngXmIUFQ8ZZdyMhxQRWgcoqSHugUG+DDsjdZo7ZWOdqLEYM219pygKmeAC7Lnw5+koo6OZJHw1oPfCtvbjHmzFl99kBEA0gpp9fhP4bnoveZxxkG9fT/JjhC+y3rwEDjUSuJA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H4M+le/3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B80AAC4CED6;
-	Tue, 25 Feb 2025 03:20:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740453630;
-	bh=CEMxrTVuEVr72S8cFbXt9nDGTNNrQnf5MK8YvJiXqqs=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=H4M+le/3gb6RveGWB4ZJlQfvlf37NwO5LrZ8WFqlXbulGP/6mzyqdtbm/9el5+Ghm
-	 fzOCKcF900uuLtOrkAB3pwt1hGz5lbqyVcsX6qejpa4QM21q5cCne0aFcYJdyWH23m
-	 aTFCK6NNw9Tx7M5+5JekG3tHdVNY/l0YX6uku6uUqphvx/Mg+h4fEaaui5OISWdk2+
-	 j+9EcRsxpVv48M5HDP/YsYRlnL1qz/MQ4rj60ijZNrQEKfeXP6gVdbPClXBad7+vhd
-	 Jo0jAbNsfs8RxqMGjyJcorErXiL7LmTlsgaTrh16I/YGfa3JnjN/1xER7f92LCj5Sj
-	 t5JrBgYb5GuAQ==
-Date: Mon, 24 Feb 2025 19:20:28 -0800
-From: Namhyung Kim <namhyung@kernel.org>
-To: Ian Rogers <irogers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Kan Liang <kan.liang@linux.intel.com>,
-	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
-	James Clark <james.clark@linaro.org>,
-	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
-	guoren <guoren@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Charlie Jenkins <charlie@rivosinc.com>,
-	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	=?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-	Howard Chu <howardchu95@gmail.com>, linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-	linux-riscv@lists.infradead.org, linux-mips@vger.kernel.org,
-	Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v3 0/8] perf: Support multiple system call tables in the
- build
-Message-ID: <Z702_CQ7nMx9fZQn@google.com>
-References: <20250219185657.280286-1-irogers@google.com>
+	s=arc-20240116; t=1740455181; c=relaxed/simple;
+	bh=Xarqt6bJuNP7uDohIoZXfOCmOa/TOsimsTJDUmQhEAk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=QOw0oOM7gaL6QQNGs4ieOwX4NgzjrQB3rMP7VLvyYQM65HoL1FeWf+5G/7gPQCknfGT4bJK0n2MWWqYbbB7mH30R/sQa0RFxkUFszVh25ckQBnKoibdD9C22kwOwkClAqfBruaexvTJ5ZNrWsHxgvOaFmOnUEcHTiv1TRcbPgcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=gdYlHQw6; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-220d398bea9so81286115ad.3
+        for <linux-mips@vger.kernel.org>; Mon, 24 Feb 2025 19:46:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1740455179; x=1741059979; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=28rhiB/GEX2aHidRfZsL1f1ynE4sxX3e1xrVD+t+cg0=;
+        b=gdYlHQw6UMjvN66luBcJmpWC6mmBua2s+rF8MRPWFK89E4pqFtOL2sKZqJrZVhYeoi
+         h0Az2B5W1RBkBDeXejxczzYtLaSHKgpaSe5nUZHyxE0sWPvVQ7egJNVQDD1ys4IP3awN
+         qLM6wTWZZd+dWGjMGYn1T6VnY11ntvSuzT5g+i2JYvUa/QhroLjt1YE7cACEwy43Tlpv
+         jo0AVkh3/z21TprOUpO6VJXxdZ5N+k1uTSGjpctRfwQfY+oc+T1qk2RWReDM4epWndH4
+         L/VBJ1fD2gDNNbcNJZPmjF1uMUrsJieVg2ui5gAb/yK4rfTB3LlvdY6TbmJofmZ5KAbk
+         G/ig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740455179; x=1741059979;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=28rhiB/GEX2aHidRfZsL1f1ynE4sxX3e1xrVD+t+cg0=;
+        b=RVxkZifVW/1XnTzPHaorXmWE5JiRnMHteL/Wy4mU7I9SUBp5saPUzmxpvTb+4HUhyX
+         fRP4LVMXPhJWLCxIfji04b9C+AL6oLbmY1T4ggyu7kBAN69U4cNTaL6mB7HSkQiQXMPW
+         FDOPzrx/G3grUv/fTCjlJ96OQU6Fz+qOs/nyH2RJ/sQPT3QWjRuDuVBTZ8lWKc5bZRZE
+         o5cHAZfI6l8vqpLLG5dbmcb4/TcE504GcZXDzOsKnSA00G8vgO8EeHT6QTpUzhydRPpd
+         KaIkhlcPG6Q8ALTq47mGJCUJxK17nkarR9kTRO/dF01XdIQ5KJrSUPD//DdA66exrfHn
+         D/cA==
+X-Forwarded-Encrypted: i=1; AJvYcCWkEost1x9t5F1LWSe0eI2gfq2JL3oScfmIB/DIam8sykrEM9wIc9IkDY2yWMBfxVtrFeArl5wXDvZ/@vger.kernel.org
+X-Gm-Message-State: AOJu0YwtJTy3Ca5EyyPOkJoc/fsY7SvHcxGTkpELnLnJRnMjleS7ctUj
+	V788Am/OKl7r1uZHmqzqmt8SpRyicDrgNTyMnsgFyerjtXhCCtQlqrlGjWIah5w=
+X-Gm-Gg: ASbGncvhXPvUGZNAgWyiQP2u6rs3RWxF29SoookxD4g6VRbrtOkxKykN34TN938p3qR
+	DqIot/NSMUqdKk60cPS7iuX4ANxpxAQ3dORN5A+8gd6DG96HlZL1bIVRZGdGMZrVmW600QoeCWm
+	kwY0F9lRNHJ3szhSrSUBr152X+F7/423FgZymC6Q29rOaIHMBLnYG4glCizEsYgeowESbS+AouE
+	AE3oQJOv9XCKSQOve1ZARu6H4ukD/Q3N3DUlQoBpYecYg+1nrjpN+E4iOIA1EPZrwgb3WNT6m1F
+	XWtXM/65EPsVZoSGJs6PwagPZbV6r6aDcEoyiv0EswL3ZMHThUJdS67meOVaCXdZ1Q==
+X-Google-Smtp-Source: AGHT+IGCQV+aaAngRw7XrsDoRTV1d2A5MeKYpMO11TDMI4tHHu1SHT60kqvv/nxGByOS3x+4jf7H6Q==
+X-Received: by 2002:a17:902:e744:b0:21f:89e5:2715 with SMTP id d9443c01a7336-221a0edd8cbmr248196785ad.19.1740455178926;
+        Mon, 24 Feb 2025 19:46:18 -0800 (PST)
+Received: from C02DW0BEMD6R.bytedance.net ([63.216.146.179])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7347a81f014sm409429b3a.156.2025.02.24.19.46.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Feb 2025 19:46:18 -0800 (PST)
+From: Qi Zheng <zhengqi.arch@bytedance.com>
+To: peterz@infradead.org,
+	kevin.brodsky@arm.com,
+	riel@surriel.com,
+	vishal.moola@gmail.com,
+	david@redhat.com,
+	jannh@google.com,
+	hughd@google.com,
+	willy@infradead.org,
+	yuzhao@google.com,
+	muchun.song@linux.dev,
+	akpm@linux-foundation.org,
+	will@kernel.org,
+	aneesh.kumar@kernel.org,
+	npiggin@gmail.com,
+	arnd@arndb.de,
+	dave.hansen@linux.intel.com,
+	rppt@kernel.org,
+	alexghiti@rivosinc.com
+Cc: linux-mm@kvack.org,
+	linux-kernel@vger.kernel.org,
+	linux-csky@vger.kernel.org,
+	linux-hexagon@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org,
+	linux-openrisc@vger.kernel.org,
+	linux-sh@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	x86@kernel.org,
+	linux-riscv@lists.infradead.org,
+	Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: [PATCH v2 0/6] remove tlb_remove_page_ptdesc()
+Date: Tue, 25 Feb 2025 11:45:50 +0800
+Message-Id: <cover.1740454179.git.zhengqi.arch@bytedance.com>
+X-Mailer: git-send-email 2.24.3 (Apple Git-128)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250219185657.280286-1-irogers@google.com>
+Content-Transfer-Encoding: 8bit
 
-On Wed, Feb 19, 2025 at 10:56:49AM -0800, Ian Rogers wrote:
-> This work builds on the clean up of system call tables and removal of
-> libaudit by Charlie Jenkins <charlie@rivosinc.com>.
-> 
-> The system call table in perf trace is used to map system call numbers
-> to names and vice versa. Prior to these changes, a single table
-> matching the perf binary's build was present. The table would be
-> incorrect if tracing say a 32-bit binary from a 64-bit version of
-> perf, the names and numbers wouldn't match.
-> 
-> Change the build so that a single system call file is built and the
-> potentially multiple tables are identifiable from the ELF machine type
-> of the process being examined. To determine the ELF machine type, the
-> executable's header is read from /proc/pid/exe with fallbacks to using
-> the perf's binary type when unknown.
+Changes in v2:
+ - add [PATCH v2 2/6] (Peter Zijlstra)
+ - remove [PATCH 4/5] and add [PATCH v2 5/6]
+ - rebase onto the next-20250224
 
-Hmm.. then this is limited to live mode and potentially detect wrong
-machine type if it reads an old data, right?
+Hi all,
 
-Also IIUC fallback to the perf binary means it cannot use cross-machine
-table.  For example, it cannot process data from ARM64 on x86, no?  It
-seems it should use perf_env.arch.
+As suggested by Peter Zijlstra below [1], this series aims to remove
+tlb_remove_page_ptdesc().
 
-One more concern is BPF.  The BPF should know about the ABI of the
-current process so that it can augment the syscall arguments correctly.
-Currently it only checks the syscall number but it can be different on
-32-bit and 64-bit.
+: Fundamentally tlb_remove_page() is about removing *pages* as from a PTE,
+: there should not be a page-table anywhere near here *ever*.
+:
+: Yes, some architectures use tlb_remove_page() for page-tables too, but
+: that is more or less an implementation detail that can be fixed.
+
+After this series, all architectures use tlb_remove_table() or tlb_remove_ptdesc()
+to remove the page table pages. In the future, once all architectures using
+tlb_remove_table() have also converted to using struct ptdesc (eg. powerpc), it
+may be possible to use only tlb_remove_ptdesc().
+
+This series is based on next-20250224.
+
+Comments and suggestions are welcome!
 
 Thanks,
-Namhyung
+Qi
 
+[1]. https://lore.kernel.org/linux-mm/20250103111457.GC22934@noisy.programming.kicks-ass.net/
 
-> 
-> Remove some runtime types used by the system call tables and make
-> equivalents generated at build time.
-> 
-> v3: Add Charlie's reviewed-by tags. Incorporate feedback from Arnd
->     Bergmann <arnd@arndb.de> on additional optional column and MIPS
->     system call numbering. Rebase past Namhyung's global system call
->     statistics and add comments that they don't yet support an
->     e_machine other than EM_HOST.
-> 
-> v2: Change the 1 element cache for the last table as suggested by
->     Howard Chu, add Howard's reviewed-by tags.
->     Add a comment and apology to Charlie for not doing better in
->     guiding:
->     https://lore.kernel.org/all/20250114-perf_syscall_arch_runtime-v1-1-5b304e408e11@rivosinc.com/
->     After discussion on v1 and he agreed this patch series would be
->     the better direction.
-> 
-> Ian Rogers (8):
->   perf syscalltble: Remove syscall_table.h
->   perf trace: Reorganize syscalls
->   perf syscalltbl: Remove struct syscalltbl
->   perf thread: Add support for reading the e_machine type for a thread
->   perf trace beauty: Add syscalltbl.sh generating all system call tables
->   perf syscalltbl: Use lookup table containing multiple architectures
->   perf build: Remove Makefile.syscalls
->   perf syscalltbl: Mask off ABI type for MIPS system calls
-> 
->  tools/perf/Makefile.perf                      |  10 +-
->  tools/perf/arch/alpha/entry/syscalls/Kbuild   |   2 -
->  .../alpha/entry/syscalls/Makefile.syscalls    |   5 -
->  tools/perf/arch/alpha/include/syscall_table.h |   2 -
->  tools/perf/arch/arc/entry/syscalls/Kbuild     |   2 -
->  .../arch/arc/entry/syscalls/Makefile.syscalls |   3 -
->  tools/perf/arch/arc/include/syscall_table.h   |   2 -
->  tools/perf/arch/arm/entry/syscalls/Kbuild     |   4 -
->  .../arch/arm/entry/syscalls/Makefile.syscalls |   2 -
->  tools/perf/arch/arm/include/syscall_table.h   |   2 -
->  tools/perf/arch/arm64/entry/syscalls/Kbuild   |   3 -
->  .../arm64/entry/syscalls/Makefile.syscalls    |   6 -
->  tools/perf/arch/arm64/include/syscall_table.h |   8 -
->  tools/perf/arch/csky/entry/syscalls/Kbuild    |   2 -
->  .../csky/entry/syscalls/Makefile.syscalls     |   3 -
->  tools/perf/arch/csky/include/syscall_table.h  |   2 -
->  .../perf/arch/loongarch/entry/syscalls/Kbuild |   2 -
->  .../entry/syscalls/Makefile.syscalls          |   3 -
->  .../arch/loongarch/include/syscall_table.h    |   2 -
->  tools/perf/arch/mips/entry/syscalls/Kbuild    |   2 -
->  .../mips/entry/syscalls/Makefile.syscalls     |   5 -
->  tools/perf/arch/mips/include/syscall_table.h  |   2 -
->  tools/perf/arch/parisc/entry/syscalls/Kbuild  |   3 -
->  .../parisc/entry/syscalls/Makefile.syscalls   |   6 -
->  .../perf/arch/parisc/include/syscall_table.h  |   8 -
->  tools/perf/arch/powerpc/entry/syscalls/Kbuild |   3 -
->  .../powerpc/entry/syscalls/Makefile.syscalls  |   6 -
->  .../perf/arch/powerpc/include/syscall_table.h |   8 -
->  tools/perf/arch/riscv/entry/syscalls/Kbuild   |   2 -
->  .../riscv/entry/syscalls/Makefile.syscalls    |   4 -
->  tools/perf/arch/riscv/include/syscall_table.h |   8 -
->  tools/perf/arch/s390/entry/syscalls/Kbuild    |   2 -
->  .../s390/entry/syscalls/Makefile.syscalls     |   5 -
->  tools/perf/arch/s390/include/syscall_table.h  |   2 -
->  tools/perf/arch/sh/entry/syscalls/Kbuild      |   2 -
->  .../arch/sh/entry/syscalls/Makefile.syscalls  |   4 -
->  tools/perf/arch/sh/include/syscall_table.h    |   2 -
->  tools/perf/arch/sparc/entry/syscalls/Kbuild   |   3 -
->  .../sparc/entry/syscalls/Makefile.syscalls    |   5 -
->  tools/perf/arch/sparc/include/syscall_table.h |   8 -
->  tools/perf/arch/x86/entry/syscalls/Kbuild     |   3 -
->  .../arch/x86/entry/syscalls/Makefile.syscalls |   6 -
->  tools/perf/arch/x86/include/syscall_table.h   |   8 -
->  tools/perf/arch/xtensa/entry/syscalls/Kbuild  |   2 -
->  .../xtensa/entry/syscalls/Makefile.syscalls   |   4 -
->  .../perf/arch/xtensa/include/syscall_table.h  |   2 -
->  tools/perf/builtin-trace.c                    | 290 +++++++++++-------
->  tools/perf/scripts/Makefile.syscalls          |  61 ----
->  tools/perf/scripts/syscalltbl.sh              |  86 ------
->  tools/perf/trace/beauty/syscalltbl.sh         | 274 +++++++++++++++++
->  tools/perf/util/syscalltbl.c                  | 148 ++++-----
->  tools/perf/util/syscalltbl.h                  |  22 +-
->  tools/perf/util/thread.c                      |  50 +++
->  tools/perf/util/thread.h                      |  14 +-
->  54 files changed, 616 insertions(+), 509 deletions(-)
->  delete mode 100644 tools/perf/arch/alpha/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/alpha/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/alpha/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/arc/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/arc/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/arc/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/arm/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/arm/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/arm/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/arm64/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/arm64/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/arm64/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/csky/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/csky/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/csky/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/loongarch/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/loongarch/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/loongarch/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/mips/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/mips/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/mips/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/parisc/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/parisc/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/parisc/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/powerpc/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/powerpc/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/powerpc/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/riscv/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/riscv/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/riscv/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/s390/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/s390/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/s390/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/sh/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/sh/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/sh/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/sparc/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/sparc/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/sparc/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/x86/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/x86/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/x86/include/syscall_table.h
->  delete mode 100644 tools/perf/arch/xtensa/entry/syscalls/Kbuild
->  delete mode 100644 tools/perf/arch/xtensa/entry/syscalls/Makefile.syscalls
->  delete mode 100644 tools/perf/arch/xtensa/include/syscall_table.h
->  delete mode 100644 tools/perf/scripts/Makefile.syscalls
->  delete mode 100755 tools/perf/scripts/syscalltbl.sh
->  create mode 100755 tools/perf/trace/beauty/syscalltbl.sh
-> 
-> -- 
-> 2.48.1.601.g30ceb7b040-goog
-> 
+Qi Zheng (6):
+  mm: pgtable: make generic tlb_remove_table() use struct ptdesc
+  mm: pgtable: change pt parameter of tlb_remove_ptdesc() to struct
+    ptdesc *
+  mm: pgtable: convert some architectures to use tlb_remove_ptdesc()
+  riscv: pgtable: unconditionally use tlb_remove_ptdesc()
+  x86: pgtable: convert to use tlb_remove_ptdesc()
+  mm: pgtable: remove tlb_remove_page_ptdesc()
+
+ arch/csky/include/asm/pgalloc.h      |  3 +--
+ arch/hexagon/include/asm/pgalloc.h   |  3 +--
+ arch/loongarch/include/asm/pgalloc.h |  3 +--
+ arch/m68k/include/asm/sun3_pgalloc.h |  3 +--
+ arch/mips/include/asm/pgalloc.h      |  3 +--
+ arch/nios2/include/asm/pgalloc.h     |  9 ++++-----
+ arch/openrisc/include/asm/pgalloc.h  |  3 +--
+ arch/riscv/include/asm/pgalloc.h     | 26 ++++----------------------
+ arch/sh/include/asm/pgalloc.h        |  3 +--
+ arch/um/include/asm/pgalloc.h        |  9 +++------
+ arch/x86/mm/pgtable.c                |  8 ++++----
+ include/asm-generic/tlb.h            | 14 ++++----------
+ 12 files changed, 26 insertions(+), 61 deletions(-)
+
+-- 
+2.20.1
+
 
