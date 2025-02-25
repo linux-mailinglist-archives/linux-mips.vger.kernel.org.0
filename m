@@ -1,165 +1,165 @@
-Return-Path: <linux-mips+bounces-7950-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7951-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20C96A443D7
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Feb 2025 16:05:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 579C1A44536
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Feb 2025 17:00:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D588E188A76B
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Feb 2025 15:05:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 444CC862312
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Feb 2025 15:59:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A21A26A0C7;
-	Tue, 25 Feb 2025 15:04:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31E2C16D9AA;
+	Tue, 25 Feb 2025 15:59:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xBeN/Yg6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hcOfCPg6"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 768972686B1
-	for <linux-mips@vger.kernel.org>; Tue, 25 Feb 2025 15:04:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF7AD1552F5;
+	Tue, 25 Feb 2025 15:59:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740495899; cv=none; b=hZS1WWMGMvLhHzV0nhes4GWX7yk9rK5dTP0aX27za6mTEiu7yKk5ISyIvyhonK/SagysuujiA4DOXaEmVdFKblZXo59QTrviDh3KKlDldI521y/iEfRExSIT9b/QfZvjuadx/uZkT5nxIeLH1/gEfgUXK6QtG7wdqTbrduAKXyo=
+	t=1740499168; cv=none; b=knpTuebUBAwjmj21VroOkMpOwiQuACfn6ErTPZLNfifJ3FCB6+SYmqaTSSUfk4HfJcJSOEUAw1AZfrKkYjnMBJWIbm69B79pSpy5B+fL3o24oIFXpmiR8rFb6tQ6Qgd1B7Qh1RW+xALo2rtL+ShNXgevABUQg5kE0wRf02BT1M4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740495899; c=relaxed/simple;
-	bh=vHxREudX9bj9dETQmre2TyJ+AerbIUB9johHAra0OcY=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=ghCD4geiREQ2ig04SmmMLrfTUUt8adc4F29h+QMAAq9m7O9l9j6ZIHLLysqbHIFLIQxG7njHswnuKE8eA0EVz/2V+SSM40iLBw+Ozcr4YhwIXZkEpV7d/1PygzLVgdd1tc/6e4zlF0IIsaTnKjiKmncwYrm3FFnlLPmbzN1oIag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xBeN/Yg6; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-2fc0bc05afdso12553543a91.0
-        for <linux-mips@vger.kernel.org>; Tue, 25 Feb 2025 07:04:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1740495897; x=1741100697; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SksBvCkZJsvM7Rmqh0mGEf+0QRJJwMrgdQAdOhKbL9I=;
-        b=xBeN/Yg6seyw2+zB6ZEiNjX9hpxkH/QBdcXGsrWIN7M0zfX1n3KZREQovfsb5sHBCB
-         BBCj3RS0xtpAB/TaL5zpddubnYGjgCckKobWK9b5wsQqk+Iv4kahgb8m3rMVNe8dlrh7
-         T78QtLJX/3Fq5wuzdvbQTR9QbEl431bQ/VPsg/4CePOy4EqfaES+j/3GWIdNyQLPrPdk
-         k33GeSW1YbQTMa63TCG6yMVykOG0s3BymxU1V8p58hnBKHxjP2CgDT+FgM9T1DJ92UrO
-         zYl7qOszMIfcpHt+f3UcZxQFRf7GXVQAqLJzLmTuwNF1hxdnT6YdSmFoE+o2IbCTo6M7
-         Gxgg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740495897; x=1741100697;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SksBvCkZJsvM7Rmqh0mGEf+0QRJJwMrgdQAdOhKbL9I=;
-        b=hL7BvBzD/mCLp6MEyznwVPRdlRNRmxAElvryex9jS9eigTYivqrmyXIbzSaVg/J/e5
-         +EukIr/tST/215GbXXeBd7gMef0bhepstQoXqa8etY22DM9IKcGavGICdqvRQI/EQAxh
-         COF/mdEl2/tvANlaygGE7re9ZjJNKR08syd12Ijy0UXRNKSKIsoUmwEwqgDIgB8fPav/
-         JzzYdKn943iTHULAf9Zi7cOvIsOshdmeP8eUBfEf5oEflbdjPFSzXI+d6sXUl81dzPxf
-         8mL04aN7gb6hbk5RML+ZkASkHZumyXTseJwtaznmguhYczBZsduriswMoLop1YN7CNBF
-         F84g==
-X-Forwarded-Encrypted: i=1; AJvYcCUeIG0rEoGTSujZ5F3Hbp86fKT+xfgEcL+iL/NjfmUFd4m49C/VFAC9/kX+iBTiJ+ddKG+vhsWIlRK3@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxq5ksZqFsm3zyFUYNR7a1DCjzVfDk6v7S5Xci4vQXbgQqbdNZO
-	Ybss4ayOlk5QRuPPHObGdJuvF58/xv7Zab2AAB12jVpQcuLxkAOnl+u0TmpCQJtepAGhdFrLywx
-	04w==
-X-Google-Smtp-Source: AGHT+IGZHL7uZNM7BfQEbB7Kx7BtB5DxGYYXBfSiN251AAOj3wJWNSwzk9hwQvuFf2tqN0hxCASkCwncVrs=
-X-Received: from pgmm27.prod.google.com ([2002:a05:6a02:551b:b0:ad5:4c6b:ab72])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:9d8f:b0:1f0:e430:43f8
- with SMTP id adf61e73a8af0-1f0fbff6f36mr6428815637.1.1740495896725; Tue, 25
- Feb 2025 07:04:56 -0800 (PST)
-Date: Tue, 25 Feb 2025 07:04:55 -0800
-In-Reply-To: <Z71072F7FMz5aq/Q@yzhao56-desk.sh.intel.com>
+	s=arc-20240116; t=1740499168; c=relaxed/simple;
+	bh=5BKzhjbCX0A+Ckqb9LCw0vp1xrvfcOr/debaeQvehd8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FAyVW2W39+KEXYjtPe5U8/tnWXEhJ1V2ulQknvvW7ut2MPnBHQEYAemejBFz7XnvgkyBXuCAl60/ZGIb8Tc0JukRdqTXqWhNND5o6WWHsz1gVO7rR2vBqRNSa9JGnNkEHXYZEp4SBMBwKn0Tb5XqAi7lULIAAR6id4TRG6LThB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hcOfCPg6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 377C2C4CEDD;
+	Tue, 25 Feb 2025 15:59:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740499167;
+	bh=5BKzhjbCX0A+Ckqb9LCw0vp1xrvfcOr/debaeQvehd8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=hcOfCPg62Mp6p/gGtsnSxwqeC+vKxdWbUHnaP0lhK9+JD4bU00iwT2OXd68fSYasS
+	 cMGHk14Swd2/bs18Mw+XCs/M5g9hO4nFPN0Ad0v9g1xE2A9OCjxI2KFldk5FNdIDjn
+	 6E9m81StJWl7+TqHJObUe/YJwJ7lmLNHRT9OGwEAOMO9UjBY3ljMeb+SDLleZcmrad
+	 7KNBAlXezxSZE8YKAYBXGYKCx63g46BsIA9/Ts0WWq6vzlXJCD9vHcwme0PfK8ESP6
+	 08LqrVwRicdu/SNhfCpUvJXkehDRbEwBSi3DKCbLms+TjzZu3gFvEovMZrnaatKyJs
+	 GmUKFT+3vHHCw==
+Date: Tue, 25 Feb 2025 07:59:26 -0800
+From: "Darrick J. Wong" <djwong@kernel.org>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Amir Goldstein <amir73il@gmail.com>,
+	Andrey Albershteyn <aalbersh@redhat.com>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Matt Turner <mattst88@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Michal Simek <monstr@monstr.eu>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S . Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
+	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
+	linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
+	Linux-Arch <linux-arch@vger.kernel.org>, linux-xfs@vger.kernel.org,
+	Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
+	Theodore Ts'o <tytso@mit.edu>
+Subject: Re: [PATCH v3] fs: introduce getfsxattrat and setfsxattrat syscalls
+Message-ID: <20250225155926.GD6265@frogsfrogsfrogs>
+References: <20250211-xattrat-syscall-v3-1-a07d15f898b2@kernel.org>
+ <20250221181135.GW21808@frogsfrogsfrogs>
+ <CAOQ4uxgyYBFqkq6cQsso4LxJsPJ4uECOdskXmz-nmGhhV5BQWg@mail.gmail.com>
+ <20250224-klinke-hochdekoriert-3f6be89005a8@brauner>
+ <6b51ffa2-9d67-4466-865e-e703c1243352@app.fastmail.com>
+ <20250225-strom-kopflos-32062347cd13@brauner>
+ <3c860dc0-ba8d-4324-b286-c160b7d8d2c4@app.fastmail.com>
+ <20250225-testfahrt-seilwinde-64e6f44c01ce@brauner>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250224235542.2562848-1-seanjc@google.com> <20250224235542.2562848-2-seanjc@google.com>
- <Z71072F7FMz5aq/Q@yzhao56-desk.sh.intel.com>
-Message-ID: <Z73cF_pWIFMreOf5@google.com>
-Subject: Re: [PATCH 1/7] KVM: x86: Free vCPUs before freeing VM state
-From: Sean Christopherson <seanjc@google.com>
-To: Yan Zhao <yan.y.zhao@intel.com>
-Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>, 
-	Huacai Chen <chenhuacai@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Anup Patel <anup@brainfault.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	kvm@vger.kernel.org, loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	Aaron Lewis <aaronlewis@google.com>, Jim Mattson <jmattson@google.com>, 
-	Rick P Edgecombe <rick.p.edgecombe@intel.com>, Kai Huang <kai.huang@intel.com>, 
-	Isaku Yamahata <isaku.yamahata@intel.com>
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250225-testfahrt-seilwinde-64e6f44c01ce@brauner>
 
-On Tue, Feb 25, 2025, Yan Zhao wrote:
-> > diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-> > index 58b82d6fd77c..045c61cc7e54 100644
-> > --- a/arch/x86/kvm/x86.c
-> > +++ b/arch/x86/kvm/x86.c
-> > @@ -12890,11 +12890,11 @@ void kvm_arch_destroy_vm(struct kvm *kvm)
-> >  		mutex_unlock(&kvm->slots_lock);
-> >  	}
-> >  	kvm_unload_vcpu_mmus(kvm);
-> > +	kvm_destroy_vcpus(kvm);
-> >  	kvm_x86_call(vm_destroy)(kvm);
-> >  	kvm_free_msr_filter(srcu_dereference_check(kvm->arch.msr_filter, &kvm->srcu, 1));
-> >  	kvm_pic_destroy(kvm);
-> >  	kvm_ioapic_destroy(kvm);
-> > -	kvm_destroy_vcpus(kvm);
-> >  	kvfree(rcu_dereference_check(kvm->arch.apic_map, 1));
-> >  	kfree(srcu_dereference_check(kvm->arch.pmu_event_filter, &kvm->srcu, 1));
-> >  	kvm_mmu_uninit_vm(kvm);
-> After this change, now the sequence is that
+On Tue, Feb 25, 2025 at 12:24:08PM +0100, Christian Brauner wrote:
+> On Tue, Feb 25, 2025 at 11:40:51AM +0100, Arnd Bergmann wrote:
+> > On Tue, Feb 25, 2025, at 11:22, Christian Brauner wrote:
+> > > On Tue, Feb 25, 2025 at 09:02:04AM +0100, Arnd Bergmann wrote:
+> > >> On Mon, Feb 24, 2025, at 12:32, Christian Brauner wrote:
+> > >> 
+> > >> The ioctl interface relies on the existing behavior, see
+> > >> 0a6eab8bd4e0 ("vfs: support FS_XFLAG_COWEXTSIZE and get/set of
+> > >> CoW extent size hint") for how it was previously extended
+> > >> with an optional flag/word. I think that is fine for the syscall
+> > >> as well, but should be properly documented since it is different
+> > >> from how most syscalls work.
+> > >
+> > > If we're doing a new system call I see no reason to limit us to a
+> > > pre-existing structure or structure layout.
+> > 
+> > Obviously we could create a new structure, but I also see no
+> > reason to do so. The existing ioctl interface was added in
+> > in 2002 as part of linux-2.5.35 with 16 bytes of padding, half
+> > of which have been used so far.
+> > 
+> > If this structure works for another 23 years before we run out
+> > of spare bytes, I think that's good enough. Building in an
+> > incompatible way to handle potential future contents would
+> > just make it harder to use for any userspace that wants to
+> > use the new syscalls but still needs a fallback to the
+> > ioctl version.
 > 
-> 1. kvm_arch_pre_destroy_vm()
-> 2. kvm_arch_destroy_vm()
->    2.1 kvm_destroy_vcpus()
->    2.2 .vm_destroy hook
->    2.3 kvm_mmu_uninit_vm() --> mirror root ref is 1 upon here. Zap the mirror
->                                root and reclaim SETP page table pages.
->    2.4 .vm_free hook
+> The fact that this structure has existed since the dawn of time doesn't
+> mean it needs to be retained when adding a completely new system call.
 > 
-> Since TDX needs to reclaim the TDR page after reclaiming all other pages, we
-> currently added a vm_free hook at 2.4, after 2.3.
+> People won't mix both. They either switch to the new interface because
+> they want to get around the limitations of the old interface or they
+> keep using the old interface and the associated workarounds.
 > 
-> Could we move kvm_mmu_uninit_vm() before the .vm_destroy hook and after
-> kvm_destroy_vcpus()?
-> 
-> Or move the .vm_destroy hook after kvm_mmu_uninit_vm(), e.g. after
-> kvm_page_track_cleanup()?
+> In another thread they keep arguing about new extensions for Windows
+> that are going to be added to the ioctl interface and how to make it fit
+> into this. That just shows that it's very hard to predict from the
+> amount of past changes how many future changes are going to happen. And
+> if an interface is easy to extend it might well invite new changes that
+> people didn't want to or couldn't make using the old interface.
 
-I would go for the first option.  I'll tack on a patch since I need to test all
-of these flows anyways, and I would much prefer to change course sooner rather
-than later if it doesn't work for whatever reason.
+Agreed, I don't think it's hard to enlarge struct fsxattr in the
+existing ioctl interface; either we figure out how to make the kernel
+fill out the "missing" bytes with an internal getfsxattr call, or we
+make it return some errno if we would be truncating real output due to
+struct size limits and leave a note in the manpage that "EL3HLT means
+use a bigger structure definition"
 
-Is this comment accurate?
+Then both interfaces can plod along for another 30 years. :)
 
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index 1e5f6f820c0b..f5685f153e08 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -12874,13 +12874,19 @@ void kvm_arch_destroy_vm(struct kvm *kvm)
-                mutex_unlock(&kvm->slots_lock);
-        }
-        kvm_destroy_vcpus(kvm);
-+
-+       /*
-+        * Do final MMU teardown prior to calling into vendor code.  All pages
-+        * that were donated to the TDX module, e.g. for S-EPT tables, need to
-+        * be reclaimed before the VM metadata page can be freed.
-+        */
-+       kvm_mmu_uninit_vm(kvm);
-        kvm_x86_call(vm_destroy)(kvm);
-        kvm_free_msr_filter(srcu_dereference_check(kvm->arch.msr_filter, &kvm->srcu, 1));
-        kvm_pic_destroy(kvm);
-        kvm_ioapic_destroy(kvm);
-        kvfree(rcu_dereference_check(kvm->arch.apic_map, 1));
-        kfree(srcu_dereference_check(kvm->arch.pmu_event_filter, &kvm->srcu, 1));
--       kvm_mmu_uninit_vm(kvm);
-        kvm_page_track_cleanup(kvm);
-        kvm_xen_destroy_vm(kvm);
-        kvm_hv_destroy_vm(kvm);
+--D
 
