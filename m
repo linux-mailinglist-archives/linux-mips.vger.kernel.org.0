@@ -1,47 +1,47 @@
-Return-Path: <linux-mips+bounces-7928-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7929-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A757A4335C
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Feb 2025 04:05:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 214DCA43390
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Feb 2025 04:20:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC19A3B0ADB
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Feb 2025 03:05:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 587C33A7EFC
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Feb 2025 03:20:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8D5713632B;
-	Tue, 25 Feb 2025 03:05:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 866E3242934;
+	Tue, 25 Feb 2025 03:20:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BFq52g4i"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H4M+le/3"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84C4ABE49;
-	Tue, 25 Feb 2025 03:05:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50C965B211;
+	Tue, 25 Feb 2025 03:20:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740452733; cv=none; b=n6hV/AesuF6MdnU44afh/nVq3vc8ZGfE82CDich6T29VL/bfAJd5BTQSRK7IWAF3+zyEdCgs3ALktyIbNq2k2O81+izZSM7FtbyYi/ClMYF7J8OXhsCr5blOdqfbJECbfxjD/Jt36ikagGi36lV8fP+uRdNK3R4KSEfo0IDBtPM=
+	t=1740453631; cv=none; b=ofeq/718QgHVoOIExxwyLKY0PJh/aJnFbxbtgzecLnrLM3IkS0L9YO/cSNyEvnFjvvs55RaH2HCTdru6s49uIEM93/W67dxldUKSlDvLlJMyTA8kn7+TQSxwEIFVm32Tw9ylQfS2Fh2EcZ7wvlrg5Q4KcqRCEzI7l9w4se0H4GI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740452733; c=relaxed/simple;
-	bh=nFx/BLGn/+pJuDUW967qxmpUkfbqlrvIzj+c3zapthY=;
+	s=arc-20240116; t=1740453631; c=relaxed/simple;
+	bh=CEMxrTVuEVr72S8cFbXt9nDGTNNrQnf5MK8YvJiXqqs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MtUUdsRGwCLGyZNfvVYKrqXNg/RXJSOCCGGD8JwNDM3tfsmqpybWz/s8+OLVrGL1dagmfph+RA9raet/qo/QXMTbWgclT8+paJqGvO57aAfzHVmW2UW/zZE7vm3T/kAu/BPxcXvy5ZoFRAH355WVcg6q31otZA60U/SHRM26Kno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BFq52g4i; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCE96C4CED6;
-	Tue, 25 Feb 2025 03:05:31 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZRIAxfZnmfN5MU3B7XenKvvV4CuQwmbwNlm06pngXmIUFQ8ZZdyMhxQRWgcoqSHugUG+DDsjdZo7ZWOdqLEYM219pygKmeAC7Lnw5+koo6OZJHw1oPfCtvbjHmzFl99kBEA0gpp9fhP4bnoveZxxkG9fT/JjhC+y3rwEDjUSuJA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H4M+le/3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B80AAC4CED6;
+	Tue, 25 Feb 2025 03:20:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740452733;
-	bh=nFx/BLGn/+pJuDUW967qxmpUkfbqlrvIzj+c3zapthY=;
+	s=k20201202; t=1740453630;
+	bh=CEMxrTVuEVr72S8cFbXt9nDGTNNrQnf5MK8YvJiXqqs=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=BFq52g4iUS/ifuZ/pZNs3Myd7fKkY09PBChZvxJSRnCNqSBslwtQV506eTggMcGox
-	 MSrjujs40NZuys2LMeOU7wlm6hDKWB6fhoPClt5gFTeOtPPtXwr8LDHKPFxDEVYD48
-	 0WSMfmX8EmWI5D2II8vKrkk4Mlb6c6qQlv1ramQwFOr50uPUVffUozxgNtMllH65gt
-	 SkSBW2oeDnPDMhasRGjaXziHAlkx04VObdG434sETY4hIii4AhS7TL8dJkynLzmnI3
-	 n9UDJ7qiZ0V1k29Cv1zCveq7mGoY7vXEH421GBRSYr1C2m9nBo8SdMwZenfM1S7Exm
-	 ZSrdKr20a8cVA==
-Date: Mon, 24 Feb 2025 19:05:30 -0800
+	b=H4M+le/3gb6RveGWB4ZJlQfvlf37NwO5LrZ8WFqlXbulGP/6mzyqdtbm/9el5+Ghm
+	 fzOCKcF900uuLtOrkAB3pwt1hGz5lbqyVcsX6qejpa4QM21q5cCne0aFcYJdyWH23m
+	 aTFCK6NNw9Tx7M5+5JekG3tHdVNY/l0YX6uku6uUqphvx/Mg+h4fEaaui5OISWdk2+
+	 j+9EcRsxpVv48M5HDP/YsYRlnL1qz/MQ4rj60ijZNrQEKfeXP6gVdbPClXBad7+vhd
+	 Jo0jAbNsfs8RxqMGjyJcorErXiL7LmTlsgaTrh16I/YGfa3JnjN/1xER7f92LCj5Sj
+	 t5JrBgYb5GuAQ==
+Date: Mon, 24 Feb 2025 19:20:28 -0800
 From: Namhyung Kim <namhyung@kernel.org>
 To: Ian Rogers <irogers@google.com>
 Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
@@ -71,7 +71,7 @@ Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
 	Arnd Bergmann <arnd@arndb.de>
 Subject: Re: [PATCH v3 0/8] perf: Support multiple system call tables in the
  build
-Message-ID: <Z70zejQJvppH8Sfh@google.com>
+Message-ID: <Z702_CQ7nMx9fZQn@google.com>
 References: <20250219185657.280286-1-irogers@google.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -81,7 +81,6 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 In-Reply-To: <20250219185657.280286-1-irogers@google.com>
 
 On Wed, Feb 19, 2025 at 10:56:49AM -0800, Ian Rogers wrote:
@@ -99,85 +98,26 @@ On Wed, Feb 19, 2025 at 10:56:49AM -0800, Ian Rogers wrote:
 > of the process being examined. To determine the ELF machine type, the
 > executable's header is read from /proc/pid/exe with fallbacks to using
 > the perf's binary type when unknown.
-> 
-> Remove some runtime types used by the system call tables and make
-> equivalents generated at build time.
 
-So I tested this with a test program.
+Hmm.. then this is limited to live mode and potentially detect wrong
+machine type if it reads an old data, right?
 
-  $ cat a.c
-  #include <stdio.h>
-  int main(void)
-  {
-  	char buf[4096];
-  	FILE *fp = fopen("a.c", "r");
-  	size_t len;
-  
-  	len = fread(buf, sizeof(buf), 1, fp);
-  	fwrite(buf, 1, len, stdout);
-  	fflush(stdout);
-  	fclose(fp);
-  	return 0;
-  }
-  
-  $ gcc -o a64.out a.c
-  $ gcc -o a32.out -m32 a.c
-  
-  $ ./perf version
-  perf version 6.14.rc1.ge002a64f6188
-  
-  $ git show
-  commit e002a64f61882626992dd6513c0db3711c06fea7 (HEAD -> perf-check)
-  Author: Ian Rogers <irogers@google.com>
-  Date:   Wed Feb 19 10:56:57 2025 -0800
-  
-      perf syscalltbl: Mask off ABI type for MIPS system calls
-      
-      Arnd Bergmann described that MIPS system calls don't necessarily start
-      from 0 as an ABI prefix is applied:
-      https://lore.kernel.org/lkml/8ed7dfb2-1e4d-4aa4-a04b-0397a89365d1@app.fastmail.com/
-      When decoding the "id" (aka system call number) for MIPS ignore values
-      greater-than 1000.
-      
-      Signed-off-by: Ian Rogers <irogers@google.com>
+Also IIUC fallback to the perf binary means it cannot use cross-machine
+table.  For example, it cannot process data from ARM64 on x86, no?  It
+seems it should use perf_env.arch.
 
-It works well with 64bit.
-
-  $ sudo ./perf trace ./a64.out |& tail
-       0.266 ( 0.007 ms): a64.out/858681 munmap(addr: 0x7f392723a000, len: 109058)                             = 0
-       0.286 ( 0.002 ms): a64.out/858681 getrandom(ubuf: 0x7f3927232178, len: 8, flags: NONBLOCK)              = 8
-       0.289 ( 0.001 ms): a64.out/858681 brk()                                                                 = 0x56419ecf7000
-       0.291 ( 0.002 ms): a64.out/858681 brk(brk: 0x56419ed18000)                                              = 0x56419ed18000
-       0.299 ( 0.009 ms): a64.out/858681 openat(dfd: CWD, filename: "a.c")                                     = 3
-       0.312 ( 0.001 ms): a64.out/858681 fstat(fd: 3, statbuf: 0x7ffdfadf1eb0)                                 = 0
-       0.315 ( 0.002 ms): a64.out/858681 read(fd: 3, buf: 0x7ffdfadf2030, count: 4096)                         = 211
-       0.318 ( 0.009 ms): a64.out/858681 read(fd: 3, buf: 0x56419ecf7480, count: 4096)                         = 0
-       0.330 ( 0.001 ms): a64.out/858681 close(fd: 3)                                                          = 0
-       0.338 (         ): a64.out/858681 exit_group()                                                          = ?
-
-But 32bit is still broken and use 64bit syscall table wrongly.
-
-  $ file a32.out
-  a32.out: ELF 32-bit LSB pie executable, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2,
-  BuildID[sha1]=6eea873c939012e6c715e8f030261642bf61cb4e, for GNU/Linux 3.2.0, not stripped
-
-  $ sudo ./perf trace ./a32.out |& tail
-       0.296 ( 0.001 ms): a32.out/858699 getxattr(pathname: "", name: "������", value: 0xf7f6ce14, size: 1)  = 0
-       0.305 ( 0.007 ms): a32.out/858699 fchmod(fd: -134774784, mode: IFLNK|ISUID|ISVTX|IWOTH|0x10000)         = 0
-       0.333 ( 0.001 ms): a32.out/858699 recvfrom(size: 4160146964, flags: RST|0x20000, addr: 0xf7f6ce14, addr_len: 0xf7f71278) = 1481879552
-       0.335 ( 0.004 ms): a32.out/858699 recvfrom(fd: 1482014720, ubuf: 0xf7f71278, size: 4160146964, flags: NOSIGNAL|MORE|WAITFORONE|BATCH|SPLICE_PAGES|CMSG_CLOEXEC|0x10500000, addr: 0xf7f6ce14, addr_len: 0xf7f71278) = 1482014720
-       0.355 ( 0.002 ms): a32.out/858699 recvfrom(fd: 1482018816, ubuf: 0x5855d000, size: 4160146964, flags: RST|NOSIGNAL|MORE|WAITFORONE|BATCH|SPLICE_PAGES|CMSG_CLOEXEC|0x10500000, addr: 0xf7f6ce14, addr_len: 0xf7f71278) = 1482018816
-       0.362 ( 0.010 ms): a32.out/858699 preadv(fd: 4294967196, vec: (struct iovec){.iov_base = (void *)0x1b01000000632e62,.iov_len = (__kernel_size_t)1125899909479171,}, pos_h: 4160146964) = 3
-       0.385 ( 0.002 ms): a32.out/858699 close(fd: 3)                                                          = 211
-       0.388 ( 0.001 ms): a32.out/858699 close(fd: 3)                                                          = 0
-       0.393 ( 0.002 ms): a32.out/858699 lstat(filename: "")                                                   = 0
-       0.396 ( 0.004 ms): a32.out/858699 recvfrom(fd: 1482014720, size: 4160146964, flags: NOSIGNAL|MORE|WAITFORONE|BATCH|SPLICE_PAGES|CMSG_CLOEXEC|0x10500000, addr: 0xf7f6ce14, addr_len: 0xf7f71278) = 1482014720
-
-The last 5 should be openat, read, read, close and brk(?).
+One more concern is BPF.  The BPF should know about the ABI of the
+current process so that it can augment the syscall arguments correctly.
+Currently it only checks the syscall number but it can be different on
+32-bit and 64-bit.
 
 Thanks,
 Namhyung
 
+
+> 
+> Remove some runtime types used by the system call tables and make
+> equivalents generated at build time.
 > 
 > v3: Add Charlie's reviewed-by tags. Incorporate feedback from Arnd
 >     Bergmann <arnd@arndb.de> on additional optional column and MIPS
