@@ -1,338 +1,245 @@
-Return-Path: <linux-mips+bounces-7939-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7940-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E73F2A434C2
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Feb 2025 06:41:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D177FA435EF
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Feb 2025 08:09:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1344E189CFBF
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Feb 2025 05:41:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B940B179935
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Feb 2025 07:09:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 432D82561D6;
-	Tue, 25 Feb 2025 05:40:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4487257AFF;
+	Tue, 25 Feb 2025 07:09:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="njaUaASH"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Iurq/2ER"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BBAD1C8616;
-	Tue, 25 Feb 2025 05:40:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740462059; cv=none; b=QACQRkKDHFgN6TMtf2Kv8MrPYDFgBUXCX/vB3uiJj7JM9kj4amZ8of/C6Hf0enpzkVFH2KNGbDmXPKIACb0P6zDH0uJRLsDgdpIM05EEJLnp7QFJkqp0OzmSiwtJskXtp0iIMOAsYF3AhVz0jMHtKyjDpoNN5RLZG6/LEiuke2U=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740462059; c=relaxed/simple;
-	bh=SSqK31Rz9wC9z/NiBzR0z7vokA7mxT8tpUFmqTG6mHM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HfqkAgna1ejjOpNPjJ0Qk0k1A2rmylKb2DucUbkQczRn26mEpgV4uErYwFuQkQ/dWcauFLf0SZdiD1eQhZYoHCzDw+CLbNsLZXnQDsQZMFoeblJLkw7RZn41KEoktAfxMgC98BAie5StdbhxLJoRVuEe13pl89EkSADLo9Npz7A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=njaUaASH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65032C4CEDD;
-	Tue, 25 Feb 2025 05:40:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740462058;
-	bh=SSqK31Rz9wC9z/NiBzR0z7vokA7mxT8tpUFmqTG6mHM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=njaUaASHhDSzCNPKLjCjSjjjHl6VqFNXKud7jBtpaLJw+Wo1Ubki267KQEakO4MNE
-	 y+mfsYpAGHllA3z9Q8bZz5gO/LNtHGoAPK+4HZ9/ypUD8sd3qu6//dhnpOdZ721e0A
-	 zEP6OVS5S6ThYE/fEKlQc39Mld250XZxFaZcdhZjjdM/9N8V9XcrmXzM5Mfmb/ImBR
-	 T+ehjRhBf16ll3f6uJYhjp2oX0fYxBlBrLAfUxQ6sLtUEezoVvrQp18BmoQ9vh4H9Q
-	 fgw48QoAMONdL15eqhCbk2Kj+TZCtx3HYLSDUgQnCsoQoENXoubZf3ab2S/MwQACm9
-	 JUFntl0rumvmA==
-Date: Mon, 24 Feb 2025 21:40:55 -0800
-From: Namhyung Kim <namhyung@kernel.org>
-To: Ian Rogers <irogers@google.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Kan Liang <kan.liang@linux.intel.com>,
-	John Garry <john.g.garry@oracle.com>, Will Deacon <will@kernel.org>,
-	James Clark <james.clark@linaro.org>,
-	Mike Leach <mike.leach@linaro.org>, Leo Yan <leo.yan@linux.dev>,
-	guoren <guoren@kernel.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Charlie Jenkins <charlie@rivosinc.com>,
-	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	=?utf-8?B?QmrDtnJuIFTDtnBlbA==?= <bjorn@rivosinc.com>,
-	Howard Chu <howardchu95@gmail.com>, linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	"linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
-	linux-riscv@lists.infradead.org, linux-mips@vger.kernel.org,
-	Arnd Bergmann <arnd@arndb.de>
-Subject: Re: [PATCH v3 0/8] perf: Support multiple system call tables in the
- build
-Message-ID: <Z71X5wXm1bQ7RM4m@google.com>
-References: <20250219185657.280286-1-irogers@google.com>
- <Z70zejQJvppH8Sfh@google.com>
- <CAP-5=fU8Xw-aeCGUOFo8Zph=xagHv43jo+BkXY5vUai5tUsmDA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF791254875;
+	Tue, 25 Feb 2025 07:09:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.18
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740467346; cv=fail; b=GiHKNcYNThSVfHqdv3icTUv9eR4mTWenpfSffUrzOi8WnVQPLJuNzEgZj/alXn+u4HpI9TZtsxrWfV1DMUuUfM4KD+Un3JlE5ys+QPLfgtcTtpsTaG4NWaUAgc0rOKhZk9JJtSlwwb4qmZB9X9EojDHuWhcN2MaJlBGmSGXrIpk=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740467346; c=relaxed/simple;
+	bh=eTKW4tIj/TRozU+6PY5F6bbQAl+0TY6LvDgVxjRH2iM=;
+	h=Date:From:To:CC:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=OsYj0/Llks04tn7tpPsNxoE4Dusv+kvoOfO1iqEu6DIh72f6LrbvRowgP7bX1NEnnCFF9lj36+Fw7l6tszDRI+J3FhoKbADGgF0/HZmeJlLcF/JzbGCrUSMomWAHOq7EYSnVsuaxhZIGNO0WYtrykMMZugqxZ4NzT0UNMLjanm4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Iurq/2ER; arc=fail smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740467345; x=1772003345;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   in-reply-to:mime-version;
+  bh=eTKW4tIj/TRozU+6PY5F6bbQAl+0TY6LvDgVxjRH2iM=;
+  b=Iurq/2ERzhzTB3ZuR7gj5IV3H45k2K79+bQ11WTCQUzXVhYB4r411sgy
+   JcRJKIwjDlw9+ly7g7fACngqS4xCXaC47HoKPA1RCQnFe3+GbGFvFtQp+
+   TO0JseQMnVqpSfBPoPMLgQ7W72NQVyfRJBBXw5B3YHgzj0iYQ8laNlnEv
+   WZFKpqTFwpw3RakxZdd1Mki1zN1kBe6lyURuVpnqxGP6ipcm9c29Npp8I
+   zcsC1C7WVNigsT3AOmmZjaERqjCV9XRCqDtzr8U10c3IlXPmMKdFMbY5B
+   60Wcz7/bUGjaJidZG7w6rMK42a6lTyvoW5NRRgWlAZZGBM8wc8GgFasSa
+   Q==;
+X-CSE-ConnectionGUID: QwTU45ESQ6azmu9mFi0MeQ==
+X-CSE-MsgGUID: VAOqxHanR4iCmf0SY0SeCA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11355"; a="40494789"
+X-IronPort-AV: E=Sophos;i="6.13,313,1732608000"; 
+   d="scan'208";a="40494789"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2025 23:09:04 -0800
+X-CSE-ConnectionGUID: hl0N50cyScCx0qmFJdRd1A==
+X-CSE-MsgGUID: pOYuvs0uSj60P8N/F5CYJQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,313,1732608000"; 
+   d="scan'208";a="121398313"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by fmviesa004.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 24 Feb 2025 23:09:04 -0800
+Received: from ORSMSX901.amr.corp.intel.com (10.22.229.23) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44; Mon, 24 Feb 2025 23:09:03 -0800
+Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
+ ORSMSX901.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.14 via Frontend Transport; Mon, 24 Feb 2025 23:09:03 -0800
+Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.43) by
+ edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.44; Mon, 24 Feb 2025 23:09:02 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=VuAUjOU3BNEwz+lEczWn5mcBVF7o4zS9H/kq4VnhpqoPZFeHorMxSAykniqKJArlHba1af5AfoFruNCWoM6bbMLNmTVIIHM/Kj4wVA1mnfbSTtdA0D5b8xIZH5vFsnNBflU6+s30wgbmqfzFCCUGhSS9opFYPOu0X14j3ELcb/8MeQyGM7XOHc0kRX1hbtWMZwXY7JVbiJ0ELveH651W4gjDNeNpB2C2MOsFGhcz8jkKPniPnnAUNzXLR9fSnxhttP7V2rhDYlaL+85kraD41M4MKn+gwjjP854Lr0KfCZI4JAODapWYMInWzwsGUn9mMiQVoBkiiJ1EIHErFoZWog==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=SMcg7oV1LXKpFEumlGiY2hKhy5CGBtvnnB2HEmDiGfE=;
+ b=btgTtbW7n4RcQaYjQYPN5ddmtwtaYzwUUu5hcpSZ04X3noT2UW6b6tgW0AYP8aD/YUj5j+wV/40O5HuRVy2v7u9UTAqQiHbD1kCU+8himR8Ovs2iZIUFX5SSux2g2jnHkTGrYtqabmcnMGwGdIexwkakU6epmEWhPNCgnbKvVvzUNbTtqAtYQpkerCtjoEcpCV9CyUO8Fx5wEw/6RpdOOM/LuYGIn+xZ0lpPKBeCY3OWrKxZ65eIso0eYWLDSqds+n1w8MMoMAvwXzHt7hxWCbVS5x69Eej66Eo7NRErX2kitOEj+EwIsFG1n+yvghcTnnGl9drOuDrB3G5T9qfw/g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DS7PR11MB5966.namprd11.prod.outlook.com (2603:10b6:8:71::6) by
+ CH2PR11MB8777.namprd11.prod.outlook.com (2603:10b6:610:283::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8489.18; Tue, 25 Feb 2025 07:08:59 +0000
+Received: from DS7PR11MB5966.namprd11.prod.outlook.com
+ ([fe80::e971:d8f4:66c4:12ca]) by DS7PR11MB5966.namprd11.prod.outlook.com
+ ([fe80::e971:d8f4:66c4:12ca%4]) with mapi id 15.20.8466.016; Tue, 25 Feb 2025
+ 07:08:59 +0000
+Date: Tue, 25 Feb 2025 15:07:36 +0800
+From: Yan Zhao <yan.y.zhao@intel.com>
+To: Sean Christopherson <seanjc@google.com>
+CC: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>,
+	Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>,
+	Huacai Chen <chenhuacai@kernel.org>, Madhavan Srinivasan
+	<maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>, Paul Walmsley
+	<paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
+	<aou@eecs.berkeley.edu>, Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Janosch Frank <frankja@linux.ibm.com>, Claudio Imbrenda
+	<imbrenda@linux.ibm.com>, Paolo Bonzini <pbonzini@redhat.com>,
+	<linux-arm-kernel@lists.infradead.org>, <kvmarm@lists.linux.dev>,
+	<kvm@vger.kernel.org>, <loongarch@lists.linux.dev>,
+	<linux-mips@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+	<kvm-riscv@lists.infradead.org>, <linux-riscv@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, Aaron Lewis <aaronlewis@google.com>, "Jim
+ Mattson" <jmattson@google.com>, Rick P Edgecombe
+	<rick.p.edgecombe@intel.com>, Kai Huang <kai.huang@intel.com>, Isaku Yamahata
+	<isaku.yamahata@intel.com>
+Subject: Re: [PATCH 3/7] KVM: Assert that a destroyed/freed vCPU is no longer
+ visible
+Message-ID: <Z71sOEu7/ewnWZU2@yzhao56-desk.sh.intel.com>
+Reply-To: Yan Zhao <yan.y.zhao@intel.com>
+References: <20250224235542.2562848-1-seanjc@google.com>
+ <20250224235542.2562848-4-seanjc@google.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20250224235542.2562848-4-seanjc@google.com>
+X-ClientProxiedBy: SI2PR02CA0051.apcprd02.prod.outlook.com
+ (2603:1096:4:196::10) To DS7PR11MB5966.namprd11.prod.outlook.com
+ (2603:10b6:8:71::6)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAP-5=fU8Xw-aeCGUOFo8Zph=xagHv43jo+BkXY5vUai5tUsmDA@mail.gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR11MB5966:EE_|CH2PR11MB8777:EE_
+X-MS-Office365-Filtering-Correlation-Id: b7115154-ea32-41f4-6f38-08dd556b46cb
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|366016|1800799024|7053199007;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?NNOpC3XG3aV5NG3Scy++IW05X2Frah4OjNFzgpiHW1pgoxathH2IyFCJOol/?=
+ =?us-ascii?Q?l5A2JC+R5dHfsL65olFA+tdvQE4r8PGMOS7Ju31vhrgZkZ9ehsK8VK4aatYv?=
+ =?us-ascii?Q?V39w8rQYnVjvN4DHdQ3IsjV5HbCDMOAgoQMJS/WzlC5mJ3cTAqdpu5oL1YZX?=
+ =?us-ascii?Q?820Be08zrpbD3Jk4DgTYYZIsCasA0Kbyl1RaTFaiNH/gMlUjmfkq+sOt8lvy?=
+ =?us-ascii?Q?C2/5uPFNKKpk2vYU7HTpsVvUpu5grrd236HkXB6QIM6j6i0phYmdOLW+rOlA?=
+ =?us-ascii?Q?JIMc7yd3fzqXyAYOR9mK/lGn3V3NSt8m6Z2TSYaYJaBhS8etsrGvgzA4/vHL?=
+ =?us-ascii?Q?UOb0FdIWys9AA+sda4isNxULMYm/xlzJKmnoNsgOQ1DtZqls2ZenEPucsj5l?=
+ =?us-ascii?Q?KS/4EDs28/Z4yyUKR51DfPTequdMoh7uImnNi25J9DvqPDYrOlaFFHayyQ4L?=
+ =?us-ascii?Q?Wqut3iNHk9gGmlaGLDDuFVOle+V2CeeJakfHZOG4gc9A9BWcPmxtjlOYnuE4?=
+ =?us-ascii?Q?69UFCrvIv+JgIz8hpWUoaLQCWjaUD7oEe3k6+xcNrxYlEZtfWgJ6Ibft8k2L?=
+ =?us-ascii?Q?ao9nWn7nQNt8BO+2HBCskGD0qmLPZxDv6PNa1R08qmynV3OZB1vrfNirfZPf?=
+ =?us-ascii?Q?+Kha8EaTzySU5YO9ENwA+SyYxirh+RMXtSDi565UuDCEESOXJY3pH6uDXZIp?=
+ =?us-ascii?Q?OCJz6nfGUclzikUCBELtP1AoA8sEyscjQLyQV6jJ03xXYr0nh6ZMX2wLTyX3?=
+ =?us-ascii?Q?FWjjc6YE4gdak/3K36yeAWohAgvMGun+p+Un1lTxL9+vAKknEdgCDKWBV46t?=
+ =?us-ascii?Q?pzcYxrWynJBFUCWrEnk+NBCnjFkYkCGI8iKNR7ZKR4VhqSuk4OxSO0CfKYb0?=
+ =?us-ascii?Q?/Tux+CqTPchiUHjy2GntWgexracKq8r6GEZ56OfrPZqKwcinPh3r6efHN3BD?=
+ =?us-ascii?Q?g+gNTObBuaWrfe4wRGieBGUvQHphALaldeCxDNtzIs5NhY0aaVB67kJQ3vP2?=
+ =?us-ascii?Q?G6J9+tPp2FeNCWtyc8NBWgZeZpdvf6S6bUkbjZQE4Mr1I6bOBGVSdGRFLiYv?=
+ =?us-ascii?Q?PFv+xUNQjJYOmE2qxisQ8YjR91VELEm420xYsDjgkBBptXMYpFA6JL8srFey?=
+ =?us-ascii?Q?M/DDp7IkeqBEMvIX6WU6AHoc8kMUcj3uQxu+yIPOdoq34wSjAh4NCnzwBXQG?=
+ =?us-ascii?Q?5Tw6eixuaoe9BLFvv5b09gGtrb8bncmuCkv3uJgr2LKLLFg+vryLXc30UmVB?=
+ =?us-ascii?Q?hVYvLcWjDlqHKc+qUv7eXa33S1fZMe6tWCBlFmC5n3K2z9zJ4AjRfojKUgcv?=
+ =?us-ascii?Q?5t97Eh7a4mX9Fwj5YKJfg14xIl1Oyb2GeMXqWMfuC1Xvg/RrXNTvA4zG0gZ8?=
+ =?us-ascii?Q?/fl+gvMHzMYaITfbfxEbljqbWFYF?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR11MB5966.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?7J1miUGVZAH/kHXubyQ4DNTdbAvP6CGGafgIvapufRQHwoOw5S3Wosk+pTEJ?=
+ =?us-ascii?Q?MdH/jxKtCkVfh5nobxWyBbiKcNm5jalMH3fRkYTD6kBpB6Fh+Ohd1rQN3p/W?=
+ =?us-ascii?Q?NUptsJp0TtuNy6jBn5Gi/DcB8Mp39cZd04cgO8wBPaT8JjZ/XYqB/X9uUP5h?=
+ =?us-ascii?Q?XnTmDVBhlcGDTCOaYlMYsRHZHekVO4wQCoqhRZg+VCeLz3IXnEPv1uv3UkwH?=
+ =?us-ascii?Q?YTOaGkngLVar9RmR1ONhTbcDqPaqeflnSSegjw2k/tpUXfJ4/jncPEn2B6qt?=
+ =?us-ascii?Q?S6F8/q2dWwClhkH84Feymy8RJ/R74FiAth7B+wrtxTLKkg4NYai02OA2hEmv?=
+ =?us-ascii?Q?Mfxv226mIvn6FHqcqHqKgROKX+I0i2i8zyWSfrcPJ3wEJqdSArfzS/GXsAji?=
+ =?us-ascii?Q?6J2rHIHsWYGyc1a1qRIJ6i2KR3t3P6gPH2KJeU6i9RH5YGpVhTwn5YD39p51?=
+ =?us-ascii?Q?CHnzSv4TNKul5sOngdp/F79MZddTVvqHDwdwWjGv4Ur4S6FcQvBBsFzIvpT7?=
+ =?us-ascii?Q?708+phKGxjRSzA+iV89JBN5KUFccLCuitR3jTEet3MSCfMcYU0OJ9iksq0wM?=
+ =?us-ascii?Q?OtkRcY6WxlOMyFLacXSyjrlaO7Yviyauqkwtg1EBwEeA5wDp88ZI4ZnQxMF7?=
+ =?us-ascii?Q?BZi2lh/Eq0FWwVf/3ajvQKl+GOFvpnmamjXF75vInwDvUyfAE5vLcF5Qq636?=
+ =?us-ascii?Q?Lzy+zA7UAfujSoMCglrd3q+zJnC76AaL/qowMXf30thWGhUeuuOedZaty6y4?=
+ =?us-ascii?Q?cv72mw2lQO+szcLsadrw+sZ59twIl25utQCAcayJP/BofC+ovsPmCKILknLH?=
+ =?us-ascii?Q?R1XTTIHBMHrSaGgdPjWoThm+kumG9zeaDc6L5d74uya9ur+5rPzQrlcL8uWd?=
+ =?us-ascii?Q?9VCPYuOIuXME+UGFx1ZJyX95B2afIC6/0ZZ2BT7bHbg2HgpEVYZstzBhXDAF?=
+ =?us-ascii?Q?LBKZcRSoxtkTCpLH0pUD6q4qO8KsPGRYsN+yU1cdMzA8TIUHx5GbypPmo812?=
+ =?us-ascii?Q?mpBXRy3dV4gMyKl6g4bf/345O+Ypfuef8y5VzCivj4IAlLzV7SBx3+RAaBgc?=
+ =?us-ascii?Q?8WRKb6StoLJXtsEN8fV2jG5nJu7qJofsXWOXpiQNdz7zAvarFqnDagfFp9mT?=
+ =?us-ascii?Q?TeE1ZTLgp9QpSJEuaguVkXE8ANyESEwzS6LttLj5x4nGwb/CpIKsAnuC05dQ?=
+ =?us-ascii?Q?koBmDcQq9aTfPPQTJLAGm7QYT0K6h8nBYVsxnT4kHW6BWLShvoHd7+9gBII9?=
+ =?us-ascii?Q?4Yw2XT2R2pRK5G83vaziWszCeBwb0LVLHHlbfDZD2pLiYq6jnitdeJpOoOVD?=
+ =?us-ascii?Q?1Eo4TmE30cjJ22uiBh4eV0FLpLw1DCZ//c/eRDTLYkIYoSrQTPsv/pZ+6hg7?=
+ =?us-ascii?Q?W8dodXkx8/FNTjWRFtA/exuTGsKTR/mIYeAJL2457/xtISxbfQog+38II9Nu?=
+ =?us-ascii?Q?ECaESGll+CsIzAWkmBDsWw+MT+G4WjbHXP+I8LKm0ceU2FuWkU/ulV/Xrh11?=
+ =?us-ascii?Q?dAV/VEqJbDiWMO27Lt6kxWVJLz8S9hW2SjwjgWpwEkKsO6XBYQ8t2o7XmbLA?=
+ =?us-ascii?Q?FnTmzGqPXHzSF9XapWxhgatdGZm52bil+brXstjf?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: b7115154-ea32-41f4-6f38-08dd556b46cb
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR11MB5966.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 25 Feb 2025 07:08:59.5466
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Gm6KSgUaiPOqhmWPyuhNptHBci3vufBKWkhCUqaIhlJIfW0tRLSgHrpcqOleYUx1AtM6/jrSkN7eyQFRI8gNLA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR11MB8777
+X-OriginatorOrg: intel.com
 
-On Mon, Feb 24, 2025 at 08:37:01PM -0800, Ian Rogers wrote:
-> On Mon, Feb 24, 2025 at 7:05 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> >
-> > On Wed, Feb 19, 2025 at 10:56:49AM -0800, Ian Rogers wrote:
-> > > This work builds on the clean up of system call tables and removal of
-> > > libaudit by Charlie Jenkins <charlie@rivosinc.com>.
-> > >
-> > > The system call table in perf trace is used to map system call numbers
-> > > to names and vice versa. Prior to these changes, a single table
-> > > matching the perf binary's build was present. The table would be
-> > > incorrect if tracing say a 32-bit binary from a 64-bit version of
-> > > perf, the names and numbers wouldn't match.
-> > >
-> > > Change the build so that a single system call file is built and the
-> > > potentially multiple tables are identifiable from the ELF machine type
-> > > of the process being examined. To determine the ELF machine type, the
-> > > executable's header is read from /proc/pid/exe with fallbacks to using
-> > > the perf's binary type when unknown.
-> > >
-> > > Remove some runtime types used by the system call tables and make
-> > > equivalents generated at build time.
-> >
-> > So I tested this with a test program.
-> >
-> >   $ cat a.c
-> >   #include <stdio.h>
-> >   int main(void)
-> >   {
-> >         char buf[4096];
-> >         FILE *fp = fopen("a.c", "r");
-> >         size_t len;
-> >
-> >         len = fread(buf, sizeof(buf), 1, fp);
-> >         fwrite(buf, 1, len, stdout);
-> >         fflush(stdout);
-> >         fclose(fp);
-> >         return 0;
-> >   }
-> >
-> >   $ gcc -o a64.out a.c
-> >   $ gcc -o a32.out -m32 a.c
-> >
-> >   $ ./perf version
-> >   perf version 6.14.rc1.ge002a64f6188
-> >
-> >   $ git show
-> >   commit e002a64f61882626992dd6513c0db3711c06fea7 (HEAD -> perf-check)
-> >   Author: Ian Rogers <irogers@google.com>
-> >   Date:   Wed Feb 19 10:56:57 2025 -0800
-> >
-> >       perf syscalltbl: Mask off ABI type for MIPS system calls
-> >
-> >       Arnd Bergmann described that MIPS system calls don't necessarily start
-> >       from 0 as an ABI prefix is applied:
-> >       https://lore.kernel.org/lkml/8ed7dfb2-1e4d-4aa4-a04b-0397a89365d1@app.fastmail.com/
-> >       When decoding the "id" (aka system call number) for MIPS ignore values
-> >       greater-than 1000.
-> >
-> >       Signed-off-by: Ian Rogers <irogers@google.com>
-> >
-> > It works well with 64bit.
-> >
-> >   $ sudo ./perf trace ./a64.out |& tail
-> >        0.266 ( 0.007 ms): a64.out/858681 munmap(addr: 0x7f392723a000, len: 109058)                             = 0
-> >        0.286 ( 0.002 ms): a64.out/858681 getrandom(ubuf: 0x7f3927232178, len: 8, flags: NONBLOCK)              = 8
-> >        0.289 ( 0.001 ms): a64.out/858681 brk()                                                                 = 0x56419ecf7000
-> >        0.291 ( 0.002 ms): a64.out/858681 brk(brk: 0x56419ed18000)                                              = 0x56419ed18000
-> >        0.299 ( 0.009 ms): a64.out/858681 openat(dfd: CWD, filename: "a.c")                                     = 3
-> >        0.312 ( 0.001 ms): a64.out/858681 fstat(fd: 3, statbuf: 0x7ffdfadf1eb0)                                 = 0
-> >        0.315 ( 0.002 ms): a64.out/858681 read(fd: 3, buf: 0x7ffdfadf2030, count: 4096)                         = 211
-> >        0.318 ( 0.009 ms): a64.out/858681 read(fd: 3, buf: 0x56419ecf7480, count: 4096)                         = 0
-> >        0.330 ( 0.001 ms): a64.out/858681 close(fd: 3)                                                          = 0
-> >        0.338 (         ): a64.out/858681 exit_group()                                                          = ?
-> >
-> > But 32bit is still broken and use 64bit syscall table wrongly.
-> >
-> >   $ file a32.out
-> >   a32.out: ELF 32-bit LSB pie executable, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2,
-> >   BuildID[sha1]=6eea873c939012e6c715e8f030261642bf61cb4e, for GNU/Linux 3.2.0, not stripped
-> >
-> >   $ sudo ./perf trace ./a32.out |& tail
-> >        0.296 ( 0.001 ms): a32.out/858699 getxattr(pathname: "", name: "������", value: 0xf7f6ce14, size: 1)  = 0
-> >        0.305 ( 0.007 ms): a32.out/858699 fchmod(fd: -134774784, mode: IFLNK|ISUID|ISVTX|IWOTH|0x10000)         = 0
-> >        0.333 ( 0.001 ms): a32.out/858699 recvfrom(size: 4160146964, flags: RST|0x20000, addr: 0xf7f6ce14, addr_len: 0xf7f71278) = 1481879552
-> >        0.335 ( 0.004 ms): a32.out/858699 recvfrom(fd: 1482014720, ubuf: 0xf7f71278, size: 4160146964, flags: NOSIGNAL|MORE|WAITFORONE|BATCH|SPLICE_PAGES|CMSG_CLOEXEC|0x10500000, addr: 0xf7f6ce14, addr_len: 0xf7f71278) = 1482014720
-> >        0.355 ( 0.002 ms): a32.out/858699 recvfrom(fd: 1482018816, ubuf: 0x5855d000, size: 4160146964, flags: RST|NOSIGNAL|MORE|WAITFORONE|BATCH|SPLICE_PAGES|CMSG_CLOEXEC|0x10500000, addr: 0xf7f6ce14, addr_len: 0xf7f71278) = 1482018816
-> >        0.362 ( 0.010 ms): a32.out/858699 preadv(fd: 4294967196, vec: (struct iovec){.iov_base = (void *)0x1b01000000632e62,.iov_len = (__kernel_size_t)1125899909479171,}, pos_h: 4160146964) = 3
-> >        0.385 ( 0.002 ms): a32.out/858699 close(fd: 3)                                                          = 211
-> >        0.388 ( 0.001 ms): a32.out/858699 close(fd: 3)                                                          = 0
-> >        0.393 ( 0.002 ms): a32.out/858699 lstat(filename: "")                                                   = 0
-> >        0.396 ( 0.004 ms): a32.out/858699 recvfrom(fd: 1482014720, size: 4160146964, flags: NOSIGNAL|MORE|WAITFORONE|BATCH|SPLICE_PAGES|CMSG_CLOEXEC|0x10500000, addr: 0xf7f6ce14, addr_len: 0xf7f71278) = 1482014720
-> >
-> > The last 5 should be openat, read, read, close and brk(?).
+On Mon, Feb 24, 2025 at 03:55:38PM -0800, Sean Christopherson wrote:
+> After freeing a vCPU, assert that it is no longer reachable, and that
+> kvm_get_vcpu() doesn't return garbage or a pointer to some other vCPU.
+> While KVM obviously shouldn't be attempting to access a freed vCPU, it's
+> all too easy for KVM to make a VM-wide request, e.g. via KVM_BUG_ON() or
+> kvm_flush_remote_tlbs().
 > 
-> That's strange as nearly the same test works for me:
-> ```
-> $ git show
-> commit 7920020237af8138f7be1a21be9a2918a71ddc5e (HEAD -> ptn-syscalltbl)
-> Author: Ian Rogers <irogers@google.com>
-> Date:   Fri Jan 31 21:34:07 2025 -0800
+> Alternatively, KVM could short-circuit problematic paths if the VM's
+> refcount has gone to zero, e.g. in kvm_make_all_cpus_request(), or KVM
+> could try disallow making global requests during teardown.  But given that
+> deleting the vCPU from the array Just Works, adding logic to the requests
+> path is unnecessary, and trying to make requests illegal during teardown
+> would be a fool's errand.
 > 
->    perf syscalltbl: Mask off ABI type for MIPS system calls
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  virt/kvm/kvm_main.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 > 
->    Arnd Bergmann described that MIPS system calls don't necessarily start
->    from 0 as an ABI prefix is applied:
->    https://lore.kernel.org/lkml/8ed7dfb2-1e4d-4aa4-a04b-0397a89365d1@app.fastmail.com/
->    When decoding the "id" (aka system call number) for MIPS ignore values
->    greater-than 1000.
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index 201c14ff476f..991e8111e88b 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -489,6 +489,14 @@ void kvm_destroy_vcpus(struct kvm *kvm)
+>  	kvm_for_each_vcpu(i, vcpu, kvm) {
+>  		kvm_vcpu_destroy(vcpu);
+>  		xa_erase(&kvm->vcpu_array, i);
+> +
+> +		/*
+> +		 * Assert that the vCPU isn't visible in any way, to ensure KVM
+> +		 * doesn't trigger a use-after-free if destroying vCPUs results
+> +		 * in VM-wide request, e.g. to flush remote TLBs when tearing
+> +		 * down MMUs, or to mark the VM dead if a KVM_BUG_ON() fires.
+> +		 */
+> +		WARN_ON_ONCE(xa_load(&kvm->vcpu_array, i) || kvm_get_vcpu(kvm, i));
+As xa_erase() says "After this function returns, loading from @index will return
+%NULL", is this checking of xa_load() necessary?
+
+>  	}
+>  
+>  	atomic_set(&kvm->online_vcpus, 0);
+> -- 
+> 2.48.1.658.g4767266eb4-goog
 > 
->    Signed-off-by: Ian Rogers <irogers@google.com>
-> ..
-> $ file a.out
-> a.out: ELF 32-bit LSB pie executable, Intel 80386, version 1 (SYSV),
-> dynamically linked, interpreter /lib/ld-linux.so.2,
-> BuildID[sha1]=3fcd28f85a27a3108941661a91dbc675c06868f9, for GNU/Linux
-> 3.2.0, not stripped
-> $ sudo /tmp/perf/perf trace ./a.out
-> ...
->          ? (         ): a.out/218604  ... [continued]: execve())
->                                     = 0
->      0.067 ( 0.003 ms): a.out/218604 brk()
->                                     = 0x5749e000
->      0.154 ( 0.007 ms): a.out/218604 access(filename: 0xf7fc7f28,
-> mode: R)                                 = -1 ENOENT (No such file or
-> directory)
->      0.168 ( 0.023 ms): a.out/218604 openat(dfd: CWD, filename:
-> 0xf7fc44c3, flags: RDONLY|CLOEXEC|LARGEFILE) = 3
->      0.193 ( 0.006 ms): a.out/218604 statx(dfd:
-> 3</proc/218604/status>, filename: 0xf7fc510a, flags:
-> NO_AUTOMOUNT|EMPTY_PATH, mask:
-> TYPE|MODE|NLINK|UID|GID|ATIME|MTIME|CTIME|INO|SIZE|BLOCKS, buffer:
-> 0xffaa6b88) = 0
->      0.212 ( 0.002 ms): a.out/218604 close(fd: 3</proc/218604/status>)
->                                     = 0
->      0.233 ( 0.019 ms): a.out/218604 openat(dfd: CWD, filename:
-> 0xf7f973e0, flags: RDONLY|CLOEXEC|LARGEFILE) = 3
->      0.255 ( 0.004 ms): a.out/218604 read(fd: 3</proc/218604/status>,
-> buf: 0xffaa6df0, count: 512)         = 512
->      0.262 ( 0.003 ms): a.out/218604 statx(dfd:
-> 3</proc/218604/status>, filename: 0xf7fc510a, flags:
-> NO_AUTOMOUNT|EMPTY_PATH, mask:
-> TYPE|MODE|NLINK|UID|GID|ATIME|MTIME|CTIME|INO|SIZE|BLOCKS, buffer:
-> 0xffaa6b38) = 0
->      0.347 ( 0.002 ms): a.out/218604 close(fd: 3</proc/218604/status>)
->                                     = 0
->      0.372 ( 0.002 ms): a.out/218604 set_tid_address(tidptr:
-> 0xf7f98528)                                   = 218604 (a.out)
->      0.376 ( 0.002 ms): a.out/218604 set_robust_list(head: 0xf7f9852c,
-> len: 12)                            =
->      0.381 ( 0.002 ms): a.out/218604 rseq(rseq: 0xf7f98960, rseq_len:
-> 32, sig: 1392848979)                 =
->      0.469 ( 0.010 ms): a.out/218604 mprotect(start: 0xf7f6e000, len:
-> 8192, prot: READ)                    = 0
->      0.489 ( 0.007 ms): a.out/218604 mprotect(start: 0x5661a000, len:
-> 4096, prot: READ)                    = 0
->      0.503 ( 0.007 ms): a.out/218604 mprotect(start: 0xf7fd0000, len:
-> 8192, prot: READ)                    = 0
->      0.550 ( 0.015 ms): a.out/218604 munmap(addr: 0xf7f7b000, len:
-> 111198)                                 = 0
->      0.589 ( 0.035 ms): a.out/218604 openat(dfd: CWD, filename:
-> 0x56619008)                                = 3
->      0.627 ( 0.024 ms): a.out/218604 read(fd: 3</proc/218604/status>,
-> buf: 0xffaa68fc, count: 4096)        = 1437
->      0.654 ( 0.090 ms): a.out/218604 write(fd: 1</dev/pts/3>, buf: ,
-> count: 1437)                          = 1437
->      0.766 (1000.164 ms): a.out/218604 clock_nanosleep(rqtp:
-> 0xffaa6824, rmtp: 0xffaa681c)                   = 0
->   1000.942 (         ): a.out/218604 exit_group()
-> $ file /tmp/perf/perf
-> /tmp/perf/perf: ELF 64-bit LSB pie executable, x86-64, version 1
-> (SYSV), dynamically linked, interpreter /lib64/ld-linux-x86-64.so.2,
-> BuildID[sha1]=60b07f65d2559a7193b2d1d36cfa00054dfbd076, for GNU/Linux
-> 3.2.0, with debug_info, not stripped
-> ```
-> Perhaps your a.out binary was built as an x32 one?
-> Looking under the covers with gdb:
-> ```
-> $ sudo gdb --args /tmp/perf/perf trace ./a.out
-> GNU gdb (Debian 15.1-1) 15.1
-> ...
-> Reading symbols from /tmp/perf/perf...
-> (gdb) b syscalltbl__name
-> Breakpoint 1 at 0x23a51b: file util/syscalltbl.c, line 47.
-> (gdb) r
-> ...
-> [Detaching after vfork from child process 218826]
-> 
-> Breakpoint 1, syscalltbl__name (e_machine=3, id=11) at util/syscalltbl.c:47
-> 47              const struct syscalltbl *table = find_table(e_machine);
-> ```
-> So the e_machine is 3 which corresponds to EM_386.
-> 
-> I've not fixed every use of syscalltbl but I believe this one is working.
-
-Strange.  I'm seeing 62 (x86_64).
-
-  $ sudo gdb -q --args ./perf trace ./a32.out
-  Reading symbols from ./perf...
-  (gdb) b syscalltbl__name
-  Breakpoint 1 at 0x27998b: file util/syscalltbl.c, line 46.
-  (gdb) r
-  Starting program: /home/namhyung/tmp/perf trace ./a32.out
-  [Thread debugging using libthread_db enabled]
-  Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
-  [Detaching after fork from child process 886888]
-  
-  Breakpoint 1, syscalltbl__name (e_machine=62, id=156) at util/syscalltbl.c:46
-  46	{
-
-But the binary is i386.
-
-  $ file a32.out
-  a32.out: ELF 32-bit LSB pie executable, Intel 80386, version 1 (SYSV), dynamically linked, interpreter /lib/ld-linux.so.2,
-  BuildID[sha1]=6eea873c939012e6c715e8f030261642bf61cb4e, for GNU/Linux 3.2.0, not stripped
-  
-  $ readelf -h a32.out
-  ELF Header:
-    Magic:   7f 45 4c 46 01 01 01 00 00 00 00 00 00 00 00 00 
-    Class:                             ELF32
-    Data:                              2's complement, little endian
-    Version:                           1 (current)
-    OS/ABI:                            UNIX - System V
-    ABI Version:                       0
-    Type:                              DYN (Position-Independent Executable file)
-    Machine:                           Intel 80386
-    Version:                           0x1
-    Entry point address:               0x10a0
-    Start of program headers:          52 (bytes into file)
-    Start of section headers:          13932 (bytes into file)
-    Flags:                             0x0
-    Size of this header:               52 (bytes)
-    Size of program headers:           32 (bytes)
-    Number of program headers:         11
-    Size of section headers:           40 (bytes)
-    Number of section headers:         30
-    Section header string table index: 29
-
-  $ hexdump -C -n 32 a32.out
-  00000000  7f 45 4c 46 01 01 01 00  00 00 00 00 00 00 00 00  |.ELF............|
-  00000010  03 00 03 00 01 00 00 00  a0 10 00 00 34 00 00 00  |............4...|
-  00000020  ----- -----
-              ^     ^
-	      |     |
-	   ET_DYN   |
-	          EM_386
-
-Thanks,
-Namhyung
-
 
