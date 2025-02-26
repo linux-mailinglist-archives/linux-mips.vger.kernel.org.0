@@ -1,78 +1,82 @@
-Return-Path: <linux-mips+bounces-7988-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7987-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E26FA467F9
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Feb 2025 18:24:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16688A467E1
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Feb 2025 18:21:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5772188C31A
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Feb 2025 17:22:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E1DBE163C29
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Feb 2025 17:19:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 445552222A9;
-	Wed, 26 Feb 2025 17:22:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51207224B1C;
+	Wed, 26 Feb 2025 17:19:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="d4NSzTHy";
-	dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="jzU8aYoK"
+	dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="FqX8vr+2";
+	dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="8ISGMUX+"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.50])
+Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [85.215.255.84])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBA31221701;
-	Wed, 26 Feb 2025 17:22:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4B98224896;
+	Wed, 26 Feb 2025 17:19:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.84
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740590548; cv=pass; b=eeaA7D22NCughijhWR6shBaswpSWedKP0/6Lf0v8GiD64RyI/Xljd2HqTXD1NEht6IpisCq06IlIy0cS29Z7JQH0SeEfSkTUGrvDx6GRnYMASXrmdvbmHHTPQTTe+vIcIranetU9qPmgFGknmgtMzeGxZiN7sl0N9/0wSUSMdBM=
+	t=1740590369; cv=pass; b=e+/XoC5JCpr2Vp2F7E34HvFNTrmLjqM6zp+1eihItwhQyrm4yqpAYfXsBHA0NHqdoxQMu6UfGl3+xJxmSxPIbTV5XeYW7QA/i41e88Ke180uCxnIWu15BskPbRlrKohvlXqGvMrD03sD7R1pi3+Y7ZMJcfYTy7fxNR3ird85amg=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740590548; c=relaxed/simple;
-	bh=zaPQGZakIJ5e1FIIOipa9PeTaMKtCnQvOQQNRGVUfcU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gD4p+kIRxQpBzMnhDE3A93UCZsRPmXpgTw7Zy4UwJ2HdEBMHfi2zfCg4NZROdLM6oQOZsLGMHDq+1cqWmYrCp1CBcZsdjaRC6MnXlYLWiQrJs66kP5bvQNLbNeuDXFBFSkE5w8fNikEN9sL9TZUaa1i1QYKqvhgG0hthXiq3zkI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com; spf=pass smtp.mailfrom=goldelico.com; dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=d4NSzTHy; dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=jzU8aYoK; arc=pass smtp.client-ip=85.215.255.50
+	s=arc-20240116; t=1740590369; c=relaxed/simple;
+	bh=aTe8bIBDw9cNT4V5VGDu63y5GXCtXugACmEJ+LcwWoA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dLWV98g2rAlBovzM4yDwfr/B+PPz8H7y1Lt67fcQtIVPxghJ9Hdl8aQ+SPQjS0QErocj94YuOeOvjl1tfv9rGUHqOUCSSozxPPH8AyTZx2a/cBncYINTKjAWNLIyTwukEpSozle4oKwX9so+XuTuO4OEX1MJY1phdALPcgfVmWM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com; spf=pass smtp.mailfrom=goldelico.com; dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=FqX8vr+2; dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=8ISGMUX+; arc=pass smtp.client-ip=85.215.255.84
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goldelico.com
-ARC-Seal: i=1; a=rsa-sha256; t=1740590183; cv=none;
+ARC-Seal: i=1; a=rsa-sha256; t=1740590184; cv=none;
     d=strato.com; s=strato-dkim-0002;
-    b=kpdTkzwL2m3RfU15u8+8R8+tE295/4UPz5vcYu2WM4aUrUb/bqSfI1XmDJgB9KLBHV
-    jH2LRtS5HvxsGOnGRQJsassiUM0NgP/kCQZGIPJ9TuzaJDlwTfQtHj15b8v8sI7hMWa6
-    jZzfURC30LMDHu/jKEoFeMmiNYYA2dnjtfd4+yYYH8ohfYSLb6RLOksXkxY3xn2Ipiul
-    HDGi618Q4rB9cJGjK5UrxtWfRlsNGcAa41lTcXsOdNn1dkB19mdnnElaZoir4Gt+4qv1
-    Xz7cAzOqVe4dApVzBYObhAZl9ULwYhsv0mLHb8yOoi1yKMGe5TLnJux3XuO2ifbeLW3J
-    3oOw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1740590183;
+    b=rZD1eBj48lT2kBGBtbS0fSK9xISjR1Ih2LIgsMlWURi6FoXmXlIOUuYBuG2gx6K+5h
+    oomWFSkokJIwBDzO/8NjFZ78KlVP9bGZ73M4pinOYM4yQUxm/m02tYNfJpfoYxyCsNg+
+    p3J3K9gCMCipbMkFxGYzMDbCkLT+Ik+ICP+NGI9D6z8P0KCYSnN8oGfMfVGOiC773phs
+    w0yllm7xbkCSG38xar6S+kgH+vAIeBChp6yGQeTC7IAC3eCC8PxpvvkhluBlFnqlOmt+
+    TiDmj8p9Jg9z8KrQ/2pWo3UMlR0Kus3JP5SI0X7ZVws9BO5nP6Ht1L7BQPU964SEGBpf
+    5Dag==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1740590184;
     s=strato-dkim-0002; d=strato.com;
-    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=4v/XI+GHsK5iNyWyu0JIeFOmhfLFNQbdUVuziJCkONg=;
-    b=JDN74OXl0Bw4P6g1LetHoVIEUjHkh8fKSkRNOq9LUbY8AaQGFM1vUuw7SBffvhwGBO
-    RamJ54dhaUnW3RZaEcZp2PCpuWsjHcmt5a3PucaVfK+nr3W2ao8AYryCjmgNktLm+qDq
-    RuUUGR5xGV7PDAwY0s64Q3Pm6LXsSgLz82lN81kMvqn4PI7t741c8Orei5czef/l9OI1
-    E7yGZaTjCKvJZH6yeBMyohkETwUSwIQtRciyL0euzoj/FV1K2a+2mD+xxwScKoG42nCF
-    2JOoGOXlhf6eDbll/ROFURAwpFWIeEtZBJZTk6HYSb9E0KdrxsSW4jloeX58pSlMuHEj
-    bWuA==
+    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
+    From:Subject:Sender;
+    bh=QScjihLacGR1ZAHaGZyRgXvYewbSE/QRZuL+MAqnw2o=;
+    b=tg/caXYQ8b6ViZ+7YFGhj0BppCMHY7JJxwlElkLteTDv4VU6WAls1d1mua5kZbgh8g
+    5m8Z2okV130cbTBDPCMrWVtBuLz1thNkCVgGoVl51pfeV5ZHDOzJIIiTYG/JHNAXAW0a
+    5zJihPbo1ptRobYkTx8asS3sEqibu1AEWkh7cvW3lsIofY33FpYpw6JNfCGKjC1/S781
+    U4Fb7rxAdPidX2WFg3vGUfkglZxpuY+HkFt4ukq8bHlDBcDpZia9g2NvMWkmQHh2N4xE
+    MrnOIeruK721s0GDLBgF5yslo97V/iQeHAOmQ6spZUeeVf4aWn4CYE3j668BzzfHVTZ0
+    aCEw==
 ARC-Authentication-Results: i=1; strato.com;
     arc=none;
     dkim=none
-X-RZG-CLASS-ID: mo01
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1740590183;
+X-RZG-CLASS-ID: mo02
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1740590184;
     s=strato-dkim-0002; d=goldelico.com;
-    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=4v/XI+GHsK5iNyWyu0JIeFOmhfLFNQbdUVuziJCkONg=;
-    b=d4NSzTHyZLeC3k5Z+DJRjEYCPrbsNpKqVmYAZV2m5K+ouQ2Zupgk8fjhK60ocVXghz
-    Gl4lv6qhO/jVgltqm2OdfX6ijP9L9yFZayTm3ltXQQOEMFxkZCvAIOwF+KEqgJu4GWsG
-    Ev+OPTwgBhyfaGMc60+/e7mL9/pLyTqwbqEoiy6MHVOiXa2g7+jAJGAnsdVw475KAydS
-    XYCTIBejVTjNzFANVa8dCw+idT9gGAySoRqVuJ05PUlOJ8yyqm+dGoy+e6ejoBEZaGdJ
-    RZCrm6Vdq9Ub1CFRevVP441gC3WeHcrUIEOh4QRDp4bWanDlylkJFnJNPrSbfqtq+Q1N
-    g9zQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1740590183;
+    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
+    From:Subject:Sender;
+    bh=QScjihLacGR1ZAHaGZyRgXvYewbSE/QRZuL+MAqnw2o=;
+    b=FqX8vr+2A6JIldkC58obS549PwHkZzHqKj+35pEN/MxQpOCr2/D3VpOaGkBCOvq/vQ
+    5Nq36Xrt6gae9jpRgA3tW9dztIQCReNsiv0DSid/4ob9QWGlnpitp/PBm6Bp9hubkcSf
+    Ye/+wlSZPm6zCxaoVLnZ0riZkLEmrqRo3FJ1FvGMI1zqIMDTMPcNQvRE53I/FYgU9Kd5
+    XhWIXi3aeZz/NKVEwL04RAGrU/UNs5LPXGzA7QJ9WjZEiZH7Y/QPOiQ6tgOqQJsVebdS
+    heyQvfZsGGF3MAUJSdKeO+fXU5CXXZJlwbsKzkbCMmGueU01SOapfrPAivCM64pmHTPF
+    zh5A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1740590184;
     s=strato-dkim-0003; d=goldelico.com;
-    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
-    bh=4v/XI+GHsK5iNyWyu0JIeFOmhfLFNQbdUVuziJCkONg=;
-    b=jzU8aYoKhju2bqGEWFzNlod30Lv069KlILRo10wp5EdWAAp+eli72oNeHSmKfo/DEK
-    VTwb5/ghmRuP5LNIFBAA==
+    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
+    From:Subject:Sender;
+    bh=QScjihLacGR1ZAHaGZyRgXvYewbSE/QRZuL+MAqnw2o=;
+    b=8ISGMUX+cjHbDdsVM6DpAom13p1mfC0EaFFMwyruaabUMS00qPCSliQXjJUoNeVPt3
+    ztQyAvaNjqusS8dt1bAQ==
 X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0lFzL1yeD0Z"
 Received: from localhost.localdomain
     by smtp.strato.de (RZmta 51.2.23 DYNA|AUTH)
-    with ESMTPSA id Qe5b2211QHGNfpw
+    with ESMTPSA id Qe5b2211QHGNfpx
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
 	(Client did not present a certificate);
     Wed, 26 Feb 2025 18:16:23 +0100 (CET)
@@ -91,10 +95,12 @@ Cc: Andreas Kemnade <andreas@kemnade.info>,
 	linux-mips@vger.kernel.org,
 	letux-kernel@openphoenux.org,
 	"H. Nikolaus Schaller" <hns@goldelico.com>
-Subject: [PATCH 0/4] pinctrl: ingenic: add support for x1600 SoC and MII and I2S for jz4730
-Date: Wed, 26 Feb 2025 18:16:03 +0100
-Message-ID: <cover.1740590093.git.hns@goldelico.com>
+Subject: [PATCH 1/4] bindings: ingenic,pinctrl: add x1600
+Date: Wed, 26 Feb 2025 18:16:04 +0100
+Message-ID: <c42f0ad1aeedbfc90b9a5f10a36b2f5f2da528e2.1740590093.git.hns@goldelico.com>
 X-Mailer: git-send-email 2.47.0
+In-Reply-To: <cover.1740590093.git.hns@goldelico.com>
+References: <cover.1740590093.git.hns@goldelico.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -104,31 +110,33 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="us-ascii"
 
-PATCH V1 2025-02-26 18:14:53:
-This series expands pinctrl support for some Ingenic/Lumissil SoC.
-For the jz4730 we add MII and I2S pinctrl and general x1600 support.
+Add bindings for the Lumissil/Ingenic X1600 SoC.
 
-The x1600 parts were jointly developed.
+Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+---
+ Documentation/devicetree/bindings/pinctrl/ingenic,pinctrl.yaml | 2 ++
+ 1 file changed, 2 insertions(+)
 
-Code was tested on LX16 board (x1600) and Alpha400 (jz4730) and
-on CI20 (jz4780).
-
-Co-authored-by: Andreas Kemnade <andreas@kemnade.info>
-Co-authored-by: H. Nikolaus Schaller <hns@goldelico.com>
-
-
-H. Nikolaus Schaller (3):
-  bindings: ingenic,pinctrl: add x1600
-  pinctrl: ingenic: jz4730: add pinmux for MII
-  pinctrl: ingenic: jz4730: add pinmux for I2S interface
-
-Paul Boddie (1):
-  pinctrl: ingenic: add x1600 support
-
- .../bindings/pinctrl/ingenic,pinctrl.yaml     |   2 +
- drivers/pinctrl/pinctrl-ingenic.c             | 259 +++++++++++++++++-
- 2 files changed, 259 insertions(+), 2 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/pinctrl/ingenic,pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/ingenic,pinctrl.yaml
+index 890961826c6f0..84e960255a36d 100644
+--- a/Documentation/devicetree/bindings/pinctrl/ingenic,pinctrl.yaml
++++ b/Documentation/devicetree/bindings/pinctrl/ingenic,pinctrl.yaml
+@@ -42,6 +42,7 @@ properties:
+           - ingenic,jz4780-pinctrl
+           - ingenic,x1000-pinctrl
+           - ingenic,x1500-pinctrl
++          - ingenic,x1600-pinctrl
+           - ingenic,x1830-pinctrl
+           - ingenic,x2000-pinctrl
+           - ingenic,x2100-pinctrl
+@@ -81,6 +82,7 @@ patternProperties:
+           - ingenic,jz4780-gpio
+           - ingenic,x1000-gpio
+           - ingenic,x1500-gpio
++          - ingenic,x1600-gpio
+           - ingenic,x1830-gpio
+           - ingenic,x2000-gpio
+           - ingenic,x2100-gpio
 -- 
 2.47.0
 
