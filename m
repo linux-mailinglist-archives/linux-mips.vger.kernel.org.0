@@ -1,126 +1,82 @@
-Return-Path: <linux-mips+bounces-7976-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7977-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48115A456E6
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Feb 2025 08:45:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7127A4584F
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Feb 2025 09:32:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4FFCC7A1442
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Feb 2025 07:44:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 065EF1743D1
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Feb 2025 08:32:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAEF819DFB4;
-	Wed, 26 Feb 2025 07:45:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="XqHts+Ih"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFBA022425B;
+	Wed, 26 Feb 2025 08:30:56 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B37010F2;
-	Wed, 26 Feb 2025 07:45:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19D731E1DEB;
+	Wed, 26 Feb 2025 08:30:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740555920; cv=none; b=pB4zQ/qxQjTXjCajWcY24znewexiqVtAv6x9NWGQDHi1JYieqWCEYcP2BmZAEKfG9dnoovviCD44DNUbujiEC6XyTWq4ulRy2wdMIVfMtwh7CliDTqnIQPwCOOX5ovK2f4Rb6oy0POo5L7lkNr/Y1A9qlqtqZN0i5XHTepHJsic=
+	t=1740558656; cv=none; b=HTrdKwlMN4uaWwDyLRHZx1JN8ZEJ02HwmGe1PKhwAVssKIU0R3SOAkuFVcDpDd2GyptX01SvhL0cNs6U6iPaN3oqsYu1kgLekC1a7vy6JcBaVJLywu9PjwRypfZyur1EyAo4UIAdvVRKJEyXZH97UNR93lHlfUva3IvwsH3HsZk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740555920; c=relaxed/simple;
-	bh=qJo8bS6v5njlNYa287rrU5UuOR3DQntakEIPTxQkkZo=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HOyqfLM8yB3LjaTIDIhV2AlBYaZdfZYo2bz5jUV8xVokl5NcVMLReVy4ct/i71F71KBq2RoE2EUlB0IHpQDM4Aj/CzpW9oCsJYJSsYXfpr9doCNtXzJy92rHBz/Rlvl5sEkCf4VdrbhOLpx97ETdkMjK1Mn7afXEJnl1m/fd0Ho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=XqHts+Ih; arc=none smtp.client-ip=217.70.183.196
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id E98ED44456;
-	Wed, 26 Feb 2025 07:45:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1740555914;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=98ELs4LVDVfL3lojYIF8k1ySA2op88p9fn2jtseES3s=;
-	b=XqHts+IhvFDpKEVckWHhvx+ayph+tjescazLblNnref2wlqU0AnQj/Msoo1Wc4BWxqUFs6
-	6J+WnZjXEzitA+UD5mSRVrk7P9kVnR90Oeg14d53qlV3ig8GdTcCPTySP6lNIdlV3OIBOg
-	fC0Byf2QfF9hm6cfLeGGvNPD6KRhLx+DTE+XGwbpVm0P2v4SfoEuNs9UIoy5LQZQa90rXU
-	15FL4X41Smh0NmCDx+oqu/o/QqRh1e2ftL1+7TDiG1XZwZPgOSb2kCH9OWmx7rvdvTvTmV
-	4kefzW75jChg8iP6pmZxqOx5xyEMR3Eax/SLkBE0CaGIeeRDexPqYd/eQ5mx6g==
-Date: Wed, 26 Feb 2025 08:45:11 +0100
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- tsbogend@alpha.franken.de, andrew@lunn.ch, hkallweit1@gmail.com,
- linux@armlinux.org.uk, davem@davemloft.net, edumazet@google.com,
- kuba@kernel.org, pabeni@redhat.com, sander@svanheule.net,
- markus.stockhausen@gmx.de, devicetree@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
- netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v7 1/2] net: mdio: Add RTL9300 MDIO driver
-Message-ID: <20250226084511.5f8f4c62@fedora.home>
-In-Reply-To: <20250226000748.3979148-2-chris.packham@alliedtelesis.co.nz>
-References: <20250226000748.3979148-1-chris.packham@alliedtelesis.co.nz>
-	<20250226000748.3979148-2-chris.packham@alliedtelesis.co.nz>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1740558656; c=relaxed/simple;
+	bh=8W1YS7kw1UYuPTog9vP2KQU1oV+SEgE+lxrN/xiMMxk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=X16I2PEN23sCU+IKTPVOs9Oi2tEIZVAP0XxiaZV5+9Btx2ypWroNUmBxoOP4IHjcFzFOihWx0yMKd4ecqOUloX9kvrWBNHDeLpOaV8HvQBOgNp8BEQZ1dIT9Q/OSwZzMyuxWGSWIeHRGhyvXmdblbz939fu0OgEtYN9j4dUv0ms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4719D1516;
+	Wed, 26 Feb 2025 00:31:10 -0800 (PST)
+Received: from [10.57.78.248] (unknown [10.57.78.248])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CE2A83F673;
+	Wed, 26 Feb 2025 00:30:47 -0800 (PST)
+Message-ID: <14fefa3a-9522-4995-8e51-662e80ae1747@arm.com>
+Date: Wed, 26 Feb 2025 09:30:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/6] mm: pgtable: make generic tlb_remove_table() use
+ struct ptdesc
+To: Qi Zheng <zhengqi.arch@bytedance.com>, peterz@infradead.org,
+ riel@surriel.com, vishal.moola@gmail.com, david@redhat.com,
+ jannh@google.com, hughd@google.com, willy@infradead.org, yuzhao@google.com,
+ muchun.song@linux.dev, akpm@linux-foundation.org, will@kernel.org,
+ aneesh.kumar@kernel.org, npiggin@gmail.com, arnd@arndb.de,
+ dave.hansen@linux.intel.com, rppt@kernel.org, alexghiti@rivosinc.com
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+ linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+ linux-sh@vger.kernel.org, linux-um@lists.infradead.org, x86@kernel.org,
+ linux-riscv@lists.infradead.org
+References: <cover.1740454179.git.zhengqi.arch@bytedance.com>
+ <5be8c3ab7bd68510bf0db4cf84010f4dfe372917.1740454179.git.zhengqi.arch@bytedance.com>
+Content-Language: en-GB
+From: Kevin Brodsky <kevin.brodsky@arm.com>
+In-Reply-To: <5be8c3ab7bd68510bf0db4cf84010f4dfe372917.1740454179.git.zhengqi.arch@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdekgedtvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepfffhvfevuffkjghfohfogggtgfesthejredtredtvdenucfhrhhomhepofgrgihimhgvucevhhgvvhgrlhhlihgvrhcuoehmrgigihhmvgdrtghhvghvrghllhhivghrsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeegveeltddvveeuhefhvefhlefhkeevfedtgfeiudefffeiledttdfgfeeuhfeukeenucfkphepvdgrtddumegtsgduleemkegugegtmeelfhdttdemsggtvddumeekkeelleemheegtdgtmegvheelvgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudelmeekugegtgemlehftddtmegstgdvudemkeekleelmeehgedttgemvgehlegvpdhhvghlohepfhgvughorhgrrdhhohhmvgdpmhgrihhlfhhrohhmpehmrgigihhmvgdrtghhvghvrghllhhivghrsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedukedprhgtphhtthhopegthhhrihhsrdhprggtkhhhrghmsegrlhhlihgvughtvghlvghsihhsrdgtohdrnhiipdhrtghpthhtoheprhhosghhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehkrhiikhdoughtsehkvghrn
- hgvlhdrohhrghdprhgtphhtthhopegtohhnohhrodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhssghoghgvnhgusegrlhhphhgrrdhfrhgrnhhkvghnrdguvgdprhgtphhtthhopegrnhgurhgvfieslhhunhhnrdgthhdprhgtphhtthhopehhkhgrlhhlfigvihhtudesghhmrghilhdrtghomhdprhgtphhtthhopehlihhnuhigsegrrhhmlhhinhhugidrohhrghdruhhk
-X-GND-Sasl: maxime.chevallier@bootlin.com
 
-Hi Chris,
+On 25/02/2025 04:45, Qi Zheng wrote:
+> Now only arm will call tlb_remove_ptdesc()/tlb_remove_table() when
+> CONFIG_MMU_GATHER_TABLE_FREE is disabled. In this case, the type of the
+> table parameter is actually struct ptdesc * instead of struct page *.
+>
+> Since struct ptdesc still overlaps with struct page and has not been
+> separated from it, forcing the table parameter to struct page * will not
+> cause any problems at this time. But this is definitely incorrect and
+> needs to be fixed. So just like the generic __tlb_remove_table(), let
+> generic tlb_remove_table() use struct ptdesc by default when
+> CONFIG_MMU_GATHER_TABLE_FREE is disabled.
+>
+> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
 
-On Wed, 26 Feb 2025 13:07:47 +1300
-Chris Packham <chris.packham@alliedtelesis.co.nz> wrote:
-
-> Add a driver for the MDIO controller on the RTL9300 family of Ethernet
-> switches with integrated SoC. There are 4 physical SMI interfaces on the
-> RTL9300 however access is done using the switch ports. The driver takes
-> the MDIO bus hierarchy from the DTS and uses this to configure the
-> switch ports so they are associated with the correct PHY. This mapping
-> is also used when dealing with software requests from phylib.
-> 
-> Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
-
-It all mostly looks good to me, there's one typo though and as it may
-be user visible, I think it's worth fixing...
-
-[...]
-
-> +static int rtl9300_mdiobus_probe_one(struct device *dev, struct rtl9300_mdio_priv *priv,
-> +				     struct fwnode_handle *node)
-> +{
-> +	struct rtl9300_mdio_chan *chan;
-> +	struct fwnode_handle *child;
-> +	struct mii_bus *bus;
-> +	u32 mdio_bus;
-> +	int err;
-> +
-> +	err = fwnode_property_read_u32(node, "reg", &mdio_bus);
-> +	if (err)
-> +		return err;
-> +
-> +	fwnode_for_each_child_node(node, child)
-> +		if (fwnode_device_is_compatible(child, "ethernet-phy-ieee802.3-c45"))
-> +			priv->smi_bus_is_c45[mdio_bus] = true;
-> +
-> +	bus = devm_mdiobus_alloc_size(dev, sizeof(*chan));
-> +	if (!bus)
-> +		return -ENOMEM;
-> +
-> +	bus->name = "Reaktek Switch MDIO Bus";
-
-You probably mean Realtek ? :)
-
-Thanks,
-
-Maxime
+Reviewed-by: Kevin Brodsky <kevin.brodsky@arm.com>
 
