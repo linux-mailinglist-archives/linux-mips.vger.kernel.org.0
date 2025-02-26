@@ -1,179 +1,459 @@
-Return-Path: <linux-mips+bounces-7991-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7992-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16AAAA469EA
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Feb 2025 19:38:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EC32A469F7
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Feb 2025 19:45:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 049B77A51E4
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Feb 2025 18:37:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18B503A3E27
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Feb 2025 18:44:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26A1C2343C5;
-	Wed, 26 Feb 2025 18:38:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2928C235341;
+	Wed, 26 Feb 2025 18:45:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="CshK/79d"
+	dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="Ae4kPHkZ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from aposti.net (aposti.net [89.234.176.197])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8294A22D4E2
-	for <linux-mips@vger.kernel.org>; Wed, 26 Feb 2025 18:38:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B80A823371B;
+	Wed, 26 Feb 2025 18:45:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.234.176.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740595117; cv=none; b=GeWbbWYK1UUzbnVJe3RioLxA6rigkKUO37Ot/Gem+xtoJPZMKDRAeTz31nbeg9leJ9GHA43nYERViXybulV0H0pZPKkU+zOC7WsfWBpvAA3h3pdtGCxWh+NlvALxB9+g3FulVzFd9/u0j6hIbhegBKebM9tfLBed3U+lFROcMgY=
+	t=1740595506; cv=none; b=aCWGtTsRo3atRhCHkiZ1rUlGZlcy+KJzpBMC3yAe+b6BWi2Y6l4BScSh4NwD/jd1IJfQ60iwhHtH9VWDUolX14CqYPzVaHvsjWQM3Wg5QWYnhPCnYQkBXkwwhzUyXFlAx1N/+8pAPWf8/hfbko/G7wNN6l8FxOK9KDcEzt6NBYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740595117; c=relaxed/simple;
-	bh=4pE8iNhrmO71LZGB2PEKoAbu2e3X350ddkt001DYnro=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ixd6Ud25D1IcI0KkEAb2XkgLbsgHSv7js7st7gWbxutro72+c8J9CHcuqS/jX6wWcsvOrSoAGngYK1tR//sL+ZB7cINiML84yUPMKHxek4Y6IY/gOaynuqiqiGaeR75hOysxzZUUeIWpoLl6BVUi5geuxUZzuuQaXDkTJZ4S0l4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=CshK/79d; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1740595114;
+	s=arc-20240116; t=1740595506; c=relaxed/simple;
+	bh=Ez0pRVxb4rvsDz/sDWthsPnz3AEUnBdg3NowQnOJ9wM=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=QHgt6CF/AVHw+vXdIbYJTAdOh9Fr6WV3q1StX4oXKpiq8Vzzs9HQbafGDaqzFBYxpVoo27TAGHu1p8uZqrvdWnm9OA1qCicQJMAe63awZ/cL/Ak0kTTRXaPxkABdhmLPoCQUr2VWzvyAFOY+d/40JdGIQ/fjxCJvm2Y+GZBWjyA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net; spf=pass smtp.mailfrom=crapouillou.net; dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b=Ae4kPHkZ; arc=none smtp.client-ip=89.234.176.197
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crapouillou.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
+	s=mail; t=1740595496;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=Po4dipnmwfGs5ho6Uar/3eIBvd8Wea1v5VEnmsiU7UA=;
-	b=CshK/79dTXTwicjtWzFtbfjANHpjKM/rUCnXCIdneOO60dN2mbQa6rBRLuKi+U4JVgsDRg
-	QnVNFX9tEkMwgxljigJm0ZvvmVLjrsSF4iLZM8I7QaeB6XS6P1IkF9xClx3aGmDi/ng0Zu
-	sxUCEhhwURSlbd/tazmasZMqjF3OFNw=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-481-SJD0tXZKNC-UuFcF27Ycaw-1; Wed, 26 Feb 2025 13:38:31 -0500
-X-MC-Unique: SJD0tXZKNC-UuFcF27Ycaw-1
-X-Mimecast-MFC-AGG-ID: SJD0tXZKNC-UuFcF27Ycaw_1740595110
-Received: by mail-ej1-f71.google.com with SMTP id a640c23a62f3a-abb61c30566so4928266b.2
-        for <linux-mips@vger.kernel.org>; Wed, 26 Feb 2025 10:38:30 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740595109; x=1741199909;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Po4dipnmwfGs5ho6Uar/3eIBvd8Wea1v5VEnmsiU7UA=;
-        b=jMhdYqg+zhzqJ1kXZcGWElUcTo81zrYJOr4gb86UXM8x4nA27A1i4jrTut4BM7cflL
-         AsnSd00mHqxTeL5Cr0/zzhUg5ZTI7k/StEyCGYfwEwsqys7k7UQnIsPkKHg4LANCwOSU
-         NSb+jlemZV9h8lai8tVaWX+sSH1lLGOLA+QAvi9+gUD39zS3RUudR3q3UqXZecYDtnVx
-         naFY/eL8Hfg43lZKlTm8sp56hGseZlnKv/5GnuVGl8V6qk3CN18o1Ztn9COc/4GLS1qt
-         AtHugSofhaConNMftIQTN2XYtHgFC4X/BYzxXxvcXAylBHkWlqgu+TRGv/vQpcKPlkUY
-         an+g==
-X-Forwarded-Encrypted: i=1; AJvYcCXCf4R9gJNLZ5C+ep0Lp1PfjhUxqeVSST+DPFSCbmCq8IKjrGf7FHs2pWcQyVvLW0hHB4IdF/CZ0nOg@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz3Tv2hT/lRQVj1a716JyulL1XDigJfpzgsYqRW4IJgpZEzAAzk
-	+nebxX6Ino1WB1kdtHQ77/AZLXu3mKTVHyG/NrkItVruI4HxWlRtnCyrGBlo5zE12ObtZEp9gFL
-	4mIHE8ICxV0V2D6Qx3XfaK+ctSIDQq3MolzDtqyzzRexAmkySl1EGdpODoj4=
-X-Gm-Gg: ASbGncscoJhkVW8muRpiuI548CakjS66SaIuXNOfAM/eUgmUsflpe7QXxfV/EFvEgoy
-	DjHVzNqGAS1tpOEpkuL8EHMnNxEr1Zy3UtpJxmNNL97k2RQpVFV3IhXTHVNzJvPlcttt11drBfJ
-	SMFwQPvVLhvfmhoef7SPbpVB4KOJaFj1fb4qFfaRzHGmreGFnZtBs7u0wYUIlXVKpgbNb0kpOiY
-	fl7CDC2V8+r430868VODCPocd/3x4AxxWIPfLOF0zbGsnGFGLkZjd32MPXDtXM5i05c16h0vRpV
-	pc8zFzBBO2SY3bMPaavk
-X-Received: by 2002:a17:906:6185:b0:ab7:c1d5:14f9 with SMTP id a640c23a62f3a-abeeecf6f63mr518736366b.10.1740595109603;
-        Wed, 26 Feb 2025 10:38:29 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGCDnvlNLlcOiBeBNB6S3TtqOxMTUK/PR46JW7lLq0KgREP2FusBvOHa60dTZ6MWayPAjFhrw==
-X-Received: by 2002:a17:906:6185:b0:ab7:c1d5:14f9 with SMTP id a640c23a62f3a-abeeecf6f63mr518730666b.10.1740595109199;
-        Wed, 26 Feb 2025 10:38:29 -0800 (PST)
-Received: from [192.168.10.81] ([176.206.102.52])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-abed20ac11bsm364226166b.163.2025.02.26.10.38.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 26 Feb 2025 10:38:28 -0800 (PST)
-Message-ID: <be33873f-ae4e-4db9-bca4-e83e8d4b39c3@redhat.com>
-Date: Wed, 26 Feb 2025 19:38:21 +0100
+	bh=LTdC+wV4Km4cP9PQt8a7JBY9RVaiQFSEGFjaUALtVlg=;
+	b=Ae4kPHkZKSJ/7bzI+dYP8KyIdaG6uuJ9og8WwW9SEadSOXXUiB26dtJOSA2ySniIb1ECXq
+	J2m8VBVJeYB0RZWexBQvxE4tW4/si9v/4rL9ybrJndERUD7gQN4lbCY3Z3gwUH0nyC/HCS
+	si2mYdTt47KSvgqjQSsin8JPVgSh9jM=
+Message-ID: <627ed9f29819e42e8efa449d87eb2ddbc6acb8a1.camel@crapouillou.net>
+Subject: Re: [PATCH 2/4] pinctrl: ingenic: add x1600 support
+From: Paul Cercueil <paul@crapouillou.net>
+To: "H. Nikolaus Schaller" <hns@goldelico.com>, Linus Walleij	
+ <linus.walleij@linaro.org>, Rob Herring <robh@kernel.org>, Krzysztof
+ Kozlowski	 <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: Andreas Kemnade <andreas@kemnade.info>, Paul Boddie
+ <paul@boddie.org.uk>,  Tim Bysun <tim.bysun@ingenic.com>,
+ linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
+	letux-kernel@openphoenux.org
+Date: Wed, 26 Feb 2025 19:43:52 +0100
+In-Reply-To: <f633a14ccafc596e4611a1fae3e1c958ddfac2dc.1740590093.git.hns@goldelico.com>
+References: <cover.1740590093.git.hns@goldelico.com>
+	 <f633a14ccafc596e4611a1fae3e1c958ddfac2dc.1740590093.git.hns@goldelico.com>
+Autocrypt: addr=paul@crapouillou.net; prefer-encrypt=mutual;
+ keydata=mQENBF0KhcEBCADkfmrzdTOp/gFOMQX0QwKE2WgeCJiHPWkpEuPH81/HB2dpjPZNW03ZM
+ LQfECbbaEkdbN4YnPfXgcc1uBe5mwOAPV1MBlaZcEt4M67iYQwSNrP7maPS3IaQJ18ES8JJ5Uf5Uz
+ FZaUawgH+oipYGW+v31cX6L3k+dGsPRM0Pyo0sQt52fsopNPZ9iag0iY7dGNuKenaEqkYNjwEgTtN
+ z8dt6s3hMpHIKZFL3OhAGi88wF/21isv0zkF4J0wlf9gYUTEEY3Eulx80PTVqGIcHZzfavlWIdzhe
+ +rxHTDGVwseR2Y1WjgFGQ2F+vXetAB8NEeygXee+i9nY5qt9c07m8mzjABEBAAG0JFBhdWwgQ2VyY
+ 3VlaWwgPHBhdWxAY3JhcG91aWxsb3UubmV0PokBTgQTAQoAOBYhBNdHYd8OeCBwpMuVxnPua9InSr
+ 1BBQJdCoXBAhsDBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEHPua9InSr1BgvIH/0kLyrI3V0f
+ 33a6D3BJwc1grbygPVYGuC5l5eMnAI+rDmLR19E2yvibRpgUc87NmPEQPpbbtAZt8On/2WZoE5OIP
+ dlId/AHNpdgAtGXo0ZX4LGeVPjxjdkbrKVHxbcdcnY+zzaFglpbVSvp76pxqgVg8PgxkAAeeJV+ET
+ 4t0823Gz2HzCL/6JZhvKAEtHVulOWoBh368SYdolp1TSfORWmHzvQiCCCA+j0cMkYVGzIQzEQhX7U
+ rf9N/nhU5/SGLFEi9DcBfXoGzhyQyLXflhJtKm3XGB1K/pPulbKaPcKAl6rIDWPuFpHkSbmZ9r4KF
+ lBwgAhlGy6nqP7O3u7q23hRU=
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/7] KVM: x86: nVMX IRQ fix and VM teardown cleanups
-To: Sean Christopherson <seanjc@google.com>, Marc Zyngier <maz@kernel.org>,
- Oliver Upton <oliver.upton@linux.dev>, Tianrui Zhao
- <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>,
- Huacai Chen <chenhuacai@kernel.org>,
- Madhavan Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Janosch Frank <frankja@linux.ibm.com>,
- Claudio Imbrenda <imbrenda@linux.ibm.com>
-Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
- kvm@vger.kernel.org, loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- Aaron Lewis <aaronlewis@google.com>, Jim Mattson <jmattson@google.com>,
- Yan Zhao <yan.y.zhao@intel.com>,
- Rick P Edgecombe <rick.p.edgecombe@intel.com>,
- Kai Huang <kai.huang@intel.com>, Isaku Yamahata <isaku.yamahata@intel.com>
-References: <20250224235542.2562848-1-seanjc@google.com>
-From: Paolo Bonzini <pbonzini@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=pbonzini@redhat.com; keydata=
- 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
-In-Reply-To: <20250224235542.2562848-1-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 2/25/25 00:55, Sean Christopherson wrote:
-> This was _supposed_ to be a tiny one-off patch to fix a nVMX bug where KVM
-> fails to detect that, after nested VM-Exit, L1 has a pending IRQ (or NMI).
-> But because x86's nested teardown flows are garbage (KVM simply forces a
-> nested VM-Exit to put the vCPU back into L1), that simple fix snowballed.
-> 
-> The immediate issue is that checking for a pending interrupt accesses the
-> legacy PIC, and x86's kvm_arch_destroy_vm() currently frees the PIC before
-> destroying vCPUs, i.e. checking for IRQs during the forced nested VM-Exit
-> results in a NULL pointer deref (or use-after-free if KVM didn't nullify
-> the PIC pointer).  That's patch 1.
-> 
-> Patch 2 is the original nVMX fix.
-> 
-> The remaining patches attempt to bring a bit of sanity to x86's VM
-> teardown code, which has accumulated a lot of cruft over the years.  E.g.
-> KVM currently unloads each vCPU's MMUs in a separate operation from
-> destroying vCPUs, all because when guest SMP support was added, KVM had a
-> kludgy MMU teardown flow that broken when a VM had more than one 1 vCPU.
-> And that oddity lived on, for 18 years...
+Hi Nikolaus, and everyone involved,
 
-Queued patches 1 and 2 to kvm/master, and everything to kvm/queue 
-(pending a little more testing and the related TDX change).
+Le mercredi 26 f=C3=A9vrier 2025 =C3=A0 18:16 +0100, H. Nikolaus Schaller a
+=C3=A9crit=C2=A0:
+> From: Paul Boddie <paul@boddie.org.uk>
+>=20
+> Add support for the Lumissil/Ingenic X1600 SoC.
+>=20
+> It uses shadow registers to commit changes to multiple pinctrl
+> registers in parallel.
+>=20
+> Define specific Chip ID, register offsets, pin tables etc.
+>=20
+> Handling the unique X1600_GPIO_PU only for the x1600 but
+> not for x1830 and above must be carefully taken into account.
+>=20
+> Co-authored-by: Andreas Kemnade <andreas@kemnade.info>
+> Co-authored-by: H. Nikolaus Schaller <hns@goldelico.com>
+> Signed-off-by: Paul Boddie <paul@boddie.org.uk>
+> Signed-off-by: Andreas Kemnade <andreas@kemnade.info>
+> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
+> ---
+> =C2=A0drivers/pinctrl/pinctrl-ingenic.c | 242
+> +++++++++++++++++++++++++++++-
+> =C2=A01 file changed, 240 insertions(+), 2 deletions(-)
+>=20
+> diff --git a/drivers/pinctrl/pinctrl-ingenic.c
+> b/drivers/pinctrl/pinctrl-ingenic.c
+> index bc7ee54e062b5..dfdc89ece9b8a 100644
+> --- a/drivers/pinctrl/pinctrl-ingenic.c
+> +++ b/drivers/pinctrl/pinctrl-ingenic.c
+> @@ -3,7 +3,7 @@
+> =C2=A0 * Ingenic SoCs pinctrl driver
+> =C2=A0 *
+> =C2=A0 * Copyright (c) 2017 Paul Cercueil <paul@crapouillou.net>
+> - * Copyright (c) 2017, 2019 Paul Boddie <paul@boddie.org.uk>
+> + * Copyright (c) 2017, 2019, 2020, 2023 Paul Boddie
+> <paul@boddie.org.uk>
+> =C2=A0 * Copyright (c) 2019, 2020 =E5=91=A8=E7=90=B0=E6=9D=B0 (Zhou Yanji=
+e)
+> <zhouyanjie@wanyeetech.com>
+> =C2=A0 */
+> =C2=A0
+> @@ -58,6 +58,8 @@
+> =C2=A0#define JZ4770_GPIO_FLAG			0x50
+> =C2=A0#define JZ4770_GPIO_PEN				0x70
+> =C2=A0
+> +#define X1600_GPIO_PU				 0x80
+> +
+> =C2=A0#define X1830_GPIO_PEL				0x110
+> =C2=A0#define X1830_GPIO_PEH				0x120
+> =C2=A0#define X1830_GPIO_SR				0x150
+> @@ -112,6 +114,7 @@ enum jz_version {
+> =C2=A0	ID_JZ4780,
+> =C2=A0	ID_X1000,
+> =C2=A0	ID_X1500,
+> +	ID_X1600,
+> =C2=A0	ID_X1830,
+> =C2=A0	ID_X2000,
+> =C2=A0	ID_X2100,
+> @@ -162,6 +165,7 @@ static const unsigned long enabled_socs =3D
+> =C2=A0	IS_ENABLED(CONFIG_MACH_JZ4780) << ID_JZ4780 |
+> =C2=A0	IS_ENABLED(CONFIG_MACH_X1000) << ID_X1000 |
+> =C2=A0	IS_ENABLED(CONFIG_MACH_X1500) << ID_X1500 |
+> +	IS_ENABLED(CONFIG_MACH_X1600) << ID_X1600 |
+> =C2=A0	IS_ENABLED(CONFIG_MACH_X1830) << ID_X1830 |
+> =C2=A0	IS_ENABLED(CONFIG_MACH_X2000) << ID_X2000 |
+> =C2=A0	IS_ENABLED(CONFIG_MACH_X2100) << ID_X2100;
+> @@ -2351,6 +2355,231 @@ static const struct ingenic_chip_info
+> x1500_chip_info =3D {
+> =C2=A0	.access_table =3D &x1000_access_table,
+> =C2=A0};
+> =C2=A0
+> +static const u32 x1600_pull_ups[4] =3D {
+> +	0xffffffff, 0xdffbf7bf, 0x987e0000, 0x0000003f,
+> +};
+> +
+> +static const u32 x1600_pull_downs[4] =3D {
+> +	0x00000000, 0x00000000, 0x07000007, 0x00000000,
+> +};
+> +
+> +static int x1600_uart0_data_pins[] =3D { 0x27, 0x28, };
+> +static int x1600_uart0_hwflow_pins[] =3D { 0x29, 0x2a, };
+> +static int x1600_uart1_data_pins[] =3D { 0x23, 0x22, };
+> +static int x1600_uart1_hwflow_pins[] =3D { 0x25, 0x24, };
+> +static int x1600_uart2_data_a_pins[] =3D { 0x1f, 0x1e, };
+> +static int x1600_uart2_data_b_pins[] =3D { 0x21, 0x20, };
+> +static int x1600_uart3_data_b_pins[] =3D { 0x25, 0x24, };
+> +static int x1600_uart3_data_d_pins[] =3D { 0x65, 0x64, };
+> +static int x1600_sfc_pins[] =3D { 0x53, 0x54, 0x55, 0x56, 0x51, 0x52,
+> 0x24, };
+> +static int x1600_ssi_dt_a_pins[] =3D { 0x1e, };
+> +static int x1600_ssi_dt_b_pins[] =3D { 0x2d, };
+> +static int x1600_ssi_dr_a_pins[] =3D { 0x1d, };
+> +static int x1600_ssi_dr_b_pins[] =3D { 0x2e, };
+> +static int x1600_ssi_clk_a_pins[] =3D { 0x1f, };
+> +static int x1600_ssi_clk_b_pins[] =3D { 0x2c, };
+> +static int x1600_ssi_ce0_a_pins[] =3D { 0x1c, };
+> +static int x1600_ssi_ce0_b_pins[] =3D { 0x31, };
+> +static int x1600_ssi_ce1_a_pins[] =3D { 0x22, };
+> +static int x1600_ssi_ce1_b_pins[] =3D { 0x30, };
+> +static int x1600_mmc0_1bit_b_pins[] =3D { 0x2c, 0x2d, 0x2e, };
+> +static int x1600_mmc0_4bit_b_pins[] =3D { 0x2f, 0x30, 0x31, };
+> +static int x1600_mmc0_1bit_c_pins[] =3D { 0x51, 0x53, 0x54, };
+> +static int x1600_mmc0_4bit_c_pins[] =3D { 0x56, 0x55, 0x52, };
+> +static int x1600_mmc1_1bit_pins[] =3D { 0x60, 0x61, 0x62, };
+> +static int x1600_mmc1_4bit_pins[] =3D { 0x63, 0x64, 0x65, };
+> +static int x1600_i2c0_a_pins[] =3D { 0x1d, 0x1c, };
+> +static int x1600_i2c0_b_pins[] =3D { 0x3f, 0x3e, };
+> +static int x1600_i2c1_b_15_pins[] =3D { 0x30, 0x2f, };
+> +static int x1600_i2c1_b_19_pins[] =3D { 0x34, 0x33, };
+> +static int x1600_i2s_data_tx_pins[] =3D { 0x39, };
+> +static int x1600_i2s_data_rx_pins[] =3D { 0x35, };
+> +static int x1600_i2s_clk_rx_pins[] =3D { 0x37, 0x38, };
+> +static int x1600_i2s_clk_tx_pins[] =3D { 0x3b, 0x3c, };
+> +static int x1600_i2s_sysclk_pins[] =3D { 0x36, 0x3a, };
+> +
+> +static int x1600_cim_pins[] =3D {
+> +	0x14, 0x16, 0x15, 0x18, 0x13,
+> +	0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
+> +};
+> +
+> +static int x1600_slcd_8bit_pins[] =3D {
+> +	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+> +	0x17, 0x19, 0x1a, 0x1b,
+> +};
+> +
+> +static int x1600_slcd_16bit_pins[] =3D {
+> +	0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
+> +};
+> +
+> +static int x1600_lcd_16bit_pins[] =3D {
+> +	0x00, 0x01, 0x02, 0x03, 0x04, 0x05, 0x06, 0x07,
+> +	0x08, 0x09, 0x0a, 0x0b, 0x0c, 0x0d, 0x0e, 0x0f,
+> +	0x18, 0x19, 0x1a, 0x1b,
+> +};
+> +
+> +static int x1600_lcd_18bit_pins[] =3D {
+> +	0x10, 0x11,
+> +};
+> +
+> +static int x1600_lcd_24bit_pins[] =3D {
+> +	0x12, 0x13, 0x14, 0x15, 0x16, 0x17,
+> +};
+> +
+> +static int x1600_pwm_pwm0_pins[] =3D { 0x40, };
+> +static int x1600_pwm_pwm1_pins[] =3D { 0x41, };
+> +static int x1600_pwm_pwm2_pins[] =3D { 0x42, };
+> +static int x1600_pwm_pwm3_pins[] =3D { 0x58, };
+> +static int x1600_pwm_pwm4_pins[] =3D { 0x59, };
+> +static int x1600_pwm_pwm5_pins[] =3D { 0x33, 0x5a, };
+> +static int x1600_pwm_pwm6_pins[] =3D { 0x29, 0x34, };
+> +static int x1600_pwm_pwm7_pins[] =3D { 0x2a, 0x35, };
 
-Paolo
+Just a quick question about these ones: why are there 2 pins here? If
+you have the PWM5/6/7 function on two different pins then you should
+probably have two groups.
+
+The rest looks OK.
+
+Cheers,
+-Paul
+
+> +
+> +static int x1600_mac_pins[] =3D {
+> +	0x33, 0x34, 0x35, 0x36, 0x37, 0x38, 0x39, 0x3a, 0x3b, 0x3c,
+> +};
+> +
+> +static int x1600_sfc_funcs[] =3D { 0, 0, 0, 0, 0, 0, 2, };
+> +
+> +static int x1600_pwm_pwm5_funcs[] =3D { 2, 1, };
+> +static int x1600_pwm_pwm6_funcs[] =3D { 1, 2, };
+> +static int x1600_pwm_pwm7_funcs[] =3D { 1, 2, };
+> +
+> +static const struct group_desc x1600_groups[] =3D {
+> +	INGENIC_PIN_GROUP("uart0-data", x1600_uart0_data, 0),
+> +	INGENIC_PIN_GROUP("uart0-hwflow", x1600_uart0_hwflow, 0),
+> +	INGENIC_PIN_GROUP("uart1-data", x1600_uart1_data, 1),
+> +	INGENIC_PIN_GROUP("uart1-hwflow", x1600_uart1_hwflow, 1),
+> +	INGENIC_PIN_GROUP("uart2-data-a", x1600_uart2_data_a, 2),
+> +	INGENIC_PIN_GROUP("uart2-data-b", x1600_uart2_data_b, 1),
+> +	INGENIC_PIN_GROUP("uart3-data-b", x1600_uart3_data_b, 0),
+> +	INGENIC_PIN_GROUP("uart3-data-d", x1600_uart3_data_d, 2),
+> +	INGENIC_PIN_GROUP_FUNCS("sfc", x1600_sfc, x1600_sfc_funcs),
+> +	INGENIC_PIN_GROUP("ssi-dt-a", x1600_ssi_dt_a, 0),
+> +	INGENIC_PIN_GROUP("ssi-dt-b", x1600_ssi_dt_b, 1),
+> +	INGENIC_PIN_GROUP("ssi-dr-a", x1600_ssi_dr_a, 0),
+> +	INGENIC_PIN_GROUP("ssi-dr-b", x1600_ssi_dr_b, 1),
+> +	INGENIC_PIN_GROUP("ssi-clk-a", x1600_ssi_clk_a, 0),
+> +	INGENIC_PIN_GROUP("ssi-clk-b", x1600_ssi_clk_b, 1),
+> +	INGENIC_PIN_GROUP("ssi-ce0-a", x1600_ssi_ce0_a, 0),
+> +	INGENIC_PIN_GROUP("ssi-ce0-b", x1600_ssi_ce0_b, 1),
+> +	INGENIC_PIN_GROUP("ssi-ce1-a", x1600_ssi_ce1_a, 2),
+> +	INGENIC_PIN_GROUP("ssi-ce1-b", x1600_ssi_ce1_b, 1),
+> +	INGENIC_PIN_GROUP("mmc0-1bit-b", x1600_mmc0_1bit_b, 0),
+> +	INGENIC_PIN_GROUP("mmc0-4bit-b", x1600_mmc0_4bit_b, 0),
+> +	INGENIC_PIN_GROUP("mmc0-1bit-c", x1600_mmc0_1bit_c, 1),
+> +	INGENIC_PIN_GROUP("mmc0-4bit-c", x1600_mmc0_4bit_c, 1),
+> +	INGENIC_PIN_GROUP("mmc1-1bit", x1600_mmc1_1bit, 0),
+> +	INGENIC_PIN_GROUP("mmc1-4bit", x1600_mmc1_4bit, 0),
+> +	INGENIC_PIN_GROUP("i2c0-data-a", x1600_i2c0_a, 2),
+> +	INGENIC_PIN_GROUP("i2c0-data-b", x1600_i2c0_b, 0),
+> +	INGENIC_PIN_GROUP("i2c1-data-b-15", x1600_i2c1_b_15, 2),
+> +	INGENIC_PIN_GROUP("i2c1-data-b-19", x1600_i2c1_b_19, 0),
+> +	INGENIC_PIN_GROUP("i2s-data-tx", x1600_i2s_data_tx, 0),
+> +	INGENIC_PIN_GROUP("i2s-data-rx", x1600_i2s_data_rx, 0),
+> +	INGENIC_PIN_GROUP("i2s-clk-rx", x1600_i2s_clk_rx, 0),
+> +	INGENIC_PIN_GROUP("i2s-clk-tx", x1600_i2s_clk_tx, 0),
+> +	INGENIC_PIN_GROUP("i2s-sysclk", x1600_i2s_sysclk, 0),
+> +	INGENIC_PIN_GROUP("cim-data", x1600_cim, 2),
+> +	INGENIC_PIN_GROUP("slcd-8bit", x1600_slcd_8bit, 1),
+> +	INGENIC_PIN_GROUP("slcd-16bit", x1600_slcd_16bit, 1),
+> +	INGENIC_PIN_GROUP("lcd-16bit", x1600_lcd_16bit, 0),
+> +	INGENIC_PIN_GROUP("lcd-18bit", x1600_lcd_18bit, 0),
+> +	INGENIC_PIN_GROUP("lcd-24bit", x1600_lcd_24bit, 0),
+> +	INGENIC_PIN_GROUP("pwm0", x1600_pwm_pwm0, 0),
+> +	INGENIC_PIN_GROUP("pwm1", x1600_pwm_pwm1, 0),
+> +	INGENIC_PIN_GROUP("pwm2", x1600_pwm_pwm2, 0),
+> +	INGENIC_PIN_GROUP("pwm3", x1600_pwm_pwm3, 1),
+> +	INGENIC_PIN_GROUP("pwm4", x1600_pwm_pwm4, 1),
+> +	INGENIC_PIN_GROUP_FUNCS("pwm5", x1600_pwm_pwm5,
+> x1600_pwm_pwm5_funcs),
+> +	INGENIC_PIN_GROUP_FUNCS("pwm6", x1600_pwm_pwm6,
+> x1600_pwm_pwm6_funcs),
+> +	INGENIC_PIN_GROUP_FUNCS("pwm7", x1600_pwm_pwm7,
+> x1600_pwm_pwm7_funcs),
+> +	INGENIC_PIN_GROUP("mac", x1600_mac, 1),
+> +};
+> +
+> +static const char * const x1600_uart0_groups[] =3D { "uart0-data",
+> "uart0-hwflow", };
+> +static const char * const x1600_uart1_groups[] =3D { "uart1-data",
+> "uart1-hwflow", };
+> +static const char * const x1600_uart2_groups[] =3D { "uart2-data-a",
+> "uart2-data-b", };
+> +static const char * const x1600_uart3_groups[] =3D { "uart3-data-b",
+> "uart3-data-d", };
+> +
+> +static const char * const x1600_sfc_groups[] =3D { "sfc", };
+> +
+> +static const char * const x1600_ssi_groups[] =3D {
+> +	"ssi-dt-a", "ssi-dt-b",
+> +	"ssi-dr-a", "ssi-dr-b",
+> +	"ssi-clk-a", "ssi-clk-b",
+> +	"ssi-ce0-a", "ssi-ce0-b",
+> +	"ssi-ce1-a", "ssi-ce1-b",
+> +};
+> +
+> +static const char * const x1600_mmc0_groups[] =3D { "mmc0-1bit-b",
+> "mmc0-4bit-b",
+> +	"mmc0-1bit-c", "mmc0-4bit-c",
+> +};
+> +
+> +static const char * const x1600_mmc1_groups[] =3D { "mmc1-1bit",
+> "mmc1-4bit", };
+> +
+> +static const char * const x1600_i2c0_groups[] =3D { "i2c0-data-a",
+> "i2c0-data-b", };
+> +static const char * const x1600_i2c1_groups[] =3D { "i2c1-data-b-15",
+> "i2c1-data-b-19", };
+> +
+> +static const char * const x1600_i2s_groups[] =3D {
+> +	"i2s-data-tx", "i2s-data-rx", "i2s-clk-rx", "i2s-clk-tx",
+> "i2s-sysclk",
+> +};
+> +
+> +static const char * const x1600_cim_groups[] =3D { "cim-data", };
+> +
+> +static const char * const x1600_lcd_groups[] =3D { "slcd-8bit", "slcd-
+> 16bit",
+> +	"lcd-16bit", "lcd-18bit", "lcd-24bit", "lcd-no-pins",
+> +};
+> +
+> +static const char * const x1600_pwm0_groups[] =3D { "pwm0", };
+> +static const char * const x1600_pwm1_groups[] =3D { "pwm1", };
+> +static const char * const x1600_pwm2_groups[] =3D { "pwm2", };
+> +static const char * const x1600_pwm3_groups[] =3D { "pwm3", };
+> +static const char * const x1600_pwm4_groups[] =3D { "pwm4", };
+> +static const char * const x1600_pwm5_groups[] =3D { "pwm5", };
+> +static const char * const x1600_pwm6_groups[] =3D { "pwm6", };
+> +static const char * const x1600_pwm7_groups[] =3D { "pwm7", };
+> +
+> +static const char * const x1600_mac_groups[] =3D { "mac", };
+> +
+> +static const struct function_desc x1600_functions[] =3D {
+> +	INGENIC_PIN_FUNCTION("uart0", x1600_uart0),
+> +	INGENIC_PIN_FUNCTION("uart1", x1600_uart1),
+> +	INGENIC_PIN_FUNCTION("uart2", x1600_uart2),
+> +	INGENIC_PIN_FUNCTION("uart3", x1600_uart3),
+> +	INGENIC_PIN_FUNCTION("sfc", x1600_sfc),
+> +	INGENIC_PIN_FUNCTION("ssi", x1600_ssi),
+> +	INGENIC_PIN_FUNCTION("mmc0", x1600_mmc0),
+> +	INGENIC_PIN_FUNCTION("mmc1", x1600_mmc1),
+> +	INGENIC_PIN_FUNCTION("i2c0", x1600_i2c0),
+> +	INGENIC_PIN_FUNCTION("i2c1", x1600_i2c1),
+> +	INGENIC_PIN_FUNCTION("i2s", x1600_i2s),
+> +	INGENIC_PIN_FUNCTION("cim", x1600_cim),
+> +	INGENIC_PIN_FUNCTION("lcd", x1600_lcd),
+> +	INGENIC_PIN_FUNCTION("pwm0", x1600_pwm0),
+> +	INGENIC_PIN_FUNCTION("pwm1", x1600_pwm1),
+> +	INGENIC_PIN_FUNCTION("pwm2", x1600_pwm2),
+> +	INGENIC_PIN_FUNCTION("pwm3", x1600_pwm3),
+> +	INGENIC_PIN_FUNCTION("pwm4", x1600_pwm4),
+> +	INGENIC_PIN_FUNCTION("pwm5", x1600_pwm5),
+> +	INGENIC_PIN_FUNCTION("pwm6", x1600_pwm6),
+> +	INGENIC_PIN_FUNCTION("pwm7", x1600_pwm7),
+> +	INGENIC_PIN_FUNCTION("mac", x1600_mac),
+> +};
+> +
+> +static const struct ingenic_chip_info x1600_chip_info =3D {
+> +	.num_chips =3D 4,
+> +	.reg_offset =3D 0x100,
+> +	.version =3D ID_X1600,
+> +	.groups =3D x1600_groups,
+> +	.num_groups =3D ARRAY_SIZE(x1600_groups),
+> +	.functions =3D x1600_functions,
+> +	.num_functions =3D ARRAY_SIZE(x1600_functions),
+> +	.pull_ups =3D x1600_pull_ups,
+> +	.pull_downs =3D x1600_pull_downs,
+> +	.access_table =3D &x1000_access_table,
+> +};
+> +
+> =C2=A0static const u32 x1830_pull_ups[4] =3D {
+> =C2=A0	0x5fdfffc0, 0xffffefff, 0x1ffffbff, 0x0fcff3fc,
+> =C2=A0};
+> @@ -3860,7 +4089,9 @@ static int ingenic_pinconf_get(struct
+> pinctrl_dev *pctldev,
+> =C2=A0		pulldown =3D (bias =3D=3D GPIO_PULL_DOWN) && (jzpc->info-
+> >pull_downs[offt] & BIT(idx));
+> =C2=A0
+> =C2=A0	} else {
+> -		if (is_soc_or_above(jzpc, ID_JZ4770))
+> +		if (is_soc_or_above(jzpc, ID_X1600))
+> +			pull =3D ingenic_get_pin_config(jzpc, pin,
+> X1600_GPIO_PU);
+> +		else if (is_soc_or_above(jzpc, ID_JZ4770))
+> =C2=A0			pull =3D !ingenic_get_pin_config(jzpc, pin,
+> JZ4770_GPIO_PEN);
+> =C2=A0		else if (is_soc_or_above(jzpc, ID_JZ4740))
+> =C2=A0			pull =3D !ingenic_get_pin_config(jzpc, pin,
+> JZ4740_GPIO_PULL_DIS);
+> @@ -3959,6 +4190,8 @@ static void ingenic_set_bias(struct
+> ingenic_pinctrl *jzpc,
+> =C2=A0					REG_SET(X1830_GPIO_PEH),
+> bias << idxh);
+> =C2=A0		}
+> =C2=A0
+> +	} else if (is_soc_or_above(jzpc, ID_X1600)) {
+> +		ingenic_config_pin(jzpc, pin, X1600_GPIO_PU, bias);
+> =C2=A0	} else if (is_soc_or_above(jzpc, ID_JZ4770)) {
+> =C2=A0		ingenic_config_pin(jzpc, pin, JZ4770_GPIO_PEN,
+> !bias);
+> =C2=A0	} else if (is_soc_or_above(jzpc, ID_JZ4740)) {
+> @@ -4150,6 +4383,7 @@ static const struct of_device_id
+> ingenic_gpio_of_matches[] __initconst =3D {
+> =C2=A0	{ .compatible =3D "ingenic,jz4775-gpio" },
+> =C2=A0	{ .compatible =3D "ingenic,jz4780-gpio" },
+> =C2=A0	{ .compatible =3D "ingenic,x1000-gpio" },
+> +	{ .compatible =3D "ingenic,x1600-gpio" },
+> =C2=A0	{ .compatible =3D "ingenic,x1830-gpio" },
+> =C2=A0	{ .compatible =3D "ingenic,x2000-gpio" },
+> =C2=A0	{ .compatible =3D "ingenic,x2100-gpio" },
+> @@ -4397,6 +4631,10 @@ static const struct of_device_id
+> ingenic_pinctrl_of_matches[] =3D {
+> =C2=A0		.compatible =3D "ingenic,x1500-pinctrl",
+> =C2=A0		.data =3D IF_ENABLED(CONFIG_MACH_X1500,
+> &x1500_chip_info)
+> =C2=A0	},
+> +	{
+> +		.compatible =3D "ingenic,x1600-pinctrl",
+> +		.data =3D IF_ENABLED(CONFIG_MACH_X1600,
+> &x1600_chip_info)
+> +	},
+> =C2=A0	{
+> =C2=A0		.compatible =3D "ingenic,x1830-pinctrl",
+> =C2=A0		.data =3D IF_ENABLED(CONFIG_MACH_X1830,
+> &x1830_chip_info)
 
 
