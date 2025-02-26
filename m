@@ -1,117 +1,115 @@
-Return-Path: <linux-mips+bounces-7968-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-7969-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5818DA45172
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Feb 2025 01:28:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 237E0A45253
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Feb 2025 02:41:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 116BD7A5E47
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Feb 2025 00:26:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E27AF18845E3
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Feb 2025 01:41:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9312533F7;
-	Wed, 26 Feb 2025 00:27:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4258419CC3E;
+	Wed, 26 Feb 2025 01:41:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ECBLMxwA"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="CvN5XUDJ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF5D480BEC
-	for <linux-mips@vger.kernel.org>; Wed, 26 Feb 2025 00:27:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 157B018801A;
+	Wed, 26 Feb 2025 01:41:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740529655; cv=none; b=ogPVZXTVEex1cmolaR/LRLJmWSC3xrFoCiCbSqgGRnhNmv3LIn00V2sNnMyyVFniwsAcAQBjpUambKlnQIjsainzJjkWELJlgheglYgxnHoiV+Q9aRIkuAPYoqb8/Foe7nMsgLYtVuThEczCFgWTrvBgpL9VFI48VZRWBZQmNes=
+	t=1740534098; cv=none; b=OHFDF8ISjo0+1c30r+cEFs5m4hj1l4yv/7DWUv8C1DOY+JK9VaPwl6H6puC/ZNHzeC14bak0NjQuPRwb4L3Vl52XBp7CSVDM+es46JvpCrj2WBUPCi9+lFsyK1ec09P69hm0bBULt7ODwh7SmbMszQ3giu7UI4qqUynDSNTWJ98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740529655; c=relaxed/simple;
-	bh=YFdIcmETOAJxtDEb1Ht/Nh5ABrjaWCQRix/l3XIAYQ8=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=syA6tc9vzxkRkfYzg/NqVWhsJvCjPiY4l47aZbaxBwR9QPbLYpvil1BUURB0FP1J//7z5iyVWYSweLCM5hR0ysrmmZn6Hi4ylQI7AiAr8YN74vr6yhBf6XGttME5i7DJch6+Uwry9PnoLkZae00vhIKEkKW6TB9K3ACaCGnUMUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ECBLMxwA; arc=none smtp.client-ip=209.85.216.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-2f2a9f056a8so13259118a91.2
-        for <linux-mips@vger.kernel.org>; Tue, 25 Feb 2025 16:27:33 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1740529653; x=1741134453; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=HAdIv23vtdyhU1Wievr5YncZEjjI/nIoxYj3wcoEoAc=;
-        b=ECBLMxwAsGRdP3VFzeMyGfZGaoY1Qb3UzSP2FRQkvEhGdgROep3X0hVvmxyoTyJC2z
-         pW/3EM1QgRY5m3SamvrJNSeV75OeTTvLfYTkqARGd2eRw6jwmgidZIKsw5lWcqY2TFS9
-         R2QQNRtcrhhHJPZqJ2ezvxSE1QPbN5yoQWY2K1P3keBz4ACvPkDk15arawiluShBVMaX
-         Lyi8npD4Gyykc6lYzAaBsg5hdL/gr5HQP8GYf2+4QaW7QFutLufClTklFxnwaE9m81lY
-         /sqDD4LLpqKp+ct0BFq9hWD3TqntV2pPCuYoF/wnFE0h/KI1NPbjfhoGv8vTby+XqJRG
-         Ey8A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740529653; x=1741134453;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HAdIv23vtdyhU1Wievr5YncZEjjI/nIoxYj3wcoEoAc=;
-        b=dHtnPPOZbMm+5nA8X995smdOOpY/bcNNHGiZ3E2Phd9cQPlu71aH/2KL7TFB2fgtR5
-         6bXCAJ5NjN7LHfm/pggpvfuzvh1SVFZS2YBWqgCmQWKAEfHUt2UGdFIg72sYLXA5wgOC
-         YaUHHYR8kmFH5AzQbo1F9aFF0xF1pQY4/vRUDQNnmiNcyikuMHakBRjwnwfzoMmOEz2F
-         osaUwKsfRdu7BzzIPp2tVsIbCr6nTOKUe2XhwH27BaMsYde7+AtQL+1DqgUIiuwNXCt8
-         hUR50VllB3oawqJFNC6Se9wSPm6uIuArLda4NOwTQGjomRU2ttGIrlAmxHmJTjW1RxdR
-         kl1g==
-X-Forwarded-Encrypted: i=1; AJvYcCW5BAjRbxlMLdpnfusvDEQLTY/lZJi2pNM9xRZ9jD7/qcIfkAQpeOPnHBKJKaEU7DhL0NK8uP/IfEd3@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxq13wG6pr1L0Wbl+t5lCdPEQOtB+h2YVp8Zy1gQ+157v23ZMGK
-	+DsRvmG64n4tGSdzMNj0lz+PYIPSlQanTUD205OJNEj22o3L0Hez6DY+e0uHD5msj+nhQyh+x8W
-	hKg==
-X-Google-Smtp-Source: AGHT+IHOUZMQJO44VDHKi6ofhJ07QZ2dZ6izn0Wyr9X1ZaSMCJ5d0/qSAVcldTsRp+dWt1bBYLTGrWWvHEg=
-X-Received: from pjbsb8.prod.google.com ([2002:a17:90b:50c8:b0:2d8:8340:8e46])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:5483:b0:2ee:f076:20f1
- with SMTP id 98e67ed59e1d1-2fe7e218ab9mr2765842a91.0.1740529653271; Tue, 25
- Feb 2025 16:27:33 -0800 (PST)
-Date: Tue, 25 Feb 2025 16:27:32 -0800
-In-Reply-To: <6475f9c7-304a-4e0b-8000-3dc5c8e718e9@redhat.com>
+	s=arc-20240116; t=1740534098; c=relaxed/simple;
+	bh=58ZMG8/1/Uh1xkS5yKwRQCg82oBoxBK2uJYcSHkp4rw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SLOsXc77hwhzFJV7vbWYxOA3ZrfGnanKdx9DptQmxPCLNwbKBIhFpRfqXBjClTdWGCQG0CEC+41Udpkh+CGKGQ+GOxSIV/mg38qLzBxQ0+qmhQSE8PLYLHvFOiZUxKOV+UyzltFg3GPT4Dq6heATUUV8UUo5aBFiNhD4YQ3whpQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=CvN5XUDJ; arc=none smtp.client-ip=144.6.53.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
+	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=jdo3/IxMwB8Q6RAm8ZwQFpjzIGffxAXyzhXHZ3RcNYQ=; b=CvN5XUDJLLlwrhy2yvZ3JOn+mA
+	66llyxU9BmPbO5yXQyiku1NmjCiS1kuS9BFF8Yp06Eqq24WFuOy39micBVHNgX3ViXpXs19PthvR/
+	Wn9fLbmpxq9kdrF/dni3e0lPtym++ScEocHEK8MLciUAsI6lsVqr//2bFdZX5STFbLXwXndIoKsVO
+	PZQ6MhZXoT/BiTrKcnlI/OL350i3vgAWwJmB8o8De+KtnrV2a6lTFKQ/ouDwLkRElW691cwJl0YRk
+	/SiR5VaATjvDIh1KOZqglSm6ktFZm7wqGo36ulqjhlizNZB/3F21vRn8vd7OKxW/bwYZ5ZOJXuLL1
+	sUyRl2ag==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
+	id 1tn6Px-001nh1-2C;
+	Wed, 26 Feb 2025 09:40:58 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Wed, 26 Feb 2025 09:40:57 +0800
+Date: Wed, 26 Feb 2025 09:40:57 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Arnd Bergmann <arnd@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Will Deacon <will@kernel.org>,
+	"David S . Miller" <davem@davemloft.net>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Harald Freudenberger <freude@linux.ibm.com>,
+	Holger Dengler <dengler@linux.ibm.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Eric Biggers <ebiggers@google.com>,
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>, linux-crypto@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: Re: [PATCH] crypto: lib/Kconfig - fix chacha/poly1305 dependencies
+ more more
+Message-ID: <Z75xKexTUNm_FnSK@gondor.apana.org.au>
+References: <20250225164216.4807-1-arnd@kernel.org>
+ <20250225213344.GA23792@willie-the-truck>
+ <f7c298b8-7989-49e7-90a2-5356029a6283@app.fastmail.com>
+ <c4896a12-8abe-4fe6-b381-86b23d32b332@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250224235542.2562848-1-seanjc@google.com> <20250224235542.2562848-2-seanjc@google.com>
- <6475f9c7-304a-4e0b-8000-3dc5c8e718e9@redhat.com>
-Message-ID: <Z75f9GuA9NfKo37c@google.com>
-Subject: Re: [PATCH 1/7] KVM: x86: Free vCPUs before freeing VM state
-From: Sean Christopherson <seanjc@google.com>
-To: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>, 
-	Huacai Chen <chenhuacai@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Anup Patel <anup@brainfault.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, kvm@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
-	linux-kernel@vger.kernel.org, Aaron Lewis <aaronlewis@google.com>, 
-	Jim Mattson <jmattson@google.com>, Yan Zhao <yan.y.zhao@intel.com>, 
-	Rick P Edgecombe <rick.p.edgecombe@intel.com>, Kai Huang <kai.huang@intel.com>, 
-	Isaku Yamahata <isaku.yamahata@intel.com>
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c4896a12-8abe-4fe6-b381-86b23d32b332@app.fastmail.com>
 
-On Wed, Feb 26, 2025, Paolo Bonzini wrote:
-> On 2/25/25 00:55, Sean Christopherson wrote:
-> > Free vCPUs before freeing any VM state, as both SVM and VMX may access
-> > VM state when "freeing" a vCPU that is currently "in" L2, i.e. that needs
-> > to be kicked out of nested guest mode.
-> > 
-> > Commit 6fcee03df6a1 ("KVM: x86: avoid loading a vCPU after .vm_destroy was
-> > called") partially fixed the issue, but for unknown reasons only moved the
-> > MMU unloading before VM destruction.  Complete the change, and free all
-> > vCPU state prior to destroying VM state, as nVMX accesses even more state
-> > than nSVM.
+On Tue, Feb 25, 2025 at 10:50:10PM +0100, Arnd Bergmann wrote:
+>
+> After looking at the original 0day report, I think the fix for
+> that problem would have been
 > 
-> I applied this to kvm-coco-queue, I will place it in kvm/master too unless
-> you shout.
+> --- a/drivers/net/Kconfig
+> +++ b/drivers/net/Kconfig
+> @@ -94,6 +94,7 @@ config WIREGUARD
+>         select CRYPTO_CHACHA_MIPS if CPU_MIPS32_R2
+>         select CRYPTO_POLY1305_MIPS if MIPS
+>         select CRYPTO_CHACHA_S390 if S390
+> +       select CRYPTO_CURVE25519_PPC64 if PPC64 && CPU_LITTLE_ENDIAN
+>         help
+>           WireGuard is a secure, fast, and easy to use replacement for IPSec
+>           that uses modern cryptography and clever networking tricks. It's
 
-Depends on what "this" is :-)
+Thanks.  I wasn't aware wireguard was doing this.
 
-My plan/hope is to land patches 1 and 2 in 6.14, i.e. in kvm/master, but the
-rest are firmly 6.15 IMO.  And based on Yan's feedback, I'm planning on adding a
-few more cleanups (though I think they're fully additive, i.e. can go on top).
+Let me see if I can replicate this select matrix in lib/crypto
+instead.
+
+Thanks,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
 
