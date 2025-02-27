@@ -1,114 +1,85 @@
-Return-Path: <linux-mips+bounces-8012-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8013-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 843C7A479C1
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2025 11:05:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E352CA479C0
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2025 11:05:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 53E767A3B18
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2025 10:04:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4EF13A1C2D
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2025 10:04:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1294522A4CD;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A82E22A4D6;
 	Thu, 27 Feb 2025 10:04:44 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CDB3225403;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CCF821B9EE;
 	Thu, 27 Feb 2025 10:04:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740650683; cv=none; b=C9uVmAsiloIGZW65OwEABFbtZi9thar6ngW5WTDY2uGxHEGwYo5Uf0AMV0XQl0pqPuJpkkldQA/fnY3ivZmMIJ28sX7zZyRtMuOQE2+DNAqZ02ztNb95XDfmrIec390GXScsOikKOVqJnYEWrEjxN5NxD5PkB8evCg2IghhoBGk=
+	t=1740650684; cv=none; b=nSFQK9QTggNbrmjcoCs9HGpzvmVbYuvY/1VneZmUPOQN4ZTq4GKGQK1lUsRDrSQjkgXVDEorrqnFRv5fDANrSjdEwkRwJV01gXj0+CFZoxB2LzK9UFq2hGds4qGzmQpxn8a0mZC8knJPGstMFKJT3pHZU1nACNzQ/YzIM7/PQw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740650683; c=relaxed/simple;
-	bh=0FsvhXhbJzNL/h3HtkWu5njVBHCG1utuxAv4T2r/eVw=;
+	s=arc-20240116; t=1740650684; c=relaxed/simple;
+	bh=cuAnZJrmKQ+otBs+gYixXb6DpO7Z6ef3tS3CsIpqqQo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fo/BD0vcJxq6WMYj9rbVRRiEqT0bkDiakwsAdJ8Ec2zvOYKucQ9mQ5DSGQ/TlMPY/Jbd3Fm00+vLQU4gANoFjXJ2VkfSV8SqQrsWZwO8ZUN4pv84X6vhyecZLw6bOpGtRDSo981O7R9t8+akCIlRec05pfam1v7dcJnsWs+Lm8o=
+	 Content-Type:Content-Disposition:In-Reply-To; b=n5Uwu8VW1L1mKrbQ3d2sxR7iFuYCuMeMi2crDYHVfPeGw7ds9zHhNQKLlDeNmNJnpeKEw75T0IrlPUeWSYwrv3igMOiKe3ewLxVZJzFezwbn63l0GjXuBXcnLR3BiKxtUMpfXbUY9Ah/4meiA/cCaOV5GUXcaCHj/7OL3W+ABes=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1tnakv-0007xe-00; Thu, 27 Feb 2025 11:04:37 +0100
+	id 1tnakv-0007xg-00; Thu, 27 Feb 2025 11:04:37 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 11E22C0484; Thu, 27 Feb 2025 11:01:08 +0100 (CET)
-Date: Thu, 27 Feb 2025 11:01:08 +0100
+	id C0CCCC043C; Thu, 27 Feb 2025 11:03:32 +0100 (CET)
+Date: Thu, 27 Feb 2025 11:03:32 +0100
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: WangYuli <wangyuli@uniontech.com>
-Cc: chenlinxuan@uniontech.com, guanwentao@uniontech.com,
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-	macro@orcam.me.uk, niecheng1@uniontech.com, zhanjun@uniontech.com
-Subject: Re: [PATCH 5/7] MIPS: dec: Remove dec_irq_dispatch()
-Message-ID: <Z8A35FvJSLcoa4BQ@alpha.franken.de>
-References: <487CE8AA937621E2+20250218125101.663980-1-wangyuli@uniontech.com>
- <222468E85948B141+20250218125842.667798-1-wangyuli@uniontech.com>
+To: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc: linux-mips@vger.kernel.org, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com, harveyhuntnexus@gmail.com,
+	devicetree@vger.kernel.org, yangshiji66@outlook.com,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v4] mips: dts: ralink: mt7628a: update system controller
+ node and its consumers
+Message-ID: <Z8A4dGWgGn39S0Ek@alpha.franken.de>
+References: <20250224053411.924015-1-sergio.paracuellos@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <222468E85948B141+20250218125842.667798-1-wangyuli@uniontech.com>
+In-Reply-To: <20250224053411.924015-1-sergio.paracuellos@gmail.com>
 
-On Tue, Feb 18, 2025 at 08:58:42PM +0800, WangYuli wrote:
-> Currently, dec_irq_dispatch() is exclusively invoked by int-handler.S.
-> Inline the do_IRQ call into int-handler.S to silence the compiler
-> warning.
+On Mon, Feb 24, 2025 at 06:34:11AM +0100, Sergio Paracuellos wrote:
+> Current MT7628A device tree file system controller node is wrong since it is
+> not matching bindings. Hence, update it to match current bindings updating
+> it also to use new introduced clock constants.
 > 
-> Fix follow error with gcc-14 when -Werror:
-> 
-> arch/mips/dec/setup.c:780:25: error: no previous prototype for ‘dec_irq_dispatch’ [-Werror=missing-prototypes]
->   780 | asmlinkage unsigned int dec_irq_dispatch(unsigned int irq)
->       |                         ^~~~~~~~~~~~~~~~
-> cc1: all warnings being treated as errors
-> make[7]: *** [scripts/Makefile.build:207: arch/mips/dec/setup.o] Error 1
-> make[6]: *** [scripts/Makefile.build:465: arch/mips/dec] Error 2
-> make[5]: *** [scripts/Makefile.build:465: arch/mips] Error 2
-> make[5]: *** Waiting for unfinished jobs....
-> make[4]: *** [Makefile:1992: .] Error 2
-> make[3]: *** [debian/rules:74: build-arch] Error 2
-> dpkg-buildpackage: error: make -f debian/rules binary subprocess returned exit status 2
-> make[2]: *** [scripts/Makefile.package:126: bindeb-pkg] Error 2
-> make[1]: *** [/mnt/83364c87-f5ee-4ae8-b862-930f1bd74feb/Projects/CommitUpstream/LinuxKernel/Temp/linux/Makefile:1625: bindeb-pkg] Error 2
-> make: *** [Makefile:251: __sub-make] Error 2
-> 
-> Signed-off-by: WangYuli <wangyuli@uniontech.com>
+> Signed-off-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 > ---
->  arch/mips/dec/int-handler.S | 2 +-
->  arch/mips/dec/setup.c       | 6 ------
->  2 files changed, 1 insertion(+), 7 deletions(-)
+> Hi Thomas,
 > 
-> diff --git a/arch/mips/dec/int-handler.S b/arch/mips/dec/int-handler.S
-> index 011d1d678840..a0b439c90488 100644
-> --- a/arch/mips/dec/int-handler.S
-> +++ b/arch/mips/dec/int-handler.S
-> @@ -277,7 +277,7 @@
->  		 srlv	t3,t1,t2
->  
->  handle_it:
-> -		j	dec_irq_dispatch
-> +		j	do_IRQ
->  		 nop
->  
->  #if defined(CONFIG_32BIT) && defined(CONFIG_MIPS_FP_SUPPORT)
-> diff --git a/arch/mips/dec/setup.c b/arch/mips/dec/setup.c
-> index 56a7ecf06b7b..6ba4c4973c9a 100644
-> --- a/arch/mips/dec/setup.c
-> +++ b/arch/mips/dec/setup.c
-> @@ -771,9 +771,3 @@ void __init arch_init_irq(void)
->  			pr_err("Failed to register halt interrupt\n");
->  	}
->  }
-> -
-> -asmlinkage unsigned int dec_irq_dispatch(unsigned int irq)
-> -{
-> -	do_IRQ(irq);
-> -	return 0;
-> -}
-> -- 
-> 2.47.2
+> This is the missing patch to be applied in the series [0] because of some
+> build errors.
+> 
+> Changes in v4:
+> - update syntax in mail file from /include/ to #include.
+> - Fix build errors in 'usb-phy' node.
+> 
+> Thanks a lot.
+> 
+> Best regards,
+>     Sergio Paracuellos
+> 
+> [0]: https://lore.kernel.org/linux-mips/CAMhs-H-8N766PMZMwmV8B3e=65pPZHA4ntnRWDMoqR-U_xULfA@mail.gmail.com/T/#mab23157e03609456bb59d3b5dfc71fe16359a419
+> 
+>  .../ralink/gardena_smart_gateway_mt7688.dts   |  2 +-
+>  arch/mips/boot/dts/ralink/mt7628a.dtsi        | 40 ++++++++++++-------
+>  arch/mips/boot/dts/ralink/omega2p.dts         |  2 +-
+>  3 files changed, 27 insertions(+), 17 deletions(-)
 
 applied to mips-next.
 
