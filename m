@@ -1,46 +1,46 @@
-Return-Path: <linux-mips+bounces-8009-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8011-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D709FA479BC
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2025 11:04:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15DEBA479BF
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2025 11:05:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B94757A3B09
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2025 10:03:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C971E3A4439
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2025 10:04:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B371229B29;
-	Thu, 27 Feb 2025 10:04:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 122DB22A4C9;
+	Thu, 27 Feb 2025 10:04:44 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CE1B225A47;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CC7B1E833A;
 	Thu, 27 Feb 2025 10:04:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740650683; cv=none; b=pR/uudF8Ed3mctynxY9wQjzF9f6Msy8g2JQEkQoqGmzaADjxqfNRZFTGEuP83SsYY2UlDGmJ3FmvN8z5GhWjw1WiScT2XzDH1T4apu0OdT1IxFXkkgU0/DcZRfHtchOAmu3X/RUr4WLwBJg41+98ufCUBG/Z7vZ5ejMPBSAPJGg=
+	t=1740650683; cv=none; b=eQFIkPplvCLpjexFgkVo6aaiKCm1Lj5GQS+vtyj1kb42OvZrzJe0oeQfUup3fLhjRHtQUBNgj1Mr+wJ4AAnpI01CELMyV+1aJwJNsXKwxXWufSQAxIMPv5In0sqialHHooRG5SuAJDBvGsqtw/w8FR4SYLQY0KLNPA5ieM892Jg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1740650683; c=relaxed/simple;
-	bh=dcwpo0WfdhAJFEVKxmgTcIJcESYPSNa5UHbw/pELZRc=;
+	bh=n4mzGGv6ShHRiKG5Zre6il63W6cqZ6MEAUjy2p0IxrQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=foRjINglBmGnUrLr2mJGjkfhdlWNL8Y7YZkBsC6E+hvQFwjkR7LvhqkTGoz/4bxsyuKoh7pP7wN4EeePMqDjV/F8ms/TNv49QhV+NK3zAO6SxMPSUzivEpesNwSD1tUDOGvK+pJgFa/ygbD1Pc6mcwLeMf1yFQDJoUYinpVd334=
+	 Content-Type:Content-Disposition:In-Reply-To; b=nNFeG5bW8XAeJsicAfzbtcKwZX4Utzused+ikzeL+4StGlsg1vJ6eh0RRCQ42BaukfLUzmbF4pc0XdW68YL6fEuYkHvQqOBycYPb58MIiR8yAtmsXbgNKBBFf/e9VRxjvmdUrZlxjQatxyh3jytJt7KOQU3wrRjB+BgFP4jv6z8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1tnakv-0007xY-00; Thu, 27 Feb 2025 11:04:37 +0100
+	id 1tnakv-0007xa-00; Thu, 27 Feb 2025 11:04:37 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id D2924C0135; Thu, 27 Feb 2025 11:00:18 +0100 (CET)
-Date: Thu, 27 Feb 2025 11:00:18 +0100
+	id 38EEEC0423; Thu, 27 Feb 2025 11:00:33 +0100 (CET)
+Date: Thu, 27 Feb 2025 11:00:33 +0100
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 To: WangYuli <wangyuli@uniontech.com>
 Cc: chenlinxuan@uniontech.com, guanwentao@uniontech.com,
 	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
 	macro@orcam.me.uk, niecheng1@uniontech.com, zhanjun@uniontech.com
-Subject: Re: [PATCH 1/7] MIPS: dec: Declare which_prom() as static
-Message-ID: <Z8A3sucKlB5i0zd9@alpha.franken.de>
+Subject: Re: [PATCH 3/7] MIPS: cevt-ds1287: Add missing ds1287.h include
+Message-ID: <Z8A3wdxvNU0aw9ys@alpha.franken.de>
 References: <487CE8AA937621E2+20250218125101.663980-1-wangyuli@uniontech.com>
- <22CF8506E42636AF+20250218125431.665670-1-wangyuli@uniontech.com>
+ <6A027EE413E09E1F+20250218125723.666989-1-wangyuli@uniontech.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -50,41 +50,46 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <22CF8506E42636AF+20250218125431.665670-1-wangyuli@uniontech.com>
+In-Reply-To: <6A027EE413E09E1F+20250218125723.666989-1-wangyuli@uniontech.com>
 
-On Tue, Feb 18, 2025 at 08:54:31PM +0800, WangYuli wrote:
-> Declare which_prom() as static to suppress gcc compiler warning that
-> 'missing-prototypes'. This function is not intended to be called
-> from other parts.
+On Tue, Feb 18, 2025 at 08:57:23PM +0800, WangYuli wrote:
+> Address the issue of cevt-ds1287.c not including the ds1287.h header
+> file.
 > 
-> Fix follow error with gcc-14 when -Werror:
+> Fix follow errors with gcc-14 when -Werror:
 > 
-> arch/mips/dec/prom/init.c:45:13: error: no previous prototype for ‘which_prom’ [-Werror=missing-prototypes]
->    45 | void __init which_prom(s32 magic, s32 *prom_vec)
->       |             ^~~~~~~~~~
+> arch/mips/kernel/cevt-ds1287.c:15:5: error: no previous prototype for ‘ds1287_timer_state’ [-Werror=missing-prototypes]
+>    15 | int ds1287_timer_state(void)
+>       |     ^~~~~~~~~~~~~~~~~~
+> arch/mips/kernel/cevt-ds1287.c:20:5: error: no previous prototype for ‘ds1287_set_base_clock’ [-Werror=missing-prototypes]
+>    20 | int ds1287_set_base_clock(unsigned int hz)
+>       |     ^~~~~~~~~~~~~~~~~~~~~
+> arch/mips/kernel/cevt-ds1287.c:103:12: error: no previous prototype for ‘ds1287_clockevent_init’ [-Werror=missing-prototypes]
+>   103 | int __init ds1287_clockevent_init(int irq)
+>       |            ^~~~~~~~~~~~~~~~~~~~~~
 > cc1: all warnings being treated as errors
-> make[6]: *** [scripts/Makefile.build:207: arch/mips/dec/prom/init.o] Error 1
-> make[5]: *** [scripts/Makefile.build:465: arch/mips/dec/prom] Error 2
-> make[5]: *** Waiting for unfinished jobs....
+> make[7]: *** [scripts/Makefile.build:207: arch/mips/kernel/cevt-ds1287.o] Error 1
+> make[7]: *** Waiting for unfinished jobs....
+> make[6]: *** [scripts/Makefile.build:465: arch/mips/kernel] Error 2
+> make[6]: *** Waiting for unfinished jobs....
 > 
 > Signed-off-by: WangYuli <wangyuli@uniontech.com>
 > ---
->  arch/mips/dec/prom/init.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  arch/mips/kernel/cevt-ds1287.c | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/arch/mips/dec/prom/init.c b/arch/mips/dec/prom/init.c
-> index cb12eb211a49..8d74d7d6c05b 100644
-> --- a/arch/mips/dec/prom/init.c
-> +++ b/arch/mips/dec/prom/init.c
-> @@ -42,7 +42,7 @@ int (*__pmax_close)(int);
->   * Detect which PROM the DECSTATION has, and set the callback vectors
->   * appropriately.
->   */
-> -void __init which_prom(s32 magic, s32 *prom_vec)
-> +static void __init which_prom(s32 magic, s32 *prom_vec)
->  {
->  	/*
->  	 * No sign of the REX PROM's magic number means we assume a non-REX
+> diff --git a/arch/mips/kernel/cevt-ds1287.c b/arch/mips/kernel/cevt-ds1287.c
+> index 9a47fbcd4638..de64d6bb7ba3 100644
+> --- a/arch/mips/kernel/cevt-ds1287.c
+> +++ b/arch/mips/kernel/cevt-ds1287.c
+> @@ -10,6 +10,7 @@
+>  #include <linux/mc146818rtc.h>
+>  #include <linux/irq.h>
+>  
+> +#include <asm/ds1287.h>
+>  #include <asm/time.h>
+>  
+>  int ds1287_timer_state(void)
 > -- 
 > 2.47.2
 
