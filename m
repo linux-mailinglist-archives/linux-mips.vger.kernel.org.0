@@ -1,46 +1,47 @@
-Return-Path: <linux-mips+bounces-8011-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8008-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15DEBA479BF
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2025 11:05:07 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C9FCA479B9
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2025 11:04:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C971E3A4439
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2025 10:04:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5E64F7A2BFD
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2025 10:03:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 122DB22A4C9;
-	Thu, 27 Feb 2025 10:04:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08C24228CB0;
+	Thu, 27 Feb 2025 10:04:43 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CC7B1E833A;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CEFD227E94;
 	Thu, 27 Feb 2025 10:04:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740650683; cv=none; b=eQFIkPplvCLpjexFgkVo6aaiKCm1Lj5GQS+vtyj1kb42OvZrzJe0oeQfUup3fLhjRHtQUBNgj1Mr+wJ4AAnpI01CELMyV+1aJwJNsXKwxXWufSQAxIMPv5In0sqialHHooRG5SuAJDBvGsqtw/w8FR4SYLQY0KLNPA5ieM892Jg=
+	t=1740650682; cv=none; b=TuaI4sYAJst/+0uiull5awh5mxWZISWCCX2figh6h0/QAecKiGukYCEMb7se0ezBS8n5GV/6SzQEsm+dhcZyTSTuacWoW5UP5dcgMTxJnznpM1RXd7CHy1DDZZJtCLRM4BB+ic6UXKG8dASPffGOqsX7oNCLvj/RS7HnJ1Eqz4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740650683; c=relaxed/simple;
-	bh=n4mzGGv6ShHRiKG5Zre6il63W6cqZ6MEAUjy2p0IxrQ=;
+	s=arc-20240116; t=1740650682; c=relaxed/simple;
+	bh=h6h6Ipg6/UyZo454uGDx+msKtkno23ocT+MfjB1APx4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nNFeG5bW8XAeJsicAfzbtcKwZX4Utzused+ikzeL+4StGlsg1vJ6eh0RRCQ42BaukfLUzmbF4pc0XdW68YL6fEuYkHvQqOBycYPb58MIiR8yAtmsXbgNKBBFf/e9VRxjvmdUrZlxjQatxyh3jytJt7KOQU3wrRjB+BgFP4jv6z8=
+	 Content-Type:Content-Disposition:In-Reply-To; b=ey8bsl9VJjPepi84J6MPRbdL71RIfXZwRSTnEQtQ6qs9znZNpE+0yJw8BV11uOhL7SSyAj2sHh1OMRcwwr1phVocgFIKFzhxGpD9St2IzmT2bm3YU/5u3JgJf2CRgCRaanyNWji5Tpw7X4zIZVvBOHb+JAJDFWFBy8f/0olqmLk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1tnakv-0007xa-00; Thu, 27 Feb 2025 11:04:37 +0100
+	id 1tnakv-0007xc-00; Thu, 27 Feb 2025 11:04:37 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 38EEEC0423; Thu, 27 Feb 2025 11:00:33 +0100 (CET)
-Date: Thu, 27 Feb 2025 11:00:33 +0100
+	id 6A065C03B4; Thu, 27 Feb 2025 11:00:48 +0100 (CET)
+Date: Thu, 27 Feb 2025 11:00:48 +0100
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 To: WangYuli <wangyuli@uniontech.com>
 Cc: chenlinxuan@uniontech.com, guanwentao@uniontech.com,
 	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
 	macro@orcam.me.uk, niecheng1@uniontech.com, zhanjun@uniontech.com
-Subject: Re: [PATCH 3/7] MIPS: cevt-ds1287: Add missing ds1287.h include
-Message-ID: <Z8A3wdxvNU0aw9ys@alpha.franken.de>
+Subject: Re: [PATCH 4/7] MIPS: ds1287: Match ds1287_set_base_clock() function
+ types
+Message-ID: <Z8A30NrFPzH3By_K@alpha.franken.de>
 References: <487CE8AA937621E2+20250218125101.663980-1-wangyuli@uniontech.com>
- <6A027EE413E09E1F+20250218125723.666989-1-wangyuli@uniontech.com>
+ <A769C7B3BA9BCC35+20250218125755.667335-1-wangyuli@uniontech.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -50,46 +51,43 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <6A027EE413E09E1F+20250218125723.666989-1-wangyuli@uniontech.com>
+In-Reply-To: <A769C7B3BA9BCC35+20250218125755.667335-1-wangyuli@uniontech.com>
 
-On Tue, Feb 18, 2025 at 08:57:23PM +0800, WangYuli wrote:
-> Address the issue of cevt-ds1287.c not including the ds1287.h header
-> file.
+On Tue, Feb 18, 2025 at 08:57:55PM +0800, WangYuli wrote:
+> Synchronize the declaration of ds1287_set_base_clock() between
+> cevt-ds1287.c and ds1287.h.
 > 
-> Fix follow errors with gcc-14 when -Werror:
+> Fix follow error with gcc-14 when -Werror:
 > 
-> arch/mips/kernel/cevt-ds1287.c:15:5: error: no previous prototype for ‘ds1287_timer_state’ [-Werror=missing-prototypes]
->    15 | int ds1287_timer_state(void)
->       |     ^~~~~~~~~~~~~~~~~~
-> arch/mips/kernel/cevt-ds1287.c:20:5: error: no previous prototype for ‘ds1287_set_base_clock’ [-Werror=missing-prototypes]
->    20 | int ds1287_set_base_clock(unsigned int hz)
+> arch/mips/kernel/cevt-ds1287.c:21:5: error: conflicting types for ‘ds1287_set_base_clock’; have ‘int(unsigned int)’
+>    21 | int ds1287_set_base_clock(unsigned int hz)
 >       |     ^~~~~~~~~~~~~~~~~~~~~
-> arch/mips/kernel/cevt-ds1287.c:103:12: error: no previous prototype for ‘ds1287_clockevent_init’ [-Werror=missing-prototypes]
->   103 | int __init ds1287_clockevent_init(int irq)
->       |            ^~~~~~~~~~~~~~~~~~~~~~
-> cc1: all warnings being treated as errors
+> In file included from arch/mips/kernel/cevt-ds1287.c:13:
+> ./arch/mips/include/asm/ds1287.h:11:13: note: previous declaration of ‘ds1287_set_base_clock’ with type ‘void(unsigned int)’
+>    11 | extern void ds1287_set_base_clock(unsigned int clock);
+>       |             ^~~~~~~~~~~~~~~~~~~~~
 > make[7]: *** [scripts/Makefile.build:207: arch/mips/kernel/cevt-ds1287.o] Error 1
-> make[7]: *** Waiting for unfinished jobs....
 > make[6]: *** [scripts/Makefile.build:465: arch/mips/kernel] Error 2
 > make[6]: *** Waiting for unfinished jobs....
 > 
 > Signed-off-by: WangYuli <wangyuli@uniontech.com>
 > ---
->  arch/mips/kernel/cevt-ds1287.c | 1 +
->  1 file changed, 1 insertion(+)
+>  arch/mips/include/asm/ds1287.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/arch/mips/kernel/cevt-ds1287.c b/arch/mips/kernel/cevt-ds1287.c
-> index 9a47fbcd4638..de64d6bb7ba3 100644
-> --- a/arch/mips/kernel/cevt-ds1287.c
-> +++ b/arch/mips/kernel/cevt-ds1287.c
-> @@ -10,6 +10,7 @@
->  #include <linux/mc146818rtc.h>
->  #include <linux/irq.h>
+> diff --git a/arch/mips/include/asm/ds1287.h b/arch/mips/include/asm/ds1287.h
+> index 46cfb01f9a14..51cb61fd4c03 100644
+> --- a/arch/mips/include/asm/ds1287.h
+> +++ b/arch/mips/include/asm/ds1287.h
+> @@ -8,7 +8,7 @@
+>  #define __ASM_DS1287_H
 >  
-> +#include <asm/ds1287.h>
->  #include <asm/time.h>
+>  extern int ds1287_timer_state(void);
+> -extern void ds1287_set_base_clock(unsigned int clock);
+> +extern int ds1287_set_base_clock(unsigned int hz);
+>  extern int ds1287_clockevent_init(int irq);
 >  
->  int ds1287_timer_state(void)
+>  #endif
 > -- 
 > 2.47.2
 
