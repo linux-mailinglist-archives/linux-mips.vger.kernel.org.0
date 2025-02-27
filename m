@@ -1,243 +1,132 @@
-Return-Path: <linux-mips+bounces-8024-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8025-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0C4EA47F5F
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2025 14:39:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C367A47FDE
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2025 14:49:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C3B6F16BCDD
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2025 13:34:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE2301897985
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2025 13:47:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33DB622D4F9;
-	Thu, 27 Feb 2025 13:34:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C5E42356BE;
+	Thu, 27 Feb 2025 13:45:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="OYvCZrDj"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="WNZmzX+W"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1F692206AC
-	for <linux-mips@vger.kernel.org>; Thu, 27 Feb 2025 13:34:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF7FE2356B4
+	for <linux-mips@vger.kernel.org>; Thu, 27 Feb 2025 13:45:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740663290; cv=none; b=nmfz7CdZV6g6OvVK8zNaF9VoXs3o2XIRpZPSiaMCZ7LhAKeCheE0FSC/PYZ0Sub0pqkhGa1PNluyOtN5rcd5JCOdNYmCVp2a1f9rthb+rPKn3S82LC7uJV4c3TsN4WWTxS5D3At1ubsDZKKqqYlhnZ2cQVh8xzD7XU9zHtDK4/U=
+	t=1740663954; cv=none; b=lbCeao5lgdWsPhpw+cB57RSlxeoO5fO+A0opZHQ/MP8Ztel0TaOMPnNcKsYsaZR2kQXUhMhVxYy5OfVjzX6VDV1pIELPBgtl/jgx/VzQ+OeLlFbqA7TdqQGIJK9Ik8QDN1iKAWgwzrRDUVSyTRcaakWOaOfM9uJ/nyfcIneiJIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740663290; c=relaxed/simple;
-	bh=0M2WmYjO1xgOd0eFwiKYedB9fY112jhiSfw4FJkXC6I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=kUmdGCxTfrxkoHzwqWts5TWxXDvlA+wZ1/U+u3StbX/yzcCGJjNjvnek8WSy2guWWjKhZMbCPdXgLfNYNP1y2YnO3Al8wOHZCvFYRXD0SvCrBg+UMCUKBTcT2belPhVfw4HE+RQtwdeGKf1gECsURB4Rau1PIvbPV6/QB8TCGhs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=OYvCZrDj; arc=none smtp.client-ip=209.85.167.51
+	s=arc-20240116; t=1740663954; c=relaxed/simple;
+	bh=DN4L8XiO/ZiZHQzxZriFPSaUZlt9cpmpkm9a2OnGF34=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=o6f11GW/8UU6B0h9EoI2KgqyK7TSPjzPRmSeqPImF8vnYjkFJ9tyMrlDGjfGqbbJl+UFNLBIMYVq0xqUAwtgPdagvz47S6R8DmpE5I5B3pe6euKypUqR/czVn8kJbXKLS+2o42ElY6O6UZ2iTi8Np7WUJRqik2w0La1HAYy4YZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=WNZmzX+W; arc=none smtp.client-ip=209.85.221.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5462ea9691cso988187e87.2
-        for <linux-mips@vger.kernel.org>; Thu, 27 Feb 2025 05:34:47 -0800 (PST)
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-38f5fc33602so670534f8f.0
+        for <linux-mips@vger.kernel.org>; Thu, 27 Feb 2025 05:45:52 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1740663286; x=1741268086; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SiVrC1DW5CsgsTGK3acbzw2cH0RgjFdHaGDXEJuK9h0=;
-        b=OYvCZrDjjm5KXRegAtU2wU+KgFizQi18mzsDlBu43RR3rwqdDHmdkAMHIh9GTeNUSR
-         Flsi3fk53/bFJ74dMtNJnn+Y9qWjT5d9Obf6g4FUle/WhAHHLA6ZWg2f72TL0AXuTWWy
-         9UV4ckqusBP0nXBsEAdbOrwYkDzf+aWUaKKlOYs/2W6E/cmVhaq/YeVbs2HcvqbTYJIN
-         ZkoKw4JX24kxkcvM3saSbX42ggPiPncOqeDYw1MAGkvADwYBZQPr0uHBlIo9AvWYsHmT
-         xZuuNDTSFzLtnfIMyi/WslZjczqPM3He6EW5CJQk5XRimuOvKSkx3VblfHNEqntZXLhB
-         bcTQ==
+        d=suse.com; s=google; t=1740663951; x=1741268751; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZGQnt5hRpa/WkmZ8nxEca9c9CkE5rmVoY/G7NcVEo2M=;
+        b=WNZmzX+WMNwj0Gqgvrq8SOIxCkqxVfZKBiHFrnBXIL2TPOd9WOPXZtAl/jGWJpiuN9
+         cfha+rO4JqyOUSGoT9rYtnu4j0k4YgZmhwnPRVcBbCpLTGEa9EMsPE9KU+HYz7+0/NN2
+         uRbMfOGo5Xw5mQMxnQW2h63gw4xbCQL2BNsH+CWEtQW93LBLNFVXPVCIWMRmuaZdukqp
+         mR4A0rzsstMdJkTdcWRxKs9WiNECSDN3xfG/2GwhDjYgbvsNhrgD6oa8NEUF2sTbgBlL
+         CavkrK7AfrcQceYf2KKJtPvk21kcQT4zMPAw8SscjAt1riCMNCEzx6Yn8NOLETTwZ+j+
+         pNXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740663286; x=1741268086;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=SiVrC1DW5CsgsTGK3acbzw2cH0RgjFdHaGDXEJuK9h0=;
-        b=UlAikp3b5T2SRtwPZMRUTOWjc8lbpwikhZLY0FpFDiSs3CtLG73rm4SVjzdkzscVeD
-         AN/Aa7ipP3libQNAImzCXkFSTI1+t8L0TsStfI7edg+lZAp704rZeRTTo3EZeKVpX5/3
-         UE7bfQ9eiEDxUjjwmz6xkI1oI+S7RZ83MpWWcFRkCuKeJC+V56Nrb//kjsvkD7KSe6Lu
-         DrN7u4Z7KAKLwYIat1JJM4hY1ePZQXZz1i6w7DIrslUUh08hcAqgbf6aZMa5h5e1wLSh
-         eyDe2YNMeEUr91e2b0xYAe9lU9Oj8h3qlthYRaZEExUVBznsTasRSpfQsx8unmM26U9g
-         39SQ==
-X-Gm-Message-State: AOJu0YzyOw76SvUc6SdGJqUcdsrRGJUKDI3ienx//F6PYRIXKF8GRX4E
-	Pa5g65Ph4KKpx/Umhgnn7ZHqVBBoN7LEwuhOF+OASDgI6VlkF0bx26l8ZgE7poSjDACs8RJqMGA
-	i+ZXAhh7iCrnUc6mqy/Ll1vYCySxkSJ4Qjsq8ew==
-X-Gm-Gg: ASbGncuUpHbt53bpiTzCcFcFrlW588V1KVgS4JJ+6owPxhZDmT3SgCF114r0U2Yue6W
-	+q7Ig11D9746mMZ0ewC09MSHN01KXZOlC+DTTG6dKUqSa+orPhP8U+jra5tDRJkO6zlXTNWQzGQ
-	xY2BCVFP8XivG7Q+y6/Jfg5gh1AUFo1LovLfvBzoUx
-X-Google-Smtp-Source: AGHT+IEMYsWO2UIj0uiCuxX0dhE2DmSJ//u+MeU1Hr0gD69Zne7Tj0URYXPsU1WOs0JmyPPuY5gjM6VLHyGQ1Y3kV0g=
-X-Received: by 2002:a05:6512:3a82:b0:545:271d:f92 with SMTP id
- 2adb3069b0e04-5493c57ef04mr4211562e87.25.1740663286036; Thu, 27 Feb 2025
- 05:34:46 -0800 (PST)
+        d=1e100.net; s=20230601; t=1740663951; x=1741268751;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZGQnt5hRpa/WkmZ8nxEca9c9CkE5rmVoY/G7NcVEo2M=;
+        b=ms2TNTLZHQopnXBowcG9UjzCxkgGXQ6JhG0YCHcAvK2aslYbJs+UGvvJgC/1gjeXFZ
+         gV+2qZ/yWIx+03mh2ZgJ78OoWYol/BXH5z8CVVBridmlAuk29Weohz/JRzENoOnvdL4R
+         alyxfxs9iKn8+ULoHuIRMNbCZx0wnvPoibAnr+d1h5eUYQfPhk7kL+NGnwOxF+5IwRzK
+         mKHRIYhfSd7JX2qjq9wfGlpkXUxIr5zWH+UZhqa7WTSZjfn4CW2CyHBlPotD21yR5sJv
+         S9wYQqdfwiOkpW2iNl3YM/0Hk8BWYwBJbRCNg+tigmEJHncb4l6GayMsSlJ+l0HBC5LW
+         Rvgg==
+X-Gm-Message-State: AOJu0Yzn0O08Q+fgljcqZGVJhzZ4LZkrolazt8uWhYg/d8zgzRVLQ/d8
+	vsl3GUl5o5x0m/gC6vOOkkEClfcLCnHHjxBM7YYCvktItzQFUYzszQjmEhgJ54G1x54VzsywFH5
+	c
+X-Gm-Gg: ASbGncuDt3GDkDHOrg9uIJq7+hj6JSe+Cm4quc1QEjNJbis8vQ5lLspuhWq8OajSTLq
+	IsE0VmbFybsc51CEB2dxzQCM8Kp04IGVXp2zmmOy3t8iVrnrb2oE+GSkMQsFPwVK7xIEQW2jI1V
+	8JExyUYlsCzAA876JmwofBj7lkoviGcZshXwxhgEECvMUa58oRRAXnvWZDz1nJfki59C8A3w0+w
+	pR8ssGgweaGia8wu+74Uf9mRKkXNVMqvJ3PiiQFwx/cYx7hkC6oh93MCn2o5Ple/8stprao0p5Z
+	RiPE+pQ3tk+kJgHpjOwEFSo9OS/sP17uW7B5nA==
+X-Google-Smtp-Source: AGHT+IEiCWqrduAOLZxpuElcccKeHTR0Gejhv1QsxlgggvIlFVbf1lQCCkOKANvMmmoAYK8EUYhVvQ==
+X-Received: by 2002:a05:6000:156c:b0:38d:cc9c:630c with SMTP id ffacd0b85a97d-390e166b1bbmr2598483f8f.10.1740663951082;
+        Thu, 27 Feb 2025 05:45:51 -0800 (PST)
+Received: from localhost.cz ([2a00:6d43:105:c401:e307:1a37:2e76:ce91])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-390e47b7b6asm2174595f8f.51.2025.02.27.05.45.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 27 Feb 2025 05:45:50 -0800 (PST)
+From: Marco Crivellari <marco.crivellari@suse.com>
+To: linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Marco Crivellari <marco.crivellari@suse.com>,
+	Frederic Weisbecker <frederic@kernel.org>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	"Maciej W . Rozycki" <macro@orcam.me.uk>
+Subject: [PATCH v4 0/1] MIPS: Fix idle VS timer enqueue
+Date: Thu, 27 Feb 2025 14:45:38 +0100
+Message-ID: <20250227134539.267169-1-marco.crivellari@suse.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250227114141.242421-1-marco.crivellari@suse.com>
- <20250227114141.242421-2-marco.crivellari@suse.com> <CAAhV-H4MVzL6A6_nxPHTX-2XpaA8tgH56P_R9_RNDp2PFY5W+Q@mail.gmail.com>
-In-Reply-To: <CAAhV-H4MVzL6A6_nxPHTX-2XpaA8tgH56P_R9_RNDp2PFY5W+Q@mail.gmail.com>
-From: Marco Crivellari <marco.crivellari@suse.com>
-Date: Thu, 27 Feb 2025 14:34:35 +0100
-X-Gm-Features: AQ5f1JoC2nl_WtMTZXWtXGvEMS_G_IxHiXHcjmzOeEHpt9wlGnQYVBm3RfDjQPo
-Message-ID: <CAAofZF7bZDJcDBqUanFxnnbxkiAeDkv60=NGXnT+5cbHfye2=g@mail.gmail.com>
-Subject: Re: [PATCH v3 1/1] MIPS: Fix idle VS timer enqueue
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Frederic Weisbecker <frederic@kernel.org>, 
-	Anna-Maria Behnsen <anna-maria@linutronix.de>, Thomas Gleixner <tglx@linutronix.de>, 
-	Peter Zijlstra <peterz@infradead.org>, "Maciej W . Rozycki" <macro@orcam.me.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-Hi Huacai,
+This patch aims to fix idle routine while the CPU receive an interrupt,
+because __r4k_wait() only checks if TIF_NEED_RESCHED is set before
+going to sleep.
+The same behavior has been changed in LoongArch [1].
 
-sorry, I completely forgot to check the comments!
+Code (cross) compiled successfully and I manage to test it on a VM
+emulating a malta board. I ran QEMU with:
 
+qemu-system-mips64el -M malta -m 2G -kernel vmlinux -serial stdio -drive \
+file=rootfs.ext2,format=raw -append "rootwait root=/dev/sda" -cpu 5Kc
 
+rootfs generated using buildroot (malta default configuration).
 
+- [1] https://github.com/chenhuacai/linux/commit/a8aa673ea46c03b3f62992ffa4ffe810ac84f6e3
 
+---
+Changes in v3:
+ - changed "daddiu k0, 1" with PTR_ADDIU k0, 5
+ - replaced CONFIG_CPU_MICROMIPS with 3 _ssnop followed by _ehb
+ - integrated the commit message with explanation about
+   CONFIG_CPU_MICROMIPS replacement
 
-On Thu, Feb 27, 2025 at 12:56=E2=80=AFPM Huacai Chen <chenhuacai@kernel.org=
-> wrote:
->
-> Hi, Marco,
->
-> On Thu, Feb 27, 2025 at 7:41=E2=80=AFPM Marco Crivellari
-> <marco.crivellari@suse.com> wrote:
-> >
-> > MIPS re-enables interrupts on its idle routine and performs
-> > a TIF_NEED_RESCHED check afterwards before putting the CPU to sleep.
-> >
-> > The IRQs firing between the check and the 'wait' instruction may set th=
-e
-> > TIF_NEED_RESCHED flag. In order to deal with this possible race, IRQs
-> > interrupting __r4k_wait() rollback their return address to the
-> > beginning of __r4k_wait() so that TIF_NEED_RESCHED is checked
-> > again before going back to sleep.
-> >
-> > However idle IRQs can also queue timers that may require a tick
-> > reprogramming through a new generic idle loop iteration but those timer=
-s
-> > would go unnoticed here because __r4k_wait() only checks
-> > TIF_NEED_RESCHED. It doesn't check for pending timers.
-> >
-> > Fix this with fast-forwarding idle IRQs return address to the end of th=
-e
-> > idle routine instead of the beginning, so that the generic idle loop
-> > handles both TIF_NEED_RESCHED and pending timers.
-> >
-> > CONFIG_CPU_MICROMIPS has been removed along with the nop instructions.
-> > There, NOPs are 2 byte in size, so change the code with 3 _ssnop which =
-are
-> > always 4 byte and remove the ifdef. Added ehb to make sure the hazard
-> > is always cleared.
-> >
-> > Signed-off-by: Marco Crivellari <marco.crivellari@suse.com>
-> > ---
-> >  arch/mips/kernel/genex.S | 40 ++++++++++++++++++++++------------------
-> >  arch/mips/kernel/idle.c  |  1 -
-> >  2 files changed, 22 insertions(+), 19 deletions(-)
-> >
-> > diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
-> > index a572ce36a24f..7b66ab239049 100644
-> > --- a/arch/mips/kernel/genex.S
-> > +++ b/arch/mips/kernel/genex.S
-> > @@ -104,25 +104,28 @@ handle_vcei:
-> >
-> >         __FINIT
-> >
-> > -       .align  5       /* 32 byte rollback region */
-> > +       .align  5
-> >  LEAF(__r4k_wait)
-> >         .set    push
-> >         .set    noreorder
-> > -       /* start of rollback region */
-> > -       LONG_L  t0, TI_FLAGS($28)
-> > -       nop
-> > -       andi    t0, _TIF_NEED_RESCHED
-> > -       bnez    t0, 1f
-> > -        nop
-> > -       nop
-> > -       nop
-> > -#ifdef CONFIG_CPU_MICROMIPS
-> > -       nop
-> > -       nop
-> > -       nop
-> > -       nop
-> > -#endif
-> > +       /* start of idle interrupt region */
-> > +       MFC0    t0, CP0_STATUS
-> > +       /* Enable Interrput */
-> > +       ori     t0, 0x1f
-> > +       xori    t0, 0x1e
-> > +       MTC0    t0, CP0_STATUS
-> > +       _ssnop
-> > +       _ssnop
-> > +       _ssnop
-> > +       _ehb
-> >         .set    MIPS_ISA_ARCH_LEVEL_RAW
-> > +       /*
-> > +        * If an interrupt lands here, between enabling interrupts abov=
-e and
-> > +        * going idle on the next instruction, we must *NOT* go idle si=
-nce the
-> > +        * interrupt could have set TIF_NEED_RESCHED or caused a timer =
-to need
-> > +        * resched. Fall through -- see rollback_handler below -- and h=
-ave
-> > +        * the idle loop take care of things.
-> > +        */
-> >         wait
-> >         /* end of rollback region (the region size must be power of two=
-) */
-> Now you add a _ehb in this version, so "(the region size must be power
-> of two)" should be removed.
->
-> >  1:
-> > @@ -136,9 +139,10 @@ LEAF(__r4k_wait)
-> >         .set    push
-> >         .set    noat
-> >         MFC0    k0, CP0_EPC
-> > -       PTR_LA  k1, __r4k_wait
-> > -       ori     k0, 0x1f        /* 32 byte rollback region */
-> > -       xori    k0, 0x1f
-> > +       PTR_LA  k1, 1b
-> > +       /* 32 byte idle interrupt region */
-> And now the region is 36 bytes. :)
->
-> Huacai
->
-> > +       ori     k0, 0x1f
-> > +       PTR_ADDIU       k0, 5
-> >         bne     k0, k1, \handler
-> >         MTC0    k0, CP0_EPC
-> >         .set pop
-> > diff --git a/arch/mips/kernel/idle.c b/arch/mips/kernel/idle.c
-> > index 5abc8b7340f8..1f74c0589f7e 100644
-> > --- a/arch/mips/kernel/idle.c
-> > +++ b/arch/mips/kernel/idle.c
-> > @@ -37,7 +37,6 @@ static void __cpuidle r3081_wait(void)
-> >
-> >  void __cpuidle r4k_wait(void)
-> >  {
-> > -       raw_local_irq_enable();
-> >         __r4k_wait();
-> >         raw_local_irq_disable();
-> >  }
-> > --
-> > 2.48.1
-> >
+Changes in v2:
+ - Changes introduced by Huacai:
+    https://lore.kernel.org/linux-mips/20250214105047.150835-1-marco.crivellari@suse.com/T/#m75d9c587829e15e0d7baec13078be4e65c936408
 
+Marco Crivellari (1):
+  MIPS: Fix idle VS timer enqueue
 
+ arch/mips/kernel/genex.S | 42 ++++++++++++++++++++++------------------
+ arch/mips/kernel/idle.c  |  1 -
+ 2 files changed, 23 insertions(+), 20 deletions(-)
 
---=20
+-- 
+2.48.1
 
-Marco Crivellari
-
-L3 Support Engineer, Technology & Product
-
-
-
-
-marco.crivellari@suse.com
 
