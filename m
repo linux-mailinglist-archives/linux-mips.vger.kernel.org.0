@@ -1,142 +1,243 @@
-Return-Path: <linux-mips+bounces-8023-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8024-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27119A47EFE
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2025 14:25:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id F0C4EA47F5F
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2025 14:39:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D770816B837
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2025 13:21:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C3B6F16BCDD
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2025 13:34:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB6AE22FF39;
-	Thu, 27 Feb 2025 13:21:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33DB622D4F9;
+	Thu, 27 Feb 2025 13:34:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="OYvCZrDj"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-vk1-f171.google.com (mail-vk1-f171.google.com [209.85.221.171])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E57B922DFAE;
-	Thu, 27 Feb 2025 13:21:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1F692206AC
+	for <linux-mips@vger.kernel.org>; Thu, 27 Feb 2025 13:34:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740662501; cv=none; b=XkMgrIdWvJ0hj51dfXJXxmiBky4d9INdUDTusr0kyGoo6Yd4TAU/oYVNHv+X45wHnPMphEofDzc4m3xBSiBv4Aak72jxwXu08siiocMF55tyNMBG7Kr+MHbDhW3hHrIJEUNyl9EnkUtqEVX7h7Msy2nz/xS6hThDF72+2kuIv84=
+	t=1740663290; cv=none; b=nmfz7CdZV6g6OvVK8zNaF9VoXs3o2XIRpZPSiaMCZ7LhAKeCheE0FSC/PYZ0Sub0pqkhGa1PNluyOtN5rcd5JCOdNYmCVp2a1f9rthb+rPKn3S82LC7uJV4c3TsN4WWTxS5D3At1ubsDZKKqqYlhnZ2cQVh8xzD7XU9zHtDK4/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740662501; c=relaxed/simple;
-	bh=KHJL4aBjL/xfUEQ3dzlxRvMvpwyqdBYuM/AU5jprt9o=;
+	s=arc-20240116; t=1740663290; c=relaxed/simple;
+	bh=0M2WmYjO1xgOd0eFwiKYedB9fY112jhiSfw4FJkXC6I=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MePiNkwflNfbl5Da6OfoZsHVIzcCEd9wUa9kjJ8yHrw/P1v5tARRXrdhw6jdVWZYQ/qWFo58Hlw0Pc7Sj5ilEutOV16TJff88VxaMZTLp3MgMhh9AzuBSlz/E1ourpNGWGYU+axrDw8PR9v4QGys5XY4EZZkqc1FrRGuimNjp0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f171.google.com with SMTP id 71dfb90a1353d-5209dad13b5so310018e0c.2;
-        Thu, 27 Feb 2025 05:21:39 -0800 (PST)
+	 To:Cc:Content-Type; b=kUmdGCxTfrxkoHzwqWts5TWxXDvlA+wZ1/U+u3StbX/yzcCGJjNjvnek8WSy2guWWjKhZMbCPdXgLfNYNP1y2YnO3Al8wOHZCvFYRXD0SvCrBg+UMCUKBTcT2belPhVfw4HE+RQtwdeGKf1gECsURB4Rau1PIvbPV6/QB8TCGhs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=OYvCZrDj; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5462ea9691cso988187e87.2
+        for <linux-mips@vger.kernel.org>; Thu, 27 Feb 2025 05:34:47 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1740663286; x=1741268086; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SiVrC1DW5CsgsTGK3acbzw2cH0RgjFdHaGDXEJuK9h0=;
+        b=OYvCZrDjjm5KXRegAtU2wU+KgFizQi18mzsDlBu43RR3rwqdDHmdkAMHIh9GTeNUSR
+         Flsi3fk53/bFJ74dMtNJnn+Y9qWjT5d9Obf6g4FUle/WhAHHLA6ZWg2f72TL0AXuTWWy
+         9UV4ckqusBP0nXBsEAdbOrwYkDzf+aWUaKKlOYs/2W6E/cmVhaq/YeVbs2HcvqbTYJIN
+         ZkoKw4JX24kxkcvM3saSbX42ggPiPncOqeDYw1MAGkvADwYBZQPr0uHBlIo9AvWYsHmT
+         xZuuNDTSFzLtnfIMyi/WslZjczqPM3He6EW5CJQk5XRimuOvKSkx3VblfHNEqntZXLhB
+         bcTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740662498; x=1741267298;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VZScFKf+GfAOC+cGkef77m9WTcLt48410fHxRRqxMGc=;
-        b=iNzXdTEAUUKzAj4GngghSR8fU37XIzXLmM2z1aWQWy2ZRQKS2DCPvfBFzMWJyyniA7
-         lYEea5ylxHEPULrCicSmu8oS8bQHg2qjgOXeTj5k3VMfJSQqHqEgDcAL/iw6dTBWwTyQ
-         uh/jQC6Oj0yUAb6RLX028/p+rsQE2h4Pusd3WpSiJs7WAVNZ2pgvnQGC5lNyP5atzazg
-         Tg9kjljwsXkkPubsKdaB2d6LCovb08VTKuoVcqZKgqavydzzoBvwCXOcvU7T68uLrsHh
-         h1Zn/OtRqnjHT5bAZOuUXIamVAc5iowxnC4GKrpQ7C7Zb24T4BB0LldnLp1dsAZR7oMG
-         FRPw==
-X-Forwarded-Encrypted: i=1; AJvYcCUn46xZweqwKHvgaNAGl008efrT8wBngLTe9g2m08oAtoqL+WtD9JOFN7ScAxAXbi/+Oyzy1fWIN0YMgQ==@vger.kernel.org, AJvYcCVRHAhg1LD/zjbg+C7KxfLr9swiUOcQDu57Ha1HcutSusWvLO1j/qlZvUEPKzt97TmNeYFe5ESXu6w5CW2c@vger.kernel.org, AJvYcCWeYQmwcSeWbakX76slp8YvZdh1RUfkIFUcEA2PjVpoP+4B+/6lz61+TPWiDkkSFE6T95UO9+Bk1ReDvs9o7+w=@vger.kernel.org, AJvYcCWxDtbkVL2uecxOnnKy/MPtVnXS3//0YdjySjCozUdH8ffZePBEtHbzARlfZ4b/+t4fdXoWZyhieN9Q@vger.kernel.org, AJvYcCXMwKI5o5Y+2iIO4E2vmj4VCuc+D8+TYWL4pauIeE3WXTF3+zzxiniIeZFy31F49pyTo1O6jGVoqqk=@vger.kernel.org, AJvYcCXgvImjiQ3+if9SASb5LjOw8Zpi5s/OfVkGHf/QSVeOFJJu3qtLPdw1+9nN9OlXZ0lEu9IRjYOxAROoFGuJ6w==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy3LwJhzEcTvJUSu9g1wT0WOw+MFpIxfH5estU846EHCdU7ZGgK
-	OxDlHaVAO/qnaSPzdMN97+SXrz/0H9ALJwt/ymUUsi+FQ2RmogxD/PYJ6x95
-X-Gm-Gg: ASbGncs4Ee9cw8PRIqrXEpy4EKoOyP9/EQo7xH3URfoMWz2f4NEEW/TOi/bH1ES/exb
-	Kh5i+wNKii8eeo7SbfT9YkCY3eYVbV18Xw6CVdf9sLW062AQZfBpTOZbHW5Zz/wOM6KurpXi8n6
-	53fLGiFhVV0c6M4rWXbXPyKYpp/Q2jcN+UHLAFgkRKopU35fbR85VVw5Hj9Q+CILcimAfkChFcW
-	KDj73TtyaRUoXhx/CBv+aVc1Uwdtzbid/yH8/g5b/vcBc8fKvHPxfEtSeh8lIk15egrbxLXWntP
-	7lMDFZ+5F8+v8EDNLwRh/AKlh0FWLfgrfSB6Of8ZuoLapxN6cCy9h3476ujdNd8CEIzX
-X-Google-Smtp-Source: AGHT+IH9anlYCVwhdh2BbHwsVXnPfg9ZW3Ms2ksh7LCy8a5Vfkv7XVedf0GsgMArvFuntbK2rmoeEg==
-X-Received: by 2002:a05:6122:660e:b0:520:8911:df12 with SMTP id 71dfb90a1353d-5224cd35d72mr4110442e0c.10.1740662498241;
-        Thu, 27 Feb 2025 05:21:38 -0800 (PST)
-Received: from mail-vk1-f173.google.com (mail-vk1-f173.google.com. [209.85.221.173])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5234bf417fdsm204836e0c.23.2025.02.27.05.21.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 27 Feb 2025 05:21:36 -0800 (PST)
-Received: by mail-vk1-f173.google.com with SMTP id 71dfb90a1353d-520aede8ae3so408812e0c.0;
-        Thu, 27 Feb 2025 05:21:35 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU6Xq3E58KiBxqg3FwEVOI5WJ9XA0sEmaxtRA7LDHRice8IVRkwSpvqV5GhXKyw/ouiyUYv3oO4nZZL9hUr0Q==@vger.kernel.org, AJvYcCUPbfj9zrli0CdQ0TOYSX+x72CxciHw8PWiSxGa+XwIu67+eaIRqj/73m5zbjaqc7JOtFlWXELeg3cQ3eJtz/4=@vger.kernel.org, AJvYcCUzO2t1bqk7sEv/GPD0m4XSf2Dez9bjIjMhQqA6Cs7WLaZleeDsw953+2hWcp0MyxaDmqpEm4bP7cqhag==@vger.kernel.org, AJvYcCVSh02+kZrICQj8ZhBECUqRm7eMZK+xmb87pC8ftxxU9kLtb8ipuFWi7k9rHbBFyBw/xdr9SmcLTwJu@vger.kernel.org, AJvYcCVpoiwlZlQRSyG6fFPwVPlrhsXIoeU2kSHJkdxSSdwGAX3tXNFQYKX5aNsDU+qJkcRzphOnnKQrJf5Xbsw4@vger.kernel.org, AJvYcCX/D05K7uWmxiHwFMyso3ymtorar2QOBzYSSpYRWzVFmCSZQZuRlQUaod3jq0SWF7du7/440Yf7tfY=@vger.kernel.org
-X-Received: by 2002:a05:6122:1d53:b0:520:51a4:b81c with SMTP id
- 71dfb90a1353d-5224ccbbe10mr3808700e0c.6.1740662495074; Thu, 27 Feb 2025
- 05:21:35 -0800 (PST)
+        d=1e100.net; s=20230601; t=1740663286; x=1741268086;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SiVrC1DW5CsgsTGK3acbzw2cH0RgjFdHaGDXEJuK9h0=;
+        b=UlAikp3b5T2SRtwPZMRUTOWjc8lbpwikhZLY0FpFDiSs3CtLG73rm4SVjzdkzscVeD
+         AN/Aa7ipP3libQNAImzCXkFSTI1+t8L0TsStfI7edg+lZAp704rZeRTTo3EZeKVpX5/3
+         UE7bfQ9eiEDxUjjwmz6xkI1oI+S7RZ83MpWWcFRkCuKeJC+V56Nrb//kjsvkD7KSe6Lu
+         DrN7u4Z7KAKLwYIat1JJM4hY1ePZQXZz1i6w7DIrslUUh08hcAqgbf6aZMa5h5e1wLSh
+         eyDe2YNMeEUr91e2b0xYAe9lU9Oj8h3qlthYRaZEExUVBznsTasRSpfQsx8unmM26U9g
+         39SQ==
+X-Gm-Message-State: AOJu0YzyOw76SvUc6SdGJqUcdsrRGJUKDI3ienx//F6PYRIXKF8GRX4E
+	Pa5g65Ph4KKpx/Umhgnn7ZHqVBBoN7LEwuhOF+OASDgI6VlkF0bx26l8ZgE7poSjDACs8RJqMGA
+	i+ZXAhh7iCrnUc6mqy/Ll1vYCySxkSJ4Qjsq8ew==
+X-Gm-Gg: ASbGncuUpHbt53bpiTzCcFcFrlW588V1KVgS4JJ+6owPxhZDmT3SgCF114r0U2Yue6W
+	+q7Ig11D9746mMZ0ewC09MSHN01KXZOlC+DTTG6dKUqSa+orPhP8U+jra5tDRJkO6zlXTNWQzGQ
+	xY2BCVFP8XivG7Q+y6/Jfg5gh1AUFo1LovLfvBzoUx
+X-Google-Smtp-Source: AGHT+IEMYsWO2UIj0uiCuxX0dhE2DmSJ//u+MeU1Hr0gD69Zne7Tj0URYXPsU1WOs0JmyPPuY5gjM6VLHyGQ1Y3kV0g=
+X-Received: by 2002:a05:6512:3a82:b0:545:271d:f92 with SMTP id
+ 2adb3069b0e04-5493c57ef04mr4211562e87.25.1740663286036; Thu, 27 Feb 2025
+ 05:34:46 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1740454179.git.zhengqi.arch@bytedance.com> <19db3e8673b67bad2f1df1ab37f1c89d99eacfea.1740454179.git.zhengqi.arch@bytedance.com>
-In-Reply-To: <19db3e8673b67bad2f1df1ab37f1c89d99eacfea.1740454179.git.zhengqi.arch@bytedance.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 27 Feb 2025 14:21:23 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdU8ttibKCiUPxSNBpJyrtBbrt1CqLa++jq6CpJFbFCwAg@mail.gmail.com>
-X-Gm-Features: AQ5f1Jqe6so1GjZXdkUhIIAiYHT08E9WH9vQcbiUEIVlcQBmr8vV6ha0mxzJuRo
-Message-ID: <CAMuHMdU8ttibKCiUPxSNBpJyrtBbrt1CqLa++jq6CpJFbFCwAg@mail.gmail.com>
-Subject: Re: [PATCH v2 3/6] mm: pgtable: convert some architectures to use tlb_remove_ptdesc()
-To: Qi Zheng <zhengqi.arch@bytedance.com>
-Cc: peterz@infradead.org, kevin.brodsky@arm.com, riel@surriel.com, 
-	vishal.moola@gmail.com, david@redhat.com, jannh@google.com, hughd@google.com, 
-	willy@infradead.org, yuzhao@google.com, muchun.song@linux.dev, 
-	akpm@linux-foundation.org, will@kernel.org, aneesh.kumar@kernel.org, 
-	npiggin@gmail.com, arnd@arndb.de, dave.hansen@linux.intel.com, 
-	rppt@kernel.org, alexghiti@rivosinc.com, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org, 
-	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
-	linux-openrisc@vger.kernel.org, linux-sh@vger.kernel.org, 
-	linux-um@lists.infradead.org, x86@kernel.org, linux-riscv@lists.infradead.org
+References: <20250227114141.242421-1-marco.crivellari@suse.com>
+ <20250227114141.242421-2-marco.crivellari@suse.com> <CAAhV-H4MVzL6A6_nxPHTX-2XpaA8tgH56P_R9_RNDp2PFY5W+Q@mail.gmail.com>
+In-Reply-To: <CAAhV-H4MVzL6A6_nxPHTX-2XpaA8tgH56P_R9_RNDp2PFY5W+Q@mail.gmail.com>
+From: Marco Crivellari <marco.crivellari@suse.com>
+Date: Thu, 27 Feb 2025 14:34:35 +0100
+X-Gm-Features: AQ5f1JoC2nl_WtMTZXWtXGvEMS_G_IxHiXHcjmzOeEHpt9wlGnQYVBm3RfDjQPo
+Message-ID: <CAAofZF7bZDJcDBqUanFxnnbxkiAeDkv60=NGXnT+5cbHfye2=g@mail.gmail.com>
+Subject: Re: [PATCH v3 1/1] MIPS: Fix idle VS timer enqueue
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Frederic Weisbecker <frederic@kernel.org>, 
+	Anna-Maria Behnsen <anna-maria@linutronix.de>, Thomas Gleixner <tglx@linutronix.de>, 
+	Peter Zijlstra <peterz@infradead.org>, "Maciej W . Rozycki" <macro@orcam.me.uk>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Qi,
+Hi Huacai,
 
-On Tue, 25 Feb 2025 at 04:46, Qi Zheng <zhengqi.arch@bytedance.com> wrote:
-> Now, the nine architectures of csky, hexagon, loongarch, m68k, mips,
-> nios2, openrisc, sh and um do not select CONFIG_MMU_GATHER_RCU_TABLE_FREE,
-> and just call pagetable_dtor() + tlb_remove_page_ptdesc() (the wrapper of
-> tlb_remove_page()). This is the same as the implementation of
-> tlb_remove_{ptdesc|table}() under !CONFIG_MMU_GATHER_TABLE_FREE, so
-> convert these architectures to use tlb_remove_ptdesc().
+sorry, I completely forgot to check the comments!
+
+
+
+
+
+On Thu, Feb 27, 2025 at 12:56=E2=80=AFPM Huacai Chen <chenhuacai@kernel.org=
+> wrote:
 >
-> The ultimate goal is to make the architecture only use tlb_remove_ptdesc()
-> or tlb_remove_table() for page table pages.
+> Hi, Marco,
 >
-> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-> Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-
-Thanks for your patch!
-
->  arch/m68k/include/asm/sun3_pgalloc.h | 3 +--
-
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org> # m68k
-
-> --- a/arch/m68k/include/asm/sun3_pgalloc.h
-> +++ b/arch/m68k/include/asm/sun3_pgalloc.h
-> @@ -19,8 +19,7 @@ extern const char bad_pmd_string[];
+> On Thu, Feb 27, 2025 at 7:41=E2=80=AFPM Marco Crivellari
+> <marco.crivellari@suse.com> wrote:
+> >
+> > MIPS re-enables interrupts on its idle routine and performs
+> > a TIF_NEED_RESCHED check afterwards before putting the CPU to sleep.
+> >
+> > The IRQs firing between the check and the 'wait' instruction may set th=
+e
+> > TIF_NEED_RESCHED flag. In order to deal with this possible race, IRQs
+> > interrupting __r4k_wait() rollback their return address to the
+> > beginning of __r4k_wait() so that TIF_NEED_RESCHED is checked
+> > again before going back to sleep.
+> >
+> > However idle IRQs can also queue timers that may require a tick
+> > reprogramming through a new generic idle loop iteration but those timer=
+s
+> > would go unnoticed here because __r4k_wait() only checks
+> > TIF_NEED_RESCHED. It doesn't check for pending timers.
+> >
+> > Fix this with fast-forwarding idle IRQs return address to the end of th=
+e
+> > idle routine instead of the beginning, so that the generic idle loop
+> > handles both TIF_NEED_RESCHED and pending timers.
+> >
+> > CONFIG_CPU_MICROMIPS has been removed along with the nop instructions.
+> > There, NOPs are 2 byte in size, so change the code with 3 _ssnop which =
+are
+> > always 4 byte and remove the ifdef. Added ehb to make sure the hazard
+> > is always cleared.
+> >
+> > Signed-off-by: Marco Crivellari <marco.crivellari@suse.com>
+> > ---
+> >  arch/mips/kernel/genex.S | 40 ++++++++++++++++++++++------------------
+> >  arch/mips/kernel/idle.c  |  1 -
+> >  2 files changed, 22 insertions(+), 19 deletions(-)
+> >
+> > diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
+> > index a572ce36a24f..7b66ab239049 100644
+> > --- a/arch/mips/kernel/genex.S
+> > +++ b/arch/mips/kernel/genex.S
+> > @@ -104,25 +104,28 @@ handle_vcei:
+> >
+> >         __FINIT
+> >
+> > -       .align  5       /* 32 byte rollback region */
+> > +       .align  5
+> >  LEAF(__r4k_wait)
+> >         .set    push
+> >         .set    noreorder
+> > -       /* start of rollback region */
+> > -       LONG_L  t0, TI_FLAGS($28)
+> > -       nop
+> > -       andi    t0, _TIF_NEED_RESCHED
+> > -       bnez    t0, 1f
+> > -        nop
+> > -       nop
+> > -       nop
+> > -#ifdef CONFIG_CPU_MICROMIPS
+> > -       nop
+> > -       nop
+> > -       nop
+> > -       nop
+> > -#endif
+> > +       /* start of idle interrupt region */
+> > +       MFC0    t0, CP0_STATUS
+> > +       /* Enable Interrput */
+> > +       ori     t0, 0x1f
+> > +       xori    t0, 0x1e
+> > +       MTC0    t0, CP0_STATUS
+> > +       _ssnop
+> > +       _ssnop
+> > +       _ssnop
+> > +       _ehb
+> >         .set    MIPS_ISA_ARCH_LEVEL_RAW
+> > +       /*
+> > +        * If an interrupt lands here, between enabling interrupts abov=
+e and
+> > +        * going idle on the next instruction, we must *NOT* go idle si=
+nce the
+> > +        * interrupt could have set TIF_NEED_RESCHED or caused a timer =
+to need
+> > +        * resched. Fall through -- see rollback_handler below -- and h=
+ave
+> > +        * the idle loop take care of things.
+> > +        */
+> >         wait
+> >         /* end of rollback region (the region size must be power of two=
+) */
+> Now you add a _ehb in this version, so "(the region size must be power
+> of two)" should be removed.
 >
->  #define __pte_free_tlb(tlb, pte, addr)                         \
->  do {                                                           \
-> -       pagetable_dtor(page_ptdesc(pte));                       \
-> -       tlb_remove_page_ptdesc((tlb), page_ptdesc(pte));        \
-> +       tlb_remove_ptdesc((tlb), page_ptdesc(pte));             \
->  } while (0)
+> >  1:
+> > @@ -136,9 +139,10 @@ LEAF(__r4k_wait)
+> >         .set    push
+> >         .set    noat
+> >         MFC0    k0, CP0_EPC
+> > -       PTR_LA  k1, __r4k_wait
+> > -       ori     k0, 0x1f        /* 32 byte rollback region */
+> > -       xori    k0, 0x1f
+> > +       PTR_LA  k1, 1b
+> > +       /* 32 byte idle interrupt region */
+> And now the region is 36 bytes. :)
 >
+> Huacai
+>
+> > +       ori     k0, 0x1f
+> > +       PTR_ADDIU       k0, 5
+> >         bne     k0, k1, \handler
+> >         MTC0    k0, CP0_EPC
+> >         .set pop
+> > diff --git a/arch/mips/kernel/idle.c b/arch/mips/kernel/idle.c
+> > index 5abc8b7340f8..1f74c0589f7e 100644
+> > --- a/arch/mips/kernel/idle.c
+> > +++ b/arch/mips/kernel/idle.c
+> > @@ -37,7 +37,6 @@ static void __cpuidle r3081_wait(void)
+> >
+> >  void __cpuidle r4k_wait(void)
+> >  {
+> > -       raw_local_irq_enable();
+> >         __r4k_wait();
+> >         raw_local_irq_disable();
+> >  }
+> > --
+> > 2.48.1
+> >
 
-With only a single statement remaining, you can remove the do { ... }
-while construct, too.
 
-Gr{oetje,eeting}s,
 
-                        Geert
+--=20
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Marco Crivellari
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+L3 Support Engineer, Technology & Product
+
+
+
+
+marco.crivellari@suse.com
 
