@@ -1,49 +1,49 @@
-Return-Path: <linux-mips+bounces-8050-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8051-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B5A9A4A174
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Feb 2025 19:27:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C7D7A4A18D
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Feb 2025 19:29:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F1A51175958
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Feb 2025 18:27:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 82F24175D64
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Feb 2025 18:29:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEC4427426D;
-	Fri, 28 Feb 2025 18:27:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E1DE2755F6;
+	Fri, 28 Feb 2025 18:29:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="HIZLTQKa"
+	dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="rRXuZPY5"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from aposti.net (aposti.net [89.234.176.197])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14229274253;
-	Fri, 28 Feb 2025 18:27:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D58582755E5;
+	Fri, 28 Feb 2025 18:29:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.234.176.197
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740767244; cv=none; b=feaML1Fa6QouG9VLQpWmpumD/pmshwWY18JnSUk2/RrrvmL/RzDZFsryh2sWAUucmT6MC4TqSmlvJeiaY8EsJf2K1730B4c2Id1Me5EbqymQKaqiFFRz3c3TXSRzr06dp+88+LdQJQWU2Ny6nOjAgQakPBcAhvTRudj54jIry3s=
+	t=1740767374; cv=none; b=pRebwCJBGWcNTtJZwMShou3W/osOQfEqHbX35ceYTMoilxiCq0yqId8ZF+2kTqkal5Ng/eb/WVxJpcTHtO+A/hlgHyHiogwe5scyKeEk9bLELVxF19cRcwqVijBeQMJJW8++qxnv4Y/+Pwc2E89ycC6oN/RkqHgsXf4Ufic8LiE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740767244; c=relaxed/simple;
-	bh=67MIZhOGaz6uNuzThDvVgUejH2NJv/lVLfIlQwxWAaY=;
+	s=arc-20240116; t=1740767374; c=relaxed/simple;
+	bh=GdT+FAgbr7YwWuisQ170ntVSMrN/XYHPwVBuOoYX/Zc=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=GgGQnvXLHbvlYj+m0GBYcX/g5u654XjSYRqpPj42IPTYiDvoRmGnjcSSxrpXpH1CBYv6DTsFeaWc291HKBa41w8sttOi8WJhnlZ9uM3w5LWYO8cMwcBJaIxKx7QQXHPeE5C6ZZSfxZoXeo8TolNsXGSgm+beDB8eabSlBjkm6X0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net; spf=pass smtp.mailfrom=crapouillou.net; dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b=HIZLTQKa; arc=none smtp.client-ip=89.234.176.197
+	 Content-Type:MIME-Version; b=rESsofqQ9LnvPFxnLhiZM/i6e6bFyJXARQ3jxmzgHPoQbgvgdfNke6bcjm7sX3f2mBmVVGlnCZBMQKNPgViHzfALXh/9rflH7zB6iA+Xf/v9K/jN/TELS4A5jl27zvnakzWR6Qc4Iqa/Mwe+k3DjLdRhOGJkenZKbWE0GRLEgXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net; spf=pass smtp.mailfrom=crapouillou.net; dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b=rRXuZPY5; arc=none smtp.client-ip=89.234.176.197
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crapouillou.net
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-	s=mail; t=1740767234;
+	s=mail; t=1740767370;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=hunC8aIjFL8iJizsnuivXHSj1ZxS4AePrCKLeqSA1Do=;
-	b=HIZLTQKaoDNgNrovU4MAqTxJVO4u5918To8gUH3iKzSPqqpvSO5wNcaqMxUeUgYVDcROxV
-	63pQc/UhJTi4wXY+QNXMuYup0rcA60Mm+b70j9yCpYYvdPjOKyPqcbGQxUXafevum9S24w
-	j7XIXsGattyqB6INNm6tK348Xunxw5s=
-Message-ID: <f1ffee11ef563d8c7486503eef3d21b8b7e2ccd9.camel@crapouillou.net>
-Subject: Re: [PATCH v2 4/4] pinctrl: ingenic: jz4730: add pinmux for I2S
- interface
+	bh=GdT+FAgbr7YwWuisQ170ntVSMrN/XYHPwVBuOoYX/Zc=;
+	b=rRXuZPY5ppmvJrIqNUkY2LCcwmGUj0xvFH3Ey5JXpY4l7FONLXUlZXmktoc1WX5o+tch7E
+	VRMTAo7GnVVTxfovz1qPaOie3uFo1DyeWDNVvhgWFhOvig5DZXxKMEMR132rIO8kWjhazL
+	/FVbC0mVSbYoIuFPmBESRc2d7cq+DSA=
+Message-ID: <3bf98fabea4b7b35816411a2253e08848d900401.camel@crapouillou.net>
+Subject: Re: [PATCH v2 0/4] pinctrl: ingenic: add support for x1600 SoC and
+ MII and I2S for jz4730
 From: Paul Cercueil <paul@crapouillou.net>
 To: "H. Nikolaus Schaller" <hns@goldelico.com>, Linus Walleij	
  <linus.walleij@linaro.org>, Rob Herring <robh@kernel.org>, Krzysztof
@@ -53,10 +53,9 @@ Cc: Andreas Kemnade <andreas@kemnade.info>, Paul Boddie
  linux-gpio@vger.kernel.org, devicetree@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
 	letux-kernel@openphoenux.org, kernel@pyra-handheld.com
-Date: Fri, 28 Feb 2025 19:26:11 +0100
-In-Reply-To: <1d50f0c980155dd22ccd164a6d281e3ac68e7446.1740749637.git.hns@goldelico.com>
+Date: Fri, 28 Feb 2025 19:28:28 +0100
+In-Reply-To: <cover.1740749637.git.hns@goldelico.com>
 References: <cover.1740749637.git.hns@goldelico.com>
-	 <1d50f0c980155dd22ccd164a6d281e3ac68e7446.1740749637.git.hns@goldelico.com>
 Autocrypt: addr=paul@crapouillou.net; prefer-encrypt=mutual;
  keydata=mQENBF0KhcEBCADkfmrzdTOp/gFOMQX0QwKE2WgeCJiHPWkpEuPH81/HB2dpjPZNW03ZM
  LQfECbbaEkdbN4YnPfXgcc1uBe5mwOAPV1MBlaZcEt4M67iYQwSNrP7maPS3IaQJ18ES8JJ5Uf5Uz
@@ -83,82 +82,48 @@ Hi Nikolaus,
 
 Le vendredi 28 f=C3=A9vrier 2025 =C3=A0 14:33 +0100, H. Nikolaus Schaller a
 =C3=A9crit=C2=A0:
-> I2S is used for the sound codec of the Alpha400.
+> PATCH V2 2025-02-28 14:33:57:
+> Fix pwm5/pwm6/pwm7 pin groups (each one can be muxed to one of two
+> pads while pwm0-4 have only one pad) for X1600.
 >=20
-> Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
-> ---
-> =C2=A0drivers/pinctrl/pinctrl-ingenic.c | 13 ++++++++++++-
-> =C2=A01 file changed, 12 insertions(+), 1 deletion(-)
+> PATCH V1 2025-02-26 18:14:53:
+> This series expands pinctrl support for some Ingenic/Lumissil SoC.
+> For the jz4730 we add MII and I2S pinctrl and general x1600 support.
 >=20
-> diff --git a/drivers/pinctrl/pinctrl-ingenic.c
-> b/drivers/pinctrl/pinctrl-ingenic.c
-> index 08e082e84f5c6..6d7dc077c373e 100644
-> --- a/drivers/pinctrl/pinctrl-ingenic.c
-> +++ b/drivers/pinctrl/pinctrl-ingenic.c
-> @@ -209,10 +209,14 @@ static int jz4730_nand_cs4_pins[] =3D { 0x56, };
-> =C2=A0static int jz4730_nand_cs5_pins[] =3D { 0x57, };
-> =C2=A0static int jz4730_pwm_pwm0_pins[] =3D { 0x5e, };
-> =C2=A0static int jz4730_pwm_pwm1_pins[] =3D { 0x5f, };
-> -
+> The x1600 parts were jointly developed.
+>=20
+> Code was tested on LX16 board (x1600) and Alpha400 (jz4730) and
+> on CI20 (jz4780).
+>=20
+> Co-authored-by: Andreas Kemnade <andreas@kemnade.info>
+> Co-authored-by: H. Nikolaus Schaller <hns@goldelico.com>
 
-Just a nit - but you remove a blank line in patch 4/4 that was added in
-3/4, better not add it in the first place :)
+Reviewed-by: Paul Cercueil <paul@crapouillou.net>
 
-That's the only comment I have on the whole patchset, so either fix it
-in a v3 while adding my review tag, or maybe Linus can do it when
-applying the patchset.
+For the whole patchset, with the nit on patch 4/4.
+
+Either fix it when sending a v3 with my reviewed-by tag above, unless
+Linus does it when merging.
 
 Cheers,
 -Paul
 
-> =C2=A0static int jz4730_mii_pins[] =3D { 0x70, 0x71, 0x72, 0x73, 0x74, 0x=
-75,
-> 0x76,
-> =C2=A0				 0x77, 0x78, 0x19, 0x7a, 0x1b, 0x7c,
-> };
-> =C2=A0
-> +static int jz4730_i2s_mclk_pins[] =3D { 0x44, };
-> +static int jz4730_i2s_acreset_pins[] =3D { 0x45, };
-> +static int jz4730_i2s_data_pins[] =3D { 0x46, 0x47, };
-> +static int jz4730_i2s_clock_pins[] =3D { 0x4d, 0x4e, };
-> +
-> =C2=A0static u8 jz4730_lcd_8bit_funcs[] =3D { 1, 1, 1, 1, 1, 1, 1, 1, 2, =
-2,
-> 2, };
-> =C2=A0
-> =C2=A0static const struct group_desc jz4730_groups[] =3D {
-> @@ -235,6 +239,11 @@ static const struct group_desc jz4730_groups[] =3D
-> {
-> =C2=A0	INGENIC_PIN_GROUP("pwm0", jz4730_pwm_pwm0, 1),
-> =C2=A0	INGENIC_PIN_GROUP("pwm1", jz4730_pwm_pwm1, 1),
-> =C2=A0	INGENIC_PIN_GROUP("mii", jz4730_mii, 1),
-> +	INGENIC_PIN_GROUP("i2s-mclk-out", jz4730_i2s_mclk, 1),
-> +	INGENIC_PIN_GROUP("i2s-acreset", jz4730_i2s_acreset, 1),
-> +	INGENIC_PIN_GROUP("i2s-data", jz4730_i2s_data, 1),
-> +	INGENIC_PIN_GROUP("i2s-master", jz4730_i2s_clock, 1),
-> +	INGENIC_PIN_GROUP("i2s-slave", jz4730_i2s_clock, 2),
-> =C2=A0};
-> =C2=A0
-> =C2=A0static const char *jz4730_mmc_groups[] =3D { "mmc-1bit", "mmc-4bit"=
-,
-> };
-> @@ -251,6 +260,7 @@ static const char *jz4730_nand_groups[] =3D {
-> =C2=A0static const char *jz4730_pwm0_groups[] =3D { "pwm0", };
-> =C2=A0static const char *jz4730_pwm1_groups[] =3D { "pwm1", };
-> =C2=A0static const char *jz4730_mii_groups[] =3D { "mii", };
-> +static const char *jz4730_i2s_groups[] =3D { "i2s-data", "i2s-master",
-> "i2s-slave", };
-> =C2=A0
-> =C2=A0static const struct function_desc jz4730_functions[] =3D {
-> =C2=A0	INGENIC_PIN_FUNCTION("mmc", jz4730_mmc),
-> @@ -263,6 +273,7 @@ static const struct function_desc
-> jz4730_functions[] =3D {
-> =C2=A0	INGENIC_PIN_FUNCTION("pwm0", jz4730_pwm0),
-> =C2=A0	INGENIC_PIN_FUNCTION("pwm1", jz4730_pwm1),
-> =C2=A0	INGENIC_PIN_FUNCTION("mii", jz4730_mii),
-> +	INGENIC_PIN_FUNCTION("i2s", jz4730_i2s),
-> =C2=A0};
-> =C2=A0
-> =C2=A0static const struct ingenic_chip_info jz4730_chip_info =3D {
+>=20
+>=20
+> H. Nikolaus Schaller (3):
+> =C2=A0 bindings: ingenic,pinctrl: add x1600
+> =C2=A0 pinctrl: ingenic: jz4730: add pinmux for MII
+> =C2=A0 pinctrl: ingenic: jz4730: add pinmux for I2S interface
+>=20
+> Paul Boddie (1):
+> =C2=A0 pinctrl: ingenic: add x1600 support
+>=20
+> =C2=A0.../bindings/pinctrl/ingenic,pinctrl.yaml=C2=A0=C2=A0=C2=A0=C2=A0 |=
+=C2=A0=C2=A0 2 +
+> =C2=A0drivers/pinctrl/pinctrl-ingenic.c=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 | 261
+> +++++++++++++++++-
+> =C2=A02 files changed, 261 insertions(+), 2 deletions(-)
+>=20
 
 
