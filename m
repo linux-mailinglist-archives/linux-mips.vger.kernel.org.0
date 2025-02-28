@@ -1,166 +1,160 @@
-Return-Path: <linux-mips+bounces-8031-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8032-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 851B0A48A91
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2025 22:33:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B8F4A48ED5
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Feb 2025 03:44:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A948F7A746A
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Feb 2025 21:32:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D6B2F3B72AA
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Feb 2025 02:44:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E7C1271830;
-	Thu, 27 Feb 2025 21:33:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D08A5145A18;
+	Fri, 28 Feb 2025 02:44:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="rv40QSHI"
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="cdGvg9LM"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 447B3271286
-	for <linux-mips@vger.kernel.org>; Thu, 27 Feb 2025 21:33:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FABE13DDB9
+	for <linux-mips@vger.kernel.org>; Fri, 28 Feb 2025 02:44:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740691984; cv=none; b=mcNNXMp7uYtWxo1bh+6WOUirPnLwCxDF6E2xKmAZkJPqXteZXwifNMx8IypbySNQBN3PPRldrQ0fKxSyJtPEPNXZhQvBEoXAH57ryNpNpSG+T1DBJ8/R8EuFrx7RrV+rS1Wi2ET6+FI3AK+CzJgqFokEgzHigbEYaovXXZbBKGA=
+	t=1740710675; cv=none; b=l8HSXz1AscF4LNY5gYngvYXGGq9ukmu8p+TnXkoGxq+K+T5DVct++4TnUYdtH3UI/HVcAXFq5zxIdCLeJ5AtPLYnwFLHEiwiIz5ZDzlhzMa2qCpEB3/ZF4jNGnV1qx3a1v6FNUBG72uYXtXlyKhZKdVcjhedEyXEfK4xV5Un3Vg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740691984; c=relaxed/simple;
-	bh=O78laQRCugQQJVm33qwQw6Vm1O71zPoAwdwqZY3zw2Q=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ifT32LiUl2IR9HBNv1p5hTcTu1CZ1RAQfcrYvoeuQvxmH/2qTMZu7l4+/Yxae8ztemTYDDMOuDRXdVpc+lofKvq4BwMlA30f8nNhOxBwu1IGw8sR2ZmMKxsQiKq1k0vYuYA5/lCECu43ldlszDdZtglsYawxFxon0Mv6Royr79g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=rv40QSHI; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 17F3D2C066F;
-	Fri, 28 Feb 2025 10:32:55 +1300 (NZDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1740691975;
-	bh=cU5KnnGteSBBNh2MJua3cK4JTvnCQNhda1NWxrZBi1I=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=rv40QSHIm6CXLc0HWvjwWiGhQKKL4uEGiaH+MSmEsgsLTRCl/Mye1fxfojYebNTXp
-	 PS1if9IU4jH8A1qkgMc1ppDU8Udy/yOsiouWz88r6L4J0y1rqlAG6cp8Zr4sMhvnxV
-	 MkrLe4IPVSKWXWxiX0bsORmEu/H8//u6YCTkcTxFtzmql46DlAO23AALRywYmW1Q9M
-	 Ee8OFPyCi8cykxL8/a565igqqimvrsck/4wlnYtBHIEvCEEXQh1+EQgBbUakSklRS4
-	 l1ZhiguU0EGrrcXLOJfu87QEkx4NqpwWQ0FMDlsDQWtM/KSuYanZ6t9d64waPMg7cn
-	 5/Tg45I3IyGIw==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B67c0da060000>; Fri, 28 Feb 2025 10:32:54 +1300
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-	by pat.atlnz.lc (Postfix) with ESMTP id DE7B113ED4A;
-	Fri, 28 Feb 2025 10:32:54 +1300 (NZDT)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-	id DC257280AFD; Fri, 28 Feb 2025 10:32:54 +1300 (NZDT)
-From: Chris Packham <chris.packham@alliedtelesis.co.nz>
-To: robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	tsbogend@alpha.franken.de,
-	andrew@lunn.ch,
-	hkallweit1@gmail.com,
-	linux@armlinux.org.uk,
-	davem@davemloft.net,
-	edumazet@google.com,
-	kuba@kernel.org,
-	pabeni@redhat.com,
-	sander@svanheule.net,
-	markus.stockhausen@gmx.de
-Cc: devicetree@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH net-next v8 2/2] mips: dts: realtek: Add MDIO controller
-Date: Fri, 28 Feb 2025 10:32:48 +1300
-Message-ID: <20250227213248.2010986-3-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250227213248.2010986-1-chris.packham@alliedtelesis.co.nz>
-References: <20250227213248.2010986-1-chris.packham@alliedtelesis.co.nz>
+	s=arc-20240116; t=1740710675; c=relaxed/simple;
+	bh=0fz6H8dlUgf8ko9N18YypQHlBg79eNoT5rDDE25IBq8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=d2eK1gOFczSOb6fn/hqV4bs6BW1qH5O7DwlDk1ypbI7HxPGEneimOwoCHy3KP2xEweib0TvvraN+uANKgTIelmZa5tZ40FTd/ZXZU/dx6NBFKr0Er+S7Y9rbZE3ZDJDPHmDmdFrC87I47jmX9CWEqtbKbZGKq0GmKZhQumhE0RE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=cdGvg9LM; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-22185cddbffso48455865ad.1
+        for <linux-mips@vger.kernel.org>; Thu, 27 Feb 2025 18:44:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1740710673; x=1741315473; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=KrHEppDznEYNt+aFJHMFnsD9ySUlfKEU8kXo3t7+HP0=;
+        b=cdGvg9LMCPgA86eF1veU8MttIzjFc4M9bOp1Q+ej90hvu2aZr7uyASxs7uRlr3D8kE
+         YQQQANN+KG+nVURDCNJSv5gXBZoaa0W0i35WiZlp+mcBPmLoJfGx/iPTsUQgBx1Od+bK
+         riOJ/vkAG14G2L8zko8aUF3QwPxJv+wmmzqITfAAwEEj6QVyvyt382VqOYTnBuj9KJAU
+         HZNHwiMw671NsErHZxT6yRYWcQ8PvZzb/ikpwi5VOwlvOlu3HTNLh12KwEYvo2mJ8GYP
+         PjXRKUtbafnl+V/PCk7t9Iw7EHZB8TYDo5psvQDupJbFjo70IVyq0wgSs20gO+qgyNoS
+         eNKg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740710673; x=1741315473;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=KrHEppDznEYNt+aFJHMFnsD9ySUlfKEU8kXo3t7+HP0=;
+        b=LE0tDubih+rWpx849LmSvNpM7YwFvonXCDenLioaSJb90b/w5n0/AEfG1BIX2y6O9s
+         x1LypkodfUwkR3g5cbZ6a/zJGIGNvAxe0PCllNdbRPhUTUi3pEJR+YsQ246C+3zupJs1
+         InTCqrmqenD65/uradYMiIxbGPeDTGDs5EjUD68f+MCAnfTgPqKcDPyPvgR0U/PxwHb8
+         /KePBo/dChDqEhnzryc395wy7o92B1clXWZ4GKzgeuuj4yQ4mnKYVc2hNxsblft0Ek2V
+         7BJZbgW6dr5qT9IPrwFpb7xQQe4AgMQmTUjcGi0VI0rwbyTbitqTEVdR7J5I1l2jmHRM
+         /6pA==
+X-Forwarded-Encrypted: i=1; AJvYcCVF5h7XtdHiw6WqSwnlEigcJfvX//ntCIQf/gEDipRdkIPw4KvDxC/FIDfvMiAc+gIY1NzwHFCq+VEF@vger.kernel.org
+X-Gm-Message-State: AOJu0YzSj3id2JF6BVI/gwnXS+xNZNkWbo12+a3E2wUxd6zUd7TVJu3f
+	lGz0rhzHubYSSOKuUBYbKFIrOGkzOvwf7dry0HXavszI1HwALlES5Nb/ufb6YF4=
+X-Gm-Gg: ASbGnctWhOd9x+NX0RxhBSszI9dtu5FLGgnmXgp/Vqz+hNTTlkCBNaVxnstCUQIpoGj
+	LtoMOSDNOK37dHxOg33gd11wK/HW+Tkg7LA6XqEF+y57NyZXB+aDvNiqX9L7p9b/YqXi59m8UQr
+	U8hCyruzs87iPKTEJ5UMElL70e4FdTSDv4AhNomlPHrgX0UuOqtTR8ZcDodeqWzQxbIZmzmKxyT
+	oYuiGIluagSRBdgbUTNqwDAIOyMBhe06icKhgN+LVcjkZfK3FQ0HH6smXoQ4QTu7SZtJ1Jq89AG
+	juo46S4fCgTo6pl+qVF9Vsw13eB7V4fJWAneLQaoah7VIjKpIg==
+X-Google-Smtp-Source: AGHT+IF4hsdZRiz/aSbemK655CZrsY9ZUuvu4Xu2ENST8y9hxHTSO7PJo35OmCgDgimYWycuvOakGg==
+X-Received: by 2002:a05:6a20:1591:b0:1ee:d19c:45f9 with SMTP id adf61e73a8af0-1f2f3e11f86mr2902815637.19.1740710672736;
+        Thu, 27 Feb 2025 18:44:32 -0800 (PST)
+Received: from [10.68.122.90] ([63.216.146.179])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7349fe514besm2559832b3a.71.2025.02.27.18.44.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 27 Feb 2025 18:44:32 -0800 (PST)
+Message-ID: <e5f4e310-5bcd-4901-8ec3-757cf55dfa64@bytedance.com>
+Date: Fri, 28 Feb 2025 10:44:21 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=ccpxrWDM c=1 sm=1 tr=0 ts=67c0da06 a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=T2h4t0Lz3GQA:10 a=Vd_wJYyKU8c0xNhbhIwA:9 a=3ZKOabzyN94A:10
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/6] mm: pgtable: convert some architectures to use
+ tlb_remove_ptdesc()
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: peterz@infradead.org, kevin.brodsky@arm.com, riel@surriel.com,
+ vishal.moola@gmail.com, david@redhat.com, jannh@google.com,
+ hughd@google.com, willy@infradead.org, yuzhao@google.com,
+ muchun.song@linux.dev, akpm@linux-foundation.org, will@kernel.org,
+ aneesh.kumar@kernel.org, npiggin@gmail.com, arnd@arndb.de,
+ dave.hansen@linux.intel.com, rppt@kernel.org, alexghiti@rivosinc.com,
+ linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+ linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+ loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org,
+ linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+ linux-sh@vger.kernel.org, linux-um@lists.infradead.org, x86@kernel.org,
+ linux-riscv@lists.infradead.org
+References: <cover.1740454179.git.zhengqi.arch@bytedance.com>
+ <19db3e8673b67bad2f1df1ab37f1c89d99eacfea.1740454179.git.zhengqi.arch@bytedance.com>
+ <CAMuHMdU8ttibKCiUPxSNBpJyrtBbrt1CqLa++jq6CpJFbFCwAg@mail.gmail.com>
+From: Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <CAMuHMdU8ttibKCiUPxSNBpJyrtBbrt1CqLa++jq6CpJFbFCwAg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Add a device tree node for the MDIO controller on the RTL9300 chips.
 
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
 
-Notes:
-    Changes in v8:
-    - None
-    Changes in v7:
-    - None
-    Changes in v6:
-    - None
-    Changes in v5:
-    - Add reg property to mdio-controller
-    Changes in v4:
-    - Have a single mdio-controller with the individual buses as child
-      nodes
-    Changes in v3:
-    - None
-    Changes in v2:
-    - None
+On 2/27/25 9:21 PM, Geert Uytterhoeven wrote:
+> Hi Qi,
+> 
+> On Tue, 25 Feb 2025 at 04:46, Qi Zheng <zhengqi.arch@bytedance.com> wrote:
+>> Now, the nine architectures of csky, hexagon, loongarch, m68k, mips,
+>> nios2, openrisc, sh and um do not select CONFIG_MMU_GATHER_RCU_TABLE_FREE,
+>> and just call pagetable_dtor() + tlb_remove_page_ptdesc() (the wrapper of
+>> tlb_remove_page()). This is the same as the implementation of
+>> tlb_remove_{ptdesc|table}() under !CONFIG_MMU_GATHER_TABLE_FREE, so
+>> convert these architectures to use tlb_remove_ptdesc().
+>>
+>> The ultimate goal is to make the architecture only use tlb_remove_ptdesc()
+>> or tlb_remove_table() for page table pages.
+>>
+>> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+>> Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> 
+> Thanks for your patch!
+> 
+>>   arch/m68k/include/asm/sun3_pgalloc.h | 3 +--
+> 
+> Acked-by: Geert Uytterhoeven <geert@linux-m68k.org> # m68k
 
- arch/mips/boot/dts/realtek/rtl930x.dtsi | 33 +++++++++++++++++++++++++
- 1 file changed, 33 insertions(+)
+Thanks for your review.
 
-diff --git a/arch/mips/boot/dts/realtek/rtl930x.dtsi b/arch/mips/boot/dts=
-/realtek/rtl930x.dtsi
-index f2e57ea3a60c..101bab72a95f 100644
---- a/arch/mips/boot/dts/realtek/rtl930x.dtsi
-+++ b/arch/mips/boot/dts/realtek/rtl930x.dtsi
-@@ -69,6 +69,39 @@ i2c1: i2c@388 {
- 			#size-cells =3D <0>;
- 			status =3D "disabled";
- 		};
-+
-+		mdio_controller: mdio-controller@ca00 {
-+			compatible =3D "realtek,rtl9301-mdio";
-+			reg =3D <0xca00 0x200>;
-+			#address-cells =3D <1>;
-+			#size-cells =3D <0>;
-+			status =3D "disabled";
-+
-+			mdio0: mdio-bus@0 {
-+				reg =3D <0>;
-+				#address-cells =3D <1>;
-+				#size-cells =3D <0>;
-+				status =3D "disabled";
-+			};
-+			mdio1: mdio-bus@1 {
-+				reg =3D <1>;
-+				#address-cells =3D <1>;
-+				#size-cells =3D <0>;
-+				status =3D "disabled";
-+			};
-+			mdio2: mdio-bus@2 {
-+				reg =3D <2>;
-+				#address-cells =3D <1>;
-+				#size-cells =3D <0>;
-+				status =3D "disabled";
-+			};
-+			mdio3: mdio-bus@3 {
-+				reg =3D <3>;
-+				#address-cells =3D <1>;
-+				#size-cells =3D <0>;
-+				status =3D "disabled";
-+			};
-+		};
- 	};
-=20
- 	soc: soc@18000000 {
---=20
-2.48.1
+> 
+>> --- a/arch/m68k/include/asm/sun3_pgalloc.h
+>> +++ b/arch/m68k/include/asm/sun3_pgalloc.h
+>> @@ -19,8 +19,7 @@ extern const char bad_pmd_string[];
+>>
+>>   #define __pte_free_tlb(tlb, pte, addr)                         \
+>>   do {                                                           \
+>> -       pagetable_dtor(page_ptdesc(pte));                       \
+>> -       tlb_remove_page_ptdesc((tlb), page_ptdesc(pte));        \
+>> +       tlb_remove_ptdesc((tlb), page_ptdesc(pte));             \
+>>   } while (0)
+>>
+> 
+> With only a single statement remaining, you can remove the do { ... }
+> while construct, too.
+
+Ah, right. Will do in the next version.
+
+Thanks!
+
+> 
+> Gr{oetje,eeting}s,
+> 
+>                          Geert
+> 
 
 
