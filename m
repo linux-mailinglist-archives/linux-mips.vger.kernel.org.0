@@ -1,200 +1,283 @@
-Return-Path: <linux-mips+bounces-8033-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8035-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E6A9A49002
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Feb 2025 05:14:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91C7CA49382
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Feb 2025 09:30:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 57B1416E5C9
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Feb 2025 04:14:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 429201881C4A
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Feb 2025 08:30:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DBEF1BEF82;
-	Fri, 28 Feb 2025 04:12:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A35572505B0;
+	Fri, 28 Feb 2025 08:30:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p7aPGZ5e"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="FHW8aMsB"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33A221BEF77;
-	Fri, 28 Feb 2025 04:12:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B41DD1DED60
+	for <linux-mips@vger.kernel.org>; Fri, 28 Feb 2025 08:30:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740715962; cv=none; b=XzvRjvKFpz5RXp/3y0TfLVhPCjSQ9XJ4p30tCSEHpl2aYtq/norv4TsXHsLzgE4L4er91FgOUC9zP1rqZba6gNwc8Xejx2qDPcNVzxINn0Qj2shFKbTwPuVPdMFn2m1uMxADr1iC5MeOJR2RWlfNqC3ObULwb8Ix+RU8fIzXeew=
+	t=1740731447; cv=none; b=l+1FWRhs54OOaLk/5IS0ot0LoCV1mWi7j0PcN3vq7WBx6gWJ6d9A1HBrk/ikog4XvMkdV6wKnFdxspdI1NqqCQSOF1oBw7mqCZp8ajMQrLjzMxmGg79JcZUi+RA6dIOCrrP2HdZhUHSTtPL1sR43NeYMs4xcTlVLLi+Ligr5OyA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740715962; c=relaxed/simple;
-	bh=FvZPNbx5Q2m1gAoxzfB4hFFsiiy5F8PtvQBiBlL4Pow=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GRg1fe9u9E8kt5yjxGaV/bPA8jqU/yOpFu/TsrOJ344XWUGHLmB5hwPhfq0SdKo4sMF0vK0jWC1wl6bgHwpqQLkGgVmfIV3mp2FPF31XCgwzJfwVnYEFnt4OmXUy8iVaChA88M1awxWUannMS9PxNIaq2dcLoBknFylnzWAXDFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p7aPGZ5e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98792C4CEF6;
-	Fri, 28 Feb 2025 04:12:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740715961;
-	bh=FvZPNbx5Q2m1gAoxzfB4hFFsiiy5F8PtvQBiBlL4Pow=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=p7aPGZ5eXgnWu9A0Ea+dKSS08y2a1/EKC3UE/Z2FEipoGmFug6U2/VPCpdALCrbev
-	 LWLYgY5slJIp6msFH5PifaBFnncPID5fOt0WPkN12UBhfDZNQvGCOtYxz98AFwQi9r
-	 WgAMNScUHgU/QCjIKBdM+8toLz0a69cR+y5wAfUL4XD0c2BeHTwNCj0rzEjg7t/9jk
-	 ztjGkYoqwsoe90w5wMaOO2qloHvLVN/nr5b6wbQvI6qWPhBrUhwPfLI8l+1c+B6Thq
-	 ulyHRyvkxI9G4GoAz23IVUQD3B6jXfZUXSLnQ7KRRzCbYXuYs+PWcPp/VNturJjJVp
-	 +DhyJ3PhSI9Og==
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-abbec6a0bfeso258047766b.2;
-        Thu, 27 Feb 2025 20:12:41 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUEB5g99z1wh0IHEjwCD3kwvUcn+fDyL7M636h6b5wVw2i/Jn2nnGQge0su5sENZJYTmO/CLJqvznRHBEM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxGwQ3NCJufw/Ow6+GDcYlLrhlsRaAR5JoUlNgEpdwjWTCi7C5s
-	K8M6utEyfI4tgRpZANLGwXZ2qGO9RbpBDXGAhtQ80u5qvYvot4K3KpufAoHWV2jUUOvsRDUezdg
-	Xpe4F+5nVq4ibL1HMjuvt8s41fjY=
-X-Google-Smtp-Source: AGHT+IG+IXmafpOkUuzzS8tQrRn3X2e+N/GjztXEBD4K6dhIwhLqaGLVg7e2U/2l0BG19YB0NjX5QGMi2+bDYhFmsMk=
-X-Received: by 2002:a17:907:3f25:b0:ab7:b5d9:525a with SMTP id
- a640c23a62f3a-abf265cee06mr203938466b.37.1740715960093; Thu, 27 Feb 2025
- 20:12:40 -0800 (PST)
+	s=arc-20240116; t=1740731447; c=relaxed/simple;
+	bh=9JRh0vQu00gcGDgHvqANg3ZiBZ1ZNLJx8nUj+BWm9B0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qORW3uxUQRM0OuDZnK2tbROo2Nmw6KOF7P1tA7R/qJ9jJwSxLaSYT83vBDaEEO3+dg4OLa4w3p/DBmSJJhLzEMlK1kEkyJHs4B9gX2cZtR7pbIvJ6Ij2KrFD9zD1jr+ZwY4UUSJofzF7K2ql1wrVlaLJk1u4SSXYNKiw4PyGZBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=FHW8aMsB; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1740731444;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=IAk7T/agbjQFnKEBQSUNnzMrHpjZ/FADtSxLOMcXTqc=;
+	b=FHW8aMsBrNHYk7hhScPyjoKqfugCCOdRmq3ZpDalzHwqZq5w96LQTM2njUA+jQxmCHWBKe
+	PlH/Vx+oz9FscQQTHVfSj5ZBGD7jvRphgBS/QIpdWTDwTwhPCadA4xx/MIGoB6wwbo97dD
+	Us4SVxxJKg3eY69S9EgpVqsXDq9Xq08=
+Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
+ [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-410-ll9o_ambOoGAJnk9GXwjcg-1; Fri, 28 Feb 2025 03:30:43 -0500
+X-MC-Unique: ll9o_ambOoGAJnk9GXwjcg-1
+X-Mimecast-MFC-AGG-ID: ll9o_ambOoGAJnk9GXwjcg_1740731442
+Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-abbba16956bso232691866b.2
+        for <linux-mips@vger.kernel.org>; Fri, 28 Feb 2025 00:30:43 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740731442; x=1741336242;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IAk7T/agbjQFnKEBQSUNnzMrHpjZ/FADtSxLOMcXTqc=;
+        b=Kzsmkqid0T2myoeaTFibLJLvvqiFPBYaBXPBh2qUbWVwwRKDDUu4+IaW8h1+M0XDKt
+         vkkhr6OTUvlY3D90TecG3oIZ/xkZZWbIzIwKaKHBioSlm8Ul7zccw/JfA9862ISJIF/k
+         mdnVKNSi1s2FjT+TwBOJPm4jOoF8ryPJ55xZ78LDuac1H4FzDyeu/gl3YQIjbEcji5Xy
+         D8HNbqV891M8/Y0FyAOeNfRLXrCbqep4YUL9kFivNJO62gRRT1RK6LZw9o89U8CvfFDL
+         DnDo/MmIWlBox1IMcdA3XNCwkldqBHCYLx5mLdZujm3UfkC+nP1qpl4CZqNMI7wZqB1Z
+         o6ow==
+X-Forwarded-Encrypted: i=1; AJvYcCUoDN2bydvZTw0qS79dTZzPlCadgnpAh4RNPxzCUJ/dVlV/ho7GX56O8czmYeUfW6qh+fHE94B9AQgM@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWw3MhXr8hVDnNX1arpI7bW08zn9IYbAuzqReME4kBxj3ZDwnG
+	ad7Oz/c5AT232XIjdeKCvUHDHcanmdZSnGkTEwpPRhg8BIvWgnQRChxO7OX/z03x19pg2gaM4Xb
+	7C9NVmQeuzqja/tqaPRGZ2NGUNYiZ8lvgE3bQcYDOZadkxVFSYrLUEmqiVw==
+X-Gm-Gg: ASbGncsykTGqXKYC8tZCE0HRpymS3JDOhdFYnyZ1TZQjnkvO8sVzLEBcUzQ3creV0K5
+	jts9Z1vkkWrrQtFslbNJ4oRcU88zyN3dZP6iuGL6uR72OfOBIXBexdRXHuB+OpQaWDQa8CiJT18
+	TP6oAQ7/0h8swnvpG3Z3FvRdVTqv5R0IxGdb0znnAXO9TudUAtgjwbPKPbV5wFDanwruW6uapcg
+	1T6T0KVpSy1hm3qg4T0qUOb7eq7sEGo0ezeABoGjyASpmo3Me5rOgmAla56MknPRWJNGABzeLaq
+	c/46VgHZRldim6JJr7OUHPL6VOOZ6hfBk0I=
+X-Received: by 2002:a17:907:2d08:b0:abf:22cd:9a7e with SMTP id a640c23a62f3a-abf261f5471mr234891666b.30.1740731441900;
+        Fri, 28 Feb 2025 00:30:41 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGZIWf4Mi/ez8uccBE3ejxNf0ox83n9Aynget7e7VbyIxs4sY20lz/2ANqi9H9OCRURVdUpFw==
+X-Received: by 2002:a17:907:2d08:b0:abf:22cd:9a7e with SMTP id a640c23a62f3a-abf261f5471mr234884766b.30.1740731441289;
+        Fri, 28 Feb 2025 00:30:41 -0800 (PST)
+Received: from thinky (ip-217-030-074-039.aim-net.cz. [217.30.74.39])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf0c74c714sm254400566b.124.2025.02.28.00.30.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Feb 2025 00:30:40 -0800 (PST)
+Date: Fri, 28 Feb 2025 09:30:38 +0100
+From: Andrey Albershteyn <aalbersh@redhat.com>
+To: Amir Goldstein <amir73il@gmail.com>
+Cc: "Darrick J. Wong" <djwong@kernel.org>, 
+	Richard Henderson <richard.henderson@linaro.org>, Matt Turner <mattst88@gmail.com>, 
+	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	Michal Simek <monstr@monstr.eu>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Naveen N Rao <naveen@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
+	Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, "David S. Miller" <davem@davemloft.net>, 
+	Andreas Larsson <andreas@gaisler.com>, Andy Lutomirski <luto@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
+	Arnd Bergmann <arnd@arndb.de>, linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-xfs@vger.kernel.org, Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>, 
+	Theodore Tso <tytso@mit.edu>
+Subject: Re: [PATCH v3] fs: introduce getfsxattrat and setfsxattrat syscalls
+Message-ID: <ihkez5xfcuocis7cmipvts2vxnfan2ub5kcpvsrnzm37glwnax@nxp72byvetye>
+References: <20250211-xattrat-syscall-v3-1-a07d15f898b2@kernel.org>
+ <20250221181135.GW21808@frogsfrogsfrogs>
+ <CAOQ4uxgyYBFqkq6cQsso4LxJsPJ4uECOdskXmz-nmGhhV5BQWg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250227134539.267169-1-marco.crivellari@suse.com> <20250227134539.267169-2-marco.crivellari@suse.com>
-In-Reply-To: <20250227134539.267169-2-marco.crivellari@suse.com>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Fri, 28 Feb 2025 12:12:29 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7U1CMrCqWwjYYhuZjD3-Fu7Wi__mUwvjvzLO5bZADr8w@mail.gmail.com>
-X-Gm-Features: AQ5f1JoUBrJ2oAhPHBMSw5VZwty-bCqwbvdZHp2bJ-aPgIkFg8cVthJRihCfcAU
-Message-ID: <CAAhV-H7U1CMrCqWwjYYhuZjD3-Fu7Wi__mUwvjvzLO5bZADr8w@mail.gmail.com>
-Subject: Re: [PATCH v4 1/1] MIPS: Fix idle VS timer enqueue
-To: Marco Crivellari <marco.crivellari@suse.com>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Frederic Weisbecker <frederic@kernel.org>, 
-	Anna-Maria Behnsen <anna-maria@linutronix.de>, Thomas Gleixner <tglx@linutronix.de>, 
-	Peter Zijlstra <peterz@infradead.org>, "Maciej W . Rozycki" <macro@orcam.me.uk>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOQ4uxgyYBFqkq6cQsso4LxJsPJ4uECOdskXmz-nmGhhV5BQWg@mail.gmail.com>
 
-On Thu, Feb 27, 2025 at 9:45=E2=80=AFPM Marco Crivellari
-<marco.crivellari@suse.com> wrote:
->
-> MIPS re-enables interrupts on its idle routine and performs
-> a TIF_NEED_RESCHED check afterwards before putting the CPU to sleep.
->
-> The IRQs firing between the check and the 'wait' instruction may set the
-> TIF_NEED_RESCHED flag. In order to deal with this possible race, IRQs
-> interrupting __r4k_wait() rollback their return address to the
-> beginning of __r4k_wait() so that TIF_NEED_RESCHED is checked
-> again before going back to sleep.
->
-> However idle IRQs can also queue timers that may require a tick
-> reprogramming through a new generic idle loop iteration but those timers
-> would go unnoticed here because __r4k_wait() only checks
-> TIF_NEED_RESCHED. It doesn't check for pending timers.
->
-> Fix this with fast-forwarding idle IRQs return address to the end of the
-> idle routine instead of the beginning, so that the generic idle loop
-> handles both TIF_NEED_RESCHED and pending timers.
->
-> CONFIG_CPU_MICROMIPS has been removed along with the nop instructions.
-> There, NOPs are 2 byte in size, so change the code with 3 _ssnop which ar=
-e
-> always 4 byte and remove the ifdef. Added ehb to make sure the hazard
-> is always cleared.
->
-> Signed-off-by: Marco Crivellari <marco.crivellari@suse.com>
-> ---
->  arch/mips/kernel/genex.S | 42 ++++++++++++++++++++++------------------
->  arch/mips/kernel/idle.c  |  1 -
->  2 files changed, 23 insertions(+), 20 deletions(-)
->
-> diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
-> index a572ce36a24f..5e333cd27fc7 100644
-> --- a/arch/mips/kernel/genex.S
-> +++ b/arch/mips/kernel/genex.S
-> @@ -104,27 +104,30 @@ handle_vcei:
->
->         __FINIT
->
-> -       .align  5       /* 32 byte rollback region */
-> +       .align  5
->  LEAF(__r4k_wait)
->         .set    push
->         .set    noreorder
-> -       /* start of rollback region */
-> -       LONG_L  t0, TI_FLAGS($28)
-> -       nop
-> -       andi    t0, _TIF_NEED_RESCHED
-> -       bnez    t0, 1f
-> -        nop
-> -       nop
-> -       nop
-> -#ifdef CONFIG_CPU_MICROMIPS
-> -       nop
-> -       nop
-> -       nop
-> -       nop
-> -#endif
-> +       /* start of idle interrupt region */
-> +       MFC0    t0, CP0_STATUS
-> +       /* Enable Interrput */
-> +       ori     t0, 0x1f
-> +       xori    t0, 0x1e
-> +       MTC0    t0, CP0_STATUS
-> +       _ssnop
-> +       _ssnop
-> +       _ssnop
-> +       _ehb
->         .set    MIPS_ISA_ARCH_LEVEL_RAW
-> +       /*
-> +        * If an interrupt lands here, between enabling interrupts above =
-and
-> +        * going idle on the next instruction, we must *NOT* go idle sinc=
-e the
-> +        * interrupt could have set TIF_NEED_RESCHED or caused a timer to=
- need
-> +        * resched. Fall through -- see rollback_handler below -- and hav=
-e
-> +        * the idle loop take care of things.
-> +        */
->         wait
-> -       /* end of rollback region (the region size must be power of two) =
-*/
-> +       /* end of rollback region */
-Oh, no, still something wrong.... "rollback region" here should be
-"idle interrupt region".
-Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
+On 2025-02-21 20:15:24, Amir Goldstein wrote:
+> On Fri, Feb 21, 2025 at 7:13 PM Darrick J. Wong <djwong@kernel.org> wrote:
+> >
+> > On Tue, Feb 11, 2025 at 06:22:47PM +0100, Andrey Albershteyn wrote:
+> > > From: Andrey Albershteyn <aalbersh@redhat.com>
+> > >
+> > > Introduce getfsxattrat and setfsxattrat syscalls to manipulate inode
+> > > extended attributes/flags. The syscalls take parent directory fd and
+> > > path to the child together with struct fsxattr.
+> > >
+> > > This is an alternative to FS_IOC_FSSETXATTR ioctl with a difference
+> > > that file don't need to be open as we can reference it with a path
+> > > instead of fd. By having this we can manipulated inode extended
+> > > attributes not only on regular files but also on special ones. This
+> > > is not possible with FS_IOC_FSSETXATTR ioctl as with special files
+> > > we can not call ioctl() directly on the filesystem inode using fd.
+> > >
+> > > This patch adds two new syscalls which allows userspace to get/set
+> > > extended inode attributes on special files by using parent directory
+> > > and a path - *at() like syscall.
+> > >
+> > > Also, as vfs_fileattr_set() is now will be called on special files
+> > > too, let's forbid any other attributes except projid and nextents
+> > > (symlink can have an extent).
+> > >
+> > > CC: linux-api@vger.kernel.org
+> > > CC: linux-fsdevel@vger.kernel.org
+> > > CC: linux-xfs@vger.kernel.org
+> > > Signed-off-by: Andrey Albershteyn <aalbersh@redhat.com>
+> > > ---
+> > > v1:
+> > > https://lore.kernel.org/linuxppc-dev/20250109174540.893098-1-aalbersh@kernel.org/
+> > >
+> > > Previous discussion:
+> > > https://lore.kernel.org/linux-xfs/20240520164624.665269-2-aalbersh@redhat.com/
+> > >
+> > > XFS has project quotas which could be attached to a directory. All
+> > > new inodes in these directories inherit project ID set on parent
+> > > directory.
+> > >
+> > > The project is created from userspace by opening and calling
+> > > FS_IOC_FSSETXATTR on each inode. This is not possible for special
+> > > files such as FIFO, SOCK, BLK etc. Therefore, some inodes are left
+> > > with empty project ID. Those inodes then are not shown in the quota
+> > > accounting but still exist in the directory. Moreover, in the case
+> > > when special files are created in the directory with already
+> > > existing project quota, these inode inherit extended attributes.
+> > > This than leaves them with these attributes without the possibility
+> > > to clear them out. This, in turn, prevents userspace from
+> > > re-creating quota project on these existing files.
+> > > ---
+> > > Changes in v3:
+> > > - Remove unnecessary "dfd is dir" check as it checked in user_path_at()
+> > > - Remove unnecessary "same filesystem" check
+> > > - Use CLASS() instead of directly calling fdget/fdput
+> > > - Link to v2: https://lore.kernel.org/r/20250122-xattrat-syscall-v2-1-5b360d4fbcb2@kernel.org
+> > > ---
+> > >  arch/alpha/kernel/syscalls/syscall.tbl      |  2 +
+> > >  arch/arm/tools/syscall.tbl                  |  2 +
+> > >  arch/arm64/tools/syscall_32.tbl             |  2 +
+> > >  arch/m68k/kernel/syscalls/syscall.tbl       |  2 +
+> > >  arch/microblaze/kernel/syscalls/syscall.tbl |  2 +
+> > >  arch/mips/kernel/syscalls/syscall_n32.tbl   |  2 +
+> > >  arch/mips/kernel/syscalls/syscall_n64.tbl   |  2 +
+> > >  arch/mips/kernel/syscalls/syscall_o32.tbl   |  2 +
+> > >  arch/parisc/kernel/syscalls/syscall.tbl     |  2 +
+> > >  arch/powerpc/kernel/syscalls/syscall.tbl    |  2 +
+> > >  arch/s390/kernel/syscalls/syscall.tbl       |  2 +
+> > >  arch/sh/kernel/syscalls/syscall.tbl         |  2 +
+> > >  arch/sparc/kernel/syscalls/syscall.tbl      |  2 +
+> > >  arch/x86/entry/syscalls/syscall_32.tbl      |  2 +
+> > >  arch/x86/entry/syscalls/syscall_64.tbl      |  2 +
+> > >  arch/xtensa/kernel/syscalls/syscall.tbl     |  2 +
+> > >  fs/inode.c                                  | 75 +++++++++++++++++++++++++++++
+> > >  fs/ioctl.c                                  | 16 +++++-
+> > >  include/linux/fileattr.h                    |  1 +
+> > >  include/linux/syscalls.h                    |  4 ++
+> > >  include/uapi/asm-generic/unistd.h           |  8 ++-
+> > >  21 files changed, 133 insertions(+), 3 deletions(-)
+> > >
+> >
+> > <cut to the syscall definitions>
+> >
+> > > diff --git a/fs/inode.c b/fs/inode.c
+> > > index 6b4c77268fc0ecace4ac78a9ca777fbffc277f4a..b2dddd9db4fabaf67a6cbf541a86978b290411ec 100644
+> > > --- a/fs/inode.c
+> > > +++ b/fs/inode.c
+> > > @@ -23,6 +23,9 @@
+> > >  #include <linux/rw_hint.h>
+> > >  #include <linux/seq_file.h>
+> > >  #include <linux/debugfs.h>
+> > > +#include <linux/syscalls.h>
+> > > +#include <linux/fileattr.h>
+> > > +#include <linux/namei.h>
+> > >  #include <trace/events/writeback.h>
+> > >  #define CREATE_TRACE_POINTS
+> > >  #include <trace/events/timestamp.h>
+> > > @@ -2953,3 +2956,75 @@ umode_t mode_strip_sgid(struct mnt_idmap *idmap,
+> > >       return mode & ~S_ISGID;
+> > >  }
+> > >  EXPORT_SYMBOL(mode_strip_sgid);
+> > > +
+> > > +SYSCALL_DEFINE4(getfsxattrat, int, dfd, const char __user *, filename,
+> > > +             struct fsxattr __user *, fsx, unsigned int, at_flags)
+> >
+> > Should the kernel require userspace to pass the size of the fsx buffer?
+> > That way we avoid needing to rev the interface when we decide to grow
+> > the structure.
+> >
+> 
+> This makes sense to me, but I see that Andreas proposed other ways,
+> as long as we have a plan on how to extend the struct if we need more space.
+> 
+> Andrey, I am sorry to bring this up in v3, but I would like to request
+> two small changes before merging this API.
+> 
+> This patch by Pali [1] adds fsx_xflags_mask for the filesystem to
+> report the supported set of xflags.
+> 
+> It was argued that we can make this change with the existing ioctl,
+> because it is not going to break xfs_io -c lsattr/chattr, which is fine,
+> but I think that we should merge the fsx_xflags_mask change along
+> with getfsxattrat() which is a new UAPI.
+> 
+> The second request is related to setfsxattrat().
+> With current FS_IOC_FSSETXATTR, IIUC, xfs ignores unsupported
+> fsx_xflags. I think this needs to be fixed before merging setfsxattrat().
+> It's ok that a program calling FS_IOC_FSSETXATTR will not know
+> if unsupported flags will be ignored, because that's the way it is,
+> but I think that setfsxattrat() must return -EINVAL for trying to
+> set unsupported xflags.
+> 
+> As I explained in [2] I think it is fine if FS_IOC_FSSETXATTR
+> will also start returning -EINVAL for unsupported flags, but I would
+> like setfsxattrat() to make that a guarantee.
+> 
+> There was an open question, what does fsx_xflags_mask mean
+> for setfsxattrat() - it is a mask like in inode_set_flags() as Andreas
+> suggested? I think that would be a good idea.
+> 
+> Thanks,
+> Amir.
+> 
+> [1] https://lore.kernel.org/linux-fsdevel/20250216164029.20673-4-pali@kernel.org/
+> [2] https://lore.kernel.org/linux-fsdevel/CAOQ4uxjwQJiKAqyjEmKUnq-VihyeSsxyEy2F+J38NXwrAXurFQ@mail.gmail.com/
+> 
 
-Huacai
+I'm fine with making Pali's patchset a dependency for this syscall,
+as if vfs_fileattr_set() will start returning EINVAL on unsupported
+flags this syscall will pass it through (ioctls will need to ignore
+it). And as these syscalls use fsxattr anyway the fsx_xflags_mask
+field will be here.
 
->  1:
->         jr      ra
->          nop
-> @@ -136,9 +139,10 @@ LEAF(__r4k_wait)
->         .set    push
->         .set    noat
->         MFC0    k0, CP0_EPC
-> -       PTR_LA  k1, __r4k_wait
-> -       ori     k0, 0x1f        /* 32 byte rollback region */
-> -       xori    k0, 0x1f
-> +       PTR_LA  k1, 1b
-> +       /* 36 byte idle interrupt region */
-> +       ori     k0, 0x1f
-> +       PTR_ADDIU       k0, 5
->         bne     k0, k1, \handler
->         MTC0    k0, CP0_EPC
->         .set pop
-> diff --git a/arch/mips/kernel/idle.c b/arch/mips/kernel/idle.c
-> index 5abc8b7340f8..1f74c0589f7e 100644
-> --- a/arch/mips/kernel/idle.c
-> +++ b/arch/mips/kernel/idle.c
-> @@ -37,7 +37,6 @@ static void __cpuidle r3081_wait(void)
->
->  void __cpuidle r4k_wait(void)
->  {
-> -       raw_local_irq_enable();
->         __r4k_wait();
->         raw_local_irq_disable();
->  }
-> --
-> 2.48.1
->
+-- 
+- Andrey
+
 
