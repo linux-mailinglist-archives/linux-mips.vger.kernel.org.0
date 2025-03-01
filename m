@@ -1,169 +1,77 @@
-Return-Path: <linux-mips+bounces-8055-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8059-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90EEFA4AA1A
-	for <lists+linux-mips@lfdr.de>; Sat,  1 Mar 2025 11:01:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23158A4AC9A
+	for <lists+linux-mips@lfdr.de>; Sat,  1 Mar 2025 16:45:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B41D1897E6B
-	for <lists+linux-mips@lfdr.de>; Sat,  1 Mar 2025 10:01:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B2A55171796
+	for <lists+linux-mips@lfdr.de>; Sat,  1 Mar 2025 15:45:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3A7B1D618E;
-	Sat,  1 Mar 2025 10:01:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="h3oWTPQM";
-	dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="HIf3I4AJ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A24C1E5203;
+	Sat,  1 Mar 2025 15:45:03 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 973501C3BEB;
-	Sat,  1 Mar 2025 10:00:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.171
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740823261; cv=pass; b=hHhkjW1wn5CUrgLfvoS4QaHCyC6ualJu50mN05uk8ecgXeNVDF8YYNL5oR6tqlChxL6RVkF+wkSo4HFM2pZfY7VhAOO7sRkrzxeXjqItTyPchv9Ofd8MBAIaHOWvORdrngTfYbR+GHSUweRNpNYv/YV5ZHR6buh/R38lMzgl7H8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740823261; c=relaxed/simple;
-	bh=uKJdpQCSbPPB5HN4bVQy18UmETpaVnNAq6aLSQSEJSE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SWm9tbXQOwCTvhfhpivxzciI+DzOKqkurbmeO468qLAH7e3qXgw4AKAhD2fsYfTHPqVV3Kh2FWE35csD27CCVXClmhdJ8S0+eBQ0RJsHGrQOYAEp3X3BKgvYXgHJrUvQa8giPnbtVGRvQPncohNSqnkksaSNsqifvzcZTGzAHLI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com; spf=pass smtp.mailfrom=goldelico.com; dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=h3oWTPQM; dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=HIf3I4AJ; arc=pass smtp.client-ip=81.169.146.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goldelico.com
-ARC-Seal: i=1; a=rsa-sha256; t=1740823246; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=B2SWVCpRtiHYOnoSPTrC//h8W/FMt8MSTVvI11FbpR3DUyg+BHeZJ0hIsH0j1BkQzQ
-    nushWZ012isEqP5BxIkchEPC2QQ25atLMxL/GdMBd590bQGStxGBSkHxvKuzyRQ7Hpot
-    1/ddc1MVA4SjaIhnH0bp3+1btIPm76P2WRJWLnqnEv/h84EA1/tnYId1yANC4QEzGZca
-    8WDt1Jwp1m8L+CFIIuwa93voXpS8norsnn2NMn/tN2+N506BgrSVoHlPJBIPSOJYx5Ib
-    O1qWHozH5KfFeZQqgmeuLnDMfwJqKifNySuTBP5rYXW9TKt6ZED8jEtwdyTTCRBiKx54
-    ZP1Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1740823246;
-    s=strato-dkim-0002; d=strato.com;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=lnTVppnPxxg35JdZy9tXb8y01L1leqSyD1ShwbOMzbI=;
-    b=Xhzp6kUVmB2qDttEKZVuHaLFwXVwNPHrifRbeLhkVB/dzRZxosbXQacinRPZPBBMqG
-    H0Lb5In5crfQrqOCRp1bQKDlmKuhCrigickQq5lk9SHo+O8gUHJ8FMznX7s24f+3QwAl
-    UUoektqlLYmCy+4+FubNm2oMXmO3zrV2pBkUI/tuo50FjuLMlWAn8Kz1ZDp3o429O3FA
-    l2V1wH0XLr7rY1+hBEnOdpe8ysPYF/NqJir5GXVbiDLctwvgXXnfhfeS7C9/D19ooEKl
-    a+NKgzbNfwSs61oY+9+lspGVim0eL0EOURVEVZQ4PCnGeJTIH1z/BWPF2gyoFShoKKLb
-    FnYg==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1740823246;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=lnTVppnPxxg35JdZy9tXb8y01L1leqSyD1ShwbOMzbI=;
-    b=h3oWTPQMxIn9iTmbJW42r8jjkyymEJKXIro1c9/WNNvwKYcW3gs68t9bdWX32K1g5O
-    0mDK0hRBegscqsC3hyj/vRe7Gb9YETDhkP/E9D7Xr/5WJTHkpbVeBRoyHx1+6uRauwPZ
-    OaUKXkQRDXU6RynAT/LNijl08WZDl+LQImHapaKoRxCh9r6TXFjvUTQMH2JYal2IktVy
-    bs8dazgmZktHrW1l7V9wprKoRu0jWPpXC2EBO2qEmycMepkczynEU/g664mMZAFbYmp9
-    g9qn9/Ugv5Yn4sqrwmdPOkSVEXypzsbrOVYMU3L+VOVJXYCzSEcRXN76CGLq63hp2dce
-    ztrg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1740823246;
-    s=strato-dkim-0003; d=goldelico.com;
-    h=References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Cc:Date:
-    From:Subject:Sender;
-    bh=lnTVppnPxxg35JdZy9tXb8y01L1leqSyD1ShwbOMzbI=;
-    b=HIf3I4AJuLvimbZgyTEIemJmhJdEGfpIvZ6UJ8wFrSxmv1f3QEUw5NHOkaJiJsKmim
-    0dDGsFb3ooelsX0QGiBg==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0lFzL1yfjEZ"
-Received: from localhost.localdomain
-    by smtp.strato.de (RZmta 51.3.0 DYNA|AUTH)
-    with ESMTPSA id Q56adc121A0jbfj
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
-	(Client did not present a certificate);
-    Sat, 1 Mar 2025 11:00:45 +0100 (CET)
-From: "H. Nikolaus Schaller" <hns@goldelico.com>
-To: Linus Walleij <linus.walleij@linaro.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Paul Cercueil <paul@crapouillou.net>
-Cc: Andreas Kemnade <andreas@kemnade.info>,
-	Paul Boddie <paul@boddie.org.uk>,
-	Tim Bysun <tim.bysun@ingenic.com>,
-	linux-gpio@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	letux-kernel@openphoenux.org,
-	kernel@pyra-handheld.com,
-	"H. Nikolaus Schaller" <hns@goldelico.com>
-Subject: [PATCH v3 4/4] pinctrl: ingenic: jz4730: add pinmux for I2S interface
-Date: Sat,  1 Mar 2025 11:00:41 +0100
-Message-ID: <7e79b16be569fb0f501032b2b6ec726e4a09411f.1740823241.git.hns@goldelico.com>
-X-Mailer: git-send-email 2.47.0
-In-Reply-To: <cover.1740823241.git.hns@goldelico.com>
-References: <cover.1740823241.git.hns@goldelico.com>
+Received: from 1wt.eu (ded1.1wt.eu [163.172.96.212])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D74CE1E25E8;
+	Sat,  1 Mar 2025 15:45:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=163.172.96.212
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740843903; cv=none; b=pGukdrS4629SY5OTgkKqRf56+Z9RgC5/aANTICmFHcamK9X88ULUPyjw9ggHTt4vkPUNvwJ3rczIbmfPf63Dz90aYopb7CLnCSofOQs56WyrwrczHulGLX371VWLFI55ImZtm+5IIYt4YEBDtL/c8XKDUiLsU9M+2U6EE3w73ko=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740843903; c=relaxed/simple;
+	bh=AxCGcINpX2kj7bTQ/vHykT9MgArIaG7SUtRbc3myy0c=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MmJvFwvHIFi6zIF3+VfEaDsLu1xz1LbggP4vcYsG9N4HF2s8JegHYMgTo6ZEq5YBqIGim02HJ/ZCTZDjZ9jpnhG7KwGQfCBQfUvgAJ/HwiMph4MefOkwsmH1tUlwy6EffiCdFcKtHozcpI+T9EZJGTR0GpQ+HmrCd6bIhO7Plik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu; spf=pass smtp.mailfrom=1wt.eu; arc=none smtp.client-ip=163.172.96.212
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=1wt.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=1wt.eu
+Received: (from willy@localhost)
+	by pcw.home.local (8.15.2/8.15.2/Submit) id 521BL2An019006;
+	Sat, 1 Mar 2025 12:21:02 +0100
+Date: Sat, 1 Mar 2025 12:21:02 +0100
+From: Willy Tarreau <w@1wt.eu>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc: Shuah Khan <shuah@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        "Maciej W. Rozycki" <macro@orcam.me.uk>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] tools/nolibc: MIPS: entrypoint cleanups and
+ N32/N64 ABIs
+Message-ID: <20250301112102.GB18621@1wt.eu>
+References: <20250225-nolibc-mips-n32-v2-0-664b47d87fa0@weissschuh.net>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="us-ascii"
+In-Reply-To: <20250225-nolibc-mips-n32-v2-0-664b47d87fa0@weissschuh.net>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-I2S is used for the sound codec of the Alpha400.
+Hi Thomas!
 
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-Signed-off-by: H. Nikolaus Schaller <hns@goldelico.com>
----
- drivers/pinctrl/pinctrl-ingenic.c | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+On Tue, Feb 25, 2025 at 06:02:34PM +0100, Thomas Weiﬂschuh wrote:
+> Introduce support for the N32 and N64 ABIs. As preparation, the
+> entrypoint is first simplified significantly. Thanks to Maciej for all
+> the valuable information.
+> 
+> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
+> ---
+> Changes in v2:
+> - Clean up entrypoint first
+> - Annotate #endifs
+> - Link to v1: https://lore.kernel.org/r/20250212-nolibc-mips-n32-v1-1-6892e58d1321@weissschuh.net
 
-diff --git a/drivers/pinctrl/pinctrl-ingenic.c b/drivers/pinctrl/pinctrl-ingenic.c
-index 08e082e84f5c6..a9e48eac15f62 100644
---- a/drivers/pinctrl/pinctrl-ingenic.c
-+++ b/drivers/pinctrl/pinctrl-ingenic.c
-@@ -213,6 +213,11 @@ static int jz4730_pwm_pwm1_pins[] = { 0x5f, };
- static int jz4730_mii_pins[] = { 0x70, 0x71, 0x72, 0x73, 0x74, 0x75, 0x76,
- 				 0x77, 0x78, 0x19, 0x7a, 0x1b, 0x7c, };
- 
-+static int jz4730_i2s_mclk_pins[] = { 0x44, };
-+static int jz4730_i2s_acreset_pins[] = { 0x45, };
-+static int jz4730_i2s_data_pins[] = { 0x46, 0x47, };
-+static int jz4730_i2s_clock_pins[] = { 0x4d, 0x4e, };
-+
- static u8 jz4730_lcd_8bit_funcs[] = { 1, 1, 1, 1, 1, 1, 1, 1, 2, 2, 2, };
- 
- static const struct group_desc jz4730_groups[] = {
-@@ -235,6 +240,11 @@ static const struct group_desc jz4730_groups[] = {
- 	INGENIC_PIN_GROUP("pwm0", jz4730_pwm_pwm0, 1),
- 	INGENIC_PIN_GROUP("pwm1", jz4730_pwm_pwm1, 1),
- 	INGENIC_PIN_GROUP("mii", jz4730_mii, 1),
-+	INGENIC_PIN_GROUP("i2s-mclk-out", jz4730_i2s_mclk, 1),
-+	INGENIC_PIN_GROUP("i2s-acreset", jz4730_i2s_acreset, 1),
-+	INGENIC_PIN_GROUP("i2s-data", jz4730_i2s_data, 1),
-+	INGENIC_PIN_GROUP("i2s-master", jz4730_i2s_clock, 1),
-+	INGENIC_PIN_GROUP("i2s-slave", jz4730_i2s_clock, 2),
- };
- 
- static const char *jz4730_mmc_groups[] = { "mmc-1bit", "mmc-4bit", };
-@@ -251,6 +261,7 @@ static const char *jz4730_nand_groups[] = {
- static const char *jz4730_pwm0_groups[] = { "pwm0", };
- static const char *jz4730_pwm1_groups[] = { "pwm1", };
- static const char *jz4730_mii_groups[] = { "mii", };
-+static const char *jz4730_i2s_groups[] = { "i2s-data", "i2s-master", "i2s-slave", };
- 
- static const struct function_desc jz4730_functions[] = {
- 	INGENIC_PIN_FUNCTION("mmc", jz4730_mmc),
-@@ -263,6 +274,7 @@ static const struct function_desc jz4730_functions[] = {
- 	INGENIC_PIN_FUNCTION("pwm0", jz4730_pwm0),
- 	INGENIC_PIN_FUNCTION("pwm1", jz4730_pwm1),
- 	INGENIC_PIN_FUNCTION("mii", jz4730_mii),
-+	INGENIC_PIN_FUNCTION("i2s", jz4730_i2s),
- };
- 
- static const struct ingenic_chip_info jz4730_chip_info = {
--- 
-2.47.0
+OK I tested this series on my glinet (MIPS 24Kc, XARCH=mips32be) and
+it worked fine, confirming that the stack alignments were not needed
+and that the cleanup is quite welcome!
 
+Tested-by: Willy Tarreau <w@1wt.eu>
+
+Willy
 
