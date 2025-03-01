@@ -1,267 +1,144 @@
-Return-Path: <linux-mips+bounces-8053-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8058-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 57A41A4A976
-	for <lists+linux-mips@lfdr.de>; Sat,  1 Mar 2025 08:24:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CC88DA4AA29
+	for <lists+linux-mips@lfdr.de>; Sat,  1 Mar 2025 11:04:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9D19C7AA031
-	for <lists+linux-mips@lfdr.de>; Sat,  1 Mar 2025 07:23:39 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 371307A8686
+	for <lists+linux-mips@lfdr.de>; Sat,  1 Mar 2025 10:03:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89C221C831A;
-	Sat,  1 Mar 2025 07:24:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39D601D7E30;
+	Sat,  1 Mar 2025 10:03:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gtscTzal"
+	dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="YCSL+ZCX";
+	dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="wcqUjdTw"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FE981B87D1;
-	Sat,  1 Mar 2025 07:24:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740813871; cv=none; b=q/lrASCUG8cJkKL9UQ6ex7RfFT5igJmo+EJVDofq3TOGAvll6qGnYuISvMZfBMee4jGPnzvHjHAu5YagAQe1xTpTKDV2FbLnD3w4I0j4MZbCk1zWjUiQo5VouB4cYArLXrNA0MpldmuO1P14ilghOIB2inVzTRnAZ8RqnsZfUpo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740813871; c=relaxed/simple;
-	bh=zNyC5lhRK0Jp4F93R1ijsSaURdoFR2R28yW7mia17cM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hmIaCfSUuUyAwzhAQ0Jrs/ioobSgF7YXBKxTiSNXnXdC9wGzWPZJY4f1XYl2Bv/2NKYoYBwaNlxUtF2tvLLVfHN/A0gbk0tJXf82UJbDIIb1g3/g99XdeBrsfaKVxNMRrIYD3OhErwQVf4/ZH33dzUVlCKT64ny14jpASaQ8JRo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gtscTzal; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 800D1C4CEDD;
-	Sat,  1 Mar 2025 07:24:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740813870;
-	bh=zNyC5lhRK0Jp4F93R1ijsSaURdoFR2R28yW7mia17cM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gtscTzalpXI+EBlbvhmEfLi9LdExvWsiMbsCojuFb6z7D6TJ+eIyI5Zu0dNVt1+Rt
-	 R7KC6887+sVZtgnQ19+IkfSlJqXOab6/YNi9aZBAtp/VgQU/JqRJpIH8eBc4GGjByG
-	 /iEET/+yluuuSKQHZY8L55Rx9HismpEadrVB6zyppH+G3FGWR/3bh3ot8dW5rcHNI7
-	 NKKycvvnkEsnUXv1eFIzBBP8cwd+jkC4/L6TStK9cq+p4BvnEfW2RzlrWF5UZglu5h
-	 /IAlH97YxPUeMyrnxQe6BmmTiig5TOwLHznM4yMtuGGFo8JCLj5r1JCg4T+JRGSA6x
-	 kS+2S3GSKmFcQ==
-Date: Sat, 1 Mar 2025 09:23:51 +0200
-From: Mike Rapoport <rppt@kernel.org>
-To: Brendan Jackman <jackmanb@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
-	Brian Cain <bcain@quicinc.com>, Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Michal Simek <monstr@monstr.eu>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>,
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-	Stafford Horne <shorne@gmail.com>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>, Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Richard Weinberger <richard@nod.at>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Christoph Hellwig <hch@infradead.org>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Christoph Lameter <cl@linux.com>,
-	Sean Christopherson <seanjc@google.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Pawan Gupta <pawan.kumar.gupta@linux.intel.com>, x86@kernel.org,
-	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
-	linux-arch@vger.kernel.org, linux-mm@kvack.org,
-	linux-trace-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org, kvm@vger.kernel.org,
-	linux-efi@vger.kernel.org, Junaid Shahid <junaids@google.com>
-Subject: Re: [PATCH RFC v2 02/29] x86: Create
- CONFIG_MITIGATION_ADDRESS_SPACE_ISOLATION
-Message-ID: <Z8K2B3WJoICVbDj3@kernel.org>
-References: <20250110-asi-rfc-v2-v2-0-8419288bc805@google.com>
- <20250110-asi-rfc-v2-v2-2-8419288bc805@google.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6B031D6DC8;
+	Sat,  1 Mar 2025 10:03:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=85.215.255.54
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740823436; cv=pass; b=pKiElAUIXMmsVhOtvQT6IgrIgHHZ+rSsuHGiAtmwRbKhT0CZ0o27xQ541G8GGvmRbDD2HlSwuS+Ij8WhdB8ZxIp3E02dCXkx2BUc4t3EsE6T43jrnWRtORMeQHuFlbYwgfnmOcho/qSIUDcwQM5pstEI2LdX/Eqzr4gAoKvxJd8=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740823436; c=relaxed/simple;
+	bh=Rn/w/lrOPl+6Z/ejlk3nn0vA6sXamygIoAjnNZ6QoL4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=GMK2+MkFC5dhzKTs+4InvjY37dq0a3dYEGIMon6K0OhWUUwDe8R9mxYO6yeynuQgdVLw87vxU5KKC7ZeJPk0uP7Qh83r4djoA9F/OKw/rmsnNZ38eWG6wKeNcBT0i/Q4PZhaAew3V1aMwl0ENktkDSQqUhCfy5p83Hz3ACkNw7A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com; spf=pass smtp.mailfrom=goldelico.com; dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=YCSL+ZCX; dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=wcqUjdTw; arc=pass smtp.client-ip=85.215.255.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goldelico.com
+ARC-Seal: i=1; a=rsa-sha256; t=1740823244; cv=none;
+    d=strato.com; s=strato-dkim-0002;
+    b=VfGLBiyuuul7M5Jh4cuZyMbLX48q2HddResoH33nydVhvupAHaLjbd+fQwTygLu3xd
+    xQcK+rz54QnUCGEP7PvUmzj4qIc7NE+zgVMQnvLC1FfsgZ6o1WeWmbNr3y83WeaTb1l4
+    Qsu5aoipVHWePuQ83IDJdcJ9eEScC6IqS7t8U/cpxIHhUQrY77Y0Yjgj84/dfqgg6huj
+    gidh9rXRglovd9s+TiEu8tzOcjMOzKgCvizjenapxJ8brTOXcvhncNhUuckBLrWH0M5r
+    6eGvqJKshk4altmp/zIC60nmP/1jVLnQqxH1PhBkBkSLuqd9Wupdxdl1fFIwm7HYC1EH
+    sVAg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1740823244;
+    s=strato-dkim-0002; d=strato.com;
+    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=jQHkoK6XIUS+W/XJnNra9kSPHkGbD84yfUBClpEfK14=;
+    b=owU9sDCrg3+r9Qe9omYgoNZObZ3GUHd+/YYbtFLwdflvTXi9/06XZBIVbQVdyLKYBl
+    HpPjL5Tb0StQHs4RFCQ11CD0goKi5kVy4pQMj2QiX2D2eJOMb1nAIOjyFUFeiryVlcSj
+    tfk1vBylRl5BSqrHrSckciTEuIDNatEfCCOgC2890q/NQf3GC4oBBhUiDyju5SHTbp2B
+    HPUfTxiDdRCGEceNTsSVQtZodqU20kx39AOdWxn+MVuNFjQ7mbTHXzm4+C40UDiY/d6H
+    HvB4prxUgvt85PBDdUjMq4+BUikOOyb342bWnFbP6+/NBvJt304YOaTNvNDFNHKbG53d
+    TaEw==
+ARC-Authentication-Results: i=1; strato.com;
+    arc=none;
+    dkim=none
+X-RZG-CLASS-ID: mo01
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1740823244;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=jQHkoK6XIUS+W/XJnNra9kSPHkGbD84yfUBClpEfK14=;
+    b=YCSL+ZCX1HMFEZz0lYwmft2xiKDXGknLSxammPr/P93NuBVBDPMHj3fdnva4afNSx+
+    PfUjryNeVZkebUjnaJn/McDNyUTDySQsmWqYV50GJQlAZCPPJ76oNzEQDoVjuCuvS/Yo
+    WE2AyV1z0ELj3xMAlMJdJru4/xZ6AG4rhGtgQyQOu33/hD6hDIHzYBln6l/feE+0cAkD
+    y4+v1clU2BAmvqR3EPIVrxCwAtBbADkZ2n6kmBM+5TeRChOyRxgS5MtYtt0n0r5PtEag
+    WKXWRYqAqYeqqoZBvmKJR+DE9ljDFJdHDoyz32Q5JI1Xwb+3nPHZS1G2VPvbd38Ty/7C
+    FoAg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1740823244;
+    s=strato-dkim-0003; d=goldelico.com;
+    h=Message-ID:Date:Subject:Cc:To:From:Cc:Date:From:Subject:Sender;
+    bh=jQHkoK6XIUS+W/XJnNra9kSPHkGbD84yfUBClpEfK14=;
+    b=wcqUjdTw7TB0GskEKt703SipSmVMBCBl7OhgFwLkja9cGIzoyL3FExijRRWlXg3q8N
+    ywFNz5gv51mfYqD+HmCQ==
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0lFzL1yfjEZ"
+Received: from localhost.localdomain
+    by smtp.strato.de (RZmta 51.3.0 DYNA|AUTH)
+    with ESMTPSA id Q56adc121A0hbff
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+	(Client did not present a certificate);
+    Sat, 1 Mar 2025 11:00:43 +0100 (CET)
+From: "H. Nikolaus Schaller" <hns@goldelico.com>
+To: Linus Walleij <linus.walleij@linaro.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Paul Cercueil <paul@crapouillou.net>
+Cc: Andreas Kemnade <andreas@kemnade.info>,
+	Paul Boddie <paul@boddie.org.uk>,
+	Tim Bysun <tim.bysun@ingenic.com>,
+	linux-gpio@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	letux-kernel@openphoenux.org,
+	kernel@pyra-handheld.com,
+	"H. Nikolaus Schaller" <hns@goldelico.com>
+Subject: [PATCH v3 0/4] pinctrl: ingenic: add support for x1600 SoC and MII and I2S for jz4730
+Date: Sat,  1 Mar 2025 11:00:37 +0100
+Message-ID: <cover.1740823241.git.hns@goldelico.com>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250110-asi-rfc-v2-v2-2-8419288bc805@google.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="us-ascii"
 
-Hi Brendan,
+PATCH V3 2025-03-01 11:00:41:
+Fix some nits reported by Conor and Paul during their review and add
+their acked/reviewed-by.
 
-On Fri, Jan 10, 2025 at 06:40:28PM +0000, Brendan Jackman wrote:
-> Currently a nop config. Keeping as a separate commit for easy review of
-> the boring bits. Later commits will use and enable this new config.
-> 
-> This config is only added for non-UML x86_64 as other architectures do
-> not yet have pending implementations. It also has somewhat artificial
-> dependencies on !PARAVIRT and !KASAN which are explained in the Kconfig
-> file.
-> 
-> Co-developed-by: Junaid Shahid <junaids@google.com>
-> Signed-off-by: Junaid Shahid <junaids@google.com>
-> Signed-off-by: Brendan Jackman <jackmanb@google.com>
-> ---
->  arch/alpha/include/asm/Kbuild      |  1 +
->  arch/arc/include/asm/Kbuild        |  1 +
->  arch/arm/include/asm/Kbuild        |  1 +
->  arch/arm64/include/asm/Kbuild      |  1 +
->  arch/csky/include/asm/Kbuild       |  1 +
->  arch/hexagon/include/asm/Kbuild    |  1 +
->  arch/loongarch/include/asm/Kbuild  |  3 +++
->  arch/m68k/include/asm/Kbuild       |  1 +
->  arch/microblaze/include/asm/Kbuild |  1 +
->  arch/mips/include/asm/Kbuild       |  1 +
->  arch/nios2/include/asm/Kbuild      |  1 +
->  arch/openrisc/include/asm/Kbuild   |  1 +
->  arch/parisc/include/asm/Kbuild     |  1 +
->  arch/powerpc/include/asm/Kbuild    |  1 +
->  arch/riscv/include/asm/Kbuild      |  1 +
->  arch/s390/include/asm/Kbuild       |  1 +
->  arch/sh/include/asm/Kbuild         |  1 +
->  arch/sparc/include/asm/Kbuild      |  1 +
->  arch/um/include/asm/Kbuild         |  2 +-
->  arch/x86/Kconfig                   | 14 ++++++++++++++
->  arch/xtensa/include/asm/Kbuild     |  1 +
->  include/asm-generic/asi.h          |  5 +++++
->  22 files changed, 41 insertions(+), 1 deletion(-)
+PATCH V2 2025-02-28 14:33:57:
+Fix pwm5/pwm6/pwm7 pin groups (each one can be muxed to one of two
+pads while pwm0-4 have only one pad) for X1600.
 
-I don't think this all is needed. You can put asi.h with stubs used outside
-of arch/x86 in include/linux and save you the hassle of updating every
-architecture.
- 
-> diff --git a/arch/sparc/include/asm/Kbuild b/arch/sparc/include/asm/Kbuild
-> index 43b0ae4c2c2112d4d4d3cb3c60e787b175172dea..cb9062c9be17fe276cc92d2ac99d8b165f6297bf 100644
-> --- a/arch/sparc/include/asm/Kbuild
-> +++ b/arch/sparc/include/asm/Kbuild
-> @@ -4,3 +4,4 @@ generated-y += syscall_table_64.h
->  generic-y += agp.h
->  generic-y += kvm_para.h
->  generic-y += mcs_spinlock.h
-> +generic-y += asi.h
+PATCH V1 2025-02-26 18:14:53:
+This series expands pinctrl support for some Ingenic/Lumissil SoC.
+For the jz4730 we add MII and I2S pinctrl and general x1600 support.
 
-sparc already has include/asm/asi.h, this will break the build
+The x1600 parts were jointly developed.
 
-> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-> index 7b9a7e8f39acc8e9aeb7d4213e87d71047865f5c..5a50582eb210e9d1309856a737d32b76fa1bfc85 100644
-> --- a/arch/x86/Kconfig
-> +++ b/arch/x86/Kconfig
-> @@ -2519,6 +2519,20 @@ config MITIGATION_PAGE_TABLE_ISOLATION
->  
->  	  See Documentation/arch/x86/pti.rst for more details.
->  
-> +config MITIGATION_ADDRESS_SPACE_ISOLATION
-> +	bool "Allow code to run with a reduced kernel address space"
-> +	default n
-> +	depends on X86_64 && !PARAVIRT && !UML
-> +	help
-> +	  This feature provides the ability to run some kernel code
-> +	  with a reduced kernel address space. This can be used to
-> +	  mitigate some speculative execution attacks.
-> +
-> +	  The !PARAVIRT dependency is only because of lack of testing; in theory
-> +	  the code is written to work under paravirtualization. In practice
-> +	  there are likely to be unhandled cases, in particular concerning TLB
-> +	  flushes.
-> +
+Code was tested on LX16 board (x1600) and Alpha400 (jz4730) and
+on CI20 (jz4780).
 
-If you expect other architectures might implement ASI the config would better
-fit into init/Kconfig or mm/Kconfig and in arch/x86/Kconfig will define
-ARCH_HAS_MITIGATION_ADDRESS_SPACE_ISOLATION.
+Co-authored-by: Andreas Kemnade <andreas@kemnade.info>
+Co-authored-by: H. Nikolaus Schaller <hns@goldelico.com>
 
->  config MITIGATION_RETPOLINE
->  	bool "Avoid speculative indirect branches in kernel"
->  	select OBJTOOL if HAVE_OBJTOOL
-> diff --git a/arch/xtensa/include/asm/Kbuild b/arch/xtensa/include/asm/Kbuild
-> index fa07c686cbcc2153776a478ac4093846f01eddab..07cea6902f98053be244d026ed594fe7246755a6 100644
-> --- a/arch/xtensa/include/asm/Kbuild
-> +++ b/arch/xtensa/include/asm/Kbuild
-> @@ -8,3 +8,4 @@ generic-y += parport.h
->  generic-y += qrwlock.h
->  generic-y += qspinlock.h
->  generic-y += user.h
-> +generic-y += asi.h
-> diff --git a/include/asm-generic/asi.h b/include/asm-generic/asi.h
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..c4d9a5ff860a96428422a15000c622aeecc2d664
-> --- /dev/null
-> +++ b/include/asm-generic/asi.h
-> @@ -0,0 +1,5 @@
-> +/* SPDX-License-Identifier: GPL-2.0 */
-> +#ifndef __ASM_GENERIC_ASI_H
-> +#define __ASM_GENERIC_ASI_H
-> +
-> +#endif
 
-IMHO it should be include/linux/asi.h, with something like
+H. Nikolaus Schaller (3):
+  bindings: pinctrl: ingenic: add x1600
+  pinctrl: ingenic: jz4730: add pinmux for MII
+  pinctrl: ingenic: jz4730: add pinmux for I2S interface
 
-#infdef __LINUX_ASI_H
-#define __LINUX_ASI_H
+Paul Boddie (1):
+  pinctrl: ingenic: add x1600 support
 
-#ifdef CONFIG_MITIGATION_ADDRESS_SPACE_ISOLATION
-
-#include <asm/asi.h>
-
-#else /* CONFIG_MITIGATION_ADDRESS_SPACE_ISOLATION */
-
-/* stubs for functions used outside arch/ */
-
-#endif /* CONFIG_MITIGATION_ADDRESS_SPACE_ISOLATION */
-
-#endif /* __LINUX_ASI_H */
+ .../bindings/pinctrl/ingenic,pinctrl.yaml     |   2 +
+ drivers/pinctrl/pinctrl-ingenic.c             | 262 +++++++++++++++++-
+ 2 files changed, 262 insertions(+), 2 deletions(-)
 
 -- 
-Sincerely yours,
-Mike.
+2.47.0
+
 
