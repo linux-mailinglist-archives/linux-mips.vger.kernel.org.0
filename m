@@ -1,112 +1,74 @@
-Return-Path: <linux-mips+bounces-8063-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8064-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F3C9A4AE9D
-	for <lists+linux-mips@lfdr.de>; Sun,  2 Mar 2025 01:54:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C147A4B0BB
+	for <lists+linux-mips@lfdr.de>; Sun,  2 Mar 2025 09:48:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 13ED23AEDB6
-	for <lists+linux-mips@lfdr.de>; Sun,  2 Mar 2025 00:54:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 65C4716AF39
+	for <lists+linux-mips@lfdr.de>; Sun,  2 Mar 2025 08:48:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 523118F6C;
-	Sun,  2 Mar 2025 00:54:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEFE21C3BF9;
+	Sun,  2 Mar 2025 08:48:35 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0A2CFBF6;
-	Sun,  2 Mar 2025 00:54:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DCFA1CA84;
+	Sun,  2 Mar 2025 08:48:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740876874; cv=none; b=HSNigN7VsGSJmpAex3j3dOzQrp8pkYzanNQ8psVWgR6XROEYZRFw7XZHQIdvo6va9eKtEAGMYWOAY+EMC+Y798XZ2WHbKdN2SQqp9pN+oxlNgQ5+qkWP7zTsoa7Hk5CggXUkFn5bbQ6C6bqrgw/XN1sao1Irto9Mg5a9a0hkNZc=
+	t=1740905315; cv=none; b=lVMl+NdzpfQLaf0u2scZgrCbPlEvqQ8dShvJ4ji8qP7Gomjwz6mPuGc0Y3q2aY3I8xpzRtCTMY1Bzo0xK9gY/KF+eEMEhbY9b0jVjKuYJ5BbXGkZ/iIkMYHnJNc9qOVJTOt7ztpiAfULqC/GLghLtqq8grx8ePxRwQv89t35IoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740876874; c=relaxed/simple;
-	bh=Jpd0cs6jQ/uM2bY2Lr1XjevgxrLlCbZgd2FnliUYzYM=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=dMzXBER6q+4AF6IjHXkQUA51kRaLuAjThNzPlQ/77kMHQGycsXkofC5tzbF1lWxzLCTtvAyxFLhulDpvEmMJhB61qKhT5LuLRtrKpDAmWQTOVGUoPtKPemwk4+E/mCLr40JW9hCP0bbh9pAU/AVhqBPV+1NRWnotnJvlpRTwovU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 7B3BE92009E; Sun,  2 Mar 2025 01:54:23 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 6CCA792009C;
-	Sun,  2 Mar 2025 00:54:23 +0000 (GMT)
-Date: Sun, 2 Mar 2025 00:54:23 +0000 (GMT)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Marco Crivellari <marco.crivellari@suse.com>
-cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
-    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-    Frederic Weisbecker <frederic@kernel.org>, 
-    Anna-Maria Behnsen <anna-maria@linutronix.de>, 
-    Thomas Gleixner <tglx@linutronix.de>, 
-    Peter Zijlstra <peterz@infradead.org>, Huacai Chen <chenhuacai@kernel.org>
-Subject: Re: [PATCH v5 1/1] MIPS: Fix idle VS timer enqueue
-In-Reply-To: <20250228100509.91121-2-marco.crivellari@suse.com>
-Message-ID: <alpine.DEB.2.21.2503020042100.12637@angie.orcam.me.uk>
-References: <20250228100509.91121-1-marco.crivellari@suse.com> <20250228100509.91121-2-marco.crivellari@suse.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1740905315; c=relaxed/simple;
+	bh=GpAubITbfEu6s2rjNggxWmrFc1oAakKX/e/I6ZqoDuQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=DKk4fB88IsTS8XTj+lxjbNV5xrSV7aW2cAGDvmGyKqimgZsM4l+SJQYFveJC5eieGP3/uV1q+FIT4FdWgwgn9D8PbGyVUPRBy4QbnUV/aTG31m++jBebH6x/z6uwO6zLn4CPHpYS6UaUd3FKiFsaRHOZxP7TbfElRXOGoEPYCuo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1toezn-0000OS-00; Sun, 02 Mar 2025 09:48:23 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 46680C0135; Sun,  2 Mar 2025 09:48:17 +0100 (CET)
+Date: Sun, 2 Mar 2025 09:48:17 +0100
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: torvalds@linux-foundation.org
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] MIPS fixes for v6.14
+Message-ID: <Z8QbUbukL7ejc6T6@alpha.franken.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On Fri, 28 Feb 2025, Marco Crivellari wrote:
+The following changes since commit 0ad2507d5d93f39619fc42372c347d6006b64319:
 
-> diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
-> index a572ce36a24f..474738d9124e 100644
-> --- a/arch/mips/kernel/genex.S
-> +++ b/arch/mips/kernel/genex.S
-> @@ -104,27 +104,30 @@ handle_vcei:
->  
->  	__FINIT
->  
-> -	.align	5	/* 32 byte rollback region */
-> +	.align	5
->  LEAF(__r4k_wait)
->  	.set	push
->  	.set	noreorder
-> -	/* start of rollback region */
-> -	LONG_L	t0, TI_FLAGS($28)
-> -	nop
-> -	andi	t0, _TIF_NEED_RESCHED
-> -	bnez	t0, 1f
-> -	 nop
-> -	nop
-> -	nop
-> -#ifdef CONFIG_CPU_MICROMIPS
-> -	nop
-> -	nop
-> -	nop
-> -	nop
-> -#endif
-> +	/* start of idle interrupt region */
-> +	MFC0	t0, CP0_STATUS
-> +	/* Enable Interrput */
-                        ^^
- Typo here; also please capitalise sentences and use full stops.
+  Linux 6.14-rc3 (2025-02-16 14:02:44 -0800)
 
-> +	ori 	t0, 0x1f
+are available in the Git repository at:
 
- No time for a thorough review here as I'm heading for a holiday right 
-away, but I can see you still have a coprocessor move hazard here with 
-MIPS III hardware.  The incoming value of $t0 to ORI is not what MFC0 has 
-obtained.  It's the value from before MFC0.
+  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.14_2
 
-> +	xori	t0, 0x1e
+for you to fetch changes up to 6d48ad04075729519f6baaa1dc9e5a3a39d05f53:
 
- And then it's only this XORI that sees the output from MFC0 (though 
-there's actually a race between the two competing writes to $t0), so 
-effectively you clobber the CP0.Status register...
+  MIPS: Ignore relocs against __ex_table for relocatable kernel (2025-02-27 11:07:50 +0100)
 
-> +	MTC0	t0, CP0_STATUS
+----------------------------------------------------------------
+Fix fallout of /scripts/sorttable cleanup
 
- ... here.  You need to schedule your instructions differently.  But do 
-you need `.set noreorder' in the first place?  Can you maybe find a way to 
-avoid it, making all the hazard avoidance stuff much easier?
+----------------------------------------------------------------
+Xi Ruoyao (1):
+      MIPS: Ignore relocs against __ex_table for relocatable kernel
 
-  Maciej
+ arch/mips/boot/tools/relocs.c | 5 +++++
+ 1 file changed, 5 insertions(+)
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
