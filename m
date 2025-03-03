@@ -1,259 +1,265 @@
-Return-Path: <linux-mips+bounces-8067-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8068-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1426AA4B5D8
-	for <lists+linux-mips@lfdr.de>; Mon,  3 Mar 2025 02:45:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E784A4B720
+	for <lists+linux-mips@lfdr.de>; Mon,  3 Mar 2025 05:23:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA015188E7A2
-	for <lists+linux-mips@lfdr.de>; Mon,  3 Mar 2025 01:46:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 310B9188EF2A
+	for <lists+linux-mips@lfdr.de>; Mon,  3 Mar 2025 04:24:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7D62513BC3F;
-	Mon,  3 Mar 2025 01:45:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 087A2158D8B;
+	Mon,  3 Mar 2025 04:23:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="TK04mLFo"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="K8aFmrKf"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 733CE35944
-	for <linux-mips@vger.kernel.org>; Mon,  3 Mar 2025 01:45:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 86B022AE89;
+	Mon,  3 Mar 2025 04:23:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740966353; cv=none; b=a4bKveu3AJScQPepnsEmXlEmnCZRpEQ7PRcuGNxYF0P0iR2Dxzj4+SuiZdZ4iMNCZVlaWUclnoFGHCSHwofWoMUti/g6YAzsCWHj+TUqISvJ39GvIZDH1k+zjj5sIvrQqDS7gp0OjF/w0w+KEJSMFlJwlWGITnXGziZ79s5MfWs=
+	t=1740975834; cv=none; b=fyj4rA/As3vADvB2ETabtkl8BWXUk1zpfbgSAFLEkqICsqDqMZango6yrU5ALM0DLxHgGoQGRWmGgYemlBl9sBOgakRuC0Iz2ASpVDLeEI0N8HlzH6ED6rloWqeKYRkDC8DLS+6VIxT4kWkWbCJiB2aBxJwYMzh1+RlTK4nroZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740966353; c=relaxed/simple;
-	bh=VVdApa3BG2mFUlbyWpECbB13z5U6JMfWDjN+ddRNM7c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jvKr2M2uomTTwBGelNJaKY1doRxfZ9F5thOJ56MeItEUpT344MPckDi3HxOIb/ilbs+L+1Am5om+13lNVQvUwcXBGBmbArxRRp5TKZGdkgw1R915XPqMXV5LSn9yb2F+cAxg4LGfTVVTWDMAYPJpRx6QshJNtrkoLZ6p95mu7G8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=TK04mLFo; arc=none smtp.client-ip=209.85.160.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
-Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-2bd2218ba4fso1015673fac.1
-        for <linux-mips@vger.kernel.org>; Sun, 02 Mar 2025 17:45:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance.com; s=google; t=1740966349; x=1741571149; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=W8SnZDZRbvLSaoNIXAx3tJOrDKr8WC27+4Kk8dOe4BE=;
-        b=TK04mLFogIQ65pDkgHnRSCTOCitks0JFjNzCP9pXKTMzD5Tg32Eqb9rXN7CS7i8yyk
-         AG+d0IVfykTXSi1HRB9zjSWb83BHgEdiDqDfQP+WV/4r3h338ReQIecHig++pFaz5uKd
-         0QWgk4rUM+MxXcDZqqZ5h4OmkUI7NkYaKOqd4Xe6eZcuDqsNdt8mqUkzxowxK4jG5EUs
-         XD/ZwAkBqoBcXaXSBbxigzj6RKgIKjMHR6nEWf3G42pRqjfYBzad+lSvDi6eatiD3fF+
-         2OfFDAjysExJ/VxJ4nt7oRA1Ab6PUTpD9/ojbtOTGq/FOy7r1JG9Wtr8wTtjGbHf1/+l
-         r5lQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740966349; x=1741571149;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=W8SnZDZRbvLSaoNIXAx3tJOrDKr8WC27+4Kk8dOe4BE=;
-        b=lNsTzQbrGBld3eACO7ajkrkleY5G0PbrtK3r1VbWjOOqLTehfDiXwIv5embv39+t0B
-         UGVockwZ3Os28G+IJgxPy0ZLAQ/yxawF5CYw06Z4vbWiXSIpmHLYDR6C1M97r6/mJvYl
-         INws1hy11f/yEMFHAm6d6R9I+9S3NoIUizmt74c3wa4VBqC8roazHG0vJuJ2SHlqX87J
-         en9lEfkJJDfPL5MRbo6pA9W+9m1k5W0Tsuq/k0zGXjC/5xpo1inlKvHU7iHuV+44VB2K
-         L5XXPYDkFteQ0AVDDBa+E74uR30EOmd79Y0JuyZQJc0L+F46Uq9VERFhJOrb/yOi5Hxc
-         I/EQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXZiZIjjtLdPzkLmqvgIHb4wi42mnLxnAxBv4tHeePz3nZnjedISV+76Sx7Yr+W8l9r02OeEdFIE6BC@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYaVNdnvngS9vL8wvfagw2+seKgKCUKTikF0UfSBdIEKGy78G/
-	7auA9slLAspXLpkGhlPy/wOvd3VZg+1/yLy03XSV5mRES7hJQq/eU4sVaPxoVhLuvaA/nBc0sx8
-	17Ot7xscEQCsRss6kESPeRWyjNOJISBYEOXgFyw==
-X-Gm-Gg: ASbGnctRgR6WRX2ywc344xgq6shIGxqggDwhULRm6kBLjGP3zZAgmEqvjkPyp43+ib5
-	OgR0ZHy2FGaNjat0uxOZ45mp3ivjsfiiHsL4lONrshRYPlQJuOM05ZSZJ5nxrBq62nQC08dwiv1
-	BnGKF0FG1ZyWBw7SFLbRFCiu17GKb+
-X-Google-Smtp-Source: AGHT+IGOWIRMroQZxbRNJcNH5tnmnGD/bIDamuPKwa3GDm5B/gWkRsBelrb1kdvpy/ijW+hukYwC4esnzOdnOPSB3MY=
-X-Received: by 2002:a05:6871:aa16:b0:2b8:3d1c:772 with SMTP id
- 586e51a60fabf-2c178335be6mr6945276fac.5.1740966349475; Sun, 02 Mar 2025
- 17:45:49 -0800 (PST)
+	s=arc-20240116; t=1740975834; c=relaxed/simple;
+	bh=RHRwTwF2rci0UsFXaOFZeSD9+Dqtg4+acVTeXRyCq9E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=b8ESWoyzbxVDBzJ4VY/zM37ZtnlZDZnz0yDp61tytsmAP+ZS6cqT7qfDdaQvq9CLdp9sL1cXKttuCBXguX9KowiZYexkNQRvbC5oed5uICcLbi4WQ1kHBkexCLpesUuO7x8SBmzzpuHjNHjlUe5pQolACOsb6Qylsd4BzDbpXuU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=K8aFmrKf; arc=none smtp.client-ip=54.206.16.166
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1740975808;
+	bh=eEGr07Gnc/KgfHm5IaSFcJgCJQ+k3INFRhhVYtc5hGE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=K8aFmrKfyWPhQtQP3w30b88YIdD9QzX2FmdBp9s4OQqMZSUhl4T9kiA3933ZC9Wom
+	 dDgOKBZ7v8vcNr8vvyGB5+q3+kUokwaHvOs1ar4Vm7YVk2Al5l2hOl/RzaOIy3Dqek
+	 G71S7IZmqyOvw8qcBOG+nJ+A+v6nJ4zNjt919Qk0=
+X-QQ-mid: bizesmtpip4t1740975795t603la1
+X-QQ-Originating-IP: AcZd1tD18G2+fzJs10igiJn3HJWy/8QKPUnlHzTb1Cc=
+Received: from [IPV6:240e:668:120a::212:156] ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Mon, 03 Mar 2025 12:23:13 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 11475789549793595180
+Message-ID: <A1142BF8B63D5EC4+98768bf8-7bde-46ec-85fc-f077d67a1798@uniontech.com>
+Date: Mon, 3 Mar 2025 12:23:13 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1740454179.git.zhengqi.arch@bytedance.com> <9025595e895515515c95e48db54b29afa489c41d.1740454179.git.zhengqi.arch@bytedance.com>
-In-Reply-To: <9025595e895515515c95e48db54b29afa489c41d.1740454179.git.zhengqi.arch@bytedance.com>
-From: yunhui cui <cuiyunhui@bytedance.com>
-Date: Mon, 3 Mar 2025 09:45:37 +0800
-X-Gm-Features: AQ5f1Jrb5nkY3jTSkwu3MIgtit28ISDfNBjj4Qwj5SXBUXKwFnVTECUIEIzLwQo
-Message-ID: <CAEEQ3wnvgX=Bq=oAQV6wfg5a7H2jiG7f8P6trbC9agJ8D6t4pA@mail.gmail.com>
-Subject: Re: [External] [PATCH v2 4/6] riscv: pgtable: unconditionally use tlb_remove_ptdesc()
-To: Qi Zheng <zhengqi.arch@bytedance.com>
-Cc: peterz@infradead.org, kevin.brodsky@arm.com, riel@surriel.com, 
-	vishal.moola@gmail.com, david@redhat.com, jannh@google.com, hughd@google.com, 
-	willy@infradead.org, yuzhao@google.com, muchun.song@linux.dev, 
-	akpm@linux-foundation.org, will@kernel.org, aneesh.kumar@kernel.org, 
-	npiggin@gmail.com, arnd@arndb.de, dave.hansen@linux.intel.com, 
-	rppt@kernel.org, alexghiti@rivosinc.com, linux-mm@kvack.org, 
-	linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org, 
-	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
-	linux-openrisc@vger.kernel.org, linux-sh@vger.kernel.org, 
-	linux-um@lists.infradead.org, x86@kernel.org, linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 5/7] MIPS: dec: Remove dec_irq_dispatch()
+To: "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc: chenlinxuan@uniontech.com, guanwentao@uniontech.com,
+ linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+ niecheng1@uniontech.com, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ zhanjun@uniontech.com
+References: <487CE8AA937621E2+20250218125101.663980-1-wangyuli@uniontech.com>
+ <222468E85948B141+20250218125842.667798-1-wangyuli@uniontech.com>
+ <alpine.DEB.2.21.2502220019210.65342@angie.orcam.me.uk>
+Content-Language: en-US
+From: WangYuli <wangyuli@uniontech.com>
+Autocrypt: addr=wangyuli@uniontech.com; keydata=
+ xjMEZoEsiBYJKwYBBAHaRw8BAQdAyDPzcbPnchbIhweThfNK1tg1imM+5kgDBJSKP+nX39DN
+ IVdhbmdZdWxpIDx3YW5neXVsaUB1bmlvbnRlY2guY29tPsKJBBMWCAAxFiEEa1GMzYeuKPkg
+ qDuvxdofMEb0C+4FAmaBLIgCGwMECwkIBwUVCAkKCwUWAgMBAAAKCRDF2h8wRvQL7g0UAQCH
+ 3mrGM0HzOaARhBeA/Q3AIVfhS010a0MZmPTRGVfPbwD/SrncJwwPAL4GiLPEC4XssV6FPUAY
+ 0rA68eNNI9cJLArOOARmgSyJEgorBgEEAZdVAQUBAQdA88W4CTLDD9fKwW9PB5yurCNdWNS7
+ VTL0dvPDofBTjFYDAQgHwngEGBYIACAWIQRrUYzNh64o+SCoO6/F2h8wRvQL7gUCZoEsiQIb
+ DAAKCRDF2h8wRvQL7sKvAP4mBvm7Zn1OUjFViwkma8IGRGosXAvMUFyOHVcl1RTgFQEAuJkU
+ o9ERi7qS/hbUdUgtitI89efbY0TVetgDsyeQiwU=
+In-Reply-To: <alpine.DEB.2.21.2502220019210.65342@angie.orcam.me.uk>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------cpzNAlvaVuHJSvSPikjQO7we"
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
+X-QQ-XMAILINFO: MMKL56urm3zQZA3sqrdtmNGN9V/2Fi1TOCTMQddWnLV1tUFsuIDCZZGu
+	F0jdSNsD1WU2RDETI1kBfM5aYCjDis5Ta1xqkdJzvVpqhb0QuApccPEMWLMGqCLcw88gkKD
+	NbbyWYveaoBmtJQjlQ1DNUgC1WeUPQIQcN33eg3iuLWdVZB32q26DpDWSdvQ49uKHySl+uY
+	ngW/+dXCVhMAmJo0e75OWbC96Ai03b1z1pkqxxkNjVbQcCWWXnZQ0E8ma5PiJa3CFXYO5rM
+	oIonKCeOFZyjxNsaGZm9kb4RUeTxZX2Vk1NM0wL+zccUqr5vjg8KAEhVcZ+1wUrIP1F/tOD
+	6Fxw4y4OOPvwtrrDKXvl5bqB/cLaXO18E/ve0mQgLiWd7yIP+wAMnptHtUFjSacySO07n3W
+	ytAduYm2eFT5fTyyZmOsDoglefMCyvwfmuQkdo3G1HITLVpKiU553ie6kwPh55UWJElCvzV
+	En/VK3UNctrI21qN3rjjbJ+Uc5qUOebANDG150LX92YFScm37FzfbTS12PN9SuQwZw3HEoY
+	AqKyMhNB9Q6+3iBWpJWG/nlf3fK9tJUNdwuLUWl+tT5BYtWSOx9sOC0QsjC+YnflpDNqdQ6
+	rXJdD9sbAxi5qFBShq40ZZW2qnE7v+hC6guOgtvEf2OAd7DV4V/X76cJMJLeXu3thOOcToR
+	crwE5EpTtMqyqzF/Tac4Qdt/m0qBhP8teve0ICSdpxaPQlnYriYtKsCkspp9qOrzcQzvkq8
+	HaglUgj2LwtmRKmYvcwcmWuzXlKaVoGXa49AqQrfpJswm1v1yumP8D81eAiOzShy54Kq9o/
+	rZjJGa0BfFKGLINsoIBZ5V5dA7TcwdtV+Vq8xAz/WmVK2H71I7u06tG8CsUvXcI9K1HvuKf
+	Pn6x4LFJLUicjbnMMDN/p1DPOApbLEOZdlBTzPCXjhD4SWqqSEVRa6XzkHqXBW6vYHDEA2v
+	CK12x+EHZtD+rLnJt5EsOOvGcJXJxhuc7xZX2NwRAw/HlQrxLOw8X6eohqrtSAk72coB2nO
+	yDrebExt8mw8RsE/PK0TQbvgc7iVwsKyXHnWmTatCDTy8MSxwkL4nu+4JUzSJvAX0tUbBbI
+	j+eYvveBndJZDzi//ZFOjvMxPEP17gyE4sK9162q9aM
+X-QQ-XMRINFO: MPJ6Tf5t3I/ycC2BItcBVIA=
+X-QQ-RECHKSPAM: 0
+
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------cpzNAlvaVuHJSvSPikjQO7we
+Content-Type: multipart/mixed; boundary="------------Dr8oZ0Svb2l280lRAcsbpviW";
+ protected-headers="v1"
+From: WangYuli <wangyuli@uniontech.com>
+To: "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc: chenlinxuan@uniontech.com, guanwentao@uniontech.com,
+ linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+ niecheng1@uniontech.com, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ zhanjun@uniontech.com
+Message-ID: <98768bf8-7bde-46ec-85fc-f077d67a1798@uniontech.com>
+Subject: Re: [PATCH 5/7] MIPS: dec: Remove dec_irq_dispatch()
+References: <487CE8AA937621E2+20250218125101.663980-1-wangyuli@uniontech.com>
+ <222468E85948B141+20250218125842.667798-1-wangyuli@uniontech.com>
+ <alpine.DEB.2.21.2502220019210.65342@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2502220019210.65342@angie.orcam.me.uk>
+
+--------------Dr8oZ0Svb2l280lRAcsbpviW
+Content-Type: multipart/mixed; boundary="------------VWdM82tDfrgrrAVtP6lrC0RP"
+
+--------------VWdM82tDfrgrrAVtP6lrC0RP
+Content-Type: multipart/alternative;
+ boundary="------------qVwLyZwqZC4S0TSExECJBtOy"
+
+--------------qVwLyZwqZC4S0TSExECJBtOy
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
+
+SGkgTWFjaWVqLA0KDQpPbiAyMDI1LzMvMSAwMDowMSwgTWFjaWVqIFcuIFJvenlja2kgd3Jv
+dGU6DQo+ICAgVXAgdG8gY29tbWl0IDhmOTlhMTYyNjUzNTMgKCJNSVBTOiBUcmFjaW5nOiBB
+ZGQgSVJRRU5UUllfRVhJVCBzZWN0aW9uIGZvcg0KPiBNSVBTIikgYGRvX0lSUScgdXNlZCB0
+byBiZSBhIG1hY3JvLCB0aGF0J3Mgd2h5LiAgQXQgdGhlIHRpbWUgYGRvX0lSUScgd2FzDQo+
+IGNvbnZlcnRlZCB0byBhIG1hY3JvIGBkZWNfaXJxX2Rpc3BhdGNoJyB3YXMgY3JlYXRlZCBh
+bmQgcHJldmlvdXNseSB0aGlzDQo+IHBsYWNlIHVzZWQgdG8gY2FsbCBgZG9fSVJRJyB0b28u
+DQo+DQo+ICAgSXQncyBhbHdheXMgZ29vZCBmaW5kaW5nIG91dCB3aHkgdGhpbmdzIGFyZSBh
+cyB0aGV5IGFyZSBzbyBhcyB0byBtYWtlDQo+IHN1cmUgeW91IGhhdmVuJ3QgYmVlbiBtaXNz
+aW5nIHNvbWV0aGluZy4gIFRoaXMgY2xlYW51cCBzaG91bGQgaGF2ZSBiZWVuDQo+IG1hZGUg
+YWxvbmcgd2l0aCBjb21taXQgOGY5OWExNjI2NTM1Mywgc28gaXQncyBwcmV0dHkgb2xkIGEg
+dGVjaG5pY2FsIGRlYnQNCj4gYmVpbmcgc29ydGVkIGhlcmUuDQo+DQo+ICAgUGxlYXNlIGFk
+ZCB0aGVzZSBmaW5kaW5ncyB0byB5b3VyIGNvbW1pdCBkZXNjcmlwdGlvbiBpbiB2Mi4NCg0K
+QWxyaWdodCwgdGhhbmsgeW91IGZvciB0aGUgY29ycmVjdGlvbi4NCg0KSSBkbyBzZWUgdGhh
+dCB0aGlzIGNvbW1pdCBoYXMgYWxyZWFkeSBiZWVuIGFwcGxpZWQgdG8gbWlwcy1uZXh0Lg0K
+DQogwqBJZiBpdCdzIGFscmlnaHQgd2l0aCB5b3UgYW5kIFRob21hcywgSSdtIGhhcHB5IHRv
+IHNlbmQgYSBwYXRjaCB2MiB0byANCmluY2x1ZGUgdGhlc2UgZGV0YWlscyBzb29uLg0KDQo+
+ICAgTkIgSSdtIG9mZiBvbiBob2xpZGF5IHN0YXJ0aW5nIGZyb20gdG9tb3Jyb3cgYW5kIEkg
+aGFkIGlzc3VlcyB3aXRoIERFQw0KPiBoYXJkd2FyZSBpbiBteSBsYWIgKG5vdyBzb3J0ZWQs
+IHJlcXVpcmVkIGEgdmlzaXQgb24gc2l0ZSkgc28gSSBjb3VsZG4ndA0KPiBnZXQgdG8geW91
+ciBzdHVmZiBzb29uZXIgYW5kIGFsc28gSSB3b24ndCBiZSBhYmxlIHRvIHZlcmlmeSBhbnkg
+b2YgdGhpcw0KPiB1bnRpbCBJJ20gYmFjayBtaWQtTWFyY2guDQo+DQo+ICAgIE1hY2llag0K
+DQpJdCdzIGEgcGl0eSBJIGRvbid0IGhhdmUgREVDIGhhcmR3YXJlIG15c2VsZiwgdGhlcmVm
+b3JlIEknbSBsaW1pdGVkIHRvIA0KdXNpbmcgY3Jvc3MtY29tcGlsYXRpb24gdG8gdmFsaWRh
+dGUgY29tcGlsYXRpb24gaXNzdWVzLg0KDQpOZXZlcnRoZWxlc3MsIGhhdmUgYSBmYW50YXN0
+aWMgaG9saWRheSENCg0KVGhhbmtzLA0KDQotLSANCldhbmdZdWxpKg0KKg0K
+--------------qVwLyZwqZC4S0TSExECJBtOy
+Content-Type: text/html; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi Qi,
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta http-equiv=3D"Content-Type" content=3D"text/html; charset=3DUTF=
+-8">
+  </head>
+  <body>
+    <p>Hi Maciej,<br>
+    </p>
+    <div class=3D"moz-cite-prefix">On 2025/3/1 00:01, Maciej W. Rozycki
+      wrote:<span style=3D"white-space: pre-wrap">
+</span><span style=3D"white-space: pre-wrap">
+</span></div>
+    <blockquote type=3D"cite"
+      cite=3D"mid:alpine.DEB.2.21.2502220019210.65342@angie.orcam.me.uk">=
 
-On Tue, Feb 25, 2025 at 11:48=E2=80=AFAM Qi Zheng <zhengqi.arch@bytedance.c=
-om> wrote:
->
-> To support fast gup, the commit 69be3fb111e7 ("riscv: enable
-> MMU_GATHER_RCU_TABLE_FREE for SMP && MMU") did the following:
->
-> 1) use tlb_remove_page_ptdesc() for those platforms which use IPI to
->    perform TLB shootdown
->
-> 2) use tlb_remove_ptdesc() for those platforms which use SBI to perform
->    TLB shootdown
->
-> The tlb_remove_page_ptdesc() is the wrapper of the tlb_remove_page(). By
-> design, the tlb_remove_page() should be used to remove a normal page from
-> a page table entry, and should not be used for page table pages.
->
-> The tlb_remove_ptdesc() is the wrapper of the tlb_remove_table(), which i=
-s
-> designed specifically for freeing page table pages. If the
-> CONFIG_MMU_GATHER_TABLE_FREE is enabled, the tlb_remove_table() will use
-> semi RCU to free page table pages, that is:
->
->  - batch table freeing: asynchronous free by RCU
->  - single table freeing: IPI + synchronous free
->
-> If the CONFIG_MMU_GATHER_TABLE_FREE is disabled, the tlb_remove_table()
-> will fall back to pagetable_dtor() + tlb_remove_page().
->
-> For case 1), since we need to perform TLB shootdown before freeing the
-> page table page, the local_irq_save() in fast gup can block the freeing
-> and protect the fast gup page walker. Therefore we can ensure safety by
-> just using tlb_remove_page_ptdesc(). In addition, we can also the
-> tlb_remove_ptdesc()/tlb_remove_table() to achieve it, and it doesn't
-> matter whether CONFIG_MMU_GATHER_RCU_TABLE_FREE is selected. And in
-> theory, the performance of freeing pages asynchronously via RCU will not
-> be lower than synchronous free.
->
-> For case 2), since local_irq_save() only disable S-privilege IPI irq but
-> not M-privilege's, which is used by the SBI implementation to perform TLB
-> shootdown, so we must select CONFIG_MMU_GATHER_RCU_TABLE_FREE and use
-> tlb_remove_ptdesc() to ensure safety. The riscv selects this config for
-> SMP && MMU, the CONFIG_RISCV_SBI is dependent on MMU. Therefore, only the
-> UP system may have the situation where CONFIG_MMU_GATHER_RCU_TABLE_FREE i=
-s
-> disabled but CONFIG_RISCV_SBI is enabled. But there is no freeing vs fast
-> gup race in the UP system.
->
-> So, in summary, we can use tlb_remove_ptdesc() to support fast gup in all
-> cases, and this interface is specifically designed for page table pages.
-> So let's use it unconditionally.
->
-> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-> Suggested-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-> ---
->  arch/riscv/include/asm/pgalloc.h | 26 ++++----------------------
->  1 file changed, 4 insertions(+), 22 deletions(-)
->
-> diff --git a/arch/riscv/include/asm/pgalloc.h b/arch/riscv/include/asm/pg=
-alloc.h
-> index 3e2aebea6312d..770ce18a7328b 100644
-> --- a/arch/riscv/include/asm/pgalloc.h
-> +++ b/arch/riscv/include/asm/pgalloc.h
-> @@ -15,24 +15,6 @@
->  #define __HAVE_ARCH_PUD_FREE
->  #include <asm-generic/pgalloc.h>
->
-> -/*
-> - * While riscv platforms with riscv_ipi_for_rfence as true require an IP=
-I to
-> - * perform TLB shootdown, some platforms with riscv_ipi_for_rfence as fa=
-lse use
-> - * SBI to perform TLB shootdown. To keep software pagetable walkers safe=
- in this
-> - * case we switch to RCU based table free (MMU_GATHER_RCU_TABLE_FREE). S=
-ee the
-> - * comment below 'ifdef CONFIG_MMU_GATHER_RCU_TABLE_FREE' in include/asm=
--generic/tlb.h
-> - * for more details.
-> - */
-> -static inline void riscv_tlb_remove_ptdesc(struct mmu_gather *tlb, void =
-*pt)
-> -{
-> -       if (riscv_use_sbi_for_rfence()) {
-> -               tlb_remove_ptdesc(tlb, pt);
-> -       } else {
-> -               pagetable_dtor(pt);
-> -               tlb_remove_page_ptdesc(tlb, pt);
-> -       }
-> -}
-> -
->  static inline void pmd_populate_kernel(struct mm_struct *mm,
->         pmd_t *pmd, pte_t *pte)
->  {
-> @@ -108,14 +90,14 @@ static inline void __pud_free_tlb(struct mmu_gather =
-*tlb, pud_t *pud,
->                                   unsigned long addr)
->  {
->         if (pgtable_l4_enabled)
-> -               riscv_tlb_remove_ptdesc(tlb, virt_to_ptdesc(pud));
-> +               tlb_remove_ptdesc(tlb, virt_to_ptdesc(pud));
->  }
->
->  static inline void __p4d_free_tlb(struct mmu_gather *tlb, p4d_t *p4d,
->                                   unsigned long addr)
->  {
->         if (pgtable_l5_enabled)
-> -               riscv_tlb_remove_ptdesc(tlb, virt_to_ptdesc(p4d));
-> +               tlb_remove_ptdesc(tlb, virt_to_ptdesc(p4d));
->  }
->  #endif /* __PAGETABLE_PMD_FOLDED */
->
-> @@ -143,7 +125,7 @@ static inline pgd_t *pgd_alloc(struct mm_struct *mm)
->  static inline void __pmd_free_tlb(struct mmu_gather *tlb, pmd_t *pmd,
->                                   unsigned long addr)
->  {
-> -       riscv_tlb_remove_ptdesc(tlb, virt_to_ptdesc(pmd));
-> +       tlb_remove_ptdesc(tlb, virt_to_ptdesc(pmd));
->  }
->
->  #endif /* __PAGETABLE_PMD_FOLDED */
-> @@ -151,7 +133,7 @@ static inline void __pmd_free_tlb(struct mmu_gather *=
-tlb, pmd_t *pmd,
->  static inline void __pte_free_tlb(struct mmu_gather *tlb, pgtable_t pte,
->                                   unsigned long addr)
->  {
-> -       riscv_tlb_remove_ptdesc(tlb, page_ptdesc(pte));
-> +       tlb_remove_ptdesc(tlb, page_ptdesc(pte));
->  }
->  #endif /* CONFIG_MMU */
->
-> --
-> 2.20.1
->
->
+      <pre wrap=3D"" class=3D"moz-quote-pre"> Up to commit 8f99a16265353 =
+("MIPS: Tracing: Add IRQENTRY_EXIT section for=20
+MIPS") `do_IRQ' used to be a macro, that's why.  At the time `do_IRQ' was=
+=20
+converted to a macro `dec_irq_dispatch' was created and previously this=20
+place used to call `do_IRQ' too.
 
-This set of patches mainly refactors the remove page table function
-interfaces. The comment "riscv_ipi_for_rfence" has been removed, as it
-was no longer needed, and this patch handles that.
+ It's always good finding out why things are as they are so as to make=20
+sure you haven't been missing something.  This cleanup should have been=20
+made along with commit 8f99a16265353, so it's pretty old a technical debt=
+=20
+being sorted here.
 
-Additionally, whether riscv_use_sbi_for_rfence is true or false, page
-tables can now be released using RCU. This patch changes the previous
-synchronous release logic (for !riscv_use_sbi_for_rfence) to an
-RCU-based release.
+ Please add these findings to your commit description in v2.
+</pre>
+    </blockquote>
+    <p>Alright, thank you for the correction.</p>
+    <p>I do see that this commit has already been applied to mips-next.</=
+p>
+    <p>=C2=A0If it's alright with you and Thomas, I'm happy to send a pat=
+ch
+      v2 to include these details soon.</p>
+    <blockquote type=3D"cite"
+      cite=3D"mid:alpine.DEB.2.21.2502220019210.65342@angie.orcam.me.uk">=
 
-So, Reviewed-by: Yunhui Cui <cuiyunhui@bytedance.com>
+      <pre wrap=3D"" class=3D"moz-quote-pre">
+ NB I'm off on holiday starting from tomorrow and I had issues with DEC=20
+hardware in my lab (now sorted, required a visit on site) so I couldn't=20
+get to your stuff sooner and also I won't be able to verify any of this=20
+until I'm back mid-March.
 
-Based on qemu-system-riscv64, I tested this patch. The log is as follows:
-./gup_test
-TAP version 13
-1..1
-# GUP_FAST_BENCHMARK: Time: get:663365 put:117 us
-# ok 1 ioctl status 0
-# Totals: pass:1 fail:0 xfail:0 xpass:0 skip:0 error:0
+  Maciej
+</pre>
+    </blockquote>
+    <p><span style=3D"white-space: pre-wrap">It's a pity I don't have DEC=
+ hardware myself, therefore I'm limited to using cross-compilation to val=
+idate compilation issues.</span></p>
+    <p><span style=3D"white-space: pre-wrap">Nevertheless, have a fantast=
+ic holiday!
+</span></p>
+    <p><span style=3D"white-space: pre-wrap">Thanks,
+</span></p>
+    <div class=3D"moz-signature">-- <br>
+      WangYuli<b><br>
+      </b></div>
+  </body>
+</html>
 
-So, Tested-by: Yunhui Cui <cuiyunhui@bytedance.com>
+--------------qVwLyZwqZC4S0TSExECJBtOy--
 
-Thanks,
-Yunhui
+--------------VWdM82tDfrgrrAVtP6lrC0RP
+Content-Type: application/pgp-keys; name="OpenPGP_0xC5DA1F3046F40BEE.asc"
+Content-Disposition: attachment; filename="OpenPGP_0xC5DA1F3046F40BEE.asc"
+Content-Description: OpenPGP public key
+Content-Transfer-Encoding: quoted-printable
+
+-----BEGIN PGP PUBLIC KEY BLOCK-----
+
+xjMEZoEsiBYJKwYBBAHaRw8BAQdAyDPzcbPnchbIhweThfNK1tg1imM+5kgDBJSK
+P+nX39DNIVdhbmdZdWxpIDx3YW5neXVsaUB1bmlvbnRlY2guY29tPsKJBBMWCAAx
+FiEEa1GMzYeuKPkgqDuvxdofMEb0C+4FAmaBLIgCGwMECwkIBwUVCAkKCwUWAgMB
+AAAKCRDF2h8wRvQL7g0UAQCH3mrGM0HzOaARhBeA/Q3AIVfhS010a0MZmPTRGVfP
+bwD/SrncJwwPAL4GiLPEC4XssV6FPUAY0rA68eNNI9cJLArOOARmgSyJEgorBgEE
+AZdVAQUBAQdA88W4CTLDD9fKwW9PB5yurCNdWNS7VTL0dvPDofBTjFYDAQgHwngE
+GBYIACAWIQRrUYzNh64o+SCoO6/F2h8wRvQL7gUCZoEsiQIbDAAKCRDF2h8wRvQL
+7sKvAP4mBvm7Zn1OUjFViwkma8IGRGosXAvMUFyOHVcl1RTgFQEAuJkUo9ERi7qS
+/hbUdUgtitI89efbY0TVetgDsyeQiwU=3D
+=3DBlkq
+-----END PGP PUBLIC KEY BLOCK-----
+
+--------------VWdM82tDfrgrrAVtP6lrC0RP--
+
+--------------Dr8oZ0Svb2l280lRAcsbpviW--
+
+--------------cpzNAlvaVuHJSvSPikjQO7we
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+wnsEABYIACMWIQRrUYzNh64o+SCoO6/F2h8wRvQL7gUCZ8UusQUDAAAAAAAKCRDF2h8wRvQL7tDp
+AQDeXbKIvClZphmjWsTVAvytlWgwVr8RgDUeDlo9r9vDOgEAgihKfOgFduggtNFdn006Xf1MoXv7
+R2Lv+968xgdMRw0=
+=3ama
+-----END PGP SIGNATURE-----
+
+--------------cpzNAlvaVuHJSvSPikjQO7we--
 
