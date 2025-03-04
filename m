@@ -1,84 +1,206 @@
-Return-Path: <linux-mips+bounces-8077-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8078-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E9CAA4D0FC
-	for <lists+linux-mips@lfdr.de>; Tue,  4 Mar 2025 02:34:33 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 966D5A4D1B7
+	for <lists+linux-mips@lfdr.de>; Tue,  4 Mar 2025 03:31:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DFA9B176E08
-	for <lists+linux-mips@lfdr.de>; Tue,  4 Mar 2025 01:34:02 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 618F17A2C31
+	for <lists+linux-mips@lfdr.de>; Tue,  4 Mar 2025 02:30:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14263156C76;
-	Tue,  4 Mar 2025 01:32:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5830B18A6B7;
+	Tue,  4 Mar 2025 02:31:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AyfrOXWw"
+	dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b="UtwdYPdf"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9BCB13D893;
-	Tue,  4 Mar 2025 01:32:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BD6743172
+	for <linux-mips@vger.kernel.org>; Tue,  4 Mar 2025 02:31:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741051924; cv=none; b=jPpqnbuXw4ilUYShrFRI2avfcHuhJ4fisxHKdvMa1qIcFWqicvFCKkUVEjYrCHu7XsYFpFpmdJYYB3iDKtQFVAkobitmhFCll0rUgb7th8QbbaZ0uJS4PpWhXsiwOdyK87JXlMEXpQ6cgGF/JB7I1H9Zfhb6Qjmd5zAfaa7MXXY=
+	t=1741055481; cv=none; b=QZ7ZZBuEv7ttqhkWvI5/UoUElxFAtg/3FWbVPIPFBidD3jvcWxo3nMuiE6sWxTPOH7Y0ZoZ/5NnOkqic4h9UHs0SoEH2I9FrnCMKCkn+GOoKD21ChdPoRpf5rTl/5Q1A/YqVlG9qe+INLSExyimbt/Ey0Y3uDuMxov9yvt68tYs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741051924; c=relaxed/simple;
-	bh=1OcsWP6/szj2uz5yKmlKz7hjrxScnDpRzTxzIErkM/w=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tSeay34Nrb4uxmW0/XEWWQGrKe3udUckZKnLiC4ghcVbIwCh74g5jkBbPof/5KTJ+SKvPm/vYDvuPd4atKvAUQr6HlTYgF8bcXJQHMhS4hvs7ZfU/LlLuSS2dzw0CWi3D2ISjB96FWWRO/WWjME+MgldxsFoqJKWitq1f9EFeAY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AyfrOXWw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A84EAC4CEE4;
-	Tue,  4 Mar 2025 01:32:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741051923;
-	bh=1OcsWP6/szj2uz5yKmlKz7hjrxScnDpRzTxzIErkM/w=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=AyfrOXWwcLMC8oKCYZcVy2y6yBFL4yws5AmKdwxXBIlqnUqqY0KJh1RbL5EbjMqmK
-	 LCQMBTiJi7hVn2t84BNMIb1BCty6eEeNSSgoXHPnK44IFT4LpZGYSrg+wGk5ZlJaTq
-	 xW5T8MwRaW1K9PsBZ9SVHcfWj1OmFMvxAx44p+R5HzkyAB2u6ZmQp2nVpQHA4l5M/l
-	 fdqTVsxHHvo7VeReNmVTaeKpBe9bhzh+sqBVAgduP/Bl8WU211VYexhg2jDnIKP/v0
-	 LsWZRQEq3Eyx0NvEYvUjv4oZ65CW97+KhdnWTInBpZpk3VOD7oQtLkCgp5ikTtUoo/
-	 Lx644jYBCCR+Q==
-Date: Mon, 3 Mar 2025 17:32:01 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- tsbogend@alpha.franken.de, andrew@lunn.ch, hkallweit1@gmail.com,
- linux@armlinux.org.uk, davem@davemloft.net, edumazet@google.com,
- pabeni@redhat.com, sander@svanheule.net, markus.stockhausen@gmx.de,
- devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next v8 0/2] RTL9300 MDIO driver
-Message-ID: <20250303173201.4205ed0c@kernel.org>
-In-Reply-To: <20250227213248.2010986-1-chris.packham@alliedtelesis.co.nz>
-References: <20250227213248.2010986-1-chris.packham@alliedtelesis.co.nz>
+	s=arc-20240116; t=1741055481; c=relaxed/simple;
+	bh=+LwpYhqMa0YBvdBDiDqcdY8NesTszK/ILIT1IDZ1qek=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=SbXy7Cw5pOQHn4aPVUqwZek2PkypoQjpoa0OU3Lqs8t+491fTElww0p2e7UbifQRZaEiqfKgJBEHa9Wi0VRUBsbOP6dsOYbxJ+p2qUif7eEJEOdqS/ELgW2CZe1eaC9BO2+yFJg3/uc0o4L7G9GSS21no3UDb4rrYp+te8+Wrpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com; spf=pass smtp.mailfrom=bytedance.com; dkim=pass (2048-bit key) header.d=bytedance.com header.i=@bytedance.com header.b=UtwdYPdf; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=bytedance.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bytedance.com
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-22334203781so97091965ad.0
+        for <linux-mips@vger.kernel.org>; Mon, 03 Mar 2025 18:31:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance.com; s=google; t=1741055478; x=1741660278; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A6T+mpuirUlxFXXDmZQp4DlzJljahRMUsKAZ4wXM54o=;
+        b=UtwdYPdfRGrEFdCavYzZI3HyLPrnLnP1t9sLzv6NaaYk9ONdWAkOEhwOwWl1Kk/5fx
+         2qKZUo498LJvoDacCw05YZlDhQNtwgyqpXvBw16HpL4kXr9Itknn3vw9x2GM4usnsRVT
+         +GYKnIiGVdGQZ2GZEh8WSqHNTuyaCX4XB2mQUUBE7/IN/aMWutRcFyFC4iN3raLkFp1s
+         N5d6EGHaAT3ebqpDYkKfMmdtaXwVm7d3zVHzuJQxdbj5B4yKA6NzQzH42R1WtRRs0nit
+         iJ7CIxsP2mBHiD8uUs8ey2gPyYp3443CWAam4TRIParGmSH0RCJXxHkaAaFxsS1EX85v
+         346Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741055478; x=1741660278;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=A6T+mpuirUlxFXXDmZQp4DlzJljahRMUsKAZ4wXM54o=;
+        b=FcJ63sTshL0C8jsuMbInhNBt3iHf4wcOY9o26zpvyCggKfanJ442EjgA+wRwoN2HQi
+         UV9QPukdrNc+xWqvozfhYMewoX4KX91b87rZutPXS1jiOBsuE5OaOAsuZ8Vp/nTYz7kz
+         keMX1iYOzXKmVKJ2wq4XAj8ofp4xZIHc8/wZdk50m2rBRu/h2YMn9UD1ZoKveJZLqD4a
+         ZWD2qFmBZRzVLM2RYd3jZIu8r1Nglf31bcXS6s2fDQGK08MIxbErMez4d5JO4smax2ZC
+         ZpPxVBxtmfRkpuVmHY72glEOF0ThvcoxYLwbYLSFpuv6RL4nV3V6ieATCn/banqHyCsn
+         HZ7A==
+X-Forwarded-Encrypted: i=1; AJvYcCXPI8YOtwrpFIeUCINMrE55ieFGMi4M3k+cft0Oh5K4blkGbsaAQLRNv4SQpH4WXs0hq9einjgd1N8n@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlfmGm+lvCxqPxVaCxxYzOLNIC0UBG1TMpYoxsbq9f+LuHDhGK
+	Cao7wYD9NepsE+qMVr3BE0UJDJlAy0WpNyNojw5vYVuX6C2bGGIbKkW2zH1uWOA=
+X-Gm-Gg: ASbGncst4AXDu6SLEEKC1TlZr/3aAG81c5RP/uBbo/JFWkBiB8kJlzpCzu6yBwlLs43
+	sf7isaBT/WyDIb4jUFR3wkQQ3vE44js+yG5/G4D3bakHSnOuHJl8qfVUILr4WhA48tIu1fiDtdr
+	UJ4MQBwJ4neivircNy+I3Qp242Pok/nLoLSpYJQP2tnobHKOMC094bZQzUKKH3qCZSfrDwXjr8H
+	nKaa3ddZHE3n9pS9RJATBawS5Z25+vG0XMVrO8IzpRLG7tFY10u1Ug/cF7OvDACpJTU9qiH9Rdc
+	FP4pfUoeE0Oe8oIYU7igo+ip1qEdndpIoxmzM3I9kb491zOyDx/17B9A8uDGNQg3eh68
+X-Google-Smtp-Source: AGHT+IGfyVS9QzXp3fDXv9OSff0zyYBlNLrDj9vPIT6lOO0LqcIFLuDQltej9EU6VX3nefPaL9P2pQ==
+X-Received: by 2002:a05:6a21:6b18:b0:1f3:383e:7739 with SMTP id adf61e73a8af0-1f3391176eamr2284458637.7.1741055478523;
+        Mon, 03 Mar 2025 18:31:18 -0800 (PST)
+Received: from [10.68.122.90] ([63.216.146.178])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-aee7ddf242bsm8911768a12.13.2025.03.03.18.31.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Mar 2025 18:31:18 -0800 (PST)
+Message-ID: <c48715aa-8c1f-41bf-92a0-bacf401c2f7c@bytedance.com>
+Date: Tue, 4 Mar 2025 10:31:07 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 3/6 update] mm: pgtable: convert some architectures to
+ use tlb_remove_ptdesc()
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: peterz@infradead.org, kevin.brodsky@arm.com, riel@surriel.com,
+ vishal.moola@gmail.com, david@redhat.com, jannh@google.com,
+ hughd@google.com, willy@infradead.org, yuzhao@google.com,
+ muchun.song@linux.dev, will@kernel.org, aneesh.kumar@kernel.org,
+ npiggin@gmail.com, arnd@arndb.de, dave.hansen@linux.intel.com,
+ rppt@kernel.org, alexghiti@rivosinc.com, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-csky@vger.kernel.org,
+ linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+ linux-openrisc@vger.kernel.org, linux-sh@vger.kernel.org,
+ linux-um@lists.infradead.org, Geert Uytterhoeven <geert@linux-m68k.org>
+References: <19db3e8673b67bad2f1df1ab37f1c89d99eacfea.1740454179.git.zhengqi.arch@bytedance.com>
+ <20250303072603.45423-1-zhengqi.arch@bytedance.com>
+ <20250303155331.de9b2fff9b04984a255a7bc2@linux-foundation.org>
+From: Qi Zheng <zhengqi.arch@bytedance.com>
+In-Reply-To: <20250303155331.de9b2fff9b04984a255a7bc2@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On Fri, 28 Feb 2025 10:32:46 +1300 Chris Packham wrote:
-> This series adds a driver for the MDIO controller on the RTL9300 family
-> of devices. The controller is a little unique in that we can't access the SMI
-> interfaces directly. This means we need to use the hardware description from
-> the DTS to compute a mapping of switch port to mdio bus/address.
-> 
-> The dt-bindings have been applied to net-next.
-> 
-> I've dropped a patch that added PHYs to the cameo-rtl9302c board as I know that
-> will need updating once some of the other in-flight changes make it into
-> linux-mips.
 
-Is the second patch going via the mips tree?
-If so could you repost just patch 1 for net-next? 
-The second patch applies to net-next but with some fuzz, 
-I suspect that may be why we're not getting any reviews here.
--- 
-pw-bot: cr
+
+On 3/4/25 7:53 AM, Andrew Morton wrote:
+> On Mon,  3 Mar 2025 15:26:03 +0800 Qi Zheng <zhengqi.arch@bytedance.com> wrote:
+> 
+>> Now, the nine architectures of csky, hexagon, loongarch, m68k, mips,
+>> nios2, openrisc, sh and um do not select CONFIG_MMU_GATHER_RCU_TABLE_FREE,
+>> and just call pagetable_dtor() + tlb_remove_page_ptdesc() (the wrapper of
+>> tlb_remove_page()). This is the same as the implementation of
+>> tlb_remove_{ptdesc|table}() under !CONFIG_MMU_GATHER_TABLE_FREE, so
+>> convert these architectures to use tlb_remove_ptdesc().
+>>
+> 
+> checkpatch warns.
+> 
+> Do these things have to be macros?  Switching to static inline fixes
+> the unused-arg warning in a nice fashion.
+
+This can be switched to static inline. In addition, I found that alpha,
+arc, microblaze, parisc, sparc32 and xtensa also have the unused-arg
+issue. Do I need to add a new patch to fix all of them, or just fix the
+newly added 11 warnings?
+
+> 
+> I'll fix the trailing-semicolon issue locally.
+
+Thanks!
+
+> 
+> WARNING: Argument 'address' is not used in function-like macro
+> #51: FILE: arch/csky/include/asm/pgalloc.h:64:
+> +#define __pte_free_tlb(tlb, pte, address)	\
+> +	tlb_remove_ptdesc((tlb), page_ptdesc(pte))
+> 
+> WARNING: Argument 'addr' is not used in function-like macro
+> #66: FILE: arch/hexagon/include/asm/pgalloc.h:90:
+> +#define __pte_free_tlb(tlb, pte, addr)	\
+> +	tlb_remove_ptdesc((tlb), page_ptdesc(pte))
+> 
+> WARNING: Argument 'address' is not used in function-like macro
+> #80: FILE: arch/loongarch/include/asm/pgalloc.h:58:
+> +#define __pte_free_tlb(tlb, pte, address)	\
+> +	tlb_remove_ptdesc((tlb), page_ptdesc(pte));
+> 
+> WARNING: macros should not use a trailing semicolon
+> #80: FILE: arch/loongarch/include/asm/pgalloc.h:58:
+> +#define __pte_free_tlb(tlb, pte, address)	\
+> +	tlb_remove_ptdesc((tlb), page_ptdesc(pte));
+> 
+> WARNING: Argument 'addr' is not used in function-like macro
+> #95: FILE: arch/m68k/include/asm/sun3_pgalloc.h:20:
+> +#define __pte_free_tlb(tlb, pte, addr)	\
+> +	tlb_remove_ptdesc((tlb), page_ptdesc(pte))
+> 
+> WARNING: Argument 'address' is not used in function-like macro
+> #110: FILE: arch/mips/include/asm/pgalloc.h:51:
+> +#define __pte_free_tlb(tlb, pte, address)	\
+> +	tlb_remove_ptdesc((tlb), page_ptdesc(pte))
+> 
+> WARNING: Argument 'addr' is not used in function-like macro
+> #125: FILE: arch/nios2/include/asm/pgalloc.h:31:
+> +#define __pte_free_tlb(tlb, pte, addr)	\
+> +	tlb_remove_ptdesc((tlb), page_ptdesc(pte))
+> 
+> WARNING: Argument 'addr' is not used in function-like macro
+> #139: FILE: arch/openrisc/include/asm/pgalloc.h:67:
+> +#define __pte_free_tlb(tlb, pte, addr)	\
+> +	tlb_remove_ptdesc((tlb), page_ptdesc(pte))
+> 
+> WARNING: Argument 'addr' is not used in function-like macro
+> #153: FILE: arch/sh/include/asm/pgalloc.h:35:
+> +#define __pte_free_tlb(tlb, pte, addr)	\
+> +	tlb_remove_ptdesc((tlb), page_ptdesc(pte))
+> 
+> WARNING: Argument 'address' is not used in function-like macro
+> #167: FILE: arch/um/include/asm/pgalloc.h:28:
+> +#define __pte_free_tlb(tlb, pte, address)	\
+> +	tlb_remove_ptdesc((tlb), page_ptdesc(pte))
+> 
+> WARNING: Argument 'address' is not used in function-like macro
+> #176: FILE: arch/um/include/asm/pgalloc.h:33:
+> +#define __pmd_free_tlb(tlb, pmd, address)	\
+> +	tlb_remove_ptdesc((tlb), virt_to_ptdesc(pmd))
+> 
+> WARNING: Argument 'address' is not used in function-like macro
+> #185: FILE: arch/um/include/asm/pgalloc.h:38:
+> +#define __pud_free_tlb(tlb, pud, address)	\
+> +	tlb_remove_ptdesc((tlb), virt_to_ptdesc(pud))
+> 
+> total: 0 errors, 12 warnings, 122 lines checked
+> 
+> NOTE: For some of the reported defects, checkpatch may be able to
+>        mechanically convert to the typical style using --fix or --fix-inplace.
+> 
+> ./patches/mm-pgtable-convert-some-architectures-to-use-tlb_remove_ptdesc-v2.patch has style problems, please review.
+> 
+> NOTE: If any of the errors are false positives, please report
+>        them to the maintainer, see CHECKPATCH in MAINTAINERS.
+> 
+
 
