@@ -1,1075 +1,306 @@
-Return-Path: <linux-mips+bounces-8098-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8099-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9694FA4FD22
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Mar 2025 12:05:27 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCA91A4FD9C
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Mar 2025 12:29:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89F111891E64
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Mar 2025 11:05:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2EA9B7A1D06
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Mar 2025 11:28:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 965D723372C;
-	Wed,  5 Mar 2025 11:05:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E022233702;
+	Wed,  5 Mar 2025 11:29:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PPja2Aw0"
+	dkim=pass (1024-bit key) header.d=marvell.com header.i=@marvell.com header.b="nl0JJTP0"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 679AF23370F;
-	Wed,  5 Mar 2025 11:05:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741172712; cv=none; b=BkxM4Zyjs1xy5AEYTjBdj5EgxpH71tnv8spH7evwh5iOf118iaTHs5XsWWQRDfbyeW6HJpA50KgnsBIF0eyWeuthh1jnEl+jrGc5rQK2ZE0vvR5UMqcxyMz4bCtNQzq+KyhjdYkDes6tYi3vCOz7BO0VzTGiEIZs0uttpenAo+M=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741172712; c=relaxed/simple;
-	bh=aQ89HN6dCosk0M/4a4fglxxIJYuKAZUWUxnt6XN/HMs=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=J8/ZdYtOVX7wDebQb1HNGVzPvD19DuLoLbSATXbtPcLC2m138ZBBehknKgPp6478Jzdvlrg9yJXz/83zdHT5yU03/OpMrYnehNZC4knX7sVfmwzwJxQTU5gDdjMIE/Uz0/5R0zajYSkVu/pf2R/r4gWKlEIECyy4srOTHvFNfWU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PPja2Aw0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 04B7FC4CEEA;
-	Wed,  5 Mar 2025 11:05:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741172712;
-	bh=aQ89HN6dCosk0M/4a4fglxxIJYuKAZUWUxnt6XN/HMs=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=PPja2Aw0liKySmMV7NMoeCvJ+amI79pFfRrFvSzQp3ZGv7gaebQXoDEzJxmmR/i34
-	 +BPDzn2Yc7LTEXRVZKWtvkFz2kqdYcLLd5BxhxtMoK/mY5m0HusdaBY1kcrQuZN8VG
-	 gOeRj+I3A5AgKX+V/iHWcyrX9fNe8t6DlVUpvnF8wtEMraNhRGLRvsmI8U6gJyRwl3
-	 3uSDYYcXt9v6lLg2Q7CT4/i5yiZ3a2jhSG4gE3XYOAS7LNMBUQZ2GGcwlsUNSmWFuP
-	 9hEKFlrJXNjbMAjD8hShrzb14NfvXS4Lipvho8mupCHUv3jnnScuKMIsabSzF+tgdJ
-	 S6JqRDWIv+Epw==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E6AC8C282EC;
-	Wed,  5 Mar 2025 11:05:11 +0000 (UTC)
-From: Keguang Zhang via B4 Relay <devnull+keguang.zhang.gmail.com@kernel.org>
-Date: Wed, 05 Mar 2025 19:05:05 +0800
-Subject: [PATCH v13 2/2] mtd: rawnand: Add Loongson-1 NAND Controller
- Driver
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C873D1F4172;
+	Wed,  5 Mar 2025 11:29:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.148.174
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741174185; cv=fail; b=eF7SdJE8fXZBCXcze3j3DVuF09SaaC78EVMPtrogGbZ/Dr+yt69sX2s7EQFFkHp7dze8qUc8CG7gouH0WI/5H3MuSOdFl3iqk98ur725BosDE5XN1OpwuE38rFcfQzUcKeB4SLG9v+FaDUPk5gJzA3exBzN4CrAt3Bp0WyWc310=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741174185; c=relaxed/simple;
+	bh=YPp1vel9dIMVNZ4XREO8vw+ggMz1euv8uUjQtzAr+Js=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=WhrOlxlTvXQtJSYEgsMRJ33j2pK2J3NVtwMoAsupn4gU8EhLS7cf2FIQ69v41iBenbD4tQj9opLfO6vuCgwkggn4/HuzH/3UWQFLcxeBVksBoXQpcUaSiPVgewXhl43fVBUQtqs9uq7Cku6ZEARyGKed2LKUiPm/IFFxHtmfdL0=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com; spf=pass smtp.mailfrom=marvell.com; dkim=pass (1024-bit key) header.d=marvell.com header.i=@marvell.com header.b=nl0JJTP0; arc=fail smtp.client-ip=67.231.148.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=marvell.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=marvell.com
+Received: from pps.filterd (m0431384.ppops.net [127.0.0.1])
+	by mx0a-0016f401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5253ve4M028541;
+	Wed, 5 Mar 2025 03:28:44 -0800
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2173.outbound.protection.outlook.com [104.47.56.173])
+	by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 456f5tgrna-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 05 Mar 2025 03:28:44 -0800 (PST)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=HvjwjM7meeeejMhm0NY2TqnCNCKKb5WlJ/thAU8qOp4fjT3DaW47xXP3UMlgNMu/Y+ql3Yi2wby2Z10MjR+te+3Svz3l8iWtl6TSEdpfEKljJZSl/9givK0QVjy4JLZscT5tpIKD8V3f5d/ljZenbk3FKKnm0bPHzWJ7CsL1v9TLIWlxDLgMP/cWEdxlqPKHgiP0pk1K9uQrUNdUA7NZwygZAKlPmgjBnnKNFN9C5p4bWJH7zQTZk9RDV3HDHsYMzQV0Q6rsJ3yDyORUH86cQpKZqCMMOg3m2XybRkvWR0FC7I8SO+f7VxSRJtVS7uYFfMXZND+Qxm/9HuLNWbEHyA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=YPp1vel9dIMVNZ4XREO8vw+ggMz1euv8uUjQtzAr+Js=;
+ b=cs2fP/eWEQmw8YlkUcQsOnYi1cgTnRnCmjSmHTiX04AUyiC5d7NyOirFRzUCgXkpS2Kfuf/QAb5Crd8uNdzs+w+2QelPLEQVz7GLWkx2OS4uKYHlyDEU7D+MlUcdD2WikGCZNXnfbc2SiwXnkCi1vcIeSGYo3nSJkMHHnSjY3Vn5U82c/M7xM74Y5jR1m7Xb36Omjdj/78xiMB6HCFOBqwLTdk3TOZmlktPb6Dx0T+u/pSV22KNHlXenAseeFlkGG8QH4S4HU00Hh/gNO9HM9E7tRgSUvrYhEoCrN8nouYCdSveFawSpZ2GlNFhwlHiRv6tVw8zPSYTT+0hMrSapEg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=marvell.com; dmarc=pass action=none header.from=marvell.com;
+ dkim=pass header.d=marvell.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=YPp1vel9dIMVNZ4XREO8vw+ggMz1euv8uUjQtzAr+Js=;
+ b=nl0JJTP0/FSqA7UbX3qUG+7ZcKNtz3v5lYGY/lMMLm1m1sHjGYlun9O4qkRIr5rVKQ8qAWnDX3DcNffL1j6L4ll2sxnGT1ml2gaGBy7cUKhKNBR0pvuYf2lWQoRI9wn2jE0TKQVAiR4vmrZt1nPoCSrC4mL6rkqumYtbOQMFp0Y=
+Received: from PH8PR18MB5381.namprd18.prod.outlook.com (2603:10b6:510:254::16)
+ by SJ0PR18MB5185.namprd18.prod.outlook.com (2603:10b6:a03:438::9) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.17; Wed, 5 Mar
+ 2025 11:28:41 +0000
+Received: from PH8PR18MB5381.namprd18.prod.outlook.com
+ ([fe80::79aa:7ee4:516e:200a]) by PH8PR18MB5381.namprd18.prod.outlook.com
+ ([fe80::79aa:7ee4:516e:200a%6]) with mapi id 15.20.8511.017; Wed, 5 Mar 2025
+ 11:28:40 +0000
+From: George Cherian <gcherian@marvell.com>
+To: Ahmad Fatoum <a.fatoum@pengutronix.de>,
+        "linux@roeck-us.net"
+	<linux@roeck-us.net>,
+        "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+        "jwerner@chromium.org" <jwerner@chromium.org>,
+        "evanbenn@chromium.org"
+	<evanbenn@chromium.org>,
+        "kabel@kernel.org" <kabel@kernel.org>,
+        "krzk@kernel.org" <krzk@kernel.org>,
+        "mazziesaccount@gmail.com"
+	<mazziesaccount@gmail.com>,
+        "thomas.richard@bootlin.com"
+	<thomas.richard@bootlin.com>,
+        "lma@chromium.org" <lma@chromium.org>,
+        "bleung@chromium.org" <bleung@chromium.org>,
+        "support.opensource@diasemi.com"
+	<support.opensource@diasemi.com>,
+        "shawnguo@kernel.org"
+	<shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com"
+	<festevam@gmail.com>,
+        "andy@kernel.org" <andy@kernel.org>,
+        "paul@crapouillou.net" <paul@crapouillou.net>,
+        "alexander.usyskin@intel.com"
+	<alexander.usyskin@intel.com>,
+        "andreas.werner@men.de"
+	<andreas.werner@men.de>,
+        "daniel@thingy.jp" <daniel@thingy.jp>,
+        "romain.perier@gmail.com" <romain.perier@gmail.com>,
+        "avifishman70@gmail.com"
+	<avifishman70@gmail.com>,
+        "tmaimon77@gmail.com" <tmaimon77@gmail.com>,
+        "tali.perry1@gmail.com" <tali.perry1@gmail.com>,
+        "venture@google.com"
+	<venture@google.com>,
+        "yuenn@google.com" <yuenn@google.com>,
+        "benjaminfair@google.com" <benjaminfair@google.com>,
+        "maddy@linux.ibm.com"
+	<maddy@linux.ibm.com>,
+        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+        "npiggin@gmail.com" <npiggin@gmail.com>,
+        "christophe.leroy@csgroup.eu"
+	<christophe.leroy@csgroup.eu>,
+        "naveen@kernel.org" <naveen@kernel.org>,
+        "mwalle@kernel.org" <mwalle@kernel.org>,
+        "xingyu.wu@starfivetech.com"
+	<xingyu.wu@starfivetech.com>,
+        "ziv.xu@starfivetech.com"
+	<ziv.xu@starfivetech.com>,
+        "hayashi.kunihiko@socionext.com"
+	<hayashi.kunihiko@socionext.com>,
+        "mhiramat@kernel.org" <mhiramat@kernel.org>
+CC: "chrome-platform@lists.linux.dev" <chrome-platform@lists.linux.dev>,
+        "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+        "imx@lists.linux.dev" <imx@lists.linux.dev>,
+        "patches@opensource.cirrus.com"
+	<patches@opensource.cirrus.com>,
+        "openbmc@lists.ozlabs.org"
+	<openbmc@lists.ozlabs.org>,
+        "linux-mips@vger.kernel.org"
+	<linux-mips@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org"
+	<linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org"
+	<linuxppc-dev@lists.ozlabs.org>,
+        "linux-arm-kernel@lists.infradead.org"
+	<linux-arm-kernel@lists.infradead.org>
+Subject: RE: [EXTERNAL] Re: [PATCH v4 0/2] Add stop_on_panic support for
+ watchdog
+Thread-Topic: [EXTERNAL] Re: [PATCH v4 0/2] Add stop_on_panic support for
+ watchdog
+Thread-Index: AQHbjbbhYskiwjLbuEyH2TqW0Jv7Q7NkWviAgAAHyoA=
+Date: Wed, 5 Mar 2025 11:28:40 +0000
+Message-ID:
+ <PH8PR18MB53817EC09B918852B78DF3AAC5CB2@PH8PR18MB5381.namprd18.prod.outlook.com>
+References: <20250305101025.2279951-1-george.cherian@marvell.com>
+ <43fb0965-04b7-41dc-ae3f-54676eefdbb5@pengutronix.de>
+In-Reply-To: <43fb0965-04b7-41dc-ae3f-54676eefdbb5@pengutronix.de>
+Accept-Language: en-US, en-IN
+Content-Language: en-US
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH8PR18MB5381:EE_|SJ0PR18MB5185:EE_
+x-ms-office365-filtering-correlation-id: 2568772b-fec1-4e16-a498-08dd5bd8e159
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|1800799024|366016|7416014|376014|38070700018|921020;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?eWYwbUw3bHpPcFVnM0NldTl4UmEwVHdRWVN4bGxwMzVtamVpOHNURlY2VDJZ?=
+ =?utf-8?B?anlhVG5aMVNYRmQ2V21IcXJmK3NZZUozcm91K3ZlaThwV3Jydi9HeFZRdzk5?=
+ =?utf-8?B?NGU3ZEhHY3c2ZmZ1SllmRFVYaU1vM05NVVptbEd3Ni9rbnA2ZXRZOUZsZkFM?=
+ =?utf-8?B?dGVkODZQVDF3Y1FFY3Q0czVTTk94MDVBeWN3Y2JLZlBmMHNkaEVoMldjV0p0?=
+ =?utf-8?B?VmVXbUdtakpWbWNXVjhBTFhaZ2JHalF2WnR0TTlnSjhCd25yVXc2aUxsUlJZ?=
+ =?utf-8?B?aWdTTEtsakpDMERPYnFQZ0tOdGRERlZHQlNidmZqcEI4TXhBaVJhcXFrMFJn?=
+ =?utf-8?B?bDlST0pHWktoZXUxRUUwV0ZRSm9BbDVIR2pkTkNTc3ZaR0VRbmwzdk1pSVBH?=
+ =?utf-8?B?R3lNSno3R2VvS3AwenF3MlZUQzdIcVVtcUdBVHkraFU5TDg3a0lWaTdEUEJL?=
+ =?utf-8?B?WTNUOGtZejVJMHdiNTdKMVlGRmorMG02K1JkNko2MzRudGxWaWlrMHpqekNl?=
+ =?utf-8?B?UjJsT1VTdktDa056elgrc29RZVZUdlRnL3hwK3JBdFFxMVZFaXU4RDNBN0pT?=
+ =?utf-8?B?b200c3pwdHgxZEpvc2sxWS9kenFldnhYY0tESFJCSUpySlJwZXVpYkhIZnZo?=
+ =?utf-8?B?Q0dIM05pYTFDMW1qdmZRVkc1aTM3NVF0dXRmTmlDQW1IQ0xWUG51d0ZUaVNh?=
+ =?utf-8?B?TW1LbW5MbXg0ZU53cWpUU0xoNG9NelJLOS9Na1JRWFRVelo2YjRTKzIzNUF0?=
+ =?utf-8?B?WExDbGJMQXFMUGwwOERsa2EwSFNRaUdDUk9KNkpsY2lIdVdiMWtJRHBZVHFW?=
+ =?utf-8?B?b3NLYjVlOHIxcnlKUWRuTXdkTmtvaHl6Z1dBeHJmQmFSckduSnZjL3pWaW5K?=
+ =?utf-8?B?Z25vMXJGdFJJNTFvUmIwYjlnVkxsOUFRRjhEOTZpVlNTdWYveEkveE9KVnlC?=
+ =?utf-8?B?d25nUkplcjdWREdRNm5Id09zaWorKzE0TUpmeS83UW9WNXJtWTdhRmxibXVh?=
+ =?utf-8?B?YUg1Q1QwQXVMRVpHT2F6NTJPdVhVSVQyWkJ5MlI4eWthcTVpRzJSdFduVDdH?=
+ =?utf-8?B?Tzk3dGs0UXpzTUhPRjVPcC9nbmVScWxFckVSK0htUzM2R2J0QjBTcC9KeG0y?=
+ =?utf-8?B?YzJOdHUzRFMzMHRuRWVGdmtYOEZ4ajV0a0J1NWZqeW1Qd1ZhOEFib2dDZ1A5?=
+ =?utf-8?B?TnJlYnRhQ01MUjB5cEIyRm9QOTlwUUV1THNUSHUrajREei9CYW92TW1mdFFI?=
+ =?utf-8?B?WTVaSEpXa1FyRTRlend6RHVTZmoybjArNEdlb2VGWUVneW03QVNWUWpXWEdu?=
+ =?utf-8?B?eExWVXIvVFNUUE1ySkhrN2ZDWi9IVjhCcDlBcnVsU0M2VG5sU3FUZ1hJM1Z4?=
+ =?utf-8?B?WUxNUVh1ZGc3K3lCWUZ5K1Vjb21qblVPaGp6bnVLeGRBYnM3Z1UvU0t5KzF1?=
+ =?utf-8?B?U01VTC9hMW5ualp0OWJTVUxGNzNIWHErK1BIYlA2M2Jza1F0NHZWUFQ0emNT?=
+ =?utf-8?B?R2N4MGtSVlBRdlhRYjlHSDduTm1sekhIUHpNRUplTFo2dmxRQmFrU21HdEJr?=
+ =?utf-8?B?Uko2Zk5GeGJBQWJ5OTNmRmlpTC9XMXRBRmdCUWRBZ3U3ZkJWdkllQ2hMK3ly?=
+ =?utf-8?B?UXAraGliNDFnV1hMU1JzZks0dHo5dHVmVitDRUhWeGdSR2JyRG4rY1ZtS1l6?=
+ =?utf-8?B?NUtoV2hjVDhybG9sdndmNEsvQys4QWVXM1QxMjNYai9JK21teGZTaUJuQktC?=
+ =?utf-8?B?SkVlWUJ2ZGJIVGV2Zlk5VFhRWFdpRHl4THlYc3ZnTjNZTXAvT2E1WUtmbjk3?=
+ =?utf-8?B?YkdSZ0RIbnpnbVl2V0JrMEJwRk1DaGl6bno0TzdGN2dPZnBDRlhKakZnYU81?=
+ =?utf-8?B?YVQ1N3pHS0gzVWl4ZWZockpTd2ZBNmVvZzFzNUNwZFFCMDRxSEJmS3R4OFFp?=
+ =?utf-8?B?bWNyYTA3Nk1sRmcxdnFEUDNrNEFkNXRqZ2ZHWGJuU2QwUzUxdXMxOTJ2RThm?=
+ =?utf-8?B?S2dETHlmVzF3PT0=?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH8PR18MB5381.namprd18.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(7416014)(376014)(38070700018)(921020);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?SFF2TXFlVXdJSEZVallsa1hMK3R1N1pMMHphZ3VGSXBIOWd3MzQ5bkNrcnpi?=
+ =?utf-8?B?NnZHYjhsYnVxbXVUZ1QyMFdKbGZsSTZqcUlMb3Jhb3hjaExqUzB4VmErVHdX?=
+ =?utf-8?B?VW9rbVFSNk9JOU5lRDFlSzh1ZW5UeWVDbGpqNTEvSi8wN0FJWk9NblpZRVVV?=
+ =?utf-8?B?TDZhTW1nTkNrcWd1YXkvTDBmaUFQNFpzdDI2RUhmS3R3aGFZSjE5ZWZyUGVm?=
+ =?utf-8?B?Tjd1Um5GYXRLVjR6c2FSVERJc1d1b3hNYWc2allUWmRFS3pqZGNBOVVmdTU3?=
+ =?utf-8?B?WktQcFYrZnJMS1pPN0FQMDl2UlI3UzRVd2pvVTFZcVVaZlN2Vmp0b0g0ekRW?=
+ =?utf-8?B?bXdLVzlSS0ZKcFBPdm9wckIreFpYemNMZmNQb0thMHFibkJMTFM5RDZXaXo4?=
+ =?utf-8?B?WjFlZHBtVGx6dDFRMWxwUU1QNVMwWTFHNWhoeWxJL3hnYVdtanpTRUdISC9r?=
+ =?utf-8?B?blp5RGZ4NXVpOGtaVkhqNXVrYXluY2ZkODkwT0hUVVlZZVc1MHVoSWZKaCtX?=
+ =?utf-8?B?akk1dW5mQ1RhUGw0WjRqV0o3QXNxc1FvNlJQY0JRZDNxc0UyaWlteFNJeFVF?=
+ =?utf-8?B?cnlya0RrSjlhbzNlbFJHM2pGR2xVM0FGZ1lWNmVBRXZoaVVGQkhESkszWFJX?=
+ =?utf-8?B?Ykwvc1cxdUVUdjQvOHQwa2gyRzFrQW1meTZIR2NlRittNFJpbzRiMFBKS3Ax?=
+ =?utf-8?B?QmU5bXNQMzQ3YW1YVVRaODJLcnVXU0ZjK0szRzYrSFpaWGE2ak1ldVpMM0t3?=
+ =?utf-8?B?M1FROTRLOS9SS1F3dUtobkJmNUhLRk1ybU1FNHhaL1hSNGZBeThTVlFkeFYx?=
+ =?utf-8?B?Q3ZPd1N4aWVIQUZObER0Wmo1aC9KMlNSZ1IyRlpWQ1JSMWg2Y2VlMXpKeFVE?=
+ =?utf-8?B?SkpkUEtXQktISkEveGVXRFhGRE1tUWtyMklNY2dHQ0h5SkFPOGI5N21TS0Yw?=
+ =?utf-8?B?SlkwaDViUkN4QW5CODZCQnVwaWVvNmlvOHc2bThTSjdGUFVXS1QwenZnWlI4?=
+ =?utf-8?B?T1VTT1c3cllXR1BwSW9IWXJWcnRxTzlWTEVkZkgxRmVacnNkZkQ3b2F1WjYz?=
+ =?utf-8?B?TU1MTy80WlUvZWNYQlZqV0huUWoxK2Q5QkcxaTVqUCtSODd1elQrcnNnUFZi?=
+ =?utf-8?B?UUFUTWFINTVkc2J4WXI1b3lvUHZaalVtQzNuR2RESm1WekZNanlOWVRkZnFa?=
+ =?utf-8?B?RzRDWlU4YmtuM0RhTFgvblZZZEVrNUlNemgrRHdScVdaNmk5aWd2NG9vSGVO?=
+ =?utf-8?B?TlNqZ3JNa2pyc2MxbjA1VlZSdng4MGhTSitabUZRYUEyS0l4SkxNQ0VtWlpF?=
+ =?utf-8?B?YlU1bVN3M1NiSnVsZW1Ya1VOUUlabmZBQm1SUE9VVy9IYnNqdVlSQjNEYkp0?=
+ =?utf-8?B?MEpRT0Nxdk1VR015WSt5M25jb1hHbStveEFTT3pqdGxOWWRTWU4xK1NmTjRF?=
+ =?utf-8?B?YjNrUGRJMUUzSHk0TlpQVEMwZEpVNjd1QnV1dzBQNWF5WUpXRDBDcU83UzFO?=
+ =?utf-8?B?aTlQTmh2Mmxqck5kQUFsQmJFa1VrL2pReGcraXB2WnBUbXRWeVV1NjFXUjBX?=
+ =?utf-8?B?Mlh5d1RoWU5CYXk5SzM4TENibTdkdklPYmY5TC94RHUxUEJuTWlzVVptcTQ3?=
+ =?utf-8?B?OFVDUnpwdFFoWXh1RHh5ZzBNTFhyMnR4djc3K2NTb2s1SXNxMEkyWVdFN1FR?=
+ =?utf-8?B?UXVjeVBSaGIzU1RDRDdSaTVDMlB0ZDRyQWZhMUpWS0ZneHd2aWlBSlM1Q282?=
+ =?utf-8?B?WGJmWGdMUWdMWlRzZ2xDUUNMaytSa1UzVGM4dHNCR2R4azU1M2xTdUlZS1Vu?=
+ =?utf-8?B?VzVURjVBTXZmTmFWeGJGUWN3Nit6N2ZTZTV6anpVdUZYd0VVb0xUNzNzOCtX?=
+ =?utf-8?B?U0xwMWFNM3MreUNzdnltaWpvdzFmUnhYdDZFTmpZb296QXdmMHdDOHM4UUE0?=
+ =?utf-8?B?M3NEcGM5N3NZQi8yYnZ1M3g3RW5pcE02YkZPejA2RTg0d3RtdEQyYmdLYmZk?=
+ =?utf-8?B?YUFRM2tIZllDRHltMG11QlZvRVZPOW4vU3FXK0ZYYmo2VEowRGRnZzNwZm1C?=
+ =?utf-8?B?NWRCRVRjQUVDNXU2NFVHNzNFNVozTUcvQUZnTml4S1Qvc1hiUWVPWHE2RE5N?=
+ =?utf-8?Q?Jwja+g6LBGPDz6SJ+x9eq6eYs?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250305-loongson1-nand-v13-2-a5bac21631cd@gmail.com>
-References: <20250305-loongson1-nand-v13-0-a5bac21631cd@gmail.com>
-In-Reply-To: <20250305-loongson1-nand-v13-0-a5bac21631cd@gmail.com>
-To: Miquel Raynal <miquel.raynal@bootlin.com>, 
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-mips@vger.kernel.org, 
- Keguang Zhang <keguang.zhang@gmail.com>
-X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1741172709; l=29683;
- i=keguang.zhang@gmail.com; s=20231129; h=from:subject:message-id;
- bh=E7i/JPDG1u7MZAfP8MFiB12/sUQUDzCVbC99enrhyXs=;
- b=uzCb25aeQa1sUyPUEPsA5Az2SRJlmnyE/XUDgBA5Nd4MclcI6O8hQT7pwBTCF9w8v7D7zF04m
- ifMf1ByE5zrDp+syNQd7BDaSWe3W42QrPWU3FyQCZbl/fhTtq/rxDtk
-X-Developer-Key: i=keguang.zhang@gmail.com; a=ed25519;
- pk=FMKGj/JgKll/MgClpNZ3frIIogsh5e5r8CeW2mr+WLs=
-X-Endpoint-Received: by B4 Relay for keguang.zhang@gmail.com/20231129 with
- auth_id=102
-X-Original-From: Keguang Zhang <keguang.zhang@gmail.com>
-Reply-To: keguang.zhang@gmail.com
+X-OriginatorOrg: marvell.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH8PR18MB5381.namprd18.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2568772b-fec1-4e16-a498-08dd5bd8e159
+X-MS-Exchange-CrossTenant-originalarrivaltime: 05 Mar 2025 11:28:40.7652
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 70e1fb47-1155-421d-87fc-2e58f638b6e0
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Ufy7/Zq7oiJtcuN5pluWq8+F+Gve91Lmp+qo/rqXeY4KA8sZ93FWqjTO4VjJXKi7eMqshnV+5LRZVcBez1IRFw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR18MB5185
+X-Proofpoint-GUID: UaoU_NmBeNyw4DV5z8_j6mNx_BWFuKA9
+X-Authority-Analysis: v=2.4 cv=JtULrN4C c=1 sm=1 tr=0 ts=67c8356c cx=c_pps a=5b96o3JgDboJA9an2DnXiA==:117 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
+ a=Vs1iUdzkB0EA:10 a=-AAbraWEqlQA:10 a=zEsxOR96UoKnfDorJPwA:9 a=QEXdDO2ut3YA:10
+X-Proofpoint-ORIG-GUID: UaoU_NmBeNyw4DV5z8_j6mNx_BWFuKA9
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-05_04,2025-03-05_01,2024-11-22_01
 
-From: Keguang Zhang <keguang.zhang@gmail.com>
-
-Add NAND controller driver for Loongson-1 SoCs.
-
-Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
----
-Changes in v13:
-- Improve ls1x_nand_check_op() to cover all opcode checks and eliminate redundancy.
-- Revert ls1x_nand_exec_op().
-- Some minor adjustments.
-
-Changes in v12:
-- Use MTD label for mtd->name instead of hardcoded assignment.
-- Removed redundant fields addr1_reg and addr2_reg from struct ls1x_nand_op.
-- Introduced .set_addr in struct ls1x_nand_host to replace the previous .parse_address,
-  and improve its logic using regmap_update_bits() to avoid restoring the row address.
-- Improve the logic of ls1x_nand_check_op() to eliminate repetitive checks.
-- Add ECC engine type check in ls1x_nand_attach_chip().
-- Some minor improvements.
-
-Changes in v11:
-- Move the DMA address to DT.
-- Rename the source file to loongson1-nand-controller.c.
-- Improve the logic of ls1x_nand_op_cmd_mapping().
-- Improve the logic of ls1x_nand_check_op() to exclude unsupported cases.
-- Substitute 'host' for the improper term 'nfc'.
-- Some minor fixes and adjustments.
-
-Changes in v10:
-- Fix the build error reported by kernel test robot.
-  Link: https://lore.kernel.org/oe-kbuild-all/202409220010.vctkHddZ-lkp@intel.com
-
-Changes in v9:
-- Change the compatible to 'loongson,ls1*-nand-controller'.
-- Update MAINTAINERS file accordingly.
-- Rebasing due to recent upstream changes.
-
-Changes in v8:
-- Drop NAND_MONOLITHIC_READ and add support for real subpage read instead.
-- Simplify the logic of ls1b_nand_parse_address() and ls1c_nand_parse_address().
-- Split ls1x_nand_set_controller() into ls1x_nand_parse_instructions()
-  and ls1x_nand_trigger_op().
-- Implement ls1x_nand_op_cmd_mapping() to convert the opcodes instead of forcing them.
-- Add ls1x_nand_check_op().
-- Remove struct ls1x_nand after moving its members to struct ls1x_nfc.
-- Add the prefix 'LS1X_' for all registers and their bits.
-- Drop the macros: nand_readl() and nand_writel().
-- Some minor fixes and improvements.
-
-Changes in v7:
-- Rename the Kconfig dependency to LOONGSON1_APB_DMA
-
-Changes in v6:
-- Amend Kconfig
-- Add DT support
-- Use DT data instead of platform data
-- Remove MAX_ID_SIZE
-- Remove case NAND_OP_CMD_INSTR in ls1x_nand_set_controller()
-- Move ECC configuration to ls1x_nand_attach_chip()
-- Rename variable "nand" to "ls1x"
-- Rename variable "nc" to "nfc"
-- Some minor fixes
-- Link to v5: https://lore.kernel.org/all/20210520224213.7907-1-keguang.zhang@gmail.com
-
-Changes in v5:
-- Update the driver to fit the raw NAND framework.
-- Implement exec_op() instead of legacy cmdfunc().
-- Use dma_request_chan() instead of dma_request_channel().
-- Some minor fixes and cleanups.
-
-Changes in v4:
-- Retrieve the controller from nand_hw_control.
-
-Changes in v3:
-- Replace __raw_readl/__raw_writel with readl/writel.
-- Split ls1x_nand into two structures:
-ls1x_nand_chip and ls1x_nand_controller.
-
-Changes in v2:
-- Modify the dependency in Kconfig due to the changes of DMA module.
----
- MAINTAINERS                                      |   1 +
- drivers/mtd/nand/raw/Kconfig                     |   7 +
- drivers/mtd/nand/raw/Makefile                    |   1 +
- drivers/mtd/nand/raw/loongson1-nand-controller.c | 853 +++++++++++++++++++++++
- 4 files changed, 862 insertions(+)
-
-diff --git a/MAINTAINERS b/MAINTAINERS
-index a2cacb7fb830..26099968808a 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -15908,6 +15908,7 @@ F:	Documentation/devicetree/bindings/*/loongson,ls1*.yaml
- F:	arch/mips/include/asm/mach-loongson32/
- F:	arch/mips/loongson32/
- F:	drivers/*/*loongson1*
-+F:	drivers/mtd/nand/raw/loongson1-nand-controller.c
- F:	drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c
- 
- MIPS/LOONGSON2EF ARCHITECTURE
-diff --git a/drivers/mtd/nand/raw/Kconfig b/drivers/mtd/nand/raw/Kconfig
-index b8035df8f732..e966b15d2445 100644
---- a/drivers/mtd/nand/raw/Kconfig
-+++ b/drivers/mtd/nand/raw/Kconfig
-@@ -462,6 +462,13 @@ config MTD_NAND_NUVOTON_MA35
- 	  Enables support for the NAND controller found on
- 	  the Nuvoton MA35 series SoCs.
- 
-+config MTD_NAND_LOONGSON1
-+	tristate "Loongson1 NAND controller"
-+	depends on LOONGSON1_APB_DMA || COMPILE_TEST
-+	select REGMAP_MMIO
-+	help
-+	  Enables support for NAND controller on Loongson1 SoCs.
-+
- comment "Misc"
- 
- config MTD_SM_COMMON
-diff --git a/drivers/mtd/nand/raw/Makefile b/drivers/mtd/nand/raw/Makefile
-index 99e79c448847..711d043ad4f8 100644
---- a/drivers/mtd/nand/raw/Makefile
-+++ b/drivers/mtd/nand/raw/Makefile
-@@ -59,6 +59,7 @@ obj-$(CONFIG_MTD_NAND_ROCKCHIP)		+= rockchip-nand-controller.o
- obj-$(CONFIG_MTD_NAND_PL35X)		+= pl35x-nand-controller.o
- obj-$(CONFIG_MTD_NAND_RENESAS)		+= renesas-nand-controller.o
- obj-$(CONFIG_MTD_NAND_NUVOTON_MA35)	+= nuvoton-ma35d1-nand-controller.o
-+obj-$(CONFIG_MTD_NAND_LOONGSON1)	+= loongson1-nand-controller.o
- 
- nand-objs := nand_base.o nand_legacy.o nand_bbt.o nand_timings.o nand_ids.o
- nand-objs += nand_onfi.o
-diff --git a/drivers/mtd/nand/raw/loongson1-nand-controller.c b/drivers/mtd/nand/raw/loongson1-nand-controller.c
-new file mode 100644
-index 000000000000..273058d132df
---- /dev/null
-+++ b/drivers/mtd/nand/raw/loongson1-nand-controller.c
-@@ -0,0 +1,853 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * NAND Controller Driver for Loongson-1 SoC
-+ *
-+ * Copyright (C) 2015-2025 Keguang Zhang <keguang.zhang@gmail.com>
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/dmaengine.h>
-+#include <linux/dma-mapping.h>
-+#include <linux/iopoll.h>
-+#include <linux/mtd/mtd.h>
-+#include <linux/mtd/rawnand.h>
-+#include <linux/of.h>
-+#include <linux/platform_device.h>
-+#include <linux/regmap.h>
-+#include <linux/sizes.h>
-+
-+/* Loongson-1 NAND Controller Registers */
-+#define LS1X_NAND_CMD		0x0
-+#define LS1X_NAND_ADDR1		0x4
-+#define LS1X_NAND_ADDR2		0x8
-+#define LS1X_NAND_TIMING	0xc
-+#define LS1X_NAND_IDL		0x10
-+#define LS1X_NAND_IDH_STATUS	0x14
-+#define LS1X_NAND_PARAM		0x18
-+#define LS1X_NAND_OP_NUM	0x1c
-+
-+/* NAND Command Register Bits */
-+#define LS1X_NAND_CMD_OP_DONE		BIT(10)
-+#define LS1X_NAND_CMD_OP_SPARE		BIT(9)
-+#define LS1X_NAND_CMD_OP_MAIN		BIT(8)
-+#define LS1X_NAND_CMD_STATUS		BIT(7)
-+#define LS1X_NAND_CMD_RESET		BIT(6)
-+#define LS1X_NAND_CMD_READID		BIT(5)
-+#define LS1X_NAND_CMD_BLOCKS_ERASE	BIT(4)
-+#define LS1X_NAND_CMD_ERASE		BIT(3)
-+#define LS1X_NAND_CMD_WRITE		BIT(2)
-+#define LS1X_NAND_CMD_READ		BIT(1)
-+#define LS1X_NAND_CMD_VALID		BIT(0)
-+
-+#define LS1X_NAND_WAIT_CYCLE_MASK	GENMASK(7, 0)
-+#define LS1X_NAND_HOLD_CYCLE_MASK	GENMASK(15, 8)
-+#define LS1X_NAND_CELL_SIZE_MASK	GENMASK(11, 8)
-+
-+#define LS1X_NAND_COL_ADDR_CYC		2U
-+#define LS1X_NAND_MAX_ADDR_CYC		5U
-+
-+#define BITS_PER_WORD		(4 * BITS_PER_BYTE)
-+
-+struct ls1x_nand_host;
-+
-+struct ls1x_nand_op {
-+	char addrs[LS1X_NAND_MAX_ADDR_CYC];
-+	unsigned int naddrs;
-+	unsigned int addrs_offset;
-+	unsigned int aligned_offset;
-+	unsigned int cmd_reg;
-+	unsigned int row_start;
-+	unsigned int rdy_timeout_ms;
-+	unsigned int orig_len;
-+	bool is_readid;
-+	bool is_erase;
-+	bool is_write;
-+	bool is_read;
-+	bool is_change_column;
-+	size_t len;
-+	char *buf;
-+};
-+
-+struct ls1x_nand_data {
-+	unsigned int status_field;
-+	unsigned int op_scope_field;
-+	unsigned int hold_cycle;
-+	unsigned int wait_cycle;
-+	void (*set_addr)(struct ls1x_nand_host *host, struct ls1x_nand_op *op);
-+};
-+
-+struct ls1x_nand_host {
-+	struct device *dev;
-+	struct nand_chip chip;
-+	struct nand_controller controller;
-+	const struct ls1x_nand_data *data;
-+	void __iomem *reg_base;
-+	struct regmap *regmap;
-+	/* DMA Engine stuff */
-+	dma_addr_t dma_base;
-+	struct dma_chan *dma_chan;
-+	dma_cookie_t dma_cookie;
-+	struct completion dma_complete;
-+};
-+
-+static const struct regmap_config ls1x_nand_regmap_config = {
-+	.reg_bits = 32,
-+	.val_bits = 32,
-+	.reg_stride = 4,
-+};
-+
-+static int ls1x_nand_op_cmd_mapping(struct nand_chip *chip, struct ls1x_nand_op *op, u8 opcode)
-+{
-+	struct ls1x_nand_host *host = nand_get_controller_data(chip);
-+
-+	op->row_start = chip->page_shift + 1;
-+
-+	/* The controller abstracts the following NAND operations. */
-+	switch (opcode) {
-+	case NAND_CMD_STATUS:
-+		op->cmd_reg = LS1X_NAND_CMD_STATUS;
-+		break;
-+	case NAND_CMD_RESET:
-+		op->cmd_reg = LS1X_NAND_CMD_RESET;
-+		break;
-+	case NAND_CMD_READID:
-+		op->is_readid = true;
-+		op->cmd_reg = LS1X_NAND_CMD_READID;
-+		break;
-+	case NAND_CMD_ERASE1:
-+		op->is_erase = true;
-+		op->addrs_offset = LS1X_NAND_COL_ADDR_CYC;
-+		break;
-+	case NAND_CMD_ERASE2:
-+		if (!op->is_erase)
-+			return -EOPNOTSUPP;
-+		/* During erasing, row_start differs from the default value. */
-+		op->row_start = chip->page_shift;
-+		op->cmd_reg = LS1X_NAND_CMD_ERASE;
-+		break;
-+	case NAND_CMD_SEQIN:
-+		op->is_write = true;
-+		break;
-+	case NAND_CMD_PAGEPROG:
-+		if (!op->is_write)
-+			return -EOPNOTSUPP;
-+		op->cmd_reg = LS1X_NAND_CMD_WRITE;
-+		break;
-+	case NAND_CMD_READ0:
-+		op->is_read = true;
-+		break;
-+	case NAND_CMD_READSTART:
-+		if (!op->is_read)
-+			return -EOPNOTSUPP;
-+		op->cmd_reg = LS1X_NAND_CMD_READ;
-+		break;
-+	case NAND_CMD_RNDOUT:
-+		op->is_change_column = true;
-+		break;
-+	case NAND_CMD_RNDOUTSTART:
-+		if (!op->is_change_column)
-+			return -EOPNOTSUPP;
-+		op->cmd_reg = LS1X_NAND_CMD_READ;
-+		break;
-+	default:
-+		dev_err(host->dev, "unsupported opcode: %u\n", opcode);
-+		return -EOPNOTSUPP;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ls1x_nand_parse_instructions(struct nand_chip *chip,
-+					const struct nand_subop *subop, struct ls1x_nand_op *op)
-+{
-+	unsigned int op_id;
-+	int ret;
-+
-+	for (op_id = 0; op_id < subop->ninstrs; op_id++) {
-+		const struct nand_op_instr *instr = &subop->instrs[op_id];
-+		unsigned int offset, naddrs;
-+		const u8 *addrs;
-+
-+		switch (instr->type) {
-+		case NAND_OP_CMD_INSTR:
-+			ret = ls1x_nand_op_cmd_mapping(chip, op, instr->ctx.cmd.opcode);
-+			if (ret < 0)
-+				return ret;
-+
-+			break;
-+		case NAND_OP_ADDR_INSTR:
-+			naddrs = nand_subop_get_num_addr_cyc(subop, op_id);
-+			if (naddrs > LS1X_NAND_MAX_ADDR_CYC)
-+				return -EOPNOTSUPP;
-+			op->naddrs = naddrs;
-+			offset = nand_subop_get_addr_start_off(subop, op_id);
-+			addrs = &instr->ctx.addr.addrs[offset];
-+			memcpy(op->addrs + op->addrs_offset, addrs, naddrs);
-+			break;
-+		case NAND_OP_DATA_IN_INSTR:
-+		case NAND_OP_DATA_OUT_INSTR:
-+			offset = nand_subop_get_data_start_off(subop, op_id);
-+			op->orig_len = nand_subop_get_data_len(subop, op_id);
-+			if (instr->type == NAND_OP_DATA_IN_INSTR)
-+				op->buf = instr->ctx.data.buf.in + offset;
-+			else if (instr->type == NAND_OP_DATA_OUT_INSTR)
-+				op->buf = (void *)instr->ctx.data.buf.out + offset;
-+
-+			break;
-+		case NAND_OP_WAITRDY_INSTR:
-+			op->rdy_timeout_ms = instr->ctx.waitrdy.timeout_ms;
-+			break;
-+		default:
-+			break;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static void ls1b_nand_set_addr(struct ls1x_nand_host *host, struct ls1x_nand_op *op)
-+{
-+	struct nand_chip *chip = &host->chip;
-+	int i;
-+
-+	for (i = 0; i < LS1X_NAND_MAX_ADDR_CYC; i++) {
-+		int shift, mask, val;
-+
-+		if (i < LS1X_NAND_COL_ADDR_CYC) {
-+			shift = i * BITS_PER_BYTE;
-+			mask = (u32)0xff << shift;
-+			mask &= GENMASK(chip->page_shift, 0);
-+			val = (u32)op->addrs[i] << shift;
-+			regmap_update_bits(host->regmap, LS1X_NAND_ADDR1, mask, val);
-+		} else if (!op->is_change_column) {
-+			shift = op->row_start + (i - LS1X_NAND_COL_ADDR_CYC) * BITS_PER_BYTE;
-+			mask = (u32)0xff << shift;
-+			val = (u32)op->addrs[i] << shift;
-+			regmap_update_bits(host->regmap, LS1X_NAND_ADDR1, mask, val);
-+
-+			if (i == 4) {
-+				mask = (u32)0xff >> (BITS_PER_WORD - shift);
-+				val = (u32)op->addrs[i] >> (BITS_PER_WORD - shift);
-+				regmap_update_bits(host->regmap, LS1X_NAND_ADDR2, mask, val);
-+			}
-+		}
-+	}
-+}
-+
-+static void ls1c_nand_set_addr(struct ls1x_nand_host *host, struct ls1x_nand_op *op)
-+{
-+	int i;
-+
-+	for (i = 0; i < LS1X_NAND_MAX_ADDR_CYC; i++) {
-+		int shift, mask, val;
-+
-+		if (i < LS1X_NAND_COL_ADDR_CYC) {
-+			shift = i * BITS_PER_BYTE;
-+			mask = (u32)0xff << shift;
-+			val = (u32)op->addrs[i] << shift;
-+			regmap_update_bits(host->regmap, LS1X_NAND_ADDR1, mask, val);
-+		} else if (!op->is_change_column) {
-+			shift = (i - LS1X_NAND_COL_ADDR_CYC) * BITS_PER_BYTE;
-+			mask = (u32)0xff << shift;
-+			val = (u32)op->addrs[i] << shift;
-+			regmap_update_bits(host->regmap, LS1X_NAND_ADDR2, mask, val);
-+		}
-+	}
-+}
-+
-+static void ls1x_nand_trigger_op(struct ls1x_nand_host *host, struct ls1x_nand_op *op)
-+{
-+	struct nand_chip *chip = &host->chip;
-+	struct mtd_info *mtd = nand_to_mtd(chip);
-+	int col0 = op->addrs[0];
-+	short col;
-+
-+	if (!IS_ALIGNED(col0, chip->buf_align)) {
-+		col0 = ALIGN_DOWN(op->addrs[0], chip->buf_align);
-+		op->aligned_offset = op->addrs[0] - col0;
-+		op->addrs[0] = col0;
-+	}
-+
-+	if (host->data->set_addr)
-+		host->data->set_addr(host, op);
-+
-+	/* set operation length */
-+	if (op->is_write || op->is_read || op->is_change_column)
-+		op->len = ALIGN(op->orig_len + op->aligned_offset, chip->buf_align);
-+	else if (op->is_erase)
-+		op->len = 1;
-+	else
-+		op->len = op->orig_len;
-+
-+	writel(op->len, host->reg_base + LS1X_NAND_OP_NUM);
-+
-+	/* set operation area and scope */
-+	col = op->addrs[1] << BITS_PER_BYTE | op->addrs[0];
-+	if (op->orig_len && !op->is_readid) {
-+		unsigned int op_scope = 0;
-+
-+		if (col < mtd->writesize) {
-+			op->cmd_reg |= LS1X_NAND_CMD_OP_MAIN;
-+			op_scope = mtd->writesize;
-+		}
-+
-+		op->cmd_reg |= LS1X_NAND_CMD_OP_SPARE;
-+		op_scope += mtd->oobsize;
-+
-+		op_scope <<= __ffs(host->data->op_scope_field);
-+		regmap_update_bits(host->regmap, LS1X_NAND_PARAM,
-+				   host->data->op_scope_field, op_scope);
-+	}
-+
-+	/* set command */
-+	writel(op->cmd_reg, host->reg_base + LS1X_NAND_CMD);
-+
-+	/* trigger operation */
-+	regmap_write_bits(host->regmap, LS1X_NAND_CMD, LS1X_NAND_CMD_VALID, LS1X_NAND_CMD_VALID);
-+}
-+
-+static int ls1x_nand_wait_for_op_done(struct ls1x_nand_host *host, struct ls1x_nand_op *op)
-+{
-+	unsigned int val;
-+	int ret = 0;
-+
-+	if (op->rdy_timeout_ms) {
-+		ret = regmap_read_poll_timeout(host->regmap, LS1X_NAND_CMD,
-+					       val, val & LS1X_NAND_CMD_OP_DONE,
-+					       0, op->rdy_timeout_ms * MSEC_PER_SEC);
-+		if (ret)
-+			dev_err(host->dev, "operation failed\n");
-+	}
-+
-+	return ret;
-+}
-+
-+static void ls1x_nand_dma_callback(void *data)
-+{
-+	struct ls1x_nand_host *host = (struct ls1x_nand_host *)data;
-+	struct dma_chan *chan = host->dma_chan;
-+	struct device *dev = chan->device->dev;
-+	enum dma_status status;
-+
-+	status = dmaengine_tx_status(chan, host->dma_cookie, NULL);
-+	if (likely(status == DMA_COMPLETE)) {
-+		dev_dbg(dev, "DMA complete with cookie=%d\n", host->dma_cookie);
-+		complete(&host->dma_complete);
-+	} else {
-+		dev_err(dev, "DMA error with cookie=%d\n", host->dma_cookie);
-+	}
-+}
-+
-+static int ls1x_nand_dma_transfer(struct ls1x_nand_host *host, struct ls1x_nand_op *op)
-+{
-+	struct nand_chip *chip = &host->chip;
-+	struct dma_chan *chan = host->dma_chan;
-+	struct device *dev = chan->device->dev;
-+	struct dma_async_tx_descriptor *desc;
-+	enum dma_data_direction data_dir = op->is_write ? DMA_TO_DEVICE : DMA_FROM_DEVICE;
-+	enum dma_transfer_direction xfer_dir = op->is_write ? DMA_MEM_TO_DEV : DMA_DEV_TO_MEM;
-+	void *buf = op->buf;
-+	char *dma_buf = NULL;
-+	dma_addr_t dma_addr;
-+	int ret;
-+
-+	if (IS_ALIGNED((uintptr_t)buf, chip->buf_align) &&
-+	    IS_ALIGNED(op->orig_len, chip->buf_align)) {
-+		dma_addr = dma_map_single(dev, buf, op->orig_len, data_dir);
-+		if (dma_mapping_error(dev, dma_addr)) {
-+			dev_err(dev, "failed to map DMA buffer\n");
-+			return -ENXIO;
-+		}
-+	} else if (!op->is_write) {
-+		dma_buf = dma_alloc_coherent(dev, op->len, &dma_addr, GFP_KERNEL);
-+		if (!dma_buf)
-+			return -ENOMEM;
-+	} else {
-+		dev_err(dev, "subpage writing not supported\n");
-+		return -EOPNOTSUPP;
-+	}
-+
-+	desc = dmaengine_prep_slave_single(chan, dma_addr, op->len, xfer_dir, DMA_PREP_INTERRUPT);
-+	if (!desc) {
-+		dev_err(dev, "failed to prepare DMA descriptor\n");
-+		ret = PTR_ERR(desc);
-+		goto err;
-+	}
-+	desc->callback = ls1x_nand_dma_callback;
-+	desc->callback_param = host;
-+
-+	host->dma_cookie = dmaengine_submit(desc);
-+	ret = dma_submit_error(host->dma_cookie);
-+	if (ret) {
-+		dev_err(dev, "failed to submit DMA descriptor\n");
-+		goto err;
-+	}
-+
-+	dev_dbg(dev, "issue DMA with cookie=%d\n", host->dma_cookie);
-+	dma_async_issue_pending(chan);
-+
-+	if (!wait_for_completion_timeout(&host->dma_complete, msecs_to_jiffies(1000))) {
-+		dmaengine_terminate_sync(chan);
-+		reinit_completion(&host->dma_complete);
-+		ret = -ETIMEDOUT;
-+		goto err;
-+	}
-+
-+	if (dma_buf)
-+		memcpy(buf, dma_buf + op->aligned_offset, op->orig_len);
-+err:
-+	if (dma_buf)
-+		dma_free_coherent(dev, op->len, dma_buf, dma_addr);
-+	else
-+		dma_unmap_single(dev, dma_addr, op->orig_len, data_dir);
-+
-+	return ret;
-+}
-+
-+static int ls1x_nand_data_type_exec(struct nand_chip *chip, const struct nand_subop *subop)
-+{
-+	struct ls1x_nand_host *host = nand_get_controller_data(chip);
-+	struct ls1x_nand_op op = {};
-+	int ret;
-+
-+	ret = ls1x_nand_parse_instructions(chip, subop, &op);
-+	if (ret)
-+		return ret;
-+
-+	ls1x_nand_trigger_op(host, &op);
-+
-+	ret = ls1x_nand_dma_transfer(host, &op);
-+	if (ret)
-+		return ret;
-+
-+	return ls1x_nand_wait_for_op_done(host, &op);
-+}
-+
-+static int ls1x_nand_misc_type_exec(struct nand_chip *chip,
-+				    const struct nand_subop *subop, struct ls1x_nand_op *op)
-+{
-+	struct ls1x_nand_host *host = nand_get_controller_data(chip);
-+	int ret;
-+
-+	ret = ls1x_nand_parse_instructions(chip, subop, op);
-+	if (ret)
-+		return ret;
-+
-+	ls1x_nand_trigger_op(host, op);
-+
-+	return ls1x_nand_wait_for_op_done(host, op);
-+}
-+
-+static int ls1x_nand_zerolen_type_exec(struct nand_chip *chip, const struct nand_subop *subop)
-+{
-+	struct ls1x_nand_op op = {};
-+
-+	return ls1x_nand_misc_type_exec(chip, subop, &op);
-+}
-+
-+static int ls1x_nand_read_id_type_exec(struct nand_chip *chip, const struct nand_subop *subop)
-+{
-+	struct ls1x_nand_host *host = nand_get_controller_data(chip);
-+	struct ls1x_nand_op op = {};
-+	int i, ret;
-+	union {
-+		char ids[5];
-+		struct {
-+			int idl;
-+			char idh;
-+		};
-+	} nand_id;
-+
-+	ret = ls1x_nand_misc_type_exec(chip, subop, &op);
-+	if (ret) {
-+		dev_err(host->dev, "failed to read ID! %d\n", ret);
-+		return ret;
-+	}
-+
-+	nand_id.idl = readl(host->reg_base + LS1X_NAND_IDL);
-+	nand_id.idh = readb(host->reg_base + LS1X_NAND_IDH_STATUS);
-+
-+	for (i = 0; i < min(sizeof(nand_id.ids), op.orig_len); i++)
-+		op.buf[i] = nand_id.ids[sizeof(nand_id.ids) - 1 - i];
-+
-+	return ret;
-+}
-+
-+static int ls1x_nand_read_status_type_exec(struct nand_chip *chip, const struct nand_subop *subop)
-+{
-+	struct ls1x_nand_host *host = nand_get_controller_data(chip);
-+	struct ls1x_nand_op op = {};
-+	int val, ret;
-+
-+	ret = ls1x_nand_misc_type_exec(chip, subop, &op);
-+	if (ret) {
-+		dev_err(host->dev, "failed to read status! %d\n", ret);
-+		return ret;
-+	}
-+
-+	val = readl(host->reg_base + LS1X_NAND_IDH_STATUS);
-+	val &= ~host->data->status_field;
-+	op.buf[0] = val << ffs(host->data->status_field);
-+
-+	return ret;
-+}
-+
-+static const struct nand_op_parser ls1x_nand_op_parser = NAND_OP_PARSER(
-+	NAND_OP_PARSER_PATTERN(
-+		ls1x_nand_read_id_type_exec,
-+		NAND_OP_PARSER_PAT_CMD_ELEM(false),
-+		NAND_OP_PARSER_PAT_ADDR_ELEM(false, LS1X_NAND_MAX_ADDR_CYC),
-+		NAND_OP_PARSER_PAT_DATA_IN_ELEM(false, 8)),
-+	NAND_OP_PARSER_PATTERN(
-+		ls1x_nand_read_status_type_exec,
-+		NAND_OP_PARSER_PAT_CMD_ELEM(false),
-+		NAND_OP_PARSER_PAT_DATA_IN_ELEM(false, 1)),
-+	NAND_OP_PARSER_PATTERN(
-+		ls1x_nand_zerolen_type_exec,
-+		NAND_OP_PARSER_PAT_CMD_ELEM(false),
-+		NAND_OP_PARSER_PAT_WAITRDY_ELEM(false)),
-+	NAND_OP_PARSER_PATTERN(
-+		ls1x_nand_zerolen_type_exec,
-+		NAND_OP_PARSER_PAT_CMD_ELEM(false),
-+		NAND_OP_PARSER_PAT_ADDR_ELEM(false, LS1X_NAND_MAX_ADDR_CYC),
-+		NAND_OP_PARSER_PAT_CMD_ELEM(false),
-+		NAND_OP_PARSER_PAT_WAITRDY_ELEM(false)),
-+	NAND_OP_PARSER_PATTERN(
-+		ls1x_nand_data_type_exec,
-+		NAND_OP_PARSER_PAT_CMD_ELEM(false),
-+		NAND_OP_PARSER_PAT_ADDR_ELEM(false, LS1X_NAND_MAX_ADDR_CYC),
-+		NAND_OP_PARSER_PAT_CMD_ELEM(false),
-+		NAND_OP_PARSER_PAT_WAITRDY_ELEM(true),
-+		NAND_OP_PARSER_PAT_DATA_IN_ELEM(false, 0)),
-+	NAND_OP_PARSER_PATTERN(
-+		ls1x_nand_data_type_exec,
-+		NAND_OP_PARSER_PAT_CMD_ELEM(false),
-+		NAND_OP_PARSER_PAT_ADDR_ELEM(false, LS1X_NAND_MAX_ADDR_CYC),
-+		NAND_OP_PARSER_PAT_DATA_OUT_ELEM(false, 0),
-+		NAND_OP_PARSER_PAT_CMD_ELEM(false),
-+		NAND_OP_PARSER_PAT_WAITRDY_ELEM(true)),
-+	);
-+
-+static int ls1x_nand_is_valid_cmd(struct device *dev, u8 opcode)
-+{
-+	if (opcode == NAND_CMD_STATUS || opcode == NAND_CMD_RESET || opcode == NAND_CMD_READID)
-+		return 0;
-+
-+	dev_err(dev, "unsupported opcode: %x", opcode);
-+
-+	return -EOPNOTSUPP;
-+}
-+
-+static int ls1x_nand_is_valid_cmd_seq(struct device *dev, u8 opcode1, u8 opcode2)
-+{
-+	if (opcode1 == NAND_CMD_RNDOUT && opcode2 == NAND_CMD_RNDOUTSTART)
-+		return 0;
-+
-+	if (opcode1 == NAND_CMD_READ0 && opcode2 == NAND_CMD_READSTART)
-+		return 0;
-+
-+	if (opcode1 == NAND_CMD_ERASE1 && opcode2 == NAND_CMD_ERASE2)
-+		return 0;
-+
-+	if (opcode1 == NAND_CMD_SEQIN && opcode2 == NAND_CMD_PAGEPROG)
-+		return 0;
-+
-+	dev_err(dev, "unsupported opcode sequence: %x %x", opcode1, opcode2);
-+
-+	return -EOPNOTSUPP;
-+}
-+
-+static int ls1x_nand_check_op(struct nand_chip *chip, const struct nand_operation *op)
-+{
-+	struct ls1x_nand_host *host = nand_get_controller_data(chip);
-+	const struct nand_op_instr *instr1 = NULL, *instr2 = NULL;
-+	struct device *dev = host->dev;
-+	int op_id;
-+
-+	for (op_id = 0; op_id < op->ninstrs; op_id++) {
-+		const struct nand_op_instr *instr = &op->instrs[op_id];
-+
-+		if (instr->type == NAND_OP_CMD_INSTR) {
-+			if (!instr1)
-+				instr1 = instr;
-+			else if (!instr2)
-+				instr2 = instr;
-+			else
-+				break;
-+		}
-+	}
-+
-+	if (!instr1)
-+		return -EOPNOTSUPP;
-+
-+	if (!instr2)
-+		return ls1x_nand_is_valid_cmd(dev, instr1->ctx.cmd.opcode);
-+
-+	return ls1x_nand_is_valid_cmd_seq(dev, instr1->ctx.cmd.opcode, instr2->ctx.cmd.opcode);
-+}
-+
-+static int ls1x_nand_exec_op(struct nand_chip *chip,
-+			     const struct nand_operation *op, bool check_only)
-+{
-+	if (check_only)
-+		return ls1x_nand_check_op(chip, op);
-+
-+	return nand_op_parser_exec_op(chip, &ls1x_nand_op_parser, op, check_only);
-+}
-+
-+static int ls1x_nand_attach_chip(struct nand_chip *chip)
-+{
-+	struct ls1x_nand_host *host = nand_get_controller_data(chip);
-+	u64 chipsize = nanddev_target_size(&chip->base);
-+	int cell_size = 0;
-+
-+	switch (chipsize) {
-+	case SZ_128M:
-+		cell_size = 0x0;
-+		break;
-+	case SZ_256M:
-+		cell_size = 0x1;
-+		break;
-+	case SZ_512M:
-+		cell_size = 0x2;
-+		break;
-+	case SZ_1G:
-+		cell_size = 0x3;
-+		break;
-+	case SZ_2G:
-+		cell_size = 0x4;
-+		break;
-+	case SZ_4G:
-+		cell_size = 0x5;
-+		break;
-+	case SZ_8G:
-+		cell_size = 0x6;
-+		break;
-+	case SZ_16G:
-+		cell_size = 0x7;
-+		break;
-+	default:
-+		dev_err(host->dev, "unsupported chip size: %llu MB\n", chipsize);
-+		return -EOPNOTSUPP;
-+	}
-+
-+	switch (chip->ecc.engine_type) {
-+	case NAND_ECC_ENGINE_TYPE_NONE:
-+		dev_info(host->dev, "No ECC\n");
-+		break;
-+	case NAND_ECC_ENGINE_TYPE_SOFT:
-+		dev_info(host->dev, "using SW ECC\n");
-+		break;
-+	default:
-+		dev_err(host->dev, "ECC mode %d not supported\n", chip->ecc.engine_type);
-+		return -EINVAL;
-+	}
-+
-+	/* set cell size */
-+	regmap_update_bits(host->regmap, LS1X_NAND_PARAM, LS1X_NAND_CELL_SIZE_MASK,
-+			   FIELD_PREP(LS1X_NAND_CELL_SIZE_MASK, cell_size));
-+
-+	regmap_update_bits(host->regmap, LS1X_NAND_TIMING, LS1X_NAND_HOLD_CYCLE_MASK,
-+			   FIELD_PREP(LS1X_NAND_HOLD_CYCLE_MASK, host->data->hold_cycle));
-+
-+	regmap_update_bits(host->regmap, LS1X_NAND_TIMING, LS1X_NAND_WAIT_CYCLE_MASK,
-+			   FIELD_PREP(LS1X_NAND_WAIT_CYCLE_MASK, host->data->wait_cycle));
-+
-+	chip->ecc.read_page_raw = nand_monolithic_read_page_raw;
-+	chip->ecc.write_page_raw = nand_monolithic_write_page_raw;
-+
-+	return 0;
-+}
-+
-+static const struct nand_controller_ops ls1x_nand_controller_ops = {
-+	.exec_op = ls1x_nand_exec_op,
-+	.attach_chip = ls1x_nand_attach_chip,
-+};
-+
-+static void ls1x_nand_controller_cleanup(struct ls1x_nand_host *host)
-+{
-+	if (host->dma_chan)
-+		dma_release_channel(host->dma_chan);
-+}
-+
-+static int ls1x_nand_controller_init(struct ls1x_nand_host *host)
-+{
-+	struct device *dev = host->dev;
-+	struct dma_chan *chan;
-+	struct dma_slave_config cfg = {};
-+	int ret;
-+
-+	host->regmap = devm_regmap_init_mmio(dev, host->reg_base, &ls1x_nand_regmap_config);
-+	if (IS_ERR(host->regmap))
-+		return dev_err_probe(dev, PTR_ERR(host->regmap), "failed to init regmap\n");
-+
-+	chan = dma_request_chan(dev, "rxtx");
-+	if (IS_ERR(chan))
-+		return dev_err_probe(dev, PTR_ERR(chan), "failed to request DMA channel\n");
-+	host->dma_chan = chan;
-+
-+	cfg.src_addr = host->dma_base;
-+	cfg.src_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
-+	cfg.dst_addr = host->dma_base;
-+	cfg.dst_addr_width = DMA_SLAVE_BUSWIDTH_4_BYTES;
-+	ret = dmaengine_slave_config(host->dma_chan, &cfg);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "failed to config DMA channel\n");
-+
-+	init_completion(&host->dma_complete);
-+
-+	dev_dbg(dev, "got %s for %s access\n", dma_chan_name(host->dma_chan), dev_name(dev));
-+
-+	return 0;
-+}
-+
-+static int ls1x_nand_chip_init(struct ls1x_nand_host *host)
-+{
-+	struct device *dev = host->dev;
-+	int nchips = of_get_child_count(dev->of_node);
-+	struct device_node *chip_np;
-+	struct nand_chip *chip = &host->chip;
-+	struct mtd_info *mtd = nand_to_mtd(chip);
-+	int ret;
-+
-+	if (nchips != 1)
-+		return dev_err_probe(dev, -EINVAL, "Currently one NAND chip supported\n");
-+
-+	chip_np = of_get_next_child(dev->of_node, NULL);
-+	if (!chip_np)
-+		return dev_err_probe(dev, -ENODEV, "failed to get child node for NAND chip\n");
-+
-+	chip->controller = &host->controller;
-+	chip->options = NAND_NO_SUBPAGE_WRITE | NAND_USES_DMA | NAND_BROKEN_XD;
-+	chip->buf_align = 16;
-+	nand_set_controller_data(chip, host);
-+	nand_set_flash_node(chip, chip_np);
-+	if (!mtd->name)
-+		return dev_err_probe(dev, -EINVAL, "Missing MTD label\n");
-+
-+	mtd->dev.parent = dev;
-+	mtd->owner = THIS_MODULE;
-+
-+	ret = nand_scan(chip, 1);
-+	if (ret) {
-+		of_node_put(chip_np);
-+		return dev_err_probe(dev, ret, "failed to scan NAND chip\n");
-+	}
-+
-+	ret = mtd_device_register(mtd, NULL, 0);
-+	if (ret) {
-+		nand_cleanup(chip);
-+		of_node_put(chip_np);
-+		return dev_err_probe(dev, ret, "failed to register MTD device\n");
-+	}
-+
-+	return 0;
-+}
-+
-+static int ls1x_nand_probe(struct platform_device *pdev)
-+{
-+	struct device *dev = &pdev->dev;
-+	const struct ls1x_nand_data *data;
-+	struct ls1x_nand_host *host;
-+	struct resource *res;
-+	int ret;
-+
-+	data = of_device_get_match_data(dev);
-+	if (!data)
-+		return -ENODEV;
-+
-+	host = devm_kzalloc(dev, sizeof(*host), GFP_KERNEL);
-+	if (!host)
-+		return -ENOMEM;
-+
-+	host->reg_base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(host->reg_base))
-+		return PTR_ERR(host->reg_base);
-+
-+	res = platform_get_resource_byname(pdev, IORESOURCE_MEM, "nand-dma");
-+	if (!res)
-+		return dev_err_probe(dev, -EINVAL, "Missing 'nand-dma' in reg-names property\n");
-+
-+	host->dma_base = dma_map_resource(dev, res->start, resource_size(res),
-+					  DMA_BIDIRECTIONAL, 0);
-+	if (dma_mapping_error(dev, host->dma_base))
-+		return -ENXIO;
-+
-+	host->dev = dev;
-+	host->data = data;
-+	host->controller.ops = &ls1x_nand_controller_ops;
-+
-+	nand_controller_init(&host->controller);
-+
-+	ret = ls1x_nand_controller_init(host);
-+	if (ret)
-+		goto err;
-+
-+	ret = ls1x_nand_chip_init(host);
-+	if (ret)
-+		goto err;
-+
-+	platform_set_drvdata(pdev, host);
-+
-+	return 0;
-+err:
-+	ls1x_nand_controller_cleanup(host);
-+
-+	return ret;
-+}
-+
-+static void ls1x_nand_remove(struct platform_device *pdev)
-+{
-+	struct ls1x_nand_host *host = platform_get_drvdata(pdev);
-+	struct nand_chip *chip = &host->chip;
-+	int ret;
-+
-+	ret = mtd_device_unregister(nand_to_mtd(chip));
-+	WARN_ON(ret);
-+	nand_cleanup(chip);
-+	ls1x_nand_controller_cleanup(host);
-+}
-+
-+static const struct ls1x_nand_data ls1b_nand_data = {
-+	.status_field = GENMASK(15, 8),
-+	.hold_cycle = 0x2,
-+	.wait_cycle = 0xc,
-+	.set_addr = ls1b_nand_set_addr,
-+};
-+
-+static const struct ls1x_nand_data ls1c_nand_data = {
-+	.status_field = GENMASK(23, 16),
-+	.op_scope_field = GENMASK(29, 16),
-+	.hold_cycle = 0x2,
-+	.wait_cycle = 0xc,
-+	.set_addr = ls1c_nand_set_addr,
-+};
-+
-+static const struct of_device_id ls1x_nand_match[] = {
-+	{
-+		.compatible = "loongson,ls1b-nand-controller",
-+		.data = &ls1b_nand_data,
-+	},
-+	{
-+		.compatible = "loongson,ls1c-nand-controller",
-+		.data = &ls1c_nand_data,
-+	},
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, ls1x_nand_match);
-+
-+static struct platform_driver ls1x_nand_driver = {
-+	.probe = ls1x_nand_probe,
-+	.remove = ls1x_nand_remove,
-+	.driver = {
-+		.name = KBUILD_MODNAME,
-+		.of_match_table = ls1x_nand_match,
-+	},
-+};
-+
-+module_platform_driver(ls1x_nand_driver);
-+
-+MODULE_AUTHOR("Keguang Zhang <keguang.zhang@gmail.com>");
-+MODULE_DESCRIPTION("Loongson-1 NAND Controller Driver");
-+MODULE_LICENSE("GPL");
-
--- 
-2.43.0
-
-
+SGkgQWhtYWQsDQo+SGkgR2VvcmdlLA0KPiBPbiAwNS4wMy4yNSAxMToxMCwgR2VvcmdlIENoZXJp
+YW4gd3JvdGU6DQo+PiBUaGlzIHNlcmllcyBhZGRzIGEgbmV3IGtlcm5lbCBjb21tYW5kIGxpbmUg
+b3B0aW9uIHRvIHdhdGNoZG9nIGNvcmUgdG8NCj4+IHN0b3AgdGhlIHdhdGNoZG9nIG9uIHBhbmlj
+LiBUaGlzIGlzIHVzZXVsIGluIGNlcnRhaW4gc3lzdGVtcyB3aGljaCBwcmV2ZW50cw0KPj4gc3Vj
+Y2Vzc2Z1bCBsb2FkaW5nIG9mIGtkdW1wIGtlcm5lbCBkdWUgdG8gd2F0Y2hkb2cgcmVzZXQuDQo+
+PiANCj4+IFNvbWUgb2YgdGhlIHdhdGNoZG9nIGRyaXZlcnMgc3RvcCBmdW5jdGlvbiBjb3VsZCBz
+bGVlcC4gRm9yIHN1Y2gNCj4+IGRyaXZlcnMgdGhlIHN0b3Bfb25fcGFuaWMgaXMgbm90IHZhbGlk
+IGFzIHRoZSBub3RpZmllciBjYWxsYmFjayBoYXBwZW5zDQo+PiBpbiBhdG9taWMgY29udGV4dC4g
+SW50cm9kdWNlIFdESU9GX1NUT1BfTUFZU0xFRVAgZmxhZyB0byB3YXRjaGRvZ19pbmZvDQo+PiBv
+cHRpb25zIHRvIGluZGljYXRlIHdoZXRoZXIgdGhlIHN0b3AgZnVuY3Rpb24gd291bGQgc2xlZXAu
+DQo+DQo+RGlkIHlvdSBjb25zaWRlciBoYXZpbmcgYSByZXNldF9vbl9wYW5pYyBpbnN0ZWFkLCB3
+aGljaCBzZXRzIGEgdXNlci1zcGVjaWZpZWQNCj50aW1lb3V0IG9uIHBhbmljPyBUaGlzIHdvdWxk
+IG1ha2UgdGhlIG1lY2hhbmlzbSB1c2VmdWwgYWxzbyBmb3Igd2F0Y2hkb2dzDQoNCi9wcm9jL3N5
+cy9rZXJuZWwvcGFuaWMgYWxyZWFkeSBwcm92aWRlcyB0aGF0IHN1cHBvcnQuIFlvdSBtYXkgZWNo
+byBhIG5vbi16ZXJvIHZhbHVlIA0KYW5kIHRoZSBzeXN0ZW0gdHJpZXMgZm9yIGEgc29mdCByZWJv
+b3QgYWZ0ZXIgdGhvc2UgbWFueSBzZWNvbmRzLiBCdXQgdGhpcyBkb2Vzbid0IGhhcHBlbiANCmlu
+IGNhc2Ugb2YgYSBrZHVtcCBrZXJuZWwgbG9hZCBhZnRlciBwYW5pYy4NCj50aGF0IGNhbid0IGJl
+IGRpc2FibGVkIGFuZCB3b3VsZCBwcm90ZWN0IGFnYWluc3Qgc3lzdGVtIGxvY2sgdXA6IA0KPkNv
+bnNpZGVyIGEgbWVtb3J5LWNvcnJ1cHRpb24gYnVnIChwZXJoYXBzIGV4dGVybmFsbHkgdmlhIERN
+QSksIHdoaWNoIHBhcnRpYWxseQ0KPm92ZXJ3cml0ZXMgYm90aCBtYWluIGFuZCBrZHVtcCBrZXJu
+ZWwuIFdpdGggYSBkaXNhYmxlZCB3YXRjaGRvZywgdGhlIHN5c3RlbQ0KPm1heSBub3QgYmUgYWJs
+ZSB0byByZWNvdmVyIG9uIGl0cyBvd24uDQoNClllcywgdGhhdCBpcyB0aGUgcmVhc29uIHdoeSB0
+aGUga2VybmVsIGNvbW1hbmQtbGluZSBpcyBvcHRpb25hbCBhbmQgYnkgZGVmYXVsdCBpdCBpcyBz
+ZXQgdG8gemVyby4NClNvIHRoYXQgaW4gY2FzZXMgaWYgeW91IGhhdmUgYSBjb3JydXB0ZWQga2R1
+bXAga2VybmVsIHRoZW4gd2F0Y2hkb2cga2lja3MgaW4uDQo+DQo+SWYgeW91IGRpZCBjb25zaWRl
+ciBpdCwgd2hhdCBtYWRlIHlvdSBkZWNpZGUgYWdhaW5zdCBpdD8NCndhdGNoZG9nLnN0b3Bfb25f
+cGFuaWM9MSBpcyBzcGVjaWZpY2FsbHkgZm9yIHN5c3RlbXMgd2hpY2ggY2FuJ3QgYm9vdCBhIGtk
+dW1wIGtlcm5lbCBkdWUgdG8gdGhlIGZhY3QgDQp0aGF0IHRoZSBrZHVtcCBrZXJuZWwgZ2V0cyBh
+IHdhdGNoZG9nIHJlc2V0IHdoaWxlIGJvb3RpbmcsIG1heSBiZSBkdWUgdG8gYSBzaG9ydGVyIHdh
+dGNoZG9nIHRpbWUuDQpGb3IgZWc6IGEgMzItYml0IHdhdGNoZG9nIGRvd24gY291bnRlciBydW5u
+aW5nIGF0IDFHSHouDQpyZXNldF9vbl9wYW5pYyBjYW4gZ3VhcmFudGVlIG9ubHkgdGhlIGxhcmdl
+c3Qgd2F0Y2hkb2cgdGltZW91dCBzdXBwb3J0ZWQgYnkgSFcsIA0Kc2luY2UgdGhlcmUgaXMgbm8g
+b25lIHRvIHBpbmcgdGhlIHdhdGNoZG9nLiANCj4NCj5UaGFua3MsDQo+QWhtYWQNCj4NCj4+IA0K
+Pj4gDQo+IENoYW5nZWxvZzoNCj4gdjEgLT4gdjINCj4gLSBSZW1vdmUgdGhlIHBlciBkcml2ZXIg
+ZmxhZyBzZXR0aW5nIG9wdGlvbg0KPiAtIFRha2UgdGhlIHBhcmFtZXRlciB2aWEga2VybmVsIGNv
+bW1hbmQtbGluZSBwYXJhbWV0ZXIgdG8gd2F0Y2hkb2dfY29yZS4NCj4gDQo+IHYyIC0+IHYzDQo+
+IC0gUmVtb3ZlIHRoZSBoZWxwZXIgZnVuY3Rpb24gd2F0Y2hkb2dfc3RvcF9vbl9wYW5pYygpIGZy
+b20gd2F0Y2hkb2cuaC4NCj4gLSBUaGVyZSBhcmUgbm8gdXNlcnMgZm9yIHRoaXMuIA0KPiANCj4g
+djMgLT4gdjQNCj4gLSBTaW5jZSB0aGUgcGFuaWMgbm90aWZpZXIgaXMgaW4gYXRvbWljIGNvbnRl
+eHQsIHdhdGNoZG9nIGZ1bmN0aW9ucw0KPiAgIHdoaWNoIHNsZWVwIGNhbid0IGJlIGNhbGxlZC4g
+DQo+IC0gQWRkIGFuIG9wdGlvbnMgZmxhZyBXRElPRl9TVE9QX01BWVNMRUVQIHRvIGluZGljYXRl
+IHdoZXRoZXIgc3RvcA0KPiAgIGZ1bmN0aW9uIHNsZWVwcy4NCj4gLSBTaW1wbGlmeSB0aGUgc3Rv
+cF9vbl9wYW5pYyBrZXJuZWwgY29tbWFuZCBsaW5lIHBhcnNpbmcuDQo+IC0gRW5hYmxlIHRoZSBw
+YW5pYyBub3RpZmZpZXIgb25seSBpZiB0aGUgd2F0Y2hkb2cgc3RvcCBmdW5jdGlvbiBkb2Vzbid0
+DQo+ICAgc2xlZXANCj4gDQo+IEdlb3JnZSBDaGVyaWFuICgyKToNCj4gICB3YXRjaGRvZzogQWRk
+IGEgbmV3IGZsYWcgV0RJT0ZfU1RPUF9NQVlTTEVFUA0KPiAgIGRyaXZlcnM6IHdhdGNoZG9nOiBB
+ZGQgc3VwcG9ydCBmb3IgcGFuaWMgbm90aWZpZXIgY2FsbGJhY2sNCg0KLSBHZW9yZ2UNCg==
 
