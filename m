@@ -1,73 +1,168 @@
-Return-Path: <linux-mips+bounces-8084-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8085-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBADDA4EE29
-	for <lists+linux-mips@lfdr.de>; Tue,  4 Mar 2025 21:15:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BED15A4F575
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Mar 2025 04:35:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29FB7189002A
-	for <lists+linux-mips@lfdr.de>; Tue,  4 Mar 2025 20:16:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED72916F821
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Mar 2025 03:35:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B0A11C84D7;
-	Tue,  4 Mar 2025 20:15:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 750283A8F7;
+	Wed,  5 Mar 2025 03:35:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ASNENR2R"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="SoSyO24H"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpbg151.qq.com (smtpbg151.qq.com [18.169.211.239])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D36C92E3377;
-	Tue,  4 Mar 2025 20:15:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 448542E336F;
+	Wed,  5 Mar 2025 03:35:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.169.211.239
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741119353; cv=none; b=jJ+BR57MuNRfgieePv7gw2l/s43dvMDDvcAuVMN1PqYrYrcjzwpSL9sPQJVQHgtrohXhLA/XzAmZNEKxurEEDEeskuz7C2aJZuGKuad0+gaR+53R5toT3xrz/4Q6YZck2eL9VLtOThjAaV9Rw7wYLJiNM1i9cPBtT3mNSBQ+r0w=
+	t=1741145747; cv=none; b=hJIx5h7CLweHOFFO/8RFOBJhc9DJxZdCrtdZ7La/jdG/LfgzIVisV2jSRTtYidhC6pP47Gw88JSHBoAIXts7y3xhGHedM8L0KHORTiSBz7Fp5raK+P6gXHrZDW6B0JjY/uONevd2umbP0ockqlEfhKRYsevQRk5C0JQGkChgR3w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741119353; c=relaxed/simple;
-	bh=EzFptwTINkfYG+DcWRwgY4GYdP9O7yNvF8WI4pbLJoQ=;
-	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
-	 Subject:From:Cc:To:Date; b=CZQdxV86gwgPCGXVnBO/GREVVNG3Qsz5J3dM+j5YknwhC9mOQ0muEnpiKgOOnWlpEmHdANtYJj7OhpJXultpm/4bU05R/Wc/EszFyprVHupF6IF+Z7aLWuVBrfvfusa7+t4UgvqqQ3KFHgnYfbCKKV8EpckaO5sxxtY+mAkURj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ASNENR2R; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38812C4CEE5;
-	Tue,  4 Mar 2025 20:15:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741119353;
-	bh=EzFptwTINkfYG+DcWRwgY4GYdP9O7yNvF8WI4pbLJoQ=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=ASNENR2RSAj70LmPomP8fllYqSbDjB67zBcNWL5S8kSsJuHIkgl/h/D5qs3X/PerE
-	 Ts0Xj0kk0Ngb5fouOYfSbWFG8G8abh0f46YQzW/kALWEnbXKfbEMat9h4OUKAtaaUk
-	 v9fOYtrHLjZBVVm4CdWsjG5I4cRC9z7rSn6zVYR3L0lizWzW33I4B4MUvmq7XK0mIJ
-	 IcW8D++FlMrsGvIIkkXivrGJkyxy8Nsy0/bjMq6GOVP+B/CsLFNDL/x8Yx0HDtTlh/
-	 MwlsfRZETh0VyLVEWZc+TjHb8XOrPnD0Kzj0GonvQWX7xRwRUw3D9/W7CoYGGxBR6g
-	 eNmBh3ye0hloA==
-Message-ID: <0f84822c35d20c99921242d0d64fa89f.sboyd@kernel.org>
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1741145747; c=relaxed/simple;
+	bh=YhpqESCa7X4qwClnGLmcs2LQkm+0kkpH8+h/yk2a08Q=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=EubB7cMDiq6hdieULOpTo/U1+F0yLoES8Y1vigxXzHonDI0QkiiAq9vld0yBZfhZ+N5ivpbkYYaX+qH1p+G6MgkLfezS/a9IDchn2OzbXS9PUbMb40j+gE16D5PlFE3W5sknfy9dHAZdwLmu4MBg6OqWVvZuDBA6+eQ1XMv9pD0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=SoSyO24H; arc=none smtp.client-ip=18.169.211.239
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1741145727;
+	bh=HFXDpVRoV7fVpwf1jPiqDZoScxJygDs+OZNWRACrGd4=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=SoSyO24HkHnX2kcaIVW0m4YkGfcfiqunnNxAHWg0uR5WGRdQIrP3hI9EaZq0W6wsx
+	 AI5fdyZv8XMC65C72oqtDjYNmdbesLmh4THSvSRiMHUhNImHrqeMQ70ItAZFZQrHus
+	 tBVnF5XNuElzVhmiOH+Iz/nYxGv3rau7pjrxhY6k=
+X-QQ-mid: bizesmtpip2t1741145681t6cfh9f
+X-QQ-Originating-IP: EbXEJ32OK2QiKly+s5QYaHysf8TpMgxAm8Yl+7ozglI=
+Received: from localhost.localdomain ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Wed, 05 Mar 2025 11:34:39 +0800 (CST)
+X-QQ-SSF: 0002000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 8366188937216395239
+From: WangYuli <wangyuli@uniontech.com>
+To: macro@orcam.me.uk,
+	tsbogend@alpha.franken.de
+Cc: linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	zhanjun@uniontech.com,
+	niecheng1@uniontech.com,
+	guanwentao@uniontech.com,
+	chenlinxuan@uniontech.com,
+	WangYuli <wangyuli@uniontech.com>
+Subject: [PATCH v2] MIPS: dec: Remove dec_irq_dispatch()
+Date: Wed,  5 Mar 2025 11:34:36 +0800
+Message-ID: <303EFD6BFBDAC7C8+20250305033436.31214-1-wangyuli@uniontech.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20240412090749.15392-1-onkarnath.1@samsung.com>
-References: <CGME20240412090801epcas5p1beb5c87f7582cf4f53c245a642468763@epcas5p1.samsung.com> <20240412090749.15392-1-onkarnath.1@samsung.com>
-Subject: Re: [PATCH v2 1/1] clk: imgtec: use %pe for better readability of errors while printing
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: linux-mips@vger.kernel.org, linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, r.thapliyal@samsung.com, maninder1.s@samsung.com, Onkarnath <onkarnath.1@samsung.com>
-To: Onkarnarth <onkarnath.1@samsung.com>, mturquette@baylibre.com, paulburton@kernel.org
-Date: Tue, 04 Mar 2025 12:15:50 -0800
-User-Agent: alot/0.12.dev1+gaa8c22fdeedb
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
+X-QQ-XMAILINFO: MauZFeUCNtAMjs4gQDc9KQ/B4cEYkJBUcLhRhOhmA0XYp6leWuxfWiH/
+	tA7iclm/teD7yL9MBgjnpEcN+i60K3Ly/HAjA16r7mynotH+9vhS2s3myHFxO3hypTHi7Yn
+	9G7xNHcEdtXuKF+bPEvVgW1EZVQxJwUHi4Zacj2zmwhQhmw16V8LvtmuNlsk0H6fw/C2Rkj
+	Y6hDRwQqBh9RpaTXp7peChBP4aafJYTvlRsWTRwxmrVkMmkHSAnhDv3Dr/6IptkFOGZt2vu
+	iTfiLGHQC0XBhPnRUdpzXjDtf6QpmETM38NKCSdWnbOBcgI4BvtTiFGkUFDRoW0UTM6sO/a
+	0vSYVlHHJvVyayeyzje1csLhe9sCanGkIbWeKOCTCLHNJ+g1ArCmZBCK2iPF3OhtaNFAYqn
+	g5VY7BjxsxQbdEyuN0Qy7mXb5H3fhJuNOZlXJ01G5jhB2APFKzYKMdcLRRY+7k8IGvYtRtg
+	VN34boPsCB7hxIFRPHS2CE+16idwjw/EFHIh3HzOm4wMbaFMqKl838QdYYVHx64UW1JfnVN
+	dyh0uKPRQU+9RIL5QD7KMqMmg7OanpUixtz5whF1zZG83a/ZbSsMgUIMjJCrx1JpY//Dtvx
+	yt9979Rzvf6ilzmDE/c0jiLWVfCcQmxVYuP4oNRMU929fovKgjk4OilJ7cDq2iAQeGBemK2
+	1z9WfoLViux1SR2mbwFiXHwZSyI3B0V758lc/o2aC0FmE6W9GOUleHeypWSAy/PfAjA9OZE
+	bcKLtH8srce+6e+RDFsNV8iNwXAkn+K9Tft0MB5Vy5m4uK0VsQAIOUwOBJD/2eq7rlTR5N6
+	83fBPNeWlIEEjULSl1hnXyCNNf5g55OWDC5fD/psLf+mdMDMxvg/f7NsZpQxP0LUnNQXgv6
+	2Kray41Y7Gx3xi5XTHRy0YBWJO1x139H9eXNJPqv+uI97Wbd9yDLJnvPWRCq7Mm56sz4MJX
+	YkcqyfuXweA0KkPM8HaKla9BkJx27PEBd8GtOoeBMgf0PAXIX9uzf6uatW7WVNg9C9o7wpm
+	uqveQtCXBgIYsADku/
+X-QQ-XMRINFO: M/715EihBoGSf6IYSX1iLFg=
+X-QQ-RECHKSPAM: 0
 
-Quoting Onkarnarth (2024-04-12 02:07:49)
-> From: Onkarnath <onkarnath.1@samsung.com>
->=20
-> instead of printing errros as a number(%ld), it's better to print in stri=
-ng
-> format for better readability of logs.
->=20
-> Signed-off-by: Onkarnath <onkarnath.1@samsung.com>
-> ---
+Commit 187933f23679 ("[MIPS] do_IRQ cleanup") introduced dec_irq_dispatch()
+function. But Subsequent to commit 8f99a1626535 ("MIPS: Tracing: Add
+IRQENTRY_EXIT section for MIPS"), the dec_irq_dispatch() function is
+rendered superfluous. Remove it to eradicate compilation warnings.
 
-Applied to clk-next
+[ Quoting Maciej W. Rozycki: ]
+
+    It always has been, since its inception, see commit 187933f23679
+  ("[MIPS] do_IRQ cleanup").
+
+    Up to commit 8f99a16265353 ("MIPS: Tracing: Add IRQENTRY_EXIT section
+  for MIPS") `do_IRQ' used to be a macro, that's why.  At the time `do_IRQ'
+  was converted to a macro `dec_irq_dispatch' was created and previously
+  this place used to call `do_IRQ' too.
+
+    This cleanup should have been made along with commit 8f99a16265353, so
+  it's pretty old a technical debt being sorted here.
+
+[ Fix follow error with gcc-14 when -Werror: ]
+
+arch/mips/dec/setup.c:780:25: error: no previous prototype for ‘dec_irq_dispatch’ [-Werror=missing-prototypes]
+  780 | asmlinkage unsigned int dec_irq_dispatch(unsigned int irq)
+      |                         ^~~~~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+make[7]: *** [scripts/Makefile.build:207: arch/mips/dec/setup.o] Error 1
+make[6]: *** [scripts/Makefile.build:465: arch/mips/dec] Error 2
+make[5]: *** [scripts/Makefile.build:465: arch/mips] Error 2
+make[5]: *** Waiting for unfinished jobs....
+make[4]: *** [Makefile:1992: .] Error 2
+make[3]: *** [debian/rules:74: build-arch] Error 2
+dpkg-buildpackage: error: make -f debian/rules binary subprocess returned exit status 2
+make[2]: *** [scripts/Makefile.package:126: bindeb-pkg] Error 2
+make[1]: *** [/mnt/83364c87-f5ee-4ae8-b862-930f1bd74feb/Projects/CommitUpstream/LinuxKernel/Temp/linux/Makefile:1625: bindeb-pkg] Error 2
+make: *** [Makefile:251: __sub-make] Error 2
+
+Link: https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=187933f23679c413706030aefad9e85e79164c44
+Link: https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8f99a162653531ef25a3dd0f92bfb6332cd2b295
+Link: https://lore.kernel.org/all/alpine.DEB.2.21.2502220019210.65342@angie.orcam.me.uk/
+Signed-off-by: WangYuli <wangyuli@uniontech.com>
+---
+Changelog:
+ *v1->v2: More detailed commit message.
+---
+ arch/mips/dec/int-handler.S | 2 +-
+ arch/mips/dec/setup.c       | 6 ------
+ 2 files changed, 1 insertion(+), 7 deletions(-)
+
+diff --git a/arch/mips/dec/int-handler.S b/arch/mips/dec/int-handler.S
+index 011d1d678840..a0b439c90488 100644
+--- a/arch/mips/dec/int-handler.S
++++ b/arch/mips/dec/int-handler.S
+@@ -277,7 +277,7 @@
+ 		 srlv	t3,t1,t2
+ 
+ handle_it:
+-		j	dec_irq_dispatch
++		j	do_IRQ
+ 		 nop
+ 
+ #if defined(CONFIG_32BIT) && defined(CONFIG_MIPS_FP_SUPPORT)
+diff --git a/arch/mips/dec/setup.c b/arch/mips/dec/setup.c
+index 6b100c7d0633..affae92f1918 100644
+--- a/arch/mips/dec/setup.c
++++ b/arch/mips/dec/setup.c
+@@ -771,9 +771,3 @@ void __init arch_init_irq(void)
+ 			pr_err("Failed to register halt interrupt\n");
+ 	}
+ }
+-
+-asmlinkage unsigned int dec_irq_dispatch(unsigned int irq)
+-{
+-	do_IRQ(irq);
+-	return 0;
+-}
+-- 
+2.47.2
+
 
