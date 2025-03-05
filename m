@@ -1,212 +1,117 @@
-Return-Path: <linux-mips+bounces-8104-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8105-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1EFDA50184
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Mar 2025 15:13:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 765EFA50F0F
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Mar 2025 23:50:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 635E81891696
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Mar 2025 14:13:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BFA961882EB7
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Mar 2025 22:50:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03F2224A075;
-	Wed,  5 Mar 2025 14:13:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F8CE2066C7;
+	Wed,  5 Mar 2025 22:50:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="eJc/Sc6p"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="T9TQvKwL"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C38213594C
-	for <linux-mips@vger.kernel.org>; Wed,  5 Mar 2025 14:13:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBDA41FF1A2
+	for <linux-mips@vger.kernel.org>; Wed,  5 Mar 2025 22:50:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741184026; cv=none; b=S29pti8CUe/bLgqnt8CugFCX2b8M63zvsJY+Y+wzoiqr6xgaWMdhCbVAj18zo7PPGseMa7Lf4rrZ1P91XKz213BVN+AJqcEbfLRGy8vO6p0c93on3MFzZY3ezDYgnKD4hYxIP7p6C2dmx0SWtYA1jOwmzvEMZsEn6L4L5OfN0hI=
+	t=1741215037; cv=none; b=WSWN8qxRVDYlPQfBCk8TuOlmcBpyFEPAN57L4lrXG+yWARbqhOSfd6HvK1sTEOJvV0VPJIqvXNk4AJQJzfbjql/w/ULW9kfToyvnWw2GH3Y322NqrP/6D+WsyrVvbOg4+frfFUiG1RpbbWp/Nd2ePXsK6d/asRjnC7qcPdYcH78=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741184026; c=relaxed/simple;
-	bh=lHKiefljl7DH+tUfGhwa7pLds/9sQ5Yo0kTU/bByKv4=;
+	s=arc-20240116; t=1741215037; c=relaxed/simple;
+	bh=hINIG5kxOwV7liYzl/+ZFhE/Yh0+VkapvzoZ/yUMGP8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WRR6dkP/7vx3Y3vquNW3BEiq6k8P+D9WQcxv8mLssnacACnrMIcareE8vobzOq7G+2QRU8E64g2FUbmsFX57AzWVmBuu8yiAGK1K68L0MHTi95Ab8F/f/t2qaWeLnF2YFkoVQiAk0YBbXNSMeDMvxDuAYfIjKTzCOGbkWk4HcGw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=eJc/Sc6p; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5493b5bc6e8so8087003e87.2
-        for <linux-mips@vger.kernel.org>; Wed, 05 Mar 2025 06:13:44 -0800 (PST)
+	 To:Cc:Content-Type; b=IesuoBVhiDj4iZ+OIZuUUG7zAHkUstAh2IsLUvDCus6FkgMK1r7pn3VQ3q/P7ijsmllNagLgT45oi2kkMjdmbAI1ABWHalsuDIcCnMHqmXEPNVUhm04RpX+2aFhyX+VT2wB+xG8c6WHwoUg6eNxBy0oYUdnB84ka6MiUW9SlA3I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=google.com; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=T9TQvKwL; arc=none smtp.client-ip=209.85.160.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-qt1-f174.google.com with SMTP id d75a77b69052e-4750a85a0ddso38091cf.1
+        for <linux-mips@vger.kernel.org>; Wed, 05 Mar 2025 14:50:35 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1741184023; x=1741788823; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YBirxCg1dxG61rZUJuSZgeRwc1WUli3vFI9Cbs1+kZM=;
-        b=eJc/Sc6pHOZ0E6RwEtAlXsdyXtml/OXRJu/CeA1BsADbWy06Nwa9jDwtOj2i1Qhnoe
-         iwkkS1Ovdt8LpQqY7w+2xG/X6gQ/WIJDRTS+Swhg7DPeMdJ352YZWdK5LMiKVuAUzvAB
-         dQU8HWkrAJBDJC3iCT3PYarSig4iq1dYw3PyEZhF9RDrnAwoXpzX2kiPAtrVxQcb2mih
-         vX8kzfxgQRF9KblSCZllhxjhEvLtkr4xxLwRV+sBGmUf4Q4S+4rt5ODtrxEji3zR/Ino
-         ZTTyIbURCLBfBw0MzizFR67DRH8ztfKsJCxAThJZ1uxkR7JtSoTMfmnyv4O1oBBKEMYS
-         v4tQ==
+        d=chromium.org; s=google; t=1741215035; x=1741819835; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RsjM4YASNleulr3tBXWY5lzfU3eAoHcF5KVgOaYjt5c=;
+        b=T9TQvKwLN2u+9y36lckxvdsuTFx31lvq1x1zggBu878diCilZ7xUW+aqF5EBspIg0A
+         HUaVZQAK7KkQx4aRLCsS56FN2fqEvRpI8JhGXQIHDTM7FxQvld3ErSslCA2ebNzk7eGq
+         GNqny3TiwsJ+IiVthCaZJMfHX3zKrijEWOXdg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741184023; x=1741788823;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=YBirxCg1dxG61rZUJuSZgeRwc1WUli3vFI9Cbs1+kZM=;
-        b=JgdSq/3s7foB35hUPMkJhMMw2h5Hyepdw1t317jKaJgquay7V24Tp4Kww5IuY1dt1s
-         69XJMLKJBE1H48MxwWfg4hAVd8ApxjxuRbmZrgHfTj03lwOd7X9TwT4nMtLH5QUsT7+Q
-         cOl9ksn1SV8t/zWe++GdlCZzUS0JaGSJz0neMugQUuYK92TUezvVNTBCVhvTa/XiGhRA
-         znkR8S3iEurqDKeOuOMHqvFaqzAoPAqGPvTlS6PXxuBgY7EEeUx4fGFpYWD4eNKR6nAR
-         dymF/+Uy1ygAR64bi156/wh7/tEqTu+l24PXf/bjeE2NEWB422nyrzNQhAoQBE/iy0ih
-         opVA==
-X-Forwarded-Encrypted: i=1; AJvYcCWRjkGgDaHdfgvsJWlkmEv0avu8EWdmezvTNpKqFlKyePYr8Qp0LSnvzSlnuCeCRTNUtCOWggwaN4/g@vger.kernel.org
-X-Gm-Message-State: AOJu0YyRKhSjqO7xF5J49R0VNfUiWIKiGIkgi/5tB47Awyo3pLWKngYc
-	e3S8207QLT9pbFwdNi86vqbAdrBsq4doCeRZ00gRY3QCwzdkzDAUvtXMBruMstIHYSPb6H65WDd
-	0EpYxHF8bj0EIkayEap64grhb8oVzQ13KxWkY6UBrug+w4CHjr7Y=
-X-Gm-Gg: ASbGncvs4ZTOAhfhR0aUU4/UYGP/UwUezjirlX0Rlv47HQKkuwDNcYSSAZzIuP/cIGK
-	H5ynW7LZAfxmHNZnfPaGzmLXAn6yc3umXzd2stuSyZ9ReU0bHuDCn1QeslgufE/h8iC80CD8t+R
-	6zf7OhqL9J8RkDkTGKu2vN86MNFOL5unuERNZUDDpj57xp8S5NOYfkHOwi200=
-X-Google-Smtp-Source: AGHT+IGt7ETpCTKRtBu9oEgGRtJDbUlwiox1K2bFo8Re017cicskr5/YVLidQCDOd8SbCFw1+MiTywsDM63Balfm85w=
-X-Received: by 2002:a05:6512:33d0:b0:545:291:7ee0 with SMTP id
- 2adb3069b0e04-5497d37af36mr1207712e87.34.1741184022729; Wed, 05 Mar 2025
- 06:13:42 -0800 (PST)
+        d=1e100.net; s=20230601; t=1741215035; x=1741819835;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RsjM4YASNleulr3tBXWY5lzfU3eAoHcF5KVgOaYjt5c=;
+        b=T7mkw9zUispWP1dNjwNS76vb8hG8mRsYszDiknLTCu/6Ma9iP9utrectwsUkg3iFYM
+         J6CA0d5zJWRGUsE/Zknt2y+SvykW2DVnhmm0v8+v5+3UK6GCVAxHfrplSXNA7jVonUs9
+         rcW0uKkYZ5N0jcW1YQY8RkTQSwUpB04W2U8l+rJbT4A64iRa87pglGz1svWZvxDxzK/L
+         ul0xDjEWUQttO9wjgzjs99leOUVc4hvk1+9Z9PfT9Fcpnk3gccFUCWmw7wzSMl6+99L7
+         Mog6ZX71XjlDky15pxGcYYa1ShqK9T+diyMwMIqfnjNgJYKp8PtROXUdL9OECg8MB0PT
+         tlkQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXeyvBjF06w45XgnVX0cx0p+j0Lc9TqWo0kT4gSJx69X4QJDHyIf7w8eRxRtmyCzbxS8uR7BD7xJ432@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzg0uuteFOtfzrAon/OIkPvDYErgj+zWEflVQbzZNwOVZQ146QD
+	F1ycZzSmyMTqi6l8LAvcYD3JDFVdJ4B1pz0M0y0sh4HO2KfVnZl32mRcUlJ8GOHrHP8d1cyoXF7
+	kfuii+mri4plBv9XjqCcJ/Zpzfa6pDz/lUt9+
+X-Gm-Gg: ASbGncstWnFu+F64rLmzEp5xB9pmWeDPzcutj/49fDsLYkAckIheHbHglAd2xJRxY/2
+	HfsTeZvQUaUccVzmhgOOsypFFgqBypUFvpBAbD7hU9psnSG7WsXe2jmRHEnrsgXy8L6l9K11ExP
+	FtG+9k6pZqsL0eErxfsAtXkFyoO9d4FfhVdKWbnEgfR4lTUnGHsyLv0APBJxA=
+X-Google-Smtp-Source: AGHT+IHvK+t3RyIjKaNCRJHSF0lsNgux1FRjfJb7Y820KcKp5rPghSBOwl1IAFSXci0ouoP0BoEyc1UcQ1d61NKzM3g=
+X-Received: by 2002:ac8:5905:0:b0:475:1754:e044 with SMTP id
+ d75a77b69052e-4751c567b75mr312741cf.3.1741215034513; Wed, 05 Mar 2025
+ 14:50:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250228100509.91121-1-marco.crivellari@suse.com>
- <20250228100509.91121-2-marco.crivellari@suse.com> <alpine.DEB.2.21.2503020042100.12637@angie.orcam.me.uk>
- <CAAhV-H5ptAzHTPAr1bxrgByZrnFmMK8zJ68Z++RwC=NHWjqZmw@mail.gmail.com>
-In-Reply-To: <CAAhV-H5ptAzHTPAr1bxrgByZrnFmMK8zJ68Z++RwC=NHWjqZmw@mail.gmail.com>
-From: Marco Crivellari <marco.crivellari@suse.com>
-Date: Wed, 5 Mar 2025 15:13:31 +0100
-X-Gm-Features: AQ5f1JraAPtmByej4UDecZdWkOIG-sEatMupm9_n5BBs7VmkfNNGDmVyP3Gxq5g
-Message-ID: <CAAofZF4HAczyRmuRe-JmQ2wcZatevLwGTOMLf1V1okGbj7q5Wg@mail.gmail.com>
-Subject: Re: [PATCH v5 1/1] MIPS: Fix idle VS timer enqueue
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: "Maciej W. Rozycki" <macro@orcam.me.uk>, linux-mips@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Frederic Weisbecker <frederic@kernel.org>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
-	Thomas Gleixner <tglx@linutronix.de>, Peter Zijlstra <peterz@infradead.org>
+References: <20250305101025.2279951-1-george.cherian@marvell.com> <20250305101025.2279951-2-george.cherian@marvell.com>
+In-Reply-To: <20250305101025.2279951-2-george.cherian@marvell.com>
+From: Julius Werner <jwerner@chromium.org>
+Date: Wed, 5 Mar 2025 14:50:20 -0800
+X-Gm-Features: AQ5f1Jq5WN2NBjpsa146UgayYxAH8L0biqGumwPp8sUUsQ-SzcQC8JeVH7zSTCI
+Message-ID: <CAODwPW_3BCfTcTu=K+6Q3PMe8DtWTiKFHC6+HO2q+cTqs=EPAA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] watchdog: Add a new flag WDIOF_STOP_MAYSLEEP
+To: George Cherian <george.cherian@marvell.com>
+Cc: linux@roeck-us.net, wim@linux-watchdog.org, jwerner@chromium.org, 
+	evanbenn@chromium.org, kabel@kernel.org, krzk@kernel.org, 
+	mazziesaccount@gmail.com, thomas.richard@bootlin.com, lma@chromium.org, 
+	bleung@chromium.org, support.opensource@diasemi.com, shawnguo@kernel.org, 
+	s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com, 
+	andy@kernel.org, paul@crapouillou.net, alexander.usyskin@intel.com, 
+	andreas.werner@men.de, daniel@thingy.jp, romain.perier@gmail.com, 
+	avifishman70@gmail.com, tmaimon77@gmail.com, tali.perry1@gmail.com, 
+	venture@google.com, yuenn@google.com, benjaminfair@google.com, 
+	maddy@linux.ibm.com, mpe@ellerman.id.au, npiggin@gmail.com, 
+	christophe.leroy@csgroup.eu, naveen@kernel.org, mwalle@kernel.org, 
+	xingyu.wu@starfivetech.com, ziv.xu@starfivetech.com, 
+	hayashi.kunihiko@socionext.com, mhiramat@kernel.org, 
+	linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, chrome-platform@lists.linux.dev, 
+	imx@lists.linux.dev, linux-mips@vger.kernel.org, openbmc@lists.ozlabs.org, 
+	linuxppc-dev@lists.ozlabs.org, patches@opensource.cirrus.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi,
+>  static const struct watchdog_ops adv_ec_wdt_ops = {
+> diff --git a/drivers/watchdog/arm_smc_wdt.c b/drivers/watchdog/arm_smc_wdt.c
+> index 8f3d0c3a005f..794cf0086912 100644
+> --- a/drivers/watchdog/arm_smc_wdt.c
+> +++ b/drivers/watchdog/arm_smc_wdt.c
+> @@ -90,7 +90,8 @@ static const struct watchdog_info smcwd_info = {
+>         .identity       = DRV_NAME,
+>         .options        = WDIOF_SETTIMEOUT |
+>                           WDIOF_KEEPALIVEPING |
+> -                         WDIOF_MAGICCLOSE,
+> +                         WDIOF_MAGICCLOSE |
+> +                         WDIOF_STOP_MAYSLEEP,
+>  };
 
-> +     /* Enable Interrput */
->                        ^^
-> Typo here; also please capitalise sentences and use full stops.
-
-Sorry, I probably forgot to run checkpatch this time.
-
->If this is a problem, then the current local_irq_enable() is also
->wrong for all MIPS III hardware, because this patch uses the same
->instruction sequence of local_irq_enable().
-
-This is the doubt I have indeed.
-Quoting from the manual (about M4K):
-
-"The Spacing column shown in Table 2.6 and Table 2.7 indicates the
-number of unrelated instructions (such as NOPs or SSNOPs) that,
-prior to the capabilities of Release 2, would need to be placed
-between the producer and consumer of the hazard in order to ensure
-that the effects of the first instruction are seen by the second instructio=
-n."
-
-The "Spacing column" value is 3, indeed.
-
-"With the hazard elimination instructions available in Release 2, the
-preferred method to eliminate hazards is to place one of the
-instructions listed in Table 2.8 between the producer and consumer of the
-hazard. Execution hazards can be removed by using the EHB [...]"
-
-Not sure if I'm missing something here.
-
-Thanks (to everyone)!
-
-On Mon, Mar 3, 2025 at 9:13=E2=80=AFAM Huacai Chen <chenhuacai@kernel.org> =
-wrote:
->
-> Hi, Maciej,
->
-> On Sun, Mar 2, 2025 at 8:54=E2=80=AFAM Maciej W. Rozycki <macro@orcam.me.=
-uk> wrote:
-> >
-> > On Fri, 28 Feb 2025, Marco Crivellari wrote:
-> >
-> > > diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
-> > > index a572ce36a24f..474738d9124e 100644
-> > > --- a/arch/mips/kernel/genex.S
-> > > +++ b/arch/mips/kernel/genex.S
-> > > @@ -104,27 +104,30 @@ handle_vcei:
-> > >
-> > >       __FINIT
-> > >
-> > > -     .align  5       /* 32 byte rollback region */
-> > > +     .align  5
-> > >  LEAF(__r4k_wait)
-> > >       .set    push
-> > >       .set    noreorder
-> > > -     /* start of rollback region */
-> > > -     LONG_L  t0, TI_FLAGS($28)
-> > > -     nop
-> > > -     andi    t0, _TIF_NEED_RESCHED
-> > > -     bnez    t0, 1f
-> > > -      nop
-> > > -     nop
-> > > -     nop
-> > > -#ifdef CONFIG_CPU_MICROMIPS
-> > > -     nop
-> > > -     nop
-> > > -     nop
-> > > -     nop
-> > > -#endif
-> > > +     /* start of idle interrupt region */
-> > > +     MFC0    t0, CP0_STATUS
-> > > +     /* Enable Interrput */
-> >                         ^^
-> >  Typo here; also please capitalise sentences and use full stops.
-> >
-> > > +     ori     t0, 0x1f
-> >
-> >  No time for a thorough review here as I'm heading for a holiday right
-> > away, but I can see you still have a coprocessor move hazard here with
-> > MIPS III hardware.  The incoming value of $t0 to ORI is not what MFC0 h=
-as
-> > obtained.  It's the value from before MFC0.
-> If this is a problem, then the current local_irq_enable() is also
-> wrong for all MIPS III hardware, because this patch uses the same
-> instruction sequence of local_irq_enable().
->
->
-> Huacai
->
-> >
-> > > +     xori    t0, 0x1e
-> >
-> >  And then it's only this XORI that sees the output from MFC0 (though
-> > there's actually a race between the two competing writes to $t0), so
-> > effectively you clobber the CP0.Status register...
-> >
-> > > +     MTC0    t0, CP0_STATUS
-> >
-> >  ... here.  You need to schedule your instructions differently.  But do
-> > you need `.set noreorder' in the first place?  Can you maybe find a way=
- to
-> > avoid it, making all the hazard avoidance stuff much easier?
-> >
-> >   Maciej
-
-
-
---
-
-Marco Crivellari
-
-L3 Support Engineer, Technology & Product
-
-
-
-
-marco.crivellari@suse.com
+I don't think this driver can sleep, unless I'm missing something?
+`arm_smccc_smc()` does a synchronous call into firmware that always
+returns back to the caller.
 
