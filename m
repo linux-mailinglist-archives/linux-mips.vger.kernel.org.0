@@ -1,142 +1,202 @@
-Return-Path: <linux-mips+bounces-8095-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8097-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68D94A4FD16
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Mar 2025 12:03:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6A267A4FD20
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Mar 2025 12:05:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8CAF16A9B4
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Mar 2025 11:03:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A52AD3A745F
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Mar 2025 11:05:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89B2E2309B9;
-	Wed,  5 Mar 2025 11:03:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93359233726;
+	Wed,  5 Mar 2025 11:05:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oWvthIqJ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1487F205ADE
-	for <linux-mips@vger.kernel.org>; Wed,  5 Mar 2025 11:03:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 679461EE7B3;
+	Wed,  5 Mar 2025 11:05:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741172597; cv=none; b=V4h55nLHf1+KOHsghaotaDHb2bTkknIWsZIxowpor8wUxMXPirkzq8eYUb0/kuRoaD9f5eMFYEyDmiuK1g/Prm44xT3u7T6eOkrbnwhe5JxHIKVqm3yU1kx3Br2Hd8j1FkA85hnL5hRK5otEZK/ULm3jHZGOdm2ygAfT97R4LPY=
+	t=1741172712; cv=none; b=BWxrELyDehulsP1bwbcs2Ezp5ORDZTsFMFI2wJd7srUIOmzSe0KqxKagIIsX0jtz/WIXUXJG4GEUF02Uk0msXFiKJ2hwo0JsUGKZi8nku51ls05urpQggeq9D2N4wVOjy8xwkJcmhX1gVYEPhoK9fvR3RwjfWYmeKieRf89lqyk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741172597; c=relaxed/simple;
-	bh=JAUm4+VWC+SmkWP2S8QleEY91rM70SFeEbmpI/d5+Fo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ei7hXo0Rw+gNoGMQqdiNY32vomk3wHQit5OMrOcGRdTNebXuFo5K6EMZUxIPqmjp17Q8CeR2ZovL3J9Rr0GBB+1llzlUfkTm14P05ZhChu6TsyMg3kLSf35JksHrH3IMvsxCBnMh+TIy9JHnDj0ghzJBRcDS+fYACqcQiklH1CI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
-	(envelope-from <a.fatoum@pengutronix.de>)
-	id 1tpmVq-0008LI-3s; Wed, 05 Mar 2025 12:02:06 +0100
-Message-ID: <7ac2b8db-22c7-4168-b1b7-4f9f0ab10531@pengutronix.de>
-Date: Wed, 5 Mar 2025 12:01:53 +0100
+	s=arc-20240116; t=1741172712; c=relaxed/simple;
+	bh=A34voqNq/lx46quWlbjuRT9G0iCCqdX+8YpwipXpyE4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=FpMvGC67UlygsoBXfcRZf55dR6viC97UM8Dd90T0fEpAy+L7Fg/aduVx8Oevnm9TTUR8hsRqvZtil22jIodoN/iAK/b7sByIZys8X9XQWp463xWXJsOoFVNoPVBssAwqx2XyiUcmGmaanHHLBmIJlpeh4eFe49J2x1rnuQRIsWg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oWvthIqJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DAF97C4CEE8;
+	Wed,  5 Mar 2025 11:05:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741172711;
+	bh=A34voqNq/lx46quWlbjuRT9G0iCCqdX+8YpwipXpyE4=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=oWvthIqJiQIJV5M0nU00B11iFlZfk9qZ+4538HJ6asc0ljf2x2ZRr0tW10XSgO1oS
+	 dc/yOWhe1oQngNKi5Q3CTQQwXKoKjYWGN1AcCr67+Ikag8sdibrg6I41tHDnvmX6MA
+	 oDZvV9oD0o8slIJIJr+jWSODvr1jJnrvYBQQjFkhu4HgNFK4c/fzM9Tb2q20U4RFwi
+	 ztRV8LgnTFAdQQYyBwjpgCMElVUXOVJMQn0AOhwvCZ9O6PTDqFassg88tX2YEW5Fhp
+	 oxY1enV5q5NHaRAAATnPG4QzDLJ4vWdiNVIDb5tXanghKtt8xlUYyIICEUR6BHOyVJ
+	 NGc2GAt5qXDkw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C47F5C282E3;
+	Wed,  5 Mar 2025 11:05:11 +0000 (UTC)
+From: Keguang Zhang via B4 Relay <devnull+keguang.zhang.gmail.com@kernel.org>
+Subject: [PATCH v13 0/2] Add support for Loongson-1 NAND
+Date: Wed, 05 Mar 2025 19:05:03 +0800
+Message-Id: <20250305-loongson1-nand-v13-0-a5bac21631cd@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/2] watchdog: Add a new flag WDIOF_STOP_MAYSLEEP
-To: George Cherian <gcherian@marvell.com>,
- "linux@roeck-us.net" <linux@roeck-us.net>
-Cc: "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
- "jwerner@chromium.org" <jwerner@chromium.org>,
- "evanbenn@chromium.org" <evanbenn@chromium.org>,
- "krzk@kernel.org" <krzk@kernel.org>,
- "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
- "thomas.richard@bootlin.com" <thomas.richard@bootlin.com>,
- "lma@chromium.org" <lma@chromium.org>,
- "bleung@chromium.org" <bleung@chromium.org>,
- "support.opensource@diasemi.com" <support.opensource@diasemi.com>,
- "shawnguo@kernel.org" <shawnguo@kernel.org>,
- "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
- "kernel@pengutronix.de" <kernel@pengutronix.de>,
- "festevam@gmail.com" <festevam@gmail.com>, "andy@kernel.org"
- <andy@kernel.org>, "paul@crapouillou.net" <paul@crapouillou.net>,
- "alexander.usyskin@intel.com" <alexander.usyskin@intel.com>,
- "andreas.werner@men.de" <andreas.werner@men.de>,
- "daniel@thingy.jp" <daniel@thingy.jp>,
- "romain.perier@gmail.com" <romain.perier@gmail.com>,
- "avifishman70@gmail.com" <avifishman70@gmail.com>,
- "tmaimon77@gmail.com" <tmaimon77@gmail.com>,
- "tali.perry1@gmail.com" <tali.perry1@gmail.com>,
- "venture@google.com" <venture@google.com>,
- "yuenn@google.com" <yuenn@google.com>,
- "benjaminfair@google.com" <benjaminfair@google.com>,
- "maddy@linux.ibm.com" <maddy@linux.ibm.com>,
- "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
- "npiggin@gmail.com" <npiggin@gmail.com>,
- "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
- "naveen@kernel.org" <naveen@kernel.org>,
- "mwalle@kernel.org" <mwalle@kernel.org>,
- "xingyu.wu@starfivetech.com" <xingyu.wu@starfivetech.com>,
- "ziv.xu@starfivetech.com" <ziv.xu@starfivetech.com>,
- "hayashi.kunihiko@socionext.com" <hayashi.kunihiko@socionext.com>,
- "mhiramat@kernel.org" <mhiramat@kernel.org>,
- "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>,
- "chrome-platform@lists.linux.dev" <chrome-platform@lists.linux.dev>,
- "imx@lists.linux.dev" <imx@lists.linux.dev>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
- "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
- "patches@opensource.cirrus.com" <patches@opensource.cirrus.com>,
- =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>,
- Pengutronix Kernel Team <kernel@pengutronix.de>
-References: <20250305101025.2279951-1-george.cherian@marvell.com>
- <20250305101025.2279951-2-george.cherian@marvell.com>
- <irmewriceyzxr6jvbiao5vqrvelpftbjalmheodx5w63zi6k2y@dg3wlvs6zryd>
- <PH8PR18MB538122CE6706872B8A836A94C5CB2@PH8PR18MB5381.namprd18.prod.outlook.com>
-Content-Language: en-US
-From: Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <PH8PR18MB538122CE6706872B8A836A94C5CB2@PH8PR18MB5381.namprd18.prod.outlook.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-mips@vger.kernel.org
+X-B4-Tracking: v=1; b=H4sIAN8vyGcC/2XQwW7DIAyA4Vepch6VbQjgnfYe0w4JgRStDVPSR
+ duqvvtItS5VuCCB9H+2uFSTH6OfqufdpRr9HKeYhnxB+bSr3KEZei9ilx8qAlIgUYtjSkM/pQH
+ F0AydYCvJdMZ4CLrK0cfoQ/y6ia9v+R7GdBLnw+ibO4NQ55MUodwbBiNQvPv+M8/a/ywTX/pTE
+ 497l06Ld4jTOY3ftwVnvah/q5DZrjJrAcIElojOByB4kJZVZrPmSkKRm5xrMNY4iSo0apvbNbd
+ gi9zm3LHufKPQtgq3Oa85Uzmdc87OmZalqhuQ2xzhv0cAKnqEDKBBTT4EC54KAFeAsPw9xAy0m
+ snVlq1t2wKgO1BDFkqAMlDLGgwzd17yI3C9Xn8BqDKimm0CAAA=
+To: Miquel Raynal <miquel.raynal@bootlin.com>, 
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-mips@vger.kernel.org, 
+ Keguang Zhang <keguang.zhang@gmail.com>, 
+ Krzysztof Kozlowski <krzk@kernel.org>
+X-Mailer: b4 0.14.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1741172709; l=5250;
+ i=keguang.zhang@gmail.com; s=20231129; h=from:subject:message-id;
+ bh=A34voqNq/lx46quWlbjuRT9G0iCCqdX+8YpwipXpyE4=;
+ b=F+f3SXX+hAXIGiykEwZ8MqwBG0UbvYTLiVhBW79MSDkpigv/E2rhuxU3QA1D5C/lNDLnhPAo6
+ jV1QmYfrGtRDjgV5JgD3Clz+96CPyZQOWryXsA3aRyzmMU59I4+smX9
+X-Developer-Key: i=keguang.zhang@gmail.com; a=ed25519;
+ pk=FMKGj/JgKll/MgClpNZ3frIIogsh5e5r8CeW2mr+WLs=
+X-Endpoint-Received: by B4 Relay for keguang.zhang@gmail.com/20231129 with
+ auth_id=102
+X-Original-From: Keguang Zhang <keguang.zhang@gmail.com>
+Reply-To: keguang.zhang@gmail.com
 
-Hi George,
-Hi Guenter,
+Add the driver and dt-binding document for Loongson-1 NAND.
 
-On 05.03.25 11:34, George Cherian wrote:
->> why is armada_37xx_wdt also here?
->> The stop function in that driver may not sleep.
-> Marek,
-> 
-> Thanks for reviewing.
-> Since the stop function has a regmap_write(), I thought it might sleep.
-> Now that you pointed it out, I assume that it is an MMIO based regmap being used for armada.
-> I will update the same in the next version
+Changes in v13:
+- Improve ls1x_nand_check_op() to cover all opcode checks and eliminate redundancy.
+- Revert ls1x_nand_exec_op().
+- Some minor adjustments.
+- Link to v12: https://lore.kernel.org/r/20250121-loongson1-nand-v12-0-53507999de39@gmail.com
 
-Failure to add WDIOF_STOP_MAYSLEEP when it's needed can lead to
-kernel hanging. Failure to add an alternative WDIOF_STOP_ATOMIC
-would lead to the kernel option being a no-op.
+Changes in v12:
+- Add MTD label in the example.
+- Use MTD label for mtd->name instead of hardcoded assignment.                                                                                               
+- Removed redundant fields addr1_reg and addr2_reg from struct ls1x_nand_op.
+- Introduced .set_addr in struct ls1x_nand_host to replace the previous .parse_address,
+  and improve its logic using regmap_update_bits() to avoid restoring the row address.
+- Improve the logic of ls1x_nand_check_op() to eliminate repetitive checks.
+- Add ECC engine type check in ls1x_nand_attach_chip().
+- Some minor improvements.
+- Link to v11: https://lore.kernel.org/r/20241217-loongson1-nand-v11-0-b692c58988bb@gmail.com
 
-I think a no-op stop_on_panic (or reset_on_panic) is a saner default.
+Changes in v11:
+- Remove the requirement for 'nand-use-soft-ecc-engine' and 'nand-ecc-algo'.
+- Add 'reg-names' to support DMA address.
+- Move the DMA address to DT.
+- Rename the source file to 'loongson1-nand-controller.c'.
+- Improve the logic of ls1x_nand_op_cmd_mapping().
+- Improve the logic of ls1x_nand_check_op() to exclude unsupported cases.
+- Substitute 'host' for the improper term 'nfc'.
+- Some minor fixes and adjustments.
+- Link to v10: https://lore.kernel.org/r/20241002-loongson1-nand-v10-0-17162eff80e2@gmail.com
 
-Cheers,
-Ahmad
+Changes in v10:                                                                                                                                              
+- Fix the build error reported by kernel test robot.
+  Link: https://lore.kernel.org/oe-kbuild-all/202409220010.vctkHddZ-lkp@intel.com
+- Link to v9: https://lore.kernel.org/r/20240920-loongson1-nand-v9-0-9cc7b9345a03@gmail.com
 
-> 
->>
->> Marek
-> 
-> -George
+Changes in v9:
+- Change the compatible to 'loongson,ls1*-nand-controller'.
+- Rename the dt-binding file to loongson,ls1b-nand-controller.yaml.
+- Update MAINTAINERS file accordingly.
+- Some minor adjustments.
+- Rebasing due to recent upstream changes.
+- Link to v8: https://lore.kernel.org/r/20240808-loongson1-nand-v8-0-c96dea418b41@gmail.com
 
+Changes in v8:
+- Add a description part.
+- Adjust the compatible because the match data for ls1c-nfc differs from ls1b-nfc.
+- Mark 'nand-use-soft-ecc-engine' and 'nand-ecc-algo' as mandatory.
+- Delete the superfluous blank lines.
+- Drop NAND_MONOLITHIC_READ and add support for real subpage read instead.
+- Simplify the logic of ls1b_nand_parse_address() and ls1c_nand_parse_address().
+- Split ls1x_nand_set_controller() into ls1x_nand_parse_instructions()
+  and ls1x_nand_trigger_op().
+- Implement ls1x_nand_op_cmd_mapping() to convert the opcodes instead of forcing them.
+- Add ls1x_nand_check_op().
+- Remove struct ls1x_nand after moving its members to struct ls1x_nfc.
+- Add the prefix 'LS1X_' for all registers and their bits.
+- Drop the macros: nand_readl() and nand_writel().
+- Some minor fixes and improvements.
+- Link to v7: https://lore.kernel.org/r/20240430-loongson1-nand-v7-0-60787c314fa4@gmail.com
 
+Changes in v7:
+- Rename the file to loongson,ls1b-nfc.yaml
+- Rename the Kconfig dependency to LOONGSON1_APB_DMA
+- Link to v6: https://lore.kernel.org/r/20240327-loongson1-nand-v6-0-7f9311cef020@gmail.com
+
+Changes in v6:
+- Amend Kconfig
+- Add the dt-binding document
+- Modify nand_read_subpage() to allow subpage read by a single operation
+- Add DT support for driver
+- Use DT data instead of platform data
+- Remove MAX_ID_SIZE
+- Remove case NAND_OP_CMD_INSTR in ls1x_nand_set_controller()
+- Move ECC configuration to ls1x_nand_attach_chip()
+- Rename variable "nand" to "ls1x"
+- Rename variable "nc" to "nfc"
+- Some minor fixes
+- Link to v5: https://lore.kernel.org/all/20210520224213.7907-1-keguang.zhang@gmail.com
+
+Changes in v5:
+- Update the driver to fit the raw NAND framework.
+- Implement exec_op() instead of legacy cmdfunc().
+- Use dma_request_chan() instead of dma_request_channel().
+- Some minor fixes and cleanups.
+
+Changes in v4:
+- Retrieve the controller from nand_hw_control.
+
+Changes in v3:
+- Replace __raw_readl/__raw_writel with readl/writel.
+- Split ls1x_nand into two structures:
+ls1x_nand_chip and ls1x_nand_controller.
+
+Changes in v2:
+- Modify the dependency in Kconfig due to the changes of DMA module.
+
+Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+---
+Keguang Zhang (2):
+      dt-bindings: mtd: Add Loongson-1 NAND Controller
+      mtd: rawnand: Add Loongson-1 NAND Controller Driver
+
+ .../mtd/loongson,ls1b-nand-controller.yaml         |  72 ++
+ MAINTAINERS                                        |   1 +
+ drivers/mtd/nand/raw/Kconfig                       |   7 +
+ drivers/mtd/nand/raw/Makefile                      |   1 +
+ drivers/mtd/nand/raw/loongson1-nand-controller.c   | 853 +++++++++++++++++++++
+ 5 files changed, 934 insertions(+)
+---
+base-commit: 8936cec5cb6e27649b86fabf383d7ce4113bba49
+change-id: 20240316-loongson1-nand-98327d77e0f6
+
+Best regards,
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Keguang Zhang <keguang.zhang@gmail.com>
+
+
 
