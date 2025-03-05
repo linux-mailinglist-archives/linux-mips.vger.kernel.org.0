@@ -1,82 +1,82 @@
-Return-Path: <linux-mips+bounces-8106-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8107-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 399EDA53DFC
-	for <lists+linux-mips@lfdr.de>; Thu,  6 Mar 2025 00:05:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0549A53EB9
+	for <lists+linux-mips@lfdr.de>; Thu,  6 Mar 2025 00:58:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 64ADE16CE5F
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Mar 2025 23:05:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 33DC23ADA24
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Mar 2025 23:58:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 958AA2066FC;
-	Wed,  5 Mar 2025 23:04:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4D31207A3A;
+	Wed,  5 Mar 2025 23:58:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ABEJ0RgE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mIwYqsjC"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90E402066E0;
-	Wed,  5 Mar 2025 23:04:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 624FE207A2A;
+	Wed,  5 Mar 2025 23:58:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741215844; cv=none; b=Wxb3BNtaRanFJWyn5tfKslNXjpUQ8vYMJojfW1c42muYW9vijf/uICXvOww0eTiB9IxFDnT76+M8VXD6J9n1tlqnJo6CDeb3O7nsuGVr7L13lVl4Bxioq6tBwQFftArDl1Y7+zxBtvw0j+D16kS9Poym2jMdKhxu4Q0VEg056b4=
+	t=1741219127; cv=none; b=hIfmymQ6aCPnwG7x0C6ITZJ4z1GbU8PXns91Tvkxf0Wru7arWBqiRL8IxCPlIzzcqEZAc9qwpsdRBrnlpb2K/TJ+8eqWuC7QsbhSGw3tJlptKm9Nyz4vGYS0wi208Znh/D2KEhLXhMACCA0S7+pa4AVv04A+rPXq/+KfNruv6P4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741215844; c=relaxed/simple;
-	bh=VcksP8vfLKbAiPpfgWERhqZafM4BZ0Xbg+XBI83YkSE=;
+	s=arc-20240116; t=1741219127; c=relaxed/simple;
+	bh=1LihH3Y5rB1CuOJs6aDXxOP33wzjt1mHrT/odXvquow=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=F5P+ZD9cAyxcQ1WZIrQpEISrTDx4/M4x0tWXVF2Y6lUbAQqMVmVWPscfMdjWLEBVdatuNauZwgc40O8ehGeGlTdjTvKUhmXBJ81W8rfTYXJh4NX2wT+ukkCmVSywemYo0zRfaKnZkur93exSSOLBIWuZ6Gucyl56Ly6gFexpE2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ABEJ0RgE; arc=none smtp.client-ip=209.85.214.182
+	 In-Reply-To:Content-Type; b=rBVKNj1U7eisLWR6jiGJTz6TDKPsw010HnYieehJvNyJgDUrNxMQeuuPkyUSfY39B6OpOIWi3fDb+2/uABYt3J//1mZbAvSvok9KSOXDNjmVrmPhhcixHXa+As1uD7mQ0hs+XSou+gAVbIuk+GtXf6kJRTOyKY4A49d9yU1bgsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mIwYqsjC; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-223959039f4so93019205ad.3;
-        Wed, 05 Mar 2025 15:04:01 -0800 (PST)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2234daaf269so608865ad.3;
+        Wed, 05 Mar 2025 15:58:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741215841; x=1741820641; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1741219125; x=1741823925; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z790mvGquNClk9am635QsUgs00BtBeIllezzp9bIdnk=;
-        b=ABEJ0RgEjfw7ttxy6qFi2j1cJXHp9hG/My47w7aM5+RmE0dXzlJ4IRre/O90TqEZon
-         qKnoGzSfM/2rYoxqO1I46bl3rEWqsGVWuBRI9YCFVFGR7nrxPwngQNEe18nlniRdtXsx
-         mkBCrS4WBt+glmDaF1osPnBwTT/xcFmgrLeM0ZgeGhhn0bFpU9FVCo02YUfY/YYj7ydz
-         koL76yDm8i03mop+rmg4nmKk+KQOoU3HcgEgILGdJuUulEpfGvRUc1U1YrZeSmMPRUyy
-         1Ng2L6jaOBoOo5ID4LFoIYyke5UfSMNf/Sx1Dvazhd4QrZwx2osmicsVX1JB8S6N2ao4
-         Gw9g==
+        bh=2C3t9OHZV16KbvS+eOTMIJqI95FVIw2G7lcCbFYFJZs=;
+        b=mIwYqsjCrqud1SBEsT/ddG2vgqvqHoMc2gV3qVIxJvmQLdeiL1GN6LUVxPefl3jmJY
+         I8xVyQvBBJJK1ziIOdWJD4T+y8rCR1MuGr3izs1bpfDQWrC7yohNkPfpwUm6v1t83BrQ
+         sV8WCX/rFHtq2RcH7XqtgyYhatNl0d3paS63LBcuFnP3y9v02Yx2ZS7zHzAJn6ch8uaF
+         j8eqf9RCVKW3eGqF6z8FBanOCJbFbyZwqF7P5Ix/17HGymnHKqsnYffVFL7TzX9nDuBr
+         EtpsfGKoLkaZQ00n6c5sOKDxrDykaiZ8r+u2B1H4bxRTQUz0DHHBhpnTgy7yKqaT1Z9Z
+         elag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741215841; x=1741820641;
+        d=1e100.net; s=20230601; t=1741219125; x=1741823925;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Z790mvGquNClk9am635QsUgs00BtBeIllezzp9bIdnk=;
-        b=GiJPShKfkgX18obdmTSNo5w+h9vKyhUHaJjJxB/b0HelYkSCLD0VpSekvxbKYVXeTz
-         77FvkFwKubiWhIAzMvlatRQeT5ra0J1WiodDZ2nk0Ft5VKvgO58CVe3+TPusp1nO5RLx
-         qI8yvR9RTHX0puVxh+yijWR7+jwORRqqzYwkVOFtdxtNsI3vXdISoc81eCq4mbRsTC6e
-         k+nOGuNJlzctOazD5T2GMCunX3p21QwAZiFEM76qwwDL9kFa10p9aqJhPeJSwJZKNFbf
-         ATcu4/lkkmiL31P25/ELvD7nE6fUI8bcEJ0jS9/Lmy1WE4scCP421kwjpx5w/Oe/aWJr
-         XFOw==
-X-Forwarded-Encrypted: i=1; AJvYcCV+sv6fd41v22kETV7WT62SDhmJdZbplTyOuRi4ntKkumPxG+m7d7qCfBTHNKxk/tNGOKevjbq3XeWcRQ==@vger.kernel.org, AJvYcCW19/SJ+e6FmcZSKrnU29CllsFUV4/a1V6L2NXPxBqVk5Uti36MqPcD4vmtiEixCRuA66oEsIxfZl7of18=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOWoQMkn2cFIpOizq2mgewVUsnYPZipxPOJbiukfvZPwTWkR15
-	z/AbW1q1PjCQBOWaXQRBbrG/dXcFBUmjrHPrXI2gJsCjdbNbQV3J
-X-Gm-Gg: ASbGncuFYWIlGioTng035DFllVXU5Gwn/mBRZ2/BNZYgQ1k0JFO9FjAuV4xWtgLK8lz
-	9BDqd9HkNjvEcsN26bdCZsEUyMvThVNbTDSwDhjpIrlwKzN9koM5EWEm6wtSk1qm++qnM2YRdOF
-	o6f8Ab0BrMTZkzJfShTvrpHxwNJbto6yac/XuWr8t/5TQkM5q4cRf8SzQ1KVp3LKde++A+lc/5F
-	94iwbCciipCFwU5NPo07KbNfnSHfYMFsN7rBHx905I8DUQHUyCGeI/3m5dcXSPMxKFi5MuD4978
-	HOkxT6zuw07GV3oSrnv108+9xx2c4PsVd+kDdxZA9KCwYIYobrOnbVPzytvWTwzPOc5j20xIFAS
-	puOFZAmnznUhEz+M/WA==
-X-Google-Smtp-Source: AGHT+IGJ8wMSqYZlSJ4sp1Cb8aQxAnqhxcIrS7MZKZh23f2DOaW2c7kOg1mKVHzfXB47vtWWZXhcIQ==
-X-Received: by 2002:a05:6a00:1397:b0:732:5164:3cc with SMTP id d2e1a72fcca58-73682c8bebamr6106502b3a.19.1741215840704;
-        Wed, 05 Mar 2025 15:04:00 -0800 (PST)
+        bh=2C3t9OHZV16KbvS+eOTMIJqI95FVIw2G7lcCbFYFJZs=;
+        b=UlmXipFTms54a/lr6F3VidIN7ZEpm+QEvl8GhhETOH3rXyKEcrA7IST+iQsZAk/aSY
+         bFrfIQz8ZUesh7h5okUOQkGW3p6/WcHnsLbtJhCUChHYREX/4oDXk3euw6mJz2XSZZ0C
+         jiqrjSuYVp1Y4QRNwhSWapWb/OnGe8VBFhTCtn+KRTh8ymNYSkhyCfLnDnvFUzcZxKc6
+         3evG0rGu974dmntmccZRvoc0VbadznMHt7Vtx+85Rju9tn++eZ06I/3z2LCuPCpZUdOo
+         hlqKRlMk0kDaQETjBGG4Mwya/LkTdt2rPGl9D5tfP1QmNIJXB9/2SgEXGuZnyuBLsUK6
+         EWvA==
+X-Forwarded-Encrypted: i=1; AJvYcCULuxKd5vzu+SHUZwZfKDauGfDsmzP1oD0OeksOWWogc3gVKtbjM0hbN26uY0hWXU+WGm+613xkFLlFWL0=@vger.kernel.org, AJvYcCV0nj0HXX4SQccC8xBOyJder+N+NfFwGQBAl13Bdxfm8Bz31TaQzrOKQXRmZojWzUW4OxrBnumfrpEZ1YX5C9o=@vger.kernel.org, AJvYcCVaK3x2CAZB8bm7jFygPwMy4XTJqApXNjJ62o2BG8ahXjYnTgeaGtILZe/DFz51lbR1QYu1NBquEQIbvg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzb/qbp4uG89pTqjl+uaSdk7onOeX0VP3ITfwT1wBPyov/vacze
+	EPoEJPXrUenORdgrdpB6sjlmDSNSWpbUkCSxeLG1D59jElO5Ob/T
+X-Gm-Gg: ASbGncvyw6TELxfQtQNkgA9mbUJq0kFa9PctMwz0lTbyWR/QK5KM0fECgTLknbvV8P0
+	u5D0KHRc3BaU+ar6E9FqIBmSxjMEbX5jX2nsfgpsvfwNwazRDHsi9TENa9JWbg0Uq5RbJlJ3+03
+	wvZHD2XUMoeEIyEBjO/9p9sOrfjofbC5LDi3M/huPPxci9mLYgiiiWhxUPIwrg1uN7JKFrJHrEf
+	7Yrga0jXl4/Ahl14nS6OKZmOlAtOSfjzsjb+ZCPbo9Np+q4xzFeEJr0oJRU0Adihz5GxzAu218x
+	ka6PfwazOrGrZUSW1IDgEw4+tPwJMtBL/poBBt8g69GyUeVMqKvbxdCS9fmjoNQ8l7Swiwa/nSA
+	sW4SuPwZPjMFaXs7jKw==
+X-Google-Smtp-Source: AGHT+IFfm7H7nJs7aTJzjddZ42tdexmQKPWdcSPX9vN1nE9dL8KTlJ94ovJcHC3Iz8/npiXYs/Z0Pg==
+X-Received: by 2002:a05:6a00:2d8a:b0:736:546c:eb69 with SMTP id d2e1a72fcca58-73682b85400mr7181751b3a.9.1741219125493;
+        Wed, 05 Mar 2025 15:58:45 -0800 (PST)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7364b4eff66sm7432847b3a.83.2025.03.05.15.03.57
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-736984f8666sm20220b3a.113.2025.03.05.15.58.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Mar 2025 15:04:00 -0800 (PST)
+        Wed, 05 Mar 2025 15:58:44 -0800 (PST)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <35c97316-1e40-45ed-93b0-7e4f7dbce56d@roeck-us.net>
-Date: Wed, 5 Mar 2025 15:03:56 -0800
+Message-ID: <28a711e5-b2cb-4d5f-bb78-259a01cd4bcc@roeck-us.net>
+Date: Wed, 5 Mar 2025 15:58:40 -0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -85,25 +85,58 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v4 1/2] watchdog: Add a new flag WDIOF_STOP_MAYSLEEP
-To: George Cherian <george.cherian@marvell.com>, wim@linux-watchdog.org,
- jwerner@chromium.org, evanbenn@chromium.org, kabel@kernel.org,
- krzk@kernel.org, mazziesaccount@gmail.com, thomas.richard@bootlin.com,
- lma@chromium.org, bleung@chromium.org, support.opensource@diasemi.com,
- shawnguo@kernel.org, s.hauer@pengutronix.de, kernel@pengutronix.de,
- festevam@gmail.com, andy@kernel.org, paul@crapouillou.net,
- alexander.usyskin@intel.com, andreas.werner@men.de, daniel@thingy.jp,
- romain.perier@gmail.com, avifishman70@gmail.com, tmaimon77@gmail.com,
- tali.perry1@gmail.com, venture@google.com, yuenn@google.com,
- benjaminfair@google.com, maddy@linux.ibm.com, mpe@ellerman.id.au,
- npiggin@gmail.com, christophe.leroy@csgroup.eu, naveen@kernel.org,
- mwalle@kernel.org, xingyu.wu@starfivetech.com, ziv.xu@starfivetech.com,
- hayashi.kunihiko@socionext.com, mhiramat@kernel.org
-Cc: linux-watchdog@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, chrome-platform@lists.linux.dev,
- imx@lists.linux.dev, linux-mips@vger.kernel.org, openbmc@lists.ozlabs.org,
- linuxppc-dev@lists.ozlabs.org, patches@opensource.cirrus.com
+To: Ahmad Fatoum <a.fatoum@pengutronix.de>,
+ George Cherian <gcherian@marvell.com>
+Cc: "wim@linux-watchdog.org" <wim@linux-watchdog.org>,
+ "jwerner@chromium.org" <jwerner@chromium.org>,
+ "evanbenn@chromium.org" <evanbenn@chromium.org>,
+ "krzk@kernel.org" <krzk@kernel.org>,
+ "mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
+ "thomas.richard@bootlin.com" <thomas.richard@bootlin.com>,
+ "lma@chromium.org" <lma@chromium.org>,
+ "bleung@chromium.org" <bleung@chromium.org>,
+ "support.opensource@diasemi.com" <support.opensource@diasemi.com>,
+ "shawnguo@kernel.org" <shawnguo@kernel.org>,
+ "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+ "kernel@pengutronix.de" <kernel@pengutronix.de>,
+ "festevam@gmail.com" <festevam@gmail.com>, "andy@kernel.org"
+ <andy@kernel.org>, "paul@crapouillou.net" <paul@crapouillou.net>,
+ "alexander.usyskin@intel.com" <alexander.usyskin@intel.com>,
+ "andreas.werner@men.de" <andreas.werner@men.de>,
+ "daniel@thingy.jp" <daniel@thingy.jp>,
+ "romain.perier@gmail.com" <romain.perier@gmail.com>,
+ "avifishman70@gmail.com" <avifishman70@gmail.com>,
+ "tmaimon77@gmail.com" <tmaimon77@gmail.com>,
+ "tali.perry1@gmail.com" <tali.perry1@gmail.com>,
+ "venture@google.com" <venture@google.com>,
+ "yuenn@google.com" <yuenn@google.com>,
+ "benjaminfair@google.com" <benjaminfair@google.com>,
+ "maddy@linux.ibm.com" <maddy@linux.ibm.com>,
+ "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
+ "npiggin@gmail.com" <npiggin@gmail.com>,
+ "christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
+ "naveen@kernel.org" <naveen@kernel.org>,
+ "mwalle@kernel.org" <mwalle@kernel.org>,
+ "xingyu.wu@starfivetech.com" <xingyu.wu@starfivetech.com>,
+ "ziv.xu@starfivetech.com" <ziv.xu@starfivetech.com>,
+ "hayashi.kunihiko@socionext.com" <hayashi.kunihiko@socionext.com>,
+ "mhiramat@kernel.org" <mhiramat@kernel.org>,
+ "linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+ "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>,
+ "chrome-platform@lists.linux.dev" <chrome-platform@lists.linux.dev>,
+ "imx@lists.linux.dev" <imx@lists.linux.dev>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ "openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
+ "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+ "patches@opensource.cirrus.com" <patches@opensource.cirrus.com>,
+ =?UTF-8?Q?Marek_Beh=C3=BAn?= <kabel@kernel.org>
 References: <20250305101025.2279951-1-george.cherian@marvell.com>
  <20250305101025.2279951-2-george.cherian@marvell.com>
+ <irmewriceyzxr6jvbiao5vqrvelpftbjalmheodx5w63zi6k2y@dg3wlvs6zryd>
+ <PH8PR18MB538122CE6706872B8A836A94C5CB2@PH8PR18MB5381.namprd18.prod.outlook.com>
+ <7ac2b8db-22c7-4168-b1b7-4f9f0ab10531@pengutronix.de>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -149,36 +182,33 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20250305101025.2279951-2-george.cherian@marvell.com>
+In-Reply-To: <7ac2b8db-22c7-4168-b1b7-4f9f0ab10531@pengutronix.de>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 3/5/25 02:10, George Cherian wrote:
-> A new option flag is added to watchdog_info. This helps the watchdog
-> core to check whether stop functions would sleep or not.
-> The option flags of individual drivers are also updated accordingly.
+On 3/5/25 03:01, Ahmad Fatoum wrote:
+> Hi George,
+> Hi Guenter,
 > 
-> Signed-off-by: George Cherian <george.cherian@marvell.com>
-> ---
->   drivers/watchdog/advantech_ec_wdt.c | 3 ++-
->   drivers/watchdog/arm_smc_wdt.c      | 3 ++-
->   drivers/watchdog/armada_37xx_wdt.c  | 2 +-
+> On 05.03.25 11:34, George Cherian wrote:
+>>> why is armada_37xx_wdt also here?
+>>> The stop function in that driver may not sleep.
+>> Marek,
+>>
+>> Thanks for reviewing.
+>> Since the stop function has a regmap_write(), I thought it might sleep.
+>> Now that you pointed it out, I assume that it is an MMIO based regmap being used for armada.
+>> I will update the same in the next version
+> 
+> Failure to add WDIOF_STOP_MAYSLEEP when it's needed can lead to
+> kernel hanging. Failure to add an alternative WDIOF_STOP_ATOMIC
+> would lead to the kernel option being a no-op.
+> 
+> I think a no-op stop_on_panic (or reset_on_panic) is a saner default.
+> 
 
-
-... and many more. Sorry, I didn't expect that this would touch
-that many drivers. My bad.
-
-Let's do the opposite instead: Introduce WDIOF_STOP_NOSLEEP,
-and let drivers opt in instead of opting out.
-
-I still have to look into the other feedback. I think someone
-suggested to introduce a callback instead, which would stop the
-watchdog at runtime if needed (especially during kdump).
-That may be a better solution than having a module parameter.
-
-Either case, please separate driver patches from the patches
-introducing the new flag. Since the flag is opt-in, that should
-be ok - drivers supporting it can be modified over time.
+Agreed. Also, I like WDIOF_STOP_ATOMIC more than the WDIOF_STOP_NOSLEEP
+I had suggested in my other response.
 
 Thanks,
 Guenter
