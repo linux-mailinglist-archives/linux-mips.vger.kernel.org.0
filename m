@@ -1,199 +1,203 @@
-Return-Path: <linux-mips+bounces-8111-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8112-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92532A552F7
-	for <lists+linux-mips@lfdr.de>; Thu,  6 Mar 2025 18:24:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D099A55560
+	for <lists+linux-mips@lfdr.de>; Thu,  6 Mar 2025 19:51:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE4353AF94F
-	for <lists+linux-mips@lfdr.de>; Thu,  6 Mar 2025 17:24:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 78CEE1893FD0
+	for <lists+linux-mips@lfdr.de>; Thu,  6 Mar 2025 18:51:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD26D26B09F;
-	Thu,  6 Mar 2025 17:22:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CE37269AE9;
+	Thu,  6 Mar 2025 18:51:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XjHSAeZK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P80r7Rsa"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE3C926AA94;
-	Thu,  6 Mar 2025 17:22:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4EE3B667;
+	Thu,  6 Mar 2025 18:51:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741281772; cv=none; b=dJguTL/TLy4PQXakEOkJUBqM4GvimbH48JDd+bG4YiUEJ28V2fNEUW3BzuEnPkC7hlqMdo0l0kkufGU5CFgD9GZqf66gN3rm/Szh8bth0U1tt9VC+926dFGP5rC2zn1NmioBk2FPwcQRdIRR4ers1VAsIO6bQIE8v1qq1CODITU=
+	t=1741287106; cv=none; b=dftyZyyPMzxbw5dldh0XC5tWRPkNPmM+4Vvy78h91J/BzfdcOo2BJHLinsAsooANfU2p2t1jJMfcDRrCin/QRNEtch/xSR5eh6HRKSC2L/Ec3rKuSZsnD8Ojnddm1hTl/a0S0EbVelBNLsFPYY7oB0zF4KMEhdU/nZU7TXLvic8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741281772; c=relaxed/simple;
-	bh=8MDbostjxGfBi/qDdO3rFCsLUo6pHB2J+hQRBUW4lyQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c7BJCFNOrg+ehr5kIPz2fJMSM1Ic/8UqXgw3e24wDWAWjIILdh06UEltA1C0ezOY9vd9c8ETYO0a0LUZUpbmtDXUAeLe/HemGwBHMAh4tNCeB5jXxI9RPUVMriVUaVQEqbFnnzNNYivaqG+CsNGQSxstmuqOstU/AqxmjtGz4ik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XjHSAeZK; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-223f4c06e9fso18897555ad.1;
-        Thu, 06 Mar 2025 09:22:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741281770; x=1741886570; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mRtVMgZ55zLMGI/NlOCcgv9aGOQgHktJls4Rai2LzFE=;
-        b=XjHSAeZKNZr4SX1HD/Kz33XeGKOobWbW+sBiGNw4JHzPfgq7RXA+xvKHIHfS/2eXZw
-         urF+eZASorPMwDWG47OuJrWbb6XPFQaGLQyrlxAI2oZHQi55W2v7QgISo+4hue0bLUUt
-         SojTaZRJAXHwdWn2YoGTpVtGBi8+vxEzrBRa75yP0AQLUmWG7M5SEJY6gMPJh9t2KbF3
-         5Nhh7F1QTSg1NuG+GBY8ELGokXwtCYIw7cg0bg9yYCcCvx+9lG3qadqpFpsKIOhgZMqR
-         iiurPcmmEuHrGCXD1Wq/0BkMHGF2HG0x0Nm2E6pAJrejkBMaLpHJbGOcDXTOFYVeUlT7
-         mEtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741281770; x=1741886570;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mRtVMgZ55zLMGI/NlOCcgv9aGOQgHktJls4Rai2LzFE=;
-        b=S61VlH4ybjuU6QOMDCp8TqSEzOnIwx0kIj7xT+Ds13uVu/AJu9Z1/vp2/n9ZSbUekv
-         dMsXck1zZiGuic7y7nGcZew0MfIrzcyYAeoEPxd6abrNQjMdT1Xre3TKY/HUEpNZC7eH
-         as49207ItJSIzAg8VgqgbKv9ZrT3LwT/caXuwkkpixw4kolKqNsq60OAQzpQHsx2l68l
-         gX9aFwfpqlo5qXCLIKsHuaVtzDnKCnlyX0WZu0U0A1+lsBuNLRGfuiO6A2BGJzoMnVMX
-         H75mLhseXLqS0nCS+xO9SPWzUND8FzhrsQ5/ptJcdtNpC2VHLvDJBh1Dp49SPaFY9J85
-         Hx7w==
-X-Forwarded-Encrypted: i=1; AJvYcCUlLmAh5UQBWYFnjyQV5MFNkXm3A2kd/CXgRY9J6X7XZxq4fnqWfMEjesoyXMuRVPH2VDS3rRXCyd8KMQ==@vger.kernel.org, AJvYcCWCOhJID0vM1+QrjR/ouV4BL9KHa4M3YFQfbgRAEPyOkoKBtkTwZDIp5j39pISN01TxFvnSDAFbsDxrzb0mj0I=@vger.kernel.org, AJvYcCXhbF7gZyAkIe2TlFlwrh7+ken2TeuLF6A1I4b/79rk+7nCxowJIhZLR6EBh9CaxXQdvM5SO+AwbgJmfAE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEHxU0IT8GUg6g/v+Jd2NTmyQdnq11ayqBDacflfRXKCCWYqOR
-	+9tQ0QzIA0LsHI1FAE8JEUtJ5WUXrZUuctM6AKZ5YCcGONVnBycq
-X-Gm-Gg: ASbGncuQtEjrY9KnBShaGWtqJU3PWh58U7QexClDo6SfY9gLg1z+3I8MJq7pexe4Q7V
-	MYJmYRTaeh+csC6Pjt2SwVGy2aF6sriAMfjv5e9idVP+WA6vQiIWor4q0x5sJlM+n3pf6j2andn
-	fAOUT50GiZ9RAmtjDjZjiucSai9bNfbz70bOEiYMBIAntMT05TwYOk8MsedVMlYWGD0bi0RshTX
-	XT6x4SwTT1J++HxdIYCzu6WddaR+M7YIWARtI59rwer78BuQjcJi2BmAvTN2zj4fwXM/qFz63Yp
-	hRLhBWpNWrBkb51KuTYbMANmRc90PWZE/WgAivkpW8O8Z+AYYx20lK4+Rw==
-X-Google-Smtp-Source: AGHT+IH26VxHQcLOQhDT0ENeuoRX0h2QLaU456Pm5UWb84f30oMCU5DkYbKfP44zoaE1dDrw9v5TnA==
-X-Received: by 2002:a17:902:e845:b0:215:a56f:1e50 with SMTP id d9443c01a7336-22426fd8a0cmr4582335ad.8.1741281769817;
-        Thu, 06 Mar 2025 09:22:49 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22410aa4f83sm15011285ad.217.2025.03.06.09.22.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Mar 2025 09:22:49 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Thu, 6 Mar 2025 09:22:47 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: George Cherian <gcherian@marvell.com>
-Cc: Ahmad Fatoum <a.fatoum@pengutronix.de>,
-	"wim@linux-watchdog.org" <wim@linux-watchdog.org>,
-	"jwerner@chromium.org" <jwerner@chromium.org>,
-	"evanbenn@chromium.org" <evanbenn@chromium.org>,
-	"krzk@kernel.org" <krzk@kernel.org>,
-	"mazziesaccount@gmail.com" <mazziesaccount@gmail.com>,
-	"thomas.richard@bootlin.com" <thomas.richard@bootlin.com>,
-	"lma@chromium.org" <lma@chromium.org>,
-	"bleung@chromium.org" <bleung@chromium.org>,
-	"support.opensource@diasemi.com" <support.opensource@diasemi.com>,
-	"shawnguo@kernel.org" <shawnguo@kernel.org>,
-	"s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
-	"kernel@pengutronix.de" <kernel@pengutronix.de>,
-	"festevam@gmail.com" <festevam@gmail.com>,
-	"andy@kernel.org" <andy@kernel.org>,
-	"paul@crapouillou.net" <paul@crapouillou.net>,
-	"alexander.usyskin@intel.com" <alexander.usyskin@intel.com>,
-	"andreas.werner@men.de" <andreas.werner@men.de>,
-	"daniel@thingy.jp" <daniel@thingy.jp>,
-	"romain.perier@gmail.com" <romain.perier@gmail.com>,
-	"avifishman70@gmail.com" <avifishman70@gmail.com>,
-	"tmaimon77@gmail.com" <tmaimon77@gmail.com>,
-	"tali.perry1@gmail.com" <tali.perry1@gmail.com>,
-	"venture@google.com" <venture@google.com>,
-	"yuenn@google.com" <yuenn@google.com>,
-	"benjaminfair@google.com" <benjaminfair@google.com>,
-	"maddy@linux.ibm.com" <maddy@linux.ibm.com>,
-	"mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-	"npiggin@gmail.com" <npiggin@gmail.com>,
-	"christophe.leroy@csgroup.eu" <christophe.leroy@csgroup.eu>,
-	"naveen@kernel.org" <naveen@kernel.org>,
-	"mwalle@kernel.org" <mwalle@kernel.org>,
-	"xingyu.wu@starfivetech.com" <xingyu.wu@starfivetech.com>,
-	"ziv.xu@starfivetech.com" <ziv.xu@starfivetech.com>,
-	"hayashi.kunihiko@socionext.com" <hayashi.kunihiko@socionext.com>,
-	"mhiramat@kernel.org" <mhiramat@kernel.org>,
-	"linux-watchdog@vger.kernel.org" <linux-watchdog@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"chrome-platform@lists.linux.dev" <chrome-platform@lists.linux.dev>,
-	"imx@lists.linux.dev" <imx@lists.linux.dev>,
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-	"openbmc@lists.ozlabs.org" <openbmc@lists.ozlabs.org>,
-	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
-	"patches@opensource.cirrus.com" <patches@opensource.cirrus.com>,
-	Marek =?iso-8859-1?Q?Beh=FAn?= <kabel@kernel.org>
-Subject: Re: [EXTERNAL] Re: [PATCH v4 1/2] watchdog: Add a new flag
- WDIOF_STOP_MAYSLEEP
-Message-ID: <925869a6-7563-459b-b42b-b7b9b8ea0b0a@roeck-us.net>
-References: <20250305101025.2279951-1-george.cherian@marvell.com>
- <20250305101025.2279951-2-george.cherian@marvell.com>
- <irmewriceyzxr6jvbiao5vqrvelpftbjalmheodx5w63zi6k2y@dg3wlvs6zryd>
- <PH8PR18MB538122CE6706872B8A836A94C5CB2@PH8PR18MB5381.namprd18.prod.outlook.com>
- <7ac2b8db-22c7-4168-b1b7-4f9f0ab10531@pengutronix.de>
- <28a711e5-b2cb-4d5f-bb78-259a01cd4bcc@roeck-us.net>
- <PH8PR18MB53812FCAE180303E5D434275C5CA2@PH8PR18MB5381.namprd18.prod.outlook.com>
+	s=arc-20240116; t=1741287106; c=relaxed/simple;
+	bh=/wpX+rodiPgNkc2E/+2EOJ8vtAUtpxXz9ICTWI7pMKs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KJUglPnL5NkRRBWfkmpaH7UW4q7JK9fkTbPPDCpQNDM0QYAGmluz7hRAKOUGJ4iBh/goODIK68Ifv3XGaRMZ25RJBpUEUvTS1dsXc4/02PwCftSPK7Jltxnx5AOMVsBTQBBLwknT90TPQpuD8j7IkOkFUKKrdpCiBDu03buNORo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P80r7Rsa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73E1BC4CEE0;
+	Thu,  6 Mar 2025 18:51:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741287105;
+	bh=/wpX+rodiPgNkc2E/+2EOJ8vtAUtpxXz9ICTWI7pMKs=;
+	h=From:To:Cc:Subject:Date:From;
+	b=P80r7Rsa2pkCu11363Fa/SyYTsTL5K11aoIfGVkUhXZXMZF9ghtejyVAEAn/9gYin
+	 1wjIQSDGLefP2aOn0lF4nfOFQWYeL481ld2xteJKdOm4N0DyD3FCaFsp8v0/3LF+Zj
+	 A1q//tTu1zIkAikd8Mvn+6NSXoOT1YkxG40QhglljaBoNvOzWHiF8i1U7IHFop/QuY
+	 5qG0votPJ3w9ptEMTqOjG9ejudqVaGGqjAr6pLD9gnSTU97J4z2wTm+bpnENlPeeCa
+	 JlGFrkz4pFB5qBl+yf6kzfEB+qI0NhdVqEy7aOxbZiiRw30qg1qYZpVJ1ch4THxRCE
+	 TD35zfcbQZ4wA==
+From: Mike Rapoport <rppt@kernel.org>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Alexander Gordeev <agordeev@linux.ibm.com>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Guo Ren <guoren@kernel.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Matt Turner <mattst88@gmail.com>,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>,
+	Mike Rapoport <rppt@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>,
+	Stafford Horne <shorne@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Vineet Gupta <vgupta@kernel.org>,
+	Will Deacon <will@kernel.org>,
+	linux-alpha@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org,
+	linux-hexagon@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org,
+	linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	linux-arch@vger.kernel.org,
+	linux-mm@kvack.org,
+	x86@kernel.org
+Subject: [PATCH 00/13] arch, mm: reduce code duplication in mem_init()
+Date: Thu,  6 Mar 2025 20:51:10 +0200
+Message-ID: <20250306185124.3147510-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PH8PR18MB53812FCAE180303E5D434275C5CA2@PH8PR18MB5381.namprd18.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
 
-On Thu, Mar 06, 2025 at 12:18:20PM +0000, George Cherian wrote:
-> Hi Guenter,
-> 
-> I am summarizing the topics we discussed in multiple threads here.
-> 
-> >>On 3/5/25 03:01, Ahmad Fatoum wrote:
-> >> Hi George,
-> >> Hi Guenter,
-> >> 
-> >> On 05.03.25 11:34, George Cherian wrote:
-> >>>> why is armada_37xx_wdt also here?
-> >>>> The stop function in that driver may not sleep.
-> >>> Marek,
-> >>>
-> >>> Thanks for reviewing.
-> >>> Since the stop function has a regmap_write(), I thought it might sleep.
-> >>> Now that you pointed it out, I assume that it is an MMIO based regmap being used for armada.
-> >>> I will update the same in the next version
-> >> 
-> >> Failure to add WDIOF_STOP_MAYSLEEP when it's needed can lead to
-> >> kernel hanging. Failure to add an alternative WDIOF_STOP_ATOMIC
-> >> would lead to the kernel option being a no-op.
-> >> 
-> >> I think a no-op stop_on_panic (or reset_on_panic) is a saner default.
-> >> 
-> >
-> >Agreed. Also, I like WDIOF_STOP_ATOMIC more than the WDIOF_STOP_NOSLEEP
-> >I had suggested in my other response.
-> 
-> 1. Instead of blacklisting drivers as WDIOF_STOP_MAYSLEEP, the option will an opt-in.
-> 2. This may not be WDIOF_STOP_AOMIC, instead would be a generic flag not limited to STOP
->     operation. May be WDIOF_OPS_ATOMIC (OPS include - .start, .stop, .set_timeout, .ping)
+From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-I don't see a value in this because AFAICS atomic operation is only needed when
-stopping the watchdog. At least in theory, some watchdogs might need to sleep
-for other functions, but not for the stop operation. Please provide a rationale.
+Hi,
 
-> 3. Remove the kernel command line option (stop_on_panic) and have a generic reset_on_panic.
-> 4. reset_on_panic=60 (by default )  meaning on a panic the wdog timeout is updated to 60sec
->      or the clamp_t(reset_on_panic, min, max_hw_heartbeat_ms).
+Every architecture has implementation of mem_init() function and some
+even more than one. All these release free memory to the buddy
+allocator, most of them set high_memory to the end of directly
+addressable memory and many of them set max_mapnr for FLATMEM case.
 
-Default should be the current behavior, that the watchdog keeps running with the
-configured timeout.
+These patches pull the commonalities into the generic code and refactor
+some of the mem_init() implementations so that many of them can be just
+dropped.
 
-> 5. if reset_on_panic=0, it means the watchdog is stopped on panic.
+Mike Rapoport (Microsoft) (13):
+  arm: mem_init: use memblock_phys_free() to free DMA memory on SA1111
+  csky: move setup_initrd() to setup.c
+  hexagon: move initialization of init_mm.context init to paging_init()
+  MIPS: consolidate mem_init() for NUMA machines
+  MIPS: make setup_zero_pages() use memblock
+  nios2: move pr_debug() about memory start and end to setup_arch()
+  s390: make setup_zero_pages() use memblock
+  xtensa: split out printing of virtual memory layout to a function
+  arch, mm: set max_mapnr when allocating memory map for FLATMEM
+  arch, mm: set high_memory in free_area_init()
+  arch, mm: streamline HIGHMEM freeing
+  arch, mm: introduce arch_mm_preinit
+  arch, mm: make releasing of memory to page allocator more explicit
 
-If we need both a panic timeout and the ability to disable the watchdog entirely
-on panic, there should be two parameters - one to select the watchdog timeout
-on panic, and one to disable the watchdog entirely on panic. If there is only
-one parameter, it should be the watchdog timeout on panic, with ==0 meaning
-"keep the configured timeout" (i.e., the current behavior).
+ arch/alpha/mm/init.c               |  8 ----
+ arch/arc/mm/init.c                 | 25 +----------
+ arch/arm/mm/init.c                 | 43 +------------------
+ arch/arm/mm/mmu.c                  |  2 -
+ arch/arm/mm/nommu.c                |  1 -
+ arch/arm64/mm/init.c               | 12 +-----
+ arch/csky/kernel/setup.c           | 43 +++++++++++++++++++
+ arch/csky/mm/init.c                | 67 ------------------------------
+ arch/hexagon/mm/init.c             | 32 ++------------
+ arch/loongarch/kernel/numa.c       |  6 ---
+ arch/loongarch/mm/init.c           |  8 ----
+ arch/m68k/mm/init.c                |  4 --
+ arch/m68k/mm/mcfmmu.c              |  1 -
+ arch/m68k/mm/motorola.c            |  2 -
+ arch/m68k/sun3/config.c            |  1 -
+ arch/microblaze/mm/init.c          | 25 -----------
+ arch/mips/include/asm/mmzone.h     |  2 -
+ arch/mips/loongson64/numa.c        |  7 ----
+ arch/mips/mm/init.c                | 49 ++++------------------
+ arch/mips/sgi-ip27/ip27-memory.c   |  9 ----
+ arch/nios2/kernel/setup.c          |  3 +-
+ arch/nios2/mm/init.c               | 16 +------
+ arch/openrisc/mm/init.c            |  6 ---
+ arch/parisc/mm/init.c              |  4 --
+ arch/powerpc/kernel/setup-common.c |  3 --
+ arch/powerpc/mm/mem.c              | 18 +-------
+ arch/riscv/mm/init.c               |  5 +--
+ arch/s390/mm/init.c                | 18 +-------
+ arch/sh/mm/init.c                  | 10 -----
+ arch/sparc/mm/init_32.c            | 31 +-------------
+ arch/sparc/mm/init_64.c            |  4 --
+ arch/um/include/shared/mem_user.h  |  1 -
+ arch/um/kernel/mem.c               |  9 ++--
+ arch/um/kernel/physmem.c           | 12 ------
+ arch/um/kernel/um_arch.c           |  2 -
+ arch/x86/include/asm/highmem.h     |  3 --
+ arch/x86/include/asm/numa.h        |  4 --
+ arch/x86/include/asm/numa_32.h     | 13 ------
+ arch/x86/kernel/setup.c            |  2 -
+ arch/x86/mm/Makefile               |  2 -
+ arch/x86/mm/highmem_32.c           | 34 ---------------
+ arch/x86/mm/init_32.c              | 41 ++----------------
+ arch/x86/mm/init_64.c              |  7 ++--
+ arch/x86/mm/numa_32.c              |  3 --
+ arch/xtensa/mm/init.c              | 66 +++++++----------------------
+ include/asm-generic/memory_model.h |  5 ++-
+ include/linux/memblock.h           |  1 -
+ include/linux/mm.h                 | 13 +-----
+ mm/internal.h                      |  3 +-
+ mm/memblock.c                      |  3 +-
+ mm/memory.c                        | 16 -------
+ mm/mm_init.c                       | 58 ++++++++++++++++++++++----
+ mm/nommu.c                         |  6 ---
+ 53 files changed, 151 insertions(+), 618 deletions(-)
+ delete mode 100644 arch/x86/include/asm/numa_32.h
+ delete mode 100644 arch/x86/mm/highmem_32.c
 
-Thanks,
-Guenter
+
+base-commit: d082ecbc71e9e0bf49883ee4afd435a77a5101b6
+-- 
+2.47.2
+
 
