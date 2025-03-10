@@ -1,108 +1,120 @@
-Return-Path: <linux-mips+bounces-8142-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8143-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A821A599CC
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Mar 2025 16:21:43 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6373AA59BC4
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Mar 2025 17:56:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A2DC93A51C6
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Mar 2025 15:21:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5B12E7A2974
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Mar 2025 16:55:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A4F622CBF4;
-	Mon, 10 Mar 2025 15:21:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FB8B230BC0;
+	Mon, 10 Mar 2025 16:56:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tN6SUlZf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZbnvJvpZ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 188BD2206B2;
-	Mon, 10 Mar 2025 15:21:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F287E158538;
+	Mon, 10 Mar 2025 16:56:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741620079; cv=none; b=Aa8qV/wKjbB1iM5H64ljOL6u5TEhlpwG/9zK3gjP1iTa6W1/j/nYlUDp3aHGZ1c29iOaOrvDY/UhKI+Gp5xPZJv2jF54cAVOYSkFxCdcq0eZIgJZ25iYecjvN9W9Fq9vgw8RdfvWtBNeLAoeVBdyFk2qx62uj8bL6FqPUE7CYGs=
+	t=1741625780; cv=none; b=ShQBdjB9/MW4r31sTrRoKU6Ml6ckelkpnItLvgqCKMZD0vdUcUBD3nLRgx3KdIdnrliOdZFZikGqCpqaXs1ZfAqrp1li6/bCYDToFTxpNbVfCqUzTxkFj5Rjd6/RNh17bsvvcP7dLa8hc8/u1bAKgPOroCMqfUs+LXD3/jTHz/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741620079; c=relaxed/simple;
-	bh=Lq4ng9tUDh+Do3SLF+xgV+HmrJ7By4mHdda8vZYyX2o=;
+	s=arc-20240116; t=1741625780; c=relaxed/simple;
+	bh=Ezrb2dDSxROW84dqyY1v4CU/Kk64AT53I36HDbsTtQk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HUugrkI+wd+tBxG2EtoJ/vOAxrJL/z7P8tG+9d4sDF02TKMXQc4tCVj/oAsPhLx1pzA85nkRxeNZWNCpLyxLEDNgixA10wj0N7hz6MUx25O7I8ZOfL97xEGSH00unkQ5JnqFYCteC6u0pQzQwFZAHR+Vz7xOQA4Vj5yChbVLm9A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tN6SUlZf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 420A6C4CEF0;
-	Mon, 10 Mar 2025 15:21:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741620077;
-	bh=Lq4ng9tUDh+Do3SLF+xgV+HmrJ7By4mHdda8vZYyX2o=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tN6SUlZfZij8LZDhONGQZYa0e7YUVUuznQJoN7QxJNnpe+jbNxOnouR+r6lsg7jz3
-	 4Lnrtw2jbVBA9IJxSTQbHidaF0Xgxo30DQX/+dScJ3X+P/HfURJVPE7azLzRl75Iuj
-	 R8qcVAe8zjuSBe0ms+K4GbTB1xyvm5SpRUbS7iX6tIkR0RqnWdsnTrb6c3W7zMZDv7
-	 l93X3XUIGRPiEP671e+UX6rqe3SSv1Mnw8M1IfM3zl0B/hdXNP+qm2TErT9R6lsSAV
-	 DzqqaC9VfMcf1rxLXbPztaw+62TIEvlf6O7v94iUwpFr2XUemJJ7QAOlLrT9UrMiF8
-	 HR7YneCmAO6Ug==
-Date: Mon, 10 Mar 2025 15:21:07 +0000
-From: Mark Brown <broonie@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=OJ08ezdM/magf97BPZUswS1Ds/OCYLGfWJwtV+4ZZCYQChb9gx8QWSuKX3w30rpJY6faOYtrz8oHBL+W4dseMY8PZ3fEqfucMIDaBYPHEhptXI1WVZ3aEBL9jWi1EUQMTgQpAaqvQ2xEgQ3AmcA3Rf/d12xr+oWMAotmN0fkunE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZbnvJvpZ; arc=none smtp.client-ip=209.85.214.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-22355618fd9so82303125ad.3;
+        Mon, 10 Mar 2025 09:56:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741625778; x=1742230578; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=APYb9FkXg1vRuxJSuYQo7eXa16DnhsCOqDRxqHiUv+k=;
+        b=ZbnvJvpZrR/6OyWLVffVa+1G+W+uUjqkFBDzc4RSK8/q5OnQikw1dcQKpCovEt4fXT
+         noLpdp3k/4pOz2kt0jJsBkUHTIqVnlsqaVVV6Wgb2Dr28VJbTkiz2O4zToa5yfVgWrUH
+         Y2EzbOh4OheaYEGBzR9b+j54DcH5IAdBoW8a+iMWEbdbI4v1Lz8DuIXqiv8g1WVfgJJT
+         ihM6OR4DS0T4stqcnZcGFncFgmn9G8KV6/xtcBC+tXbphiCB5q4B0Y0dL2rCIZRe1dW+
+         8pw+TAjvy+rah4q1GyJBlQBXGsNolBLRMPQ69wmEP01MGJ25OWBDXU9SzkgDAwrcKwkf
+         gSmQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741625778; x=1742230578;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=APYb9FkXg1vRuxJSuYQo7eXa16DnhsCOqDRxqHiUv+k=;
+        b=XB1qIz/UAEgE+WfDXgYJlKUQ1UKPxPUiQWO7Zs1RFRGuYR5Ik24nGxlFEtENXcw7HF
+         iE4GvgFXfMf+852PMfJykf7xScqN9KJOKk7AJvbOxXUZrcg7W4MlKkk7CWBzYHw0C9Zy
+         s9Ut/ds6L6gpCOJXmervkatLL3QiRFOoko09qR2odKYO3QVwlE2AgYWFS2ZpjI9lWwJw
+         ZAc7lhDKIsVoz8ZF2U6dkXU/UU7rm6KENpKMG2g56JI5ZsjX+GavURWbFA5uF0HSay10
+         2wCithAzjxeZjB+uTviq4HxC/QSo+qmHwhHfYlg7uU2G/RhSErIJlXXxwEfxQLjMsLEJ
+         TjuA==
+X-Forwarded-Encrypted: i=1; AJvYcCUJTb9up35aQvuRgA7Xniw1/u9+uiFQERbRlAdwgj9ejtM2YYVaR+1Fnte2ICLRbLJk4/3pERa4BCo=@vger.kernel.org, AJvYcCUVtJ2MykojNbAk5VTUWvKJhI7zRCn1NsnqityaEzJxPtV7tzj2n6pl/KKCgXAj+K+TVj4agg1oIGNMENHZ@vger.kernel.org, AJvYcCUurg6P4ucTLcGCIa8q5KZDBlnRufl0kbNZQ4isqT4Y1jb2trUoKWk52/OIXde8jH35TCVz5q4LLWFzsA==@vger.kernel.org, AJvYcCVe3g6DXfsRZVLaXvqKzYh+sM/Ej5V4eXEzItymWyElzMO3BoF3fjFSfBI9nlFr9vbxHWW6LSQh70GYEQ==@vger.kernel.org, AJvYcCXHq5ZhmjDDbF6YNMtOX/JVlUrwBMX5i1BzdCqHAaIvRzgmRwCL3Hi54jV9ZrhaAs/ZYqcWJM83CJMV4Ms=@vger.kernel.org, AJvYcCXYE95uRPwvio9bsJzEHdR7EnGrfuT7v+LcWFSmhd3l20zSlZawvPUBqzIaPEKf/lHF4GQwsXhk6csp@vger.kernel.org, AJvYcCXuYKzrZiE0bQRL+VZ6ItAUlM8T8umWkr9Snh1frX4tIRKWW5LwqPcezp+03+17SiIMZEhtsOng5LTyGw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyqr+roQoIfhlwJ3SBZELwazs789um9PmJ41r99aqHb+Ribc1gr
+	aRl7rG1YsYIdDq0AuTXEUAqVPAA3B0lFv89tFxpMMO8VXcmn1ZHReC90TQ==
+X-Gm-Gg: ASbGncurFjlNPQOZs3629vKQ4xJACKuCPRx6T8g/ERO6qqMDVJP27C8XzCGYi8k+coz
+	fUHA5OA1UmPZuRPItYR64d9VGJFmeq3DiSgMq6pdeXHju4YbIyg1UpoFM8p2x1ALUqMlIafsaTW
+	92uyVEyvTEF3UGcfPcY+3Nu7/Rf2kFeAmnwO6Y8/3tXAekmIh9Nh9oNqc3TvaXWUFAViGyrCWm7
+	qfX4/WkyhR3ceoqIZbm9uwMJzfS2j3j5ACmaZg5k2f9I/q/ZbQ8TaYoSwxthfUBsQOp3YeIIoVd
+	55hJQN/Rqe+txuqxsX15yk18rK9zFh2XpU4Jmg1nwjT0
+X-Google-Smtp-Source: AGHT+IHYlGgo1/vzV4si4Qn81FbyVTTf4l8pjPxaAUEx+//suEtoprSuUAAYpRMpt6VXcEwCFKWneQ==
+X-Received: by 2002:a05:6a20:db0c:b0:1f3:4427:74ae with SMTP id adf61e73a8af0-1f58cb46b0amr604930637.25.1741625777842;
+        Mon, 10 Mar 2025 09:56:17 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:eb9f:29c2:9ede:46d])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-af28126e09dsm7864964a12.53.2025.03.10.09.56.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Mar 2025 09:56:17 -0700 (PDT)
+Date: Mon, 10 Mar 2025 09:56:14 -0700
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 To: linux@treblig.org
-Cc: arnd@arndb.de, lee@kernel.org, dmitry.torokhov@gmail.com,
-	sre@kernel.org, lgirdwood@gmail.com, alexandre.belloni@bootlin.com,
+Cc: arnd@arndb.de, lee@kernel.org, sre@kernel.org, lgirdwood@gmail.com,
+	broonie@kernel.org, alexandre.belloni@bootlin.com,
 	danielt@kernel.org, jingoohan1@gmail.com, deller@gmx.de,
 	linus.walleij@linaro.org, brgl@bgdev.pl, tsbogend@alpha.franken.de,
 	linux-mips@vger.kernel.org, linux-input@vger.kernel.org,
 	linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
 	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
 	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/9] regulator: pcf50633-regulator: Remove
-Message-ID: <a45de47a-d3f8-4730-bb91-2782f52fd25f@sirena.org.uk>
+Subject: Re: [PATCH 5/9] Input: pcf50633-input - Remove
+Message-ID: <Z88ZroxO32c0HLV0@google.com>
 References: <20250309193612.251929-1-linux@treblig.org>
- <20250309193612.251929-7-linux@treblig.org>
+ <20250309193612.251929-6-linux@treblig.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="xd0V7MnYEiEQnSNp"
-Content-Disposition: inline
-In-Reply-To: <20250309193612.251929-7-linux@treblig.org>
-X-Cookie: I'm having an emotional outburst!!
-
-
---xd0V7MnYEiEQnSNp
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <20250309193612.251929-6-linux@treblig.org>
 
-On Sun, Mar 09, 2025 at 07:36:09PM +0000, linux@treblig.org wrote:
-
+On Sun, Mar 09, 2025 at 07:36:08PM +0000, linux@treblig.org wrote:
+> From: "Dr. David Alan Gilbert" <linux@treblig.org>
+> 
+> The pcf50633 was used as part of the OpenMoko devices but
+> the support for its main chip was recently removed in:
+> commit 61b7f8920b17 ("ARM: s3c: remove all s3c24xx support")
+> 
+> See https://lore.kernel.org/all/Z8z236h4B5A6Ki3D@gallifrey/
+> 
+> Remove it.
+> 
 > Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
-> ---
->  drivers/mfd/pcf50633-core.c            |  35 +------
->  drivers/regulator/Kconfig              |   7 --
->  drivers/regulator/Makefile             |   1 -
->  drivers/regulator/pcf50633-regulator.c | 124 -------------------------
->  include/linux/mfd/pcf50633/core.h      |   1 -
 
-Putting MFD changes into the subsystem changes just makes everything
-harder to apply, please keep things separate unless there's a strong
-need to keep everything integrated.
+Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 
-Acked-by: Mark Brown <broonie@kernel.org>
+Please merge with the rest of the changes.
 
---xd0V7MnYEiEQnSNp
-Content-Type: application/pgp-signature; name="signature.asc"
+Thanks.
 
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmfPA2MACgkQJNaLcl1U
-h9DJ2Af/XTN0nfI5RCpJ/Fr/iN6MekiWRzaQb3lLzvZytMpntNc4uPwT7p5rYEHa
-ydU9MVFQh7Dyt0gJynsGwsny1gwwpV6lbD/t9Larxqo0gCebDw8KDzLqOEuj2U3k
-0qHsl4zlFCcPbafwODYl+E6ZsaE2i6qIaaYkuRVNtMVDmJ60E3NBfow87xLD56q3
-VH/Vp8e4kPNG/tHAfDadzy705WzmwwJHYSt1JCDPoyxlbXSrCzEDyN5w2+hq0Jvf
-YbmzdUrP2MUQlvOolK/ciND0mX/VT17xsO6Wg2b4t2ZyuDkxJ9bod08/xTZk7BxA
-j94zeh1q8atD27MZlCcC4ibCsF317A==
-=A1eA
------END PGP SIGNATURE-----
-
---xd0V7MnYEiEQnSNp--
+-- 
+Dmitry
 
