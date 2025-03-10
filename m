@@ -1,102 +1,78 @@
-Return-Path: <linux-mips+bounces-8143-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8144-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6373AA59BC4
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Mar 2025 17:56:26 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA6F3A5A396
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Mar 2025 20:04:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5B12E7A2974
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Mar 2025 16:55:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 509ED7A31AE
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Mar 2025 19:03:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FB8B230BC0;
-	Mon, 10 Mar 2025 16:56:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D27C9230BD4;
+	Mon, 10 Mar 2025 19:04:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZbnvJvpZ"
+	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="hybiMAQh"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F287E158538;
-	Mon, 10 Mar 2025 16:56:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA9DF1624C0;
+	Mon, 10 Mar 2025 19:04:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741625780; cv=none; b=ShQBdjB9/MW4r31sTrRoKU6Ml6ckelkpnItLvgqCKMZD0vdUcUBD3nLRgx3KdIdnrliOdZFZikGqCpqaXs1ZfAqrp1li6/bCYDToFTxpNbVfCqUzTxkFj5Rjd6/RNh17bsvvcP7dLa8hc8/u1bAKgPOroCMqfUs+LXD3/jTHz/A=
+	t=1741633452; cv=none; b=UohPUh631a5XpJhM3AM3nr7TGnzPMNlOf4UvMEO43sxtoePBSEfFtLrMD5tpdFkNcWx4D9zhCNhHNmxTENzrJUCIRmhY0+GJQcMvsTh5GCy1HJx00GKs0T4zOcoptCX2X/8o3ti2NmZFQyQ/60/55BCJhMh/ZABBIliN1XQuzks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741625780; c=relaxed/simple;
-	bh=Ezrb2dDSxROW84dqyY1v4CU/Kk64AT53I36HDbsTtQk=;
+	s=arc-20240116; t=1741633452; c=relaxed/simple;
+	bh=RzhTiFdvucIVDCROkX2WzXWGv0bsSTcofGbLyDngjWo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OJ08ezdM/magf97BPZUswS1Ds/OCYLGfWJwtV+4ZZCYQChb9gx8QWSuKX3w30rpJY6faOYtrz8oHBL+W4dseMY8PZ3fEqfucMIDaBYPHEhptXI1WVZ3aEBL9jWi1EUQMTgQpAaqvQ2xEgQ3AmcA3Rf/d12xr+oWMAotmN0fkunE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZbnvJvpZ; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-22355618fd9so82303125ad.3;
-        Mon, 10 Mar 2025 09:56:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741625778; x=1742230578; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=APYb9FkXg1vRuxJSuYQo7eXa16DnhsCOqDRxqHiUv+k=;
-        b=ZbnvJvpZrR/6OyWLVffVa+1G+W+uUjqkFBDzc4RSK8/q5OnQikw1dcQKpCovEt4fXT
-         noLpdp3k/4pOz2kt0jJsBkUHTIqVnlsqaVVV6Wgb2Dr28VJbTkiz2O4zToa5yfVgWrUH
-         Y2EzbOh4OheaYEGBzR9b+j54DcH5IAdBoW8a+iMWEbdbI4v1Lz8DuIXqiv8g1WVfgJJT
-         ihM6OR4DS0T4stqcnZcGFncFgmn9G8KV6/xtcBC+tXbphiCB5q4B0Y0dL2rCIZRe1dW+
-         8pw+TAjvy+rah4q1GyJBlQBXGsNolBLRMPQ69wmEP01MGJ25OWBDXU9SzkgDAwrcKwkf
-         gSmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741625778; x=1742230578;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=APYb9FkXg1vRuxJSuYQo7eXa16DnhsCOqDRxqHiUv+k=;
-        b=XB1qIz/UAEgE+WfDXgYJlKUQ1UKPxPUiQWO7Zs1RFRGuYR5Ik24nGxlFEtENXcw7HF
-         iE4GvgFXfMf+852PMfJykf7xScqN9KJOKk7AJvbOxXUZrcg7W4MlKkk7CWBzYHw0C9Zy
-         s9Ut/ds6L6gpCOJXmervkatLL3QiRFOoko09qR2odKYO3QVwlE2AgYWFS2ZpjI9lWwJw
-         ZAc7lhDKIsVoz8ZF2U6dkXU/UU7rm6KENpKMG2g56JI5ZsjX+GavURWbFA5uF0HSay10
-         2wCithAzjxeZjB+uTviq4HxC/QSo+qmHwhHfYlg7uU2G/RhSErIJlXXxwEfxQLjMsLEJ
-         TjuA==
-X-Forwarded-Encrypted: i=1; AJvYcCUJTb9up35aQvuRgA7Xniw1/u9+uiFQERbRlAdwgj9ejtM2YYVaR+1Fnte2ICLRbLJk4/3pERa4BCo=@vger.kernel.org, AJvYcCUVtJ2MykojNbAk5VTUWvKJhI7zRCn1NsnqityaEzJxPtV7tzj2n6pl/KKCgXAj+K+TVj4agg1oIGNMENHZ@vger.kernel.org, AJvYcCUurg6P4ucTLcGCIa8q5KZDBlnRufl0kbNZQ4isqT4Y1jb2trUoKWk52/OIXde8jH35TCVz5q4LLWFzsA==@vger.kernel.org, AJvYcCVe3g6DXfsRZVLaXvqKzYh+sM/Ej5V4eXEzItymWyElzMO3BoF3fjFSfBI9nlFr9vbxHWW6LSQh70GYEQ==@vger.kernel.org, AJvYcCXHq5ZhmjDDbF6YNMtOX/JVlUrwBMX5i1BzdCqHAaIvRzgmRwCL3Hi54jV9ZrhaAs/ZYqcWJM83CJMV4Ms=@vger.kernel.org, AJvYcCXYE95uRPwvio9bsJzEHdR7EnGrfuT7v+LcWFSmhd3l20zSlZawvPUBqzIaPEKf/lHF4GQwsXhk6csp@vger.kernel.org, AJvYcCXuYKzrZiE0bQRL+VZ6ItAUlM8T8umWkr9Snh1frX4tIRKWW5LwqPcezp+03+17SiIMZEhtsOng5LTyGw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyqr+roQoIfhlwJ3SBZELwazs789um9PmJ41r99aqHb+Ribc1gr
-	aRl7rG1YsYIdDq0AuTXEUAqVPAA3B0lFv89tFxpMMO8VXcmn1ZHReC90TQ==
-X-Gm-Gg: ASbGncurFjlNPQOZs3629vKQ4xJACKuCPRx6T8g/ERO6qqMDVJP27C8XzCGYi8k+coz
-	fUHA5OA1UmPZuRPItYR64d9VGJFmeq3DiSgMq6pdeXHju4YbIyg1UpoFM8p2x1ALUqMlIafsaTW
-	92uyVEyvTEF3UGcfPcY+3Nu7/Rf2kFeAmnwO6Y8/3tXAekmIh9Nh9oNqc3TvaXWUFAViGyrCWm7
-	qfX4/WkyhR3ceoqIZbm9uwMJzfS2j3j5ACmaZg5k2f9I/q/ZbQ8TaYoSwxthfUBsQOp3YeIIoVd
-	55hJQN/Rqe+txuqxsX15yk18rK9zFh2XpU4Jmg1nwjT0
-X-Google-Smtp-Source: AGHT+IHYlGgo1/vzV4si4Qn81FbyVTTf4l8pjPxaAUEx+//suEtoprSuUAAYpRMpt6VXcEwCFKWneQ==
-X-Received: by 2002:a05:6a20:db0c:b0:1f3:4427:74ae with SMTP id adf61e73a8af0-1f58cb46b0amr604930637.25.1741625777842;
-        Mon, 10 Mar 2025 09:56:17 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:eb9f:29c2:9ede:46d])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-af28126e09dsm7864964a12.53.2025.03.10.09.56.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Mar 2025 09:56:17 -0700 (PDT)
-Date: Mon, 10 Mar 2025 09:56:14 -0700
-From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To: linux@treblig.org
-Cc: arnd@arndb.de, lee@kernel.org, sre@kernel.org, lgirdwood@gmail.com,
-	broonie@kernel.org, alexandre.belloni@bootlin.com,
-	danielt@kernel.org, jingoohan1@gmail.com, deller@gmx.de,
-	linus.walleij@linaro.org, brgl@bgdev.pl, tsbogend@alpha.franken.de,
-	linux-mips@vger.kernel.org, linux-input@vger.kernel.org,
+	 Content-Type:Content-Disposition:In-Reply-To; b=sL5MQWjvm++N8fSr/YLU+K3wcEsBZAmn1qyJjF8AWynJrENuQmfaDjGRXm/zSUT0hiZFh0xO8h1G1Ap4L6sJrLMSR8z2mJT5LHVnCqHcXx+KFangFSmQfcgPnbXqDUCzP7n0/0RN3LYQ2tliGCQcTfCi5d3MCpni8MlZv6ph18E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=hybiMAQh; arc=none smtp.client-ip=46.235.229.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
+	; s=bytemarkmx; h=Content-Type:MIME-Version:Message-ID:Subject:From:Date:From
+	:Subject; bh=RWF6GDJzM/hy2cQecsSjoebubSbxEAFf7JYu72sTbbs=; b=hybiMAQheTWRVQOf
+	Brb1iHlg5QiLKtB7AknF+HJBfWeQvN4Y5AujGAm0+xJzWS2LC+HbzEtkeszjwPt/Ynqel5ezOniyi
+	JVPVfwyTYgXdPbchxvUW1zKY0X2a/DvukCEJ2iQK6Dighh1LsCh527e0SfRZPZAupAEMXI2w8vflT
+	MBT1v0HfVG0RsfJimHZkg4o0mmaIuubASyQPW3WrlWeWmYv5/WjwH/kqcJAfxFwQj82D4cLSXnbDV
+	+4ploGfQhaa6pX5vxeJ5UD44NSoL24+R6qyjsLcPg84ECs6waUSGbN7sYwvsmXVthQJETEsd8q5vU
+	SQ5q2K0mvNIRt7QgTw==;
+Received: from dg by mx.treblig.org with local (Exim 4.96)
+	(envelope-from <dg@treblig.org>)
+	id 1triPt-003ykV-16;
+	Mon, 10 Mar 2025 19:03:57 +0000
+Date: Mon, 10 Mar 2025 19:03:57 +0000
+From: "Dr. David Alan Gilbert" <linux@treblig.org>
+To: arnd@arndb.de, lee@kernel.org, dmitry.torokhov@gmail.com,
+	sre@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
+	alexandre.belloni@bootlin.com, danielt@kernel.org,
+	jingoohan1@gmail.com, deller@gmx.de, linus.walleij@linaro.org,
+	brgl@bgdev.pl, tsbogend@alpha.franken.de
+Cc: linux-mips@vger.kernel.org, linux-input@vger.kernel.org,
 	linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
 	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
 	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 5/9] Input: pcf50633-input - Remove
-Message-ID: <Z88ZroxO32c0HLV0@google.com>
+Subject: Re: [PATCH 0/9] Remove pcf50633
+Message-ID: <Z883nYWpaOF2OZbs@gallifrey>
 References: <20250309193612.251929-1-linux@treblig.org>
- <20250309193612.251929-6-linux@treblig.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250309193612.251929-6-linux@treblig.org>
+In-Reply-To: <20250309193612.251929-1-linux@treblig.org>
+X-Chocolate: 70 percent or better cocoa solids preferably
+X-Operating-System: Linux/6.1.0-21-amd64 (x86_64)
+X-Uptime: 19:02:58 up 306 days,  6:17,  1 user,  load average: 0.00, 0.00,
+ 0.00
+User-Agent: Mutt/2.2.12 (2023-09-09)
 
-On Sun, Mar 09, 2025 at 07:36:08PM +0000, linux@treblig.org wrote:
+* linux@treblig.org (linux@treblig.org) wrote:
 > From: "Dr. David Alan Gilbert" <linux@treblig.org>
 > 
 > The pcf50633 was used as part of the OpenMoko devices but
@@ -107,14 +83,82 @@ On Sun, Mar 09, 2025 at 07:36:08PM +0000, linux@treblig.org wrote:
 > 
 > Remove it.
 > 
+> I've split this up based on the subcomponents to make the size
+> of each patch sensible.
+> 
+
+Both Alexandre and Mark would prefer the mfd changes to be
+more separate from the subsystem changes, so I'll cook a v2
+shortly.
+
+Dave
+
+> 
 > Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
-
-Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
-
-Please merge with the rest of the changes.
-
-Thanks.
-
+> 
+> 
+> Dr. David Alan Gilbert (9):
+>   mfd: pcf50633-adc:  Remove
+>   backlight: pcf50633-backlight: Remove
+>   rtc: pcf50633: Remove
+>   mfd: pcF50633-gpio: Remove
+>   Input: pcf50633-input - Remove
+>   regulator: pcf50633-regulator: Remove
+>   power: supply: pcf50633: Remove charger
+>   mfd: pcf50633: Remove irq code
+>   mfd: pcf50633: Remove remains
+> 
+>  arch/mips/configs/ip27_defconfig             |   3 -
+>  drivers/input/misc/Kconfig                   |   7 -
+>  drivers/input/misc/Makefile                  |   1 -
+>  drivers/input/misc/pcf50633-input.c          | 113 -----
+>  drivers/mfd/Kconfig                          |  24 -
+>  drivers/mfd/Makefile                         |   4 -
+>  drivers/mfd/pcf50633-adc.c                   | 255 ----------
+>  drivers/mfd/pcf50633-core.c                  | 304 ------------
+>  drivers/mfd/pcf50633-gpio.c                  |  92 ----
+>  drivers/mfd/pcf50633-irq.c                   | 312 -------------
+>  drivers/power/supply/Kconfig                 |   6 -
+>  drivers/power/supply/Makefile                |   1 -
+>  drivers/power/supply/pcf50633-charger.c      | 466 -------------------
+>  drivers/regulator/Kconfig                    |   7 -
+>  drivers/regulator/Makefile                   |   1 -
+>  drivers/regulator/pcf50633-regulator.c       | 124 -----
+>  drivers/rtc/Kconfig                          |   7 -
+>  drivers/rtc/Makefile                         |   1 -
+>  drivers/rtc/rtc-pcf50633.c                   | 284 -----------
+>  drivers/video/backlight/Kconfig              |   7 -
+>  drivers/video/backlight/Makefile             |   1 -
+>  drivers/video/backlight/pcf50633-backlight.c | 154 ------
+>  include/linux/mfd/pcf50633/adc.h             |  69 ---
+>  include/linux/mfd/pcf50633/backlight.h       |  42 --
+>  include/linux/mfd/pcf50633/core.h            | 232 ---------
+>  include/linux/mfd/pcf50633/gpio.h            |  48 --
+>  include/linux/mfd/pcf50633/mbc.h             | 130 ------
+>  include/linux/mfd/pcf50633/pmic.h            |  68 ---
+>  28 files changed, 2763 deletions(-)
+>  delete mode 100644 drivers/input/misc/pcf50633-input.c
+>  delete mode 100644 drivers/mfd/pcf50633-adc.c
+>  delete mode 100644 drivers/mfd/pcf50633-core.c
+>  delete mode 100644 drivers/mfd/pcf50633-gpio.c
+>  delete mode 100644 drivers/mfd/pcf50633-irq.c
+>  delete mode 100644 drivers/power/supply/pcf50633-charger.c
+>  delete mode 100644 drivers/regulator/pcf50633-regulator.c
+>  delete mode 100644 drivers/rtc/rtc-pcf50633.c
+>  delete mode 100644 drivers/video/backlight/pcf50633-backlight.c
+>  delete mode 100644 include/linux/mfd/pcf50633/adc.h
+>  delete mode 100644 include/linux/mfd/pcf50633/backlight.h
+>  delete mode 100644 include/linux/mfd/pcf50633/core.h
+>  delete mode 100644 include/linux/mfd/pcf50633/gpio.h
+>  delete mode 100644 include/linux/mfd/pcf50633/mbc.h
+>  delete mode 100644 include/linux/mfd/pcf50633/pmic.h
+> 
+> -- 
+> 2.48.1
+> 
 -- 
-Dmitry
+ -----Open up your eyes, open up your mind, open up your code -------   
+/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
+\        dave @ treblig.org |                               | In Hex /
+ \ _________________________|_____ http://www.treblig.org   |_______/
 
