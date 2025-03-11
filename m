@@ -1,108 +1,128 @@
-Return-Path: <linux-mips+bounces-8160-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8161-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C8B7A5D086
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Mar 2025 21:12:49 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37F62A5D159
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Mar 2025 22:06:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2E3901727C2
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Mar 2025 20:12:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C8E7A3B8A9D
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Mar 2025 21:06:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0908C264F9B;
-	Tue, 11 Mar 2025 20:12:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4C6326158C;
+	Tue, 11 Mar 2025 21:06:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HWnpb1wG"
+	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="Pz04Z1fv"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1C9E2641F1;
-	Tue, 11 Mar 2025 20:12:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB7651386DA;
+	Tue, 11 Mar 2025 21:06:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741723945; cv=none; b=nftGdNQCcIPgLOm9jR9hcND7YgT2qps1WVyF6WiHL30QOxPOGC7xP0YDDonV2Vkrns6zENzQAy8l5veWOhLTgUbb2g5F84ynDBEGMCB6h36qFyf3T/7ZwUCjZ66UKwtqzw3usPUGR4vKO/1WmnDSZ54iyYwFRKR9i5lFfz4F+YI=
+	t=1741727175; cv=none; b=holqbe8VdIjrBVm8LOPTEZMTVOvfMfJMZvj44nnKe9wcOxpPve7LY84yqqGzoUwY+UECDLR4EoEqdqIi/VKmaMEWNRcAkGN03jC/3CwDdyIHyP0+Z1dAeVk/raJmElpfjC8WPywPfZ0Hs+cqJhS9u5VpkOB2XEYTzrwYEaFw+m4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741723945; c=relaxed/simple;
-	bh=aG8lVFvNtP8J6nlAUQoM2tb12NQ0LmUQ/5LfiFA5s94=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=dto9m4s4ZBzGAhRQXyLJwO8WdeO0BIWAlSD531VeLMgXnqSQVELTETSle41yRxyPDi8Gd7J4DLnX2fizOSmyZQZ+zAPbU4I8rzYvUwwHJv27Q7o9KFdptamOYtHVt99ZS1upIX0HFwmURe6ndYwwNBMz435LzeF4N+0LFtt/iTU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HWnpb1wG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A082C4CEEC;
-	Tue, 11 Mar 2025 20:12:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741723945;
-	bh=aG8lVFvNtP8J6nlAUQoM2tb12NQ0LmUQ/5LfiFA5s94=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=HWnpb1wGyF4g//SlyZAJpWzL1HpXqjbhBCvuxh3senUqbTFEoYXnI08G7f3cVlyG/
-	 kxWw+7iFj+bU9iAPzyh3NNmhyq/Uh6u2lUwZt3GzWTfZTWUa3/vxSO03XaWhH2Yw5R
-	 CtV13E03i48r/HmzaLxe/ad8WikUpD8VDK3GHlcQ7UUmwHAUjsWgf9jBaVJnJTYbed
-	 ydVBErLMkLiv8L+f+w+BFyRhvhkoiyHJ0AIDrXNdcfUgNWiCIG4zQmdYayhikpZ9e3
-	 y5SWYSB9XHf7KKih3K4oKfVXvvi+ZKzXapKB/GCOBsM9pcpFOEnZ0Q/foiWEIAHxNH
-	 VcCQREybLkm4A==
-From: Mark Brown <broonie@kernel.org>
-To: arnd@arndb.de, lee@kernel.org, dmitry.torokhov@gmail.com, 
- sre@kernel.org, lgirdwood@gmail.com, alexandre.belloni@bootlin.com, 
- danielt@kernel.org, jingoohan1@gmail.com, deller@gmx.de, 
- linus.walleij@linaro.org, brgl@bgdev.pl, tsbogend@alpha.franken.de, 
- linux@treblig.org
-Cc: linux-mips@vger.kernel.org, linux-input@vger.kernel.org, 
- linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org, 
- dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org, 
- linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20250311014959.743322-1-linux@treblig.org>
-References: <20250311014959.743322-1-linux@treblig.org>
-Subject: Re: (subset) [PATCH v2 0/9] Remove pcf50633
-Message-Id: <174172394137.371198.5965546226649774705.b4-ty@kernel.org>
-Date: Tue, 11 Mar 2025 20:12:21 +0000
+	s=arc-20240116; t=1741727175; c=relaxed/simple;
+	bh=aGHrqIf6TaZnD6AIuiiF2VpR10cGUHRJs2RNL3cvJJA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Y8Ml93DCGMzm8Je3ZvsZOoJ9bfPEPXm812Rb/KT8pvky0UwF5tbo5woa41KQHFQiYbbzpI13lWdi73AdGWHDup/aTkqHdQceuWpJgpCZTmtEkEeuxYlVaDIxnu2nvQRGGRVjKN2DhBGz3nFUPtbk7V6fnsE4XB/j+IFd6f2f74A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=Pz04Z1fv; arc=none smtp.client-ip=46.235.229.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
+	; s=bytemarkmx; h=Content-Type:MIME-Version:Message-ID:Subject:From:Date:From
+	:Subject; bh=8cQ/NQPSdJvXIo45BwmVpV7YAKqa0qFriHj8RB6qbiE=; b=Pz04Z1fvHkkbn+am
+	bDaVD+7ggiir2qFZ2Iqkr7OXYGTOz8FuXkQ2AP4fsFAAgsWetrP6mohkF0dCc9GMbLL9M8VmTztz4
+	msU/eXqHFhgCyS3670Sj3w1LlpeJnRr7fTL26B8NOwlW1jSckvtiDi+6PrZvycwDhznZLa8N4az8D
+	oc5MOLb6mleltSBbkpodGkqU71/JhnLe+f9SC2ZjKp0A1C8sDMcW9sUMyRgCCoMVkzNU3I3uGOTzW
+	8TTrrk+vMkCdGnYb5dww4Cbeln3tIOs8l8/Qx8jom91OlYW2NjXW1s2qfM+4dmTo3hWQ9qCLfk3aL
+	rxKKxORjsRATavJ46w==;
+Received: from dg by mx.treblig.org with local (Exim 4.96)
+	(envelope-from <dg@treblig.org>)
+	id 1ts6nV-004Gh7-2p;
+	Tue, 11 Mar 2025 21:05:57 +0000
+Date: Tue, 11 Mar 2025 21:05:57 +0000
+From: "Dr. David Alan Gilbert" <linux@treblig.org>
+To: Mark Brown <broonie@kernel.org>
+Cc: arnd@arndb.de, lee@kernel.org, dmitry.torokhov@gmail.com,
+	sre@kernel.org, lgirdwood@gmail.com, alexandre.belloni@bootlin.com,
+	danielt@kernel.org, jingoohan1@gmail.com, deller@gmx.de,
+	linus.walleij@linaro.org, brgl@bgdev.pl, tsbogend@alpha.franken.de,
+	linux-mips@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: (subset) [PATCH 0/9] Remove pcf50633
+Message-ID: <Z9CltdJsg_qaTKzQ@gallifrey>
+References: <20250309193612.251929-1-linux@treblig.org>
+ <174172393659.371198.1480937233663952854.b4-ty@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-1b0d6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <174172393659.371198.1480937233663952854.b4-ty@kernel.org>
+X-Chocolate: 70 percent or better cocoa solids preferably
+X-Operating-System: Linux/6.1.0-21-amd64 (x86_64)
+X-Uptime: 21:05:11 up 307 days,  8:19,  1 user,  load average: 0.00, 0.01,
+ 0.00
+User-Agent: Mutt/2.2.12 (2023-09-09)
 
-On Tue, 11 Mar 2025 01:49:50 +0000, linux@treblig.org wrote:
-> The pcf50633 was used as part of the OpenMoko devices but
-> the support for its main chip was recently removed in:
-> commit 61b7f8920b17 ("ARM: s3c: remove all s3c24xx support")
+* Mark Brown (broonie@kernel.org) wrote:
+> On Sun, 09 Mar 2025 19:36:03 +0000, linux@treblig.org wrote:
+> > The pcf50633 was used as part of the OpenMoko devices but
+> > the support for its main chip was recently removed in:
+> > commit 61b7f8920b17 ("ARM: s3c: remove all s3c24xx support")
+> > 
+> > See https://lore.kernel.org/all/Z8z236h4B5A6Ki3D@gallifrey/
+> > 
+> > Remove it.
+> > 
+> > [...]
 > 
-> See https://lore.kernel.org/all/Z8z236h4B5A6Ki3D@gallifrey/
+> Applied to
 > 
-> Remove it.
+>    https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
 > 
-> [...]
-
-Applied to
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+> Thanks!
+> 
+> [6/9] regulator: pcf50633-regulator: Remove
+>       commit: 248bc01138b11ff3af38c3b4a39cb8db7aae6eb6
 
 Thanks!
+Although....I'd only tested this as part of the series and assumed
+someone (Lee?) would pick the lot up in one go.
 
-[5/9] regulator: pcf50633-regulator: Remove
-      commit: 248bc01138b11ff3af38c3b4a39cb8db7aae6eb6
+Dave
 
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
+> All being well this means that it will be integrated into the linux-next
+> tree (usually sometime in the next 24 hours) and sent to Linus during
+> the next merge window (or sooner if it is a bug fix), however if
+> problems are discovered then the patch may be dropped or reverted.
+> 
+> You may get further e-mails resulting from automated or manual testing
+> and review of the tree, please engage with people reporting problems and
+> send followup patches addressing any issues that are reported if needed.
+> 
+> If any updates are required or you are submitting further changes they
+> should be sent as incremental updates against current git, existing
+> patches will not be replaced.
+> 
+> Please add any relevant lists and maintainers to the CCs when replying
+> to this mail.
+> 
+> Thanks,
+> Mark
+> 
+> 
+-- 
+ -----Open up your eyes, open up your mind, open up your code -------   
+/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
+\        dave @ treblig.org |                               | In Hex /
+ \ _________________________|_____ http://www.treblig.org   |_______/
 
