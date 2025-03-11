@@ -1,180 +1,161 @@
-Return-Path: <linux-mips+bounces-8155-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8156-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C7254A5B650
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Mar 2025 02:52:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D51FDA5B8C4
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Mar 2025 06:56:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ECE8A1726B4
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Mar 2025 01:52:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C29B189236E
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Mar 2025 05:57:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8EA01E47B4;
-	Tue, 11 Mar 2025 01:51:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D5D7221576;
+	Tue, 11 Mar 2025 05:56:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="IC9ctY59"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f48a7jPd"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4A5141C63;
-	Tue, 11 Mar 2025 01:51:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9F592206AC;
+	Tue, 11 Mar 2025 05:56:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741657913; cv=none; b=NpBb7OI9Qnpi97K0WzF9vDC5RRvc+pvcL4V7MuPcc/9eRFEYdEhz9acekFkri1Jzl4F1PJU/oahfUNtkZKsCXoUwODtwlv4C69zoVE9T7388n+ZMMXAth7GdP0vIQ8mc6CT65lWaXDe41IGISSL3/6Zr/Z4AOIxmKx5ahieYiw0=
+	t=1741672583; cv=none; b=Q0nXobcy0CJ2+bpffJOwAtWiE45GEZuE8AxS2FvvwEvxUL+Kh2NOdl5fvL6kPLY4icR6C8kRcOgdO4HlL2QCMo9noq/xt4/nxSQVXAvh1TyY9JOEuzIAFXnybE7fmEBZDpBQDREG49ZjdEafU1gfg4nA9Jxbpc6sAC2GeVaoP/g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741657913; c=relaxed/simple;
-	bh=SAWgCmReWDwFueE8sGcj3Dn15fV1Xg6gOw21ijuZnDc=;
+	s=arc-20240116; t=1741672583; c=relaxed/simple;
+	bh=JR5aE1/6W9bEsH29C5z708XdvBh3y3whu03ldRN1cT0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q4BuS+vweaGBxtUcvJchUy+2OAbAkw5DCc1H8zbKfvtIKVgDgbAlD1TXpOId/KX+WmfP64Ke82oPKC3ItwwPmGf2T4jkfgFo3urL+9ri6eHy7XzwrvgmqnXF6OdsuSJyZLHFyk2u3qOJnQnLWzxcVSEtaRj/4iLlxIIZUP99X6U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=IC9ctY59; arc=none smtp.client-ip=46.235.229.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-	; s=bytemarkmx; h=Content-Type:MIME-Version:Message-ID:Subject:From:Date:From
-	:Subject; bh=NEqOnfxZNcmn2LgGL93widqC+Pfk+3b4HnWZx6HPkdc=; b=IC9ctY59MNwsJGB1
-	KDkOokDnCYzLkR3h5NpmzxozIj5BKDBTqM96Wer4SeAhbatSczejsYG6i+1vGetPFwa8xjBzF+4Bt
-	62L6X2IVb8slnv+G+A/7qHfT4N4tc80LTlX3wUKUL3FFuml8KB7T5hcKyFtM4IqFhAlopufIvKKqo
-	q66HvHxhpFlTmjXafP4Lrp/8ZR7HZxxZb5sEcMmBkTMByOPx+kfBHkOwRsrxI1gpU3kjnNrn0jvqK
-	4a2BqUUTED9Zci3ymteJ6+qwwoDhwkWZByQcDIVN08SGGbZqrCC5L9iu0zjpUScPgHrAEprAbpr1k
-	5FeKwFYf/hI/vUl98w==;
-Received: from dg by mx.treblig.org with local (Exim 4.96)
-	(envelope-from <dg@treblig.org>)
-	id 1tromY-0042vt-0p;
-	Tue, 11 Mar 2025 01:51:46 +0000
-Date: Tue, 11 Mar 2025 01:51:46 +0000
-From: "Dr. David Alan Gilbert" <linux@treblig.org>
-To: arnd@arndb.de, lee@kernel.org, dmitry.torokhov@gmail.com,
-	sre@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
-	alexandre.belloni@bootlin.com, danielt@kernel.org,
-	jingoohan1@gmail.com, deller@gmx.de, linus.walleij@linaro.org,
-	brgl@bgdev.pl, tsbogend@alpha.franken.de
-Cc: linux-mips@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/9] Remove pcf50633
-Message-ID: <Z8-XMr3fVKpol6c0@gallifrey>
-References: <20250309193612.251929-1-linux@treblig.org>
- <Z883nYWpaOF2OZbs@gallifrey>
+	 Content-Type:Content-Disposition:In-Reply-To; b=hU0+zGxmR+1dvfB9rJa8exxG+NFisG20MyrrgeeAN8gIL1ukYsp5JwU7+YmcpX1V/kf6K7ozA+kuoncPDeJsXZZ8m9pF7VfWHlozLinUEsc710EUAqjoVpmUb5rvz6L/hmTPlAml9IuuJPuSy8DNm1x22+snG0nxSWHFyNGAk4Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f48a7jPd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D93EC4CEED;
+	Tue, 11 Mar 2025 05:56:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741672582;
+	bh=JR5aE1/6W9bEsH29C5z708XdvBh3y3whu03ldRN1cT0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=f48a7jPdRs+4CFxnOQTPCHsm75344xXl4kGcXGjsNF7CXHD6rakA6cXBClsJrVEtn
+	 WMcp4MDOS6ujAbPjNce+g3L+xfZC5vi4RqizMWw2e621BlT1F9Ay/Loxsxa26BilyR
+	 V3RuJvI1gFKwfV3U+Q95PUC/u4Gy4+xVTdXkrb9dHTeavvebfTfgzz2yhmQ89ydU2G
+	 kiwkfL2BapKmKWzCToyXgMHRmDr7W8auvyr26g/1+MWMbdjrYYGY9Pgy3JpC8H5B/G
+	 ocFRu6iz+c47Alu4XK27RyF2DFlSe0JprTDW9yyHuXhbUMDy3L4Bzl+ZBGVJfIovu1
+	 qQCLqsddFmhPA==
+Date: Tue, 11 Mar 2025 07:55:55 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: Heiko Carstens <hca@linux.ibm.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+	Guo Ren <guoren@kernel.org>, Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Simek <monstr@monstr.eu>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>,
+	Stafford Horne <shorne@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vasily Gorbik <gor@linux.ibm.com>, Vineet Gupta <vgupta@kernel.org>,
+	Will Deacon <will@kernel.org>, linux-alpha@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
+	linux-arch@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org
+Subject: Re: [PATCH 07/13] s390: make setup_zero_pages() use memblock
+Message-ID: <Z8_Qawg0dGtZdys7@kernel.org>
+References: <20250306185124.3147510-1-rppt@kernel.org>
+ <20250306185124.3147510-8-rppt@kernel.org>
+ <20250307152815.9880Gbd-hca@linux.ibm.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z883nYWpaOF2OZbs@gallifrey>
-X-Chocolate: 70 percent or better cocoa solids preferably
-X-Operating-System: Linux/6.1.0-21-amd64 (x86_64)
-X-Uptime: 01:51:14 up 306 days, 13:05,  1 user,  load average: 0.05, 0.03,
- 0.00
-User-Agent: Mutt/2.2.12 (2023-09-09)
+In-Reply-To: <20250307152815.9880Gbd-hca@linux.ibm.com>
 
-* Dr. David Alan Gilbert (linux@treblig.org) wrote:
-> * linux@treblig.org (linux@treblig.org) wrote:
-> > From: "Dr. David Alan Gilbert" <linux@treblig.org>
+On Fri, Mar 07, 2025 at 04:28:15PM +0100, Heiko Carstens wrote:
+> On Thu, Mar 06, 2025 at 08:51:17PM +0200, Mike Rapoport wrote:
+> > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 > > 
-> > The pcf50633 was used as part of the OpenMoko devices but
-> > the support for its main chip was recently removed in:
-> > commit 61b7f8920b17 ("ARM: s3c: remove all s3c24xx support")
+> > Allocating the zero pages from memblock is simpler because the memory is
+> > already reserved.
 > > 
-> > See https://lore.kernel.org/all/Z8z236h4B5A6Ki3D@gallifrey/
+> > This will also help with pulling out memblock_free_all() to the generic
+> > code and reducing code duplication in arch::mem_init().
 > > 
-> > Remove it.
-> > 
-> > I've split this up based on the subcomponents to make the size
-> > of each patch sensible.
-> > 
+> > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> > ---
+> >  arch/s390/mm/init.c | 14 +++-----------
+> >  1 file changed, 3 insertions(+), 11 deletions(-)
 > 
-> Both Alexandre and Mark would prefer the mfd changes to be
-> more separate from the subsystem changes, so I'll cook a v2
-> shortly.
-
-v2 thread starting with message
-  20250311014959.743322-1-linux@treblig.org
-just posted.
-
-Thanks!
-
-Dave
-
-> Dave
+> Acked-by: Heiko Carstens <hca@linux.ibm.com>
 > 
-> > 
-> > Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
-> > 
-> > 
-> > Dr. David Alan Gilbert (9):
-> >   mfd: pcf50633-adc:  Remove
-> >   backlight: pcf50633-backlight: Remove
-> >   rtc: pcf50633: Remove
-> >   mfd: pcF50633-gpio: Remove
-> >   Input: pcf50633-input - Remove
-> >   regulator: pcf50633-regulator: Remove
-> >   power: supply: pcf50633: Remove charger
-> >   mfd: pcf50633: Remove irq code
-> >   mfd: pcf50633: Remove remains
-> > 
-> >  arch/mips/configs/ip27_defconfig             |   3 -
-> >  drivers/input/misc/Kconfig                   |   7 -
-> >  drivers/input/misc/Makefile                  |   1 -
-> >  drivers/input/misc/pcf50633-input.c          | 113 -----
-> >  drivers/mfd/Kconfig                          |  24 -
-> >  drivers/mfd/Makefile                         |   4 -
-> >  drivers/mfd/pcf50633-adc.c                   | 255 ----------
-> >  drivers/mfd/pcf50633-core.c                  | 304 ------------
-> >  drivers/mfd/pcf50633-gpio.c                  |  92 ----
-> >  drivers/mfd/pcf50633-irq.c                   | 312 -------------
-> >  drivers/power/supply/Kconfig                 |   6 -
-> >  drivers/power/supply/Makefile                |   1 -
-> >  drivers/power/supply/pcf50633-charger.c      | 466 -------------------
-> >  drivers/regulator/Kconfig                    |   7 -
-> >  drivers/regulator/Makefile                   |   1 -
-> >  drivers/regulator/pcf50633-regulator.c       | 124 -----
-> >  drivers/rtc/Kconfig                          |   7 -
-> >  drivers/rtc/Makefile                         |   1 -
-> >  drivers/rtc/rtc-pcf50633.c                   | 284 -----------
-> >  drivers/video/backlight/Kconfig              |   7 -
-> >  drivers/video/backlight/Makefile             |   1 -
-> >  drivers/video/backlight/pcf50633-backlight.c | 154 ------
-> >  include/linux/mfd/pcf50633/adc.h             |  69 ---
-> >  include/linux/mfd/pcf50633/backlight.h       |  42 --
-> >  include/linux/mfd/pcf50633/core.h            | 232 ---------
-> >  include/linux/mfd/pcf50633/gpio.h            |  48 --
-> >  include/linux/mfd/pcf50633/mbc.h             | 130 ------
-> >  include/linux/mfd/pcf50633/pmic.h            |  68 ---
-> >  28 files changed, 2763 deletions(-)
-> >  delete mode 100644 drivers/input/misc/pcf50633-input.c
-> >  delete mode 100644 drivers/mfd/pcf50633-adc.c
-> >  delete mode 100644 drivers/mfd/pcf50633-core.c
-> >  delete mode 100644 drivers/mfd/pcf50633-gpio.c
-> >  delete mode 100644 drivers/mfd/pcf50633-irq.c
-> >  delete mode 100644 drivers/power/supply/pcf50633-charger.c
-> >  delete mode 100644 drivers/regulator/pcf50633-regulator.c
-> >  delete mode 100644 drivers/rtc/rtc-pcf50633.c
-> >  delete mode 100644 drivers/video/backlight/pcf50633-backlight.c
-> >  delete mode 100644 include/linux/mfd/pcf50633/adc.h
-> >  delete mode 100644 include/linux/mfd/pcf50633/backlight.h
-> >  delete mode 100644 include/linux/mfd/pcf50633/core.h
-> >  delete mode 100644 include/linux/mfd/pcf50633/gpio.h
-> >  delete mode 100644 include/linux/mfd/pcf50633/mbc.h
-> >  delete mode 100644 include/linux/mfd/pcf50633/pmic.h
-> > 
-> > -- 
-> > 2.48.1
-> > 
-> -- 
->  -----Open up your eyes, open up your mind, open up your code -------   
-> / Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
-> \        dave @ treblig.org |                               | In Hex /
->  \ _________________________|_____ http://www.treblig.org   |_______/
+> > -	empty_zero_page = __get_free_pages(GFP_KERNEL | __GFP_ZERO, order);
+> > +	empty_zero_page = (unsigned long)memblock_alloc(PAGE_SIZE << order, order);
+> >  	if (!empty_zero_page)
+> >  		panic("Out of memory in setup_zero_pages");
 > 
+> This could have been converted to memblock_alloc_or_panic(), but I
+> guess this can also be done at a later point in time.
+
+Duh, I should have remembered about memblock_alloc_or_panic() :)
+
+@Andrew, can you please pick this as a fixup?
+
+From 344fec8519e5152c25809c9277b54a68f9cde0e9 Mon Sep 17 00:00:00 2001
+From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+Date: Tue, 11 Mar 2025 07:51:27 +0200
+Subject: [PATCH] s390: use memblock_alloc_or_panic() in setup_zero_page()
+
+Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+---
+ arch/s390/mm/init.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
+
+diff --git a/arch/s390/mm/init.c b/arch/s390/mm/init.c
+index ab8ece3c41f1..c6a97329d7e7 100644
+--- a/arch/s390/mm/init.c
++++ b/arch/s390/mm/init.c
+@@ -81,9 +81,7 @@ static void __init setup_zero_pages(void)
+ 	while (order > 2 && (total_pages >> 10) < (1UL << order))
+ 		order--;
+ 
+-	empty_zero_page = (unsigned long)memblock_alloc(PAGE_SIZE << order, order);
+-	if (!empty_zero_page)
+-		panic("Out of memory in setup_zero_pages");
++	empty_zero_page = (unsigned long)memblock_alloc_or_panic(PAGE_SIZE << order, order);
+ 
+ 	zero_page_mask = ((PAGE_SIZE << order) - 1) & PAGE_MASK;
+ }
 -- 
- -----Open up your eyes, open up your mind, open up your code -------   
-/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
-\        dave @ treblig.org |                               | In Hex /
- \ _________________________|_____ http://www.treblig.org   |_______/
+2.47.2
+
+
+-- 
+Sincerely yours,
+Mike.
 
