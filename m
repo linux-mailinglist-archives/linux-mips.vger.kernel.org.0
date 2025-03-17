@@ -1,64 +1,85 @@
-Return-Path: <linux-mips+bounces-8213-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8214-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6AB05A6610F
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Mar 2025 22:56:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A288A66328
+	for <lists+linux-mips@lfdr.de>; Tue, 18 Mar 2025 00:56:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 869AC7A94D3
-	for <lists+linux-mips@lfdr.de>; Mon, 17 Mar 2025 21:55:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42F0F3A950C
+	for <lists+linux-mips@lfdr.de>; Mon, 17 Mar 2025 23:56:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0944A20469A;
-	Mon, 17 Mar 2025 21:56:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90DF82063F3;
+	Mon, 17 Mar 2025 23:52:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="LlHMBRN4"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="U/lBJe7K"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2FEF1FDE2E;
-	Mon, 17 Mar 2025 21:56:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 324A02063EC
+	for <linux-mips@vger.kernel.org>; Mon, 17 Mar 2025 23:52:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742248579; cv=none; b=rr2SqkIKuoJrxAsKYaJ5ywOdPMu7uZOxPaFG9QOoPDD1IQ7N2KTE+Sl4725FS9BAChMXUumhUEwYeP2cyNNL2F/aEHksuhTKXG9cMIq9Uj7Xp7AjGYu0MiOOJu2A4WJuYC8XBgLmv1aPzyhOdyrrAkpM4QMGEdMt4r9RB4HKfSQ=
+	t=1742255541; cv=none; b=hiGFbBZL6ZYV0DQxq0FXG59ZMd3gJEDvFMhi8pmdMyWIN0v5kcgqU9T5wHx+Nm/PLFKkB7uVdBdXlQVk8zVGq9UWS/jsReHHuHyMyQuPcJw0M4AfX7ILceFCxDm5c8hLLSOX1bUQU/pVlrf/Mtkv8tgbrOZrLQy15w1riJs3jN8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742248579; c=relaxed/simple;
-	bh=inAtUwWXZw6O+qaTrGoLKXAeQwhcqR+I5Hy9wJp/Kto=;
+	s=arc-20240116; t=1742255541; c=relaxed/simple;
+	bh=gvz05YIWaLvwfZjPBEm872B5QkOs/p9lPHWGYTN34MQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s4ZNDGGRu0FZ+XYp3LWRT29proHaolmhUoOewzEQ3p3e5w+5YEvZ70nlaxQFt7s8EQRN/UTOe9GUQjkZO+JhkF/IDLkn7PfrMQKRHLRf2/5xusmKvGsnOZAzzdBEehpPq3WYuJiUSru90X4XvokO33X/1Fasy9cqJ7iF5Fmng0Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=LlHMBRN4; arc=none smtp.client-ip=217.70.183.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8FEF32057C;
-	Mon, 17 Mar 2025 21:56:12 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1742248573;
+	 Content-Type:Content-Disposition:In-Reply-To; b=SteIEFtwIeuQ/Xspi01ctBz/vQAlNhGwKCJdhLvg9fW21Uy9LCw3n5Y0qmv/rUFq3xXp6m0c7ehFGLdTcJmcEipFxDicrGXJye0gr/GwFd8hvIO+IxjgeHuWjX0fwwKgsx4BbZnrIWiqneeJ8KJmrmbKkvU/XhOg/dzXnbchLT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=U/lBJe7K; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1742255538;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 in-reply-to:in-reply-to:references:references;
-	bh=2+2T3UFKZNQqzYcppRSeRT40EIToHYWw5aJ/ZTMJlsg=;
-	b=LlHMBRN4dd1wr3rT/5fl9FvLjlU9W0MrimdfbNvbBLmagR523h+WFWVHELxVrwnr0AfKe8
-	ukIUFAYhDvBj14lILUTc8VuKNOeQFbdP6N31lMeCB4rgKBTFhfnLu0UNK4UEiV9x4b2J8z
-	FODZFbe0VD3kW/Fe0/x/2OSWKJSok7HbxuwLO8aX/OGP+sQ/57sLDj0U2NSAMytvG4ozlw
-	MMAkehhE4kvQHPoYD4sXllnsp7IqWM5rJSm1tESA9G0kq76sLK5m0A7HTknvrio+tWCebf
-	VYStkCnS/CxnZo0zorWUmQgBwRrEVqrP+mCb+1lDaJ9mNFAIaeVZHXYdaDnfdQ==
-Date: Mon, 17 Mar 2025 22:56:12 +0100
-From: Alexandre Belloni <alexandre.belloni@bootlin.com>
-To: arnd@arndb.de, lee@kernel.org, dmitry.torokhov@gmail.com,
-	sre@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
-	danielt@kernel.org, jingoohan1@gmail.com, deller@gmx.de,
-	linus.walleij@linaro.org, brgl@bgdev.pl, tsbogend@alpha.franken.de,
-	linux@treblig.org
-Cc: linux-mips@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH v2 2/9] rtc: pcf50633: Remove
-Message-ID: <174224855863.1587763.1321316355670597238.b4-ty@bootlin.com>
-References: <20250311014959.743322-1-linux@treblig.org>
- <20250311014959.743322-3-linux@treblig.org>
+	bh=ln9muO+UnoEXyYsgLcV9Ra/t7A/95ouFlMUsf8wdrpI=;
+	b=U/lBJe7K9Sb0DZ4N6bev6H5gc7yrDZfIs/CQqJn7uciRI6ef6PZ8laQJ/7Az/EZ1vlaL6r
+	7FQEXVpeQqAvlHQ5duL5zkloEBQyCkyzz3eZwQ9coML//s1Q0s/oxaxi74GW5uc4E7m6Np
+	vu7i7eQIqW98mXSHozu29Uifcj5wCJY=
+Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-19-DU2R_2XDMkuC00OGsR7rfg-1; Mon,
+ 17 Mar 2025 19:52:14 -0400
+X-MC-Unique: DU2R_2XDMkuC00OGsR7rfg-1
+X-Mimecast-MFC-AGG-ID: DU2R_2XDMkuC00OGsR7rfg_1742255532
+Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 9C30A195608B;
+	Mon, 17 Mar 2025 23:52:09 +0000 (UTC)
+Received: from localhost (unknown [10.72.112.23])
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 53A23180174E;
+	Mon, 17 Mar 2025 23:52:05 +0000 (UTC)
+Date: Tue, 18 Mar 2025 07:52:00 +0800
+From: Baoquan He <bhe@redhat.com>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Arnd Bergmann <arnd@arndb.de>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org, linux-arch@vger.kernel.org,
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+	Oscar Salvador <osalvador@suse.de>, Peter Xu <peterx@redhat.com>
+Subject: Re: [PATCH v3 1/5] arch/x86: Drop own definition of pgd,p4d_leaf
+Message-ID: <Z9i1oGaAR9c2MPbN@MiWiFi-R3L-srv>
+References: <c81566e5df160587de50f9095d0ec377114fdba8.1720854135.git.christophe.leroy@csgroup.eu>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -67,33 +88,59 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250311014959.743322-3-linux@treblig.org>
-X-GND-State: clean
-X-GND-Score: 0
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddugedtieeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecunecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvdenucfhrhhomheptehlvgigrghnughrvgcuuegvlhhlohhnihcuoegrlhgvgigrnhgurhgvrdgsvghllhhonhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeijeefhfffkeejueehveeuveejvdelveejteduffehuedtffdufeejudffuedvtdenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemvgdtrgemvdgumeeifeejtdemjeekvgdtmegttdgvkeemvdektdeimeekrggtieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemvgdtrgemvdgumeeifeejtdemjeekvgdtmegttdgvkeemvdektdeimeekrggtiedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomheprghlvgigrghnughrvgdrsggvlhhlohhnihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvddupdhrtghpthhtoheprghrnhgusegrrhhnuggsrdguvgdprhgtphhtthhopehlvggvsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegumhhithhrhidrthhorhhokhhhohhvsehgmhgrihhlrdgtohhmpdhrtghpt
- hhtohepshhrvgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhgihhrugifohhougesghhmrghilhdrtghomhdprhgtphhtthhopegsrhhoohhnihgvsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehjihhnghhoohhhrghnudesghhmrghilhdrtghomh
-X-GND-Sasl: alexandre.belloni@bootlin.com
+In-Reply-To: <c81566e5df160587de50f9095d0ec377114fdba8.1720854135.git.christophe.leroy@csgroup.eu>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-On Tue, 11 Mar 2025 01:49:52 +0000, linux@treblig.org wrote:
-> The pcf50633 was used as part of the OpenMoko devices but
-> the support for its main chip was recently removed in:
-> commit 61b7f8920b17 ("ARM: s3c: remove all s3c24xx support")
+On 07/13/24 at 09:08am, Christophe Leroy wrote:
+> From: Oscar Salvador <osalvador@suse.de>
 > 
-> See https://lore.kernel.org/all/Z8z236h4B5A6Ki3D@gallifrey/
+> We provide generic definitions of pXd_leaf in pgtable.h when the arch
+> do not define their own, where the generic pXd_leaf always return false.
 > 
-> Remove it.
+> Although x86 defines {pgd,p4d}_leaf, they end up being a no-op, so drop them
+> and make them fallback to the generic one.
 > 
-> [...]
+> Signed-off-by: Oscar Salvador <osalvador@suse.de>
+> Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+> Reviewed-by: Peter Xu <peterx@redhat.com>
+> ---
+>  arch/x86/include/asm/pgtable.h | 10 ----------
+>  1 file changed, 10 deletions(-)
 
-Applied, thanks!
+Seems this series is missed. It does do a great clean up.
 
-[2/9] rtc: pcf50633: Remove
-      https://git.kernel.org/abelloni/c/0a243de9d009
+> 
+> diff --git a/arch/x86/include/asm/pgtable.h b/arch/x86/include/asm/pgtable.h
+> index 65b8e5bb902c..772f778bac06 100644
+> --- a/arch/x86/include/asm/pgtable.h
+> +++ b/arch/x86/include/asm/pgtable.h
+> @@ -252,13 +252,6 @@ static inline unsigned long pgd_pfn(pgd_t pgd)
+>  	return (pgd_val(pgd) & PTE_PFN_MASK) >> PAGE_SHIFT;
+>  }
+>  
+> -#define p4d_leaf p4d_leaf
+> -static inline bool p4d_leaf(p4d_t p4d)
+> -{
+> -	/* No 512 GiB pages yet */
+> -	return 0;
+> -}
+> -
+>  #define pte_page(pte)	pfn_to_page(pte_pfn(pte))
+>  
+>  #define pmd_leaf pmd_leaf
+> @@ -1396,9 +1389,6 @@ static inline bool pgdp_maps_userspace(void *__ptr)
+>  	return (((ptr & ~PAGE_MASK) / sizeof(pgd_t)) < PGD_KERNEL_START);
+>  }
+>  
+> -#define pgd_leaf	pgd_leaf
+> -static inline bool pgd_leaf(pgd_t pgd) { return false; }
+> -
+>  #ifdef CONFIG_MITIGATION_PAGE_TABLE_ISOLATION
+>  /*
+>   * All top-level MITIGATION_PAGE_TABLE_ISOLATION page tables are order-1 pages
+> -- 
+> 2.44.0
+> 
+> 
 
-Best regards,
-
--- 
-Alexandre Belloni, co-owner and COO, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
 
