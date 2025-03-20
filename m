@@ -1,172 +1,264 @@
-Return-Path: <linux-mips+bounces-8248-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8249-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB266A6A68C
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Mar 2025 13:56:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA011A6A98D
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Mar 2025 16:19:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 636593BC121
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Mar 2025 12:56:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B69FC46303C
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Mar 2025 15:19:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A3471EEE9;
-	Thu, 20 Mar 2025 12:56:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA0391E5B9F;
+	Thu, 20 Mar 2025 15:18:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tjFExFxj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jtAZa04N"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 19B4118641
-	for <linux-mips@vger.kernel.org>; Thu, 20 Mar 2025 12:56:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BBCF14B08A;
+	Thu, 20 Mar 2025 15:18:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742475387; cv=none; b=NFgy5qx7wT+MVCSavPsCJ8FSWQw6L/MYebWznjOUFQnIMl/d7vpq++k54WJtuuOIuDeIdAcyrfzmfLizYWZ0Wpig1yH3rJq0tWTmAnM5vAwMrOaUHCyicOx6LgzF1y64WsBGMl1+8B8QWRgPKOySLoUXqWs5Dy/KwQE4RVCsSqM=
+	t=1742483937; cv=none; b=OMRJ94PgOp+SNGi6FwFDwH7e0smL2GYZNvHn/GdwtWsM95NdwPtSjzDgMkW7TWf561ejRlZ+EFCq0SfzMPE9SzS4X+xqCXPYUyqXZSnvIJjnjOc8j5Jb85MSk5BPWSZ2BvpoV3yCxVFjOGNW6PB3PLdDsMMdF102CN/dUsUlPTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742475387; c=relaxed/simple;
-	bh=zTnXAKmTuZRtU1d1p7Q5TlC/BTFpcP/VJalqvVhGyj8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Y3fXrP7wywHSAH+4Xba8dsP5ZVBXQ9B1DirLlb4bepao4GBEKxe3XBSf70aQpE7zPY+j8rfQBLFYs2n4kH05DJf+dtWctsN3+Nj2p6hhFFzb79nr5hYgTAHIT/3xzjqggFWTV2GhRq67ojnRXGtweYbIWBtc2CmSGyw6V4IKdf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tjFExFxj; arc=none smtp.client-ip=209.85.218.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-ac2963dc379so133114766b.2
-        for <linux-mips@vger.kernel.org>; Thu, 20 Mar 2025 05:56:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1742475384; x=1743080184; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HTiBMnvR5EfiapTBlQ2zIHklJYLCh/G/HYnYPld7nw4=;
-        b=tjFExFxjbUzksAmUGKs8bktnIAL/dOdAIUu3uNWvSMhjDPsaW4uoHKutafmN0FVyLh
-         ekTaSBtt9wKZaKYmJXpK72UxQPHEy43whWsR5evtAvjC5huZNbQpB/CNjzTIrri7rh8N
-         diz+e0BKg56edVlYvqArZmvLOH0LrYe0k9nLU2dZ1ljZgq1r8uSbf1ewL53kyVpOPUx9
-         gxN58T0N5A+uOB5eEIPVPYJGOaFcoKgI6B3HpwjjRafAzpyBDJq/2dj8u+BKcU5yNKmM
-         Tu6DTpMrgszaMYb8navO0fLM09oejSADZEt4fhIqYfO9mKU0yz6YpXRmSxwMjAYWM6dE
-         6TXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742475384; x=1743080184;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HTiBMnvR5EfiapTBlQ2zIHklJYLCh/G/HYnYPld7nw4=;
-        b=meAKSrGKRSa+k5D0uJAXCNiQdVpXaOVxUnZQraadjmCgkVf2L1QyGs41W2V6nbw9vy
-         aVRYklSBatCd4S4nm5AJNNBpOXNZMEwmu5v4pQYM9CssqoMPTW8G59pYye9FHmlRVchj
-         nAXlZCskOjaQgx4BNcFODIELc43ddcCJal6uSIECEXw9AdS8Cu9CWXuJe4o43Rxdmku3
-         E5KdcW856dKJNpuRM1/DLQMR6S/EfKp9n1gNO3JtJB0TjJuwjRb+oyspIQOnXL+5yif9
-         IrIJuWDNuTjfxb44/pWF6PfpcbjogVozWf0OYm+5RDAs+Y5Ix2fWsbGSxvWURU+5Z+y5
-         Q61g==
-X-Forwarded-Encrypted: i=1; AJvYcCX9kXLT+inKkmU73SCdtf+BrozNz22/bPplpb4pWofMXzzBn1hxSGSQeI1By4yGHTlHGpVwmoEVIqVC@vger.kernel.org
-X-Gm-Message-State: AOJu0YzcxdbNXAfowlGAvZgTkO7S/U3b/36LYNP9uoPoDthXowrkPnRe
-	GOrOZPR0Eqq/B+LPJUC+VpFttlJ4ZQU08nE6Mnw3fdkUeTRx5fesILLhf75tC80=
-X-Gm-Gg: ASbGncud9sYkBpmxDk/hhqciZR+CdyiE985/2aK46AA3Tt9Xsrw+348JIB4X1EWCPrw
-	BA5hdw0WOzLbOs2se4vVZ7HcxzZPUrVshGKk5JU5A2ay7jjXaxkpZKyKdqvGkSV1xFBB1GIkx+z
-	49d88Rsg2hWIVFHjESgFezlLWKhriX8AAulhlH45JjHbu+2351m6tOTzvaXXNVj9wJotLgcotCg
-	kn89p0fh7A0F3hBOFYUWHHCnuj7/RY7fQUowVJta/8X0pWPACTyO3Od8RoYjYQRhOBVfCiscZFu
-	jEqBTK05tMaV6NNLfjpWrDpbY0vO3+CJjfsHjnyCjZU6uqc/204dDpmc1pJTU9LBs2aIZyJ+q+O
-	8ml6vJsQBxfFQ
-X-Google-Smtp-Source: AGHT+IFwbUtBKy1cKZpiAYgKgI/ab8Fj6ZMme+dS/eEmYErdP1Yx16iHt4BcTPb5hz8rYdlEnkXIEA==
-X-Received: by 2002:a17:907:f50a:b0:ac3:45c0:6d08 with SMTP id a640c23a62f3a-ac3b7373065mr786509366b.0.1742475384270;
-        Thu, 20 Mar 2025 05:56:24 -0700 (PDT)
-Received: from [192.168.69.235] (88-187-86-199.subs.proxad.net. [88.187.86.199])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac3146af080sm1155354066b.31.2025.03.20.05.56.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Mar 2025 05:56:23 -0700 (PDT)
-Message-ID: <817c02a0-5493-419a-9663-73a85182b047@linaro.org>
-Date: Thu, 20 Mar 2025 13:56:22 +0100
+	s=arc-20240116; t=1742483937; c=relaxed/simple;
+	bh=1Z6H2iLvH3rXMt19HL+9taZFJeo/GqQ1pEgfLHm/VO8=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=ffiktKpYT0dnPb3VPhH6Sm1TN4G5d03h4CC18XgEdoplTGPtyEJXlXWskCd4aM4oBLny5hi/h9dDFcytLmXEJkgiu1VOJn0kVQPipu07hdvDFxYBTAd3BmVzoZA+CiSNSCKBMxLq796yUehzDn7kYiiW7KkRpEnOx2XOvNpfd0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jtAZa04N; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A232C4CEDD;
+	Thu, 20 Mar 2025 15:18:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742483936;
+	bh=1Z6H2iLvH3rXMt19HL+9taZFJeo/GqQ1pEgfLHm/VO8=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=jtAZa04NkVALEmArILtqhgvGWzNrqybg3hrSGdZZ2VVAFhkXh1nT4jpUcZ4Kc2DDn
+	 0A6i4ERYcuiCeprXqYIMy4u4kiFrkwJYEeYsWv+53EA4mBSJ6BqBYD7yzk5jl0BW7F
+	 3K+uSeS65G8FFh9VmSyWsSaODa9u59R3cNyzrD/bWKcMoby2y3/LjyBnzNkYD+iJSL
+	 9QHQkLG/EQ0PXCuzUmTG72RV9mKDT4ZRjt1NiAC6yuM4pg17khef1prwdyUg+6q41R
+	 XwbECsZNkZ4re5+LVruYEIZ107+IH+Jq6zDSLtPqFFjlA4zbkDNY4cbCQwK98Zoq0c
+	 4mfWfzYas3b3w==
+From: Mark Brown <broonie@kernel.org>
+To: tglx@linutronix.de, "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+Cc: maz@kernel.org, linux-kernel@vger.kernel.org, 
+ Aaro Koskinen <aaro.koskinen@iki.fi>, 
+ Abhinav Kumar <quic_abhinavk@quicinc.com>, 
+ Albert Ou <aou@eecs.berkeley.edu>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Alexandre Ghiti <alex@ghiti.fr>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+ Alex Deucher <alexander.deucher@amd.com>, Alex Shi <alexs@kernel.org>, 
+ Alim Akhtar <alim.akhtar@samsung.com>, 
+ =?utf-8?q?Alvin_=C5=A0ipraga?= <alsi@bang-olufsen.dk>, 
+ Alyssa Rosenzweig <alyssa@rosenzweig.io>, amd-gfx@lists.freedesktop.org, 
+ Amit Kucheria <amitk@kernel.org>, Anatolij Gustschin <agust@denx.de>, 
+ Andi Shyti <andi.shyti@kernel.org>, 
+ =?utf-8?q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, 
+ Andreas Kemnade <andreas@kemnade.info>, 
+ Andrew Jeffery <andrew@codeconstruct.com.au>, Andrew Lunn <andrew@lunn.ch>, 
+ Andy Shevchenko <andy@kernel.org>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Antoine Tenart <atenart@kernel.org>, 
+ Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
+ Anup Patel <anup@brainfault.org>, Arnd Bergmann <arnd@arndb.de>, 
+ asahi@lists.linux.dev, Bartosz Golaszewski <brgl@bgdev.pl>, 
+ Baruch Siach <baruch@tkos.co.il>, 
+ Benjamin Herrenschmidt <benh@kernel.crashing.org>, 
+ Bharat Kumar Gogada <bharat.kumar.gogada@amd.com>, 
+ Bjorn Andersson <andersson@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
+ Borislav Petkov <bp@alien8.de>, 
+ Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+ Corentin Chary <corentin.chary@gmail.com>, 
+ Daire McNamara <daire.mcnamara@microchip.com>, 
+ Daniel Golle <daniel@makrotopia.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Daniel Mack <daniel@zonque.org>, 
+ Daniel Palmer <daniel@thingy.jp>, Dave Hansen <dave.hansen@linux.intel.com>, 
+ David Airlie <airlied@gmail.com>, "David S. Miller" <davem@davemloft.net>, 
+ DENG Qingfang <dqfext@gmail.com>, Dinh Nguyen <dinguyen@kernel.org>, 
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+ Dongliang Mu <dzm91@hust.edu.cn>, Doug Berger <opendmb@gmail.com>, 
+ dri-devel@lists.freedesktop.org, Eddie James <eajames@linux.ibm.com>, 
+ Eric Dumazet <edumazet@google.com>, Fabio Estevam <festevam@gmail.com>, 
+ Florian Fainelli <florian.fainelli@broadcom.com>, 
+ Geoff Levand <geoff@infradead.org>, 
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+ Gregory Clement <gregory.clement@bootlin.com>, Guo Ren <guoren@kernel.org>, 
+ Hans de Goede <hdegoede@redhat.com>, 
+ Haojian Zhuang <haojian.zhuang@gmail.com>, 
+ Haojian Zhuang <haojian.zhuang@linaro.org>, 
+ Heiko Stuebner <heiko@sntech.de>, Herve Codina <herve.codina@bootlin.com>, 
+ Hou Zhiqiang <Zhiqiang.Hou@nxp.com>, "H. Peter Anvin" <hpa@zytor.com>, 
+ Huacai Chen <chenhuacai@kernel.org>, 
+ Changhuang Liang <changhuang.liang@starfivetech.com>, 
+ Chen-Yu Tsai <wens@csie.org>, "Chester A. Unal" <chester.a.unal@arinc9.com>, 
+ =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
+ Christophe Leroy <christophe.leroy@csgroup.eu>, 
+ Chris Zankel <chris@zankel.net>, 
+ =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+ Imre Kaloz <kaloz@openwrt.org>, Ingo Molnar <mingo@redhat.com>, 
+ Jakub Kicinski <kuba@kernel.org>, James Morse <james.morse@arm.com>, 
+ Janne Grunau <j@jannau.net>, Janusz Krzysztofik <jmkrzyszt@gmail.com>, 
+ Jaroslav Kysela <perex@perex.cz>, Jassi Brar <jassisinghbrar@gmail.com>, 
+ Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Jerome Brunet <jbrunet@baylibre.com>, 
+ Jianjun Wang <jianjun.wang@mediatek.com>, 
+ Jiawen Wu <jiawenwu@trustnetic.com>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
+ Jim Quinlan <jim2101024@gmail.com>, Jingoo Han <jingoohan1@gmail.com>, 
+ Joel Stanley <joel@jms.id.au>, Johannes Berg <johannes@sipsolutions.net>, 
+ John Crispin <john@phrozen.org>, 
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
+ Jonas Bonn <jonas@southpole.se>, Jonathan Cameron <jic23@kernel.org>, 
+ Jonathan Corbet <corbet@lwn.net>, Jonathan Hunter <jonathanh@nvidia.com>, 
+ =?utf-8?q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>, 
+ Joyce Ooi <joyce.ooi@intel.com>, 
+ Karthikeyan Mitran <m.karthikeyan@mobiveil.co.in>, 
+ Keerthy <j-keerthy@ti.com>, Kevin Hilman <khilman@baylibre.com>, 
+ Konrad Dybcio <konradybcio@kernel.org>, 
+ Krzysztof Kozlowski <krzk@kernel.org>, 
+ =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
+ Kunihiko Hayashi <hayashi.kunihiko@socionext.com>, 
+ Lakshmi Sowjanya D <lakshmi.sowjanya.d@intel.com>, 
+ Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>, 
+ Liam Girdwood <lgirdwood@gmail.com>, 
+ Linus Walleij <linus.walleij@linaro.org>, Linus Walleij <linusw@kernel.org>, 
+ linux-amlogic@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+ linux-arm-msm@vger.kernel.org, linux-doc@vger.kernel.org, 
+ linux-edac@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ linux-iio@vger.kernel.org, linux-i2c@vger.kernel.org, 
+ linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org, 
+ linux-omap@vger.kernel.org, linux-pci@vger.kernel.org, 
+ linuxppc-dev@lists.ozlabs.org, linux-remoteproc@vger.kernel.org, 
+ linux-riscv@lists.infradead.org, linux-rpi-kernel@lists.infradead.org, 
+ linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org, 
+ linux-sound@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
+ linux-um@lists.infradead.org, linux-wireless@vger.kernel.org, 
+ loongarch@lists.linux.dev, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+ Ludovic Desroches <ludovic.desroches@microchip.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>, "Luke D. Jones" <luke@ljones.dev>, 
+ Madhavan Srinivasan <maddy@linux.ibm.com>, 
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
+ =?utf-8?q?Marek_Beh=C3=BAn?= <kabel@kernel.org>, 
+ Marijn Suijten <marijn.suijten@somainline.org>, 
+ Mark-PK Tsai <mark-pk.tsai@mediatek.com>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+ Masami Hiramatsu <mhiramat@kernel.org>, 
+ Mathieu Poirier <mathieu.poirier@linaro.org>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ Mauro Carvalho Chehab <mchehab@kernel.org>, 
+ Max Filippov <jcmvbkbc@gmail.com>, 
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Mengyuan Lou <mengyuanlou@net-swift.com>, Michael Buesch <m@bues.ch>, 
+ Michael Ellerman <mpe@ellerman.id.au>, Michal Simek <michal.simek@amd.com>, 
+ Miodrag Dinic <miodrag.dinic@mips.com>, Naveen N Rao <naveen@kernel.org>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, netdev@vger.kernel.org, 
+ Nicolas Ferre <nicolas.ferre@microchip.com>, 
+ Nicolas Saenz Julienne <nsaenz@kernel.org>, 
+ Nicholas Piggin <npiggin@gmail.com>, 
+ Nikhil Agarwal <nikhil.agarwal@amd.com>, Nipun Gupta <nipun.gupta@amd.com>, 
+ Nishanth Menon <nm@ti.com>, =?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Paolo Abeni <pabeni@redhat.com>, 
+ Paul Cercueil <paul@crapouillou.net>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Peter Rosin <peda@axentia.se>, Philipp Zabel <p.zabel@pengutronix.de>, 
+ Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>, 
+ platform-driver-x86@vger.kernel.org, 
+ Prasad Kumpatla <quic_pkumpatl@quicinc.com>, 
+ Qiang Zhao <qiang.zhao@nxp.com>, Qin Jian <qinjian@cqplus1.com>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Randy Dunlap <rdunlap@infradead.org>, Ray Jui <rjui@broadcom.com>, 
+ Rengarajan Sundararajan <Rengarajan.S@microchip.com>, 
+ Richard Cochran <richardcochran@gmail.com>, 
+ Richard Weinberger <richard@nod.at>, Rich Felker <dalias@libc.org>, 
+ Rob Clark <robdclark@gmail.com>, Robert Jarzmik <robert.jarzmik@free.fr>, 
+ Robert Richter <rric@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Roger Quadros <rogerq@kernel.org>, Russell King <linux@armlinux.org.uk>, 
+ Ryan Chen <ryan_chen@aspeedtech.com>, Ryder Lee <ryder.lee@mediatek.com>, 
+ Samuel Holland <samuel@sholland.org>, 
+ Santosh Shilimkar <ssantosh@kernel.org>, 
+ Sascha Hauer <s.hauer@pengutronix.de>, 
+ Scott Branden <sbranden@broadcom.com>, Scott Wood <oss@buserror.net>, 
+ Sean Paul <sean@poorly.run>, Sean Wang <sean.wang@kernel.org>, 
+ Sean Wang <sean.wang@mediatek.com>, 
+ Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, 
+ Sergio Paracuellos <sergio.paracuellos@gmail.com>, 
+ Shawn Guo <shawnguo@kernel.org>, Shawn Lin <shawn.lin@rock-chips.com>, 
+ Siddharth Vadapalli <s-vadapalli@ti.com>, Simona Vetter <simona@ffwll.ch>, 
+ Stafford Horne <shorne@gmail.com>, 
+ Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>, 
+ Stephen Boyd <sboyd@kernel.org>, Sven Peter <sven@svenpeter.dev>, 
+ Takashi Iwai <tiwai@suse.com>, Talel Shenhar <talel@amazon.com>, 
+ Tero Kristo <kristo@kernel.org>, 
+ Thangaraj Samynathan <Thangaraj.S@microchip.com>, 
+ Thara Gopinath <thara.gopinath@gmail.com>, 
+ Thierry Reding <thierry.reding@gmail.com>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Toan Le <toan@os.amperecomputing.com>, Tony Lindgren <tony@atomide.com>, 
+ Tony Luck <tony.luck@intel.com>, UNGLinuxDriver@microchip.com, 
+ =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <ukleinek@kernel.org>, 
+ Vignesh Raghavendra <vigneshr@ti.com>, Vineet Gupta <vgupta@kernel.org>, 
+ Vladimir Oltean <olteanv@gmail.com>, Vladimir Zapolskiy <vz@mleia.com>, 
+ WANG Xuerui <kernel@xen0n.name>, Woojung Huh <woojung.huh@microchip.com>, 
+ x86@kernel.org, Yanteng Si <si.yanteng@linux.dev>, 
+ Yoshinori Sato <ysato@users.sourceforge.jp>, 
+ Zhang Rui <rui.zhang@intel.com>
+In-Reply-To: <20250319092951.37667-1-jirislaby@kernel.org>
+References: <20250319092951.37667-1-jirislaby@kernel.org>
+Subject: Re: (subset) [PATCH v2 00/57] irqdomain: Cleanups and
+ Documentation
+Message-Id: <174248389026.68765.4225899402848645156.b4-ty@kernel.org>
+Date: Thu, 20 Mar 2025 15:18:10 +0000
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 19/41] mips: Replace __ASSEMBLY__ with __ASSEMBLER__ in
- the mips headers
-To: Thomas Huth <thuth@redhat.com>, linux-kernel@vger.kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>, linux-arch@vger.kernel.org,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org
-References: <20250314071013.1575167-1-thuth@redhat.com>
- <20250314071013.1575167-20-thuth@redhat.com>
-Content-Language: en-US
-From: =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>
-In-Reply-To: <20250314071013.1575167-20-thuth@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-1b0d6
 
-On 14/3/25 08:09, Thomas Huth wrote:
-> While the GCC and Clang compilers already define __ASSEMBLER__
-> automatically when compiling assembly code, __ASSEMBLY__ is a
-> macro that only gets defined by the Makefiles in the kernel.
-> This can be very confusing when switching between userspace
-> and kernelspace coding, or when dealing with uapi headers that
-> rather should use __ASSEMBLER__ instead. So let's standardize on
-> the __ASSEMBLER__ macro that is provided by the compilers now.
+On Wed, 19 Mar 2025 10:28:53 +0100, Jiri Slaby (SUSE) wrote:
+> tl;dr if patches are agreed upon, I ask subsys maintainers to take the
+> respective ones via their trees (as they are split per subsys), so that
+> the IRQ tree can take only the rest. That would minimize churn/conflicts
+> during merges.
 > 
-> This is almost a completely mechanical patch (done with a simple
-> "sed -i" statement), with just one comment tweaked manually in
-> arch/mips/include/asm/cpu.h (that was missing some underscores).
+> ===
 > 
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: linux-mips@vger.kernel.org
-> Signed-off-by: Thomas Huth <thuth@redhat.com>
-> ---
->   arch/mips/include/asm/addrspace.h            |  4 +--
->   arch/mips/include/asm/asm-eva.h              |  6 ++--
->   arch/mips/include/asm/asm.h                  |  8 ++---
->   arch/mips/include/asm/bmips.h                |  4 +--
->   arch/mips/include/asm/cpu.h                  |  4 +--
->   arch/mips/include/asm/dec/ecc.h              |  2 +-
->   arch/mips/include/asm/dec/interrupts.h       |  4 +--
->   arch/mips/include/asm/dec/kn01.h             |  2 +-
->   arch/mips/include/asm/dec/kn02.h             |  2 +-
->   arch/mips/include/asm/dec/kn02xa.h           |  2 +-
->   arch/mips/include/asm/eva.h                  |  4 +--
->   arch/mips/include/asm/ftrace.h               |  4 +--
->   arch/mips/include/asm/hazards.h              |  4 +--
->   arch/mips/include/asm/irqflags.h             |  4 +--
->   arch/mips/include/asm/jazz.h                 | 16 ++++-----
->   arch/mips/include/asm/jump_label.h           |  4 +--
->   arch/mips/include/asm/linkage.h              |  2 +-
->   arch/mips/include/asm/mach-generic/spaces.h  |  4 +--
->   arch/mips/include/asm/mips-boards/bonito64.h |  4 +--
->   arch/mips/include/asm/mipsmtregs.h           |  6 ++--
->   arch/mips/include/asm/mipsregs.h             |  6 ++--
->   arch/mips/include/asm/msa.h                  |  4 +--
->   arch/mips/include/asm/pci/bridge.h           |  4 +--
->   arch/mips/include/asm/pm.h                   |  6 ++--
->   arch/mips/include/asm/prefetch.h             |  2 +-
->   arch/mips/include/asm/regdef.h               |  4 +--
->   arch/mips/include/asm/sibyte/board.h         |  4 +--
->   arch/mips/include/asm/sibyte/sb1250.h        |  2 +-
->   arch/mips/include/asm/sibyte/sb1250_defs.h   |  6 ++--
->   arch/mips/include/asm/smp-cps.h              |  6 ++--
->   arch/mips/include/asm/sn/addrs.h             | 18 +++++-----
->   arch/mips/include/asm/sn/gda.h               |  4 +--
->   arch/mips/include/asm/sn/kldir.h             |  4 +--
->   arch/mips/include/asm/sn/klkernvars.h        |  4 +--
->   arch/mips/include/asm/sn/launch.h            |  4 +--
->   arch/mips/include/asm/sn/nmi.h               |  8 ++---
->   arch/mips/include/asm/sn/sn0/addrs.h         | 14 ++++----
->   arch/mips/include/asm/sn/sn0/hub.h           |  2 +-
->   arch/mips/include/asm/sn/sn0/hubio.h         | 36 ++++++++++----------
->   arch/mips/include/asm/sn/sn0/hubmd.h         |  4 +--
->   arch/mips/include/asm/sn/sn0/hubni.h         |  6 ++--
->   arch/mips/include/asm/sn/sn0/hubpi.h         |  4 +--
->   arch/mips/include/asm/sn/types.h             |  2 +-
->   arch/mips/include/asm/sync.h                 |  2 +-
->   arch/mips/include/asm/thread_info.h          |  4 +--
->   arch/mips/include/asm/unistd.h               |  4 +--
->   arch/mips/include/asm/vdso/gettimeofday.h    |  4 +--
->   arch/mips/include/asm/vdso/processor.h       |  4 +--
->   arch/mips/include/asm/vdso/vdso.h            |  4 +--
->   arch/mips/include/asm/vdso/vsyscall.h        |  4 +--
->   arch/mips/include/asm/xtalk/xtalk.h          |  4 +--
->   arch/mips/include/asm/xtalk/xwidget.h        |  4 +--
->   drivers/soc/bcm/brcmstb/pm/pm.h              |  2 +-
->   53 files changed, 140 insertions(+), 140 deletions(-)
+> [...]
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
+
+Thanks!
+
+[35/57] irqdomain: sound: Switch to irq_domain_create_linear()
+        commit: 83eddf0116b09186f909bc643f2093f266f204ea
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
 
 
