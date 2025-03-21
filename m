@@ -1,106 +1,108 @@
-Return-Path: <linux-mips+bounces-8259-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8265-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B130DA6BBFA
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Mar 2025 14:47:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3436EA6BEC3
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Mar 2025 16:53:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B202D1893AD0
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Mar 2025 13:47:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 381C4189E9B3
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Mar 2025 15:52:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9295114601C;
-	Fri, 21 Mar 2025 13:47:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5AF022C34A;
+	Fri, 21 Mar 2025 15:52:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="bDbDSjid"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hHILnwct"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.cjdns.fr (mail.cjdns.fr [5.135.140.105])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7BDD1411EB;
-	Fri, 21 Mar 2025 13:47:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.135.140.105
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78D7D223703;
+	Fri, 21 Mar 2025 15:52:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742564833; cv=none; b=LTI+Dwl4FH9rF5APSRlHlL9lXleBMc+6N7gCR6Ana4RqaMXAKN0D7fb1tjHg7+qR7eVQliaAOhjmOp5grT4ii3wK4AZc6TeGxEbfkTzW9jTjo+zgDNeF4zNS37e3H8g4aDAdPdLVB6r8s0giXMI1SpN/KsQf+50I9WmOxXJYfog=
+	t=1742572325; cv=none; b=rxXi/RghFxPqINJOOkGjX2pfQIIPtvbkiJTSasPCjBAQfmSxU4381Vel/2MdmxBHz190Jle+D4ytokhbpQDG8v7Rs66Iw0vj4i98EPE+/gNqu/UmpAI7Q3yQjyiUTiBHI/FM04XnxtJCt6flwMUM7XiwfZd4TiDmY6pmZ3Nc2fI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742564833; c=relaxed/simple;
-	bh=osWE5O1iRBWe7qclvdbCFGuXogiHJ5z7z7iF7pq+164=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=HKVtpT1CXu0vrph4b8VXWnhma3n5uU9NTwaYlC8KPElseaRnjW14+nEhE3azwqdbv8f878Xf/aDFfvLEnyZ95ylrey9R49KS3VQl4V31c98CT5Fh+PVvOtC07yE81QAdNmwkJmcnx5h6izLj8LwxWazWWM8WoZ5lfeNcqCvxbBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=none smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=bDbDSjid; arc=none smtp.client-ip=5.135.140.105
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cjdns.fr
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 2E4102A46C6;
-	Fri, 21 Mar 2025 14:47:07 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjdns.fr; s=dkim;
-	t=1742564828; h=from:subject:date:message-id:to:cc:mime-version:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=z5J7Cym/+UR5PPjai7DjLogajBOo4PPQLYr4IkBxyls=;
-	b=bDbDSjidark7vzWvNcXyhJXZVQMoElRVrqgZ9PivQUdxt0eUNVeK/A6iaHDnS7H8OSKxBX
-	z1hXCLIlzeROVJdjKj8oLN3PFjhuy5lfVwoJt80ds5jxX9Xpo6t+0x0V74oTQhgQTmC2dc
-	WIfZ4IgWHnYsrjwMASZZT77fNlnhfhE5y0SwY225B1UDI1GdIwckuVGvavO7YqmbJA8Ft/
-	bnEl0yokZ7TCywI9vQ5fU2wQBYWCnnSfWjXLMfkhfu9LBjFNKb4iwZb0KWEet9dGV9Q9rM
-	FtawgE1r93//SP9bqTdd6GQg+7BeTHfyB0MyI4SMa1YIIuQEM1b+KX+7k+I06g==
-From: Caleb James DeLisle <cjd@cjdns.fr>
-To: linux-mips@vger.kernel.org
-Cc: Thomas Gleixner <tglx@linutronix.de>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	benjamin.larsson@genexis.eu,
-	Caleb James DeLisle <cjd@cjdns.fr>
-Subject: [PATCH v1 8/8] MAINTAINERS: Add EcoNet MIPS platform entry
-Date: Fri, 21 Mar 2025 13:46:33 +0000
-Message-Id: <20250321134633.2155141-9-cjd@cjdns.fr>
-In-Reply-To: <20250321134633.2155141-1-cjd@cjdns.fr>
-References: <20250321134633.2155141-1-cjd@cjdns.fr>
+	s=arc-20240116; t=1742572325; c=relaxed/simple;
+	bh=+MlNXD+nU/FyW3Z2jZmfsNxmoyYLAZ6DjsTXsGyJU40=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=dkVZlFjnrru9h588GivdgPSYvsdlxRLPwwAt54mdjHiMc/D8EBVQUYCxjZGZ+D8BeUkRg63+5nbjV+C+lHvr2t6KyFqnMelAi4tYNh2bIt4RVkoQv+zSAGO1tiynuUldIkKuuwUAP8rCluXdfc88kcZquWLI4eIvslQwz6uaOKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hHILnwct; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A5384C4CEE3;
+	Fri, 21 Mar 2025 15:52:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1742572324;
+	bh=+MlNXD+nU/FyW3Z2jZmfsNxmoyYLAZ6DjsTXsGyJU40=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=hHILnwctpsR2U3NwJKnAltNyE1+kAw+SlNF6GhQl77dNVgUgJ/w6fUOEoY0pSvNsd
+	 mRBRjeQZZ8+AC/8P/EoJ6CI7OK26Smdv7OTT9Z13gXK7cUFp6YtQWHJwtknoHVlqia
+	 TMmTUOUfX6qV0aPcyDJuXjGz7aqcHdg+1jI+MGR9sISmgnihz46rcCZLUNltUDXs36
+	 EhVc5PcmhGRw9ktk+ba3pd7OhigWJa14l814TeQJ74igJrdbvdSoNmUV0Ew6r1ZBD/
+	 F4iBX+9jwkCgdKyKoFgTcMKDDX7Ti+fftV+82FoB4UQE6uc/adMXruZr9n3kySxPQQ
+	 6dzLZuSOV5JGA==
+Date: Fri, 21 Mar 2025 10:52:03 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, devicetree@vger.kernel.org, 
+ Thomas Gleixner <tglx@linutronix.de>, linux-mips@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, benjamin.larsson@genexis.eu, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>
+To: Caleb James DeLisle <cjd@cjdns.fr>
+In-Reply-To: <20250321134633.2155141-3-cjd@cjdns.fr>
+References: <20250321134633.2155141-1-cjd@cjdns.fr>
+ <20250321134633.2155141-3-cjd@cjdns.fr>
+Message-Id: <174257232355.3436156.11164230137695407225.robh@kernel.org>
+Subject: Re: [PATCH v1 2/8] dt-bindings: interrupt-controller: Add EcoNet
+ EN751221 INTC
 
-Add a MAINTAINERS entry for the EcoNet EN751221 platform, covering its
-device tree bindings, platform code, interrupt controller, and timer
-drivers.
 
-Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
----
- MAINTAINERS | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+On Fri, 21 Mar 2025 13:46:27 +0000, Caleb James DeLisle wrote:
+> Document the device tree binding for the interrupt controller in the
+> EcoNet EN751221 MIPS SoC.
+> 
+> Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
+> ---
+> If anyone is aware of a standard name for this "shadow interrupt" pattern,
+> please let me know and I will re-send with updated naming.
+> ---
+>  .../econet,en751221-intc.yaml                 | 77 +++++++++++++++++++
+>  1 file changed, 77 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/interrupt-controller/econet,en751221-intc.yaml
+> 
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index efee40ea589f..fcb1c49ee54e 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8182,6 +8182,18 @@ W:	https://linuxtv.org
- Q:	http://patchwork.linuxtv.org/project/linux-media/list/
- F:	drivers/media/dvb-frontends/ec100*
- 
-+ECONET MIPS PLATFORM
-+M:	Caleb James DeLisle <cjd@cjdns.fr>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/interrupt-controller/econet,en751221-intc.yaml
-+F:	Documentation/devicetree/bindings/mips/econet.yaml
-+F:	Documentation/devicetree/bindings/timer/econet,timer-hpt.yaml
-+F:	Documentation/devicetree/bindings/vendor-prefixes.yaml
-+F:	arch/mips/boot/dts/econet/
-+F:	arch/mips/econet/
-+F:	drivers/clocksource/timer-econet-hpt.c
-+F:	drivers/irqchip/irq-econet-en751221.c
-+
- ECRYPT FILE SYSTEM
- M:	Tyler Hicks <code@tyhicks.com>
- L:	ecryptfs@vger.kernel.org
--- 
-2.30.2
+My bot found errors running 'make dt_binding_check' on your patch:
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/interrupt-controller/econet,en751221-intc.example.dtb: interrupt-controller@1fb40000: 'interrupt-parent' is a required property
+	from schema $id: http://devicetree.org/schemas/interrupt-controller/econet,en751221-intc.yaml#
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20250321134633.2155141-3-cjd@cjdns.fr
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
 
 
