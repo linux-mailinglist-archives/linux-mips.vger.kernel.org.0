@@ -1,54 +1,54 @@
-Return-Path: <linux-mips+bounces-8271-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8272-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87235A6C324
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Mar 2025 20:16:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A85BA6C31B
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Mar 2025 20:15:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 22D7D17DA38
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Mar 2025 19:14:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 416023BEF3F
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Mar 2025 19:14:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0A72230BCF;
-	Fri, 21 Mar 2025 19:14:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 978EE231A21;
+	Fri, 21 Mar 2025 19:14:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="hwPN6zqj"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="GS6MXkY6"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4431E1E7C19;
-	Fri, 21 Mar 2025 19:14:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BFDD22FDEE;
+	Fri, 21 Mar 2025 19:14:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742584447; cv=none; b=c9por4fnmtqQQ7BoMiqwMU3IV6/pZtJbFqzp6Csc94sa9pCPAWBmW3EFiAversYmPwRw4Weln6PoVZuY7/40BZFAlqRzVYPKrbtOpIO2aXd9GWUvjtqiVtnfRkGCqD4kpt7vHuoIp1pzukGd59QP8cWNC5edg0pyxLTdnPJPim0=
+	t=1742584448; cv=none; b=qBVmZv22ZGdMkB7pvkVx0ICpN8uv0E30MFc6oVDxu9o794ccdw4R/pK2zjTn9LC7UzJ1dZRuAbFZANjPoNpUzogY7J2masUAry2KLPWYo+vo9Mb9oSUqXTeicDs6MUk5efV3cjY4nzCSqAc26o+oggZk9DvLmLNgFj27xf1QINI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742584447; c=relaxed/simple;
-	bh=C9CZIcFt8krcolJ/LHmKCRm/IRRfLk9Nb24MiOkiDvI=;
+	s=arc-20240116; t=1742584448; c=relaxed/simple;
+	bh=2zPGiT2ZErzPM0jN4wXM8PrBFh1LuW/QxzZUrWAVXvw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=oV4y9Vl2AD8zaWtmOTCoXrvQAifYTZPlRcUk1Q0yzCWiBYfy0jvTGj/4c+V3Dxd/ydTR2kfqHFgKAiB6/scPqFpdrMtGJNrV4dei6WoM3rvN/qkdS3GE4b6jiviQt3IQhruEN4H6gujPBu7JkL3W1nANKxjqibJGYuAlj0C3l7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=hwPN6zqj; arc=none smtp.client-ip=217.70.183.196
+	 In-Reply-To:To:Cc; b=bBgt2IFKaRRpqSpG35yERdONWtBkVCc/OveTsibBdnB8huI2G1q1JeqQPqnkph/76YPeyZV3tOaGyXaDdZ+KubKQbgiKkg9pSQEmcTrIwQGjAVyiOG/43/BIwT0tsclg+HlpmNWcZ8Jety4+573MLWo+IAz0OX2SLBpOH8AmFlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=GS6MXkY6; arc=none smtp.client-ip=217.70.183.196
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id D215344551;
-	Fri, 21 Mar 2025 19:13:55 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 638C344554;
+	Fri, 21 Mar 2025 19:13:57 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1742584437;
+	t=1742584439;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=IuZZ1c6pfeMUYzSCc2NncoPGK60qkvSILYq+w9aYkTE=;
-	b=hwPN6zqjrifTQtFg0tzBTL/P6yepJ4OWg2zrll4M2vwWlDEyESdpFSwFJgNyB8IGmIRyTB
-	9dsSSrLg8UitTnXlV809wNVRtnYHhDV7nB1HgE9PceOBPsp43EZ+dr+ulQbbXiDOqiQHh9
-	J1flOeKER6aXXkzABmZC9FHtwuJqmamXLe4JOYT05OPl65tFMPZ/ey+c/KYDmrG5Xd/+Bo
-	f9zS4HY74/h908abnI2bp1Kk4tnNLD4YIhHaOFJ9K/Dw5mRCMzMvclu+FyaOa7oiELUXqC
-	vjWEzOOmMEOZ0m/axPJkvJr4XHGfFOzJsAgQDugvV85bOVeFXNr07BbAowqXNQ==
+	bh=NiE8yWDmE5ieiLpljw/I6k+OSUnyDXBb+4UjDl98ElI=;
+	b=GS6MXkY6slLO1NYad/F3dRS5uGTcOWIsvM7KAeZGx2Q79KrquRP+h2Lf2mK+90f3m7E/tA
+	LYHAqsmTiGKqFqdmGzeNEXvZEyKdCBSHGVeVVg8c+pQ9VAXPYGTb3J1aGKn+fotUkt9NZR
+	2JwLdJNVwnl/ql/PDAA2tzRoHtby9+hWs+SmQ7ObjTc1knwNrhIQscLT9kckSPX42vxo4V
+	DPdvTwG0jc91E3MyW1ujDj5lmhTk/0M8f37rwF/gJH+dARqTLkp2tiixlIwRBvJEuWHul7
+	LlhQcWQa4ddw9e81Pbbz5RaGcqN+wogroUWcvoaLybeHVLqt8Bs/QXBP6ejI9w==
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Fri, 21 Mar 2025 20:09:32 +0100
-Subject: [PATCH net-next 01/13] dt-bindings: net: cdns,macb: add Mobileye
- EyeQ5 ethernet interface
+Date: Fri, 21 Mar 2025 20:09:33 +0100
+Subject: [PATCH net-next 02/13] dt-bindings: net: cdns,macb: allow tsu_clk
+ without tx_clk
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250321-macb-v1-1-537b7e37971d@bootlin.com>
+Message-Id: <20250321-macb-v1-2-537b7e37971d@bootlin.com>
 References: <20250321-macb-v1-0-537b7e37971d@bootlin.com>
 In-Reply-To: <20250321-macb-v1-0-537b7e37971d@bootlin.com>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -87,61 +87,26 @@ X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduheduledtucetufdoteggode
  hgvrhhnvghlrdhorhhgpdhrtghpthhtohepnhgvthguvghvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepnhhitgholhgrshdrfhgvrhhrvgesmhhitghrohgthhhiphdrtghomhdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomh
 X-GND-Sasl: theo.lebrun@bootlin.com
 
-Add cdns,eyeq5-gem as compatible for the integrated GEM block inside
-Mobileye EyeQ5 SoCs. Add a phandle (and two offset arguments) for
-accessing syscon registers.
+Allow providing tsu_clk without a tx_clk as both are optional.
 
 Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 ---
- .../devicetree/bindings/net/cdns,macb.yaml          | 21 +++++++++++++++++++++
- 1 file changed, 21 insertions(+)
+ Documentation/devicetree/bindings/net/cdns,macb.yaml | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/Documentation/devicetree/bindings/net/cdns,macb.yaml b/Documentation/devicetree/bindings/net/cdns,macb.yaml
-index 3c30dd23cd4efa17e14b17bfb41c54de4ebadcaa..306d14958778df1a80a15e24d8ed5409704613be 100644
+index 306d14958778df1a80a15e24d8ed5409704613be..36fcae1b20d757b3ebe615a9fc66068000ded56d 100644
 --- a/Documentation/devicetree/bindings/net/cdns,macb.yaml
 +++ b/Documentation/devicetree/bindings/net/cdns,macb.yaml
-@@ -51,6 +51,7 @@ properties:
-           - atmel,sama5d2-gem         # GEM IP (10/100) on Atmel sama5d2 SoCs
-           - atmel,sama5d3-gem         # Gigabit IP on Atmel sama5d3 SoCs
-           - atmel,sama5d4-gem         # GEM IP (10/100) on Atmel sama5d4 SoCs
-+          - mobileye,eyeq5-gem        # Mobileye EyeQ5 SoCs
-           - cdns,np4-macb             # NP4 SoC devices
-           - microchip,sama7g5-emac    # Microchip SAMA7G5 ethernet interface
-           - microchip,sama7g5-gem     # Microchip SAMA7G5 gigabit ethernet interface
-@@ -136,6 +137,14 @@ properties:
-       Node containing PHY children. If this node is not present, then PHYs will
-       be direct children.
+@@ -85,7 +85,7 @@ properties:
+     items:
+       - enum: [ ether_clk, hclk, pclk ]
+       - enum: [ hclk, pclk ]
+-      - const: tx_clk
++      - enum: [ tx_clk, tsu_clk ]
+       - enum: [ rx_clk, tsu_clk ]
+       - const: tsu_clk
  
-+  mobileye,olb:
-+    $ref: /schemas/types.yaml#/definitions/phandle-array
-+    items:
-+      - items:
-+          - description: phandle to OLB node
-+          - description: MAC General-Purpose register offset
-+          - description: MAC SGMII register offset
-+
- patternProperties:
-   "^ethernet-phy@[0-9a-f]$":
-     type: object
-@@ -174,6 +183,18 @@ allOf:
-         reg:
-           maxItems: 1
- 
-+  - if:
-+      properties:
-+        compatible:
-+          contains:
-+            const: mobileye,eyeq5-gem
-+    then:
-+      required:
-+        - mobileye,olb
-+    else:
-+      properties:
-+        mobileye,olb: false
-+
- unevaluatedProperties: false
- 
- examples:
 
 -- 
 2.48.1
