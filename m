@@ -1,48 +1,48 @@
-Return-Path: <linux-mips+bounces-8292-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8293-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45BB1A6C4AC
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Mar 2025 21:56:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07811A6C4B2
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Mar 2025 21:57:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 514EE7A2D4A
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Mar 2025 20:55:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BD4913B133A
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Mar 2025 20:57:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50EC7230BD1;
-	Fri, 21 Mar 2025 20:56:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61CBD231A2D;
+	Fri, 21 Mar 2025 20:57:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hSxvE5IF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EEBdSspm"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20A8313C695;
-	Fri, 21 Mar 2025 20:56:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 340A815D5B6;
+	Fri, 21 Mar 2025 20:57:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742590595; cv=none; b=V13B6OtIXBdOqQ2m1msCeNr146atS5zuYuWg9SYgbuNJ04uHBS56AkktPYMOW3EBj458CEPG44bcvRrUyfm/EyrcDFFgfcbwyn7JVy7LcqM42inziHQcC5aPpKEmg2LpIx5eYQ/YlEn6jIpr5R8t/GiwMpY3S1uf7i4PpFkLtGk=
+	t=1742590640; cv=none; b=d8h4HxxqtGoQySaD+8kRZCT29I7I7ZUSq9g/TXPIOnxhKN9lW/MUb78i26yFRTnntE1G6oI51vb/GUlDN9xpZIaU34zrUUA5q4anRNy4k7F3ef4Ob4U/KltY+IQJk7pbYEEjoFnFylrVwKQNCVPAjwfIhCiBph7zJstNYeevl6g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742590595; c=relaxed/simple;
-	bh=ec3+o488fphAO1T0qvJyJYNbwPmkpTwgA5JJPdJ8RSk=;
+	s=arc-20240116; t=1742590640; c=relaxed/simple;
+	bh=uFyZi9x0O8rvJHwbXPQ3ZtHG2ktkVcaZ3xLIhuxCjkw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IfTIV1bia3y/dBWV1pfdSZMpzLKK+DpQuO/6vTKpC5yXK2f5ftvb3VC5tI6N0KJBnnzYGXeYebns+sZNVjiSAZu6TfWCHLrwmpffhpz8TZ1OIvGiehNX9jZ41kC4pY7O+9hirQ/8qVb23skPMB2lmpgz72HLyjvyMyr+bwpklb8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hSxvE5IF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 722F1C4CEE3;
-	Fri, 21 Mar 2025 20:56:29 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=MJ1OYXiSy71dgQkxrS7zmd1t2FBEE4Xcnup+P+dxovnG2LlP3t4ziyB+mv2YeK00SYtRE2UopUTqHL7Qf/ytVyODa9dTt8gOrXrYIcgoMQJ3PlyzEeqkxTKSLL0XFrp5SLU4i6vHtHDJjei3vk6GhwatT4uFI0VroEX4Ji8548I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EEBdSspm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9CADC4CEE7;
+	Fri, 21 Mar 2025 20:57:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742590593;
-	bh=ec3+o488fphAO1T0qvJyJYNbwPmkpTwgA5JJPdJ8RSk=;
+	s=k20201202; t=1742590639;
+	bh=uFyZi9x0O8rvJHwbXPQ3ZtHG2ktkVcaZ3xLIhuxCjkw=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=hSxvE5IFT7zH25ei6WnDtLU0sFcu9ydwmTx/UyDdgcSMVfBswrk1afZzc5DpFLFbt
-	 eE9E7i3FLDdIrIxRLT4B38SdoF+tqiHl1atfY8ac3VsWy7ITeheVHQQd07IXoMNo5f
-	 uDa/93Yu1+6egWKBC3unIsrulPiRd4UGCuaeeFFGvwzJHvg8DiYXKd3Zg331+IQMJs
-	 KlMp3z+6U/N1l/PM1onnLacgYR6L+HRCvDTOpiZtON4BGVzfFkRmkrYUPxo2a78EXL
-	 RThnvi5Kt6pr45BYn48+O+ibCWAup/EV3VZgPLwS+uv1qlpfQFR5jQMhSv/RanKkQW
-	 QeiJNQTCutkOA==
-Message-ID: <c1791b2e-bdf6-448c-88d3-c97511af3357@kernel.org>
-Date: Fri, 21 Mar 2025 21:56:27 +0100
+	b=EEBdSspmnBc86Y/MawsZaFpOhMv60RKAxiFB5Lz91I93oxHgo02hVFCJUp0orA0l8
+	 EPgeUJbz71HfChFTh3Sghs0ZU9LVAqWCZRgzuTJpLb15Q9wf5RsbdTXMxHhJqG3P+J
+	 IVeiPpqt493UlvgOwRK1X1z3oEeMzenFVdwlx49qj1NPyYjD04CEB0WgQlK8VefEfa
+	 VslgsZAqHTX94idkm8BMCw8VeAtVxnNGJKFrby14vJsU1ejN79phjvARyqTf7uFRyq
+	 9942Z74W1uH03zq6Wnv8es2SJAj7BgxM2tLGat5mDnKgPB0Tj1OcGArWu+kTaw9iSg
+	 9hWiVGZxReIQA==
+Message-ID: <6bf8c1c7-19f8-4727-8096-84532e6010a8@kernel.org>
+Date: Fri, 21 Mar 2025 21:57:13 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 4/8] dt-bindings: timer: Add EcoNet HPT CPU Timer
+Subject: Re: [PATCH v1 6/8] dt-bindings: mips: Add EcoNet platform binding
 To: Caleb James DeLisle <cjd@cjdns.fr>, linux-mips@vger.kernel.org
 Cc: Thomas Gleixner <tglx@linutronix.de>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
@@ -58,7 +58,7 @@ Cc: Thomas Gleixner <tglx@linutronix.de>, Rob Herring <robh@kernel.org>,
  Daniel Lezcano <daniel.lezcano@linaro.org>, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, benjamin.larsson@genexis.eu
 References: <20250321134633.2155141-1-cjd@cjdns.fr>
- <20250321134633.2155141-5-cjd@cjdns.fr>
+ <20250321134633.2155141-7-cjd@cjdns.fr>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -104,121 +104,55 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250321134633.2155141-5-cjd@cjdns.fr>
+In-Reply-To: <20250321134633.2155141-7-cjd@cjdns.fr>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 21/03/2025 14:46, Caleb James DeLisle wrote:
-> Add device tree binding documentation for the high-precision timer (HPT)
-> in the EcoNet EN751221 SoC.
+> Document the top-level device tree binding for EcoNet MIPS-based SoCs.
 > 
 > Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
-
-Previous patch was not tested, so was this one tested?
-
 > ---
->  .../bindings/timer/econet,timer-hpt.yaml      | 58 +++++++++++++++++++
->  1 file changed, 58 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/timer/econet,timer-hpt.yaml
+>  .../devicetree/bindings/mips/econet.yaml      | 27 +++++++++++++++++++
+>  1 file changed, 27 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mips/econet.yaml
 > 
-> diff --git a/Documentation/devicetree/bindings/timer/econet,timer-hpt.yaml b/Documentation/devicetree/bindings/timer/econet,timer-hpt.yaml
+> diff --git a/Documentation/devicetree/bindings/mips/econet.yaml b/Documentation/devicetree/bindings/mips/econet.yaml
 > new file mode 100644
-> index 000000000000..8b7ff9bce947
+> index 000000000000..44da78dc1e29
 > --- /dev/null
-> +++ b/Documentation/devicetree/bindings/timer/econet,timer-hpt.yaml
-> @@ -0,0 +1,58 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +++ b/Documentation/devicetree/bindings/mips/econet.yaml
+> @@ -0,0 +1,27 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
 > +%YAML 1.2
 > +---
-> +$id: http://devicetree.org/schemas/timer/econet,timer-hpt.yaml#
+> +$id: http://devicetree.org/schemas/mips/econet.yaml#
 > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +title: EcoNet High Precision Timer (HPT)
+> +title: EcoNet MIPS SoCs
 > +
 > +maintainers:
-> +  - Calev James DeLisle <cjd@cjdns.fr>
+> +  - Caleb James DeLisle <cjd@cjdns.fr>
 > +
-> +description: |
+> +description:
+> +  Boards with an EcoNet SoC shall have the following properties.
 
-Do not need '|' unless you need to preserve formatting.
+Drop description, useless and not even correct.
 
-> +  The EcoNet High Precision Timer (HPT) is a timer peripheral found in various
-> +  EcoNet SoCs, including the EN751221 and EN751627 families. It provides per-VPE
-> +  count/compare registers and a per-CPU control register, with a single interrupt
-> +  line using a percpu-devid interrupt mechanism.
 > +
 > +properties:
+> +  $nodename:
+> +    const: '/'
+> +
 > +  compatible:
-> +    const: econet,timer-hpt
+> +    oneOf:
+> +      - description: Boards with EcoNet EN751221 family SoC
+> +        items:
+> +          - const: econet,en751221
 
-Soc components must have soc-based compatible and then filename matching
-whatever you use as fallback.
+That's a soc. You need board compatible as well. Look at other
+upstreamed code.
 
-> +
-> +  reg:
-> +    minItems: 1
-> +    maxItems: 2
-
-No, list items instead.
-
-> +    description: |
-> +      Physical base address and size of the timer's register space. On 34Kc
-> +      processors, a single region is used. On 1004Kc processors, two regions are
-> +      used, one for each core.
-
-So different hardware, different compatible. That's why you need
-soc-based compatibles. Follow standard SoC upstreaming rules and examples.
-
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +    description: |
-
-Do not need '|' unless you need to preserve formatting.
-
-> +      The interrupt number for the timer.
-
-Drop, redundant.
-
-
-> This is a percpu-devid interrupt shared
-> +      across CPUs.
-> +
-> +  clocks:
-> +    maxItems: 1
-> +    description: |
-> +      A clock to get the frequency of the timer.
-
-Drop description, redundant
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +  - clocks
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    timer_hpt@1fbf0400 {
-
-No underscores
-
-Node names should be generic. See also an explanation and list of
-examples (not exhaustive) in DT specification:
-https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
-
-Look how other SoCs are calling this.
-
-> +        compatible = "econet,timer-hpt";
-> +        reg = <0x1fbf0400 0x100>;
-> +        interrupt-parent = <&intc>;
-> +        interrupts = <30>;
-> +        clocks = <&hpt_clock>;
-> +    };
-> +...
 
 
 Best regards,
