@@ -1,135 +1,107 @@
-Return-Path: <linux-mips+bounces-8266-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8267-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A1BCA6BF75
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Mar 2025 17:16:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC3A2A6C121
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Mar 2025 18:19:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C3D1C16FC84
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Mar 2025 16:16:16 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C3FBC189B762
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Mar 2025 17:19:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0167C19938D;
-	Fri, 21 Mar 2025 16:15:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 317051EA7DC;
+	Fri, 21 Mar 2025 17:19:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="A7JGV9oI"
+	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="NQBI8X13"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.cjdns.fr (mail.cjdns.fr [5.135.140.105])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB1BA1DEFC5
-	for <linux-mips@vger.kernel.org>; Fri, 21 Mar 2025 16:15:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85AE81D95A9;
+	Fri, 21 Mar 2025 17:19:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.135.140.105
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742573717; cv=none; b=lftRn56QUtuAmIoVGyX105rf4gjboAcouKE3IGfx9frcgh73E4HuJB0DdqQhltaPbP5CuTPVAAIWyeZWEp2Lt4oLo3ILAv1Hj+0bvXvTxKKB89rYU4XtEM4hrset2JowbUn+qgnhEqDPlE3weZ9DnUP2NZ8pgE8UnxAx7b2SS9c=
+	t=1742577560; cv=none; b=Mj4A+hRPlW8Qgdp2zb6onLeJpXfP/3U287RmKNdVAjRUfWWdwY8HviMOAOCgI/DTRkMu6/pOtlKeVhQG7+4ejUjP5nAmT0oMZ6t8dQmUDTXA7bAmUjOW3KlFanbHW7fG0z6y7YHgG9mQetUUDaMkuAajd86xw7AGvTa21o6NOjg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742573717; c=relaxed/simple;
-	bh=t0I85wJl6Q02gWZfsGxbdmSAryl/5ThAyE7h6UCvpP0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=m5Tcj4NQW+AcWyqtiGe3mMYbRqGpEr5e+HOyM7H+epn06uUsaLKVt+ihLCx18xBRVdcu/zDtI3BhFLJDtr9QOgwLJrdAfAsO27lDtQJaADxhwuk7TrT8/9e3q9KO5VoXvbmUiFvYCyUnPejh9nfp3nkKGzB0pJpCaOtPL8ZYdnQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=A7JGV9oI; arc=none smtp.client-ip=209.85.167.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-5499614d3d2so2552077e87.3
-        for <linux-mips@vger.kernel.org>; Fri, 21 Mar 2025 09:15:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1742573714; x=1743178514; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=xxLB0h16iEEcVhCHw+83yfdc4253yuJpjZl1F1gKp+U=;
-        b=A7JGV9oIh6ZmKwqaD71AYdB8LPOezlNH2kf2dHxfonUSKw1QOz6ojZeb8Z2027BhiP
-         P+vDFbddpHbxA3WKgumIYQiE+PodnoVXVmmbEOuiFpBUZOReK9P4GrWFVLCzKzd37j+5
-         xRaFNQQKnYPaL3TrurnBf7l0w0Vx29gAmKxYmS+w1p+/gsTOcIInm9cZE8G5mfrnbKkL
-         3lMFgL0x8z6ycMHPKKqjo+ErAkES9oOgW1P+4ZiJj7AeT9LvSoKwrmbmymk2HkUz2tNp
-         PhwlMjZjRMwx8KTz3WqeSedAiXiXPlxR5W1Woom/BBc4KAzxKu1wtuJtbwD4fCTeR7u2
-         S7TA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742573714; x=1743178514;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xxLB0h16iEEcVhCHw+83yfdc4253yuJpjZl1F1gKp+U=;
-        b=gztX7BENuE7emvwy/UYBpZiqtMbpu9wVF7MZNyV/ur0UsTDEVFoMjxW7YPOIHxtIjS
-         /wiF0EVmv97qawsRTgW8esA5kII71SdxyhSjZqTuK+k3BMiHoF+2bclzl/BsLy5DOPeq
-         TxW6/TdG4aLIKeKYRYlB8tj7aZBumKN1WVXRX46Sbv5mTi0ZqoQlwhVPecl0g6LvoqfZ
-         02Jn2susuhqymYwaBXZqgsXBQphi+coOEGONiUFcXUT0WpSQrBwWP+wwZUWi5sVKaEd/
-         ifQN9CQWeZKAhhLvIKcumyQExX0UNV2InhyiMZ3TxfYqO8FW4oMINGX2g1rvNZGPQmwg
-         ECvg==
-X-Gm-Message-State: AOJu0YwjkVBfPPlByUfi2lxvLO3g555VAWHx0+6NScVsqCCmA0fNmn1p
-	LpSJHELgf0NQpRY+pNQtT3uRBWFW3m2wfP1uALgDlND891mzTQitaGQSRnsNYXCo+IRIlQc8GjD
-	wI0YNN15qmQFtJ10YRhWZpKenFKtvvPennjYnHCoPGfEpuKD6
-X-Gm-Gg: ASbGnctuo6CkKCCEpknVbxY9gJi1N8E+3f8N0ab1ulGdfSe+236zHSH40XJ+t9Oultb
-	uv/8npiptjuVj6l6oE1z5EaMSDtMT2Jjc2HEmITUWnfyKj4sV9v+YbLhV3zHOleTfJjgTg5qBhy
-	O4U9fg08pDysj45kw4X0PtOzrDGUeMuf3Lps++BAdX2qEKxkz+xi1B7RjbCcY=
-X-Google-Smtp-Source: AGHT+IFpr7tj7lCX7rK9TyEdAX36qI3BUwAIzNojkRB11whvA4tpCS//FWsPqh8dSvOvjgyUXnDZxoxT5uuaNvkOseo=
-X-Received: by 2002:a05:6512:1088:b0:549:8bb2:8575 with SMTP id
- 2adb3069b0e04-54ad6476834mr1559553e87.10.1742573713747; Fri, 21 Mar 2025
- 09:15:13 -0700 (PDT)
+	s=arc-20240116; t=1742577560; c=relaxed/simple;
+	bh=iUjrZZviz0HratLYPa9I0r6ES1UGZaKfPifNHoR5kXA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=p9wG7sr9E2xcilV1OYAuE391VAls6DM3iaSG3HE271GR9FNeQi/yvRKrFo/Pla2nvdZh14Sj+PskSQ+jhCuUVjAJ9rGR7Gppk6mGRRoHErf6Fx55CsvzZ3KXA+s3KRyPhN/q9+7ryAffd3FU7bHYjDvBPXwginH0kTqtOneckE8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=none smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=NQBI8X13; arc=none smtp.client-ip=5.135.140.105
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cjdns.fr
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 06661291C36;
+	Fri, 21 Mar 2025 18:19:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjdns.fr; s=dkim;
+	t=1742577555; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:content-language:in-reply-to:references;
+	bh=zzPyt7C28wJDA71/0ZNWzwkpyL1VjuZamOj0CGGN+uk=;
+	b=NQBI8X13zFj3alYAZHLjU3eOj2iMZP+Tzsw8RR2S2EettgrRTWQQDc8Ui4OnqsY6KqYGXS
+	glNiGXPJp+7qHHvo48N3sCOi7pMv5vquUJ8ohHjROnNGYD7YI1AB/0aHJI9n0VUs7Iffg9
+	jIQXaoEphNstLU1lJnSFhRncfFOXIG9I9BRsaA7tzi+vNfKu/OaefYvDRi2aNuueBDP8Cf
+	kqvkf4tJRWo7mTwwbGYlCqIVLL4kQ2pMB5T/FxPZIerGfWYbQkwsvKl6yMBbmK96WTtvDq
+	tKD3Mv3IlSoS+oeU7rhl5cO2qvPT3KVIX0okWw9HkipnVW1XtewtqRZwV+XtKg==
+Message-ID: <4479c4cc-404b-48b9-9e0f-b6b371c8c159@cjdns.fr>
+Date: Fri, 21 Mar 2025 18:19:10 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250315194002.13778-1-marco.crivellari@suse.com>
- <20250315194002.13778-2-marco.crivellari@suse.com> <alpine.DEB.2.21.2503211146001.35806@angie.orcam.me.uk>
-In-Reply-To: <alpine.DEB.2.21.2503211146001.35806@angie.orcam.me.uk>
-From: Marco Crivellari <marco.crivellari@suse.com>
-Date: Fri, 21 Mar 2025 17:15:02 +0100
-X-Gm-Features: AQ5f1JowyTWw49XnxSHXBxJuGDwxUK9dmkDqvxpfG5_TtVO4oP_4udCpS9k6fzw
-Message-ID: <CAAofZF4gy6WJKLK4TzF5aV7+ca3gob5jVz3XQZyGrTpfnCsn_Q@mail.gmail.com>
-Subject: Re: [PATCH v6 1/1] MIPS: Fix idle VS timer enqueue
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Frederic Weisbecker <frederic@kernel.org>, 
-	Anna-Maria Behnsen <anna-maria@linutronix.de>, Thomas Gleixner <tglx@linutronix.de>, 
-	Peter Zijlstra <peterz@infradead.org>, Huacai Chen <chenhuacai@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-Hi Maciej,
-
-On Fri, Mar 21, 2025 at 12:53=E2=80=AFPM Maciej W. Rozycki <macro@orcam.me.=
-uk> wrote:
->  This instruction sequence still suffers from the coprocessor move delay
-> hazard.  How many times do I need to request to get it fixed (counting
-> three so far)?
-
-Can I have more details about this?
-
-I can see it is the same code present also in local_irq_enable()
-(arch_local_irq_enable()),
-and from the manual I've seen:
-
-"The Spacing column shown in Table 2.6 and Table 2.7 indicates the
-number of unrelated instructions (such as NOPs or SSNOPs) that,
-prior to the capabilities of Release 2, would need to be placed
-between the producer and consumer of the hazard in order to ensure
-that the effects of the first instruction are seen by the second instructio=
-n."
-
-The "Spacing column" value is 3, indeed.
-
-"With the hazard elimination instructions available in Release 2, the
-preferred method to eliminate hazards is to place one of the
-instructions listed in Table 2.8 between the producer and consumer of the
-hazard. Execution hazards can be removed by using the EHB [...]"
-
-What am I missing?
-
-Thanks in advance
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH v1 2/8] dt-bindings: interrupt-controller: Add EcoNet
+ EN751221 INTC
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, devicetree@vger.kernel.org,
+ Thomas Gleixner <tglx@linutronix.de>, linux-mips@vger.kernel.org,
+ linux-kernel@vger.kernel.org, benjamin.larsson@genexis.eu,
+ Daniel Lezcano <daniel.lezcano@linaro.org>
+References: <20250321134633.2155141-1-cjd@cjdns.fr>
+ <20250321134633.2155141-3-cjd@cjdns.fr>
+ <174257232355.3436156.11164230137695407225.robh@kernel.org>
+Content-Language: en-US
+From: Caleb James DeLisle <cjd@cjdns.fr>
+In-Reply-To: <174257232355.3436156.11164230137695407225.robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
 
 
---
+On 21/03/2025 16:52, Rob Herring (Arm) wrote:
+> On Fri, 21 Mar 2025 13:46:27 +0000, Caleb James DeLisle wrote:
+>> Document the device tree binding for the interrupt controller in the
+>> EcoNet EN751221 MIPS SoC.
+>>
+>> Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
+>> ---
+>> If anyone is aware of a standard name for this "shadow interrupt" pattern,
+>> please let me know and I will re-send with updated naming.
+>> ---
+>>   .../econet,en751221-intc.yaml                 | 77 +++++++++++++++++++
+>>   1 file changed, 77 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/interrupt-controller/econet,en751221-intc.yaml
+>>
+> My bot found errors running 'make dt_binding_check' on your patch:
+>
+> yamllint warnings/errors:
+>
+> dtschema/dtc warnings/errors:
+> /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/interrupt-controller/econet,en751221-intc.example.dtb: interrupt-controller@1fb40000: 'interrupt-parent' is a required property
+> 	from schema $id: http://devicetree.org/schemas/interrupt-controller/econet,en751221-intc.yaml#
+>
 
-Marco Crivellari
+Reproduced and fixed, thank you.
 
-L3 Support Engineer, Technology & Product
+In the interest of limiting mailing list noise, I plan to send a v2 sometime
+around Monday, ideally to aggregate a few more reviews in the process.
 
 
+Thanks,
 
+Caleb
 
-marco.crivellari@suse.com
 
