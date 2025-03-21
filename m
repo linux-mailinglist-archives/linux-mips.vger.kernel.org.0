@@ -1,110 +1,87 @@
-Return-Path: <linux-mips+bounces-8250-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8251-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 732FBA6ABC3
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Mar 2025 18:15:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 23E22A6B7D3
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Mar 2025 10:42:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E87C9189B798
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Mar 2025 17:15:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 512893BCC04
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Mar 2025 09:40:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C5141E2307;
-	Thu, 20 Mar 2025 17:15:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="J9IJpfJx"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A93822157E;
+	Fri, 21 Mar 2025 09:38:31 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A84042A80;
-	Thu, 20 Mar 2025 17:15:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 757CF210192;
+	Fri, 21 Mar 2025 09:38:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742490925; cv=none; b=mVTrhVxnKcSXy/FDSNp0oxpsfcx+f+NWPfSnVT4hmxZv/CH4aguUpi44T1sIN4VdUxvWtl/XvYNcV4CgywW9aetUpDsgfDiD7U8dkh5XMABfxLfLRIRA9v8ZcSajUJbuCMvbkcHxQ+C4JRzBbAyXyFIO8NnnYPnd8S2fWGWku6k=
+	t=1742549910; cv=none; b=DeECEZD6gYAlo24mf1bOd2JnmgdXu2jNSnmXZoJc8E3HStHfYyaxj9HGMXXmFJ/whzF1rO4dcl1vzm6uOFIclDC0wAFl1JJzbyHmcJTTjX4llET+BoCIn48RFIGdQkhdXeHHauvvERk0Bu2ASYwOZy2JzroiF65H2zdNZi48QJU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742490925; c=relaxed/simple;
-	bh=hOqyTiYO4SAvCtYtejWnWK1GKbOLHYL+G0pZHLC9R1w=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Wke0ZzF3c8kux3xr7Sk58riTh7Mo6/Gx5wru/nl4P1fIS/bHoh6CbM5+QV3YUpFuRPJMor5+KdRIwhAN9yAWBmuIL6eCNEGbEJZpan4SQC/Px6bxKpkrFQMdifcHq+0OmH0jDPr4jE5j/z/dwARJgZfOK1KzBTwMlEUYEG+wJUY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=J9IJpfJx; arc=none smtp.client-ip=217.70.183.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id B8861443AB;
-	Thu, 20 Mar 2025 17:15:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1742490914;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=SxcpHL6JN0oeezTkg7NVy58dIuvVNMDJ2U1SuOSdwYU=;
-	b=J9IJpfJxCUQy4Nmv3ICqgxXGSZ6zv41jNmXAdsbdKwqXzLaMoy2ew7RCtXu5kef/Qj3UaF
-	2+zElCQGrOuVLtFPPGpzcf0ORi6zbAgThOr3jt8MSGqTewV8LkyAcFrOub33cnTGhHm4ar
-	+Yjt05/rZBHpbLjzJ0yMU4mJPyS1sVB0JlyPwtCLy0Rek9OG/1w4yvPoe0lqnNZN7Hy4ZH
-	iDkGER6Agr4nUeyy4ujo3PCO0lt28Nff7uJGFke26TRdk+V2mG5xX4NQNx6whIo35RVIvA
-	mOBc/Tkse0yiIsQ/+2DTBIftNn2i5pBmRhc9cRmwADMAw5PcFX20fwBKo1+lIA==
-Date: Thu, 20 Mar 2025 18:15:08 +0100
-From: Herve Codina <herve.codina@bootlin.com>
-To: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-Cc: tglx@linutronix.de, maz@kernel.org, linux-kernel@vger.kernel.org,
- Antoine Tenart <atenart@kernel.org>, Sven Peter <sven@svenpeter.dev>, Janne
- Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, Andrew
- Lunn <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>,
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Linus Walleij
- <linusw@kernel.org>, Imre Kaloz <kaloz@openwrt.org>, Huacai Chen
- <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, Jiaxun Yang
- <jiaxun.yang@flygoat.com>, Neil Armstrong <neil.armstrong@linaro.org>,
- Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>,
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>, Anup Patel
- <anup@brainfault.org>, Paul Walmsley <paul.walmsley@sifive.com>, Palmer
- Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Alexandre
- Ghiti <alex@ghiti.fr>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>, Nishanth Menon
- <nm@ti.com>, Tero Kristo <kristo@kernel.org>, Santosh Shilimkar
- <ssantosh@kernel.org>, Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
- Masami Hiramatsu <mhiramat@kernel.org>,
- linux-arm-kernel@lists.infradead.org, asahi@lists.linux.dev,
- loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
- linux-amlogic@lists.infradead.org, linux-riscv@lists.infradead.org,
- linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH v2 06/57] irqdomain: irqchip: Switch to
- of_fwnode_handle()
-Message-ID: <20250320181508.132c4636@bootlin.com>
-In-Reply-To: <20250319092951.37667-7-jirislaby@kernel.org>
-References: <20250319092951.37667-1-jirislaby@kernel.org>
-	<20250319092951.37667-7-jirislaby@kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1742549910; c=relaxed/simple;
+	bh=1huO00OkX0Vakm7rr7rzZ8OBPfeAzXVRpl8jPbeH2ZA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TGOGMzbqkBvGCshiFhcS1uPeLrK9N75PC185NJdiq2dXfxcfetJVRdPFw6lXnoMMaCpzFyO1hQC/JVvBvg/1aBViam7YQqwUEVO9/OF9Ep9BJyMGNB6LSs+IiWI9MUW9akm5bo3uLjyTywLEurkMwcr5DvzQk9NF8MzW/IXr2dY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1tvYpU-0006y1-00; Fri, 21 Mar 2025 10:38:16 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id F2DD4C0135; Fri, 21 Mar 2025 10:38:01 +0100 (CET)
+Date: Fri, 21 Mar 2025 10:38:01 +0100
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Marco Crivellari <marco.crivellari@suse.com>
+Cc: Frederic Weisbecker <frederic@kernel.org>, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	"Maciej W . Rozycki" <macro@orcam.me.uk>
+Subject: Re: [PATCH v6 1/1] MIPS: Fix idle VS timer enqueue
+Message-ID: <Z90zebpJE4Y9SbkK@alpha.franken.de>
+References: <20250315194002.13778-1-marco.crivellari@suse.com>
+ <20250315194002.13778-2-marco.crivellari@suse.com>
+ <Z9qlW81QikxeVzQa@alpha.franken.de>
+ <Z9rYAT9i3Ko92uUo@p200300d06f3e987545685175b554ae65.dip0.t-ipconnect.de>
+ <Z9rjZf0ZT7iejVlA@alpha.franken.de>
+ <CAAofZF7XPm+tzPpwAPu0oDZem+EOVY18oAbVwAXzkGmtstnBQg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddugeekjeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtkeertdertdejnecuhfhrohhmpefjvghrvhgvucevohguihhnrgcuoehhvghrvhgvrdgtohguihhnrgessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepveeiffefgeeitdelleeigefhjeelueeuveekveetgeffheeltdekgeduiefggfdvnecukfhppedvrgdtudemvgdtrgemvdegieemjeejledtmedviegtgeemvgdvvdemiedtfegumeehkegrnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegvtdgrmedvgeeimeejjeeltdemvdeitgegmegvvddvmeeitdefugemheekrgdphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomhephhgvrhhvvgdrtghoughinhgrsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeefledprhgtphhtthhopehjihhrihhslhgrsgihsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehtghhlgieslhhinhhuthhrohhnihigrdguvgdprhgtphhtthhopehmrgiisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvl
- hdrohhrghdprhgtphhtthhopegrthgvnhgrrhhtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehsvhgvnhesshhvvghnphgvthgvrhdruggvvhdprhgtphhtthhopehjsehjrghnnhgruhdrnhgvthdprhgtphhtthhopegrlhihshhsrgesrhhoshgvnhiifigvihhgrdhioh
-X-GND-Sasl: herve.codina@bootlin.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAofZF7XPm+tzPpwAPu0oDZem+EOVY18oAbVwAXzkGmtstnBQg@mail.gmail.com>
 
-Hi Jiri,
-
-On Wed, 19 Mar 2025 10:28:59 +0100
-"Jiri Slaby (SUSE)" <jirislaby@kernel.org> wrote:
-
-> of_node_to_fwnode() is irqdomain's reimplementation of the "officially"
-> defined of_fwnode_handle(). The former is in the process of being
-> removed, so use the latter instead.
+On Thu, Mar 20, 2025 at 09:44:23AM +0100, Marco Crivellari wrote:
+> Hi,
 > 
-> Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
+> yesterday I made this changes:
+> 
+> @@ -128,7 +128,11 @@ LEAF(__r4k_wait)
+>         */
+>        wait
+>        /* End of idle interrupt region. */
+> -1:
+> +SYM_INNER_LABEL(__r4k_wait_exit, SYM_L_LOCAL)
 
-Reviewed-by: Herve Codina <herve.codina@bootlin.com>
-Acked-by: Herve Codina <herve.codina@bootlin.com> # irq-lan966x-oic
+do we really need that for a symbol local to that file ?
 
-Best regards,
-Hervé
+> +       /* Check idle interrupt region size. */
+> +       .ifne   __r4k_wait_exit - __r4k_wait - 36
+
+I have to say, that I prefer my .if statement, since this clearly spells out
+the comparision in the expression. Is there a reason for your version ?
+
+Thomas.
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
