@@ -1,49 +1,49 @@
-Return-Path: <linux-mips+bounces-8304-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8305-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B4DFA6C67B
-	for <lists+linux-mips@lfdr.de>; Sat, 22 Mar 2025 00:44:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BA9A4A6C689
+	for <lists+linux-mips@lfdr.de>; Sat, 22 Mar 2025 00:55:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3E207463982
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Mar 2025 23:43:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3EA0E4821C7
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Mar 2025 23:55:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D50122D781;
-	Fri, 21 Mar 2025 23:43:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CAF3720F07D;
+	Fri, 21 Mar 2025 23:55:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="uPnLAcz9"
+	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="aq0vnjZ7"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from mail.cjdns.fr (mail.cjdns.fr [5.135.140.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EA7B22D79A;
-	Fri, 21 Mar 2025 23:43:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCB212AD21;
+	Fri, 21 Mar 2025 23:55:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.135.140.105
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742600630; cv=none; b=r1E0G6srKcSwjA3vUqRFVpKm57qz9yxk+nnVtJCucZUB16xS4Jh3UY0J0HFVsGqcUirGl/VFWUpsq9NfDoIhtK9X6CM4fVGsdDojhSb/JK9BWWV3KVvOCuuPx37ABRfU+N04glbODwBnHJupRr1NPKll3hZUmQqJpkq4Okf4gqc=
+	t=1742601335; cv=none; b=lzqm13+noST33Tp9TjUMnQ+/7kLNWgy/XyKGJ2wm2gYMUCvo8LbSjNdpv/IRkjaQtZuAnKqbMRRl2CwDGO2JKqUNQpn2fIfwGIQXUWwm4q9+hxWoC6EnXSth37QFjNemKEPQFm+u81A5qqIG9zIk/TT584DUipGb09fpNSH/8qc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742600630; c=relaxed/simple;
-	bh=0YlhmsqVJqyKLTQlrLmuX8giANE/7kmOE8z/It4VeEU=;
+	s=arc-20240116; t=1742601335; c=relaxed/simple;
+	bh=tM+Y7qY57N8Hwt2vqT/hZUX7pDEsPwiIi9Ee3mFu0Zc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=C4Y1W5+Es6VbnIoKwqxRF5PSF0NFucA8IxCD5o+7WDMLVHLrdv/OnQSnfBPXdY76hmUEVJqcWRyNUNtnGibAOFotgHPw4oUjXXUkxbl9KcfBwlbwZYkNAEi9xbtQdhfg6+S/dkuq7Afd/r9lrVNDJXciMkZkG36E0C6Y249VwbI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=none smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=uPnLAcz9; arc=none smtp.client-ip=5.135.140.105
+	 In-Reply-To:Content-Type; b=KUYJVQoTFsnYJJvqiky33lasjcH/uMNPDy3qA6Z3C2C/NFFCpZmdRn3IIiSknuF+kfG80HUAMFTaaP46RAF2TMOp2drIgM+W6BuJ6CL+E0Wi6wn4Bwj4v2JFwQjgDieebyyyK/UZI9y8TxptVOQAC2lg4UvT8qFuERyACJvtWE4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=none smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=aq0vnjZ7; arc=none smtp.client-ip=5.135.140.105
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cjdns.fr
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 551C1297BEE;
-	Sat, 22 Mar 2025 00:43:43 +0100 (CET)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 0F05D299882;
+	Sat, 22 Mar 2025 00:55:28 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjdns.fr; s=dkim;
-	t=1742600625; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1742601330; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=m8/dml8cBA307rIhQR/2DcZSr7O2w983VSBwU+b/4g4=;
-	b=uPnLAcz9Mn05NoxfVoN2JC8VxczVJlaiXX8Pk1SQ0fp76TVmxuF8GOvLBnQLSHvbfyUdTc
-	BtxRrcHg/ktKSxJM7OcW+hCZ7kUTWjdc1PMw2WNdOBLjpY6pl+lGpwtCQLGIVRF0puM3ue
-	AbDyAYBGrsOr/EW7yvO1rqZhGgO8ojmLiePEodCtLsUf6+n9fu+cxM/TcnWpvHzGCxmDwd
-	QtuIuByGUyTwd1fL20diptC7R8Z9MnhS9AN5jXHzGnhf2r2rOVLrVMnuV64wTq5xJkr8U7
-	Uk89QfVY+a1hBj6wHv6kMlj4keYL7t+I0ChndIUoLSnWE/aH5z7Jqr6MUunmeg==
-Message-ID: <8fba3bb0-cfb5-4427-97d0-0cf9493a5bcf@cjdns.fr>
-Date: Sat, 22 Mar 2025 00:43:42 +0100
+	bh=IUM1wVVjOwVSF2R3rZm8EaeiH5SmVgXAx/5TyFoGIRI=;
+	b=aq0vnjZ73HxkTtspFmsz3STpQeKQ+IB+WRYQQmOeAlvgYzQIHtFv0u17QqTkBmj9JSBjKO
+	fXdsl3g7JDwaJQlVFffdYnfQ2PW4w47kOwp916gW1nIphZJ4YZ5o17+5kVYXR9pvZf8BPa
+	0ZHpa9W17HAEaL2/Zx+3Wa1bFQRwOorjHsF6KvLYOnHPuOJX/Ud2ou0+RFzVE7hKjRIUop
+	gXTX43Gkz1Py+0iIlyckQQwTCknwcGt2X3pNbNYhxXl9UaHhsCE7EYlhIqBv/9pEuQhm92
+	o1o1+0U1fg+P49Cqgb5xg0HjMJHAePchc+NLMb/+CUN0JHyGMmxVdvy8mwp1+g==
+Message-ID: <6b07cb8c-6d79-43c7-a6e9-5aaa5600a702@cjdns.fr>
+Date: Sat, 22 Mar 2025 00:55:28 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -51,247 +51,138 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH v1 7/8] mips: Add EcoNet MIPS platform support
-To: Krzysztof Kozlowski <krzk@kernel.org>, linux-mips@vger.kernel.org
-Cc: Thomas Gleixner <tglx@linutronix.de>, Rob Herring <robh@kernel.org>,
+Subject: Re: [PATCH v1 2/8] dt-bindings: interrupt-controller: Add EcoNet
+ EN751221 INTC
+To: Rob Herring <robh@kernel.org>
+Cc: linux-mips@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
  <conor+dt@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
  Daniel Lezcano <daniel.lezcano@linaro.org>, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, benjamin.larsson@genexis.eu
 References: <20250321134633.2155141-1-cjd@cjdns.fr>
- <20250321134633.2155141-8-cjd@cjdns.fr>
- <f1f50469-bbd2-41a8-87a5-a535a9bc495b@kernel.org>
+ <20250321134633.2155141-3-cjd@cjdns.fr>
+ <20250321211752.GA3970526-robh@kernel.org>
 Content-Language: en-US
 From: Caleb James DeLisle <cjd@cjdns.fr>
-In-Reply-To: <f1f50469-bbd2-41a8-87a5-a535a9bc495b@kernel.org>
+In-Reply-To: <20250321211752.GA3970526-robh@kernel.org>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Last-TLS-Session-Version: TLSv1.3
 
 
-On 21/03/2025 22:00, Krzysztof Kozlowski wrote:
-> On 21/03/2025 14:46, Caleb James DeLisle wrote:
->> Add platform support for EcoNet MIPS SoCs.
+On 21/03/2025 22:17, Rob Herring wrote:
+> On Fri, Mar 21, 2025 at 01:46:27PM +0000, Caleb James DeLisle wrote:
+>> Document the device tree binding for the interrupt controller in the
+>> EcoNet EN751221 MIPS SoC.
 >>
 >> Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
 >> ---
->> As is typical of embedded platforms, it's not realistic to imagine building
->> a fully functioning system from kernel sources alone. In the interest of
->> providing something without external dependencies, I have included build and
->> device tree for a minimal testing / PoC image that can be booted from memory
->> on these devices.
+>> If anyone is aware of a standard name for this "shadow interrupt" pattern,
+>> please let me know and I will re-send with updated naming.
 >> ---
->>   arch/mips/Kbuild.platforms                    |  1 +
->>   arch/mips/Kconfig                             | 25 ++++++
->>   arch/mips/boot/compressed/uart-16550.c        |  5 ++
->>   arch/mips/boot/dts/Makefile                   |  1 +
->>   arch/mips/boot/dts/econet/Makefile            |  2 +
->>   arch/mips/boot/dts/econet/en751221.dtsi       | 62 +++++++++++++++
->>   .../boot/dts/econet/en751221_test_image.dts   | 19 +++++
->>   arch/mips/econet/Kconfig                      | 42 ++++++++++
->>   arch/mips/econet/Makefile                     |  2 +
->>   arch/mips/econet/Platform                     |  5 ++
->>   arch/mips/econet/init.c                       | 78 +++++++++++++++++++
->>   11 files changed, 242 insertions(+)
->>   create mode 100644 arch/mips/boot/dts/econet/Makefile
->>   create mode 100644 arch/mips/boot/dts/econet/en751221.dtsi
->>   create mode 100644 arch/mips/boot/dts/econet/en751221_test_image.dts
-> DTS are always, always separate patches. See also DTS coding style and
-> submitting patches in the bindings, which already covers this.
-Ok got it, somehow I though arch/mips/* made it different.
->
->
-> ...
->
->
+>>   .../econet,en751221-intc.yaml                 | 77 +++++++++++++++++++
+>>   1 file changed, 77 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/interrupt-controller/econet,en751221-intc.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/interrupt-controller/econet,en751221-intc.yaml b/Documentation/devicetree/bindings/interrupt-controller/econet,en751221-intc.yaml
 >> new file mode 100644
->> index 000000000000..e4404aed5705
+>> index 000000000000..1b0f262c9630
 >> --- /dev/null
->> +++ b/arch/mips/boot/dts/econet/en751221.dtsi
->> @@ -0,0 +1,62 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/dts-v1/;
+>> +++ b/Documentation/devicetree/bindings/interrupt-controller/econet,en751221-intc.yaml
+>> @@ -0,0 +1,77 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/interrupt-controller/econet,en751221-intc.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 >> +
->> +/ {
->> +	compatible = "econet,en751221";
->> +	#address-cells = <1>;
->> +	#size-cells = <1>;
+>> +title: EcoNet EN751221 Interrupt Controller
 >> +
->> +	hpt_clock: hpt_clock {
-> No underscores in node names.
+>> +maintainers:
+>> +  - Caleb James DeLisle <cjd@cjdns.fr>
+>> +
+>> +description: |
+> Don't need '|' if no formatting.
+Got it, thanks.
 >
-> Follow DTS coding style.
-Right, I know this, my fault.
+>> +  The EcoNet EN751221 Interrupt Controller is a simple interrupt controller
+>> +  designed for the MIPS 34Kc MT SMP processor with 2 VPEs. Each interrupt can
+>> +  be routed to either VPE but not both, so to support per-CPU interrupts, a
+>> +  secondary IRQ number is allocated to control masking/unmasking on VPE#1. For
+>> +  lack of a better term we call these "shadow interrupts". The assignment of
+>> +  shadow interrupts is defined by the SoC integrator when wiring the interrupt
+>> +  lines, so they are configurable in the device tree.
+>> +
+>> +allOf:
+>> +  - $ref: /schemas/interrupt-controller.yaml#
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: econet,en751221-intc
+>> +
+>> +  reg:
+>> +    maxItems: 1
+>> +
+>> +  "#interrupt-cells":
+>> +    const: 1
+>> +
+>> +  interrupt-controller: true
+>> +
+>> +  interrupts:
+>> +    maxItems: 1
+>> +    description: Interrupt line connecting this controller to its parent.
+>> +
+>> +  econet,shadow-interrupts:
+>> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> Looks like uint32-matrix to me as it pairs of u32's.
+Thanks for the pointer, will update.
 >
->> +		compatible = "fixed-clock";
->> +		#clock-cells = <0>;
->> +		clock-frequency = <200000000>;  /* 200 MHz */
->> +	};
->> +
->> +	cpus: cpus {
->> +		#address-cells = <1>;
->> +		#size-cells = <0>;
->> +
->> +		cpu@0 {
->> +			device_type = "cpu";
->> +			compatible = "mips,mips24KEc";
->> +			reg = <0>;
->> +		};
->> +	};
->> +
->> +	cpuintc: interrupt-controller {
->> +		#address-cells = <0>;
->> +		#interrupt-cells = <1>;
->> +		interrupt-controller;
->> +		compatible = "mti,cpu-interrupt-controller";
->> +	};
->> +
->> +	intc: interrupt-controller@1fb40000 {
->> +		compatible = "econet,en751221-intc";
->> +		reg = <0x1fb40000 0x100>;
->> +		interrupt-parent = <&cpuintc>;
->> +		interrupts = <2>;
->> +
->> +		interrupt-controller;
->> +		#interrupt-cells = <1>;
->> +		econet,shadow-interrupts = <7 2>, <8 3>, <13 12>, <30 29>;
->> +	};
->> +
->> +	uart: serial@1fbf0000 {
->> +		compatible = "ns16550";
->> +		reg = <0x1fbf0000 0x30>;
->> +		reg-io-width = <4>;
->> +		reg-shift = <2>;
->> +		interrupt-parent = <&intc>;
->> +		interrupts = <0>;
->> +		clock-frequency = <1843200>;
->> +	};
->> +
->> +	timer_hpt: timer_hpt@1fbf0400 {
-> Same problem as with binding.
-Will fix.
+>> +    description: |
+>> +      An array of interrupt number pairs where each pair represents a shadow
+>> +      interrupt relationship. The first number in each pair is the primary IRQ,
+>> +      and the second is its shadow IRQ used for VPE#1 control. For example,
+>> +      <8 3> means IRQ 8 is shadowed by IRQ 3, so IRQ 3 cannot be mapped, but
+>> +      when VPE#1 requests IRQ 8, it will use manipulate the IRQ 3 mask bit.
+>> +    maxItems: 40
+>> +    items:
+>> +      minimum: 0
+>> +      maximum: 40
+> Then this would be:
 >
->> +		compatible = "econet,timer-hpt";
->> +		reg = <0x1fbf0400 0x100>;
->> +
->> +		interrupt-parent = <&intc>;
->> +		interrupts = <30>;
->> +		clocks = <&hpt_clock>;
->> +	};
->> +};
->> diff --git a/arch/mips/boot/dts/econet/en751221_test_image.dts b/arch/mips/boot/dts/econet/en751221_test_image.dts
->> new file mode 100644
->> index 000000000000..bc140c4043b2
->> --- /dev/null
->> +++ b/arch/mips/boot/dts/econet/en751221_test_image.dts
-> Does not look like a board. We do not take some testing/debugging
-> thingies. Please upstream *real* board.
-No problem, will swap this out for a cheap available modem that I like to dev on.
+> minItems: 1
+> maxItems: 40
+> items:
+>    items:
+>      - description: primary IRQ
+>      - description: shadow IRQ
 >
->> @@ -0,0 +1,19 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/dts-v1/;
->> +
->> +#include "en751221.dtsi"
->> +
->> +/ {
->> +	model = "Generic EN751221";
-> Missing compatible.
+> (Feel free to expand the descriptions)
+Yes, much nicer.
 >
 >> +
->> +	memory@0 {
->> +		/* We hope at least 64MB will be available wherever we are run */
->> +		device_type = "memory";
->> +		reg = <0x00000000 0x4000000>;
->> +	};
->> +
->> +	chosen {
->> +		bootargs = "console=ttyS0,115200";
-> Drop bootargs and use standard property - stdout.
+>> +required:
+>> +  - compatible
+>> +  - reg
+>> +  - interrupt-controller
+>> +  - "#interrupt-cells"
+>> +  - interrupt-parent
+> Generally, interrupt-parent is never required. It can be in a parent
+> node for example.
+Removed, thanks.
 >
-> See how all other platforms are doing it (and not some ancient MIPS, but
-> the most recent arm64 or riscv).
-Sure thing.
->
->
->> +		linux,usable-memory-range = <0x00020000 0x3fe0000>;
->> +	};
->> +};
->> diff --git a/arch/mips/econet/Kconfig b/arch/mips/econet/Kconfig
->> new file mode 100644
->> index 000000000000..12f85d638e47
->> --- /dev/null
->> +++ b/arch/mips/econet/Kconfig
->> @@ -0,0 +1,42 @@
->> +# SPDX-License-Identifier: GPL-2.0
->> +if ECONET
+>> +  - interrupts
 >> +
->> +config SOC_ECONET_EN751221
->> +	bool
->> +	select COMMON_CLK
->> +	select ECONET_EN751221_INTC
->> +	select IRQ_MIPS_CPU
->> +	select SMP
->> +	select SMP_UP
->> +	select SYS_SUPPORTS_SMP
+>> +additionalProperties: false
 >> +
->> +choice
->> +	prompt "EcoNet SoC selection"
->> +	default SOC_ECONET_EN751221_FAMILY
->> +	help
->> +	  Select EcoNet MIPS SoC type. Individual SoCs within a family are
->> +	  similar enough that is it enough to select the right family, and
->> +	  then customize to the specific SoC using the device tree only.
->> +
->> +	config SOC_ECONET_EN751221_FAMILY
->> +		bool "EN751221 family"
->> +		select SOC_ECONET_EN751221
->> +		help
->> +		  The EN751221 family includes EN7512, RN7513, EN7521, EN7526.
->> +		  They are based on single core MIPS 34Kc processors. To boot
->> +		  this kernel, you will need a device tree such as
->> +		  MIPS_RAW_APPENDED_DTB=y, and a root filesystem.
->> +
->> +	config SOC_ECONET_EN751221_TEST_IMAGE
->> +		bool "EN751221 test image"
->> +		select SOC_ECONET_EN751221
->> +		select BUILTIN_DTB
->> +		help
->> +		  Build a minimal kernel that will boot on any EN751221 board
->> +		  with at least 64MB of memory. This has a builtin device tree
->> +		  so it can boot with nothing more than an appended initramfs.
->> +		  This is good for validating that a given SoC is EN751221
->> +		  compatible, or for regression testing.
->> +endchoice
->> +
->> +endif
->> diff --git a/arch/mips/econet/Makefile b/arch/mips/econet/Makefile
->> new file mode 100644
->> index 000000000000..7e4529e7d3d7
->> --- /dev/null
->> +++ b/arch/mips/econet/Makefile
->> @@ -0,0 +1,2 @@
->> +
->> +obj-y := init.o
->> diff --git a/arch/mips/econet/Platform b/arch/mips/econet/Platform
->> new file mode 100644
->> index 000000000000..bb659876d855
->> --- /dev/null
->> +++ b/arch/mips/econet/Platform
->> @@ -0,0 +1,5 @@
->> +# To address a 7.2MB kernel size limit in the EcoNet SDK bootloader,
->> +# we put the load address well above where the bootloader loads and then use
->> +# zboot. So please set CONFIG_ZBOOT_LOAD_ADDRESS to the address where your
->> +# bootloader actually places the kernel.
->> +load-$(CONFIG_ECONET)	+= 0xffffffff81000000
->> \ No newline at end of file
-> You have patch warnings
+>> +examples:
+>> +  - |
+>> +    intc: interrupt-controller@1fb40000 {
+> Drop unused labels (intc).
 
-"No newline at end of file" - that's embarrassing, I'll try to figure out how that got into the patch.
+Ok.
 
 
-Thank you very much for your time.
-
+Thank you very much for your time, hope to see you soon in v2.
 
 Thanks,
 
@@ -299,6 +190,19 @@ Caleb
 
 
 >
-> Best regards,
-> Krzysztof
+>> +        compatible = "econet,en751221-intc";
+>> +        reg = <0x1fb40000 0x100>;
+>> +
+>> +        interrupt-controller;
+>> +        #interrupt-cells = <1>;
+>> +
+>> +        interrupt-parent = <&cpuintc>;
+>> +        interrupts = <2>;
+>> +
+>> +        econet,shadow-interrupts = <7 2>, <8 3>, <13 12>, <30 29>;
+>> +    };
+>> +...
+>> -- 
+>> 2.30.2
+>>
 
