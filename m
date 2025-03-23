@@ -1,212 +1,347 @@
-Return-Path: <linux-mips+bounces-8312-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8313-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE0ABA6CDCA
-	for <lists+linux-mips@lfdr.de>; Sun, 23 Mar 2025 04:06:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 268AEA6CE5D
+	for <lists+linux-mips@lfdr.de>; Sun, 23 Mar 2025 09:45:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0DDC53B921C
-	for <lists+linux-mips@lfdr.de>; Sun, 23 Mar 2025 03:06:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C0F41890137
+	for <lists+linux-mips@lfdr.de>; Sun, 23 Mar 2025 08:45:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53DC21AF0BB;
-	Sun, 23 Mar 2025 03:06:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB5A9202993;
+	Sun, 23 Mar 2025 08:45:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="Z85BnGC5"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WAAfNB21"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.cjdns.fr (mail.cjdns.fr [5.135.140.105])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E0203C17;
-	Sun, 23 Mar 2025 03:06:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.135.140.105
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7BCF48CFC;
+	Sun, 23 Mar 2025 08:45:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742699213; cv=none; b=IwjZbFgml1SyW2mWats8ttFw2Dwhom7RE+oBdaf7AmB1BpSpHACiiKXs1VifMaTF1AfQGvLieuIw3w0Q2TY9Veu/fKVDLce9LqJyo83MmVszAEAgXT1vdDuRovhwn8BqtOAdxQyBgXW+UMYWCWdmf3TT/5XHmYbni4nSk794gSE=
+	t=1742719521; cv=none; b=A58PE9VYCoNHfmvXNTxYKCSbW1L2VYXZrES1lfoz3MMuLqBPP12ww2Dn2K+jzNSZqHn0dKDCc1koovdK7CopcWczofGUzJnzd4A8t8miD/ax9yaaFPDx1anCDzcKJaSvHaFv1p5240uYfstXGSRO3tqEs5UwsHn4taqWY6Dv3ME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742699213; c=relaxed/simple;
-	bh=JhIB323Iy8oRh6ltMfxnvtaHNZ01Z07O3c8rcIlp5hI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VqDQXJod5EQYSwzQ9CujaSALBNGlirGKakqhY8UuAtBF+NDPFiNRqWJOYD9uMTyFql+2YFZeEtSVEoc4cMg808ld79SZJca+KnEwBreT4MEnNfnH7vKA+DzBvHabDq0RfoJcFGKVf2oD93ghT2E/a8EAGjzWMex6A3T9jEWFVKE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=none smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=Z85BnGC5; arc=none smtp.client-ip=5.135.140.105
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cjdns.fr
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 352B22A8408;
-	Sun, 23 Mar 2025 04:06:39 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjdns.fr; s=dkim;
-	t=1742699202; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=XPPUF/akYfiVaHG87FM7tDRS63NPbDuRHGbZg93aZK8=;
-	b=Z85BnGC5WNujHRhUPJ9SZHINQe8b1hwHVS/x/L0qdKbko1H85ekMqCDk6MJypNGfxCM96Q
-	phsURLoj0AsvSluaIcjyLAm4fTag20InUbQZ5DokKXxcvWnK4UrdTcnFF9GaLFDdjHJZQ9
-	P9O1aE+q+BMeCz5CwG//yGcnrMffRwLcZA/84O8lIRLquR9NR1HpooSyT25um/zQ3g5nTN
-	GKhmMtnBVQmvWmhn0bkKpZ/x3YhkdNgZYv5znhvCzOSvE9Nwa3OhrTQbuVJ81V5STqahl2
-	SzGRSfxRy9EY0isQGaWWQ8sM9TTMcvf03DRiJN0vMHt5ghQE6a84ZjXWX0ROPQ==
-Message-ID: <7307e611-1cc6-425e-a066-478794878d8e@cjdns.fr>
-Date: Sun, 23 Mar 2025 04:06:33 +0100
+	s=arc-20240116; t=1742719521; c=relaxed/simple;
+	bh=b7msV9pgJYlhEyRge9PfEcB6ipwT555t51j3Jg4i4JU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Zg92qAbM6MpvfuCxFzKyzi17WxBU8UloE4FnwEEpFDkj78OY6CHkgE1O/PSWZ2RpkHDpW4AMt+GwaW0oupyjGwA1WryFOUkXY4KSpNi3qk/Y+qJxDPjYgqS8bJZ6IZK+S4YWdCcoye7xWvqQChlBjEVgJ2qapDxYQP8flRkhz/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WAAfNB21; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5dccaaca646so6317781a12.0;
+        Sun, 23 Mar 2025 01:45:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1742719517; x=1743324317; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3jxIP2TIUbDJlhhIEkW541D6lu1Z7/8FzD6NZfb9i/w=;
+        b=WAAfNB216UMy7CKSShnqnY+mjW47ObBF+cghNpRQlgyFL0J+F21tXzfwjW9UxT6TL6
+         wT9iJxH3qzPBcVIpgvX0QHyO0bBNz87otlgPCR+NqYgtFTegDt4Ieq8rURLTkA0WeOFe
+         NZPijf0zeYuSEsT/X13oSBH3J4Dq06CD0LXPgSN00o6uAwH9JAS7ucPTwKLp1dstf7XR
+         KHNeu+FSM63XJ+KuX5hzs7GB2Fr9U9YrKjfqvR+Ivaj3zzs98QTH+bfSmZoWmsWWV9na
+         2K4Z6aXu2eQhOBtHxI0dAFZJnSUFVSDAOQ7tqICcxXuYO96D1eac0kix2P9NkrSVYLwB
+         A48g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1742719517; x=1743324317;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=3jxIP2TIUbDJlhhIEkW541D6lu1Z7/8FzD6NZfb9i/w=;
+        b=YTJF+jOSM+HsPv0QJp8otAA9lOsf7p68SwsdEBqAFzZQ8BjWoA7VlLLdlJyC2FTb8k
+         aa+M5trHjKFi1Zivz0sVif2jlWuLo398YkUv5KWD5jbTa0/POLUSyXeph/vP8EQ5qq4k
+         8a5vt3ISiVgsSwulUbpBN2JUSlLnPhIx4LcUIU+bI3DxSk+TQVuBZhg2Zf9kq2BKPL7w
+         2LscRJQkY+lZl6mkcrDmypnJFq0NU/gEWzvzVM/5s5dutc/9Ng1RRWaiIATtTOYM7cBY
+         IprrjP7qA0sqrRK3cIjH3o5kP6AJ7YBwsGUAlbQliEEHvMwbUP5bJzx2SFXhwG6l/PWv
+         1IBw==
+X-Forwarded-Encrypted: i=1; AJvYcCU3ttjF/xWrM+HlJPtQmvjQuPxvbZ3VkcgivhLZdfoSjk99/KjDv7IEtFJRn0gNqVEyD15a9glRztD1RKkYCL90iJ4Ky8i9@vger.kernel.org, AJvYcCUAnZSPSH4D4Q5PFZS1IyMx0s+aWKxblKVi4arAZC8E2JAmg9LytzMkCG3RYPSjI0iah5ZijrtUk3v+8g==@vger.kernel.org, AJvYcCULdxeqkdoYqiSHYnyCDjYeUMQ2hZOn27F4+lFKgYQUxYgckWucW3QXGnbuy6nAOLjaVBvP76SncWQ=@vger.kernel.org, AJvYcCUQ4cluKDU/Vk5im62fIJrsECSddB72Q6WuiR8VsXQc5NqeLDLSnILxjONBoO04Wjt6Nl9D9wn3cNmoQg==@vger.kernel.org, AJvYcCUXw7D9MA0V1jmqlCJe1nGuCYo2IOQofO/K6nSkPqw255rtroF5UVvrLj62u0CK2qOgRZZUBlNVu5iPBSh0@vger.kernel.org, AJvYcCUZaooI7mSenRN9gwZirHX1jo8JwiuIEyF0aOL9DaxhsP9ZhPiwcKzNfQx4ILgrnU5VwRoYzsfZ2CzmRA==@vger.kernel.org, AJvYcCUbIcjpa0DmDLasACLEYNeKBdP1i5eK1goIuNMDLjAlJyHvGhYz02+VKlwoyceVSb7MgH5X4ikKESuflIhX@vger.kernel.org, AJvYcCWL9fFQsleDgCCko7RnjWXOb3ZvyJ7ho5/lF/zPGAHw9NJMrat8dVrg1GGRIQIJ3gBQanNvRcsOag==@vger.kernel.org, AJvYcCWM/yrdkyhAJyOw65kJVfjvANvbVDKr6CyY/KszL+Pq0u6vV7LaypAUneNyI6M/XqY1lA399aP6doyf@vger.kernel.org, AJvYcCWdfrjdarAL
+ IaXl2JMPt153iZnju5AbuM68rtbArvdwQBuPgKeGMRfc6aU0MZcyseH+VYysmF1sSTOw@vger.kernel.org, AJvYcCXP/nMWmU2tIxm7JfJnM2waQVp+E0toS3QjzYIdNCtrZeMK9HDTgUmLRMCnwuy7V8RAiJo1P+BnAr4bmg==@vger.kernel.org, AJvYcCXp2RYc7nUUiNFaO95rW/EDYOtGEwdUgWuMTbFosrHJMlbNppU+lSJ+ORjXxvALRqd5cMSDeNsfCt7MBw==@vger.kernel.org, AJvYcCXwrXGrI33v4dT8PARvYeQ+FV5BCgUXevqqajr1i0ZgseLncByRV/FvFVfS1bshwAeO3LZYIYrRjALY6ZNHHQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRaomk2nfLx+0x3p30ej185JpUWGnEvZBFbQoqwt+Aa70Kl1U2
+	2+TA6AY86Y7XkUw6VmdCgOi+oOGJl4q6Pj1RCoaPOEzphzFYWOr6OA25l0QEEdNwlfHaGccqLhv
+	BjAKkGVe2fTrH4r9uiyFD578M818=
+X-Gm-Gg: ASbGncuC6hUmK5HAqANgVa6OC1mOIE6AiVyy8TCmlUQ7ZLPnhxO+gcSWluHVQmbVvm/
+	DwGzAoaKkldfaAFXUby/pGL82wFSnCkdbCZ8uXYXaDmYtogRNS82GlT3tw2BqQb37ptBjW31lmW
+	s8Nfc/vriGzubd8Dx85BXaV0SLwH+x0VAjReS903my5GP9wrClIyzxhKrRSH4=
+X-Google-Smtp-Source: AGHT+IGKn4NZALUSEG+rHMaGWglZZduHpRclHK5w+Kv4NN031fphTZKyVC6h710/5c6HAafbvHO3fjsZw2YzDAeWHLw=
+X-Received: by 2002:a05:6402:42c9:b0:5e5:854d:4d17 with SMTP id
+ 4fb4d7f45d1cf-5eb9a017821mr12555025a12.11.1742719516454; Sun, 23 Mar 2025
+ 01:45:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH v1 3/8] irqchip: Add EcoNet EN751221 INTC
-To: Thomas Gleixner <tglx@linutronix.de>, linux-mips@vger.kernel.org
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, benjamin.larsson@genexis.eu
-References: <20250321134633.2155141-1-cjd@cjdns.fr>
- <20250321134633.2155141-4-cjd@cjdns.fr> <87tt7m1664.ffs@tglx>
- <ce72abfe-e822-48d6-9fc7-3cf9faffdc76@cjdns.fr> <87bjtt1nod.ffs@tglx>
-Content-Language: en-US
-From: Caleb James DeLisle <cjd@cjdns.fr>
-In-Reply-To: <87bjtt1nod.ffs@tglx>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
+References: <20250321-xattrat-syscall-v4-0-3e82e6fb3264@kernel.org>
+In-Reply-To: <20250321-xattrat-syscall-v4-0-3e82e6fb3264@kernel.org>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Sun, 23 Mar 2025 09:45:06 +0100
+X-Gm-Features: AQ5f1JqljvGQqYT8xQtG-jZ8bGx-mNtzX8tKytu1uegIaEXtua4XQMAbrGMEflk
+Message-ID: <CAOQ4uxjQDUg8HFG+mSxMkR54zen7nC2jttzOKqh13Bx-uosh3Q@mail.gmail.com>
+Subject: Re: [PATCH v4 0/3] fs: introduce getfsxattrat and setfsxattrat syscalls
+To: Andrey Albershteyn <aalbersh@redhat.com>
+Cc: Richard Henderson <richard.henderson@linaro.org>, Matt Turner <mattst88@gmail.com>, 
+	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>, Michal Simek <monstr@monstr.eu>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Naveen N Rao <naveen@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, Yoshinori Sato <ysato@users.sourceforge.jp>, 
+	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
+	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
+	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	Arnd Bergmann <arnd@arndb.de>, =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, linux-alpha@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, 
+	linux-arch@vger.kernel.org, selinux@vger.kernel.org, 
+	Andrey Albershteyn <aalbersh@kernel.org>, linux-xfs@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-[snip]
->> Maybe my message was misleading everything has been tested and works correctly
->> on multiple SoCs because ECONET_SOC_EN751221 does not select EI/VI. Answering
->> this question will allow me to enable them, thus also getting
->> MIPS_MT_SMP.
-> It does not select it, but it can be enabled independently or through
-> some other magic config knob, right? And if it gets enabled, then it
-> does not work, right?
-
-Not really true on either point.
-
-Firstly, it's not something you can select in the kernel menuconfig, it's
-selected by the SoC or some core feature of the SoC (e.g. SMP_MT_MIPS).
-
-Secondly it does work, it's just that it does what it says it does, and you
-need to handle those vectored interrupts - no irqchip driver does this.
-
->> I could look at forbidding them in the driver, but I'm not sure that's
->> appropriate as this seems like more of an SoC issue than an INTC
->> issue. But I'll follow your guidance.
-> What's not appropriate? If it does not work, then it's very appropriate
-> to do
+On Fri, Mar 21, 2025 at 8:50=E2=80=AFPM Andrey Albershteyn <aalbersh@redhat=
+.com> wrote:
 >
->     config ECONET
->            depends on !EI && !VI
+> This patchset introduced two new syscalls getfsxattrat() and
+> setfsxattrat(). These syscalls are similar to FS_IOC_FSSETXATTR ioctl()
+> except they use *at() semantics. Therefore, there's no need to open the
+> file to get an fd.
 >
-> on the principle of least surprise, no?
+> These syscalls allow userspace to set filesystem inode attributes on
+> special files. One of the usage examples is XFS quota projects.
+>
+> XFS has project quotas which could be attached to a directory. All
+> new inodes in these directories inherit project ID set on parent
+> directory.
+>
+> The project is created from userspace by opening and calling
+> FS_IOC_FSSETXATTR on each inode. This is not possible for special
+> files such as FIFO, SOCK, BLK etc. Therefore, some inodes are left
+> with empty project ID. Those inodes then are not shown in the quota
+> accounting but still exist in the directory. This is not critical but in
+> the case when special files are created in the directory with already
+> existing project quota, these new inodes inherit extended attributes.
+> This creates a mix of special files with and without attributes.
+> Moreover, special files with attributes don't have a possibility to
+> become clear or change the attributes. This, in turn, prevents userspace
+> from re-creating quota project on these existing files.
+>
+> Christian, if this get in some mergeable state, please don't merge it
+> yet. Amir suggested these syscalls better to use updated struct fsxattr
+> with masking from Pali Roh=C3=A1r patchset, so, let's see how it goes.
 
-I've spent quite a bit of time studying this, so with respect for your time,
-let me try to give you a brief summary of what I know and why I
-submitted this as I did:
+Andrey,
 
-1. EI/VI is supported by the intc but it's really a feature of MIPS32r2.
-In MIPS32r2, the CPU<->intc wire interface allows the CPU to send its
-interrupts to the intc, and then allows the intc to fire any of of up to
-64 interrupts back to the CPU.
+To be honest I don't think it would be fair to delay your syscalls more
+than needed.
 
-2. When enabled, the CPU's internal intc sends its 7 interrupts to the
-external intc who prioritizes them, renumbers them, and sends them
-back along with their own.
+If Pali can follow through and post patches on top of your syscalls for
+next merge window that would be great, but otherwise, I think the
+minimum requirement is that the syscalls return EINVAL if fsx_pad
+is not zero. we can take it from there later.
 
-3. When they come back, the CPU tries to be helpful by dispatching to an
-offset within a vector table depending on the interrupt number.
-
-4. The real problem with this is IRQ_MIPS_CPU no longer gets its 7
-interrupts because they've been renumbered.
-
-5. MIPS 1004Kc uses a standard intc (IRQ_GIC), and they solved this by
-not really using the feature. Despite having 64 lines, they only send on
-one and they make the driver poll to find out what's pending. I believe
-they also return the CPU's 7 interrupts without renumbering.
-
-6. But in 34Kc world there is no standard intc, and AFAICT many (most?)
-of them fully use the EI/VI feature.
-
-7. If you don't set EI/VI, the processor goes into / stays in legacy mode,
-so it doesn't send anything to the intc, and everything the intc sends to
-it is converted to a hit on line 2 - so as long as the intc has some
-kind of pending register, chaining works.
-
-8. But without EI/VI you can't have MT_SMP so you only get one thread.
-
-9. In every 34Kc SoC I've found in Linux or OpenWRT, EI/VI is
-conspicuously missing (with one exception). Clearly they had a
-compelling reason for doing it, and I *think* that reason is because
-they all faced the same issue as me and solved it the same way.
-
-10. The exception is irq-realtek-rtl, which via an out-of-tree patch[1]
-was able to enable EI/VI and I have no idea what they're doing, but it
-appears that their intc hardware is participating, like with GIC.
-
-11. I did implement an EI/VI dispatcher myself and had it working with
-SMP, but I shelved because it's complex and it's not tightly coupled to
-the intc driver itself so I concluded that it should be a separate
-component that works with any intc. The complexity comes from the
-fact that you need to either route the software interrupts back to
-IRQ_MIPS_CPU's domain and fix the renumbering, or else implement
-your own IPI subsystem.
-
-
-So it's my belief that what I'm doing here is standard for 34Kc.
-
-The reason I asked the question in the beginning was because I wanted
-to check my assumptions and know if there's any way I can get SMP
-without writing this dispatcher.
-
-
->>> So this patch clearly should have been tagged with 'RFC'.
->> Given the patchset works correctly in testing, does this comment
->> stand?
-> Until the EI/VI issue is resolved so that it either works or cannot
-> happen.
-
-All said, if "depends on !EI && !VI" makes you happy then I'm OK to add it.
-
-Just what I'm afraid of is being asked to find an authoritative answer to my
-question before merging, because if nobody decides to jump in with one
-then this could just be blocked indefinitely.
-
+We can always also increase the size of struct fsxattr, but let's first
+use the padding space already available.
 
 Thanks,
+Amir.
 
-Caleb
-
-
-[1]: 
-https://github.com/openwrt/openwrt/blob/main/target/linux/realtek/patches-6.6/314-irqchip-irq-realtek-rtl-add-VPE-support.patch
-
->>>> +static int econet_intc_map(struct irq_domain *d, u32 irq, irq_hw_number_t hwirq)
->>>> +{
->>>> +	int ret;
->>>> +
->>>> +	if (hwirq >= INTC_IRQ_COUNT) {
->>>> +		pr_err("%s: hwirq %lu out of range\n", __func__, hwirq);
->>>> +		return -EINVAL;
->>>> +	} else if (econet_intc_rai.shadow_interrupts[hwirq] == INTC_IS_SHADOW) {
->>>> +		pr_err("%s: can't map hwirq %lu, it is a shadow interrupt\n",
->>>> +		       __func__, hwirq);
->>> No newline
->> If I understand correctly, you prefer:
->> .....interrupt\n", __func__, hwirq);
->> for a 96 char line?
-> You have 100 characters in drivers/irqchip/
 >
->>>> +	.domain_ops = {
->>>> +		.xlate = irq_domain_xlate_onecell,
->>>> +		.map = econet_intc_map,
->>> See documention.
->> I suppose this is tab alignment, but I will in any case make a point
->> of reading it all carefully.
-> Yes. The aligned tabular view is way simpler to read and parse. Reading
-> is based on pattern recognition. Irregular patterns disturb the reading
-> flow, which means the focus is shifted from understanding to decoding
-> the irregular pattern.
+> NAME
 >
->> In case of any doubt, I wasn't trying to sneak bad code past you.
-> I did not assume malice here at all.
+>         getfsxattrat/setfsxattrat - get/set filesystem inode attributes
 >
-> Thanks,
+> SYNOPSIS
 >
->          tglx
+>         #include <sys/syscall.h>    /* Definition of SYS_* constants */
+>         #include <unistd.h>
+>
+>         long syscall(SYS_getfsxattrat, int dirfd, const char *pathname,
+>                 struct fsxattr *fsx, size_t size,
+>                 unsigned int at_flags);
+>         long syscall(SYS_setfsxattrat, int dirfd, const char *pathname,
+>                 struct fsxattr *fsx, size_t size,
+>                 unsigned int at_flags);
+>
+>         Note: glibc doesn't provide for getfsxattrat()/setfsxattrat(),
+>         use syscall(2) instead.
+>
+> DESCRIPTION
+>
+>         The syscalls take fd and path to the child together with struct
+>         fsxattr. If path is absolute, fd is not used. If path is empty,
+>         inode under fd is used to get/set attributes on.
+>
+>         This is an alternative to FS_IOC_FSGETXATTR/FS_IOC_FSSETXATTR
+>         ioctl with a difference that file don't need to be open as we
+>         can reference it with a path instead of fd. By having this we
+>         can manipulated filesystem inode attributes not only on regular
+>         files but also on special ones. This is not possible with
+>         FS_IOC_FSSETXATTR ioctl as with special files we can not call
+>         ioctl() directly on the filesystem inode using file descriptor.
+>
+> RETURN VALUE
+>
+>         On success, 0 is returned.  On error, -1 is returned, and errno
+>         is set to indicate the error.
+>
+> ERRORS
+>
+>         EINVAL          Invalid at_flag specified (only
+>                         AT_SYMLINK_NOFOLLOW and AT_EMPTY_PATH is
+>                         supported).
+>
+>         EINVAL          Size was smaller than any known version of
+>                         struct fsxattr.
+>
+>         EINVAL          Invalid combination of parameters provided in
+>                         fsxattr for this type of file.
+>
+>         E2BIG           Size of input argument **struct fsxattr** is too
+>                         big.
+>
+>         EBADF           Invalid file descriptor was provided.
+>
+>         EPERM           No permission to change this file.
+>
+>         EOPNOTSUPP      Filesystem does not support setting attributes
+>                         on this type of inode
+>
+> HISTORY
+>
+>         Added in Linux 6.14.
+>
+> EXAMPLE
+>
+> Create directory and file "mkdir ./dir && touch ./dir/foo" and then
+> execute the following program:
+>
+>         #include <fcntl.h>
+>         #include <errno.h>
+>         #include <string.h>
+>         #include <linux/fs.h>
+>         #include <stdio.h>
+>         #include <sys/syscall.h>
+>         #include <unistd.h>
+>
+>         int
+>         main(int argc, char **argv) {
+>                 int dfd;
+>                 int error;
+>                 struct fsxattr fsx;
+>
+>                 dfd =3D open("./dir", O_RDONLY);
+>                 if (dfd =3D=3D -1) {
+>                         printf("can not open ./dir");
+>                         return dfd;
+>                 }
+>
+>                 error =3D syscall(467, dfd, "./foo", &fsx, 0);
+>                 if (error) {
+>                         printf("can not call 467: %s", strerror(errno));
+>                         return error;
+>                 }
+>
+>                 printf("dir/foo flags: %d\n", fsx.fsx_xflags);
+>
+>                 fsx.fsx_xflags |=3D FS_XFLAG_NODUMP;
+>                 error =3D syscall(468, dfd, "./foo", &fsx, 0);
+>                 if (error) {
+>                         printf("can not call 468: %s", strerror(errno));
+>                         return error;
+>                 }
+>
+>                 printf("dir/foo flags: %d\n", fsx.fsx_xflags);
+>
+>                 return error;
+>         }
+>
+> SEE ALSO
+>
+>         ioctl(2), ioctl_iflags(2), ioctl_xfs_fsgetxattr(2)
+>
+> ---
+> Changes in v4:
+> - Use getname_maybe_null() for correct handling of dfd + path semantic
+> - Remove restriction for special files on which flags are allowed
+> - Utilize copy_struct_from_user() for better future compatibility
+> - Add draft man page to cover letter
+> - Convert -ENOIOCTLCMD to -EOPNOSUPP as more appropriate for syscall
+> - Add missing __user to header declaration of syscalls
+> - Link to v3: https://lore.kernel.org/r/20250211-xattrat-syscall-v3-1-a07=
+d15f898b2@kernel.org
+>
+> Changes in v3:
+> - Remove unnecessary "dfd is dir" check as it checked in user_path_at()
+> - Remove unnecessary "same filesystem" check
+> - Use CLASS() instead of directly calling fdget/fdput
+> - Link to v2: https://lore.kernel.org/r/20250122-xattrat-syscall-v2-1-5b3=
+60d4fbcb2@kernel.org
+>
+> v1:
+> https://lore.kernel.org/linuxppc-dev/20250109174540.893098-1-aalbersh@ker=
+nel.org/
+>
+> Previous discussion:
+> https://lore.kernel.org/linux-xfs/20240520164624.665269-2-aalbersh@redhat=
+.com/
+>
+> ---
+> Andrey Albershteyn (3):
+>       lsm: introduce new hooks for setting/getting inode fsxattr
+>       fs: split fileattr/fsxattr converters into helpers
+>       fs: introduce getfsxattrat and setfsxattrat syscalls
+>
+>  arch/alpha/kernel/syscalls/syscall.tbl      |   2 +
+>  arch/arm/tools/syscall.tbl                  |   2 +
+>  arch/arm64/tools/syscall_32.tbl             |   2 +
+>  arch/m68k/kernel/syscalls/syscall.tbl       |   2 +
+>  arch/microblaze/kernel/syscalls/syscall.tbl |   2 +
+>  arch/mips/kernel/syscalls/syscall_n32.tbl   |   2 +
+>  arch/mips/kernel/syscalls/syscall_n64.tbl   |   2 +
+>  arch/mips/kernel/syscalls/syscall_o32.tbl   |   2 +
+>  arch/parisc/kernel/syscalls/syscall.tbl     |   2 +
+>  arch/powerpc/kernel/syscalls/syscall.tbl    |   2 +
+>  arch/s390/kernel/syscalls/syscall.tbl       |   2 +
+>  arch/sh/kernel/syscalls/syscall.tbl         |   2 +
+>  arch/sparc/kernel/syscalls/syscall.tbl      |   2 +
+>  arch/x86/entry/syscalls/syscall_32.tbl      |   2 +
+>  arch/x86/entry/syscalls/syscall_64.tbl      |   2 +
+>  arch/xtensa/kernel/syscalls/syscall.tbl     |   2 +
+>  fs/inode.c                                  | 130 ++++++++++++++++++++++=
+++++++
+>  fs/ioctl.c                                  |  39 ++++++---
+>  include/linux/fileattr.h                    |   2 +
+>  include/linux/lsm_hook_defs.h               |   4 +
+>  include/linux/security.h                    |  16 ++++
+>  include/linux/syscalls.h                    |   6 ++
+>  include/uapi/asm-generic/unistd.h           |   8 +-
+>  include/uapi/linux/fs.h                     |   3 +
+>  security/security.c                         |  32 +++++++
+>  25 files changed, 259 insertions(+), 13 deletions(-)
+> ---
+> base-commit: ffd294d346d185b70e28b1a28abe367bbfe53c04
+> change-id: 20250114-xattrat-syscall-6a1136d2db59
+>
+> Best regards,
+> --
+> Andrey Albershteyn <aalbersh@kernel.org>
+>
+>
 
