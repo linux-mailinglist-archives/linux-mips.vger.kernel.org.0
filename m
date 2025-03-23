@@ -1,284 +1,238 @@
-Return-Path: <linux-mips+bounces-8319-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8320-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3427DA6D0B3
-	for <lists+linux-mips@lfdr.de>; Sun, 23 Mar 2025 20:08:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CD65A6D27D
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Mar 2025 00:53:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0F4913A62ED
-	for <lists+linux-mips@lfdr.de>; Sun, 23 Mar 2025 19:07:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C449F1893DCF
+	for <lists+linux-mips@lfdr.de>; Sun, 23 Mar 2025 23:53:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2933078C9C;
-	Sun, 23 Mar 2025 19:07:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C9571C8605;
+	Sun, 23 Mar 2025 23:53:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MLMpK4am"
+	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="vXNUa/E1"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.cjdns.fr (mail.cjdns.fr [5.135.140.105])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AF532E3399
-	for <linux-mips@vger.kernel.org>; Sun, 23 Mar 2025 19:07:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2270E15539A;
+	Sun, 23 Mar 2025 23:53:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.135.140.105
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742756871; cv=none; b=dsULT/u+rHwOKTDfM66frz1dxjj00iM+DEnENcki6VXK2rN4hSO7lX/E2PJNX3OPSu81fItKS+zdn0Yi1+FLGB3oP8zQCBWMznaOGhflpuCbCcHRf7uXP6JWFKAwPS4QWps0YNwjJy3RSp4uxMpIQLli5GoSaJsoavup/BO6cWM=
+	t=1742774006; cv=none; b=J5ocTIg9280c0AfQK+mfWmlOSgBtdgjUrUC8OhvoF5han8TWbityHmlUMmpS/mpSHMpXOOcCX2Tgc7fVYzXbxqoOVbEfIEGEBW2AG5ysCy1FMKsVr/16bZzRmHglaOMmwW34+79OoG75TQET3nrvT2t+/j584iJt3E6+N3vM9hY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742756871; c=relaxed/simple;
-	bh=BEIic7V3IbJFVfdKgVHWODnsPjLjd4ys3WKIRdzw04Y=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RukUyc5s7ytyjE+N6lICIEtnoOIL6hMOCws7T77x4GqmNw/dRybmZ/fshOMHcmuoi58THA958Vz+55ecNvXAJCFm6C/4bRRJT66zNljEUCeEofpPVeoqyT0R/Sua3/ABurYtNnN35BhjmwsqJHn+gpf2WesApYV8+1Rjg3S0bo0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MLMpK4am; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5499614d3d2so4205565e87.3
-        for <linux-mips@vger.kernel.org>; Sun, 23 Mar 2025 12:07:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1742756867; x=1743361667; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0awTdPceABBAf2g7yCTzQQMJhua2KB1IW8GCaITec1w=;
-        b=MLMpK4am8zJ3r7fOMQVU9Xu73L+hQSJrFJEZnI0fXbY48fES9BdMRlDhwF9nVX3FC8
-         e5gpSxXwDfSPO1i7y/fx6LGDTX0Fo6P8NPTTyWOD/B3e/VyjurqsdjywYu/0R3Q6yxiE
-         1Il99Y6xmPF3IKyEkh6Xu6XmHaDXxm70ZSvdhIXbmexS62CsemcgYjX9tFqrhrdmVio3
-         Ru+wl+Mg6IH/noWOTpbO+FIWOKqxiC+inCBHYTR3NXXVJMWj9oLfj/kNFAak3OmW8oFw
-         sVqAbjRHC9a5IWpsfR5x8uwU/rKuTL7ZaWTBsN2Dw7NpC7sArXJbEDKmAnHfGdTKchum
-         Q38g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1742756867; x=1743361667;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0awTdPceABBAf2g7yCTzQQMJhua2KB1IW8GCaITec1w=;
-        b=FLOtIqkf2egw/hGIPQKJ25jcAUI4UFxMTZGJI0iAr/NEcrYtYRL8F4q419BNHaIyaq
-         vetxYsCkTeQQd6C9Nau39Bv60IyjwX9lVwJ5JATiBhyZVKTCiTjaPWN6+tCc/LZvXdsk
-         G8dD4IRV/cPPz3CX7euZlarzfhiKSd2y0JQ+auBjbVwg/sURMGVHAWRnna5Js+eIDK8k
-         oJCTc3j6aKvClZ6aUCActNxOroGYHbDaGDL0MBxizO49Fvqk1ZOhMqfdmGPIuWPPePLi
-         lJ272i26wqXeB6KdHuHs1Nd2QwL8QK1wGSadEYTE+E51zJ/jjGqyZxjvZcxTSwiDZxWw
-         1q3w==
-X-Gm-Message-State: AOJu0Yygw7J9loofVuGigIjxNBrWCV7hJ4es7JizcOzwk3tACj+d+mcJ
-	ar7V19ZgfAS230zi2487j3SFpG9J+w5SCYwvHNdVgVDqPt9Jr7yIjb1sI02aEww=
-X-Gm-Gg: ASbGnctxbimIVhC4qVPNEyN1biCkavYowsrbyVvcNlMEmY337P2Grze90Q+viAOLRXp
-	wyXkpdvHlvXZQUv1G3TwW6XZTsRIxxorssk8xop7Du6ho+FiZmCZmlXl53Is1HjuQUrs7NWiVjX
-	jP7BKu6rlFB/rIa3YaNSkmzI6pXMMhpTZW6qAnz176KUQ3f5SY5C1YlTjMVY9L7A6rk+wjuWO4V
-	cv89lnpGc9j+leZPr53MPuvsN7f+Gki8Dtbmv4S9uAAxupO9N4zEY3yTtqS4n50Hw2oYMuOUorO
-	SsfKrF/fUgBkjeFEaxtJUoE8XikgyMxe0I/+6fJ4WkdjuZ6WwOELOH22i6PWC2jGTnI2uJJ/Mz7
-	f2mRs/qO80kJWgUPOQGJqDqZPW5cR3ZAfKlHmcNAjQwaIGIjJJu/9no+17imEohpqSQ==
-X-Google-Smtp-Source: AGHT+IE5Yg8Hp+lOY/yoVroXEQ/cF1jwS/9N70kEyHTo8mHoUl92Ez78KjsFuBg2ilBc1Y4gz+iYhA==
-X-Received: by 2002:a05:6512:3e23:b0:549:8fb5:f0ca with SMTP id 2adb3069b0e04-54ad647679cmr3201603e87.2.1742756866470;
-        Sun, 23 Mar 2025 12:07:46 -0700 (PDT)
-Received: from yocto-build-johan.c.remarkable-codex-builds.internal (122.96.88.34.bc.googleusercontent.com. [34.88.96.122])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-54ad650925esm855062e87.193.2025.03.23.12.07.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 23 Mar 2025 12:07:45 -0700 (PDT)
-From: Johan Korsnes <johan.korsnes@gmail.com>
-To: linux-mips@vger.kernel.org
-Cc: Johan Korsnes <johan.korsnes@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: [PATCH] arch: mips: defconfig: Drop obsolete CONFIG_NET_CLS_TCINDEX
-Date: Sun, 23 Mar 2025 20:07:34 +0100
-Message-ID: <20250323190734.111670-1-johan.korsnes@gmail.com>
-X-Mailer: git-send-email 2.49.0
+	s=arc-20240116; t=1742774006; c=relaxed/simple;
+	bh=M6OGTvLw7CtrXFJe/5E6TOOm2mnJXkCUt54dENXIYBI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=E1A56NWGPLS1esmKLYskn5zdsJ1tySxeOcKDpQkafgdkbbXc/zn8VVn4vddCnM9sKS9GHRAdp+TvNJCFiNXI9+c5OHJ3rodPPi1fBbvZzhzUYYVJO3Zbkkp0ZZTXlxDwAI1bsIZbdNcjyex0d0XcodcdD6lhN4Z+WP211PFp5Rk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=none smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=vXNUa/E1; arc=none smtp.client-ip=5.135.140.105
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cjdns.fr
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 5AE4E2B096F;
+	Mon, 24 Mar 2025 00:53:18 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjdns.fr; s=dkim;
+	t=1742774001; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:content-language:in-reply-to:references;
+	bh=M45i0cNSjLCYGojqbS0h+f9E80WUbVF8rMlj+9W/SQY=;
+	b=vXNUa/E1enNAw74HG10KVbTB688tQfMjeU81OfZWzxid00a7D/DEA+CcLi3DmnorwLbCWv
+	qm5IZxZWFw0iN0pHQdSUlUHKjuCpgOhsGoE50iKtSI21o54vnI3zLeFhbcPGC6wV6FhBRQ
+	2KFvfCFMV6ys9MM5QjkS4W5LgSWxXZMDzqN4/Nb8vVg0wC0lBE9EXKMgoRCAmvr/OeCB2z
+	KKCtg1H/StfuIFIi9tc9bIcPCX4G6I8KRMCC2xQMCtjIl34OBGBO0/qBXUgFE8IISEoeKk
+	8BuQ/BRMo12d/7/nx9Pg7TEkRsf9G/HjzAc22Q2AjN/ioWM4gAIuCOPwlu2S1g==
+Message-ID: <d419bcd2-fa78-4390-88b0-64ed54b87081@cjdns.fr>
+Date: Mon, 24 Mar 2025 00:53:17 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird Beta
+Subject: Re: [PATCH v1 4/8] dt-bindings: timer: Add EcoNet HPT CPU Timer
+To: Krzysztof Kozlowski <krzk@kernel.org>, linux-mips@vger.kernel.org
+Cc: Thomas Gleixner <tglx@linutronix.de>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, benjamin.larsson@genexis.eu
+References: <20250321134633.2155141-1-cjd@cjdns.fr>
+ <20250321134633.2155141-5-cjd@cjdns.fr>
+ <c1791b2e-bdf6-448c-88d3-c97511af3357@kernel.org>
+ <8f095a56-a188-45e9-945a-1d77ef175dc8@cjdns.fr>
+ <f2738225-564e-479b-a4f0-fac0ba6b6d53@kernel.org>
+Content-Language: en-US
+From: Caleb James DeLisle <cjd@cjdns.fr>
+In-Reply-To: <f2738225-564e-479b-a4f0-fac0ba6b6d53@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-This option was removed from the Kconfig in commit
-8c710f75256b ("net/sched: Retire tcindex classifier") but it was not
-removed from the defconfigs.
 
-Fixes: 8c710f75256b ("net/sched: Retire tcindex classifier")
-Signed-off-by: Johan Korsnes <johan.korsnes@gmail.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
----
- arch/mips/configs/gpr_defconfig             | 1 -
- arch/mips/configs/ip22_defconfig            | 1 -
- arch/mips/configs/ip27_defconfig            | 1 -
- arch/mips/configs/malta_defconfig           | 1 -
- arch/mips/configs/malta_kvm_defconfig       | 1 -
- arch/mips/configs/malta_qemu_32r6_defconfig | 1 -
- arch/mips/configs/maltaaprp_defconfig       | 1 -
- arch/mips/configs/maltasmvp_defconfig       | 1 -
- arch/mips/configs/maltasmvp_eva_defconfig   | 1 -
- arch/mips/configs/maltaup_defconfig         | 1 -
- arch/mips/configs/maltaup_xpa_defconfig     | 1 -
- arch/mips/configs/mtx1_defconfig            | 1 -
- arch/mips/configs/rb532_defconfig           | 1 -
- arch/mips/configs/rm200_defconfig           | 1 -
- 14 files changed, 14 deletions(-)
+On 23/03/2025 13:39, Krzysztof Kozlowski wrote:
+> On 22/03/2025 00:21, Caleb James DeLisle wrote:
+>> Thank you for the review.
+>>
+>> On 21/03/2025 21:56, Krzysztof Kozlowski wrote:
+>>> On 21/03/2025 14:46, Caleb James DeLisle wrote:
+>>>> Add device tree binding documentation for the high-precision timer (HPT)
+>>>> in the EcoNet EN751221 SoC.
+>>>>
+>>>> Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
+>>> Previous patch was not tested, so was this one tested?
+>> Yes, all of this has been tested on multiple devices, I believe I was
+>> unclear in the question I added in patch 3.
+> Hm? How can you test a binding on a device? I meant here bindings - they
+> were not tested.
 
-diff --git a/arch/mips/configs/gpr_defconfig b/arch/mips/configs/gpr_defconfig
-index 92fc0edbac47..12f3eed8a946 100644
---- a/arch/mips/configs/gpr_defconfig
-+++ b/arch/mips/configs/gpr_defconfig
-@@ -116,7 +116,6 @@ CONFIG_NET_SCH_DSMARK=m
- CONFIG_NET_SCH_NETEM=m
- CONFIG_NET_SCH_INGRESS=m
- CONFIG_NET_CLS_BASIC=m
--CONFIG_NET_CLS_TCINDEX=m
- CONFIG_NET_CLS_ROUTE4=m
- CONFIG_NET_CLS_FW=m
- CONFIG_NET_CLS_U32=m
-diff --git a/arch/mips/configs/ip22_defconfig b/arch/mips/configs/ip22_defconfig
-index e22e8b825903..31ca93d3acc5 100644
---- a/arch/mips/configs/ip22_defconfig
-+++ b/arch/mips/configs/ip22_defconfig
-@@ -161,7 +161,6 @@ CONFIG_NET_SCH_DSMARK=m
- CONFIG_NET_SCH_NETEM=m
- CONFIG_NET_SCH_INGRESS=m
- CONFIG_NET_CLS_BASIC=m
--CONFIG_NET_CLS_TCINDEX=m
- CONFIG_NET_CLS_ROUTE4=m
- CONFIG_NET_CLS_FW=m
- CONFIG_NET_CLS_U32=m
-diff --git a/arch/mips/configs/ip27_defconfig b/arch/mips/configs/ip27_defconfig
-index b08a199767d1..829d731713a9 100644
---- a/arch/mips/configs/ip27_defconfig
-+++ b/arch/mips/configs/ip27_defconfig
-@@ -63,7 +63,6 @@ CONFIG_NET_SCH_DSMARK=m
- CONFIG_NET_SCH_NETEM=m
- CONFIG_NET_SCH_INGRESS=m
- CONFIG_NET_CLS_BASIC=m
--CONFIG_NET_CLS_TCINDEX=m
- CONFIG_NET_CLS_ROUTE4=m
- CONFIG_NET_CLS_FW=m
- CONFIG_NET_CLS_U32=m
-diff --git a/arch/mips/configs/malta_defconfig b/arch/mips/configs/malta_defconfig
-index 4390d30206d9..ae59a90969f8 100644
---- a/arch/mips/configs/malta_defconfig
-+++ b/arch/mips/configs/malta_defconfig
-@@ -190,7 +190,6 @@ CONFIG_NET_SCH_DSMARK=m
- CONFIG_NET_SCH_NETEM=m
- CONFIG_NET_SCH_INGRESS=m
- CONFIG_NET_CLS_BASIC=m
--CONFIG_NET_CLS_TCINDEX=m
- CONFIG_NET_CLS_ROUTE4=m
- CONFIG_NET_CLS_FW=m
- CONFIG_NET_CLS_U32=m
-diff --git a/arch/mips/configs/malta_kvm_defconfig b/arch/mips/configs/malta_kvm_defconfig
-index d63d8be8cb50..9e16092261da 100644
---- a/arch/mips/configs/malta_kvm_defconfig
-+++ b/arch/mips/configs/malta_kvm_defconfig
-@@ -194,7 +194,6 @@ CONFIG_NET_SCH_DSMARK=m
- CONFIG_NET_SCH_NETEM=m
- CONFIG_NET_SCH_INGRESS=m
- CONFIG_NET_CLS_BASIC=m
--CONFIG_NET_CLS_TCINDEX=m
- CONFIG_NET_CLS_ROUTE4=m
- CONFIG_NET_CLS_FW=m
- CONFIG_NET_CLS_U32=m
-diff --git a/arch/mips/configs/malta_qemu_32r6_defconfig b/arch/mips/configs/malta_qemu_32r6_defconfig
-index b21f48863d81..1b98f6945c2d 100644
---- a/arch/mips/configs/malta_qemu_32r6_defconfig
-+++ b/arch/mips/configs/malta_qemu_32r6_defconfig
-@@ -64,7 +64,6 @@ CONFIG_NET_SCH_DSMARK=m
- CONFIG_NET_SCH_NETEM=m
- CONFIG_NET_SCH_INGRESS=m
- CONFIG_NET_CLS_BASIC=m
--CONFIG_NET_CLS_TCINDEX=m
- CONFIG_NET_CLS_ROUTE4=m
- CONFIG_NET_CLS_FW=m
- CONFIG_NET_CLS_U32=m
-diff --git a/arch/mips/configs/maltaaprp_defconfig b/arch/mips/configs/maltaaprp_defconfig
-index ecfa8a396c33..7b8905cb3400 100644
---- a/arch/mips/configs/maltaaprp_defconfig
-+++ b/arch/mips/configs/maltaaprp_defconfig
-@@ -66,7 +66,6 @@ CONFIG_NET_SCH_DSMARK=m
- CONFIG_NET_SCH_NETEM=m
- CONFIG_NET_SCH_INGRESS=m
- CONFIG_NET_CLS_BASIC=m
--CONFIG_NET_CLS_TCINDEX=m
- CONFIG_NET_CLS_ROUTE4=m
- CONFIG_NET_CLS_FW=m
- CONFIG_NET_CLS_U32=m
-diff --git a/arch/mips/configs/maltasmvp_defconfig b/arch/mips/configs/maltasmvp_defconfig
-index 5cb4f262a4ea..8249f6a51895 100644
---- a/arch/mips/configs/maltasmvp_defconfig
-+++ b/arch/mips/configs/maltasmvp_defconfig
-@@ -67,7 +67,6 @@ CONFIG_NET_SCH_DSMARK=m
- CONFIG_NET_SCH_NETEM=m
- CONFIG_NET_SCH_INGRESS=m
- CONFIG_NET_CLS_BASIC=m
--CONFIG_NET_CLS_TCINDEX=m
- CONFIG_NET_CLS_ROUTE4=m
- CONFIG_NET_CLS_FW=m
- CONFIG_NET_CLS_U32=m
-diff --git a/arch/mips/configs/maltasmvp_eva_defconfig b/arch/mips/configs/maltasmvp_eva_defconfig
-index 5e1498296782..21cb37668763 100644
---- a/arch/mips/configs/maltasmvp_eva_defconfig
-+++ b/arch/mips/configs/maltasmvp_eva_defconfig
-@@ -68,7 +68,6 @@ CONFIG_NET_SCH_DSMARK=m
- CONFIG_NET_SCH_NETEM=m
- CONFIG_NET_SCH_INGRESS=m
- CONFIG_NET_CLS_BASIC=m
--CONFIG_NET_CLS_TCINDEX=m
- CONFIG_NET_CLS_ROUTE4=m
- CONFIG_NET_CLS_FW=m
- CONFIG_NET_CLS_U32=m
-diff --git a/arch/mips/configs/maltaup_defconfig b/arch/mips/configs/maltaup_defconfig
-index c8594505d676..3df9cd669683 100644
---- a/arch/mips/configs/maltaup_defconfig
-+++ b/arch/mips/configs/maltaup_defconfig
-@@ -65,7 +65,6 @@ CONFIG_NET_SCH_DSMARK=m
- CONFIG_NET_SCH_NETEM=m
- CONFIG_NET_SCH_INGRESS=m
- CONFIG_NET_CLS_BASIC=m
--CONFIG_NET_CLS_TCINDEX=m
- CONFIG_NET_CLS_ROUTE4=m
- CONFIG_NET_CLS_FW=m
- CONFIG_NET_CLS_U32=m
-diff --git a/arch/mips/configs/maltaup_xpa_defconfig b/arch/mips/configs/maltaup_xpa_defconfig
-index 338bb6544a93..bb44b0e07f12 100644
---- a/arch/mips/configs/maltaup_xpa_defconfig
-+++ b/arch/mips/configs/maltaup_xpa_defconfig
-@@ -191,7 +191,6 @@ CONFIG_NET_SCH_DSMARK=m
- CONFIG_NET_SCH_NETEM=m
- CONFIG_NET_SCH_INGRESS=m
- CONFIG_NET_CLS_BASIC=m
--CONFIG_NET_CLS_TCINDEX=m
- CONFIG_NET_CLS_ROUTE4=m
- CONFIG_NET_CLS_FW=m
- CONFIG_NET_CLS_U32=m
-diff --git a/arch/mips/configs/mtx1_defconfig b/arch/mips/configs/mtx1_defconfig
-index 8e98c0796437..06b7a0b97eca 100644
---- a/arch/mips/configs/mtx1_defconfig
-+++ b/arch/mips/configs/mtx1_defconfig
-@@ -162,7 +162,6 @@ CONFIG_NET_SCH_DSMARK=m
- CONFIG_NET_SCH_NETEM=m
- CONFIG_NET_SCH_INGRESS=m
- CONFIG_NET_CLS_BASIC=m
--CONFIG_NET_CLS_TCINDEX=m
- CONFIG_NET_CLS_ROUTE4=m
- CONFIG_NET_CLS_FW=m
- CONFIG_NET_CLS_U32=m
-diff --git a/arch/mips/configs/rb532_defconfig b/arch/mips/configs/rb532_defconfig
-index 517f1b060bf4..0261969a6e45 100644
---- a/arch/mips/configs/rb532_defconfig
-+++ b/arch/mips/configs/rb532_defconfig
-@@ -77,7 +77,6 @@ CONFIG_NET_SCH_CBQ=m
- CONFIG_NET_SCH_PRIO=m
- CONFIG_NET_SCH_NETEM=m
- CONFIG_NET_CLS_BASIC=m
--CONFIG_NET_CLS_TCINDEX=m
- CONFIG_NET_CLS_ROUTE4=m
- CONFIG_NET_CLS_FW=m
- CONFIG_NET_CLS_U32=m
-diff --git a/arch/mips/configs/rm200_defconfig b/arch/mips/configs/rm200_defconfig
-index 08e1c1f2f4de..c757742c1f50 100644
---- a/arch/mips/configs/rm200_defconfig
-+++ b/arch/mips/configs/rm200_defconfig
-@@ -143,7 +143,6 @@ CONFIG_NET_SCH_GRED=m
- CONFIG_NET_SCH_DSMARK=m
- CONFIG_NET_SCH_NETEM=m
- CONFIG_NET_CLS_BASIC=m
--CONFIG_NET_CLS_TCINDEX=m
- CONFIG_NET_CLS_ROUTE4=m
- CONFIG_NET_CLS_FW=m
- CONFIG_NET_CLS_U32=m
--- 
-2.49.0
 
+I see. For bindings I ran `make dt_binding_check` and assumed it good because
+it ran to completion. I now know that isn't reliable, but re-checked that it didn't
+log any errors (warnings?) about econet,timer-hpt.yaml
+
+
+>
+>>>> ---
+>>>>    .../bindings/timer/econet,timer-hpt.yaml      | 58 +++++++++++++++++++
+>>>>    1 file changed, 58 insertions(+)
+>>>>    create mode 100644 Documentation/devicetree/bindings/timer/econet,timer-hpt.yaml
+>>>>
+>>>> diff --git a/Documentation/devicetree/bindings/timer/econet,timer-hpt.yaml b/Documentation/devicetree/bindings/timer/econet,timer-hpt.yaml
+>>>> new file mode 100644
+>>>> index 000000000000..8b7ff9bce947
+>>>> --- /dev/null
+>>>> +++ b/Documentation/devicetree/bindings/timer/econet,timer-hpt.yaml
+>>>> @@ -0,0 +1,58 @@
+>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>>> +%YAML 1.2
+>>>> +---
+>>>> +$id: http://devicetree.org/schemas/timer/econet,timer-hpt.yaml#
+>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>> +
+>>>> +title: EcoNet High Precision Timer (HPT)
+>>>> +
+>>>> +maintainers:
+>>>> +  - Calev James DeLisle <cjd@cjdns.fr>
+>>>> +
+>>>> +description: |
+>>> Do not need '|' unless you need to preserve formatting.
+>> Ok
+>>>> +  The EcoNet High Precision Timer (HPT) is a timer peripheral found in various
+>>>> +  EcoNet SoCs, including the EN751221 and EN751627 families. It provides per-VPE
+>>>> +  count/compare registers and a per-CPU control register, with a single interrupt
+>>>> +  line using a percpu-devid interrupt mechanism.
+>>>> +
+>>>> +properties:
+>>>> +  compatible:
+>>>> +    const: econet,timer-hpt
+>>> Soc components must have soc-based compatible and then filename matching
+>>> whatever you use as fallback.
+>> I have so far been unable to find good documentation on writing DT bindings
+>> specifically for SoC devices. If you have anything to point me to, I will read it.
+>> If not, even a good example of someone else doing it right is helpful.
+>>
+>> Currently, I see qcom,pdc.yaml appears to do what you say, so I in absence
+>> of any other advice, I can try to do what they do.
+> Just don't use generic fallback.
+
+
+Ok I watched your "Accepted in Less Than 10 Iterations" lecture (I'm doing my
+homework). If I understand this correctly, you prefer that I use something specific
+like econet,en751221-timer as the fallback case, so for example on EN751627,
+it would be:
+
+compatible = "econet,en751627-timer", "econet,en751221-timer";
+
+The reason why I didn't do this is because this timer seems to show up in a lot of
+places. Vendor code says that it's older than EN751221, and (if my reading is
+correct) it has found it's way into chips branded TrendChip, MediaTek and Ralink
+as well as EcoNet.
+
+Now that I'll be adding strict checks on the number of register blocks, this way
+also has the advantage of allowing a case for users of the timer in SoCs we don't
+know about:
+
+// Only valid with 2 register blocks
+compatible = "econet,en751627-timer", "econet,timer-hpt";
+
+// Only valid with 1 register block
+compatible = "econet,en751612-timer", "econet,timer-hpt";
+
+// No restriction because we don't know how many timers the SoC has
+compatible = "econet,timer-hpt";
+
+
+That said, I'm fine to do it however you want as long as I'm clear on what you're
+asking for and you have all of the context behind my original decision.
+
+
+Thanks,
+
+Caleb
+
+
+>
+>>>> +
+>>>> +  reg:
+>>>> +    minItems: 1
+>>>> +    maxItems: 2
+>>> No, list items instead.
+>> I see qcom,pdc.yaml using items: with per-item description so can follow that.
+>>>> +    description: |
+>>>> +      Physical base address and size of the timer's register space. On 34Kc
+>>>> +      processors, a single region is used. On 1004Kc processors, two regions are
+>>>> +      used, one for each core.
+>>> So different hardware, different compatible. That's why you need
+>>> soc-based compatibles. Follow standard SoC upstreaming rules and examples.
+>> I presume this should ideally be with If: statements to further validate the DT (?)
+> Yes
+>
+>>>> +
+>>>> +  interrupts:
+>>>> +    maxItems: 1
+>>>> +    description: |
+>>> Do not need '|' unless you need to preserve formatting.
+>> Ok
+>>>> +      The interrupt number for the timer.
+>>> Drop, redundant.
+>> Ok
+>>>
+>>>> This is a percpu-devid interrupt shared
+>>>> +      across CPUs.
+>>>> +
+>>>> +  clocks:
+>>>> +    maxItems: 1
+>>>> +    description: |
+>>>> +      A clock to get the frequency of the timer.
+>>> Drop description, redundant
+>> Ok
+>>>> +
+>>>> +required:
+>>>> +  - compatible
+>>>> +  - reg
+>>>> +  - interrupts
+>>>> +  - clocks
+>>>> +
+>>>> +additionalProperties: false
+>>>> +
+>>>> +examples:
+>>>> +  - |
+>>>> +    timer_hpt@1fbf0400 {
+>>> No underscores
+>> I knew that, my mistake.
+>>> Node names should be generic. See also an explanation and list of
+>>> examples (not exhaustive) in DT specification:
+>>> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+>> Thank you, this is useful.
+>>> Look how other SoCs are calling this.
+>> As said, any documentation link or example of someone who does this right
+>> is much appreciated. In any case, thank you very much for your time and I
+>> will address these points in v2.
+> I gave one link above. Other could be one of my talks... or maybe what
+> elinux.org has, but I did not verify it.
+>
+> Best regards,
+> Krzysztof
 
