@@ -1,179 +1,220 @@
-Return-Path: <linux-mips+bounces-8323-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8324-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12380A6D4C4
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Mar 2025 08:14:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF193A6D5B8
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Mar 2025 09:03:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C80A188A729
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Mar 2025 07:14:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5177916A4FF
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Mar 2025 08:03:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF1C3250BFA;
-	Mon, 24 Mar 2025 07:13:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FEF2257443;
+	Mon, 24 Mar 2025 08:02:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iSPkz4+r"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="jQ02LsMk";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="JU2xrRaX"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout-a7-smtp.messagingengine.com (fout-a7-smtp.messagingengine.com [103.168.172.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1B482500C9;
-	Mon, 24 Mar 2025 07:13:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58EEE18B470;
+	Mon, 24 Mar 2025 08:02:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742800429; cv=none; b=Rlm9vjcpEp7wrhxOyRkE64oUi/aiEWu4aVAkCplkHD7ZHZYOy0lytQhuQm80CGoP6hVVSbOMMcNdmdb6moc8N8nHK7XY66btp3bTYFFU5qD8VHbfJFsdegfMvCXQQ+dC5WwPv7BdhvG99qtdpXIRrxVydjFnYiqLsUahA9W5udg=
+	t=1742803377; cv=none; b=E/CWVjYJIFIcJp7gXI2jYzeHx8nJNBXY2EpcWcU26RwJd4nx753qbGD1spiE8kmUIrkJQuobtlU+B+WEl8K7ToBfcLtY7NDU1QxEqjlRL7sV+1T8RaH8h65WrggiR3ZJPho6Sy1Eeq22pZdb+VEloyqs9EkrcPIfc6RS36CeBJA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742800429; c=relaxed/simple;
-	bh=cJusTp+OERRyKA7Mn/qYePshCTVvne34QzPhXoqFQNk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PPZipL2LriZZhc2t3GO1h2EtScd/HzKOnlMSBnJ2QsP3oQ/2gfOgNUNushFOgdcaExqJ3RDc/J0wHDh1VUwrSwOp7xHSnDw5qhAMiAxJaJyDz6M/2BMZqRbMyWk4QSPx5O2d7T3JopneYkYjdjskqJqw/hp3cWOGQ/Q64ebVD9c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iSPkz4+r; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2093C4CEDD;
-	Mon, 24 Mar 2025 07:13:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742800429;
-	bh=cJusTp+OERRyKA7Mn/qYePshCTVvne34QzPhXoqFQNk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=iSPkz4+rGnlbaffWBQ8Xk3ya1dka2J2PoYwu73f/xoKUo4GIommHTm7l4VFXX5aLt
-	 ywfKps1sfFvVhbhozDkEXk0i+VgHOq1AaF9I4Nb+8d0yUXRqQ90rZYVn7VUweeLRve
-	 fqwMZkKpP7dmQtUBhZ/FwiGoRmK9felmYyk1E2zkDPfCf890qTQULixMqpPmE1YCEp
-	 CJ3F/POAaLTtkRAmntcsNu6zJn34L+La0KfNsWWp68u6T8g0MVYXNj6ItJlWRQHwh/
-	 WFhWCbnQ/s2Ftd2eqdA0t/uIqP5W0S+3dRCpo05R5cSdbQuUzk0kRmitYQMxtnX0Td
-	 mP/T/1yUtwxBg==
-Message-ID: <b3fea7b9-b7ea-4987-9fe7-b0adb9346f07@kernel.org>
-Date: Mon, 24 Mar 2025 08:13:41 +0100
+	s=arc-20240116; t=1742803377; c=relaxed/simple;
+	bh=WnEWpX2LEQgbBaMp8eYL6YPucjJVn5f6DVzd6dzKvos=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=fH9F/kFYUCkcjAq/AMYgFJphMXmt1sQvDaUCg8k1fS7jvIPY9toAIOCyeOSh8KLrfnIC0wZ+m/TW8Ik/0le23h3vWIQIqP7KVJIXKmPld33ffUnUrB4BxB3XXFsiYu9UjSKEMRPDN/Y9XqBDqtuW4PjOZ4M45zlEmShVkIUBaFE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=jQ02LsMk; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=JU2xrRaX; arc=none smtp.client-ip=103.168.172.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
+	by mailfout.phl.internal (Postfix) with ESMTP id 3D00E1382CB7;
+	Mon, 24 Mar 2025 04:02:52 -0400 (EDT)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-07.internal (MEProxy); Mon, 24 Mar 2025 04:02:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1742803372;
+	 x=1742889772; bh=adzYBEKh/yqg4YHIRxasSNX+4SOl9DvVZEEHKyF6Ds8=; b=
+	jQ02LsMkYJca5oAbaoAVP9lOqKesMFcf3kY1L6937OmT0RIMP+pgHl3L1dJmtUZ8
+	k/oIPSTiyQ63s1qafFQcIgJXOkEbpOEkyaeRaLFkKhMuTpd2ME/ehnGtpsZq2LIa
+	lpXEtmbFSyOUzqSiGPeg73gqBUgXtcSonD1R3oxGhMyfFs8reSVN3ADa/cs0UxKe
+	hHhGQBg2Q7y9RA+D9FFyTHXaKxZqmWb7X8+bHjpTuBuzrSQXYWUXziOyqusCCB4Y
+	/tuOVhPSnytMqzpEhYM0RiZc3Vt/xDu56HS/aG+GjGl7Ri+BfUg8IAszXw8zFtHM
+	ZQxdQh4FTxF3iidupy0y6g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1742803372; x=
+	1742889772; bh=adzYBEKh/yqg4YHIRxasSNX+4SOl9DvVZEEHKyF6Ds8=; b=J
+	U2xrRaX/2LY9S62Ap4tyti7bpdYWu0788m1xv1Us5AaoSlmFtSZV7NG0KkHcL850
+	NSIGgD4FiBjJjEe/JcbULMR/iPeuzj7WF1BpZnjwJQBBibEGIhDfh62ARqhPryuH
+	8biIOKbipOqu/tWA6bMysxa/KaMd2yGqyqP/F6XRwI3wY5AUJWE73/mf57kWJQB0
+	C7aXariz+LeW6Grl9nOvLiCsU2Wh87i/eFPfl9aJGty1Ln4CPQegQeRwwJZRb5VW
+	8bUzUnJJErGClA1KJkUhWhQjENriuRIYIhYOFnNQx9gUX41bwanzHuUfNldnR/+r
+	yi93+pyZPYrSlPDFdR1Hw==
+X-ME-Sender: <xms:qhHhZ5nZTPn4CkOVtKO4if16jD0npIjwWI7yBFV-Iz-38wrU7BOfPQ>
+    <xme:qhHhZ004OsA2BUHO9qMmzdirvPjc7MWwko5173S1rvweRDQsG4L5GO_itGAGnl9_R
+    q9SSvL7-OXbP3s4E0I>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduheelvdegucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
+    tddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
+    gsrdguvgeqnecuggftrfgrthhtvghrnhephfdthfdvtdefhedukeetgefggffhjeeggeet
+    fefggfevudegudevledvkefhvdeinecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrg
+    hmpehmrghilhhfrhhomheprghrnhgusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohep
+    vdeipdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehtshgsohhgvghnugesrghlph
+    hhrgdrfhhrrghnkhgvnhdruggvpdhrtghpthhtoheptghhrhhishhtohhphhgvrdhlvghr
+    ohihsegtshhgrhhouhhprdgvuhdprhgtphhtthhopehmphgvsegvlhhlvghrmhgrnhdrih
+    gurdgruhdprhgtphhtthhopehmrghtthhsthekkeesghhmrghilhdrtghomhdprhgtphht
+    thhopehnphhighhgihhnsehgmhgrihhlrdgtohhmpdhrtghpthhtohepuggvlhhlvghrse
+    hgmhigrdguvgdprhgtphhtthhopegshhgvlhhgrggrshesghhoohhglhgvrdgtohhmpdhr
+    tghpthhtohepjhgrmhgvshdrsghothhtohhmlhgvhieshhgrnhhsvghnphgrrhhtnhgvrh
+    hshhhiphdrtghomhdprhgtphhtthhopegrrhhnugeskhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:qhHhZ_p-u8s5pl3YM_1-PsEN9wBfKfwXvrHdL61Q-nhZDSolr_K7Mw>
+    <xmx:qhHhZ5kYRVJdV1MObn5MTFlxn9WLq1qINYV8-8l2m2E4SAKKl83-Ww>
+    <xmx:qhHhZ32z1LJiorBkFoyg-aZNO0xESpHo-jDwSf5gWXDLEZ3-2Qp6VA>
+    <xmx:qhHhZ4tW9ZugFEiuVqPqdmmqi1kNe-aZmABnfDMdIQSnpAO8aZjmsw>
+    <xmx:rBHhZwffwYjZf1CcOqvx81hevZ9WxdyiSnJ2x_cAQyFRDDuaiwyi10Yb>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id E60322220073; Mon, 24 Mar 2025 04:02:49 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 4/8] dt-bindings: timer: Add EcoNet HPT CPU Timer
-To: Caleb James DeLisle <cjd@cjdns.fr>, linux-mips@vger.kernel.org
-Cc: Thomas Gleixner <tglx@linutronix.de>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, benjamin.larsson@genexis.eu
-References: <20250321134633.2155141-1-cjd@cjdns.fr>
- <20250321134633.2155141-5-cjd@cjdns.fr>
- <c1791b2e-bdf6-448c-88d3-c97511af3357@kernel.org>
- <8f095a56-a188-45e9-945a-1d77ef175dc8@cjdns.fr>
- <f2738225-564e-479b-a4f0-fac0ba6b6d53@kernel.org>
- <d419bcd2-fa78-4390-88b0-64ed54b87081@cjdns.fr>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <d419bcd2-fa78-4390-88b0-64ed54b87081@cjdns.fr>
-Content-Type: text/plain; charset=UTF-8
+X-ThreadId: T53f4a10e7512c522
+Date: Mon, 24 Mar 2025 09:02:28 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Greg Ungerer" <gerg@linux-m68k.org>, "Arnd Bergmann" <arnd@kernel.org>,
+ Linux-Arch <linux-arch@vger.kernel.org>
+Cc: "Richard Henderson" <richard.henderson@linaro.org>,
+ "Matt Turner" <mattst88@gmail.com>,
+ "Geert Uytterhoeven" <geert@linux-m68k.org>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+ "Helge Deller" <deller@gmx.de>, "Madhavan Srinivasan" <maddy@linux.ibm.com>,
+ "Michael Ellerman" <mpe@ellerman.id.au>,
+ "Nicholas Piggin" <npiggin@gmail.com>,
+ "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+ "Naveen N Rao" <naveen@kernel.org>,
+ "Yoshinori Sato" <ysato@users.sourceforge.jp>,
+ "Rich Felker" <dalias@libc.org>,
+ "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
+ "Julian Vetter" <julian@outer-limits.org>,
+ "Bjorn Helgaas" <bhelgaas@google.com>, linux-alpha@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org
+Message-Id: <4a31c6a8-7c99-4d8f-8248-92e0e52b8db6@app.fastmail.com>
+In-Reply-To: <64f226e5-7931-40ba-878a-a28688da82fd@linux-m68k.org>
+References: <20250315105907.1275012-1-arnd@kernel.org>
+ <20250315105907.1275012-7-arnd@kernel.org>
+ <64f226e5-7931-40ba-878a-a28688da82fd@linux-m68k.org>
+Subject: Re: [PATCH 6/6] m68k/nommu: stop using GENERIC_IOMAP
+Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 
-On 24/03/2025 00:53, Caleb James DeLisle wrote:
->>>>> +  compatible:
->>>>> +    const: econet,timer-hpt
->>>> Soc components must have soc-based compatible and then filename matching
->>>> whatever you use as fallback.
->>> I have so far been unable to find good documentation on writing DT bindings
->>> specifically for SoC devices. If you have anything to point me to, I will read it.
->>> If not, even a good example of someone else doing it right is helpful.
->>>
->>> Currently, I see qcom,pdc.yaml appears to do what you say, so I in absence
->>> of any other advice, I can try to do what they do.
->> Just don't use generic fallback.
-> 
-> 
-> Ok I watched your "Accepted in Less Than 10 Iterations" lecture (I'm doing my
-> homework). If I understand this correctly, you prefer that I use something specific
-> like econet,en751221-timer as the fallback case, so for example on EN751627,
-> it would be:
-> 
-> compatible = "econet,en751627-timer", "econet,en751221-timer";
+On Mon, Mar 24, 2025, at 02:33, Greg Ungerer wrote:
+> Hi Arnd,
+>
+> On 15/3/25 20:59, Arnd Bergmann wrote:
+>> From: Arnd Bergmann <arnd@arndb.de>
+>> 
+>> There is no need to go through the GENERIC_IOMAP wrapper for PIO on
+>> nommu platforms, since these always come from PCI I/O space that is
+>> itself memory mapped.
+>> 
+>> Instead, the generic ioport_map() can just return the MMIO location
+>> of the ports directly by applying the PCI_IO_PA offset, while
+>> ioread32/iowrite32 trivially turn into readl/writel as they do
+>> on most other architectures.
+>> 
+>> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>
+> With this applied this fails to build for me:
+>
+>    UPD     include/generated/utsversion.h
+>    CC      init/version-timestamp.o
+>    LD      vmlinux
+> m68k-linux-uclibc-ld: drivers/pci/quirks.o: in function 
+> `quirk_switchtec_ntb_dma_alias':
+> quirks.c:(.text+0x23e4): undefined reference to `pci_iomap'
+> m68k-linux-uclibc-ld: quirks.c:(.text+0x24fe): undefined reference to 
+> `pci_iounmap'
+> m68k-linux-uclibc-ld: drivers/pci/quirks.o: in function 
+> `disable_igfx_irq':
+> quirks.c:(.text+0x32f4): undefined reference to `pci_iomap'
+> m68k-linux-uclibc-ld: quirks.c:(.text+0x3348): undefined reference to 
+> `pci_iounmap'
 
-Yes
+Thanks for the report, I was able to reproduce the problem now
+and applied the fixup below. I had tested m5475evb_defconfig earlier,
+and that built cleanly with PCI enabled, but I had missed how
+that still used GENERIC_IOMAP because it has CONFIG_MMU enabled.
 
-> 
-> The reason why I didn't do this is because this timer seems to show up in a lot of
-> places. Vendor code says that it's older than EN751221, and (if my reading is
+Does this fixup work for you?
 
-Just like every other SoC component for every other SoC.
+On a related note, I'm curious about how the MCF54xx chips are
+used in practice, as I see that they are the only coldfire chips
+with PCI and they all have an MMU. Are there actual users of these
+chips that have PCI but choose not to use the MMU? 
 
-> correct) it has found it's way into chips branded TrendChip, MediaTek and Ralink
-> as well as EcoNet.
-> 
-> Now that I'll be adding strict checks on the number of register blocks, this way
-> also has the advantage of allowing a case for users of the timer in SoCs we don't
-> know about:
-> 
-> // Only valid with 2 register blocks
-> compatible = "econet,en751627-timer", "econet,timer-hpt";
-> 
-> // Only valid with 1 register block
-> compatible = "econet,en751612-timer", "econet,timer-hpt";
+      Arnd
 
-Above do not differ...
+8<-----
+From a36995e2a64711556c6773797367d165828f6705 Mon Sep 17 00:00:00 2001
+From: Arnd Bergmann <arnd@arndb.de>
+Date: Mon, 24 Mar 2025 07:53:47 +0100
+Subject: [PATCH] m68k: coldfire: select PCI_IOMAP for PCI
 
-> 
-> // No restriction because we don't know how many timers the SoC has
-> compatible = "econet,timer-hpt";
+After I dropped CONFIG_GENERIC_IOMAP, some PCI drivers started failing
+to link when CONFIG_MMU is disabled:
 
-How can you not know? This is strictly defined on given hardware.
+ERROR: modpost: "pci_iounmap" [drivers/video/fbdev/i740fb.ko] undefined!
+ERROR: modpost: "pci_iounmap" [drivers/video/fbdev/vt8623fb.ko] undefined!
+ERROR: modpost: "pci_iomap_wc" [drivers/video/fbdev/vt8623fb.ko] undefined!
+ERROR: modpost: "pci_iomap" [drivers/video/fbdev/vt8623fb.ko] undefined!
+ERROR: modpost: "pci_iounmap" [drivers/video/fbdev/s3fb.ko] undefined!
+...
 
-> 
-> 
-> That said, I'm fine to do it however you want as long as I'm clear on what you're
-> asking for and you have all of the context behind my original decision.
+It turns out that there were two mistakes in my patch: on !MMU I forgot
+to enable CONFIG_GENERIC_PCI_IOMAP, and for Coldfire with MMU enabled,
+teh GENERIC_IOMAP was left in place but incorrectly configured.
 
-Generic compatible as fallback is accepted if you have evidence that it
-is the same IP, with same programming interface, across all these SoCs.
-Or if its version is discoverable. If you do not know about other SoC
-implementations it is rather a proof that above statement cannot be
-fulfilled - you just don't know how it is implemented.
+Fixes: 9d48cc07d0d7 ("m68k/nommu: stop using GENERIC_IOMAP")
+Reported-by: Greg Ungerer <gerg@linux-m68k.org>
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 
-
-Best regards,
-Krzysztof
+diff --git a/arch/m68k/Kconfig b/arch/m68k/Kconfig
+index b50c275fa94d..eb5bb6d36899 100644
+--- a/arch/m68k/Kconfig
++++ b/arch/m68k/Kconfig
+@@ -18,12 +18,13 @@ config M68K
+ 	select DMA_DIRECT_REMAP if M68K_NONCOHERENT_DMA && !COLDFIRE
+ 	select GENERIC_ATOMIC64
+ 	select GENERIC_CPU_DEVICES
+-	select GENERIC_IOMAP if HAS_IOPORT && MMU
++	select GENERIC_IOMAP if HAS_IOPORT && MMU && !COLDFIRE
+ 	select GENERIC_IRQ_SHOW
+ 	select GENERIC_LIB_ASHLDI3
+ 	select GENERIC_LIB_ASHRDI3
+ 	select GENERIC_LIB_LSHRDI3
+ 	select GENERIC_LIB_MULDI3
++	select GENERIC_PCI_IOMAP if PCI
+ 	select HAS_IOPORT if PCI || ISA || ATARI_ROM_ISA
+ 	select HAVE_ARCH_LIBGCC_H
+ 	select HAVE_ARCH_SECCOMP
 
