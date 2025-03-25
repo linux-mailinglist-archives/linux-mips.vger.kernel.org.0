@@ -1,180 +1,172 @@
-Return-Path: <linux-mips+bounces-8342-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8343-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BE7BA6F787
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Mar 2025 12:50:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DB98A7029E
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Mar 2025 14:48:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 635DC1891560
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Mar 2025 11:50:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2824D3B9C2F
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Mar 2025 13:35:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAA032561C6;
-	Tue, 25 Mar 2025 11:49:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DE74258CCD;
+	Tue, 25 Mar 2025 13:31:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LlmENNuW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uQ4xG7Yp"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B16E71E7C28;
-	Tue, 25 Mar 2025 11:49:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33F8A1DE8B4;
+	Tue, 25 Mar 2025 13:31:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742903387; cv=none; b=apShQzqU3IdH3e+91TcZikBeqZskBhMnUfXEWw97Y/OFTTGzz9jFnfl4FT8eK4INolIwu9SGrb1y+OtJPvWcc15UBxwkhMO2H2Y8RULyqqXpVU3drlduPbmLgHS/FjYvxJnVadOfWYTfABKtHxBUCxoIvtmMde0CkdBzK6SNbsI=
+	t=1742909484; cv=none; b=UpIytnRlgbefpSg+hBo5LX7nZGQqUr5WA8fXD8ZqQRU/E0ZEOgGZQIZQOD8VFlIyELuYNVeaOdjMX5nnHnwsHSniA/F0CH/qxy2cmLd95w+ESs9FDIHb8ZZi4G4AsQ7nbLPP6wa/Qw157f6VAgFrr264j7DaDYC2vdbKFV8NBc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742903387; c=relaxed/simple;
-	bh=KjXVzwyQVPVG7ZDGogZ7pwFZUzgPV51utp1p2Si+3js=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=L6/XsKYqaHXV05yqH8Q1vOr2EYNHolUaU27fY5e68aXK4zmk0rv2XCW2//VAqIK93HmccAOg1A7NJaieGMgdbQjktC9cl/88ZN+YDSrfJWHK9Nfzd/RCznr/DIzh+lyS4XmTALfUy9SirdDljZPkTEeWm1kLsVUSpXXRXg7LBgQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LlmENNuW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B20B9C4CEE9;
-	Tue, 25 Mar 2025 11:49:42 +0000 (UTC)
+	s=arc-20240116; t=1742909484; c=relaxed/simple;
+	bh=q4pxLc2dsJbpfFd+rTznh5LCvEgCmB34/vWrz6De0hM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=D9TK2kPk0vj0bGv1hq1iB1q3Y03g2+quPtR8VH98VZRV0uzzQ0Pwqy4R0d+oN/CCqy8a8WikhkkTxgUm8X+nX6WRd2AbWjXKQqzZylEGH+s2U6UU0+8WHtIlHed59pTUtnFjDVfKyZeESYFGWdNqhiAr/kihYj88tQ1bawBGA9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uQ4xG7Yp; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47520C4CEE4;
+	Tue, 25 Mar 2025 13:31:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1742903387;
-	bh=KjXVzwyQVPVG7ZDGogZ7pwFZUzgPV51utp1p2Si+3js=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=LlmENNuWOSzOvGs96AushtPG9bBtDl6hM3+nqxlYmmYaE/ThuySmRGQjosM0AUOXR
-	 UdMsC0fDvyny1gFz0OogOT/19sg+tiajV7LTCrUIvnePjNqJPGgtDqwfq9VyFsFNYb
-	 UBWTyUVwiPNT7wsP63t3xozIA8yWGnfH+hzWYZVAACcabDM603Eo1kIoFMhYzvNFcg
-	 gHOAZv3QgU+0gv6cI60MYChaEeRDpKvwij//iW7o4L2MaWDz73Detuybq2YijYvUar
-	 7NnKRw3BbGK45V7Kf/NURvWILQbRSsFkFGx3Y9Yo5bXzQhfAfNlbICxS57EgPPbQeV
-	 En3tNRx9fZGog==
-From: Mike Rapoport <rppt@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Andy Lutomirski <luto@kernel.org>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Ingo Molnar <mingo@redhat.com>,
-	Mike Rapoport <rppt@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
+	s=k20201202; t=1742909483;
+	bh=q4pxLc2dsJbpfFd+rTznh5LCvEgCmB34/vWrz6De0hM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uQ4xG7YpFCzolFz84asQ+QJ82OXo1g1LtIlsQlOWhhRwD+nk18Wd8Jf0edbDo3O9U
+	 NW7lerGkosc0mN4dYIHBovNJkXACPYbipALjVO2ZHIwln7oZH/Fn4QsB6ikndNydrQ
+	 8tJOOrGbO2B0JqCZO7Hiu73r+TsSCSR/SlKwVd3uj65HDnWj15IAgPrZOdq3OHh8Uq
+	 Rlfa9zMdWSdlHsvZWyIy0iRF/W6OsruZyjF2sIADhDZ9WpP5ufT0B/s9aOZkSr9lHB
+	 LQhpsKOsKzFlk8Em3jsjGHeiPBQdq02DDHw2lxomba7WgCi9tuBMnmiSWmrekqVOac
+	 I6tI1K4JAQB9A==
+Date: Tue, 25 Mar 2025 14:31:20 +0100
+From: Frederic Weisbecker <frederic@kernel.org>
+To: "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc: Marco Crivellari <marco.crivellari@suse.com>,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Anna-Maria Behnsen <anna-maria@linutronix.de>,
 	Thomas Gleixner <tglx@linutronix.de>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	kernel test robot <oliver.sang@intel.com>,
-	linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	linux-mm@kvack.org,
-	x86@kernel.org
-Subject: [PATCH 2/2] memblock: don't release high memory to page allocator when HIGHMEM is off
-Date: Tue, 25 Mar 2025 13:49:28 +0200
-Message-ID: <20250325114928.1791109-3-rppt@kernel.org>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250325114928.1791109-1-rppt@kernel.org>
-References: <20250325114928.1791109-1-rppt@kernel.org>
+	Peter Zijlstra <peterz@infradead.org>,
+	Huacai Chen <chenhuacai@kernel.org>
+Subject: Re: [PATCH v6 1/1] MIPS: Fix idle VS timer enqueue
+Message-ID: <Z-KwKACJQhH98EoW@localhost.localdomain>
+References: <20250315194002.13778-1-marco.crivellari@suse.com>
+ <20250315194002.13778-2-marco.crivellari@suse.com>
+ <alpine.DEB.2.21.2503211146001.35806@angie.orcam.me.uk>
+ <Z93Vj7BLTEvgWwda@pavilion.home>
+ <alpine.DEB.2.21.2503221516450.35806@angie.orcam.me.uk>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <alpine.DEB.2.21.2503221516450.35806@angie.orcam.me.uk>
 
-From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+Le Sat, Mar 22, 2025 at 04:08:31PM +0000, Maciej W. Rozycki a écrit :
+> On Fri, 21 Mar 2025, Frederic Weisbecker wrote:
+> 
+> > > > diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
+> > > > index a572ce36a24f..4e012421d00f 100644
+> > > > --- a/arch/mips/kernel/genex.S
+> > > > +++ b/arch/mips/kernel/genex.S
+> > > > @@ -104,27 +104,30 @@ handle_vcei:
+> > > >  
+> > > >  	__FINIT
+> > > >  
+> > > > -	.align	5	/* 32 byte rollback region */
+> > > > +	.align	5
+> > > >  LEAF(__r4k_wait)
+> > > >  	.set	push
+> > > >  	.set	noreorder
+> > > > -	/* start of rollback region */
+> > > > -	LONG_L	t0, TI_FLAGS($28)
+> > > > -	nop
+> > > > -	andi	t0, _TIF_NEED_RESCHED
+> > > > -	bnez	t0, 1f
+> > > > -	 nop
+> > > > -	nop
+> > > > -	nop
+> > > > -#ifdef CONFIG_CPU_MICROMIPS
+> > > > -	nop
+> > > > -	nop
+> > > > -	nop
+> > > > -	nop
+> > > > -#endif
+> > > > +	/* Start of idle interrupt region. */
+> > > > +	MFC0	t0, CP0_STATUS
+> > > > +	/* Enable interrupt. */
+> > > > +	ori 	t0, 0x1f
+> > > 
+> > >  This instruction sequence still suffers from the coprocessor move delay 
+> > > hazard.  How many times do I need to request to get it fixed (counting 
+> > > three so far)?
+> > 
+> > This is because your request had follow-ups from Huacai and Marco that
+> > were left unanswered:
+> > 
+> >      https://lore.kernel.org/all/CAAhV-H5ptAzHTPAr1bxrgByZrnFmMK8zJ68Z++RwC=NHWjqZmw@mail.gmail.com/
+> 
+>  The conclusion made there is however wrong: `local_irq_enable' code 
+> plays no tricks with instruction scheduling and lets the toolchain 
+> resolve any pipeline hazards automatically, while `__r4k_wait' arranges 
+> for instructions to be scheduled by hand and any hazards resolved by the 
+> human writer of the code.  There's even explicit `.set reorder' in 
+> `local_irq_enable', which is redundant, because it's the default mode 
+> for inline assembly.
+> 
+>  And I can't emphasise it enough: manual instruction scheduling is tough
+> and ought to be restricted to cases where there is no other way really, 
+> such as for placing an instruction in a branch delay slot where there is 
+> a data antidependency between the branch and the delay-slot instruction.  
+> Yet this approach has often been used by code authors for other reasons 
+> (or I daresay no reason at all), leaving it up to the maintainers to 
+> keep the code working in the changing conditions while the submitter has 
+> long gone.  I converted some of such code in the past, but it also takes 
+> time and effort that does not come for free.
+> 
+> >      https://lore.kernel.org/all/CAAofZF4HAczyRmuRe-JmQ2wcZatevLwGTOMLf1V1okGbj7q5Wg@mail.gmail.com/
+> 
+>  I missed that one, sorry.  A ping would have helped, and I never have 
+> an issue with being pinged.  I do hope I have now addressed that concern 
+> with my other reply.
 
-Nathan Chancellor reports the following crash on a MIPS system with
-CONFIG_HIGHMEM=n:
+Hopefully, I'll let Marco follow-up on that as I must confess I'm lost
+with these details. But your help has been very valuable!
 
-  Linux version 6.14.0-rc6-00359-g6faea3422e3b (nathan@ax162) (mips-linux-gcc (GCC) 14.2.0, GNU ld (GNU Binutils) 2.42) #1 SMP Fri Mar 21 08:12:02 MST 2025
-  earlycon: uart8250 at I/O port 0x3f8 (options '38400n8')
-  printk: legacy bootconsole [uart8250] enabled
-  Config serial console: console=ttyS0,38400n8r
-  CPU0 revision is: 00019300 (MIPS 24Kc)
-  FPU revision is: 00739300
-  MIPS: machine is mti,malta
-  Software DMA cache coherency enabled
-  Initial ramdisk at: 0x8fad0000 (5360128 bytes)
-  OF: reserved mem: Reserved memory: No reserved-memory node in the DT
-  Primary instruction cache 2kB, VIPT, 2-way, linesize 16 bytes.
-  Primary data cache 2kB, 2-way, VIPT, no aliases, linesize 16 bytes
-  Zone ranges:
-    DMA      [mem 0x0000000000000000-0x0000000000ffffff]
-    Normal   [mem 0x0000000001000000-0x000000001fffffff]
-  Movable zone start for each node
-  Early memory node ranges
-    node   0: [mem 0x0000000000000000-0x000000000fffffff]
-    node   0: [mem 0x0000000090000000-0x000000009fffffff]
-  Initmem setup node 0 [mem 0x0000000000000000-0x000000009fffffff]
-  On node 0, zone Normal: 16384 pages in unavailable ranges
-  random: crng init done
-  percpu: Embedded 3 pages/cpu s18832 r8192 d22128 u49152
-  Kernel command line: rd_start=0xffffffff8fad0000 rd_size=5360128  console=ttyS0,38400n8r
-  printk: log buffer data + meta data: 32768 + 102400 = 135168 bytes
-  Dentry cache hash table entries: 65536 (order: 4, 262144 bytes, linear)
-  Inode-cache hash table entries: 32768 (order: 3, 131072 bytes, linear)
-  Writing ErrCtl register=00000000
-  Readback ErrCtl register=00000000
-  Built 1 zonelists, mobility grouping on.  Total pages: 16384
-  mem auto-init: stack:all(zero), heap alloc:off, heap free:off
-  Unhandled kernel unaligned access[#1]:
-  CPU: 0 UID: 0 PID: 0 Comm: swapper Not tainted 6.14.0-rc6-00359-g6faea3422e3b #1
-  Hardware name: mti,malta
-  $ 0   : 00000000 00000001 81cb0880 00129027
-  $ 4   : 00000001 0000000a 00000002 00129026
-  $ 8   : ffffdfff 80101e00 00000002 00000000
-  $12   : 81c9c224 81c63e68 00000002 00000000
-  $16   : 805b1e00 00025800 81cb0880 00000002
-  $20   : 00000000 81c63e64 0000000a 81f10000
-  $24   : 81c63e64 81c63e60
-  $28   : 81c60000 81c63de0 00000001 81cc9d20
-  Hi    : 00000000
-  Lo    : 00000000
-  epc   : 814a227c __free_pages_ok+0x144/0x3c0
-  ra    : 81cc9d20 memblock_free_all+0x1d4/0x27c
-  Status: 10000002        KERNEL EXL
-  Cause : 00800410 (ExcCode 04)
-  BadVA : 00129026
-  PrId  : 00019300 (MIPS 24Kc)
-  Modules linked in:
-  Process swapper (pid: 0, threadinfo=(ptrval), task=(ptrval), tls=00000000)
-  Stack : 81f10000 805a9e00 81c80000 00000000 00000002 814aa240 000003ff 00000400
-          00000000 81f10000 81c9c224 00003b1f 81c80000 81c63e60 81ca0000 81c63e64
-          81f10000 0000000a 0000001f 81cc9d20 81f10000 81cc96d8 00000000 81c80000
-          81c9c224 81c63e60 81c63e64 00000000 81f10000 00024000 00028000 00025c00
-          90000000 a0000000 00000002 00000017 00000000 00000000 81f10000 81f10000
-          ...
-  Call Trace:
-  [<814a227c>] __free_pages_ok+0x144/0x3c0
-  [<81cc9d20>] memblock_free_all+0x1d4/0x27c
-  [<81cc6764>] mm_core_init+0x100/0x138
-  [<81cb4ba4>] start_kernel+0x4a0/0x6e4
+> 
+> > We have detected this longstanding architecture specific timer handling bug on
+> > loongson and MIPS and we could have just dropped a report and let you guys deal with
+> > it. Instead we decided to spend time ourselves (especially Marco) working on
+> > fixes for these architectures we don't run and which we are not familiar with,
+> > alongway taking reviews seriously and patiently re-iterating accordingly.
+> 
+>  Thank you for your effort, really appreciated.  Any fixes need to be 
+> technically correct however, it makes no sense to get one bug replaced 
+> with another one.  We've got enough technical debt accumulated already 
+> with a platform that no longer has any commercial support and relies 
+> solely on voluteers keeping it alive in their limited spare time.  I do 
+> have a long list of outstanding issues to address and ever so little 
+> time to take care of them, with hardware problems additionally kicking 
+> in and distracting every so often too.
 
-  Code: 1080ffd5  02003825  2467ffff <8ce30000> 7c630500  1060ffd4  00000000  8ce30000  7c630180
+Yeah I totally understand that!
 
-The crash happens because commit 6faea3422e3b ("arch, mm: streamline
-HIGHMEM freeing") too eagerly frees high memory to the page allocator even
-when HIGHMEM is disabled.
+> 
+> > So please be gentle with us.
+> 
+>  As always, but also emphatic on this occasion.  We're in the same boat 
+> really, striving against the lack of resources and issues piling, and 
+> now we've made some progress.  Thank you for your understanding.
 
-Make sure that when CONFIG_HIGHMEM=n the high memory is not released to the
-page allocator.
+Heh I know... Thanks a lot!
 
-Link: https://lore.kernel.org/all/20250323190647.GA1009914@ax162
-Reported-by: Nathan Chancellor <nathan@kernel.org>
-Fixes: 6faea3422e3b ("arch, mm: streamline HIGHMEM freeing")
-Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
----
- mm/memblock.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/mm/memblock.c b/mm/memblock.c
-index 64ae678cd1d1..d7ff8dfe5f88 100644
---- a/mm/memblock.c
-+++ b/mm/memblock.c
-@@ -2166,6 +2166,9 @@ static unsigned long __init __free_memory_core(phys_addr_t start,
- 	unsigned long start_pfn = PFN_UP(start);
- 	unsigned long end_pfn = PFN_DOWN(end);
- 
-+	if (!IS_ENABLED(CONFIG_HIGHMEM) && end_pfn > max_low_pfn)
-+		end_pfn = max_low_pfn;
-+
- 	if (start_pfn >= end_pfn)
- 		return 0;
- 
--- 
-2.47.2
-
+> 
+>   Maciej
 
