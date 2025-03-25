@@ -1,44 +1,43 @@
-Return-Path: <linux-mips+bounces-8360-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8361-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56747A70BA2
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Mar 2025 21:38:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C011A70DA9
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Mar 2025 00:33:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4EBBB3B2C13
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Mar 2025 20:38:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 94E0019A0109
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Mar 2025 23:33:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9C5E26139D;
-	Tue, 25 Mar 2025 20:38:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD3761DFDE;
+	Tue, 25 Mar 2025 23:33:19 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33A981A5B88
-	for <linux-mips@vger.kernel.org>; Tue, 25 Mar 2025 20:38:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A344154430
+	for <linux-mips@vger.kernel.org>; Tue, 25 Mar 2025 23:33:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1742935108; cv=none; b=Fh8a4PaQ6HSdI++rNfSeKWXGrpg6j7D2dqTlsIhbLxFIebTFyZTupKqhowqddRZ7Qf96WzTw3kw09+6tTLFqgNe2MO9Oh5kYGZ2qF5KUPlAh88nuVOB61ix7zViwwRcvBMIEfhPzQd0Eili90Xcu8oLyGV3qQct5tKWbZIrTD1Q=
+	t=1742945599; cv=none; b=GxIbEHjROMEHtDFCLjb8nmhRuPNGIOQAyEHFGBtDla/0Md0Q9bZnNGqPBxaiZDHFUDld7FIcicB461EOVYs+0Z41VDya3/T/pId6FStEHGVFq8f54AbakVN8yoHPdBtQQqWICX0zD3yCKmbr/AQd6Mx6TNPVPGZMmzYFeJAyCHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1742935108; c=relaxed/simple;
-	bh=WJVsQmrjA2YexuKzVzuJpVcQcDlxqUr16m48ASl2K40=;
+	s=arc-20240116; t=1742945599; c=relaxed/simple;
+	bh=ZnyXvaWG1+Z+ufyN9Dt7pWByS4nkdOscZDj7911wSos=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FCv/RRWgF3IXWICjvWZq5hOD5CE1HDSTiXeOFMsvFn3MGVOOOuppnuwcSFo8RwwkLh0GdW2kvR8+y/uWU4EScjFeGMT4Z4rbb51XdQpndVJJxgASHL7T0eVVov49wSYTMmgP2X2XDAQRyhhhsgyaaJ1h10ywFcVoXxaow68sDPw=
+	 Content-Type:Content-Disposition:In-Reply-To; b=r1uhtp2dNQWuG5SzNtwwCyPYtjSRulMNt9wOkCkjfuXifeV/dy/AUuZUi0KYIzV5hmUMzZZa5MuRCXUDekfhDvB9X0x+8J30oal9KyWBDYA8Z/FVpFpR9fuSpKC4/ABMu0Bvmlc5fbi9F9FwjQo0scs+doEdgJimXIuaKUa1GRs=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1txB2M-0007ZN-00; Tue, 25 Mar 2025 21:38:14 +0100
+	id 1txDlh-0000Vo-00; Wed, 26 Mar 2025 00:33:13 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id DB064C0135; Tue, 25 Mar 2025 21:37:40 +0100 (CET)
-Date: Tue, 25 Mar 2025 21:37:40 +0100
+	id 9E1FBC0397; Tue, 25 Mar 2025 21:38:46 +0100 (CET)
+Date: Tue, 25 Mar 2025 21:38:46 +0100
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Johan Korsnes <johan.korsnes@gmail.com>
-Cc: linux-mips@vger.kernel.org
-Subject: Re: [PATCH] arch: mips: defconfig: Drop obsolete
- CONFIG_NET_CLS_TCINDEX
-Message-ID: <Z-MUFKXfWaTQ_OpT@alpha.franken.de>
-References: <20250323190734.111670-1-johan.korsnes@gmail.com>
+To: Joris Vaisvila <joey@tinyisr.com>
+Cc: harveyhuntnexus@gmail.com, linux-mips@vger.kernel.org
+Subject: Re: [PATCH] MIPS: config: omega2+, vocore2: enable CLK_MTMIPS
+Message-ID: <Z-MUVny8O-00vZ9D@alpha.franken.de>
+References: <20250325200751.2763618-1-joey@tinyisr.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -47,32 +46,46 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250323190734.111670-1-johan.korsnes@gmail.com>
+In-Reply-To: <20250325200751.2763618-1-joey@tinyisr.com>
 
-On Sun, Mar 23, 2025 at 08:07:34PM +0100, Johan Korsnes wrote:
-> This option was removed from the Kconfig in commit
-> 8c710f75256b ("net/sched: Retire tcindex classifier") but it was not
-> removed from the defconfigs.
+On Tue, Mar 25, 2025 at 10:07:51PM +0200, Joris Vaisvila wrote:
+> This commit enables the CLK_MTMIPS driver for omega2+ and vocore2
+> devices. This driver is required for these devices to boot properly.
+> Without it, the devices fail to obtain the CPU clock, resulting in a
+> kernel panic.
 > 
-> Fixes: 8c710f75256b ("net/sched: Retire tcindex classifier")
-> Signed-off-by: Johan Korsnes <johan.korsnes@gmail.com>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Signed-off-by: Joris Vaisvila <joey@tinyisr.com>
 > ---
->  arch/mips/configs/gpr_defconfig             | 1 -
->  arch/mips/configs/ip22_defconfig            | 1 -
->  arch/mips/configs/ip27_defconfig            | 1 -
->  arch/mips/configs/malta_defconfig           | 1 -
->  arch/mips/configs/malta_kvm_defconfig       | 1 -
->  arch/mips/configs/malta_qemu_32r6_defconfig | 1 -
->  arch/mips/configs/maltaaprp_defconfig       | 1 -
->  arch/mips/configs/maltasmvp_defconfig       | 1 -
->  arch/mips/configs/maltasmvp_eva_defconfig   | 1 -
->  arch/mips/configs/maltaup_defconfig         | 1 -
->  arch/mips/configs/maltaup_xpa_defconfig     | 1 -
->  arch/mips/configs/mtx1_defconfig            | 1 -
->  arch/mips/configs/rb532_defconfig           | 1 -
->  arch/mips/configs/rm200_defconfig           | 1 -
->  14 files changed, 14 deletions(-)
+>  arch/mips/configs/omega2p_defconfig | 1 +
+>  arch/mips/configs/vocore2_defconfig | 1 +
+>  2 files changed, 2 insertions(+)
+> 
+> diff --git a/arch/mips/configs/omega2p_defconfig b/arch/mips/configs/omega2p_defconfig
+> index 7c1c1b974d8f..128f9abab7fc 100644
+> --- a/arch/mips/configs/omega2p_defconfig
+> +++ b/arch/mips/configs/omega2p_defconfig
+> @@ -61,6 +61,7 @@ CONFIG_USB=y
+>  CONFIG_USB_EHCI_HCD=y
+>  CONFIG_USB_EHCI_HCD_PLATFORM=y
+>  CONFIG_MMC=y
+> +CONFIG_CLK_MTMIPS=y
+>  # CONFIG_IOMMU_SUPPORT is not set
+>  CONFIG_MEMORY=y
+>  CONFIG_PHY_RALINK_USB=y
+> diff --git a/arch/mips/configs/vocore2_defconfig b/arch/mips/configs/vocore2_defconfig
+> index 7c8ebb1b56da..917967fed45f 100644
+> --- a/arch/mips/configs/vocore2_defconfig
+> +++ b/arch/mips/configs/vocore2_defconfig
+> @@ -61,6 +61,7 @@ CONFIG_USB=y
+>  CONFIG_USB_EHCI_HCD=y
+>  CONFIG_USB_EHCI_HCD_PLATFORM=y
+>  CONFIG_MMC=y
+> +CONFIG_CLK_MTMIPS=y
+>  # CONFIG_IOMMU_SUPPORT is not set
+>  CONFIG_MEMORY=y
+>  CONFIG_PHY_RALINK_USB=y
+> -- 
+> 2.48.1
 
 applied to mips-next
 
