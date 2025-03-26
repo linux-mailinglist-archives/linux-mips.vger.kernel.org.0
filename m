@@ -1,114 +1,74 @@
-Return-Path: <linux-mips+bounces-8374-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8375-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4ABD3A71A31
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Mar 2025 16:27:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F2EDA71B7C
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Mar 2025 17:06:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3000718881EE
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Mar 2025 15:22:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 167CD84262F
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Mar 2025 16:01:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B851E1A2632;
-	Wed, 26 Mar 2025 15:22:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lC2YE/oT"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2335D1F5402;
+	Wed, 26 Mar 2025 16:02:03 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A1751624C2;
-	Wed, 26 Mar 2025 15:22:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4EBB1F4703;
+	Wed, 26 Mar 2025 16:01:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743002555; cv=none; b=m7EREwo0hUB7g4LoWsO71NkeTHbEZZZwd/UxjBD1G9IxbaFrFQTD8849rucTnPaeoioPdTq9+GmjOAUU1J0BMeRYGiCebjlJ7qeJiXH5ZKvTbD7YvMxOvp8mjuvdFEilro1iTjdxRIHyt7ZFX+gZqCMsqms6MVZYEOOjvpHJBmo=
+	t=1743004923; cv=none; b=d9QA+HLkyDq5eCwF+r8SwqDNkLdK94UfADEfIzmko9Z28jH2AHWsF85Ln7iu6PWgwp5SqjvzpTtDMT0EidHKTk4MaV0ZuhQYdpCIJFp9LcHuta5Q/ctM/etylmTZdu8jMpvK9qa9N2wC+XoCeRtBVp5UKBCC03HOsBLFaGoMFvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743002555; c=relaxed/simple;
-	bh=qaYn04pl0bOmbX7Q3sOhRWu/QUj4q3xvvH/bXbpjwDI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ERrZYKMcYVa5RVeU8PgJi1rNOaqR4mwMcNFuN+mI7fJw3hRe3VTKmVHyBGmuvjnxu3nXnEDY3V6aItokbveZ97n17BWr+FMyDN5yvoYasRbIUhgtSFypR/ycnwe6d7SK0WzkDPdDhfNQ0avtfGc1hI8svLxg4G2Y9Yxp4CIs6Qs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lC2YE/oT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA0DFC4CEE2;
-	Wed, 26 Mar 2025 15:22:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743002555;
-	bh=qaYn04pl0bOmbX7Q3sOhRWu/QUj4q3xvvH/bXbpjwDI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lC2YE/oT3fyupPQ2QRcZzHgza1/sOCa5chbFYaMXFQg5pq7QL6oPsHPlqCbpCWn9F
-	 q5Hp/gTd3oqCS4oz4rWf34knTycSCfoS41l9NOMpXEz2rRiTv7uZPoZhPYHyhh3qsz
-	 OJW3W5qBp8L6ee7YrSb2dELYMDG2NMiKYT9vZPWUYA7D3+4Q2IHWKFNp+kRdFNE2TP
-	 4r1sSODu8+5rkSTBYFzsb6yiS21pEvi3ouaEKhW/VjGeZS0DQro+gxJXjgvxIPd5/X
-	 aqQDXgWY0UtzZmsMjtx0uBh6EXfjSlcUD26jMuRszxW3kxL4xXrcwUJLX/8nKYuNp4
-	 u6z1n/jTSeFNQ==
-Date: Wed, 26 Mar 2025 08:22:28 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Mike Rapoport <rppt@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Andy Lutomirski <luto@kernel.org>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Ingo Molnar <mingo@redhat.com>, "H. Peter Anvin" <hpa@zytor.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	kernel test robot <oliver.sang@intel.com>,
-	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-mm@kvack.org, x86@kernel.org
-Subject: Re: [PATCH 2/2] memblock: don't release high memory to page
- allocator when HIGHMEM is off
-Message-ID: <20250326152228.GA1105284@ax162>
-References: <20250325114928.1791109-1-rppt@kernel.org>
- <20250325114928.1791109-3-rppt@kernel.org>
+	s=arc-20240116; t=1743004923; c=relaxed/simple;
+	bh=gikYG0N+HwVfMssT3V0KA6C5t3HSmahHn5KJWzp9fNo=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=auO4ZXUK3IzXUVRZAX93UfqlPJnGuRTR7tQ6Q6MHYBt9rtYKZ65gV0nsB9vm9RLsiP1YAUs85ZER1O1LetCpWg6WiFxxTLjkAWT1NW8XjnmjOQARBrTMEgLwc6SoMDF5qfLOsr6C03GGbpXOmv8QmmmSLTAGIiCB5UPs0QucbhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id AF46192009C; Wed, 26 Mar 2025 17:01:51 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id A89E292009B;
+	Wed, 26 Mar 2025 16:01:51 +0000 (GMT)
+Date: Wed, 26 Mar 2025 16:01:51 +0000 (GMT)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Marco Crivellari <marco.crivellari@suse.com>
+cc: Huacai Chen <chenhuacai@kernel.org>, linux-mips@vger.kernel.org, 
+    linux-kernel@vger.kernel.org, 
+    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+    Frederic Weisbecker <frederic@kernel.org>, 
+    Anna-Maria Behnsen <anna-maria@linutronix.de>, 
+    Thomas Gleixner <tglx@linutronix.de>, 
+    Peter Zijlstra <peterz@infradead.org>
+Subject: Re: [PATCH v6 1/1] MIPS: Fix idle VS timer enqueue
+In-Reply-To: <CAAofZF52_yKcpd+GBE9ygggeNTOVQDP7AKau5xZE+N4fHGCgSQ@mail.gmail.com>
+Message-ID: <alpine.DEB.2.21.2503261556020.47733@angie.orcam.me.uk>
+References: <20250315194002.13778-1-marco.crivellari@suse.com> <20250315194002.13778-2-marco.crivellari@suse.com> <alpine.DEB.2.21.2503211146001.35806@angie.orcam.me.uk> <CAAofZF4gy6WJKLK4TzF5aV7+ca3gob5jVz3XQZyGrTpfnCsn_Q@mail.gmail.com>
+ <alpine.DEB.2.21.2503211747150.35806@angie.orcam.me.uk> <CAAofZF5yaGMG0Kyax+ksfGngQ0T6AxvN5-60SnasQh7=OabaOg@mail.gmail.com> <CAAhV-H7Tko290LSCJPuVFE2qds81N4C=8RPz4edC-xddFvZGjA@mail.gmail.com>
+ <CAAofZF52_yKcpd+GBE9ygggeNTOVQDP7AKau5xZE+N4fHGCgSQ@mail.gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250325114928.1791109-3-rppt@kernel.org>
+Content-Type: text/plain; charset=US-ASCII
 
-On Tue, Mar 25, 2025 at 01:49:28PM +0200, Mike Rapoport wrote:
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> 
-> Nathan Chancellor reports the following crash on a MIPS system with
-> CONFIG_HIGHMEM=n:
-...
-> The crash happens because commit 6faea3422e3b ("arch, mm: streamline
-> HIGHMEM freeing") too eagerly frees high memory to the page allocator even
-> when HIGHMEM is disabled.
-> 
-> Make sure that when CONFIG_HIGHMEM=n the high memory is not released to the
-> page allocator.
-> 
-> Link: https://lore.kernel.org/all/20250323190647.GA1009914@ax162
-> Reported-by: Nathan Chancellor <nathan@kernel.org>
-> Fixes: 6faea3422e3b ("arch, mm: streamline HIGHMEM freeing")
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+On Wed, 26 Mar 2025, Marco Crivellari wrote:
 
-Tested-by: Nathan Chancellor <nathan@kernel.org>
+> I'm mostly thinking about future changes in this part of the code.
+> But if it is ok what we have now, and future changes are not a
+> problem, let's keep this version.
+> 
+> Would this be ok with you @Maciej?
 
-> ---
->  mm/memblock.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/mm/memblock.c b/mm/memblock.c
-> index 64ae678cd1d1..d7ff8dfe5f88 100644
-> --- a/mm/memblock.c
-> +++ b/mm/memblock.c
-> @@ -2166,6 +2166,9 @@ static unsigned long __init __free_memory_core(phys_addr_t start,
->  	unsigned long start_pfn = PFN_UP(start);
->  	unsigned long end_pfn = PFN_DOWN(end);
->  
-> +	if (!IS_ENABLED(CONFIG_HIGHMEM) && end_pfn > max_low_pfn)
-> +		end_pfn = max_low_pfn;
-> +
->  	if (start_pfn >= end_pfn)
->  		return 0;
->  
-> -- 
-> 2.47.2
-> 
+ Nope, I think it's the wrong direction and I have a longer reply in the 
+queue, but I yet need some time to complete it.  I just got off the plane 
+having been away from home for a month and I have other stuff to do first.  
+If it was broken for ~30 years, it can wait a couple days yet.
+
+  Maciej
 
