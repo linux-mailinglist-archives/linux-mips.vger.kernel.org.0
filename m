@@ -1,49 +1,54 @@
-Return-Path: <linux-mips+bounces-8377-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8378-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1915A72041
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Mar 2025 21:56:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DA58A720FF
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Mar 2025 22:52:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3C6221767B2
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Mar 2025 20:54:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9FC1F1752D3
+	for <lists+linux-mips@lfdr.de>; Wed, 26 Mar 2025 21:52:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9937825E474;
-	Wed, 26 Mar 2025 20:54:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF13723E349;
+	Wed, 26 Mar 2025 21:52:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="ccwE1uBt"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [91.216.245.30])
+Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0CFD1F55FB;
-	Wed, 26 Mar 2025 20:54:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.216.245.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AF692AD02;
+	Wed, 26 Mar 2025 21:52:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743022490; cv=none; b=R/JGECuEHS8ndZAhe1JBuGMQsKLjewjlOSDZ9FKnj8MSAuy4vpk/Ez3sTRNrs4xueox5u4e0hq56QMoxwsADFL+9IguSCH4pzJYj7SiiB18UxyejysPs1oNAolc9axDFO2au4p3hKOr0mfzU9Pkl6rWRJDgKPFx8BMMFhEE6Si0=
+	t=1743025927; cv=none; b=GzBISzHmcgatpmXdG9hv4KFCj0DBx+yhxs1IQqOitMwRzl4mMyyzV/L8tVfdao1xCItYAvr4wPOetfuBgyJ/Kp+C9hfctc1Rs5ySBR+v99R2dc3/JMXx9xWl80/PlVnafijk/Vx1E2zPYW8oS0L6aWSAWYCrWrP1N+8k4XyJXcQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743022490; c=relaxed/simple;
-	bh=JQYH6Zg4jnoka7zieh2nEFJFRsfxuEU6yzfTT1ofpSU=;
+	s=arc-20240116; t=1743025927; c=relaxed/simple;
+	bh=E7kr/pxzFv3vUyE91rsLl/E9VrXg3DOOVZED/WIMboo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DbpzYWlV0tGbSRpPzv85NxdwgaJntf8UcM8rvMoUUpQpWYo48qs4GoezkNXbP7mB1lE2EGQ4FOBPLMFhsvLNmZce8DEBCmzvEPJlKXHAvOwEJSHvDDYrq43D3lxl24valxoC3pzcwUM9BJP5FxTFw7Dm+Xoy+qQkrdQo1HNAhsE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=breakpoint.cc; spf=pass smtp.mailfrom=breakpoint.cc; arc=none smtp.client-ip=91.216.245.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=breakpoint.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=breakpoint.cc
-Received: from bigeasy by Chamillionaire.breakpoint.cc with local (Exim 4.92)
-	(envelope-from <sebastian@breakpoint.cc>)
-	id 1txXli-0001GT-LT; Wed, 26 Mar 2025 21:54:34 +0100
-Date: Wed, 26 Mar 2025 21:54:34 +0100
-From: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
-To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"Maciej W. Rozycki" <macro@orcam.me.uk>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mips@vger.kernel.org
+	 Content-Type:Content-Disposition:In-Reply-To; b=hO2ycgJ/JlhiAN6nQULAlYQBuclr6T1H7kn3cVPXgjAyMgMZ+mRy7t2b8B1Xo+XcqttXCss7OyeaOytm1HsW2q5XHYHfYb0F0kovb2aVlEj2nbbUqxFa5EeGWs+v7Q5ah0zmzvsEBHJS0U+DeaNll4K5ilZ5KbLfxDxNAZH2gPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=ccwE1uBt; arc=none smtp.client-ip=159.69.126.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
+	s=mail; t=1743025915;
+	bh=E7kr/pxzFv3vUyE91rsLl/E9VrXg3DOOVZED/WIMboo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ccwE1uBtbu2l/p5le7kqE45+XoDN4GZPzFyUFdjRoOnMTj3Va12W8jW3FuW7v8llV
+	 isxvg9JY6cULw1qBQykv1mcSMK0nv7U02cW6IbVAgKF4xiEP2edXEAUSTDGS5Y0XWE
+	 pb3yC61nwKHq0cHmGwGNa/7AeCrnzyGQ7QSA+Xp4=
+Date: Wed, 26 Mar 2025 22:51:54 +0100
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+To: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
+Cc: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "Maciej W. Rozycki" <macro@orcam.me.uk>, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org
 Subject: Re: [PATCH v2 0/4] tools/nolibc: MIPS: entrypoint cleanups and
  N32/N64 ABIs
-Message-ID: <20250326205434.bPx_kVUx@breakpoint.cc>
+Message-ID: <60e78caf-49e5-42ad-900c-9813518d838b@t-8ch.de>
 References: <20250225-nolibc-mips-n32-v2-0-664b47d87fa0@weissschuh.net>
+ <20250326205434.bPx_kVUx@breakpoint.cc>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -52,23 +57,31 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20250225-nolibc-mips-n32-v2-0-664b47d87fa0@weissschuh.net>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250326205434.bPx_kVUx@breakpoint.cc>
 
-On 2025-02-25 18:02:34 [+0100], Thomas Wei=C3=9Fschuh wrote:
-> Introduce support for the N32 and N64 ABIs. As preparation, the
-> entrypoint is first simplified significantly. Thanks to Maciej for all
-> the valuable information.
->=20
-> Signed-off-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
+On 2025-03-26 21:54:34+0100, Sebastian Andrzej Siewior wrote:
+> On 2025-02-25 18:02:34 [+0100], Thomas Weißschuh wrote:
+> > Introduce support for the N32 and N64 ABIs. As preparation, the
+> > entrypoint is first simplified significantly. Thanks to Maciej for all
+> > the valuable information.
+> > 
+> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+> 
+> Tested-by: Sebastian Andrzej Siewior <sebastian@breakpoint.cc> [ICT Loongson-3]
 
-Tested-by: Sebastian Andrzej Siewior <sebastian@breakpoint.cc> [ICT Loongso=
-n-3]
+Thanks!
 
-mips32le works as-is.
-For mips64le I had to s/-march=3Dmips64r6/-march=3Dmips64r2 to match the
-ABI. Which makes me wonder: Why do do we need to pass -march here and
-can't rely on toolchain defaults?
+> mips32le works as-is.
+> For mips64le I had to s/-march=mips64r6/-march=mips64r2 to match the
+> ABI. Which makes me wonder: Why do do we need to pass -march here and
+> can't rely on toolchain defaults?
 
-Sebastian
+The goal here is to have an as-wide-as-possible test matrix for
+nolibc-test, which will mostly be running on QEMU anyways.
+Also we need to run the correct QEMU user variant; by fixing the
+architecture this is easy to do.
+
+
+Thomas
 
