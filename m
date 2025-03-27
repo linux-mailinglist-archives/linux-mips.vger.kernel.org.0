@@ -1,323 +1,190 @@
-Return-Path: <linux-mips+bounces-8390-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8391-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D460CA738E2
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Mar 2025 18:07:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64C1EA73E85
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Mar 2025 20:26:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4950A1771AF
-	for <lists+linux-mips@lfdr.de>; Thu, 27 Mar 2025 17:07:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2775E3B7DF2
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Mar 2025 19:26:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3DED2192F1;
-	Thu, 27 Mar 2025 17:07:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B76DB1C6FF5;
+	Thu, 27 Mar 2025 19:26:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="pquV8/Lv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AhoI7WNe"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 942EF1B0437;
-	Thu, 27 Mar 2025 17:07:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73ED018A6DB;
+	Thu, 27 Mar 2025 19:26:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743095249; cv=none; b=LMxZEqSG8yvHe4iFZO8cBPc5p8OasA8k/GARZiprt8tBVAhwxU9fgvVw2xU78ymCnQV0ALf5jhcf48+U6Be0pvKk9evZuL7BM3Zkb8MnzoyvjbefuaeLOK/7pbxBOWnub3VrTHTWtLJIL93E6dn6G1+g3eiAjRU6iJasUUjsv4w=
+	t=1743103605; cv=none; b=OeaKf2eAmQaF/ijWQdMpzg7bpgJyeTMaRwCZg6yCO8pZZtH86a3PYscI3LKZuWwsviLltzlJUODzjjKD4C7KByD+I5lbGjAOOIqv9pPkyWpcFsjWkPtxeBJ72Y3E10H8yF4jTMLntohKSYNL3urA/xpNskpTmJeciVikG0YvgRU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743095249; c=relaxed/simple;
-	bh=eIXFtol+0vZBbIYFckLTPfC2WG9dNrHXYKkM9EBg79A=;
-	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
-	 References:In-Reply-To; b=b52IFeDjfE7TBjDsrsr30ccnunHwPuDudveZVoiBTuL9dkRcZK4mLDz2tan0W4Bo+XL6EKs6v67QeA1RA/zNv+zlFOff+x7OdopsZO5wpsxji/PcbYDXUFCYNwbfUfydIRJ1BIQZQVH3j4E7356r8vrOjJp5UR1/szx2QgmXPcw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=pquV8/Lv; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 6E20B4424E;
-	Thu, 27 Mar 2025 17:07:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1743095239;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UdhTLdNrpirrNqXWYpfQ6mk/u/0zez3SEY7a+4LtZhQ=;
-	b=pquV8/LvdCRSxF1toX4HU3e4N4ii7PO8LWLGS+EgcwbdcmadVNBPmg5Nf/azep1I0TZUIE
-	m/nnZlbO7I1ftRSXTmW+JI+AwbHWQiMBEWgYlUip+F7xF5XXhHqIW5FRGxkD8EmvG49Y1s
-	ednGhlGdPjkrxnYTdXROvmp6wLAAPv+yRAyZx4oR6biquHn4qRlp7V/QdsI6Fdz/JHqRhx
-	Czhn71bpeZpnq4UBjrkXkMtrAQmgqUJ3tUWvZ2lGJE2Je1WGMP2WvyHVKPYPhUyLI5scod
-	OjFzxi+gCgnjgZksfgD+049BKcvlUgDPOXp5WlXi0MSBZMUAf9p7asMmoLDI5A==
+	s=arc-20240116; t=1743103605; c=relaxed/simple;
+	bh=g1CYlQqdxlwZLruKDHJtfRscrIkZVdAluXQtGU8MRKc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TemvPxwLw9ysPgvdH9e3SvnkoYicb4zmcrTMgTARNamEMksG8vzirWKXXyt/UNV1TXo8OFLfhdLakRodlCEaBRVOwcCu3Bd8Y7A2YtnFInMv6Hgo/MTFle7NOwreV8k67KdOSJmgBIaY3blyPNC+uOWiRhlgoL42AlfEH/8ijY4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AhoI7WNe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 98751C4CEE5;
+	Thu, 27 Mar 2025 19:26:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743103604;
+	bh=g1CYlQqdxlwZLruKDHJtfRscrIkZVdAluXQtGU8MRKc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=AhoI7WNeMPZ29oSLwAkdjh1+hmd1H0PFd78VKrYEq7ZvOtJyRn/kZVpJ7ov1pCCkt
+	 FFtBsyvNXkgsCOuqL30XwUuAqDQSOw70VXwuTA0GlahX+tgi0vjgOM4rALe3DWcHDQ
+	 jjdr86gecU+SCmXIyBRIrTstnwwhhOU6G2P4SE+bQ56P43gtHv0GdjAy87Fkl3/6cO
+	 KzWNTAKllZg27AeU0seeKYl9Wju3Yt8606yfQiT/HEaHSmUmIR/ZYy8Aof73NN9rkC
+	 QlhDI25yR0zXN+3W0AsjfYwqvdqIfS5VNKvL2/jazZPFvmtHh/DNyEYhO04ZgZcO2W
+	 aITrHM+dyWvfA==
+Received: by pali.im (Postfix)
+	id 490BC81B; Thu, 27 Mar 2025 20:26:29 +0100 (CET)
+Date: Thu, 27 Mar 2025 20:26:29 +0100
+From: Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To: Amir Goldstein <amir73il@gmail.com>
+Cc: Andrey Albershteyn <aalbersh@redhat.com>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	Matt Turner <mattst88@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Michal Simek <monstr@monstr.eu>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Helge Deller <deller@gmx.de>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	"David S. Miller" <davem@davemloft.net>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Andy Lutomirski <luto@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	Alexander Viro <viro@zeniv.linux.org.uk>,
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+	=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>,
+	Arnd Bergmann <arnd@arndb.de>, Paul Moore <paul@paul-moore.com>,
+	James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>, linux-alpha@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
+	linux-arch@vger.kernel.org, selinux@vger.kernel.org,
+	Andrey Albershteyn <aalbersh@kernel.org>, linux-xfs@vger.kernel.org
+Subject: Re: [PATCH v4 0/3] fs: introduce getfsxattrat and setfsxattrat
+ syscalls
+Message-ID: <20250327192629.ivnarhlkfbhbzjcl@pali>
+References: <20250321-xattrat-syscall-v4-0-3e82e6fb3264@kernel.org>
+ <CAOQ4uxjQDUg8HFG+mSxMkR54zen7nC2jttzOKqh13Bx-uosh3Q@mail.gmail.com>
+ <20250323103234.2mwhpsbigpwtiby4@pali>
+ <CAOQ4uxiTKhGs1H-w1Hv-+MqY284m92Pvxfem0iWO+8THdzGvuA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Thu, 27 Mar 2025 18:07:13 +0100
-Message-Id: <D8R7OVRDZF3J.3FH8JD5J0AWWF@bootlin.com>
-Cc: "Andrew Lunn" <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, "Eric Dumazet" <edumazet@google.com>, "Jakub
- Kicinski" <kuba@kernel.org>, "Paolo Abeni" <pabeni@redhat.com>, "Rob
- Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
- "Conor Dooley" <conor+dt@kernel.org>, "Nicolas Ferre"
- <nicolas.ferre@microchip.com>, "Claudiu Beznea" <claudiu.beznea@tuxon.dev>,
- "Paul Walmsley" <paul.walmsley@sifive.com>, "Palmer Dabbelt"
- <palmer@dabbelt.com>, "Albert Ou" <aou@eecs.berkeley.edu>, "Alexandre
- Ghiti" <alex@ghiti.fr>, "Samuel Holland" <samuel.holland@sifive.com>,
- "Richard Cochran" <richardcochran@gmail.com>, "Russell King"
- <linux@armlinux.org.uk>, "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>, "Gregory CLEMENT"
- <gregory.clement@bootlin.com>, "netdev@vger.kernel.org"
- <netdev@vger.kernel.org>, "devicetree@vger.kernel.org"
- <devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
- <linux-kernel@vger.kernel.org>, "linux-riscv@lists.infradead.org"
- <linux-riscv@lists.infradead.org>, "linux-mips@vger.kernel.org"
- <linux-mips@vger.kernel.org>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>
-To: "Katakam, Harini" <harini.katakam@amd.com>, "Andrew Lunn"
- <andrew@lunn.ch>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH net-next 07/13] net: macb: move HW IP alignment value to
- macb_config
-X-Mailer: aerc 0.20.1-0-g2ecb8770224a
-References: <20250321-macb-v1-0-537b7e37971d@bootlin.com>
- <20250321-macb-v1-7-537b7e37971d@bootlin.com>
- <45b3e613-90c6-4499-b50b-383106172184@lunn.ch>
- <D8OOPAXK16CI.3TE75O760JRSL@bootlin.com>
- <967fcb66-6a64-4e97-8293-a38b0ef1bc01@lunn.ch>
- <SJ2PR12MB8739A1E03E116F9D6A312EB99EA62@SJ2PR12MB8739.namprd12.prod.outlook.com>
-In-Reply-To: <SJ2PR12MB8739A1E03E116F9D6A312EB99EA62@SJ2PR12MB8739.namprd12.prod.outlook.com>
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduieekleeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpegggfgtfffkvefvhffuofhfjgesthhqredtredtjeenucfhrhhomhepvfhhrohoucfnvggsrhhunhcuoehthhgvohdrlhgvsghruhhnsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeeigfelffeuffetteetuddufffghefhudeuteeigeekteevgeeileejgfdvffelheenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdugeemheehieemjegrtddtmeeiieegsgemfhdtfhhfmehfvgdutdemlegvfhgunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdugeemheehieemjegrtddtmeeiieegsgemfhdtfhhfmehfvgdutdemlegvfhgupdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehthhgvohdrlhgvsghruhhnsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvledprhgtphhtthhopehhrghrihhnihdrkhgrthgrkhgrmhesrghmugdrtghomhdprhgtphhtthhopegrnhgurhgvfieslhhunhhnrdgthhdprhgtphhtthhopegrnhgurhgvfidonhgvthguvghvsehluhhnnhdrtghhpdhrtghpt
- hhtohepuggrvhgvmhesuggrvhgvmhhlohhfthdrnhgvthdprhgtphhtthhopegvughumhgriigvthesghhoohhglhgvrdgtohhmpdhrtghpthhtohepkhhusggrsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehprggsvghnihesrhgvughhrghtrdgtohhmpdhrtghpthhtoheprhhosghhsehkvghrnhgvlhdrohhrgh
-X-GND-Sasl: theo.lebrun@bootlin.com
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAOQ4uxiTKhGs1H-w1Hv-+MqY284m92Pvxfem0iWO+8THdzGvuA@mail.gmail.com>
+User-Agent: NeoMutt/20180716
 
-Hello Harini, Andrew,
+On Thursday 27 March 2025 12:47:02 Amir Goldstein wrote:
+> On Sun, Mar 23, 2025 at 11:32 AM Pali Rohár <pali@kernel.org> wrote:
+> >
+> > On Sunday 23 March 2025 09:45:06 Amir Goldstein wrote:
+> > > On Fri, Mar 21, 2025 at 8:50 PM Andrey Albershteyn <aalbersh@redhat.com> wrote:
+> > > >
+> > > > This patchset introduced two new syscalls getfsxattrat() and
+> > > > setfsxattrat(). These syscalls are similar to FS_IOC_FSSETXATTR ioctl()
+> > > > except they use *at() semantics. Therefore, there's no need to open the
+> > > > file to get an fd.
+> > > >
+> > > > These syscalls allow userspace to set filesystem inode attributes on
+> > > > special files. One of the usage examples is XFS quota projects.
+> > > >
+> > > > XFS has project quotas which could be attached to a directory. All
+> > > > new inodes in these directories inherit project ID set on parent
+> > > > directory.
+> > > >
+> > > > The project is created from userspace by opening and calling
+> > > > FS_IOC_FSSETXATTR on each inode. This is not possible for special
+> > > > files such as FIFO, SOCK, BLK etc. Therefore, some inodes are left
+> > > > with empty project ID. Those inodes then are not shown in the quota
+> > > > accounting but still exist in the directory. This is not critical but in
+> > > > the case when special files are created in the directory with already
+> > > > existing project quota, these new inodes inherit extended attributes.
+> > > > This creates a mix of special files with and without attributes.
+> > > > Moreover, special files with attributes don't have a possibility to
+> > > > become clear or change the attributes. This, in turn, prevents userspace
+> > > > from re-creating quota project on these existing files.
+> > > >
+> > > > Christian, if this get in some mergeable state, please don't merge it
+> > > > yet. Amir suggested these syscalls better to use updated struct fsxattr
+> > > > with masking from Pali Rohár patchset, so, let's see how it goes.
+> > >
+> > > Andrey,
+> > >
+> > > To be honest I don't think it would be fair to delay your syscalls more
+> > > than needed.
+> >
+> > I agree.
+> >
+> > > If Pali can follow through and post patches on top of your syscalls for
+> > > next merge window that would be great, but otherwise, I think the
+> > > minimum requirement is that the syscalls return EINVAL if fsx_pad
+> > > is not zero. we can take it from there later.
+> >
+> > IMHO SYS_getfsxattrat is fine in this form.
+> >
+> > For SYS_setfsxattrat I think there are needed some modifications
+> > otherwise we would have problem again with backward compatibility as
+> > is with ioctl if the syscall wants to be extended in future.
+> >
+> > I would suggest for following modifications for SYS_setfsxattrat:
+> >
+> > - return EINVAL if fsx_xflags contains some reserved or unsupported flag
+> >
+> > - add some flag to completely ignore fsx_extsize, fsx_projid, and
+> >   fsx_cowextsize fields, so SYS_setfsxattrat could be used just to
+> >   change fsx_xflags, and so could be used without the preceding
+> >   SYS_getfsxattrat call.
+> >
+> > What do you think about it?
+> 
+> I think all Andrey needs to do now is return -EINVAL if fsx_pad is not zero.
+> 
+> You can use this later to extend for the semantics of flags/fields mask
+> and we can have a long discussion later on what this semantics should be.
+> 
+> Right?
+> 
+> Amir.
 
-On Wed Mar 26, 2025 at 6:01 AM CET, Katakam, Harini wrote:
-> [AMD Official Use Only - AMD Internal Distribution Only]
->
-> Hi Theo,
->
->> -----Original Message-----
->> From: Andrew Lunn <andrew@lunn.ch>
->> Sent: Tuesday, March 25, 2025 12:06 AM
->> To: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
->> Cc: Andrew Lunn <andrew+netdev@lunn.ch>; David S. Miller
->> <davem@davemloft.net>; Eric Dumazet <edumazet@google.com>; Jakub Kicinsk=
-i
->> <kuba@kernel.org>; Paolo Abeni <pabeni@redhat.com>; Rob Herring
->> <robh@kernel.org>; Krzysztof Kozlowski <krzk+dt@kernel.org>; Conor Doole=
-y
->> <conor+dt@kernel.org>; Nicolas Ferre <nicolas.ferre@microchip.com>; Clau=
-diu
->> Beznea <claudiu.beznea@tuxon.dev>; Paul Walmsley
->> <paul.walmsley@sifive.com>; Palmer Dabbelt <palmer@dabbelt.com>; Albert =
-Ou
->> <aou@eecs.berkeley.edu>; Alexandre Ghiti <alex@ghiti.fr>; Samuel Holland
->> <samuel.holland@sifive.com>; Richard Cochran <richardcochran@gmail.com>;
->> Russell King <linux@armlinux.org.uk>; Thomas Bogendoerfer
->> <tsbogend@alpha.franken.de>; Vladimir Kondratiev
->> <vladimir.kondratiev@mobileye.com>; Gregory CLEMENT
->> <gregory.clement@bootlin.com>; netdev@vger.kernel.org;
->> devicetree@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
->> riscv@lists.infradead.org; linux-mips@vger.kernel.org; Thomas Petazzoni
->> <thomas.petazzoni@bootlin.com>; Tawfik Bayouk <tawfik.bayouk@mobileye.co=
-m>
->> Subject: Re: [PATCH net-next 07/13] net: macb: move HW IP alignment valu=
-e to
->> macb_config
->>
->> On Mon, Mar 24, 2025 at 06:49:05PM +0100, Th=C3=A9o Lebrun wrote:
->> > Hello Andrew,
->> >
->> > On Fri Mar 21, 2025 at 10:06 PM CET, Andrew Lunn wrote:
->> > > On Fri, Mar 21, 2025 at 08:09:38PM +0100, Th=C3=A9o Lebrun wrote:
->> > >> The controller does IP alignment (two bytes).
->> > >
->> > > I'm a bit confused here. Is this hard coded, baked into the silicon?
->> > > It will always do IP alignment? It cannot be turned off?
->> >
->> > Yes, the alignment is baked inside the silicon.
->> > I looked but haven't seen any register to configure the alignment.
->> >
->> > Sorry the commit message isn't clear, it needs improvements.
->> >
->> > >>  skb_reserve(skb, NET_IP_ALIGN);
->> > >
->> > > Why not just replace this with
->> > >
->> > >         skb_reserve(skb, 2);
->> >
->> > On arm64, NET_IP_ALIGN=3D0. I don't have HW to test, but the current
->> > code is telling us that the silicon doesn't do alignment on those:
->>
->> This is part of the confusion. You say the hardware does alignment, and =
-then say it
->> does not....
->>
->> >    skb =3D netdev_alloc_skb(...);
->> >    paddr =3D dma_map_single(..., skb->data, ...);
->> >    macb_set_addr(..., paddr);
->> >
->> >    // arm   =3D> NET_IP_ALIGN=3D2 =3D> silicon does alignment
->> >    // arm64 =3D> NET_IP_ALIGN=3D0 =3D> silicon doesn't do alignment
->> >    skb_reserve(skb, NET_IP_ALIGN);
->> >
->> > The platform we introduce is the first one where the silicon alignment
->> > (0 bytes) is different from the NET_IP_ALIGN value (MIPS, 2 bytes).
->>
->> This is starting to make it clearer. So the first statement that the con=
-troller does IP
->> alignment (two bytes) is not the full story. I would start there, explai=
-n the full story,
->> otherwise readers get the wrong idea.
->>
->> > >>     Compatible             |  DTS folders              |  hw_ip_ali=
-gn
->> > >>    ------------------------|---------------------------|-----------=
------
->> > >>    cdns,at91sam9260-macb   | arch/arm/                 | 2
->> > >>    cdns,macb               | arch/{arm,riscv}/         | NET_IP_ALI=
-GN
->> > >>    cdns,np4-macb           | NULL                      | NET_IP_ALI=
-GN
->> > >>    cdns,pc302-gem          | NULL                      | NET_IP_ALI=
-GN
->> > >>    cdns,gem                | arch/{arm,arm64}/         | NET_IP_ALI=
-GN
->> > >>    cdns,sam9x60-macb       | arch/arm/                 | 2
->> > >>    atmel,sama5d2-gem       | arch/arm/                 | 2
->> > >>    atmel,sama5d29-gem      | arch/arm/                 | 2
->> > >>    atmel,sama5d3-gem       | arch/arm/                 | 2
->> > >>    atmel,sama5d3-macb      | arch/arm/                 | 2
->> > >>    atmel,sama5d4-gem       | arch/arm/                 | 2
->> > >>    cdns,at91rm9200-emac    | arch/arm/                 | 2
->> > >>    cdns,emac               | arch/arm/                 | 2
->> > >>    cdns,zynqmp-gem         | *same as xlnx,zynqmp-gem* | 0
->> > >>    cdns,zynq-gem           | *same as xlnx,zynq-gem*   | 2
->> > >>    sifive,fu540-c000-gem   | arch/riscv/               | 2
->> > >>    microchip,mpfs-macb     | arch/riscv/               | 2
->> > >>    microchip,sama7g5-gem   | arch/arm/                 | 2
->> > >>    microchip,sama7g5-emac  | arch/arm/                 | 2
->> > >>    xlnx,zynqmp-gem         | arch/arm64/               | 0
->> > >>    xlnx,zynq-gem           | arch/arm/                 | 2
->> > >>    xlnx,versal-gem         | NULL                      | NET_IP_ALI=
-GN
->
-> Thanks for the patch. xlnx,versal-gem is arm64 and NET_IP_ALIGN is 0.
->
-> AFAIK, IP alignment is controlled by the register field " receive buffer =
-offset "
-> in the NW config register. The only exception is when " gem_pbuf_rsc " i.=
-e.
-> receive coalescing is enabled in the RTL in the IP. In that case, the Cad=
-enc
-> specification states that these bits are ignored.
-> So to summarize, if RSC is not enabled (see bit 26 of designcfg_debug6),
-> then the current implementation works for all architectures i.e. these tw=
-o
-> statements are in sync:
-> config |=3D MACB_BF(RBOF, NET_IP_ALIGN);  /* Make eth data aligned */
-> skb_reserve(skb, NET_IP_ALIGN);
->
-> Hope this helps simplify the patch (and also fill up the table that Andre=
-w suggested)
-
-Well, big thanks! That'll make the patch much simpler. Either EyeQ5
-is the first compatible with RSC enabled, or others with RSC enabled
-have NET_IP_ALIGN=3D0.
-
-Below is what the patch could look like for V2.
- - We detect at probe if the HW is RSC-capable.
- - If it isn't, we keep the code the same.
- - If it is, that means the alignment feature isn't available.
-   We can't respect our arch alignment request.
-
-That removes all the macb_config->hw_ip_align mess. Much better.
-
-Note: I tried checking if the RBOF field is read-only when the "receive
-buffer offset" isn't available but it isn't.
-
--
-
-diff --git a/drivers/net/ethernet/cadence/macb.h b/drivers/net/ethernet/cad=
-ence/macb.h
-index d8ee7878e144..478152f70563 100644
---- a/drivers/net/ethernet/cadence/macb.h
-+++ b/drivers/net/ethernet/cadence/macb.h
-@@ -525,6 +525,8 @@
- /* Bitfields in DCFG6. */
- #define GEM_PBUF_LSO_OFFSET        27
- #define GEM_PBUF_LSO_SIZE       1
-+#define GEM_PBUF_RSC_OFFSET        26
-+#define GEM_PBUF_RSC_SIZE       1
- #define GEM_PBUF_CUTTHRU_OFFSET       25
- #define GEM_PBUF_CUTTHRU_SIZE         1
- #define GEM_DAW64_OFFSET        23
-@@ -736,6 +738,7 @@
- #define MACB_CAPS_NEED_TSUCLK         BIT(10)
- #define MACB_CAPS_QUEUE_DISABLE       BIT(11)
- #define MACB_CAPS_NO_LSO        BIT(12)
-+#define MACB_CAPS_RSC_CAPABLE         BIT(13)
- #define MACB_CAPS_PCS           BIT(24)
- #define MACB_CAPS_HIGH_SPEED       BIT(25)
- #define MACB_CAPS_CLK_HW_CHG       BIT(26)
-diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/etherne=
-t/cadence/macb_main.c
-index db8da8590fe0..51e82d66403b 100644
---- a/drivers/net/ethernet/cadence/macb_main.c
-+++ b/drivers/net/ethernet/cadence/macb_main.c
-@@ -1329,8 +1329,19 @@ static void gem_rx_refill(struct macb_queue *queue)
-         dma_wmb();
-         macb_set_addr(bp, desc, paddr);
-
--        /* Properly align Ethernet header. */
--        skb_reserve(skb, NET_IP_ALIGN);
-+        /* Properly align Ethernet header.
-+         *
-+         * Hardware can add dummy bytes if asked using the RBOF
-+         * field inside the NCFGR register. That feature isn't
-+         * available if hardware is RSC capable.
-+         *
-+         * We cannot fallback to doing the 2-byte shift before
-+         * DMA mapping because the address field does not allow
-+         * setting the low 2/3 bits.
-+         * It is 3 bits if HW_DMA_CAP_PTP.
-+         */
-+        if (!(bp->caps & MACB_CAPS_RSC_CAPABLE))
-+           skb_reserve(skb, NET_IP_ALIGN);
-      } else {
-         desc->ctrl =3D 0;
-         dma_wmb();
-@@ -2788,7 +2799,9 @@ static void macb_init_hw(struct macb *bp)
-   macb_set_hwaddr(bp);
-
-   config =3D macb_mdc_clk_div(bp);
--  config |=3D MACB_BF(RBOF, NET_IP_ALIGN); /* Make eth data aligned */
-+  /* Make eth data aligned. If RSC capable, that offset is ignored. */
-+  if (!(bp->caps & MACB_CAPS_RSC_CAPABLE))
-+     config |=3D MACB_BF(RBOF, NET_IP_ALIGN);
-   config |=3D MACB_BIT(DRFCS);    /* Discard Rx FCS */
-   if (bp->caps & MACB_CAPS_JUMBO)
-      config |=3D MACB_BIT(JFRAME);   /* Enable jumbo frames */
-@@ -4109,6 +4122,8 @@ static void macb_configure_caps(struct macb *bp,
-      dcfg =3D gem_readl(bp, DCFG2);
-      if ((dcfg & (GEM_BIT(RX_PKT_BUFF) | GEM_BIT(TX_PKT_BUFF))) =3D=3D 0)
-         bp->caps |=3D MACB_CAPS_FIFO_MODE;
-+     if (GEM_BFEXT(PBUF_RSC, gem_readl(bp, DCFG6)))
-+        bp->caps |=3D MACB_CAPS_RSC_CAPABLE;
-      if (gem_has_ptp(bp)) {
-         if (!GEM_BFEXT(TSU, gem_readl(bp, DCFG5)))
-            dev_err(&bp->pdev->dev,
-
-Thanks Andrew & Harini,
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+It is really enough? All new extensions later would have to be added
+into fsx_pad fields, and currently unused bits in fsx_xflags would be
+unusable for extensions.
 
