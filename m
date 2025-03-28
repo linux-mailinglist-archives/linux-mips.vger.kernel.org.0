@@ -1,471 +1,338 @@
-Return-Path: <linux-mips+bounces-8394-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8395-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B294A7488D
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Mar 2025 11:43:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A195A74C29
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Mar 2025 15:13:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A058417BF81
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Mar 2025 10:43:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81C073B5625
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Mar 2025 14:09:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1074621322B;
-	Fri, 28 Mar 2025 10:43:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 644621A2C0E;
+	Fri, 28 Mar 2025 14:09:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CqLEGb7F"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F4C91C174E;
-	Fri, 28 Mar 2025 10:42:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4731F18FDAF;
+	Fri, 28 Mar 2025 14:09:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743158582; cv=none; b=qOW1Kk5GJVHNW3dAP3Cg9jrVtjYBPahQ0R3JABdNq2XlKnjj7jfy7jhrONWfSLluWuSyUJxjOiysmdokQJlkoeqIaUCB1DmnmnYTTtmx0EGvoKUtkI2zbRMNs4H5aj+oAJML4X8wY8eYXzYlCnAV4CGb2jlDe+8GzcTMlJYkgZk=
+	t=1743170962; cv=none; b=qkffzI975EP3oDySRPuNg2gXJs+5ynQooVrw7jXihztECavFGIVJe6mCksHJi7omwdoxLWEdanQ0am9ZdRwvYVQGt7TWCs7dvk3HIehPYtkoc7aCDbCEu2I4YSeJhYljHw9lfOJi7HVhHZrsOgz1P4A/cC9F+mciQSWm6iHGrFk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743158582; c=relaxed/simple;
-	bh=RGvkjYCnX8xGlZm4pCFZKNWvPleXd2bYo/GQZmrfKJU=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=OcYsA0PRz+Fx684ioyYDOkoA5FwxD9jwc1DZqhDgLMtm9PEo4RZkz6clfM1Ws7A6aPvWDzfso+CpUuajjqMEgJycSdPuP9LosBcQVxlAxC2odq5gbiB3vMuVba/iKxjEWP1583DoN7ObSgy1jVOeTUw9ELDe8Oeo1ucP04+fmEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 7C8FB92009C; Fri, 28 Mar 2025 11:42:50 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 7594992009B;
-	Fri, 28 Mar 2025 10:42:50 +0000 (GMT)
-Date: Fri, 28 Mar 2025 10:42:50 +0000 (GMT)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Marco Crivellari <marco.crivellari@suse.com>
-cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
-    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-    Frederic Weisbecker <frederic@kernel.org>, 
-    Anna-Maria Behnsen <anna-maria@linutronix.de>, 
-    Thomas Gleixner <tglx@linutronix.de>, 
-    Peter Zijlstra <peterz@infradead.org>, Huacai Chen <chenhuacai@kernel.org>
-Subject: Re: [PATCH v6 1/1] MIPS: Fix idle VS timer enqueue
-In-Reply-To: <CAAofZF5yaGMG0Kyax+ksfGngQ0T6AxvN5-60SnasQh7=OabaOg@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.2503260300290.29685@angie.orcam.me.uk>
-References: <20250315194002.13778-1-marco.crivellari@suse.com> <20250315194002.13778-2-marco.crivellari@suse.com> <alpine.DEB.2.21.2503211146001.35806@angie.orcam.me.uk> <CAAofZF4gy6WJKLK4TzF5aV7+ca3gob5jVz3XQZyGrTpfnCsn_Q@mail.gmail.com>
- <alpine.DEB.2.21.2503211747150.35806@angie.orcam.me.uk> <CAAofZF5yaGMG0Kyax+ksfGngQ0T6AxvN5-60SnasQh7=OabaOg@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1743170962; c=relaxed/simple;
+	bh=tXCqTGn/bYispaGD35awccbnSyOSYc7UdrJ7NfU9JU4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CZT13Mgjdl+Uj0VJ0r8PrgJtYxcoNaj14sOwgUjT9q4H1qKNRjp8BLXgg5eBLLaFNg1GnIc2htWEgGe5w0ZIcMXbJuWjVI+TfSu4M1JSSHAg7Bo/I5vxFNzSjfhlPPdy7Z8RPskvnmiy1MtZhhC84oJxv2icGnxYfOubSlKB8BA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CqLEGb7F; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5e61d91a087so3614962a12.0;
+        Fri, 28 Mar 2025 07:09:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1743170958; x=1743775758; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=2ZsOuifdSx5C6zG54VnSZPZcGikHAgTXK/kBvDrJLmc=;
+        b=CqLEGb7F22DNYtU3eg/mAMQt+QSwpTTmJCQHNkw1AvCPymWCTGzk/Stki/Lpj/8Sjw
+         6XD9Y6n1BodYE53qgIwRz3ELAeSVv1z5b2tsUuBxyeOopXmgfszgIMwxMEwbXNiF4YtV
+         19w5adfstOEBPdF34H/tB05VZgy3j8pPelOikQyZx0J+YF4tghq63S1Iy88pFpGEx3s9
+         VqyAmPgnxWnJ5Q+CK5aI80x35EBtgyNgpo4TlzmRrA58f/EYSTLclj5ODzXLB3go4ubp
+         qVsVmEOwrwBX9LS6jw9HsSwSK2z4YJ8DyjXB2+nqXhPXQ8gpa1KxEbLd5Hzqh4bQ4ChR
+         EwbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1743170958; x=1743775758;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=2ZsOuifdSx5C6zG54VnSZPZcGikHAgTXK/kBvDrJLmc=;
+        b=iEWFOqulACE0Le2PR0KTc5Za5YwyFzGuBeJDrStxr7k0Og3ino9FZkSbhjZ0mwkoOF
+         gzDL/gsm7in9IhG7ku41L/r6+9YnQ9UVaThMBtP6HH4YEERZee2kVFqZLcawq9SCitXi
+         wAG1LjD7ryp8cdMSQPFZeT7TT/1V7TFLl2T+Zh+1DCgoWBvr7ucPSWXmBlfNAO3x4LAB
+         igXIQ4zsK6b2/Nv+ffEs/XwSpTijab/R85LHuqCr4QHkTy24u4cDRvBrNOxdAAQPxQMd
+         d4cD9IdnwjKNhQo2KOJtnzONw6CRweGQHCA/8GIlPFOUrbVWzkFDNQ7V2tnqYYBcp4dp
+         IR4A==
+X-Forwarded-Encrypted: i=1; AJvYcCUeEndVMFA0urS85HYxz6KwV7U1m0d8xOnUSwusQbAZMoy5VlU7EwfXLfG05nre0H4hTNLYYUZ7wNH2@vger.kernel.org, AJvYcCUjxAjtdHPrKr1ZXJX/e5gPEkqwyGaGm+LcfB2Fvbh1YsEyaKf14UV9dmPpjDnwJ2/EXLFejr7FAA8=@vger.kernel.org, AJvYcCUm3/vUisLsi5WlLgJYlKub6DTFlGJ4g1q4XLgBIKqEMfTwC/iiwXPN7UZjyhOK4/N2xdKnICYntbWLkTVH@vger.kernel.org, AJvYcCVISM0Iby05unvWuAZKQ7k5oIqobSZzE6fRLd8JB+CUkG02zjTR69J4vPm9cL9uGGbODjnXU+OeZRS9Do7AjL8IAbowFAJt@vger.kernel.org, AJvYcCVKPnSf5k8RCx3Se3aiNbT380eHelUDf9X+B6AZhga7+NjO2ybleFhIcMFltAxn5v/fJzJNOyOUUg==@vger.kernel.org, AJvYcCVflDAg7fcXg1qGnIcyu932WgPhNbVf7b45AExqF2XQXz3AOCGGo+LXUKDmVWDO7y1ZeircoWKdEKcRYPH5@vger.kernel.org, AJvYcCW1kZAMx7Yp32YHQfC6XlzKXIQe9WbMxsr5JBfbHQRktp7inLni0TShUpzaJtLPb9XyUKOyoIYeMU9F@vger.kernel.org, AJvYcCW3H9DEcCh+WFK/nTwh5iMuSgSNEeepe2Tk38dCl+CIlHLl5Bp7mHMVkZbzdEoqLcuvjo3nVhsbMjRT7w==@vger.kernel.org, AJvYcCWMrfvtwHD2JRyZ4pSR/H8r/eMvVUzDR+MzwJU9OFyZA5HMTvoi0YLvWiP0U6tsVRC3X5EWCogpQRQiUjmEOQ==@vger.kernel.org, AJvYcCXGn2pmK8qJ
+ l91vemLytJGZKQXGBh46wB22RTJuKQLI6uVYU6wxA9G3/1JrjV1ld7StGK2puPOjrPYzcw==@vger.kernel.org, AJvYcCXbf6zb6yKA0Zr8lIRe07a+7OOhrhNNCms0Rk5cLFwWSMgp/tyM6k10XfNv7tu5y56u2TqpiUGFxIoIXw==@vger.kernel.org, AJvYcCXnJnV7c+toLb7p8Z8XpJfqZMQiuUP7ZIXtR45e22YIrYD2ODMIupe11pJcptZEYGJMpMpi06I4NhRkXA==@vger.kernel.org, AJvYcCXu91M72oCKSliVFKXJc2MC3WhGH2mtQFe3U5gMNZShbfMRJG6iqvJcgThNc2SrN/T5tL5VDkZDB0w26Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyTM/JQrXFnBS7h8VUVGdier22ne7ATe7GV/Wgz97pRVxGiYU1H
+	/wmNCE87Ot6ggg/8Sh5j+wWhRxOHo2SyYg2UEn4i3sre+JCLeDMio3lUdhHqAts24k/foo6zoCj
+	oEa11Los4L9qgKbkQPPVU1hbsEdM=
+X-Gm-Gg: ASbGncsDF/PASL58mHhjfO8lGtYBdFTCcGpuxDlWipccgefWrBtyMhDpprxG8FnZMfb
+	r2Nnmr5tcqgl8cCMN/+mkFWYw9GD8ofRGk7DQ8czP2aDHApYogxOt3DyEg3P0Xto6MK8erecuq4
+	e2koY0Q6cueBFaFDEvWbE712RFjg==
+X-Google-Smtp-Source: AGHT+IHR2ixT+t94BjkZr/w2qrKr8vCyOHZOQeJuHGHNo/LQshrJ8a3gU3C5jc0FaYRkpYxsuH9rvd/3gEooPk/WaTY=
+X-Received: by 2002:a17:906:f587:b0:ac6:f6f4:adad with SMTP id
+ a640c23a62f3a-ac6fb145b61mr858589366b.45.1743170957819; Fri, 28 Mar 2025
+ 07:09:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20250321-xattrat-syscall-v4-0-3e82e6fb3264@kernel.org>
+ <CAOQ4uxjQDUg8HFG+mSxMkR54zen7nC2jttzOKqh13Bx-uosh3Q@mail.gmail.com>
+ <20250323103234.2mwhpsbigpwtiby4@pali> <CAOQ4uxiTKhGs1H-w1Hv-+MqY284m92Pvxfem0iWO+8THdzGvuA@mail.gmail.com>
+ <20250327192629.ivnarhlkfbhbzjcl@pali> <CAOQ4uxhJ53h+1AjtF4B64onqvRfZsJ3n1OFikyJpXAPTyX45iQ@mail.gmail.com>
+ <20250327211301.kdsohqou3s242coa@pali>
+In-Reply-To: <20250327211301.kdsohqou3s242coa@pali>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Fri, 28 Mar 2025 15:09:06 +0100
+X-Gm-Features: AQ5f1JpNweOw-d_V1vidFC1VFgAIx6VvCKUFr5FxsVRcprjnxwDwW9vgqTHuYto
+Message-ID: <CAOQ4uxiBh42oGyqtc3ekO+jCqtQz85ZWrwFZ9eS0=C8Zq+hPPg@mail.gmail.com>
+Subject: Re: [PATCH v4 0/3] fs: introduce getfsxattrat and setfsxattrat syscalls
+To: =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
+Cc: Andrey Albershteyn <aalbersh@redhat.com>, Richard Henderson <richard.henderson@linaro.org>, 
+	Matt Turner <mattst88@gmail.com>, Russell King <linux@armlinux.org.uk>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, Michal Simek <monstr@monstr.eu>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Naveen N Rao <naveen@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, Yoshinori Sato <ysato@users.sourceforge.jp>, 
+	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
+	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
+	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, linux-alpha@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, 
+	linux-arch@vger.kernel.org, selinux@vger.kernel.org, 
+	Andrey Albershteyn <aalbersh@kernel.org>, linux-xfs@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Marco,
+On Thu, Mar 27, 2025 at 10:13=E2=80=AFPM Pali Roh=C3=A1r <pali@kernel.org> =
+wrote:
+>
+> On Thursday 27 March 2025 21:57:34 Amir Goldstein wrote:
+> > On Thu, Mar 27, 2025 at 8:26=E2=80=AFPM Pali Roh=C3=A1r <pali@kernel.or=
+g> wrote:
+> > >
+> > > On Thursday 27 March 2025 12:47:02 Amir Goldstein wrote:
+> > > > On Sun, Mar 23, 2025 at 11:32=E2=80=AFAM Pali Roh=C3=A1r <pali@kern=
+el.org> wrote:
+> > > > >
+> > > > > On Sunday 23 March 2025 09:45:06 Amir Goldstein wrote:
+> > > > > > On Fri, Mar 21, 2025 at 8:50=E2=80=AFPM Andrey Albershteyn <aal=
+bersh@redhat.com> wrote:
+> > > > > > >
+> > > > > > > This patchset introduced two new syscalls getfsxattrat() and
+> > > > > > > setfsxattrat(). These syscalls are similar to FS_IOC_FSSETXAT=
+TR ioctl()
+> > > > > > > except they use *at() semantics. Therefore, there's no need t=
+o open the
+> > > > > > > file to get an fd.
+> > > > > > >
+> > > > > > > These syscalls allow userspace to set filesystem inode attrib=
+utes on
+> > > > > > > special files. One of the usage examples is XFS quota project=
+s.
+> > > > > > >
+> > > > > > > XFS has project quotas which could be attached to a directory=
+. All
+> > > > > > > new inodes in these directories inherit project ID set on par=
+ent
+> > > > > > > directory.
+> > > > > > >
+> > > > > > > The project is created from userspace by opening and calling
+> > > > > > > FS_IOC_FSSETXATTR on each inode. This is not possible for spe=
+cial
+> > > > > > > files such as FIFO, SOCK, BLK etc. Therefore, some inodes are=
+ left
+> > > > > > > with empty project ID. Those inodes then are not shown in the=
+ quota
+> > > > > > > accounting but still exist in the directory. This is not crit=
+ical but in
+> > > > > > > the case when special files are created in the directory with=
+ already
+> > > > > > > existing project quota, these new inodes inherit extended att=
+ributes.
+> > > > > > > This creates a mix of special files with and without attribut=
+es.
+> > > > > > > Moreover, special files with attributes don't have a possibil=
+ity to
+> > > > > > > become clear or change the attributes. This, in turn, prevent=
+s userspace
+> > > > > > > from re-creating quota project on these existing files.
+> > > > > > >
+> > > > > > > Christian, if this get in some mergeable state, please don't =
+merge it
+> > > > > > > yet. Amir suggested these syscalls better to use updated stru=
+ct fsxattr
+> > > > > > > with masking from Pali Roh=C3=A1r patchset, so, let's see how=
+ it goes.
+> > > > > >
+> > > > > > Andrey,
+> > > > > >
+> > > > > > To be honest I don't think it would be fair to delay your sysca=
+lls more
+> > > > > > than needed.
+> > > > >
+> > > > > I agree.
+> > > > >
+> > > > > > If Pali can follow through and post patches on top of your sysc=
+alls for
+> > > > > > next merge window that would be great, but otherwise, I think t=
+he
+> > > > > > minimum requirement is that the syscalls return EINVAL if fsx_p=
+ad
+> > > > > > is not zero. we can take it from there later.
+> > > > >
+> > > > > IMHO SYS_getfsxattrat is fine in this form.
+> > > > >
+> > > > > For SYS_setfsxattrat I think there are needed some modifications
+> > > > > otherwise we would have problem again with backward compatibility=
+ as
+> > > > > is with ioctl if the syscall wants to be extended in future.
+> > > > >
+> > > > > I would suggest for following modifications for SYS_setfsxattrat:
+> > > > >
+> > > > > - return EINVAL if fsx_xflags contains some reserved or unsupport=
+ed flag
+> > > > >
+> > > > > - add some flag to completely ignore fsx_extsize, fsx_projid, and
+> > > > >   fsx_cowextsize fields, so SYS_setfsxattrat could be used just t=
+o
+> > > > >   change fsx_xflags, and so could be used without the preceding
+> > > > >   SYS_getfsxattrat call.
+> > > > >
+> > > > > What do you think about it?
+> > > >
+> > > > I think all Andrey needs to do now is return -EINVAL if fsx_pad is =
+not zero.
+> > > >
+> > > > You can use this later to extend for the semantics of flags/fields =
+mask
+> > > > and we can have a long discussion later on what this semantics shou=
+ld be.
+> > > >
+> > > > Right?
+> > > >
+> > > > Amir.
+> > >
+> > > It is really enough?
+> >
+> > I don't know. Let's see...
+> >
+> > > All new extensions later would have to be added
+> > > into fsx_pad fields, and currently unused bits in fsx_xflags would be
+> > > unusable for extensions.
+> >
+> > I am working under the assumption that the first extension would be
+> > to support fsx_xflags_mask and from there, you could add filesystem
+> > flags support checks and then new flags. Am I wrong?
+> >
+> > Obviously, fsx_xflags_mask would be taken from fsx_pad space.
+> > After that extension is implemented, calling SYS_setfsxattrat() with
+> > a zero fsx_xflags_mask would be silly for programs that do not do
+> > the legacy get+set.
+> >
+> > So when we introduce  fsx_xflags_mask, we could say that a value
+> > of zero means that the mask is not being checked at all and unknown
+> > flags in set syscall are ignored (a.k.a legacy ioctl behavior).
+> >
+> > Programs that actually want to try and set without get will have to set
+> > a non zero fsx_xflags_mask to do something useful.
+>
+> Here we need to also solve the problem that without GET call we do not
+> have valid values for fsx_extsize, fsx_projid, and fsx_cowextsize. So
+> maybe we would need some flag in fsx_pad that fsx_extsize, fsx_projid,
+> or fsx_cowextsize are ignored/masked.
+>
+> > I don't think this is great.
+> > I would rather that the first version of syscalls will require the mask
+> > and will always enforce filesystems supported flags.
+>
+> It is not great... But what about this? In a first step (part of this
+> syscall patch series) would be just a check that fsx_pad is zero.
+> Non-zero will return -EINVAL.
+>
+> In next changes would added fsx_filter bit field, which for each
+> fsx_xflags and also for fsx_extsize, fsx_projid, and fsx_cowextsize
+> fields would add a new bit flag which would say (when SET) that the
+> particular thing has to be ignored.
 
-> >  Whatever manual you quote it refers to MIPS Release 2, which is only
-> > dated 2003
-> 
-> About the MIPS manual, anyhow, it is "MIPS32 M4 Processor Core" (year 2008).
-> Maybe I've also picked the wrong manual.
+1. I don't like the inverse mask. statx already has the stx_mask
+    and stx_attributes_mask, so I rather stick to same semantics
+    because some of those attributes are exposed via statx as well
+2. fsx_*extsize already have a bit that says if that the particular
+    attribute is valid or not, so setting a zero fsx_cowextsize with the
+    flag FS_XFLAG_COWEXTSIZE has no effect in xfs:
 
- It has to be M4K there, and that isn't the most fortunate choice, because 
-it's a manual for the specific microarchitecture and then one that doesn't 
-usually run Linux, because it has no TLB.  For MIPS Release 1 onwards the 
-architecture manuals are a better choice, but still they don't necessarily 
-get the details right for older legacy MIPS ISA revisions.
+        /*
+         * Only set the extent size hint if we've already determined that t=
+he
+         * extent size hint should be set on the inode. If no extent size f=
+lags
+         * are set on the inode then unconditionally clear the extent size =
+hint.
+         */
+        if (ip->i_diflags & (XFS_DIFLAG_EXTSIZE | XFS_DIFLAG_EXTSZINHERIT))
+                ip->i_extsize =3D XFS_B_TO_FSB(mp, fa->fsx_extsize);
+        else
+                ip->i_extsize =3D 0;
 
- For your reference the architecture manuals are:
+        if (xfs_has_v3inodes(mp)) {
+                if (ip->i_diflags2 & XFS_DIFLAG2_COWEXTSIZE)
+                        ip->i_cowextsize =3D XFS_B_TO_FSB(mp, fa->fsx_cowex=
+tsize);
+                else
+                        ip->i_cowextsize =3D 0;
+        }
 
-- "MIPS32 Architecture For Programmers, Volume I: Introduction to the 
-   MIPS32 Architecture",
+I think we need to enforce this logic in fileattr_set_prepare()
+and I think we need to add a flag FS_XFLAG_PROJID
+that will be set in GET when fsx_projid !=3D 0 and similarly
+required when setting fsx_projid !=3D 0.
 
-- "MIPS32 Architecture For Programmers, Volume II: The MIPS32 Instruction 
-   Set",
+Probably will need to add some backward compat glue for this
+flag in GET ioctl to avoid breaking out of tree fs and fuse.
 
-- "MIPS32 Architecture For Programmers, Volume III: The MIPS32 Privileged 
-   Resource Architecture",
+>
+> So when fsx_pad is all-zeros then fsx_filter (first field in fsx_pad)
+> would say that nothing in fsx_xflags, fsx_extsize, fsx_projid, and
+> fsx_cowextsize is ignored, and hence behave like before.
+>
+> And when something in fsx_pad/fsx_filter is set then it says which
+> fields are ignored/filtered-out.
+>
+> > If you can get those patches (on top of current series) posted and
+> > reviewed in time for the next merge window, including consensus
+> > on the actual semantics, that would be the best IMO.
+>
+> I think that this starting to be more complicated to rebase my patches
+> in a way that they do not affect IOCTL path but implement it properly
+> for new syscall path. It does not sounds like a trivial thing which I
+> would finish in merge window time and having proper review and consensus
+> on this.
+>
 
-and their MIPS64 counterparts, released repeatedly as the architecture 
-evolved with the document's major revision number matching the respective 
-architecture release.  I do believe the most recent revisions continue 
-being available from the MIPS web site.  But as the titles imply these 
-manuals document the architecture and not the intricacies of the MIPS 
-assembly language dialect or the various aspects of programming for the 
-architecture.  For that you need another book.
+Yes, it is better to separate the two efforts.
 
-> >  Best is to avoid using a `.set noreorder' region in the first place.
-> > But is it really needed here?  Does the rollback area have to be of a
-> > hardcoded size rather than one calculated by the assembler based on
-> > actual machine code produced?  It seems to me having it calculated would
-> > reduce complexity here and let us use the EI instruction where available
-> > as well.
-> 
-> Well, considering the complexity and how the code looks fragile even with
-> a small change, yes, that's likely better to avoid noreorder.
+wrt erroring on unsupported SET flags, all fs other than xfs already
+have some variant of fileattr_has_fsx(), so xfs is the only filesystem
+that requires special care with the new syscalls.
+It's easier to write a patch than it is to explain what I mean, so
+I'll try to write a patch.
 
- FAOD this is my general observation, regardless of its applicability 
-here.
-
-> I think I'm going to need some guidance here.
-> Please, correct me where something is wrong.
-> 
-> 1)
-> When you say "let us use the EI instruction where available" are you
-> referring to do
-> something like below?
-> 
-> #if defined(CONFIG_CPU_HAS_DIEI)
-> ei
-> #else
-> MFC0    t0, CP0_STATUS
-> ori     t0, 0x1f
-> xori    t0, 0x1e
-> MTC0    t0, CP0_STATUS
-> #endif
-
- I think let's just simplify this stuff a lot and make use of the existing 
-code infrastructure.  Since we move interrupt enabling into `__r4k_wait', 
-we can just get rid of the C wrapper the existence of which makes no sense 
-anymore along with the extra nesting of function calls, and have something 
-along the lines of:
-
-	.section .cpuidle.text,"ax"
-	/* Align to 32 bytes for the maximum idle interrupt region size.  */
-	.align	5
-LEAF(r4k_wait)
-	/* Keep the ISA bit clear for calculations on local labels here.  */
-0:	.fill	0
-	/* Start of idle interrupt region.  */
-	local_irq_enable
-	/*
-	 * If an interrupt lands here, before going idle on the next
-	 * instruction, we must *NOT* go idle since the interrupt could
-	 * have set TIF_NEED_RESCHED or caused a timer to need resched.
-	 * Fall through -- see rollback_handler below -- and have the
-	 * idle loop take care of things.
-	 */
-1:	.fill	0
-	/* The R2 EI/EHB sequence takes 8 bytes, otherwise pad up.  */
-	.if	1b - 0b > 32
-	.error	"overlong idle interrupt region"
-	.elseif	1b - 0b > 8
-	.align	4
-	.endif
-2:	.fill	0
-	.equ	r4k_wait_idle_size, 2b - 0b
-	/* End of idle interrupt region; size has to be a power of 2.  */
-	.set	MIPS_ISA_ARCH_LEVEL_RAW
-r4k_wait_insn:
-	wait
-	.set	mips0
-	local_irq_disable
-	jr	ra
-	END(r4k_wait)
-	.previous
-
-	.macro	BUILD_ROLLBACK_PROLOGUE handler
-	FEXPORT(rollback_\handler)
-	.set	push
-	.set	noat
-	MFC0	k0, CP0_EPC
-	/* Subtract 2 to let the ISA bit propagate through the mask.  */
-	PTR_LA	k1, r4k_wait_insn - 2
-	ori	k0, r4k_wait_idle_size - 2
-	bne	k0, k1, \handler
-	MTC0	k0, CP0_EPC
-	.set pop
-	.endm
-
-There's some complication here coming from the need to factor in the ISA 
-bit in the microMIPS mode; something that hasn't been discussed so far.  
-The `.fill 0' approach is a hack and it has struck me that we need to add 
-a `.noinsn' pseudo-op to GAS for this purpose, complementing `.insn', but 
-we need to stick with the hack for now anyway as it will take years until 
-we can rely on a new feature in the assembler.
-
- NB don't refer to a local label from a macro as such a reference may end 
-up pointing not where you want it to from the place the macro is pasted 
-at.  For example with your v6 code BUILD_ROLLBACK_PROLOGUE refers to the 
-intended label in `__r4k_wait' when pasted for `handle_int', but then to 
-the label in `except_vec4' instead when pasted for `except_vec_vi' further 
-down.
-
-> 2)
-> Removing "noreorder" would let the compiler add "nops" where they are needed.
-
- The assembler, not the compiler.
-
-> But that still means the 3 ssnop and ehb are still needed, right?
-
- Yes, in the pessimistic case, which the code above avoids where not 
-needed.  E.g. for R2 we now have:
-
-807f1700 <r4k_wait>:
-807f1700:	41606020 	ei
-807f1704:	000000c0 	ehb
-
-807f1708 <r4k_wait_insn>:
-807f1708:	42000020 	wait
-807f170c:	41606000 	di
-807f1710:	000000c0 	ehb
-807f1714:	03e00008 	jr	ra
-807f1718:	00000000 	nop
-	...
-
--- nice and sweet, and for the R10k likewise:
-
-a80000000084e540 <r4k_wait>:
-a80000000084e540:	400c6000 	mfc0	t0,$12
-a80000000084e544:	358c0001 	ori	t0,t0,0x1
-a80000000084e548:	408c6000 	mtc0	t0,$12
-a80000000084e54c:	00000000 	nop
-
-a80000000084e550 <r4k_wait_insn>:
-a80000000084e550:	42000020 	wait
-a80000000084e554: 	400c6000 	mfc0	t0,$12
-a80000000084e558: 	358c0001 	ori	t0,t0,0x1
-a80000000084e55c: 	398c0001 	xori	t0,t0,0x1
-a80000000084e560: 	408c6000 	mtc0	t0,$12
-a80000000084e564: 	03e00008 	jr	ra
-a80000000084e568: 	00000000 	nop
-	...
-
--- because it's fully interlocked, so no extra NOPs other than to pad the 
-idle interrupt region to a power-of-two size.
-
-> My subsequent dumb question is: there is the guarantee that the
-> compiler will not
-> reorder / change something we did?
-
- Not in this case; the assembler isn't that smart (which is why compiled 
-code is usually a better choice where feasible) and except for one case 
-all it can do is adding extra NOPs between instructions to avoid pipeline 
-hazards (and then ones coming from data dependencies in register use 
-only), including ones between non-adjacent instruction pairs.
-
- The only exception are jumps/branches where the assembler will schedule 
-their delay slot where possible by swapping the jump/branch with the 
-immediately preceding instruction where no data dependency exists between 
-the two instructions.  Otherwise the delay slot will be filled with a NOP.
-
- For example with the code sequences above the last instruction produced 
-by `local_irq_disable' could be scheduled into the delay slot of `jr ra'.  
-It wouldn't be an issue here however and it doesn't actually happen with 
-GAS, likely because `local_irq_disable' is a user macro.  For built-in 
-instruction macros such as `la' the swapping of the final instruction does 
-happen.
-
-> This question also came after reading the manual you quoted (paragraph
-> "Coprocessor Hazards"):
-> 
-> "For example, after an mtc0 to the Status register which changes an
-> interrupt mask bit,
-> there will be two further instructions before the interrupt is
-> actually enabled or disabled.
-> [...]
-> To cope with these situations usually requires the programmer to take explicit
-> action to prevent the assembler from scheduling inappropriate
-> instructions after a
-> dangerous mtc0. This is done by using the .set noreorder directive,
-> discussed below"
-
- Technically it is correct and likely the original MIPSCO assembler from 
-1985 or one supplied with IRIX were smarter, but GAS won't itself ever 
-reorder instructions other than to fill branch delay slots, so we don't 
-have to be worried.  Here's the relevant comment from GAS sources:
-
-      /* There are a lot of optimizations we could do that we don't.
-	 In particular, we do not, in general, reorder instructions.
-	 If you use gcc with optimization, it will reorder
-	 instructions and generally do much more optimization then we
-	 do here; repeating all that work in the assembler would only
-	 benefit hand written assembly code, and does not seem worth
-	 it.  */
-
-And in cases like this where we just don't want a bunch of instructions to 
-be moved across a certain point we don't actually have to schedule any 
-code by hand as a lone:
-
-	.set	noreorder
-	.set	reorder
-
-barrier will do (or actually just a label should as well).
-
-> 3)
-> Considering the size is determined by the compiler, the check about
-> the idle interrupt
-> size region should not be needed, correct?
-
- I gave it some thought and concluded that the interrupt handling path has 
-to be optimised for performance and the idle routine does not.  Therefore 
-I think we need to stick to the power-of-two size for the idle interrupt 
-region, because in that case the check for an interrupt arriving within 
-`r4k_wait' but ahead of the WAIT instruction can be done with a pair of 
-ALU operations and a single branch.  Anything more complex would require 
-more operations in the interrupt handling path.
-
-> 4)
-> ori and PTR_ADDIU should be removed of course from the rollback handler macro.
-
- I can't imagine how we'd advance past WAIT without these instructions, 
-what do you have in mind?
-
-> Can I have some hints about the needed change?
-> Using QEMU is always working, so I'm not sure if what I will change is
-> also correct.
-
- Any verification with real hardware can only be based on the probability 
-of an interrupt arriving at the right time and the right conditions for a 
-pending timer.  I'd expect such an event to be relatively rare, so for the 
-large part I think we need to rely on correct code generation rather than 
-run-time verification.  Making use of the existing infrastructure rather 
-than having an ad-hoc handcoded variant improves robustness here and also 
-means no change will likely be needed should any further platform variant 
-of the various hazard resolution macros be added in the future.
-
- NB how do you actually verify this stuff with QEMU?  Is it by injecting 
-an interrupt by hand at a chosen code location via GDB attached to QEMU's 
-built-in debug stub?
-
-> Many thanks in advance, also for your time!
-
- You're welcome.
-
- Below I've included a complete change based on the outline above.  It 
-seems to do the right thing for a couple of my configurations, but I've 
-only eyeballed the resulting code and haven't tried running it.  Most of 
-my hardware doesn't implement the WAIT instruction anyway.
-
- The missing `.cpuidle.text' section assignment is a separate preexisting 
-problem and the fix might be worth splitting off into a preparatory patch, 
-for backporting or documentation purposes.
-
- You can add my:
-
-Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-
-on top of yours when using this code, since it's still ultimately yours, 
-just massaged a little.  FWIW I went ahead and chose to cook this piece up 
-myself since I realised how complex this issue actually is and that it 
-would take us forever to get all the individual aspects nailed over e-mail 
-communication.
-
- Let me know if you find anything here unclear or have any questions or 
-comments.
-
-  Maciej
-
----
- arch/mips/include/asm/idle.h |    3 --
- arch/mips/kernel/genex.S     |   59 ++++++++++++++++++++++++-------------------
- arch/mips/kernel/idle.c      |    7 -----
- 3 files changed, 34 insertions(+), 35 deletions(-)
-
-linux-mips-idle-vs-timer.diff
-Index: linux-macro/arch/mips/include/asm/idle.h
-===================================================================
---- linux-macro.orig/arch/mips/include/asm/idle.h
-+++ linux-macro/arch/mips/include/asm/idle.h
-@@ -6,8 +6,7 @@
- #include <linux/linkage.h>
- 
- extern void (*cpu_wait)(void);
--extern void r4k_wait(void);
--extern asmlinkage void __r4k_wait(void);
-+extern asmlinkage void r4k_wait(void);
- extern void r4k_wait_irqoff(void);
- 
- static inline int using_rollback_handler(void)
-Index: linux-macro/arch/mips/kernel/genex.S
-===================================================================
---- linux-macro.orig/arch/mips/kernel/genex.S
-+++ linux-macro/arch/mips/kernel/genex.S
-@@ -104,41 +104,48 @@ NESTED(except_vec3_r4000, 0, sp)
- 
- 	__FINIT
- 
--	.align	5	/* 32 byte rollback region */
--LEAF(__r4k_wait)
--	.set	push
--	.set	noreorder
--	/* start of rollback region */
--	LONG_L	t0, TI_FLAGS($28)
--	nop
--	andi	t0, _TIF_NEED_RESCHED
--	bnez	t0, 1f
--	 nop
--	nop
--	nop
--#ifdef CONFIG_CPU_MICROMIPS
--	nop
--	nop
--	nop
--	nop
--#endif
-+	.section .cpuidle.text,"ax"
-+	/* Align to 32 bytes for the maximum idle interrupt region size.  */
-+	.align	5
-+LEAF(r4k_wait)
-+	/* Keep the ISA bit clear for calculations on local labels here.  */
-+0:	.fill	0
-+	/* Start of idle interrupt region.  */
-+	local_irq_enable
-+	/*
-+	 * If an interrupt lands here, before going idle on the next
-+	 * instruction, we must *NOT* go idle since the interrupt could
-+	 * have set TIF_NEED_RESCHED or caused a timer to need resched.
-+	 * Fall through -- see rollback_handler below -- and have the
-+	 * idle loop take care of things.
-+	 */
-+1:	.fill	0
-+	/* The R2 EI/EHB sequence takes 8 bytes, otherwise pad up.  */
-+	.if	1b - 0b > 32
-+	.error	"overlong idle interrupt region"
-+	.elseif	1b - 0b > 8
-+	.align	4
-+	.endif
-+2:	.fill	0
-+	.equ	r4k_wait_idle_size, 2b - 0b
-+	/* End of idle interrupt region; size has to be a power of 2.  */
- 	.set	MIPS_ISA_ARCH_LEVEL_RAW
-+r4k_wait_insn:
- 	wait
--	/* end of rollback region (the region size must be power of two) */
--1:
-+	.set	mips0
-+	local_irq_disable
- 	jr	ra
--	 nop
--	.set	pop
--	END(__r4k_wait)
-+	END(r4k_wait)
-+	.previous
- 
- 	.macro	BUILD_ROLLBACK_PROLOGUE handler
- 	FEXPORT(rollback_\handler)
- 	.set	push
- 	.set	noat
- 	MFC0	k0, CP0_EPC
--	PTR_LA	k1, __r4k_wait
--	ori	k0, 0x1f	/* 32 byte rollback region */
--	xori	k0, 0x1f
-+	/* Subtract 2 to let the ISA bit propagate through the mask.  */
-+	PTR_LA	k1, r4k_wait_insn - 2
-+	ori	k0, r4k_wait_idle_size - 2
- 	bne	k0, k1, \handler
- 	MTC0	k0, CP0_EPC
- 	.set pop
-Index: linux-macro/arch/mips/kernel/idle.c
-===================================================================
---- linux-macro.orig/arch/mips/kernel/idle.c
-+++ linux-macro/arch/mips/kernel/idle.c
-@@ -35,13 +35,6 @@ static void __cpuidle r3081_wait(void)
- 	write_c0_conf(cfg | R30XX_CONF_HALT);
- }
- 
--void __cpuidle r4k_wait(void)
--{
--	raw_local_irq_enable();
--	__r4k_wait();
--	raw_local_irq_disable();
--}
--
- /*
-  * This variant is preferable as it allows testing need_resched and going to
-  * sleep depending on the outcome atomically.  Unfortunately the "It is
+Thanks,
+Amir.
 
