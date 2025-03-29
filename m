@@ -1,42 +1,48 @@
-Return-Path: <linux-mips+bounces-8401-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8402-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28333A755AB
-	for <lists+linux-mips@lfdr.de>; Sat, 29 Mar 2025 11:06:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 02495A75642
+	for <lists+linux-mips@lfdr.de>; Sat, 29 Mar 2025 13:49:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE6653AE552
-	for <lists+linux-mips@lfdr.de>; Sat, 29 Mar 2025 10:06:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 676013AFFA3
+	for <lists+linux-mips@lfdr.de>; Sat, 29 Mar 2025 12:48:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B10F73477;
-	Sat, 29 Mar 2025 10:06:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29DB81B4244;
+	Sat, 29 Mar 2025 12:49:06 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D0F1208D0;
-	Sat, 29 Mar 2025 10:06:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EFBD1FC8;
+	Sat, 29 Mar 2025 12:49:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743242787; cv=none; b=UcGokAuLmcGjJluQiAUKJfUJUkXfuUmU+7/B6n8yu/ajeqaM2SsYihkvJeVI1qyNVj6lnHbQ1XDc/acUFjDKNi7ZmOjok+7p8tSId/81xtdlrX4Sa70WOa4lOn6wxyZ7pASUPShm0Dmz9I3GvVV9wI0BDIRJT+vknlVFSghMdig=
+	t=1743252546; cv=none; b=usrM1PfGKEIeYck7yjm+/ksGnDM31Z6nn8oh1RRuEsEu3iHphWPWI6Zpv67ERCD8sIQ1/rZfvDgt6dcSI/BI2B5AGxG4ng4qW4zpCNRx8dIYx8jjTtxkoeHUJsq5U7KREznRf9oB2PmoThlLbFKGCLQGdbHciNj2dQvgaBm59is=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743242787; c=relaxed/simple;
-	bh=pC4yT71Ib0ckoDWBir7IsgDkdHvt1zvX0i+HOKnOltk=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=oD8SR0FhhOSmua7bKRVpgVta6UGXMO9whU6S610y7F8L6hcTLqlPgEDCTkAv6zAmObFKD+JD92/oBqxbSAuGBgafiJSLbbvta4Wlc3IVvJTUDNoanleWZWfKcduyaDoW3tVm4621fWjpmb+nie+9jSW1l+lz4kLQBkWwjXDfqsA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1tyT54-0005YC-00; Sat, 29 Mar 2025 11:06:22 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 77697C00F0; Sat, 29 Mar 2025 11:06:16 +0100 (CET)
-Date: Sat, 29 Mar 2025 11:06:16 +0100
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: torvalds@linux-foundation.org
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] MIPS changes for v6.15
-Message-ID: <Z-fGGOyv_5IafH71@alpha.franken.de>
+	s=arc-20240116; t=1743252546; c=relaxed/simple;
+	bh=FOs7PQk4EBqCuu/+MQmpjVpHLf5BYkUfO8dcCugbFGQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Nx7JJ7Iy93U5vjr+Z0hbHCZAiYN7aa0OraUuT+r+wD1naG18ddUDxYNdPSS+gmuYD/yEFdKsxBNcckstiSzLPj422NiFyRKKbMMF57F8iGOKICqPgx+uKs34Ftkmy8zET+4TzLlYVLXi6Xg6XZZ2f5+hYbnU+nG5kUla0NrvUm0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
+Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
+	by vmicros1.altlinux.org (Postfix) with ESMTP id 6373172C8CC;
+	Sat, 29 Mar 2025 15:48:56 +0300 (MSK)
+Received: by mua.local.altlinux.org (Postfix, from userid 508)
+	id 51B347CCB3A; Sat, 29 Mar 2025 15:48:56 +0300 (IDT)
+Date: Sat, 29 Mar 2025 15:48:56 +0300
+From: "Dmitry V. Levin" <ldv@strace.io>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Shuah Khan <shuah@kernel.org>, Oleg Nesterov <oleg@redhat.com>,
+	"Maciej W. Rozycki" <macro@orcam.me.uk>,
+	strace-devel@lists.strace.io, linux-kselftest@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] selftests/ptrace/get_syscall_info: fix for MIPS n32
+Message-ID: <20250329124856.GA1356@strace.io>
+References: <20250115233747.GA28541@strace.io>
+ <0262acf1-4d3f-471b-bd56-4ddf8a2bc1a3@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -45,145 +51,96 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <0262acf1-4d3f-471b-bd56-4ddf8a2bc1a3@linuxfoundation.org>
 
-The following changes since commit 0ad2507d5d93f39619fc42372c347d6006b64319:
+On Fri, Mar 28, 2025 at 05:04:54PM -0600, Shuah Khan wrote:
+> On 1/15/25 16:37, Dmitry V. Levin wrote:
+> > MIPS n32 is one of two ILP32 architectures supported by the kernel
+> > that have 64-bit syscall arguments (another one is x32).
+> > 
+> > When this test passed 32-bit arguments to syscall(), they were
+> > sign-extended in libc, PTRACE_GET_SYSCALL_INFO reported these
+> > sign-extended 64-bit values, and the test complained about the mismatch.
+> > 
+> > Fix this by passing arguments of the appropriate type to syscall(),
+> > which is "unsigned long long" on MIPS n32, and __kernel_ulong_t on other
+> > architectures.
+> > 
+> > As a side effect, this also extends the test on all 64-bit architectures
+> > by choosing constants that don't fit into 32-bit integers.
+> > 
+> > Signed-off-by: Dmitry V. Levin <ldv@strace.io>
+> > ---
+> > 
+> > v2: Fixed MIPS #ifdef.
+> > 
+> >   .../selftests/ptrace/get_syscall_info.c       | 53 +++++++++++--------
+> >   1 file changed, 32 insertions(+), 21 deletions(-)
+> > 
+> > diff --git a/tools/testing/selftests/ptrace/get_syscall_info.c b/tools/testing/selftests/ptrace/get_syscall_info.c
+> > index 5bcd1c7b5be6..2970f72d66d3 100644
+> > --- a/tools/testing/selftests/ptrace/get_syscall_info.c
+> > +++ b/tools/testing/selftests/ptrace/get_syscall_info.c
+> > @@ -11,8 +11,19 @@
+> >   #include <err.h>
+> >   #include <signal.h>
+> >   #include <asm/unistd.h>
+> > +#include <linux/types.h>
+> >   #include "linux/ptrace.h"
+> >   
+> > +#if defined(_MIPS_SIM) && _MIPS_SIM == _MIPS_SIM_NABI32
+> > +/*
+> > + * MIPS N32 is the only architecture where __kernel_ulong_t
+> > + * does not match the bitness of syscall arguments.
+> > + */
+> > +typedef unsigned long long kernel_ulong_t;
+> > +#else
+> > +typedef __kernel_ulong_t kernel_ulong_t;
+> > +#endif
+> > +
+> 
+> What's the reason for adding these typedefs? checkpatch should
+> have warned you about adding new typedefs.
+> 
+> Also this introduces kernel_ulong_t in user-space test code.
+> Something to avoid.
 
-  Linux 6.14-rc3 (2025-02-16 14:02:44 -0800)
+There has to be a new type for this test, and the natural way to do this
+is to use typedef.  The alternative would be to #define kernel_ulong_t
+which is ugly.  By the way, there are quite a few typedefs in selftests,
+and there seems to be given no rationale why adding new types in selftests
+is a bad idea.
 
-are available in the Git repository at:
+That is, the new type in this test is being added on purpose,
+and I'd rather keep it this way.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.15
+> >   static int
+> >   kill_tracee(pid_t pid)
+> >   {
+> > @@ -42,37 +53,37 @@ sys_ptrace(int request, pid_t pid, unsigned long addr, unsigned long data)
+> >   
+> >   TEST(get_syscall_info)
+> >   {
+> > -	static const unsigned long args[][7] = {
+> > +	const kernel_ulong_t args[][7] = {
+> >   		/* a sequence of architecture-agnostic syscalls */
+> >   		{
+> >   			__NR_chdir,
+> > -			(unsigned long) "",
+> > -			0xbad1fed1,
+> > -			0xbad2fed2,
+> > -			0xbad3fed3,
+> > -			0xbad4fed4,
+> > -			0xbad5fed5
+> > +			(uintptr_t) "",
+> 
+> You could use ifdef here.
 
-for you to fetch changes up to 855912be0b046028abc9c0577787e749a8d26cf5:
+Not just here but in other cases as well.
+I think this would make the code less readable.
+I'd prefer a single ifdef with a single explanatory comment.
 
-  MIPS: config: omega2+, vocore2: enable CLK_MTMIPS (2025-03-25 21:35:54 +0100)
-
-----------------------------------------------------------------
-Added support for multi-cluster configuration
-Added quirks for enabling multi-cluster mode on EyeQ6
-Added DTS clocks for ralink
-Cleanup realtek DTS
-Other cleanups and fixes
-
-----------------------------------------------------------------
-Abhishek Tamboli (1):
-      MIPS: Fix Macro name
-
-Bibo Mao (1):
-      MIPS: Use arch specific syscall name match function
-
-Geert Uytterhoeven (1):
-      mips: dts: ingenic: Switch to simple-audio-card,hp-det-gpios
-
-Gregory CLEMENT (5):
-      dt-bindings: mips: Document mti,mips-cm
-      dt-bindings: mips: mips-cm: Add a new compatible string for EyeQ6
-      MIPS: cm: Detect CM quirks from device tree
-      MIPS: CPS: Support broken HCI for multicluster
-      MIPS: mobileye: dts: eyeq6h: Enable cluster support
-
-Johan Korsnes (1):
-      arch: mips: defconfig: Drop obsolete CONFIG_NET_CLS_TCINDEX
-
-Joris Vaisvila (1):
-      MIPS: config: omega2+, vocore2: enable CLK_MTMIPS
-
-Paul Burton (4):
-      clocksource: mips-gic-timer: Enable counter when CPUs start
-      MIPS: pm-cps: Use per-CPU variables as per-CPU, not per-core
-      MIPS: CPS: Introduce struct cluster_boot_config
-      MIPS: CPS: Boot CPUs in secondary clusters
-
-Sander Vanheule (9):
-      mips: dts: realtek: Decouple RTL930x base DTSI
-      mips: dts: realtek: Clean up CPU clocks
-      mips: dts: realtek: Add address to SoC node name
-      mips: dts: realtek: Fold rtl83xx into rtl838x
-      mips: dts: realtek: Add SoC IRQ node for RTL838x
-      mips: dts: realtek: Correct uart interrupt-parent
-      mips: dts: realtek: Replace uart clock property
-      mips: dts: realtek: Add RTL838x SoC peripherals
-      mips: dts: realtek: Add restart to Cisco SG220-26P
-
-Sergio Paracuellos (6):
-      dt-bindings: clock: add clock definitions for Ralink SoCs
-      mips: dts: ralink: rt2880: update system controller node and its consumers
-      mips: dts: ralink: rt3050: update system controller node and its consumers
-      mips: dts: ralink: rt3883: update system controller node and its consumers
-      mips: dts: ralink: mt7620a: update system controller node and its consumers
-      mips: dts: ralink: mt7628a: update system controller node and its consumers
-
-Thomas Bogendoerfer (1):
-      MIPS: cm: Fix warning if MIPS_CM is disabled
-
-Thomas Zimmermann (1):
-      mips: sni: Do not include <linux/fb.h>
-
-Thorsten Blum (1):
-      MIPS: Loongson2ef: Replace deprecated strncpy() with strscpy()
-
-WangYuli (3):
-      MIPS: dec: Declare which_prom() as static
-      MIPS: cevt-ds1287: Add missing ds1287.h include
-      MIPS: ds1287: Match ds1287_set_base_clock() function types
-
- .../bindings/clock/mediatek,mtmips-sysc.yaml       |  11 +-
- .../devicetree/bindings/mips/mti,mips-cm.yaml      |  57 ++++
- arch/mips/boot/dts/ingenic/gcw0.dts                |   2 +-
- arch/mips/boot/dts/ingenic/rs90.dts                |   2 +-
- arch/mips/boot/dts/mobileye/eyeq6h.dtsi            |   4 +
- .../dts/ralink/gardena_smart_gateway_mt7688.dts    |   2 +-
- arch/mips/boot/dts/ralink/mt7620a.dtsi             |  10 +-
- arch/mips/boot/dts/ralink/mt7620a_eval.dts         |   2 +-
- arch/mips/boot/dts/ralink/mt7628a.dtsi             |  40 +--
- arch/mips/boot/dts/ralink/omega2p.dts              |   2 +-
- arch/mips/boot/dts/ralink/rt2880.dtsi              |  10 +-
- arch/mips/boot/dts/ralink/rt2880_eval.dts          |   2 +-
- arch/mips/boot/dts/ralink/rt3050.dtsi              |  10 +-
- arch/mips/boot/dts/ralink/rt3883.dtsi              |  10 +-
- arch/mips/boot/dts/ralink/rt3883_eval.dts          |   2 +-
- arch/mips/boot/dts/realtek/cisco_sg220-26.dts      |  10 +-
- arch/mips/boot/dts/realtek/rtl838x.dtsi            | 111 +++++++-
- arch/mips/boot/dts/realtek/rtl83xx.dtsi            |  59 -----
- arch/mips/boot/dts/realtek/rtl930x.dtsi            | 136 ++++++----
- arch/mips/configs/gpr_defconfig                    |   1 -
- arch/mips/configs/ip22_defconfig                   |   1 -
- arch/mips/configs/ip27_defconfig                   |   1 -
- arch/mips/configs/malta_defconfig                  |   1 -
- arch/mips/configs/malta_kvm_defconfig              |   1 -
- arch/mips/configs/malta_qemu_32r6_defconfig        |   1 -
- arch/mips/configs/maltaaprp_defconfig              |   1 -
- arch/mips/configs/maltasmvp_defconfig              |   1 -
- arch/mips/configs/maltasmvp_eva_defconfig          |   1 -
- arch/mips/configs/maltaup_defconfig                |   1 -
- arch/mips/configs/maltaup_xpa_defconfig            |   1 -
- arch/mips/configs/mtx1_defconfig                   |   1 -
- arch/mips/configs/omega2p_defconfig                |   1 +
- arch/mips/configs/rb532_defconfig                  |   1 -
- arch/mips/configs/rm200_defconfig                  |   1 -
- arch/mips/configs/vocore2_defconfig                |   1 +
- arch/mips/dec/prom/init.c                          |   2 +-
- arch/mips/include/asm/ds1287.h                     |   2 +-
- arch/mips/include/asm/ftrace.h                     |  16 ++
- arch/mips/include/asm/mach-rc32434/pci.h           |   2 +-
- arch/mips/include/asm/mips-cm.h                    |  40 +++
- arch/mips/include/asm/smp-cps.h                    |   7 +-
- arch/mips/kernel/asm-offsets.c                     |   3 +
- arch/mips/kernel/cevt-ds1287.c                     |   1 +
- arch/mips/kernel/cps-vec.S                         |  19 +-
- arch/mips/kernel/mips-cm.c                         |  18 +-
- arch/mips/kernel/pm-cps.c                          |  35 ++-
- arch/mips/kernel/smp-cps.c                         | 288 +++++++++++++++++----
- arch/mips/loongson2ef/common/machtype.c            |   3 +-
- arch/mips/sni/setup.c                              |   1 -
- drivers/clocksource/mips-gic-timer.c               |   6 +-
- include/dt-bindings/clock/mediatek,mtmips-sysc.h   | 130 ++++++++++
- 51 files changed, 836 insertions(+), 235 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/mips/mti,mips-cm.yaml
- delete mode 100644 arch/mips/boot/dts/realtek/rtl83xx.dtsi
- create mode 100644 include/dt-bindings/clock/mediatek,mtmips-sysc.h
 
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+ldv
 
