@@ -1,111 +1,82 @@
-Return-Path: <linux-mips+bounces-8399-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8400-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AB5CDA7559C
-	for <lists+linux-mips@lfdr.de>; Sat, 29 Mar 2025 10:51:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 87276A755A2
+	for <lists+linux-mips@lfdr.de>; Sat, 29 Mar 2025 10:57:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC60A188FCE8
-	for <lists+linux-mips@lfdr.de>; Sat, 29 Mar 2025 09:52:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A81EA1894649
+	for <lists+linux-mips@lfdr.de>; Sat, 29 Mar 2025 09:57:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E67EE1ACECB;
-	Sat, 29 Mar 2025 09:51:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="NT7Nzq/c"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A16C41AB50D;
+	Sat, 29 Mar 2025 09:57:36 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6B363597B;
-	Sat, 29 Mar 2025 09:51:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 756BF3597B;
+	Sat, 29 Mar 2025 09:57:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743241911; cv=none; b=Yg0rMuAjIK37V4bhYGl2M0ldPSIS9ZHQheC07WK2NUGVlJto61KkRoUmopahMiSzpApphHiLR1Dj8F3sQ8TSgHjCkCUvxZIUC/BOEYanZRwDtA+0MGlRHSikz719ZDgwi6p8/KW6506sUb4QnEffzbojHlt2zSvghRjjryD2SVs=
+	t=1743242256; cv=none; b=fm2946D+1sFtbBu7yWzZ0Xg0XZZjUPqYg0uodvQ2R62f+DKZTG6jkiWfNiair3G/Q8TMomZllv/tlnrkCOxzAWakNH9p2dQCt/1vASy3oD01eb243w+0nAZ1CVtA6FpMxVp/J3gVpnqkEeaggA9mPuvSLUM8rtgeDdD1rmiWUaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743241911; c=relaxed/simple;
-	bh=emnL5YrggIqYqC8E+OKm6HsIBhJSJimByrZY+7rtUkw=;
+	s=arc-20240116; t=1743242256; c=relaxed/simple;
+	bh=n56iBYJh+619jz44wL6s7DUA0CbNuuQMnW5pkyXaauk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JLBTilzrj6GW9/rDrcNbkoPJdtxD5j9cjzSAUA/inwM76RUtj/BmdfiFiByb1tKN8lLSLzqGjb7lbCbo1yZ3g5oY9Qz4kMGBc7oEw+RKlq7etGP1uwodIhDLA7MR9u/g/ch1juqTsyHdqNDrYIw6hmRVZhWYDXfwXuiGdDj9JH0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=NT7Nzq/c; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1743241907;
-	bh=emnL5YrggIqYqC8E+OKm6HsIBhJSJimByrZY+7rtUkw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=NT7Nzq/cc/96FJDVDFFIzPg1/I+8zS4JgseMhhrn6m3g+LgBIt7jrCLWiDFv7JDdL
-	 y0Wj4Ddp0Ll4jmZA6YfQTeVcI/3W+YYGkw9VLQ+nyKPh1U73PmjGRrp8ZerC2oGyUi
-	 zzcoILwQ8zZFq7H66I6+aqsljNms334iBgLMZF6U=
-Date: Sat, 29 Mar 2025 10:51:47 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
-Cc: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "Maciej W. Rozycki" <macro@orcam.me.uk>, 
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] tools/nolibc: MIPS: entrypoint cleanups and
- N32/N64 ABIs
-Message-ID: <7fef431b-1b68-4967-8f8a-d2b49e403578@t-8ch.de>
-References: <20250225-nolibc-mips-n32-v2-0-664b47d87fa0@weissschuh.net>
- <20250326205434.bPx_kVUx@breakpoint.cc>
- <60e78caf-49e5-42ad-900c-9813518d838b@t-8ch.de>
- <20250326220430._IkF6-zy@breakpoint.cc>
+	 Content-Type:Content-Disposition:In-Reply-To; b=aq8m9lGZbPTSvJQlzjQuSC2zLAy1NxmHyK8qEG40NwjHvT07nlq+1uNMXvV7jlE1EbEyPUUGqAoh1cOWZNMCEhLRZSyfb67Ze9QAtC34QOahwJ4jvd2X9LDKLu5G/hwmL5TnEym8H+DArsMH9wMWV8aR0g4U77AVLMQOFiKNvmM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1tySwO-0005VP-00; Sat, 29 Mar 2025 10:57:24 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id BB183C00F0; Sat, 29 Mar 2025 10:57:15 +0100 (CET)
+Date: Sat, 29 Mar 2025 10:57:15 +0100
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Khem Raj <raj.khem@gmail.com>
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	Nicolas Schier <nicolas@fjasle.eu>, Kees Cook <kees@kernel.org>,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v2] mips: Add '-std=gnu11' to vdso CFLAGS
+Message-ID: <Z-fD-584-2L-YAhe@alpha.franken.de>
+References: <20250327032436.3600578-1-raj.khem@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250326220430._IkF6-zy@breakpoint.cc>
+In-Reply-To: <20250327032436.3600578-1-raj.khem@gmail.com>
 
-On 2025-03-26 23:04:30+0100, Sebastian Andrzej Siewior wrote:
-> On 2025-03-26 22:51:54 [+0100], Thomas Weißschuh wrote:
-> > > mips32le works as-is.
-> > > For mips64le I had to s/-march=mips64r6/-march=mips64r2 to match the
-> > > ABI. Which makes me wonder: Why do do we need to pass -march here and
-> > > can't rely on toolchain defaults?
-> > 
-> > The goal here is to have an as-wide-as-possible test matrix for
-> > nolibc-test, which will mostly be running on QEMU anyways.
-> > Also we need to run the correct QEMU user variant; by fixing the
-> > architecture this is easy to do.
+On Wed, Mar 26, 2025 at 08:24:36PM -0700, Khem Raj wrote:
+> GCC 15 changed the default C standard dialect from gnu17 to gnu23,
+> which should not have impacted the kernel because it explicitly requests
+> the gnu11 standard in the main Makefile. However, mips/vdso code uses
+> its own CFLAGS without a '-std=' value, which break with this dialect
+> change because of the kernel's own definitions of bool, false, and true
+> conflicting with the C23 reserved keywords.
 > 
-> I would prefer to make distro users as in real hardware first class
-> citizen and not QEMU users. If you run qemu you can specify the ABI
-> anyway.
+>   include/linux/stddef.h:11:9: error: cannot use keyword 'false' as enumeration constant
+>      11 |         false   = 0,
+>         |         ^~~~~
+>   include/linux/stddef.h:11:9: note: 'false' is a keyword with '-std=c23' onwards
+>   include/linux/types.h:35:33: error: 'bool' cannot be defined via 'typedef'
+>      35 | typedef _Bool                   bool;
+>         |                                 ^~~~
+>   include/linux/types.h:35:33: note: 'bool' is a keyword with '-std=c23' onwards
+> 
+> Add '-std=gnu11' to the decompressor and purgatory CFLAGS to eliminate
+> these errors and make the C standard version of these areas match the
+> rest of the kernel.
 
-Does the following work for you when running kust "make nolibc-test"?
+please adapt subject and description.
 
-diff --git a/tools/testing/selftests/nolibc/Makefile b/tools/testing/selftests/nolibc/Makefile
-index 58bcbbd029bc..27d5ceb20858 100644
---- a/tools/testing/selftests/nolibc/Makefile
-+++ b/tools/testing/selftests/nolibc/Makefile
-@@ -174,10 +174,13 @@ CFLAGS_s390x = -m64
- CFLAGS_s390 = -m31
- CFLAGS_mips32le = -EL -mabi=32 -fPIC
- CFLAGS_mips32be = -EB -mabi=32
-+ifeq ($(origin XARCH),command line)
-+CFLAGS_ARCH = $(CFLAGS_$(XARCH))
-+endif
- CFLAGS_STACKPROTECTOR ?= $(call cc-option,-mstack-protector-guard=global $(call cc-option,-fstack-protector-all))
- CFLAGS  ?= -Os -fno-ident -fno-asynchronous-unwind-tables -std=c89 -W -Wall -Wextra \
-                $(call cc-option,-fno-stack-protector) $(call cc-option,-Wmissing-prototypes) \
--               $(CFLAGS_$(XARCH)) $(CFLAGS_STACKPROTECTOR) $(CFLAGS_EXTRA)
-+               $(CFLAGS_ARCH) $(CFLAGS_STACKPROTECTOR) $(CFLAGS_EXTRA)
- LDFLAGS :=
+Thomas.
 
- LIBGCC := -lgcc
-@@ -232,7 +235,7 @@ all: run
-
- sysroot: sysroot/$(ARCH)/include
-
--sysroot/$(ARCH)/include: | defconfig
-+sysroot/$(ARCH)/include:
-        $(Q)rm -rf sysroot/$(ARCH) sysroot/sysroot
-        $(QUIET_MKDIR)mkdir -p sysroot
-        $(Q)$(MAKE) -C $(srctree) outputmakefile
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
