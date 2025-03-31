@@ -1,53 +1,58 @@
-Return-Path: <linux-mips+bounces-8417-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8418-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D84EA75BE1
-	for <lists+linux-mips@lfdr.de>; Sun, 30 Mar 2025 21:19:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F594A75F1C
+	for <lists+linux-mips@lfdr.de>; Mon, 31 Mar 2025 09:00:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81A7F3A806E
-	for <lists+linux-mips@lfdr.de>; Sun, 30 Mar 2025 19:19:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A1B863A7016
+	for <lists+linux-mips@lfdr.de>; Mon, 31 Mar 2025 07:00:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C8471D54E3;
-	Sun, 30 Mar 2025 19:19:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74BB712CD88;
+	Mon, 31 Mar 2025 07:00:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jt+aet+B"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from Chamillionaire.breakpoint.cc (Chamillionaire.breakpoint.cc [91.216.245.30])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE42C80C02;
-	Sun, 30 Mar 2025 19:19:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.216.245.30
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4854C258A;
+	Mon, 31 Mar 2025 07:00:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743362385; cv=none; b=B7aBtwn8ZK49nuNSEj02oEBrtkkiJ3/jgs9q4rAgncFdozfem0LNLQKaCO0UCHh5RHrC1oOrP8U0R3UPHjwHCtLpsQ3z9vGcLkZh3WJHEg8Nt+ZoSRG4U1mYDrg3vyeqiWOqHLaMjKpe9i5GwulEXZ4D+mz0dXbjLztN5yEEc94=
+	t=1743404432; cv=none; b=oMj8eCmvN0xAZVql4Ec4OKQSf/KXWhhjovFOubBjcayqM5bOY646pGcFFk2GFL2l9i5qlk6CqWhpU1JtmuwFHd0w6sngNWa0Vb7CsKoo6udwX/dQPUHKO4adBupyVCtnAOE9lZ8CuZgYD1JdHwpXDaWHOdU1HJeFx743lu4ieBQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743362385; c=relaxed/simple;
-	bh=NK8A9IK2TwM8Rn4visRZVeXeLeV20HHbC0t4xC+R9nU=;
+	s=arc-20240116; t=1743404432; c=relaxed/simple;
+	bh=lqdUoYLMGq1XxPIIR92iaihAlvsbsEW+dCwoaJlT6Xo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=g/GtFfywF6R9R4EN46vQ+zxzpfhOS/wa920chguFPCV+Z4neH7z4T6MWpB8xkSKiP3MsSa4RMV0qLlfQt7jkQaZNId3yj7tjqO3RXs2KXmUy67RXD8RNEZDG2He5gWB8dXpoqDqHxrZPNTWL9NAFflPAcT9kwGNqQuckXquJTBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=breakpoint.cc; spf=pass smtp.mailfrom=breakpoint.cc; arc=none smtp.client-ip=91.216.245.30
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=breakpoint.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=breakpoint.cc
-Received: from bigeasy by Chamillionaire.breakpoint.cc with local (Exim 4.92)
-	(envelope-from <sebastian@breakpoint.cc>)
-	id 1tyyBn-0005fB-7s; Sun, 30 Mar 2025 21:19:23 +0200
-Date: Sun, 30 Mar 2025 21:19:23 +0200
-From: Sebastian Andrzej Siewior <sebastian@breakpoint.cc>
-To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-Cc: Willy Tarreau <w@1wt.eu>, Shuah Khan <shuah@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"Maciej W. Rozycki" <macro@orcam.me.uk>,
-	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mips@vger.kernel.org
-Subject: Re: [PATCH v2 0/4] tools/nolibc: MIPS: entrypoint cleanups and
- N32/N64 ABIs
-Message-ID: <20250330191923.M_4QMXqa@breakpoint.cc>
-References: <20250225-nolibc-mips-n32-v2-0-664b47d87fa0@weissschuh.net>
- <20250326205434.bPx_kVUx@breakpoint.cc>
- <60e78caf-49e5-42ad-900c-9813518d838b@t-8ch.de>
- <20250326220430._IkF6-zy@breakpoint.cc>
- <7fef431b-1b68-4967-8f8a-d2b49e403578@t-8ch.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=tmNdinVwflHRmGIcLSXcl1HWBVguyUtsgWA7xCwOjUWeAZzlA5qh2by/FnXk+zmZ/zgaVLOhGuLChXgMJoKvmc/3qkRmkFBZ8f4c2JVGJv4qkV2Av3UJDtmvb074BZ11nSBOzZd8h6YNRX2IB+FdnZ1NtrlYtPUCs8LBCDDzWSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jt+aet+B; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E8B5EC4CEE3;
+	Mon, 31 Mar 2025 07:00:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743404431;
+	bh=lqdUoYLMGq1XxPIIR92iaihAlvsbsEW+dCwoaJlT6Xo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jt+aet+BtMYPfw7P4TJiXyryenyyf2bC8TMGmVnacwrfINrpAtmF5pbk4/xxI3ltn
+	 Pc3TUNtyIQrlHRytKp/UeBmhP3vUnBExGF+aJ3oQWEgOBLEahwbpOlaRZYC8eAbTE1
+	 BRmBiBueXxYSGnLR5Fst4uSa/POS62toKac1LtXNPw4UZczqAsLZ0JI2TIaNR5c/GT
+	 zWJajYp1eTkO5jzUyq8wVnLyAKS8FxvTHZl3j8WTZtMNiUe+YBktbgAkt/HeSRbBK1
+	 2/rQmjZHUrEYkWy7GAp8NBnMzeu3g1tF07rEkVN+FMSMrfXiXNehZS0r8YguYroU4k
+	 K7+az8Chbjyjw==
+Date: Mon, 31 Mar 2025 09:00:28 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Caleb James DeLisle <cjd@cjdns.fr>
+Cc: linux-mips@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	benjamin.larsson@genexis.eu, linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v3 01/10] dt-bindings: vendor-prefixes: Add EcoNet
+Message-ID: <20250331-spiritual-beige-lion-b82c82@krzk-bin>
+References: <20250330170306.2584136-1-cjd@cjdns.fr>
+ <20250330170306.2584136-2-cjd@cjdns.fr>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -56,15 +61,19 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <7fef431b-1b68-4967-8f8a-d2b49e403578@t-8ch.de>
+In-Reply-To: <20250330170306.2584136-2-cjd@cjdns.fr>
 
-On 2025-03-29 10:51:47 [+0100], Thomas Wei=C3=9Fschuh wrote:
->=20
-> Does the following work for you when running kust "make nolibc-test"?
+On Sun, Mar 30, 2025 at 05:02:57PM +0000, Caleb James DeLisle wrote:
+> Add the "econet" vendor prefix for SoC maker
+> 
+> Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
+> ---
+>  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 
-I had to manually apply this on top of b4/nolibc-mips-n32. The resulting
-make produced the native 64bit binary.
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Sebastian
+Best regards,
+Krzysztof
+
 
