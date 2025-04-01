@@ -1,164 +1,259 @@
-Return-Path: <linux-mips+bounces-8423-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8424-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4B41A777C6
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Apr 2025 11:31:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 050BBA77A79
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Apr 2025 14:16:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1988A3A059C
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Apr 2025 09:31:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A9BA5166ADD
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Apr 2025 12:16:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FE121E5B8B;
-	Tue,  1 Apr 2025 09:31:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3E461FC0F3;
+	Tue,  1 Apr 2025 12:16:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="lDte6dqE";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="V22fAY53"
+	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="BI8ZYVDD"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fout-b5-smtp.messagingengine.com (fout-b5-smtp.messagingengine.com [202.12.124.148])
+Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A6CC2AEFE;
-	Tue,  1 Apr 2025 09:31:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.148
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53D4342A94;
+	Tue,  1 Apr 2025 12:15:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743499903; cv=none; b=I76yoFQpECqcqaev9ELla1x0IqHiCBpJERhmOPkaWhtlhKYXQomEXXkuLhKyaKXMS91e+uBDT5hpa1M9X6EFTv8Ez5N3+vkyul6qx2x9M0GROpRo1iaDqT3OgzH2AQbdn7LzNS9htGy0JHpjfWdtG1OWRY3Q1SKPRNLOD2HUb7w=
+	t=1743509762; cv=none; b=PbAexvRjWaP294M8e5iP1m0UeZixMQ02UV/awGxX2BHcXaQn+qiw3Df0qgODfKH5bWVx0TJN96hz5vXBjfegyQkZjf17YBSuSEkFOjr7+Gy3z9WOz9tOyV3Ypdlf9Nmx9UH2JrdbEPrZYCjRMg9SNvwJCthkslsoZCYLS2K4r1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743499903; c=relaxed/simple;
-	bh=jgYjzSXiFeavvI5uH2ljfh8Oel3js0wYnlAOFC3ySJo=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=Ovo1Biv8LSFDT8ChWpxWZGQOkvEyZJSWI2FNnG2feyKf4nOCnzAU1xAfZ07ekL2sPldRj+7cXf/umSlG/hRlZfEB0iLvJV4EW0wOYRIC06OeC0xaL345o22q69xN0iCcVvlFPJ5x+rVlSvDS1Xg3qLpwLqQROyUezMHciZWdDmw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=lDte6dqE; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=V22fAY53; arc=none smtp.client-ip=202.12.124.148
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from phl-compute-02.internal (phl-compute-02.phl.internal [10.202.2.42])
-	by mailfout.stl.internal (Postfix) with ESMTP id B21871140099;
-	Tue,  1 Apr 2025 05:31:39 -0400 (EDT)
-Received: from phl-imap-12 ([10.202.2.86])
-  by phl-compute-02.internal (MEProxy); Tue, 01 Apr 2025 05:31:39 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1743499899;
-	 x=1743586299; bh=26kfGnH2Kam8l8xczFEl8FkUmZLoeycEawM0qxbDrrQ=; b=
-	lDte6dqEaKhiXV0GQB4jdq388VWaTiXgYA+enf1NrgNXR/afXU3QPaok+s2QZq0E
-	rByr8dpL3k0343fCVF1cLiYPgIILKmMe+GJisMlt6IbC5jks/dSbAF8EnBDmzkcD
-	RsMjHFvWLIV/O2zs9CQqPPbQV1GUYRZdlzXbktefszZAXgBFvc7JdAtEK529Zf1y
-	9ZjGiDJH/bdoZAhhxBJD81VAhzvySqwSzTA3iXK2SEaBFltuS7Bzhlk70A+ByY4v
-	CgEPwJk+tjRh3YEKOvFwNUuoSfLhd7QtOEGBPNSwP01Y+XYe/7HtYj78j6i+uVQ3
-	ESculMzgiyBB327DdsvtFg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1743499899; x=
-	1743586299; bh=26kfGnH2Kam8l8xczFEl8FkUmZLoeycEawM0qxbDrrQ=; b=V
-	22fAY53qAtNJ51n08velihowB8lDUYILoef72sobNhVMrg+K79zc58XCXOCbRMsi
-	YeSX9EXQTBlwNluoG1FvWOSGzVyG97nuz35e5DAElYbt5UjA92ABNDvvn9Kf/pem
-	hd1hJOgVYyuyYU0ZyBfUHXKNy/VKzwsfmSH0bSuNNiT4tydc0/FJEuYQw3NlAeIm
-	K32BI7E9Zp588HJog1l8AJ4yzCTru5QNdx2hbV9p0luYTCstz46mzRDWQqqRMgbU
-	AifO0H/yrEgng1o9vsu6e4KssIBobzOYGIRQJfIdZw2N4/AV6qaKXICPJfO702ZH
-	zFsynNRzXEeOPM64v7iKQ==
-X-ME-Sender: <xms:erLrZxJy_3ycICMYvWA0SbTJEMz-6Y34RrZR48rG8tthqpLQIZC6bA>
-    <xme:erLrZ9LZzcVBUhsCnVEAPiESEadIWSrq3sELP2srRfcYRa3uEd8E-_q-DHD42rrW7
-    WYxSMaYwXbDSxl_SXU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddukedvgeegucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertder
-    tdejnecuhfhrohhmpedflfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghngh
-    esfhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepjeehfeduvddtgffgvdff
-    keethefhlefgvdevvdekuefffeekheehgeevhfevteejnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihg
-    ohgrthdrtghomhdpnhgspghrtghpthhtohepuddtpdhmohguvgepshhmthhpohhuthdprh
-    gtphhtthhopehtshgsohhgvghnugesrghlphhhrgdrfhhrrghnkhgvnhdruggvpdhrtghp
-    thhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheptghhvg
-    hnhhhurggtrghisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehfrhgvuggvrhhitges
-    khgvrhhnvghlrdhorhhgpdhrtghpthhtoheprghnnhgrqdhmrghrihgrsehlihhnuhhtrh
-    honhhigidruggvpdhrtghpthhtohepthhglhigsehlihhnuhhtrhhonhhigidruggvpdhr
-    tghpthhtohepmhgrtghrohesohhrtggrmhdrmhgvrdhukhdprhgtphhtthhopehmrghrtg
-    hordgtrhhivhgvlhhlrghrihesshhushgvrdgtohhmpdhrtghpthhtoheplhhinhhugidq
-    khgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:erLrZ5vCUAu-I0p9qAgpi-PDmIwnocSr2raCFhwEW-_BjJB59r1nBQ>
-    <xmx:erLrZyaKAXaSFOVUT_q1FXy8HLt2U-mrCVPleGZNDdwnHfyk27ph8g>
-    <xmx:erLrZ4a6ESz0wt0LqlxlhHxDXBHQ7UPLBCbACSVb5ntI12oApAg3rA>
-    <xmx:erLrZ2Brj1kav_pWJWU7zXHqup0VtbVYR85Z6QqHtFSkQm-yILDHyQ>
-    <xmx:e7LrZ2mAxe_ZFIPCpFOF7w21Gp0nSGXjwzGhxfmpg70GCP7blgmnK-xk>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 8E34F1C20068; Tue,  1 Apr 2025 05:31:38 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1743509762; c=relaxed/simple;
+	bh=tJ/nY5DmjGkUEyUIKawES06pKMf+xtUebkpWoQY+V7E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ubZD3U+Pb8lMhg2FAWOWsZ+3oYsQWb3x+ckuo+y4yfh/RszD2l4Q3oClKXJVIOXTjC6T/26K6PCjKKMbnAqNlLGLyqOM/c/LPBAXjp5TNvGK98eikKWxSu6RaQpE09idcr9whdT64ai46dfQW/ytZ5ewBKpSsF0T1Lcgtz+H2B0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=BI8ZYVDD; arc=none smtp.client-ip=46.235.229.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
+	; s=bytemarkmx; h=Content-Type:MIME-Version:Message-ID:Subject:From:Date:From
+	:Subject; bh=cpHa3hRcyYE+oveSMpWWau+9FeOL1orHAEbMAeTSCY0=; b=BI8ZYVDD+A/bplQt
+	Lxzx6WknmOncFAkzbg2GZCQjMX0EAq3hUE9F4Aes1QlpQGYc2jv803aIWQnkSeu1SB4HcnYScO+yg
+	vxZPEWAte1PAaam76hgaooRGKH/oYX6y6tnP4nfGIO/WmayF48Jf/Y+bbe+FDkYOV0L7ozJaO7fF4
+	cxqDUiRvIoIGCHx3CjyqPfvSEXQ/zYYbs4d642O+Op3BWzlkgU8N8wRfC0Bt6yr30AMrT3jketCEJ
+	sRmONLJWJkJ+tiAsl0gyRjWasE+3VPQ2kYY994EuQop1SvJlb/h7dGwe9C/0e3Ijd/HG6FuSc006A
+	tJHj4XYIBZWId1R7kw==;
+Received: from dg by mx.treblig.org with local (Exim 4.96)
+	(envelope-from <dg@treblig.org>)
+	id 1tzZpw-008Jmf-0j;
+	Tue, 01 Apr 2025 11:31:20 +0000
+Date: Tue, 1 Apr 2025 11:31:20 +0000
+From: "Dr. David Alan Gilbert" <linux@treblig.org>
+To: arnd@arndb.de, lee@kernel.org, dmitry.torokhov@gmail.com,
+	sre@kernel.org, lgirdwood@gmail.com, broonie@kernel.org,
+	alexandre.belloni@bootlin.com, danielt@kernel.org,
+	jingoohan1@gmail.com, deller@gmx.de, linus.walleij@linaro.org,
+	brgl@bgdev.pl, tsbogend@alpha.franken.de
+Cc: linux-mips@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
+	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/9] Input: pcf50633-input - Remove
+Message-ID: <Z-vOiJ9tdovS-Guq@gallifrey>
+References: <20250311014959.743322-1-linux@treblig.org>
+ <20250311014959.743322-5-linux@treblig.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: Tf2d86106c131fe8c
-Date: Tue, 01 Apr 2025 10:31:17 +0100
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>,
- "Marco Crivellari" <marco.crivellari@suse.com>
-Cc: "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- linux-kernel@vger.kernel.org,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Frederic Weisbecker" <frederic@kernel.org>,
- "Anna-Maria Behnsen" <anna-maria@linutronix.de>,
- "Thomas Gleixner" <tglx@linutronix.de>,
- "Peter Zijlstra" <peterz@infradead.org>,
- "Huacai Chen" <chenhuacai@kernel.org>
-Message-Id: <3f7f6ced-98e8-4101-aa83-3692e14222ca@app.fastmail.com>
-In-Reply-To: <alpine.DEB.2.21.2503311348560.47733@angie.orcam.me.uk>
-References: <20250315194002.13778-1-marco.crivellari@suse.com>
- <20250315194002.13778-2-marco.crivellari@suse.com>
- <alpine.DEB.2.21.2503211146001.35806@angie.orcam.me.uk>
- <CAAofZF4gy6WJKLK4TzF5aV7+ca3gob5jVz3XQZyGrTpfnCsn_Q@mail.gmail.com>
- <alpine.DEB.2.21.2503211747150.35806@angie.orcam.me.uk>
- <CAAofZF5yaGMG0Kyax+ksfGngQ0T6AxvN5-60SnasQh7=OabaOg@mail.gmail.com>
- <alpine.DEB.2.21.2503260300290.29685@angie.orcam.me.uk>
- <alpine.DEB.2.21.2503281345010.47733@angie.orcam.me.uk>
- <CAAofZF65p+DnH8xA0+sfuZv=VO63Zgv4rQ6frrdEzQYoZ0MaWA@mail.gmail.com>
- <alpine.DEB.2.21.2503311348560.47733@angie.orcam.me.uk>
-Subject: Re: [PATCH v6 1/1] MIPS: Fix idle VS timer enqueue
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+In-Reply-To: <20250311014959.743322-5-linux@treblig.org>
+X-Chocolate: 70 percent or better cocoa solids preferably
+X-Operating-System: Linux/6.1.0-21-amd64 (x86_64)
+X-Uptime: 11:28:53 up 327 days, 22:42,  1 user,  load average: 0.00, 0.00,
+ 0.00
+User-Agent: Mutt/2.2.12 (2023-09-09)
 
+* linux@treblig.org (linux@treblig.org) wrote:
+> From: "Dr. David Alan Gilbert" <linux@treblig.org>
+> 
+> The pcf50633 was used as part of the OpenMoko devices but
+> the support for its main chip was recently removed in:
+> commit 61b7f8920b17 ("ARM: s3c: remove all s3c24xx support")
+> 
+> See https://lore.kernel.org/all/Z8z236h4B5A6Ki3D@gallifrey/
+> 
+> Remove it.
+> 
+> Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
 
+Has anyone got this input patch lined up?
+I think most of the other parts are there; the rtc I see in next.
+Then once those go there is a core.h that needs nuking.
 
-=E5=9C=A82025=E5=B9=B43=E6=9C=8831=E6=97=A5=E6=98=9F=E6=9C=9F=E5=91=A8=E4=
-=B8=80 =E4=B8=8B=E5=8D=889:09=EF=BC=8CMaciej W. Rozycki=E5=86=99=E9=81=93=
-=EF=BC=9A
-[...]
->
->  FAOD I have one MIPS32r2 system wired for testing, but that might not=
- be=20
-> the most interesting configuration to verify as it'll now just use EI/=
-EHB=20
-> to enable interrupts ahead of WAIT.  I could try an R1 kernel instead,=
- but=20
-> I'm not sure if it can be made to work owing to the differences in the=
- FPU=20
-> between R1 and R2 for the MIPS32 ISA.  I used to have a MIPS64 (R1) sy=
-stem=20
-> there, but the CPU daughtercard sadly stopped working 3 years ago and =
-I=20
-> wasn't able to repair it, owing to the lack of available spare parts (=
-it's=20
-> most likely a dead CPU).
+Dave
 
-I can test on legacy (R1 version) 4Kc RTL simulator if you wish. Is ther=
-e any
-thing specific you want to test? I think I can try interrupt flood and s=
-ee if
-there is any deadlock.
-
-The simulation is painfully slow, so I'd wish to minimize test vector.
-
-Thanks
-
-
---=20
-- Jiaxun
+> ---
+>  drivers/input/misc/Kconfig          |   7 --
+>  drivers/input/misc/Makefile         |   1 -
+>  drivers/input/misc/pcf50633-input.c | 113 ----------------------------
+>  3 files changed, 121 deletions(-)
+>  delete mode 100644 drivers/input/misc/pcf50633-input.c
+> 
+> diff --git a/drivers/input/misc/Kconfig b/drivers/input/misc/Kconfig
+> index 13d135257e06..62819144bd8c 100644
+> --- a/drivers/input/misc/Kconfig
+> +++ b/drivers/input/misc/Kconfig
+> @@ -584,13 +584,6 @@ config INPUT_PALMAS_PWRBUTTON
+>  	  To compile this driver as a module, choose M here. The module will
+>  	  be called palmas_pwrbutton.
+>  
+> -config INPUT_PCF50633_PMU
+> -	tristate "PCF50633 PMU events"
+> -	depends on MFD_PCF50633
+> -	help
+> -	 Say Y to include support for delivering  PMU events via  input
+> -	 layer on NXP PCF50633.
+> -
+>  config INPUT_PCF8574
+>  	tristate "PCF8574 Keypad input device"
+>  	depends on I2C
+> diff --git a/drivers/input/misc/Makefile b/drivers/input/misc/Makefile
+> index 6d91804d0a6f..d468c8140b93 100644
+> --- a/drivers/input/misc/Makefile
+> +++ b/drivers/input/misc/Makefile
+> @@ -59,7 +59,6 @@ obj-$(CONFIG_INPUT_MC13783_PWRBUTTON)	+= mc13783-pwrbutton.o
+>  obj-$(CONFIG_INPUT_MMA8450)		+= mma8450.o
+>  obj-$(CONFIG_INPUT_PALMAS_PWRBUTTON)	+= palmas-pwrbutton.o
+>  obj-$(CONFIG_INPUT_PCAP)		+= pcap_keys.o
+> -obj-$(CONFIG_INPUT_PCF50633_PMU)	+= pcf50633-input.o
+>  obj-$(CONFIG_INPUT_PCF8574)		+= pcf8574_keypad.o
+>  obj-$(CONFIG_INPUT_PCSPKR)		+= pcspkr.o
+>  obj-$(CONFIG_INPUT_PM8941_PWRKEY)	+= pm8941-pwrkey.o
+> diff --git a/drivers/input/misc/pcf50633-input.c b/drivers/input/misc/pcf50633-input.c
+> deleted file mode 100644
+> index 6d046e236ba6..000000000000
+> --- a/drivers/input/misc/pcf50633-input.c
+> +++ /dev/null
+> @@ -1,113 +0,0 @@
+> -// SPDX-License-Identifier: GPL-2.0-or-later
+> -/* NXP PCF50633 Input Driver
+> - *
+> - * (C) 2006-2008 by Openmoko, Inc.
+> - * Author: Balaji Rao <balajirrao@openmoko.org>
+> - * All rights reserved.
+> - *
+> - * Broken down from monstrous PCF50633 driver mainly by
+> - * Harald Welte, Andy Green and Werner Almesberger
+> - */
+> -
+> -#include <linux/kernel.h>
+> -#include <linux/module.h>
+> -#include <linux/device.h>
+> -#include <linux/platform_device.h>
+> -#include <linux/input.h>
+> -#include <linux/slab.h>
+> -
+> -#include <linux/mfd/pcf50633/core.h>
+> -
+> -#define PCF50633_OOCSTAT_ONKEY	0x01
+> -#define PCF50633_REG_OOCSTAT	0x12
+> -#define PCF50633_REG_OOCMODE	0x10
+> -
+> -struct pcf50633_input {
+> -	struct pcf50633 *pcf;
+> -	struct input_dev *input_dev;
+> -};
+> -
+> -static void
+> -pcf50633_input_irq(int irq, void *data)
+> -{
+> -	struct pcf50633_input *input;
+> -	int onkey_released;
+> -
+> -	input = data;
+> -
+> -	/* We report only one event depending on the key press status */
+> -	onkey_released = pcf50633_reg_read(input->pcf, PCF50633_REG_OOCSTAT)
+> -						& PCF50633_OOCSTAT_ONKEY;
+> -
+> -	if (irq == PCF50633_IRQ_ONKEYF && !onkey_released)
+> -		input_report_key(input->input_dev, KEY_POWER, 1);
+> -	else if (irq == PCF50633_IRQ_ONKEYR && onkey_released)
+> -		input_report_key(input->input_dev, KEY_POWER, 0);
+> -
+> -	input_sync(input->input_dev);
+> -}
+> -
+> -static int pcf50633_input_probe(struct platform_device *pdev)
+> -{
+> -	struct pcf50633_input *input;
+> -	struct input_dev *input_dev;
+> -	int ret;
+> -
+> -
+> -	input = kzalloc(sizeof(*input), GFP_KERNEL);
+> -	if (!input)
+> -		return -ENOMEM;
+> -
+> -	input_dev = input_allocate_device();
+> -	if (!input_dev) {
+> -		kfree(input);
+> -		return -ENOMEM;
+> -	}
+> -
+> -	platform_set_drvdata(pdev, input);
+> -	input->pcf = dev_to_pcf50633(pdev->dev.parent);
+> -	input->input_dev = input_dev;
+> -
+> -	input_dev->name = "PCF50633 PMU events";
+> -	input_dev->id.bustype = BUS_I2C;
+> -	input_dev->evbit[0] = BIT(EV_KEY) | BIT(EV_PWR);
+> -	set_bit(KEY_POWER, input_dev->keybit);
+> -
+> -	ret = input_register_device(input_dev);
+> -	if (ret) {
+> -		input_free_device(input_dev);
+> -		kfree(input);
+> -		return ret;
+> -	}
+> -	pcf50633_register_irq(input->pcf, PCF50633_IRQ_ONKEYR,
+> -				pcf50633_input_irq, input);
+> -	pcf50633_register_irq(input->pcf, PCF50633_IRQ_ONKEYF,
+> -				pcf50633_input_irq, input);
+> -
+> -	return 0;
+> -}
+> -
+> -static void pcf50633_input_remove(struct platform_device *pdev)
+> -{
+> -	struct pcf50633_input *input  = platform_get_drvdata(pdev);
+> -
+> -	pcf50633_free_irq(input->pcf, PCF50633_IRQ_ONKEYR);
+> -	pcf50633_free_irq(input->pcf, PCF50633_IRQ_ONKEYF);
+> -
+> -	input_unregister_device(input->input_dev);
+> -	kfree(input);
+> -}
+> -
+> -static struct platform_driver pcf50633_input_driver = {
+> -	.driver = {
+> -		.name = "pcf50633-input",
+> -	},
+> -	.probe = pcf50633_input_probe,
+> -	.remove = pcf50633_input_remove,
+> -};
+> -module_platform_driver(pcf50633_input_driver);
+> -
+> -MODULE_AUTHOR("Balaji Rao <balajirrao@openmoko.org>");
+> -MODULE_DESCRIPTION("PCF50633 input driver");
+> -MODULE_LICENSE("GPL");
+> -MODULE_ALIAS("platform:pcf50633-input");
+> -- 
+> 2.48.1
+> 
+-- 
+ -----Open up your eyes, open up your mind, open up your code -------   
+/ Dr. David Alan Gilbert    |       Running GNU/Linux       | Happy  \ 
+\        dave @ treblig.org |                               | In Hex /
+ \ _________________________|_____ http://www.treblig.org   |_______/
 
