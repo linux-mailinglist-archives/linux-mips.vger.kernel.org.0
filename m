@@ -1,64 +1,64 @@
-Return-Path: <linux-mips+bounces-8433-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8434-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B047A7B321
-	for <lists+linux-mips@lfdr.de>; Fri,  4 Apr 2025 02:11:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08C0DA7B364
+	for <lists+linux-mips@lfdr.de>; Fri,  4 Apr 2025 02:17:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 07EEB3B5FFF
-	for <lists+linux-mips@lfdr.de>; Fri,  4 Apr 2025 00:11:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 542EE17A470
+	for <lists+linux-mips@lfdr.de>; Fri,  4 Apr 2025 00:16:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13B6A1ACED5;
-	Fri,  4 Apr 2025 00:05:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59B301F5844;
+	Fri,  4 Apr 2025 00:05:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AKHq+5D8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aChowIxY"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD181EEC3;
-	Fri,  4 Apr 2025 00:05:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE2A14A09C;
+	Fri,  4 Apr 2025 00:05:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743725107; cv=none; b=cBRid0RG+Ij+KJ+fms+ij9JpcS5tujixKB1VZDP4nrJn/rqaL03gjhrdXL1ub1CWvMWDK4vsJa+e3oipfLKAmYCeJ1u6aDdwvFlEcq/DJ6S/PtmN93kv7dbPvDNCc1D54a70k151sWSEpFc2OgQ2GpoAMH7CmGzfgVY9kYMlwCA=
+	t=1743725154; cv=none; b=LOtQy24/wtvnZoKzTP3xlEzdTm0SsV3cjRVLan4OQN4UAd+Ag9ocuE8cx1p8WEpoLD5sLlqaulYRvTCSo5EKcNybrQeowQp8JTLBR9lkE3+yGMQRuA6Ij6f8BukVFqXWXx/OLp5bKqPHuLG38tB664JW8fLFs3GTqUSAtEdC4RY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743725107; c=relaxed/simple;
-	bh=r7QFhLqGBIbqEB6bTak6YRf5D6NQBdcSnGBFjIBNgCc=;
+	s=arc-20240116; t=1743725154; c=relaxed/simple;
+	bh=SAIAvP07XyuGe/Ilj1nav7Mqv8QbExIi9rs/k91UdzY=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=s2hleIBPn4XG6MUunF15WOqWfCH4ZLv+lc99nIWfeUin7TFau52xiNDb+ProJNI2MdpihXK3MRouGlt7LbmCMpxD/Wurz0CBE+H3Hm4JXlzs9zdMng5hqa9XdUmmrRhvW12TPAGUdaTLkSOc495GMtKxwJXFdMddCuk7HPbjn70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AKHq+5D8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EDCFC4CEE3;
-	Fri,  4 Apr 2025 00:05:05 +0000 (UTC)
+	 MIME-Version; b=XPGQmpHbQuHJxkqYl0h0XqDpmyzb2Qd9uvEQ41HDeEOJiWeG8Gouz5qZyThok1HdycFVe+yesYK8HZ+zwDS+17ASbn3fadwKnYzPGr6f2Mx0vgDTnJt8AIFX5DRQShsfHk5qvY0zw+uDVIJtHBLd34ZBNS5WYy1NQ+87oNu2pzs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aChowIxY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77E74C4CEE5;
+	Fri,  4 Apr 2025 00:05:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743725106;
-	bh=r7QFhLqGBIbqEB6bTak6YRf5D6NQBdcSnGBFjIBNgCc=;
+	s=k20201202; t=1743725152;
+	bh=SAIAvP07XyuGe/Ilj1nav7Mqv8QbExIi9rs/k91UdzY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=AKHq+5D8czIVFaOVZ+Ww5F5xT7b/XNpyeNEP3AquzhnAxqOZtJ5/WU6Ww6/y0glyR
-	 PzgJx1ojdELA5tXv5GgLGbfETSLHDHbco0CePZ469M/932HxIBpYPfX1PjpCK8LXNv
-	 PxXi2zRKg+11bt/LdQgaVHDbJlaplC7q9CxLU5JU+HV2h88p+OuB+ngtkcFJjxZrUC
-	 TxmXrSBYlKrL3HdZ0IHAd2o1qD1CWEQSaYhCQDLI6T6Sk4qGUFGL5qVsQQ2MwcYu7b
-	 qreg0kMlk+zLAntOLJQE8+UUcUzc867RtWpTln2Sq8USRejjGziLUFvhhrtryTVPNl
-	 B9m2yqIyta+Cw==
+	b=aChowIxYwp7kd5UANEusL6L4gywEaxM56wa9ZgYnkayuyzf9O8nWTaftM+AO8gi7L
+	 WhNuhqx+1YWRMYR66plaP6Wvq8FYzf993s5kA/kE3dSvXFnxtZDRW1jb3F+ZYR5s9X
+	 QtnRbL8wpgIHpB760s/TsV7AlcK6adCwJcsLOD5ZZyzvSxb/VOEPHM2WAjGgRkCtEV
+	 nkNc4ZNw89Na7AGHIuHGde4wEWssHG0QVzB96KNVW6nN22GxhkugGxDWhW54db9FbH
+	 6ROSsJtoxzmtqtbmYYSTxv5ahbk8w4O75nyVA456mMtGivh4yFoZYps5MERUqItoc1
+	 ORr+d8VoXEQWA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
 Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
 	Sasha Levin <sashal@kernel.org>,
-	dragan.mladjenovic@syrmia.com,
-	cfu@wavecomp.com,
 	jiaxun.yang@flygoat.com,
-	paulburton@kernel.org,
+	dragan.mladjenovic@syrmia.com,
 	arikalo@gmail.com,
+	paulburton@kernel.org,
+	cfu@wavecomp.com,
 	linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.13 05/22] MIPS: cm: Detect CM quirks from device tree
-Date: Thu,  3 Apr 2025 20:04:34 -0400
-Message-Id: <20250404000453.2688371-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.12 04/20] MIPS: cm: Detect CM quirks from device tree
+Date: Thu,  3 Apr 2025 20:05:24 -0400
+Message-Id: <20250404000541.2688670-4-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250404000453.2688371-1-sashal@kernel.org>
-References: <20250404000453.2688371-1-sashal@kernel.org>
+In-Reply-To: <20250404000541.2688670-1-sashal@kernel.org>
+References: <20250404000541.2688670-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -67,7 +67,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.13.9
+X-stable-base: Linux 6.12.21
 Content-Transfer-Encoding: 8bit
 
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
@@ -91,7 +91,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 36 insertions(+)
 
 diff --git a/arch/mips/include/asm/mips-cm.h b/arch/mips/include/asm/mips-cm.h
-index 23ce951f445bb..754e96dba256c 100644
+index 1e782275850a3..6a1de2ebc7b80 100644
 --- a/arch/mips/include/asm/mips-cm.h
 +++ b/arch/mips/include/asm/mips-cm.h
 @@ -59,6 +59,16 @@ extern phys_addr_t mips_cm_l2sync_phys_base(void);
