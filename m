@@ -1,172 +1,189 @@
-Return-Path: <linux-mips+bounces-8439-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8440-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9EFDEA7B423
-	for <lists+linux-mips@lfdr.de>; Fri,  4 Apr 2025 02:32:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDD2CA7B605
+	for <lists+linux-mips@lfdr.de>; Fri,  4 Apr 2025 04:59:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0D8127A8FD0
-	for <lists+linux-mips@lfdr.de>; Fri,  4 Apr 2025 00:28:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5017F189B7F0
+	for <lists+linux-mips@lfdr.de>; Fri,  4 Apr 2025 02:59:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F0BDF19D09C;
-	Fri,  4 Apr 2025 00:08:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96B2F7E110;
+	Fri,  4 Apr 2025 02:59:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="iYv//QHj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DInFV6Zz"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7A8D19D07C;
-	Fri,  4 Apr 2025 00:08:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 45A9A2940B;
+	Fri,  4 Apr 2025 02:59:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743725294; cv=none; b=k6Eg6S8jBCpeG4A3YJssK+SsWpLuS71GrsKarl5lyPFrd1tQub9oMntuheqsUZQgrLyGlPFE8ZTC2Qoeubv1Af845qZb74ZN4NBjavVFlmh/0S/dj5IfQ1dazsXzx8GWcp88aicDglRMqnG5fE8Wucl1OUWz3hl8Ne0ZOdI2iSQ=
+	t=1743735582; cv=none; b=QdCGRTlFKvqA0tTq79/yv41gWNPRuz+ghLFdkaun49H2SJ3syq8o69oZdzPl1KiYUN7lwo0zNauMv4lNa/viWN+5EnU9w9N7VTG22z3F/JmlE206S+XzfC7xB/wigaws8P48vs2+vV9r5Oi2ifmiWmgKyuyl2EqdW6PR2nCRMcc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743725294; c=relaxed/simple;
-	bh=lUA8vM9tBV4MG0sxT8IeCLiocZpMZjkb3aDRq0kXYeI=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CIvPKyG/rBd8+UcT7rtigsEcMrpTXwiWAkvOoxLFQ7JQseChAo8SoosZGRu1wsMlmBCqHTpi2oBbq52Fh5c0YCe5I3inUdi7vgxlERdQ8WMrBv/X9uKOKycxsR9W4tZx0NZyiLLcrexq4380OOVS9lHWEvfS+NFVY+RvqfQP/H8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=iYv//QHj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7097BC4CEE3;
-	Fri,  4 Apr 2025 00:08:13 +0000 (UTC)
+	s=arc-20240116; t=1743735582; c=relaxed/simple;
+	bh=R97K1edD4zHvzCCaN7fvUpcILyjz5fPxwxzTH3c208Y=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=k3DG/IxuSLJ22FF19hOLr2kbkty9UYL4+uWPFPld1sj7EB9gTBLAT3YgNOXkpsuPNqy0fO31bVkwb0cVPFKQ3TAUpJAv72dHhUVW8/Jx84weWNCnGaCludFQIohFBrLkI7SWljZNHOOA9T4qfasrVekKCRmaTZaASK3yEvU+45Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DInFV6Zz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 770AFC4CEE3;
+	Fri,  4 Apr 2025 02:59:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743725294;
-	bh=lUA8vM9tBV4MG0sxT8IeCLiocZpMZjkb3aDRq0kXYeI=;
-	h=From:To:Cc:Subject:Date:From;
-	b=iYv//QHjg2u6sAi6pUikFGUgB7sM9iXdsjiEN+hQVGwzKXK7D7n5YVDxaNYarpV6e
-	 Rc52X89of5CcWvQD+e9wEJr8V8kbPCeik7mF8p96e8YR1G9fSNhBJ3rsTWfOw1zyYp
-	 CoBtTL058jKC1J910LqPPMNkviMkm2AMRjNyo7Zegfw1zRiTyyCbzJUHL5iEArpJZ1
-	 H5BnSueQWn4GBQ+dx/2OkAsVIU0KTc07GpwwJHV90lNpWxoDXMLo/JU8dPyQqqr0ni
-	 yuZxPj+KKVq5KP+N3gsIxrtBJz2crwmfxpgj9p16FxzQ4THRGCQcABQqda/hpIM5E8
-	 8RkUbYZXnT7nA==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Sasha Levin <sashal@kernel.org>,
-	paulburton@kernel.org,
-	cfu@wavecomp.com,
-	jiaxun.yang@flygoat.com,
-	arikalo@gmail.com,
-	dragan.mladjenovic@syrmia.com,
-	linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.4 1/6] MIPS: cm: Detect CM quirks from device tree
-Date: Thu,  3 Apr 2025 20:08:02 -0400
-Message-Id: <20250404000809.2689525-1-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
+	s=k20201202; t=1743735580;
+	bh=R97K1edD4zHvzCCaN7fvUpcILyjz5fPxwxzTH3c208Y=;
+	h=From:Subject:Date:To:Cc:From;
+	b=DInFV6ZzZBtDCjprD0wNsyVhBlrl/OLVq59Qc8WDA3UnSu6pzYrn/+z8sAldu048T
+	 ECwlYcs9UBoRPnPvxrGuu3EVcEF6J+/4r0wCEVgadFKl7SSEGWPQGtFvgKZ1uGx6Gw
+	 NTLPe6lvFsgBfDYD7MVxeaup6ebGs1VhLDI2kWsioUB4+zEg5amoqw+NwiA92bLggV
+	 DiTcm1B9ZIta65dj/bHTQlKbhzaJ+b8ojif64yPJtiGJ9m0NXcBKtR4YA89r3Wz/hE
+	 JDizBDNh1vovQRv3FZYw5ee6m1E8APjoQChggwO8qym2IVuWiSgZhxgZi6eSXcB4yL
+	 +O4eazKiulj1g==
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Subject: [PATCH 00/19] Arm cpu schema clean-ups
+Date: Thu, 03 Apr 2025 21:59:21 -0500
+Message-Id: <20250403-dt-cpu-schema-v1-0-076be7171a85@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.4.291
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAlL72cC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDEwNj3ZQS3eSCUt3i5IzU3ERdE4tUM7Nk8zSzREsDJaCegqLUtMwKsHn
+ RsbW1AGXLomtfAAAA
+X-Change-ID: 20250403-dt-cpu-schema-48e66c7f6a90
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
+ Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Samuel Holland <samuel@sholland.org>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Viresh Kumar <viresh.kumar@linaro.org>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+ Liviu Dudau <liviu.dudau@arm.com>, Sudeep Holla <sudeep.holla@arm.com>, 
+ Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+ Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, 
+ Stephen Boyd <sboyd@kernel.org>, zhouyanjie@wanyeetech.com, 
+ Conor Dooley <conor@kernel.org>, 
+ Nicolas Ferre <nicolas.ferre@microchip.com>, 
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+ Steen Hegelund <Steen.Hegelund@microchip.com>, 
+ Daniel Machon <daniel.machon@microchip.com>, UNGLinuxDriver@microchip.com, 
+ Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, Heiko Stuebner <heiko@sntech.de>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, 
+ Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+ Geert Uytterhoeven <geert+renesas@glider.be>, 
+ Magnus Damm <magnus.damm@gmail.com>
+Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org, 
+ linux-arm-msm@vger.kernel.org, linux-mips@vger.kernel.org, 
+ imx@lists.linux.dev, linux-rockchip@lists.infradead.org, 
+ linux-amlogic@lists.infradead.org, linux-renesas-soc@vger.kernel.org
+X-Mailer: b4 0.15-dev
 
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
+The Arm cpu.yaml schema fails to restrict allowed properties in 'cpu' 
+nodes. The result, not surprisely, is a number of additional properties 
+and errors in .dts files. This series resolves those issues.
 
-[ Upstream commit e27fbe16af5cfc40639de4ced67d1a866a1953e9 ]
+There's still more properties in arm32 DTS files which I have not 
+documented. Mostly yet more supply names and "fsl,soc-operating-points". 
+What's a few more warnings on the 10000s of warnings...
 
-Some information that should be retrieved at runtime for the Coherence
-Manager can be either absent or wrong. This patch allows checking if
-some of this information is available from the device tree and updates
-the internal variable accordingly.
+The .dts files can be taken by the respective SoC maintainers. I will 
+take the binding changes.
 
-For now, only the compatible string associated with the broken HCI is
-being retrieved.
-
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
+Signed-off-by: "Rob Herring (Arm)" <robh@kernel.org>
 ---
- arch/mips/include/asm/mips-cm.h | 22 ++++++++++++++++++++++
- arch/mips/kernel/mips-cm.c      | 14 ++++++++++++++
- 2 files changed, 36 insertions(+)
+Rob Herring (Arm) (19):
+      arm64: dts: allwinner: h5/h6: Drop spurious 'clock-latency-ns' properties
+      arm64: dts: broadcom: bcm2712: Use "l2-cache" for L2 cache node names
+      arm64: dts: morello: Fix-up cache nodes
+      arm64: dts: microchip: sparx5: Fix CPU node "enable-method" property dependencies
+      arm64: dts: qcom: qdu1000: Fix qcom,freq-domain
+      arm64: dts: qcom: msm8939: Fix CPU node "enable-method" property dependencies
+      arm64: dts: qcom: msm8992-lg-h815: Fix CPU node "enable-method" property dependencies
+      arm: dts: qcom: msm8916: Move "qcom,acc" and "qcom,saw" to 32-bit .dtsi
+      arm: dts: qcom: sdx55/sdx65: Fix CPU power-domain-names
+      arm/arm64: dts: imx: Drop redundant CPU "clock-latency"
+      arm: dts: qcom: ipq4019: Drop redundant CPU "clock-latency"
+      arm: dts: rockchip: Drop redundant CPU "clock-latency"
+      arm64: dts: amlogic: Drop redundant CPU "clock-latency"
+      dt-bindings: arm/cpus: Add schemas for "enable-method" dependencies
+      dt-bindings: arm/cpus: Re-wrap 'description' entries
+      dt-bindings: Reference opp-v1 schema in CPU schemas
+      dt-bindings: arm/cpus: Add missing properties
+      dt-bindings: arm/cpus: Add power-domains constraints
+      dt-bindings: cpufreq: Drop redundant Mediatek binding
 
-diff --git a/arch/mips/include/asm/mips-cm.h b/arch/mips/include/asm/mips-cm.h
-index 696b40beb774f..0f31324998c0a 100644
---- a/arch/mips/include/asm/mips-cm.h
-+++ b/arch/mips/include/asm/mips-cm.h
-@@ -47,6 +47,16 @@ extern phys_addr_t __mips_cm_phys_base(void);
-  */
- extern int mips_cm_is64;
- 
-+/*
-+ * mips_cm_is_l2_hci_broken  - determine if HCI is broken
-+ *
-+ * Some CM reports show that Hardware Cache Initialization is
-+ * complete, but in reality it's not the case. They also incorrectly
-+ * indicate that Hardware Cache Initialization is supported. This
-+ * flags allows warning about this broken feature.
-+ */
-+extern bool mips_cm_is_l2_hci_broken;
-+
- /**
-  * mips_cm_error_report - Report CM cache errors
-  */
-@@ -85,6 +95,18 @@ static inline bool mips_cm_present(void)
- #endif
- }
- 
-+/**
-+ * mips_cm_update_property - update property from the device tree
-+ *
-+ * Retrieve the properties from the device tree if a CM node exist and
-+ * update the internal variable based on this.
-+ */
-+#ifdef CONFIG_MIPS_CM
-+extern void mips_cm_update_property(void);
-+#else
-+static void mips_cm_update_property(void) {}
-+#endif
-+
- /**
-  * mips_cm_has_l2sync - determine whether an L2-only sync region is present
-  *
-diff --git a/arch/mips/kernel/mips-cm.c b/arch/mips/kernel/mips-cm.c
-index 611ef512c0b81..159354ac9335b 100644
---- a/arch/mips/kernel/mips-cm.c
-+++ b/arch/mips/kernel/mips-cm.c
-@@ -5,6 +5,7 @@
-  */
- 
- #include <linux/errno.h>
-+#include <linux/of.h>
- #include <linux/percpu.h>
- #include <linux/spinlock.h>
- 
-@@ -14,6 +15,7 @@
- void __iomem *mips_gcr_base;
- void __iomem *mips_cm_l2sync_base;
- int mips_cm_is64;
-+bool mips_cm_is_l2_hci_broken;
- 
- static char *cm2_tr[8] = {
- 	"mem",	"gcr",	"gic",	"mmio",
-@@ -196,6 +198,18 @@ static void mips_cm_probe_l2sync(void)
- 	mips_cm_l2sync_base = ioremap_nocache(addr, MIPS_CM_L2SYNC_SIZE);
- }
- 
-+void mips_cm_update_property(void)
-+{
-+	struct device_node *cm_node;
-+
-+	cm_node = of_find_compatible_node(of_root, NULL, "mobileye,eyeq6-cm");
-+	if (!cm_node)
-+		return;
-+	pr_info("HCI (Hardware Cache Init for the L2 cache) in GCR_L2_RAM_CONFIG from the CM3 is broken");
-+	mips_cm_is_l2_hci_broken = true;
-+	of_node_put(cm_node);
-+}
-+
- int mips_cm_probe(void)
- {
- 	phys_addr_t addr;
+ Documentation/devicetree/bindings/arm/cpus.yaml    | 220 ++++++++++--------
+ .../bindings/cpufreq/cpufreq-mediatek.txt          | 250 ---------------------
+ Documentation/devicetree/bindings/mips/cpus.yaml   |   3 +-
+ Documentation/devicetree/bindings/opp/opp-v1.yaml  |  18 +-
+ arch/arm/boot/dts/nxp/imx/imx7s.dtsi               |   1 -
+ arch/arm/boot/dts/qcom/qcom-ipq4019.dtsi           |   4 -
+ arch/arm/boot/dts/qcom/qcom-msm8916-smp.dtsi       |   8 +
+ arch/arm/boot/dts/qcom/qcom-sdx55.dtsi             |   2 +-
+ arch/arm/boot/dts/qcom/qcom-sdx65.dtsi             |   2 +-
+ arch/arm/boot/dts/rockchip/rk3128.dtsi             |   8 +-
+ arch/arm/boot/dts/rockchip/rk3188.dtsi             |   1 -
+ arch/arm/boot/dts/rockchip/rk322x.dtsi             |   1 -
+ arch/arm/boot/dts/rockchip/rk3288.dtsi             |   5 +-
+ arch/arm/boot/dts/rockchip/rv1108.dtsi             |   1 -
+ arch/arm64/boot/dts/allwinner/sun50i-h5.dtsi       |   4 -
+ arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi       |   4 -
+ arch/arm64/boot/dts/amlogic/meson-g12a-fbx8am.dts  |   4 -
+ .../boot/dts/amlogic/meson-g12a-radxa-zero.dts     |   4 -
+ arch/arm64/boot/dts/amlogic/meson-g12a-sei510.dts  |   4 -
+ arch/arm64/boot/dts/amlogic/meson-g12a-u200.dts    |   4 -
+ arch/arm64/boot/dts/amlogic/meson-g12a-x96-max.dts |   4 -
+ arch/arm64/boot/dts/amlogic/meson-g12a.dtsi        |   1 +
+ .../dts/amlogic/meson-g12b-a311d-libretech-cc.dts  |   6 -
+ arch/arm64/boot/dts/amlogic/meson-g12b-a311d.dtsi  |   2 +
+ .../boot/dts/amlogic/meson-g12b-bananapi-cm4.dtsi  |   6 -
+ .../boot/dts/amlogic/meson-g12b-bananapi.dtsi      |   6 -
+ .../boot/dts/amlogic/meson-g12b-khadas-vim3.dtsi   |   6 -
+ .../dts/amlogic/meson-g12b-odroid-go-ultra.dts     |   6 -
+ arch/arm64/boot/dts/amlogic/meson-g12b-odroid.dtsi |   6 -
+ .../boot/dts/amlogic/meson-g12b-radxa-zero2.dts    |   6 -
+ arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi  |   2 +
+ arch/arm64/boot/dts/amlogic/meson-g12b-w400.dtsi   |   6 -
+ arch/arm64/boot/dts/amlogic/meson-sm1-ac2xx.dtsi   |   4 -
+ .../arm64/boot/dts/amlogic/meson-sm1-bananapi.dtsi |   4 -
+ .../boot/dts/amlogic/meson-sm1-khadas-vim3l.dts    |   4 -
+ arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi  |   4 -
+ .../dts/amlogic/meson-sm1-s905d3-libretech-cc.dts  |   4 -
+ arch/arm64/boot/dts/amlogic/meson-sm1-sei610.dts   |   4 -
+ arch/arm64/boot/dts/amlogic/meson-sm1.dtsi         |   1 +
+ arch/arm64/boot/dts/arm/morello.dtsi               |  22 +-
+ arch/arm64/boot/dts/broadcom/bcm2712.dtsi          |   8 +-
+ arch/arm64/boot/dts/freescale/imx8mm.dtsi          |   4 -
+ arch/arm64/boot/dts/freescale/imx8mn.dtsi          |   4 -
+ arch/arm64/boot/dts/freescale/imx8mp.dtsi          |   4 -
+ arch/arm64/boot/dts/freescale/imx8mq.dtsi          |   4 -
+ .../boot/dts/microchip/sparx5_pcb_common.dtsi      |   2 +
+ arch/arm64/boot/dts/qcom/msm8916.dtsi              |   8 -
+ arch/arm64/boot/dts/qcom/msm8939.dtsi              |  24 +-
+ arch/arm64/boot/dts/qcom/msm8992-lg-h815.dts       |   6 +
+ arch/arm64/boot/dts/qcom/qdu1000.dtsi              |   8 +-
+ 50 files changed, 210 insertions(+), 514 deletions(-)
+---
+base-commit: a2cc6ff5ec8f91bc463fd3b0c26b61166a07eb11
+change-id: 20250403-dt-cpu-schema-48e66c7f6a90
+
+Best regards,
 -- 
-2.39.5
+Rob Herring (Arm) <robh@kernel.org>
 
 
