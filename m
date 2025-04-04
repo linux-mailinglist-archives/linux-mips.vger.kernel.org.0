@@ -1,64 +1,63 @@
-Return-Path: <linux-mips+bounces-8434-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8435-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08C0DA7B364
-	for <lists+linux-mips@lfdr.de>; Fri,  4 Apr 2025 02:17:15 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D077FA7B39B
+	for <lists+linux-mips@lfdr.de>; Fri,  4 Apr 2025 02:22:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 542EE17A470
-	for <lists+linux-mips@lfdr.de>; Fri,  4 Apr 2025 00:16:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 92B82189B83E
+	for <lists+linux-mips@lfdr.de>; Fri,  4 Apr 2025 00:21:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59B301F5844;
-	Fri,  4 Apr 2025 00:05:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE4A51FF1B6;
+	Fri,  4 Apr 2025 00:06:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aChowIxY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f4y88TqM"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BE2A14A09C;
-	Fri,  4 Apr 2025 00:05:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 917D018B47D;
+	Fri,  4 Apr 2025 00:06:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743725154; cv=none; b=LOtQy24/wtvnZoKzTP3xlEzdTm0SsV3cjRVLan4OQN4UAd+Ag9ocuE8cx1p8WEpoLD5sLlqaulYRvTCSo5EKcNybrQeowQp8JTLBR9lkE3+yGMQRuA6Ij6f8BukVFqXWXx/OLp5bKqPHuLG38tB664JW8fLFs3GTqUSAtEdC4RY=
+	t=1743725193; cv=none; b=XM3wGMpoos8c+Tx1cm7GAKmgjvC561VmjmHowLX7LrPrsuLL3i+3S1QnJ8BDX+XPT1Twq8jqVu6IuRUisEpgOVWLWnxvMbGBHQ8Z7WJwm2NxuQ3NfQGznljE5CytANWQ5ojfXETQ7+On9fnyaTOGzkjlqUPbha4v4tFgFQwkatg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743725154; c=relaxed/simple;
-	bh=SAIAvP07XyuGe/Ilj1nav7Mqv8QbExIi9rs/k91UdzY=;
+	s=arc-20240116; t=1743725193; c=relaxed/simple;
+	bh=6MiLJJkju46L6xfTkIknXJhImciYRsXc3r8zjM2rMms=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=XPGQmpHbQuHJxkqYl0h0XqDpmyzb2Qd9uvEQ41HDeEOJiWeG8Gouz5qZyThok1HdycFVe+yesYK8HZ+zwDS+17ASbn3fadwKnYzPGr6f2Mx0vgDTnJt8AIFX5DRQShsfHk5qvY0zw+uDVIJtHBLd34ZBNS5WYy1NQ+87oNu2pzs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aChowIxY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77E74C4CEE5;
-	Fri,  4 Apr 2025 00:05:51 +0000 (UTC)
+	 MIME-Version; b=oUBYMzz0AuOto/4+EQCChz4bqW71Pr05R7gUWRQytzAL9HUOrCIuoaT95lImxri8BOKOC0xue1LQV+Z0oxoiNVXLXQ60l6BLLb/wxeE8zFirVB8FpPkOl6i8OFuVrM8WhkYhKyvy/N93G5QJHuoL+N1Ho5syao2LSoywTOynVr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f4y88TqM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F02E9C4CEE3;
+	Fri,  4 Apr 2025 00:06:31 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743725152;
-	bh=SAIAvP07XyuGe/Ilj1nav7Mqv8QbExIi9rs/k91UdzY=;
+	s=k20201202; t=1743725193;
+	bh=6MiLJJkju46L6xfTkIknXJhImciYRsXc3r8zjM2rMms=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=aChowIxYwp7kd5UANEusL6L4gywEaxM56wa9ZgYnkayuyzf9O8nWTaftM+AO8gi7L
-	 WhNuhqx+1YWRMYR66plaP6Wvq8FYzf993s5kA/kE3dSvXFnxtZDRW1jb3F+ZYR5s9X
-	 QtnRbL8wpgIHpB760s/TsV7AlcK6adCwJcsLOD5ZZyzvSxb/VOEPHM2WAjGgRkCtEV
-	 nkNc4ZNw89Na7AGHIuHGde4wEWssHG0QVzB96KNVW6nN22GxhkugGxDWhW54db9FbH
-	 6ROSsJtoxzmtqtbmYYSTxv5ahbk8w4O75nyVA456mMtGivh4yFoZYps5MERUqItoc1
-	 ORr+d8VoXEQWA==
+	b=f4y88TqM8c0qp0gtb5lBRxcsxL5tncG/YarNkmJXNk42TmzawLPhfdvx4mLUdqgeM
+	 JFPaBWiWflRDMrU5fWr6Oc5FRzFHFwSKvdfMs5wy06RvN+LyFrr5YJMSvvEcrb0B/A
+	 P9c1wxO4JRr8eCn35RvRLGFQVFc7NHmLd3mYZNXeEGUbl84Fmsr6Fw291aXAO/SJZ/
+	 5nLwDEZ93Xtz7xMw44Bvl5UKx0nxDkprJ2T0b/v+ebcKkXiXJcja00cvka/3YQhOCB
+	 TChgv/3/Iws/xFCVWqoudZpZ7AABVHucGAIq/jeKBpTjuhNlnrbMamRzXufy4LaZhB
+	 0b4COni1YSXLw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
 Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
 	Sasha Levin <sashal@kernel.org>,
-	jiaxun.yang@flygoat.com,
 	dragan.mladjenovic@syrmia.com,
-	arikalo@gmail.com,
-	paulburton@kernel.org,
 	cfu@wavecomp.com,
+	paulburton@kernel.org,
+	arikalo@gmail.com,
 	linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 04/20] MIPS: cm: Detect CM quirks from device tree
-Date: Thu,  3 Apr 2025 20:05:24 -0400
-Message-Id: <20250404000541.2688670-4-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 02/16] MIPS: cm: Detect CM quirks from device tree
+Date: Thu,  3 Apr 2025 20:06:10 -0400
+Message-Id: <20250404000624.2688940-2-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250404000541.2688670-1-sashal@kernel.org>
-References: <20250404000541.2688670-1-sashal@kernel.org>
+In-Reply-To: <20250404000624.2688940-1-sashal@kernel.org>
+References: <20250404000624.2688940-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -67,7 +66,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.21
+X-stable-base: Linux 6.6.85
 Content-Transfer-Encoding: 8bit
 
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
@@ -91,10 +90,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  2 files changed, 36 insertions(+)
 
 diff --git a/arch/mips/include/asm/mips-cm.h b/arch/mips/include/asm/mips-cm.h
-index 1e782275850a3..6a1de2ebc7b80 100644
+index 696b40beb774f..0f31324998c0a 100644
 --- a/arch/mips/include/asm/mips-cm.h
 +++ b/arch/mips/include/asm/mips-cm.h
-@@ -59,6 +59,16 @@ extern phys_addr_t mips_cm_l2sync_phys_base(void);
+@@ -47,6 +47,16 @@ extern phys_addr_t __mips_cm_phys_base(void);
   */
  extern int mips_cm_is64;
  
@@ -111,7 +110,7 @@ index 1e782275850a3..6a1de2ebc7b80 100644
  /**
   * mips_cm_error_report - Report CM cache errors
   */
-@@ -97,6 +107,18 @@ static inline bool mips_cm_present(void)
+@@ -85,6 +95,18 @@ static inline bool mips_cm_present(void)
  #endif
  }
  
@@ -131,7 +130,7 @@ index 1e782275850a3..6a1de2ebc7b80 100644
   * mips_cm_has_l2sync - determine whether an L2-only sync region is present
   *
 diff --git a/arch/mips/kernel/mips-cm.c b/arch/mips/kernel/mips-cm.c
-index 3eb2cfb893e19..9cfabaa94d010 100644
+index 3f00788b08718..4f75160f08949 100644
 --- a/arch/mips/kernel/mips-cm.c
 +++ b/arch/mips/kernel/mips-cm.c
 @@ -5,6 +5,7 @@
@@ -150,7 +149,7 @@ index 3eb2cfb893e19..9cfabaa94d010 100644
  
  static char *cm2_tr[8] = {
  	"mem",	"gcr",	"gic",	"mmio",
-@@ -237,6 +239,18 @@ static void mips_cm_probe_l2sync(void)
+@@ -243,6 +245,18 @@ static void mips_cm_probe_l2sync(void)
  	mips_cm_l2sync_base = ioremap(addr, MIPS_CM_L2SYNC_SIZE);
  }
  
