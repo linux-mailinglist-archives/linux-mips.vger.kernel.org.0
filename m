@@ -1,73 +1,175 @@
-Return-Path: <linux-mips+bounces-8431-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8432-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DD5DA7B052
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Apr 2025 23:14:40 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 70819A7B2DA
+	for <lists+linux-mips@lfdr.de>; Fri,  4 Apr 2025 02:05:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D40E13B6D85
-	for <lists+linux-mips@lfdr.de>; Thu,  3 Apr 2025 21:06:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F03D03A62C4
+	for <lists+linux-mips@lfdr.de>; Fri,  4 Apr 2025 00:05:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF5191ACEC8;
-	Thu,  3 Apr 2025 20:17:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 919F428E8;
+	Fri,  4 Apr 2025 00:04:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JrQXEvac"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A10133997;
-	Thu,  3 Apr 2025 20:17:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 651FC13BAE3;
+	Fri,  4 Apr 2025 00:04:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743711473; cv=none; b=Lt/WTojetb10IpBqbEg4ZaLvofyg9Lb2zKGK6HHk6D4aUg0zHKFD8AyjEZSmA1Ho1b9rCkI3ftCt5n25bNya55hYJfEqbRj6bGHxdybARHvdVFRuhgquk7hBZZCK4bX8jcDJFbKPJIj82kuV8H3HXTPgK5LE8WfVRPJ1RXLpleU=
+	t=1743725056; cv=none; b=nyXljT1BEKXa2P2mUiAONtaHOrnep6crQELN2ndaPIDJuuAv/B4uc8QzkZ3pEOe70vaERGxPIBYBJLMjaK97WDr3wLTfVGEb6h7+xWF7N7E1uVsu6C+v342maEWKfSD4ZWVpQ06OghjmNzdzZ4NG2rJAVJWxdhoxA/AJel6m3rQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743711473; c=relaxed/simple;
-	bh=ejLLA06zLnyyVFtt9C0U6uklOKBjBiRO5UroAuh+hrM=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=tcj4zx954sCbQTHzJubDjGXtqIvn0r95F4Rj1FIlBcp0hvNKJMus3qHsDDthX8VwEGBRW52LY/AKJzI0r34TERYsLDMHmiOAGlXgkBp9ZlMrPesaGxlxc1YuyffK3MS2DcYiQFS8JQVLfZAqmVSL4I5QGnhZ7mgEThzDQm82hR4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 6FC1F92009C; Thu,  3 Apr 2025 22:17:48 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 68AB092009B;
-	Thu,  3 Apr 2025 21:17:48 +0100 (BST)
-Date: Thu, 3 Apr 2025 21:17:48 +0100 (BST)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Marco Crivellari <marco.crivellari@suse.com>
-cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
-    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-    Frederic Weisbecker <frederic@kernel.org>, 
-    Anna-Maria Behnsen <anna-maria@linutronix.de>, 
-    Thomas Gleixner <tglx@linutronix.de>, 
-    Peter Zijlstra <peterz@infradead.org>, Huacai Chen <chenhuacai@kernel.org>
-Subject: Re: [PATCH v6 1/1] MIPS: Fix idle VS timer enqueue
-In-Reply-To: <CAAofZF7YVK207bVYu5-p0CAKjpB7hHYomgd9wdV1J=5GkeNXbw@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.2504032112590.53907@angie.orcam.me.uk>
-References: <20250315194002.13778-1-marco.crivellari@suse.com> <20250315194002.13778-2-marco.crivellari@suse.com> <alpine.DEB.2.21.2503211146001.35806@angie.orcam.me.uk> <CAAofZF4gy6WJKLK4TzF5aV7+ca3gob5jVz3XQZyGrTpfnCsn_Q@mail.gmail.com>
- <alpine.DEB.2.21.2503211747150.35806@angie.orcam.me.uk> <CAAofZF5yaGMG0Kyax+ksfGngQ0T6AxvN5-60SnasQh7=OabaOg@mail.gmail.com> <alpine.DEB.2.21.2503260300290.29685@angie.orcam.me.uk> <alpine.DEB.2.21.2503281345010.47733@angie.orcam.me.uk>
- <CAAofZF65p+DnH8xA0+sfuZv=VO63Zgv4rQ6frrdEzQYoZ0MaWA@mail.gmail.com> <alpine.DEB.2.21.2503311348560.47733@angie.orcam.me.uk> <CAAofZF6Gnzm9isPt3NUuSPBmBWQsj56O43pPZAf64WEP8no2Rg@mail.gmail.com> <alpine.DEB.2.21.2504021933160.53907@angie.orcam.me.uk>
- <CAAofZF7YVK207bVYu5-p0CAKjpB7hHYomgd9wdV1J=5GkeNXbw@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1743725056; c=relaxed/simple;
+	bh=r7QFhLqGBIbqEB6bTak6YRf5D6NQBdcSnGBFjIBNgCc=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=kBiKZocBM6Ik5bNWpvfNIOyovpvAorNqky/8QgRagC6YHMm38/yJUL0lxjS9/DwWkqpTqFwoILm1NAQKQq73FHkJ6I4UwQlD9A1qnQPbwwAckuoYUYgHeeIXb1ee67ao03qrNrJ4CD8DuCx64hqg4ZMh1/ZdgwebZHO0Ahd872o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JrQXEvac; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95A59C4CEE5;
+	Fri,  4 Apr 2025 00:04:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1743725055;
+	bh=r7QFhLqGBIbqEB6bTak6YRf5D6NQBdcSnGBFjIBNgCc=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=JrQXEvact6EeVgTMnOQ1zSIy7g11kg5EtKNgzCpLb1S6lB7dswGGo/WI8xXUtNen+
+	 XO9z+QKnVupZSqAdsYWqXYd2sUse4Z+IasLQV7L4E62Z7nEfOdbRgIQqqBqA9bByd7
+	 aL3pvScUd/nJevmzzb/Mjo0EiS/SLowoyY0CjZ60qRGvFNRWgIsC+JSa6zyDFuVkxo
+	 It7AvdNdAICS+blJH1L3G9V2AO/1/Kg7ygfPtUyRcJwZtoumF+1PoJceM8aFTl426u
+	 crsW7I4KdGGSe9hz4k+yiuKhD4RwX/STG+A6hz4IA4OQh1ShHLkQMOASPgvZNuPigV
+	 ROCCI2oQn2aGg==
+From: Sasha Levin <sashal@kernel.org>
+To: linux-kernel@vger.kernel.org,
+	stable@vger.kernel.org
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Sasha Levin <sashal@kernel.org>,
+	jiaxun.yang@flygoat.com,
+	paulburton@kernel.org,
+	arikalo@gmail.com,
+	cfu@wavecomp.com,
+	dragan.mladjenovic@syrmia.com,
+	linux-mips@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.14 05/23] MIPS: cm: Detect CM quirks from device tree
+Date: Thu,  3 Apr 2025 20:03:42 -0400
+Message-Id: <20250404000402.2688049-5-sashal@kernel.org>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250404000402.2688049-1-sashal@kernel.org>
+References: <20250404000402.2688049-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+X-stable: review
+X-Patchwork-Hint: Ignore
+X-stable-base: Linux 6.14
+Content-Transfer-Encoding: 8bit
 
-On Thu, 3 Apr 2025, Marco Crivellari wrote:
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
 
-> Great, so I think that I will send the v7 without the "rename" part,
-> so we can address this in the future, if it sounds reasonable,
-> and find an appropriate name.
+[ Upstream commit e27fbe16af5cfc40639de4ced67d1a866a1953e9 ]
 
- Well, from experience "future" sounds like "never" to me, but if Thomas 
-is fine with that, I'm not going to fight a battle here.  I've got enough 
-stuff to do now, including some rather urgent discovered last month, as 
-far as the MIPS port is concerned, let alone other things.  Thank you for 
-your perseverance with this effort anyway.
+Some information that should be retrieved at runtime for the Coherence
+Manager can be either absent or wrong. This patch allows checking if
+some of this information is available from the device tree and updates
+the internal variable accordingly.
 
-  Maciej
+For now, only the compatible string associated with the broken HCI is
+being retrieved.
+
+Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ arch/mips/include/asm/mips-cm.h | 22 ++++++++++++++++++++++
+ arch/mips/kernel/mips-cm.c      | 14 ++++++++++++++
+ 2 files changed, 36 insertions(+)
+
+diff --git a/arch/mips/include/asm/mips-cm.h b/arch/mips/include/asm/mips-cm.h
+index 23ce951f445bb..754e96dba256c 100644
+--- a/arch/mips/include/asm/mips-cm.h
++++ b/arch/mips/include/asm/mips-cm.h
+@@ -59,6 +59,16 @@ extern phys_addr_t mips_cm_l2sync_phys_base(void);
+  */
+ extern int mips_cm_is64;
+ 
++/*
++ * mips_cm_is_l2_hci_broken  - determine if HCI is broken
++ *
++ * Some CM reports show that Hardware Cache Initialization is
++ * complete, but in reality it's not the case. They also incorrectly
++ * indicate that Hardware Cache Initialization is supported. This
++ * flags allows warning about this broken feature.
++ */
++extern bool mips_cm_is_l2_hci_broken;
++
+ /**
+  * mips_cm_error_report - Report CM cache errors
+  */
+@@ -97,6 +107,18 @@ static inline bool mips_cm_present(void)
+ #endif
+ }
+ 
++/**
++ * mips_cm_update_property - update property from the device tree
++ *
++ * Retrieve the properties from the device tree if a CM node exist and
++ * update the internal variable based on this.
++ */
++#ifdef CONFIG_MIPS_CM
++extern void mips_cm_update_property(void);
++#else
++static void mips_cm_update_property(void) {}
++#endif
++
+ /**
+  * mips_cm_has_l2sync - determine whether an L2-only sync region is present
+  *
+diff --git a/arch/mips/kernel/mips-cm.c b/arch/mips/kernel/mips-cm.c
+index 3eb2cfb893e19..9cfabaa94d010 100644
+--- a/arch/mips/kernel/mips-cm.c
++++ b/arch/mips/kernel/mips-cm.c
+@@ -5,6 +5,7 @@
+  */
+ 
+ #include <linux/errno.h>
++#include <linux/of.h>
+ #include <linux/percpu.h>
+ #include <linux/spinlock.h>
+ 
+@@ -14,6 +15,7 @@
+ void __iomem *mips_gcr_base;
+ void __iomem *mips_cm_l2sync_base;
+ int mips_cm_is64;
++bool mips_cm_is_l2_hci_broken;
+ 
+ static char *cm2_tr[8] = {
+ 	"mem",	"gcr",	"gic",	"mmio",
+@@ -237,6 +239,18 @@ static void mips_cm_probe_l2sync(void)
+ 	mips_cm_l2sync_base = ioremap(addr, MIPS_CM_L2SYNC_SIZE);
+ }
+ 
++void mips_cm_update_property(void)
++{
++	struct device_node *cm_node;
++
++	cm_node = of_find_compatible_node(of_root, NULL, "mobileye,eyeq6-cm");
++	if (!cm_node)
++		return;
++	pr_info("HCI (Hardware Cache Init for the L2 cache) in GCR_L2_RAM_CONFIG from the CM3 is broken");
++	mips_cm_is_l2_hci_broken = true;
++	of_node_put(cm_node);
++}
++
+ int mips_cm_probe(void)
+ {
+ 	phys_addr_t addr;
+-- 
+2.39.5
+
 
