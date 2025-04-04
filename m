@@ -1,64 +1,64 @@
-Return-Path: <linux-mips+bounces-8432-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8433-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70819A7B2DA
-	for <lists+linux-mips@lfdr.de>; Fri,  4 Apr 2025 02:05:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B047A7B321
+	for <lists+linux-mips@lfdr.de>; Fri,  4 Apr 2025 02:11:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F03D03A62C4
-	for <lists+linux-mips@lfdr.de>; Fri,  4 Apr 2025 00:05:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 07EEB3B5FFF
+	for <lists+linux-mips@lfdr.de>; Fri,  4 Apr 2025 00:11:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 919F428E8;
-	Fri,  4 Apr 2025 00:04:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13B6A1ACED5;
+	Fri,  4 Apr 2025 00:05:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JrQXEvac"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AKHq+5D8"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 651FC13BAE3;
-	Fri,  4 Apr 2025 00:04:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD181EEC3;
+	Fri,  4 Apr 2025 00:05:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1743725056; cv=none; b=nyXljT1BEKXa2P2mUiAONtaHOrnep6crQELN2ndaPIDJuuAv/B4uc8QzkZ3pEOe70vaERGxPIBYBJLMjaK97WDr3wLTfVGEb6h7+xWF7N7E1uVsu6C+v342maEWKfSD4ZWVpQ06OghjmNzdzZ4NG2rJAVJWxdhoxA/AJel6m3rQ=
+	t=1743725107; cv=none; b=cBRid0RG+Ij+KJ+fms+ij9JpcS5tujixKB1VZDP4nrJn/rqaL03gjhrdXL1ub1CWvMWDK4vsJa+e3oipfLKAmYCeJ1u6aDdwvFlEcq/DJ6S/PtmN93kv7dbPvDNCc1D54a70k151sWSEpFc2OgQ2GpoAMH7CmGzfgVY9kYMlwCA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1743725056; c=relaxed/simple;
+	s=arc-20240116; t=1743725107; c=relaxed/simple;
 	bh=r7QFhLqGBIbqEB6bTak6YRf5D6NQBdcSnGBFjIBNgCc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=kBiKZocBM6Ik5bNWpvfNIOyovpvAorNqky/8QgRagC6YHMm38/yJUL0lxjS9/DwWkqpTqFwoILm1NAQKQq73FHkJ6I4UwQlD9A1qnQPbwwAckuoYUYgHeeIXb1ee67ao03qrNrJ4CD8DuCx64hqg4ZMh1/ZdgwebZHO0Ahd872o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JrQXEvac; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 95A59C4CEE5;
-	Fri,  4 Apr 2025 00:04:14 +0000 (UTC)
+	 MIME-Version; b=s2hleIBPn4XG6MUunF15WOqWfCH4ZLv+lc99nIWfeUin7TFau52xiNDb+ProJNI2MdpihXK3MRouGlt7LbmCMpxD/Wurz0CBE+H3Hm4JXlzs9zdMng5hqa9XdUmmrRhvW12TPAGUdaTLkSOc495GMtKxwJXFdMddCuk7HPbjn70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AKHq+5D8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EDCFC4CEE3;
+	Fri,  4 Apr 2025 00:05:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1743725055;
+	s=k20201202; t=1743725106;
 	bh=r7QFhLqGBIbqEB6bTak6YRf5D6NQBdcSnGBFjIBNgCc=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=JrQXEvact6EeVgTMnOQ1zSIy7g11kg5EtKNgzCpLb1S6lB7dswGGo/WI8xXUtNen+
-	 XO9z+QKnVupZSqAdsYWqXYd2sUse4Z+IasLQV7L4E62Z7nEfOdbRgIQqqBqA9bByd7
-	 aL3pvScUd/nJevmzzb/Mjo0EiS/SLowoyY0CjZ60qRGvFNRWgIsC+JSa6zyDFuVkxo
-	 It7AvdNdAICS+blJH1L3G9V2AO/1/Kg7ygfPtUyRcJwZtoumF+1PoJceM8aFTl426u
-	 crsW7I4KdGGSe9hz4k+yiuKhD4RwX/STG+A6hz4IA4OQh1ShHLkQMOASPgvZNuPigV
-	 ROCCI2oQn2aGg==
+	b=AKHq+5D8czIVFaOVZ+Ww5F5xT7b/XNpyeNEP3AquzhnAxqOZtJ5/WU6Ww6/y0glyR
+	 PzgJx1ojdELA5tXv5GgLGbfETSLHDHbco0CePZ469M/932HxIBpYPfX1PjpCK8LXNv
+	 PxXi2zRKg+11bt/LdQgaVHDbJlaplC7q9CxLU5JU+HV2h88p+OuB+ngtkcFJjxZrUC
+	 TxmXrSBYlKrL3HdZ0IHAd2o1qD1CWEQSaYhCQDLI6T6Sk4qGUFGL5qVsQQ2MwcYu7b
+	 qreg0kMlk+zLAntOLJQE8+UUcUzc867RtWpTln2Sq8USRejjGziLUFvhhrtryTVPNl
+	 B9m2yqIyta+Cw==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
 Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
 	Sasha Levin <sashal@kernel.org>,
+	dragan.mladjenovic@syrmia.com,
+	cfu@wavecomp.com,
 	jiaxun.yang@flygoat.com,
 	paulburton@kernel.org,
 	arikalo@gmail.com,
-	cfu@wavecomp.com,
-	dragan.mladjenovic@syrmia.com,
 	linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.14 05/23] MIPS: cm: Detect CM quirks from device tree
-Date: Thu,  3 Apr 2025 20:03:42 -0400
-Message-Id: <20250404000402.2688049-5-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.13 05/22] MIPS: cm: Detect CM quirks from device tree
+Date: Thu,  3 Apr 2025 20:04:34 -0400
+Message-Id: <20250404000453.2688371-5-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250404000402.2688049-1-sashal@kernel.org>
-References: <20250404000402.2688049-1-sashal@kernel.org>
+In-Reply-To: <20250404000453.2688371-1-sashal@kernel.org>
+References: <20250404000453.2688371-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -67,7 +67,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.14
+X-stable-base: Linux 6.13.9
 Content-Transfer-Encoding: 8bit
 
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
