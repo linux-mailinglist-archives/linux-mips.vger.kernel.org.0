@@ -1,199 +1,141 @@
-Return-Path: <linux-mips+bounces-8523-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8524-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AABFEA8069E
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Apr 2025 14:29:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 896B3A81989
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Apr 2025 01:54:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 714BB423397
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Apr 2025 12:20:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 798FB1B804BB
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Apr 2025 23:55:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1678268C66;
-	Tue,  8 Apr 2025 12:17:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CCEB2566E1;
+	Tue,  8 Apr 2025 23:54:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zemJrq9F"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="RJMpo4gE"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8A0F267B91
-	for <linux-mips@vger.kernel.org>; Tue,  8 Apr 2025 12:17:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96AE1254872
+	for <linux-mips@vger.kernel.org>; Tue,  8 Apr 2025 23:54:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744114667; cv=none; b=Blq7o5hRatvw3w+Y9TyMSG7PcQv3lo7rs9+EuWub0m4o1q97sV9utI/f6dw2xyLoEpZJQhi13GeAMfQNXeVrl6RXy6VPH/miXf1qpquBEtAWdPypY3mvG6YfB7TgiYnCvFMnd/OydbxWs4faGRNlgzJ3s8t1rAb3yiP/M+9a8LY=
+	t=1744156485; cv=none; b=CsbyU6avQDeRyZXPRbZqVMXaMeTWXQIVMYoPjEYdA5XQxFemPbqYojakk4FLej6+7oWvMxV+XOCvJHpu4Dg7yjfREc3mYeDVL372IMM0oX45AcnO0kP0D4KCGL6junGiUbje3X/fGG6cjQ9tqprVVxWtwYH+D7awwHJWpXRBWRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744114667; c=relaxed/simple;
-	bh=zrTv3Igv/b40jizFm6EQbXgK0TIclob8WTp61FIgQrU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SQhjYgz08s/6NJTaq9ziL0piaBWGRblhPtTDWyipLKCJEKiebqX1/ZHsRkYyaDc9kYbqgTOKSNvmLX7j0iP5Y2Nz8rDvWGMkYF9SgjI18JjHfvuNFVHJOP+MJxzdzPP0m8GCY43uPKUFoL9dOaIz0mahFzJNZaBQt7UzA7OqFtU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zemJrq9F; arc=none smtp.client-ip=209.85.128.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-6fedefb1c9cso45622207b3.0
-        for <linux-mips@vger.kernel.org>; Tue, 08 Apr 2025 05:17:44 -0700 (PDT)
+	s=arc-20240116; t=1744156485; c=relaxed/simple;
+	bh=Jnx6PKKzCvL4p4g+uO/ftLP/ihvxn+++kI74c7ySLPY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CMLAt41ea2T1gFyDIHjES9gAm/8uma0Fs6OnpJpRMy4A+FYRz6X2Aw8cu5ELu2U62c3NpldVDsKkzMSaViS1lT+YVhb6dtnSyFooXcPQYmqHI3oJsKybCNP9YttibGmjnxvPzIBz+fh9IhVWx9++li0temmSCziFU1xYI7gMgFA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=RJMpo4gE; arc=none smtp.client-ip=209.85.166.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-861525e9b0aso119012639f.3
+        for <linux-mips@vger.kernel.org>; Tue, 08 Apr 2025 16:54:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744114664; x=1744719464; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XgQfANebtdqnI5c6U+NPo92x9wLAySpUrYEpuKhqRpM=;
-        b=zemJrq9FttpnMiL9NdMxR+s1Uf5KlMrufAXEaNgypkx/rYyxGfcggw3FJVCMNBWolC
-         HJH/Oo8996CvyhusQ7ZPyuZb4eWXKydjaJSGJ8oOczJYjodtESnlfKMQw+zdWH1Kan0V
-         wE2Ahf0JTksf4+5EfiQTKpbxI9p9loJDcyKrwcLntMCfPDHs8WRD2sNufy3vIBukUAQz
-         i0vzCuZvn5qVsSxq8DFRWb26Q+apLgvuevEYrmjMgGJS3v8KQexbJioPpK5A4V7wPyxI
-         DmlirTJcve2q7P58ZBfnOgWFuw61CvYygmfNz8LvYR0rp4lQ7AEp9GeGUvnR7zssM4NJ
-         DEJg==
+        d=linuxfoundation.org; s=google; t=1744156481; x=1744761281; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=zdRyBtliQ5cx07mISx4wCHyn5iramOMcxVolUqi92Io=;
+        b=RJMpo4gE/CclGysCZHF4DFNZsSnXV4P4XuEjnWRUTJ9omVb675XMkP0rDKjJIXgGqR
+         QLn7HxEEUlqjtQiIyOZ8RBMTzUJ/XQZB7BHuSY/olcc272F/Uxt+iYgdIMs3C+cSM3Xi
+         0DvCjOUiR/VPa/tZwkgRPn6Dzl5/OVyDbKNeQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744114664; x=1744719464;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XgQfANebtdqnI5c6U+NPo92x9wLAySpUrYEpuKhqRpM=;
-        b=U7skLtJ1x265w+dQsDdFSxPO4cWJ+ChjkOP7XMUtRwim6vfHm9QyBLGc7tQ2yg0Hiy
-         tehHQSdPsUTYHxoOrGZsZiPSj9gCL8TxuBufGYNchb9h+AD45lytWFpuxqy8KpgBjaZr
-         mEF+xBzzK+smeXF+WVABvjaRAGy+b0pOG0vFILSOKsjhYfZpIt/POdH/T6bf1TnlZRSU
-         a9Ryo5YqPjUW2m7de6zWqhavRNexoD2bBUPRUz3vbYhfffoPzi7yacPUfRGf5O7cgKS/
-         dj1QrOGzq/ORVSt929hPJzjGidIVnkyVEq6hkBF1zs0y0oWYUaI7Oa/4MkninTGKmFv5
-         b/qQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXDfUH7KVUOmnaUwB4mSe5fkdSWY36IEufs0Kcv+9lAayLZZ+ThFMD51d+Kbo5LbyEPk3ZcvVtE3Uw+@vger.kernel.org
-X-Gm-Message-State: AOJu0YxbYpVGzuiQb2GYkyadcBBqlqeGIxfW1/cOWWdCknz0fF6G6Vnm
-	Z13Pghq1W+cXb0AkJPCosw8GmCBDRMcHahgL0MdeO6GpHHTgdSjXKLmKcP3HHUEMr0XYKEeEOZp
-	DZ04N4tBhx3cWn5t5VJ9WGKhF/v5j3GYlWbv9PA==
-X-Gm-Gg: ASbGncvx+upRpq28I2h+axOU3Z+yYTEtszBQxgmXrCpObQ/RfaVz5j1FA9jexY4bxwE
-	nTRRAPT67Ek2Q9p8cZ329qMfmPN7KYo247aTtJuT5KN7rWlijfOJOqzWruIzzv9KeaTtqMqSFx0
-	LmfY5lIicsp09vR2Cvh77SIcF+pDo=
-X-Google-Smtp-Source: AGHT+IE9ys53OzSUdrwDVzPrCpJ3j0rVw9UiRXdXpPHOiJneCGTZtJTMxzg8Xq2rdR9GYtx0ZTNP05CFJHjGpzcayc8=
-X-Received: by 2002:a05:690c:67c4:b0:6ff:28b2:50e1 with SMTP id
- 00721157ae682-703e14ffd3dmr297170407b3.2.1744114663553; Tue, 08 Apr 2025
- 05:17:43 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1744156481; x=1744761281;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zdRyBtliQ5cx07mISx4wCHyn5iramOMcxVolUqi92Io=;
+        b=NXcCOFTU/z2Y5nYWF8EkyYFk8pPWuwqnhn5xVas1TbDfJ0MIGmYUWNxKhzDB0t9r9V
+         nD88BADD0OuQOJSn4q4orlIOzQyUmJhahhrokG4WjJGfUSlXWXDbXz7krkY+IzFJ44Kj
+         /jzfO5zWRwT//jLWw/feI6XPeBGUCkxNFSczRFn9SsHDH2a2cdaQNdZ1SPhKTpC4QERZ
+         LI9sjNmFU5mK/KJkm3k9sRC+cGb1L9qHXBcyOP+HwsnQR/Oa5XkTtcip9lH4FWxA9roI
+         4G46pukmBO8w6rV1mIqH4BTgv1pgcYdHE73YGBkpxOo0YQeNd/zk8C2ZpLAEW2kSEtyk
+         feDA==
+X-Forwarded-Encrypted: i=1; AJvYcCVsPtkAm+YXGcPc5L1kzijzLAKDuym/Q0y61if/T71s7sa8LV3NqEziW1ap5amB49oDw7HMme8aUY/u@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOnvYtJdfeCEjBM5Jf7t+67WHbPFnE+UWqj6IxlMyzhYDdXbON
+	JRH/pDkFh/pys9suThRbbiyP0gA1eNyjeecbit6PRS0EwokBQWGqbiXwzCP3i9k=
+X-Gm-Gg: ASbGncuRVsipH5duKLvTs6xPkbnElSkW30YpXjRD3wTOkeSsy/2y0F742mxH3s86cLN
+	8pRWIwXHBjZANH2rcKbPmT73eVKo+w45bheiS0SlDitXSw9UOXwieYaHJr6QKwCv2k3xu9hsdUB
+	VyRzEITvtSIgOCqTNRk4GTRXthnX35Mc14/uDbMHf04ou2TNM/oC1dZj0nmQi3Mgf7NQOTJSUKC
+	1aeTxTKffluvyjkdjW0OZ88PEfg28u3r4j3d0C8BkAGQAM0yIjKZoGV9NB2cH0D5+7JpcauJwLp
+	/QuKdHqWXz4BSNPF21Iilu3WYM5MQ2Wv5ljh2RfbLdjvofEBYbwvwrU=
+X-Google-Smtp-Source: AGHT+IHrbk9mfKXAQeL9/yafdcqMUAyL8vOKCLUsGKcMZRbOPlFSarz6cufkOxtG6i0ALC59RzlGtw==
+X-Received: by 2002:a05:6602:720e:b0:85b:3dcd:d8c0 with SMTP id ca18e2360f4ac-8616128f2f0mr132204539f.12.1744156481759;
+        Tue, 08 Apr 2025 16:54:41 -0700 (PDT)
+Received: from [192.168.1.14] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f4f43bda91sm746758173.27.2025.04.08.16.54.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 08 Apr 2025 16:54:41 -0700 (PDT)
+Message-ID: <dae94ac2-63d7-419c-9bec-bea0840ea534@linuxfoundation.org>
+Date: Tue, 8 Apr 2025 17:54:40 -0600
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250403-dt-cpu-schema-v1-0-076be7171a85@kernel.org>
- <20250403-dt-cpu-schema-v1-18-076be7171a85@kernel.org> <CAPDyKFrFRrPVJ_t0JrAE1VTbS02hwr=L-EHtqb7CQiWzB1MnQg@mail.gmail.com>
- <CAL_JsqKygxhcQ=PZW84sfiW7BVXKF839vfNyxS9GwAXuqmN=8g@mail.gmail.com>
- <CAPDyKFoHQdHED0hHUR7VKin0XG6SVnYXuvPjB=Xe+1o2hpiPJA@mail.gmail.com> <CAL_Jsq+Oa7MvVO7Y-RG+qrY2e86B_q0XGq1LWoy5Mq+G72ZHzQ@mail.gmail.com>
-In-Reply-To: <CAL_Jsq+Oa7MvVO7Y-RG+qrY2e86B_q0XGq1LWoy5Mq+G72ZHzQ@mail.gmail.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 8 Apr 2025 14:17:07 +0200
-X-Gm-Features: ATxdqUE7frfhfuxoKUlf3DinAq4W783EiniruawsYcgTKF9-ms73Ag05S_dZWTY
-Message-ID: <CAPDyKFoKdj-Y4-dCwYRG7TLdS1HcSH=i9EN-b9Cpyo50kMmC5Q@mail.gmail.com>
-Subject: Re: [PATCH 18/19] dt-bindings: arm/cpus: Add power-domains constraints
-To: Rob Herring <robh@kernel.org>
-Cc: Stephan Gerhold <stephan.gerhold@linaro.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Liviu Dudau <liviu.dudau@arm.com>, 
-	Sudeep Holla <sudeep.holla@arm.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Viresh Kumar <vireshk@kernel.org>, 
-	Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, zhouyanjie@wanyeetech.com, 
-	Conor Dooley <conor@kernel.org>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>, Steen Hegelund <Steen.Hegelund@microchip.com>, 
-	Daniel Machon <daniel.machon@microchip.com>, UNGLinuxDriver@microchip.com, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Heiko Stuebner <heiko@sntech.de>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org, 
-	linux-arm-msm@vger.kernel.org, linux-mips@vger.kernel.org, 
-	imx@lists.linux.dev, linux-rockchip@lists.infradead.org, 
-	linux-amlogic@lists.infradead.org, linux-renesas-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] selftests/ptrace/get_syscall_info: fix for MIPS n32
+To: "Maciej W. Rozycki" <macro@orcam.me.uk>, "Dmitry V. Levin" <ldv@strace.io>
+Cc: Shuah Khan <shuah@kernel.org>, Oleg Nesterov <oleg@redhat.com>,
+ strace-devel@lists.strace.io, linux-kselftest@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20250115233747.GA28541@strace.io>
+ <0262acf1-4d3f-471b-bd56-4ddf8a2bc1a3@linuxfoundation.org>
+ <20250329124856.GA1356@strace.io>
+ <alpine.DEB.2.21.2503291345580.47733@angie.orcam.me.uk>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <alpine.DEB.2.21.2503291345580.47733@angie.orcam.me.uk>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-+ Stephan Gerhold
+On 3/29/25 08:02, Maciej W. Rozycki wrote:
+> On Sat, 29 Mar 2025, Dmitry V. Levin wrote:
+> 
+>>>> +#if defined(_MIPS_SIM) && _MIPS_SIM == _MIPS_SIM_NABI32
+>>>> +/*
+>>>> + * MIPS N32 is the only architecture where __kernel_ulong_t
+>>>> + * does not match the bitness of syscall arguments.
+>>>> + */
+>>>> +typedef unsigned long long kernel_ulong_t;
+>>>> +#else
+>>>> +typedef __kernel_ulong_t kernel_ulong_t;
+>>>> +#endif
+>>>> +
+>>>
+>>> What's the reason for adding these typedefs? checkpatch should
+>>> have warned you about adding new typedefs.
+>>>
+>>> Also this introduces kernel_ulong_t in user-space test code.
+>>> Something to avoid.
+>>
+>> There has to be a new type for this test, and the natural way to do this
+>> is to use typedef.  The alternative would be to #define kernel_ulong_t
+>> which is ugly.  By the way, there are quite a few typedefs in selftests,
+>> and there seems to be given no rationale why adding new types in selftests
+>> is a bad idea.
+> 
 
-On Mon, 7 Apr 2025 at 18:50, Rob Herring <robh@kernel.org> wrote:
->
-> On Mon, Apr 7, 2025 at 11:23=E2=80=AFAM Ulf Hansson <ulf.hansson@linaro.o=
-rg> wrote:
-> >
-> > On Fri, 4 Apr 2025 at 15:09, Rob Herring <robh@kernel.org> wrote:
-> > >
-> > > On Fri, Apr 4, 2025 at 5:37=E2=80=AFAM Ulf Hansson <ulf.hansson@linar=
-o.org> wrote:
-> > > >
-> > > > On Fri, 4 Apr 2025 at 05:06, Rob Herring (Arm) <robh@kernel.org> wr=
-ote:
-> > > > >
-> > > > > The "power-domains" and "power-domains-names" properties are miss=
-ing any
-> > > > > constraints. Add the constraints and drop the generic description=
-s.
-> > > > >
-> > > > > Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> > > > > ---
-> > > > >  Documentation/devicetree/bindings/arm/cpus.yaml | 8 ++------
-> > > > >  1 file changed, 2 insertions(+), 6 deletions(-)
-> > > > >
-> > > > > diff --git a/Documentation/devicetree/bindings/arm/cpus.yaml b/Do=
-cumentation/devicetree/bindings/arm/cpus.yaml
-> > > > > index 6f74ebfd38df..5bd5822db8af 100644
-> > > > > --- a/Documentation/devicetree/bindings/arm/cpus.yaml
-> > > > > +++ b/Documentation/devicetree/bindings/arm/cpus.yaml
-> > > > > @@ -313,19 +313,15 @@ properties:
-> > > > >      maxItems: 1
-> > > > >
-> > > > >    power-domains:
-> > > > > -    description:
-> > > > > -      List of phandles and PM domain specifiers, as defined by b=
-indings of the
-> > > > > -      PM domain provider (see also ../power_domain.txt).
-> > > > > +    maxItems: 1
-> > > >
-> > > > There are more than one in some cases. The most is probably three, =
-I think.
-> > >
-> > > Unless I missed it, testing says otherwise. What would the names be i=
-f
-> > > more than 1 entry?
-> >
-> > "psci", "perf", "cpr", etc
-> >
-> > The "psci" is always for CPU power management, the other is for CPU
-> > performance scaling (which may be more than one power-domain in some
-> > cases).
-> >
-> > I would suggest changing this to "maxItems: 3". That should be
-> > sufficient I think.
->
-> Again, my testing says 1 is enough. So where is a .dts file with 3 or 2?
+It causes problems down the road for maintenance. I would rather not
+see these types of kernel typedefs added to user-space.
 
-Right! I assume those with 3 or 2 just haven't made it upstream yet,
-but sure they are cases. If you prefer to update the binding later,
-that's fine by me, but I just wanted to avoid unnecessary churns for
-you.
+>   FWIW I agree, and I fail to see a reason why this would be a problem in a
+> standalone test program where the typedef does not propagate anywhere.
+> 
+>   The only potential issue I can identify would be a namespace clash, so
+> perhaps the new type could have a name prefix specific to the test, but it
+> doesn't appear to me a widespread practice across our selftests and then
+> `kernel_' ought to be pretty safe against ISO C or POSIX, so perhaps let's
+> leave the things alone?
+> 
 
-For example, msm8916 seems to be one case that already uses "psci",
-but requires an additional two power-domains for performance-scaling.
-At least according to earlier discussions [1] with Stephan Gerhold.
+Can't this be solved with ifdef?
 
-Moreover, it's perfectly fine to also describe CPU's idle-states by
-using the power-domains/domain-idle-states DT bindings, according to
-the bindings for PSCI [2] (no matter of PSCI OSI/PC mode). In other
-words, for all those that only have a "perf" or "cpr" power-domain
-today (or whatever name is used for the performance-scaling domain),
-those could easily add a "psci" power-domain too, depending on how
-they choose to describe things in DT.
-
-Kind regards
-Uffe
-
-[1]
-https://lore.kernel.org/all/ZRcC2IRRv6dtKY65@gerhold.net/
-[2]
-Documentation/devicetree/bindings/arm/psci.yaml
+thanks,
+-- Shuah
 
