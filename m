@@ -1,113 +1,97 @@
-Return-Path: <linux-mips+bounces-8530-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8531-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E198A8257D
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Apr 2025 15:00:07 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 592C3A82789
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Apr 2025 16:18:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 708203A5C78
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Apr 2025 12:57:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79CA13B0F7B
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Apr 2025 14:17:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A8E22620CD;
-	Wed,  9 Apr 2025 12:57:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A68CC3595C;
+	Wed,  9 Apr 2025 14:17:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d4tGjyA0"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="YlJwNMx1"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEFD926157C;
-	Wed,  9 Apr 2025 12:57:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F5EB69D2B;
+	Wed,  9 Apr 2025 14:17:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744203458; cv=none; b=WL+1CrT7KBLY0RTM44RQDo2ZqZtBEnrlTV4a8m1XKIBGDqd1597FYM43GwJXruTyCamXKXxzbxWfLGE4/FRP9QbDJ0YFFx+Hn/M8T5AHvJPiXwGSe6w+obVNdXlLGwLLMUq4YqCNdxjnylf5BiF2Cj1YIcEMGM276nn9GyH0ovs=
+	t=1744208238; cv=none; b=UAeRrLilJ8q6GQpDIOCkvGaH1rfopl5dglaq4X8kK9ZTHDiju64du/Tno4eMZ7bmlQ7Rtr41h3HcvXlbyrAW/PKA4EXlt/42XfFWQ7dSZ4E+dkwh5YXoBkDDJ4T8jcVi0RS9eUN4kM4HqxANfy3QTRoYEByQE7aa2s9Kf3ztRWU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744203458; c=relaxed/simple;
-	bh=m55S+NAzzTirpjscqGqB9PjBzrk5EvZCfUKQU0wol30=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZqhvA77/5ic6e/gWkHFtnLLXfyXYn338kmRv/XXPZqrv8SrSbxhi9EAwFJdsdNXg184Bj5GXlnDf6MgzycnliELPvbCvuRCft7KOoHQm1pVGaXPU06cHYOlspxEUyV0fvyf2nXfnRwmE27XmgjRH1skiUhbLFIQCYXhKl2O9Dqo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d4tGjyA0; arc=none smtp.client-ip=209.85.219.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e60aef2711fso4659337276.2;
-        Wed, 09 Apr 2025 05:57:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1744203456; x=1744808256; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m55S+NAzzTirpjscqGqB9PjBzrk5EvZCfUKQU0wol30=;
-        b=d4tGjyA0kZIkCSeDmm0D4GyF9ZqiFCLbkGc12lN47oKwqvEakc87Bhbibj5HPedRFW
-         BPNR1oEERp2x/LQywOkxWGIvmtvmZfZGSuf8dZCwVtcNntX2ti18VYdBwsaBRWoX/G+T
-         X2y3sVYpXzJDTaezWpkniIjMztWs0mClcxafk5M6cza8FQMY8VuRJ1e1XUQGYSDKNW3M
-         zEk00qfB5gUWjYGsgl/3NB6KuyD/WnArJkYZ4PtVjLqWVuK9CH0hkxPNyTQv4h+IvChe
-         i5SU8ss98vNtayrh5amHn9tt4GHJNDlitYcuKBC5l0Pjt+ecuNX7NpGnHJzXVxIDzQPH
-         qoKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744203456; x=1744808256;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=m55S+NAzzTirpjscqGqB9PjBzrk5EvZCfUKQU0wol30=;
-        b=br1RVg9aXEW69w43hN707G4J+91Ff7CN8/mE014IIrxWdKRpCSbZn92xVCG7/2VWO1
-         9DYKD4DvD0oEkl0epV2Lbc3I2EmW1fsJXqwxZVnNR2iE3nDdmTK4dhfMeaNAVsHGwlty
-         h6XbXZtBy3l5XmTs9kwRxD2XYXs1ujW9o4bMN6Wi/VH0ZNJYCbGZrmDt/Z9CpKchrHnr
-         nB17QtBFAOYpqg9qut19EOgnU1WTegKC1TJTweX0LSmtLvGieRsc7ZSptyI/YlBn1Pa6
-         8tEfP07dJAOobUB4eW99tX4SIfWyhURKKK6CvSrYdPIWZxKsRSPuzgPF5uE8VGWAoeGw
-         2aAQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW9gW1SHlNUlcIt9q0CmfsoBeCQR51NvpLvtMhe5VzcJ155haVSIwZ/kWZYlJS0qJT7JU0Zl/93@vger.kernel.org, AJvYcCWUAtzjEalmoXbCS+K5GjLtxYLbG87VsHTkQ4MNYb+YsJRcbX2Sk2BwaykP6qdFHuB2RaCKEOaxCwOU74s=@vger.kernel.org, AJvYcCXH8+8TxMUkNIkd82W8adqF0x6A+QRjqlDXQc8EvTxlZfv3tfKOgiGyTCJduAa3dX9ZtxhnzvdQlpPhbQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9Oe94wPokR9i6oLh81r9NB5pV7YjDS9hlwvN2l2AC18uUH7NS
-	59K1KmYtP9ECGk2Py7g6xaHC3w8NGSczMIrE1lP6r0Fwlr6gCvzY8SZhci4KSPJUO95qGgoXJ1o
-	96PAKB2mb6Ip9ociqk/JbvefrvFD7c0+o
-X-Gm-Gg: ASbGncvwnlzAJJdX7VhZJw11O+K63I8IhYGiIfChSO06hD1QsrhVK7ofLpeDAvjWy7P
-	YkWY0ROs4Saio1psd1/jC0KNy/EnTMiB8OLciee39V/l0OvIg6+Swe+0B1W8Lvdjz8CCpdlz7QS
-	izJ0pKCH1kHJTkGNiTzNAR
-X-Google-Smtp-Source: AGHT+IGQ+l4z4aKFzX2VxoQWfT7LBq40+um8TCunccvRuMrc0oqQgl9fK1Vpnx33pmIjgTku6cCbis+cQ/RLWgGZn0c=
-X-Received: by 2002:a05:6902:2743:b0:e6d:e87f:ca82 with SMTP id
- 3f1490d57ef6-e702ef49942mr4330709276.11.1744203455768; Wed, 09 Apr 2025
- 05:57:35 -0700 (PDT)
+	s=arc-20240116; t=1744208238; c=relaxed/simple;
+	bh=82X3NYXWCJomiHQTWEQfiLI1iuG+CjlNIAJKAsElX88=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=VVAzZTN7d8TVTtuH/F8/nRhS0pEl5+P5BoEakvpqFminRKSUonCqtzc+Id+fi4w+wecdtZQDDp9/fAPZDPSlyPgv4TzcjKCdadZEbcmbVXZBBngemnM5KnHeJgi2JDvxVYedirDm8u3OgXjBqGDBeOY5T4VB25fHRcn+IK5NcwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=YlJwNMx1; arc=none smtp.client-ip=95.215.58.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Content-Type: text/plain;
+	charset=utf-8
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1744208232;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=82X3NYXWCJomiHQTWEQfiLI1iuG+CjlNIAJKAsElX88=;
+	b=YlJwNMx1NJN9JLAeoFjz0r/bVqyyi12GXh2fREXtt5m9JxY2/et93hkZk6HuByQZeH0KDa
+	yIDnhLxZ1o9u9ZsZv21W6DXlt//UzFB2G7rOb5HADlzOSi7WiWFCAVX+klVEUQsfNEEbvC
+	GVt0VWlSVAPj7zVyYg5zxfK1zMZD80s=
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250407082759.742105-1-thorsten.blum@linux.dev>
-In-Reply-To: <20250407082759.742105-1-thorsten.blum@linux.dev>
-From: Jonas Gorski <jonas.gorski@gmail.com>
-Date: Wed, 9 Apr 2025 14:57:24 +0200
-X-Gm-Features: ATxdqUFTgDcrBPfsLWnsogV97LEjLFoF-_XeGrFOWVyfz3ZaUyRawTgrAILMb0E
-Message-ID: <CAOiHx==cJicn3fYbf+yOfGX1ORZNgBwUNuV-2CNAxmdpn9O5Ww@mail.gmail.com>
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3776.700.51.11.2\))
 Subject: Re: [PATCH] MIPS: ralink: Fix refcount leak in ill_acc_of_setup()
-To: Thorsten Blum <thorsten.blum@linux.dev>
-Cc: John Crispin <john@phrozen.org>, Sergio Paracuellos <sergio.paracuellos@gmail.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, stable@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Thorsten Blum <thorsten.blum@linux.dev>
+In-Reply-To: <CAOiHx==cJicn3fYbf+yOfGX1ORZNgBwUNuV-2CNAxmdpn9O5Ww@mail.gmail.com>
+Date: Wed, 9 Apr 2025 16:16:59 +0200
+Cc: John Crispin <john@phrozen.org>,
+ Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ stable@vger.kernel.org,
+ linux-mips@vger.kernel.org,
+ linux-kernel@vger.kernel.org
 Content-Transfer-Encoding: quoted-printable
+Message-Id: <83B958C5-1C7B-43C4-9EA2-93F8705B31A8@linux.dev>
+References: <20250407082759.742105-1-thorsten.blum@linux.dev>
+ <CAOiHx==cJicn3fYbf+yOfGX1ORZNgBwUNuV-2CNAxmdpn9O5Ww@mail.gmail.com>
+To: Jonas Gorski <jonas.gorski@gmail.com>
+X-Migadu-Flow: FLOW_OUT
 
-Hi,
+On 9. Apr 2025, at 14:57, Jonas Gorski wrote:
+> On Mon, Apr 7, 2025 at 10:32=E2=80=AFAM Thorsten Blum wrote:
+>>=20
+>> The of_find_device_by_node() function increments the reference count =
+of
+>> the embedded device, which should be released with put_device() when =
+it
+>> is no longer needed.
+>>=20
+>> In ill_acc_of_setup(), put_device() is only called on error paths, =
+but
+>> not on the success path. Fix this by calling put_device() before
+>> returning successfully.
+>=20
+> I would think this is very much deliberate as the device is used as
+> the priv argument of the registered IRQ handler. AFAIU as long as that
+> one is live the reference of the device needs to be kept.
+>=20
+> Dropping the reference of the device should only be done after
+> freeing/unregistering the IRQ again, which currently never happens.
 
-On Mon, Apr 7, 2025 at 10:32=E2=80=AFAM Thorsten Blum <thorsten.blum@linux.=
-dev> wrote:
->
-> The of_find_device_by_node() function increments the reference count of
-> the embedded device, which should be released with put_device() when it
-> is no longer needed.
->
-> In ill_acc_of_setup(), put_device() is only called on error paths, but
-> not on the success path. Fix this by calling put_device() before
-> returning successfully.
+Thanks for the explanation. I assumed request_irq() would increment the
+refcount, but that's apparently not the case because it's just a cookie.
 
-I would think this is very much deliberate as the device is used as
-the priv argument of the registered IRQ handler. AFAIU as long as that
-one is live the reference of the device needs to be kept.
+Thanks,
+Thorsten
 
-Dropping the reference of the device should only be done after
-freeing/unregistering the IRQ again, which currently never happens.
-
-Best regards,
-Jonas
 
