@@ -1,127 +1,113 @@
-Return-Path: <linux-mips+bounces-8529-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8530-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18F4CA82216
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Apr 2025 12:30:59 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E198A8257D
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Apr 2025 15:00:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 688068C1FB0
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Apr 2025 10:29:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 708203A5C78
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Apr 2025 12:57:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B912E25DB0C;
-	Wed,  9 Apr 2025 10:30:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A8E22620CD;
+	Wed,  9 Apr 2025 12:57:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="StMW4ovH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d4tGjyA0"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CCFC25DAE2;
-	Wed,  9 Apr 2025 10:30:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEFD926157C;
+	Wed,  9 Apr 2025 12:57:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744194600; cv=none; b=Cpy5sybc+t9Ng2k/qIN/wCYZIrcFNFXHcjzhZcorfc/5eMSpTnruG1y92kaHycU9Xwb4fIMdbYHnD/W/L9mYKMJ85zA9r2Jms9qdn3JnuT4GFHbNiMd0sD8T5rO6hFGt5J5Wwz6NVfrbS6haRF7SpxW7+6JFUIkHn/u3q4hGSGk=
+	t=1744203458; cv=none; b=WL+1CrT7KBLY0RTM44RQDo2ZqZtBEnrlTV4a8m1XKIBGDqd1597FYM43GwJXruTyCamXKXxzbxWfLGE4/FRP9QbDJ0YFFx+Hn/M8T5AHvJPiXwGSe6w+obVNdXlLGwLLMUq4YqCNdxjnylf5BiF2Cj1YIcEMGM276nn9GyH0ovs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744194600; c=relaxed/simple;
-	bh=5Tc53pxjVxa86rw6gH92zMKZ+MrFWBmscHtIF90fUbw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=a4lNZ9/gCzjsJNNlEfoRYIHi1O+0cNX1gW4LtXO7qaerqdHMYcLzIZAkXPi+1b8KiadopF7jFbdNf4TheaeGt/JU/xh9CidKwDk0tQmz4qafqxmWKb6yH5gFZqvQJ5e9EtkRcwF+29v+0IWTszAwOVrF3CWQ8YqqxatdejZGSFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=StMW4ovH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id F366DC4CEF1;
-	Wed,  9 Apr 2025 10:29:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744194600;
-	bh=5Tc53pxjVxa86rw6gH92zMKZ+MrFWBmscHtIF90fUbw=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=StMW4ovHSUyCy0+izavTlNwSpEpKr8rMeuYeFidLnUbP1k8f1+ROBtKZ/7L5TZ8+6
-	 lkX4pA8L4hQsZ+1qVdhyr2/qhPiZtYT7F2g/uxI6j/TtdTD4+AhhA3Mfx30NuHwRM8
-	 fPJc4Vul1+/FqUbZBqwrlsLX/q2FlY+47w3nJXSi/5LX+eaQZLn+Lon/sfB8n0+sMp
-	 S5Lg7wwSj9dp68628kgFFlRDJP+7WN/OZs6XJ069bp3twRlCJTTgpeQyd66C2t1GWS
-	 MaOMVkWI1AiXKgHKvDzrYCAef/XJEaKhvDo1DJxLQxvkTUMm6AlEQD6E+T5Vr9H3u7
-	 2GRCr7Cosjxkw==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id E70F1C369A4;
-	Wed,  9 Apr 2025 10:29:59 +0000 (UTC)
-From: Keguang Zhang via B4 Relay <devnull+keguang.zhang.gmail.com@kernel.org>
-Date: Wed, 09 Apr 2025 18:29:34 +0800
-Subject: [PATCH v2 4/4] ASoC: ac97: Add DT support
+	s=arc-20240116; t=1744203458; c=relaxed/simple;
+	bh=m55S+NAzzTirpjscqGqB9PjBzrk5EvZCfUKQU0wol30=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ZqhvA77/5ic6e/gWkHFtnLLXfyXYn338kmRv/XXPZqrv8SrSbxhi9EAwFJdsdNXg184Bj5GXlnDf6MgzycnliELPvbCvuRCft7KOoHQm1pVGaXPU06cHYOlspxEUyV0fvyf2nXfnRwmE27XmgjRH1skiUhbLFIQCYXhKl2O9Dqo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d4tGjyA0; arc=none smtp.client-ip=209.85.219.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e60aef2711fso4659337276.2;
+        Wed, 09 Apr 2025 05:57:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1744203456; x=1744808256; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m55S+NAzzTirpjscqGqB9PjBzrk5EvZCfUKQU0wol30=;
+        b=d4tGjyA0kZIkCSeDmm0D4GyF9ZqiFCLbkGc12lN47oKwqvEakc87Bhbibj5HPedRFW
+         BPNR1oEERp2x/LQywOkxWGIvmtvmZfZGSuf8dZCwVtcNntX2ti18VYdBwsaBRWoX/G+T
+         X2y3sVYpXzJDTaezWpkniIjMztWs0mClcxafk5M6cza8FQMY8VuRJ1e1XUQGYSDKNW3M
+         zEk00qfB5gUWjYGsgl/3NB6KuyD/WnArJkYZ4PtVjLqWVuK9CH0hkxPNyTQv4h+IvChe
+         i5SU8ss98vNtayrh5amHn9tt4GHJNDlitYcuKBC5l0Pjt+ecuNX7NpGnHJzXVxIDzQPH
+         qoKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1744203456; x=1744808256;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=m55S+NAzzTirpjscqGqB9PjBzrk5EvZCfUKQU0wol30=;
+        b=br1RVg9aXEW69w43hN707G4J+91Ff7CN8/mE014IIrxWdKRpCSbZn92xVCG7/2VWO1
+         9DYKD4DvD0oEkl0epV2Lbc3I2EmW1fsJXqwxZVnNR2iE3nDdmTK4dhfMeaNAVsHGwlty
+         h6XbXZtBy3l5XmTs9kwRxD2XYXs1ujW9o4bMN6Wi/VH0ZNJYCbGZrmDt/Z9CpKchrHnr
+         nB17QtBFAOYpqg9qut19EOgnU1WTegKC1TJTweX0LSmtLvGieRsc7ZSptyI/YlBn1Pa6
+         8tEfP07dJAOobUB4eW99tX4SIfWyhURKKK6CvSrYdPIWZxKsRSPuzgPF5uE8VGWAoeGw
+         2aAQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW9gW1SHlNUlcIt9q0CmfsoBeCQR51NvpLvtMhe5VzcJ155haVSIwZ/kWZYlJS0qJT7JU0Zl/93@vger.kernel.org, AJvYcCWUAtzjEalmoXbCS+K5GjLtxYLbG87VsHTkQ4MNYb+YsJRcbX2Sk2BwaykP6qdFHuB2RaCKEOaxCwOU74s=@vger.kernel.org, AJvYcCXH8+8TxMUkNIkd82W8adqF0x6A+QRjqlDXQc8EvTxlZfv3tfKOgiGyTCJduAa3dX9ZtxhnzvdQlpPhbQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz9Oe94wPokR9i6oLh81r9NB5pV7YjDS9hlwvN2l2AC18uUH7NS
+	59K1KmYtP9ECGk2Py7g6xaHC3w8NGSczMIrE1lP6r0Fwlr6gCvzY8SZhci4KSPJUO95qGgoXJ1o
+	96PAKB2mb6Ip9ociqk/JbvefrvFD7c0+o
+X-Gm-Gg: ASbGncvwnlzAJJdX7VhZJw11O+K63I8IhYGiIfChSO06hD1QsrhVK7ofLpeDAvjWy7P
+	YkWY0ROs4Saio1psd1/jC0KNy/EnTMiB8OLciee39V/l0OvIg6+Swe+0B1W8Lvdjz8CCpdlz7QS
+	izJ0pKCH1kHJTkGNiTzNAR
+X-Google-Smtp-Source: AGHT+IGQ+l4z4aKFzX2VxoQWfT7LBq40+um8TCunccvRuMrc0oqQgl9fK1Vpnx33pmIjgTku6cCbis+cQ/RLWgGZn0c=
+X-Received: by 2002:a05:6902:2743:b0:e6d:e87f:ca82 with SMTP id
+ 3f1490d57ef6-e702ef49942mr4330709276.11.1744203455768; Wed, 09 Apr 2025
+ 05:57:35 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250409-loongson1-ac97-v2-4-65d5db96a046@gmail.com>
-References: <20250409-loongson1-ac97-v2-0-65d5db96a046@gmail.com>
-In-Reply-To: <20250409-loongson1-ac97-v2-0-65d5db96a046@gmail.com>
-To: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Jaroslav Kysela <perex@perex.cz>, 
- Takashi Iwai <tiwai@suse.com>
-Cc: linux-mips@vger.kernel.org, linux-sound@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Keguang Zhang <keguang.zhang@gmail.com>
-X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1744194597; l=1140;
- i=keguang.zhang@gmail.com; s=20231129; h=from:subject:message-id;
- bh=zOmvkdjOxEXNVbs0rnSsZ3qVKBPQtGNTr4XJg6yjJq8=;
- b=jfNHiiIkUNks040IkOBwMATTw/hJJ5gyDUmpLJgM7FznX3ndazW6dGT6L7akPE4GzfABZMK0M
- ieaYWoGQzQBCt8WwkEyWxPiy9djLBa5PMCuLUho+FVmzn9p9yHGRTuF
-X-Developer-Key: i=keguang.zhang@gmail.com; a=ed25519;
- pk=FMKGj/JgKll/MgClpNZ3frIIogsh5e5r8CeW2mr+WLs=
-X-Endpoint-Received: by B4 Relay for keguang.zhang@gmail.com/20231129 with
- auth_id=102
-X-Original-From: Keguang Zhang <keguang.zhang@gmail.com>
-Reply-To: keguang.zhang@gmail.com
+References: <20250407082759.742105-1-thorsten.blum@linux.dev>
+In-Reply-To: <20250407082759.742105-1-thorsten.blum@linux.dev>
+From: Jonas Gorski <jonas.gorski@gmail.com>
+Date: Wed, 9 Apr 2025 14:57:24 +0200
+X-Gm-Features: ATxdqUFTgDcrBPfsLWnsogV97LEjLFoF-_XeGrFOWVyfz3ZaUyRawTgrAILMb0E
+Message-ID: <CAOiHx==cJicn3fYbf+yOfGX1ORZNgBwUNuV-2CNAxmdpn9O5Ww@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: ralink: Fix refcount leak in ill_acc_of_setup()
+To: Thorsten Blum <thorsten.blum@linux.dev>
+Cc: John Crispin <john@phrozen.org>, Sergio Paracuellos <sergio.paracuellos@gmail.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, stable@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Keguang Zhang <keguang.zhang@gmail.com>
+Hi,
 
-Add an of_match_table with 'realtek,alc203' to provide
-DT support for the AC97 generic codec driver.
+On Mon, Apr 7, 2025 at 10:32=E2=80=AFAM Thorsten Blum <thorsten.blum@linux.=
+dev> wrote:
+>
+> The of_find_device_by_node() function increments the reference count of
+> the embedded device, which should be released with put_device() when it
+> is no longer needed.
+>
+> In ill_acc_of_setup(), put_device() is only called on error paths, but
+> not on the success path. Fix this by calling put_device() before
+> returning successfully.
 
-Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
----
- sound/soc/codecs/ac97.c | 10 ++++++++++
- 1 file changed, 10 insertions(+)
+I would think this is very much deliberate as the device is used as
+the priv argument of the registered IRQ handler. AFAIU as long as that
+one is live the reference of the device needs to be kept.
 
-diff --git a/sound/soc/codecs/ac97.c b/sound/soc/codecs/ac97.c
-index 0e013edfe63d..d8444a083af2 100644
---- a/sound/soc/codecs/ac97.c
-+++ b/sound/soc/codecs/ac97.c
-@@ -13,6 +13,7 @@
- #include <linux/kernel.h>
- #include <linux/device.h>
- #include <linux/module.h>
-+#include <linux/of.h>
- #include <sound/core.h>
- #include <sound/pcm.h>
- #include <sound/ac97_codec.h>
-@@ -127,9 +128,18 @@ static int ac97_probe(struct platform_device *pdev)
- 			&soc_component_dev_ac97, &ac97_dai, 1);
- }
- 
-+#ifdef CONFIG_OF
-+static const struct of_device_id ac97_codec_of_match[] = {
-+	{ .compatible = "realtek,alc203", },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, ac97_codec_of_match);
-+#endif
-+
- static struct platform_driver ac97_codec_driver = {
- 	.driver = {
- 		.name = "ac97-codec",
-+		.of_match_table = of_match_ptr(ac97_codec_of_match),
- 	},
- 
- 	.probe = ac97_probe,
+Dropping the reference of the device should only be done after
+freeing/unregistering the IRQ again, which currently never happens.
 
--- 
-2.43.0
-
-
+Best regards,
+Jonas
 
