@@ -1,104 +1,110 @@
-Return-Path: <linux-mips+bounces-8568-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8569-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14F1FA85FF0
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Apr 2025 16:04:56 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C04EA86233
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Apr 2025 17:46:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB51819E19D3
-	for <lists+linux-mips@lfdr.de>; Fri, 11 Apr 2025 14:03:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1940F4C2BF7
+	for <lists+linux-mips@lfdr.de>; Fri, 11 Apr 2025 15:45:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF5FC1F1921;
-	Fri, 11 Apr 2025 14:03:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="PO8AItXl"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44B8D2144CF;
+	Fri, 11 Apr 2025 15:44:39 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6AC41865EE
-	for <linux-mips@vger.kernel.org>; Fri, 11 Apr 2025 14:03:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24A6520E33F;
+	Fri, 11 Apr 2025 15:44:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744380217; cv=none; b=nOTLLvI1KJCbL40zdsdO1+so8aFVMJHZgYiZMduTrbMVZDeakxtC/eclKnV0TD8GZMBPTI29N3pGiNvTmCQ8VSJ7n4TYj0MHucc5LkgLmcaJtOMuD6Asp5AaW07bjJi/UUejrxGh5MJqHpL8k6arl2d0iFei12B5XQ7DyQ/mnZI=
+	t=1744386279; cv=none; b=c4pNGGTwHXcvQ68BGXek6t2AwW9LgFnbOdR2lSyGrmL8jrqYjEBF/IMHunDwACz7fuEx9surOF86xwHPIF09qG9rFkhKn0Gxz+u9Ghi8WjaliCVTNiLdvRIcjqZDDjNAR4nGMoTaljyAPyY/5cwv735bYsdD4z6rbCF+1lqqglo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744380217; c=relaxed/simple;
-	bh=+B3dssbzQ0T+9tjtOKViLG4iLIBBnTTBP8+6J/vDyXE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=EW4esSf3hOCB1eXXZl8K9AcLcm1+9tmm/Fgo0dPN6ERQF88g9LnaWaWR9EgY55AOVdyhVTGu+elsP5zcESxCjgePh7YJXV2C7c6luM6DasUxTY82lyn1AnIYj3f51YbC/+cEBCBP2SRD+f90CBXAGrkdluWfM5AltW108KxnOCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=PO8AItXl; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43cf628cb14so21837275e9.1
-        for <linux-mips@vger.kernel.org>; Fri, 11 Apr 2025 07:03:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1744380214; x=1744985014; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WjHI8iLKNyjSer6QwZ0T4nLrTbVuh8PFv9EW9BoptFs=;
-        b=PO8AItXlpHlJXYohYpQQKAom+Aj8yHrwLKVt2Pq5132DqhU3fHsva95bVqy03fzPbo
-         t2NJ7R5VjOL4tXUJyOZK5c1vLuOoHs2EfOuMJ7Xa9A4xfl2b+yHY2kkhDNes6HhOYNOV
-         BATSPjFmiq4BnkoT53wR+xdCHK7L/Di841TFU1eqyAkC78udk7KzbNv7r8MtPGVzQA57
-         WvDld3xfOVSDA7/CTfMzdyLcK7A8K0ZI6DNhfqhhLrxntZizhZVlOFHTEThGgLQmj7tX
-         IGNq9Be2HaVMZMdMq3fATgJpFf/XjBFrBQnVQz2fZnOTaC/d9Zm3rljIDlw0Bvdhr7Kh
-         AmuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744380214; x=1744985014;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WjHI8iLKNyjSer6QwZ0T4nLrTbVuh8PFv9EW9BoptFs=;
-        b=uxb2KLWTxaFbyIxeh8iVGfNysnTM9eSt8f8qG84mSOxLyu61Xe/13OJqd6WieITuTM
-         U9K0CzYq9j+MXiSbkS8q64rzVJ0/cDr7zgRC++nNaax4R/UmLDQANE1rN3VvezKeyZ8f
-         tNPzpSpYKlnTFBWu6DAVY97nbTsyfCmNcRf3C8v7OPLvZ4Q2+2QnCALhGTqFC8tVWfaZ
-         3tivncKBvt4aOEluTPIx7uFrgGb1bQe4pbBReill22tbbV2hpqFyVCkHgPUwLV4M/JaW
-         fDMDRIK+SBO6zMqq+9PYVEd3meTMyh6h0Q8yvM9UR2fBdNZUjHnoCBNmcKHRC6B+Urio
-         nRQQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVUgXPxTkWNhPukDbkq8U4Xgapw0d9BpF+jsODVtLAGy7ARzFyQI+TzcfHoqcoPZpReAZH8K07eUAoW@vger.kernel.org
-X-Gm-Message-State: AOJu0YzcdIzNkFJcnaiKvogxACGcth+Y+iriacC85HesMAfSuRwoRD17
-	Z6dA9lwDAzC8nzCUxkJAsvfEWR04XG2bqgTuPme9K6opJjAv/cjzfMLjIoihTbc=
-X-Gm-Gg: ASbGncu9SPshnXsdJzTafC0CysSIvuFNGs9q+JMse+ThVAUB0iQXEUIPGG6xgEs+bpv
-	qVOSPI0H+TSzvWKaZB1mXyJOw6geRIQKxCdNhbMSaZOEIzWyheSxNu5ZJe6PFmgLBREEAlI8CSu
-	rytX2RpYhZ4Ca1T/dnmLb/2tWxyr9KqYl1KcheK6Nlx7/HVfEEAJG1J6R5H3XItnBru+9OXyG9O
-	Ll2WXgFm2Lp1caRO/MJr63iQ9iKtQSOe52k27IwS7hwU541288XwtwiVN7kl7vaKM5TfWIvmfqE
-	F1zmq2j4VU5AVMQ/g4oYjWqk5zM5Ip+sVdhh9mU0tXGJKiYPThAoAbLfjN1fvMk=
-X-Google-Smtp-Source: AGHT+IFNQChJHGwm0jpg81EkuoYc4db4lN0W2dHhvYnddiYay5Ou28lyQpS+tRSobcbaI0Z86YjbrQ==
-X-Received: by 2002:a05:600c:5112:b0:439:4b23:9e8e with SMTP id 5b1f17b1804b1-43f39622947mr26940535e9.3.1744380212225;
-        Fri, 11 Apr 2025 07:03:32 -0700 (PDT)
-Received: from localhost.localdomain ([2a00:6d43:105:c401:e307:1a37:2e76:ce91])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43f20a897b6sm51235895e9.1.2025.04.11.07.03.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 11 Apr 2025 07:03:31 -0700 (PDT)
-From: Marco Crivellari <marco.crivellari@suse.com>
-To: marco.crivellari@suse.com
-Cc: anna-maria@linutronix.de,
-	chenhuacai@kernel.org,
-	frederic@kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	macro@orcam.me.uk,
-	peterz@infradead.org,
-	tglx@linutronix.de,
-	tsbogend@alpha.franken.de
-Subject: Re: [PATCH v7 1/2] MIPS: Fix idle VS timer enqueue
-Date: Fri, 11 Apr 2025 16:03:21 +0200
-Message-ID: <20250411140321.218752-1-marco.crivellari@suse.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250403161143.361461-2-marco.crivellari@suse.com>
-References: <20250403161143.361461-2-marco.crivellari@suse.com>
+	s=arc-20240116; t=1744386279; c=relaxed/simple;
+	bh=rhk63kE+eFhK1H4ZWcBbfIoHVGFGzCPZDckKZnOUHQk=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=et/FOIqPqqqStsIfyuo5mTi9MxCejeiEmE/gZZk3i0c5lMl9Mvo4kCdYVrQ/gXMJLr3XeuRY3xeXBELYpF23RWdUnchlw/BTgntZx9rmZNeIxj2spDJZVyYSSADpDfR6Ui2H5DqfgCSTRiHbmjLff0Eq2/1dgEiAhH1BALdMV3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 88281C4CEE7;
+	Fri, 11 Apr 2025 15:44:38 +0000 (UTC)
+Received: from wens.tw (localhost [127.0.0.1])
+	by wens.tw (Postfix) with ESMTP id F10975FCDB;
+	Fri, 11 Apr 2025 23:44:35 +0800 (CST)
+From: Chen-Yu Tsai <wens@csie.org>
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Samuel Holland <samuel@sholland.org>, Conor Dooley <conor@kernel.org>, 
+ Nicolas Ferre <nicolas.ferre@microchip.com>, 
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+ Steen Hegelund <Steen.Hegelund@microchip.com>, 
+ Daniel Machon <daniel.machon@microchip.com>, UNGLinuxDriver@microchip.com, 
+ Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+ Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, Heiko Stuebner <heiko@sntech.de>, 
+ Neil Armstrong <neil.armstrong@linaro.org>, 
+ Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+ Geert Uytterhoeven <geert+renesas@glider.be>, 
+ Magnus Damm <magnus.damm@gmail.com>, 
+ Lorenzo Pieralisi <lpieralisi@kernel.org>, Andy Gross <agross@kernel.org>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, 
+ Stephen Boyd <sboyd@kernel.org>, zhouyanjie@wanyeetech.com, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+ Stephan Gerhold <stephan.gerhold@linaro.org>, 
+ "Rob Herring (Arm)" <robh@kernel.org>
+Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org, 
+ linux-arm-msm@vger.kernel.org, imx@lists.linux.dev, 
+ linux-rockchip@lists.infradead.org, linux-amlogic@lists.infradead.org, 
+ linux-renesas-soc@vger.kernel.org, linux-mips@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org, 
+ Andre Przywara <andre.przywara@arm.com>, 
+ =?utf-8?q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>, 
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, 
+ Sudeep Holla <sudeep.holla@arm.com>, Viresh Kumar <viresh.kumar@linaro.org>, 
+ Ulf Hansson <ulf.hansson@linaro.org>
+In-Reply-To: <20250410-dt-cpu-schema-v2-0-63d7dc9ddd0a@kernel.org>
+References: <20250410-dt-cpu-schema-v2-0-63d7dc9ddd0a@kernel.org>
+Subject: Re: (subset) [PATCH v2 00/17] Arm cpu schema clean-ups
+Message-Id: <174438627597.2569515.3740142615905391643.b4-ty@csie.org>
+Date: Fri, 11 Apr 2025 23:44:35 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.14.2
 
-Gentle Ping, also for "MIPS: rename rollback_handler 
-with skipover_handler".
+On Thu, 10 Apr 2025 10:47:21 -0500, Rob Herring (Arm) wrote:
+> The Arm cpu.yaml schema fails to restrict allowed properties in 'cpu'
+> nodes. The result, not surprisely, is a number of additional properties
+> and errors in .dts files. This series resolves those issues.
+> 
+> There's still more properties in arm32 DTS files which I have not
+> documented. Mostly yet more supply names and "fsl,soc-operating-points".
+> What's a few more warnings on the 10000s of warnings...
+> 
+> [...]
 
-Thanks in advance.
+Applied to dt-for-6.16 in git@github.com:linux-sunxi/linux-sunxi.git, thanks!
+
+[01/17] arm64: dts: allwinner: h5/h6: Drop spurious 'clock-latency-ns' properties
+        commit: 4df05f4a5fead4e5fc7e3c39cae74e5c0dc5282a
+
+Best regards,
+-- 
+Chen-Yu Tsai <wens@csie.org>
+
 
