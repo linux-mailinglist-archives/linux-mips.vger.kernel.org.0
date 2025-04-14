@@ -1,246 +1,325 @@
-Return-Path: <linux-mips+bounces-8584-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8585-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E655A8737A
-	for <lists+linux-mips@lfdr.de>; Sun, 13 Apr 2025 21:12:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA6EFA8785A
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Apr 2025 09:04:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AC3F77A5280
-	for <lists+linux-mips@lfdr.de>; Sun, 13 Apr 2025 19:11:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B06A63AABE0
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Apr 2025 07:04:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 233061E7C2D;
-	Sun, 13 Apr 2025 19:12:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 515311AA1E8;
+	Mon, 14 Apr 2025 07:04:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="E/u5tsrt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EOKguFF2"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E436229D19;
-	Sun, 13 Apr 2025 19:12:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 197F725776;
+	Mon, 14 Apr 2025 07:04:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744571570; cv=none; b=kGPZJtB3QyLZCO0zNt2p6WSwlF9ORyKJY+28OoGxlmfcW+fqZe/cqvuE6wDa4gDsxTnyFQ0Axxp8VTYQajkuoK2ToB6SHXHqBEeVnQlUY8nx4kFAd2qXB6/QEvZ2VB7lsWKmj4pyqtly0RMJfwLOBpVxvJE58w8YsdRosLIoHMo=
+	t=1744614250; cv=none; b=McTPYhbljNm9nuUva2ebsstgpudyfNdPXkTl6AFAeJZkKT3t3jemWC1qahn9YLGNwBDAd0eLxuW6WTZZ5b+GmU14bgiAifnGy3h99BIu4n5jNOGIsA0R3f+nd8jo/KEwgDJUIrPBN7gLGX0/o++fhdaSauzOEN8tfX0dqk90ip8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744571570; c=relaxed/simple;
-	bh=QMkSUO+xFyLpesHo/rtDCMPD8DylSwKw+UPXoZij6YM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=tM6I5OpcN+Nkh7C4BcuOh7HUAkLaZCUMeeYzczqal8bWa97M/lzMCCjzX/fhcctfPSkZirkWxo8xpzKmZlbWdGT8TB91Ut8F5NPQ18ye2Y6Wd5JOr8D4eyv5PcnS8b6voYw3J4EP+ijeL2ER/Tl8UcD2PcV/jpklJgd7YJRcBXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=E/u5tsrt; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3D72043A48;
-	Sun, 13 Apr 2025 19:12:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1744571559;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=hafZ4yNk+voYEIZB0KH9G7yt0rov6Uv3t+PFXc6R67A=;
-	b=E/u5tsrtbYq0/wHfJFKoVcTknvpyjW+5rim5HsBr3w5Uu8LrSaSst88EucyLy55Hj28K+N
-	zEaws1pn4RErRTq+dr273sjuf6xtQtaPEPoUg+aFmZFaM8Sx2RaE5c+R8ZhI63A5aWurDG
-	ZGUjVAj5J2JXdp6r/OsghFBzWviK82ASNLXKFM2/2PCgPMjMXvjk1yF9DO92FdAILyLUfe
-	3RKo0MIAn5lDGy8rqZsbFxzhiLZBKrYXS2D2x6RrTi2rzLc+kF1KxAtbsQnubEvFREoQ+m
-	JAgiuAg0/g7HzAubOFLaCx8jZ7Ui47rxVSwgcUlLYTlBERcS9Rsw7FE/9JlhCA==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-Date: Sun, 13 Apr 2025 21:12:32 +0200
-Subject: [PATCH] MIPS: SMP: Implement parallel CPU bring up for EyeQ
+	s=arc-20240116; t=1744614250; c=relaxed/simple;
+	bh=icC6pKxwkk63ydYys6oK1ioyyV4qcPSvCmG0NKiQefg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=erHj8vLjA+4ylF9ndK/dbQyLbkeerQ3iRxZA4C4nITyJ49UMeEty1qMXYtDaHZmk6eY13VuvqTmOJtCTVJGE25PZoW2ZwDbrUjs9HdcGLIvDyskbf5cFLa07Hk+ek1hcX9zlg2EodPbPLkXpIZa+uyBgs0/Zfnb4tXEgoO0dYt4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EOKguFF2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 969E8C4CEEC;
+	Mon, 14 Apr 2025 07:04:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744614249;
+	bh=icC6pKxwkk63ydYys6oK1ioyyV4qcPSvCmG0NKiQefg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=EOKguFF2VxI82DMzK1Hz/A36DdD6tyL16iCFnyNocB04XiHAEx2Usjf/l6jDguOkg
+	 x3x3GRKL3w5pPVXZXuWw8qka//Ftfz2gh2c3JWvNBxmk2NWEGeFWbV1va2ur/nm60z
+	 GY7tun/dRfez4UgI3Y+aeNdjEkOUTPStzp/a77Huyjwo9YDobX5TXngfK1JnmNckvv
+	 Pxe1thYVFZ8sjvAerBTj+XrQO6k9DRsERd4IDnLmszh5hTBhX9R1hMavHavnnO/RBa
+	 8vBY9W5SWdJavz0DzdjfjrDYaFhxI5GAVDy48t8XDSSp72bBnRzw+3Sv8wRiahxeGv
+	 Hqppo3tkdiUcg==
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-549946c5346so4563449e87.2;
+        Mon, 14 Apr 2025 00:04:09 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVMy9NkNs+FsFrRXfyOYjPqojV6Bx3otIbNwMMrCWFQDqtm8P4ct9hzToHmD5VQMtyGKsRdBOMYdMewivo=@vger.kernel.org, AJvYcCW55GQrRD3piXZUzy5eCNXDqKiA4V9RbaidzJ8hu6evyUaOP5nLhw+YseqAyiPGlrrZzJQX2H/yS+N2cw==@vger.kernel.org, AJvYcCWdBD5JvLx2ACqPzNccHi/291TEYc0hiVJSoICbEVHeet40SjW1AXPNroaVcJbBkL8PsXITiZnQJH4tRA==@vger.kernel.org, AJvYcCX7gYMYpZcZntVkxgQ61OyEwf45v6t+lVYA97SnpQXvHXv8Pq/s1fpCA5OsAYq39ZBox+6V/fXvFVg9CA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzYWZSK+UmsGZJ/I+GU/FUXwvfeXKAtPVlp6y0aV2n5ot0DYDBF
+	yqHm+4VZ5bemkqf3tHOtzCRHXBAeGDw8h+50aRvJDkBlJtlJwCDVXq6NozX63TKWWN3UoTkUaPn
+	PbXn2nXZoIwJ788qtymL2OH5egfo=
+X-Google-Smtp-Source: AGHT+IEoYXlejAjxOwys1OLaOhDBK3py6wT/Y0QJYW6cfE2lr6fzReeEdjo+qSenumfyEoIhuh4zXG1xEt+R7ijOO8Y=
+X-Received: by 2002:a05:6512:ba7:b0:546:2f7a:38c4 with SMTP id
+ 2adb3069b0e04-54d45292cd1mr2746051e87.13.1744614247886; Mon, 14 Apr 2025
+ 00:04:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250413-parallel-cpu-bringup-v1-1-a19d36ec229b@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIAJ8M/GcC/x3MQQqEMAxA0atI1gZsVZx6FXERNWqg1JKiCOLdp
- 7h8i/8fSKzCCfriAeVLkhwhw5QFzDuFjVGWbLCVbavGGIyk5D17nOOJk0rYzojdzzlHztYtE+Q
- 0Kq9yf9thfN8/lclC8WYAAAA=
-X-Change-ID: 20250411-parallel-cpu-bringup-78999a9235ea
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>, 
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-mips@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Gregory CLEMENT <gregory.clement@bootlin.com>
-X-Mailer: b4 0.14.2
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvudekgeeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhfffugggtgffkvfevofesthekredtredtjeenucfhrhhomhepifhrvghgohhrhicuvefngffogffpvfcuoehgrhgvghhorhihrdgtlhgvmhgvnhhtsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpedvheehjeevleeggfelfffgjedugfduleduuedthfelieduveffgeeuleekffduhfenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegvtdgrmeefuggtmegvvgektdemhedvvdehmedvgeejgeemiegrugdtmegtugeiugenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemvgdtrgemfegutgemvggvkedtmeehvddvheemvdegjeegmeeirggutdemtgguiegupdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehgrhgvghhorhihrdgtlhgvmhgvnhhtsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeelpdhrtghpthhtohepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomhdprhgtphhtthhopehthhgvohdrlhgvsghruhhnsegsohhothhlihhnrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvr
- hhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepvhhlrgguihhmihhrrdhkohhnughrrghtihgvvhesmhhosghilhgvhigvrdgtohhmpdhrtghpthhtohepthgrfihfihhkrdgsrgihohhukhesmhhosghilhgvhigvrdgtohhmpdhrtghpthhtohepghhrvghgohhrhidrtghlvghmvghnthessghoohhtlhhinhdrtghomhdprhgtphhtthhopehtshgsohhgvghnugesrghlphhhrgdrfhhrrghnkhgvnhdruggvpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhm
-X-GND-Sasl: gregory.clement@bootlin.com
+References: <20250413154350.10819-1-ebiggers@kernel.org>
+In-Reply-To: <20250413154350.10819-1-ebiggers@kernel.org>
+From: Ard Biesheuvel <ardb@kernel.org>
+Date: Mon, 14 Apr 2025 09:03:56 +0200
+X-Gmail-Original-Message-ID: <CAMj1kXGhG6PKVzqmVT6qrQ+GPkk_oxXE5d-ut0swi49V2=o-wQ@mail.gmail.com>
+X-Gm-Features: ATxdqUEnYfS7U-gc63ktCKYv5CbPjrmaDdsHdKGekiLY6qQSH14mpXQi1o5UxKs
+Message-ID: <CAMj1kXGhG6PKVzqmVT6qrQ+GPkk_oxXE5d-ut0swi49V2=o-wQ@mail.gmail.com>
+Subject: Re: [PATCH] lib/crc: make the CPU feature static keys __ro_after_init
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev, 
+	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	sparclinux@vger.kernel.org, linux-s390@vger.kernel.org, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Added support for starting CPUs in parallel on EyeQ to speed up boot time.
+On Sun, 13 Apr 2025 at 17:44, Eric Biggers <ebiggers@kernel.org> wrote:
+>
+> From: Eric Biggers <ebiggers@google.com>
+>
+> All of the CRC library's CPU feature static_keys are initialized by
+> initcalls and never change afterwards, so there's no need for them to be
+> in the regular .data section.  Put them in .data..ro_after_init instead.
+>
+> Signed-off-by: Eric Biggers <ebiggers@google.com>
+> ---
+>
+> I'm planning to take this via the crc tree.
+>
+>  arch/arm/lib/crc-t10dif-glue.c       | 4 ++--
+>  arch/arm/lib/crc32-glue.c            | 4 ++--
+>  arch/arm64/lib/crc-t10dif-glue.c     | 4 ++--
+>  arch/loongarch/lib/crc32-loongarch.c | 2 +-
+>  arch/mips/lib/crc32-mips.c           | 2 +-
+>  arch/powerpc/lib/crc-t10dif-glue.c   | 2 +-
+>  arch/powerpc/lib/crc32-glue.c        | 2 +-
+>  arch/s390/lib/crc32-glue.c           | 2 +-
+>  arch/sparc/lib/crc32_glue.c          | 2 +-
+>  arch/x86/lib/crc-t10dif-glue.c       | 2 +-
+>  arch/x86/lib/crc32-glue.c            | 4 ++--
+>  arch/x86/lib/crc64-glue.c            | 2 +-
+>  12 files changed, 16 insertions(+), 16 deletions(-)
+>
 
-On EyeQ5, booting 8 CPUs is now ~90ms faster.
-On EyeQ6, booting 32 CPUs is now ~650ms faster.
 
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
----
-Hello,
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
 
-This patch allows CPUs to start in parallel. It has been tested on
-EyeQ5 and EyeQ6, which are both MIPS64 and use the I6500 design. These
-systems use CPS to support SMP.
 
-As noted in the commit log, on EyeQ6, booting 32 CPUs is now ~650ms
-faster.
 
-Currently, this support is only for EyeQ SoC. However, it should also
-work for other CPUs using CPS. I am less sure about MT ASE support,
-but this patch can be a good starting point. If anyone wants to add
-support for other systems, I can share some ideas, especially for the
-MIPS_GENERIC setup that needs to handle both types of SMP setups.
-
-Gregory
----
- arch/mips/Kconfig                |  2 ++
- arch/mips/include/asm/topology.h |  3 +++
- arch/mips/kernel/smp-cps.c       |  2 ++
- arch/mips/kernel/smp.c           | 18 ++++++++++++++++++
- 4 files changed, 25 insertions(+)
-
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index fc0772c1bad4ab736d440a18b972faf66a610783..e0e6ce2592b4168facf337b60fd889d76e81a407 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -617,6 +617,7 @@ config EYEQ
- 	select USB_UHCI_BIG_ENDIAN_DESC if CPU_BIG_ENDIAN
- 	select USB_UHCI_BIG_ENDIAN_MMIO if CPU_BIG_ENDIAN
- 	select USE_OF
-+	select HOTPLUG_PARALLEL if SMP
- 	help
- 	  Select this to build a kernel supporting EyeQ SoC from Mobileye.
- 
-@@ -2287,6 +2288,7 @@ config MIPS_CPS
- 	select MIPS_CM
- 	select MIPS_CPS_PM if HOTPLUG_CPU
- 	select SMP
-+	select HOTPLUG_SMT if HOTPLUG_PARALLEL
- 	select HOTPLUG_CORE_SYNC_DEAD if HOTPLUG_CPU
- 	select SYNC_R4K if (CEVT_R4K || CSRC_R4K)
- 	select SYS_SUPPORTS_HOTPLUG_CPU
-diff --git a/arch/mips/include/asm/topology.h b/arch/mips/include/asm/topology.h
-index 0673d2d0f2e6dd02ed14d650e5af7b8a3c162b6f..5158c802eb6574d292f6ad2512cc7772fece4aae 100644
---- a/arch/mips/include/asm/topology.h
-+++ b/arch/mips/include/asm/topology.h
-@@ -16,6 +16,9 @@
- #define topology_core_id(cpu)			(cpu_core(&cpu_data[cpu]))
- #define topology_core_cpumask(cpu)		(&cpu_core_map[cpu])
- #define topology_sibling_cpumask(cpu)		(&cpu_sibling_map[cpu])
-+
-+extern struct cpumask __cpu_primary_thread_mask;
-+#define cpu_primary_thread_mask ((const struct cpumask *)&__cpu_primary_thread_mask)
- #endif
- 
- #endif /* __ASM_TOPOLOGY_H */
-diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
-index e85bd087467e8caf0640ad247ee5f8eb65107591..02bbd7ecd1b9557003186b9d3d98ae17eac5eb9f 100644
---- a/arch/mips/kernel/smp-cps.c
-+++ b/arch/mips/kernel/smp-cps.c
-@@ -236,6 +236,7 @@ static void __init cps_smp_setup(void)
- 			/* Use the number of VPEs in cluster 0 core 0 for smp_num_siblings */
- 			if (!cl && !c)
- 				smp_num_siblings = core_vpes;
-+			cpumask_set_cpu(nvpes, &__cpu_primary_thread_mask);
- 
- 			for (v = 0; v < min_t(int, core_vpes, NR_CPUS - nvpes); v++) {
- 				cpu_set_cluster(&cpu_data[nvpes + v], cl);
-@@ -364,6 +365,7 @@ static void __init cps_prepare_cpus(unsigned int max_cpus)
- 	cl = cpu_cluster(&current_cpu_data);
- 	c = cpu_core(&current_cpu_data);
- 	cluster_bootcfg = &mips_cps_cluster_bootcfg[cl];
-+	cpu_smt_set_num_threads(core_vpes, core_vpes);
- 	core_bootcfg = &cluster_bootcfg->core_config[c];
- 	bitmap_set(cluster_bootcfg->core_power, cpu_core(&current_cpu_data), 1);
- 	atomic_set(&core_bootcfg->vpe_mask, 1 << cpu_vpe_id(&current_cpu_data));
-diff --git a/arch/mips/kernel/smp.c b/arch/mips/kernel/smp.c
-index 39e193cad2b9e4f877e920b71bbbb210e52607d0..1726744f2b2ec10a44420a7b9b9cd04f06c4d2f6 100644
---- a/arch/mips/kernel/smp.c
-+++ b/arch/mips/kernel/smp.c
-@@ -56,8 +56,10 @@ EXPORT_SYMBOL(cpu_sibling_map);
- cpumask_t cpu_core_map[NR_CPUS] __read_mostly;
- EXPORT_SYMBOL(cpu_core_map);
- 
-+#ifndef CONFIG_HOTPLUG_PARALLEL
- static DECLARE_COMPLETION(cpu_starting);
- static DECLARE_COMPLETION(cpu_running);
-+#endif
- 
- /*
-  * A logical cpu mask containing only one VPE per core to
-@@ -74,6 +76,8 @@ static cpumask_t cpu_core_setup_map;
- 
- cpumask_t cpu_coherent_mask;
- 
-+struct cpumask __cpu_primary_thread_mask __read_mostly;
-+
- unsigned int smp_max_threads __initdata = UINT_MAX;
- 
- static int __init early_nosmt(char *s)
-@@ -374,10 +378,15 @@ asmlinkage void start_secondary(void)
- 	set_cpu_core_map(cpu);
- 
- 	cpumask_set_cpu(cpu, &cpu_coherent_mask);
-+#ifdef CONFIG_HOTPLUG_PARALLEL
-+	cpuhp_ap_sync_alive();
-+#endif
- 	notify_cpu_starting(cpu);
- 
-+#ifndef CONFIG_HOTPLUG_PARALLEL
- 	/* Notify boot CPU that we're starting & ready to sync counters */
- 	complete(&cpu_starting);
-+#endif
- 
- 	synchronise_count_slave(cpu);
- 
-@@ -386,11 +395,13 @@ asmlinkage void start_secondary(void)
- 
- 	calculate_cpu_foreign_map();
- 
-+#ifndef CONFIG_HOTPLUG_PARALLEL
- 	/*
- 	 * Notify boot CPU that we're up & online and it can safely return
- 	 * from __cpu_up
- 	 */
- 	complete(&cpu_running);
-+#endif
- 
- 	/*
- 	 * irq will be enabled in ->smp_finish(), enabling it too early
-@@ -447,6 +458,12 @@ void __init smp_prepare_boot_cpu(void)
- 	set_cpu_online(0, true);
- }
- 
-+#ifdef CONFIG_HOTPLUG_PARALLEL
-+int arch_cpuhp_kick_ap_alive(unsigned int cpu, struct task_struct *tidle)
-+{
-+	return mp_ops->boot_secondary(cpu, tidle);
-+}
-+#else
- int __cpu_up(unsigned int cpu, struct task_struct *tidle)
- {
- 	int err;
-@@ -466,6 +483,7 @@ int __cpu_up(unsigned int cpu, struct task_struct *tidle)
- 	wait_for_completion(&cpu_running);
- 	return 0;
- }
-+#endif
- 
- #ifdef CONFIG_PROFILING
- /* Not really SMP stuff ... */
-
----
-base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
-change-id: 20250411-parallel-cpu-bringup-78999a9235ea
-
-Best regards,
--- 
-Grégory CLEMENT, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+> diff --git a/arch/arm/lib/crc-t10dif-glue.c b/arch/arm/lib/crc-t10dif-glue.c
+> index 6efad3d78284..382437094bdd 100644
+> --- a/arch/arm/lib/crc-t10dif-glue.c
+> +++ b/arch/arm/lib/crc-t10dif-glue.c
+> @@ -14,12 +14,12 @@
+>  #include <crypto/internal/simd.h>
+>
+>  #include <asm/neon.h>
+>  #include <asm/simd.h>
+>
+> -static DEFINE_STATIC_KEY_FALSE(have_neon);
+> -static DEFINE_STATIC_KEY_FALSE(have_pmull);
+> +static __ro_after_init DEFINE_STATIC_KEY_FALSE(have_neon);
+> +static __ro_after_init DEFINE_STATIC_KEY_FALSE(have_pmull);
+>
+>  #define CRC_T10DIF_PMULL_CHUNK_SIZE    16U
+>
+>  asmlinkage u16 crc_t10dif_pmull64(u16 init_crc, const u8 *buf, size_t len);
+>  asmlinkage void crc_t10dif_pmull8(u16 init_crc, const u8 *buf, size_t len,
+> diff --git a/arch/arm/lib/crc32-glue.c b/arch/arm/lib/crc32-glue.c
+> index 4340351dbde8..7ef7db9c0de7 100644
+> --- a/arch/arm/lib/crc32-glue.c
+> +++ b/arch/arm/lib/crc32-glue.c
+> @@ -16,12 +16,12 @@
+>
+>  #include <asm/hwcap.h>
+>  #include <asm/neon.h>
+>  #include <asm/simd.h>
+>
+> -static DEFINE_STATIC_KEY_FALSE(have_crc32);
+> -static DEFINE_STATIC_KEY_FALSE(have_pmull);
+> +static __ro_after_init DEFINE_STATIC_KEY_FALSE(have_crc32);
+> +static __ro_after_init DEFINE_STATIC_KEY_FALSE(have_pmull);
+>
+>  #define PMULL_MIN_LEN  64      /* min size of buffer for pmull functions */
+>
+>  asmlinkage u32 crc32_pmull_le(const u8 buf[], u32 len, u32 init_crc);
+>  asmlinkage u32 crc32_armv8_le(u32 init_crc, const u8 buf[], u32 len);
+> diff --git a/arch/arm64/lib/crc-t10dif-glue.c b/arch/arm64/lib/crc-t10dif-glue.c
+> index bacd18f23168..99d0b5668a28 100644
+> --- a/arch/arm64/lib/crc-t10dif-glue.c
+> +++ b/arch/arm64/lib/crc-t10dif-glue.c
+> @@ -15,12 +15,12 @@
+>  #include <crypto/internal/simd.h>
+>
+>  #include <asm/neon.h>
+>  #include <asm/simd.h>
+>
+> -static DEFINE_STATIC_KEY_FALSE(have_asimd);
+> -static DEFINE_STATIC_KEY_FALSE(have_pmull);
+> +static __ro_after_init DEFINE_STATIC_KEY_FALSE(have_asimd);
+> +static __ro_after_init DEFINE_STATIC_KEY_FALSE(have_pmull);
+>
+>  #define CRC_T10DIF_PMULL_CHUNK_SIZE    16U
+>
+>  asmlinkage void crc_t10dif_pmull_p8(u16 init_crc, const u8 *buf, size_t len,
+>                                     u8 out[16]);
+> diff --git a/arch/loongarch/lib/crc32-loongarch.c b/arch/loongarch/lib/crc32-loongarch.c
+> index c44ee4f32557..8e6d1f517e73 100644
+> --- a/arch/loongarch/lib/crc32-loongarch.c
+> +++ b/arch/loongarch/lib/crc32-loongarch.c
+> @@ -24,11 +24,11 @@ do {                                                        \
+>  } while (0)
+>
+>  #define CRC32(crc, value, size)                _CRC32(crc, value, size, crc)
+>  #define CRC32C(crc, value, size)       _CRC32(crc, value, size, crcc)
+>
+> -static DEFINE_STATIC_KEY_FALSE(have_crc32);
+> +static __ro_after_init DEFINE_STATIC_KEY_FALSE(have_crc32);
+>
+>  u32 crc32_le_arch(u32 crc, const u8 *p, size_t len)
+>  {
+>         if (!static_branch_likely(&have_crc32))
+>                 return crc32_le_base(crc, p, len);
+> diff --git a/arch/mips/lib/crc32-mips.c b/arch/mips/lib/crc32-mips.c
+> index 676a4b3e290b..84df361e7181 100644
+> --- a/arch/mips/lib/crc32-mips.c
+> +++ b/arch/mips/lib/crc32-mips.c
+> @@ -60,11 +60,11 @@ do {                                                        \
+>         _CRC32(crc, value, size, crc32)
+>
+>  #define CRC32C(crc, value, size) \
+>         _CRC32(crc, value, size, crc32c)
+>
+> -static DEFINE_STATIC_KEY_FALSE(have_crc32);
+> +static __ro_after_init DEFINE_STATIC_KEY_FALSE(have_crc32);
+>
+>  u32 crc32_le_arch(u32 crc, const u8 *p, size_t len)
+>  {
+>         if (!static_branch_likely(&have_crc32))
+>                 return crc32_le_base(crc, p, len);
+> diff --git a/arch/powerpc/lib/crc-t10dif-glue.c b/arch/powerpc/lib/crc-t10dif-glue.c
+> index f411b0120cc5..ddd5c4088f50 100644
+> --- a/arch/powerpc/lib/crc-t10dif-glue.c
+> +++ b/arch/powerpc/lib/crc-t10dif-glue.c
+> @@ -19,11 +19,11 @@
+>  #define VMX_ALIGN              16
+>  #define VMX_ALIGN_MASK         (VMX_ALIGN-1)
+>
+>  #define VECTOR_BREAKPOINT      64
+>
+> -static DEFINE_STATIC_KEY_FALSE(have_vec_crypto);
+> +static __ro_after_init DEFINE_STATIC_KEY_FALSE(have_vec_crypto);
+>
+>  u32 __crct10dif_vpmsum(u32 crc, unsigned char const *p, size_t len);
+>
+>  u16 crc_t10dif_arch(u16 crci, const u8 *p, size_t len)
+>  {
+> diff --git a/arch/powerpc/lib/crc32-glue.c b/arch/powerpc/lib/crc32-glue.c
+> index dbd10f339183..42f2dd3c85dd 100644
+> --- a/arch/powerpc/lib/crc32-glue.c
+> +++ b/arch/powerpc/lib/crc32-glue.c
+> @@ -11,11 +11,11 @@
+>  #define VMX_ALIGN              16
+>  #define VMX_ALIGN_MASK         (VMX_ALIGN-1)
+>
+>  #define VECTOR_BREAKPOINT      512
+>
+> -static DEFINE_STATIC_KEY_FALSE(have_vec_crypto);
+> +static __ro_after_init DEFINE_STATIC_KEY_FALSE(have_vec_crypto);
+>
+>  u32 __crc32c_vpmsum(u32 crc, const u8 *p, size_t len);
+>
+>  u32 crc32_le_arch(u32 crc, const u8 *p, size_t len)
+>  {
+> diff --git a/arch/s390/lib/crc32-glue.c b/arch/s390/lib/crc32-glue.c
+> index 124214a27340..8f20a8e595c3 100644
+> --- a/arch/s390/lib/crc32-glue.c
+> +++ b/arch/s390/lib/crc32-glue.c
+> @@ -16,11 +16,11 @@
+>
+>  #define VX_MIN_LEN             64
+>  #define VX_ALIGNMENT           16L
+>  #define VX_ALIGN_MASK          (VX_ALIGNMENT - 1)
+>
+> -static DEFINE_STATIC_KEY_FALSE(have_vxrs);
+> +static __ro_after_init DEFINE_STATIC_KEY_FALSE(have_vxrs);
+>
+>  /*
+>   * DEFINE_CRC32_VX() - Define a CRC-32 function using the vector extension
+>   *
+>   * Creates a function to perform a particular CRC-32 computation. Depending
+> diff --git a/arch/sparc/lib/crc32_glue.c b/arch/sparc/lib/crc32_glue.c
+> index a70752c729cf..d34e7cc7e1a1 100644
+> --- a/arch/sparc/lib/crc32_glue.c
+> +++ b/arch/sparc/lib/crc32_glue.c
+> @@ -15,11 +15,11 @@
+>  #include <linux/kernel.h>
+>  #include <linux/crc32.h>
+>  #include <asm/pstate.h>
+>  #include <asm/elf.h>
+>
+> -static DEFINE_STATIC_KEY_FALSE(have_crc32c_opcode);
+> +static __ro_after_init DEFINE_STATIC_KEY_FALSE(have_crc32c_opcode);
+>
+>  u32 crc32_le_arch(u32 crc, const u8 *data, size_t len)
+>  {
+>         return crc32_le_base(crc, data, len);
+>  }
+> diff --git a/arch/x86/lib/crc-t10dif-glue.c b/arch/x86/lib/crc-t10dif-glue.c
+> index f89c335cde3c..d073b3678edc 100644
+> --- a/arch/x86/lib/crc-t10dif-glue.c
+> +++ b/arch/x86/lib/crc-t10dif-glue.c
+> @@ -7,11 +7,11 @@
+>
+>  #include <linux/crc-t10dif.h>
+>  #include <linux/module.h>
+>  #include "crc-pclmul-template.h"
+>
+> -static DEFINE_STATIC_KEY_FALSE(have_pclmulqdq);
+> +static __ro_after_init DEFINE_STATIC_KEY_FALSE(have_pclmulqdq);
+>
+>  DECLARE_CRC_PCLMUL_FUNCS(crc16_msb, u16);
+>
+>  u16 crc_t10dif_arch(u16 crc, const u8 *p, size_t len)
+>  {
+> diff --git a/arch/x86/lib/crc32-glue.c b/arch/x86/lib/crc32-glue.c
+> index e3f93b17ac3f..e6a6285cfca8 100644
+> --- a/arch/x86/lib/crc32-glue.c
+> +++ b/arch/x86/lib/crc32-glue.c
+> @@ -9,12 +9,12 @@
+>
+>  #include <linux/crc32.h>
+>  #include <linux/module.h>
+>  #include "crc-pclmul-template.h"
+>
+> -static DEFINE_STATIC_KEY_FALSE(have_crc32);
+> -static DEFINE_STATIC_KEY_FALSE(have_pclmulqdq);
+> +static __ro_after_init DEFINE_STATIC_KEY_FALSE(have_crc32);
+> +static __ro_after_init DEFINE_STATIC_KEY_FALSE(have_pclmulqdq);
+>
+>  DECLARE_CRC_PCLMUL_FUNCS(crc32_lsb, u32);
+>
+>  u32 crc32_le_arch(u32 crc, const u8 *p, size_t len)
+>  {
+> diff --git a/arch/x86/lib/crc64-glue.c b/arch/x86/lib/crc64-glue.c
+> index b0e1b719ecbf..1214ee726c16 100644
+> --- a/arch/x86/lib/crc64-glue.c
+> +++ b/arch/x86/lib/crc64-glue.c
+> @@ -7,11 +7,11 @@
+>
+>  #include <linux/crc64.h>
+>  #include <linux/module.h>
+>  #include "crc-pclmul-template.h"
+>
+> -static DEFINE_STATIC_KEY_FALSE(have_pclmulqdq);
+> +static __ro_after_init DEFINE_STATIC_KEY_FALSE(have_pclmulqdq);
+>
+>  DECLARE_CRC_PCLMUL_FUNCS(crc64_msb, u64);
+>  DECLARE_CRC_PCLMUL_FUNCS(crc64_lsb, u64);
+>
+>  u64 crc64_be_arch(u64 crc, const u8 *p, size_t len)
+>
+> base-commit: e8c24520a1338f938774268a9bafb679ace93b76
+> --
+> 2.49.0
+>
 
