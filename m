@@ -1,131 +1,108 @@
-Return-Path: <linux-mips+bounces-8592-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8593-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F107EA8815A
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Apr 2025 15:14:07 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4FEFEA8852F
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Apr 2025 16:36:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E37713B0EF0
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Apr 2025 13:13:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2040D3BFF3F
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Apr 2025 14:20:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6E692D3A7D;
-	Mon, 14 Apr 2025 13:13:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 06BF2297A66;
+	Mon, 14 Apr 2025 13:56:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JlWkqhAk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="k6A+4fEX"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 592772D1F7B;
-	Mon, 14 Apr 2025 13:13:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA28F2973DB;
+	Mon, 14 Apr 2025 13:56:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744636382; cv=none; b=NW91nL0KdIfn5/IEsMLuzdL+ztcJpdk9JrvGl368+XxDbRfaFNvPT4ap+T70TiZaTI8Zlv4sVqqUv/IzMOzsPSMb2AQOOL4JThXifXK4nJQiRaF6jMdZTelitbfrlohJUgOY15qcirQtm6OeHLNy5IJWYgKNSKoBgHLXzkWOHGc=
+	t=1744639001; cv=none; b=BYMSAiKEHV1RjeISveDUOa+YvlC/DCfbycG2h5kY36mJbqZlV9GRFAQOAxE1IMzD1cn7PMAjhcNA4+ZBRaoXIGb/qsVelMDglK5Ovw9sXxiNHGuEmfAQK3aejCTAdq7i3a8MRqVLggIBsekIThXNm4A9Xmujvs25eLMdaV9W39M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744636382; c=relaxed/simple;
-	bh=PYtZof1JpAgYgjbf7Rfsjlu1zvZsWl5iqqO93SvjAxA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GpjH6aVdGGXm5Yg8aSYskJXMSj2mYoySuPQe6i5eWalBUOtfbTrXihTzGRQNNkwjmtWbixlDAeld9d4iAO+9/yHve2mHNIC1XY5gkQG/QuPCMlMe+Dk2FTIxd9Sbif24rSjxi4hSi5k9bFJ4PtjfVRCDM6r5Ogi28+nOR18K/1s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JlWkqhAk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D61D9C4AF09;
-	Mon, 14 Apr 2025 13:13:01 +0000 (UTC)
+	s=arc-20240116; t=1744639001; c=relaxed/simple;
+	bh=/efdcXBCkp25/Whv4nPqxxiDxKeXYrIljk214SJcbtk=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=HzZaWRQ0dDfbYmDDKuQCfv4hJ2a5NYLJgIY6j92J/A5jzBoHSyRiK+ZYSZqMTK4sJwomVpzqZZbeer/qoy9Is14deVvDMTp8DqpTjrqglL/lmtsXN6rOjFug8FBOcCcTkGc+V/3NLBQbQjU6IXQFbAD0Ue9OYtNFFTkbjj2HNwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=k6A+4fEX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07F7CC4CEEC;
+	Mon, 14 Apr 2025 13:56:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744636381;
-	bh=PYtZof1JpAgYgjbf7Rfsjlu1zvZsWl5iqqO93SvjAxA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=JlWkqhAkffqQUy7ti9hPGnnhvDvKTOIcBCWG5k12bTxqHOWceJcjpt5DeZaOX9rw5
-	 k+O9UNs2yN2I6WSh2xKCbB4XVsecud69yS8bjL5Y8UU9gIARpwj73EyxX7g4ig3qCt
-	 ZGkzxEHlqjBXBzdCQD9Ko6UrhuiLbOKl81GrD/x2+OSzK+V/nuktrJv/jg741qEMwZ
-	 RD8RKyrLwy5p2AlJdFVY40Ijv1jkSEbec9JTX0ytX9dFaVkfdTswxHvU+BOvgm0E6A
-	 GeKI7tyrJs2Gvgp+z44jolI6wm3kaWUT/y4B8GJgV5v4h4KlH9bVHS+6MCDetWtoeu
-	 /Vf69sMXYQO+w==
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5e677f59438so6263509a12.2;
-        Mon, 14 Apr 2025 06:13:01 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUD4uCTJjGTaei8ORymDlO35rNDmiVpNf0J8ypKCSGbvhgoyUHKdYWoG1DPVbCUtPYNYKqWXZgsLvU=@vger.kernel.org, AJvYcCVnGSSkNXpBON3jpg0xdQOhtALOAWglALLSs4DsFXza+0/ax54ds6X2LFNLVANlaBLMT0eLfvvWyEsqbDgBi4yW0nQ=@vger.kernel.org, AJvYcCW3W7/YB3ENS6TlB+Q4Kp4Ft7Hy90l0UME49wh6wMWzRYZKIP0KUAtO5nl+3IEEWi56ygAISV/KD7xBTA==@vger.kernel.org, AJvYcCW4+TBuwrU2mbi78wme2VBNcvjMQG7FMhiV/lxy0JQZd+N082VJSvPhkqt2ckibtFhyYmPxlShlfi1diM5WYA==@vger.kernel.org, AJvYcCWcfVchEuwRgAXZUZFbsdganOTzXRtveKq0kFB8Idt0Rr2HamdrsagiVQNgSzrzYn2MlG9oFpGCHSRG@vger.kernel.org, AJvYcCXv7SzSAorAe1Kc0pAbV6W/TXAmyvnq0SL/xp/uK72Y7/8SVdMr/fRGaodbxTNjm42Au0bjL9F/xJgAnNPH@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2S6lVkfESLUh5PlapvSpg6Ute+kP0nA7ZDwcr2t5raFcW+WFz
-	RTOmAc+kjNhwxwufGo7bRpMaGwo42CptiggiEJz49ZuFesUcHVDSVsVc61MTq7QiN7K7F8L1eq6
-	EeZbinPMn8aj3RCw1W+XkG2DTnA==
-X-Google-Smtp-Source: AGHT+IGD1RjwJGslsl4TZQ3wfuNijXDBc01yF9Y4gnZ5DJt+B5EtvoBjX+ECQxWRz+SZvCEqXEVdeGMo7Gts//oS3Co=
-X-Received: by 2002:a05:6402:1d4d:b0:5ee:497:67d6 with SMTP id
- 4fb4d7f45d1cf-5f36ff1c023mr10307363a12.33.1744636380328; Mon, 14 Apr 2025
- 06:13:00 -0700 (PDT)
+	s=k20201202; t=1744639000;
+	bh=/efdcXBCkp25/Whv4nPqxxiDxKeXYrIljk214SJcbtk=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=k6A+4fEXe7SHkW6I6+sdgDNidr/hWTyi5YOiRu2mVojqOAxbbfHtKzflStaYBmy2u
+	 a16daAogKddexBTxm7P9VUpnEvnAbNFPU8e7x8A6K7kkTPy3Kk7nE1PDz6L+tbZ/1V
+	 /zX+Om0AGw7RNg6k9+6ANrc1/PfyE519FdavAIC5JtNn/ywktWbiKXZnlXtsEP01/f
+	 mgL+1ZalDZIa1gqErc1oE1ea2tzdW2pjlVe23B6HmW+KBvcluU5F91/3mvZ2gJZG/j
+	 R7iY6fMS38QZGq3DoBhHB1wAx4DS7GU0bidyNVCa1+wcrDXq5p0Mkbf5WA5yBSisWa
+	 cpG20PRBe0LHw==
+From: Mark Brown <broonie@kernel.org>
+To: Liam Girdwood <lgirdwood@gmail.com>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Jaroslav Kysela <perex@perex.cz>, 
+ Takashi Iwai <tiwai@suse.com>, Keguang Zhang <keguang.zhang@gmail.com>
+Cc: linux-mips@vger.kernel.org, linux-sound@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20250409-loongson1-ac97-v2-0-65d5db96a046@gmail.com>
+References: <20250409-loongson1-ac97-v2-0-65d5db96a046@gmail.com>
+Subject: Re: [PATCH v2 0/4] Add support for Loongson-1 AC97
+Message-Id: <174463899776.86688.5147297198063500549.b4-ty@kernel.org>
+Date: Mon, 14 Apr 2025 14:56:37 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250410-dt-cpu-schema-v2-0-63d7dc9ddd0a@kernel.org>
- <20250410-dt-cpu-schema-v2-2-63d7dc9ddd0a@kernel.org> <0ce8559d-5c7d-43a0-8177-7704969fd334@gmail.com>
-In-Reply-To: <0ce8559d-5c7d-43a0-8177-7704969fd334@gmail.com>
-From: Rob Herring <robh@kernel.org>
-Date: Mon, 14 Apr 2025 08:12:47 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJi+8-WdYEyrGjb=cQXPEb07Lkcj90a32d38ChvYJAA-Q@mail.gmail.com>
-X-Gm-Features: ATxdqUHJKQLq2A74uSC_bdg-o7xbFw7BNZs9YlgJy-cREnL8L5s0aEVjMNnl6WA
-Message-ID: <CAL_JsqJi+8-WdYEyrGjb=cQXPEb07Lkcj90a32d38ChvYJAA-Q@mail.gmail.com>
-Subject: Re: [PATCH v2 02/17] arm64: dts: broadcom: bcm2712: Use "l2-cache"
- for L2 cache node names
-To: Florian Fainelli <f.fainelli@gmail.com>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
-	Samuel Holland <samuel@sholland.org>, Conor Dooley <conor@kernel.org>, 
-	Nicolas Ferre <nicolas.ferre@microchip.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
-	Steen Hegelund <Steen.Hegelund@microchip.com>, Daniel Machon <daniel.machon@microchip.com>, 
-	UNGLinuxDriver@microchip.com, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Heiko Stuebner <heiko@sntech.de>, 
-	Neil Armstrong <neil.armstrong@linaro.org>, Kevin Hilman <khilman@baylibre.com>, 
-	Jerome Brunet <jbrunet@baylibre.com>, 
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, Andy Gross <agross@kernel.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Viresh Kumar <vireshk@kernel.org>, 
-	Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, zhouyanjie@wanyeetech.com, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
-	Stephan Gerhold <stephan.gerhold@linaro.org>, devicetree@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	imx@lists.linux.dev, linux-rockchip@lists.infradead.org, 
-	linux-amlogic@lists.infradead.org, linux-renesas-soc@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-mediatek@lists.infradead.org, 
-	=?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-c25d1
 
-On Fri, Apr 11, 2025 at 6:37=E2=80=AFPM Florian Fainelli <f.fainelli@gmail.=
-com> wrote:
->
-> On 4/10/25 08:47, Rob Herring (Arm) wrote:
-> > There's no need include the CPU number in the L2 cache node names as
-> > the names are local to the CPU nodes. The documented node name is
-> > also just "l2-cache".
-> >
-> > Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
-> > Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
->
-> Not sure how you had intended for me to pick up that patch without
-> copying the maintainers.
+On Wed, 09 Apr 2025 18:29:30 +0800, Keguang Zhang wrote:
+> Add the driver and dt-binding document for Loongson-1 AC97.
+> Add the dt-binding document for Realtek ALC203 Codec.
+> Add DT support for the AC97 generic codec driver.
+> 
+> 
 
-Looks like there is a problem in MAINTAINERS. This matches what b4 runs:
+Applied to
 
-$ git show cca91c99fe14 | scripts/get_maintainer.pl --nogit
---nogit-fallback --nogit-chief-penguins --norolestats
-Rob Herring <robh@kernel.org>
-Krzysztof Kozlowski <krzk+dt@kernel.org>
-Conor Dooley <conor+dt@kernel.org>
-devicetree@vger.kernel.org
-linux-kernel@vger.kernel.org
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git for-next
 
+Thanks!
 
-> Applied nonetheless, thanks!
+[1/4] ASoC: dt-bindings: Add Loongson-1 AC97 Controller
+      commit: d60007fc9b739d939d5b6148c25805f206c836f9
+[2/4] ASoC: dt-bindings: Add Realtek ALC203 Codec
+      commit: 0142b45000457b9d112d40d5685d0898e51ed52f
+[3/4] ASoC: loongson: Add Loongson-1 AC97 Driver
+      commit: 1fc55a2baef5289c9535ce10a4f5f37664ce854a
+[4/4] ASoC: ac97: Add DT support
+      commit: 436a3cc8afbf34bb68166c2c5c19ca5113c0c756
 
-Thanks.
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
 
-Rob
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
