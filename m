@@ -1,143 +1,131 @@
-Return-Path: <linux-mips+bounces-8591-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8592-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 947CAA87E3A
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Apr 2025 12:57:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F107EA8815A
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Apr 2025 15:14:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0E5667A3941
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Apr 2025 10:56:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E37713B0EF0
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Apr 2025 13:13:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81AA527E1A6;
-	Mon, 14 Apr 2025 10:57:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6E692D3A7D;
+	Mon, 14 Apr 2025 13:13:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="BTsWDRsX";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="gKgu5XMb"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JlWkqhAk"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB4E027E1CC;
-	Mon, 14 Apr 2025 10:57:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 592772D1F7B;
+	Mon, 14 Apr 2025 13:13:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744628232; cv=none; b=t02duAv0ogt5pj7Ta79RAgGOwP+eKbBElkKshv8gV2TKXjnJNs/q9ybpnDlb5yuNkd6PSNa1YGuuxACAatYdWWwP955xz1b7mk0vsXA46Ht8zmtArtb1FnaWmxgB0hqhcbLlFQ5jUqNKCrTlDM92ZaBVAZlTe8tcjoxdJsx9FU0=
+	t=1744636382; cv=none; b=NW91nL0KdIfn5/IEsMLuzdL+ztcJpdk9JrvGl368+XxDbRfaFNvPT4ap+T70TiZaTI8Zlv4sVqqUv/IzMOzsPSMb2AQOOL4JThXifXK4nJQiRaF6jMdZTelitbfrlohJUgOY15qcirQtm6OeHLNy5IJWYgKNSKoBgHLXzkWOHGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744628232; c=relaxed/simple;
-	bh=Be2ydnxapnJ1r1uZegCpXDABpgwYbmS9LN3MXZ+3AaA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LwmZxgiJGSGI4LGP1FzQlwACoPhSscy0uCBprfTLAM8cXm5KcOUezZ2gXSyR+xLSgKMk02r+9ChDYMZr2lQ6lDKxx409ymwgZB67qnjKqsf1rIVyRkcfyEPsE/T5W+P1TJSIUtr85lGM8rD4zMjRvhqSQ5HSHJwuSyjQkuS9H+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=BTsWDRsX; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=gKgu5XMb; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Mon, 14 Apr 2025 12:57:05 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1744628228;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=T0kuMBxWgx+PRLHcph8H3TFWPvSCGgkMX4FLSszxil8=;
-	b=BTsWDRsXiDcXPw3gpV903D7uHA09pxR/ZWLgPzlVuqIMaNwtzacrfJPdJ6GDH9ROtY/wvO
-	iMYvOIR+zzm20lVV2g0WJm3tYmY9mYUi0jcledeICyCmdgKAT2PGKANHLS0LS7WjvirL6r
-	TDB2cOytPHn2P+XH38vUpZNMq1lTAk+5xNi6GLNYj8pSQMzdixy7v6DX/5s4+okj9Dlq4R
-	MumeJAvnwd269VP+F1gTTrZ0424hFRda6WdjvOmK3l/3gJoQBcgXR4QGb9RWYps18pjyPA
-	Cp6fdHPvToaMAMKzR1ke+xZCozhUGMgQtW8hBNkufYh/rJJ6qNO+dgcM0FIDwA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1744628228;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=T0kuMBxWgx+PRLHcph8H3TFWPvSCGgkMX4FLSszxil8=;
-	b=gKgu5XMbLZ3ojKsH+N//qkaa/GL6pLpdIqpZ0RnJWIdNhDbwz0qX7cAy1F/UfnakHmGDvh
-	57IRSZWUH5VxcvCw==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Brendan Higgins <brendan.higgins@linux.dev>, David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, 
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	kunit-dev@googlegroups.com
-Subject: Re: [PATCH v2 1/2] MIPS: Don't crash in stack_top() for tasks
- without ABI or vDSO
-Message-ID: <20250414125526-98c48a5a-8950-4a3d-b49a-401cd80ecfba@linutronix.de>
-References: <20250414-kunit-mips-v2-0-4cf01e1a29e6@linutronix.de>
- <20250414-kunit-mips-v2-1-4cf01e1a29e6@linutronix.de>
- <CAAhV-H7p9TWLEYjv2K-sXUD9roMBJtkbjyq6NCEnyavG9PnWKw@mail.gmail.com>
+	s=arc-20240116; t=1744636382; c=relaxed/simple;
+	bh=PYtZof1JpAgYgjbf7Rfsjlu1zvZsWl5iqqO93SvjAxA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GpjH6aVdGGXm5Yg8aSYskJXMSj2mYoySuPQe6i5eWalBUOtfbTrXihTzGRQNNkwjmtWbixlDAeld9d4iAO+9/yHve2mHNIC1XY5gkQG/QuPCMlMe+Dk2FTIxd9Sbif24rSjxi4hSi5k9bFJ4PtjfVRCDM6r5Ogi28+nOR18K/1s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JlWkqhAk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D61D9C4AF09;
+	Mon, 14 Apr 2025 13:13:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744636381;
+	bh=PYtZof1JpAgYgjbf7Rfsjlu1zvZsWl5iqqO93SvjAxA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=JlWkqhAkffqQUy7ti9hPGnnhvDvKTOIcBCWG5k12bTxqHOWceJcjpt5DeZaOX9rw5
+	 k+O9UNs2yN2I6WSh2xKCbB4XVsecud69yS8bjL5Y8UU9gIARpwj73EyxX7g4ig3qCt
+	 ZGkzxEHlqjBXBzdCQD9Ko6UrhuiLbOKl81GrD/x2+OSzK+V/nuktrJv/jg741qEMwZ
+	 RD8RKyrLwy5p2AlJdFVY40Ijv1jkSEbec9JTX0ytX9dFaVkfdTswxHvU+BOvgm0E6A
+	 GeKI7tyrJs2Gvgp+z44jolI6wm3kaWUT/y4B8GJgV5v4h4KlH9bVHS+6MCDetWtoeu
+	 /Vf69sMXYQO+w==
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5e677f59438so6263509a12.2;
+        Mon, 14 Apr 2025 06:13:01 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUD4uCTJjGTaei8ORymDlO35rNDmiVpNf0J8ypKCSGbvhgoyUHKdYWoG1DPVbCUtPYNYKqWXZgsLvU=@vger.kernel.org, AJvYcCVnGSSkNXpBON3jpg0xdQOhtALOAWglALLSs4DsFXza+0/ax54ds6X2LFNLVANlaBLMT0eLfvvWyEsqbDgBi4yW0nQ=@vger.kernel.org, AJvYcCW3W7/YB3ENS6TlB+Q4Kp4Ft7Hy90l0UME49wh6wMWzRYZKIP0KUAtO5nl+3IEEWi56ygAISV/KD7xBTA==@vger.kernel.org, AJvYcCW4+TBuwrU2mbi78wme2VBNcvjMQG7FMhiV/lxy0JQZd+N082VJSvPhkqt2ckibtFhyYmPxlShlfi1diM5WYA==@vger.kernel.org, AJvYcCWcfVchEuwRgAXZUZFbsdganOTzXRtveKq0kFB8Idt0Rr2HamdrsagiVQNgSzrzYn2MlG9oFpGCHSRG@vger.kernel.org, AJvYcCXv7SzSAorAe1Kc0pAbV6W/TXAmyvnq0SL/xp/uK72Y7/8SVdMr/fRGaodbxTNjm42Au0bjL9F/xJgAnNPH@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy2S6lVkfESLUh5PlapvSpg6Ute+kP0nA7ZDwcr2t5raFcW+WFz
+	RTOmAc+kjNhwxwufGo7bRpMaGwo42CptiggiEJz49ZuFesUcHVDSVsVc61MTq7QiN7K7F8L1eq6
+	EeZbinPMn8aj3RCw1W+XkG2DTnA==
+X-Google-Smtp-Source: AGHT+IGD1RjwJGslsl4TZQ3wfuNijXDBc01yF9Y4gnZ5DJt+B5EtvoBjX+ECQxWRz+SZvCEqXEVdeGMo7Gts//oS3Co=
+X-Received: by 2002:a05:6402:1d4d:b0:5ee:497:67d6 with SMTP id
+ 4fb4d7f45d1cf-5f36ff1c023mr10307363a12.33.1744636380328; Mon, 14 Apr 2025
+ 06:13:00 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAhV-H7p9TWLEYjv2K-sXUD9roMBJtkbjyq6NCEnyavG9PnWKw@mail.gmail.com>
+References: <20250410-dt-cpu-schema-v2-0-63d7dc9ddd0a@kernel.org>
+ <20250410-dt-cpu-schema-v2-2-63d7dc9ddd0a@kernel.org> <0ce8559d-5c7d-43a0-8177-7704969fd334@gmail.com>
+In-Reply-To: <0ce8559d-5c7d-43a0-8177-7704969fd334@gmail.com>
+From: Rob Herring <robh@kernel.org>
+Date: Mon, 14 Apr 2025 08:12:47 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqJi+8-WdYEyrGjb=cQXPEb07Lkcj90a32d38ChvYJAA-Q@mail.gmail.com>
+X-Gm-Features: ATxdqUHJKQLq2A74uSC_bdg-o7xbFw7BNZs9YlgJy-cREnL8L5s0aEVjMNnl6WA
+Message-ID: <CAL_JsqJi+8-WdYEyrGjb=cQXPEb07Lkcj90a32d38ChvYJAA-Q@mail.gmail.com>
+Subject: Re: [PATCH v2 02/17] arm64: dts: broadcom: bcm2712: Use "l2-cache"
+ for L2 cache node names
+To: Florian Fainelli <f.fainelli@gmail.com>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Samuel Holland <samuel@sholland.org>, Conor Dooley <conor@kernel.org>, 
+	Nicolas Ferre <nicolas.ferre@microchip.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+	Steen Hegelund <Steen.Hegelund@microchip.com>, Daniel Machon <daniel.machon@microchip.com>, 
+	UNGLinuxDriver@microchip.com, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Heiko Stuebner <heiko@sntech.de>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Kevin Hilman <khilman@baylibre.com>, 
+	Jerome Brunet <jbrunet@baylibre.com>, 
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
+	Lorenzo Pieralisi <lpieralisi@kernel.org>, Andy Gross <agross@kernel.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Viresh Kumar <vireshk@kernel.org>, 
+	Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, zhouyanjie@wanyeetech.com, 
+	Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+	Stephan Gerhold <stephan.gerhold@linaro.org>, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	imx@lists.linux.dev, linux-rockchip@lists.infradead.org, 
+	linux-amlogic@lists.infradead.org, linux-renesas-soc@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-mediatek@lists.infradead.org, 
+	=?UTF-8?Q?Philippe_Mathieu=2DDaud=C3=A9?= <philmd@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 14, 2025 at 05:32:47PM +0800, Huacai Chen wrote:
-> Hi, Thomas,
-> 
-> On Mon, Apr 14, 2025 at 4:29 PM Thomas Weißschuh
-> <thomas.weissschuh@linutronix.de> wrote:
+On Fri, Apr 11, 2025 at 6:37=E2=80=AFPM Florian Fainelli <f.fainelli@gmail.=
+com> wrote:
+>
+> On 4/10/25 08:47, Rob Herring (Arm) wrote:
+> > There's no need include the CPU number in the L2 cache node names as
+> > the names are local to the CPU nodes. The documented node name is
+> > also just "l2-cache".
 > >
-> > Not all tasks have an ABI associated or vDSO mapped,
-> > for example kthreads never do.
-> > If such a task ever ends up calling stack_top(), it will derefence the
-> > NULL vdso pointer and crash.
-> >
-> > This can for example happen when using kunit:
-> >
-> >     mips_stack_top+0x28/0xc0
-> >     arch_pick_mmap_layout+0x190/0x220
-> >     kunit_vm_mmap_init+0xf8/0x138
-> >     __kunit_add_resource+0x40/0xa8
-> >     kunit_vm_mmap+0x88/0xd8
-> >     usercopy_test_init+0xb8/0x240
-> >     kunit_try_run_case+0x5c/0x1a8
-> >     kunit_generic_run_threadfn_adapter+0x28/0x50
-> >     kthread+0x118/0x240
-> >     ret_from_kernel_thread+0x14/0x1c
-> >
-> > Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-> > ---
-> >  arch/mips/kernel/process.c | 8 +++++---
-> >  1 file changed, 5 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
-> > index b630604c577f9ff3f2493b0f254363e499c8318c..66343cb6c1737c4217ddd8a2c3ca244fac0ef8a5 100644
-> > --- a/arch/mips/kernel/process.c
-> > +++ b/arch/mips/kernel/process.c
-> > @@ -690,9 +690,11 @@ unsigned long mips_stack_top(void)
-> >         }
-> >
-> >         /* Space for the VDSO, data page & GIC user page */
-> > -       top -= PAGE_ALIGN(current->thread.abi->vdso->size);
-> > -       top -= PAGE_SIZE;
-> > -       top -= mips_gic_present() ? PAGE_SIZE : 0;
-> > +       if (current->thread.abi) {
-> > +               top -= PAGE_ALIGN(current->thread.abi->vdso->size);
-> > +               top -= PAGE_SIZE;
-> > +               top -= mips_gic_present() ? PAGE_SIZE : 0;
-> > +       }
-> I think the below code should also exist only when VDSO exists.
-> 
->         if (current->flags & PF_RANDOMIZE)
->                 top -= VDSO_RANDOMIZE_SIZE;
+> > Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> > Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
+>
+> Not sure how you had intended for me to pick up that patch without
+> copying the maintainers.
 
-Good point, thanks.
-I'll move that up into the same new conditional block.
+Looks like there is a problem in MAINTAINERS. This matches what b4 runs:
 
-> Huacai
-> 
-> >
-> >         /* Space for cache colour alignment */
-> >         if (cpu_has_dc_aliases)
-> >
-> > --
-> > 2.49.0
-> >
-> >
+$ git show cca91c99fe14 | scripts/get_maintainer.pl --nogit
+--nogit-fallback --nogit-chief-penguins --norolestats
+Rob Herring <robh@kernel.org>
+Krzysztof Kozlowski <krzk+dt@kernel.org>
+Conor Dooley <conor+dt@kernel.org>
+devicetree@vger.kernel.org
+linux-kernel@vger.kernel.org
+
+
+> Applied nonetheless, thanks!
+
+Thanks.
+
+Rob
 
