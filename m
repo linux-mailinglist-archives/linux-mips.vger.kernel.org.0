@@ -1,107 +1,150 @@
-Return-Path: <linux-mips+bounces-8602-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8603-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FB07A896D6
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Apr 2025 10:35:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 45C11A89711
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Apr 2025 10:47:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D2D43BAFDB
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Apr 2025 08:34:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ABA5F1890799
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Apr 2025 08:48:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA67927E1A7;
-	Tue, 15 Apr 2025 08:33:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 648E41DED5D;
+	Tue, 15 Apr 2025 08:47:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Q0nkpvfg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BID48Jc4"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lj1-f181.google.com (mail-lj1-f181.google.com [209.85.208.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D985D27C854
-	for <linux-mips@vger.kernel.org>; Tue, 15 Apr 2025 08:32:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 303B61C9B9B;
+	Tue, 15 Apr 2025 08:47:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744705981; cv=none; b=D2zny6Q9ef7PeLiEA0BaUqX51nx448N5mYl0W1VlfU0f3nRPItJAx4nMII381cZ9uBSxu0jgiuSlmFiLv0HLQkGp8nUejazI+msvHOYiJhkp61bYYTh2CVRRBHjweGn/OAdyKgG9r0g/Tche25Ns/jKSNoO9ssHncKXcnPW64QE=
+	t=1744706866; cv=none; b=QEBLC+FTxbTojpYB81xpZaJCwWwFdDLvzu1IJpxl0uaXNHHBW1aMWUQlJyzS9bGhiKkga8p6KQ1kJgtlLRHvwStiABV20syIS5KI7CvF6y49GQdMagZmeBYNyXmYd+PXbXbkB0tneTGCne41AAAsCsQHUOdz+xbse1atRnK4UMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744705981; c=relaxed/simple;
-	bh=p/sfemeB3+3AkoNBn983i9nv2fEhv2yg6yOcdLv/+hY=;
+	s=arc-20240116; t=1744706866; c=relaxed/simple;
+	bh=rCkQaiV8UvXZZucXLcojjy+jRldKKp9rj/zIIx3mUcc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=WHBYZxYYEzoKMFjEQ7dYh/JVvHOLhYsHuibKL8Jg/Yhv6aegK18QScgOWyHS4uRCJiZ8MkXU1/czh+eFh9YfTCuZ8wber6UtGewb6a9ocmWMKtSMLHsvE0OU48Wto7dkwu0OLsDYuv/e7znU9O4MVwgFNZgwffQRSd7BEc3SGWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Q0nkpvfg; arc=none smtp.client-ip=209.85.208.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-31062172698so23118891fa.0
-        for <linux-mips@vger.kernel.org>; Tue, 15 Apr 2025 01:32:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1744705978; x=1745310778; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p/sfemeB3+3AkoNBn983i9nv2fEhv2yg6yOcdLv/+hY=;
-        b=Q0nkpvfgEMZiIYM6rWgOZhHhOiEvBFZyxS+X+MwOlT5bjg6uPCqpdltlgAnIw/42mr
-         Fb/c1o2yflo1ZqaZNaWRk71JzfNcvr4jwKB/CikUjIGDwKkiplyRcB46lbNMv4iFNAed
-         SnhAS/Jpw+wsxE9iZmo7T0nIwdYsf0jk465kEOoaL4mPPv+/hm/JitKyghn4m86nEZt/
-         VmpiEjAFUl8X9EJgErZm2vMMqU5OPChGlrqB41fpaaiAfNVopPfTbq2VICULqBZi2ibU
-         AtW34RDZQoTDlIB6HgJ3Tl2xm5qKp2WfJUnl+t/b+7tt1CjWwJ6y2ZOh3DDV81UNkNq+
-         6DWA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1744705978; x=1745310778;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=p/sfemeB3+3AkoNBn983i9nv2fEhv2yg6yOcdLv/+hY=;
-        b=qCDq6DIRmS2WQuiFDWJon+mEDdtdTTp5wqo/z+/CoQtjSYrfLMzw+5kU5o4TY1+dM2
-         utpSUFavVrQWHFq7qIk1lmvZhKw/rlR2vE9Tzes6uvh1txEJv6AuDHB9nAwkQAg0L/AR
-         xkN6BdZhiX7j6sX9g5aKyBODDEQOc27zqHmn+DNdFMG0U45IyJbSw+53bXDP7xLCvUvC
-         ycwv3Vrkx18nG1kk4wqfNgPWWAXNmU4ahiou6SrBjBUGkf9Cgq2cuIrahQmpklopuZYd
-         BaNK2nrmMTH/SuZpCZVzkfjlXcJRUSu6UxI7iYKEUksQOUJTM/zAE6HA+aVOsMyj5zP0
-         Ss4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXGhf/VTRozxL1f092VywV55fs8sYIVJNnjSM2ywpMmthgrz5NI2Skzl7bUkpueP8ezEzGaSUc9fQnZ@vger.kernel.org
-X-Gm-Message-State: AOJu0YysduzgWJkQXimuxZ0OoaOP+O0rnIalP8IlufmjF3SZcpTbW4C7
-	dg1Wm18GKsx1E+6LXbCxpMOPPybzObXlunjvfWgHy3aHsO0HUia9YFnDpO9PZ1X1Jxop/U170ys
-	J1IixAWKdYNAWBxy4xH6DCu+jwEdUSI7lOcdj7NcH7elWugcl3pU=
-X-Gm-Gg: ASbGncuIYAVac0y8CHQFTw/FpCRiCdPtlP7abjAe9W8jvYLzZzuW/coHlBI/TAVqJVc
-	X5kfqOjMMcPYvrqMqm41x4LCq3ZJ4yZ/raUW3+YeZWltwO4kiHb0cmJr/en6K28vVpRW30+T7AD
-	T2xD6vefSw3X1BHk2yrOE4bw==
-X-Google-Smtp-Source: AGHT+IFY4mxWjOvUJ45dJSrLBON1zaTvdnLpGG/sPvryWvonle0qbT8VZTQ6lzHhQH0TveUlkekm7lMiWhkJTsAbCfk=
-X-Received: by 2002:a05:651c:1597:b0:30b:acad:d5ce with SMTP id
- 38308e7fff4ca-31049a1acd9mr52007071fa.21.1744705977861; Tue, 15 Apr 2025
- 01:32:57 -0700 (PDT)
+	 To:Cc:Content-Type; b=mupNxTb/uheSlxqIdQBeapF6DmyfUT0tUKBKxjAb7OrQvxn+dVi5omFypKM0hLix9KbBLJHJztcVLn98TOwhY1KRSClh5dBetMuWZh5B/a3i4QGN9TvKk4zxrQPaQX9TuSevO4lhRK+XIjOV87Bl1u9R/JJo/Su0jducOyFf5CM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BID48Jc4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E4FDC4CEE9;
+	Tue, 15 Apr 2025 08:47:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744706865;
+	bh=rCkQaiV8UvXZZucXLcojjy+jRldKKp9rj/zIIx3mUcc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=BID48Jc49LHTZ1e1fkby0OWl7Oe8Ldt8kVabt6gCDQjf5E29z7zKgiZztk20aCpdz
+	 Rbk1TO62AoAN5E6wLjKmsrtqACu37msR2CPFUoOq+eRZxtE6BHIIL/qYekhoCk0RzS
+	 C5kl1SjOZnoZOV5M21zGerkxFowbKwyFqDOyPUqCeRlqyGcymrEsOv3DUDYvygEMW9
+	 XE9YDa/8kPh2AeroewtYFWRyb3kpx76vwxtdYA5KkhrwgP7ux/P5IlrWzNhqfR5d++
+	 iDCZ0WdWfyYhjEGErGDlhMvpsLw6qnRU5xx+F4GO7ZkHyi21AXD9RWTHZEdjoqV1/j
+	 HIi0bo+kgwlgw==
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5e5e0caa151so9210749a12.0;
+        Tue, 15 Apr 2025 01:47:45 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUVig85Qb6XZbUPaMAiHwWGjDt2aI87TouoDPBzc+VyMUw/Ob83q7+tx08jFwpoxhTsgmc3bbkR2QGgFIWRX7ib@vger.kernel.org, AJvYcCWb4TnH/7BQDcADyTjOfbe5bM9yFS9Pts+hU6crJP1eVcJz5Yp0GbG9QmO6awC6iQe5R+2n6cJwX9hojLQ=@vger.kernel.org, AJvYcCXpZso0GtWNPdMZadlJmg9H1dl6s4INxWkVEDmlO7Islk39f7ww1Q/+1nxPbaHmCy20UAoIoW/si7ns0w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxmE5zcnUYx1ttKXNf8dUbdWKLobE8MKUivh5FnKTgisz/UhUu3
+	29dGyaxroSPNhbCffOg5uSK9xuNbe8B9sQffbKPe3U9QQrH+ZKZnzdErP/W2QVD66Rth3UYQ6Jp
+	HA1UnY/oQMxU3rT7m8KNT5NFXhxQ=
+X-Google-Smtp-Source: AGHT+IGGGp4mD43KUIHTnp6qprRyupvO+rjVcFQNkbhkl5DWOmFNSNrWDn0Ycc+UUCRvlHnlaxWm/lqhAeEBj4G3WcI=
+X-Received: by 2002:a17:906:dc94:b0:ac7:3a23:569c with SMTP id
+ a640c23a62f3a-acad34468e4mr1593829966b.1.1744706864187; Tue, 15 Apr 2025
+ 01:47:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250407-gpiochip-set-rv-mips-v1-0-e7f74a4eee2b@linaro.org>
-In-Reply-To: <20250407-gpiochip-set-rv-mips-v1-0-e7f74a4eee2b@linaro.org>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Tue, 15 Apr 2025 10:32:46 +0200
-X-Gm-Features: ATxdqUHStbj-Ti_vRnViTaRVrQ8zaVNPZsXG8wIEFb28PzUwDvLDxspkFk2FCi8
-Message-ID: <CACRpkdb0RHqYejNJ9w5HzvX0nkYCJRpdzsp3=JankRkJKYXmdA@mail.gmail.com>
-Subject: Re: [PATCH 0/4] MIPS: convert board-file GPIO drivers to using new
- value setters
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20250415-kunit-mips-v3-0-4ec2461b5a7e@linutronix.de> <20250415-kunit-mips-v3-1-4ec2461b5a7e@linutronix.de>
+In-Reply-To: <20250415-kunit-mips-v3-1-4ec2461b5a7e@linutronix.de>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Tue, 15 Apr 2025 16:47:31 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5b8ePEkCyECax37BOiqu57ZVRt_FHt11ijbPgsty+r=A@mail.gmail.com>
+X-Gm-Features: ATxdqUFuEM48gRpDnFeEggn2BIbSPZXdcbVAh9Rsa0I8PR7GkoEkvAFVvvabfxk
+Message-ID: <CAAhV-H5b8ePEkCyECax37BOiqu57ZVRt_FHt11ijbPgsty+r=A@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] MIPS: Don't crash in stack_top() for tasks without
+ ABI or vDSO
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Brendan Higgins <brendan.higgins@linux.dev>, 
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>, linux-mips@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	kunit-dev@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Apr 7, 2025 at 9:25=E2=80=AFAM Bartosz Golaszewski <brgl@bgdev.pl> =
-wrote:
+Hi, Thomas,
 
-> struct gpio_chip now has callbacks for setting line values that return
-> an integer, allowing to indicate failures. We're in the process of
-> converting all GPIO drivers to using the new API. This series converts
-> all MIPS board-file level controllers.
+On Tue, Apr 15, 2025 at 3:10=E2=80=AFPM Thomas Wei=C3=9Fschuh
+<thomas.weissschuh@linutronix.de> wrote:
 >
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> Not all tasks have an ABI associated or vDSO mapped,
+> for example kthreads never do.
+> If such a task ever ends up calling stack_top(), it will derefence the
+> NULL ABI pointer and crash.
+>
+> This can for example happen when using kunit:
+>
+>     mips_stack_top+0x28/0xc0
+>     arch_pick_mmap_layout+0x190/0x220
+>     kunit_vm_mmap_init+0xf8/0x138
+>     __kunit_add_resource+0x40/0xa8
+>     kunit_vm_mmap+0x88/0xd8
+>     usercopy_test_init+0xb8/0x240
+>     kunit_try_run_case+0x5c/0x1a8
+>     kunit_generic_run_threadfn_adapter+0x28/0x50
+>     kthread+0x118/0x240
+>     ret_from_kernel_thread+0x14/0x1c
+>
+> Only dereference the ABI point if it is set.
+>
+> Also move the randomization adjustment into the same conditional.
+>
+> Signed-off-by: Thomas Wei=C3=9Fschuh <thomas.weissschuh@linutronix.de>
+> ---
+>  arch/mips/kernel/process.c | 16 +++++++++-------
+>  1 file changed, 9 insertions(+), 7 deletions(-)
+>
+> diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
+> index b630604c577f9ff3f2493b0f254363e499c8318c..02aa6a04a21da437909eeac4f=
+149155cc298f5b5 100644
+> --- a/arch/mips/kernel/process.c
+> +++ b/arch/mips/kernel/process.c
+> @@ -690,18 +690,20 @@ unsigned long mips_stack_top(void)
+>         }
+>
+>         /* Space for the VDSO, data page & GIC user page */
+> -       top -=3D PAGE_ALIGN(current->thread.abi->vdso->size);
+> -       top -=3D PAGE_SIZE;
+> -       top -=3D mips_gic_present() ? PAGE_SIZE : 0;
+> +       if (current->thread.abi) {
+> +               top -=3D PAGE_ALIGN(current->thread.abi->vdso->size);
+> +               top -=3D PAGE_SIZE;
+> +               top -=3D mips_gic_present() ? PAGE_SIZE : 0;
+I'm not sure, but maybe this line has nothing to do with VDSO.
 
-The series:
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+Huacai
 
-Yours,
-Linus Walleij
+> +
+> +               /* Space to randomize the VDSO base */
+> +               if (current->flags & PF_RANDOMIZE)
+> +                       top -=3D VDSO_RANDOMIZE_SIZE;
+> +       }
+>
+>         /* Space for cache colour alignment */
+>         if (cpu_has_dc_aliases)
+>                 top -=3D shm_align_mask + 1;
+>
+> -       /* Space to randomize the VDSO base */
+> -       if (current->flags & PF_RANDOMIZE)
+> -               top -=3D VDSO_RANDOMIZE_SIZE;
+> -
+>         return top;
+>  }
+>
+>
+> --
+> 2.49.0
+>
 
