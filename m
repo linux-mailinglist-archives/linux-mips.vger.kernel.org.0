@@ -1,55 +1,63 @@
-Return-Path: <linux-mips+bounces-8622-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8623-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD016A92455
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Apr 2025 19:48:03 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FBEAA927F4
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Apr 2025 20:30:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EBBC3462240
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Apr 2025 17:48:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1B83E19E72D6
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Apr 2025 18:30:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 928F4253F22;
-	Thu, 17 Apr 2025 17:48:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CD33262D29;
+	Thu, 17 Apr 2025 18:27:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="H5OZ8HQd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OIGe0C4H"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out-172.mta0.migadu.com (out-172.mta0.migadu.com [91.218.175.172])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AB6C245020
-	for <linux-mips@vger.kernel.org>; Thu, 17 Apr 2025 17:47:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1346F2571AC;
+	Thu, 17 Apr 2025 18:27:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744912080; cv=none; b=pcDfdlxmKtxQgnOvYE9P6M6ojwd0RMp7YcLtdpU4zjyRKINCBRGt66EKj9Q7YrbT2608d+MrOywBA/XjSEEBwJooZAHjyixNEoxrdE6wc9nb7eyqwb5NvnNrzfVHSVZE0dPFkpMq/sn66Ru4AhthlVxIE2T5aYMLP4gj22ecbU0=
+	t=1744914426; cv=none; b=YUhNYX9tqXc7pvAAr6cHhkegMvsDKmxcEvW9e+VvsQrr1sXZOwTH89RuUT2jGK20zHRDJD+3yYhX3jyS9v2IPhz77lvrAk5kDhI66/+tB7lJXFOb7mDAR/W0Utrg3VUfFJ5hPl3/Yr97Xekp9SmTJy6Av3GBrmzdg62/v4Q0J+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744912080; c=relaxed/simple;
-	bh=efZOUVbO12d3BMx+8iRADLOz9htxGmN11Lx4RjDJNwM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=gVpXZKOcSBHOoBclSXkUNZ3OeZot/hNpS7P/D8YDrqnf9POCbcjbJFHxBQpIrLBely9VDxng++A021V//1lhyfNSUXH7pyoas3QCXfjzjYUPszltuHgXOeSjVV7hSi4inz00mRxsQdQcPV15xrGuQVNSmP/X8kU4RkVvD6Er15s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=H5OZ8HQd; arc=none smtp.client-ip=91.218.175.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1744912075;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=K0BNXfkJ3Uo96nxmEHcIGgrMK0PvXrRydTdFukEvwao=;
-	b=H5OZ8HQdFIHZJDepT9UJuYCI0LhZt5BHzuhrEiZeHlXsI8bwwhoiCgObTwhlWTdsOFWwXD
-	UdDhQ5tMWvnG93zGfCYLlEPklQRzcrqXNANarz0CAstv4EDj0nNSuZOP5EGe0otvFQUOsP
-	XvjGO86b3a2SIjD4OjQonLwKDe2D7+0=
-From: Thorsten Blum <thorsten.blum@linux.dev>
-To: Oleg Nesterov <oleg@redhat.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: "Maciej W. Rozycki" <macro@orcam.me.uk>,
-	Thorsten Blum <thorsten.blum@linux.dev>,
+	s=arc-20240116; t=1744914426; c=relaxed/simple;
+	bh=eYlw8AhwDiKSQwbJxBZMP6nL7U7/odFuPU2SW3GNcIs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LC5ipJ9Ycq4QQvRcxojdrUaiL93BRg7AiXDS/SMSaREVCQh9QZh9y59UCMmqStWt0m2AqR5F122VBaQnNKnX27JqR9eK8mu9I6lZRZJ7dyaduCMybahTc0RbVDnZ7S+saTmJQLD3+2LDyJm51p1WI3+y2iqFeNnwivX5QWnyTlw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OIGe0C4H; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 241E8C4CEEC;
+	Thu, 17 Apr 2025 18:27:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1744914425;
+	bh=eYlw8AhwDiKSQwbJxBZMP6nL7U7/odFuPU2SW3GNcIs=;
+	h=From:To:Cc:Subject:Date:From;
+	b=OIGe0C4HhyE/SwSQmKx2rHmtBTJv+C//vsUPyHQ9nBNZ7SM70FI5kAjNOXx0SiPAT
+	 oAV2RDvW3y7SexpSfNzDbW3E0WnI97wnBu7vd0ixGUtDVT++ajf0iwHpYPkfRoPvP9
+	 dT4SFF4LmjWuyS23J7I28QPr2BOEobjN9OeNUvVqomFKSjPZoUnpDk/aJjRQhRsRIa
+	 2jmz2BHEDWHCJM4wvqlkIeqwkGTdW4f9UXQwxbXtBHS8en8Ihmr+5OuGxO4m0tt2DT
+	 hAvSXPNfuhibOtdvN7de1S4/+B2pChejRWcf0/OP2SYlBqQ90ckVcnffrq7XEP05h7
+	 kOgQb7+Go6l8A==
+From: Eric Biggers <ebiggers@kernel.org>
+To: linux-crypto@vger.kernel.org
+Cc: linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	loongarch@lists.linux.dev,
 	linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] MIPS: Fix MAX_REG_OFFSET and remove zero-length struct member
-Date: Thu, 17 Apr 2025 19:47:13 +0200
-Message-ID: <20250417174712.69292-2-thorsten.blum@linux.dev>
+	linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org,
+	sparclinux@vger.kernel.org,
+	x86@kernel.org,
+	"Jason A . Donenfeld " <Jason@zx2c4.com>,
+	Ard Biesheuvel <ardb@kernel.org>
+Subject: [PATCH 00/15] Finish disentangling ChaCha, Poly1305, and BLAKE2s from CRYPTO
+Date: Thu, 17 Apr 2025 11:26:08 -0700
+Message-ID: <20250417182623.67808-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -57,48 +65,59 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
 
-Remove the unnecessary zero-length struct member '__last' and fix
-MAX_REG_OFFSET to point to the last register in 'pt_regs'.
+This series removes the unnecessary dependency of the ChaCha, Poly1305,
+and BLAKE2s library functions on the generic crypto infrastructure, i.e.
+CONFIG_CRYPTO.  To do this, it moves arch/*/crypto/Kconfig from a
+submenu of crypto/Kconfig to a submenu of arch/*/Kconfig, then re-adds
+the CRYPTO dependency to the symbols that actually need it.
 
-Fixes: 40e084a506eba ("MIPS: Add uprobes support.")
-Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
----
-Compile-tested only.
+Patches 14-15 then simplify the ChaCha and Poly1305 symbols by removing
+the unneeded "internal" symbols.
 
-Changes in v2:
-- Fix MAX_REG_OFFSET as suggested by Maciej (thanks!)
-- Link to v1: https://lore.kernel.org/lkml/20250411090032.7844-1-thorsten.blum@linux.dev/
----
- arch/mips/include/asm/ptrace.h | 7 +++++--
- 1 file changed, 5 insertions(+), 2 deletions(-)
+Note that Curve25519 is still entangled.  Later patches will fix that.
 
-diff --git a/arch/mips/include/asm/ptrace.h b/arch/mips/include/asm/ptrace.h
-index 85fa9962266a..23acad11ac8e 100644
---- a/arch/mips/include/asm/ptrace.h
-+++ b/arch/mips/include/asm/ptrace.h
-@@ -48,7 +48,6 @@ struct pt_regs {
- 	unsigned long long mpl[6];        /* MTM{0-5} */
- 	unsigned long long mtp[6];        /* MTP{0-5} */
- #endif
--	unsigned long __last[0];
- } __aligned(8);
- 
- static inline unsigned long kernel_stack_pointer(struct pt_regs *regs)
-@@ -65,7 +64,11 @@ static inline void instruction_pointer_set(struct pt_regs *regs,
- 
- /* Query offset/name of register from its name/offset */
- extern int regs_query_register_offset(const char *name);
--#define MAX_REG_OFFSET (offsetof(struct pt_regs, __last))
-+#ifdef CONFIG_CPU_CAVIUM_OCTEON
-+#define MAX_REG_OFFSET offsetof(struct pt_regs, mtp[5])
-+#else
-+#define MAX_REG_OFFSET offsetof(struct pt_regs, cp0_epc)
-+#endif
- 
- /**
-  * regs_get_register() - get register value from its offset
+Eric Biggers (15):
+  crypto: arm - remove CRYPTO dependency of library functions
+  crypto: arm64 - drop redundant dependencies on ARM64
+  crypto: arm64 - remove CRYPTO dependency of library functions
+  crypto: loongarch - source arch/loongarch/crypto/Kconfig without
+    CRYPTO
+  crypto: mips - remove CRYPTO dependency of library functions
+  crypto: powerpc - drop redundant dependencies on PPC
+  crypto: powerpc - remove CRYPTO dependency of library functions
+  crypto: riscv - remove CRYPTO dependency of library functions
+  crypto: s390 - drop redundant dependencies on S390
+  crypto: s390 - remove CRYPTO dependency of library functions
+  crypto: sparc - source arch/sparc/crypto/Kconfig without CRYPTO
+  crypto: x86 - drop redundant dependencies on X86
+  crypto: x86 - remove CRYPTO dependency of library functions
+  crypto: lib/chacha - remove INTERNAL symbol and selection of CRYPTO
+  crypto: lib/poly1305 - remove INTERNAL symbol and selection of CRYPTO
+
+ arch/arm/Kconfig            |  2 ++
+ arch/arm/crypto/Kconfig     | 28 ++++++++-------
+ arch/arm64/Kconfig          |  3 +-
+ arch/arm64/crypto/Kconfig   | 45 ++++++++++++-----------
+ arch/loongarch/Kconfig      |  1 +
+ arch/mips/Kconfig           |  2 ++
+ arch/mips/crypto/Kconfig    | 12 +++----
+ arch/powerpc/Kconfig        |  2 ++
+ arch/powerpc/crypto/Kconfig | 22 ++++++------
+ arch/riscv/Kconfig          |  2 ++
+ arch/riscv/crypto/Kconfig   | 14 ++++----
+ arch/s390/Kconfig           |  4 +++
+ arch/s390/crypto/Kconfig    | 21 ++++++-----
+ arch/sparc/Kconfig          |  2 ++
+ arch/sparc/crypto/Kconfig   | 14 ++++----
+ arch/x86/Kconfig            |  4 +++
+ arch/x86/crypto/Kconfig     | 72 ++++++++++++++++++-------------------
+ crypto/Kconfig              | 34 ++----------------
+ lib/crypto/Kconfig          | 32 ++++++-----------
+ 19 files changed, 149 insertions(+), 167 deletions(-)
+
+
+base-commit: da4cb617bc7d827946cbb368034940b379a1de90
 -- 
 2.49.0
 
