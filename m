@@ -1,91 +1,89 @@
-Return-Path: <linux-mips+bounces-8650-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8651-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72F37A93499
-	for <lists+linux-mips@lfdr.de>; Fri, 18 Apr 2025 10:25:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 817E0A935C7
+	for <lists+linux-mips@lfdr.de>; Fri, 18 Apr 2025 12:06:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C5771B66468
-	for <lists+linux-mips@lfdr.de>; Fri, 18 Apr 2025 08:26:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA19A3B007A
+	for <lists+linux-mips@lfdr.de>; Fri, 18 Apr 2025 10:06:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A93B426B2B1;
-	Fri, 18 Apr 2025 08:25:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CBDB253F00;
+	Fri, 18 Apr 2025 10:06:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="kpcJ1aZe"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sQV/u+jV"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
+Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15FF1268C55;
-	Fri, 18 Apr 2025 08:25:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B976519D074
+	for <linux-mips@vger.kernel.org>; Fri, 18 Apr 2025 10:06:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744964749; cv=none; b=gDuErHtBI1GdifPRE0MwB0sZPNbTFY1lPrG6C+gxA0LMogAuaGrGDZDzKSPdPYVNLY60bUnsVDiHtxd+DhZB29+BZaduOPpDX+HYoEfOFCxe/txEgREnN5ULtbSumFgfOMh9GPkidUBGAfIqnQj0nRguf89F6nDXInXrhWZRUXw=
+	t=1744970797; cv=none; b=aJDKsP0q23BVicGqpDO5tHHPGxc1LM3WInuTPqrk5Rz5v4x+p73x/xAHKOReKXcqYq5zCboZD00+zrTCEHfxTjjAuPk/fTyCy8fphJ2h6kBEUnAncb1IDM7eNkEmhz0uHOsSBplsE0um6/vxR5scuuBKcDMBDZWvEy2UeVwstXc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744964749; c=relaxed/simple;
-	bh=s2IhmVKxZhm64Wc2L/816Yw4hfryYZJNu4rC36wz9FY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=BAqkYGXjTB/is/n5wNCYUAAJjdduomW6N0yHwgHIEqDlJJwpXgAcwLb+DHF/S1Ses1VjtLaGNbhXYv3PAWL+TCInlCtB/e0N0K6jGREAxgm3B4JnUYqEW2kHyZT+L4fyhnYcE/eCx0ndUvcNZPlA30r+yP7wqesal51qKO8LoCw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=kpcJ1aZe; arc=none smtp.client-ip=144.6.53.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
-	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=hlkg+5jDRBY5wNNnTe1hqoMZ0WqQC2CXlXJOinsVxyU=; b=kpcJ1aZefOCOmEslLOYgO5//QM
-	Ln6pMr5koiDKWOj7at3DmuXW/+yNTQNemE32nJCw0tUBk2lSSos3j+agdtU8LJ1QmGrITb33TVv2P
-	ax7x7ihD9o/9/iRWIG6o5huDo+sjBvBM8N/+4rmITe3RGNDZD3kJRIZDt9wM6vSrDQAsM8CtmlaSX
-	oieCkebA9MArb2/oiKMgpHGYdSRIx5EULaGWGCnkwKjcIqfjRnqi6KVnMh+uDMtW/pKGRh9+DYB8j
-	6L7OlrJk5uGTHv5eg8RoWUkRMy9N+wd4fu7ENI0N1H5rEEfkOX/zcPw1G7vGUetKFspJKMJxaHYWr
-	x44+Tchg==;
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1u5h2a-00GhP1-29;
-	Fri, 18 Apr 2025 16:25:41 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 18 Apr 2025 16:25:40 +0800
-Date: Fri, 18 Apr 2025 16:25:40 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: linux-crypto@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
-	x86@kernel.org, Jason@zx2c4.com, ardb@kernel.org
-Subject: Re: [PATCH 01/15] crypto: arm - remove CRYPTO dependency of library
- functions
-Message-ID: <aAIMhLD3UMM41JkT@gondor.apana.org.au>
-References: <20250417182623.67808-2-ebiggers@kernel.org>
- <aAHDIRlSNLsYYZmW@gondor.apana.org.au>
- <20250418033236.GB38960@quark.localdomain>
- <aAHJRszwcQ4UyQ2e@gondor.apana.org.au>
- <20250418040931.GD38960@quark.localdomain>
+	s=arc-20240116; t=1744970797; c=relaxed/simple;
+	bh=sqneE/YMjA/pyVVbycpzttNUKQsyesmIU7FKiP4qcz0=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=nBU3I4/gUqdCZ9lr/LmzCpH8+418wYuxNDQFJf3KKoqWLwjRaZUpVQN7aOSvZi9766boJBTMQ6Ral4m7LmvB1ADSjZdvbM8FdZb5vZTxl1nSk+Z2A1qtEau8+LHbKH0qpHXxZKCtXcLOPzrfWT02J5IUIE15Jv/Qc9xDmwoiKx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sQV/u+jV; arc=none smtp.client-ip=91.218.175.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Content-Type: text/plain;
+	charset=us-ascii
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1744970791;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=sqneE/YMjA/pyVVbycpzttNUKQsyesmIU7FKiP4qcz0=;
+	b=sQV/u+jVRB+rp5So9kwTxElco0blrhF+ROpvv0VCcxheTE6X3VU+bBOB0XdpJX4lZ3+Z3R
+	uydQjy/rRDSq3NTMQ+gGrQ0/qVN2ZGY9ZuI8xSlS0wwb5+1dwFpiQ44BdA1E4NJPnGSIAu
+	wTPyrk5fYBGTD6sQ3RlFV9Zi1r1U/LY=
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250418040931.GD38960@quark.localdomain>
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3776.700.51.11.2\))
+Subject: Re: [PATCH v2] MIPS: Fix MAX_REG_OFFSET and remove zero-length struct
+ member
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Thorsten Blum <thorsten.blum@linux.dev>
+In-Reply-To: <aAIF_kEFlOOVNDaE@alpha.franken.de>
+Date: Fri, 18 Apr 2025 12:06:18 +0200
+Cc: Oleg Nesterov <oleg@redhat.com>,
+ "Maciej W. Rozycki" <macro@orcam.me.uk>,
+ linux-mips@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <DAD22E95-6D33-43D5-B5E5-3A7B45A63944@linux.dev>
+References: <20250417174712.69292-2-thorsten.blum@linux.dev>
+ <aAIF_kEFlOOVNDaE@alpha.franken.de>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+X-Migadu-Flow: FLOW_OUT
 
-On Thu, Apr 17, 2025 at 09:09:31PM -0700, Eric Biggers wrote:
->
-> arch/$ARCH/lib/crypto/ is the "right" way to do it, mirroring lib/crypto/.  I
-> was just hoping to avoid a 4-deep directory.  But we can do it.
+On 18. Apr 2025, at 09:57, Thomas Bogendoerfer wrote:
+> On Thu, Apr 17, 2025 at 07:47:13PM +0200, Thorsten Blum wrote:
+>> Remove the unnecessary zero-length struct member '__last' and fix
+>> MAX_REG_OFFSET to point to the last register in 'pt_regs'.
+>>=20
+>> Fixes: 40e084a506eba ("MIPS: Add uprobes support.")
+>=20
+> what does it fix ?
 
-You can do that in a follow-up, assuming nothing else pops for this
-series.
+The value of MAX_REG_OFFSET and thus how regs_get_register() behaves.
 
-Cheers,
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+=46rom my understanding, MAX_REG_OFFSET points to the marker '__last[0]'
+instead of the actual last register in 'pt_regs', which could allow
+regs_get_register() to return an invalid offset.
+
+Let me know if I'm missing anything.
+
+Thanks,
+Thorsten
+
 
