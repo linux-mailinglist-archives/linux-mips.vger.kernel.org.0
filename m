@@ -1,89 +1,91 @@
-Return-Path: <linux-mips+bounces-8651-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8652-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 817E0A935C7
-	for <lists+linux-mips@lfdr.de>; Fri, 18 Apr 2025 12:06:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D166A93611
+	for <lists+linux-mips@lfdr.de>; Fri, 18 Apr 2025 12:36:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA19A3B007A
-	for <lists+linux-mips@lfdr.de>; Fri, 18 Apr 2025 10:06:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A6DF68E3FB7
+	for <lists+linux-mips@lfdr.de>; Fri, 18 Apr 2025 10:36:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CBDB253F00;
-	Fri, 18 Apr 2025 10:06:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="sQV/u+jV"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A288421505E;
+	Fri, 18 Apr 2025 10:36:49 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out-181.mta0.migadu.com (out-181.mta0.migadu.com [91.218.175.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B976519D074
-	for <linux-mips@vger.kernel.org>; Fri, 18 Apr 2025 10:06:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.181
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 428F7221F1A;
+	Fri, 18 Apr 2025 10:36:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744970797; cv=none; b=aJDKsP0q23BVicGqpDO5tHHPGxc1LM3WInuTPqrk5Rz5v4x+p73x/xAHKOReKXcqYq5zCboZD00+zrTCEHfxTjjAuPk/fTyCy8fphJ2h6kBEUnAncb1IDM7eNkEmhz0uHOsSBplsE0um6/vxR5scuuBKcDMBDZWvEy2UeVwstXc=
+	t=1744972609; cv=none; b=fyMYnrqeRUX9l997FTI7W4JImNaiNcxKVk++pkJDoWILCPxK2t/o7u23z2ClgPyhLhto0SdFApk8gfVp1VPEwngNfFMPVSMRrU3lQtNHXBH9wZm7jxXfS6PJ65fgM4LV140JHvDd6ACNwxQj3bGR0b9vwi+LqeuQPQlKWiI/GGc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744970797; c=relaxed/simple;
-	bh=sqneE/YMjA/pyVVbycpzttNUKQsyesmIU7FKiP4qcz0=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=nBU3I4/gUqdCZ9lr/LmzCpH8+418wYuxNDQFJf3KKoqWLwjRaZUpVQN7aOSvZi9766boJBTMQ6Ral4m7LmvB1ADSjZdvbM8FdZb5vZTxl1nSk+Z2A1qtEau8+LHbKH0qpHXxZKCtXcLOPzrfWT02J5IUIE15Jv/Qc9xDmwoiKx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=sQV/u+jV; arc=none smtp.client-ip=91.218.175.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Content-Type: text/plain;
-	charset=us-ascii
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1744970791;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=sqneE/YMjA/pyVVbycpzttNUKQsyesmIU7FKiP4qcz0=;
-	b=sQV/u+jVRB+rp5So9kwTxElco0blrhF+ROpvv0VCcxheTE6X3VU+bBOB0XdpJX4lZ3+Z3R
-	uydQjy/rRDSq3NTMQ+gGrQ0/qVN2ZGY9ZuI8xSlS0wwb5+1dwFpiQ44BdA1E4NJPnGSIAu
-	wTPyrk5fYBGTD6sQ3RlFV9Zi1r1U/LY=
+	s=arc-20240116; t=1744972609; c=relaxed/simple;
+	bh=sw6r3R5Y6VvqVM7Pf5FIG4Rg5KdgiyqxVDqTGBpTQ8U=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=IWbRkDlVEBvU3cYvoYeT93ALDsnGi2BO3b8DW48xK4Z3gIS4NB63dR+Y0Pf3BOWEWdR3GsjsyWLvrZ5wWqstfIon7iiZ5k2KRbQUWHykUOfKAAvyZad4FZOXOWbkpR8TAFQlX/gkXCAGG91K+0r4kvXR7U74xktbuVtPAl9iCJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id 70A1092009C; Fri, 18 Apr 2025 12:36:37 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id 6C06392009B;
+	Fri, 18 Apr 2025 11:36:37 +0100 (BST)
+Date: Fri, 18 Apr 2025 11:36:37 +0100 (BST)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Thorsten Blum <thorsten.blum@linux.dev>
+cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+    Oleg Nesterov <oleg@redhat.com>, linux-mips@vger.kernel.org, 
+    linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] MIPS: Fix MAX_REG_OFFSET and remove zero-length struct
+ member
+In-Reply-To: <DAD22E95-6D33-43D5-B5E5-3A7B45A63944@linux.dev>
+Message-ID: <alpine.DEB.2.21.2504181108170.18253@angie.orcam.me.uk>
+References: <20250417174712.69292-2-thorsten.blum@linux.dev> <aAIF_kEFlOOVNDaE@alpha.franken.de> <DAD22E95-6D33-43D5-B5E5-3A7B45A63944@linux.dev>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3776.700.51.11.2\))
-Subject: Re: [PATCH v2] MIPS: Fix MAX_REG_OFFSET and remove zero-length struct
- member
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Thorsten Blum <thorsten.blum@linux.dev>
-In-Reply-To: <aAIF_kEFlOOVNDaE@alpha.franken.de>
-Date: Fri, 18 Apr 2025 12:06:18 +0200
-Cc: Oleg Nesterov <oleg@redhat.com>,
- "Maciej W. Rozycki" <macro@orcam.me.uk>,
- linux-mips@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <DAD22E95-6D33-43D5-B5E5-3A7B45A63944@linux.dev>
-References: <20250417174712.69292-2-thorsten.blum@linux.dev>
- <aAIF_kEFlOOVNDaE@alpha.franken.de>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-X-Migadu-Flow: FLOW_OUT
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 
-On 18. Apr 2025, at 09:57, Thomas Bogendoerfer wrote:
-> On Thu, Apr 17, 2025 at 07:47:13PM +0200, Thorsten Blum wrote:
->> Remove the unnecessary zero-length struct member '__last' and fix
->> MAX_REG_OFFSET to point to the last register in 'pt_regs'.
->>=20
->> Fixes: 40e084a506eba ("MIPS: Add uprobes support.")
->=20
-> what does it fix ?
+On Fri, 18 Apr 2025, Thorsten Blum wrote:
 
-The value of MAX_REG_OFFSET and thus how regs_get_register() behaves.
+> >> Remove the unnecessary zero-length struct member '__last' and fix
+> >> MAX_REG_OFFSET to point to the last register in 'pt_regs'.
+> >> 
+> >> Fixes: 40e084a506eba ("MIPS: Add uprobes support.")
+> > 
+> > what does it fix ?
+> 
+> The value of MAX_REG_OFFSET and thus how regs_get_register() behaves.
+> 
+> From my understanding, MAX_REG_OFFSET points to the marker '__last[0]'
+> instead of the actual last register in 'pt_regs', which could allow
+> regs_get_register() to return an invalid offset.
 
-=46rom my understanding, MAX_REG_OFFSET points to the marker '__last[0]'
-instead of the actual last register in 'pt_regs', which could allow
-regs_get_register() to return an invalid offset.
+ Or actually it permits an out-of-range access beyond the end of `struct 
+pt_regs': if you call `regs_get_register(pt_regs, MAX_REG_OFFSET)', it'll 
+read memory beyond `pt_regs' rather than returning 0 right away.  It may 
+not happen in reality (I haven't checked), but it's a QoI issue we should 
+address IMO.  Other platforms that I've checked (riscv, x86) get it right.
 
-Let me know if I'm missing anything.
+ Though the fix is incorrect for CPU_CAVIUM_OCTEON, because it doesn't 
+allow one to access the second half of the last register, and I find it 
+exceedingly complex anyway.  Just:
 
-Thanks,
-Thorsten
+#define MAX_REG_OFFSET							\
+	(offsetof(struct pt_regs, __last) - sizeof(unsigned long))
 
+will do (as `regs_get_register' operates on `unsigned long' quantities).  
+
+ Using `sizeof(struct pt_regs)' is problematic, as there might be padding 
+at the end of the structure, depending on the configuration (which is also 
+surely why Ralf chose to add this extra `__last' member instead), and we 
+don't want let one access that padding area either.
+
+  Maciej
 
