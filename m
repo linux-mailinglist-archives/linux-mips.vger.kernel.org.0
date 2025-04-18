@@ -1,58 +1,68 @@
-Return-Path: <linux-mips+bounces-8644-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8645-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 439CBA930DE
-	for <lists+linux-mips@lfdr.de>; Fri, 18 Apr 2025 05:38:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 120FAA930E1
+	for <lists+linux-mips@lfdr.de>; Fri, 18 Apr 2025 05:39:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D69637A8698
-	for <lists+linux-mips@lfdr.de>; Fri, 18 Apr 2025 03:37:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B8CEA1B62417
+	for <lists+linux-mips@lfdr.de>; Fri, 18 Apr 2025 03:39:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D53F37E0FF;
-	Fri, 18 Apr 2025 03:38:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 077F61E4AB;
+	Fri, 18 Apr 2025 03:38:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YbV/7d47"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="Sw/SPaiI"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D3721E4AB;
-	Fri, 18 Apr 2025 03:38:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 464077E0FF;
+	Fri, 18 Apr 2025 03:38:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1744947512; cv=none; b=M4kdYV78jfbUoBynHtGpCLQf2Cb2EJshEtHSl8YhZ8eswEY5Z3BoS0gfXQDyuvtdT90nYQglw0Q+Ah1avZF6NsUd3qspXmjNAPbVA0sHEn3H6G8qvtOAP84KNrDCTzxLfJqYSuBy9CqEzrScMgszrRySr8ibE5BIUinFrCwskSg=
+	t=1744947533; cv=none; b=cuiA0GHlOInd0BZItj9bhWFQEcnarY+9Wr2A1YU/2+p+fG9RSgFd1MB1bHxg7Y4l6MaKLYKMTWmfNex0wnhhWFKeaLMceCawbnOuQOCCwhcLJZQbnPSLxuZnYBJnFB7U1SCJX6vFMN/q+8Iu2l8JdkwZ0npqFNgP9JExq9zFJgo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1744947512; c=relaxed/simple;
-	bh=JIccxkbUkJv2mhfcvak7GTlHD8kRGQhmDGq2CC/2MlI=;
+	s=arc-20240116; t=1744947533; c=relaxed/simple;
+	bh=CJcPXGX8c/TllH/WpTkXAI7WyMoePHD4KFWUv6KlXdE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZbqhHuwjbx9lI2EwACOvBQ2W0i65eP1e9I52QUdUWuv86spHH0XcbL0thFYwyW/FBuDBmQB9sl7zUdUgCUJqtg/BJrQiq1ZfwBpEkt01zlqSChwt/QpqllFen78ASJzbByvN0BVb6VmnzPMAe30PfNrW/gG9Vz0pUMDF9WfjDqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YbV/7d47; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5DC94C4CEE2;
-	Fri, 18 Apr 2025 03:38:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1744947512;
-	bh=JIccxkbUkJv2mhfcvak7GTlHD8kRGQhmDGq2CC/2MlI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YbV/7d47vHOJChB47qhZmb0CfoN/a3qx2MFQWBgheSbIGzLw0f2MlJ5Ku660xMDdN
-	 T4loJYW/hWRNd0mew7guTwfHnu2tM8xDIubGn1ERQsyKxMx5ar2zFZUJ2Lrwbz6r98
-	 yNZwbC1RlV+RdXfe82WOaIXpLWfmd2tlKB3jl32SbbQuj8P+fcZHE8UE6qTKi/BRn7
-	 rRIzvkx8PAQGfQK9vD+DANxt4gQtM8rY6YozQ2Af70zxW9lO+cSmZlU7C5/oCMGSPk
-	 yR8h1YTR/Hx45pr9O8JqluF6gUxSJfqBiXPtG8LY8J46QrYMhVbT8pMdKsD5QHusBf
-	 izokyk+75mmyA==
-Date: Thu, 17 Apr 2025 20:38:29 -0700
-From: Eric Biggers <ebiggers@kernel.org>
-To: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	 Content-Type:Content-Disposition:In-Reply-To; b=oTRG7QWEni1u52gW37BpekYo0ucGt9UhpAZ9WwJGAaJeUJym3dtlSAAUzmAwnQpftGGxXaEydko8NfniVxmg1jZBa0zeVp+x6CQuKZwZ5PdVwAjMocQKICEIGlgAdazauGQ3m9OSzitMyU8xlTyXumEKPpA6N0VzeoGmlFdlN+A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=Sw/SPaiI; arc=none smtp.client-ip=144.6.53.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
+	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=B5FIE5cHQYuMr1+LHfbtaiLujfedpAMdrckiF6Jw7wE=; b=Sw/SPaiIwN2XkEd3xx63jQvQU8
+	6GooV8x5tQUoq0lZci9EL+Z/URNL5NnWrKhvkqhVIkw/wqqBHP0/AcSjEFSPQ08OCbpdQEziW4WA1
+	BjhVGq+q4PPss7KWlPRXKYTEX7bm8DfxuHlxraHZYmYNuv0dCNhAsAPT6Kl1rqkEhAWv1Dg+1HRTK
+	VrGJtSoHwAef6a+FxsIYM42MFza4Tcqt3RNsgJYu+qCX0A3O1uCxjhZ7cQLllWj6ZiWPQerfPZHPk
+	ZzmdOqQcktgF3XJAIgaS7LwiTpMmJyNHj8iMjo5PylXrBp3FZ7Qk+tnZJ9BoNz2srhcV4TEiX1GCE
+	b//mLDQQ==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
+	id 1u5cYw-00Geir-1h;
+	Fri, 18 Apr 2025 11:38:47 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 18 Apr 2025 11:38:46 +0800
+Date: Fri, 18 Apr 2025 11:38:46 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: linux-crypto@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, x86@kernel.org, ardb@kernel.org,
-	Jason@zx2c4.com, torvalds@linux-foundation.org
-Subject: Re: [PATCH 8/9] crypto: x86/chacha - remove the skcipher algorithms
-Message-ID: <20250418033829.GC38960@quark.localdomain>
-References: <20250405182609.404216-9-ebiggers@kernel.org>
- <aAHF0X2I5ydEJK1p@gondor.apana.org.au>
+	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+	x86@kernel.org, Jason@zx2c4.com, ardb@kernel.org
+Subject: Re: [PATCH 01/15] crypto: arm - remove CRYPTO dependency of library
+ functions
+Message-ID: <aAHJRszwcQ4UyQ2e@gondor.apana.org.au>
+References: <20250417182623.67808-2-ebiggers@kernel.org>
+ <aAHDIRlSNLsYYZmW@gondor.apana.org.au>
+ <20250418033236.GB38960@quark.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -61,26 +71,24 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aAHF0X2I5ydEJK1p@gondor.apana.org.au>
+In-Reply-To: <20250418033236.GB38960@quark.localdomain>
 
-On Fri, Apr 18, 2025 at 11:24:01AM +0800, Herbert Xu wrote:
-> Eric Biggers <ebiggers@kernel.org> wrote:
-> >
-> > -static void __exit chacha_simd_mod_fini(void)
-> > -{
-> > -       if (IS_REACHABLE(CONFIG_CRYPTO_SKCIPHER) && boot_cpu_has(X86_FEATURE_SSSE3))
-> > -               crypto_unregister_skciphers(algs, ARRAY_SIZE(algs));
-> > -}
-> > -
-> > arch_initcall(chacha_simd_mod_init);
-> > -module_exit(chacha_simd_mod_fini);
-> 
-> Why did you remove the ability to remove the module?
-> 
+On Thu, Apr 17, 2025 at 08:32:36PM -0700, Eric Biggers wrote:
+>
+> I don't think that would be better.  The 'if' would be up to 400 lines long, and
+> it would be easy for people to miss the context when editing the file.
 
-Well, I forgot that an empty module_exit needs to be kept around for the module
-to be removable.  I'll send a patch that adds these back in, though I'm doubtful
-that anyone ever removes these modules in practice.
+We should separate the symbols for Crypto API options and the library
+options.  If you're worried about people missing the if statement,
+how about splitting the file into two? One for Crypto API symbols
+and one for the library symbols.
 
-- Eric
+In fact we could move the library files into a different directory,
+e.g., arch/x86/crypto/lib or arch/x86/lib/crypto.
+
+Cheers,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
 
