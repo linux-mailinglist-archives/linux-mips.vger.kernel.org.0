@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-8686-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8687-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D0CC3A96405
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Apr 2025 11:20:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E323EA96430
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Apr 2025 11:25:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A1F8E1885E11
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Apr 2025 09:18:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D9331628E8
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Apr 2025 09:25:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68D001F1509;
-	Tue, 22 Apr 2025 09:18:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 977521F3B98;
+	Tue, 22 Apr 2025 09:25:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="aHdWa7rb"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="WR1PNINK"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
+Received: from smtpbgbr1.qq.com (smtpbgbr1.qq.com [54.207.19.206])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F3C018E3F;
-	Tue, 22 Apr 2025 09:18:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A3061F2382;
+	Tue, 22 Apr 2025 09:25:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.207.19.206
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745313501; cv=none; b=GY4WqioB5GH703ansIB9T73gdKUvBZmED1UBh0vTC+XGybU5smkjg/UmKDllAEekIjBVyxNI35adzN9pxxzQanrMnNDhfhdRGfXRfzZ3qVYowkTAzloxS/2xhyYyv3rEaGAiKHVsRePlPUR9VEZhZoRSqpUJga/kREMZPIH3VXg=
+	t=1745313933; cv=none; b=OEX6TqK6F/WbvBi0DIVbleXwz1hQAGrHrHTNX7bmEZx1kol0Jx5JbVt8kmdZaXOaN76wOuWMDwVG7UcvdM2Svgu/OiodAwlfRjM59ebCFHhXJZLt/PgCmdoHecPHQ9c50rfmBfTMpUrr/2e3PsQXW7t5P6/60kfyxguzjpit3ao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745313501; c=relaxed/simple;
-	bh=ahUrLKUy5cKBw3CCcbzKd4Qd4em2A+c8Vv02kzDIBzI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=V6JtccoJjDfV61TQFGT/wlncylv8Ccq70lRsHXrhW/b1gmCpyZYWvIsazxjcmYtvACdSxJyIZaELHo6uIpqRIOTOTejbHvrY7PfAhnlBe2Y3udv06PWuCM36XeicDs9tG0dMq5Ng6JC7xBekAV5od4C7LeiXY8yR5z7lxvJfe5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=aHdWa7rb; arc=none smtp.client-ip=54.206.16.166
+	s=arc-20240116; t=1745313933; c=relaxed/simple;
+	bh=5HXOfChdntgYLWeKK+lob+HMvx+eoXiews4WXrPNji0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Uzi/+pxKzhMlxUMePJDIVEWYsZZlXHEmff7c46ufxllbQfnECKInJO181cAVionXpBP60kq3kK30E8DCPoiC7fFBYOZPe3gzWvu4BgywW2PQGvEWFXLkX3Pe8VAA43Q4tVHmZ6Q92w3jqp2L4neGAR34jGi2QoHdPe3PxKbqcss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=WR1PNINK; arc=none smtp.client-ip=54.207.19.206
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1745313433;
-	bh=iGkIVWXFOyVsd4uMO+SSpTfRM67ip4m1rYsko5Qs5AA=;
+	s=onoh2408; t=1745313878;
+	bh=OGDnSMArk/WrjO2UTNNnGOJJKTaitd2ENOoLaZYFrmo=;
 	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=aHdWa7rby8JmH/g6tVdSKt2CgjT4BpgsVgk1sv/CFWUI2mM0G/vMY7e2nGVBuhayy
-	 XAcpW0kfFx7KH/1o6pajPBt1SWkF1q0xzFndEYmHHSq1vdcFqVLCV0/iQ9ZUdNMoH4
-	 W3tuhp9Udle+nAIUJfBYU2eJtN5tMspEuXtR96Wo=
-X-QQ-mid: zesmtpip3t1745313415t3daaa261
-X-QQ-Originating-IP: j1RNao9pu3ZOoDyXZrFlPdWn5P6r/D0upx564EzC170=
+	b=WR1PNINKFJ7G0lQVO2eczeXOsij7wKAbOWPlTPRpXzZA7PASGsGD04g0aTwJ0HEII
+	 9aAKzQP+iI6Z8wEkATXkXLBKJqrVTEV53lAj3PhicUPQtdixyW3hMsx5yw1pg+RhwL
+	 T5DQ8g6Fwlkz+lvCyBKJe05SpaVNE80AXYYC5xJ4=
+X-QQ-mid: zesmtpip4t1745313861t42375df0
+X-QQ-Originating-IP: rbmCeOYn6fTV13+abiw/rrLT1iX6vvePKYuombisU2k=
 Received: from localhost.localdomain ( [localhost])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 22 Apr 2025 17:16:54 +0800 (CST)
+	id ; Tue, 22 Apr 2025 17:24:19 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 4643946903979290159
+X-BIZMAIL-ID: 4302771691292400825
 EX-QQ-RecipientCnt: 8
 From: WangYuli <wangyuli@uniontech.com>
 To: gregkh@linuxfoundation.org,
@@ -55,9 +55,9 @@ Cc: macro@orcam.me.uk,
 	wangyuli@uniontech.com,
 	linux-mips@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 5.4+] MIPS: cevt-ds1287: Add missing ds1287.h include
-Date: Tue, 22 Apr 2025 17:16:48 +0800
-Message-ID: <CB3E3A9CEA5227BE+20250422091648.116984-1-wangyuli@uniontech.com>
+Subject: [PATCH 5.4+] MIPS: ds1287: Match ds1287_set_base_clock() function types
+Date: Tue, 22 Apr 2025 17:24:15 +0800
+Message-ID: <418FF04C2B5B986B+20250422092415.120647-1-wangyuli@uniontech.com>
 X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -69,65 +69,63 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
-X-QQ-XMAILINFO: N34HGxtl3nZNGOKxccmAw5hb6+nu/qSRzx28mLLa0xo0l3x4TJObnebb
-	uc5Dii4gWRaCibxuC02o3LhUFTqLj1M6wY6T2D8FR6DYtiaDnjSkiIWfvjXVq2bDHhKLZ2e
-	UA3wEk1qlAt26kqmHJpvDJQp6lKmF6wCAT716pzW+/bC5uWPaRVVqLw1ge4YCWCsqZvd+XX
-	LwXUmXnNENSfMVBCXwF8zns7vIwu8EXde6K7LI+daTu9PexaEusNL1fawFPuMs8XZfm2i/U
-	jqJzaB0A5uonemKYsKJNVL8emtvi02aLViGVu9xb4LO3GK4vKpLkj8uEzFGxxFpebn0M310
-	LNq9ggnB+8z0sXDzIqMDCpxqS4j9twi8kyZaApaWhbxNoFrh9H/L23vCT0ikSfMO05+Z927
-	xPxvcWqrxHlsahsY57x5j3ceJoVfPAkRr/9B2vIQOabJV265EGTmWdnksvi3tZTq7C91RAX
-	dPCbrUhWc9qs0cgmjWOHVD9ivluuRrCPD9wT/sbb1TBdsvTe6Mbk0dSmxzuNtruO/7vXMZz
-	Agk5pMY+6MazjxmOIZLQhhwqzdCEThqguUCivWavmiIveWnjW7TNLsUDcvDkULoDa0/UFrP
-	FyrKRy605rxajAt5yNSQjJv5o9Za/z+XXAh2Per2nddp0LhxDcpG4kqcwXlcnsqk6BeBedn
-	l5d1MMF/JHJ4oGye4Dc8DApl0/IaTKeC8+GJcmkTz/gRA4plOCoXJwTwzlJHJKagS5LF7FI
-	5CPrW4ScOPHkwMQOt+uXJ9tKvc5doLGzJIPw3cboMaeaoNKuvpavRgFcj/C3cwquwZAJnXq
-	IsvhSg7G/hGhx4aOfgoCiktWpL9PUyu1AIo9mY17gli3QsWtqKAQJNl+4tW5cuqkY+czMXl
-	nrISiU5oknnU9mILfQILANK+FsmnJYiHVBUdsxQ9QRxOpOjAmCrpDPgGesUBDs5yNzGfhY+
-	66eAa1YCXUFdW510yvO9ApXy0qC722wgyfIAFCePVgg5L/HBFaZuuPia8MK9PTln6ekZcpf
-	t5CV5p1KFaOXd+rSkO7UipK1SxF7k=
-X-QQ-XMRINFO: M/715EihBoGSf6IYSX1iLFg=
+X-QQ-XMAILINFO: Oah+0YjUCNSuh5RbwCP+5zcKnQdodoC5VcXnY5+8dpcUpUOEiDuLG1HS
+	Yv5+aZ7PCsUhuqpyKa7lL1VoHpjDX9KQar9ddnI3b3tDM+VDMnhc4SknWGmfyysswLw6/5L
+	9ExNFJANE2bOkI5gzS8AUjZmBqjgR2HsG7u8d2bkcWHAyRcFCUVJJaOd2ETEqmx+nfqSFYB
+	g86fOddrLdpYQ6OURCSsao31VhsdrxygvynxtkA8kS6KH2wl0BAkV56Z8xOYQ3urp1iYAwB
+	wpysMVzja6Mlp7aWuM3tvc0liKG5GT5pBW58sRJL9LoGBGs8PNvCl3/UN9KTG3VKwOgoFXP
+	rRstCpBXEYprCzfGmL6MRMIqQt7p3X19YqL7/4D7ZwFfJP/JYz6mSjvgJDhuo2Atq6oy4Zh
+	jmWsyo4KFavo9pbI4DtZ/UlOr/EfCPMS0gxELj0Gz7aavsROG1PJHh13QW1ggrgBk7qrFVQ
+	Hp73ppOJgwJlQ8f8DAJfyDnC3tmSBvA3sDfgykv24q2P34lgLkOtvMRU5mAGcWafFdxM/Ht
+	L/Q5ns9PzcWiuksOEJhVSsQ68zwenRmtkAxcXhMpw9G0vFMOrGKBxaTPRWv2+KzEcu33B2B
+	DsQZJG9zSk4Cq6kUGuFbIxT+4Mv9brYc1Yw2304UpspVVPwMoVyjX58/+OExarANpRMXOHY
+	2Idjx5GzjgBZZomsO1cZizJmWXbLdqBqoTgW6fpC6C66t65gDcBLx6FRGNm3wSueSSrZ/XR
+	npmE1HxmLyUOUISthvZ4OFun53gUavW/A+XhmBggBxZrtbXEn6PMk56dRTzdaHnMUmcZDhe
+	+XKeLo3v8N5gNQZYwIUI3higNRvc6yS1WVrcNUwamhRl8tCWGEFNYeEslyetXWbdwZTqmrR
+	3eW0zYb0ULcY09JpQmCaN7zuVeR5yu29A7amzI74cqMiTbj8IsLmsGyF0iGfOI+scgIdBgL
+	g2bG6HCu7iVt1aWim//K1s1WkAG3Rl0WzGlKGs39vpElqIR0GQsFlGSqYOqA25eIBUhHzHW
+	Bh/ACwiYtUULB+4xTr/Os771X+Unu8NrDveeDVkkDJVOJgc3m4B65W7HQHRQmD3NsHN2/qz
+	wY45oLl+G49t/hU/ZMuyJM=
+X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
 X-QQ-RECHKSPAM: 0
 
-[ Upstream commit f3be225f338a578851a7b607a409f476354a8deb ]
+[ Upstream commit a759109b234385b74d2f5f4c86b5f59b3201ec12 ]
 
-Address the issue of cevt-ds1287.c not including the ds1287.h header
-file.
+Synchronize the declaration of ds1287_set_base_clock() between
+cevt-ds1287.c and ds1287.h.
 
-Fix follow errors with gcc-14 when -Werror:
+Fix follow error with gcc-14 when -Werror:
 
-arch/mips/kernel/cevt-ds1287.c:15:5: error: no previous prototype for ‘ds1287_timer_state’ [-Werror=missing-prototypes]
-   15 | int ds1287_timer_state(void)
-      |     ^~~~~~~~~~~~~~~~~~
-arch/mips/kernel/cevt-ds1287.c:20:5: error: no previous prototype for ‘ds1287_set_base_clock’ [-Werror=missing-prototypes]
-   20 | int ds1287_set_base_clock(unsigned int hz)
+arch/mips/kernel/cevt-ds1287.c:21:5: error: conflicting types for ‘ds1287_set_base_clock’; have ‘int(unsigned int)’
+   21 | int ds1287_set_base_clock(unsigned int hz)
       |     ^~~~~~~~~~~~~~~~~~~~~
-arch/mips/kernel/cevt-ds1287.c:103:12: error: no previous prototype for ‘ds1287_clockevent_init’ [-Werror=missing-prototypes]
-  103 | int __init ds1287_clockevent_init(int irq)
-      |            ^~~~~~~~~~~~~~~~~~~~~~
-cc1: all warnings being treated as errors
+In file included from arch/mips/kernel/cevt-ds1287.c:13:
+./arch/mips/include/asm/ds1287.h:11:13: note: previous declaration of ‘ds1287_set_base_clock’ with type ‘void(unsigned int)’
+   11 | extern void ds1287_set_base_clock(unsigned int clock);
+      |             ^~~~~~~~~~~~~~~~~~~~~
 make[7]: *** [scripts/Makefile.build:207: arch/mips/kernel/cevt-ds1287.o] Error 1
-make[7]: *** Waiting for unfinished jobs....
 make[6]: *** [scripts/Makefile.build:465: arch/mips/kernel] Error 2
 make[6]: *** Waiting for unfinished jobs....
 
 Signed-off-by: WangYuli <wangyuli@uniontech.com>
 Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 ---
- arch/mips/kernel/cevt-ds1287.c | 1 +
- 1 file changed, 1 insertion(+)
+ arch/mips/include/asm/ds1287.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/kernel/cevt-ds1287.c b/arch/mips/kernel/cevt-ds1287.c
-index 9a47fbcd4638..de64d6bb7ba3 100644
---- a/arch/mips/kernel/cevt-ds1287.c
-+++ b/arch/mips/kernel/cevt-ds1287.c
-@@ -10,6 +10,7 @@
- #include <linux/mc146818rtc.h>
- #include <linux/irq.h>
+diff --git a/arch/mips/include/asm/ds1287.h b/arch/mips/include/asm/ds1287.h
+index 46cfb01f9a14..51cb61fd4c03 100644
+--- a/arch/mips/include/asm/ds1287.h
++++ b/arch/mips/include/asm/ds1287.h
+@@ -8,7 +8,7 @@
+ #define __ASM_DS1287_H
  
-+#include <asm/ds1287.h>
- #include <asm/time.h>
+ extern int ds1287_timer_state(void);
+-extern void ds1287_set_base_clock(unsigned int clock);
++extern int ds1287_set_base_clock(unsigned int hz);
+ extern int ds1287_clockevent_init(int irq);
  
- int ds1287_timer_state(void)
+ #endif
 -- 
 2.49.0
 
