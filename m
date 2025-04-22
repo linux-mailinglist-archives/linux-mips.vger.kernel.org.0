@@ -1,52 +1,52 @@
-Return-Path: <linux-mips+bounces-8695-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8694-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7ADD6A965D1
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Apr 2025 12:25:00 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8185AA965D0
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Apr 2025 12:24:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4CCD63BA00A
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Apr 2025 10:24:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DEC767AC91E
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Apr 2025 10:23:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D241F215066;
-	Tue, 22 Apr 2025 10:24:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B7CE2147EA;
+	Tue, 22 Apr 2025 10:24:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="MtXHJ80k"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="J2w0Bi7m"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpbg151.qq.com (smtpbg151.qq.com [18.169.211.239])
+Received: from smtpbgau1.qq.com (smtpbgau1.qq.com [54.206.16.166])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8EE82135D0;
-	Tue, 22 Apr 2025 10:24:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.169.211.239
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41730F510;
+	Tue, 22 Apr 2025 10:24:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.16.166
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745317464; cv=none; b=MjRn5/qcQfICw2RF0kLcW6SEbLvNeTMZgUaTszbHH8GOxZoSSeW8dGwREo63GDF/EWqMC6rFD1vRdz71SvnCByzqo/Og6fY+ngO9U1kH+UsEgwaXDsjCWCAwN6SwicYyAyZCiw2S5PhCuehH6FfIKP+P62adWVZoF5pMvNtKtUs=
+	t=1745317460; cv=none; b=CJ0o1o1GpXLlujlRQuSO51P/A4sLKqooPp8s6PzAwwrtUcUHKFlWTQN9rTSZP+bnSaROqqhkYpNAN7Sr6Owe9qt6fD+b0Mj2DIlKtkYcSho8xPUuyEkJAMycgbmDWScK3Bcq/A/7yE0PM6WdZyUMsxmp/EnF9fgaEsM5WhlBTtc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745317464; c=relaxed/simple;
-	bh=AqT7m1u440zOibe16v2sMSLTv4oY8kFJKxRTDSjSEe4=;
+	s=arc-20240116; t=1745317460; c=relaxed/simple;
+	bh=aOUxpTx+k+5fk5OYmSww98phSSuRsLaGNQ+0Q/iRm8M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=l0QyA/Q72EJbhRq4TaB1fAAlBCGd2zjAie+up2LHujPzZIvBWDv76gmZ4sCoBMg6KXy/zxJWEVtUVjI+UszjpbTt4hGKsrtieiRW8EGK/9UDbRjXO+5rcI74zUSBIPEeVMzTzABOmMUg9ih/Z7U5QfvJjDsqZmlhEmOPREcdjvc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=MtXHJ80k; arc=none smtp.client-ip=18.169.211.239
+	 MIME-Version:Content-Type; b=BRB4fYOccqNNZWnqk0HueMVfxydgyRR0HwaBpXaNXkQVumZweFjYnmU974p9QLbGPX54gHHKC3HCVcdLsodJuS+DB9EginmkOvffsjCGu24NL8DUe0Bf5zINZWbES6mXh4jDZxUqvHyFAkDRAHEoz+fSAbXjUAeLnH5HP7XGXQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=J2w0Bi7m; arc=none smtp.client-ip=54.206.16.166
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1745317436;
-	bh=28bWYpBODBMHyOWNKQNC1L/Lz6MllkPxMRU2S9jr7eA=;
+	s=onoh2408; t=1745317443;
+	bh=nCPkl2VraY01qejRiFzb+h6eDDwwwG21C+d7Srnl4uE=;
 	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=MtXHJ80kZ2xKqxpKJmxfPhh+0lSbJkAxuPJ1xc9vX3eIG0C3nMxa4nBQdu3paI+5A
-	 xbz5biP9tCzAS9a/r+4xLEDXZMt0W8XYnjZBE02QGabuZupv5XkDLz5PaCymoXxS5S
-	 1JZRFC3WTPiCExozrZxFOLTk9+SStgrJxQCR7vy8=
-X-QQ-mid: zesmtpip4t1745317394tbdcae06d
-X-QQ-Originating-IP: 7kb3nrCfv66PVDKlai2IcJySyp79o6yy/taB80T1yig=
+	b=J2w0Bi7mtIzZfxhm5IAz0Sgsac33/7czxgjkkMyC8CaOd50F8GI1LhxlS1/h5v2sJ
+	 PRVLkiarJsErriFSE+VSMT96mSkyiFLehv66tyW5XBl+fuFV6ku1hF6ZDCkjXlkuFu
+	 +d4jvcfgF1/iredxKTfslJ1jm1BxcAtEENrmVVRA=
+X-QQ-mid: zesmtpip4t1745317399tb833f869
+X-QQ-Originating-IP: pn0vdm8843sak/UTPiNLAc1jJEy9sFECKFGIZyXCzEs=
 Received: from localhost.localdomain ( [localhost])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 22 Apr 2025 18:23:08 +0800 (CST)
+	id ; Tue, 22 Apr 2025 18:23:16 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 5605286764837814321
-EX-QQ-RecipientCnt: 9
+X-BIZMAIL-ID: 15127516559595859823
+EX-QQ-RecipientCnt: 8
 From: WangYuli <wangyuli@uniontech.com>
 To: wangyuli@uniontech.com
 Cc: guanwentao@uniontech.com,
@@ -55,11 +55,10 @@ Cc: guanwentao@uniontech.com,
 	macro@orcam.me.uk,
 	niecheng1@uniontech.com,
 	tsbogend@alpha.franken.de,
-	zhanjun@uniontech.com,
-	=?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>
-Subject: [PATCH v2 3/6] MIPS: dec: Create reset.h
-Date: Tue, 22 Apr 2025 18:22:50 +0800
-Message-ID: <3AD7E5DDE3F05C6D+20250422102253.137944-3-wangyuli@uniontech.com>
+	zhanjun@uniontech.com
+Subject: [PATCH v2 4/6] MIPS: dec: Remove dec_irq_dispatch()
+Date: Tue, 22 Apr 2025 18:22:51 +0800
+Message-ID: <093E43FBF9F4F005+20250422102253.137944-4-wangyuli@uniontech.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <24EC7D2CA58B25F5+20250422101855.136675-1-wangyuli@uniontech.com>
 References: <24EC7D2CA58B25F5+20250422101855.136675-1-wangyuli@uniontech.com>
@@ -73,156 +72,97 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
-X-QQ-XMAILINFO: M1gP/lprZGJnT407nQc5mQ8kDHXKhY9nuOVDzr0dckA1Hcs5cHhABbfx
-	kQ+vD8FjePSmNqWTxoRXHmLrw5uNWn1ZHvAFYtDfTaORyuSHg5/0PudfJdRPvk2QGuEeU9U
-	aCwLRJ257x3FCdL4BoS1tVcaLWQPGiqA0rTkjU7Aj8sGooRHiSlQK4ALzItuCe+aEHaZ6Zm
-	L+DOs9DRop1Y3Z2Mh4SllPKI43JnpxMPCmujP0HubX/scMkYbEPgLEWfgQ9NcX/kXaZZSP6
-	q0fbJPJgVZyqTIsfJ/BKLoWPBORIJ/nAKaPzx4lHvP6TdAP1H1o1UFjdgWZvRkOC6QltehB
-	ZKg600VhSxOTgmu662jNRk72imJ5L5Qlbceo4Idp+W3bOTmMwNQS8GJy4JlcGLvqyLlsWGF
-	/8AmupaSkd14i8hxHqMhrBbUZJ2BfjhcKIHDb4QjAD7cmc0r7CGZ25PvLGX4uhlVTaYMMm+
-	JARUXH89pX1Z5RIne9XzUVt8HcNkMvhhSeMNtKKZOOaw03Rnc9Q1p7arkITprfyiwm6lIfi
-	vZzzGL/KxEChte7IVeu0MA73BWV1XemY03VLMhJiU4ocU+zRwf630X9qxLjfQqbBjzBWxMH
-	zQTdSEeBTblsZTUSAIeRfedhlYfjzKXmyWQJskZdfjh40Ws48u6YAO0VMl5u3Q3UBUTaQEw
-	BHiDgD2qJ9SASJGkE/qsUFgZ0doeqtojjS/WizDN+4d/JFDONj2vsryFaRe6jFKgOpEl2St
-	QoSMvIRNtjZsJXvQexLe1uJevze1RFQjdndiL/tEARLvySEpkIeUgIqKn9/cbP5+FCD+yW7
-	L6a01iEdnVjyXFuXSFoTvAwv9Tk1Ajf89P2iPc2dlSNCIj7mMl6gAfUq8h4GkACYeWoSGP2
-	iGhfLZeTwz6JFN/jKDBOwCo/K3BpYHkmQAAG5ULOawTkABOt78PayTs4v/65vZFvnS3Jb+y
-	coTAGhH+8GOxsbX9fq0yYaSl3i1z/hlQmdkk7DpRZimIYNOI3lCFb80P/Kg6DaJRBwozV9e
-	daU1oEEmMVPSQfB/+CemIRSCd8QUK/fsxWx+2KBMSAhU5xujzAd90Usc1LysAXX+s7yOQu9
-	6hyNWpMli0F
-X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
+X-QQ-XMAILINFO: NHaWRpycPDeTUbKqbCmKp7OqkX0jNNN5lm/T/P/pR9kHy3n6r0kgsvK8
+	lOVt8OVDMTWUVgdWuEU+hZSsNdaJ6M6vTVzmEbIhVxJP/hBAeuNyRmLFcNQ84OaJBx4Psia
+	5TgXqSSAxWt3/DCxr7xOLbx6C2CkRKCTknBjie6GzS2Hwg127Fx3acw5cLeDvQ2ePCSmj8h
+	udkotD1DcBPNnhTs6g4uWdty+oNpHOGLf93zEkeEhRGON/T/5fdfSwNFv0hS9tfpjdjtBc0
+	pCj+n1oYApOhxulzmYWXSXbnebLMUfittmjRi524K4Y04hkiXOcOKV4Rq7UuneTpBp9fKF9
+	VnQ36sWtraHHPzBjs0pEG32+RSNOlyuXwf/BBboNpgbPEqMV35WRPJ1LSps8qxbuGemwW3i
+	XrJsfSp3Yd0W+yG7SY/2tz+1RcXY2fcuo9V5SI7CIeWfmJjhm1waxUrANNLlcIH0q1OFQho
+	Jw4VNRu4YFnvsldk9sh6VfLxfEaW4TZgovFikonKWrSt0sZlc98FHL8Xqv3UgWI2+VSCCik
+	N59sjJ9kxqceD293rA0OUKD0TQlven/kvcEU5ailXdoWnXk0e2bUj0Zrvqgbp2xnC2WgOmq
+	lPyrCgbInvazZL6F0rAShUbIkohzUrZvf11lDYVD7u9JW4dZEfeEeD2GC+CxDSSfYdsrC5w
+	E+13ZrNf65errcp7kYIizOxL9Gt3YM5HORKyIhdgaHKWxkQ6C3MF2xJ1qZAW1pxTf0rT5Bt
+	+1g8Dcs1Z7ojMmM5TQrfZCIgqWc8mhFObZ6VNMfar5/OgXmzYBC9HgJkm5LLpxsfltAdu67
+	cj0eSYD6T2dCAF/U8MN1a6CPkY/Dx0oIXk2CDIoJSJPGcl1Mfkom5/opTZWT4RnbV/6uD8L
+	JdqOVL1dzlEQmbRcZQlUx+kYLg5Htj+/Ha6DwfL961xcx/aVCCAAELmkdorSnMLnsH+esmk
+	kY+22pH9S/lrlm4Imn+IpIINsALKxHfMGO7CIFRaoWivv1ijCIIhAy413wAUMDUTl2cUlje
+	6HUpUX6Kkxbs7NgyJV6FzEWuamccBYernDTU2GGzxqkWCN6hNg8bp6RZbW2xly04RlOaQi8
+	OTY7FCMY4pw53uGVwJAu7w=
+X-QQ-XMRINFO: NS+P29fieYNw95Bth2bWPxk=
 X-QQ-RECHKSPAM: 0
 
-Declare externally used functions in reset.c to resolve compilation
-warnings.
+Commit 187933f23679 ("[MIPS] do_IRQ cleanup") introduced dec_irq_dispatch()
+function. But Subsequent to commit 8f99a1626535 ("MIPS: Tracing: Add
+IRQENTRY_EXIT section for MIPS"), the dec_irq_dispatch() function is
+rendered superfluous. Remove it to eradicate compilation warnings.
 
-Fix follow errors with gcc-14 when -Werror:
+[ Quoting Maciej W. Rozycki: ]
 
-arch/mips/dec/reset.c:22:17: error: no previous prototype for ‘dec_machine_restart’ [-Werror=missing-prototypes]
-   22 | void __noreturn dec_machine_restart(char *command)
-      |                 ^~~~~~~~~~~~~~~~~~~
-arch/mips/dec/reset.c:27:17: error: no previous prototype for ‘dec_machine_halt’ [-Werror=missing-prototypes]
-   27 | void __noreturn dec_machine_halt(void)
-      |                 ^~~~~~~~~~~~~~~~
-arch/mips/dec/reset.c:32:17: error: no previous prototype for ‘dec_machine_power_off’ [-Werror=missing-prototypes]
-   32 | void __noreturn dec_machine_power_off(void)
-      |                 ^~~~~~~~~~~~~~~~~~~~~
-arch/mips/dec/reset.c:38:13: error: no previous prototype for ‘dec_intr_halt’ [-Werror=missing-prototypes]
-   38 | irqreturn_t dec_intr_halt(int irq, void *dev_id)
-      |             ^~~~~~~~~~~~~
+    It always has been, since its inception, see commit 187933f23679
+  ("[MIPS] do_IRQ cleanup").
+
+    Up to commit 8f99a16265353 ("MIPS: Tracing: Add IRQENTRY_EXIT section
+  for MIPS") `do_IRQ' used to be a macro, that's why.  At the time `do_IRQ'
+  was converted to a macro `dec_irq_dispatch' was created and previously
+  this place used to call `do_IRQ' too.
+
+    This cleanup should have been made along with commit 8f99a16265353, so
+  it's pretty old a technical debt being sorted here.
+
+[ Fix follow error with gcc-14 when -Werror: ]
+
+arch/mips/dec/setup.c:780:25: error: no previous prototype for ‘dec_irq_dispatch’ [-Werror=missing-prototypes]
+  780 | asmlinkage unsigned int dec_irq_dispatch(unsigned int irq)
+      |                         ^~~~~~~~~~~~~~~~
 cc1: all warnings being treated as errors
-make[7]: *** [scripts/Makefile.build:207: arch/mips/dec/reset.o] Error 1
-make[7]: *** Waiting for unfinished jobs....
+make[7]: *** [scripts/Makefile.build:207: arch/mips/dec/setup.o] Error 1
+make[6]: *** [scripts/Makefile.build:465: arch/mips/dec] Error 2
+make[5]: *** [scripts/Makefile.build:465: arch/mips] Error 2
+make[5]: *** Waiting for unfinished jobs....
+make[4]: *** [Makefile:1992: .] Error 2
+make[3]: *** [debian/rules:74: build-arch] Error 2
+dpkg-buildpackage: error: make -f debian/rules binary subprocess returned exit status 2
+make[2]: *** [scripts/Makefile.package:126: bindeb-pkg] Error 2
+make[1]: *** [/mnt/83364c87-f5ee-4ae8-b862-930f1bd74feb/Projects/CommitUpstream/LinuxKernel/Temp/linux/Makefile:1625: bindeb-pkg] Error 2
+make: *** [Makefile:251: __sub-make] Error 2
 
-In passing, also correct the include file ordering in setup.c as it
-doesn't merit a separate commit.
-
-Link: https://lore.kernel.org/all/Z8A0JeFYfBxXOFCD@alpha.franken.de/
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+Link: https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=187933f23679c413706030aefad9e85e79164c44
+Link: https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/?id=8f99a162653531ef25a3dd0f92bfb6332cd2b295
+Link: https://lore.kernel.org/all/alpine.DEB.2.21.2502220019210.65342@angie.orcam.me.uk/
 Signed-off-by: WangYuli <wangyuli@uniontech.com>
 ---
-Changelog:
- *v1->v2: Add Philippe Mathieu-Daudé's "Reviewed-by" tag.
----
- arch/mips/dec/prom/init.c         |  3 +--
- arch/mips/dec/reset.c             |  2 ++
- arch/mips/dec/setup.c             |  9 ++-------
- arch/mips/include/asm/dec/reset.h | 20 ++++++++++++++++++++
- 4 files changed, 25 insertions(+), 9 deletions(-)
- create mode 100644 arch/mips/include/asm/dec/reset.h
+ arch/mips/dec/int-handler.S | 2 +-
+ arch/mips/dec/setup.c       | 6 ------
+ 2 files changed, 1 insertion(+), 7 deletions(-)
 
-diff --git a/arch/mips/dec/prom/init.c b/arch/mips/dec/prom/init.c
-index 8d74d7d6c05b..a8393052a443 100644
---- a/arch/mips/dec/prom/init.c
-+++ b/arch/mips/dec/prom/init.c
-@@ -18,7 +18,7 @@
- #include <asm/processor.h>
+diff --git a/arch/mips/dec/int-handler.S b/arch/mips/dec/int-handler.S
+index 011d1d678840..a0b439c90488 100644
+--- a/arch/mips/dec/int-handler.S
++++ b/arch/mips/dec/int-handler.S
+@@ -277,7 +277,7 @@
+ 		 srlv	t3,t1,t2
  
- #include <asm/dec/prom.h>
--
-+#include <asm/dec/reset.h>
+ handle_it:
+-		j	dec_irq_dispatch
++		j	do_IRQ
+ 		 nop
  
- int (*__rex_bootinit)(void);
- int (*__rex_bootread)(void);
-@@ -88,7 +88,6 @@ static void __init which_prom(s32 magic, s32 *prom_vec)
- 
- void __init prom_init(void)
- {
--	extern void dec_machine_halt(void);
- 	static const char cpu_msg[] __initconst =
- 		"Sorry, this kernel is compiled for a wrong CPU type!\n";
- 	s32 argc = fw_arg0;
-diff --git a/arch/mips/dec/reset.c b/arch/mips/dec/reset.c
-index 3df01f1da347..ee1ad38f4a69 100644
---- a/arch/mips/dec/reset.c
-+++ b/arch/mips/dec/reset.c
-@@ -10,6 +10,8 @@
- 
- #include <asm/addrspace.h>
- 
-+#include <asm/dec/reset.h>
-+
- typedef void __noreturn (* noret_func_t)(void);
- 
- static inline void __noreturn back_to_prom(void)
+ #if defined(CONFIG_32BIT) && defined(CONFIG_MIPS_FP_SUPPORT)
 diff --git a/arch/mips/dec/setup.c b/arch/mips/dec/setup.c
-index 87f0a1436bf9..6b100c7d0633 100644
+index 6b100c7d0633..affae92f1918 100644
 --- a/arch/mips/dec/setup.c
 +++ b/arch/mips/dec/setup.c
-@@ -18,10 +18,10 @@
- #include <linux/memblock.h>
- #include <linux/param.h>
- #include <linux/percpu-defs.h>
-+#include <linux/pm.h>
- #include <linux/sched.h>
- #include <linux/spinlock.h>
- #include <linux/types.h>
--#include <linux/pm.h>
- 
- #include <asm/addrspace.h>
- #include <asm/bootinfo.h>
-@@ -48,14 +48,9 @@
- #include <asm/dec/kn02ca.h>
- #include <asm/dec/kn03.h>
- #include <asm/dec/kn230.h>
-+#include <asm/dec/reset.h>
- #include <asm/dec/system.h>
- 
+@@ -771,9 +771,3 @@ void __init arch_init_irq(void)
+ 			pr_err("Failed to register halt interrupt\n");
+ 	}
+ }
 -
--extern void dec_machine_restart(char *command);
--extern void dec_machine_halt(void);
--extern void dec_machine_power_off(void);
--extern irqreturn_t dec_intr_halt(int irq, void *dev_id);
--
- unsigned long dec_kn_slot_base, dec_kn_slot_size;
- 
- EXPORT_SYMBOL(dec_kn_slot_base);
-diff --git a/arch/mips/include/asm/dec/reset.h b/arch/mips/include/asm/dec/reset.h
-new file mode 100644
-index 000000000000..c1557b88264c
---- /dev/null
-+++ b/arch/mips/include/asm/dec/reset.h
-@@ -0,0 +1,20 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Reset a DECstation machine.
-+ *
-+ * File created to eliminate warnings; copyright from reset.c.
-+ *
-+ * Copyright (C) 199x  the Anonymous
-+ * Copyright (C) 2001, 2002, 2003  Maciej W. Rozycki
-+ */
-+
-+#ifndef __ASM_DEC_RESET_H
-+
-+#include <linux/interrupt.h>
-+
-+extern void __noreturn dec_machine_restart(char *command);
-+extern void __noreturn dec_machine_halt(void);
-+extern void __noreturn dec_machine_power_off(void);
-+extern irqreturn_t dec_intr_halt(int irq, void *dev_id);
-+
-+#endif /* __ASM_DEC_RESET_H */
+-asmlinkage unsigned int dec_irq_dispatch(unsigned int irq)
+-{
+-	do_IRQ(irq);
+-	return 0;
+-}
 -- 
 2.49.0
 
