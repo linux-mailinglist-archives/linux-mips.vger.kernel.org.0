@@ -1,51 +1,51 @@
-Return-Path: <linux-mips+bounces-8692-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8696-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BDD1A965CB
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Apr 2025 12:24:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27C0DA965D2
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Apr 2025 12:25:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5DD9C3B57B1
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Apr 2025 10:24:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F41BD3BC86F
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Apr 2025 10:24:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDFE2201262;
-	Tue, 22 Apr 2025 10:24:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61FCD215781;
+	Tue, 22 Apr 2025 10:24:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="Vq+IwI1+"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="H+FXgYcj"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpbgau2.qq.com (smtpbgau2.qq.com [54.206.34.216])
+Received: from smtpbg151.qq.com (smtpbg151.qq.com [18.169.211.239])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2D6E2116EB;
-	Tue, 22 Apr 2025 10:24:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.206.34.216
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A346215173;
+	Tue, 22 Apr 2025 10:24:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.169.211.239
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745317456; cv=none; b=g8feHiCcGKK7Iz0oZxINvlJFH31CqXPjPXCsHv6hn/wnfKfBPeoY5+XpdjZdS/sK/qQemmZS5cyr1F/OxXe8FsMJUl8g0KgGfBNRmKL8VMjQ2susGxgmuIYJgGuu0SfCjXkCX38FID1oY1jjnWzYfbDeSBR8MUAPU1SbfY4JGTc=
+	t=1745317469; cv=none; b=ZLH3dJoV4RQzFH2ZkQJrx8Xcypb4lmU6aJCqJUVPJPc3RbrIo2DGqM5E5dboknNSSp6cCLJz7haQ6kGvZ+nsWKN58CcQ/2zqWGudkv4/Lb39hhQBvtpeR5DHlWtNfXH94QK2TbFaMaTcPORH8lT3pvqSqImyYIH+HSBiIQi34EU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745317456; c=relaxed/simple;
-	bh=DwnHJKjSRTcNroFg/p73E0l/JHIa6S8hPby+gFI9qpQ=;
+	s=arc-20240116; t=1745317469; c=relaxed/simple;
+	bh=niHZ7SywtqEBXhJxXUoQ5qHTD9B3hV3qxTLETfQVkRM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=alHPgJB2icgzaj2LUenpe4xQf9ODNk9fLMSTXlbug1Pa+7cE1VP0yUuFa0KawqbCUHVR4SmhvWZE9sp8wzIOoJr2FiT1M6osxuJeee+rkevO0mwao1XpDot2cd2ubD28ONHd0OJLrdDg6KEZje1XehNAsH1PhOAa5fG2BzKcv5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=Vq+IwI1+; arc=none smtp.client-ip=54.206.34.216
+	 MIME-Version; b=SLI/5uL91Nbm29iyPzZH8ZNWDsuJ050TvPyLeqwKXGFoQAM+dCuIOCDEz+f9z2ADa8XqjPK8yqJphZgvnS/sSjMt1bQX+ayKHZpJ/JilknKMBQM3SEckSmDtHiuVCOzhQWHRd/BtQ7998mWDoGHL+CyQm4ReBYvnst7MW9jDZ4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=H+FXgYcj; arc=none smtp.client-ip=18.169.211.239
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1745317443;
-	bh=/kCJEwIi51vpS2czRIPch3YPYBe5K2hVZT8aTmupNNc=;
+	s=onoh2408; t=1745317454;
+	bh=TTsZEPwrBCz/1dlJoPGkzqJ2iCyPoKODASZBVNBm63g=;
 	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=Vq+IwI1+QZnq4aI3jWuCzmCbbb0chMcG+Kc5FSX/WdIFq3+Xo1lCqshdEb+rATwt+
-	 fko10VuHRcCjATiEuePR+pIMjUlsL3S3Okn7lipPoj0bz9ucPYRzO0gwTcWbZws44r
-	 QcePHnS6APk6zyvuHjxTZbfhVXeFJp3nkV3OR1gM=
-X-QQ-mid: zesmtpip4t1745317404t5b5a4381
-X-QQ-Originating-IP: S0t1emq2KGXtxj+2JIdNqT7E9gubmHp4di/k3CSucoY=
+	b=H+FXgYcjRd57r/eHrlvaQFcywfddTIcB7oF7VLfF2ptSO7t56F5Ujdgc4zOaZiOzc
+	 wAxOO7MZcJ8Tca+qTODn+s3vsf7EC+3nN08l63sGUkb9nIbkmV+8sr8QXzo9L/CaE2
+	 G5KitIdBMrUePjAECogPlVyzxQCx8Re5zDft3GY0=
+X-QQ-mid: zesmtpip4t1745317409t6fbbb0f7
+X-QQ-Originating-IP: 3ilSgnN/hpCJ+v0evZYAElIP8wKs9EEd3cnDgrh72YI=
 Received: from localhost.localdomain ( [localhost])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 22 Apr 2025 18:23:22 +0800 (CST)
+	id ; Tue, 22 Apr 2025 18:23:27 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 8795362617588376660
+X-BIZMAIL-ID: 1331914406803930652
 EX-QQ-RecipientCnt: 8
 From: WangYuli <wangyuli@uniontech.com>
 To: wangyuli@uniontech.com
@@ -56,9 +56,9 @@ Cc: guanwentao@uniontech.com,
 	niecheng1@uniontech.com,
 	tsbogend@alpha.franken.de,
 	zhanjun@uniontech.com
-Subject: [PATCH v2 5/6] MIPS: decstation_64_defconfig: Update configs dependencies
-Date: Tue, 22 Apr 2025 18:22:52 +0800
-Message-ID: <566F2D64350C960C+20250422102253.137944-5-wangyuli@uniontech.com>
+Subject: [PATCH v2 6/6] MIPS: decstation_64_defconfig: Compile the kernel with warnings as errors
+Date: Tue, 22 Apr 2025 18:22:53 +0800
+Message-ID: <2AEFB36427BDF18E+20250422102253.137944-6-wangyuli@uniontech.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <24EC7D2CA58B25F5+20250422101855.136675-1-wangyuli@uniontech.com>
 References: <24EC7D2CA58B25F5+20250422101855.136675-1-wangyuli@uniontech.com>
@@ -71,148 +71,43 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
-X-QQ-XMAILINFO: MvUCj+jJbjsSURhWTNu2YlJFciUNDpBoc1mQEO9goJzhtElPaBVqfmG4
-	uf/U4rzgizlgPh0E27qM97ob4qIUcshhtW6V/0I1GN+rxHnj40alBVhUSa+Oj7szuymcVpn
-	LMIQNlVRZG/230cPM4m2vkLe6iNLSDz6Vp2pIL/2RnEAHzklcwMlVzCHuDBQxNbBUa3jioA
-	Z88qMVW0gsmXoGkEY4DLUMkJbHP080UCpC4GH9djt4d7ZM238Tr/fGoAoo13QwOe6yyO3F1
-	IRHhVcflyiCMxtaR6gGjgGh1hQP+jbiP6HnC/vWqjpHOg1Lid1/+3+yYpTs3RJn3Gpme48v
-	ZJBqXmtO8re3KVsOlYPBYT/wB0mCLJjaH1GG8KwJQ8xlgAKRHkxiLJ6gQx4Q2IbkTGObEhm
-	gG83BaqdOkJSd5rkSf3872wutl+3hm9rjhx1BbruloEIUxys8phP5mh9cYQRAHV/pLzbTIm
-	d0Ngj+WFVx8is+7vYKakXdquQZXgHvGY/VDf1Sv3YDNXJs2vvveV5w0P8TXI5qjxN54iJUh
-	QTRUVvstI3e/1viIiiD8QMqsKKwVqSlzIs9PkKmQN/dRL5J9Ku4cYwBzuoUg13m+YdISozP
-	m4IYERequYXbkZCqULj8InZFccBwsynA/0AWsAF2sivWci8JSs3oi61NySdeRFvqaYJ9Fvb
-	BjvNmyaRSe0qpKRB3cRg0KdeT3xKhUq2GEcOSYM+tp1SvkFDWFEyxpOC+hrv+cGUBDbYU8x
-	6dS6q++gZjSrN3FFwLxQBgLtMed5iOEy9sjgY24xp1ppFJJi9/Jx/PcxFXeX+O3Vhul8JR/
-	/TmjhIqrfRKCUwCatWgq9U7oe8rA5UfQb6wOmLCksVvvfq/UT8qbEmYj/NVzmWxS5ebs0dp
-	e7P+Zg57BRaNzV2n2g/gcEK0eLsUe5i25+rIHorwW7E0h2tmCdtJjE7rhGXRb8Bz+Yd8c3n
-	4YUzrj3aj0K2JFMSobsQzoS8PbXiVJS1UxjKqUezUWRHmlRWhqFJi88iq/QalyafBoB8zrs
-	JHLsW6wNx3OGb2UTLj+X2ZQKe3H6pepw0guxTH4VPxCH2hXlEWpCMm511cF2U=
-X-QQ-XMRINFO: MPJ6Tf5t3I/ycC2BItcBVIA=
+X-QQ-XMAILINFO: M1EFJi73A4mxs/cags2Do9xngT/5dq0dzmyJlacxwRLzPdQ/8mdDvcQ6
+	h3Xo5pR0v5/zpVV0Pk5sxlv9mbQ9FZZs+8kCVSxDnNHqmRUk8PZeKHvl6TrmSfbwdHsqFIV
+	MeLNSlfcbYaTWGS3T6THgxS4JQfBJlTO7EgCOp+GFnga3a6f4Ccbu7F4bzDGeBNgv9YtRiP
+	ItuZDiy9oI9jCYa9KcefHoot+MPGg6U4OOQjDbcM//3kULHUn2rcU2UI7XJ68+K5HWHttxF
+	quIW9ex40OAFim7X9B2QWFeBIi/mIhdJERDTfUjCvmdssP2TflHDJ1tIsQ7uwZUoGvnjQL2
+	1KGuPKHfoAaYb9nFd/WxA2DjsOlxIEeQ8qcC7egNxSHVWzw8Vn5/8o0jcW4FUlW7Bt9Uylh
+	t4DoXoAPcD3CDgPt50ofu+BjnBkIHhvu4V8axwT2xkcN75H6hduRonidfSgAwdj3c+p+L26
+	JUO/gNBsUynkuFdvKrVGEvM7JI3B/IDiPbBJ5ttX/Nbx/edyUs1sgGu7B151lYZsNvX9i9n
+	YJiGYUFA1FbvpuoCDSC5HpMhmnDT6EcnL1KVV5lDPJLdohRWMCTAcaru663g0VZ3VXj/awC
+	By7+k6sRSEo64HsVFDO11Tq5r84yNA1/qBFPdjZp7thDsbXGpMbc29ky8xEELqj2JT0oAtE
+	SGlomGaMxe1ZS1fz8kIVoqfNoWQkOmkU1t+cvPLopmUo2q+r9hZNHilFiUWGBx1UZuy+Xkd
+	2JPYiqVkRQGLOa9ZBPTNIPU4C4iRlI0MDP/3jaF/z8vP4bJOKQnxDjM3D+2SGGqFFgzq8fV
+	aBXlMvbzut2pLjrgEBB0CazwmHAB0Tk0MLtcJp2e7mCu535zddT1fH79Pkxw8FEHL5xqXqg
+	wjFTY9WO4u851CEWNQoGaSvo1g+uPBn7QMvEUqIhCMFuLWef6UNKggN1uVARMJHr7Y3bCSw
+	W3aLiuVrlrzWOLDllWg8pG/BxrlWKwC/GNQiL48Q5YL8y1rVW8tB1jo1DKWnRSRm0DGKzHz
+	upbTeCDEQaGoNYIfn9SoSBMXetRyzKtcN7yKhX0SzsLtduBXAA1ywXmCiC16xacFOI111Rf
+	w==
+X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
 X-QQ-RECHKSPAM: 0
 
-Due to long-term changes in kernel build configurations,
-run 'make savedefconfig' to update the build configuration
-dependencies.
-
-This commit does not affect the actual .config file content,
-in preparation for future modifications to decstation_64_defconfig.
+All compilation issues under decstation_64_defconfig have been
+resolved, and it is now safe to enable CONFIG_WERROR now.
 
 Signed-off-by: WangYuli <wangyuli@uniontech.com>
 ---
- arch/mips/configs/decstation_64_defconfig | 42 +++++++++--------------
- 1 file changed, 16 insertions(+), 26 deletions(-)
+ arch/mips/configs/decstation_64_defconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
 diff --git a/arch/mips/configs/decstation_64_defconfig b/arch/mips/configs/decstation_64_defconfig
-index 9655567614aa..bf579866cf4b 100644
+index bf579866cf4b..12415c5dd28c 100644
 --- a/arch/mips/configs/decstation_64_defconfig
 +++ b/arch/mips/configs/decstation_64_defconfig
-@@ -1,27 +1,27 @@
+@@ -1,3 +1,4 @@
++CONFIG_WERROR=y
  CONFIG_SYSVIPC=y
  CONFIG_POSIX_MQUEUE=y
  CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_BPF_SYSCALL=y
- CONFIG_BSD_PROCESS_ACCT=y
- CONFIG_BSD_PROCESS_ACCT_V3=y
- CONFIG_LOG_BUF_SHIFT=15
- CONFIG_EXPERT=y
- # CONFIG_SGETMASK_SYSCALL is not set
- # CONFIG_SYSFS_SYSCALL is not set
--CONFIG_BPF_SYSCALL=y
--# CONFIG_COMPAT_BRK is not set
- CONFIG_MACH_DECSTATION=y
- CONFIG_64BIT=y
--CONFIG_PAGE_SIZE_16KB=y
- CONFIG_TC=y
- CONFIG_MIPS32_O32=y
- CONFIG_MIPS32_N32=y
- # CONFIG_SUSPEND is not set
-+CONFIG_PAGE_SIZE_16KB=y
- CONFIG_MODULES=y
- CONFIG_MODULE_UNLOAD=y
- CONFIG_MODULE_SRCVERSION_ALL=y
- CONFIG_PARTITION_ADVANCED=y
- CONFIG_OSF_PARTITION=y
- # CONFIG_EFI_PARTITION is not set
-+# CONFIG_COMPAT_BRK is not set
- CONFIG_TRANSPARENT_HUGEPAGE=y
- CONFIG_NET=y
- CONFIG_PACKET=y
-@@ -49,7 +49,6 @@ CONFIG_NETWORK_SECMARK=y
- CONFIG_IP_SCTP=m
- CONFIG_VLAN_8021Q=m
- # CONFIG_WIRELESS is not set
--# CONFIG_UEVENT_HELPER is not set
- # CONFIG_FW_LOADER is not set
- # CONFIG_ALLOW_DEV_COREDUMP is not set
- CONFIG_MTD=m
-@@ -83,9 +82,9 @@ CONFIG_DECLANCE=y
- # CONFIG_NET_VENDOR_MICREL is not set
- # CONFIG_NET_VENDOR_MICROCHIP is not set
- # CONFIG_NET_VENDOR_MICROSEMI is not set
-+# CONFIG_NET_VENDOR_NI is not set
- # CONFIG_NET_VENDOR_NATSEMI is not set
- # CONFIG_NET_VENDOR_NETRONOME is not set
--# CONFIG_NET_VENDOR_NI is not set
- # CONFIG_NET_VENDOR_QUALCOMM is not set
- # CONFIG_NET_VENDOR_RENESAS is not set
- # CONFIG_NET_VENDOR_ROCKER is not set
-@@ -114,7 +113,6 @@ CONFIG_FB_TGA=y
- CONFIG_FB_PMAG_AA=y
- CONFIG_FB_PMAG_BA=y
- CONFIG_FB_PMAGB_B=y
--# CONFIG_VGA_CONSOLE is not set
- CONFIG_DUMMY_CONSOLE_COLUMNS=160
- CONFIG_DUMMY_CONSOLE_ROWS=64
- CONFIG_FRAMEBUFFER_CONSOLE=y
-@@ -167,36 +165,28 @@ CONFIG_NLS_ISO8859_13=m
- CONFIG_NLS_ISO8859_14=m
- CONFIG_NLS_ISO8859_15=m
- CONFIG_NLS_UTF8=m
--CONFIG_CRYPTO_RSA=m
- CONFIG_CRYPTO_MANAGER=y
--CONFIG_CRYPTO_CCM=m
--CONFIG_CRYPTO_GCM=m
--CONFIG_CRYPTO_CHACHA20POLY1305=m
-+CONFIG_CRYPTO_RSA=m
-+CONFIG_CRYPTO_BLOWFISH=m
-+CONFIG_CRYPTO_CAMELLIA=m
-+CONFIG_CRYPTO_CAST5=m
-+CONFIG_CRYPTO_CAST6=m
-+CONFIG_CRYPTO_FCRYPT=m
-+CONFIG_CRYPTO_SERPENT=m
-+CONFIG_CRYPTO_TWOFISH=m
- CONFIG_CRYPTO_CTS=m
- CONFIG_CRYPTO_LRW=m
--CONFIG_CRYPTO_OFB=m
- CONFIG_CRYPTO_PCBC=m
- CONFIG_CRYPTO_XTS=m
-+CONFIG_CRYPTO_CHACHA20POLY1305=m
-+CONFIG_CRYPTO_CCM=m
- CONFIG_CRYPTO_CMAC=m
--CONFIG_CRYPTO_XCBC=m
--CONFIG_CRYPTO_CRC32=m
- CONFIG_CRYPTO_MD4=m
- CONFIG_CRYPTO_MICHAEL_MIC=m
- CONFIG_CRYPTO_RMD160=m
--CONFIG_CRYPTO_SHA512=m
- CONFIG_CRYPTO_WP512=m
--CONFIG_CRYPTO_ANUBIS=m
--CONFIG_CRYPTO_ARC4=m
--CONFIG_CRYPTO_BLOWFISH=m
--CONFIG_CRYPTO_CAMELLIA=m
--CONFIG_CRYPTO_CAST5=m
--CONFIG_CRYPTO_CAST6=m
--CONFIG_CRYPTO_FCRYPT=m
--CONFIG_CRYPTO_KHAZAD=m
--CONFIG_CRYPTO_SEED=m
--CONFIG_CRYPTO_SERPENT=m
--CONFIG_CRYPTO_TEA=m
--CONFIG_CRYPTO_TWOFISH=m
-+CONFIG_CRYPTO_XCBC=m
-+CONFIG_CRYPTO_CRC32=m
- CONFIG_CRYPTO_LZO=m
- CONFIG_CRYPTO_842=m
- CONFIG_CRYPTO_LZ4=m
 -- 
 2.49.0
 
