@@ -1,52 +1,52 @@
-Return-Path: <linux-mips+bounces-8693-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8695-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0ACF3A965CC
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Apr 2025 12:24:36 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7ADD6A965D1
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Apr 2025 12:25:00 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 467AE17BED1
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Apr 2025 10:24:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4CCD63BA00A
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Apr 2025 10:24:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C80FF2144BA;
-	Tue, 22 Apr 2025 10:24:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D241F215066;
+	Tue, 22 Apr 2025 10:24:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="etRAOVNW"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="MtXHJ80k"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtpbg151.qq.com (smtpbg151.qq.com [18.169.211.239])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E1A91EDA2C;
-	Tue, 22 Apr 2025 10:24:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8EE82135D0;
+	Tue, 22 Apr 2025 10:24:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=18.169.211.239
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745317459; cv=none; b=i7/75W9u94E4BcxGF+V8eEsWf35iss25y53ZhlosXAkZZjU+D5xKOGwISeCe1FCM2CAGQ4o0xG+UEoOIs4d5oeXlir4X3bqxSE6rIYRUiGqikLST7JwU8+qD8zvN4SzrdM0pii5uPL3ui00I23A93mxLZn4z6uwR9f6+A3S8iMA=
+	t=1745317464; cv=none; b=MjRn5/qcQfICw2RF0kLcW6SEbLvNeTMZgUaTszbHH8GOxZoSSeW8dGwREo63GDF/EWqMC6rFD1vRdz71SvnCByzqo/Og6fY+ngO9U1kH+UsEgwaXDsjCWCAwN6SwicYyAyZCiw2S5PhCuehH6FfIKP+P62adWVZoF5pMvNtKtUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745317459; c=relaxed/simple;
-	bh=gjmegUE8nkvnqYGAzoqCkp0JHDCzhgmR/Pn3cCV+J30=;
+	s=arc-20240116; t=1745317464; c=relaxed/simple;
+	bh=AqT7m1u440zOibe16v2sMSLTv4oY8kFJKxRTDSjSEe4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SF3COSt6Gm0nMj/62nVhOPrf/GtOEfXUkw5wdqWstnYHzw8cZ3Vp0g4rE3pxet0TmpBdcfYOk+XwO99EeY0FEfy89GUB1RCELjMCHb1r7o1Q/ehSx4Z9Ktu1MeYFf3D5QaidplL2+i1AvcrPU7u90WvxhvVeagGVa+b+20Fktwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=etRAOVNW; arc=none smtp.client-ip=18.169.211.239
+	 MIME-Version:Content-Type; b=l0QyA/Q72EJbhRq4TaB1fAAlBCGd2zjAie+up2LHujPzZIvBWDv76gmZ4sCoBMg6KXy/zxJWEVtUVjI+UszjpbTt4hGKsrtieiRW8EGK/9UDbRjXO+5rcI74zUSBIPEeVMzTzABOmMUg9ih/Z7U5QfvJjDsqZmlhEmOPREcdjvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=MtXHJ80k; arc=none smtp.client-ip=18.169.211.239
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1745317426;
-	bh=p13p1deBOhuoKBgpdie+NXcLOjyEkv+MI/7mj2NH+KU=;
+	s=onoh2408; t=1745317436;
+	bh=28bWYpBODBMHyOWNKQNC1L/Lz6MllkPxMRU2S9jr7eA=;
 	h=From:To:Subject:Date:Message-ID:MIME-Version;
-	b=etRAOVNWpcQMSe6kfltvgiXywzE1gZ7vczheoe9UxbuHoCwRWLFHo05GrMTRI+o/I
-	 aHR+DlAtBDq5TD7ilpRgQsEiV6ToMbg6is/IlQB7QqUpsEH7/c2KAxGMCE/+SEPvrB
-	 bY0EKfzKXN5dvmEmVQM8hz7aTnV2OU61eUBU1tnY=
-X-QQ-mid: zesmtpip4t1745317385t99dfa428
-X-QQ-Originating-IP: fUrGjttCi44eEZnGCNZku/HmudvD3QI6pVKyD2F0rW4=
+	b=MtXHJ80kZ2xKqxpKJmxfPhh+0lSbJkAxuPJ1xc9vX3eIG0C3nMxa4nBQdu3paI+5A
+	 xbz5biP9tCzAS9a/r+4xLEDXZMt0W8XYnjZBE02QGabuZupv5XkDLz5PaCymoXxS5S
+	 1JZRFC3WTPiCExozrZxFOLTk9+SStgrJxQCR7vy8=
+X-QQ-mid: zesmtpip4t1745317394tbdcae06d
+X-QQ-Originating-IP: 7kb3nrCfv66PVDKlai2IcJySyp79o6yy/taB80T1yig=
 Received: from localhost.localdomain ( [localhost])
 	by bizesmtp.qq.com (ESMTP) with 
-	id ; Tue, 22 Apr 2025 18:23:03 +0800 (CST)
+	id ; Tue, 22 Apr 2025 18:23:08 +0800 (CST)
 X-QQ-SSF: 0000000000000000000000000000000
 X-QQ-GoodBg: 1
-X-BIZMAIL-ID: 9625508605425131605
-EX-QQ-RecipientCnt: 8
+X-BIZMAIL-ID: 5605286764837814321
+EX-QQ-RecipientCnt: 9
 From: WangYuli <wangyuli@uniontech.com>
 To: wangyuli@uniontech.com
 Cc: guanwentao@uniontech.com,
@@ -55,10 +55,11 @@ Cc: guanwentao@uniontech.com,
 	macro@orcam.me.uk,
 	niecheng1@uniontech.com,
 	tsbogend@alpha.franken.de,
-	zhanjun@uniontech.com
-Subject: [PATCH v2 2/6] MIPS: Eliminate Redundant KBUILD_SYM32 Checks
-Date: Tue, 22 Apr 2025 18:22:49 +0800
-Message-ID: <5D20D311FB1FCDF1+20250422102253.137944-2-wangyuli@uniontech.com>
+	zhanjun@uniontech.com,
+	=?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>
+Subject: [PATCH v2 3/6] MIPS: dec: Create reset.h
+Date: Tue, 22 Apr 2025 18:22:50 +0800
+Message-ID: <3AD7E5DDE3F05C6D+20250422102253.137944-3-wangyuli@uniontech.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <24EC7D2CA58B25F5+20250422101855.136675-1-wangyuli@uniontech.com>
 References: <24EC7D2CA58B25F5+20250422101855.136675-1-wangyuli@uniontech.com>
@@ -68,50 +69,160 @@ List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-QQ-SENDSIZE: 520
 Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
-X-QQ-XMAILINFO: Np+/JNR9oCIP6eIBrtHRZQ4VzIYzIVjpRNQObTetPVIiFtb0+G3L7g8u
-	CiS6fuXXGwZy9EVqsGcn4Isjw/pNPmQabRn8QMJ07rpfuvCbojuHqO2mCM8RJWjnnPgEay+
-	KalQSm+h6/ioXoMPcngZSCw/reNIb1d+Rs+Ki+QnIT2cDe+Nfezkqdh7UZ0KkmvBmA+8wWH
-	qgfjrhXqNWDMuFBCZiCtSEEs5cRRRD230+JCC/QCkRcWN6FF03rnw4HrVXlgx9Dk5QCAV8a
-	Z4HiOTZ0OJvOe5vf9H9SP9s2BO/p8VNi3KWlgz06U/lpNMf2vVlnalWG3et1DlclHAXtI1S
-	OA8Rp/81gaboLfWlrl5thIQSyCrWW9TknSU9SoNqdFdiFZDfH8u0bQqLe1+AdQQaOxbEHaA
-	0B98IwUjUYFuTqHJHXmTEitiNONgjxJsvbKK6Yb6u4QJMRaWyYsZA+Gm80koqjPUDIC+Urg
-	sjc5j1UiflEUG7csFEd4vuRKp5XKDjqkRDmAhSJqXsWptJliaQCiX/ck27Hq21j+Uz3Z32D
-	5rxAmfUfAgCmpzybRLU1nmg2wnxRnHlO4G2BYhe/QwAqKRDkqhIyiXpEphc5gWgecyO20KI
-	WbHWtxGhMZI/Jkliz7+h83HkByjzdtYyzr8KFHDZ9quRDrjHBb0HTs3rHWk89/6vbuEaN/W
-	A1AjLTOkdVIReH15K1UAloHKgloSwl7q58ywaFIZLkkeQeX5gYNiZ9FaXY4n8ULwhsC2PU4
-	v7EkFCAcPudxmwAlRyKI7wLESk+HSadbPZu7aGrxWv8L3QXXO/nZiGgfCB9aveg3u6QLBNK
-	xJKne2g2zG/SCG02sSsPrT0W1TSwj23Id2MvHbMgAeDlqWH5+uIOq2vzaxFsAbyv2m4LC8i
-	dFYQheIF8iQJeQ8G5iImcXvpqJ7MD9RnvDk1t8sot343+e05GJzxHzuDvmmWWvNzfbkr2Py
-	IVTicdnyFvSm63UoEReUXlsigsGZa6N9nOClsUNM+nYikDuVZKgrQJydJB9eciXUR+wrOQo
-	3fkLfkCl3lLxnArvxcOpIAJfhdsLw3ZjNf4OWO6IBiwu+T7m67kmXVrTnfeRTjzy0e2zOFZ
-	VvXgltYipH7PO04UlfGyXs=
-X-QQ-XMRINFO: MPJ6Tf5t3I/ycC2BItcBVIA=
+X-QQ-XMAILINFO: M1gP/lprZGJnT407nQc5mQ8kDHXKhY9nuOVDzr0dckA1Hcs5cHhABbfx
+	kQ+vD8FjePSmNqWTxoRXHmLrw5uNWn1ZHvAFYtDfTaORyuSHg5/0PudfJdRPvk2QGuEeU9U
+	aCwLRJ257x3FCdL4BoS1tVcaLWQPGiqA0rTkjU7Aj8sGooRHiSlQK4ALzItuCe+aEHaZ6Zm
+	L+DOs9DRop1Y3Z2Mh4SllPKI43JnpxMPCmujP0HubX/scMkYbEPgLEWfgQ9NcX/kXaZZSP6
+	q0fbJPJgVZyqTIsfJ/BKLoWPBORIJ/nAKaPzx4lHvP6TdAP1H1o1UFjdgWZvRkOC6QltehB
+	ZKg600VhSxOTgmu662jNRk72imJ5L5Qlbceo4Idp+W3bOTmMwNQS8GJy4JlcGLvqyLlsWGF
+	/8AmupaSkd14i8hxHqMhrBbUZJ2BfjhcKIHDb4QjAD7cmc0r7CGZ25PvLGX4uhlVTaYMMm+
+	JARUXH89pX1Z5RIne9XzUVt8HcNkMvhhSeMNtKKZOOaw03Rnc9Q1p7arkITprfyiwm6lIfi
+	vZzzGL/KxEChte7IVeu0MA73BWV1XemY03VLMhJiU4ocU+zRwf630X9qxLjfQqbBjzBWxMH
+	zQTdSEeBTblsZTUSAIeRfedhlYfjzKXmyWQJskZdfjh40Ws48u6YAO0VMl5u3Q3UBUTaQEw
+	BHiDgD2qJ9SASJGkE/qsUFgZ0doeqtojjS/WizDN+4d/JFDONj2vsryFaRe6jFKgOpEl2St
+	QoSMvIRNtjZsJXvQexLe1uJevze1RFQjdndiL/tEARLvySEpkIeUgIqKn9/cbP5+FCD+yW7
+	L6a01iEdnVjyXFuXSFoTvAwv9Tk1Ajf89P2iPc2dlSNCIj7mMl6gAfUq8h4GkACYeWoSGP2
+	iGhfLZeTwz6JFN/jKDBOwCo/K3BpYHkmQAAG5ULOawTkABOt78PayTs4v/65vZFvnS3Jb+y
+	coTAGhH+8GOxsbX9fq0yYaSl3i1z/hlQmdkk7DpRZimIYNOI3lCFb80P/Kg6DaJRBwozV9e
+	daU1oEEmMVPSQfB/+CemIRSCd8QUK/fsxWx+2KBMSAhU5xujzAd90Usc1LysAXX+s7yOQu9
+	6hyNWpMli0F
+X-QQ-XMRINFO: OWPUhxQsoeAVDbp3OJHYyFg=
 X-QQ-RECHKSPAM: 0
 
-Given that KBUILD_SYM32=y is a prerequisite for this statement to be
-executed, it's logically redundant to verify KBUILD_SYM32 is y again.
+Declare externally used functions in reset.c to resolve compilation
+warnings.
 
+Fix follow errors with gcc-14 when -Werror:
+
+arch/mips/dec/reset.c:22:17: error: no previous prototype for ‘dec_machine_restart’ [-Werror=missing-prototypes]
+   22 | void __noreturn dec_machine_restart(char *command)
+      |                 ^~~~~~~~~~~~~~~~~~~
+arch/mips/dec/reset.c:27:17: error: no previous prototype for ‘dec_machine_halt’ [-Werror=missing-prototypes]
+   27 | void __noreturn dec_machine_halt(void)
+      |                 ^~~~~~~~~~~~~~~~
+arch/mips/dec/reset.c:32:17: error: no previous prototype for ‘dec_machine_power_off’ [-Werror=missing-prototypes]
+   32 | void __noreturn dec_machine_power_off(void)
+      |                 ^~~~~~~~~~~~~~~~~~~~~
+arch/mips/dec/reset.c:38:13: error: no previous prototype for ‘dec_intr_halt’ [-Werror=missing-prototypes]
+   38 | irqreturn_t dec_intr_halt(int irq, void *dev_id)
+      |             ^~~~~~~~~~~~~
+cc1: all warnings being treated as errors
+make[7]: *** [scripts/Makefile.build:207: arch/mips/dec/reset.o] Error 1
+make[7]: *** Waiting for unfinished jobs....
+
+In passing, also correct the include file ordering in setup.c as it
+doesn't merit a separate commit.
+
+Link: https://lore.kernel.org/all/Z8A0JeFYfBxXOFCD@alpha.franken.de/
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 Signed-off-by: WangYuli <wangyuli@uniontech.com>
 ---
- arch/mips/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Changelog:
+ *v1->v2: Add Philippe Mathieu-Daudé's "Reviewed-by" tag.
+---
+ arch/mips/dec/prom/init.c         |  3 +--
+ arch/mips/dec/reset.c             |  2 ++
+ arch/mips/dec/setup.c             |  9 ++-------
+ arch/mips/include/asm/dec/reset.h | 20 ++++++++++++++++++++
+ 4 files changed, 25 insertions(+), 9 deletions(-)
+ create mode 100644 arch/mips/include/asm/dec/reset.h
 
-diff --git a/arch/mips/Makefile b/arch/mips/Makefile
-index 1fffc6cf8b52..ad06e81f50fb 100644
---- a/arch/mips/Makefile
-+++ b/arch/mips/Makefile
-@@ -299,7 +299,7 @@ ifdef CONFIG_64BIT
-   endif
+diff --git a/arch/mips/dec/prom/init.c b/arch/mips/dec/prom/init.c
+index 8d74d7d6c05b..a8393052a443 100644
+--- a/arch/mips/dec/prom/init.c
++++ b/arch/mips/dec/prom/init.c
+@@ -18,7 +18,7 @@
+ #include <asm/processor.h>
  
-   ifeq ($(KBUILD_SYM32), y)
--    cflags-$(KBUILD_SYM32) += -msym32 -DKBUILD_64BIT_SYM32
-+    cflags-y += -msym32 -DKBUILD_64BIT_SYM32
-   else
-     ifeq ($(CONFIG_CPU_DADDI_WORKAROUNDS), y)
-       $(error CONFIG_CPU_DADDI_WORKAROUNDS unsupported without -msym32)
+ #include <asm/dec/prom.h>
+-
++#include <asm/dec/reset.h>
+ 
+ int (*__rex_bootinit)(void);
+ int (*__rex_bootread)(void);
+@@ -88,7 +88,6 @@ static void __init which_prom(s32 magic, s32 *prom_vec)
+ 
+ void __init prom_init(void)
+ {
+-	extern void dec_machine_halt(void);
+ 	static const char cpu_msg[] __initconst =
+ 		"Sorry, this kernel is compiled for a wrong CPU type!\n";
+ 	s32 argc = fw_arg0;
+diff --git a/arch/mips/dec/reset.c b/arch/mips/dec/reset.c
+index 3df01f1da347..ee1ad38f4a69 100644
+--- a/arch/mips/dec/reset.c
++++ b/arch/mips/dec/reset.c
+@@ -10,6 +10,8 @@
+ 
+ #include <asm/addrspace.h>
+ 
++#include <asm/dec/reset.h>
++
+ typedef void __noreturn (* noret_func_t)(void);
+ 
+ static inline void __noreturn back_to_prom(void)
+diff --git a/arch/mips/dec/setup.c b/arch/mips/dec/setup.c
+index 87f0a1436bf9..6b100c7d0633 100644
+--- a/arch/mips/dec/setup.c
++++ b/arch/mips/dec/setup.c
+@@ -18,10 +18,10 @@
+ #include <linux/memblock.h>
+ #include <linux/param.h>
+ #include <linux/percpu-defs.h>
++#include <linux/pm.h>
+ #include <linux/sched.h>
+ #include <linux/spinlock.h>
+ #include <linux/types.h>
+-#include <linux/pm.h>
+ 
+ #include <asm/addrspace.h>
+ #include <asm/bootinfo.h>
+@@ -48,14 +48,9 @@
+ #include <asm/dec/kn02ca.h>
+ #include <asm/dec/kn03.h>
+ #include <asm/dec/kn230.h>
++#include <asm/dec/reset.h>
+ #include <asm/dec/system.h>
+ 
+-
+-extern void dec_machine_restart(char *command);
+-extern void dec_machine_halt(void);
+-extern void dec_machine_power_off(void);
+-extern irqreturn_t dec_intr_halt(int irq, void *dev_id);
+-
+ unsigned long dec_kn_slot_base, dec_kn_slot_size;
+ 
+ EXPORT_SYMBOL(dec_kn_slot_base);
+diff --git a/arch/mips/include/asm/dec/reset.h b/arch/mips/include/asm/dec/reset.h
+new file mode 100644
+index 000000000000..c1557b88264c
+--- /dev/null
++++ b/arch/mips/include/asm/dec/reset.h
+@@ -0,0 +1,20 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Reset a DECstation machine.
++ *
++ * File created to eliminate warnings; copyright from reset.c.
++ *
++ * Copyright (C) 199x  the Anonymous
++ * Copyright (C) 2001, 2002, 2003  Maciej W. Rozycki
++ */
++
++#ifndef __ASM_DEC_RESET_H
++
++#include <linux/interrupt.h>
++
++extern void __noreturn dec_machine_restart(char *command);
++extern void __noreturn dec_machine_halt(void);
++extern void __noreturn dec_machine_power_off(void);
++extern irqreturn_t dec_intr_halt(int irq, void *dev_id);
++
++#endif /* __ASM_DEC_RESET_H */
 -- 
 2.49.0
 
