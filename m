@@ -1,87 +1,129 @@
-Return-Path: <linux-mips+bounces-8684-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8685-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 21339A96224
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Apr 2025 10:42:58 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B2E2A963E1
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Apr 2025 11:16:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7278417B83C
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Apr 2025 08:37:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 56BAE188B828
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Apr 2025 09:12:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D77CA291154;
-	Tue, 22 Apr 2025 08:28:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D29D7256C6C;
+	Tue, 22 Apr 2025 09:11:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="haFfUafN"
+	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="PZk2DwvG"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+Received: from smtpbgsg2.qq.com (smtpbgsg2.qq.com [54.254.200.128])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4E0B291140
-	for <linux-mips@vger.kernel.org>; Tue, 22 Apr 2025 08:28:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85EA62561D9;
+	Tue, 22 Apr 2025 09:11:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.128
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745310483; cv=none; b=BfZk+ERaQdwtpm2VRFvFNGPLMmoryX8zO05GzG90c69PiKCPXQPC7ACRiGPfBNJwsBXWeZhVR6a2IjeYcM43Iwy6CzLek35XJ6HcktdAu5XF3HE0jj1ZsIaBrqDNdHcrXbV52JOf+2fpqEWLECgMo0TaHcZ6KZkYyxG9qki3U68=
+	t=1745313080; cv=none; b=Jh66YBe8RCNaRJ4+/QTwiFzWGjsIlSztp0Hfn1/sFnuJkzVK/ZHGuC7z2RcMHHS1EEuIWP1SzJ91LPaA/WBGEh+rwh3XfMQYK6e/Zh4sO2G3w0KHHH0wj+rdnoMSBqVB+nzdkqnvLI1CnLklh/vZFKJznIZUVIyDtCcQzQXKZ4g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745310483; c=relaxed/simple;
-	bh=g7KAwgL/rpqtApo9wTdj7rOSNNxCdAiqVKAXiRg3rEI=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=YB6lF/w9D43LyUUIoGJegEPoJAxulbLo/sCNZ4Ah47/eqj375RODKNztoLH+nJlecRnu62L7CYQDUT2Zz7nm4T/slDsniePE7H7hf2e8GBiniBGz/7UZS5mf7Ntb1Xg/JeBETQgt7HaYhCacfAYw5x+jbOIJxRboKS2QA8Ji2Yo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=haFfUafN; arc=none smtp.client-ip=95.215.58.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Content-Type: text/plain;
-	charset=us-ascii
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1745310468;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=g7KAwgL/rpqtApo9wTdj7rOSNNxCdAiqVKAXiRg3rEI=;
-	b=haFfUafNn1BVvts0BQ/RQh+FwaYBNl7W+BWb+sA8S612uVHLCDiHJ8fsk4btLET4GWS6Og
-	6qgdXpc+oQzp5COgyYjuS7ChnOCIZK0CrN/b4Z9uuK9Nue9pQfDX/OfM9xoD6MBxQyNZPT
-	1MsLaLIBqclM8tfPCiz7rjuE0MqYjWg=
+	s=arc-20240116; t=1745313080; c=relaxed/simple;
+	bh=WBUuOWQpdrQOFEYaOQmzhp+l1UfStjkHFbt5cXHqFZQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Pv29DmMds3n0gXIrhMm37Iv6RKemNxNX4CfyVqXJAd+ONHiySGdBwghdGKlSCZ8lGEHSp1TQLFXVbCNOyuFniEYLf5Pbjv9QF2CrvI5a2jaxDaBTOdDckwbY2IJLWT9lCek2zdKofdiDOoh+EZJLgbhfL7etJOUQwY4vShsQRIo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=PZk2DwvG; arc=none smtp.client-ip=54.254.200.128
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
+	s=onoh2408; t=1745313025;
+	bh=VGWZpF9dZHrPeszei/T2CQ20Hv6zpF5SOxVEFV93m3I=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=PZk2DwvGYkpS0AnKVdURrYXzElCQKRjKLaBey04icBal/iGZSkpps5UzEfc2d9k+C
+	 B4p64dQ8lIfIoLTIHRLwKLFttobKaxlzT6by9B3Z25mqNTN/dx2Ig83s1NdB5gIBlG
+	 9SUlFQp39As531aFfx1Jwo1QwTfVBinX9bci0zBU=
+X-QQ-mid: zesmtpip4t1745313008t2c41e022
+X-QQ-Originating-IP: D2Ocb7vvYEe79UAEG9zEOt7ZAfusavGiBvAMgQLxemI=
+Received: from localhost.localdomain ( [localhost])
+	by bizesmtp.qq.com (ESMTP) with 
+	id ; Tue, 22 Apr 2025 17:10:06 +0800 (CST)
+X-QQ-SSF: 0000000000000000000000000000000
+X-QQ-GoodBg: 1
+X-BIZMAIL-ID: 9580230143236949142
+EX-QQ-RecipientCnt: 8
+From: WangYuli <wangyuli@uniontech.com>
+To: gregkh@linuxfoundation.org,
+	sashal@kernel.org,
+	stable@vger.kernel.org
+Cc: macro@orcam.me.uk,
+	tsbogend@alpha.franken.de,
+	wangyuli@uniontech.com,
+	linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 5.4+] MIPS: dec: Declare which_prom() as static
+Date: Tue, 22 Apr 2025 17:09:37 +0800
+Message-ID: <D1625EB772D42BA4+20250422090937.113109-1-wangyuli@uniontech.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3776.700.51.11.2\))
-Subject: Re: [PATCH] MIPS: BCM63XX: Replace strcpy() with strscpy() in
- board_prom_init()
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Thorsten Blum <thorsten.blum@linux.dev>
-In-Reply-To: <aAdNVAzu0rmIfGGC@smile.fi.intel.com>
-Date: Tue, 22 Apr 2025 10:27:33 +0200
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Alexander Sverdlin <alexander.sverdlin@gmail.com>,
- Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
- linux-hardening@vger.kernel.org,
- linux-mips@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: 7bit
-Message-Id: <86E5AC5D-11BC-4B4E-B08E-845F59AACF6C@linux.dev>
-References: <20250422074257.544016-2-thorsten.blum@linux.dev>
- <aAdNVAzu0rmIfGGC@smile.fi.intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-X-Migadu-Flow: FLOW_OUT
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: zesmtpip:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
+X-QQ-XMAILINFO: MlPHsU0QBEEv63P2klKLlNoevHRwHdgXgbrVu/2gjZAuqiL1iUprcBge
+	5qPKskzHRFOUJcO8WXTYbo5xrbNp7XbAh4Hvs/3HNbHNlrAJhFr7rDU/mZdZvdcDEtqHLNM
+	7zbegztOBn7zyM/7MOJtCFPLSoQ2dV3TX/ie7VwnXAWmvHVixKUieDKDcST9KdCreELiSfh
+	+XJ9B5XKY3iDNqgOCPmchShqdwyPP0kWR3HCzAGeqsVWYg2+rKdcvF15UbgCkUEum3Wl6Le
+	ySqNlrsQ7cX7PXdx141uzpTkgEKeExUgxClAmz/icDECBc3pFcNMYktlbBue1rqbknRWsUK
+	iLyvCzOAavsrNPx6/nVNM3XTEb+EdVQA1jkglzqHH8XJ/qJKNlHEUXISSC8vb7lCVx/DNjc
+	kAjp7n8LgXB1VknpSXFDbBDuGl26+tIzweDhfgUSsyKeNNwwVdvyYAh+FfWOsqrfyfzpD/0
+	w3f79n7gV5+7VB0trPDzJM00FjKeenyz1e0JpaO+XxfBRBibrmlOe2m/P8WP7MTUBMizeES
+	quTTCSw7TE/e2GOYdM8jTYhRIbh8F6tUC93j8TVOCEWAJOPexzqZI/aoWmd77a1AI2QprLl
+	ZeK9af303SC2DPVlg2YInhEqX1/K5j3HPNphzgICLmuIig0+wkalQ30U2kFIGpsWiC+mr57
+	3+JUu7E4Bg2ii5VgFqJvoUQr0ZzaWtSuPxHS1qObpdPw+FfNNXsQDpvp+GS1+x3yVQ93+Kh
+	JXJT5djAblntj+taU7dlZt0JS5JVQB7fMAnoH9Psb1Crwt3QsUyKSa/15IXILUPWXnr94LM
+	gaB/gSY7BEMy7YR6sLpPsz2+s0gt/C31AYt2qq8j1ARifd8ORKdffPti0xwJlnedVt+c+B8
+	E38vwRXw7XBlmvFfXTg3srYENOws3+6NQe1M71YkQMDasRPJLAQmQWnRDmKOXrlPGwX1eNj
+	eSyh5Ag4WPZiHWg1yujYXaBnNZ8g3ITTCEbw3lpVDTWDJzwnY2ld78PK7AT5otvbaCJfwJm
+	7D4+AzeB1/fV/7x54T4jI8/PzSFHM=
+X-QQ-XMRINFO: OD9hHCdaPRBwq3WW+NvGbIU=
+X-QQ-RECHKSPAM: 0
 
-Hi Andy,
+[ Upstream commit 55fa5868519bc48a7344a4c070efa2f4468f2167 ]
 
-On 22. Apr 2025, at 10:03, Andy Shevchenko wrote:
+Declare which_prom() as static to suppress gcc compiler warning that
+'missing-prototypes'. This function is not intended to be called
+from other parts.
 
-> Can you use --cc OR put this line...
+Fix follow error with gcc-14 when -Werror:
 
-Yes, will do next time.
+arch/mips/dec/prom/init.c:45:13: error: no previous prototype for ‘which_prom’ [-Werror=missing-prototypes]
+   45 | void __init which_prom(s32 magic, s32 *prom_vec)
+      |             ^~~~~~~~~~
+cc1: all warnings being treated as errors
+make[6]: *** [scripts/Makefile.build:207: arch/mips/dec/prom/init.o] Error 1
+make[5]: *** [scripts/Makefile.build:465: arch/mips/dec/prom] Error 2
+make[5]: *** Waiting for unfinished jobs....
 
-> Have you compiled this with `make W=1` with recent GCCs?
+Signed-off-by: WangYuli <wangyuli@uniontech.com>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+---
+ arch/mips/dec/prom/init.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Yes, I compile-tested it with W=1 and mips64-linux-gnu-gcc 14.2.1.
-
-Thanks,
-Thorsten
+diff --git a/arch/mips/dec/prom/init.c b/arch/mips/dec/prom/init.c
+index cb12eb211a49..8d74d7d6c05b 100644
+--- a/arch/mips/dec/prom/init.c
++++ b/arch/mips/dec/prom/init.c
+@@ -42,7 +42,7 @@ int (*__pmax_close)(int);
+  * Detect which PROM the DECSTATION has, and set the callback vectors
+  * appropriately.
+  */
+-void __init which_prom(s32 magic, s32 *prom_vec)
++static void __init which_prom(s32 magic, s32 *prom_vec)
+ {
+ 	/*
+ 	 * No sign of the REX PROM's magic number means we assume a non-REX
+-- 
+2.49.0
 
 
