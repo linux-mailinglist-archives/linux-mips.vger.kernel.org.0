@@ -1,214 +1,234 @@
-Return-Path: <linux-mips+bounces-8718-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8719-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF6D6A97104
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Apr 2025 17:32:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC978A9868A
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Apr 2025 11:54:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9B3C24033B1
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Apr 2025 15:30:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3AF5A1B62693
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Apr 2025 09:54:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79BA4296D32;
-	Tue, 22 Apr 2025 15:28:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B875269B12;
+	Wed, 23 Apr 2025 09:53:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="flnVTBjr"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="AdV8BumX";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="B5lH7ZKp";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="MkBnnBgU";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="JV9vpkpW"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42182296178;
-	Tue, 22 Apr 2025 15:28:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C4BD267F4D
+	for <linux-mips@vger.kernel.org>; Wed, 23 Apr 2025 09:53:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745335701; cv=none; b=fnkkKGn6iH10JEsZjVyngg4864rvweByltrPnchsj022Av0XLqph54MPH/XKkrwRRX0JG+kZFKTifkOiO6KLhLEmgZMzK3fk5htpMfquQlAwbCiDO9tTkT6bYHTEsfmSbOe9KUvriGm9KlGFwGZ895C3HBZgwJPxf7yxchl+jYo=
+	t=1745402011; cv=none; b=s4vJ47ZQXPXMRlsv/CToG+Uj0kVZ7S4SaUsFV5uEFZWy1BEXdRCIej7dl6pbGlvwQg2zUIBQdu7qEmsht3mCaCKcazfP+61m97cZ6QclO9DWXGwS1jeLuFq+PK71IFrmgnyh2A4aOoQ2eLBWLD7wddOra/Ezl8rqZqxAN9R89B8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745335701; c=relaxed/simple;
-	bh=ZcB01eEG0PyKlIVeDwX/bqMc2RbGUn9yHA+iRHbv2w8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=HaSZAP57cE2kuTWcLldId4SPfjh9Zt8ddp/r+Rot7wFPE4IGct5r40cpPqpaDOuwDY5qkTKIipTXA0CBNI1F3E9yxYQSvpbv68pmzefJK0peoXwNfSa1W8aGOX3LmyZWA1rcbiVZ+SoHeFPlyCb6q9+ywLo2vQFIUKGr9MKL5IQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=flnVTBjr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E94AC4AF09;
-	Tue, 22 Apr 2025 15:28:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745335700;
-	bh=ZcB01eEG0PyKlIVeDwX/bqMc2RbGUn9yHA+iRHbv2w8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=flnVTBjrcSMGzaCSWAF3ye5NXVmpU/6srA7TV+v4bkaqFY2GYm1FaDCcYPH7hh8Um
-	 XOIMTiGX3wi1BxxUC+c8+YmYtI6H5wQwbfPtQ5z2d4dmVdVPn/MKv8ne5oWoWd4gQU
-	 uSobcfZD1j7EFl/LlBhh0gx2CmGiYh/+zFmssMJuB1uoahPQP7aVDXtiZLak68wFdh
-	 JJSl145uTsHT5mYqm8OVfUHIZ21q9UAQpINtNNXrcCiYAFOWl6j6kFTiHue6WK4wa2
-	 aProW4NNfjxsq6wAtS69b9mBF3mo2oVeqU8K7o5PqEU+5ShZrm9LNhZnL3/bUZ6jGc
-	 6UajEdWW1lTBQ==
-From: Eric Biggers <ebiggers@kernel.org>
-To: linux-crypto@vger.kernel.org
-Cc: linux-arch@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mips@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org,
-	x86@kernel.org,
-	"Jason A . Donenfeld" <Jason@zx2c4.com>,
-	Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH v3 13/13] crypto: lib/poly1305 - remove INTERNAL symbol and selection of CRYPTO
-Date: Tue, 22 Apr 2025 08:27:16 -0700
-Message-ID: <20250422152716.5923-14-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250422152716.5923-1-ebiggers@kernel.org>
-References: <20250422152716.5923-1-ebiggers@kernel.org>
+	s=arc-20240116; t=1745402011; c=relaxed/simple;
+	bh=EUt9Pc3d/cQ830Ysfg1KDOqUA0z0jpWmWw3HLSWOSdQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jxWfOWjzYnR/Yzfgj7Ae6OlTeGs1Mjp022RGyOWrXQ7NUWqumow8BlUIUhSEJ6JvLucQPFRHP3kcCYoO7t+nCs6wluI6L1uf85iPsmlKIV7TUBhW44QTSY0WEx3kDiuUSQhDPF/9YmMTbf1C52gjyT3d1FU8uRwm8T/HKdHRoBE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=AdV8BumX; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=B5lH7ZKp; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=MkBnnBgU; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=JV9vpkpW; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 49FAF21174;
+	Wed, 23 Apr 2025 09:53:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1745402007; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bAMJg+22aX8wNXOVQU/q0Slu5K2ETQkFa+MaYS1q1Aw=;
+	b=AdV8BumXxL2TjQOiXmb8BjdaVHaIK77tLQWkr1Dylc32u4E/PHXgBIBYuNagQAXxlcna88
+	cnaOoQaQOOZEbDB6938vKwZPECl5uJVH7HQZyRqvUVPgpST8VMSJVDRzqWU86QCbsO36kr
+	82/7kxzm9/zDf6E4qf4QX4ouEb8e8WE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1745402007;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bAMJg+22aX8wNXOVQU/q0Slu5K2ETQkFa+MaYS1q1Aw=;
+	b=B5lH7ZKpLQDtKPAfIBU+ZOHxgaNk/JP0nkZ2VBWlEacGhRvD3TlxFXD42GmLPP6SC2b2UT
+	qPoTNWqrZuVOZRBA==
+Authentication-Results: smtp-out1.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1745402006; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bAMJg+22aX8wNXOVQU/q0Slu5K2ETQkFa+MaYS1q1Aw=;
+	b=MkBnnBgUY4DejLxyqWELETbhQDSZbHRBCNcJ2SL2jANKjsmepr5ez71Lc+6XleLSZfpZrU
+	TZVIrwAG2mGYIiL+u5itSCcJjvabGWmDlypht/2m5b4xnKMjA73DuYr+ZRRUAYxQRyrlLB
+	7MnS/Z/KvF6Q+pV3yLCv4FTBynvtKsg=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1745402006;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=bAMJg+22aX8wNXOVQU/q0Slu5K2ETQkFa+MaYS1q1Aw=;
+	b=JV9vpkpWivR2j2l2iOWTdS74vSAmYn3ZCfrfQCySD6Ap21BM7ulYL6yd2KEBTFx0uVIzmS
+	IUaaLaSNx/k8B8DQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 2E71013691;
+	Wed, 23 Apr 2025 09:53:26 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id +W9NC5a4CGhVFQAAD6G6ig
+	(envelope-from <jack@suse.cz>); Wed, 23 Apr 2025 09:53:26 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id BEC8BA07A7; Wed, 23 Apr 2025 11:53:25 +0200 (CEST)
+Date: Wed, 23 Apr 2025 11:53:25 +0200
+From: Jan Kara <jack@suse.cz>
+To: Christian Brauner <brauner@kernel.org>
+Cc: Andrey Albershteyn <aalbersh@redhat.com>, 
+	Richard Henderson <richard.henderson@linaro.org>, Matt Turner <mattst88@gmail.com>, 
+	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	Michal Simek <monstr@monstr.eu>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Naveen N Rao <naveen@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
+	Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, "David S. Miller" <davem@davemloft.net>, 
+	Andreas Larsson <andreas@gaisler.com>, Andy Lutomirski <luto@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+	=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-xfs@vger.kernel.org
+Subject: Re: [PATCH v4 3/3] fs: introduce getfsxattrat and setfsxattrat
+ syscalls
+Message-ID: <rbzlwvecvrp4xawwp5nywdq6wp5hgjhrtrabpszv74xmfqbj4f@x7v6eqfc5gcd>
+References: <20250321-xattrat-syscall-v4-0-3e82e6fb3264@kernel.org>
+ <20250321-xattrat-syscall-v4-3-3e82e6fb3264@kernel.org>
+ <20250422-abbekommen-begierde-bcf48dd74a2e@brauner>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250422-abbekommen-begierde-bcf48dd74a2e@brauner>
+X-Spam-Level: 
+X-Spamd-Result: default: False [-3.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	RCVD_COUNT_THREE(0.00)[3];
+	MIME_TRACE(0.00)[0:+];
+	MISSING_XM_UA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	FREEMAIL_CC(0.00)[redhat.com,linaro.org,gmail.com,armlinux.org.uk,arm.com,kernel.org,linux-m68k.org,monstr.eu,alpha.franken.de,hansenpartnership.com,gmx.de,linux.ibm.com,ellerman.id.au,csgroup.eu,users.sourceforge.jp,libc.org,physik.fu-berlin.de,davemloft.net,gaisler.com,linutronix.de,alien8.de,linux.intel.com,zytor.com,zankel.net,zeniv.linux.org.uk,suse.cz,digikod.net,google.com,arndb.de,paul-moore.com,namei.org,hallyn.com,vger.kernel.org,lists.infradead.org,lists.linux-m68k.org,lists.ozlabs.org];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FUZZY_BLOCKED(0.00)[rspamd.com];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	TO_MATCH_ENVRCPT_SOME(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[60];
+	RCVD_TLS_LAST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email]
+X-Spam-Score: -3.80
+X-Spam-Flag: NO
 
-From: Eric Biggers <ebiggers@google.com>
+On Tue 22-04-25 16:59:02, Christian Brauner wrote:
+> On Fri, Mar 21, 2025 at 08:48:42PM +0100, Andrey Albershteyn wrote:
+> > From: Andrey Albershteyn <aalbersh@redhat.com>
+> > 
+> > Introduce getfsxattrat and setfsxattrat syscalls to manipulate inode
+> > extended attributes/flags. The syscalls take parent directory fd and
+> > path to the child together with struct fsxattr.
+> > 
+> > This is an alternative to FS_IOC_FSSETXATTR ioctl with a difference
+> > that file don't need to be open as we can reference it with a path
+> > instead of fd. By having this we can manipulated inode extended
+> > attributes not only on regular files but also on special ones. This
+> > is not possible with FS_IOC_FSSETXATTR ioctl as with special files
+> > we can not call ioctl() directly on the filesystem inode using fd.
+> > 
+> > This patch adds two new syscalls which allows userspace to get/set
+> > extended inode attributes on special files by using parent directory
+> > and a path - *at() like syscall.
+> > 
+> > CC: linux-api@vger.kernel.org
+> > CC: linux-fsdevel@vger.kernel.org
+> > CC: linux-xfs@vger.kernel.org
+> > Signed-off-by: Andrey Albershteyn <aalbersh@redhat.com>
+> > Acked-by: Arnd Bergmann <arnd@arndb.de>
+...
+> > +		struct fsxattr __user *, ufsx, size_t, usize,
+> > +		unsigned int, at_flags)
+> > +{
+> > +	struct fileattr fa = {};
+> > +	struct path filepath;
+> > +	int error;
+> > +	unsigned int lookup_flags = 0;
+> > +	struct filename *name;
+> > +	struct fsxattr fsx = {};
+> > +
+> > +	BUILD_BUG_ON(sizeof(struct fsxattr) < FSXATTR_SIZE_VER0);
+> > +	BUILD_BUG_ON(sizeof(struct fsxattr) != FSXATTR_SIZE_LATEST);
+> > +
+> > +	if ((at_flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH)) != 0)
+> > +		return -EINVAL;
+> > +
+> > +	if (!(at_flags & AT_SYMLINK_NOFOLLOW))
+> > +		lookup_flags |= LOOKUP_FOLLOW;
+> > +
+> > +	if (at_flags & AT_EMPTY_PATH)
+> > +		lookup_flags |= LOOKUP_EMPTY;
+> > +
+> > +	if (usize > PAGE_SIZE)
+> > +		return -E2BIG;
+> > +
+> > +	if (usize < FSXATTR_SIZE_VER0)
+> > +		return -EINVAL;
+> > +
+> > +	name = getname_maybe_null(filename, at_flags);
+> > +	if (!name) {
+> 
+> This is broken as it doesn't handle AT_FDCWD correctly. You need:
+> 
+>         name = getname_maybe_null(filename, at_flags);
+>         if (IS_ERR(name))
+>                 return PTR_ERR(name);
+> 
+>         if (!name && dfd >= 0) {
+> 		CLASS(fd, f)(dfd);
 
-Now that the architecture-optimized Poly1305 kconfig symbols are defined
-regardless of CRYPTO, there is no need for CRYPTO_LIB_POLY1305 to select
-CRYPTO.  So, remove that.  This makes the indirection through the
-CRYPTO_LIB_POLY1305_INTERNAL symbol unnecessary, so get rid of that and
-just use CRYPTO_LIB_POLY1305 directly.  Finally, make the fallback to
-the generic implementation use a default value instead of a select; this
-makes it consistent with how the arch-optimized code gets enabled and
-also with how CRYPTO_LIB_BLAKE2S_GENERIC gets enabled.
+Ah, you're indeed right that if dfd == AT_FDCWD and filename == NULL, the
+we should operate on cwd but we'd bail with error here. I've missed that
+during my review. But as far as I've checked the same bug is there in
+path_setxattrat() and path_getxattrat() so we should fix this there as
+well?
 
-Signed-off-by: Eric Biggers <ebiggers@google.com>
----
- arch/arm/lib/crypto/Kconfig     |  2 +-
- arch/arm64/lib/crypto/Kconfig   |  2 +-
- arch/mips/lib/crypto/Kconfig    |  2 +-
- arch/powerpc/lib/crypto/Kconfig |  2 +-
- arch/x86/lib/crypto/Kconfig     |  2 +-
- crypto/Kconfig                  |  2 +-
- lib/crypto/Kconfig              | 16 +++++-----------
- 7 files changed, 11 insertions(+), 17 deletions(-)
-
-diff --git a/arch/arm/lib/crypto/Kconfig b/arch/arm/lib/crypto/Kconfig
-index 5d10bd13fc8df..e8444fd0aae30 100644
---- a/arch/arm/lib/crypto/Kconfig
-+++ b/arch/arm/lib/crypto/Kconfig
-@@ -18,7 +18,7 @@ config CRYPTO_CHACHA20_NEON
- 	default CRYPTO_LIB_CHACHA
- 	select CRYPTO_ARCH_HAVE_LIB_CHACHA
- 
- config CRYPTO_POLY1305_ARM
- 	tristate
--	default CRYPTO_LIB_POLY1305_INTERNAL
-+	default CRYPTO_LIB_POLY1305
- 	select CRYPTO_ARCH_HAVE_LIB_POLY1305
-diff --git a/arch/arm64/lib/crypto/Kconfig b/arch/arm64/lib/crypto/Kconfig
-index 2a8ff7cfc08d3..0b903ef524d85 100644
---- a/arch/arm64/lib/crypto/Kconfig
-+++ b/arch/arm64/lib/crypto/Kconfig
-@@ -8,7 +8,7 @@ config CRYPTO_CHACHA20_NEON
- 	select CRYPTO_ARCH_HAVE_LIB_CHACHA
- 
- config CRYPTO_POLY1305_NEON
- 	tristate
- 	depends on KERNEL_MODE_NEON
--	default CRYPTO_LIB_POLY1305_INTERNAL
-+	default CRYPTO_LIB_POLY1305
- 	select CRYPTO_ARCH_HAVE_LIB_POLY1305
-diff --git a/arch/mips/lib/crypto/Kconfig b/arch/mips/lib/crypto/Kconfig
-index 454354e30d76c..0670a170c1be0 100644
---- a/arch/mips/lib/crypto/Kconfig
-+++ b/arch/mips/lib/crypto/Kconfig
-@@ -6,7 +6,7 @@ config CRYPTO_CHACHA_MIPS
- 	default CRYPTO_LIB_CHACHA
- 	select CRYPTO_ARCH_HAVE_LIB_CHACHA
- 
- config CRYPTO_POLY1305_MIPS
- 	tristate
--	default CRYPTO_LIB_POLY1305_INTERNAL
-+	default CRYPTO_LIB_POLY1305
- 	select CRYPTO_ARCH_HAVE_LIB_POLY1305
-diff --git a/arch/powerpc/lib/crypto/Kconfig b/arch/powerpc/lib/crypto/Kconfig
-index 6627d28cd24e0..bf6d0ab22c27d 100644
---- a/arch/powerpc/lib/crypto/Kconfig
-+++ b/arch/powerpc/lib/crypto/Kconfig
-@@ -8,8 +8,8 @@ config CRYPTO_CHACHA20_P10
- 	select CRYPTO_ARCH_HAVE_LIB_CHACHA
- 
- config CRYPTO_POLY1305_P10
- 	tristate
- 	depends on PPC64 && CPU_LITTLE_ENDIAN && VSX
--	default CRYPTO_LIB_POLY1305_INTERNAL
-+	default CRYPTO_LIB_POLY1305
- 	select CRYPTO_ARCH_HAVE_LIB_POLY1305
- 	select CRYPTO_LIB_POLY1305_GENERIC
-diff --git a/arch/x86/lib/crypto/Kconfig b/arch/x86/lib/crypto/Kconfig
-index e44403d9677f5..546fe2afe0b51 100644
---- a/arch/x86/lib/crypto/Kconfig
-+++ b/arch/x86/lib/crypto/Kconfig
-@@ -20,7 +20,7 @@ config CRYPTO_CHACHA20_X86_64
- 	select CRYPTO_ARCH_HAVE_LIB_CHACHA
- 
- config CRYPTO_POLY1305_X86_64
- 	tristate
- 	depends on 64BIT
--	default CRYPTO_LIB_POLY1305_INTERNAL
-+	default CRYPTO_LIB_POLY1305
- 	select CRYPTO_ARCH_HAVE_LIB_POLY1305
-diff --git a/crypto/Kconfig b/crypto/Kconfig
-index 832af6363951f..9878286d1d683 100644
---- a/crypto/Kconfig
-+++ b/crypto/Kconfig
-@@ -954,12 +954,12 @@ config CRYPTO_POLYVAL
- 	  cryptographic hash function.
- 
- config CRYPTO_POLY1305
- 	tristate "Poly1305"
- 	select CRYPTO_HASH
-+	select CRYPTO_LIB_POLY1305
- 	select CRYPTO_LIB_POLY1305_GENERIC
--	select CRYPTO_LIB_POLY1305_INTERNAL
- 	help
- 	  Poly1305 authenticator algorithm (RFC7539)
- 
- 	  Poly1305 is an authenticator algorithm designed by Daniel J. Bernstein.
- 	  It is used for the ChaCha20-Poly1305 AEAD, specified in RFC7539 for use
-diff --git a/lib/crypto/Kconfig b/lib/crypto/Kconfig
-index c6ab724c1dbd9..af2368799579f 100644
---- a/lib/crypto/Kconfig
-+++ b/lib/crypto/Kconfig
-@@ -112,25 +112,19 @@ config CRYPTO_ARCH_HAVE_LIB_POLY1305
- 	  accelerated implementation of the Poly1305 library interface,
- 	  either builtin or as a module.
- 
- config CRYPTO_LIB_POLY1305_GENERIC
- 	tristate
-+	default CRYPTO_LIB_POLY1305 if !CRYPTO_ARCH_HAVE_LIB_POLY1305
- 	help
--	  This symbol can be depended upon by arch implementations of the
--	  Poly1305 library interface that require the generic code as a
--	  fallback, e.g., for SIMD implementations. If no arch specific
--	  implementation is enabled, this implementation serves the users
--	  of CRYPTO_LIB_POLY1305.
--
--config CRYPTO_LIB_POLY1305_INTERNAL
--	tristate
--	select CRYPTO_LIB_POLY1305_GENERIC if CRYPTO_ARCH_HAVE_LIB_POLY1305=n
-+	  This symbol can be selected by arch implementations of the Poly1305
-+	  library interface that require the generic code as a fallback, e.g.,
-+	  for SIMD implementations. If no arch specific implementation is
-+	  enabled, this implementation serves the users of CRYPTO_LIB_POLY1305.
- 
- config CRYPTO_LIB_POLY1305
- 	tristate
--	select CRYPTO
--	select CRYPTO_LIB_POLY1305_INTERNAL
- 	help
- 	  Enable the Poly1305 library interface. This interface may be fulfilled
- 	  by either the generic implementation or an arch-specific one, if one
- 	  is available and enabled.
- 
+								Honza
 -- 
-2.49.0
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
 
