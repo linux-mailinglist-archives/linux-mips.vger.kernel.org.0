@@ -1,234 +1,126 @@
-Return-Path: <linux-mips+bounces-8719-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8720-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC978A9868A
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Apr 2025 11:54:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73F85A991D0
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Apr 2025 17:36:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3AF5A1B62693
-	for <lists+linux-mips@lfdr.de>; Wed, 23 Apr 2025 09:54:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1CAB9922BAA
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Apr 2025 15:24:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B875269B12;
-	Wed, 23 Apr 2025 09:53:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6F7528D82C;
+	Wed, 23 Apr 2025 15:16:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="AdV8BumX";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="B5lH7ZKp";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="MkBnnBgU";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="JV9vpkpW"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="OjPls7wN"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C4BD267F4D
-	for <linux-mips@vger.kernel.org>; Wed, 23 Apr 2025 09:53:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F28DD28D836
+	for <linux-mips@vger.kernel.org>; Wed, 23 Apr 2025 15:16:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745402011; cv=none; b=s4vJ47ZQXPXMRlsv/CToG+Uj0kVZ7S4SaUsFV5uEFZWy1BEXdRCIej7dl6pbGlvwQg2zUIBQdu7qEmsht3mCaCKcazfP+61m97cZ6QclO9DWXGwS1jeLuFq+PK71IFrmgnyh2A4aOoQ2eLBWLD7wddOra/Ezl8rqZqxAN9R89B8=
+	t=1745421410; cv=none; b=XA4lqiZsfABDdrNe2pJBi0uCkMoL7N99wMdoxvEeuMiug9IuV0SdM913h8twrl2mcNl1uy2LNak1sT7eCis3yCWrw5JKuv77NYXt0PVHhlqMpEXsVaB+PHEema+7Bf7VeaRNFzHKI+cYGRG9vBVBJJrDeNwEh6WrdNoDS4YJh2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745402011; c=relaxed/simple;
-	bh=EUt9Pc3d/cQ830Ysfg1KDOqUA0z0jpWmWw3HLSWOSdQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jxWfOWjzYnR/Yzfgj7Ae6OlTeGs1Mjp022RGyOWrXQ7NUWqumow8BlUIUhSEJ6JvLucQPFRHP3kcCYoO7t+nCs6wluI6L1uf85iPsmlKIV7TUBhW44QTSY0WEx3kDiuUSQhDPF/9YmMTbf1C52gjyT3d1FU8uRwm8T/HKdHRoBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=AdV8BumX; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=B5lH7ZKp; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=MkBnnBgU; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=JV9vpkpW; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 49FAF21174;
-	Wed, 23 Apr 2025 09:53:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1745402007; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bAMJg+22aX8wNXOVQU/q0Slu5K2ETQkFa+MaYS1q1Aw=;
-	b=AdV8BumXxL2TjQOiXmb8BjdaVHaIK77tLQWkr1Dylc32u4E/PHXgBIBYuNagQAXxlcna88
-	cnaOoQaQOOZEbDB6938vKwZPECl5uJVH7HQZyRqvUVPgpST8VMSJVDRzqWU86QCbsO36kr
-	82/7kxzm9/zDf6E4qf4QX4ouEb8e8WE=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1745402007;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bAMJg+22aX8wNXOVQU/q0Slu5K2ETQkFa+MaYS1q1Aw=;
-	b=B5lH7ZKpLQDtKPAfIBU+ZOHxgaNk/JP0nkZ2VBWlEacGhRvD3TlxFXD42GmLPP6SC2b2UT
-	qPoTNWqrZuVOZRBA==
-Authentication-Results: smtp-out1.suse.de;
-	none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1745402006; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bAMJg+22aX8wNXOVQU/q0Slu5K2ETQkFa+MaYS1q1Aw=;
-	b=MkBnnBgUY4DejLxyqWELETbhQDSZbHRBCNcJ2SL2jANKjsmepr5ez71Lc+6XleLSZfpZrU
-	TZVIrwAG2mGYIiL+u5itSCcJjvabGWmDlypht/2m5b4xnKMjA73DuYr+ZRRUAYxQRyrlLB
-	7MnS/Z/KvF6Q+pV3yLCv4FTBynvtKsg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1745402006;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bAMJg+22aX8wNXOVQU/q0Slu5K2ETQkFa+MaYS1q1Aw=;
-	b=JV9vpkpWivR2j2l2iOWTdS74vSAmYn3ZCfrfQCySD6Ap21BM7ulYL6yd2KEBTFx0uVIzmS
-	IUaaLaSNx/k8B8DQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 2E71013691;
-	Wed, 23 Apr 2025 09:53:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id +W9NC5a4CGhVFQAAD6G6ig
-	(envelope-from <jack@suse.cz>); Wed, 23 Apr 2025 09:53:26 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id BEC8BA07A7; Wed, 23 Apr 2025 11:53:25 +0200 (CEST)
-Date: Wed, 23 Apr 2025 11:53:25 +0200
-From: Jan Kara <jack@suse.cz>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Andrey Albershteyn <aalbersh@redhat.com>, 
-	Richard Henderson <richard.henderson@linaro.org>, Matt Turner <mattst88@gmail.com>, 
-	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Michal Simek <monstr@monstr.eu>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Naveen N Rao <naveen@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
-	Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
-	=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-xfs@vger.kernel.org
-Subject: Re: [PATCH v4 3/3] fs: introduce getfsxattrat and setfsxattrat
- syscalls
-Message-ID: <rbzlwvecvrp4xawwp5nywdq6wp5hgjhrtrabpszv74xmfqbj4f@x7v6eqfc5gcd>
-References: <20250321-xattrat-syscall-v4-0-3e82e6fb3264@kernel.org>
- <20250321-xattrat-syscall-v4-3-3e82e6fb3264@kernel.org>
- <20250422-abbekommen-begierde-bcf48dd74a2e@brauner>
+	s=arc-20240116; t=1745421410; c=relaxed/simple;
+	bh=wiQRxjVfq6FHjvTR4eF4WEQlEgSYtFXiwIFHwN6ZJdA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uKZD606M/NYOEVC8yLPhWAW1/DjEL6iWeQwLdEnBOqLemjYe7kS6m0sSoI++xfcP8GDBZCLrADoQ8Eco6BvN7RXXZdhErrDOJevJ5HPpmbt6rRx5TXhcu3YIW8+gKbh30l4q2OHKXrblWKFRZqPhnhzKMnIYcWHSRFPqVNPGp+s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=OjPls7wN; arc=none smtp.client-ip=209.85.208.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-30de488cf81so128671fa.1
+        for <linux-mips@vger.kernel.org>; Wed, 23 Apr 2025 08:16:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1745421407; x=1746026207; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9jo5fNYX7M8KjPw/nzhDjJuKY3qNiI/6SOFAiqZVsVI=;
+        b=OjPls7wNqoIHWJqn8Vtmy4jfhirj5aOrFBgpxDsy4m1towrIGT5zXUMNjwFJUO8/IL
+         g7jsiWCs5cA8zDI8bGU1znOZXshKwoEX6iqtDXaf9nn/jfZqF64bJ8Zka1mYpCbcRMGr
+         KIgHo7WtE2Gofn1RG8ZgGnWel8B5hTJi+IMenI3Zj8hYk2K661e7iNfoahxBX3xG6eOq
+         zBO4VR2dYMweIw7CBFBTt+n7ks7rU09WAcSDA2i79ZnCrRDM+nUOpyXh/aalXYIUsTq6
+         Frmmyt+DZiPRLJAfqopWdKFCdHGzxYW4Fdw6WWGrPJX9XgeBJzFA/F24E3JwnspCciVz
+         +7pQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745421407; x=1746026207;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9jo5fNYX7M8KjPw/nzhDjJuKY3qNiI/6SOFAiqZVsVI=;
+        b=TtVE7Q6RvZ+FDWTO2ea6TFtZOmOUloN40ZgK4csDxqKcKP0bXEiTTsMFyAFvwZswmM
+         1MK4gTeF5gLE8/CVvs+ofMQiA7H40mr0oViLk4GXFD9MJcO3ko/HszCKpB3ZgmeyTVXG
+         gH8JVWT1CjvQhMhCG5B2/kpqmi9ecPYmuoCDsGbfTekUURi4shdVSQ5ZMLqsUhGLpQy+
+         qDsV/kFuKCfVzTVFIDKYzuXOADGfUKQupfISYb3iDb0MMB4qQhj6pwxyXOjWR34Yd6/V
+         ImdR2KzrGY8D83tKY3OuEKtSDgHoBZ5+NfLgg/gHpEoRkW10oezrZU7muXTYjVpnVmPy
+         gCWA==
+X-Gm-Message-State: AOJu0YxxnTsY1VwbuFbIsHf8N0gKsZwdTCzwURNmF2Sq3fRJ/UTebX5Q
+	LPWOl2T1A2vAELRkPqw65DK9V2hQv0T1k64Fjg3rDhpunrH41Jj2xmy2ASdOcfTJluUWPIVWeZS
+	CJUyXy4qFjQLFp6k4fklKqoP3q8jEbVeEV0zVVA==
+X-Gm-Gg: ASbGncuybmMZk9PsTjOfhihiH5d9L66j3NM4xxzxk8CbNVAloX8pFLkOzlKOeIT/vyv
+	WeD4KHVsGZXoDM1U3f3e8UnRvbprP2N3OySmKO8SMKYc8YdtfcY0zI+c/j2yPXZ/vvt78KFdocE
+	s/Z3DobE4RCd3eNpNDzhI09/34RfZBFVfrxugkWTC7pMsMg0pQg+qNhg==
+X-Google-Smtp-Source: AGHT+IETE/k4w1fu2U8cN+Dnfk6dutM38e/zDtMkQO31fN5/T3kjC7GQG5tDFfOMiRyAghFnvFrA/27CKuuGkDO0Ong=
+X-Received: by 2002:a05:651c:1463:b0:30b:b956:53bd with SMTP id
+ 38308e7fff4ca-310904c7e91mr63840301fa.4.1745421407059; Wed, 23 Apr 2025
+ 08:16:47 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250422-abbekommen-begierde-bcf48dd74a2e@brauner>
-X-Spam-Level: 
-X-Spamd-Result: default: False [-3.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	RCVD_COUNT_THREE(0.00)[3];
-	MIME_TRACE(0.00)[0:+];
-	MISSING_XM_UA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	FREEMAIL_CC(0.00)[redhat.com,linaro.org,gmail.com,armlinux.org.uk,arm.com,kernel.org,linux-m68k.org,monstr.eu,alpha.franken.de,hansenpartnership.com,gmx.de,linux.ibm.com,ellerman.id.au,csgroup.eu,users.sourceforge.jp,libc.org,physik.fu-berlin.de,davemloft.net,gaisler.com,linutronix.de,alien8.de,linux.intel.com,zytor.com,zankel.net,zeniv.linux.org.uk,suse.cz,digikod.net,google.com,arndb.de,paul-moore.com,namei.org,hallyn.com,vger.kernel.org,lists.infradead.org,lists.linux-m68k.org,lists.ozlabs.org];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
-	TO_MATCH_ENVRCPT_SOME(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[60];
-	RCVD_TLS_LAST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email]
-X-Spam-Score: -3.80
-X-Spam-Flag: NO
+References: <20250407-gpiochip-set-rv-mips-v1-0-e7f74a4eee2b@linaro.org>
+In-Reply-To: <20250407-gpiochip-set-rv-mips-v1-0-e7f74a4eee2b@linaro.org>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Wed, 23 Apr 2025 17:16:34 +0200
+X-Gm-Features: ATxdqUELgS6WCJFQes3519gHJSdg6pzOWNNHSfSI0N6izE-OdLoImE-rCQIjitc
+Message-ID: <CAMRc=MdOVSWzt-J4_g+4H-TSVYyc0tCOmog0WSpHUqE+hCEe6w@mail.gmail.com>
+Subject: Re: [PATCH 0/4] MIPS: convert board-file GPIO drivers to using new
+ value setters
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Linus Walleij <linus.walleij@linaro.org>, 
+	Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-gpio@vger.kernel.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue 22-04-25 16:59:02, Christian Brauner wrote:
-> On Fri, Mar 21, 2025 at 08:48:42PM +0100, Andrey Albershteyn wrote:
-> > From: Andrey Albershteyn <aalbersh@redhat.com>
-> > 
-> > Introduce getfsxattrat and setfsxattrat syscalls to manipulate inode
-> > extended attributes/flags. The syscalls take parent directory fd and
-> > path to the child together with struct fsxattr.
-> > 
-> > This is an alternative to FS_IOC_FSSETXATTR ioctl with a difference
-> > that file don't need to be open as we can reference it with a path
-> > instead of fd. By having this we can manipulated inode extended
-> > attributes not only on regular files but also on special ones. This
-> > is not possible with FS_IOC_FSSETXATTR ioctl as with special files
-> > we can not call ioctl() directly on the filesystem inode using fd.
-> > 
-> > This patch adds two new syscalls which allows userspace to get/set
-> > extended inode attributes on special files by using parent directory
-> > and a path - *at() like syscall.
-> > 
-> > CC: linux-api@vger.kernel.org
-> > CC: linux-fsdevel@vger.kernel.org
-> > CC: linux-xfs@vger.kernel.org
-> > Signed-off-by: Andrey Albershteyn <aalbersh@redhat.com>
-> > Acked-by: Arnd Bergmann <arnd@arndb.de>
-...
-> > +		struct fsxattr __user *, ufsx, size_t, usize,
-> > +		unsigned int, at_flags)
-> > +{
-> > +	struct fileattr fa = {};
-> > +	struct path filepath;
-> > +	int error;
-> > +	unsigned int lookup_flags = 0;
-> > +	struct filename *name;
-> > +	struct fsxattr fsx = {};
-> > +
-> > +	BUILD_BUG_ON(sizeof(struct fsxattr) < FSXATTR_SIZE_VER0);
-> > +	BUILD_BUG_ON(sizeof(struct fsxattr) != FSXATTR_SIZE_LATEST);
-> > +
-> > +	if ((at_flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH)) != 0)
-> > +		return -EINVAL;
-> > +
-> > +	if (!(at_flags & AT_SYMLINK_NOFOLLOW))
-> > +		lookup_flags |= LOOKUP_FOLLOW;
-> > +
-> > +	if (at_flags & AT_EMPTY_PATH)
-> > +		lookup_flags |= LOOKUP_EMPTY;
-> > +
-> > +	if (usize > PAGE_SIZE)
-> > +		return -E2BIG;
-> > +
-> > +	if (usize < FSXATTR_SIZE_VER0)
-> > +		return -EINVAL;
-> > +
-> > +	name = getname_maybe_null(filename, at_flags);
-> > +	if (!name) {
-> 
-> This is broken as it doesn't handle AT_FDCWD correctly. You need:
-> 
->         name = getname_maybe_null(filename, at_flags);
->         if (IS_ERR(name))
->                 return PTR_ERR(name);
-> 
->         if (!name && dfd >= 0) {
-> 		CLASS(fd, f)(dfd);
+On Mon, Apr 7, 2025 at 9:25=E2=80=AFAM Bartosz Golaszewski <brgl@bgdev.pl> =
+wrote:
+>
+> struct gpio_chip now has callbacks for setting line values that return
+> an integer, allowing to indicate failures. We're in the process of
+> converting all GPIO drivers to using the new API. This series converts
+> all MIPS board-file level controllers.
+>
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> ---
+> Bartosz Golaszewski (4):
+>       MIPS: rb532: gpio: use new line value setter callbacks
+>       MIPS: bcm63xx: gpio: use new line value setter callbacks
+>       MIPS: alchemy: gpio: use new line value setter callbacks
+>       MIPS: txx9: gpio: use new line value setter callbacks
+>
+>  arch/mips/alchemy/common/gpiolib.c | 6 ++++--
+>  arch/mips/bcm63xx/gpio.c           | 7 ++++---
+>  arch/mips/kernel/gpio_txx9.c       | 8 +++++---
+>  arch/mips/rb532/gpio.c             | 8 +++++---
+>  arch/mips/txx9/generic/setup.c     | 8 +++++---
+>  5 files changed, 23 insertions(+), 14 deletions(-)
+> ---
+> base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
+> change-id: 20250324-gpiochip-set-rv-mips-43c07e67328e
+>
+> Best regards,
+> --
+> Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>
 
-Ah, you're indeed right that if dfd == AT_FDCWD and filename == NULL, the
-we should operate on cwd but we'd bail with error here. I've missed that
-during my review. But as far as I've checked the same bug is there in
-path_setxattrat() and path_getxattrat() so we should fix this there as
-well?
+Gentle ping.
 
-								Honza
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Bart
 
