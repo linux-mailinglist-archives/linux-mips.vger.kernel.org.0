@@ -1,193 +1,164 @@
-Return-Path: <linux-mips+bounces-8733-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8734-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ECBEAA9A645
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Apr 2025 10:38:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBC4BA9A75E
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Apr 2025 11:06:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 75B3C924FDC
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Apr 2025 08:38:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E0C7018980C1
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Apr 2025 09:06:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08B72225A47;
-	Thu, 24 Apr 2025 08:36:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF9F221505C;
+	Thu, 24 Apr 2025 09:06:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="RPtK9kC4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qPzQ2EtO"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 172C72253EA
-	for <linux-mips@vger.kernel.org>; Thu, 24 Apr 2025 08:36:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FED1210F5A;
+	Thu, 24 Apr 2025 09:06:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745483763; cv=none; b=QjFXBEBrz/WNDNG6PDE8/icu9Jo3AtWGGFSrAwtNPiCu4wxpkzY6gaInX+LqLSry3Z57FiWXeL9kPPTFm2mKCn+udeahe0wkmMUAz+8ohTXCDL10s/45OUQ9rOaNd2QtUCXz08AD2E6VZDNsbFvVlB09A++mjTWxBSRlISmXOmk=
+	t=1745485582; cv=none; b=DVkg+p5KTiuu7hbo0J270jYBlHaaA5sQLXR2MSAqbbf+iPojEN1KXE5nz2m0KdlloqR3Az+1k9+n50cVr/PwRqHvIRZ1RbYGsAH3fm04jJxyDspoNijz+7xs78TCwjS2U1CfuvyqGHDmGgHf0RGHKchBbReRSXp1ioPk0m54Q/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745483763; c=relaxed/simple;
-	bh=iJgBNsG6lNFWVLQiSa+DhOTeGMwUTZl4FTd44fGqDV0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=IrWJRfk5giEhv4H3VVAPfIFYzFnAr+KG++cZJksgEj51efs/SienKYrpjX2IkwIjGctuh2YU3WFc78e+Bc9Kx22MZR4Nqp4+LUFdUt6Hxc7/ZXtXDH2ITyxuijSConZiIGznv9nAwbqiSoCVmeMB7eyUtVIjivq9g+Ys4b+ykz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=RPtK9kC4; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-43cfecdd8b2so4317355e9.2
-        for <linux-mips@vger.kernel.org>; Thu, 24 Apr 2025 01:36:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1745483760; x=1746088560; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wyD1ibYwZZNQjABTauO+kWeZmIcgNLsOAbjC6l1tSrA=;
-        b=RPtK9kC4LjSXD1qQFOsA0rKWaD0QeJc64AIgG33BrCZCJmOAxZ52LrclzBfUqrrXtm
-         mA9trdleq54MLvugQI59/uqHVrgHOnDwAJB26qU9VCLDSSbCyD9+SgMwVaH9UsRUK/uo
-         u9H6AfGBahjDSZXIrVd0/owWqf8hLb5BwAHxEM8IAcbtNqx09s8NXM4/H2+uJomieZeV
-         GcsN1KnhTxxjys9o1NYmtY26rvOd5IXOFSANNydM2cHpUWt+WUAVVbtA3u8CwGg1yRLg
-         J6eLDLijB25QuitRErqmqkrM9HuU/ANu4Fvv40MMTU9yCUAEYgih6eSxdpcwdkPlgpNB
-         Hu9Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745483760; x=1746088560;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wyD1ibYwZZNQjABTauO+kWeZmIcgNLsOAbjC6l1tSrA=;
-        b=qwIg00mqJ+OANAv2lixlmEkWDcwQvcKvAnRxY+Cw36IOVsGgVfX/rb2ieMCrG0EDKK
-         1KDB47ig4HGaVnJQzwOwdhevlaxZt9ic8fRktn6lQCqpw8xXtGFpw/ZbHrNbjdA17yeb
-         JodMizYxm0hcO0Ro/VfNfzcat8YCUjqF6v4yhcaxqvrgz9pvFLDMsfjZpEjapeCaNOKR
-         1gjdUQas07UB2P0QTwQ5ZsamJKDZWh0GE4QY6v5J2oxT0uZ3zRXdqII3Ue6LDkEM8yDG
-         0bU4gwC3UCIv5slcKXOs8TJc3DeBj6ORor6dSf5ipVG/i5ZW8eJxx4An4YZHpsc6ozJC
-         EvCw==
-X-Forwarded-Encrypted: i=1; AJvYcCVcQbu6Q/w21CQMVKf0I2jpk7LKPWkPjkX8mdPS7C6MA/kuXRl5meB1OlrGRA+F/AOl07Q1Zh/fHYDI@vger.kernel.org
-X-Gm-Message-State: AOJu0YzKgi71oXXOvBAn0W9p2rYnHV9mAWP2fMwqmz9thZ7Wm+03G4D/
-	2gkSRBrUZyVplsrCRwb6gwwAnfTLX1ithQXKw2fQU99RSY418mKyduvkU96yHWI=
-X-Gm-Gg: ASbGncvS7McVp7frIDiA1Ds1PXdDO086JGRHImUoaTlmWgsbuIs1uQWaUMbk8mRZy+W
-	NDgFvSz0hXqUkv4n+mXavA9DQFYQVik67/YI/bvKfAN9vwfDeIbDS7f0/zeU+N7XqOz6k7XFyf5
-	+XDl65MlQEb9WYxb/lL3HSieJbmcAf3tdB9EuFkUFQMspboX5C67hFV6BACxDfsa02EZUUV3VOX
-	yXW58qQzkoocpVDs1Aw95ANIRRVSQZlNsak5cyrsIv/BsouVHG4BojvwIS/XjgD3ijUpuuNVn6I
-	AVQeOQiTbflUq281MYrGXtj8MLFzT7JRJYITP2AOArsm
-X-Google-Smtp-Source: AGHT+IH6QOMYk+VJrhRN0zGGVgIfy1D2k+1MN8UGZUw2MzoHJ3Lm78KvUsSoh9H7JaBXZAa1kpHpxw==
-X-Received: by 2002:a05:600c:1d02:b0:43c:fbbf:7bf1 with SMTP id 5b1f17b1804b1-4409bdb032cmr18240795e9.30.1745483760212;
-        Thu, 24 Apr 2025 01:36:00 -0700 (PDT)
-Received: from [127.0.1.1] ([2a01:cb1d:dc:7e00:6266:7750:57ce:7cb4])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3a06d54ee11sm1295376f8f.97.2025.04.24.01.35.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Apr 2025 01:35:59 -0700 (PDT)
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Thu, 24 Apr 2025 10:35:35 +0200
-Subject: [PATCH 12/12] pinctrl: samsung: use new GPIO line value setter
- callbacks
+	s=arc-20240116; t=1745485582; c=relaxed/simple;
+	bh=g6bxeBGFz+ZfAiISf78nYF5d6OuqVi+zKYMYmkzuYww=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HK3T3zdIGDpGO/TCXAxWRf0iQ/zar0OLW4YFttAblOUqXirChYvfmI8uemjkoQnmB6Vb3JnpDDLRlHt/MQVAv4OdHrWLF9sIeVyQmLcJCpCAkh54AH3oLhumaQtjEc8H20yVMyUPIJyfy3E+2mYHzKTMOazaBeYbpRqxd4/g8Mo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qPzQ2EtO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CF029C4CEEB;
+	Thu, 24 Apr 2025 09:06:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745485581;
+	bh=g6bxeBGFz+ZfAiISf78nYF5d6OuqVi+zKYMYmkzuYww=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qPzQ2EtOhRHjvqeIqmfEs41n41+fPOpo5wVb0WXRA0Y64JK63Z0piOH/6q1TuKDwD
+	 WTI9c9BorspnKyVAu3DQkYsACDPHLJTqVVPTN6kTMVKEScUaCBv3GdtHESuUO5NqC6
+	 pqjqzGFZkOK5FpMLm1+UNv77/mYGep1Zag5d47x0b6vZpoHTEkoNH1VrlBp4U0AaKU
+	 qsF/Vn2vnRvvp1Kn7/YXcOkrtYa0w4Ynlqq5gkE0B8hjxnGwh/iyaywzNfxrIZA9z+
+	 2pzSBGKxX+TFKn8wOJih4WXcFzFXNu3Sjb1AkS/krSZea9kudjKkOe+16Pk7titbWK
+	 ch3/3zyDdzWnA==
+Date: Thu, 24 Apr 2025 11:06:07 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Jan Kara <jack@suse.cz>
+Cc: Andrey Albershteyn <aalbersh@redhat.com>, 
+	Richard Henderson <richard.henderson@linaro.org>, Matt Turner <mattst88@gmail.com>, 
+	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>, 
+	Michal Simek <monstr@monstr.eu>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Naveen N Rao <naveen@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
+	Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, "David S. Miller" <davem@davemloft.net>, 
+	Andreas Larsson <andreas@gaisler.com>, Andy Lutomirski <luto@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
+	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>, Paul Moore <paul@paul-moore.com>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-xfs@vger.kernel.org
+Subject: Re: [PATCH v4 3/3] fs: introduce getfsxattrat and setfsxattrat
+ syscalls
+Message-ID: <20250424-zuspielen-luxus-3d49b600c3bf@brauner>
+References: <20250321-xattrat-syscall-v4-0-3e82e6fb3264@kernel.org>
+ <20250321-xattrat-syscall-v4-3-3e82e6fb3264@kernel.org>
+ <20250422-abbekommen-begierde-bcf48dd74a2e@brauner>
+ <rbzlwvecvrp4xawwp5nywdq6wp5hgjhrtrabpszv74xmfqbj4f@x7v6eqfc5gcd>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250424-gpiochip-set-rv-pinctrl-part2-v1-12-504f91120b99@linaro.org>
-References: <20250424-gpiochip-set-rv-pinctrl-part2-v1-0-504f91120b99@linaro.org>
-In-Reply-To: <20250424-gpiochip-set-rv-pinctrl-part2-v1-0-504f91120b99@linaro.org>
-To: Basavaraj Natikar <Basavaraj.Natikar@amd.com>, 
- Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, 
- Linus Walleij <linus.walleij@linaro.org>, 
- Bartosz Golaszewski <brgl@bgdev.pl>, Chen-Yu Tsai <wens@csie.org>, 
- Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
- Alexandre Torgue <alexandre.torgue@foss.st.com>, 
- =?utf-8?q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, 
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
- Paul Cercueil <paul@crapouillou.net>, 
- Steen Hegelund <Steen.Hegelund@microchip.com>, 
- Daniel Machon <daniel.machon@microchip.com>, UNGLinuxDriver@microchip.com, 
- Ludovic Desroches <ludovic.desroches@microchip.com>, 
- Nicolas Ferre <nicolas.ferre@microchip.com>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Claudiu Beznea <claudiu.beznea@tuxon.dev>, Andrew Lunn <andrew@lunn.ch>, 
- Gregory Clement <gregory.clement@bootlin.com>, 
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, 
- Krzysztof Kozlowski <krzk@kernel.org>, 
- Sylwester Nawrocki <s.nawrocki@samsung.com>, 
- Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-stm32@st-md-mailman.stormreply.com, 
- linux-arm-kernel@lists.infradead.org, linux-actions@lists.infradead.org, 
- linux-mips@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1963;
- i=bartosz.golaszewski@linaro.org; h=from:subject:message-id;
- bh=eG2KW5x0cqyXDN96Y9D3KPo3rE0JJ5CGRPpl+iXxy5M=;
- b=owEBbQKS/ZANAwAKARGnLqAUcddyAcsmYgBoCffdVG5Ygxdkgp3G4S/J2z4z5Tlan+vD7V30h
- TZ7h0V/5sqJAjMEAAEKAB0WIQQWnetsC8PEYBPSx58Rpy6gFHHXcgUCaAn33QAKCRARpy6gFHHX
- cjrUD/4wlY3EyRbxHX7pcMIAP/3DRyfsZNReCKH3ZrZK01gpg0foFUc8R9H0I7tpjEjSAcAY76v
- HT6Cav5kSBB36HXaJHFnbS5jDeLX1My/AARxYsg4hUeZMPsEdhdyug5NLPV4v9U5qGYyscWQJyQ
- IwWtL5S1/tZAIxzE73GS7fBnvaLvxdKHbO+ihsBKDN+CICZsABKHeqmX8HC/mpf/Pn3VZDLdxw/
- v370ttF11vBuDqxQFqucfxlUgG44NsRTH7slXcpLFqsmYFiyQ+60Kr8qtR4uG0wjgcD84YTAWTA
- jnMOBMJyWoX60aJoqOu+7ntHGuUA7AfUId1TflJw4qGZZhayvH7YZWSFpZChBh+R4GzP2lrJnH1
- /l3WSICXjyuCbO00KEg0M/ETEdHzDfqcXsC++m0uUp+XVVbx+NvevmZ076l6BhVpake9w8udGP+
- Y6lwhiWZ8sd+/nec1W16T+R/feEwjS3Uv+zzSP+uImKmEA6Rt/EFeZ0kppvf1XgXTXagAHYRfnq
- AX4Z1SXHpFfCHXYrPNMxv8w2uM1/eIljOwRAW3Xye5WYWe5bWWR/tmOB8O64R331D1+UTdeTv/x
- ZuaGKlVB7ySPckXnPWzWBP1UHZQiR7DAHXC2juTTX1w+v4NAGx137CcqLE/rrfEgbdhjBoA9iFy
- +HWM7daAr7IScLg==
-X-Developer-Key: i=bartosz.golaszewski@linaro.org; a=openpgp;
- fpr=169DEB6C0BC3C46013D2C79F11A72EA01471D772
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <rbzlwvecvrp4xawwp5nywdq6wp5hgjhrtrabpszv74xmfqbj4f@x7v6eqfc5gcd>
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On Wed, Apr 23, 2025 at 11:53:25AM +0200, Jan Kara wrote:
+> On Tue 22-04-25 16:59:02, Christian Brauner wrote:
+> > On Fri, Mar 21, 2025 at 08:48:42PM +0100, Andrey Albershteyn wrote:
+> > > From: Andrey Albershteyn <aalbersh@redhat.com>
+> > > 
+> > > Introduce getfsxattrat and setfsxattrat syscalls to manipulate inode
+> > > extended attributes/flags. The syscalls take parent directory fd and
+> > > path to the child together with struct fsxattr.
+> > > 
+> > > This is an alternative to FS_IOC_FSSETXATTR ioctl with a difference
+> > > that file don't need to be open as we can reference it with a path
+> > > instead of fd. By having this we can manipulated inode extended
+> > > attributes not only on regular files but also on special ones. This
+> > > is not possible with FS_IOC_FSSETXATTR ioctl as with special files
+> > > we can not call ioctl() directly on the filesystem inode using fd.
+> > > 
+> > > This patch adds two new syscalls which allows userspace to get/set
+> > > extended inode attributes on special files by using parent directory
+> > > and a path - *at() like syscall.
+> > > 
+> > > CC: linux-api@vger.kernel.org
+> > > CC: linux-fsdevel@vger.kernel.org
+> > > CC: linux-xfs@vger.kernel.org
+> > > Signed-off-by: Andrey Albershteyn <aalbersh@redhat.com>
+> > > Acked-by: Arnd Bergmann <arnd@arndb.de>
+> ...
+> > > +		struct fsxattr __user *, ufsx, size_t, usize,
+> > > +		unsigned int, at_flags)
+> > > +{
+> > > +	struct fileattr fa = {};
+> > > +	struct path filepath;
+> > > +	int error;
+> > > +	unsigned int lookup_flags = 0;
+> > > +	struct filename *name;
+> > > +	struct fsxattr fsx = {};
+> > > +
+> > > +	BUILD_BUG_ON(sizeof(struct fsxattr) < FSXATTR_SIZE_VER0);
+> > > +	BUILD_BUG_ON(sizeof(struct fsxattr) != FSXATTR_SIZE_LATEST);
+> > > +
+> > > +	if ((at_flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH)) != 0)
+> > > +		return -EINVAL;
+> > > +
+> > > +	if (!(at_flags & AT_SYMLINK_NOFOLLOW))
+> > > +		lookup_flags |= LOOKUP_FOLLOW;
+> > > +
+> > > +	if (at_flags & AT_EMPTY_PATH)
+> > > +		lookup_flags |= LOOKUP_EMPTY;
+> > > +
+> > > +	if (usize > PAGE_SIZE)
+> > > +		return -E2BIG;
+> > > +
+> > > +	if (usize < FSXATTR_SIZE_VER0)
+> > > +		return -EINVAL;
+> > > +
+> > > +	name = getname_maybe_null(filename, at_flags);
+> > > +	if (!name) {
+> > 
+> > This is broken as it doesn't handle AT_FDCWD correctly. You need:
+> > 
+> >         name = getname_maybe_null(filename, at_flags);
+> >         if (IS_ERR(name))
+> >                 return PTR_ERR(name);
+> > 
+> >         if (!name && dfd >= 0) {
+> > 		CLASS(fd, f)(dfd);
+> 
+> Ah, you're indeed right that if dfd == AT_FDCWD and filename == NULL, the
+> we should operate on cwd but we'd bail with error here. I've missed that
+> during my review. But as far as I've checked the same bug is there in
+> path_setxattrat() and path_getxattrat() so we should fix this there as
+> well?
 
-struct gpio_chip now has callbacks for setting line values that return
-an integer, allowing to indicate failures. Convert the driver to using
-them.
-
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
- drivers/pinctrl/samsung/pinctrl-samsung.c | 13 +++++++++----
- 1 file changed, 9 insertions(+), 4 deletions(-)
-
-diff --git a/drivers/pinctrl/samsung/pinctrl-samsung.c b/drivers/pinctrl/samsung/pinctrl-samsung.c
-index ef557217e173..fe1ac82b9d79 100644
---- a/drivers/pinctrl/samsung/pinctrl-samsung.c
-+++ b/drivers/pinctrl/samsung/pinctrl-samsung.c
-@@ -570,15 +570,18 @@ static void samsung_gpio_set_value(struct gpio_chip *gc,
- }
- 
- /* gpiolib gpio_set callback function */
--static void samsung_gpio_set(struct gpio_chip *gc, unsigned offset, int value)
-+static int samsung_gpio_set(struct gpio_chip *gc, unsigned int offset,
-+			    int value)
- {
- 	struct samsung_pin_bank *bank = gpiochip_get_data(gc);
- 	struct samsung_pinctrl_drv_data *drvdata = bank->drvdata;
- 	unsigned long flags;
-+	int ret;
- 
--	if (clk_enable(drvdata->pclk)) {
-+	ret = clk_enable(drvdata->pclk);
-+	if (ret) {
- 		dev_err(drvdata->dev, "failed to enable clock\n");
--		return;
-+		return ret;
- 	}
- 
- 	raw_spin_lock_irqsave(&bank->slock, flags);
-@@ -586,6 +589,8 @@ static void samsung_gpio_set(struct gpio_chip *gc, unsigned offset, int value)
- 	raw_spin_unlock_irqrestore(&bank->slock, flags);
- 
- 	clk_disable(drvdata->pclk);
-+
-+	return 0;
- }
- 
- /* gpiolib gpio_get callback function */
-@@ -1062,7 +1067,7 @@ static int samsung_gpio_set_config(struct gpio_chip *gc, unsigned int offset,
- static const struct gpio_chip samsung_gpiolib_chip = {
- 	.request = gpiochip_generic_request,
- 	.free = gpiochip_generic_free,
--	.set = samsung_gpio_set,
-+	.set_rv = samsung_gpio_set,
- 	.get = samsung_gpio_get,
- 	.direction_input = samsung_gpio_direction_input,
- 	.direction_output = samsung_gpio_direction_output,
-
--- 
-2.45.2
-
+Yes, please!
 
