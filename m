@@ -1,212 +1,145 @@
-Return-Path: <linux-mips+bounces-8739-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8740-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBBE9A9B5A2
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Apr 2025 19:45:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1786CA9B6D7
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Apr 2025 20:55:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 19EC54C0D68
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Apr 2025 17:45:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52EA517BF19
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Apr 2025 18:55:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14A2628CF68;
-	Thu, 24 Apr 2025 17:45:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE9E02900A1;
+	Thu, 24 Apr 2025 18:55:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="an/xVS7j"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="oOadD6Sr"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 539F028E5F5
-	for <linux-mips@vger.kernel.org>; Thu, 24 Apr 2025 17:45:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C436E1E1C1A
+	for <linux-mips@vger.kernel.org>; Thu, 24 Apr 2025 18:55:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745516716; cv=none; b=Ib2nknobAqT85N9tUTuEr98AFTcgbadb8+7vdP0UWoUQqf/A6qse29TaOe9/PSqAjH5xrAiJe19vUc6F5i6Y3MCRyFMgl6BZdQx5YqRDaiMX2zU1ir26J6JwY0z+hs5U/VBpIqSFZa7ELDDw2A99g4MFQ1zFbd6qNh/cOsUpGKM=
+	t=1745520948; cv=none; b=KJL0lDPcAvWzkrqgQAiOYLaFNdXOEsL9FPROUcR9hfRNSQwqRmJt/iti/PHMgRmy2YDvrKcU2a/UJToj7TcNN1hM+3ESD7ImwqlHwAa0/Iu7/ZJASPbN7tlR1sLX7j3v9Rgn+UcbpRShNdVO4p+p/2iXxyMjFdeorj3VQOnD7Ic=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745516716; c=relaxed/simple;
-	bh=nuhY4mNQtbqLil9CN9WkICD/oYDC6db0CLuLTFGNXWw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=q17eJpBuaC6Wq0wlsEtCPu6r+9MUfAEWtkKUHmDxmrUl+EMyh0m5VKZXeRb4GZN36oq7H1M9h/3WTInxg6d5WL0z1d3j54IMvErhIio/rYu529S2T9ojgs9CdVCG3+Izv8a61KubdqhIg6gvvN3bAL63SC0Q30NMOFbcfoIZuOg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=an/xVS7j; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1745516711;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JSMzO6fx79vdlfqdO8dlMyzHm6+/LG9Oml+3X61fg04=;
-	b=an/xVS7j6EwyHG3LmIL6j2+DtJAsAThNylH1GGZj6KjbGaII7K38BOBooxJjXnXZzAGMGU
-	dPXg1uYZ7HZFAwmRaV9SruWMQlv2mniP2hwHwjTJaUPYtfEOu2QFRoVD4LCjLQw4b6l9br
-	8+uRDxoAuUQIJ79T7ajAWIaaxhl8Xy0=
-Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
- [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-537-dk0veLseOLic5wrvZq12jQ-1; Thu, 24 Apr 2025 13:45:10 -0400
-X-MC-Unique: dk0veLseOLic5wrvZq12jQ-1
-X-Mimecast-MFC-AGG-ID: dk0veLseOLic5wrvZq12jQ_1745516709
-Received: by mail-ed1-f70.google.com with SMTP id 4fb4d7f45d1cf-5e5dbd04225so1075028a12.3
-        for <linux-mips@vger.kernel.org>; Thu, 24 Apr 2025 10:45:09 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745516709; x=1746121509;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+	s=arc-20240116; t=1745520948; c=relaxed/simple;
+	bh=rZUxyELSfnVXwreNQjwJQoaXQJWZ9fkMyqWksLWMfUI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=S+0pE9RI8TuAENw1WQzXJn4TLVEMt2x4fFrXJPGVvMoQfCMTNGZZpdn9kKAjytERV31Mae57Wt9YHO8PL2sICCZHcwdN9QRiKapwqY9Mq4zX8Q2XWYEofUyGBHT5uiQI+H/GjDyFX0WDCeqJ90PGkJC+YrxyfbQjLi1Yr2TBHQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=oOadD6Sr; arc=none smtp.client-ip=209.85.208.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-3105ef2a08dso13592631fa.0
+        for <linux-mips@vger.kernel.org>; Thu, 24 Apr 2025 11:55:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1745520945; x=1746125745; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JSMzO6fx79vdlfqdO8dlMyzHm6+/LG9Oml+3X61fg04=;
-        b=EHDcX3IRkfyIfACO4V0JCXjuie0Nal2bS94mJq3oLv9fNQZja0sR/8ZxMTQc1apOu4
-         Tb68Fys2UtdRgYii7uwv/TP2RKPvZB12MQde6C6HCzTXr9FxYPSd/xWh+m0nyxRAjJSG
-         oPb78eB/7fPJh6R+aIpDbLsxBij1pcqKQrSXys9RuyWmMb8PnRyBHKU/cNOiqBYwqEs/
-         AfsC248aW4sIQvSglCamFiMaehQk6+Cs03n6uWliDXDZPT222vdxD5jc0ZF7M5z4wj9D
-         i38+ZfQUoUe7+Ngqow3jL/G42viIyf0Qh2E4kLvFLnGgeMTuPr+WVDyB5tCpME266w4v
-         6KRg==
-X-Forwarded-Encrypted: i=1; AJvYcCW0UaDy/vV3neKtfY95wDYQtsOlxzJMjQIANXF8X2umMzHB9hvnRM9YT6RLSx33J6OkKkgDtLdKDddf@vger.kernel.org
-X-Gm-Message-State: AOJu0YyigEMjhViwiQPJlivQ0lYAo59satqOrsFuf/7t4w+zRQTbdfdw
-	LIC0DEkokNd7TgP2uiqEwayTe/fLZW5hgpEqCmcKbESBOSGS5OzzxV7pPsahILlthIcv89vqAYi
-	fcERJiwGscQSfI1L2/I7YfawNsoxLaRGxSB76dPro65i1Sn3KYCyoKk3DZQ==
-X-Gm-Gg: ASbGncvay8JHRJWy2CsAor328EFIdTuJNTZzNXx1gwQEp4wEKlfXcHjzyOPEu3sXaol
-	6tDLAVfcqU8OB7zK5QyNKobJrBZ/1NwJ/kCoyJYNS9wKc9UdCkrnLX0GLAN++aVuqBCdT+z4tqP
-	Ez5TC3OBe5cUIJ/H9WuuO9xGmwttvaAbNfSAuyvTBE77Sm9eznuZ1F6hKS3eyFNtlXsnsfhodrg
-	my6MJc+mYb8M8ActRYPx4w27BpUAIbT1XvoUOzRl1XoPEVVIwa/a5+IUY9HD0Dg06CRQFshBwYN
-	XOQZ599VYrqZj5OIF6K4DEuQREurkTg=
-X-Received: by 2002:a17:907:9412:b0:acb:3a0d:8a82 with SMTP id a640c23a62f3a-ace6b450a49mr51592866b.32.1745516708724;
-        Thu, 24 Apr 2025 10:45:08 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IFTh+3uHoEBQ4GmOFk2Iro9cQNDST88N03Da5siOmOBhQ6S/NryZGUQ9nV3zdizG2WhZyWkCg==
-X-Received: by 2002:a17:907:9412:b0:acb:3a0d:8a82 with SMTP id a640c23a62f3a-ace6b450a49mr51586866b.32.1745516708167;
-        Thu, 24 Apr 2025 10:45:08 -0700 (PDT)
-Received: from thinky (ip-217-030-074-039.aim-net.cz. [217.30.74.39])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ace5989b173sm140418466b.59.2025.04.24.10.45.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 24 Apr 2025 10:45:07 -0700 (PDT)
-Date: Thu, 24 Apr 2025 19:45:06 +0200
-From: Andrey Albershteyn <aalbersh@redhat.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Jan Kara <jack@suse.cz>, 
-	Richard Henderson <richard.henderson@linaro.org>, Matt Turner <mattst88@gmail.com>, 
-	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Michal Simek <monstr@monstr.eu>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Naveen N Rao <naveen@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
-	Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, 
-	=?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-xfs@vger.kernel.org
-Subject: Re: [PATCH v4 3/3] fs: introduce getfsxattrat and setfsxattrat
- syscalls
-Message-ID: <oprhbm2vcqpveaf6smetfl2zacntntzqlakysys73zx3gnougi@zy7bo43bh5ef>
-References: <20250321-xattrat-syscall-v4-0-3e82e6fb3264@kernel.org>
- <20250321-xattrat-syscall-v4-3-3e82e6fb3264@kernel.org>
- <20250422-abbekommen-begierde-bcf48dd74a2e@brauner>
- <rbzlwvecvrp4xawwp5nywdq6wp5hgjhrtrabpszv74xmfqbj4f@x7v6eqfc5gcd>
- <20250424-zuspielen-luxus-3d49b600c3bf@brauner>
+        bh=pvz3PmaQFn+0EBBAKUfs2w07bVJpHkRF9qQc8oVPxCg=;
+        b=oOadD6SrYOVFwX3+5Y/nBEQ75lMAcd2yH7FAWOvxmqnt72wQttKx3za/ShKG8zuUtu
+         +BgZ+4D2eYfAWxZUZKLcQ07UDxHZNaSzgtPHMo9wniXRY+5aLY29WVQF8yXW8Wz+XXm7
+         FObeRCk94n07XxsX+kH1KoyVJYtSOomeFCt+P92tN6yjta8ZvbMlq3p/GuV/JMS8l/UV
+         Hk9EyJHxZ1NmBDZvJkcoDjBpmCEc/Y+7CW1JN2fMMRObLvMv5GTWeBeD0iPjbTiiDp1z
+         MQ1KVB+3w0TcD2ScrARSQgzuzMnOu0zfLEarYO/SrPVZKs/D6DYjLtaDs6hdCrfMrKvl
+         Waig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1745520945; x=1746125745;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=pvz3PmaQFn+0EBBAKUfs2w07bVJpHkRF9qQc8oVPxCg=;
+        b=In4XTJRBRCW11mERoXFchbmyJDuxhnEkOm+39fBcAjTDlULV/J7SZTzD+t6L6YYlzA
+         ezPFKs7SEZlJX6JQd2PJGFZxuoOXNwCqWXKarsuXTYkiygxaIkSfUU+jkzQ54YB6lcMH
+         7tVJRomXE3VyAbbYYSOsYTE/q3xx1c5OoEEtdEA4lJ2wLEj3taUjwBKINlLKsmAZHRZt
+         vCTXC1qk5eDJM+1WqmCsMG0WIhNX7S2mi/yIplYRWYCWtM9/dhy863OonUboBKIerF7p
+         6lusXgFWhPvpkvsGUUt2uOg4EIrZQKkMXujP7xVKUqhxygufklCFkEWyDy5JnJDm9yW/
+         UupA==
+X-Forwarded-Encrypted: i=1; AJvYcCVTcinbwZGWQ+u4iH5A5dDcsZRL4Rkb7akxVzkBm3nv1tJ9srb8vlS9rPEHiiAm8HRojl3iGL6fdUUS@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6ah3fT1txaMpEWQbVXRgGFqFG9UCBy2vtXZnrqWirkgZhshKj
+	Cc/7HKO+56lfqhXKkp75dsw+0AJxzezS7hvg8s5IbOTmWmr/HiVr6+7MAZMAb8elMzW5cL2HgK8
+	jnZOKPIE/S/UDgPBdPbFaHFYgLkUPiS9Y9Vg+Uw==
+X-Gm-Gg: ASbGncuBuGSWPySSdeIkB/R3GLTV1V5lOOZrDG8T8OnYBZxJQZQk0b/X9q2CO3ilQn+
+	WwScZs21SGvYtVvavFfQdeZ6jMFiDe+b4bfki9TYc3JCVn9jV0hTQzY4lTfTnybAQ4ug7ic6aH9
+	KODLWTSSpFjVRjd/aTLDndZaIExaCCvIbxpo1w6LjfneDDBo0awS00ZQ==
+X-Google-Smtp-Source: AGHT+IE0c8VGEk3/LwHw0m2axs8IZ9HjpeBp8o188g75mkoErRBNX5c5KptrxgTjbE1qe+vTvqn/BpVZsaupGVwBUJc=
+X-Received: by 2002:a05:651c:210f:b0:30b:bfca:bbf2 with SMTP id
+ 38308e7fff4ca-318a7b0b7f5mr2808701fa.7.1745520944675; Thu, 24 Apr 2025
+ 11:55:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250424-zuspielen-luxus-3d49b600c3bf@brauner>
+References: <20250424-gpiochip-set-rv-pinctrl-part2-v1-0-504f91120b99@linaro.org>
+ <20250424-gpiochip-set-rv-pinctrl-part2-v1-2-504f91120b99@linaro.org> <CAGb2v67jH2G_i51fg3T7qu2dDtj7FqUO7q9pBJJw_uKhdGV6uQ@mail.gmail.com>
+In-Reply-To: <CAGb2v67jH2G_i51fg3T7qu2dDtj7FqUO7q9pBJJw_uKhdGV6uQ@mail.gmail.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Thu, 24 Apr 2025 20:55:33 +0200
+X-Gm-Features: ATxdqUGQRJTk1Y9jikLuWRcOSvqi5BIyaHo-9YdHMReWW67MF95w4__wq5ceBqw
+Message-ID: <CAMRc=McmRB8iNPrTztoSLbEXX2WxNp5d3t5--AAqzqU2LQ+FGw@mail.gmail.com>
+Subject: Re: [PATCH 02/12] pinctrl: axp209: use new GPIO line value setter callbacks
+To: wens@csie.org
+Cc: Basavaraj Natikar <Basavaraj.Natikar@amd.com>, Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, 
+	Linus Walleij <linus.walleij@linaro.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+	Alexandre Torgue <alexandre.torgue@foss.st.com>, =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, 
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Paul Cercueil <paul@crapouillou.net>, 
+	Steen Hegelund <Steen.Hegelund@microchip.com>, Daniel Machon <daniel.machon@microchip.com>, 
+	UNGLinuxDriver@microchip.com, 
+	Ludovic Desroches <ludovic.desroches@microchip.com>, 
+	Nicolas Ferre <nicolas.ferre@microchip.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+	Andrew Lunn <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>, 
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Sylwester Nawrocki <s.nawrocki@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-stm32@st-md-mailman.stormreply.com, 
+	linux-arm-kernel@lists.infradead.org, linux-actions@lists.infradead.org, 
+	linux-mips@vger.kernel.org, linux-samsung-soc@vger.kernel.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2025-04-24 11:06:07, Christian Brauner wrote:
-> On Wed, Apr 23, 2025 at 11:53:25AM +0200, Jan Kara wrote:
-> > On Tue 22-04-25 16:59:02, Christian Brauner wrote:
-> > > On Fri, Mar 21, 2025 at 08:48:42PM +0100, Andrey Albershteyn wrote:
-> > > > From: Andrey Albershteyn <aalbersh@redhat.com>
-> > > > 
-> > > > Introduce getfsxattrat and setfsxattrat syscalls to manipulate inode
-> > > > extended attributes/flags. The syscalls take parent directory fd and
-> > > > path to the child together with struct fsxattr.
-> > > > 
-> > > > This is an alternative to FS_IOC_FSSETXATTR ioctl with a difference
-> > > > that file don't need to be open as we can reference it with a path
-> > > > instead of fd. By having this we can manipulated inode extended
-> > > > attributes not only on regular files but also on special ones. This
-> > > > is not possible with FS_IOC_FSSETXATTR ioctl as with special files
-> > > > we can not call ioctl() directly on the filesystem inode using fd.
-> > > > 
-> > > > This patch adds two new syscalls which allows userspace to get/set
-> > > > extended inode attributes on special files by using parent directory
-> > > > and a path - *at() like syscall.
-> > > > 
-> > > > CC: linux-api@vger.kernel.org
-> > > > CC: linux-fsdevel@vger.kernel.org
-> > > > CC: linux-xfs@vger.kernel.org
-> > > > Signed-off-by: Andrey Albershteyn <aalbersh@redhat.com>
-> > > > Acked-by: Arnd Bergmann <arnd@arndb.de>
-> > ...
-> > > > +		struct fsxattr __user *, ufsx, size_t, usize,
-> > > > +		unsigned int, at_flags)
-> > > > +{
-> > > > +	struct fileattr fa = {};
-> > > > +	struct path filepath;
-> > > > +	int error;
-> > > > +	unsigned int lookup_flags = 0;
-> > > > +	struct filename *name;
-> > > > +	struct fsxattr fsx = {};
-> > > > +
-> > > > +	BUILD_BUG_ON(sizeof(struct fsxattr) < FSXATTR_SIZE_VER0);
-> > > > +	BUILD_BUG_ON(sizeof(struct fsxattr) != FSXATTR_SIZE_LATEST);
-> > > > +
-> > > > +	if ((at_flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH)) != 0)
-> > > > +		return -EINVAL;
-> > > > +
-> > > > +	if (!(at_flags & AT_SYMLINK_NOFOLLOW))
-> > > > +		lookup_flags |= LOOKUP_FOLLOW;
-> > > > +
-> > > > +	if (at_flags & AT_EMPTY_PATH)
-> > > > +		lookup_flags |= LOOKUP_EMPTY;
-> > > > +
-> > > > +	if (usize > PAGE_SIZE)
-> > > > +		return -E2BIG;
-> > > > +
-> > > > +	if (usize < FSXATTR_SIZE_VER0)
-> > > > +		return -EINVAL;
-> > > > +
-> > > > +	name = getname_maybe_null(filename, at_flags);
-> > > > +	if (!name) {
-> > > 
-> > > This is broken as it doesn't handle AT_FDCWD correctly. You need:
-> > > 
-> > >         name = getname_maybe_null(filename, at_flags);
-> > >         if (IS_ERR(name))
-> > >                 return PTR_ERR(name);
-> > > 
-> > >         if (!name && dfd >= 0) {
-> > > 		CLASS(fd, f)(dfd);
-> > 
-> > Ah, you're indeed right that if dfd == AT_FDCWD and filename == NULL, the
-> > we should operate on cwd but we'd bail with error here. I've missed that
-> > during my review. But as far as I've checked the same bug is there in
-> > path_setxattrat() and path_getxattrat() so we should fix this there as
-> > well?
-> 
-> Yes, please!
-> 
+On Thu, Apr 24, 2025 at 7:43=E2=80=AFPM Chen-Yu Tsai <wens@csie.org> wrote:
+>
+> On Thu, Apr 24, 2025 at 4:35=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.p=
+l> wrote:
+> >
+> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >
+> > struct gpio_chip now has callbacks for setting line values that return
+> > an integer, allowing to indicate failures. Convert the driver to using
+> > them.
+> >
+> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>>
+> >         /* AXP209 has GPIO3 status sharing the settings register */
+> >         if (offset =3D=3D 3) {
+> > -               regmap_update_bits(pctl->regmap, AXP20X_GPIO3_CTRL,
+> > -                                  AXP20X_GPIO3_FUNCTIONS,
+> > -                                  value ? AXP20X_GPIO3_FUNCTION_OUT_HI=
+GH :
+> > -                                  AXP20X_GPIO3_FUNCTION_OUT_LOW);
+> > -               return;
+> > +               return regmap_update_bits(pctl->regmap, AXP20X_GPIO3_CT=
+RL,
+> > +                                         AXP20X_GPIO3_FUNCTIONS,
+> > +                                         value ?
+> > +                                               AXP20X_GPIO3_FUNCTION_O=
+UT_HIGH :
+> > +                                               AXP20X_GPIO3_FUNCTION_O=
+UT_LOW);
+> >         }
+>
+> I guess you could also drop the curly braces, but otherwise
+>
+> Reviewed-by: Chen-Yu Tsai <wens@csie.org>
+>
 
-Thanks for the review, Christian. I will fix issues you noticed as
-suggested. I see that Jan already sent fix for path_[s|g]etxattrat()
-so won't do anything here.
+Right. Linus: can you remove them while applying?
 
--- 
-- Andrey
-
+Bart
 
