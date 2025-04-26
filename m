@@ -1,690 +1,248 @@
-Return-Path: <linux-mips+bounces-8745-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8746-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55470A9D056
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Apr 2025 20:17:14 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73B99A9D87B
+	for <lists+linux-mips@lfdr.de>; Sat, 26 Apr 2025 08:51:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EDF401BA4274
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Apr 2025 18:17:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 95E5D4C0CDB
+	for <lists+linux-mips@lfdr.de>; Sat, 26 Apr 2025 06:51:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F6B5217666;
-	Fri, 25 Apr 2025 18:17:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 564811D5CDD;
+	Sat, 26 Apr 2025 06:51:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DoNPDeK2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q5CKi8Fj"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF4981F9F51
-	for <linux-mips@vger.kernel.org>; Fri, 25 Apr 2025 18:16:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 179482F56;
+	Sat, 26 Apr 2025 06:51:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745605022; cv=none; b=QFjVgX2QmletVfnCRZ0l3i/K6QdifW8bClK8BMmbunPOXsk1I30kafuyQbpM2ol9q5s6voJEAXlydtmMJ7vkcLQw4TOrK/oVyG+TTh5MMGwzRxvnewyLyhP2Axw5/qcPmHGleh8elBZ/TIaHbU/dKw32cbTs3YVKxoigmh+V1WA=
+	t=1745650300; cv=none; b=pOnEhG+fd++y4sQ5n7LCOehPtlBwbi2TZfrUN0l43KqBFHqBpOHC5C6clDF9qBHJEo8jMHOo8JHV49xLTukHFadlPHB46k4zFqegiL8VSwehwgWtYZyEUZfR+3Buk356jGEK9CHrlSdZ48d9Tn3hXdJMT83ZiiFc95vDyyoPyV8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745605022; c=relaxed/simple;
-	bh=xRwS7DIQ9xzKdaaNVSmdVjShk/A0oP6INDbbCT/nzow=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HgBbu5hf6EnVEN8daEAZav4Gu0OH5pUSXuIFSFoZwqqbuAyUeHfOi59PPrIYQ6bAmSvdKsaPOgJdsPsMSaO9p751d+jIVqNGXdv0QHurr730S/mos7pqr2AfBQcZKHQD3vSHDDR2G8IGnLpeAn+yWF8eB+PV3JROmWvoq1IMHZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DoNPDeK2; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1745605016;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=3/H3vr0OCdDcR3s3PDhlvbwdaoTNbpfjoBVpx9IMnBk=;
-	b=DoNPDeK2STJBW2lvKOeUNdPR11BBrBQulvbvkJfkCnApgNaDujGCjbYvL+xOVVU1Z/Mxa0
-	sN52najFUYYfbwQmNKyNhBgFaH4yXbmxmGAiOJ+lbb+DFCDWNTS2PlOfYzOzXw608y9gD8
-	oVmOohrETzH6JM6n/enX+72H/1hX/tk=
-Received: from mail-ej1-f69.google.com (mail-ej1-f69.google.com
- [209.85.218.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-410-XBQMzfs8NOW09DBmTEjo7w-1; Fri, 25 Apr 2025 14:16:55 -0400
-X-MC-Unique: XBQMzfs8NOW09DBmTEjo7w-1
-X-Mimecast-MFC-AGG-ID: XBQMzfs8NOW09DBmTEjo7w_1745605014
-Received: by mail-ej1-f69.google.com with SMTP id a640c23a62f3a-ac6caf952d7so253772566b.3
-        for <linux-mips@vger.kernel.org>; Fri, 25 Apr 2025 11:16:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1745605014; x=1746209814;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3/H3vr0OCdDcR3s3PDhlvbwdaoTNbpfjoBVpx9IMnBk=;
-        b=YMmlopeeddTQW3DqcO0wOJfzLFiEaxVpMXwiq0elPWXE2qgj7OTBPFredEHephBvhS
-         dqBOjBF218yax7ezJZ0CCK9HLDWMSOxpSQE4L4SgDKmnWUR+HRQLdilF2WQ9DJAfsMm4
-         scqfk1InwS4VF7FoocdRSQq+OnToyvsRREq9Ll+xcY1aVeOKoIcSnLMrjYvV31v6Ucdc
-         zFddkYlAwTAf1yYRCUi7PnAoapJok/7T6wvu7CR2H0nlTGSdXMaSmHg4gNjgFhd9cEzP
-         JNWaXplrLT6JgJQnIYMKLRC46A4nwEh8P2ij2GqTJFd3xS+D6IXyBCD9NrHmAPU4j8oP
-         PUzg==
-X-Forwarded-Encrypted: i=1; AJvYcCVjpgc3w2g6pv4enSsmXtEH8foDkhst+5qZjFrtM3dIg0iM03vsau5TcNqJIzg+Iq+kJHQmvMxGurjB@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOsdr5Uz6fEhA85lnQ+bFt8cY4mbCUbwN3fLFfB9x7woNw2Jog
-	4qhJqvRSeb2oZ2oynUTTDLvv94F6imomYgjW6+t0atxQohepBO4ZzKmFF2lUvPdWyFwG1JVt38I
-	MyNFs/WdcomPWsPB162ZKlyq2lofVWXaDyjxgqFPhnNSVgPQhvaJVyIajtw==
-X-Gm-Gg: ASbGnctcwyA5e/JYm34k2r9g1pTQw/mgg0O7Q4TO0mA0qFvbFTKU5mhHCSjTMtGVto9
-	Uz7PyaYUyhE5f8loNt03F7pk0hgVrgLDLojoJiHyDqgtozRan0jVzmL6ADWqcYqIymuq6IhiiYh
-	mcKph81wtEAfFWy6NFVob0maPnSu9GtZWLPPMy8UPT8uGR5gzSb9ptzxfdPRS/Q4pLsfap3qqWS
-	eyCaf9FRBLtuatNl8jMsYqC7BLxDQBqXWT3i8ca2PxKph37O/6HxDeOp9yAAesaxqcYy3H9qee+
-	jz9s/lRSVaswJmRWeCLquBJhyMWRDP4=
-X-Received: by 2002:a17:907:720d:b0:ac7:eb12:dc69 with SMTP id a640c23a62f3a-ace7110bb7emr344209866b.28.1745605013791;
-        Fri, 25 Apr 2025 11:16:53 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEcwZ2uBmoBZxtvmd2g+z9kEiApYvdSEco/tISBfW2KUfnlzh1cUwx+QqrN8Zv6maFk6XK8qg==
-X-Received: by 2002:a17:907:720d:b0:ac7:eb12:dc69 with SMTP id a640c23a62f3a-ace7110bb7emr344205866b.28.1745605013200;
-        Fri, 25 Apr 2025 11:16:53 -0700 (PDT)
-Received: from thinky (ip-217-030-074-039.aim-net.cz. [217.30.74.39])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ace6ed70606sm168961166b.160.2025.04.25.11.16.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 25 Apr 2025 11:16:52 -0700 (PDT)
-Date: Fri, 25 Apr 2025 20:16:48 +0200
-From: Andrey Albershteyn <aalbersh@redhat.com>
-To: Christian Brauner <brauner@kernel.org>
-Cc: Amir Goldstein <amir73il@gmail.com>, 
-	Richard Henderson <richard.henderson@linaro.org>, Matt Turner <mattst88@gmail.com>, 
-	Russell King <linux@armlinux.org.uk>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Geert Uytterhoeven <geert@linux-m68k.org>, 
-	Michal Simek <monstr@monstr.eu>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Naveen N Rao <naveen@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
-	Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
-	=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
-	Arnd Bergmann <arnd@arndb.de>, Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-xfs@vger.kernel.org
-Subject: Re: [PATCH v4 3/3] fs: introduce getfsxattrat and setfsxattrat
- syscalls
-Message-ID: <l33napyvz5fwbcdju4otllbu4zr6faaz6mufz652alpxnjjfvl@h7j4hu4uwqwv>
-References: <20250321-xattrat-syscall-v4-0-3e82e6fb3264@kernel.org>
- <20250321-xattrat-syscall-v4-3-3e82e6fb3264@kernel.org>
- <CAOQ4uxj2Fqmc_pSD4bqqoQu7QjmgSVp2V15FbmBdTNqQ03aPGQ@mail.gmail.com>
- <faqun3wrpvwrhwukql3niqvvauy5ngrpytx5bxbrv5xkounez3@m7j2znjuzapu>
- <CAOQ4uxjs=Gg-ocwx_fkzc0gxQ_dHx-P9EAgz5ZwbdbrxV0T_EA@mail.gmail.com>
- <20250422-suchen-filmpreis-3573a913457c@brauner>
- <20250422-gefressen-faucht-8ded2c9a5375@brauner>
+	s=arc-20240116; t=1745650300; c=relaxed/simple;
+	bh=Wt4NiLwr3M+nnRmOESBPWOhsCFaewP404R89YU0Ma5M=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nJ0QhW5HYaotU4Y5iQHqg+NHe6vZMPEqnNAI53geMm4nPTxUgaWx3LfZPK35cusLeGmfBIJ+ZpulL1w0edCukZo3ZG3efBC8MVJWCTtShv5HCETFjmbip6fDu1l7CXxHQlExy/Bm6tUt4CR5abP3/lvgT8U8KXl7ab+hO7Aa5EU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q5CKi8Fj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D8A8C4CEE2;
+	Sat, 26 Apr 2025 06:51:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745650299;
+	bh=Wt4NiLwr3M+nnRmOESBPWOhsCFaewP404R89YU0Ma5M=;
+	h=From:To:Cc:Subject:Date:From;
+	b=Q5CKi8Fj8xTGPwU5Drh/PIkGhwVgbuW9HluQx63MK9bQszLhD1B+qOn0taEs2bOYT
+	 xBLhxHiJ14hN8wZd5OxE4WguGmBhxzXaFqJL+htoOFdKU3BzoM7lR/QIeSUuRtp/5R
+	 gig6dijFkQjn6WC6FuWjCbGcPvoQXYpyadAK/qbp921I+Fz1WufozNZ0O7WVjBivlP
+	 hD9T2mbnScBpB1uA34w+nY5WNn6DaqxIZnEognT6gjIUeJu/GMOiHHum2pD1dS7SFk
+	 vI6VS1pf337qJxrzm8RfuoAuUx7oT9vTJZmvfL9I9A7sqtxZoeM8H6MVnLOxkCewCS
+	 jDKNVfj94qJ7A==
+From: Eric Biggers <ebiggers@kernel.org>
+To: linux-crypto@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org,
+	sparclinux@vger.kernel.org,
+	linux-s390@vger.kernel.org,
+	x86@kernel.org,
+	Ard Biesheuvel <ardb@kernel.org>,
+	"Jason A . Donenfeld " <Jason@zx2c4.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH 00/13] Architecture-optimized SHA-256 library API
+Date: Fri, 25 Apr 2025 23:50:26 -0700
+Message-ID: <20250426065041.1551914-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250422-gefressen-faucht-8ded2c9a5375@brauner>
 
-On 2025-04-22 17:14:10, Christian Brauner wrote:
-> On Tue, Apr 22, 2025 at 04:31:29PM +0200, Christian Brauner wrote:
-> > On Thu, Mar 27, 2025 at 12:39:28PM +0100, Amir Goldstein wrote:
-> > > On Thu, Mar 27, 2025 at 10:33 AM Andrey Albershteyn <aalbersh@redhat.com> wrote:
-> > > >
-> > > > On 2025-03-23 09:56:25, Amir Goldstein wrote:
-> > > > > On Fri, Mar 21, 2025 at 8:49 PM Andrey Albershteyn <aalbersh@redhat.com> wrote:
-> > > > > >
-> > > > > > From: Andrey Albershteyn <aalbersh@redhat.com>
-> > > > > >
-> > > > > > Introduce getfsxattrat and setfsxattrat syscalls to manipulate inode
-> > > > > > extended attributes/flags. The syscalls take parent directory fd and
-> > > > > > path to the child together with struct fsxattr.
-> > > > > >
-> > > > > > This is an alternative to FS_IOC_FSSETXATTR ioctl with a difference
-> > > > > > that file don't need to be open as we can reference it with a path
-> > > > > > instead of fd. By having this we can manipulated inode extended
-> > > > > > attributes not only on regular files but also on special ones. This
-> > > > > > is not possible with FS_IOC_FSSETXATTR ioctl as with special files
-> > > > > > we can not call ioctl() directly on the filesystem inode using fd.
-> > > > > >
-> > > > > > This patch adds two new syscalls which allows userspace to get/set
-> > > > > > extended inode attributes on special files by using parent directory
-> > > > > > and a path - *at() like syscall.
-> > > > > >
-> > > > > > CC: linux-api@vger.kernel.org
-> > > > > > CC: linux-fsdevel@vger.kernel.org
-> > > > > > CC: linux-xfs@vger.kernel.org
-> > > > > > Signed-off-by: Andrey Albershteyn <aalbersh@redhat.com>
-> > > > > > Acked-by: Arnd Bergmann <arnd@arndb.de>
-> > > > > > ---
-> > > > > ...
-> > > > > > +SYSCALL_DEFINE5(setfsxattrat, int, dfd, const char __user *, filename,
-> > > > > > +               struct fsxattr __user *, ufsx, size_t, usize,
-> > > > > > +               unsigned int, at_flags)
-> > > > > > +{
-> > > > > > +       struct fileattr fa;
-> > > > > > +       struct path filepath;
-> > > > > > +       int error;
-> > > > > > +       unsigned int lookup_flags = 0;
-> > > > > > +       struct filename *name;
-> > > > > > +       struct mnt_idmap *idmap;.
-> > > > >
-> > > > > > +       struct dentry *dentry;
-> > > > > > +       struct vfsmount *mnt;
-> > > > > > +       struct fsxattr fsx = {};
-> > > > > > +
-> > > > > > +       BUILD_BUG_ON(sizeof(struct fsxattr) < FSXATTR_SIZE_VER0);
-> > > > > > +       BUILD_BUG_ON(sizeof(struct fsxattr) != FSXATTR_SIZE_LATEST);
-> > > > > > +
-> > > > > > +       if ((at_flags & ~(AT_SYMLINK_NOFOLLOW | AT_EMPTY_PATH)) != 0)
-> > > > > > +               return -EINVAL;
-> > > > > > +
-> > > > > > +       if (!(at_flags & AT_SYMLINK_NOFOLLOW))
-> > > > > > +               lookup_flags |= LOOKUP_FOLLOW;
-> > > > > > +
-> > > > > > +       if (at_flags & AT_EMPTY_PATH)
-> > > > > > +               lookup_flags |= LOOKUP_EMPTY;
-> > > > > > +
-> > > > > > +       if (usize > PAGE_SIZE)
-> > > > > > +               return -E2BIG;
-> > > > > > +
-> > > > > > +       if (usize < FSXATTR_SIZE_VER0)
-> > > > > > +               return -EINVAL;
-> > > > > > +
-> > > > > > +       error = copy_struct_from_user(&fsx, sizeof(struct fsxattr), ufsx, usize);
-> > > > > > +       if (error)
-> > > > > > +               return error;
-> > > > > > +
-> > > > > > +       fsxattr_to_fileattr(&fsx, &fa);
-> > > > > > +
-> > > > > > +       name = getname_maybe_null(filename, at_flags);
-> > > > > > +       if (!name) {
-> > > > > > +               CLASS(fd, f)(dfd);
-> > > > > > +
-> > > > > > +               if (fd_empty(f))
-> > > > > > +                       return -EBADF;
-> > > > > > +
-> > > > > > +               idmap = file_mnt_idmap(fd_file(f));
-> > > > > > +               dentry = file_dentry(fd_file(f));
-> > > > > > +               mnt = fd_file(f)->f_path.mnt;
-> > > > > > +       } else {
-> > > > > > +               error = filename_lookup(dfd, name, lookup_flags, &filepath,
-> > > > > > +                                       NULL);
-> > > > > > +               if (error)
-> > > > > > +                       return error;
-> > > > > > +
-> > > > > > +               idmap = mnt_idmap(filepath.mnt);
-> > > > > > +               dentry = filepath.dentry;
-> > > > > > +               mnt = filepath.mnt;
-> > > > > > +       }
-> > > > > > +
-> > > > > > +       error = mnt_want_write(mnt);
-> > > > > > +       if (!error) {
-> > > > > > +               error = vfs_fileattr_set(idmap, dentry, &fa);
-> > > > > > +               if (error == -ENOIOCTLCMD)
-> > > > > > +                       error = -EOPNOTSUPP;
-> > > > >
-> > > > > This is awkward.
-> > > > > vfs_fileattr_set() should return -EOPNOTSUPP.
-> > > > > ioctl_setflags() could maybe convert it to -ENOIOCTLCMD,
-> > > > > but looking at similar cases ioctl_fiemap(), ioctl_fsfreeze() the
-> > > > > ioctl returns -EOPNOTSUPP.
-> > > > >
-> > > > > I don't think it is necessarily a bad idea to start returning
-> > > > >  -EOPNOTSUPP instead of -ENOIOCTLCMD for the ioctl
-> > > > > because that really reflects the fact that the ioctl is now implemented
-> > > > > in vfs and not in the specific fs.
-> > > > >
-> > > > > and I think it would not be a bad idea at all to make that change
-> > > > > together with the merge of the syscalls as a sort of hint to userspace
-> > > > > that uses the ioctl, that the sycalls API exists.
-> > > > >
-> > > > > Thanks,
-> > > > > Amir.
-> > > > >
-> > > >
-> > > > Hmm, not sure what you're suggesting here. I see it as:
-> > > > - get/setfsxattrat should return EOPNOTSUPP as it make more sense
-> > > >   than ENOIOCTLCMD
-> > > > - ioctl_setflags returns ENOIOCTLCMD which also expected
-> > > >
-> > > > Don't really see a reason to change what vfs_fileattr_set() returns
-> > > > and then copying this if() to other places or start returning
-> > > > EOPNOTSUPP.
-> > > 
-> > > ENOIOCTLCMD conceptually means that the ioctl command is unknown
-> > > This is not the case since ->fileattr_[gs]et() became a vfs API
-> > 
-> > vfs_fileattr_{g,s}et() should not return ENOIOCTLCMD. Change the return
-> > code to EOPNOTSUPP and then make EOPNOTSUPP be translated to ENOTTY on
-> > on overlayfs and to ENOIOCTLCMD in ecryptfs and in fs/ioctl.c. This way
-> > we get a clean VFS api while retaining current behavior. Amir can do his
-> > cleanup based on that.
-> 
-> Also this get/set dance is not something new apis should do. It should
-> be handled like setattr_prepare() or generic_fillattr() where the
-> filesystem calls a VFS helper and that does all of this based on the
-> current state of the inode instead of calling into the filesystem twice:
-> 
-> int vfs_fileattr_set(struct mnt_idmap *idmap, struct dentry *dentry,
-> 		     struct fileattr *fa)
-> {
-> <snip>
-> 	inode_lock(inode);
-> 	err = vfs_fileattr_get(dentry, &old_ma);
-> 	if (!err) {
-> 		/* initialize missing bits from old_ma */
-> 		if (fa->flags_valid) {
-> <snip>
-> 		err = fileattr_set_prepare(inode, &old_ma, fa);
-> 		if (!err && !security_inode_setfsxattr(inode, fa))
-> 			err = inode->i_op->fileattr_set(idmap, dentry, fa);
-> 
+This is based on cryptodev commit bf0b4f15267ca404 plus the series
+https://lore.kernel.org/linux-crypto/20250422152716.5923-1-ebiggers@kernel.org/.
+It can also be retrieved from:
 
-You mean something like this? (not all fs are done)
+    git fetch https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git sha256-lib-v1
+
+Following the example of several other algorithms (e.g. CRC32, ChaCha,
+Poly1305, BLAKE2s), this series refactors the kernel's existing
+architecture-optimized SHA-256 code to be available via the library API,
+instead of just via the crypto_shash API as it was before.  It also
+reimplements the SHA-256 crypto_shash API on top of the library API.
+
+This makes it possible to use the SHA-256 library in
+performance-critical cases.  The new design is also much simpler, with a
+negative diffstat of over 1200 lines.  Finally, this also fixes the
+longstanding issue where the arch-optimized SHA-256 was disabled by
+default, so people often forgot to enable it.
+
+For now the SHA-256 library is well-covered by the crypto_shash
+self-tests, but I plan to add a test for the library directly later.
+I've fully tested this series on arm, arm64, riscv, and x86.  On mips,
+powerpc, s390, and sparc I've only been able to partially test it, since
+QEMU does not support the SHA-256 instructions on those platforms.  If
+anyone with access to a mips, powerpc, s390, or sparc system that has
+SHA-256 instructions can verify that the crypto self-tests still pass,
+that would be appreciated.  But I don't expect any issues, especially
+since the new code is more straightforward than the old code.
+
+Eric Biggers (13):
+  crypto: sha256 - support arch-optimized lib and expose through shash
+  crypto: arm/sha256 - implement library instead of shash
+  crypto: arm64/sha256 - remove obsolete chunking logic
+  crypto: arm64/sha256 - implement library instead of shash
+  crypto: mips/sha256 - implement library instead of shash
+  crypto: powerpc/sha256 - implement library instead of shash
+  crypto: riscv/sha256 - implement library instead of shash
+  crypto: s390/sha256 - implement library instead of shash
+  crypto: sparc - move opcodes.h into asm directory
+  crypto: sparc/sha256 - implement library instead of shash
+  crypto: x86/sha256 - implement library instead of shash
+  crypto: sha256 - remove sha256_base.h
+  crypto: lib/sha256 - improve function prototypes
+
+ arch/arm/configs/exynos_defconfig             |   1 -
+ arch/arm/configs/milbeaut_m10v_defconfig      |   1 -
+ arch/arm/configs/multi_v7_defconfig           |   1 -
+ arch/arm/configs/omap2plus_defconfig          |   1 -
+ arch/arm/configs/pxa_defconfig                |   1 -
+ arch/arm/crypto/Kconfig                       |  21 -
+ arch/arm/crypto/Makefile                      |   8 +-
+ arch/arm/crypto/sha2-ce-glue.c                |  87 ----
+ arch/arm/crypto/sha256_glue.c                 | 107 -----
+ arch/arm/crypto/sha256_glue.h                 |   9 -
+ arch/arm/crypto/sha256_neon_glue.c            |  75 ---
+ arch/arm/lib/crypto/.gitignore                |   1 +
+ arch/arm/lib/crypto/Kconfig                   |   6 +
+ arch/arm/lib/crypto/Makefile                  |   8 +-
+ arch/arm/{ => lib}/crypto/sha256-armv4.pl     |   0
+ .../sha2-ce-core.S => lib/crypto/sha256-ce.S} |  10 +-
+ arch/arm/lib/crypto/sha256.c                  |  64 +++
+ arch/arm64/configs/defconfig                  |   1 -
+ arch/arm64/crypto/Kconfig                     |  19 -
+ arch/arm64/crypto/Makefile                    |  13 +-
+ arch/arm64/crypto/sha2-ce-glue.c              | 138 ------
+ arch/arm64/crypto/sha256-glue.c               | 171 -------
+ arch/arm64/lib/crypto/.gitignore              |   1 +
+ arch/arm64/lib/crypto/Kconfig                 |   5 +
+ arch/arm64/lib/crypto/Makefile                |   9 +-
+ .../crypto/sha2-armv8.pl}                     |   0
+ .../sha2-ce-core.S => lib/crypto/sha256-ce.S} |  36 +-
+ arch/arm64/lib/crypto/sha256.c                |  75 +++
+ arch/mips/cavium-octeon/Kconfig               |   6 +
+ .../mips/cavium-octeon/crypto/octeon-sha256.c | 135 ++----
+ arch/mips/configs/cavium_octeon_defconfig     |   1 -
+ arch/mips/crypto/Kconfig                      |  10 -
+ arch/powerpc/crypto/Kconfig                   |  11 -
+ arch/powerpc/crypto/Makefile                  |   2 -
+ arch/powerpc/crypto/sha256-spe-glue.c         | 128 ------
+ arch/powerpc/lib/crypto/Kconfig               |   6 +
+ arch/powerpc/lib/crypto/Makefile              |   3 +
+ .../powerpc/{ => lib}/crypto/sha256-spe-asm.S |   0
+ arch/powerpc/lib/crypto/sha256.c              |  70 +++
+ arch/riscv/crypto/Kconfig                     |  11 -
+ arch/riscv/crypto/Makefile                    |   3 -
+ arch/riscv/crypto/sha256-riscv64-glue.c       | 125 -----
+ arch/riscv/lib/crypto/Kconfig                 |   7 +
+ arch/riscv/lib/crypto/Makefile                |   3 +
+ .../sha256-riscv64-zvknha_or_zvknhb-zvkb.S    |   4 +-
+ arch/riscv/lib/crypto/sha256.c                |  62 +++
+ arch/s390/configs/debug_defconfig             |   1 -
+ arch/s390/configs/defconfig                   |   1 -
+ arch/s390/crypto/Kconfig                      |  10 -
+ arch/s390/crypto/Makefile                     |   1 -
+ arch/s390/crypto/sha256_s390.c                | 144 ------
+ arch/s390/lib/crypto/Kconfig                  |   6 +
+ arch/s390/lib/crypto/Makefile                 |   2 +
+ arch/s390/lib/crypto/sha256.c                 |  47 ++
+ arch/sparc/crypto/Kconfig                     |  10 -
+ arch/sparc/crypto/Makefile                    |   2 -
+ arch/sparc/crypto/aes_asm.S                   |   3 +-
+ arch/sparc/crypto/aes_glue.c                  |   3 +-
+ arch/sparc/crypto/camellia_asm.S              |   3 +-
+ arch/sparc/crypto/camellia_glue.c             |   3 +-
+ arch/sparc/crypto/des_asm.S                   |   3 +-
+ arch/sparc/crypto/des_glue.c                  |   3 +-
+ arch/sparc/crypto/md5_asm.S                   |   3 +-
+ arch/sparc/crypto/md5_glue.c                  |   3 +-
+ arch/sparc/crypto/sha1_asm.S                  |   3 +-
+ arch/sparc/crypto/sha1_glue.c                 |   3 +-
+ arch/sparc/crypto/sha256_glue.c               | 129 ------
+ arch/sparc/crypto/sha512_asm.S                |   3 +-
+ arch/sparc/crypto/sha512_glue.c               |   3 +-
+ arch/sparc/{crypto => include/asm}/opcodes.h  |   6 +-
+ arch/sparc/lib/Makefile                       |   1 +
+ arch/sparc/lib/crc32c_asm.S                   |   3 +-
+ arch/sparc/lib/crypto/Kconfig                 |   8 +
+ arch/sparc/lib/crypto/Makefile                |   4 +
+ arch/sparc/lib/crypto/sha256.c                |  64 +++
+ arch/sparc/{ => lib}/crypto/sha256_asm.S      |   5 +-
+ arch/x86/crypto/Kconfig                       |  14 -
+ arch/x86/crypto/Makefile                      |   3 -
+ arch/x86/crypto/sha256_ssse3_glue.c           | 432 ------------------
+ arch/x86/lib/crypto/Kconfig                   |   7 +
+ arch/x86/lib/crypto/Makefile                  |   3 +
+ arch/x86/{ => lib}/crypto/sha256-avx-asm.S    |  12 +-
+ arch/x86/{ => lib}/crypto/sha256-avx2-asm.S   |  12 +-
+ .../crypto/sha256-ni-asm.S}                   |  36 +-
+ arch/x86/{ => lib}/crypto/sha256-ssse3-asm.S  |  14 +-
+ arch/x86/lib/crypto/sha256.c                  |  74 +++
+ crypto/Kconfig                                |   1 +
+ crypto/Makefile                               |   3 +-
+ crypto/sha256.c                               | 201 ++++++++
+ crypto/sha256_generic.c                       | 102 -----
+ include/crypto/internal/sha2.h                |  28 ++
+ include/crypto/sha2.h                         |  23 +-
+ include/crypto/sha256_base.h                  | 180 --------
+ lib/crypto/Kconfig                            |  22 +
+ lib/crypto/sha256.c                           | 130 +++++-
+ 95 files changed, 1008 insertions(+), 2225 deletions(-)
+ delete mode 100644 arch/arm/crypto/sha2-ce-glue.c
+ delete mode 100644 arch/arm/crypto/sha256_glue.c
+ delete mode 100644 arch/arm/crypto/sha256_glue.h
+ delete mode 100644 arch/arm/crypto/sha256_neon_glue.c
+ rename arch/arm/{ => lib}/crypto/sha256-armv4.pl (100%)
+ rename arch/arm/{crypto/sha2-ce-core.S => lib/crypto/sha256-ce.S} (91%)
+ create mode 100644 arch/arm/lib/crypto/sha256.c
+ delete mode 100644 arch/arm64/crypto/sha2-ce-glue.c
+ delete mode 100644 arch/arm64/crypto/sha256-glue.c
+ rename arch/arm64/{crypto/sha512-armv8.pl => lib/crypto/sha2-armv8.pl} (100%)
+ rename arch/arm64/{crypto/sha2-ce-core.S => lib/crypto/sha256-ce.S} (80%)
+ create mode 100644 arch/arm64/lib/crypto/sha256.c
+ delete mode 100644 arch/powerpc/crypto/sha256-spe-glue.c
+ rename arch/powerpc/{ => lib}/crypto/sha256-spe-asm.S (100%)
+ create mode 100644 arch/powerpc/lib/crypto/sha256.c
+ delete mode 100644 arch/riscv/crypto/sha256-riscv64-glue.c
+ rename arch/riscv/{ => lib}/crypto/sha256-riscv64-zvknha_or_zvknhb-zvkb.S (98%)
+ create mode 100644 arch/riscv/lib/crypto/sha256.c
+ delete mode 100644 arch/s390/crypto/sha256_s390.c
+ create mode 100644 arch/s390/lib/crypto/sha256.c
+ delete mode 100644 arch/sparc/crypto/sha256_glue.c
+ rename arch/sparc/{crypto => include/asm}/opcodes.h (96%)
+ create mode 100644 arch/sparc/lib/crypto/Kconfig
+ create mode 100644 arch/sparc/lib/crypto/Makefile
+ create mode 100644 arch/sparc/lib/crypto/sha256.c
+ rename arch/sparc/{ => lib}/crypto/sha256_asm.S (95%)
+ delete mode 100644 arch/x86/crypto/sha256_ssse3_glue.c
+ rename arch/x86/{ => lib}/crypto/sha256-avx-asm.S (98%)
+ rename arch/x86/{ => lib}/crypto/sha256-avx2-asm.S (98%)
+ rename arch/x86/{crypto/sha256_ni_asm.S => lib/crypto/sha256-ni-asm.S} (85%)
+ rename arch/x86/{ => lib}/crypto/sha256-ssse3-asm.S (98%)
+ create mode 100644 arch/x86/lib/crypto/sha256.c
+ create mode 100644 crypto/sha256.c
+ delete mode 100644 crypto/sha256_generic.c
+ create mode 100644 include/crypto/internal/sha2.h
+ delete mode 100644 include/crypto/sha256_base.h
 
 -- 
-
-From 421445f054ccad3116d55ae22c8995a48bb753fd Mon Sep 17 00:00:00 2001
-From: Andrey Albershteyn <aalbersh@kernel.org>
-Date: Fri, 25 Apr 2025 17:20:42 +0200
-Subject: [PATCH] fs: push retrieval of fileattr down to filesystems
-
-Currently, vfs_fileattr_set() calls twice to the file system. Firstly,
-to retrieve current state of the inode extended attributes and secondly
-to set the new ones.
-
-This patch refactors this in a way that filesystem firstly gets current
-inode attribute state and then calls VFS helper to verify them. This way
-vfs_fileattr_set() will call filesystem just once.
-
-Signed-off-by: Andrey Albershteyn <aalbersh@kernel.org>
----
- fs/ext2/ioctl.c          |  9 ++++++
- fs/ext4/ioctl.c          |  9 ++++++
- fs/f2fs/file.c           | 12 +++++++-
- fs/file_attr.c           | 62 ++++++++++++++++++++++++----------------
- fs/gfs2/file.c           |  9 ++++++
- fs/hfsplus/inode.c       |  9 ++++++
- fs/jfs/ioctl.c           |  9 +++++-
- fs/ntfs3/file.c          | 12 +++++++-
- fs/orangefs/inode.c      |  9 ++++++
- fs/ubifs/ioctl.c         | 12 +++++++-
- fs/xfs/xfs_ioctl.c       |  6 ++++
- include/linux/fileattr.h |  2 ++
- mm/shmem.c               |  8 ++++++
- 13 files changed, 140 insertions(+), 28 deletions(-)
-
-diff --git a/fs/ext2/ioctl.c b/fs/ext2/ioctl.c
-index 44e04484e570..3a45ed9c12b7 100644
---- a/fs/ext2/ioctl.c
-+++ b/fs/ext2/ioctl.c
-@@ -32,6 +32,15 @@ int ext2_fileattr_set(struct mnt_idmap *idmap,
- {
- 	struct inode *inode = d_inode(dentry);
- 	struct ext2_inode_info *ei = EXT2_I(inode);
-+	struct fileattr cfa;
-+	int err;
-+
-+	err = ext2_fileattr_get(dentry, &cfa);
-+	if (err)
-+		return err;
-+	err = vfs_fileattr_set_prepare(idmap, dentry, &cfa, fa);
-+	if (err)
-+		return err;
- 
- 	if (fileattr_has_fsx(fa))
- 		return -EOPNOTSUPP;
-diff --git a/fs/ext4/ioctl.c b/fs/ext4/ioctl.c
-index d17207386ead..f988ff4d7256 100644
---- a/fs/ext4/ioctl.c
-+++ b/fs/ext4/ioctl.c
-@@ -1002,6 +1002,15 @@ int ext4_fileattr_set(struct mnt_idmap *idmap,
- 	struct inode *inode = d_inode(dentry);
- 	u32 flags = fa->flags;
- 	int err = -EOPNOTSUPP;
-+	struct fileattr cfa;
-+
-+	err = ext4_fileattr_get(dentry, &cfa);
-+	if (err)
-+		return err;
-+
-+	err = vfs_fileattr_set_prepare(idmap, dentry, &cfa, fa);
-+	if (err)
-+		return err;
- 
- 	if (flags & ~EXT4_FL_USER_VISIBLE)
- 		goto out;
-diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index abbcbb5865a3..f196a07f1f17 100644
---- a/fs/f2fs/file.c
-+++ b/fs/f2fs/file.c
-@@ -3371,14 +3371,24 @@ int f2fs_fileattr_set(struct mnt_idmap *idmap,
- 		      struct dentry *dentry, struct fileattr *fa)
- {
- 	struct inode *inode = d_inode(dentry);
--	u32 fsflags = fa->flags, mask = F2FS_SETTABLE_FS_FL;
-+	u32 fsflags, mask = F2FS_SETTABLE_FS_FL;
- 	u32 iflags;
-+	struct fileattr cfa;
- 	int err;
- 
- 	if (unlikely(f2fs_cp_error(F2FS_I_SB(inode))))
- 		return -EIO;
- 	if (!f2fs_is_checkpoint_ready(F2FS_I_SB(inode)))
- 		return -ENOSPC;
-+
-+	err = f2fs_fileattr_get(dentry, &cfa);
-+	if (err)
-+		return err;
-+	err = vfs_fileattr_set_prepare(idmap, dentry, &cfa, fa);
-+	if (err)
-+		return err;
-+	fsflags = fa->flags;
-+
- 	if (fsflags & ~F2FS_GETTABLE_FS_FL)
- 		return -EOPNOTSUPP;
- 	fsflags &= F2FS_SETTABLE_FS_FL;
-diff --git a/fs/file_attr.c b/fs/file_attr.c
-index 5e51c5b851ef..d0a01377bca8 100644
---- a/fs/file_attr.c
-+++ b/fs/file_attr.c
-@@ -7,6 +7,8 @@
- #include <linux/fileattr.h>
- #include <linux/namei.h>
- 
-+#include "internal.h"
-+
- /**
-  * fileattr_fill_xflags - initialize fileattr with xflags
-  * @fa:		fileattr pointer
-@@ -225,6 +227,36 @@ static int fileattr_set_prepare(struct inode *inode,
- 	return 0;
- }
- 
-+/**
-+ * vfs_fileattr_set_prepare - merge new filettr state and check for validity
-+ * @idmap:	idmap of the mount
-+ * @dentry:	the object to change
-+ * @cfa:	current fileattr state
-+ * @fa:		fileattr pointer with new values
-+ *
-+ * Return: 0 on success, or a negative error on failure.
-+ */
-+int vfs_fileattr_set_prepare(struct mnt_idmap *idmap, struct dentry *dentry,
-+			     struct fileattr *cfa, struct fileattr *fa)
-+{
-+	int err;
-+
-+	/* initialize missing bits from cfa */
-+	if (fa->flags_valid) {
-+		fa->fsx_xflags |= cfa->fsx_xflags & ~FS_XFLAG_COMMON;
-+		fa->fsx_extsize = cfa->fsx_extsize;
-+		fa->fsx_nextents = cfa->fsx_nextents;
-+		fa->fsx_projid = cfa->fsx_projid;
-+		fa->fsx_cowextsize = cfa->fsx_cowextsize;
-+	} else {
-+		fa->flags |= cfa->flags & ~FS_COMMON_FL;
-+	}
-+
-+	err = fileattr_set_prepare(d_inode(dentry), cfa, fa);
-+	return err;
-+}
-+EXPORT_SYMBOL(vfs_fileattr_set_prepare);
-+
- /**
-  * vfs_fileattr_set - change miscellaneous file attributes
-  * @idmap:	idmap of the mount
-@@ -245,7 +277,6 @@ int vfs_fileattr_set(struct mnt_idmap *idmap, struct dentry *dentry,
- 		     struct fileattr *fa)
- {
- 	struct inode *inode = d_inode(dentry);
--	struct fileattr old_ma = {};
- 	int err;
- 
- 	if (!inode->i_op->fileattr_set)
-@@ -255,29 +286,12 @@ int vfs_fileattr_set(struct mnt_idmap *idmap, struct dentry *dentry,
- 		return -EPERM;
- 
- 	inode_lock(inode);
--	err = vfs_fileattr_get(dentry, &old_ma);
--	if (!err) {
--		/* initialize missing bits from old_ma */
--		if (fa->flags_valid) {
--			fa->fsx_xflags |= old_ma.fsx_xflags & ~FS_XFLAG_COMMON;
--			fa->fsx_extsize = old_ma.fsx_extsize;
--			fa->fsx_nextents = old_ma.fsx_nextents;
--			fa->fsx_projid = old_ma.fsx_projid;
--			fa->fsx_cowextsize = old_ma.fsx_cowextsize;
--		} else {
--			fa->flags |= old_ma.flags & ~FS_COMMON_FL;
--		}
--
--		err = fileattr_set_prepare(inode, &old_ma, fa);
--		if (err)
--			goto out;
--		err = security_inode_file_setattr(dentry, fa);
--		if (err)
--			goto out;
--		err = inode->i_op->fileattr_set(idmap, dentry, fa);
--		if (err)
--			goto out;
--	}
-+	err = security_inode_file_setattr(dentry, fa);
-+	if (err)
-+		goto out;
-+	err = inode->i_op->fileattr_set(idmap, dentry, fa);
-+	if (err)
-+		goto out;
- 
- out:
- 	inode_unlock(inode);
-diff --git a/fs/gfs2/file.c b/fs/gfs2/file.c
-index fd1147aa3891..cf796fa73af2 100644
---- a/fs/gfs2/file.c
-+++ b/fs/gfs2/file.c
-@@ -282,10 +282,19 @@ int gfs2_fileattr_set(struct mnt_idmap *idmap,
- 	u32 fsflags = fa->flags, gfsflags = 0;
- 	u32 mask;
- 	int i;
-+	struct fileattr cfa;
-+	int error;
- 
- 	if (d_is_special(dentry))
- 		return -ENOTTY;
- 
-+	error = gfs2_fileattr_get(dentry, &cfa);
-+	if (error)
-+		return error;
-+	error = vfs_fileattr_set_prepare(idmap, dentry, &cfa, fa);
-+	if (error)
-+		return error;
-+
- 	if (fileattr_has_fsx(fa))
- 		return -EOPNOTSUPP;
- 
-diff --git a/fs/hfsplus/inode.c b/fs/hfsplus/inode.c
-index f331e9574217..cdb11d00faea 100644
---- a/fs/hfsplus/inode.c
-+++ b/fs/hfsplus/inode.c
-@@ -678,6 +678,15 @@ int hfsplus_fileattr_set(struct mnt_idmap *idmap,
- 	struct inode *inode = d_inode(dentry);
- 	struct hfsplus_inode_info *hip = HFSPLUS_I(inode);
- 	unsigned int new_fl = 0;
-+	struct fileattr cfa;
-+	int err;
-+
-+	err = hfsplus_fileattr_get(dentry, &cfa);
-+	if (err)
-+		return err;
-+	err = vfs_fileattr_set_prepare(idmap, dentry, &cfa, fa);
-+	if (err)
-+		return err;
- 
- 	if (fileattr_has_fsx(fa))
- 		return -EOPNOTSUPP;
-diff --git a/fs/jfs/ioctl.c b/fs/jfs/ioctl.c
-index f7bd7e8f5be4..4c62c14d15b0 100644
---- a/fs/jfs/ioctl.c
-+++ b/fs/jfs/ioctl.c
-@@ -75,11 +75,18 @@ int jfs_fileattr_set(struct mnt_idmap *idmap,
- {
- 	struct inode *inode = d_inode(dentry);
- 	struct jfs_inode_info *jfs_inode = JFS_IP(inode);
--	unsigned int flags;
-+	unsigned int flags = jfs_inode->mode2 & JFS_FL_USER_VISIBLE;
-+	struct fileattr cfa;
-+	int err;
- 
- 	if (d_is_special(dentry))
- 		return -ENOTTY;
- 
-+	fileattr_fill_flags(&cfa, jfs_map_ext2(flags, 0));
-+	err = vfs_fileattr_set_prepare(idmap, dentry, &cfa, fa);
-+	if (err)
-+		return err;
-+
- 	if (fileattr_has_fsx(fa))
- 		return -EOPNOTSUPP;
- 
-diff --git a/fs/ntfs3/file.c b/fs/ntfs3/file.c
-index 9b6a3f8d2e7c..bc7ee7595b70 100644
---- a/fs/ntfs3/file.c
-+++ b/fs/ntfs3/file.c
-@@ -83,12 +83,22 @@ int ntfs_fileattr_set(struct mnt_idmap *idmap, struct dentry *dentry,
- {
- 	struct inode *inode = d_inode(dentry);
- 	struct ntfs_inode *ni = ntfs_i(inode);
--	u32 flags = fa->flags;
-+	u32 flags;
- 	unsigned int new_fl = 0;
-+	struct fileattr cfa;
-+	int err;
-+
-+	err = ntfs_fileattr_get(dentry, &cfa);
-+	if (err)
-+		return err;
-+	err = vfs_fileattr_set_prepare(idmap, dentry, &cfa, fa);
-+	if (err)
-+		return err;
- 
- 	if (fileattr_has_fsx(fa))
- 		return -EOPNOTSUPP;
- 
-+	flags = fa->flags;
- 	if (flags & ~(FS_IMMUTABLE_FL | FS_APPEND_FL | FS_COMPR_FL))
- 		return -EOPNOTSUPP;
- 
-diff --git a/fs/orangefs/inode.c b/fs/orangefs/inode.c
-index 5ac743c6bc2e..aecb61146443 100644
---- a/fs/orangefs/inode.c
-+++ b/fs/orangefs/inode.c
-@@ -910,6 +910,15 @@ static int orangefs_fileattr_set(struct mnt_idmap *idmap,
- 				 struct dentry *dentry, struct fileattr *fa)
- {
- 	u64 val = 0;
-+	struct fileattr cfa;
-+	int error = 0;
-+
-+	error = orangefs_fileattr_get(dentry, &cfa);
-+	if (error)
-+		return error;
-+	error = vfs_fileattr_set_prepare(idmap, dentry, &cfa, fa);
-+	if (error)
-+		return error;
- 
- 	gossip_debug(GOSSIP_FILE_DEBUG, "%s: called on %pd\n", __func__,
- 		     dentry);
-diff --git a/fs/ubifs/ioctl.c b/fs/ubifs/ioctl.c
-index 2c99349cf537..e71e362c786b 100644
---- a/fs/ubifs/ioctl.c
-+++ b/fs/ubifs/ioctl.c
-@@ -148,14 +148,24 @@ int ubifs_fileattr_set(struct mnt_idmap *idmap,
- 		       struct dentry *dentry, struct fileattr *fa)
- {
- 	struct inode *inode = d_inode(dentry);
--	int flags = fa->flags;
-+	int flags;
-+	struct fileattr cfa;
-+	int err;
- 
- 	if (d_is_special(dentry))
- 		return -ENOTTY;
- 
-+	err = ubifs_fileattr_get(dentry, &cfa);
-+	if (err)
-+		return err;
-+	err = vfs_fileattr_set_prepare(idmap, dentry, &cfa, fa);
-+	if (err)
-+		return err;
-+
- 	if (fileattr_has_fsx(fa))
- 		return -EOPNOTSUPP;
- 
-+	flags = fa->flags;
- 	if (flags & ~UBIFS_GETTABLE_IOCTL_FLAGS)
- 		return -EOPNOTSUPP;
- 
-diff --git a/fs/xfs/xfs_ioctl.c b/fs/xfs/xfs_ioctl.c
-index d250f7f74e3b..c861dc1c3cf0 100644
---- a/fs/xfs/xfs_ioctl.c
-+++ b/fs/xfs/xfs_ioctl.c
-@@ -733,12 +733,18 @@ xfs_fileattr_set(
- 	struct xfs_dquot	*pdqp = NULL;
- 	struct xfs_dquot	*olddquot = NULL;
- 	int			error;
-+	struct fileattr		cfa;
- 
- 	trace_xfs_ioctl_setattr(ip);
- 
- 	if (d_is_special(dentry))
- 		return -ENOTTY;
- 
-+	xfs_fill_fsxattr(ip, XFS_DATA_FORK, &cfa);
-+	error = vfs_fileattr_set_prepare(idmap, dentry, &cfa, fa);
-+	if (error)
-+		return error;
-+
- 	if (!fa->fsx_valid) {
- 		if (fa->flags & ~(FS_IMMUTABLE_FL | FS_APPEND_FL |
- 				  FS_NOATIME_FL | FS_NODUMP_FL |
-diff --git a/include/linux/fileattr.h b/include/linux/fileattr.h
-index f62a5143eb2d..aba76d897533 100644
---- a/include/linux/fileattr.h
-+++ b/include/linux/fileattr.h
-@@ -75,6 +75,8 @@ static inline bool fileattr_has_fsx(const struct fileattr *fa)
- }
- 
- int vfs_fileattr_get(struct dentry *dentry, struct fileattr *fa);
-+int vfs_fileattr_set_prepare(struct mnt_idmap *idmap, struct dentry *dentry,
-+			     struct fileattr *cfa, struct fileattr *fa);
- int vfs_fileattr_set(struct mnt_idmap *idmap, struct dentry *dentry,
- 		     struct fileattr *fa);
- int ioctl_getflags(struct file *file, unsigned int __user *argp);
-diff --git a/mm/shmem.c b/mm/shmem.c
-index 99327c30507c..c2a5991f944f 100644
---- a/mm/shmem.c
-+++ b/mm/shmem.c
-@@ -4199,6 +4199,14 @@ static int shmem_fileattr_set(struct mnt_idmap *idmap,
- 	struct inode *inode = d_inode(dentry);
- 	struct shmem_inode_info *info = SHMEM_I(inode);
- 	int ret, flags;
-+	struct fileattr cfa;
-+
-+	ret = shmem_fileattr_get(dentry, &cfa);
-+	if (ret)
-+		return ret;
-+	ret = vfs_fileattr_set_prepare(idmap, dentry, &cfa, fa);
-+	if (ret)
-+		return ret;
- 
- 	if (fileattr_has_fsx(fa))
- 		return -EOPNOTSUPP;
--- 
-2.47.2
+2.49.0
 
 
