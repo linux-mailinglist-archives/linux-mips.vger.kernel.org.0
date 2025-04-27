@@ -1,141 +1,110 @@
-Return-Path: <linux-mips+bounces-8766-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8767-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A1B3A9DD63
-	for <lists+linux-mips@lfdr.de>; Sat, 26 Apr 2025 23:51:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D701AA9DDFC
+	for <lists+linux-mips@lfdr.de>; Sun, 27 Apr 2025 02:19:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE9BC3B1F2B
-	for <lists+linux-mips@lfdr.de>; Sat, 26 Apr 2025 21:50:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 280243AB9A5
+	for <lists+linux-mips@lfdr.de>; Sun, 27 Apr 2025 00:19:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 45F9D1FBCB2;
-	Sat, 26 Apr 2025 21:51:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B4E7224247;
+	Sun, 27 Apr 2025 00:19:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="Sye5YV7N"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="LsUBruIG"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 740B51DE883;
-	Sat, 26 Apr 2025 21:51:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1FB01E7C34;
+	Sun, 27 Apr 2025 00:19:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745704273; cv=none; b=tP1su37K6+Defp5GcLBcYo8zRLLJCnJH00HnG4LN0TJMtzFa7e7O/EoqJRZ2kMtSZhQeIBLibSqRw1oeXrVyQLg+91B/MYqVKzy+FQhUedUBFC/uNZlxXbkYmI6tG/PnBZfHd7GOzOuzbVBwyOocBsUTmsSG9cM3MVBBRfg9zaA=
+	t=1745713152; cv=none; b=epGwSS/irttZ4jE28UoCjVOOjJJGlGVw8iNH6S0UPh7uZONuqswcLsochfD0D6vEhlz3JSYcaeQngSAzINbEqlgxBIakeRy2LL4f2Vkvt7hwGqgVvtnXHCy8KpG7sxqv+KdbrNtfPBtTelcC8QFoLMhhNPHjRgnjkkrIyxW+rs8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745704273; c=relaxed/simple;
-	bh=vU7rQ3ql5ZcEjD49ZOsILjzztWdn9rLW5kD/8m1EG64=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=QHPCIZWGk/7ic8vV/WSsc7JPf6QZdvmG2igVGKVUt5BX3YDJxP4WHSD3AfHzQ+JY1ZxZreWNmayP3KMzw/61GAjPNUZvarEOVgYNSVPWyNWPbczgesp2xkDZkQStrUXMhvkWIrSBODhe9a4DsEEngdpRPcJIXAshoG2hwqXmIzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=Sye5YV7N; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID;
-	bh=gsIFs9lsBStWNO+SAUv4QwVqUpvjBQFP3/IMyXHCh3E=; b=Sye5YV7NL9CEcB/oGe1RyoXudx
-	aQYeOWLye+efnOo9sycbe8k309HBPzOVgvdQeo7HNweqWmNTst6ZB+Irt2iOpJ8H/1NEffnDdZR7y
-	TgLUNbnl1tGVC9edgLpJsjdDVz9KATV22vbIJusuOkzh1BWrOv7meFHgBVd8ujMMJ+0j7j8QOsMFT
-	EaVNMgrPlDgJ5350yiF+vMLKUHddKZe2QwTRTqSExdrfjcOz00BjshTrcn2E3x+2zTVtu8CGZOGJ8
-	IWKhx20FVgecrDUhL9+p2gnRdZPAeOCOKgn7rscJFg5hpC/ZUW15rDktJhz+soODfF7KqtIQUePdJ
-	PSy0q48w==;
-Received: from i53875aba.versanet.de ([83.135.90.186] helo=phil..)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1u8nLv-0001OR-UY; Sat, 26 Apr 2025 23:46:28 +0200
-From: Heiko Stuebner <heiko@sntech.de>
-To: Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Conor Dooley <conor@kernel.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Steen Hegelund <Steen.Hegelund@microchip.com>,
-	Daniel Machon <daniel.machon@microchip.com>,
-	UNGLinuxDriver@microchip.com,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Andy Gross <agross@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Viresh Kumar <vireshk@kernel.org>,
-	Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	zhouyanjie@wanyeetech.com,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	Stephan Gerhold <stephan.gerhold@linaro.org>,
-	"Rob Herring (Arm)" <robh@kernel.org>
-Cc: Heiko Stuebner <heiko@sntech.de>,
-	devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-sunxi@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	imx@lists.linux.dev,
-	linux-rockchip@lists.infradead.org,
-	linux-amlogic@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-mediatek@lists.infradead.org,
-	Andre Przywara <andre.przywara@arm.com>,
-	=?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>
-Subject: Re: (subset) [PATCH v2 00/17] Arm cpu schema clean-ups
-Date: Sat, 26 Apr 2025 23:46:17 +0200
-Message-ID: <174570370139.31943.759075106630349490.b4-ty@sntech.de>
-X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20250410-dt-cpu-schema-v2-0-63d7dc9ddd0a@kernel.org>
-References: <20250410-dt-cpu-schema-v2-0-63d7dc9ddd0a@kernel.org>
+	s=arc-20240116; t=1745713152; c=relaxed/simple;
+	bh=z2JnkUelGjwTsIo7Ko54jjxrEw1ldas4tF+vGGSGEUA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ghqUM/F2/GO2USFPh8CVapnEJFnxA4UDql55yssEWsEK58h3muHOyBM+eOUiAKTDyqFoqgCYX5vc/74silqqra2H319uODOvKPTF2yx1/7kLj4KDqHBVZeJ2gRy7GaYenI7LOvvJBXbKaToyW3fxA7fJKSysKCFOjeKg9PVaRvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=LsUBruIG; arc=none smtp.client-ip=144.6.53.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
+	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=qIc1CnqWjP+VDV+/eTU2C9hwQs+hAGsJroIHvnLDXc0=; b=LsUBruIGAs9uLBJRTk9h6fgdB0
+	2xisb0QqkU5+qP/eEYOH3uvK2DCnuZkERHnCECKmdbX85eZlMfmPqVki9sSxjYrxdWFAhjUUMsUD3
+	P2JtdRMdBzT9y1/R7BdqzGhm5+HW6Qeftz51Y5755VFfohf8/0ee7AMDCj9lJUk5Fsi5cY7ScWSiM
+	wAarhpfnk8TKu4CA4qEF5xdYMq88s0cnneBOdtKkePk/L0Ss41Ue/EHUkeraGj4GuqVbngWnxOuPy
+	zGJVAmP3Tblrt5KCk9xwxPfx3IMbexqk44KkQviPivswZwKydYQtt5WMVkj4AP4WS2Vj5Wn0x9m7M
+	CuGifb1w==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
+	id 1u8pjU-001IyU-22;
+	Sun, 27 Apr 2025 08:18:57 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Sun, 27 Apr 2025 08:18:56 +0800
+Date: Sun, 27 Apr 2025 08:18:56 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
+	linux-s390@vger.kernel.org, x86@kernel.org, ardb@kernel.org,
+	Jason@zx2c4.com, torvalds@linux-foundation.org
+Subject: Re: [PATCH 11/13] crypto: x86/sha256 - implement library instead of
+ shash
+Message-ID: <aA138IKjqyZeQLgB@gondor.apana.org.au>
+References: <20250426065041.1551914-12-ebiggers@kernel.org>
+ <aAy6g3nblKtRj1l3@gondor.apana.org.au>
+ <20250426180326.GA1184@sol.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250426180326.GA1184@sol.localdomain>
 
+On Sat, Apr 26, 2025 at 11:03:26AM -0700, Eric Biggers wrote:
+>
+> The SHA-256 library functions currently work in any context, and this patch
+> series preserves that behavior.  Changing that would be a separate change.
 
-On Thu, 10 Apr 2025 10:47:21 -0500, Rob Herring (Arm) wrote:
-> The Arm cpu.yaml schema fails to restrict allowed properties in 'cpu'
-> nodes. The result, not surprisely, is a number of additional properties
-> and errors in .dts files. This series resolves those issues.
-> 
-> There's still more properties in arm32 DTS files which I have not
-> documented. Mostly yet more supply names and "fsl,soc-operating-points".
-> What's a few more warnings on the 10000s of warnings...
-> 
-> [...]
+I've already removed the SIMD fallback path and your patch is
+adding it back.
 
-Applied, thanks!
+> But also as I've explained before, for the library API the performance benefit
+> of removing the crypto_simd_usable() doesn't seem to be worth the footgun that
+> would be introduced.  Your position is, effectively, that if someone calls one
+> of the sha256*() functions from a hardirq, we should sometimes corrupt a random
+> task's FPU registers.  That's a really bad bug that is very difficult to
+> root-cause.  My position is that we should make it just work as expected.
 
-[10/17] arm: dts: rockchip: Drop redundant CPU "clock-latency"
-        commit: 709a25f7a433d53dc9f0daf7cf5657f0671c5026
+kernel_fpu_begin already does a WARN_ON when called in hardirq
+context and it can't safely use the FPU, there is no silent
+corruption.
 
-Best regards,
+In fact if anything your patch is making the problem worse by
+making a hardirq stochastically slow with no visible warnings
+at all.
+
+> Yes, no one *should* be doing SHA-256 in a hardirq.  But I don't think that
+> means we should corrupt a random task's FPU registers if someone doesn't follow
+> best practices, when we can easily make the API just work as expected.
+
+If you really want to support this, do it in the FPU layer, not here.
+
+Thanks,
 -- 
-Heiko Stuebner <heiko@sntech.de>
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
 
