@@ -1,165 +1,106 @@
-Return-Path: <linux-mips+bounces-8790-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8798-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEC92A9DFF4
-	for <lists+linux-mips@lfdr.de>; Sun, 27 Apr 2025 08:37:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE6FFA9E128
+	for <lists+linux-mips@lfdr.de>; Sun, 27 Apr 2025 10:48:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C9E05842A6B
-	for <lists+linux-mips@lfdr.de>; Sun, 27 Apr 2025 06:33:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4EF1C1A829B1
+	for <lists+linux-mips@lfdr.de>; Sun, 27 Apr 2025 08:49:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D01862528EC;
-	Sun, 27 Apr 2025 06:31:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="c/bG7Pmo"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E010245006;
+	Sun, 27 Apr 2025 08:48:34 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95B61252284;
-	Sun, 27 Apr 2025 06:31:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E34622367CE;
+	Sun, 27 Apr 2025 08:48:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745735479; cv=none; b=jkDKMq+qPXpmRdBCDTI/wgtzJBBPZtqpOsOQ/NXu9oFqB8aDfKEMWBSezkFXOXhTVjvHX7cTw6pswaePhiqMy/zzMFxfszwAiTJ4r7t6f1wI09GOkiIFv0rl5IXPHKpR03zAKiLqZsLO0fXWhX4iMxxrkWhVZVqaFjLhsouDfBU=
+	t=1745743714; cv=none; b=Pv+E4fsakENSDuGwj3QFmL0Pn24IcCm+k+PBIdg0honeUz0dxRHuZ2BCDY7vcbZkJvgg/6/y6+IUGIVGGwVR8bMe2bcufm4fghwv792g3ziVqHanStnTFVy2Vx4tfaj4ubSxKJ34qcrcxuV2o7qBmHJ0ZxwfDmzDtDqLNXzOBr8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745735479; c=relaxed/simple;
-	bh=SQtb6nAdMsr+moU0ZJo9JpOgHQ/TtzTkBQl/+CKgm00=;
-	h=Date:Message-Id:In-Reply-To:References:From:Subject:To:Cc; b=HrsRfn5P/mACOgfm3jU5KiIt0eqPrViTOVdLtc7SxNx9OqEPLk5Bosxjfpte1x+YA1fOJnwqImbpop2B5gM6vC7aropSuTVawsLbtpczbJO1q+WK1a5BWx+5V3ERAIQQy0CgMZMEwDzAMC5SFn1IwYpiY8R+dgDjBflvGo63tXk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=c/bG7Pmo; arc=none smtp.client-ip=144.6.53.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
-	s=formenos; h=Cc:To:Subject:From:References:In-Reply-To:Message-Id:Date:
-	Sender:Reply-To:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=p52B43yI7yzG7IFY2yqwoQVRnjSzHB18F+tstzNAX4I=; b=c/bG7PmonGoeGCcd/Ntc0Cz8ar
-	hBLXW/VxFBpKXZi3xo5i2meaz/6R3cCqYVdKIiRLrWN8VtjiN2F2WnWy/q1ssBztd4D9XD5HFR1jA
-	5Pkj4sPqYktI1OYjVt90QVAYdnL20m4K4SVVgn/yL8O0uNkSi9U1peWa/6h9PeYowVZbIjhDo8FqJ
-	e5ZTZoS2dqBy9gLSGnQ/qAy9o28ctdu2ZwBndw9Y4lbPpberlPlWMKIVZb8QJwVZpQTkg2i0d621G
-	Iq5lPqLx2si1FzrOOa00uCCojbqrFJ2or0Rid0kTydSAI9sRXY8WsdsztGHyCvAvDQYfbfeArMD6z
-	RHhemc1A==;
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1u8vXk-001LXh-0E;
-	Sun, 27 Apr 2025 14:31:13 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Sun, 27 Apr 2025 14:31:12 +0800
-Date: Sun, 27 Apr 2025 14:31:12 +0800
-Message-Id: <e1fd4c41e9c1e0da47176b811e23ae2c84fa1d98.1745734678.git.herbert@gondor.apana.org.au>
-In-Reply-To: <cover.1745734678.git.herbert@gondor.apana.org.au>
-References: <cover.1745734678.git.herbert@gondor.apana.org.au>
-From: Herbert Xu <herbert@gondor.apana.org.au>
-Subject: [v2 PATCH 13/13] crypto: lib/sha256 - improve function prototypes
-To: Linux Crypto Mailing List <linux-crypto@vger.kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org, linux-s390@vger.kernel.org, x86@kernel.org, Ard Biesheuvel <ardb@kernel.org>, "Jason A . Donenfeld " <Jason@zx2c4.com>, Linus Torvalds <torvalds@linux-foundation.org>
+	s=arc-20240116; t=1745743714; c=relaxed/simple;
+	bh=gOu7wvGasAAJsNqfTmva3ihx1xGo8COx25Vwcxlk800=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bzoZyr6CbicZxG5xJcaFZHwaODRlBmqFt6zy435PnmoZxgtHPvk7DMN8Le4Kv8YAxWnXScpUQDehfC4iVc4+Q0TFsZ5giVtu6CbWtSojdc5kfeEtVnAiUdJmlNPRsbK44PC1tzucOg92sG6aGF/zoVft6Ie6A3STE/DY8YqRNio=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1u8wsd-0007Ke-00; Sun, 27 Apr 2025 09:56:51 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 96D69C0895; Sun, 27 Apr 2025 09:12:49 +0200 (CEST)
+Date: Sun, 27 Apr 2025 09:12:49 +0200
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Thorsten Blum <thorsten.blum@linux.dev>
+Cc: "Maciej W. Rozycki" <macro@orcam.me.uk>,
+	Oleg Nesterov <oleg@redhat.com>, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] MIPS: Fix MAX_REG_OFFSET and remove zero-length
+ struct member
+Message-ID: <aA3Y8UDmeqJPnA3C@alpha.franken.de>
+References: <20250417174712.69292-2-thorsten.blum@linux.dev>
+ <aAIF_kEFlOOVNDaE@alpha.franken.de>
+ <DAD22E95-6D33-43D5-B5E5-3A7B45A63944@linux.dev>
+ <alpine.DEB.2.21.2504181108170.18253@angie.orcam.me.uk>
+ <EC98BAE8-8269-4169-B3A2-5F426E77C223@linux.dev>
+ <alpine.DEB.2.21.2504181337350.18253@angie.orcam.me.uk>
+ <B71034AC-B0FC-4C5F-8562-661D6AD11056@linux.dev>
+ <alpine.DEB.2.21.2504181608420.18253@angie.orcam.me.uk>
+ <9F6CA7CB-B36A-4F79-B78C-7ED63E39260D@linux.dev>
+ <A08BC566-5F6D-4FA5-B315-34D2FCA55A6E@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <A08BC566-5F6D-4FA5-B315-34D2FCA55A6E@linux.dev>
 
-From: Eric Biggers <ebiggers@google.com>
+On Fri, Apr 18, 2025 at 10:21:22PM +0200, Thorsten Blum wrote:
+> On 18. Apr 2025, at 22:18, Thorsten Blum wrote:
+> > On 18. Apr 2025, at 17:14, Maciej W. Rozycki wrote:
+> >> On Fri, 18 Apr 2025, Thorsten Blum wrote:
+> >>>>> Does regs_get_register() even work for CPU_CAVIUM_OCTEON when accessing
+> >>>>> the last two registers because they're both ULL, not UL? (independent of
+> >>>>> my patch)
+> >>>> 
+> >>>> Or rather two arrays of registers.  With 32-bit configurations their 
+> >>>> contents have to be retrieved by pieces.  I don't know if it's handled by 
+> >>>> the caller(s) though as I'm not familiar with this interface.
+> >>> 
+> >>> Ah, CPU_CAVIUM_OCTEON seems to be 64-bit only, so there's no difference
+> >>> between UL and ULL. Then both my patch and your suggestion:
+> >> 
+> >> So it seems odd to use `long long int' here, but I can't be bothered to 
+> >> check history.  There could be a valid reason or it could be just sloppy 
+> >> coding.
+> >> 
+> >>> I still prefer my approach without '__last[0]' because it also silences
+> >>> the following false-positive Coccinelle warning, which is how I stumbled
+> >>> upon this in the first place:
+> >>> 
+> >>> ./ptrace.h:51:15-21: WARNING use flexible-array member instead
+> >> 
+> >> So make `__last' a flexible array instead?  With a separate patch.
+> > 
+> > No, '__last[0]' is a fake flexible array and the Coccinelle warning is
+> > wrong. We should either ignore the warning or silence it by removing the
+> > marker, but turning it into a real flexible array doesn't make sense.
+> > I'd prefer to just remove it from the struct.
+> > 
+> > Stefan or Oleg, do you have any preference?
+> 
+> Sorry, I meant Thomas, not Stefan.
 
-Follow best practices by changing the length parameters to size_t and
-explicitly specifying the length of the output digest arrays.
+I don't like the #ifdefery, so please keep __last
 
-Signed-off-by: Eric Biggers <ebiggers@google.com>
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
----
- include/crypto/internal/sha2.h |  2 +-
- include/crypto/sha2.h          |  8 ++++----
- lib/crypto/sha256.c            | 12 ++++++------
- 3 files changed, 11 insertions(+), 11 deletions(-)
+Thomas.
 
-diff --git a/include/crypto/internal/sha2.h b/include/crypto/internal/sha2.h
-index 09f622c2ae7d..421872a93a83 100644
---- a/include/crypto/internal/sha2.h
-+++ b/include/crypto/internal/sha2.h
-@@ -46,7 +46,7 @@ static inline void sha256_choose_blocks(
- 
- static __always_inline void sha256_finup(
- 	struct crypto_sha256_state *sctx, const u8 *src, unsigned int len,
--	u8 *out, size_t digest_size, bool force_generic,
-+	u8 out[SHA256_DIGEST_SIZE], size_t digest_size, bool force_generic,
- 	bool force_simd)
- {
- 	unsigned int bit_offset = SHA256_BLOCK_SIZE / 8 - 1;
-diff --git a/include/crypto/sha2.h b/include/crypto/sha2.h
-index 9a56286d736d..9853cd2d1291 100644
---- a/include/crypto/sha2.h
-+++ b/include/crypto/sha2.h
-@@ -100,9 +100,9 @@ static inline void sha256_init(struct sha256_state *sctx)
- 	sctx->state[7] = SHA256_H7;
- 	sctx->count = 0;
- }
--void sha256_update(struct sha256_state *sctx, const u8 *data, unsigned int len);
--void sha256_final(struct sha256_state *sctx, u8 *out);
--void sha256(const u8 *data, unsigned int len, u8 *out);
-+void sha256_update(struct sha256_state *sctx, const u8 *data, size_t len);
-+void sha256_final(struct sha256_state *sctx, u8 out[SHA256_DIGEST_SIZE]);
-+void sha256(const u8 *data, size_t len, u8 out[SHA256_DIGEST_SIZE]);
- 
- static inline void sha224_init(struct sha256_state *sctx)
- {
-@@ -117,6 +117,6 @@ static inline void sha224_init(struct sha256_state *sctx)
- 	sctx->count = 0;
- }
- /* Simply use sha256_update as it is equivalent to sha224_update. */
--void sha224_final(struct sha256_state *sctx, u8 *out);
-+void sha224_final(struct sha256_state *sctx, u8 out[SHA224_DIGEST_SIZE]);
- 
- #endif /* _CRYPTO_SHA2_H */
-diff --git a/lib/crypto/sha256.c b/lib/crypto/sha256.c
-index d2bd9fdb8571..107d2bdea682 100644
---- a/lib/crypto/sha256.c
-+++ b/lib/crypto/sha256.c
-@@ -33,7 +33,7 @@ static inline void sha256_blocks(u32 state[SHA256_STATE_WORDS], const u8 *data,
- 			     sha256_force_generic(), false);
- }
- 
--void sha256_update(struct sha256_state *sctx, const u8 *data, unsigned int len)
-+void sha256_update(struct sha256_state *sctx, const u8 *data, size_t len)
- {
- 	size_t partial = sctx->count % SHA256_BLOCK_SIZE;
- 
-@@ -43,8 +43,8 @@ void sha256_update(struct sha256_state *sctx, const u8 *data, unsigned int len)
- }
- EXPORT_SYMBOL(sha256_update);
- 
--static void __sha256_final(struct sha256_state *sctx, u8 *out,
--			   size_t digest_size)
-+static void __sha256_final(struct sha256_state *sctx,
-+			   u8 out[SHA256_DIGEST_SIZE], size_t digest_size)
- {
- 	unsigned int len = sctx->count % SHA256_BLOCK_SIZE;
- 
-@@ -54,19 +54,19 @@ static void __sha256_final(struct sha256_state *sctx, u8 *out,
- 	memzero_explicit(sctx, sizeof(*sctx));
- }
- 
--void sha256_final(struct sha256_state *sctx, u8 *out)
-+void sha256_final(struct sha256_state *sctx, u8 out[SHA256_DIGEST_SIZE])
- {
- 	__sha256_final(sctx, out, SHA256_DIGEST_SIZE);
- }
- EXPORT_SYMBOL(sha256_final);
- 
--void sha224_final(struct sha256_state *sctx, u8 *out)
-+void sha224_final(struct sha256_state *sctx, u8 out[SHA224_DIGEST_SIZE])
- {
- 	__sha256_final(sctx, out, SHA224_DIGEST_SIZE);
- }
- EXPORT_SYMBOL(sha224_final);
- 
--void sha256(const u8 *data, unsigned int len, u8 *out)
-+void sha256(const u8 *data, size_t len, u8 out[SHA256_DIGEST_SIZE])
- {
- 	struct sha256_state sctx;
- 
 -- 
-2.39.5
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
