@@ -1,244 +1,285 @@
-Return-Path: <linux-mips+bounces-8805-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8806-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CD1AA9E24C
-	for <lists+linux-mips@lfdr.de>; Sun, 27 Apr 2025 11:54:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D447A9E266
+	for <lists+linux-mips@lfdr.de>; Sun, 27 Apr 2025 12:13:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 791757A54C5
-	for <lists+linux-mips@lfdr.de>; Sun, 27 Apr 2025 09:53:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8992E5A0014
+	for <lists+linux-mips@lfdr.de>; Sun, 27 Apr 2025 10:13:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CED2248865;
-	Sun, 27 Apr 2025 09:54:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 358752512FD;
+	Sun, 27 Apr 2025 10:13:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dk14C0Z6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="maSik9pE"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 250453D3B8;
-	Sun, 27 Apr 2025 09:54:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CF5B1ABEC5;
+	Sun, 27 Apr 2025 10:13:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745747647; cv=none; b=n9AJx3L7m/8XAJ6MhHGnC9BcAlvGdLkhLKzlnShxo3eSd3ZpgZQ1FmqJ4JEgptNsKmrr3PdmN/VCdXsr+td/soyFQAFoLEgiSBhbQ84+qd4s00GB+RxfV0a6IKS1gi4TeenytHsHZnGBydj8xxuBSSv+RghQmcAcUe0MTgFScu0=
+	t=1745748803; cv=none; b=nH0qpZqGzjyEGtnCrEITIjYmLGfMCOP9urIwLay3PkOVyFQY96w5Zw7QafCWB1a4OaKCk0EE9UxNK1aMIO/sBtiZL8QBAibxIN8g4HIEhAL0xmK3onFKPpTrGXRKow6pNUUTm8FnfabVfJnrZC3d97+1i/Z/ibHydQhY9cTJNRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745747647; c=relaxed/simple;
-	bh=lJywy2heovpguXmU4RXA81i8PyjXRqZ9d0GMwK1U8GI=;
+	s=arc-20240116; t=1745748803; c=relaxed/simple;
+	bh=8eWwbbuZABqTs1ENQRQR8TnUIzNNiOQap8h8jxOuxlU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=P99+p1D95u9BIzhluhXcuPyhCkzYaYZ1eZlx3mqJsTLAr1HNHHL0/N0OXrXbhOOa22HBLDvj0xddhMxhQrm7sN3lWdwZ3jIcKTj9nuvajIkWVwvsu9uaNKgHgmSFGBHOvGa0yE9D0O/jMj7qQJmoFIu9RJE0+SLe5xrfWSONROg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dk14C0Z6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9F6A1C4CEEE;
-	Sun, 27 Apr 2025 09:54:06 +0000 (UTC)
+	 To:Cc:Content-Type; b=msswUfrRjsiFE1yWr8ETHmuHt6tqag5wgIC3UQaGDbCzL4P3rCupRZQL5RdjMYPlZj3Uj34dJTFG5bZSAm/bxJ3bz1XJgnjW/jmGu8VmOA/jLa8sgokZzcH54VwzqeSELyS4x0uhTfAKkoaTLqDU9CgYKvWfzcyBmG9beJxBquQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=maSik9pE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80B7AC4AF09;
+	Sun, 27 Apr 2025 10:13:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745747646;
-	bh=lJywy2heovpguXmU4RXA81i8PyjXRqZ9d0GMwK1U8GI=;
+	s=k20201202; t=1745748802;
+	bh=8eWwbbuZABqTs1ENQRQR8TnUIzNNiOQap8h8jxOuxlU=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=dk14C0Z6CUa16mxHCfUfO8KFnrgzSDj9cZSevSs1v0YzK2zKzThHyf+NMQTYl7q44
-	 9uM1IbEk7Mw/3f2AcH7A+9YTDALUMoYJfwRNDUNHu2YojafjjfYy0qqT+PVI/tKb8E
-	 rNY21xvWOQMFXX3Dag5YW06hbYRNwsn01kyEYOlsrfGVet3IV4CMk4sK2nHLNZ1tFd
-	 pCdQOjYNV0+iL//mvpwghV62lyLgM7KblTcTHixOXuGtLe+rrawgoc8s78asuFSwez
-	 mqakfNrte3usR5YprLC2lnQP0EM/yM+VScG2wvvbkSjwSCDsHH+W+CxH4i/apCY7/Q
-	 vQwrppNbgow5Q==
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-ace98258d4bso106372066b.1;
-        Sun, 27 Apr 2025 02:54:06 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCW2yurXpnHLHvrLi//RWA0pvZcErm4AAew4Qs8QScZuVGxoDsf1UW90PGpgNoTJZjvboh32k21StdbPvss=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwPNmzS+hfc0xusfJOHHrsk9K4zQExJ3MS+Szs//5y2Esjy3ZP1
-	7MRHStdCF+Xajlj+dqEJWE1APi8psLJdv9ZjycIYeesWR761S0IQeos17lW948Y4TtfbvMWub3T
-	BPCKh0k2b/FObxdDSMIa/6D3EOCI=
-X-Google-Smtp-Source: AGHT+IFdd2EJQ7n8SypqXMqm8qzf6ftGrwF80c/azWJ3IohnTTU+rfmczlWwbqE06/zNhcJM7ZIcoskdFpILELI+8yE=
-X-Received: by 2002:a17:906:6a13:b0:ace:6a1e:61e0 with SMTP id
- a640c23a62f3a-ace71105624mr700041466b.25.1745747645198; Sun, 27 Apr 2025
- 02:54:05 -0700 (PDT)
+	b=maSik9pEtOgpYhHT9YIWukXxpTiXTk5HE6tAJqbPGbnftVQmCXLn2/N4tZxjXU+JE
+	 N4xd4wWTTq3erdQPO3zo3n1eUyLadYiMF3+rhJfSfMh4709jGroYpg5GyVnmBi7NSh
+	 1Jh0mCFz2JUqvSlwDJrGMRiZlA+yQzEIJezg1bOLT4XHQEC+X4QyPBjjw703SGtFNV
+	 xs1fTWmZQP02mDCwBvUi4O8HXRl8tdy8mZDsfMO1DKQiUtBBeiwl6VQ0My9pIdTMaS
+	 y/QI/FFI6b0nd1DSWJlqz2DSen/lFNJAtA251dmW9M5C5573SU0pqpjq3sYtsyf+yf
+	 Bh+IAtDouzKBA==
+Received: by mail-ed1-f41.google.com with SMTP id 4fb4d7f45d1cf-5f624291db6so6504722a12.3;
+        Sun, 27 Apr 2025 03:13:22 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU2znO/Udpq4ESNqjJ9PPUI3EbzUp4yOfhTC+O4aOZ77qsre4gdQ3KqQ82H7haJutf0BD8CllJ0Oa7+zQ==@vger.kernel.org, AJvYcCVUSBjztHwFeZKau/3rWbdxi3juK4/nPcYNPE3ZCGqtcHfjdIAblurIui06QMapuHXs1oK9Oej/9UO1HLA=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxhwzVWyoqBXmB89lV2Z8AywwdJdypcMpRjspkd1C4JrOU3EJuO
+	wYFCFdOqa96FAKVx9r4QT9A7bg88nEdghLC2i3t/AB0EfHihJB0v9kWN4cbp8+x6FseosdwPehI
+	NsS6hTshOo18srTLPg/l/+hBV5qI=
+X-Google-Smtp-Source: AGHT+IG6fQJpNysz3C7zmZd8D5k2f0nkYrh5DPoU1Qw6dMeUXhJQwVDzdJVJK8ymDINO2YUuDdCwNcFUF9lhhNcgNxg=
+X-Received: by 2002:a17:906:c14c:b0:ace:9d4e:d0cd with SMTP id
+ a640c23a62f3a-ace9d4ed62bmr246475066b.7.1745748801059; Sun, 27 Apr 2025
+ 03:13:21 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250403161143.361461-1-marco.crivellari@suse.com> <20250403161143.361461-2-marco.crivellari@suse.com>
-In-Reply-To: <20250403161143.361461-2-marco.crivellari@suse.com>
+References: <20250413-parallel-cpu-bringup-v1-1-a19d36ec229b@bootlin.com>
+In-Reply-To: <20250413-parallel-cpu-bringup-v1-1-a19d36ec229b@bootlin.com>
 From: Huacai Chen <chenhuacai@kernel.org>
-Date: Sun, 27 Apr 2025 17:53:54 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H6WszbD2o=fUqzz-FcOho-=ZxMQjW3EHKE5z=azntdbeQ@mail.gmail.com>
-X-Gm-Features: ATxdqUG7O6UOZTB94ey4wgCL-bRgs7u44phjvOJQ9mMKeiAx0hFOrzW3s2BZXec
-Message-ID: <CAAhV-H6WszbD2o=fUqzz-FcOho-=ZxMQjW3EHKE5z=azntdbeQ@mail.gmail.com>
-Subject: Re: [PATCH v7 1/2] MIPS: Fix idle VS timer enqueue
-To: Marco Crivellari <marco.crivellari@suse.com>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Frederic Weisbecker <frederic@kernel.org>, 
-	Anna-Maria Behnsen <anna-maria@linutronix.de>, Thomas Gleixner <tglx@linutronix.de>, 
-	Peter Zijlstra <peterz@infradead.org>, "Maciej W . Rozycki" <macro@orcam.me.uk>
+Date: Sun, 27 Apr 2025 18:13:10 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6JSKwWvLwPSK7Bu6jZixRn4U+xtpxGL4KBtsmjhc3PVA@mail.gmail.com>
+X-Gm-Features: ATxdqUFerU0TO4qWcekIXXooiAhSnCIDsgFGmXVbaG2s1h4X5IheC2ZSDhyFiiw
+Message-ID: <CAAhV-H6JSKwWvLwPSK7Bu6jZixRn4U+xtpxGL4KBtsmjhc3PVA@mail.gmail.com>
+Subject: Re: [PATCH] MIPS: SMP: Implement parallel CPU bring up for EyeQ
+To: Gregory CLEMENT <gregory.clement@bootlin.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>, 
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-mips@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi, Marco and Thomas,
+Hi, Gregory and Thomas,
 
-On Fri, Apr 4, 2025 at 12:11=E2=80=AFAM Marco Crivellari
-<marco.crivellari@suse.com> wrote:
+I'm sorry I'm late, but I have some questions about this patch.
+
+On Mon, Apr 14, 2025 at 3:12=E2=80=AFAM Gregory CLEMENT
+<gregory.clement@bootlin.com> wrote:
 >
-> MIPS re-enables interrupts on its idle routine and performs
-> a TIF_NEED_RESCHED check afterwards before putting the CPU to sleep.
+> Added support for starting CPUs in parallel on EyeQ to speed up boot time=
+.
 >
-> The IRQs firing between the check and the 'wait' instruction may set the
-> TIF_NEED_RESCHED flag. In order to deal with this possible race, IRQs
-> interrupting __r4k_wait() rollback their return address to the
-> beginning of __r4k_wait() so that TIF_NEED_RESCHED is checked
-> again before going back to sleep.
+> On EyeQ5, booting 8 CPUs is now ~90ms faster.
+> On EyeQ6, booting 32 CPUs is now ~650ms faster.
 >
-> However idle IRQs can also queue timers that may require a tick
-> reprogramming through a new generic idle loop iteration but those timers
-> would go unnoticed here because __r4k_wait() only checks
-> TIF_NEED_RESCHED. It doesn't check for pending timers.
->
-> Fix this with fast-forwarding idle IRQs return address to the end of the
-> idle routine instead of the beginning, so that the generic idle loop
-> handles both TIF_NEED_RESCHED and pending timers.
->
-> CONFIG_CPU_MICROMIPS has been removed along with the nop instructions.
-> There, NOPs are 2 byte in size, so change the code with 3 _ssnop which ar=
-e
-> always 4 byte and remove the ifdef. Added ehb to make sure the hazard
-> is always cleared.
->
-> Fixes: c65a5480ff29 ("[MIPS] Fix potential latency problem due to non-ato=
-mic cpu_wait.")
-> Signed-off-by: Marco Crivellari <marco.crivellari@suse.com>
-> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-> Acked-by: Frederic Weisbecker <frederic@kernel.org>
+> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 > ---
->  arch/mips/include/asm/idle.h |  3 +-
->  arch/mips/kernel/genex.S     | 62 +++++++++++++++++++++---------------
->  arch/mips/kernel/idle.c      |  7 ----
->  3 files changed, 37 insertions(+), 35 deletions(-)
+> Hello,
 >
-> diff --git a/arch/mips/include/asm/idle.h b/arch/mips/include/asm/idle.h
-> index 0992cad9c632..2bc3678455ed 100644
-> --- a/arch/mips/include/asm/idle.h
-> +++ b/arch/mips/include/asm/idle.h
-> @@ -6,8 +6,7 @@
->  #include <linux/linkage.h>
+> This patch allows CPUs to start in parallel. It has been tested on
+> EyeQ5 and EyeQ6, which are both MIPS64 and use the I6500 design. These
+> systems use CPS to support SMP.
 >
->  extern void (*cpu_wait)(void);
-> -extern void r4k_wait(void);
-> -extern asmlinkage void __r4k_wait(void);
-> +extern asmlinkage void r4k_wait(void);
->  extern void r4k_wait_irqoff(void);
+> As noted in the commit log, on EyeQ6, booting 32 CPUs is now ~650ms
+> faster.
 >
->  static inline int using_rollback_handler(void)
-> diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
-> index a572ce36a24f..46d975d00298 100644
-> --- a/arch/mips/kernel/genex.S
-> +++ b/arch/mips/kernel/genex.S
-> @@ -104,42 +104,52 @@ handle_vcei:
+> Currently, this support is only for EyeQ SoC. However, it should also
+> work for other CPUs using CPS. I am less sure about MT ASE support,
+> but this patch can be a good starting point. If anyone wants to add
+> support for other systems, I can share some ideas, especially for the
+> MIPS_GENERIC setup that needs to handle both types of SMP setups.
 >
->         __FINIT
+> Gregory
+> ---
+>  arch/mips/Kconfig                |  2 ++
+>  arch/mips/include/asm/topology.h |  3 +++
+>  arch/mips/kernel/smp-cps.c       |  2 ++
+>  arch/mips/kernel/smp.c           | 18 ++++++++++++++++++
+>  4 files changed, 25 insertions(+)
 >
-> -       .align  5       /* 32 byte rollback region */
-> -LEAF(__r4k_wait)
-> -       .set    push
-> -       .set    noreorder
-> -       /* start of rollback region */
-> -       LONG_L  t0, TI_FLAGS($28)
-> -       nop
-> -       andi    t0, _TIF_NEED_RESCHED
-> -       bnez    t0, 1f
-> -        nop
-> -       nop
-> -       nop
-> -#ifdef CONFIG_CPU_MICROMIPS
-> -       nop
-> -       nop
-> -       nop
-> -       nop
-> -#endif
-> +       /* Align to 32 bytes for the maximum idle interrupt region size. =
-*/
-> +       .align  5
-> +LEAF(r4k_wait)
-> +       /* Keep the ISA bit clear for calculations on local labels here. =
-*/
-> +0:     .fill   0
-> +       /* Start of idle interrupt region. */
-> +       local_irq_enable
-> +       /*
-> +        * If an interrupt lands here, before going idle on the next
-> +        * instruction, we must *NOT* go idle since the interrupt could
-> +        * have set TIF_NEED_RESCHED or caused a timer to need resched.
-> +        * Fall through -- see rollback_handler below -- and have the
-> +        * idle loop take care of things.
-> +        */
-> +1:     .fill   0
-> +       /* The R2 EI/EHB sequence takes 8 bytes, otherwise pad up.  */
-> +       .if             1b - 0b > 32
-> +       .error  "overlong idle interrupt region"
-> +       .elseif 1b - 0b > 8
-> +       .align  4
-> +       .endif
-> +2:     .fill   0
-> +       .equ    r4k_wait_idle_size, 2b - 0b
-> +       /* End of idle interrupt region; size has to be a power of 2. */
->         .set    MIPS_ISA_ARCH_LEVEL_RAW
-> +r4k_wait_insn:
->         wait
-> -       /* end of rollback region (the region size must be power of two) =
-*/
-> -1:
-> +r4k_wait_exit:
-> +       .set    mips0
-> +       local_irq_disable
->         jr      ra
-> -        nop
-> -       .set    pop
-> -       END(__r4k_wait)
-> +       END(r4k_wait)
-> +       .previous
-I'm very sorry for the late response, but I think ".previous" should
-be moved to the second patch.
+> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> index fc0772c1bad4ab736d440a18b972faf66a610783..e0e6ce2592b4168facf337b60=
+fd889d76e81a407 100644
+> --- a/arch/mips/Kconfig
+> +++ b/arch/mips/Kconfig
+> @@ -617,6 +617,7 @@ config EYEQ
+>         select USB_UHCI_BIG_ENDIAN_DESC if CPU_BIG_ENDIAN
+>         select USB_UHCI_BIG_ENDIAN_MMIO if CPU_BIG_ENDIAN
+>         select USE_OF
+> +       select HOTPLUG_PARALLEL if SMP
+>         help
+>           Select this to build a kernel supporting EyeQ SoC from Mobileye=
+.
+>
+> @@ -2287,6 +2288,7 @@ config MIPS_CPS
+>         select MIPS_CM
+>         select MIPS_CPS_PM if HOTPLUG_CPU
+>         select SMP
+> +       select HOTPLUG_SMT if HOTPLUG_PARALLEL
+>         select HOTPLUG_CORE_SYNC_DEAD if HOTPLUG_CPU
+>         select SYNC_R4K if (CEVT_R4K || CSRC_R4K)
+>         select SYS_SUPPORTS_HOTPLUG_CPU
+> diff --git a/arch/mips/include/asm/topology.h b/arch/mips/include/asm/top=
+ology.h
+> index 0673d2d0f2e6dd02ed14d650e5af7b8a3c162b6f..5158c802eb6574d292f6ad251=
+2cc7772fece4aae 100644
+> --- a/arch/mips/include/asm/topology.h
+> +++ b/arch/mips/include/asm/topology.h
+> @@ -16,6 +16,9 @@
+>  #define topology_core_id(cpu)                  (cpu_core(&cpu_data[cpu])=
+)
+>  #define topology_core_cpumask(cpu)             (&cpu_core_map[cpu])
+>  #define topology_sibling_cpumask(cpu)          (&cpu_sibling_map[cpu])
+> +
+> +extern struct cpumask __cpu_primary_thread_mask;
+> +#define cpu_primary_thread_mask ((const struct cpumask *)&__cpu_primary_=
+thread_mask)
+>  #endif
+>
+>  #endif /* __ASM_TOPOLOGY_H */
+> diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
+> index e85bd087467e8caf0640ad247ee5f8eb65107591..02bbd7ecd1b9557003186b9d3=
+d98ae17eac5eb9f 100644
+> --- a/arch/mips/kernel/smp-cps.c
+> +++ b/arch/mips/kernel/smp-cps.c
+> @@ -236,6 +236,7 @@ static void __init cps_smp_setup(void)
+>                         /* Use the number of VPEs in cluster 0 core 0 for=
+ smp_num_siblings */
+>                         if (!cl && !c)
+>                                 smp_num_siblings =3D core_vpes;
+> +                       cpumask_set_cpu(nvpes, &__cpu_primary_thread_mask=
+);
+>
+>                         for (v =3D 0; v < min_t(int, core_vpes, NR_CPUS -=
+ nvpes); v++) {
+>                                 cpu_set_cluster(&cpu_data[nvpes + v], cl)=
+;
+> @@ -364,6 +365,7 @@ static void __init cps_prepare_cpus(unsigned int max_=
+cpus)
+>         cl =3D cpu_cluster(&current_cpu_data);
+>         c =3D cpu_core(&current_cpu_data);
+>         cluster_bootcfg =3D &mips_cps_cluster_bootcfg[cl];
+> +       cpu_smt_set_num_threads(core_vpes, core_vpes);
+>         core_bootcfg =3D &cluster_bootcfg->core_config[c];
+>         bitmap_set(cluster_bootcfg->core_power, cpu_core(&current_cpu_dat=
+a), 1);
+>         atomic_set(&core_bootcfg->vpe_mask, 1 << cpu_vpe_id(&current_cpu_=
+data));
+> diff --git a/arch/mips/kernel/smp.c b/arch/mips/kernel/smp.c
+> index 39e193cad2b9e4f877e920b71bbbb210e52607d0..1726744f2b2ec10a44420a7b9=
+b9cd04f06c4d2f6 100644
+> --- a/arch/mips/kernel/smp.c
+> +++ b/arch/mips/kernel/smp.c
+> @@ -56,8 +56,10 @@ EXPORT_SYMBOL(cpu_sibling_map);
+>  cpumask_t cpu_core_map[NR_CPUS] __read_mostly;
+>  EXPORT_SYMBOL(cpu_core_map);
+>
+> +#ifndef CONFIG_HOTPLUG_PARALLEL
+>  static DECLARE_COMPLETION(cpu_starting);
+>  static DECLARE_COMPLETION(cpu_running);
+> +#endif
+>
+>  /*
+>   * A logical cpu mask containing only one VPE per core to
+> @@ -74,6 +76,8 @@ static cpumask_t cpu_core_setup_map;
+>
+>  cpumask_t cpu_coherent_mask;
+>
+> +struct cpumask __cpu_primary_thread_mask __read_mostly;
+> +
+>  unsigned int smp_max_threads __initdata =3D UINT_MAX;
+>
+>  static int __init early_nosmt(char *s)
+> @@ -374,10 +378,15 @@ asmlinkage void start_secondary(void)
+>         set_cpu_core_map(cpu);
+>
+>         cpumask_set_cpu(cpu, &cpu_coherent_mask);
+> +#ifdef CONFIG_HOTPLUG_PARALLEL
+> +       cpuhp_ap_sync_alive();
+This is a "synchronization point" due to the description from commit
+9244724fbf8ab394a7210e8e93bf037abc, which means things are parallel
+before this point and serialized after this point.
+
+But unfortunately, set_cpu_sibling_map() and set_cpu_core_map() cannot
+be executed in parallel. Maybe you haven't observed problems, but in
+theory it's not correct.
 
 Huacai
 
+> +#endif
+>         notify_cpu_starting(cpu);
 >
->         .macro  BUILD_ROLLBACK_PROLOGUE handler
->         FEXPORT(rollback_\handler)
->         .set    push
->         .set    noat
->         MFC0    k0, CP0_EPC
-> -       PTR_LA  k1, __r4k_wait
-> -       ori     k0, 0x1f        /* 32 byte rollback region */
-> -       xori    k0, 0x1f
-> +       /* Subtract/add 2 to let the ISA bit propagate through the mask. =
- */
-> +       PTR_LA  k1, r4k_wait_insn - 2
-> +       ori     k0, r4k_wait_idle_size - 2
-> +       .set    noreorder
->         bne     k0, k1, \handler
-> +       PTR_ADDIU       k0, r4k_wait_exit - r4k_wait_insn + 2
-> +       .set    reorder
->         MTC0    k0, CP0_EPC
->         .set pop
->         .endm
-> diff --git a/arch/mips/kernel/idle.c b/arch/mips/kernel/idle.c
-> index 5abc8b7340f8..80e8a04a642e 100644
-> --- a/arch/mips/kernel/idle.c
-> +++ b/arch/mips/kernel/idle.c
-> @@ -35,13 +35,6 @@ static void __cpuidle r3081_wait(void)
->         write_c0_conf(cfg | R30XX_CONF_HALT);
+> +#ifndef CONFIG_HOTPLUG_PARALLEL
+>         /* Notify boot CPU that we're starting & ready to sync counters *=
+/
+>         complete(&cpu_starting);
+> +#endif
+>
+>         synchronise_count_slave(cpu);
+>
+> @@ -386,11 +395,13 @@ asmlinkage void start_secondary(void)
+>
+>         calculate_cpu_foreign_map();
+>
+> +#ifndef CONFIG_HOTPLUG_PARALLEL
+>         /*
+>          * Notify boot CPU that we're up & online and it can safely retur=
+n
+>          * from __cpu_up
+>          */
+>         complete(&cpu_running);
+> +#endif
+>
+>         /*
+>          * irq will be enabled in ->smp_finish(), enabling it too early
+> @@ -447,6 +458,12 @@ void __init smp_prepare_boot_cpu(void)
+>         set_cpu_online(0, true);
 >  }
 >
-> -void __cpuidle r4k_wait(void)
-> -{
-> -       raw_local_irq_enable();
-> -       __r4k_wait();
-> -       raw_local_irq_disable();
-> -}
-> -
->  /*
->   * This variant is preferable as it allows testing need_resched and goin=
-g to
->   * sleep depending on the outcome atomically.  Unfortunately the "It is
+> +#ifdef CONFIG_HOTPLUG_PARALLEL
+> +int arch_cpuhp_kick_ap_alive(unsigned int cpu, struct task_struct *tidle=
+)
+> +{
+> +       return mp_ops->boot_secondary(cpu, tidle);
+> +}
+> +#else
+>  int __cpu_up(unsigned int cpu, struct task_struct *tidle)
+>  {
+>         int err;
+> @@ -466,6 +483,7 @@ int __cpu_up(unsigned int cpu, struct task_struct *ti=
+dle)
+>         wait_for_completion(&cpu_running);
+>         return 0;
+>  }
+> +#endif
+>
+>  #ifdef CONFIG_PROFILING
+>  /* Not really SMP stuff ... */
+>
+> ---
+> base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
+> change-id: 20250411-parallel-cpu-bringup-78999a9235ea
+>
+> Best regards,
 > --
-> 2.49.0
+> Gr=C3=A9gory CLEMENT, Bootlin
+> Embedded Linux and Kernel engineering
+> https://bootlin.com
+>
 >
 
