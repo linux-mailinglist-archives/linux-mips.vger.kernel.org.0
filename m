@@ -1,47 +1,47 @@
-Return-Path: <linux-mips+bounces-8818-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8820-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D46DA9E5C8
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Apr 2025 03:35:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3994A9E5DF
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Apr 2025 03:43:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 154B77A8C34
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Apr 2025 01:34:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 299E61694DC
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Apr 2025 01:43:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0262F126C03;
-	Mon, 28 Apr 2025 01:35:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 807E935972;
+	Mon, 28 Apr 2025 01:43:53 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 066A1A945;
-	Mon, 28 Apr 2025 01:35:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B38BEAF1;
+	Mon, 28 Apr 2025 01:43:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745804109; cv=none; b=AV9L+eIy0/do8HhCCk1ljQ42L5bwiwNsEk8HNawFAC/cKQLLzoEQ1Fxal33RfHkpZPb0xZjeDu1DH6Jh2iAPlTvpJI4sguzcwibbpYHSFeb/zbjVDp7ycIJ3yzJ4nZa2UhVDrLB1p1FTY3HCy+HGfIM+z2Aa7wCxXkrI8WQTGZs=
+	t=1745804633; cv=none; b=jVsI2fFmZPidWNUGIxdNAXURBI6dpm8C/mhIcLGnJVa61k0giqo/9GQ+80iK5EfN9ycVEaX5/gTRFW6TI4T/y8vwtfzW7efMA4kHKBlg0nwg0EAvebBe0uuCnHq7t3xG8zBI+RRsbgnPqsnRtNjoBw07nqDx/2Oyp+xmhiqbxEQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745804109; c=relaxed/simple;
-	bh=Ebz/VBsEcgu0lcMVIMIt7JjmA5z1W8cu8ILvrlaK9zw=;
+	s=arc-20240116; t=1745804633; c=relaxed/simple;
+	bh=OtlmkEkbNGzcTzcluHrptih4SZgW0i/zchiqxekC/Js=;
 	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=C42/fcdOWVoPxHIVzNJBLesRd4X6BBiJbwJFLP3SQAanPR6/zXElSgdWJ5KNnLCZ0NwJ7Fl+WFP/LXmKOoSdKGkehg5GeBiscLsPFUPDk+EdeYbWZkeM8V43IrLnJ6HX9gVFDbG/vKuClWF8w+gNdlgIawi/8NkB5yzgjcz+KTs=
+	 MIME-Version:Content-Type; b=UXxkfZ3jEUcerEDk7WUPx2J4dUg+wtL7ecl26CI6DsNZq+EHmT9jn4cpZGKZilOlJJ0q8LWWzR0T0jCOfXVhtQtUTpRRLvMCo1hewdCHoVyW7Qsx7fM/M83GB+X4MQMAlPVQoHJF26zzPHS9DRWMeaabmRcHJ6v1I3tMXXhA6Zk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
 Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 6A1B492009E; Mon, 28 Apr 2025 03:35:05 +0200 (CEST)
+	id 259B292009C; Mon, 28 Apr 2025 03:43:50 +0200 (CEST)
 Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 63AF092009D;
-	Mon, 28 Apr 2025 02:35:05 +0100 (BST)
-Date: Mon, 28 Apr 2025 02:35:05 +0100 (BST)
+	by angie.orcam.me.uk (Postfix) with ESMTP id 1820192009B;
+	Mon, 28 Apr 2025 02:43:50 +0100 (BST)
+Date: Mon, 28 Apr 2025 02:43:50 +0100 (BST)
 From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Thorsten Blum <thorsten.blum@linux.dev>
-cc: Oleg Nesterov <oleg@redhat.com>, 
-    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+To: Huacai Chen <chenhuacai@kernel.org>
+cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+    Thorsten Blum <thorsten.blum@linux.dev>, Oleg Nesterov <oleg@redhat.com>, 
     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
 Subject: Re: [PATCH v3] MIPS: Fix MAX_REG_OFFSET
-In-Reply-To: <20250427113423.67040-2-thorsten.blum@linux.dev>
-Message-ID: <alpine.DEB.2.21.2504280233460.31828@angie.orcam.me.uk>
-References: <20250427113423.67040-2-thorsten.blum@linux.dev>
+In-Reply-To: <CAAhV-H5A_xFMXOXPJFz6FyD_FixDW2msGM1fRe-FdDSq=anS8w@mail.gmail.com>
+Message-ID: <alpine.DEB.2.21.2504280235440.31828@angie.orcam.me.uk>
+References: <20250427113423.67040-2-thorsten.blum@linux.dev> <CAAhV-H6kxy9NaWXqq1QLfobVvVz9-VMybHC6M+0V-sE3MY9SRA@mail.gmail.com> <aA4oag9MAXT3y0t8@alpha.franken.de> <CAAhV-H5A_xFMXOXPJFz6FyD_FixDW2msGM1fRe-FdDSq=anS8w@mail.gmail.com>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -51,21 +51,19 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 
-On Sun, 27 Apr 2025, Thorsten Blum wrote:
+On Sun, 27 Apr 2025, Huacai Chen wrote:
 
-> Fix MAX_REG_OFFSET to point to the last register in 'pt_regs' and not to
-> the marker itself, which could allow regs_get_register() to return an
-> invalid offset.
-> 
-> Fixes: 40e084a506eb ("MIPS: Add uprobes support.")
-> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
-> ---
-> Compile-tested only.
-> 
-> Changes in v2:
-> - Fix MAX_REG_OFFSET as suggested by Maciej (thanks!)
+> > > There is no 80 columns limit now, so no new line needed here.
+> >
+> > but not forbidden to care about it. I still prefer this limit.
+> Of course you are free to choose. But in my opinion "force to long
+> lines" and "force to short lines" are both bad, code readability is
+> the first thing to be considered.
 
- You're welcome; please add a `Suggested-by' tag accordingly.
+ Correct, and I start getting lost when lines are wrapped by overrunning 
+the width of my screen.  NB in the old days some terminals would actually 
+truncate lines instead; at least it does not happen anymore, or at least 
+you can tell your terminal not to do it via a suitable stty(1) invocation.
 
   Maciej
 
