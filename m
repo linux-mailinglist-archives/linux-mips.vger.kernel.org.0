@@ -1,69 +1,114 @@
-Return-Path: <linux-mips+bounces-8820-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8821-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3994A9E5DF
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Apr 2025 03:43:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E66CDA9E640
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Apr 2025 04:27:07 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 299E61694DC
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Apr 2025 01:43:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A7443B5F9A
+	for <lists+linux-mips@lfdr.de>; Mon, 28 Apr 2025 02:26:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 807E935972;
-	Mon, 28 Apr 2025 01:43:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0BFA14D428;
+	Mon, 28 Apr 2025 02:27:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uj/r+mHa"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B38BEAF1;
-	Mon, 28 Apr 2025 01:43:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87A5078F51;
+	Mon, 28 Apr 2025 02:27:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745804633; cv=none; b=jVsI2fFmZPidWNUGIxdNAXURBI6dpm8C/mhIcLGnJVa61k0giqo/9GQ+80iK5EfN9ycVEaX5/gTRFW6TI4T/y8vwtfzW7efMA4kHKBlg0nwg0EAvebBe0uuCnHq7t3xG8zBI+RRsbgnPqsnRtNjoBw07nqDx/2Oyp+xmhiqbxEQ=
+	t=1745807223; cv=none; b=hLJ6gvptx6MBPoS/WQHwdvk4CVLGh9OtEgNPnwvRA+BleiY1EQXu8hwUmc8OLQHHxL2iKrmO5JX6MbltxTWwFePF39xtUidYk41t032pUVgJ5LR8czymgB5jNzd/TJttECFKoKi0PvHYJhKHrbCCTmyba/Qmxt0a5z8fX6abLIU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745804633; c=relaxed/simple;
-	bh=OtlmkEkbNGzcTzcluHrptih4SZgW0i/zchiqxekC/Js=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=UXxkfZ3jEUcerEDk7WUPx2J4dUg+wtL7ecl26CI6DsNZq+EHmT9jn4cpZGKZilOlJJ0q8LWWzR0T0jCOfXVhtQtUTpRRLvMCo1hewdCHoVyW7Qsx7fM/M83GB+X4MQMAlPVQoHJF26zzPHS9DRWMeaabmRcHJ6v1I3tMXXhA6Zk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 259B292009C; Mon, 28 Apr 2025 03:43:50 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 1820192009B;
-	Mon, 28 Apr 2025 02:43:50 +0100 (BST)
-Date: Mon, 28 Apr 2025 02:43:50 +0100 (BST)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Huacai Chen <chenhuacai@kernel.org>
-cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-    Thorsten Blum <thorsten.blum@linux.dev>, Oleg Nesterov <oleg@redhat.com>, 
-    linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] MIPS: Fix MAX_REG_OFFSET
-In-Reply-To: <CAAhV-H5A_xFMXOXPJFz6FyD_FixDW2msGM1fRe-FdDSq=anS8w@mail.gmail.com>
-Message-ID: <alpine.DEB.2.21.2504280235440.31828@angie.orcam.me.uk>
-References: <20250427113423.67040-2-thorsten.blum@linux.dev> <CAAhV-H6kxy9NaWXqq1QLfobVvVz9-VMybHC6M+0V-sE3MY9SRA@mail.gmail.com> <aA4oag9MAXT3y0t8@alpha.franken.de> <CAAhV-H5A_xFMXOXPJFz6FyD_FixDW2msGM1fRe-FdDSq=anS8w@mail.gmail.com>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1745807223; c=relaxed/simple;
+	bh=ARUogu1KWOl8XAQWf/Oqsl0rAq6eejDgKlCFeI2WThM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Zld2N2S4IDy19+i30WbxhUPacaI3tpodYoU/M364SfYyIZ6cyuHmxkV34kyLvCSwIy3HfZ+pk7mRd1r6PzIkmKNWQO3DD8P7VpKPCECIvIZcurr9sUObDblkz6Ixpe2X49PsOnK5KMA3S9XdxxA0ryMKf7TzHpUpB5LPC2mmQSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uj/r+mHa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B149C4CEED;
+	Mon, 28 Apr 2025 02:27:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745807223;
+	bh=ARUogu1KWOl8XAQWf/Oqsl0rAq6eejDgKlCFeI2WThM=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=uj/r+mHaLAIYEdBKV11mPlqzYr3AkOvpV/eb6cT09N3H8dcpDCm5+48VHg4vFwt1S
+	 8e/1ZmladmjfWzh2Dy0hHmbjhtAnii/Hp8ZUMsLlU/kSirk2+3Tl14+JIrkn92UNuH
+	 XzHho2qWM8m6ERjpiqPyU3WjL0OvGxWF/fzyUYaUSonZu3ijPgqftyw+7HlLYWXbF5
+	 J8b2Vi6VtH794+3kEwj6q+QXaiF8nr007SzECXw4mIVzslxfQk2bZqv1o6mRblY88x
+	 ZavwOvmI+xq9GxZ7keyloDU5E8P56/eHy7rvISQwsUvVPuINvAnNfYLaXSr2aar3Xt
+	 2zRsWuTqDKiuQ==
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-aca99fc253bso626966566b.0;
+        Sun, 27 Apr 2025 19:27:02 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCW418YgarSRIz88J9+GI3smzrfxcZ+whf+wLhpTejQ639AmyqXxtcY36ZyCrAkiTW+5xANjgf0wNSkXGd4=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy8HH1OSRZE/0yp6Uo0NAWgAFpPk9ZafqBYbw09FgmgU2q3lDyw
+	LydWTe4XjrZCV5FGOHd5y7SwkCgnGcDdpK7vnOdYwat++a+C+74rBxjBWIbVDN/BVxMTnl2hggV
+	PzcKB6jo3VY5b+ejUzeRPBOk4Lfs=
+X-Google-Smtp-Source: AGHT+IFrzxa51ihXg7aydgBMfAxORsS7IiZgQWV17nIFgI4LvEhmAWQY2i4M/0v8LH8m4JiIn7pMROdDqgeFvRal8sA=
+X-Received: by 2002:a17:907:7daa:b0:acb:5f9a:7303 with SMTP id
+ a640c23a62f3a-ace8493c1e3mr608073566b.35.1745807221613; Sun, 27 Apr 2025
+ 19:27:01 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+References: <20250403161143.361461-1-marco.crivellari@suse.com> <20250403161143.361461-3-marco.crivellari@suse.com>
+In-Reply-To: <20250403161143.361461-3-marco.crivellari@suse.com>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Mon, 28 Apr 2025 10:26:51 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4dQ8hRfBm2JWmgMzYH5tuy4ph6hyOSXQBLOvtCQ+K9dQ@mail.gmail.com>
+X-Gm-Features: ATxdqUGost9qNZ7QpU2DF1a0CWnWmGGt-lR5NOpVjzH5-3nUd4ENdD94Ymse94c
+Message-ID: <CAAhV-H4dQ8hRfBm2JWmgMzYH5tuy4ph6hyOSXQBLOvtCQ+K9dQ@mail.gmail.com>
+Subject: Re: [PATCH v7 2/2] MIPS: Move r4k_wait() to .cpuidle.text section
+To: Marco Crivellari <marco.crivellari@suse.com>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Frederic Weisbecker <frederic@kernel.org>, 
+	Anna-Maria Behnsen <anna-maria@linutronix.de>, Thomas Gleixner <tglx@linutronix.de>, 
+	Peter Zijlstra <peterz@infradead.org>, "Maciej W . Rozycki" <macro@orcam.me.uk>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Sun, 27 Apr 2025, Huacai Chen wrote:
+Hi, Marco,
 
-> > > There is no 80 columns limit now, so no new line needed here.
-> >
-> > but not forbidden to care about it. I still prefer this limit.
-> Of course you are free to choose. But in my opinion "force to long
-> lines" and "force to short lines" are both bad, code readability is
-> the first thing to be considered.
+On Fri, Apr 4, 2025 at 12:12=E2=80=AFAM Marco Crivellari
+<marco.crivellari@suse.com> wrote:
+>
+> Fix missing .cpuidle.text section assignment for r4k_wait() to correct
+> backtracing with nmi_backtrace().
+>
+> Fixes: 97c8580e85cf ("MIPS: Annotate cpu_wait implementations with __cpui=
+dle")
+> Signed-off-by: Marco Crivellari <marco.crivellari@suse.com>
+> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+> Acked-by: Frederic Weisbecker <frederic@kernel.org>
+> ---
+>  arch/mips/kernel/genex.S | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/arch/mips/kernel/genex.S b/arch/mips/kernel/genex.S
+> index 46d975d00298..2cf312d9a3b0 100644
+> --- a/arch/mips/kernel/genex.S
+> +++ b/arch/mips/kernel/genex.S
+> @@ -104,6 +104,7 @@ handle_vcei:
+>
+>         __FINIT
+>
+> +       .section .cpuidle.text,"ax"
+If you submit a new version, adding a space before "ax" will be a little be=
+tter.
 
- Correct, and I start getting lost when lines are wrapped by overrunning 
-the width of my screen.  NB in the old days some terminals would actually 
-truncate lines instead; at least it does not happen anymore, or at least 
-you can tell your terminal not to do it via a suitable stty(1) invocation.
+Huacai
 
-  Maciej
+>         /* Align to 32 bytes for the maximum idle interrupt region size. =
+*/
+>         .align  5
+>  LEAF(r4k_wait)
+> --
+> 2.49.0
+>
 
