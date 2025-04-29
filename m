@@ -1,99 +1,127 @@
-Return-Path: <linux-mips+bounces-8866-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8867-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6526AAA0701
-	for <lists+linux-mips@lfdr.de>; Tue, 29 Apr 2025 11:24:30 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D56C4AA1313
+	for <lists+linux-mips@lfdr.de>; Tue, 29 Apr 2025 19:02:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EEC25189669F
-	for <lists+linux-mips@lfdr.de>; Tue, 29 Apr 2025 09:24:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0FEB61BA645F
+	for <lists+linux-mips@lfdr.de>; Tue, 29 Apr 2025 16:59:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5653029DB7B;
-	Tue, 29 Apr 2025 09:24:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B072215060;
+	Tue, 29 Apr 2025 16:57:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="lwQmXdwa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VfHRE0Zf"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C84DC2AEE1;
-	Tue, 29 Apr 2025 09:24:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D67D924A047;
+	Tue, 29 Apr 2025 16:57:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745918663; cv=none; b=DWYZEQIShLsP/+5L8SkMgGyMEVSJjVvbVoCduNfUxc/5tIj+JmjfEh7S+yjR45g0UdO3UP2LwDu19b9EF5FdE4RuI/Q34w4gNk0D1oGA27RHYn1y1Wc+l9xDOKOq+PugQXptPOBDKn/yFFnUs/qijQkc1rp2WGZsadQ+cy/bhwo=
+	t=1745945872; cv=none; b=u2/6ifII56JyZg3an4doJxwaOEBC5vAwYnzwEC/E2qQ00n7bivfCxkAY+IAzzFYwcF0MM9XPghG+S0KFA0UukzEz0IVCHYvFvGD1w3mBRItIIBKN1XgWN7kWPe18rIiGxiviheB8WGOaRMt8UvvM9F91bB4dTyqKJ4PBrvMg9W4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745918663; c=relaxed/simple;
-	bh=v/1PWZDE9LhvYVzvh4nbkMKW/Yz9R0EAlITfjRWJ6aQ=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=emL7FbiM/Hx42rhYR3s4kfsmBYLg0ZQ+oTy5lWtxngUOnF5fa31aIrN8wjLSWV5QK+1HiCjcPcL35g84HNnms9bu3MuINDjxuyUyfRJqyAsxkEquHQsPWCgY0PTFC5Xwx5bDrGguBw6tJBXkZWzrxaDti29cHAfs2jHp+BHK+lQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=lwQmXdwa; arc=none smtp.client-ip=217.70.183.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8F5481FCE7;
-	Tue, 29 Apr 2025 09:24:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1745918657;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GEZ0/TGAvSoNsUalpNLb8aLo8LMMcOANkTCZwKQ6Zkk=;
-	b=lwQmXdwaoauJ6hEcJAvn5jgXfWSB3TfZJZ9U+eEaK7Veri0FeQAOuFpHyHe3NbnvI5r80G
-	FCuKeZSaabwYzvgSsKSspZzQZ/Ly1PnLR53+yfA2zYaB8j4tWsGZFJ341nI+XcS96jSHmL
-	Lju6igRcOH72VNzulesEfHI3r0exkCo+Whx0vTEX31FDAsJTbz/buG5uCViioezGPxFaLc
-	xDWiZYGqzPNsWKlbxci8IP6bSUw+rJvr2Xdnv8Md16zoqfJ5OOo+dXQyyYlsMd/W5rC2J+
-	j09uDMcXydNFRORaDYOu1Tw+mfMDxXo32FWlxN+Vd0kdsNLAArZoAH4czRkCuQ==
-From: Miquel Raynal <miquel.raynal@bootlin.com>
-To: Richard Weinberger <richard@nod.at>, 
- Vignesh Raghavendra <vigneshr@ti.com>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Keguang Zhang <keguang.zhang@gmail.com>
-Cc: linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-mips@vger.kernel.org, 
- Krzysztof Kozlowski <krzk@kernel.org>
-In-Reply-To: <20250320-loongson1-nand-v14-0-2fef37c8607f@gmail.com>
-References: <20250320-loongson1-nand-v14-0-2fef37c8607f@gmail.com>
-Subject: Re: [PATCH v14 0/2] Add support for Loongson-1 NAND
-Message-Id: <174591865038.993381.4352536787925323902.b4-ty@bootlin.com>
-Date: Tue, 29 Apr 2025 11:24:10 +0200
+	s=arc-20240116; t=1745945872; c=relaxed/simple;
+	bh=Tg1ctzwo0ak0Lwu1YWKgH+RS3fovIZ1X+v294BjOsH8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=E5eCeW9G/DNrxqMjMeS6kxib+gjQYz9CyZqnoldd0kEhlNgvIhtYcLWjQJq+9WiISZJbe+qFCxeGivQqm99xdgA6mmTEx18ceZLowYpXXm2ntArkAC2GRkoklRfWlzPeOGa9RSqWdP8nVRMQN68t7TLdLn0sT9rNvF8YC8jIK+M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VfHRE0Zf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EA3CC4CEEA;
+	Tue, 29 Apr 2025 16:57:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1745945871;
+	bh=Tg1ctzwo0ak0Lwu1YWKgH+RS3fovIZ1X+v294BjOsH8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=VfHRE0ZfOmDAVECATIVhnIIEDv8InpF/NVtbUFhMnpUd0U4Y+5b0Ww4zgRVL1MNmR
+	 u8gCoUF2f9BknbD6Z34UXG4o4jeie06f9l37yhBS9hg7PyyZPh0t76hiNmFRLKGGi5
+	 iEyi9z3gFBB3tX3cQpD1giyD3J3AvQz31/yIHy3BsfSa938ZSffUIHVakH6CrbbrdF
+	 VDAjwRavumw/UONhO/E9zhOSkKcu9AG/KUZggezyKAUSbacO11GC7UHvJUwjFrcjyu
+	 f0RJmP3EuGwQ5b0kiClDl4KQSZySaB5MQps8Q90qLLDnvzKrTossosvNsmID5DJOBH
+	 TIWeglu12AohQ==
+Date: Tue, 29 Apr 2025 09:57:49 -0700
+From: Eric Biggers <ebiggers@kernel.org>
+To: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+	sparclinux@vger.kernel.org, linux-s390@vger.kernel.org,
+	x86@kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+	"Jason A . Donenfeld " <Jason@zx2c4.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [v3 PATCH 00/13] Architecture-optimized SHA-256 library API
+Message-ID: <20250429165749.GC1743@sol.localdomain>
+References: <cover.1745816372.git.herbert@gondor.apana.org.au>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.15-dev
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvieefgeehucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevjghfuffkffggtgfgofesthekredtredtjeenucfhrhhomhepofhiqhhuvghlucftrgihnhgrlhcuoehmihhquhgvlhdrrhgrhihnrghlsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeekieelgfehtdejteduhffhvdduueetfeettdejfeehkeetiefhgfevhfeuheffleenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeelvddrudekgedruddtkedrvdehheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeelvddrudekgedruddtkedrvdehhedphhgvlhhopegludelvddrudeikedruddruddtiegnpdhmrghilhhfrhhomhepmhhiqhhuvghlrdhrrgihnhgrlhessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepuddupdhrtghpthhtohepuggvvhhitggvthhrvggvsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhriihksehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhmthgusehlihhsthhsrdhinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoheprhhosghhsehkvghrnhgvlhdrohhrghdprhgtphhtt
- hhopehrihgthhgrrhgusehnohgurdgrthdprhgtphhtthhopehkvghguhgrnhhgrdiihhgrnhhgsehgmhgrihhlrdgtohhmpdhrtghpthhtohepkhhriihkodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheptghonhhorhdoughtsehkvghrnhgvlhdrohhrgh
-X-GND-Sasl: miquel.raynal@bootlin.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <cover.1745816372.git.herbert@gondor.apana.org.au>
 
-On Thu, 20 Mar 2025 18:31:36 +0800, Keguang Zhang wrote:
-> Add the driver and dt-binding document for Loongson-1 NAND.
+On Mon, Apr 28, 2025 at 01:17:02PM +0800, Herbert Xu wrote:
+> Changes in v3:
+> - Add shash sha256-lib/sha224-lib to provide test coverage for libsha256.
 > 
-> Changes in v14:
-> - Clean up unnecessary print messages in the driver.
-> - Some minor related adjustments.
-> - Link to v13: https://lore.kernel.org/r/20250305-loongson1-nand-v13-0-a5bac21631cd@gmail.com
+> This is based on
 > 
-> [...]
+> 	https://patchwork.kernel.org/project/linux-crypto/list/?series=957558
+> 
+> Original description:
+> 
+> Following the example of several other algorithms (e.g. CRC32, ChaCha,
+> Poly1305, BLAKE2s), this series refactors the kernel's existing
+> architecture-optimized SHA-256 code to be available via the library API,
+> instead of just via the crypto_shash API as it was before.  It also
+> reimplements the SHA-256 crypto_shash API on top of the library API.
+> 
+> This makes it possible to use the SHA-256 library in
+> performance-critical cases.  The new design is also much simpler, with a
+> negative diffstat of over 1200 lines.  Finally, this also fixes the
+> longstanding issue where the arch-optimized SHA-256 was disabled by
+> default, so people often forgot to enable it.
+> 
+> For now the SHA-256 library is well-covered by the crypto_shash
+> self-tests, but I plan to add a test for the library directly later.
+> I've fully tested this series on arm, arm64, riscv, and x86.  On mips,
+> powerpc, s390, and sparc I've only been able to partially test it, since
+> QEMU does not support the SHA-256 instructions on those platforms.  If
+> anyone with access to a mips, powerpc, s390, or sparc system that has
+> SHA-256 instructions can verify that the crypto self-tests still pass,
+> that would be appreciated.  But I don't expect any issues, especially
+> since the new code is more straightforward than the old code.
+> 
+> Eric Biggers (13):
+>   crypto: sha256 - support arch-optimized lib and expose through shash
+>   crypto: arm/sha256 - implement library instead of shash
+>   crypto: arm64/sha256 - remove obsolete chunking logic
+>   crypto: arm64/sha256 - implement library instead of shash
+>   crypto: mips/sha256 - implement library instead of shash
+>   crypto: powerpc/sha256 - implement library instead of shash
+>   crypto: riscv/sha256 - implement library instead of shash
+>   crypto: s390/sha256 - implement library instead of shash
+>   crypto: sparc - move opcodes.h into asm directory
+>   crypto: sparc/sha256 - implement library instead of shash
+>   crypto: x86/sha256 - implement library instead of shash
+>   crypto: sha256 - remove sha256_base.h
+>   crypto: lib/sha256 - improve function prototypes
 
-Applied to nand/next, thanks!
+To be clear, the objections I have on your v2 patchset still hold.  Your
+unsolicited changes to my patches add unnecessary complexity and redundancy,
+make the crypto_shash API even harder to use correctly, and also break the build
+for several architectures.  If you're going to again use your maintainer
+privileges to push these out anyway over my objections, I'd appreciate it if you
+at least made your dubious changes as incremental patches using your own
+authorship so that they can be properly reviewed/blamed.
 
-[1/2] dt-bindings: mtd: Add Loongson-1 NAND Controller
-      commit: eff4e04c892774b1cf7ce43afbb186ff0be870c0
-[2/2] mtd: rawnand: Add Loongson-1 NAND Controller Driver
-      commit: d2d10ede04b1671dc4762479a2d06f183aaafbba
+Please also note that I've sent a v4 which fixes the one real issue that my v1
+patchset had: https://lore.kernel.org/r/20250428170040.423825-1-ebiggers@kernel.org
 
-Patche(s) should be available on mtd/linux.git and will be
-part of the next PR (provided that no robot complains by then).
-
-Kind regards,
-Miquèl
-
+- Eric
 
