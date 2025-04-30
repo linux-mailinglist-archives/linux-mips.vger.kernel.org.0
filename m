@@ -1,49 +1,56 @@
-Return-Path: <linux-mips+bounces-8867-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8868-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D56C4AA1313
-	for <lists+linux-mips@lfdr.de>; Tue, 29 Apr 2025 19:02:35 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9783EAA40EE
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Apr 2025 04:27:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0FEB61BA645F
-	for <lists+linux-mips@lfdr.de>; Tue, 29 Apr 2025 16:59:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C63807B7132
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Apr 2025 02:26:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B072215060;
-	Tue, 29 Apr 2025 16:57:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34C1819E83C;
+	Wed, 30 Apr 2025 02:27:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VfHRE0Zf"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="Vieyc26V"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D67D924A047;
-	Tue, 29 Apr 2025 16:57:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DEE9320F;
+	Wed, 30 Apr 2025 02:27:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745945872; cv=none; b=u2/6ifII56JyZg3an4doJxwaOEBC5vAwYnzwEC/E2qQ00n7bivfCxkAY+IAzzFYwcF0MM9XPghG+S0KFA0UukzEz0IVCHYvFvGD1w3mBRItIIBKN1XgWN7kWPe18rIiGxiviheB8WGOaRMt8UvvM9F91bB4dTyqKJ4PBrvMg9W4=
+	t=1745980050; cv=none; b=chbfn+ciz2S/NNpeDQU7sWo5GQUL+1Mx96qwGD0KGtnJracKI9FTy3AdYEzbWx+7Ws+BHhC9bDaWW5lHDoQd1dZj4svPJh7BrlmkImHJkrFy+6ZQvM+nyL8LySUlsl7jM1h/f3xHRr30zCXwCoZHbLGbcr8RPDkMaeLEjEZMcJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745945872; c=relaxed/simple;
-	bh=Tg1ctzwo0ak0Lwu1YWKgH+RS3fovIZ1X+v294BjOsH8=;
+	s=arc-20240116; t=1745980050; c=relaxed/simple;
+	bh=MjSwpfkrbJam/CzzxFxRbha1wbLDcDn5jLZbOSmWQ6I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=E5eCeW9G/DNrxqMjMeS6kxib+gjQYz9CyZqnoldd0kEhlNgvIhtYcLWjQJq+9WiISZJbe+qFCxeGivQqm99xdgA6mmTEx18ceZLowYpXXm2ntArkAC2GRkoklRfWlzPeOGa9RSqWdP8nVRMQN68t7TLdLn0sT9rNvF8YC8jIK+M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VfHRE0Zf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EA3CC4CEEA;
-	Tue, 29 Apr 2025 16:57:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1745945871;
-	bh=Tg1ctzwo0ak0Lwu1YWKgH+RS3fovIZ1X+v294BjOsH8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VfHRE0ZfOmDAVECATIVhnIIEDv8InpF/NVtbUFhMnpUd0U4Y+5b0Ww4zgRVL1MNmR
-	 u8gCoUF2f9BknbD6Z34UXG4o4jeie06f9l37yhBS9hg7PyyZPh0t76hiNmFRLKGGi5
-	 iEyi9z3gFBB3tX3cQpD1giyD3J3AvQz31/yIHy3BsfSa938ZSffUIHVakH6CrbbrdF
-	 VDAjwRavumw/UONhO/E9zhOSkKcu9AG/KUZggezyKAUSbacO11GC7UHvJUwjFrcjyu
-	 f0RJmP3EuGwQ5b0kiClDl4KQSZySaB5MQps8Q90qLLDnvzKrTossosvNsmID5DJOBH
-	 TIWeglu12AohQ==
-Date: Tue, 29 Apr 2025 09:57:49 -0700
-From: Eric Biggers <ebiggers@kernel.org>
-To: Herbert Xu <herbert@gondor.apana.org.au>
+	 Content-Type:Content-Disposition:In-Reply-To; b=rNh2/gfuWb7mRXT7x5F9yeaeHnoOBMOR+MoktakHUJxh4uvCv9oHI7s1fV/P1j9ViVJF8CRgNuFtwANlPLq0i6wf8sJv0lC49CQWOMfPq+oIA72LwJDq12Fb/ZjHkO/y/EcUKJikXEE+3K0H7S5db9rhlZQZRsKWKO/Zyc472aU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=Vieyc26V; arc=none smtp.client-ip=144.6.53.87
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
+	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
+	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+	List-Post:List-Owner:List-Archive;
+	bh=k4QjAmh83yMZNLzUuAj1J5f4WZGw3kbBWCArSRYks8c=; b=Vieyc26VLhqz4zWnYRj3rYoyQj
+	H0zpuIjmCDGV04Csn9F7DAzFr4VMNjSPrC0ttYmpV9ePC4GcLW04Gh2LQ1DfIxlqp8R2aL3ipQgqS
+	Hoxj4/7XIQ9SP8MYTw9J6YxFRkgAmoixnyakr025Cu5UwmrQd+FkzC7jHq9Sv7Lbup88SHAX/kJOO
+	gCZMT32Dh2FRvOwZvUtHvMWVDl4ZzRtgK+7mmLDbkUAE5fgD6/s5zMPyYWMNXS2Dyy648liRupOcp
+	RncktiF2kCxxXhDi4UksWk66YNHf90reaqkRJHJIrq0moVeglYppY4Tl1LsVfkb0I0T9xlkGgF+Dz
+	KZjeX6Og==;
+Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
+	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
+	id 1u9xAJ-0028rg-2e;
+	Wed, 30 Apr 2025 10:27:16 +0800
+Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Wed, 30 Apr 2025 10:27:15 +0800
+Date: Wed, 30 Apr 2025 10:27:15 +0800
+From: Herbert Xu <herbert@gondor.apana.org.au>
+To: Eric Biggers <ebiggers@kernel.org>
 Cc: Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
 	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
@@ -53,8 +60,9 @@ Cc: Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
 	"Jason A . Donenfeld " <Jason@zx2c4.com>,
 	Linus Torvalds <torvalds@linux-foundation.org>
 Subject: Re: [v3 PATCH 00/13] Architecture-optimized SHA-256 library API
-Message-ID: <20250429165749.GC1743@sol.localdomain>
+Message-ID: <aBGKg5bq0zLkhy3-@gondor.apana.org.au>
 References: <cover.1745816372.git.herbert@gondor.apana.org.au>
+ <20250429165749.GC1743@sol.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -63,65 +71,35 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1745816372.git.herbert@gondor.apana.org.au>
+In-Reply-To: <20250429165749.GC1743@sol.localdomain>
 
-On Mon, Apr 28, 2025 at 01:17:02PM +0800, Herbert Xu wrote:
-> Changes in v3:
-> - Add shash sha256-lib/sha224-lib to provide test coverage for libsha256.
-> 
-> This is based on
-> 
-> 	https://patchwork.kernel.org/project/linux-crypto/list/?series=957558
-> 
-> Original description:
-> 
-> Following the example of several other algorithms (e.g. CRC32, ChaCha,
-> Poly1305, BLAKE2s), this series refactors the kernel's existing
-> architecture-optimized SHA-256 code to be available via the library API,
-> instead of just via the crypto_shash API as it was before.  It also
-> reimplements the SHA-256 crypto_shash API on top of the library API.
-> 
-> This makes it possible to use the SHA-256 library in
-> performance-critical cases.  The new design is also much simpler, with a
-> negative diffstat of over 1200 lines.  Finally, this also fixes the
-> longstanding issue where the arch-optimized SHA-256 was disabled by
-> default, so people often forgot to enable it.
-> 
-> For now the SHA-256 library is well-covered by the crypto_shash
-> self-tests, but I plan to add a test for the library directly later.
-> I've fully tested this series on arm, arm64, riscv, and x86.  On mips,
-> powerpc, s390, and sparc I've only been able to partially test it, since
-> QEMU does not support the SHA-256 instructions on those platforms.  If
-> anyone with access to a mips, powerpc, s390, or sparc system that has
-> SHA-256 instructions can verify that the crypto self-tests still pass,
-> that would be appreciated.  But I don't expect any issues, especially
-> since the new code is more straightforward than the old code.
-> 
-> Eric Biggers (13):
->   crypto: sha256 - support arch-optimized lib and expose through shash
->   crypto: arm/sha256 - implement library instead of shash
->   crypto: arm64/sha256 - remove obsolete chunking logic
->   crypto: arm64/sha256 - implement library instead of shash
->   crypto: mips/sha256 - implement library instead of shash
->   crypto: powerpc/sha256 - implement library instead of shash
->   crypto: riscv/sha256 - implement library instead of shash
->   crypto: s390/sha256 - implement library instead of shash
->   crypto: sparc - move opcodes.h into asm directory
->   crypto: sparc/sha256 - implement library instead of shash
->   crypto: x86/sha256 - implement library instead of shash
->   crypto: sha256 - remove sha256_base.h
->   crypto: lib/sha256 - improve function prototypes
+On Tue, Apr 29, 2025 at 09:57:49AM -0700, Eric Biggers wrote:
+>
+> To be clear, the objections I have on your v2 patchset still hold.  Your
+> unsolicited changes to my patches add unnecessary complexity and redundancy,
+> make the crypto_shash API even harder to use correctly, and also break the build
+> for several architectures.  If you're going to again use your maintainer
+> privileges to push these out anyway over my objections, I'd appreciate it if you
+> at least made your dubious changes as incremental patches using your own
+> authorship so that they can be properly reviewed/blamed.
 
-To be clear, the objections I have on your v2 patchset still hold.  Your
-unsolicited changes to my patches add unnecessary complexity and redundancy,
-make the crypto_shash API even harder to use correctly, and also break the build
-for several architectures.  If you're going to again use your maintainer
-privileges to push these out anyway over my objections, I'd appreciate it if you
-at least made your dubious changes as incremental patches using your own
-authorship so that they can be properly reviewed/blamed.
+Well the main problem is that your patch introduces a regression
+in the shash sha256 code by making its export format differ from
+other shash sha256 implementations (e.g., padlock-sha).
 
-Please also note that I've sent a v4 which fixes the one real issue that my v1
-patchset had: https://lore.kernel.org/r/20250428170040.423825-1-ebiggers@kernel.org
+So your first patch cannot stand as is.  What I could do is split up
+the first patch so that the lib/crypto sha stuff goes in by itself
+followed by a separate patch replacing the crypto/sha256 code.
 
-- Eric
+> Please also note that I've sent a v4 which fixes the one real issue that my v1
+> patchset had: https://lore.kernel.org/r/20250428170040.423825-1-ebiggers@kernel.org
+
+Yes I've seen it but it still has the same issue of changing the
+shash sha256 export format.
+
+Cheers,
+-- 
+Email: Herbert Xu <herbert@gondor.apana.org.au>
+Home Page: http://gondor.apana.org.au/~herbert/
+PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
 
