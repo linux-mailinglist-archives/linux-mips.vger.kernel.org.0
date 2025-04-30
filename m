@@ -1,194 +1,148 @@
-Return-Path: <linux-mips+bounces-8888-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8889-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 614B1AA50E9
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Apr 2025 17:55:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60698AA52D6
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Apr 2025 19:45:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 91FFA1BC841D
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Apr 2025 15:55:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 043621BC8282
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Apr 2025 17:46:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11874261388;
-	Wed, 30 Apr 2025 15:55:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7E892620D1;
+	Wed, 30 Apr 2025 17:45:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="K2wiGfB1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b5Ki7Zeo"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A54525DAFB;
-	Wed, 30 Apr 2025 15:55:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8058B1AA1FF;
+	Wed, 30 Apr 2025 17:45:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746028534; cv=none; b=SntuzETGlUnzhR0gtWvHSal0Xx1lBD6uG0IJTQGjTnSuUHkcsJYdPQZiCLgEeX19Mrz+9q/F7LBxt5egLpAUSDsfdM72ZvWWSwzQe+EMcYod7PjgQWLPS3DlP6Wf1aJRL3ti84u0pGFnujmjh5RUXhnih9nBHNKgaLZpv0nVFDA=
+	t=1746035146; cv=none; b=NI6FDDAfskkObhrABAJt6VStnT6u7oc01dSlckbR8/KKgsoV1NIoaInjcV89VdGvSoIVqwRA9QaO+5nawW66CtYQnDDYKIM7UrKexFcJRWRId+MVj+wJHwh520O/gAbnxNwOZkG9WLsd0vC1NzDMBZ7IPMaDwywyCg685ioXpHs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746028534; c=relaxed/simple;
-	bh=pAi1g0+GcrXhsxxUwg/COVu8QWbSDq0H9FeDRKmvTZo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=OJbQgkD6jSq9Auoskjsuuwj7G0Tv7aWDOmOD7UqydCATVtyIX6s2gRgK8YC5zO0tnVfpI1laAt+vnwfBnWqE6fLuawu7E5eJgUPTSYVTGx3AIHM56HwEkyHcnEK+66nu9QWAkilfi9ZkLtmaVZV0UqSQVRPqgIaJDuHwF3x3Wus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=K2wiGfB1; arc=none smtp.client-ip=148.163.158.5
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353725.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 53UDnBtg027609;
-	Wed, 30 Apr 2025 15:54:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=0rJOsX
-	oPMQhpiqynyefL1qZwMh6TkDUagnvd4/qOyd8=; b=K2wiGfB15TYazXEnpvRv1V
-	CpV8N8jNb1inCirUlCY5p1+Mpp/dKc9l6G+rth3k3o7nHl5+c3OWq6Npvs5h+nWW
-	Lcm7zbgzHrVXdY7cUj0/fjTV+4A4ELvvRncr/+0hlIFwk2gjmH6ZoCB6G0CyPiN4
-	t+9DR3Qccj5dFQ7j4N9y9zmHw41KNdMG97QxmQR2mwoi9YwYnLWa5FAT9QD4tTC2
-	o/vT7uGXCG51UopyBrzbcy+ZWUZaOvOD1xUxDrAeHcxBG94GyS7dFD3TvnLmt6k6
-	mApOaKQs/+bHcz4nY8N1iERMAdVAhklDXOEMNCGfpp9xY/TLyRj0g5TGw8etc08Q
-	==
-Received: from pps.reinject (localhost [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46b8r0un51-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 30 Apr 2025 15:54:55 +0000 (GMT)
-Received: from m0353725.ppops.net (m0353725.ppops.net [127.0.0.1])
-	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 53UFmj17027098;
-	Wed, 30 Apr 2025 15:54:54 GMT
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 46b8r0un4u-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 30 Apr 2025 15:54:54 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 53UFdC7A031677;
-	Wed, 30 Apr 2025 15:54:53 GMT
-Received: from smtprelay07.wdc07v.mail.ibm.com ([172.16.1.74])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 4699tu8pwy-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 30 Apr 2025 15:54:53 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-	by smtprelay07.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 53UFspgu14156496
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 30 Apr 2025 15:54:52 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C11CE5805A;
-	Wed, 30 Apr 2025 15:54:51 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id B44C25805C;
-	Wed, 30 Apr 2025 15:54:49 +0000 (GMT)
-Received: from [9.61.85.22] (unknown [9.61.85.22])
-	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 30 Apr 2025 15:54:49 +0000 (GMT)
-Message-ID: <c8e88c29-e1bb-4845-a362-dc352d690508@linux.ibm.com>
-Date: Wed, 30 Apr 2025 11:54:49 -0400
+	s=arc-20240116; t=1746035146; c=relaxed/simple;
+	bh=KRq3ObS+7bPSh5npZvFvh2C1vvjoanHB8ALoJ0Lw5oY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Du3c3FSuKyvh5v1i/hqNTxLmgiXx5XNJofJh3p/+eBOfoF803zZcf+ngoQo4f9r+m+wIDc06uX6FjXKDiEXXWVa6OM077xH0qHm+rc1Ohk61RgHzjpf/trk6U6Rq7wGopJDC8rwuqTgOMoS26CkWzz/zKB1su5fLdsENKWsXA04=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b5Ki7Zeo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7027EC4CEE7;
+	Wed, 30 Apr 2025 17:45:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746035146;
+	bh=KRq3ObS+7bPSh5npZvFvh2C1vvjoanHB8ALoJ0Lw5oY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=b5Ki7ZeoUb9ZN4LPaDEoM1o1bvfVz7fD1oztts7rOpVhwqg4oS5OvcmfJCGu3gxUH
+	 fT26UoXeSWagXlFQb3TkXpFnlFx9pI6CdXses/373TH68nkQ5m1XnkeCZyjTB3pjL8
+	 hB2unDN1O+ZToSdOpBH6aVt6DnPXIiit23u0m97zhbqweH/oPbGvmEvxIZXP3/PGuI
+	 fXfOoMh+QT2xdYboklbx8EcmahcftGMdK+N5ysjtRDWRo5qH2CA9yak25NsdYdhKlS
+	 5Unk+mvpoO/hy1QMjlUYCjybEmTkDQ2xbgxYdXD5WmCQ7eiojk/2fQ1VOdLNWLhrd4
+	 FfCKW0EMC7VFg==
+Date: Wed, 30 Apr 2025 10:45:43 -0700
+From: Eric Biggers <ebiggers@kernel.org>
+To: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
+	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+	sparclinux@vger.kernel.org, linux-s390@vger.kernel.org,
+	x86@kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+	"Jason A . Donenfeld" <Jason@zx2c4.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: Re: [PATCH 00/12] crypto: sha256 - Use partial block API
+Message-ID: <20250430174543.GB1958@sol.localdomain>
+References: <cover.1745992998.git.herbert@gondor.apana.org.au>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 6.1 000/167] 6.1.136-rc1 review
-To: Naresh Kamboju <naresh.kamboju@linaro.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org,
-        hargar@microsoft.com, broonie@kernel.org,
-        clang-built-linux <llvm@lists.linux.dev>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Anders Roxell <anders.roxell@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Dan Carpenter <dan.carpenter@linaro.org>, linux-s390@vger.kernel.org,
-        linux-mips@vger.kernel.org, io-uring@vger.kernel.org,
-        virtualization@lists.linux.dev, Halil Pasic <pasic@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>, Heiko Carstens <hca@linux.ibm.com>
-References: <20250429161051.743239894@linuxfoundation.org>
- <CA+G9fYuNjKcxFKS_MKPRuga32XbndkLGcY-PVuoSwzv6VWbY=w@mail.gmail.com>
-Content-Language: en-US
-From: Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <CA+G9fYuNjKcxFKS_MKPRuga32XbndkLGcY-PVuoSwzv6VWbY=w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNDMwMDExMSBTYWx0ZWRfX7Wf07gSrdqCk zb0K3R03TxsVsyR1iTUQrpsn8SgfAs0YFKySz/5l60nS4Ty5Ocio1IGZiRsSV+b6BaQ34Fw0vKl ioFN6STKCZicQtlKBajk+fMGVQHIWLwsOHmjMfdnISc6UX6/lQi32CbkOacKy/qWe59SsGqD1FW
- yGAw7jomIrcY7Y+QlX3QnxqhlFLuOCqh+3nvUuQYjBBEicyOXHCNHfg56gMlKo5TQ/HU7CKD1Vz W4soxBFSdg8ydvaCNHKx0zyGUk5RgEVNwU6w4KkJxsKXecKKMDQcqtH9SDveCufpn4QuNdXaLOW HAoIki6/XzHtkh/RZDURZLd+FVRmQ2ZYWFKlr3RObtf5HJq1oVyxlxnHoPOrM947oMgF6/F//iH
- LrRowoVxEOQ07s5PL23CPXOo0ntDDhtUxrPRU8Domof8K1cr/useUFXFiV+noDH/q8fUiJLd
-X-Authority-Analysis: v=2.4 cv=OqdPyz/t c=1 sm=1 tr=0 ts=681247cf cx=c_pps a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17 a=IkcTkHD0fZMA:10 a=XR8D0OoHHMoA:10 a=eZE_XS7iPCa-stX4-vkA:9 a=QEXdDO2ut3YA:10
-X-Proofpoint-GUID: Sij4fx90_ksNlpmCP9y4w-QIVKqfbDsT
-X-Proofpoint-ORIG-GUID: 2ilcYsyPiGbEAPeMVPlTbkq5Tf2pWo3G
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-04-30_04,2025-04-24_02,2025-02-21_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- suspectscore=0 malwarescore=0 priorityscore=1501 bulkscore=0 mlxscore=0
- lowpriorityscore=0 adultscore=0 clxscore=1011 spamscore=0 mlxlogscore=602
- phishscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2504070000
- definitions=main-2504300111
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <cover.1745992998.git.herbert@gondor.apana.org.au>
 
+[Added back Cc's that were dropped]
 
-> 2)
-> Regressions on s390 with defconfig builds with gcc-13, gcc-8 and
-> clang-20 and clang-nightly toolchains on the stable-rc 6.1.136-rc1.
+On Wed, Apr 30, 2025 at 02:06:15PM +0800, Herbert Xu wrote:
+> This is based on
 > 
-> * s390, build
->   - clang-20-defconfig
->   - clang-nightly-defconfig
->   - gcc-13-allmodconfig
->   - gcc-13-defconfig
->   - gcc-8-defconfig-fe40093d
+> 	https://patchwork.kernel.org/project/linux-crypto/list/?series=957785
+
+I'm assuming that you mean that with your diff
+https://lore.kernel.org/r/aBGdiv17ztQnhAps@gondor.apana.org.au folded into my
+first patch, since otherwise your patch series doesn't apply.  But even with
+that done, your patch series doesn't build:
+
+    In file included from ./include/crypto/hash_info.h:12,
+                     from crypto/hash_info.c:9:
+    ./include/crypto/sha2.h: In function ‘sha256_init’:
+    ./include/crypto/sha2.h:101:32: error: ‘struct sha256_state’ has no member named ‘ctx’
+      101 |         sha256_block_init(&sctx->ctx);
+          |                                ^~
+
+> Rather than going through the lib/sha256 partial block handling,
+> use the native shash partial block API.  Add two extra shash
+> algorithms to provide testing coverage for lib/sha256.
 > 
-> Regression Analysis:
->  - New regression? Yes
->  - Reproducibility? Yes
-> 
-...
-> drivers/s390/virtio/virtio_ccw.c:88:9: error: unknown type name 'dma64_t'
->    88 |         dma64_t queue;
->       |         ^~~~~~~
-> drivers/s390/virtio/virtio_ccw.c:95:9: error: unknown type name 'dma64_t'
->    95 |         dma64_t desc;
->       |         ^~~~~~~
-> drivers/s390/virtio/virtio_ccw.c:99:9: error: unknown type name 'dma64_t'
->    99 |         dma64_t avail;
->       |         ^~~~~~~
-> drivers/s390/virtio/virtio_ccw.c:100:9: error: unknown type name 'dma64_t'
->   100 |         dma64_t used;
->       |         ^~~~~~~
-> drivers/s390/virtio/virtio_ccw.c:109:9: error: unknown type name 'dma64_t'
->   109 |         dma64_t summary_indicator;
->       |         ^~~~~~~
-> drivers/s390/virtio/virtio_ccw.c:110:9: error: unknown type name 'dma64_t'
->   110 |         dma64_t indicator;
->       |         ^~~~~~~
-> drivers/s390/virtio/virtio_ccw.c: In function 'virtio_ccw_drop_indicator':
-> drivers/s390/virtio/virtio_ccw.c:370:25: error: implicit declaration
-> of function 'virt_to_dma64'; did you mean 'virt_to_page'?
-> [-Werror=implicit-function-declaration]
->   370 |                         virt_to_dma64(get_summary_indicator(airq_info));
->       |                         ^~~~~~~~~~~~~
->       |                         virt_to_page
-> drivers/s390/virtio/virtio_ccw.c:374:28: error: implicit declaration
-> of function 'virt_to_dma32'; did you mean 'virt_to_page'?
-> [-Werror=implicit-function-declaration]
->   374 |                 ccw->cda = virt_to_dma32(thinint_area);
->       |                            ^~~~~~~~~~~~~
->       |                            virt_to_page
-> drivers/s390/virtio/virtio_ccw.c: In function 'virtio_ccw_setup_vq':
-> drivers/s390/virtio/virtio_ccw.c:552:45: error: implicit declaration
-> of function 'u64_to_dma64' [-Werror=implicit-function-declaration]
->   552 |                 info->info_block->l.queue = u64_to_dma64(queue);
->       |                                             ^~~~~~~~~~~~
-> drivers/s390/virtio/virtio_ccw.c: In function 'virtio_ccw_find_vqs':
-> drivers/s390/virtio/virtio_ccw.c:654:9: error: unknown type name 'dma64_t'
->   654 |         dma64_t *indicatorp = NULL;
->       |         ^~~~~~~
-> cc1: some warnings being treated as errors
+> Herbert Xu (12):
+>   crypto: lib/sha256 - Restore lib_sha256 finup code
+>   crypto: sha256 - Use the partial block API for generic
+>   crypto: arm/sha256 - Add simd block function
+>   crypto: arm64/sha256 - Add simd block function
+>   crypto: mips/sha256 - Export block functions as GPL only
+>   crypto: powerpc/sha256 - Export block functions as GPL only
+>   crypto: riscv/sha256 - Add simd block function
+>   crypto: s390/sha256 - Export block functions as GPL only
+>   crypto: sparc/sha256 - Export block functions as GPL only
+>   crypto: x86/sha256 - Add simd block function
+>   crypto: lib/sha256 - Use generic block helper
+>   crypto: sha256 - Use the partial block API
+>
+>  arch/arm/lib/crypto/Kconfig                   |   1 +
+>  arch/arm/lib/crypto/sha256-armv4.pl           |  20 +--
+>  arch/arm/lib/crypto/sha256.c                  |  16 +--
+>  arch/arm64/crypto/sha512-glue.c               |   6 +-
+>  arch/arm64/lib/crypto/Kconfig                 |   1 +
+>  arch/arm64/lib/crypto/sha2-armv8.pl           |   2 +-
+>  arch/arm64/lib/crypto/sha256.c                |  16 +--
+>  .../mips/cavium-octeon/crypto/octeon-sha256.c |   4 +-
+>  arch/powerpc/lib/crypto/sha256.c              |   4 +-
+>  arch/riscv/lib/crypto/Kconfig                 |   1 +
+>  arch/riscv/lib/crypto/sha256.c                |  17 ++-
+>  arch/s390/lib/crypto/sha256.c                 |   4 +-
+>  arch/sparc/lib/crypto/sha256.c                |   4 +-
+>  arch/x86/lib/crypto/Kconfig                   |   1 +
+>  arch/x86/lib/crypto/sha256.c                  |  16 ++-
+>  crypto/sha256.c                               | 134 +++++++++++-------
+>  include/crypto/internal/sha2.h                |  46 ++++++
+>  include/crypto/sha2.h                         |  14 +-
+>  lib/crypto/Kconfig                            |   8 ++
+>  lib/crypto/sha256.c                           | 100 +++----------
+>  20 files changed, 232 insertions(+), 183 deletions(-)
 
-The virtio_ccw errors are caused by '[PATCH 6.1 033/167] s390/virtio_ccw: fix virtual vs physical address confusion'
+The EXPORT_SYMBOL => EXPORT_SYMBOL_GPL changes are fine and should just be one
+patch.  I was just trying to be consistent with lib/crypto/sha256.c which uses
+EXPORT_SYMBOL, but EXPORT_SYMBOL_GPL is fine too.
 
-Picking the following 2 dependencies would resolve the build error:
+Everything else in this series is harmful, IMO.
 
-1bcf7f48b7d4 s390/cio: use bitwise types to allow for type checking
-8b19e145e82f s390/cio: introduce bitwise dma types and helper functions
+I already covered why crypto_shash should simply use the library and not do
+anything special.
+
+As for your sha256_finup "optimization", it's an interesting idea, but
+unfortunately it slightly slows down the common case which is count % 64 < 56,
+due to the unnecessary copy to the stack and the following zeroization.  In the
+uncommon case where count % 64 >= 56 you do get to pass nblocks=2 to
+sha256_blocks_*(), but ultimately SHA-256 is serialized block-by-block anyway,
+so it ends up being only slightly faster in that case, which again is the
+uncommon case.  So while it's an interesting idea, it doesn't seem to actually
+be better.  And the fact that that patch is also being used to submit unrelated,
+more dubious changes isn't very helpful, of course.
+
+- Eric
 
