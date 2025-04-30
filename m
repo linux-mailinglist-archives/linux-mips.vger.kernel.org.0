@@ -1,148 +1,99 @@
-Return-Path: <linux-mips+bounces-8889-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8890-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 60698AA52D6
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Apr 2025 19:45:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB63CAA5351
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Apr 2025 20:08:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 043621BC8282
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Apr 2025 17:46:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1F73B166FA8
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Apr 2025 18:08:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7E892620D1;
-	Wed, 30 Apr 2025 17:45:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b5Ki7Zeo"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6505213236;
+	Wed, 30 Apr 2025 18:08:41 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8058B1AA1FF;
-	Wed, 30 Apr 2025 17:45:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8154419F12D;
+	Wed, 30 Apr 2025 18:08:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746035146; cv=none; b=NI6FDDAfskkObhrABAJt6VStnT6u7oc01dSlckbR8/KKgsoV1NIoaInjcV89VdGvSoIVqwRA9QaO+5nawW66CtYQnDDYKIM7UrKexFcJRWRId+MVj+wJHwh520O/gAbnxNwOZkG9WLsd0vC1NzDMBZ7IPMaDwywyCg685ioXpHs=
+	t=1746036521; cv=none; b=VNCiEpbNaiE9HmDRxtYejbAMURY8QEuPc8gNLqgixjzfACbWhUc8HbylLRcUOITq8wj08drOuGGKnsGRH2j1TiSzxTMjUXPezqc3SrEqC0fUQfaTL14MyzsaQEe5bTgGli4PX5Nt8zysaelMefy7mcwwcxCQ2w1eZ+eHMKzRmC8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746035146; c=relaxed/simple;
-	bh=KRq3ObS+7bPSh5npZvFvh2C1vvjoanHB8ALoJ0Lw5oY=;
+	s=arc-20240116; t=1746036521; c=relaxed/simple;
+	bh=jH+ZCBEn9F/QUZhg04QvPxAeiqE8vcukpm0W0ApPd7k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Du3c3FSuKyvh5v1i/hqNTxLmgiXx5XNJofJh3p/+eBOfoF803zZcf+ngoQo4f9r+m+wIDc06uX6FjXKDiEXXWVa6OM077xH0qHm+rc1Ohk61RgHzjpf/trk6U6Rq7wGopJDC8rwuqTgOMoS26CkWzz/zKB1su5fLdsENKWsXA04=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b5Ki7Zeo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7027EC4CEE7;
-	Wed, 30 Apr 2025 17:45:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746035146;
-	bh=KRq3ObS+7bPSh5npZvFvh2C1vvjoanHB8ALoJ0Lw5oY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=b5Ki7ZeoUb9ZN4LPaDEoM1o1bvfVz7fD1oztts7rOpVhwqg4oS5OvcmfJCGu3gxUH
-	 fT26UoXeSWagXlFQb3TkXpFnlFx9pI6CdXses/373TH68nkQ5m1XnkeCZyjTB3pjL8
-	 hB2unDN1O+ZToSdOpBH6aVt6DnPXIiit23u0m97zhbqweH/oPbGvmEvxIZXP3/PGuI
-	 fXfOoMh+QT2xdYboklbx8EcmahcftGMdK+N5ysjtRDWRo5qH2CA9yak25NsdYdhKlS
-	 5Unk+mvpoO/hy1QMjlUYCjybEmTkDQ2xbgxYdXD5WmCQ7eiojk/2fQ1VOdLNWLhrd4
-	 FfCKW0EMC7VFg==
-Date: Wed, 30 Apr 2025 10:45:43 -0700
-From: Eric Biggers <ebiggers@kernel.org>
-To: Herbert Xu <herbert@gondor.apana.org.au>
-Cc: Linux Crypto Mailing List <linux-crypto@vger.kernel.org>,
-	linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-	sparclinux@vger.kernel.org, linux-s390@vger.kernel.org,
-	x86@kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-	"Jason A . Donenfeld" <Jason@zx2c4.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH 00/12] crypto: sha256 - Use partial block API
-Message-ID: <20250430174543.GB1958@sol.localdomain>
-References: <cover.1745992998.git.herbert@gondor.apana.org.au>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Gfnk47OFuism34uVg/gwSI+2A4Q2kda9LNhqnpiXW5HaCpeOmq/+niGWqf/b6R/cqspdDsNSBjAtMyGgfCxDjoF7rGvWdEdvS+dladh4s+Haj0aDeoGV9jG5GCB9MRbmQtzqu+Vr0MGsqaIanl1lpBgXBpHxGa5E6TvWUjF0s08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1uABr9-0006WF-00; Wed, 30 Apr 2025 20:08:27 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 3822BC01A2; Wed, 30 Apr 2025 20:07:59 +0200 (CEST)
+Date: Wed, 30 Apr 2025 20:07:59 +0200
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Thorsten Blum <thorsten.blum@linux.dev>
+Cc: Oleg Nesterov <oleg@redhat.com>,
+	"Maciej W. Rozycki" <macro@orcam.me.uk>, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] MIPS: Fix MAX_REG_OFFSET
+Message-ID: <aBJm_31-FwCKIq3_@alpha.franken.de>
+References: <20250427113423.67040-2-thorsten.blum@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <cover.1745992998.git.herbert@gondor.apana.org.au>
+In-Reply-To: <20250427113423.67040-2-thorsten.blum@linux.dev>
 
-[Added back Cc's that were dropped]
-
-On Wed, Apr 30, 2025 at 02:06:15PM +0800, Herbert Xu wrote:
-> This is based on
+On Sun, Apr 27, 2025 at 01:34:24PM +0200, Thorsten Blum wrote:
+> Fix MAX_REG_OFFSET to point to the last register in 'pt_regs' and not to
+> the marker itself, which could allow regs_get_register() to return an
+> invalid offset.
 > 
-> 	https://patchwork.kernel.org/project/linux-crypto/list/?series=957785
-
-I'm assuming that you mean that with your diff
-https://lore.kernel.org/r/aBGdiv17ztQnhAps@gondor.apana.org.au folded into my
-first patch, since otherwise your patch series doesn't apply.  But even with
-that done, your patch series doesn't build:
-
-    In file included from ./include/crypto/hash_info.h:12,
-                     from crypto/hash_info.c:9:
-    ./include/crypto/sha2.h: In function ‘sha256_init’:
-    ./include/crypto/sha2.h:101:32: error: ‘struct sha256_state’ has no member named ‘ctx’
-      101 |         sha256_block_init(&sctx->ctx);
-          |                                ^~
-
-> Rather than going through the lib/sha256 partial block handling,
-> use the native shash partial block API.  Add two extra shash
-> algorithms to provide testing coverage for lib/sha256.
+> Fixes: 40e084a506eb ("MIPS: Add uprobes support.")
+> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+> ---
+> Compile-tested only.
 > 
-> Herbert Xu (12):
->   crypto: lib/sha256 - Restore lib_sha256 finup code
->   crypto: sha256 - Use the partial block API for generic
->   crypto: arm/sha256 - Add simd block function
->   crypto: arm64/sha256 - Add simd block function
->   crypto: mips/sha256 - Export block functions as GPL only
->   crypto: powerpc/sha256 - Export block functions as GPL only
->   crypto: riscv/sha256 - Add simd block function
->   crypto: s390/sha256 - Export block functions as GPL only
->   crypto: sparc/sha256 - Export block functions as GPL only
->   crypto: x86/sha256 - Add simd block function
->   crypto: lib/sha256 - Use generic block helper
->   crypto: sha256 - Use the partial block API
->
->  arch/arm/lib/crypto/Kconfig                   |   1 +
->  arch/arm/lib/crypto/sha256-armv4.pl           |  20 +--
->  arch/arm/lib/crypto/sha256.c                  |  16 +--
->  arch/arm64/crypto/sha512-glue.c               |   6 +-
->  arch/arm64/lib/crypto/Kconfig                 |   1 +
->  arch/arm64/lib/crypto/sha2-armv8.pl           |   2 +-
->  arch/arm64/lib/crypto/sha256.c                |  16 +--
->  .../mips/cavium-octeon/crypto/octeon-sha256.c |   4 +-
->  arch/powerpc/lib/crypto/sha256.c              |   4 +-
->  arch/riscv/lib/crypto/Kconfig                 |   1 +
->  arch/riscv/lib/crypto/sha256.c                |  17 ++-
->  arch/s390/lib/crypto/sha256.c                 |   4 +-
->  arch/sparc/lib/crypto/sha256.c                |   4 +-
->  arch/x86/lib/crypto/Kconfig                   |   1 +
->  arch/x86/lib/crypto/sha256.c                  |  16 ++-
->  crypto/sha256.c                               | 134 +++++++++++-------
->  include/crypto/internal/sha2.h                |  46 ++++++
->  include/crypto/sha2.h                         |  14 +-
->  lib/crypto/Kconfig                            |   8 ++
->  lib/crypto/sha256.c                           | 100 +++----------
->  20 files changed, 232 insertions(+), 183 deletions(-)
+> Changes in v2:
+> - Fix MAX_REG_OFFSET as suggested by Maciej (thanks!)
+> - Link to v1: https://lore.kernel.org/lkml/20250411090032.7844-1-thorsten.blum@linux.dev/
+> 
+> Changes in v3:
+> - Keep the marker and avoid using #ifdef by adjusting MAX_REG_OFFSET as
+>   suggested by Thomas and Maciej
+> - Link to v2: https://lore.kernel.org/lkml/20250417174712.69292-2-thorsten.blum@linux.dev/
+> ---
+>  arch/mips/include/asm/ptrace.h | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/mips/include/asm/ptrace.h b/arch/mips/include/asm/ptrace.h
+> index 85fa9962266a..ef72c46b5568 100644
+> --- a/arch/mips/include/asm/ptrace.h
+> +++ b/arch/mips/include/asm/ptrace.h
+> @@ -65,7 +65,8 @@ static inline void instruction_pointer_set(struct pt_regs *regs,
+>  
+>  /* Query offset/name of register from its name/offset */
+>  extern int regs_query_register_offset(const char *name);
+> -#define MAX_REG_OFFSET (offsetof(struct pt_regs, __last))
+> +#define MAX_REG_OFFSET \
+> +	(offsetof(struct pt_regs, __last) - sizeof(unsigned long))
+>  
+>  /**
+>   * regs_get_register() - get register value from its offset
+> -- 
+> 2.49.0
 
-The EXPORT_SYMBOL => EXPORT_SYMBOL_GPL changes are fine and should just be one
-patch.  I was just trying to be consistent with lib/crypto/sha256.c which uses
-EXPORT_SYMBOL, but EXPORT_SYMBOL_GPL is fine too.
+applied to mips-fixes.
 
-Everything else in this series is harmful, IMO.
+Thomas.
 
-I already covered why crypto_shash should simply use the library and not do
-anything special.
-
-As for your sha256_finup "optimization", it's an interesting idea, but
-unfortunately it slightly slows down the common case which is count % 64 < 56,
-due to the unnecessary copy to the stack and the following zeroization.  In the
-uncommon case where count % 64 >= 56 you do get to pass nblocks=2 to
-sha256_blocks_*(), but ultimately SHA-256 is serialized block-by-block anyway,
-so it ends up being only slightly faster in that case, which again is the
-uncommon case.  So while it's an interesting idea, it doesn't seem to actually
-be better.  And the fact that that patch is also being used to submit unrelated,
-more dubious changes isn't very helpful, of course.
-
-- Eric
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
