@@ -1,261 +1,455 @@
-Return-Path: <linux-mips+bounces-8876-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8877-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B07F0AA4408
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Apr 2025 09:32:24 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EB35AA4906
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Apr 2025 12:45:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EAD4418834E3
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Apr 2025 07:32:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F7661893800
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Apr 2025 10:42:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F6981EA7F1;
-	Wed, 30 Apr 2025 07:32:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61BFE25D212;
+	Wed, 30 Apr 2025 10:39:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="J21B68qh"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WYUJSuQi"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com [209.85.221.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C24211C5489;
-	Wed, 30 Apr 2025 07:32:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2144E25B67C
+	for <linux-mips@vger.kernel.org>; Wed, 30 Apr 2025 10:39:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1745998338; cv=none; b=twhQxVRjP+rjf74nAdMNg9XAW/e+Sn9JvTxaYIlmFe44+bEnH8Y5epxT+0SLMV0itGo5Ey6JEcM1SncXs0qyKYhQ5ZTkZzoLnGGaDZjjYblfGaB5jU1qVlaVeeuoo7W8PS24SyHC0px0+bHTo4vPmovDl1N/Jxvq3fRgc/5LKV4=
+	t=1746009575; cv=none; b=GWdZ66PITfSBYs051GdMqx6Hmb+ZcG2vTlKXjz7eenO5qU0oKNrbFrn2jcJmAlrxipNGVmRkQOXFkZ3on0SsQ4wwizgh5fUXRlVv+32ySGgyOWahij0GVNVqurK4xk86mCuIxYgIPW27u0jayl6nqzOPDWgc7u8SBABbaVbSpzc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1745998338; c=relaxed/simple;
-	bh=lh2NhYND5L/q7ZH7P7x1WitE03Jcl7OAEHOBZ1FPAZo=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=YQ34QluPWm0QTJ9PF5BZxpKKi1qDME8x0cwaDAdyRAhnz665dWK+qk0vXMZ69V8+hQbgluBY5d6dR87OWft+bI1jt51zcZYt8NNmalgpWVTZu8M6rLhYp5g8OwM+VfVe6TL/NhJ5Zw5vJLWUdnEoVkh+tneazpp7sHlM0hv5fr8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=J21B68qh; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 21CFA439C6;
-	Wed, 30 Apr 2025 07:32:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1745998320;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vvtHvuxI8loluQxLe+C+G5B6+CQYenOucGelx/9Ax2E=;
-	b=J21B68qhK60h6vl70s/Jvn/Y4hzfmHFB72YsasijD39eGnzoehUUit9ePl0eRzduzoIoEu
-	l7fBr3ntFz7vTXqvrSf+r/DzCnVFfdH28peNZ6uSnF+aYwVesTYEXBJnI6XVWXM2bmQgBK
-	c3SFNscAq2Flojz8qZPSuoBz7YxhJDGIN7cnE93rNQEkJaywnDOfvsfnBxYqFNkgSjeHEM
-	GCEMaxTfiF2SeGHiUJe5qeumV9z2R1ez8IrQBeC3SQK59kPxHI4GbUdpDYIzui1+kYuU+3
-	8GdMFsduBRM92YRn7CzG6kWCYQoipE93gOxL1zoABU6aEpXlq6x0qsdBO2toIA==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Jiaxun Yang
- <jiaxun.yang@flygoat.com>, Vladimir Kondratiev
- <vladimir.kondratiev@mobileye.com>, =?utf-8?Q?Th=C3=A9o?= Lebrun
- <theo.lebrun@bootlin.com>,
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, linux-mips@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: SMP: Implement parallel CPU bring up for EyeQ
-In-Reply-To: <CAAhV-H65b5Ae-cCYYHTx0QBhYJ_fzSVLFGY0RH1PCq0XbvNPQA@mail.gmail.com>
-References: <20250413-parallel-cpu-bringup-v1-1-a19d36ec229b@bootlin.com>
- <CAAhV-H6JSKwWvLwPSK7Bu6jZixRn4U+xtpxGL4KBtsmjhc3PVA@mail.gmail.com>
- <CAAhV-H6iOwoYCCob6TmFf1boKQHb0=Mim2bWFvZCMfi9Rw5FPQ@mail.gmail.com>
- <87wmb2ceh7.fsf@BLaptop.bootlin.com>
- <CAAhV-H65b5Ae-cCYYHTx0QBhYJ_fzSVLFGY0RH1PCq0XbvNPQA@mail.gmail.com>
-Date: Wed, 30 Apr 2025 09:31:59 +0200
-Message-ID: <87o6wecdg0.fsf@BLaptop.bootlin.com>
+	s=arc-20240116; t=1746009575; c=relaxed/simple;
+	bh=d4RLgrZhyX8/Pg01VVv6h4TRP9Jm0WhqcAfzUScAuus=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=bYnbfJ52EJhnsEB12ZndIWB7kbtRNUv0kvrnsvB9OVWoJ1zYfHtP6yv4kN5dMdP23+09Lftoc2Uy3XXzHzO4lu26W7E7izGbH/A+A6gnSDI57ihT3YbGS8ORcnXO6LhWLnhDeurqrR76elIynJ4D5NOsjLR7AVxhydmVsJ9CgG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WYUJSuQi; arc=none smtp.client-ip=209.85.221.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-vk1-f180.google.com with SMTP id 71dfb90a1353d-5262475372eso2893915e0c.2
+        for <linux-mips@vger.kernel.org>; Wed, 30 Apr 2025 03:39:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1746009571; x=1746614371; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ylwsJDrt4vv0hbcQwuLON7i6O6OaEoOImrGaJinpJGA=;
+        b=WYUJSuQiHnLWQFEYYBzqqz86iErDXvdI3apuelCg6jve83A0yametRUdLhmSHehiQn
+         Yh63xjU6qVvvGvlm+AbQBEvUmwccu9X6y6rEXHuyStGVErRL0TqYpd8hDLrtiAT8FBlx
+         US3achPj3jJcmcFAb49P1wHB9P5T0VndXXrPlKa8kgSpNLM3yUamrmwNHmtpdd2xjTOw
+         /LsIshelkLwlAMpFHXxck9GIvJISBUKWNriBrHQNxlYLpG3WrJAbIDMEwHPPezHUO9sk
+         7wM8CDPaj6cisAmsN0G3hSOj8a+Fr+OVHNbijwmsA1f/Q2JWpw+tratfAUVMBVJYWMvs
+         FAtg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746009571; x=1746614371;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ylwsJDrt4vv0hbcQwuLON7i6O6OaEoOImrGaJinpJGA=;
+        b=FLAIoJ3zYVGayt2225GWGGiM/mIqjPDZ53bFwICaeaSXb16yvW0YtIy3QVszbfj8YT
+         orqAznwhvYiwWlHtOwg01x95xXZbhN7a5YuXmN79EfmkSQvRyQ5cZrlgXv7vIaKvj88g
+         1/VZb8Rm3XH3qfpEbpROWgQ8dew5J4l/D77xSTTAeBXtLZZMv1g6fDRZWeIPxa1boDH7
+         DGupNStKM7ib/Kzj/UBDECo/MXTJM5Pgcym5JHEer0F0CcrL8inSM8m/QPfjhi+7SpYy
+         qyERoxjQPWQHQDoCbThEAL9H01lKyRvjILx+Q375Jjd9sxMo9QRESzjp/MZt4NhdZYe7
+         o/fw==
+X-Forwarded-Encrypted: i=1; AJvYcCV5vhzWEye4mY6qgbvidfkCupomnt6dLr9sgQDuvmFXrSpn8C2ZzQoYiXYMbrZ9IFUVX0YnajMR5+Yh@vger.kernel.org
+X-Gm-Message-State: AOJu0YxN/nej8biOH1hS281ufKzKsWnfeRExerrTVM2cIMaw80PEu969
+	Gly9bXiE+qVtGl5LvcmQo/9JUj+oEVR3qyFtyxAW/GPgBp1X+c3tMLp6WQGzPxIpX9hcZcBSwyH
+	qE80cZphHy9cfGW6bxBPWPI/Mz9RTIq0WayIGfw==
+X-Gm-Gg: ASbGncsKBvS+LxZUe6u9Zby2GbLjFNaZOLHPaQ+3L0ganzwE61NAsdO9OdjYAHsL3Cj
+	flq/uBpZiqjoXXo/JAdoqOG/Se1fXmeXlBpjLOYSJoYEs4s6rZvtlrZfTnBykuFTiayqGcRLeNZ
+	9Fa15AdfoebUfDG76PkOzYgYCM23EsJD1PpiJaHvozekDynyGsDjrRK49sEIpw6Wdm
+X-Google-Smtp-Source: AGHT+IEGrbJc8JxtRP89FE4xXSHbjaEwuC2CG8y2YBkTpepRUy6crz/1pfGUdfcI0IOB0Gksvo22zIGEP03RI2L25Ng=
+X-Received: by 2002:a05:6122:25d8:b0:52a:d0f3:1ec1 with SMTP id
+ 71dfb90a1353d-52ad0f31f5fmr358417e0c.0.1746009570825; Wed, 30 Apr 2025
+ 03:39:30 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvieeiuddtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufgjfhffkfggtgfgsehtqhertddttdejnecuhfhrohhmpefirhgvghhorhihucevnffgoffgpffvuceoghhrvghgohhrhidrtghlvghmvghnthessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepueetgfffueeivdeitdeuhedtteffueffjedthfevvdegvdevgeduhfektdfhleeunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdugeemheehieemjegrtddtmegvrgegfhemieguiegvmeeifheitgemheefudgunecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdugeemheehieemjegrtddtmegvrgegfhemieguiegvmeeifheitgemheefudgupdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehgrhgvghhorhihrdgtlhgvmhgvnhhtsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeelpdhrtghpthhtoheptghhvghnhhhurggtrghisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehtshgsohhgvghnugesrghlphhhrgdrfhhrrghnkhgvnhdruggvpdhrt
- ghpthhtohepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomhdprhgtphhtthhopehvlhgrughimhhirhdrkhhonhgurhgrthhivghvsehmohgsihhlvgihvgdrtghomhdprhgtphhtthhopehthhgvohdrlhgvsghruhhnsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepthgrfihfihhkrdgsrgihohhukhesmhhosghilhgvhigvrdgtohhmpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtoheplhhinhhugidqmhhiphhssehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-GND-Sasl: gregory.clement@bootlin.com
+References: <20250429161051.743239894@linuxfoundation.org>
+In-Reply-To: <20250429161051.743239894@linuxfoundation.org>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Wed, 30 Apr 2025 16:09:18 +0530
+X-Gm-Features: ATxdqUGXDo7pBa4eq0bS5qcWzmVSW-p2cU-XdgUlse38VYng22TRg-n231NAwjI
+Message-ID: <CA+G9fYuNjKcxFKS_MKPRuga32XbndkLGcY-PVuoSwzv6VWbY=w@mail.gmail.com>
+Subject: Re: [PATCH 6.1 000/167] 6.1.136-rc1 review
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: stable@vger.kernel.org, patches@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org, 
+	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org, 
+	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de, 
+	jonathanh@nvidia.com, f.fainelli@gmail.com, sudipm.mukherjee@gmail.com, 
+	srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org, hargar@microsoft.com, 
+	broonie@kernel.org, clang-built-linux <llvm@lists.linux.dev>, 
+	Nathan Chancellor <nathan@kernel.org>, Anders Roxell <anders.roxell@linaro.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Dan Carpenter <dan.carpenter@linaro.org>, linux-s390@vger.kernel.org, 
+	linux-mips@vger.kernel.org, io-uring@vger.kernel.org, 
+	virtualization@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
-Huacai Chen <chenhuacai@kernel.org> writes:
-
-> On Wed, Apr 30, 2025 at 3:09=E2=80=AFPM Gregory CLEMENT
-> <gregory.clement@bootlin.com> wrote:
->>
->> Hello Huacai,
->>
->> > Hi, Gregory,
->> >
->> > On Sun, Apr 27, 2025 at 6:13=E2=80=AFPM Huacai Chen <chenhuacai@kernel=
-.org> wrote:
->> >>
->> >> Hi, Gregory and Thomas,
->> >>
->> >> I'm sorry I'm late, but I have some questions about this patch.
->> >>
->> >> On Mon, Apr 14, 2025 at 3:12=E2=80=AFAM Gregory CLEMENT
->> >> <gregory.clement@bootlin.com> wrote:
->> >> >
->> >> > Added support for starting CPUs in parallel on EyeQ to speed up boo=
-t time.
->> >> >
->> >> > On EyeQ5, booting 8 CPUs is now ~90ms faster.
->> >> > On EyeQ6, booting 32 CPUs is now ~650ms faster.
->> >> >
->> >> > Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
->> >> > ---
->> >> > Hello,
->> >> >
->> >> > This patch allows CPUs to start in parallel. It has been tested on
->> >> > EyeQ5 and EyeQ6, which are both MIPS64 and use the I6500 design. Th=
-ese
->> >> > systems use CPS to support SMP.
->> >> >
->> >> > As noted in the commit log, on EyeQ6, booting 32 CPUs is now ~650ms
->> >> > faster.
->> >> >
->> >> > Currently, this support is only for EyeQ SoC. However, it should al=
-so
->> >> > work for other CPUs using CPS. I am less sure about MT ASE support,
->> >> > but this patch can be a good starting point. If anyone wants to add
->> >> > support for other systems, I can share some ideas, especially for t=
-he
->> >> > MIPS_GENERIC setup that needs to handle both types of SMP setups.
->> >> >
->> [...]
->> >> >   * A logical cpu mask containing only one VPE per core to
->> >> > @@ -74,6 +76,8 @@ static cpumask_t cpu_core_setup_map;
->> >> >
->> >> >  cpumask_t cpu_coherent_mask;
->> >> >
->> >> > +struct cpumask __cpu_primary_thread_mask __read_mostly;
->> >> > +
->> >> >  unsigned int smp_max_threads __initdata =3D UINT_MAX;
->> >> >
->> >> >  static int __init early_nosmt(char *s)
->> >> > @@ -374,10 +378,15 @@ asmlinkage void start_secondary(void)
->> >> >         set_cpu_core_map(cpu);
->> >> >
->> >> >         cpumask_set_cpu(cpu, &cpu_coherent_mask);
->> >> > +#ifdef CONFIG_HOTPLUG_PARALLEL
->> >> > +       cpuhp_ap_sync_alive();
->> >> This is a "synchronization point" due to the description from commit
->> >> 9244724fbf8ab394a7210e8e93bf037abc, which means things are parallel
->> >> before this point and serialized after this point.
->> >>
->> >> But unfortunately, set_cpu_sibling_map() and set_cpu_core_map() cannot
->> >> be executed in parallel. Maybe you haven't observed problems, but in
->> >> theory it's not correct.
->>
->> I am working on it. To address your remark, I have a few options that I
->> evaluate.
-> I suggest to revert this patch temporary in mips-next.
-
-
-As I previously mentioned, I haven't observed any issues until now. What
-I'm evaluating is whether there is a real problem with this
-implementation. Let's examine whether we need a new patch or if this one
-is sufficient.
-
-I will have the resutls at the end of the week.
-
-Gregory
-
+On Tue, 29 Apr 2025 at 23:31, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
 >
-> Huacai
+> This is the start of the stable review cycle for the 6.1.136 release.
+> There are 167 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 >
->>
->> > I don't know whether you have done reboot tests (for ~1000 times),
->> > Jiaxun Yang submitted similar patches for LoongArch [1], but during
->> > reboot tests we encountered problems that I have described in my
->> > previous reply.
->> >
->> > [1] https://lore.kernel.org/loongarch/20240716-loongarch-hotplug-v3-0-=
-af59b3bb35c8@flygoat.com/
->>
->> I saw that series and I wondered why the last patch was not merged.
->>
->> I performed around 100 tests so far without encountering any issues; I
->> plan to automate them further to gather more data.
->>
->> Gregpory
->>
->> >
->> > Huacai
->> >
->> >>
->> >> Huacai
->> >>
->> >> > +#endif
->> >> >         notify_cpu_starting(cpu);
->> >> >
->> >> > +#ifndef CONFIG_HOTPLUG_PARALLEL
->> >> >         /* Notify boot CPU that we're starting & ready to sync coun=
-ters */
->> >> >         complete(&cpu_starting);
->> >> > +#endif
->> >> >
->> >> >         synchronise_count_slave(cpu);
->> >> >
->> >> > @@ -386,11 +395,13 @@ asmlinkage void start_secondary(void)
->> >> >
->> >> >         calculate_cpu_foreign_map();
->> >> >
->> >> > +#ifndef CONFIG_HOTPLUG_PARALLEL
->> >> >         /*
->> >> >          * Notify boot CPU that we're up & online and it can safely=
- return
->> >> >          * from __cpu_up
->> >> >          */
->> >> >         complete(&cpu_running);
->> >> > +#endif
->> >> >
->> >> >         /*
->> >> >          * irq will be enabled in ->smp_finish(), enabling it too e=
-arly
->> >> > @@ -447,6 +458,12 @@ void __init smp_prepare_boot_cpu(void)
->> >> >         set_cpu_online(0, true);
->> >> >  }
->> >> >
->> >> > +#ifdef CONFIG_HOTPLUG_PARALLEL
->> >> > +int arch_cpuhp_kick_ap_alive(unsigned int cpu, struct task_struct =
-*tidle)
->> >> > +{
->> >> > +       return mp_ops->boot_secondary(cpu, tidle);
->> >> > +}
->> >> > +#else
->> >> >  int __cpu_up(unsigned int cpu, struct task_struct *tidle)
->> >> >  {
->> >> >         int err;
->> >> > @@ -466,6 +483,7 @@ int __cpu_up(unsigned int cpu, struct task_stru=
-ct *tidle)
->> >> >         wait_for_completion(&cpu_running);
->> >> >         return 0;
->> >> >  }
->> >> > +#endif
->> >> >
->> >> >  #ifdef CONFIG_PROFILING
->> >> >  /* Not really SMP stuff ... */
->> >> >
->> >> > ---
->> >> > base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
->> >> > change-id: 20250411-parallel-cpu-bringup-78999a9235ea
->> >> >
->> >> > Best regards,
->> >> > --
->> >> > Gr=C3=A9gory CLEMENT, Bootlin
->> >> > Embedded Linux and Kernel engineering
->> >> > https://bootlin.com
->> >> >
->> >> >
->>
->> --
->> Gr=C3=A9gory CLEMENT, Bootlin
->> Embedded Linux and Kernel engineering
->> https://bootlin.com
+> Responses should be made by Thu, 01 May 2025 16:10:15 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.1.136-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.1.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
---=20
-Gr=C3=A9gory CLEMENT, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+There are three build regressions and two build warnings.
+
+1)
+Regressions on x86_64 with defconfig builds with clang-nightly toolchain
+on the stable-rc 6.1.136-rc1.
+
+* x86_64, build
+  - clang-nightly-lkftconfig
+  - clang-nightly-x86_64_defconfig
+
+Regression Analysis:
+ - New regression? Yes
+ - Reproducibility? Yes
+
+Build regression: x86_64 clang-nightly net ip.h error default
+initialization of an object of type 'typeof (rt->dst.expires)'
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build error x86_64
+include/net/ip.h:462:14: error: default initialization of an object of
+type 'typeof (rt->dst.expires)' (aka 'const unsigned long') leaves the
+object uninitialized and is incompatible with C++
+[-Werror,-Wdefault-const-init-unsafe]
+  462 |                 if (mtu && time_before(jiffies, rt->dst.expires))
+      |                            ^
+
+## Build x86_64
+* Build log: https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.134-461-g961a5173f29d/testrun/28268204/suite/build/test/clang-nightly-x86_64_defconfig/log
+* Build history:
+https://qa-reports.linaro.org/lkft/linux-stale-rc-linux-6.1.y/build/v6.1.134-461-g961a5173f29d/testrun/28268204/suite/build/test/clang-nightly-x86_64_defconfig/history/
+* Build details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.134-461-g961a5173f29d/testrun/28268204/suite/build/test/clang-nightly-x86_64_defconfig/details/
+* Build link: https://storage.tuxsuite.com/public/linaro/lkft/builds/2wPjfmTxuT4qMCUSSj4ZwJQJrqY/
+* Kernel config:
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2wPjfmTxuT4qMCUSSj4ZwJQJrqY/config
+* Toolchain: Debian clang version 21.0.0
+(++20250428112741+e086d7b1464a-1~exp1~20250428112923.1416)
+
+2)
+Regressions on s390 with defconfig builds with gcc-13, gcc-8 and
+clang-20 and clang-nightly toolchains on the stable-rc 6.1.136-rc1.
+
+* s390, build
+  - clang-20-defconfig
+  - clang-nightly-defconfig
+  - gcc-13-allmodconfig
+  - gcc-13-defconfig
+  - gcc-8-defconfig-fe40093d
+
+Regression Analysis:
+ - New regression? Yes
+ - Reproducibility? Yes
+
+Build regression: s390 pci_report.c fatal error linux sprintf.h No
+such file or directory
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build error S390
+arch/s390/pci/pci_report.c:14:10: fatal error: linux/sprintf.h: No
+such file or directory
+   14 | #include <linux/sprintf.h>
+      |          ^~~~~~~~~~~~~~~~~
+compilation terminated.
+arch/s390/pci/pci_fixup.c: In function 'zpci_ism_bar_no_mmap':
+arch/s390/pci/pci_fixup.c:19:13: error: 'struct pci_dev' has no member
+named 'non_mappable_bars'
+   19 |         pdev->non_mappable_bars = 1;
+      |             ^~
+drivers/s390/virtio/virtio_ccw.c:88:9: error: unknown type name 'dma64_t'
+   88 |         dma64_t queue;
+      |         ^~~~~~~
+drivers/s390/virtio/virtio_ccw.c:95:9: error: unknown type name 'dma64_t'
+   95 |         dma64_t desc;
+      |         ^~~~~~~
+drivers/s390/virtio/virtio_ccw.c:99:9: error: unknown type name 'dma64_t'
+   99 |         dma64_t avail;
+      |         ^~~~~~~
+drivers/s390/virtio/virtio_ccw.c:100:9: error: unknown type name 'dma64_t'
+  100 |         dma64_t used;
+      |         ^~~~~~~
+drivers/s390/virtio/virtio_ccw.c:109:9: error: unknown type name 'dma64_t'
+  109 |         dma64_t summary_indicator;
+      |         ^~~~~~~
+drivers/s390/virtio/virtio_ccw.c:110:9: error: unknown type name 'dma64_t'
+  110 |         dma64_t indicator;
+      |         ^~~~~~~
+drivers/s390/virtio/virtio_ccw.c: In function 'virtio_ccw_drop_indicator':
+drivers/s390/virtio/virtio_ccw.c:370:25: error: implicit declaration
+of function 'virt_to_dma64'; did you mean 'virt_to_page'?
+[-Werror=implicit-function-declaration]
+  370 |                         virt_to_dma64(get_summary_indicator(airq_info));
+      |                         ^~~~~~~~~~~~~
+      |                         virt_to_page
+drivers/s390/virtio/virtio_ccw.c:374:28: error: implicit declaration
+of function 'virt_to_dma32'; did you mean 'virt_to_page'?
+[-Werror=implicit-function-declaration]
+  374 |                 ccw->cda = virt_to_dma32(thinint_area);
+      |                            ^~~~~~~~~~~~~
+      |                            virt_to_page
+drivers/s390/virtio/virtio_ccw.c: In function 'virtio_ccw_setup_vq':
+drivers/s390/virtio/virtio_ccw.c:552:45: error: implicit declaration
+of function 'u64_to_dma64' [-Werror=implicit-function-declaration]
+  552 |                 info->info_block->l.queue = u64_to_dma64(queue);
+      |                                             ^~~~~~~~~~~~
+drivers/s390/virtio/virtio_ccw.c: In function 'virtio_ccw_find_vqs':
+drivers/s390/virtio/virtio_ccw.c:654:9: error: unknown type name 'dma64_t'
+  654 |         dma64_t *indicatorp = NULL;
+      |         ^~~~~~~
+cc1: some warnings being treated as errors
+
+## Build s390
+* Build log: https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.134-461-g961a5173f29d/testrun/28268210/suite/build/test/gcc-13-defconfig/log
+* Build history:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.134-461-g961a5173f29d/testrun/28268210/suite/build/test/gcc-13-defconfig/history/
+* Build details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.134-461-g961a5173f29d/testrun/28268210/suite/build/test/gcc-13-defconfig/details/
+* Build link: https://storage.tuxsuite.com/public/linaro/lkft/builds/2wPjfcqRiiDhTc38knEJ0xbygtF/
+* Kernel config:
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2wPjfcqRiiDhTc38knEJ0xbygtF/config
+* Toolchain: Debian clang version 21.0.0
+(++20250428112741+e086d7b1464a-1~exp1~20250428112923.1416)
+
+3)
+Regressions on mips with defconfig builds with clang-nightly
+toolchains on the stable-rc 6.1.136-rc1.
+
+* mips, build
+  - clang-nightly-allnoconfig
+  - clang-nightly-defconfig
+  - clang-nightly-tinyconfig
+
+Regression Analysis:
+ - New regression? Yes
+ - Reproducibility? Yes
+
+Build regression: mips kernel branch.c error default initialization of
+an object of type union
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+## Build error mips
+arch/mips/kernel/branch.c:35:6: error: default initialization of an
+object of type 'union (unnamed union at
+arch/mips/kernel/branch.c:35:6)' with const member leaves the object
+uninitialized and is incompatible with C++
+[-Werror,-Wdefault-const-init-unsafe]
+   35 |         if (__get_user(inst, (u16 __user *) msk_isa16_mode(epc))) {
+      |             ^
+
+
+## Build mips
+* Build log:  https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.134-461-g961a5173f29d/testrun/28266863/suite/build/test/clang-nightly-tinyconfig/log
+* Build history:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.134-461-g961a5173f29d/testrun/28266863/suite/build/test/clang-nightly-tinyconfig/history/
+* Build details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.134-461-g961a5173f29d/testrun/28266863/suite/build/test/clang-nightly-tinyconfig/details/
+* Build link: https://storage.tuxsuite.com/public/linaro/lkft/builds/2wPjfMHLLGL9OjZrjKvW9u8uy4b/
+* Kernel config:
+https://storage.tuxsuite.com/public/linaro/lkft/builds/2wPjfMHLLGL9OjZrjKvW9u8uy4b/config
+
+
+## Build warnings
+
+a)
+Build warnings on x86_64 builds.
+io_uring/timeout.c:410:31: warning: default initialization of an
+object of type 'typeof ((sqe->addr2))' (aka 'const unsigned long
+long') leaves the object uninitialized and is incompatible with C++
+[-Wdefault-const-init-unsafe]
+  410 |                 if (get_timespec64(&tr->ts,
+u64_to_user_ptr(sqe->addr2)))
+      |                                             ^
+
+Links:
+ - https://storage.tuxsuite.com/public/linaro/lkft/builds/2wPjeiV7BNYgKZ2oXuK3BNEYYBa/
+
+b)
+Build warnings on arm with clang-nightly with tinyconfig.
+
+clang: warning: argument unused during compilation: '-march=armv7-m'
+[-Wunused-command-line-argument]
+kernel/params.c:367:22: warning: default initialization of an object
+of type 'struct kernel_param' with const member leaves the object
+uninitialized and is incompatible with C++
+[-Wdefault-const-init-unsafe]
+  367 |         struct kernel_param dummy;
+      |                             ^
+include/linux/moduleparam.h:73:12: note: member 'perm' declared 'const' here
+   73 |         const u16 perm;
+      |                   ^
+kernel/params.c:423:22: warning: default initialization of an object
+of type 'struct kernel_param' with const member leaves the object
+uninitialized and is incompatible with C++
+[-Wdefault-const-init-unsafe]
+  423 |         struct kernel_param kp;
+      |                             ^
+include/linux/moduleparam.h:73:12: note: member 'perm' declared 'const' here
+   73 |         const u16 perm;
+      |                   ^
+2 warnings generated.
+
+Links:
+ - https://storage.tuxsuite.com/public/linaro/lkft/builds/2wPjeaX1oyIaa7F0nsdW1BymEGQ/
+
+## Build
+* kernel: 6.1.136-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+* git commit: 961a5173f29d2aa1f2c87ff9612b029c46086972
+* git describe: v6.1.134-461-g961a5173f29d
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.1.y/build/v6.1.134-461-g961a5173f29d
+
+## Test Regressions (compared to v6.1.134-292-gb8b5da130779)
+* i386, build
+  - clang-nightly-defconfig
+  - clang-nightly-lkftconfig
+
+* mips, build
+  - clang-nightly-allnoconfig
+  - clang-nightly-defconfig
+  - clang-nightly-tinyconfig
+
+* s390, build
+  - clang-20-defconfig
+  - clang-nightly-defconfig
+  - gcc-13-allmodconfig
+  - gcc-13-defconfig
+  - gcc-8-defconfig-fe40093d
+
+* x86_64, build
+  - clang-nightly-lkftconfig
+  - clang-nightly-x86_64_defconfig
+
+## Metric Regressions (compared to v6.1.134-292-gb8b5da130779)
+
+## Test Fixes (compared to v6.1.134-292-gb8b5da130779)
+
+## Metric Fixes (compared to v6.1.134-292-gb8b5da130779)
+
+## Test result summary
+total: 96862, pass: 76665, fail: 4435, skip: 15439, xfail: 323
+
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 135 total, 135 passed, 0 failed
+* arm64: 43 total, 43 passed, 0 failed
+* i386: 27 total, 20 passed, 7 failed
+* mips: 26 total, 22 passed, 4 failed
+* parisc: 4 total, 4 passed, 0 failed
+* powerpc: 32 total, 31 passed, 1 failed
+* riscv: 11 total, 9 passed, 2 failed
+* s390: 14 total, 8 passed, 6 failed
+* sh: 10 total, 10 passed, 0 failed
+* sparc: 7 total, 7 passed, 0 failed
+* x86_64: 35 total, 32 passed, 3 failed
+
+## Test suites summary
+* boot
+* commands
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-cgroup
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-cpufreq
+* kselftest-efivarfs
+* kselftest-exec
+* kselftest-fpu
+* kselftest-ftrace
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-kcmp
+* kselftest-kvm
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-memfd
+* kselftest-mincore
+* kselftest-mqueue
+* kselftest-net
+* kselftest-net-mptcp
+* kselftest-openat2
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-tc-testing
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user_events
+* kselftest-vDSO
+* kselftest-x86
+* kunit
+* kvm-unit-tests
+* lava
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-build-clang
+* log-parser-build-gcc
+* log-parser-test
+* ltp-capability
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-hugetlb
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-pty
+* ltp-sched
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* perf
+* rcutorture
+
+--
+Linaro LKFT
+https://lkft.linaro.org
 
