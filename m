@@ -1,150 +1,102 @@
-Return-Path: <linux-mips+bounces-8895-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8896-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFA39AA5B59
-	for <lists+linux-mips@lfdr.de>; Thu,  1 May 2025 09:18:42 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50537AA5D75
+	for <lists+linux-mips@lfdr.de>; Thu,  1 May 2025 12:58:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E71E217E070
-	for <lists+linux-mips@lfdr.de>; Thu,  1 May 2025 07:18:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B425B161763
+	for <lists+linux-mips@lfdr.de>; Thu,  1 May 2025 10:58:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B6F5265CCF;
-	Thu,  1 May 2025 07:18:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD15F2222A4;
+	Thu,  1 May 2025 10:58:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="rPJcbEsX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G4kbdGbb"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C186C23183C;
-	Thu,  1 May 2025 07:18:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE4C72AD32;
+	Thu,  1 May 2025 10:58:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746083917; cv=none; b=N4dCyTAi7FzYFTknkpy0Au8XgR2hKBWFURpGKPRS/teVXzy6IL+S6Dww7iS3wZDEfrLHNN3sNGriYXOnmdWHVGhhiHRtFVm6zD9C1AHdAe8V0jf5Jlhz+NxneKZ7LNP4Ub2cPZqYALobVy5sdCzMh415noqp+jHpocQaKafkPDo=
+	t=1746097131; cv=none; b=M/W+I9ABTc9zj4ma3dcYOySb6OF6TIb9vd/sR3BkKsNx2BJ8XSRbIqvo/WSTL5s2DsYWy4qm/gKA28vBjbsiPJEUq33zXP0i10mo1tjVd/MfWyM8/n1sojxdt+KuvC1t3aXrXTE6TWZnFrCyPN+JnhyYzWwON8bolUhgIg++inM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746083917; c=relaxed/simple;
-	bh=su7Ol8QR1fuFy/VFNGr36BLKigm4/e1vZx94ZJZJg38=;
+	s=arc-20240116; t=1746097131; c=relaxed/simple;
+	bh=fOPI1vRY7umuBn+S/P9hMul1fSPdaHJ81MJBCEDAOto=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MZhuhOu117thaXJQZkTJ/e61FAj0NVkae/MZcg6O++mknv3TD2g+Rb4E2CUbsuqZQxCOQRTM/m4LA/Te33m7MoG0VRdxc9/HDftU6VuxsRrwfX4yH9LRLRiXIF0YeOfYpE/djRnr0gC9n+xLhBrAF92DY+fVn20WzetdWpfZMi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=rPJcbEsX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CF92C4CEE3;
-	Thu,  1 May 2025 07:18:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1746083916;
-	bh=su7Ol8QR1fuFy/VFNGr36BLKigm4/e1vZx94ZJZJg38=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=qlb5vF5JoNEVWXTR43be7Am7UAT8lXUkid5hZN3/qbAqQFJHQ4PI2z53cNuXYKPd2eMdiiXMJ8/NH4hU1WckkJxU7nVTVg+BAiQDrH8rczWyZbxLiEhYf4KATgF1jYoUTdIA0D6v/b6Sbc/qpRzTYJGiD1nSJZEMeJ9y7/d2D3Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G4kbdGbb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1EC4C4CEE3;
+	Thu,  1 May 2025 10:58:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746097131;
+	bh=fOPI1vRY7umuBn+S/P9hMul1fSPdaHJ81MJBCEDAOto=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=rPJcbEsXhGMC0dq469bmaLlkkVmpTUn3Tb0S6zGu3+bqDNRihHhQAt0pboiT/Bfnn
-	 oDLbw5I2ui5R8d5zxjLUmtpyyQ/Ql3Q2drqkJMJTROy9N0EmaHutplO2D6U4sEAGcu
-	 61EjbwYysFa7sycvpKmbswX/b8m0KRwA739rNN6k=
-Date: Thu, 1 May 2025 09:18:32 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Matthew Rosato <mjrosato@linux.ibm.com>
-Cc: Naresh Kamboju <naresh.kamboju@linaro.org>, stable@vger.kernel.org,
-	patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-	torvalds@linux-foundation.org, akpm@linux-foundation.org,
-	linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-	lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-	f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-	srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org,
-	hargar@microsoft.com, broonie@kernel.org,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Anders Roxell <anders.roxell@linaro.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	linux-s390@vger.kernel.org, linux-mips@vger.kernel.org,
-	io-uring@vger.kernel.org, virtualization@lists.linux.dev,
-	Halil Pasic <pasic@linux.ibm.com>,
-	Eric Farman <farman@linux.ibm.com>,
-	Heiko Carstens <hca@linux.ibm.com>
-Subject: Re: [PATCH 6.1 000/167] 6.1.136-rc1 review
-Message-ID: <2025050118-glade-lunchroom-927f@gregkh>
-References: <20250429161051.743239894@linuxfoundation.org>
- <CA+G9fYuNjKcxFKS_MKPRuga32XbndkLGcY-PVuoSwzv6VWbY=w@mail.gmail.com>
- <c8e88c29-e1bb-4845-a362-dc352d690508@linux.ibm.com>
+	b=G4kbdGbb5Ttos7413Y9NRKDgW9LAD6g3OLKHMJHzdqOkufj89zfhI1K/vK872+YWD
+	 Ji3r3IcpHV1lO8l3J9Dc2Lf+aTaW2OFrSj1/KLtwkMY4LzriyrZpcF2k6aGfLgoeDo
+	 LVKR5uO8px3oWIpV9WZBwq+SaROVF7vvilxAXMDG7W2Gs+nDl0G1WbDfhqGA2tB2Uw
+	 dCJxhavYP92r0DTN9IAV3tAwyP9ii3arplTRgX02vriYnpVg5bSK2ABmigqie0RvVx
+	 Mzs3AmGVr/3Ko65RKjUtQgV/p/aplBuDvIz5dx2O6O/4dOGN+LwylQ+71GFQV7tWz5
+	 UKdNw5fBPxSNg==
+Date: Thu, 1 May 2025 12:58:48 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Caleb James DeLisle <cjd@cjdns.fr>
+Cc: linux-mips@vger.kernel.org, tglx@linutronix.de, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, tsbogend@alpha.franken.de, 
+	daniel.lezcano@linaro.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	benjamin.larsson@genexis.eu, linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v4 1/7] dt-bindings: timer: Add EcoNet EN751221 "HPT" CPU
+ Timer
+Message-ID: <20250501-ludicrous-idealistic-camel-7bf8aa@kuoka>
+References: <20250430133433.22222-1-cjd@cjdns.fr>
+ <20250430133433.22222-2-cjd@cjdns.fr>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <c8e88c29-e1bb-4845-a362-dc352d690508@linux.ibm.com>
+In-Reply-To: <20250430133433.22222-2-cjd@cjdns.fr>
 
-On Wed, Apr 30, 2025 at 11:54:49AM -0400, Matthew Rosato wrote:
+On Wed, Apr 30, 2025 at 01:34:27PM GMT, Caleb James DeLisle wrote:
+> Add device tree bindings for the so-called high-precision timer (HPT)
+> in the EcoNet EN751221 SoC.
 > 
-> > 2)
-> > Regressions on s390 with defconfig builds with gcc-13, gcc-8 and
-> > clang-20 and clang-nightly toolchains on the stable-rc 6.1.136-rc1.
-> > 
-> > * s390, build
-> >   - clang-20-defconfig
-> >   - clang-nightly-defconfig
-> >   - gcc-13-allmodconfig
-> >   - gcc-13-defconfig
-> >   - gcc-8-defconfig-fe40093d
-> > 
-> > Regression Analysis:
-> >  - New regression? Yes
-> >  - Reproducibility? Yes
-> > 
-> ...
-> > drivers/s390/virtio/virtio_ccw.c:88:9: error: unknown type name 'dma64_t'
-> >    88 |         dma64_t queue;
-> >       |         ^~~~~~~
-> > drivers/s390/virtio/virtio_ccw.c:95:9: error: unknown type name 'dma64_t'
-> >    95 |         dma64_t desc;
-> >       |         ^~~~~~~
-> > drivers/s390/virtio/virtio_ccw.c:99:9: error: unknown type name 'dma64_t'
-> >    99 |         dma64_t avail;
-> >       |         ^~~~~~~
-> > drivers/s390/virtio/virtio_ccw.c:100:9: error: unknown type name 'dma64_t'
-> >   100 |         dma64_t used;
-> >       |         ^~~~~~~
-> > drivers/s390/virtio/virtio_ccw.c:109:9: error: unknown type name 'dma64_t'
-> >   109 |         dma64_t summary_indicator;
-> >       |         ^~~~~~~
-> > drivers/s390/virtio/virtio_ccw.c:110:9: error: unknown type name 'dma64_t'
-> >   110 |         dma64_t indicator;
-> >       |         ^~~~~~~
-> > drivers/s390/virtio/virtio_ccw.c: In function 'virtio_ccw_drop_indicator':
-> > drivers/s390/virtio/virtio_ccw.c:370:25: error: implicit declaration
-> > of function 'virt_to_dma64'; did you mean 'virt_to_page'?
-> > [-Werror=implicit-function-declaration]
-> >   370 |                         virt_to_dma64(get_summary_indicator(airq_info));
-> >       |                         ^~~~~~~~~~~~~
-> >       |                         virt_to_page
-> > drivers/s390/virtio/virtio_ccw.c:374:28: error: implicit declaration
-> > of function 'virt_to_dma32'; did you mean 'virt_to_page'?
-> > [-Werror=implicit-function-declaration]
-> >   374 |                 ccw->cda = virt_to_dma32(thinint_area);
-> >       |                            ^~~~~~~~~~~~~
-> >       |                            virt_to_page
-> > drivers/s390/virtio/virtio_ccw.c: In function 'virtio_ccw_setup_vq':
-> > drivers/s390/virtio/virtio_ccw.c:552:45: error: implicit declaration
-> > of function 'u64_to_dma64' [-Werror=implicit-function-declaration]
-> >   552 |                 info->info_block->l.queue = u64_to_dma64(queue);
-> >       |                                             ^~~~~~~~~~~~
-> > drivers/s390/virtio/virtio_ccw.c: In function 'virtio_ccw_find_vqs':
-> > drivers/s390/virtio/virtio_ccw.c:654:9: error: unknown type name 'dma64_t'
-> >   654 |         dma64_t *indicatorp = NULL;
-> >       |         ^~~~~~~
-> > cc1: some warnings being treated as errors
+> Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
+> ---
+>  .../bindings/timer/econet,en751221-timer.yaml | 80 +++++++++++++++++++
+>  1 file changed, 80 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/timer/econet,en751221-timer.yaml
 > 
-> The virtio_ccw errors are caused by '[PATCH 6.1 033/167] s390/virtio_ccw: fix virtual vs physical address confusion'
-> 
-> Picking the following 2 dependencies would resolve the build error:
-> 
-> 1bcf7f48b7d4 s390/cio: use bitwise types to allow for type checking
-> 8b19e145e82f s390/cio: introduce bitwise dma types and helper functions
 
-I'm just going to drop all of these now and wait for a tested series to
-be sent.
+What changed? Nothing explains dropping the tag.
 
-thanks,
+<form letter>
+This is a friendly reminder during the review process.
 
-greg k-h
+It looks like you received a tag and forgot to add it.
+
+If you do not know the process, here is a short explanation:
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new
+versions of patchset, under or above your Signed-off-by tag, unless
+patch changed significantly (e.g. new properties added to the DT
+bindings). Tag is "received", when provided in a message replied to you
+on the mailing list. Tools like b4 can help here. However, there's no
+need to repost patches *only* to add the tags. The upstream maintainer
+will do that for tags received on the version they apply.
+
+Please read:
+https://elixir.bootlin.com/linux/v6.12-rc3/source/Documentation/process/submitting-patches.rst#L577
+
+If a tag was not added on purpose, please state why and what changed.
+</form letter>
+
+Best regards,
+Krzysztof
+
 
