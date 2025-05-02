@@ -1,69 +1,54 @@
-Return-Path: <linux-mips+bounces-8901-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8902-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C846AA761C
-	for <lists+linux-mips@lfdr.de>; Fri,  2 May 2025 17:33:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BF253AA76A8
+	for <lists+linux-mips@lfdr.de>; Fri,  2 May 2025 18:04:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1470F9E3A4E
-	for <lists+linux-mips@lfdr.de>; Fri,  2 May 2025 15:32:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 827CE18974A1
+	for <lists+linux-mips@lfdr.de>; Fri,  2 May 2025 16:04:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 960011991B8;
-	Fri,  2 May 2025 15:33:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 021EC25D203;
+	Fri,  2 May 2025 16:04:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Hk3KMDE/"
+	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="IP5oh0e/"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79AAE17A2E1;
-	Fri,  2 May 2025 15:32:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6887925D1E7;
+	Fri,  2 May 2025 16:04:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746199980; cv=none; b=COJ3O/yiLxH6P7MPePpBWVUanwpZDD6rm/JW9VhUBH4cJE7Q0fhy30Hm4mz76PWktk9iALHH9GP5JAckCzv5An2PftfglVpzfsm24LbLaCeO3vjqoR2A0bH/tA3JprtYvHKAz/s0XY3QnC19+x5+VJcsmgMh8aORIdCaPo/PXNg=
+	t=1746201860; cv=none; b=d9q7dtQ8mFjsfE0HeQOU8sqAemdDC3x2c0VkGRlHhnMV7p6QbXNjd7M2eFDad1tSGqBDaZnD8XP/ZG5shsH4UWQxdyx0Q/8k/YzK6ntA7nTVBy9omrq/FH8OC1ohd1xrgn2iZewCqYlkJJVOU3hLmHHunyKpHTOhjC0pB8k+w98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746199980; c=relaxed/simple;
-	bh=yHpzrVzr/oK3MgmusvBTKE8uAkP7XduR/wfA4fiCQlU=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=TtRqLkPBxPMSyqstwF4vwHsRTmOUhJIdx5HACiFuoxE3sJJJXRAazGDy2WC2at1f63ngSgdOziZlJSvaukDsLs6Wa8ohzNATMVT0KieB/g+qPVbK6/19e0OziZRCG55zbBygabOPJMmhqjYFfiPrNZBy2VoCby9B8ZaRQmvRPpA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Hk3KMDE/; arc=none smtp.client-ip=217.70.183.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 1269143977;
-	Fri,  2 May 2025 15:32:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1746199975;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UUgQDcstbAgtUrYmh7Z5aZwvJ2iReYl8nbIcaObLdHo=;
-	b=Hk3KMDE/YXdSf5KnKE8LYCsZjQK+VIjljn9imJ1Vmgq64+rf8RBV6cc7HTEykUweFs/INk
-	/OKXTSSKrG9/Ffy4HxTAUs3l0JCN5niclCfeYE9PM/h6NhYDHUUJ4NumcF3rc+2xDrb4o9
-	vsCVno4BPHBZo7fIKfK4O8SKxsReGBlT3V27VUqN7mLuoVVBkElXOuIZKxo30DxxLbmMqx
-	QupooD9/WizapYrUNFbGvPykpW60elT/dKSiSYwSfOkHJnHh1wVTLHoITslV9Is+0skOIK
-	TpLvF0SZ1zG8hnslMpC6QV4j2XpAsvqqWRD7stns6lRDq8CSVBzPFcbl+Ojmnw==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Jiaxun Yang
- <jiaxun.yang@flygoat.com>, Vladimir Kondratiev
- <vladimir.kondratiev@mobileye.com>, =?utf-8?Q?Th=C3=A9o?= Lebrun
- <theo.lebrun@bootlin.com>,
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, linux-mips@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: SMP: Implement parallel CPU bring up for EyeQ
-In-Reply-To: <87o6wecdg0.fsf@BLaptop.bootlin.com>
-References: <20250413-parallel-cpu-bringup-v1-1-a19d36ec229b@bootlin.com>
- <CAAhV-H6JSKwWvLwPSK7Bu6jZixRn4U+xtpxGL4KBtsmjhc3PVA@mail.gmail.com>
- <CAAhV-H6iOwoYCCob6TmFf1boKQHb0=Mim2bWFvZCMfi9Rw5FPQ@mail.gmail.com>
- <87wmb2ceh7.fsf@BLaptop.bootlin.com>
- <CAAhV-H65b5Ae-cCYYHTx0QBhYJ_fzSVLFGY0RH1PCq0XbvNPQA@mail.gmail.com>
- <87o6wecdg0.fsf@BLaptop.bootlin.com>
-Date: Fri, 02 May 2025 17:32:54 +0200
-Message-ID: <87cycrc9jt.fsf@BLaptop.bootlin.com>
+	s=arc-20240116; t=1746201860; c=relaxed/simple;
+	bh=gwXN3uKkZvpWrE6+FvlOwjYwomgnhHuJFP/82khwbdI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=f48uTnIGgKvDSwcLWepBexAhadE4QcgFEc91ZYzyVWruGi5EW7fH6wntt1qUzq0nV1jNYzd+36WCO1RcG5D+afndGXxSAgB3E1MEvrQKKmFDben4ZCdVkZiGmCmpxig8+nexYvPnzDPBLwffzIBYSeZ4XGMUYhIY5LBs2lpGcr4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=IP5oh0e/; arc=none smtp.client-ip=213.167.242.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
+Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
+	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 9B348AF;
+	Fri,  2 May 2025 18:04:09 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+	s=mail; t=1746201849;
+	bh=gwXN3uKkZvpWrE6+FvlOwjYwomgnhHuJFP/82khwbdI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=IP5oh0e/+b5cd/A+M+O7BEm452PpzvvWGaOoOugaHEXe7aFfXRrvmKWZart6lZxYU
+	 bSdrhAfFu3vMbOFaLsYxkXhuDiy42BLBXLtTJqEl2jraJduviw005hEHkCEPW3mZyc
+	 Pn2DmelSm2H7aDV7m55cSF3iEfxlSNLEifjGBWIA=
+Date: Fri, 2 May 2025 19:04:08 +0300
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: Keguang Zhang <keguang.zhang@gmail.com>, linux-mips@vger.kernel.org,
+	linux-mtd@lists.infradead.org, devicetree@vger.kernel.org
+Subject: Re: [bug report] mtd: rawnand: Add Loongson-1 NAND Controller Driver
+Message-ID: <20250502160408.GC15945@pendragon.ideasonboard.com>
+References: <aBR535RZZT-sa6QZ@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -71,244 +56,91 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvjedvkedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufgjfhffkfggtgfgsehtqhertddttdejnecuhfhrohhmpefirhgvghhorhihucevnffgoffgpffvuceoghhrvghgohhrhidrtghlvghmvghnthessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepueetgfffueeivdeitdeuhedtteffueffjedthfevvdegvdevgeduhfektdfhleeunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdugeemheehieemjegrtddtmeduvdgrheemsgdvugejmedutdehleemgegvtdeknecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdugeemheehieemjegrtddtmeduvdgrheemsgdvugejmedutdehleemgegvtdekpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehgrhgvghhorhihrdgtlhgvmhgvnhhtsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeelpdhrtghpthhtoheptghhvghnhhhurggtrghisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehtshgsohhgvghnugesrghlphhhrgdrfhhrrghnkhgvnhdruggvpdhrt
- ghpthhtohepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomhdprhgtphhtthhopehvlhgrughimhhirhdrkhhonhgurhgrthhivghvsehmohgsihhlvgihvgdrtghomhdprhgtphhtthhopehthhgvohdrlhgvsghruhhnsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepthgrfihfihhkrdgsrgihohhukhesmhhosghilhgvhigvrdgtohhmpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtoheplhhinhhugidqmhhiphhssehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-GND-Sasl: gregory.clement@bootlin.com
+Content-Disposition: inline
+In-Reply-To: <aBR535RZZT-sa6QZ@stanley.mountain>
 
-Hello,=20
+On Fri, May 02, 2025 at 10:53:03AM +0300, Dan Carpenter wrote:
+> Hello Keguang Zhang,
+> 
+> Commit d2d10ede04b1 ("mtd: rawnand: Add Loongson-1 NAND Controller
+> Driver") from Mar 20, 2025 (linux-next), leads to the following
+> Smatch static checker warning:
+> 
+> 	drivers/mtd/nand/raw/loongson1-nand-controller.c:730 ls1x_nand_chip_init()
+> 	warn: inconsistent refcounting 'chip_np->kobj.kref.refcount.refs.counter':
+> 
+> drivers/mtd/nand/raw/loongson1-nand-controller.c
+>     690 static int ls1x_nand_chip_init(struct ls1x_nand_host *host)
+>     691 {
+>     692         struct device *dev = host->dev;
+>     693         int nchips = of_get_child_count(dev->of_node);
+>     694         struct device_node *chip_np;
+>     695         struct nand_chip *chip = &host->chip;
+>     696         struct mtd_info *mtd = nand_to_mtd(chip);
+>     697         int ret;
+>     698 
+>     699         if (nchips != 1)
+>     700                 return dev_err_probe(dev, -EINVAL, "Currently one NAND chip supported\n");
+>     701 
+>     702         chip_np = of_get_next_child(dev->of_node, NULL);
+> 
+> 
+> The of_get_next_child() function drops the reference on the current
+> child.  That's probably not what we want to happen.  This is similar to
+> a discussion we were having earlier about of_find_node_by_name().
 
-> Huacai Chen <chenhuacai@kernel.org> writes:
->
->> On Wed, Apr 30, 2025 at 3:09=E2=80=AFPM Gregory CLEMENT
->> <gregory.clement@bootlin.com> wrote:
->>>
->>> Hello Huacai,
->>>
->>> > Hi, Gregory,
->>> >
->>> > On Sun, Apr 27, 2025 at 6:13=E2=80=AFPM Huacai Chen <chenhuacai@kerne=
-l.org> wrote:
->>> >>
->>> >> Hi, Gregory and Thomas,
->>> >>
->>> >> I'm sorry I'm late, but I have some questions about this patch.
->>> >>
->>> >> On Mon, Apr 14, 2025 at 3:12=E2=80=AFAM Gregory CLEMENT
->>> >> <gregory.clement@bootlin.com> wrote:
->>> >> >
->>> >> > Added support for starting CPUs in parallel on EyeQ to speed up bo=
-ot time.
->>> >> >
->>> >> > On EyeQ5, booting 8 CPUs is now ~90ms faster.
->>> >> > On EyeQ6, booting 32 CPUs is now ~650ms faster.
->>> >> >
->>> >> > Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
->>> >> > ---
->>> >> > Hello,
->>> >> >
->>> >> > This patch allows CPUs to start in parallel. It has been tested on
->>> >> > EyeQ5 and EyeQ6, which are both MIPS64 and use the I6500 design. T=
-hese
->>> >> > systems use CPS to support SMP.
->>> >> >
->>> >> > As noted in the commit log, on EyeQ6, booting 32 CPUs is now ~650ms
->>> >> > faster.
->>> >> >
->>> >> > Currently, this support is only for EyeQ SoC. However, it should a=
-lso
->>> >> > work for other CPUs using CPS. I am less sure about MT ASE support,
->>> >> > but this patch can be a good starting point. If anyone wants to add
->>> >> > support for other systems, I can share some ideas, especially for =
-the
->>> >> > MIPS_GENERIC setup that needs to handle both types of SMP setups.
->>> >> >
->>> [...]
->>> >> >   * A logical cpu mask containing only one VPE per core to
->>> >> > @@ -74,6 +76,8 @@ static cpumask_t cpu_core_setup_map;
->>> >> >
->>> >> >  cpumask_t cpu_coherent_mask;
->>> >> >
->>> >> > +struct cpumask __cpu_primary_thread_mask __read_mostly;
->>> >> > +
->>> >> >  unsigned int smp_max_threads __initdata =3D UINT_MAX;
->>> >> >
->>> >> >  static int __init early_nosmt(char *s)
->>> >> > @@ -374,10 +378,15 @@ asmlinkage void start_secondary(void)
->>> >> >         set_cpu_core_map(cpu);
->>> >> >
->>> >> >         cpumask_set_cpu(cpu, &cpu_coherent_mask);
->>> >> > +#ifdef CONFIG_HOTPLUG_PARALLEL
->>> >> > +       cpuhp_ap_sync_alive();
->>> >> This is a "synchronization point" due to the description from commit
->>> >> 9244724fbf8ab394a7210e8e93bf037abc, which means things are parallel
->>> >> before this point and serialized after this point.
->>> >>
->>> >> But unfortunately, set_cpu_sibling_map() and set_cpu_core_map() cann=
-ot
->>> >> be executed in parallel. Maybe you haven't observed problems, but in
->>> >> theory it's not correct.
->>>
->>> I am working on it. To address your remark, I have a few options that I
->>> evaluate.
->> I suggest to revert this patch temporary in mips-next.
->
->
-> As I previously mentioned, I haven't observed any issues until now. What
-> I'm evaluating is whether there is a real problem with this
-> implementation. Let's examine whether we need a new patch or if this one
-> is sufficient.
->
-> I will have the resutls at the end of the week.
+The current child here is NULL, so I don't think there's an issue.
 
-After hundreds of reboots on the EyeQ5, I did not encounter any failures
-during boot. However, while executing the set_cpu_core_map() and
-set_cpu_sibling_map() functions in parallel, modifications to shared
-resources could result in issues. To address this, I proposed the
-following fix:
+> Then it takes a reference to the new child.
 
-diff --git a/arch/mips/kernel/smp.c b/arch/mips/kernel/smp.c
-index 1726744f2b2ec..5f30611f45a1c 100644
---- a/arch/mips/kernel/smp.c
-+++ b/arch/mips/kernel/smp.c
-@@ -374,13 +377,13 @@ asmlinkage void start_secondary(void)
-        calibrate_delay();
-        cpu_data[cpu].udelay_val =3D loops_per_jiffy;
-=20
-+#ifdef CONFIG_HOTPLUG_PARALLEL
-+       cpuhp_ap_sync_alive();
-+#endif
-        set_cpu_sibling_map(cpu);
-        set_cpu_core_map(cpu);
-=20
-        cpumask_set_cpu(cpu, &cpu_coherent_mask);
--#ifdef CONFIG_HOTPLUG_PARALLEL
--       cpuhp_ap_sync_alive();
--#endif
-        notify_cpu_starting(cpu);
-=20
- #ifndef CONFIG_HOTPLUG_PARALLEL
+*That* causes issues that you outlined below.
 
-It moved these two functions back in the serialized part of the boot. I
-was concerned about potential slowdowns during the boot process, but I
-didn't notice any issues during my test on EyeQ5. Therefore, we can make
-this change.
+> 
+>     703         if (!chip_np)
+>     704                 return dev_err_probe(dev, -ENODEV, "failed to get child node for NAND chip\n");
+>     705 
+>     706         chip->controller = &host->controller;
+>     707         chip->options = NAND_NO_SUBPAGE_WRITE | NAND_USES_DMA | NAND_BROKEN_XD;
+>     708         chip->buf_align = 16;
+>     709         nand_set_controller_data(chip, host);
+>     710         nand_set_flash_node(chip, chip_np);
+>     711         if (!mtd->name)
+>     712                 return dev_err_probe(dev, -EINVAL, "Missing MTD label\n");
+> 
+> of_node_put(chip_np) before returning.
+> 
+>     713 
+>     714         mtd->dev.parent = dev;
+>     715         mtd->owner = THIS_MODULE;
+>     716 
+>     717         ret = nand_scan(chip, 1);
+>     718         if (ret) {
+>     719                 of_node_put(chip_np);
+>     720                 return dev_err_probe(dev, ret, "failed to scan NAND chip\n");
+>     721         }
+>     722 
+>     723         ret = mtd_device_register(mtd, NULL, 0);
+>     724         if (ret) {
+>     725                 nand_cleanup(chip);
+>     726                 of_node_put(chip_np);
+>     727                 return dev_err_probe(dev, ret, "failed to register MTD device\n");
+>     728         }
+>     729 
+> 
+> I think we want to call of_node_put(chip_np) before returning on the
+> success path as well?
 
+I would instead declare the chip_np variable as
 
-Thomas,
+	struct device_node *chip_np __free(of_node_put) = NULL;
 
-how would you like to proceed? Do you want to squash this patch
-into the current commit, or do you prefere I create a separate patch for
-it, or a new version of the patch including this change?
+and drop all the of_node_put(chip_np) calls.
 
-Gregory
+> --> 730         return 0;
+>     731 }
 
+-- 
+Regards,
 
->
-> Gregory
->
->>
->> Huacai
->>
->>>
->>> > I don't know whether you have done reboot tests (for ~1000 times),
->>> > Jiaxun Yang submitted similar patches for LoongArch [1], but during
->>> > reboot tests we encountered problems that I have described in my
->>> > previous reply.
->>> >
->>> > [1] https://lore.kernel.org/loongarch/20240716-loongarch-hotplug-v3-0=
--af59b3bb35c8@flygoat.com/
->>>
->>> I saw that series and I wondered why the last patch was not merged.
->>>
->>> I performed around 100 tests so far without encountering any issues; I
->>> plan to automate them further to gather more data.
->>>
->>> Gregpory
->>>
->>> >
->>> > Huacai
->>> >
->>> >>
->>> >> Huacai
->>> >>
->>> >> > +#endif
->>> >> >         notify_cpu_starting(cpu);
->>> >> >
->>> >> > +#ifndef CONFIG_HOTPLUG_PARALLEL
->>> >> >         /* Notify boot CPU that we're starting & ready to sync cou=
-nters */
->>> >> >         complete(&cpu_starting);
->>> >> > +#endif
->>> >> >
->>> >> >         synchronise_count_slave(cpu);
->>> >> >
->>> >> > @@ -386,11 +395,13 @@ asmlinkage void start_secondary(void)
->>> >> >
->>> >> >         calculate_cpu_foreign_map();
->>> >> >
->>> >> > +#ifndef CONFIG_HOTPLUG_PARALLEL
->>> >> >         /*
->>> >> >          * Notify boot CPU that we're up & online and it can safel=
-y return
->>> >> >          * from __cpu_up
->>> >> >          */
->>> >> >         complete(&cpu_running);
->>> >> > +#endif
->>> >> >
->>> >> >         /*
->>> >> >          * irq will be enabled in ->smp_finish(), enabling it too =
-early
->>> >> > @@ -447,6 +458,12 @@ void __init smp_prepare_boot_cpu(void)
->>> >> >         set_cpu_online(0, true);
->>> >> >  }
->>> >> >
->>> >> > +#ifdef CONFIG_HOTPLUG_PARALLEL
->>> >> > +int arch_cpuhp_kick_ap_alive(unsigned int cpu, struct task_struct=
- *tidle)
->>> >> > +{
->>> >> > +       return mp_ops->boot_secondary(cpu, tidle);
->>> >> > +}
->>> >> > +#else
->>> >> >  int __cpu_up(unsigned int cpu, struct task_struct *tidle)
->>> >> >  {
->>> >> >         int err;
->>> >> > @@ -466,6 +483,7 @@ int __cpu_up(unsigned int cpu, struct task_str=
-uct *tidle)
->>> >> >         wait_for_completion(&cpu_running);
->>> >> >         return 0;
->>> >> >  }
->>> >> > +#endif
->>> >> >
->>> >> >  #ifdef CONFIG_PROFILING
->>> >> >  /* Not really SMP stuff ... */
->>> >> >
->>> >> > ---
->>> >> > base-commit: 0af2f6be1b4281385b618cb86ad946eded089ac8
->>> >> > change-id: 20250411-parallel-cpu-bringup-78999a9235ea
->>> >> >
->>> >> > Best regards,
->>> >> > --
->>> >> > Gr=C3=A9gory CLEMENT, Bootlin
->>> >> > Embedded Linux and Kernel engineering
->>> >> > https://bootlin.com
->>> >> >
->>> >> >
->>>
->>> --
->>> Gr=C3=A9gory CLEMENT, Bootlin
->>> Embedded Linux and Kernel engineering
->>> https://bootlin.com
->
-> --=20
-> Gr=C3=A9gory CLEMENT, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
-
---=20
-Gr=C3=A9gory CLEMENT, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Laurent Pinchart
 
