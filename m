@@ -1,121 +1,125 @@
-Return-Path: <linux-mips+bounces-8899-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8900-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6844EAA6C93
-	for <lists+linux-mips@lfdr.de>; Fri,  2 May 2025 10:34:55 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 81323AA6CA2
+	for <lists+linux-mips@lfdr.de>; Fri,  2 May 2025 10:39:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 27C521B674E2
-	for <lists+linux-mips@lfdr.de>; Fri,  2 May 2025 08:35:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B2C657A50BF
+	for <lists+linux-mips@lfdr.de>; Fri,  2 May 2025 08:38:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70A7922A7E5;
-	Fri,  2 May 2025 08:34:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC22122B5A3;
+	Fri,  2 May 2025 08:39:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gk0E1b12"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pgkeSmGo"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42BDA8828;
-	Fri,  2 May 2025 08:34:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ECAB22A7F6
+	for <linux-mips@vger.kernel.org>; Fri,  2 May 2025 08:39:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746174890; cv=none; b=mULRbjnBn/1D3AeFCKnUfDs/m05sXp4Ho26vgVzp2+yRBlt0Q0v3pvaUAUZTwZ0gB5mZJ6xbVOaDtf0+04KokWeWfKT5RYTRKjw4Ba0m8EdyvqCOB3Gmlf2ie0zCzjrpMvOGlvPfz7jfP3OrMFT6CMsLBVCSF+9Z3SnLkVrZDNY=
+	t=1746175177; cv=none; b=OhZQjcp3dhw3CmG+02NjMdgrCUg2keDwc2bmFhoGdqzBgoL7IzeQEUnhKIY/Z5MDgwC9mMTlkf1gyzim+Bbz5oFyBFKNKBL+4YpTF7Mtil5WRWAN3oWDVPaMLZN0HG0MZ4in7RvT1Lyu72LyvTx4Pjmmja/xe0XifXdVR3hGkO0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746174890; c=relaxed/simple;
-	bh=gavfjvHRT5wusZDL+2oOWK7fIEbSI+GHndbQUpjG4qw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oaJ23Fh4bqTBFzi7QuRj2UfWnbR2yayr8f7TX8W0sl3rjsTbx/uIub/Ud3/6oodobt7bOER9WwZ6vkwRhAWo6EbqxZFYxHFs1oufnObrfqBNA3AP1ntLWULy83/0rzPd20PQKKBBLm+nywD2PMkcrssmoaqzirhDp68xBwdecq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gk0E1b12; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F20B6C4CEE4;
-	Fri,  2 May 2025 08:34:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746174889;
-	bh=gavfjvHRT5wusZDL+2oOWK7fIEbSI+GHndbQUpjG4qw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=gk0E1b12WMFQI1HXXe5kJMMGbjgnrnVylLLQTKdAUBj7zymfCpmn/Dn8qnPcyNUHe
-	 kcuMiuw1lZa55uGxYbWjFTYuET/yCRLXLi1lnDKpLUdI+BP2mgXxljd6cEaFK4SS3V
-	 Thre+RBYrTSsvadMwwkrQXI92o28IqPv+kQfGU7mvCSZmlH+8S4VJGNLyDheam56m/
-	 nJNYgVrd+EZDf+KS8OFYnvOBP3E0Ut8EhlKD6aUMFqW6izVYE42a5y1GHZBItYqgt6
-	 OVR/ZHuGQsbWbBSI/2ct7f8J9MjymchYcvJhPTfoTCnARcmkx4XCLQN7baoILdL4Xf
-	 Z76g7Ii+1sB1w==
-Message-ID: <6ae54415-aadb-4f26-bdae-63a036bff112@kernel.org>
-Date: Fri, 2 May 2025 10:34:42 +0200
+	s=arc-20240116; t=1746175177; c=relaxed/simple;
+	bh=Fc6VGyglFbCU4Zg5Mw2hQNZJJof9kthAbyW2Wut9M2I=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=dOVUnR4C/19z/C2ICXje3LIVcTjpqpxblCIaSu6z6wfKghu586JqINxpOUSLsQuAoEGw59kjpeEUcJo30i+2hwkZ5H8mNUVBd/yzSZH5q75KU7k8QwGPFmHhh2BksfEaHnTZ+fwlZ2+KaAflK4sBOh8+QFyO7i+iPbz3w4NuFLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pgkeSmGo; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-39ee5a5bb66so955534f8f.3
+        for <linux-mips@vger.kernel.org>; Fri, 02 May 2025 01:39:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1746175173; x=1746779973; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=YTp1n3CXi4d/IkYoP7iNGIaUGP0jg9QVzJw7i5UhA5Y=;
+        b=pgkeSmGoxGb3NfuIJob4Qla0scUPSMXoTsndHmbdmjevpXYIfbDx4MAZn4oT6YbLOm
+         xw0IrMORmI9j9tflWnq3tb+KApmrfvvNjN5AQhARq+w+0R5nmLM9mnMKFqCS5XJPyHxo
+         ZGy4DKfP0RBUJXBZsDPWD3ETQHuMl8oOD/lLf24/i+dn38TW/79l2ayYffez7wkm2LB6
+         E0vFUMDR1QP3WqhZwGzws5jaC+Bu7ylByJz58gdyGInOUsMUythMtSzs2KESFQncXLsF
+         nIyZ795yXc42yqI0ohwTiiqGI0EFaOaE6ACA90QLsHmK26oLqIN//JN+vcHHfpJhFdED
+         g1UQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746175173; x=1746779973;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=YTp1n3CXi4d/IkYoP7iNGIaUGP0jg9QVzJw7i5UhA5Y=;
+        b=tEYt+5PZm22cvH5cU57nh6bOwTBTkee3QvvI5Z2RwUUNB6IuFfMhpbMImZcSf4eK8J
+         Dv3vEuiICPhnAiJf7YfbyUxo9TJ+2uaopUgVbtv/Q6DWgowKigyNTyfjJ0LmrUUvp2hC
+         LyjKcq6vjZaIYnQ5etCeFB6BNUjRdUbO3xOV1nbqqh1MfVcgLXgnPnHlVHnQI63WthLW
+         N+0v4axgL+3HXFd7kmAjtegBleeaVgEfZMdjkwA5eFQbRgSULLPLz1njSLAUrf83YdMa
+         3OGgNMWQzaZFBOwwOL65LdON8mLgvcHSMqItB7bvLtdgPOGWFfr6DdHJJgpCMti7iCSf
+         BOow==
+X-Forwarded-Encrypted: i=1; AJvYcCVIn1EsAAenzVbMbOTA9zhhzDFGD+5+z8fyZWdUSUklKjavSlKUxRa2vjib+jrINowfwmX0glRzNjsi@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3OoLj+2xx72wlsVf7Y22bYQ0J15L/OJqdi+WuS6kNG25WST6D
+	XsE2KKdtmR7+hAIiGyozpDrLE+nnXKGmq8hKwKALHCwwlbNSW6Lafg6+oBTowrU=
+X-Gm-Gg: ASbGncuHoucnXHZMHe01TDPyNoliDvU4UnJW7f4Kp/RIETAffrdnF0PN8096kUuVSmB
+	bwvFSBwR5uUg7HpZ6pPBUVU0BoG2oyDwBUYtbNu+QLkSw2qqTX8toi6qBtJWr3NLIkaF7uLAZoT
+	ut6ybWL1/RaEzR3GB9fhvgW3WmZ6RWiBJz9pNwtkcAjsTLuVzlSKXatJguQa5DkoEnQl4+1Ugpl
+	/ohWX6TP7qH2MpUu9jsKmPtjxi3S71P2CQSTxySevOfLpkQhxgRenfRgJmGcaUqbI4JQ2wBGxaq
+	V4ZllWuthfnqEddgBMYur3Etf5jU2pF3DHawNLQQ9wRNuA==
+X-Google-Smtp-Source: AGHT+IGb74sv8hsGiSyin0BDmnbpMA2IZnPZBnAg8xwnjuUfYCPDX9NlYI/bGPAEUyHsmHQ+F3zSMg==
+X-Received: by 2002:a5d:588b:0:b0:39c:1f10:ba54 with SMTP id ffacd0b85a97d-3a099adeae2mr1444276f8f.35.1746175173327;
+        Fri, 02 May 2025 01:39:33 -0700 (PDT)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3a099ae0d2csm1473852f8f.2.2025.05.02.01.39.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 May 2025 01:39:32 -0700 (PDT)
+Date: Fri, 2 May 2025 11:39:29 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: Keguang Zhang <keguang.zhang@gmail.com>
+Cc: Miquel Raynal <miquel.raynal@bootlin.com>,
+	Richard Weinberger <richard@nod.at>,
+	Vignesh Raghavendra <vigneshr@ti.com>, linux-mips@vger.kernel.org,
+	linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org
+Subject: [PATCH next] mtd: rawnand: loongson1: Fix error code in
+ ls1x_nand_dma_transfer()
+Message-ID: <aBSEwag_ducqOwy7@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/7] dt-bindings: timer: Add EcoNet EN751221 "HPT" CPU
- Timer
-To: Caleb James DeLisle <cjd@cjdns.fr>, linux-mips@vger.kernel.org
-Cc: tglx@linutronix.de, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, tsbogend@alpha.franken.de, daniel.lezcano@linaro.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- benjamin.larsson@genexis.eu, linux-mediatek@lists.infradead.org
-References: <20250430133433.22222-1-cjd@cjdns.fr>
- <20250430133433.22222-2-cjd@cjdns.fr>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20250430133433.22222-2-cjd@cjdns.fr>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Mailer: git-send-email haha only kidding
 
-On 30/04/2025 15:34, Caleb James DeLisle wrote:
-> Add device tree bindings for the so-called high-precision timer (HPT)
-> in the EcoNet EN751221 SoC.
-> 
-> Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
+The "desc" variable is NULL and PTR_ERR(NULL) is zero/success.  Return
+a negative error code instead.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Fixes: d2d10ede04b1 ("mtd: rawnand: Add Loongson-1 NAND Controller Driver")
+Signed-off-by: Dan Carpenter <dan.carpenter@linaro.org>
+---
+It's hard to know what the patch prefix should be here.  Ideally when we
+add a new driver we would use the patch prefix for the driver.
 
-Best regards,
-Krzysztof
+Tired: subsystem: Add driver XXX
+Wired: subsystem: XXX: Add driver for XXX
+
+ drivers/mtd/nand/raw/loongson1-nand-controller.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/mtd/nand/raw/loongson1-nand-controller.c b/drivers/mtd/nand/raw/loongson1-nand-controller.c
+index 6a369b1c7d86..8754bb4f8b56 100644
+--- a/drivers/mtd/nand/raw/loongson1-nand-controller.c
++++ b/drivers/mtd/nand/raw/loongson1-nand-controller.c
+@@ -371,7 +371,7 @@ static int ls1x_nand_dma_transfer(struct ls1x_nand_host *host, struct ls1x_nand_
+ 	desc = dmaengine_prep_slave_single(chan, dma_addr, op->len, xfer_dir, DMA_PREP_INTERRUPT);
+ 	if (!desc) {
+ 		dev_err(dev, "failed to prepare DMA descriptor\n");
+-		ret = PTR_ERR(desc);
++		ret = -ENOMEM;
+ 		goto err;
+ 	}
+ 	desc->callback = ls1x_nand_dma_callback;
+-- 
+2.47.2
+
 
