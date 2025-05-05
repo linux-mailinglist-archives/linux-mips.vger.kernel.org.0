@@ -1,46 +1,46 @@
-Return-Path: <linux-mips+bounces-8935-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8936-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DAB1AAB454
-	for <lists+linux-mips@lfdr.de>; Tue,  6 May 2025 07:04:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7865EAAB530
+	for <lists+linux-mips@lfdr.de>; Tue,  6 May 2025 07:24:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9E11A189036C
-	for <lists+linux-mips@lfdr.de>; Tue,  6 May 2025 05:01:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7112C3AAB3F
+	for <lists+linux-mips@lfdr.de>; Tue,  6 May 2025 05:19:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19B232820C7;
-	Tue,  6 May 2025 00:41:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6988A2F54B0;
+	Tue,  6 May 2025 00:45:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ObaD34Je"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UxOBz7Ko"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CC272ECE34;
-	Mon,  5 May 2025 23:10:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48EA6390E0C;
+	Mon,  5 May 2025 23:16:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746486648; cv=none; b=g9WSFEnG+qwDNMyupVbpqof23VztHTHq/hQx4sc03cDLvBo4NlIsnixNiGrwmRFaod9DBJPJF1yJSo1LVrYv9lUU37xl0FHD3WkXeoTO5OAa0JqKeRG+B9AlvD1NPkrCDlWUy6pRTpBwjTL0tUvklYqOsDR3Iwq8AiDkzlapRYU=
+	t=1746486997; cv=none; b=LyqRha8tmQIQ3oltKucHATzNL7i5mfx5rfTjQr3aXx8bULgE1I2/cHhOnBWzZGobe6UfiU56RWRksMZl/oLmwqjJa06GXBednzEOI4ZlW2Lp6yakf74O/vaHDkvsqG7Da/nHLh8M5QA4EPaHTpUsq/7014gjC2QXJysrxsilP98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746486648; c=relaxed/simple;
-	bh=6R+CjWoSWNOkptTCEyM4s/GgpltNIGtG68+ZjbM+P8k=;
+	s=arc-20240116; t=1746486997; c=relaxed/simple;
+	bh=D2onoH0eioFutunK8t49CfkAwg7YCy58FHYrZHRgwp0=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YLLnBB1GdrTWoFRvsshT8EVULfPRE3Ia2xFNU2jB8tnNJxlXHuCDTBTqdC9XCCUb00ETpTugiSGNyFEHD3EKMsA8u8ZWAOufbp/swn4ZPcQpiP+P9UhWK+yvyngYTi9A4iPq7Ep7lXhi0BLsuYT9AJWmAd5N8DNo6IyrPmkP3lc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ObaD34Je; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0B84C4CEEF;
-	Mon,  5 May 2025 23:10:46 +0000 (UTC)
+	 MIME-Version:Content-Type; b=heAvbJ1n+1ih3Z5X5lpU5CB3dZ7DMBG78IaeIHoffOAx+N0JJ5r0lCDbS7DaKYyTjooJqryUgsKNxwf8ko/JdvbijdBg7cprVTLwSFJTQVUkXzurY+Y1IzVe+eTt+gNrRovcaVWhuSBMQDl/HLZ6Z3iYs9kH5GUzRv/H1njwmQg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UxOBz7Ko; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F234C4CEEF;
+	Mon,  5 May 2025 23:16:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746486648;
-	bh=6R+CjWoSWNOkptTCEyM4s/GgpltNIGtG68+ZjbM+P8k=;
+	s=k20201202; t=1746486995;
+	bh=D2onoH0eioFutunK8t49CfkAwg7YCy58FHYrZHRgwp0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ObaD34Jegc1z61HZ4xAVLF7nnpJlO4Zy8CF5cnc9ZvV/ObMXTf9hNyxt37Zyvqoi8
-	 khfSJ8Q8OCXUvuu0sEx26s0zrqA4gqqMSnD2t1xcGsTQB7EcuuoVIKl+Tq211EPwtz
-	 Z3llzr+O9jd9Ke5JUw37DvbgVHoVNQ3EplsooE/GazkVv6wqqLEspXQtLK28AIahPc
-	 47LbkE18MpoouMEtce9cmpT3ZawTgJjZsc2RJHLF6wxuqO8WF/Sd9TiIHidCKZW2Jp
-	 Q58XlZh5b9ifz6uHBr+2hDFCRYqLZDKMl2MWbXlI8akLVJ78W3/IFtjQJdeBZxJU43
-	 3EBlQOKWApXhw==
+	b=UxOBz7KowbWH2ZRTO5Cq4sdXczlwdK2rhRKJgeB3+DtJKZquMdoBZF+3SBHqnZLGt
+	 5/kzKtFIrwkGWC9ukKqWvonQGJChdEfMASoJM+dFWO2Gu8CiTrj72ab6CwYpBMhEx3
+	 L0ZbxOHQSBxw6KOZqEwPPVlFIWhb2uHwZV5qoEXQGXebzUL7yWreDYJJnkjY6rKpfR
+	 dxvNYqmlIRPlEzD4Hn3DWIHWl74nDg4e7zIlvSKaPhqrbKg+9BL6dhn7PA+7120wx6
+	 nBwo6VFav1JKwMB0AsUhOMJKawG//SrqEY27SZQZi8z8rrF40mdLO5+NlFWrDM+Jhi
+	 ZCZ8kmbceiZtg==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -56,12 +56,12 @@ Cc: Paul Burton <paulburton@kernel.org>,
 	Sasha Levin <sashal@kernel.org>,
 	tglx@linutronix.de,
 	linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.1 134/212] clocksource: mips-gic-timer: Enable counter when CPUs start
-Date: Mon,  5 May 2025 19:05:06 -0400
-Message-Id: <20250505230624.2692522-134-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.15 097/153] clocksource: mips-gic-timer: Enable counter when CPUs start
+Date: Mon,  5 May 2025 19:12:24 -0400
+Message-Id: <20250505231320.2695319-97-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250505230624.2692522-1-sashal@kernel.org>
-References: <20250505230624.2692522-1-sashal@kernel.org>
+In-Reply-To: <20250505231320.2695319-1-sashal@kernel.org>
+References: <20250505231320.2695319-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -71,7 +71,7 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.1.136
+X-stable-base: Linux 5.15.181
 Content-Transfer-Encoding: 8bit
 
 From: Paul Burton <paulburton@kernel.org>
@@ -108,10 +108,10 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/drivers/clocksource/mips-gic-timer.c b/drivers/clocksource/mips-gic-timer.c
-index b3ae38f367205..39c70b5ac44c9 100644
+index be4175f415ba5..1946691f6b322 100644
 --- a/drivers/clocksource/mips-gic-timer.c
 +++ b/drivers/clocksource/mips-gic-timer.c
-@@ -114,6 +114,9 @@ static void gic_update_frequency(void *data)
+@@ -119,6 +119,9 @@ static void gic_update_frequency(void *data)
  
  static int gic_starting_cpu(unsigned int cpu)
  {
@@ -121,7 +121,7 @@ index b3ae38f367205..39c70b5ac44c9 100644
  	gic_clockevent_cpu_init(cpu, this_cpu_ptr(&gic_clockevent_device));
  	return 0;
  }
-@@ -248,9 +251,6 @@ static int __init gic_clocksource_of_init(struct device_node *node)
+@@ -253,9 +256,6 @@ static int __init gic_clocksource_of_init(struct device_node *node)
  			pr_warn("Unable to register clock notifier\n");
  	}
  
