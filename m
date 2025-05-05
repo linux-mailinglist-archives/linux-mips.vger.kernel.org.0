@@ -1,483 +1,965 @@
-Return-Path: <linux-mips+bounces-8915-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8916-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2848BAA9B6C
-	for <lists+linux-mips@lfdr.de>; Mon,  5 May 2025 20:20:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6513AAA9BCE
+	for <lists+linux-mips@lfdr.de>; Mon,  5 May 2025 20:44:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DE5FE7A9C07
-	for <lists+linux-mips@lfdr.de>; Mon,  5 May 2025 18:18:53 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9EAD63BFC7B
+	for <lists+linux-mips@lfdr.de>; Mon,  5 May 2025 18:44:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 684D02701D5;
-	Mon,  5 May 2025 18:19:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 699F4270563;
+	Mon,  5 May 2025 18:43:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qjLazIDP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uM5uAJcP"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33BE92701C9;
-	Mon,  5 May 2025 18:19:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BCA12701D8;
+	Mon,  5 May 2025 18:43:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746469166; cv=none; b=ehCmW45Y3DS3hn1n6/Y//hEfjGR0OIrHW/ZmOlm+cMddBCqC2FKOxD0FuR0toAf73+pW1GdTbsksO4DdWMeG0ixu3BtmDwip8GsanFunltWNtrpG0/sABVHTXuLM1YrYsMDfAP0T9neFUgalV2cxuDJJrA96e/zybghAoKnWqrU=
+	t=1746470637; cv=none; b=hERkmeu1cYFUIWBkyecuGermvMifQjKAxjVnXvY3k1bCgQJtmxFcmt4lngnQkTHlYJ6+nfkEwJqz8zAI8j9Urd4PHfe75SsgPVHpgs3wE3pIVFr4DLbZBj2iCgQ52oYRssPGEwYFRvVCFKVlFLMqFEfGKd15Hj5yh4DSHTFt1ac=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746469166; c=relaxed/simple;
-	bh=uslrcW8Rjh8Vtp1jwkYS+gns1NocaM1ysr80C17p+10=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pEPv8byS10PIOTLiXhNxV42YstkyOUn+jyXvUACFDYmBFKPVUFXSumU/KtRTy7l3Fy2TlYnQWPKJxgxzbt+bMch7HmBl6H/nisBPuZSGHcrFupynaMyPXu73hHbqGjROkHIpS+1qViyCPkzeaUnnqOQpCgy+gu6Le8bgkUYMoRs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qjLazIDP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6333BC4CEEF;
-	Mon,  5 May 2025 18:19:24 +0000 (UTC)
+	s=arc-20240116; t=1746470637; c=relaxed/simple;
+	bh=tF04Fns79sH1yaJ5H8T/Hh5MDrmddyRBb/f3XQX4pgQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hwS4lP2agYoi/gFrZ1LxlgjZIPpOfulnkvKK2uOa8Bg3oRHgXmKdUD0shy6+PewuwV902DCEyYEjxIMS8HCaXqaxGf1tLFVOv4vaUeBl0q5LkUZoSsBlT/jkg+QqXtHQxNvQuXjSPTIjRO24OtB/w2VaXC3+GDH5kEtW0c52We0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uM5uAJcP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 83C6BC4CEFD;
+	Mon,  5 May 2025 18:43:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746469164;
-	bh=uslrcW8Rjh8Vtp1jwkYS+gns1NocaM1ysr80C17p+10=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=qjLazIDPDkm/C095UjRbYZiH2s5N7gpqYt3hMK3JSviK+dnBWkx8DT34stTwvRWa1
-	 uUtdO0i0UEOfXdoCL9knyjf2nfgVeTT2W+a8+QuZeFSaGqfhUQssF3B+Zu2avSGq67
-	 xd9zRgby65l75mxRUMgJ8mIB34uhHYW9XqvipSYtBOSCKEkOTEuzevxNKHxZbkUy8c
-	 kr0qCDllV/5OLtzYqjvDqCzj+9Le6N5jMBFbPAIGwstCX3DSTeBpVC8eixdn3W1XoB
-	 9UB09lQN5DAc8rMGmN5uWYfVcXSoWJTv53n9I1Z2RSVh3pov8ByWjjIvVLik3+NFBX
-	 foUo9yue0AqVg==
-From: Eric Biggers <ebiggers@kernel.org>
-To: linux-crypto@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mips@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org,
-	linux-bcachefs@vger.kernel.org,
-	"Jason A . Donenfeld " <Jason@zx2c4.com>,
-	Theodore Ts'o <tytso@mit.edu>
-Subject: [PATCH 4/4] crypto: lib/chacha - add array bounds to function prototypes
-Date: Mon,  5 May 2025 11:18:24 -0700
-Message-ID: <20250505181824.647138-5-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250505181824.647138-1-ebiggers@kernel.org>
-References: <20250505181824.647138-1-ebiggers@kernel.org>
+	s=k20201202; t=1746470636;
+	bh=tF04Fns79sH1yaJ5H8T/Hh5MDrmddyRBb/f3XQX4pgQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=uM5uAJcP15BVWhuXYww/5TrKz+DfcC4Wt8xaxG7HsFpPtzKQfbc6udt6k+YnHlgKN
+	 5SN9QZm8uO3QVhWg9/l5fZtVkO1yL9OkEe8D12NEM6fEMA5lzBFAyQ0h/81PJ0S0hX
+	 ihSnE9ZT/VhKnO1I0dLPoOtlu/z7Zg2HBZO2zymhVW2q/BTYfZFH/mlguYwIKWF6WY
+	 FacKgX9MVq1Z5yaEvjXqujbOxlsyBEESK0LYZqNJFrbyKdb9/YWanCoAf9U2W6HEMO
+	 xqGSvNKKruYaDI75hjoTYS5pbyG9jxSrx9nL/YGCQ1/tuzUYEI24eDhOMhmPBHzXxO
+	 hP/CRbTUM54RQ==
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-acb615228a4so1115071566b.0;
+        Mon, 05 May 2025 11:43:56 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUHN+PTcqhd47NtZtbly8iL/Kxch5n2+kovY6i3tTmzv8eUbjbFnVHzK2aZPsTF0D8JVC4sRIzLGCKBfj9mNJdcgyM=@vger.kernel.org, AJvYcCUh/3E2KeHLxwPI2rup6SLCEwt0dfwvnGKiBi+lCtRrYm8T1LSBKHU5Bgk+yRlQn3Na3VEvjGvBR+CEzKW+@vger.kernel.org, AJvYcCUzxShDmwaDtLZgFL3QKFxx1fD22fbKMLVyS39QbQMV17m/c08qKNWbWDjDN/HymwFAzEpFbfxbQ8n8/A==@vger.kernel.org, AJvYcCVsWmQi9WtZ1ZSFIdnipI6JyHdj4iznDvg0Q7bWQsY5IWcm7Jxv6Bxnj36zexPNmov1MRA1z7kjwzg=@vger.kernel.org, AJvYcCW5tjlg/05IQij+AdcS0kTmckWXXs9F2aXdJqNFMVnU6Za6QaXRgBbWZcnHx5e1dHDlkQUaloDniDQU5SEz@vger.kernel.org
+X-Gm-Message-State: AOJu0YxcJgIxyWJVTDQdYwlbZjToTp4D/LOXD2p37Mk3rNMBJ4lPQuZJ
+	Jl+XTvZ3dIiIYusrU1h6W1OaJmXZ20unVwJJmXAKd/goCMDYBowYlSZbed/EYRwEJf4HCLx9XSn
+	VyXI+bB+w2CyZM8UprqbEyJaICA==
+X-Google-Smtp-Source: AGHT+IE07Ly6dyu8Y+aF9BlZdIf7+P37J2qLB07/RiqfMFZ0ipjDBLk74RTbDrbdYckFkuO0cf7wPwVCCZB9ROIhhI4=
+X-Received: by 2002:a17:906:c144:b0:acb:2050:c105 with SMTP id
+ a640c23a62f3a-ad1d2f5cadbmr46457866b.21.1746470634738; Mon, 05 May 2025
+ 11:43:54 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250410-dt-cpu-schema-v2-0-63d7dc9ddd0a@kernel.org> <20250410-dt-cpu-schema-v2-11-63d7dc9ddd0a@kernel.org>
+In-Reply-To: <20250410-dt-cpu-schema-v2-11-63d7dc9ddd0a@kernel.org>
+From: Rob Herring <robh@kernel.org>
+Date: Mon, 5 May 2025 13:43:43 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqLGHQ4YBqGGEdyirtgaBnJKRxOxOKTaQLv2jm-g8TNndA@mail.gmail.com>
+X-Gm-Features: ATxdqUH6daJs7nOd8Y48rS3eP2-1poIs0MGdxfDe75Fd100QvIPr8Ytk27ZE1_w
+Message-ID: <CAL_JsqLGHQ4YBqGGEdyirtgaBnJKRxOxOKTaQLv2jm-g8TNndA@mail.gmail.com>
+Subject: Re: [PATCH v2 11/17] arm64: dts: amlogic: Drop redundant CPU "clock-latency"
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Samuel Holland <samuel@sholland.org>, Conor Dooley <conor@kernel.org>, 
+	Nicolas Ferre <nicolas.ferre@microchip.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+	Steen Hegelund <Steen.Hegelund@microchip.com>, Daniel Machon <daniel.machon@microchip.com>, 
+	UNGLinuxDriver@microchip.com, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Heiko Stuebner <heiko@sntech.de>, 
+	Neil Armstrong <neil.armstrong@linaro.org>, Kevin Hilman <khilman@baylibre.com>, 
+	Jerome Brunet <jbrunet@baylibre.com>, 
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
+	Lorenzo Pieralisi <lpieralisi@kernel.org>, Andy Gross <agross@kernel.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Viresh Kumar <vireshk@kernel.org>, 
+	Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>, zhouyanjie@wanyeetech.com, 
+	Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+	Stephan Gerhold <stephan.gerhold@linaro.org>
+Cc: devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	linux-arm-msm@vger.kernel.org, imx@lists.linux.dev, 
+	linux-rockchip@lists.infradead.org, linux-amlogic@lists.infradead.org, 
+	linux-renesas-soc@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Eric Biggers <ebiggers@google.com>
+On Thu, Apr 10, 2025 at 10:50=E2=80=AFAM Rob Herring (Arm) <robh@kernel.org=
+> wrote:
+>
+> The "clock-latency" property is part of the deprecated opp-v1 binding
+> and is redundant if the opp-v2 table has equal or larger values in any
+> "clock-latency-ns". Add any missing "clock-latency-ns" properties and
+> remove "clock-latency".
+>
+> Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
+> ---
 
-Add explicit array bounds to the function prototypes for the parameters
-that didn't already get handled by the conversion to use chacha_state:
+Ping!
 
-- chacha_block_*():
-  Change 'u8 *out' or 'u8 *stream' to u8 out[CHACHA_BLOCK_SIZE].
-
-- hchacha_block_*():
-  Change 'u32 *out' or 'u32 *stream' to u32 out[HCHACHA_OUT_WORDS].
-
-- chacha_init():
-  Change 'const u32 *key' to 'const u32 key[CHACHA_KEY_WORDS]'.
-  Change 'const u8 *iv' to 'const u8 iv[CHACHA_IV_SIZE]'.
-
-No functional changes.  This just makes it clear when fixed-size arrays
-are expected.
-
-Signed-off-by: Eric Biggers <ebiggers@google.com>
----
- arch/arm/lib/crypto/chacha-glue.c           | 12 ++++-----
- arch/arm/lib/crypto/chacha-scalar-core.S    |  2 +-
- arch/arm64/lib/crypto/chacha-neon-glue.c    | 10 ++++----
- arch/mips/lib/crypto/chacha-glue.c          |  2 +-
- arch/powerpc/lib/crypto/chacha-p10-glue.c   |  4 +--
- arch/riscv/lib/crypto/chacha-riscv64-glue.c |  3 ++-
- arch/s390/lib/crypto/chacha-glue.c          |  4 +--
- arch/x86/lib/crypto/chacha_glue.c           |  8 +++---
- crypto/chacha.c                             |  4 +--
- include/crypto/chacha.h                     | 27 ++++++++++++---------
- lib/crypto/chacha.c                         | 15 ++++++------
- lib/crypto/chacha20poly1305.c               |  2 --
- 12 files changed, 49 insertions(+), 44 deletions(-)
-
-diff --git a/arch/arm/lib/crypto/chacha-glue.c b/arch/arm/lib/crypto/chacha-glue.c
-index 0c2b4c62d484..88ec96415283 100644
---- a/arch/arm/lib/crypto/chacha-glue.c
-+++ b/arch/arm/lib/crypto/chacha-glue.c
-@@ -21,13 +21,13 @@ asmlinkage void chacha_block_xor_neon(const struct chacha_state *state,
- 				      u8 *dst, const u8 *src, int nrounds);
- asmlinkage void chacha_4block_xor_neon(const struct chacha_state *state,
- 				       u8 *dst, const u8 *src,
- 				       int nrounds, unsigned int nbytes);
- asmlinkage void hchacha_block_arm(const struct chacha_state *state,
--				  u32 *out, int nrounds);
-+				  u32 out[HCHACHA_OUT_WORDS], int nrounds);
- asmlinkage void hchacha_block_neon(const struct chacha_state *state,
--				   u32 *out, int nrounds);
-+				   u32 out[HCHACHA_OUT_WORDS], int nrounds);
- 
- asmlinkage void chacha_doarm(u8 *dst, const u8 *src, unsigned int bytes,
- 			     const struct chacha_state *state, int nrounds);
- 
- static __ro_after_init DEFINE_STATIC_KEY_FALSE(use_neon);
-@@ -62,18 +62,18 @@ static void chacha_doneon(struct chacha_state *state, u8 *dst, const u8 *src,
- 			memcpy(dst, buf, bytes);
- 		state->x[12]++;
- 	}
- }
- 
--void hchacha_block_arch(const struct chacha_state *state, u32 *stream,
--			int nrounds)
-+void hchacha_block_arch(const struct chacha_state *state,
-+			u32 out[HCHACHA_OUT_WORDS], int nrounds)
- {
- 	if (!IS_ENABLED(CONFIG_KERNEL_MODE_NEON) || !neon_usable()) {
--		hchacha_block_arm(state, stream, nrounds);
-+		hchacha_block_arm(state, out, nrounds);
- 	} else {
- 		kernel_neon_begin();
--		hchacha_block_neon(state, stream, nrounds);
-+		hchacha_block_neon(state, out, nrounds);
- 		kernel_neon_end();
- 	}
- }
- EXPORT_SYMBOL(hchacha_block_arch);
- 
-diff --git a/arch/arm/lib/crypto/chacha-scalar-core.S b/arch/arm/lib/crypto/chacha-scalar-core.S
-index d20b5de755cc..4951df05c158 100644
---- a/arch/arm/lib/crypto/chacha-scalar-core.S
-+++ b/arch/arm/lib/crypto/chacha-scalar-core.S
-@@ -406,11 +406,11 @@ ENTRY(chacha_doarm)
- 	b		0b
- ENDPROC(chacha_doarm)
- 
- /*
-  * void hchacha_block_arm(const struct chacha_state *state,
-- *			  u32 out[8], int nrounds);
-+ *			  u32 out[HCHACHA_OUT_WORDS], int nrounds);
-  */
- ENTRY(hchacha_block_arm)
- 	push		{r1,r4-r11,lr}
- 
- 	cmp		r2, #12			// ChaCha12 ?
-diff --git a/arch/arm64/lib/crypto/chacha-neon-glue.c b/arch/arm64/lib/crypto/chacha-neon-glue.c
-index 7b451b3c7240..d0188f974ca5 100644
---- a/arch/arm64/lib/crypto/chacha-neon-glue.c
-+++ b/arch/arm64/lib/crypto/chacha-neon-glue.c
-@@ -32,11 +32,11 @@ asmlinkage void chacha_block_xor_neon(const struct chacha_state *state,
- 				      u8 *dst, const u8 *src, int nrounds);
- asmlinkage void chacha_4block_xor_neon(const struct chacha_state *state,
- 				       u8 *dst, const u8 *src,
- 				       int nrounds, int bytes);
- asmlinkage void hchacha_block_neon(const struct chacha_state *state,
--				   u32 *out, int nrounds);
-+				   u32 out[HCHACHA_OUT_WORDS], int nrounds);
- 
- static __ro_after_init DEFINE_STATIC_KEY_FALSE(have_neon);
- 
- static void chacha_doneon(struct chacha_state *state, u8 *dst, const u8 *src,
- 			  int bytes, int nrounds)
-@@ -59,18 +59,18 @@ static void chacha_doneon(struct chacha_state *state, u8 *dst, const u8 *src,
- 		dst += l;
- 		state->x[12] += DIV_ROUND_UP(l, CHACHA_BLOCK_SIZE);
- 	}
- }
- 
--void hchacha_block_arch(const struct chacha_state *state, u32 *stream,
--			int nrounds)
-+void hchacha_block_arch(const struct chacha_state *state,
-+			u32 out[HCHACHA_OUT_WORDS], int nrounds)
- {
- 	if (!static_branch_likely(&have_neon) || !crypto_simd_usable()) {
--		hchacha_block_generic(state, stream, nrounds);
-+		hchacha_block_generic(state, out, nrounds);
- 	} else {
- 		kernel_neon_begin();
--		hchacha_block_neon(state, stream, nrounds);
-+		hchacha_block_neon(state, out, nrounds);
- 		kernel_neon_end();
- 	}
- }
- EXPORT_SYMBOL(hchacha_block_arch);
- 
-diff --git a/arch/mips/lib/crypto/chacha-glue.c b/arch/mips/lib/crypto/chacha-glue.c
-index 75df4040cded..88c097594eb0 100644
---- a/arch/mips/lib/crypto/chacha-glue.c
-+++ b/arch/mips/lib/crypto/chacha-glue.c
-@@ -13,11 +13,11 @@ asmlinkage void chacha_crypt_arch(struct chacha_state *state,
- 				  u8 *dst, const u8 *src,
- 				  unsigned int bytes, int nrounds);
- EXPORT_SYMBOL(chacha_crypt_arch);
- 
- asmlinkage void hchacha_block_arch(const struct chacha_state *state,
--				   u32 *stream, int nrounds);
-+				   u32 out[HCHACHA_OUT_WORDS], int nrounds);
- EXPORT_SYMBOL(hchacha_block_arch);
- 
- bool chacha_is_arch_optimized(void)
- {
- 	return true;
-diff --git a/arch/powerpc/lib/crypto/chacha-p10-glue.c b/arch/powerpc/lib/crypto/chacha-p10-glue.c
-index a6e6a8da1b8b..fcd23c6f1590 100644
---- a/arch/powerpc/lib/crypto/chacha-p10-glue.c
-+++ b/arch/powerpc/lib/crypto/chacha-p10-glue.c
-@@ -47,13 +47,13 @@ static void chacha_p10_do_8x(struct chacha_state *state, u8 *dst, const u8 *src,
- 	if (bytes > 0)
- 		chacha_crypt_generic(state, dst, src, bytes, nrounds);
- }
- 
- void hchacha_block_arch(const struct chacha_state *state,
--			u32 *stream, int nrounds)
-+			u32 out[HCHACHA_OUT_WORDS], int nrounds)
- {
--	hchacha_block_generic(state, stream, nrounds);
-+	hchacha_block_generic(state, out, nrounds);
- }
- EXPORT_SYMBOL(hchacha_block_arch);
- 
- void chacha_crypt_arch(struct chacha_state *state, u8 *dst, const u8 *src,
- 		       unsigned int bytes, int nrounds)
-diff --git a/arch/riscv/lib/crypto/chacha-riscv64-glue.c b/arch/riscv/lib/crypto/chacha-riscv64-glue.c
-index 57541621981e..8c3f11d79be3 100644
---- a/arch/riscv/lib/crypto/chacha-riscv64-glue.c
-+++ b/arch/riscv/lib/crypto/chacha-riscv64-glue.c
-@@ -16,11 +16,12 @@
- static __ro_after_init DEFINE_STATIC_KEY_FALSE(use_zvkb);
- 
- asmlinkage void chacha_zvkb(struct chacha_state *state, const u8 *in, u8 *out,
- 			    size_t nblocks, int nrounds);
- 
--void hchacha_block_arch(const struct chacha_state *state, u32 *out, int nrounds)
-+void hchacha_block_arch(const struct chacha_state *state,
-+			u32 out[HCHACHA_OUT_WORDS], int nrounds)
- {
- 	hchacha_block_generic(state, out, nrounds);
- }
- EXPORT_SYMBOL(hchacha_block_arch);
- 
-diff --git a/arch/s390/lib/crypto/chacha-glue.c b/arch/s390/lib/crypto/chacha-glue.c
-index 0a9fd50c1bd8..f95ba3483bbc 100644
---- a/arch/s390/lib/crypto/chacha-glue.c
-+++ b/arch/s390/lib/crypto/chacha-glue.c
-@@ -15,14 +15,14 @@
- #include <linux/sizes.h>
- #include <asm/fpu.h>
- #include "chacha-s390.h"
- 
- void hchacha_block_arch(const struct chacha_state *state,
--			u32 *stream, int nrounds)
-+			u32 out[HCHACHA_OUT_WORDS], int nrounds)
- {
- 	/* TODO: implement hchacha_block_arch() in assembly */
--	hchacha_block_generic(state, stream, nrounds);
-+	hchacha_block_generic(state, out, nrounds);
- }
- EXPORT_SYMBOL(hchacha_block_arch);
- 
- void chacha_crypt_arch(struct chacha_state *state, u8 *dst, const u8 *src,
- 		       unsigned int bytes, int nrounds)
-diff --git a/arch/x86/lib/crypto/chacha_glue.c b/arch/x86/lib/crypto/chacha_glue.c
-index 6f00a56e3e9a..10b2c945f541 100644
---- a/arch/x86/lib/crypto/chacha_glue.c
-+++ b/arch/x86/lib/crypto/chacha_glue.c
-@@ -17,11 +17,11 @@ asmlinkage void chacha_block_xor_ssse3(const struct chacha_state *state,
- 				       unsigned int len, int nrounds);
- asmlinkage void chacha_4block_xor_ssse3(const struct chacha_state *state,
- 					u8 *dst, const u8 *src,
- 					unsigned int len, int nrounds);
- asmlinkage void hchacha_block_ssse3(const struct chacha_state *state,
--				    u32 *out, int nrounds);
-+				    u32 out[HCHACHA_OUT_WORDS], int nrounds);
- 
- asmlinkage void chacha_2block_xor_avx2(const struct chacha_state *state,
- 				       u8 *dst, const u8 *src,
- 				       unsigned int len, int nrounds);
- asmlinkage void chacha_4block_xor_avx2(const struct chacha_state *state,
-@@ -125,17 +125,17 @@ static void chacha_dosimd(struct chacha_state *state, u8 *dst, const u8 *src,
- 		state->x[12]++;
- 	}
- }
- 
- void hchacha_block_arch(const struct chacha_state *state,
--			u32 *stream, int nrounds)
-+			u32 out[HCHACHA_OUT_WORDS], int nrounds)
- {
- 	if (!static_branch_likely(&chacha_use_simd)) {
--		hchacha_block_generic(state, stream, nrounds);
-+		hchacha_block_generic(state, out, nrounds);
- 	} else {
- 		kernel_fpu_begin();
--		hchacha_block_ssse3(state, stream, nrounds);
-+		hchacha_block_ssse3(state, out, nrounds);
- 		kernel_fpu_end();
- 	}
- }
- EXPORT_SYMBOL(hchacha_block_arch);
- 
-diff --git a/crypto/chacha.c b/crypto/chacha.c
-index 73ce62a9ac22..c3a11f4e2d13 100644
---- a/crypto/chacha.c
-+++ b/crypto/chacha.c
-@@ -44,12 +44,12 @@ static int chacha12_setkey(struct crypto_skcipher *tfm,
- {
- 	return chacha_setkey(tfm, key, keysize, 12);
- }
- 
- static int chacha_stream_xor(struct skcipher_request *req,
--			     const struct chacha_ctx *ctx, const u8 *iv,
--			     bool arch)
-+			     const struct chacha_ctx *ctx,
-+			     const u8 iv[CHACHA_IV_SIZE], bool arch)
- {
- 	struct skcipher_walk walk;
- 	struct chacha_state state;
- 	int err;
- 
-diff --git a/include/crypto/chacha.h b/include/crypto/chacha.h
-index 7c2e6c68919b..91f6b4cf561c 100644
---- a/include/crypto/chacha.h
-+++ b/include/crypto/chacha.h
-@@ -24,32 +24,36 @@
- 
- #define CHACHA_KEY_SIZE		32
- #define CHACHA_BLOCK_SIZE	64
- #define CHACHAPOLY_IV_SIZE	12
- 
--#define CHACHA_STATE_WORDS	(CHACHA_BLOCK_SIZE / sizeof(u32))
-+#define CHACHA_KEY_WORDS	8
-+#define CHACHA_STATE_WORDS	16
-+#define HCHACHA_OUT_WORDS	8
- 
- /* 192-bit nonce, then 64-bit stream position */
- #define XCHACHA_IV_SIZE		32
- 
- struct chacha_state {
- 	u32 x[CHACHA_STATE_WORDS];
- };
- 
--void chacha_block_generic(struct chacha_state *state, u8 *stream, int nrounds);
--static inline void chacha20_block(struct chacha_state *state, u8 *stream)
-+void chacha_block_generic(struct chacha_state *state,
-+			  u8 out[CHACHA_BLOCK_SIZE], int nrounds);
-+static inline void chacha20_block(struct chacha_state *state,
-+				  u8 out[CHACHA_BLOCK_SIZE])
- {
--	chacha_block_generic(state, stream, 20);
-+	chacha_block_generic(state, out, 20);
- }
- 
--void hchacha_block_arch(const struct chacha_state *state, u32 *out,
--			int nrounds);
--void hchacha_block_generic(const struct chacha_state *state, u32 *out,
--			   int nrounds);
-+void hchacha_block_arch(const struct chacha_state *state,
-+			u32 out[HCHACHA_OUT_WORDS], int nrounds);
-+void hchacha_block_generic(const struct chacha_state *state,
-+			   u32 out[HCHACHA_OUT_WORDS], int nrounds);
- 
--static inline void hchacha_block(const struct chacha_state *state, u32 *out,
--				 int nrounds)
-+static inline void hchacha_block(const struct chacha_state *state,
-+				 u32 out[HCHACHA_OUT_WORDS], int nrounds)
- {
- 	if (IS_ENABLED(CONFIG_CRYPTO_ARCH_HAVE_LIB_CHACHA))
- 		hchacha_block_arch(state, out, nrounds);
- 	else
- 		hchacha_block_generic(state, out, nrounds);
-@@ -69,11 +73,12 @@ static inline void chacha_init_consts(struct chacha_state *state)
- 	state->x[2]  = CHACHA_CONSTANT_2_BY;
- 	state->x[3]  = CHACHA_CONSTANT_TE_K;
- }
- 
- static inline void chacha_init(struct chacha_state *state,
--			       const u32 *key, const u8 *iv)
-+			       const u32 key[CHACHA_KEY_WORDS],
-+			       const u8 iv[CHACHA_IV_SIZE])
- {
- 	chacha_init_consts(state);
- 	state->x[4]  = key[0];
- 	state->x[5]  = key[1];
- 	state->x[6]  = key[2];
-diff --git a/lib/crypto/chacha.c b/lib/crypto/chacha.c
-index ae50e441f9fb..ced87dd31a97 100644
---- a/lib/crypto/chacha.c
-+++ b/lib/crypto/chacha.c
-@@ -65,49 +65,50 @@ static void chacha_permute(struct chacha_state *state, int nrounds)
- }
- 
- /**
-  * chacha_block_generic - generate one keystream block and increment block counter
-  * @state: input state matrix
-- * @stream: output keystream block (64 bytes)
-+ * @out: output keystream block
-  * @nrounds: number of rounds (20 or 12; 20 is recommended)
-  *
-  * This is the ChaCha core, a function from 64-byte strings to 64-byte strings.
-  * The caller has already converted the endianness of the input.  This function
-  * also handles incrementing the block counter in the input matrix.
-  */
--void chacha_block_generic(struct chacha_state *state, u8 *stream, int nrounds)
-+void chacha_block_generic(struct chacha_state *state,
-+			  u8 out[CHACHA_BLOCK_SIZE], int nrounds)
- {
- 	struct chacha_state permuted_state = *state;
- 	int i;
- 
- 	chacha_permute(&permuted_state, nrounds);
- 
- 	for (i = 0; i < ARRAY_SIZE(state->x); i++)
- 		put_unaligned_le32(permuted_state.x[i] + state->x[i],
--				   &stream[i * sizeof(u32)]);
-+				   &out[i * sizeof(u32)]);
- 
- 	state->x[12]++;
- }
- EXPORT_SYMBOL(chacha_block_generic);
- 
- /**
-  * hchacha_block_generic - abbreviated ChaCha core, for XChaCha
-  * @state: input state matrix
-- * @stream: output (8 32-bit words)
-+ * @out: the output words
-  * @nrounds: number of rounds (20 or 12; 20 is recommended)
-  *
-  * HChaCha is the ChaCha equivalent of HSalsa and is an intermediate step
-  * towards XChaCha (see https://cr.yp.to/snuffle/xsalsa-20081128.pdf).  HChaCha
-  * skips the final addition of the initial state, and outputs only certain words
-  * of the state.  It should not be used for streaming directly.
-  */
- void hchacha_block_generic(const struct chacha_state *state,
--			   u32 *stream, int nrounds)
-+			   u32 out[HCHACHA_OUT_WORDS], int nrounds)
- {
- 	struct chacha_state permuted_state = *state;
- 
- 	chacha_permute(&permuted_state, nrounds);
- 
--	memcpy(&stream[0], &permuted_state.x[0], 16);
--	memcpy(&stream[4], &permuted_state.x[12], 16);
-+	memcpy(&out[0], &permuted_state.x[0], 16);
-+	memcpy(&out[4], &permuted_state.x[12], 16);
- }
- EXPORT_SYMBOL(hchacha_block_generic);
-diff --git a/lib/crypto/chacha20poly1305.c b/lib/crypto/chacha20poly1305.c
-index 2e7bbc1a67ea..fbd3690e2531 100644
---- a/lib/crypto/chacha20poly1305.c
-+++ b/lib/crypto/chacha20poly1305.c
-@@ -16,12 +16,10 @@
- #include <linux/kernel.h>
- #include <linux/init.h>
- #include <linux/mm.h>
- #include <linux/module.h>
- 
--#define CHACHA_KEY_WORDS	(CHACHA_KEY_SIZE / sizeof(u32))
--
- static void chacha_load_key(u32 *k, const u8 *in)
- {
- 	k[0] = get_unaligned_le32(in);
- 	k[1] = get_unaligned_le32(in + 4);
- 	k[2] = get_unaligned_le32(in + 8);
--- 
-2.49.0
-
+>  arch/arm64/boot/dts/amlogic/meson-g12a-fbx8am.dts             | 4 ----
+>  arch/arm64/boot/dts/amlogic/meson-g12a-radxa-zero.dts         | 4 ----
+>  arch/arm64/boot/dts/amlogic/meson-g12a-sei510.dts             | 4 ----
+>  arch/arm64/boot/dts/amlogic/meson-g12a-u200.dts               | 4 ----
+>  arch/arm64/boot/dts/amlogic/meson-g12a-x96-max.dts            | 4 ----
+>  arch/arm64/boot/dts/amlogic/meson-g12a.dtsi                   | 1 +
+>  arch/arm64/boot/dts/amlogic/meson-g12b-a311d-libretech-cc.dts | 6 ------
+>  arch/arm64/boot/dts/amlogic/meson-g12b-a311d.dtsi             | 2 ++
+>  arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4.dtsi      | 6 ------
+>  arch/arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi          | 6 ------
+>  arch/arm64/boot/dts/amlogic/meson-g12b-khadas-vim3.dtsi       | 6 ------
+>  arch/arm64/boot/dts/amlogic/meson-g12b-odroid-go-ultra.dts    | 6 ------
+>  arch/arm64/boot/dts/amlogic/meson-g12b-odroid.dtsi            | 6 ------
+>  arch/arm64/boot/dts/amlogic/meson-g12b-radxa-zero2.dts        | 6 ------
+>  arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi             | 2 ++
+>  arch/arm64/boot/dts/amlogic/meson-g12b-w400.dtsi              | 6 ------
+>  arch/arm64/boot/dts/amlogic/meson-sm1-ac2xx.dtsi              | 4 ----
+>  arch/arm64/boot/dts/amlogic/meson-sm1-bananapi.dtsi           | 4 ----
+>  arch/arm64/boot/dts/amlogic/meson-sm1-khadas-vim3l.dts        | 4 ----
+>  arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi             | 4 ----
+>  arch/arm64/boot/dts/amlogic/meson-sm1-s905d3-libretech-cc.dts | 4 ----
+>  arch/arm64/boot/dts/amlogic/meson-sm1-sei610.dts              | 4 ----
+>  arch/arm64/boot/dts/amlogic/meson-sm1.dtsi                    | 1 +
+>  23 files changed, 6 insertions(+), 92 deletions(-)
+>
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12a-fbx8am.dts b/arch/arm=
+64/boot/dts/amlogic/meson-g12a-fbx8am.dts
+> index 9aa36f17ffa2..d0a3b4b9229c 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-g12a-fbx8am.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12a-fbx8am.dts
+> @@ -267,28 +267,24 @@ &cpu0 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu1 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu2 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu3 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &ethmac {
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12a-radxa-zero.dts b/arch=
+/arm64/boot/dts/amlogic/meson-g12a-radxa-zero.dts
+> index 952b8d02e5c2..4353485c6f26 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-g12a-radxa-zero.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12a-radxa-zero.dts
+> @@ -220,28 +220,24 @@ &cpu0 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu1 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu2 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu3 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cvbs_vdac_port {
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12a-sei510.dts b/arch/arm=
+64/boot/dts/amlogic/meson-g12a-sei510.dts
+> index 52fbc5103e45..f39fcabc763f 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-g12a-sei510.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12a-sei510.dts
+> @@ -314,28 +314,24 @@ &cpu0 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu1 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu2 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu3 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cvbs_vdac_port {
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12a-u200.dts b/arch/arm64=
+/boot/dts/amlogic/meson-g12a-u200.dts
+> index 5407049d2647..b5bf8ecc91e6 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-g12a-u200.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12a-u200.dts
+> @@ -407,28 +407,24 @@ &cpu0 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu1 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu2 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu3 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &clkc_audio {
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12a-x96-max.dts b/arch/ar=
+m64/boot/dts/amlogic/meson-g12a-x96-max.dts
+> index 01da83658ae3..5ab460a3e637 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-g12a-x96-max.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12a-x96-max.dts
+> @@ -263,28 +263,24 @@ &cpu0 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu1 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu2 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu3 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cvbs_vdac_port {
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12a.dtsi b/arch/arm64/boo=
+t/dts/amlogic/meson-g12a.dtsi
+> index 543e70669df5..deee61dbe074 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-g12a.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12a.dtsi
+> @@ -62,6 +62,7 @@ cpu_opp_table: opp-table {
+>                 opp-1000000000 {
+>                         opp-hz =3D /bits/ 64 <1000000000>;
+>                         opp-microvolt =3D <731000>;
+> +                       clock-latency-ns =3D <50000>;
+>                 };
+>
+>                 opp-1200000000 {
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-a311d-libretech-cc.dt=
+s b/arch/arm64/boot/dts/amlogic/meson-g12b-a311d-libretech-cc.dts
+> index adedc1340c78..415248931ab1 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-g12b-a311d-libretech-cc.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12b-a311d-libretech-cc.dts
+> @@ -76,42 +76,36 @@ &cpu0 {
+>         cpu-supply =3D <&vddcpu_b>;
+>         operating-points-v2 =3D <&cpu_opp_table_0>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu1 {
+>         cpu-supply =3D <&vddcpu_b>;
+>         operating-points-v2 =3D <&cpu_opp_table_0>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu100 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu101 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu102 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu103 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &pwm_ab {
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-a311d.dtsi b/arch/arm=
+64/boot/dts/amlogic/meson-g12b-a311d.dtsi
+> index 8e9ad1e51d66..8ecb5bd125c1 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-g12b-a311d.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12b-a311d.dtsi
+> @@ -14,6 +14,7 @@ cpu_opp_table_0: opp-table-0 {
+>                 opp-1000000000 {
+>                         opp-hz =3D /bits/ 64 <1000000000>;
+>                         opp-microvolt =3D <761000>;
+> +                       clock-latency-ns =3D <50000>;
+>                 };
+>
+>                 opp-1200000000 {
+> @@ -54,6 +55,7 @@ cpub_opp_table_1: opp-table-1 {
+>                 opp-1000000000 {
+>                         opp-hz =3D /bits/ 64 <1000000000>;
+>                         opp-microvolt =3D <731000>;
+> +                       clock-latency-ns =3D <50000>;
+>                 };
+>
+>                 opp-1200000000 {
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4.dtsi b/a=
+rch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4.dtsi
+> index 92e8b26ecccc..39011b645128 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi-cm4.dtsi
+> @@ -155,42 +155,36 @@ &cpu0 {
+>         cpu-supply =3D <&vddcpu_b>;
+>         operating-points-v2 =3D <&cpu_opp_table_0>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu1 {
+>         cpu-supply =3D <&vddcpu_b>;
+>         operating-points-v2 =3D <&cpu_opp_table_0>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu100 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu101 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu102 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu103 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &ext_mdio {
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi b/arch/=
+arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi
+> index 54663c55a20e..1b08303c4282 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12b-bananapi.dtsi
+> @@ -263,42 +263,36 @@ &cpu0 {
+>         cpu-supply =3D <&vddcpu_b>;
+>         operating-points-v2 =3D <&cpu_opp_table_0>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu1 {
+>         cpu-supply =3D <&vddcpu_b>;
+>         operating-points-v2 =3D <&cpu_opp_table_0>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu100 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu101 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu102 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu103 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &ethmac {
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-khadas-vim3.dtsi b/ar=
+ch/arm64/boot/dts/amlogic/meson-g12b-khadas-vim3.dtsi
+> index 48650bad230d..fc737499f207 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-g12b-khadas-vim3.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12b-khadas-vim3.dtsi
+> @@ -51,42 +51,36 @@ &cpu0 {
+>         cpu-supply =3D <&vddcpu_b>;
+>         operating-points-v2 =3D <&cpu_opp_table_0>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu1 {
+>         cpu-supply =3D <&vddcpu_b>;
+>         operating-points-v2 =3D <&cpu_opp_table_0>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu100 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu101 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu102 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu103 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &pwm_ab {
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-go-ultra.dts b=
+/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-go-ultra.dts
+> index e21831dfceee..d5938a4a6da3 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-go-ultra.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12b-odroid-go-ultra.dts
+> @@ -281,42 +281,36 @@ &cpu0 {
+>         cpu-supply =3D <&vddcpu_b>;
+>         operating-points-v2 =3D <&cpu_opp_table_0>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu1 {
+>         cpu-supply =3D <&vddcpu_b>;
+>         operating-points-v2 =3D <&cpu_opp_table_0>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu100 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu101 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu102 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu103 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  /* RK817 only supports 12.5mV steps, round up the values */
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-odroid.dtsi b/arch/ar=
+m64/boot/dts/amlogic/meson-g12b-odroid.dtsi
+> index 7e8964bacfce..3298d59833b6 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-g12b-odroid.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12b-odroid.dtsi
+> @@ -227,42 +227,36 @@ &cpu0 {
+>         cpu-supply =3D <&vddcpu_b>;
+>         operating-points-v2 =3D <&cpu_opp_table_0>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu1 {
+>         cpu-supply =3D <&vddcpu_b>;
+>         operating-points-v2 =3D <&cpu_opp_table_0>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu100 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu101 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu102 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu103 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu_thermal {
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-radxa-zero2.dts b/arc=
+h/arm64/boot/dts/amlogic/meson-g12b-radxa-zero2.dts
+> index fc05ecf90714..1e5c6f984945 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-g12b-radxa-zero2.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12b-radxa-zero2.dts
+> @@ -259,42 +259,36 @@ &cpu0 {
+>         cpu-supply =3D <&vddcpu_b>;
+>         operating-points-v2 =3D <&cpu_opp_table_0>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu1 {
+>         cpu-supply =3D <&vddcpu_b>;
+>         operating-points-v2 =3D <&cpu_opp_table_0>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu100 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu101 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu102 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu103 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu_thermal {
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi b/arch/arm=
+64/boot/dts/amlogic/meson-g12b-s922x.dtsi
+> index 44c23c984034..19cad93a6889 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12b-s922x.dtsi
+> @@ -14,6 +14,7 @@ cpu_opp_table_0: opp-table-0 {
+>                 opp-1000000000 {
+>                         opp-hz =3D /bits/ 64 <1000000000>;
+>                         opp-microvolt =3D <731000>;
+> +                       clock-latency-ns =3D <50000>;
+>                 };
+>
+>                 opp-1200000000 {
+> @@ -59,6 +60,7 @@ cpub_opp_table_1: opp-table-1 {
+>                 opp-1000000000 {
+>                         opp-hz =3D /bits/ 64 <1000000000>;
+>                         opp-microvolt =3D <771000>;
+> +                       clock-latency-ns =3D <50000>;
+>                 };
+>
+>                 opp-1200000000 {
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b-w400.dtsi b/arch/arm6=
+4/boot/dts/amlogic/meson-g12b-w400.dtsi
+> index a7a0fc264cdc..9b6d780eada7 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-g12b-w400.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-g12b-w400.dtsi
+> @@ -213,42 +213,36 @@ &cpu0 {
+>         cpu-supply =3D <&vddcpu_b>;
+>         operating-points-v2 =3D <&cpu_opp_table_0>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu1 {
+>         cpu-supply =3D <&vddcpu_b>;
+>         operating-points-v2 =3D <&cpu_opp_table_0>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu100 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu101 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu102 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu103 {
+>         cpu-supply =3D <&vddcpu_a>;
+>         operating-points-v2 =3D <&cpub_opp_table_1>;
+>         clocks =3D <&clkc CLKID_CPUB_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cvbs_vdac_port {
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-ac2xx.dtsi b/arch/arm6=
+4/boot/dts/amlogic/meson-sm1-ac2xx.dtsi
+> index a3463149db3d..9be3084b090d 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-sm1-ac2xx.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-sm1-ac2xx.dtsi
+> @@ -147,28 +147,24 @@ &cpu0 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu1 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU1_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu2 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU2_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu3 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU3_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cvbs_vdac_port {
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi.dtsi b/arch/a=
+rm64/boot/dts/amlogic/meson-sm1-bananapi.dtsi
+> index 40db95f64636..538b35036954 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-sm1-bananapi.dtsi
+> @@ -185,28 +185,24 @@ &cpu0 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu1 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU1_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu2 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU2_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu3 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU3_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &ext_mdio {
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-khadas-vim3l.dts b/arc=
+h/arm64/boot/dts/amlogic/meson-sm1-khadas-vim3l.dts
+> index 5d75ad3f3e46..a3d9b66b6878 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-sm1-khadas-vim3l.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-sm1-khadas-vim3l.dts
+> @@ -51,28 +51,24 @@ &cpu0 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu1 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU1_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu2 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU2_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu3 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU3_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &pwm_AO_cd {
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi b/arch/arm=
+64/boot/dts/amlogic/meson-sm1-odroid.dtsi
+> index ad8d07883760..c4524eb4f099 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-sm1-odroid.dtsi
+> @@ -250,28 +250,24 @@ &cpu0 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu1 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU1_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu2 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU2_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu3 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU3_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &ext_mdio {
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-s905d3-libretech-cc.dt=
+s b/arch/arm64/boot/dts/amlogic/meson-sm1-s905d3-libretech-cc.dts
+> index 537370db360f..5daadfb170b4 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-sm1-s905d3-libretech-cc.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-sm1-s905d3-libretech-cc.dts
+> @@ -64,26 +64,22 @@ &cpu0 {
+>         cpu-supply =3D <&vddcpu_b>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu1 {
+>         cpu-supply =3D <&vddcpu_b>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU1_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu2 {
+>         cpu-supply =3D <&vddcpu_b>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU2_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu3 {
+>         cpu-supply =3D <&vddcpu_b>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU3_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1-sei610.dts b/arch/arm6=
+4/boot/dts/amlogic/meson-sm1-sei610.dts
+> index 37d7f64b6d5d..024d2eb8e6ee 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-sm1-sei610.dts
+> +++ b/arch/arm64/boot/dts/amlogic/meson-sm1-sei610.dts
+> @@ -359,28 +359,24 @@ &cpu0 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu1 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU1_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu2 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU2_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &cpu3 {
+>         cpu-supply =3D <&vddcpu>;
+>         operating-points-v2 =3D <&cpu_opp_table>;
+>         clocks =3D <&clkc CLKID_CPU3_CLK>;
+> -       clock-latency =3D <50000>;
+>  };
+>
+>  &ethmac {
+> diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi b/arch/arm64/boot=
+/dts/amlogic/meson-sm1.dtsi
+> index 97e4b52066dc..966ebb19cc55 100644
+> --- a/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
+> +++ b/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
+> @@ -100,6 +100,7 @@ cpu_opp_table: opp-table {
+>                 opp-1000000000 {
+>                         opp-hz =3D /bits/ 64 <1000000000>;
+>                         opp-microvolt =3D <770000>;
+> +                       clock-latency-ns =3D <50000>;
+>                 };
+>
+>                 opp-1200000000 {
+>
+> --
+> 2.47.2
+>
+>
 
