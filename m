@@ -1,191 +1,111 @@
-Return-Path: <linux-mips+bounces-8903-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8904-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DC0BAA7BF7
-	for <lists+linux-mips@lfdr.de>; Sat,  3 May 2025 00:05:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71CA3AA91DE
+	for <lists+linux-mips@lfdr.de>; Mon,  5 May 2025 13:18:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 256C91B67AF1
-	for <lists+linux-mips@lfdr.de>; Fri,  2 May 2025 22:06:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A21E517743A
+	for <lists+linux-mips@lfdr.de>; Mon,  5 May 2025 11:17:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBBDD21764B;
-	Fri,  2 May 2025 22:03:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE055205AA3;
+	Mon,  5 May 2025 11:17:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NP3CnStn"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53E6321579C;
-	Fri,  2 May 2025 22:03:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6E97204F73
+	for <linux-mips@vger.kernel.org>; Mon,  5 May 2025 11:17:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746223434; cv=none; b=jzhlxKfwGMhSEGqWWEfBmPYOGVCDCboPqv2956PIeI+qJPHuh34nR+fgzBOIIpsjzNbRQDUB97i0Wc7hMp1X8OQn94syJs/iLBwfVngzOeBCtYgesCueXGGeMXap9iWFBYIuc/B6fBRqqT7uujFtE1kzdFL8MWmkoquHqsA0EtU=
+	t=1746443825; cv=none; b=lFLONmSBJbTu5viO4Ei2kR0PMAz1ClYH2eeh5rmSJPVXGN+S5rAh52TOdDN43f7yIUm/XHJkP1s6qfpMBTi1mo94uKuywWqQZNfmMOev2C3tfHDh672sywrGk3hqstAfke/3IH4iNmrBu8ocvwD/a+iT+BkbGPTfZhkGG7jmqKM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746223434; c=relaxed/simple;
-	bh=DpP+88hJLy7CP597o93+6YUD+p4vmlKs4pFy5wAegVE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eHeICr53qlBROZGNs7nZsNh+h+aSb/2NdAILW/5fEaKYhF4+jf0RciBEtOQkI2YSLexnBJzeDq56MEbrnY1k5GrA8xE/eGIbX3SVM9ppJ+syp2Aw9vsGUmxSToET706BPMVaVSmEcQOOMzSVpQbd0WnhO1fMT6f4hmS0CRGXMWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1uAyTu-0001Wu-00; Sat, 03 May 2025 00:03:42 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 00C67C01A2; Sat,  3 May 2025 00:03:08 +0200 (CEST)
-Date: Sat, 3 May 2025 00:03:08 +0200
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Gregory CLEMENT <gregory.clement@bootlin.com>
-Cc: Huacai Chen <chenhuacai@kernel.org>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: SMP: Implement parallel CPU bring up for EyeQ
-Message-ID: <aBVBHFGH2kICjnT3@alpha.franken.de>
-References: <20250413-parallel-cpu-bringup-v1-1-a19d36ec229b@bootlin.com>
- <CAAhV-H6JSKwWvLwPSK7Bu6jZixRn4U+xtpxGL4KBtsmjhc3PVA@mail.gmail.com>
- <CAAhV-H6iOwoYCCob6TmFf1boKQHb0=Mim2bWFvZCMfi9Rw5FPQ@mail.gmail.com>
- <87wmb2ceh7.fsf@BLaptop.bootlin.com>
- <CAAhV-H65b5Ae-cCYYHTx0QBhYJ_fzSVLFGY0RH1PCq0XbvNPQA@mail.gmail.com>
- <87o6wecdg0.fsf@BLaptop.bootlin.com>
- <87cycrc9jt.fsf@BLaptop.bootlin.com>
+	s=arc-20240116; t=1746443825; c=relaxed/simple;
+	bh=V8DkUL7VwKllhb1yUSVxhPaI03yBxle7Crwrri6QItc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lvcxvUXNbpnp8fW6ZEqILkHSVbATe74LK40FkPh9RBr0iLAHIwDlQUKDm+JfDD6hZ5I2BvxN3Bz2kp+qpw2/m9y9te2CTPD7vg+g4mq0Rsvh75A6MOEs31/4CAFHkWjMXufuH6Fn0pm8/2409VM3rqKIStk3eM/U7xsTvrYnldU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NP3CnStn; arc=none smtp.client-ip=209.85.128.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-43d04dc73b7so36174345e9.3
+        for <linux-mips@vger.kernel.org>; Mon, 05 May 2025 04:17:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1746443822; x=1747048622; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=PR/1TFPITj+MSR2NV1inwmG355HiaGH8G5lNmd8tBP4=;
+        b=NP3CnStn9ST1MXoLK7QiNjzjzmJkP85XVE+dHc7mAK8fde4pc2IUf3SKdPgl+fheC7
+         /LPbKVqF9GN3f2S0RIUq8f9AXGbVza4ErSOIhVL57ycakTBwv8ExZG2zSXaygUtWDigA
+         otEID9tUlcdmlCtvRPXOuW2GssXqzmfBBMGoMQpJqmc8VOgbSj2s6FabMQfG/NfA9n/X
+         hNUYlrHriGU05a29UI6IFtBvpAtNJdgr7QWKi0mxv4CmgnFt3hZ7lvzdS4MIDzUqnCKf
+         f8VCPG4vusvl2MFRSGlFKBlfJiJjtOCEmUPedYlKxSO0pTGVnH5Nqgf60EeZTJshHev/
+         My1A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746443822; x=1747048622;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=PR/1TFPITj+MSR2NV1inwmG355HiaGH8G5lNmd8tBP4=;
+        b=armJag6S7T3Yk3StJP8idDNPh/aEX4wzRkP/nx9g+Dxun/0Pr9HwQoC+s1PP6FCfed
+         LooWFASFyCBi2dbSs5LLYZbjQrMxC8d1qIILJHLyh0Q/woByFKjN/7eermMrbCn8id/F
+         v7qNjE+Gsi0D3lBwq2Q7MR4neqkztU2dl3E7QMU6MudIM3JSodAeheIiTfeJ7ogQu9+A
+         df+H3IGj83mn6nM8MCfPOhdPFGO2zLM1qtEWSwKcQAGUqvzIoWr4wjt+RLFqZRFr0lBU
+         eSIOWCZgx3eupwr2URezTpRgs+3E/JWh9tb4WGjOW0KaOXOFS46rLgtUGLbCjjFZf7G0
+         X5JA==
+X-Forwarded-Encrypted: i=1; AJvYcCXN4AwDcsz3V+WNlkgskBLaFebu2dtnQgr1nNzG2qMPqfo/JS72Y995DMswoRJUSsn8x1KK3BsMhcKQ@vger.kernel.org
+X-Gm-Message-State: AOJu0YzeylKrqkzbUscEAaeaiyoO2/jHabw1036C44V9BC//UmE/T1Rw
+	21CmXgkE4tf/ndoTVTBrtOOmpSI5u/jDgMxzqSFBiW2gUuQ9nUEG34wJltz4iJo=
+X-Gm-Gg: ASbGncuQj5GfY+TCKQkhWEupWdbHXdzwLTdNIGceNBqmjt7VF2Lx7ShsXquLfgf2gu0
+	xFZgYyxCWluxwOx9hXBivuEMdvinpC74X8emQxGAqSUfl9Q/37xTHoLWyR/VshuAB9LRh4O28Vg
+	L59T7ruC4SuDoqWZwVtT5+3xGUiV6BBUWkfQ/FbC2vYEawv9n54XiWjsTEa35Gr4rvV6H5ncwrE
+	dI/1a+p2BAGoCCGtvstTr9jHeAuRyOE80I7sw6IEgexiC0WJDIBGi+LrY8hrLyTqfpXu10eTqwJ
+	h8Z5mUrhHHdiD8CSYTB13GTg+nGdiY4WUtFbjqueCjs6smSLabz0v4INVBJsCAX4BLdto3+KeeQ
+	=
+X-Google-Smtp-Source: AGHT+IFXGyrq6AF4eSKBqMr0ZHG5ODbF+SMMKNV3Hl/UrsQRAKrSSv09aRoM2DkTJis6kpOovgBnAg==
+X-Received: by 2002:a05:600c:83cd:b0:43c:fcb1:528a with SMTP id 5b1f17b1804b1-441c48aa481mr62039405e9.6.1746443821195;
+        Mon, 05 May 2025 04:17:01 -0700 (PDT)
+Received: from [10.194.152.213] (71.86.95.79.rev.sfr.net. [79.95.86.71])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-441b2b20c3fsm177760595e9.28.2025.05.05.04.16.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 05 May 2025 04:17:00 -0700 (PDT)
+Message-ID: <9b93c67c-b163-4026-be7a-a8761a0f21f0@linaro.org>
+Date: Mon, 5 May 2025 13:16:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 5/7] dt-bindings: vendor-prefixes: Add SmartFiber
+To: Caleb James DeLisle <cjd@cjdns.fr>, linux-mips@vger.kernel.org
+Cc: tglx@linutronix.de, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, tsbogend@alpha.franken.de, daniel.lezcano@linaro.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ benjamin.larsson@genexis.eu, linux-mediatek@lists.infradead.org,
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20250430133433.22222-1-cjd@cjdns.fr>
+ <20250430133433.22222-6-cjd@cjdns.fr>
+Content-Language: en-US
+From: =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>
+In-Reply-To: <20250430133433.22222-6-cjd@cjdns.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <87cycrc9jt.fsf@BLaptop.bootlin.com>
 
-On Fri, May 02, 2025 at 05:32:54PM +0200, Gregory CLEMENT wrote:
-> Hello, 
+On 30/4/25 15:34, Caleb James DeLisle wrote:
+> Add "smartfiber" vendor prefix for manufactorer of EcoNet based boards.
 > 
-> > Huacai Chen <chenhuacai@kernel.org> writes:
-> >
-> >> On Wed, Apr 30, 2025 at 3:09 PM Gregory CLEMENT
-> >> <gregory.clement@bootlin.com> wrote:
-> >>>
-> >>> Hello Huacai,
-> >>>
-> >>> > Hi, Gregory,
-> >>> >
-> >>> > On Sun, Apr 27, 2025 at 6:13 PM Huacai Chen <chenhuacai@kernel.org> wrote:
-> >>> >>
-> >>> >> Hi, Gregory and Thomas,
-> >>> >>
-> >>> >> I'm sorry I'm late, but I have some questions about this patch.
-> >>> >>
-> >>> >> On Mon, Apr 14, 2025 at 3:12 AM Gregory CLEMENT
-> >>> >> <gregory.clement@bootlin.com> wrote:
-> >>> >> >
-> >>> >> > Added support for starting CPUs in parallel on EyeQ to speed up boot time.
-> >>> >> >
-> >>> >> > On EyeQ5, booting 8 CPUs is now ~90ms faster.
-> >>> >> > On EyeQ6, booting 32 CPUs is now ~650ms faster.
-> >>> >> >
-> >>> >> > Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-> >>> >> > ---
-> >>> >> > Hello,
-> >>> >> >
-> >>> >> > This patch allows CPUs to start in parallel. It has been tested on
-> >>> >> > EyeQ5 and EyeQ6, which are both MIPS64 and use the I6500 design. These
-> >>> >> > systems use CPS to support SMP.
-> >>> >> >
-> >>> >> > As noted in the commit log, on EyeQ6, booting 32 CPUs is now ~650ms
-> >>> >> > faster.
-> >>> >> >
-> >>> >> > Currently, this support is only for EyeQ SoC. However, it should also
-> >>> >> > work for other CPUs using CPS. I am less sure about MT ASE support,
-> >>> >> > but this patch can be a good starting point. If anyone wants to add
-> >>> >> > support for other systems, I can share some ideas, especially for the
-> >>> >> > MIPS_GENERIC setup that needs to handle both types of SMP setups.
-> >>> >> >
-> >>> [...]
-> >>> >> >   * A logical cpu mask containing only one VPE per core to
-> >>> >> > @@ -74,6 +76,8 @@ static cpumask_t cpu_core_setup_map;
-> >>> >> >
-> >>> >> >  cpumask_t cpu_coherent_mask;
-> >>> >> >
-> >>> >> > +struct cpumask __cpu_primary_thread_mask __read_mostly;
-> >>> >> > +
-> >>> >> >  unsigned int smp_max_threads __initdata = UINT_MAX;
-> >>> >> >
-> >>> >> >  static int __init early_nosmt(char *s)
-> >>> >> > @@ -374,10 +378,15 @@ asmlinkage void start_secondary(void)
-> >>> >> >         set_cpu_core_map(cpu);
-> >>> >> >
-> >>> >> >         cpumask_set_cpu(cpu, &cpu_coherent_mask);
-> >>> >> > +#ifdef CONFIG_HOTPLUG_PARALLEL
-> >>> >> > +       cpuhp_ap_sync_alive();
-> >>> >> This is a "synchronization point" due to the description from commit
-> >>> >> 9244724fbf8ab394a7210e8e93bf037abc, which means things are parallel
-> >>> >> before this point and serialized after this point.
-> >>> >>
-> >>> >> But unfortunately, set_cpu_sibling_map() and set_cpu_core_map() cannot
-> >>> >> be executed in parallel. Maybe you haven't observed problems, but in
-> >>> >> theory it's not correct.
-> >>>
-> >>> I am working on it. To address your remark, I have a few options that I
-> >>> evaluate.
-> >> I suggest to revert this patch temporary in mips-next.
-> >
-> >
-> > As I previously mentioned, I haven't observed any issues until now. What
-> > I'm evaluating is whether there is a real problem with this
-> > implementation. Let's examine whether we need a new patch or if this one
-> > is sufficient.
-> >
-> > I will have the resutls at the end of the week.
-> 
-> After hundreds of reboots on the EyeQ5, I did not encounter any failures
-> during boot. However, while executing the set_cpu_core_map() and
-> set_cpu_sibling_map() functions in parallel, modifications to shared
-> resources could result in issues. To address this, I proposed the
-> following fix:
-> 
-> diff --git a/arch/mips/kernel/smp.c b/arch/mips/kernel/smp.c
-> index 1726744f2b2ec..5f30611f45a1c 100644
-> --- a/arch/mips/kernel/smp.c
-> +++ b/arch/mips/kernel/smp.c
-> @@ -374,13 +377,13 @@ asmlinkage void start_secondary(void)
->         calibrate_delay();
->         cpu_data[cpu].udelay_val = loops_per_jiffy;
->  
-> +#ifdef CONFIG_HOTPLUG_PARALLEL
-> +       cpuhp_ap_sync_alive();
-> +#endif
->         set_cpu_sibling_map(cpu);
->         set_cpu_core_map(cpu);
->  
->         cpumask_set_cpu(cpu, &cpu_coherent_mask);
-> -#ifdef CONFIG_HOTPLUG_PARALLEL
-> -       cpuhp_ap_sync_alive();
-> -#endif
->         notify_cpu_starting(cpu);
->  
->  #ifndef CONFIG_HOTPLUG_PARALLEL
-> 
-> It moved these two functions back in the serialized part of the boot. I
-> was concerned about potential slowdowns during the boot process, but I
-> didn't notice any issues during my test on EyeQ5. Therefore, we can make
-> this change.
-> 
-> 
-> Thomas,
-> 
-> how would you like to proceed? Do you want to squash this patch
-> into the current commit, or do you prefere I create a separate patch for
-> it, or a new version of the patch including this change?
+> Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
+> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> ---
+>   Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
+>   1 file changed, 2 insertions(+)
 
-please send a seperate patch with just the fix
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
 
