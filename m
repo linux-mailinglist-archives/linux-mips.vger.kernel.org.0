@@ -1,136 +1,120 @@
-Return-Path: <linux-mips+bounces-8926-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8927-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85A4DAAB033
-	for <lists+linux-mips@lfdr.de>; Tue,  6 May 2025 05:33:52 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4284AAADC6
+	for <lists+linux-mips@lfdr.de>; Tue,  6 May 2025 04:41:59 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 95C167B5698
-	for <lists+linux-mips@lfdr.de>; Tue,  6 May 2025 03:27:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 09D0B1BA1523
+	for <lists+linux-mips@lfdr.de>; Tue,  6 May 2025 02:38:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 254023EA8ED;
-	Mon,  5 May 2025 23:35:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C976630DE1F;
+	Mon,  5 May 2025 23:44:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VxuTRzMv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HwR6zRaq"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 154773B11FB;
-	Mon,  5 May 2025 23:20:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C519D2FA13F;
+	Mon,  5 May 2025 23:23:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746487236; cv=none; b=sKimFDvZDzr0ELNUY7qk1bZmYCGqmBNVI6J1Zqg+guT8IRnIPmn2nsjXc21I3anLGeW1lzf/PcpIy1pu8dTy7QgBryeXbRW7hMcToL65yNc17IQ/fcCdirv/2diuCWvO+YnVx/5ZgQfwaYqZQk5dFcrrO8SbHLx4Ko6/LKgjBo0=
+	t=1746487398; cv=none; b=UF0OFja39PmmjEFsJaEwlc7aQhU8w0V+TI8li6dhgj1J9+96GdOd+0ml2G/vZHy+eDuuIUIkjrS+tZNuNkGtPJCpnxpF1Ajn5kGQXiGOwQAElLLPxQ2i79eMs9xf8xAc3lWx0rHLQ1yt7spcECbcr3FkqB3WkVUkZQBMJ6zMV0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746487236; c=relaxed/simple;
-	bh=D2onoH0eioFutunK8t49CfkAwg7YCy58FHYrZHRgwp0=;
+	s=arc-20240116; t=1746487398; c=relaxed/simple;
+	bh=aaoHzeX9kNdyJ+UGNMNnz6IM+kfANJ9lmqLQLCXrsqw=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=IMF/+qx2AQo12tQ+mAXiKY7vj6dMgpSR7o3X+Foc8maWlsRiNt/nPzrxwe8qYUlJyQD6Ba0ihzTYA+qO12paYmrLNI7/KrwCO0HakPNlDfS3idIh3foD7W7l4KMgVMA/al+Dixv9ebOvarJz0OhOq0UNHA35BM0sBWOs72REjBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VxuTRzMv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00B40C4CEEF;
-	Mon,  5 May 2025 23:20:32 +0000 (UTC)
+	 MIME-Version; b=Qk8TNGl5ri+Xx74NP1hDCjxmhSClppAqwnHeqRih0ph9taF9ayWsjrwiq/f6T9G6OkQwEh+LH98pTTZF6QO3SyrgHJUm1r0d8+Rc7zbHl8LO+OYV6cW3UNEUKYesRgWwv2BLNIOqEpBekiRyQbif65oeQTZuEjbBemj0mpIJ9fI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HwR6zRaq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABFC1C4CEE4;
+	Mon,  5 May 2025 23:23:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746487234;
-	bh=D2onoH0eioFutunK8t49CfkAwg7YCy58FHYrZHRgwp0=;
+	s=k20201202; t=1746487397;
+	bh=aaoHzeX9kNdyJ+UGNMNnz6IM+kfANJ9lmqLQLCXrsqw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=VxuTRzMvoiAJDY2SKTCpWhDifhJovH+lHZmYHqX8IXpvVtAN/l3YhGJaNcnsn8SUW
-	 o0OJbq9Br7iEI5SNj5hT1tM+j9A1x2I8h2psoDhPyZrgFr/cp1sQhiAJuqDSFbNn1o
-	 +uTB3kruLlIfphN/OjnIs5s90vgO4NJhaBn2KOLsGkVUUc/+4s8/8uZfmdkXLs+FQT
-	 4rtHIv8jw5tazKyl1SZVt1X8AgWfDPsGF1AE6aNgGbpaJ9CeJwmLRQDOVYxlhWuDAd
-	 EMIFq0CAaJnmNdWQ1+WPAdGwu5NhMxYPJqIniVOnV5XYJMoXh/MOhkOJEg5chtZ+IO
-	 wX9+toOHxEB9Q==
+	b=HwR6zRaqCZ5TvupCLYYKUhrzA6+1GqhVaJBTeb61lIGMdqE/pB7n2tnkNeY/EDvoq
+	 9Ey4X+EzAYnuLOZJpiGX8v16j7NVqmZ3nBRVhwggHASdpKXBW3SYwboBPU7cFN1UyJ
+	 6Cs9vn8yk/Uy0TSOZtpJ3JVmJlSmM+eWguUE0aRwxXvV2qam8hhPpEfiMOVbfVO2OU
+	 st3NjJOIfgS2eSlKL5VLIjh1ycYEQHcvAFRg9wa5cEvWKLhXFWBgfMXUv9/wPdaEZB
+	 X1MfghXVXyzA8J3tP+WyeULWJ73xHvnR94zsmUtPzcOrYbnnzDpkRjI8RMH4m7bj4A
+	 oJbuTphdkFkzQ==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
-Cc: Paul Burton <paulburton@kernel.org>,
-	Chao-ying Fu <cfu@wavecomp.com>,
-	Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>,
-	Aleksandar Rikalo <arikalo@gmail.com>,
-	=?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
-	Serge Semin <fancer.lancer@gmail.com>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
+Cc: Bibo Mao <maobibo@loongson.cn>,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
 	Sasha Levin <sashal@kernel.org>,
-	tglx@linutronix.de,
+	rostedt@goodmis.org,
+	mhiramat@kernel.org,
+	linux-trace-kernel@vger.kernel.org,
 	linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 070/114] clocksource: mips-gic-timer: Enable counter when CPUs start
-Date: Mon,  5 May 2025 19:17:33 -0400
-Message-Id: <20250505231817.2697367-70-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 5.4 47/79] MIPS: Use arch specific syscall name match function
+Date: Mon,  5 May 2025 19:21:19 -0400
+Message-Id: <20250505232151.2698893-47-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250505231817.2697367-1-sashal@kernel.org>
-References: <20250505231817.2697367-1-sashal@kernel.org>
+In-Reply-To: <20250505232151.2698893-1-sashal@kernel.org>
+References: <20250505232151.2698893-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.237
+X-stable-base: Linux 5.4.293
 Content-Transfer-Encoding: 8bit
 
-From: Paul Burton <paulburton@kernel.org>
+From: Bibo Mao <maobibo@loongson.cn>
 
-[ Upstream commit 3128b0a2e0cf6e07aa78e5f8cf7dd9cd59dc8174 ]
+[ Upstream commit 756276ce78d5624dc814f9d99f7d16c8fd51076e ]
 
-In multi-cluster MIPS I6500 systems there is a GIC in each cluster,
-each with its own counter. When a cluster powers up the counter will
-be stopped, with the COUNTSTOP bit set in the GIC_CONFIG register.
+On MIPS system, most of the syscall function name begin with prefix
+sys_. Some syscalls are special such as clone/fork, function name of
+these begin with __sys_. Since scratch registers need be saved in
+stack when these system calls happens.
 
-In single cluster systems, it has been fine to clear COUNTSTOP once
-in gic_clocksource_of_init() to start the counter. In multi-cluster
-systems, this will only have started the counter in the boot cluster,
-and any CPUs in other clusters will find their counter stopped which
-will break the GIC clock_event_device.
+With ftrace system call method, system call functions are declared with
+SYSCALL_DEFINEx, metadata of the system call symbol name begins with
+sys_. Here mips specific function arch_syscall_match_sym_name is used to
+compare function name between sys_call_table[] and metadata of syscall
+symbol.
 
-Resolve this by having CPUs clear the COUNTSTOP bit when they come
-online, using the existing gic_starting_cpu() CPU hotplug callback. This
-will allow CPUs in secondary clusters to ensure that the cluster's GIC
-counter is running as expected.
-
-Signed-off-by: Paul Burton <paulburton@kernel.org>
-Signed-off-by: Chao-ying Fu <cfu@wavecomp.com>
-Signed-off-by: Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
-Signed-off-by: Aleksandar Rikalo <arikalo@gmail.com>
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
-Tested-by: Serge Semin <fancer.lancer@gmail.com>
-Tested-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-Acked-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+Signed-off-by: Bibo Mao <maobibo@loongson.cn>
 Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- drivers/clocksource/mips-gic-timer.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ arch/mips/include/asm/ftrace.h | 16 ++++++++++++++++
+ 1 file changed, 16 insertions(+)
 
-diff --git a/drivers/clocksource/mips-gic-timer.c b/drivers/clocksource/mips-gic-timer.c
-index be4175f415ba5..1946691f6b322 100644
---- a/drivers/clocksource/mips-gic-timer.c
-+++ b/drivers/clocksource/mips-gic-timer.c
-@@ -119,6 +119,9 @@ static void gic_update_frequency(void *data)
- 
- static int gic_starting_cpu(unsigned int cpu)
- {
-+	/* Ensure the GIC counter is running */
-+	clear_gic_config(GIC_CONFIG_COUNTSTOP);
+diff --git a/arch/mips/include/asm/ftrace.h b/arch/mips/include/asm/ftrace.h
+index b463f2aa5a613..7acbe701afd69 100644
+--- a/arch/mips/include/asm/ftrace.h
++++ b/arch/mips/include/asm/ftrace.h
+@@ -87,4 +87,20 @@ struct dyn_arch_ftrace {
+ #endif /*  CONFIG_DYNAMIC_FTRACE */
+ #endif /* __ASSEMBLY__ */
+ #endif /* CONFIG_FUNCTION_TRACER */
 +
- 	gic_clockevent_cpu_init(cpu, this_cpu_ptr(&gic_clockevent_device));
- 	return 0;
- }
-@@ -253,9 +256,6 @@ static int __init gic_clocksource_of_init(struct device_node *node)
- 			pr_warn("Unable to register clock notifier\n");
- 	}
- 
--	/* And finally start the counter */
--	clear_gic_config(GIC_CONFIG_COUNTSTOP);
--
- 	/*
- 	 * It's safe to use the MIPS GIC timer as a sched clock source only if
- 	 * its ticks are stable, which is true on either the platforms with
++#ifdef CONFIG_FTRACE_SYSCALLS
++#ifndef __ASSEMBLY__
++/*
++ * Some syscall entry functions on mips start with "__sys_" (fork and clone,
++ * for instance). We should also match the sys_ variant with those.
++ */
++#define ARCH_HAS_SYSCALL_MATCH_SYM_NAME
++static inline bool arch_syscall_match_sym_name(const char *sym,
++					       const char *name)
++{
++	return !strcmp(sym, name) ||
++		(!strncmp(sym, "__sys_", 6) && !strcmp(sym + 6, name + 4));
++}
++#endif /* __ASSEMBLY__ */
++#endif /* CONFIG_FTRACE_SYSCALLS */
+ #endif /* _ASM_MIPS_FTRACE_H */
 -- 
 2.39.5
 
