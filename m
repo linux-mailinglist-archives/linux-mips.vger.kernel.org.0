@@ -1,80 +1,48 @@
-Return-Path: <linux-mips+bounces-8905-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8906-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94300AA91EB
-	for <lists+linux-mips@lfdr.de>; Mon,  5 May 2025 13:18:47 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53046AA91FB
+	for <lists+linux-mips@lfdr.de>; Mon,  5 May 2025 13:24:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 14FC3177702
-	for <lists+linux-mips@lfdr.de>; Mon,  5 May 2025 11:18:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3F69F7A3546
+	for <lists+linux-mips@lfdr.de>; Mon,  5 May 2025 11:23:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C0A62040A7;
-	Mon,  5 May 2025 11:18:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29681201116;
+	Mon,  5 May 2025 11:24:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="N1RSxx8v"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U6py1Kug"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F093183098
-	for <linux-mips@vger.kernel.org>; Mon,  5 May 2025 11:18:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0F287E0E4;
+	Mon,  5 May 2025 11:24:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746443884; cv=none; b=qIwKJcMs8f6LYnwqTNBO6jqb+jNSKtkpZFXs5cV/phlI028p+mAM35fuUWoqZa/+3ah0rRmQjWElyfwVanIs4oLYm1O0T9wJRehlb4yVDOiL4uEXvT/hrWCcX3vUhMOE7VRH1eRwZnD4ZmylNqgWuWv26kCpb+rYGwJ+/ol8SWc=
+	t=1746444278; cv=none; b=TrVHSVCxKMoDQ+6E0VRrWikiFtJ8FFhax3k34/kINL5ZQltpGlvw0mRumbZv0iSMiqgSioh2eBMMSELdJh5Mn/1yahVJl4u0Qik77+FnnU5lqowqaiX1hu+5RljSBM/uznmkNsR326Ufhk2ktcUeX1Zyv+l8Wz2NDD2RrZVNpJI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746443884; c=relaxed/simple;
-	bh=y1har2ncqSYeMcbNF3xPx7v4qVPXDkt+yqHZ2rV1WIw=;
+	s=arc-20240116; t=1746444278; c=relaxed/simple;
+	bh=iqwoq9xbHDlu5Z9FDtyIPBE0+xJrB8yd2XeOEFojo3I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qWkGu0QRZ6ozYTsiaY2png27VDFAXWmh9p9vp2VNGbWX1NLzzeWBMjA7sydVl4PsmG6DcISQdThUAOSKySJabi88S/NQipSwrbf/u7MYoQag42ZWa2MZx53HOObz0/J5ilWEPml/mAAUQwkJQwWLoNebvMtMEkZ6s/+JyXfTO0Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=fail smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=N1RSxx8v; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=linaro.org
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-43edecbfb46so23579945e9.0
-        for <linux-mips@vger.kernel.org>; Mon, 05 May 2025 04:18:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1746443880; x=1747048680; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=MSIHoJjmQEmR3SwhanBXvMF/GyBvUaOcIuvCYJy1q/g=;
-        b=N1RSxx8vLQBckQER05uOQZhi4vpPHEjHfdPu7EwavZSILPhuPkRoB87Dc9Fyu7bIMq
-         YtB0cese4w6FW14MbGiqe8hZk7OwQpneyxXFElsiwDgJ8zsDtv1PDHZCqfYUIO0CwCJO
-         75FvfVHYILmMdAt2DS5I0jfA6PDzOhIy4c+TxKptKFDlSc4+6TarpYadmRy2Ib3engx9
-         yaSHFAb7Zrm+iujx1Da98Bta29e9T54KnO/RwxekVVcuqpdXaA98FL0G866POoTz4Ols
-         pPPFEnJQu9lS/iTKzajLpK9JXQ6ftNlcI2sGW9jqhn51cDra1TRVGeXL0s6QF8Co/Sjp
-         oooA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746443880; x=1747048680;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MSIHoJjmQEmR3SwhanBXvMF/GyBvUaOcIuvCYJy1q/g=;
-        b=lj5xIZ4hDnViZK/Q2DZWQjrdthMAKZkbQD3SFsFyt6rwGCWl0pOXqKSy6zQ221/9B3
-         7TnDEX54Oqkl6T1YxgnNl28L/2pBx8c881d8+pOUcJS482q0H6MPMPbW7UI+ogLacjpR
-         FxjotsMzQkyQcDAGj5WZASF6C1FZ4t3TwaYubvzaZdanxi6i6cplWwEHEX5GOBidwrm/
-         cDqZfwKThi347BmzD/Ixu15YvQno7OOjuUG8dY0ehc25uN6MV+oK9IgyyqxAAErt9zqw
-         SuObh/XkhFAsrPifBxFS9/soRPyj0xhYh6C8Et0xq9rnFaos3368zz3LqYIld9G8Ou+c
-         vlhQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWHuPdAfHNCvjQUph1yDoZNtJ9knhvO+VjcEjPU0IzW5ukSxvpQMU1lEEOQmdguBtSZdlUqZ72fCjz4@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEe1Iv8hlzW2JW0LbULiI7EdirQQbK5ScwlCJPrt2l0EoZPSPy
-	EQKBe18eSyCE/m1aRd2fmLVeEF9AMoLIU5A+BD27skIWqs5MsB1m1KxhnO5HTSY=
-X-Gm-Gg: ASbGnctnDI1rkPprr5Bo/qfnSDptX+sasi0k5yD8X36cFYyu1KcjwCSpFLqnNiRhC2S
-	OySzuG9eNOrckBcQNemsNdWAL2PADOpeOPiIFakazvpq7eV9vY97xvPI5/kPrAft4h4qaf1f+lI
-	GIpAgwdVeTyKh6Euw/C2OGGCxT3Yip4PZplg1l/2V9+PE4vtWOA3X9cKuuI9x0iravTUEyGC6dK
-	nvEA//1/bVu3RU27ZzzphWxMlRCpuBoWvEgsU4Y+YDw2N0yQ7xl/IAxofZqSc4iV46T3VY40x14
-	XDmZwFWk1wHJn2kXikLC5iSxiqRZUpmBR2yPw4Z7S5bv/VcCFeuBsmkYUx/yr5sbcEgJLq1aDf4
-	=
-X-Google-Smtp-Source: AGHT+IHtLeAYgDITpx3deW3jXAAdVKG9LHkQfNIbFqRoTGdWyF2rh3YZeh6jK1CDMoX4LIkyoL6r8w==
-X-Received: by 2002:a05:600c:b96:b0:43d:7588:667b with SMTP id 5b1f17b1804b1-441c48be172mr62376775e9.10.1746443879877;
-        Mon, 05 May 2025 04:17:59 -0700 (PDT)
-Received: from [10.194.152.213] (71.86.95.79.rev.sfr.net. [79.95.86.71])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-441b8a285c2sm129777475e9.32.2025.05.05.04.17.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 05 May 2025 04:17:59 -0700 (PDT)
-Message-ID: <33708722-6986-40d2-92c8-38832467b857@linaro.org>
-Date: Mon, 5 May 2025 13:17:56 +0200
+	 In-Reply-To:Content-Type; b=HrF8xqzV8eeM8A4H49Q34JzbwbM353RvSQXAa+jD2ehrHQATTgEcs/VWdAAbhY+KsYjwz0KSe6W5XRae4pjng3G9NVQ+cLOiwolZjqXwzoM5uopLtSOuUuSFIvn6wHQjGlfSRrjP4heOep1p7dWuqJOFrAGwkiFlFD5cPKqQWps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U6py1Kug; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 205FBC4CEE4;
+	Mon,  5 May 2025 11:24:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746444277;
+	bh=iqwoq9xbHDlu5Z9FDtyIPBE0+xJrB8yd2XeOEFojo3I=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=U6py1KugRFeX3NyyN8rGouoR5IKVV9GVNlAdttpWOBUyLnBOTqe7MwxQgrxVMQ/OV
+	 Dz6RAuH7sLDee1t77W3uMUgzoRuKExk4Xysuh5WFeXV+24nY0ro6dZeEIfb/N54CFA
+	 Lhqcj9jw/pFhAAHKBLK3Nu0SN7nxOYM+jJ7V811GtQ1G4YDLk7coDZHyCBjYkH2ppc
+	 I1NBNLBKdtVv2p3d/TgfTRbD8zo1GPo5D8fK4ypREpwg4vqZ1rR4CuNyvN7Mlk9UJm
+	 vNE1mmS+NETG5Vwz8F7PtQjFEXClQ+LA9xpNHzDV17CMqWV86wJM7E4rBuhda+ZHiR
+	 NVVuhlh17Pwvg==
+Message-ID: <604c4257-619f-4433-a02f-b6e1f4144ecb@kernel.org>
+Date: Mon, 5 May 2025 13:24:32 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -82,29 +50,81 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 7/7] MAINTAINERS: Add entry for newly added EcoNet
- platform.
-To: Caleb James DeLisle <cjd@cjdns.fr>, linux-mips@vger.kernel.org
-Cc: tglx@linutronix.de, robh@kernel.org, krzk+dt@kernel.org,
- conor+dt@kernel.org, tsbogend@alpha.franken.de, daniel.lezcano@linaro.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- benjamin.larsson@genexis.eu, linux-mediatek@lists.infradead.org
-References: <20250430133433.22222-1-cjd@cjdns.fr>
- <20250430133433.22222-8-cjd@cjdns.fr>
+Subject: Re: [PATCH] MIPS: Loongson64: Add missing '#interrupt-cells' for
+ loongson64c_ls7a
+To: WangYuli <wangyuli@uniontech.com>, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, tsbogend@alpha.franken.de
+Cc: devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-kernel@vger.kernel.org, jiaxun.yang@flygoat.com,
+ chenhuacai@kernel.org, yangtiezhu@loongson.cn, zhanjun@uniontech.com,
+ niecheng1@uniontech.com, guanwentao@uniontech.com
+References: <6E749D043BC7BD99+20250416034548.805069-1-wangyuli@uniontech.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: =?UTF-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>
-In-Reply-To: <20250430133433.22222-8-cjd@cjdns.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Autocrypt: addr=krzk@kernel.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
+ FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
+ QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
+ +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
+ ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
+ 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
+ hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
+ tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
+ 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
+ naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
+ hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
+ whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
+ Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
+ MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
+ OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
+ GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
+ 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
+ YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
+ 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
+ BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
+ JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
+ 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
+ YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
+ qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
+ RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
+ Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
+ H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
+ dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
+ AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
+ jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
+ zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
+ XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
+In-Reply-To: <6E749D043BC7BD99+20250416034548.805069-1-wangyuli@uniontech.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 30/4/25 15:34, Caleb James DeLisle wrote:
-> Add a MAINTAINERS entry as part of integration of the EcoNet MIPS platform.
+On 16/04/2025 05:45, WangYuli wrote:
+> Similar to commit 98a9e2ac3755 ("MIPS: Loongson64: DTS: Fix msi node for ls7a").
 > 
-> Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
-> ---
->   MAINTAINERS | 12 ++++++++++++
->   1 file changed, 12 insertions(+)
+> Fix follow warnings:
+>   arch/mips/boot/dts/loongson/loongson64c_4core_ls7a.dts:28.31-36.4: Warning (interrupt_provider): /bus@10000000/msi-controller@2ff00000: Missing '#interrupt-cells' in interrupt provider
+>   arch/mips/boot/dts/loongson/loongson64c_4core_ls7a.dtb: Warning (interrupt_map): Failed prerequisite 'interrupt_provider'
+> 
+> Fixes: 24af105962c8 ("MIPS: Loongson64: DeviceTree for LS7A PCH")
+> Tested-by: WangYuli <wangyuli@uniontech.com>
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+This is redundant.
 
+> Signed-off-by: WangYuli <wangyuli@uniontech.com>
+
+This implies testing... unless you mean that everything you send is by
+default untested? But then please read carefully submitting patches.
+
+Best regards,
+Krzysztof
 
