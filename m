@@ -1,195 +1,144 @@
-Return-Path: <linux-mips+bounces-8937-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8938-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE5E2AAB596
-	for <lists+linux-mips@lfdr.de>; Tue,  6 May 2025 07:32:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 076CBAABDE2
+	for <lists+linux-mips@lfdr.de>; Tue,  6 May 2025 10:54:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C2C857B4D40
-	for <lists+linux-mips@lfdr.de>; Tue,  6 May 2025 05:30:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 080BE1C23BD8
+	for <lists+linux-mips@lfdr.de>; Tue,  6 May 2025 08:55:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D6844A652E;
-	Tue,  6 May 2025 00:49:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDCC3262804;
+	Tue,  6 May 2025 08:54:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NGCjwbvu"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="iC7tDMw0"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDC6E3B11C4;
-	Mon,  5 May 2025 23:20:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1265324C67A
+	for <linux-mips@vger.kernel.org>; Tue,  6 May 2025 08:54:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746487232; cv=none; b=dmClXX7OcxPP0zNq99+Q9AvfvhCfjuA0wwEmfJEyMWn/DxrUZ4CllUbSRjykUKt93dikLKpF2jFaSVhrqD0ceMDXttfdz6LExjpMmq02VzNK2rLwp+5WqEIzIczdtGUW7dNWlyzGC4wh4hDbWsRH3kzY7UDugzRTPFvnetBum0A=
+	t=1746521654; cv=none; b=NnotdeF6fAA6eQvTV3pZ7KS08iUtXu1fpWaxd/upJwOcpvUAqn68BsB+0mT+naOt4hrwcg9+91Bt80KG4kTYMdSIz54cf2ZRP1z97pHZp5kYkzssCri+C5NjKE98tt5YUWiqFueUDLBmS/gEEvSNtg+aHJ/96LWVOObjjdPVi5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746487232; c=relaxed/simple;
-	bh=9UGdHSS8asS9PAcd3QKXZyEnq18ZNSJR23cUPFhNCoQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=e5mYZqD3CG8XTsn3JdSbzJqeYAZrl+XzvZvPql7soY0QE0P2GphG38S+zqwT6aVWUFYD4cVpTFVBu2dq0Jq0+BncrKaPFm7S/UCJQhbO2mCy9dJa4MPyG7WYO9pI5aY8ajrv0GnBf257ChdXFHzWDeXxksd7Ba+ym3zL6KJ5N+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NGCjwbvu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81BE4C4CEE4;
-	Mon,  5 May 2025 23:20:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746487232;
-	bh=9UGdHSS8asS9PAcd3QKXZyEnq18ZNSJR23cUPFhNCoQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=NGCjwbvu/Nmq5v25ocscgqxQH25nGy4fOpAQNupUETJ6uJ5y1D3EYBhgRFXzEyC/+
-	 0rE8LZPBYBUqy+Iz8He3CfWsWwqNbhSgSfI8Ir0JQ2jb1qhBGaRSOMLP5bOzUEvjIZ
-	 fZ4s+f7J9VzMHnhkJanXdSWi90EFkmYor0E5jpCLAyx5ftvnWem9wSUgqmq+yUyJcV
-	 gQtlTQk+Wrs25d4ZEXCSrnMC+jycPyE44j77K6a6zj/BGTbufJfMqQI6sCI1Wo62cs
-	 KZfpt71NTuRphOmC8EDLPytaaYl6AISkEIbCVr5SJ+1bOVWyZ9Vv7JBInqTuiAaLDF
-	 KzftbBuNEqFpg==
-From: Sasha Levin <sashal@kernel.org>
-To: linux-kernel@vger.kernel.org,
-	stable@vger.kernel.org
-Cc: Paul Burton <paulburton@kernel.org>,
-	Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>,
-	Aleksandar Rikalo <arikalo@gmail.com>,
-	Serge Semin <fancer.lancer@gmail.com>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Sasha Levin <sashal@kernel.org>,
-	linux-mips@vger.kernel.org
-Subject: [PATCH AUTOSEL 5.10 069/114] MIPS: pm-cps: Use per-CPU variables as per-CPU, not per-core
-Date: Mon,  5 May 2025 19:17:32 -0400
-Message-Id: <20250505231817.2697367-69-sashal@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250505231817.2697367-1-sashal@kernel.org>
-References: <20250505231817.2697367-1-sashal@kernel.org>
+	s=arc-20240116; t=1746521654; c=relaxed/simple;
+	bh=wkGsbJpTT6NwcQZnaI3cgMwR5wm69KF8kopHqpBUf1k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=hxCORwhUqZtU9eC9CdnjuxLBGT0m6vLxH8GPrJp1OtwGfrpGjxfVXvZcEtG55Vf9+UPLroTA6khK3E88F+jF4NRkUzoB1DZjTmKF+Yaw5mSLXXfee8jKUaBcsYPPzt6KfFLBEg7sIiXuj+iFOmUxWlI8/STBE8EU9mM3eC6T0S4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=iC7tDMw0; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-43edecbfb46so29870605e9.0
+        for <linux-mips@vger.kernel.org>; Tue, 06 May 2025 01:54:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1746521651; x=1747126451; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=/0cBa9PVs+oAQ53ekJJBPQ5CTxO23NSJ0+4h1zfsmKE=;
+        b=iC7tDMw0UUrXGfEBsuAglOz4oP3qzM0WCBQEqda4p5JON9xfvijq/JPLR8dzfA6QPj
+         2n40/DoK5E6q1o7xp7NLMhxP0dAAl/p/2fuux743TRozgA8KE7PVOP4vkBY1whqgJeuM
+         h6NAqjwe8lP9RFIDpOi4CDOZL2jktZXbmuIA+XNPb1MlV9aa1Y47xRgVtVkLMe606Hvc
+         nTywp0ELEsfNjR5V7FsyNbu87Jbs1aT+FrP4jPIyUKhP/nrOdX0qDNdIwtG/KOSkkq7b
+         y/aLrUetaYcqw6GfNUsUapKy4ojaKGOJTKSWD1sycHhN2YpwH2LfTUDQlh8d3qmgrAd4
+         cMyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1746521651; x=1747126451;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/0cBa9PVs+oAQ53ekJJBPQ5CTxO23NSJ0+4h1zfsmKE=;
+        b=MApAEQVVIHTyFzvct3IufErhGAQ43fw5vvTz/nXWZkSlWKTzAfXuGIVTW3pg9p1qoR
+         HX9aRlCUW0XzBUSi2iXLziRoPgIXmp8bT2puGzdLcga4kSCsl13FYKKYfYR72FzQDp2t
+         e9a6Cr9rHbu8gTas7d6kkFYehZUEYSzdVfC8b6qFi19TKZpwPBd9WVnJQxheh+UOVOCl
+         nmrkDw9Djdyb2GW5UvZbIFtStpG1ZKFFCJxiWbjXt28KEIF0boqEz4cROP2UE6Gh1iiJ
+         0xIgir3UicwSOSb3n75gdckZdCVE9ElY4B9isHGFk1IY0lmzQ6PpAP6Uo0lRckkbTiMR
+         AilA==
+X-Gm-Message-State: AOJu0YwLHotYCKXxy/yH0l/wDmik+1UMDhHErTyAfJX5wD+CeTTBzv+o
+	khLeNaTQHNYS5bbobj+awJrYwFVNK1w1RwQ9gOe7ZR3ngMFAs6ZVIaylRY1v6bM=
+X-Gm-Gg: ASbGncv0YHwSv0O3CzcClAeqivuqlT/zxM667YTN2mFBvO7CRC54QPCsUxqa4FMAcZg
+	y23GB8TWiStcXjqW7b3kGeIBQFHhVpcL6dwT0WrsnUV2cOSztx3DYZDGW+HsGjpiEJg7bdTvYkc
+	YmtOIw5pC2XWXGAcNEdAmSkXgiocxfga6uwixC8s90gbEwmJb/KIm9BfKb9mCHBlJZe0+Zm0YBm
+	DfVBMGkJuP5X8ltLBPAAohzILJ6N+v0Y2c77mpTekyneYT6VNKSnDu/Qa72IZjVsIc7nKhg4RAe
+	WUDHt/jEQ05PLubKGBrTVD3SoC6oNh+68pXsbfVu05VSwhzAfsq9k8y6bc71iBQSgc2mWFFu339
+	+X/Jt
+X-Google-Smtp-Source: AGHT+IHXEKsH42KRLrEmKISrJCPG8Apw+QWhDI341ouWaA3XrXnmpLIfMz6s/Acz/PZ//Y59wBBHlA==
+X-Received: by 2002:a05:600c:1d0a:b0:43b:d0fe:b8ac with SMTP id 5b1f17b1804b1-441d053b038mr18104455e9.30.1746521651357;
+        Tue, 06 May 2025 01:54:11 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-441b89ee593sm158952075e9.24.2025.05.06.01.54.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 06 May 2025 01:54:10 -0700 (PDT)
+Message-ID: <7c08cc9e-f39f-490c-85fe-5738656380e5@linaro.org>
+Date: Tue, 6 May 2025 10:54:09 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-stable: review
-X-Patchwork-Hint: Ignore
-X-stable-base: Linux 5.10.237
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/7] clocksource/drivers: Add EcoNet Timer HPT driver
+To: Caleb James DeLisle <cjd@cjdns.fr>
+Cc: linux-mips@vger.kernel.org, tglx@linutronix.de, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, tsbogend@alpha.franken.de,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ benjamin.larsson@genexis.eu, linux-mediatek@lists.infradead.org
+References: <20250430133433.22222-1-cjd@cjdns.fr>
+ <20250430133433.22222-3-cjd@cjdns.fr> <aBjpBpJAIP89oiit@mai.linaro.org>
+ <92cd3689-3409-4d43-8db1-8633d35f779a@cjdns.fr>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <92cd3689-3409-4d43-8db1-8633d35f779a@cjdns.fr>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-From: Paul Burton <paulburton@kernel.org>
+On 05/05/2025 20:09, Caleb James DeLisle wrote:
+> 
+> On 05/05/2025 18:36, Daniel Lezcano wrote:
+>> On Wed, Apr 30, 2025 at 01:34:28PM +0000, Caleb James DeLisle wrote:
+>>> Introduce a clocksource driver for the so-called high-precision timer 
+>>> (HPT)
+>>> in the EcoNet EN751221 MIPS SoC.
+>> As a new driver, please document the timer (up - down ?, SPI/PPI, etc
+>> ...) that will help to understand the code more easily, especially the
+>> reg_* functions (purposes?).
+> 
+> 
+> Sure thing, I can elaborate the comment in the header of
+> timer-econet-en751221.c. Let me know if you'd like it described
+> somewhere else as well, such as the help of config ECONET_EN751221_TIMER.
 
-[ Upstream commit 00a134fc2bb4a5f8fada58cf7ff4259149691d64 ]
+It is ok in the changelog, so it is possible to get the description when 
+looking for the patch introducing the new timer.
 
-The pm-cps code has up until now used per-CPU variables indexed by core,
-rather than CPU number, in order to share data amongst sibling CPUs (ie.
-VPs/threads in a core). This works fine for single cluster systems, but
-with multi-cluster systems a core number is no longer unique in the
-system, leading to sharing between CPUs that are not actually siblings.
+[ ... ]
 
-Avoid this issue by using per-CPU variables as they are more generally
-used - ie. access them using CPU numbers rather than core numbers.
-Sharing between siblings is then accomplished by:
- - Assigning the same pointer to entries for each sibling CPU for the
-   nc_asm_enter & ready_count variables, which allow this by virtue of
-   being per-CPU pointers.
+>>> +
+>>> +    cpuhp_setup_state(CPUHP_AP_MIPS_GIC_TIMER_STARTING,
+>>> +              "clockevents/en75/timer:starting",
+>>> +              cevt_init_cpu, NULL);
+>> cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, ... ) ?
+> 
+> I see that Ingenic does this. This is the only timer so until it's up,
+> sleeping causes a hang. If sleeping is prior to CPUHP_AP_ONLINE_DYN is
+> considered a bug then this should be okay, but I'm not informed enough
+> to say whether that is the case so I'll follow your guidance here.
 
- - Indexing by the first CPU set in a CPUs cpu_sibling_map in the case
-   of pm_barrier, for which we can't use the previous approach because
-   the per-CPU variable is not a pointer.
+Hmm, hard to say without the platform. May be just give a try with 
+CPUHP_AP_ONLINE_DYN to check if it works otherwise stick on 
+CPUHP_AP_MIPS_GIC_TIMER_STARTING as it is already defined ?
 
-Signed-off-by: Paul Burton <paulburton@kernel.org>
-Signed-off-by: Dragan Mladjenovic <dragan.mladjenovic@syrmia.com>
-Signed-off-by: Aleksandar Rikalo <arikalo@gmail.com>
-Tested-by: Serge Semin <fancer.lancer@gmail.com>
-Tested-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Signed-off-by: Sasha Levin <sashal@kernel.org>
----
- arch/mips/kernel/pm-cps.c | 30 +++++++++++++++++-------------
- 1 file changed, 17 insertions(+), 13 deletions(-)
+[ ... ]
 
-diff --git a/arch/mips/kernel/pm-cps.c b/arch/mips/kernel/pm-cps.c
-index 9bf60d7d44d36..a7bcf2b814c86 100644
---- a/arch/mips/kernel/pm-cps.c
-+++ b/arch/mips/kernel/pm-cps.c
-@@ -56,10 +56,7 @@ static DEFINE_PER_CPU_ALIGNED(u32*, ready_count);
- /* Indicates online CPUs coupled with the current CPU */
- static DEFINE_PER_CPU_ALIGNED(cpumask_t, online_coupled);
- 
--/*
-- * Used to synchronize entry to deep idle states. Actually per-core rather
-- * than per-CPU.
-- */
-+/* Used to synchronize entry to deep idle states */
- static DEFINE_PER_CPU_ALIGNED(atomic_t, pm_barrier);
- 
- /* Saved CPU state across the CPS_PM_POWER_GATED state */
-@@ -118,9 +115,10 @@ int cps_pm_enter_state(enum cps_pm_state state)
- 	cps_nc_entry_fn entry;
- 	struct core_boot_config *core_cfg;
- 	struct vpe_boot_config *vpe_cfg;
-+	atomic_t *barrier;
- 
- 	/* Check that there is an entry function for this state */
--	entry = per_cpu(nc_asm_enter, core)[state];
-+	entry = per_cpu(nc_asm_enter, cpu)[state];
- 	if (!entry)
- 		return -EINVAL;
- 
-@@ -156,7 +154,7 @@ int cps_pm_enter_state(enum cps_pm_state state)
- 	smp_mb__after_atomic();
- 
- 	/* Create a non-coherent mapping of the core ready_count */
--	core_ready_count = per_cpu(ready_count, core);
-+	core_ready_count = per_cpu(ready_count, cpu);
- 	nc_addr = kmap_noncoherent(virt_to_page(core_ready_count),
- 				   (unsigned long)core_ready_count);
- 	nc_addr += ((unsigned long)core_ready_count & ~PAGE_MASK);
-@@ -164,7 +162,8 @@ int cps_pm_enter_state(enum cps_pm_state state)
- 
- 	/* Ensure ready_count is zero-initialised before the assembly runs */
- 	WRITE_ONCE(*nc_core_ready_count, 0);
--	coupled_barrier(&per_cpu(pm_barrier, core), online);
-+	barrier = &per_cpu(pm_barrier, cpumask_first(&cpu_sibling_map[cpu]));
-+	coupled_barrier(barrier, online);
- 
- 	/* Run the generated entry code */
- 	left = entry(online, nc_core_ready_count);
-@@ -635,12 +634,14 @@ static void *cps_gen_entry_code(unsigned cpu, enum cps_pm_state state)
- 
- static int cps_pm_online_cpu(unsigned int cpu)
- {
--	enum cps_pm_state state;
--	unsigned core = cpu_core(&cpu_data[cpu]);
-+	unsigned int sibling, core;
- 	void *entry_fn, *core_rc;
-+	enum cps_pm_state state;
-+
-+	core = cpu_core(&cpu_data[cpu]);
- 
- 	for (state = CPS_PM_NC_WAIT; state < CPS_PM_STATE_COUNT; state++) {
--		if (per_cpu(nc_asm_enter, core)[state])
-+		if (per_cpu(nc_asm_enter, cpu)[state])
- 			continue;
- 		if (!test_bit(state, state_support))
- 			continue;
-@@ -652,16 +653,19 @@ static int cps_pm_online_cpu(unsigned int cpu)
- 			clear_bit(state, state_support);
- 		}
- 
--		per_cpu(nc_asm_enter, core)[state] = entry_fn;
-+		for_each_cpu(sibling, &cpu_sibling_map[cpu])
-+			per_cpu(nc_asm_enter, sibling)[state] = entry_fn;
- 	}
- 
--	if (!per_cpu(ready_count, core)) {
-+	if (!per_cpu(ready_count, cpu)) {
- 		core_rc = kmalloc(sizeof(u32), GFP_KERNEL);
- 		if (!core_rc) {
- 			pr_err("Failed allocate core %u ready_count\n", core);
- 			return -ENOMEM;
- 		}
--		per_cpu(ready_count, core) = core_rc;
-+
-+		for_each_cpu(sibling, &cpu_sibling_map[cpu])
-+			per_cpu(ready_count, sibling) = core_rc;
- 	}
- 
- 	return 0;
+
 -- 
-2.39.5
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
