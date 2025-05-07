@@ -1,134 +1,114 @@
-Return-Path: <linux-mips+bounces-8962-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8963-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D6BDAAE6EC
-	for <lists+linux-mips@lfdr.de>; Wed,  7 May 2025 18:39:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C941AAEEA0
+	for <lists+linux-mips@lfdr.de>; Thu,  8 May 2025 00:18:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 01E0F1891A23
-	for <lists+linux-mips@lfdr.de>; Wed,  7 May 2025 16:39:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E8BB9862A1
+	for <lists+linux-mips@lfdr.de>; Wed,  7 May 2025 22:18:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE53728C5A9;
-	Wed,  7 May 2025 16:38:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70A8928C2CB;
+	Wed,  7 May 2025 22:18:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AyIymc2W"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HW9i1+ZW"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D3E028C2D1;
-	Wed,  7 May 2025 16:38:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E55222F759;
+	Wed,  7 May 2025 22:18:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746635922; cv=none; b=HyTjQ4zGbIDhPFVppHAVKtQam4T+fzUWsTSatTxwme6FDkaOD5FOALg3EwK+mZBLcxuOt45+V/xBdcd5DrzaTtIRLeJQKyPm9Cg4mLdWfDwEI7M17/uxC+htpOi0pP/JHjC11smS/VvM7VL6JdYAy279XqF8JSNhT0+vNfnDdRw=
+	t=1746656332; cv=none; b=iFWVPV1bIIPqmcF808KsqRK7TNLP3VieRdTOt9l+gWXpPWzU/yHOfpxF1xWWHjWgkElcYqwjzBWwjrpwOe9qqnKxE1tA5ZqdR/1JRrljCkWFLTS+KKWdVQwDIKjRUYhPXl93/Ukg/wN2/kVkVGp5UXui0ZuoGV/EQMA7jin9pJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746635922; c=relaxed/simple;
-	bh=TqTyxNTUeXIXIbgbWfv1PyWf194MsWra/G7EgnvKn1E=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YHlb5qsdiDYzDK4gUvfY4QV0gf5/Dbq5x7i6GXQ5V0Qr9sZyDgPHz7d9cgw5/C83eTIR3wTAs2EpaVb+nLHZBz1NaEFzA/FBnp6SaiaQ2ZkGPhkSVwYZktI2dHJc+P5zelSIpYcxzZDvGngvCg0BtEfRk3aBz94jVJ9OsVN1U9s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AyIymc2W; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F04D7C4CEEE;
-	Wed,  7 May 2025 16:38:37 +0000 (UTC)
+	s=arc-20240116; t=1746656332; c=relaxed/simple;
+	bh=EEgrVpV+dxmZpKE2aC2GH0LMPotoCq/ED7mZZZVPrOw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PGXKbEFi5KGePAD9siyYhme7jeJpdkN4/LIgSvGMwZqX3fZ2txDokFYBbqQbMCaKyk75vyMI0TUiff1G/A/rMv/ht0ywKd7rEUi4jMlcahdr9GmBRt7Cn0v4wtO3F7tmo2dqENcXLgECOTf5Z9AwOjHuMydGSswfqRMBgUjRnLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HW9i1+ZW; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7031BC4CEE2;
+	Wed,  7 May 2025 22:18:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746635920;
-	bh=TqTyxNTUeXIXIbgbWfv1PyWf194MsWra/G7EgnvKn1E=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=AyIymc2WUwyOA8d+yIafhO3j7UN9ALcm+hJ4nXmJ5aU79oNpfstTIMGLCVRACV2ax
-	 JIEL4T+cYujaPi/vwiJjQPC4CBIueS0dZzALrwNExDGGSWSKFn6qgHn2T76DlSbjQ3
-	 YYukBbrippdZmajPTYXivGbBd+1EJCowJ68J2AOuR+NPZQOBFzORc8QXTv7jvjxdCo
-	 zXkrngaysM8SKMppt6W/7J3mjFcHm61ktJqnwuI1oVgXCG8CPlgpinUZr1TYzdsm/P
-	 +bCJSfEOkxWJvo5tKzdr27ATGxkeHQdH7e93YRxYX4YVB8zau06Vnv6oIxo+rJF1Nf
-	 dc/dJAXbgPo7A==
-From: Bjorn Andersson <andersson@kernel.org>
-To: Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Conor Dooley <conor@kernel.org>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Steen Hegelund <Steen.Hegelund@microchip.com>,
-	Daniel Machon <daniel.machon@microchip.com>,
-	UNGLinuxDriver@microchip.com,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Andy Gross <agross@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Viresh Kumar <vireshk@kernel.org>,
-	Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	zhouyanjie@wanyeetech.com,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
-	Stephan Gerhold <stephan.gerhold@linaro.org>,
-	"Rob Herring (Arm)" <robh@kernel.org>
-Cc: devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-sunxi@lists.linux.dev,
-	linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	imx@lists.linux.dev,
-	linux-rockchip@lists.infradead.org,
-	linux-amlogic@lists.infradead.org,
-	linux-renesas-soc@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-mediatek@lists.infradead.org,
-	Andre Przywara <andre.przywara@arm.com>,
-	=?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>
-Subject: Re: (subset) [PATCH v2 00/17] Arm cpu schema clean-ups
-Date: Wed,  7 May 2025 09:38:33 -0700
-Message-ID: <174663591275.3531.6906045623469489227.b4-ty@kernel.org>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250410-dt-cpu-schema-v2-0-63d7dc9ddd0a@kernel.org>
-References: <20250410-dt-cpu-schema-v2-0-63d7dc9ddd0a@kernel.org>
+	s=k20201202; t=1746656331;
+	bh=EEgrVpV+dxmZpKE2aC2GH0LMPotoCq/ED7mZZZVPrOw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HW9i1+ZWzoLd/e9bujf1qVWc4oLPzoIis/DMPHIjPG4Lg+v2TPdqTr9QUjrfy3xA6
+	 LilZNWBQntwYzZV1RPplD4NAwhlcoCFs+Z+bFj5U2bi1PwPgblDNphdOhRJdm5EtCy
+	 Cw60wLu8RYdoLYzMoGZIdU47QksD3fVhi9bqZ5jHQixh3LYtQq3gLI1W1cHdys5QKK
+	 9/F0GzkplXSU36PJNe3pXjxhJpGny5aOaj3aWnq27QG91pMqJZyUjkOlEmYjHZkCGT
+	 LSn3niecaNRjbjhwe/MAUWzR4BKj4fKUqm3qDUbCOTt/mpAWdNOuY4BZKZNd1gjo6T
+	 nGhlayET1r+dg==
+Date: Wed, 7 May 2025 15:18:46 -0700
+From: Eric Biggers <ebiggers@kernel.org>
+To: kernel test robot <lkp@intel.com>
+Cc: oe-kbuild-all@lists.linux.dev, Herbert Xu <herbert@gondor.apana.org.au>,
+	linux-crypto@vger.kernel.org, linux-mips@vger.kernel.org,
+	=?iso-8859-1?Q?Ren=E9?= van Dorst <opensource@vdorst.com>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>
+Subject: Re: [linux-next:master 6141/9308]
+ arch/mips/lib/crypto/chacha-core.S:264:118: error: unknown instruction, did
+ you mean: rol, rotr?
+Message-ID: <20250507221846.GA526360@sol>
+References: <202505080409.EujEBwA0-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <202505080409.EujEBwA0-lkp@intel.com>
 
+[+Cc linux-crypto, linux-mips, and the authors of the mips chacha-core.S]
 
-On Thu, 10 Apr 2025 10:47:21 -0500, Rob Herring (Arm) wrote:
-> The Arm cpu.yaml schema fails to restrict allowed properties in 'cpu'
-> nodes. The result, not surprisely, is a number of additional properties
-> and errors in .dts files. This series resolves those issues.
+On Thu, May 08, 2025 at 04:36:30AM +0800, kernel test robot wrote:
+> Hi Eric,
 > 
-> There's still more properties in arm32 DTS files which I have not
-> documented. Mostly yet more supply names and "fsl,soc-operating-points".
-> What's a few more warnings on the 10000s of warnings...
+> First bad commit (maybe != root cause):
 > 
-> [...]
+> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
+> head:   08710e696081d58163c8078e0e096be6d35c5fad
+> commit: 939a54ac073808db15ed411d563dfadb3ef12798 [6141/9308] crypto: mips - move library functions to arch/mips/lib/crypto/
+> config: mips-randconfig-r111-20250501 (https://download.01.org/0day-ci/archive/20250508/202505080409.EujEBwA0-lkp@intel.com/config)
+> compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
+> reproduce: (https://download.01.org/0day-ci/archive/20250508/202505080409.EujEBwA0-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202505080409.EujEBwA0-lkp@intel.com/
+> 
+> All errors (new ones prefixed by >>):
+> 
+> >> arch/mips/lib/crypto/chacha-core.S:264:118: error: unknown instruction, did you mean: rol, rotr?
+>     addu $t0, $t4; addu $t1, $t5; addu $t2, $t6; addu $t3, $t7; xor $s5, $t0; xor $s4, $t1; xor $s3, $t2; xor $s2, $t3; rotl $s5, 16; rotl $s4, 16; rotl $s3, 16; rotl $s2, 16;;
 
-Applied, thanks!
+This build error actually occurs before my commit too, and even on current
+mainline.  I don't know why it's just getting reported now.  It occurs only with
+clang, which is why I didn't notice it before (I did the mips build with gcc).
+Anyway, I don't really speak MIPS, but it looks like what's going on is the CPU
+only has a right rotate instruction, and binutils translates left rotates into
+right rotates, but clang doesn't.
 
-[09/17] arm: dts: qcom: ipq4019: Drop redundant CPU "clock-latency"
-        commit: 3ea267124573f24e67f0fe47c4a865f0f283f8fc
+'mips-linux-gnu-gcc -c -march=mips32r2' successfully compiles the following:
 
-Best regards,
--- 
-Bjorn Andersson <andersson@kernel.org>
+    rotl $a0, 5
+
+... and with 'mips-linux-gnu-objdump' it comes back as:
+
+    ror	a0,a0,0x1b
+
+But 'clang -c -target mips-linux-gnu -march=mips32r2' errors out:
+
+    test.S:1:1: error: unknown instruction, did you mean: rol, rotr?
+    rotl $a0, 5
+
+I don't know if 'rotl' is "supposed" to work or not.  But either way, we could
+make the assembly code use right rotates only.
+
+- Eric
 
