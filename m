@@ -1,221 +1,215 @@
-Return-Path: <linux-mips+bounces-8953-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8950-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB39CAAD622
-	for <lists+linux-mips@lfdr.de>; Wed,  7 May 2025 08:33:04 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2489DAAD5F5
+	for <lists+linux-mips@lfdr.de>; Wed,  7 May 2025 08:24:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00D0E983806
-	for <lists+linux-mips@lfdr.de>; Wed,  7 May 2025 06:32:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2EC7D983B19
+	for <lists+linux-mips@lfdr.de>; Wed,  7 May 2025 06:24:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03B70213E76;
-	Wed,  7 May 2025 06:32:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3267620E003;
+	Wed,  7 May 2025 06:24:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CTDPSW8X"
+	dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b="Nbyipach"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from EUR03-AM7-obe.outbound.protection.outlook.com (mail-am7eur03on2082.outbound.protection.outlook.com [40.107.105.82])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E5DF212FB8;
-	Wed,  7 May 2025 06:32:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746599542; cv=none; b=RR2pIe1MEwZ745zEKuzBYO58iJzwMcoAu6NPzvRKxjmQqFH1OstflM1FvGsMDu5XWDhkaUJgtgtum30dbx52f2kuvT/HLk0N/IbQSGfqDKG4MNLWQs8XsfIhb+jiAWqkQZEicBZ15kE0oRPudV673NOS+FhBk59eyP8iEtzC5rg=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746599542; c=relaxed/simple;
-	bh=gVnr8TnU5oBPUOllfUkHDqgYRsX0nAzlPey3pz8QsSw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=QasUDT1vK8VkqEtMU40dhGQjAn0Z975l/mi9stsuSFZ8lIN10JEAZN4PKWURWYjk0O9Rz3v/crq1LyIJ3A+OSfM9P+YSvZveAqQK80/7jMMGJLwPQhLUyu4ZA/TgON81FITBNMSoaZekOKm+PGbtec5O3hRoSuR9nRck/Njl9ps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CTDPSW8X; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-22423adf751so73716855ad.2;
-        Tue, 06 May 2025 23:32:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1746599540; x=1747204340; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8YWstoYnxasTg7tshxJbl1B8GWpQGF7X65mCdPOf1/0=;
-        b=CTDPSW8XZD6Be5HIisLjLIaoiMkLL+tFC3VX20M9GpI3SJ4sTDsfGG2F+2eJe39jil
-         Kuwqv0YbbIX9xMcjzuDPCybuWdNbY5+k1qwGFFOm7cFb3xJsRjj7m5VbcpVUCeRhJYW1
-         nR4EE6cFHwTD9L0HhPoOQ3ULbBZ13deEr9y7fpevOJNXziUMZiy/qa3OvSYifuYCA6u9
-         2m1W0FTUUIjP2YtJa1Xy1pBADwLZDRvIE7fyYozCSYGH8b85oKm43TDr4J1oqI9ZGZni
-         lX10LqHrdjov8II0//0Ln0pRfqtvrn85aaxbhx5+0Q+agImUNIoSEVqCQLcNi9dOC86C
-         2CbQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1746599540; x=1747204340;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=8YWstoYnxasTg7tshxJbl1B8GWpQGF7X65mCdPOf1/0=;
-        b=Xmra7d4lMoScKSu3/rFpLaw2V8YkaKCR3RCRmc3wOSZxd3IH50ky7oQKiHR6nmRCN5
-         /7DD8e/QphKK0855yemNE1CPVhqwLZc2AsUFXML0kFIA1pTWBOHy7frfFRtTyiH7W9Gm
-         HEerklEXhvTyvrvJjTHXEBH0UIbWjI41x0VtR3ZKcqyxiqCzLGW2t1RUTTcChbhUZko3
-         g9/q51pkIkuue1GQb+QmUHGBpaHud7vZKUsRHOM+Aq7lIw5KCqSDvjQxStrh7o5AAJrj
-         Y4CNvIRrgLBYkC/xIQMt4c97dAMrLT9kS//REQOhgldJCbm7yhdBqpIGTxEJtUne+QcU
-         l9wg==
-X-Forwarded-Encrypted: i=1; AJvYcCUiuDM1SaLiHzsuRUTTW5kBZHt6dCLnXSbRvyIXc9OBwXevHs0Jm5nYfX5x/gyE250cyguEI9UpeNGq@vger.kernel.org, AJvYcCUrYaSoFQYvt8i0VoY4+edgAqILpV+Nt+nWm/c93jOU5CBhJOpvdpOntte1phCQtJYmqK7o829LllG8nQ==@vger.kernel.org, AJvYcCXjlFAiQtHOXG7Q+ZZXRWfUvdXBey8oRcYbP+pCDz6CIUPPHcsIdDeYEtKnYonXOOf+xtEl8qiyLrPqJKo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YypSrY+x+D4XmHzF2Yrmf3KI3d0NIfbbyWmHej44rPgAdaDvB4t
-	SahReigSv940o/+rBTHzfWM2R8CbJZwqD/4ODbGFph4dg+sOKem1
-X-Gm-Gg: ASbGncv20WHx/MywniplRnNDO4HdNVIvyQk53hXCRgRtALFba9xHjdImKQev6nvTGuD
-	/0m/utw2DD4/upia7NDJnGT0pK07TRTCmp0serW+aaO1Hn2ghhs76ac0wswN7lxcD6cLgPlVgLI
-	YAzF/O3fEdSlfmYhJzM06FH/FUl4GufS8u64ouXB2Dis66hWCnaBKLIR3TUjkjZad6mviRjhhtH
-	Sv9E/re79+cfQCUHiUgIqBPc3GyMa6jpqB75DsSR8wtsAqSOfioJHxNSQ3eqLokbyAg/LnKVChg
-	PtJ5IeRNtWGlt9hNGV4XBKCI92O5L42oJuvRrQACIUt0NKgEPhM=
-X-Google-Smtp-Source: AGHT+IGJ/qWe5PPqzuHBICQzeHVIVKp5crJzNNKXqyBfyk7uaOLcOkz/tYZnutpwUCMI1zF55cUgKQ==
-X-Received: by 2002:a17:902:e844:b0:22c:3609:97ed with SMTP id d9443c01a7336-22e5ec9e997mr25272325ad.30.1746599540530;
-        Tue, 06 May 2025 23:32:20 -0700 (PDT)
-Received: from Black-Pearl. ([122.162.204.119])
-        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-22e15229384sm85805295ad.206.2025.05.06.23.32.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 06 May 2025 23:32:20 -0700 (PDT)
-From: Charan Pedumuru <charan.pedumuru@gmail.com>
-Date: Wed, 07 May 2025 06:29:36 +0000
-Subject: [PATCH 2/2] dt-binding: mmc: microchip,sdhci-pic32: convert text
- based binding to json schema
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9858C2063D2;
+	Wed,  7 May 2025 06:24:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.105.82
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1746599063; cv=fail; b=ejRRUO26NiXF1RtJINDNv5aCyIy0XFZH2sYAHiRAyvn+lu/H8Z296Z7zAT2+uNgZdJd1kjOqzK5D/vhymtIBUON6l8yWTmgRNxVtno+ZRB91vUrJyVLis/XKikeVQn1ry+sg1n/Bt4i/wXUHGIdxR0/wsZi4ekzWPcp7hkrZPHo=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1746599063; c=relaxed/simple;
+	bh=WgvLl1PHbJ8CP9di9Xn+SG23lPSE4Lgcy2TuLblI4zE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=YpVkKTZeGeSh3DYDMyO8UP4wNlhiYyIp71s1WO+dWqGLrtID1OV1JlU1S4UX+P96y/swXQe/b10IGPkWyWTi7YGnToRqj4kvOpx883by62EHAjmhc1BMYY3i6siH0lm+oc5GGsgZTmJToXLnqN9OZvt8E9u3lraWvGIzHGwaHDI=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com; spf=pass smtp.mailfrom=oss.nxp.com; dkim=pass (2048-bit key) header.d=NXP1.onmicrosoft.com header.i=@NXP1.onmicrosoft.com header.b=Nbyipach; arc=fail smtp.client-ip=40.107.105.82
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=oss.nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=BTyUkVlck1dKipkfL1GdkqpvLzZPLaM0Y07uL4bq0z/uyFfOXa5ERvwARcObO9S2N326USubOO+IWI5W90RZ/JZoxQpfPwme5tF09KS23bs3ZZVfrZtSUF19fjN+chafO2CVJTgfT3wEERNA1LLtb1HgRJBXzFvXotY3x/bF1KMmBYdZZev6r9rxeBYxoHUBEe+1a4k2dQeXFvEiWX7cpnrS71n2RdvVCTStaJkLV48dfzUqcx6i/hnEDI9uLsx8tfTq3pa8G1nFTLbZbXpDx1l/s+FP0jeir7Jf33WOjPTi9r0TbblW1u+A2NO7aY5a59Ka1SdwaYdR4wBbyC6YGw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=oRLbbYJNcVxKMK0B5a74lNlv4utyF8rrAcS58HaupmQ=;
+ b=meeHZknOuCIsMz8d6658aeq/9TBw5TsbkU3TLbTpSgfOdFJGdLUkTewfsiGY41YzSDS3vNy8uAY2bghZK1FxH2Lq9i2MJBnvB8NhMYIF0zc31Vs1oOH9KPT9ywCJeSa0eE59Dt2UMS9xUdV3Q/9CCIZVPLPcOADFZlSnGu1knTKeYRutX0mWAY9JhktQTYuhFT0nGK0hMebXCU+L20pO9Y+Zklf78LVoPsg/kpnOuQk0x97wo28cI0sSLUZzAjfdPur7ZsIH7FThrmw5f8s4ipLTrfWnaC4VewiTWr2BK+KsmKzq8ea+evwXdYrdI5JfYK8ZP4bpLVpBlwBnViSiBg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oss.nxp.com; dmarc=pass action=none header.from=oss.nxp.com;
+ dkim=pass header.d=oss.nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=NXP1.onmicrosoft.com;
+ s=selector1-NXP1-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=oRLbbYJNcVxKMK0B5a74lNlv4utyF8rrAcS58HaupmQ=;
+ b=NbyipachHI7ocD3PwXqLb0piFsvc9BMq4eKaLSQRewkvk3xdQP0OoVfngnuiWq27pBme1Vo46yzZ9QxbgM1Q4TaDcIVpgnRHM+6cWiKxaKOC+hwVtb24uJLIClnA42gXTfMJGZcLwfvKTeuXen5/UU/LUOX8UaqHCyDdRJ2oRDwOjFQtblbxGDepRr1aaObLgo//yxAICRYYkVN4FcE+gZ42oPMYJCcrMH/1vJvAsd6EEVo7M4IFe9FPqv0ciQuOnzgFriItePU8G2UbxfK9ShL6W/O7lQ+FMZe48EDN9yRJ/czTCAXAA3Cb9B3mUFnq6WY4cfJmKsUnpvQYzrzKwA==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=oss.nxp.com;
+Received: from PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
+ by AS1PR04MB9654.eurprd04.prod.outlook.com (2603:10a6:20b:476::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8722.20; Wed, 7 May
+ 2025 06:24:12 +0000
+Received: from PAXPR04MB8459.eurprd04.prod.outlook.com
+ ([fe80::165a:30a2:5835:9630]) by PAXPR04MB8459.eurprd04.prod.outlook.com
+ ([fe80::165a:30a2:5835:9630%5]) with mapi id 15.20.8699.026; Wed, 7 May 2025
+ 06:24:12 +0000
+Date: Wed, 7 May 2025 15:33:18 +0800
+From: Peng Fan <peng.fan@oss.nxp.com>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Conor Dooley <conor@kernel.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Steen Hegelund <Steen.Hegelund@microchip.com>,
+	Daniel Machon <daniel.machon@microchip.com>,
+	UNGLinuxDriver@microchip.com,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Andy Gross <agross@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>, zhouyanjie@wanyeetech.com,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	Stephan Gerhold <stephan.gerhold@linaro.org>,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, imx@lists.linux.dev,
+	linux-rockchip@lists.infradead.org,
+	linux-amlogic@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v2 08/17] arm/arm64: dts: imx: Drop redundant CPU
+ "clock-latency"
+Message-ID: <20250507073318.GB2351@nxa18884-linux>
+References: <20250410-dt-cpu-schema-v2-0-63d7dc9ddd0a@kernel.org>
+ <20250410-dt-cpu-schema-v2-8-63d7dc9ddd0a@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250410-dt-cpu-schema-v2-8-63d7dc9ddd0a@kernel.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-ClientProxiedBy: SG2PR06CA0194.apcprd06.prod.outlook.com (2603:1096:4:1::26)
+ To PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250507-mchp-sdhci-v1-2-ed29de05295a@gmail.com>
-References: <20250507-mchp-sdhci-v1-0-ed29de05295a@gmail.com>
-In-Reply-To: <20250507-mchp-sdhci-v1-0-ed29de05295a@gmail.com>
-To: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Ulf Hansson <ulf.hansson@linaro.org>
-Cc: devicetree@vger.kernel.org, linux-mips@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org, 
- Charan Pedumuru <charan.pedumuru@gmail.com>
-X-Mailer: b4 0.14.2
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB8459:EE_|AS1PR04MB9654:EE_
+X-MS-Office365-Filtering-Correlation-Id: c229a58c-a5f5-47de-e6e0-08dd8d2fc87f
+X-MS-Exchange-SharedMailbox-RoutingAgent-Processed: True
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|7416014|52116014|1800799024|366016|7053199007|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?jEJfFSG3rSvecB9w1JJJimYVk/RffpSRq3LpKUbtLYXqdQR5qqDFEz3fmL2b?=
+ =?us-ascii?Q?B8/ig8h2dA/90RGHWLsXUAUTl9yImgFVQ4AZ+ZGw4GMqcuM+RUpvxnzzbqAN?=
+ =?us-ascii?Q?5aVGlXAGMe08xPQ2afeB2S1+yL4uOuFISx3XJOq3cMJOdJeXU2uQ2xJAo0ev?=
+ =?us-ascii?Q?mNjDSqTS3rqj492lHA04Vh3It5tMws8xcjfctZ5SZZX0FImL6mR7qDk8MKoc?=
+ =?us-ascii?Q?dvPi4Swzwxgpb+WP4nLexReNjD4gIz9c9ZO1oOy0/1iPg4SFwLFjJueZuwUd?=
+ =?us-ascii?Q?OgEeXK9vBEPNwae9srstAu8HDHXZENC8PCo8JOFSDwhufFHjf77bnFbhVVar?=
+ =?us-ascii?Q?Gep+wpud8p3ztRPVJizcrbw6AvUavIfTZET/kbcwtAabGB/NTqclL2BNTAc8?=
+ =?us-ascii?Q?p9lZCDTAU5LfB39y51pAzNZMfJ3nPxUuSfpeIzCtI+oX/5fRJku9GwbyYnC4?=
+ =?us-ascii?Q?YS+qgVPs0FEJGDMbacGJCmvi1PzVA2x/Qrg3Mg9Uqv/5wy99fTDMk4FrhbB6?=
+ =?us-ascii?Q?D+wSHDuFaRYvlkKKbIO7SVKwHIyY0Eg+RGuSYkKW6P0HRGyp78yolknl3C/g?=
+ =?us-ascii?Q?1guhS+CYDZzfPaXHVwK+IyarBnZKA5TKwjDXIcSQebMnUpU6GJSXNaAaxVyz?=
+ =?us-ascii?Q?ubKprF222Tit5/3Jvo71O6KJt4Y2PJiN4344mCnrcYekL1KY795M6TSIJsZu?=
+ =?us-ascii?Q?+LfzDrr1O23WTbHk0MgmxN71coStJmRwhn/0GPfC6zMSqCSpN8xda+jovpBM?=
+ =?us-ascii?Q?cJucJUHRjpTuYEn9grGlipdwuw5h4xvDa5N35/v6+tibj3JV7dDVwPpo4KtR?=
+ =?us-ascii?Q?FMaVsKaRKbl43UKNpgN+TN4KoFTau4nIKDAu+dn6T/FafxAXe484ndj1w4pl?=
+ =?us-ascii?Q?jSOJTUKbpksvsV2iZvtxxG0YEk+3Hcx/n1vtG9pt5iwRBr0W0UN1f8/OPpx5?=
+ =?us-ascii?Q?w9qB2Gcq8mGXLY6w7M2uKQbc7vr9kLIdNvrOifyRqZw+U20Rwv0x8ATG8lFc?=
+ =?us-ascii?Q?0Bhu8Ij1lpS/hNxxjAdkbS5uTJubk01hh24U5GkQrydEQoALudZdJkbL4Wzj?=
+ =?us-ascii?Q?4mwbJiU1sxoR72t5GxesQD1BXPZlizJO7qh64GgKdherbNRb56TEUegB9Pmm?=
+ =?us-ascii?Q?+VMoEuu18xIuUG6utAbb/1WStzGUVsj9yZmb+I5Re2B3XyJYd+zD1xtkJ7DU?=
+ =?us-ascii?Q?1nO6nyLFFmnE/t9qCTimMUwOkkiPHB513cllcr+pyN37UoT39/vojHgcLzBz?=
+ =?us-ascii?Q?LazTSRPdtX6LjfzyKHwU0pnAO6O/ljILzvFlonWjUAfjUapqbgR5YqyV9kve?=
+ =?us-ascii?Q?wjYHmwfxx6fQKqSRkWcEFV1olgwNv4aX1vm5/LcnyDQcXjp3t648xZyEpo0G?=
+ =?us-ascii?Q?ZjohJj0v6eqF/GeaPbCrx0j5NGr2cSObrZytxI0qtWeTTWqITyO9QKkcwjw+?=
+ =?us-ascii?Q?wB2AmUOhlz17cdWmV3Yd5gGOzPRqKdst2uAPSfVCdsHfxUguoRb1JQ=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(52116014)(1800799024)(366016)(7053199007)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?1dJEpdfTYdS4UuORXJAdPvQLh6kKLCjfmdLizhsPeJSeBqkCJfSdMJTW/Sl/?=
+ =?us-ascii?Q?A2UYHqgvuWq79E6EHl8UirMFsfz71IlRYJKPqWwIRmqbto32AVV4DVojv2fb?=
+ =?us-ascii?Q?ilBJQS4xPhwM+6fA7GeeEVYWpuRJ6idEolEVvEDJqgQAeUWQM1KdGlR/CXv3?=
+ =?us-ascii?Q?pdPNTngxRDY2zho0yl4K3bXtM2eb0oWIJBjgl8JrdQZq1g6X4HF+WNqb2Khb?=
+ =?us-ascii?Q?7CXc8iUMXhat+lXJci1Yfziz23Kb9dmCYl0zp1KStXT/SQYLlRygL0ZdAY6g?=
+ =?us-ascii?Q?VFdbLHpxfDldc9xbW3FQS6hayIOSBqSSbSQsI0sbNOo6C/8eJPNy1PkhSDvr?=
+ =?us-ascii?Q?8Zw+vPEa2hkHYCjT4KLK37hoDx4W0LtjJBrtATnvK1KfEsIppogZvFpIhp7n?=
+ =?us-ascii?Q?LP02o0So0RGkFPpBwnj7nci96bbg8xSFTOR2tXBxrcf8zwWocKhpuatfJtkl?=
+ =?us-ascii?Q?hW7E2ycWu3F/iKASBJ5pW9v4Y+qPigGN6agb5g3UvlzHnQXK6eQTJ/31vBBw?=
+ =?us-ascii?Q?Rnzb6fLa/9Pre05fFHEpGhKURtZp5TByL3byNAMzaeYdHDqSpsUKW83z6SA/?=
+ =?us-ascii?Q?ZJHJUfFTyvfbYGVugLefTAE8CaF3w4xbulwBJe/IP9I49z75qxxfR1FRxJ8R?=
+ =?us-ascii?Q?8x4T2ip1aPU2AJ4MmrVtsGhnFx5sfK2iIacbgFiljrjwhdBnYEdpCK7IFBEa?=
+ =?us-ascii?Q?150TZu7Bc3fgAYj3vZbLlusVO0LUZcY9Cq9ZFaCSseDb+2M6m4XSh8mgj8DC?=
+ =?us-ascii?Q?Fv3SaEnc1z1Q3hZCZ/agbYnyBazf/X5rqL6P7/n03XNvDSVbDbfd68PWGO10?=
+ =?us-ascii?Q?VNk/QzUN1Ji8CEBkMVQcT4dUJKb9PX3BTbYI+m05S4MT+TSzYc7HBggcdjoe?=
+ =?us-ascii?Q?JQeuIktctXIWRs2EVcb9I37VEm0HuQAKLKXilMzA5JqQ6Yw1g8aNFzyjyN+w?=
+ =?us-ascii?Q?uoGlOw4qUvQfABPnZcSobKMyhocesfJpkKLKB74kNcbnx1J1AuKrt86R2/7Y?=
+ =?us-ascii?Q?EWRaooK6L5/f5hNxrszgAxwWF9RBnDgSTlXrHpGNbvuvz2JMo1HMKwTxKuUi?=
+ =?us-ascii?Q?cmh07fECTx/2phJ9ZMRbgk/SYcRimRc4hFEMOs5wB67+HCoxCa1qcCQlU+N0?=
+ =?us-ascii?Q?kob59n8OwFzbpJudmVxz85c76D2Fm2AodjeYeRQuepDpIXsdgLGKVv1GuBhT?=
+ =?us-ascii?Q?iPH0TKDQ+o1qWw17uEfz1658Tmp21GIWcAsiiXbhUA8nvbAaeeeOyEdx2dc6?=
+ =?us-ascii?Q?0+rxp6shg71l9oMSahY25mRQisPEqpWFvp+v7Za2OyZnxKV99Dk+PzZKYMux?=
+ =?us-ascii?Q?BmVl1QUQCSKjiM9TkHIwVJNVrUL0C680+3XbZqx9XhOU1hzIsHB31Ghk+OjZ?=
+ =?us-ascii?Q?qxxHaA/nPYIoXAMmKKRy6SmfjSTJuEJ24Y5TmUU0FREiG76lC4um7uk+j+1Z?=
+ =?us-ascii?Q?j6Yy+oVMIMvPBquC7iyJLtP0Axaa9E+wMYL8nX+ZLhrRCW6Zm7y0KJwYvnT9?=
+ =?us-ascii?Q?NAxcmrlm9RBe1DLqGm1pnCt0Nqpb9Q+SaUFkEExsHq4FCQgE7F13VQhls7hI?=
+ =?us-ascii?Q?/0fFvCMN4mPDOLkZr0OJ1SzzmwnMh+Ygyx+CwvqQ?=
+X-OriginatorOrg: oss.nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c229a58c-a5f5-47de-e6e0-08dd8d2fc87f
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8459.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 May 2025 06:24:12.6832
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: QZ7HKbzJabh4szsQOV4fA7UpZZHOZLebsI5kLMmEMv2tXKSXx1uxiNLBxR+WMq/BM4cLP/gnIMEPAU4S5Nh3zg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS1PR04MB9654
 
-Update text binding to YAML.
-Changes during conversion:
-Add appropriate include statements for interrupts and clock-names
-to resolve errors identified by `dt_binding_check` and `dtbs_check`.
+On Thu, Apr 10, 2025 at 10:47:29AM -0500, Rob Herring (Arm) wrote:
+>The "clock-latency" property is part of the deprecated opp-v1 binding
+>and is redundant if the opp-v2 table has equal or larger values in any
+>"clock-latency-ns". The OPP tables have values of 150000, so it can be
+>removed.
+>
+>Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+>---
+> arch/arm/boot/dts/nxp/imx/imx7s.dtsi      | 1 -
+> arch/arm64/boot/dts/freescale/imx8mm.dtsi | 4 ----
+> arch/arm64/boot/dts/freescale/imx8mn.dtsi | 4 ----
+> arch/arm64/boot/dts/freescale/imx8mp.dtsi | 4 ----
+> arch/arm64/boot/dts/freescale/imx8mq.dtsi | 4 ----
+> 5 files changed, 17 deletions(-)
+>
 
-Signed-off-by: Charan Pedumuru <charan.pedumuru@gmail.com>
----
- .../bindings/mmc/microchip,sdhci-pic32.txt         | 29 ----------
- .../bindings/mmc/microchip,sdhci-pic32.yaml        | 66 ++++++++++++++++++++++
- 2 files changed, 66 insertions(+), 29 deletions(-)
-
-diff --git a/Documentation/devicetree/bindings/mmc/microchip,sdhci-pic32.txt b/Documentation/devicetree/bindings/mmc/microchip,sdhci-pic32.txt
-deleted file mode 100644
-index f064528effed31f30d1d1c6e0b49c02e215d99af..0000000000000000000000000000000000000000
---- a/Documentation/devicetree/bindings/mmc/microchip,sdhci-pic32.txt
-+++ /dev/null
-@@ -1,29 +0,0 @@
--* Microchip PIC32 SDHCI Controller
--
--This file documents differences between the core properties in mmc.txt
--and the properties used by the sdhci-pic32 driver.
--
--Required properties:
--- compatible: Should be "microchip,pic32mzda-sdhci"
--- interrupts: Should contain interrupt
--- clock-names: Should be "base_clk", "sys_clk".
--               See: Documentation/devicetree/bindings/resource-names.txt
--- clocks: Phandle to the clock.
--          See: Documentation/devicetree/bindings/clock/clock-bindings.txt
--- pinctrl-names: A pinctrl state names "default" must be defined.
--- pinctrl-0: Phandle referencing pin configuration of the SDHCI controller.
--             See: Documentation/devicetree/bindings/pinctrl/pinctrl-bindings.txt
--
--Example:
--
--	sdhci@1f8ec000 {
--		compatible = "microchip,pic32mzda-sdhci";
--		reg = <0x1f8ec000 0x100>;
--		interrupts = <191 IRQ_TYPE_LEVEL_HIGH>;
--		clocks = <&rootclk REF4CLK>, <&rootclk PB5CLK>;
--		clock-names = "base_clk", "sys_clk";
--		bus-width = <4>;
--		cap-sd-highspeed;
--		pinctrl-names = "default";
--		pinctrl-0 = <&pinctrl_sdhc1>;
--	};
-diff --git a/Documentation/devicetree/bindings/mmc/microchip,sdhci-pic32.yaml b/Documentation/devicetree/bindings/mmc/microchip,sdhci-pic32.yaml
-new file mode 100644
-index 0000000000000000000000000000000000000000..ca0ca7df9ee991d8402bc4c62b1235ef5db2e85f
---- /dev/null
-+++ b/Documentation/devicetree/bindings/mmc/microchip,sdhci-pic32.yaml
-@@ -0,0 +1,66 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/mmc/microchip,sdhci-pic32.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Microchip PIC32 SDHI Controller
-+
-+description:
-+  The Microchip PIC32 family of microcontrollers (MCUs) includes models with
-+  Secure Digital Host Controller Interface (SDHCI) controllers, allowing them
-+  to interface with Secure Digital (SD) cards. This interface is used for reading,
-+  writing, and managing data on SD cards, enabling storage and data transfer
-+  capabilities in embedded systems.
-+
-+allOf:
-+  - $ref: mmc-controller.yaml
-+
-+maintainers:
-+  - Ulf Hansson <ulf.hansson@linaro.org>
-+
-+properties:
-+  compatible:
-+    const: microchip,pic32mzda-sdhci
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 2
-+
-+  clock-names:
-+    items:
-+      - const: base_clk
-+      - const: sys_clk
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - clocks
-+  - clock-names
-+  - pinctrl-names
-+  - pinctrl-0
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    #include <dt-bindings/clock/microchip,pic32-clock.h>
-+    mmc@1f8ec000 {
-+        compatible = "microchip,pic32mzda-sdhci";
-+        reg = <0x1f8ec000 0x100>;
-+        interrupts = <191 IRQ_TYPE_LEVEL_HIGH>;
-+        clocks = <&rootclk REF4CLK>, <&rootclk PB5CLK>;
-+        clock-names = "base_clk", "sys_clk";
-+        bus-width = <4>;
-+        cap-sd-highspeed;
-+        pinctrl-names = "default";
-+        pinctrl-0 = <&pinctrl_sdhc1>;
-+    };
-+...
-
--- 
-2.43.0
-
+Acked-by: Peng Fan <peng.fan@nxp.com>
 
