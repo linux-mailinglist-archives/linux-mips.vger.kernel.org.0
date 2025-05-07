@@ -1,108 +1,134 @@
-Return-Path: <linux-mips+bounces-8961-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8962-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 856AAAAE169
-	for <lists+linux-mips@lfdr.de>; Wed,  7 May 2025 15:53:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D6BDAAE6EC
+	for <lists+linux-mips@lfdr.de>; Wed,  7 May 2025 18:39:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 27F04165285
-	for <lists+linux-mips@lfdr.de>; Wed,  7 May 2025 13:52:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 01E0F1891A23
+	for <lists+linux-mips@lfdr.de>; Wed,  7 May 2025 16:39:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C22128D831;
-	Wed,  7 May 2025 13:45:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE53728C5A9;
+	Wed,  7 May 2025 16:38:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="YfrfliAf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AyIymc2W"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.cjdns.fr (mail.cjdns.fr [5.135.140.105])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3576928CF45;
-	Wed,  7 May 2025 13:45:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.135.140.105
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D3E028C2D1;
+	Wed,  7 May 2025 16:38:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746625534; cv=none; b=acPyryi91h4cWkebGpRAx9SfYVJ3u5yR2Z2CGpVtl+vAA3x8hX38hC3/aAvZ4Fj8yxp0MKA+dSOUxj2deM+TaVR/EXIKziLQGE2VRMG6TgIehdS8r4U49dDTW/PuVD9F/UCp1HJu2RKh13DAN1sWDUtRlzbLy4Ql9g2BSkXGMUE=
+	t=1746635922; cv=none; b=HyTjQ4zGbIDhPFVppHAVKtQam4T+fzUWsTSatTxwme6FDkaOD5FOALg3EwK+mZBLcxuOt45+V/xBdcd5DrzaTtIRLeJQKyPm9Cg4mLdWfDwEI7M17/uxC+htpOi0pP/JHjC11smS/VvM7VL6JdYAy279XqF8JSNhT0+vNfnDdRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746625534; c=relaxed/simple;
-	bh=UyLSGrPjMNhTJSLUqGX4FZHiCmrxwwb/RNLZ4loGzhA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=oO2ySaQ1kPtBRlC/y441o6mFrnIDtHAaEsWKpHuJi0i3SRInHd1CK3hnVwt5mQaXExB34ha9LwLw7ctuK6jZB+TsRWDGjAoGbV+bt7nVxdzBEeyzjd9YvsCdbkCtveCR4BmWFDgC2vO5tPuWCx8mMcF+M0+DsONAPWWUaIVKleI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=none smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=YfrfliAf; arc=none smtp.client-ip=5.135.140.105
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cjdns.fr
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9A800DCC5F;
-	Wed,  7 May 2025 15:45:29 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjdns.fr; s=dkim;
-	t=1746625531; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=lrjxiKt7lKLcOgSH2fhDYWG/J++M1ZtRLxV3n+zZByw=;
-	b=YfrfliAfVwmRInkw0wX0s6Jq9OXbEAZINo2ysDegfPFdv4uK0AqxMe8kfOOXOaLb01U8tc
-	ReDRmpGvanRTAOttouvbfsg7nzBGhGKHGOnpVNmXBzVlgyPHl/Na1UvwKcFmmNoX/JsPqD
-	i8s1+1RPjxmfCBGfgZBf0OF5vvYst0tr9BQelpz4CuumzyWAkCeBD64gaulNfuSyImHZn4
-	dycayg7KB2OIxaryaaygJwefQ/WZRRPUP/95KiCwWwxQrWfiNFlbSf2iEt+70Au7q4AYHp
-	luS+TyeK7tIQE8qGVQ7LKpGWgEe1EhEPG546aSysgjsIxF02Z+zdQ58XU5txpg==
-From: Caleb James DeLisle <cjd@cjdns.fr>
-To: linux-mips@vger.kernel.org
-Cc: tglx@linutronix.de,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	tsbogend@alpha.franken.de,
-	daniel.lezcano@linaro.org,
-	devicetree@vger.kernel.org,
+	s=arc-20240116; t=1746635922; c=relaxed/simple;
+	bh=TqTyxNTUeXIXIbgbWfv1PyWf194MsWra/G7EgnvKn1E=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=YHlb5qsdiDYzDK4gUvfY4QV0gf5/Dbq5x7i6GXQ5V0Qr9sZyDgPHz7d9cgw5/C83eTIR3wTAs2EpaVb+nLHZBz1NaEFzA/FBnp6SaiaQ2ZkGPhkSVwYZktI2dHJc+P5zelSIpYcxzZDvGngvCg0BtEfRk3aBz94jVJ9OsVN1U9s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AyIymc2W; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F04D7C4CEEE;
+	Wed,  7 May 2025 16:38:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1746635920;
+	bh=TqTyxNTUeXIXIbgbWfv1PyWf194MsWra/G7EgnvKn1E=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=AyIymc2WUwyOA8d+yIafhO3j7UN9ALcm+hJ4nXmJ5aU79oNpfstTIMGLCVRACV2ax
+	 JIEL4T+cYujaPi/vwiJjQPC4CBIueS0dZzALrwNExDGGSWSKFn6qgHn2T76DlSbjQ3
+	 YYukBbrippdZmajPTYXivGbBd+1EJCowJ68J2AOuR+NPZQOBFzORc8QXTv7jvjxdCo
+	 zXkrngaysM8SKMppt6W/7J3mjFcHm61ktJqnwuI1oVgXCG8CPlgpinUZr1TYzdsm/P
+	 +bCJSfEOkxWJvo5tKzdr27ATGxkeHQdH7e93YRxYX4YVB8zau06Vnv6oIxo+rJF1Nf
+	 dc/dJAXbgPo7A==
+From: Bjorn Andersson <andersson@kernel.org>
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Conor Dooley <conor@kernel.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Steen Hegelund <Steen.Hegelund@microchip.com>,
+	Daniel Machon <daniel.machon@microchip.com>,
+	UNGLinuxDriver@microchip.com,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Kevin Hilman <khilman@baylibre.com>,
+	Jerome Brunet <jbrunet@baylibre.com>,
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Andy Gross <agross@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Viresh Kumar <vireshk@kernel.org>,
+	Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	zhouyanjie@wanyeetech.com,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	Stephan Gerhold <stephan.gerhold@linaro.org>,
+	"Rob Herring (Arm)" <robh@kernel.org>
+Cc: devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev,
 	linux-kernel@vger.kernel.org,
-	benjamin.larsson@genexis.eu,
+	linux-arm-msm@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-rockchip@lists.infradead.org,
+	linux-amlogic@lists.infradead.org,
+	linux-renesas-soc@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	linux-pm@vger.kernel.org,
 	linux-mediatek@lists.infradead.org,
-	cjd@cjdns.fr,
-	=?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>
-Subject: [PATCH v5 7/7] MAINTAINERS: Add entry for newly added EcoNet platform.
-Date: Wed,  7 May 2025 13:45:00 +0000
-Message-Id: <20250507134500.390547-8-cjd@cjdns.fr>
-In-Reply-To: <20250507134500.390547-1-cjd@cjdns.fr>
-References: <20250507134500.390547-1-cjd@cjdns.fr>
+	Andre Przywara <andre.przywara@arm.com>,
+	=?UTF-8?q?Philippe=20Mathieu-Daud=C3=A9?= <philmd@linaro.org>,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>
+Subject: Re: (subset) [PATCH v2 00/17] Arm cpu schema clean-ups
+Date: Wed,  7 May 2025 09:38:33 -0700
+Message-ID: <174663591275.3531.6906045623469489227.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250410-dt-cpu-schema-v2-0-63d7dc9ddd0a@kernel.org>
+References: <20250410-dt-cpu-schema-v2-0-63d7dc9ddd0a@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
 
-Add a MAINTAINERS entry as part of integration of the EcoNet MIPS platform.
 
-Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
----
- MAINTAINERS | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
+On Thu, 10 Apr 2025 10:47:21 -0500, Rob Herring (Arm) wrote:
+> The Arm cpu.yaml schema fails to restrict allowed properties in 'cpu'
+> nodes. The result, not surprisely, is a number of additional properties
+> and errors in .dts files. This series resolves those issues.
+> 
+> There's still more properties in arm32 DTS files which I have not
+> documented. Mostly yet more supply names and "fsl,soc-operating-points".
+> What's a few more warnings on the 10000s of warnings...
+> 
+> [...]
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 96b827049501..5b2536150996 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -8352,6 +8352,18 @@ W:	https://linuxtv.org
- Q:	http://patchwork.linuxtv.org/project/linux-media/list/
- F:	drivers/media/dvb-frontends/ec100*
- 
-+ECONET MIPS PLATFORM
-+M:	Caleb James DeLisle <cjd@cjdns.fr>
-+L:	linux-mips@vger.kernel.org
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/interrupt-controller/econet,en751221-intc.yaml
-+F:	Documentation/devicetree/bindings/mips/econet.yaml
-+F:	Documentation/devicetree/bindings/timer/econet,en751221-timer.yaml
-+F:	arch/mips/boot/dts/econet/
-+F:	arch/mips/econet/
-+F:	drivers/clocksource/timer-econet-en751221.c
-+F:	drivers/irqchip/irq-econet-en751221.c
-+
- ECRYPT FILE SYSTEM
- M:	Tyler Hicks <code@tyhicks.com>
- L:	ecryptfs@vger.kernel.org
+Applied, thanks!
+
+[09/17] arm: dts: qcom: ipq4019: Drop redundant CPU "clock-latency"
+        commit: 3ea267124573f24e67f0fe47c4a865f0f283f8fc
+
+Best regards,
 -- 
-2.39.5
-
+Bjorn Andersson <andersson@kernel.org>
 
