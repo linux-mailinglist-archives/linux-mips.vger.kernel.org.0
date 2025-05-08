@@ -1,114 +1,150 @@
-Return-Path: <linux-mips+bounces-8963-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-8964-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C941AAEEA0
-	for <lists+linux-mips@lfdr.de>; Thu,  8 May 2025 00:18:57 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9FFEAAF1A8
+	for <lists+linux-mips@lfdr.de>; Thu,  8 May 2025 05:28:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E8BB9862A1
-	for <lists+linux-mips@lfdr.de>; Wed,  7 May 2025 22:18:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CFFE0188E5F4
+	for <lists+linux-mips@lfdr.de>; Thu,  8 May 2025 03:29:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70A8928C2CB;
-	Wed,  7 May 2025 22:18:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93AAE1F3BAC;
+	Thu,  8 May 2025 03:28:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HW9i1+ZW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ENHPijUw"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E55222F759;
-	Wed,  7 May 2025 22:18:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B4821DE4DC;
+	Thu,  8 May 2025 03:28:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1746656332; cv=none; b=iFWVPV1bIIPqmcF808KsqRK7TNLP3VieRdTOt9l+gWXpPWzU/yHOfpxF1xWWHjWgkElcYqwjzBWwjrpwOe9qqnKxE1tA5ZqdR/1JRrljCkWFLTS+KKWdVQwDIKjRUYhPXl93/Ukg/wN2/kVkVGp5UXui0ZuoGV/EQMA7jin9pJw=
+	t=1746674930; cv=none; b=Wj4sxeCDyhzAtAk/WnMKNyei2woSpp9iJWmRtGzhhEZvMB0P0a760m/GtACicWcnryCTqCD6GSzN18YsRDz6LdL69ALjulqtVtUwWsLGWqJvkqajImnGYshduU49z/1bFvoYnXqYYqsoReJokuMJmx9sfia+KtYyEhkQlJQN2+4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1746656332; c=relaxed/simple;
-	bh=EEgrVpV+dxmZpKE2aC2GH0LMPotoCq/ED7mZZZVPrOw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=PGXKbEFi5KGePAD9siyYhme7jeJpdkN4/LIgSvGMwZqX3fZ2txDokFYBbqQbMCaKyk75vyMI0TUiff1G/A/rMv/ht0ywKd7rEUi4jMlcahdr9GmBRt7Cn0v4wtO3F7tmo2dqENcXLgECOTf5Z9AwOjHuMydGSswfqRMBgUjRnLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HW9i1+ZW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7031BC4CEE2;
-	Wed,  7 May 2025 22:18:51 +0000 (UTC)
+	s=arc-20240116; t=1746674930; c=relaxed/simple;
+	bh=vdAmVAbufuOs39noAWyicE6RZakZi51NyGvoS2Gr3As=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=FH4+TCX9tTP8S8bYW9hDNTZRx1nJyz8+iGa6xW2iVWYSxxbJoYeg+O1RcO3DfrzeCQR43LRPFiXT5VRmpVvGvNyh88WU3WAm3fj3IOdT2xsYADdUCMShWpiRWkS1ptlVBQwHV1R1zdd0QYaevPUCRfNm5jdgtgBoRVxvNqIEi2A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ENHPijUw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id D5C7DC4CEE8;
+	Thu,  8 May 2025 03:28:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1746656331;
-	bh=EEgrVpV+dxmZpKE2aC2GH0LMPotoCq/ED7mZZZVPrOw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HW9i1+ZWzoLd/e9bujf1qVWc4oLPzoIis/DMPHIjPG4Lg+v2TPdqTr9QUjrfy3xA6
-	 LilZNWBQntwYzZV1RPplD4NAwhlcoCFs+Z+bFj5U2bi1PwPgblDNphdOhRJdm5EtCy
-	 Cw60wLu8RYdoLYzMoGZIdU47QksD3fVhi9bqZ5jHQixh3LYtQq3gLI1W1cHdys5QKK
-	 9/F0GzkplXSU36PJNe3pXjxhJpGny5aOaj3aWnq27QG91pMqJZyUjkOlEmYjHZkCGT
-	 LSn3niecaNRjbjhwe/MAUWzR4BKj4fKUqm3qDUbCOTt/mpAWdNOuY4BZKZNd1gjo6T
-	 nGhlayET1r+dg==
-Date: Wed, 7 May 2025 15:18:46 -0700
-From: Eric Biggers <ebiggers@kernel.org>
-To: kernel test robot <lkp@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, Herbert Xu <herbert@gondor.apana.org.au>,
-	linux-crypto@vger.kernel.org, linux-mips@vger.kernel.org,
-	=?iso-8859-1?Q?Ren=E9?= van Dorst <opensource@vdorst.com>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>
-Subject: Re: [linux-next:master 6141/9308]
- arch/mips/lib/crypto/chacha-core.S:264:118: error: unknown instruction, did
- you mean: rol, rotr?
-Message-ID: <20250507221846.GA526360@sol>
-References: <202505080409.EujEBwA0-lkp@intel.com>
+	s=k20201202; t=1746674929;
+	bh=vdAmVAbufuOs39noAWyicE6RZakZi51NyGvoS2Gr3As=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=ENHPijUw2e8bBenUyJA/B5Fl0O8M1Vco9GZYiy/fbeuooQminhUsQ/vxPgEywxxqB
+	 6A4Si22NuGnUzknZV4/hWZpGYemjL7zw12MTTpxKPesWQsJ+A+q801D6EjeS5fGKUC
+	 8fpPERcaVhfIqtACyVlLsrCvc7FrfOACLq42NPaJymerWDd931B6X0Z6mWtRED77hR
+	 PjIBqhgElF8ua0JWFcR9Uz5uYP0GWt0NyeVwkw8zAJxsxJ359ZV039h97CS7rzoy0N
+	 VdBCeQlPqfW+MZWcm0TTxNt7QYJjIzgA57WJVo5DSehccTgMyYY70yYUcDHT5HXUyJ
+	 dFCxZWtMzxuag==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C417CC3ABBE;
+	Thu,  8 May 2025 03:28:49 +0000 (UTC)
+From: Keguang Zhang via B4 Relay <devnull+keguang.zhang.gmail.com@kernel.org>
+Date: Thu, 08 May 2025 11:28:42 +0800
+Subject: [PATCH] mtd: rawnand: loongson1: Fix inconsistent refcounting in
+ ls1x_nand_chip_init()
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202505080409.EujEBwA0-lkp@intel.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250508-loongson1-nand-fix-v1-1-27b26234c62c@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAOkkHGgC/x2MQQqAMAzAvjJ6tjAHOvQr4mHaqgXpZAMRZH93e
+ EwgeSFzEs4wmhcS35IlaoW2MbAeQXdGocrgrOtsZz2eMeqeo7aoQQk3edD5YfErUb8Fghpeiav
+ +p9NcygcEQdaqZAAAAA==
+To: Miquel Raynal <miquel.raynal@bootlin.com>, 
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>
+Cc: linux-mips@vger.kernel.org, linux-mtd@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, 
+ Laurent Pinchart <laurent.pinchart@ideasonboard.com>, 
+ Dan Carpenter <dan.carpenter@linaro.org>, 
+ Keguang Zhang <keguang.zhang@gmail.com>
+X-Mailer: b4 0.14.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1746674928; l=2384;
+ i=keguang.zhang@gmail.com; s=20231129; h=from:subject:message-id;
+ bh=Enffpow1/oAmcpIlxb54XqOtVEib/iLdUuIMLpplTqs=;
+ b=fYD8HRpmUt1FmYMRV3iW1cBEn4niKD1j8KhX3W660f8g/vV9SUM9UJ2xm+x1vbLINlw0u8KKW
+ vHC+7SwNRNmAPW6deUZAEbq+C+iM1dGovTg/E7gfvQniSTIjeTEuiSr
+X-Developer-Key: i=keguang.zhang@gmail.com; a=ed25519;
+ pk=FMKGj/JgKll/MgClpNZ3frIIogsh5e5r8CeW2mr+WLs=
+X-Endpoint-Received: by B4 Relay for keguang.zhang@gmail.com/20231129 with
+ auth_id=102
+X-Original-From: Keguang Zhang <keguang.zhang@gmail.com>
+Reply-To: keguang.zhang@gmail.com
 
-[+Cc linux-crypto, linux-mips, and the authors of the mips chacha-core.S]
+From: Keguang Zhang <keguang.zhang@gmail.com>
 
-On Thu, May 08, 2025 at 04:36:30AM +0800, kernel test robot wrote:
-> Hi Eric,
-> 
-> First bad commit (maybe != root cause):
-> 
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git master
-> head:   08710e696081d58163c8078e0e096be6d35c5fad
-> commit: 939a54ac073808db15ed411d563dfadb3ef12798 [6141/9308] crypto: mips - move library functions to arch/mips/lib/crypto/
-> config: mips-randconfig-r111-20250501 (https://download.01.org/0day-ci/archive/20250508/202505080409.EujEBwA0-lkp@intel.com/config)
-> compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project f819f46284f2a79790038e1f6649172789734ae8)
-> reproduce: (https://download.01.org/0day-ci/archive/20250508/202505080409.EujEBwA0-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202505080409.EujEBwA0-lkp@intel.com/
-> 
-> All errors (new ones prefixed by >>):
-> 
-> >> arch/mips/lib/crypto/chacha-core.S:264:118: error: unknown instruction, did you mean: rol, rotr?
->     addu $t0, $t4; addu $t1, $t5; addu $t2, $t6; addu $t3, $t7; xor $s5, $t0; xor $s4, $t1; xor $s3, $t2; xor $s2, $t3; rotl $s5, 16; rotl $s4, 16; rotl $s3, 16; rotl $s2, 16;;
+As reported by Dan,
+commit d2d10ede04b1 ("mtd: rawnand: Add Loongson-1 NAND Controller
+Driver"), leads to the following Smatch static checker warning:
 
-This build error actually occurs before my commit too, and even on current
-mainline.  I don't know why it's just getting reported now.  It occurs only with
-clang, which is why I didn't notice it before (I did the mips build with gcc).
-Anyway, I don't really speak MIPS, but it looks like what's going on is the CPU
-only has a right rotate instruction, and binutils translates left rotates into
-right rotates, but clang doesn't.
+drivers/mtd/nand/raw/loongson1-nand-controller.c:730 ls1x_nand_chip_init()
+warn: inconsistent refcounting 'chip_np->kobj.kref.refcount.refs.counter':
 
-'mips-linux-gnu-gcc -c -march=mips32r2' successfully compiles the following:
+Fix this issue by calling of_node_put() immediately after using chip_np.
+In addition, remove all unnecessary of_node_put(chip_np) calls.
 
-    rotl $a0, 5
+Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+Closes: https://lore.kernel.org/all/aBR535RZZT-sa6QZ@stanley.mountain/
+Fixes: d2d10ede04b1 ("mtd: rawnand: Add Loongson-1 NAND Controller Driver")
+Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+---
+ drivers/mtd/nand/raw/loongson1-nand-controller.c | 14 ++++++--------
+ 1 file changed, 6 insertions(+), 8 deletions(-)
 
-... and with 'mips-linux-gnu-objdump' it comes back as:
+diff --git a/drivers/mtd/nand/raw/loongson1-nand-controller.c b/drivers/mtd/nand/raw/loongson1-nand-controller.c
+index 6a369b1c7d86..5f1bde21c8fc 100644
+--- a/drivers/mtd/nand/raw/loongson1-nand-controller.c
++++ b/drivers/mtd/nand/raw/loongson1-nand-controller.c
+@@ -703,27 +703,25 @@ static int ls1x_nand_chip_init(struct ls1x_nand_host *host)
+ 	if (!chip_np)
+ 		return dev_err_probe(dev, -ENODEV, "failed to get child node for NAND chip\n");
+ 
+-	chip->controller = &host->controller;
+-	chip->options = NAND_NO_SUBPAGE_WRITE | NAND_USES_DMA | NAND_BROKEN_XD;
+-	chip->buf_align = 16;
+-	nand_set_controller_data(chip, host);
+ 	nand_set_flash_node(chip, chip_np);
++	of_node_put(chip_np);
+ 	if (!mtd->name)
+ 		return dev_err_probe(dev, -EINVAL, "Missing MTD label\n");
+ 
++	nand_set_controller_data(chip, host);
++	chip->controller = &host->controller;
++	chip->options = NAND_NO_SUBPAGE_WRITE | NAND_USES_DMA | NAND_BROKEN_XD;
++	chip->buf_align = 16;
+ 	mtd->dev.parent = dev;
+ 	mtd->owner = THIS_MODULE;
+ 
+ 	ret = nand_scan(chip, 1);
+-	if (ret) {
+-		of_node_put(chip_np);
++	if (ret)
+ 		return dev_err_probe(dev, ret, "failed to scan NAND chip\n");
+-	}
+ 
+ 	ret = mtd_device_register(mtd, NULL, 0);
+ 	if (ret) {
+ 		nand_cleanup(chip);
+-		of_node_put(chip_np);
+ 		return dev_err_probe(dev, ret, "failed to register MTD device\n");
+ 	}
+ 
 
-    ror	a0,a0,0x1b
+---
+base-commit: 08710e696081d58163c8078e0e096be6d35c5fad
+change-id: 20250507-loongson1-nand-fix-279b7cdd6fad
 
-But 'clang -c -target mips-linux-gnu -march=mips32r2' errors out:
+Best regards,
+-- 
+Keguang Zhang <keguang.zhang@gmail.com>
 
-    test.S:1:1: error: unknown instruction, did you mean: rol, rotr?
-    rotl $a0, 5
 
-I don't know if 'rotl' is "supposed" to work or not.  But either way, we could
-make the assembly code use right rotates only.
-
-- Eric
 
