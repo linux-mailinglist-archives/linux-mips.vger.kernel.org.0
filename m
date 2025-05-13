@@ -1,306 +1,182 @@
-Return-Path: <linux-mips+bounces-8999-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9000-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5FC0AB52EF
-	for <lists+linux-mips@lfdr.de>; Tue, 13 May 2025 12:41:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9EE3AB553F
+	for <lists+linux-mips@lfdr.de>; Tue, 13 May 2025 14:53:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 99EAD1780EE
-	for <lists+linux-mips@lfdr.de>; Tue, 13 May 2025 10:41:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 578B71B464DB
+	for <lists+linux-mips@lfdr.de>; Tue, 13 May 2025 12:53:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C5D41F3B83;
-	Tue, 13 May 2025 10:41:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 023C928DEF0;
+	Tue, 13 May 2025 12:53:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fuMWAO+T"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QuXrkrSi"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-vk1-f179.google.com (mail-vk1-f179.google.com [209.85.221.179])
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 655B323BCFD
-	for <linux-mips@vger.kernel.org>; Tue, 13 May 2025 10:41:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09B56286439;
+	Tue, 13 May 2025 12:53:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747132872; cv=none; b=l9mhad8mHQbdiAXn8fHldHEiy5BL7cCaCYfLsrk2wgCI38VDOfUqmMv7WiudC6IfL21ZiVl5HV+hxiJzy7grE1OXKkf+8/rBw8zfRYRjjlHEtnhWrxtkWo1BivNbLSBASoHpTY9ZRbcNmbcqDB6oLQgBqG1/UvD80nM81DTHqHA=
+	t=1747140812; cv=none; b=JA/bh2tnZzifgi4QuE05ypqtmmkoeEs0nIp1CtXE47INtiM/1BSQjqaighg9PEDAjuJXXXhbp/8NGqZfw8e9xQJ1OuLiqx4euPCR93OJmtbIsN0M5DfSY5JqOMr1fyFrprGIWWPC9x/dysugTsTNrYd5LiTkr+EyhYC2NfTa/94=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747132872; c=relaxed/simple;
-	bh=CTQckT2HZmRFkfxw8ncpe6Y+0P+Hov7ABUwiXyl5W1U=;
+	s=arc-20240116; t=1747140812; c=relaxed/simple;
+	bh=i14x7HK+wQByi+0aKyFzNcOhWac1lJuJhW5b260ntpI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=A8yXFhEJOHsdRkamoy+/peI/HD9hsb0/dWf2q739ikkZzSIBfLxthXVlUMB79tg5a4whxK6rzDpt9f/ZVTllELmYnLM26y5HHZ23SUCHFU8zQEk6E7aduE8cm2mj/6gtG0YBguqTKBN64tCOqHZSGKl3JRfUXaAG5zaC0ssKRKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fuMWAO+T; arc=none smtp.client-ip=209.85.221.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-vk1-f179.google.com with SMTP id 71dfb90a1353d-5259331b31eso1989467e0c.0
-        for <linux-mips@vger.kernel.org>; Tue, 13 May 2025 03:41:10 -0700 (PDT)
+	 To:Cc:Content-Type; b=mumr5vF6jDD3Fy3Rp/6CfoRgl8B1iSwKyXB3b4kQ4TGyamHE7o9ukTPd6qj9zchptF83NIx2hW4cJkRbXwSp5MyPLshngHBysqThad7VV49/jdhnRpDrLvuKuTFzBPKAI4W7pfxFLdocyu9EtPuRb8JAgeFsMPEARRuXbLDT73Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QuXrkrSi; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-ad4ce8cc3c1so183121966b.2;
+        Tue, 13 May 2025 05:53:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1747132869; x=1747737669; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mfQ9neFs/KkQwu/rsyvkIG7pZfzGZt+yMbnSNAfCILM=;
-        b=fuMWAO+Tcq6qe97KHlHX+O0BF63DsmVEvyjLszHXew3cNH0JA54Hl8HVOmxyhbCqvi
-         GMxsGwbm8apNWCvxTC8ezMz5vX4Ds+cYr39Nn898miYKMGXPnC9sSmEH8YXrUuJ2Mdnf
-         EsffiCz3wMtpqmaJq3ytWJiHfUNQsgy7i+KBr0u1+L6gtjISs2gI9jQa9612z1inPHGe
-         VHU5CZnhYUZxa8w/7uWiZmpcxmyKXmpeASicUIaQlKQLjF2kIY3W1WlVXMwVRqyQsgj9
-         IlLUXiEGK/yO1gO1imNiYPTs33otn6qRtuQ+6dazdezSldsFArJwpzYl3Uqh/q6EFGEU
-         KmIg==
+        d=gmail.com; s=20230601; t=1747140809; x=1747745609; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lhUsGW6Aej7UtwPk8Fo3WswAje2EzwjwJ+3T+imRPIA=;
+        b=QuXrkrSiJBAik3QaKSWS+HCnTCmriB79zSscrWJTudsfLcCdBYURl4R+C+rz0p88Al
+         y1SnyopHLPBjZk1IZI7/9BLTpiykvL+HgLYdzr9hW/O2soRNiM2KXYEIfWHGpShVSoj0
+         hw3YQ/aVmyF2kh4neaYC7LbQpW39YzqrKe9Ln0rVlJB9CFYktdTKyIhc9mpw3Cx5Y5JF
+         zGN25CitcI+6r1dMoYHxd6kbeIaV3OaHJpq5dw94jhIkTgMBFWc+hTcU4e/mzNNSF6Yp
+         r0EbycRgLUdjAJ3gwHmT1mxvsAVqBAWtIBd25OXgxuXr3uuhemqkzQxKkHAye9efZZAw
+         yrRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747132869; x=1747737669;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mfQ9neFs/KkQwu/rsyvkIG7pZfzGZt+yMbnSNAfCILM=;
-        b=i9UoH1iUF4xudEEdy8ZtNHUIRQoWynoYzw2UYNxGAMdfhaQMY0xFJcZ4kCSxIo28JL
-         ojdr9VTX4u6LFgP9lysULS7MAYCAJd86RlBSmO8cxk5E/ekV/BMiwk/aFw29Z0Yw52Gt
-         9bsgDl+Ch4LuucHy/pIU5CL91VifeFxlgphqTTO2pUoXQVmLiGiGTxRWi0KN+yW7i/dc
-         CATwnSMw5uAUfX55s8y5So2OZM4Xb0OjPNWW30IT5GVlacyHSIn5rzxlVPF7F39VjiVA
-         aI9a6G5S5pEI6SnHE1eqVKT0sTBzuWVWa+1Xvw+KwHfeqYuZE0V96zbzBUSBNPBs2DrY
-         VmAA==
-X-Forwarded-Encrypted: i=1; AJvYcCW+djIv+/pRA9jPdvnHziHDX6pkyyvctPDGcXUaHSaJAygK7OwKa4xdbUAXRAVXcGzBCM+o9tQITn4C@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZ5S2y4QCFcsWmp/VN0GJl2MgrGQU0JzDjB8y3/RBtn5sNSxsy
-	gZxFFt6RPQ/ZqyA4xShvQoLg5u/oEZXzbQeB/KR6CR5Dc9oUUeCeWAkXsAKnjSq+Wys5WI/pMqa
-	Vj3RT33wJ5RkG+bywUnK4GVsZ0sScGFKBgLpAcJYDZYOFsvwEifo=
-X-Gm-Gg: ASbGncvc1kM186YNANF7jwYfkw3QWwE9Mdxqxx2Zxax4LO6/jytuotJZOFN8zBE6u5d
-	qTHCPZ9OUV43gVZlI4WpjkXh7IzpmeYKPz0kE7EEWClNuve9m8eTkfuGRWDaGvab4gLfty94//D
-	/CMto4EPo7vAooWY8k+v+6Tr2iVl5kMOYYJRUuhDfhGg==
-X-Google-Smtp-Source: AGHT+IEaQC1x5Zb/J9SdhWkKAIbBENy/MyS503LgRLTtCaHBPpm2j0RzkOlAC+ryGomdrOxBtkoL+cOeZMHd5BxZ2s8=
-X-Received: by 2002:a05:6122:3d0d:b0:52b:789:cf93 with SMTP id
- 71dfb90a1353d-52c53c769a4mr9774991e0c.5.1747132869155; Tue, 13 May 2025
- 03:41:09 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1747140809; x=1747745609;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lhUsGW6Aej7UtwPk8Fo3WswAje2EzwjwJ+3T+imRPIA=;
+        b=fk9n/0i5SHHGShj1aABH9XbUXj8VLnJ6hWskizdQ/Hv6+pvfLvJTiAtR1GIDAQ0SU6
+         8o4Mu5c6+8JMuvppWZ/HILHeh8Fi7sjXgQ7mtLefyMWCVypLu8pvfU53wqhqPjwDbOma
+         hleWf5TAmZRrQqBLkiyCQ55vNn2PbFRSsoGrJ54TSB6rZ8BTBKbSKK4+5Nb5J+bEWab8
+         M7OHcv9BLEuqfTusGLttzncsFS5ssQwKgGFwhENRWMw45jDIuM1DhjNEJwaJHTYvdE5+
+         y1RybgBw8vEx1JG+aWmuFvE1xLQquR8OP0EYaJv9cO/gUgjcGDbhuLQzfb+KaXSJH91H
+         5bNQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU7e6L9mnrLNooJ9RkHA6ife5t/gy9K25ybm6oqmgzLNPkxadcewB0Q84T3DvnsigKiwCvvyS4yIKQoxEU=@vger.kernel.org, AJvYcCU9mDM6H9T3sz3E554QZWqDrD5rf+qFMM7kw/ORDLPE+1evJYV9Pch539b5BhjgWzhA8Jy6rwz+R6CI@vger.kernel.org, AJvYcCUEDNWuYp/pxKalJXWWlVtzByDM8VpnkS4nFb5mjjSfTeVLfQIX6qLtO5R9zN/s7S37La6/MorrS3q9@vger.kernel.org, AJvYcCUUZcobAqzsK5VY+uEFVQQ7lUNMBHopNXhlDJUGmb2AivwVbTSxD1OeL1xLNunH7ymPjEuu0gYJ2ZCGOg==@vger.kernel.org, AJvYcCUq7yF5v72wOEhtTjmn+EUeTFbucWySHFISH6NMd5TehZIX5U/By+MmziKdpkfvNK8vanOQBR29mw==@vger.kernel.org, AJvYcCV08vqx9uqctDhNUHBlHsayXIP4bb5yrb4i472bEYgGkxrAbDcT7zCNXAP1kRKLnTvDUg2XhoVGvyVdcxiS@vger.kernel.org, AJvYcCVvUrHY5foOtwZ1BUZACwOSKJ/P5st1t1eXjV+nx2AMCQ/CT3gKhezSIA8fIoLY87ZL7SVOo+zzgzfrqpuGPw==@vger.kernel.org, AJvYcCWEgChK2604Cs0evHzTc6/05n6f/a+19uhiKBP7owG6oHz97yX4vgPeE1S/w13z27OUAPL+Nt/7wQ==@vger.kernel.org, AJvYcCWHFfMeaC5nxbtGT3oBViXoNCHuYxNxkHqUt6pxx2+xd7yfpxE1DzkRQo75SiEmpk1ID6I10Bt1ESbleg==@vger.kernel.org, AJvYcCWRekuiSXiiT/D559N5rQC8
+ RIZ4ZgBFwsKO4WnCc0DSCBNpvVqrfN4NXBhQtr+sqRTESPb8NqquRB1pTw==@vger.kernel.org, AJvYcCX9zzBVchTPcWHRSkQgdLCbGa+qVaiP0Mz7gHPPRHIHoDz0fJ6ndyhSSBeI2EWwZRshzGlDTDsXF6ZNTd2vqIkdoKj/voAJ@vger.kernel.org, AJvYcCXL7+hGHVOMpQe9QxfWCmGTiLQF0ZvcyJc9HOrdCBWz3QltWhqE9S/uAzXi9u6lljMNL+yll1VOtWdiWzX+@vger.kernel.org, AJvYcCXMru4J2JwBr6AKU3hllsAf4fbuzRBxQN6HErSvZ7COW/hsvRTLry+q1FYYbFfLXHf3LotstNJ9ttlMA+EJCw==@vger.kernel.org, AJvYcCXMvsnBVLqpvPL68tOrZ8aD2pfaVy11gtH4/pkm6bZ5RLMhO+bL0nauXc1DBHaLDC1D/15JN8GlCUn6eg==@vger.kernel.org, AJvYcCXjfzn+oRwGRlQV1zQ1I4Hg/3+qNIjbrLmHuLga+e7y/rzGDP/4avrZJPfrqotEuOTUASZKQZO1rm4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyBy+xrGuTOo/BHoy2MF1yeFX5Fb7UUdoWy5+Go7SmeXOVhBDFr
+	+0jN+kq9uAGcJy+E6qzHrCzySZ+i3idSxVlzKpH5Lo0DddIHgHKs/t9dRLnYVfTEYI0OzHIFgLx
+	QE1o3gxc9o/qjMMxOZ6lJ5W3W8GI=
+X-Gm-Gg: ASbGncvgC5MxgfdU96tnDtzsnHzv0XYRKofolm7sto42gMHQcx5U/N/qLDD+WLUeLu6
+	JgaUFVTokmO1GuItT5jjFNEHv9BP4uCa+UbnlRqn+ZsBrPYWLpm3Cqre2dToPqB/FkWXhMHqEe3
+	P2TE4pHJXXqHODET9kcDOnwwvoPzJYuoQ3
+X-Google-Smtp-Source: AGHT+IE/b0BCD4zsWzgMefEsXbY+DbhCAD/XOG3dRDcg9jP4PpucFQp1j7NsiRF8Za5+3lLoqjezqR5fGVfm35+9pG4=
+X-Received: by 2002:a17:907:7617:b0:ad2:23fb:5a03 with SMTP id
+ a640c23a62f3a-ad223fb7c87mr1075619066b.7.1747140808774; Tue, 13 May 2025
+ 05:53:28 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250512172044.326436266@linuxfoundation.org>
-In-Reply-To: <20250512172044.326436266@linuxfoundation.org>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Tue, 13 May 2025 11:40:57 +0100
-X-Gm-Features: AX0GCFvABlwvpsFejGmvR-D-CDsu0dVnQstgEoue8lMI6NadE8n39FU2E5xrTaQ
-Message-ID: <CA+G9fYuO5m0EgOAbytJv2Ytp9uj-0jHVUGddaXHLckHk+ZLEHA@mail.gmail.com>
-Subject: Re: [PATCH 6.14 000/197] 6.14.7-rc1 review
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: stable@vger.kernel.org, patches@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org, 
-	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org, 
-	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de, 
-	jonathanh@nvidia.com, f.fainelli@gmail.com, sudipm.mukherjee@gmail.com, 
-	srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org, hargar@microsoft.com, 
-	broonie@kernel.org, clang-built-linux <llvm@lists.linux.dev>, 
-	Anders Roxell <anders.roxell@linaro.org>, Dan Carpenter <dan.carpenter@linaro.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
-	Marco Crivellari <marco.crivellari@suse.com>, Thorsten Blum <thorsten.blum@linux.dev>, 
-	linux-mips@vger.kernel.org
+References: <20250513-xattrat-syscall-v5-0-22bb9c6c767f@kernel.org> <399fdabb-74d3-4dd6-9eee-7884a986dab1@app.fastmail.com>
+In-Reply-To: <399fdabb-74d3-4dd6-9eee-7884a986dab1@app.fastmail.com>
+From: Amir Goldstein <amir73il@gmail.com>
+Date: Tue, 13 May 2025 14:53:17 +0200
+X-Gm-Features: AX0GCFu24ZFGPch6zxlVZkmp4exgi2YQWGGbqSjGo76MZv2IKCv94Wv0HRsT2OA
+Message-ID: <CAOQ4uxgOAxg7N1OUJfb1KMp7oWOfN=KV9Lzz6ZrX0=XRGOQrEQ@mail.gmail.com>
+Subject: Re: [PATCH v5 0/7] fs: introduce file_getattr and file_setattr syscalls
+To: Arnd Bergmann <arnd@arndb.de>, Christian Brauner <brauner@kernel.org>
+Cc: Andrey Albershteyn <aalbersh@redhat.com>, Richard Henderson <richard.henderson@linaro.org>, 
+	Matt Turner <mattst88@gmail.com>, Russell King <linux@armlinux.org.uk>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, Michal Simek <monstr@monstr.eu>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Naveen N Rao <naveen@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, Yoshinori Sato <ysato@users.sourceforge.jp>, 
+	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
+	"David S . Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
+	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
+	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
+	=?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, Tyler Hicks <code@tyhicks.com>, 
+	Miklos Szeredi <miklos@szeredi.hu>, linux-alpha@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, 
+	Linux-Arch <linux-arch@vger.kernel.org>, selinux@vger.kernel.org, 
+	ecryptfs@vger.kernel.org, linux-unionfs@vger.kernel.org, 
+	linux-xfs@vger.kernel.org, Andrey Albershteyn <aalbersh@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 12 May 2025 at 18:43, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
+On Tue, May 13, 2025 at 11:53=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrot=
+e:
 >
-> This is the start of the stable review cycle for the 6.14.7 release.
-> There are 197 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+> On Tue, May 13, 2025, at 11:17, Andrey Albershteyn wrote:
 >
-> Responses should be made by Wed, 14 May 2025 17:19:58 +0000.
-> Anything received after that time might be too late.
+> >
+> >       long syscall(SYS_file_getattr, int dirfd, const char *pathname,
+> >               struct fsxattr *fsx, size_t size, unsigned int at_flags);
+> >       long syscall(SYS_file_setattr, int dirfd, const char *pathname,
+> >               struct fsxattr *fsx, size_t size, unsigned int at_flags);
 >
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.14.7-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.14.y
-> and the diffstat can be found below.
+> I don't think we can have both the "struct fsxattr" from the uapi
+> headers, and a variable size as an additional argument. I would
+> still prefer not having the extensible structure at all and just
+> use fsxattr, but if you want to make it extensible in this way,
+> it should use a different structure (name). Otherwise adding
+> fields after fsx_pad[] would break the ioctl interface.
 >
-> thanks,
+
+Are you are suggesting that we need to define this variant?:
+
+--- a/include/uapi/linux/fs.h
++++ b/include/uapi/linux/fs.h
+@@ -148,6 +148,17 @@ struct fsxattr {
+        unsigned char   fsx_pad[8];
+ };
+
++/*
++ * Variable size structure for file_[sg]et_attr().
++ */
++struct fsx_fileattr {
++       __u32           fsx_xflags;     /* xflags field value (get/set) */
++       __u32           fsx_extsize;    /* extsize field value (get/set)*/
++       __u32           fsx_nextents;   /* nextents field value (get)   */
++       __u32           fsx_projid;     /* project identifier (get/set) */
++       __u32           fsx_cowextsize; /* CoW extsize field value (get/set=
+)*/
++};
++
+
+> I also find the bit confusing where the argument contains both
+> "ignored but assumed zero" flags, and "required to be zero"
+> flags depending on whether it's in the fsx_pad[] field or
+> after it. This would be fine if it was better documented.
 >
-> greg k-h
 
-Regressions on mips defconfig tinyconfig and allnoconfig builds failed with
-clang-20 toolchain on stable-rc  6.14.7-rc1, 6.12.29-rc1 and 6.6.91-rc1.
-But, builds pass with gcc-13.
+I think that is an oversight.
+The syscall should have required that fsx_pad is zero,
+same as patch 6/7 requires that unknown xflags are zero.
 
-* mips, build
-  - clang-20-allnoconfig
-  - clang-20-defconfig
-  - clang-20-tinyconfig
-  - korg-clang-20-lkftconfig-hardening
-  - korg-clang-20-lkftconfig-lto-full
-  - korg-clang-20-lkftconfig-lto-thing
+If we change to:
+       error =3D copy_struct_from_user(&fsx, sizeof(struct
+fsx_fileattr), ufsx, usize);
 
-Regression Analysis:
- - New regression? Yes
- - Reproducibility? Yes
+It will take care of requiring zero fsx_pad even if user calls the syscall =
+with
+sizeof(struct fsxattr).
 
-Build regression: mips defconfig clang-20 instantiation error expected
-an immediate
-
-Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-
-## Build error mips
-<instantiation>:7:11: error: expected an immediate
- ori $26, r4k_wait_idle_size - 2
-          ^
-<instantiation>:10:13: error: expected an immediate
- addiu $26, r4k_wait_exit - r4k_wait_insn + 2
-            ^
-<instantiation>:10:29: error: expected an immediate
- addiu $26, r4k_wait_exit - r4k_wait_insn + 2
-                            ^
-<instantiation>:7:11: error: expected an immediate
- ori $26, r4k_wait_idle_size - 2
-          ^
-<instantiation>:10:13: error: expected an immediate
- addiu $26, r4k_wait_exit - r4k_wait_insn + 2
-            ^
-<instantiation>:10:29: error: expected an immediate
- addiu $26, r4k_wait_exit - r4k_wait_insn + 2
-                            ^
-arch/mips/kernel/genex.S:531:2: warning: macro defined with named
-parameters which are not used in macro body, possible positional
-parameter found in body which will have no effect
- .macro __BUILD_verbose nexception
- ^
-
-## Build mips
-* Build log: https://qa-reports.linaro.org/api/testruns/28409657/log_file/
-* Build history:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.14.y/build/v6.14.6-198-g4f7f8fb4f8e3/testrun/28409667/suite/build/test/clang-20-defconfig/history/
-* Build details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.14.y/build/v6.14.6-198-g4f7f8fb4f8e3/testrun/28409657/suite/build/test/clang-20-defconfig/details/
-* Build link: https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/builds/2x0SR9ZL9r6xvF3HT3UgkQA9ebC
-* Kernel config:
-https://storage.tuxsuite.com/public/linaro/lkft/builds/2x0SR9ZL9r6xvF3HT3UgkQA9ebC/config
-* Toolchain: clang-20
-
-## Steps to reproduce
- -  tuxmake --runtime podman --target-arch mips --toolchain clang-20
---kconfig defconfig LLVM=1 LLVM_IAS=1
-
-## Build
-* kernel: 6.14.7-rc1
-* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-* git commit: 4f7f8fb4f8e35798b197be0b6b13229aa1864da1
-* git describe: v6.14.6-198-g4f7f8fb4f8e3
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.14.y/build/v6.14.6-198-g4f7f8fb4f8e3
-
-## Test Regressions (compared to v6.14.5-184-ga33747967783)
-* mips, build
-  - clang-20-allnoconfig
-  - clang-20-defconfig
-  - clang-20-tinyconfig
-  - korg-clang-20-lkftconfig-hardening
-  - korg-clang-20-lkftconfig-lto-full
-  - korg-clang-20-lkftconfig-lto-thing
-
-
-## Metric Regressions (compared to v6.14.5-184-ga33747967783)
-
-## Test Fixes (compared to v6.14.5-184-ga33747967783)
-
-## Metric Fixes (compared to v6.14.5-184-ga33747967783)
-
-## Test result summary
-total: 155299, pass: 129321, fail: 5951, skip: 19411, xfail: 616
-
-## Build Summary
-* arc: 5 total, 5 passed, 0 failed
-* arm: 139 total, 137 passed, 2 failed
-* arm64: 56 total, 55 passed, 1 failed
-* i386: 18 total, 16 passed, 2 failed
-* mips: 34 total, 27 passed, 7 failed
-* parisc: 4 total, 4 passed, 0 failed
-* powerpc: 40 total, 40 passed, 0 failed
-* riscv: 25 total, 22 passed, 3 failed
-* s390: 22 total, 22 passed, 0 failed
-* sh: 5 total, 5 passed, 0 failed
-* sparc: 4 total, 3 passed, 1 failed
-* x86_64: 49 total, 42 passed, 7 failed
-
-## Test suites summary
-* boot
-* commands
-* kselftest-arm64
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-cgroup
-* kselftest-clone3
-* kselftest-core
-* kselftest-cpu-hotplug
-* kselftest-cpufreq
-* kselftest-efivarfs
-* kselftest-exec
-* kselftest-fpu
-* kselftest-ftrace
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-kcmp
-* kselftest-kvm
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-memfd
-* kselftest-mincore
-* kselftest-mm
-* kselftest-mqueue
-* kselftest-net
-* kselftest-net-mptcp
-* kselftest-openat2
-* kselftest-ptrace
-* kselftest-rseq
-* kselftest-rtc
-* kselftest-rust
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-tc-testing
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user_events
-* kselftest-vDSO
-* kselftest-x86
-* kunit
-* kvm-unit-tests
-* lava
-* libgpiod
-* libhugetlbfs
-* log-parser-boot
-* log-parser-build-clang
-* log-parser-build-gcc
-* log-parser-test
-* ltp-capability
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-hugetlb
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-pty
-* ltp-sched
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* perf
-* rcutorture
-* rt-tests-cyclicdeadline
-* rt-tests-pi-stress
-* rt-tests-pmqtest
-* rt-tests-rt-migrate-test
-* rt-tests-signaltest
-
---
-Linaro LKFT
-https://lkft.linaro.org
+Thanks,
+Amir.
 
