@@ -1,169 +1,133 @@
-Return-Path: <linux-mips+bounces-9001-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9002-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CAF40AB560D
-	for <lists+linux-mips@lfdr.de>; Tue, 13 May 2025 15:29:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E252DAB5705
+	for <lists+linux-mips@lfdr.de>; Tue, 13 May 2025 16:25:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18B323AAA54
-	for <lists+linux-mips@lfdr.de>; Tue, 13 May 2025 13:29:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C169189B349
+	for <lists+linux-mips@lfdr.de>; Tue, 13 May 2025 14:25:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABC731EB5F0;
-	Tue, 13 May 2025 13:29:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D7502BD017;
+	Tue, 13 May 2025 14:24:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kR3p5wQ9"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GbbiUOd0"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com [209.85.217.46])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4E1F1E5B9D
-	for <linux-mips@vger.kernel.org>; Tue, 13 May 2025 13:29:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C394F292080
+	for <linux-mips@vger.kernel.org>; Tue, 13 May 2025 14:24:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747142975; cv=none; b=fh8V44eeyIdpKqpg3KIkTocRSefVZmzl/a2ezhHLeVt2UThRpE9HrH8fw6JTR9lra84+ajQbbHk+Sk2o9BgrnExFMb3ZWsUqVVXxvgphZv09xJ1GV7LiWyMUhm9V+dj/a/xEf60uN25ug1NAZ+MlLuYda//triIv2aRvqFPGUPw=
+	t=1747146297; cv=none; b=NW7J1gvZAz6VhZOWBKHLeLEy8S+ymFZhuLzMU55L8YQVta/wLHrIYhr2NT0fPHmOdqO9JxzOWJg0lUd347LX7uc8VdcBthTyV/gCwPsp/eNcTfMIy5Mv6DJcD6miCQpYjqR8Fl0ZV7NF3uNNKyoyUu8Pg/I5+K75NsAOO1o6D/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747142975; c=relaxed/simple;
-	bh=pIZnqAbvKi6g6bM9xBkbfMYNKRFSU6d2NCIENbAWFOs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dvwjcNQwopQ2EeI4u4ZDo23CQ3m6nwajJbOtfTBcmD85Wl8hRlDcXbZR2FJnsBW6IoiiRZ+PKIF2zFKX00/e5lFGOSob0Jz47eOhhc2gJ0Xwu89IBSdSCkvSZUjWIt2SWmYoYs0Q+SgoPuQ4Iu+mWZypI9xvY1hffBQBPm8qF/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kR3p5wQ9; arc=none smtp.client-ip=209.85.217.46
+	s=arc-20240116; t=1747146297; c=relaxed/simple;
+	bh=GxwcSYNe2p0XJBrJx4bSenouSf2vBwH0LKTpfUMyLn0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=N4jF+zKd+gP1Pv/kf4jKpy8wERMchJAfaLiTOvC88POcpHgC5j45b+7FxnYYTA/KwtBysG0P3Ms/mylvdeIIus2m3jihoBVDcMH1k0NwjkgsGypoit74jmq4rOIGSI+OFJJ1sjYOUFrBCK3m3xpFUFEPdy0o0Gv1OO83SJqGF1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GbbiUOd0; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-vs1-f46.google.com with SMTP id ada2fe7eead31-4df6027cabcso1492054137.0
-        for <linux-mips@vger.kernel.org>; Tue, 13 May 2025 06:29:32 -0700 (PDT)
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-43cfe574976so41259695e9.1
+        for <linux-mips@vger.kernel.org>; Tue, 13 May 2025 07:24:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1747142971; x=1747747771; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=LZEie1OhAZfjtagVfLYxTcaBKPW2X7YkdVD9WseQzgE=;
-        b=kR3p5wQ9nxxZ0EVG5HcRztu35MW/ZMH0Z4Ap5aqYoCDbROItNisvMevG528ocbPQkd
-         Ja4KRQ/9tSVsSnPXW68q4x+7rTwCd3sGTkEZB4P2dYtgjk9yVWelrQqqHVkkQ81UBC0y
-         Gk8ZHpjj0r8KNzSrudIc/bB47aaFhpTkJRqCUCnLxkL+qZPfUxIqcov/xmgnPMtaeB0X
-         H/GHyI78InR86RlUJ0jXHgJTs+zTMZe20A5CgDi9luYA/WHykBLdTPcE53s/WmVGZ+LG
-         IeXmObmPFBorJOwPeeJkjzdZzes/uWXoCSZgBycuzBR0OtGftgifPQ0T8HU2jCurYrU1
-         DE0g==
+        d=linaro.org; s=google; t=1747146294; x=1747751094; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=/NWh098gqRLftvvY4dIkjtdvgIAwUVSrP7NdWik+NTk=;
+        b=GbbiUOd0zktufQFK9LZO0f6IqfSKNNyks3R+IYGWOLbDrfHJeJ3WqDzARkp3llsvLB
+         iL1wnox3ggk7x9CUZXYGf5iNRZFT4qf3BvPxOFwWWoKLTXBpwF14g/iyI6oQ2McqM3xf
+         jMXov9f1UtvHF6v9DCYlbrZmOOpPHPiuZ3lDa439MgtgDTD1KgHkp9lrJCAlLcXHyAVz
+         2HdpIcPVmWIOc+thpXTvBmqKxgHl8NCby9wHY7vQhsHf8S4Xw9zdE+ztu8Fuf7LvMLZS
+         /MSnKxyLDv8XxtytFJ4l4wwM/YibtWaVobNTnkB9d0gzZguceEaSuKubnrLJ/H54bmNC
+         mT0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747142971; x=1747747771;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=LZEie1OhAZfjtagVfLYxTcaBKPW2X7YkdVD9WseQzgE=;
-        b=PcFlS0Gr9VWq3OzXbQmqeVuIJfG2xTFRyRRReIxju5AkCJOE3ZN1R+eJZ86f0ssLRQ
-         fjoYnPnpHaOj9s8s/qpHxjvapYdJhHU9T8nQFXXQ0pK3UAjSgCGOyE0ny3yD877Yt148
-         g3Jad0I9VpOXUhnn2RVcZy7qp76cvjpNOM6qjqVZ4G88EhRbYQGhZoueZ308tT8k5VW+
-         zKwrAvGO/5bTXP5ppvEkvcajxXtLM/4kQDIBaQt/6i2az4e8PCLqNrIeDIJ4WlSCbkCy
-         mGcnQLAoCJxCcxatOiI1X6Wy6ryLeXHcvmEeQy0zPlUCiilsXdeeW6mPdUUReqSmx/9Q
-         743Q==
-X-Forwarded-Encrypted: i=1; AJvYcCV9SFd1tjvKUZuGKe0bmLTKQBkyQJd9Ux5OvpNyMO5MxZXtM0s5A+SZCOwzYk0qcM6frKebx5kEd31Y@vger.kernel.org
-X-Gm-Message-State: AOJu0YxFOveeyhD58kcOt5O9gSl38GnUhec2fzvNCiXgAZZkAJgXBEpM
-	bzh/jLJs/CPH2HyqrMniTjyceMi1kWN2hwXTjICy6KCyVeCKk+vljpneIKOL4SFoqNOMavLYht0
-	KZHvdIDmZDxoYHmAwZL9uy5iPifi4qg5lUolt1A==
-X-Gm-Gg: ASbGncuwN5AibM+w/DoONtZV2VqcRrKTDVn1Y8wi2M87v0sMZvpei1GRYuh6d3LOM7k
-	TWZNb557jSlzXYMzMXRZJ3+muawzTXV7KlwKpP3GqvHKy6QgyEu00WzoOGJkAkmkaNSehG26rG2
-	HZhlZGy7LAedFm5kqdla67zRXMYaD+ScQ=
-X-Google-Smtp-Source: AGHT+IHlbMMFq5nAfSA83CCKmxe6r5lw+vXbf9voMmrMRSDCezf0HsCPwNDvoXL3icNnJqJh9L6Y0Q0gPm4WwUngrEA=
-X-Received: by 2002:a05:6102:2c08:b0:4c1:9b88:5c30 with SMTP id
- ada2fe7eead31-4deed3d3870mr14789892137.19.1747142971375; Tue, 13 May 2025
- 06:29:31 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1747146294; x=1747751094;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/NWh098gqRLftvvY4dIkjtdvgIAwUVSrP7NdWik+NTk=;
+        b=X1eOVCWTcRBK17Uwb3P3IgxS5N5ehR9zvZc8Awb8oL3Ol9BZJHLeihTfu6/boblvAS
+         NEmoAuLgKCg5Oqk4sCvH7tcE1JUG8tmsmKod7hQ64Q+TMTAjsOFZIFaVVZeW9t1D5Xul
+         Qxg76fN98GtpreQVsD1Vy8+/pNYIpV5iMLZERO4lXdjVI3QhKXsHTshaTcXyH4+EdLtv
+         3gEzUN7SbSPk7q+oaYpjGAyeHbdaXJB0t+qeiX+BNV3ic0YBXWBro2MNG2kKm9nKrRhp
+         Jx2lf73Wr7GRZd62KS66qYy67mHQVgtdjtGWApwAOycSyR+GQPf0AudZb0DvGEBx4ghN
+         Sodg==
+X-Gm-Message-State: AOJu0YyzPn3lCAOif8eEMyRxHHdkmvjj5R8bNWow15fFf5zRko1Z824B
+	zt0RUoMNVYSjTCkoYATSMSj1eBeZO/OBcpNpHZe+TuN8UXFMDjBa4g5h62dfphc=
+X-Gm-Gg: ASbGncv0J5ogR2Cam37Ho3lyrGhXiYQeMTNG7hSG6tdmeelqywp+TniKBbyC4RZhfW7
+	PsxRlLVD3h83TijTrd8vbFGH4Ghg/1geJ4D5NDEZg0E4BjKGx6gAkXdRsxsqusZvf1m4h6rKfaX
+	11TC/T+ropMdwx+WIRXvQrXLOTw6ScD5Rc+09QBiboZqrgcYqnr1MTZJhv5WmJLN2V82YEZburv
+	CMPx0uBlKepG9m08JOuCtzu8/d5dt+JjGzilmgb3vWYdVbqdIP4UXof5oPhKBpiuxO4F29Oixdw
+	Y25sMg9g09aLhLSYo7Tsm1IuLj1Gx1BQuYlaXPodMOyW+c0Ouzk76aEZknowaHuxV9Eqd9NpBtW
+	T+pmC2niWPc2nVQ==
+X-Google-Smtp-Source: AGHT+IHHlX9t4nfJ+7hHMCJoNaC1yXBW+lGGwra9RnsLEfJITmGfdfvMv/X1F4SEEmKSiUDfR77dIg==
+X-Received: by 2002:a05:600c:4e44:b0:439:8c80:6af4 with SMTP id 5b1f17b1804b1-442d6d6b603mr171874205e9.19.1747146293972;
+        Tue, 13 May 2025 07:24:53 -0700 (PDT)
+Received: from mai.linaro.org (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-442ed666dc7sm23697575e9.18.2025.05.13.07.24.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 May 2025 07:24:53 -0700 (PDT)
+Date: Tue, 13 May 2025 16:24:51 +0200
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+To: Caleb James DeLisle <cjd@cjdns.fr>
+Cc: linux-mips@vger.kernel.org, tglx@linutronix.de, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, tsbogend@alpha.franken.de,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	benjamin.larsson@genexis.eu, linux-mediatek@lists.infradead.org
+Subject: Re: [PATCH v5 0/7] Add EcoNet EN751221 MIPS platform support
+Message-ID: <aCNWM5Xq7wnHVCrc@mai.linaro.org>
+References: <20250507134500.390547-1-cjd@cjdns.fr>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250512172044.326436266@linuxfoundation.org> <CA+G9fYuO5m0EgOAbytJv2Ytp9uj-0jHVUGddaXHLckHk+ZLEHA@mail.gmail.com>
-In-Reply-To: <CA+G9fYuO5m0EgOAbytJv2Ytp9uj-0jHVUGddaXHLckHk+ZLEHA@mail.gmail.com>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Tue, 13 May 2025 14:29:20 +0100
-X-Gm-Features: AX0GCFvoub22XkeGUwB2DkAUVguhCcizeWQN8lgksWkCPZabNB8ZW-3lo3CS3bQ
-Message-ID: <CA+G9fYsGTqCxiXQOY3HEu4Z3CEwmyQoOb8DnpzVToWMW-Y8R5A@mail.gmail.com>
-Subject: Re: [PATCH 6.14 000/197] 6.14.7-rc1 review
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: stable@vger.kernel.org, patches@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org, 
-	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org, 
-	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de, 
-	jonathanh@nvidia.com, f.fainelli@gmail.com, sudipm.mukherjee@gmail.com, 
-	srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org, hargar@microsoft.com, 
-	broonie@kernel.org, clang-built-linux <llvm@lists.linux.dev>, 
-	Anders Roxell <anders.roxell@linaro.org>, Dan Carpenter <dan.carpenter@linaro.org>, 
-	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
-	Marco Crivellari <marco.crivellari@suse.com>, Thorsten Blum <thorsten.blum@linux.dev>, 
-	linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250507134500.390547-1-cjd@cjdns.fr>
 
-On Tue, 13 May 2025 at 11:40, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->
-> On Mon, 12 May 2025 at 18:43, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
-> >
-> > This is the start of the stable review cycle for the 6.14.7 release.
-> > There are 197 patches in this series, all will be posted as a response
-> > to this one.  If anyone has any issues with these being applied, please
-> > let me know.
-> >
-> > Responses should be made by Wed, 14 May 2025 17:19:58 +0000.
-> > Anything received after that time might be too late.
-> >
-> > The whole patch series can be found in one patch at:
-> >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.14.7-rc1.gz
-> > or in the git tree and branch at:
-> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.14.y
-> > and the diffstat can be found below.
-> >
-> > thanks,
-> >
-> > greg k-h
->
-> Regressions on mips defconfig tinyconfig and allnoconfig builds failed with
-> clang-20 toolchain on stable-rc  6.14.7-rc1, 6.12.29-rc1 and 6.6.91-rc1.
-> But, builds pass with gcc-13.
->
-> * mips, build
->   - clang-20-allnoconfig
->   - clang-20-defconfig
->   - clang-20-tinyconfig
->   - korg-clang-20-lkftconfig-hardening
->   - korg-clang-20-lkftconfig-lto-full
->   - korg-clang-20-lkftconfig-lto-thing
->
-> Regression Analysis:
->  - New regression? Yes
->  - Reproducibility? Yes
->
-> Build regression: mips defconfig clang-20 instantiation error expected
-> an immediate
->
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->
-> ## Build error mips
-> <instantiation>:7:11: error: expected an immediate
->  ori $26, r4k_wait_idle_size - 2
->           ^
-> <instantiation>:10:13: error: expected an immediate
->  addiu $26, r4k_wait_exit - r4k_wait_insn + 2
->             ^
-> <instantiation>:10:29: error: expected an immediate
->  addiu $26, r4k_wait_exit - r4k_wait_insn + 2
->                             ^
-> <instantiation>:7:11: error: expected an immediate
->  ori $26, r4k_wait_idle_size - 2
->           ^
-> <instantiation>:10:13: error: expected an immediate
->  addiu $26, r4k_wait_exit - r4k_wait_insn + 2
->             ^
-> <instantiation>:10:29: error: expected an immediate
->  addiu $26, r4k_wait_exit - r4k_wait_insn + 2
->                             ^
+On Wed, May 07, 2025 at 01:44:53PM +0000, Caleb James DeLisle wrote:
+> EcoNet MIPS SoCs are big endian machines based on 34Kc and 1004Kc
+> processors. They are found in xDSL and xPON modems, and contain PCM
+> (VoIP), Ethernet, USB, GPIO, I2C, SPI (Flash), UART, and PCIe.
+> 
+> The EcoNet MIPS SoCs are divided broadly into two families, the
+> EN751221 family based on the 34Kc, and the EN751627 family based on
+> the 1004Kc. Individual SoCs within a family are very similar, only
+> with different peripherals.
+> 
+> This patchset adds basic "boots to a console" support for the EN751221
+> family and adds SmartFiber XP8421-B, a low cost commercially available
+> board that is useful for testing and development.
+> 
+> Note that Airoha (AN7523, AN7581) is similar to EcoNet in terms of
+> peripherals, and for historical reasons Airoha chips are sometimes
+> referred to with the EN75xx prefix. However this is a different
+> platform because Airoha chips are ARM based.
+> 
+> This patchset is against mips-next.
+> 
+> v4 -> v5
+> * 2/7 clocksource/drivers: Add EcoNet Timer HPT driver:
+>   * Improve explanation of HPT timer in changelog
+>   * Move pr_info to pr_debug per recommendation
+>   * Remove pointless debug on spurious interrupt
+>   * Small code-style change
 
+Shall I pick the clocksource + bindings changes through my tree ?
 
-The bisection found this as first bad commit,
+-- 
 
-    MIPS: Fix idle VS timer enqueue
+ <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-    [ Upstream commit 56651128e2fbad80f632f388d6bf1f39c928267a ]
-
-- Naresh Kamboju
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
