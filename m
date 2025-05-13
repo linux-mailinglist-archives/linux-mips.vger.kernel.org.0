@@ -1,182 +1,169 @@
-Return-Path: <linux-mips+bounces-9000-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9001-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9EE3AB553F
-	for <lists+linux-mips@lfdr.de>; Tue, 13 May 2025 14:53:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAF40AB560D
+	for <lists+linux-mips@lfdr.de>; Tue, 13 May 2025 15:29:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 578B71B464DB
-	for <lists+linux-mips@lfdr.de>; Tue, 13 May 2025 12:53:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18B323AAA54
+	for <lists+linux-mips@lfdr.de>; Tue, 13 May 2025 13:29:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 023C928DEF0;
-	Tue, 13 May 2025 12:53:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABC731EB5F0;
+	Tue, 13 May 2025 13:29:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QuXrkrSi"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kR3p5wQ9"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-vs1-f46.google.com (mail-vs1-f46.google.com [209.85.217.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09B56286439;
-	Tue, 13 May 2025 12:53:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4E1F1E5B9D
+	for <linux-mips@vger.kernel.org>; Tue, 13 May 2025 13:29:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747140812; cv=none; b=JA/bh2tnZzifgi4QuE05ypqtmmkoeEs0nIp1CtXE47INtiM/1BSQjqaighg9PEDAjuJXXXhbp/8NGqZfw8e9xQJ1OuLiqx4euPCR93OJmtbIsN0M5DfSY5JqOMr1fyFrprGIWWPC9x/dysugTsTNrYd5LiTkr+EyhYC2NfTa/94=
+	t=1747142975; cv=none; b=fh8V44eeyIdpKqpg3KIkTocRSefVZmzl/a2ezhHLeVt2UThRpE9HrH8fw6JTR9lra84+ajQbbHk+Sk2o9BgrnExFMb3ZWsUqVVXxvgphZv09xJ1GV7LiWyMUhm9V+dj/a/xEf60uN25ug1NAZ+MlLuYda//triIv2aRvqFPGUPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747140812; c=relaxed/simple;
-	bh=i14x7HK+wQByi+0aKyFzNcOhWac1lJuJhW5b260ntpI=;
+	s=arc-20240116; t=1747142975; c=relaxed/simple;
+	bh=pIZnqAbvKi6g6bM9xBkbfMYNKRFSU6d2NCIENbAWFOs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mumr5vF6jDD3Fy3Rp/6CfoRgl8B1iSwKyXB3b4kQ4TGyamHE7o9ukTPd6qj9zchptF83NIx2hW4cJkRbXwSp5MyPLshngHBysqThad7VV49/jdhnRpDrLvuKuTFzBPKAI4W7pfxFLdocyu9EtPuRb8JAgeFsMPEARRuXbLDT73Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QuXrkrSi; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-ad4ce8cc3c1so183121966b.2;
-        Tue, 13 May 2025 05:53:30 -0700 (PDT)
+	 To:Cc:Content-Type; b=dvwjcNQwopQ2EeI4u4ZDo23CQ3m6nwajJbOtfTBcmD85Wl8hRlDcXbZR2FJnsBW6IoiiRZ+PKIF2zFKX00/e5lFGOSob0Jz47eOhhc2gJ0Xwu89IBSdSCkvSZUjWIt2SWmYoYs0Q+SgoPuQ4Iu+mWZypI9xvY1hffBQBPm8qF/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kR3p5wQ9; arc=none smtp.client-ip=209.85.217.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-vs1-f46.google.com with SMTP id ada2fe7eead31-4df6027cabcso1492054137.0
+        for <linux-mips@vger.kernel.org>; Tue, 13 May 2025 06:29:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747140809; x=1747745609; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lhUsGW6Aej7UtwPk8Fo3WswAje2EzwjwJ+3T+imRPIA=;
-        b=QuXrkrSiJBAik3QaKSWS+HCnTCmriB79zSscrWJTudsfLcCdBYURl4R+C+rz0p88Al
-         y1SnyopHLPBjZk1IZI7/9BLTpiykvL+HgLYdzr9hW/O2soRNiM2KXYEIfWHGpShVSoj0
-         hw3YQ/aVmyF2kh4neaYC7LbQpW39YzqrKe9Ln0rVlJB9CFYktdTKyIhc9mpw3Cx5Y5JF
-         zGN25CitcI+6r1dMoYHxd6kbeIaV3OaHJpq5dw94jhIkTgMBFWc+hTcU4e/mzNNSF6Yp
-         r0EbycRgLUdjAJ3gwHmT1mxvsAVqBAWtIBd25OXgxuXr3uuhemqkzQxKkHAye9efZZAw
-         yrRg==
+        d=linaro.org; s=google; t=1747142971; x=1747747771; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LZEie1OhAZfjtagVfLYxTcaBKPW2X7YkdVD9WseQzgE=;
+        b=kR3p5wQ9nxxZ0EVG5HcRztu35MW/ZMH0Z4Ap5aqYoCDbROItNisvMevG528ocbPQkd
+         Ja4KRQ/9tSVsSnPXW68q4x+7rTwCd3sGTkEZB4P2dYtgjk9yVWelrQqqHVkkQ81UBC0y
+         Gk8ZHpjj0r8KNzSrudIc/bB47aaFhpTkJRqCUCnLxkL+qZPfUxIqcov/xmgnPMtaeB0X
+         H/GHyI78InR86RlUJ0jXHgJTs+zTMZe20A5CgDi9luYA/WHykBLdTPcE53s/WmVGZ+LG
+         IeXmObmPFBorJOwPeeJkjzdZzes/uWXoCSZgBycuzBR0OtGftgifPQ0T8HU2jCurYrU1
+         DE0g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747140809; x=1747745609;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=lhUsGW6Aej7UtwPk8Fo3WswAje2EzwjwJ+3T+imRPIA=;
-        b=fk9n/0i5SHHGShj1aABH9XbUXj8VLnJ6hWskizdQ/Hv6+pvfLvJTiAtR1GIDAQ0SU6
-         8o4Mu5c6+8JMuvppWZ/HILHeh8Fi7sjXgQ7mtLefyMWCVypLu8pvfU53wqhqPjwDbOma
-         hleWf5TAmZRrQqBLkiyCQ55vNn2PbFRSsoGrJ54TSB6rZ8BTBKbSKK4+5Nb5J+bEWab8
-         M7OHcv9BLEuqfTusGLttzncsFS5ssQwKgGFwhENRWMw45jDIuM1DhjNEJwaJHTYvdE5+
-         y1RybgBw8vEx1JG+aWmuFvE1xLQquR8OP0EYaJv9cO/gUgjcGDbhuLQzfb+KaXSJH91H
-         5bNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU7e6L9mnrLNooJ9RkHA6ife5t/gy9K25ybm6oqmgzLNPkxadcewB0Q84T3DvnsigKiwCvvyS4yIKQoxEU=@vger.kernel.org, AJvYcCU9mDM6H9T3sz3E554QZWqDrD5rf+qFMM7kw/ORDLPE+1evJYV9Pch539b5BhjgWzhA8Jy6rwz+R6CI@vger.kernel.org, AJvYcCUEDNWuYp/pxKalJXWWlVtzByDM8VpnkS4nFb5mjjSfTeVLfQIX6qLtO5R9zN/s7S37La6/MorrS3q9@vger.kernel.org, AJvYcCUUZcobAqzsK5VY+uEFVQQ7lUNMBHopNXhlDJUGmb2AivwVbTSxD1OeL1xLNunH7ymPjEuu0gYJ2ZCGOg==@vger.kernel.org, AJvYcCUq7yF5v72wOEhtTjmn+EUeTFbucWySHFISH6NMd5TehZIX5U/By+MmziKdpkfvNK8vanOQBR29mw==@vger.kernel.org, AJvYcCV08vqx9uqctDhNUHBlHsayXIP4bb5yrb4i472bEYgGkxrAbDcT7zCNXAP1kRKLnTvDUg2XhoVGvyVdcxiS@vger.kernel.org, AJvYcCVvUrHY5foOtwZ1BUZACwOSKJ/P5st1t1eXjV+nx2AMCQ/CT3gKhezSIA8fIoLY87ZL7SVOo+zzgzfrqpuGPw==@vger.kernel.org, AJvYcCWEgChK2604Cs0evHzTc6/05n6f/a+19uhiKBP7owG6oHz97yX4vgPeE1S/w13z27OUAPL+Nt/7wQ==@vger.kernel.org, AJvYcCWHFfMeaC5nxbtGT3oBViXoNCHuYxNxkHqUt6pxx2+xd7yfpxE1DzkRQo75SiEmpk1ID6I10Bt1ESbleg==@vger.kernel.org, AJvYcCWRekuiSXiiT/D559N5rQC8
- RIZ4ZgBFwsKO4WnCc0DSCBNpvVqrfN4NXBhQtr+sqRTESPb8NqquRB1pTw==@vger.kernel.org, AJvYcCX9zzBVchTPcWHRSkQgdLCbGa+qVaiP0Mz7gHPPRHIHoDz0fJ6ndyhSSBeI2EWwZRshzGlDTDsXF6ZNTd2vqIkdoKj/voAJ@vger.kernel.org, AJvYcCXL7+hGHVOMpQe9QxfWCmGTiLQF0ZvcyJc9HOrdCBWz3QltWhqE9S/uAzXi9u6lljMNL+yll1VOtWdiWzX+@vger.kernel.org, AJvYcCXMru4J2JwBr6AKU3hllsAf4fbuzRBxQN6HErSvZ7COW/hsvRTLry+q1FYYbFfLXHf3LotstNJ9ttlMA+EJCw==@vger.kernel.org, AJvYcCXMvsnBVLqpvPL68tOrZ8aD2pfaVy11gtH4/pkm6bZ5RLMhO+bL0nauXc1DBHaLDC1D/15JN8GlCUn6eg==@vger.kernel.org, AJvYcCXjfzn+oRwGRlQV1zQ1I4Hg/3+qNIjbrLmHuLga+e7y/rzGDP/4avrZJPfrqotEuOTUASZKQZO1rm4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyBy+xrGuTOo/BHoy2MF1yeFX5Fb7UUdoWy5+Go7SmeXOVhBDFr
-	+0jN+kq9uAGcJy+E6qzHrCzySZ+i3idSxVlzKpH5Lo0DddIHgHKs/t9dRLnYVfTEYI0OzHIFgLx
-	QE1o3gxc9o/qjMMxOZ6lJ5W3W8GI=
-X-Gm-Gg: ASbGncvgC5MxgfdU96tnDtzsnHzv0XYRKofolm7sto42gMHQcx5U/N/qLDD+WLUeLu6
-	JgaUFVTokmO1GuItT5jjFNEHv9BP4uCa+UbnlRqn+ZsBrPYWLpm3Cqre2dToPqB/FkWXhMHqEe3
-	P2TE4pHJXXqHODET9kcDOnwwvoPzJYuoQ3
-X-Google-Smtp-Source: AGHT+IE/b0BCD4zsWzgMefEsXbY+DbhCAD/XOG3dRDcg9jP4PpucFQp1j7NsiRF8Za5+3lLoqjezqR5fGVfm35+9pG4=
-X-Received: by 2002:a17:907:7617:b0:ad2:23fb:5a03 with SMTP id
- a640c23a62f3a-ad223fb7c87mr1075619066b.7.1747140808774; Tue, 13 May 2025
- 05:53:28 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1747142971; x=1747747771;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LZEie1OhAZfjtagVfLYxTcaBKPW2X7YkdVD9WseQzgE=;
+        b=PcFlS0Gr9VWq3OzXbQmqeVuIJfG2xTFRyRRReIxju5AkCJOE3ZN1R+eJZ86f0ssLRQ
+         fjoYnPnpHaOj9s8s/qpHxjvapYdJhHU9T8nQFXXQ0pK3UAjSgCGOyE0ny3yD877Yt148
+         g3Jad0I9VpOXUhnn2RVcZy7qp76cvjpNOM6qjqVZ4G88EhRbYQGhZoueZ308tT8k5VW+
+         zKwrAvGO/5bTXP5ppvEkvcajxXtLM/4kQDIBaQt/6i2az4e8PCLqNrIeDIJ4WlSCbkCy
+         mGcnQLAoCJxCcxatOiI1X6Wy6ryLeXHcvmEeQy0zPlUCiilsXdeeW6mPdUUReqSmx/9Q
+         743Q==
+X-Forwarded-Encrypted: i=1; AJvYcCV9SFd1tjvKUZuGKe0bmLTKQBkyQJd9Ux5OvpNyMO5MxZXtM0s5A+SZCOwzYk0qcM6frKebx5kEd31Y@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFOveeyhD58kcOt5O9gSl38GnUhec2fzvNCiXgAZZkAJgXBEpM
+	bzh/jLJs/CPH2HyqrMniTjyceMi1kWN2hwXTjICy6KCyVeCKk+vljpneIKOL4SFoqNOMavLYht0
+	KZHvdIDmZDxoYHmAwZL9uy5iPifi4qg5lUolt1A==
+X-Gm-Gg: ASbGncuwN5AibM+w/DoONtZV2VqcRrKTDVn1Y8wi2M87v0sMZvpei1GRYuh6d3LOM7k
+	TWZNb557jSlzXYMzMXRZJ3+muawzTXV7KlwKpP3GqvHKy6QgyEu00WzoOGJkAkmkaNSehG26rG2
+	HZhlZGy7LAedFm5kqdla67zRXMYaD+ScQ=
+X-Google-Smtp-Source: AGHT+IHlbMMFq5nAfSA83CCKmxe6r5lw+vXbf9voMmrMRSDCezf0HsCPwNDvoXL3icNnJqJh9L6Y0Q0gPm4WwUngrEA=
+X-Received: by 2002:a05:6102:2c08:b0:4c1:9b88:5c30 with SMTP id
+ ada2fe7eead31-4deed3d3870mr14789892137.19.1747142971375; Tue, 13 May 2025
+ 06:29:31 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250513-xattrat-syscall-v5-0-22bb9c6c767f@kernel.org> <399fdabb-74d3-4dd6-9eee-7884a986dab1@app.fastmail.com>
-In-Reply-To: <399fdabb-74d3-4dd6-9eee-7884a986dab1@app.fastmail.com>
-From: Amir Goldstein <amir73il@gmail.com>
-Date: Tue, 13 May 2025 14:53:17 +0200
-X-Gm-Features: AX0GCFu24ZFGPch6zxlVZkmp4exgi2YQWGGbqSjGo76MZv2IKCv94Wv0HRsT2OA
-Message-ID: <CAOQ4uxgOAxg7N1OUJfb1KMp7oWOfN=KV9Lzz6ZrX0=XRGOQrEQ@mail.gmail.com>
-Subject: Re: [PATCH v5 0/7] fs: introduce file_getattr and file_setattr syscalls
-To: Arnd Bergmann <arnd@arndb.de>, Christian Brauner <brauner@kernel.org>
-Cc: Andrey Albershteyn <aalbersh@redhat.com>, Richard Henderson <richard.henderson@linaro.org>, 
-	Matt Turner <mattst88@gmail.com>, Russell King <linux@armlinux.org.uk>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, Michal Simek <monstr@monstr.eu>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Naveen N Rao <naveen@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Yoshinori Sato <ysato@users.sourceforge.jp>, 
-	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
-	"David S . Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
-	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
-	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
-	=?UTF-8?B?TWlja2HDq2wgU2FsYcO8bg==?= <mic@digikod.net>, 
-	=?UTF-8?Q?G=C3=BCnther_Noack?= <gnoack@google.com>, 
-	=?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>, 
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
-	"Serge E. Hallyn" <serge@hallyn.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
-	Ondrej Mosnacek <omosnace@redhat.com>, Tyler Hicks <code@tyhicks.com>, 
-	Miklos Szeredi <miklos@szeredi.hu>, linux-alpha@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, 
-	Linux-Arch <linux-arch@vger.kernel.org>, selinux@vger.kernel.org, 
-	ecryptfs@vger.kernel.org, linux-unionfs@vger.kernel.org, 
-	linux-xfs@vger.kernel.org, Andrey Albershteyn <aalbersh@kernel.org>
+References: <20250512172044.326436266@linuxfoundation.org> <CA+G9fYuO5m0EgOAbytJv2Ytp9uj-0jHVUGddaXHLckHk+ZLEHA@mail.gmail.com>
+In-Reply-To: <CA+G9fYuO5m0EgOAbytJv2Ytp9uj-0jHVUGddaXHLckHk+ZLEHA@mail.gmail.com>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Tue, 13 May 2025 14:29:20 +0100
+X-Gm-Features: AX0GCFvoub22XkeGUwB2DkAUVguhCcizeWQN8lgksWkCPZabNB8ZW-3lo3CS3bQ
+Message-ID: <CA+G9fYsGTqCxiXQOY3HEu4Z3CEwmyQoOb8DnpzVToWMW-Y8R5A@mail.gmail.com>
+Subject: Re: [PATCH 6.14 000/197] 6.14.7-rc1 review
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: stable@vger.kernel.org, patches@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org, 
+	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org, 
+	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de, 
+	jonathanh@nvidia.com, f.fainelli@gmail.com, sudipm.mukherjee@gmail.com, 
+	srw@sladewatkins.net, rwarsow@gmx.de, conor@kernel.org, hargar@microsoft.com, 
+	broonie@kernel.org, clang-built-linux <llvm@lists.linux.dev>, 
+	Anders Roxell <anders.roxell@linaro.org>, Dan Carpenter <dan.carpenter@linaro.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Nathan Chancellor <nathan@kernel.org>, 
+	Marco Crivellari <marco.crivellari@suse.com>, Thorsten Blum <thorsten.blum@linux.dev>, 
+	linux-mips@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, May 13, 2025 at 11:53=E2=80=AFAM Arnd Bergmann <arnd@arndb.de> wrot=
-e:
+On Tue, 13 May 2025 at 11:40, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
 >
-> On Tue, May 13, 2025, at 11:17, Andrey Albershteyn wrote:
->
+> On Mon, 12 May 2025 at 18:43, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
 > >
-> >       long syscall(SYS_file_getattr, int dirfd, const char *pathname,
-> >               struct fsxattr *fsx, size_t size, unsigned int at_flags);
-> >       long syscall(SYS_file_setattr, int dirfd, const char *pathname,
-> >               struct fsxattr *fsx, size_t size, unsigned int at_flags);
+> > This is the start of the stable review cycle for the 6.14.7 release.
+> > There are 197 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
+> >
+> > Responses should be made by Wed, 14 May 2025 17:19:58 +0000.
+> > Anything received after that time might be too late.
+> >
+> > The whole patch series can be found in one patch at:
+> >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.14.7-rc1.gz
+> > or in the git tree and branch at:
+> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.14.y
+> > and the diffstat can be found below.
+> >
+> > thanks,
+> >
+> > greg k-h
 >
-> I don't think we can have both the "struct fsxattr" from the uapi
-> headers, and a variable size as an additional argument. I would
-> still prefer not having the extensible structure at all and just
-> use fsxattr, but if you want to make it extensible in this way,
-> it should use a different structure (name). Otherwise adding
-> fields after fsx_pad[] would break the ioctl interface.
+> Regressions on mips defconfig tinyconfig and allnoconfig builds failed with
+> clang-20 toolchain on stable-rc  6.14.7-rc1, 6.12.29-rc1 and 6.6.91-rc1.
+> But, builds pass with gcc-13.
 >
-
-Are you are suggesting that we need to define this variant?:
-
---- a/include/uapi/linux/fs.h
-+++ b/include/uapi/linux/fs.h
-@@ -148,6 +148,17 @@ struct fsxattr {
-        unsigned char   fsx_pad[8];
- };
-
-+/*
-+ * Variable size structure for file_[sg]et_attr().
-+ */
-+struct fsx_fileattr {
-+       __u32           fsx_xflags;     /* xflags field value (get/set) */
-+       __u32           fsx_extsize;    /* extsize field value (get/set)*/
-+       __u32           fsx_nextents;   /* nextents field value (get)   */
-+       __u32           fsx_projid;     /* project identifier (get/set) */
-+       __u32           fsx_cowextsize; /* CoW extsize field value (get/set=
-)*/
-+};
-+
-
-> I also find the bit confusing where the argument contains both
-> "ignored but assumed zero" flags, and "required to be zero"
-> flags depending on whether it's in the fsx_pad[] field or
-> after it. This would be fine if it was better documented.
+> * mips, build
+>   - clang-20-allnoconfig
+>   - clang-20-defconfig
+>   - clang-20-tinyconfig
+>   - korg-clang-20-lkftconfig-hardening
+>   - korg-clang-20-lkftconfig-lto-full
+>   - korg-clang-20-lkftconfig-lto-thing
 >
+> Regression Analysis:
+>  - New regression? Yes
+>  - Reproducibility? Yes
+>
+> Build regression: mips defconfig clang-20 instantiation error expected
+> an immediate
+>
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>
+> ## Build error mips
+> <instantiation>:7:11: error: expected an immediate
+>  ori $26, r4k_wait_idle_size - 2
+>           ^
+> <instantiation>:10:13: error: expected an immediate
+>  addiu $26, r4k_wait_exit - r4k_wait_insn + 2
+>             ^
+> <instantiation>:10:29: error: expected an immediate
+>  addiu $26, r4k_wait_exit - r4k_wait_insn + 2
+>                             ^
+> <instantiation>:7:11: error: expected an immediate
+>  ori $26, r4k_wait_idle_size - 2
+>           ^
+> <instantiation>:10:13: error: expected an immediate
+>  addiu $26, r4k_wait_exit - r4k_wait_insn + 2
+>             ^
+> <instantiation>:10:29: error: expected an immediate
+>  addiu $26, r4k_wait_exit - r4k_wait_insn + 2
+>                             ^
 
-I think that is an oversight.
-The syscall should have required that fsx_pad is zero,
-same as patch 6/7 requires that unknown xflags are zero.
 
-If we change to:
-       error =3D copy_struct_from_user(&fsx, sizeof(struct
-fsx_fileattr), ufsx, usize);
+The bisection found this as first bad commit,
 
-It will take care of requiring zero fsx_pad even if user calls the syscall =
-with
-sizeof(struct fsxattr).
+    MIPS: Fix idle VS timer enqueue
 
-Thanks,
-Amir.
+    [ Upstream commit 56651128e2fbad80f632f388d6bf1f39c928267a ]
+
+- Naresh Kamboju
 
