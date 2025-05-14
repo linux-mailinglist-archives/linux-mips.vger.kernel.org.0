@@ -1,65 +1,123 @@
-Return-Path: <linux-mips+bounces-9007-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9008-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B061AAB6835
-	for <lists+linux-mips@lfdr.de>; Wed, 14 May 2025 11:58:05 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id CBC14AB6974
+	for <lists+linux-mips@lfdr.de>; Wed, 14 May 2025 13:03:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 52030189C488
-	for <lists+linux-mips@lfdr.de>; Wed, 14 May 2025 09:57:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 609C319E5E98
+	for <lists+linux-mips@lfdr.de>; Wed, 14 May 2025 11:03:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B20725FA0E;
-	Wed, 14 May 2025 09:55:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA07B274661;
+	Wed, 14 May 2025 11:02:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="belB5YVB"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="I15Wzgb4"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F096325E827;
-	Wed, 14 May 2025 09:55:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12313211A3D
+	for <linux-mips@vger.kernel.org>; Wed, 14 May 2025 11:02:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747216512; cv=none; b=AOxvzlqS0ntHxaYwUpYRm49jOV8r05WVoeY3mLrwS20jhUezDktTYRJMcP4e+CDSWizfPTYX5e4V8fMWPKf4iiPHrE4TPVo8RnYzCJLtDdsLKyyrIAbN8k/UnNn/FTWqiaAXmJIHCZbDWnq/aBozi4x6gXd/AZIpXIxvBuxL35g=
+	t=1747220559; cv=none; b=XwC4gQHW52ckJvdftu6bRaBs9XFYTWbl1CU9dbfN7Xu+lNohupO3n+3hl0Uw9tSCW/v+eaU8A/TPgrdZsW4yt80v9Fa9KfxxKmumZXs/xWxSafkRMDXOfXEW8Qr2NRCrepotZJc328o19uT6U8sTOQVj/zKQ/rAXVz60Edo2+go=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747216512; c=relaxed/simple;
-	bh=NU0/laBLJ5U/Z61R8LdAMhWaqpI9feJPmdaQdzlsQqc=;
+	s=arc-20240116; t=1747220559; c=relaxed/simple;
+	bh=g6FsWqajrTcVSIHknD3zeLY9flfbWnzSw3aQFZLECpw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=vB3Mf4Y+igvLoEMk0vdyqxzAx5vSkviGoZCuLNhgHBWwqSch4IXylE0AkJhqs1rH0d26F3TcQ/AYYqPF5znXLI0waaEn4ghVAZqKmi0nsAGaHOE0Vk7Fdotwt7XiLhT3P6/8qA7b0Lv8e3RwaI+BD7Yq6R6OIxZGpTBQRVxHt60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=belB5YVB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5A49C4CEE9;
-	Wed, 14 May 2025 09:55:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1747216511;
-	bh=NU0/laBLJ5U/Z61R8LdAMhWaqpI9feJPmdaQdzlsQqc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=belB5YVBvtc5H3/w8UjIZtr7Ri7Fe0orS+bV9pxjvY2IKtEBsSqdynxckERS+mIDo
-	 nZ8By2eA/s7IehP+5jFrpV3EgjTy1aRm6EtX0Qe5UeMaiSe56Tm5GogTQFYGGqz3UB
-	 w9+Du91MUj57+iGJ4bh334CDWjlAKxuNRdfA7rl0=
-Date: Wed, 14 May 2025 11:53:23 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Naresh Kamboju <naresh.kamboju@linaro.org>
-Cc: stable@vger.kernel.org, patches@lists.linux.dev,
-	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-	jonathanh@nvidia.com, f.fainelli@gmail.com,
-	sudipm.mukherjee@gmail.com, srw@sladewatkins.net, rwarsow@gmx.de,
-	conor@kernel.org, hargar@microsoft.com, broonie@kernel.org,
-	clang-built-linux <llvm@lists.linux.dev>,
-	Anders Roxell <anders.roxell@linaro.org>,
-	Dan Carpenter <dan.carpenter@linaro.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Marco Crivellari <marco.crivellari@suse.com>,
-	Thorsten Blum <thorsten.blum@linux.dev>, linux-mips@vger.kernel.org
-Subject: Re: [PATCH 6.14 000/197] 6.14.7-rc1 review
-Message-ID: <2025051415-unloader-likely-b0e6@gregkh>
-References: <20250512172044.326436266@linuxfoundation.org>
- <CA+G9fYuO5m0EgOAbytJv2Ytp9uj-0jHVUGddaXHLckHk+ZLEHA@mail.gmail.com>
- <CA+G9fYsGTqCxiXQOY3HEu4Z3CEwmyQoOb8DnpzVToWMW-Y8R5A@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=pHKGxA9ZRvuOltz/8tNvwVMiWZLqTM+seqz17hrAG67+/foBYtpl1y3FlDdtpdpSad1F4gTe1D4d/Che/Y4sGhF63x2bKST/p1rrccTY+spABA1QtWsImjGuGZ+BOm3OJOWLCnlnwksxDjIzcfEBAwseEJoNKdfpAdqfwlWaIkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=I15Wzgb4; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1747220554;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=Cav3Z4NY5VTBc23C/qTtaVoA8kEGEB5wAcjksldNIvE=;
+	b=I15Wzgb4KH+oyoPc6ukXT/0Rwdg5uNuvsAl9IB61zrfdLL64n3zJsde/cQlpOL63vmRgqh
+	eIv0oGHsyLYob1U9Fx4UGZG6Ey1R5cIe9TH/vN63/4zQN/PjxsRIT1AnWpkbjir82ox2zz
+	gOhrSEgIy0Z5w8YIy6dkuIs0UXJ1P4g=
+Received: from mail-ed1-f72.google.com (mail-ed1-f72.google.com
+ [209.85.208.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-633-syQcNQgsM7uHs9XX2n24Gw-1; Wed, 14 May 2025 07:02:33 -0400
+X-MC-Unique: syQcNQgsM7uHs9XX2n24Gw-1
+X-Mimecast-MFC-AGG-ID: syQcNQgsM7uHs9XX2n24Gw_1747220552
+Received: by mail-ed1-f72.google.com with SMTP id 4fb4d7f45d1cf-5fbf6c98e2dso7469720a12.1
+        for <linux-mips@vger.kernel.org>; Wed, 14 May 2025 04:02:32 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747220552; x=1747825352;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Cav3Z4NY5VTBc23C/qTtaVoA8kEGEB5wAcjksldNIvE=;
+        b=u+aEleBHTsrAGdK+6NEeN2zQUjUzVKHS+oUwxUGtAIoVZvl8hr/aW0SBJRC/53bmNN
+         w+GEA9702k9SrZGsS/2EhOtdiRiFWpxHMBJhVwMh+PdY5B+GXvzjSIFKjKs+WrSECDpS
+         T/Du8pSaQRdX8Hpg5RMu0k9nFdkFVKeuWHLYUbVsuvNz1IAnx68xHfDBpms/s70EYC5g
+         DbPY8VniQcjCO3MPKziuUvFju9afhkjTc/5AFqDu7ygaVnaXYE9UXAreqPgV86Pk5Nw1
+         lggJRx5Rwx7vNxVD3X1zqj8DZ1CITVLau3wGYNjgISedwQWwa6QfmiX1DPSpaMD+dtar
+         HkXg==
+X-Forwarded-Encrypted: i=1; AJvYcCXUfNmhlaJl9VrcoyeU0DhRnyHmxv5CfBcv/vfuW6ozDkNomyLeDpJSKZ/E8v1OULI+caqqBm96aPGL@vger.kernel.org
+X-Gm-Message-State: AOJu0YwpPCU8SKGvunIdExXoVTH52EEq9qHPLGNU1yZaUIxm9RdKf83y
+	hKhsQTViSExTKW29BGFMJ19sEmb+ZRzOAkPP9xQO9QLYucdXlV63/Ke78CwQlzhfERdnqOsq3tl
+	U4HFfDAXqW/O8QRbXOs/8HGjytG/ZxrUgJS55zkKHiEmWN6dG2VK+KKEOVA==
+X-Gm-Gg: ASbGncu424EwhM5K8TjBv9gYk6o9OvLFTG02tfAESFc1WHLJJWNdN5jMUq5iyvYc/Q/
+	N3gsnULnUzOZKqg4RpgmxmdK5Eo2Wza5TGNxSmy8CtJ1k7rsdnA61S2lYxZJZjy1Gyruu9iFGFK
+	PO+Jn2/bzUra/Mnb4MPA5kHv7J+UrIzndBOhYecoiPFkJgUJZq+IJjmBgJET/Nr2/M9PMVm4P8m
+	vyOp5gwSiPp0F0JW1Ple3crzNqoPcYaxKRojtvP7dMxtEMp9dYzHkceNVU5FtfZjPEqxUWW1UAD
+	ew==
+X-Received: by 2002:a05:6402:234d:b0:5f4:ade4:88c5 with SMTP id 4fb4d7f45d1cf-5ff988dd135mr2083053a12.34.1747220551715;
+        Wed, 14 May 2025 04:02:31 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEs3ORoNcv9GW9V4gupozuqWmYmwSxEEUINo5zQzLXzCm36ngPWceLYKaaZhwPfqmrqY5iYdA==
+X-Received: by 2002:a05:6402:234d:b0:5f4:ade4:88c5 with SMTP id 4fb4d7f45d1cf-5ff988dd135mr2082854a12.34.1747220550339;
+        Wed, 14 May 2025 04:02:30 -0700 (PDT)
+Received: from thinky ([2a0e:fd87:a051:1:e664:4a86:4c01:c774])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5fe43357d45sm4879817a12.54.2025.05.14.04.02.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 14 May 2025 04:02:29 -0700 (PDT)
+Date: Wed, 14 May 2025 13:02:13 +0200
+From: Andrey Albershteyn <aalbersh@redhat.com>
+To: Casey Schaufler <casey@schaufler-ca.com>
+Cc: Richard Henderson <richard.henderson@linaro.org>, 
+	Matt Turner <mattst88@gmail.com>, Russell King <linux@armlinux.org.uk>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, Michal Simek <monstr@monstr.eu>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	Helge Deller <deller@gmx.de>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>, 
+	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, Yoshinori Sato <ysato@users.sourceforge.jp>, 
+	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
+	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
+	Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+	Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, 
+	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>, =?utf-8?Q?G=C3=BCnther?= Noack <gnoack@google.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Stephen Smalley <stephen.smalley.work@gmail.com>, 
+	Ondrej Mosnacek <omosnace@redhat.com>, Tyler Hicks <code@tyhicks.com>, 
+	Miklos Szeredi <miklos@szeredi.hu>, Amir Goldstein <amir73il@gmail.com>, linux-alpha@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org, linux-arch@vger.kernel.org, 
+	selinux@vger.kernel.org, ecryptfs@vger.kernel.org, linux-unionfs@vger.kernel.org, 
+	linux-xfs@vger.kernel.org, Andrey Albershteyn <aalbersh@kernel.org>
+Subject: Re: [PATCH v5 2/7] lsm: introduce new hooks for setting/getting
+ inode fsxattr
+Message-ID: <kgl5h2iruqnhmad65sonlvneu6mdj6jl3sd4aoc3us3lvrgviy@imce27t4nk2e>
+References: <20250512-xattrat-syscall-v5-0-4cd6821e8ff7@kernel.org>
+ <20250512-xattrat-syscall-v5-2-4cd6821e8ff7@kernel.org>
+ <f700845d-f332-4336-a441-08f98cd7f075@schaufler-ca.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -68,81 +126,62 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CA+G9fYsGTqCxiXQOY3HEu4Z3CEwmyQoOb8DnpzVToWMW-Y8R5A@mail.gmail.com>
+In-Reply-To: <f700845d-f332-4336-a441-08f98cd7f075@schaufler-ca.com>
 
-On Tue, May 13, 2025 at 02:29:20PM +0100, Naresh Kamboju wrote:
-> On Tue, 13 May 2025 at 11:40, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+On 2025-05-12 08:43:32, Casey Schaufler wrote:
+> On 5/12/2025 6:25 AM, Andrey Albershteyn wrote:
+> > Introduce new hooks for setting and getting filesystem extended
+> > attributes on inode (FS_IOC_FSGETXATTR).
 > >
-> > On Mon, 12 May 2025 at 18:43, Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > This is the start of the stable review cycle for the 6.14.7 release.
-> > > There are 197 patches in this series, all will be posted as a response
-> > > to this one.  If anyone has any issues with these being applied, please
-> > > let me know.
-> > >
-> > > Responses should be made by Wed, 14 May 2025 17:19:58 +0000.
-> > > Anything received after that time might be too late.
-> > >
-> > > The whole patch series can be found in one patch at:
-> > >         https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.14.7-rc1.gz
-> > > or in the git tree and branch at:
-> > >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.14.y
-> > > and the diffstat can be found below.
-> > >
-> > > thanks,
-> > >
-> > > greg k-h
+> > Cc: selinux@vger.kernel.org
+> > Cc: Paul Moore <paul@paul-moore.com>
 > >
-> > Regressions on mips defconfig tinyconfig and allnoconfig builds failed with
-> > clang-20 toolchain on stable-rc  6.14.7-rc1, 6.12.29-rc1 and 6.6.91-rc1.
-> > But, builds pass with gcc-13.
+> > Signed-off-by: Andrey Albershteyn <aalbersh@kernel.org>
+> > ---
+> >  fs/file_attr.c                | 19 ++++++++++++++++---
+> >  include/linux/lsm_hook_defs.h |  2 ++
+> >  include/linux/security.h      | 16 ++++++++++++++++
+> >  security/security.c           | 30 ++++++++++++++++++++++++++++++
+> >  4 files changed, 64 insertions(+), 3 deletions(-)
 > >
-> > * mips, build
-> >   - clang-20-allnoconfig
-> >   - clang-20-defconfig
-> >   - clang-20-tinyconfig
-> >   - korg-clang-20-lkftconfig-hardening
-> >   - korg-clang-20-lkftconfig-lto-full
-> >   - korg-clang-20-lkftconfig-lto-thing
-> >
-> > Regression Analysis:
-> >  - New regression? Yes
-> >  - Reproducibility? Yes
-> >
-> > Build regression: mips defconfig clang-20 instantiation error expected
-> > an immediate
-> >
-> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
-> >
-> > ## Build error mips
-> > <instantiation>:7:11: error: expected an immediate
-> >  ori $26, r4k_wait_idle_size - 2
-> >           ^
-> > <instantiation>:10:13: error: expected an immediate
-> >  addiu $26, r4k_wait_exit - r4k_wait_insn + 2
-> >             ^
-> > <instantiation>:10:29: error: expected an immediate
-> >  addiu $26, r4k_wait_exit - r4k_wait_insn + 2
-> >                             ^
-> > <instantiation>:7:11: error: expected an immediate
-> >  ori $26, r4k_wait_idle_size - 2
-> >           ^
-> > <instantiation>:10:13: error: expected an immediate
-> >  addiu $26, r4k_wait_exit - r4k_wait_insn + 2
-> >             ^
-> > <instantiation>:10:29: error: expected an immediate
-> >  addiu $26, r4k_wait_exit - r4k_wait_insn + 2
-> >                             ^
+> > diff --git a/fs/file_attr.c b/fs/file_attr.c
+> > index 2910b7047721..be62d97cc444 100644
+> > --- a/fs/file_attr.c
+> > +++ b/fs/file_attr.c
+> > @@ -76,10 +76,15 @@ EXPORT_SYMBOL(fileattr_fill_flags);
+> >  int vfs_fileattr_get(struct dentry *dentry, struct fileattr *fa)
+> >  {
+> >  	struct inode *inode = d_inode(dentry);
+> > +	int error;
+> >  
+> >  	if (!inode->i_op->fileattr_get)
+> >  		return -ENOIOCTLCMD;
+> >  
+> > +	error = security_inode_file_getattr(dentry, fa);
+> > +	if (error)
+> > +		return error;
+> > +
 > 
-> 
-> The bisection found this as first bad commit,
-> 
->     MIPS: Fix idle VS timer enqueue
-> 
->     [ Upstream commit 56651128e2fbad80f632f388d6bf1f39c928267a ]
+> If you're changing VFS behavior to depend on LSMs supporting the new
+> hooks I'm concerned about the impact it will have on the LSMs that you
+> haven't supplied hooks for. Have you tested these changes with anything
+> besides SELinux?
 
-Thanks, now dropped from all queues.
+Sorry, this thread is incomplete, I've resent full patchset again.
+If you have any further comments please comment in that thread [1]
 
-greg k-h
+I haven't tested with anything except SELinux, but I suppose if
+module won't register any hooks, then security_inode_file_*() will
+return 0. Reverting SELinux implementation of the hooks doesn't
+cause any errors.
+
+I'm not that familiar with LSMs/selinux and its codebase, if you can
+recommend what need to be tested while adding new hooks, I will try
+to do that for next revision.
+
+[1]: https://lore.kernel.org/linux-fsdevel/CAOQ4uxgOAxg7N1OUJfb1KMp7oWOfN=KV9Lzz6ZrX0=XRGOQrEQ@mail.gmail.com/T/#t
+
+-- 
+- Andrey
+
 
