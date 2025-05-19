@@ -1,282 +1,225 @@
-Return-Path: <linux-mips+bounces-9023-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9024-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 163DDABBC96
-	for <lists+linux-mips@lfdr.de>; Mon, 19 May 2025 13:37:22 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EA84ABBDD7
+	for <lists+linux-mips@lfdr.de>; Mon, 19 May 2025 14:32:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 110361893449
-	for <lists+linux-mips@lfdr.de>; Mon, 19 May 2025 11:37:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2E3431895B76
+	for <lists+linux-mips@lfdr.de>; Mon, 19 May 2025 12:32:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5B4A27510C;
-	Mon, 19 May 2025 11:37:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3857277022;
+	Mon, 19 May 2025 12:32:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fromorbit-com.20230601.gappssmtp.com header.i=@fromorbit-com.20230601.gappssmtp.com header.b="pXTAcIz/"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TAUBTEVP"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pf1-f169.google.com (mail-pf1-f169.google.com [209.85.210.169])
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B5E02750E3
-	for <linux-mips@vger.kernel.org>; Mon, 19 May 2025 11:37:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9ECB274FFA
+	for <linux-mips@vger.kernel.org>; Mon, 19 May 2025 12:31:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747654632; cv=none; b=DIB5q4JBIn1nW4DL/k2WFYG+weO84cQQdCfYn9iRI0Bwicu/KxSz0KDYS6XPuzCW0zYEdV7+KHDeiOvY2IQSdKXsFgu+BChazkhztfpSHoQFx+wLBE6Mod7rHiqQuByyPAJkgKcwUmifFEChX+7kBq4sVAd9gWmgpb/BFDu27eE=
+	t=1747657920; cv=none; b=QApMgfvnP0F0yiAw+fuyCq4mhr9iMcU/sMWtouhY8ZHsRFxFNfBuKC0rVtucSP8yHLB15ou8ccDfp+SbaV32fdE53IMKN56njzlQzL+DmZrEuE5uZ9LdBVKAcNTSFNcjCVNTQqJ6MyTQacr3Rzj5KhqSlnpqXMB1yrJYSn/CnWA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747654632; c=relaxed/simple;
-	bh=GFhTh8qt5cp6q80eo9lSCWZXWbRWYcGWMwJc66usfSM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H6a1OkG+jVa01LmUQK/BfRW0muwJqUuIqQVIEFWMzc5bfuP12bB86hoksRE/VEVzyI5rmyvWi7hO0zpJGZML/gYV7tVWDYr3rEZ9pTyzo6AySxl8fe9wqcvKKz06bCf0OJEt8XsTkLg9D+Uvcn0CyJhKWJC6ebEmh13Jae8B/Bk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fromorbit.com; spf=pass smtp.mailfrom=fromorbit.com; dkim=pass (2048-bit key) header.d=fromorbit-com.20230601.gappssmtp.com header.i=@fromorbit-com.20230601.gappssmtp.com header.b=pXTAcIz/; arc=none smtp.client-ip=209.85.210.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=fromorbit.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=fromorbit.com
-Received: by mail-pf1-f169.google.com with SMTP id d2e1a72fcca58-742c9563fafso884304b3a.0
-        for <linux-mips@vger.kernel.org>; Mon, 19 May 2025 04:37:09 -0700 (PDT)
+	s=arc-20240116; t=1747657920; c=relaxed/simple;
+	bh=3r5j8ewUTdDD9cAVaQUvMIgt76uz3t6q02hyODKU56A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MpPxBdQDRZPYklZaZX1K03O0kqyqa6JwO4fVqFrXnKzXyYfSMRAXPnZP82rDxx0AqPQN2B45QqBu0JabVseSzHYh5+d46IdEu3tmomVuMU3+P6kqmthycp444692w0/pyMS0X9jno3goiXrUst1AD/aPcSZFjVo4ig8slbH2omE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TAUBTEVP; arc=none smtp.client-ip=209.85.219.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e7387d4a336so3556440276.2
+        for <linux-mips@vger.kernel.org>; Mon, 19 May 2025 05:31:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=fromorbit-com.20230601.gappssmtp.com; s=20230601; t=1747654629; x=1748259429; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=DkYbc28ZqmxwTCsqpy3spmOraOHqionupf/htIjrysQ=;
-        b=pXTAcIz/GgulyAu0QLlBT9UeD2DHbX4hsEBS6moydy6FP2YFBc9EthoupgN62flhpp
-         xn4ElzxeEaMRoUdjcGLCr/6T8U743jjlDHrhPc3nJlHNeJ9D90PDD/0qwvCbTEtXXnQ1
-         RPgaQQzoByYMNfLhMY+SSeSgYFHJurzhD/epDXsLrHJ8QKO7/mzSdR8ta0wu1TJyzets
-         o/9yD05HLIBtFYJ+IxgsqFOQ7YKNTaFJLRWWee9LxcELfTQnG9oVJybE/EP025yFndXb
-         f9adaN7VXFOsgSuBp7xl2mwq7q5rjr2T9EvmymBmqQ1mhIcKEwe4NG3DJCgDkmIhbGVz
-         5ryg==
+        d=linaro.org; s=google; t=1747657918; x=1748262718; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=K/Y4tapDB2lInfWCMbvdtqDDZUxcIGcJpTNFG1RgCRM=;
+        b=TAUBTEVPNAtUTnSocO9UXH8p7zkbiPqhzN1PXMbkEhTMWkNAgythz+VL0CTXcJhmbU
+         AlzJDSqWtzkgp3WQ9ge6OpyeaW+MChvEQ3mAbdH3wpFXqCbLlprcDtPNUaoUgCZHk2Oz
+         SufzhHIhd0dC2BrNjcW8Qme3T0Qzk0fTl/duFp/i5y0c0y9oeGHyCqFP9WZYpTDa3P8n
+         sn/vSAZ0kC3yOj6I4QA3Ns0tlOnbwlFcAfT7CfD32eqgbYu7Z9to8KVUdSIj5AACB5q/
+         2eeU6VkXA7JNPibFcbl26xBjHl5qdmv4isC6q3R2le3NeDVK/jeheJxW1UgOWrACh9yY
+         Dp9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747654629; x=1748259429;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DkYbc28ZqmxwTCsqpy3spmOraOHqionupf/htIjrysQ=;
-        b=ml4Mb0EvTsz267KTDsbMk/oCI3Ym1PhkCTN1zTv9ggWTrEWmXTIneF2quQwFeFb+d3
-         dqeJQtZ6znxI//myOAbNzP8qFz/etZqdJPNb7KjPS82O7ufXyUkszxM3uHKFP3XkTa8B
-         FBi/jnZWESc06zB3DT/8ciWeqoaiZiYTHhcGOmrFNlR5ZOaXHDdthGex0iTE1wRSCgJ5
-         bQg+iwuvdg+XQGmHEze4V0Y46RCD+PSEu4ttCvTuwJmirp/eHBjEPP6ujLytjP2gsErw
-         g24ruSO9ZyydUbX6ZlaGGLggWMcXSxJtI3LvhmfV/NIAFrO72QzVUlv3CQ++6h8X5Xa1
-         5UDA==
-X-Forwarded-Encrypted: i=1; AJvYcCWw6IqxvHuJ4r2O+614412++6W2x1/PFh5SlVbsbd9We1OTlMVnnenmmpHkqtCH8GQpyuPVFKlZ1T1e@vger.kernel.org
-X-Gm-Message-State: AOJu0YxS/g6Z97ZvzJLI4RKE+R4S2oGMjbkRQg72GN03zkZPVCqWMDEm
-	9QNh6nJPLAPrewP4FlOiRUwA+VbKEW6yGauU7JH+f4/bfwYb9t4PyGQdTFg9k3TdfOQ=
-X-Gm-Gg: ASbGncs1lPj7W7jH++oQbcsp1vO61Aa7Ekbelu7tFzl9VdwYFuqM4x6sP58TYaAaasc
-	eTNy4lY3t75R1qKw/EGhtkm2jBLvUUtdgt1wHhzjME7xxoYCfLDsfLcyimQi+YPwIWoeI8eJ60p
-	rC+gBiLp8mgTSpj00Lau5O9Us3rV+xxKShbHP8QCYCNAa4yi6LmeGv9f+uPz4b8J2PTSX3nPf1E
-	/Fayno70OVKWKQ/ZUQVvBjXEPOinQwySYInKk33dtD9Z4kUUKeepu7wjLQ1QJX9c4s5Wu4I0PV3
-	Djf3cZ4U/aryescWYIq0y1FPVNCmFFVJEad2C/L3GuXzV/5EyhwDVYWDO2Z3ovNIMO1NpI65f4R
-	ymc33qUBRy4HiAio4taqTO87B/as=
-X-Google-Smtp-Source: AGHT+IEUy25uZy6yhylI082QEDzxGQ+0mJz25NQX6XuPMH4jpAhK+MU3tNtraGB6TKng6SdbDnt0Eg==
-X-Received: by 2002:a05:6a00:3a20:b0:736:a6e0:e66d with SMTP id d2e1a72fcca58-742a97a6df2mr15123631b3a.6.1747654628667;
-        Mon, 19 May 2025 04:37:08 -0700 (PDT)
-Received: from dread.disaster.area (pa49-180-184-88.pa.nsw.optusnet.com.au. [49.180.184.88])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-742a973a2f8sm5957134b3a.81.2025.05.19.04.37.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 19 May 2025 04:37:08 -0700 (PDT)
-Received: from dave by dread.disaster.area with local (Exim 4.98.2)
-	(envelope-from <david@fromorbit.com>)
-	id 1uGyno-00000005Si8-44qA;
-	Mon, 19 May 2025 21:37:04 +1000
-Date: Mon, 19 May 2025 21:37:04 +1000
-From: Dave Chinner <david@fromorbit.com>
-To: Amir Goldstein <amir73il@gmail.com>
-Cc: Christian Brauner <brauner@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Andrey Albershteyn <aalbersh@redhat.com>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Matt Turner <mattst88@gmail.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Michal Simek <monstr@monstr.eu>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>,
-	Rich Felker <dalias@libc.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	"David S . Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
-	Max Filippov <jcmvbkbc@gmail.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>,
-	=?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-	=?iso-8859-1?Q?G=FCnther?= Noack <gnoack@google.com>,
-	Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Stephen Smalley <stephen.smalley.work@gmail.com>,
-	Ondrej Mosnacek <omosnace@redhat.com>,
-	Tyler Hicks <code@tyhicks.com>, Miklos Szeredi <miklos@szeredi.hu>,
-	linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-	linux-security-module@vger.kernel.org, linux-api@vger.kernel.org,
-	Linux-Arch <linux-arch@vger.kernel.org>, selinux@vger.kernel.org,
-	ecryptfs@vger.kernel.org, linux-unionfs@vger.kernel.org,
-	linux-xfs@vger.kernel.org, Andrey Albershteyn <aalbersh@kernel.org>
-Subject: Re: [PATCH v5 0/7] fs: introduce file_getattr and file_setattr
- syscalls
-Message-ID: <aCsX4LTpAnGfFjHg@dread.disaster.area>
-References: <20250513-xattrat-syscall-v5-0-22bb9c6c767f@kernel.org>
- <399fdabb-74d3-4dd6-9eee-7884a986dab1@app.fastmail.com>
- <20250515-bedarf-absagen-464773be3e72@brauner>
- <CAOQ4uxicuEkOas2UR4mqfus9Q2RAeKKYTwbE2XrkcE_zp8oScQ@mail.gmail.com>
+        d=1e100.net; s=20230601; t=1747657918; x=1748262718;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K/Y4tapDB2lInfWCMbvdtqDDZUxcIGcJpTNFG1RgCRM=;
+        b=bge6plC8duGICpLGnXczBpqfBUOhMUoDELJ2w/+LkYg8T5VwEtf5RQoi9vQI/7VJ5Q
+         tfUk/qQhweRZkBZpZ4Wzy6QMOaH8zTwEMeklcKtBsbvFpyFOtbF7Jk9X+FEsbuixDapW
+         2D7BVBRqzdadXJK0VTbZcnmSK+42RUEbPv3cJvOJpmz/wGdGx1qwy9jUbasfzQltyERt
+         Quij04bBnl9b9OOnB5qKpknEi6uariNoal5WurCZlKoW8q/vTYysbw10FCbpRKRTY/bS
+         N7eXeBf1Tc1MrQv3FkDC4PLOHdt3ep/ChGoMf/g1Fb3ODCuUON2ko6TkaX6bhrB/b4c0
+         WAgg==
+X-Forwarded-Encrypted: i=1; AJvYcCVZZMSzQX8KC8L5s7QyF9JYt98hvcgGcRsW6UhjURRBR/OyKm9pCha6gJ0CyDCG8YUfS3PwtvCyjtWA@vger.kernel.org
+X-Gm-Message-State: AOJu0YxItZoa332fffniBBaC8tpoCr6ChaJ4ekyKYk+wYgF5dGhSBQrc
+	gGtAhzKjCRWrEXFfHgcFZE57OmKbhxKGTSIQGFCEklQ6ducrMKwcQsOKibSA4aMuzOibbDqVjKr
+	gR+T46VNuiFakzSzxDdmZP2eWbJ7PY+S49Rt2M/RD7A==
+X-Gm-Gg: ASbGncs3qaESJicjij9ty4G6HmGabvc2IfNs3DETaM4XZNX41xskLFhmAwwq1dIJlcj
+	Ftm5dBd+4vrRYW1KDnsqklzmS+ynxzkB6MQkvZ7/hr5spk3TWOwqiSa2cYvPX06GEU3AjKDX/J2
+	YV+D6G+OvPmyldMgo29K6ADx4nxW8wWyawHw==
+X-Google-Smtp-Source: AGHT+IEmv/WGUjKBm+/A1/4GEydyk8TOzWy7/Tild6Q46xMQvO171ETGSmplGkezWXGMNntuDWyD2TLLNFfhysgWzEI=
+X-Received: by 2002:a05:6902:1547:b0:e7b:9763:6676 with SMTP id
+ 3f1490d57ef6-e7b97636a60mr5784680276.17.1747657917592; Mon, 19 May 2025
+ 05:31:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAOQ4uxicuEkOas2UR4mqfus9Q2RAeKKYTwbE2XrkcE_zp8oScQ@mail.gmail.com>
+References: <20250507-mchp-sdhci-v1-0-ed29de05295a@gmail.com> <20250507-mchp-sdhci-v1-2-ed29de05295a@gmail.com>
+In-Reply-To: <20250507-mchp-sdhci-v1-2-ed29de05295a@gmail.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Mon, 19 May 2025 14:31:21 +0200
+X-Gm-Features: AX0GCFuWDdcxOPuDxhAtLQnUgrmqueC7zHJtPdPiN6hagUd_-Xv9el2wmRphFWc
+Message-ID: <CAPDyKFqPhxOfzZOYuF_yG9TyUx0FQ7p=TE8krSdLkM7AjOmp_g@mail.gmail.com>
+Subject: Re: [PATCH 2/2] dt-binding: mmc: microchip,sdhci-pic32: convert text
+ based binding to json schema
+To: Charan Pedumuru <charan.pedumuru@gmail.com>
+Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	devicetree@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, May 15, 2025 at 12:33:31PM +0200, Amir Goldstein wrote:
-> On Thu, May 15, 2025 at 11:02 AM Christian Brauner <brauner@kernel.org> wrote:
-> >
-> > On Tue, May 13, 2025 at 11:53:23AM +0200, Arnd Bergmann wrote:
-> > > On Tue, May 13, 2025, at 11:17, Andrey Albershteyn wrote:
-> > >
-> > > >
-> > > >     long syscall(SYS_file_getattr, int dirfd, const char *pathname,
-> > > >             struct fsxattr *fsx, size_t size, unsigned int at_flags);
-> > > >     long syscall(SYS_file_setattr, int dirfd, const char *pathname,
-> > > >             struct fsxattr *fsx, size_t size, unsigned int at_flags);
-> > >
-> > > I don't think we can have both the "struct fsxattr" from the uapi
-> > > headers, and a variable size as an additional argument. I would
-> > > still prefer not having the extensible structure at all and just
-> >
-> > We're not going to add new interfaces that are fixed size unless for the
-> > very basic cases. I don't care if we're doing that somewhere else in the
-> > kernel but we're not doing that for vfs apis.
-> >
-> > > use fsxattr, but if you want to make it extensible in this way,
-> > > it should use a different structure (name). Otherwise adding
-> > > fields after fsx_pad[] would break the ioctl interface.
-> >
-> > Would that really be a problem? Just along the syscall simply add
-> > something like:
-> >
-> > diff --git a/fs/ioctl.c b/fs/ioctl.c
-> > index c91fd2b46a77..d3943805c4be 100644
-> > --- a/fs/ioctl.c
-> > +++ b/fs/ioctl.c
-> > @@ -868,12 +868,6 @@ static int do_vfs_ioctl(struct file *filp, unsigned int fd,
-> >         case FS_IOC_SETFLAGS:
-> >                 return ioctl_setflags(filp, argp);
-> >
-> > -       case FS_IOC_FSGETXATTR:
-> > -               return ioctl_fsgetxattr(filp, argp);
-> > -
-> > -       case FS_IOC_FSSETXATTR:
-> > -               return ioctl_fssetxattr(filp, argp);
-> > -
-> >         case FS_IOC_GETFSUUID:
-> >                 return ioctl_getfsuuid(filp, argp);
-> >
-> > @@ -886,6 +880,20 @@ static int do_vfs_ioctl(struct file *filp, unsigned int fd,
-> >                 break;
-> >         }
-> >
-> > +       switch (_IOC_NR(cmd)) {
-> > +       case _IOC_NR(FS_IOC_FSGETXATTR):
-> > +               if (WARN_ON_ONCE(_IOC_TYPE(cmd) != _IOC_TYPE(FS_IOC_FSGETXATTR)))
-> > +                       return SOMETHING_SOMETHING;
-> > +               /* Only handle original size. */
-> > +               return ioctl_fsgetxattr(filp, argp);
-> > +
-> > +       case _IOC_NR(FFS_IOC_FSSETXATTR):
-> > +               if (WARN_ON_ONCE(_IOC_TYPE(cmd) != _IOC_TYPE(FFS_IOC_FSSETXATTR)))
-> > +                       return SOMETHING_SOMETHING;
-> > +               /* Only handle original size. */
-> > +               return ioctl_fssetxattr(filp, argp);
-> > +       }
-> > +
-> 
-> I think what Arnd means is that we will not be able to change struct
-> sfxattr in uapi
-> going forward, because we are not going to deprecate the ioctls and
+On Wed, 7 May 2025 at 08:32, Charan Pedumuru <charan.pedumuru@gmail.com> wrote:
+>
+> Update text binding to YAML.
+> Changes during conversion:
+> Add appropriate include statements for interrupts and clock-names
+> to resolve errors identified by `dt_binding_check` and `dtbs_check`.
+>
+> Signed-off-by: Charan Pedumuru <charan.pedumuru@gmail.com>
 
-There's no need to deprecate anything to rev an ioctl API.  We have
-had to solve this "changing struct size" problem previously in XFS
-ioctls. See XFS_IOC_FSGEOMETRY and the older XFS_IOC_FSGEOMETRY_V4
-and XFS_IOC_FSGEOMETRY_V1 versions of the API/ABI.
+Applied for next, thanks!
 
-If we need to increase the structure size, we can rename the existing
-ioctl and struct to fix the version in the API, then use the
-original name for the new ioctl and structure definition.
+Note that, I leave patch1 for SoC maintainers to pick up, thanks!
 
-The only thing we have to make sure of is that the old and new
-structures have exactly the same overlapping structure. i.e.
-extension must always be done by appending new varibles, they can't
-be put in the middle of the structure.
+Kind regards
+Uffe
 
-This way applications being rebuild will pick up the new definition
-automatically when the system asserts that it is suppored, whilst
-existing binaries will always still be supported by the kernel.
 
-If the application wants/needs to support all possible kernels, then
-if XFS_IOC_FSGEOMETRY is not supported, call XFS_IOC_FSGEOMETRY_V4,
-and if that fails (only on really old irix!) or you only need
-something in that original subset, call XFS_IOC_FSGEOMETRY_V1 which
-will always succeed....
 
-> Should we will need to depart from this struct definition and we might
-> as well do it for the initial release of the syscall rather than later on, e.g.:
-> 
-> --- a/include/uapi/linux/fs.h
-> +++ b/include/uapi/linux/fs.h
-> @@ -148,6 +148,17 @@ struct fsxattr {
->         unsigned char   fsx_pad[8];
->  };
-> 
-> +/*
-> + * Variable size structure for file_[sg]et_attr().
-> + */
-> +struct fsx_fileattr {
-> +       __u32           fsx_xflags;     /* xflags field value (get/set) */
-> +       __u32           fsx_extsize;    /* extsize field value (get/set)*/
-> +       __u32           fsx_nextents;   /* nextents field value (get)   */
-> +       __u32           fsx_projid;     /* project identifier (get/set) */
-> +       __u32           fsx_cowextsize; /* CoW extsize field value (get/set)*/
-> +};
+> ---
+>  .../bindings/mmc/microchip,sdhci-pic32.txt         | 29 ----------
+>  .../bindings/mmc/microchip,sdhci-pic32.yaml        | 66 ++++++++++++++++++++++
+>  2 files changed, 66 insertions(+), 29 deletions(-)
+>
+> diff --git a/Documentation/devicetree/bindings/mmc/microchip,sdhci-pic32.txt b/Documentation/devicetree/bindings/mmc/microchip,sdhci-pic32.txt
+> deleted file mode 100644
+> index f064528effed31f30d1d1c6e0b49c02e215d99af..0000000000000000000000000000000000000000
+> --- a/Documentation/devicetree/bindings/mmc/microchip,sdhci-pic32.txt
+> +++ /dev/null
+> @@ -1,29 +0,0 @@
+> -* Microchip PIC32 SDHCI Controller
+> -
+> -This file documents differences between the core properties in mmc.txt
+> -and the properties used by the sdhci-pic32 driver.
+> -
+> -Required properties:
+> -- compatible: Should be "microchip,pic32mzda-sdhci"
+> -- interrupts: Should contain interrupt
+> -- clock-names: Should be "base_clk", "sys_clk".
+> -               See: Documentation/devicetree/bindings/resource-names.txt
+> -- clocks: Phandle to the clock.
+> -          See: Documentation/devicetree/bindings/clock/clock-bindings.txt
+> -- pinctrl-names: A pinctrl state names "default" must be defined.
+> -- pinctrl-0: Phandle referencing pin configuration of the SDHCI controller.
+> -             See: Documentation/devicetree/bindings/pinctrl/pinctrl-bindings.txt
+> -
+> -Example:
+> -
+> -       sdhci@1f8ec000 {
+> -               compatible = "microchip,pic32mzda-sdhci";
+> -               reg = <0x1f8ec000 0x100>;
+> -               interrupts = <191 IRQ_TYPE_LEVEL_HIGH>;
+> -               clocks = <&rootclk REF4CLK>, <&rootclk PB5CLK>;
+> -               clock-names = "base_clk", "sys_clk";
+> -               bus-width = <4>;
+> -               cap-sd-highspeed;
+> -               pinctrl-names = "default";
+> -               pinctrl-0 = <&pinctrl_sdhc1>;
+> -       };
+> diff --git a/Documentation/devicetree/bindings/mmc/microchip,sdhci-pic32.yaml b/Documentation/devicetree/bindings/mmc/microchip,sdhci-pic32.yaml
+> new file mode 100644
+> index 0000000000000000000000000000000000000000..ca0ca7df9ee991d8402bc4c62b1235ef5db2e85f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mmc/microchip,sdhci-pic32.yaml
+> @@ -0,0 +1,66 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mmc/microchip,sdhci-pic32.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > +
-> +#define FSXATTR_SIZE_VER0 20
-> +#define FSXATTR_SIZE_LATEST FSXATTR_SIZE_VER0
-
-If all the structures overlap the same, all that is needed in the
-code is to define the structure size that should be copied in and
-parsed. i.e:
-
-	case FSXATTR..._V1:
-		return ioctl_fsxattr...(args, sizeof(fsx_fileattr_v1));
-	case FSXATTR..._V2:
-		return ioctl_fsxattr...(args, sizeof(fsx_fileattr_v2));
-	case FSXATTR...:
-		return ioctl_fsxattr...(args, sizeof(fsx_fileattr));
-
--Dave.
--- 
-Dave Chinner
-david@fromorbit.com
+> +title: Microchip PIC32 SDHI Controller
+> +
+> +description:
+> +  The Microchip PIC32 family of microcontrollers (MCUs) includes models with
+> +  Secure Digital Host Controller Interface (SDHCI) controllers, allowing them
+> +  to interface with Secure Digital (SD) cards. This interface is used for reading,
+> +  writing, and managing data on SD cards, enabling storage and data transfer
+> +  capabilities in embedded systems.
+> +
+> +allOf:
+> +  - $ref: mmc-controller.yaml
+> +
+> +maintainers:
+> +  - Ulf Hansson <ulf.hansson@linaro.org>
+> +
+> +properties:
+> +  compatible:
+> +    const: microchip,pic32mzda-sdhci
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 2
+> +
+> +  clock-names:
+> +    items:
+> +      - const: base_clk
+> +      - const: sys_clk
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - clocks
+> +  - clock-names
+> +  - pinctrl-names
+> +  - pinctrl-0
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/irq.h>
+> +    #include <dt-bindings/clock/microchip,pic32-clock.h>
+> +    mmc@1f8ec000 {
+> +        compatible = "microchip,pic32mzda-sdhci";
+> +        reg = <0x1f8ec000 0x100>;
+> +        interrupts = <191 IRQ_TYPE_LEVEL_HIGH>;
+> +        clocks = <&rootclk REF4CLK>, <&rootclk PB5CLK>;
+> +        clock-names = "base_clk", "sys_clk";
+> +        bus-width = <4>;
+> +        cap-sd-highspeed;
+> +        pinctrl-names = "default";
+> +        pinctrl-0 = <&pinctrl_sdhc1>;
+> +    };
+> +...
+>
+> --
+> 2.43.0
+>
 
