@@ -1,123 +1,157 @@
-Return-Path: <linux-mips+bounces-9039-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9040-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06D80ABE282
-	for <lists+linux-mips@lfdr.de>; Tue, 20 May 2025 20:21:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54AE1ABE80A
+	for <lists+linux-mips@lfdr.de>; Wed, 21 May 2025 01:30:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DC3097B3FC9
-	for <lists+linux-mips@lfdr.de>; Tue, 20 May 2025 18:19:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 157764C6D2C
+	for <lists+linux-mips@lfdr.de>; Tue, 20 May 2025 23:30:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FD33289E13;
-	Tue, 20 May 2025 18:17:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="k28WW5Sr"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E220925F991;
+	Tue, 20 May 2025 23:30:07 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED579289370;
-	Tue, 20 May 2025 18:17:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8D4025D1F5;
+	Tue, 20 May 2025 23:30:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747765046; cv=none; b=P4xtXnDFX6/Nyr6BkQqUqf+8DWKNfEs9vd/bddbj68FXzPaZZEMIJerCannbJKkFih/jE7wczq+eBeVJvcQ5BRxUcY2POuad8WmNG9eTJWEfMkC17tIItbRjZcNsSujQ188YkPYKKndwdpJ6eqgBV5f/cUQS9H7KiaZm3rdomoE=
+	t=1747783807; cv=none; b=JGbCVkn3CLHo4rCdqmdPPYDMK27Tpn7N22TJF4pxZWwE7GaMnLkpmyDBUv+e1KL5p1kLPjG5K/jrFXDxtKCnUitB2dc0BggqEPxknCpEmacKugJRHEeERVRxgqqFA9V92h2/0E+PEgnLJ70kaDaN1sTrpZ+18+SX64NzXr0Y01s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747765046; c=relaxed/simple;
-	bh=W83BuCBEGVgUrqk/CNpFhmFYGiaT4zNHiSxidabkeh4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=s0Z96rhtW2BuJsOMBju9tvZfE7U3Mo5/n00ehlrNkLBeRJTbLVoAkkVz568g025K/NYlpvAotTFa7gjRAhpwlz6ZaSz9cu4Jb5mv/uOTaRqifTfMai8IEqxdaWDCQViHIh+ad7UeJHgb3zcNMMlvrCpfalpd3tdfwITh8FZfPPc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=k28WW5Sr; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747765045; x=1779301045;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=W83BuCBEGVgUrqk/CNpFhmFYGiaT4zNHiSxidabkeh4=;
-  b=k28WW5Sr21gZcGXPKSkK/mDziqHBROdeHGkLKP6OIaZ+fJVxy6opMA1F
-   2tpcvZPqBMJqoGBJrOGn/MyEVFbsKbYxCxokhdEftZ8ESowgGRbTXBfeF
-   X3Wkdtik0oz//B+1s7cQrfJSZfttTZx1poI0ReIIy5a/df0jPYrZIsPuo
-   +pFq+t6QlOX0ZXIJr/BLyxGe4ZZd5Je0wWk30JwHSH3diCwkSDZh0YNEq
-   xkUL1kGUEbQsKU1qSw1lKeVm2c6l4sNbPRGv5YHHAF96Vc+xsEYmgYymQ
-   GfPRZpm1yu3fNZ2dr/G/onrpTw1aWwWHtMa/9qVK17GO3qXFLxJmmPv3R
-   Q==;
-X-CSE-ConnectionGUID: Co81dHvPQImnN1Yh+cfmqg==
-X-CSE-MsgGUID: 73Q3a8S3Sk6lL5+UeQ1bNQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11439"; a="49848063"
-X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
-   d="scan'208";a="49848063"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2025 11:17:14 -0700
-X-CSE-ConnectionGUID: IRyZBA6xRXK9/tMskgqUFQ==
-X-CSE-MsgGUID: MvsA5NJFQOmUedhDBhk8nA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,302,1739865600"; 
-   d="scan'208";a="144514724"
-Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
-  by orviesa003.jf.intel.com with ESMTP; 20 May 2025 11:17:14 -0700
-From: kan.liang@linux.intel.com
-To: peterz@infradead.org,
-	mingo@redhat.com,
-	namhyung@kernel.org,
-	irogers@google.com,
-	mark.rutland@arm.com,
-	linux-kernel@vger.kernel.org,
-	linux-perf-users@vger.kernel.org
-Cc: eranian@google.com,
-	ctshao@google.com,
-	tmricht@linux.ibm.com,
-	leo.yan@arm.com,
-	Kan Liang <kan.liang@linux.intel.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-mips@vger.kernel.org
-Subject: [PATCH V4 16/16] mips/perf: Remove driver-specific throttle support
-Date: Tue, 20 May 2025 11:16:44 -0700
-Message-Id: <20250520181644.2673067-17-kan.liang@linux.intel.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20250520181644.2673067-1-kan.liang@linux.intel.com>
-References: <20250520181644.2673067-1-kan.liang@linux.intel.com>
+	s=arc-20240116; t=1747783807; c=relaxed/simple;
+	bh=/Yn/tU7urG+QqEUQLpNA79C93Cze2XqrbVp4Cz+CeTg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Xpj0EmQgLvknQV28jTmqQAZf5j5MKP6DhAJerC+MmtLXVa92eR0YFJ1z6i80HHGYbXnDErNoxCsrlpNiVCzZwa7H7wA/244rYrBDXxBRYNctKMrbucuqbY0SC97+0Sxd/LJG02aZs5X0ryLAwGvTJDZGnYvtqga+9fsT/KGRdUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 37EB0C4CEE9;
+	Tue, 20 May 2025 23:30:01 +0000 (UTC)
+Message-ID: <215dd4bf-04fd-4ce3-ad1c-2ede18e6f152@linux-m68k.org>
+Date: Wed, 21 May 2025 09:29:58 +1000
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 1/3] net: phy: fixed_phy: remove irq argument
+ from fixed_phy_add
+To: Heiner Kallweit <hkallweit1@gmail.com>,
+ Geert Uytterhoeven <geert@linux-m68k.org>, Hauke Mehrtens
+ <hauke@hauke-m.de>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Vladimir Oltean <olteanv@gmail.com>, Doug Berger <opendmb@gmail.com>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Thangaraj Samynathan <Thangaraj.S@microchip.com>,
+ Rengarajan Sundararajan <Rengarajan.S@microchip.com>,
+ Microchip Linux Driver Support <UNGLinuxDriver@microchip.com>,
+ Andrew Lunn <andrew@lunn.ch>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ Russell King - ARM Linux <linux@armlinux.org.uk>,
+ David Miller <davem@davemloft.net>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@google.com>
+Cc: Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, linux-m68k@lists.linux-m68k.org,
+ linux-mips@vger.kernel.org,
+ Linux USB Mailing List <linux-usb@vger.kernel.org>,
+ "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+References: <4d4c468e-300d-42c7-92a1-eabbdb6be748@gmail.com>
+ <b3b9b3bc-c310-4a54-b376-c909c83575de@gmail.com>
+Content-Language: en-US
+From: Greg Ungerer <gerg@linux-m68k.org>
+In-Reply-To: <b3b9b3bc-c310-4a54-b376-c909c83575de@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Kan Liang <kan.liang@linux.intel.com>
+Hi Heiner,
 
-The throttle support has been added in the generic code. Remove
-the driver-specific throttle support.
+On 18/5/25 06:34, Heiner Kallweit wrote:
+> All callers pass PHY_POLL, therefore remove irq argument from
+> fixed_phy_add().
+> 
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> ---
+>   arch/m68k/coldfire/m5272.c  | 2 +-
+>   arch/mips/bcm47xx/setup.c   | 2 +-
+>   drivers/net/phy/fixed_phy.c | 5 ++---
+>   include/linux/phy_fixed.h   | 5 ++---
+>   4 files changed, 6 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/m68k/coldfire/m5272.c b/arch/m68k/coldfire/m5272.c
+> index 734dab657..5b70dfdab 100644
+> --- a/arch/m68k/coldfire/m5272.c
+> +++ b/arch/m68k/coldfire/m5272.c
+> @@ -119,7 +119,7 @@ static struct fixed_phy_status nettel_fixed_phy_status __initdata = {
+>   static int __init init_BSP(void)
+>   {
+>   	m5272_uarts_init();
+> -	fixed_phy_add(PHY_POLL, 0, &nettel_fixed_phy_status);
+> +	fixed_phy_add(0, &nettel_fixed_phy_status);
+>   	clkdev_add_table(m5272_clk_lookup, ARRAY_SIZE(m5272_clk_lookup));
+>   	return 0;
+>   }
 
-Besides the throttle, perf_event_overflow may return true because of
-event_limit. It already does an inatomic event disable. The pmu->stop
-is not required either.
+Acked-by: Greg Ungerer <gerg@linux-m68k.org>
 
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
----
- arch/mips/kernel/perf_event_mipsxx.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+Regards
+Greg
 
-diff --git a/arch/mips/kernel/perf_event_mipsxx.c b/arch/mips/kernel/perf_event_mipsxx.c
-index c4d6b09136b1..196a070349b0 100644
---- a/arch/mips/kernel/perf_event_mipsxx.c
-+++ b/arch/mips/kernel/perf_event_mipsxx.c
-@@ -791,8 +791,7 @@ static void handle_associated_event(struct cpu_hw_events *cpuc,
- 	if (!mipspmu_event_set_period(event, hwc, idx))
- 		return;
- 
--	if (perf_event_overflow(event, data, regs))
--		mipsxx_pmu_disable_event(idx);
-+	perf_event_overflow(event, data, regs);
- }
- 
- 
--- 
-2.38.1
+
+> diff --git a/arch/mips/bcm47xx/setup.c b/arch/mips/bcm47xx/setup.c
+> index 247be207f..de426a474 100644
+> --- a/arch/mips/bcm47xx/setup.c
+> +++ b/arch/mips/bcm47xx/setup.c
+> @@ -282,7 +282,7 @@ static int __init bcm47xx_register_bus_complete(void)
+>   	bcm47xx_leds_register();
+>   	bcm47xx_workarounds();
+>   
+> -	fixed_phy_add(PHY_POLL, 0, &bcm47xx_fixed_phy_status);
+> +	fixed_phy_add(0, &bcm47xx_fixed_phy_status);
+>   	return 0;
+>   }
+>   device_initcall(bcm47xx_register_bus_complete);
+> diff --git a/drivers/net/phy/fixed_phy.c b/drivers/net/phy/fixed_phy.c
+> index c91adf246..34a71f223 100644
+> --- a/drivers/net/phy/fixed_phy.c
+> +++ b/drivers/net/phy/fixed_phy.c
+> @@ -160,10 +160,9 @@ static int fixed_phy_add_gpiod(unsigned int irq, int phy_addr,
+>   	return 0;
+>   }
+>   
+> -int fixed_phy_add(unsigned int irq, int phy_addr,
+> -		  struct fixed_phy_status *status)
+> +int fixed_phy_add(int phy_addr, struct fixed_phy_status *status)
+>   {
+> -	return fixed_phy_add_gpiod(irq, phy_addr, status, NULL);
+> +	return fixed_phy_add_gpiod(PHY_POLL, phy_addr, status, NULL);
+>   }
+>   EXPORT_SYMBOL_GPL(fixed_phy_add);
+>   
+> diff --git a/include/linux/phy_fixed.h b/include/linux/phy_fixed.h
+> index 3392c09b5..316bb4ded 100644
+> --- a/include/linux/phy_fixed.h
+> +++ b/include/linux/phy_fixed.h
+> @@ -17,8 +17,7 @@ struct net_device;
+>   
+>   #if IS_ENABLED(CONFIG_FIXED_PHY)
+>   extern int fixed_phy_change_carrier(struct net_device *dev, bool new_carrier);
+> -extern int fixed_phy_add(unsigned int irq, int phy_id,
+> -			 struct fixed_phy_status *status);
+> +int fixed_phy_add(int phy_id, struct fixed_phy_status *status);
+>   extern struct phy_device *fixed_phy_register(unsigned int irq,
+>   					     struct fixed_phy_status *status,
+>   					     struct device_node *np);
+> @@ -28,7 +27,7 @@ extern int fixed_phy_set_link_update(struct phy_device *phydev,
+>   			int (*link_update)(struct net_device *,
+>   					   struct fixed_phy_status *));
+>   #else
+> -static inline int fixed_phy_add(unsigned int irq, int phy_id,
+> +static inline int fixed_phy_add(int phy_id,
+>   				struct fixed_phy_status *status)
+>   {
+>   	return -ENODEV;
 
 
