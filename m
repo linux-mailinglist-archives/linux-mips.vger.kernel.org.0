@@ -1,160 +1,91 @@
-Return-Path: <linux-mips+bounces-9059-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9060-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0015ABF26E
-	for <lists+linux-mips@lfdr.de>; Wed, 21 May 2025 13:09:16 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7933ABFC3B
+	for <lists+linux-mips@lfdr.de>; Wed, 21 May 2025 19:27:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ED0653A7F06
-	for <lists+linux-mips@lfdr.de>; Wed, 21 May 2025 11:08:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 82F0416E2F8
+	for <lists+linux-mips@lfdr.de>; Wed, 21 May 2025 17:27:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EF4625FA0B;
-	Wed, 21 May 2025 11:09:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23C1317C21B;
+	Wed, 21 May 2025 17:27:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dH5ZyA4E"
+	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="fhQhKMgC"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.cjdns.fr (mail.cjdns.fr [5.135.140.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29F8646B5;
-	Wed, 21 May 2025 11:09:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7BE9D1C5F09
+	for <linux-mips@vger.kernel.org>; Wed, 21 May 2025 17:27:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.135.140.105
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747825752; cv=none; b=UeTwONVwc3spG9zCsAFOQmqb4bIsU2Gr1oCWxLXq2iEWy9X2ZalGFzXJcwC+5Xr/oZaSspF6/jrI9yqyub2O7APePRq3INLVA0Rq6k7t/7kCT0/mdqwJd0COPcch380MYlQsj8nCEpO/jn615eU498Z9Vqw1a1/gtc79eHM2sN8=
+	t=1747848423; cv=none; b=qHp9yd9k7wAVF0sTuQzBGAAe8ZfuBmVf3ZmeLgUwNM4JySn6pTnb2gpBHx0tsMtWPnb45aIife0oUJH1j+RQA/ph6kFmzkPaEG+oN68C8aIny/rgb1vzxsRTp6PizG6XWjSrbwhb2CIVDQ8/IrJ1FDs9wBZ8YUApBj0YH/d+9Vs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747825752; c=relaxed/simple;
-	bh=teL1ExaTgwk0A24QKGbbFQaV+6uqaGGfhT+BH48aQSg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qoN9JTDYy8R0O0dH4PqjLpiWHHKge4cyDOgYNE+t5dykI5OJcflxs5RfU5VUmAKsk1nYSlAiV9K1TF6MrAN5kOl5oJg+k707hUC6ephubJST5WhX9ImMHQZRWbDdfiJrSzxPWCZA06xqONRAzr5R6GU74FsHtSAR/02y70CEUC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dH5ZyA4E; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A375C4CEE4;
-	Wed, 21 May 2025 11:09:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747825750;
-	bh=teL1ExaTgwk0A24QKGbbFQaV+6uqaGGfhT+BH48aQSg=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=dH5ZyA4E4Oz+MheLIui+apXfWY2nYgrqB+rh8LgEgD7sSW4/sY7RWUSSsUX5hOPsI
-	 O26TwhXKB55ud32L1Hlwcj0JVDCY8gTNN1HRf0Xisy4CCWwlBoHXfBlK+9k7MbGO6K
-	 bh/LvRP7jzkOWXYl286RhIR9u8jN8K2p1d0SedIHCyJZNtrP7BkGsYRCd0C2jUaM3S
-	 gnustsSX+owcyb5OnX6c+cMjQ5ypAiONUqokCGaQiW0d94AvRC1jKoh9TnmDMapqK8
-	 0Xckvv8T5i4OcZirqCx2etKt3ZRDIzDd926QUOFsqmUGMUF/Wu+PErFCNQ2oQCsGMR
-	 /v/RTymXilO9g==
-Message-ID: <b00c3805-aa8c-40d7-a882-66f59f777747@kernel.org>
-Date: Wed, 21 May 2025 13:09:06 +0200
+	s=arc-20240116; t=1747848423; c=relaxed/simple;
+	bh=Ozf2K5aLWxUcsueIVSaKOvz59INQJwnTXOlW4JzMWoo=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=Bf3PduHR0p8Z/RTm1q9B2/ibzbRRk7xB+dfA6YFDggOGSg5qTVHRISG/aEXphBeadWkqBfNuQ/2l42wa/07fccX1b+SDIN1/8PikpK+LE4eTNKAku5f36w9+SvA9ihvnZ3cPizdYS7dLRHKgyNrL7h6SNTtzKxUNdJZB1JFe/r0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=none smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=fhQhKMgC; arc=none smtp.client-ip=5.135.140.105
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cjdns.fr
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id C8BA21A2540;
+	Wed, 21 May 2025 19:26:50 +0200 (CEST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjdns.fr; s=dkim;
+	t=1747848413; h=from:subject:date:message-id:to:cc:mime-version:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=9ZOwVLxDdRlVFdc4Md6tASgtfCFcbsCuBgUjD/USceM=;
+	b=fhQhKMgCZOphb0Zs+ry/C17CoKBQcT1oNGeZI/wGCdMSZanyB7DGoJJ201prtjw2LsVK/a
+	jCd+vik69LbvcA8S2L6mDq06TQtDzTj+7f1fTROTPb45atJvkQ12bUUTPcNBroMlEHiGSz
+	ug5FtZomm20TzfO5+AFJoQ4tyATH16Aa9ED+2mrv3mIR93m5n8rJEK0S+6Ym2w+mqxCAe8
+	ILl7iwy6XwbHLDgXycpGGcF5uk8PR9sAKZOPGPh5KyREE/4atUfQg2KGQS2hUOeOImcb+9
+	jwg6y5AvWIGof2chWwXo2epr83fJ/iRJUe3fj7VXsT3uMZBQLNhWyJcv1TjAoQ==
+From: Caleb James DeLisle <cjd@cjdns.fr>
+To: lkp@intel.com
+Cc: cjd@cjdns.fr,
+	fazilyildiran@gmail.com,
+	linux-mips@vger.kernel.org,
+	oe-kbuild-all@lists.linux.dev,
+	paul@pgazz.com,
+	tsbogend@alpha.franken.de
+Subject: [PATCH] mips: econet: Select SERIAL_8250 because SERIAL_OF_PLATFORM depends on it
+Date: Wed, 21 May 2025 17:26:45 +0000
+Message-Id: <20250521172646.461046-1-cjd@cjdns.fr>
+In-Reply-To: <202505211654.CBdIsoTq-lkp@intel.com>
+References: <202505211654.CBdIsoTq-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/4] mips: dts: qca: add wmac support
-To: Rosen Penev <rosenp@gmail.com>, linux-wireless@vger.kernel.org
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
- "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
- <devicetree@vger.kernel.org>, "open list:MIPS" <linux-mips@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>
-References: <20250521021557.666611-1-rosenp@gmail.com>
- <20250521021557.666611-5-rosenp@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
- QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
- +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
- ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
- 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
- hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
- tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
- 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
- naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
- hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
- whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
- qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
- RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
- Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
- H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
- dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
- AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
- jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
- zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
- XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250521021557.666611-5-rosenp@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-On 21/05/2025 04:15, Rosen Penev wrote:
-> Now that OF ahb support was added to the ath9k driver, we can use it to
-> enable and use the SoC wireless found in these chipsets.
-> 
-> Signed-off-by: Rosen Penev <rosenp@gmail.com>
-> ---
->  arch/mips/boot/dts/qca/ar9132.dtsi                       | 9 +++++++++
->  arch/mips/boot/dts/qca/ar9132_tl_wr1043nd_v1.dts         | 4 ++++
->  arch/mips/boot/dts/qca/ar9331.dtsi                       | 9 +++++++++
->  arch/mips/boot/dts/qca/ar9331_dpt_module.dts             | 4 ++++
->  arch/mips/boot/dts/qca/ar9331_dragino_ms14.dts           | 4 ++++
->  arch/mips/boot/dts/qca/ar9331_omega.dts                  | 4 ++++
->  .../mips/boot/dts/qca/ar9331_openembed_som9331_board.dts | 4 ++++
->  arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts              | 4 ++++
->  8 files changed, 42 insertions(+)
-> 
-> diff --git a/arch/mips/boot/dts/qca/ar9132.dtsi b/arch/mips/boot/dts/qca/ar9132.dtsi
-> index 61dcfa5b6ca7..dc94459aa3e9 100644
-> --- a/arch/mips/boot/dts/qca/ar9132.dtsi
-> +++ b/arch/mips/boot/dts/qca/ar9132.dtsi
-> @@ -156,6 +156,15 @@ spi: spi@1f000000 {
->  			#address-cells = <1>;
->  			#size-cells = <0>;
->  		};
-> +
-> +		wmac: wmac@180c0000 {
+config ECONET selects SERIAL_OF_PLATFORM and that depends on SERIAL_8250.
 
-The name is enforced by bindings now (if you tested that). It's wifi.
+Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202505211654.CBdIsoTq-lkp@intel.com/
+---
+ arch/mips/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-It does not look like you tested the DTS against bindings. Please run
-`make dtbs_check W=1` (see
-Documentation/devicetree/bindings/writing-schema.rst or
-https://www.linaro.org/blog/tips-and-tricks-for-validating-devicetree-sources-with-the-devicetree-schema/
-for instructions).
-Maybe you need to update your dtschema and yamllint. Don't rely on
-distro packages for dtschema and be sure you are using the latest
-released dtschema.
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index c3dbdc808664..b23122633a02 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -398,6 +398,7 @@ config ECONET
+ 	select DEBUG_ZBOOT
+ 	select EARLY_PRINTK_8250
+ 	select ECONET_EN751221_TIMER
++	select SERIAL_8250
+ 	select SERIAL_OF_PLATFORM
+ 	select SYS_SUPPORTS_BIG_ENDIAN
+ 	select SYS_HAS_CPU_MIPS32_R1
+-- 
+2.39.5
 
-Please run scripts/checkpatch.pl on the patches and fix reported
-warnings. After that, run also 'scripts/checkpatch.pl --strict' on the
-patches and (probably) fix more warnings. Some warnings can be ignored,
-especially from --strict run, but the code here looks like it needs a
-fix. Feel free to get in touch if the warning is not clear.
-
-
-Best regards,
-Krzysztof
 
