@@ -1,306 +1,194 @@
-Return-Path: <linux-mips+bounces-9061-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9062-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5DE4ABFC72
-	for <lists+linux-mips@lfdr.de>; Wed, 21 May 2025 19:42:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57964ABFE05
+	for <lists+linux-mips@lfdr.de>; Wed, 21 May 2025 22:43:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 095BB3B2612
-	for <lists+linux-mips@lfdr.de>; Wed, 21 May 2025 17:41:51 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7C3D11BA7BDA
+	for <lists+linux-mips@lfdr.de>; Wed, 21 May 2025 20:43:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C20F289E0B;
-	Wed, 21 May 2025 17:42:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 524BE29C35A;
+	Wed, 21 May 2025 20:43:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FtwhFJZm"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KBA9mmoT"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f180.google.com (mail-yw1-f180.google.com [209.85.128.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63CBB1A23AA;
-	Wed, 21 May 2025 17:42:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA8A92673BA;
+	Wed, 21 May 2025 20:43:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747849327; cv=none; b=sUuzNTxsFShqcMS5vW4fNSM9iVlivu8exZ6Dd0dkWSzPGFM0t6dW17rjBgEFbpNyp3tECwZdEKIT5yjc9c26kYXBEy16fIz+skNCmq84CX+12Av1RK0vhxcU5WIP5Teb9Hg1KmJ6lfCnP7OdwL9ep0ZvsVIvJIZrTX8XdMhN1yQ=
+	t=1747860200; cv=none; b=jb3qiQWh8Y9cn08jznDO6WfRhZsO/6CDu1dsydVLup8aU9XE+lUsrfJBqw7dhPQ98mJjUuleFp/suX2skTuykZCXB0fWcoPsF5Az/XERe2iB335ipvZ+4HnMEG/AeA73O1Q1m6nr40lgdJ1prVApqODVvGw1e9unMkeJ7s11Kzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747849327; c=relaxed/simple;
-	bh=zILedU8aIBwOZV+2G1TrvBXeLPQ8UB3Yl8VhAYL566s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lCMoGJCgt1wld+DGwiTbyAF6seF5fC9yldc3VlsZiM9UkrDUvmgVMHhYSvRB8AmhkfzzMGDTgkv1fifZ88TK4atSWa3Pc9QiLpBtXKC+eJhK/UE0Hb+LeZ8R1jMPJ848vOIyicAeJ1lZUWQR4yB2IW9w2Uj2TOmS/9D43aTk4Cg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FtwhFJZm; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1747849326; x=1779385326;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=zILedU8aIBwOZV+2G1TrvBXeLPQ8UB3Yl8VhAYL566s=;
-  b=FtwhFJZmizfkTYmx5ga1Gax636pY2hH2eQf2yOQa3b7e8XcOGY5TXc0w
-   x1bVb/lO0k8NZQkG/MBBPHWE5c9ACJiMSkBwYNAEfWXzEZEnKoFOI+0xu
-   +7lLEAIZlyQLRbWTnz0BsYGW+FqpfxGF5F37en1L6wyJPTbmxXHz4Pq/2
-   j5mkz2HfpjQ7XRbCg/CmrUvmWqRPieDv3TXu+oVbJg+UUPmJt9mNJ55CS
-   UH0N/U5pbgfoyVrqyxNEjVGz9Mhqk7Ipk3dPm9kFFMhxcrC8RIwAihS4E
-   bCDAOTZWm/6TtLWVlD+EGLrEzIoyif2i9/ITZKMUP7Oiz1J7tB4U/5t2q
-   Q==;
-X-CSE-ConnectionGUID: 6VN/NANlS8OYM833FP+csA==
-X-CSE-MsgGUID: 79ZYpvL+Syy8i8fyd/ZSog==
-X-IronPort-AV: E=McAfee;i="6700,10204,11440"; a="61252110"
-X-IronPort-AV: E=Sophos;i="6.15,304,1739865600"; 
-   d="scan'208";a="61252110"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 May 2025 10:42:04 -0700
-X-CSE-ConnectionGUID: qNbmyK/7TbGW6UT8eUGwcg==
-X-CSE-MsgGUID: ECERoRRvSN6yuz91U4AnZw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.15,304,1739865600"; 
-   d="scan'208";a="171042032"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa002.jf.intel.com with ESMTP; 21 May 2025 10:41:57 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-	id DC1DA368; Wed, 21 May 2025 20:41:55 +0300 (EEST)
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Andreas Larsson <andreas@gaisler.com>,
-	linux-alpha@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org,
-	linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	sparclinux@vger.kernel.org
-Cc: Richard Henderson <richard.henderson@linaro.org>,
-	Matt Turner <mattst88@gmail.com>,
-	Ian Molton <spyro@f2s.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	Helge Deller <deller@gmx.de>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>,
-	Denis Efremov <efremov@linux.com>
-Subject: [PATCH v1 1/1] floppy: Remove unused CROSS_64K() macro from arch/ code
-Date: Wed, 21 May 2025 20:41:52 +0300
-Message-ID: <20250521174152.1339379-1-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.47.2
+	s=arc-20240116; t=1747860200; c=relaxed/simple;
+	bh=IwrRCiDNtk8v6QhRVXRTWIgPaS40Y4CEAbnOkbHmGGI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mVo9fbqXiYCwLR32AwgDPuwjfrYyu/P5dIO2TexELM8ukGS+1uLPgfzXBtmpV4xXlCgMux/fs88GzDzmK3Uh4vGboDuLIp/vbXyUr5p1pPUboA2hJT+rnDXsANbbgCDh5G/Z8YWwDGeLzxdudj2AxpoRusmLba8tyO0aF5jyWn8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KBA9mmoT; arc=none smtp.client-ip=209.85.128.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f180.google.com with SMTP id 00721157ae682-70dda931089so32711587b3.1;
+        Wed, 21 May 2025 13:43:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747860197; x=1748464997; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I/DjaVjylUwkku9SaRveOg/Gwyx+o4sa3Ygm6F3w6CM=;
+        b=KBA9mmoT+rT9ToW6m+fzXgrZRpoRf2L+v0g6S/n6Bxu0TBNZpqNHg07xuclo9Jb7BH
+         GEKOLRxWl1ETfAPHw3nEZm3FMmlBi5HoL4ejW1UPiLZCPsqPtOYLPdiEgMJUAbadUAD3
+         HUAiuHqGqfnCQScWQ+vPCOKNW/GwhxzEH3b4zotze/ADBHt+9jhiWbaLIujosXvOVCV3
+         ZSH1Ek3ElT/3u+1qpBgi0eSJIr0N0UXX+qCiy6hbyX0qGQqktU32R0O+aMgXKZ49Ew7O
+         jgyQZB01WwRZ+8VNwCnwLrD/uUkM2aK0G2ygs767MNC576+rhlMId9kp815WaqDCTwjG
+         7WhA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747860197; x=1748464997;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=I/DjaVjylUwkku9SaRveOg/Gwyx+o4sa3Ygm6F3w6CM=;
+        b=TO+qm+ugeLsW/gZlmj+T71ueyLwdL7a8xRZw1yeToCjdFIdt8huewiJTSH5NT8i+H2
+         tc6biUUv4zFRY6HzFeXhy2EHHgh3Mj7CSTB01ROQSjA+XY3sxeB235eg7tUJoh3hUV5n
+         L47hNllq7MO2Uj9z7E+CR5rZQMciDq5ndpSvrUK7SUoi7eICxc6EEqzHkPvyA7CH5jWm
+         c5MgAeWMMOv+/N/MvE6G1VXVy81NL14r/GuH8/zaXwiaUAC/us0AAFOFAiHCYUT1vqsC
+         AcGnYNTIX4LZNmsBCvWUankfglmeH3xg/IUMafUBwePL6YvK4VZics2qmcb8l0zxGcll
+         Lh+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVPQpF/iDDaGj7UNhaEw64RYaYRwJoR6MXoLr0ttlY1uMFyqG+2eX2OJXEllNcobpypqlkfW4B7zeZR3FXf@vger.kernel.org, AJvYcCWsuXoJ2l4R0mgHb1+Bjel3mnqZRrQgafi61QrFba7fBEgMmRcivDRW6oR3M7nicw9v+O20CvuxyejG@vger.kernel.org, AJvYcCXeiFAzfijcqBgdHvJeTyvHZ8fzRqEZlzNLuUqF+86aJxvO2e9RGa/NSXm4R9GlD+yw1h1sO+ZKAW7Uvg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLEN1txWwaeFF/GERnW9afpEARJKxegM2twIsqY/Vjago+I+tr
+	M1Z1+kBpmxexV7Xz+oEU8pTyg2ICoyMFrnQbSfpHWtAW3sXird1g/08LOZkih7VuH+PMuqo4YIJ
+	pWdWSDrpgKH2ZBtFeZHHt8wWANUbEbfw=
+X-Gm-Gg: ASbGnctUEpW3Hrh3nK8da332GSQkO9dcGn3HvnzNRMUatxCvUvobvhW8vUwiDPzp1u6
+	VOKYS+rzPC/2hCbYWjFdEduRkdmBuxS/HNVvSVFcWIG3Gvg+0063gRQSJ9HFY5NMeYJotp2EW6j
+	3hZ18we9pp2C6FJrsRxThdu7c50tmaOE2z51ZKYr0fjk9ogg==
+X-Google-Smtp-Source: AGHT+IEO6sBgvdCHcR8JGZXZ4dzSUK0Nu5a1MgT/3BhJ0uncUhOOu/EW2B4W5UgPvtgkogJGshbmnl27422KYGnc9cQ=
+X-Received: by 2002:a05:690c:8e0b:b0:6fd:97a7:1474 with SMTP id
+ 00721157ae682-70ca7a30020mr296466807b3.11.1747860197547; Wed, 21 May 2025
+ 13:43:17 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250521021557.666611-1-rosenp@gmail.com> <20250521021557.666611-4-rosenp@gmail.com>
+ <5de13266-d6d4-4497-8913-e442080702ed@kernel.org>
+In-Reply-To: <5de13266-d6d4-4497-8913-e442080702ed@kernel.org>
+From: Rosen Penev <rosenp@gmail.com>
+Date: Wed, 21 May 2025 13:43:06 -0700
+X-Gm-Features: AX0GCFtCgtQspZEgjiG8yAwSQqWmuBRmHD0YqwzNjsX_MMXlabY3ueL4Vk3cb18
+Message-ID: <CAKxU2N9LJcX2AbCipk9nzHQhx=AKT2gUV8-Bk91BLzrUwfkGYw@mail.gmail.com>
+Subject: Re: [PATCH 3/4] wifi: ath9k: ahb: replace id_table with of
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: linux-wireless@vger.kernel.org, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>, 
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, "open list:MIPS" <linux-mips@vger.kernel.org>, 
+	open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Since the commit 3d86739c6343 ("floppy: always use the track buffer")
-the CROSS_64K() is not used by the driver, remove the leftovers.
+On Wed, May 21, 2025 at 4:08=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel.or=
+g> wrote:
+>
+> On 21/05/2025 04:15, Rosen Penev wrote:
+> > -             .name =3D "qca955x_wmac",
+> > -             .driver_data =3D AR9300_DEVID_QCA955X,
+> > -     },
+> > -     {
+> > -             .name =3D "qca953x_wmac",
+> > -             .driver_data =3D AR9300_DEVID_AR953X,
+> > -     },
+> > -     {
+> > -             .name =3D "qca956x_wmac",
+> > -             .driver_data =3D AR9300_DEVID_QCA956X,
+> > -     },
+> > +static const struct of_device_id ath9k_of_match_table[] =3D {
+> > +     { .compatible =3D "qca,ar9130-wmac", .data =3D (void *)AR5416_AR9=
+100_DEVID },
+> > +     { .compatible =3D "qca,ar9330-wmac", .data =3D (void *)AR9300_DEV=
+ID_AR9330 },
+> > +     { .compatible =3D "qca,ar9340-wmac", .data =3D (void *)AR9300_DEV=
+ID_AR9340 },
+> > +     { .compatible =3D "qca,qca9530-wmac", .data =3D (void *)AR9300_DE=
+VID_AR953X },
+> > +     { .compatible =3D "qca,qca9550-wmac", .data =3D (void *)AR9300_DE=
+VID_QCA955X },
+> > +     { .compatible =3D "qca,qca9560-wmac", .data =3D (void *)AR9300_DE=
+VID_QCA956X },
+>
+> Undocumented ABI.
+Hrm wonder where to document.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- arch/alpha/include/asm/floppy.h    | 19 -------------------
- arch/arm/include/asm/floppy.h      |  2 --
- arch/m68k/include/asm/floppy.h     |  4 ----
- arch/mips/include/asm/floppy.h     | 15 ---------------
- arch/parisc/include/asm/floppy.h   |  6 +-----
- arch/powerpc/include/asm/floppy.h  |  5 -----
- arch/sparc/include/asm/floppy_32.h |  3 ---
- arch/sparc/include/asm/floppy_64.h |  3 ---
- arch/x86/include/asm/floppy.h      |  5 +----
- 9 files changed, 2 insertions(+), 60 deletions(-)
+Documentation/devicetree/bindings/net/wireless/qca,ath9k.yaml
 
-diff --git a/arch/alpha/include/asm/floppy.h b/arch/alpha/include/asm/floppy.h
-index 64b42d9591fc..5a6239e65097 100644
---- a/arch/alpha/include/asm/floppy.h
-+++ b/arch/alpha/include/asm/floppy.h
-@@ -90,25 +90,6 @@ static int FDC2 = -1;
- #define N_FDC 2
- #define N_DRIVE 8
- 
--/*
-- * Most Alphas have no problems with floppy DMA crossing 64k borders,
-- * except for certain ones, like XL and RUFFIAN.
-- *
-- * However, the test is simple and fast, and this *is* floppy, after all,
-- * so we do it for all platforms, just to make sure.
-- *
-- * This is advantageous in other circumstances as well, as in moving
-- * about the PCI DMA windows and forcing the floppy to start doing
-- * scatter-gather when it never had before, and there *is* a problem
-- * on that platform... ;-}
-- */
--
--static inline unsigned long CROSS_64KB(void *a, unsigned long s)
--{
--	unsigned long p = (unsigned long)a;
--	return ((p + s - 1) ^ p) & ~0xffffUL;
--}
--
- #define EXTRA_FLOPPY_PARAMS
- 
- #endif /* __ASM_ALPHA_FLOPPY_H */
-diff --git a/arch/arm/include/asm/floppy.h b/arch/arm/include/asm/floppy.h
-index e1cb04ed5008..e579f77162e9 100644
---- a/arch/arm/include/asm/floppy.h
-+++ b/arch/arm/include/asm/floppy.h
-@@ -65,8 +65,6 @@ static unsigned char floppy_selects[4] = { 0x10, 0x21, 0x23, 0x33 };
- #define N_FDC 1
- #define N_DRIVE 4
- 
--#define CROSS_64KB(a,s) (0)
--
- /*
-  * This allows people to reverse the order of
-  * fd0 and fd1, in case their hardware is
-diff --git a/arch/m68k/include/asm/floppy.h b/arch/m68k/include/asm/floppy.h
-index a4d0fea47c6b..dea98bbc0932 100644
---- a/arch/m68k/include/asm/floppy.h
-+++ b/arch/m68k/include/asm/floppy.h
-@@ -107,13 +107,9 @@ static void fd_free_irq(void)
- 
- #define fd_free_dma()             /* nothing */
- 
--/* No 64k boundary crossing problems on Q40 - no DMA at all */
--#define CROSS_64KB(a,s) (0)
--
- #define DMA_MODE_READ  0x44    /* i386 look-alike */
- #define DMA_MODE_WRITE 0x48
- 
--
- static int m68k_floppy_init(void)
- {
-   use_virtual_dma =1;
-diff --git a/arch/mips/include/asm/floppy.h b/arch/mips/include/asm/floppy.h
-index 021d09ae5670..44da2ff91f65 100644
---- a/arch/mips/include/asm/floppy.h
-+++ b/arch/mips/include/asm/floppy.h
-@@ -34,21 +34,6 @@ static inline void fd_cacheflush(char * addr, long size)
- #define N_FDC 1			/* do you *really* want a second controller? */
- #define N_DRIVE 8
- 
--/*
-- * The DMA channel used by the floppy controller cannot access data at
-- * addresses >= 16MB
-- *
-- * Went back to the 1MB limit, as some people had problems with the floppy
-- * driver otherwise. It doesn't matter much for performance anyway, as most
-- * floppy accesses go through the track buffer.
-- *
-- * On MIPSes using vdma, this actually means that *all* transfers go thru
-- * the * track buffer since 0x1000000 is always smaller than KSEG0/1.
-- * Actually this needs to be a bit more complicated since the so much different
-- * hardware available with MIPS CPUs ...
-- */
--#define CROSS_64KB(a, s) ((unsigned long)(a)/K_64 != ((unsigned long)(a) + (s) - 1) / K_64)
--
- #define EXTRA_FLOPPY_PARAMS
- 
- #include <floppy.h>
-diff --git a/arch/parisc/include/asm/floppy.h b/arch/parisc/include/asm/floppy.h
-index b318a7df52f6..df20dbef3ada 100644
---- a/arch/parisc/include/asm/floppy.h
-+++ b/arch/parisc/include/asm/floppy.h
-@@ -22,13 +22,9 @@
- #define _CROSS_64KB(a,s,vdma) \
- (!(vdma) && ((unsigned long)(a)/K_64 != ((unsigned long)(a) + (s) - 1) / K_64))
- 
--#define CROSS_64KB(a,s) _CROSS_64KB(a,s,use_virtual_dma & 1)
--
--
- #define SW fd_routine[use_virtual_dma&1]
- #define CSW fd_routine[can_use_virtual_dma & 1]
- 
--
- #define fd_inb(base, reg)		readb((base) + (reg))
- #define fd_outb(value, base, reg)	writeb(value, (base) + (reg))
- 
-@@ -206,7 +202,7 @@ static int vdma_dma_setup(char *addr, unsigned long size, int mode, int io)
- static int hard_dma_setup(char *addr, unsigned long size, int mode, int io)
- {
- #ifdef FLOPPY_SANITY_CHECK
--	if (CROSS_64KB(addr, size)) {
-+	if (_CROSS_64KB(addr, size, use_virtual_dma & 1)) {
- 		printk("DMA crossing 64-K boundary %p-%p\n", addr, addr+size);
- 		return -1;
- 	}
-diff --git a/arch/powerpc/include/asm/floppy.h b/arch/powerpc/include/asm/floppy.h
-index f8ce178b43b7..048c0c5cdf30 100644
---- a/arch/powerpc/include/asm/floppy.h
-+++ b/arch/powerpc/include/asm/floppy.h
-@@ -203,11 +203,6 @@ static int FDC2 = -1;
- #define N_FDC 2			/* Don't change this! */
- #define N_DRIVE 8
- 
--/*
-- * The PowerPC has no problems with floppy DMA crossing 64k borders.
-- */
--#define CROSS_64KB(a,s)	(0)
--
- #define EXTRA_FLOPPY_PARAMS
- 
- #endif /* __KERNEL__ */
-diff --git a/arch/sparc/include/asm/floppy_32.h b/arch/sparc/include/asm/floppy_32.h
-index 836f6575aa1d..7251d1fed7a4 100644
---- a/arch/sparc/include/asm/floppy_32.h
-+++ b/arch/sparc/include/asm/floppy_32.h
-@@ -96,9 +96,6 @@ static struct sun_floppy_ops sun_fdops;
- #define N_FDC    1
- #define N_DRIVE  8
- 
--/* No 64k boundary crossing problems on the Sparc. */
--#define CROSS_64KB(a,s) (0)
--
- /* Routines unique to each controller type on a Sun. */
- static void sun_set_dor(unsigned char value, int fdc_82077)
- {
-diff --git a/arch/sparc/include/asm/floppy_64.h b/arch/sparc/include/asm/floppy_64.h
-index b0f633ce3518..135f9a49b6ba 100644
---- a/arch/sparc/include/asm/floppy_64.h
-+++ b/arch/sparc/include/asm/floppy_64.h
-@@ -95,9 +95,6 @@ static int sun_floppy_types[2] = { 0, 0 };
- #define N_FDC    1
- #define N_DRIVE  8
- 
--/* No 64k boundary crossing problems on the Sparc. */
--#define CROSS_64KB(a,s) (0)
--
- static unsigned char sun_82077_fd_inb(unsigned long base, unsigned int reg)
- {
- 	udelay(5);
-diff --git a/arch/x86/include/asm/floppy.h b/arch/x86/include/asm/floppy.h
-index 6ec3fc969ad5..e76cb74bbed2 100644
---- a/arch/x86/include/asm/floppy.h
-+++ b/arch/x86/include/asm/floppy.h
-@@ -24,9 +24,6 @@
- 	(!(vdma) &&							\
- 	 ((unsigned long)(a)/K_64 != ((unsigned long)(a) + (s) - 1) / K_64))
- 
--#define CROSS_64KB(a, s) _CROSS_64KB(a, s, use_virtual_dma & 1)
--
--
- #define SW fd_routine[use_virtual_dma & 1]
- #define CSW fd_routine[can_use_virtual_dma & 1]
- 
-@@ -206,7 +203,7 @@ static int vdma_dma_setup(char *addr, unsigned long size, int mode, int io)
- static int hard_dma_setup(char *addr, unsigned long size, int mode, int io)
- {
- #ifdef FLOPPY_SANITY_CHECK
--	if (CROSS_64KB(addr, size)) {
-+	if (_CROSS_64KB(addr, size, use_virtual_dma & 1)) {
- 		printk("DMA crossing 64-K boundary %p-%p\n", addr, addr+size);
- 		return -1;
- 	}
--- 
-2.47.2
+sounds like the place but that file looks like it's for pci(e) only.
+This patch adds the bindings to ahb, not pci(e).
+>
+> Please run scripts/checkpatch.pl on the patches and fix reported
+> warnings. After that, run also 'scripts/checkpatch.pl --strict' on the
+> patches and (probably) fix more warnings. Some warnings can be ignored,
+> especially from --strict run, but the code here looks like it needs a
+> fix. Feel free to get in touch if the warning is not clear.
+>
+>
+> >       {},
+> >  };
+> >
+> > @@ -72,20 +55,16 @@ static const struct ath_bus_ops ath_ahb_bus_ops  =
+=3D {
+> >
+> >  static int ath_ahb_probe(struct platform_device *pdev)
+> >  {
+> > -     const struct platform_device_id *id =3D platform_get_device_id(pd=
+ev);
+> > +     const struct of_device_id *match;
+> >       struct ieee80211_hw *hw;
+> >       struct ath_softc *sc;
+> >       struct ath_hw *ah;
+> >       void __iomem *mem;
+> >       char hw_name[64];
+> > +     u16 dev_id;
+> >       int irq;
+> >       int ret;
+> >
+> > -     if (!dev_get_platdata(&pdev->dev)) {
+> > -             dev_err(&pdev->dev, "no platform data specified\n");
+> > -             return -EINVAL;
+> > -     }
+> > -
+> >       mem =3D devm_platform_ioremap_resource(pdev, 0);
+> >       if (IS_ERR(mem)) {
+> >               dev_err(&pdev->dev, "ioremap failed\n");
+> > @@ -118,7 +97,9 @@ static int ath_ahb_probe(struct platform_device *pde=
+v)
+> >               goto err_free_hw;
+> >       }
+> >
+> > -     ret =3D ath9k_init_device(id->driver_data, sc, &ath_ahb_bus_ops);
+> > +     match =3D of_match_device(ath9k_of_match_table, &pdev->dev);
+>
+> There is a wrapper for getting data, use it.
+I assume you mean of_device_get_match_data. Will do.
+>
+> > +     dev_id =3D (uintptr_t)match->data;
+>
+> And dev_id is enum? Then you want kernel_ulong_t.
+The entries specified in data are macros in the form of 0xYYYY. This
+is why I used u16. The ath9k_init_device takes an int here.
 
+Interestingly enough in the newer ath drivers, it looks like these
+macros are placed in an enum. ath9k uses a u16 field in the struct.
+
+As for kernel_ulong_t, ath12k uses that, ath10k uintptr_t. I assume
+the former is more appropriate.
+>
+>
+>
+>
+> Best regards,
+> Krzysztof
 
