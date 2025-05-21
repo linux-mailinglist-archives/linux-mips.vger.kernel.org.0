@@ -1,229 +1,109 @@
-Return-Path: <linux-mips+bounces-9046-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9047-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 436BDABE9BD
-	for <lists+linux-mips@lfdr.de>; Wed, 21 May 2025 04:18:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC2A4ABEBFA
+	for <lists+linux-mips@lfdr.de>; Wed, 21 May 2025 08:31:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79E638A38CB
-	for <lists+linux-mips@lfdr.de>; Wed, 21 May 2025 02:16:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D1AE4E1F7F
+	for <lists+linux-mips@lfdr.de>; Wed, 21 May 2025 06:31:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37F5822B8B5;
-	Wed, 21 May 2025 02:16:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADE6217BD3;
+	Wed, 21 May 2025 06:31:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HgG88T2I"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MQujiOX8"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DC1F22F173;
-	Wed, 21 May 2025 02:16:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F1FE219EB
+	for <linux-mips@vger.kernel.org>; Wed, 21 May 2025 06:31:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747793768; cv=none; b=N5r43M6bd1MD6vBW3FfXF2hkddT8GDjGoehlC4x42BrcBeVmFDLs4QSv2OK/WeE20EgthUEyL4YVRdfMRnBWYe82o+tgLuSPUOHkeFqpWBHzt9nq38BhTHnaXgpL++lyA0CPTbcocXHohFt/9BLKrDHCIyyIprxX64fIjdZ/gvM=
+	t=1747809089; cv=none; b=tBLwHLRURXbR9fn4VLObcHwQHSIq1Ny8c4jj1uOSc1CpgUhznB7Juk1sGUGbUBW/aDBiHL0iT7ovEwu2fsk3l+WJxT29+ia1CMDD6Icza99YzMcEosa2tuFFVX9YOlPWk46Rdj81JfQrtyn5DHVeEcXPfGfOwb3o0nxPSZMaZ6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747793768; c=relaxed/simple;
-	bh=gpdmefgU668pK6VStjJQagzuktgRSMx2Yg1xIRvuc/g=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KZ87g1aOjfna4n235eWvyFmV8Qx/BRbwM4oofofUQqEjfl0pkIpqiRYqpPDfKCLuBkj8VNAwtp91PZ3F8HxTSGvXjDWVL+ek6Jxfs6MQw27erUWJDngwP+BzJzMp1sZiIFNVV0Sypr7b93p7pLawpB1CTPaX9xPb2YOLUrFgL3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HgG88T2I; arc=none smtp.client-ip=209.85.210.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-74267c68c11so5460333b3a.0;
-        Tue, 20 May 2025 19:16:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1747793766; x=1748398566; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JZW5CcwPkMleb80Fmd+SX38Kmt5DxqWa4H4ElhnYX7E=;
-        b=HgG88T2ITSWCMqsVMbZyBCVZT/IWdge+Jb6YjTFe8rUv9yrIjZcT0UmkACVObqdt+K
-         nTKSLHCQlWscSGN3dFqnD5HXtZiuFug+/jafaacXho9LpUgPz8Y27kU27H4U4mrZOIRU
-         nP7+HVOpBKWYt4zFhvN9jUZR6fy/ccfw9jZeQYpDMsqPx6GLaglWKtPH7ADcoWVvmtYk
-         ck25QNEhCTmGbbX5+KO1eQXyBuATgeEMV7XNdwYoAuRXafJDz6yMkMPNkAqWCy8sZH+U
-         HUyHZqbRUocjVo7BEJ7f9ZJ/i0U24Reedcoztwho503wss2Ag0MbyL54t0nbBL7XoQqx
-         p+fA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747793766; x=1748398566;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JZW5CcwPkMleb80Fmd+SX38Kmt5DxqWa4H4ElhnYX7E=;
-        b=EeCgV1asKCWEPIrMqrf68s+kP4c8kYGoROIUBporctLkIv/GN7WUJLQvLM6+FOOEfw
-         NUEPvtbsmkYucZLLyD91sXXLE5s/zJZ6D9QbGDTmjD47zQXn7HdyPbYl9jVmXh/s+NLz
-         o3zzWK0JMTe1wN1ltNY13gjW+kkkzLlvY77HkUEiIstLUlRRuKpdbBJNhmMZsxScS7IH
-         +4DIFal+saRanLl+JNEYG0bX9aWczRRB5Z5Rqc6uhklIXo+i/fgMRbGZBgAixRdN/Tx3
-         +CUiF514ii+hdA4RfEM4k3q0tpcora1j1I2AoUGCe3eibM74eywSYT/9BQ2WPS+310L/
-         FaZg==
-X-Forwarded-Encrypted: i=1; AJvYcCVtEh0CAmOesdV3Hd6QnX+9FwVjJpzIqLNN4ZUvzPG1nrpAWLydO6P5mCqu3okcMcg8jwODor2Wp7Px5A==@vger.kernel.org, AJvYcCX/PjHPgadduwthlOvzCM/qgthBtEcn6Opx71+Fbo1TBtqriNxoLR5+GVx23JclHh5YbIIMTNgY4BzG@vger.kernel.org, AJvYcCXPQB5vvQAFgUYy7AiKUVWcTzV1ZwB1OvPOwdDbCj//l/ygOUdETHj1IxIjWLMPs/hvPYXZdMtxdeJXGibi@vger.kernel.org
-X-Gm-Message-State: AOJu0YzawgQ3WCM2bZzXKoX61Shn1dawFLdww3LiD18++qai074Vnpgk
-	2bgCNw2gta72dR5w+DwkPekNlSOAMlLMvNLt6C/Pf3bLnQVABPk/HGed3iXpEw==
-X-Gm-Gg: ASbGncvyrwljTAA/snanStCiQHom6Fgwv8oWdYRp9sIrxGH40qf9JY/V3wUONDEN/nC
-	JUPA5klVgGGLabsowGL+zzQkHoi1r4GKQz+kFELAwgzn2HhN8fgmD8oKhx7pbjSc0e9yh8ktPyu
-	i+LYho7jFfxMC3M2dEOcfL2KrwU9hVDb2dJK0llsOiYei6bpfaQABRSyoi9ZFMgUXaju7cMLwyv
-	Q+UvcwB5ZdXaO0THs1BfJ09/mp5fbg/K6RPFKqnPEu5zTexxFsuJ6oDeGzO2NhQK8D7Gmm0VfNZ
-	ZQjpf9Xwyj73+otGeEjDRur7LUg=
-X-Google-Smtp-Source: AGHT+IGmo9M9l+Htn3g//UzeHH0APFPDedj/h9cUeRvzIihHZspqVATX5aQM/GWiGZyDH+UBp9tA8Q==
-X-Received: by 2002:a05:6a21:4606:b0:1f5:9016:3594 with SMTP id adf61e73a8af0-2170cc65e25mr29445068637.18.1747793765653;
-        Tue, 20 May 2025 19:16:05 -0700 (PDT)
-Received: from ryzen.lan ([2601:644:8200:dab8::a86])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b26eb0843d1sm8758473a12.49.2025.05.20.19.16.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 20 May 2025 19:16:05 -0700 (PDT)
-From: Rosen Penev <rosenp@gmail.com>
-To: linux-wireless@vger.kernel.org
-Cc: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
-	devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS),
-	linux-mips@vger.kernel.org (open list:MIPS),
-	linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH 4/4] mips: dts: qca: add wmac support
-Date: Tue, 20 May 2025 19:15:57 -0700
-Message-ID: <20250521021557.666611-5-rosenp@gmail.com>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250521021557.666611-1-rosenp@gmail.com>
-References: <20250521021557.666611-1-rosenp@gmail.com>
+	s=arc-20240116; t=1747809089; c=relaxed/simple;
+	bh=gKIqUTPAzqATsN00/jM3CEVx85Zp2akccXki8US+XvU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=YEqyLka0nDqtu8UvKaui/Te2MAEwfEgVjSiwQb/75/IlT21bZsA57eX2T2Da1xUwuuQPQihyR0Yv6jW4lWYn1PX0Bqih/YKYiMD/MTFzw/zckGJi1GuAMfsctYwYyVjQO7E5D83DaUs4wkEYrOU420ISKiiKDdyY4o96QySJRx0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MQujiOX8; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1747809087; x=1779345087;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=gKIqUTPAzqATsN00/jM3CEVx85Zp2akccXki8US+XvU=;
+  b=MQujiOX8RMHXWcPpEDXjY4eaoiUUGMQT2alnDup3i+TjzEVQo/o8aVBC
+   KpW/LYdCkCDmrxlg10RSm6ZNHyh8GxmJgICTfh4WbnJKNErHjXwvohT12
+   jekXq9hhTu1mW7YWVCtJA6iGpZwskFtHWVLR2arSkQYR41oBAQwnDr5Ly
+   FnQqavkSG9QC71Cj4orLzuxlOX4PAFNY7HKuWhsux0sGonRDW4SRzNqVc
+   6ILUaxmLr5EStUuBLm4XPr+DLCkBHqQZQGldxDIIk1ZiBMmxs2bsqM6IY
+   +OH5Duv0Pxycdg38S9115d3tc1dVogIwlfBsvWEQuRXkvUMLeG637elUt
+   Q==;
+X-CSE-ConnectionGUID: +kZ/JQPLRhWl+js5TUMQZg==
+X-CSE-MsgGUID: 2h+sCl2kS1OImMGjtzfzBw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11439"; a="60426578"
+X-IronPort-AV: E=Sophos;i="6.15,303,1739865600"; 
+   d="scan'208";a="60426578"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 May 2025 23:31:27 -0700
+X-CSE-ConnectionGUID: gk1WQ6S/T1SEdiRfw5OoiA==
+X-CSE-MsgGUID: 7Rv0VKx+RK6u2kyKxKgsYQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.15,303,1739865600"; 
+   d="scan'208";a="144908120"
+Received: from lkp-server01.sh.intel.com (HELO 1992f890471c) ([10.239.97.150])
+  by orviesa004.jf.intel.com with ESMTP; 20 May 2025 23:31:25 -0700
+Received: from kbuild by 1992f890471c with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1uHcz4-000NxC-1q;
+	Wed, 21 May 2025 06:31:22 +0000
+Date: Wed, 21 May 2025 14:31:19 +0800
+From: kernel test robot <lkp@intel.com>
+To: Caleb James DeLisle <cjd@cjdns.fr>
+Cc: Paul Gazzillo <paul@pgazz.com>,
+	Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+	oe-kbuild-all@lists.linux.dev, linux-mips@vger.kernel.org,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Subject: [mips-linux:mips-next 16/19] kismet: WARNING: unmet direct
+ dependencies detected for DEBUG_ZBOOT when selected by ECONET
+Message-ID: <202505211451.WRjyf3a9-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Now that OF ahb support was added to the ath9k driver, we can use it to
-enable and use the SoC wireless found in these chipsets.
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git mips-next
+head:   faefb0a59c5914b7b8f737e2ec5c82822e5bc4c7
+commit: 35fb26f94dfa1b291086b84b2421f957214824d1 [16/19] mips: Add EcoNet MIPS platform support
+config: mips-kismet-CONFIG_DEBUG_ZBOOT-CONFIG_ECONET-0-0 (https://download.01.org/0day-ci/archive/20250521/202505211451.WRjyf3a9-lkp@intel.com/config)
+reproduce: (https://download.01.org/0day-ci/archive/20250521/202505211451.WRjyf3a9-lkp@intel.com/reproduce)
 
-Signed-off-by: Rosen Penev <rosenp@gmail.com>
----
- arch/mips/boot/dts/qca/ar9132.dtsi                       | 9 +++++++++
- arch/mips/boot/dts/qca/ar9132_tl_wr1043nd_v1.dts         | 4 ++++
- arch/mips/boot/dts/qca/ar9331.dtsi                       | 9 +++++++++
- arch/mips/boot/dts/qca/ar9331_dpt_module.dts             | 4 ++++
- arch/mips/boot/dts/qca/ar9331_dragino_ms14.dts           | 4 ++++
- arch/mips/boot/dts/qca/ar9331_omega.dts                  | 4 ++++
- .../mips/boot/dts/qca/ar9331_openembed_som9331_board.dts | 4 ++++
- arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts              | 4 ++++
- 8 files changed, 42 insertions(+)
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202505211451.WRjyf3a9-lkp@intel.com/
 
-diff --git a/arch/mips/boot/dts/qca/ar9132.dtsi b/arch/mips/boot/dts/qca/ar9132.dtsi
-index 61dcfa5b6ca7..dc94459aa3e9 100644
---- a/arch/mips/boot/dts/qca/ar9132.dtsi
-+++ b/arch/mips/boot/dts/qca/ar9132.dtsi
-@@ -156,6 +156,15 @@ spi: spi@1f000000 {
- 			#address-cells = <1>;
- 			#size-cells = <0>;
- 		};
-+
-+		wmac: wmac@180c0000 {
-+			compatible = "qca,ar9130-wmac";
-+			reg = <0x180c0000 0x230000>;
-+
-+			interrupts = <2>;
-+
-+			status = "disabled";
-+		};
- 	};
- 
- 	usb_phy: usb-phy {
-diff --git a/arch/mips/boot/dts/qca/ar9132_tl_wr1043nd_v1.dts b/arch/mips/boot/dts/qca/ar9132_tl_wr1043nd_v1.dts
-index f894fe17816b..7df518fdc515 100644
---- a/arch/mips/boot/dts/qca/ar9132_tl_wr1043nd_v1.dts
-+++ b/arch/mips/boot/dts/qca/ar9132_tl_wr1043nd_v1.dts
-@@ -108,3 +108,7 @@ partition@2 {
- 		};
- 	};
- };
-+
-+&wmac {
-+	status = "okay";
-+};
-diff --git a/arch/mips/boot/dts/qca/ar9331.dtsi b/arch/mips/boot/dts/qca/ar9331.dtsi
-index 768ac0f869b1..4cd55f765e1f 100644
---- a/arch/mips/boot/dts/qca/ar9331.dtsi
-+++ b/arch/mips/boot/dts/qca/ar9331.dtsi
-@@ -285,6 +285,15 @@ spi: spi@1f000000 {
- 
- 			status = "disabled";
- 		};
-+
-+		wmac: wmac@18100000 {
-+			compatible = "qca,ar9330-wmac";
-+			reg = <0x18100000 0x20000>;
-+
-+			interrupts = <2>;
-+
-+			status = "disabled";
-+		};
- 	};
- 
- 	usb_phy: usb-phy {
-diff --git a/arch/mips/boot/dts/qca/ar9331_dpt_module.dts b/arch/mips/boot/dts/qca/ar9331_dpt_module.dts
-index c857cd22f7db..d855dfe118e6 100644
---- a/arch/mips/boot/dts/qca/ar9331_dpt_module.dts
-+++ b/arch/mips/boot/dts/qca/ar9331_dpt_module.dts
-@@ -97,3 +97,7 @@ &phy_port0 {
- &phy_port4 {
- 	status = "okay";
- };
-+
-+&wmac {
-+	status = "okay";
-+};
-diff --git a/arch/mips/boot/dts/qca/ar9331_dragino_ms14.dts b/arch/mips/boot/dts/qca/ar9331_dragino_ms14.dts
-index 7affa58d4fa6..679e793e9f55 100644
---- a/arch/mips/boot/dts/qca/ar9331_dragino_ms14.dts
-+++ b/arch/mips/boot/dts/qca/ar9331_dragino_ms14.dts
-@@ -98,3 +98,7 @@ spiflash: w25q128@0 {
- 		reg = <0>;
- 	};
- };
-+
-+&wmac {
-+	status = "okay";
-+};
-diff --git a/arch/mips/boot/dts/qca/ar9331_omega.dts b/arch/mips/boot/dts/qca/ar9331_omega.dts
-index 8904aa917a6e..093142bf3ed6 100644
---- a/arch/mips/boot/dts/qca/ar9331_omega.dts
-+++ b/arch/mips/boot/dts/qca/ar9331_omega.dts
-@@ -74,3 +74,7 @@ spiflash: w25q128@0 {
- 		reg = <0>;
- 	};
- };
-+
-+&wmac {
-+	status = "okay";
-+};
-diff --git a/arch/mips/boot/dts/qca/ar9331_openembed_som9331_board.dts b/arch/mips/boot/dts/qca/ar9331_openembed_som9331_board.dts
-index dc65ebd60bbc..22e05d9c283a 100644
---- a/arch/mips/boot/dts/qca/ar9331_openembed_som9331_board.dts
-+++ b/arch/mips/boot/dts/qca/ar9331_openembed_som9331_board.dts
-@@ -106,3 +106,7 @@ &phy_port2 {
- &phy_port4 {
- 	status = "okay";
- };
-+
-+&wmac {
-+	status = "okay";
-+};
-diff --git a/arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts b/arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts
-index 10b9759228b7..b740f1a91162 100644
---- a/arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts
-+++ b/arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts
-@@ -114,3 +114,7 @@ spiflash: s25sl032p@0 {
- 		reg = <0>;
- 	};
- };
-+
-+&wmac {
-+	status = "okay";
-+};
+kismet warnings: (new ones prefixed by >>)
+>> kismet: WARNING: unmet direct dependencies detected for DEBUG_ZBOOT when selected by ECONET
+   WARNING: unmet direct dependencies detected for DEBUG_ZBOOT
+     Depends on [n]: DEBUG_KERNEL [=n] && SYS_SUPPORTS_ZBOOT [=y]
+     Selected by [y]:
+     - ECONET [=y]
+   
+   WARNING: unmet direct dependencies detected for SERIAL_OF_PLATFORM
+     Depends on [n]: TTY [=y] && HAS_IOMEM [=y] && SERIAL_8250 [=n] && OF [=y]
+     Selected by [y]:
+     - ECONET [=y]
+
 -- 
-2.49.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
