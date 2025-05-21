@@ -1,50 +1,89 @@
-Return-Path: <linux-mips+bounces-9041-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9042-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A7CEABE8E9
-	for <lists+linux-mips@lfdr.de>; Wed, 21 May 2025 03:20:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C2B5ABE9A7
+	for <lists+linux-mips@lfdr.de>; Wed, 21 May 2025 04:16:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 440643B59CE
-	for <lists+linux-mips@lfdr.de>; Wed, 21 May 2025 01:20:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5D657A7FED
+	for <lists+linux-mips@lfdr.de>; Wed, 21 May 2025 02:15:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6463116CD33;
-	Wed, 21 May 2025 01:20:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4872922D4F6;
+	Wed, 21 May 2025 02:16:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WJT4t/1k"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="npikpxEV"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f180.google.com (mail-pf1-f180.google.com [209.85.210.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34F68165F13;
-	Wed, 21 May 2025 01:20:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBC4A22B8AF;
+	Wed, 21 May 2025 02:16:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747790415; cv=none; b=X9NvjP+OFajmG1TLxNX7h2UN5z4ixoHT8XriLMtXucmUOYG67o+qVwyiKPVQ9O+3vC3B4ltR9PWzzIHlGdpL6R9LtRVzkfQsdUx4KIrsASE3xCbXg+4Lfzf/CcOQxJqVBTalux6hhEOPHkgr+0qwjhXHwdj3J7odFyKAUtPTQDg=
+	t=1747793762; cv=none; b=Hs8xG+84g3JMbBi35Q+7xiDnA13J1JoTVeo/6SiUJlaXeAtIXnK0FUsP1INVeanv6mu2HNzuB6Obamh8wHDJNM4oUEWeuHQVgmbm6KDqOPAzbyMRLb7tIHjTp4UyS2F2MDpBAdVFErXunvGJnXCR/gnn2jHO/glYBzFFKRizE3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747790415; c=relaxed/simple;
-	bh=J42QwgN71K7lVleEFOdNDdi7sYwtPu6FjJUMG6HIEFo=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=mTJZq+BGvUa5MwqqVUdAt0nvf1pyfGLV6AAfjCUCmYrdEmwaZKTnwy9JSAKXHn4iChBFIvfcnALGc11wb4093KLgQoF+Y/LHZr+bviBzTHhQfYUHtIcKIGy3+A8wHb403Cw71DcYyrei1TuVj2rogZwh51xmvftc0E9QgaEVKC8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WJT4t/1k; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 96581C4CEF0;
-	Wed, 21 May 2025 01:20:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747790414;
-	bh=J42QwgN71K7lVleEFOdNDdi7sYwtPu6FjJUMG6HIEFo=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=WJT4t/1kxoSPKUy1x69rtULOXnbjNvc/Qi2JOt7DdEfdRcurMShTXqxj42JQqb2Bu
-	 gxag8cc1jM9ebuO2kYAWV6rKjpCqrb+TAF0j2smU3z8x/x0q1Z9kS8iV5B43UQ/kSr
-	 WxK+/kpBbZWiVmChxVBw33dAxlcV+3AfRNoDpuEx7+pW0SY5nyyiIQl3P/C1sM0mnY
-	 x7D5FPnq3a7iVIDobJdoiTJnRqUDj0ed73QOj9rAcmU3ewKVG07WjSh2QOxkuPcfdf
-	 7qe8XQwqbleOxU+hwSAxUiI6MhdPM3NSGFSJcHbRgeqh0R6iwWifO+qy6bsSiMl0Pn
-	 bs2dz3sE/2AAw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADD4D380AAD0;
-	Wed, 21 May 2025 01:20:51 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1747793762; c=relaxed/simple;
+	bh=xYWtAxWM7T95j7PVs68xH0+OR0v4YPuA+HXyLluIUwI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=BuQaLtZEQaVowUYZfpTbNuDvthh/yzUnPEwUm7YGAO0tTS0wK+6gT7c3EeqNMdikMyMF0Mcd7zFv/sPMqltl/t4OCRtHnl/uXh35KT5DtF+AMc65cOl7vJXCCyd/EFGcbTcEvLhatrz34tWA5JvDJCTd96a0eOfdGntA8D/cLhM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=npikpxEV; arc=none smtp.client-ip=209.85.210.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f180.google.com with SMTP id d2e1a72fcca58-742c96af71dso4147759b3a.0;
+        Tue, 20 May 2025 19:16:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747793760; x=1748398560; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HFijZmAHpugfNM23fWRlOUPUTPaN7XdLx2HnnMFN2xo=;
+        b=npikpxEVz7g6bzojU0XEPbHuCaioWAJQUsP9KbHhTknc12NPSeh1jtx+xvy+gQC4pe
+         TPvshBD7cYPt56CaRC9BUkDlZbS9YOQJW0/AhIVklCoGlHcsOVu2hKB5L5U4z+CfZYdg
+         ERCEVHku4J3HemDOJ8lI8UhdBgOPNqgeM+3PAdwwLchiFmS/s1EB4klz1ikQNTujHzJS
+         s9jLBcFy1glNzsPciwEGhgXjQdvLVDf1n0sf+ZGOaOFi1/YkcJ0oo16a+r3xU+GQG+A+
+         j/QezdEvf49rOTRbe/vJ23j9nNe4/ybfr2mdNv4hu18andfdYoZMFDtHnWOYx8zsbsM2
+         WDIg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747793760; x=1748398560;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HFijZmAHpugfNM23fWRlOUPUTPaN7XdLx2HnnMFN2xo=;
+        b=wwCFpp0PkvucpjLabXei46B7S7/JA86pbeLE5+bzJMWEI8gfOGYVTslK8S8+MRIBKr
+         UZJIPV9eZxShoRHqCTl0Wt5QfMKueWfeF/cdHGaDhtEQNcpEipjnqoURJ8yLhY7AsEKN
+         QJRJJfokSGl97/fh+8Rv+A0ceSip2EZsmA936KL8TQbGV0YrIpeHcY59OykdsJj9vuiJ
+         eXpE8Lh4EObEJXRnYJWyqMmCPo2C98CSGcNL5OKGY6lRFiyfYcCgvoDgdRypkCIwESqC
+         RpMCExQYeJSidhS9IpxJHJRhUU2y1vPFVeBWbRREs9RcYVTXhf5Yu/53OCqG9dD0UiDa
+         faUg==
+X-Forwarded-Encrypted: i=1; AJvYcCWhYlhHg32qCIWmQtD7ApQCbPL/gAO4PMdeC6klcbIO/udvelILgsRw90aFfaGoSo4ICRJW0jzW0tHOmQ5V@vger.kernel.org, AJvYcCX2x1f4qB0VBQ0/8fPtP6PpTQhMci9A4OxS9UPA8iDQzycK8D4UJ5AUdUhS6/7U3K00p3bQa1c0qzLFAw==@vger.kernel.org, AJvYcCXOjpxZyIkcd0GwX3+HaGgD4tJKNfoIgiXl/uKl5ZHAhHsGct0nUmJXnSFjHnzqyzHJyVmu00nZraHS@vger.kernel.org
+X-Gm-Message-State: AOJu0YynBKCUvqNuIUizNj9wNtaQCIiRvEgI6XMc/GuG+4XHX3glke2M
+	zlxqT9Ie/5UrkFqHyWZWTuLoqJSwJVpE+bRs+SgHHEgF7gGWUaBCTqvaukWudA==
+X-Gm-Gg: ASbGncvZcRbIew+/wm70Hz7cMgLS5DWoR6V9DF/Wd83djQ231stR8x+rLD1T8CipYBR
+	WAnBquaqSFdYi1m97n+tBPe3KMvYpnZ5SHhrwEKcu0pZczrU4Yp1sqx37BIrGxxclonZ7x4epaZ
+	FfbaVvtBCWUNokwj1WI+QFvEetpu4OXgnBbDS2enIwDk8obR3jgZYeHD3fg/BBdp7PEGVyWvmqH
+	hFc1wO314C5KQ+2Fjb9KXXLtyjHlFtuU9dU2dj2q0Al8t2441mY2vpXEX0cLXlIxvsef/O1jWYN
+	RwwAhQCpHeu/QpQhFRT+NabSDDY=
+X-Google-Smtp-Source: AGHT+IEsqjqtFcYrnCgx+fm0ur12ycP8Jr8QiSOFOgGdSxla/L9uI7wRXAiZ50mzksfOlGOhptU/mA==
+X-Received: by 2002:a05:6a00:3023:b0:742:9e9b:a244 with SMTP id d2e1a72fcca58-742a98fb012mr30778982b3a.24.1747793759770;
+        Tue, 20 May 2025 19:15:59 -0700 (PDT)
+Received: from ryzen.lan ([2601:644:8200:dab8::a86])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b26eb0843d1sm8758473a12.49.2025.05.20.19.15.58
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 20 May 2025 19:15:59 -0700 (PDT)
+From: Rosen Penev <rosenp@gmail.com>
+To: linux-wireless@vger.kernel.org
+Cc: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	=?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+	devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS),
+	linux-mips@vger.kernel.org (open list:MIPS),
+	linux-kernel@vger.kernel.org (open list)
+Subject: [PATCH 0/4] wifi: ath9k: add ahb OF support
+Date: Tue, 20 May 2025 19:15:53 -0700
+Message-ID: <20250521021557.666611-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -52,53 +91,28 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next 0/3] net: phy: fixed_phy: simplifications and
- improvements
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <174779045049.1526198.18389815848433022265.git-patchwork-notify@kernel.org>
-Date: Wed, 21 May 2025 01:20:50 +0000
-References: <4d4c468e-300d-42c7-92a1-eabbdb6be748@gmail.com>
-In-Reply-To: <4d4c468e-300d-42c7-92a1-eabbdb6be748@gmail.com>
-To: Heiner Kallweit <hkallweit1@gmail.com>
-Cc: gerg@linux-m68k.org, geert@linux-m68k.org, hauke@hauke-m.de,
- zajec5@gmail.com, tsbogend@alpha.franken.de, olteanv@gmail.com,
- opendmb@gmail.com, florian.fainelli@broadcom.com, Thangaraj.S@microchip.com,
- Rengarajan.S@microchip.com, UNGLinuxDriver@microchip.com, andrew@lunn.ch,
- andrew+netdev@lunn.ch, linux@armlinux.org.uk, davem@davemloft.net,
- kuba@kernel.org, pabeni@redhat.com, edumazet@google.com,
- bcm-kernel-feedback-list@broadcom.com, linux-m68k@lists.linux-m68k.org,
- linux-mips@vger.kernel.org, linux-usb@vger.kernel.org, netdev@vger.kernel.org
 
-Hello:
+First two commits are small cleanups to make the changes of the third
+simpler. The fourth actually adds dts definitions to use ahb.
 
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
+Rosen Penev (4):
+  wifi: ath9k: ahb: reorder declarations
+  wifi: ath9k: ahb: reorder includes
+  wifi: ath9k: ahb: replace id_table with of
+  mips: dts: qca: add wmac support
 
-On Sat, 17 May 2025 22:33:23 +0200 you wrote:
-> This series includes two types of changes:
-> - All callers pass PHY_POLL, therefore remove irq argument
-> - constify the passed struct fixed_phy_status *status
-> 
-> Heiner Kallweit (3):
->   net: phy: fixed_phy: remove irq argument from fixed_phy_add
->   net: phy: fixed_phy: remove irq argument from fixed_phy_register
->   net: phy: fixed_phy: constify status argument where possible
-> 
-> [...]
+ arch/mips/boot/dts/qca/ar9132.dtsi            |  9 +++
+ .../boot/dts/qca/ar9132_tl_wr1043nd_v1.dts    |  4 ++
+ arch/mips/boot/dts/qca/ar9331.dtsi            |  9 +++
+ arch/mips/boot/dts/qca/ar9331_dpt_module.dts  |  4 ++
+ .../mips/boot/dts/qca/ar9331_dragino_ms14.dts |  4 ++
+ arch/mips/boot/dts/qca/ar9331_omega.dts       |  4 ++
+ .../qca/ar9331_openembed_som9331_board.dts    |  4 ++
+ arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts   |  4 ++
+ drivers/net/wireless/ath/ath9k/ahb.c          | 61 +++++++------------
+ 9 files changed, 63 insertions(+), 40 deletions(-)
 
-Here is the summary with links:
-  - [net-next,1/3] net: phy: fixed_phy: remove irq argument from fixed_phy_add
-    https://git.kernel.org/netdev/net-next/c/3f1716ee0f6c
-  - [net-next,2/3] net: phy: fixed_phy: remove irq argument from fixed_phy_register
-    https://git.kernel.org/netdev/net-next/c/d23b4af5df39
-  - [net-next,3/3] net: phy: fixed_phy: constify status argument where possible
-    https://git.kernel.org/netdev/net-next/c/4ba1c5bb4811
-
-You are awesome, thank you!
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.49.0
 
 
