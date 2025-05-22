@@ -1,124 +1,157 @@
-Return-Path: <linux-mips+bounces-9066-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9067-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48D6CAC0584
-	for <lists+linux-mips@lfdr.de>; Thu, 22 May 2025 09:21:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C1F5AC0C2E
+	for <lists+linux-mips@lfdr.de>; Thu, 22 May 2025 15:04:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C9081BA72C0
-	for <lists+linux-mips@lfdr.de>; Thu, 22 May 2025 07:21:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 90280A2466B
+	for <lists+linux-mips@lfdr.de>; Thu, 22 May 2025 13:03:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17CD91E32A3;
-	Thu, 22 May 2025 07:21:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CA6F1D618A;
+	Thu, 22 May 2025 13:04:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="P5CBdeaj";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="RHc4CrXL"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-vs1-f53.google.com (mail-vs1-f53.google.com [209.85.217.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-b2-smtp.messagingengine.com (fhigh-b2-smtp.messagingengine.com [202.12.124.153])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A56B91A3A80;
-	Thu, 22 May 2025 07:21:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2FEEA2F85B;
+	Thu, 22 May 2025 13:04:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747898494; cv=none; b=tJqL4bJVfRvsYPmYwbCsca5QHK0WtwtzZbEk6Vmu34GC/Dms8ebK7kn3TqtAjPkLfY4/uHxTlhofLwm3jOL/JTbxYoQeH+O+a4DERXTNPj66NdDSYxAl+PaxCyNjoGF5RHGijPYJ5KolNvTqPa8XRFpoKx/NK4m8vQpUPc+ELCI=
+	t=1747919054; cv=none; b=I9vkSactUXznhbtKM4DGhS2NiyR1EWJ3/Onf6FT5ofCNhwvTs8+cw/Ey6BWuopZertTqjJZdxYZVdXrnyJjOWOlhUGIL+z1wLdLiOTnKTYjGlblylkULxJmrhqVlVDse4j1/NoBdmPeehCavcY4T/uNHSBdxHCRFLzguJmYYE/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747898494; c=relaxed/simple;
-	bh=PimKZV/vvpya6qk4QcsOlAInmmFkcQUXGB3xQOYFJ9A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EQQtAdR2RAJ6bEIBEw62gdfPtiI55V8pBxBeN7ouYe+K3VQ4IBnsh74sqMCZgj4QwnyumjDNp4dVcNWYO+VijYVPApQjQdWV52GGYbjn0thiwThCRypAvEirrDYfB8wo+M1GoQUN64Tir0sbIDhMvY5OcLzbYB642jZ8eiiTRXU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f53.google.com with SMTP id ada2fe7eead31-4e1382f2b24so4333716137.1;
-        Thu, 22 May 2025 00:21:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1747898489; x=1748503289;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3Pm7W9V2mmyzuHBQiDodlGveixXiKksfY8Pj8Y9T4Ts=;
-        b=OI9Gd3MvmSjf5JtkWqTyMnbEGYY+DdbaIB64nSKULLLk5SOoS4QcIn0XgsCtFV+zdZ
-         yTg0qJWs67B212dEfsMKVySPBYPMxLX38u9QD5mC5h9wRM7aqfjhG4LtXQWndHGzGa+g
-         wVczdMV1v+4bc+IunFrIeQiruzos/Do+deGbkM8PxMER5FnIOSpKQJ4M7EVasaGUip/+
-         wxkgb354WevV50Rvz8rpFpW0RhNXN0Knx4/BzRM8zxMNaX5yZ/gP3KqaUHMaq15IyJWx
-         kkSlY/OnvRULoAD1A+WhkSTpbaBFP8caLTF/eicrjWHcIE2sgt6j+D6666zYR7ZukqLQ
-         xQuw==
-X-Forwarded-Encrypted: i=1; AJvYcCUieKsWWZ4L3np1e1S/khVjBaKEMgSFJWYaOuYEZ3ywvf1YK+ErobiaW3dYmg93K24+uPPL+aBDdEpjKg==@vger.kernel.org, AJvYcCVtjxUeCe5v/zKw9RjdvLmClTJ2RHuvK1emrJKIliartVsTZ6Pxo1XSf5a1XsqH5JlN+BJhxa4LY0rvmake@vger.kernel.org, AJvYcCWDvZAI91E+c5dZukNWrt4N/R3XmsDcaZUc+YsfVYCc7yiYL3r7KuLnMIk3RZiQ9VP5bp6FxYjHXdJeQA==@vger.kernel.org, AJvYcCWE7hLDEBN59ohyiRbZV95NL9pL8qtoZz6ZOd6jf8ogVtyILQXUBIVWAc1/zYnXlesf31v3VWk7/PJ85w==@vger.kernel.org, AJvYcCWbHq7SJf8oC2SqzDy70LTzNSRz9Y/PX2ghhd3LdOrv5ifZ9QdBP5wqAfYrZzTz1rgRRa2LcCfM3IOdNcht@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy+cLJL5t02nqiI2cmKRUUCTjzg8jmcDyINapwliBFu7lk00ieD
-	vgw0pHYLk2iG9I6RUyAqIJ3UEe7deWfCDVo9V2gz7+evWxrMWv2jjqySs7YasLUo
-X-Gm-Gg: ASbGncscwhKINlYHr2EVljtXTauxWSFFHJsAMYBMH6fAyiuydAWelQeF5R73tzzcDOE
-	STHDPTqRKuYarH9yzbTpZje0yKlnk4xldF9J7Z/GrO79F90++V4POcj6AtRT5FMvdduX3XMyZ6E
-	YBB4yWWGz66tKKZaYU3Ct+49Nico7dZQnTSgGpJfa70KFFVW2aFsdaNvBd3pviAMmDAtrp/RYdg
-	oFbltgSz2W364oeebPrpRltbWv55/gmerbpYzVXVfuh3SZlWU730ZRU8YxYhuardMrok6nAsPFS
-	URzyR5cPdIIEcJFm9oRSzK05A69H7cSr5pTOCWTpx7ICzQz/9DtVrDdr3G6p2Xp/yjNNx87oxnJ
-	HBovBW4RYzd0OcA==
-X-Google-Smtp-Source: AGHT+IGe9hmMMlui2/8ywXvpwEV0kAauzMYRasYjY7VGENvtBGXDOj9IiPeWqWSQqJjzZ2gaDWjQzQ==
-X-Received: by 2002:a05:6102:15a2:b0:4df:9e8b:8cad with SMTP id ada2fe7eead31-4dfa6c1dc1emr23187816137.22.1747898489103;
-        Thu, 22 May 2025 00:21:29 -0700 (PDT)
-Received: from mail-vs1-f43.google.com (mail-vs1-f43.google.com. [209.85.217.43])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4dfa66bf405sm10947499137.9.2025.05.22.00.21.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 22 May 2025 00:21:26 -0700 (PDT)
-Received: by mail-vs1-f43.google.com with SMTP id ada2fe7eead31-4e150f1ba9aso3933424137.2;
-        Thu, 22 May 2025 00:21:26 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUJrYVQ/yyjR7RpXuEHQzBmXHI6g5DMr63zzidJQjaHseMbUm90rJeP/dwbrGlVK3bt/GCLveDwprUldQ==@vger.kernel.org, AJvYcCV0N0dRZSr2pWmxyh2tf7rGUCnCtS25ZfBRWu4QIId1h754Pnm9/ky2ZEgqcK0EQLO0F+Jq9wvKGEITwl57@vger.kernel.org, AJvYcCV1FHon2dnh/AwJY2IvZH5dZd9SObIGAoK7JdNaTEvlIEfGVgnXdpfCqphcegUoJrgfyAv7Xizop0wtew==@vger.kernel.org, AJvYcCVOi/wruGQLx+xQQbMhX9UYEM8InCnhvLxrkpdJUIyTf6Zh9dOXpSom5ijWCB0emfrBkiFw902FE8TkK8y0@vger.kernel.org, AJvYcCXBfgBP9NKQ6jy9ymsoizwrxm68/pjkSr7urVLyl6Ujgaypz20axdRecYPHVIRYiKiZOldoDGBS+Xy3GA==@vger.kernel.org
-X-Received: by 2002:a05:6102:14a1:b0:4df:a58d:9db2 with SMTP id
- ada2fe7eead31-4dfa6b586f8mr25153206137.9.1747898486254; Thu, 22 May 2025
- 00:21:26 -0700 (PDT)
+	s=arc-20240116; t=1747919054; c=relaxed/simple;
+	bh=wNY6l4wV3IAmGUJTqydxuvOlnaTtVOB+aMvhQaHtVWA=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=DprMaoHJCMbhdffjaIvKiKWQ9O4sC4Eic9Ti4vH+D0bD2D3fW9yssbJTJHXgm2txXezn68uLpuxvzikBmdOB/WwSffyx1YJvU13q5ot8KDeJUOmN79aKskIblheXJCo2RZkk//sBjKxtc7/rgYkMKaYZQCzQl+d5OsdCxA6yd9c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=P5CBdeaj; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=RHc4CrXL; arc=none smtp.client-ip=202.12.124.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
+	by mailfhigh.stl.internal (Postfix) with ESMTP id 1155C2540203;
+	Thu, 22 May 2025 09:04:11 -0400 (EDT)
+Received: from phl-imap-12 ([10.202.2.86])
+  by phl-compute-06.internal (MEProxy); Thu, 22 May 2025 09:04:11 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1747919050;
+	 x=1748005450; bh=wNY6l4wV3IAmGUJTqydxuvOlnaTtVOB+aMvhQaHtVWA=; b=
+	P5CBdeajEX7ZItZ9GovcrsV1+gqk1N4Ij8LRfxFtxS7+jQp3LfSkZHvvbvYOYlcE
+	pk0XCoTC3uHSpEOdhaZeX/gzL6UzN/ymJqbNd17lq26LbHAVq7zAdzI4++t6SyNS
+	ePxo+SiNvOCQowZ1+MKX097keFltQ4xC3XNr0pmI66a1N8ACyxWOS4/WZRr4tyxC
+	/cqdwMTfEI+UGpQWU1i3jnXzuJD3AOAlRUQ++WCKJZ0bbK3F/2+ebTBt+VgxvM90
+	QbGWf4VQgTWFsfujgmgD71xFkfFGzTuB969eceN1pT1UM2BAth9Uz5fnEBubxNXF
+	+VAmXWYN7g5hqitU9DTAIw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1747919050; x=
+	1748005450; bh=wNY6l4wV3IAmGUJTqydxuvOlnaTtVOB+aMvhQaHtVWA=; b=R
+	Hc4CrXLcj4HuLWeag8Kk/p6bHCfVfWYmnnBH2+3DtVF1vAWX4zzORtzP/QFaIn0E
+	3bS97tw6OcacCcyx8hI519Hib6dgTBwBg1XwKhwI0NQSIIDxb/pMIzg2qt3BoEBy
+	Ti7Tg2D/wSWtvw+BrUd8/MZH62Ne79l2dSI7GEtqOpjrjQrdpnrmHszPVOygxGBs
+	YkbaJOWx/ON929kwrBG1ip5ZY3dJPD3KTtZMOWs6ZeJ8k2Pi3pyRL4faah19yv6W
+	bupj6tvUbUqVDmM4otukef6Dzsg4F5KFoXpgOpLTDDhapt/MIw/IER/e7QyO2TcE
+	flhyY1u9xovZkFctd7Q8Q==
+X-ME-Sender: <xms:yiAvaLIXGOYnpknNeuic_2_H4CzF6o34wzzLP7shOB3nrIZckJA1HQ>
+    <xme:yiAvaPIemhk-upI8VNTkzvEDzSSjBKwzmk43qU6W9Atwo0mM6J_bYxdmZF_2bMEN0
+    8U_W67deb47NCl3y_4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddtgdeitdefucdltddurdegfedvrddttd
+    dmucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgf
+    nhhsuhgsshgtrhhisggvpdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttd
+    enucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgj
+    fhfutgfgsehtqhertdertdejnecuhfhrohhmpedflfhirgiguhhnucgjrghnghdfuceojh
+    hirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhep
+    jeehfeduvddtgffgvdffkeethefhlefgvdevvdekuefffeekheehgeevhfevteejnecuve
+    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhn
+    rdihrghnghesfhhlhihgohgrthdrtghomhdpnhgspghrtghpthhtohepkedpmhhouggvpe
+    hsmhhtphhouhhtpdhrtghpthhtohepthhssghoghgvnhgusegrlhhphhgrrdhfrhgrnhhk
+    vghnrdguvgdprhgtphhtthhopehgrhgvghhorhihrdgtlhgvmhgvnhhtsegsohhothhlih
+    hnrdgtohhmpdhrtghpthhtohepthhhvghordhlvggsrhhunhessghoohhtlhhinhdrtgho
+    mhdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtg
+    homhdprhgtphhtthhopehtrgiffhhikhdrsggrhihouhhksehmohgsihhlvgihvgdrtgho
+    mhdprhgtphhtthhopehvlhgrughimhhirhdrkhhonhgurhgrthhivghvsehmohgsihhlvg
+    ihvgdrtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghr
+    nhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhmihhpshesvhhgvghrrdhkvghrnh
+    gvlhdrohhrgh
+X-ME-Proxy: <xmx:yiAvaDvx5LhDr_9xDav7flMGm2kZX_UJTaigqFoDmuXK9LFt-Y5kWg>
+    <xmx:yiAvaEYkfTtpdTAW7ds_xZ396KfmTcrkEZqywm8TQL0aw72q8KPTiA>
+    <xmx:yiAvaCYaqyM8HzUOb_DO5NifM_hg96mmcRJkuHj7aSbfaZDKiO8Pqw>
+    <xmx:yiAvaIDiRnmXXhPo1gDT9EvIj6hZx6-LgkhMaSmfkDbX3xP41BU_Fw>
+    <xmx:yiAvaLAloZ9iRNdcUPy1ZY4BPGikWvonUnAz4qY9SuOT9bp2fOvEANxE>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 1DD2A1060064; Thu, 22 May 2025 09:04:10 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250521174152.1339379-1-andriy.shevchenko@linux.intel.com>
-In-Reply-To: <20250521174152.1339379-1-andriy.shevchenko@linux.intel.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Thu, 22 May 2025 09:21:14 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUgb92D5Vp0NpfboAW6YJnmkFTtWj0wCL7QDM55xkzGEA@mail.gmail.com>
-X-Gm-Features: AX0GCFsqKFm6qJMA3hsMqbJWzZuzklg0ynX2aADj_Q8qeZ9nB2XXIFQN5G6rIkM
-Message-ID: <CAMuHMdUgb92D5Vp0NpfboAW6YJnmkFTtWj0wCL7QDM55xkzGEA@mail.gmail.com>
-Subject: Re: [PATCH v1 1/1] floppy: Remove unused CROSS_64K() macro from arch/ code
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: Andreas Larsson <andreas@gaisler.com>, linux-alpha@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	sparclinux@vger.kernel.org, Richard Henderson <richard.henderson@linaro.org>, 
-	Matt Turner <mattst88@gmail.com>, Ian Molton <spyro@f2s.com>, Russell King <linux@armlinux.org.uk>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Naveen N Rao <naveen@kernel.org>, "David S. Miller" <davem@davemloft.net>, 
-	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
-	"H. Peter Anvin" <hpa@zytor.com>, Denis Efremov <efremov@linux.com>
-Content-Type: text/plain; charset="UTF-8"
+X-ThreadId: Tfc8a567c59a896e5
+Date: Thu, 22 May 2025 14:03:49 +0100
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Gregory CLEMENT" <gregory.clement@bootlin.com>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
+Cc: "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>,
+ =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
+ "Tawfik Bayouk" <tawfik.bayouk@mobileye.com>,
+ "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ linux-kernel@vger.kernel.org
+Message-Id: <105ed884-9ee8-429a-9937-d8f58a221faa@app.fastmail.com>
+In-Reply-To: <87ecwipfr2.fsf@BLaptop.bootlin.com>
+References: <20250520-smp_calib-v1-1-cd04f0a78648@bootlin.com>
+ <8c4ef90e-82db-4711-a5f3-446bcca00e9d@app.fastmail.com>
+ <87ecwipfr2.fsf@BLaptop.bootlin.com>
+Subject: Re: [PATCH] MIPS: CPS: Optimise delay CPU calibration for SMP
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Andy,
 
-Thanks for your patch!
 
-On Wed, 21 May 2025 at 19:42, Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
-> Since the commit 3d86739c6343 ("floppy: always use the track buffer")
-> the CROSS_64K() is not used by the driver, remove the leftovers.
+=E5=9C=A82025=E5=B9=B45=E6=9C=8821=E6=97=A5=E5=91=A8=E4=B8=89 =E4=B8=8A=E5=
+=8D=888:47=EF=BC=8CGregory CLEMENT=E5=86=99=E9=81=93=EF=BC=9A
+> Hello Jiaxun,
+>
+>> =E5=9C=A82025=E5=B9=B45=E6=9C=8820=E6=97=A5=E5=91=A8=E4=BA=8C =E4=B8=8B=
+=E5=8D=884:21=EF=BC=8CGregory CLEMENT=E5=86=99=E9=81=93=EF=BC=9A
+>> [...]
+>>>
+>>> This allows to implement calibrate_delay_is_known(), which will retu=
+rn
+>>> 0 (triggering calibration) only for the primary CPU of each
+>>> cluster. For other CPUs, we can simply reuse the value from their
+>>> cluster's primary CPU core.
+>>
+>> Is __cpu_primary_cluster_mask really necessary?
+>>
+>> Maybe we can just test if current CPU is the first powered up CPU
+>> in the cluster?
+>
+> That is exactly the point of __cpu_primary_cluster_mask: setting in an
+> efficient way the first powered-up CPU for each cluster. This adds only
+> a single variable (which is actually just a long) and allows for minim=
+al
+> impact during boot time, by doing the minimum write and read operations
+>
+> I don't see a better alternative. What do you have in mind ?
 
-"CROSS_64KB" (also in the subject; "git grep" found no users at all ;-)
+Maybe we can try mips_cps_first_online_in_cluster()?
 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+[...]
 
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org> # m68k
+Thanks
 
-Gr{oetje,eeting}s,
-
-                        Geert
-
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+--=20
+- Jiaxun
 
