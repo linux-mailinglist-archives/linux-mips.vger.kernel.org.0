@@ -1,154 +1,123 @@
-Return-Path: <linux-mips+bounces-9071-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9072-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD5D2AC0F9A
-	for <lists+linux-mips@lfdr.de>; Thu, 22 May 2025 17:13:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34C07AC138B
+	for <lists+linux-mips@lfdr.de>; Thu, 22 May 2025 20:45:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6DE9F163A86
-	for <lists+linux-mips@lfdr.de>; Thu, 22 May 2025 15:12:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 60E7BA23028
+	for <lists+linux-mips@lfdr.de>; Thu, 22 May 2025 18:45:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82EB1290095;
-	Thu, 22 May 2025 15:11:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0372419F135;
+	Thu, 22 May 2025 18:45:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="B2GK1GUp";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="bGJiC52+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XdKMqfbf"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fhigh-b3-smtp.messagingengine.com (fhigh-b3-smtp.messagingengine.com [202.12.124.154])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f170.google.com (mail-pf1-f170.google.com [209.85.210.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2470C290091;
-	Thu, 22 May 2025 15:11:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.154
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78BF42AE7F;
+	Thu, 22 May 2025 18:45:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747926669; cv=none; b=BIHIMmwysjZiCmAw9lsKKggnRVvrzYN2UV4NlSh531z4Zf5mJeCXqZhot/lFqhEaUyheWpx3PAHr7DknjKv5u+oft/cSrX6Np49afMA0Puf+IRhdfbo+dE7J5pgmJlAMwNeomYt42fn9qM5jNmh9TGb1dAoIveB9gKEaJluERvQ=
+	t=1747939520; cv=none; b=ZhLjpAG/KXPNJzCt1q8SBk0QHeb2AItMMjEuDc7TUsZCX5sEq5EB648ghT1yFeKFwR8+AiWDdu+hKFFRxAouBd7+EcFEwfgN/wFz8Slu8NggACZ3tRox0/wBDLQfRcumDhmwDqyB5gAf5BLnLJnxe0J7WulOdVlbpn4BVi8NW7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747926669; c=relaxed/simple;
-	bh=uT56pjrvDODLrsQoFu8ndFFw9NrNmImgPMsOSNIgUjE=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=oLMzmh3tqGOoQieVqF9x2t1qoXZns2T2NmvhRrVXpbCMhj/rgA4W9S85XKm6TmJNm+SEX+hvI76YSOlTCXhXo+z01/il9yEJB7+addDli43E/zYtmRRewuOCHDs/hkMI4rmWD0ZHxjJjF/x4u7eYAyC6txx3EpLsmJ+aRrqU47k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=B2GK1GUp; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=bGJiC52+; arc=none smtp.client-ip=202.12.124.154
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id D11AB2540182;
-	Thu, 22 May 2025 11:11:05 -0400 (EDT)
-Received: from phl-imap-12 ([10.202.2.86])
-  by phl-compute-06.internal (MEProxy); Thu, 22 May 2025 11:11:06 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1747926665;
-	 x=1748013065; bh=uT56pjrvDODLrsQoFu8ndFFw9NrNmImgPMsOSNIgUjE=; b=
-	B2GK1GUpl1NA51b5vZybgjb0RTZcOWylp/B5hN3M4O9JNmFfLw3pyh3N0qGDnMNF
-	CRxa7frGRcSV4ktbMyQLUTEEnHqV6bR2Dyba3Z4uAVlB/H7MbWl5CUlovQxCfPJu
-	so+UpCHnTTl2C6zorDQDs+ZPYkpGXR7onPO8pC3VmWsNdmTI0luryH81nqWY+DYg
-	tV6gYiYEZj74MqZx/127b3mpUA9YFmzvwSWksg5XGjaxQHx1yi6S3RY978g5M/2b
-	o4iUkXWf+5QaxXlJbTHUW7vzI0bDXJoLIzWg46pSMFCeKCei2nL2Q+v1nMegpVPu
-	PDoACfGyNgRSBXZvXmChJQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1747926665; x=
-	1748013065; bh=uT56pjrvDODLrsQoFu8ndFFw9NrNmImgPMsOSNIgUjE=; b=b
-	GJiC52+Ov2Cj0OsrEFthR4S9pWr+SAa+j9PUYes+EpPWiw7ehXzGaInKCnN1cBYN
-	Vr5GDJdBRnUosGCfbL0+/krsZS5TFwVNrqzc/OCfNd7DV5yDbsewLEbCT4zlExqN
-	wAnnmzvHpAar9OkQB3aU3FIGb2Z9FjLJMENJcoKTpyAVb1nVedI4Q17xW40FDAsf
-	gv2aSP5tGT5aYPnRPF4Wg0a+h22xI8p2mjEpUXX+DqlWaIoNpaLjJq+UfatuChS0
-	8wik7mZopgVNkHhA/IPeaYdj0UH2aXBxbxS2spX50MdgVGDlSyAYBWc0qedSEb9R
-	GVIHGXCVVRgnQDWNF1uoQ==
-X-ME-Sender: <xms:iD4vaLCaxgREniukd5ATkkW_UDwR57rAgHEElglqxMptk8_m46PDgQ>
-    <xme:iD4vaBgZwPnB2ZRx0pwyOPFHAdnI6sF1Xfn2tTcnSAo1IBnOQLO5kjPz1Wt0dzj0i
-    pxc0fwU7-AyIkXjcnA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddtgdeivdekucdltddurdegfedvrddttd
-    dmucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgf
-    nhhsuhgsshgtrhhisggvpdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttd
-    enucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgj
-    fhfutgfgsehtqhertdertdejnecuhfhrohhmpedflfhirgiguhhnucgjrghnghdfuceojh
-    hirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhep
-    jeehfeduvddtgffgvdffkeethefhlefgvdevvdekuefffeekheehgeevhfevteejnecuve
-    hluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhn
-    rdihrghnghesfhhlhihgohgrthdrtghomhdpnhgspghrtghpthhtohepkedpmhhouggvpe
-    hsmhhtphhouhhtpdhrtghpthhtohepthhssghoghgvnhgusegrlhhphhgrrdhfrhgrnhhk
-    vghnrdguvgdprhgtphhtthhopehgrhgvghhorhihrdgtlhgvmhgvnhhtsegsohhothhlih
-    hnrdgtohhmpdhrtghpthhtohepthhhvghordhlvggsrhhunhessghoohhtlhhinhdrtgho
-    mhdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtg
-    homhdprhgtphhtthhopehtrgiffhhikhdrsggrhihouhhksehmohgsihhlvgihvgdrtgho
-    mhdprhgtphhtthhopehvlhgrughimhhirhdrkhhonhgurhgrthhivghvsehmohgsihhlvg
-    ihvgdrtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghr
-    nhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhmihhpshesvhhgvghrrdhkvghrnh
-    gvlhdrohhrgh
-X-ME-Proxy: <xmx:iD4vaGmX1tYX0lxyVdxc39QVqV6oB-ykSztby7N0wP1xhqLojzBsaw>
-    <xmx:iD4vaNw5Fi2pciKbSs4d6LaDyiD-9ac11q3_25pWznvUQ114mRbUng>
-    <xmx:iD4vaAQPhoXk6QRYU-5SjSFgAOlfwj_BRNjt5AHsXapKEsNVtYRl6A>
-    <xmx:iD4vaAaZKByr_I3aEr0cAO-eAfH4wEZQkJwyuTrFZ_3p1vtlqb8jMA>
-    <xmx:iT4vaGbNj6f8ASmfLGRnt0cl30ZQaQEAh_uAN55DyVGp5Bux8lGSs7-g>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id B93A11060060; Thu, 22 May 2025 11:11:04 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1747939520; c=relaxed/simple;
+	bh=wP7ZgUCLjfdfBFrCeaXuLW218dXqDVe2vcNavUuWQJk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ityz6iFQLMsfG5dETnJboXHJ6AKnH+JWYY7xm6ONTqBNIbfBWnNl7EK3ZOg1xbC0MFAYl1ItjZwMlbPQdl9vX5sSBQdHEZpmbLVd7ePOFSsnnr3yk5JBBlmJb7UyyUkAgxsS1QjxcYZ0O3PWj0jxye6XZx5nqgQnznpNGot9go4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XdKMqfbf; arc=none smtp.client-ip=209.85.210.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pf1-f170.google.com with SMTP id d2e1a72fcca58-7376e311086so9744874b3a.3;
+        Thu, 22 May 2025 11:45:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1747939518; x=1748544318; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nHrtgk3cilwDlkLgJATNxCKVWDqyvDZFwi6EiNKD/0M=;
+        b=XdKMqfbfrdBLfA682g2Ekd1A19s/UGqhuzf1PUUqQAg+Ccx/HLgA+KhF0uqapgRJLL
+         mV6eIf6rHYZ6l3ZNrqTZhZjP7uSgPtjmCQL+ZEGOzPTzGPgOmDqdFz6mJ3yGBXK+kOKU
+         DzXEMEBmqFA/ZxFEjYlpend1FUn2wqJxoSuGvYgSLhP0MPX918NJQ5mtZydCmllORe08
+         Ty58cCarzRi9Tu0ltqbjB1w912Vvu/2dHMoiMfsr64FNj2PnlYV75o8ZjMG9QupNosH1
+         siJtSNj2/8kzzSPIPpSCajcnazROWXnGSl5HQpOKlPWH1jTWcXCaNVb3TTBiaH9vsUFy
+         lzDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1747939518; x=1748544318;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nHrtgk3cilwDlkLgJATNxCKVWDqyvDZFwi6EiNKD/0M=;
+        b=jCGFQxP4Pvyamke/DqwuBTeHusfJEftci/pxgqd6gF6VvHjVpvZ8Et3JXYSJqv9+2d
+         749gXd5SdsuSHzky7DsaNl0JauNNXx7JyO4YA/RZRIxLXOeW4dIN/ncRsyU6PpnObQw7
+         VtYMaFuNXxX38wsjbehfeQFs3EWY/Zx1LYXYRAVC80tSm8loZQA3Y6hVtbeCiKBKLTZo
+         /beBLcxexZ2pZAZmSYLLpS2rQcs7NN0rSPHu2bJ0nn8v34AYRU0fS/Q+bEYcdLLrVO7e
+         L4zkP3lUngJT5i3y8QMa6TNOoDZdIQKyuNOmuZkEVbWKOYLsL+XQX6L3DD7t/rE9CKH+
+         8kYw==
+X-Forwarded-Encrypted: i=1; AJvYcCVskp82umhzIG6npLftdeE1fnLUTs7Z9owyFpMks0lGL8tAUAxSULaVVnYJAlLnLbNizAeB4vQJhKLMTQ==@vger.kernel.org, AJvYcCWFlaupUoHQ9Apfs2VPdpaGHfSGSTHJoXyIvz3C+7THt6oZTeBgFWN5h6HZ485dDl8ozGAeUVDd/WvOlrB2@vger.kernel.org, AJvYcCXs3d5JwFs/kbem70QFhC/ovxX1U3CEjvHjP5bGRUEK+FJAgPiU8S0dhGc0r9mU30/ak9p/sMK+30X0@vger.kernel.org
+X-Gm-Message-State: AOJu0YzuRJbEOwoBFh0NcHX8wX5nrOht2a1Trss4ePejvIOiDqjASXq2
+	ny5bh8sDOVrnbRfTiKFbM95l6VrDcggjlIz/RfMFcDq0r8XQfBJRTkWoePMZbQ==
+X-Gm-Gg: ASbGncsnSb0cf3FrCngHAvKuzWhXllV5kJliorh5sm2w2Ihr+8E2sqxZFtSnZQD+U7o
+	rInBLl0DHTuiYoOlktL/5IbGD2l7jIS02piBuszA4fOn6Irw/yLsqKeLGDfTiSbBLEusXjbXrqY
+	Nudd7EdSaOwylOoMc4BKvfdquufKLRVXFpVq5lC+bO99qMAIrqEcrxXzu/7RbLTzXC3AnGoNJ3Q
+	oIMAqhxcd/lUJk25adtOb6bm2QP4oLnQijYhj4fCrzaWOdQtlwMgokwK3EnEfQaaCAztLpE2YME
+	rJZ7O1XK43enYFHxzVCos+ap1EY=
+X-Google-Smtp-Source: AGHT+IGSdjFB7Jabutdy6tfoYdoTwoUWKiWnrBMyjM2b7Ojmp9Vl71heLBXDgO88JqD+QaVZcTzlCQ==
+X-Received: by 2002:a05:6a21:9012:b0:1fa:9819:c0a5 with SMTP id adf61e73a8af0-216218c0554mr37375687637.11.1747939518433;
+        Thu, 22 May 2025 11:45:18 -0700 (PDT)
+Received: from ryzen.lan ([2601:644:8200:dab8::a86])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-b26eaf6fd3bsm11502424a12.23.2025.05.22.11.45.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 22 May 2025 11:45:17 -0700 (PDT)
+From: Rosen Penev <rosenp@gmail.com>
+To: linux-wireless@vger.kernel.org
+Cc: =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS),
+	linux-kernel@vger.kernel.org (open list),
+	linux-mips@vger.kernel.org (open list:MIPS)
+Subject: [PATCHv2 0/5] wifi: ath9k: add ahb OF support
+Date: Thu, 22 May 2025 11:45:11 -0700
+Message-ID: <20250522184516.13176-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: Tfc8a567c59a896e5
-Date: Thu, 22 May 2025 16:10:35 +0100
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Gregory CLEMENT" <gregory.clement@bootlin.com>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
-Cc: "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>,
- =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- "Tawfik Bayouk" <tawfik.bayouk@mobileye.com>,
- "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- linux-kernel@vger.kernel.org
-Message-Id: <bc3dd9ed-0fab-4f62-a55b-8ce33fea10f0@app.fastmail.com>
-In-Reply-To: <87iklsofih.fsf@BLaptop.bootlin.com>
-References: <20250520-smp_calib-v1-1-cd04f0a78648@bootlin.com>
- <8c4ef90e-82db-4711-a5f3-446bcca00e9d@app.fastmail.com>
- <87ecwipfr2.fsf@BLaptop.bootlin.com>
- <105ed884-9ee8-429a-9937-d8f58a221faa@app.fastmail.com>
- <87iklsofih.fsf@BLaptop.bootlin.com>
-Subject: Re: [PATCH] MIPS: CPS: Optimise delay CPU calibration for SMP
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
+First two commits are small cleanups to make the changes of the third
+simpler. The fourth actually adds dts definitions to use ahb.
 
+v2: Add documentation, use kernel_ulong_t, and of_device_get_match_data
 
-=E5=9C=A82025=E5=B9=B45=E6=9C=8822=E6=97=A5=E5=91=A8=E5=9B=9B =E4=B8=8B=E5=
-=8D=884:02=EF=BC=8CGregory CLEMENT=E5=86=99=E9=81=93=EF=BC=9A
-[...]
->
-> I didn't notice this function initially, but upon closer inspection, it
-> appears that although the scan process is optimized, it still performs=
- a
-> full scan for each CPU during boot. In contrast, with the mask, the
-> information is created only once and within an existing loop.
->
-> I believe this function would benefit from __cpu_primary_cluster_mask,
-> which is why I prefer my current implementation over using
-> mips_cps_first_online_in_cluster().
+Rosen Penev (5):
+  wifi: ath9k: ahb: reorder declarations
+  wifi: ath9k: ahb: reorder includes
+  wifi: ath9k: ahb: replace id_table with of
+  dt-bindings: net: wireless: ath9k: add OF bindings
+  mips: dts: qca: add wmac support
 
-Thanks for clarification!
+ .../bindings/net/wireless/qca,ath9k.yaml      | 23 ++++++-
+ arch/mips/boot/dts/qca/ar9132.dtsi            |  9 +++
+ .../boot/dts/qca/ar9132_tl_wr1043nd_v1.dts    |  4 ++
+ arch/mips/boot/dts/qca/ar9331.dtsi            |  9 +++
+ arch/mips/boot/dts/qca/ar9331_dpt_module.dts  |  4 ++
+ .../mips/boot/dts/qca/ar9331_dragino_ms14.dts |  4 ++
+ arch/mips/boot/dts/qca/ar9331_omega.dts       |  4 ++
+ .../qca/ar9331_openembed_som9331_board.dts    |  4 ++
+ arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts   |  4 ++
+ drivers/net/wireless/ath/ath9k/ahb.c          | 60 +++++++------------
+ 10 files changed, 84 insertions(+), 41 deletions(-)
 
-My concern is __cpu_primary_cluster_mask is pretty limited and the conce=
-pt
-of "primary cpu" is kind of fragile.
+-- 
+2.49.0
 
-To optimize mips_cps_first_online_in_cluster I think the best way forward
-would be produce cpumask for each cluster and perform cpumask_or with on=
-line
-cpu mask at runtime. cluster_cpumask can be reused by other logic later.
-
-Anyway, it's just my two cents.
-
-Thanks
---=20
-- Jiaxun
 
