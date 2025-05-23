@@ -1,130 +1,157 @@
-Return-Path: <linux-mips+bounces-9094-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9095-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB977AC1E13
-	for <lists+linux-mips@lfdr.de>; Fri, 23 May 2025 09:58:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F067AC1F34
+	for <lists+linux-mips@lfdr.de>; Fri, 23 May 2025 11:03:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8BE59160310
-	for <lists+linux-mips@lfdr.de>; Fri, 23 May 2025 07:58:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A736A25B9C
+	for <lists+linux-mips@lfdr.de>; Fri, 23 May 2025 09:03:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0FAD1D54F7;
-	Fri, 23 May 2025 07:58:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B715223DEC;
+	Fri, 23 May 2025 09:03:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="extPZGgM"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GBBddXGL"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A77F2DCBED;
-	Fri, 23 May 2025 07:58:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0F2F2236EB;
+	Fri, 23 May 2025 09:03:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747987105; cv=none; b=rIAlezlmH6aekmc46eh/j8x7nCsHYP66EoqR/E02eb+ku/+rw/9ld7H+9ipyehQ8kGDdi0J7nGmJIEzJsr4xl3KDb2RuxiqYzwUc4COLM4fTT2JkFaC8ZVhnjKPkVFyZIjx5dxw7QAmIDtOUA+E3zqqtKYx04H8P++6yMorR+Ao=
+	t=1747990994; cv=none; b=TIutPAXPNJgpJqVEUUD9BmvxkMTYbWoRPkVOeyMKsS9vH+FIPWzzUHFJBvIgjCG1vcjmUvhCiZYKbCoRNmgj0a2QOoKMdYrPCxrPTddehuDrn+40k6ET2JrdyrX8Q8VJRRyWywt5EUs4k4H073FYoDua/dYr/AnNJiHjeCEsUAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747987105; c=relaxed/simple;
-	bh=hc/ZEJUpZIM7Kp61qjmy8Q6sFDNCRKW/ZMjLsf22VZ0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=KWYiza+CxZD8BhCgJy/0ylwihcXuNdr+RI8T4Zmu625mLkfQhKzPWlP3LwqmGwZS/vBe5MN3s5Eoaxmlw2RE2WxOdjo6FsaSnbL96D8R6MKwZQ/Ny9VziW4EFsyelmE7qEUlxdbYu2V5MaW+QGnd+8bsnPZg+vxBPK9aPVjlwM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=extPZGgM; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id C2349439C9;
-	Fri, 23 May 2025 07:58:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1747987101;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=f4jg6TJM9rfnd81xJwrBimjVOQPPhbLnaiJRLysszsA=;
-	b=extPZGgM8PhcDiuh42PxWIDf5nlOx6CcJsqIGigOsobNYzs8jMJ1z27J9yOwX/GwLHy5Dv
-	wNX/kbaYBtOd4HK0xPjvIepuhZtJX9hj1rt8eHOYnAKcYTQHMMvscRAMswlgZ+Ec1g1B9V
-	R1Il3bQBjotseGgXN3Nl0fusD0o4/5W4NmP4hninYKoT3pvdJeOKwitEBUP4EYrBmUwkEY
-	xbF1yxEiglKYryBxXQdr6h0iWNHm9PkGS/PVfwMTaaXjE1XLwxkPesMwgf3Zbt3xgMV3EI
-	orqERXz1rvc9HPpTulXxuSW4meuyz80zetTDS2KGGcrEj/6NpAPl/FwAZD2/UQ==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-Date: Fri, 23 May 2025 09:58:15 +0200
-Subject: [PATCH] MIPS: SMP: Move the AP sync point before the calibration
- delay
+	s=arc-20240116; t=1747990994; c=relaxed/simple;
+	bh=fgNdYJ6Icfxm1rufblmWWRmhDfarblHEjveCv2W+a0E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JNwcLI2HgF70lJc+5+6fXKea7fzEm76QBR70B/dvyngMu4P9ZEDJoUdOzVDYcUl18TS/GA++NHuLiqSymYCQiF+CvHiFgpi7bZlpjvZ4ue8fGU7zegYoKRd7++U7eqRcrzwSq9rhlmhdyZNAsvMyDQxeb36M0ehK17kP7DaoYik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GBBddXGL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9612CC4CEE9;
+	Fri, 23 May 2025 09:03:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747990994;
+	bh=fgNdYJ6Icfxm1rufblmWWRmhDfarblHEjveCv2W+a0E=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=GBBddXGLSkGmKOnmELz/5WhFuBXe0qFz98yo/sL3VR/jY3YKPUjJLiPs4J60cICJS
+	 15W+zbxLlX5Xt7IcrIDVw8DwIDDA1S8Q+Sx8bHTjMjyDxBZFEuIJrm0WuOUXJAjEsF
+	 TKloFbxJANvIEF/VpNrVLyi1kxeAkz9y3eMV9ShtcRejhK8aMDdRXWQNFBfttDizjK
+	 +PX3HGhgczz9V18sAFnaKjhxAArqDTEo0K+1i/Lo74i8Ibv85mGJHLqx9XC/VPbX+E
+	 HDcD6ltsNrpYqSoE3Cgf1484Q5Zl4vvIu6WIF+8g/8BTcuUwQ/2RBXLMKGa0LxqZzf
+	 taReSpOAAriBg==
+Date: Fri, 23 May 2025 11:03:08 +0200
+From: Christian Brauner <brauner@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Naresh Kamboju <naresh.kamboju@linaro.org>, 
+	linux-fsdevel@vger.kernel.org, linux-mips@vger.kernel.org, 
+	open list <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org, 
+	Linux Regressions <regressions@lists.linux.dev>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Anders Roxell <anders.roxell@linaro.org>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Dan Carpenter <dan.carpenter@linaro.org>
+Subject: Re: mips gcc-12 malta_defconfig 'SOCK_COREDUMP' undeclared (first
+ use in this function); did you mean 'SOCK_RDM'?
+Message-ID: <20250523-genannt-anwalt-7c1f3c6bc4e1@brauner>
+References: <CA+G9fYsZPSJ55FQ9Le9rLQMVHaHyE5kU66xqiPnz6mmfhvPfbQ@mail.gmail.com>
+ <70d46cd3-80f4-4f5e-b0fc-fa2a6f284404@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250523-hotplug-paralell-fix2-v1-1-45a9f84587fd@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIAJYqMGgC/x2MQQqAMAzAviI9W5iFHfQr4qFqtxWGjk1FEP/u8
- JhA8kCRrFJgaB7IcmnRfavQtQ0sgTcvqGtlIEPWWCIM+5Hi6TFx5igxotObsJudY0PcW+qhtil
- L9f93nN73A1u43CZnAAAA
-X-Change-ID: 20250522-hotplug-paralell-fix2-1bffa02a9529
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Huacai Chen <chenhuacai@kernel.org>, 
- Jiaxun Yang <jiaxun.yang@flygoat.com>, 
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-mips@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Gregory CLEMENT <gregory.clement@bootlin.com>
-X-Mailer: b4 0.14.2
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddtgdekfeduucdltddurdegfedvrddttddmucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhfffugggtgffkvfevofesthekredtredtjeenucfhrhhomhepifhrvghgohhrhicuvefngffogffpvfcuoehgrhgvghhorhihrdgtlhgvmhgvnhhtsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeetleefudeikeetjeejkeeuleeuvefhhfduudehjeefudfgtdeufeegheeggfevteenucffohhmrghinhepkhgvrhhnvghlrdhorhhgpdgsohhothhlihhnrdgtohhmnecukfhppedvrgdtudemtggsudegmeehheeimeejrgdttdemjeguvddumeduvdeileemvggtughfmegtjeeijeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudegmeehheeimeejrgdttdemjeguvddumeduvdeileemvggtughfmegtjeeijedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomhepghhrvghgohhrhidrtghlvghmvghnthessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepuddtpdhrtghpthhtohepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomhdprhgtphhtthhopehgrhgvghhorhihrdgtlhgvmhgvnhhts
- egsohhothhlihhnrdgtohhmpdhrtghpthhtoheplhhinhhugidqmhhiphhssehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtohepthhhvghordhlvggsrhhunhessghoohhtlhhinhdrtghomhdprhgtphhtthhopehvlhgrughimhhirhdrkhhonhgurhgrthhivghvsehmohgsihhlvgihvgdrtghomhdprhgtphhtthhopehtshgsohhgvghnugesrghlphhhrgdrfhhrrghnkhgvnhdruggvpdhrtghpthhtoheptghhvghnhhhurggtrghisehkvghrnhgvlhdrohhrgh
-X-GND-Sasl: gregory.clement@bootlin.com
+Content-Type: multipart/mixed; boundary="zlqp6i2j7vfr5zzm"
+Content-Disposition: inline
+In-Reply-To: <70d46cd3-80f4-4f5e-b0fc-fa2a6f284404@app.fastmail.com>
 
-In the calibration delay process, some resources are shared, so it's
-better to move it after the parallel execution part. Thanks to the
-patch optimizing CPU delay calibration, this change has no impact on
-the boot time improvements gained from CPU parallel boot.
 
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+--zlqp6i2j7vfr5zzm
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+
+On Thu, May 22, 2025 at 04:01:53PM +0200, Arnd Bergmann wrote:
+> On Thu, May 22, 2025, at 15:22, Naresh Kamboju wrote:
+> 
+> > ## Build log
+> > net/unix/af_unix.c: In function 'unix_find_bsd':
+> > net/unix/af_unix.c:1152:21: error: 'SOCK_COREDUMP' undeclared (first
+> > use in this function); did you mean 'SOCK_RDM'?
+> >  1152 |         if (flags & SOCK_COREDUMP) {
+> 
+> SOCK_COREDUMP should be defined outside of ARCH_HAS_SOCKET_TYPES.
+> How about reducing the scope of that check like this?
+> 
+>       Arnd
+
+I applied the appended patch.
+
+--zlqp6i2j7vfr5zzm
+Content-Type: text/x-diff; charset=utf-8
+Content-Disposition: attachment;
+	filename="0001-mips-net-ensure-that-SOCK_COREDUMP-is-defined.patch"
+
+From 4e83ae6ec87dddac070ba349d3b839589b1bb957 Mon Sep 17 00:00:00 2001
+From: Christian Brauner <brauner@kernel.org>
+Date: Fri, 23 May 2025 10:47:06 +0200
+Subject: [PATCH] mips, net: ensure that SOCK_COREDUMP is defined
+
+For historical reasons mips has to override the socket enum values but
+the defines are all the same. So simply move the ARCH_HAS_SOCKET_TYPES
+scope.
+
+Fixes: a9194f88782a ("coredump: add coredump socket")
+Suggested-by: Arnd Bergmann <arnd@arndb.de>
+Signed-off-by: Christian Brauner <brauner@kernel.org>
 ---
-Hello,
+ arch/mips/include/asm/socket.h | 9 ---------
+ include/linux/net.h            | 3 +--
+ 2 files changed, 1 insertion(+), 11 deletions(-)
 
-After a thorough review, as reported in [1], the CPU delay calibration
-is the last potential issue area. However, I believe that with this
-patch [2] applied, the source of concurrency will disappear.
-
-Gregory
-
-[1]: https://lore.kernel.org/linux-mips/87frgvokga.fsf@BLaptop.bootlin.com/
-[2] :https://lore.kernel.org/linux-mips/20250520-smp_calib-v1-1-cd04f0a78648@bootlin.com/
----
- arch/mips/kernel/smp.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/arch/mips/kernel/smp.c b/arch/mips/kernel/smp.c
-index 7901b59d8f60eddefc020cf2a137716af963f09e..4868e79f3b30e9d80fe6390785b297c35d8c02a3 100644
---- a/arch/mips/kernel/smp.c
-+++ b/arch/mips/kernel/smp.c
-@@ -371,12 +371,12 @@ asmlinkage void start_secondary(void)
- 	 * to an option instead of something based on .cputype
- 	 */
+diff --git a/arch/mips/include/asm/socket.h b/arch/mips/include/asm/socket.h
+index 4724a563c5bf..43a09f0dd3ff 100644
+--- a/arch/mips/include/asm/socket.h
++++ b/arch/mips/include/asm/socket.h
+@@ -36,15 +36,6 @@ enum sock_type {
+ 	SOCK_PACKET	= 10,
+ };
  
--	calibrate_delay();
--	cpu_data[cpu].udelay_val = loops_per_jiffy;
+-#define SOCK_MAX (SOCK_PACKET + 1)
+-/* Mask which covers at least up to SOCK_MASK-1.  The
+- *  * remaining bits are used as flags. */
+-#define SOCK_TYPE_MASK 0xf
 -
- #ifdef CONFIG_HOTPLUG_PARALLEL
- 	cpuhp_ap_sync_alive();
- #endif
-+	calibrate_delay();
-+	cpu_data[cpu].udelay_val = loops_per_jiffy;
-+
- 	set_cpu_sibling_map(cpu);
- 	set_cpu_core_map(cpu);
+-/* Flags for socket, socketpair, paccept */
+-#define SOCK_CLOEXEC	O_CLOEXEC
+-#define SOCK_NONBLOCK	O_NONBLOCK
+-
+ #define ARCH_HAS_SOCKET_TYPES 1
  
-
----
-base-commit: faefb0a59c5914b7b8f737e2ec5c82822e5bc4c7
-change-id: 20250522-hotplug-paralell-fix2-1bffa02a9529
-
-Best regards,
+ #endif /* _ASM_SOCKET_H */
+diff --git a/include/linux/net.h b/include/linux/net.h
+index 139c85d0f2ea..f60fff91e1df 100644
+--- a/include/linux/net.h
++++ b/include/linux/net.h
+@@ -70,6 +70,7 @@ enum sock_type {
+ 	SOCK_DCCP	= 6,
+ 	SOCK_PACKET	= 10,
+ };
++#endif /* ARCH_HAS_SOCKET_TYPES */
+ 
+ #define SOCK_MAX (SOCK_PACKET + 1)
+ /* Mask which covers at least up to SOCK_MASK-1.  The
+@@ -83,8 +84,6 @@ enum sock_type {
+ #endif
+ #define SOCK_COREDUMP	O_NOCTTY
+ 
+-#endif /* ARCH_HAS_SOCKET_TYPES */
+-
+ /**
+  * enum sock_shutdown_cmd - Shutdown types
+  * @SHUT_RD: shutdown receptions
 -- 
-Grégory CLEMENT, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.47.2
 
+
+--zlqp6i2j7vfr5zzm--
 
