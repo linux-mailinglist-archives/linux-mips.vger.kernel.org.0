@@ -1,122 +1,139 @@
-Return-Path: <linux-mips+bounces-9083-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9084-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B14EAC1B73
-	for <lists+linux-mips@lfdr.de>; Fri, 23 May 2025 06:41:46 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5259AC1CE8
+	for <lists+linux-mips@lfdr.de>; Fri, 23 May 2025 08:24:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE87EA42831
-	for <lists+linux-mips@lfdr.de>; Fri, 23 May 2025 04:40:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 56AA81B65338
+	for <lists+linux-mips@lfdr.de>; Fri, 23 May 2025 06:24:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 94FA6271443;
-	Fri, 23 May 2025 04:39:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C637C2236EE;
+	Fri, 23 May 2025 06:24:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uE7AaIXp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BC4sgF7y"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D23825E454;
-	Fri, 23 May 2025 04:39:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9239D634;
+	Fri, 23 May 2025 06:24:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747975182; cv=none; b=rG6w8oOd8GvilpRJYgPAwX09d30+tNZZoprXDu+edojXXEmiHLbgNakNnSsb5o1rsY6nEzb2e1gF9zVhVU9uUm87XUSrx/9JwsLmRmPVfG4T30hXU8iDmpDm4EUK/DNZj4mm4s9OAdG1wLPS0xhNKylORArQsL8qyxtYcFB50oc=
+	t=1747981445; cv=none; b=gCNdDTpUt7q6g2rRjHl1odZEylbkX44f9CuqvxijLVfnAE7CBgijqb0Kj/3txg047p4/SzdwKpq9d3b3D+dar4K+OFmd0HfJ3aJtwzScwOquohU5dli24O79j2zoF/uAE4al6xfzdxwHddd1dYPbuqDm2i0QW2JRp2x+k/NoGuI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747975182; c=relaxed/simple;
-	bh=Jd/sB6oZ8iltvnfrQDqGbUKjd0Ro3QNhdkLI+vDUogY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=RGyxhPh79+kjRujVjrYEGo5MrFNLa/E0TzSfcIWKN4lTE8TejhJoS4KFUzm5oHGatzgr4rrG9RQv7sr2evfgJLy60ClHqUcoSJuOIMkeTUpYA52Q/Ih+oJ74Pgvc5Hl/nU+WpXxjzyqeN4fmyNOC1rTCG1ykDcDJp0fSFouBEyA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uE7AaIXp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 45D20C4CEF6;
-	Fri, 23 May 2025 04:39:41 +0000 (UTC)
+	s=arc-20240116; t=1747981445; c=relaxed/simple;
+	bh=PIYLxqCyjw+4aCqAW27AXRd6ZQCdzIB4GNC0BzN1GP0=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=dJPfsdvzGj6/2wXpN+YS54AkBn/qhYpiz696d5kam6Wt090bsnCvcxoFEHJKrAv6llwbAjVcHn6neUvFYnmHbStdxvP5t6WxRdkseohgXvLYNHF/gqZ98clkIcdRKzXIh3udB3otE/4ThHV2Tu/DS4fpE8Z0ZFGdt7ni4+G5TQo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BC4sgF7y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C5D6C4CEE9;
+	Fri, 23 May 2025 06:24:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1747975181;
-	bh=Jd/sB6oZ8iltvnfrQDqGbUKjd0Ro3QNhdkLI+vDUogY=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=uE7AaIXpwC5UwsMRJ69CQY6UitGX9wnySf5tVkqGdVEf3R8NkbsWcogYuMzwCIPjU
-	 PKOIlhjPY7eZqWnbn23WMH4eVsoeXc2gpbWtUYAl5lScvcTQhwCu+WHQ/weTwqFkY1
-	 MKtNJT1gy9Ua87vncd628DzNyGV+pLo4o1GRdtLgYU4s0pK+yl1CFQL8tjutl60QfX
-	 UIedCQqD0fEMZOR1fqZKF/lfM5q1EcIFwL7VMYlAEDzsOkmVJtO4+AOBJmSkAdh3q9
-	 IX5DyMtDuEsfAVFqKg+pGrxwAZJxoDombtDDeetPTNkmjyHD7gtG+v5lDEGWWpUAoR
-	 uheAXE53E4XBw==
-From: Kees Cook <kees@kernel.org>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Kees Cook <kees@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-mips@vger.kernel.org,
-	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
-	Christoph Hellwig <hch@lst.de>,
-	Marco Elver <elver@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nicolas Schier <nicolas.schier@linux.dev>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	linux-kernel@vger.kernel.org,
-	x86@kernel.org,
-	kasan-dev@googlegroups.com,
-	linux-doc@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org,
-	linux-efi@vger.kernel.org,
-	linux-hardening@vger.kernel.org,
-	linux-kbuild@vger.kernel.org,
-	linux-security-module@vger.kernel.org,
-	linux-kselftest@vger.kernel.org,
-	sparclinux@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: [PATCH v2 09/14] mips: Handle KCOV __init vs inline mismatches
-Date: Thu, 22 May 2025 21:39:19 -0700
-Message-Id: <20250523043935.2009972-9-kees@kernel.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250523043251.it.550-kees@kernel.org>
-References: <20250523043251.it.550-kees@kernel.org>
+	s=k20201202; t=1747981445;
+	bh=PIYLxqCyjw+4aCqAW27AXRd6ZQCdzIB4GNC0BzN1GP0=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=BC4sgF7y+evOPoAhcLFKLfTQwBlnXPq9nnsmi3NuvoBWeuFfiX2UkLlX6Af/jWeaq
+	 fAFxkLZuZiPq9U7JiEAauYZYBdjUsx+3mbIWzWxV6Cji5f4dCdUY1GZJjwU/bfe5yz
+	 V9LnlDHC0xAhrkfnnV/IA33rapFy1/5tT/bzwOIw1JZFLyESlDhjNLURatUSU7FDxI
+	 RMrbpUngOG4R4DvNLWz2bkXk4/f6+K9lLEi5SLqT8n114ZnGev61d3cbTke7FmFDFE
+	 Eg4Si9pGlmJp51/wFJXNBNnbM8QSwPD/R8YWzOuKGmN+u/QnqMLR1MBo3BOdmgzata
+	 o2sg5CqnFjKZQ==
+Message-ID: <4b1960f2-95e4-41c3-9723-04d77c6c27d4@kernel.org>
+Date: Fri, 23 May 2025 08:24:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1052; i=kees@kernel.org; h=from:subject; bh=Jd/sB6oZ8iltvnfrQDqGbUKjd0Ro3QNhdkLI+vDUogY=; b=owGbwMvMwCVmps19z/KJym7G02pJDBn6v3/Zi0kce6axcl3IlGXXv7dekvhyRPSBTort1tP1K SyVtX0ZHaUsDGJcDLJiiixBdu5xLh5v28Pd5yrCzGFlAhnCwMUpABOZysfIsPL2U8Z//9ZLv1JP aV33p2xj+sPc5oXl284XsjnqZc1ZtpPhf9Cv8pC7KxeE36nZ/nr2m3tGE9NjZ03f/PFc35H9N+K yTLkB
-X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCHv2 4/5] dt-bindings: net: wireless: ath9k: add OF bindings
+To: Rosen Penev <rosenp@gmail.com>
+Cc: linux-wireless@vger.kernel.org, =?UTF-8?Q?Toke_H=C3=B8iland-J=C3=B8rgens?=
+ =?UTF-8?Q?en?= <toke@toke.dk>, Johannes Berg <johannes@sipsolutions.net>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
+ <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
+ "open list:MIPS" <linux-mips@vger.kernel.org>
+References: <20250522184516.13176-1-rosenp@gmail.com>
+ <20250522184516.13176-5-rosenp@gmail.com>
+ <871d18ab-a696-4141-bc3a-7b6e968fc649@kernel.org>
+ <CAKxU2N8uZ+q1aE42+e65tVMr=ji0RTx5wZssFBnQN29OzsFXVA@mail.gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <CAKxU2N8uZ+q1aE42+e65tVMr=ji0RTx5wZssFBnQN29OzsFXVA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-When KCOV is enabled all functions get instrumented, unless
-the __no_sanitize_coverage attribute is used. To prepare for
-__no_sanitize_coverage being applied to __init functions, we have to
-handle differences in how GCC's inline optimizations get resolved. For
-mips this requires forcing a function to be inline with __always_inline.
+On 23/05/2025 02:04, Rosen Penev wrote:
+> On Thu, May 22, 2025 at 12:54 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>>
+>> On 22/05/2025 20:45, Rosen Penev wrote:
+>>> Now that support was added to the driver, document it.
+>>
+>> That's not appropriate commit msg. Binding must be before the user (see
+>> submitting patches in DT directory). Describe the hardware, what are you
+>> adding here.
+>>
+>> Subject: OF bindings is redundant. It duplicates dt-bindings. Instead:
+>> "Add Atheros AR9-foo-bar on AHB bus" or something similar
+> At this point I wonder if my approach is wrong. The other ath drivers
+> use a qcom, prefix and a -wifi suffix. Might make sense to do the same
+> here to avoid typing qca twice.
 
-Signed-off-by: Kees Cook <kees@kernel.org>
----
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: <linux-mips@vger.kernel.org>
----
- arch/mips/include/asm/time.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/include/asm/time.h b/arch/mips/include/asm/time.h
-index e855a3611d92..044cff0e0764 100644
---- a/arch/mips/include/asm/time.h
-+++ b/arch/mips/include/asm/time.h
-@@ -55,7 +55,7 @@ static inline int mips_clockevent_init(void)
-  */
- extern int init_r4k_clocksource(void);
- 
--static inline int init_mips_clocksource(void)
-+static __always_inline int init_mips_clocksource(void)
- {
- #ifdef CONFIG_CSRC_R4K
- 	return init_r4k_clocksource();
--- 
-2.34.1
 
+Yes, probably this should be qcom.
+
+
+Best regards,
+Krzysztof
 
