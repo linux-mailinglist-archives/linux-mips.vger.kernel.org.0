@@ -1,166 +1,124 @@
-Return-Path: <linux-mips+bounces-9092-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9093-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76882AC1DAA
-	for <lists+linux-mips@lfdr.de>; Fri, 23 May 2025 09:27:59 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95212AC1DBA
+	for <lists+linux-mips@lfdr.de>; Fri, 23 May 2025 09:35:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B31751BC70B8
-	for <lists+linux-mips@lfdr.de>; Fri, 23 May 2025 07:28:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 042FD1BC3B3F
+	for <lists+linux-mips@lfdr.de>; Fri, 23 May 2025 07:35:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD19F21C165;
-	Fri, 23 May 2025 07:27:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B0C12036ED;
+	Fri, 23 May 2025 07:34:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="HJIDY/j2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kCEWWIyR"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AA2514B08E;
-	Fri, 23 May 2025 07:27:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 564C9200BBC;
+	Fri, 23 May 2025 07:34:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1747985274; cv=none; b=NZdoydQMsdx7Ey99IHrTyLcl6CZxp/UI8yxPgk+ZCu/IxA7vRWAwYmwyCxgCORjAs/dBvAVWtrMMAI6Z+P13gL1k9B9RGeuTLwUGaSPKvdb6uU1q7OCZUEKF+QE6Aq1MdSMvBuzjF0blwZlKpqZ/m5yWe074vwDdSQAEHTgaae8=
+	t=1747985698; cv=none; b=p1gqIAIs6lbxNhph6G00KB0pT7r1JsUeud5RpJTBVA17bKKc5U0H1sudBdLrsMWWdOYJJkT3XReCphfixQ3XB5nwFiue76N/21zG1TK3hsin1yMQwd8lb+T4+Tc2Qxb2PVx3vGnZGtlqpXsGq0cpP4tgYt9woUDkTOyhyZ00g1Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1747985274; c=relaxed/simple;
-	bh=pia6GTF0Mh+haWDlLZtC6NVS3VxsyNTEbcDkMYl8C1A=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=BMCAQyC/tS4BUbIyVsKlRbYtGJ0l4B/q3n7CWJOXYVYLLFxLvzz0Krllm4httrHTNQuMZbtjETMIxkbvR3CqumOPmdXRwHSCrg366txTHhheYsnaEOqV4z3g4SsiAn2tKKASdCEj5g6701nxErDwvB423RuSDN1CNNeKW+CgtMA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=HJIDY/j2; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9EB6B439C1;
-	Fri, 23 May 2025 07:27:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1747985270;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=fF5aUob062i9t3JjOPj+hAJhI1ZrgpdxwhEcSjQny0U=;
-	b=HJIDY/j2NTaUSvk0Cw8TM3MMrasu71tQYPx49illiSCk5D1Y3/FS76LgL/tMkSGZcFPqFP
-	ZtQVO5w8xZ46fkL6itUQxl81z6107ANG2/uteUokZNAEJFIxA+H47mKv+U31ZBETbWLXfq
-	jerS8+Ej7sOL9kZV2d4e3vbk4+Uh0UVTqbvLN1xoIValn0ndMiFSwDJFocKSijwYrdfzuT
-	6BYteusE2MuC9sKbZfedyonTeZgR4VjBsLYOV4PgcoP1NuoBmxyzjT/iWyw/DkXB1ftHgk
-	kwDnPutLffO4d9kxY8jMvS08CKUyxhXpSZ1/1dvJshfXz7Z1VXGNfppFDQPmUw==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Jiaxun Yang
- <jiaxun.yang@flygoat.com>, Vladimir Kondratiev
- <vladimir.kondratiev@mobileye.com>, =?utf-8?Q?Th=C3=A9o?= Lebrun
- <theo.lebrun@bootlin.com>,
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, linux-mips@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: SMP: Move the AP sync point before the
- non-parallel aware functions
-In-Reply-To: <CAAhV-H54bTCatqbabhOuvr6O-oOBa-Z4TGyvoT7uGnTjR6OfDw@mail.gmail.com>
-References: <20250505-hotplug-paralell-fix-v1-1-86f222cb6d90@bootlin.com>
- <CAAhV-H54bTCatqbabhOuvr6O-oOBa-Z4TGyvoT7uGnTjR6OfDw@mail.gmail.com>
-Date: Fri, 23 May 2025 09:27:49 +0200
-Message-ID: <87frgvokga.fsf@BLaptop.bootlin.com>
+	s=arc-20240116; t=1747985698; c=relaxed/simple;
+	bh=EnQAKD8l/H9RmxSZrHWWWVsvsQ9y+wSNSH7iYmJpbco=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=bAoMHGW47886M/leR5yLcbg0gyry9M12B8kFzKSUWzlSYNlqcr7QwZAh2XNGTN5Onyoeco15diGfEktBU0epmIB20Mujv+k/SK2WcTmHOh4gg9n886yLQUfl2dtjUDqzYDXcwBRMxMm6GYKMzEy49N2Pi2D9s3bx2DpNjRIQgGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kCEWWIyR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 900D5C4CEE9;
+	Fri, 23 May 2025 07:34:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1747985697;
+	bh=EnQAKD8l/H9RmxSZrHWWWVsvsQ9y+wSNSH7iYmJpbco=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=kCEWWIyRzlM9lR8MWsToN9kPatqBViQgFBudMpVrII1mcakeT30TAlOGghw/8tD9Q
+	 wSLqukchbjNNdsjZuusj9FeFEqklCEscKUz0xgdzLUnr9JLilFaPh/GtqaiqjmaMlw
+	 2qwe0pko2pG1sZVfa6OQ0Fw5qBr4/hwFr9iHJdYGOT8NKiiB8HACFlcJk2/xuEM+ZN
+	 5/KVLbpE91OgmA+liadMCBzsw/MskaRHH1B++rLVO7NXdJ0tFgUu1Q1AHUJ8Qoqbw7
+	 1ZSX56EavU//hYyX02FqxUxXedDDI2mGSt9UViS5MYbWXTQpj1VXjO/xq+BZ8MR5+M
+	 oAtYcr8hMNSBA==
+Date: Fri, 23 May 2025 02:34:55 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddtgdekvdehucdltddurdegfedvrddttddmucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufgjfhffkfggtgfgsehtqhertddttdejnecuhfhrohhmpefirhgvghhorhihucevnffgoffgpffvuceoghhrvghgohhrhidrtghlvghmvghnthessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepueetgfffueeivdeitdeuhedtteffueffjedthfevvdegvdevgeduhfektdfhleeunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdugeemheehieemjegrtddtmeejugdvudemuddvieelmegvtggufhemtgejieejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdugeemheehieemjegrtddtmeejugdvudemuddvieelmegvtggufhemtgejieejpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehgrhgvghhorhihrdgtlhgvmhgvnhhtsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeelpdhrtghpthhtoheptghhvghnhhhurggtrghisehkvghrnhgvlhdrohhrghdprhgtphhtthhopehtshgsohhgvghnugesrghlphhhrgdrfhhrr
- ghnkhgvnhdruggvpdhrtghpthhtohepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomhdprhgtphhtthhopehvlhgrughimhhirhdrkhhonhgurhgrthhivghvsehmohgsihhlvgihvgdrtghomhdprhgtphhtthhopehthhgvohdrlhgvsghruhhnsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepthgrfihfihhkrdgsrgihohhukhesmhhosghilhgvhigvrdgtohhmpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtoheplhhinhhugidqmhhiphhssehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-GND-Sasl: gregory.clement@bootlin.com
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: linux-kernel@vger.kernel.org, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org, 
+ devicetree@vger.kernel.org, Johannes Berg <johannes@sipsolutions.net>, 
+ linux-wireless@vger.kernel.org, 
+ =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, nbd@ndb.name
+To: Rosen Penev <rosenp@gmail.com>
+In-Reply-To: <20250523063207.10040-4-rosenp@gmail.com>
+References: <20250523063207.10040-1-rosenp@gmail.com>
+ <20250523063207.10040-4-rosenp@gmail.com>
+Message-Id: <174798569576.581215.14604917966107916722.robh@kernel.org>
+Subject: Re: [PATCHv3 3/5] dt-bindings: net: wireless: ath9k: add WIFI
+ bindings
 
-Hello Huacai,
 
-> Hi, Gregory,
->
-> On Mon, May 5, 2025 at 8:58=E2=80=AFPM Gregory CLEMENT
-> <gregory.clement@bootlin.com> wrote:
->>
->> When CONFIG_HOTPLUG_PARALLEL is enabled, the code executing before
->> cpuhp_ap_sync_alive() is executed in parallel, while after it is
->> serialized. The functions set_cpu_sibling_map() and set_cpu_core_map()
->> were not designed to be executed in parallel, so by moving the
->> cpuhp_ap_sync_alive() before cpuhp_ap_sync_alive(), we then ensure
->> they will be called serialized.
-> set_cpu_sibling_map() and set_cpu_core_map() are the most obvious
-> functions that need serialization, but you'd better check other places
-> to make sure there are no similar functions executed in parallel.
+On Thu, 22 May 2025 23:32:05 -0700, Rosen Penev wrote:
+> These are for the wireless chips that come built in with various
+> Atheros/QCA SoCs. dts wise, the difference between pcie and the wmac is
+> 
+> AHB > PCIE > WIFI
+> AHB > WIFI
+> 
+> These will be used to replace the platform_device code with OF in the
+> following patch.
+> 
+> Signed-off-by: Rosen Penev <rosenp@gmail.com>
+> ---
+>  .../bindings/net/wireless/qca,ath9k.yaml      | 20 ++++++++++++++++++-
+>  1 file changed, 19 insertions(+), 1 deletion(-)
+> 
 
-I conducted an exhaustive review of all called functions, which allowed
-me to identify an opportunity for improving boot time:
-[1]. Additionally, I noted that CPU delay calibration is the only
-remaining part where concurrent access could occur. This was indeed the
-case prior to my previous patch submission[1]. To ensure safety, I am
-about sending a new fix addressing this issue.
+My bot found errors running 'make dt_binding_check' on your patch:
 
-Gregory
+yamllint warnings/errors:
 
-[1]: https://lore.kernel.org/linux-mips/20250520-smp_calib-v1-1-cd04f0a7864=
-8@bootlin.com/
->
-> Huacai
->
->>
->> The measurement done on EyeQ5 did not show any relevant boot time
->> increase after applying this patch.
->>
->> Reported-by: Huacai Chen <chenhuacai@kernel.org>
->> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
->> ---
->> Hello,
->>
->> As discussed last week [1], this is the patch that fixes the potential
->> issue with the functions set_cpu_sibling_map() and set_cpu_core_map().
->>
->> Gregory
->>
->> [1]: https://lore.kernel.org/all/aBVBHFGH2kICjnT3@alpha.franken.de/
->> ---
->>  arch/mips/kernel/smp.c | 6 +++---
->>  1 file changed, 3 insertions(+), 3 deletions(-)
->>
->> diff --git a/arch/mips/kernel/smp.c b/arch/mips/kernel/smp.c
->> index 1726744f2b2ec10a44420a7b9b9cd04f06c4d2f6..7901b59d8f60eddefc020cf2=
-a137716af963f09e 100644
->> --- a/arch/mips/kernel/smp.c
->> +++ b/arch/mips/kernel/smp.c
->> @@ -374,13 +374,13 @@ asmlinkage void start_secondary(void)
->>         calibrate_delay();
->>         cpu_data[cpu].udelay_val =3D loops_per_jiffy;
->>
->> +#ifdef CONFIG_HOTPLUG_PARALLEL
->> +       cpuhp_ap_sync_alive();
->> +#endif
->>         set_cpu_sibling_map(cpu);
->>         set_cpu_core_map(cpu);
->>
->>         cpumask_set_cpu(cpu, &cpu_coherent_mask);
->> -#ifdef CONFIG_HOTPLUG_PARALLEL
->> -       cpuhp_ap_sync_alive();
->> -#endif
->>         notify_cpu_starting(cpu);
->>
->>  #ifndef CONFIG_HOTPLUG_PARALLEL
->>
->> ---
->> base-commit: 3b3704261e851e25983860e4c352f1f73786f4ab
->> change-id: 20250505-hotplug-paralell-fix-25224cd229c6
->>
->> Best regards,
->> --
->> Gr=C3=A9gory CLEMENT, Bootlin
->> Embedded Linux and Kernel engineering
->> https://bootlin.com
->>
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/net/wireless/qca,ath9k.example.dts:90.13-41: Warning (reg_format): /example-2/ahb/wifi@180c0000:reg: property has invalid length (8 bytes) (#address-cells == 2, #size-cells == 1)
+Documentation/devicetree/bindings/net/wireless/qca,ath9k.example.dts:86.11-18: Warning (ranges_format): /example-2/ahb:ranges: empty "ranges" property but its #address-cells (2) differs from /example-2 (1)
+Documentation/devicetree/bindings/net/wireless/qca,ath9k.example.dtb: Warning (pci_device_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/net/wireless/qca,ath9k.example.dtb: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/net/wireless/qca,ath9k.example.dtb: Warning (simple_bus_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/net/wireless/qca,ath9k.example.dtb: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/net/wireless/qca,ath9k.example.dtb: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/net/wireless/qca,ath9k.example.dts:88.25-93.13: Warning (avoid_default_addr_size): /example-2/ahb/wifi@180c0000: Relying on default #address-cells value
+Documentation/devicetree/bindings/net/wireless/qca,ath9k.example.dts:88.25-93.13: Warning (avoid_default_addr_size): /example-2/ahb/wifi@180c0000: Relying on default #size-cells value
+Documentation/devicetree/bindings/net/wireless/qca,ath9k.example.dtb: Warning (unique_unit_address_if_enabled): Failed prerequisite 'avoid_default_addr_size'
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/wireless/qca,ath9k.example.dtb: ahb (simple-bus): '#address-cells' is a required property
+	from schema $id: http://devicetree.org/schemas/simple-bus.yaml#
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/net/wireless/qca,ath9k.example.dtb: ahb (simple-bus): '#size-cells' is a required property
+	from schema $id: http://devicetree.org/schemas/simple-bus.yaml#
+Documentation/devicetree/bindings/net/wireless/qca,ath9k.example.dtb: /example-2/ahb/wifi@180c0000: failed to match any schema with compatible: ['qca,ar9130-wifi']
 
---=20
-Gr=C3=A9gory CLEMENT, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20250523063207.10040-4-rosenp@gmail.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
 
