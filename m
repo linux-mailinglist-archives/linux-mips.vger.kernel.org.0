@@ -1,161 +1,175 @@
-Return-Path: <linux-mips+bounces-9096-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9097-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A467DAC2276
-	for <lists+linux-mips@lfdr.de>; Fri, 23 May 2025 14:16:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1FB4AC2631
+	for <lists+linux-mips@lfdr.de>; Fri, 23 May 2025 17:16:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 09F8B3B8328
-	for <lists+linux-mips@lfdr.de>; Fri, 23 May 2025 12:15:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E3035425B9
+	for <lists+linux-mips@lfdr.de>; Fri, 23 May 2025 15:16:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15AB923908B;
-	Fri, 23 May 2025 12:16:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8DE1205E26;
+	Fri, 23 May 2025 15:16:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JpXl2pYk"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=markus.stockhausen@gmx.de header.b="Xf1NkGDJ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-qk1-f172.google.com (mail-qk1-f172.google.com [209.85.222.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C52311EDA39
-	for <linux-mips@vger.kernel.org>; Fri, 23 May 2025 12:16:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7717204C2F;
+	Fri, 23 May 2025 15:16:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748002573; cv=none; b=QHv3ckV9Ope1GUdzaYrNY9+JPvXkvePdS+Usd49xcn4sxXQLp1xjJw2S/GIQ2Ha68NsowbGHshordrOoRDYx7t1UjnLjYkbVfp0Ba/sNFcmK0Pmwx5FpvpROJNQe+xBkug9sDzC5OkHj5u8UMG9K8Ha6Ibt6ZTd2PEItorVRN40=
+	t=1748013365; cv=none; b=iebGdjJSUF572xOV+5FCbyxrHWFrHXoKNDSYOlp5bFKPFOyjpCdQJTlVqL0Z8imPPGq7zRG28X3C3yo3QNLhZm2pfmGGLSBB2rg6uWowouPqKrdurKC084bV0YeEeZIYs8o1aiVnQ5wLS0x8GX9gZWIOHd+K4Uo7ltl9/UrBRzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748002573; c=relaxed/simple;
-	bh=EgDWebAmLIsMgY7vDv9DECCxG0h/SjOmQ/R1MVSCVoY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZZJibW7yqZTAwa9yqiiMzGxO1DBC2bo7i3QwaJ0YWd/MIBedRPlsnzFM4ty8oVoEYL5m5FTdmYUpBfbJ7CuOt4znX89L+RToB97dJTX6TshfsD2g4Ogr31iX+X9X2VOmODonChNP0T6OZGIieR4bdni4Af6IopqztJAh9NmiUt0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JpXl2pYk; arc=none smtp.client-ip=209.85.222.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-qk1-f172.google.com with SMTP id af79cd13be357-7c9376c4bddso1036274085a.3
-        for <linux-mips@vger.kernel.org>; Fri, 23 May 2025 05:16:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1748002568; x=1748607368; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=V8BApzo+tcGxUQ4qyRc5kFvmPIaCYVT6klZyuYrkTWg=;
-        b=JpXl2pYkjD5mK51Ywj3Txhc41HbNJW+R5mWVbKoI5AFR+UE6hhHd4u+mnDej/X96m2
-         PFkdj6OE5lmajGftoyS6f/x/QwNwpA4w7G9QlK9RhPr03omo04I3SqmMW/MvIsvXKUrQ
-         htAKMuv0fj70bwRof8+9RLiGP39HD3ms0PIAeZGaAY2QIcv/M9TZ4bzUIxPRPecltozS
-         BFjGz9I6GvQrVwaB+ZgGJ1ZxZLOzo++qfJyYn2eTUHUG7Noq3psAxhQzxQSy2VmuiTk+
-         EMTV929DHmPRLeFCBBDqNggslOTW47Qnt8JZfizXfa84/a/0eEop2s8gWj+7WY5upE7i
-         D5vA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1748002568; x=1748607368;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=V8BApzo+tcGxUQ4qyRc5kFvmPIaCYVT6klZyuYrkTWg=;
-        b=UhSRA8HNARdJKlCHK/LlQBMvxX3wuS+yAD3jKMOWwQtsiHVEJlDh7YYlEdvZv/4Pwa
-         D0EEPX9DRVdR57Ydku0VgiNlDp+E+HaZmu21CTngLeBBDSaEjVM2Df6Gdj4YJPfc1eGx
-         O4/yggYq+FDSbWfb5Q09umcI9Mt8KB10j/8KZrxQpPxV1ZzDky/eRhIMa/dL1MzHjK+i
-         XiGffkuTbVcndjZhO9bM0bsmxtO2OYCSNKCFe/a5x1D4mfqAYkWNJNK3DpUKWcjdNlv+
-         CN/klmWCwOjsEt8of8P00c2AwqE6JYEYxVB+CDUVFBnUeUkPNO4dL/i3sBWs6jSouhe/
-         ElZg==
-X-Forwarded-Encrypted: i=1; AJvYcCWT1vC5HVxcwJoCrQ4U6viLlPyieflmzilUHjA/OQO/P3iiO/vvSet9Ses+dDhwzdzRTUPAzLeHiNg4@vger.kernel.org
-X-Gm-Message-State: AOJu0YxY7B+0lFya9c9J9ozyDo1tJGzFbUyPk4oc+HW1znjz8hzQSnJK
-	Mcr+FGZF2tuWDgAv6VlQ8iUOMKPrC8vSnroKGhNUpX0Hv7dEnnDksy9+O1hDh82Hm4wzIH6e9yh
-	sQUDdJHTF29c7xTvW0b+uGLBvz1yWIBWk9c8TPUdBjg==
-X-Gm-Gg: ASbGnctdPBwU8HG/CYF4H3D/aRnjol3olTsL8578DTW0LtJ12Fm4N/8ZkXll53WlreE
-	r0h3As6eR3MFBt3vw/06+UqUs1YpFGkkcOV+nt2HPkCxRg0vm+dk6pXGIjfC7BhcwmWTU6SiQB4
-	4y1W55oU3W8e1VrxYpjKPp7TAAzdZCx7qad9t9bpG5+lhUKLIT049xYWi7aQrCgKQ=
-X-Google-Smtp-Source: AGHT+IFI9cZTC1Lw+RkjnHQgJAawN/JkLsHsZMeuSEx0h5hDWONvffxErgEONGaLu2y1YUsI+OSBxtKp0HDD02GjIeA=
-X-Received: by 2002:a05:620a:45a7:b0:7c5:6410:3a6 with SMTP id
- af79cd13be357-7cee31badcdmr357640685a.27.1748002568177; Fri, 23 May 2025
- 05:16:08 -0700 (PDT)
+	s=arc-20240116; t=1748013365; c=relaxed/simple;
+	bh=HfPSFLbOlWzTJ6HAWaXKrp/ZuGojHM8o/fXVDyvPKwI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=EUXYpY9SNrEqG6LuJy8QuQETiUGDUI3Jqy4XoSdqD1pCakM/756xAZWOz0n3GHMaDn729foIPdS1Ywdp0bA4m8JaHkZs7lOsMr8NMcB5Vn8caYEJVzZNjzk7ds5TvodjNxrECwUXA5VBJrg8m/w9Yu+eVqGQtRX/ecEYiMoFoKQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=markus.stockhausen@gmx.de header.b=Xf1NkGDJ; arc=none smtp.client-ip=212.227.17.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1748013361; x=1748618161;
+	i=markus.stockhausen@gmx.de;
+	bh=00hetodQh9Btp7EHhv8gvMlNueNHg3V3mKZCOHwcKWk=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-ID:
+	 MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=Xf1NkGDJqoyliyC/USS+8VuXWNBKmkdbW2BRkktXlNSDnpQB7AS3w+WCKJ0Qpyes
+	 AHQrWx1t53de4xu2RS4lSGfZj6Dh2cIM5fQ8NGUxeka5pB4jif8JzQEyW7lAqCSTX
+	 tt66L1ufoQutFkTgreeGbDS4NeMbZ21vaAPrBv4rnHoucbo987OP8qL+KSb+7vSMc
+	 2jDqiYm03Z4usYHJChO5GgDyxgRYRWWq8ClILdFO9kady6ruqYQIqe1oanNV4kq9P
+	 hWd7hp5nuqNKh48rmC17SjPVJYLKUnrInD4y2fHjeMzG7c6Q4DieSCr2owc0JX4+k
+	 Xddlx1Of+7GI0kKNIQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from openwrt.willemsstb.de ([94.31.70.55]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mo6ux-1uhOjz2prf-00iiEi; Fri, 23
+ May 2025 17:16:00 +0200
+From: Markus Stockhausen <markus.stockhausen@gmx.de>
+To: tsbogend@alpha.franken.de,
+	tglx@linutronix.de,
+	linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	s.gottschall@dd-wrt.com
+Cc: Markus Stockhausen <markus.stockhausen@gmx.de>
+Subject: [PATCH] irqchip/mips-gic: allow forced affinity for current cpu during hotplug
+Date: Fri, 23 May 2025 11:15:42 -0400
+Message-ID: <20250523151542.3903598-1-markus.stockhausen@gmx.de>
+X-Mailer: git-send-email 2.47.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CA+G9fYsZPSJ55FQ9Le9rLQMVHaHyE5kU66xqiPnz6mmfhvPfbQ@mail.gmail.com>
- <70d46cd3-80f4-4f5e-b0fc-fa2a6f284404@app.fastmail.com>
-In-Reply-To: <70d46cd3-80f4-4f5e-b0fc-fa2a6f284404@app.fastmail.com>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Fri, 23 May 2025 17:45:56 +0530
-X-Gm-Features: AX0GCFsCp7KO-IJd_ns8HQ1m2sgketC1fMATdiktIg7OhSVKCwGOqNM2CvlFqFs
-Message-ID: <CA+G9fYs1FMx6Z23i8g-yM-cABvZ4yTmPhfpRs4R1LBoP7Cyo5Q@mail.gmail.com>
-Subject: Re: mips gcc-12 malta_defconfig 'SOCK_COREDUMP' undeclared (first use
- in this function); did you mean 'SOCK_RDM'?
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: linux-fsdevel@vger.kernel.org, linux-mips@vger.kernel.org, 
-	open list <linux-kernel@vger.kernel.org>, lkft-triage@lists.linaro.org, 
-	Linux Regressions <regressions@lists.linux.dev>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Anders Roxell <anders.roxell@linaro.org>, 
-	Alexander Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, 
-	Dan Carpenter <dan.carpenter@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:k5zI14p6u2qA8GNp1wbElaNr5qT6Ykm9rvLyNDeaH3bB1HB/vTF
+ 7bZCsvM7PgMA/cpgEe1kSTB7P0pZCeJ2rtMSuwNduogWUFTheJgsozXAe6XPc170dr/Lcdz
+ ojQqcA/f+RyyC1Fb9hBLifkznJu+syx61MGO+f4XYQ3+rD/OYpfrFt8AC8B2IcZxMS+gzdB
+ s4IWuicEZzd+oOH4JUoKQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:h4+3Wz6c1bo=;qb9pfpEOwC8aSgPvAE+AS5TCWcs
+ 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
+ cN9UTeJaqGc17i6M0fo+0wWLi
 
-Hi Arnd,
+Devices of the Realtek MIPS Otto platform use the official rtl-otto-timer
+as clock event generator and cpu clocksource. It is registered for cpu
+startup via cpuhp_setup_state() and forces the affinity of the clockevent
+interrupts to the appropriate cpu via irq_force_affinity().
 
-On Thu, 22 May 2025 at 19:32, Arnd Bergmann <arnd@arndb.de> wrote:
->
-> On Thu, May 22, 2025, at 15:22, Naresh Kamboju wrote:
->
-> > ## Build log
-> > net/unix/af_unix.c: In function 'unix_find_bsd':
-> > net/unix/af_unix.c:1152:21: error: 'SOCK_COREDUMP' undeclared (first
-> > use in this function); did you mean 'SOCK_RDM'?
-> >  1152 |         if (flags & SOCK_COREDUMP) {
->
-> SOCK_COREDUMP should be defined outside of ARCH_HAS_SOCKET_TYPES.
-> How about reducing the scope of that check like this?
->
->       Arnd
->
+On the "smaller" devices with a vendor specific interrupt controller
+(supported by irq-realtek-rtl) the registration works fine. The "larger"
+RTL931x series is based on a MIPS interAptiv dual core with a MIPS GIC
+controller. Interrupt routing setup is cancelled because gic_set_affinity(=
+)
+does not accept the current (not yet online) cpu as a target.
 
-Thanks for sharing a quick fix patch.
-This below patch is applied and build test pass.
+Relax the checks by evaluating the force parameter that is provided for
+exactly this purpose. With this patch affinity can be set as follows:
 
-Tested-by: Naresh Kamboju  <naresh.kamboju@linaro.org>
+- force =3D false: works like before
+- force =3D true: allow to set affinity to the current not yet online cpu
 
+Signed-off-by: Markus Stockhausen <markus.stockhausen@gmx.de>
+Signed-off-by: Sebastian Gottschall <s.gottschall@dd-wrt.com>
+=2D--
+ drivers/irqchip/irq-mips-gic.c | 11 ++++++++++-
+ 1 file changed, 10 insertions(+), 1 deletion(-)
 
-> diff --git a/arch/mips/include/asm/socket.h b/arch/mips/include/asm/socket.h
-> index 4724a563c5bf..43a09f0dd3ff 100644
-> --- a/arch/mips/include/asm/socket.h
-> +++ b/arch/mips/include/asm/socket.h
-> @@ -36,15 +36,6 @@ enum sock_type {
->         SOCK_PACKET     = 10,
->  };
->
-> -#define SOCK_MAX (SOCK_PACKET + 1)
-> -/* Mask which covers at least up to SOCK_MASK-1.  The
-> - *  * remaining bits are used as flags. */
-> -#define SOCK_TYPE_MASK 0xf
-> -
-> -/* Flags for socket, socketpair, paccept */
-> -#define SOCK_CLOEXEC   O_CLOEXEC
-> -#define SOCK_NONBLOCK  O_NONBLOCK
-> -
->  #define ARCH_HAS_SOCKET_TYPES 1
->
->  #endif /* _ASM_SOCKET_H */
-> diff --git a/include/linux/net.h b/include/linux/net.h
-> index 139c85d0f2ea..f60fff91e1df 100644
-> --- a/include/linux/net.h
-> +++ b/include/linux/net.h
-> @@ -70,6 +70,7 @@ enum sock_type {
->         SOCK_DCCP       = 6,
->         SOCK_PACKET     = 10,
->  };
-> +#endif /* ARCH_HAS_SOCKET_TYPES */
->
->  #define SOCK_MAX (SOCK_PACKET + 1)
->  /* Mask which covers at least up to SOCK_MASK-1.  The
-> @@ -83,8 +84,6 @@ enum sock_type {
->  #endif
->  #define SOCK_COREDUMP  O_NOCTTY
->
-> -#endif /* ARCH_HAS_SOCKET_TYPES */
-> -
->  /**
->   * enum sock_shutdown_cmd - Shutdown types
->   * @SHUT_RD: shutdown receptions
->
->
+diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic=
+.c
+index bca8053864b2..0a88f785e114 100644
+=2D-- a/drivers/irqchip/irq-mips-gic.c
++++ b/drivers/irqchip/irq-mips-gic.c
+@@ -378,9 +378,18 @@ static int gic_set_affinity(struct irq_data *d, const=
+ struct cpumask *cpumask,
+ 	 * the first online CPU in the mask.
+ 	 */
+ 	cpu =3D cpumask_first_and(cpumask, cpu_online_mask);
+-	if (cpu >=3D NR_CPUS)
++
++	if ((cpu >=3D NR_CPUS) && !force)
++		/* In normal mode allow only online CPUs. */
+ 		return -EINVAL;
+=20
++	if (cpu >=3D NR_CPUS) {
++		/* In force mode allow current not yet online CPU for hotplug handlers.=
+ */
++		cpu =3D cpumask_first(cpumask);
++		if (cpu !=3D get_cpu())
++			return -EINVAL;
++	}
++
+ 	old_cpu =3D cpumask_first(irq_data_get_effective_affinity_mask(d));
+ 	old_cl =3D cpu_cluster(&cpu_data[old_cpu]);
+ 	cl =3D cpu_cluster(&cpu_data[cpu]);
+=2D-=20
+2.47.0
+
 
