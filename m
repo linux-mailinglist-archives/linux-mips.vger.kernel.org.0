@@ -1,67 +1,45 @@
-Return-Path: <linux-mips+bounces-9129-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9131-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E25F4AC85A0
-	for <lists+linux-mips@lfdr.de>; Fri, 30 May 2025 02:19:07 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 183A0AC8FA0
+	for <lists+linux-mips@lfdr.de>; Fri, 30 May 2025 15:17:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A99804E1F66
-	for <lists+linux-mips@lfdr.de>; Fri, 30 May 2025 00:19:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 25F661C05D47
+	for <lists+linux-mips@lfdr.de>; Fri, 30 May 2025 13:12:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DC3110F1;
-	Fri, 30 May 2025 00:19:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="orABEw9G"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 644EF22DF99;
+	Fri, 30 May 2025 12:49:27 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C888E632;
-	Fri, 30 May 2025 00:19:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC9DC22DF87;
+	Fri, 30 May 2025 12:49:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748564340; cv=none; b=M3n9WKcZM/jouy45uvOUx1o1IuD9GsNBUicwPvdHtsR3ErEAe85ffJRPviqWfNL1fnw4KEJ7d1Plper7QJ456WmPYMLZ3vj1l/gJP/NNeut0f1vtRsy5II5YHbo1l8MLEJdFtlBkhULjVFK+dOHDZR6HRtsCeumBFByLhHN5XOY=
+	t=1748609367; cv=none; b=JkBYYD01/GT2YDYOHpOGfcIkhie6n8A8g6xqDEf4JqpC0hAaSOCweyVMVDmpQa4EzD45J69gHheoTKCKset8GjhSRBac6IXVXxG7ru53G5zNy0b5zB4I4ohzDpQyz3ouWVgFehHQEP7rkQueOh8l+32euFD/3AfuDXFct565W3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748564340; c=relaxed/simple;
-	bh=fzOvslZ2yd+4RFEep1dbc5ORhnJiU65cwMbwzfxOuJk=;
+	s=arc-20240116; t=1748609367; c=relaxed/simple;
+	bh=wQV3TRzu2EJQ8Icqq57cO+0WosOKHbrqlyWVi4uEAbE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FQxp6A9RY1nrq88AxmE7wiBVZX7blhSHevBzx+sojjrN0DUiFH5kI1VIOO147QRejlMXG46zd6yytpkout9LQjxGe1k0NSssh4/eqdEE84uyNF6oiE4BbTSwvBiVAYMKKQTSg9MgQEfhE1FNKvKZvQm6V6R/GLVDLuJY53UPxOs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=orABEw9G; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1318DC4CEE7;
-	Fri, 30 May 2025 00:19:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1748564340;
-	bh=fzOvslZ2yd+4RFEep1dbc5ORhnJiU65cwMbwzfxOuJk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=orABEw9GW8hha5WEfX4nOeo6UClo8SCkt06HiIxuvuXY7GIfYcPzgNE32XTnhzdfX
-	 kKMuYGPwMqs+WLu0Qj8v4D5q6qNBKBDogc8zbaCiVXEQrnWp9+f4G6a49QkyH5AQMF
-	 dDx8VrJ3wVC7iECbcZX0SpWm8aiThHGfvOpkVjVWpDL+74WBH03Q2Ykt1cb+GFASa2
-	 NU60WR7MaU4No+If0hsqwvEwuY0P3bfo2S5jzwxo83RXY/5/tgfmwQm04dF8NWmBDR
-	 v1DbNr/Hjp64FvFbXKbCNsalVpnA3MSbZXY5ojWWQl9zts6A8OtUTG4mPMeo4MMzkm
-	 Ln6fC4JypHUAQ==
-Date: Fri, 30 May 2025 00:18:58 +0000
-From: Eric Biggers <ebiggers@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Alex Williamson <alex.williamson@redhat.com>,
-	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org, sparclinux@vger.kernel.org,
-	linux-s390@vger.kernel.org, x86@kernel.org,
-	Ard Biesheuvel <ardb@kernel.org>,
-	"Jason A . Donenfeld" <Jason@zx2c4.com>
-Subject: Re: [PATCH v4 08/13] crypto: s390/sha256 - implement library instead
- of shash
-Message-ID: <20250530001858.GD3840196@google.com>
-References: <20250428170040.423825-1-ebiggers@kernel.org>
- <20250428170040.423825-9-ebiggers@kernel.org>
- <20250529110526.6d2959a9.alex.williamson@redhat.com>
- <20250529173702.GA3840196@google.com>
- <CAHk-=whCp-nMWyLxAot4e6yVMCGANTUCWErGfvmwqNkEfTQ=Sw@mail.gmail.com>
- <20250529211639.GD23614@sol>
- <CAHk-=wh+H-9649NHK5cayNKn0pmReH41rvG6hWee+oposb3EUg@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=E4xxma5ti9HBSKkA+TkmCDliNMEffkI8fg2t4/WMLrqdfoYCGLx1C0yXg84WSvitJEM3s5hxHsUJ8ux1OtWD1U5bHk7CiGqgPshGxFIoEvt86dAYjeWhYhqtsR+YMVZOrjL8gzygs/gMQGi7N2Pi57rbIByMT+ysGxGBN2+OmZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1uKyw4-0000cD-00; Fri, 30 May 2025 14:34:08 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 0EA74C05F3; Fri, 30 May 2025 14:33:38 +0200 (CEST)
+Date: Fri, 30 May 2025 14:33:38 +0200
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: linux-kernel@vger.kernel.org, Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	linux-mips@vger.kernel.org
+Subject: Re: [PATCH] MIPS: loongson2ef: cs5536: add missing function
+ prototypes
+Message-ID: <aDmlolSlNS-JkdVq@alpha.franken.de>
+References: <20250529031956.3993115-1-rdunlap@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -70,32 +48,57 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wh+H-9649NHK5cayNKn0pmReH41rvG6hWee+oposb3EUg@mail.gmail.com>
+In-Reply-To: <20250529031956.3993115-1-rdunlap@infradead.org>
 
-On Thu, May 29, 2025 at 04:54:34PM -0700, Linus Torvalds wrote:
-> On Thu, 29 May 2025 at 14:16, Eric Biggers <ebiggers@kernel.org> wrote:
-> >
-> > So using crc32c() + ext4 + x86 as an example (but SHA-256 would be very
-> > similar), the current behavior is that ext4.ko depends on the crc32c_arch()
-> > symbol.
+On Wed, May 28, 2025 at 08:19:56PM -0700, Randy Dunlap wrote:
+> Add missing function prototypes for cs5536, mostly for PCI functions,
+> and for init_mfgpt_clocksource().
 > 
-> Yes, I think that's a good example.
+> arch/mips/loongson2ef/common/cs5536/cs5536_ide.c:15:6: warning: no previous prototype for 'pci_ide_write_reg' [-Wmissing-prototypes]
+>    15 | void pci_ide_write_reg(int reg, u32 value)
+> arch/mips/loongson2ef/common/cs5536/cs5536_ide.c:96:5: warning: no previous prototype for 'pci_ide_read_reg' [-Wmissing-prototypes]
+>    96 | u32 pci_ide_read_reg(int reg)
 > 
-> I think it's an example of something that "works", but it certainly is
-> a bit hacky.
+> arch/mips/loongson2ef/common/cs5536/cs5536_ehci.c:15:6: warning: no previous prototype for 'pci_ehci_write_reg' [-Wmissing-prototypes]
+>    15 | void pci_ehci_write_reg(int reg, u32 value)
+> arch/mips/loongson2ef/common/cs5536/cs5536_ehci.c:75:5: warning: no previous prototype for 'pci_ehci_read_reg' [-Wmissing-prototypes]
+>    75 | u32 pci_ehci_read_reg(int reg)
 > 
-> Wouldn't it be nicer if just plain "crc32c()" did the right thing,
-> instead of users having to do strange hacks just to get the optimized
-> version that they are looking for?
+> arch/mips/loongson2ef/common/cs5536/cs5536_acc.c:15:6: warning: no previous prototype for 'pci_acc_write_reg' [-Wmissing-prototypes]
+>    15 | void pci_acc_write_reg(int reg, u32 value)
+> arch/mips/loongson2ef/common/cs5536/cs5536_acc.c:62:5: warning: no previous prototype for 'pci_acc_read_reg' [-Wmissing-prototypes]
+>    62 | u32 pci_acc_read_reg(int reg)
+> 
+> arch/mips/loongson2ef/common/cs5536/cs5536_ohci.c:15:6: warning: no previous prototype for 'pci_ohci_write_reg' [-Wmissing-prototypes]
+>    15 | void pci_ohci_write_reg(int reg, u32 value)
+> arch/mips/loongson2ef/common/cs5536/cs5536_ohci.c:70:5: warning: no previous prototype for 'pci_ohci_read_reg' [-Wmissing-prototypes]
+>    70 | u32 pci_ohci_read_reg(int reg)
+> 
+> arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:84:6: warning: no previous prototype for 'pci_isa_write_bar' [-Wmissing-prototypes]
+>    84 | void pci_isa_write_bar(int n, u32 value)
+> arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:110:5: warning: no previous prototype for 'pci_isa_read_bar' [-Wmissing-prototypes]
+>   110 | u32 pci_isa_read_bar(int n)
+> arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:134:6: warning: no previous prototype for 'pci_isa_write_reg' [-Wmissing-prototypes]
+>   134 | void pci_isa_write_reg(int reg, u32 value)
+> arch/mips/loongson2ef/common/cs5536/cs5536_isa.c:228:5: warning: no previous prototype for 'pci_isa_read_reg' [-Wmissing-prototypes]
+>   228 | u32 pci_isa_read_reg(int reg)
+> 
+> arch/mips/loongson2ef/common/cs5536/cs5536_mfgpt.c:195:12: warning: no previous prototype for 'init_mfgpt_clocksource' [-Wmissing-prototypes]
+>   195 | int __init init_mfgpt_clocksource(void)
+> 
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>
+> Cc: linux-mips@vger.kernel.org
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> ---
+>  arch/mips/include/asm/mach-loongson2ef/cs5536/cs5536_pci.h |   20 ++++++++++
+>  1 file changed, 20 insertions(+)
 
-For crc32c() that's exactly how it works (since v6.14, when I implemented it).
-The users call crc32c() which is an inline function, which then calls
-crc32c_arch() or crc32c_base() depending on the kconfig.  So that's why I said
-the symbol dependency is currently on crc32c_arch.  Sorry if I wasn't clear.
-The SHA-256, ChaCha, and Poly1305 library code now has a similar design too.
+applied to mips-next.
 
-If we merged the arch and generic modules together, then the symbol would become
-crc32c.  But in either case crc32c() is the API that all the users call.
+Thomas.
 
-- Eric
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
