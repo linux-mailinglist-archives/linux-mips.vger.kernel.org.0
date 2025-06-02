@@ -1,70 +1,50 @@
-Return-Path: <linux-mips+bounces-9148-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9149-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34D04ACA874
-	for <lists+linux-mips@lfdr.de>; Mon,  2 Jun 2025 06:11:36 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3F9AACADB6
+	for <lists+linux-mips@lfdr.de>; Mon,  2 Jun 2025 13:59:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42076189C265
-	for <lists+linux-mips@lfdr.de>; Mon,  2 Jun 2025 04:11:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D526417F4D6
+	for <lists+linux-mips@lfdr.de>; Mon,  2 Jun 2025 11:59:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BA28136351;
-	Mon,  2 Jun 2025 04:11:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b="cDLc7AG1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD85121516E;
+	Mon,  2 Jun 2025 11:59:27 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [62.89.141.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99ABA182B7;
-	Mon,  2 Jun 2025 04:11:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.89.141.173
+Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC59E2144C7;
+	Mon,  2 Jun 2025 11:59:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748837490; cv=none; b=L37878dKjSGJWh6H7C3iiwwRaTn7cNAskkzzx0xVd5wP9g7N1gdxGryTUhSeC/VmEjqvS8Z7Jg47T8k9NMQrDArdt28wRSDapEJsr/MVSgXdsxL97gxjuja1UmieWoLtQSw4D8KXi6hR2h4MmBlCzPTYVABM4OaPlFlbQGD5RQ4=
+	t=1748865567; cv=none; b=SajHsmrofuskEIOU9R51WwkrU0rp2WvXx4iAbsVoMdrNN37HrH4HO30TdaJciiIwU4qdo2kWU7QkT7EccI4ugY3dYICX/Z3FQBHLgwmO7pfPProANHoSO/FoeB9XyqwSjJSf1qzqbrSH/OwqoJsOihmnFJF1z9P15mAtz0OwZFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748837490; c=relaxed/simple;
-	bh=VNUqtAL1SHKb0pozQoeZywC6qZxi9oGNe5rRKbOsy4Q=;
+	s=arc-20240116; t=1748865567; c=relaxed/simple;
+	bh=QKYhjdgz2i0aSyodXmoReRggatM/g2F1A8cEcmxYHBY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=biseBkn2Y23CItRRBVvCR4j8+4WkWsZP3wcAcZ9CKxU1Jm0DyzouZiMdZoEb1AEwAOybmqXY4GdbCBndC9f2dDedKD1tuNYeQpfbSaUxfgnhHHqtyrjHUuA9trfjY0Pwa6BD4jC6CZr4AJHmY2XDsriuUY2PzQ8aG5jYMHkp9H8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk; spf=none smtp.mailfrom=ftp.linux.org.uk; dkim=pass (2048-bit key) header.d=linux.org.uk header.i=@linux.org.uk header.b=cDLc7AG1; arc=none smtp.client-ip=62.89.141.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zeniv.linux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ftp.linux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=iuH08HhCzFKCMOC8/O0swKDH+rpWOadfk7Rm4fI946Q=; b=cDLc7AG1xVeGrDIh1peeN0IWEk
-	zSPl9poJhEGT0YoB/3XnvH6rSM6bY3xjL0IUqjUntiObN7RMhtlCPHuD3A62GgdK0UEACC5R8vd1k
-	nGJkZRQS6J7IpGD5Cac8ckt2eGuQw0ldn0T1SIMMph5HBpFztRTyZBhVmy8+xkbQoA7OwVtDKj3OZ
-	76BRcTLzVJZLqbCzOHiBTXoFLI5gsn+T2zZ4MU1RCovTNxA1K7wQ4w3A4hqY1qW3qspeqQLRXJ12A
-	qO/+nks1w4qOwDF7mdiodEdOvdFTMW5W0MgrK6eRVtCQ084Z11K100prR+Fy/v0Uyq+f2T84t8Tki
-	2y66Yf/A==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uLwW6-0000000BUl8-1UDJ;
-	Mon, 02 Jun 2025 04:11:18 +0000
-Date: Mon, 2 Jun 2025 05:11:18 +0100
-From: Al Viro <viro@zeniv.linux.org.uk>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linmag7@gmail.com, Al Viro <viro@ftp.linux.org.uk>, arnd@arndb.de,
-	chris@zankel.net, dinguyen@kernel.org, glaubitz@physik.fu-berlin.de,
-	ink@unseen.parts, jcmvbkbc@gmail.com, kees@kernel.org,
-	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org, linux-um@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	mattst88@gmail.com, monstr@monstr.eu, richard.henderson@linaro.org,
-	sparclinux@vger.kernel.org, x86@kernel.org,
-	Sam James <sam@gentoo.org>
-Subject: Re: [PATCH v2 1/1] mm: pgtable: fix pte_swp_exclusive
-Message-ID: <20250602041118.GA2675383@ZenIV>
-References: <87cyfejafj.fsf@gentoo.org>
- <87v7rik020.fsf@gentoo.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=P0vZJ+oTajuv5dpGMah/eKRtHcraXSOrBb4HCbEMtuW9Sl5no2DFghkzGSd4pNrCjoNcEk418Cq3uFU/TVrF8rt1MlS1IkVOzKPMuauUAbvV12IgBn+01OOdMVpqiIXqxN6pC+8ZHVwypZnlM4IeFtvJjMBtUAhbFTsY3Yat9pw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
+Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
+	by vmicros1.altlinux.org (Postfix) with ESMTP id 8D3F772C8CC;
+	Mon,  2 Jun 2025 14:59:24 +0300 (MSK)
+Received: by mua.local.altlinux.org (Postfix, from userid 508)
+	id 3CCEA7CCB3A; Mon,  2 Jun 2025 14:59:24 +0300 (IDT)
+Date: Mon, 2 Jun 2025 14:59:24 +0300
+From: "Dmitry V. Levin" <ldv@strace.io>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: "Maciej W. Rozycki" <macro@orcam.me.uk>, Shuah Khan <shuah@kernel.org>,
+	Oleg Nesterov <oleg@redhat.com>, strace-devel@lists.strace.io,
+	linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] selftests/ptrace/get_syscall_info: fix for MIPS n32
+Message-ID: <20250602115924.GB329@strace.io>
+References: <20250115233747.GA28541@strace.io>
+ <0262acf1-4d3f-471b-bd56-4ddf8a2bc1a3@linuxfoundation.org>
+ <20250329124856.GA1356@strace.io>
+ <alpine.DEB.2.21.2503291345580.47733@angie.orcam.me.uk>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -73,66 +53,50 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <87v7rik020.fsf@gentoo.org>
-Sender: Al Viro <viro@ftp.linux.org.uk>
+In-Reply-To: <alpine.DEB.2.21.2503291345580.47733@angie.orcam.me.uk>
 
-On Sat, Apr 05, 2025 at 06:09:11PM +0100, Sam James wrote:
-> Sam James <sam@gentoo.org> writes:
+On Sat, Mar 29, 2025 at 02:02:28PM +0000, Maciej W. Rozycki wrote:
+> On Sat, 29 Mar 2025, Dmitry V. Levin wrote:
 > 
-> > Lovely cleanup and a great suggestion from Al.
-> >
-> > Reviewed-by: Sam James <sam@gentoo.org>
-> >
-> > I'd suggest adding a:
-> > Suggested-by: Al Viro <viro@zeniv.linux.org.uk>
+> > > > +#if defined(_MIPS_SIM) && _MIPS_SIM == _MIPS_SIM_NABI32
+> > > > +/*
+> > > > + * MIPS N32 is the only architecture where __kernel_ulong_t
+> > > > + * does not match the bitness of syscall arguments.
+> > > > + */
+> > > > +typedef unsigned long long kernel_ulong_t;
+> > > > +#else
+> > > > +typedef __kernel_ulong_t kernel_ulong_t;
+> > > > +#endif
+> > > > +
+> > > 
+> > > What's the reason for adding these typedefs? checkpatch should
+> > > have warned you about adding new typedefs.
+> > > 
+> > > Also this introduces kernel_ulong_t in user-space test code.
+> > > Something to avoid.
+> > 
+> > There has to be a new type for this test, and the natural way to do this
+> > is to use typedef.  The alternative would be to #define kernel_ulong_t
+> > which is ugly.  By the way, there are quite a few typedefs in selftests,
+> > and there seems to be given no rationale why adding new types in selftests
+> > is a bad idea.
 > 
-> Al, were you planning on taking this through your tree?
+>  FWIW I agree, and I fail to see a reason why this would be a problem in a 
+> standalone test program where the typedef does not propagate anywhere.  
+> 
+>  The only potential issue I can identify would be a namespace clash, so 
+> perhaps the new type could have a name prefix specific to the test, but it 
+> doesn't appear to me a widespread practice across our selftests and then
+> `kernel_' ought to be pretty safe against ISO C or POSIX, so perhaps let's 
+> leave the things alone?
 
-FWIW, I expected it to get sent to Linus as "please, run this
-sed script before -rc1" kind of thing, script being something
-like
+Another similar test I authored (selftests/ptrace/set_syscall_info) has
+been merged, so there are two similar tests in the tree now, but only
+one of them is permitted to use this approach, creating inconsistency.
 
-sed -i -e 's/int pte_swp_exclusive/bool pte_swp_exclusive/' \
-	`git grep -l 'int pte_swp_exclusive'`
+Taking all of the above into consideration, please approve this fix.
 
-with suggested commit message...  It's absolutely regular and
-that kind of tree-wide change is easier handled that way.
 
-	Oh, well...  To restore the context: Magnus had spotted a fun
-bug on Alpha back in February - pte_swp_exclusive() there returned
-pte_val(pte) & _PAGE_SWP_EXCLUSIVE as int.  The problem is that
-_PAGE_SWP_EXCLUSIVE is 1UL<<39 there, with obvious results...
-
-	I looked at the originally posted patch and suggested to
-make pte_swp_exclusive() return bool instead of int.  All users
-are in explicitly boolean contexts:
-
-include/linux/swapops.h:        if (pte_swp_exclusive(pte))
-mm/debug_vm_pgtable.c:  WARN_ON(pte_swp_exclusive(pte));
-mm/debug_vm_pgtable.c:  WARN_ON(!pte_swp_exclusive(pte));
-mm/debug_vm_pgtable.c:  WARN_ON(pte_swp_exclusive(pte));
-mm/internal.h:  if (pte_swp_exclusive(pte))
-mm/memory.c:            if (pte_swp_exclusive(orig_pte)) {
-mm/memory.c:            exclusive = pte_swp_exclusive(vmf->orig_pte);
-mm/swapfile.c:          if (pte_swp_exclusive(old_pte))
-mm/userfaultfd.c:               if (!pte_swp_exclusive(orig_src_pte)) {
-
-	Magnus posted patch of that form (see
-https://lore.kernel.org/all/20250218175735.19882-2-linmag7@gmail.com/),
-got no serious objections and then it went nowhere.
-
-	Bug is real and fairly obvious, fix is entirely mechanical and
-affects one line in each asm/pgtable.h out there.  Linus, could you
-run that sed script just before -rc1?  Commit message from the patch refered
-above looks sane:
-
-mm: pgtable: fix pte_swp_exclusive
-
-Make pte_swp_exclusive return bool instead of int. This will better reflect
-how pte_swp_exclusive is actually used in the code. This fixes swap/swapoff
-problems on Alpha due pte_swp_exclusive not returning correct values when
-_PAGE_SWP_EXCLUSIVE bit resides in upper 32-bits of PTE (like on alpha).
-
-Signed-off-by: Magnus Lindholm <linmag7@gmail.com>
-
+-- 
+ldv
 
