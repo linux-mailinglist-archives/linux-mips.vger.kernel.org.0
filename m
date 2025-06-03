@@ -1,182 +1,102 @@
-Return-Path: <linux-mips+bounces-9154-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9155-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1AF1DACBD81
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Jun 2025 00:56:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCD40ACC00D
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Jun 2025 08:12:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 364C71891575
-	for <lists+linux-mips@lfdr.de>; Mon,  2 Jun 2025 22:56:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 907FB3A061B
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Jun 2025 06:12:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9EEF4252295;
-	Mon,  2 Jun 2025 22:56:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C3B5146A66;
+	Tue,  3 Jun 2025 06:12:33 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03CA6224240;
-	Mon,  2 Jun 2025 22:56:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C7EA8494;
+	Tue,  3 Jun 2025 06:12:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1748904975; cv=none; b=fEUAI/bgplfPhc8aSSUQjowqkW5DpPMVYgMfVPSuNVcO5obWyv9dRBXZTB3HEnz3K2No+n9dgIvAtAlNqIqYxPEUrMWLI8JALkrn1WahwnpOPczZNw0pO7YoZEmhAW6WSzNPsbdfUe/X11SOOjZcBDZVekwe/FztrtawcdEsvC0=
+	t=1748931153; cv=none; b=OeMiI7C0iDyDZRHMRG0pkNrnFVqQJMO2fFiXa+ujjkuqYPhVMCJHd9ce8wxjIGUClxP/deG922/Y64SEJNMXmMbCzpTpLYTAwNyYDcWY8amxZPHHmPeQ0oYcvvBBSrTOAzsx/PudSp6Qi2HWlLm5u9C6p1v/lnJ37XOgTjGqk6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1748904975; c=relaxed/simple;
-	bh=bs0uQbFC8a3+B+UVBUz/7Mj+FMPhbCeM9qCsUm37p5U=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=oZdiHr8qwzyPvuq1t6zMy1D22Zk/qm8H2zr4yyaNUG+WCh5XR0vr1gz1zqBBqRo15n4v6VeRfiytcIrGS0kwEwPXGiuf2xk/Mvks9N3AhPGeElx+C8ABjxLmYqqL94Pf0m+cYNasP7W6yb+sOkLaS8Q2g3f+4AUIQR0D06geIQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=strace.io
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
-Received: from mua.local.altlinux.org (mua.local.altlinux.org [192.168.1.14])
-	by vmicros1.altlinux.org (Postfix) with ESMTP id 3764772C8CC;
-	Tue,  3 Jun 2025 01:56:11 +0300 (MSK)
-Received: by mua.local.altlinux.org (Postfix, from userid 508)
-	id 224917CCB3A; Tue,  3 Jun 2025 01:56:11 +0300 (IDT)
-Date: Tue, 3 Jun 2025 01:56:11 +0300
-From: "Dmitry V. Levin" <ldv@strace.io>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Shuah Khan <shuah@kernel.org>, Oleg Nesterov <oleg@redhat.com>,
-	"Maciej W. Rozycki" <macro@orcam.me.uk>,
-	strace-devel@lists.strace.io, linux-kselftest@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3] selftests/ptrace/get_syscall_info: fix for MIPS n32
-Message-ID: <20250602225610.GA6005@strace.io>
+	s=arc-20240116; t=1748931153; c=relaxed/simple;
+	bh=BLBicKxUdfy3A8BLWdtrjmCmWquuwY3rJHu/dkcCUfM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WUKODcO/5bNSUTWqJKaqeGHyLBx5nsfh5Yz8vezzdxPA8PRaFqp76ebnL/SD1iUHyK6kKU0xFYY3vGj9Jij9yYUvwmrz8Ttcggxl5u9OzvXp/Vfa0wtSOmSe+1CpxZcLubA8vi67dQlj1x8oYwYuTTNXDmzmpb3xzNE+Gl7WJ48=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from localhost (unknown [124.16.138.129])
+	by APP-01 (Coremail) with SMTP id qwCowADXhtXpkD5oBobTAg--.17728S2;
+	Tue, 03 Jun 2025 14:06:33 +0800 (CST)
+From: Chen Ni <nichen@iscas.ac.cn>
+To: cjd@cjdns.fr,
+	daniel.lezcano@linaro.org,
+	tglx@linutronix.de
+Cc: linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Chen Ni <nichen@iscas.ac.cn>
+Subject: [PATCH] clocksource/timer-econet-en751221: Convert comma to semicolon
+Date: Tue,  3 Jun 2025 14:04:50 +0800
+Message-Id: <20250603060450.1310204-1-nichen@iscas.ac.cn>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qwCowADXhtXpkD5oBobTAg--.17728S2
+X-Coremail-Antispam: 1UD129KBjvdXoW7Gr4rCw4kuw4kuw1xGrW3ZFb_yoWDCFc_Kr
+	n2qrnrCrn0yr90gw4Duw17Za9akF1vqw1Fqrn2qasxAa4UAF1qkr4DZr1293s8u3y0yF98
+	C3y7GFW5Zw13WjkaLaAFLSUrUUUUbb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbIAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+	A2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr0_
+	Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s
+	1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0
+	cI8IcVAFwI0_Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8Jw
+	ACjcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lc7CjxVAaw2AFwI0_JF0_
+	Jw1lc2xSY4AK67AK6r47MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY6r1j6r4UMI
+	8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17CEb7AF67AK
+	xVWUAVWUtwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMIIF0xvE2Ix0cI
+	8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIxAIcVC2z280
+	aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVWUJVW8JbIYCTnIWIevJa73UjIFyT
+	uYvjfU1l1vDUUUU
+X-CM-SenderInfo: xqlfxv3q6l2u1dvotugofq/
 
-MIPS n32 is one of two ILP32 architectures supported by the kernel
-that have 64-bit syscall arguments (another one is x32).
+Replace comma between expressions with semicolons.
 
-When this test passed 32-bit arguments to syscall(), they were
-sign-extended in libc, PTRACE_GET_SYSCALL_INFO reported these
-sign-extended 64-bit values, and the test complained about the mismatch.
+Using a ',' in place of a ';' can have unintended side effects.
+Although that is not the case here, it is seems best to use ';'
+unless ',' is intended.
 
-Fix this by passing arguments of the appropriate type to syscall(),
-which is "unsigned long long" on MIPS n32, and __kernel_ulong_t on other
-architectures, the same way as selftests/ptrace/set_syscall_info already
-does.
+Found by inspection.
+No functional change intended.
+Compile tested only.
 
-As a side effect, this also extends the test on all 64-bit architectures
-by choosing constants that don't fit into 32-bit integers.
-
-Signed-off-by: Dmitry V. Levin <ldv@strace.io>
-Acked-by: Shuah Khan <skhan@linuxfoundation.org>
+Signed-off-by: Chen Ni <nichen@iscas.ac.cn>
 ---
+ drivers/clocksource/timer-econet-en751221.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-v3: Added Acked-by:
-    https://lore.kernel.org/all/b2e62143-fa68-4cd1-bf6c-67f0ad49c670@linuxfoundation.org/
-
-v2: Fixed MIPS #ifdef:
-    https://lore.kernel.org/all/20250115233747.GA28541@strace.io/
-
- .../selftests/ptrace/get_syscall_info.c       | 53 +++++++++++--------
- 1 file changed, 32 insertions(+), 21 deletions(-)
-
-diff --git a/tools/testing/selftests/ptrace/get_syscall_info.c b/tools/testing/selftests/ptrace/get_syscall_info.c
-index 5bcd1c7b5be6..2970f72d66d3 100644
---- a/tools/testing/selftests/ptrace/get_syscall_info.c
-+++ b/tools/testing/selftests/ptrace/get_syscall_info.c
-@@ -11,8 +11,19 @@
- #include <err.h>
- #include <signal.h>
- #include <asm/unistd.h>
-+#include <linux/types.h>
- #include "linux/ptrace.h"
+diff --git a/drivers/clocksource/timer-econet-en751221.c b/drivers/clocksource/timer-econet-en751221.c
+index 3b449fdaafee..4008076b1a21 100644
+--- a/drivers/clocksource/timer-econet-en751221.c
++++ b/drivers/clocksource/timer-econet-en751221.c
+@@ -146,7 +146,7 @@ static int __init cevt_init(struct device_node *np)
+ 	for_each_possible_cpu(i) {
+ 		struct clock_event_device *cd = &per_cpu(econet_timer_pcpu, i);
  
-+#if defined(_MIPS_SIM) && _MIPS_SIM == _MIPS_SIM_NABI32
-+/*
-+ * MIPS N32 is the only architecture where __kernel_ulong_t
-+ * does not match the bitness of syscall arguments.
-+ */
-+typedef unsigned long long kernel_ulong_t;
-+#else
-+typedef __kernel_ulong_t kernel_ulong_t;
-+#endif
-+
- static int
- kill_tracee(pid_t pid)
- {
-@@ -42,37 +53,37 @@ sys_ptrace(int request, pid_t pid, unsigned long addr, unsigned long data)
- 
- TEST(get_syscall_info)
- {
--	static const unsigned long args[][7] = {
-+	const kernel_ulong_t args[][7] = {
- 		/* a sequence of architecture-agnostic syscalls */
- 		{
- 			__NR_chdir,
--			(unsigned long) "",
--			0xbad1fed1,
--			0xbad2fed2,
--			0xbad3fed3,
--			0xbad4fed4,
--			0xbad5fed5
-+			(uintptr_t) "",
-+			(kernel_ulong_t) 0xdad1bef1bad1fed1ULL,
-+			(kernel_ulong_t) 0xdad2bef2bad2fed2ULL,
-+			(kernel_ulong_t) 0xdad3bef3bad3fed3ULL,
-+			(kernel_ulong_t) 0xdad4bef4bad4fed4ULL,
-+			(kernel_ulong_t) 0xdad5bef5bad5fed5ULL
- 		},
- 		{
- 			__NR_gettid,
--			0xcaf0bea0,
--			0xcaf1bea1,
--			0xcaf2bea2,
--			0xcaf3bea3,
--			0xcaf4bea4,
--			0xcaf5bea5
-+			(kernel_ulong_t) 0xdad0bef0caf0bea0ULL,
-+			(kernel_ulong_t) 0xdad1bef1caf1bea1ULL,
-+			(kernel_ulong_t) 0xdad2bef2caf2bea2ULL,
-+			(kernel_ulong_t) 0xdad3bef3caf3bea3ULL,
-+			(kernel_ulong_t) 0xdad4bef4caf4bea4ULL,
-+			(kernel_ulong_t) 0xdad5bef5caf5bea5ULL
- 		},
- 		{
- 			__NR_exit_group,
- 			0,
--			0xfac1c0d1,
--			0xfac2c0d2,
--			0xfac3c0d3,
--			0xfac4c0d4,
--			0xfac5c0d5
-+			(kernel_ulong_t) 0xdad1bef1fac1c0d1ULL,
-+			(kernel_ulong_t) 0xdad2bef2fac2c0d2ULL,
-+			(kernel_ulong_t) 0xdad3bef3fac3c0d3ULL,
-+			(kernel_ulong_t) 0xdad4bef4fac4c0d4ULL,
-+			(kernel_ulong_t) 0xdad5bef5fac5c0d5ULL
- 		}
- 	};
--	const unsigned long *exp_args;
-+	const kernel_ulong_t *exp_args;
- 
- 	pid_t pid = fork();
- 
-@@ -154,7 +165,7 @@ TEST(get_syscall_info)
- 			}
- 			ASSERT_LT(0, (rc = sys_ptrace(PTRACE_GET_SYSCALL_INFO,
- 						      pid, size,
--						      (unsigned long) &info))) {
-+						      (uintptr_t) &info))) {
- 				LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO: %m");
- 			}
- 			ASSERT_EQ(expected_none_size, rc) {
-@@ -177,7 +188,7 @@ TEST(get_syscall_info)
- 		case SIGTRAP | 0x80:
- 			ASSERT_LT(0, (rc = sys_ptrace(PTRACE_GET_SYSCALL_INFO,
- 						      pid, size,
--						      (unsigned long) &info))) {
-+						      (uintptr_t) &info))) {
- 				LOG_KILL_TRACEE("PTRACE_GET_SYSCALL_INFO: %m");
- 			}
- 			switch (ptrace_stop) {
+-		cd->rating		= 310,
++		cd->rating		= 310;
+ 		cd->features		= CLOCK_EVT_FEAT_ONESHOT |
+ 					  CLOCK_EVT_FEAT_C3STOP |
+ 					  CLOCK_EVT_FEAT_PERCPU;
 -- 
-ldv
+2.25.1
+
 
