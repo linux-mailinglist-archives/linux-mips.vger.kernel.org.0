@@ -1,155 +1,139 @@
-Return-Path: <linux-mips+bounces-9160-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9161-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B808ACFD25
-	for <lists+linux-mips@lfdr.de>; Fri,  6 Jun 2025 08:55:11 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90F6EAD0333
+	for <lists+linux-mips@lfdr.de>; Fri,  6 Jun 2025 15:31:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2496B1724DC
-	for <lists+linux-mips@lfdr.de>; Fri,  6 Jun 2025 06:55:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1CF177A16F5
+	for <lists+linux-mips@lfdr.de>; Fri,  6 Jun 2025 13:29:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D5CD283FD4;
-	Fri,  6 Jun 2025 06:55:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F242286D4C;
+	Fri,  6 Jun 2025 13:31:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="y89NGOqs";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="omhTFxJB"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FF3D42AA9;
-	Fri,  6 Jun 2025 06:55:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+Received: from fhigh-a3-smtp.messagingengine.com (fhigh-a3-smtp.messagingengine.com [103.168.172.154])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B87C72F2E;
+	Fri,  6 Jun 2025 13:31:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.154
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749192907; cv=none; b=gWAU2RiGxjohm0ezZS7nqVnAgpQ515ef3Ms3uUEOIMSaFmT+y1pUTwAjFzkAcyM23/tE9LnGxnO8wVxIUuNP+DrFq4WlTXJ66334PYWDyQU0ElnXPgooGwJSNy4t8UmGYIg5m/XPpm49LrwMWFRLhZtTtnwI+uWdV2Dti5ocUE4=
+	t=1749216671; cv=none; b=dc2osxqkNmAIbaMSxDSys1oxXfSTLyTvCkr3QKRDIWRFmUPZPNAYS0TFykO70SIEHHIrwVhsg9gAti71wjDIYhEhg6wqZEvN8Cm6Ey5r+0eo9zDKDpZIDkL+Js5KV0f6pJX2SpyvDTc1McdpWa7gMnK8H9xcJE9+w+oY1D/1384=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749192907; c=relaxed/simple;
-	bh=+KR7896HFgiNCh/FwADWs5fCnvi70stb4k6usaGIL+Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=GMq79kHe1Pneyt+zBY8tkZzvzOK0xcCPs9R6HFgY0KUB88Vqq0T69/5gcHqAxKuumInO8vF1alKuUgn4MIi7tVXPdUqBHyX5wdlHUAYKRvEHIprbWEFCCv+y6KMGWmsEe0zFw/EvISoo3BIvzZ8tRzszWCcYQFgSSBVODXhMSV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1uNQyb-00037B-00; Fri, 06 Jun 2025 08:54:53 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id E95AEC0176; Fri,  6 Jun 2025 08:54:44 +0200 (CEST)
-Date: Fri, 6 Jun 2025 08:54:44 +0200
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: torvalds@linux-foundation.org
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [GIT PULL] MIPS changes for v6.16
-Message-ID: <aEKQtJcSIeKklwz4@alpha.franken.de>
+	s=arc-20240116; t=1749216671; c=relaxed/simple;
+	bh=N9Wy1DLXhhISqceJ4s1aGdwZLuvYZPRCEL0gR1l+Rv4=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=bktsA1Fx/BMpcuynE41kkJY17RJfNWQe8HRp+46CpBZIC1Me3Ss+7I4OPTy1hNnFXwUBXC6QquimB9nF3K268/sLPtKADSJHTsi9yQXxhHV+gP2ERkVWstW+I+jFDqhSxcRx8zz2J5nF+aLjMPnKp4gwDcbq3Pi2ouAgmTomyuA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=y89NGOqs; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=omhTFxJB; arc=none smtp.client-ip=103.168.172.154
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 5C6B2114017E;
+	Fri,  6 Jun 2025 09:31:05 -0400 (EDT)
+Received: from phl-imap-08 ([10.202.2.84])
+  by phl-compute-06.internal (MEProxy); Fri, 06 Jun 2025 09:31:05 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1749216665;
+	 x=1749303065; bh=N9Wy1DLXhhISqceJ4s1aGdwZLuvYZPRCEL0gR1l+Rv4=; b=
+	y89NGOqs+DarZJgbfqAm+EDavPOclNYRXH8bvhG3eul3FsnnSePAXHG81xplfpSs
+	U9AAB69kZwQDf77ItFKMVd2XYVEgogZ2zh87Fkah9hzgPdMzm7SZssZVgN6e/vGL
+	THBVMDrIAPS0C6lPucTk4F6emLIKL1sVgdkyfwVYVj9qR2DqSkB1Gf/BB75ab36c
+	KuTt/ieEn76riHaOlFCNh4JZLZbmV05x6cJN10MRy4KK7E8OWEymrjC0ZExPZhUX
+	FICtFKeJonwLAFJhAIe/n7N9NmSrgQNnfh55wLRrHoP97q/dvt8fzeWGYr8Meoyd
+	hb4I4iJ+aX+oWlxBlFB1yA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1749216665; x=
+	1749303065; bh=N9Wy1DLXhhISqceJ4s1aGdwZLuvYZPRCEL0gR1l+Rv4=; b=o
+	mhTFxJBV2G4IaP30Kawj8S7hVwmCO9bc9XxOlsbAYfNSqJuy/nVyXBzxzz0wq2g9
+	uDVQ6cRPUkwMrMO18E8ezlE7lVG/8lJMi9hkLfbYll2HFJrDdgjrkTovHxHCh9MC
+	uHt46xiqrZgtJFfiANqnqshWq1lGeMSnfFISy6WZbwwpyizAIM1gbdZF3fjSV5PB
+	npPk2lTyyHmqo6iXV6G7fyRpQsIutgCmXhPK5W40qkvs1tD/iBsm3Eh/EDV8OXlt
+	x+izrM+0o46+G9hYFUcC15TrNzhdsGYN/ad/4leWJNLlhf9iNzexxJc6/VwaBBYJ
+	pfSOiR9OFlNTSBR74sOpg==
+X-ME-Sender: <xms:mO1CaF3y-PoQRmBUsux-o_My9SDfmboERuV5KrkgNAQ9XsBHmpQALQ>
+    <xme:mO1CaMHbcOH2LMejk0ZdOW1Rj2_3FeitSGcR4CN8_1mRaa5fVO1jjmKNKxpqs2VOU
+    hpHUf9uhWah5CJgDHc>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugdehudehucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdej
+    necuhfhrohhmpedflfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfh
+    hlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepjeehfeduvddtgffgvdffkeet
+    hefhlefgvdevvdekuefffeekheehgeevhfevteejnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgr
+    thdrtghomhdpnhgspghrtghpthhtohepgedpmhhouggvpehsmhhtphhouhhtpdhrtghpth
+    htohepthhssghoghgvnhgusegrlhhphhgrrdhfrhgrnhhkvghnrdguvgdprhgtphhtthho
+    pehsthgrsghlvgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrh
+    hnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqmhhi
+    phhssehvghgvrhdrkhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:mO1CaF5PyU2ISWJI6C87-K0tOmypjUbpRv-kD5vcTLhqBWJ-ib3x0w>
+    <xmx:mO1CaC2rkO9iKjqDn4T9CbJRmnIJ8TuNhMAXg9hjDP-UdyNRkPyp_A>
+    <xmx:mO1CaIEUIwrhbZYsnyxsRK3jqxE0AT89HPVWLdQkge2NQDUxz6lexA>
+    <xmx:mO1CaD89LhunXFsKt-IPdD9Xz71LVYRdcWziAd4IqnvQDe7TIfxr3A>
+    <xmx:me1CaOfWZhG6k0IdECmyaog9GBQ2ro84lnkJK8oetKefBmkpdkK3J9yv>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id AE41E2CE0065; Fri,  6 Jun 2025 09:31:04 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+X-ThreadId: Tfa3886415041e94f
+Date: Fri, 06 Jun 2025 14:30:43 +0100
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
+Cc: "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ linux-kernel@vger.kernel.org, stable@kernel.org
+Message-Id: <a70690be-64ba-4337-bca2-23f93b645b62@app.fastmail.com>
+In-Reply-To: <20250605-tlb-fix-v1-1-4af496f17b2f@flygoat.com>
+References: <20250605-tlb-fix-v1-1-4af496f17b2f@flygoat.com>
+Subject: Re: [PATCH] MIPS: mm: tlb-r4k: Uniquify TLB entries on init
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-The following changes since commit 0af2f6be1b4281385b618cb86ad946eded089ac8:
 
-  Linux 6.15-rc1 (2025-04-06 13:11:33 -0700)
 
-are available in the Git repository at:
+=E5=9C=A82025=E5=B9=B46=E6=9C=885=E6=97=A5=E5=91=A8=E5=9B=9B =E4=B8=8A=E5=
+=8D=8811:02=EF=BC=8CJiaxun Yang=E5=86=99=E9=81=93=EF=BC=9A
+> Hardware or bootloader will initialize TLB entries to any value, which
+> may collide with kernel's UNIQUE_ENTRYHI value. On MIPS microAptiv/M51=
+50
+> family of cores this will trigger machine check exception and cause bo=
+ot
+> failure. On M5150 simulation this could happen 7 times out of 1000 boo=
+ts.
+>
+> Replace local_flush_tlb_all() with r4k_tlb_uniquify() which probes each
+> TLB ENTRIHI unique value for collisions before it's written and overwr=
+ites
+> any conflicting entries with safe values before initializing the kerne=
+l's
+> UNIQUE_ENTRYHI pattern.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.16
+I just realised it might be easier to cycling ASID instead of address in
+Entry Hi.
 
-for you to fetch changes up to 5a0c749125c001cba673e9951b0002fba7ea2886:
+Will come try a v2.
 
-  MIPS: loongson2ef: lemote-2f: add missing function prototypes (2025-05-30 14:19:02 +0200)
+Thanks
+Jiaxun
 
-----------------------------------------------------------------
-Added support for EcoNet platform
-Added support for parallel CPU bring up on EyeQ
-Other cleanups and fixes
+[...]
 
-----------------------------------------------------------------
-Bartosz Golaszewski (4):
-      MIPS: rb532: gpio: use new line value setter callbacks
-      MIPS: bcm63xx: gpio: use new line value setter callbacks
-      MIPS: alchemy: gpio: use new line value setter callbacks
-      MIPS: txx9: gpio: use new line value setter callbacks
-
-Caleb James DeLisle (6):
-      dt-bindings: mips: Add EcoNet platform binding
-      mips: Add EcoNet MIPS platform support
-      dt-bindings: vendor-prefixes: Add SmartFiber
-      mips: dts: Add EcoNet DTS with EN751221 and SmartFiber XP8421-B board
-      MAINTAINERS: Add entry for newly added EcoNet platform.
-      mips: econet: Fix incorrect Kconfig dependencies
-
-Charan Pedumuru (1):
-      mips: dts: pic32: pic32mzda: Rename the sdhci nodename to match with common mmc-controller binding
-
-Chris Packham (1):
-      mips: dts: realtek: Add MDIO controller
-
-Eric Biggers (1):
-      MIPS: bcm63xx: nvram: avoid inefficient use of crc32_le_combine()
-
-Gregory CLEMENT (3):
-      MIPS: SMP: Implement parallel CPU bring up for EyeQ
-      MIPS: SMP: Move the AP sync point before the non-parallel aware functions
-      MIPS: SMP: Move the AP sync point before the calibration delay
-
-Khem Raj (1):
-      mips: Add -std= flag specified in KBUILD_CFLAGS to vdso CFLAGS
-
-Randy Dunlap (2):
-      MIPS: loongson2ef: cs5536: add missing function prototypes
-      MIPS: loongson2ef: lemote-2f: add missing function prototypes
-
-Thorsten Blum (3):
-      mips: ptrace: Improve code formatting and indentation
-      MIPS: BCM63XX: Replace strcpy() with strscpy() in board_prom_init()
-      MIPS: Replace strcpy() with strscpy() in vpe_elfload()
-
-WangYuli (1):
-      MIPS: Loongson64: Add missing '#interrupt-cells' for loongson64c_ls7a
-
- Documentation/devicetree/bindings/mips/econet.yaml | 26 ++++++++
- .../devicetree/bindings/vendor-prefixes.yaml       |  2 +
- MAINTAINERS                                        | 12 ++++
- arch/mips/Kbuild.platforms                         |  1 +
- arch/mips/Kconfig                                  | 28 ++++++++
- arch/mips/alchemy/common/gpiolib.c                 |  6 +-
- arch/mips/bcm63xx/boards/board_bcm963xx.c          |  2 +-
- arch/mips/bcm63xx/gpio.c                           |  7 +-
- arch/mips/boot/compressed/uart-16550.c             |  5 ++
- arch/mips/boot/dts/Makefile                        |  1 +
- arch/mips/boot/dts/econet/Makefile                 |  2 +
- arch/mips/boot/dts/econet/en751221.dtsi            | 67 +++++++++++++++++++
- .../dts/econet/en751221_smartfiber_xp8421-b.dts    | 19 ++++++
- .../boot/dts/loongson/loongson64c_4core_ls7a.dts   |  1 +
- arch/mips/boot/dts/pic32/pic32mzda.dtsi            |  2 +-
- arch/mips/boot/dts/realtek/rtl930x.dtsi            | 33 +++++++++
- arch/mips/econet/Kconfig                           | 48 +++++++++++++
- arch/mips/econet/Makefile                          |  2 +
- arch/mips/econet/Platform                          |  5 ++
- arch/mips/econet/init.c                            | 78 ++++++++++++++++++++++
- .../asm/mach-loongson2ef/cs5536/cs5536_pci.h       | 20 ++++++
- arch/mips/include/asm/mach-loongson2ef/loongson.h  |  9 +++
- arch/mips/include/asm/topology.h                   |  3 +
- arch/mips/kernel/gpio_txx9.c                       |  8 ++-
- arch/mips/kernel/ptrace.c                          | 34 +++++-----
- arch/mips/kernel/smp-cps.c                         |  2 +
- arch/mips/kernel/smp.c                             | 18 +++++
- arch/mips/kernel/vpe.c                             |  3 +-
- arch/mips/rb532/gpio.c                             |  8 ++-
- arch/mips/txx9/generic/setup.c                     |  8 ++-
- arch/mips/vdso/Makefile                            |  1 +
- include/linux/bcm963xx_nvram.h                     | 16 ++---
- 32 files changed, 434 insertions(+), 43 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/mips/econet.yaml
- create mode 100644 arch/mips/boot/dts/econet/Makefile
- create mode 100644 arch/mips/boot/dts/econet/en751221.dtsi
- create mode 100644 arch/mips/boot/dts/econet/en751221_smartfiber_xp8421-b.dts
- create mode 100644 arch/mips/econet/Kconfig
- create mode 100644 arch/mips/econet/Makefile
- create mode 100644 arch/mips/econet/Platform
- create mode 100644 arch/mips/econet/init.c
--- 
-
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+--=20
+- Jiaxun
 
