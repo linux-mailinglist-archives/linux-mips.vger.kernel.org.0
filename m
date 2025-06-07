@@ -1,481 +1,214 @@
-Return-Path: <linux-mips+bounces-9165-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9166-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0877FAD0D49
-	for <lists+linux-mips@lfdr.de>; Sat,  7 Jun 2025 14:09:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54A25AD0D76
+	for <lists+linux-mips@lfdr.de>; Sat,  7 Jun 2025 14:44:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 051FA3B3719
-	for <lists+linux-mips@lfdr.de>; Sat,  7 Jun 2025 12:08:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 703B63B0FD9
+	for <lists+linux-mips@lfdr.de>; Sat,  7 Jun 2025 12:43:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E75C221F05;
-	Sat,  7 Jun 2025 12:08:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEAC31F5413;
+	Sat,  7 Jun 2025 12:44:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="Z9msa4X7"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="DQMNnAnO";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Ci/wlHB5"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A54821FF37;
-	Sat,  7 Jun 2025 12:08:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 867D91F3BA9;
+	Sat,  7 Jun 2025 12:44:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749298118; cv=none; b=ELq7ZlF3x8BWE5u0Ah26um+LqSb6ZzL3ohLVVSsYqdt/ip2Z54JEezQEjgBk7kpYyCxTZBZAGftd1EvUJd0GlqUOaYG1nbvJSJE7+MBDryBzWPSk/JI4yPuMaNEcHCKNdRmklyop2mqkWXnZMfW2TI1KppgdJR/k8iDaORPpxa8=
+	t=1749300242; cv=none; b=Ru3ip639W37lHu1PGxDHZ555FfLEayc7HXRPqqhEHKoq/1kPXWcIAtRsYtqfrHLybreIqNiA6tYwY5KW2sdpKBp2u9kTWghKXkCPTqSC5ZtP0jNiipZxMebtv1plzmBsJjU6VU4ZvmuOj0xtn52hG8JvUGpZFiemNBY1/2FN69Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749298118; c=relaxed/simple;
-	bh=iaef8qmXNAq5l/9As63qndXfRVPmWNwMOYaxinGhHS8=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=WlVvuprmTNTzZ7WKtiYwogqTrhEGxUK0Esm5dquCatfczMNsg/3SLKU+8UhWUvE1Jb65MAXl2qglrRDz2ujQuIN4c1/xvB60xOPI2rpkSi+sXDhzOOUGWoWXq1UxzcpHSpLUnCD0ZIq5YE2LY+B/gyfwlJUByN2u1U+k+bgu36c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=Z9msa4X7; arc=none smtp.client-ip=130.133.4.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=FwM4OXMNxwD5om0/o3Aytg0dRVg/tzG+D8QfcuPysvA=; t=1749298114; x=1749902914; 
-	b=Z9msa4X7Y0nywltDrIQ3GIsTB8mZKkxvf0fl4IZLo/wb5FbGGHHftNtYJG/kB5vJ8bb5Cod3e+5
-	KPDn1S/Lzz12Z2VsXOt1WxmKEh7bMkMevfUPGdYB/1jMvycQqMcRYV8K68FoIAquUQSeMOvMiheGD
-	AEjXUFtTCN7WNgfpN2/OiQDWHTKrnJfob+v/+/sSkftKMFKzMr04d2xH1cD1BdJXvd29sVw9pmGFy
-	2eQkngIt7VDHuxa9qwsVWj1z7I8pmJKFDwz7s+0zpAbz8fzRW5xR6FG9R4BdRMTkrZ4CG38OGNNko
-	3to80Wg17JkVqQB0WEuls5+Ihvstb3KJwMJw==;
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.98)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1uNsLc-00000001cxo-1xRw; Sat, 07 Jun 2025 14:08:28 +0200
-Received: from p5b13afe4.dip0.t-ipconnect.de ([91.19.175.228] helo=[192.168.178.61])
-          by inpost2.zedat.fu-berlin.de (Exim 4.98)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1uNsLc-00000003H4l-0SRQ; Sat, 07 Jun 2025 14:08:28 +0200
-Message-ID: <6c7770dd1c216410fcff3bf0758a45d5afcb5444.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH 2/6] sh: remove duplicate ioread/iowrite helpers
-From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To: Arnd Bergmann <arnd@kernel.org>, linux-arch@vger.kernel.org
-Cc: Arnd Bergmann <arnd@arndb.de>, Richard Henderson	
- <richard.henderson@linaro.org>, Matt Turner <mattst88@gmail.com>, Geert
- Uytterhoeven <geert@linux-m68k.org>, Greg Ungerer <gerg@linux-m68k.org>,
- Thomas Bogendoerfer	 <tsbogend@alpha.franken.de>, "James E.J. Bottomley"	
- <James.Bottomley@HansenPartnership.com>, Helge Deller <deller@gmx.de>, 
- Madhavan Srinivasan	 <maddy@linux.ibm.com>, Michael Ellerman
- <mpe@ellerman.id.au>, Nicholas Piggin	 <npiggin@gmail.com>, Christophe
- Leroy <christophe.leroy@csgroup.eu>, Naveen N Rao <naveen@kernel.org>,
- Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker	
- <dalias@libc.org>, Julian Vetter <julian@outer-limits.org>, Bjorn Helgaas	
- <bhelgaas@google.com>, linux-alpha@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org
-Date: Sat, 07 Jun 2025 14:08:26 +0200
-In-Reply-To: <20250315105907.1275012-3-arnd@kernel.org>
-References: <20250315105907.1275012-1-arnd@kernel.org>
-	 <20250315105907.1275012-3-arnd@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 
+	s=arc-20240116; t=1749300242; c=relaxed/simple;
+	bh=7v35t10rT/x0ifFckUPG4qEzeCS6Bhh0PhcL4WRVQzU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=YH2A352xQB0qR5fbJgQuFufA+fT/LDGOKE2XNR0WUYSiHA/RqC6/kYFMqfOqaA+RTniPCcVu0FUS+M0n5NolAx639wzC/QYN+hfq11PRzrBWn5Xs3R0y+idah6Tc116HPsTU0FE6I+K41FhVg6LUCuEUYvkNieBKxlP4Gt2BDuI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=DQMNnAnO; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Ci/wlHB5; arc=none smtp.client-ip=103.168.172.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from phl-compute-03.internal (phl-compute-03.phl.internal [10.202.2.43])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 7531911400E1;
+	Sat,  7 Jun 2025 08:43:59 -0400 (EDT)
+Received: from phl-mailfrontend-01 ([10.202.2.162])
+  by phl-compute-03.internal (MEProxy); Sat, 07 Jun 2025 08:43:59 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm2; t=1749300239; x=1749386639; bh=LE
+	Tek6F2yQhSW75x3yTlSBCuK2Zv1tv+UzjZpfyMlbE=; b=DQMNnAnO02DxakMxvw
+	Vaw6q783f8L96uMiaoYJvwCu2/e8ofpRyawHLwei6OOOZwlWFfXujMAX/nETX9j3
+	MiV3Lo5cwac/55h5CPHj2GGKCs/ZlU59zljhM4RbAklvvZaa8HnXocwxISVrpsYg
+	Tm00bI0g+58+3uO9awVRna1wVZ4unQuiHcZP1hXdCYPKX3gydW5v/bpsUqjM5qSW
+	VCQcu1yo0rQvWDcQlkMTpvbqyWQ6bHkk1lLAE1Uk6Kz0O8xJB+iNOyaN2TSE6kGJ
+	pkkLuO/71nJwZvptI3Gq1OxKAH2K8t4seVKhsCorVzZJC0sVZS22RGhARmdCixKD
+	Ar7g==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1749300239; x=1749386639; bh=LETek6F2yQhSW75x3yTlSBCuK2Zv
+	1tv+UzjZpfyMlbE=; b=Ci/wlHB5k176kZj8vqmSNFjUxxdZGvKnljF1bNMXWjVI
+	XnIf1v5w56YkCyp3qpfAzyxugfPoDEOh6adkTx2HUGyVgil5sm4q2bUbrSJG0nxA
+	0O6dHNeYbeUzU277mWc76sh3tGzc5judJg0vpkH1eYx0s75idig39mrVft45DuJS
+	goeXijr+wfzXYoK5za34FHjzuIIc2W9iT4nIP6rKJ19gxT9y3O+s7imCBrksLOhf
+	rGOo8JjsLcPSpVVZUAWZ1batleh7WyZ7nc7lQsgx3oRL5oBhcy+kP+ZDXrQHGhYP
+	v/KCYGJlWz9QbczAJ/PUzdj7Pq8ldUWUMo4wg8nbMQ==
+X-ME-Sender: <xms:DjREaPQZIGVjD67s6Rb4RiRRUCCE7XqE7DDsOTmxICxUK3WDR7BGAQ>
+    <xme:DjREaAxh4rLZWX-BPmYi01AK5sEFUUhW1ZUmZZzo3REUVcRpMokkDep8q4IJiNw1d
+    N0FCsJMoKJ7Gw72xBk>
+X-ME-Received: <xmr:DjREaE1yBGRXIdPtG6bM7_-KDdp1_YARhf-XepZ7-2xkzD56byud8t8v1sFkXA>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddugdeiheegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnecujfgurhephfffufggtgfgkffvvefosehtjeertdertdejnecu
+    hfhrohhmpeflihgrgihunhcujggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgoh
+    grthdrtghomheqnecuggftrfgrthhtvghrnhephfffgeejgfejieeugffgudegvdekffev
+    geeuteetgeejveeiteeivedvffehlefgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrgh
+    enucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgr
+    gihunhdrhigrnhhgsehflhihghhorghtrdgtohhmpdhnsggprhgtphhtthhopeeipdhmoh
+    guvgepshhmthhpohhuthdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghr
+    rdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsthgrsghlvgeskhgvrhhnvghlrdhorh
+    hgpdhrtghpthhtohepmhgrtghrohesohhrtggrmhdrmhgvrdhukhdprhgtphhtthhopeht
+    shgsohhgvghnugesrghlphhhrgdrfhhrrghnkhgvnhdruggvpdhrtghpthhtoheplhhinh
+    hugidqmhhiphhssehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepjhhirgig
+    uhhnrdihrghnghesfhhlhihgohgrthdrtghomh
+X-ME-Proxy: <xmx:DjREaPBEdf64GvtKXChu6-Mem2o_h1FxiNXQIH7s7BEAVYCOHK-Trw>
+    <xmx:DjREaIi-YZ0M9a3rsMmnD9J8UC7C010a2I40RlcqNBR89_R4VIZ9lA>
+    <xmx:DjREaDrsEur5cl5-2q4avuj7-B4aNQrFa6K6n2cArdZPB1Wz0S2RYg>
+    <xmx:DjREaDhCYC7KQ106zdfnZEwmNQOjT6yiwCMR28sFQHEdRh0Ajn2FtA>
+    <xmx:DzREaMnfb6Zs-287xe6hYlLleZ9ms7D5G9HiEnA3Ot1hT52MjxZW0IDi>
+Feedback-ID: ifd894703:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
+ 7 Jun 2025 08:43:58 -0400 (EDT)
+From: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Date: Sat, 07 Jun 2025 13:43:56 +0100
+Subject: [PATCH v2] MIPS: mm: tlb-r4k: Uniquify TLB entries on init
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-ZEDAT-Hint: PO
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250607-tlb-fix-v2-1-6751eccd86f1@flygoat.com>
+X-B4-Tracking: v=1; b=H4sIAAs0RGgC/2WMSw7CIBQAr9K8tRggfNSV9zBdAD5akloMEGLTc
+ HexW5czmcwOGVPADLdhh4Q15BDXDvw0gJvNOiEJz87AKZdUUUnKYokPHyL1xRqnLUqhoNfvhF0
+ fp8fYeQ65xLQd48p+9v9RGWFEGC+uyjNtub/7ZZuiKWcXXzC21r4qNXlioAAAAA==
+X-Change-ID: 20250605-tlb-fix-578bac7be546
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: "Maciej W. Rozycki" <macro@orcam.me.uk>, linux-mips@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, stable@kernel.org, 
+ Jiaxun Yang <jiaxun.yang@flygoat.com>
+X-Mailer: b4 0.14.2
 
-Hi Arnd,
+Hardware or bootloader will initialize TLB entries to any value, which
+may collide with kernel's UNIQUE_ENTRYHI value. On MIPS microAptiv/M5150
+family of cores this will trigger machine check exception and cause boot
+failure. On M5150 simulation this could happen 7 times out of 1000 boots.
 
-On Sat, 2025-03-15 at 11:59 +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->=20
-> The ioread/iowrite functions on sh only do memory mapped I/O like the
-> generic verion, and never map onto non-MMIO inb/outb variants, so they
-> just add complexity. In particular, the use of asm-generic/iomap.h
-> ties the declaration to the x86 implementation.
->=20
-> Remove the custom versions and use the architecture-independent fallback
-> code instead. Some of the calling conventions on sh are different here,
-> so fix that by adding 'volatile' keywords where required by the generic
-> implementation and change the cpg clock driver to no longer depend on
-> the interesting choice of return types for ioread8/ioread16/ioread32.
->=20
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
->  arch/sh/include/asm/io.h |  30 ++------
->  arch/sh/kernel/Makefile  |   3 -
->  arch/sh/kernel/iomap.c   | 162 ---------------------------------------
->  arch/sh/kernel/ioport.c  |   5 --
->  arch/sh/lib/io.c         |   4 +-
->  drivers/sh/clk/cpg.c     |  25 +++---
->  6 files changed, 21 insertions(+), 208 deletions(-)
->  delete mode 100644 arch/sh/kernel/iomap.c
->=20
-> diff --git a/arch/sh/include/asm/io.h b/arch/sh/include/asm/io.h
-> index cf5eab840d57..0f663ebec700 100644
-> --- a/arch/sh/include/asm/io.h
-> +++ b/arch/sh/include/asm/io.h
-> @@ -19,7 +19,6 @@
->  #include <asm/machvec.h>
->  #include <asm/page.h>
->  #include <linux/pgtable.h>
-> -#include <asm-generic/iomap.h>
-> =20
->  #define __IO_PREFIX     generic
->  #include <asm/io_generic.h>
-> @@ -100,7 +99,7 @@ pfx##writes##bwlq(volatile void __iomem *mem, const vo=
-id *addr,		\
->  	}								\
->  }									\
->  									\
-> -static inline void pfx##reads##bwlq(volatile void __iomem *mem,		\
-> +static inline void pfx##reads##bwlq(const volatile void __iomem *mem,	\
->  				    void *addr, unsigned int count)	\
->  {									\
->  	volatile type *__addr =3D addr;					\
-> @@ -114,37 +113,18 @@ static inline void pfx##reads##bwlq(volatile void _=
-_iomem *mem,		\
->  __BUILD_MEMORY_STRING(__raw_, b, u8)
->  __BUILD_MEMORY_STRING(__raw_, w, u16)
-> =20
-> -void __raw_writesl(void __iomem *addr, const void *data, int longlen);
-> -void __raw_readsl(const void __iomem *addr, void *data, int longlen);
-> +void __raw_writesl(void volatile __iomem *addr, const void *data, int lo=
-nglen);
-> +void __raw_readsl(const volatile void __iomem *addr, void *data, int lon=
-glen);
-> =20
->  __BUILD_MEMORY_STRING(__raw_, q, u64)
-> =20
->  #define ioport_map ioport_map
-> -#define ioport_unmap ioport_unmap
->  #define pci_iounmap pci_iounmap
-> =20
-> -#define ioread8 ioread8
-> -#define ioread16 ioread16
-> -#define ioread16be ioread16be
-> -#define ioread32 ioread32
-> -#define ioread32be ioread32be
-> -
-> -#define iowrite8 iowrite8
-> -#define iowrite16 iowrite16
-> -#define iowrite16be iowrite16be
-> -#define iowrite32 iowrite32
-> -#define iowrite32be iowrite32be
-> -
-> -#define ioread8_rep ioread8_rep
-> -#define ioread16_rep ioread16_rep
-> -#define ioread32_rep ioread32_rep
-> -
-> -#define iowrite8_rep iowrite8_rep
-> -#define iowrite16_rep iowrite16_rep
-> -#define iowrite32_rep iowrite32_rep
-> -
->  #ifdef CONFIG_HAS_IOPORT_MAP
-> =20
-> +extern void __iomem *ioport_map(unsigned long port, unsigned int nr);
-> +
->  /*
->   * Slowdown I/O port space accesses for antique hardware.
->   */
-> diff --git a/arch/sh/kernel/Makefile b/arch/sh/kernel/Makefile
-> index ba917008d63e..7b453592adaf 100644
-> --- a/arch/sh/kernel/Makefile
-> +++ b/arch/sh/kernel/Makefile
-> @@ -21,10 +21,7 @@ obj-y	:=3D head_32.o debugtraps.o dumpstack.o				\
->  	   syscalls_32.o time.o topology.o traps.o			\
->  	   traps_32.o unwinder.o
-> =20
-> -ifndef CONFIG_GENERIC_IOMAP
-> -obj-y				+=3D iomap.o
->  obj-$(CONFIG_HAS_IOPORT_MAP)	+=3D ioport.o
-> -endif
-> =20
->  obj-y				+=3D sys_sh32.o
->  obj-y				+=3D cpu/
-> diff --git a/arch/sh/kernel/iomap.c b/arch/sh/kernel/iomap.c
-> deleted file mode 100644
-> index 0a0dff4e66de..000000000000
-> --- a/arch/sh/kernel/iomap.c
-> +++ /dev/null
-> @@ -1,162 +0,0 @@
-> -// SPDX-License-Identifier: GPL-2.0
-> -/*
-> - * arch/sh/kernel/iomap.c
-> - *
-> - * Copyright (C) 2000  Niibe Yutaka
-> - * Copyright (C) 2005 - 2007 Paul Mundt
-> - */
-> -#include <linux/module.h>
-> -#include <linux/io.h>
-> -
-> -unsigned int ioread8(const void __iomem *addr)
-> -{
-> -	return readb(addr);
-> -}
-> -EXPORT_SYMBOL(ioread8);
-> -
-> -unsigned int ioread16(const void __iomem *addr)
-> -{
-> -	return readw(addr);
-> -}
-> -EXPORT_SYMBOL(ioread16);
-> -
-> -unsigned int ioread16be(const void __iomem *addr)
-> -{
-> -	return be16_to_cpu(__raw_readw(addr));
-> -}
-> -EXPORT_SYMBOL(ioread16be);
-> -
-> -unsigned int ioread32(const void __iomem *addr)
-> -{
-> -	return readl(addr);
-> -}
-> -EXPORT_SYMBOL(ioread32);
-> -
-> -unsigned int ioread32be(const void __iomem *addr)
-> -{
-> -	return be32_to_cpu(__raw_readl(addr));
-> -}
-> -EXPORT_SYMBOL(ioread32be);
-> -
-> -void iowrite8(u8 val, void __iomem *addr)
-> -{
-> -	writeb(val, addr);
-> -}
-> -EXPORT_SYMBOL(iowrite8);
-> -
-> -void iowrite16(u16 val, void __iomem *addr)
-> -{
-> -	writew(val, addr);
-> -}
-> -EXPORT_SYMBOL(iowrite16);
-> -
-> -void iowrite16be(u16 val, void __iomem *addr)
-> -{
-> -	__raw_writew(cpu_to_be16(val), addr);
-> -}
-> -EXPORT_SYMBOL(iowrite16be);
-> -
-> -void iowrite32(u32 val, void __iomem *addr)
-> -{
-> -	writel(val, addr);
-> -}
-> -EXPORT_SYMBOL(iowrite32);
-> -
-> -void iowrite32be(u32 val, void __iomem *addr)
-> -{
-> -	__raw_writel(cpu_to_be32(val), addr);
-> -}
-> -EXPORT_SYMBOL(iowrite32be);
-> -
-> -/*
-> - * These are the "repeat MMIO read/write" functions.
-> - * Note the "__raw" accesses, since we don't want to
-> - * convert to CPU byte order. We write in "IO byte
-> - * order" (we also don't have IO barriers).
-> - */
-> -static inline void mmio_insb(const void __iomem *addr, u8 *dst, int coun=
-t)
-> -{
-> -	while (--count >=3D 0) {
-> -		u8 data =3D __raw_readb(addr);
-> -		*dst =3D data;
-> -		dst++;
-> -	}
-> -}
-> -
-> -static inline void mmio_insw(const void __iomem *addr, u16 *dst, int cou=
-nt)
-> -{
-> -	while (--count >=3D 0) {
-> -		u16 data =3D __raw_readw(addr);
-> -		*dst =3D data;
-> -		dst++;
-> -	}
-> -}
-> -
-> -static inline void mmio_insl(const void __iomem *addr, u32 *dst, int cou=
-nt)
-> -{
-> -	while (--count >=3D 0) {
-> -		u32 data =3D __raw_readl(addr);
-> -		*dst =3D data;
-> -		dst++;
-> -	}
-> -}
-> -
-> -static inline void mmio_outsb(void __iomem *addr, const u8 *src, int cou=
-nt)
-> -{
-> -	while (--count >=3D 0) {
-> -		__raw_writeb(*src, addr);
-> -		src++;
-> -	}
-> -}
-> -
-> -static inline void mmio_outsw(void __iomem *addr, const u16 *src, int co=
-unt)
-> -{
-> -	while (--count >=3D 0) {
-> -		__raw_writew(*src, addr);
-> -		src++;
-> -	}
-> -}
-> -
-> -static inline void mmio_outsl(void __iomem *addr, const u32 *src, int co=
-unt)
-> -{
-> -	while (--count >=3D 0) {
-> -		__raw_writel(*src, addr);
-> -		src++;
-> -	}
-> -}
-> -
-> -void ioread8_rep(const void __iomem *addr, void *dst, unsigned long coun=
-t)
-> -{
-> -	mmio_insb(addr, dst, count);
-> -}
-> -EXPORT_SYMBOL(ioread8_rep);
-> -
-> -void ioread16_rep(const void __iomem *addr, void *dst, unsigned long cou=
-nt)
-> -{
-> -	mmio_insw(addr, dst, count);
-> -}
-> -EXPORT_SYMBOL(ioread16_rep);
-> -
-> -void ioread32_rep(const void __iomem *addr, void *dst, unsigned long cou=
-nt)
-> -{
-> -	mmio_insl(addr, dst, count);
-> -}
-> -EXPORT_SYMBOL(ioread32_rep);
-> -
-> -void iowrite8_rep(void __iomem *addr, const void *src, unsigned long cou=
-nt)
-> -{
-> -	mmio_outsb(addr, src, count);
-> -}
-> -EXPORT_SYMBOL(iowrite8_rep);
-> -
-> -void iowrite16_rep(void __iomem *addr, const void *src, unsigned long co=
-unt)
-> -{
-> -	mmio_outsw(addr, src, count);
-> -}
-> -EXPORT_SYMBOL(iowrite16_rep);
-> -
-> -void iowrite32_rep(void __iomem *addr, const void *src, unsigned long co=
-unt)
-> -{
-> -	mmio_outsl(addr, src, count);
-> -}
-> -EXPORT_SYMBOL(iowrite32_rep);
-> diff --git a/arch/sh/kernel/ioport.c b/arch/sh/kernel/ioport.c
-> index c8aff8a20164..915a3dfd9f02 100644
-> --- a/arch/sh/kernel/ioport.c
-> +++ b/arch/sh/kernel/ioport.c
-> @@ -23,8 +23,3 @@ void __iomem *ioport_map(unsigned long port, unsigned i=
-nt nr)
->  	return (void __iomem *)(port + sh_io_port_base);
->  }
->  EXPORT_SYMBOL(ioport_map);
-> -
-> -void ioport_unmap(void __iomem *addr)
-> -{
-> -}
-> -EXPORT_SYMBOL(ioport_unmap);
-> diff --git a/arch/sh/lib/io.c b/arch/sh/lib/io.c
-> index ebcf7c0a7335..dc6345e4c53b 100644
-> --- a/arch/sh/lib/io.c
-> +++ b/arch/sh/lib/io.c
-> @@ -11,7 +11,7 @@
->  #include <linux/module.h>
->  #include <linux/io.h>
-> =20
-> -void __raw_readsl(const void __iomem *addr, void *datap, int len)
-> +void __raw_readsl(const volatile void __iomem *addr, void *datap, int le=
-n)
->  {
->  	u32 *data;
-> =20
-> @@ -60,7 +60,7 @@ void __raw_readsl(const void __iomem *addr, void *datap=
-, int len)
->  }
->  EXPORT_SYMBOL(__raw_readsl);
-> =20
-> -void __raw_writesl(void __iomem *addr, const void *data, int len)
-> +void __raw_writesl(volatile void __iomem *addr, const void *data, int le=
-n)
->  {
->  	if (likely(len !=3D 0)) {
->  		int tmp1;
-> diff --git a/drivers/sh/clk/cpg.c b/drivers/sh/clk/cpg.c
-> index fd72d9088bdc..64ed7d64458a 100644
-> --- a/drivers/sh/clk/cpg.c
-> +++ b/drivers/sh/clk/cpg.c
-> @@ -26,6 +26,19 @@ static unsigned int sh_clk_read(struct clk *clk)
->  	return ioread32(clk->mapped_reg);
->  }
-> =20
-> +static unsigned int sh_clk_read_status(struct clk *clk)
-> +{
-> +	void __iomem *mapped_status =3D (phys_addr_t)clk->status_reg -
-> +		(phys_addr_t)clk->enable_reg + clk->mapped_reg;
-> +
-> +	if (clk->flags & CLK_ENABLE_REG_8BIT)
-> +		return ioread8(mapped_status);
-> +	else if (clk->flags & CLK_ENABLE_REG_16BIT)
-> +		return ioread16(mapped_status);
-> +
-> +	return ioread32(mapped_status);
-> +}
-> +
->  static void sh_clk_write(int value, struct clk *clk)
->  {
->  	if (clk->flags & CLK_ENABLE_REG_8BIT)
-> @@ -40,20 +53,10 @@ static int sh_clk_mstp_enable(struct clk *clk)
->  {
->  	sh_clk_write(sh_clk_read(clk) & ~(1 << clk->enable_bit), clk);
->  	if (clk->status_reg) {
-> -		unsigned int (*read)(const void __iomem *addr);
->  		int i;
-> -		void __iomem *mapped_status =3D (phys_addr_t)clk->status_reg -
-> -			(phys_addr_t)clk->enable_reg + clk->mapped_reg;
-> -
-> -		if (clk->flags & CLK_ENABLE_REG_8BIT)
-> -			read =3D ioread8;
-> -		else if (clk->flags & CLK_ENABLE_REG_16BIT)
-> -			read =3D ioread16;
-> -		else
-> -			read =3D ioread32;
-> =20
->  		for (i =3D 1000;
-> -		     (read(mapped_status) & (1 << clk->enable_bit)) && i;
-> +		     (sh_clk_read_status(clk) & (1 << clk->enable_bit)) && i;
->  		     i--)
->  			cpu_relax();
->  		if (!i) {
+Replace local_flush_tlb_all() with r4k_tlb_uniquify() which probes each
+TLB ENTRIHI unique value for collisions before it's written, and in case
+of collision try a different ASID.
 
-Those are quite a number of changes that I would like to test on real hardw=
-are
-first before merging them into the kernel.
+Cc: stable@kernel.org
+Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+---
+Changes in v2:
+- Cycle ASID instead of ENTRYHI index in case of collison.
+- Avoid int over flow UB (Maciej)
+- Link to v1: https://lore.kernel.org/r/20250605-tlb-fix-v1-1-4af496f17b2f@flygoat.com
+---
+ arch/mips/mm/tlb-r4k.c | 56 +++++++++++++++++++++++++++++++++++++++++++++++++-
+ 1 file changed, 55 insertions(+), 1 deletion(-)
 
-@Geert: Could you test it on your SH-7751 LANDISK board as well?
+diff --git a/arch/mips/mm/tlb-r4k.c b/arch/mips/mm/tlb-r4k.c
+index 76f3b9c0a9f0ce60c42e4a9ea8025e1283678bd1..347126dc010dd59904820d9d9e34cdeeb011832f 100644
+--- a/arch/mips/mm/tlb-r4k.c
++++ b/arch/mips/mm/tlb-r4k.c
+@@ -508,6 +508,60 @@ static int __init set_ntlb(char *str)
+ 
+ __setup("ntlb=", set_ntlb);
+ 
++/* Initialise all TLB entries with unique values */
++static void r4k_tlb_uniquify(void)
++{
++	int entry = num_wired_entries();
++
++	htw_stop();
++	write_c0_entrylo0(0);
++	write_c0_entrylo1(0);
++
++	while (entry < current_cpu_data.tlbsize) {
++		unsigned long asid_mask = cpu_asid_mask(&current_cpu_data);
++		unsigned long asid = 0;
++		int idx;
++
++		/* Skip wired MMID to make ginvt_mmid work */
++		if (cpu_has_mmid)
++			asid = MMID_KERNEL_WIRED + 1;
++
++		/* Check for match before using UNIQUE_ENTRYHI */
++		do {
++			if (cpu_has_mmid) {
++				write_c0_memorymapid(asid);
++				write_c0_entryhi(UNIQUE_ENTRYHI(entry));
++			} else {
++				write_c0_entryhi(UNIQUE_ENTRYHI(entry) | asid);
++			}
++			mtc0_tlbw_hazard();
++			tlb_probe();
++			tlb_probe_hazard();
++			idx = read_c0_index();
++			/* No match or match is on current entry */
++			if (idx < 0 || idx == entry)
++				break;
++			/*
++			 * If we hit a match, we need to try again with
++			 * a different ASID.
++			 */
++			asid++;
++		} while (asid < asid_mask);
++
++		if (idx >= 0 && idx != entry)
++			panic("Unable to uniquify TLB entry %d", idx);
++
++		write_c0_index(entry);
++		mtc0_tlbw_hazard();
++		tlb_write_indexed();
++		entry++;
++	}
++
++	tlbw_use_hazard();
++	htw_start();
++	flush_micro_tlb();
++}
++
+ /*
+  * Configure TLB (for init or after a CPU has been powered off).
+  */
+@@ -547,7 +601,7 @@ static void r4k_tlb_configure(void)
+ 	temp_tlb_entry = current_cpu_data.tlbsize - 1;
+ 
+ 	/* From this point on the ARC firmware is dead.	 */
+-	local_flush_tlb_all();
++	r4k_tlb_uniquify();
+ 
+ 	/* Did I tell you that ARC SUCKS?  */
+ }
 
-Thanks,
-Adrian
+---
+base-commit: 911483b25612c8bc32a706ba940738cc43299496
+change-id: 20250605-tlb-fix-578bac7be546
 
---=20
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+Best regards,
+-- 
+Jiaxun Yang <jiaxun.yang@flygoat.com>
+
 
