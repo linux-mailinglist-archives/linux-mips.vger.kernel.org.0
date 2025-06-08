@@ -1,88 +1,91 @@
-Return-Path: <linux-mips+bounces-9180-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9181-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55762AD1077
-	for <lists+linux-mips@lfdr.de>; Sun,  8 Jun 2025 01:47:15 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9325AD10BD
+	for <lists+linux-mips@lfdr.de>; Sun,  8 Jun 2025 03:51:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 102F016A9EA
-	for <lists+linux-mips@lfdr.de>; Sat,  7 Jun 2025 23:47:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB6DF3A40BF
+	for <lists+linux-mips@lfdr.de>; Sun,  8 Jun 2025 01:51:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 965ED25CC6F;
-	Sat,  7 Jun 2025 23:47:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1787743159;
+	Sun,  8 Jun 2025 01:51:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="jsPgU/cc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NpjtjXs6"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BFF8219A95;
-	Sat,  7 Jun 2025 23:47:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0CEC171D2;
+	Sun,  8 Jun 2025 01:51:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749340029; cv=none; b=K5kGQFJ9238INzLdGDjLe9LuPx32GggC7b1+1/lfDapEikW86Qya6cQHmCtfWzkQoyAIsVS7x1B5dKhne4Uc616fBjf+ECk1FraGHBNGyay5oFB5ZQrIcykO3s4sOAOMtrkwUNMF+ig2hRPKlZRkuOI507Tc1G92AcqubIl/ms8=
+	t=1749347508; cv=none; b=ooEEp8GnC7Lq6roxZWDz7kpQa7j7Z3juSdRv5jjMHdpgAPYjjRdn6d7AYRYO6hWtRQ5rmpL7BGW2mXYWz8xEGrzUaAL7zCiAt/3Ji0S6DSDUTvdbFbVIXHFjcJ8TKsEWtDmvK/MvbrqPf2xT9iSDk+Pz82j3MV8SweyV672Fmvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749340029; c=relaxed/simple;
-	bh=LLYBi6lLM9yrrhCbb5rR61lngl1sYzAS5pqk0JZQ3I0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=sUpe3PYSdQhbTmbYCTae+0v7gRWNjAYmt46+BbQwm3yYJkRYGF4gqBcnQU4s4hAmaSMazds1vLrNItY4G/73iL1m1nBuRND8EsH5Gnag+mwK+VVgu99pkWfp3v6rFpExXZLRzXYvo0+nx+RmdxGixK5ZYbEXp7IOMi88kzF5yGA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b=jsPgU/cc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9FE6DC4CEE4;
-	Sat,  7 Jun 2025 23:47:07 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-	dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="jsPgU/cc"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-	t=1749340025;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9BLd3zVhm1uyr2zWfOpGUqAHdfaRE3TGpoHRN6aaMSk=;
-	b=jsPgU/ccygnXS60vh3VCJ8IeDnGtsomv+dciNUeunJ0SO8LqmCcTqPcJBkB2QFrLru1ll1
-	E9OF1lkNEqMRShrw2za9BAoJsJQKmF9rvzmtd3v/rLI1EduGNSPRtry+Kyl+tncxIkS+aK
-	UrU1VhYkP4pcQtnNoKmPvrZIA/DIb6Q=
-Received: 
-	by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 669734c3 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-	Sat, 7 Jun 2025 23:47:04 +0000 (UTC)
-Date: Sat, 7 Jun 2025 17:47:02 -0600
-From: "Jason A. Donenfeld" <Jason@zx2c4.com>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	sparclinux@vger.kernel.org, x86@kernel.org,
-	linux-arch@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v2 00/12] lib/crc: improve how arch-optimized code is
- integrated
-Message-ID: <aETPdvg8qXv18MDu@zx2c4.com>
-References: <20250607200454.73587-1-ebiggers@kernel.org>
+	s=arc-20240116; t=1749347508; c=relaxed/simple;
+	bh=3Gq9peW74fSvYyE65Zgyx4l3vTl9c6C+4T79M0ERd1o=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=habCDch5mxufV3NaMfSZyCW8d4ZpGrhWbFyY9WN3qFkbNQJ7QuoEzXM9tj+J6veKb9zozUjLoXkae2yli7KKqSG3SmT3ktHqBxQ8EvLK+pvwdtNcQTXNB5UB/BrXuhKnwIiTuhG4gBGoeXqtFV88zAKxXfkuzWnjM2L2E9N+J3c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NpjtjXs6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3700FC4CEE4;
+	Sun,  8 Jun 2025 01:51:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749347506;
+	bh=3Gq9peW74fSvYyE65Zgyx4l3vTl9c6C+4T79M0ERd1o=;
+	h=From:To:Cc:Subject:Date:From;
+	b=NpjtjXs6nPp2AHLP3AVq+cDgR5KhAUiyIxt0FJP2ho61shSEzk2vmHMrLeB7UzRYG
+	 pxTC/uMESNAwjBvH6YbZDkciJAW24s82QCwXkGyISg8p5uW2rcbWjeBHUCckULt5eM
+	 WmxYWT1EmeKBbQo8k0RQ4zXbThdadlSsMV40KVRbOUD+GVCClCztWzGTqfw6WGaALU
+	 5+1axVrpmmYueUdKINjFWK86WVMcKnNRLBhVWp6A4q6xJ1UjEHnt6g/Itc00UM/TyM
+	 2Qs03H6uXUaWMk+z4KzBXZLIHF9JNGQhZ1FV+/WRxLflb+utLOQ4RgxamlzoIl50L1
+	 Cm6D2wvKRGqyA==
+From: Masahiro Yamada <masahiroy@kernel.org>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-mips@vger.kernel.org
+Cc: Masahiro Yamada <masahiroy@kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] mips: boot: use 'targets' instead of extra-y in Makefile
+Date: Sun,  8 Jun 2025 10:51:34 +0900
+Message-ID: <20250608015136.2960777-1-masahiroy@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250607200454.73587-1-ebiggers@kernel.org>
+Content-Transfer-Encoding: 8bit
 
-On Sat, Jun 07, 2025 at 01:04:42PM -0700, Eric Biggers wrote:
-> Having arch-specific code outside arch/ was somewhat controversial when
-> Zinc proposed it back in 2018.  But I don't think the concerns are
-> warranted.  It's better from a technical perspective, as it enables the
-> improvements mentioned above.  This model is already successfully used
-> in other places in the kernel such as lib/raid6/.  The community of each
-> architecture still remains free to work on the code, even if it's not in
-> arch/.  At the time there was also a desire to put the library code in
-> the same files as the old-school crypto API, but that was a mistake; now
-> that the library is separate, that's no longer a constraint either.
+vmlinux.bin.* files are built as prerequisites of other objects.
+There is no need to use extra-y, which is planned for deprecation.
 
-I can't express how happy I am to see this revived. It's clearly the
-right way forward and makes it a lot simpler for us to dispatch to
-various arch implementations and also is organizationally simpler.
+Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+---
 
-Jason
+ arch/mips/boot/Makefile | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/arch/mips/boot/Makefile b/arch/mips/boot/Makefile
+index 196c44fa72d9..8473c4671702 100644
+--- a/arch/mips/boot/Makefile
++++ b/arch/mips/boot/Makefile
+@@ -54,10 +54,10 @@ UIMAGE_ENTRYADDR = $(VMLINUX_ENTRY_ADDRESS)
+ # Compressed vmlinux images
+ #
+ 
+-extra-y += vmlinux.bin.bz2
+-extra-y += vmlinux.bin.gz
+-extra-y += vmlinux.bin.lzma
+-extra-y += vmlinux.bin.lzo
++targets += vmlinux.bin.bz2
++targets += vmlinux.bin.gz
++targets += vmlinux.bin.lzma
++targets += vmlinux.bin.lzo
+ 
+ $(obj)/vmlinux.bin.bz2: $(obj)/vmlinux.bin FORCE
+ 	$(call if_changed,bzip2)
+-- 
+2.43.0
+
 
