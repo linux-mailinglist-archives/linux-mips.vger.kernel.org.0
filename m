@@ -1,102 +1,129 @@
-Return-Path: <linux-mips+bounces-9187-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9188-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9151AD164E
-	for <lists+linux-mips@lfdr.de>; Mon,  9 Jun 2025 02:37:58 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B4F3AD1740
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Jun 2025 05:09:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 864051681C1
-	for <lists+linux-mips@lfdr.de>; Mon,  9 Jun 2025 00:37:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 50733168FF8
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Jun 2025 03:09:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 234812F37;
-	Mon,  9 Jun 2025 00:37:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DFC7146A60;
+	Mon,  9 Jun 2025 03:08:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="E+Jep937"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O8kGqSZ1"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE2B11362;
-	Mon,  9 Jun 2025 00:37:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3D911442E8;
+	Mon,  9 Jun 2025 03:08:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749429476; cv=none; b=FCjmEw0ec9D9dv1mzjxHPNFwvQBSdt3P9lof+B1V9ERXv78GfaPXBmF8/sOkrXMFnIGAtXuvWhxo6Op/KACLJCAR0ocYS+Lltq/RtmdR5jPUPvP+RBNTgWdq8ysms3j4a7qK8k/z6mnev9AaNyEdy70xHtTwhbHhyBfPvQalZ1Y=
+	t=1749438537; cv=none; b=ali4PIxTqu2V91qGFBozqg7GcQGD8RNvUEz64YVqIX2bU7fLk2oRrtpDdzPSB1WZH6lkTQ0eXyVZDgyYpe/JHxQnCIomOfr7Vt7isXKU+mKe5e4mow2VlU0axD8CyGVGfnkTAfHq8P9c455zmKNM/cYLnV1tMmH4S4Qj6jVtv5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749429476; c=relaxed/simple;
-	bh=w8eQaWwxvXeuDN3Oqzs8kOQiuSO0ovhEAVB4m1OgVWk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tYn4xO5OOCZJxn0WqOphLq8UETYU/rdbyoQcZQiNbjoiP3zj/3iMCEBNDtebzAidkNTTEwwUUKYUxQshg0M5GCVxZDnNHV7M04FjvL5grH1jE25eom4p/bMP+PZfOPda0952+LE+ieHtMe13N444x/Kqo2Yg/d514ObPL4jwGwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=E+Jep937; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74FA4C4AF09;
-	Mon,  9 Jun 2025 00:37:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749429475;
-	bh=w8eQaWwxvXeuDN3Oqzs8kOQiuSO0ovhEAVB4m1OgVWk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=E+Jep937QZ2dTZ8UoloM4f/Ug8z2Xle7Wg6tGMV7Ihjnsx2mXcbkD6428GjCRm5dB
-	 xZBW/YE5oshBNyvHd+BADxWkE53M272h8mnoVzBk+6q+gMWLZGyJV2yXBJOX9IrS4s
-	 xBNnGqZnHZ2xqxra0mTK3g/2A8OgCZz9kSZig7XgsJrF3rmlclvY2jEJOhtXUe2JUP
-	 KxxspvARCpETfS264r695uxAbiBVfM1WLlxznnfSMWrXR9c2p11g14IdjpfLF+HaIY
-	 jM99qgQZ0X0cQKxqSxqhWDYE5Ahw5yL9JXdnxDGIyZ/EO3uUyW4TSuPLx0ZPdp4POp
-	 y1pOrIrNkPzSA==
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-54998f865b8so3612850e87.3;
-        Sun, 08 Jun 2025 17:37:55 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCWvNhhh6oeNTVUhFU7JXqntFMxuZ8w+/LcpBRctSJb3eyo3CJObhienS/AG4wxRStHgGIaRXRHnFmBf@vger.kernel.org
-X-Gm-Message-State: AOJu0YyDTnKcuwR0crCPhH9M/9Sb4ZwsrOoUlBnnGApLzuXP7/356m8U
-	8ATSuf+NGwyxc5yrLBHPt+XgOcoFKOj8TeTbwKTaDFlbk8/ujTPXqpUBiaUO1k2YwU6z3mUAsMc
-	i5M+jVmFufq3B3QvVV3dy177kHgL0wxg=
-X-Google-Smtp-Source: AGHT+IGdbKWYUlmG/pv6JTxAlk5y0fDBnTopILfOcgmgJtVEQ1cjl1Xj/5EojETciRbGqU7ZOkL160Yn6WWUpb3o3yc=
-X-Received: by 2002:a05:6512:1290:b0:553:37e7:867a with SMTP id
- 2adb3069b0e04-55366c35759mr2660670e87.49.1749429474191; Sun, 08 Jun 2025
- 17:37:54 -0700 (PDT)
+	s=arc-20240116; t=1749438537; c=relaxed/simple;
+	bh=G1ugksUD70dw7VwPdWruYsa1CRY8GI4Ngi4CaKI0RwQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tRZe07qzj2mcmq/qrBQV4LSXvl2DA7Rbey1W7bnKE8iPPnDLRDquznmE+6nAUFc0TNGPw24OWYC7xAxPM5ifWLWueB50T6ISVJTsBCIl6378kveAK3D5eAeFr3nWmu8YFzbWLfHH6MTz8guSFyqiPgTW61t/o/wfCuguO6n9uzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O8kGqSZ1; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-23228b9d684so39251975ad.1;
+        Sun, 08 Jun 2025 20:08:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1749438535; x=1750043335; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TiQ/BDrbHCoVEau1+y2DDgfhGTvPVaPbBNKA6TyEfTs=;
+        b=O8kGqSZ1wBzBfikAgJprUWBwmNoqT9VxaWLPOoeihJu78cStTYJgz5mXP7HrJpcFOr
+         /4HDNENa6bWEId3TTRAYRNkX6hOGT1J73Mrw4pDGrM/v97AVEbE0hNvOCa2afgjowjka
+         UP1XkudoWsZGJSzZ9LVevy4uyqgAaXAp8ZAROI1TU8ozS6mV2AFFjY1Mjhqhwtu8wwyR
+         NKYl6TRS5pK39IW5yp7clR47B+TMJtgHDgDbOYPDSCNzJX1FXsGtEAF6ttncTkP28LZs
+         6nJzhzal7DSljQBNPLswKF6fKO18SdpdIbmqRhiER8MOHeqkM1x9DjrtlUrMTMh/ZjNv
+         d1Iw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749438535; x=1750043335;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TiQ/BDrbHCoVEau1+y2DDgfhGTvPVaPbBNKA6TyEfTs=;
+        b=p5xohNrPo4veaRsHxiM9a6QiBr0OmeKcrR8E5k3pu0xMqU/ISlLIe/dEST+MSpCd9w
+         eW7VOZaW0w6kzpwGPgLiUE32+fx9JXLsWWhElQ1on7iT/K5z68OJhvKqo/rw3Ql0pCkM
+         ZzhmQyNC5pyqbnkF6yDXCH1C7uMUk+H6YrAQMf73fVPS/08cRP+wDFRdLgLhvEqkeoQy
+         jCyOc8NZwEc+6neVZ85Io7nlcJLVLeTmFgn5yhto3xF0vA6zaNs1KeH5fpZlWHTagJ3R
+         shjUj/Ejab4gRJKLPzhOA1AIt7dYo6vHIT45a8R3weTjGpW01T6nyNsamm+kIsHQP0dB
+         SadA==
+X-Forwarded-Encrypted: i=1; AJvYcCU3mZU3ydp0+1UEpijtkVOlNjb4Z9ojJ5yThkVjTjB9C64ryO23ORz2NY0rJRjeC3Z1G+dHCK1aMU725LaI@vger.kernel.org, AJvYcCUXD0xgZuOyAJRoN3JWH0VUKbLebedv77Chg6iZpLLUh5bEKj2qBYMcIYUs5Oy5UhXDm5yxrXxPsRNb@vger.kernel.org, AJvYcCXqWWmOcYzCQXrXp3h2d8VpHO/tY3slKI1xYesIlKih12hnr4qGH4Nm21PKJdxJBHouaEmtgWubhKpDbw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YytrG3+N08VlwZXSUN/Ap1CMkOmB4XefDI6CM/+2Ut7iikY3M+u
+	lit0q93ASu9VQwakyT4e2Zd6qZhua7QSpdvZ0cDRH5Udrdk4P5qPF4Oy5ZyGbg==
+X-Gm-Gg: ASbGncvdzeMWm/m3JAov63VUce5xBBuqq0fP+AonlZ0Z9asyl+xSE2Ec5vHcN8mCyGb
+	Vt7+jzb3UnseYyOrEbSmrHsGj03wf+7vmPJoj5kHVc/tqKJWxPjZF6Sj2mKw5pMBwBSDLJjvaSl
+	QmjUEkq2EO85rPYAbGAVcswo0CmtbX4K5KXZQiVYBmiQoWPi2TViSDYy3L2eb/xtkIukpbVbPcL
+	2MLBrHie+rDDQNecH5ipXKitSUjOERfdB1SF8bED7Jr7Z9ViFNT8Tc/xjL5jtulGEO+VCasUaBj
+	zLhOXXvC9KiWJGtlFtCOd4EYVZ1o2TcAR0LOLx1Yb+eyswYz
+X-Google-Smtp-Source: AGHT+IGhxdx//dqJ222EDb/aL1JQB44t7nuKf8VuZeMiQzxZdIuIRbRb0DfNlDHtumArzNYMpYWwAg==
+X-Received: by 2002:a17:903:22c7:b0:234:bfcb:5c1d with SMTP id d9443c01a7336-23601d71207mr171632405ad.40.1749438534362;
+        Sun, 08 Jun 2025 20:08:54 -0700 (PDT)
+Received: from ryzen.lan ([2601:644:8200:dab8::a86])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-236032fccd6sm45310125ad.134.2025.06.08.20.08.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 08 Jun 2025 20:08:53 -0700 (PDT)
+From: Rosen Penev <rosenp@gmail.com>
+To: linux-wireless@vger.kernel.org
+Cc: =?UTF-8?q?Toke=20H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+	nbd@nbd.name,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS),
+	linux-kernel@vger.kernel.org (open list),
+	linux-mips@vger.kernel.org (open list:MIPS)
+Subject: [PATCHv5 0/5] wifi: ath9k: add ahb OF support
+Date: Sun,  8 Jun 2025 20:08:46 -0700
+Message-ID: <20250609030851.17739-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250608142010.161632-1-chenhuacai@loongson.cn>
-In-Reply-To: <20250608142010.161632-1-chenhuacai@loongson.cn>
-From: Masahiro Yamada <masahiroy@kernel.org>
-Date: Mon, 9 Jun 2025 09:37:18 +0900
-X-Gmail-Original-Message-ID: <CAK7LNATS0AQp+07q6bDtUcxoyzW2z1M4RqGFcPeFxWmT5wA6qQ@mail.gmail.com>
-X-Gm-Features: AX0GCFt74_WfQ5997Np-icEc1AhlD46D0i8NHiw3ysMd7CEqH30P3KrIPY6yDL8
-Message-ID: <CAK7LNATS0AQp+07q6bDtUcxoyzW2z1M4RqGFcPeFxWmT5wA6qQ@mail.gmail.com>
-Subject: Re: [PATCH] MIPS/Loongson: Fix build warnings about export.h
-To: Huacai Chen <chenhuacai@loongson.cn>
-Cc: linux-kbuild@vger.kernel.org, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org, 
-	Jiaxun Yang <jiaxun.yang@flygoat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Sun, Jun 8, 2025 at 11:20=E2=80=AFPM Huacai Chen <chenhuacai@loongson.cn=
-> wrote:
->
-> After commit a934a57a42f64a4 ("scripts/misc-check: check missing #include
-> <linux/export.h> when W=3D1") and 7d95680d64ac8e836c ("scripts/misc-check=
-:
-> check unnecessary #include <linux/export.h> when W=3D1"), we get some bui=
-ld
-> warnings with W=3D1:
->
-> arch/mips/loongson64/setup.c: warning: EXPORT_SYMBOL() is not used, but #=
-include <linux/export.h> is present
->
-> So fix these build warnings for MIPS/Loongson.
->
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+First two commits are small cleanups to make the changes of the third
+simpler. The fourth actually adds dts definitions to use ahb.
 
+v2: Add documentation, use kernel_ulong_t, and of_device_get_match_data
+v3: Use qcom prefix and wifi suffix as in other ath drivers.
+v4: fix up dts example in Documentation
+v5: move back to using qca prefix. It makes no sense to diverge between
+all the other drivers for MIPS based qualcomm devices. qcom as a prefix
+is used for Quallcomm's ARM(64) stuff.
 
-Thank you for your contribution.
+Rosen Penev (5):
+  wifi: ath9k: ahb: reorder declarations
+  wifi: ath9k: ahb: reorder includes
+  wifi: ath9k: ahb: replace id_table with of
+  dt-bindings: net: wireless: ath9k: add OF bindings
+  mips: dts: qca: add wmac support
 
-Reviewed-by: Masahiro Yamada <masahiroy@kernel.org>
+ .../bindings/net/wireless/qca,ath9k.yaml      | 23 ++++++-
+ arch/mips/boot/dts/qca/ar9132.dtsi            |  9 +++
+ .../boot/dts/qca/ar9132_tl_wr1043nd_v1.dts    |  4 ++
+ arch/mips/boot/dts/qca/ar9331.dtsi            |  9 +++
+ arch/mips/boot/dts/qca/ar9331_dpt_module.dts  |  4 ++
+ .../mips/boot/dts/qca/ar9331_dragino_ms14.dts |  4 ++
+ arch/mips/boot/dts/qca/ar9331_omega.dts       |  4 ++
+ .../qca/ar9331_openembed_som9331_board.dts    |  4 ++
+ arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts   |  4 ++
+ drivers/net/wireless/ath/ath9k/ahb.c          | 60 +++++++------------
+ 10 files changed, 84 insertions(+), 41 deletions(-)
 
+-- 
+2.49.0
 
-
---=20
-Best Regards
-Masahiro Yamada
 
