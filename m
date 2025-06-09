@@ -1,155 +1,160 @@
-Return-Path: <linux-mips+bounces-9195-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9196-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24F9AAD19AA
-	for <lists+linux-mips@lfdr.de>; Mon,  9 Jun 2025 10:15:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 82C44AD1E6D
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Jun 2025 15:04:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCC21188B4A5
-	for <lists+linux-mips@lfdr.de>; Mon,  9 Jun 2025 08:16:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4035B188D408
+	for <lists+linux-mips@lfdr.de>; Mon,  9 Jun 2025 13:03:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 642671C5496;
-	Mon,  9 Jun 2025 08:15:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 436CD2580FE;
+	Mon,  9 Jun 2025 13:02:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hHlmWMB5"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="YHFjckwr"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4166A92E;
-	Mon,  9 Jun 2025 08:15:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E74D02571A2
+	for <linux-mips@vger.kernel.org>; Mon,  9 Jun 2025 13:02:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749456940; cv=none; b=p9celhQr/liaZglIEavVwDbjDCFcXM4z6D8CdtkXj2lA95QqyP8airjEuZ7mdB4mYc9MFecYCo9Vv4PmDh2GYFOkM561cpbuoc5WSZbdbs/lnpCZt1J7COLiSqzPVz5ErUVdMnANnZ6ShwQXfecUD9NTUgGXCeF3+JF+HhQa2F4=
+	t=1749474152; cv=none; b=t8pKJ+voriTLejtwRp67zRQn5frfdLUDN/iXG1NLgVX7tEAD7eGgoCK7C+0EaA24zcnW0IcFzh2v1XlI7sbY0Mu4JW/zfLmE2yiYg953aSn3BdDmKdSgdexfnXFmxFR226Kn/QskVj3I+LxAUg6EStxH37ihDxfUCsvalYEALaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749456940; c=relaxed/simple;
-	bh=6biSLqDt8gO7ruJmOh16RBlP1yDZqTM/WuIwSMjWngY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=icLlWp7cOsH+UWSdINsg5mjHMqCUxjrUx+uY3DdqXEMqgv+chPiacG1E02xx1E9R0ANM5kWwtTE7ZT9I9eVvAfnSLAG77FTpG1+lvC5iZPi8GMUwBPX75gqb9Z55yglRbehhteH4uqe4FqBK5ZAoUaQVNovesIgB390wFV/Fxcw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hHlmWMB5; arc=none smtp.client-ip=209.85.219.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6fad4e6d949so22011896d6.0;
-        Mon, 09 Jun 2025 01:15:38 -0700 (PDT)
+	s=arc-20240116; t=1749474152; c=relaxed/simple;
+	bh=ExaMzXZlSuKQlxahihw/nEqvNxngY52zmmzw4dDOOOY=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=TTtCT8Kpuh+wprEMVJLQbsph2p5VXKUMIsNYkOsx84fQLyWD02vGTCWeyhqp1hGBgjStqgoxPSxOmPGX+wOIifUrTLVPpo6aQnRlWAomoeUhpOww83k1CtaIc7d+VM6zLAWNEQaL6dSxzAkkURLzK5Qc1Tfl52Y1g1Ks3kRqQQI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=YHFjckwr; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-452f9735424so8971815e9.3
+        for <linux-mips@vger.kernel.org>; Mon, 09 Jun 2025 06:02:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1749456937; x=1750061737; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1749474147; x=1750078947; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:user-agent
+         :references:in-reply-to:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=avUZtz3QyLzrtWeLJ2NgcAc7qvPmPgbfgTpeZiYZBXg=;
-        b=hHlmWMB586pA6FEK49ecKFQuFv6PzQwW0yW8LiKY2HMR71k21x3x8rYhTf41XKHRgd
-         QX8oZQYCt+EozPJt2XAwWWxQ+kNnWI8j4pOflgu4Ob9DnGGQSLLPLpwaWJ7rCu9l37Fb
-         KeUlxKlxzyAu+i4hMt1/2s6NdSKSx9S2bDfMC7bi7ga14m1+AXf077JhTRSEihtdSveY
-         q0xMMQXHOiqs7N/3xy8WMpIHqqwgk4ftN9A2FpXqD3mFd7L8y4+C5P/P5o8OPOtPAumv
-         /wRP768R/EH7hX/XQCx3c8c711kbD0XUDFDGaa4gRmrQ1obcEyIlJXoQuVdKUUbcjf1I
-         bUkA==
+        bh=+Bh+Zp7cUZNAenLGdWusNvBpvA8IMsAYVSOUkU7ta8Y=;
+        b=YHFjckwrloVFpaai0XMvPHcSDBbd3+Klh/KkyQhzO38FvylsbztPr3aQd59bcVrNuZ
+         SCILXznlLXOqXV6rKvYihLrWO5vJWcZ5jJkmgIUgCcVn+oW9qA+UPiGhtFS8c8ExCxBF
+         sQ6dPdjVsZsaOaZD5oykEBSugYfCwRW9ylL9UxLFdUitlCrnAwQh4z2+YeIU5GOIqX8R
+         uMcKp+dBeoeDXINMTd+Xz0Cj6N20NFv0E85wlA6rtzihaURUdfLmX3GY0pPwxw+S0sLq
+         FXSH2+u3RRDY1sDNLgMaC3l0VuPMPMfTmLKrELdsJOW+LfVRSBmzfaADHgzYFAM9c2Fr
+         TL0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749456937; x=1750061737;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=avUZtz3QyLzrtWeLJ2NgcAc7qvPmPgbfgTpeZiYZBXg=;
-        b=ltV7dscYfE7jLb24k+w9Efd8bm/ifqYrByOS0YDt2kuvOl1C6gXlZ0J2xlHvwEQyjt
-         IFtks+3M0nz8EUiIIhy34WhEw83tE/mK6i5rF3DFgao2dmH7w158aJDDcT1Hf+7sVuhC
-         Rtd1EY8ZDvs/UYVpyCigjFawK9i9aJfpgYeytVyx0VznWhmOiPkvEjRHO4e/5qmeEwS2
-         /M4rJRPW9JKYnJo5JKf/0dw8VfjszZBzGBWFbPyrBQvmGp2xNuHPxWXYma+nmnSYIMc+
-         1ibV361EEvDfnN2C/GbfoNpzVwDpiFq9vcKrY9uxr84uf2SGfw8fUALYwDO8DFjVKRnZ
-         Pk8A==
-X-Forwarded-Encrypted: i=1; AJvYcCUEgzQMxH4uOhPIUAil7YQBr3+meygxfCDuqPVMxPn+HYbQOmnnGAXvRfIWQsbOwD9tm97FDszLxFjIHw==@vger.kernel.org, AJvYcCULo1lUmTl6den+CD1LB8fzoGyslPz5H/YosbszilReC7y2Tm7qT9fHFFI0ItKtYbiGjHrgV+/tdCGQ@vger.kernel.org, AJvYcCWCAgB7uCKQRu7uUbUHuh6cWCntvijnXvepINYXtKGJ0UvLmRQ7hUkK1r70cJUkBkruy6kbpishY/OZ3w==@vger.kernel.org, AJvYcCWs7q19+s31WAKC74xdjW70GV0VtmSndwHVol+NV+afrDDszzeeMJvVOpCwq0ksbeGHGO8jcdgHmWmzyG04@vger.kernel.org, AJvYcCXAo6eXv5f3iFtR2GNteyGJ6beV20yITtiwzB5eDSD1cLeWmeh3SCR3PHX93LzXe6N542qLs7Mg2MUKmQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyfo8mhpV0Z9dwNHpW7+9Ox2gbfZ+BaWhpnd444pPhkwCh1ykSd
-	R39Vot3nCy3OH8Rox7EVXS0AIE7QPQuSbmuCRFf98OMedcOgo0jQFIKt0V5H+cDb8X3FzxOpG9n
-	WwGgeqTneOaMONdxTHojK3vnK4E5cnNrX/Q==
-X-Gm-Gg: ASbGnctUDNg2ikWerb31Cwn6LxNeCKNEsqy/tanU0YvHce7WK/sKKjVS9Om5VR7pc7l
-	DsYCiRLC45/4MU+7pVHubgvlonC3vOKy0PWTaVnwwkj+4mSu6ifAstMIFyy7hvVUUpU1GL7VIjK
-	pDYOiFnOU1jaPXxk3q0KitdTFi4Rom8tvQ
-X-Google-Smtp-Source: AGHT+IH9me4CEdVFtIOCuIg1XAKf5VF3TkyjvnvcV85fkEmF6RBw78F2p/ZOsZjFija3GtR5SXP0ijToaYQxk0VMGhA=
-X-Received: by 2002:ad4:5f09:0:b0:6fa:c81a:6204 with SMTP id
- 6a1803df08f44-6fb08f50942mr228433326d6.10.1749456937558; Mon, 09 Jun 2025
- 01:15:37 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1749474147; x=1750078947;
+        h=content-transfer-encoding:mime-version:message-id:date:user-agent
+         :references:in-reply-to:subject:cc:to:from:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=+Bh+Zp7cUZNAenLGdWusNvBpvA8IMsAYVSOUkU7ta8Y=;
+        b=cRChRz6p52hzJ9dFQeuvrtBQKVRf0XHntsmh6D9TBzbNBBhLp51XYISUmDYhgZ4gkq
+         BN5dpdOF26WGv5BX3ljC0nAGx+hRE7htZRqc6tpmw0ovaB2GJ4IY6If3bC9iBUSDxl95
+         27dAs3d1BT8cQamaVRe/JCVWzU4ceavmWFbmmC3qJzeiAIFowl9gtUAk5K9gWVPjI3OF
+         QJr4pwP3Qruu62fQMOVPtfHoVj2S4wyYSGsHYdB6mhaAk8zd+9pSAv+86dERwjD7WJ4O
+         9wkUwRfdUzKSlJ31oCxcTUsK3WOrQPKEdO90YOfXy/RD9DmXW8MOTTvvZvQkcgbvs6P4
+         asmA==
+X-Forwarded-Encrypted: i=1; AJvYcCXbpFi4VKE/rS7VHzZahBflaHo6iDQymAt+bN8S+FfwIDm/S+0UVvLJyYRoBXiONwWy7dXgtE4NgDsX@vger.kernel.org
+X-Gm-Message-State: AOJu0YxDPYYb2+j6RL77OO+FTsN9V1GUtvV52LTWrRIZlwFvcPFn49JK
+	KKWaZwFiUsd9W+EsfMu7ui08AujFforaNZBoPFtlZjUjr6QHKSWnNCRVLldnDv4pLPg=
+X-Gm-Gg: ASbGnctVoFWUkemGDt1aP8mQ1L3NRy/rlB9kf2gEHIRRzKYPuHVHVYoO7xzeZfKKgOw
+	VgER1DmxFP+1C4yM8yqu0qvIS0xMHk+RKL4Qa46BroG5XCOYdX7lzSOdMomRuR4y1QrWPi42Ozj
+	SoWX00HwsyWub42mw3nnLLaqzFOqzd2oChOI2KTa42mnPtn46Qs3EnI365Thobv1xU+/UMX8eKa
+	SwdGMHB6u4Jd73CdK2TrG1l1KLmq0iL4rYmO7/dcROoBhmp4pC1QYReNKz0TjEfMpPiUV55JViv
+	JQtxMJlhUZtIeGWnRFxAWMZkPj5d6AfOg337xrA8KsVEQKITmjk=
+X-Google-Smtp-Source: AGHT+IEC224y8+mr5qcnD9k9Q2VLvv7fn9ojcXNf/BK82QyxQgrEFMVWAZeFnV10+zDndt5WfXGhRg==
+X-Received: by 2002:a05:600c:34ca:b0:453:1058:f8c1 with SMTP id 5b1f17b1804b1-4531058ffa6mr39477275e9.3.1749474147101;
+        Mon, 09 Jun 2025 06:02:27 -0700 (PDT)
+Received: from localhost ([2a01:e0a:3c5:5fb1:1008:ff30:c454:e59e])
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-452137290b9sm110888675e9.34.2025.06.09.06.02.25
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 09 Jun 2025 06:02:26 -0700 (PDT)
+From: Jerome Brunet <jbrunet@baylibre.com>
+To: Doug Anderson <dianders@chromium.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,  Dave Ertman
+ <david.m.ertman@intel.com>,  Ira Weiny <ira.weiny@intel.com>,  "Rafael J.
+ Wysocki" <rafael@kernel.org>,  Stephen Boyd <sboyd@kernel.org>,  Arnd
+ Bergmann <arnd@arndb.de>,  Danilo Krummrich <dakr@kernel.org>,  Conor
+ Dooley <conor.dooley@microchip.com>,  Daire McNamara
+ <daire.mcnamara@microchip.com>,  Philipp Zabel <p.zabel@pengutronix.de>,
+  Andrzej Hajda <andrzej.hajda@intel.com>,  Neil Armstrong
+ <neil.armstrong@linaro.org>,  Robert Foss <rfoss@kernel.org>,  Laurent
+ Pinchart <Laurent.pinchart@ideasonboard.com>,  Jonas Karlman
+ <jonas@kwiboo.se>,  Jernej Skrabec <jernej.skrabec@gmail.com>,  Maarten
+ Lankhorst <maarten.lankhorst@linux.intel.com>,  Maxime Ripard
+ <mripard@kernel.org>,  Thomas Zimmermann <tzimmermann@suse.de>,  David
+ Airlie <airlied@gmail.com>,  Simona Vetter <simona@ffwll.ch>,  Hans de
+ Goede <hdegoede@redhat.com>,  Ilpo =?utf-8?Q?J=C3=A4rvinen?=
+ <ilpo.jarvinen@linux.intel.com>,  "Bryan O'Donoghue"
+ <bryan.odonoghue@linaro.org>,  Vladimir Kondratiev
+ <vladimir.kondratiev@mobileye.com>,  Gregory CLEMENT
+ <gregory.clement@bootlin.com>,  =?utf-8?Q?Th=C3=A9o?= Lebrun
+ <theo.lebrun@bootlin.com>,
+  Michael Turquette <mturquette@baylibre.com>,  Abel Vesa
+ <abelvesa@kernel.org>,  Peng Fan <peng.fan@nxp.com>,  Shawn Guo
+ <shawnguo@kernel.org>,  Sascha Hauer <s.hauer@pengutronix.de>,
+  Pengutronix Kernel Team <kernel@pengutronix.de>,  Fabio Estevam
+ <festevam@gmail.com>,  Kevin Hilman <khilman@baylibre.com>,  Martin
+ Blumenstingl <martin.blumenstingl@googlemail.com>,
+  linux-kernel@vger.kernel.org,  linux-riscv@lists.infradead.org,
+  dri-devel@lists.freedesktop.org,  platform-driver-x86@vger.kernel.org,
+  linux-mips@vger.kernel.org,  linux-clk@vger.kernel.org,
+  imx@lists.linux.dev,  linux-arm-kernel@lists.infradead.org,
+  linux-amlogic@lists.infradead.org
+Subject: Re: [PATCH v4 3/8] drm/bridge: ti-sn65dsi86: use the auxiliary device
+In-Reply-To: <CAD=FV=Vb+Wb6wJ42jUBxVVNp9P87BiqHZgoY+Tw6W3fO==FF6g@mail.gmail.com>
+	(Doug Anderson's message of "Tue, 25 Feb 2025 08:04:57 -0800")
+References: <20250218-aux-device-create-helper-v4-0-c3d7dfdea2e6@baylibre.com>
+	<20250218-aux-device-create-helper-v4-3-c3d7dfdea2e6@baylibre.com>
+	<CAD=FV=Vb+Wb6wJ42jUBxVVNp9P87BiqHZgoY+Tw6W3fO==FF6g@mail.gmail.com>
+User-Agent: mu4e 1.12.9; emacs 30.1
+Date: Mon, 09 Jun 2025 15:02:24 +0200
+Message-ID: <1jmsahcbkv.fsf@starbuckisacylon.baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250607200454.73587-1-ebiggers@kernel.org>
-In-Reply-To: <20250607200454.73587-1-ebiggers@kernel.org>
-From: Julian Calaby <julian.calaby@gmail.com>
-Date: Mon, 9 Jun 2025 18:15:24 +1000
-X-Gm-Features: AX0GCFtpUUxU8yEaZey6YSh4XuBhQlOITIBZOiB21tfxDGQbnIThjp-0HFxjxHQ
-Message-ID: <CAGRGNgV_4X3O-qo3XFGexi9_JqJXK9Mf82=p8CQ4BoD3o-Hypw@mail.gmail.com>
-Subject: Re: [PATCH v2 00/12] lib/crc: improve how arch-optimized code is integrated
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev, 
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-	sparclinux@vger.kernel.org, x86@kernel.org, linux-arch@vger.kernel.org, 
-	Ard Biesheuvel <ardb@kernel.org>, "Jason A . Donenfeld" <Jason@zx2c4.com>, 
-	Linus Torvalds <torvalds@linux-foundation.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-Hi Eric,
+On Tue 25 Feb 2025 at 08:04, Doug Anderson <dianders@chromium.org> wrote:
 
-On Sun, Jun 8, 2025 at 6:07=E2=80=AFAM Eric Biggers <ebiggers@kernel.org> w=
-rote:
+> Hi,
 >
-> This series is also available at:
+> On Tue, Feb 18, 2025 at 11:30=E2=80=AFAM Jerome Brunet <jbrunet@baylibre.=
+com> wrote:
+>>
+>> The auxiliary device creation of this driver is simple enough to
+>> use the available auxiliary device creation helper.
+>>
+>> Use it and remove some boilerplate code.
+>>
+>> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+>> ---
+>>  drivers/gpu/drm/bridge/ti-sn65dsi86.c | 49 +++++-----------------------=
+-------
+>>  1 file changed, 7 insertions(+), 42 deletions(-)
 >
->     git fetch https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/li=
-nux.git lib-crc-arch-v2
+> Reviewed-by: Douglas Anderson <dianders@chromium.org>
 >
-> This series improves how lib/crc supports arch-optimized code.  First,
-> instead of the arch-optimized CRC code being in arch/$(SRCARCH)/lib/, it
-> will now be in lib/crc/$(SRCARCH)/.  Second, the API functions (e.g.
-> crc32c()), arch-optimized functions (e.g. crc32c_arch()), and generic
-> functions (e.g. crc32c_base()) will now be part of a single module for
-> each CRC type, allowing better inlining and dead code elimination.  The
-> second change is made possible by the first.
->
-> As an example, consider CONFIG_CRC32=3Dm on x86.  We'll now have just
-> crc32.ko instead of both crc32-x86.ko and crc32.ko.  The two modules
-> were already coupled together and always both got loaded together via
-> direct symbol dependency, so the separation provided no benefit.
->
-> Note: later I'd like to apply the same design to lib/crypto/ too, where
-> often the API functions are out-of-line so this will work even better.
-> In those cases, for each algorithm we currently have 3 modules all
-> coupled together, e.g. libsha256.ko, libsha256-generic.ko, and
-> sha256-x86.ko.  We should have just one, inline things properly, and
-> rely on the compiler's dead code elimination to decide the inclusion of
-> the generic code instead of manually setting it via kconfig.
->
-> Having arch-specific code outside arch/ was somewhat controversial when
-> Zinc proposed it back in 2018.  But I don't think the concerns are
-> warranted.  It's better from a technical perspective, as it enables the
-> improvements mentioned above.  This model is already successfully used
-> in other places in the kernel such as lib/raid6/.  The community of each
-> architecture still remains free to work on the code, even if it's not in
-> arch/.  At the time there was also a desire to put the library code in
-> the same files as the old-school crypto API, but that was a mistake; now
-> that the library is separate, that's no longer a constraint either.
+> I'll snooze this for a bunch of weeks and check back to see if this
+> can be landed in drm-misc-next every once in a while. If you notice
+> that drm-misc-next has the necessary patches before I do then feel
+> free to poke me and I'll commit it.
 
-Quick question, and apologies if this has been covered elsewhere.
+Hi Doug,
 
-Why not just use choice blocks in Kconfig to choose the compiled-in
-crc32 variant instead of this somewhat indirect scheme?
+FYI, this is safe to take with v6.16-rc1.
+Please let know in case you prefer a resend.
 
-This would keep the dependencies grouped by arch and provide a single
-place to choose whether the generic or arch-specific method is used.
-
-It would also allow for alternatives if that ever becomes a thing and
-compile testing of the arch-specific variants if that even offers any
-actual value.
-
-Thanks,
+>
+> -Doug
 
 --=20
-Julian Calaby
-
-Email: julian.calaby@gmail.com
-Profile: http://www.google.com/profiles/julian.calaby/
+Jerome
 
