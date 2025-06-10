@@ -1,131 +1,168 @@
-Return-Path: <linux-mips+bounces-9214-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9215-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62CADAD4233
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Jun 2025 20:48:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 02C60AD4243
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Jun 2025 20:52:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CD6DD7A54D8
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Jun 2025 18:47:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C8ABC7A39AB
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Jun 2025 18:51:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B9FD24A055;
-	Tue, 10 Jun 2025 18:48:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67B6524A056;
+	Tue, 10 Jun 2025 18:52:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N2rR2VQ8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vA7GkvRD"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4098D242D90;
-	Tue, 10 Jun 2025 18:48:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E1962494ED;
+	Tue, 10 Jun 2025 18:52:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749581300; cv=none; b=K1s24Dcqy0tWM3KiE6Cw9bKlpgP+zhIuuZc128Bc9gRE44Y+YU1sHwVWA6UTRiqehC/76DQhAzaEZrMD2aF9RAQAHh6HJAwD4rVCGrV5nAjU6kfpQLXiUU8J4B+IszntYw4HuXWyJ/UbDvzEeCY0qaqd9hC2XmM4xKMnsqN+4RM=
+	t=1749581541; cv=none; b=lq0ikA85+tyCceUMgZc3JJcd3plvaQPwyW1Li2bnrXbwnDDN0oVKT08wAqEki7eWSCjCkMB5pkm3G4cKrdzgqBNyJ7dpAKkr1GG0W6x5oyUhQV7f6bWMBjuzOWxQsecYqahtJWLCik0WtGGJETS9JgzwA4ekjFaXtZyakLxjByQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749581300; c=relaxed/simple;
-	bh=fW4WUlLPzTcOGUmKEUJPh5AreVUZepIXG7py1Yrxjzw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J5fdeL4tAz0i77qjv2ivPrif6dpY94K3J/TuAVDuXMIo33I2TwfarApBIzMzg1cMDflinlFfnpJITUF41rdS+hndXpjtCfrJA5sMnRti5QLgOEdIotnS1wu/ciWMPTz1oSujgnqS3wSLeqabqq2BVyc+jQdxYQ4bnC4UDU6AY40=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N2rR2VQ8; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5B537C4CEED;
-	Tue, 10 Jun 2025 18:48:19 +0000 (UTC)
+	s=arc-20240116; t=1749581541; c=relaxed/simple;
+	bh=D+SLbgwqbHoCj3oO6CuUATPS7+/ovg9hSc1l4QTqaYI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UUdSZlgNbakGE74uAxvzuEBDUmd8u+DiaE4TIX1z42j7krFDM1NSRH1CnI3pVZclSI+LflsyAQvtEbpqYPx9nEisB4I6DsQG7d01dzNsSrdDGn65scZA+qzhHSZ4DYXSiMyYAITl8UJzudglWI58lx6C3u77iH/8905OI3WU7lk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vA7GkvRD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B038CC4CEED;
+	Tue, 10 Jun 2025 18:52:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749581299;
-	bh=fW4WUlLPzTcOGUmKEUJPh5AreVUZepIXG7py1Yrxjzw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=N2rR2VQ8Oq9Cmc6H9eooraC/6WL6LWGn/CyQscdSYoBnxrd6j556t8Yr4T5TQT33Y
-	 KjAddPGzxn/a1xZsEPhM/wtGddhOqKWPsMgUketQdpHVnfaf6YaA4v61Gwh2iKlc4q
-	 XkImdNQGb8y/Dgab6Udgq58Wxqco3rHtvNJ/qMnxwy9JcEIqHgZDQeAJCWUxC+A3oV
-	 OL2cGfo+A5I1Vic3XRH5dNQh8oPwI4lU72wrwqRIvmCAJJGgAq2b9hXkSx0B0RmSDD
-	 yJDpesZCL8iTxUJpJJvTqXeUEjtLqkz9iTejv45bhW3iFAmqRSy59HNfkPBVXi01hH
-	 mICO2Doj48fpw==
-Date: Tue, 10 Jun 2025 11:47:55 -0700
-From: Eric Biggers <ebiggers@kernel.org>
-To: linux-kernel@vger.kernel.org
-Cc: linux-crypto@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
-	x86@kernel.org, linux-arch@vger.kernel.org,
-	Ard Biesheuvel <ardb@kernel.org>,
-	"Jason A . Donenfeld" <Jason@zx2c4.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v2 00/12] lib/crc: improve how arch-optimized code is
- integrated
-Message-ID: <20250610184755.GC1649@sol>
-References: <20250607200454.73587-1-ebiggers@kernel.org>
+	s=k20201202; t=1749581540;
+	bh=D+SLbgwqbHoCj3oO6CuUATPS7+/ovg9hSc1l4QTqaYI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=vA7GkvRDeNEkKZ0x5bgHWPa6SW5jph1vEukaxaD/VWMWQ9v8MOTFfBFJILKH7RQ2j
+	 4Eskbu/gmfN+5YecJCn4f/6ZRenm+JRYNbTqWwUHVMt4VWXMzy4Frl+Ddj3M1locN6
+	 myC1gTAqyBgcCWfgpz6nrOERV+fDUBk9T0SOgMq9iNJ+32XL33mxFzeAOABtmM7nMk
+	 AlKb713enWkTQZ8GU0RYGLpbOWIeZxA+Egofn5N/aUtwWZQ1b2OQ8UFZWT+NUp1usr
+	 dGZJxlzGmP8OewvVNvjXQv/BqvB6KjJA0foVAWqZPJW/2HYRxCqMFfcIPMDPA4JzRW
+	 OBD4PW275/DCA==
+Message-ID: <d237b434-1add-4686-95c0-fd167bc9e6c0@kernel.org>
+Date: Tue, 10 Jun 2025 20:52:13 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250607200454.73587-1-ebiggers@kernel.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 2/5] i2c: piix4: Depends on X86
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Mario Limonciello <superm1@kernel.org>,
+ Huacai Chen <chenhuacai@kernel.org>, Borislav Petkov <bp@alien8.de>,
+ Jean Delvare <jdelvare@suse.com>, Andi Shyti <andi.shyti@kernel.org>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Mario Limonciello <mario.limonciello@amd.com>,
+ Yazen Ghannam <yazen.ghannam@amd.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+ "H . Peter Anvin" <hpa@zytor.com>,
+ Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+ "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ "open list:I2C/SMBUS CONTROLLER DRIVERS FOR PC" <linux-i2c@vger.kernel.org>,
+ "open list:AMD PMC DRIVER" <platform-driver-x86@vger.kernel.org>,
+ Ingo Molnar <mingo@kernel.org>, linux-mips@vger.kernel.org,
+ loongarch@lists.linux.dev
+References: <20250422234830.2840784-1-superm1@kernel.org>
+ <20250422234830.2840784-3-superm1@kernel.org>
+ <CAMuHMdVPQLjOox5sMp34Z5MTwKv2WOpHa=MpZr8hWG22fQKcjw@mail.gmail.com>
+ <CAAhV-H70LXsDYMA7wz4x828rEFoJsNX0=m8F73Ge9=yfpzBpZQ@mail.gmail.com>
+ <24febda9-6360-459f-82d3-6fba9ed9be83@kernel.org>
+ <30a7f1a6-1e04-4fc5-9bea-e2b5956b28b7@kernel.org>
+ <1e06c620-8f8e-4ddf-8356-0782bccd63a2@kernel.org>
+ <CAMuHMdXtrJn0i5ehBSq85+gTZ7fmeeQ=r-8fzV4GRFvmgOY1DQ@mail.gmail.com>
+Content-Language: en-US, nl
+From: Hans de Goede <hansg@kernel.org>
+In-Reply-To: <CAMuHMdXtrJn0i5ehBSq85+gTZ7fmeeQ=r-8fzV4GRFvmgOY1DQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Sat, Jun 07, 2025 at 01:04:42PM -0700, Eric Biggers wrote:
-> This series is also available at:
-> 
->     git fetch https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git lib-crc-arch-v2
-> 
-> This series improves how lib/crc supports arch-optimized code.  First,
-> instead of the arch-optimized CRC code being in arch/$(SRCARCH)/lib/, it
-> will now be in lib/crc/$(SRCARCH)/.  Second, the API functions (e.g.
-> crc32c()), arch-optimized functions (e.g. crc32c_arch()), and generic
-> functions (e.g. crc32c_base()) will now be part of a single module for
-> each CRC type, allowing better inlining and dead code elimination.  The
-> second change is made possible by the first.
-> 
-> As an example, consider CONFIG_CRC32=m on x86.  We'll now have just
-> crc32.ko instead of both crc32-x86.ko and crc32.ko.  The two modules
-> were already coupled together and always both got loaded together via
-> direct symbol dependency, so the separation provided no benefit.
-> 
-> Note: later I'd like to apply the same design to lib/crypto/ too, where
-> often the API functions are out-of-line so this will work even better.
-> In those cases, for each algorithm we currently have 3 modules all
-> coupled together, e.g. libsha256.ko, libsha256-generic.ko, and
-> sha256-x86.ko.  We should have just one, inline things properly, and
-> rely on the compiler's dead code elimination to decide the inclusion of
-> the generic code instead of manually setting it via kconfig.
-> 
-> Having arch-specific code outside arch/ was somewhat controversial when
-> Zinc proposed it back in 2018.  But I don't think the concerns are
-> warranted.  It's better from a technical perspective, as it enables the
-> improvements mentioned above.  This model is already successfully used
-> in other places in the kernel such as lib/raid6/.  The community of each
-> architecture still remains free to work on the code, even if it's not in
-> arch/.  At the time there was also a desire to put the library code in
-> the same files as the old-school crypto API, but that was a mistake; now
-> that the library is separate, that's no longer a constraint either.
-> 
-> Changed in v2:
->    - Fixed build warning on architectures without any optimized CRC code
->    - Fixed build warning in sparc/crc32.h by removing pr_fmt
->    - Moved fallback definitions of crc32*_arch back into arch files
->    - Remove ARCH_HAS_CRC* symbols at end of series instead of beginning,
->      so that they're not removed until they're no longer being selected
->    - Slightly improved some commit messages
->    - Rebased onto other pending lib/crc changes
-> 
-> Eric Biggers (12):
->   lib/crc: move files into lib/crc/
->   lib/crc: prepare for arch-optimized code in subdirs of lib/crc/
->   lib/crc/arm: migrate arm-optimized CRC code into lib/crc/
->   lib/crc/arm64: migrate arm64-optimized CRC code into lib/crc/
->   lib/crc/loongarch: migrate loongarch-optimized CRC code into lib/crc/
->   lib/crc/mips: migrate mips-optimized CRC code into lib/crc/
->   lib/crc/powerpc: migrate powerpc-optimized CRC code into lib/crc/
->   lib/crc/riscv: migrate riscv-optimized CRC code into lib/crc/
->   lib/crc/s390: migrate s390-optimized CRC code into lib/crc/
->   lib/crc/sparc: migrate sparc-optimized CRC code into lib/crc/
->   lib/crc/x86: migrate x86-optimized CRC code into lib/crc/
->   lib/crc: remove ARCH_HAS_* kconfig symbols
+Hi Geert,
 
-Applied to https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/log/?h=crc-next
+On 10-Jun-25 18:59, Geert Uytterhoeven wrote:
+> Hi Hans,
+> 
+> On Tue, 10 Jun 2025 at 16:55, Hans de Goede <hansg@kernel.org> wrote:
+>> On 10-Jun-25 16:53, Hans de Goede wrote:
+>>> On 10-Jun-25 16:12, Mario Limonciello wrote:
+>>>> On 6/10/2025 2:24 AM, Huacai Chen wrote:
+>>>>> On Tue, Jun 10, 2025 at 5:16 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>>>>>> On Wed, 23 Apr 2025 at 01:49, Mario Limonciello <superm1@kernel.org> wrote:
+>>>>>>> From: Mario Limonciello <mario.limonciello@amd.com>
+>>>>>>>
+>>>>>>> PIIX4 and compatible controllers are only for X86. As some headers are
+>>>>>>> being moved into x86 specific headers PIIX4 won't compile on non-x86.
+>>>>>>>
+>>>>>>> Suggested-by: Ingo Molnar <mingo@kernel.org>
+>>>>>>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+>>>>>>
+>>>>>> Thanks for your patch, which is now commit 7e173eb82ae97175
+>>>>>> ("i2c: piix4: Make CONFIG_I2C_PIIX4 dependent on CONFIG_X86")
+>>>>>> in v6.16-rc1.
+>>>>>>
+>>>>>>> --- a/drivers/i2c/busses/Kconfig
+>>>>>>> +++ b/drivers/i2c/busses/Kconfig
+>>>>>>> @@ -200,7 +200,7 @@ config I2C_ISMT
+>>>>>>>
+>>>>>>>   config I2C_PIIX4
+>>>>>>>          tristate "Intel PIIX4 and compatible (ATI/AMD/Serverworks/Broadcom/SMSC)"
+>>>>>>> -       depends on PCI && HAS_IOPORT
+>>>>>>> +       depends on PCI && HAS_IOPORT && X86
+>>>>>>
+>>>>>> Are you sure this south-bridge is not used on non-x86 platforms?
+>>>>>> It is enabled in several non-x86 defconfigs:
+>>>>>>
+>>>>>>      arch/loongarch/configs/loongson3_defconfig:CONFIG_I2C_PIIX4=y
+>>>>>>      arch/mips/configs/ip27_defconfig:CONFIG_I2C_PIIX4=m
+>>>>>>      arch/mips/configs/loongson2k_defconfig:CONFIG_I2C_PIIX4=y
+>>>>>>      arch/mips/configs/loongson3_defconfig:CONFIG_I2C_PIIX4=y
+>>>>>>
+>>>>>> The loongarch and loongson entries are probably bogus, but I wouldn't
+>>>>>> be surprised if the SGI Onyx and Origin do use Intel south-bridges.
+>>>>> Loongson can use AMD SB700/SB800 south bridges, which have I2C_PIIX4.
+>>>>
+>>>> Well we could revert this patch, but it's going to be a compile failure because of 624b0d5696a89b138408d385899dd35372db324b and other patches that go on top of that.
+>>>>
+>>>> My current leaning is we make a dummy fch.h header for these archs with #defines for 0.
+>>>
+>>> Move "fch.h" to include/linux/platform/x86/ so that it is available on all arches
+>>> and if necessary ifdef out anything x86 specific in the C-code referencing it ?
+>>
+>> Correction that should be include/linux/platform_data/x86/
+> 
+> Is that a good location?
 
-- Eric
+It is a location typically used for x86 headers which we want to be
+available when not building on x86 too.
+
+> It is not x86-specific, and I see no platform_data (struct) definitions in
+> arch/x86/include/asm/amd/fch.h?
+
+If it is not x86 specific then maybe just include/linux/amd_fch.h ?
+
+Anyways I don't really give much about the exact name, the essence of
+my suggestion is that we can fix this by moving fch.h to some place
+(and maybe a new name) under include/linux so that the header is also
+available when not building for x86.
+
+Regards,
+
+Hans
+
+
+
+
+
+> 
+> Gr{oetje,eeting}s,
+> 
+>                         Geert
+> 
+
 
