@@ -1,155 +1,146 @@
-Return-Path: <linux-mips+bounces-9209-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9210-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E8A6AD3BD1
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Jun 2025 16:56:06 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65521AD3BCD
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Jun 2025 16:55:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 296EB3AC4B0
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Jun 2025 14:54:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2869A165D22
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Jun 2025 14:55:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83EE022069F;
-	Tue, 10 Jun 2025 14:54:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B49B8227EBF;
+	Tue, 10 Jun 2025 14:55:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (1024-bit key) header.d=borehabit.cfd header.i=@borehabit.cfd header.b="Mczl6qw7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sl51QyIk"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from borehabit.cfd (ip160.ip-51-81-179.us [51.81.179.160])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30534199943
-	for <linux-mips@vger.kernel.org>; Tue, 10 Jun 2025 14:54:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=51.81.179.160
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C47F20766E;
+	Tue, 10 Jun 2025 14:55:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749567280; cv=none; b=C5SDCY1Qq0MMasmE1CLyUdvAKoxZdCKtCBrAOxn0/StGyhHYE93j7Wwqnpsd8E3+oLUlIcKAObVEcbZwrjmRqk80IDBPyx5rIMiOKVjPAquEhSYikCO5tMAAHiNXnGbfto2Da/3tRIYu0OC7A8xZkYbEyVIv3HKDsAQHUexbNus=
+	t=1749567333; cv=none; b=W0BYVU+VsITKgHosIqHoO/yFa0/FiUFJEeIovKnWatFb5tJmAztrQT5GD2sNQI9qWZN5mp+QF+6H5K1t9fVYxptuME7tHEnO3hHyGZfCQMQbESyYaGSoRMRkOIYmFIJ3IFUmh/pSpbXbwFUxxnD0iAWaf2nIurhx2S4gmfS/PLs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749567280; c=relaxed/simple;
-	bh=j/qZ6nCFDOcbnwIbag40JF9HDzOLw0n9TJz9U1mz3X8=;
-	h=To:Subject:Date:From:Message-ID:MIME-Version:Content-Type; b=N2Q31pF4ygno+KQNvW2S5CNonzUwFwrk8ToxAHQ9JrExkRGFh+0Fr1LN5AJ76nSjkx1VUcGJG2cWJ4HkrpToGDFWrV48xp/mP8kmPhI5ZUV2zxq5FFsfviA2fNRgC2wkTHqw/BpO35NJFZ24Q4UuPHtitFmanPu/K4iMWsEF5o8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=borehabit.cfd; spf=pass smtp.mailfrom=borehabit.cfd; dkim=pass (1024-bit key) header.d=borehabit.cfd header.i=@borehabit.cfd header.b=Mczl6qw7; arc=none smtp.client-ip=51.81.179.160
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=borehabit.cfd
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=borehabit.cfd
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=borehabit.cfd; s=mail; h=Content-Transfer-Encoding:Content-Type:
-	MIME-Version:Message-ID:Reply-To:From:Date:Subject:To:Sender:Cc:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=CFYjPvEUim5mD5QwWelE+Axpgk7p2gwnF2M5gpb++Rg=; b=Mczl6qw7devZ2ORFFeoqrFFlPN
-	dG+SAvedXOIvi3nqZYXL4p9n0Y/Hx2a5dmb1V9JWMrpdvLJ1+LwIF+qDHv3QXZqLt6IHQxM/gpqwq
-	viHfN9xKT133wMGN0PuY4V3GrIt6PZjl9uFymIGkz+QC6JFdJPOA58lHvXIc70ezKpoc=;
-Received: from admin by borehabit.cfd with local (Exim 4.90_1)
-	(envelope-from <support@borehabit.cfd>)
-	id 1uP0N3-000Uc8-4t
-	for linux-mips@vger.kernel.org; Tue, 10 Jun 2025 21:54:37 +0700
-To: linux-mips@vger.kernel.org
-Subject: WTS Available laptops and Memory
-Date: Tue, 10 Jun 2025 14:54:37 +0000
-From: Exceptional One PC <support@borehabit.cfd>
-Reply-To: info@exceptionalonepc.com
-Message-ID: <0141c2a4d8cc80db6577d447edb83cb9@borehabit.cfd>
+	s=arc-20240116; t=1749567333; c=relaxed/simple;
+	bh=o2qFIwCJqf1Owe8LoAFDkXI9Um7ln94fm/Lg5eVi6/s=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bx9EOMPQtbJQdtFI/G7pCkMzFjEsL34G+8Uasi+UCanKVNzerCkHVeCNPxUDyrvGEUEowCJ3wEAr55CA8opNl2CThOhzNhFc1NUR5s7OopLAvX2Ez0E/AqMcO4Dtjo/c2NAg2NX1pejnM4+r7bAdpV63VrQzY/x3gMb0HMQjdqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sl51QyIk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04298C4CEED;
+	Tue, 10 Jun 2025 14:55:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749567333;
+	bh=o2qFIwCJqf1Owe8LoAFDkXI9Um7ln94fm/Lg5eVi6/s=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=Sl51QyIkRvKqYv018SvVzJZZ1IvNREg1v8VuuTS4bBTEiwLbyujGGldADwF5xT8tN
+	 SwjGfmnT5myotfQhC5x4VXrpEz/YFGqll2BfRcnKFSia9CrNGOqdZ5x8ccvlz2uxVb
+	 UXW0bTsrTa7YiQxKBaApgGFE6hwBBrIwbbnkTigUEfAxqhrdMjJNMMpw5at6o0uOmd
+	 a7ZkgXr+IpLI3P2/qTFKDhtIHzvJ3lxNLJNv986w2tgeProeOj3fue8Hw3hXi0hjzq
+	 TLBCNnQNk8lokn5M4NexbgYJAE0pKDPb2DYn3/w5kdi8Mm2p3l5sg7FTewow6ayy4X
+	 HevTJcwJF1WjQ==
+Message-ID: <1e06c620-8f8e-4ddf-8356-0782bccd63a2@kernel.org>
+Date: Tue, 10 Jun 2025 16:55:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v5 2/5] i2c: piix4: Depends on X86
+To: Mario Limonciello <superm1@kernel.org>,
+ Huacai Chen <chenhuacai@kernel.org>,
+ Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Borislav Petkov <bp@alien8.de>, Jean Delvare <jdelvare@suse.com>,
+ Andi Shyti <andi.shyti@kernel.org>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Jonathan Corbet <corbet@lwn.net>,
+ Mario Limonciello <mario.limonciello@amd.com>,
+ Yazen Ghannam <yazen.ghannam@amd.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+ "H . Peter Anvin" <hpa@zytor.com>,
+ Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+ "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ "open list:I2C/SMBUS CONTROLLER DRIVERS FOR PC" <linux-i2c@vger.kernel.org>,
+ "open list:AMD PMC DRIVER" <platform-driver-x86@vger.kernel.org>,
+ Ingo Molnar <mingo@kernel.org>, linux-mips@vger.kernel.org,
+ loongarch@lists.linux.dev
+References: <20250422234830.2840784-1-superm1@kernel.org>
+ <20250422234830.2840784-3-superm1@kernel.org>
+ <CAMuHMdVPQLjOox5sMp34Z5MTwKv2WOpHa=MpZr8hWG22fQKcjw@mail.gmail.com>
+ <CAAhV-H70LXsDYMA7wz4x828rEFoJsNX0=m8F73Ge9=yfpzBpZQ@mail.gmail.com>
+ <24febda9-6360-459f-82d3-6fba9ed9be83@kernel.org>
+ <30a7f1a6-1e04-4fc5-9bea-e2b5956b28b7@kernel.org>
+Content-Language: en-US, nl
+From: Hans de Goede <hansg@kernel.org>
+In-Reply-To: <30a7f1a6-1e04-4fc5-9bea-e2b5956b28b7@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-Hello,
+Hi,
 
-Looking for a buyer to move any of the following Items located in USA.
+On 10-Jun-25 16:53, Hans de Goede wrote:
+> Hi,
+> 
+> On 10-Jun-25 16:12, Mario Limonciello wrote:
+>> On 6/10/2025 2:24 AM, Huacai Chen wrote:
+>>> On Tue, Jun 10, 2025 at 5:16 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+>>>>
+>>>> Hi Mario,
+>>>>
+>>>> CC mips, loongarch
+>>>>
+>>>> On Wed, 23 Apr 2025 at 01:49, Mario Limonciello <superm1@kernel.org> wrote:
+>>>>> From: Mario Limonciello <mario.limonciello@amd.com>
+>>>>>
+>>>>> PIIX4 and compatible controllers are only for X86. As some headers are
+>>>>> being moved into x86 specific headers PIIX4 won't compile on non-x86.
+>>>>>
+>>>>> Suggested-by: Ingo Molnar <mingo@kernel.org>
+>>>>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+>>>>
+>>>> Thanks for your patch, which is now commit 7e173eb82ae97175
+>>>> ("i2c: piix4: Make CONFIG_I2C_PIIX4 dependent on CONFIG_X86")
+>>>> in v6.16-rc1.
+>>>>
+>>>>> --- a/drivers/i2c/busses/Kconfig
+>>>>> +++ b/drivers/i2c/busses/Kconfig
+>>>>> @@ -200,7 +200,7 @@ config I2C_ISMT
+>>>>>
+>>>>>   config I2C_PIIX4
+>>>>>          tristate "Intel PIIX4 and compatible (ATI/AMD/Serverworks/Broadcom/SMSC)"
+>>>>> -       depends on PCI && HAS_IOPORT
+>>>>> +       depends on PCI && HAS_IOPORT && X86
+>>>>
+>>>> Are you sure this south-bridge is not used on non-x86 platforms?
+>>>> It is enabled in several non-x86 defconfigs:
+>>>>
+>>>>      arch/loongarch/configs/loongson3_defconfig:CONFIG_I2C_PIIX4=y
+>>>>      arch/mips/configs/ip27_defconfig:CONFIG_I2C_PIIX4=m
+>>>>      arch/mips/configs/loongson2k_defconfig:CONFIG_I2C_PIIX4=y
+>>>>      arch/mips/configs/loongson3_defconfig:CONFIG_I2C_PIIX4=y
+>>>>
+>>>> The loongarch and loongson entries are probably bogus, but I wouldn't
+>>>> be surprised if the SGI Onyx and Origin do use Intel south-bridges.
+>>> Loongson can use AMD SB700/SB800 south bridges, which have I2C_PIIX4.
+>>
+>> Well we could revert this patch, but it's going to be a compile failure because of 624b0d5696a89b138408d385899dd35372db324b and other patches that go on top of that.
+>>
+>> My current leaning is we make a dummy fch.h header for these archs with #defines for 0.
+> 
+> Move "fch.h" to include/linux/platform/x86/ so that it is available on all arches
+> and if necessary ifdef out anything x86 specific in the C-code referencing it ?
 
+Correction that should be include/linux/platform_data/x86/
 
-Used MICRON SSD 7300 PRO 3.84TB 
-U.2 HTFDHBE3T8TDF SSD 2.5" NVMe 3480GB
-Quantity 400, price $100 EACH 
+Regards,
 
+Hans
 
- 005052112 _ 7.68TB HDD -$200 PER w/ caddies refurbished 
- Quantity 76, price $100
-
-
-
-Brand New CISCO C9300-48UXM-E
-Available 5
-$2000 EACH
-
-
-Brand New C9200L-48T-4X-E
-$1,200 EACH
-QTY4
-
-HP 1040G3 Elite Book Folio Processor :- Intel Core i5
-◻Processor :- Intel Core i5
-◻Generation :- 6th
-◻RAM :- 16GB
-◻Storage :- 256G SSD
-◻Display :- 14 inch" Touch Screen 
-QTY 340 $90 EA
-
-
-
-SK HYNIX 16GB 2RX4 PC4 - 2133P-RAO-10
-HMA42GR7AFR4N-TF TD AB 1526
-QTY560 $20 EA
-
-
-Xeon Gold 6442Y (60M Cache, 2.60 GHz)	
- PK8071305120500	 
- QTY670 700 each 
-
-
-SAMSUNG 64GB 4DRX4 PC4-2666V-LD2-12-MAO
-M386A8K40BM2-CTD60 S
-QTY 320 $42 each
-
-
-
-Brand New CISCO C9300-48UXM-E
-Available 5
-$2500 EACH
-
-
-Core i3-1315U (10M Cache, up to 4.50 GHz)	
- FJ8071505258601
-QTY50  $80 EA
-
-Intel Xeon Gold 5418Y Processors
-QTY28 $780 each
-
-
-Brand New C9200L-48T-4X-E  
-$1000 EACH
-QTY4
-
-
-Brand New Gigabyte NVIDIA GeForce RTX 5090 AORUS
-MASTER OC Graphics Card GPU 32GB GDDR7
-QTY50 $1,300
-
-
- Brand New N9K-C93108TC-FX-24 Nexus
-9300-FX w/ 24p 100M/1/10GT & 6p 40/100G
-Available 4
-$3000 each
-
-
-
-Brand New NVIDIA GeForce RTX 4090 Founders
-Edition 24GB - QTY: 56 - $700 each
-
-
-
-
-Charles Lawson
-Exceptional One PC
-3645 Central Ave, Riverside
-CA 92506, United States
-www.exceptionalonepc.com
-info@exceptionalonepc.com
-Office: (951)-556-3104
 
 
