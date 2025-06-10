@@ -1,146 +1,135 @@
-Return-Path: <linux-mips+bounces-9210-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9211-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65521AD3BCD
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Jun 2025 16:55:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6870EAD3EE8
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Jun 2025 18:29:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2869A165D22
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Jun 2025 14:55:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 135E4189CDD4
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Jun 2025 16:29:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B49B8227EBF;
-	Tue, 10 Jun 2025 14:55:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FE6B245038;
+	Tue, 10 Jun 2025 16:28:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Sl51QyIk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JJ1f2Y7N"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C47F20766E;
-	Tue, 10 Jun 2025 14:55:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3B8024166B;
+	Tue, 10 Jun 2025 16:28:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749567333; cv=none; b=W0BYVU+VsITKgHosIqHoO/yFa0/FiUFJEeIovKnWatFb5tJmAztrQT5GD2sNQI9qWZN5mp+QF+6H5K1t9fVYxptuME7tHEnO3hHyGZfCQMQbESyYaGSoRMRkOIYmFIJ3IFUmh/pSpbXbwFUxxnD0iAWaf2nIurhx2S4gmfS/PLs=
+	t=1749572889; cv=none; b=N3/2lJnIY02UVZgxjMqRzEHCY+RY4TTJ3LN+XhfnP3S6109zEamIbWOLmlfdmGgC7M2tm+VyPR60PazJpE83t2366uh0FwYVV2Xdt+3uLoVtd2AjAlaO4MNTTjYXB5C6lLkChM/mThOv2YabC1duX18SVSKS0ItHXSADx+jZydw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749567333; c=relaxed/simple;
-	bh=o2qFIwCJqf1Owe8LoAFDkXI9Um7ln94fm/Lg5eVi6/s=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bx9EOMPQtbJQdtFI/G7pCkMzFjEsL34G+8Uasi+UCanKVNzerCkHVeCNPxUDyrvGEUEowCJ3wEAr55CA8opNl2CThOhzNhFc1NUR5s7OopLAvX2Ez0E/AqMcO4Dtjo/c2NAg2NX1pejnM4+r7bAdpV63VrQzY/x3gMb0HMQjdqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Sl51QyIk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04298C4CEED;
-	Tue, 10 Jun 2025 14:55:27 +0000 (UTC)
+	s=arc-20240116; t=1749572889; c=relaxed/simple;
+	bh=VGaA2UjcATw5usDRARWAGHoyvA3nRCcXodZF/+d4fPQ=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=cRL7VOGtrA/8IooI67lQAjAprtTkDPiTx4O/41+GvUl8+VEw7vM6ER/AI6HbVFIkTa2jxIllHPB2aNTZ4Ce/JFppjOd657tuePT1QPUl+aBL1ETTcqyYKXnJxawLT859Tzm16ccrs0zdCq5AFXKKEHhbBfeuxuqSrqTm4YHYfZ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JJ1f2Y7N; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89E19C4CEF0;
+	Tue, 10 Jun 2025 16:28:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749567333;
-	bh=o2qFIwCJqf1Owe8LoAFDkXI9Um7ln94fm/Lg5eVi6/s=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Sl51QyIkRvKqYv018SvVzJZZ1IvNREg1v8VuuTS4bBTEiwLbyujGGldADwF5xT8tN
-	 SwjGfmnT5myotfQhC5x4VXrpEz/YFGqll2BfRcnKFSia9CrNGOqdZ5x8ccvlz2uxVb
-	 UXW0bTsrTa7YiQxKBaApgGFE6hwBBrIwbbnkTigUEfAxqhrdMjJNMMpw5at6o0uOmd
-	 a7ZkgXr+IpLI3P2/qTFKDhtIHzvJ3lxNLJNv986w2tgeProeOj3fue8Hw3hXi0hjzq
-	 TLBCNnQNk8lokn5M4NexbgYJAE0pKDPb2DYn3/w5kdi8Mm2p3l5sg7FTewow6ayy4X
-	 HevTJcwJF1WjQ==
-Message-ID: <1e06c620-8f8e-4ddf-8356-0782bccd63a2@kernel.org>
-Date: Tue, 10 Jun 2025 16:55:26 +0200
+	s=k20201202; t=1749572889;
+	bh=VGaA2UjcATw5usDRARWAGHoyvA3nRCcXodZF/+d4fPQ=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=JJ1f2Y7NQSd54tSszQLRiQIl7dD277rRFw5CD03cct8JsOIa9MeckGxwgeTNERJbY
+	 /Aq7k/QdxMobJHlLVMWLaBVYiO7WUz7b5oZF8aZHHmpn5SGMFxfrabCx4zi/NelVA7
+	 9tpmie/ZR7eRtm/GQUxR12kWA/MXW8KxThnLlIuGSON9FK96/TttZtzzrp91aMtCTf
+	 nkrgxszvlyVUm0gGo8/i60pLDKogQxJCIy6qqOtv6fYwtbh3P8fqWAcjVqLwJncDb0
+	 2wdFJTUv8YDSR+ksvQyqg1NCDe5af7sVQqmJb6cWow02fsajDICno0naOHZ+D1dFYd
+	 UMToThilj3zfw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 33D5B39D6540;
+	Tue, 10 Jun 2025 16:28:41 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 2/5] i2c: piix4: Depends on X86
-To: Mario Limonciello <superm1@kernel.org>,
- Huacai Chen <chenhuacai@kernel.org>,
- Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Borislav Petkov <bp@alien8.de>, Jean Delvare <jdelvare@suse.com>,
- Andi Shyti <andi.shyti@kernel.org>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Yazen Ghannam <yazen.ghannam@amd.com>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Dave Hansen <dave.hansen@linux.intel.com>,
- "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
- "H . Peter Anvin" <hpa@zytor.com>,
- Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
- "open list:DOCUMENTATION" <linux-doc@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>,
- "open list:I2C/SMBUS CONTROLLER DRIVERS FOR PC" <linux-i2c@vger.kernel.org>,
- "open list:AMD PMC DRIVER" <platform-driver-x86@vger.kernel.org>,
- Ingo Molnar <mingo@kernel.org>, linux-mips@vger.kernel.org,
- loongarch@lists.linux.dev
-References: <20250422234830.2840784-1-superm1@kernel.org>
- <20250422234830.2840784-3-superm1@kernel.org>
- <CAMuHMdVPQLjOox5sMp34Z5MTwKv2WOpHa=MpZr8hWG22fQKcjw@mail.gmail.com>
- <CAAhV-H70LXsDYMA7wz4x828rEFoJsNX0=m8F73Ge9=yfpzBpZQ@mail.gmail.com>
- <24febda9-6360-459f-82d3-6fba9ed9be83@kernel.org>
- <30a7f1a6-1e04-4fc5-9bea-e2b5956b28b7@kernel.org>
-Content-Language: en-US, nl
-From: Hans de Goede <hansg@kernel.org>
-In-Reply-To: <30a7f1a6-1e04-4fc5-9bea-e2b5956b28b7@kernel.org>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 2/2] arch: use always-$(KBUILD_BUILTIN) for vmlinux.lds
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <174957291974.2454024.16546912662876416180.git-patchwork-notify@kernel.org>
+Date: Tue, 10 Jun 2025 16:28:39 +0000
+References: <20250602181256.529033-2-masahiroy@kernel.org>
+In-Reply-To: <20250602181256.529033-2-masahiroy@kernel.org>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-riscv@lists.infradead.org, linux-kbuild@vger.kernel.org,
+ aou@eecs.berkeley.edu, agordeev@linux.ibm.com, alex@ghiti.fr,
+ andreas@gaisler.com, anton.ivanov@cambridgegreys.com, bp@alien8.de,
+ bcain@kernel.org, catalin.marinas@arm.com, chris@zankel.net,
+ borntraeger@linux.ibm.com, christophe.leroy@csgroup.eu,
+ dave.hansen@linux.intel.com, davem@davemloft.net, dinguyen@kernel.org,
+ geert@linux-m68k.org, guoren@kernel.org, hpa@zytor.com, hca@linux.ibm.com,
+ deller@gmx.de, chenhuacai@kernel.org, mingo@redhat.com,
+ James.Bottomley@HansenPartnership.com, johannes@sipsolutions.net,
+ glaubitz@physik.fu-berlin.de, jonas@southpole.se, maddy@linux.ibm.com,
+ mattst88@gmail.com, jcmvbkbc@gmail.com, mpe@ellerman.id.au, monstr@monstr.eu,
+ naveen@kernel.org, npiggin@gmail.com, palmer@dabbelt.com,
+ paul.walmsley@sifive.com, dalias@libc.org, richard.henderson@linaro.org,
+ richard@nod.at, linux@armlinux.org.uk, shorne@gmail.com,
+ stefan.kristiansson@saunalahti.fi, svens@linux.ibm.com,
+ tsbogend@alpha.franken.de, tglx@linutronix.de, gor@linux.ibm.com,
+ vgupta@kernel.org, kernel@xen0n.name, will@kernel.org,
+ ysato@users.sourceforge.jp, linux-alpha@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+ linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+ linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+ linux-snps-arc@lists.infradead.org, linux-um@lists.infradead.org,
+ linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+ sparclinux@vger.kernel.org, x86@kernel.org
 
-Hi,
+Hello:
 
-On 10-Jun-25 16:53, Hans de Goede wrote:
-> Hi,
+This patch was applied to riscv/linux.git (fixes)
+by Masahiro Yamada <masahiroy@kernel.org>:
+
+On Tue,  3 Jun 2025 03:12:54 +0900 you wrote:
+> The extra-y syntax is deprecated. Instead, use always-$(KBUILD_BUILTIN),
+> which behaves equivalently.
 > 
-> On 10-Jun-25 16:12, Mario Limonciello wrote:
->> On 6/10/2025 2:24 AM, Huacai Chen wrote:
->>> On Tue, Jun 10, 2025 at 5:16 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->>>>
->>>> Hi Mario,
->>>>
->>>> CC mips, loongarch
->>>>
->>>> On Wed, 23 Apr 2025 at 01:49, Mario Limonciello <superm1@kernel.org> wrote:
->>>>> From: Mario Limonciello <mario.limonciello@amd.com>
->>>>>
->>>>> PIIX4 and compatible controllers are only for X86. As some headers are
->>>>> being moved into x86 specific headers PIIX4 won't compile on non-x86.
->>>>>
->>>>> Suggested-by: Ingo Molnar <mingo@kernel.org>
->>>>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
->>>>
->>>> Thanks for your patch, which is now commit 7e173eb82ae97175
->>>> ("i2c: piix4: Make CONFIG_I2C_PIIX4 dependent on CONFIG_X86")
->>>> in v6.16-rc1.
->>>>
->>>>> --- a/drivers/i2c/busses/Kconfig
->>>>> +++ b/drivers/i2c/busses/Kconfig
->>>>> @@ -200,7 +200,7 @@ config I2C_ISMT
->>>>>
->>>>>   config I2C_PIIX4
->>>>>          tristate "Intel PIIX4 and compatible (ATI/AMD/Serverworks/Broadcom/SMSC)"
->>>>> -       depends on PCI && HAS_IOPORT
->>>>> +       depends on PCI && HAS_IOPORT && X86
->>>>
->>>> Are you sure this south-bridge is not used on non-x86 platforms?
->>>> It is enabled in several non-x86 defconfigs:
->>>>
->>>>      arch/loongarch/configs/loongson3_defconfig:CONFIG_I2C_PIIX4=y
->>>>      arch/mips/configs/ip27_defconfig:CONFIG_I2C_PIIX4=m
->>>>      arch/mips/configs/loongson2k_defconfig:CONFIG_I2C_PIIX4=y
->>>>      arch/mips/configs/loongson3_defconfig:CONFIG_I2C_PIIX4=y
->>>>
->>>> The loongarch and loongson entries are probably bogus, but I wouldn't
->>>> be surprised if the SGI Onyx and Origin do use Intel south-bridges.
->>> Loongson can use AMD SB700/SB800 south bridges, which have I2C_PIIX4.
->>
->> Well we could revert this patch, but it's going to be a compile failure because of 624b0d5696a89b138408d385899dd35372db324b and other patches that go on top of that.
->>
->> My current leaning is we make a dummy fch.h header for these archs with #defines for 0.
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
 > 
-> Move "fch.h" to include/linux/platform/x86/ so that it is available on all arches
-> and if necessary ifdef out anything x86 specific in the C-code referencing it ?
+>  arch/alpha/kernel/Makefile      | 2 +-
+>  arch/arc/kernel/Makefile        | 2 +-
+>  arch/arm/kernel/Makefile        | 2 +-
+>  arch/arm64/kernel/Makefile      | 2 +-
+>  arch/csky/kernel/Makefile       | 2 +-
+>  arch/hexagon/kernel/Makefile    | 2 +-
+>  arch/loongarch/kernel/Makefile  | 2 +-
+>  arch/m68k/kernel/Makefile       | 2 +-
+>  arch/microblaze/kernel/Makefile | 2 +-
+>  arch/mips/kernel/Makefile       | 2 +-
+>  arch/nios2/kernel/Makefile      | 2 +-
+>  arch/openrisc/kernel/Makefile   | 2 +-
+>  arch/parisc/kernel/Makefile     | 2 +-
+>  arch/powerpc/kernel/Makefile    | 2 +-
+>  arch/riscv/kernel/Makefile      | 2 +-
+>  arch/s390/kernel/Makefile       | 2 +-
+>  arch/sh/kernel/Makefile         | 2 +-
+>  arch/sparc/kernel/Makefile      | 2 +-
+>  arch/um/kernel/Makefile         | 2 +-
+>  arch/x86/kernel/Makefile        | 2 +-
+>  arch/xtensa/kernel/Makefile     | 2 +-
+>  21 files changed, 21 insertions(+), 21 deletions(-)
 
-Correction that should be include/linux/platform_data/x86/
+Here is the summary with links:
+  - [2/2] arch: use always-$(KBUILD_BUILTIN) for vmlinux.lds
+    https://git.kernel.org/riscv/c/e21efe833eae
 
-Regards,
-
-Hans
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
 
 
 
