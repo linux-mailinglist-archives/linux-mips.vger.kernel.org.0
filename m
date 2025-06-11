@@ -1,46 +1,46 @@
-Return-Path: <linux-mips+bounces-9240-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9241-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C4F5AD48AE
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 948E0AD48B0
 	for <lists+linux-mips@lfdr.de>; Wed, 11 Jun 2025 04:15:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E9ED18860FD
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Jun 2025 02:15:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF5273A5B00
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Jun 2025 02:14:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 313B91D9324;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2BD61DEFC8;
 	Wed, 11 Jun 2025 02:12:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BInTO5VY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UHVDPUBG"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F03581D5CDD;
-	Wed, 11 Jun 2025 02:12:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC49E1DE4CD;
+	Wed, 11 Jun 2025 02:12:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749607979; cv=none; b=mutrpMY7aCpL6OpYOm/5Lu4du3+x3fb1QS/OXO105oj80/+S7C3+Y3uTlSQq75TgUnHHKXOEjz7JFUZkDQHnWJXj5rLIcBY62OSGcqvZIZYV6wNA6dxmr0bOLClTldCYw4yq/5zH3zTLZAhxefUb9Pei0AajAB6SiCM9h3UI2/M=
+	t=1749607979; cv=none; b=NrehkCNv9foO8m5WbjPId4lqioBDvUsp6ZPVn3YhA09GQu+JbiOL3r+pgdcNWcH5bd/dZScGZ1j43+N9JO5mnd2m48ZZDocVdgosZhtnh/2+m/05oDGv4+s2OF6RrAdYQ2nZb8N66jTdN+SZdx72fldSabOS8pMGAegI5IlTTME=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1749607979; c=relaxed/simple;
-	bh=LymbL3HQOHfT/jDvUslu3WG9DHYX8sFXPLEZDKGLIl0=;
+	bh=SVChQMLGJGNa3SupHP96pbXwkXbpgKCn5CYCT7nIvfs=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FMWmHo2okr0p3S6XXuiC+TZg992CLNV5Jqu8ASqm8hyL72vgVNNF1ThIvEkqMIUTeAgTDkI/PrxEhnlOxhDC9YjHMJKQ89US/JJ0uqijsG7ZRx7ajraKxFBGoB/Ot6DdRDDXgSa3zt/FPHuk4//3XuN2saDTU6gFDzXNSEFpySs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BInTO5VY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 818E2C4CEF5;
+	 MIME-Version; b=Of4XDnNmkmX5oxvqdD1umy7qLGAxj+trpXNh/uZoonrWQBlSeThdJ2M259S79kYxETexWS7jLRUgQQyMoRENSOmSxd0KEVR4UdIVp9McPFf2BqszqZTxF/0bf/UZCbrfiR8EKrJpRdvPM/cx6N6qTbMpXR6/pWy8jJndc5AaLVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UHVDPUBG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 024E4C16AAE;
 	Wed, 11 Jun 2025 02:12:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749607978;
-	bh=LymbL3HQOHfT/jDvUslu3WG9DHYX8sFXPLEZDKGLIl0=;
+	s=k20201202; t=1749607979;
+	bh=SVChQMLGJGNa3SupHP96pbXwkXbpgKCn5CYCT7nIvfs=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BInTO5VYEIg6ikYMucIEzcf6zyBwRdamla0H1Jog5AEi7WG9AnYgCrl/Bm/0CIBYM
-	 bUUvMH6uHSurGHGM0Tj6u8+eYLXIU9qzIKzlSebuPIKnXuox/g2JVmMG+jMLfGalEj
-	 EWMNCB4977XqRRtwwZltuUSbpVoQwBGl4CLAXqaJA79Rnr2RZpnnqlBn/qumER6oHd
-	 JSuOU0PvpS4JB1RdZWdxRIN30cQJf1sVFJVMElRBMeTO/jYzEf52vveaD33VvbCmTO
-	 WiN9rc1QKHtrgc9BXBXa9jtp9CNyHJQ/0avsULhfeVFjXjUVwVTSTSwVctBNmu7Obm
-	 VFxDXlz5N8TvQ==
+	b=UHVDPUBGRopr+Uea/Lz2u8PaZwBL11VDOdYHQPOl4DK4flXAGrs94161yvsMkyOEK
+	 0WWmR3peoMoFSI0qepIplKZlJakc1cX+6PATmf2JrDlp6oQF7oPe/uItwf+syUG3i3
+	 z7xetWcbDCjcWUKD+q1vDaDWTbyDB4SjDHwXc/m53GDlVwYkM/eyGXTKYuHMDbWv2k
+	 kl7S1EXRZyWRAQwZ/QvZnUlDG6E2zGgTfhpFfJXwPxr1mTB9vvzLsMmiq64r2BWU8Z
+	 ErdgZN2bAf5TxkvZg2L7d/3pL85zJWat8gBQ5Ze0aHdeay+hApx+3lRpG9bCDr6tnB
+	 PxVMtEk2yIcgw==
 From: Eric Biggers <ebiggers@kernel.org>
 To: linux-crypto@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -53,9 +53,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Ard Biesheuvel <ardb@kernel.org>,
 	"Jason A . Donenfeld " <Jason@zx2c4.com>,
 	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 14/16] lib/crypto/sha512: migrate sparc-optimized SHA-512 code to library
-Date: Tue, 10 Jun 2025 19:09:21 -0700
-Message-ID: <20250611020923.1482701-15-ebiggers@kernel.org>
+Subject: [PATCH 15/16] lib/crypto/sha512: migrate x86-optimized SHA-512 code to library
+Date: Tue, 10 Jun 2025 19:09:22 -0700
+Message-ID: <20250611020923.1482701-16-ebiggers@kernel.org>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250611020923.1482701-1-ebiggers@kernel.org>
 References: <20250611020923.1482701-1-ebiggers@kernel.org>
@@ -69,296 +69,640 @@ Content-Transfer-Encoding: 8bit
 
 From: Eric Biggers <ebiggers@google.com>
 
-Instead of exposing the sparc-optimized SHA-512 code via sparc-specific
+Instead of exposing the x86-optimized SHA-512 code via x86-specific
 crypto_shash algorithms, instead just implement the sha512_blocks()
 library function.  This is much simpler, it makes the SHA-512 (and
-SHA-384) library functions be sparc-optimized, and it fixes the
-longstanding issue where the sparc-optimized SHA-512 code was disabled
-by default.  SHA-512 still remains available through crypto_shash, but
+SHA-384) library functions be x86-optimized, and it fixes the
+longstanding issue where the x86-optimized SHA-512 code was disabled by
+default.  SHA-512 still remains available through crypto_shash, but
 individual architectures no longer need to handle it.
 
 To match sha512_blocks(), change the type of the nblocks parameter of
-the assembly function from int to size_t.  The assembly function
+the assembly functions from int to size_t.  The assembly functions
 actually already treated it as size_t.
-
-Note: to see the diff from arch/sparc/crypto/sha512_glue.c to
-lib/crypto/sparc/sha512.h, view this commit with 'git show -M10'.
 
 Signed-off-by: Eric Biggers <ebiggers@google.com>
 ---
- arch/sparc/crypto/Kconfig                     |  10 --
- arch/sparc/crypto/Makefile                    |   2 -
- arch/sparc/crypto/sha512_glue.c               | 122 ------------------
+ arch/x86/crypto/Kconfig                       |  13 -
+ arch/x86/crypto/Makefile                      |   3 -
+ arch/x86/crypto/sha512_ssse3_glue.c           | 322 ------------------
  lib/crypto/Kconfig                            |   1 +
- lib/crypto/Makefile                           |   1 +
- lib/crypto/sparc/sha512.h                     |  42 ++++++
- .../crypto => lib/crypto/sparc}/sha512_asm.S  |   0
- 7 files changed, 44 insertions(+), 134 deletions(-)
- delete mode 100644 arch/sparc/crypto/sha512_glue.c
- create mode 100644 lib/crypto/sparc/sha512.h
- rename {arch/sparc/crypto => lib/crypto/sparc}/sha512_asm.S (100%)
+ lib/crypto/Makefile                           |   3 +
+ .../crypto/x86}/sha512-avx-asm.S              |  11 +-
+ .../crypto/x86}/sha512-avx2-asm.S             |  11 +-
+ .../crypto/x86}/sha512-ssse3-asm.S            |  12 +-
+ lib/crypto/x86/sha512.h                       |  54 +++
+ 9 files changed, 78 insertions(+), 352 deletions(-)
+ delete mode 100644 arch/x86/crypto/sha512_ssse3_glue.c
+ rename {arch/x86/crypto => lib/crypto/x86}/sha512-avx-asm.S (97%)
+ rename {arch/x86/crypto => lib/crypto/x86}/sha512-avx2-asm.S (98%)
+ rename {arch/x86/crypto => lib/crypto/x86}/sha512-ssse3-asm.S (97%)
+ create mode 100644 lib/crypto/x86/sha512.h
 
-diff --git a/arch/sparc/crypto/Kconfig b/arch/sparc/crypto/Kconfig
-index a6ba319c42dce..9d8da9aef3a41 100644
---- a/arch/sparc/crypto/Kconfig
-+++ b/arch/sparc/crypto/Kconfig
-@@ -34,20 +34,10 @@ config CRYPTO_SHA1_SPARC64
- 	help
- 	  SHA-1 secure hash algorithm (FIPS 180)
+diff --git a/arch/x86/crypto/Kconfig b/arch/x86/crypto/Kconfig
+index 56cfdc79e2c66..eb641a300154e 100644
+--- a/arch/x86/crypto/Kconfig
++++ b/arch/x86/crypto/Kconfig
+@@ -388,23 +388,10 @@ config CRYPTO_SHA1_SSSE3
+ 	  - SSSE3 (Supplemental SSE3)
+ 	  - AVX (Advanced Vector Extensions)
+ 	  - AVX2 (Advanced Vector Extensions 2)
+ 	  - SHA-NI (SHA Extensions New Instructions)
  
- 	  Architecture: sparc64
- 
--config CRYPTO_SHA512_SPARC64
--	tristate "Hash functions: SHA-384 and SHA-512"
--	depends on SPARC64
+-config CRYPTO_SHA512_SSSE3
+-	tristate "Hash functions: SHA-384 and SHA-512 (SSSE3/AVX/AVX2)"
+-	depends on 64BIT
 -	select CRYPTO_SHA512
 -	select CRYPTO_HASH
 -	help
 -	  SHA-384 and SHA-512 secure hash algorithms (FIPS 180)
 -
--	  Architecture: sparc64 using crypto instructions, when available
+-	  Architecture: x86_64 using:
+-	  - SSSE3 (Supplemental SSE3)
+-	  - AVX (Advanced Vector Extensions)
+-	  - AVX2 (Advanced Vector Extensions 2)
 -
- config CRYPTO_AES_SPARC64
- 	tristate "Ciphers: AES, modes: ECB, CBC, CTR"
- 	depends on SPARC64
- 	select CRYPTO_SKCIPHER
- 	help
-diff --git a/arch/sparc/crypto/Makefile b/arch/sparc/crypto/Makefile
-index 701c39edb0d73..99a7e8fd13bc9 100644
---- a/arch/sparc/crypto/Makefile
-+++ b/arch/sparc/crypto/Makefile
-@@ -2,19 +2,17 @@
- #
- # Arch-specific CryptoAPI modules.
- #
+ config CRYPTO_SM3_AVX_X86_64
+ 	tristate "Hash functions: SM3 (AVX)"
+ 	depends on 64BIT
+ 	select CRYPTO_HASH
+ 	select CRYPTO_LIB_SM3
+diff --git a/arch/x86/crypto/Makefile b/arch/x86/crypto/Makefile
+index aa289a9e0153b..d31348be83704 100644
+--- a/arch/x86/crypto/Makefile
++++ b/arch/x86/crypto/Makefile
+@@ -52,13 +52,10 @@ aesni-intel-$(CONFIG_64BIT) += aes-gcm-avx10-x86_64.o
+ endif
  
- obj-$(CONFIG_CRYPTO_SHA1_SPARC64) += sha1-sparc64.o
--obj-$(CONFIG_CRYPTO_SHA512_SPARC64) += sha512-sparc64.o
- obj-$(CONFIG_CRYPTO_MD5_SPARC64) += md5-sparc64.o
+ obj-$(CONFIG_CRYPTO_SHA1_SSSE3) += sha1-ssse3.o
+ sha1-ssse3-y := sha1_avx2_x86_64_asm.o sha1_ssse3_asm.o sha1_ni_asm.o sha1_ssse3_glue.o
  
- obj-$(CONFIG_CRYPTO_AES_SPARC64) += aes-sparc64.o
- obj-$(CONFIG_CRYPTO_DES_SPARC64) += des-sparc64.o
- obj-$(CONFIG_CRYPTO_CAMELLIA_SPARC64) += camellia-sparc64.o
+-obj-$(CONFIG_CRYPTO_SHA512_SSSE3) += sha512-ssse3.o
+-sha512-ssse3-y := sha512-ssse3-asm.o sha512-avx-asm.o sha512-avx2-asm.o sha512_ssse3_glue.o
+-
+ obj-$(CONFIG_CRYPTO_GHASH_CLMUL_NI_INTEL) += ghash-clmulni-intel.o
+ ghash-clmulni-intel-y := ghash-clmulni-intel_asm.o ghash-clmulni-intel_glue.o
  
- sha1-sparc64-y := sha1_asm.o sha1_glue.o
--sha512-sparc64-y := sha512_asm.o sha512_glue.o
- md5-sparc64-y := md5_asm.o md5_glue.o
- 
- aes-sparc64-y := aes_asm.o aes_glue.o
- des-sparc64-y := des_asm.o des_glue.o
- camellia-sparc64-y := camellia_asm.o camellia_glue.o
-diff --git a/arch/sparc/crypto/sha512_glue.c b/arch/sparc/crypto/sha512_glue.c
+ obj-$(CONFIG_CRYPTO_POLYVAL_CLMUL_NI) += polyval-clmulni.o
+ polyval-clmulni-y := polyval-clmulni_asm.o polyval-clmulni_glue.o
+diff --git a/arch/x86/crypto/sha512_ssse3_glue.c b/arch/x86/crypto/sha512_ssse3_glue.c
 deleted file mode 100644
-index fb81c3290c8c0..0000000000000
---- a/arch/sparc/crypto/sha512_glue.c
+index 97744b7d23817..0000000000000
+--- a/arch/x86/crypto/sha512_ssse3_glue.c
 +++ /dev/null
-@@ -1,122 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/* Glue code for SHA512 hashing optimized for sparc64 crypto opcodes.
+@@ -1,322 +0,0 @@
+-/*
+- * Cryptographic API.
 - *
-- * This is based largely upon crypto/sha512_generic.c
+- * Glue code for the SHA512 Secure Hash Algorithm assembler
+- * implementation using supplemental SSE3 / AVX / AVX2 instructions.
 - *
-- * Copyright (c) Jean-Luc Cooke <jlcooke@certainkey.com>
-- * Copyright (c) Andrew McDonald <andrew@mcdonald.org.uk>
-- * Copyright (c) 2003 Kyle McMartin <kyle@debian.org>
+- * This file is based on sha512_generic.c
+- *
+- * Copyright (C) 2013 Intel Corporation
+- * Author: Tim Chen <tim.c.chen@linux.intel.com>
+- *
+- * This program is free software; you can redistribute it and/or modify it
+- * under the terms of the GNU General Public License as published by the Free
+- * Software Foundation; either version 2 of the License, or (at your option)
+- * any later version.
+- *
+- * THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
+- * EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
+- * MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
+- * NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS
+- * BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN
+- * ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+- * CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+- * SOFTWARE.
+- *
 - */
 -
 -#define pr_fmt(fmt)	KBUILD_MODNAME ": " fmt
 -
--#include <asm/elf.h>
--#include <asm/opcodes.h>
--#include <asm/pstate.h>
+-#include <asm/cpu_device_id.h>
+-#include <asm/simd.h>
 -#include <crypto/internal/hash.h>
--#include <crypto/sha2.h>
--#include <crypto/sha512_base.h>
 -#include <linux/kernel.h>
 -#include <linux/module.h>
+-#include <crypto/sha2.h>
+-#include <crypto/sha512_base.h>
 -
--asmlinkage void sha512_sparc64_transform(u64 *digest, const char *data,
--					 unsigned int rounds);
+-asmlinkage void sha512_transform_ssse3(struct sha512_state *state,
+-				       const u8 *data, int blocks);
 -
--static void sha512_block(struct sha512_state *sctx, const u8 *src, int blocks)
+-static int sha512_update_x86(struct shash_desc *desc, const u8 *data,
+-			     unsigned int len, sha512_block_fn *sha512_xform)
 -{
--	sha512_sparc64_transform(sctx->state, src, blocks);
+-	int remain;
+-
+-	/*
+-	 * Make sure struct sha512_state begins directly with the SHA512
+-	 * 512-bit internal state, as this is what the asm functions expect.
+-	 */
+-	BUILD_BUG_ON(offsetof(struct sha512_state, state) != 0);
+-
+-	kernel_fpu_begin();
+-	remain = sha512_base_do_update_blocks(desc, data, len, sha512_xform);
+-	kernel_fpu_end();
+-
+-	return remain;
 -}
 -
--static int sha512_sparc64_update(struct shash_desc *desc, const u8 *data,
--				 unsigned int len)
+-static int sha512_finup(struct shash_desc *desc, const u8 *data,
+-	      unsigned int len, u8 *out, sha512_block_fn *sha512_xform)
 -{
--	return sha512_base_do_update_blocks(desc, data, len, sha512_block);
--}
+-	kernel_fpu_begin();
+-	sha512_base_do_finup(desc, data, len, sha512_xform);
+-	kernel_fpu_end();
 -
--static int sha512_sparc64_finup(struct shash_desc *desc, const u8 *src,
--				unsigned int len, u8 *out)
--{
--	sha512_base_do_finup(desc, src, len, sha512_block);
 -	return sha512_base_finish(desc, out);
 -}
 -
--static struct shash_alg sha512_alg = {
+-static int sha512_ssse3_update(struct shash_desc *desc, const u8 *data,
+-		       unsigned int len)
+-{
+-	return sha512_update_x86(desc, data, len, sha512_transform_ssse3);
+-}
+-
+-static int sha512_ssse3_finup(struct shash_desc *desc, const u8 *data,
+-	      unsigned int len, u8 *out)
+-{
+-	return sha512_finup(desc, data, len, out, sha512_transform_ssse3);
+-}
+-
+-static struct shash_alg sha512_ssse3_algs[] = { {
 -	.digestsize	=	SHA512_DIGEST_SIZE,
 -	.init		=	sha512_base_init,
--	.update		=	sha512_sparc64_update,
--	.finup		=	sha512_sparc64_finup,
+-	.update		=	sha512_ssse3_update,
+-	.finup		=	sha512_ssse3_finup,
 -	.descsize	=	SHA512_STATE_SIZE,
 -	.base		=	{
 -		.cra_name	=	"sha512",
--		.cra_driver_name=	"sha512-sparc64",
--		.cra_priority	=	SPARC_CR_OPCODE_PRIORITY,
+-		.cra_driver_name =	"sha512-ssse3",
+-		.cra_priority	=	150,
+-		.cra_flags	=	CRYPTO_AHASH_ALG_BLOCK_ONLY |
+-					CRYPTO_AHASH_ALG_FINUP_MAX,
 -		.cra_blocksize	=	SHA512_BLOCK_SIZE,
 -		.cra_module	=	THIS_MODULE,
 -	}
--};
--
--static struct shash_alg sha384_alg = {
+-},  {
 -	.digestsize	=	SHA384_DIGEST_SIZE,
 -	.init		=	sha384_base_init,
--	.update		=	sha512_sparc64_update,
--	.finup		=	sha512_sparc64_finup,
+-	.update		=	sha512_ssse3_update,
+-	.finup		=	sha512_ssse3_finup,
 -	.descsize	=	SHA512_STATE_SIZE,
 -	.base		=	{
 -		.cra_name	=	"sha384",
--		.cra_driver_name=	"sha384-sparc64",
--		.cra_priority	=	SPARC_CR_OPCODE_PRIORITY,
+-		.cra_driver_name =	"sha384-ssse3",
+-		.cra_priority	=	150,
+-		.cra_flags	=	CRYPTO_AHASH_ALG_BLOCK_ONLY |
+-					CRYPTO_AHASH_ALG_FINUP_MAX,
 -		.cra_blocksize	=	SHA384_BLOCK_SIZE,
 -		.cra_module	=	THIS_MODULE,
 -	}
--};
+-} };
 -
--static bool __init sparc64_has_sha512_opcode(void)
+-static int register_sha512_ssse3(void)
 -{
--	unsigned long cfr;
+-	if (boot_cpu_has(X86_FEATURE_SSSE3))
+-		return crypto_register_shashes(sha512_ssse3_algs,
+-			ARRAY_SIZE(sha512_ssse3_algs));
+-	return 0;
+-}
 -
--	if (!(sparc64_elf_hwcap & HWCAP_SPARC_CRYPTO))
--		return false;
+-static void unregister_sha512_ssse3(void)
+-{
+-	if (boot_cpu_has(X86_FEATURE_SSSE3))
+-		crypto_unregister_shashes(sha512_ssse3_algs,
+-			ARRAY_SIZE(sha512_ssse3_algs));
+-}
 -
--	__asm__ __volatile__("rd %%asr26, %0" : "=r" (cfr));
--	if (!(cfr & CFR_SHA512))
+-asmlinkage void sha512_transform_avx(struct sha512_state *state,
+-				     const u8 *data, int blocks);
+-static bool avx_usable(void)
+-{
+-	if (!cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM, NULL)) {
+-		if (boot_cpu_has(X86_FEATURE_AVX))
+-			pr_info("AVX detected but unusable.\n");
 -		return false;
+-	}
 -
 -	return true;
 -}
 -
--static int __init sha512_sparc64_mod_init(void)
+-static int sha512_avx_update(struct shash_desc *desc, const u8 *data,
+-		       unsigned int len)
 -{
--	if (sparc64_has_sha512_opcode()) {
--		int ret = crypto_register_shash(&sha384_alg);
--		if (ret < 0)
--			return ret;
+-	return sha512_update_x86(desc, data, len, sha512_transform_avx);
+-}
 -
--		ret = crypto_register_shash(&sha512_alg);
--		if (ret < 0) {
--			crypto_unregister_shash(&sha384_alg);
--			return ret;
--		}
+-static int sha512_avx_finup(struct shash_desc *desc, const u8 *data,
+-	      unsigned int len, u8 *out)
+-{
+-	return sha512_finup(desc, data, len, out, sha512_transform_avx);
+-}
 -
--		pr_info("Using sparc64 sha512 opcode optimized SHA-512/SHA-384 implementation\n");
--		return 0;
+-static struct shash_alg sha512_avx_algs[] = { {
+-	.digestsize	=	SHA512_DIGEST_SIZE,
+-	.init		=	sha512_base_init,
+-	.update		=	sha512_avx_update,
+-	.finup		=	sha512_avx_finup,
+-	.descsize	=	SHA512_STATE_SIZE,
+-	.base		=	{
+-		.cra_name	=	"sha512",
+-		.cra_driver_name =	"sha512-avx",
+-		.cra_priority	=	160,
+-		.cra_flags	=	CRYPTO_AHASH_ALG_BLOCK_ONLY |
+-					CRYPTO_AHASH_ALG_FINUP_MAX,
+-		.cra_blocksize	=	SHA512_BLOCK_SIZE,
+-		.cra_module	=	THIS_MODULE,
 -	}
--	pr_info("sparc64 sha512 opcode not available.\n");
+-},  {
+-	.digestsize	=	SHA384_DIGEST_SIZE,
+-	.init		=	sha384_base_init,
+-	.update		=	sha512_avx_update,
+-	.finup		=	sha512_avx_finup,
+-	.descsize	=	SHA512_STATE_SIZE,
+-	.base		=	{
+-		.cra_name	=	"sha384",
+-		.cra_driver_name =	"sha384-avx",
+-		.cra_priority	=	160,
+-		.cra_flags	=	CRYPTO_AHASH_ALG_BLOCK_ONLY |
+-					CRYPTO_AHASH_ALG_FINUP_MAX,
+-		.cra_blocksize	=	SHA384_BLOCK_SIZE,
+-		.cra_module	=	THIS_MODULE,
+-	}
+-} };
+-
+-static int register_sha512_avx(void)
+-{
+-	if (avx_usable())
+-		return crypto_register_shashes(sha512_avx_algs,
+-			ARRAY_SIZE(sha512_avx_algs));
+-	return 0;
+-}
+-
+-static void unregister_sha512_avx(void)
+-{
+-	if (avx_usable())
+-		crypto_unregister_shashes(sha512_avx_algs,
+-			ARRAY_SIZE(sha512_avx_algs));
+-}
+-
+-asmlinkage void sha512_transform_rorx(struct sha512_state *state,
+-				      const u8 *data, int blocks);
+-
+-static int sha512_avx2_update(struct shash_desc *desc, const u8 *data,
+-		       unsigned int len)
+-{
+-	return sha512_update_x86(desc, data, len, sha512_transform_rorx);
+-}
+-
+-static int sha512_avx2_finup(struct shash_desc *desc, const u8 *data,
+-	      unsigned int len, u8 *out)
+-{
+-	return sha512_finup(desc, data, len, out, sha512_transform_rorx);
+-}
+-
+-static struct shash_alg sha512_avx2_algs[] = { {
+-	.digestsize	=	SHA512_DIGEST_SIZE,
+-	.init		=	sha512_base_init,
+-	.update		=	sha512_avx2_update,
+-	.finup		=	sha512_avx2_finup,
+-	.descsize	=	SHA512_STATE_SIZE,
+-	.base		=	{
+-		.cra_name	=	"sha512",
+-		.cra_driver_name =	"sha512-avx2",
+-		.cra_priority	=	170,
+-		.cra_flags	=	CRYPTO_AHASH_ALG_BLOCK_ONLY |
+-					CRYPTO_AHASH_ALG_FINUP_MAX,
+-		.cra_blocksize	=	SHA512_BLOCK_SIZE,
+-		.cra_module	=	THIS_MODULE,
+-	}
+-},  {
+-	.digestsize	=	SHA384_DIGEST_SIZE,
+-	.init		=	sha384_base_init,
+-	.update		=	sha512_avx2_update,
+-	.finup		=	sha512_avx2_finup,
+-	.descsize	=	SHA512_STATE_SIZE,
+-	.base		=	{
+-		.cra_name	=	"sha384",
+-		.cra_driver_name =	"sha384-avx2",
+-		.cra_priority	=	170,
+-		.cra_flags	=	CRYPTO_AHASH_ALG_BLOCK_ONLY |
+-					CRYPTO_AHASH_ALG_FINUP_MAX,
+-		.cra_blocksize	=	SHA384_BLOCK_SIZE,
+-		.cra_module	=	THIS_MODULE,
+-	}
+-} };
+-
+-static bool avx2_usable(void)
+-{
+-	if (avx_usable() && boot_cpu_has(X86_FEATURE_AVX2) &&
+-		    boot_cpu_has(X86_FEATURE_BMI2))
+-		return true;
+-
+-	return false;
+-}
+-
+-static int register_sha512_avx2(void)
+-{
+-	if (avx2_usable())
+-		return crypto_register_shashes(sha512_avx2_algs,
+-			ARRAY_SIZE(sha512_avx2_algs));
+-	return 0;
+-}
+-static const struct x86_cpu_id module_cpu_ids[] = {
+-	X86_MATCH_FEATURE(X86_FEATURE_AVX2, NULL),
+-	X86_MATCH_FEATURE(X86_FEATURE_AVX, NULL),
+-	X86_MATCH_FEATURE(X86_FEATURE_SSSE3, NULL),
+-	{}
+-};
+-MODULE_DEVICE_TABLE(x86cpu, module_cpu_ids);
+-
+-static void unregister_sha512_avx2(void)
+-{
+-	if (avx2_usable())
+-		crypto_unregister_shashes(sha512_avx2_algs,
+-			ARRAY_SIZE(sha512_avx2_algs));
+-}
+-
+-static int __init sha512_ssse3_mod_init(void)
+-{
+-	if (!x86_match_cpu(module_cpu_ids))
+-		return -ENODEV;
+-
+-	if (register_sha512_ssse3())
+-		goto fail;
+-
+-	if (register_sha512_avx()) {
+-		unregister_sha512_ssse3();
+-		goto fail;
+-	}
+-
+-	if (register_sha512_avx2()) {
+-		unregister_sha512_avx();
+-		unregister_sha512_ssse3();
+-		goto fail;
+-	}
+-
+-	return 0;
+-fail:
 -	return -ENODEV;
 -}
 -
--static void __exit sha512_sparc64_mod_fini(void)
+-static void __exit sha512_ssse3_mod_fini(void)
 -{
--	crypto_unregister_shash(&sha384_alg);
--	crypto_unregister_shash(&sha512_alg);
+-	unregister_sha512_avx2();
+-	unregister_sha512_avx();
+-	unregister_sha512_ssse3();
 -}
 -
--module_init(sha512_sparc64_mod_init);
--module_exit(sha512_sparc64_mod_fini);
+-module_init(sha512_ssse3_mod_init);
+-module_exit(sha512_ssse3_mod_fini);
 -
 -MODULE_LICENSE("GPL");
--MODULE_DESCRIPTION("SHA-384 and SHA-512 Secure Hash Algorithm, sparc64 sha512 opcode accelerated");
+-MODULE_DESCRIPTION("SHA512 Secure Hash Algorithm, Supplemental SSE3 accelerated");
 -
--MODULE_ALIAS_CRYPTO("sha384");
 -MODULE_ALIAS_CRYPTO("sha512");
--
--#include "crop_devid.c"
+-MODULE_ALIAS_CRYPTO("sha512-ssse3");
+-MODULE_ALIAS_CRYPTO("sha512-avx");
+-MODULE_ALIAS_CRYPTO("sha512-avx2");
+-MODULE_ALIAS_CRYPTO("sha384");
+-MODULE_ALIAS_CRYPTO("sha384-ssse3");
+-MODULE_ALIAS_CRYPTO("sha384-avx");
+-MODULE_ALIAS_CRYPTO("sha384-avx2");
 diff --git a/lib/crypto/Kconfig b/lib/crypto/Kconfig
-index 4bdb4118a789f..0d6522b92ef57 100644
+index 0d6522b92ef57..88496ee08b5ae 100644
 --- a/lib/crypto/Kconfig
 +++ b/lib/crypto/Kconfig
-@@ -182,10 +182,11 @@ config CRYPTO_LIB_SHA512_ARCH
- 	default y if ARM && !CPU_V7M
+@@ -183,10 +183,11 @@ config CRYPTO_LIB_SHA512_ARCH
  	default y if ARM64
  	default y if MIPS && CPU_CAVIUM_OCTEON
  	default y if RISCV && 64BIT && RISCV_ISA_V && TOOLCHAIN_HAS_VECTOR_CRYPTO
  	default y if S390
-+	default y if SPARC64
+ 	default y if SPARC64
++	default y if X86_64
  
  config CRYPTO_LIB_SM3
  	tristate
  
  if !KMSAN # avoid false positives from assembly
 diff --git a/lib/crypto/Makefile b/lib/crypto/Makefile
-index bfa35cc235cea..3c651927f5ba5 100644
+index 3c651927f5ba5..bc4bf15f26142 100644
 --- a/lib/crypto/Makefile
 +++ b/lib/crypto/Makefile
-@@ -90,10 +90,11 @@ $(obj)/arm64/sha512-core.S: $(src)/../../arch/arm64/lib/crypto/sha2-armv8.pl
- clean-files += arm64/sha512-core.S
+@@ -91,10 +91,13 @@ clean-files += arm64/sha512-core.S
  libsha512-$(CONFIG_KERNEL_MODE_NEON) += arm64/sha512-ce-core.o
  endif
  
  libsha512-$(CONFIG_RISCV) += riscv/sha512-riscv64-zvknhb-zvkb.o
-+libsha512-$(CONFIG_SPARC) += sparc/sha512_asm.o
+ libsha512-$(CONFIG_SPARC) += sparc/sha512_asm.o
++libsha512-$(CONFIG_X86) += x86/sha512-ssse3-asm.o \
++			   x86/sha512-avx-asm.o \
++			   x86/sha512-avx2-asm.o
  endif # CONFIG_CRYPTO_LIB_SHA512_ARCH
  
  obj-$(CONFIG_MPILIB) += mpi/
  
  obj-$(CONFIG_CRYPTO_SELFTESTS)			+= simd.o
-diff --git a/lib/crypto/sparc/sha512.h b/lib/crypto/sparc/sha512.h
+diff --git a/arch/x86/crypto/sha512-avx-asm.S b/lib/crypto/x86/sha512-avx-asm.S
+similarity index 97%
+rename from arch/x86/crypto/sha512-avx-asm.S
+rename to lib/crypto/x86/sha512-avx-asm.S
+index 5bfce4b045fdf..84291772ba385 100644
+--- a/arch/x86/crypto/sha512-avx-asm.S
++++ b/lib/crypto/x86/sha512-avx-asm.S
+@@ -46,11 +46,11 @@
+ # and search for that title.
+ #
+ ########################################################################
+ 
+ #include <linux/linkage.h>
+-#include <linux/cfi_types.h>
++#include <linux/objtool.h>
+ 
+ .text
+ 
+ # Virtual Registers
+ # ARG1
+@@ -265,18 +265,21 @@ frame_size = frame_WK + WK_SIZE
+ 	add	tmp0, h_64
+ 	RotateState
+ .endm
+ 
+ ########################################################################
+-# void sha512_transform_avx(sha512_state *state, const u8 *data, int blocks)
++# void sha512_transform_avx(struct sha512_block_state *state,
++#			    const u8 *data, size_t nblocks);
+ # Purpose: Updates the SHA512 digest stored at "state" with the message
+ # stored in "data".
+ # The size of the message pointed to by "data" must be an integer multiple
+ # of SHA512 message blocks.
+-# "blocks" is the message length in SHA512 blocks
++# "nblocks" is the message length in SHA512 blocks
+ ########################################################################
+-SYM_TYPED_FUNC_START(sha512_transform_avx)
++SYM_FUNC_START(sha512_transform_avx)
++	ANNOTATE_NOENDBR	# since this is called only via static_call
++
+ 	test msglen, msglen
+ 	je .Lnowork
+ 
+ 	# Save GPRs
+ 	push	%rbx
+diff --git a/arch/x86/crypto/sha512-avx2-asm.S b/lib/crypto/x86/sha512-avx2-asm.S
+similarity index 98%
+rename from arch/x86/crypto/sha512-avx2-asm.S
+rename to lib/crypto/x86/sha512-avx2-asm.S
+index 24973f42c43ff..2af6a4d7d1640 100644
+--- a/arch/x86/crypto/sha512-avx2-asm.S
++++ b/lib/crypto/x86/sha512-avx2-asm.S
+@@ -48,11 +48,11 @@
+ ########################################################################
+ # This code schedules 1 blocks at a time, with 4 lanes per block
+ ########################################################################
+ 
+ #include <linux/linkage.h>
+-#include <linux/cfi_types.h>
++#include <linux/objtool.h>
+ 
+ .text
+ 
+ # Virtual Registers
+ Y_0 = %ymm4
+@@ -557,18 +557,21 @@ frame_size = frame_CTX + CTX_SIZE
+ 	RotateState
+ 
+ .endm
+ 
+ ########################################################################
+-# void sha512_transform_rorx(sha512_state *state, const u8 *data, int blocks)
++# void sha512_transform_rorx(struct sha512_block_state *state,
++#			     const u8 *data, size_t nblocks);
+ # Purpose: Updates the SHA512 digest stored at "state" with the message
+ # stored in "data".
+ # The size of the message pointed to by "data" must be an integer multiple
+ # of SHA512 message blocks.
+-# "blocks" is the message length in SHA512 blocks
++# "nblocks" is the message length in SHA512 blocks
+ ########################################################################
+-SYM_TYPED_FUNC_START(sha512_transform_rorx)
++SYM_FUNC_START(sha512_transform_rorx)
++	ANNOTATE_NOENDBR	# since this is called only via static_call
++
+ 	# Save GPRs
+ 	push	%rbx
+ 	push	%r12
+ 	push	%r13
+ 	push	%r14
+diff --git a/arch/x86/crypto/sha512-ssse3-asm.S b/lib/crypto/x86/sha512-ssse3-asm.S
+similarity index 97%
+rename from arch/x86/crypto/sha512-ssse3-asm.S
+rename to lib/crypto/x86/sha512-ssse3-asm.S
+index 30a2c4777f9d5..a7544beb59d38 100644
+--- a/arch/x86/crypto/sha512-ssse3-asm.S
++++ b/lib/crypto/x86/sha512-ssse3-asm.S
+@@ -46,11 +46,11 @@
+ # and search for that title.
+ #
+ ########################################################################
+ 
+ #include <linux/linkage.h>
+-#include <linux/cfi_types.h>
++#include <linux/objtool.h>
+ 
+ .text
+ 
+ # Virtual Registers
+ # ARG1
+@@ -264,20 +264,20 @@ frame_size = frame_WK + WK_SIZE
+ 	lea	(T1, T2), h_64
+ 	RotateState
+ .endm
+ 
+ ########################################################################
+-## void sha512_transform_ssse3(struct sha512_state *state, const u8 *data,
+-##			       int blocks);
+-# (struct sha512_state is assumed to begin with u64 state[8])
++# void sha512_transform_ssse3(struct sha512_block_state *state,
++#			      const u8 *data, size_t nblocks);
+ # Purpose: Updates the SHA512 digest stored at "state" with the message
+ # stored in "data".
+ # The size of the message pointed to by "data" must be an integer multiple
+ # of SHA512 message blocks.
+-# "blocks" is the message length in SHA512 blocks.
++# "nblocks" is the message length in SHA512 blocks
+ ########################################################################
+-SYM_TYPED_FUNC_START(sha512_transform_ssse3)
++SYM_FUNC_START(sha512_transform_ssse3)
++	ANNOTATE_NOENDBR	# since this is called only via static_call
+ 
+ 	test msglen, msglen
+ 	je .Lnowork
+ 
+ 	# Save GPRs
+diff --git a/lib/crypto/x86/sha512.h b/lib/crypto/x86/sha512.h
 new file mode 100644
-index 0000000000000..55303ab6b15f7
+index 0000000000000..c13503d9d57d9
 --- /dev/null
-+++ b/lib/crypto/sparc/sha512.h
-@@ -0,0 +1,42 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
++++ b/lib/crypto/x86/sha512.h
+@@ -0,0 +1,54 @@
++/* SPDX-License-Identifier: GPL-2.0-or-later */
 +/*
-+ * SHA-512 accelerated using the sparc64 sha512 opcodes
++ * x86-optimized SHA-512 block function
 + *
-+ * Copyright (c) Jean-Luc Cooke <jlcooke@certainkey.com>
-+ * Copyright (c) Andrew McDonald <andrew@mcdonald.org.uk>
-+ * Copyright (c) 2003 Kyle McMartin <kyle@debian.org>
++ * Copyright 2025 Google LLC
 + */
 +
-+#include <asm/elf.h>
-+#include <asm/opcodes.h>
-+#include <asm/pstate.h>
++#include <asm/fpu/api.h>
++#include <crypto/internal/simd.h>
++#include <linux/static_call.h>
 +
-+static __ro_after_init DEFINE_STATIC_KEY_FALSE(have_sha512_opcodes);
++DEFINE_STATIC_CALL(sha512_blocks_x86, sha512_blocks_generic);
 +
-+asmlinkage void sha512_sparc64_transform(struct sha512_block_state *state,
-+					 const u8 *data, size_t nblocks);
++#define DEFINE_X86_SHA512_FN(c_fn, asm_fn)                                 \
++	asmlinkage void asm_fn(struct sha512_block_state *state,           \
++			       const u8 *data, size_t nblocks);            \
++	static void c_fn(struct sha512_block_state *state, const u8 *data, \
++			 size_t nblocks)                                   \
++	{                                                                  \
++		if (likely(crypto_simd_usable())) {                        \
++			kernel_fpu_begin();                                \
++			asm_fn(state, data, nblocks);                      \
++			kernel_fpu_end();                                  \
++		} else {                                                   \
++			sha512_blocks_generic(state, data, nblocks);       \
++		}                                                          \
++	}
++
++DEFINE_X86_SHA512_FN(sha512_blocks_ssse3, sha512_transform_ssse3);
++DEFINE_X86_SHA512_FN(sha512_blocks_avx, sha512_transform_avx);
++DEFINE_X86_SHA512_FN(sha512_blocks_avx2, sha512_transform_rorx);
 +
 +static void sha512_blocks(struct sha512_block_state *state,
 +			  const u8 *data, size_t nblocks)
 +{
-+	if (static_branch_likely(&have_sha512_opcodes))
-+		sha512_sparc64_transform(state, data, nblocks);
-+	else
-+		sha512_blocks_generic(state, data, nblocks);
++	static_call(sha512_blocks_x86)(state, data, nblocks);
 +}
 +
 +#define sha512_mod_init_arch sha512_mod_init_arch
 +static inline void sha512_mod_init_arch(void)
 +{
-+	unsigned long cfr;
-+
-+	if (!(sparc64_elf_hwcap & HWCAP_SPARC_CRYPTO))
-+		return;
-+
-+	__asm__ __volatile__("rd %%asr26, %0" : "=r" (cfr));
-+	if (!(cfr & CFR_SHA512))
-+		return;
-+
-+	static_branch_enable(&have_sha512_opcodes);
-+	pr_info("Using sparc64 sha512 opcode optimized SHA-512/SHA-384 implementation\n");
++	if (cpu_has_xfeatures(XFEATURE_MASK_SSE | XFEATURE_MASK_YMM, NULL) &&
++	    boot_cpu_has(X86_FEATURE_AVX)) {
++		if (boot_cpu_has(X86_FEATURE_AVX2) &&
++		    boot_cpu_has(X86_FEATURE_BMI2))
++			static_call_update(sha512_blocks_x86,
++					   sha512_blocks_avx2);
++		else
++			static_call_update(sha512_blocks_x86,
++					   sha512_blocks_avx);
++	} else if (boot_cpu_has(X86_FEATURE_SSSE3)) {
++		static_call_update(sha512_blocks_x86, sha512_blocks_ssse3);
++	}
 +}
-diff --git a/arch/sparc/crypto/sha512_asm.S b/lib/crypto/sparc/sha512_asm.S
-similarity index 100%
-rename from arch/sparc/crypto/sha512_asm.S
-rename to lib/crypto/sparc/sha512_asm.S
 -- 
 2.49.0
 
