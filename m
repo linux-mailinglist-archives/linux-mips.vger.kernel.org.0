@@ -1,45 +1,46 @@
-Return-Path: <linux-mips+bounces-9226-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9227-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C6CDAD4869
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Jun 2025 04:13:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id A7F39AD486D
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Jun 2025 04:13:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C18B3A5851
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Jun 2025 02:12:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 925673A5876
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Jun 2025 02:12:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E976C1714B4;
-	Wed, 11 Jun 2025 02:12:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54D9717B506;
+	Wed, 11 Jun 2025 02:12:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PYKA3dc2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O9SOps0U"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1081156F45;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21DFF17A2FC;
 	Wed, 11 Jun 2025 02:12:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749607972; cv=none; b=iJSdjZn7imSJTYQk1D7cnrZDbVK91t+GH7UtAKCE6Xvjtfm73RsfyimSD+LEJhoUjAzekYiOY0jn2Ae9nNRjRsu547uCXvZxb9zo/H0utMGaL2R38yuNPmEhEG/obUtP+iK6fc4Dw2HnOkloKfBTAOz9Q4cTGKryIp0JnFoATAk=
+	t=1749607973; cv=none; b=Uw6GzP2DK3OaCEoMeK4q4PTk0iIcPla4TxB3kSW+gIGhmbHbdgt12AlUahVLV8RpinSTVnByZxd7nQ0Xf+RU3qUCumclL5LVmW0zNrm/Zb79xDU2QXZeqmQBrva7xPb6I6xno5C5D6TBe60kiSPCYhOYaXBX5lAXsS0yDyqfaJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749607972; c=relaxed/simple;
-	bh=H6nrs/ntjG5cZgZMn/Mw/s7NFoDXvl6Tqz/mtTtGbAk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Tiewwi8mLMF0LNbP/2et+SdNf59+fJQKQXHoa2Z6ARsF1a+6RAunywNWAkUYg0vLXkQWBRfNbRo/wOAKDOYh6AzKH9mET0tWsskNM4EsvRyC6+GVLEecp16Df0JrZhyF+zI4b4Q9sDHw/mIPoCiOc027Jvsvo1bQzsduUaZLKrA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PYKA3dc2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C2851C4CEED;
-	Wed, 11 Jun 2025 02:12:51 +0000 (UTC)
+	s=arc-20240116; t=1749607973; c=relaxed/simple;
+	bh=hTzqIPE8jGSH60x3USrFNk9o+3svOV8hf9z113UDgJI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=kH32ZoMjoqgEImv3wQaFIEnE+8F81wO/f3oTjSCwbu/JCqbhYu5qdFBvgCKp2iwrkwPRD/IipOydVPzDHLFsK7l5PYm7hvp0t5EorxZra6O3H2EmCIqXaipSuDUhc9CzjK1IpeOGJivWqXeRU9BEotXVQLHQl2regWykT0x6VqI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O9SOps0U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50059C4CEF1;
+	Wed, 11 Jun 2025 02:12:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1749607972;
-	bh=H6nrs/ntjG5cZgZMn/Mw/s7NFoDXvl6Tqz/mtTtGbAk=;
-	h=From:To:Cc:Subject:Date:From;
-	b=PYKA3dc2syWyr6YVP6t0ca76B97xO8mJG7hrM6OKlq+h4g/iVbtMAnPJ7En0+89/b
-	 Oy2VApdT31w9w5YJBMuqLkCWbLYkoIHX7VKsFw9+kKkeSp34hKz+LfwpuSFAa/0jUn
-	 BwoiICSLlHnaZUHBIjsarOIHjcXUo9jX1jWYGdQ+ECyqBJ+KsE8DWmZHHBANZHv5N0
-	 ZvSFNDQr0rYd/M5dCfIkLU4RHgNuKWaucik9Oxad3XnA55F3K1s4il2JkPrKt75+a+
-	 W0BY6uoFVICpQNOX5+BVh8NZ46X5n6E04FKVLBiuX9oyBN15oBt5QT47gllSYdGFGS
-	 0OwoOxuJDCeRQ==
+	bh=hTzqIPE8jGSH60x3USrFNk9o+3svOV8hf9z113UDgJI=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=O9SOps0Uo2bDYBlyskNcRKbp7I+RI3AAQBONiPJ5syevbDXXmUhAsMbLHADD/c1eh
+	 9VRigQ7XlLzJCkIZ3KqoBH67n5HLlbkMOH3gebJSi7cLvFFr2+G8vVcH8WmUMzSkH9
+	 wikjUROQdLIVlJaJ86iPHSU9hoVvcS4W/uonPUUNxcTTs79BA2Qc0rlSQzMoZrVOUN
+	 4dBYK3gGkDQPcmyTHWTRc9/tq39ILKBYirIDvlR9jJ4Gyt9kQ/1r/KtSOhs7UDuKUJ
+	 jkGfUex1KyuizQT/O1E/6lMDD9oMtb4U6f3nNyskPJ1xh1pVg4T40DY432p5vFuF3N
+	 bUqmz4zt2qCtg==
 From: Eric Biggers <ebiggers@kernel.org>
 To: linux-crypto@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -52,10 +53,12 @@ Cc: linux-kernel@vger.kernel.org,
 	Ard Biesheuvel <ardb@kernel.org>,
 	"Jason A . Donenfeld " <Jason@zx2c4.com>,
 	Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH 00/16] SHA-512 library functions
-Date: Tue, 10 Jun 2025 19:09:07 -0700
-Message-ID: <20250611020923.1482701-1-ebiggers@kernel.org>
+Subject: [PATCH 01/16] crypto: sha512 - rename conflicting symbols
+Date: Tue, 10 Jun 2025 19:09:08 -0700
+Message-ID: <20250611020923.1482701-2-ebiggers@kernel.org>
 X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250611020923.1482701-1-ebiggers@kernel.org>
+References: <20250611020923.1482701-1-ebiggers@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -64,203 +67,250 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This series applies to v6.16-rc1 and is targeting the libcrypto-next
-tree.  It is also available at:
+From: Eric Biggers <ebiggers@google.com>
 
-    git fetch https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git sha512-lib-v1
+Rename existing functions and structs in architecture-optimized SHA-512
+code that had names conflicting with the upcoming library interface
+which will be added to <crypto/sha2.h>: sha384_init, sha512_init,
+sha512_update, sha384, and sha512.
 
-This series adds support for SHA-384, SHA-512, HMAC-SHA384, and
-HMAC-SHA512 to lib/crypto/.  The new functions take advantage of the
-kernel's existing architecture-optimized implementations of the SHA-512
-compression function.  The new functions are fully tested using KUnit.
+Note: all affected code will be superseded by later commits that migrate
+the arch-optimized SHA-512 code into the library.  This commit simply
+keeps the kernel building for the initial introduction of the library.
 
-To avoid duplicating all arch-optimized implementations of the SHA-512
-compression function (~3000 lines of code total), they are moved into
-lib/crypto/ rather than copied.  To make the "sha384", "sha512",
-"hmac(sha384)", and "hmac(sha512)" crypto_shash algorithms in the
-old-school crypto API continue to be properly optimized after that, they
-are reimplemented on top of lib/crypto/, which is straightforward.
+Signed-off-by: Eric Biggers <ebiggers@google.com>
+---
+ arch/arm64/crypto/sha512-glue.c     |  8 ++++----
+ arch/s390/crypto/sha512_s390.c      |  8 ++++----
+ arch/sparc/crypto/sha512_glue.c     | 14 +++++++-------
+ arch/x86/crypto/sha512_ssse3_glue.c | 10 +++++-----
+ 4 files changed, 20 insertions(+), 20 deletions(-)
 
-The following lists some of the design choices and conventions that I've
-followed in more detail.  Where these differ from the code or APIs for
-other algorithms (e.g., SHA-256 in some cases), I'd like to do it this
-way going forward and plan to fix up the other algorithms accordingly:
-
-- APIs are fully documented with kerneldoc comments.
-
-- APIs cannot fail, and return void.
-
-- APIs work in all contexts.  This doesn't mean that they *should* be
-  called in all contexts, but rather they always just work as expected.
-
-- Tests are KUnit tests, and they are fairly thorough (more thorough
-  than crypto/testmgr.c) and also optionally include benchmarks.
-
-- Architecture-optimized code is integrated the same way I'm doing it
-  for lib/crc/: it's in subdirectories lib/crypto/$(SRCARCH), it's
-  enabled by default, and it's inlined into the same module as the
-  generic code.  This solves a number of problems; for more details, see
-  https://lore.kernel.org/r/20250607200454.73587-1-ebiggers@kernel.org
-
-- HMAC support is a first-class citizen.
-
-- APIs handle zeroization, when applicable.
-
-- Message contexts are *_ctx instead of *_state.  It's shorter, avoids
-  ambiguity with the compression function state, and matches OpenSSL.
-
-- Length arguments are size_t, are in bytes, are named len or *_len, and
-  immediately follow the corresponding buffer.  "Object" being operated
-  on is first argument; outputs otherwise follow inputs.
-
-- The structures for different algorithms use different types, which
-  prevents usage errors where functions are mixed up between algorithms.
-
-- The compression function state is strongly typed, not a plain array.
-
-Eric Biggers (16):
-  crypto: sha512 - rename conflicting symbols
-  lib/crypto/sha512: add support for SHA-384 and SHA-512
-  lib/crypto/sha512: add HMAC-SHA384 and HMAC-SHA512 support
-  lib/crypto/sha512: add KUnit tests for SHA-384 and SHA-512
-  lib/crypto/sha256: add KUnit tests for SHA-224 and SHA-256
-  crypto: riscv/sha512 - stop depending on sha512_generic_block_fn
-  crypto: sha512 - replace sha512_generic with wrapper around SHA-512
-    library
-  lib/crypto/sha512: migrate arm-optimized SHA-512 code to library
-  lib/crypto/sha512: migrate arm64-optimized SHA-512 code to library
-  mips: cavium-octeon: move octeon-crypto.h into asm directory
-  lib/crypto/sha512: migrate mips-optimized SHA-512 code to library
-  lib/crypto/sha512: migrate riscv-optimized SHA-512 code to library
-  lib/crypto/sha512: migrate s390-optimized SHA-512 code to library
-  lib/crypto/sha512: migrate sparc-optimized SHA-512 code to library
-  lib/crypto/sha512: migrate x86-optimized SHA-512 code to library
-  crypto: sha512 - remove sha512_base.h
-
- arch/arm/configs/exynos_defconfig             |   1 -
- arch/arm/configs/milbeaut_m10v_defconfig      |   1 -
- arch/arm/configs/multi_v7_defconfig           |   1 -
- arch/arm/configs/omap2plus_defconfig          |   1 -
- arch/arm/configs/pxa_defconfig                |   1 -
- arch/arm/crypto/Kconfig                       |  10 -
- arch/arm/crypto/Makefile                      |  15 -
- arch/arm/crypto/sha512-glue.c                 | 110 ---
- arch/arm/crypto/sha512-neon-glue.c            |  75 --
- arch/arm/crypto/sha512.h                      |   3 -
- arch/arm64/configs/defconfig                  |   1 -
- arch/arm64/crypto/Kconfig                     |  19 -
- arch/arm64/crypto/Makefile                    |  14 -
- arch/arm64/crypto/sha512-ce-glue.c            |  96 ---
- arch/arm64/crypto/sha512-glue.c               |  83 ---
- arch/mips/cavium-octeon/crypto/Makefile       |   1 -
- .../mips/cavium-octeon/crypto/octeon-crypto.c |   3 +-
- arch/mips/cavium-octeon/crypto/octeon-md5.c   |   3 +-
- arch/mips/cavium-octeon/crypto/octeon-sha1.c  |   3 +-
- .../mips/cavium-octeon/crypto/octeon-sha256.c |   3 +-
- .../mips/cavium-octeon/crypto/octeon-sha512.c | 167 -----
- arch/mips/configs/cavium_octeon_defconfig     |   1 -
- arch/mips/crypto/Kconfig                      |  10 -
- .../asm/octeon/crypto.h}                      |   0
- arch/riscv/crypto/Kconfig                     |  11 -
- arch/riscv/crypto/Makefile                    |   3 -
- arch/riscv/crypto/sha512-riscv64-glue.c       | 124 ----
- arch/s390/configs/debug_defconfig             |   1 -
- arch/s390/configs/defconfig                   |   1 -
- arch/s390/crypto/Kconfig                      |  10 -
- arch/s390/crypto/Makefile                     |   1 -
- arch/s390/crypto/sha512_s390.c                | 151 ----
- arch/sparc/crypto/Kconfig                     |  10 -
- arch/sparc/crypto/Makefile                    |   2 -
- arch/sparc/crypto/sha512_glue.c               | 122 ----
- arch/x86/crypto/Kconfig                       |  13 -
- arch/x86/crypto/Makefile                      |   3 -
- arch/x86/crypto/sha512_ssse3_glue.c           | 322 ---------
- crypto/Kconfig                                |   4 +-
- crypto/Makefile                               |   2 +-
- crypto/sha512.c                               | 254 +++++++
- crypto/sha512_generic.c                       | 217 ------
- crypto/testmgr.c                              |  16 +
- drivers/crypto/starfive/jh7110-hash.c         |   8 +-
- include/crypto/sha2.h                         | 350 +++++++++
- include/crypto/sha512_base.h                  | 120 ----
- lib/crypto/Kconfig                            |  20 +
- lib/crypto/Makefile                           |  38 +
- lib/crypto/arm/.gitignore                     |   2 +
- .../crypto => lib/crypto/arm}/sha512-armv4.pl |   0
- lib/crypto/arm/sha512.h                       |  38 +
- lib/crypto/arm64/.gitignore                   |   2 +
- .../crypto/arm64}/sha512-ce-core.S            |  10 +-
- lib/crypto/arm64/sha512.h                     |  46 ++
- lib/crypto/mips/sha512.h                      |  74 ++
- .../riscv}/sha512-riscv64-zvknhb-zvkb.S       |   4 +-
- lib/crypto/riscv/sha512.h                     |  41 ++
- lib/crypto/s390/sha512.h                      |  28 +
- lib/crypto/sha512.c                           | 403 +++++++++++
- lib/crypto/sparc/sha512.h                     |  42 ++
- .../crypto => lib/crypto/sparc}/sha512_asm.S  |   0
- lib/crypto/tests/Kconfig                      |  24 +
- lib/crypto/tests/Makefile                     |   6 +
- lib/crypto/tests/hash-test-template.h         | 512 ++++++++++++++
- lib/crypto/tests/sha224-testvecs.h            | 223 ++++++
- lib/crypto/tests/sha224_kunit.c               |  50 ++
- lib/crypto/tests/sha256-testvecs.h            | 223 ++++++
- lib/crypto/tests/sha256_kunit.c               |  39 ++
- lib/crypto/tests/sha384-testvecs.h            | 566 +++++++++++++++
- lib/crypto/tests/sha384_kunit.c               |  48 ++
- lib/crypto/tests/sha512-testvecs.h            | 662 ++++++++++++++++++
- lib/crypto/tests/sha512_kunit.c               |  48 ++
- .../crypto/x86}/sha512-avx-asm.S              |  11 +-
- .../crypto/x86}/sha512-avx2-asm.S             |  11 +-
- .../crypto/x86}/sha512-ssse3-asm.S            |  12 +-
- lib/crypto/x86/sha512.h                       |  54 ++
- scripts/crypto/gen-hash-testvecs.py           |  83 +++
- 77 files changed, 3931 insertions(+), 1756 deletions(-)
- delete mode 100644 arch/arm/crypto/sha512-glue.c
- delete mode 100644 arch/arm/crypto/sha512-neon-glue.c
- delete mode 100644 arch/arm/crypto/sha512.h
- delete mode 100644 arch/arm64/crypto/sha512-ce-glue.c
- delete mode 100644 arch/arm64/crypto/sha512-glue.c
- delete mode 100644 arch/mips/cavium-octeon/crypto/octeon-sha512.c
- rename arch/mips/{cavium-octeon/crypto/octeon-crypto.h => include/asm/octeon/crypto.h} (100%)
- delete mode 100644 arch/riscv/crypto/sha512-riscv64-glue.c
- delete mode 100644 arch/s390/crypto/sha512_s390.c
- delete mode 100644 arch/sparc/crypto/sha512_glue.c
- delete mode 100644 arch/x86/crypto/sha512_ssse3_glue.c
- create mode 100644 crypto/sha512.c
- delete mode 100644 crypto/sha512_generic.c
- delete mode 100644 include/crypto/sha512_base.h
- create mode 100644 lib/crypto/arm/.gitignore
- rename {arch/arm/crypto => lib/crypto/arm}/sha512-armv4.pl (100%)
- create mode 100644 lib/crypto/arm/sha512.h
- create mode 100644 lib/crypto/arm64/.gitignore
- rename {arch/arm64/crypto => lib/crypto/arm64}/sha512-ce-core.S (97%)
- create mode 100644 lib/crypto/arm64/sha512.h
- create mode 100644 lib/crypto/mips/sha512.h
- rename {arch/riscv/crypto => lib/crypto/riscv}/sha512-riscv64-zvknhb-zvkb.S (98%)
- create mode 100644 lib/crypto/riscv/sha512.h
- create mode 100644 lib/crypto/s390/sha512.h
- create mode 100644 lib/crypto/sha512.c
- create mode 100644 lib/crypto/sparc/sha512.h
- rename {arch/sparc/crypto => lib/crypto/sparc}/sha512_asm.S (100%)
- create mode 100644 lib/crypto/tests/Kconfig
- create mode 100644 lib/crypto/tests/Makefile
- create mode 100644 lib/crypto/tests/hash-test-template.h
- create mode 100644 lib/crypto/tests/sha224-testvecs.h
- create mode 100644 lib/crypto/tests/sha224_kunit.c
- create mode 100644 lib/crypto/tests/sha256-testvecs.h
- create mode 100644 lib/crypto/tests/sha256_kunit.c
- create mode 100644 lib/crypto/tests/sha384-testvecs.h
- create mode 100644 lib/crypto/tests/sha384_kunit.c
- create mode 100644 lib/crypto/tests/sha512-testvecs.h
- create mode 100644 lib/crypto/tests/sha512_kunit.c
- rename {arch/x86/crypto => lib/crypto/x86}/sha512-avx-asm.S (97%)
- rename {arch/x86/crypto => lib/crypto/x86}/sha512-avx2-asm.S (98%)
- rename {arch/x86/crypto => lib/crypto/x86}/sha512-ssse3-asm.S (97%)
- create mode 100644 lib/crypto/x86/sha512.h
- create mode 100755 scripts/crypto/gen-hash-testvecs.py
-
-
-base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
+diff --git a/arch/arm64/crypto/sha512-glue.c b/arch/arm64/crypto/sha512-glue.c
+index 15aa9d8b7b2c4..a78e184c100fa 100644
+--- a/arch/arm64/crypto/sha512-glue.c
++++ b/arch/arm64/crypto/sha512-glue.c
+@@ -25,12 +25,12 @@ static void sha512_arm64_transform(struct sha512_state *sst, u8 const *src,
+ 				   int blocks)
+ {
+ 	sha512_blocks_arch(sst->state, src, blocks);
+ }
+ 
+-static int sha512_update(struct shash_desc *desc, const u8 *data,
+-			 unsigned int len)
++static int sha512_update_arm64(struct shash_desc *desc, const u8 *data,
++			       unsigned int len)
+ {
+ 	return sha512_base_do_update_blocks(desc, data, len,
+ 					    sha512_arm64_transform);
+ }
+ 
+@@ -42,11 +42,11 @@ static int sha512_finup(struct shash_desc *desc, const u8 *data,
+ }
+ 
+ static struct shash_alg algs[] = { {
+ 	.digestsize		= SHA512_DIGEST_SIZE,
+ 	.init			= sha512_base_init,
+-	.update			= sha512_update,
++	.update			= sha512_update_arm64,
+ 	.finup			= sha512_finup,
+ 	.descsize		= SHA512_STATE_SIZE,
+ 	.base.cra_name		= "sha512",
+ 	.base.cra_driver_name	= "sha512-arm64",
+ 	.base.cra_priority	= 150,
+@@ -55,11 +55,11 @@ static struct shash_alg algs[] = { {
+ 	.base.cra_blocksize	= SHA512_BLOCK_SIZE,
+ 	.base.cra_module	= THIS_MODULE,
+ }, {
+ 	.digestsize		= SHA384_DIGEST_SIZE,
+ 	.init			= sha384_base_init,
+-	.update			= sha512_update,
++	.update			= sha512_update_arm64,
+ 	.finup			= sha512_finup,
+ 	.descsize		= SHA512_STATE_SIZE,
+ 	.base.cra_name		= "sha384",
+ 	.base.cra_driver_name	= "sha384-arm64",
+ 	.base.cra_priority	= 150,
+diff --git a/arch/s390/crypto/sha512_s390.c b/arch/s390/crypto/sha512_s390.c
+index 33711a29618c3..e8bb172dbed75 100644
+--- a/arch/s390/crypto/sha512_s390.c
++++ b/arch/s390/crypto/sha512_s390.c
+@@ -15,11 +15,11 @@
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ 
+ #include "sha.h"
+ 
+-static int sha512_init(struct shash_desc *desc)
++static int sha512_init_s390(struct shash_desc *desc)
+ {
+ 	struct s390_sha_ctx *ctx = shash_desc_ctx(desc);
+ 
+ 	ctx->sha512.state[0] = SHA512_H0;
+ 	ctx->sha512.state[1] = SHA512_H1;
+@@ -60,11 +60,11 @@ static int sha512_import(struct shash_desc *desc, const void *in)
+ 	return 0;
+ }
+ 
+ static struct shash_alg sha512_alg = {
+ 	.digestsize	=	SHA512_DIGEST_SIZE,
+-	.init		=	sha512_init,
++	.init		=	sha512_init_s390,
+ 	.update		=	s390_sha_update_blocks,
+ 	.finup		=	s390_sha_finup,
+ 	.export		=	sha512_export,
+ 	.import		=	sha512_import,
+ 	.descsize	=	sizeof(struct s390_sha_ctx),
+@@ -80,11 +80,11 @@ static struct shash_alg sha512_alg = {
+ 	}
+ };
+ 
+ MODULE_ALIAS_CRYPTO("sha512");
+ 
+-static int sha384_init(struct shash_desc *desc)
++static int sha384_init_s390(struct shash_desc *desc)
+ {
+ 	struct s390_sha_ctx *ctx = shash_desc_ctx(desc);
+ 
+ 	ctx->sha512.state[0] = SHA384_H0;
+ 	ctx->sha512.state[1] = SHA384_H1;
+@@ -101,11 +101,11 @@ static int sha384_init(struct shash_desc *desc)
+ 	return 0;
+ }
+ 
+ static struct shash_alg sha384_alg = {
+ 	.digestsize	=	SHA384_DIGEST_SIZE,
+-	.init		=	sha384_init,
++	.init		=	sha384_init_s390,
+ 	.update		=	s390_sha_update_blocks,
+ 	.finup		=	s390_sha_finup,
+ 	.export		=	sha512_export,
+ 	.import		=	sha512_import,
+ 	.descsize	=	sizeof(struct s390_sha_ctx),
+diff --git a/arch/sparc/crypto/sha512_glue.c b/arch/sparc/crypto/sha512_glue.c
+index 47b9277b6877a..fb81c3290c8c0 100644
+--- a/arch/sparc/crypto/sha512_glue.c
++++ b/arch/sparc/crypto/sha512_glue.c
+@@ -38,11 +38,11 @@ static int sha512_sparc64_finup(struct shash_desc *desc, const u8 *src,
+ {
+ 	sha512_base_do_finup(desc, src, len, sha512_block);
+ 	return sha512_base_finish(desc, out);
+ }
+ 
+-static struct shash_alg sha512 = {
++static struct shash_alg sha512_alg = {
+ 	.digestsize	=	SHA512_DIGEST_SIZE,
+ 	.init		=	sha512_base_init,
+ 	.update		=	sha512_sparc64_update,
+ 	.finup		=	sha512_sparc64_finup,
+ 	.descsize	=	SHA512_STATE_SIZE,
+@@ -53,11 +53,11 @@ static struct shash_alg sha512 = {
+ 		.cra_blocksize	=	SHA512_BLOCK_SIZE,
+ 		.cra_module	=	THIS_MODULE,
+ 	}
+ };
+ 
+-static struct shash_alg sha384 = {
++static struct shash_alg sha384_alg = {
+ 	.digestsize	=	SHA384_DIGEST_SIZE,
+ 	.init		=	sha384_base_init,
+ 	.update		=	sha512_sparc64_update,
+ 	.finup		=	sha512_sparc64_finup,
+ 	.descsize	=	SHA512_STATE_SIZE,
+@@ -85,17 +85,17 @@ static bool __init sparc64_has_sha512_opcode(void)
+ }
+ 
+ static int __init sha512_sparc64_mod_init(void)
+ {
+ 	if (sparc64_has_sha512_opcode()) {
+-		int ret = crypto_register_shash(&sha384);
++		int ret = crypto_register_shash(&sha384_alg);
+ 		if (ret < 0)
+ 			return ret;
+ 
+-		ret = crypto_register_shash(&sha512);
++		ret = crypto_register_shash(&sha512_alg);
+ 		if (ret < 0) {
+-			crypto_unregister_shash(&sha384);
++			crypto_unregister_shash(&sha384_alg);
+ 			return ret;
+ 		}
+ 
+ 		pr_info("Using sparc64 sha512 opcode optimized SHA-512/SHA-384 implementation\n");
+ 		return 0;
+@@ -104,12 +104,12 @@ static int __init sha512_sparc64_mod_init(void)
+ 	return -ENODEV;
+ }
+ 
+ static void __exit sha512_sparc64_mod_fini(void)
+ {
+-	crypto_unregister_shash(&sha384);
+-	crypto_unregister_shash(&sha512);
++	crypto_unregister_shash(&sha384_alg);
++	crypto_unregister_shash(&sha512_alg);
+ }
+ 
+ module_init(sha512_sparc64_mod_init);
+ module_exit(sha512_sparc64_mod_fini);
+ 
+diff --git a/arch/x86/crypto/sha512_ssse3_glue.c b/arch/x86/crypto/sha512_ssse3_glue.c
+index 067684c543952..97744b7d23817 100644
+--- a/arch/x86/crypto/sha512_ssse3_glue.c
++++ b/arch/x86/crypto/sha512_ssse3_glue.c
+@@ -36,12 +36,12 @@
+ #include <crypto/sha512_base.h>
+ 
+ asmlinkage void sha512_transform_ssse3(struct sha512_state *state,
+ 				       const u8 *data, int blocks);
+ 
+-static int sha512_update(struct shash_desc *desc, const u8 *data,
+-		       unsigned int len, sha512_block_fn *sha512_xform)
++static int sha512_update_x86(struct shash_desc *desc, const u8 *data,
++			     unsigned int len, sha512_block_fn *sha512_xform)
+ {
+ 	int remain;
+ 
+ 	/*
+ 	 * Make sure struct sha512_state begins directly with the SHA512
+@@ -67,11 +67,11 @@ static int sha512_finup(struct shash_desc *desc, const u8 *data,
+ }
+ 
+ static int sha512_ssse3_update(struct shash_desc *desc, const u8 *data,
+ 		       unsigned int len)
+ {
+-	return sha512_update(desc, data, len, sha512_transform_ssse3);
++	return sha512_update_x86(desc, data, len, sha512_transform_ssse3);
+ }
+ 
+ static int sha512_ssse3_finup(struct shash_desc *desc, const u8 *data,
+ 	      unsigned int len, u8 *out)
+ {
+@@ -139,11 +139,11 @@ static bool avx_usable(void)
+ }
+ 
+ static int sha512_avx_update(struct shash_desc *desc, const u8 *data,
+ 		       unsigned int len)
+ {
+-	return sha512_update(desc, data, len, sha512_transform_avx);
++	return sha512_update_x86(desc, data, len, sha512_transform_avx);
+ }
+ 
+ static int sha512_avx_finup(struct shash_desc *desc, const u8 *data,
+ 	      unsigned int len, u8 *out)
+ {
+@@ -201,11 +201,11 @@ asmlinkage void sha512_transform_rorx(struct sha512_state *state,
+ 				      const u8 *data, int blocks);
+ 
+ static int sha512_avx2_update(struct shash_desc *desc, const u8 *data,
+ 		       unsigned int len)
+ {
+-	return sha512_update(desc, data, len, sha512_transform_rorx);
++	return sha512_update_x86(desc, data, len, sha512_transform_rorx);
+ }
+ 
+ static int sha512_avx2_finup(struct shash_desc *desc, const u8 *data,
+ 	      unsigned int len, u8 *out)
+ {
 -- 
 2.49.0
 
