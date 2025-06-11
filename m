@@ -1,66 +1,70 @@
-Return-Path: <linux-mips+bounces-9247-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9248-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 79FF3AD4F50
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Jun 2025 11:06:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CD02AD50E8
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Jun 2025 12:06:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 050B618884A1
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Jun 2025 09:06:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C9073A8AD0
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Jun 2025 10:05:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66C7C2356A6;
-	Wed, 11 Jun 2025 09:05:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFE9626A0FC;
+	Wed, 11 Jun 2025 10:03:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Jyf12agD"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gSHzIZMV"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 056C32D543C
-	for <linux-mips@vger.kernel.org>; Wed, 11 Jun 2025 09:05:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C3BE026988E;
+	Wed, 11 Jun 2025 10:03:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749632758; cv=none; b=Lci8iYeBTADwCPJCuZukgx66wdwL5fxKqCCt+TLfYZ2GIacdXWE5jWm86m985ykgfbwAbaLBJccuSMxtFk66XPpiOqjNJb1XiItVkhv9uCgz4SLA5gQ0Q5TsFH1N0GJYZG6uFGsHYk3ri+ri/r75mxjOoNhajamBz5onnp1PlSg=
+	t=1749636223; cv=none; b=o3BGm0oejt4nl7Uc8beVrDfm654dIXLilStTAhF7BOrYz7vmVglYldLxgi9fyWJj4NomAenCa2+9j8bFU0l02o12vIsf1j9iU7btKkxyzLIG5/I0BXyx/NVb8fXKoJzgJCw/djK1sUYVN7nVAcvDnSJeDR7VT5b0smuzB46zIj8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749632758; c=relaxed/simple;
-	bh=IAK6nZGiOoHD/H2vqNpdnZWPucIVUMQPOIi0P+vFLNM=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=hZeL/ie/GTgxPV50MM0gGrWQNqchOq3KEbYobrLIlRpeH9gBTm8McQFBuUkOJ0twEpJwbl1fBbtCzBNu1RR/Iq2DbnpNe0D62QU25Sman53R1PY+tT6A2w0hR2N8oK0rFZl9xzL/DnaNaXztKn43jqVkUE6ap6W4H59Y/3kY2bc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Jyf12agD; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1749632753;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=LTYVNVrovLDjrQ/z11VDrvo/BIiGOKPZo2de3y6CfTI=;
-	b=Jyf12agDgkJ9Z0HqpFiM6XH6ICEXA2MdmA0dCnJdP2Gu5TCepa9CfyNx3VP0Adv3A+loXd
-	hm1HTtYj4ZGd9w93D502fzznIoeawalWhS7mKjJcxrny8mjugczjbSkKzX5ObfpxVXJuGu
-	higHWlSTg9JPdPFgVIKdjStJ1CRwkLU=
-Received: from mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-554-rqzjW346NB2-G944ILi78w-1; Wed,
- 11 Jun 2025 05:05:50 -0400
-X-MC-Unique: rqzjW346NB2-G944ILi78w-1
-X-Mimecast-MFC-AGG-ID: rqzjW346NB2-G944ILi78w_1749632749
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 67F061800282;
-	Wed, 11 Jun 2025 09:05:49 +0000 (UTC)
-Received: from thuth-p1g4.redhat.com (unknown [10.45.224.174])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 6B00D19560AF;
-	Wed, 11 Jun 2025 09:05:45 +0000 (UTC)
-From: Thomas Huth <thuth@redhat.com>
-To: linux-mips@vger.kernel.org,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: [PATCH v2] mips: Replace __ASSEMBLY__ with __ASSEMBLER__ in the mips headers
-Date: Wed, 11 Jun 2025 11:05:44 +0200
-Message-ID: <20250611090544.90032-1-thuth@redhat.com>
+	s=arc-20240116; t=1749636223; c=relaxed/simple;
+	bh=WnNh6Rm9Jg/5QW7kY8rxY/asPnz6gmr/Wc6rb4KEVVA=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=BC5X46EWZoaQQnHFjo30tAkn6ph+ogkKNTkiiTVsqf0b8i0oQuX9rPOmHQJIzc7VOVwhaTPEU/mkGZ3TtMf4eccPBZh/xcy/Q4oCDVM2yQ+V4toO7keoyZTjJIQ8jb5TFczfOVhthsCD7CkuIuuZFgwN7FCuCv4t4lrFy5Xy8z4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gSHzIZMV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCB90C4CEF2;
+	Wed, 11 Jun 2025 10:03:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749636223;
+	bh=WnNh6Rm9Jg/5QW7kY8rxY/asPnz6gmr/Wc6rb4KEVVA=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=gSHzIZMVLV69bRYINCRFNUMLUTYDU0vxl6UqXKftZ/QTsTnzxo/aO5jQhccphsJOg
+	 Cv0pVQAf4rsYJq/ATeNFZ6C3MDdu+0RtwXwHFr9o2gFMg3EYEVLvgjZ7aLYINPVmXi
+	 JwYCSpcY4yEwRLB6HMif7MihNAipdZiaUfLsduDnMzeurlLmXvNAJGxu5W3u46Htni
+	 sdBolxL+Z7eDSPM6ijoUZmqYPKbrXwMiy2vvnC5yvZQ3XO2hfyjgTnuXvyOX1beo61
+	 0TdqK5YHneN6JW2SQF8z+Bdt3v3Y8DfxPQTcNBSsvHzO1oVtTVJnpL1mjhz/4zwsfu
+	 SavGm0vQjveew==
+From: "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+To: gregkh@linuxfoundation.org
+Cc: linux-serial@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Vladimir Zapolskiy <vz@mleia.com>,
+	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-mips@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 08/33] serial: 8250: sanitize uart_port::serial_{in,out}() types
+Date: Wed, 11 Jun 2025 12:02:54 +0200
+Message-ID: <20250611100319.186924-9-jirislaby@kernel.org>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250611100319.186924-1-jirislaby@kernel.org>
+References: <20250611100319.186924-1-jirislaby@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -69,1503 +73,484 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-From: Thomas Huth <thuth@redhat.com>
+uart_port::{serial_in,serial_out} (and plat_serial8250_port::* likewise)
+historically use:
+* 'unsigned int' for 32-bit register values in reads and writes, and
+* 'int' for offsets.
 
-While the GCC and Clang compilers already define __ASSEMBLER__
-automatically when compiling assembler code, __ASSEMBLY__ is a
-macro that only gets defined by the Makefiles in the kernel.
-This is bad since macros starting with two underscores are names
-that are reserved by the C language. It can also be very confusing
-for the developers when switching between userspace and kernelspace
-coding, or when dealing with uapi headers that rather should use
-__ASSEMBLER__  instead. So let's now standardize on the __ASSEMBLER__
-macro that is provided by the compilers.
+Make them sane such that:
+* 'u32' is used for register values, and
+* 'unsigned int' is used for offsets.
 
-This is almost a completely mechanical patch (done with a simple
-"sed -i" statement), with just one comment tweaked manually in
-arch/mips/include/asm/cpu.h (that was missing some underscores).
+While at it, name hooks' parameters, so it is clear what is what.
 
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
-Signed-off-by: Thomas Huth <thuth@redhat.com>
+Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
+Cc: Madhavan Srinivasan <maddy@linux.ibm.com>
+Cc: Michael Ellerman <mpe@ellerman.id.au>
+Cc: Nicholas Piggin <npiggin@gmail.com>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: "Ilpo Järvinen" <ilpo.jarvinen@linux.intel.com>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Paul Cercueil <paul@crapouillou.net>
+Cc: Vladimir Zapolskiy <vz@mleia.com>
+Cc: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Cc: Masami Hiramatsu <mhiramat@kernel.org>
 ---
- v2: Fixed one more new occurance in ftrace.h
+Cc: linuxppc-dev@lists.ozlabs.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+---
+ arch/powerpc/kernel/legacy_serial.c     |  7 ++---
+ drivers/tty/serial/8250/8250_dw.c       | 34 ++++++++++++-------------
+ drivers/tty/serial/8250/8250_em.c       |  4 +--
+ drivers/tty/serial/8250/8250_ingenic.c  |  8 +++---
+ drivers/tty/serial/8250/8250_ioc3.c     |  4 +--
+ drivers/tty/serial/8250/8250_lpc18xx.c  |  2 +-
+ drivers/tty/serial/8250/8250_pci.c      |  6 ++---
+ drivers/tty/serial/8250/8250_port.c     | 30 +++++++++++-----------
+ drivers/tty/serial/8250/8250_rt288x.c   |  4 +--
+ drivers/tty/serial/8250/8250_uniphier.c |  4 +--
+ include/linux/serial_8250.h             |  4 +--
+ include/linux/serial_core.h             |  4 +--
+ 12 files changed, 56 insertions(+), 55 deletions(-)
 
- arch/mips/include/asm/addrspace.h            |  4 +--
- arch/mips/include/asm/asm-eva.h              |  6 ++--
- arch/mips/include/asm/asm.h                  |  8 ++---
- arch/mips/include/asm/bmips.h                |  4 +--
- arch/mips/include/asm/cpu.h                  |  4 +--
- arch/mips/include/asm/dec/ecc.h              |  2 +-
- arch/mips/include/asm/dec/interrupts.h       |  4 +--
- arch/mips/include/asm/dec/kn01.h             |  2 +-
- arch/mips/include/asm/dec/kn02.h             |  2 +-
- arch/mips/include/asm/dec/kn02xa.h           |  2 +-
- arch/mips/include/asm/eva.h                  |  4 +--
- arch/mips/include/asm/ftrace.h               |  8 ++---
- arch/mips/include/asm/hazards.h              |  4 +--
- arch/mips/include/asm/irqflags.h             |  4 +--
- arch/mips/include/asm/jazz.h                 | 16 ++++-----
- arch/mips/include/asm/jump_label.h           |  4 +--
- arch/mips/include/asm/linkage.h              |  2 +-
- arch/mips/include/asm/mach-generic/spaces.h  |  4 +--
- arch/mips/include/asm/mips-boards/bonito64.h |  4 +--
- arch/mips/include/asm/mipsmtregs.h           |  6 ++--
- arch/mips/include/asm/mipsregs.h             |  6 ++--
- arch/mips/include/asm/msa.h                  |  4 +--
- arch/mips/include/asm/pci/bridge.h           |  4 +--
- arch/mips/include/asm/pm.h                   |  6 ++--
- arch/mips/include/asm/prefetch.h             |  2 +-
- arch/mips/include/asm/regdef.h               |  4 +--
- arch/mips/include/asm/sibyte/board.h         |  4 +--
- arch/mips/include/asm/sibyte/sb1250.h        |  2 +-
- arch/mips/include/asm/sibyte/sb1250_defs.h   |  6 ++--
- arch/mips/include/asm/smp-cps.h              |  6 ++--
- arch/mips/include/asm/sn/addrs.h             | 18 +++++-----
- arch/mips/include/asm/sn/gda.h               |  4 +--
- arch/mips/include/asm/sn/kldir.h             |  4 +--
- arch/mips/include/asm/sn/klkernvars.h        |  4 +--
- arch/mips/include/asm/sn/launch.h            |  4 +--
- arch/mips/include/asm/sn/nmi.h               |  8 ++---
- arch/mips/include/asm/sn/sn0/addrs.h         | 14 ++++----
- arch/mips/include/asm/sn/sn0/hub.h           |  2 +-
- arch/mips/include/asm/sn/sn0/hubio.h         | 36 ++++++++++----------
- arch/mips/include/asm/sn/sn0/hubmd.h         |  4 +--
- arch/mips/include/asm/sn/sn0/hubni.h         |  6 ++--
- arch/mips/include/asm/sn/sn0/hubpi.h         |  4 +--
- arch/mips/include/asm/sn/types.h             |  2 +-
- arch/mips/include/asm/sync.h                 |  2 +-
- arch/mips/include/asm/thread_info.h          |  4 +--
- arch/mips/include/asm/unistd.h               |  4 +--
- arch/mips/include/asm/vdso/gettimeofday.h    |  4 +--
- arch/mips/include/asm/vdso/processor.h       |  4 +--
- arch/mips/include/asm/vdso/vdso.h            |  4 +--
- arch/mips/include/asm/vdso/vsyscall.h        |  4 +--
- arch/mips/include/asm/xtalk/xtalk.h          |  4 +--
- arch/mips/include/asm/xtalk/xwidget.h        |  4 +--
- drivers/soc/bcm/brcmstb/pm/pm.h              |  2 +-
- 53 files changed, 142 insertions(+), 142 deletions(-)
-
-diff --git a/arch/mips/include/asm/addrspace.h b/arch/mips/include/asm/addrspace.h
-index 7e9ef01cb182b..e2354e9b0ee28 100644
---- a/arch/mips/include/asm/addrspace.h
-+++ b/arch/mips/include/asm/addrspace.h
-@@ -15,7 +15,7 @@
- /*
-  *  Configure language
-  */
--#ifdef __ASSEMBLY__
-+#ifdef __ASSEMBLER__
- #define _ATYPE_
- #define _ATYPE32_
- #define _ATYPE64_
-@@ -34,7 +34,7 @@
- /*
-  *  32-bit MIPS address spaces
-  */
--#ifdef __ASSEMBLY__
-+#ifdef __ASSEMBLER__
- #define _ACAST32_
- #define _ACAST64_
- #else
-diff --git a/arch/mips/include/asm/asm-eva.h b/arch/mips/include/asm/asm-eva.h
-index e327ebc767539..220431d00ee9b 100644
---- a/arch/mips/include/asm/asm-eva.h
-+++ b/arch/mips/include/asm/asm-eva.h
-@@ -10,7 +10,7 @@
- #ifndef __ASM_ASM_EVA_H
- #define __ASM_ASM_EVA_H
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- /* Kernel variants */
- 
-@@ -99,7 +99,7 @@
- 
- #endif /* CONFIG_EVA */
- 
--#else /* __ASSEMBLY__ */
-+#else /* __ASSEMBLER__ */
- 
- #define kernel_cache(op, base)		cache op, base
- #define kernel_pref(hint, base)		pref hint, base
-@@ -185,6 +185,6 @@
- 
- #endif /* CONFIG_EVA */
- 
--#endif /* __ASSEMBLY__ */
-+#endif /* __ASSEMBLER__ */
- 
- #endif /* __ASM_ASM_EVA_H */
-diff --git a/arch/mips/include/asm/asm.h b/arch/mips/include/asm/asm.h
-index 87ff609b53fe1..0ed19ffed0769 100644
---- a/arch/mips/include/asm/asm.h
-+++ b/arch/mips/include/asm/asm.h
-@@ -37,7 +37,7 @@
- #define CFI_SECTIONS
- #endif
- 
--#ifdef __ASSEMBLY__
-+#ifdef __ASSEMBLER__
- /*
-  * LEAF - declare leaf routine
-  */
-@@ -123,7 +123,7 @@ symbol		=	value
- #define ASM_PRINT(string)
- #endif
- 
--#endif /* __ASSEMBLY__ */
-+#endif /* __ASSEMBLER__ */
- 
- /*
-  * Stack alignment
-@@ -228,7 +228,7 @@ symbol		=	value
- #define LONG_INS	ins
- #define LONG_EXT	ext
- 
--#ifdef __ASSEMBLY__
-+#ifdef __ASSEMBLER__
- #define LONG		.word
- #endif
- #define LONGSIZE	4
-@@ -257,7 +257,7 @@ symbol		=	value
- #define LONG_INS	dins
- #define LONG_EXT	dext
- 
--#ifdef __ASSEMBLY__
-+#ifdef __ASSEMBLER__
- #define LONG		.dword
- #endif
- #define LONGSIZE	8
-diff --git a/arch/mips/include/asm/bmips.h b/arch/mips/include/asm/bmips.h
-index 3a1cdfddb987e..0eee81be9e2b5 100644
---- a/arch/mips/include/asm/bmips.h
-+++ b/arch/mips/include/asm/bmips.h
-@@ -42,7 +42,7 @@
- 
- #define ZSCM_REG_BASE			0x97000000
- 
--#if !defined(__ASSEMBLY__)
-+#if !defined(__ASSEMBLER__)
- 
- #include <linux/cpumask.h>
- #include <asm/r4kcache.h>
-@@ -124,6 +124,6 @@ static inline void bmips_write_zscm_reg(unsigned int offset, unsigned long data)
- 	barrier();
- }
- 
--#endif /* !defined(__ASSEMBLY__) */
-+#endif /* !defined(__ASSEMBLER__) */
- 
- #endif /* _ASM_BMIPS_H */
-diff --git a/arch/mips/include/asm/cpu.h b/arch/mips/include/asm/cpu.h
-index ecb9854cb4324..32cf5496006e4 100644
---- a/arch/mips/include/asm/cpu.h
-+++ b/arch/mips/include/asm/cpu.h
-@@ -288,7 +288,7 @@
- 
- #define FPIR_IMP_NONE		0x0000
- 
--#if !defined(__ASSEMBLY__)
-+#if !defined(__ASSEMBLER__)
- 
- enum cpu_type_enum {
- 	CPU_UNKNOWN,
-@@ -329,7 +329,7 @@ enum cpu_type_enum {
- 	CPU_LAST
- };
- 
--#endif /* !__ASSEMBLY */
-+#endif /* !__ASSEMBLER__ */
- 
- /*
-  * ISA Level encodings
-diff --git a/arch/mips/include/asm/dec/ecc.h b/arch/mips/include/asm/dec/ecc.h
-index c3a3f71f1a544..dbc39643c31c5 100644
---- a/arch/mips/include/asm/dec/ecc.h
-+++ b/arch/mips/include/asm/dec/ecc.h
-@@ -37,7 +37,7 @@
- #define KN0X_ESR_SYNLO		(0x7f<<0)	/* syndrome from ECC logic */
- 
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- #include <linux/interrupt.h>
- 
-diff --git a/arch/mips/include/asm/dec/interrupts.h b/arch/mips/include/asm/dec/interrupts.h
-index e10d341067c82..c1cd36c04b6c8 100644
---- a/arch/mips/include/asm/dec/interrupts.h
-+++ b/arch/mips/include/asm/dec/interrupts.h
-@@ -95,7 +95,7 @@
- #define DEC_CPU_IRQ_ALL		(0xff << CAUSEB_IP)
- 
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- /*
-  * Interrupt table structures to hide differences between systems.
-@@ -121,6 +121,6 @@ extern void cpu_all_int(void);
- extern void dec_intr_unimplemented(void);
- extern void asic_intr_unimplemented(void);
- 
--#endif /* __ASSEMBLY__ */
-+#endif /* __ASSEMBLER__ */
- 
- #endif
-diff --git a/arch/mips/include/asm/dec/kn01.h b/arch/mips/include/asm/dec/kn01.h
-index 88d9ffd742588..6c074b93a7dbf 100644
---- a/arch/mips/include/asm/dec/kn01.h
-+++ b/arch/mips/include/asm/dec/kn01.h
-@@ -71,7 +71,7 @@
- #define KN01_CSR_LEDS		(0xff<<0) /* ~diagnostic LEDs (w/o) */
- 
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- #include <linux/interrupt.h>
- #include <linux/spinlock.h>
-diff --git a/arch/mips/include/asm/dec/kn02.h b/arch/mips/include/asm/dec/kn02.h
-index 93430b5f47241..9fea17020079d 100644
---- a/arch/mips/include/asm/dec/kn02.h
-+++ b/arch/mips/include/asm/dec/kn02.h
-@@ -80,7 +80,7 @@
- #define KN02_IRQ_ALL		0xff
- 
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- #include <linux/types.h>
- 
-diff --git a/arch/mips/include/asm/dec/kn02xa.h b/arch/mips/include/asm/dec/kn02xa.h
-index b56b4577f6eff..3580d78b906fb 100644
---- a/arch/mips/include/asm/dec/kn02xa.h
-+++ b/arch/mips/include/asm/dec/kn02xa.h
-@@ -70,7 +70,7 @@
- #define KN02XA_EAR_RES_0	(0x3<<0)	/* unused */
- 
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- #include <linux/interrupt.h>
- 
-diff --git a/arch/mips/include/asm/eva.h b/arch/mips/include/asm/eva.h
-index a3d1807f227c2..c7b39f38634b8 100644
---- a/arch/mips/include/asm/eva.h
-+++ b/arch/mips/include/asm/eva.h
-@@ -13,7 +13,7 @@
- 
- #include <kernel-entry-init.h>
- 
--#ifdef __ASSEMBLY__
-+#ifdef __ASSEMBLER__
- 
- #ifdef CONFIG_EVA
- 
-@@ -38,6 +38,6 @@ platform_eva_init
- 
- #endif /* CONFIG_EVA */
- 
--#endif /* __ASSEMBLY__ */
-+#endif /* __ASSEMBLER__ */
- 
- #endif
-diff --git a/arch/mips/include/asm/ftrace.h b/arch/mips/include/asm/ftrace.h
-index b41fc10446688..7d557f03188f2 100644
---- a/arch/mips/include/asm/ftrace.h
-+++ b/arch/mips/include/asm/ftrace.h
-@@ -15,7 +15,7 @@
- #define MCOUNT_ADDR ((unsigned long)(_mcount))
- #define MCOUNT_INSN_SIZE 4		/* sizeof mcount call */
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- extern void _mcount(void);
- #define mcount _mcount
- 
-@@ -89,11 +89,11 @@ struct dyn_arch_ftrace {
- void prepare_ftrace_return(unsigned long *parent_ra_addr, unsigned long self_ra,
- 			   unsigned long fp);
- 
--#endif /* __ASSEMBLY__ */
-+#endif /* __ASSEMBLER__ */
- #endif /* CONFIG_FUNCTION_TRACER */
- 
- #ifdef CONFIG_FTRACE_SYSCALLS
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- /*
-  * Some syscall entry functions on mips start with "__sys_" (fork and clone,
-  * for instance). We should also match the sys_ variant with those.
-@@ -105,6 +105,6 @@ static inline bool arch_syscall_match_sym_name(const char *sym,
- 	return !strcmp(sym, name) ||
- 		(!strncmp(sym, "__sys_", 6) && !strcmp(sym + 6, name + 4));
- }
--#endif /* __ASSEMBLY__ */
-+#endif /* __ASSEMBLER__ */
- #endif /* CONFIG_FTRACE_SYSCALLS */
- #endif /* _ASM_MIPS_FTRACE_H */
-diff --git a/arch/mips/include/asm/hazards.h b/arch/mips/include/asm/hazards.h
-index cb16be93b048e..a084b3b3bc810 100644
---- a/arch/mips/include/asm/hazards.h
-+++ b/arch/mips/include/asm/hazards.h
-@@ -301,7 +301,7 @@ do {									\
- 
- #endif
- 
--#ifdef __ASSEMBLY__
-+#ifdef __ASSEMBLER__
- 
- #define _ssnop ___ssnop
- #define	_ehb ___ehb
-@@ -417,6 +417,6 @@ do {									\
-  */
- extern void mips_ihb(void);
- 
--#endif /* __ASSEMBLY__  */
-+#endif /* __ASSEMBLER__  */
- 
- #endif /* _ASM_HAZARDS_H */
-diff --git a/arch/mips/include/asm/irqflags.h b/arch/mips/include/asm/irqflags.h
-index f5b8300f45735..70e5b05fd88bd 100644
---- a/arch/mips/include/asm/irqflags.h
-+++ b/arch/mips/include/asm/irqflags.h
-@@ -11,7 +11,7 @@
- #ifndef _ASM_IRQFLAGS_H
- #define _ASM_IRQFLAGS_H
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- #include <linux/compiler.h>
- #include <linux/stringify.h>
-@@ -142,7 +142,7 @@ static inline int arch_irqs_disabled(void)
- 	return arch_irqs_disabled_flags(arch_local_save_flags());
- }
- 
--#endif /* #ifndef __ASSEMBLY__ */
-+#endif /* #ifndef __ASSEMBLER__ */
- 
- /*
-  * Do the CPU's IRQ-state tracing from assembly code.
-diff --git a/arch/mips/include/asm/jazz.h b/arch/mips/include/asm/jazz.h
-index a61970d01a81c..9356e87dd64be 100644
---- a/arch/mips/include/asm/jazz.h
-+++ b/arch/mips/include/asm/jazz.h
-@@ -70,7 +70,7 @@
- #define LED_E			0x9e
- #define LED_F			0x8e
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- static __inline__ void pica_set_led(unsigned int bits)
+diff --git a/arch/powerpc/kernel/legacy_serial.c b/arch/powerpc/kernel/legacy_serial.c
+index a874eb8e000b..ae1906bfe8a5 100644
+--- a/arch/powerpc/kernel/legacy_serial.c
++++ b/arch/powerpc/kernel/legacy_serial.c
+@@ -54,9 +54,10 @@ static int legacy_serial_console = -1;
+ static const upf_t legacy_port_flags = UPF_BOOT_AUTOCONF | UPF_SKIP_TEST |
+ 	UPF_SHARE_IRQ | UPF_FIXED_PORT;
+ 
+-static unsigned int tsi_serial_in(struct uart_port *p, int offset)
++static u32 tsi_serial_in(struct uart_port *p, unsigned int offset)
  {
-@@ -79,7 +79,7 @@ static __inline__ void pica_set_led(unsigned int bits)
- 	*led_register = bits;
+-	unsigned int tmp;
++	u32 tmp;
++
+ 	offset = offset << p->regshift;
+ 	if (offset == UART_IIR) {
+ 		tmp = readl(p->membase + (UART_IIR & ~3));
+@@ -65,7 +66,7 @@ static unsigned int tsi_serial_in(struct uart_port *p, int offset)
+ 		return readb(p->membase + offset);
  }
  
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- /*
-  * Base address of the Sonic Ethernet adapter in Jazz machines.
-@@ -100,7 +100,7 @@ static __inline__ void pica_set_led(unsigned int bits)
- #define JAZZ_KEYBOARD_DATA	0xe0005000
- #define JAZZ_KEYBOARD_COMMAND	0xe0005001
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- typedef struct {
- 	unsigned char data;
-@@ -121,7 +121,7 @@ typedef struct {
-  */
- #define keyboard_hardware	jazz_keyboard_hardware
- 
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- /*
-  * i8042 keyboard controller for most other Mips machines.
-@@ -154,7 +154,7 @@ typedef struct {
- /*
-  * DRAM configuration register
-  */
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- #ifdef __MIPSEL__
- typedef struct {
- 	unsigned int bank2 : 3;
-@@ -174,7 +174,7 @@ typedef struct {
- 	unsigned int bank2 : 3;
- } dram_configuration;
- #endif
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- #define PICA_DRAM_CONFIG	0xe00fffe0
- 
-@@ -260,7 +260,7 @@ typedef struct {
- /*
-  * Access the R4030 DMA and I/O Controller
-  */
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- static inline void r4030_delay(void)
+-static void tsi_serial_out(struct uart_port *p, int offset, int value)
++static void tsi_serial_out(struct uart_port *p, unsigned int offset, u32 value)
  {
-@@ -299,7 +299,7 @@ static inline void r4030_write_reg32(unsigned long addr, unsigned val)
- 	r4030_delay();
+ 	offset = offset << p->regshift;
+ 	if (!((offset == UART_IER) && (value & UART_IER_UUE)))
+diff --git a/drivers/tty/serial/8250/8250_dw.c b/drivers/tty/serial/8250/8250_dw.c
+index 1902f29444a1..0a22f0cb8896 100644
+--- a/drivers/tty/serial/8250/8250_dw.c
++++ b/drivers/tty/serial/8250/8250_dw.c
+@@ -67,8 +67,8 @@ struct dw8250_data {
+ 	struct dw8250_port_data	data;
+ 	const struct dw8250_platform_data *pdata;
+ 
+-	int			msr_mask_on;
+-	int			msr_mask_off;
++	u32			msr_mask_on;
++	u32			msr_mask_off;
+ 	struct clk		*clk;
+ 	struct clk		*pclk;
+ 	struct notifier_block	clk_notifier;
+@@ -94,7 +94,7 @@ static inline struct dw8250_data *work_to_dw8250_data(struct work_struct *work)
+ 	return container_of(work, struct dw8250_data, clk_work);
  }
  
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- #define JAZZ_FDC_BASE	0xe0003000
- #define JAZZ_RTC_BASE	0xe0004000
-diff --git a/arch/mips/include/asm/jump_label.h b/arch/mips/include/asm/jump_label.h
-index ff5d388502d4a..c1508f88e03ea 100644
---- a/arch/mips/include/asm/jump_label.h
-+++ b/arch/mips/include/asm/jump_label.h
-@@ -10,7 +10,7 @@
- 
- #define arch_jump_label_transform_static arch_jump_label_transform
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- #include <linux/types.h>
- #include <asm/isa-rev.h>
-@@ -76,5 +76,5 @@ struct jump_entry {
- 	jump_label_t key;
- };
- 
--#endif  /* __ASSEMBLY__ */
-+#endif  /* __ASSEMBLER__ */
- #endif /* _ASM_MIPS_JUMP_LABEL_H */
-diff --git a/arch/mips/include/asm/linkage.h b/arch/mips/include/asm/linkage.h
-index 1829c2b6da6cd..fd44ba754f1a6 100644
---- a/arch/mips/include/asm/linkage.h
-+++ b/arch/mips/include/asm/linkage.h
-@@ -2,7 +2,7 @@
- #ifndef __ASM_LINKAGE_H
- #define __ASM_LINKAGE_H
- 
--#ifdef __ASSEMBLY__
-+#ifdef __ASSEMBLER__
- #include <asm/asm.h>
- #endif
- 
-diff --git a/arch/mips/include/asm/mach-generic/spaces.h b/arch/mips/include/asm/mach-generic/spaces.h
-index f8783d339fb0d..6332b6cbf7eef 100644
---- a/arch/mips/include/asm/mach-generic/spaces.h
-+++ b/arch/mips/include/asm/mach-generic/spaces.h
-@@ -21,13 +21,13 @@
- /*
-  * This gives the physical RAM offset.
-  */
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- # if defined(CONFIG_MIPS_AUTO_PFN_OFFSET)
- #  define PHYS_OFFSET		((unsigned long)PFN_PHYS(ARCH_PFN_OFFSET))
- # elif !defined(PHYS_OFFSET)
- #  define PHYS_OFFSET		_AC(0, UL)
- # endif
--#endif /* __ASSEMBLY__ */
-+#endif /* __ASSEMBLER__ */
- 
- #ifdef CONFIG_32BIT
- #define CAC_BASE		_AC(0x80000000, UL)
-diff --git a/arch/mips/include/asm/mips-boards/bonito64.h b/arch/mips/include/asm/mips-boards/bonito64.h
-index 31a31fe78d775..74c5fc0fc6c04 100644
---- a/arch/mips/include/asm/mips-boards/bonito64.h
-+++ b/arch/mips/include/asm/mips-boards/bonito64.h
-@@ -21,7 +21,7 @@
- #ifndef _ASM_MIPS_BOARDS_BONITO64_H
- #define _ASM_MIPS_BOARDS_BONITO64_H
- 
--#ifdef __ASSEMBLY__
-+#ifdef __ASSEMBLER__
- 
- /* offsets from base register */
- #define BONITO(x)	(x)
-@@ -36,7 +36,7 @@ extern unsigned long _pcictrl_bonito_pcicfg;
- 
- #define BONITO(x)		*(volatile u32 *)(_pcictrl_bonito + (x))
- 
--#endif /* __ASSEMBLY__ */
-+#endif /* __ASSEMBLER__ */
- 
- 
- #define BONITO_BOOT_BASE		0x1fc00000
-diff --git a/arch/mips/include/asm/mipsmtregs.h b/arch/mips/include/asm/mipsmtregs.h
-index b1ee3c48e84ba..cab7582010e80 100644
---- a/arch/mips/include/asm/mipsmtregs.h
-+++ b/arch/mips/include/asm/mipsmtregs.h
-@@ -10,7 +10,7 @@
- 
- #include <asm/mipsregs.h>
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- /*
-  * C macros
-@@ -176,7 +176,7 @@
- /* TCHalt */
- #define TCHALT_H		(_ULCAST_(1))
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- static inline unsigned core_nvpes(void)
+-static inline int dw8250_modify_msr(struct uart_port *p, int offset, int value)
++static inline u32 dw8250_modify_msr(struct uart_port *p, unsigned int offset, u32 value)
  {
-@@ -469,6 +469,6 @@ do {									\
+ 	struct dw8250_data *d = to_dw8250_data(p->private_data);
  
- __BUILD_SET_C0(mvpcontrol)
- 
--#endif /* Not __ASSEMBLY__ */
-+#endif /* Not __ASSEMBLER__ */
- 
- #endif
-diff --git a/arch/mips/include/asm/mipsregs.h b/arch/mips/include/asm/mipsregs.h
-index c025558754d57..f799c0d723dac 100644
---- a/arch/mips/include/asm/mipsregs.h
-+++ b/arch/mips/include/asm/mipsregs.h
-@@ -32,7 +32,7 @@
- /*
-  *  Configure language
+@@ -145,7 +145,7 @@ static void dw8250_force_idle(struct uart_port *p)
+  * routine. Hence, it must not call serial_port_out() or serial_out()
+  * against the modified registers here, i.e. LCR.
   */
--#ifdef __ASSEMBLY__
-+#ifdef __ASSEMBLER__
- #define _ULCAST_
- #define _U64CAST_
- #else
-@@ -1346,7 +1346,7 @@
- #define FPU_CSR_RD	0x3	/* towards -Infinity */
+-static void dw8250_check_lcr(struct uart_port *p, int offset, int value)
++static void dw8250_check_lcr(struct uart_port *p, unsigned int offset, u32 value)
+ {
+ 	struct dw8250_data *d = to_dw8250_data(p->private_data);
+ 	void __iomem *addr = p->membase + (offset << p->regshift);
+@@ -156,7 +156,7 @@ static void dw8250_check_lcr(struct uart_port *p, int offset, int value)
  
+ 	/* Make sure LCR write wasn't ignored */
+ 	while (tries--) {
+-		unsigned int lcr = serial_port_in(p, offset);
++		u32 lcr = serial_port_in(p, offset);
  
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- /*
-  * Macros for handling the ISA mode bit for MIPS16 and microMIPS.
-@@ -3095,6 +3095,6 @@ static inline unsigned int get_ebase_cpunum(void)
- 	return read_c0_ebase() & MIPS_EBASE_CPUNUM;
+ 		if ((value & ~UART_LCR_SPAR) == (lcr & ~UART_LCR_SPAR))
+ 			return;
+@@ -205,13 +205,13 @@ static void dw8250_tx_wait_empty(struct uart_port *p)
+ 	}
  }
  
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- #endif /* _ASM_MIPSREGS_H */
-diff --git a/arch/mips/include/asm/msa.h b/arch/mips/include/asm/msa.h
-index 236a49ee2e3e7..c6077f5fa4b18 100644
---- a/arch/mips/include/asm/msa.h
-+++ b/arch/mips/include/asm/msa.h
-@@ -8,7 +8,7 @@
- 
- #include <asm/mipsregs.h>
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- #include <asm/inst.h>
- 
-@@ -218,7 +218,7 @@ __BUILD_MSA_CTL_REG(request, 5)
- __BUILD_MSA_CTL_REG(map, 6)
- __BUILD_MSA_CTL_REG(unmap, 7)
- 
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- #define MSA_IR		0
- #define MSA_CSR		1
-diff --git a/arch/mips/include/asm/pci/bridge.h b/arch/mips/include/asm/pci/bridge.h
-index 9c476a0400e0c..eaeafccd82c7d 100644
---- a/arch/mips/include/asm/pci/bridge.h
-+++ b/arch/mips/include/asm/pci/bridge.h
-@@ -43,7 +43,7 @@
-  *    Bridge address map
-  */
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- #define ATE_V		0x01
- #define ATE_CO		0x02
-@@ -288,7 +288,7 @@ struct bridge_err_cmdword {
- };
- 
- #define berr_field	berr_un.berr_st
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- /*
-  * The values of these macros can and should be crosschecked
-diff --git a/arch/mips/include/asm/pm.h b/arch/mips/include/asm/pm.h
-index 7ecd4dfe38461..52f3d64c5f347 100644
---- a/arch/mips/include/asm/pm.h
-+++ b/arch/mips/include/asm/pm.h
-@@ -8,7 +8,7 @@
- #ifndef __ASM_PM_H
- #define __ASM_PM_H
- 
--#ifdef __ASSEMBLY__
-+#ifdef __ASSEMBLER__
- 
- #include <asm/asm-offsets.h>
- #include <asm/asm.h>
-@@ -130,7 +130,7 @@
- 	RESUME_RESTORE_REGS_RETURN
- .endm
- 
--#else /* __ASSEMBLY__ */
-+#else /* __ASSEMBLER__ */
- 
- /**
-  * struct mips_static_suspend_state - Core saved CPU state across S2R.
-@@ -150,6 +150,6 @@ struct mips_static_suspend_state {
- 	unsigned long sp;
- };
- 
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- #endif /* __ASM_PM_HELPERS_H */
-diff --git a/arch/mips/include/asm/prefetch.h b/arch/mips/include/asm/prefetch.h
-index a56594f360ee2..4bd359fa3d977 100644
---- a/arch/mips/include/asm/prefetch.h
-+++ b/arch/mips/include/asm/prefetch.h
-@@ -42,7 +42,7 @@
- #define Pref_WriteBackInvalidate	25
- #define Pref_PrepareForStore		30
- 
--#ifdef __ASSEMBLY__
-+#ifdef __ASSEMBLER__
- 
- 	.macro	__pref hint addr
- #ifdef CONFIG_CPU_HAS_PREFETCH
-diff --git a/arch/mips/include/asm/regdef.h b/arch/mips/include/asm/regdef.h
-index 236051364f78e..dd0b558c97672 100644
---- a/arch/mips/include/asm/regdef.h
-+++ b/arch/mips/include/asm/regdef.h
-@@ -103,7 +103,7 @@
- 
- #endif /* _MIPS_SIM == _MIPS_SIM_ABI64 || _MIPS_SIM == _MIPS_SIM_NABI32 */
- 
--#ifdef __ASSEMBLY__
-+#ifdef __ASSEMBLER__
- #if _MIPS_SIM == _MIPS_SIM_ABI32
- 
- /*
-@@ -192,6 +192,6 @@
- #define ra	$31	/* return address */
- 
- #endif /* _MIPS_SIM == _MIPS_SIM_ABI64 || _MIPS_SIM == _MIPS_SIM_NABI32 */
--#endif /* __ASSEMBLY__ */
-+#endif /* __ASSEMBLER__ */
- 
- #endif /* _ASM_REGDEF_H */
-diff --git a/arch/mips/include/asm/sibyte/board.h b/arch/mips/include/asm/sibyte/board.h
-index 03463faa42446..d29c1c013dc5c 100644
---- a/arch/mips/include/asm/sibyte/board.h
-+++ b/arch/mips/include/asm/sibyte/board.h
-@@ -19,7 +19,7 @@
- #include <asm/sibyte/bigsur.h>
- #endif
- 
--#ifdef __ASSEMBLY__
-+#ifdef __ASSEMBLER__
- 
- #ifdef LEDS_PHYS
- #define setleds(t0, t1, c0, c1, c2, c3) \
-@@ -46,6 +46,6 @@ extern void setleds(char *str);
- #define setleds(s) do { } while (0)
- #endif /* LEDS_PHYS */
- 
--#endif /* __ASSEMBLY__ */
-+#endif /* __ASSEMBLER__ */
- 
- #endif /* _SIBYTE_BOARD_H */
-diff --git a/arch/mips/include/asm/sibyte/sb1250.h b/arch/mips/include/asm/sibyte/sb1250.h
-index 495b31925ed77..de4b352256c8a 100644
---- a/arch/mips/include/asm/sibyte/sb1250.h
-+++ b/arch/mips/include/asm/sibyte/sb1250.h
-@@ -19,7 +19,7 @@
- 
- #define SB1250_DUART_MINOR_BASE		64
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- #include <asm/addrspace.h>
- 
-diff --git a/arch/mips/include/asm/sibyte/sb1250_defs.h b/arch/mips/include/asm/sibyte/sb1250_defs.h
-index 68cd7c0b37eae..98cbb65cce0ac 100644
---- a/arch/mips/include/asm/sibyte/sb1250_defs.h
-+++ b/arch/mips/include/asm/sibyte/sb1250_defs.h
-@@ -199,7 +199,7 @@
-  * Note: you'll need to define uint32_t and uint64_t in your headers.
-  */
- 
--#if !defined(__ASSEMBLY__)
-+#if !defined(__ASSEMBLER__)
- #define _SB_MAKE64(x) ((uint64_t)(x))
- #define _SB_MAKE32(x) ((uint32_t)(x))
- #else
-@@ -238,9 +238,9 @@
-  */
- 
- 
--#if defined(__mips64) && !defined(__ASSEMBLY__)
-+#if defined(__mips64) && !defined(__ASSEMBLER__)
- #define SBWRITECSR(csr, val) *((volatile uint64_t *) PHYS_TO_K1(csr)) = (val)
- #define SBREADCSR(csr) (*((volatile uint64_t *) PHYS_TO_K1(csr)))
--#endif /* __ASSEMBLY__ */
-+#endif /* __ASSEMBLER__ */
- 
- #endif
-diff --git a/arch/mips/include/asm/smp-cps.h b/arch/mips/include/asm/smp-cps.h
-index 10d3ebd890cb2..767d0bb33001d 100644
---- a/arch/mips/include/asm/smp-cps.h
-+++ b/arch/mips/include/asm/smp-cps.h
-@@ -9,7 +9,7 @@
- 
- #define CPS_ENTRY_PATCH_INSNS	6
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- struct vpe_boot_config {
- 	unsigned long pc;
-@@ -54,9 +54,9 @@ static inline bool mips_cps_smp_in_use(void) { return false; }
- 
- #endif /* !CONFIG_MIPS_CPS */
- 
--#else /* __ASSEMBLY__ */
-+#else /* __ASSEMBLER__ */
- 
- .extern mips_cps_bootcfg;
- 
--#endif /* __ASSEMBLY__ */
-+#endif /* __ASSEMBLER__ */
- #endif /* __MIPS_ASM_SMP_CPS_H__ */
-diff --git a/arch/mips/include/asm/sn/addrs.h b/arch/mips/include/asm/sn/addrs.h
-index 837d23e249768..7c675fecbf9a9 100644
---- a/arch/mips/include/asm/sn/addrs.h
-+++ b/arch/mips/include/asm/sn/addrs.h
-@@ -10,10 +10,10 @@
- #define _ASM_SN_ADDRS_H
- 
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- #include <linux/smp.h>
- #include <linux/types.h>
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- #include <asm/addrspace.h>
- #include <asm/sn/kldir.h>
-@@ -25,15 +25,15 @@
- #endif
- 
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- #define UINT64_CAST		(unsigned long)
- 
--#else /* __ASSEMBLY__ */
-+#else /* __ASSEMBLER__ */
- 
- #define UINT64_CAST
- 
--#endif /* __ASSEMBLY__ */
-+#endif /* __ASSEMBLER__ */
- 
- 
- #define NASID_GET_META(_n)	((_n) >> NASID_LOCAL_BITS)
-@@ -254,7 +254,7 @@
- #define LOCAL_HUB_ADDR(_x)	(IALIAS_BASE + (_x))
- #define REMOTE_HUB_ADDR(_n, _x) ((NODE_SWIN_BASE(_n, 1) + 0x800000 + (_x)))
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- #define LOCAL_HUB_PTR(_x)	((u64 *)LOCAL_HUB_ADDR((_x)))
- #define REMOTE_HUB_PTR(_n, _x)	((u64 *)REMOTE_HUB_ADDR((_n), (_x)))
-@@ -265,7 +265,7 @@
- #define REMOTE_HUB_S(_n, _r, _d)	__raw_writeq((_d),		\
- 						REMOTE_HUB_PTR((_n), (_r)))
- 
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- /*
-  * Software structure locations -- permanently fixed
-@@ -315,7 +315,7 @@
- #define KLI_KERN_XP		8
- #define KLI_KERN_PARTID		9
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- #define KLD_BASE(nasid)		((kldir_ent_t *) KLDIR_ADDR(nasid))
- #define KLD_LAUNCH(nasid)	(KLD_BASE(nasid) + KLI_LAUNCH)
-@@ -371,7 +371,7 @@
- #define KERN_VARS_ADDR(nasid)	KLD_KERN_VARS(nasid)->pointer
- #define KERN_VARS_SIZE(nasid)	KLD_KERN_VARS(nasid)->size
- 
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- 
- #endif /* _ASM_SN_ADDRS_H */
-diff --git a/arch/mips/include/asm/sn/gda.h b/arch/mips/include/asm/sn/gda.h
-index 5b8c96d5b5870..d8fd80137206a 100644
---- a/arch/mips/include/asm/sn/gda.h
-+++ b/arch/mips/include/asm/sn/gda.h
-@@ -39,7 +39,7 @@
- #define G_PARTIDOFF	40
- #define G_TABLEOFF	128
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- typedef struct gda {
- 	u32	g_magic;	/* GDA magic number */
-@@ -63,7 +63,7 @@ typedef struct gda {
- 
- #define GDA ((gda_t*) GDA_ADDR(get_nasid()))
- 
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- /*
-  * Define:	PART_GDA_VERSION
-  * Purpose:	Define the minimum version of the GDA required, lower
-diff --git a/arch/mips/include/asm/sn/kldir.h b/arch/mips/include/asm/sn/kldir.h
-index 245f59bf38454..f394b1e0c9566 100644
---- a/arch/mips/include/asm/sn/kldir.h
-+++ b/arch/mips/include/asm/sn/kldir.h
-@@ -15,7 +15,7 @@
- #define KLDIR_ENT_SIZE			0x40
- #define KLDIR_MAX_ENTRIES		(0x400 / 0x40)
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- typedef struct kldir_ent_s {
- 	u64		magic;		/* Indicates validity of entry	    */
- 	off_t		offset;		/* Offset from start of node space  */
-@@ -27,7 +27,7 @@ typedef struct kldir_ent_s {
- 	/* NOTE: These 16 bytes are used in the Partition KLDIR
- 	   entry to store partition info. Refer to klpart.h for this. */
- } kldir_ent_t;
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- #ifdef CONFIG_SGI_IP27
- #include <asm/sn/sn0/kldir.h>
-diff --git a/arch/mips/include/asm/sn/klkernvars.h b/arch/mips/include/asm/sn/klkernvars.h
-index ea6b217951636..bb7a6c36f6e7b 100644
---- a/arch/mips/include/asm/sn/klkernvars.h
-+++ b/arch/mips/include/asm/sn/klkernvars.h
-@@ -12,7 +12,7 @@
- 
- #define KV_MAGIC		0x5f4b565f
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- #include <asm/sn/types.h>
- 
-@@ -24,6 +24,6 @@ typedef struct kern_vars_s {
- 	unsigned long	kv_rw_baseaddr;
- } kern_vars_t;
- 
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- #endif /* __ASM_SN_KLKERNVARS_H */
-diff --git a/arch/mips/include/asm/sn/launch.h b/arch/mips/include/asm/sn/launch.h
-index 04226d8d30c42..ce95187362e70 100644
---- a/arch/mips/include/asm/sn/launch.h
-+++ b/arch/mips/include/asm/sn/launch.h
-@@ -59,7 +59,7 @@
-  * clears the BUSY flag after control is returned to it.
-  */
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- typedef int launch_state_t;
- typedef void (*launch_proc_t)(u64 call_parm);
-@@ -101,6 +101,6 @@ typedef struct launch_s {
- #define LAUNCH_FLASH	(*(void (*)(void)) \
- 			 IP27PROM_FLASHLEDS)
- 
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- #endif /* _ASM_SN_LAUNCH_H */
-diff --git a/arch/mips/include/asm/sn/nmi.h b/arch/mips/include/asm/sn/nmi.h
-index 12ac210f12a17..eff51606bbcea 100644
---- a/arch/mips/include/asm/sn/nmi.h
-+++ b/arch/mips/include/asm/sn/nmi.h
-@@ -48,7 +48,7 @@
-  *
-  */
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- typedef struct nmi_s {
- 	volatile unsigned long	 magic;		/* Magic number */
-@@ -59,13 +59,13 @@ typedef struct nmi_s {
- 	volatile unsigned long	 gmaster;	/* Flag true only on global master*/
- } nmi_t;
- 
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- /* Following definitions are needed both in the prom & the kernel
-  * to identify the format of the nmi cpu register save area in the
-  * low memory on each node.
-  */
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- struct reg_struct {
- 	unsigned long	gpr[32];
-@@ -78,7 +78,7 @@ struct reg_struct {
- 	unsigned long	nmi_sr;
- };
- 
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- /* These are the assembly language offsets into the reg_struct structure */
- 
-diff --git a/arch/mips/include/asm/sn/sn0/addrs.h b/arch/mips/include/asm/sn/sn0/addrs.h
-index f13df84edfdd5..a28158a91ecf5 100644
---- a/arch/mips/include/asm/sn/sn0/addrs.h
-+++ b/arch/mips/include/asm/sn/sn0/addrs.h
-@@ -84,15 +84,15 @@
- #define NASID_GET(_pa)		(int) ((UINT64_CAST (_pa) >>		\
- 					NASID_SHFT) & NASID_BITMASK)
- 
--#if !defined(__ASSEMBLY__)
-+#if !defined(__ASSEMBLER__)
- 
- #define NODE_SWIN_BASE(nasid, widget)					\
- 	((widget == 0) ? NODE_BWIN_BASE((nasid), SWIN0_BIGWIN)		\
- 	: RAW_NODE_SWIN_BASE(nasid, widget))
--#else /* __ASSEMBLY__ */
-+#else /* __ASSEMBLER__ */
- #define NODE_SWIN_BASE(nasid, widget) \
-      (NODE_IO_BASE(nasid) + (UINT64_CAST(widget) << SWIN_SIZE_BITS))
--#endif /* __ASSEMBLY__ */
-+#endif /* __ASSEMBLER__ */
- 
- /*
-  * The following definitions pertain to the IO special address
-@@ -139,11 +139,11 @@
- /* Turn on sable logging for the processors whose bits are set. */
- #define SABLE_LOG_TRIGGER(_map)
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- #define KERN_NMI_ADDR(nasid, slice)					\
- 		    TO_NODE_UNCAC((nasid), IP27_NMI_KREGS_OFFSET +	\
- 				  (IP27_NMI_KREGS_CPU_SIZE * (slice)))
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- #ifdef PROM
- 
-@@ -248,7 +248,7 @@
- #define KL_UART_DATA	LOCAL_HUB_ADDR(MD_UREG0_1)	/* UART data reg */
- #define KL_I2C_REG	MD_UREG0_0			/* I2C reg */
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- /* Address 0x400 to 0x1000 ualias points to cache error eframe + misc
-  * CACHE_ERR_SP_PTR could either contain an address to the stack, or
-@@ -266,7 +266,7 @@
- #define CACHE_ERR_SP		(CACHE_ERR_SP_PTR - 16)
- #define CACHE_ERR_AREA_SIZE	(ARCS_SPB_OFFSET - CACHE_ERR_EFRAME)
- 
--#endif	/* !__ASSEMBLY__ */
-+#endif	/* !__ASSEMBLER__ */
- 
- #define _ARCSPROM
- 
-diff --git a/arch/mips/include/asm/sn/sn0/hub.h b/arch/mips/include/asm/sn/sn0/hub.h
-index c84adde36d41f..916394319af59 100644
---- a/arch/mips/include/asm/sn/sn0/hub.h
-+++ b/arch/mips/include/asm/sn/sn0/hub.h
-@@ -37,7 +37,7 @@
- #define UATTR_MSPEC	2
- #define UATTR_UNCAC	3
- 
--#ifdef __ASSEMBLY__
-+#ifdef __ASSEMBLER__
- /*
-  * Returns the local nasid into res.
-  */
-diff --git a/arch/mips/include/asm/sn/sn0/hubio.h b/arch/mips/include/asm/sn/sn0/hubio.h
-index 57ece90f8cf1e..c489426f8f9e2 100644
---- a/arch/mips/include/asm/sn/sn0/hubio.h
-+++ b/arch/mips/include/asm/sn/sn0/hubio.h
-@@ -169,7 +169,7 @@
- /*
-  * The IO LLP control status register and widget control register
-  */
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- typedef union hubii_wid_u {
- 	u64	wid_reg_value;
-@@ -292,7 +292,7 @@ typedef union io_perf_cnt {
- 	} perf_cnt_bits;
- } io_perf_cnt_t;
- 
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- 
- #define LNK_STAT_WORKING	0x2
-@@ -440,7 +440,7 @@ typedef union io_perf_cnt {
- /*
-  * Fields in CRB Register A
-  */
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- typedef union icrba_u {
- 	u64	reg_value;
- 	struct {
-@@ -486,7 +486,7 @@ typedef union h1_icrba_u {
- #define ICRBN_A_CERR_SHFT	54
- #define ICRBN_A_ERR_MASK	0x3ff
- 
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- #define IIO_ICRB_ADDR_SHFT	2	/* Shift to get proper address */
- 
-@@ -509,7 +509,7 @@ typedef union h1_icrba_u {
- /*
-  * Fields in CRB Register B
-  */
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- typedef union icrbb_u {
- 	u64	reg_value;
- 	struct {
-@@ -608,7 +608,7 @@ typedef union h1_icrbb_u {
- #define b_imsg		icrbb_field_s.imsg
- #define b_initiator	icrbb_field_s.initiator
- 
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- /*
-  * values for field xtsize
-@@ -666,7 +666,7 @@ typedef union h1_icrbb_u {
-  * Fields in CRB Register C
-  */
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- typedef union icrbc_s {
- 	u64	reg_value;
-@@ -698,13 +698,13 @@ typedef union icrbc_s {
- #define c_barrop	icrbc_field_s.barrop
- #define c_doresp	icrbc_field_s.doresp
- #define c_gbr	icrbc_field_s.gbr
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- /*
-  * Fields in CRB Register D
-  */
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- typedef union icrbd_s {
- 	u64	reg_value;
- 	struct {
-@@ -737,7 +737,7 @@ typedef union hubii_ifdr_u {
- 	} hi_ifdr_fields;
- } hubii_ifdr_t;
- 
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- /*
-  * Hardware designed names for the BTE control registers.
-@@ -784,7 +784,7 @@ typedef union hubii_ifdr_u {
-  * IO PIO Read Table Entry format
-  */
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- typedef union iprte_a {
- 	u64	entry;
-@@ -806,7 +806,7 @@ typedef union iprte_a {
- #define iprte_init	iprte_fields.initiator
- #define iprte_addr	iprte_fields.addr
- 
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- #define IPRTE_ADDRSHFT	3
- 
-@@ -814,7 +814,7 @@ typedef union iprte_a {
-  * Hub IIO PRB Register format.
-  */
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- /*
-  * Note: Fields bnakctr, anakctr, xtalkctrmode, ovflow fields are
-  * "Status" fields, and should only be used in case of clean up after errors.
-@@ -846,7 +846,7 @@ typedef union iprb_u {
- #define iprb_anakctr	iprb_fields_s.anakctr
- #define iprb_xtalkctr	iprb_fields_s.xtalkctr
- 
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- /*
-  * values for mode field in iprb_t.
-@@ -861,7 +861,7 @@ typedef union iprb_u {
- /*
-  * IO CRB entry C_A to E_A : Partial (cache) CRBS
-  */
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- typedef union icrbp_a {
- 	u64   ip_reg;	    /* the entire register value	*/
- 	struct {
-@@ -895,7 +895,7 @@ typedef union icrbp_a {
- 	} ip_fmt;
- } icrbp_a_t;
- 
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- /*
-  * A couple of defines to go with the above structure.
-@@ -903,7 +903,7 @@ typedef union icrbp_a {
- #define ICRBP_A_CERR_SHFT	54
- #define ICRBP_A_ERR_MASK	0x3ff
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- typedef union hubii_idsr {
- 	u64 iin_reg;
- 	struct {
-@@ -917,7 +917,7 @@ typedef union hubii_idsr {
- 		    level : 7;
- 	} iin_fmt;
- } hubii_idsr_t;
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- /*
-  * IO BTE Length/Status (IIO_IBLS) register bit field definitions
-diff --git a/arch/mips/include/asm/sn/sn0/hubmd.h b/arch/mips/include/asm/sn/sn0/hubmd.h
-index 305d002be1825..97d9cbbf9f4c6 100644
---- a/arch/mips/include/asm/sn/sn0/hubmd.h
-+++ b/arch/mips/include/asm/sn/sn0/hubmd.h
-@@ -423,7 +423,7 @@
-  * Operations on page migration threshold register
-  */
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- /*
-  * LED register macros
-@@ -735,7 +735,7 @@ typedef union md_perf_cnt {
- } md_perf_cnt_t;
- 
- 
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- 
- #define DIR_ERROR_VALID_MASK	0xe000000000000000
-diff --git a/arch/mips/include/asm/sn/sn0/hubni.h b/arch/mips/include/asm/sn/sn0/hubni.h
-index b8253142cb834..4830bae723e4b 100644
---- a/arch/mips/include/asm/sn/sn0/hubni.h
-+++ b/arch/mips/include/asm/sn/sn0/hubni.h
-@@ -11,7 +11,7 @@
- #ifndef _ASM_SGI_SN0_HUBNI_H
- #define _ASM_SGI_SN0_HUBNI_H
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- #include <linux/types.h>
- #endif
- 
-@@ -226,7 +226,7 @@
- 
- #define NLT_EXIT_PORT_MASK (UINT64_CAST 0xf)
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- typedef union	hubni_port_error_u {
- 	u64	nipe_reg_value;
-@@ -258,6 +258,6 @@ static inline int get_region_shift(void)
- 	return NASID_TO_COARSEREG_SHFT;
+-static void dw8250_serial_out(struct uart_port *p, int offset, int value)
++static void dw8250_serial_out(struct uart_port *p, unsigned int offset, u32 value)
+ {
+ 	writeb(value, p->membase + (offset << p->regshift));
+ 	dw8250_check_lcr(p, offset, value);
  }
  
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- #endif /* _ASM_SGI_SN0_HUBNI_H */
-diff --git a/arch/mips/include/asm/sn/sn0/hubpi.h b/arch/mips/include/asm/sn/sn0/hubpi.h
-index 7b83655913c52..a4fe0feeef0cc 100644
---- a/arch/mips/include/asm/sn/sn0/hubpi.h
-+++ b/arch/mips/include/asm/sn/sn0/hubpi.h
-@@ -306,7 +306,7 @@
- #define ERR_STACK_SIZE_BYTES(_sz) \
-        ((_sz) ? (PI_MIN_STACK_SIZE << ((_sz) - 1)) : 0)
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- /*
-  * format of error stack and error status registers.
-  */
-@@ -359,7 +359,7 @@ typedef union pi_err_stat1 {
- 
- typedef u64	rtc_time_t;
- 
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- 
- /* Bits in PI_SYSAD_ERRCHK_EN */
-diff --git a/arch/mips/include/asm/sn/types.h b/arch/mips/include/asm/sn/types.h
-index 451ba1ee41ad8..53d04c04d6f55 100644
---- a/arch/mips/include/asm/sn/types.h
-+++ b/arch/mips/include/asm/sn/types.h
-@@ -11,7 +11,7 @@
- 
- #include <linux/types.h>
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- typedef unsigned long	cpuid_t;
- typedef signed short	nasid_t;	/* node id in numa-as-id space */
-diff --git a/arch/mips/include/asm/sync.h b/arch/mips/include/asm/sync.h
-index 44c04a82d0b7d..d7873e8d7e6f8 100644
---- a/arch/mips/include/asm/sync.h
-+++ b/arch/mips/include/asm/sync.h
-@@ -193,7 +193,7 @@
-  * Preprocessor magic to expand macros used as arguments before we insert them
-  * into assembly code.
-  */
--#ifdef __ASSEMBLY__
-+#ifdef __ASSEMBLER__
- # define ___SYNC(type, reason, else)				\
- 	____SYNC(type, reason, else)
- #else
-diff --git a/arch/mips/include/asm/thread_info.h b/arch/mips/include/asm/thread_info.h
-index b9d76e8ac5a23..2707dad260dd7 100644
---- a/arch/mips/include/asm/thread_info.h
-+++ b/arch/mips/include/asm/thread_info.h
-@@ -11,7 +11,7 @@
- #ifdef __KERNEL__
- 
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- #include <asm/processor.h>
- 
-@@ -73,7 +73,7 @@ static inline struct thread_info *current_thread_info(void)
- register unsigned long current_stack_pointer __asm__("sp");
- #endif
- 
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- /* thread information allocation */
- #if defined(CONFIG_PAGE_SIZE_4KB) && defined(CONFIG_32BIT)
-diff --git a/arch/mips/include/asm/unistd.h b/arch/mips/include/asm/unistd.h
-index ba83d3fb0a848..6a974b990f4b2 100644
---- a/arch/mips/include/asm/unistd.h
-+++ b/arch/mips/include/asm/unistd.h
-@@ -29,7 +29,7 @@
- #define NR_syscalls  (__NR_O32_Linux + __NR_O32_Linux_syscalls)
- #endif
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- #define __ARCH_WANT_NEW_STAT
- #define __ARCH_WANT_OLD_READDIR
-@@ -62,6 +62,6 @@
- /* whitelists for checksyscalls */
- #define __IGNORE_fadvise64_64
- 
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- #endif /* _ASM_UNISTD_H */
-diff --git a/arch/mips/include/asm/vdso/gettimeofday.h b/arch/mips/include/asm/vdso/gettimeofday.h
-index fd32baa30e172..32d2d173fdc0b 100644
---- a/arch/mips/include/asm/vdso/gettimeofday.h
-+++ b/arch/mips/include/asm/vdso/gettimeofday.h
-@@ -11,7 +11,7 @@
- #ifndef __ASM_VDSO_GETTIMEOFDAY_H
- #define __ASM_VDSO_GETTIMEOFDAY_H
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- #include <asm/vdso/vdso.h>
- #include <asm/clocksource.h>
-@@ -215,6 +215,6 @@ static __always_inline const struct vdso_time_data *__arch_get_vdso_u_time_data(
+-static void dw8250_serial_out38x(struct uart_port *p, int offset, int value)
++static void dw8250_serial_out38x(struct uart_port *p, unsigned int offset, u32 value)
+ {
+ 	/* Allow the TX to drain before we reconfigure */
+ 	if (offset == UART_LCR)
+@@ -220,22 +220,22 @@ static void dw8250_serial_out38x(struct uart_port *p, int offset, int value)
+ 	dw8250_serial_out(p, offset, value);
  }
- #define __arch_get_vdso_u_time_data __arch_get_vdso_u_time_data
  
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
+-static unsigned int dw8250_serial_in(struct uart_port *p, int offset)
++static u32 dw8250_serial_in(struct uart_port *p, unsigned int offset)
+ {
+-	unsigned int value = readb(p->membase + (offset << p->regshift));
++	u32 value = readb(p->membase + (offset << p->regshift));
  
- #endif /* __ASM_VDSO_GETTIMEOFDAY_H */
-diff --git a/arch/mips/include/asm/vdso/processor.h b/arch/mips/include/asm/vdso/processor.h
-index 511c95d735e65..05cdb366dc21c 100644
---- a/arch/mips/include/asm/vdso/processor.h
-+++ b/arch/mips/include/asm/vdso/processor.h
-@@ -5,7 +5,7 @@
- #ifndef __ASM_VDSO_PROCESSOR_H
- #define __ASM_VDSO_PROCESSOR_H
+ 	return dw8250_modify_msr(p, offset, value);
+ }
  
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
+ #ifdef CONFIG_64BIT
+-static unsigned int dw8250_serial_inq(struct uart_port *p, int offset)
++static u32 dw8250_serial_inq(struct uart_port *p, unsigned int offset)
+ {
+ 	u8 value = __raw_readq(p->membase + (offset << p->regshift));
  
- #ifdef CONFIG_CPU_LOONGSON64
- /*
-@@ -22,6 +22,6 @@
- #define cpu_relax()	barrier()
+ 	return dw8250_modify_msr(p, offset, value);
+ }
+ 
+-static void dw8250_serial_outq(struct uart_port *p, int offset, int value)
++static void dw8250_serial_outq(struct uart_port *p, unsigned int offset, u32 value)
+ {
+ 	value &= 0xff;
+ 	__raw_writeq(value, p->membase + (offset << p->regshift));
+@@ -246,28 +246,28 @@ static void dw8250_serial_outq(struct uart_port *p, int offset, int value)
+ }
+ #endif /* CONFIG_64BIT */
+ 
+-static void dw8250_serial_out32(struct uart_port *p, int offset, int value)
++static void dw8250_serial_out32(struct uart_port *p, unsigned int offset, u32 value)
+ {
+ 	writel(value, p->membase + (offset << p->regshift));
+ 	dw8250_check_lcr(p, offset, value);
+ }
+ 
+-static unsigned int dw8250_serial_in32(struct uart_port *p, int offset)
++static u32 dw8250_serial_in32(struct uart_port *p, unsigned int offset)
+ {
+-	unsigned int value = readl(p->membase + (offset << p->regshift));
++	u32 value = readl(p->membase + (offset << p->regshift));
+ 
+ 	return dw8250_modify_msr(p, offset, value);
+ }
+ 
+-static void dw8250_serial_out32be(struct uart_port *p, int offset, int value)
++static void dw8250_serial_out32be(struct uart_port *p, unsigned int offset, u32 value)
+ {
+ 	iowrite32be(value, p->membase + (offset << p->regshift));
+ 	dw8250_check_lcr(p, offset, value);
+ }
+ 
+-static unsigned int dw8250_serial_in32be(struct uart_port *p, int offset)
++static u32 dw8250_serial_in32be(struct uart_port *p, unsigned int offset)
+ {
+-       unsigned int value = ioread32be(p->membase + (offset << p->regshift));
++       u32 value = ioread32be(p->membase + (offset << p->regshift));
+ 
+        return dw8250_modify_msr(p, offset, value);
+ }
+diff --git a/drivers/tty/serial/8250/8250_em.c b/drivers/tty/serial/8250/8250_em.c
+index 35094f884492..e90c71494944 100644
+--- a/drivers/tty/serial/8250/8250_em.c
++++ b/drivers/tty/serial/8250/8250_em.c
+@@ -59,7 +59,7 @@ static void serial8250_em_serial_out_helper(struct uart_port *p, int offset,
+ 	}
+ }
+ 
+-static unsigned int serial8250_em_serial_in(struct uart_port *p, int offset)
++static u32 serial8250_em_serial_in(struct uart_port *p, unsigned int offset)
+ {
+ 	switch (offset) {
+ 	case UART_RX: /* RX @ 0x00 */
+@@ -119,7 +119,7 @@ static void serial8250_em_reg_update(struct uart_port *p, int off, int value)
+ 	serial8250_em_serial_out_helper(p, UART_HCR0_EM, hcr0);
+ }
+ 
+-static void serial8250_em_serial_out(struct uart_port *p, int offset, int value)
++static void serial8250_em_serial_out(struct uart_port *p, unsigned int offset, u32 value)
+ {
+ 	switch (offset) {
+ 	case UART_TX:
+diff --git a/drivers/tty/serial/8250/8250_ingenic.c b/drivers/tty/serial/8250/8250_ingenic.c
+index a73dd3773640..94542fc143c2 100644
+--- a/drivers/tty/serial/8250/8250_ingenic.c
++++ b/drivers/tty/serial/8250/8250_ingenic.c
+@@ -168,9 +168,9 @@ OF_EARLYCON_DECLARE(jz4780_uart, "ingenic,jz4780-uart",
+ OF_EARLYCON_DECLARE(x1000_uart, "ingenic,x1000-uart",
+ 		    ingenic_early_console_setup);
+ 
+-static void ingenic_uart_serial_out(struct uart_port *p, int offset, int value)
++static void ingenic_uart_serial_out(struct uart_port *p, unsigned int offset, u32 value)
+ {
+-	int ier;
++	u32 ier;
+ 
+ 	switch (offset) {
+ 	case UART_FCR:
+@@ -206,9 +206,9 @@ static void ingenic_uart_serial_out(struct uart_port *p, int offset, int value)
+ 	writeb(value, p->membase + (offset << p->regshift));
+ }
+ 
+-static unsigned int ingenic_uart_serial_in(struct uart_port *p, int offset)
++static u32 ingenic_uart_serial_in(struct uart_port *p, unsigned int offset)
+ {
+-	unsigned int value;
++	u8 value;
+ 
+ 	value = readb(p->membase + (offset << p->regshift));
+ 
+diff --git a/drivers/tty/serial/8250/8250_ioc3.c b/drivers/tty/serial/8250/8250_ioc3.c
+index 499e80aa4cf9..3ebda9a5d07d 100644
+--- a/drivers/tty/serial/8250/8250_ioc3.c
++++ b/drivers/tty/serial/8250/8250_ioc3.c
+@@ -21,12 +21,12 @@ struct ioc3_8250_data {
+ 	int line;
+ };
+ 
+-static unsigned int ioc3_serial_in(struct uart_port *p, int offset)
++static u32 ioc3_serial_in(struct uart_port *p, unsigned int offset)
+ {
+ 	return readb(p->membase + (offset ^ 3));
+ }
+ 
+-static void ioc3_serial_out(struct uart_port *p, int offset, int value)
++static void ioc3_serial_out(struct uart_port *p, unsigned int offset, u32 value)
+ {
+ 	writeb(value, p->membase + (offset ^ 3));
+ }
+diff --git a/drivers/tty/serial/8250/8250_lpc18xx.c b/drivers/tty/serial/8250/8250_lpc18xx.c
+index d52445948da0..6c0489c9c253 100644
+--- a/drivers/tty/serial/8250/8250_lpc18xx.c
++++ b/drivers/tty/serial/8250/8250_lpc18xx.c
+@@ -67,7 +67,7 @@ static int lpc18xx_rs485_config(struct uart_port *port, struct ktermios *termios
+ 	return 0;
+ }
+ 
+-static void lpc18xx_uart_serial_out(struct uart_port *p, int offset, int value)
++static void lpc18xx_uart_serial_out(struct uart_port *p, unsigned int offset, u32 value)
+ {
+ 	/*
+ 	 * For DMA mode one must ensure that the UART_FCR_DMA_SELECT
+diff --git a/drivers/tty/serial/8250/8250_pci.c b/drivers/tty/serial/8250/8250_pci.c
+index 73c200127b08..152f914c599d 100644
+--- a/drivers/tty/serial/8250/8250_pci.c
++++ b/drivers/tty/serial/8250/8250_pci.c
+@@ -1751,7 +1751,7 @@ static int pci_fintek_init(struct pci_dev *dev)
+ 	return max_port;
+ }
+ 
+-static void f815xxa_mem_serial_out(struct uart_port *p, int offset, int value)
++static void f815xxa_mem_serial_out(struct uart_port *p, unsigned int offset, u32 value)
+ {
+ 	struct f815xxa_data *data = p->private_data;
+ 	unsigned long flags;
+@@ -1846,10 +1846,10 @@ static void kt_handle_break(struct uart_port *p)
+ 	serial8250_clear_and_reinit_fifos(up);
+ }
+ 
+-static unsigned int kt_serial_in(struct uart_port *p, int offset)
++static u32 kt_serial_in(struct uart_port *p, unsigned int offset)
+ {
+ 	struct uart_8250_port *up = up_to_u8250p(p);
+-	unsigned int val;
++	u32 val;
+ 
+ 	/*
+ 	 * When the Intel ME (management engine) gets reset its serial
+diff --git a/drivers/tty/serial/8250/8250_port.c b/drivers/tty/serial/8250/8250_port.c
+index 6d7b8c4667c9..f5407832e8a7 100644
+--- a/drivers/tty/serial/8250/8250_port.c
++++ b/drivers/tty/serial/8250/8250_port.c
+@@ -339,14 +339,14 @@ static void default_serial_dl_write(struct uart_8250_port *up, u32 value)
+ }
+ 
+ #ifdef CONFIG_HAS_IOPORT
+-static unsigned int hub6_serial_in(struct uart_port *p, int offset)
++static u32 hub6_serial_in(struct uart_port *p, unsigned int offset)
+ {
+ 	offset = offset << p->regshift;
+ 	outb(p->hub6 - 1 + offset, p->iobase);
+ 	return inb(p->iobase + 1);
+ }
+ 
+-static void hub6_serial_out(struct uart_port *p, int offset, int value)
++static void hub6_serial_out(struct uart_port *p, unsigned int offset, u32 value)
+ {
+ 	offset = offset << p->regshift;
+ 	outb(p->hub6 - 1 + offset, p->iobase);
+@@ -354,73 +354,73 @@ static void hub6_serial_out(struct uart_port *p, int offset, int value)
+ }
+ #endif /* CONFIG_HAS_IOPORT */
+ 
+-static unsigned int mem_serial_in(struct uart_port *p, int offset)
++static u32 mem_serial_in(struct uart_port *p, unsigned int offset)
+ {
+ 	offset = offset << p->regshift;
+ 	return readb(p->membase + offset);
+ }
+ 
+-static void mem_serial_out(struct uart_port *p, int offset, int value)
++static void mem_serial_out(struct uart_port *p, unsigned int offset, u32 value)
+ {
+ 	offset = offset << p->regshift;
+ 	writeb(value, p->membase + offset);
+ }
+ 
+-static void mem16_serial_out(struct uart_port *p, int offset, int value)
++static void mem16_serial_out(struct uart_port *p, unsigned int offset, u32 value)
+ {
+ 	offset = offset << p->regshift;
+ 	writew(value, p->membase + offset);
+ }
+ 
+-static unsigned int mem16_serial_in(struct uart_port *p, int offset)
++static u32 mem16_serial_in(struct uart_port *p, unsigned int offset)
+ {
+ 	offset = offset << p->regshift;
+ 	return readw(p->membase + offset);
+ }
+ 
+-static void mem32_serial_out(struct uart_port *p, int offset, int value)
++static void mem32_serial_out(struct uart_port *p, unsigned int offset, u32 value)
+ {
+ 	offset = offset << p->regshift;
+ 	writel(value, p->membase + offset);
+ }
+ 
+-static unsigned int mem32_serial_in(struct uart_port *p, int offset)
++static u32 mem32_serial_in(struct uart_port *p, unsigned int offset)
+ {
+ 	offset = offset << p->regshift;
+ 	return readl(p->membase + offset);
+ }
+ 
+-static void mem32be_serial_out(struct uart_port *p, int offset, int value)
++static void mem32be_serial_out(struct uart_port *p, unsigned int offset, u32 value)
+ {
+ 	offset = offset << p->regshift;
+ 	iowrite32be(value, p->membase + offset);
+ }
+ 
+-static unsigned int mem32be_serial_in(struct uart_port *p, int offset)
++static u32 mem32be_serial_in(struct uart_port *p, unsigned int offset)
+ {
+ 	offset = offset << p->regshift;
+ 	return ioread32be(p->membase + offset);
+ }
+ 
+ #ifdef CONFIG_HAS_IOPORT
+-static unsigned int io_serial_in(struct uart_port *p, int offset)
++static u32 io_serial_in(struct uart_port *p, unsigned int offset)
+ {
+ 	offset = offset << p->regshift;
+ 	return inb(p->iobase + offset);
+ }
+ 
+-static void io_serial_out(struct uart_port *p, int offset, int value)
++static void io_serial_out(struct uart_port *p, unsigned int offset, u32 value)
+ {
+ 	offset = offset << p->regshift;
+ 	outb(value, p->iobase + offset);
+ }
  #endif
+-static unsigned int no_serial_in(struct uart_port *p, int offset)
++static u32 no_serial_in(struct uart_port *p, unsigned int offset)
+ {
+-	return (unsigned int)-1;
++	return ~0U;
+ }
  
--#endif /* __ASSEMBLY__ */
-+#endif /* __ASSEMBLER__ */
+-static void no_serial_out(struct uart_port *p, int offset, int value)
++static void no_serial_out(struct uart_port *p, unsigned int offset, u32 value)
+ {
+ }
  
- #endif /* __ASM_VDSO_PROCESSOR_H */
-diff --git a/arch/mips/include/asm/vdso/vdso.h b/arch/mips/include/asm/vdso/vdso.h
-index acd0efcd3d93e..6889e0f2e5db9 100644
---- a/arch/mips/include/asm/vdso/vdso.h
-+++ b/arch/mips/include/asm/vdso/vdso.h
-@@ -9,7 +9,7 @@
+diff --git a/drivers/tty/serial/8250/8250_rt288x.c b/drivers/tty/serial/8250/8250_rt288x.c
+index 6415ca8d3adf..bf28b8a9a710 100644
+--- a/drivers/tty/serial/8250/8250_rt288x.c
++++ b/drivers/tty/serial/8250/8250_rt288x.c
+@@ -33,7 +33,7 @@ static const u8 au_io_out_map[5] = {
+ 	[UART_MCR]	= 6,
+ };
  
- #define __VDSO_PAGES 4
+-static unsigned int au_serial_in(struct uart_port *p, int offset)
++static u32 au_serial_in(struct uart_port *p, unsigned int offset)
+ {
+ 	if (offset >= ARRAY_SIZE(au_io_in_map))
+ 		return UINT_MAX;
+@@ -42,7 +42,7 @@ static unsigned int au_serial_in(struct uart_port *p, int offset)
+ 	return __raw_readl(p->membase + (offset << p->regshift));
+ }
  
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- #include <asm/asm.h>
- #include <asm/vdso.h>
-@@ -69,4 +69,4 @@ static inline void __iomem *get_gic(const struct vdso_time_data *data)
- 
- #endif /* CONFIG_CLKSRC_MIPS_GIC */
- 
--#endif /* __ASSEMBLY__ */
-+#endif /* __ASSEMBLER__ */
-diff --git a/arch/mips/include/asm/vdso/vsyscall.h b/arch/mips/include/asm/vdso/vsyscall.h
-index 2b1debb62dee0..0f061a9babd13 100644
---- a/arch/mips/include/asm/vdso/vsyscall.h
-+++ b/arch/mips/include/asm/vdso/vsyscall.h
-@@ -4,13 +4,13 @@
- 
- #include <asm/page.h>
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- #include <vdso/datapage.h>
- 
- /* The asm-generic header needs to be included after the definitions above */
- #include <asm-generic/vdso/vsyscall.h>
- 
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- #endif /* __ASM_VDSO_VSYSCALL_H */
-diff --git a/arch/mips/include/asm/xtalk/xtalk.h b/arch/mips/include/asm/xtalk/xtalk.h
-index 680e7efebbaf6..dfe6a3fce65a5 100644
---- a/arch/mips/include/asm/xtalk/xtalk.h
-+++ b/arch/mips/include/asm/xtalk/xtalk.h
-@@ -12,7 +12,7 @@
- #ifndef _ASM_XTALK_XTALK_H
- #define _ASM_XTALK_XTALK_H
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- /*
-  * User-level device driver visible types
+-static void au_serial_out(struct uart_port *p, int offset, int value)
++static void au_serial_out(struct uart_port *p, unsigned int offset, u32 value)
+ {
+ 	if (offset >= ARRAY_SIZE(au_io_out_map))
+ 		return;
+diff --git a/drivers/tty/serial/8250/8250_uniphier.c b/drivers/tty/serial/8250/8250_uniphier.c
+index 4874a9632db3..e3db60bf50c9 100644
+--- a/drivers/tty/serial/8250/8250_uniphier.c
++++ b/drivers/tty/serial/8250/8250_uniphier.c
+@@ -63,7 +63,7 @@ OF_EARLYCON_DECLARE(uniphier, "socionext,uniphier-uart",
+  * The register map is slightly different from that of 8250.
+  * IO callbacks must be overridden for correct access to FCR, LCR, MCR and SCR.
   */
-@@ -47,6 +47,6 @@ typedef struct xtalk_piomap_s *xtalk_piomap_t;
- #define XIO_PORT(x)	((xwidgetnum_t)(((x)&XIO_PORT_BITS) >> XIO_PORT_SHIFT))
- #define XIO_PACK(p, o)	((((uint64_t)(p))<<XIO_PORT_SHIFT) | ((o)&XIO_ADDR_BITS))
+-static unsigned int uniphier_serial_in(struct uart_port *p, int offset)
++static u32 uniphier_serial_in(struct uart_port *p, unsigned int offset)
+ {
+ 	unsigned int valshift = 0;
  
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
+@@ -92,7 +92,7 @@ static unsigned int uniphier_serial_in(struct uart_port *p, int offset)
+ 	return (readl(p->membase + offset) >> valshift) & 0xff;
+ }
  
- #endif /* _ASM_XTALK_XTALK_H */
-diff --git a/arch/mips/include/asm/xtalk/xwidget.h b/arch/mips/include/asm/xtalk/xwidget.h
-index 24f121da6a1d9..efcfe4494576a 100644
---- a/arch/mips/include/asm/xtalk/xwidget.h
-+++ b/arch/mips/include/asm/xtalk/xwidget.h
-@@ -203,7 +203,7 @@ static const struct widget_ident __initconst widget_idents[] = {
-  * widget target flush register are widget dependent thus will not be
-  * defined here
-  */
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- typedef u32 widgetreg_t;
- 
- /* widget configuration registers */
-@@ -274,6 +274,6 @@ typedef struct xwidget_hwid_s {
- 	((hwid2)->mfg_num == XWIDGET_MFG_NUM_NONE) || \
- 	((hwid1)->mfg_num == (hwid2)->mfg_num)))
- 
--#endif /* !__ASSEMBLY__ */
-+#endif /* !__ASSEMBLER__ */
- 
- #endif /* _ASM_XTALK_XWIDGET_H */
-diff --git a/drivers/soc/bcm/brcmstb/pm/pm.h b/drivers/soc/bcm/brcmstb/pm/pm.h
-index 94a380470a2f9..17f7a06a7a836 100644
---- a/drivers/soc/bcm/brcmstb/pm/pm.h
-+++ b/drivers/soc/bcm/brcmstb/pm/pm.h
-@@ -60,7 +60,7 @@
- 			   PM_DEEP_STANDBY | \
- 			   PM_PLL_PWRDOWN | PM_PWR_DOWN)
- 
--#ifndef __ASSEMBLY__
-+#ifndef __ASSEMBLER__
- 
- #ifndef CONFIG_MIPS
- extern const unsigned long brcmstb_pm_do_s2_sz;
+-static void uniphier_serial_out(struct uart_port *p, int offset, int value)
++static void uniphier_serial_out(struct uart_port *p, unsigned int offset, u32 value)
+ {
+ 	unsigned int valshift = 0;
+ 	bool normal = false;
+diff --git a/include/linux/serial_8250.h b/include/linux/serial_8250.h
+index 144de7a7948d..01efdce0fda0 100644
+--- a/include/linux/serial_8250.h
++++ b/include/linux/serial_8250.h
+@@ -46,8 +46,8 @@ struct plat_serial8250_port {
+ 	unsigned int	type;		/* If UPF_FIXED_TYPE */
+ 	upf_t		flags;		/* UPF_* flags */
+ 	u16		bugs;		/* port bugs */
+-	unsigned int	(*serial_in)(struct uart_port *, int);
+-	void		(*serial_out)(struct uart_port *, int, int);
++	u32		(*serial_in)(struct uart_port *, unsigned int offset);
++	void		(*serial_out)(struct uart_port *, unsigned int offset, u32 val);
+ 	u32		(*dl_read)(struct uart_8250_port *up);
+ 	void		(*dl_write)(struct uart_8250_port *up, u32 value);
+ 	void		(*set_termios)(struct uart_port *,
+diff --git a/include/linux/serial_core.h b/include/linux/serial_core.h
+index 914b5e97e056..d65b15449cfe 100644
+--- a/include/linux/serial_core.h
++++ b/include/linux/serial_core.h
+@@ -443,8 +443,8 @@ struct uart_port {
+ 	spinlock_t		lock;			/* port lock */
+ 	unsigned long		iobase;			/* in/out[bwl] */
+ 	unsigned char __iomem	*membase;		/* read/write[bwl] */
+-	unsigned int		(*serial_in)(struct uart_port *, int);
+-	void			(*serial_out)(struct uart_port *, int, int);
++	u32			(*serial_in)(struct uart_port *, unsigned int offset);
++	void			(*serial_out)(struct uart_port *, unsigned int offset, u32 val);
+ 	void			(*set_termios)(struct uart_port *,
+ 				               struct ktermios *new,
+ 				               const struct ktermios *old);
 -- 
 2.49.0
 
