@@ -1,107 +1,142 @@
-Return-Path: <linux-mips+bounces-9265-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9267-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 42DBBAD692C
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Jun 2025 09:35:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDD67AD6EEA
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Jun 2025 13:22:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3E1E3AABF8
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Jun 2025 07:34:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4E6FF3AF413
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Jun 2025 11:21:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E8FC2036EC;
-	Thu, 12 Jun 2025 07:35:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 862BA23A9AD;
+	Thu, 12 Jun 2025 11:22:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ItpMEVj9"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mout-u-107.mailbox.org (mout-u-107.mailbox.org [80.241.59.207])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 576E51F12F6;
-	Thu, 12 Jun 2025 07:35:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.59.207
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59EEC229B38;
+	Thu, 12 Jun 2025 11:22:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749713709; cv=none; b=AtGq0h+Z7vTdPCJjawsMdCBSPvr3bGkuSIYNdiHrDljEn04yBGbeKztnW8La3Qn/vYocMfzsTfQcyMggfqB/8uf/4D7NsaDWP8P6spG19bT8ow/V97/XFD1V2+AgxeQiak33knGH9v/dJf001burFE/eHiPkgyiD9NvQODPh/wI=
+	t=1749727329; cv=none; b=XQwdMHQ29UQN7KBNowHyoZx+gQvbhCmF0ULbIgOgGIqH2blbH8QW9F+DICBH1Vu1+2gS0Jge2eCf8RHY0ST7GTPvcggXN9bMcWQsvdvMMTobzuif18GaMuD6xxODFKHmChG5tg6ZPuzH2bOAnY1w7jFSYXlGQIW72Fvdj67pacI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749713709; c=relaxed/simple;
-	bh=p1j9QOtPk3ZIlPqNiNr1tiipGrWDfoJ3dSSpP2dPRV0=;
+	s=arc-20240116; t=1749727329; c=relaxed/simple;
+	bh=ZrR2KM4gwZRxXaEmhqgPIVUwOUQUXvfbHNIbxlOunlM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=atdRaYZsI7rtURuPxRtNgc3Jxfy8ReuCgbtO742a7Bzxv0FExRjzWfhHM3rEOkfrB2Yhgd6RaMRN3ulDHGmS7snEgm/g0xvGnGMte9ufaFJD4v+gNkC0yAvPlOldmnBfIBBCUYXw3LQOs3H8SzO1f6L9Dvfqf2U5PE/YLfnr7C0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=denx.de; spf=fail smtp.mailfrom=denx.de; arc=none smtp.client-ip=80.241.59.207
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=denx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=denx.de
-Received: from smtp102.mailbox.org (smtp102.mailbox.org [10.196.197.102])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-u-107.mailbox.org (Postfix) with ESMTPS id 4bHvSR3yhhz9tgy;
-	Thu, 12 Jun 2025 09:35:03 +0200 (CEST)
-Message-ID: <7db61610-890a-480e-b74d-3565d0e9ba16@denx.de>
-Date: Thu, 12 Jun 2025 09:35:02 +0200
+	 In-Reply-To:Content-Type; b=PV+q1nWmABn6YCB92/FF7B9bPuMCtk72t/Fy7lrgZkSAfmN4rXq2IFD1NustAKqfjkpmXOTVr+l+JlCrJbxBA2BqI/s7RjdvCBUWM58aEgRkZ4O4PGqASrTzg5KgMAFTPfcEe6GQerFbSdQ/SfFVIxtMEI8c838jt9hqO9AlSes=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ItpMEVj9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E596C4CEEA;
+	Thu, 12 Jun 2025 11:22:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749727328;
+	bh=ZrR2KM4gwZRxXaEmhqgPIVUwOUQUXvfbHNIbxlOunlM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ItpMEVj9ZO16lsggp41FCAlqAJiY68krw0sMbN59JeUxjVv6j0Ic95HbvDd/fOOsq
+	 6X6dAtgboIVeGp6D8XV5M9xSuoZOIx/fUrpx+SjD8TC/3Qs+E4Bq0bXihiBu+4Zh6j
+	 fmBmWtuwCUmYcYAO0WpnhRuakhyU53ILx8L9O1P1HU4TYh8IAlLjKltNeBt0dwUFtr
+	 vOaWsy+baqWWfeBoEhTVERmy6apkxphZHHxKcaD07aTVaE2OrDKpupgRu2n0UvcFNT
+	 Ep7rgAdnJ9OrmX8GMx5dxJWNvEhY0s6sMlk+JEYWEXsBY7QYW0318s3duI3k55H9rv
+	 C7KARXPvxSR6w==
+Message-ID: <e2ffca36-d2ed-4253-86a6-a990e7931ba0@kernel.org>
+Date: Thu, 12 Jun 2025 13:22:04 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Subject: Re: [PATCH v1 3/3] MIPS: dts: ralink: gardena_smart_gateway_mt7688:
- Fix power LED
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/3] MIPS: dts: ralink: mt7628a: Fix sysc's compatible
+ property for MT7688
 To: Ezra Buehler <ezra@easyb.ch>, linux-mips@vger.kernel.org
 Cc: Conor Dooley <conor+dt@kernel.org>,
  Harvey Hunt <harveyhuntnexus@gmail.com>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>,
  Reto Schneider <reto.schneider@husqvarnagroup.com>,
  Rob Herring <robh@kernel.org>,
- Sergio Paracuellos <sergio.paracuellos@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, devicetree@vger.kernel.org,
- Ezra Buehler <ezra.buehler@husqvarnagroup.com>
+ Sergio Paracuellos <sergio.paracuellos@gmail.com>, Stefan Roese
+ <sr@denx.de>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ devicetree@vger.kernel.org, Ezra Buehler <ezra.buehler@husqvarnagroup.com>
 References: <20250611194716.302126-1-ezra@easyb.ch>
- <20250611194716.302126-4-ezra@easyb.ch>
+ <20250611194716.302126-2-ezra@easyb.ch>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Stefan Roese <sr@denx.de>
-In-Reply-To: <20250611194716.302126-4-ezra@easyb.ch>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250611194716.302126-2-ezra@easyb.ch>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 11.06.25 21:47, Ezra Buehler wrote:
+On 11/06/2025 21:47, Ezra Buehler wrote:
 > From: Ezra Buehler <ezra.buehler@husqvarnagroup.com>
 > 
-> When starting up, the GARDENA smart Gateway's power LED should be
-> flashing green. It is unclear why it was initially set to "off".
-> 
-> The LED frequency cannot be configured in the devicetree. Luckily, the
-> default is 1 Hz, which is what we want.
+> Otherwise, the MT7688-based GARDENA smart Gateway will fail to boot
+> printing "Kernel panic - not syncing: unable to get CPU clock, err=-2".
 > 
 > Signed-off-by: Ezra Buehler <ezra.buehler@husqvarnagroup.com>
-
-Reviewed-by: Stefan Roese <sr@denx.de>
-
-Thanks,
-Stefan
-
 > ---
->   arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
+>  arch/mips/boot/dts/ralink/mt7628a.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 > 
-> diff --git a/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts b/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-> index 7743d014631a..0bfb1dde9764 100644
-> --- a/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-> +++ b/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-> @@ -56,7 +56,7 @@ led-power-blue {
->   		led-power-green {
->   			label = "smartgw:power:green";
->   			gpios = <&gpio 19 GPIO_ACTIVE_HIGH>;
-> -			default-state = "off";
-> +			linux,default-trigger = "timer";
->   		};
->   
->   		led-power-red {
+> diff --git a/arch/mips/boot/dts/ralink/mt7628a.dtsi b/arch/mips/boot/dts/ralink/mt7628a.dtsi
+> index 0212700c4fb4..10221a41f02a 100644
+> --- a/arch/mips/boot/dts/ralink/mt7628a.dtsi
+> +++ b/arch/mips/boot/dts/ralink/mt7628a.dtsi
+> @@ -33,7 +33,7 @@ palmbus@10000000 {
+>  		#size-cells = <1>;
+>  
+>  		sysc: syscon@0 {
+> -			compatible = "ralink,mt7628-sysc", "syscon";
+> +			compatible = "ralink,mt7628-sysc", "ralink,mt7688-sysc", "syscon";
+This is in contradiction to bindings, so you need to fix bindings first
+- with proper justification. If this happened in separate patchset, then
+the DTS thread MUST provide lore link to that.
 
-Viele Grüße,
-Stefan Roese
-
--- 
-DENX Software Engineering GmbH,      Managing Director: Erika Unter
-HRB 165235 Munich, Office: Kirchenstr.5, D-82194 Groebenzell, Germany
-Phone: (+49)-8142-66989-51 Fax: (+49)-8142-66989-80 Email: sr@denx.de
-
+Best regards,
+Krzysztof
 
