@@ -1,223 +1,141 @@
-Return-Path: <linux-mips+bounces-9294-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9295-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64AD9AD92C4
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Jun 2025 18:24:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 74438AD92ED
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Jun 2025 18:36:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C43ED3B958D
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Jun 2025 16:24:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 673A13BA03C
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Jun 2025 16:36:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E76A20C487;
-	Fri, 13 Jun 2025 16:24:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B56920F09B;
+	Fri, 13 Jun 2025 16:36:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MjhrZQsj"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="PI5Rveho"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A33F3BB48
-	for <linux-mips@vger.kernel.org>; Fri, 13 Jun 2025 16:24:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 796551F5430
+	for <linux-mips@vger.kernel.org>; Fri, 13 Jun 2025 16:36:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749831893; cv=none; b=MhpuDBGDMv//7Xi1LV0NkLjL7QPg71RCZewtC4HIBaC+XZwwUbG108EkUr+R5r6lmfdPO/r+j4ZtM1xcLiXodOfCwXxVhYpXIhuZ2arfEAXFOsUW4No8/PEamfG3S60VQ7rb4m8u1AldHKL2nYHg4iBPHDhfjKH9DCR3oYfVT9A=
+	t=1749832582; cv=none; b=LJQtEVxIhKqdMMe4xItsP5MggHVsKl1/CUeVsVj7HASsMUmK4U20W2kLF3fbyYAtUVHtezZyD82AYUivXsWdXz5/m44Li2iEuUS+STnXIxLjSeyXCuWpIJg0sLhKyhTaX/cbwcuqTBL+rb6ZqPRY3VTYdi7LGpNQ66JMt3Igv+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749831893; c=relaxed/simple;
-	bh=ezAPkeMmfcqGy1OO+aJ5oa0dXrm8ejKbGu1v5Dg5Cqk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FZid6kw5zXPBcwuaQzB7wGSjYMT19e29QVtNipGbzmVV9PQHhiX5UdB//+EU5Q1cnJCY1axz7s9JzVDkE3C7emaIfLh3yK6CtzAKZ8XhkWCNV6Mlp2fi2D/kjIeRLnM6WLiGvWXXoC4rmCZ7JpTiGePYMPS6dvelFxOSwXomd6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MjhrZQsj; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1749831890;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=M6UPs3wZZzH8Vr1Vmqrw6Xud3sdfgHi+vy7XvS9r/Jo=;
-	b=MjhrZQsj/JkW5i8G8Or0WLQSxRLDCsZYmlOf9vVD0W81t4a5X5mXXvySGZkt+4kAXRvBAW
-	RmfkoV0mD8OCcGhPGKqq27bgsWYxVaa55IUCE1tSafze30NV3m30GYs7pVgFph3KdZ/npU
-	VRfXZx36vT6jGwGNiasBKCnOBIRBzv8=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-104-NOz3SgZON_GeUZDpEwcX0Q-1; Fri, 13 Jun 2025 12:24:49 -0400
-X-MC-Unique: NOz3SgZON_GeUZDpEwcX0Q-1
-X-Mimecast-MFC-AGG-ID: NOz3SgZON_GeUZDpEwcX0Q_1749831888
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-4a42c569a9aso54257781cf.0
-        for <linux-mips@vger.kernel.org>; Fri, 13 Jun 2025 09:24:49 -0700 (PDT)
+	s=arc-20240116; t=1749832582; c=relaxed/simple;
+	bh=6IDK3mFK3aUcD6DqmEoL/rBAW6jbXc5FxEXCTke0bD8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=XRJZN4PHpFciT2WagpjjJ/8hs9wRInXU/SWCaYvZWTS334uqny3pIR/Q0Bvh9NjWiDc3Rhldk/cT8iMnNa2ZS+EQp+98+iNQdY71gq1htN7QVn+f2XZvR1OuzT0IAMT4LQOQXou/1UfM0DjPiGbDvx3TrYnZDZ2Hu6T9WwuL3i0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=PI5Rveho; arc=none smtp.client-ip=209.85.208.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-60780d74bbaso3986624a12.0
+        for <linux-mips@vger.kernel.org>; Fri, 13 Jun 2025 09:36:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1749832578; x=1750437378; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=76g08zX1QgiOXgDWQ+4Q63FmolLqjqLzmJdnqen2jZI=;
+        b=PI5RvehogUMvTtnZ9NT+nSQkeUjvDQn3WINLD3naZhlnHdHoiwzfw4PB8oyeNV7oDE
+         VrHfQJGMeqLG/pNd3WOoWMrlR6AladBALeW/89jAhhvNPpu5dfKbt2xlyQEemCm0h6s4
+         FDkroMjWJCWEClLaDHi+R/BMqAC4Nlc/tEs3Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1749831888; x=1750436688;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M6UPs3wZZzH8Vr1Vmqrw6Xud3sdfgHi+vy7XvS9r/Jo=;
-        b=UmQ77SBzj7rM6qm7HwwdWpJSmdTMZlCbcG4WcAB3Rt2RsAv+PfE17cH244T4mxNShm
-         XM50qFwoaYXBefl/PZkc3O+kwOXhmMX5ho2L7F3YoRmY786xoBWYirXKPHZbweTWeUyX
-         JE5Dq3Ki22ICWIP8kTaNrZSnS/B3YL+rm9D11rN+QFp4ocHsS7KJoKfg0AbbhHRZ8QE1
-         ICPN0OmyMEkDKWgY/g8+1WNS/hFB6sAHLu3cFdG12pDpQsnmBIF5TdVknOYaHAxLe89e
-         dY5M5wBxgy6CCnXV9yHTkHCwrJW8QA8vRNORbtN/M58Of6u3bW2c0sv7o8y/OkP8EeuK
-         ulTQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWdeE49UER4RdJ8T7dMQlwklamuo1J3A/795USdqJ1CXxgZSWrBFgoCQh8D+e7oMESh2uvBx1mWoGgW@vger.kernel.org
-X-Gm-Message-State: AOJu0YzMPGGTyyh+GC+LW3euAIe+HXtzj4XkE1RnQhAZEDwL0oR20+0Q
-	p5mn/A18lbXjhTBxVK7ebSvSmtrFbSWA2MpuoIkyMHcw4JPJp/kI6oDteLFQfUrJy5lg5kLAdz9
-	oe5lxSpZ9vPwEsBZUkb1RTGHIhmaVD6CJHAsL658+n3AtJ35i5vPpx0pTpQ+Tx7A=
-X-Gm-Gg: ASbGncsZCSblpB5hhMLPGyO/lAC1tjUR1bZ8Kc5v1PgOkbNFTnfjYgqEwJ+kTH4dki2
-	abnEkIlSbkSvHLpKAs1p4wxXgh9qfip1FJ7MfSGD3Iwoe9B/M1OEuulBQAVMUPhOhfSysW57oap
-	Dxci1ohzNIem0D9NYrjG5eH3AeR+veeV0A596CLU4SHyRDRhzNmu/J9TxpYyjj0Grls6GSheMzy
-	Hs3nzYbO8Cq2nvFebeXx0oyd8fJMpvuH442Qr7UE4m4K1cHX1CkViH04nkmTxve8pWjyubHjGXz
-	Hs+8apXSCSWxlA==
-X-Received: by 2002:a05:622a:44:b0:4a6:fa1f:46a5 with SMTP id d75a77b69052e-4a73b69e837mr6261721cf.2.1749831888563;
-        Fri, 13 Jun 2025 09:24:48 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGwE/aMkplM3bTE+98WG9z6ojodJYRohckJBl51t/zS9y9pPDUtOdEYutdKcOPE5vAqv+nUow==
-X-Received: by 2002:a05:622a:44:b0:4a6:fa1f:46a5 with SMTP id d75a77b69052e-4a73b69e837mr6261261cf.2.1749831888182;
-        Fri, 13 Jun 2025 09:24:48 -0700 (PDT)
-Received: from x1.local ([85.131.185.92])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a72a4cf7desm18773181cf.53.2025.06.13.09.24.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 13 Jun 2025 09:24:47 -0700 (PDT)
-Date: Fri, 13 Jun 2025 12:24:43 -0400
-From: Peter Xu <peterx@redhat.com>
-To: Zi Yan <ziy@nvidia.com>
-Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org, kvm@vger.kernel.org,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Alex Williamson <alex.williamson@redhat.com>,
-	Jason Gunthorpe <jgg@nvidia.com>, Alex Mastro <amastro@fb.com>,
-	David Hildenbrand <david@redhat.com>,
-	Nico Pache <npache@redhat.com>, Huacai Chen <chenhuacai@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Muchun Song <muchun.song@linux.dev>,
-	Oscar Salvador <osalvador@suse.de>, loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org
-Subject: Re: [PATCH 2/5] mm/hugetlb: Remove prepare_hugepage_range()
-Message-ID: <aExQy6xMDc9Igm5v@x1.local>
-References: <20250613134111.469884-1-peterx@redhat.com>
- <20250613134111.469884-3-peterx@redhat.com>
- <050B65EF-6A1E-44A8-87D5-152FA9A60641@nvidia.com>
+        d=1e100.net; s=20230601; t=1749832578; x=1750437378;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=76g08zX1QgiOXgDWQ+4Q63FmolLqjqLzmJdnqen2jZI=;
+        b=q1Y3qVGzn6+JQ8v67YvndeER9YWzl7VOXcGQmDjPIid2jPr2DYOIWh0b30/VJCUpSe
+         2Wa1LYY5Ts73yqGqPKwmZW0YqWwJWod1nrF/cJba3mmR5y7PBPrxi+PIoSSXirE+6ESU
+         gNtwp7YUca/rfKDTv3F7Ml+Q2P5XwyQl0i7N9BjYMePGboBE93IJuc3YBuZvn+H2s1nn
+         iEafM94BWRY/2mN/EKVbL2CuII/fJtWdsdoUFovg2EeRxTYXl1Lm6Hs+G0bIUQbffN6L
+         HUuYRlZVK2unHbHgPSHS2M5u3gF0ybikRETdw688WZTl+cbE5TbIlCNSvaX1DnOeqMVE
+         ClWw==
+X-Forwarded-Encrypted: i=1; AJvYcCXW4kgRd3vn8TS/kX00us4S7S45Us+nk2XiWYgy4sYFQhB7rD0eK+tJTcanTWj0RkjZipRrQsiEf71+@vger.kernel.org
+X-Gm-Message-State: AOJu0YybiJkDhh+mh5/38AfAaP9hFbbB3NuS7V2zy9Zm7sYS7pDlCWk0
+	s5hZzjID3e8pTiJ5o+Qv8QQpDyirLZVdCPs4BeR2SGGctFnBbVSj297AyAngdEbxMSRSCXhS8RM
+	XwcYTczJFnQ==
+X-Gm-Gg: ASbGncsSEmYG4/p36utI8behlN7aQI4CNzoICT7pUaUXOWUFcOATZ7wCw7lZLS4Yge6
+	3N6AcmMsh0WQshSbPPYPcOwiHWsEaw6jMBkrYWcK5WClriZbdbAe/1Pdbm+LUXqkvVWB0F5s83Q
+	t+svwMiz2NSQj44HXUE9PAPM8fIZhsaEv+uE7546VOOD0jFHKxRZGKOCvIvRaxa75wa8FiaoHp8
+	lGDNl37mRTmWnOtiHQPcnqKtbW/6XoRuTJQ4sekC+vSvxYwWLzeWW38EgOD3xKAHdgl7a6U85Xj
+	FaNnveM+A1AwmrRA5eB7TwFQmRiqhtJYPEWs8IRp4zqVGzdcPXWF83KseqQHmk2iVobrBtGZCdH
+	YEY3LCZhFCPcL1afLgpoW5WpAgMF6rmZnwcOM
+X-Google-Smtp-Source: AGHT+IHCmvaj+u6c9Ju99NI3mBAu+XySVu8vu3bbAUi10A0fsgT2jILb8OUHCAz/t+n8TCxU3FdXPg==
+X-Received: by 2002:a05:6402:2753:b0:608:35ae:d856 with SMTP id 4fb4d7f45d1cf-608ce59a8a2mr357635a12.10.1749832578553;
+        Fri, 13 Jun 2025 09:36:18 -0700 (PDT)
+Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com. [209.85.208.45])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-608cfade4desm11391a12.9.2025.06.13.09.36.16
+        for <linux-mips@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 13 Jun 2025 09:36:16 -0700 (PDT)
+Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-607873cc6c4so4726787a12.1
+        for <linux-mips@vger.kernel.org>; Fri, 13 Jun 2025 09:36:16 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV+agAUWuxlh4aQ/iDZFYeC5B9p6xK5Na+M8aYVrhzFl3ECONcOQq6DfrIV6E6AY91oDIdeU5Ghg/Tl@vger.kernel.org
+X-Received: by 2002:a05:6402:35cd:b0:602:427c:452b with SMTP id
+ 4fb4d7f45d1cf-608ce49d897mr365341a12.3.1749832576184; Fri, 13 Jun 2025
+ 09:36:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <050B65EF-6A1E-44A8-87D5-152FA9A60641@nvidia.com>
+References: <20250611020923.1482701-8-ebiggers@kernel.org> <aEjo6YZn59m5FnZ_@gondor.apana.org.au>
+ <20250611033957.GA1484147@sol> <aEj8J3ZIYEFp_XT4@gondor.apana.org.au>
+ <20250611035842.GB1484147@sol> <20250613053624.GA163131@sol>
+ <aEu5cyDOMcKteW_b@gondor.apana.org.au> <20250613055439.GB163131@sol>
+ <CAMj1kXEDCRfCgvtuhRc+a=m1kVt-zkcCqi_=_WOFTmt4Hz2gGg@mail.gmail.com> <aEvjrhkLnB_GEKnV@gondor.apana.org.au>
+In-Reply-To: <aEvjrhkLnB_GEKnV@gondor.apana.org.au>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Fri, 13 Jun 2025 09:35:59 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiewoOfhK=NVQT2uf+29Kngv9F9J6ObJRFUKi6n-=B06g@mail.gmail.com>
+X-Gm-Features: AX0GCFu7lGsyyFJqLRh6z7a562txhJJOyTpVqIIzlie72BRGPF0wH2A3ccvLGV0
+Message-ID: <CAHk-=wiewoOfhK=NVQT2uf+29Kngv9F9J6ObJRFUKi6n-=B06g@mail.gmail.com>
+Subject: Re: [PATCH 07/16] crypto: sha512 - replace sha512_generic with
+ wrapper around SHA-512 library
+To: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: Ard Biesheuvel <ardb@kernel.org>, Eric Biggers <ebiggers@kernel.org>, linux-crypto@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-mips@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, x86@kernel.org, 
+	Jason@zx2c4.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Fri, Jun 13, 2025 at 11:13:50AM -0400, Zi Yan wrote:
-> On 13 Jun 2025, at 9:41, Peter Xu wrote:
-> 
-> > Only mips and loongarch implemented this API, however what it does was
-> > checking against stack overflow for either len or addr.  That's already
-> > done in arch's arch_get_unmapped_area*() functions, hence not needed.
-> >
-> > It means the whole API is pretty much obsolete at least now, remove it
-> > completely.
-> >
-> > Cc: Huacai Chen <chenhuacai@kernel.org>
-> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > Cc: Muchun Song <muchun.song@linux.dev>
-> > Cc: Oscar Salvador <osalvador@suse.de>
-> > Cc: loongarch@lists.linux.dev
-> > Cc: linux-mips@vger.kernel.org
-> > Signed-off-by: Peter Xu <peterx@redhat.com>
-> > ---
-> >  arch/loongarch/include/asm/hugetlb.h | 14 --------------
-> >  arch/mips/include/asm/hugetlb.h      | 14 --------------
-> >  fs/hugetlbfs/inode.c                 |  8 ++------
-> >  include/asm-generic/hugetlb.h        |  8 --------
-> >  include/linux/hugetlb.h              |  6 ------
-> >  5 files changed, 2 insertions(+), 48 deletions(-)
-> >
-> > diff --git a/arch/loongarch/include/asm/hugetlb.h b/arch/loongarch/include/asm/hugetlb.h
-> > index 4dc4b3e04225..ab68b594f889 100644
-> > --- a/arch/loongarch/include/asm/hugetlb.h
-> > +++ b/arch/loongarch/include/asm/hugetlb.h
-> > @@ -10,20 +10,6 @@
-> >
-> >  uint64_t pmd_to_entrylo(unsigned long pmd_val);
-> >
-> > -#define __HAVE_ARCH_PREPARE_HUGEPAGE_RANGE
-> > -static inline int prepare_hugepage_range(struct file *file,
-> > -					 unsigned long addr,
-> > -					 unsigned long len)
-> > -{
-> > -	unsigned long task_size = STACK_TOP;
-> > -
-> > -	if (len > task_size)
-> > -		return -ENOMEM;
-> > -	if (task_size - len < addr)
-> > -		return -EINVAL;
-> > -	return 0;
-> > -}
-> > -
-> >  #define __HAVE_ARCH_HUGE_PTE_CLEAR
-> >  static inline void huge_pte_clear(struct mm_struct *mm, unsigned long addr,
-> >  				  pte_t *ptep, unsigned long sz)
-> > diff --git a/arch/mips/include/asm/hugetlb.h b/arch/mips/include/asm/hugetlb.h
-> > index fbc71ddcf0f6..8c460ce01ffe 100644
-> > --- a/arch/mips/include/asm/hugetlb.h
-> > +++ b/arch/mips/include/asm/hugetlb.h
-> > @@ -11,20 +11,6 @@
-> >
-> >  #include <asm/page.h>
-> >
-> > -#define __HAVE_ARCH_PREPARE_HUGEPAGE_RANGE
-> > -static inline int prepare_hugepage_range(struct file *file,
-> > -					 unsigned long addr,
-> > -					 unsigned long len)
-> > -{
-> > -	unsigned long task_size = STACK_TOP;
-> > -
-> > -	if (len > task_size)
-> > -		return -ENOMEM;
-> 
-> arch_get_unmapped_area_topdown() has this check.
-> 
-> > -	if (task_size - len < addr)
-> > -		return -EINVAL;
-> 
-> For this one, arch_get_unmapped_area_topdown() instead will try to
-> provide a different addr if the check fails.
-> 
-> So this patch changes the original code behavior, right?
+On Fri, 13 Jun 2025 at 01:39, Herbert Xu <herbert@gondor.apana.org.au> wrote:
+>
+> First of all the export format is being made consistent so that
+> any hardware hash can switch over to a software fallback after
+> it has started, e.g., in the event of a memory allocation failure.
 
-It almost shouldn't change.  Note that prepare_hugepage_range() is only
-used for MAP_FIXED before this patch:
+Can we please instead aim to *simplify* the crypto thing?
 
-hugetlb_get_unmapped_area():
-        if (flags & MAP_FIXED) {
-                if (addr & ~huge_page_mask(h))
-                        return -EINVAL;
-                if (prepare_hugepage_range(file, addr, len))
-                        return -EINVAL;
-        }
+Just say that hw accelerators that have this kind of issue shouldn't
+be used. At all. And certainly not be catered to by generic code.
 
-Then for MAP_FIXED, on MIPS:
+The whole hw acceleration is very dubious to begin with unless it's
+directly tied to the source (or destination) of the data in the first
+place, so that there isn't extra data movement.
 
-arch_get_unmapped_area_common():
-        ...
-	if (flags & MAP_FIXED) {
-		/* Even MAP_FIXED mappings must reside within TASK_SIZE */
-		if (TASK_SIZE - len < addr)
-			return -EINVAL;
-                ...
-        }
+And if there are any software fallbacks, that "dubious to begin with"
+pretty much becomes "entirely pointless".
 
-But if we want to be super accurate, it's indeed different, in that the old
-hugetlb code was checking stack top with STACK_TOP, which is
-mips_stack_top() for MIPS: it's a value that might be slightly less than
-TASK_SIZE..
+If the point is that there are existing stupid hw drivers that already
+do that fallback internally, then please just *keep* that kind of
+idiocy and workarounds in the drivers.
 
-So strictly speaking, there's indeed a trivial difference on the oddity of
-defining stack top, but my guess is nothing will be affected.  I can add
-some explanation into the commit message in that case.
+It's actually *better* to have a broken garbage hardware driver - that
+you can easily just disable on its own - than having a broken garbage
+generic crypto layer that people just don't want to use at all because
+it's such a ess.
 
-Thanks,
+This whole "make the mess that is the crypto layer EVEN MORE OF A
+MESS" model of development is completely broken in my opinion.
 
--- 
-Peter Xu
+There's a reason people prefer to have just the sw library without any
+of the indirection or complexity of the crypto layer.
 
+           Linus
 
