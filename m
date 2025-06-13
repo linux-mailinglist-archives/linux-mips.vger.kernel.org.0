@@ -1,132 +1,223 @@
-Return-Path: <linux-mips+bounces-9293-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9294-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0CA02AD925C
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Jun 2025 18:03:31 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64AD9AD92C4
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Jun 2025 18:24:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 042231691AA
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Jun 2025 16:02:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C43ED3B958D
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Jun 2025 16:24:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F2B11FBE9B;
-	Fri, 13 Jun 2025 16:02:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E76A20C487;
+	Fri, 13 Jun 2025 16:24:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Zhfihg3Q"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MjhrZQsj"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8603E1F4628;
-	Fri, 13 Jun 2025 16:02:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A33F3BB48
+	for <linux-mips@vger.kernel.org>; Fri, 13 Jun 2025 16:24:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749830525; cv=none; b=pIGV8tWduKnOaPKhvVMpMd2undb3g1DMbNiqAU/LgvoidqVj8krF6m/tZhS4L5YRvevTzPnfT6zjvRgdfbNBVi6HV5cJEXA/rRCB1ctrZoyTa+10WT2k3grMyPlRR817xIbv2I5gIN9zMBWkaUAWL+32oVOdM4mRQISxvFJ7YEY=
+	t=1749831893; cv=none; b=MhpuDBGDMv//7Xi1LV0NkLjL7QPg71RCZewtC4HIBaC+XZwwUbG108EkUr+R5r6lmfdPO/r+j4ZtM1xcLiXodOfCwXxVhYpXIhuZ2arfEAXFOsUW4No8/PEamfG3S60VQ7rb4m8u1AldHKL2nYHg4iBPHDhfjKH9DCR3oYfVT9A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749830525; c=relaxed/simple;
-	bh=sP+WTByBn7c1i+cE70EYSmAqeZL2rfsXlCl547H8JHo=;
+	s=arc-20240116; t=1749831893; c=relaxed/simple;
+	bh=ezAPkeMmfcqGy1OO+aJ5oa0dXrm8ejKbGu1v5Dg5Cqk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ew1ZCXNIAwp9XvWPA5m8NmJqH4OYu6M/mAj6rr1l5iXQwN8gJeYAc/INNk3D8duOers/n0rnrZgLYxhouqjvzrxxuZK8b2yX/0c23akbhFTdEW5Vs1htu+adpdkE2PY0fdr19daMiq35qhJoBdHxPTiSuuXJinVaj79wnbFMndA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Zhfihg3Q; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55DATE0P029060;
-	Fri, 13 Jun 2025 16:01:47 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=dxMSfWlJLSP1Q2CznlmbgSk8Q0tBnI
-	ErVGASW4hTcD0=; b=Zhfihg3QYV80iCtJFIZNXzwNsO28/CBzBPA1NW4+cP5VWr
-	k5l0f/92cmSa5uH4HyGSN7MW6sSZu3gD2JREmvkY9IWiDksFl/haBc28Yev1eh2p
-	fR3cqw2RD+tVrXIr7ijzmVyteuDmhjWOR5YkS2N2qTSLKs3rs5KGToPoP9lOHn28
-	Zc0+P608Mn4Oofwq9OObNNP0q5WFKuFHs7VgiBgMYGALGpI5XLkpWYhrNGGVAIJg
-	CsvXGDatoWJVdD4D+XIN/bR1Z2kVnng6dv251wWZwQ5XqU8LCwiGj9YrhbE5Yqqs
-	c0WIsVuRjG1it6BmiiXjCc1Dtc3+1matXW8Zfx8g==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 474dv8225n-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Jun 2025 16:01:47 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 55DFim5F019573;
-	Fri, 13 Jun 2025 16:01:46 GMT
-Received: from smtprelay06.fra02v.mail.ibm.com ([9.218.2.230])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 4752f2tec9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 13 Jun 2025 16:01:45 +0000
-Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
-	by smtprelay06.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 55DG1irx33227464
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 13 Jun 2025 16:01:44 GMT
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 3311620040;
-	Fri, 13 Jun 2025 16:01:44 +0000 (GMT)
-Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4533A20043;
-	Fri, 13 Jun 2025 16:01:43 +0000 (GMT)
-Received: from li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com (unknown [9.111.81.121])
-	by smtpav04.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Fri, 13 Jun 2025 16:01:43 +0000 (GMT)
-Date: Fri, 13 Jun 2025 18:01:41 +0200
-From: Alexander Gordeev <agordeev@linux.ibm.com>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, x86@kernel.org, linux-arch@vger.kernel.org,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v2 09/12] lib/crc/s390: migrate s390-optimized CRC code
- into lib/crc/
-Message-ID: <aExLZaoBCg55rZWJ@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
-References: <20250607200454.73587-1-ebiggers@kernel.org>
- <20250607200454.73587-10-ebiggers@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=FZid6kw5zXPBcwuaQzB7wGSjYMT19e29QVtNipGbzmVV9PQHhiX5UdB//+EU5Q1cnJCY1axz7s9JzVDkE3C7emaIfLh3yK6CtzAKZ8XhkWCNV6Mlp2fi2D/kjIeRLnM6WLiGvWXXoC4rmCZ7JpTiGePYMPS6dvelFxOSwXomd6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MjhrZQsj; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1749831890;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=M6UPs3wZZzH8Vr1Vmqrw6Xud3sdfgHi+vy7XvS9r/Jo=;
+	b=MjhrZQsj/JkW5i8G8Or0WLQSxRLDCsZYmlOf9vVD0W81t4a5X5mXXvySGZkt+4kAXRvBAW
+	RmfkoV0mD8OCcGhPGKqq27bgsWYxVaa55IUCE1tSafze30NV3m30GYs7pVgFph3KdZ/npU
+	VRfXZx36vT6jGwGNiasBKCnOBIRBzv8=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-104-NOz3SgZON_GeUZDpEwcX0Q-1; Fri, 13 Jun 2025 12:24:49 -0400
+X-MC-Unique: NOz3SgZON_GeUZDpEwcX0Q-1
+X-Mimecast-MFC-AGG-ID: NOz3SgZON_GeUZDpEwcX0Q_1749831888
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-4a42c569a9aso54257781cf.0
+        for <linux-mips@vger.kernel.org>; Fri, 13 Jun 2025 09:24:49 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749831888; x=1750436688;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M6UPs3wZZzH8Vr1Vmqrw6Xud3sdfgHi+vy7XvS9r/Jo=;
+        b=UmQ77SBzj7rM6qm7HwwdWpJSmdTMZlCbcG4WcAB3Rt2RsAv+PfE17cH244T4mxNShm
+         XM50qFwoaYXBefl/PZkc3O+kwOXhmMX5ho2L7F3YoRmY786xoBWYirXKPHZbweTWeUyX
+         JE5Dq3Ki22ICWIP8kTaNrZSnS/B3YL+rm9D11rN+QFp4ocHsS7KJoKfg0AbbhHRZ8QE1
+         ICPN0OmyMEkDKWgY/g8+1WNS/hFB6sAHLu3cFdG12pDpQsnmBIF5TdVknOYaHAxLe89e
+         dY5M5wBxgy6CCnXV9yHTkHCwrJW8QA8vRNORbtN/M58Of6u3bW2c0sv7o8y/OkP8EeuK
+         ulTQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWdeE49UER4RdJ8T7dMQlwklamuo1J3A/795USdqJ1CXxgZSWrBFgoCQh8D+e7oMESh2uvBx1mWoGgW@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMPGGTyyh+GC+LW3euAIe+HXtzj4XkE1RnQhAZEDwL0oR20+0Q
+	p5mn/A18lbXjhTBxVK7ebSvSmtrFbSWA2MpuoIkyMHcw4JPJp/kI6oDteLFQfUrJy5lg5kLAdz9
+	oe5lxSpZ9vPwEsBZUkb1RTGHIhmaVD6CJHAsL658+n3AtJ35i5vPpx0pTpQ+Tx7A=
+X-Gm-Gg: ASbGncsZCSblpB5hhMLPGyO/lAC1tjUR1bZ8Kc5v1PgOkbNFTnfjYgqEwJ+kTH4dki2
+	abnEkIlSbkSvHLpKAs1p4wxXgh9qfip1FJ7MfSGD3Iwoe9B/M1OEuulBQAVMUPhOhfSysW57oap
+	Dxci1ohzNIem0D9NYrjG5eH3AeR+veeV0A596CLU4SHyRDRhzNmu/J9TxpYyjj0Grls6GSheMzy
+	Hs3nzYbO8Cq2nvFebeXx0oyd8fJMpvuH442Qr7UE4m4K1cHX1CkViH04nkmTxve8pWjyubHjGXz
+	Hs+8apXSCSWxlA==
+X-Received: by 2002:a05:622a:44:b0:4a6:fa1f:46a5 with SMTP id d75a77b69052e-4a73b69e837mr6261721cf.2.1749831888563;
+        Fri, 13 Jun 2025 09:24:48 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGwE/aMkplM3bTE+98WG9z6ojodJYRohckJBl51t/zS9y9pPDUtOdEYutdKcOPE5vAqv+nUow==
+X-Received: by 2002:a05:622a:44:b0:4a6:fa1f:46a5 with SMTP id d75a77b69052e-4a73b69e837mr6261261cf.2.1749831888182;
+        Fri, 13 Jun 2025 09:24:48 -0700 (PDT)
+Received: from x1.local ([85.131.185.92])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-4a72a4cf7desm18773181cf.53.2025.06.13.09.24.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jun 2025 09:24:47 -0700 (PDT)
+Date: Fri, 13 Jun 2025 12:24:43 -0400
+From: Peter Xu <peterx@redhat.com>
+To: Zi Yan <ziy@nvidia.com>
+Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org, kvm@vger.kernel.org,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Alex Williamson <alex.williamson@redhat.com>,
+	Jason Gunthorpe <jgg@nvidia.com>, Alex Mastro <amastro@fb.com>,
+	David Hildenbrand <david@redhat.com>,
+	Nico Pache <npache@redhat.com>, Huacai Chen <chenhuacai@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Muchun Song <muchun.song@linux.dev>,
+	Oscar Salvador <osalvador@suse.de>, loongarch@lists.linux.dev,
+	linux-mips@vger.kernel.org
+Subject: Re: [PATCH 2/5] mm/hugetlb: Remove prepare_hugepage_range()
+Message-ID: <aExQy6xMDc9Igm5v@x1.local>
+References: <20250613134111.469884-1-peterx@redhat.com>
+ <20250613134111.469884-3-peterx@redhat.com>
+ <050B65EF-6A1E-44A8-87D5-152FA9A60641@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250607200454.73587-10-ebiggers@kernel.org>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: oqxWeEseK0qommY-tA52lM8_yDgYBZ8b
-X-Proofpoint-GUID: oqxWeEseK0qommY-tA52lM8_yDgYBZ8b
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjEzMDExNSBTYWx0ZWRfX2SFXW8bIydO8 QijS4XnzPyWGv7hUAVPhEsrOB00xE8g+gtnZ5TKc3xm/6m22RAo7pWDdkAUOPF1K6LO6qJEf193 PxiDvBNjb2KojolH7uIG4xIF5aoOVAuWCvsnLPUnzUljRW/4dT+d6yR8TGdRxod4wQd7u9oXLyt
- 960X1pKDQBdkA9i2fSfl/dxiyGZuXG6X5RlU4ZS8JXRnJlDwSVv11Yh0NZ3so0jxjPrI/YVMcT2 6jW8eHHK29fMPvF4SWZi3ZgmFX9oL1/VYz01noMZpHwwtcEMmmSVoqdhzy0/dmzN0+Go88V0p57 Weg2+fyKZ+PNLuJB+wyFM7SDDMfP0OJ1UZqOon8sp39ETo2dKYj4MRErDeC122oOtE8J8jykSry
- lFdOt02pLQfhwmo1MyS48Be/xFyI96QJGhA1Fc1zghsJy38d3Mb+b7BSNKN7KQSA+ld6RejI
-X-Authority-Analysis: v=2.4 cv=CfMI5Krl c=1 sm=1 tr=0 ts=684c4b6b cx=c_pps a=aDMHemPKRhS1OARIsFnwRA==:117 a=aDMHemPKRhS1OARIsFnwRA==:17 a=kj9zAlcOel0A:10 a=6IFa9wvqVegA:10 a=1XWaLZrsAAAA:8 a=DtkNC_JpMhehFE-g-C8A:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-13_01,2025-06-13_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 spamscore=0
- phishscore=0 priorityscore=1501 clxscore=1011 impostorscore=0 mlxscore=0
- suspectscore=0 mlxlogscore=403 adultscore=0 malwarescore=0
- lowpriorityscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2506130115
+In-Reply-To: <050B65EF-6A1E-44A8-87D5-152FA9A60641@nvidia.com>
 
-On Sat, Jun 07, 2025 at 01:04:51PM -0700, Eric Biggers wrote:
-> From: Eric Biggers <ebiggers@google.com>
+On Fri, Jun 13, 2025 at 11:13:50AM -0400, Zi Yan wrote:
+> On 13 Jun 2025, at 9:41, Peter Xu wrote:
 > 
-> Move the s390-optimized CRC code from arch/s390/lib/crc* into its new
-> location in lib/crc/s390/, and wire it up in the new way.  This new way
-> of organizing the CRC code eliminates the need to artificially split the
-> code for each CRC variant into separate arch and generic modules,
-> enabling better inlining and dead code elimination.  For more details,
-> see "lib/crc: prepare for arch-optimized code in subdirs of lib/crc/".
+> > Only mips and loongarch implemented this API, however what it does was
+> > checking against stack overflow for either len or addr.  That's already
+> > done in arch's arch_get_unmapped_area*() functions, hence not needed.
+> >
+> > It means the whole API is pretty much obsolete at least now, remove it
+> > completely.
+> >
+> > Cc: Huacai Chen <chenhuacai@kernel.org>
+> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > Cc: Muchun Song <muchun.song@linux.dev>
+> > Cc: Oscar Salvador <osalvador@suse.de>
+> > Cc: loongarch@lists.linux.dev
+> > Cc: linux-mips@vger.kernel.org
+> > Signed-off-by: Peter Xu <peterx@redhat.com>
+> > ---
+> >  arch/loongarch/include/asm/hugetlb.h | 14 --------------
+> >  arch/mips/include/asm/hugetlb.h      | 14 --------------
+> >  fs/hugetlbfs/inode.c                 |  8 ++------
+> >  include/asm-generic/hugetlb.h        |  8 --------
+> >  include/linux/hugetlb.h              |  6 ------
+> >  5 files changed, 2 insertions(+), 48 deletions(-)
+> >
+> > diff --git a/arch/loongarch/include/asm/hugetlb.h b/arch/loongarch/include/asm/hugetlb.h
+> > index 4dc4b3e04225..ab68b594f889 100644
+> > --- a/arch/loongarch/include/asm/hugetlb.h
+> > +++ b/arch/loongarch/include/asm/hugetlb.h
+> > @@ -10,20 +10,6 @@
+> >
+> >  uint64_t pmd_to_entrylo(unsigned long pmd_val);
+> >
+> > -#define __HAVE_ARCH_PREPARE_HUGEPAGE_RANGE
+> > -static inline int prepare_hugepage_range(struct file *file,
+> > -					 unsigned long addr,
+> > -					 unsigned long len)
+> > -{
+> > -	unsigned long task_size = STACK_TOP;
+> > -
+> > -	if (len > task_size)
+> > -		return -ENOMEM;
+> > -	if (task_size - len < addr)
+> > -		return -EINVAL;
+> > -	return 0;
+> > -}
+> > -
+> >  #define __HAVE_ARCH_HUGE_PTE_CLEAR
+> >  static inline void huge_pte_clear(struct mm_struct *mm, unsigned long addr,
+> >  				  pte_t *ptep, unsigned long sz)
+> > diff --git a/arch/mips/include/asm/hugetlb.h b/arch/mips/include/asm/hugetlb.h
+> > index fbc71ddcf0f6..8c460ce01ffe 100644
+> > --- a/arch/mips/include/asm/hugetlb.h
+> > +++ b/arch/mips/include/asm/hugetlb.h
+> > @@ -11,20 +11,6 @@
+> >
+> >  #include <asm/page.h>
+> >
+> > -#define __HAVE_ARCH_PREPARE_HUGEPAGE_RANGE
+> > -static inline int prepare_hugepage_range(struct file *file,
+> > -					 unsigned long addr,
+> > -					 unsigned long len)
+> > -{
+> > -	unsigned long task_size = STACK_TOP;
+> > -
+> > -	if (len > task_size)
+> > -		return -ENOMEM;
 > 
-> Signed-off-by: Eric Biggers <ebiggers@google.com>
-...
+> arch_get_unmapped_area_topdown() has this check.
+> 
+> > -	if (task_size - len < addr)
+> > -		return -EINVAL;
+> 
+> For this one, arch_get_unmapped_area_topdown() instead will try to
+> provide a different addr if the check fails.
+> 
+> So this patch changes the original code behavior, right?
 
-Hi Eric,
+It almost shouldn't change.  Note that prepare_hugepage_range() is only
+used for MAP_FIXED before this patch:
 
-With this series I am getting on s390:
+hugetlb_get_unmapped_area():
+        if (flags & MAP_FIXED) {
+                if (addr & ~huge_page_mask(h))
+                        return -EINVAL;
+                if (prepare_hugepage_range(file, addr, len))
+                        return -EINVAL;
+        }
 
-alg: hash: skipping comparison tests for crc32c-s390 because crc32c-generic is unavailable
+Then for MAP_FIXED, on MIPS:
 
-Thanks!
+arch_get_unmapped_area_common():
+        ...
+	if (flags & MAP_FIXED) {
+		/* Even MAP_FIXED mappings must reside within TASK_SIZE */
+		if (TASK_SIZE - len < addr)
+			return -EINVAL;
+                ...
+        }
+
+But if we want to be super accurate, it's indeed different, in that the old
+hugetlb code was checking stack top with STACK_TOP, which is
+mips_stack_top() for MIPS: it's a value that might be slightly less than
+TASK_SIZE..
+
+So strictly speaking, there's indeed a trivial difference on the oddity of
+defining stack top, but my guess is nothing will be affected.  I can add
+some explanation into the commit message in that case.
+
+Thanks,
+
+-- 
+Peter Xu
+
 
