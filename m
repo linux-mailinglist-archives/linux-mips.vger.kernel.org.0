@@ -1,71 +1,51 @@
-Return-Path: <linux-mips+bounces-9300-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9301-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A046FAD96DA
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Jun 2025 23:04:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7295CAD97CD
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Jun 2025 23:53:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97C3A3BE3D6
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Jun 2025 21:03:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 308774A0B7D
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Jun 2025 21:53:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58B92261568;
-	Fri, 13 Jun 2025 21:03:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Kc8nPVhl"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F262265626;
+	Fri, 13 Jun 2025 21:53:41 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out-174.mta1.migadu.com (out-174.mta1.migadu.com [95.215.58.174])
+Received: from fgw21-7.mail.saunalahti.fi (fgw21-7.mail.saunalahti.fi [62.142.5.82])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80D9E25C716
-	for <linux-mips@vger.kernel.org>; Fri, 13 Jun 2025 21:03:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ECA126B748
+	for <linux-mips@vger.kernel.org>; Fri, 13 Jun 2025 21:53:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.142.5.82
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749848598; cv=none; b=I8uAK0QefyOUpriqpShTqRgWkTFcEt5jJKMpTE/5OHWD1V800jg3g1H4Ti9hginLThqic5yc9FRGk9nHT6pDIXGFQN1muw3vNTTb7G6vOdAHFBEPcvopFwpHLa2Oy8TT4Sm6sZgEOPV1BvP78qqxG/TjvZOwVAwg93qh8yH0AOc=
+	t=1749851621; cv=none; b=M8L6i5AWSLjJDxBWFhBYyX0KPoAH/nn4mx1w8fGRRHSdCJHZyPmTbS6r3Pnft5IzLFD+UpHoJrhsXXAvG7kn5wegLVBzzRXoHlR14Xmc5qkQcSaP1cBUUy41GWynSzIqiYMhIAKlz49vi/HbiOGnit8yuzzNw4qHMjfUHewgYlY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749848598; c=relaxed/simple;
-	bh=RvoNgZOWtd0BxznLOG4DnK82GZ7oKsETmKcwAOzz4qs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=TYsjYEKBVpVaarsi7XWnLT8x/3sa7F0h3sG7xkO1GXn38ONxycGQ80Vw87ZK0vAPEyx5XyazTP+hi4hvWWXsHEcQBAfhGdoHhzYzuW/dZlGG74TYUDm++0Le5nG/+2ZAQb0cXi8OkhySjpOWcJyTfL6/CPRSq4iGS6rlQqQGuUo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Kc8nPVhl; arc=none smtp.client-ip=95.215.58.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Date: Fri, 13 Jun 2025 14:02:53 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1749848582;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UYPjxyG6Lkdruehl3Wfp/fvOgutsisDdZvGlZZakKgQ=;
-	b=Kc8nPVhlXgf6TePD1ArgM60c5dmNUT/R1JjVbnGxN7TexwkvkpcVz2WLId55A9oZ/CDUE5
-	FbP2i2FSaWw7NAS2SkcnbcgK6HWEZ0xCShW/gxdnuC/LY4NPQptRcXYiWmJk0yYg54tCZA
-	FkggVzxEL64vxvaUGTfILfyirGgdhDI=
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Oliver Upton <oliver.upton@linux.dev>
-To: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Sean Christopherson <seanjc@google.com>, Marc Zyngier <maz@kernel.org>,
-	Tianrui Zhao <zhaotianrui@loongson.cn>,
-	Bibo Mao <maobibo@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Anup Patel <anup@brainfault.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Janosch Frank <frankja@linux.ibm.com>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>,
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org, Anish Ghulati <aghulati@google.com>,
-	Colton Lewis <coltonlewis@google.com>,
-	Thomas Huth <thuth@redhat.com>
-Subject: Re: [PATCH 0/8] KVM: Remove include/kvm, standardize includes
-Message-ID: <aEyR_bixN696F1sP@linux.dev>
-References: <20250611001042.170501-1-seanjc@google.com>
- <125bfa5b-4727-4998-a0da-fb50feec6df6@redhat.com>
+	s=arc-20240116; t=1749851621; c=relaxed/simple;
+	bh=pqrsu9Rk23bn+FnyFGlSR9nDXVGagaQEyjCqJLSTHGI=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Tb9WULXNq9n+e01pfKrXtPn0ZjjnDDayKSoSiMjwy6F44saaFQZ/jJkRyZ3nW18WoyGTIwwGEosZ0s+O+sYsY8qNL+VIRJ/ObXw8V+fqoqlax1EK7M/JIKLjepsFcUHgZkgZy6Hhpzi7XurqveCXKn/zywc9OQToH5nYEVac6CA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=62.142.5.82
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
+Received: from localhost (88-113-26-232.elisa-laajakaista.fi [88.113.26.232])
+	by fgw23.mail.saunalahti.fi (Halon) with ESMTP
+	id acff03e0-48a0-11f0-a97f-005056bdfda7;
+	Sat, 14 Jun 2025 00:52:18 +0300 (EEST)
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Sat, 14 Jun 2025 00:52:18 +0300
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH v1 1/1] MIPS: Alchemy: Remove unused forward declaration
+Message-ID: <aEydkh4EkKu6w2NJ@surfacebook.localdomain>
+References: <20250531194346.3630898-1-andriy.shevchenko@linux.intel.com>
+ <aEv_y5Lfe3Dul48I@smile.fi.intel.com>
+ <aEwMFVSPzc-mV1ve@alpha.franken.de>
+ <aEweZReuPzQ_hq8L@smile.fi.intel.com>
+ <aEwy2Ud08nHHAdED@alpha.franken.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -74,34 +54,30 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <125bfa5b-4727-4998-a0da-fb50feec6df6@redhat.com>
-X-Migadu-Flow: FLOW_OUT
+In-Reply-To: <aEwy2Ud08nHHAdED@alpha.franken.de>
 
-On Thu, Jun 12, 2025 at 06:56:53AM +0200, Paolo Bonzini wrote:
-> On 6/11/25 02:10, Sean Christopherson wrote:
-> > Kill off include/kvm (through file moves/renames), and standardize the set of
-> > KVM includes across all architectures.
+Fri, Jun 13, 2025 at 04:16:57PM +0200, Thomas Bogendoerfer kirjoitti:
+> On Fri, Jun 13, 2025 at 03:49:41PM +0300, Andy Shevchenko wrote:
+> > On Fri, Jun 13, 2025 at 01:31:33PM +0200, Thomas Bogendoerfer wrote:
+> > > On Fri, Jun 13, 2025 at 01:39:07PM +0300, Andy Shevchenko wrote:
+> > > > On Sat, May 31, 2025 at 10:43:46PM +0300, Andy Shevchenko wrote:
+
+...
+
+> > > > I think we can take it via GPIO tree if there is no reply.
+> > > 
+> > > please do
 > > 
-> > This conflicts with Colton's partioned PMU series[1], but this should work as
-> > a nice prepatory cleanup for the partitioned PMU work (and hopefully can land
-> > sooner).
-> > 
-> > Note, these patches were originally posted as part of a much larger and more
-> > agressive RFC[1].  We've effectively abandoned upstreaming the multi-KVM idea,
-> > but I'm trying to (slowly) upstream the bits and pieces that I think/hope are
-> > generally beneficial.
-> > 
-> > [1] https://lore.kernel.org/all/20250602192702.2125115-1-coltonlewis@google.com
-> > [2] https://lore.kernel.org/all/20230916003118.2540661-1-seanjc@google.com
+> > Acked-by?
 > 
-> Marc, Oliver, I'd like to commit this to kvm/next sometime soon; I'll wait
-> for your ack since most of the meat here is in arch/arm64.
+> Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
-Let it rip, just to get ahead of potential conflicts can you push out a
-topic branch?
+Thank you! Bart, seems we are all set to route this via GPIO tree. Do you have
+any objections?
 
-Acked-by: Oliver Upton <oliver.upton@linux.dev>
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Thanks,
-Oliver
+
 
