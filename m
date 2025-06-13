@@ -1,134 +1,244 @@
-Return-Path: <linux-mips+bounces-9287-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9288-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3333BAD8CF2
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Jun 2025 15:13:47 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EC406AD8D4E
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Jun 2025 15:41:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1A3E31882014
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Jun 2025 13:14:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A6D0F189FD44
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Jun 2025 13:42:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC4F713A265;
-	Fri, 13 Jun 2025 13:13:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADE9C191F8C;
+	Fri, 13 Jun 2025 13:41:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y/RbFyvx"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LuubT669"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A30BB3595A;
-	Fri, 13 Jun 2025 13:13:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9145E1922FD
+	for <linux-mips@vger.kernel.org>; Fri, 13 Jun 2025 13:41:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749820422; cv=none; b=K3pM9S4mH7So4mskfffoeoEZEMsTS+Nm79TSJ6e1zcAJyCU7yLN49f2VhcasDdBWYcF+5ClX31OYx1wOoAIp1AOsH7603joHa2ipy0ZtsNPcAqEhzMLNMfjTW7pfKEC8uoTC9gXq4xhQaG/eU8K01DjeEL3SH4Y9x94QCqJV+T0=
+	t=1749822084; cv=none; b=Xdrda9uCr1gW2Jkdl1Q9zDTh+IDb781+32ir+wAUROSLNsed9ZjJYTsaVO7mKXT6cwNxXZ4aSHebjSAmD1nszfVYma9DjP1Uly8DfTisWtAZjOiv6BVQoQ9xePrm6lmvtxN6b1V4RN2I+kiOq3pTnA08ixYgh+4AP794u0VcJzM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749820422; c=relaxed/simple;
-	bh=QUEaQcWchyKExDizItw6OS5O/5MlAQjHdQVGZ+Ru9+E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tX/oB/iTy4LtNC8XooeIUXTr7BQV60ha4d5BHQX8fRVy2gynUEm00l8t43we7TVvOEHkoerdOAwO6cIsy6Or9eTE/F6GgMvCymzIE5yS9pP5bfdvVZ7SaMCQmV1BLgBvzEU8MQ10dHe0lmbHJmuX+wVPzBZvWMRqm+ziAaUZkt8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y/RbFyvx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A69CC4CEE3;
-	Fri, 13 Jun 2025 13:13:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1749820422;
-	bh=QUEaQcWchyKExDizItw6OS5O/5MlAQjHdQVGZ+Ru9+E=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Y/RbFyvxF9uhYogGrpvfGCVNECxQM4QvKPOU4NBlih1iNVMQ8/QP+EjtA5R6LM66i
-	 ziNCR/ULIuXnqUQfFKiiACf2Rh04ODlF48YL3IhzOAwc5UmD9dzOCqi14IlzMSpP2T
-	 dFRsjwo7L7lSZQuntWpLjxu9clEICSUWXosozZ5TWR+crD97JQ3/e+jbTlKQpB62DD
-	 QwTy4w2GHZ7V0fJRN05Qksd1mGM+Y72N6WFPkE3i83xCOf35KltBjegnRslhw/Ys9b
-	 3DXkBAseQuacJMsu6GPJ2Nh76sHaO/9Yi4kaif6xGtrBK9+jbNSKL7DBurf8Ir7LoA
-	 tfP61ihTASZ8A==
-Message-ID: <864cd33e-94d4-4ceb-a8dd-1b525f7bbf26@kernel.org>
-Date: Fri, 13 Jun 2025 15:13:37 +0200
+	s=arc-20240116; t=1749822084; c=relaxed/simple;
+	bh=oBujyHW3fR3UArBsFd0eQdvuPTosgfHx6P9PRFKYox8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=ufqELV+GzsH2tTFjgXcOn9Z2uUSl3xnrmjN0S/L8UdcFrAtl9WtywsbWKKUG/7B6m3F5vb3uVsWd+jFn22enCPenMY19/o9Ly4V9gQAYJsRRsGbzQHGmjCRxNwvPX39JmVl+lyhOf2CO19GjdHSQjBPEdUs9wIECRWrTE66IK8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LuubT669; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1749822081;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=CurRk13BLi453FdNUVmvRv3/1kchAf7liLqepSAurz8=;
+	b=LuubT669ueDH/xKrJFloiM00Z9RVEWMQ+DYwBJW+PkN4UWUbkjK9mDQA1y04bySSLHTipq
+	GPZG++dULivASt9Lf7maMkjfFC052twrT/+FqM+239BPt+LKGlrdM7QXhDqo+A6d9gElaX
+	DIVWbJCwJczl5YnsRCehZtOtyn4A4Cs=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-482-57O0JQ1sPUaOVRv6QpGgKw-1; Fri, 13 Jun 2025 09:41:20 -0400
+X-MC-Unique: 57O0JQ1sPUaOVRv6QpGgKw-1
+X-Mimecast-MFC-AGG-ID: 57O0JQ1sPUaOVRv6QpGgKw_1749822080
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7c53e316734so399483985a.2
+        for <linux-mips@vger.kernel.org>; Fri, 13 Jun 2025 06:41:20 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1749822079; x=1750426879;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CurRk13BLi453FdNUVmvRv3/1kchAf7liLqepSAurz8=;
+        b=RpfBWv/UgCAvHe4lTxu3esCT7kXDRkv1bATpmb8OYwqF8MEqw1LYJEz2Yx8n46mSFH
+         GAYLk358hyqCIKPGkjyqCuJKUk9iA0Lt2s2nV0PQHUzVQYfTQtOf81AZvY6HCn7PawUz
+         RXXjvGI+lta8vzjIvLnkN/wlYnh3NVEb2qXPJWDTHZ7cl/MXDpDPZHnLV8fxj3hR3600
+         3HuFuprL9B2w2pcDiTCRS8mjbYMnkNaQOvSbGVqtwzVL4rWFU/nTlvReN6kKLMJc7xkp
+         jRSt3Fs5CMgYQQm5iG+bZLzdBXI8G8DWnRyFPFy//WH0zMTz7GzgQ1KHsy3IeMZAmLON
+         ep0Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWf9P0JlZrhVEKi0CvJ1rPTdJ5VStHTQ39JHeUC7DcM3JhjSR065SuMfjA1FjpNKUyl+8T7m9o9Yb57@vger.kernel.org
+X-Gm-Message-State: AOJu0YxNDqdhNAi0ntkBgfOL5ze60IqnrfljzjxFHx0+xK1yU4JASC6N
+	J9cFtzHd2W+TwCxcjGfQohW71y0O0ip+M6TrdTYq5GtwSVNInBY/m9Jj7gXQxnocqqiTQGtqFXc
+	nSEborjuQ1Ji3TGwtWDyH1+VyWraDp3/bXu7vqMaylx8oXfpqAIPmGrgEr3fijjp+FSdY/7Y=
+X-Gm-Gg: ASbGncvHD2Qrmsj9ZuecElSGYAcCXfEhD+Zn08CkDGUIG3RjiLQqvYOn8TCD3K+pdfy
+	3mL+qRRq9uOgZd55YwOFZfXTvkbQQKSTtyPawrFBPXcgj1CXqAe3s1YPoxR4GL/u/HvbWUxe8Nl
+	4ytQ1nJF//euJZZEJHzL51iVJD2HAW79yX8PyK0GNGqE7ojWVh4JTUPBbEQp0nb6jpuPYsuIyck
+	yKFiqz+O4p/72WttZZSDtqELhPLIv2/ER3CY5hLKVEIBs1ScQawI/gXmMIYOPtww93m6Bq6rd+J
+	yCyz4cmuPNw=
+X-Received: by 2002:a05:620a:44d0:b0:7d2:27ff:2133 with SMTP id af79cd13be357-7d3bc3b0704mr463527885a.1.1749822079289;
+        Fri, 13 Jun 2025 06:41:19 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGmKoTuxvL7ffTQWjIUtdV/ylXkzGCctDnDjUG//mfabF7LSk4R8g8f8pkMatkvnCJNdWJBNQ==
+X-Received: by 2002:a05:620a:44d0:b0:7d2:27ff:2133 with SMTP id af79cd13be357-7d3bc3b0704mr463525385a.1.1749822078879;
+        Fri, 13 Jun 2025 06:41:18 -0700 (PDT)
+Received: from x1.com ([85.131.185.92])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7d3b8ee3f72sm171519285a.94.2025.06.13.06.41.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 13 Jun 2025 06:41:18 -0700 (PDT)
+From: Peter Xu <peterx@redhat.com>
+To: linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	kvm@vger.kernel.org
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+	Alex Williamson <alex.williamson@redhat.com>,
+	Zi Yan <ziy@nvidia.com>,
+	Jason Gunthorpe <jgg@nvidia.com>,
+	Alex Mastro <amastro@fb.com>,
+	David Hildenbrand <david@redhat.com>,
+	Nico Pache <npache@redhat.com>,
+	peterx@redhat.com,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Muchun Song <muchun.song@linux.dev>,
+	Oscar Salvador <osalvador@suse.de>,
+	loongarch@lists.linux.dev,
+	linux-mips@vger.kernel.org
+Subject: [PATCH 2/5] mm/hugetlb: Remove prepare_hugepage_range()
+Date: Fri, 13 Jun 2025 09:41:08 -0400
+Message-ID: <20250613134111.469884-3-peterx@redhat.com>
+X-Mailer: git-send-email 2.49.0
+In-Reply-To: <20250613134111.469884-1-peterx@redhat.com>
+References: <20250613134111.469884-1-peterx@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/3] MIPS: dts: ralink: mt7628a: Fix sysc's compatible
- property for MT7688
-To: Ezra Buehler <ezra@easyb.ch>
-Cc: Sergio Paracuellos <sergio.paracuellos@gmail.com>,
- linux-mips@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
- Harvey Hunt <harveyhuntnexus@gmail.com>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Reto Schneider <reto.schneider@husqvarnagroup.com>,
- Rob Herring <robh@kernel.org>, Stefan Roese <sr@denx.de>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, devicetree@vger.kernel.org,
- Ezra Buehler <ezra.buehler@husqvarnagroup.com>
-References: <20250611194716.302126-1-ezra@easyb.ch>
- <20250611194716.302126-2-ezra@easyb.ch>
- <e2ffca36-d2ed-4253-86a6-a990e7931ba0@kernel.org>
- <CAM1KZSkcc8wh7yuJ-26ASKSehjWfD_QGs0JrKOWm+WMfXiY+DA@mail.gmail.com>
- <9a23e0e5-f48c-41a9-8e15-69cdfbc7eca2@kernel.org>
- <CAM1KZSkKUYcsx_gpvtEaz7hoT-KfJmQ0xHeFYEGMSZ7FEBDyjA@mail.gmail.com>
- <2ca2da8f-92b9-475f-aa41-bd54a95bfc69@kernel.org>
- <CAM1KZSmLwLopU8rVrPS+wFqAGZn-7LdsikEg6p2f93EiK9_2_Q@mail.gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
- cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
- JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
- gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
- J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
- NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
- BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
- vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
- Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
- TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzSVLcnp5c3p0b2Yg
- S296bG93c2tpIDxrcnprQGtlcm5lbC5vcmc+wsGVBBMBCgA/AhsDBgsJCAcDAgYVCAIJCgsE
- FgIDAQIeAQIXgBYhBJvQfg4MUfjVlne3VBuTQ307QWKbBQJoF1BKBQkWlnSaAAoJEBuTQ307
- QWKbHukP/3t4tRp/bvDnxJfmNdNVn0gv9ep3L39IntPalBFwRKytqeQkzAju0whYWg+R/rwp
- +r2I1Fzwt7+PTjsnMFlh1AZxGDmP5MFkzVsMnfX1lGiXhYSOMP97XL6R1QSXxaWOpGNCDaUl
- ajorB0lJDcC0q3xAdwzRConxYVhlgmTrRiD8oLlSCD5baEAt5Zw17UTNDnDGmZQKR0fqLpWy
- 786Lm5OScb7DjEgcA2PRm17st4UQ1kF0rQHokVaotxRM74PPDB8bCsunlghJl1DRK9s1aSuN
- hL1Pv9VD8b4dFNvCo7b4hfAANPU67W40AaaGZ3UAfmw+1MYyo4QuAZGKzaP2ukbdCD/DYnqi
- tJy88XqWtyb4UQWKNoQqGKzlYXdKsldYqrLHGoMvj1UN9XcRtXHST/IaLn72o7j7/h/Ac5EL
- 8lSUVIG4TYn59NyxxAXa07Wi6zjVL1U11fTnFmE29ALYQEXKBI3KUO1A3p4sQWzU7uRmbuxn
- naUmm8RbpMcOfa9JjlXCLmQ5IP7Rr5tYZUCkZz08LIfF8UMXwH7OOEX87Y++EkAB+pzKZNNd
- hwoXulTAgjSy+OiaLtuCys9VdXLZ3Zy314azaCU3BoWgaMV0eAW/+gprWMXQM1lrlzvwlD/k
- whyy9wGf0AEPpLssLVt9VVxNjo6BIkt6d1pMg6mHsUEVzsFNBFVDXDQBEADNkrQYSREUL4D3
- Gws46JEoZ9HEQOKtkrwjrzlw/tCmqVzERRPvz2Xg8n7+HRCrgqnodIYoUh5WsU84N03KlLue
- MNsWLJBvBaubYN4JuJIdRr4dS4oyF1/fQAQPHh8Thpiz0SAZFx6iWKB7Qrz3OrGCjTPcW6ei
- OMheesVS5hxietSmlin+SilmIAPZHx7n242u6kdHOh+/SyLImKn/dh9RzatVpUKbv34eP1wA
- GldWsRxbf3WP9pFNObSzI/Bo3kA89Xx2rO2roC+Gq4LeHvo7ptzcLcrqaHUAcZ3CgFG88CnA
- 6z6lBZn0WyewEcPOPdcUB2Q7D/NiUY+HDiV99rAYPJztjeTrBSTnHeSBPb+qn5ZZGQwIdUW9
- YegxWKvXXHTwB5eMzo/RB6vffwqcnHDoe0q7VgzRRZJwpi6aMIXLfeWZ5Wrwaw2zldFuO4Dt
- 91pFzBSOIpeMtfgb/Pfe/a1WJ/GgaIRIBE+NUqckM+3zJHGmVPqJP/h2Iwv6nw8U+7Yyl6gU
- BLHFTg2hYnLFJI4Xjg+AX1hHFVKmvl3VBHIsBv0oDcsQWXqY+NaFahT0lRPjYtrTa1v3tem/
- JoFzZ4B0p27K+qQCF2R96hVvuEyjzBmdq2esyE6zIqftdo4MOJho8uctOiWbwNNq2U9pPWmu
- 4vXVFBYIGmpyNPYzRm0QPwARAQABwsF8BBgBCgAmAhsMFiEEm9B+DgxR+NWWd7dUG5NDfTtB
- YpsFAmgXUF8FCRaWWyoACgkQG5NDfTtBYptO0w//dlXJs5/42hAXKsk+PDg3wyEFb4NpyA1v
- qmx7SfAzk9Hf6lWwU1O6AbqNMbh6PjEwadKUk1m04S7EjdQLsj/MBSgoQtCT3MDmWUUtHZd5
- RYIPnPq3WVB47GtuO6/u375tsxhtf7vt95QSYJwCB+ZUgo4T+FV4hquZ4AsRkbgavtIzQisg
- Dgv76tnEv3YHV8Jn9mi/Bu0FURF+5kpdMfgo1sq6RXNQ//TVf8yFgRtTUdXxW/qHjlYURrm2
- H4kutobVEIxiyu6m05q3e9eZB/TaMMNVORx+1kM3j7f0rwtEYUFzY1ygQfpcMDPl7pRYoJjB
- dSsm0ZuzDaCwaxg2t8hqQJBzJCezTOIkjHUsWAK+tEbU4Z4SnNpCyM3fBqsgYdJxjyC/tWVT
- AQ18NRLtPw7tK1rdcwCl0GFQHwSwk5pDpz1NH40e6lU+NcXSeiqkDDRkHlftKPV/dV+lQXiu
- jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
- zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
- XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <CAM1KZSmLwLopU8rVrPS+wFqAGZn-7LdsikEg6p2f93EiK9_2_Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 13/06/2025 14:56, Ezra Buehler wrote:
-> On Fri, Jun 13, 2025 at 2:41 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
->> That's not a binding, but driver, so obviously it is fine since you are
->> not removing it from bindings.
-> 
-> And, if we also remove all occurrences of "ralink,mt7688-sysc" from the
-> code, as it is not needed from a technical standpoint, can we remove it
-> from mediatek,mtmips-sysc.yaml or is there no going back?
-But it is needed. MT7688 needs it to fulfill the DT bindings requirement
-(see writing bindings): specific compatible.
+Only mips and loongarch implemented this API, however what it does was
+checking against stack overflow for either len or addr.  That's already
+done in arch's arch_get_unmapped_area*() functions, hence not needed.
 
-Best regards,
-Krzysztof
+It means the whole API is pretty much obsolete at least now, remove it
+completely.
+
+Cc: Huacai Chen <chenhuacai@kernel.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Muchun Song <muchun.song@linux.dev>
+Cc: Oscar Salvador <osalvador@suse.de>
+Cc: loongarch@lists.linux.dev
+Cc: linux-mips@vger.kernel.org
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
+ arch/loongarch/include/asm/hugetlb.h | 14 --------------
+ arch/mips/include/asm/hugetlb.h      | 14 --------------
+ fs/hugetlbfs/inode.c                 |  8 ++------
+ include/asm-generic/hugetlb.h        |  8 --------
+ include/linux/hugetlb.h              |  6 ------
+ 5 files changed, 2 insertions(+), 48 deletions(-)
+
+diff --git a/arch/loongarch/include/asm/hugetlb.h b/arch/loongarch/include/asm/hugetlb.h
+index 4dc4b3e04225..ab68b594f889 100644
+--- a/arch/loongarch/include/asm/hugetlb.h
++++ b/arch/loongarch/include/asm/hugetlb.h
+@@ -10,20 +10,6 @@
+ 
+ uint64_t pmd_to_entrylo(unsigned long pmd_val);
+ 
+-#define __HAVE_ARCH_PREPARE_HUGEPAGE_RANGE
+-static inline int prepare_hugepage_range(struct file *file,
+-					 unsigned long addr,
+-					 unsigned long len)
+-{
+-	unsigned long task_size = STACK_TOP;
+-
+-	if (len > task_size)
+-		return -ENOMEM;
+-	if (task_size - len < addr)
+-		return -EINVAL;
+-	return 0;
+-}
+-
+ #define __HAVE_ARCH_HUGE_PTE_CLEAR
+ static inline void huge_pte_clear(struct mm_struct *mm, unsigned long addr,
+ 				  pte_t *ptep, unsigned long sz)
+diff --git a/arch/mips/include/asm/hugetlb.h b/arch/mips/include/asm/hugetlb.h
+index fbc71ddcf0f6..8c460ce01ffe 100644
+--- a/arch/mips/include/asm/hugetlb.h
++++ b/arch/mips/include/asm/hugetlb.h
+@@ -11,20 +11,6 @@
+ 
+ #include <asm/page.h>
+ 
+-#define __HAVE_ARCH_PREPARE_HUGEPAGE_RANGE
+-static inline int prepare_hugepage_range(struct file *file,
+-					 unsigned long addr,
+-					 unsigned long len)
+-{
+-	unsigned long task_size = STACK_TOP;
+-
+-	if (len > task_size)
+-		return -ENOMEM;
+-	if (task_size - len < addr)
+-		return -EINVAL;
+-	return 0;
+-}
+-
+ #define __HAVE_ARCH_HUGE_PTEP_GET_AND_CLEAR
+ static inline pte_t huge_ptep_get_and_clear(struct mm_struct *mm,
+ 					    unsigned long addr, pte_t *ptep,
+diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+index fc03dd541b4d..32dff13463d2 100644
+--- a/fs/hugetlbfs/inode.c
++++ b/fs/hugetlbfs/inode.c
+@@ -179,12 +179,8 @@ hugetlb_get_unmapped_area(struct file *file, unsigned long addr,
+ 
+ 	if (len & ~huge_page_mask(h))
+ 		return -EINVAL;
+-	if (flags & MAP_FIXED) {
+-		if (addr & ~huge_page_mask(h))
+-			return -EINVAL;
+-		if (prepare_hugepage_range(file, addr, len))
+-			return -EINVAL;
+-	}
++	if ((flags & MAP_FIXED) && (addr & ~huge_page_mask(h)))
++		return -EINVAL;
+ 	if (addr)
+ 		addr0 = ALIGN(addr, huge_page_size(h));
+ 
+diff --git a/include/asm-generic/hugetlb.h b/include/asm-generic/hugetlb.h
+index 3e0a8fe9b108..4bce4f07f44f 100644
+--- a/include/asm-generic/hugetlb.h
++++ b/include/asm-generic/hugetlb.h
+@@ -114,14 +114,6 @@ static inline int huge_pte_none_mostly(pte_t pte)
+ }
+ #endif
+ 
+-#ifndef __HAVE_ARCH_PREPARE_HUGEPAGE_RANGE
+-static inline int prepare_hugepage_range(struct file *file,
+-		unsigned long addr, unsigned long len)
+-{
+-	return 0;
+-}
+-#endif
+-
+ #ifndef __HAVE_ARCH_HUGE_PTEP_SET_WRPROTECT
+ static inline void huge_ptep_set_wrprotect(struct mm_struct *mm,
+ 		unsigned long addr, pte_t *ptep)
+diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+index 42f374e828a2..85acdfdbe9f0 100644
+--- a/include/linux/hugetlb.h
++++ b/include/linux/hugetlb.h
+@@ -359,12 +359,6 @@ static inline void hugetlb_show_meminfo_node(int nid)
+ {
+ }
+ 
+-static inline int prepare_hugepage_range(struct file *file,
+-				unsigned long addr, unsigned long len)
+-{
+-	return -EINVAL;
+-}
+-
+ static inline void hugetlb_vma_lock_read(struct vm_area_struct *vma)
+ {
+ }
+-- 
+2.49.0
+
 
