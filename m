@@ -1,72 +1,75 @@
-Return-Path: <linux-mips+bounces-9276-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9277-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3511AD8616
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Jun 2025 10:52:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id ADF93AD899A
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Jun 2025 12:39:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2C7F43ACDCF
-	for <lists+linux-mips@lfdr.de>; Fri, 13 Jun 2025 08:52:00 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2CC113B549D
+	for <lists+linux-mips@lfdr.de>; Fri, 13 Jun 2025 10:38:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7474E291C10;
-	Fri, 13 Jun 2025 08:51:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7DB42989BA;
+	Fri, 13 Jun 2025 10:39:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="ejeNYxJx"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ISfiiyr2"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68A57291C0A;
-	Fri, 13 Jun 2025 08:51:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1834825B30C;
+	Fri, 13 Jun 2025 10:39:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749804706; cv=none; b=Qgg9pjw78Zz5oe/Z+hcCfuugAgFN9M01PhgTHhaXOu9aMuIu//GaiyisZxCu3eBubBUih2ffsm/wmXDoDZHA0OpX7q8HPieMpWc0YNvyMydVvm5QZvPO5LH3eKtZoRlYYkNiKfmFgQvtI38ZqnKlHLimWqdbQmGgtC8Wn4D065o=
+	t=1749811153; cv=none; b=J2CKboSAzoKohBM6ovL1hSoJEUvsxY7vXnMNL/Kpt06EVSgYlBbZTchMxATu6s2oACB37MSyOlCQfM89Anf3G7jjf+BnrI2AWrXqMU3TerYImHOiyMqxIsXedNgH7yjr8UhLcl5rPtEOoEuUmZaQNtwcTZE9je1LjqSNIdG6kng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749804706; c=relaxed/simple;
-	bh=XjnRFn+DLVFoTo5zHOySZabgyaoUWVbhHCCtwku0/2Y=;
+	s=arc-20240116; t=1749811153; c=relaxed/simple;
+	bh=lTnmuJ4Zw3G9dBvu7NKjvEJCyXHzKDQ65nEqpiNtDFo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ec4Ul/uqug03vfAwxsekUQA4LY2U+Fx6GNBJlDF7c8zDIkJ/RlmbTptrLQamru+Qj0YdTSgPO+/d56xw2FB2mWl2oPXKYqt6ohj9dALoQdcXx/zkYCih/GP9OPZRV1cqSrOCz4+C23bxDeRiaK8u+ulhK+Svn0XdxQBfY0qjako=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=ejeNYxJx; arc=none smtp.client-ip=144.6.53.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
-	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=wMKt/wPLq9KRfU6Jf04/z1jGFWH/wF4jH0NXJm6Bhlo=; b=ejeNYxJxjqQkEf+Qtb4/A1GtfZ
-	b7jAaCx+igD/opjcpb3XKwVwchdM/PXR4tiwHprFmt4/L2Xs+ZpChWQHUuX2LYsCxrUU+eiustbeA
-	ZKVolER6TWQLfjepmarO/P1DHA89vwzY7ArJk9gDAzisKwslfsuuBqb/Wg3/aWQPZOOjQoyMRELCP
-	8Xbl2WNglxWI/mZ9MWHvlGbxuFigF+67XenNjqAmRVolrvDDN1QbLFg2RHZ/qe/i3LN+yRpvaWrJm
-	DTsKHT9mnfmMylzfbbw6eoUAmVq33jZS3a+a6lk6aGGMWMPA7TQxzmLPlMLIij5j0NMLYobmukZhv
-	QJp9aG1g==;
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1uQ08Q-00CsF4-2w;
-	Fri, 13 Jun 2025 16:51:39 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Fri, 13 Jun 2025 16:51:38 +0800
-Date: Fri, 13 Jun 2025 16:51:38 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	sparclinux@vger.kernel.org, x86@kernel.org, ardb@kernel.org,
-	Jason@zx2c4.com, torvalds@linux-foundation.org
-Subject: [PATCH] crypto: ahash - Stop legacy tfms from using the set_virt
- fallback path
-Message-ID: <aEvmmr0huGGd2Psv@gondor.apana.org.au>
-References: <20250611020923.1482701-8-ebiggers@kernel.org>
- <aEjo6YZn59m5FnZ_@gondor.apana.org.au>
- <20250611033957.GA1484147@sol>
- <aEj8J3ZIYEFp_XT4@gondor.apana.org.au>
- <20250611035842.GB1484147@sol>
- <20250613053624.GA163131@sol>
- <aEu5cyDOMcKteW_b@gondor.apana.org.au>
- <20250613055439.GB163131@sol>
+	 Content-Type:Content-Disposition:In-Reply-To; b=CY5OIvqZg3QXWZWVJ+Kqxqm44tukEUjHOBvygeU6q/RIA24A6LSg9QMdiOOv2YZYvMCBkRdQpSQpGnF5Da50+7bKK9kOZvF4JULTKkWxN/TRrl0Gs/V0RLd+WCgkzk1/ZrmwdCXflyTmfb3m66DEVJYLYgegpDlUsuesstlaEkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ISfiiyr2; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1749811152; x=1781347152;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=lTnmuJ4Zw3G9dBvu7NKjvEJCyXHzKDQ65nEqpiNtDFo=;
+  b=ISfiiyr2K+jMxxDWgM+dxw9NOjBxUPzwe+CgNrH5OuKFMhuNDOE2Ks0D
+   9zVpqWBR/cjCDbLFIIDZdXHIb74Ju5QiIFNrfcSTuBSR1deRe8CUNFEUs
+   v3PHG+vroJWXRZmD7RLcwGzthePlAIGiU+T5hmxyx8UVis+ruOhjjrQRC
+   oJOZaPhL2MWVyuWe24YXaN1lYvdb6tm9zQvaXN/ksR3thP3tfQ6uSLwvi
+   XVPTC8ehz4zvadBt4m53fI43Cr65Bxmbzv4qVg06/eAcHpSNBWjb9YI4s
+   OUGqL614yxXEy+qtXY8Rm0Gvm1WppmYdF1T3VfZo6zWQVRcN2mvIlx6Al
+   A==;
+X-CSE-ConnectionGUID: beQ8ftboT4aRlwvmqmDqew==
+X-CSE-MsgGUID: 6LtwW3ypQ6eN2MoLlbsZxA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11462"; a="63375282"
+X-IronPort-AV: E=Sophos;i="6.16,233,1744095600"; 
+   d="scan'208";a="63375282"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2025 03:39:11 -0700
+X-CSE-ConnectionGUID: rEJYELCnQN2xerUUmvLz7g==
+X-CSE-MsgGUID: RmyrZvILRR6G+bZEy6+kkg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,233,1744095600"; 
+   d="scan'208";a="148681207"
+Received: from smile.fi.intel.com ([10.237.72.52])
+  by fmviesa009.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Jun 2025 03:39:10 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1uQ1oR-00000006DOa-32d4;
+	Fri, 13 Jun 2025 13:39:07 +0300
+Date: Fri, 13 Jun 2025 13:39:07 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH v1 1/1] MIPS: Alchemy: Remove unused forward declaration
+Message-ID: <aEv_y5Lfe3Dul48I@smile.fi.intel.com>
+References: <20250531194346.3630898-1-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -75,65 +78,27 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250613055439.GB163131@sol>
+In-Reply-To: <20250531194346.3630898-1-andriy.shevchenko@linux.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Thu, Jun 12, 2025 at 10:54:39PM -0700, Eric Biggers wrote:
->
-> Actually, crypto_ahash::base::fb is initialized if CRYPTO_ALG_NEED_FALLBACK,
-> which many of the drivers already set.  Then crypto_ahash_update() calls
-> ahash_do_req_chain() if the algorithm does *not* have
-> CRYPTO_AHASH_ALG_BLOCK_ONLY set.  Which then exports the driver's custom state
-> and tries to import it into the fallback.
-> 
-> As far as I can tell, it's just broken for most of the existing drivers.
++Cc: Bart.
 
-This fallback path is only meant to be used for drivers that have
-been converted.  But you're right there is a check missing in there.
+On Sat, May 31, 2025 at 10:43:46PM +0300, Andy Shevchenko wrote:
+> The 'struct gpio' is not used in the code, remove unneeded forward declaration.
+> This seems to be a leftover for a 5 years.
 
-Thanks,
+Any comments on this, please?
 
----8<---
-Ensure that drivers that have not been converted to the ahash API
-do not use the ahash_request_set_virt fallback path as they cannot
-use the software fallback.
+It prevents us from moving forward with the killing the GPIO legacy APIs
+(it's not critical at all in this case, just an inconvenience for a `grep`,
+but still...).
 
-Reported-by: Eric Biggers <ebiggers@kernel.org>
-Fixes: 9d7a0ab1c753 ("crypto: ahash - Handle partial blocks in API")
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
+I think we can take it via GPIO tree if there is no reply.
 
-diff --git a/crypto/ahash.c b/crypto/ahash.c
-index e10bc2659ae4..992228a9f283 100644
---- a/crypto/ahash.c
-+++ b/crypto/ahash.c
-@@ -347,6 +347,9 @@ static int ahash_do_req_chain(struct ahash_request *req,
- 	if (crypto_ahash_statesize(tfm) > HASH_MAX_STATESIZE)
- 		return -ENOSYS;
- 
-+	if (crypto_hash_no_export_core(tfm))
-+		return -ENOSYS;
-+
- 	{
- 		u8 state[HASH_MAX_STATESIZE];
- 
-diff --git a/include/crypto/internal/hash.h b/include/crypto/internal/hash.h
-index 0f85c543f80b..f052afa6e7b0 100644
---- a/include/crypto/internal/hash.h
-+++ b/include/crypto/internal/hash.h
-@@ -91,6 +91,12 @@ static inline bool crypto_hash_alg_needs_key(struct hash_alg_common *alg)
- 		!(alg->base.cra_flags & CRYPTO_ALG_OPTIONAL_KEY);
- }
- 
-+static inline bool crypto_hash_no_export_core(struct crypto_ahash *tfm)
-+{
-+	return crypto_hash_alg_common(tfm)->base.cra_flags &
-+	       CRYPTO_AHASH_ALG_NO_EXPORT_CORE;
-+}
-+
- int crypto_grab_ahash(struct crypto_ahash_spawn *spawn,
- 		      struct crypto_instance *inst,
- 		      const char *name, u32 type, u32 mask);
 -- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+With Best Regards,
+Andy Shevchenko
+
+
 
