@@ -1,90 +1,66 @@
-Return-Path: <linux-mips+bounces-9309-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9310-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1B6AAD9CDD
-	for <lists+linux-mips@lfdr.de>; Sat, 14 Jun 2025 15:24:43 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FA33ADA0B9
+	for <lists+linux-mips@lfdr.de>; Sun, 15 Jun 2025 05:18:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EFC1F1899ECD
-	for <lists+linux-mips@lfdr.de>; Sat, 14 Jun 2025 13:24:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2EF20171AD1
+	for <lists+linux-mips@lfdr.de>; Sun, 15 Jun 2025 03:18:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFE132C15B8;
-	Sat, 14 Jun 2025 13:24:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AE8F2F2A;
+	Sun, 15 Jun 2025 03:18:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="QdpU4ujh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MPYTBuCd"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F73F16A395;
-	Sat, 14 Jun 2025 13:24:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B74E136E;
+	Sun, 15 Jun 2025 03:18:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1749907479; cv=none; b=lXn+xvU5zJLB9p+lVv56P9yrxo98DKOs4TBCNL+cssH17Tdo0hLPB+bP+z0pKDCzkITp4pFQftVNhnyyTG2KP8MU9OauF2zOWnskG81iE3G8X+kQ0K1nHMf1f1bqUQ+oJnh6C+jsiIafHcGtQ81r7dkrWmrVKfbiTjr4ebu9Qno=
+	t=1749957515; cv=none; b=vD1l4LBA+fZ7Gu2gPkNhZ+fRDA1/7qWlfuBQv5aBHFgNBRU48lyKgulnlkPZLQdtFWD0TDI67rJjjMYN6YLtuci/Fx5MHoRFA8t2Iz6Zcqb/7AOrANuhG+apNvSbuDNutdSIUWjy2Rmnm6jSm08+2M0lYtV90B//wnACMdrG1cI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1749907479; c=relaxed/simple;
-	bh=CYXHP4KKIhpklU5iwnybTexQYw0GxEFyWpr5CjPsKr0=;
+	s=arc-20240116; t=1749957515; c=relaxed/simple;
+	bh=QyNmeeqe/QCejIB1o+4hWQjoOtCd19AfCElA8Pxgmf4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Z1RHs4GXWRH8jKSzQ9OaCpHDPNoCI7TzQJEy1dv6zrHBgRL6RA83/0mSsvXCUlLU4d7Yd0Qi6V7RlmY6o4cfdxOVWKMWOsJ6Gp3gmenHNSik+iv4DGj5yLNmq8UQs9QLNW+84pQ6qry1ilXSJch6EjwamiC2levbiwwznkMMA5g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=QdpU4ujh; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55E31XiX026411;
-	Sat, 14 Jun 2025 13:24:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=pp1; bh=asgOieLRu0diNOiUoZ2jXlR5JV3Qd/
-	n2DC6baSQLRnM=; b=QdpU4ujh2znmTfKyKlX4mmaJKgkxJQP5WltI8RvqMsauCi
-	D0xYclDyHiGT5WSF3VwCrWsgu9mx+Eg0IzqdzpXerpUx7hZs+Yk2o7UblXRFax2j
-	E4lBEW73KizXX3L+yOZehgIbmcuMcM1BmZ+9rZlxeKvSnGZtVx9vhzjhbsMu6acn
-	7zcRehZ0XP+l2W4e+C2M4TZdb8mPhiuelM90U8SdWQNsAlRMZ98qQIBqCqt3eXXF
-	KEdwgLK9qyRO7oNWnssXcAXuBM6QGDbbMZMBi/jFx9xxZg/pWkWA4tTo2YaG4B80
-	1kfaVdCSM7nE7DIcGUPaYUQwHOzU5f/rqDefmgnQ==
-Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4790tdhky3-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 14 Jun 2025 13:24:27 +0000 (GMT)
-Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 55E8akJ8014948;
-	Sat, 14 Jun 2025 13:24:26 GMT
-Received: from smtprelay02.fra02v.mail.ibm.com ([9.218.2.226])
-	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 4750rppu2a-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sat, 14 Jun 2025 13:24:26 +0000
-Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
-	by smtprelay02.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 55EDOOCX37618074
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Sat, 14 Jun 2025 13:24:24 GMT
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 4276A20043;
-	Sat, 14 Jun 2025 13:24:24 +0000 (GMT)
-Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 5B75820040;
-	Sat, 14 Jun 2025 13:24:23 +0000 (GMT)
-Received: from li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com (unknown [9.87.143.160])
-	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTPS;
-	Sat, 14 Jun 2025 13:24:23 +0000 (GMT)
-Date: Sat, 14 Jun 2025 15:24:21 +0200
-From: Alexander Gordeev <agordeev@linux.ibm.com>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        sparclinux@vger.kernel.org, x86@kernel.org, linux-arch@vger.kernel.org,
-        Ard Biesheuvel <ardb@kernel.org>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: Re: [PATCH v2 09/12] lib/crc/s390: migrate s390-optimized CRC code
- into lib/crc/
-Message-ID: <aE14BfWQHvki9pW5@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
-References: <20250607200454.73587-1-ebiggers@kernel.org>
- <20250607200454.73587-10-ebiggers@kernel.org>
- <aExLZaoBCg55rZWJ@li-008a6a4c-3549-11b2-a85c-c5cc2836eea2.ibm.com>
- <20250613171143.GB1284@sol>
+	 Content-Type:Content-Disposition:In-Reply-To; b=HAkpLP9qTiskh37iwkwbmi6K13k2dkiuhs8saNVzEmCn1tWrdODF0/CVzfq2kK46XHSZrD8+X5hWwwPVmiJV9f+ZHF0idroNBidj/tC9euIHdxOQi/y6zRO44zudkxtfUocQ/8i9p+VCv3+CGo9TkKfczDEc/dMEjIUDjA3GAsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MPYTBuCd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34907C4CEED;
+	Sun, 15 Jun 2025 03:18:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1749957514;
+	bh=QyNmeeqe/QCejIB1o+4hWQjoOtCd19AfCElA8Pxgmf4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MPYTBuCd7X45YU//pkrHZijODUDPe4eBXgOI24hNeaiz4dbjbb/3k5BQs1Xc6Fr2G
+	 1SUuS34Vh6YlA3y4WIOmnc4WfVDp48/8YLKBe6aqQhXOnefPSHjIKv2Q/Z3IVnq3Hb
+	 /sbJrNGZlRTYza+Mt9gtQEwDcX0tW6FwYwQK3fWqyZEOw58reqeyiqce64xdk3csvB
+	 T1sYLtQc6KtNQoM975rjkVarhrrjsKE/VcsUDyELJ/EoeWCL4NAn8Q+rcrYDoz6k3b
+	 pZWCNS2I90e08jz9scf576cleOvu8Rx8hgtaV7hycc5/OzK21YtwWT4NF2/+EHEREh
+	 UnZExOsX46Q9A==
+Date: Sat, 14 Jun 2025 20:18:07 -0700
+From: Eric Biggers <ebiggers@kernel.org>
+To: Herbert Xu <herbert@gondor.apana.org.au>
+Cc: linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	sparclinux@vger.kernel.org, x86@kernel.org, ardb@kernel.org,
+	Jason@zx2c4.com, torvalds@linux-foundation.org
+Subject: Re: [PATCH] crypto: ahash - Stop legacy tfms from using the set_virt
+ fallback path
+Message-ID: <20250615031807.GA81869@sol>
+References: <20250611020923.1482701-8-ebiggers@kernel.org>
+ <aEjo6YZn59m5FnZ_@gondor.apana.org.au>
+ <20250611033957.GA1484147@sol>
+ <aEj8J3ZIYEFp_XT4@gondor.apana.org.au>
+ <20250611035842.GB1484147@sol>
+ <20250613053624.GA163131@sol>
+ <aEu5cyDOMcKteW_b@gondor.apana.org.au>
+ <20250613055439.GB163131@sol>
+ <aEvmmr0huGGd2Psv@gondor.apana.org.au>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -93,48 +69,132 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250613171143.GB1284@sol>
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: nj-5Q1qWGKzJpm-8fdR-97xdbrM1_VJ3
-X-Proofpoint-GUID: nj-5Q1qWGKzJpm-8fdR-97xdbrM1_VJ3
-X-Authority-Analysis: v=2.4 cv=c92rQQ9l c=1 sm=1 tr=0 ts=684d780b cx=c_pps a=GFwsV6G8L6GxiO2Y/PsHdQ==:117 a=GFwsV6G8L6GxiO2Y/PsHdQ==:17 a=kj9zAlcOel0A:10 a=6IFa9wvqVegA:10 a=VwQbUJbxAAAA:8 a=fhZMs16YlvXlDsCV5c8A:9 a=CjuIK1q_8ugA:10
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjE0MDExMSBTYWx0ZWRfX9VGL3Nt2grmi XR12ZSw6bF5QzEcFwoU9YySQ7ESO7UBTeDWf9VSjgbgnS44V4zwPgmto4OmAvE7t1tkgKOgaEeJ 3KlPppY7dIwK4yNsfAdKeDH+PizbhKm6vQbc3IemUtkRykwmV4G0BRGMhkHA6dhLxnjHFmd6HiP
- L+RgSlaiw/7V+kb0HatOVNVB5PW2cjICh51TUaxD3pR6joEKa4bQfjBYnE3u1XGX98rL0iGK5QM ipnKhdfgzrpC1RV/yKaFvLGo8vJfC7pZB2tJb9BbwcIfChRVLo/5Q0opcEhYKHgkSaKhNTruY7x KV1ti89wPc3jLoJdwJKPmWKTTNqz8wdeqQyvN8sLH2hrdXbz7R9PQSf/sXKqzKXhjKIAewJR+bY
- NdnRQufd/o2KAEOF4Cnd4CKWD8yFSJFxKB+H54xsN950Da/R6flU9XzMmXFw5Rp0t+AS3P91
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
- definitions=2025-06-14_04,2025-06-13_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 malwarescore=0
- bulkscore=0 lowpriorityscore=0 clxscore=1015 priorityscore=1501
- mlxlogscore=853 mlxscore=0 adultscore=0 phishscore=0 suspectscore=0
- impostorscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2506140111
+In-Reply-To: <aEvmmr0huGGd2Psv@gondor.apana.org.au>
 
-On Fri, Jun 13, 2025 at 10:11:43AM -0700, Eric Biggers wrote:
-> > Hi Eric,
+On Fri, Jun 13, 2025 at 04:51:38PM +0800, Herbert Xu wrote:
+> On Thu, Jun 12, 2025 at 10:54:39PM -0700, Eric Biggers wrote:
+> >
+> > Actually, crypto_ahash::base::fb is initialized if CRYPTO_ALG_NEED_FALLBACK,
+> > which many of the drivers already set.  Then crypto_ahash_update() calls
+> > ahash_do_req_chain() if the algorithm does *not* have
+> > CRYPTO_AHASH_ALG_BLOCK_ONLY set.  Which then exports the driver's custom state
+> > and tries to import it into the fallback.
 > > 
-> > With this series I am getting on s390:
-> > 
-> > alg: hash: skipping comparison tests for crc32c-s390 because crc32c-generic is unavailable
-> > 
-> > Thanks!
+> > As far as I can tell, it's just broken for most of the existing drivers.
 > 
-> I think that's actually from "crypto/crc32c: register only one shash_alg"
-> (https://lore.kernel.org/linux-crypto/20250601224441.778374-3-ebiggers@kernel.org/),
-> not the patch you replied to.
+> This fallback path is only meant to be used for drivers that have
+> been converted.  But you're right there is a check missing in there.
 > 
-> Those self-test warnings are expected.  But I guess they are going to confuse
-> people, so we should do something to make them go away.
+> Thanks,
 > 
-> I think we should do what I've proposed for SHA-512: stop worrying about setting
-> the cra_driver_name to something meaningful (which has never really worked
-> anyway), instead just use *-lib, and update crypto/testmgr.c accordingly.
+> ---8<---
+> Ensure that drivers that have not been converted to the ahash API
+> do not use the ahash_request_set_virt fallback path as they cannot
+> use the software fallback.
 > 
-> I'll send out patches that do that.
+> Reported-by: Eric Biggers <ebiggers@kernel.org>
+> Fixes: 9d7a0ab1c753 ("crypto: ahash - Handle partial blocks in API")
+> Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
 
-Thanks, Eric!
-Please, ignore my other email - I though I did not send this one.
+Okay.  Out of curiosity I decided to actually test the Qualcomm Crypto Engine
+driver on a development board that has a Qualcomm SoC, using latest mainline.
 
-> - Eric
+Even with your patch applied, it overflows the stack when running the crypto
+self-tests, apparently due to crypto/ahash.c calling into itself recursively:
+
+    [    9.230887] Insufficient stack space to handle exception!
+    [    9.230889] ESR: 0x0000000096000047 -- DABT (current EL)
+    [    9.230891] FAR: 0xffff800084927fe0
+    [    9.230891] Task stack:     [0xffff800084928000..0xffff80008492c000]
+    [    9.230893] IRQ stack:      [0xffff800080030000..0xffff800080034000]
+    [    9.230894] Overflow stack: [0xffff000a72dd2100..0xffff000a72dd3100]
+    [    9.230896] CPU: 6 UID: 0 PID: 747 Comm: cryptomgr_test Tainted: G S                  6.16.0-rc1-00237-g84ffcd88616f #7 PREEMPT 
+    [    9.230900] Tainted: [S]=CPU_OUT_OF_SPEC
+    [    9.230901] Hardware name: Qualcomm Technologies, Inc. SM8650 HDK (DT)
+    [    9.230901] pstate: 01400005 (nzcv daif +PAN -UAO -TCO +DIT -SSBS BTYPE=--)
+    [    9.230903] pc : qce_ahash_update+0x4/0x1f4
+    [    9.230910] lr : ahash_do_req_chain+0xb4/0x19c
+    [    9.230915] sp : ffff800084928030
+    [    9.230915] x29: ffff8000849281a0 x28: 0000000000000003 x27: 0000000000000001
+    [    9.230918] x26: ffff0008022d8060 x25: ffff000800a33500 x24: ffff80008492b8d8
+    [    9.230920] x23: ffff80008492b918 x22: 0000000000000400 x21: ffff000800a33510
+    [    9.230922] x20: ffff000800b62030 x19: ffff00080122d400 x18: 00000000ffffffff
+    [    9.230923] x17: 0000000000000000 x16: 0000000000000000 x15: 0000000000000000
+    [    9.230925] x14: 0000000000000001 x13: 0000000000000000 x12: 0000000000000000
+    [    9.230927] x11: eee1c132902c61e2 x10: 0000000000000063 x9 : 0000000000000000
+    [    9.230928] x8 : 0000000000000062 x7 : a54ff53a3c6ef372 x6 : 0000000000000400
+    [    9.230930] x5 : fefefefefefefefe x4 : ffff000800a33510 x3 : 0000000000000000
+    [    9.230931] x2 : ffff000805d76900 x1 : ffffcea2349738cc x0 : ffff00080122d400
+    [    9.230933] Kernel panic - not syncing: kernel stack overflow
+    [    9.230934] CPU: 6 UID: 0 PID: 747 Comm: cryptomgr_test Tainted: G S                  6.16.0-rc1-00237-g84ffcd88616f #7 PREEMPT 
+    [    9.230936] Tainted: [S]=CPU_OUT_OF_SPEC
+    [    9.230937] Hardware name: Qualcomm Technologies, Inc. SM8650 HDK (DT)
+    [    9.230938] Call trace:
+    [    9.230939]  show_stack+0x18/0x24 (C)
+    [    9.230943]  dump_stack_lvl+0x60/0x80
+    [    9.230947]  dump_stack+0x18/0x24
+    [    9.230949]  panic+0x168/0x360
+    [    9.230952]  add_taint+0x0/0xbc
+    [    9.230955]  panic_bad_stack+0x108/0x120
+    [    9.230958]  handle_bad_stack+0x34/0x40
+    [    9.230962]  __bad_stack+0x80/0x84
+    [    9.230963]  qce_ahash_update+0x4/0x1f4 (P)
+    [    9.230965]  crypto_ahash_update+0x17c/0x18c
+    [    9.230967]  crypto_ahash_finup+0x184/0x1e4
+    [    9.230969]  crypto_ahash_finup+0x1ac/0x1e4
+    [    9.230970]  crypto_ahash_finup+0x1ac/0x1e4
+    [    9.230972]  crypto_ahash_finup+0x1ac/0x1e4
+    [    9.230973]  crypto_ahash_finup+0x1ac/0x1e4
+    [    9.230974]  crypto_ahash_finup+0x1ac/0x1e4
+    [    9.230976]  crypto_ahash_finup+0x1ac/0x1e4
+    [    9.230977]  crypto_ahash_finup+0x1ac/0x1e4
+    [    9.230979]  crypto_ahash_finup+0x1ac/0x1e4
+    [    9.230980]  crypto_ahash_finup+0x1ac/0x1e4
+    [    9.230981]  crypto_ahash_finup+0x1ac/0x1e4
+    [    9.230983]  crypto_ahash_finup+0x1ac/0x1e4
+    [    9.230984]  crypto_ahash_finup+0x1ac/0x1e4
+    [    9.230986]  crypto_ahash_finup+0x1ac/0x1e4
+    [    9.230988]  crypto_ahash_finup+0x1ac/0x1e4
+    [    9.230989]  crypto_ahash_finup+0x1ac/0x1e4
+    [    9.230991]  crypto_ahash_finup+0x1ac/0x1e4
+    [    9.230993]  crypto_ahash_finup+0x1ac/0x1e4
+    [    9.230995]  crypto_ahash_finup+0x1ac/0x1e4
+    [    9.230996]  crypto_ahash_finup+0x1ac/0x1e4
+    [    9.230998]  crypto_ahash_finup+0x1ac/0x1e4
+    [    9.230999]  crypto_ahash_finup+0x1ac/0x1e4
+    [    9.231001]  crypto_ahash_finup+0x1ac/0x1e4
+    [    9.231002]  crypto_ahash_finup+0x1ac/0x1e4
+    [    9.231004]  crypto_ahash_finup+0x1ac/0x1e4
+    [    9.231005]  crypto_ahash_finup+0x1ac/0x1e4
+
+    [the above line repeated a few hundred times more...]
+
+    [    9.231571]  test_ahash_vec_cfg+0x508/0x8f8
+    [    9.231573]  test_hash_vec+0xb8/0x21c
+    [    9.231575]  __alg_test_hash+0x144/0x2e0
+    [    9.231577]  alg_test_hash+0xc0/0x178
+    [    9.231578]  alg_test+0x148/0x5ec
+    [    9.231579]  cryptomgr_test+0x24/0x40
+    [    9.231581]  kthread+0x12c/0x204
+    [    9.231583]  ret_from_fork+0x10/0x20
+    [    9.231587] SMP: stopping secondary CPUs
+    [    9.240072] Kernel Offset: 0x4ea1b2a80000 from 0xffff800080000000
+    [    9.240073] PHYS_OFFSET: 0xfff1000080000000
+    [    9.240074] CPU features: 0x6000,000001c0,62130cb1,357e7667
+    [    9.240075] Memory Limit: none
+    [   11.373410] ---[ end Kernel panic - not syncing: kernel stack overflow ]---
+
+After disabling the crypto self-tests, I was then able to run a benchmark of
+SHA-256 hashing 4096-byte messages, which fortunately didn't encounter the
+recursion bug.  I got the following results:
+
+    ARMv8 crypto extensions: 1864 MB/s
+    Generic C code: 358 MB/s
+    Qualcomm Crypto Engine: 55 MB/s
+
+So just to clarify, you believe that asynchronous hash drivers like the Qualcomm
+Crypto Engine one are useful, and the changes that you're requiring to the
+CPU-based code are to support these drivers?
+
+- Eric
 
