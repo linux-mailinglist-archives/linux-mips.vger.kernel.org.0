@@ -1,155 +1,407 @@
-Return-Path: <linux-mips+bounces-9313-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9314-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5EB62ADA330
-	for <lists+linux-mips@lfdr.de>; Sun, 15 Jun 2025 21:37:53 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22B45ADA574
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Jun 2025 03:15:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF69E1696DF
-	for <lists+linux-mips@lfdr.de>; Sun, 15 Jun 2025 19:37:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 06B467A51D6
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Jun 2025 01:13:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA8CD27C15A;
-	Sun, 15 Jun 2025 19:37:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="Q+mLk1y/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 695F9481B6;
+	Mon, 16 Jun 2025 01:15:15 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F7D0264FB4
-	for <linux-mips@vger.kernel.org>; Sun, 15 Jun 2025 19:37:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A75241547C9;
+	Mon, 16 Jun 2025 01:15:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750016271; cv=none; b=Tpp4RVkRkovU3HrH5bCVAz0+Q8ND/neTNUovXrLKEUh5460DTyWNqm92ENbNyie4yHcTsml1lWBCIBm+F59NqpU5pLgDvEXn3Yvl0uQgSU9FYxUjVY7CYt0Y7WOXV7WyuiZpzenVMBn7tjuvBxme/h55d5Ku4snujw7TowF/BvY=
+	t=1750036515; cv=none; b=nudtRxQPO9MJuyDOCr23AGFFXFCR1mc0VjRRRhBVaGLLmYohGDxXau9kBW/dDd0dT+Bkrwz/qIws+Ewgot3IfMVKXV+9OT2k6kH5ACXXM7xSq7/7u7bEM1ph4OFfWSLMu8KFjiunub+dxPUbHas8XMukxjY1Q5HJaslPVr/ukTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750016271; c=relaxed/simple;
-	bh=+DdLJhNZpkF0mq6V6riPNHi40jkfNk/Fbp6sB9glqNc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=O/ktLraFDqONgUclRt6ZPWRuqwyYelan5etIHPMtzT4gb7rwvBYqjsFD7y07OQXZzym5sJezwxqomZphgQSIKW9BbP7WaAXu9fdgpVmn8n1wKZDpdjWEtXKG2IwG1Y0NVXFDoZj3Da4WV7AgP8DGwak91kCHjO7iS7BdtB6RcUw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=Q+mLk1y/; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-ade30256175so736758166b.1
-        for <linux-mips@vger.kernel.org>; Sun, 15 Jun 2025 12:37:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1750016267; x=1750621067; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9Bm1Ypz9xIQ9oSWoxmBY5SZFvMd6ktsJLpK/MNzMMqc=;
-        b=Q+mLk1y/m9VlZYsSy1XdhmgGGlLHhLY1VR4lmaI5GGLnin39R+lnnmOq7ocbyItRtZ
-         5hmw/tR50iPd5HvT9d9YNs2r3EfNb3FVxtVxq+J77nc5ALX1gJ81cqXb7/zAx3ExaVw2
-         Sdl4G25y8JSd7Qh/fsPulb2uiaNEbRbrRz1uQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750016267; x=1750621067;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9Bm1Ypz9xIQ9oSWoxmBY5SZFvMd6ktsJLpK/MNzMMqc=;
-        b=CgGHth6MwdzsYZtqYuLxQ95Z5vhdwDGUIFaO62qUt9I4Gvvioi3t4yEVKEuEYte88v
-         gk8/6gl40i2QMNOvE4MDC+EtjlR90QrO69Ek27He4NlI6gHZ7JuWrfgfvAixBDrXl2Gu
-         OxUCPw+qVhLRugh4eLFX4xDkOstKAM2dyRlZ6365Ek4XEgbXs73l9xyyi3jJ8Ec36sdp
-         +k5JerV5u7OhBGzjxxBwEmaJYU6ifOqALi9zRksDGCo3s4JAGoq+VaA4s9KNFEqCGS7X
-         hLxHQTf89jNQc1TBxLKrtkZhditgi2IK8hOT+I1/i9VP/3RUaojIcANXIfT6ZbxJ0YN4
-         p7Mw==
-X-Forwarded-Encrypted: i=1; AJvYcCXXxMFEnZGHKxfU7n34KnGuFo1w71q4s2yukiNeqwr2XP9K7mJN4AHYfRkCbtp0pugpl+NZ6l+NyXQ3@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx63KyHn6KQCUIWZJ5L7BRV7usDtQBDA+BApIBq6OxTgxSky0da
-	ntdDEls+uHwITuQtcszALRB5jliyj/7YucUhhwgY2+7dV2FB3tFUTHK7xgSw4U1aoSV998fOKtp
-	RyCCwzeQ=
-X-Gm-Gg: ASbGncs7oA7QrAvweSrK3zjltOyL9q/IqrC0T178pi6EGPL3KbxvuYtY8cll2hEmsRa
-	rDNGpmmxpXgei9hFaTf2tGdz+XNtis56tJJxyMPA2o0GBC74NcvsX4MxrP5zrH2Fa9fhLlpKwqc
-	MmNPMHRvYdmoSZ3Co4hK9MzPZlvAQCaMPFHfM0BJ9qbnP8Jw+MinczElqihV8EwIGQisEG2r12B
-	RBvFAvamnjGDcmTYTlyNmDTX+d6D+YU1Htb0/OIdmWqWLizEaMM2ifBZNQXS4HOUYFIo7kSm9L4
-	DQI5sikzhQvGRhkWLD/+gtZJWJISQbaqV+zMWmhxoZlOOPD7c2csvdeXuOFIJ7JeR3bNi+5olrL
-	yL2Ner6ZqZ22PDCBjsxJ2kXn5rW+d1vTjA6ix
-X-Google-Smtp-Source: AGHT+IGmB2iiJ7t/+fOMuL0mlq+dj56Mfw+v6Evh4dx4bWQfjELzY4M6ohVQNy5NqQAFHc6kccp4Dg==
-X-Received: by 2002:a17:907:72c2:b0:ade:4339:9367 with SMTP id a640c23a62f3a-adfad34accdmr622824566b.26.1750016267116;
-        Sun, 15 Jun 2025 12:37:47 -0700 (PDT)
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com. [209.85.208.52])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-adec88ff5ffsm531220166b.106.2025.06.15.12.37.46
-        for <linux-mips@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 15 Jun 2025 12:37:46 -0700 (PDT)
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-606ddbda275so7500985a12.1
-        for <linux-mips@vger.kernel.org>; Sun, 15 Jun 2025 12:37:46 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUx2hnAb7BVqj2JW5my/sxKdOg+PfQ9C9hNXz3+cIaTxVJ6lYNR0IlmGrqNHrqr41N7Ai5zsHktuIxl@vger.kernel.org
-X-Received: by 2002:a05:6402:50cc:b0:5f3:26bb:8858 with SMTP id
- 4fb4d7f45d1cf-608d09a2d16mr6285703a12.34.1750016266135; Sun, 15 Jun 2025
- 12:37:46 -0700 (PDT)
+	s=arc-20240116; t=1750036515; c=relaxed/simple;
+	bh=dvTGtxAknQfEoc4zbDY1V7wwkCrQM97z3Atd+/H9l4g=;
+	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
+	 In-Reply-To:Content-Type; b=faKtu9yOH/piR8rpkUAK7rD1cbUaFvRm+BxRUsk6cNwLwe4uF8rGPhpU6pTaROLqEadmGvAL9GE+OL0sdeeTorfHi29iqQYD0OS4oZkG13QmReKISXXPtSjO98wdje38fjOifOCHKWWl5cp+UJ7tr7olpOI9uSurw5wYpd0A6eo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [10.20.42.62])
+	by gateway (Coremail) with SMTP id _____8AxnOIVcE9owWYXAQ--.19204S3;
+	Mon, 16 Jun 2025 09:15:01 +0800 (CST)
+Received: from [10.20.42.62] (unknown [10.20.42.62])
+	by front1 (Coremail) with SMTP id qMiowMDxH+UGcE9oJlYcAQ--.19628S3;
+	Mon, 16 Jun 2025 09:14:49 +0800 (CST)
+Subject: Re: [PATCH 4/8] KVM: Move include/kvm/iodev.h to include/linux as
+ kvm_iodev.h
+To: Sean Christopherson <seanjc@google.com>, Marc Zyngier <maz@kernel.org>,
+ Oliver Upton <oliver.upton@linux.dev>, Tianrui Zhao
+ <zhaotianrui@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
+ Madhavan Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>,
+ Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
+ <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Janosch Frank <frankja@linux.ibm.com>,
+ Claudio Imbrenda <imbrenda@linux.ibm.com>,
+ Paolo Bonzini <pbonzini@redhat.com>
+Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+ kvm@vger.kernel.org, loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+ linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+ Anish Ghulati <aghulati@google.com>, Colton Lewis <coltonlewis@google.com>,
+ Thomas Huth <thuth@redhat.com>
+References: <20250611001042.170501-1-seanjc@google.com>
+ <20250611001042.170501-5-seanjc@google.com>
+From: Bibo Mao <maobibo@loongson.cn>
+Message-ID: <50a32984-f2ed-249a-c055-81ad35e1fa51@loongson.cn>
+Date: Mon, 16 Jun 2025 09:13:23 +0800
+User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
+ Thunderbird/68.7.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <aEjo6YZn59m5FnZ_@gondor.apana.org.au> <20250611033957.GA1484147@sol>
- <aEj8J3ZIYEFp_XT4@gondor.apana.org.au> <20250611035842.GB1484147@sol>
- <20250613053624.GA163131@sol> <aEu5cyDOMcKteW_b@gondor.apana.org.au>
- <20250613055439.GB163131@sol> <aEvmmr0huGGd2Psv@gondor.apana.org.au>
- <20250615031807.GA81869@sol> <CAMj1kXGd93Kg0Vs8ExLhK=fxhRBASU9sOPfgYUogv+rwVqgUsg@mail.gmail.com>
- <20250615184638.GA1480@sol>
-In-Reply-To: <20250615184638.GA1480@sol>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Sun, 15 Jun 2025 12:37:29 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wiAh0fnfm-LomMWDV=OGhCHCp0C_7xZASE_8pZ3ZP0CXg@mail.gmail.com>
-X-Gm-Features: AX0GCFsirgA8Ga0u26X0ToUgNd-a86j5gL8Na8fIUJo1Hy2_joO0gogaJwm_iSM
-Message-ID: <CAHk-=wiAh0fnfm-LomMWDV=OGhCHCp0C_7xZASE_8pZ3ZP0CXg@mail.gmail.com>
-Subject: Re: [PATCH] crypto: ahash - Stop legacy tfms from using the set_virt
- fallback path
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: Ard Biesheuvel <ardb@kernel.org>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-	sparclinux@vger.kernel.org, x86@kernel.org, Jason@zx2c4.com
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20250611001042.170501-5-seanjc@google.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowMDxH+UGcE9oJlYcAQ--.19628S3
+X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
+X-Coremail-Antispam: 1Uk129KBj93XoWfGr4rtr1fJrW8Cr1ktFW3XFc_yoWDAFWxpF
+	4DCF4kAr43Cr18JF9Fy3ZIvFyUXws5Kr1UKa4UuFWUAw1aqr1kXw4vkrn8tFn5Aayvqa10
+	gFWagF15Zw4UX3gCm3ZEXasCq-sJn29KB7ZKAUJUUUUJ529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
+	xVW8Jr0_Cr1UM2kKe7AKxVWUtVW8ZwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
+	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
+	tVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
+	8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vI
+	r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jw0_GFylx2IqxVAqx4xG67
+	AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIY
+	rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14
+	v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWx
+	JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUShiSDU
+	UUU
 
-On Sun, 15 Jun 2025 at 11:47, Eric Biggers <ebiggers@kernel.org> wrote:
->
-> So yes, QCE seems to have only one queue, and even that one queue is *much*
-> slower than just using the CPU.  It's even slower than the generic C code.
 
-Honestly, I have *NEVER* seen an external crypto accelerator that is
-worth using unless it's integrated with the target IO.
 
-Now, it's not my area of expertise either, so there may well be some
-random case that I haven't heard about, but the only sensible use-case
-I'm aware of is when the network card just does all the offloading and
-just does the whole SSL thing (or IPsec or whatever, but if you care
-about performance you'd be better off using wireguard and doing it all
-on the CPU anyway)
+On 2025/6/11 上午8:10, Sean Christopherson wrote:
+> Move iodev.h, the last remaining holdout in include/kvm, to the standard
+> include/linux directory as kvm_iodev.h and delete include/kvm.
+> 
+> Acked-by: Anup Patel <anup@brainfault.org>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>   MAINTAINERS                                | 1 -
+>   arch/arm64/include/asm/kvm_vgic.h          | 2 +-
+>   arch/arm64/kvm/vgic/vgic-mmio-v2.c         | 2 +-
+>   arch/arm64/kvm/vgic/vgic-mmio-v3.c         | 2 +-
+>   arch/arm64/kvm/vgic/vgic-mmio.c            | 2 +-
+>   arch/loongarch/include/asm/kvm_eiointc.h   | 2 +-
+>   arch/loongarch/include/asm/kvm_ipi.h       | 2 +-
+>   arch/loongarch/include/asm/kvm_pch_pic.h   | 2 +-
+>   arch/mips/include/asm/kvm_host.h           | 3 +--
+>   arch/powerpc/kvm/mpic.c                    | 2 +-
+>   arch/riscv/kvm/aia_aplic.c                 | 2 +-
+>   arch/riscv/kvm/aia_imsic.c                 | 2 +-
+>   arch/x86/kvm/i8254.h                       | 2 +-
+>   arch/x86/kvm/ioapic.h                      | 2 +-
+>   arch/x86/kvm/irq.h                         | 2 +-
+>   arch/x86/kvm/lapic.h                       | 2 +-
+>   include/{kvm/iodev.h => linux/kvm_iodev.h} | 0
+>   virt/kvm/coalesced_mmio.c                  | 3 +--
+>   virt/kvm/eventfd.c                         | 2 +-
+>   virt/kvm/kvm_main.c                        | 3 +--
+>   20 files changed, 18 insertions(+), 22 deletions(-)
+>   rename include/{kvm/iodev.h => linux/kvm_iodev.h} (100%)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 10cf54c8f727..a2cd432273e5 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -13011,7 +13011,6 @@ W:	http://www.linux-kvm.org
+>   T:	git git://git.kernel.org/pub/scm/virt/kvm/kvm.git
+>   F:	Documentation/virt/kvm/
+>   F:	include/asm-generic/kvm*
+> -F:	include/kvm/iodev.h
+>   F:	include/linux/kvm*
+>   F:	include/trace/events/kvm.h
+>   F:	include/uapi/asm-generic/kvm*
+> diff --git a/arch/arm64/include/asm/kvm_vgic.h b/arch/arm64/include/asm/kvm_vgic.h
+> index 4a34f7f0a864..09d7f628fa3b 100644
+> --- a/arch/arm64/include/asm/kvm_vgic.h
+> +++ b/arch/arm64/include/asm/kvm_vgic.h
+> @@ -14,7 +14,7 @@
+>   #include <linux/static_key.h>
+>   #include <linux/types.h>
+>   #include <linux/xarray.h>
+> -#include <kvm/iodev.h>
+> +#include <linux/kvm_iodev.h>
+>   #include <linux/list.h>
+>   #include <linux/jump_label.h>
+>   
+> diff --git a/arch/arm64/kvm/vgic/vgic-mmio-v2.c b/arch/arm64/kvm/vgic/vgic-mmio-v2.c
+> index d00c8a74fad6..889440a8b129 100644
+> --- a/arch/arm64/kvm/vgic/vgic-mmio-v2.c
+> +++ b/arch/arm64/kvm/vgic/vgic-mmio-v2.c
+> @@ -6,9 +6,9 @@
+>   #include <linux/irqchip/arm-gic.h>
+>   #include <linux/kvm.h>
+>   #include <linux/kvm_host.h>
+> +#include <linux/kvm_iodev.h>
+>   #include <linux/nospec.h>
+>   
+> -#include <kvm/iodev.h>
+>   #include <asm/kvm_vgic.h>
+>   
+>   #include "vgic.h"
+> diff --git a/arch/arm64/kvm/vgic/vgic-mmio-v3.c b/arch/arm64/kvm/vgic/vgic-mmio-v3.c
+> index 505d4e389885..db95d3ccbd14 100644
+> --- a/arch/arm64/kvm/vgic/vgic-mmio-v3.c
+> +++ b/arch/arm64/kvm/vgic/vgic-mmio-v3.c
+> @@ -7,8 +7,8 @@
+>   #include <linux/irqchip/arm-gic-v3.h>
+>   #include <linux/kvm.h>
+>   #include <linux/kvm_host.h>
+> +#include <linux/kvm_iodev.h>
+>   #include <linux/interrupt.h>
+> -#include <kvm/iodev.h>
+>   
+>   #include <asm/kvm_emulate.h>
+>   #include <asm/kvm_arm.h>
+> diff --git a/arch/arm64/kvm/vgic/vgic-mmio.c b/arch/arm64/kvm/vgic/vgic-mmio.c
+> index ec1b13abc728..de689e0e881f 100644
+> --- a/arch/arm64/kvm/vgic/vgic-mmio.c
+> +++ b/arch/arm64/kvm/vgic/vgic-mmio.c
+> @@ -9,7 +9,7 @@
+>   #include <linux/irq.h>
+>   #include <linux/kvm.h>
+>   #include <linux/kvm_host.h>
+> -#include <kvm/iodev.h>
+> +#include <linux/kvm_iodev.h>
+>   #include <asm/kvm_arch_timer.h>
+>   #include <asm/kvm_vgic.h>
+>   
+> diff --git a/arch/loongarch/include/asm/kvm_eiointc.h b/arch/loongarch/include/asm/kvm_eiointc.h
+> index a3a40aba8acf..0049b0b79477 100644
+> --- a/arch/loongarch/include/asm/kvm_eiointc.h
+> +++ b/arch/loongarch/include/asm/kvm_eiointc.h
+> @@ -6,7 +6,7 @@
+>   #ifndef __ASM_KVM_EIOINTC_H
+>   #define __ASM_KVM_EIOINTC_H
+>   
+> -#include <kvm/iodev.h>
+> +#include <linux/kvm_iodev.h>
+>   
+>   #define EIOINTC_IRQS			256
+>   #define EIOINTC_ROUTE_MAX_VCPUS		256
+> diff --git a/arch/loongarch/include/asm/kvm_ipi.h b/arch/loongarch/include/asm/kvm_ipi.h
+> index 060163dfb4a3..3956b230f087 100644
+> --- a/arch/loongarch/include/asm/kvm_ipi.h
+> +++ b/arch/loongarch/include/asm/kvm_ipi.h
+> @@ -6,7 +6,7 @@
+>   #ifndef __ASM_KVM_IPI_H
+>   #define __ASM_KVM_IPI_H
+>   
+> -#include <kvm/iodev.h>
+> +#include <linux/kvm_iodev.h>
+>   
+>   #define LARCH_INT_IPI			12
+>   
+> diff --git a/arch/loongarch/include/asm/kvm_pch_pic.h b/arch/loongarch/include/asm/kvm_pch_pic.h
+> index e6df6a4c1c70..4b37e3134e52 100644
+> --- a/arch/loongarch/include/asm/kvm_pch_pic.h
+> +++ b/arch/loongarch/include/asm/kvm_pch_pic.h
+> @@ -6,7 +6,7 @@
+>   #ifndef __ASM_KVM_PCH_PIC_H
+>   #define __ASM_KVM_PCH_PIC_H
+>   
+> -#include <kvm/iodev.h>
+> +#include <linux/kvm_iodev.h>
+>   
+>   #define PCH_PIC_SIZE			0x3e8
+>   
+> diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm_host.h
+> index c14b10821817..0d7dd89ca5bf 100644
+> --- a/arch/mips/include/asm/kvm_host.h
+> +++ b/arch/mips/include/asm/kvm_host.h
+> @@ -16,6 +16,7 @@
+>   #include <linux/interrupt.h>
+>   #include <linux/types.h>
+>   #include <linux/kvm.h>
+> +#include <linux/kvm_iodev.h>
+>   #include <linux/kvm_types.h>
+>   #include <linux/threads.h>
+>   #include <linux/spinlock.h>
+> @@ -24,8 +25,6 @@
+>   #include <asm/inst.h>
+>   #include <asm/mipsregs.h>
+>   
+> -#include <kvm/iodev.h>
+> -
+>   /* MIPS KVM register ids */
+>   #define MIPS_CP0_32(_R, _S)					\
+>   	(KVM_REG_MIPS_CP0 | KVM_REG_SIZE_U32 | (8 * (_R) + (_S)))
+> diff --git a/arch/powerpc/kvm/mpic.c b/arch/powerpc/kvm/mpic.c
+> index 23e9c2bd9f27..b25a03251544 100644
+> --- a/arch/powerpc/kvm/mpic.c
+> +++ b/arch/powerpc/kvm/mpic.c
+> @@ -26,6 +26,7 @@
+>   #include <linux/slab.h>
+>   #include <linux/mutex.h>
+>   #include <linux/kvm_host.h>
+> +#include <linux/kvm_iodev.h>
+>   #include <linux/errno.h>
+>   #include <linux/fs.h>
+>   #include <linux/anon_inodes.h>
+> @@ -33,7 +34,6 @@
+>   #include <asm/mpic.h>
+>   #include <asm/kvm_para.h>
+>   #include <asm/kvm_ppc.h>
+> -#include <kvm/iodev.h>
+>   
+>   #define MAX_CPU     32
+>   #define MAX_SRC     256
+> diff --git a/arch/riscv/kvm/aia_aplic.c b/arch/riscv/kvm/aia_aplic.c
+> index f59d1c0c8c43..bf163724aec5 100644
+> --- a/arch/riscv/kvm/aia_aplic.c
+> +++ b/arch/riscv/kvm/aia_aplic.c
+> @@ -9,10 +9,10 @@
+>   
+>   #include <linux/irqchip/riscv-aplic.h>
+>   #include <linux/kvm_host.h>
+> +#include <linux/kvm_iodev.h>
+>   #include <linux/math.h>
+>   #include <linux/spinlock.h>
+>   #include <linux/swab.h>
+> -#include <kvm/iodev.h>
+>   
+>   struct aplic_irq {
+>   	raw_spinlock_t lock;
+> diff --git a/arch/riscv/kvm/aia_imsic.c b/arch/riscv/kvm/aia_imsic.c
+> index 29ef9c2133a9..ae3c0807baa9 100644
+> --- a/arch/riscv/kvm/aia_imsic.c
+> +++ b/arch/riscv/kvm/aia_imsic.c
+> @@ -11,10 +11,10 @@
+>   #include <linux/bitmap.h>
+>   #include <linux/irqchip/riscv-imsic.h>
+>   #include <linux/kvm_host.h>
+> +#include <linux/kvm_iodev.h>
+>   #include <linux/math.h>
+>   #include <linux/spinlock.h>
+>   #include <linux/swab.h>
+> -#include <kvm/iodev.h>
+>   #include <asm/csr.h>
+>   
+>   #define IMSIC_MAX_EIX	(IMSIC_MAX_ID / BITS_PER_TYPE(u64))
+> diff --git a/arch/x86/kvm/i8254.h b/arch/x86/kvm/i8254.h
+> index a768212ba821..4de7a0b88e4f 100644
+> --- a/arch/x86/kvm/i8254.h
+> +++ b/arch/x86/kvm/i8254.h
+> @@ -4,7 +4,7 @@
+>   
+>   #include <linux/kthread.h>
+>   
+> -#include <kvm/iodev.h>
+> +#include <linux/kvm_iodev.h>
+>   
+>   struct kvm_kpit_channel_state {
+>   	u32 count; /* can be 65536 */
+> diff --git a/arch/x86/kvm/ioapic.h b/arch/x86/kvm/ioapic.h
+> index aa8cb4ac0479..cb36c36affd3 100644
+> --- a/arch/x86/kvm/ioapic.h
+> +++ b/arch/x86/kvm/ioapic.h
+> @@ -3,7 +3,7 @@
+>   #define __KVM_IO_APIC_H
+>   
+>   #include <linux/kvm_host.h>
+> -#include <kvm/iodev.h>
+> +#include <linux/kvm_iodev.h>
+>   #include "irq.h"
+>   
+>   struct kvm;
+> diff --git a/arch/x86/kvm/irq.h b/arch/x86/kvm/irq.h
+> index 76d46b2f41dd..b21b03aa2ee7 100644
+> --- a/arch/x86/kvm/irq.h
+> +++ b/arch/x86/kvm/irq.h
+> @@ -13,9 +13,9 @@
+>   #include <linux/mm_types.h>
+>   #include <linux/hrtimer.h>
+>   #include <linux/kvm_host.h>
+> +#include <linux/kvm_iodev.h>
+>   #include <linux/spinlock.h>
+>   
+> -#include <kvm/iodev.h>
+>   #include "lapic.h"
+>   
+>   #define PIC_NUM_PINS 16
+> diff --git a/arch/x86/kvm/lapic.h b/arch/x86/kvm/lapic.h
+> index 4ce30db65828..43ffbded5f72 100644
+> --- a/arch/x86/kvm/lapic.h
+> +++ b/arch/x86/kvm/lapic.h
+> @@ -2,7 +2,7 @@
+>   #ifndef __KVM_X86_LAPIC_H
+>   #define __KVM_X86_LAPIC_H
+>   
+> -#include <kvm/iodev.h>
+> +#include <linux/kvm_iodev.h>
+>   
+>   #include <linux/kvm_host.h>
+>   
+> diff --git a/include/kvm/iodev.h b/include/linux/kvm_iodev.h
+> similarity index 100%
+> rename from include/kvm/iodev.h
+> rename to include/linux/kvm_iodev.h
+> diff --git a/virt/kvm/coalesced_mmio.c b/virt/kvm/coalesced_mmio.c
+> index 375d6285475e..d0f84e3611da 100644
+> --- a/virt/kvm/coalesced_mmio.c
+> +++ b/virt/kvm/coalesced_mmio.c
+> @@ -9,8 +9,7 @@
+>    *
+>    */
+>   
+> -#include <kvm/iodev.h>
+> -
+> +#include <linux/kvm_iodev.h>
+>   #include <linux/kvm_host.h>
+>   #include <linux/slab.h>
+>   #include <linux/kvm.h>
+> diff --git a/virt/kvm/eventfd.c b/virt/kvm/eventfd.c
+> index 11e5d1e3f12e..35786d59b233 100644
+> --- a/virt/kvm/eventfd.c
+> +++ b/virt/kvm/eventfd.c
+> @@ -26,7 +26,7 @@
+>   #include <linux/irqbypass.h>
+>   #include <trace/events/kvm.h>
+>   
+> -#include <kvm/iodev.h>
+> +#include <linux/kvm_iodev.h>
+>   
+>   #ifdef CONFIG_HAVE_KVM_IRQCHIP
+>   
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index eec82775c5bf..a401ba32ecaa 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -10,9 +10,8 @@
+>    *   Yaniv Kamay  <yaniv@qumranet.com>
+>    */
+>   
+> -#include <kvm/iodev.h>
+> -
+>   #include <linux/kvm_host.h>
+> +#include <linux/kvm_iodev.h>
+>   #include <linux/kvm.h>
+>   #include <linux/module.h>
+>   #include <linux/errno.h>
+> 
+About modification with LoongArch specific.
+Reviewed-by: Bibo Mao <maobibo@loongson.cn>
 
-And even then, people tend to not be happy with the results, because
-the hardware is too inflexible or too rare.
-
-(Replace "network card" with "disk controller" if that's your thing -
-the basic idea is the same: it's worthwhile if it's done natively by
-the IO target, not done by some third party accelerator - and while
-I'm convinced encryption on the disk controller makes sense, I'm not
-sure I'd actually *trust* it from a real cryptographic standpoint if
-you really care about it, because some of those are most definitely
-black boxes with the trust model seemingly being based on the "Trust
-me, Bro" approach to security).
-
-The other case is the "key is physically separate and isn't even under
-kernel control at all", but then it's never about performance in the
-first place (ie security keys etc).
-
-Even if the hardware crypto engine is fast - and as you see, no they
-aren't - any possible performance is absolutely killed by lack of
-caches and the IO overhead.
-
-This seems to also be pretty much true of async SMP crypto on the CPU
-as well.  You can get better benchmarks by offloading the crypto to
-other CPU's, but I'm not convinced it's actually a good trade-off in
-reality. The cost of scheduling and just all the overhead of
-synchronization is very very real, and the benchmarks where it looks
-good tend to be the "we do nothing else, and we don't actually touch
-the data anyway, it's just purely about pointless benchmarking".
-
-Just the set-up costs for doing things asynchronously can be higher
-than the cost of just doing the operation itself.
-
-             Linus
 
