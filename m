@@ -1,407 +1,274 @@
-Return-Path: <linux-mips+bounces-9314-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9315-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22B45ADA574
-	for <lists+linux-mips@lfdr.de>; Mon, 16 Jun 2025 03:15:19 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 568B1ADA5BE
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Jun 2025 03:42:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 06B467A51D6
-	for <lists+linux-mips@lfdr.de>; Mon, 16 Jun 2025 01:13:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 44D427A13C3
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Jun 2025 01:40:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 695F9481B6;
-	Mon, 16 Jun 2025 01:15:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03F19287504;
+	Mon, 16 Jun 2025 01:41:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F6u+Y88r"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A75241547C9;
-	Mon, 16 Jun 2025 01:15:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0903287500;
+	Mon, 16 Jun 2025 01:41:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750036515; cv=none; b=nudtRxQPO9MJuyDOCr23AGFFXFCR1mc0VjRRRhBVaGLLmYohGDxXau9kBW/dDd0dT+Bkrwz/qIws+Ewgot3IfMVKXV+9OT2k6kH5ACXXM7xSq7/7u7bEM1ph4OFfWSLMu8KFjiunub+dxPUbHas8XMukxjY1Q5HJaslPVr/ukTw=
+	t=1750038113; cv=none; b=e+SfK+0y7N9HoNl0F4/oLTseTJrbTHJaMx8zWE9wZZb6osaEXDRZffsXcnE+kCzU4L6qsnSrb/9w68lNN8ZuGjCaspIEi4aR5GVWqV2KqxJYTnk3ukzRHLqPbfE7/flPvyCczyCp8Fx6QCOUZ6rrFcZzcpXUynJLc2rd+bIOpG4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750036515; c=relaxed/simple;
-	bh=dvTGtxAknQfEoc4zbDY1V7wwkCrQM97z3Atd+/H9l4g=;
-	h=Subject:To:Cc:References:From:Message-ID:Date:MIME-Version:
-	 In-Reply-To:Content-Type; b=faKtu9yOH/piR8rpkUAK7rD1cbUaFvRm+BxRUsk6cNwLwe4uF8rGPhpU6pTaROLqEadmGvAL9GE+OL0sdeeTorfHi29iqQYD0OS4oZkG13QmReKISXXPtSjO98wdje38fjOifOCHKWWl5cp+UJ7tr7olpOI9uSurw5wYpd0A6eo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [10.20.42.62])
-	by gateway (Coremail) with SMTP id _____8AxnOIVcE9owWYXAQ--.19204S3;
-	Mon, 16 Jun 2025 09:15:01 +0800 (CST)
-Received: from [10.20.42.62] (unknown [10.20.42.62])
-	by front1 (Coremail) with SMTP id qMiowMDxH+UGcE9oJlYcAQ--.19628S3;
-	Mon, 16 Jun 2025 09:14:49 +0800 (CST)
-Subject: Re: [PATCH 4/8] KVM: Move include/kvm/iodev.h to include/linux as
- kvm_iodev.h
-To: Sean Christopherson <seanjc@google.com>, Marc Zyngier <maz@kernel.org>,
- Oliver Upton <oliver.upton@linux.dev>, Tianrui Zhao
- <zhaotianrui@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
- Madhavan Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Janosch Frank <frankja@linux.ibm.com>,
- Claudio Imbrenda <imbrenda@linux.ibm.com>,
- Paolo Bonzini <pbonzini@redhat.com>
-Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
- kvm@vger.kernel.org, loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
- linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- Anish Ghulati <aghulati@google.com>, Colton Lewis <coltonlewis@google.com>,
- Thomas Huth <thuth@redhat.com>
-References: <20250611001042.170501-1-seanjc@google.com>
- <20250611001042.170501-5-seanjc@google.com>
-From: Bibo Mao <maobibo@loongson.cn>
-Message-ID: <50a32984-f2ed-249a-c055-81ad35e1fa51@loongson.cn>
-Date: Mon, 16 Jun 2025 09:13:23 +0800
-User-Agent: Mozilla/5.0 (X11; Linux loongarch64; rv:68.0) Gecko/20100101
- Thunderbird/68.7.0
+	s=arc-20240116; t=1750038113; c=relaxed/simple;
+	bh=y2sfSOcIVIm5TLfKyQ/mKLJQuEYlH2/C3vDsfThYsOQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ko6AFJvRx9R+Or0XRO9awzRJRz0Zb+apJ68GBZH+dAWxg7IVJsMgnbg/I+rrrM3wGKIkjIVagcrGsv6cTeA2hn1xGVkXZcWIMNJMOQ3hMVnOCcEll8vcKBGlmZYZXR26Cwbat8v5ZP5tGl9GIyqe8mduGlMOxmpY/zWldHRF/aA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F6u+Y88r; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DA266C4CEE3;
+	Mon, 16 Jun 2025 01:41:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750038113;
+	bh=y2sfSOcIVIm5TLfKyQ/mKLJQuEYlH2/C3vDsfThYsOQ=;
+	h=From:To:Cc:Subject:Date:From;
+	b=F6u+Y88r8vCozKhMCTzW2dZdkrJcwXbJDB1FSnsp95/7isEVv89ggIP9yDlbCC0S3
+	 /BXK7SzXm8ldeLwexN2XjhlqUqygRif3DxjcrH8y4Di8rAXRRV5z81+3LYgBRTuKvT
+	 NjnPqSO4515WsN5VWoDAJ9AYGAOPLq7Qy1jUgm6Ufbv80qnwyebgwUWWowSM6ZvVJN
+	 91lm0uwCzLAd443g1dDNPBlTWTiCBDU62YmnNLTmJ+lpnT8C19rkRy9KgC+s4SZOHg
+	 6WDEe1J8iRxTjFQ1l4lI5Pxg9ndmU43AiL3tEc1R3zJoeMt7+2dguorpPn1FX4Gqor
+	 wbd89LkQaOjHw==
+From: Eric Biggers <ebiggers@kernel.org>
+To: linux-crypto@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mips@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org,
+	sparclinux@vger.kernel.org,
+	x86@kernel.org,
+	Ard Biesheuvel <ardb@kernel.org>,
+	"Jason A . Donenfeld" <Jason@zx2c4.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>
+Subject: [PATCH v2 00/17] SHA-512 library functions
+Date: Sun, 15 Jun 2025 18:40:02 -0700
+Message-ID: <20250616014019.415791-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <20250611001042.170501-5-seanjc@google.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowMDxH+UGcE9oJlYcAQ--.19628S3
-X-CM-SenderInfo: xpdruxter6z05rqj20fqof0/
-X-Coremail-Antispam: 1Uk129KBj93XoWfGr4rtr1fJrW8Cr1ktFW3XFc_yoWDAFWxpF
-	4DCF4kAr43Cr18JF9Fy3ZIvFyUXws5Kr1UKa4UuFWUAw1aqr1kXw4vkrn8tFn5Aayvqa10
-	gFWagF15Zw4UX3gCm3ZEXasCq-sJn29KB7ZKAUJUUUUJ529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUPab4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW8Jr0_Cr1UM28EF7xvwVC2z280aVCY1x0267AK
-	xVW8Jr0_Cr1UM2kKe7AKxVWUtVW8ZwAS0I0E0xvYzxvE52x082IY62kv0487Mc804VCY07
-	AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWU
-	tVWrXwAv7VC2z280aVAFwI0_Gr0_Cr1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcVAKI4
-	8JMxk0xIA0c2IEe2xFo4CEbIxvr21lc7CjxVAaw2AFwI0_GFv_Wryl42xK82IYc2Ij64vI
-	r41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xFxVAFwI0_Jw0_GFylx2IqxVAqx4xG67
-	AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r4a6rW5MIIY
-	rxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14
-	v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVW8JVWx
-	JwCI42IY6I8E87Iv6xkF7I0E14v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjxUShiSDU
-	UUU
+
+This series applies to v6.16-rc1 and is targeting the libcrypto-next
+tree.  It is also available at:
+
+    git fetch https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git sha512-lib-v2
+
+This series adds support for SHA-384, SHA-512, HMAC-SHA384, and
+HMAC-SHA512 to lib/crypto/.  The new functions take advantage of the
+kernel's existing architecture-optimized implementations of the SHA-512
+compression function.  The new functions are fully tested using KUnit.
+
+To avoid duplicating all arch-optimized implementations of the SHA-512
+compression function (~3000 lines of code total), they are moved into
+lib/crypto/ rather than copied.  To make the "sha384", "sha512",
+"hmac(sha384)", and "hmac(sha512)" crypto_shash algorithms in the
+old-school crypto API continue to be properly optimized after that, they
+are reimplemented on top of lib/crypto/, which is straightforward.
+
+The following lists some of the design choices and conventions that I've
+followed in more detail.  Where these differ from the code or APIs for
+other algorithms (e.g., SHA-256 in some cases), I'd like to do it this
+way going forward and plan to fix up the other algorithms accordingly:
+
+- APIs are fully documented with kerneldoc comments.
+
+- APIs cannot fail, and return void.
+
+- APIs work in all contexts.  This doesn't mean that they *should* be
+  called in all contexts, but rather they always just work as expected.
+
+- Tests are KUnit tests, and they are fairly thorough (more thorough
+  than crypto/testmgr.c) and also optionally include benchmarks.
+
+- Architecture-optimized code is integrated the same way I'm doing it
+  for lib/crc/: it's in subdirectories lib/crypto/$(SRCARCH), it's
+  enabled by default, and it's inlined into the same module as the
+  generic code.  This solves a number of problems; for more details, see
+  https://lore.kernel.org/r/20250607200454.73587-1-ebiggers@kernel.org
+
+- HMAC support is a first-class citizen.
+
+- APIs handle zeroization, when applicable.
+
+- Message contexts are *_ctx instead of *_state.  It's shorter, avoids
+  ambiguity with the compression function state, and matches OpenSSL.
+
+- Length arguments are size_t, are in bytes, are named len or *_len, and
+  immediately follow the corresponding buffer.  "Object" being operated
+  on is first argument; outputs otherwise follow inputs.
+
+- The structures for different algorithms use different types, which
+  prevents usage errors where functions are mixed up between algorithms.
+
+- The compression function state is strongly typed, not a plain array.
+
+Changed in v2:
+- Added "crypto: sha512 - use same state format as legacy drivers"
+- Fixed build on user-mode Linux
+- Fixed W=1 build warning by adding <linux/export.h>
+- Optimized __sha512_final() and __hmac_sha512_final() slightly
+
+Eric Biggers (17):
+  crypto: sha512 - rename conflicting symbols
+  lib/crypto/sha512: add support for SHA-384 and SHA-512
+  lib/crypto/sha512: add HMAC-SHA384 and HMAC-SHA512 support
+  lib/crypto/sha512: add KUnit tests for SHA-384 and SHA-512
+  lib/crypto/sha256: add KUnit tests for SHA-224 and SHA-256
+  crypto: riscv/sha512 - stop depending on sha512_generic_block_fn
+  crypto: sha512 - replace sha512_generic with wrapper around SHA-512
+    library
+  crypto: sha512 - use same state format as legacy drivers
+  lib/crypto/sha512: migrate arm-optimized SHA-512 code to library
+  lib/crypto/sha512: migrate arm64-optimized SHA-512 code to library
+  mips: cavium-octeon: move octeon-crypto.h into asm directory
+  lib/crypto/sha512: migrate mips-optimized SHA-512 code to library
+  lib/crypto/sha512: migrate riscv-optimized SHA-512 code to library
+  lib/crypto/sha512: migrate s390-optimized SHA-512 code to library
+  lib/crypto/sha512: migrate sparc-optimized SHA-512 code to library
+  lib/crypto/sha512: migrate x86-optimized SHA-512 code to library
+  crypto: sha512 - remove sha512_base.h
+
+ arch/arm/configs/exynos_defconfig             |   1 -
+ arch/arm/configs/milbeaut_m10v_defconfig      |   1 -
+ arch/arm/configs/multi_v7_defconfig           |   1 -
+ arch/arm/configs/omap2plus_defconfig          |   1 -
+ arch/arm/configs/pxa_defconfig                |   1 -
+ arch/arm/crypto/Kconfig                       |  10 -
+ arch/arm/crypto/Makefile                      |  15 -
+ arch/arm/crypto/sha512-glue.c                 | 110 ---
+ arch/arm/crypto/sha512-neon-glue.c            |  75 --
+ arch/arm/crypto/sha512.h                      |   3 -
+ arch/arm64/configs/defconfig                  |   1 -
+ arch/arm64/crypto/Kconfig                     |  19 -
+ arch/arm64/crypto/Makefile                    |  14 -
+ arch/arm64/crypto/sha512-ce-glue.c            |  96 ---
+ arch/arm64/crypto/sha512-glue.c               |  83 ---
+ arch/mips/cavium-octeon/crypto/Makefile       |   1 -
+ .../mips/cavium-octeon/crypto/octeon-crypto.c |   3 +-
+ arch/mips/cavium-octeon/crypto/octeon-md5.c   |   3 +-
+ arch/mips/cavium-octeon/crypto/octeon-sha1.c  |   3 +-
+ .../mips/cavium-octeon/crypto/octeon-sha256.c |   3 +-
+ .../mips/cavium-octeon/crypto/octeon-sha512.c | 167 -----
+ arch/mips/configs/cavium_octeon_defconfig     |   1 -
+ arch/mips/crypto/Kconfig                      |  10 -
+ .../asm/octeon/crypto.h}                      |   0
+ arch/riscv/crypto/Kconfig                     |  11 -
+ arch/riscv/crypto/Makefile                    |   3 -
+ arch/riscv/crypto/sha512-riscv64-glue.c       | 124 ----
+ arch/s390/configs/debug_defconfig             |   1 -
+ arch/s390/configs/defconfig                   |   1 -
+ arch/s390/crypto/Kconfig                      |  10 -
+ arch/s390/crypto/Makefile                     |   1 -
+ arch/s390/crypto/sha512_s390.c                | 151 ----
+ arch/sparc/crypto/Kconfig                     |  10 -
+ arch/sparc/crypto/Makefile                    |   2 -
+ arch/sparc/crypto/sha512_glue.c               | 122 ----
+ arch/x86/crypto/Kconfig                       |  13 -
+ arch/x86/crypto/Makefile                      |   3 -
+ arch/x86/crypto/sha512_ssse3_glue.c           | 322 ---------
+ crypto/Kconfig                                |   4 +-
+ crypto/Makefile                               |   2 +-
+ crypto/sha512.c                               | 338 +++++++++
+ crypto/sha512_generic.c                       | 217 ------
+ crypto/testmgr.c                              |  16 +
+ drivers/crypto/starfive/jh7110-hash.c         |   8 +-
+ include/crypto/sha2.h                         | 350 +++++++++
+ include/crypto/sha512_base.h                  | 120 ----
+ lib/crypto/Kconfig                            |  20 +
+ lib/crypto/Makefile                           |  38 +
+ lib/crypto/arm/.gitignore                     |   2 +
+ .../crypto => lib/crypto/arm}/sha512-armv4.pl |   0
+ lib/crypto/arm/sha512.h                       |  38 +
+ lib/crypto/arm64/.gitignore                   |   2 +
+ .../crypto/arm64}/sha512-ce-core.S            |  10 +-
+ lib/crypto/arm64/sha512.h                     |  46 ++
+ lib/crypto/mips/sha512.h                      |  74 ++
+ .../riscv}/sha512-riscv64-zvknhb-zvkb.S       |   4 +-
+ lib/crypto/riscv/sha512.h                     |  41 ++
+ lib/crypto/s390/sha512.h                      |  28 +
+ lib/crypto/sha512.c                           | 400 +++++++++++
+ lib/crypto/sparc/sha512.h                     |  42 ++
+ .../crypto => lib/crypto/sparc}/sha512_asm.S  |   0
+ lib/crypto/tests/Kconfig                      |  24 +
+ lib/crypto/tests/Makefile                     |   6 +
+ lib/crypto/tests/hash-test-template.h         | 512 ++++++++++++++
+ lib/crypto/tests/sha224-testvecs.h            | 223 ++++++
+ lib/crypto/tests/sha224_kunit.c               |  50 ++
+ lib/crypto/tests/sha256-testvecs.h            | 223 ++++++
+ lib/crypto/tests/sha256_kunit.c               |  39 ++
+ lib/crypto/tests/sha384-testvecs.h            | 566 +++++++++++++++
+ lib/crypto/tests/sha384_kunit.c               |  48 ++
+ lib/crypto/tests/sha512-testvecs.h            | 662 ++++++++++++++++++
+ lib/crypto/tests/sha512_kunit.c               |  48 ++
+ .../crypto/x86}/sha512-avx-asm.S              |  11 +-
+ .../crypto/x86}/sha512-avx2-asm.S             |  11 +-
+ .../crypto/x86}/sha512-ssse3-asm.S            |  12 +-
+ lib/crypto/x86/sha512.h                       |  54 ++
+ scripts/crypto/gen-hash-testvecs.py           |  83 +++
+ 77 files changed, 4012 insertions(+), 1756 deletions(-)
+ delete mode 100644 arch/arm/crypto/sha512-glue.c
+ delete mode 100644 arch/arm/crypto/sha512-neon-glue.c
+ delete mode 100644 arch/arm/crypto/sha512.h
+ delete mode 100644 arch/arm64/crypto/sha512-ce-glue.c
+ delete mode 100644 arch/arm64/crypto/sha512-glue.c
+ delete mode 100644 arch/mips/cavium-octeon/crypto/octeon-sha512.c
+ rename arch/mips/{cavium-octeon/crypto/octeon-crypto.h => include/asm/octeon/crypto.h} (100%)
+ delete mode 100644 arch/riscv/crypto/sha512-riscv64-glue.c
+ delete mode 100644 arch/s390/crypto/sha512_s390.c
+ delete mode 100644 arch/sparc/crypto/sha512_glue.c
+ delete mode 100644 arch/x86/crypto/sha512_ssse3_glue.c
+ create mode 100644 crypto/sha512.c
+ delete mode 100644 crypto/sha512_generic.c
+ delete mode 100644 include/crypto/sha512_base.h
+ create mode 100644 lib/crypto/arm/.gitignore
+ rename {arch/arm/crypto => lib/crypto/arm}/sha512-armv4.pl (100%)
+ create mode 100644 lib/crypto/arm/sha512.h
+ create mode 100644 lib/crypto/arm64/.gitignore
+ rename {arch/arm64/crypto => lib/crypto/arm64}/sha512-ce-core.S (97%)
+ create mode 100644 lib/crypto/arm64/sha512.h
+ create mode 100644 lib/crypto/mips/sha512.h
+ rename {arch/riscv/crypto => lib/crypto/riscv}/sha512-riscv64-zvknhb-zvkb.S (98%)
+ create mode 100644 lib/crypto/riscv/sha512.h
+ create mode 100644 lib/crypto/s390/sha512.h
+ create mode 100644 lib/crypto/sha512.c
+ create mode 100644 lib/crypto/sparc/sha512.h
+ rename {arch/sparc/crypto => lib/crypto/sparc}/sha512_asm.S (100%)
+ create mode 100644 lib/crypto/tests/Kconfig
+ create mode 100644 lib/crypto/tests/Makefile
+ create mode 100644 lib/crypto/tests/hash-test-template.h
+ create mode 100644 lib/crypto/tests/sha224-testvecs.h
+ create mode 100644 lib/crypto/tests/sha224_kunit.c
+ create mode 100644 lib/crypto/tests/sha256-testvecs.h
+ create mode 100644 lib/crypto/tests/sha256_kunit.c
+ create mode 100644 lib/crypto/tests/sha384-testvecs.h
+ create mode 100644 lib/crypto/tests/sha384_kunit.c
+ create mode 100644 lib/crypto/tests/sha512-testvecs.h
+ create mode 100644 lib/crypto/tests/sha512_kunit.c
+ rename {arch/x86/crypto => lib/crypto/x86}/sha512-avx-asm.S (97%)
+ rename {arch/x86/crypto => lib/crypto/x86}/sha512-avx2-asm.S (98%)
+ rename {arch/x86/crypto => lib/crypto/x86}/sha512-ssse3-asm.S (97%)
+ create mode 100644 lib/crypto/x86/sha512.h
+ create mode 100755 scripts/crypto/gen-hash-testvecs.py
 
 
-
-On 2025/6/11 上午8:10, Sean Christopherson wrote:
-> Move iodev.h, the last remaining holdout in include/kvm, to the standard
-> include/linux directory as kvm_iodev.h and delete include/kvm.
-> 
-> Acked-by: Anup Patel <anup@brainfault.org>
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->   MAINTAINERS                                | 1 -
->   arch/arm64/include/asm/kvm_vgic.h          | 2 +-
->   arch/arm64/kvm/vgic/vgic-mmio-v2.c         | 2 +-
->   arch/arm64/kvm/vgic/vgic-mmio-v3.c         | 2 +-
->   arch/arm64/kvm/vgic/vgic-mmio.c            | 2 +-
->   arch/loongarch/include/asm/kvm_eiointc.h   | 2 +-
->   arch/loongarch/include/asm/kvm_ipi.h       | 2 +-
->   arch/loongarch/include/asm/kvm_pch_pic.h   | 2 +-
->   arch/mips/include/asm/kvm_host.h           | 3 +--
->   arch/powerpc/kvm/mpic.c                    | 2 +-
->   arch/riscv/kvm/aia_aplic.c                 | 2 +-
->   arch/riscv/kvm/aia_imsic.c                 | 2 +-
->   arch/x86/kvm/i8254.h                       | 2 +-
->   arch/x86/kvm/ioapic.h                      | 2 +-
->   arch/x86/kvm/irq.h                         | 2 +-
->   arch/x86/kvm/lapic.h                       | 2 +-
->   include/{kvm/iodev.h => linux/kvm_iodev.h} | 0
->   virt/kvm/coalesced_mmio.c                  | 3 +--
->   virt/kvm/eventfd.c                         | 2 +-
->   virt/kvm/kvm_main.c                        | 3 +--
->   20 files changed, 18 insertions(+), 22 deletions(-)
->   rename include/{kvm/iodev.h => linux/kvm_iodev.h} (100%)
-> 
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 10cf54c8f727..a2cd432273e5 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -13011,7 +13011,6 @@ W:	http://www.linux-kvm.org
->   T:	git git://git.kernel.org/pub/scm/virt/kvm/kvm.git
->   F:	Documentation/virt/kvm/
->   F:	include/asm-generic/kvm*
-> -F:	include/kvm/iodev.h
->   F:	include/linux/kvm*
->   F:	include/trace/events/kvm.h
->   F:	include/uapi/asm-generic/kvm*
-> diff --git a/arch/arm64/include/asm/kvm_vgic.h b/arch/arm64/include/asm/kvm_vgic.h
-> index 4a34f7f0a864..09d7f628fa3b 100644
-> --- a/arch/arm64/include/asm/kvm_vgic.h
-> +++ b/arch/arm64/include/asm/kvm_vgic.h
-> @@ -14,7 +14,7 @@
->   #include <linux/static_key.h>
->   #include <linux/types.h>
->   #include <linux/xarray.h>
-> -#include <kvm/iodev.h>
-> +#include <linux/kvm_iodev.h>
->   #include <linux/list.h>
->   #include <linux/jump_label.h>
->   
-> diff --git a/arch/arm64/kvm/vgic/vgic-mmio-v2.c b/arch/arm64/kvm/vgic/vgic-mmio-v2.c
-> index d00c8a74fad6..889440a8b129 100644
-> --- a/arch/arm64/kvm/vgic/vgic-mmio-v2.c
-> +++ b/arch/arm64/kvm/vgic/vgic-mmio-v2.c
-> @@ -6,9 +6,9 @@
->   #include <linux/irqchip/arm-gic.h>
->   #include <linux/kvm.h>
->   #include <linux/kvm_host.h>
-> +#include <linux/kvm_iodev.h>
->   #include <linux/nospec.h>
->   
-> -#include <kvm/iodev.h>
->   #include <asm/kvm_vgic.h>
->   
->   #include "vgic.h"
-> diff --git a/arch/arm64/kvm/vgic/vgic-mmio-v3.c b/arch/arm64/kvm/vgic/vgic-mmio-v3.c
-> index 505d4e389885..db95d3ccbd14 100644
-> --- a/arch/arm64/kvm/vgic/vgic-mmio-v3.c
-> +++ b/arch/arm64/kvm/vgic/vgic-mmio-v3.c
-> @@ -7,8 +7,8 @@
->   #include <linux/irqchip/arm-gic-v3.h>
->   #include <linux/kvm.h>
->   #include <linux/kvm_host.h>
-> +#include <linux/kvm_iodev.h>
->   #include <linux/interrupt.h>
-> -#include <kvm/iodev.h>
->   
->   #include <asm/kvm_emulate.h>
->   #include <asm/kvm_arm.h>
-> diff --git a/arch/arm64/kvm/vgic/vgic-mmio.c b/arch/arm64/kvm/vgic/vgic-mmio.c
-> index ec1b13abc728..de689e0e881f 100644
-> --- a/arch/arm64/kvm/vgic/vgic-mmio.c
-> +++ b/arch/arm64/kvm/vgic/vgic-mmio.c
-> @@ -9,7 +9,7 @@
->   #include <linux/irq.h>
->   #include <linux/kvm.h>
->   #include <linux/kvm_host.h>
-> -#include <kvm/iodev.h>
-> +#include <linux/kvm_iodev.h>
->   #include <asm/kvm_arch_timer.h>
->   #include <asm/kvm_vgic.h>
->   
-> diff --git a/arch/loongarch/include/asm/kvm_eiointc.h b/arch/loongarch/include/asm/kvm_eiointc.h
-> index a3a40aba8acf..0049b0b79477 100644
-> --- a/arch/loongarch/include/asm/kvm_eiointc.h
-> +++ b/arch/loongarch/include/asm/kvm_eiointc.h
-> @@ -6,7 +6,7 @@
->   #ifndef __ASM_KVM_EIOINTC_H
->   #define __ASM_KVM_EIOINTC_H
->   
-> -#include <kvm/iodev.h>
-> +#include <linux/kvm_iodev.h>
->   
->   #define EIOINTC_IRQS			256
->   #define EIOINTC_ROUTE_MAX_VCPUS		256
-> diff --git a/arch/loongarch/include/asm/kvm_ipi.h b/arch/loongarch/include/asm/kvm_ipi.h
-> index 060163dfb4a3..3956b230f087 100644
-> --- a/arch/loongarch/include/asm/kvm_ipi.h
-> +++ b/arch/loongarch/include/asm/kvm_ipi.h
-> @@ -6,7 +6,7 @@
->   #ifndef __ASM_KVM_IPI_H
->   #define __ASM_KVM_IPI_H
->   
-> -#include <kvm/iodev.h>
-> +#include <linux/kvm_iodev.h>
->   
->   #define LARCH_INT_IPI			12
->   
-> diff --git a/arch/loongarch/include/asm/kvm_pch_pic.h b/arch/loongarch/include/asm/kvm_pch_pic.h
-> index e6df6a4c1c70..4b37e3134e52 100644
-> --- a/arch/loongarch/include/asm/kvm_pch_pic.h
-> +++ b/arch/loongarch/include/asm/kvm_pch_pic.h
-> @@ -6,7 +6,7 @@
->   #ifndef __ASM_KVM_PCH_PIC_H
->   #define __ASM_KVM_PCH_PIC_H
->   
-> -#include <kvm/iodev.h>
-> +#include <linux/kvm_iodev.h>
->   
->   #define PCH_PIC_SIZE			0x3e8
->   
-> diff --git a/arch/mips/include/asm/kvm_host.h b/arch/mips/include/asm/kvm_host.h
-> index c14b10821817..0d7dd89ca5bf 100644
-> --- a/arch/mips/include/asm/kvm_host.h
-> +++ b/arch/mips/include/asm/kvm_host.h
-> @@ -16,6 +16,7 @@
->   #include <linux/interrupt.h>
->   #include <linux/types.h>
->   #include <linux/kvm.h>
-> +#include <linux/kvm_iodev.h>
->   #include <linux/kvm_types.h>
->   #include <linux/threads.h>
->   #include <linux/spinlock.h>
-> @@ -24,8 +25,6 @@
->   #include <asm/inst.h>
->   #include <asm/mipsregs.h>
->   
-> -#include <kvm/iodev.h>
-> -
->   /* MIPS KVM register ids */
->   #define MIPS_CP0_32(_R, _S)					\
->   	(KVM_REG_MIPS_CP0 | KVM_REG_SIZE_U32 | (8 * (_R) + (_S)))
-> diff --git a/arch/powerpc/kvm/mpic.c b/arch/powerpc/kvm/mpic.c
-> index 23e9c2bd9f27..b25a03251544 100644
-> --- a/arch/powerpc/kvm/mpic.c
-> +++ b/arch/powerpc/kvm/mpic.c
-> @@ -26,6 +26,7 @@
->   #include <linux/slab.h>
->   #include <linux/mutex.h>
->   #include <linux/kvm_host.h>
-> +#include <linux/kvm_iodev.h>
->   #include <linux/errno.h>
->   #include <linux/fs.h>
->   #include <linux/anon_inodes.h>
-> @@ -33,7 +34,6 @@
->   #include <asm/mpic.h>
->   #include <asm/kvm_para.h>
->   #include <asm/kvm_ppc.h>
-> -#include <kvm/iodev.h>
->   
->   #define MAX_CPU     32
->   #define MAX_SRC     256
-> diff --git a/arch/riscv/kvm/aia_aplic.c b/arch/riscv/kvm/aia_aplic.c
-> index f59d1c0c8c43..bf163724aec5 100644
-> --- a/arch/riscv/kvm/aia_aplic.c
-> +++ b/arch/riscv/kvm/aia_aplic.c
-> @@ -9,10 +9,10 @@
->   
->   #include <linux/irqchip/riscv-aplic.h>
->   #include <linux/kvm_host.h>
-> +#include <linux/kvm_iodev.h>
->   #include <linux/math.h>
->   #include <linux/spinlock.h>
->   #include <linux/swab.h>
-> -#include <kvm/iodev.h>
->   
->   struct aplic_irq {
->   	raw_spinlock_t lock;
-> diff --git a/arch/riscv/kvm/aia_imsic.c b/arch/riscv/kvm/aia_imsic.c
-> index 29ef9c2133a9..ae3c0807baa9 100644
-> --- a/arch/riscv/kvm/aia_imsic.c
-> +++ b/arch/riscv/kvm/aia_imsic.c
-> @@ -11,10 +11,10 @@
->   #include <linux/bitmap.h>
->   #include <linux/irqchip/riscv-imsic.h>
->   #include <linux/kvm_host.h>
-> +#include <linux/kvm_iodev.h>
->   #include <linux/math.h>
->   #include <linux/spinlock.h>
->   #include <linux/swab.h>
-> -#include <kvm/iodev.h>
->   #include <asm/csr.h>
->   
->   #define IMSIC_MAX_EIX	(IMSIC_MAX_ID / BITS_PER_TYPE(u64))
-> diff --git a/arch/x86/kvm/i8254.h b/arch/x86/kvm/i8254.h
-> index a768212ba821..4de7a0b88e4f 100644
-> --- a/arch/x86/kvm/i8254.h
-> +++ b/arch/x86/kvm/i8254.h
-> @@ -4,7 +4,7 @@
->   
->   #include <linux/kthread.h>
->   
-> -#include <kvm/iodev.h>
-> +#include <linux/kvm_iodev.h>
->   
->   struct kvm_kpit_channel_state {
->   	u32 count; /* can be 65536 */
-> diff --git a/arch/x86/kvm/ioapic.h b/arch/x86/kvm/ioapic.h
-> index aa8cb4ac0479..cb36c36affd3 100644
-> --- a/arch/x86/kvm/ioapic.h
-> +++ b/arch/x86/kvm/ioapic.h
-> @@ -3,7 +3,7 @@
->   #define __KVM_IO_APIC_H
->   
->   #include <linux/kvm_host.h>
-> -#include <kvm/iodev.h>
-> +#include <linux/kvm_iodev.h>
->   #include "irq.h"
->   
->   struct kvm;
-> diff --git a/arch/x86/kvm/irq.h b/arch/x86/kvm/irq.h
-> index 76d46b2f41dd..b21b03aa2ee7 100644
-> --- a/arch/x86/kvm/irq.h
-> +++ b/arch/x86/kvm/irq.h
-> @@ -13,9 +13,9 @@
->   #include <linux/mm_types.h>
->   #include <linux/hrtimer.h>
->   #include <linux/kvm_host.h>
-> +#include <linux/kvm_iodev.h>
->   #include <linux/spinlock.h>
->   
-> -#include <kvm/iodev.h>
->   #include "lapic.h"
->   
->   #define PIC_NUM_PINS 16
-> diff --git a/arch/x86/kvm/lapic.h b/arch/x86/kvm/lapic.h
-> index 4ce30db65828..43ffbded5f72 100644
-> --- a/arch/x86/kvm/lapic.h
-> +++ b/arch/x86/kvm/lapic.h
-> @@ -2,7 +2,7 @@
->   #ifndef __KVM_X86_LAPIC_H
->   #define __KVM_X86_LAPIC_H
->   
-> -#include <kvm/iodev.h>
-> +#include <linux/kvm_iodev.h>
->   
->   #include <linux/kvm_host.h>
->   
-> diff --git a/include/kvm/iodev.h b/include/linux/kvm_iodev.h
-> similarity index 100%
-> rename from include/kvm/iodev.h
-> rename to include/linux/kvm_iodev.h
-> diff --git a/virt/kvm/coalesced_mmio.c b/virt/kvm/coalesced_mmio.c
-> index 375d6285475e..d0f84e3611da 100644
-> --- a/virt/kvm/coalesced_mmio.c
-> +++ b/virt/kvm/coalesced_mmio.c
-> @@ -9,8 +9,7 @@
->    *
->    */
->   
-> -#include <kvm/iodev.h>
-> -
-> +#include <linux/kvm_iodev.h>
->   #include <linux/kvm_host.h>
->   #include <linux/slab.h>
->   #include <linux/kvm.h>
-> diff --git a/virt/kvm/eventfd.c b/virt/kvm/eventfd.c
-> index 11e5d1e3f12e..35786d59b233 100644
-> --- a/virt/kvm/eventfd.c
-> +++ b/virt/kvm/eventfd.c
-> @@ -26,7 +26,7 @@
->   #include <linux/irqbypass.h>
->   #include <trace/events/kvm.h>
->   
-> -#include <kvm/iodev.h>
-> +#include <linux/kvm_iodev.h>
->   
->   #ifdef CONFIG_HAVE_KVM_IRQCHIP
->   
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index eec82775c5bf..a401ba32ecaa 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -10,9 +10,8 @@
->    *   Yaniv Kamay  <yaniv@qumranet.com>
->    */
->   
-> -#include <kvm/iodev.h>
-> -
->   #include <linux/kvm_host.h>
-> +#include <linux/kvm_iodev.h>
->   #include <linux/kvm.h>
->   #include <linux/module.h>
->   #include <linux/errno.h>
-> 
-About modification with LoongArch specific.
-Reviewed-by: Bibo Mao <maobibo@loongson.cn>
+base-commit: 19272b37aa4f83ca52bdf9c16d5d81bdd1354494
+-- 
+2.49.0
 
 
