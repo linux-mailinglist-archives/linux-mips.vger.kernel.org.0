@@ -1,73 +1,104 @@
-Return-Path: <linux-mips+bounces-9333-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9334-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 83DF8ADA709
-	for <lists+linux-mips@lfdr.de>; Mon, 16 Jun 2025 06:09:31 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 01932ADA919
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Jun 2025 09:16:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 917823AFF2E
-	for <lists+linux-mips@lfdr.de>; Mon, 16 Jun 2025 04:09:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 40BB5188657A
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Jun 2025 07:17:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38D80155C88;
-	Mon, 16 Jun 2025 04:09:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 928743595A;
+	Mon, 16 Jun 2025 07:16:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b="Dkr31hJx"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="qAY4VVpi"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from abb.hmeau.com (abb.hmeau.com [144.6.53.87])
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEE5A748D;
-	Mon, 16 Jun 2025 04:09:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=144.6.53.87
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BE613208;
+	Mon, 16 Jun 2025 07:16:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750046965; cv=none; b=lGrPN1l4+3G5Q/OHI5sxgUInm3UXfB9W2OnqzydekI/dFp2nQB5ADCQG1rsFqlawVr45BDCzsjFUZgTahfLS9fTe0otobNdZXP/BsyWjukNaP48LOhPOiMM/FFfHWpij+gNTOzOLwWrH1kTk1oJy+CNZMFNt1z0h57RXK5zArZA=
+	t=1750058208; cv=none; b=CKXYvY0oB8K/i5+3fRELydwvXsM2L01G6uHTOjq2OtPzi7Ealqa1n5kID+wAdhS2UrJ+7cfkLRhBMpb18Qnjk2P+znLbA2OB6q7So39hS8QBKw7UjPXA8PISK5Lj7gOzKZqjnNRN5O1WjNlky5PCxiD9WqO3SgXkqVo4zsqiz34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750046965; c=relaxed/simple;
-	bh=djI8g1JpgsRAjUj8Dc2+uUnKHr91231GLP6XPF8dB3E=;
+	s=arc-20240116; t=1750058208; c=relaxed/simple;
+	bh=8oS9W40Kxi3jCDLjbplhmNHApFzpmxWBjEyHqggrd0A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WOJnvsuNjiD1QroWhQmK1O+iGYcMXo64n/hd81Ec9SjrRnEJlnhEVRj95eD3AvaEoX7YCnfQBV5Z8Ll93HEcXEiLtYkdxucXM8UPUXIjP8CUyokk2YzNHa3TKd1L7Aq6BXhxZRo57jkGriSW0c8zVx1iZZFCFsOc/0Ae6nLVQzs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au; spf=pass smtp.mailfrom=gondor.apana.org.au; dkim=pass (2048-bit key) header.d=hmeau.com header.i=@hmeau.com header.b=Dkr31hJx; arc=none smtp.client-ip=144.6.53.87
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gondor.apana.org.au
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gondor.apana.org.au
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=hmeau.com;
-	s=formenos; h=In-Reply-To:Content-Type:MIME-Version:References:Message-ID:
-	Subject:Cc:To:From:Date:Sender:Reply-To:Content-Transfer-Encoding:Content-ID:
-	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
-	:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-	List-Post:List-Owner:List-Archive;
-	bh=I38ai5ionxBMkBimwgLTi73TMk2JcKNFvw44Vez0IHg=; b=Dkr31hJxvLQnMX0CfUojD5ZoE7
-	MusiFgiCS4vFeeOt6FIPojpyxxSZVMUfETa4aO4WEzxp0Mjc4uOXbiK6zlntrb0LOL3eEZ//QO29I
-	1QPx96pD1ghlO3yPOzExTtEJ5KpKXOeEsJUbu9oED8EkTc2ABJC59nNNWQkr7t49qgLqu0Lo/4O/P
-	N0MTEVx+OkOxgm2Y6507kpc/JUHsMWiIi16uANk6vdK8E/qCV5C7q+Vr8nWeOmcYUJU5QmOg1pypW
-	TRIDx0faC1zS86z9Bm8sHbovNm2tMcfNbZQLNicr/kkjQ66KlAP2x2YVqG2HcJI6DnWoKnUoeXe+8
-	BToQgXOw==;
-Received: from loth.rohan.me.apana.org.au ([192.168.167.2])
-	by formenos.hmeau.com with smtp (Exim 4.96 #2 (Debian))
-	id 1uR0uf-000JCI-2h;
-	Mon, 16 Jun 2025 12:09:18 +0800
-Received: by loth.rohan.me.apana.org.au (sSMTP sendmail emulation); Mon, 16 Jun 2025 12:09:17 +0800
-Date: Mon, 16 Jun 2025 12:09:17 +0800
-From: Herbert Xu <herbert@gondor.apana.org.au>
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	sparclinux@vger.kernel.org, x86@kernel.org, ardb@kernel.org,
-	Jason@zx2c4.com, torvalds@linux-foundation.org
-Subject: [PATCH] crypto: ahash - Fix infinite recursion in ahash_def_finup
-Message-ID: <aE-Y7VzdJTDJHsy_@gondor.apana.org.au>
-References: <20250611020923.1482701-8-ebiggers@kernel.org>
- <aEjo6YZn59m5FnZ_@gondor.apana.org.au>
- <20250611033957.GA1484147@sol>
- <aEj8J3ZIYEFp_XT4@gondor.apana.org.au>
- <20250611035842.GB1484147@sol>
- <20250613053624.GA163131@sol>
- <aEu5cyDOMcKteW_b@gondor.apana.org.au>
- <20250613055439.GB163131@sol>
- <aEvmmr0huGGd2Psv@gondor.apana.org.au>
- <20250615031807.GA81869@sol>
+	 Content-Type:Content-Disposition:In-Reply-To; b=mKrUH8VKJzYbc7rHTSK8qkSKCxa8bXD1BIKeZoHy1DNKK3RNagnca7zDpG3SshBwWEEk74HEUdPPbp3BtUY5fd0sUZ8enBcNTMFlxHW3u+5ycZFirDpDt975wp56TTlttNpOvQkzs/aPlbgSQtQIHKEcaIJyWxInHW96nAhVqFI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=qAY4VVpi; arc=none smtp.client-ip=148.163.158.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55FLRHHr025161;
+	Mon, 16 Jun 2025 07:15:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=8oS9W40Kxi3jCDLjbplhmNHApFzpmx
+	WBjEyHqggrd0A=; b=qAY4VVpinI2Rbjtg6/cTxb0ByK9Dpzpf/aO3yY9XM5UF4d
+	fU78j65QpJ3TapkNS/xL3vWbPV5/pklD1FE7kjijxU/XLyukt6XZ3WfcR4gFH81+
+	UFdauXXxcaqtHqvoucUPRYWnY4bL4ogy5OumG75AWe2BeYdsMVMYJOpOVg665ANi
+	VWvgBCKH/JyZisb5vUa4CL8qgECUwjCm3TRR4ZUf58M9gln0exc5pR4IRrjSC6+f
+	ZkrajO9adrWRsa38pwUBB5r4ztMCHddjRWJusLpI5uP3qlP55wkLVB/N8+UcqUCc
+	LCE/mDDOWLEmLtUGpgpcmyaSwGoUdK3hRWsyQEfA==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4790r1qypc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 16 Jun 2025 07:15:36 +0000 (GMT)
+Received: from m0360072.ppops.net (m0360072.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.0.8/8.18.0.8) with ESMTP id 55G6uksv023490;
+	Mon, 16 Jun 2025 07:15:36 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 4790r1qyp8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 16 Jun 2025 07:15:36 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 55G3BxpK011236;
+	Mon, 16 Jun 2025 07:15:35 GMT
+Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 479kdt56ah-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 16 Jun 2025 07:15:35 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 55G7FVZd43385168
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 16 Jun 2025 07:15:31 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id EB3CA2004D;
+	Mon, 16 Jun 2025 07:15:30 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 6B03A2004E;
+	Mon, 16 Jun 2025 07:15:26 +0000 (GMT)
+Received: from li-c6426e4c-27cf-11b2-a85c-95d65bc0de0e.ibm.com (unknown [9.204.206.66])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Mon, 16 Jun 2025 07:15:26 +0000 (GMT)
+Date: Mon, 16 Jun 2025 12:45:22 +0530
+From: Gautam Menghani <gautam@linux.ibm.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>,
+        Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        linux-kernel@vger.kernel.org, Anish Ghulati <aghulati@google.com>,
+        Colton Lewis <coltonlewis@google.com>, Thomas Huth <thuth@redhat.com>
+Subject: Re: [PATCH 6/8] KVM: PPC: Stop adding virt/kvm to the arch include
+ path
+Message-ID: <etqfg3dvpr4tabk3lysnvelpb5k3pyuuhhkfxsd4oyxlmgwnit@rducsforanaj>
+References: <20250611001042.170501-1-seanjc@google.com>
+ <20250611001042.170501-7-seanjc@google.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -76,46 +107,23 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250615031807.GA81869@sol>
+In-Reply-To: <20250611001042.170501-7-seanjc@google.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: pA27UQdSoFi7fENYAbcClrvtInowwnUB
+X-Proofpoint-ORIG-GUID: TmHFGtZ04KPLB6esid1G6CYOB7tVt6Vr
+X-Authority-Analysis: v=2.4 cv=AqTu3P9P c=1 sm=1 tr=0 ts=684fc498 cx=c_pps a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17 a=kj9zAlcOel0A:10 a=6IFa9wvqVegA:10 a=VnNF1IyMAAAA:8 a=90UzZmcSQ78tuVnzBuAA:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjE2MDA0NCBTYWx0ZWRfX7cOmaIrOSqpw SXLMPZuCWSZBCBLE3FL1xYcVW8X8KK0s74UvFuWZnCI71S5bsha1iy0u8LbyZa/+82oTUgv81jB 8/dlb4z7C/9S1qOfR7ocu1ICPZlI2cR3jyDHY3OeqfHz4UFQa3Rmzgnyh3GV1P+TxeqAcXYuNcf
+ QEN1U+QFmMf+lloYVcQjizKufdVGBS01u2hgxtp3bvDWMeYFm65yaoSob0KnI8NZ2r/UggduiwU ZI3aZ9HSz+pCtgy2G1LIxS18dF8Y3fx6iFj5NS4G1C1cP4XiHgt73JfFH9LrR8JcXlRfTcEju3e eeU8dw7b1BrKJERMYaXJKC8cF2yDollkevHHuOIz2ofPC4iO7YXWdRjLohoPeN5pLWHoOr65LX/
+ hSQl2MRrPAQ08Y2Uc3A15BdBi0qU/CKs2ILqAsxRoOrQErs71PyFk7tko/eh6IYJbN/lDZCI
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.0.736,FMLib:17.12.80.40
+ definitions=2025-06-16_02,2025-06-13_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ lowpriorityscore=0 suspectscore=0 adultscore=0 impostorscore=0
+ priorityscore=1501 phishscore=0 mlxlogscore=478 mlxscore=0 spamscore=0
+ bulkscore=0 malwarescore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2506160044
 
-On Sat, Jun 14, 2025 at 08:18:07PM -0700, Eric Biggers wrote:
->
-> Even with your patch applied, it overflows the stack when running the crypto
-> self-tests, apparently due to crypto/ahash.c calling into itself recursively:
-
-Thanks for the report.  This driver doesn't provide a finup function
-which triggered a bug in the default finup implementation:
-
----8<---
-Invoke the final function directly in the default finup implementation
-since crypto_ahash_final is now just a wrapper around finup.
-
-Reported-by: Eric Biggers <ebiggers@kernel.org>
-Fixes: 9d7a0ab1c753 ("crypto: ahash - Handle partial blocks in API")
-Signed-off-by: Herbert Xu <herbert@gondor.apana.org.au>
-
-diff --git a/crypto/ahash.c b/crypto/ahash.c
-index bd9e49950201..3878b4da3cfd 100644
---- a/crypto/ahash.c
-+++ b/crypto/ahash.c
-@@ -603,12 +603,14 @@ static void ahash_def_finup_done2(void *data, int err)
- 
- static int ahash_def_finup_finish1(struct ahash_request *req, int err)
- {
-+	struct crypto_ahash *tfm = crypto_ahash_reqtfm(req);
-+
- 	if (err)
- 		goto out;
- 
- 	req->base.complete = ahash_def_finup_done2;
- 
--	err = crypto_ahash_final(req);
-+	err = crypto_ahash_alg(tfm)->final(req);
- 	if (err == -EINPROGRESS || err == -EBUSY)
- 		return err;
- 
--- 
-Email: Herbert Xu <herbert@gondor.apana.org.au>
-Home Page: http://gondor.apana.org.au/~herbert/
-PGP Key: http://gondor.apana.org.au/~herbert/pubkey.txt
+Reviewed-by: Gautam Menghani <gautam@linux.ibm.com>
 
