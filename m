@@ -1,144 +1,260 @@
-Return-Path: <linux-mips+bounces-9361-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9362-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80A2FADDDAC
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Jun 2025 23:10:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 29F10ADDEBE
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Jun 2025 00:30:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A41BD189DBAC
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Jun 2025 21:10:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53EB8189C3E1
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Jun 2025 22:30:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 543FF2ECD0C;
-	Tue, 17 Jun 2025 21:10:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7FB762949F3;
+	Tue, 17 Jun 2025 22:29:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="HMsC5FfB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n+7P/y3E"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E11D92EFD88
-	for <linux-mips@vger.kernel.org>; Tue, 17 Jun 2025 21:10:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4066D2F5312;
+	Tue, 17 Jun 2025 22:29:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750194637; cv=none; b=Wk8fIYWCHbxoVDd2rSdj3QMeRfRhO3d13VAri/Ua8wlHNEBMix4D5/24MQJsFpP4XV3FHwZDZ4zCvTSRxtqUe5S7jt15AJlnX+9TKMxCYNS9ifg/G8zscvTJI4q/KPhxs6ywxpuJe2UUOgjJ+79ul6aK6SRCHSca1xg2c9RKQTw=
+	t=1750199398; cv=none; b=Flq/PDNUYD/fFlc4/h6ZQXskdPpf0Zp9haGmb2ADV6OTxp8+eyRf3Tg+/alb5AO9RLbL2RZYpQG0pXdd+u2hVXekz6x4SZ46e4Ucpdz3tsoCO903n2Wx6QCc9+RZfj3d9uESj4/0BVid7ohKPOTwqEtq+ksXK4LnAEOE+a1ezMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750194637; c=relaxed/simple;
-	bh=ir2qXEQz0ITQfoN65/zED7gUfzbFZUXr94ByJGJvwQY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=SUw4IXJgQy/Ui/Owxip44mBVu9jNjCHqA3DtWvfNShGRifWDqPWvcWYCJWLvd300MTzoZxwrHuXlPGt1TKRGBSKjzi0tH994UwD4Z4x96CUOORKn4lEWnkFLlqPt5F1kWsTTWJHHaID9qXZdSeupziPMRGDCMFiJ/pADR84JL0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=HMsC5FfB; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-adb5cb6d8f1so1135433766b.3
-        for <linux-mips@vger.kernel.org>; Tue, 17 Jun 2025 14:10:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google; t=1750194633; x=1750799433; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NscEjg9Y1LWinfHLpsahI5dfBkkxck14FsEzSEH/mHM=;
-        b=HMsC5FfBBK8m1OzFzla6fblWwkNIzUHDmGhhJ8yI7xn5y17BmMGS+n9v0OX3/0ZUok
-         05Ye3ty1blfiv0qAEkOtr0rGdneAksgoWTKeUx1NmzyaJCi2GjCR2iMXQ3sjkl0sGEcj
-         uxMct+ygdjDVcBLicGWBCL8TFCeFJsYuQOOG8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750194633; x=1750799433;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NscEjg9Y1LWinfHLpsahI5dfBkkxck14FsEzSEH/mHM=;
-        b=nd49Ax2KmukEsM/LzAKeYd0hJgQxHDBe2fAAMqb2dGPt0kT+uboXbSqdmgUTTnm8qV
-         7a64N/kpWmzskkcOKBO9glZ7oNjI2+wgy2rmgWqgXtIDec9ZfeYXFlnWY0PRRI5UZusl
-         7dN9+4vbRuCtlm20ffwdxfus+OJoT1g/iFNCx5Edwdn++FEwu7pwmZGn0uVn/0YozGmt
-         h8YrkV9reRsBH3sbtYlMeLGWrDlExkCelv55+NwzAgNiQd18zLL2Qewn6RQ+AHJjBXVg
-         43IjYerfZ9/b3+UByIqAt9WidTHHlPayh0ja2rL4MGwyN2Zf55CS9WEHjRpd+ixrN7Tg
-         xCfA==
-X-Forwarded-Encrypted: i=1; AJvYcCUZcl58lE1kcOQrb1b/aM+17hFZQc2VQYx79AtV9WQ+pZC10Uqq/KVg7fPMlbp2slchGg0zVdJX1bEa@vger.kernel.org
-X-Gm-Message-State: AOJu0YzsQ9acX0XiSg4+qj2LHnAPkKCGN4kdmbdAsHM0AcuBztv+hIik
-	NKqd1yJCByYHDX/upAcs2i0XPK8WXmphKQDiKUYliPHQmm+82qjwzdBpw23UTUXN4KZVoz0fsnV
-	D+Z0xiG8=
-X-Gm-Gg: ASbGncsOkx+sPUki6eJCQSB+eseFYXmQB5frwvTarkbM8Gb8IP0lzfp4x3bYmbpapUG
-	EkJrLZheE7YEIeKX2HGosJDlSQeOYwpoNYsBuEoH0FxoZX+Pf7vLtJ6pJb4XPxLBjEaYF+oYHYi
-	Lv76zyYmBrG6fkVw3YSFbYZ7LUBif9S2PRbZLpWDq9imxRdHha1hSzrWMpikideSSyo5i/in52v
-	eI9JgaZW18+jck/IRpoLKxAOxP5n0PIZeOkhj0zoWU420ejJdMKOqyDbJw4iXIYgR6Djv5BqqxQ
-	KGQRb0tLQN6z+1XvgedGPzsyXGSq0EyNpL+BzGSF1fpf7v7DSKl6Fwe5w6yQlSJosNuVd4QXJha
-	GTAlblbAg6K3080Kcj6ZW6Rsa21JzO+kOHJGdYTr1YAFLU84=
-X-Google-Smtp-Source: AGHT+IHP5m9m9js7wrAacUPnhK1+t1Bn6mKCCKfl5SXBUhmDMgyb3fkLEoULeT8nvifYAzpVzYyNCw==
-X-Received: by 2002:a17:907:3da0:b0:ad8:9257:571c with SMTP id a640c23a62f3a-adfad326f1bmr1540738866b.20.1750194632823;
-        Tue, 17 Jun 2025 14:10:32 -0700 (PDT)
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com. [209.85.208.43])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-adec8158d33sm923863666b.31.2025.06.17.14.10.32
-        for <linux-mips@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 17 Jun 2025 14:10:32 -0700 (PDT)
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-607434e1821so9004383a12.0
-        for <linux-mips@vger.kernel.org>; Tue, 17 Jun 2025 14:10:32 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCX0kUI942YTiIcJIk3Rt7QXNUPeyua6i0Aw7M9BOza2lNEwS01EkLZ7bVzMW6QGIn1qY5PEyHUIEyh5@vger.kernel.org
-X-Received: by 2002:a05:6402:5188:b0:607:f55d:7c56 with SMTP id
- 4fb4d7f45d1cf-608d097a0a3mr14798722a12.25.1750194632040; Tue, 17 Jun 2025
- 14:10:32 -0700 (PDT)
+	s=arc-20240116; t=1750199398; c=relaxed/simple;
+	bh=0mROCvAkY84h3wsIpbNLCY1gzYL1020FxJLMgOjDJTY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ChQT+cRyfb7/Mh1TXxBGG+Lr5/0G0wqBRmxTikOwsgMg4PuYn3yx0X/r6pUk1g5+TkZE/vcmnWUzrlHNJndI+jqzKmxJWz77bHAcF5OIS6exx4m01C7z9hdwha8oK7G3LyXrjDkTwo/kO3SPJc00NrIstVhbSqKcRQ8f998dcs0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n+7P/y3E; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70007C4CEE3;
+	Tue, 17 Jun 2025 22:29:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750199397;
+	bh=0mROCvAkY84h3wsIpbNLCY1gzYL1020FxJLMgOjDJTY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=n+7P/y3EpQYb9JC/xhcaAICmrBI9FlrvjdYlDCtennrygikav6it9ZSmPjELmu69A
+	 +Zw+41ZhtHJEZMq4R/XTXsTuAIS5I3BgSGnqPpd+lwcem/AfJ+kqTuNi8JXZOo+FuD
+	 P0rLGSV7Q+xFY6bWX6bfYAiA4s6Y2hEVD4ZFIT9wiBOfLtzXQgeDQ73o6vcFBnyDws
+	 USOn8XsBOS9cmwle7zRncqZdHbuZgJIfnPjFzY5KkFkozqxlmNIH6zbfWdisNH4BdY
+	 vitO8k2Xa+pTENrYSdz/WA3iDYjm72BKzMeNOq8bxdT8sz44cMaG0kxKkZv/oESAhx
+	 pQAuGH0okF9nA==
+From: Eric Biggers <ebiggers@kernel.org>
+To: linux-crypto@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	"Jason A . Donenfeld " <Jason@zx2c4.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org,
+	sparclinux@vger.kernel.org,
+	x86@kernel.org
+Subject: [PATCH 0/9] lib/crypto: move arch/$(ARCH)/lib/crypto/ to lib/crypto/$(ARCH)/
+Date: Tue, 17 Jun 2025 15:27:17 -0700
+Message-ID: <20250617222726.365148-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250616014019.415791-1-ebiggers@kernel.org> <20250617060523.GH8289@sol>
- <CAHk-=wi5d4K+sF2L=tuRW6AopVxO1DDXzstMQaECmU2QHN13KA@mail.gmail.com>
- <20250617192212.GA1365424@google.com> <CAHk-=wiB6XYBt81zpebysAoya4T-YiiZEmW_7+TtoA=FSCA4XQ@mail.gmail.com>
- <20250617195858.GA1288@sol> <CAHk-=whJjS_wfxCDhkj2fNp1XPAbxDDdNwF1iqZbamZumBmZPg@mail.gmail.com>
- <20250617203726.GC1288@sol>
-In-Reply-To: <20250617203726.GC1288@sol>
-From: Linus Torvalds <torvalds@linux-foundation.org>
-Date: Tue, 17 Jun 2025 14:10:15 -0700
-X-Gmail-Original-Message-ID: <CAHk-=whLENPVgWtHg5jt42he8Eb2pFzZngbvfSWXUmq64cyaAw@mail.gmail.com>
-X-Gm-Features: AX0GCFteh8AxHdG-O3SktB-Vd7hTjMUC_EBJsHwrbakY8eEhqvV4OBO-zVcDyV4
-Message-ID: <CAHk-=whLENPVgWtHg5jt42he8Eb2pFzZngbvfSWXUmq64cyaAw@mail.gmail.com>
-Subject: Re: [PATCH v2 00/17] SHA-512 library functions
-To: Eric Biggers <ebiggers@kernel.org>
-Cc: linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-	sparclinux@vger.kernel.org, x86@kernel.org, Ard Biesheuvel <ardb@kernel.org>, 
-	"Jason A . Donenfeld" <Jason@zx2c4.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Tue, 17 Jun 2025 at 13:37, Eric Biggers <ebiggers@kernel.org> wrote:
->
-> Okay.  For now I'll keep the test commits last and plan for a separate pull
-> request with them, based on the first.  I fear I'll quickly run into
-> interdependencies, in which case I'll need to fall back to "one pull request and
-> spell things out very clearly".  But I'll try it.
+This series applies on top of
+https://lore.kernel.org/r/20250616014019.415791-1-ebiggers@kernel.org/
+and is also available in git at:
 
-Thanks.
+    git fetch https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git arch-to-lib-crypto-v1
 
-Note that this "split it out" is really _only_ for when there's big
-code movement and re-organization like this - it's certainly not a
-general thing.
+This series moves the contents of arch/$(ARCH)/lib/crypto/ into
+lib/crypto/$(ARCH)/.
 
-So you don't need to feel like I'm going to ask you to jump through
-hoops in general for normal crypto library updates, this is really
-only for these kinds of initial "big code movement" things.
+The new code organization makes a lot more sense for how this code
+actually works and is developed.  In particular, it makes it possible to
+build each algorithm as a single module, with better inlining and dead
+code elimination.  For a more detailed explanation, see the patchset
+which did this for the CRC library code:
+https://lore.kernel.org/r/20250607200454.73587-1-ebiggers@kernel.org/.
+Also see the patchset which did this for SHA-512:
+https://lore.kernel.org/linux-crypto/20250616014019.415791-1-ebiggers@kernel.org/
 
-> Just so it's clear, this is the diffstat of this patchset broken down by
-> non-test code (patches 1-3 and 6-17) and tests (4-5):
->
->     Non-test:
->          65 files changed, 1524 insertions(+), 1756 deletions(-)
->
->     Test:
->          14 files changed, 2488 insertions(+)
+This is just a preparatory series, which does the move to get the files
+into their new location but keeps them building the same way as before.
+Later patch series will make the actual improvements to the way the
+arch-optimized code is integrated for each algorithm.
 
-Looks good. That's the kind of diffstat that makes me happy to pull:
-the first one removes move code than it adds, and the second one very
-clearly just adds tests.
+Note that .gitignore files are being intentionally kept for now.  See
+https://lore.kernel.org/r/CAHk-=whu2fb22rEy6+oKx1-+NCHuWucZepvD0H2MD38DrJVKtg@mail.gmail.com/
+I'll remove it later after some time has passed.
 
-So yes, this is the kind of thing that makes my life easy..
+Eric Biggers (9):
+  lib/crypto/arm: move arch/arm/lib/crypto/ to lib/crypto/arm/
+  lib/crypto/arm64: move arch/arm64/lib/crypto/ to lib/crypto/arm64/
+  lib/crypto/mips: move arch/mips/lib/crypto/ to lib/crypto/mips/
+  lib/crypto/powerpc: move arch/powerpc/lib/crypto/ to
+    lib/crypto/powerpc/
+  lib/crypto/riscv: move arch/riscv/lib/crypto/ to lib/crypto/riscv/
+  lib/crypto/s390: move arch/s390/lib/crypto/ to lib/crypto/s390/
+  lib/crypto/sparc: move arch/sparc/lib/crypto/ to lib/crypto/sparc/
+  lib/crypto/x86: move arch/x86/lib/crypto/ to lib/crypto/x86/
+  MAINTAINERS: drop arch/*/lib/crypto/ pattern
 
-> Note that the non-test part includes kerneldoc comments.  I'll assume you aren't
-> going to insist on those being in a separate "documentation" pull request...
+ MAINTAINERS                                      |  1 -
+ arch/arm/lib/Makefile                            |  2 --
+ arch/arm64/lib/Makefile                          |  3 ---
+ arch/mips/lib/Makefile                           |  2 --
+ arch/powerpc/lib/Makefile                        |  2 --
+ arch/riscv/lib/Makefile                          |  1 -
+ arch/s390/lib/Makefile                           |  1 -
+ arch/sparc/lib/Makefile                          |  1 -
+ arch/x86/lib/Makefile                            |  2 --
+ lib/crypto/Kconfig                               | 16 ++++++++--------
+ lib/crypto/Makefile                              | 11 ++++++++++-
+ lib/crypto/arm/.gitignore                        |  2 ++
+ {arch/arm/lib/crypto => lib/crypto/arm}/Kconfig  |  0
+ {arch/arm/lib/crypto => lib/crypto/arm}/Makefile |  0
+ .../lib/crypto => lib/crypto/arm}/blake2s-core.S |  0
+ .../lib/crypto => lib/crypto/arm}/blake2s-glue.c |  0
+ .../lib/crypto => lib/crypto/arm}/chacha-glue.c  |  0
+ .../crypto => lib/crypto/arm}/chacha-neon-core.S |  0
+ .../crypto/arm}/chacha-scalar-core.S             |  0
+ .../crypto => lib/crypto/arm}/poly1305-armv4.pl  |  0
+ .../crypto => lib/crypto/arm}/poly1305-glue.c    |  0
+ .../crypto => lib/crypto/arm}/sha256-armv4.pl    |  0
+ .../lib/crypto => lib/crypto/arm}/sha256-ce.S    |  0
+ {arch/arm/lib/crypto => lib/crypto/arm}/sha256.c |  0
+ lib/crypto/arm64/.gitignore                      |  2 ++
+ .../lib/crypto => lib/crypto/arm64}/Kconfig      |  0
+ .../lib/crypto => lib/crypto/arm64}/Makefile     |  0
+ .../crypto/arm64}/chacha-neon-core.S             |  0
+ .../crypto/arm64}/chacha-neon-glue.c             |  0
+ .../crypto/arm64}/poly1305-armv8.pl              |  0
+ .../crypto => lib/crypto/arm64}/poly1305-glue.c  |  0
+ .../crypto => lib/crypto/arm64}/sha2-armv8.pl    |  0
+ .../lib/crypto => lib/crypto/arm64}/sha256-ce.S  |  0
+ .../lib/crypto => lib/crypto/arm64}/sha256.c     |  0
+ lib/crypto/mips/.gitignore                       |  2 ++
+ .../mips/lib/crypto => lib/crypto/mips}/Kconfig  |  0
+ .../mips/lib/crypto => lib/crypto/mips}/Makefile |  0
+ .../lib/crypto => lib/crypto/mips}/chacha-core.S |  0
+ .../lib/crypto => lib/crypto/mips}/chacha-glue.c |  0
+ .../crypto => lib/crypto/mips}/poly1305-glue.c   |  0
+ .../crypto => lib/crypto/mips}/poly1305-mips.pl  |  0
+ .../lib/crypto => lib/crypto/powerpc}/Kconfig    |  0
+ .../lib/crypto => lib/crypto/powerpc}/Makefile   |  0
+ .../crypto/powerpc}/chacha-p10-glue.c            |  0
+ .../crypto/powerpc}/chacha-p10le-8x.S            |  0
+ .../crypto/powerpc}/poly1305-p10-glue.c          |  0
+ .../crypto/powerpc}/poly1305-p10le_64.S          |  0
+ .../crypto/powerpc}/sha256-spe-asm.S             |  0
+ .../lib/crypto => lib/crypto/powerpc}/sha256.c   |  0
+ .../lib/crypto => lib/crypto/riscv}/Kconfig      |  0
+ .../lib/crypto => lib/crypto/riscv}/Makefile     |  0
+ .../crypto/riscv}/chacha-riscv64-glue.c          |  0
+ .../crypto/riscv}/chacha-riscv64-zvkb.S          |  0
+ .../sha256-riscv64-zvknha_or_zvknhb-zvkb.S       |  0
+ .../lib/crypto => lib/crypto/riscv}/sha256.c     |  0
+ .../s390/lib/crypto => lib/crypto/s390}/Kconfig  |  0
+ .../s390/lib/crypto => lib/crypto/s390}/Makefile |  0
+ .../lib/crypto => lib/crypto/s390}/chacha-glue.c |  0
+ .../lib/crypto => lib/crypto/s390}/chacha-s390.S |  0
+ .../lib/crypto => lib/crypto/s390}/chacha-s390.h |  0
+ .../s390/lib/crypto => lib/crypto/s390}/sha256.c |  0
+ .../lib/crypto => lib/crypto/sparc}/Kconfig      |  0
+ .../lib/crypto => lib/crypto/sparc}/Makefile     |  0
+ .../lib/crypto => lib/crypto/sparc}/sha256.c     |  0
+ .../lib/crypto => lib/crypto/sparc}/sha256_asm.S |  0
+ lib/crypto/x86/.gitignore                        |  2 ++
+ {arch/x86/lib/crypto => lib/crypto/x86}/Kconfig  |  0
+ {arch/x86/lib/crypto => lib/crypto/x86}/Makefile |  0
+ .../lib/crypto => lib/crypto/x86}/blake2s-core.S |  0
+ .../lib/crypto => lib/crypto/x86}/blake2s-glue.c |  0
+ .../crypto/x86}/chacha-avx2-x86_64.S             |  0
+ .../crypto/x86}/chacha-avx512vl-x86_64.S         |  0
+ .../crypto/x86}/chacha-ssse3-x86_64.S            |  0
+ .../lib/crypto => lib/crypto/x86}/chacha_glue.c  |  0
+ .../crypto/x86}/poly1305-x86_64-cryptogams.pl    |  0
+ .../crypto => lib/crypto/x86}/poly1305_glue.c    |  0
+ .../crypto => lib/crypto/x86}/sha256-avx-asm.S   |  0
+ .../crypto => lib/crypto/x86}/sha256-avx2-asm.S  |  0
+ .../crypto => lib/crypto/x86}/sha256-ni-asm.S    |  0
+ .../crypto => lib/crypto/x86}/sha256-ssse3-asm.S |  0
+ {arch/x86/lib/crypto => lib/crypto/x86}/sha256.c |  0
+ 81 files changed, 26 insertions(+), 24 deletions(-)
+ rename {arch/arm/lib/crypto => lib/crypto/arm}/Kconfig (100%)
+ rename {arch/arm/lib/crypto => lib/crypto/arm}/Makefile (100%)
+ rename {arch/arm/lib/crypto => lib/crypto/arm}/blake2s-core.S (100%)
+ rename {arch/arm/lib/crypto => lib/crypto/arm}/blake2s-glue.c (100%)
+ rename {arch/arm/lib/crypto => lib/crypto/arm}/chacha-glue.c (100%)
+ rename {arch/arm/lib/crypto => lib/crypto/arm}/chacha-neon-core.S (100%)
+ rename {arch/arm/lib/crypto => lib/crypto/arm}/chacha-scalar-core.S (100%)
+ rename {arch/arm/lib/crypto => lib/crypto/arm}/poly1305-armv4.pl (100%)
+ rename {arch/arm/lib/crypto => lib/crypto/arm}/poly1305-glue.c (100%)
+ rename {arch/arm/lib/crypto => lib/crypto/arm}/sha256-armv4.pl (100%)
+ rename {arch/arm/lib/crypto => lib/crypto/arm}/sha256-ce.S (100%)
+ rename {arch/arm/lib/crypto => lib/crypto/arm}/sha256.c (100%)
+ rename {arch/arm64/lib/crypto => lib/crypto/arm64}/Kconfig (100%)
+ rename {arch/arm64/lib/crypto => lib/crypto/arm64}/Makefile (100%)
+ rename {arch/arm64/lib/crypto => lib/crypto/arm64}/chacha-neon-core.S (100%)
+ rename {arch/arm64/lib/crypto => lib/crypto/arm64}/chacha-neon-glue.c (100%)
+ rename {arch/arm64/lib/crypto => lib/crypto/arm64}/poly1305-armv8.pl (100%)
+ rename {arch/arm64/lib/crypto => lib/crypto/arm64}/poly1305-glue.c (100%)
+ rename {arch/arm64/lib/crypto => lib/crypto/arm64}/sha2-armv8.pl (100%)
+ rename {arch/arm64/lib/crypto => lib/crypto/arm64}/sha256-ce.S (100%)
+ rename {arch/arm64/lib/crypto => lib/crypto/arm64}/sha256.c (100%)
+ create mode 100644 lib/crypto/mips/.gitignore
+ rename {arch/mips/lib/crypto => lib/crypto/mips}/Kconfig (100%)
+ rename {arch/mips/lib/crypto => lib/crypto/mips}/Makefile (100%)
+ rename {arch/mips/lib/crypto => lib/crypto/mips}/chacha-core.S (100%)
+ rename {arch/mips/lib/crypto => lib/crypto/mips}/chacha-glue.c (100%)
+ rename {arch/mips/lib/crypto => lib/crypto/mips}/poly1305-glue.c (100%)
+ rename {arch/mips/lib/crypto => lib/crypto/mips}/poly1305-mips.pl (100%)
+ rename {arch/powerpc/lib/crypto => lib/crypto/powerpc}/Kconfig (100%)
+ rename {arch/powerpc/lib/crypto => lib/crypto/powerpc}/Makefile (100%)
+ rename {arch/powerpc/lib/crypto => lib/crypto/powerpc}/chacha-p10-glue.c (100%)
+ rename {arch/powerpc/lib/crypto => lib/crypto/powerpc}/chacha-p10le-8x.S (100%)
+ rename {arch/powerpc/lib/crypto => lib/crypto/powerpc}/poly1305-p10-glue.c (100%)
+ rename {arch/powerpc/lib/crypto => lib/crypto/powerpc}/poly1305-p10le_64.S (100%)
+ rename {arch/powerpc/lib/crypto => lib/crypto/powerpc}/sha256-spe-asm.S (100%)
+ rename {arch/powerpc/lib/crypto => lib/crypto/powerpc}/sha256.c (100%)
+ rename {arch/riscv/lib/crypto => lib/crypto/riscv}/Kconfig (100%)
+ rename {arch/riscv/lib/crypto => lib/crypto/riscv}/Makefile (100%)
+ rename {arch/riscv/lib/crypto => lib/crypto/riscv}/chacha-riscv64-glue.c (100%)
+ rename {arch/riscv/lib/crypto => lib/crypto/riscv}/chacha-riscv64-zvkb.S (100%)
+ rename {arch/riscv/lib/crypto => lib/crypto/riscv}/sha256-riscv64-zvknha_or_zvknhb-zvkb.S (100%)
+ rename {arch/riscv/lib/crypto => lib/crypto/riscv}/sha256.c (100%)
+ rename {arch/s390/lib/crypto => lib/crypto/s390}/Kconfig (100%)
+ rename {arch/s390/lib/crypto => lib/crypto/s390}/Makefile (100%)
+ rename {arch/s390/lib/crypto => lib/crypto/s390}/chacha-glue.c (100%)
+ rename {arch/s390/lib/crypto => lib/crypto/s390}/chacha-s390.S (100%)
+ rename {arch/s390/lib/crypto => lib/crypto/s390}/chacha-s390.h (100%)
+ rename {arch/s390/lib/crypto => lib/crypto/s390}/sha256.c (100%)
+ rename {arch/sparc/lib/crypto => lib/crypto/sparc}/Kconfig (100%)
+ rename {arch/sparc/lib/crypto => lib/crypto/sparc}/Makefile (100%)
+ rename {arch/sparc/lib/crypto => lib/crypto/sparc}/sha256.c (100%)
+ rename {arch/sparc/lib/crypto => lib/crypto/sparc}/sha256_asm.S (100%)
+ create mode 100644 lib/crypto/x86/.gitignore
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/Kconfig (100%)
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/Makefile (100%)
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/blake2s-core.S (100%)
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/blake2s-glue.c (100%)
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/chacha-avx2-x86_64.S (100%)
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/chacha-avx512vl-x86_64.S (100%)
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/chacha-ssse3-x86_64.S (100%)
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/chacha_glue.c (100%)
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/poly1305-x86_64-cryptogams.pl (100%)
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/poly1305_glue.c (100%)
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/sha256-avx-asm.S (100%)
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/sha256-avx2-asm.S (100%)
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/sha256-ni-asm.S (100%)
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/sha256-ssse3-asm.S (100%)
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/sha256.c (100%)
 
-Naah, they're relatively tiny, and don't skew the diffstat in huge ways.
+-- 
+2.49.0
 
-             Linus
 
