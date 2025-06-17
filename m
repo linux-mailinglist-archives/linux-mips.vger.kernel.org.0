@@ -1,46 +1,46 @@
-Return-Path: <linux-mips+bounces-9369-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9370-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9806ADDEE4
-	for <lists+linux-mips@lfdr.de>; Wed, 18 Jun 2025 00:30:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB88DADDEF1
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Jun 2025 00:31:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8A7F87AC653
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Jun 2025 22:29:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DAA4B3BCCB7
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Jun 2025 22:30:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8CC42BEC28;
-	Tue, 17 Jun 2025 22:30:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3153F2E54D3;
+	Tue, 17 Jun 2025 22:30:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CKc8qPKa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rxMqdTMQ"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 848BE2BDC28;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3AE62C0327;
 	Tue, 17 Jun 2025 22:30:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750199401; cv=none; b=BgCCOCkPbzR1L9D8Ecpx5aa93WQFwkTv+hpFyHcyRbB+/q5U/2j2CYSHllVFoXHJJV3OA2pCSOtB+3XM2kJc0awRk8U9IVLPZYZRfO9hU0HHG71kPgW2HW/pV4EuOiTswe8mA8IQSvwBwv25ItC8HZGvQAkOozcFXlmX390qPvo=
+	t=1750199402; cv=none; b=FvnA9/mJ0ymYTTeRvk9uFHLQh3+0dITuGPpCgRctFP6jwlQ0qVwYU5Ms/1y+gnIspFp386u7E24Gn3yaxMbsHQ1lLGM3FdQSo61KDFiaZGxpIUyIiLjJ+twBC4JSf9VtqMT+xbSUz0FSVUHs2MsKG54LcvNoSPgOHG1qtY6DCh8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750199401; c=relaxed/simple;
-	bh=hkPIvoqxShZhMTTDhLVtDi8Yqmn39FL66nVo8qVRu1Y=;
+	s=arc-20240116; t=1750199402; c=relaxed/simple;
+	bh=8jdu9LHzVRz1BNvZSq3ZYEM4B1Z0nZLxiOO9k8V1IZ4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=XNjtubKqPUZ3qCEMKpSvblnHExajfaCawLTN+k4lXIS7JJ7hJJQUPIMMJk/2PhERzXngzwaD3gUanLcais3siwoY7Hp8SdSrtvaV0JA83hlNzvlF6LcxwuO5/o0LNW7rrER3sWLZ2iHgJG9Qb09L2XqZAgrVCsS1GJhrHz2l78o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CKc8qPKa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC62AC4CEF6;
-	Tue, 17 Jun 2025 22:30:00 +0000 (UTC)
+	 MIME-Version; b=qj2nH6G7TAeiPsd9hwhh8XlIoGKfA5W/DNLAoRTCvt2yJJ+OwIbvMP3bnkIWgjbvO6T2blsEjbQBhYTgwlVyscuAA1HStB+uPeOdwO7X2ENrKdcIGWu2pLEpe9ucrpvNdnQj1jPiP9wQMCY4n7JlHNm0auMenuDzWTLn+dwvy50=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rxMqdTMQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C3B4C4AF0D;
+	Tue, 17 Jun 2025 22:30:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1750199401;
-	bh=hkPIvoqxShZhMTTDhLVtDi8Yqmn39FL66nVo8qVRu1Y=;
+	bh=8jdu9LHzVRz1BNvZSq3ZYEM4B1Z0nZLxiOO9k8V1IZ4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=CKc8qPKacvgviafDJA8lSI2yrliEIiRaHqww9PSNVArp3EkmSThFIj0ix9/MqJPwg
-	 3t0MqZLXdwckLnEcpIcbnuhL8zrVWrFYzDDuEke7tXOvMfDa3J7RRrKLmU+uetbjZ4
-	 bG1iU16tXN1rrqNMaQxv+54OWdd/MEWLvXU9V0sacQR86Pehnf0mSBErESrSvBLLqb
-	 ntGC/IsNfd2afRrg89OWW2gQnIbUZFr5ADvscwB9ZsXqG8WMWm0JAyG4OPxWA5H3Q7
-	 T9Uy/6lgMcgbVxTl3aSfMvp3Nmeamfxr1OxiYp1oJMF4LdCD3rAm7+Q0WUupeSaq0t
-	 O5Ni41xVr1NEw==
+	b=rxMqdTMQBGpK7NKz+2Cv8yBMwsWxMBeJd9bTUuyDkYX7YYU+jrxrDq8PPMf7vBwnn
+	 zHsuDv8GvDnH1VrOvFRDMxP2s0jrflOWxlc5FjbqcxIGJz81BNGH8vVOdp9FYbKNdq
+	 4u38I0tsjDRhq4WCGyAY4HgmHpEwewKxTMFKHauMorBUtmLTbxHKTV90nIH6v1c3Az
+	 26jdJsahBxuTEPhh5xCsx/sz5oa8BFGWnMGGIQfpoHPvDflcrEbxMjPMEZ2WgZMiqM
+	 K2gyO9xDZuBgzO9nBJN9rKXK+5amrA1VSGV0uijZxomlNdlv/cflza6afeghUr4ytV
+	 NUyzdpVJYvxCg==
 From: Eric Biggers <ebiggers@kernel.org>
 To: linux-crypto@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -53,9 +53,9 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-s390@vger.kernel.org,
 	sparclinux@vger.kernel.org,
 	x86@kernel.org
-Subject: [PATCH 7/9] lib/crypto/sparc: move arch/sparc/lib/crypto/ to lib/crypto/sparc/
-Date: Tue, 17 Jun 2025 15:27:24 -0700
-Message-ID: <20250617222726.365148-8-ebiggers@kernel.org>
+Subject: [PATCH 8/9] lib/crypto/x86: move arch/x86/lib/crypto/ to lib/crypto/x86/
+Date: Tue, 17 Jun 2025 15:27:25 -0700
+Message-ID: <20250617222726.365148-9-ebiggers@kernel.org>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250617222726.365148-1-ebiggers@kernel.org>
 References: <20250617222726.365148-1-ebiggers@kernel.org>
@@ -69,7 +69,7 @@ Content-Transfer-Encoding: 8bit
 
 From: Eric Biggers <ebiggers@google.com>
 
-Move the contents of arch/sparc/lib/crypto/ into lib/crypto/sparc/.
+Move the contents of arch/x86/lib/crypto/ into lib/crypto/x86/.
 
 The new code organization makes a lot more sense for how this code
 actually works and is developed.  In particular, it makes it possible to
@@ -85,81 +85,161 @@ into their new location but keeps them building the same way as before.
 Later commits will make the actual improvements to the way the
 arch-optimized code is integrated for each algorithm.
 
+arch/x86/lib/crypto/.gitignore is intentionally kept for now.  See
+https://lore.kernel.org/r/CAHk-=whu2fb22rEy6+oKx1-+NCHuWucZepvD0H2MD38DrJVKtg@mail.gmail.com/
+I'll remove it later after some time has passed.
+
 Signed-off-by: Eric Biggers <ebiggers@google.com>
 ---
- arch/sparc/lib/Makefile                                  | 1 -
- lib/crypto/Kconfig                                       | 2 +-
- lib/crypto/Makefile                                      | 1 +
- {arch/sparc/lib/crypto => lib/crypto/sparc}/Kconfig      | 0
- {arch/sparc/lib/crypto => lib/crypto/sparc}/Makefile     | 0
- {arch/sparc/lib/crypto => lib/crypto/sparc}/sha256.c     | 0
- {arch/sparc/lib/crypto => lib/crypto/sparc}/sha256_asm.S | 0
- 7 files changed, 2 insertions(+), 2 deletions(-)
- rename {arch/sparc/lib/crypto => lib/crypto/sparc}/Kconfig (100%)
- rename {arch/sparc/lib/crypto => lib/crypto/sparc}/Makefile (100%)
- rename {arch/sparc/lib/crypto => lib/crypto/sparc}/sha256.c (100%)
- rename {arch/sparc/lib/crypto => lib/crypto/sparc}/sha256_asm.S (100%)
+ arch/x86/lib/Makefile                                           | 2 --
+ lib/crypto/Kconfig                                              | 2 +-
+ lib/crypto/Makefile                                             | 1 +
+ lib/crypto/x86/.gitignore                                       | 2 ++
+ {arch/x86/lib/crypto => lib/crypto/x86}/Kconfig                 | 0
+ {arch/x86/lib/crypto => lib/crypto/x86}/Makefile                | 0
+ {arch/x86/lib/crypto => lib/crypto/x86}/blake2s-core.S          | 0
+ {arch/x86/lib/crypto => lib/crypto/x86}/blake2s-glue.c          | 0
+ {arch/x86/lib/crypto => lib/crypto/x86}/chacha-avx2-x86_64.S    | 0
+ .../x86/lib/crypto => lib/crypto/x86}/chacha-avx512vl-x86_64.S  | 0
+ {arch/x86/lib/crypto => lib/crypto/x86}/chacha-ssse3-x86_64.S   | 0
+ {arch/x86/lib/crypto => lib/crypto/x86}/chacha_glue.c           | 0
+ .../lib/crypto => lib/crypto/x86}/poly1305-x86_64-cryptogams.pl | 0
+ {arch/x86/lib/crypto => lib/crypto/x86}/poly1305_glue.c         | 0
+ {arch/x86/lib/crypto => lib/crypto/x86}/sha256-avx-asm.S        | 0
+ {arch/x86/lib/crypto => lib/crypto/x86}/sha256-avx2-asm.S       | 0
+ {arch/x86/lib/crypto => lib/crypto/x86}/sha256-ni-asm.S         | 0
+ {arch/x86/lib/crypto => lib/crypto/x86}/sha256-ssse3-asm.S      | 0
+ {arch/x86/lib/crypto => lib/crypto/x86}/sha256.c                | 0
+ 19 files changed, 4 insertions(+), 3 deletions(-)
+ create mode 100644 lib/crypto/x86/.gitignore
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/Kconfig (100%)
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/Makefile (100%)
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/blake2s-core.S (100%)
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/blake2s-glue.c (100%)
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/chacha-avx2-x86_64.S (100%)
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/chacha-avx512vl-x86_64.S (100%)
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/chacha-ssse3-x86_64.S (100%)
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/chacha_glue.c (100%)
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/poly1305-x86_64-cryptogams.pl (100%)
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/poly1305_glue.c (100%)
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/sha256-avx-asm.S (100%)
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/sha256-avx2-asm.S (100%)
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/sha256-ni-asm.S (100%)
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/sha256-ssse3-asm.S (100%)
+ rename {arch/x86/lib/crypto => lib/crypto/x86}/sha256.c (100%)
 
-diff --git a/arch/sparc/lib/Makefile b/arch/sparc/lib/Makefile
-index 5cf9781d68b40..ef8860eb3f3d1 100644
---- a/arch/sparc/lib/Makefile
-+++ b/arch/sparc/lib/Makefile
-@@ -2,11 +2,10 @@
- # Makefile for Sparc library files..
+diff --git a/arch/x86/lib/Makefile b/arch/x86/lib/Makefile
+index 4fa5c4e1ba8a0..7cf8681cba0f2 100644
+--- a/arch/x86/lib/Makefile
++++ b/arch/x86/lib/Makefile
+@@ -1,12 +1,10 @@
+ # SPDX-License-Identifier: GPL-2.0
+ #
+ # Makefile for x86 specific library files.
  #
  
- asflags-y := -ansi -DST_DIV0=0x02
+-obj-y += crypto/
+-
+ # Produces uninteresting flaky coverage.
+ KCOV_INSTRUMENT_delay.o	:= n
  
--obj-y                 += crypto/
- lib-$(CONFIG_SPARC32) += ashrdi3.o
- lib-$(CONFIG_SPARC32) += memcpy.o memset.o
- lib-y                 += strlen.o
- lib-y                 += checksum_$(BITS).o
- lib-$(CONFIG_SPARC32) += blockops.o
+ # KCSAN uses udelay for introducing watchpoint delay; avoid recursion.
+ KCSAN_SANITIZE_delay.o := n
 diff --git a/lib/crypto/Kconfig b/lib/crypto/Kconfig
-index 278b7ef5ec4f9..b98543c7ef231 100644
+index b98543c7ef231..2460ddff967fc 100644
 --- a/lib/crypto/Kconfig
 +++ b/lib/crypto/Kconfig
-@@ -206,11 +206,11 @@ source "lib/crypto/riscv/Kconfig"
- endif
- if S390
- source "lib/crypto/s390/Kconfig"
+@@ -209,10 +209,10 @@ source "lib/crypto/s390/Kconfig"
  endif
  if SPARC
--source "arch/sparc/lib/crypto/Kconfig"
-+source "lib/crypto/sparc/Kconfig"
+ source "lib/crypto/sparc/Kconfig"
  endif
  if X86
- source "arch/x86/lib/crypto/Kconfig"
+-source "arch/x86/lib/crypto/Kconfig"
++source "lib/crypto/x86/Kconfig"
  endif
  endif
+ 
+ endmenu
 diff --git a/lib/crypto/Makefile b/lib/crypto/Makefile
-index 4cda1f5cd21d4..748d1fc6b6be2 100644
+index 748d1fc6b6be2..16f5d76d92710 100644
 --- a/lib/crypto/Makefile
 +++ b/lib/crypto/Makefile
-@@ -107,5 +107,6 @@ obj-$(CONFIG_ARM) += arm/
- obj-$(CONFIG_ARM64) += arm64/
+@@ -108,5 +108,6 @@ obj-$(CONFIG_ARM64) += arm64/
  obj-$(CONFIG_MIPS) += mips/
  obj-$(CONFIG_PPC) += powerpc/
  obj-$(CONFIG_RISCV) += riscv/
  obj-$(CONFIG_S390) += s390/
-+obj-$(CONFIG_SPARC) += sparc/
-diff --git a/arch/sparc/lib/crypto/Kconfig b/lib/crypto/sparc/Kconfig
+ obj-$(CONFIG_SPARC) += sparc/
++obj-$(CONFIG_X86) += x86/
+diff --git a/lib/crypto/x86/.gitignore b/lib/crypto/x86/.gitignore
+new file mode 100644
+index 0000000000000..580c839bb1776
+--- /dev/null
++++ b/lib/crypto/x86/.gitignore
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0-only
++poly1305-x86_64-cryptogams.S
+diff --git a/arch/x86/lib/crypto/Kconfig b/lib/crypto/x86/Kconfig
 similarity index 100%
-rename from arch/sparc/lib/crypto/Kconfig
-rename to lib/crypto/sparc/Kconfig
-diff --git a/arch/sparc/lib/crypto/Makefile b/lib/crypto/sparc/Makefile
+rename from arch/x86/lib/crypto/Kconfig
+rename to lib/crypto/x86/Kconfig
+diff --git a/arch/x86/lib/crypto/Makefile b/lib/crypto/x86/Makefile
 similarity index 100%
-rename from arch/sparc/lib/crypto/Makefile
-rename to lib/crypto/sparc/Makefile
-diff --git a/arch/sparc/lib/crypto/sha256.c b/lib/crypto/sparc/sha256.c
+rename from arch/x86/lib/crypto/Makefile
+rename to lib/crypto/x86/Makefile
+diff --git a/arch/x86/lib/crypto/blake2s-core.S b/lib/crypto/x86/blake2s-core.S
 similarity index 100%
-rename from arch/sparc/lib/crypto/sha256.c
-rename to lib/crypto/sparc/sha256.c
-diff --git a/arch/sparc/lib/crypto/sha256_asm.S b/lib/crypto/sparc/sha256_asm.S
+rename from arch/x86/lib/crypto/blake2s-core.S
+rename to lib/crypto/x86/blake2s-core.S
+diff --git a/arch/x86/lib/crypto/blake2s-glue.c b/lib/crypto/x86/blake2s-glue.c
 similarity index 100%
-rename from arch/sparc/lib/crypto/sha256_asm.S
-rename to lib/crypto/sparc/sha256_asm.S
+rename from arch/x86/lib/crypto/blake2s-glue.c
+rename to lib/crypto/x86/blake2s-glue.c
+diff --git a/arch/x86/lib/crypto/chacha-avx2-x86_64.S b/lib/crypto/x86/chacha-avx2-x86_64.S
+similarity index 100%
+rename from arch/x86/lib/crypto/chacha-avx2-x86_64.S
+rename to lib/crypto/x86/chacha-avx2-x86_64.S
+diff --git a/arch/x86/lib/crypto/chacha-avx512vl-x86_64.S b/lib/crypto/x86/chacha-avx512vl-x86_64.S
+similarity index 100%
+rename from arch/x86/lib/crypto/chacha-avx512vl-x86_64.S
+rename to lib/crypto/x86/chacha-avx512vl-x86_64.S
+diff --git a/arch/x86/lib/crypto/chacha-ssse3-x86_64.S b/lib/crypto/x86/chacha-ssse3-x86_64.S
+similarity index 100%
+rename from arch/x86/lib/crypto/chacha-ssse3-x86_64.S
+rename to lib/crypto/x86/chacha-ssse3-x86_64.S
+diff --git a/arch/x86/lib/crypto/chacha_glue.c b/lib/crypto/x86/chacha_glue.c
+similarity index 100%
+rename from arch/x86/lib/crypto/chacha_glue.c
+rename to lib/crypto/x86/chacha_glue.c
+diff --git a/arch/x86/lib/crypto/poly1305-x86_64-cryptogams.pl b/lib/crypto/x86/poly1305-x86_64-cryptogams.pl
+similarity index 100%
+rename from arch/x86/lib/crypto/poly1305-x86_64-cryptogams.pl
+rename to lib/crypto/x86/poly1305-x86_64-cryptogams.pl
+diff --git a/arch/x86/lib/crypto/poly1305_glue.c b/lib/crypto/x86/poly1305_glue.c
+similarity index 100%
+rename from arch/x86/lib/crypto/poly1305_glue.c
+rename to lib/crypto/x86/poly1305_glue.c
+diff --git a/arch/x86/lib/crypto/sha256-avx-asm.S b/lib/crypto/x86/sha256-avx-asm.S
+similarity index 100%
+rename from arch/x86/lib/crypto/sha256-avx-asm.S
+rename to lib/crypto/x86/sha256-avx-asm.S
+diff --git a/arch/x86/lib/crypto/sha256-avx2-asm.S b/lib/crypto/x86/sha256-avx2-asm.S
+similarity index 100%
+rename from arch/x86/lib/crypto/sha256-avx2-asm.S
+rename to lib/crypto/x86/sha256-avx2-asm.S
+diff --git a/arch/x86/lib/crypto/sha256-ni-asm.S b/lib/crypto/x86/sha256-ni-asm.S
+similarity index 100%
+rename from arch/x86/lib/crypto/sha256-ni-asm.S
+rename to lib/crypto/x86/sha256-ni-asm.S
+diff --git a/arch/x86/lib/crypto/sha256-ssse3-asm.S b/lib/crypto/x86/sha256-ssse3-asm.S
+similarity index 100%
+rename from arch/x86/lib/crypto/sha256-ssse3-asm.S
+rename to lib/crypto/x86/sha256-ssse3-asm.S
+diff --git a/arch/x86/lib/crypto/sha256.c b/lib/crypto/x86/sha256.c
+similarity index 100%
+rename from arch/x86/lib/crypto/sha256.c
+rename to lib/crypto/x86/sha256.c
 -- 
 2.49.0
 
