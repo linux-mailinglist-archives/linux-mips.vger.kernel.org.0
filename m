@@ -1,167 +1,108 @@
-Return-Path: <linux-mips+bounces-9345-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9347-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26FC8ADCA6A
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Jun 2025 14:05:36 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64616ADCD41
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Jun 2025 15:33:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C79A9167CA3
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Jun 2025 12:05:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 760C91883BDE
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Jun 2025 13:29:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0D76293B5C;
-	Tue, 17 Jun 2025 12:05:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF3932E264E;
+	Tue, 17 Jun 2025 13:26:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hPw1+TK6"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="HTU68KS1"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A755F2264A0;
-	Tue, 17 Jun 2025 12:05:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A1CB2E7169;
+	Tue, 17 Jun 2025 13:26:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750161931; cv=none; b=h6AhmaHeDcrY1bIH9FWMR90tRQZ6JiFGCJVpjgLVHuUAEg8DRt6qI7feDzqs9gpiRicVPt3l7R+pR5Fca9+KRJFld3uC/55Lt/vuX+olq9kAhb8EluLw7Zye5zFH5bc43zi/mlJZKjMOkguRvQrTdaw5/fMxwkWJFxxJLOs4+s8=
+	t=1750166778; cv=none; b=Pb91nQ4G/+uFGsQxMbdCoYWAFEAdTpqSYW6rEqpzT0qOqbN+/ZkVz2FxtABYxgKauKSmF710zRWoqx0D9aGvNR5l+mXyUKKXQUuNigAnf3HoWJKnbLhjMaUxiPl0PJGsn2vvdQ5xEDNbnSnC9R2CVVoplaeDV01/rhi24Dj4cE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750161931; c=relaxed/simple;
-	bh=jnIuOLLFMFA8tIxkAkEXgf/DcYbN/cMJVkbqduhGma8=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=cHxRvZFwKCCJ6J8z+B+KwpRr1IoWrcYUKLQ3Byv3zXB7761ROuGC79GmW/cb4agg6K9Zu5Dtxie4c+9nHMEChOD0gS676nD15L2r5ItTNp+lIiVY1IKnokPS3yfla412x5F4bR2mDdLqdpH047B80MT/Y/rE2K5fuvQlKWV4NYQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hPw1+TK6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48C6BC4CEED;
-	Tue, 17 Jun 2025 12:05:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750161931;
-	bh=jnIuOLLFMFA8tIxkAkEXgf/DcYbN/cMJVkbqduhGma8=;
-	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
-	b=hPw1+TK6QI38G0XAUg3OObvfR5jjPDOOKJ4NG3RXGV6xxGUMFSfqDGVjKn1o7eOhE
-	 q2mbhzWUfEC5qwsz8DSRIrp+kTex0qTaRA8q0IGd0i0Cj3yBJviA5dl04HsrpiEOdt
-	 HUbsxi1THD+BcBIJVjwxBmXdsOVRrv0503evHVk5Gv0Hz4A0rn8k/u1MVti8ecEJl0
-	 qEUrFlKswaLtVcKdXAzM5JPkv05vcTiFh0760D0r/GLYtKxYqJonMShQugc1OH7wng
-	 b+bxMfGlP8gY5/aOPCJnDe+E9ikVLk5TD5B20w7bPvxjOLbxvGi2XstY3mvaonTRyt
-	 LQ6eXsInw+xPg==
-Message-ID: <a999bc7d-a141-4ebe-9adc-0d64d3e67d5a@kernel.org>
-Date: Tue, 17 Jun 2025 14:05:26 +0200
+	s=arc-20240116; t=1750166778; c=relaxed/simple;
+	bh=wNORk0hXvvkPqbJFbqdS9rN9/qpHWhfNvs+JPPcQAFQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=FaI8x0XvEGi23peXnhR6QOvA06He7vZoJ3ZsvmA3o27SlwmkMH9S39dary8MeaHJ4WjUj0LXBD8GCE6FxVJgYD6XfMMy9kmdU3lzgEkGkqYi/fZRHwvi8Xoj9i36Lu64+ysUcnRS3IX6jaiR3UolhvwJ3X32ZXknY/nj5fAHVwU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=HTU68KS1; arc=none smtp.client-ip=217.70.183.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id D0D1643B16;
+	Tue, 17 Jun 2025 13:26:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1750166767;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=VBP1D5K0x3QxSBaXRPUliaOayaAzgYNXPqHRbr5cqYY=;
+	b=HTU68KS12LI/XmNO8zbV3KybQm3jtMesgHO14kri2Nwge8neq4UBjjtNiN3+gOtjSVY6Kl
+	Fp1fcYU18CvZeoNq4tsOO5ihacbZj4mFee355ktEhS5n+wAwg3Jfnh91JM40yzo+joUcpk
+	DcPYHUXeY/ydrrqQ0mB0Rtkvba4AnZ0bCwoLVv8TH1IsbdudwS5tkoWM+zo/t2CebPcSSB
+	hYjR5yLHtu44WBPSLhtWp6rXeed1XBQnGdUhYsTr65/O3M4wbbty8L3VsYWx9nGn3jG7py
+	8icXHQ2ngbpTmqMyEnnC5yQMQVfrdBt6nt6+NvIU2n6MYk82Jkrdzozgju3fhA==
+From: =?UTF-8?q?Beno=C3=AEt=20Monin?= <benoit.monin@bootlin.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	=?UTF-8?q?Th=C3=A9o=20Lebrun?= <theo.lebrun@bootlin.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Adrian Hunter <adrian.hunter@intel.com>,
+	Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc: =?UTF-8?q?Beno=C3=AEt=20Monin?= <benoit.monin@bootlin.com>,
+	linux-mmc@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	"Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+Subject: [PATCH 0/6] Add MMC support for Mobileye EyeQ5 and EyeQ6 SoCs
+Date: Tue, 17 Jun 2025 15:25:50 +0200
+Message-ID: <cover.1750156323.git.benoit.monin@bootlin.com>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/4] dt-bindings: clock: mediatek,mtmips-sysc: Adapt
- compatible for MT7688 boards
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Ezra Buehler <ezra@easyb.ch>, linux-mips@vger.kernel.org
-Cc: Conor Dooley <conor+dt@kernel.org>,
- Harvey Hunt <harveyhuntnexus@gmail.com>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Reto Schneider <reto.schneider@husqvarnagroup.com>,
- Rob Herring <robh@kernel.org>,
- Sergio Paracuellos <sergio.paracuellos@gmail.com>, Stefan Roese
- <sr@denx.de>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- devicetree@vger.kernel.org, Ezra Buehler <ezra.buehler@husqvarnagroup.com>
-References: <20250617103058.1125836-1-ezra@easyb.ch>
- <20250617103058.1125836-2-ezra@easyb.ch>
- <74402e94-6d1e-4a4c-9e50-d41fdf1080e0@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <74402e94-6d1e-4a4c-9e50-d41fdf1080e0@kernel.org>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgddvlecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkofggtgfgsehtkeertdertdejnecuhfhrohhmpeeuvghnohpfthcuofhonhhinhcuoegsvghnohhithdrmhhonhhinhessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepkeeuhefhveehuefgteejheffieefhfejffdvteejueefgeegvdfhteehtdeuhfdvnecukfhppedvrgdtudemtggsudegmeehheeimeejrgdttdemudehfeejmehffeehmeelfeeiugemvgelvdehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdugeemheehieemjegrtddtmeduheefjeemfhefheemleefiegumegvledvhedphhgvlhhopehfrhgrmhgvfihorhhkrdhlohgtrghlughomhgrihhnpdhmrghilhhfrhhomhepsggvnhhoihhtrdhmohhnihhnsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeduiedprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopehrohgshheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhriihkodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheptghonhhorhdoughtsehkv
+ ghrnhgvlhdrohhrghdprhgtphhtthhopehvlhgrughimhhirhdrkhhonhgurhgrthhivghvsehmohgsihhlvgihvgdrtghomhdprhgtphhtthhopehgrhgvghhorhihrdgtlhgvmhgvnhhtsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepthhhvghordhlvggsrhhunhessghoohhtlhhinhdrtghomhdprhgtphhtthhopehtshgsohhgvghnugesrghlphhhrgdrfhhrrghnkhgvnhdruggv
+X-GND-Sasl: benoit.monin@bootlin.com
 
-On 17/06/2025 13:40, Krzysztof Kozlowski wrote:
-> On 17/06/2025 12:30, Ezra Buehler wrote:
->> From: Ezra Buehler <ezra.buehler@husqvarnagroup.com>
->>
->> As the MT7628 and MT7688 are identical in most respects, mt7628a.dtsi is
->> used for both SoCs. To prevent "Kernel panic - not syncing: unable to
->> get CPU clock, err=-2" and allow an MT7688-based board to boot, the
->> following must be allowed:
->>
->>     compatible = "ralink,mt7628-sysc", "ralink,mt7688-sysc", "syscon";
->>
->> Signed-off-by: Ezra Buehler <ezra.buehler@husqvarnagroup.com>
->> ---
->>  .../bindings/clock/mediatek,mtmips-sysc.yaml  | 29 +++++++++++--------
->>  1 file changed, 17 insertions(+), 12 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml b/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
->> index 83c1803ffd16..550807301fc5 100644
->> --- a/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
->> +++ b/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
->> @@ -26,18 +26,23 @@ description: |
->>  
->>  properties:
->>    compatible:
->> -    items:
->> -      - enum:
->> -          - ralink,mt7620-sysc
->> -          - ralink,mt7628-sysc
->> -          - ralink,mt7688-sysc
->> -          - ralink,rt2880-sysc
->> -          - ralink,rt3050-sysc
->> -          - ralink,rt3052-sysc
->> -          - ralink,rt3352-sysc
->> -          - ralink,rt3883-sysc
->> -          - ralink,rt5350-sysc
->> -      - const: syscon
->> +    oneOf:
->> +      - items:
->> +          - enum:
->> +              - ralink,mt7620-sysc
->> +              - ralink,mt7628-sysc
-> 
-> It's here already, so this must be dropped.
+The MMC/SDHCI controller found in Mobileye EyeQ5 and EyeQ6 SoCs is 
+based on Cadence cdns sd4hc IP. It supports up to HS400HS mode. The 
+only peculiarity of the hardware is that it needs the preset value
+quirk to configure the clock properly at speed slower than HS200.
 
+This patchset adds a compatible device tree binding to cdns sdhci for 
+mobileye then uses it in the sdhci-cadence driver.
 
-I meant mt7628 is here already and you are adding it again further, so
-it is now in two places.
+It also adds an emmc entry in the dtsi of each SoC and the config 
+options in each defconfig to allow using an eMMC for the rootfs.
 
+Benoît Monin (6):
+  dt-bindings: mmc: cdns: add Mobileye EyeQ MMC/SDHCI controller
+  mmc: sdhci-cadence: add Mobileye eyeQ support
+  MIPS: mobileye: dts: eyeq6h: add the emmc controller
+  MIPS: eyeq6_defconfig: add cadence MMC/SDHCI driver
+  MIPS: mobileye: dts: eyeq5: add the emmc controller
+  MIPS: eyeq5_defconfig: add cadence MMC/SDHCI driver
 
-Best regards,
-Krzysztof
+ .../devicetree/bindings/mmc/cdns,sdhci.yaml   |  1 +
+ arch/mips/boot/dts/mobileye/eyeq5.dtsi        | 22 +++++++++++++++++++
+ arch/mips/boot/dts/mobileye/eyeq6h.dtsi       | 22 +++++++++++++++++++
+ arch/mips/configs/eyeq5_defconfig             |  2 ++
+ arch/mips/configs/eyeq6_defconfig             |  2 ++
+ drivers/mmc/host/sdhci-cadence.c              | 11 ++++++++++
+ 6 files changed, 60 insertions(+)
+
 
