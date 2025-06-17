@@ -1,48 +1,48 @@
-Return-Path: <linux-mips+bounces-9344-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9345-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50E54ADC9A1
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Jun 2025 13:40:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 26FC8ADCA6A
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Jun 2025 14:05:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CAA32178BA4
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Jun 2025 11:40:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C79A9167CA3
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Jun 2025 12:05:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7252D2DBF7B;
-	Tue, 17 Jun 2025 11:40:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0D76293B5C;
+	Tue, 17 Jun 2025 12:05:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OD2tKmsJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hPw1+TK6"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 406E22DBF62;
-	Tue, 17 Jun 2025 11:40:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A755F2264A0;
+	Tue, 17 Jun 2025 12:05:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750160406; cv=none; b=utUkxRhX1yjF/VAaDbqwJ8vVHM17HtGAWKKU6E5AN3Shf2aocEexQrwJGNkJNO6QWvAraWDkxN5+9juuR6sx1wtZrgfFQS2rSiDkxV79Yx5AirDT7ZfPP/oIkyFK/x07vIdE5NCjoP6xq+bKMXRv/4TLfIgb6/MCN2YLcWWzS8I=
+	t=1750161931; cv=none; b=h6AhmaHeDcrY1bIH9FWMR90tRQZ6JiFGCJVpjgLVHuUAEg8DRt6qI7feDzqs9gpiRicVPt3l7R+pR5Fca9+KRJFld3uC/55Lt/vuX+olq9kAhb8EluLw7Zye5zFH5bc43zi/mlJZKjMOkguRvQrTdaw5/fMxwkWJFxxJLOs4+s8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750160406; c=relaxed/simple;
-	bh=pMDacMHhH7plhzx4hSeLuxVWMh8IlE+qEePTraGPSt4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=on5U/HwodjQM3RzF+DnG8dfeYCs/AmZqT9SwhE+dWTpCEoYhmYBONt9a3Ga6AYuqLlvxYHrk7B7pURtU/zMcUFBWy1n0f7CP2UADfKxrBCBjXu+O5mQcClYXBOZ8sF67iVnURotCpF/BLcBJp32PFmNrBG3DgUzNal/v1JO7SEo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OD2tKmsJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E7E4C4CEE3;
-	Tue, 17 Jun 2025 11:40:02 +0000 (UTC)
+	s=arc-20240116; t=1750161931; c=relaxed/simple;
+	bh=jnIuOLLFMFA8tIxkAkEXgf/DcYbN/cMJVkbqduhGma8=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=cHxRvZFwKCCJ6J8z+B+KwpRr1IoWrcYUKLQ3Byv3zXB7761ROuGC79GmW/cb4agg6K9Zu5Dtxie4c+9nHMEChOD0gS676nD15L2r5ItTNp+lIiVY1IKnokPS3yfla412x5F4bR2mDdLqdpH047B80MT/Y/rE2K5fuvQlKWV4NYQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hPw1+TK6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48C6BC4CEED;
+	Tue, 17 Jun 2025 12:05:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750160405;
-	bh=pMDacMHhH7plhzx4hSeLuxVWMh8IlE+qEePTraGPSt4=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=OD2tKmsJI5dcsvBqlpfXJT//0InoBbGHBZ2oyzPQeaH27c3BYfrpqaYvJtXdwPUq8
-	 blXp3MuPMdfmcZyRscfim2Ei/7hithRrlNl81MdM3rxVWUJYYNmDU7O5bVQhravGKm
-	 V0CtPVbB+8UZVjG4K5ReVNIfxga1XS7IiI+j91jroxIeNKQ5dEKXulQVk9I+WYwR5d
-	 g7IHVVHgaI+1RGagdTmZ+EQvJBZ/VsKOw3mF94FDwjBjrf3oL5HbEwlm/VNHrVpAFM
-	 XqE4y3pU4dCJ8S6Sqd0F0mycUsZoiCTZnmW0pQBbZZxJrNyUakq6P5Ft9DdpH++FMi
-	 iCgA+DwybxmRQ==
-Message-ID: <74402e94-6d1e-4a4c-9e50-d41fdf1080e0@kernel.org>
-Date: Tue, 17 Jun 2025 13:40:01 +0200
+	s=k20201202; t=1750161931;
+	bh=jnIuOLLFMFA8tIxkAkEXgf/DcYbN/cMJVkbqduhGma8=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=hPw1+TK6QI38G0XAUg3OObvfR5jjPDOOKJ4NG3RXGV6xxGUMFSfqDGVjKn1o7eOhE
+	 q2mbhzWUfEC5qwsz8DSRIrp+kTex0qTaRA8q0IGd0i0Cj3yBJviA5dl04HsrpiEOdt
+	 HUbsxi1THD+BcBIJVjwxBmXdsOVRrv0503evHVk5Gv0Hz4A0rn8k/u1MVti8ecEJl0
+	 qEUrFlKswaLtVcKdXAzM5JPkv05vcTiFh0760D0r/GLYtKxYqJonMShQugc1OH7wng
+	 b+bxMfGlP8gY5/aOPCJnDe+E9ikVLk5TD5B20w7bPvxjOLbxvGi2XstY3mvaonTRyt
+	 LQ6eXsInw+xPg==
+Message-ID: <a999bc7d-a141-4ebe-9adc-0d64d3e67d5a@kernel.org>
+Date: Tue, 17 Jun 2025 14:05:26 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -52,6 +52,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH v2 1/4] dt-bindings: clock: mediatek,mtmips-sysc: Adapt
  compatible for MT7688 boards
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Ezra Buehler <ezra@easyb.ch>, linux-mips@vger.kernel.org
 Cc: Conor Dooley <conor+dt@kernel.org>,
  Harvey Hunt <harveyhuntnexus@gmail.com>,
@@ -63,7 +64,7 @@ Cc: Conor Dooley <conor+dt@kernel.org>,
  devicetree@vger.kernel.org, Ezra Buehler <ezra.buehler@husqvarnagroup.com>
 References: <20250617103058.1125836-1-ezra@easyb.ch>
  <20250617103058.1125836-2-ezra@easyb.ch>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <74402e94-6d1e-4a4c-9e50-d41fdf1080e0@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
@@ -108,52 +109,57 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250617103058.1125836-2-ezra@easyb.ch>
+In-Reply-To: <74402e94-6d1e-4a4c-9e50-d41fdf1080e0@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 17/06/2025 12:30, Ezra Buehler wrote:
-> From: Ezra Buehler <ezra.buehler@husqvarnagroup.com>
+On 17/06/2025 13:40, Krzysztof Kozlowski wrote:
+> On 17/06/2025 12:30, Ezra Buehler wrote:
+>> From: Ezra Buehler <ezra.buehler@husqvarnagroup.com>
+>>
+>> As the MT7628 and MT7688 are identical in most respects, mt7628a.dtsi is
+>> used for both SoCs. To prevent "Kernel panic - not syncing: unable to
+>> get CPU clock, err=-2" and allow an MT7688-based board to boot, the
+>> following must be allowed:
+>>
+>>     compatible = "ralink,mt7628-sysc", "ralink,mt7688-sysc", "syscon";
+>>
+>> Signed-off-by: Ezra Buehler <ezra.buehler@husqvarnagroup.com>
+>> ---
+>>  .../bindings/clock/mediatek,mtmips-sysc.yaml  | 29 +++++++++++--------
+>>  1 file changed, 17 insertions(+), 12 deletions(-)
+>>
+>> diff --git a/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml b/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
+>> index 83c1803ffd16..550807301fc5 100644
+>> --- a/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
+>> +++ b/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
+>> @@ -26,18 +26,23 @@ description: |
+>>  
+>>  properties:
+>>    compatible:
+>> -    items:
+>> -      - enum:
+>> -          - ralink,mt7620-sysc
+>> -          - ralink,mt7628-sysc
+>> -          - ralink,mt7688-sysc
+>> -          - ralink,rt2880-sysc
+>> -          - ralink,rt3050-sysc
+>> -          - ralink,rt3052-sysc
+>> -          - ralink,rt3352-sysc
+>> -          - ralink,rt3883-sysc
+>> -          - ralink,rt5350-sysc
+>> -      - const: syscon
+>> +    oneOf:
+>> +      - items:
+>> +          - enum:
+>> +              - ralink,mt7620-sysc
+>> +              - ralink,mt7628-sysc
 > 
-> As the MT7628 and MT7688 are identical in most respects, mt7628a.dtsi is
-> used for both SoCs. To prevent "Kernel panic - not syncing: unable to
-> get CPU clock, err=-2" and allow an MT7688-based board to boot, the
-> following must be allowed:
-> 
->     compatible = "ralink,mt7628-sysc", "ralink,mt7688-sysc", "syscon";
-> 
-> Signed-off-by: Ezra Buehler <ezra.buehler@husqvarnagroup.com>
-> ---
->  .../bindings/clock/mediatek,mtmips-sysc.yaml  | 29 +++++++++++--------
->  1 file changed, 17 insertions(+), 12 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml b/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
-> index 83c1803ffd16..550807301fc5 100644
-> --- a/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
-> +++ b/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
-> @@ -26,18 +26,23 @@ description: |
->  
->  properties:
->    compatible:
-> -    items:
-> -      - enum:
-> -          - ralink,mt7620-sysc
-> -          - ralink,mt7628-sysc
-> -          - ralink,mt7688-sysc
-> -          - ralink,rt2880-sysc
-> -          - ralink,rt3050-sysc
-> -          - ralink,rt3052-sysc
-> -          - ralink,rt3352-sysc
-> -          - ralink,rt3883-sysc
-> -          - ralink,rt5350-sysc
-> -      - const: syscon
-> +    oneOf:
-> +      - items:
-> +          - enum:
-> +              - ralink,mt7620-sysc
-> +              - ralink,mt7628-sysc
+> It's here already, so this must be dropped.
 
-It's here already, so this must be dropped.
+
+I meant mt7628 is here already and you are adding it again further, so
+it is now in two places.
 
 
 Best regards,
