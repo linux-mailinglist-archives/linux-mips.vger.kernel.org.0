@@ -1,46 +1,46 @@
-Return-Path: <linux-mips+bounces-9368-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9369-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B070FADDEDE
-	for <lists+linux-mips@lfdr.de>; Wed, 18 Jun 2025 00:30:43 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9806ADDEE4
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Jun 2025 00:30:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8FCE9177E05
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Jun 2025 22:30:41 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8A7F87AC653
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Jun 2025 22:29:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF5A129DB68;
-	Tue, 17 Jun 2025 22:30:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8CC42BEC28;
+	Tue, 17 Jun 2025 22:30:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GIYerzvn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CKc8qPKa"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B958229B8F7;
-	Tue, 17 Jun 2025 22:30:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 848BE2BDC28;
+	Tue, 17 Jun 2025 22:30:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750199400; cv=none; b=KTKjc4TbiwYOOtjG8nUl6/rKdhKY26EvPEdy/TjAL0P5ie0nJ58aRkKy7EqcU2wHOq5kKkR9CELNeulZPXCxn5VY0uC4yHHLgovFKom5qAh30nKe1Hh+DVR9fj6US/1S3S5S4wLgCgOathQ1i4IS42ToT2u7CBAOaWR/Z6OaPJU=
+	t=1750199401; cv=none; b=BgCCOCkPbzR1L9D8Ecpx5aa93WQFwkTv+hpFyHcyRbB+/q5U/2j2CYSHllVFoXHJJV3OA2pCSOtB+3XM2kJc0awRk8U9IVLPZYZRfO9hU0HHG71kPgW2HW/pV4EuOiTswe8mA8IQSvwBwv25ItC8HZGvQAkOozcFXlmX390qPvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750199400; c=relaxed/simple;
-	bh=DB9DhLYVRPJOFC4JEDOQxgYzL630xncYTvwWN0gUiiM=;
+	s=arc-20240116; t=1750199401; c=relaxed/simple;
+	bh=hkPIvoqxShZhMTTDhLVtDi8Yqmn39FL66nVo8qVRu1Y=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=h7cCRltedOneO9HMe46CCZysste9B37wfQq9GWMRurKp2Gu7VnZWyaOiNveAWoWPByOqVgvL80WVcjfGxwedxmq+a1TRm8UU1wgAh6yM4AWy+Un3wsNCc57aMfReMnmoqNYHUhkp5IEwymPwCRVdxfJMVcyhzQObiLIjGlhV38g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GIYerzvn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49D9CC4CEED;
+	 MIME-Version; b=XNjtubKqPUZ3qCEMKpSvblnHExajfaCawLTN+k4lXIS7JJ7hJJQUPIMMJk/2PhERzXngzwaD3gUanLcais3siwoY7Hp8SdSrtvaV0JA83hlNzvlF6LcxwuO5/o0LNW7rrER3sWLZ2iHgJG9Qb09L2XqZAgrVCsS1GJhrHz2l78o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CKc8qPKa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC62AC4CEF6;
 	Tue, 17 Jun 2025 22:30:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750199400;
-	bh=DB9DhLYVRPJOFC4JEDOQxgYzL630xncYTvwWN0gUiiM=;
+	s=k20201202; t=1750199401;
+	bh=hkPIvoqxShZhMTTDhLVtDi8Yqmn39FL66nVo8qVRu1Y=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=GIYerzvn7TkQv8UhdzsGR2rqziJPgfgOG4h6rMYjV8i2fmyJZx/y5nf8WTbs/GG8Y
-	 a0X7Aw26Sj1eUD4YljIGP3krHppMca79SDg/cuVSv/C24zdNrwXqys4sFBrqKx5Ll5
-	 jQ7gPM5IBYyanhR7gaWs9tUP8/eVTid9ipCEr50gEhwbMbGfxY3/PAhYc7lhYYM8mW
-	 iOEzkysYJZNdPW+5uNlmUz5sgbCLC2R+oRoDR2XpiV9v0SJehI6MYubs3zbFM4hn7K
-	 7bAbHLTtuG2cBs/Way1kxZ5fJh7a5QYUAqIYo6PU1t57pY0T0mmdVJ/DRgt5wf+s1Q
-	 YGJcjLKKLAAsQ==
+	b=CKc8qPKacvgviafDJA8lSI2yrliEIiRaHqww9PSNVArp3EkmSThFIj0ix9/MqJPwg
+	 3t0MqZLXdwckLnEcpIcbnuhL8zrVWrFYzDDuEke7tXOvMfDa3J7RRrKLmU+uetbjZ4
+	 bG1iU16tXN1rrqNMaQxv+54OWdd/MEWLvXU9V0sacQR86Pehnf0mSBErESrSvBLLqb
+	 ntGC/IsNfd2afRrg89OWW2gQnIbUZFr5ADvscwB9ZsXqG8WMWm0JAyG4OPxWA5H3Q7
+	 T9Uy/6lgMcgbVxTl3aSfMvp3Nmeamfxr1OxiYp1oJMF4LdCD3rAm7+Q0WUupeSaq0t
+	 O5Ni41xVr1NEw==
 From: Eric Biggers <ebiggers@kernel.org>
 To: linux-crypto@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -53,9 +53,9 @@ Cc: linux-kernel@vger.kernel.org,
 	linux-s390@vger.kernel.org,
 	sparclinux@vger.kernel.org,
 	x86@kernel.org
-Subject: [PATCH 6/9] lib/crypto/s390: move arch/s390/lib/crypto/ to lib/crypto/s390/
-Date: Tue, 17 Jun 2025 15:27:23 -0700
-Message-ID: <20250617222726.365148-7-ebiggers@kernel.org>
+Subject: [PATCH 7/9] lib/crypto/sparc: move arch/sparc/lib/crypto/ to lib/crypto/sparc/
+Date: Tue, 17 Jun 2025 15:27:24 -0700
+Message-ID: <20250617222726.365148-8-ebiggers@kernel.org>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <20250617222726.365148-1-ebiggers@kernel.org>
 References: <20250617222726.365148-1-ebiggers@kernel.org>
@@ -69,7 +69,7 @@ Content-Transfer-Encoding: 8bit
 
 From: Eric Biggers <ebiggers@google.com>
 
-Move the contents of arch/s390/lib/crypto/ into lib/crypto/s390/.
+Move the contents of arch/sparc/lib/crypto/ into lib/crypto/sparc/.
 
 The new code organization makes a lot more sense for how this code
 actually works and is developed.  In particular, it makes it possible to
@@ -87,91 +87,79 @@ arch-optimized code is integrated for each algorithm.
 
 Signed-off-by: Eric Biggers <ebiggers@google.com>
 ---
- arch/s390/lib/Makefile                                  | 1 -
- lib/crypto/Kconfig                                      | 2 +-
- lib/crypto/Makefile                                     | 1 +
- {arch/s390/lib/crypto => lib/crypto/s390}/Kconfig       | 0
- {arch/s390/lib/crypto => lib/crypto/s390}/Makefile      | 0
- {arch/s390/lib/crypto => lib/crypto/s390}/chacha-glue.c | 0
- {arch/s390/lib/crypto => lib/crypto/s390}/chacha-s390.S | 0
- {arch/s390/lib/crypto => lib/crypto/s390}/chacha-s390.h | 0
- {arch/s390/lib/crypto => lib/crypto/s390}/sha256.c      | 0
- 9 files changed, 2 insertions(+), 2 deletions(-)
- rename {arch/s390/lib/crypto => lib/crypto/s390}/Kconfig (100%)
- rename {arch/s390/lib/crypto => lib/crypto/s390}/Makefile (100%)
- rename {arch/s390/lib/crypto => lib/crypto/s390}/chacha-glue.c (100%)
- rename {arch/s390/lib/crypto => lib/crypto/s390}/chacha-s390.S (100%)
- rename {arch/s390/lib/crypto => lib/crypto/s390}/chacha-s390.h (100%)
- rename {arch/s390/lib/crypto => lib/crypto/s390}/sha256.c (100%)
+ arch/sparc/lib/Makefile                                  | 1 -
+ lib/crypto/Kconfig                                       | 2 +-
+ lib/crypto/Makefile                                      | 1 +
+ {arch/sparc/lib/crypto => lib/crypto/sparc}/Kconfig      | 0
+ {arch/sparc/lib/crypto => lib/crypto/sparc}/Makefile     | 0
+ {arch/sparc/lib/crypto => lib/crypto/sparc}/sha256.c     | 0
+ {arch/sparc/lib/crypto => lib/crypto/sparc}/sha256_asm.S | 0
+ 7 files changed, 2 insertions(+), 2 deletions(-)
+ rename {arch/sparc/lib/crypto => lib/crypto/sparc}/Kconfig (100%)
+ rename {arch/sparc/lib/crypto => lib/crypto/sparc}/Makefile (100%)
+ rename {arch/sparc/lib/crypto => lib/crypto/sparc}/sha256.c (100%)
+ rename {arch/sparc/lib/crypto => lib/crypto/sparc}/sha256_asm.S (100%)
 
-diff --git a/arch/s390/lib/Makefile b/arch/s390/lib/Makefile
-index cd35cdbfa8713..271a1c407121c 100644
---- a/arch/s390/lib/Makefile
-+++ b/arch/s390/lib/Makefile
-@@ -1,11 +1,10 @@
- # SPDX-License-Identifier: GPL-2.0
- #
- # Makefile for s390-specific library files..
+diff --git a/arch/sparc/lib/Makefile b/arch/sparc/lib/Makefile
+index 5cf9781d68b40..ef8860eb3f3d1 100644
+--- a/arch/sparc/lib/Makefile
++++ b/arch/sparc/lib/Makefile
+@@ -2,11 +2,10 @@
+ # Makefile for Sparc library files..
  #
  
--obj-y += crypto/
- lib-y += delay.o string.o uaccess.o find.o spinlock.o tishift.o
- lib-y += csum-partial.o
- obj-y += mem.o xor.o
- lib-$(CONFIG_KPROBES) += probes.o
- lib-$(CONFIG_UPROBES) += probes.o
+ asflags-y := -ansi -DST_DIV0=0x02
+ 
+-obj-y                 += crypto/
+ lib-$(CONFIG_SPARC32) += ashrdi3.o
+ lib-$(CONFIG_SPARC32) += memcpy.o memset.o
+ lib-y                 += strlen.o
+ lib-y                 += checksum_$(BITS).o
+ lib-$(CONFIG_SPARC32) += blockops.o
 diff --git a/lib/crypto/Kconfig b/lib/crypto/Kconfig
-index a2b58ca2df0cc..278b7ef5ec4f9 100644
+index 278b7ef5ec4f9..b98543c7ef231 100644
 --- a/lib/crypto/Kconfig
 +++ b/lib/crypto/Kconfig
-@@ -203,11 +203,11 @@ source "lib/crypto/powerpc/Kconfig"
- endif
- if RISCV
- source "lib/crypto/riscv/Kconfig"
+@@ -206,11 +206,11 @@ source "lib/crypto/riscv/Kconfig"
  endif
  if S390
--source "arch/s390/lib/crypto/Kconfig"
-+source "lib/crypto/s390/Kconfig"
+ source "lib/crypto/s390/Kconfig"
  endif
  if SPARC
- source "arch/sparc/lib/crypto/Kconfig"
+-source "arch/sparc/lib/crypto/Kconfig"
++source "lib/crypto/sparc/Kconfig"
  endif
  if X86
+ source "arch/x86/lib/crypto/Kconfig"
+ endif
+ endif
 diff --git a/lib/crypto/Makefile b/lib/crypto/Makefile
-index 0fe9200a031d6..4cda1f5cd21d4 100644
+index 4cda1f5cd21d4..748d1fc6b6be2 100644
 --- a/lib/crypto/Makefile
 +++ b/lib/crypto/Makefile
-@@ -106,5 +106,6 @@ libsm3-y					:= sm3.o
- obj-$(CONFIG_ARM) += arm/
+@@ -107,5 +107,6 @@ obj-$(CONFIG_ARM) += arm/
  obj-$(CONFIG_ARM64) += arm64/
  obj-$(CONFIG_MIPS) += mips/
  obj-$(CONFIG_PPC) += powerpc/
  obj-$(CONFIG_RISCV) += riscv/
-+obj-$(CONFIG_S390) += s390/
-diff --git a/arch/s390/lib/crypto/Kconfig b/lib/crypto/s390/Kconfig
+ obj-$(CONFIG_S390) += s390/
++obj-$(CONFIG_SPARC) += sparc/
+diff --git a/arch/sparc/lib/crypto/Kconfig b/lib/crypto/sparc/Kconfig
 similarity index 100%
-rename from arch/s390/lib/crypto/Kconfig
-rename to lib/crypto/s390/Kconfig
-diff --git a/arch/s390/lib/crypto/Makefile b/lib/crypto/s390/Makefile
+rename from arch/sparc/lib/crypto/Kconfig
+rename to lib/crypto/sparc/Kconfig
+diff --git a/arch/sparc/lib/crypto/Makefile b/lib/crypto/sparc/Makefile
 similarity index 100%
-rename from arch/s390/lib/crypto/Makefile
-rename to lib/crypto/s390/Makefile
-diff --git a/arch/s390/lib/crypto/chacha-glue.c b/lib/crypto/s390/chacha-glue.c
+rename from arch/sparc/lib/crypto/Makefile
+rename to lib/crypto/sparc/Makefile
+diff --git a/arch/sparc/lib/crypto/sha256.c b/lib/crypto/sparc/sha256.c
 similarity index 100%
-rename from arch/s390/lib/crypto/chacha-glue.c
-rename to lib/crypto/s390/chacha-glue.c
-diff --git a/arch/s390/lib/crypto/chacha-s390.S b/lib/crypto/s390/chacha-s390.S
+rename from arch/sparc/lib/crypto/sha256.c
+rename to lib/crypto/sparc/sha256.c
+diff --git a/arch/sparc/lib/crypto/sha256_asm.S b/lib/crypto/sparc/sha256_asm.S
 similarity index 100%
-rename from arch/s390/lib/crypto/chacha-s390.S
-rename to lib/crypto/s390/chacha-s390.S
-diff --git a/arch/s390/lib/crypto/chacha-s390.h b/lib/crypto/s390/chacha-s390.h
-similarity index 100%
-rename from arch/s390/lib/crypto/chacha-s390.h
-rename to lib/crypto/s390/chacha-s390.h
-diff --git a/arch/s390/lib/crypto/sha256.c b/lib/crypto/s390/sha256.c
-similarity index 100%
-rename from arch/s390/lib/crypto/sha256.c
-rename to lib/crypto/s390/sha256.c
+rename from arch/sparc/lib/crypto/sha256_asm.S
+rename to lib/crypto/sparc/sha256_asm.S
 -- 
 2.49.0
 
