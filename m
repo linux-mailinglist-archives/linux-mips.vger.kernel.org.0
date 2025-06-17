@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-9346-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9348-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD9E5ADCD40
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Jun 2025 15:33:42 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CA32ADCD43
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Jun 2025 15:34:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C1F61882631
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Jun 2025 13:29:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42BCF1885FD6
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Jun 2025 13:29:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 514052E06D9;
-	Tue, 17 Jun 2025 13:26:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D9312E2674;
+	Tue, 17 Jun 2025 13:26:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="hisNQ3GG"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="OZPxq/YQ"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 720B64A3E;
-	Tue, 17 Jun 2025 13:26:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7A982C030A;
+	Tue, 17 Jun 2025 13:26:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750166778; cv=none; b=l639SXsJQ8ddd4NYhiOAY3CI94fa9FJdBvDaIxJX1KukKQZ8lAWg2uvhGAGleXcspwvjYyw+R96PPb6X3yNUK0gMb9QK/PixAzbrYZrrIcUa/EOa7PCNwewTU2use+jH7PZKDw6Gzm5H9MwKzjhHbOFZRd4T6Wnr+zTS4mN2VIg=
+	t=1750166780; cv=none; b=O8CDtkV97llWpAOUHDWQ5n18ovUIxc5Y2lvjuAg3BwPPJCMfQEOyEqcZv4QQ2C/v730SenlpHm73VOkt83QAAbq+ZhyaXsJlw7ccdyS7HAeyUFcZiD77rrU5fcgUkxsyr6JvZzBXzfoOvfVfKZZ7lMJxG13MzXvYS3j+dMDmQOo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750166778; c=relaxed/simple;
-	bh=TvizUw3s32t5WfGidPkDNUWzrMmpAfSocWSh6m0IFEs=;
+	s=arc-20240116; t=1750166780; c=relaxed/simple;
+	bh=EoQSVfjmQhFp8Pf1z8sIAQ+SUZ570j0AUSbWNVE84+k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FVZNxsHrvxGZaaYpfatyNhsXu4AeWyaKaSg7ypyGSltv7rPgrYNXmNnU+S+N2eIFbg6VNZkXZBXuWDBhm7A5zdBeiz3abQ+VzG6DxuBMhV/R2GAT6zgi5W1f9jBRA0KZz0RhNcDoFB3MWN6PAHOG+3mBdIhdecLNeH9+CenHWcQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=hisNQ3GG; arc=none smtp.client-ip=217.70.183.196
+	 MIME-Version:Content-Type; b=Ns0+MWkIQvvwmuZBhX5fGi2rL1rSYAPCP1rSxP9IxvGsv6DVpIhKYLgJ7BW97if/tW4cFAoMSdo6RTtY7G8cF+uMCNY9CBM9swEOFPSop9a92IyW9j8ekUu4HwctyZCwPpBbP+TQGfhg80PDQw1Rr55JM0AUC5JyLHB0Kpkal90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=OZPxq/YQ; arc=none smtp.client-ip=217.70.183.196
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 26C8543B1A;
+Received: by mail.gandi.net (Postfix) with ESMTPSA id F373343AED;
 	Tue, 17 Jun 2025 13:26:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1750166767;
+	t=1750166768;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=XbFldGhGnrwmXccRNPx3zmXGt1+GihInMsMek4sU+M0=;
-	b=hisNQ3GG95DTr3ELv2mNmwWRaNsjAHXpBQaQW/zah0g6fjAS4rNNDUcQNpKetjrtHX+bzX
-	2Y5/WdrjgT05jO3QSrLhXE+H6JG7904+63WJywl4G5QSJAogbA0bmwPhPWqm0YPn9m3RPw
-	+ewGsA/jXCC2wusx4NITLGwl4ahzeX2mf+NCnwq6JNBPVPDRZxdRAcS+C2+fyq7zhzGaXt
-	uAD+pcckWxyHH+8tRA3HFmuNb7aXBPx/vcdMTcm4h6TQ9vipm4Maet9cndXLhxbEHnM5QM
-	sTB1PibZjBUaX96+94YLcPrHQhiHoFL+bUTkDB3m1g47HipQG1LG1Z3FVMFYjw==
+	bh=bCmIoAYmrqX3lAaHkyLHBfKbWm86bSCT79CFP9TUs2o=;
+	b=OZPxq/YQLjpeydC4OOQVmZZXskhci/E+RaWXUKED0ACSVFX9/toSDIuzQNCQs8VElwPZXX
+	dMiY2oMBp2fi3AivDrPkFDs66tBK8JHad8GX8Lo+TgG03up0pA8v9VrJWPYr2jo8wovUr7
+	HxRtUIiL+wBcP+K3NIjkhF1KzXVdZ49C/yxphKjrwCHI9xcJb8SQReWKe4JDSd5lJLFQ0z
+	7aMjkOIEjJwVqVaB0iodl4pt9V731csg9caImH7uiXKSNNcPAPDsumsIgdxk+Aeh7MKsKF
+	K6SE/WGpEWKqffIkb5YZm+/JEMONl4Hg1bQUcupAIJy61DO88QQCBQCuCq4TGg==
 From: =?UTF-8?q?Beno=C3=AEt=20Monin?= <benoit.monin@bootlin.com>
 To: Ulf Hansson <ulf.hansson@linaro.org>,
 	Rob Herring <robh@kernel.org>,
@@ -62,9 +62,9 @@ Cc: =?UTF-8?q?Beno=C3=AEt=20Monin?= <benoit.monin@bootlin.com>,
 	linux-kernel@vger.kernel.org,
 	linux-mips@vger.kernel.org,
 	"Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
-Subject: [PATCH 1/6] dt-bindings: mmc: cdns: add Mobileye EyeQ MMC/SDHCI controller
-Date: Tue, 17 Jun 2025 15:25:51 +0200
-Message-ID: <9b34b471d1e71cf47c503aed7145fab896767ba7.1750156323.git.benoit.monin@bootlin.com>
+Subject: [PATCH 2/6] mmc: sdhci-cadence: add Mobileye eyeQ support
+Date: Tue, 17 Jun 2025 15:25:52 +0200
+Message-ID: <e97f409650495791e07484589e1666ead570fa12.1750156323.git.benoit.monin@bootlin.com>
 X-Mailer: git-send-email 2.49.0
 In-Reply-To: <cover.1750156323.git.benoit.monin@bootlin.com>
 References: <cover.1750156323.git.benoit.monin@bootlin.com>
@@ -82,24 +82,42 @@ X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgddvlecutefuodetggdotefrodf
  ehkvghrnhgvlhdrohhrghdprhgtphhtthhopehvlhgrughimhhirhdrkhhonhgurhgrthhivghvsehmohgsihhlvgihvgdrtghomhdprhgtphhtthhopehgrhgvghhorhihrdgtlhgvmhgvnhhtsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepthhhvghordhlvggsrhhunhessghoohhtlhhinhdrtghomhdprhgtphhtthhopehtshgsohhgvghnugesrghlphhhrgdrfhhrrghnkhgvnhdruggv
 X-GND-Sasl: benoit.monin@bootlin.com
 
-The MMC/SD controller from Mobileye is compatible with cdns,sd4hc, but
-will need the preset broken value quirk for speed slower than HS200.
+The MMC/SDHCI controller implemented by Mobileye needs the preset value
+quirks to configure the clock properly at speed slower than HS200.
+It otherwise works as a standard sd4hc controller.
 
 Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
 ---
- Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/mmc/host/sdhci-cadence.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-index 0432cc96f7ca..ac75d694611a 100644
---- a/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-+++ b/Documentation/devicetree/bindings/mmc/cdns,sdhci.yaml
-@@ -16,6 +16,7 @@ properties:
-           - amd,pensando-elba-sd4hc
-           - microchip,mpfs-sd4hc
-           - microchip,pic64gx-sd4hc
-+          - mobileye,eyeq-sd4hc
-           - socionext,uniphier-sd4hc
-       - const: cdns,sd4hc
+diff --git a/drivers/mmc/host/sdhci-cadence.c b/drivers/mmc/host/sdhci-cadence.c
+index a94b297fcf2a..60ca09780da3 100644
+--- a/drivers/mmc/host/sdhci-cadence.c
++++ b/drivers/mmc/host/sdhci-cadence.c
+@@ -433,6 +433,13 @@ static const struct sdhci_cdns_drv_data sdhci_elba_drv_data = {
+ 	},
+ };
  
++static const struct sdhci_cdns_drv_data sdhci_eyeq_drv_data = {
++	.pltfm_data = {
++		.ops = &sdhci_cdns_ops,
++		.quirks2 = SDHCI_QUIRK2_PRESET_VALUE_BROKEN,
++	},
++};
++
+ static const struct sdhci_cdns_drv_data sdhci_cdns_drv_data = {
+ 	.pltfm_data = {
+ 		.ops = &sdhci_cdns_ops,
+@@ -595,6 +602,10 @@ static const struct of_device_id sdhci_cdns_match[] = {
+ 		.compatible = "amd,pensando-elba-sd4hc",
+ 		.data = &sdhci_elba_drv_data,
+ 	},
++	{
++		.compatible = "mobileye,eyeq-sd4hc",
++		.data = &sdhci_eyeq_drv_data,
++	},
+ 	{ .compatible = "cdns,sd4hc" },
+ 	{ /* sentinel */ }
+ };
 
