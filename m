@@ -1,268 +1,144 @@
-Return-Path: <linux-mips+bounces-9360-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9361-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B927ADDD9C
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Jun 2025 23:07:48 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80A2FADDDAC
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Jun 2025 23:10:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89FE01892CF2
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Jun 2025 21:08:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A41BD189DBAC
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Jun 2025 21:10:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 416012EF9CD;
-	Tue, 17 Jun 2025 21:07:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 543FF2ECD0C;
+	Tue, 17 Jun 2025 21:10:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MLmWeLnQ"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="HMsC5FfB"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53E9C28C03B
-	for <linux-mips@vger.kernel.org>; Tue, 17 Jun 2025 21:07:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E11D92EFD88
+	for <linux-mips@vger.kernel.org>; Tue, 17 Jun 2025 21:10:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750194461; cv=none; b=lQzblRK17/QUrcz5NZIjPqIdAKrk1V4qoUSoCVKhuYTR1NyQ3Z4DvEB110Da/HaVuxTvfDI4L4z2RbCZG6SmELdVV41+E1QBl6z9D6BT08K4aylLIsqSss9DzVv/gmD2DrfQmo+Nazjs4pzhZr8xH5kS9R8QnZMHjn8zxhUSZyY=
+	t=1750194637; cv=none; b=Wk8fIYWCHbxoVDd2rSdj3QMeRfRhO3d13VAri/Ua8wlHNEBMix4D5/24MQJsFpP4XV3FHwZDZ4zCvTSRxtqUe5S7jt15AJlnX+9TKMxCYNS9ifg/G8zscvTJI4q/KPhxs6ywxpuJe2UUOgjJ+79ul6aK6SRCHSca1xg2c9RKQTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750194461; c=relaxed/simple;
-	bh=/YMbad19V6TpsG3MEiZ2mbTgkuu9Y0VSL2UolHVg1UE=;
-	h=Date:From:To:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tVKDUQu03Dke4iJaIcoTCn8l1a4j4kzNDuohrkZ/610uOxEtd4mxnpViM17e//npD2msYM2/IaayOSYBzDd6LiSe65vkIOAD8t8flT3/fICNHNnIXeQ/yQSCKQGZfwRChwW2A1sEL/iNOeQ/G552FfjP0MA2qhKzareKckU83fY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MLmWeLnQ; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1750194458;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9waNqRMmOjunuN18CikjvGF9bugNIg2AINTl6Y0HXgo=;
-	b=MLmWeLnQjO23v/GhsmudsFqyGn5zk9mPrvpoZ90tPPGpnEwJYmsmd40mEEFmjGhxhVf4Nv
-	+4iCcwI0Ht0hXz1yNV8FviDpQCyRipU5YElHWaGnCBLXjhkuj2aFVUxNziZARa/V9Ytr4r
-	CErokSyjTUlhuRg+VX9GZRbm8OGqAvc=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-522-3ZTSNHsYPc60Ko2fbBe9Bg-1; Tue, 17 Jun 2025 17:07:35 -0400
-X-MC-Unique: 3ZTSNHsYPc60Ko2fbBe9Bg-1
-X-Mimecast-MFC-AGG-ID: 3ZTSNHsYPc60Ko2fbBe9Bg_1750194454
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-7d09ed509aaso1024348585a.3
-        for <linux-mips@vger.kernel.org>; Tue, 17 Jun 2025 14:07:34 -0700 (PDT)
+	s=arc-20240116; t=1750194637; c=relaxed/simple;
+	bh=ir2qXEQz0ITQfoN65/zED7gUfzbFZUXr94ByJGJvwQY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SUw4IXJgQy/Ui/Owxip44mBVu9jNjCHqA3DtWvfNShGRifWDqPWvcWYCJWLvd300MTzoZxwrHuXlPGt1TKRGBSKjzi0tH994UwD4Z4x96CUOORKn4lEWnkFLlqPt5F1kWsTTWJHHaID9qXZdSeupziPMRGDCMFiJ/pADR84JL0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=HMsC5FfB; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-foundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-adb5cb6d8f1so1135433766b.3
+        for <linux-mips@vger.kernel.org>; Tue, 17 Jun 2025 14:10:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google; t=1750194633; x=1750799433; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=NscEjg9Y1LWinfHLpsahI5dfBkkxck14FsEzSEH/mHM=;
+        b=HMsC5FfBBK8m1OzFzla6fblWwkNIzUHDmGhhJ8yI7xn5y17BmMGS+n9v0OX3/0ZUok
+         05Ye3ty1blfiv0qAEkOtr0rGdneAksgoWTKeUx1NmzyaJCi2GjCR2iMXQ3sjkl0sGEcj
+         uxMct+ygdjDVcBLicGWBCL8TFCeFJsYuQOOG8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750194454; x=1750799254;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9waNqRMmOjunuN18CikjvGF9bugNIg2AINTl6Y0HXgo=;
-        b=J0l81TV/V7QYna6bSneNgsdo5XI/FVQgHQoq0Sf1lPA2LtyRmcHzfHyZBP227zDgQb
-         TpAU3yJ7IOcd8xTrAMZUSgbHjZ9ABy/l/Wdnl/e9SaaF9bjyOJKZZbDXnKbFGn9ByxdT
-         qWaQN+l74a1reM8FpvhihrUpedtF9yfhfn5DbNaC4piqwfglHhCioNRMZn7MreruUBoS
-         zwoR0r5rhq6Hfv7Kpp3TjyMEpbwPhzdPD+6HGo+/IEkJfWF1DQOeg+6saIjEVyUSFh+e
-         6ULdbLwGE1ZPiyfFKnzLl+cL/Q9mioFKtxLvhOuqrxRfXrPBR0NnK2W6gKKlBEMmzNLy
-         caig==
-X-Forwarded-Encrypted: i=1; AJvYcCUkEHyppteBKkK8VV6MUrCSqpqjQUimTQdyz3hvmZ1w5u/VB1/NTy4uQ4rGu8rrKUvWAP3GeKxBXnD8@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz0xkhmyEVgerRcJXYDMOotH8Q9HSx5X2lF1O3Z4UMjyrr+Flve
-	bUUg42v0g2fyNh5+tt/ZkMuFV8dbn/ZwtJzk+UZD0FvF7169I9M+/PM8rtmBmtRp7vwhS76otSW
-	6yj4GAzr8Ze7uzLbTc54uhtAlIRi/mO4C4pyNlg/o4ugQlkKmBQsgZtKUONflqd4=
-X-Gm-Gg: ASbGncsj6mkZQTZXhnZn4oNdY+2RJRRduMQJDQSr0/Key9g2qPFTgZ5tjjUEtsHEbyj
-	6w4jLmM+a6FOE8Ep3zIAWpyOei1/0cilrVyKVP3Vk/lcp2cZZqBo+Ihc8ea4ZAUKHSCfi9TEF81
-	3SdaDqUsml/EkOpaxIT3aE+RiWamM/6ICjiMEb9eoSJVgP5wUUvMbCbIBRv+jcXABreRiy+aOI2
-	Cs1KDNCbAnBueJtKU8rSsEHdW5AkTtM2Ts+3JKlXH+7C91VXS3uUW3P8S9lbhLjXTSkJ30xuPFX
-	vTKGWRuw4bh4GA==
-X-Received: by 2002:a05:620a:40c3:b0:7d2:2698:aab1 with SMTP id af79cd13be357-7d3c6c18fc1mr2412798785a.19.1750194454389;
-        Tue, 17 Jun 2025 14:07:34 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEjDInY101hnNdJuIa1SM4o6S/CNrzg2R+QnI69RAx4dIk51ymk26jNQS+KJeGfyRDLUZEXbQ==
-X-Received: by 2002:a05:620a:40c3:b0:7d2:2698:aab1 with SMTP id af79cd13be357-7d3c6c18fc1mr2412795385a.19.1750194454011;
-        Tue, 17 Jun 2025 14:07:34 -0700 (PDT)
-Received: from x1.local ([85.131.185.92])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7d3b8e2173csm690984185a.52.2025.06.17.14.07.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jun 2025 14:07:33 -0700 (PDT)
-Date: Tue, 17 Jun 2025 17:07:30 -0400
-From: Peter Xu <peterx@redhat.com>
-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-	kvm@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-	Alex Williamson <alex.williamson@redhat.com>,
-	Zi Yan <ziy@nvidia.com>, Jason Gunthorpe <jgg@nvidia.com>,
-	Alex Mastro <amastro@fb.com>, David Hildenbrand <david@redhat.com>,
-	Nico Pache <npache@redhat.com>, Huacai Chen <chenhuacai@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Muchun Song <muchun.song@linux.dev>,
-	Oscar Salvador <osalvador@suse.de>, loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org
-Subject: Re: [PATCH 2/5] mm/hugetlb: Remove prepare_hugepage_range()
-Message-ID: <aFHZEtepArJdkLB0@x1.local>
-References: <20250613134111.469884-1-peterx@redhat.com>
- <20250613134111.469884-3-peterx@redhat.com>
- <4rypovqoa4j6f4fyfqzrm5xeiv3dng5hc5dlfhmnehkydk6gcd@z6f3k3joaoli>
+        d=1e100.net; s=20230601; t=1750194633; x=1750799433;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NscEjg9Y1LWinfHLpsahI5dfBkkxck14FsEzSEH/mHM=;
+        b=nd49Ax2KmukEsM/LzAKeYd0hJgQxHDBe2fAAMqb2dGPt0kT+uboXbSqdmgUTTnm8qV
+         7a64N/kpWmzskkcOKBO9glZ7oNjI2+wgy2rmgWqgXtIDec9ZfeYXFlnWY0PRRI5UZusl
+         7dN9+4vbRuCtlm20ffwdxfus+OJoT1g/iFNCx5Edwdn++FEwu7pwmZGn0uVn/0YozGmt
+         h8YrkV9reRsBH3sbtYlMeLGWrDlExkCelv55+NwzAgNiQd18zLL2Qewn6RQ+AHJjBXVg
+         43IjYerfZ9/b3+UByIqAt9WidTHHlPayh0ja2rL4MGwyN2Zf55CS9WEHjRpd+ixrN7Tg
+         xCfA==
+X-Forwarded-Encrypted: i=1; AJvYcCUZcl58lE1kcOQrb1b/aM+17hFZQc2VQYx79AtV9WQ+pZC10Uqq/KVg7fPMlbp2slchGg0zVdJX1bEa@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsQ9acX0XiSg4+qj2LHnAPkKCGN4kdmbdAsHM0AcuBztv+hIik
+	NKqd1yJCByYHDX/upAcs2i0XPK8WXmphKQDiKUYliPHQmm+82qjwzdBpw23UTUXN4KZVoz0fsnV
+	D+Z0xiG8=
+X-Gm-Gg: ASbGncsOkx+sPUki6eJCQSB+eseFYXmQB5frwvTarkbM8Gb8IP0lzfp4x3bYmbpapUG
+	EkJrLZheE7YEIeKX2HGosJDlSQeOYwpoNYsBuEoH0FxoZX+Pf7vLtJ6pJb4XPxLBjEaYF+oYHYi
+	Lv76zyYmBrG6fkVw3YSFbYZ7LUBif9S2PRbZLpWDq9imxRdHha1hSzrWMpikideSSyo5i/in52v
+	eI9JgaZW18+jck/IRpoLKxAOxP5n0PIZeOkhj0zoWU420ejJdMKOqyDbJw4iXIYgR6Djv5BqqxQ
+	KGQRb0tLQN6z+1XvgedGPzsyXGSq0EyNpL+BzGSF1fpf7v7DSKl6Fwe5w6yQlSJosNuVd4QXJha
+	GTAlblbAg6K3080Kcj6ZW6Rsa21JzO+kOHJGdYTr1YAFLU84=
+X-Google-Smtp-Source: AGHT+IHP5m9m9js7wrAacUPnhK1+t1Bn6mKCCKfl5SXBUhmDMgyb3fkLEoULeT8nvifYAzpVzYyNCw==
+X-Received: by 2002:a17:907:3da0:b0:ad8:9257:571c with SMTP id a640c23a62f3a-adfad326f1bmr1540738866b.20.1750194632823;
+        Tue, 17 Jun 2025 14:10:32 -0700 (PDT)
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com. [209.85.208.43])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-adec8158d33sm923863666b.31.2025.06.17.14.10.32
+        for <linux-mips@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 17 Jun 2025 14:10:32 -0700 (PDT)
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-607434e1821so9004383a12.0
+        for <linux-mips@vger.kernel.org>; Tue, 17 Jun 2025 14:10:32 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCX0kUI942YTiIcJIk3Rt7QXNUPeyua6i0Aw7M9BOza2lNEwS01EkLZ7bVzMW6QGIn1qY5PEyHUIEyh5@vger.kernel.org
+X-Received: by 2002:a05:6402:5188:b0:607:f55d:7c56 with SMTP id
+ 4fb4d7f45d1cf-608d097a0a3mr14798722a12.25.1750194632040; Tue, 17 Jun 2025
+ 14:10:32 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <4rypovqoa4j6f4fyfqzrm5xeiv3dng5hc5dlfhmnehkydk6gcd@z6f3k3joaoli>
+References: <20250616014019.415791-1-ebiggers@kernel.org> <20250617060523.GH8289@sol>
+ <CAHk-=wi5d4K+sF2L=tuRW6AopVxO1DDXzstMQaECmU2QHN13KA@mail.gmail.com>
+ <20250617192212.GA1365424@google.com> <CAHk-=wiB6XYBt81zpebysAoya4T-YiiZEmW_7+TtoA=FSCA4XQ@mail.gmail.com>
+ <20250617195858.GA1288@sol> <CAHk-=whJjS_wfxCDhkj2fNp1XPAbxDDdNwF1iqZbamZumBmZPg@mail.gmail.com>
+ <20250617203726.GC1288@sol>
+In-Reply-To: <20250617203726.GC1288@sol>
+From: Linus Torvalds <torvalds@linux-foundation.org>
+Date: Tue, 17 Jun 2025 14:10:15 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whLENPVgWtHg5jt42he8Eb2pFzZngbvfSWXUmq64cyaAw@mail.gmail.com>
+X-Gm-Features: AX0GCFteh8AxHdG-O3SktB-Vd7hTjMUC_EBJsHwrbakY8eEhqvV4OBO-zVcDyV4
+Message-ID: <CAHk-=whLENPVgWtHg5jt42he8Eb2pFzZngbvfSWXUmq64cyaAw@mail.gmail.com>
+Subject: Re: [PATCH v2 00/17] SHA-512 library functions
+To: Eric Biggers <ebiggers@kernel.org>
+Cc: linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
+	sparclinux@vger.kernel.org, x86@kernel.org, Ard Biesheuvel <ardb@kernel.org>, 
+	"Jason A . Donenfeld" <Jason@zx2c4.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Sat, Jun 14, 2025 at 12:11:22AM -0400, Liam R. Howlett wrote:
-> * Peter Xu <peterx@redhat.com> [691231 23:00]:
-> > Only mips and loongarch implemented this API, however what it does was
-> > checking against stack overflow for either len or addr.  That's already
-> > done in arch's arch_get_unmapped_area*() functions, hence not needed.
-> 
-> I'm not as confident..
-> 
-> > 
-> > It means the whole API is pretty much obsolete at least now, remove it
-> > completely.
-> > 
-> > Cc: Huacai Chen <chenhuacai@kernel.org>
-> > Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > Cc: Muchun Song <muchun.song@linux.dev>
-> > Cc: Oscar Salvador <osalvador@suse.de>
-> > Cc: loongarch@lists.linux.dev
-> > Cc: linux-mips@vger.kernel.org
-> > Signed-off-by: Peter Xu <peterx@redhat.com>
-> > ---
-> >  arch/loongarch/include/asm/hugetlb.h | 14 --------------
-> >  arch/mips/include/asm/hugetlb.h      | 14 --------------
-> >  fs/hugetlbfs/inode.c                 |  8 ++------
-> >  include/asm-generic/hugetlb.h        |  8 --------
-> >  include/linux/hugetlb.h              |  6 ------
-> >  5 files changed, 2 insertions(+), 48 deletions(-)
-> > 
-> > diff --git a/arch/loongarch/include/asm/hugetlb.h b/arch/loongarch/include/asm/hugetlb.h
-> > index 4dc4b3e04225..ab68b594f889 100644
-> > --- a/arch/loongarch/include/asm/hugetlb.h
-> > +++ b/arch/loongarch/include/asm/hugetlb.h
-> > @@ -10,20 +10,6 @@
-> >  
-> >  uint64_t pmd_to_entrylo(unsigned long pmd_val);
-> >  
-> > -#define __HAVE_ARCH_PREPARE_HUGEPAGE_RANGE
-> > -static inline int prepare_hugepage_range(struct file *file,
-> > -					 unsigned long addr,
-> > -					 unsigned long len)
-> > -{
-> > -	unsigned long task_size = STACK_TOP;
-> > -
-> > -	if (len > task_size)
-> > -		return -ENOMEM;
-> > -	if (task_size - len < addr)
-> > -		return -EINVAL;
-> > -	return 0;
-> > -}
-> > -
-> >  #define __HAVE_ARCH_HUGE_PTE_CLEAR
-> >  static inline void huge_pte_clear(struct mm_struct *mm, unsigned long addr,
-> >  				  pte_t *ptep, unsigned long sz)
-> > diff --git a/arch/mips/include/asm/hugetlb.h b/arch/mips/include/asm/hugetlb.h
-> > index fbc71ddcf0f6..8c460ce01ffe 100644
-> > --- a/arch/mips/include/asm/hugetlb.h
-> > +++ b/arch/mips/include/asm/hugetlb.h
-> > @@ -11,20 +11,6 @@
-> >  
-> >  #include <asm/page.h>
-> >  
-> > -#define __HAVE_ARCH_PREPARE_HUGEPAGE_RANGE
-> > -static inline int prepare_hugepage_range(struct file *file,
-> > -					 unsigned long addr,
-> > -					 unsigned long len)
-> > -{
-> > -	unsigned long task_size = STACK_TOP;
-> 
-> arch/mips/include/asm/processor.h:#define STACK_TOP             mips_stack_top()
-> 
-> 
-> unsigned long mips_stack_top(void)                                                                                                                                                                                                             
-> {       
->         unsigned long top = TASK_SIZE & PAGE_MASK;                                                                                                                                                                                             
->         
->         if (IS_ENABLED(CONFIG_MIPS_FP_SUPPORT)) {
->                 /* One page for branch delay slot "emulation" */                                                                                                                                                                               
->                 top -= PAGE_SIZE;                                                                                                                                                                                                              
->         }                                                                                                                                                                                                                                      
->         
->         /* Space for the VDSO, data page & GIC user page */                                                                                                                                                                                    
->         top -= PAGE_ALIGN(current->thread.abi->vdso->size);                                                                                                                                                                                    
->         top -= PAGE_SIZE;
->         top -= mips_gic_present() ? PAGE_SIZE : 0;                                                                                                                                                                                             
->         
->         /* Space for cache colour alignment */                                                                                                                                                                                                 
->         if (cpu_has_dc_aliases)
->                 top -= shm_align_mask + 1;                                                                                                                                                                                                     
->         
->         /* Space to randomize the VDSO base */                                                                                                                                                                                                 
->         if (current->flags & PF_RANDOMIZE)
->                 top -= VDSO_RANDOMIZE_SIZE;                                                                                                                                                                                                    
->         
->         return top;                                                                                                                                                                                                                            
-> }
-> 
-> This seems different than TASK_SIZE.
-> 
-> Code is from:
-> commit ea7e0480a4b695d0aa6b3fa99bd658a003122113
-> Author: Paul Burton <paulburton@kernel.org>
-> Date:   Tue Sep 25 15:51:26 2018 -0700
-> 
-> 
-> > -	if (len > task_size)
-> > -		return -ENOMEM;
-> > -	if (task_size - len < addr)
-> > -		return -EINVAL;
-> > -	return 0;
-> > -}
-> > -
-> 
-> Unfortunately, the commit message for the addition of this code are not
-> helpful.
-> 
-> commit 50a41ff292fafe1e937102be23464b54fed8b78c
-> Author: David Daney <ddaney@caviumnetworks.com>
-> Date:   Wed May 27 17:47:42 2009 -0700
-> 
-> ... But the dates are helpful.  This code used to use:
-> #define STACK_TOP      ((TASK_SIZE & PAGE_MASK) - PAGE_SIZE)
-> 
-> It's not exactly task size either.
-> 
-> I don't think this is an issue to remove this check because the overflow
-> should be caught later (or trigger the opposite search).  But it's not
-> clear why STACK_TOP was done in the first place.. Maybe just because we
-> know the overflow here would be an issue later, but then we'd avoid the
-> opposite search - and maybe that's the point?
-> 
-> Either way, your comment about the same check existing doesn't seem
-> correct.
+On Tue, 17 Jun 2025 at 13:37, Eric Biggers <ebiggers@kernel.org> wrote:
+>
+> Okay.  For now I'll keep the test commits last and plan for a separate pull
+> request with them, based on the first.  I fear I'll quickly run into
+> interdependencies, in which case I'll need to fall back to "one pull request and
+> spell things out very clearly".  But I'll try it.
 
-I will fix up the commit message to mention both archs:
+Thanks.
 
-  Only mips and loongarch implemented this API, however what it does was
-  checking against stack overflow for either len or addr.  That's already
-  done in arch's arch_get_unmapped_area*() functions, even though it may not
-  be 100% identical checks.
+Note that this "split it out" is really _only_ for when there's big
+code movement and re-organization like this - it's certainly not a
+general thing.
 
-  For example, for both of the architectures, there will be a trivial
-  difference on how stack top was defined.  The old code uses STACK_TOP which
-  may be slightly smaller than TASK_SIZE on either of them, but the hope is
-  that shouldn't be a problem.
+So you don't need to feel like I'm going to ask you to jump through
+hoops in general for normal crypto library updates, this is really
+only for these kinds of initial "big code movement" things.
 
-  It means the whole API is pretty much obsolete at least now, remove it
-  completely.
+> Just so it's clear, this is the diffstat of this patchset broken down by
+> non-test code (patches 1-3 and 6-17) and tests (4-5):
+>
+>     Non-test:
+>          65 files changed, 1524 insertions(+), 1756 deletions(-)
+>
+>     Test:
+>          14 files changed, 2488 insertions(+)
 
-> 
-> I haven't checked loong arch, but I'd be willing to wager this was just
-> cloned mips code... because this happens so much.
+Looks good. That's the kind of diffstat that makes me happy to pull:
+the first one removes move code than it adds, and the second one very
+clearly just adds tests.
 
-They define STACK_TOP differently, but AFAIU there're some duplications in
-pattern of the two archs.
+So yes, this is the kind of thing that makes my life easy..
 
-Please let me know if the fixed commit message works for you above, thanks.
+> Note that the non-test part includes kerneldoc comments.  I'll assume you aren't
+> going to insist on those being in a separate "documentation" pull request...
 
--- 
-Peter Xu
+Naah, they're relatively tiny, and don't skew the diffstat in huge ways.
 
+             Linus
 
