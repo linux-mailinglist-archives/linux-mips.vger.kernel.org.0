@@ -1,132 +1,161 @@
-Return-Path: <linux-mips+bounces-9343-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9344-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D2BBADC857
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Jun 2025 12:31:32 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50E54ADC9A1
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Jun 2025 13:40:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 90AE618990D8
-	for <lists+linux-mips@lfdr.de>; Tue, 17 Jun 2025 10:31:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CAA32178BA4
+	for <lists+linux-mips@lfdr.de>; Tue, 17 Jun 2025 11:40:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A9C52D12F7;
-	Tue, 17 Jun 2025 10:31:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7252D2DBF7B;
+	Tue, 17 Jun 2025 11:40:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=easyb-ch.20230601.gappssmtp.com header.i=@easyb-ch.20230601.gappssmtp.com header.b="CJpMQB0e"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OD2tKmsJ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62CCF2D0289
-	for <linux-mips@vger.kernel.org>; Tue, 17 Jun 2025 10:31:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 406E22DBF62;
+	Tue, 17 Jun 2025 11:40:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750156268; cv=none; b=Rgzc7UhBgB2CE31TilecYzMdYfvvSCyvgRecLEMxYamt7zTNSsRcOJR1dyqQQdVjfdYMzVZ+cLhY4rvN8pGinQbD4RO4YgYOz+TfY+RgaOXSQ6ZNinKoLuWUX1DlbPnPshZ5HHxWz/Fn4/BrrT6XXIVNmtygR+B5U5wLs2zGkgo=
+	t=1750160406; cv=none; b=utUkxRhX1yjF/VAaDbqwJ8vVHM17HtGAWKKU6E5AN3Shf2aocEexQrwJGNkJNO6QWvAraWDkxN5+9juuR6sx1wtZrgfFQS2rSiDkxV79Yx5AirDT7ZfPP/oIkyFK/x07vIdE5NCjoP6xq+bKMXRv/4TLfIgb6/MCN2YLcWWzS8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750156268; c=relaxed/simple;
-	bh=TrO2SFjGKBK1TwkijXcscyMw/RsP3DJJ4iYMXoLZjYc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ChjV5sjkAu0lAZG3zJBIZsRKJzYvE+/dQ/yVY/dwDW9C9Hh0jxrxrDa/PR8SKGo/X7sJ0Fk7gH8MaQ3vNjDFEdT/DgHCXGtGkfTrU6o4j8uAEW8970y24VAk9+2bYu0dQtAo+CS6sAoVPRshrShXa+ClO21slEYx/Qxc8H1L45A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=easyb.ch; spf=none smtp.mailfrom=easyb.ch; dkim=pass (2048-bit key) header.d=easyb-ch.20230601.gappssmtp.com header.i=@easyb-ch.20230601.gappssmtp.com header.b=CJpMQB0e; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=easyb.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=easyb.ch
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-45310223677so44804025e9.0
-        for <linux-mips@vger.kernel.org>; Tue, 17 Jun 2025 03:31:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=easyb-ch.20230601.gappssmtp.com; s=20230601; t=1750156265; x=1750761065; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+EIhw+Rvhc6cZiuD+svHBrLE+9XGVyIueYFgEdxmfoI=;
-        b=CJpMQB0ereSZWBP4xZJtNUEs0BMJ1uDLceNv9/mpJZEKxJP8/qaZBOEcCviDhFb4kR
-         iqbYBaYHcVi3e63RgLMLbuioei/V5p9XGaffvsZ9gPeFuRs1QgL9mS6oQRhtl3r7l5jr
-         kakcondm0AYmSxI7zsZ+s8AbjNVthJwe0xkwRGw9eSqxVno/bAhPcg002xMlejSnGwbl
-         QQSViGWmBvXYTgD4E189aeU0De80vsaJaELTLQkjK/FLXrzBfXPCP/OMFD5aVwp7vPg5
-         MZfK09y3Ad6AmXvKvxX/QCVm8VXkelDD+Kg2JDP9zS6WjJ0CI0k8fMeP7tznffF4fSY3
-         kQtQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750156265; x=1750761065;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+EIhw+Rvhc6cZiuD+svHBrLE+9XGVyIueYFgEdxmfoI=;
-        b=VMkRIZXSUTU2TWGzJBPMArMRvS3qE9gt13+D3pr8RAPTEnXvyhRv7a4RjjYxMpxGfP
-         st+epDzzBbZ1y/CPJZqeX9ybCWYwto97plVVO2A8UgFOgCOOOeRpgkfYevmB4tlxDEP4
-         zLFqyh7czdwiu5ftvFvuU5LXrepB/JXRar5m93Nue9/OGS2glMy7QA8Im0CAwBOeWW83
-         i6XW38UEabPV3T8VZ0KIsyFkKhVxCRpjTrUPmub6bA1Ad1hWOld2HyyyM4rSUdI0UCvc
-         lKcIaH7k36rtx45lkyN7hFiQnxQL1RKu8keq8lFJeR3dyBWWV16R8JvmG6L+LSUk2LGi
-         heeA==
-X-Gm-Message-State: AOJu0YxecvgfgGfBw3BcydRDJ3TTKV7j++iAmBhujZoe0sGJO5pZBt31
-	Homv6HYPWqQxfHwaPUcqBnmGZzW8Wz/3jdJzrm3zlMmD89BR2zcJHxK4Q5v89Y1ukeTukHTEAel
-	M1Q1F
-X-Gm-Gg: ASbGncuTJrFFoUtwZgkTJKCcarUUoxdrkf37MMZdBRhFEsnygWMRVMicO55PGfxIYdO
-	WynaACwBh/yEo15plfLuLfPaEkYakKr66D9OrhL/MgAWY+dg6KAbQzJ+RYFFo9fLEoZ3SfvcZaB
-	7oKVoKtkly8V3LWiMyZAo9EAYZk69j6/9DcKYLoY3Evaowb8ojEJIjAcam8LESx62bbA0q13jrU
-	68q/96PcjFBX67rl2eRIic9jBOWoHM5rE/GNa0S9YnsMM4WM4eWgu6NGWWL+pbK8T/tY8HLB9SU
-	X6E5QXi3KD9srXM5YZ7Wq5vQHwqldJ4YSlWp+DbJnllH0roUC2rhZlrKLHw=
-X-Google-Smtp-Source: AGHT+IGtDKpHFy5WHmvYJBL42JR6U9VDIK34mA7pSWjqK42F0jExFwDeVF6E15A9/TbCdRZsiBlyXg==
-X-Received: by 2002:a05:6000:3112:b0:3a4:e480:b5df with SMTP id ffacd0b85a97d-3a572e79749mr11186526f8f.44.1750156265412;
-        Tue, 17 Jun 2025 03:31:05 -0700 (PDT)
-Received: from fraxinus.easyland ([2a02:16a:7402:0:b1a7:bc8:262a:3102])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4532e16a097sm176749215e9.33.2025.06.17.03.31.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 17 Jun 2025 03:31:05 -0700 (PDT)
-From: Ezra Buehler <ezra@easyb.ch>
-To: linux-mips@vger.kernel.org
-Cc: Conor Dooley <conor+dt@kernel.org>,
-	Harvey Hunt <harveyhuntnexus@gmail.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Reto Schneider <reto.schneider@husqvarnagroup.com>,
-	Rob Herring <robh@kernel.org>,
-	Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-	Stefan Roese <sr@denx.de>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	devicetree@vger.kernel.org,
-	Ezra Buehler <ezra.buehler@husqvarnagroup.com>
-Subject: [PATCH v2 4/4] MIPS: dts: ralink: gardena_smart_gateway_mt7688: Fix power LED
-Date: Tue, 17 Jun 2025 12:30:58 +0200
-Message-ID: <20250617103058.1125836-5-ezra@easyb.ch>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250617103058.1125836-1-ezra@easyb.ch>
-References: <20250617103058.1125836-1-ezra@easyb.ch>
+	s=arc-20240116; t=1750160406; c=relaxed/simple;
+	bh=pMDacMHhH7plhzx4hSeLuxVWMh8IlE+qEePTraGPSt4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=on5U/HwodjQM3RzF+DnG8dfeYCs/AmZqT9SwhE+dWTpCEoYhmYBONt9a3Ga6AYuqLlvxYHrk7B7pURtU/zMcUFBWy1n0f7CP2UADfKxrBCBjXu+O5mQcClYXBOZ8sF67iVnURotCpF/BLcBJp32PFmNrBG3DgUzNal/v1JO7SEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OD2tKmsJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E7E4C4CEE3;
+	Tue, 17 Jun 2025 11:40:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750160405;
+	bh=pMDacMHhH7plhzx4hSeLuxVWMh8IlE+qEePTraGPSt4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=OD2tKmsJI5dcsvBqlpfXJT//0InoBbGHBZ2oyzPQeaH27c3BYfrpqaYvJtXdwPUq8
+	 blXp3MuPMdfmcZyRscfim2Ei/7hithRrlNl81MdM3rxVWUJYYNmDU7O5bVQhravGKm
+	 V0CtPVbB+8UZVjG4K5ReVNIfxga1XS7IiI+j91jroxIeNKQ5dEKXulQVk9I+WYwR5d
+	 g7IHVVHgaI+1RGagdTmZ+EQvJBZ/VsKOw3mF94FDwjBjrf3oL5HbEwlm/VNHrVpAFM
+	 XqE4y3pU4dCJ8S6Sqd0F0mycUsZoiCTZnmW0pQBbZZxJrNyUakq6P5Ft9DdpH++FMi
+	 iCgA+DwybxmRQ==
+Message-ID: <74402e94-6d1e-4a4c-9e50-d41fdf1080e0@kernel.org>
+Date: Tue, 17 Jun 2025 13:40:01 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/4] dt-bindings: clock: mediatek,mtmips-sysc: Adapt
+ compatible for MT7688 boards
+To: Ezra Buehler <ezra@easyb.ch>, linux-mips@vger.kernel.org
+Cc: Conor Dooley <conor+dt@kernel.org>,
+ Harvey Hunt <harveyhuntnexus@gmail.com>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Reto Schneider <reto.schneider@husqvarnagroup.com>,
+ Rob Herring <robh@kernel.org>,
+ Sergio Paracuellos <sergio.paracuellos@gmail.com>, Stefan Roese
+ <sr@denx.de>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ devicetree@vger.kernel.org, Ezra Buehler <ezra.buehler@husqvarnagroup.com>
+References: <20250617103058.1125836-1-ezra@easyb.ch>
+ <20250617103058.1125836-2-ezra@easyb.ch>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250617103058.1125836-2-ezra@easyb.ch>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Ezra Buehler <ezra.buehler@husqvarnagroup.com>
+On 17/06/2025 12:30, Ezra Buehler wrote:
+> From: Ezra Buehler <ezra.buehler@husqvarnagroup.com>
+> 
+> As the MT7628 and MT7688 are identical in most respects, mt7628a.dtsi is
+> used for both SoCs. To prevent "Kernel panic - not syncing: unable to
+> get CPU clock, err=-2" and allow an MT7688-based board to boot, the
+> following must be allowed:
+> 
+>     compatible = "ralink,mt7628-sysc", "ralink,mt7688-sysc", "syscon";
+> 
+> Signed-off-by: Ezra Buehler <ezra.buehler@husqvarnagroup.com>
+> ---
+>  .../bindings/clock/mediatek,mtmips-sysc.yaml  | 29 +++++++++++--------
+>  1 file changed, 17 insertions(+), 12 deletions(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml b/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
+> index 83c1803ffd16..550807301fc5 100644
+> --- a/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
+> +++ b/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
+> @@ -26,18 +26,23 @@ description: |
+>  
+>  properties:
+>    compatible:
+> -    items:
+> -      - enum:
+> -          - ralink,mt7620-sysc
+> -          - ralink,mt7628-sysc
+> -          - ralink,mt7688-sysc
+> -          - ralink,rt2880-sysc
+> -          - ralink,rt3050-sysc
+> -          - ralink,rt3052-sysc
+> -          - ralink,rt3352-sysc
+> -          - ralink,rt3883-sysc
+> -          - ralink,rt5350-sysc
+> -      - const: syscon
+> +    oneOf:
+> +      - items:
+> +          - enum:
+> +              - ralink,mt7620-sysc
+> +              - ralink,mt7628-sysc
 
-When starting up, the GARDENA smart Gateway's power LED should be
-flashing green. It is unclear why it was initially set to "off".
+It's here already, so this must be dropped.
 
-The LED frequency cannot be configured in the devicetree. Luckily, the
-default is 1 Hz, which is what we want.
 
-Signed-off-by: Ezra Buehler <ezra.buehler@husqvarnagroup.com>
-Reviewed-by: Stefan Roese <sr@denx.de>
-Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts b/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-index 7743d014631a..0bfb1dde9764 100644
---- a/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-+++ b/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-@@ -56,7 +56,7 @@ led-power-blue {
- 		led-power-green {
- 			label = "smartgw:power:green";
- 			gpios = <&gpio 19 GPIO_ACTIVE_HIGH>;
--			default-state = "off";
-+			linux,default-trigger = "timer";
- 		};
- 
- 		led-power-red {
--- 
-2.43.0
-
+Best regards,
+Krzysztof
 
