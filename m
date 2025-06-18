@@ -1,50 +1,51 @@
-Return-Path: <linux-mips+bounces-9404-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9405-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E44FADF5FB
-	for <lists+linux-mips@lfdr.de>; Wed, 18 Jun 2025 20:34:15 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C3E2ADF6DA
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Jun 2025 21:27:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 265F83AB207
-	for <lists+linux-mips@lfdr.de>; Wed, 18 Jun 2025 18:33:51 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E8A4E7AC558
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Jun 2025 19:26:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4AEA2F547C;
-	Wed, 18 Jun 2025 18:33:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5988F211A27;
+	Wed, 18 Jun 2025 19:27:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A3Ej2aul"
+	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="EaIfnTLG"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBC5527E07E;
-	Wed, 18 Jun 2025 18:33:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B989A1A2632;
+	Wed, 18 Jun 2025 19:27:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750271636; cv=none; b=m/ipv1+lat+4XK6QaPWvpebdhWzKdi3aRKg8D3zrmzVSOzq0WfzrCugU+TvNadVnL9s8cjWiNlte8dOL0k2t8EmxZ1y3f6qczwky0N0URn0fDmW1oi3qVx6H/1SkAKAk40+HuiwRHEMX6OxRsuzRv7wXVQ9EPVJGYBKt4LMDiNk=
+	t=1750274869; cv=none; b=ZG78nyUZtaPbCqTxp2g/a35SclOz3hSWLv+hYsaPOi586jbvIqJkz+hkcNGzpK1E+CXj4O2pZXSdNjq+Vrp09NIU+WEl0E9UBho/mqKBwpLgE/CQsFL+hWWgqAoyVvx27DjH9OllBQm5XH/kouuuT/CGRMDNH/eWMLzJxVISkTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750271636; c=relaxed/simple;
-	bh=kpSEGRfAU9fOVbtCMrVZ+rQ1aeDB+P7Ft42jygFEEhI=;
+	s=arc-20240116; t=1750274869; c=relaxed/simple;
+	bh=1ggfQZFdA0UYfQVq+fCP0OtEKwuAY5GutXm6zg7tbfk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Eoa6kcx/8Bki1BB0XhSGv1qmyYRcZJ49nKi2t3Yq1N7uVzHk4bHa+yTIB6KXKMgSj/eVt2/UTgJyn0sEx79rQXaSoSRNls6q72q6gmJ0hqg/tuLsD143We8/7f1O9F/UK9CUvpai8k1Q0o0meX2StZYMGYYJvXJBJ9WuJpQbT24=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A3Ej2aul; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77C8EC4CEE7;
-	Wed, 18 Jun 2025 18:33:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750271636;
-	bh=kpSEGRfAU9fOVbtCMrVZ+rQ1aeDB+P7Ft42jygFEEhI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=A3Ej2aul6fOJdod+0Bbxj0EYeWA1n+Nq1rRrj2roqfVx8U5wc9HLvaFtQ/Gl+sX87
-	 DVlw0BCrspfewDTpmNpbKVx5NKWLTN6j3JaLhozqVKHvBJRbJrAeiHFjzJANJcHvru
-	 ady7/4IUV0NdKjQIe1n6y1eQPhCTWlo3fImZ/x7KWqP4G7Pi7Voyo3jMtMZaU7TS1g
-	 2Z8fBPysGH7TIfjr3E84ZogDi7vPuFu4iBSlaUrSlAiuJTiQMrAe29qWgU6+tzKTRt
-	 Da8MhNQmLQ0fOi+ywjmv1dXi7e4bx7W2YI+ojHWczLCnBetGloAn07w6VGIrBPt1LS
-	 EN19s6tQH1ViA==
-Date: Wed, 18 Jun 2025 19:33:51 +0100
-From: Simon Horman <horms@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=qJr9pm2sHhLcUC+8PP1/wLagY95llI8MGgNHc0sQk9PoxZW/d7Q48lio2pb41bCscNaJw+vOtcM6VFs2sOVvYSnpzOkflLhpz2Kq7Q64J0a01PBJrazaN1PHg5SD3rpg3d+FXbIrZKra9ZLckwgXa89UfNBfawAICwPCCBL2eF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=EaIfnTLG; arc=none smtp.client-ip=156.67.10.101
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+	bh=mbpyUcV8WJEkmNQrYOMEQSj4rAFYVKz/rtUgfOJMyew=; b=EaIfnTLGw+4JwC3Kzt5QUG2/YL
+	t24i+RjeQafPTa8HWidbHGlIousYnbhxaqPsVwx9Wekyhryw/B+I0T/xRZRIbbklISomjvy5dLIMn
+	4OJSC8Y4EJMhQnRFFcpqYfYs/9bXSBXQi0+dlfOtH4Uc85y91CI6/yYxq6Xr2loroqBk=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+	(envelope-from <andrew@lunn.ch>)
+	id 1uRyRM-00GKRb-Q0; Wed, 18 Jun 2025 21:27:20 +0200
+Date: Wed, 18 Jun 2025 21:27:20 +0200
+From: Andrew Lunn <andrew@lunn.ch>
 To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc: Andrew Lunn <andrew@lunn.ch>, Heiner Kallweit <hkallweit1@gmail.com>,
+Cc: Heiner Kallweit <hkallweit1@gmail.com>,
 	Alexandre Torgue <alexandre.torgue@foss.st.com>,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
 	"David S. Miller" <davem@davemloft.net>,
@@ -55,11 +56,11 @@ Cc: Andrew Lunn <andrew@lunn.ch>, Heiner Kallweit <hkallweit1@gmail.com>,
 	linux-stm32@st-md-mailman.stormreply.com,
 	Maxime Coquelin <mcoquelin.stm32@gmail.com>, netdev@vger.kernel.org,
 	Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH net-next 2/2] net: stmmac: loongson1: get ls1b resource
- only once
-Message-ID: <20250618183351.GX1699@horms.kernel.org>
+Subject: Re: [PATCH net-next 1/2] net: stmmac: loongson1: provide match data
+ struct
+Message-ID: <ac285b47-ccb0-4f85-8f28-cf0067b1334c@lunn.ch>
 References: <aFKXzlno7HkG-cNh@shell.armlinux.org.uk>
- <E1uRqEE-004c7M-Go@rmk-PC.armlinux.org.uk>
+ <E1uRqE9-004c7G-CB@rmk-PC.armlinux.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -68,17 +69,16 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <E1uRqEE-004c7M-Go@rmk-PC.armlinux.org.uk>
+In-Reply-To: <E1uRqE9-004c7G-CB@rmk-PC.armlinux.org.uk>
 
-On Wed, Jun 18, 2025 at 11:41:14AM +0100, Russell King (Oracle) wrote:
-> ls1b_dwmac_syscon_init() was getting the stmmac iomem resource to detect
-> which GMAC block is being used. Move this to a separate setup() function
-> that only runs at probe time, so it can sensibly behave with an
-> unrecognised resource adress. Use this to set a MAC index (id) which is
-> then used in place of testing the base address.
+On Wed, Jun 18, 2025 at 11:41:09AM +0100, Russell King (Oracle) wrote:
+> Provide a structure for match data rather than using the function
+> pointer as match data. This allows stronger type-checking for the
+> function itself, and allows extensions to the match data.
 > 
 > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 
-Reviewed-by: Simon Horman <horms@kernel.org>
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 
+    Andrew
 
