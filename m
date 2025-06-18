@@ -1,181 +1,169 @@
-Return-Path: <linux-mips+bounces-9377-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9379-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46169ADE388
-	for <lists+linux-mips@lfdr.de>; Wed, 18 Jun 2025 08:19:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E34DAADE947
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Jun 2025 12:42:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8DB4218978CA
-	for <lists+linux-mips@lfdr.de>; Wed, 18 Jun 2025 06:19:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E4042189EABD
+	for <lists+linux-mips@lfdr.de>; Wed, 18 Jun 2025 10:42:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92E981E25F8;
-	Wed, 18 Jun 2025 06:19:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32C32285061;
+	Wed, 18 Jun 2025 10:41:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fuCAYfUr"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="KmCEIcKF"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 684E51B0437;
-	Wed, 18 Jun 2025 06:19:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E145115D1;
+	Wed, 18 Jun 2025 10:41:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750227571; cv=none; b=cO5DTRojowkgbZYKRW3mw0RZsq+Az18nvUSr0XYxonRIGNk5xIjiABmPkDXeuryCyR3yYT9KYoWj8D8029KY0hGchtyNxgM8vfM7Q71zSB4AqFuIWFZsYLLlh0tbd0IwiyMKbChHPUdZ06l6yulCw3w8i4Yn/vbFjiJAI+ClAr0=
+	t=1750243318; cv=none; b=H9pxwnZRElCFlgILNhW4K6b/D3YvYc+24KdX+9eh0Cigaa5CTRPHLNx8Fhz7tDqKVYsMrtwgdO/sYHIel1VZMw/xpJUfURr4NnuUnndkZA12OKkyqnlsuInPDt7eHkvLqaxj5i6aL4Fa1uToqIJ22uvq2kwhE0lE7If7NI8Sbao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750227571; c=relaxed/simple;
-	bh=032ckw2UZWrg7+vlZx89aJJ8YD2Pi2qcJAidK1LUh6U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CtQpWBElmzAQVRPSLReFxeZ/MSnC5j3OVqo8uVSDrgwOQ91H8DFs3TX6bBoP9wG8V3ft4q4NJ7Jlj6hHK1FNG5vXTcvpt+zW92E3UnN+X4KNb8xtrBeuptRr0u3GeTrXtjHxFQ8fHRu8nuDf9DzgKRklI1tBbSy0b9jpowTy4fc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fuCAYfUr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51361C4CEE7;
-	Wed, 18 Jun 2025 06:19:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750227571;
-	bh=032ckw2UZWrg7+vlZx89aJJ8YD2Pi2qcJAidK1LUh6U=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=fuCAYfUrUyVq6AHx2qwEqQ2fuNR0Eo0WaX55ck53RCRVm0YY4EktLc1o24uMJ/1tJ
-	 1H3wgBXF7hQiU6OTyQoTjJnnpx8rQ50FmVxAnCdjx4WYDjwfEdEeHyMTtAwsj+6AIX
-	 33k0ag/Fk3757J6jhbuShPngZkA1tpRy2z0zE0AaFNI3tfeGBf6dTecvdbJnndXbEl
-	 u3VhFB8RD0TtKu5yj3c/s1MsZJrxF8GGwZdhKDhPnWCYTJQPWlwGucozDWSxCAq6rG
-	 NtVvtDpy1g+3EgOa/Pc4oB/zD02amgFbHHcN0+rMTqr+L/Cac9bs6c7BjCotlNnvu+
-	 P+2KcJOFBmBog==
-Message-ID: <3041baa7-64d2-40ec-b3c6-168d0a57965f@kernel.org>
-Date: Wed, 18 Jun 2025 08:19:26 +0200
+	s=arc-20240116; t=1750243318; c=relaxed/simple;
+	bh=k0LXltQZW3ApzJfj+AHhZrtAxdbVdDUSqytiiy7bwD4=;
+	h=In-Reply-To:References:From:To:Cc:Subject:MIME-Version:
+	 Content-Disposition:Content-Type:Message-Id:Date; b=N2yb9TpqeGtTVhayjU1r48G+f87fFT8Nt7TDQvq2gUpNi6eaSER0qEbkzv/+H6ON00bOTNB9p503g7O1owpUR4iwEBbkUSogYKH/jAH7YqWrxzjZH5BKTEo8nr65ZPHgzw6gGam9SvkqHoE8S8RPZJr4XAxdnllxEe++uExB5k0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=KmCEIcKF; arc=none smtp.client-ip=78.32.30.218
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
+	Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:References:
+	In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=Cm/933WhUbzY2Ue6anpW6daO4H0jv7g+t//DGt737a8=; b=KmCEIcKFhTTTC5XlkVRRdi6Q6L
+	gfoMjuP0cDyjUGyz6KEdDcJ4zuuhX1KMcLtXoxV8o8d3WaE170hQxYgs1LCHMXnbmT8GzEgoxu7eT
+	JkAWuUVRWRg5kFGOnCZ3b6p2L8eK6I+9U2qGgn4b+RM07Ii0Zgys1xaiDlj+UCrV/9e+EVBDNvkgn
+	+I0YA/ADwi77krhLJI5A0+xuqPOm+2SviJzaI/OosZh/q48Jb6AjhXYz0HvTTmm6drETWag1lHHQT
+	Og5Sbx2F2kpBkYZ6E7CgL5yccMDomgqa7y8S55Rwy2vW0q7fyji2C+zrUJPhB30SPp2rWGGE3FeQG
+	0AhIcjxw==;
+Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:60256 helo=rmk-PC.armlinux.org.uk)
+	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <rmk@armlinux.org.uk>)
+	id 1uRqEn-0006Ia-2s;
+	Wed, 18 Jun 2025 11:41:49 +0100
+Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.94.2)
+	(envelope-from <rmk@rmk-PC.armlinux.org.uk>)
+	id 1uRqE9-004c7G-CB; Wed, 18 Jun 2025 11:41:09 +0100
+In-Reply-To: <aFKXzlno7HkG-cNh@shell.armlinux.org.uk>
+References: <aFKXzlno7HkG-cNh@shell.armlinux.org.uk>
+From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+To: Andrew Lunn <andrew@lunn.ch>,
+	Heiner Kallweit <hkallweit1@gmail.com>
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Keguang Zhang <keguang.zhang@gmail.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mips@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	netdev@vger.kernel.org,
+	Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH net-next 1/2] net: stmmac: loongson1: provide match data
+ struct
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/4] dt-bindings: clock: mediatek,mtmips-sysc: Adapt
- compatible for MT7688 boards
-To: Ezra Buehler <ezra@easyb.ch>
-Cc: linux-mips@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
- Harvey Hunt <harveyhuntnexus@gmail.com>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Reto Schneider <reto.schneider@husqvarnagroup.com>,
- Rob Herring <robh@kernel.org>,
- Sergio Paracuellos <sergio.paracuellos@gmail.com>, Stefan Roese
- <sr@denx.de>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- devicetree@vger.kernel.org, Ezra Buehler <ezra.buehler@husqvarnagroup.com>
-References: <20250617103058.1125836-1-ezra@easyb.ch>
- <20250617103058.1125836-2-ezra@easyb.ch>
- <74402e94-6d1e-4a4c-9e50-d41fdf1080e0@kernel.org>
- <a999bc7d-a141-4ebe-9adc-0d64d3e67d5a@kernel.org>
- <CAM1KZSnFsc1r+DUCC81aKiP-Pomd7dUYASg5e9VYJLu+v64_QQ@mail.gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <CAM1KZSnFsc1r+DUCC81aKiP-Pomd7dUYASg5e9VYJLu+v64_QQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <E1uRqE9-004c7G-CB@rmk-PC.armlinux.org.uk>
+Sender: Russell King <rmk@armlinux.org.uk>
+Date: Wed, 18 Jun 2025 11:41:09 +0100
 
-On 17/06/2025 17:29, Ezra Buehler wrote:
-> On Tue, Jun 17, 2025 at 2:05 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
->>
->> On 17/06/2025 13:40, Krzysztof Kozlowski wrote:
->>> On 17/06/2025 12:30, Ezra Buehler wrote:
->>>> From: Ezra Buehler <ezra.buehler@husqvarnagroup.com>
->>>>
->>>> As the MT7628 and MT7688 are identical in most respects, mt7628a.dtsi is
->>>> used for both SoCs. To prevent "Kernel panic - not syncing: unable to
->>>> get CPU clock, err=-2" and allow an MT7688-based board to boot, the
->>>> following must be allowed:
->>>>
->>>>     compatible = "ralink,mt7628-sysc", "ralink,mt7688-sysc", "syscon";
->>>>
->>>> Signed-off-by: Ezra Buehler <ezra.buehler@husqvarnagroup.com>
->>>> ---
->>>>  .../bindings/clock/mediatek,mtmips-sysc.yaml  | 29 +++++++++++--------
->>>>  1 file changed, 17 insertions(+), 12 deletions(-)
->>>>
->>>> diff --git a/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml b/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
->>>> index 83c1803ffd16..550807301fc5 100644
->>>> --- a/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
->>>> +++ b/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
->>>> @@ -26,18 +26,23 @@ description: |
->>>>
->>>>  properties:
->>>>    compatible:
->>>> -    items:
->>>> -      - enum:
->>>> -          - ralink,mt7620-sysc
->>>> -          - ralink,mt7628-sysc
->>>> -          - ralink,mt7688-sysc
->>>> -          - ralink,rt2880-sysc
->>>> -          - ralink,rt3050-sysc
->>>> -          - ralink,rt3052-sysc
->>>> -          - ralink,rt3352-sysc
->>>> -          - ralink,rt3883-sysc
->>>> -          - ralink,rt5350-sysc
->>>> -      - const: syscon
->>>> +    oneOf:
->>>> +      - items:
->>>> +          - enum:
->>>> +              - ralink,mt7620-sysc
->>>> +              - ralink,mt7628-sysc
->>>
->>> It's here already, so this must be dropped.
->>
->>
->> I meant mt7628 is here already and you are adding it again further, so
->> it is now in two places.
-> 
-> My idea was to support these variants, as they are all valid:
-> 
-> compatible = "ralink,mt7628-sysc", "syscon";
-> compatible = "ralink,mt7688-sysc", "syscon";
-> compatible = "ralink,mt7628-sysc", "ralink,mt7688-sysc", "syscon";
+Provide a structure for match data rather than using the function
+pointer as match data. This allows stronger type-checking for the
+function itself, and allows extensions to the match data.
 
-How is it valid? Provide arguments because this defies logic. Device is
-and is not compatible with 7688? The same time? How, really how?
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+---
+ .../ethernet/stmicro/stmmac/dwmac-loongson1.c | 24 ++++++++++++++-----
+ 1 file changed, 18 insertions(+), 6 deletions(-)
 
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c
+index 3e86810717d3..78d9540be10c 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c
+@@ -46,6 +46,10 @@ struct ls1x_dwmac {
+ 	struct regmap *regmap;
+ };
+ 
++struct ls1x_data {
++	int (*init)(struct platform_device *pdev, void *bsp_priv);
++};
++
+ static int ls1b_dwmac_syscon_init(struct platform_device *pdev, void *priv)
+ {
+ 	struct ls1x_dwmac *dwmac = priv;
+@@ -143,9 +147,9 @@ static int ls1x_dwmac_probe(struct platform_device *pdev)
+ {
+ 	struct plat_stmmacenet_data *plat_dat;
+ 	struct stmmac_resources stmmac_res;
++	const struct ls1x_data *data;
+ 	struct regmap *regmap;
+ 	struct ls1x_dwmac *dwmac;
+-	int (*init)(struct platform_device *pdev, void *priv);
+ 	int ret;
+ 
+ 	ret = stmmac_get_platform_resources(pdev, &stmmac_res);
+@@ -159,8 +163,8 @@ static int ls1x_dwmac_probe(struct platform_device *pdev)
+ 		return dev_err_probe(&pdev->dev, PTR_ERR(regmap),
+ 				     "Unable to find syscon\n");
+ 
+-	init = of_device_get_match_data(&pdev->dev);
+-	if (!init) {
++	data = of_device_get_match_data(&pdev->dev);
++	if (!data) {
+ 		dev_err(&pdev->dev, "No of match data provided\n");
+ 		return -EINVAL;
+ 	}
+@@ -175,21 +179,29 @@ static int ls1x_dwmac_probe(struct platform_device *pdev)
+ 				     "dt configuration failed\n");
+ 
+ 	plat_dat->bsp_priv = dwmac;
+-	plat_dat->init = init;
++	plat_dat->init = data->init;
+ 	dwmac->plat_dat = plat_dat;
+ 	dwmac->regmap = regmap;
+ 
+ 	return devm_stmmac_pltfr_probe(pdev, plat_dat, &stmmac_res);
+ }
+ 
++static const struct ls1x_data ls1b_dwmac_data = {
++	.init = ls1b_dwmac_syscon_init,
++};
++
++static const struct ls1x_data ls1c_dwmac_data = {
++	.init = ls1c_dwmac_syscon_init,
++};
++
+ static const struct of_device_id ls1x_dwmac_match[] = {
+ 	{
+ 		.compatible = "loongson,ls1b-gmac",
+-		.data = &ls1b_dwmac_syscon_init,
++		.data = &ls1b_dwmac_data,
+ 	},
+ 	{
+ 		.compatible = "loongson,ls1c-emac",
+-		.data = &ls1c_dwmac_syscon_init,
++		.data = &ls1c_dwmac_data,
+ 	},
+ 	{ }
+ };
+-- 
+2.30.2
 
-Best regards,
-Krzysztof
 
