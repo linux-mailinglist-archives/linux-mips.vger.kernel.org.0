@@ -1,84 +1,98 @@
-Return-Path: <linux-mips+bounces-9405-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9406-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C3E2ADF6DA
-	for <lists+linux-mips@lfdr.de>; Wed, 18 Jun 2025 21:27:56 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D4FCADFA91
+	for <lists+linux-mips@lfdr.de>; Thu, 19 Jun 2025 03:08:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E8A4E7AC558
-	for <lists+linux-mips@lfdr.de>; Wed, 18 Jun 2025 19:26:33 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C52B33BEC02
+	for <lists+linux-mips@lfdr.de>; Thu, 19 Jun 2025 01:07:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5988F211A27;
-	Wed, 18 Jun 2025 19:27:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B98A19ABD1;
+	Thu, 19 Jun 2025 01:08:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="EaIfnTLG"
+	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="dKJ7MWj6"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B989A1A2632;
-	Wed, 18 Jun 2025 19:27:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6630C18DB20
+	for <linux-mips@vger.kernel.org>; Thu, 19 Jun 2025 01:08:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750274869; cv=none; b=ZG78nyUZtaPbCqTxp2g/a35SclOz3hSWLv+hYsaPOi586jbvIqJkz+hkcNGzpK1E+CXj4O2pZXSdNjq+Vrp09NIU+WEl0E9UBho/mqKBwpLgE/CQsFL+hWWgqAoyVvx27DjH9OllBQm5XH/kouuuT/CGRMDNH/eWMLzJxVISkTY=
+	t=1750295282; cv=none; b=EbaqE80nHKCwB23y9Fv2uxK2XcTjOUebibQTNNQ7tfUlMSBGuyMK30YvQzevC3iiR7FFZsa+iVyp9u59WBOpv2NqZrw5ueJesnehBXhOHVL+V4auBboGNhEnh4jB4f2cjbuVKTVITULwZwts378q/0Z2xpM834F+WeNHK3SJ6us=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750274869; c=relaxed/simple;
-	bh=1ggfQZFdA0UYfQVq+fCP0OtEKwuAY5GutXm6zg7tbfk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qJr9pm2sHhLcUC+8PP1/wLagY95llI8MGgNHc0sQk9PoxZW/d7Q48lio2pb41bCscNaJw+vOtcM6VFs2sOVvYSnpzOkflLhpz2Kq7Q64J0a01PBJrazaN1PHg5SD3rpg3d+FXbIrZKra9ZLckwgXa89UfNBfawAICwPCCBL2eF4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=EaIfnTLG; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=mbpyUcV8WJEkmNQrYOMEQSj4rAFYVKz/rtUgfOJMyew=; b=EaIfnTLGw+4JwC3Kzt5QUG2/YL
-	t24i+RjeQafPTa8HWidbHGlIousYnbhxaqPsVwx9Wekyhryw/B+I0T/xRZRIbbklISomjvy5dLIMn
-	4OJSC8Y4EJMhQnRFFcpqYfYs/9bXSBXQi0+dlfOtH4Uc85y91CI6/yYxq6Xr2loroqBk=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1uRyRM-00GKRb-Q0; Wed, 18 Jun 2025 21:27:20 +0200
-Date: Wed, 18 Jun 2025 21:27:20 +0200
-From: Andrew Lunn <andrew@lunn.ch>
-To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc: Heiner Kallweit <hkallweit1@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Keguang Zhang <keguang.zhang@gmail.com>,
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, netdev@vger.kernel.org,
-	Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH net-next 1/2] net: stmmac: loongson1: provide match data
- struct
-Message-ID: <ac285b47-ccb0-4f85-8f28-cf0067b1334c@lunn.ch>
-References: <aFKXzlno7HkG-cNh@shell.armlinux.org.uk>
- <E1uRqE9-004c7G-CB@rmk-PC.armlinux.org.uk>
+	s=arc-20240116; t=1750295282; c=relaxed/simple;
+	bh=9dx2Bp7Fz2kJQ1wK1pPMYN/B3+qfbPpYdSDnI/2M+6U=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=U1PE8A97EeBwdaUPCjNIxAXZBxbqT24OmkJ2n1lZXeE2RLI41Pt4fw02nLJIRWsW0VFWGZU0Eh2Q/mWKvjE2pEyctxlmz86lcbAZ/F+gHzq1t8mmYdFWd/3YiP3/UAai42fqC0rqTHeVeTUFMbeMZM8HMz0mm2K1U3YRl5twddY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=dKJ7MWj6; arc=none smtp.client-ip=202.36.163.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
+Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 4A2BB2C097B;
+	Thu, 19 Jun 2025 13:07:58 +1200 (NZST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
+	s=mail181024; t=1750295278;
+	bh=d6fQpCd/tGiiYo2KaJm4qfwVgUBw7EZikZ+Ox0tD/5U=;
+	h=From:To:Cc:Subject:Date:From;
+	b=dKJ7MWj6QhTjTaV7g++zJ/GrYzFKP5aKv3p3H3OAMc7h6UZzYwlO7EtL1Y2ERj3E9
+	 s4R740jJSQ9IUn3X7LBDsGqaM2Is9Cs9SLZ/OlhHcrMKCeGSn3okk++kuxYdlY0Lvq
+	 e3EUbvtaICRjJGgwxd3khYzexH7Gv/p4cRsPlGIrutBjraEvvV9tg+FYGv6bHcRCbu
+	 dxYo4VxCkWQglTs9ETntEREx9LgE8J9AehRolUYvnSpFlGMO4DiaqdjbqPpKQG1+sS
+	 vxg10JkfeTbVUd76stKsOt+SB1H0/V+uiAsuE8bqOHVJ6EdQ5bm9t9okaHH7ixpw2R
+	 IXWrdJxp9b8Ow==
+Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
+	id <B685362ee0000>; Thu, 19 Jun 2025 13:07:58 +1200
+Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
+	by pat.atlnz.lc (Postfix) with ESMTP id 01CE013ED6B;
+	Thu, 19 Jun 2025 13:07:58 +1200 (NZST)
+Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
+	id F403B280993; Thu, 19 Jun 2025 13:07:57 +1200 (NZST)
+From: Chris Packham <chris.packham@alliedtelesis.co.nz>
+To: tsbogend@alpha.franken.de,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	sander@svanheule.net,
+	markus.stockhausen@gmx.de
+Cc: linux-mips@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Chris Packham <chris.packham@alliedtelesis.co.nz>
+Subject: [PATCH 0/4] mips: dts: Updates for RTL9300
+Date: Thu, 19 Jun 2025 13:07:50 +1200
+Message-ID: <20250619010754.3760612-1-chris.packham@alliedtelesis.co.nz>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <E1uRqE9-004c7G-CB@rmk-PC.armlinux.org.uk>
+Content-Transfer-Encoding: quoted-printable
+X-SEG-SpamProfiler-Analysis: v=2.4 cv=F7/0dbhN c=1 sm=1 tr=0 ts=685362ee a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=6IFa9wvqVegA:10 a=yObgpN-EOfBVP0ifAR8A:9 a=3ZKOabzyN94A:10
+X-SEG-SpamProfiler-Score: 0
+x-atlnz-ls: pat
 
-On Wed, Jun 18, 2025 at 11:41:09AM +0100, Russell King (Oracle) wrote:
-> Provide a structure for match data rather than using the function
-> pointer as match data. This allows stronger type-checking for the
-> function itself, and allows extensions to the match data.
-> 
-> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+This is a series of small dts changes for the RTL9300 to enable various
+peripherals.
 
-Reviewed-by: Andrew Lunn <andrew@lunn.ch>
+Chris Packham (4):
+  mips: dts: cameo-rtl9302c: Add switch block
+  mips: dts: realtek: Add switch interrupts
+  mips: dts: realtek: Add watchdog
+  mips: dts: realtek: Add gpio block
 
-    Andrew
+ .../cameo-rtl9302c-2x-rtl8224-2xge.dts        | 96 +++++++++++++++++++
+ arch/mips/boot/dts/realtek/rtl930x.dtsi       | 31 ++++++
+ 2 files changed, 127 insertions(+)
+
+--=20
+2.49.0
+
 
