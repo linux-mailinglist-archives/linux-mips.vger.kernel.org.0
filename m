@@ -1,128 +1,108 @@
-Return-Path: <linux-mips+bounces-9408-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9411-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A438ADFA8B
-	for <lists+linux-mips@lfdr.de>; Thu, 19 Jun 2025 03:08:16 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1808ADFC1A
+	for <lists+linux-mips@lfdr.de>; Thu, 19 Jun 2025 06:01:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF5121BC0A0A
-	for <lists+linux-mips@lfdr.de>; Thu, 19 Jun 2025 01:08:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 63E3A7AC99E
+	for <lists+linux-mips@lfdr.de>; Thu, 19 Jun 2025 03:59:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4900F19E992;
-	Thu, 19 Jun 2025 01:08:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B24DE21E087;
+	Thu, 19 Jun 2025 04:00:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b="tLCLqUjU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ax1QfBig"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from gate2.alliedtelesis.co.nz (gate2.alliedtelesis.co.nz [202.36.163.20])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f171.google.com (mail-pg1-f171.google.com [209.85.215.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62067175D53
-	for <linux-mips@vger.kernel.org>; Thu, 19 Jun 2025 01:08:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.36.163.20
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A50C54764;
+	Thu, 19 Jun 2025 04:00:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750295284; cv=none; b=MieeB832agy81RF85snkWIxf90UqbJhgWgISKyFTlr9cQ/ezd2S0/8WQdNtYIJ25NHuALf7c06gab5oxrG/qVhqkbqOQLyc0F/lidZfAcxqt45lSt8+T21VLjgyuB+cCFkHb9Ucv3g9PcVfJAExW38qMWbWl6e+yw11AcAbZ1Ww=
+	t=1750305655; cv=none; b=r5JQHZBruFxVD7ZofprDoNUvcAJaQNHWr8mjhHIyO1n+AhQlOunfC3DetejAyhq9p9ICHsp8oKkiP7UL5j+pxivIZQnPmREBgkkSs/E6iOO8aUeiWnP7BqkELvdoep1LNZ6kFC1HRvZYLmg1DHV2XbWPxkgoxjKP2QTs3IOdWsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750295284; c=relaxed/simple;
-	bh=XVB9thgNi1didXz5aWGiHjLjyRTPcEHJKWRSyNTp4fo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=pVQztuUCR36rZeUzBGJGagbqw5/dY6tGrVqBi0D5M0/h/wodY+erzNO73h2WQB0GmvM57uxVsZj+QR3rphON+8cOhE1iWUp8a9iveiQNWDlk2RfQQJKUNWg4QGgaJXnzVl9aMErPIbucOGclGoxnWnrCncEW18R1roj+9NvTEnU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz; spf=pass smtp.mailfrom=alliedtelesis.co.nz; dkim=pass (2048-bit key) header.d=alliedtelesis.co.nz header.i=@alliedtelesis.co.nz header.b=tLCLqUjU; arc=none smtp.client-ip=202.36.163.20
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=alliedtelesis.co.nz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alliedtelesis.co.nz
-Received: from svr-chch-seg1.atlnz.lc (mmarshal3.atlnz.lc [10.32.18.43])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by gate2.alliedtelesis.co.nz (Postfix) with ESMTPS id 6F9B62C0BC6;
-	Thu, 19 Jun 2025 13:07:58 +1200 (NZST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alliedtelesis.co.nz;
-	s=mail181024; t=1750295278;
-	bh=7UmSMxZInk7rBl0e8y0lvWe7dE2+hkbf4Sw2iH0CEmM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=tLCLqUjUtkvjGJBnnBji7/Rz6W8XqEczkKobhBEp4ZcB35PeIvia+4PqwXmGQAODL
-	 tHDgdkbST8j2H3ZvPt3PvXiy2/tS2s3BFLBJtBvoZ6rn7KurSVXXtkdnWORMJH1J9d
-	 zUkgCxac5nizBvGvB2lVYw61RlFc8WrFHTVxs8iQ1fvD4vqnLHODcChzGE5McZSgH2
-	 prwJplZylR8LlbmR3ZYRT4dcAc8hWMboHgDNaFfG9rcUW4zUs72r+LVr5qUhCKSeO3
-	 h1WiagGJrdPtGsU2S3/ZcfOSwJyUKMNtS7zZWMQtgQMmMeb+pfNpoo/hCCcSXozmSF
-	 cLfYF/nV71+eQ==
-Received: from pat.atlnz.lc (Not Verified[10.32.16.33]) by svr-chch-seg1.atlnz.lc with Trustwave SEG (v8,2,6,11305)
-	id <B685362ee0004>; Thu, 19 Jun 2025 13:07:58 +1200
-Received: from chrisp-dl.ws.atlnz.lc (chrisp-dl.ws.atlnz.lc [10.33.22.30])
-	by pat.atlnz.lc (Postfix) with ESMTP id 0B30913EEA1;
-	Thu, 19 Jun 2025 13:07:58 +1200 (NZST)
-Received: by chrisp-dl.ws.atlnz.lc (Postfix, from userid 1030)
-	id 0BD95280993; Thu, 19 Jun 2025 13:07:58 +1200 (NZST)
-From: Chris Packham <chris.packham@alliedtelesis.co.nz>
-To: tsbogend@alpha.franken.de,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	sander@svanheule.net,
-	markus.stockhausen@gmx.de
-Cc: linux-mips@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Chris Packham <chris.packham@alliedtelesis.co.nz>
-Subject: [PATCH 4/4] mips: dts: realtek: Add gpio block
-Date: Thu, 19 Jun 2025 13:07:54 +1200
-Message-ID: <20250619010754.3760612-5-chris.packham@alliedtelesis.co.nz>
-X-Mailer: git-send-email 2.49.0
-In-Reply-To: <20250619010754.3760612-1-chris.packham@alliedtelesis.co.nz>
-References: <20250619010754.3760612-1-chris.packham@alliedtelesis.co.nz>
+	s=arc-20240116; t=1750305655; c=relaxed/simple;
+	bh=M72OOni9nuPjXpXI7PBkMS4QekjBamZtmQ/ypweMgrs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WJRKCNzULEhVjRJ0PXMKG94PyBCncn1CnSSwEqwB80ay3wqQSK5uMAal65WPhlk/cPE5mOvlqe8OYgBMNwFhsM2nwQMeyE4SRlph938RpoaZ6Gwlo34NUIkyuycSqBDLeiOcvkhRjvIjRYATprQDbnsdFYannbjyf2r0EHCMoFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ax1QfBig; arc=none smtp.client-ip=209.85.215.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f171.google.com with SMTP id 41be03b00d2f7-b2f0faeb994so463473a12.0;
+        Wed, 18 Jun 2025 21:00:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1750305653; x=1750910453; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ooLg2AVXWoHfrdwnF2kQOLZWKgxHASVc333apUAQwo8=;
+        b=Ax1QfBigNk4RZ1UmJFVlabGnuUWLkpt8FdzOkop/1p3kq2R8tddTCJ7e9kqFnABpbJ
+         wZbofp2wF5VGlm/LugL3yDgUwrjLAsV//KJPZlP5yV8aDooRre+EZHbgW0v7sW0QM26l
+         02KD5xQ7QqtnR5h6DLvW4Cs3/npeQWRRBhH2cUYzlA0rLYHVYIrZ0cPbuNCzvMT+8By6
+         QjmTYMv+tCtbYLaEpTPfcxBLGsNzMUsuHh4yVm21AT36+i4mLHMkxdd2NqyYFJUoObOe
+         Ny5bp/ujmGsGAJaGdKuJ2AM///MTncbdV3/rD7097c44qqSGSyHnEBHetfpn/2BNwb6K
+         9FfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750305653; x=1750910453;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ooLg2AVXWoHfrdwnF2kQOLZWKgxHASVc333apUAQwo8=;
+        b=HC057l4jmkoV5ZBlvGuiVKduwNK916tEAbCSeVL5LYkaOrm/Xn0aUYy0Vo1ZDnNwAu
+         T8rUOdD2yuhPRdf4rcSct/6aUPqjf90+100O7qAsSEIXRfOZ8EjG0AYfMDjAO81aSUow
+         sdsJjnpTk5urqYkrgwVYwLdi8kNjf113QpyT6rUhqTTK7rAS4hYS5smT7Vy6HDiM85dh
+         0OEaRwzklN8UpQ5/lTm7SXvAyrchkwTjRufj7e2bxGMcafIQtg2s2+IjLn7BMg2C5isP
+         4lLpJ0JnweKlkJkPjpny74mLKwll9fe2ltkxwW6BLtJx2FD7dFvUKjkCOecRbrh/PU6g
+         vqwA==
+X-Forwarded-Encrypted: i=1; AJvYcCWVImX9hhZoxvirqTstQnRmjorYHWoMyZ5PLGMgqcLVBdy1SKKw9QuquNuEby3iA8a7wHQ3nrhvPvPdpss=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8qdK1C/PgmcvQKomvq1CE7Tmo9ff7AnHzpSnKrmqoPqUwJ80a
+	N3mPT8Xy+8var8BZoxctWLIqGSnY5pqhzopTQdW/QUb7Gk+bC8lvsx9e51E1wqbExaaz28Q84dA
+	y9XgJGKL+DS+mEdD3U7hamyBMhOQa6Yw=
+X-Gm-Gg: ASbGncsiNDOE8Fnb0nKuCP0KVhWKltLg6gpRvEoWniwMZ19WYRusd3qpuqMzWs9QeOd
+	0N4we7A/srWCc9z/zVegW9MbZbgS0kaHc7FC4ooDWMj29QckjMc2fYo00MWTYaUYQVPbPg7qVvV
+	NxtZorUzIA2o2Z958J6btJKqojDQOR0Qy/D8S4Mwj0T2uxe+48BwE=
+X-Google-Smtp-Source: AGHT+IG4EU24MbNMPr1LqaZXbbwlqMD6VU21vOqudKWNrsgMI3HV8ZjJnMiFWZ6++l/Uxsh8s0fM9lgO7FagKkqrGHE=
+X-Received: by 2002:a17:90b:264b:b0:313:db0b:75e3 with SMTP id
+ 98e67ed59e1d1-313f1e6f3fcmr32108934a91.35.1750305653447; Wed, 18 Jun 2025
+ 21:00:53 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <OSBPR01MB1670AB9E2C07690BF71FA6F5BC72A@OSBPR01MB1670.jpnprd01.prod.outlook.com>
+In-Reply-To: <OSBPR01MB1670AB9E2C07690BF71FA6F5BC72A@OSBPR01MB1670.jpnprd01.prod.outlook.com>
+From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date: Thu, 19 Jun 2025 06:00:42 +0200
+X-Gm-Features: AX0GCFsl2J-hW1BVYjyXsA5gwVtQQxvOUc1dZ9TUS7d3oNWcCyLT-hblWsMnL4Y
+Message-ID: <CAMhs-H-KGBumYbxojg-GM+bQPow4umM1va862o5_qEcDM2P1kA@mail.gmail.com>
+Subject: Re: [PATCH 0/2] MIPS: ralink: some build fixes
+To: Shiji Yang <yangshiji66@outlook.com>
+Cc: linux-mips@vger.kernel.org, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, John Crispin <john@phrozen.org>, 
+	Mieczyslaw Nalewaj <namiltd@yahoo.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-SEG-SpamProfiler-Analysis: v=2.4 cv=F7/0dbhN c=1 sm=1 tr=0 ts=685362ee a=KLBiSEs5mFS1a/PbTCJxuA==:117 a=6IFa9wvqVegA:10 a=jdP34snFAAAA:8 a=GAZJBr5AWi_iGCRPYoMA:9 a=3ZKOabzyN94A:10 a=LeixItDrjNxFEfIwcpfa:22 a=jlphF6vWLdwq7oh3TaWq:22
-X-SEG-SpamProfiler-Score: 0
-x-atlnz-ls: pat
 
-The RTL9300 has a block of GPIOs included in the SoC. Add these to the
-devicetree.
+On Wed, Jun 18, 2025 at 5:40=E2=80=AFPM Shiji Yang <yangshiji66@outlook.com=
+> wrote:
+>
+> This patch series fixes some MIPS Ralink platform compilation issues
+> founded on the OpenWrt distribution 6.12 kernel[1].
+>
+> [1] https://github.com/openwrt/openwrt/pull/18654
+>
+> Mieczyslaw Nalewaj (2):
+>   MIPS: ralink: add missing header include
+>   MIPS: pci-rt2880: make pcibios_init() static
+>
+>  arch/mips/pci/pci-rt2880.c | 2 +-
+>  arch/mips/ralink/irq.c     | 1 +
+>  2 files changed, 2 insertions(+), 1 deletion(-)
 
-This is taken from openwrt[1] the differences are removing the
-unnecessary second cell from the interrupt and removing the -controller
-from the node name to conform to the dtschema.
-
-[1] - https://git.openwrt.org/?p=3Dopenwrt/openwrt.git;a=3Dblob;f=3Dtarge=
-t/linux/realtek/dts/rtl930x.dtsi
-
-Signed-off-by: Chris Packham <chris.packham@alliedtelesis.co.nz>
----
- arch/mips/boot/dts/realtek/rtl930x.dtsi | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
-
-diff --git a/arch/mips/boot/dts/realtek/rtl930x.dtsi b/arch/mips/boot/dts=
-/realtek/rtl930x.dtsi
-index 77a854034aba..24e262e2dc2a 100644
---- a/arch/mips/boot/dts/realtek/rtl930x.dtsi
-+++ b/arch/mips/boot/dts/realtek/rtl930x.dtsi
-@@ -156,6 +156,19 @@ watchdog0: watchdog@3260 {
- 			interrupts =3D <5>, <6>;
- 		};
-=20
-+		gpio0: gpio@3300 {
-+			compatible =3D "realtek,rtl9300-gpio", "realtek,otto-gpio";
-+			reg =3D <0x3300 0x1c>, <0x3338 0x8>;
-+			gpio-controller;
-+			#gpio-cells =3D <2>;
-+			ngpios =3D <24>;
-+
-+			interrupt-controller;
-+			#interrupt-cells =3D <2>;
-+			interrupt-parent =3D <&intc>;
-+			interrupts =3D <13>;
-+		};
-+
- 		snand: spi@1a400 {
- 			compatible =3D "realtek,rtl9301-snand";
- 			reg =3D <0x1a400 0x44>;
---=20
-2.49.0
-
+Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 
