@@ -1,73 +1,73 @@
-Return-Path: <linux-mips+bounces-9412-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9413-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B444ADFD33
-	for <lists+linux-mips@lfdr.de>; Thu, 19 Jun 2025 07:48:41 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4949BADFD3C
+	for <lists+linux-mips@lfdr.de>; Thu, 19 Jun 2025 07:49:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 264F83AB4D4
-	for <lists+linux-mips@lfdr.de>; Thu, 19 Jun 2025 05:46:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 621E63A3C2D
+	for <lists+linux-mips@lfdr.de>; Thu, 19 Jun 2025 05:49:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92C1B244665;
-	Thu, 19 Jun 2025 05:46:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 275C9374D1;
+	Thu, 19 Jun 2025 05:49:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nleSInXc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lJ9Tx5AU"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4F11244186;
-	Thu, 19 Jun 2025 05:46:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F931239E8D;
+	Thu, 19 Jun 2025 05:49:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750312018; cv=none; b=oprPJYrsBCiv/RTkgS69uLdeN0xDgzs3JH+0QojeUqq2YwF3aIWHkesprQrpW6oev6fLG/rd/eO/cz/LlWCstuedoDw50JvQnZozw3dEHWMBJw8TPbIwnQ2J+k0rblIqUvyxPUmbtV+dwRJrruvBbnpOCNPKnIFCYcvnG7VHWNQ=
+	t=1750312163; cv=none; b=Yo8oHJYOIW0JElhofecHNwphuN9d0L8Y1XcjOUjRkSJPiFy7r0DBH4sPgTikYj605wCXRNdc8v69LOaT/qZfZjC0Y21rB2+9e53UmBVBnzz150RsMsNii+Bm+D602/p0mKdRb3Cf3ZutJO56pHdb4pdR0+zpW2UJ0tMvyDo8v8M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750312018; c=relaxed/simple;
-	bh=nyTZhZosQlK8zc2CRYvq23U6H5QZQEEq+/ASYL+tvJM=;
+	s=arc-20240116; t=1750312163; c=relaxed/simple;
+	bh=X1eLZfBAk86nemMzfPKzEu41Vb9ua9iooK6dbhd+PCw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nFQusyRm/qoENhbJ1zUOJP89HlIC9BVKSq7XqjJGVF/5q48QsY8TsXw15bfKw12FyUGwpDz5v9PM31Smfce9+xpyPtqu7io98iyL/ykXm3CYjrg/WTs7AKyY5wLatICPe4ul6ALJvTzbhnrc8H+nVRmPwQvAtOqC8vqwOeqXTV0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nleSInXc; arc=none smtp.client-ip=209.85.167.48
+	 To:Cc:Content-Type; b=MRnnki1Qw5CSMug22iqiw8zu8LpZi/9BEMGDG3pm5hjzKulXUzRZsoSF77/2zgEfMhk8KB08saP2HoWfCvU/zMdFATJCyZZ7AJz0RhcwxN+n8gxiiolCo0SqCaXUbXA48HbobOTM+YzhN91H+InlfkVO7UQozMFsrRLN1e3VTjw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lJ9Tx5AU; arc=none smtp.client-ip=209.85.167.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-553b51f5218so336205e87.0;
-        Wed, 18 Jun 2025 22:46:55 -0700 (PDT)
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-551fc6d4a76so357969e87.0;
+        Wed, 18 Jun 2025 22:49:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750312014; x=1750916814; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1750312160; x=1750916960; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=nyTZhZosQlK8zc2CRYvq23U6H5QZQEEq+/ASYL+tvJM=;
-        b=nleSInXc/HUPMcw/3JHgca1CcQ4W6TIYZMdmgEH1nVhrLpznuoGtq1o7EJ+tJohvs+
-         au65demM4JRUGacovfoBZgwk/OmVB8r9B/2fPkieDxcZgbQkyGdJFwZ+pxZLCqZINlBR
-         zdQxmHikU85RcLBaUlBcD1g2norMJXn6tZYUflYdUIq6lnaupwvVPKoyHCNz9e0NeOIx
-         e2BPkJrqtnI4EWzX2ARmF2+ArQbMNZp/ARgc7aJtQMeIYaa4a8LbxUKABaGqHHY8Iqb8
-         0HjtQxXyFD0G5S7HptOxXpD13naj+NvpyNqQQib9sVL3jwBp0QIDr8ubI541iAmnMdEK
-         RRIQ==
+        bh=LP0+v+yPMTvWP3QRlvcaJX6go4/gtqoSeY1FPuuU0EQ=;
+        b=lJ9Tx5AUyLc6hLCbAgr3N6OBVteAXBdKtDEUI94foonoPYIs3jU9l6IeCyw6Pn0ymk
+         P0Fj8ly1GwYySgdDaxoRZwXZnR6SI3jA7OQ4K9+nN7Wmda2vXVo1KBBonA1/aRGubh5Z
+         sTgHG3V3bl+Dvd78eFMXYaQ/IST8+PEGit3ru0RhPxeZLaO5APYWrsqpAaM6/tdRMUQQ
+         q4ENTYzaDYK6aMX7Z4Pr78kaH6Fzp7U3domslSfkYZZvJIsEzcowPHNoLOsz/hk8R7Rr
+         OVBEvfCwqSC5UHSthE87OInHNPMCjSUa2xzwW5NvQF+kZWi4VgFhpFxkwMLBq7NVXD7M
+         UG+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750312014; x=1750916814;
+        d=1e100.net; s=20230601; t=1750312160; x=1750916960;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nyTZhZosQlK8zc2CRYvq23U6H5QZQEEq+/ASYL+tvJM=;
-        b=MuYgAJRE3UPL3mwq3G5FIBItsUZ67Q/eNg0JWA7e3t/ANRuK+IwMwQtK7R8MvU/A9q
-         J01XyGAu0+E7xZxba8MF5G0XsCYpr4uRq0Rpg9MLfRHX9y2wg+3kMgt2mWa1n0lMHvjj
-         Fd4sGrc/3uwmPnLfEl5VhO5sX+7fjXDC+ZGrUKTe8gTYMvbi5PSn6TWsRruNSjRkzMhy
-         0rT3rtT5qaucqITgQnB3VyEO5Sw9O71jpqLl3ikj9vSdc8bElrBZHRrxBsWVgpsYzDs4
-         yXrHlrN+WpdEGD+m9wpmDQcbBLRRKFwNMb6hCNR+lnhFhpJ01oMq8g2cPX7mVyPkWjdE
-         ZdOg==
-X-Forwarded-Encrypted: i=1; AJvYcCW1pwg/tY6P2rotGMcfExjX2I2HSRJ4qI1uECvmvEeWfQ2H3Yrmpw7YRThK9nJ57aPX1hyOL0Kf@vger.kernel.org, AJvYcCXbbwA2rmWnFSxDAdA+Gf5JfdaoNAE9MQxLyFs/Op55ZxP2whjiw9xZ18uAN85w16f38s9dcemzkPvN@vger.kernel.org
-X-Gm-Message-State: AOJu0YxyVv418cjn1Udf/NYyPxGuK6qBu7XaWOqvVxQS6a73YOlU/tU5
-	WR4KW334NawtKFBCKN0OmIw1HWHwOLQ3nLqDDrxk1OnVeog7ZieQn2pbL8bAt7leYrvi6cQ3vRK
-	Mm87ME6e7KHAJZjQrPhogudhvVWL90dA=
-X-Gm-Gg: ASbGncucmLZ+y/7CsE5mO1ZlXudQQcUH5wl3P7kLfcjnSdVY8OBoLjT7uBllB5lYKhX
-	dK26cUBZTy04vvNwl2i2k9DahlsivsoNyQPDU6hvHjC8eS6Lo60Lz0IjbrY/0aPB5x0LiJCMTkL
-	5TJC5ut+9NlRdFoS2bHoSP/vW/x/JWNO4lwkxjcuqToH8R
-X-Google-Smtp-Source: AGHT+IE1xPGt5ROVV8f70S5heb5S4gN/anI8tPUvJGRuJeXPD/dBLegDhxqjDN+fi/v7qlQqJzYLlHExWELH2KyeXss=
-X-Received: by 2002:a05:6512:2114:b0:553:cf7d:7283 with SMTP id
- 2adb3069b0e04-553cf7d7475mr2149020e87.33.1750312013519; Wed, 18 Jun 2025
- 22:46:53 -0700 (PDT)
+        bh=LP0+v+yPMTvWP3QRlvcaJX6go4/gtqoSeY1FPuuU0EQ=;
+        b=nxcTM4kmHOKhJoniqwXAc2SiXNf9Yn6gUk+Nv6ypMk3h+bQE7vXIG+EISGJoRlDWIK
+         xK5s0mS9Dtzn5R7tDrfn+85cYIwIJc7v7GB0nnU0IKPScMn7hFsUHxyxzkAof92PHedi
+         8XvckLizSgfk/AGhV7vkugq3FSPds4PU4IcY8oS6fglXCk4+/nSOcjgrFaSt9xCJmnuB
+         JU21r6i7N4ECyeSBwBhfAexCpKFv4BLWo8/jsl7BRyyFEO3POgHPlXl6ZFnyz2wmTUiz
+         n30RA3VR6Bn205A/CZpenJNv8L/VuyIwSxhT0AFJ9N51WzjauOh5UZJVXYVB3csGePLG
+         EwhA==
+X-Forwarded-Encrypted: i=1; AJvYcCU9yOo2WDK5nLXdGjFTqAOPF/qKZz/Sk3tQCXwW3O1ER1S55jdn0RziRbPlZV0DFChouANjZtbS4HSn@vger.kernel.org, AJvYcCWU3af8sxOrwS6sm71o7qDwA5r+PuOkBdvC1g9abE2RPO3r4eBaHzs2FZrE36nE5vPIL8w0M4Cs@vger.kernel.org
+X-Gm-Message-State: AOJu0YwNIqmyqMoHeRo7C6vRMffFx0cyYOstEyAIoeR6g+0XSwOycw1g
+	9Y/HHCA41Ge6wTOn2q9l2+xLrNtSkfgldtHPsCxEpz1OoSGa2vm+kEBgkWaseOcQBJJUBJeMslO
+	DZxwl9WTeCd46dqnHYf4j9xgjhyH8G2k=
+X-Gm-Gg: ASbGncveboGIoeowiNLuDMXXaklvJUvuL567iPWFDW/YJg0BPXbkWgJ6KpriMLkF7a1
+	hHysGh1OVXukpFIHT4xm8Ajr3676vyf8r+uBOGtfyBxrOpobVFutBRrR2w8kRk+Mnpy27ncdxSN
+	hRaOqQOaLJC/DOTnEf59fYJ/loK8uNXBRzlwrfddo1zMDc
+X-Google-Smtp-Source: AGHT+IEAtdtfArajT5szIQvBU7UGnWhv91Qs5Lq4eHuTo5U3W8BhvGer+g6N8WmU7PLHZ8aDkn6H5sM9ZBf+qYCptUo=
+X-Received: by 2002:a05:6512:ea5:b0:553:2d93:d31 with SMTP id
+ 2adb3069b0e04-553b6ecba35mr5597131e87.22.1750312159320; Wed, 18 Jun 2025
+ 22:49:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -75,39 +75,117 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <aFKXzlno7HkG-cNh@shell.armlinux.org.uk> <E1uRqE9-004c7G-CB@rmk-PC.armlinux.org.uk>
- <20250618183333.GW1699@horms.kernel.org>
-In-Reply-To: <20250618183333.GW1699@horms.kernel.org>
+In-Reply-To: <E1uRqE9-004c7G-CB@rmk-PC.armlinux.org.uk>
 From: Keguang Zhang <keguang.zhang@gmail.com>
-Date: Thu, 19 Jun 2025 13:46:16 +0800
-X-Gm-Features: Ac12FXz2MfdvF8WEisDdVYaJh-GTBO0QM7RElK1s-X1101O0wUuzCnLffKUuZmw
-Message-ID: <CAJhJPsV2moLRZji4pPxLoV6=GSdVsfXPDt6rkhKHqO-eC-X79Q@mail.gmail.com>
+Date: Thu, 19 Jun 2025 13:48:42 +0800
+X-Gm-Features: Ac12FXwywCRDElBPzLsFtuXFdNKKqhum4JUE_fePl755xSXSFzh60WUfPkWp7Z4
+Message-ID: <CAJhJPsUDmQgunCk_Fbe5vFtBzE6Yy6m6Q0oRcXmpWRTu4nqQ0A@mail.gmail.com>
 Subject: Re: [PATCH net-next 1/2] net: stmmac: loongson1: provide match data struct
-To: Simon Horman <horms@kernel.org>
-Cc: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>, Andrew Lunn <andrew@lunn.ch>, 
-	Heiner Kallweit <hkallweit1@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller" <davem@davemloft.net>, 
-	Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, 
-	linux-stm32@st-md-mailman.stormreply.com, 
+To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+Cc: Andrew Lunn <andrew@lunn.ch>, Heiner Kallweit <hkallweit1@gmail.com>, 
+	Alexandre Torgue <alexandre.torgue@foss.st.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+	linux-mips@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
 	Maxime Coquelin <mcoquelin.stm32@gmail.com>, netdev@vger.kernel.org, 
 	Paolo Abeni <pabeni@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jun 19, 2025 at 2:33=E2=80=AFAM Simon Horman <horms@kernel.org> wro=
-te:
->
-> On Wed, Jun 18, 2025 at 11:41:09AM +0100, Russell King (Oracle) wrote:
-> > Provide a structure for match data rather than using the function
-> > pointer as match data. This allows stronger type-checking for the
-> > function itself, and allows extensions to the match data.
-> >
-> > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
->
-> Reviewed-by: Simon Horman <horms@kernel.org>
-
 Reviewed-by: Keguang Zhang <keguang.zhang@gmail.com>
 Tested-by: Keguang Zhang <keguang.zhang@gmail.com> # on LS1B & LS1C
+
+On Wed, Jun 18, 2025 at 6:41=E2=80=AFPM Russell King (Oracle)
+<rmk+kernel@armlinux.org.uk> wrote:
+>
+> Provide a structure for match data rather than using the function
+> pointer as match data. This allows stronger type-checking for the
+> function itself, and allows extensions to the match data.
+>
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> ---
+>  .../ethernet/stmicro/stmmac/dwmac-loongson1.c | 24 ++++++++++++++-----
+>  1 file changed, 18 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c b/driv=
+ers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c
+> index 3e86810717d3..78d9540be10c 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c
+> @@ -46,6 +46,10 @@ struct ls1x_dwmac {
+>         struct regmap *regmap;
+>  };
+>
+> +struct ls1x_data {
+> +       int (*init)(struct platform_device *pdev, void *bsp_priv);
+> +};
+> +
+>  static int ls1b_dwmac_syscon_init(struct platform_device *pdev, void *pr=
+iv)
+>  {
+>         struct ls1x_dwmac *dwmac =3D priv;
+> @@ -143,9 +147,9 @@ static int ls1x_dwmac_probe(struct platform_device *p=
+dev)
+>  {
+>         struct plat_stmmacenet_data *plat_dat;
+>         struct stmmac_resources stmmac_res;
+> +       const struct ls1x_data *data;
+>         struct regmap *regmap;
+>         struct ls1x_dwmac *dwmac;
+> -       int (*init)(struct platform_device *pdev, void *priv);
+>         int ret;
+>
+>         ret =3D stmmac_get_platform_resources(pdev, &stmmac_res);
+> @@ -159,8 +163,8 @@ static int ls1x_dwmac_probe(struct platform_device *p=
+dev)
+>                 return dev_err_probe(&pdev->dev, PTR_ERR(regmap),
+>                                      "Unable to find syscon\n");
+>
+> -       init =3D of_device_get_match_data(&pdev->dev);
+> -       if (!init) {
+> +       data =3D of_device_get_match_data(&pdev->dev);
+> +       if (!data) {
+>                 dev_err(&pdev->dev, "No of match data provided\n");
+>                 return -EINVAL;
+>         }
+> @@ -175,21 +179,29 @@ static int ls1x_dwmac_probe(struct platform_device =
+*pdev)
+>                                      "dt configuration failed\n");
+>
+>         plat_dat->bsp_priv =3D dwmac;
+> -       plat_dat->init =3D init;
+> +       plat_dat->init =3D data->init;
+>         dwmac->plat_dat =3D plat_dat;
+>         dwmac->regmap =3D regmap;
+>
+>         return devm_stmmac_pltfr_probe(pdev, plat_dat, &stmmac_res);
+>  }
+>
+> +static const struct ls1x_data ls1b_dwmac_data =3D {
+> +       .init =3D ls1b_dwmac_syscon_init,
+> +};
+> +
+> +static const struct ls1x_data ls1c_dwmac_data =3D {
+> +       .init =3D ls1c_dwmac_syscon_init,
+> +};
+> +
+>  static const struct of_device_id ls1x_dwmac_match[] =3D {
+>         {
+>                 .compatible =3D "loongson,ls1b-gmac",
+> -               .data =3D &ls1b_dwmac_syscon_init,
+> +               .data =3D &ls1b_dwmac_data,
+>         },
+>         {
+>                 .compatible =3D "loongson,ls1c-emac",
+> -               .data =3D &ls1c_dwmac_syscon_init,
+> +               .data =3D &ls1c_dwmac_data,
+>         },
+>         { }
+>  };
+> --
+> 2.30.2
+>
+
 
 --=20
 Best regards,
