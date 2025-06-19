@@ -1,108 +1,120 @@
-Return-Path: <linux-mips+bounces-9416-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9417-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 474FCAE09DD
-	for <lists+linux-mips@lfdr.de>; Thu, 19 Jun 2025 17:11:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E295AE0C45
+	for <lists+linux-mips@lfdr.de>; Thu, 19 Jun 2025 20:01:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BD8DF7A8885
-	for <lists+linux-mips@lfdr.de>; Thu, 19 Jun 2025 15:09:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5F9F21BC4828
+	for <lists+linux-mips@lfdr.de>; Thu, 19 Jun 2025 18:01:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6E4D22D7A1;
-	Thu, 19 Jun 2025 15:09:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E37E028D8E9;
+	Thu, 19 Jun 2025 18:00:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hqM7AO5U"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M5I0A1/a"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DA39DDAD;
-	Thu, 19 Jun 2025 15:09:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B04B124290B;
+	Thu, 19 Jun 2025 18:00:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750345770; cv=none; b=bZT2xff8ku2xCowNY0Xh1O51jDC3JLBCo1tL5H/Hzm3/25asZHX3FIf7P231NqFMfj45LJYiNBqjZ1BsPsFx9WbGolmBQ2sbJ/LJj7ZtyY7OrWGtt36siPPy3kbq7KeCmfGgTp23Erc2CdyjpR/x17Y/d4590Z1p5cXWcam6tpc=
+	t=1750356049; cv=none; b=vGFWM/dqI5uQkPPLsmmsfDCajWsSnb2oSim5ae9dp4qSegCuc+C9AeUFDHF45dkZv+r/LPBLlkHdrmr729XaPNGXmel+phnLD+gU4gHPU/zD2kGngeHatVnJBBhzXHgtijLsqAq+CK/IKVdUuRPWgL02bAkswAxR6l+r+1H3iHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750345770; c=relaxed/simple;
-	bh=HEvp4fBuOrjvsapFDRXsKrviD9BOWcxkwsVTAxwlBg8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=atRqwJM4Pv4tMt6qb6sENCLQHd3vdpGmXE9gC7efLGrEp6oSnXsGA3WwV/15MkHoblIHa/hZ6wJwZzb7uiln4OzylR4vdZgu8qLDVn5DKSUZ5LujVGN6IW3+g7smEM34vOM/svBemu+AykK+NAqgZ7oEVu9cWhYo61RIk1/FATM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hqM7AO5U; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2366e5e4dbaso7059245ad.1;
-        Thu, 19 Jun 2025 08:09:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1750345768; x=1750950568; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bGx01NHzknv7sazk+LVrYeoQMIf3jCaqKqqskaI1EIE=;
-        b=hqM7AO5UgFOAXp0sO3s27zW26VeJbrdkfj6U3jvOEzBBUGEWNGK7HyhF5HIDU8mJoP
-         b6KECyaLS+3NWicfrUGWn1+cOhBV80GGIGrIjLX+KyiVGTIR+hIlJKqEHgrmdSkqQIh7
-         WAImcp+T1CpC5T8CBAJBvCLUpXCcDq5Kpmq0YAmQyVVssr4o556qYgyBY2OQFe1lODwA
-         O/x0yPjdwm9QrCCCMy/+CiQU55jmBvkbtwtjZGxVrcYYaf/v6/WYv4LMDtpB2Xk9JO7H
-         IcWOkNlkOtp081jmzPfZpEdoXH9+ktJ952HMmX0EbMfNCOeM/3miW71sPLfcjy4DsPpc
-         vGIw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750345768; x=1750950568;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bGx01NHzknv7sazk+LVrYeoQMIf3jCaqKqqskaI1EIE=;
-        b=hPL5h5ZNB/QzHZDgFySwSHF7xpEccPDRqKiVfhWSiDQ1L030xXeMK6zLOGMDy5Oo+b
-         HpBhxNszq5tkBh2RexRcNEJGrDgJ3Vz1/zJC2FwQ9uBwdjvsJ2dmfbFDAVzZvJUvwwqZ
-         r4R4AmBWIHiIzI4DO7n6cvXxEABvgMtdK2NQFs6WHDLaMBqcg04tTvZOgtuXNPTnFLxJ
-         FJufZqetlA37v55+/ulumg5bU5CpnmkTa5svdkI/0KspNLN5knqIziqY3II8Omo9kgeW
-         Map+Y/MhtoXbG/D4SMPwkjQ84v0VuG6D6vgdge/bF9KD56GZ1Cp2nEuhsGXdYIdzF/5h
-         LlQQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV2hkkLIBdLLsXHfxXAlleLHQ3K4ephVTVUu8lx45+vcUwbTOA3OrpdF/XZQolBzWx1g7cRxgVceSy/srk=@vger.kernel.org, AJvYcCXbo97jSImdOMbfXacZqZ0zB8uBKJTP1fyclN3Jg3M9ad0kto3j2QDcRTZnNfizXg75VbTchYZhaImLGQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxnHMP1RlePQo3bAzFdilO8w+DUKzk38cirQ43fuFsP1wlUbJj
-	x27CBg3rcQpguNLlGgMX9cvFx172fUFQfmDY4psq7TVyD8nXtS15b3K8YYiEjvVCu5HMXIVyewZ
-	BHwepXRiPzRTktkkXg/uHtArF4I5EmcU=
-X-Gm-Gg: ASbGncvWpO6aZnvysys0DKzfGv7618acCsPZsjXkzpKIb6srIRft8iBGXdMn5Gj/rEh
-	D0shp233F1UQdUm0VnERSB4BfUvHdQPy9610An10CJUN1WNaFL2YA1AhcT+2obZ6CTG31u4Ry8m
-	RTy0auS/bvc4PHqYLtAKkxxybgVn93g/ieAA4qkJLv
-X-Google-Smtp-Source: AGHT+IEVCk58oo1QIM3vXEHImn3+adyQd1dRV6D69TpTXPNDcgqxh9l2Ve2RmgHqQ6Hj4L3GqfP4nJTdiXS6cWqY0PQ=
-X-Received: by 2002:a17:90b:3802:b0:314:2cd2:595d with SMTP id
- 98e67ed59e1d1-3158abf405amr6597387a91.8.1750345768311; Thu, 19 Jun 2025
- 08:09:28 -0700 (PDT)
+	s=arc-20240116; t=1750356049; c=relaxed/simple;
+	bh=Srwp2iLw4QM9QiJcm+XyF2ewuN6J1w1QzFgVha1WoaA=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=Ton16bxfSIkeaJreQjiCddTOQbsdVEmBcQDZpdknVE/mpp7P1V0XlZJ7nGZ3P1xcZCYF6D1W/iv1im2vk5936P/6HbIMx2sccdsPwhKamqqk+qpHLX6Zq1MWjUyRJjWrh5vVU/SHusb59rTsZqLogl5pscl/MwNyrml4g+Rz07g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M5I0A1/a; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0524C4CEF0;
+	Thu, 19 Jun 2025 18:00:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1750356049;
+	bh=Srwp2iLw4QM9QiJcm+XyF2ewuN6J1w1QzFgVha1WoaA=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=M5I0A1/aUJtATUyvDp6wFYVlrNghgCcIX6X08SPbxlg9C4rwi77I7Erp39cEWFBXT
+	 48k2Cz1swL6iCoQo0bL2Rpmdq0NX8w7oPTucWpbVo5doSwdvR5zzyOhqj50L9ssIbV
+	 3XtLd0wlYHITA7lj/M7QPYAsGGDftAzdhUTak6Rwqv5pejFVrT9SOlOduvFCNqkBB2
+	 dQXwcAJ2BdX4hXm5wN9iSN3KmfSkmvXd5iz35qs2LV1/gomSeRmbnLibBP6gWBw6cg
+	 fbjEU/dT6aKDAy24cnOTDiNv/UNJ59IGgY3g81+yAcjjIVG1ic9pDeJQ6WDqHbNpAO
+	 eyI+G3yf++aCg==
+From: Mark Brown <broonie@kernel.org>
+To: linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ linux-spi@vger.kernel.org, Shiji Yang <yangshiji66@outlook.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ John Crispin <john@phrozen.org>, Linus Walleij <linus.walleij@linaro.org>, 
+ linux-kernel@vger.kernel.org
+In-Reply-To: <OSBPR01MB1670163BDCA60924B3671D45BC72A@OSBPR01MB1670.jpnprd01.prod.outlook.com>
+References: <OSBPR01MB1670163BDCA60924B3671D45BC72A@OSBPR01MB1670.jpnprd01.prod.outlook.com>
+Subject: Re: (subset) [PATCH 00/16] MIPS: some compilation fixes for the
+ Lantiq platform
+Message-Id: <175035604752.283409.17816680036110051430.b4-ty@kernel.org>
+Date: Thu, 19 Jun 2025 19:00:47 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250618121917.35899-1-wangyufei@vivo.com>
-In-Reply-To: <20250618121917.35899-1-wangyufei@vivo.com>
-From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date: Thu, 19 Jun 2025 17:09:16 +0200
-X-Gm-Features: AX0GCFv90HHp8of5Ln8B0f_vuFAEXUVFRzBiOqVDxLWGwAmilCDyOvQ3xN-wjgw
-Message-ID: <CAMhs-H8_FUpsAQCVRxb0yKUD66gntGKi3EJ2nAYr9TmGvTEsbg@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: ralink: Use min() to simplify code in rt_timer_config()
-To: wangyufei <wangyufei@vivo.com>
-Cc: John Crispin <john@phrozen.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	opensource.kernel@vivo.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-08c49
 
-Hi,
+On Wed, 18 Jun 2025 22:53:13 +0800, Shiji Yang wrote:
+> This patch series fixes some MIPS Lantiq platform compilation issues
+> found on the 6.12 kernel[1].
+> 
+> [1] https://github.com/openwrt/openwrt/pull/18751
+> 
+> Shiji Yang (16):
+>   MIPS: lantiq: xway: mark ltq_ar9_sys_hz() as static
+>   MIPS: lantiq: xway: mark dma_init() as static
+>   MIPS: lantiq: xway: mark dcdc_init() as static
+>   MIPS: lantiq: irq: fix misc missing-prototypes warnings
+>   MIPS: lantiq: xway: add prototype for ltq_get_cp1_base()
+>   MIPS: pci: lantiq: marks pcibios_init() as static
+>   MIPS: lantiq: falcon: fix misc missing-prototypes warnings
+>   MIPS: lantiq: falcon: sysctrl: remove unused falcon_trigger_hrst()
+>   MIPS: lantiq: falcon: sysctrl: add missing header prom.h
+>   MIPS: lantiq: falcon: sysctrl: fix request memory check logic
+>   MIPS: lantiq: xway: gptu: mark gptu_init() as static
+>   MIPS: vpe-mt: mark vpe_free() and vpe_stop() as static
+>   MIPS: vpe-mt: drop unused functions vpe_alloc() and vpe_start()
+>   pinctrl: xway: mark xway_pinconf_group_set() as static
+>   pinctrl: falcon: mark pinctrl_falcon_init() as static
+>   spi: falcon: mark falcon_sflash_xfer() as static
+> 
+> [...]
 
-On Wed, Jun 18, 2025 at 2:21=E2=80=AFPM wangyufei <wangyufei@vivo.com> wrot=
-e:
->
-> Use min() to simplify rt_timer_config() and improve its readability.
->
-> Signed-off-by: wangyufei <wangyufei@vivo.com>
-> ---
->  arch/mips/ralink/timer.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
+Applied to
 
-I personally like the code as it is because it is more readable at
-least to my eyes :)
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+
+Thanks!
+
+[16/16] spi: falcon: mark falcon_sflash_xfer() as static
+        commit: 5fc2c383125c2b4b6037e02ad8796b776b25e6d0
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
 
 Thanks,
-    Sergio Paracuellos
+Mark
+
 
