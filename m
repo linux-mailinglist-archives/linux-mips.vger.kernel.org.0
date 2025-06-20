@@ -1,104 +1,169 @@
-Return-Path: <linux-mips+bounces-9439-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9440-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 121E0AE16C8
-	for <lists+linux-mips@lfdr.de>; Fri, 20 Jun 2025 10:56:05 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DBE9AE1D33
+	for <lists+linux-mips@lfdr.de>; Fri, 20 Jun 2025 16:19:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B01C8177CF2
-	for <lists+linux-mips@lfdr.de>; Fri, 20 Jun 2025 08:56:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E49B3B7B97
+	for <lists+linux-mips@lfdr.de>; Fri, 20 Jun 2025 14:19:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E2B326280A;
-	Fri, 20 Jun 2025 08:56:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EBB8528A3E4;
+	Fri, 20 Jun 2025 14:19:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=toke.dk header.i=@toke.dk header.b="kmlBszZP"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=markus.stockhausen@gmx.de header.b="gxzipLsn"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.toke.dk (mail.toke.dk [45.145.95.4])
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F02942594BD;
-	Fri, 20 Jun 2025 08:55:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.145.95.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5759428CF6D
+	for <linux-mips@vger.kernel.org>; Fri, 20 Jun 2025 14:19:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750409760; cv=none; b=DkmanP7U2+T6mTxITy4Sh6vGUWfjAKCVAPvBNPi7RvzOejy4uoY3xzPtoFum9dOXV1LTTAhQV8E9Yp5n3QTfW0XxfihfUi1Wcr6YGC36iLL/sgXTD/Oib4DZ2R8iniQ2O68AxaxTWMUCmjFti4GsEEwSXj0nNWoSJRHiUPcL7Nk=
+	t=1750429180; cv=none; b=YUmGWa7Cz6hQVfe33cQU9lCp2zTIWMSm6eSlyvMYbAo+QJBgU3+bJ7nhQmp9lp5mI9D63LP/oqySFWA2Fr1XlHmZ8A7rVyMBSMk7KjtxUfKfko7zBEH7g5PRJHeS88/aHsA6PGEhB5j2eCfHeHqHwcafot4rfUnIj0BJeyc9rmU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750409760; c=relaxed/simple;
-	bh=mTuYhO+8RYrHvkIFsdv7f3E34qKo7UjC2oN1lSvcei4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=gv29deHNAE7JKbBnfF0mWl2ov3BZOBSDz+tb3JGzBP/4fnn7jMY+vUCm4tWdJWEff9uceJJwpW6X7ruj2517ufRoV0FoY9gdyeYpZn0J9un7BKqk2/wAcRyaTh0UHeD2bUGkCu4Lz95b2mgNGH8rFAzsVeFTlAjBsBwg2PgvLgk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=toke.dk; spf=pass smtp.mailfrom=toke.dk; dkim=pass (2048-bit key) header.d=toke.dk header.i=@toke.dk header.b=kmlBszZP; arc=none smtp.client-ip=45.145.95.4
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=toke.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=toke.dk
-From: Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=toke.dk; s=20161023;
-	t=1750409410; bh=mTuYhO+8RYrHvkIFsdv7f3E34qKo7UjC2oN1lSvcei4=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=kmlBszZPJ0o9V5Gu5t531smG/U2NhuVXp2DOw4P4UoCzukGlFTZGbpAvDGGD79BKp
-	 9Smdaj+H5cJAHLgnOG9x1aYqn/OkdEXaNqbRSTMn/H+2kAX30uW41GmkkGgGfIpPXJ
-	 hixfOE8eWzbyq/X+xzCwLtUiNOe1x/FP4JGChL4lcNmfG88WCabTXMelyU5ieIILPq
-	 CACG6hU0Qtz3T6mVnzRgyENzHDI5yIK7rff5xlp6LzaD5vIqv1MQiKWUXj6/+d+3v5
-	 ha7faJSnHHVaf3fNTY17gUBuMwoK4NWt0ZUnjlqRwBWxkbTdQCOOoI9aIFJKwzKnue
-	 iViuNtYwZvRpQ==
-To: Rosen Penev <rosenp@gmail.com>, linux-wireless@vger.kernel.org
-Cc: nbd@nbd.name, Johannes Berg <johannes@sipsolutions.net>, Rob Herring
- <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
- <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
- "open list:MIPS" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCHv5 0/5] wifi: ath9k: add ahb OF support
-In-Reply-To: <20250609030851.17739-1-rosenp@gmail.com>
-References: <20250609030851.17739-1-rosenp@gmail.com>
-Date: Fri, 20 Jun 2025 10:50:10 +0200
-X-Clacks-Overhead: GNU Terry Pratchett
-Message-ID: <87bjqiztj1.fsf@toke.dk>
+	s=arc-20240116; t=1750429180; c=relaxed/simple;
+	bh=otVgixSen/JG2rWUUAH4+Ts6qyUPthUOkiwK97dUGyY=;
+	h=From:To:Cc:References:In-Reply-To:Subject:Date:Message-ID:
+	 MIME-Version:Content-Type; b=IX7sH9SJZ0oXzQHHZygkgMQxv/4y03U9WPgAFMdWIJCNKcG4F9mSMCSRqcZil9BjmjLfUx9w6EK3mPpA/L9AjeheuDPWdW6BFJF7rfc6AnJihi5HmwTNhsA/udaseqREg/wjnSbiDnWz24hzxprVUY3kX/52c1KOiuNqwt9eh4c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=markus.stockhausen@gmx.de header.b=gxzipLsn; arc=none smtp.client-ip=212.227.17.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
+	s=s31663417; t=1750429158; x=1751033958;
+	i=markus.stockhausen@gmx.de;
+	bh=otVgixSen/JG2rWUUAH4+Ts6qyUPthUOkiwK97dUGyY=;
+	h=X-UI-Sender-Class:From:To:Cc:References:In-Reply-To:Subject:Date:
+	 Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=gxzipLsnuwgRqeFQd6QanpjsXMYcODk1EqyVYWFFvGoNAJT40hUoh6Sk9veQY1bc
+	 jybajhyl69cikLUnlsysXG15lYgk1mpSUav2TS6FpBqWrSz7f8U8HtpCUHHsk6i/V
+	 E0nvSuvj9S8ukmS4nif8Dl/e3olZTsZlp6vLWcHnYZK1N2bBHE+g3kVGNgucGw9ra
+	 SIKapNkLrSss0IV3GRCrQqBYeRfqkBoJAlPUjnch3zByc+ijSUsqUgkryVzINvwEe
+	 n6GkgEwzmqT0hZwoeEno9BWCu2tvyEXXerLCgPoVx7kkuBaZGd2Iw6djXJkXIZ9dJ
+	 j2fWIi3b13l3EWjE+A==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from colnote55 ([94.31.70.55]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MpUUm-1v7QRm1hjo-00foyD; Fri, 20
+ Jun 2025 16:19:18 +0200
+From: <markus.stockhausen@gmx.de>
+To: "'Thomas Gleixner'" <tglx@linutronix.de>
+Cc: <tsbogend@alpha.franken.de>,
+	<linux-mips@vger.kernel.org>,
+	<s.gottschall@dd-wrt.com>
+References: <20250526134149.3239623-1-markus.stockhausen@gmx.de> <87bjqtrtkq.ffs@tglx> 
+In-Reply-To: 
+Subject: AW: [PATCH v2] irqchip/mips-gic: allow forced affinity
+Date: Fri, 20 Jun 2025 16:19:18 +0200
+Message-ID: <1022e01dbe1ee$4f7a9020$ee6fb060$@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain;
+	charset="us-ascii"
 Content-Transfer-Encoding: quoted-printable
+X-Mailer: Microsoft Outlook 16.0
+Content-Language: de
+Thread-Index: AQGqT2GOijjdrn74TijIilOdIHqaNAJgqQSWAdKWn/i0TaMkAA==
+X-Provags-ID: V03:K1:q1trwNkRGOnXch14hAyawPjRyWqMGMh+1g8amL6PhDOdum7COeI
+ 9Ty4AePHvzinoEf6DE/vYKVlP5wwfnzPEHQuy/9Tj/SSihtWcCMy/HRO4hIBMcuPdc49RsC
+ kGnktZUjTmapgkDy0qlUhRKt3qUTU25k5lfkS1HAoBtgjueboyGayxS2LxX5VslnUlyH4E4
+ vSy+zL7Ezt7BVL69FJg4A==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:D74FFlRyJ74=;ljG+aUpVMGWlkI2kzlUOi0S89wL
+ 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
+ F4+Obb6Gb6CdUbTHaDC7Wabxh
 
-Rosen Penev <rosenp@gmail.com> writes:
+Hi Thomas.
 
-> First two commits are small cleanups to make the changes of the third
-> simpler. The fourth actually adds dts definitions to use ahb.
+> Von: markus.stockhausen@gmx.de <markus.stockhausen@gmx.de>=20
+> Gesendet: Freitag, 13. Juni 2025 07:36
+> Betreff: AW: [PATCH v2] irqchip/mips-gic: allow forced affinity
 >
-> v2: Add documentation, use kernel_ulong_t, and of_device_get_match_data
-> v3: Use qcom prefix and wifi suffix as in other ath drivers.
-> v4: fix up dts example in Documentation
-> v5: move back to using qca prefix. It makes no sense to diverge between
-> all the other drivers for MIPS based qualcomm devices. qcom as a prefix
-> is used for Quallcomm's ARM(64) stuff.
+> > Von: Thomas Gleixner <tglx@linutronix.de>=20
+> > Gesendet: Donnerstag, 12. Juni 2025 15:14
+> >=20
+> > On Mon, May 26 2025 at 09:41, Markus Stockhausen wrote:
+> > >
+> > > Signed-off-by: Markus Stockhausen <markus.stockhausen@gmx.de>
+> > > Signed-off-by: Sebastian Gottschall <s.gottschall@dd-wrt.com>
+> >
+> > This Signed-off-by chain is broken.
+> >
+> > https://www.kernel.org/doc/html/latest/process/submitting-patches.html
+> > #sign-your-work-the-developer-s-certificate-of-origin>
+> >
+> > and the following paragraphs explain it.
 >
-> Rosen Penev (5):
->   wifi: ath9k: ahb: reorder declarations
->   wifi: ath9k: ahb: reorder includes
->   wifi: ath9k: ahb: replace id_table with of
->   dt-bindings: net: wireless: ath9k: add OF bindings
->   mips: dts: qca: add wmac support
+> This is my first co-authorship. So want to make sure that I understand i=
+t
+correctly.
 >
->  .../bindings/net/wireless/qca,ath9k.yaml      | 23 ++++++-
->  arch/mips/boot/dts/qca/ar9132.dtsi            |  9 +++
->  .../boot/dts/qca/ar9132_tl_wr1043nd_v1.dts    |  4 ++
->  arch/mips/boot/dts/qca/ar9331.dtsi            |  9 +++
->  arch/mips/boot/dts/qca/ar9331_dpt_module.dts  |  4 ++
->  .../mips/boot/dts/qca/ar9331_dragino_ms14.dts |  4 ++
->  arch/mips/boot/dts/qca/ar9331_omega.dts       |  4 ++
->  .../qca/ar9331_openembed_som9331_board.dts    |  4 ++
->  arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts   |  4 ++
->  drivers/net/wireless/ath/ath9k/ahb.c          | 60 +++++++------------
->  10 files changed, 84 insertions(+), 41 deletions(-)
+> - I developed the patched and
+> - Sebastian gave helpful input for it.
 >
-> --=20
-> 2.49.0
+> So it should be like this?
+>
+> Co-developed-by: Sebastian Gottschall <s.gottschall@dd-wrt.com>
+> Signed-off-by: Sebastian Gottschall <s.gottschall@dd-wrt.com>
+> Signed-off-by: Markus Stockhausen <markus.stockhausen@gmx.de>
+>
+> Thanks in advance.
+>
+> Markus
+
+Ping on this one.
+
+Markus
 
 
-For the ath9k bits:
-
-Acked-by: Toke H=C3=B8iland-J=C3=B8rgensen <toke@toke.dk>
 
