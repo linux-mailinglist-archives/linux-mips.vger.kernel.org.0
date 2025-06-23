@@ -1,139 +1,223 @@
-Return-Path: <linux-mips+bounces-9451-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9452-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 175C8AE365A
-	for <lists+linux-mips@lfdr.de>; Mon, 23 Jun 2025 08:55:14 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 31678AE3958
+	for <lists+linux-mips@lfdr.de>; Mon, 23 Jun 2025 11:04:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D3A921892492
-	for <lists+linux-mips@lfdr.de>; Mon, 23 Jun 2025 06:55:29 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A908B7A8ED2
+	for <lists+linux-mips@lfdr.de>; Mon, 23 Jun 2025 09:03:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DED21E5734;
-	Mon, 23 Jun 2025 06:55:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C746122FDFF;
+	Mon, 23 Jun 2025 09:04:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="itUqZRr0"
+	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="Lu4havlq"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5013C1E519;
-	Mon, 23 Jun 2025 06:55:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC5491EBFFF
+	for <linux-mips@vger.kernel.org>; Mon, 23 Jun 2025 09:04:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750661708; cv=none; b=rhN4bixiCy2Q2nHKyXmLa5iQOVjv0aaLvSiLaCVCT4gI0iOz3R+oj0MrtT0h++Zn/4Kxn6mmFG3gI7I8Uk8h84Zh42RA1N0uGCHprKK/emHSAV8RLAAuvOqCACjewoaGiQljwLO31W+c9V3vCiPdvsflHDcq8pNp3oVC5yYMUG0=
+	t=1750669459; cv=none; b=sdmsnG85WNQfiV8hfbHU4WYnV7k6e6ra/hwto5wqkXRUk/fWLpaHq0f3hDgvVC8AeTwS6UnW8LPkbRPg8VBfQiAaF+KbelcZSJalJsLhwPKkI42vsPYEbslW3F0oI6xLI1NCAz4vqMjXQcLtMhBLnTucMcoK3KctjIuDMz1iSpc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750661708; c=relaxed/simple;
-	bh=+UUYhxbhh5cVwZ2/qMKb53nrEeN6AGie0y9hUr6U0X0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aFX6yny66k3LCnjcMSCITh+1RmuAiKvI657kM54q0KLTwXNvJeCrTz18+8dO0qqtVAT+hX0Byj+lUlM/AJV16aA6am4VZxpEztXCAG6x4nSMWh4b+pW64FcmszuI+Rb+N2L9LgPlYAxkkoEeFChEAQj7N8752sw43HP7nwOAO80=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=itUqZRr0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06185C4CEED;
-	Mon, 23 Jun 2025 06:55:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750661708;
-	bh=+UUYhxbhh5cVwZ2/qMKb53nrEeN6AGie0y9hUr6U0X0=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=itUqZRr0WgCDNzpl1JcmpaZTuPZqxsSfSGlrd1K6rL9sZXtb1VuXMJTVSTHKPL2Td
-	 VkuJF1GDpQWVfV/pmITUJgpJ7UyE6lvV6Cn3vQ3v357La9At2XE383l7vyRFxwcoNQ
-	 i7gVZMcFq/TBps0Uu6DEwNcLwoc13Mz7bkRbNKhLK7MLgXMpER+sLBwmcJsBjzGiJN
-	 nPxstGjksDT4RoTklMPc7i46AiADzu65cuD4HamVRYQftn3b6J/X34bwMJwB6bQ81h
-	 ceflgSxNZqLg70cG0K1cakBZNUsW7IrovNV+b/rR3rHbB/8uF1pWVUBJlRm3Dn8vD9
-	 oSVprIhLxBPWQ==
-Message-ID: <b9a128a9-5135-4288-ba95-de0925c2b580@kernel.org>
-Date: Mon, 23 Jun 2025 08:55:03 +0200
+	s=arc-20240116; t=1750669459; c=relaxed/simple;
+	bh=SPCcFqbrzfIHwolmZbtkAZSKbGxU/6xQjBXOl8gkX1o=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=YACXCUnTkjFLVXjf/8O3bpaO9gdPzqTMv2BD3Zt5BKkUDPFP9P+OCLZkwZRAmz+4Aj4/fhWr0qw5L5kk7Gr3OVs+7ylE0M3YDD2w7IaG6Ejm2dadbrFbopKT+h3D93gapsy4ndCeOGIUJbOvxNa1ZLOycaVNaeAP6PAKjm3PpNw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=Lu4havlq; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3a589d99963so3820278f8f.1
+        for <linux-mips@vger.kernel.org>; Mon, 23 Jun 2025 02:04:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1750669454; x=1751274254; darn=vger.kernel.org;
+        h=mime-version:message-id:date:user-agent:references:in-reply-to
+         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mGJGLljVH09RHHvcPmR2xlgcJlbWSurnIEnT57zI1pg=;
+        b=Lu4havlqx8neoDFi+GQNK9mgC8PgsFG9ODY1HkfyoDzZNnW+/Ko9s11AAt+x/eA3cy
+         vdxfKPI3Q7TJr+9O28HKcUxZOhjBZw+lX0mwqdujgTn2l2MdfjSbbDeEALckuvytS8lT
+         NBFRnuCy+BwN4pETOzGSzxB/bPm7hIrdwTEI8ckukYpPYOzXxPaUjIbmb/BZnHOCyq8D
+         Wd7tciPxbsyuVeakTlVVDBUiSfGezAfj7+Yn5i5ykbjlRRrCAYjtKmU245I3y6qKAStC
+         3p6nuIN3fu8WW05lNSUCoh6DvqtfElkwztRb3BGaIrma37Zhoxc2ebhbOaURrjILYq2i
+         Do9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750669454; x=1751274254;
+        h=mime-version:message-id:date:user-agent:references:in-reply-to
+         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mGJGLljVH09RHHvcPmR2xlgcJlbWSurnIEnT57zI1pg=;
+        b=YjBTXIaRhGZQvcvedDxu8clsxVHJGR+dWZa2BB7VIEMOR4Z3WLEPt7C8mI5LDofJd2
+         By1tIHIN7KmkDZoPy6vzluMXM2FwDtzfCBY6INSpHLbY4qzg41OXECwm94zBEcbrCYUS
+         0Mx/RA9FlgZfgyhuUkPcpPxT1plgx3qTQ3cxPUwGMn9Pb2WY0DEXXzpTp9WCbQCtxoIM
+         bujZtbRp8ZeBXnJlscltih3b9/fMisarm06S0ElSX72QNbric6IvhkJ4BL7TT2jAd86t
+         Qt6+qN13VqQVeM05g1Qs+Jm77XPDJdna/V2wth1uw5/OPIxxmWDH15SAp9YMg3FP6lD8
+         41UQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVZmGoFJ+C5BBdBSN6h0I0xiaonxUqysLpG6YY+3uNf7pF63SfE3i7XVzOyIRXOa3AUzOIIcn3Nonnx@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOZoo5W4N0oVkwMzPpVwc1Eq4BMUkAWDZkNfOX1qed17JayeeH
+	3othqsXxA5quta4YHwF9VPP6PnK80zX5OJYQ+RA5IRONlUuToFaSGzmHkiG1KHNvs6A=
+X-Gm-Gg: ASbGncvMsS79SrpShiatbwiFFivQhQOj+hMGmvUpVst0xJsuXm/gcubEaMF5Sy9xRLV
+	Y02byrhJ67i6qpfBGITQswLnESgZHcRh5PdqjwgEfnVPA0FE5agUJzujGcKYyGuuTnVFSyylVO9
+	CcDtByO17uga1HK8H3ejbSJz5LvJXuVJnFF8UYQQAZ+59dkSbFy3D3QIQ5KJBt5ycN5ve+J0l2b
+	zklimjpmqz3zdgRKb99zQV9LYien3HXBwcFdEWnx/eWaF3aAVPmP3m2ldbYZr5ZrIVumKECDYAf
+	r6vaRpdYfc49WksHs/qhiK/xe/ExaXOnuQLgVM06Cyw5WxM3zu8bBEULMMd6
+X-Google-Smtp-Source: AGHT+IHPFVP2GzxWqyLYPOcDDU16rCAlS0TgolK5wkPSR8zZb2Tfrc8wGwUYkTiUhGSu8NLF6anogw==
+X-Received: by 2002:a5d:5f4b:0:b0:3a5:21c8:af31 with SMTP id ffacd0b85a97d-3a6d12a41a1mr9212783f8f.16.1750669453679;
+        Mon, 23 Jun 2025 02:04:13 -0700 (PDT)
+Received: from localhost ([2a01:e0a:3c5:5fb1:dd07:164c:d535:3e5])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3a6d117c66esm8705949f8f.47.2025.06.23.02.04.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 23 Jun 2025 02:04:13 -0700 (PDT)
+From: Jerome Brunet <jbrunet@baylibre.com>
+To: Frank Li <Frank.li@nxp.com>
+Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,  Gregory CLEMENT
+ <gregory.clement@bootlin.com>,  =?utf-8?Q?Th=C3=A9o?= Lebrun
+ <theo.lebrun@bootlin.com>,
+  Michael Turquette <mturquette@baylibre.com>,  Stephen Boyd
+ <sboyd@kernel.org>,  Philipp Zabel <p.zabel@pengutronix.de>,  Abel Vesa
+ <abelvesa@kernel.org>,  Peng Fan <peng.fan@nxp.com>,  Shawn Guo
+ <shawnguo@kernel.org>,  Sascha Hauer <s.hauer@pengutronix.de>,
+  Pengutronix Kernel Team <kernel@pengutronix.de>,  Fabio Estevam
+ <festevam@gmail.com>,  Neil Armstrong <neil.armstrong@linaro.org>,  Kevin
+ Hilman <khilman@baylibre.com>,  Martin Blumenstingl
+ <martin.blumenstingl@googlemail.com>,  linux-mips@vger.kernel.org,
+  linux-clk@vger.kernel.org,  linux-kernel@vger.kernel.org,
+  imx@lists.linux.dev,  linux-arm-kernel@lists.infradead.org,
+  linux-amlogic@lists.infradead.org
+Subject: Re: [PATCH 3/4] clk: clk-imx8mp-audiomix: use the auxiliary device
+ creation helper
+In-Reply-To: <aEmzRrhQC+olmywj@lizhi-Precision-Tower-5810> (Frank Li's message
+	of "Wed, 11 Jun 2025 12:48:06 -0400")
+References: <20250611-clk-aux-v1-0-fb6575ed86a7@baylibre.com>
+	<20250611-clk-aux-v1-3-fb6575ed86a7@baylibre.com>
+	<aEmzRrhQC+olmywj@lizhi-Precision-Tower-5810>
+User-Agent: mu4e 1.12.9; emacs 30.1
+Date: Mon, 23 Jun 2025 11:04:12 +0200
+Message-ID: <1jikkmkewj.fsf@starbuckisacylon.baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 08/33] serial: 8250: sanitize uart_port::serial_{in,out}()
- types
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: gregkh@linuxfoundation.org, linux-serial@vger.kernel.org,
- linux-kernel@vger.kernel.org, Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Paul Cercueil <paul@crapouillou.net>, Vladimir Zapolskiy <vz@mleia.com>,
- Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
- Masami Hiramatsu <mhiramat@kernel.org>, linuxppc-dev@lists.ozlabs.org,
- linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20250611100319.186924-1-jirislaby@kernel.org>
- <20250611100319.186924-9-jirislaby@kernel.org>
- <aEmcxySiXun--YZs@smile.fi.intel.com>
-Content-Language: en-US
-From: Jiri Slaby <jirislaby@kernel.org>
-Autocrypt: addr=jirislaby@kernel.org; keydata=
- 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
-In-Reply-To: <aEmcxySiXun--YZs@smile.fi.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-On 11. 06. 25, 17:12, Andy Shevchenko wrote:
-> On Wed, Jun 11, 2025 at 12:02:54PM +0200, Jiri Slaby (SUSE) wrote:
->> uart_port::{serial_in,serial_out} (and plat_serial8250_port::* likewise)
->> historically use:
->> * 'unsigned int' for 32-bit register values in reads and writes, and
->> * 'int' for offsets.
+On Wed 11 Jun 2025 at 12:48, Frank Li <Frank.li@nxp.com> wrote:
+
+> On Wed, Jun 11, 2025 at 02:53:58PM +0200, Jerome Brunet wrote:
+>> The auxiliary device creation of this driver is simple enough to
+>> use the available auxiliary device creation helper.
 >>
->> Make them sane such that:
->> * 'u32' is used for register values, and
->> * 'unsigned int' is used for offsets.
+>> Use it and remove some boilerplate code.
+>
+> Actaully, you also remove unused struct clk_imx8mp_audiomix_priv *priv
+> at clk_imx8mp_audiomix_reset_controller_register().
+>
+> Please add it into comments.
+
+That's merely a side effect of removing the boilerplate code.
+Like for the other changes of the same kind, I don't think listing the
+symbols removed would be useful to the change description
+
+>
+> Reviewed-by: Frank Li <Frank.Li@nxp.com>
+>
 >>
->> While at it, name hooks' parameters, so it is clear what is what.
-> 
-> At a glance this looks just mechanical change. Have you used coccinelle for
-> that?
+>> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+>> ---
+>>  drivers/clk/imx/clk-imx8mp-audiomix.c | 49 ++++++-----------------------------
+>>  1 file changed, 8 insertions(+), 41 deletions(-)
+>>
+>> diff --git a/drivers/clk/imx/clk-imx8mp-audiomix.c b/drivers/clk/imx/clk-imx8mp-audiomix.c
+>> index 775f62dddb11d8cfd17a4ebf7a677ef399c5e617..765fb1f5bd4fa2b039d7414abd89471438ee41dd 100644
+>> --- a/drivers/clk/imx/clk-imx8mp-audiomix.c
+>> +++ b/drivers/clk/imx/clk-imx8mp-audiomix.c
+>> @@ -230,61 +230,28 @@ struct clk_imx8mp_audiomix_priv {
+>>
+>>  #if IS_ENABLED(CONFIG_RESET_CONTROLLER)
+>>
+>> -static void clk_imx8mp_audiomix_reset_unregister_adev(void *_adev)
+>> +static int clk_imx8mp_audiomix_reset_controller_register(struct device *dev)
+>>  {
+>> -	struct auxiliary_device *adev = _adev;
+>> -
+>> -	auxiliary_device_delete(adev);
+>> -	auxiliary_device_uninit(adev);
+>> -}
+>> -
+>> -static void clk_imx8mp_audiomix_reset_adev_release(struct device *dev)
+>> -{
+>> -	struct auxiliary_device *adev = to_auxiliary_dev(dev);
+>> -
+>> -	kfree(adev);
+>> -}
+>> -
+>> -static int clk_imx8mp_audiomix_reset_controller_register(struct device *dev,
+>> -							 struct clk_imx8mp_audiomix_priv *priv)
+>> -{
+>> -	struct auxiliary_device *adev __free(kfree) = NULL;
+>> -	int ret;
+>> +	struct auxiliary_device *adev;
+>>
+>>  	if (!of_property_present(dev->of_node, "#reset-cells"))
+>>  		return 0;
+>>
+>> -	adev = kzalloc(sizeof(*adev), GFP_KERNEL);
+>> +	adev = devm_auxiliary_device_create(dev, "reset", NULL);
+>>  	if (!adev)
+>> -		return -ENOMEM;
+>> -
+>> -	adev->name = "reset";
+>> -	adev->dev.parent = dev;
+>> -	adev->dev.release = clk_imx8mp_audiomix_reset_adev_release;
+>> -
+>> -	ret = auxiliary_device_init(adev);
+>> -	if (ret)
+>> -		return ret;
+>> +		return -ENODEV;
+>>
+>> -	ret = auxiliary_device_add(adev);
+>> -	if (ret) {
+>> -		auxiliary_device_uninit(adev);
+>> -		return ret;
+>> -	}
+>> -
+>> -	return devm_add_action_or_reset(dev, clk_imx8mp_audiomix_reset_unregister_adev,
+>> -					no_free_ptr(adev));
+>> +	return 0;
+>>  }
+>>
+>>  #else /* !CONFIG_RESET_CONTROLLER */
+>>
+>> -static int clk_imx8mp_audiomix_reset_controller_register(struct device *dev,
+>> -							 struct clk_imx8mp_audiomix_priv *priv)
+>> +static int clk_imx8mp_audiomix_reset_controller_register(struct device *dev)
+>>  {
+>>  	return 0;
+>>  }
+>>
+>> -#endif /* !CONFIG_RESET_CONTROLLER */
+>> +#endif
+>>
+>>  static void clk_imx8mp_audiomix_save_restore(struct device *dev, bool save)
+>>  {
+>> @@ -408,7 +375,7 @@ static int clk_imx8mp_audiomix_probe(struct platform_device *pdev)
+>>  	if (ret)
+>>  		goto err_clk_register;
+>>
+>> -	ret = clk_imx8mp_audiomix_reset_controller_register(dev, priv);
+>> +	ret = clk_imx8mp_audiomix_reset_controller_register(dev);
+>>  	if (ret)
+>>  		goto err_clk_register;
+>>
+>>
+>> --
+>> 2.47.2
+>>
 
-No, I haven't managed to learn that :P. But I used 
-https://github.com/jirislaby/clang-struct.
-
-thanks,
 -- 
-js
-suse labs
+Jerome
 
