@@ -1,132 +1,119 @@
-Return-Path: <linux-mips+bounces-9473-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9474-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46CA7AE640A
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Jun 2025 13:58:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65FE8AE67B5
+	for <lists+linux-mips@lfdr.de>; Tue, 24 Jun 2025 16:03:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 065197A1D8C
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Jun 2025 11:57:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C1D144C7CC7
+	for <lists+linux-mips@lfdr.de>; Tue, 24 Jun 2025 14:02:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AAD4728ECD7;
-	Tue, 24 Jun 2025 11:58:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3766127C16A;
+	Tue, 24 Jun 2025 14:01:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=easyb-ch.20230601.gappssmtp.com header.i=@easyb-ch.20230601.gappssmtp.com header.b="rXdutZGp"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OFg/HG1h"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDE17291C06
-	for <linux-mips@vger.kernel.org>; Tue, 24 Jun 2025 11:58:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C337427AC25;
+	Tue, 24 Jun 2025 14:01:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750766301; cv=none; b=cQ6csbDa1mdHWeJan37h3azWVFHxoS8sDwMXmvUm46BhmQ8cUCe38oyUpB4XkCuACNZ+DNJjKpTdvjzzO5Q/M+ZT7VQsAUhhEbpyHoYlHAe181m2d10EUophBsml8NE28VRUsn/UHiJfFUKv/XDVWzjWCNLDJHspTY10vGRyM+k=
+	t=1750773716; cv=none; b=n4tE2T3FbdzqDZae7ywTH0ltgTgmQt6kmwGJeIHdgeo55r5TTbgOefDSB1aH9QBq+9sOg+UdkyYzSY71x+oM4+yYxIqTgMnTLT15Mt9toRTRJl+r5uqnMAyJnXLY4S6EMcmj6PmVAzntMRPqAiwv+gBJUER+CopYgze7I4oMfXg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750766301; c=relaxed/simple;
-	bh=TrO2SFjGKBK1TwkijXcscyMw/RsP3DJJ4iYMXoLZjYc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Fjbm42dUXlVbNGu7ZTn7CPwqXHMjUZAgzWNEX1WSVkk3pjaSMkq+pVidjE8L2F3rKWbCJkCP6vSkLlY/WfQd5c8D5Ed2kWWnF6YXeo614/bj2tO55Bom1gsYL8+vaDVG/+DX6D75JvEnKPbMaOFiPd+m4XFzoMGCRbY3YFGfot8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=easyb.ch; spf=none smtp.mailfrom=easyb.ch; dkim=pass (2048-bit key) header.d=easyb-ch.20230601.gappssmtp.com header.i=@easyb-ch.20230601.gappssmtp.com header.b=rXdutZGp; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=easyb.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=easyb.ch
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-450ccda1a6eso45036065e9.2
-        for <linux-mips@vger.kernel.org>; Tue, 24 Jun 2025 04:58:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=easyb-ch.20230601.gappssmtp.com; s=20230601; t=1750766298; x=1751371098; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+EIhw+Rvhc6cZiuD+svHBrLE+9XGVyIueYFgEdxmfoI=;
-        b=rXdutZGpER4wOAV1UvbmaJxYSfKAqX+lFu473u7nzS4zOKyhXZogCCxcvTZDByPq2v
-         plHzXouIywY3iqYBz13Vew2LchH6p1hfhoPlYeSF1aV8aLu1DOckTNsF9/V4vx5vY3a7
-         JNqXmpSYrrgTb88FqgImPZqZm5xEn11P784c1Cd6NjIDmwWWbjRlJnrup18R1d9YF7Vk
-         y/PeHktuvBVuNicFdZ5GiQe9xBH+q20muW+jG5nQZPcFMOUI3Mbx0VFufZrSLi5/7e+0
-         HZZScAr3SskmcRGvs7ocfDTX8HjgggkaIVqDnJNs8BoJhJ7aj8kuB+qCyiHdRDnwBcUq
-         6Owg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1750766298; x=1751371098;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=+EIhw+Rvhc6cZiuD+svHBrLE+9XGVyIueYFgEdxmfoI=;
-        b=iACR4+L42zNNQQBx3v+mOZJns6m38hXdhH8beAWD9T85+OKhDDnIwboznhzyEpJUec
-         M+L4vLsTQ4tRXtv/uxOWMvgUZrJkW0Ebe6tKux9lZ/7gbk/GPGMgHX5/rDiB1jXsZUrq
-         8P/w8gSmv6Cr6MXtKH8Frn7g3CSiTBFsJe6FBljZu/W+4ncorZOiz5e7JBuqgSN4fUvi
-         yOaJwm6YT7hm/FeczdfyCqmCJRJJOaN+WYLOFWBzxfLa/ysffQY33S60gHYWgl5F/Fx+
-         w6d6Jd6EnLG8ZdLWXuXRCdfiZSU7BKUyvSKFLC1yT+x3hT0Mu/jpAJbEDtwiX5wkt/gx
-         07aA==
-X-Gm-Message-State: AOJu0Yz+FIqctXHP1U2vtq2OmHMZJsm3gJaRvgWR18bYQTdHfyHKuJ7V
-	8x9H/06oBICRW61hNy14X0Zga7Qh+KD2+9n/UF81CgoDijRasVHQjPbGbHxF6R+IwD+UlHcmqwS
-	zQLAZ
-X-Gm-Gg: ASbGncu71KA0O49cw/pgJ3YxhQ07fbAaNGQEkfjYwtqaR06U4IFG2uLMmfdnwteGPH5
-	4wno9ei9/2wsS/Kqov1Qsngd8tTcpVUUPaDeWjahCaERNAA8mJapkYNegBSZ2ynQdssxDKYGsLr
-	3j8fXkbz/Z6tzwQzem8fdIBV4jgtfj0N3vs18T4v345lsBMNLzAyB/7lLE8dCLMf0SfVBXSoKJu
-	op37PfzcEiKg025ubtsnobRyMhSqjuUqIeDO9WZ54pRHuUd0z/vtjICzvqHmTmYgtxjfakjo5nw
-	Tv6e3OZkRkqq0YmxTgqJQeOJnzS4m9sVfZ+DqWS6o1Y9zPgsBmpBxEZpYzN+vpCFcfwoioY=
-X-Google-Smtp-Source: AGHT+IGStsBZuJubPW8W7dU9RQ438DWNGWOc3jz/0MQcL2u05gjUkC6JTB4QeRYPapRd3bVa6wNSuQ==
-X-Received: by 2002:a05:600c:a41:b0:450:d4a6:799d with SMTP id 5b1f17b1804b1-453659c480fmr133230975e9.7.1750766297899;
-        Tue, 24 Jun 2025 04:58:17 -0700 (PDT)
-Received: from fraxinus.easyland ([2a02:16a:7402:0:d834:684f:62eb:5df0])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4535ead2a5fsm173860985e9.34.2025.06.24.04.58.16
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 24 Jun 2025 04:58:17 -0700 (PDT)
-From: Ezra Buehler <ezra@easyb.ch>
-To: linux-mips@vger.kernel.org,
-	devicetree@vger.kernel.org
-Cc: Conor Dooley <conor+dt@kernel.org>,
-	Harvey Hunt <harveyhuntnexus@gmail.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Reto Schneider <reto.schneider@husqvarnagroup.com>,
-	Rob Herring <robh@kernel.org>,
-	Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-	Stefan Roese <sr@denx.de>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Ezra Buehler <ezra.buehler@husqvarnagroup.com>
-Subject: [PATCH v4 4/4] MIPS: dts: ralink: gardena_smart_gateway_mt7688: Fix power LED
-Date: Tue, 24 Jun 2025 13:58:10 +0200
-Message-ID: <20250624115810.37851-5-ezra@easyb.ch>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250624115810.37851-1-ezra@easyb.ch>
-References: <20250624115810.37851-1-ezra@easyb.ch>
+	s=arc-20240116; t=1750773716; c=relaxed/simple;
+	bh=qe/lKzDIKQb9yrByvn2o2OiLeZ837IOlRXcF3CcOVxY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ykg+VvU8/J8SP+A1P4zld+0MA6BXCfkYflkC2s+ihJEzrI2x9ao7G/EYq1TS0qVL4rbPdF9V5H/IKtP9X3mEEqDWH4FVYbPRmiNMefMEnL9x55OKmCUubvPSBM54rXVgWKK4Nz6foj4FwyZIPrxysRdfAZxYlnnjDohNvz3gjPE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OFg/HG1h; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1750773714; x=1782309714;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=qe/lKzDIKQb9yrByvn2o2OiLeZ837IOlRXcF3CcOVxY=;
+  b=OFg/HG1hvZ6L4XxcdKofaXr5E3+wuY5PNS6t6tjxB8qmZnnTbWs9cTRZ
+   YFNh/obsPCVggJ8+jY52SqXIeG5w+NRlPZDT4xx4YlnyMUkS/UQLymqOT
+   6eQgKYrhND2yv9ZrGQ4TZ9dl4idQa47J8OJ8vc1xtONmxWXnDgkzZb/Mf
+   cR3Aa92cWpbYIKrbQu+84lgpyYrAiOM0o3cIvpX8Uzj0GraFfHu11QqNz
+   5C1Kj3nZkNXNtmwr1Carw4yDo9BECnGi88fCxZyfcWNY26Jdj0LPpujOT
+   sr/go9jS2NCIam/sfEytZKE9QZ2Ia6xndbUCi8MksiUAefvfMkVAOjQWu
+   Q==;
+X-CSE-ConnectionGUID: EcylcUW5RgS7FD3D4eoctA==
+X-CSE-MsgGUID: eYtG+Z2TQx6A3f+wAlnx3w==
+X-IronPort-AV: E=McAfee;i="6800,10657,11474"; a="40628397"
+X-IronPort-AV: E=Sophos;i="6.16,261,1744095600"; 
+   d="scan'208";a="40628397"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2025 07:01:50 -0700
+X-CSE-ConnectionGUID: NcaZkpcHSr6VkMpll0qrAQ==
+X-CSE-MsgGUID: 9v/ZDIeDRXS0b/f/E5hikA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.16,261,1744095600"; 
+   d="scan'208";a="152450367"
+Received: from smile.fi.intel.com ([10.237.72.52])
+  by fmviesa008.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jun 2025 07:01:31 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1uU4DI-00000009UFW-2HG9;
+	Tue, 24 Jun 2025 17:01:28 +0300
+Date: Tue, 24 Jun 2025 17:01:28 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Andy Shevchenko <andy.shevchenko@gmail.com>,
+	Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH v1 1/1] MIPS: Alchemy: Remove unused forward declaration
+Message-ID: <aFqvuIzH2zo5X76q@smile.fi.intel.com>
+References: <20250531194346.3630898-1-andriy.shevchenko@linux.intel.com>
+ <aEv_y5Lfe3Dul48I@smile.fi.intel.com>
+ <aEwMFVSPzc-mV1ve@alpha.franken.de>
+ <aEweZReuPzQ_hq8L@smile.fi.intel.com>
+ <aEwy2Ud08nHHAdED@alpha.franken.de>
+ <aEydkh4EkKu6w2NJ@surfacebook.localdomain>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <aEydkh4EkKu6w2NJ@surfacebook.localdomain>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-From: Ezra Buehler <ezra.buehler@husqvarnagroup.com>
+On Sat, Jun 14, 2025 at 12:52:18AM +0300, Andy Shevchenko wrote:
+> Fri, Jun 13, 2025 at 04:16:57PM +0200, Thomas Bogendoerfer kirjoitti:
+> > On Fri, Jun 13, 2025 at 03:49:41PM +0300, Andy Shevchenko wrote:
+> > > On Fri, Jun 13, 2025 at 01:31:33PM +0200, Thomas Bogendoerfer wrote:
+> > > > On Fri, Jun 13, 2025 at 01:39:07PM +0300, Andy Shevchenko wrote:
+> > > > > On Sat, May 31, 2025 at 10:43:46PM +0300, Andy Shevchenko wrote:
 
-When starting up, the GARDENA smart Gateway's power LED should be
-flashing green. It is unclear why it was initially set to "off".
+...
 
-The LED frequency cannot be configured in the devicetree. Luckily, the
-default is 1 Hz, which is what we want.
+> > > > > I think we can take it via GPIO tree if there is no reply.
+> > > > 
+> > > > please do
+> > > 
+> > > Acked-by?
+> > 
+> > Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> 
+> Thank you! Bart, seems we are all set to route this via GPIO tree. Do you have
+> any objections?
 
-Signed-off-by: Ezra Buehler <ezra.buehler@husqvarnagroup.com>
-Reviewed-by: Stefan Roese <sr@denx.de>
-Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
----
- arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Bart, can you apply this one, please? Or do you have objections?
 
-diff --git a/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts b/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-index 7743d014631a..0bfb1dde9764 100644
---- a/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-+++ b/arch/mips/boot/dts/ralink/gardena_smart_gateway_mt7688.dts
-@@ -56,7 +56,7 @@ led-power-blue {
- 		led-power-green {
- 			label = "smartgw:power:green";
- 			gpios = <&gpio 19 GPIO_ACTIVE_HIGH>;
--			default-state = "off";
-+			linux,default-trigger = "timer";
- 		};
- 
- 		led-power-red {
 -- 
-2.43.0
+With Best Regards,
+Andy Shevchenko
+
 
 
