@@ -1,232 +1,169 @@
-Return-Path: <linux-mips+bounces-9463-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9465-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6281BAE5FB2
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Jun 2025 10:42:56 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 332E0AE604B
+	for <lists+linux-mips@lfdr.de>; Tue, 24 Jun 2025 11:09:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17C3A19214BE
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Jun 2025 08:43:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9490E7A4DBC
+	for <lists+linux-mips@lfdr.de>; Tue, 24 Jun 2025 09:07:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02F8126B0AE;
-	Tue, 24 Jun 2025 08:42:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CF7C27AC4B;
+	Tue, 24 Jun 2025 09:08:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="SPXYg2iN";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="UfI9GbRk"
+	dkim=pass (2048-bit key) header.d=easyb-ch.20230601.gappssmtp.com header.i=@easyb-ch.20230601.gappssmtp.com header.b="RWig66NC"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fout-a6-smtp.messagingengine.com (fout-a6-smtp.messagingengine.com [103.168.172.149])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9D5C26A1AE;
-	Tue, 24 Jun 2025 08:42:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.149
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0CE4D27A90A
+	for <linux-mips@vger.kernel.org>; Tue, 24 Jun 2025 09:08:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750754558; cv=none; b=bZSsDHKqeP45dvMkRtdng4q3OBLKxWGKIBeh/mHmv2n6No7KHlrgzCe+McsoiazErVOwVPpZMhOzpuK4BeD/T058DcIDzSdKmj2op3JysVqEsA3W1JnYws/SDUzqlt8/G6MVTvYbzds286YLc9VKoSNbVXkpi1oaIoHeXCr5dfY=
+	t=1750756097; cv=none; b=TpWxIQUxgUUcCX3BvAHzSXK77rmOL6hsJ/fy6bXzDvt2HOS2zGtvoYlWmW5lo3UsE+z61JYR39e4dByvdWRWfyg3+WmfWWxivw1UtIph4T/bB06/f95blq8z1CTsQPx3C6v+0EHQi3emCbdiNX1qJISVakJ/L2ZcpuRaxWCzrTg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750754558; c=relaxed/simple;
-	bh=IJbXgE2ic8EcuieZkS1NE5Xz+m8iUFG/k9AgCnaIFsU=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=fCI6Q0CbZ8gzwFPbWWVD2FC7nraKw3TR1GnJZi+lWKhVix2frtoUUxoGZKor4ZNEPtvEgEFS9uV4jMhkWo8RM2VczWUKXWCuJtV7XsZui0BfgYifi5jeGXQW12iO+NoxbEEzlnCbpppatLKGmVTnllF+CLR/H7NfzuufFL6qvh8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=SPXYg2iN; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=UfI9GbRk; arc=none smtp.client-ip=103.168.172.149
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
-	by mailfout.phl.internal (Postfix) with ESMTP id 5FDD31380CBA;
-	Tue, 24 Jun 2025 04:42:35 -0400 (EDT)
-Received: from phl-imap-08 ([10.202.2.84])
-  by phl-compute-06.internal (MEProxy); Tue, 24 Jun 2025 04:42:35 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1750754555;
-	 x=1750840955; bh=grGqUxi/05MhI/cvKY7PBXz+A7rPGZM+hVfckJHh1ZY=; b=
-	SPXYg2iNL/xF3dTCaRaS057p/BXSBnY6GbkzQDzgIfw9pjcnIx1IEssoStZdZOH/
-	O60bYJqwPvlEJm9HNX7HtwWKmFuRxh/vuYZUvq8ZGS1zfvOs1L1dkQOicNpjSlOp
-	YmrgjdYSFm/pxY/N7b/RHKwdIFs7R9Y2YO5dnULNu+IbYnfXhDsOHTLbkUgpMttN
-	YJTuXAuawVtFSo441dhK9oyw+HnXl4xOi6N/2v0YOtQ/iBMFihdV9Gwh8AZPyiaU
-	LuJp0iViKrKQracNg6YkOOnWHX7ov0rrteRMDyt6+yq0sA6qPMylf/u4R3eT8L1m
-	LunSDNPZfKsx0nafDPR+Ug==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1750754555; x=
-	1750840955; bh=grGqUxi/05MhI/cvKY7PBXz+A7rPGZM+hVfckJHh1ZY=; b=U
-	fI9GbRkH4a1Qx6afCqadOgsU6IP/QjvifnrVaXLCh6pHNmKarRI9HxHlwI/gPw/m
-	LAErMdcaiOEo8q0AuGEclleiPA26ZOg5gIvtC+E8/2ExjUMf2uvCDThA+IM/4jYE
-	aTFKtB+Qrw0kLiF+cJMG6oCCWI44YuK//R9ZvNQxJ5TE7KAT7XcAzpDO6V36PKUp
-	uqItehE5y7S/cfYjWlcRzLiXO2old8mTEabygJ1UL9REmPZCvpUZUzrcUU+EKuPQ
-	jnuIKoMl4o4QdZe6GR2Oqq2EdkC5rNMPM+yq/Grj+9ap+0w1spyQktlv/0dIfBLE
-	KhDoOkfoc/1MW+HUJon/Q==
-X-ME-Sender: <xms:-mRaaNjcUj6ox1ADZ5osWyBCQLa5QQvS9k1ZZLusGtpsnYth7TAJwA>
-    <xme:-mRaaCA0yCqO4sBDA-pZ2z730vQ0_K2W7LEqpUi-HJoMScxqDXrZ9byzHIsA-Ve0h
-    9wjzfasX6KekWEqGps>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgdduleegfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthhqredtredtjeenucfhrhhomhepfdflihgrgihu
-    nhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
-    ggtffrrghtthgvrhhnpeffkeevtedtueevfefhkefhudfggeetjeffjeduueehueejgfel
-    udevkedutdeuheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrh
-    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghes
-    fhhlhihgohgrthdrtghomhdpnhgspghrtghpthhtohephedpmhhouggvpehsmhhtphhouh
-    htpdhrtghpthhtohepthhssghoghgvnhgusegrlhhphhgrrdhfrhgrnhhkvghnrdguvgdp
-    rhgtphhtthhopehsthgrsghlvgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepmhgrtg
-    hrohesohhrtggrmhdrmhgvrdhukhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhes
-    vhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhmihhpshesvh
-    hgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:-mRaaNFJ89rSTNbhOrnaC5YdokrOynCu2977Qze_q9TnqNFHoumV7Q>
-    <xmx:-mRaaCSgd11zvWe4YlMo8MJDOjByuBKzH6yIO9pLFhSqwtbuyU3WvQ>
-    <xmx:-mRaaKxLQ1s0z53qLCKDzKXbCSMi2Ra9ckzXEh-rDIFsWuxA5xoipQ>
-    <xmx:-mRaaI5cGr0WNB5GsnynkRhYeHJmmeO1B6uhG3HGMbbLpLbpvGRZow>
-    <xmx:-2RaaCQbtMqpdOBGsmP0Veg-mWXVgCAkfN-omv26T1LQ1RkPnWzY9KRZ>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id A0DCE2CE0072; Tue, 24 Jun 2025 04:42:34 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1750756097; c=relaxed/simple;
+	bh=5WKKCWHFXDqqH5An8UZnpXVHdQMcfV5m1TnJvBNqIM4=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=oAOuW3CSuzG3UFHqKgcpcIqqiZQHryrS64JNdH/JELa30DOTY2SKuXKtc5OpkmHmU5yOmaK9bUjmiw/LJBMNXe/Jt/VW4xWLGMWO2MQboY4WfMVLP961aiXEjPMxHlTTbWZQo+hJ+IRm1oFtJwa45zxAgHkPVTu7Jr37o/d87/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=easyb.ch; spf=none smtp.mailfrom=easyb.ch; dkim=pass (2048-bit key) header.d=easyb-ch.20230601.gappssmtp.com header.i=@easyb-ch.20230601.gappssmtp.com header.b=RWig66NC; arc=none smtp.client-ip=209.85.221.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=easyb.ch
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=easyb.ch
+Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-3a4f379662cso4151015f8f.0
+        for <linux-mips@vger.kernel.org>; Tue, 24 Jun 2025 02:08:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=easyb-ch.20230601.gappssmtp.com; s=20230601; t=1750756092; x=1751360892; darn=vger.kernel.org;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=1WGlx8yzYyb7R5Ea68xV7+gQv5IF8pex1PAwKtFxm+o=;
+        b=RWig66NCML/jArAt8R5ZGpb48n/HMeEWH8sAZgjW7Xg7KlEyfHhgGJchs9TU3RBTuk
+         p3a6D3U95W+xCmWHR/FQ0m5fjp0XUlAFa/oSFwCLA44abo0D1O1TODwjTrUhhT416Kzt
+         v7LpF2Yl9EOhSlUExO7tlVDRdl3ngr5F6Vl9E5sglWjzp+I3+n9j4C9c8rerZQpEca4C
+         l3vngqxowAUp8LuI2qLS87mosZ1Vn6AM+AeFcGUgN4WDah0iynxzFOZGy3886S6UopQN
+         qr0VeKgMicKSyTSA4J/2hv72YO7lbID8bzya1zXKCLKNE8Gcrbg6792ovUrOaYgCtGLw
+         tUFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1750756092; x=1751360892;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1WGlx8yzYyb7R5Ea68xV7+gQv5IF8pex1PAwKtFxm+o=;
+        b=Qv5K/q6fl5uOoAXtKEXlK25cntEt4wj3wOu8Bt115M8toFBvLIck9WHEyB3/FJq//H
+         pGWa5b5ITk1fNbCoU5jh+pNA+AY+9uJMEU65+yPJEB0gPSzFRVDpHBim41SH1vQOxK1V
+         6yc/uYoQI89X9dHckE7tD3Gw+N+FRAquayjyEZbg+xY5Y5yfhPsDWKZ2G+cYNHxCkRUs
+         SX3zfgd8S2rXEnQYP9slNiewV1d3mcCZ/uJ/MZp4a82IG4SMcykqZR0DaNUS3c1dq6xP
+         e9CVPn8tF1aAFIqP8FcURHdV6pI1dfiXZ175vhB618lhlLT4c260xHt7wJAOulc3TXb6
+         Yd1g==
+X-Gm-Message-State: AOJu0Yz1Jho0AQR9iO492+isjZpgT0P8RzD68O5mMkivkEFGPX4fbsNb
+	P0zNPQfk7QWNgevMiB5yULUaK0klORRdViIk+SCs1CyP4UXxho1swNu5UaD2tFD+yZ8=
+X-Gm-Gg: ASbGnctO3ASgPmYA2vLZKAItxddGvvixn8XToz9z9x7TiJ2mHz0p4Yu4b85QqMuS/Js
+	IOxVRw3O4nb1s4KN0hYTX53cz6h+d5VKZi16w1iA+bWGGhCe2rxu5bS1QM0YdIEM2owzxMbaXGh
+	epqECoKb6IH5JBzT3IbkoqH8UU2xqMjzo070Rse5pBTXoxhlBP8ScEURH0w2GEEkXOZXB4qc4SA
+	eEARcu3L2DCb/HCnyX594A1WXOBIS60LR5I4/Sk+LmoY+FIpcuwn1aVhjtORmOg9uCQm6IbYZii
+	S3vPlupDuPWdCEsEZ7aA7bi3zovd0ORUe4Y93RRJpSxpyV/frTSr8DwmYZRXh01Uza6GMhkrTvq
+	neR4MncyhAfX01s0=
+X-Google-Smtp-Source: AGHT+IHIiGP2EXYtNWJFCTShYwnPbQfV9Yt33Xq0JCDLCavYNerSkXaiBRZSLpRhlXqq3hR0aB58vw==
+X-Received: by 2002:a5d:6f0f:0:b0:3a4:f7e3:c63c with SMTP id ffacd0b85a97d-3a6d0f3d61amr14270045f8f.0.1750756091896;
+        Tue, 24 Jun 2025 02:08:11 -0700 (PDT)
+Received: from smtpclient.apple ([2a02:16a:7402:0:54f7:a1c1:3e0:3848])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-453646d7d8fsm133469355e9.15.2025.06.24.02.08.10
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Tue, 24 Jun 2025 02:08:11 -0700 (PDT)
+Content-Type: text/plain;
+	charset=us-ascii
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-ThreadId: T4b9790859b38a261
-Date: Tue, 24 Jun 2025 09:42:14 +0100
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
-Cc: "Maciej W. Rozycki" <macro@orcam.me.uk>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- linux-kernel@vger.kernel.org, stable@kernel.org
-Message-Id: <7ebe1a12-5975-4ed1-8580-905662059a27@app.fastmail.com>
-In-Reply-To: <20250607-tlb-fix-v2-1-6751eccd86f1@flygoat.com>
-References: <20250607-tlb-fix-v2-1-6751eccd86f1@flygoat.com>
-Subject: Re: [PATCH v2] MIPS: mm: tlb-r4k: Uniquify TLB entries on init
-Content-Type: text/plain; charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.600.51.1.1\))
+Subject: Re: [PATCH v3 1/4] dt-bindings: clock: mediatek,mtmips-sysc: Adapt
+ compatible for MT7688 boards
+From: Ezra Buehler <ezra@easyb.ch>
+In-Reply-To: <20250620-unnatural-bloodhound-of-tenacity-4133bd@kuoka>
+Date: Tue, 24 Jun 2025 11:08:00 +0200
+Cc: linux-mips@vger.kernel.org,
+ devicetree@vger.kernel.org,
+ Conor Dooley <conor+dt@kernel.org>,
+ Harvey Hunt <harveyhuntnexus@gmail.com>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Reto Schneider <reto.schneider@husqvarnagroup.com>,
+ Rob Herring <robh@kernel.org>,
+ Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+ Stefan Roese <sr@denx.de>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Ezra Buehler <ezra.buehler@husqvarnagroup.com>
 Content-Transfer-Encoding: quoted-printable
+Message-Id: <C75A767D-BD81-48CB-8D39-9FD19BA67E78@easyb.ch>
+References: <20250619203502.1293695-1-ezra@easyb.ch>
+ <20250619203502.1293695-2-ezra@easyb.ch>
+ <20250620-unnatural-bloodhound-of-tenacity-4133bd@kuoka>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+X-Mailer: Apple Mail (2.3826.600.51.1.1)
 
-
-
-=E5=9C=A82025=E5=B9=B46=E6=9C=887=E6=97=A5=E5=91=A8=E5=85=AD =E4=B8=8B=E5=
-=8D=881:43=EF=BC=8CJiaxun Yang=E5=86=99=E9=81=93=EF=BC=9A
-> Hardware or bootloader will initialize TLB entries to any value, which
-> may collide with kernel's UNIQUE_ENTRYHI value. On MIPS microAptiv/M51=
-50
-> family of cores this will trigger machine check exception and cause bo=
-ot
-> failure. On M5150 simulation this could happen 7 times out of 1000 boo=
-ts.
->
-> Replace local_flush_tlb_all() with r4k_tlb_uniquify() which probes each
-> TLB ENTRIHI unique value for collisions before it's written, and in ca=
-se
-> of collision try a different ASID.
-
-A gentle ping :-)
-
->
-> Cc: stable@kernel.org
-> Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-> ---
-> Changes in v2:
-> - Cycle ASID instead of ENTRYHI index in case of collison.
-> - Avoid int over flow UB (Maciej)
-> - Link to v1:=20
-> https://lore.kernel.org/r/20250605-tlb-fix-v1-1-4af496f17b2f@flygoat.c=
-om
-> ---
->  arch/mips/mm/tlb-r4k.c | 56=20
-> +++++++++++++++++++++++++++++++++++++++++++++++++-
->  1 file changed, 55 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/mips/mm/tlb-r4k.c b/arch/mips/mm/tlb-r4k.c
-> index=20
-> 76f3b9c0a9f0ce60c42e4a9ea8025e1283678bd1..347126dc010dd59904820d9d9e34=
-cdeeb011832f=20
-> 100644
-> --- a/arch/mips/mm/tlb-r4k.c
-> +++ b/arch/mips/mm/tlb-r4k.c
-> @@ -508,6 +508,60 @@ static int __init set_ntlb(char *str)
+> On 20 Jun 2025, at 09:42, Krzysztof Kozlowski <krzk@kernel.org> wrote:
 >=20
->  __setup("ntlb=3D", set_ntlb);
+> On Thu, Jun 19, 2025 at 10:34:59PM GMT, Ezra Buehler wrote:
+>> From: Ezra Buehler <ezra.buehler@husqvarnagroup.com>
+>>=20
+>> As the MT7628 and MT7688 are identical in most respects, mt7628a.dtsi =
+is
+>> used for both SoCs. To prevent "Kernel panic - not syncing: unable to
+>> get CPU clock, err=3D-2" and allow an MT7688-based board to boot, the
+>> following must be allowed:
+>>=20
+>>    compatible =3D "ralink,mt7628-sysc", "ralink,mt7688-sysc", =
+"syscon";
+>>=20
+>> Signed-off-by: Ezra Buehler <ezra.buehler@husqvarnagroup.com>
+>> ---
+>> .../bindings/clock/mediatek,mtmips-sysc.yaml  | 27 =
+++++++++++---------
+>> 1 file changed, 15 insertions(+), 12 deletions(-)
+>>=20
+>> diff --git =
+a/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml =
+b/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
+>> index 83c1803ffd16..3fabaa8acc10 100644
+>> --- =
+a/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
+>> +++ =
+b/Documentation/devicetree/bindings/clock/mediatek,mtmips-sysc.yaml
+>> @@ -26,18 +26,21 @@ description: |
+>>=20
+>> properties:
+>>   compatible:
+>> -    items:
+>> -      - enum:
+>> -          - ralink,mt7620-sysc
+>> -          - ralink,mt7628-sysc
+>> -          - ralink,mt7688-sysc
 >=20
-> +/* Initialise all TLB entries with unique values */
-> +static void r4k_tlb_uniquify(void)
-> +{
-> +	int entry =3D num_wired_entries();
-> +
-> +	htw_stop();
-> +	write_c0_entrylo0(0);
-> +	write_c0_entrylo1(0);
-> +
-> +	while (entry < current_cpu_data.tlbsize) {
-> +		unsigned long asid_mask =3D cpu_asid_mask(&current_cpu_data);
-> +		unsigned long asid =3D 0;
-> +		int idx;
-> +
-> +		/* Skip wired MMID to make ginvt_mmid work */
-> +		if (cpu_has_mmid)
-> +			asid =3D MMID_KERNEL_WIRED + 1;
-> +
-> +		/* Check for match before using UNIQUE_ENTRYHI */
-> +		do {
-> +			if (cpu_has_mmid) {
-> +				write_c0_memorymapid(asid);
-> +				write_c0_entryhi(UNIQUE_ENTRYHI(entry));
-> +			} else {
-> +				write_c0_entryhi(UNIQUE_ENTRYHI(entry) | asid);
-> +			}
-> +			mtc0_tlbw_hazard();
-> +			tlb_probe();
-> +			tlb_probe_hazard();
-> +			idx =3D read_c0_index();
-> +			/* No match or match is on current entry */
-> +			if (idx < 0 || idx =3D=3D entry)
-> +				break;
-> +			/*
-> +			 * If we hit a match, we need to try again with
-> +			 * a different ASID.
-> +			 */
-> +			asid++;
-> +		} while (asid < asid_mask);
-> +
-> +		if (idx >=3D 0 && idx !=3D entry)
-> +			panic("Unable to uniquify TLB entry %d", idx);
-> +
-> +		write_c0_index(entry);
-> +		mtc0_tlbw_hazard();
-> +		tlb_write_indexed();
-> +		entry++;
-> +	}
-> +
-> +	tlbw_use_hazard();
-> +	htw_start();
-> +	flush_micro_tlb();
-> +}
-> +
->  /*
->   * Configure TLB (for init or after a CPU has been powered off).
->   */
-> @@ -547,7 +601,7 @@ static void r4k_tlb_configure(void)
->  	temp_tlb_entry =3D current_cpu_data.tlbsize - 1;
->=20
->  	/* From this point on the ARC firmware is dead.	 */
-> -	local_flush_tlb_all();
-> +	r4k_tlb_uniquify();
->=20
->  	/* Did I tell you that ARC SUCKS?  */
->  }
->
-> ---
-> base-commit: 911483b25612c8bc32a706ba940738cc43299496
-> change-id: 20250605-tlb-fix-578bac7be546
->
-> Best regards,
-> --=20
-> Jiaxun Yang <jiaxun.yang@flygoat.com>
+> I do not understand why this is removed and commit msg explains =
+nothing
+> about it. Re-add it back.
 
---=20
-- Jiaxun
+OK, so you suggest we allow
+
+compatible =3D "ralink,mt7628-sysc", "ralink,mt7688-sysc", "syscon";
+
+and
+
+compatible =3D "ralink,mt7688-sysc", "syscon";
+
+I'll adapt my patch accordingly.
+
+Still, as AFAIK the MT7628 and MT7688 are identical in this regard,
+
+compatible =3D "ralink,mt7688-sysc", "ralink,mt7628-sysc", "syscon";
+
+would technically be valid too. Could you elaborate why that is not a
+good idea? The MT7688 is basically a subset of the MT7628.
+
+Cheers,
+Ezra.
+
 
