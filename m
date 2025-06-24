@@ -1,60 +1,58 @@
-Return-Path: <linux-mips+bounces-9461-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9462-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B56B2AE5A30
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Jun 2025 04:45:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AE07AE5A3B
+	for <lists+linux-mips@lfdr.de>; Tue, 24 Jun 2025 04:48:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8C9E3189C2B2
-	for <lists+linux-mips@lfdr.de>; Tue, 24 Jun 2025 02:45:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B500216E5D6
+	for <lists+linux-mips@lfdr.de>; Tue, 24 Jun 2025 02:48:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3DF76EB79;
-	Tue, 24 Jun 2025 02:45:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCCD7146D6A;
+	Tue, 24 Jun 2025 02:48:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oIipPcPU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P8VT+Qfs"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B360C5680;
-	Tue, 24 Jun 2025 02:45:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA72A6EB79;
+	Tue, 24 Jun 2025 02:48:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750733126; cv=none; b=VRxxo0bU9d0Gokl7uAlC+errRDMAJ0gesTcqTawHlsHoiEzd+pFY4Gq/7qVhifNWQcJ4bSpsC/USC5FLQoG1gWE0ZGb4rVrR+cCUgTap9MW/Urg7pqQ0p1ko7T0Pz4DvaynKxyGWVMOYE3sOIy467Qo7QVvfoyxuyhLMdfA5is0=
+	t=1750733284; cv=none; b=QuXLYDOJf6oTbPdFAbz9zYpRTgIWlx+B6n2uv7IS01/zPmoD3h265EeLJ+edG+baLtqPovmVDCVvUaUzbNO2NeVBTt1bLibTnD+HTXIEHOF69uR3D5d2Z57lljuJTlmS3Q1kbi7sxnHgIFwIPwWsvRZrSFb+LXxzN3d9eBib39o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750733126; c=relaxed/simple;
-	bh=wvw4KZrFb3bDpFyljDt13+2hzP7dlyNidFKreU0+rGc=;
+	s=arc-20240116; t=1750733284; c=relaxed/simple;
+	bh=0ZETP/chWGG4T9JGaFbl9fh8M/SzCRMYDw4aVpfGbeo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gu8f9Q8i/M/GAZWaVSE0YpW3E2uFmKFLptD4TXdoEnla8Vnl2ZsWRcJ38dPmIL8pnWqoqPi7XSWM1EB7cqH8YMQKZWOCTBispOVZDtYgm7jI8JM5MLgxDeUXXOomh9oUU8LRA2eOU61l9RhIpFF5fYQL1v5PfVRr2RtwoBs2nLM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oIipPcPU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1A0AC4CEEA;
-	Tue, 24 Jun 2025 02:45:25 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=nbuaUd/BvCMNduuI7DSLXRpLzYt1Mht3VdRhHHz/WLWkC77/6Wpof4NKfFbIWNfKvsxT/PUJZ4wJg+WTtV4SHlXzwwEUfT8nDhZWniXDOUs/J530ZRElf7sXPqYMS/FQBbbepINI/3mQ9AsUF2PRtAaRaDrWIkSTWgulrlsySnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P8VT+Qfs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 421FEC4CEEA;
+	Tue, 24 Jun 2025 02:48:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750733126;
-	bh=wvw4KZrFb3bDpFyljDt13+2hzP7dlyNidFKreU0+rGc=;
+	s=k20201202; t=1750733284;
+	bh=0ZETP/chWGG4T9JGaFbl9fh8M/SzCRMYDw4aVpfGbeo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=oIipPcPUENDbB1DVaM2klpFxZLymtMC1278ktKPXQMNZt41mnhj+ZJexStFH5JK2u
-	 nFXCl0kaNRAtFSccN6WfWV998QOsGwbB+qf9yeRG2pfUiPe5aPfG7a5fiaJzXH3RE/
-	 FIJSmpv+ncH9OqsDWsdaTgdlboVcC2ABX1ghnprIEbIl3QAUqvV2QqsDjZ1079FYkn
-	 jPt0nzSxpOunutckTus8H/G0ofSpk6ztujnJoy+KSEri/GKc+oFI2MLNBYknXyAgdT
-	 3HUYlPxE9SjpaR0UWveXbgSzRwttALUuqVwFQiG2HmGYrj+2QgHF3a3xvoxS0gN2+S
-	 O5Eof0eJUCorA==
-Date: Mon, 23 Jun 2025 19:44:51 -0700
+	b=P8VT+QfsmFyNCARIa6+zv5GeEdHmGYz4b2CXf2QnLCgg2XjI+QzVHFQwaE54p21fT
+	 1LCZ7fSSZ2/nlpVQyeKmcrVqpGzdILXyh4DkrsBuW0Jm2+lMKrL2NYPCa2F1u7qiRq
+	 pmGy+v9rQbqcPMJ5c7Ar9+5dM1PmAGXhnP1d40AksQRUnbL04k4TUW/iADQsjNci5R
+	 /M7bl9YM8W8DfDHtijhEjzPSFgXIzwYJGmERAy0H9kLYjCZywd5ELycQkRygA06DgI
+	 eFstFLW0coTU18586ApXLRLRIQwaVckxTiXEMn3hF5HMSifi0iGk/xafn/MCD06Y2v
+	 j10n7GKclAZ1w==
+Date: Mon, 23 Jun 2025 19:47:30 -0700
 From: Eric Biggers <ebiggers@kernel.org>
-To: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Jason@zx2c4.com, Ard Biesheuvel <ardb@kernel.org>,
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
-	x86@kernel.org
-Subject: Re: [PATCH v2 5/9] lib/crypto: riscv: move arch/riscv/lib/crypto/
- into lib/crypto/
-Message-ID: <20250624024451.GA7127@sol>
-References: <20250619191908.134235-6-ebiggers@kernel.org>
- <mhng-8FC37478-859D-40EA-A0E9-3EA86429DC53@palmerdabbelt-mac>
+To: linux-crypto@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
+	"Jason A . Donenfeld " <Jason@zx2c4.com>,
+	=?iso-8859-1?Q?Ren=E9?= van Dorst <opensource@vdorst.com>,
+	linux-mips@vger.kernel.org, llvm@lists.linux.dev,
+	stable@vger.kernel.org, kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] lib/crypto: mips/chacha: Fix clang build and remove
+ unneeded byteswap
+Message-ID: <20250624024730.GC7127@sol>
+References: <20250619225535.679301-1-ebiggers@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -63,53 +61,49 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <mhng-8FC37478-859D-40EA-A0E9-3EA86429DC53@palmerdabbelt-mac>
+In-Reply-To: <20250619225535.679301-1-ebiggers@kernel.org>
 
-On Mon, Jun 23, 2025 at 04:23:52PM -0700, Palmer Dabbelt wrote:
-> On Thu, 19 Jun 2025 12:19:04 PDT (-0700), ebiggers@kernel.org wrote:
-> > From: Eric Biggers <ebiggers@google.com>
-> > 
-> > Move the contents of arch/riscv/lib/crypto/ into lib/crypto/riscv/.
-> > 
-> > The new code organization makes a lot more sense for how this code
-> > actually works and is developed.  In particular, it makes it possible to
-> > build each algorithm as a single module, with better inlining and dead
-> > code elimination.  For a more detailed explanation, see the patchset
-> > which did this for the CRC library code:
-> > https://lore.kernel.org/r/20250607200454.73587-1-ebiggers@kernel.org/.
-> > Also see the patchset which did this for SHA-512:
-> > https://lore.kernel.org/linux-crypto/20250616014019.415791-1-ebiggers@kernel.org/
-> > 
-> > This is just a preparatory commit, which does the move to get the files
-> > into their new location but keeps them building the same way as before.
-> > Later commits will make the actual improvements to the way the
-> > arch-optimized code is integrated for each algorithm.
-> > 
-> > Signed-off-by: Eric Biggers <ebiggers@google.com>
-> > ---
-> >  arch/riscv/lib/Makefile                                         | 1 -
-> >  lib/crypto/Kconfig                                              | 2 +-
-> >  lib/crypto/Makefile                                             | 1 +
-> >  {arch/riscv/lib/crypto => lib/crypto/riscv}/Kconfig             | 0
-> >  {arch/riscv/lib/crypto => lib/crypto/riscv}/Makefile            | 0
-> >  .../riscv/lib/crypto => lib/crypto/riscv}/chacha-riscv64-glue.c | 0
-> >  .../riscv/lib/crypto => lib/crypto/riscv}/chacha-riscv64-zvkb.S | 0
-> >  .../crypto/riscv}/sha256-riscv64-zvknha_or_zvknhb-zvkb.S        | 0
-> >  {arch/riscv/lib/crypto => lib/crypto/riscv}/sha256.c            | 0
-> >  9 files changed, 2 insertions(+), 2 deletions(-)
-> >  rename {arch/riscv/lib/crypto => lib/crypto/riscv}/Kconfig (100%)
-> >  rename {arch/riscv/lib/crypto => lib/crypto/riscv}/Makefile (100%)
-> >  rename {arch/riscv/lib/crypto => lib/crypto/riscv}/chacha-riscv64-glue.c (100%)
-> >  rename {arch/riscv/lib/crypto => lib/crypto/riscv}/chacha-riscv64-zvkb.S (100%)
-> >  rename {arch/riscv/lib/crypto => lib/crypto/riscv}/sha256-riscv64-zvknha_or_zvknhb-zvkb.S (100%)
-> >  rename {arch/riscv/lib/crypto => lib/crypto/riscv}/sha256.c (100%)
+On Thu, Jun 19, 2025 at 03:55:35PM -0700, Eric Biggers wrote:
+> The MIPS32r2 ChaCha code has never been buildable with the clang
+> assembler.  First, clang doesn't support the 'rotl' pseudo-instruction:
 > 
-> I'm assuming you want to keep these all together.
+>     error: unknown instruction, did you mean: rol, rotr?
 > 
-> Acked-by: Palmer Dabbelt <palmer@dabbelt.com>
+> Second, clang requires that both operands of the 'wsbh' instruction be
+> explicitly given:
 > 
+>     error: too few operands for instruction
+> 
+> To fix this, align the code with the real instruction set by (1) using
+> the real instruction 'rotr' instead of the nonstandard pseudo-
+> instruction 'rotl', and (2) explicitly giving both operands to 'wsbh'.
+> 
+> To make removing the use of 'rotl' a bit easier, also remove the
+> unnecessary special-casing for big endian CPUs at
+> .Lchacha_mips_xor_bytes.  The tail handling is actually
+> endian-independent since it processes one byte at a time.  On big endian
+> CPUs the old code byte-swapped SAVED_X, then iterated through it in
+> reverse order.  But the byteswap and reverse iteration canceled out.
+> 
+> Tested with chacha20poly1305-selftest in QEMU using "-M malta" with both
+> little endian and big endian mips32r2 kernels.
+> 
+> Fixes: 49aa7c00eddf ("crypto: mips/chacha - import 32r2 ChaCha code from Zinc")
+> Cc: stable@vger.kernel.org
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202505080409.EujEBwA0-lkp@intel.com/
+> Signed-off-by: Eric Biggers <ebiggers@kernel.org>
+> ---
+> 
+> This applies on top of other pending lib/crypto patches and can be
+> retrieved from git at:
+> 
+>     git fetch https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git mips-chacha-fix
+> 
+>  lib/crypto/mips/chacha-core.S | 20 +++++++-------------
+>  1 file changed, 7 insertions(+), 13 deletions(-)
 
-Yes, I'm taking this series through libcrypto-next.  Thanks!
+Applied to https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git/log/?h=libcrypto-next
 
 - Eric
 
