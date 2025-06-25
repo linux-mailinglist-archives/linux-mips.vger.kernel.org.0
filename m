@@ -1,46 +1,46 @@
-Return-Path: <linux-mips+bounces-9481-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9482-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFF3AAE77EF
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Jun 2025 09:11:30 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90421AE77F1
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Jun 2025 09:11:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2C55517FAF8
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Jun 2025 07:11:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F4A41BC58C8
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Jun 2025 07:11:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B99020C030;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D95020E00A;
 	Wed, 25 Jun 2025 07:10:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nqVpQzpx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UyXquyVZ"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E80AC20B218;
-	Wed, 25 Jun 2025 07:10:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69E4620CCE5;
+	Wed, 25 Jun 2025 07:10:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750835430; cv=none; b=tV5HNDWjEnkTzR1nrLL3d+sMX0cUeaHhVALIVfXK2pUPfbE2siL5knoLQnU4aRCsxmInmAcmPpFuIXuaA9HbKFi7Wf33ztPw+oPVyfPvgMFewVL4tj6x3e73JESYyWT5Kw6cS6yP/4+nMouHkerrfE6X1UNeEmmYKH3BjrHW8H8=
+	t=1750835430; cv=none; b=aPxP+lLap/KvUyJ2zHybh/GMCNdYGURvCwApmUFgU0SQ5NjeV7q3NvK9Yoj0JancETdt0AxZiwGGkJvVMFz0mVGTfRg9C0JjD+ym5Fh4JD6s4Smq9JZdCY6CvdpCV/EKKMu46ZnNyBaKeDn9vli2ggNfV347GRadCZ9b8TzCWzw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1750835430; c=relaxed/simple;
-	bh=1DNk7tX1YvvlA6uSWHlfTS+Bb3s1eS+aWteQQPlb1JM=;
+	bh=2LrGs37CGEadHzUgE3udzC7iJiB7yoZqC5JHegQK+WQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=hu7cDyXjRdIL8ocCQJpPMJUlJPgMvLHpC5QZp/qdvnH4Dzt/j/Pi1YJHiMqGZdAwfJxgglVk1hX+PPUtye2QvZooxU5XWKuzAxtslpORe2p8Jy/Omcc9TfqKwpSQMtkMe3hM3fBK2Uq+jaTd0rqaj5l2ylHUweKYGuhxENdkAQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nqVpQzpx; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 303BCC4CEF4;
+	 MIME-Version; b=kz6He9LX6aTZNsMv5oEz9Vp6/1bJK2X8x7WOI2pC/5wT8a1L2zaIIVHI6wEalHByoDmob3wJzDKScL9p28fzshM1Ff4gHmkTZznRofVVtBb2zDpO0oWdUYwmnACmT4y8n0vZegZBSQkDJkjMKSSEhGPAaANR1CX1N2ouPNzL25s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UyXquyVZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A66DCC4CEF2;
 	Wed, 25 Jun 2025 07:10:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1750835429;
-	bh=1DNk7tX1YvvlA6uSWHlfTS+Bb3s1eS+aWteQQPlb1JM=;
+	s=k20201202; t=1750835430;
+	bh=2LrGs37CGEadHzUgE3udzC7iJiB7yoZqC5JHegQK+WQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=nqVpQzpxUnKXPMGrZ1EGYozacdniZ2Ei1z0BDb9CArbXCIdhByuU9MICPVrjgSPOs
-	 7I9XtCbuuhB6jWShxX4zi3pBcGSRDxsestEYjY/AaCTGarh3AmLmMYGVmsNHH1evss
-	 mVm19s4IODFj3zJjHA7UoVak1Yktt1eeG3x4UvGqP1eBFy9no7S/Z2ct6nwLqYlGJV
-	 Hfjb4JOyB1ZwjnDHOmsYhRJU6IML4Cg4wPn/XWbASQCigU+IWieRPJoRfKCL2onHLw
-	 c93er26kDV2ZMVmMh48fmsPNOWrh8d0egdKTyR/kurxPY6+tKSegQkxGRUJK1Iqp4n
-	 jcy1kRYUqSgXw==
+	b=UyXquyVZWgisY6zFwDG5d4ZzxprCHqDlisQ41lEvQ5IHurjnN/m8NqcWJG2vqieps
+	 QNFaI0iSMcmJ46Ug61uPBEtuUygIKDzSDjAxynb4e32/Bzo9ew8IRX1nVeNa3fkzqN
+	 syi5JxOKQKXDORFsRNuQUSvE2MTtpLQan5nDKmPDEZTdAAdaOORBOzhXfhVgW++ZhS
+	 8aQcYq36vJoEcgEO11QoLWRlxYpBu5iW/xpJLuTKV0vQsT609fAI+9N0MKxz1aEcLo
+	 feCNVsiIJhz/3Gd10BL2tMvEMtB3M5eyiDmrObThqsEaq+JwDKnQHAVQO+KU2HI6MX
+	 nTvdfxLoh5QYA==
 From: Eric Biggers <ebiggers@kernel.org>
 To: linux-crypto@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -54,9 +54,9 @@ Cc: linux-kernel@vger.kernel.org,
 	sparclinux@vger.kernel.org,
 	x86@kernel.org,
 	Eric Biggers <ebiggers@kernel.org>
-Subject: [PATCH 05/18] lib/crypto: sha512: Do not include <crypto/internal/sha2.h>
-Date: Wed, 25 Jun 2025 00:08:06 -0700
-Message-ID: <20250625070819.1496119-6-ebiggers@kernel.org>
+Subject: [PATCH 06/18] lib/crypto: sha512: Fix a grammatical error in kerneldoc comments
+Date: Wed, 25 Jun 2025 00:08:07 -0700
+Message-ID: <20250625070819.1496119-7-ebiggers@kernel.org>
 X-Mailer: git-send-email 2.50.0
 In-Reply-To: <20250625070819.1496119-1-ebiggers@kernel.org>
 References: <20250625070819.1496119-1-ebiggers@kernel.org>
@@ -68,40 +68,95 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Since the SHA-512 code is now consolidated into a single translation
-unit except for assembly code, there is no longer any need for an
-internal header.  Indeed, lib/crypto/sha512.c relies on
-<crypto/internal/sha2.h> only for indirect inclusions.  Stop including
-it.  This prepares for the later removal of this header, once the
-SHA-256 code is reorganized similarly and stops needing it too.
+"An HMAC", not "A HMAC".
 
 Signed-off-by: Eric Biggers <ebiggers@kernel.org>
 ---
- lib/crypto/sha512.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ include/crypto/sha2.h | 12 ++++++------
+ 1 file changed, 6 insertions(+), 6 deletions(-)
 
-diff --git a/lib/crypto/sha512.c b/lib/crypto/sha512.c
-index fe9d98b9b7db9..f5a9569a7ef96 100644
---- a/lib/crypto/sha512.c
-+++ b/lib/crypto/sha512.c
-@@ -7,15 +7,16 @@
-  * Copyright (c) 2003 Kyle McMartin <kyle@debian.org>
-  * Copyright 2025 Google LLC
+diff --git a/include/crypto/sha2.h b/include/crypto/sha2.h
+index 36a9dab805be7..296ce9d468bfc 100644
+--- a/include/crypto/sha2.h
++++ b/include/crypto/sha2.h
+@@ -247,11 +247,11 @@ struct hmac_sha384_ctx {
   */
+ void hmac_sha384_preparekey(struct hmac_sha384_key *key,
+ 			    const u8 *raw_key, size_t raw_key_len);
  
- #include <crypto/hmac.h>
--#include <crypto/internal/sha2.h>
-+#include <crypto/sha2.h>
- #include <linux/export.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/overflow.h>
-+#include <linux/unaligned.h>
- #include <linux/wordpart.h>
+ /**
+- * hmac_sha384_init() - Initialize a HMAC-SHA384 context for a new message
++ * hmac_sha384_init() - Initialize an HMAC-SHA384 context for a new message
+  * @ctx: (output) the HMAC context to initialize
+  * @key: the prepared HMAC key
+  *
+  * If you don't need incremental computation, consider hmac_sha384() instead.
+  *
+@@ -262,11 +262,11 @@ static inline void hmac_sha384_init(struct hmac_sha384_ctx *ctx,
+ {
+ 	__hmac_sha512_init(&ctx->ctx, &key->key);
+ }
  
- static const struct sha512_block_state sha384_iv = {
- 	.h = {
- 		SHA384_H0, SHA384_H1, SHA384_H2, SHA384_H3,
+ /**
+- * hmac_sha384_update() - Update a HMAC-SHA384 context with message data
++ * hmac_sha384_update() - Update an HMAC-SHA384 context with message data
+  * @ctx: the HMAC context to update; must have been initialized
+  * @data: the message data
+  * @data_len: the data length in bytes
+  *
+  * This can be called any number of times.
+@@ -278,11 +278,11 @@ static inline void hmac_sha384_update(struct hmac_sha384_ctx *ctx,
+ {
+ 	__sha512_update(&ctx->ctx.sha_ctx, data, data_len);
+ }
+ 
+ /**
+- * hmac_sha384_final() - Finish computing a HMAC-SHA384 value
++ * hmac_sha384_final() - Finish computing an HMAC-SHA384 value
+  * @ctx: the HMAC context to finalize; must have been initialized
+  * @out: (output) the resulting HMAC-SHA384 value
+  *
+  * After finishing, this zeroizes @ctx.  So the caller does not need to do it.
+  *
+@@ -405,11 +405,11 @@ struct hmac_sha512_ctx {
+  */
+ void hmac_sha512_preparekey(struct hmac_sha512_key *key,
+ 			    const u8 *raw_key, size_t raw_key_len);
+ 
+ /**
+- * hmac_sha512_init() - Initialize a HMAC-SHA512 context for a new message
++ * hmac_sha512_init() - Initialize an HMAC-SHA512 context for a new message
+  * @ctx: (output) the HMAC context to initialize
+  * @key: the prepared HMAC key
+  *
+  * If you don't need incremental computation, consider hmac_sha512() instead.
+  *
+@@ -420,11 +420,11 @@ static inline void hmac_sha512_init(struct hmac_sha512_ctx *ctx,
+ {
+ 	__hmac_sha512_init(&ctx->ctx, &key->key);
+ }
+ 
+ /**
+- * hmac_sha512_update() - Update a HMAC-SHA512 context with message data
++ * hmac_sha512_update() - Update an HMAC-SHA512 context with message data
+  * @ctx: the HMAC context to update; must have been initialized
+  * @data: the message data
+  * @data_len: the data length in bytes
+  *
+  * This can be called any number of times.
+@@ -436,11 +436,11 @@ static inline void hmac_sha512_update(struct hmac_sha512_ctx *ctx,
+ {
+ 	__sha512_update(&ctx->ctx.sha_ctx, data, data_len);
+ }
+ 
+ /**
+- * hmac_sha512_final() - Finish computing a HMAC-SHA512 value
++ * hmac_sha512_final() - Finish computing an HMAC-SHA512 value
+  * @ctx: the HMAC context to finalize; must have been initialized
+  * @out: (output) the resulting HMAC-SHA512 value
+  *
+  * After finishing, this zeroizes @ctx.  So the caller does not need to do it.
+  *
 -- 
 2.50.0
 
