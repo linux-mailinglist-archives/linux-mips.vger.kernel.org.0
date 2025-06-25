@@ -1,46 +1,46 @@
-Return-Path: <linux-mips+bounces-9493-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9494-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E192CAE7841
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Jun 2025 09:15:40 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E5E9AE7834
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Jun 2025 09:14:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 24AFA6A03E2
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Jun 2025 07:13:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 06F234A13C3
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Jun 2025 07:13:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 877422264C7;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CA902264D4;
 	Wed, 25 Jun 2025 07:10:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bH9JuMjc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eZmKP/fI"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 576112264BA;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 575AF2264B6;
 	Wed, 25 Jun 2025 07:10:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750835436; cv=none; b=qFWhXB/IsvntcnkE6NmnEO68jqCh7pmuI4ztbuK0SP9VMCZytrN1QTfxrfku4WANikc+moWDphiLm4BzBTyNBUbNlT1vXpqc4098jeb3+JW7TmyG/FeHe+or5uTe45S3lnfy8Y7qf3Ovv0lKhhj1UuKKsivgnfwFBc3rUk0Za98=
+	t=1750835436; cv=none; b=sZjAGmLJeNuCl3EWqsFjwgfirVM61ka4LVYlRpdhujkZ+qI5un/i5XOnAtOzP6Jjkm89ijN1lioAiojmoiAJfgAHJ7a4Wl2nrborDvkiguZ2zUXAiD3B7h6vQBUER4AAK6SqCNDr39a62NvK1zzLV+cex5fWrVqL9/WgKCguhQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1750835436; c=relaxed/simple;
-	bh=Y+OM4xhFGnbbVJB2/pk7w3PVA+sL8KWZ8Ahn07y2y1A=;
+	bh=pkoFPfsdz5mUfc5I4FK+MnyFLsCjGsnnD9jc5ME9fN4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=L0dCymTNOtzycKi51/FhbJFNUR8a9wsr0F/qNxoknrIh/I9vIUnCrV+03F+ZYP3HTBJ58KQX9OMyV6gJf6O+w/SNPTd0nYl08SibQ0lJ9ujrVVn5YrdTz6ObPVBUz2/cmJtM3/RS1HS4UciNSqVAWSuvyJGihB8SiUy7j/odaZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bH9JuMjc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EFCAC4CEF2;
+	 MIME-Version; b=g7x+Ur/Jf/siwukPDo7pjM2MZ3zdyJmPfCSNgCZ0Uo2E5QNo2zrG+sPyfTeLhDNAxQeZRHuWeEN8XC0CW/53vn7Rl3qtb0zXGRn9VsB8mNVi6DQzOPgbvKoeyZReYqkkdmuVo4q3LE0Jwe/5/Vl6GHQdlqT5RpSf85TsUBbQo+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eZmKP/fI; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 850B0C4CEF1;
 	Wed, 25 Jun 2025 07:10:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1750835435;
-	bh=Y+OM4xhFGnbbVJB2/pk7w3PVA+sL8KWZ8Ahn07y2y1A=;
+	bh=pkoFPfsdz5mUfc5I4FK+MnyFLsCjGsnnD9jc5ME9fN4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=bH9JuMjcvx3J7GtUczSjT11nGI4YWbo07MYlZLzC2HhSWEMCp2w/3F76EUQDdl9aH
-	 x3U0E8JYWVjle7diqxhGtq75vEUoC36KAdmOt5ehtup8q9m0RB23nlpgatFdW+xPro
-	 JnvpTRlkc04oJMwRgnosZlVo8rkhPtz1xEyaez2xP71hb1UjwpZwEHoEgz9hwvZZ8w
-	 Xg73giZDP2UVojmC6ER8rObGC/udaKqdU8qwkmAQlqBDk2z567b670tXgzD5vy92Bv
-	 LTPxk9gDYjyHb92F+u8ONsV4Eu9yHAg8GfgBAM3Y1PeC6Az6HX0fnNqfEvvqWnzfdm
-	 PfOgccGBMYwtA==
+	b=eZmKP/fIDXW6rkeKR6Thsj7qhzrxUo7+anqcEdA8gXs47TnZN6DL2kX7bOmniF+Af
+	 +piPAyua5mV1/j2iaeJwcTEQSZit4PSpaEuHxsuX3Gh7qbJL1/S6+cmg48nAkVE0dN
+	 ZyGYkK4KNRVoHZ8kRyXFP+D5WRT1bmxJwqycb3x7/rHw4Si1XjQgAf3mJF4Ppbc3st
+	 vVZqoNdVE/MzcDZ1B21vwKhKKnzwJYGxof7gMCU3EX3I9Jd+xgPmhyMAFfRtKRsS7F
+	 8ucsuq7Ii9jB5dRSQBWrDMV+5Y5BLLHL58mBqSOsHYMJPjSbhmNrrHgtHdtCEEmFJL
+	 s0DeneNL1I14g==
 From: Eric Biggers <ebiggers@kernel.org>
 To: linux-crypto@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -54,9 +54,9 @@ Cc: linux-kernel@vger.kernel.org,
 	sparclinux@vger.kernel.org,
 	x86@kernel.org,
 	Eric Biggers <ebiggers@kernel.org>
-Subject: [PATCH 17/18] lib/crypto: sha256: Sync sha256_update() with sha512_update()
-Date: Wed, 25 Jun 2025 00:08:18 -0700
-Message-ID: <20250625070819.1496119-18-ebiggers@kernel.org>
+Subject: [PATCH 18/18] lib/crypto: sha256: Document the SHA-224 and SHA-256 API
+Date: Wed, 25 Jun 2025 00:08:19 -0700
+Message-ID: <20250625070819.1496119-19-ebiggers@kernel.org>
 X-Mailer: git-send-email 2.50.0
 In-Reply-To: <20250625070819.1496119-1-ebiggers@kernel.org>
 References: <20250625070819.1496119-1-ebiggers@kernel.org>
@@ -68,71 +68,130 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The BLOCK_HASH_UPDATE_BLOCKS macro is difficult to read.  For now, let's
-just write the update explicitly in the straightforward way, mirroring
-sha512_update().  It's possible that we'll bring back a macro for this
-later, but it needs to be properly justified and hopefully a bit more
-readable.
+Add kerneldoc comments, consistent with the kerneldoc comments of the
+SHA-384 and SHA-512 API.
 
 Signed-off-by: Eric Biggers <ebiggers@kernel.org>
 ---
- lib/crypto/sha256.c | 28 +++++++++++++++++++++++++---
- 1 file changed, 25 insertions(+), 3 deletions(-)
+ include/crypto/sha2.h | 76 +++++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 76 insertions(+)
 
-diff --git a/lib/crypto/sha256.c b/lib/crypto/sha256.c
-index 0de49bf8e8b8b..c93bf4699160c 100644
---- a/lib/crypto/sha256.c
-+++ b/lib/crypto/sha256.c
-@@ -8,11 +8,10 @@
-  * Copyright (c) 2014 Red Hat Inc.
-  * Copyright 2025 Google LLC
+diff --git a/include/crypto/sha2.h b/include/crypto/sha2.h
+index 2e3fc2cf4aa0d..e0a08f6addd00 100644
+--- a/include/crypto/sha2.h
++++ b/include/crypto/sha2.h
+@@ -153,17 +153,55 @@ void __hmac_sha256_init(struct __hmac_sha256_ctx *ctx,
   */
+ struct sha224_ctx {
+ 	struct __sha256_ctx ctx;
+ };
  
- #include <crypto/hmac.h>
--#include <crypto/internal/blockhash.h>
- #include <crypto/sha2.h>
- #include <linux/export.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/unaligned.h>
-@@ -177,12 +176,35 @@ EXPORT_SYMBOL_GPL(sha256_init);
- void __sha256_update(struct __sha256_ctx *ctx, const u8 *data, size_t len)
++/**
++ * sha224_init() - Initialize a SHA-224 context for a new message
++ * @ctx: the context to initialize
++ *
++ * If you don't need incremental computation, consider sha224() instead.
++ *
++ * Context: Any context.
++ */
+ void sha224_init(struct sha224_ctx *ctx);
++
++/**
++ * sha224_update() - Update a SHA-224 context with message data
++ * @ctx: the context to update; must have been initialized
++ * @data: the message data
++ * @len: the data length in bytes
++ *
++ * This can be called any number of times.
++ *
++ * Context: Any context.
++ */
+ static inline void sha224_update(struct sha224_ctx *ctx,
+ 				 const u8 *data, size_t len)
  {
- 	size_t partial = ctx->bytecount % SHA256_BLOCK_SIZE;
- 
- 	ctx->bytecount += len;
--	BLOCK_HASH_UPDATE_BLOCKS(sha256_blocks, &ctx->state, data, len,
--				 SHA256_BLOCK_SIZE, ctx->buf, partial);
-+
-+	if (partial + len >= SHA256_BLOCK_SIZE) {
-+		size_t nblocks;
-+
-+		if (partial) {
-+			size_t l = SHA256_BLOCK_SIZE - partial;
-+
-+			memcpy(&ctx->buf[partial], data, l);
-+			data += l;
-+			len -= l;
-+
-+			sha256_blocks(&ctx->state, ctx->buf, 1);
-+		}
-+
-+		nblocks = len / SHA256_BLOCK_SIZE;
-+		len %= SHA256_BLOCK_SIZE;
-+
-+		if (nblocks) {
-+			sha256_blocks(&ctx->state, data, nblocks);
-+			data += nblocks * SHA256_BLOCK_SIZE;
-+		}
-+		partial = 0;
-+	}
-+	if (len)
-+		memcpy(&ctx->buf[partial], data, len);
+ 	__sha256_update(&ctx->ctx, data, len);
  }
- EXPORT_SYMBOL(__sha256_update);
++
++/**
++ * sha224_final() - Finish computing a SHA-224 message digest
++ * @ctx: the context to finalize; must have been initialized
++ * @out: (output) the resulting SHA-224 message digest
++ *
++ * After finishing, this zeroizes @ctx.  So the caller does not need to do it.
++ *
++ * Context: Any context.
++ */
+ void sha224_final(struct sha224_ctx *ctx, u8 out[SHA224_DIGEST_SIZE]);
++
++/**
++ * sha224() - Compute SHA-224 message digest in one shot
++ * @data: the message data
++ * @len: the data length in bytes
++ * @out: (output) the resulting SHA-224 message digest
++ *
++ * Context: Any context.
++ */
+ void sha224(const u8 *data, size_t len, u8 out[SHA224_DIGEST_SIZE]);
  
- static void __sha256_final(struct __sha256_ctx *ctx,
- 			   u8 *out, size_t digest_size)
+ /**
+  * struct hmac_sha224_key - Prepared key for HMAC-SHA224
+  * @key: private
+@@ -273,17 +311,55 @@ void hmac_sha224_usingrawkey(const u8 *raw_key, size_t raw_key_len,
+  */
+ struct sha256_ctx {
+ 	struct __sha256_ctx ctx;
+ };
+ 
++/**
++ * sha256_init() - Initialize a SHA-256 context for a new message
++ * @ctx: the context to initialize
++ *
++ * If you don't need incremental computation, consider sha256() instead.
++ *
++ * Context: Any context.
++ */
+ void sha256_init(struct sha256_ctx *ctx);
++
++/**
++ * sha256_update() - Update a SHA-256 context with message data
++ * @ctx: the context to update; must have been initialized
++ * @data: the message data
++ * @len: the data length in bytes
++ *
++ * This can be called any number of times.
++ *
++ * Context: Any context.
++ */
+ static inline void sha256_update(struct sha256_ctx *ctx,
+ 				 const u8 *data, size_t len)
+ {
+ 	__sha256_update(&ctx->ctx, data, len);
+ }
++
++/**
++ * sha256_final() - Finish computing a SHA-256 message digest
++ * @ctx: the context to finalize; must have been initialized
++ * @out: (output) the resulting SHA-256 message digest
++ *
++ * After finishing, this zeroizes @ctx.  So the caller does not need to do it.
++ *
++ * Context: Any context.
++ */
+ void sha256_final(struct sha256_ctx *ctx, u8 out[SHA256_DIGEST_SIZE]);
++
++/**
++ * sha256() - Compute SHA-256 message digest in one shot
++ * @data: the message data
++ * @len: the data length in bytes
++ * @out: (output) the resulting SHA-256 message digest
++ *
++ * Context: Any context.
++ */
+ void sha256(const u8 *data, size_t len, u8 out[SHA256_DIGEST_SIZE]);
+ 
+ /**
+  * struct hmac_sha256_key - Prepared key for HMAC-SHA256
+  * @key: private
 -- 
 2.50.0
 
