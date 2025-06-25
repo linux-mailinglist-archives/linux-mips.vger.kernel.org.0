@@ -1,46 +1,46 @@
-Return-Path: <linux-mips+bounces-9478-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9479-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 82900AE77D9
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Jun 2025 09:10:41 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F852AE77DE
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Jun 2025 09:10:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A7C3F1688A0
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Jun 2025 07:10:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6EFA61BC4F71
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Jun 2025 07:11:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B9C21FF1C9;
-	Wed, 25 Jun 2025 07:10:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 307D52040B6;
+	Wed, 25 Jun 2025 07:10:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AFyVXiVi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eaWrFSUh"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35DD21FDE39;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5A78202983;
 	Wed, 25 Jun 2025 07:10:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750835428; cv=none; b=jR5j5Nki4wnD9+nXVlw9O03eWpO1gQ7O06EkYgc3q7vjmTokZgoC/WpVUKsi0dU0OvC3K6tDwKodaKEoP80oKhf+OwvpVsqLzjUq3i50TuxtOKwJASO5zbVo+sCXsPzRGcp2cR8w+Y7heD1FGWq9KO1KKcIQYFtljMRv7U9IKI8=
+	t=1750835429; cv=none; b=YjAorFMGnOi4nr0vqaSNhyTzHLNAHMdZ5KCuSzcE3A784Cyuc4M1Vb0S7i7zCS2GXywJ8LLK5htf8rhTcHar0tSpcWwgpaRtC6gXO+C4G/1TruJR5bEgNSFNb8LfTTdTabON3zOjP+eF271318kgVrkVYPxCqStTEgZNRo6esOU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750835428; c=relaxed/simple;
-	bh=UROoErFHCYCaDPqAxDhc4AhSGoASaVjnImGlpaYhSWw=;
+	s=arc-20240116; t=1750835429; c=relaxed/simple;
+	bh=MVpW9jOYl5nfA5iSMc4oN4R/qeu/fhMbVZxtFi5zdFA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=UZ8KXpj6/nNvEwYL3mKltoWB9R2ambEcxBJsLQLXFFZ23jybrTJvrwNHX8Cg2rUAsV0hyXT8K4yx26NnAhzHzDE0h226YfPja7ue5o7wlEik3ikbRcliUn3yD+pcGZ8B4gUfMao2YflR78LCQD49wV0K7y9hXVsfUq4xkcEqgMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AFyVXiVi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4181C4CEF4;
-	Wed, 25 Jun 2025 07:10:27 +0000 (UTC)
+	 MIME-Version; b=ee7TXIwcXbcnI7xqSwFDZuOGIRSWj1jcZ5auTcVkC6VyIm8ansi8F+8bVuGhptBhxjb+VBpPjykiARv6+n563dEbekHH8DanxMQ49gxhTUw36BzWezEy+8flathvUsaGkts5HHjE6+dg+M9Y7bwwQVRT/5lYAPNCn2p1XqvKnwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eaWrFSUh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 35A21C4CEF8;
+	Wed, 25 Jun 2025 07:10:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1750835428;
-	bh=UROoErFHCYCaDPqAxDhc4AhSGoASaVjnImGlpaYhSWw=;
+	bh=MVpW9jOYl5nfA5iSMc4oN4R/qeu/fhMbVZxtFi5zdFA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=AFyVXiVibPF18EO8gj6Jg8HFt9D0dAKEtmgBllL6vS9puXEkLps5gGp8IKQOMYoEU
-	 5cIMp+c+4Lw+Md2qvcSaljt6xufjhViD2eHp77C7AyQs1BQx07SSUxJHjp1R0N/16N
-	 C9qn8pZxEt5b6NDQUrlVxIrbOHtSyYVwN3KGx7y0MOmYsCFQU2MsU02kMD0HmvZdME
-	 yIShdZk23UOa1raxW1EGKtqSRe/5QtI3T6rhPGDi9zx6HVJpqsBfLq3VyQx3ChC4Nn
-	 p2b5qocKN78Ox6UeR+WxFAOugP5RqbJOBsLqASFPiHO8G/b6w8RjDlMzNOJo72ptLm
-	 N8Lwk1i6vX/Nw==
+	b=eaWrFSUhcCI7riLUfFOXOKpU7RRqzyayHnNsr0WqvQSAzXanOJBDrb0E5xCtJtois
+	 8LShoehuDb1UkTBdzvjnDGljGp3yrYnOf2GxQfhGzZJE6b/KqYJikZ8wgjHjdNfNPi
+	 mSTR1FAb33fdLl/btE0meQ09o5r4K6cPrIg9STvdmgXdU1T4r2tm+MQ235u9xHlGPe
+	 cdGa0cns8ZIr3XYa0cJBGr4rbTwGYLKfBa7QGwMZwnJsPNjVGxQI3of78cc5JJiyZm
+	 wU21Gged0J0nqc1T/laJis8r+d0qh5/kKhXdRXWILByu9uENEwQX2fTTLyncyq9hrE
+	 LX8wskdgDHsZg==
 From: Eric Biggers <ebiggers@kernel.org>
 To: linux-crypto@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -54,9 +54,9 @@ Cc: linux-kernel@vger.kernel.org,
 	sparclinux@vger.kernel.org,
 	x86@kernel.org,
 	Eric Biggers <ebiggers@kernel.org>
-Subject: [PATCH 02/18] cxl/test: Simplify fw_buf_checksum_show()
-Date: Wed, 25 Jun 2025 00:08:03 -0700
-Message-ID: <20250625070819.1496119-3-ebiggers@kernel.org>
+Subject: [PATCH 03/18] crypto: sha512 - Use the correct legacy export format
+Date: Wed, 25 Jun 2025 00:08:04 -0700
+Message-ID: <20250625070819.1496119-4-ebiggers@kernel.org>
 X-Mailer: git-send-email 2.50.0
 In-Reply-To: <20250625070819.1496119-1-ebiggers@kernel.org>
 References: <20250625070819.1496119-1-ebiggers@kernel.org>
@@ -68,54 +68,68 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-First, just use sha256() instead of a sequence of sha256_init(),
-sha256_update(), and sha256_final().  The result is the same.
+It appears the legacy export format is intended to have the value of the
+bytecount field be block-aligned, so update __crypto_sha512_export() and
+__crypto_sha512_import() to match.
 
-Second, use *phN instead of open-coding the conversion of bytes to hex.
-
+Fixes: e62c2fe56418 ("crypto: sha512 - Use same state format as legacy drivers")
 Signed-off-by: Eric Biggers <ebiggers@kernel.org>
 ---
- tools/testing/cxl/test/mem.c | 21 ++-------------------
- 1 file changed, 2 insertions(+), 19 deletions(-)
+ crypto/sha512.c | 22 +++++++++++++++++-----
+ 1 file changed, 17 insertions(+), 5 deletions(-)
 
-diff --git a/tools/testing/cxl/test/mem.c b/tools/testing/cxl/test/mem.c
-index 0f1d91f57ba34..d533481672b78 100644
---- a/tools/testing/cxl/test/mem.c
-+++ b/tools/testing/cxl/test/mem.c
-@@ -1826,31 +1826,14 @@ static DEVICE_ATTR_RW(security_lock);
- static ssize_t fw_buf_checksum_show(struct device *dev,
- 				    struct device_attribute *attr, char *buf)
+diff --git a/crypto/sha512.c b/crypto/sha512.c
+index 0eed801346018..5bda259dd22fe 100644
+--- a/crypto/sha512.c
++++ b/crypto/sha512.c
+@@ -13,30 +13,42 @@
+ #include <linux/module.h>
+ 
+ /*
+  * Export and import functions.  crypto_shash wants a particular format that
+  * matches that used by some legacy drivers.  It currently is the same as the
+- * library SHA context but with the partial block length as a u8 appended to it.
++ * library SHA context, except the value in bytecount_lo must be block-aligned
++ * and the remainder must be stored in an extra u8 appended to the struct.
+  */
+ 
+ #define SHA512_SHASH_STATE_SIZE 209
+ static_assert(offsetof(struct __sha512_ctx, state) == 0);
+ static_assert(offsetof(struct __sha512_ctx, bytecount_lo) == 64);
+ static_assert(offsetof(struct __sha512_ctx, bytecount_hi) == 72);
+ static_assert(offsetof(struct __sha512_ctx, buf) == 80);
+ static_assert(sizeof(struct __sha512_ctx) + 1 == SHA512_SHASH_STATE_SIZE);
+ 
+-static int __crypto_sha512_export(const struct __sha512_ctx *ctx, void *out)
++static int __crypto_sha512_export(const struct __sha512_ctx *ctx0, void *out)
  {
- 	struct cxl_mockmem_data *mdata = dev_get_drvdata(dev);
- 	u8 hash[SHA256_DIGEST_SIZE];
--	unsigned char *hstr, *hptr;
--	struct sha256_state sctx;
--	ssize_t written = 0;
--	int i;
--
--	sha256_init(&sctx);
--	sha256_update(&sctx, mdata->fw, mdata->fw_size);
--	sha256_final(&sctx, hash);
--
--	hstr = kzalloc((SHA256_DIGEST_SIZE * 2) + 1, GFP_KERNEL);
--	if (!hstr)
--		return -ENOMEM;
--
--	hptr = hstr;
--	for (i = 0; i < SHA256_DIGEST_SIZE; i++)
--		hptr += sprintf(hptr, "%02x", hash[i]);
- 
--	written = sysfs_emit(buf, "%s\n", hstr);
-+	sha256(mdata->fw, mdata->fw_size, hash);
- 
--	kfree(hstr);
--	return written;
-+	return sysfs_emit(buf, "%*phN\n", SHA256_DIGEST_SIZE, hash);
+-	memcpy(out, ctx, sizeof(*ctx));
+-	*((u8 *)out + sizeof(*ctx)) = ctx->bytecount_lo % SHA512_BLOCK_SIZE;
++	struct __sha512_ctx ctx = *ctx0;
++	unsigned int partial;
++	u8 *p = out;
++
++	partial = ctx.bytecount_lo % SHA512_BLOCK_SIZE;
++	ctx.bytecount_lo -= partial;
++	memcpy(p, &ctx, sizeof(ctx));
++	p += sizeof(ctx);
++	*p = partial;
+ 	return 0;
  }
  
- static DEVICE_ATTR_RO(fw_buf_checksum);
+ static int __crypto_sha512_import(struct __sha512_ctx *ctx, const void *in)
+ {
+-	memcpy(ctx, in, sizeof(*ctx));
++	const u8 *p = in;
++
++	memcpy(ctx, p, sizeof(*ctx));
++	p += sizeof(*ctx);
++	ctx->bytecount_lo += *p;
+ 	return 0;
+ }
  
- static ssize_t sanitize_timeout_show(struct device *dev,
+ /* SHA-384 */
+ 
 -- 
 2.50.0
 
