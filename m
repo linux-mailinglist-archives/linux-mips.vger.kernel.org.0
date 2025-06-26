@@ -1,59 +1,59 @@
-Return-Path: <linux-mips+bounces-9509-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9510-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 047ECAEA1C8
-	for <lists+linux-mips@lfdr.de>; Thu, 26 Jun 2025 17:02:45 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DEA4AEA1CD
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Jun 2025 17:03:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 72ED66A5B2A
-	for <lists+linux-mips@lfdr.de>; Thu, 26 Jun 2025 14:56:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA2283B055F
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Jun 2025 14:56:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC41A2FA644;
-	Thu, 26 Jun 2025 14:49:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7412B2FBFE2;
+	Thu, 26 Jun 2025 14:49:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Idsc8a/+";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="JBEOGIcD"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="CMq1Gxr5";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="VrtZi3tD"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D2342F9498;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BCA522FA621;
 	Thu, 26 Jun 2025 14:49:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750949380; cv=none; b=FLM2hNL90+7G8uV6p1YvH0V3pe/7UwqGTfXjuT7MNTsWW0/nAAOXHZpHskJH+ig1DSBQbFXnF/QwRPkroyeP98To8P2azIWLJI2t/dwMNoNzxFo22acQ9QL/y5ukUAbuGaSIqrz6p/V69Te//XmAumURxjo20q2+4Gls06LmgKU=
+	t=1750949381; cv=none; b=ZeTmHYNRABpvWEr9wlQ4I/n3An6Lw0caK+M7gjKvoxqWzyoHL3APohl5ptCeqB8lfVtItGSQzzSIK6YV4CsJqgz+/QiPm+5ZDQazawgmX/EcqOc2jnSLM4pzLTqb66d3IBi+tDQS6lD32jj+1GzVOlcKvHcfCW7NEZ1nB2FW4ZE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750949380; c=relaxed/simple;
-	bh=ZFlAGtOpezGZLMwLXedEkRGUAwxZFBwzVvo1qs4Vuy4=;
+	s=arc-20240116; t=1750949381; c=relaxed/simple;
+	bh=SZ2njfr0p2LP4U6s4/kpLpooqtZmqtk4nmYeoXC6kgc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=Yy8PNtYikAB2HClvUQlkQdijDz5H/Hi/UlqzHvv6JKCXHd9Gvw0G8OBQz4W7ZOTfhBPoOr61eVGe+JmOdrz9vkpVe3IGQEm+juTqdk+2KxKRQLY+DZKKYh/pudT4GLdgUrfzil0TEMQIwzZoS6T36NVzZbiBHnYT2qj0u0fxx4g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Idsc8a/+; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=JBEOGIcD; arc=none smtp.client-ip=193.142.43.55
+	 MIME-Version; b=s2UQAIGUSpFyFG+of/nJqO8c94ZCFkn/A74wEDlQQnBnU6+suNAdJr7Zf1YvIP38eEDZlaAJ3nlQ7cDDrjGWF673fg0grPWA/3rZTLRQz/WABpZSp6Ua7+wtbFU1HClJHI1oM70r0U9t7iLPKpUUN4CvLmnwpRFFr7xyJ19XdrQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=CMq1Gxr5; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=VrtZi3tD; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: Nam Cao <namcao@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1750949377;
+	s=2020; t=1750949378;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Z2aznJGf1J+nG8uzCfZ1sNahDbmhHRYzTMg4koq1VzA=;
-	b=Idsc8a/+lTtARTa2nNQrRNQvokiSlvPFnhxaytrQ1nkjwUGdApgKmyVsjOyhGmvOp4ruxo
-	wHOArztVX7uJfBbPcb5uK+/ha9KjEzBrVLjNkwu4ToXBKnDeNVvgtVZ8Jffcp3WCHD51dl
-	tyLoQN/tcNmUDMdoQU3HAuCbuIfqzUKHZmtWJodFHRT7kxMZyK/w2cMUg7W6AvnE+ddqoX
-	5JplpIQjp7LKjWwfnjsu2LpTon/d3QZLEUXZUD1WroEV9z9Yy82LiFMJ1LklSdz+Pdc8vG
-	ZHYAO9xbNSUowGTAn9O4rGFjA7rTnPg3VI26DrrCoifOHT9hriabbgAbyz0+TQ==
+	bh=efayX2kB19e/5fOKxvWIg5Uzbqjfs8VRJ75B0fwk9Gc=;
+	b=CMq1Gxr5Pm9ZIdl+tCHNTj5Y8eDMa6aOMVaWCiah6HMWHVkoqypyaI4kBj2TVhLyHSJZJ8
+	rKbbdzqWUe7rZAp/7qUj+Jv/rLXVqIlsbVD6O6fHnDVWdnkzaHTSXkHx0HptmbhvX+UrSY
+	Eo4QmPYp0rwnRTMNenqkwXydEI2sAZIX6Jpn9BPXlgrQ9I/dY55qI/JI20zV9LYbDM/GPS
+	tYhU5DmSC0blfhgyHAnJ5ZqIHdkkSsRtVxOTf1tilTSj5RD9uvTWZJqTJifnR8tB/uyNPw
+	oSljTW5mHY1cR5EhI2gPmp5rSyGOMKpnSnlAfCuN2CxIN02tVhPHMsfhEXv0qg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1750949377;
+	s=2020e; t=1750949378;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Z2aznJGf1J+nG8uzCfZ1sNahDbmhHRYzTMg4koq1VzA=;
-	b=JBEOGIcDy1WIGOz1iEnahNhZLPLAPyxSPGYQw3pRNaIE4sX+XH1TNAh/rWBgqYtgSBL7GW
-	zn74SJJMSYMKUdCA==
+	bh=efayX2kB19e/5fOKxvWIg5Uzbqjfs8VRJ75B0fwk9Gc=;
+	b=VrtZi3tDzFyI/vKrmM8P7d4h4FoLDKNKc8U1MNdg/bMGAjgPWvWTnKevlK7Ag39wgLEQGj
+	lCAnFdnQjLWGZNBA==
 To: Marc Zyngier <maz@kernel.org>,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Antoine Tenart <atenart@kernel.org>,
@@ -77,9 +77,9 @@ To: Marc Zyngier <maz@kernel.org>,
 	linux-mips@vger.kernel.org,
 	linux-riscv@lists.infradead.org
 Cc: Nam Cao <namcao@linutronix.de>
-Subject: [PATCH 09/12] irqchip/alpine-msi: Convert to __free
-Date: Thu, 26 Jun 2025 16:49:06 +0200
-Message-Id: <ff2c9460d03e44cb2946521dbae5ce800d34523e.1750860131.git.namcao@linutronix.de>
+Subject: [PATCH 10/12] irqchip/alpine-msi: Switch to msi_create_parent_irq_domain()
+Date: Thu, 26 Jun 2025 16:49:07 +0200
+Message-Id: <ec08fea004e7c3aa18c3f5657a8cafeb1adfcc1d.1750860131.git.namcao@linutronix.de>
 In-Reply-To: <cover.1750860131.git.namcao@linutronix.de>
 References: <cover.1750860131.git.namcao@linutronix.de>
 Precedence: bulk
@@ -92,7 +92,8 @@ Content-Transfer-Encoding: quoted-printable
 
 From: Thomas Gleixner <tglx@linutronix.de>
 
-Tidy up the code with __free. No functional change.
+Move away from the legacy MSI domain setup, switch to use
+msi_create_parent_irq_domain().
 
 Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
 Signed-off-by: Nam Cao <namcao@linutronix.de>
@@ -100,88 +101,150 @@ Signed-off-by: Nam Cao <namcao@linutronix.de>
 Cc: Antoine Tenart <atenart@kernel.org>
 Cc: linux-arm-kernel@lists.infradead.org
 ---
- drivers/irqchip/irq-alpine-msi.c | 31 ++++++++++++-------------------
- 1 file changed, 12 insertions(+), 19 deletions(-)
+ drivers/irqchip/Kconfig          |  1 +
+ drivers/irqchip/irq-alpine-msi.c | 69 +++++++++++++-------------------
+ 2 files changed, 28 insertions(+), 42 deletions(-)
 
+diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+index 0d196e4471426..dbdb988e4f7e0 100644
+--- a/drivers/irqchip/Kconfig
++++ b/drivers/irqchip/Kconfig
+@@ -85,6 +85,7 @@ config ALPINE_MSI
+ 	bool
+ 	depends on PCI
+ 	select PCI_MSI
++	select IRQ_MSI_LIB
+ 	select GENERIC_IRQ_CHIP
+=20
+ config AL_FIC
 diff --git a/drivers/irqchip/irq-alpine-msi.c b/drivers/irqchip/irq-alpine-=
 msi.c
-index cf188e5feefc0..43d6db290138a 100644
+index 43d6db290138a..159d9ec7c0ddc 100644
 --- a/drivers/irqchip/irq-alpine-msi.c
 +++ b/drivers/irqchip/irq-alpine-msi.c
-@@ -207,11 +207,10 @@ static int alpine_msix_init_domains(struct alpine_msi=
-x_data *priv, struct device
+@@ -14,6 +14,7 @@
 =20
- static int alpine_msix_init(struct device_node *node, struct device_node *=
-parent)
- {
--	struct alpine_msix_data *priv;
-+	struct alpine_msix_data *priv __free(kfree) =3D kzalloc(sizeof(*priv), GF=
-P_KERNEL);
- 	struct resource res;
- 	int ret;
+ #include <linux/irqchip.h>
+ #include <linux/irqchip/arm-gic.h>
++#include <linux/irqchip/irq-msi-lib.h>
+ #include <linux/msi.h>
+ #include <linux/of.h>
+ #include <linux/of_address.h>
+@@ -36,26 +37,6 @@ struct alpine_msix_data {
+ 	unsigned long	*msi_map;
+ };
 =20
--	priv =3D kzalloc(sizeof(*priv), GFP_KERNEL);
- 	if (!priv)
- 		return -ENOMEM;
-=20
-@@ -220,7 +219,7 @@ static int alpine_msix_init(struct device_node *node, s=
-truct device_node *parent
- 	ret =3D of_address_to_resource(node, 0, &res);
- 	if (ret) {
- 		pr_err("Failed to allocate resource\n");
--		goto err_priv;
-+		return ret;
- 	}
-=20
- 	/*
-@@ -235,34 +234,28 @@ static int alpine_msix_init(struct device_node *node,=
- struct device_node *parent
-=20
- 	if (of_property_read_u32(node, "al,msi-base-spi", &priv->spi_first)) {
- 		pr_err("Unable to parse MSI base\n");
--		ret =3D -EINVAL;
--		goto err_priv;
-+		return -EINVAL;
- 	}
-=20
- 	if (of_property_read_u32(node, "al,msi-num-spis", &priv->num_spis)) {
- 		pr_err("Unable to parse MSI numbers\n");
--		ret =3D -EINVAL;
--		goto err_priv;
-+		return -EINVAL;
- 	}
-=20
--	priv->msi_map =3D bitmap_zalloc(priv->num_spis, GFP_KERNEL);
--	if (!priv->msi_map) {
--		ret =3D -ENOMEM;
--		goto err_priv;
--	}
-+	unsigned long *msi_map __free(kfree) =3D bitmap_zalloc(priv->num_spis, GF=
-P_KERNEL);
-+
-+	if (!msi_map)
-+		return -ENOMEM;
-+	priv->msi_map =3D msi_map;
-=20
- 	pr_debug("Registering %d msixs, starting at %d\n", priv->num_spis, priv->=
-spi_first);
-=20
- 	ret =3D alpine_msix_init_domains(priv, node);
- 	if (ret)
--		goto err_map;
-+		return ret;
-=20
-+	retain_and_null_ptr(priv);
-+	retain_and_null_ptr(msi_map);
- 	return 0;
+-static void alpine_msix_mask_msi_irq(struct irq_data *d)
+-{
+-	pci_msi_mask_irq(d);
+-	irq_chip_mask_parent(d);
+-}
 -
--err_map:
--	bitmap_free(priv->msi_map);
--err_priv:
--	kfree(priv);
--	return ret;
+-static void alpine_msix_unmask_msi_irq(struct irq_data *d)
+-{
+-	pci_msi_unmask_irq(d);
+-	irq_chip_unmask_parent(d);
+-}
+-
+-static struct irq_chip alpine_msix_irq_chip =3D {
+-	.name			=3D "MSIx",
+-	.irq_mask		=3D alpine_msix_mask_msi_irq,
+-	.irq_unmask		=3D alpine_msix_unmask_msi_irq,
+-	.irq_eoi		=3D irq_chip_eoi_parent,
+-	.irq_set_affinity	=3D irq_chip_set_affinity_parent,
+-};
+-
+ static int alpine_msix_allocate_sgi(struct alpine_msix_data *priv, int num=
+_req)
+ {
+ 	int first;
+@@ -88,12 +69,6 @@ static void alpine_msix_compose_msi_msg(struct irq_data =
+*data, struct msi_msg *m
+ 	msg->data =3D 0;
  }
- IRQCHIP_DECLARE(alpine_msix, "al,alpine-msix", alpine_msix_init);
+=20
+-static struct msi_domain_info alpine_msix_domain_info =3D {
+-	.flags	=3D MSI_FLAG_USE_DEF_DOM_OPS | MSI_FLAG_USE_DEF_CHIP_OPS |
+-		  MSI_FLAG_PCI_MSIX,
+-	.chip	=3D &alpine_msix_irq_chip,
+-};
+-
+ static struct irq_chip middle_irq_chip =3D {
+ 	.name			=3D "alpine_msix_middle",
+ 	.irq_mask		=3D irq_chip_mask_parent,
+@@ -164,13 +139,35 @@ static void alpine_msix_middle_domain_free(struct irq=
+_domain *domain, unsigned i
+ }
+=20
+ static const struct irq_domain_ops alpine_msix_middle_domain_ops =3D {
++	.select	=3D msi_lib_irq_domain_select,
+ 	.alloc	=3D alpine_msix_middle_domain_alloc,
+ 	.free	=3D alpine_msix_middle_domain_free,
+ };
+=20
++#define ALPINE_MSI_FLAGS_REQUIRED  (MSI_FLAG_USE_DEF_DOM_OPS |		\
++				    MSI_FLAG_USE_DEF_CHIP_OPS |		\
++				    MSI_FLAG_PCI_MSI_MASK_PARENT)
++
++#define ALPINE_MSI_FLAGS_SUPPORTED (MSI_GENERIC_FLAGS_MASK |		\
++				    MSI_FLAG_PCI_MSIX)
++
++static struct msi_parent_ops alpine_msi_parent_ops =3D {
++	.supported_flags	=3D ALPINE_MSI_FLAGS_SUPPORTED,
++	.required_flags		=3D ALPINE_MSI_FLAGS_REQUIRED,
++	.chip_flags		=3D MSI_CHIP_FLAG_SET_EOI,
++	.bus_select_token	=3D DOMAIN_BUS_NEXUS,
++	.bus_select_mask	=3D MATCH_PCI_MSI,
++	.prefix			=3D "ALPINE-",
++	.init_dev_msi_info	=3D msi_lib_init_dev_msi_info,
++};
++
+ static int alpine_msix_init_domains(struct alpine_msix_data *priv, struct =
+device_node *node)
+ {
+-	struct irq_domain *middle_domain, *msi_domain, *gic_domain;
++	struct irq_domain_info info =3D {
++		.fwnode		=3D of_fwnode_handle(node),
++		.ops		=3D &alpine_msix_middle_domain_ops,
++		.host_data	=3D priv,
++	};
+ 	struct device_node *gic_node;
+=20
+ 	gic_node =3D of_irq_find_parent(node);
+@@ -179,29 +176,17 @@ static int alpine_msix_init_domains(struct alpine_msi=
+x_data *priv, struct device
+ 		return -ENODEV;
+ 	}
+=20
+-	gic_domain =3D irq_find_host(gic_node);
++	info.parent =3D irq_find_host(gic_node);
+ 	of_node_put(gic_node);
+-	if (!gic_domain) {
++	if (!info.parent) {
+ 		pr_err("Failed to find the GIC domain\n");
+ 		return -ENXIO;
+ 	}
+=20
+-	middle_domain =3D irq_domain_create_hierarchy(gic_domain, 0, 0, NULL,
+-						    &alpine_msix_middle_domain_ops, priv);
+-	if (!middle_domain) {
+-		pr_err("Failed to create the MSIX middle domain\n");
+-		return -ENOMEM;
+-	}
+-
+-	msi_domain =3D pci_msi_create_irq_domain(of_fwnode_handle(node),
+-					       &alpine_msix_domain_info,
+-					       middle_domain);
+-	if (!msi_domain) {
++	if (!msi_create_parent_irq_domain(&info, &alpine_msi_parent_ops)) {
+ 		pr_err("Failed to create MSI domain\n");
+-		irq_domain_remove(middle_domain);
+ 		return -ENOMEM;
+ 	}
+-
+ 	return 0;
+ }
+=20
 --=20
 2.39.5
 
