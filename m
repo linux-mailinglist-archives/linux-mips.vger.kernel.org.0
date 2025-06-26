@@ -1,63 +1,66 @@
-Return-Path: <linux-mips+bounces-9512-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9513-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9C21AEA1E7
-	for <lists+linux-mips@lfdr.de>; Thu, 26 Jun 2025 17:07:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D0D7AAEA33A
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Jun 2025 18:08:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BAB0F18861A9
-	for <lists+linux-mips@lfdr.de>; Thu, 26 Jun 2025 14:57:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 370771C455BD
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Jun 2025 16:08:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29EDB2FCE02;
-	Thu, 26 Jun 2025 14:49:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E63A3203706;
+	Thu, 26 Jun 2025 16:08:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="RM5tpvvs";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="3g8rK+mp"
+	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="eFpTD6Rb"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from MRWPR03CU001.outbound.protection.outlook.com (mail-francesouthazon11011002.outbound.protection.outlook.com [40.107.130.2])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79D702FBFE3;
-	Thu, 26 Jun 2025 14:49:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750949383; cv=none; b=kjRHXlLHK75O+xYNTnb47sRAoPkbyS6il96R0pSF6TxaX7RD2mghzJv/gkFYKyH1LeXrlL3JLTEEghfoqhDOuPM+tTQMv7aVWbEpMzdwg3Mlrw9biKsFSfOlX8t/fX9om5oK86wHxOd8o7yhosqX/dXsNZ8OWo9ngFUoVupxtdM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750949383; c=relaxed/simple;
-	bh=dp2qjOL8O21ilGvN3hcyhYQWqyZCYJvTUAiWti124QY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=S12dwHdWmCsF88eOA1c6qy0few0RmEQupnvEgHP/3qd3nRhvpxzfvjB2i9yP1FVmYA1sSMAOPOmizuUx+1ZxYRBMI7tJEfCUMxC4AHwGEOCjHE6YXXMQ/wueVlvoiy2VBoBtuMNHzgFYWSUNPTNcsIytFXYXkDioWGuwIl0A58Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=RM5tpvvs; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=3g8rK+mp; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Nam Cao <namcao@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1750949379;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=MIhKQ4RQQi3D5IJg+JFkYdGIygyIoXiLyEsOtUGkCjs=;
-	b=RM5tpvvs+MbLl9f7SQ4Y4ZdLiJ6gkF0qGYmpFYd1vgciUYEome+/nKuo3y8YNQqaRl9zlG
-	vK1suWMloNhESxrs+IfhZ0Ir0uq+WbbIHtZTJ2H8ZkutgRI3Yum3zAczYWNoJ3VR71Mex6
-	fsgdiE+j3itHmBfek6RXeFNDcJE66HYbToqjerqVB4SG9GKNoyqLM6ubDDe3bIVCXzYX6C
-	4Ix6zqpNBaIWk0L9nYtIJstz4x+qM9MLqKMPz+0eqHFX2bnBPOr8e8oaetpxb9aab4Myd+
-	l22+2HQLy3/qGyN+ylhIfZaBxzJtN+2HcbXXw2XRaqbVdVinmwc752tr4tm6OQ==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1750949379;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=MIhKQ4RQQi3D5IJg+JFkYdGIygyIoXiLyEsOtUGkCjs=;
-	b=3g8rK+mpfrVGe4Vw+aUfM9tHYiyJfZRoezDvLVA2kq5SNuyB89vV0NChva4wdm0ota7ehM
-	z4hy2jp1szfWSsCw==
-To: Marc Zyngier <maz@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Antoine Tenart <atenart@kernel.org>,
-	Andrew Lunn <andrew@lunn.ch>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA8A31F4168;
+	Thu, 26 Jun 2025 16:08:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.130.2
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1750954096; cv=fail; b=n2LjZneeadIuJ9pD68vorPGK8g60aNynD44ROKtOJY9+MRWKYWsoT2aR/Dfloy9F+X9C14NwTCTzL3iqUMKsQuy8DOCGzOR/M0/v1/rKeuU+d3L/4L5zdAqM2M3/SswX/a1TeIV8T65q8Hn3O4lShelMFZOLtrB7fJeRsXTareA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1750954096; c=relaxed/simple;
+	bh=zZr31osxHTVs27ELIojtZj2dOI8lzc3WgPqa9CDMB40=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=mBWfYnPk6ukr0UMwRC7/3HjcHu12fCKudC8efqsyeH/bRuhZJf4KSiOPjyMFoG/aSsZExyTYi+pMnbQN6BXVN87dPd/p+CfnRMb1gMhk2KCVUDLUvh6L5L0iA2RxuXDGQHiPtDQRlxOf0ljTevHed6rvNPg99HZWOvkDiUGUInU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=eFpTD6Rb; arc=fail smtp.client-ip=40.107.130.2
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Yb933NWPiFIlnrRcw79p0rSSZ3IlD6P4pe41nSlMLolJkAZp56fDArGQN2rI+kxqR/JK1ZXjBeafkfk0XVTguQVTr+VMRvCmISS5AJN1Jrxn5G5sgzXFvoCoXhr35xnpkYGDhbcTixvonD9mbrcMYg82U/ofppGZkRLkhHBQm0nOiGP0fD9FmuCT3uOeTIbOl0qhXoWOu07+SSvJmSJVTMGrFLFZRuhixk3H9lgYk2hMpmotSiiIlHrSDH+FDWulK+o9GNwcyG9hP0RqH07I2ObrZYb0T7EqCYGyAIyhOvpl8F54JxRbK5nLf6SJydslHtvvAQ+AvDjFnISUid4z2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ocidI6mSs4/fgUZV2bAXSL1w9m+IV2ZnqPOX1xgW0FA=;
+ b=wUTDGVVZ5vbgr5lgqr1VeUWQozKpV9rhz9ngkXUslCtxZ/9W6aBwVTadnlPjvk3a3/JW2rOtfs2HNRzG2rFIyIDWbOBW2YVnWOMwmKgDua1x2XyOAmrsoVO0NQAk2jImwRenWR1JfzCJzzUPBHNwwIfRySGplzDXjr9t+LQIxLS3VsCPEuboK1DpgfGN0ZzQqWpPrDg8PbSx3jKjqGhcRybx2AfqKeoN5hzCBJklKj+4PhKaRw7o8R95bIFxAWo0Rzch2z+QY0UqTknGHDMkBmKui6iMwIw9dqPZYk7oCUicexatsLh//h9snq1O2iOehZGe7kY5CJ0zzwywIXQBoQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ocidI6mSs4/fgUZV2bAXSL1w9m+IV2ZnqPOX1xgW0FA=;
+ b=eFpTD6Rb2EUM99FW8sVNOISpaqlqy5DZGJG6vKqbr4PooM2QS8geAVBhxB4xXjqyel4k9/laBlpswhnf+keeP/1m0AzIXTe+lfJVPAl/CyBUKH9g3h3H7KxmnwEYLUVi2VRg1r26/8/NnYFy0JO0T+hS/HsEPhEcmf6rh3XwjpWGtNP/Og5X89JQZhq+Vmj5uODmmCfKdjbt8oyMC3h1adiJdW860/XV+urNQPoTOI4VuTPOA7RWDjNggJWVgZF11n+RG6slcNXgUFzbimq8bvc74/QCd8SYPjhH6xMKvOrm/NUoOe1hfUhATBvYcRuEgPxJu+Wyck0mpJHBXwUDyQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com (2603:10a6:102:240::14)
+ by PAXPR04MB8653.eurprd04.prod.outlook.com (2603:10a6:102:21c::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.21; Thu, 26 Jun
+ 2025 16:08:11 +0000
+Received: from PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06]) by PAXPR04MB9642.eurprd04.prod.outlook.com
+ ([fe80::9126:a61e:341d:4b06%7]) with mapi id 15.20.8880.015; Thu, 26 Jun 2025
+ 16:08:11 +0000
+Date: Thu, 26 Jun 2025 12:08:04 -0400
+From: Frank Li <Frank.li@nxp.com>
+To: Nam Cao <namcao@linutronix.de>
+Cc: Marc Zyngier <maz@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+	Antoine Tenart <atenart@kernel.org>, Andrew Lunn <andrew@lunn.ch>,
 	Gregory Clement <gregory.clement@bootlin.com>,
 	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
 	Shawn Guo <shawnguo@kernel.org>,
@@ -69,150 +72,161 @@ To: Marc Zyngier <maz@kernel.org>,
 	Anup Patel <anup@brainfault.org>,
 	Paul Walmsley <paul.walmsley@sifive.com>,
 	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	imx@lists.linux.dev,
-	linux-mips@vger.kernel.org,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	imx@lists.linux.dev, linux-mips@vger.kernel.org,
 	linux-riscv@lists.infradead.org
-Cc: Nam Cao <namcao@linutronix.de>
-Subject: [PATCH 12/12] irqchip/ls-scfg-msi: Switch to use msi_create_parent_irq_domain()
-Date: Thu, 26 Jun 2025 16:49:09 +0200
-Message-Id: <6d23d93fa1f1e65526698f97c9888fa5d12abc7b.1750860131.git.namcao@linutronix.de>
-In-Reply-To: <cover.1750860131.git.namcao@linutronix.de>
+Subject: Re: [PATCH 04/12] irqchip/imx-mu-msi: Convert to
+ msi_create_parent_irq_domain() helper
+Message-ID: <aF1wZJV6U9c7bnX6@lizhi-Precision-Tower-5810>
 References: <cover.1750860131.git.namcao@linutronix.de>
+ <4f05fff99b6cc5875d2f4dadd31707e2dedaafc8.1750860131.git.namcao@linutronix.de>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4f05fff99b6cc5875d2f4dadd31707e2dedaafc8.1750860131.git.namcao@linutronix.de>
+X-ClientProxiedBy: AM9P193CA0025.EURP193.PROD.OUTLOOK.COM
+ (2603:10a6:20b:21e::30) To PAXPR04MB9642.eurprd04.prod.outlook.com
+ (2603:10a6:102:240::14)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PAXPR04MB9642:EE_|PAXPR04MB8653:EE_
+X-MS-Office365-Filtering-Correlation-Id: 225d9d10-6d50-4c1a-00f0-08ddb4cba606
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|366016|1800799024|52116014|376014|7416014|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?ehkxc60JgiScfZSNnqXMn1Rl7gk1UHzeThGmuAhwd8532LgOei/N6FqNVsFc?=
+ =?us-ascii?Q?6qYaB2/iLzhVeown17vSF8K1f0W6Rc4OHSIBJggnq/ZjC+xObpda8Ar9cZYk?=
+ =?us-ascii?Q?NKaamH6hExV5YUx0WZihMI52kIpR8TU5HACVP/9WfhnvCyspi1/IU8DafnVH?=
+ =?us-ascii?Q?afiqXupUeVVpiRHGk3971LPmdqhrgMP07LyYcdC5Qomm4zJq6WLe27YNvqvs?=
+ =?us-ascii?Q?XVjIzf+uwsoeBfGEccwaztgMVzXOOOlJJrUWWwtSNF3Sq1uA0Ce2b8Te9Um4?=
+ =?us-ascii?Q?IdPyqgC65E5SIpX5mRAeDB6M83l+3jOiyqwbCzvtb2pWdyrJ3bqP/i/vRsn9?=
+ =?us-ascii?Q?A8PmLSaW9C/ETx+cw+IuI8fuv1jrU1ZvJmbQvjEE28FN98ZGREQDdHsszkmU?=
+ =?us-ascii?Q?LESMswSplIcKmai+N2TYnUN+dfx+s1EXiINKm5l85CS9nCXEVUUzZEwiGk8O?=
+ =?us-ascii?Q?aTRsqjcFvffT6uZSELLR5yUDcoounrDrIRp8DmzmBdjTEaxjho7fiVFr+bGP?=
+ =?us-ascii?Q?AnmRbIPWi6n1grSO3GeeOw40IgERKD/Pa43HDcqtqN5ZNE8HT7P1gePz9ilY?=
+ =?us-ascii?Q?vTl+eYK3KR2mKt1uI1Fvs3YOq08OuerKgfjUhVsxKiRZY1JowYYmHd3QEaOV?=
+ =?us-ascii?Q?VLi79K1W3ht0+MmTZx4UpniObmsDrFIPmVEo/hY5p5n2pk9FT5f6xwvMl2kk?=
+ =?us-ascii?Q?Rj39BLqcLVuIkB2EKdawF8RAoI6VZCMwg2KvG5ZBoSHfHp3t1XhHKq/8Jf3a?=
+ =?us-ascii?Q?P0izNA+ITmSgGy/k4p5Vh+LGopog7ZFnxh9V0Q3pOVdi1wKnPt4V6cut0X5N?=
+ =?us-ascii?Q?KtD3A5NkIfH5eiS7n/M8MLbwtoQkVG0yHIir/KzXyW2LBCwHbW1XnOjpy6mY?=
+ =?us-ascii?Q?3e+PSI6QWxQu6VBAWF8qsA0tFEagEobzSU9GolfpzGeT+W0plxGvUVDcak3X?=
+ =?us-ascii?Q?QqGiEhkVwgHbwUHBLo+FxXhLChePJsLA4kOXzTsEUb+kcCXsTQSlqc98JiZu?=
+ =?us-ascii?Q?uHfEShiMjR0ytJvL+5vNol8bLxpaJHKU6Iypv1C52OpFy8UhPSZO3pvy0tdc?=
+ =?us-ascii?Q?9chko7cI3JZ2dpdPFEhRLcY6UcTCjQD4gpds8Mpd2hR+pVovP7w4nqK3Rn0M?=
+ =?us-ascii?Q?gAXTgCZ0CcHIxdZAVw9/oFE2Ej/k2fbWBoKzb19BKxpF5gWmlTov6/2tsnzV?=
+ =?us-ascii?Q?bLo4hBp6koAWBr3plCRxNFrZVGcgamyjQJdlUbatJZcHRFmRCkiSxAxsdbnH?=
+ =?us-ascii?Q?+p7VGHDkx+hlflZThIualNLRKKC2qAg5VOwaww//XCS7XjfMD+xfHEv8QwnO?=
+ =?us-ascii?Q?UYxLu1GQDvpg+N8nKWYlDCt7M1ePb5V9vwiN2+SPKWeuNvHwCRswAxsc4HO3?=
+ =?us-ascii?Q?HoEgxczF7Wz2KDwM/+bVTxorFGdQ2J43CIitkAhHzWcv5rK0WAyA6s9rY70a?=
+ =?us-ascii?Q?UYSNXL5IbLyFYUfbCWzru+Q/lsrjsu4xOa3XiSUo5Ikjx63r7Qrdnrqc/3Rd?=
+ =?us-ascii?Q?FVD7BH0CiB8tFZg=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(52116014)(376014)(7416014)(38350700014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?CRDnPBzG4N42Oyfqda1V/w30Pkjh5VMUO+tVVc1kuZA69VUtLLncmBxPbZZ2?=
+ =?us-ascii?Q?7PWJxYKf53J4eDbopOoJtEEBuxknBhl0jcNMhZAXsazrzIZO7Ybz362kjPyh?=
+ =?us-ascii?Q?rp26N1m7Oh1AMZYA79jrWf+1xebVGMRdjzdt/RgYg9KKLbjuT1kCKdTe9aFt?=
+ =?us-ascii?Q?9O0YBDQPvNS1FDIZ0vts6/gWIoAheN4VmmbprQzU3P0nr42nR4x2xzNxAbDF?=
+ =?us-ascii?Q?ZweGlgoK6v1Axlhqi74RJiOND+NWf8FhWso2WIf5TofpTwrueOh9RtjKfG7b?=
+ =?us-ascii?Q?/KXRZBWL33ohFUtd8l7dTUzHZ0TqgU3XAl6gkEjwaoJbqz7jdNzg0Z8RPqPk?=
+ =?us-ascii?Q?O2jqjvxCVInbQfjN6JQ27rscJJ0WRz9pKVq3rwzz/+ipLRQvQhFtCrz1U95y?=
+ =?us-ascii?Q?0KTJqi2GqzSbllDL+uNiO9Gamc7SC5glIf5YzqOOJyHI5V4BxMAFzJZwSx8S?=
+ =?us-ascii?Q?XW7KPTgYyGeTzg/wJGbTgRD0F7bsuJbdKybeejxRJDkMPy3giWcUiU2IPPv8?=
+ =?us-ascii?Q?G6AbaTbIEZYNYruLIQWcwM/Je68dtnS1A42Zktuz1GkeUhJgZszRI3P+aivu?=
+ =?us-ascii?Q?zvIux8t6lwQGz9gn9d3vqbGZm7avie8BkTFe7FnDaOWS4v6pOF61H+5p95y2?=
+ =?us-ascii?Q?AK8hmdWe03CNaU3CK3GvYUqVjLC+ykUgjX73YLmLXqMWXYPxZYUo5J53bHdv?=
+ =?us-ascii?Q?5PIRWyz4873fhq2zMqlQnvS0CSxnrVAzaoIIT58BUxXRoz/spDL+lPdFcnKs?=
+ =?us-ascii?Q?XSGKjp9+i56aGx5AiOcnBkoD9nDMxK0H5Adk9IqMSzd4OJXnArYSx1e0gLzx?=
+ =?us-ascii?Q?pocc2sS0xyLT4C9Z1oXJ/Agk0jPFYbrSzEsVBypqeJJb1c3SfzSdhTCbtjMI?=
+ =?us-ascii?Q?r2uuinEgtIz1N+BpEZU4cKdN4922aT+dRZGS58Rq31ScGpnRSUJj5GJsyiDB?=
+ =?us-ascii?Q?K3O9QlCF2n6RAbBVFPER6/OUfai0Sopa53N3PRpgvIe8OeguYV5wGfqcdDaS?=
+ =?us-ascii?Q?KmMseF2t0123nOL8WTiwh3z9fB9eh3EbNwAtBKutdRvFyL/HIf/A21lrBLnD?=
+ =?us-ascii?Q?5GzTGe3gXyGGLAweXGOlCST9vpcjLycAVc2h17Bqrp1yURVLfjJ7nB/28AVk?=
+ =?us-ascii?Q?p0M8R9Way24pcB/woXauz/321kQw0i8Rb0XldAWzj6t708Cvb9pKxJi8UJYO?=
+ =?us-ascii?Q?1MLJ4T6bdr2LZK4juOlTZd3/Q3Ctg6tEDtdskDuOQR7Roa1njtUEqmqC9hCh?=
+ =?us-ascii?Q?AHy2Tbq07eU6iXa2TbXVtc89vQ2CUx/ue9afv8nH69uxTOdr62XtpyQurqgz?=
+ =?us-ascii?Q?3/848VkkCGIgGzppxsQ7Own5C9nTB5t2tGQhhLPch/9IT0hk2jq6HQXz4MAy?=
+ =?us-ascii?Q?BxF+w3WsuC4SzJvuc6+T/+Iyb+Mmtnf0oMeciD5J+qQ4NiSvnAMTE/tvIkgL?=
+ =?us-ascii?Q?mt3+REV84Ob1JI/wocrawyBkuF/D92RMbrvoS/+mcTDaveqKmFL3o+Kz2bwO?=
+ =?us-ascii?Q?KPDgoicd7zi8ufVr7IEStnD5ZcXp5LWRGSOqIGtC8coF7RlfO7vLW57jtY5D?=
+ =?us-ascii?Q?DmAkxXcg0Ua/O82MqT8K5X4Q53YDsqlXrvK505sx?=
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 225d9d10-6d50-4c1a-00f0-08ddb4cba606
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9642.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 26 Jun 2025 16:08:11.5017
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 3zurhkKxoq+ZRbGWhIwYrmDkuWT0FyZSwvDgbUL/gYLoZOfxdsqo28DOvDVlUOeFu1qQcgFjIBjtHpE1kJN9GA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR04MB8653
 
-Move away from the legacy MSI domain setup, switch to use
-msi_create_parent_irq_domain().
+On Thu, Jun 26, 2025 at 04:49:01PM +0200, Nam Cao wrote:
+> From: Marc Zyngier <maz@kernel.org>
+>
+> Now that we have a concise helper to create an MSI parent domain,
+> switch the IMX letter soup over to that.
+>
+> Signed-off-by: Marc Zyngier <maz@kernel.org>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Link: https://lore.kernel.org/all/20241204124549.607054-7-maz@kernel.org
 
-Signed-off-by: Nam Cao <namcao@linutronix.de>
----
- drivers/irqchip/Kconfig           |  1 +
- drivers/irqchip/irq-ls-scfg-msi.c | 49 ++++++++++++++-----------------
- 2 files changed, 23 insertions(+), 27 deletions(-)
+Reviewed-by: Frank Li <Frank.Li@nxp.com>
 
-diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
-index afd7bae30a788..f1aaf3a0fcdb0 100644
---- a/drivers/irqchip/Kconfig
-+++ b/drivers/irqchip/Kconfig
-@@ -436,6 +436,7 @@ config LS_SCFG_MSI
- 	def_bool y if SOC_LS1021A || ARCH_LAYERSCAPE
- 	select IRQ_MSI_IOMMU
- 	depends on PCI_MSI
-+	select IRQ_MSI_LIB
-=20
- config PARTITION_PERCPU
- 	bool
-diff --git a/drivers/irqchip/irq-ls-scfg-msi.c b/drivers/irqchip/irq-ls-scf=
-g-msi.c
-index 84bc5e4b47cf5..7eca751d6548b 100644
---- a/drivers/irqchip/irq-ls-scfg-msi.c
-+++ b/drivers/irqchip/irq-ls-scfg-msi.c
-@@ -14,6 +14,7 @@
- #include <linux/iommu.h>
- #include <linux/irq.h>
- #include <linux/irqchip/chained_irq.h>
-+#include <linux/irqchip/irq-msi-lib.h>
- #include <linux/irqdomain.h>
- #include <linux/of_irq.h>
- #include <linux/of_pci.h>
-@@ -47,7 +48,6 @@ struct ls_scfg_msi {
- 	spinlock_t		lock;
- 	struct platform_device	*pdev;
- 	struct irq_domain	*parent;
--	struct irq_domain	*msi_domain;
- 	void __iomem		*regs;
- 	phys_addr_t		msiir_addr;
- 	struct ls_scfg_msi_cfg	*cfg;
-@@ -57,17 +57,18 @@ struct ls_scfg_msi {
- 	unsigned long		*used;
- };
-=20
--static struct irq_chip ls_scfg_msi_irq_chip =3D {
--	.name =3D "MSI",
--	.irq_mask	=3D pci_msi_mask_irq,
--	.irq_unmask	=3D pci_msi_unmask_irq,
--};
--
--static struct msi_domain_info ls_scfg_msi_domain_info =3D {
--	.flags	=3D (MSI_FLAG_USE_DEF_DOM_OPS |
--		   MSI_FLAG_USE_DEF_CHIP_OPS |
--		   MSI_FLAG_PCI_MSIX),
--	.chip	=3D &ls_scfg_msi_irq_chip,
-+#define MPIC_MSI_FLAGS_REQUIRED (MSI_FLAG_USE_DEF_DOM_OPS | \
-+				 MSI_FLAG_USE_DEF_CHIP_OPS)
-+#define MPIC_MSI_FLAGS_SUPPORTED (MSI_FLAG_PCI_MSIX       | \
-+				  MSI_GENERIC_FLAGS_MASK)
-+
-+static const struct msi_parent_ops ls_scfg_msi_parent_ops =3D {
-+	.required_flags		=3D MPIC_MSI_FLAGS_REQUIRED,
-+	.supported_flags	=3D MPIC_MSI_FLAGS_SUPPORTED,
-+	.bus_select_token	=3D DOMAIN_BUS_NEXUS,
-+	.bus_select_mask	=3D MATCH_PCI_MSI,
-+	.prefix			=3D "MSI-",
-+	.init_dev_msi_info	=3D msi_lib_init_dev_msi_info,
- };
-=20
- static int msi_affinity_flag =3D 1;
-@@ -185,6 +186,7 @@ static void ls_scfg_msi_domain_irq_free(struct irq_doma=
-in *domain,
- }
-=20
- static const struct irq_domain_ops ls_scfg_msi_domain_ops =3D {
-+	.select	=3D msi_lib_irq_domain_select,
- 	.alloc	=3D ls_scfg_msi_domain_irq_alloc,
- 	.free	=3D ls_scfg_msi_domain_irq_free,
- };
-@@ -214,21 +216,15 @@ static void ls_scfg_msi_irq_handler(struct irq_desc *=
-desc)
-=20
- static int ls_scfg_msi_domains_init(struct ls_scfg_msi *msi_data)
- {
--	/* Initialize MSI domain parent */
--	msi_data->parent =3D irq_domain_create_linear(NULL,
--						    msi_data->irqs_num,
--						    &ls_scfg_msi_domain_ops,
--						    msi_data);
-+	struct irq_domain_info info =3D {
-+		.fwnode		=3D of_fwnode_handle(msi_data->pdev->dev.of_node),
-+		.ops		=3D &ls_scfg_msi_domain_ops,
-+		.host_data	=3D msi_data,
-+		.size		=3D msi_data->irqs_num,
-+	};
-+
-+	msi_data->parent =3D msi_create_parent_irq_domain(&info, &ls_scfg_msi_par=
-ent_ops);
- 	if (!msi_data->parent) {
--		dev_err(&msi_data->pdev->dev, "failed to create IRQ domain\n");
--		return -ENOMEM;
--	}
--
--	msi_data->msi_domain =3D pci_msi_create_irq_domain(
--				of_fwnode_handle(msi_data->pdev->dev.of_node),
--				&ls_scfg_msi_domain_info,
--				msi_data->parent);
--	if (!msi_data->msi_domain) {
- 		dev_err(&msi_data->pdev->dev, "failed to create MSI domain\n");
- 		irq_domain_remove(msi_data->parent);
- 		return -ENOMEM;
-@@ -405,7 +401,6 @@ static void ls_scfg_msi_remove(struct platform_device *=
-pdev)
- 	for (i =3D 0; i < msi_data->msir_num; i++)
- 		ls_scfg_msi_teardown_hwirq(&msi_data->msir[i]);
-=20
--	irq_domain_remove(msi_data->msi_domain);
- 	irq_domain_remove(msi_data->parent);
-=20
- 	platform_set_drvdata(pdev, NULL);
---=20
-2.39.5
-
+> ---
+> Cc: Shawn Guo <shawnguo@kernel.org>
+> Cc: Sascha Hauer <s.hauer@pengutronix.de>
+> Cc: Pengutronix Kernel Team <kernel@pengutronix.de>
+> Cc: Fabio Estevam <festevam@gmail.com>
+> Cc: imx@lists.linux.dev
+> Cc: linux-arm-kernel@lists.infradead.org
+> ---
+>  drivers/irqchip/irq-imx-mu-msi.c | 14 +++++++-------
+>  1 file changed, 7 insertions(+), 7 deletions(-)
+>
+> diff --git a/drivers/irqchip/irq-imx-mu-msi.c b/drivers/irqchip/irq-imx-mu-msi.c
+> index 137da1927d144..d2a4e8a61a42b 100644
+> --- a/drivers/irqchip/irq-imx-mu-msi.c
+> +++ b/drivers/irqchip/irq-imx-mu-msi.c
+> @@ -223,21 +223,21 @@ static const struct msi_parent_ops imx_mu_msi_parent_ops = {
+>
+>  static int imx_mu_msi_domains_init(struct imx_mu_msi *msi_data, struct device *dev)
+>  {
+> -	struct fwnode_handle *fwnodes = dev_fwnode(dev);
+> +	struct irq_domain_info info = {
+> +		.ops		= &imx_mu_msi_domain_ops,
+> +		.fwnode		= dev_fwnode(dev),
+> +		.size		= IMX_MU_CHANS,
+> +		.host_data	= msi_data,
+> +	};
+>  	struct irq_domain *parent;
+>
+>  	/* Initialize MSI domain parent */
+> -	parent = irq_domain_create_linear(fwnodes, IMX_MU_CHANS,
+> -					  &imx_mu_msi_domain_ops, msi_data);
+> +	parent = msi_create_parent_irq_domain(&info, &imx_mu_msi_parent_ops);
+>  	if (!parent) {
+>  		dev_err(dev, "failed to create IRQ domain\n");
+>  		return -ENOMEM;
+>  	}
+> -
+> -	irq_domain_update_bus_token(parent, DOMAIN_BUS_NEXUS);
+>  	parent->dev = parent->pm_dev = dev;
+> -	parent->flags |= IRQ_DOMAIN_FLAG_MSI_PARENT;
+> -	parent->msi_parent_ops = &imx_mu_msi_parent_ops;
+>  	return 0;
+>  }
+>
+> --
+> 2.39.5
+>
 
