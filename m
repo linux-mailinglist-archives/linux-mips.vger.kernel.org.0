@@ -1,164 +1,139 @@
-Return-Path: <linux-mips+bounces-9499-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9500-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 396FFAE86E3
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Jun 2025 16:45:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90773AEA1D0
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Jun 2025 17:03:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 25AEB1637C4
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Jun 2025 14:44:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C375C1C436E4
+	for <lists+linux-mips@lfdr.de>; Thu, 26 Jun 2025 14:55:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F651269817;
-	Wed, 25 Jun 2025 14:44:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C7772F4305;
+	Thu, 26 Jun 2025 14:49:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="pop4ozTM";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="jZLqytQG"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="czaI2DSB";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="psVI2LjH"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fout-b7-smtp.messagingengine.com (fout-b7-smtp.messagingengine.com [202.12.124.150])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCF57268688;
-	Wed, 25 Jun 2025 14:44:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAF612F3C13;
+	Thu, 26 Jun 2025 14:49:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1750862666; cv=none; b=VOriPHZTfi5WCYwnwxgYuY1sJJyaGv7/Br0GqsmLBW8v/mLzFDkN2oO0x/7zhuKWEyOHGtmU7Uc9aPNciI2ADTe8LKUSume0GFnw0rAqh5CABHOpIRvBm3kjPmhe3w9DWxRWZV15i3lO+8mVOd0ZiQq+L92vErxHIHBY8OEWitU=
+	t=1750949372; cv=none; b=K+tlh465XTOJpbP+yJ/AZyADOmwl698jHefY94Wv/1uIlIruaBHvsP18+3NKqMm6vmKwi/l3xJ1voVMhM8lP2OUo9Co5S+zF9RvYe0iFUVGWraTgm7/FG85/S4NWLf0SFx7vzdQOjV9qVt0fHyezbwnhuDgOfQ+M4Oit8o3H2NE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1750862666; c=relaxed/simple;
-	bh=tb+Qf0bMOlqi5RQUGlXx2ej++rgDmLKQRnHq8rCRq4o=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=V46kqpzyc9Czl4Pxx6nEnuoEDXIc6nPUAmqza7Q84KoCTpWNX5v97nf032gFLh2WHOJVTBsr0DnXqrnyFSXBmHXii3BCHDr0n1iW7AlzeB6QpCWpziAnMUL1bd1I/xL3DYrOVbPOVaDKzKk+N1+IRPXrknrXKPNq2OaAQLK0Myo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=pop4ozTM; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=jZLqytQG; arc=none smtp.client-ip=202.12.124.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
-	by mailfout.stl.internal (Postfix) with ESMTP id BA94A1D00129;
-	Wed, 25 Jun 2025 10:44:21 -0400 (EDT)
-Received: from phl-imap-08 ([10.202.2.84])
-  by phl-compute-06.internal (MEProxy); Wed, 25 Jun 2025 10:44:21 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1750862661;
-	 x=1750949061; bh=F7MlgIBtKJDe2dIIvnJcjftvaO+3hOLqw6764Puv5SQ=; b=
-	pop4ozTMmJUafXrwB/riS2yemR7pJlIesh6TVKGlul5lA3byEDidzR7Feb+h7NZ/
-	vN5931aOKd9vgnH2ytAk7qT7ggdwsZpMo+NsTDaKQTKoHl0MhwKAipFuVWTLS/8q
-	h1+z5yiEn3RteCBRvkmI+My0pIwkUT6vr7ZKV/MNVZ3IyvyscDdhY8pznMpChZVF
-	8gU4Ggbe9b+sC76ZbU4OO5IRw1KbCCWnTPcF0M0mRWn/9/siVWNZ5RdEBJz/BwMr
-	h/yvL2LfEY1PDEvJIn2B9Qv7LIi/y1pUFc5eSiC73QiWXYng68pG75B985RbvJZ5
-	mhzjoflqr45vLDg6oN0Njw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1750862661; x=
-	1750949061; bh=F7MlgIBtKJDe2dIIvnJcjftvaO+3hOLqw6764Puv5SQ=; b=j
-	ZLqytQG600SI1oly4aMNgMY68VrlzvfVn3EibI7lMltP6YRZc/HkUwy5sxXOkliD
-	0Lag8sMQYpBngvzSUtH+pmljhkoSGVQPkiKo6qp/lMOhFrTfnDn/9o4jde2OZ0dh
-	xujN3paw9w2+4MqGCYa7OwSJpEdZrxlsCVELYe6gxoPpEQsadE5DwLx/+oNQjbO9
-	i/hTN4B1XmOqwEkau5NB2JpyolL4AvPux3cnH40dNbPyYaV48fsP7AlvM/c9oJdo
-	W0bqkWtD+FRaQrP1DUlAC/UQxLiQmDlqGEpWAbAaDwGXMOyKjUZriowF8q9MpjfZ
-	LtAx0L8MRoYznhUjUf3ZQ==
-X-ME-Sender: <xms:RAtcaOApX5Rk0g7kxCek02TYWVJKSEgQ_l2Cgx1wU4ZEVs7Yb9MaRA>
-    <xme:RAtcaIgwms4mLrM6Y-EGwDvEqj64duscZUrBMjd8ETfdZ40bECSWTMod7n-w5KyC1
-    C-SuD0_Yt_J48uGNWE>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtddvgddvfedtgecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthhqredtredtjeenucfhrhhomhepfdflihgrgihu
-    nhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
-    ggtffrrghtthgvrhhnpeejheefuddvtdfggfdvffekteehhfelgfdvvedvkeeuffefkeeh
-    heegvefhveetjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmpdhnsggprhgtphht
-    thhopeekpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehtshgsohhgvghnugesrg
-    hlphhhrgdrfhhrrghnkhgvnhdruggvpdhrtghpthhtohepghhrvghgohhrhidrtghlvghm
-    vghnthessghoohhtlhhinhdrtghomhdprhgtphhtthhopehthhgvohdrlhgvsghruhhnse
-    gsohhothhlihhnrdgtohhmpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhi
-    segsohhothhlihhnrdgtohhmpdhrtghpthhtohepthgrfihfihhkrdgsrgihohhukhesmh
-    hosghilhgvhigvrdgtohhmpdhrtghpthhtohepvhhlrgguihhmihhrrdhkohhnughrrght
-    ihgvvhesmhhosghilhgvhigvrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvg
-    hlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqmhhiphhs
-    sehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:RAtcaBkyASSJ-C6pcwcLZsf_DZikVFx9vabBJpgxAWG8coXE5_SKag>
-    <xmx:RAtcaMw2dIl4sWK-Hz1VZefU0T4ndBhM9eXRrHEwK5wcIjRSPdXpxw>
-    <xmx:RAtcaDRhCphTEEOgxz6s5Kv0bfWla6ewgQXDg-HVZ-uaEI62_jaOuA>
-    <xmx:RAtcaHa3lkQKAIqLfVfXtJmOTHjraPImyBLdsP8XgWhf7YEhuC7XgQ>
-    <xmx:RQtcaFanIxcDhtx5bNX_rnscWD8lq6LRJTJat3xPGke9mNP1aVBYIt60>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id B8C432CE0072; Wed, 25 Jun 2025 10:44:20 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1750949372; c=relaxed/simple;
+	bh=3c7vs8Cm8xKVUdvXoMQb0+CBp/UzsXS8rN6WJvQ1oek=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kNemfdeH/j4yrcp80TsvP/4UkzJysMbjqTxZbsZJvnN0WWh9WLMtNclawhd/EkfgcTjXqvZBfILq4GpTgYRoUoH9jUVpf30tKdz8zlFg9wWYyHHLmhPEd1gCxzXRhXBU+P9rSxAmAh8s/8r7QWKjGRZCC63jUHTMzs6ELBD1fKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=czaI2DSB; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=psVI2LjH; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Nam Cao <namcao@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1750949369;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=RH4Oypq2KUDQkhJZzAt8JVIWri/iIyk+GulHVMw8GJw=;
+	b=czaI2DSBz6lv453TNMwhAu26IwFz1BOoWFI49qdBHgvJndJ7A+gK6ojqrK1HnfjGXuz17+
+	4Wuz0KYBKa1I2pk0/mfDJJxSnvY+p4Wbmm+IbJlukddbCxUshXcBP3t7CpmcasNzvVQxX4
+	VtMF9rbnmKc1lfvRsU2yYmsCdDudNWLz2KQmA8rUpwvP9biyrYKuUnw/fYWwfdAcqQiHPG
+	skQFntKLytgiyj9iW2LuPqkkbcC8f3R5e6b8EiH3LFRbcpKEOVGcj+NZ1uK/PlcKWvwF4H
+	66+ARZm2c8+m5rMvuG2rTeAkaK6QYZRQBKiVct0HkLubGJWu7G9hY3zRpXFUQg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1750949369;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=RH4Oypq2KUDQkhJZzAt8JVIWri/iIyk+GulHVMw8GJw=;
+	b=psVI2LjHAPIUXeFXC3qVXazEejx7vgLn8YmfK3c6xPNOeqTwCFROQJgUanCk0avAHuqWR5
+	SEtZrEmwxGV9x1DA==
+To: Marc Zyngier <maz@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Antoine Tenart <atenart@kernel.org>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Anup Patel <anup@brainfault.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	imx@lists.linux.dev,
+	linux-mips@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Cc: Nam Cao <namcao@linutronix.de>
+Subject: [PATCH 00/12] irqchip: MSI cleanup and conversion to MSI parent domain
+Date: Thu, 26 Jun 2025 16:48:57 +0200
+Message-Id: <cover.1750860131.git.namcao@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: T5c6495ba301cbe19
-Date: Wed, 25 Jun 2025 15:44:00 +0100
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Gregory CLEMENT" <gregory.clement@bootlin.com>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
-Cc: "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>,
- =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- "Tawfik Bayouk" <tawfik.bayouk@mobileye.com>,
- "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- linux-kernel@vger.kernel.org
-Message-Id: <808e21d2-1212-4358-9ba6-29f9d097be8a@app.fastmail.com>
-In-Reply-To: 
- <20250625-mmid_disable_no_ginv_on_noc-v1-1-38a3902607a7@bootlin.com>
-References: 
- <20250625-mmid_disable_no_ginv_on_noc-v1-1-38a3902607a7@bootlin.com>
-Subject: Re: [PATCH] MIPS: disable MMID if GINVT is not usable
-Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 
-=E5=9C=A82025=E5=B9=B46=E6=9C=8825=E6=97=A5=E5=91=A8=E4=B8=89 =E4=B8=8B=E5=
-=8D=882:27=EF=BC=8CGregory CLEMENT=E5=86=99=E9=81=93=EF=BC=9A
+The initial implementation of PCI/MSI interrupt domains in the hierarchical
+interrupt domain model used a shortcut by providing a global PCI/MSI
+domain.
 
-Hi Gregory,
+This works because the PCI/MSI[X] hardware is standardized and uniform, but
+it violates the basic design principle of hierarchical interrupt domains:
+Each hardware block involved in the interrupt delivery chain should have a
+separate interrupt domain.
 
-> If System-level Interconnect (aka Network on Chip) does not support
-> the global invalidation, then MMID feature is not usable. Indeed the
-> current implementation of MMID relies on the GINV* instruction.
+For PCI/MSI[X], the interrupt controller is per PCI device and not a global
+made-up entity.
 
-Yes, it is the case if the NoC IP can't handle AMBA ACE DVM requests.
+Unsurprisingly, the shortcut turned out to have downsides as it does not
+allow dynamic allocation of interrupt vectors after initialization and it
+prevents supporting IMS on PCI. For further details, see:
 
->
-> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-> ---
->  arch/mips/Kconfig                    | 6 ++++++
->  arch/mips/include/asm/cpu-features.h | 5 ++++-
->  arch/mips/mobileye/Kconfig           | 2 ++
->  3 files changed, 12 insertions(+), 1 deletion(-)
->
-> diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> index=20
-> 1e48184ecf1ec8e29c0a25de6452ece5da835e30..05ce008459b89f03fa71d9442960=
-7feb9d06526f=20
-> 100644
-> --- a/arch/mips/Kconfig
-> +++ b/arch/mips/Kconfig
-> @@ -2575,6 +2575,12 @@ config WAR_R10000_LLSC
->  config WAR_MIPS34K_MISSED_ITLB
->  	bool
->=20
-> +# Some I6500 based SoC do not support the global invalidation on their
-> +# System-level Interconnect (aka Network on Chip), this have an
-> +# influence on the MMID support.
-> +config GINVT_UNSUPPORTED_NOC
-> +	bool
-> +
+https://lore.kernel.org/lkml/20221111120501.026511281@linutronix.de/
 
-I believe this should be a DeviceTree property of CM node instead of Kco=
-nfig
-hack.
+The solution is implementing per device MSI domains, this means the
+entities which provide global PCI/MSI domain so far have to implement MSI
+parent domain functionality instead.
 
-Thanks
+Aside from that, the creation of MSI parent domains has been simplified by
+new helper functions, which are not yet used by all drivers.
+
+This series addresses this by:
+
+   - Converting the remaining global PCI/MSI domain providers to MSI parent
+     domains
+
+   - Converting the existing MSI parent domain implementations to the
+     simplified setup function
+
+ drivers/irqchip/Kconfig                    |   3 +
+ drivers/irqchip/irq-alpine-msi.c           | 155 ++++++++-------------
+ drivers/irqchip/irq-armada-370-xp.c        |  48 ++++---
+ drivers/irqchip/irq-bcm2712-mip.c          |  20 +--
+ drivers/irqchip/irq-imx-mu-msi.c           |  14 +-
+ drivers/irqchip/irq-loongson-pch-msi.c     |  25 ++--
+ drivers/irqchip/irq-ls-scfg-msi.c          |  49 +++----
+ drivers/irqchip/irq-riscv-imsic-platform.c |  12 +-
+ drivers/irqchip/irq-sg2042-msi.c           |  20 ++-
+ include/linux/irqdomain.h                  |   2 +
+ include/linux/msi.h                        |   2 +
+ kernel/irq/irqdomain.c                     |   1 +
+ kernel/irq/msi.c                           |   3 +-
+ 13 files changed, 155 insertions(+), 199 deletions(-)
 
 --=20
-- Jiaxun
+2.39.5
+
 
