@@ -1,216 +1,151 @@
-Return-Path: <linux-mips+bounces-9540-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9541-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F473AEBE77
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Jun 2025 19:32:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CBC80AEBF95
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Jun 2025 21:16:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8DC891C2834D
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Jun 2025 17:32:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6073F5652A3
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Jun 2025 19:16:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 343D12E92C8;
-	Fri, 27 Jun 2025 17:31:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27CF01F874C;
+	Fri, 27 Jun 2025 19:16:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="gQ3LYDiA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HeSdvolZ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2075.outbound.protection.outlook.com [40.107.94.75])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 977312EA162;
-	Fri, 27 Jun 2025 17:31:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.75
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751045518; cv=fail; b=jQwWPjAD+DbzoUAPZzNeuFP9eOmqRooUya/ix1iB9oSY4aH2ZmpG3flwTETZyeewd3meJPCeCLELwYkmazJZnfbpt+CZDVvZFdLyw+thoUXJm6pgeFth4qdgNXiPUMDwbJNcxPwsuqeCJZSlaKhS+8sztCH5I8pRxShqBMzolKw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751045518; c=relaxed/simple;
-	bh=zW92uwznnUO+NSQXHS8EoUFSEJMNTkb+6H93121PE78=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Jvgzxoowkp8jFeqeh9rGKDdq1WYUFtAg2g8SgYw5L88Gl2Vf65F01urdhXbg8KcQ0+9cZwMadAbkv0oOZfiuMOw4GvVUyS0BuvK0ofltacr6S7ehnMwImqb1cy/UXoYcsF0cEeFow0IJw809HaAIVJJggi50spyg6Rayb9JKEkM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=gQ3LYDiA; arc=fail smtp.client-ip=40.107.94.75
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=f1fH46DxbM6g7qX25mxGucC4oWu17RtmLQh6YXUYpRcMhmGhRgYTIxwzw9rsBSmTNdaAU0A0UjBJuzlhiiIRtJ6TVW/9nM6rnwA5cCofL8EzzAWXBrO7TwshsKvJXiYuIhRtSzAz5zcSDgKYkt7bKpjinI22mqJ9Tzp5tK94D3SbGVFdEFZlGIfUBTVl3TwRTLouihYq5OErBUVCnOq3eBCOy912j0z0xF4/ziitjpGDAMsKfhd1b6fKql/pWXrox1d9D0e99OO7NosbcEFu38+4cYFwm+VHvFL9Med5B+L1KOxl163eZ1/yFrmWn/S5nH2cGVJif5FhkAnhRaU9Dw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=36fW2eR2bkfpDQoezV+7kd7SwaC/8CZBnaiN1uOke/g=;
- b=ZT5X0XSg9joAArp183/2LP9Zr1Q71FJQhZIt/r0ImEar2b0EwFiGPGnGPDp8nTJJHK0tSxe/qq/gwiR+KzXQyQzavqkfhPkxcQd6+UmLjyNPOcxUZDKpmmLb7o/SVRTXn8LsxZ2XqLxX3Kl73zBcTYRZ1uLucjZC8L4yTYzmAVC0h1/h3xmZBtNNroVSuqF4RVgGsbp5TGYy18BCW4w6gS7OwCmILCwCuIV1yk3hk9iwFNhmjR5sMvvWvqAxSDpQpjDCcxwTXuRXbGv+u9UUir/L676VRrY2qT8Vb+0dVt6H0STr1x5wtOWaS/EZk+gRSAgYvg9q7KwA7x8d8sATfw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=csgroup.eu smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=36fW2eR2bkfpDQoezV+7kd7SwaC/8CZBnaiN1uOke/g=;
- b=gQ3LYDiAXy/wElWcgPIh0OLAgcJTz2Qx1DU7UeQKyWhfZKUba2YNrwYuhm6Pj1iX2E9M3Evz6v7huDYUmQhjU8t9cWbtvWH6CuHUoTMAs2lcQ9ugo+IlgYS9CCDASmg7bQO1W5S5nCKr/IBGgggqufo7BWzN5KveYxGpjBmjeU0=
-Received: from MW4PR03CA0116.namprd03.prod.outlook.com (2603:10b6:303:b7::31)
- by PH0PR12MB5677.namprd12.prod.outlook.com (2603:10b6:510:14d::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.22; Fri, 27 Jun
- 2025 17:31:54 +0000
-Received: from SJ1PEPF0000231F.namprd03.prod.outlook.com
- (2603:10b6:303:b7:cafe::5c) by MW4PR03CA0116.outlook.office365.com
- (2603:10b6:303:b7::31) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8880.21 via Frontend Transport; Fri,
- 27 Jun 2025 17:31:53 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- SJ1PEPF0000231F.mail.protection.outlook.com (10.167.242.235) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8880.14 via Frontend Transport; Fri, 27 Jun 2025 17:31:53 +0000
-Received: from SATLEXMB05.amd.com (10.181.40.146) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 27 Jun
- 2025 12:31:52 -0500
-Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB05.amd.com
- (10.181.40.146) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 27 Jun
- 2025 12:31:52 -0500
-Received: from [10.4.12.116] (10.180.168.240) by SATLEXMB03.amd.com
- (10.181.40.144) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
- Transport; Fri, 27 Jun 2025 12:31:51 -0500
-Message-ID: <49ff7c4c-6503-4c45-a8cb-91068fa9afa8@amd.com>
-Date: Fri, 27 Jun 2025 13:31:51 -0400
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAA891E1E0B;
+	Fri, 27 Jun 2025 19:16:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751051765; cv=none; b=D6oeB8ewJHHXhbj7c6b76ALVR3IyhuoqCfcHaVZIeYFh2J5N5cAHQZYKeLeq7xRgOQSEa3BxFg3O3UJdJOE7d5yLzm3OWFVMw3oWvx9QlfULwwssIFRlMU+VPJjYL+jeYI2R4pqC+Qv4WW4rKcFNyTz9ZTG+ry4uD2fiCJ55Xyc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751051765; c=relaxed/simple;
+	bh=e3ItbkmjlCF+WHhbj2/fNpi4b7yR0M+6lB+y/2rBgh4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KyYe7JTxWRN7bvmsEQtL4igwUL89jr9J8w4PfhAOmbYt4nLyAAHpN5+mJE9MKpnGYoweTwBSGLlcZGOG9pBRYX+KJnF11RfhtPOL0BrAkykB5J1XsB9BR3BxiE/fN9/8cVT8F5ZoZkmOy8s42ye+abeNAXlrkPXu/TaHxsEcOt8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HeSdvolZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A7DD2C4CEE3;
+	Fri, 27 Jun 2025 19:15:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751051764;
+	bh=e3ItbkmjlCF+WHhbj2/fNpi4b7yR0M+6lB+y/2rBgh4=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HeSdvolZ1UWrXJ9VSVn0ZS0DXIqe2eIXrXITt8duLo+CfF5vTXac+ssoZApecraH1
+	 P6B34G+ZT4coa3ZcU6wxNroRRNJoZdFztXJD03a4AdF1WGj/t9kpNYDL/NfBJE4Wof
+	 KmdnpV4SLP6BzmvZek6j0+ATHYvGhFeAd1DG8mXmgIsOfucxt3OywgB99zLXehfevR
+	 mqU7rlqzqJtoNk10nnojKRiZNt0EB9GqJ5bK68DoJUsEIZlO21up/E/uvVTp+qY8Wt
+	 bHmHC42juwXKYjbB+5rAmVCmyt4SIW3YdBju8ygb3Yey69lLMJjOUfvZszDV8BjyJY
+	 3XsaCQMDAlyHw==
+Date: Fri, 27 Jun 2025 20:15:55 +0100
+From: Simon Horman <horms@kernel.org>
+To: =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Richard Cochran <richardcochran@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Cyrille Pitchen <cyrille.pitchen@atmel.com>,
+	Harini Katakam <harini.katakam@xilinx.com>,
+	Rafal Ozieblo <rafalo@cadence.com>,
+	Haavard Skinnemoen <hskinnemoen@atmel.com>,
+	Jeff Garzik <jeff@garzik.org>, netdev@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-mips@vger.kernel.org,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Subject: Re: [PATCH net-next v2 16/18] MIPS: mobileye: add EyeQ5 DMA IOCU
+ support
+Message-ID: <20250627191555.GD1776@horms.kernel.org>
+References: <20250627-macb-v2-0-ff8207d0bb77@bootlin.com>
+ <20250627-macb-v2-16-ff8207d0bb77@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] kmap: fix header include to reflect actual path
-To: Christophe Leroy <christophe.leroy@csgroup.eu>, Vineet Gupta
-	<vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>, Guo Ren
-	<guoren@kernel.org>, Michal Simek <monstr@monstr.eu>, Thomas Bogendoerfer
-	<tsbogend@alpha.franken.de>, Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
-	Naveen N Rao <naveen@kernel.org>, "David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>, Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
-	<dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter Anvin"
-	<hpa@zytor.com>, Chris Zankel <chris@zankel.net>, Max Filippov
-	<jcmvbkbc@gmail.com>, Peter Zijlstra <peterz@infradead.org>, Juri Lelli
-	<juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt
-	<rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman
-	<mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>
-CC: <linux-snps-arc@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-csky@vger.kernel.org>,
-	<linux-mips@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
-	<sparclinux@vger.kernel.org>
-References: <20250627153259.301946-1-aurabindo.pillai@amd.com>
- <5c371310-525c-4432-88f2-7c62ed563c9b@csgroup.eu>
-Content-Language: en-US
-From: Aurabindo Pillai <aurabindo.pillai@amd.com>
-In-Reply-To: <5c371310-525c-4432-88f2-7c62ed563c9b@csgroup.eu>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Received-SPF: None (SATLEXMB05.amd.com: aurabindo.pillai@amd.com does not
- designate permitted sender hosts)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: SJ1PEPF0000231F:EE_|PH0PR12MB5677:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9f8a7c28-8746-43db-8941-08ddb5a081f1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|36860700013|376014|7416014|1800799024|82310400026|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?dkFJTyszZGgxZWRmN1phbnpOeVZMRldYcVczeWl3UStuVUtCYnhkWm9jODky?=
- =?utf-8?B?RTMxTVZsQmZVcTZWeXdPZ01LTEJyeCtpRlZQLytaMUl5amZrZXdkM0h3L0NK?=
- =?utf-8?B?cjU1bWVNQ2E2T3BRSVA4SEJhWEtCOWFrTFZuNk15Mm55MHBzVlBtdjdmdXFV?=
- =?utf-8?B?ZGRMRURjVTdLRFJkcjlZM3k1N2xKSlpwaUR6bEtSN0VyQ3ViZjlVWVgyRC9T?=
- =?utf-8?B?VlFJMTd4YmtucHpwemhGWlNVRzBVRXJHbkgwa29jMEFzbkpTWXhRRkVwT0ZQ?=
- =?utf-8?B?VE50S3RwVlYrUThPZGRyVnJ3c0c2NmlvaDFBM21YdzJUY2RtaG1FbXBpcm5R?=
- =?utf-8?B?UjNMRnBobldrQWFCWmpHbW5ESHpjcmhweW0rNXNsb1dMRGxYV3BsbmFtS2U5?=
- =?utf-8?B?THM1bDJNSXJSRDc0TlpVeWNxeU91YWQxMEQ4WVdoQXl4Vy94RThkRmdsNUNu?=
- =?utf-8?B?M0hEMWdIVzFGRnJsMWlNaXRPc1dtRUpTVkRzRTZBOW9nS3pYdExDRFNoQ3lY?=
- =?utf-8?B?bkxBLzNYRkt3bG5xaThmZ2lOQnFsUDFRbWNGUXI4aEZ3dHQ5SndsaFFFSlIv?=
- =?utf-8?B?bnFwQ3BiRjM0WXdKRUNlQUd1TkZOL0NobU1kZ0NZMTE2ZVlBQi9TUlk4NERO?=
- =?utf-8?B?OHhCaXRaSHRSQlpGUHJJR3Voeld6dXlCRHRscXk3VEd1dmRZWGk1UEdUVUJ2?=
- =?utf-8?B?VFQxNGU1VUNJSTZ0SGFrem5HK2NQZTlNbTMwRFV6WXltdEtSOW9XYlB0c1NO?=
- =?utf-8?B?OEQ4eHB6WU9sTVB0TCt5WUprOGRGQ0djUlRuTWljdVlTSHVIbmR0WFVqRGYv?=
- =?utf-8?B?U3VTemFnKzJlZ0NUMjBpUE1KVHA4UXMwdDF6QjBGL3RibnMrWFFkTlZRMzVX?=
- =?utf-8?B?V3B0NUY2dnpta1p2Rm1LV2JxVWVRWjBKdVFkdzdqNzlCclRTSFE1VE5mWS9M?=
- =?utf-8?B?blZnWW1rOGpXekx4cmdXdi9ETm5xVlRkZlp1YXcyL2dKNUlEeXl0TTJqMGY4?=
- =?utf-8?B?aDBieG1yVFlrRDFSUXBXYVpqUFRTcEpOMEVaQW5QbDRJdkNXWjZnV3pxRjZs?=
- =?utf-8?B?elZFU1JiN044OXhjeGNqQnk5cW1aSlVnTkI2WjRXdkVFWUR5NGZBSFpGNTIr?=
- =?utf-8?B?ci80Yjlkc2ZxbUdtZ1A5RzZ5MWVYTHp5WHVuYzAzeUFKMDRXWnJOY09pZU5C?=
- =?utf-8?B?OHJWZWpYcTNqaE1QVWhnNmFhYlhoNnhSZ3RMNlFNdU5MUkxTb1J6NTZsMVo4?=
- =?utf-8?B?TUJ0R016VmlvcHRiM3dSQTEzZ0cvVVhmWmU4THZGWGZVRE5mWFNzOGpOVTdK?=
- =?utf-8?B?Y2dlczNLcDJ2RDVmTUg1TWRJd1d6TmtONGJqbXFiRnROc2RCeHljYmhvSURR?=
- =?utf-8?B?WmZlSE9EZDBmYlBkbnQ3enJIN2luMDRzNEUyV3RQOXNYeExFWFpCeXZDNG5i?=
- =?utf-8?B?MjhJeThqa0lrU21CY0xiTWk1WGxTdDRxQ01BYkhBZ3hyUlJZVVJMd3RFWG1p?=
- =?utf-8?B?M2FSWXArd0Nha1dDRUR6VG9Iamk5YlFOSnhFZUxYTFMzRzFieVdDcm5RZmlv?=
- =?utf-8?B?c2t1aVlKaERmaVZjQURSaEVWY0lPa2ZMNW9GNnNSWDFXUldZWExVazN0WkU0?=
- =?utf-8?B?aG1rRE5TYVJ5b2p1T25DVW1iWURyK1dFQm5oRmxwSXdmZTBQcmt0TU94VHJ2?=
- =?utf-8?B?SGZDYVk4TCsrQ0ErS3JXL0cySEZKcDk2dWFNeG5sVXlvZ3JWem4xOEZ1UDFn?=
- =?utf-8?B?aDFmKzNwSjVsVzdUY2paL3F6T3kyL3RNQ2NkQWtSV211bThMTDRzTGZiUDRL?=
- =?utf-8?B?UENURzY5dURnRisxYStlbXd1c0laTEw1cENKL1piWnl2d2RNOXZlb0l0dlJI?=
- =?utf-8?B?L1BpRmtvUU1aQkxYYkh4R0UxNkdtY2VkYWNkeUFPZkJiaENCQndZbXgxVGZT?=
- =?utf-8?B?Tk9XYmoxc0pVOGZka2NBem1yQ1Biek1OL2dxYnZRaFVMVlViUXd6U0lCRTBi?=
- =?utf-8?Q?uA6BfNuUyFtjsFzSDWaNvfNaPnhVS0=3D?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(36860700013)(376014)(7416014)(1800799024)(82310400026)(921020);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2025 17:31:53.4603
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9f8a7c28-8746-43db-8941-08ddb5a081f1
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	SJ1PEPF0000231F.namprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB5677
+In-Reply-To: <20250627-macb-v2-16-ff8207d0bb77@bootlin.com>
 
+On Fri, Jun 27, 2025 at 11:09:02AM +0200, Théo Lebrun wrote:
+> Both Cadence GEM Ethernet controllers on EyeQ5 are hardwired through CM3
+> IO Coherency Units (IOCU). For DMA coherent accesses, BIT(36) must be
+> set in DMA addresses.
+> 
+> Implement that in platform-specific dma_map_ops which get attached to
+> both instances of `cdns,eyeq5-gem` through a notifier block.
+> 
+> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 
+...
 
-On 2025-06-27 12:34, Christophe Leroy wrote:
-> 
-> 
-> Le 27/06/2025 à 17:32, Aurabindo Pillai a écrit :
->> [Vous ne recevez pas souvent de courriers de aurabindo.pillai@amd.com. 
->> Découvrez pourquoi ceci est important à https://aka.ms/ 
->> LearnAboutSenderIdentification ]
->>
->> There are plenty of header includes like:
->>
->>          #include <asm/kmap_size.h>
-> 
-> Yes and in reality that includes those,
-> 
-> ./arch/arm64/include/generated/asm/kmap_size.h
-> ./arch/riscv/include/generated/asm/kmap_size.h
-> ./arch/arc/include/generated/asm/kmap_size.h
-> ./arch/x86/include/generated/asm/kmap_size.h
-> ./arch/powerpc/include/generated/asm/kmap_size.h
-> ./arch/arm/include/generated/asm/kmap_size.h
-> 
-> Which contain:
-> 
-> $ cat arch/powerpc/include/generated/asm/kmap_size.h
-> #include <asm-generic/kmap_size.h>
-> 
-> So what is the problem really ?
+> diff --git a/arch/mips/mobileye/eyeq5-iocu-dma.c b/arch/mips/mobileye/eyeq5-iocu-dma.c
 
-Thanks for the explanation. I was trying to reuse some driver source 
-code in another project such that it compiles the related files in Linux 
-and ran into a compilation issue, and the error was that the header file 
-asm-generic/kmap_size.h was not found.
+...
 
-I just realized that once the kernel is built, the path asm/kmap_size.h 
-will exist, and hence there is no need for this patch.
--- 
-Thanks & Regards,
-Aurabindo Pillai
+> +const struct dma_map_ops eyeq5_iocu_ops = {
+> +	.alloc			= eyeq5_iocu_alloc,
+> +	.free			= eyeq5_iocu_free,
+> +	.alloc_pages_op		= dma_direct_alloc_pages,
+> +	.free_pages		= dma_direct_free_pages,
+> +	.mmap			= eyeq5_iocu_mmap,
+> +	.get_sgtable		= eyeq5_iocu_get_sgtable,
+> +	.map_page		= eyeq5_iocu_map_page,
+> +	.unmap_page		= eyeq5_iocu_unmap_page,
+> +	.map_sg			= eyeq5_iocu_map_sg,
+> +	.unmap_sg		= eyeq5_iocu_unmap_sg,
+> +	.get_required_mask	= dma_direct_get_required_mask,
+> +};
+> +EXPORT_SYMBOL(eyeq5_iocu_ops);
 
+Hi Théo,
+
+Does eyeq5_iocu_ops need to be exported?
+If so it should probably be declared in a header file somewhere.
+But I if not probably the EXPORT_SYMBOL line should be
+dropped, and the structure made static.
+
+Flagged by Sparse.
+
+> +
+> +static int eyeq5_iocu_notifier(struct notifier_block *nb,
+> +			       unsigned long event,
+> +			       void *data)
+> +{
+> +	struct device *dev = data;
+> +
+> +	/*
+> +	 * IOCU routing is hardwired; we must use our above custom
+> +	 * routines for cache-coherent DMA on ethernet interfaces.
+> +	 */
+> +	if (event == BUS_NOTIFY_ADD_DEVICE &&
+> +	    device_is_compatible(dev, "mobileye,eyeq5-gem")) {
+> +		set_dma_ops(dev, &eyeq5_iocu_ops);
+> +		return NOTIFY_OK;
+> +	}
+> +
+> +	return NOTIFY_DONE;
+> +}
+
+...
 
