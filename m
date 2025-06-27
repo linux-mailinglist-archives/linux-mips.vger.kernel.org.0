@@ -1,153 +1,344 @@
-Return-Path: <linux-mips+bounces-9536-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9537-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65DF1AEB327
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Jun 2025 11:42:23 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 004AAAEBBE8
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Jun 2025 17:33:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 54FFF566CF1
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Jun 2025 09:41:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EBAE0645925
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Jun 2025 15:33:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D6DA293C6A;
-	Fri, 27 Jun 2025 09:42:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCE282EA146;
+	Fri, 27 Jun 2025 15:33:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="ANo4mvAp"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="ssZv8Jdo"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2073.outbound.protection.outlook.com [40.107.92.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1C9E1DE2C9;
-	Fri, 27 Jun 2025 09:42:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751017331; cv=none; b=E1bD9qSwfVmg4DinhCQtpQXkGlRHk5o2KI4bRaP+KHZ9ihfqmDLgxMWGKxpGR+f1C96UGjCo01QcZMKrcTcxiuued3lSbFdGnj8ScYkB06tiXnHYmcPS37Es/yoUeHhjWIa+Ec35Prf3cYNmvo1MSqj0cSLtjmDS77+XEYBW/sk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751017331; c=relaxed/simple;
-	bh=ALB8scmnqBjrj7Lx7mrURXy49O4IYjmrSTfkDIal3lI=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rTE+dD7fzvved3bS2x+XF7ebqHPmSzsN2x7WwT6krkVQmt6BTneXSyyotPs+rPqhEhDZ8p6FxltGFdKm/1/bQqT0mFy9bIDcTPo/PnVW6udMb0GX6VA3BDMoCT4t9N4b6SOdDM5wDOfq0Svwz2+PTmXDCmYj4o4kJA/AQgs0Kb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=ANo4mvAp; arc=none smtp.client-ip=217.70.183.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 081091FD35;
-	Fri, 27 Jun 2025 09:41:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1751017321;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ebkQpOy7jU/hd2ovSMuvbdUVcZ8KbjpAp3Ecuke29NM=;
-	b=ANo4mvApogHPe4fMWd2QFeBCg+mWgojUEV8XaXM/25ncURaUsz9M/kEC6Nn6IVH4maVX6j
-	gSeSCAUP/wlUINz90v32u/TeUsei8qUxIXQS6gDZRhsaB8zBNJmzkdZiaYtkNAavTknDsP
-	dRdh+FNdH2dlKN6La4DumIswSehs0FgFn89O4Iokd0AoNO4qnLq0SpsC6O1yrdqCLW9b2k
-	h9Upd+221NuY96MmaBC7ix86cApTM5GZSfo0ZV56K/KAoyKWrsuFyHBZ31W4LK69SU2LzV
-	acuBc9jpT4Ril5gE8uY2KWJvi1SV/M7Wfe4OOWc+QLioRAkbvmT+bkVgu9R1Iw==
-Date: Fri, 27 Jun 2025 11:41:51 +0200
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-To: =?UTF-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>
-Cc: Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Jakub Kicinski
- <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Rob Herring
- <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Nicolas Ferre <nicolas.ferre@microchip.com>, Claudiu
- Beznea <claudiu.beznea@tuxon.dev>, Paul Walmsley
- <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
- <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Samuel Holland
- <samuel.holland@sifive.com>, Richard Cochran <richardcochran@gmail.com>,
- Russell King <linux@armlinux.org.uk>, Thomas Bogendoerfer
- <tsbogend@alpha.franken.de>, Vladimir Kondratiev
- <vladimir.kondratiev@mobileye.com>, Gregory CLEMENT
- <gregory.clement@bootlin.com>, Cyrille Pitchen <cyrille.pitchen@atmel.com>,
- Harini Katakam <harini.katakam@xilinx.com>, Rafal Ozieblo
- <rafalo@cadence.com>, Haavard Skinnemoen <hskinnemoen@atmel.com>,
- netdev@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-mips@vger.kernel.org, Thomas Petazzoni
- <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
- Andrew Lunn <andrew@lunn.ch>
-Subject: Re: [PATCH net-next v2 00/18] Support the Cadence MACB/GEM
- instances on Mobileye EyeQ5 SoCs
-Message-ID: <20250627112234.1cb54133@2a02-8440-d103-6715-ef68-2a2e-b947-8885.rev.sfr.net>
-In-Reply-To: <20250627-macb-v2-0-ff8207d0bb77@bootlin.com>
-References: <20250627-macb-v2-0-ff8207d0bb77@bootlin.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.43; x86_64-redhat-linux-gnu)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 195972E9EA1;
+	Fri, 27 Jun 2025 15:33:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.73
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751038387; cv=fail; b=WzxDlQDxEGv6r9mI/T7T4HmHIUVfvPVedROrZ5f/szn21VCH/f5IqJLaDSaGr8T8fYMlBOaVZPsEErzZGxj6P+oMZzLOQ8QpUG8MpYPnT65rgNw6EgG5MUC2fU24GVnTr2mx3xVK3HQEIvH6Nc3lMF4Seuk+9xO2ul1jzUK68yg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751038387; c=relaxed/simple;
+	bh=GB8HTOdZb6sloi5jcWxyvsuA/uDenZVKqU/6zqJlO1M=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=u0zJWAIaiV8rXSiXQQOLDbCuLeNC0KgsmFhNmjuswgzO2X22m37VAmdJ3Dwibn+oUdAo4euBJOmjZpiVDj8L8l8eV+qz1VWJdMbBt/i7eWGFlttS4ohi0NWPkYKfALhv30vBjM04UPaS1fl0pi6e0T4Si+OnAHVdMOIlsxgMmYg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=ssZv8Jdo; arc=fail smtp.client-ip=40.107.92.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=SuUpdt352Hx3IcuZ0v+qSL00hlhe8UI2UCpHt9gBOdtaDGMYyfOexubDhocG0WSBwm48h3WyR4kBEGQ1Wc53I1gvWnjIGt3hmvDMh2dqpWgtbb0+B5Q/c+O0fluCYvvKYuzM5ghYgFJiXyGD2YL+4DsBV+X3GUAgpuPyXuyxcjqVnWwYXlY4pWV43ZNYx7ivdPEDoZvxAV26IK3itznjnZWCr4fM6kEBnSdvEH2/bPO501FPF6lfohudRT5vb7gQppjst1fpRWhyEvcGzrjAvRxO5X8fBOgFyxiStpgwsFBhnsrZ9Q8ZFFH1gZsYr/gHCevB5FZApHX9hufgYj0moA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=5fQboSs/5/bXDh8HLuZLTAl16XdVgH1rML49GhypkCY=;
+ b=BjSxsuiA58g03dp9AVYNnguzlmvYIomXuFYk0FJ9484mlmhys9k0dBEWw+APaAnNu+FhwS7RlGlnsK/rv33j6QKuvpLSvcjlcRK2WOMy3KsVyVy8jgBM9Q/wNBUe2v7pj5JwjRblLxxNaBb3xlblz8FuQaaeewUU8SMR5jxqyUHCMI+GMR2qekwv8fGkskpnCtMrFCmFabjISOFhJqhyzXw6pU97datTaojIb8wsklGvaX0Zl58KLXeY4tpWSjSeTxjgtUktiDH4V/OB3JBqck8t93N28chEjjUX+DrpRLovg5yXrUikofmXBXJfDXi3OP2W4a/7779zWIehkAb/IQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=5fQboSs/5/bXDh8HLuZLTAl16XdVgH1rML49GhypkCY=;
+ b=ssZv8JdoAhqL6o59pxGEKslz0rTpErVGu63rEMIyDB9Q7wDSCE48U3tQ2OKI33AH4NqrwJbs3ERaeDKRAwPOO9YzuNkSWFtVl9XZ/cSL9X9T1hABMI1AEQPPYhjhVfHJg90xI/gRLHI1NMHOW+2fJOSwLBwEkbnYqTZp7LJETE8=
+Received: from DM6PR02CA0098.namprd02.prod.outlook.com (2603:10b6:5:1f4::39)
+ by SA0PR12MB4461.namprd12.prod.outlook.com (2603:10b6:806:9c::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.22; Fri, 27 Jun
+ 2025 15:33:01 +0000
+Received: from DS2PEPF00003443.namprd04.prod.outlook.com
+ (2603:10b6:5:1f4:cafe::2b) by DM6PR02CA0098.outlook.office365.com
+ (2603:10b6:5:1f4::39) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8880.20 via Frontend Transport; Fri,
+ 27 Jun 2025 15:33:01 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ DS2PEPF00003443.mail.protection.outlook.com (10.167.17.70) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8880.14 via Frontend Transport; Fri, 27 Jun 2025 15:33:01 +0000
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 27 Jun
+ 2025 10:33:00 -0500
+Received: from aaurabin-z5-cachy.amd.com (10.180.168.240) by
+ SATLEXMB04.amd.com (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39
+ via Frontend Transport; Fri, 27 Jun 2025 10:32:59 -0500
+From: Aurabindo Pillai <aurabindo.pillai@amd.com>
+To: Vineet Gupta <vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>,
+	Guo Ren <guoren@kernel.org>, Michal Simek <monstr@monstr.eu>, Thomas
+ Bogendoerfer <tsbogend@alpha.franken.de>, Madhavan Srinivasan
+	<maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin
+	<npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, Naveen N
+ Rao <naveen@kernel.org>, "David S. Miller" <davem@davemloft.net>, Andreas
+ Larsson <andreas@gaisler.com>, Thomas Gleixner <tglx@linutronix.de>, Ingo
+ Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
+	<dave.hansen@linux.intel.com>, <x86@kernel.org>, "H. Peter Anvin"
+	<hpa@zytor.com>, Chris Zankel <chris@zankel.net>, Max Filippov
+	<jcmvbkbc@gmail.com>, Peter Zijlstra <peterz@infradead.org>, Juri Lelli
+	<juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>,
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt
+	<rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman
+	<mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>
+CC: <linux-snps-arc@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-csky@vger.kernel.org>,
+	<linux-mips@vger.kernel.org>, <linuxppc-dev@lists.ozlabs.org>,
+	<sparclinux@vger.kernel.org>
+Subject: [PATCH] kmap: fix header include to reflect actual path
+Date: Fri, 27 Jun 2025 11:32:57 -0400
+Message-ID: <20250627153259.301946-1-aurabindo.pillai@amd.com>
+X-Mailer: git-send-email 2.50.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddvjedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtqhertdertdejnecuhfhrohhmpeforgigihhmvgcuvehhvghvrghllhhivghruceomhgrgihimhgvrdgthhgvvhgrlhhlihgvrhessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepkeehgeeijeekteffhfelheetffeghfffhfeufeeifeffjeeftefhveduteduueeunecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvdgrtddvmeekgeegtdemugdutdefmeeijeduheemvghfieekmedvrgdvvgemsgelgeejmeekkeekheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemkeeggedtmeguuddtfeemieejudehmegvfheikeemvdgrvdgvmegsleegjeemkeekkeehpdhhvghlohepvdgrtddvqdekgeegtddqugdutdefqdeijeduhedqvghfieekqddvrgdvvgdqsgelgeejqdekkeekhedrrhgvvhdrshhfrhdrnhgvthdpmhgrihhlfhhrohhmpehmrgigihhmvgdrtghhvghvrghllhhivghrsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeeffedprhgtphhtthhopehthhgvohdrlhgvsghruhhnsegsohhothhli
- hhnrdgtohhmpdhrtghpthhtoheprghnughrvgifodhnvghtuggvvheslhhunhhnrdgthhdprhgtphhtthhopegurghvvghmsegurghvvghmlhhofhhtrdhnvghtpdhrtghpthhtohepvgguuhhmrgiivghtsehgohhoghhlvgdrtghomhdprhgtphhtthhopehkuhgsrgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepphgrsggvnhhisehrvgguhhgrthdrtghomhdprhgtphhtthhopehrohgshheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhriihkodgutheskhgvrhhnvghlrdhorhhg
-X-GND-Sasl: maxime.chevallier@bootlin.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+Received-SPF: None (SATLEXMB04.amd.com: aurabindo.pillai@amd.com does not
+ designate permitted sender hosts)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS2PEPF00003443:EE_|SA0PR12MB4461:EE_
+X-MS-Office365-Filtering-Correlation-Id: fa3d1a8a-36d3-4a3c-f4d1-08ddb58fe6c3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|82310400026|36860700013|1800799024|376014|7416014|921020;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?dlTK7w1IbyyQXFUIhEzViuseygrINLnH56IMgdxHEBSJMaXKIuk/JIEza7n9?=
+ =?us-ascii?Q?QjEmYTKodgqcsNCfznBYoRAoNHJgtm+MPDDUleoQHefXnfQQgEropvvmmqpo?=
+ =?us-ascii?Q?+2AjICmWOhthgL9HGNp6B2N3i5gerr6VBMMdmVV8jN29lvutAJLQDhLPcEdG?=
+ =?us-ascii?Q?7yCeuLAzCmOy+EOc5OKa4n6ML8ml1mFeSyzl4BnSMmzANKFBfksIAEaydM9v?=
+ =?us-ascii?Q?yv3o1EJA5fU3YahtkksxfvzKg66Uk780ZgkSZejkBDdC9hrRS11k/5fsuC9Z?=
+ =?us-ascii?Q?mdM3g2Fk8zRJIpkgGOK3PL5fs+f4lwQ6tR4MG8OvgkTltZ3+6+V5piCRtO9B?=
+ =?us-ascii?Q?Nu3fhK/vbd93GDeBTDv4w+sghLyKvnl5pxREdrnlm+k88MndZRn7z19JjGEv?=
+ =?us-ascii?Q?als1fLyQ9qm3wKGgNCX0gEwvopi1arG8jXEFSzKxAfolV6YlZCltOZS4H5Hq?=
+ =?us-ascii?Q?5QQIDDneEipGJjGsbWmq22cJm/h2Bd7olOb7Po86IMNKKjKFPDvBkcNVAVsh?=
+ =?us-ascii?Q?OMO4QG37OapwUIgPNktQHi92vO+QAhT4mIdgv0yzDuVJi7SMoNDJ6pBgNu/r?=
+ =?us-ascii?Q?nTAbER+CaC2nl/twc9ESVsZKvNwMJu0lg12QZLZ8mQMBfRrCJLXvyAORhpH7?=
+ =?us-ascii?Q?DD0JscF7L2aCLfE7PQ1ttLQxX49NT75LQ28OVSaO/HfrDT0Crd3yb+bziGMr?=
+ =?us-ascii?Q?5J78/YjQVq9xV4VlDAYdyhsTpNVMnlH9kJeCNl69Omo+Adh0TDDbRljIyFSW?=
+ =?us-ascii?Q?RXSJdHd1LDrjVs/ts8fKpGc5DVlPZouSg7jDqn9K6fy5RxgQ2x2lg6J1Xv1Z?=
+ =?us-ascii?Q?CmOdO08eXGlp361wJSVErrAPR9cKnV21JTYkgJxJKm/m9dB3dcQ7pLRnWpFi?=
+ =?us-ascii?Q?bOBx4C+9GcPTDx+sigV/P2XzPpNKi8ldcqS/Ao/WXFEF4hAJsruQfFlw3oYZ?=
+ =?us-ascii?Q?7pegGpOAUyuLhzxJORnGUn1gckySXStq/dvelp2619H21G6FRsWPsmMwDts4?=
+ =?us-ascii?Q?MPyeXIN6seAzy7PQBoDe8yhbMtDjiHsq1H7rNDTOw+4fiH5i6v4ue7/9Z8KV?=
+ =?us-ascii?Q?nK9QO4jVSA1tFVO8LyAWzWuugnX/O7I7bR8aJXASXCfLmrnIMe46QIbvyY2t?=
+ =?us-ascii?Q?5tjhXAQB9JUO/AbMrwmE7NWHDN6X/a6frg122XscTawW6A/RFa/NyBsiPvsC?=
+ =?us-ascii?Q?waSkRJauUU1JsAZutUNIluTGcE8gnW61CvJa/0H47cuxSCzAd8+MTpZOasfc?=
+ =?us-ascii?Q?v62FvM7DjLur1ANbuhXCNTpTyHvvFiB0nxt2npVixlkf69oNuI5zY3JTqT/W?=
+ =?us-ascii?Q?kpnoIWh+6Vj9ezi+ofPGLdZwSliAovQNlCKS1dTfKtCN1f++VyRlhdhjW3kh?=
+ =?us-ascii?Q?oU9K+9QC9NuvZZizvANExSDU1WKa92PLlUTPeXyuOqUhRMBRA0JDzCmI9LcI?=
+ =?us-ascii?Q?UzE4d9O9ENre6q6sDEpczxaAhtmGzSNvgosiZHHclWzPptGHk837vfufmL58?=
+ =?us-ascii?Q?2dV5hlCy5lQsu6kBSPzPhJCPcg6jdhdnoJJ+dh4nI3PU67A4+0hyF3+cDg?=
+ =?us-ascii?Q?=3D=3D?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(82310400026)(36860700013)(1800799024)(376014)(7416014)(921020);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jun 2025 15:33:01.2146
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: fa3d1a8a-36d3-4a3c-f4d1-08ddb58fe6c3
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	DS2PEPF00003443.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4461
 
-Hi Th=C3=A9o,
+There are plenty of header includes like:
 
-On Fri, 27 Jun 2025 11:08:46 +0200
-Th=C3=A9o Lebrun <theo.lebrun@bootlin.com> wrote:
+	#include <asm/kmap_size.h>
 
-> Mobileye EyeQ5 SoCs provides two GEM IP blocks. The end result of this
-> series is working 1G networking on the EyeQ5 eval board. It isn't just
-> a new macb_config & compatible, we also provide some cleanup & fixes
-> along the way.
->=20
-> dt-bindings:
->   [PATCH net-next v2 01/18] dt-bindings: net: cdns,macb: sort compatibles
->   [PATCH net-next v2 02/18] dt-bindings: net: cdns,macb: add Mobileye Eye=
-Q5 ethernet interface
->   [PATCH net-next v2 03/18] dt-bindings: net: cdns,macb: allow tsu_clk wi=
-thout tx_clk
->   [PATCH net-next v2 04/18] dt-bindings: net: cdns,macb: allow dma-cohere=
-nt
->=20
-> Cleanup:
->   [PATCH net-next v2 05/18] net: macb: use BIT() macro for capability def=
-initions
->   [PATCH net-next v2 06/18] net: macb: Remove local variables clk_init an=
-d init in macb_probe()
->   [PATCH net-next v2 07/18] net: macb: drop macb_config NULL checking
->   [PATCH net-next v2 08/18] net: macb: introduce DMA descriptor helpers (=
-is 64bit? is PTP?)
->   [PATCH net-next v2 09/18] net: macb: sort #includes
->=20
-> Fixes:
->   [PATCH net-next v2 10/18] net: macb: remove illusion about TBQPH/RBQPH =
-being per-queue
->   [PATCH net-next v2 11/18] net: macb: single dma_alloc_coherent() for DM=
-A descriptors
->   [PATCH net-next v2 12/18] net: macb: match skb_reserve(skb, NET_IP_ALIG=
-N) with HW alignment
->   [PATCH net-next v2 13/18] net: macb: avoid double endianness swap in ma=
-cb_set_hwaddr()
+However, the file kmap_size.h is actually inside the folder asm-generic.
+Fix the includes in various header files so that the correct path is
+referenced in the source, so rename them to:
 
-Fixes go through the net tree, and new features through net-next :
+	#include <asm-generic/kmap_size.h>
 
-https://docs.kernel.org/process/maintainer-netdev.html#netdev-faq
+Signed-off-by: Aurabindo Pillai <aurabindo.pillai@amd.com>
+---
+ arch/arc/include/asm/highmem.h       | 2 +-
+ arch/arm/include/asm/fixmap.h        | 2 +-
+ arch/csky/include/asm/fixmap.h       | 2 +-
+ arch/csky/include/asm/highmem.h      | 2 +-
+ arch/microblaze/include/asm/fixmap.h | 2 +-
+ arch/mips/include/asm/fixmap.h       | 2 +-
+ arch/mips/include/asm/highmem.h      | 2 +-
+ arch/powerpc/include/asm/fixmap.h    | 2 +-
+ arch/sparc/include/asm/vaddrs.h      | 2 +-
+ arch/x86/include/asm/fixmap.h        | 2 +-
+ arch/xtensa/include/asm/fixmap.h     | 2 +-
+ include/linux/sched.h                | 2 +-
+ 12 files changed, 12 insertions(+), 12 deletions(-)
 
-As this series is quite big, it could be nice to send the cleanups and
-fixes in dedicated series, and then the eyeQ5 support in itself as a
-standalone series. This would make the review work easier.
+diff --git a/arch/arc/include/asm/highmem.h b/arch/arc/include/asm/highmem.h
+index a6b8e2c352c44..3be6754ab304d 100644
+--- a/arch/arc/include/asm/highmem.h
++++ b/arch/arc/include/asm/highmem.h
+@@ -9,7 +9,7 @@
+ #ifdef CONFIG_HIGHMEM
+ 
+ #include <uapi/asm/page.h>
+-#include <asm/kmap_size.h>
++#include <asm-generic/kmap_size.h>
+ 
+ #define FIXMAP_SIZE		PGDIR_SIZE
+ #define PKMAP_SIZE		PGDIR_SIZE
+diff --git a/arch/arm/include/asm/fixmap.h b/arch/arm/include/asm/fixmap.h
+index 707068f852c27..149669def2e92 100644
+--- a/arch/arm/include/asm/fixmap.h
++++ b/arch/arm/include/asm/fixmap.h
+@@ -7,7 +7,7 @@
+ #define FIXADDR_TOP		(FIXADDR_END - PAGE_SIZE)
+ 
+ #include <linux/pgtable.h>
+-#include <asm/kmap_size.h>
++#include <asm-generic/kmap_size.h>
+ 
+ enum fixed_addresses {
+ 	FIX_EARLYCON_MEM_BASE,
+diff --git a/arch/csky/include/asm/fixmap.h b/arch/csky/include/asm/fixmap.h
+index 49a77cbbe2a9c..c68aabec22429 100644
+--- a/arch/csky/include/asm/fixmap.h
++++ b/arch/csky/include/asm/fixmap.h
+@@ -7,7 +7,7 @@
+ #include <asm/memory.h>
+ #ifdef CONFIG_HIGHMEM
+ #include <linux/threads.h>
+-#include <asm/kmap_size.h>
++#include <asm-generic/kmap_size.h>
+ #endif
+ 
+ enum fixed_addresses {
+diff --git a/arch/csky/include/asm/highmem.h b/arch/csky/include/asm/highmem.h
+index 1ed810effb3d1..c3c4d51a93d0d 100644
+--- a/arch/csky/include/asm/highmem.h
++++ b/arch/csky/include/asm/highmem.h
+@@ -8,7 +8,7 @@
+ #include <linux/init.h>
+ #include <linux/interrupt.h>
+ #include <linux/uaccess.h>
+-#include <asm/kmap_size.h>
++#include <asm-generic/kmap_size.h>
+ #include <asm/cache.h>
+ 
+ /* undef for production */
+diff --git a/arch/microblaze/include/asm/fixmap.h b/arch/microblaze/include/asm/fixmap.h
+index e6e9288bff761..77996f6605949 100644
+--- a/arch/microblaze/include/asm/fixmap.h
++++ b/arch/microblaze/include/asm/fixmap.h
+@@ -20,7 +20,7 @@
+ #include <asm/page.h>
+ #ifdef CONFIG_HIGHMEM
+ #include <linux/threads.h>
+-#include <asm/kmap_size.h>
++#include <asm-generic/kmap_size.h>
+ #endif
+ 
+ #define FIXADDR_TOP	((unsigned long)(-PAGE_SIZE))
+diff --git a/arch/mips/include/asm/fixmap.h b/arch/mips/include/asm/fixmap.h
+index b037718d7e8b4..85e2854a2fc50 100644
+--- a/arch/mips/include/asm/fixmap.h
++++ b/arch/mips/include/asm/fixmap.h
+@@ -17,7 +17,7 @@
+ #include <spaces.h>
+ #ifdef CONFIG_HIGHMEM
+ #include <linux/threads.h>
+-#include <asm/kmap_size.h>
++#include <asm-generic/kmap_size.h>
+ #endif
+ 
+ /*
+diff --git a/arch/mips/include/asm/highmem.h b/arch/mips/include/asm/highmem.h
+index 92a3802100178..80a6409d4a137 100644
+--- a/arch/mips/include/asm/highmem.h
++++ b/arch/mips/include/asm/highmem.h
+@@ -24,7 +24,7 @@
+ #include <linux/interrupt.h>
+ #include <linux/uaccess.h>
+ #include <asm/cpu-features.h>
+-#include <asm/kmap_size.h>
++#include <asm-generic/kmap_size.h>
+ 
+ /* declarations for highmem.c */
+ extern unsigned long highstart_pfn, highend_pfn;
+diff --git a/arch/powerpc/include/asm/fixmap.h b/arch/powerpc/include/asm/fixmap.h
+index f9068dd8dfce7..b0622370fbab1 100644
+--- a/arch/powerpc/include/asm/fixmap.h
++++ b/arch/powerpc/include/asm/fixmap.h
+@@ -20,7 +20,7 @@
+ #include <asm/page.h>
+ #ifdef CONFIG_HIGHMEM
+ #include <linux/threads.h>
+-#include <asm/kmap_size.h>
++#include <asm-generic/kmap_size.h>
+ #endif
+ 
+ /*
+diff --git a/arch/sparc/include/asm/vaddrs.h b/arch/sparc/include/asm/vaddrs.h
+index 4fec0341e2a81..f21d51153d6ef 100644
+--- a/arch/sparc/include/asm/vaddrs.h
++++ b/arch/sparc/include/asm/vaddrs.h
+@@ -32,7 +32,7 @@
+ #define SRMMU_NOCACHE_ALCRATIO	64	/* 256 pages per 64MB of system RAM */
+ 
+ #ifndef __ASSEMBLY__
+-#include <asm/kmap_size.h>
++#include <asm-generic/kmap_size.h>
+ 
+ enum fixed_addresses {
+ 	FIX_HOLE,
+diff --git a/arch/x86/include/asm/fixmap.h b/arch/x86/include/asm/fixmap.h
+index d0dcefb5cc59d..ed2dc040747e4 100644
+--- a/arch/x86/include/asm/fixmap.h
++++ b/arch/x86/include/asm/fixmap.h
+@@ -14,7 +14,7 @@
+ #ifndef _ASM_X86_FIXMAP_H
+ #define _ASM_X86_FIXMAP_H
+ 
+-#include <asm/kmap_size.h>
++#include <asm-generic/kmap_size.h>
+ 
+ /*
+  * Exposed to assembly code for setting up initial page tables. Cannot be
+diff --git a/arch/xtensa/include/asm/fixmap.h b/arch/xtensa/include/asm/fixmap.h
+index 1c65dc1d33971..af09aafb66687 100644
+--- a/arch/xtensa/include/asm/fixmap.h
++++ b/arch/xtensa/include/asm/fixmap.h
+@@ -16,7 +16,7 @@
+ #ifdef CONFIG_HIGHMEM
+ #include <linux/threads.h>
+ #include <linux/pgtable.h>
+-#include <asm/kmap_size.h>
++#include <asm-generic/kmap_size.h>
+ 
+ /* The map slots for temporary mappings via kmap_atomic/local(). */
+ enum fixed_addresses {
+diff --git a/include/linux/sched.h b/include/linux/sched.h
+index 9c15365a30c08..28507df174ee7 100644
+--- a/include/linux/sched.h
++++ b/include/linux/sched.h
+@@ -46,7 +46,7 @@
+ #include <linux/rv.h>
+ #include <linux/livepatch_sched.h>
+ #include <linux/uidgid_types.h>
+-#include <asm/kmap_size.h>
++#include <asm-generic/kmap_size.h>
+ 
+ /* task_struct member predeclarations (sorted alphabetically): */
+ struct audit_context;
+-- 
+2.50.0
 
-
-> EyeQ5 support:
->   [PATCH net-next v2 14/18] net: macb: add no LSO capability (MACB_CAPS_N=
-O_LSO)
->   [PATCH net-next v2 15/18] net: macb: Add "mobileye,eyeq5-gem" compatible
->=20
-> DTS:
->   [PATCH net-next v2 16/18] MIPS: mobileye: add EyeQ5 DMA IOCU support
->   [PATCH net-next v2 17/18] MIPS: mobileye: eyeq5: add two Cadence GEM Et=
-hernet controllers
->   [PATCH net-next v2 18/18] MIPS: mobileye: eyeq5-epm: add two Cadence GE=
-M Ethernet PHYs
-
-Maxime
 
