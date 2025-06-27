@@ -1,54 +1,54 @@
-Return-Path: <linux-mips+bounces-9534-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9535-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B34E4AEB26E
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Jun 2025 11:15:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0616AEB273
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Jun 2025 11:15:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3DB21562258
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Jun 2025 09:14:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C3CC561BF0
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Jun 2025 09:14:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9278C2D97B1;
-	Fri, 27 Jun 2025 09:09:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A5E92DA75D;
+	Fri, 27 Jun 2025 09:10:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="G4QL6NBE"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="kQ/Jcgki"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48E3E2D8797;
-	Fri, 27 Jun 2025 09:09:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 892CA2D979A;
+	Fri, 27 Jun 2025 09:09:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751015398; cv=none; b=b3WiykvARFXNdEZK10RP/tFIpSLL2LkBXAzIrMUDXkjLo2Kl7A7PyisoNCNNHxlyhqbf9/GmJHKbaFeeZwmV2/vfUGCnlcFEi2lHAkU8zXbK9z52mxcoJnVPpuUbufBytA+L4PyNw2iPasgfQFFEbyJCquKXDqkIGsE0bbWHrNs=
+	t=1751015399; cv=none; b=cN3rtMyudYxf5L7NV7s38npbLVHQL6XaM7cZ3PbhUpkeGIeijJ7zxi1sXCYfHAy/cUvy6wxf/olaR4sx+Q9ZqKOF/UTn9O+OgWsSagBc8moBcga9HswlJpTzU4qx983WfzTF28u3PdcslhvyAelh7Jiaasuugz/rYt5p9ifeeqc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751015398; c=relaxed/simple;
-	bh=cBhIOlwAofvTclnsunNvhkbXKF+FQBchShW9Almz/3U=;
+	s=arc-20240116; t=1751015399; c=relaxed/simple;
+	bh=HMcGeng6GdApxgpmXogy29JLEunDQe70RuYk/d3AUrQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=rrLaz3T7bf3GzFtkLGPgKZ3vLc29GI6a4IrkbuXtyhqr/O4lHk1WDHlWQzb5/plSeXmCJxspY8IIREY6PDKWzewLo0FFu16vNfK/MNUQ4UWuiua+KKkhjTZIpItDENQ3mxY21rbuD+dFt5t0eO4MjvGentd4PlMMmHEICWlPqpw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=G4QL6NBE; arc=none smtp.client-ip=217.70.183.200
+	 In-Reply-To:To:Cc; b=q7GGabyLE5rKXEk/JnDoj8lOywviHPB2HQIZNftu0xCznImLMgk3ydNmhcDOqfi0gm7fV21AAGJdWiD4LsuTY0bnbAIdv4dyhHgiqx8bq5ekILfh5GUKtVFnmD692O6K30Ioz0I7s2rAVH8PTQHXBzTfyP6P4WDEa3ktlxl+VCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=kQ/Jcgki; arc=none smtp.client-ip=217.70.183.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 507DB4391A;
-	Fri, 27 Jun 2025 09:09:53 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id C556E4391D;
+	Fri, 27 Jun 2025 09:09:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1751015394;
+	t=1751015396;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ESDHlSmA/zmR11x7Wk/z9wZ37h0LK4bQV9lMVDCCDjg=;
-	b=G4QL6NBE8G5iXAl7fnjHFZeICL/10N9cWpd7a15MIbBbYsdL7ET9CxGcbql+NL8XLy6euC
-	7yatE9e+iy50vH6QCaAqMUaUPw6khWAwVvDYY7prV2BMuVkyUjJidM9oVIzeva2jvJm/93
-	4lZLGSlTDSmB4hw1F7tQrmJQ2kc27BgKsrumrsygiX3jA4oCKqIriDjYHC540fAy/ymAIk
-	zEO12LTbTcEWjdSxTCSVgPBxessPMiFR+IfVqBMNlKW2kwFCTsSpv+cTS8ovGEHjFZ38lK
-	dfNvMZ+5Elq5Hhk7zaLdh2W2wLs3zBk8bRPOh90wiDY5ZDYYw54XaY7MT7J6Ig==
+	bh=ASRiFVp5ZFhKvwm/2Lsajqh0Hrof/9pCxPbZ+iqYjHE=;
+	b=kQ/Jcgki2tmSJyior01LIrOt1jFieJEVoPTJGuWxJMaOYnYQF79onv+z57Z5HP6Fe3Rp+3
+	AupmOzJ1ICFrv77bDPt4adn7E9/JduZ3ul6qNrDSgxT+vtoR0GilVi9BTjcNGTJrJsTk5o
+	yUI+myeztHe9jCyl3c980ZIY5eNV4AFFcjoKwLY5DAY2/2AQflVPHZ+kuVQTFqEfAVbYtg
+	ZQlrgTxA36+jLKzMhFLD4GPrUZqntgRj7bIeuYEx/PzKhAwGvvdfOjmY65ROi9KZQxiYQL
+	akWLuyPrNB5x245ewRC9Qspfthp+LegJ5CxADwkwbnk2M6Ge4Aj7N92VUszk2w==
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Fri, 27 Jun 2025 11:09:03 +0200
-Subject: [PATCH net-next v2 17/18] MIPS: mobileye: eyeq5: add two Cadence
- GEM Ethernet controllers
+Date: Fri, 27 Jun 2025 11:09:04 +0200
+Subject: [PATCH net-next v2 18/18] MIPS: mobileye: eyeq5-epm: add two
+ Cadence GEM Ethernet PHYs
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250627-macb-v2-17-ff8207d0bb77@bootlin.com>
+Message-Id: <20250627-macb-v2-18-ff8207d0bb77@bootlin.com>
 References: <20250627-macb-v2-0-ff8207d0bb77@bootlin.com>
 In-Reply-To: <20250627-macb-v2-0-ff8207d0bb77@bootlin.com>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -83,73 +83,57 @@ Cc: netdev@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
  linux-mips@vger.kernel.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
  Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
+ Andrew Lunn <andrew@lunn.ch>
 X-Mailer: b4 0.14.2
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddvieeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhfffugggtgffkfhgjvfevofesthekredtredtjeenucfhrhhomhepvfhhrohoucfnvggsrhhunhcuoehthhgvohdrlhgvsghruhhnsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeelvefhkeeufedvkefghefhgfdukeejlefgtdehtdeivddtteetgedvieelieeuhfenucfkphepvdgrtddumegtsgdugeemheehieemjegrtddtmeeiieegsgemfhdtfhhfmehfvgdutdemlegvfhgunecuvehluhhsthgvrhfuihiivgepudehnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudegmeehheeimeejrgdttdemieeigegsmehftdhffhemfhgvuddtmeelvghfugdphhgvlhhopegludelvddrudeikedruddtrddvudegngdpmhgrihhlfhhrohhmpehthhgvohdrlhgvsghruhhnsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeefvddprhgtphhtthhopehrihgthhgrrhgutghotghhrhgrnhesghhmrghilhdrtghomhdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehvlhgrughimhhirhdrkhhonhgurhgrthhivghvsehmohgsihhlvgihvgdrt
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddvieeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhfffugggtgffkfhgjvfevofesthekredtredtjeenucfhrhhomhepvfhhrohoucfnvggsrhhunhcuoehthhgvohdrlhgvsghruhhnsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeelvefhkeeufedvkefghefhgfdukeejlefgtdehtdeivddtteetgedvieelieeuhfenucfkphepvdgrtddumegtsgdugeemheehieemjegrtddtmeeiieegsgemfhdtfhhfmehfvgdutdemlegvfhgunecuvehluhhsthgvrhfuihiivgepudehnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudegmeehheeimeejrgdttdemieeigegsmehftdhffhemfhgvuddtmeelvghfugdphhgvlhhopegludelvddrudeikedruddtrddvudegngdpmhgrihhlfhhrohhmpehthhgvohdrlhgvsghruhhnsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeeffedprhgtphhtthhopehrihgthhgrrhgutghotghhrhgrnhesghhmrghilhdrtghomhdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehvlhgrughimhhirhdrkhhonhgurhgrthhivghvsehmohgsihhlvgihvgdrt
  ghomhdprhgtphhtthhopegrohhusegvvggtshdrsggvrhhkvghlvgihrdgvughupdhrtghpthhtohepphgruhhlrdifrghlmhhslhgvhiesshhifhhivhgvrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhssghoghgvnhgusegrlhhphhgrrdhfrhgrnhhkvghnrdguvgdprhgtphhtthhopehprggsvghnihesrhgvughhrghtrdgtohhm
 X-GND-Sasl: theo.lebrun@bootlin.com
 
-Add both MACB/GEM instances found in the Mobileye EyeQ5 SoC.
+The Mobileye EyeQ5 eval board (EPM) embeds two MDIO PHYs.
 
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 ---
- arch/mips/boot/dts/mobileye/eyeq5.dtsi | 34 ++++++++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
+ arch/mips/boot/dts/mobileye/eyeq5-epm5.dts | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/arch/mips/boot/dts/mobileye/eyeq5.dtsi b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-index a84e6e720619ef99e1405ae6296d8bad1aa3fa23..420cb27607bfdd8d5ea510fb668b0a1c85dd7d83 100644
---- a/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-+++ b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-@@ -77,6 +77,8 @@ aliases {
- 		serial0 = &uart0;
- 		serial1 = &uart1;
- 		serial2 = &uart2;
-+		ethernet0 = &macb0;
-+		ethernet1 = &macb1;
- 	};
- 
- 	cpu_intc: interrupt-controller {
-@@ -178,6 +180,38 @@ timer {
- 				clocks = <&olb EQ5C_CPU_CORE0>;
- 			};
- 		};
-+
-+		macb0: ethernet@2a00000 {
-+			compatible = "mobileye,eyeq5-gem";
-+			reg = <0x0 0x02a00000 0x0 0x4000>;
-+			interrupt-parent = <&gic>;
-+			interrupts = <GIC_SHARED 23 IRQ_TYPE_LEVEL_HIGH>, /* queue0 */
-+				     <GIC_SHARED 23 IRQ_TYPE_LEVEL_HIGH>, /* queue1 */
-+				     <GIC_SHARED 23 IRQ_TYPE_LEVEL_HIGH>, /* queue2 */
-+				     <GIC_SHARED 23 IRQ_TYPE_LEVEL_HIGH>; /* queue3 */
-+			clock-names = "pclk", "hclk", "tsu_clk";
-+			clocks = <&pclk>, <&pclk>, <&tsu_clk>;
-+			dma-coherent;
-+			nvmem-cells = <&eth0_mac>;
-+			nvmem-cell-names = "mac-address";
-+			mobileye,olb = <&olb 0x128 0x134>;
-+		};
-+
-+		macb1: ethernet@2b00000 {
-+			compatible = "mobileye,eyeq5-gem";
-+			reg = <0x0 0x02b00000 0x0 0x4000>;
-+			interrupt-parent = <&gic>;
-+			interrupts = <GIC_SHARED 24 IRQ_TYPE_LEVEL_HIGH>, /* queue0 */
-+				     <GIC_SHARED 24 IRQ_TYPE_LEVEL_HIGH>, /* queue1 */
-+				     <GIC_SHARED 24 IRQ_TYPE_LEVEL_HIGH>, /* queue2 */
-+				     <GIC_SHARED 24 IRQ_TYPE_LEVEL_HIGH>; /* queue3 */
-+			clock-names = "pclk", "hclk", "tsu_clk";
-+			clocks = <&pclk>, <&pclk>, <&tsu_clk>;
-+			dma-coherent;
-+			nvmem-cells = <&eth1_mac>;
-+			nvmem-cell-names = "mac-address";
-+			mobileye,olb = <&olb 0x12c 0x138>;
-+		};
+diff --git a/arch/mips/boot/dts/mobileye/eyeq5-epm5.dts b/arch/mips/boot/dts/mobileye/eyeq5-epm5.dts
+index 6898b2d8267dfadeea511a84d1df3f70744f17bb..3d8af5b4675b24c2fa284a52e537a4366226acc2 100644
+--- a/arch/mips/boot/dts/mobileye/eyeq5-epm5.dts
++++ b/arch/mips/boot/dts/mobileye/eyeq5-epm5.dts
+@@ -21,3 +21,29 @@ memory@0 {
+ 		      <0x8 0x02000000 0x0 0x7E000000>;
  	};
  };
- 
++
++&macb0 {
++	phy-mode = "sgmii";
++	phy-handle = <&macb0_phy>;
++
++	mdio {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		macb0_phy: ethernet-phy@e {
++			reg = <0xe>;
++		};
++	};
++};
++
++&macb1 {
++	phy-mode = "rgmii-id";
++	phy-handle = <&macb1_phy>;
++
++	mdio {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		macb1_phy: ethernet-phy@e {
++			reg = <0xe>;
++		};
++	};
++};
 
 -- 
 2.50.0
