@@ -1,54 +1,54 @@
-Return-Path: <linux-mips+bounces-9532-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9533-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4887CAEB264
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Jun 2025 11:14:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96BAEAEB26A
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Jun 2025 11:14:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7761F641F5E
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Jun 2025 09:13:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8102656241A
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Jun 2025 09:14:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE2972D5C8F;
-	Fri, 27 Jun 2025 09:09:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60D282D9794;
+	Fri, 27 Jun 2025 09:09:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Yt661UtJ"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="TSg0uwLZ"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from relay7-d.mail.gandi.net (relay7-d.mail.gandi.net [217.70.183.200])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E1A52D1914;
-	Fri, 27 Jun 2025 09:09:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D83B829347C;
+	Fri, 27 Jun 2025 09:09:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751015395; cv=none; b=H0STeOCq2zcYJUHms/CdrcMxLQu31GwBAccm/fYTdy3ru2JDMDDHaQqFp1l4SwaqS5zpI1vWC5GZpF45ydeHwWG1DjGLfXGqUY3LxRJ3hImdHbfgrmIG0EcuMy4SJp8LuCgB14EIHj6OywHtowEo38NVVaNXV0OVe5zhk0GR8Bc=
+	t=1751015397; cv=none; b=CrTkGac9ZsN1mUZl8X+uE14jPI+JbisR8qpZdGdN1mMXNMIGbzPC35aqZgzVYI9vgz7HMUaPC1lv63lpd806MhdQUi0jp6q/55M4KfVb0CD22LVhfRGdz6nysRTi8gFOgzaw2VeprJ8qBxvFFx7/HhDFia3XTzgGfmBwIEO2dGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751015395; c=relaxed/simple;
-	bh=jc3c9T7zBKk08gXb+SWzLy5BdXpmqLSWASVICeMMYnk=;
+	s=arc-20240116; t=1751015397; c=relaxed/simple;
+	bh=HTTqKIl1ruJyDw2Z8g78b+mPI9ZkBt4y8Eycbe1HcvA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=I+xsnr17fuYY+N6YAG+XmAWW7Ep3B96NoUvEUr+b3na0Fhe3Aj5+CJb2sY9MuPE4AmCG1WDKzURK+Wd2KJEnlEUkFx7gotPbsDqiqDlrJto0aBQNCXTBbKKy0sQGt7zLyBANUJ0MbrsOnr2fHxT8JoEWu8mzMB2yiT1EleURHn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Yt661UtJ; arc=none smtp.client-ip=217.70.183.200
+	 In-Reply-To:To:Cc; b=YgjLfn1KEZKie8KeAwSrgpUnW3C8ZJitGHeDMYM3ZILXUw+zqxtpjlWj8H0LpOiWXNPrE9fAar9jAQidnwB7n75zdSqPM4V9ygFkrvn+AJa1pIoVk7i6aG+vl7OWDsxVneQUr/XDL/XlcHF2cSaZDOV8L3VLjw4sbHXGcZ69p0c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=TSg0uwLZ; arc=none smtp.client-ip=217.70.183.200
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 7C13A43916;
-	Fri, 27 Jun 2025 09:09:50 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id E92EC43917;
+	Fri, 27 Jun 2025 09:09:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1751015391;
+	t=1751015393;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=0e77s5AONBGZ93Anb3sgLgMItwu5elVegMgqEAQHQ10=;
-	b=Yt661UtJ6JqApeYIF1kmeDaKSR5Hdm9fyk1zP0de/WL3UThjzPa96AtiIn5oAqw04kVong
-	rblm/5dOF2f6UV0Z/eGh7sND7/rXg2iAMmDs7umvI0oG2vjbI+C2AmrsInHCnPyVWBmkxV
-	HXFHT7qwsGmo9AFw60swfqaxg02Fd717B4cj7Qx8hsoCd1MGCGwG0b0Wl+4DUZl5InU+tc
-	JIB1Fzy5ZJw6kxF+1gi7qPNiVTyczbGkUf62RAlj4HwtJCnExInhLlxKT35GzKY9JYtIQS
-	A39/dFZ6VkuYFLDOLZY3AE6p2RgdRLR29BdznHDhkPIgxn+UT5L1vRHcizA/FA==
+	bh=yFyDvKihiO8/365UCwZVhjDjhTUdM3RtaA4+iqNm6Zg=;
+	b=TSg0uwLZXLskSpP8EYGNlcLfLrwVCHVwsSbdzN436o4CmrbpA8BmxZGtG1jIemrtq10gWT
+	EhQDIPAtoVIV/9gYN38rJi/nYJ2D08D93Q3ttNJizNqknc2qNQ8cLQRWzQksoLoqvhBMO4
+	9CymUawJ2YTtOECmYyNAC7J8LP/5nYltF14TuCQiI1bFUuozVQb0/XjIU2dwsjIVltA+jy
+	J72aQgm7i+zrrnPc1tLgOBwladZC8ipzy+a6WVdIoe9IHC7xH4QeKmR9tEzqu7THWMu3sh
+	gT+DQwvdYkq7abvy4JohXbEx6YvtRIfCj4EVCnHob6P+Oq7rlv0RnaTxE7Ziww==
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Fri, 27 Jun 2025 11:09:01 +0200
-Subject: [PATCH net-next v2 15/18] net: macb: Add "mobileye,eyeq5-gem"
- compatible
+Date: Fri, 27 Jun 2025 11:09:02 +0200
+Subject: [PATCH net-next v2 16/18] MIPS: mobileye: add EyeQ5 DMA IOCU
+ support
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250627-macb-v2-15-ff8207d0bb77@bootlin.com>
+Message-Id: <20250627-macb-v2-16-ff8207d0bb77@bootlin.com>
 References: <20250627-macb-v2-0-ff8207d0bb77@bootlin.com>
 In-Reply-To: <20250627-macb-v2-0-ff8207d0bb77@bootlin.com>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -87,142 +87,224 @@ Cc: netdev@vger.kernel.org, devicetree@vger.kernel.org,
 X-Mailer: b4 0.14.2
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddvieeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhfffugggtgffkfhgjvfevofesthekredtredtjeenucfhrhhomhepvfhhrohoucfnvggsrhhunhcuoehthhgvohdrlhgvsghruhhnsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeelvefhkeeufedvkefghefhgfdukeejlefgtdehtdeivddtteetgedvieelieeuhfenucfkphepvdgrtddumegtsgdugeemheehieemjegrtddtmeeiieegsgemfhdtfhhfmehfvgdutdemlegvfhgunecuvehluhhsthgvrhfuihiivgepuddtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudegmeehheeimeejrgdttdemieeigegsmehftdhffhemfhgvuddtmeelvghfugdphhgvlhhopegludelvddrudeikedruddtrddvudegngdpmhgrihhlfhhrohhmpehthhgvohdrlhgvsghruhhnsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeefvddprhgtphhtthhopehrihgthhgrrhgutghotghhrhgrnhesghhmrghilhdrtghomhdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehvlhgrughimhhirhdrkhhonhgurhgrthhivghvsehmohgsihhlvgihvgdrt
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddvieeiucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhfffugggtgffkfhgjvfevofesthekredtredtjeenucfhrhhomhepvfhhrohoucfnvggsrhhunhcuoehthhgvohdrlhgvsghruhhnsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpeelvefhkeeufedvkefghefhgfdukeejlefgtdehtdeivddtteetgedvieelieeuhfenucfkphepvdgrtddumegtsgdugeemheehieemjegrtddtmeeiieegsgemfhdtfhhfmehfvgdutdemlegvfhgunecuvehluhhsthgvrhfuihiivgepudehnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudegmeehheeimeejrgdttdemieeigegsmehftdhffhemfhgvuddtmeelvghfugdphhgvlhhopegludelvddrudeikedruddtrddvudegngdpmhgrihhlfhhrohhmpehthhgvohdrlhgvsghruhhnsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeefvddprhgtphhtthhopehrihgthhgrrhgutghotghhrhgrnhesghhmrghilhdrtghomhdprhgtphhtthhopehnvghtuggvvhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehvlhgrughimhhirhdrkhhonhgurhgrthhivghvsehmohgsihhlvgihvgdrt
  ghomhdprhgtphhtthhopegrohhusegvvggtshdrsggvrhhkvghlvgihrdgvughupdhrtghpthhtohepphgruhhlrdifrghlmhhslhgvhiesshhifhhivhgvrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhssghoghgvnhgusegrlhhphhgrrdhfrhgrnhhkvghnrdguvgdprhgtphhtthhopehprggsvghnihesrhgvughhrghtrdgtohhm
 X-GND-Sasl: theo.lebrun@bootlin.com
 
-Add support for the two GEM instances inside Mobileye EyeQ5 SoCs, using
-compatible "mobileye,eyeq5-gem". With it, add a custom init sequence
-that accesses two system-controller registers.
+Both Cadence GEM Ethernet controllers on EyeQ5 are hardwired through CM3
+IO Coherency Units (IOCU). For DMA coherent accesses, BIT(36) must be
+set in DMA addresses.
 
-Noteworthy: NET_IP_ALIGN=2 on MIPS but the hardware does not align and
-low bits aren't configurable, so we cannot respect the requested IP
-header alignment.
+Implement that in platform-specific dma_map_ops which get attached to
+both instances of `cdns,eyeq5-gem` through a notifier block.
 
 Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 ---
- drivers/net/ethernet/cadence/macb_main.c | 80 ++++++++++++++++++++++++++++++++
- 1 file changed, 80 insertions(+)
+ MAINTAINERS                         |   2 +-
+ arch/mips/mobileye/Kconfig          |   1 +
+ arch/mips/mobileye/Makefile         |   2 +
+ arch/mips/mobileye/eyeq5-iocu-dma.c | 160 ++++++++++++++++++++++++++++++++++++
+ 4 files changed, 164 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
-index f9a3a5caebcafe3d9197a3bc7681b64734d7ac93..ed394e5d1ec9b1748282f1448628d5006f3b0971 100644
---- a/drivers/net/ethernet/cadence/macb_main.c
-+++ b/drivers/net/ethernet/cadence/macb_main.c
-@@ -20,6 +20,7 @@
- #include <linux/iopoll.h>
- #include <linux/ip.h>
- #include <linux/kernel.h>
-+#include <linux/mfd/syscon.h>
- #include <linux/module.h>
- #include <linux/moduleparam.h>
- #include <linux/netdevice.h>
-@@ -31,6 +32,7 @@
- #include <linux/platform_device.h>
- #include <linux/pm_runtime.h>
- #include <linux/ptp_classify.h>
-+#include <linux/regmap.h>
- #include <linux/reset.h>
- #include <linux/slab.h>
- #include <linux/tcp.h>
-@@ -4957,6 +4959,72 @@ static int init_reset_optional(struct platform_device *pdev)
- 	return ret;
- }
+diff --git a/MAINTAINERS b/MAINTAINERS
+index bb9df569a3fff41ab40d7da5843f1e8564b47bf2..7ee68d7f8e8d0632846f59579412458e301bd8fb 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -16789,7 +16789,7 @@ F:	Documentation/devicetree/bindings/mips/mobileye.yaml
+ F:	Documentation/devicetree/bindings/soc/mobileye/
+ F:	arch/mips/boot/dts/mobileye/
+ F:	arch/mips/configs/eyeq5_defconfig
+-F:	arch/mips/mobileye/board-epm5.its.S
++F:	arch/mips/mobileye/
+ F:	drivers/clk/clk-eyeq.c
+ F:	drivers/pinctrl/pinctrl-eyeq5.c
+ F:	drivers/reset/reset-eyeq.c
+diff --git a/arch/mips/mobileye/Kconfig b/arch/mips/mobileye/Kconfig
+index f9abb2d6e1787dbc5a173db48606ed5a02088e41..b9040f3a9b3ddc7f5addcd8e5f110cb9c775b6b1 100644
+--- a/arch/mips/mobileye/Kconfig
++++ b/arch/mips/mobileye/Kconfig
+@@ -9,6 +9,7 @@ choice
  
-+#define EYEQ5_OLB_GP_TX_SWRST_DIS	BIT(0)		// Tx SW reset
-+#define EYEQ5_OLB_GP_TX_M_CLKE		BIT(1)		// Tx M clock enable
-+#define EYEQ5_OLB_GP_SYS_SWRST_DIS	BIT(2)		// Sys SW reset
-+#define EYEQ5_OLB_GP_SYS_M_CLKE		BIT(3)		// Sys clock enable
-+#define EYEQ5_OLB_GP_SGMII_MODE		BIT(4)		// SGMII mode
-+#define EYEQ5_OLB_GP_RGMII_DRV		GENMASK(8, 5)	// RGMII mode
+ 	config MACH_EYEQ5
+ 		bool "Mobileye EyeQ5 SoC"
++		select ARCH_HAS_DMA_OPS
+ 
+ 	config MACH_EYEQ6H
+ 		bool "Mobileye EyeQ6H SoC"
+diff --git a/arch/mips/mobileye/Makefile b/arch/mips/mobileye/Makefile
+index 315c06b689cfbb83f9f205d1140ecf5058e2aa02..50fc7d0ae167c3fb3dc8585bcd45583c6cc3f2d2 100644
+--- a/arch/mips/mobileye/Makefile
++++ b/arch/mips/mobileye/Makefile
+@@ -1 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0-or-later
 +
-+#define EYEQ5_OLB_SGMII_PWR_EN		BIT(0)
-+#define EYEQ5_OLB_SGMII_RST_DIS		BIT(1)
-+#define EYEQ5_OLB_SGMII_PLL_EN		BIT(2)
-+#define EYEQ5_OLB_SGMII_SIG_DET_SW	BIT(3)
-+#define EYEQ5_OLB_SGMII_PWR_STATE	BIT(4)
-+#define EYEQ5_OLB_SGMII_PLL_ACK		BIT(18)
++obj-$(CONFIG_MACH_EYEQ5)               += eyeq5-iocu-dma.o
+diff --git a/arch/mips/mobileye/eyeq5-iocu-dma.c b/arch/mips/mobileye/eyeq5-iocu-dma.c
+new file mode 100644
+index 0000000000000000000000000000000000000000..71d1c35f911636db141c4467dccc405af69835ec
+--- /dev/null
++++ b/arch/mips/mobileye/eyeq5-iocu-dma.c
+@@ -0,0 +1,160 @@
++// SPDX-License-Identifier: GPL-2.0
 +
-+static int eyeq5_init(struct platform_device *pdev)
++#include <linux/bits.h>
++#include <linux/device.h>
++#include <linux/device/bus.h>
++#include <linux/dma-direct.h>
++#include <linux/dma-direction.h>
++#include <linux/dma-map-ops.h>
++#include <linux/dma-mapping.h>
++#include <linux/errno.h>
++#include <linux/export.h>
++#include <linux/gfp_types.h>
++#include <linux/init.h>
++#include <linux/mm.h>
++#include <linux/mm_types.h>
++#include <linux/notifier.h>
++#include <linux/pfn.h>
++#include <linux/platform_device.h>
++#include <linux/property.h>
++#include <linux/scatterlist.h>
++#include <linux/types.h>
++
++static void *eyeq5_iocu_alloc(struct device *dev, size_t size,
++			      dma_addr_t *dma_handle, gfp_t gfp,
++			      unsigned long attrs)
 +{
-+	struct device *dev = &pdev->dev;
-+	struct net_device *netdev = platform_get_drvdata(pdev);
-+	struct macb *bp = netdev_priv(netdev);
-+	struct device_node *np = dev->of_node;
-+	unsigned int gp, sgmii;
-+	struct regmap *regmap;
-+	unsigned int args[2];
-+	unsigned int reg;
-+	int ret;
++	void *p = dma_direct_alloc(dev, size, dma_handle, gfp, attrs);
 +
-+	regmap = syscon_regmap_lookup_by_phandle_args(np, "mobileye,olb", 2, args);
-+	if (IS_ERR(regmap))
-+		return PTR_ERR(regmap);
-+
-+	gp = args[0];
-+	sgmii = args[1];
-+
-+	/* Forced reset */
-+	regmap_write(regmap, gp, 0);
-+	regmap_write(regmap, sgmii, 0);
-+	usleep_range(5, 20);
-+
-+	if (bp->phy_interface == PHY_INTERFACE_MODE_SGMII) {
-+		regmap_write(regmap, gp, EYEQ5_OLB_GP_SGMII_MODE);
-+
-+		reg = EYEQ5_OLB_SGMII_PWR_EN | EYEQ5_OLB_SGMII_RST_DIS |
-+		      EYEQ5_OLB_SGMII_PLL_EN;
-+		regmap_write(regmap, sgmii, reg);
-+
-+		ret = regmap_read_poll_timeout(regmap, sgmii, reg,
-+					       reg & EYEQ5_OLB_SGMII_PLL_ACK,
-+					       1, 100);
-+		if (ret)
-+			return dev_err_probe(dev, ret, "PLL timeout");
-+
-+		reg = EYEQ5_OLB_SGMII_PWR_STATE | EYEQ5_OLB_SGMII_SIG_DET_SW;
-+		regmap_update_bits(regmap, sgmii, reg, reg);
-+	}
-+
-+	reg = phy_interface_mode_is_rgmii(bp->phy_interface) ? 0x9 : 0x0;
-+	regmap_update_bits(regmap, gp, EYEQ5_OLB_GP_RGMII_DRV,
-+			   FIELD_PREP(EYEQ5_OLB_GP_RGMII_DRV, reg));
-+
-+	reg = EYEQ5_OLB_GP_TX_SWRST_DIS | EYEQ5_OLB_GP_TX_M_CLKE |
-+	      EYEQ5_OLB_GP_SYS_SWRST_DIS | EYEQ5_OLB_GP_SYS_M_CLKE;
-+	regmap_update_bits(regmap, gp, reg, reg);
-+
-+	return macb_init(pdev);
++	*dma_handle |= BIT_ULL(36);
++	return p;
 +}
 +
- static const struct macb_usrio_config sama7g5_usrio = {
- 	.mii = 0,
- 	.rmii = 1,
-@@ -5109,6 +5177,17 @@ static const struct macb_config versal_config = {
- 	.usrio = &macb_default_usrio,
- };
- 
-+static const struct macb_config eyeq5_config = {
-+	.caps = MACB_CAPS_GIGABIT_MODE_AVAILABLE | MACB_CAPS_JUMBO |
-+		MACB_CAPS_GEM_HAS_PTP | MACB_CAPS_QUEUE_DISABLE |
-+		MACB_CAPS_NO_LSO,
-+	.dma_burst_length = 16,
-+	.clk_init = macb_clk_init,
-+	.init = eyeq5_init,
-+	.jumbo_max_len = 10240,
-+	.usrio = &macb_default_usrio,
++static void eyeq5_iocu_free(struct device *dev, size_t size,
++			    void *vaddr, dma_addr_t dma_handle,
++			    unsigned long attrs)
++{
++	dma_handle &= ~BIT_ULL(36);
++	dma_direct_free(dev, size, vaddr, dma_handle, attrs);
++}
++
++static int eyeq5_iocu_mmap(struct device *dev, struct vm_area_struct *vma,
++			   void *cpu_addr, dma_addr_t dma_addr, size_t size,
++			   unsigned long attrs)
++{
++	unsigned long pfn = PHYS_PFN(dma_to_phys(dev, dma_addr));
++	unsigned long count = PAGE_ALIGN(size) >> PAGE_SHIFT;
++	unsigned long user_count = vma_pages(vma);
++	int ret;
++
++	vma->vm_page_prot = dma_pgprot(dev, vma->vm_page_prot, attrs);
++
++	if (dma_mmap_from_dev_coherent(dev, vma, cpu_addr, size, &ret))
++		return ret;
++
++	if (vma->vm_pgoff >= count || user_count > count - vma->vm_pgoff)
++		return -ENXIO;
++
++	return remap_pfn_range(vma, vma->vm_start, pfn + vma->vm_pgoff,
++			       user_count << PAGE_SHIFT, vma->vm_page_prot);
++}
++
++static int eyeq5_iocu_get_sgtable(struct device *dev, struct sg_table *sgt,
++				  void *cpu_addr, dma_addr_t dma_addr, size_t size,
++				  unsigned long attrs)
++{
++	struct page *page = virt_to_page(cpu_addr);
++	int ret;
++
++	ret = sg_alloc_table(sgt, 1, GFP_KERNEL);
++	if (!ret)
++		sg_set_page(sgt->sgl, page, PAGE_ALIGN(size), 0);
++	return ret;
++}
++
++static dma_addr_t eyeq5_iocu_map_page(struct device *dev, struct page *page,
++				      unsigned long offset, size_t size,
++				      enum dma_data_direction dir,
++				      unsigned long attrs)
++{
++	phys_addr_t phys = page_to_phys(page) + offset;
++
++	/* BIT(36) toggles routing through IOCU for DMA operations. */
++	return phys_to_dma(dev, phys) | BIT_ULL(36);
++}
++
++static void eyeq5_iocu_unmap_page(struct device *dev, dma_addr_t dma_handle,
++				  size_t size, enum dma_data_direction dir,
++		unsigned long attrs)
++{
++}
++
++static int eyeq5_iocu_map_sg(struct device *dev, struct scatterlist *sgl,
++			     int nents, enum dma_data_direction dir,
++			     unsigned long attrs)
++{
++	struct scatterlist *sg;
++	int i;
++
++	for_each_sg(sgl, sg, nents, i) {
++		sg->dma_address = eyeq5_iocu_map_page(dev, sg_page(sg),
++						      sg->offset, sg->length,
++						      dir, attrs);
++		if (sg->dma_address == DMA_MAPPING_ERROR)
++			return 0; /* No cleanup because ->unmap_page() is a no-op. */
++		sg_dma_len(sg) = sg->length;
++	}
++
++	return nents;
++}
++
++static void eyeq5_iocu_unmap_sg(struct device *dev, struct scatterlist *sgl,
++				int nents, enum dma_data_direction dir,
++				unsigned long attrs)
++{
++	/* We know page ->unmap_page() is a no-op. */
++}
++
++const struct dma_map_ops eyeq5_iocu_ops = {
++	.alloc			= eyeq5_iocu_alloc,
++	.free			= eyeq5_iocu_free,
++	.alloc_pages_op		= dma_direct_alloc_pages,
++	.free_pages		= dma_direct_free_pages,
++	.mmap			= eyeq5_iocu_mmap,
++	.get_sgtable		= eyeq5_iocu_get_sgtable,
++	.map_page		= eyeq5_iocu_map_page,
++	.unmap_page		= eyeq5_iocu_unmap_page,
++	.map_sg			= eyeq5_iocu_map_sg,
++	.unmap_sg		= eyeq5_iocu_unmap_sg,
++	.get_required_mask	= dma_direct_get_required_mask,
++};
++EXPORT_SYMBOL(eyeq5_iocu_ops);
++
++static int eyeq5_iocu_notifier(struct notifier_block *nb,
++			       unsigned long event,
++			       void *data)
++{
++	struct device *dev = data;
++
++	/*
++	 * IOCU routing is hardwired; we must use our above custom
++	 * routines for cache-coherent DMA on ethernet interfaces.
++	 */
++	if (event == BUS_NOTIFY_ADD_DEVICE &&
++	    device_is_compatible(dev, "mobileye,eyeq5-gem")) {
++		set_dma_ops(dev, &eyeq5_iocu_ops);
++		return NOTIFY_OK;
++	}
++
++	return NOTIFY_DONE;
++}
++
++static struct notifier_block eyeq5_iocu_nb = {
++	.notifier_call = eyeq5_iocu_notifier,
 +};
 +
- static const struct of_device_id macb_dt_ids[] = {
- 	{ .compatible = "cdns,at91sam9260-macb", .data = &at91sam9260_config },
- 	{ .compatible = "cdns,macb" },
-@@ -5129,6 +5208,7 @@ static const struct of_device_id macb_dt_ids[] = {
- 	{ .compatible = "microchip,mpfs-macb", .data = &mpfs_config },
- 	{ .compatible = "microchip,sama7g5-gem", .data = &sama7g5_gem_config },
- 	{ .compatible = "microchip,sama7g5-emac", .data = &sama7g5_emac_config },
-+	{ .compatible = "mobileye,eyeq5-gem", .data = &eyeq5_config },
- 	{ .compatible = "xlnx,zynqmp-gem", .data = &zynqmp_config},
- 	{ .compatible = "xlnx,zynq-gem", .data = &zynq_config },
- 	{ .compatible = "xlnx,versal-gem", .data = &versal_config},
++static int __init eyeq5_iocu_init(void)
++{
++	return bus_register_notifier(&platform_bus_type, &eyeq5_iocu_nb);
++}
++postcore_initcall(eyeq5_iocu_init);
 
 -- 
 2.50.0
