@@ -1,246 +1,312 @@
-Return-Path: <linux-mips+bounces-9538-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9539-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1411AEBCCE
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Jun 2025 18:07:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4B18AEBDD0
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Jun 2025 18:50:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 60B3A7AC3C7
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Jun 2025 16:05:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5DE247ABE2E
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Jun 2025 16:49:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8A402E973C;
-	Fri, 27 Jun 2025 16:07:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Ui1Gsy17"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C29B32E4240;
+	Fri, 27 Jun 2025 16:50:37 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 235572D9EDE
-	for <linux-mips@vger.kernel.org>; Fri, 27 Jun 2025 16:07:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+Received: from pegase1.c-s.fr (pegase1.c-s.fr [93.17.236.30])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9A28136327;
+	Fri, 27 Jun 2025 16:50:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.236.30
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751040435; cv=none; b=Pf4+p98D+7C3N/vbx+mMH9P2zIc0ovVGpTyS+L0jwBRjWdRVWckwtpse3KuiCRcdRbzbGU94MVfL2Z2qvKjf3srdwcV9rzS0uomEQVH3N950EmtQk0vpWYamRyDAH8cvCpDubCjYUptKMMzOOJxwI40E5i1dXSp6pnWc+P+9ayM=
+	t=1751043037; cv=none; b=lTUXAX8lAWzjLnT6v5rmW9Tp0y4g/nw8vE0RoE7pzSubgvIxukZqwpjeQ+ywNQU8/hqt21N2/UdgW9t728mo1Er5Ae0l/Mozm/kgR6meEN2Y0Dx7jEtux0MTej+8oi2VgWR1kI9tyw7BcE7dwoV8JX66k92OsQBIfn2iW7/86SU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751040435; c=relaxed/simple;
-	bh=Tdpe6JDS+rR3v1xR5w42iqwYeD9PI+17P546Ndy04J8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=V4LtgBxo1IDUKokofUHS1HWiMo5+RI97Nm9DJSpF/WfGxVDmcexmxaClCg7FZK6i5xR+Y+iSg6Ca0/xG7w1l2tpRl/oqraqMrb38kC6qCOrS2iEPkyrKDbdJuazJzr8pfKSVh6dn0E66BZlgy55HfHYiBP72BwqF+ncDLezaCDA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Ui1Gsy17; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1751040433;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=/xy96KI8UDKszt96CyDW7op5ryIeAmzp/OyFji+BJh8=;
-	b=Ui1Gsy17GX+FpVKa2Rkr1ERTsyxgb+HDWiNML1i/G3KwbN0JMNfKdxJGdQ3y7qYeY4HuqU
-	Lqsp0+UHtnJkPsOEW0ZD8wqa7hgj/UAe+Wwbuk3/+98aTv8E4uKZ9nX3QSEKZKv4kTKeOb
-	2R91HiffBwb2AwVy5IqUELA0yd9c6Wc=
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com
- [209.85.219.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-685-5XIyR_OOMl-J7FMpl8R7sQ-1; Fri, 27 Jun 2025 12:07:11 -0400
-X-MC-Unique: 5XIyR_OOMl-J7FMpl8R7sQ-1
-X-Mimecast-MFC-AGG-ID: 5XIyR_OOMl-J7FMpl8R7sQ_1751040431
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-6fad2a25b65so38337086d6.3
-        for <linux-mips@vger.kernel.org>; Fri, 27 Jun 2025 09:07:11 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751040431; x=1751645231;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/xy96KI8UDKszt96CyDW7op5ryIeAmzp/OyFji+BJh8=;
-        b=sOZUVLJHaV7TjnF0/a5YNn8L7RglbvKWHtQRUGDQtwx3Sgwkf85im4FHVTrGMIu5Nh
-         d6O9Zp0mh+XPZOUZ/Uog/dnm86RuN2AzytqvKEnOEWWNBTfCiSDO3h0N7m/y5zIb+xRO
-         HAt/HBUaov3qTrLU4fmuOcXJhIsEOlgHmPYsBZxZUmFD6XlCkZX0zRwbA+fZpJp9/3Zv
-         SbJGJ5yWqrvcPYJHtd56p1oTtbz/RNr8DVeUdrN8K5kXTZCXkdrnDgjhNnPc5SOe1EXi
-         3E+7FtNibq9+7M01F3uIKy5nrOVWCdq5id+tnpnJ1Pv35a4bJi0FUJ529qBbHlmvrZPT
-         jdsg==
-X-Forwarded-Encrypted: i=1; AJvYcCWOAJjQtwycOXSQ7nW/1MLCTWMd9iRCU6PPt7FKiCogtyVdbTXNy+zI0qLZdFLf5GkXw6A9RXf+B5EE@vger.kernel.org
-X-Gm-Message-State: AOJu0YxqD4FccPpDeX6BE1oTljDeXqtOxIFir00jc4HiMEHxxMrZc8Km
-	S/3iC9Q7r4dl+j7HSXaqy/CNIebyorbPJJ8C7qYaJdI4/wC6YA4uvSA1OMnJNh6+bCCdNvPm5SW
-	5SOSROuyfk4vGlH+cR70f6IzwWCxbzAkyrqOYyHjbizbVmJ4H4uSbbH6duSNOPLE=
-X-Gm-Gg: ASbGncuCnxjtkELrPbGnPiS2mcxRnDHQ58OBLYNTCZVYcne4ldz/MvLGQNFD06bAR5D
-	fXiDXSHkH7F35D2PjWZFyDFnGrnHFK2lCHufM8liGEpfTXbzKuYalZqLfYmobtz9xamdpzhX6y9
-	yf5OU+ayxMRXLmEZiQdfeSVx1nZWzxamnXVNcMX8IrYpyrnonoN2xs399azkai4gttUFZqbXlsp
-	MOO2zOSqpDNNXIPOwLR/BADE3QmaTkCQ+F9gAuEs4CuJHtdx0tVseTBcZh5Unv+Vti+vMVqOQxZ
-	qvrvckOSye0=
-X-Received: by 2002:a05:6214:405:b0:6fd:24:b0e0 with SMTP id 6a1803df08f44-7000252f09fmr61586346d6.6.1751040431134;
-        Fri, 27 Jun 2025 09:07:11 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGpI3B+sCb86YFp8sTXjrVwNo2dAmF8TVfkL08aeMHEOdDuhipHJHbQBBG3CZhrBLuzvp45Qw==
-X-Received: by 2002:a05:6214:405:b0:6fd:24:b0e0 with SMTP id 6a1803df08f44-7000252f09fmr61585916d6.6.1751040430641;
-        Fri, 27 Jun 2025 09:07:10 -0700 (PDT)
-Received: from x1.com ([85.131.185.92])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6fd76e74372sm22805016d6.0.2025.06.27.09.07.09
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 27 Jun 2025 09:07:10 -0700 (PDT)
-From: Peter Xu <peterx@redhat.com>
-To: linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	peterx@redhat.com,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Muchun Song <muchun.song@linux.dev>,
-	Oscar Salvador <osalvador@suse.de>,
-	loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org,
-	Jason Gunthorpe <jgg@nvidia.com>,
-	David Hildenbrand <david@redhat.com>
-Subject: [PATCH] mm/hugetlb: Remove prepare_hugepage_range()
-Date: Fri, 27 Jun 2025 12:07:07 -0400
-Message-ID: <20250627160707.2124580-1-peterx@redhat.com>
-X-Mailer: git-send-email 2.49.0
+	s=arc-20240116; t=1751043037; c=relaxed/simple;
+	bh=pdSKV0zS3LH+Fac+/p/fowsLhMH6s4/U6gxd0AvBIY4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XS9KU9XXGLjquRCRPXN7r/5T7J35omCZ0DZWDRVZd9aH6yAbY+ndO382EftTvIpOexvlZoIBJ1MWQIXgsn62dmVhI195JfjQPxmvEYr3paCnKus8X/HTZxIukODi+dIVKm1cNqYoG828GJoWugCJXT31I2zwAyjtzGX/OfNvIa0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.236.30
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub3.si.c-s.fr [192.168.12.233])
+	by localhost (Postfix) with ESMTP id 4bTLkY73wNz9vHw;
+	Fri, 27 Jun 2025 18:35:01 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase1.c-s.fr ([192.168.12.234])
+	by localhost (pegase1.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id KDIXtx_acZHc; Fri, 27 Jun 2025 18:35:01 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase1.c-s.fr (Postfix) with ESMTP id 4bTLkY629lz9vHn;
+	Fri, 27 Jun 2025 18:35:01 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id C430B8B7B7;
+	Fri, 27 Jun 2025 18:35:01 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id eaDpLvMbeWNr; Fri, 27 Jun 2025 18:35:01 +0200 (CEST)
+Received: from [192.168.235.99] (unknown [192.168.235.99])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id E96A18B7A7;
+	Fri, 27 Jun 2025 18:34:57 +0200 (CEST)
+Message-ID: <5c371310-525c-4432-88f2-7c62ed563c9b@csgroup.eu>
+Date: Fri, 27 Jun 2025 18:34:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] kmap: fix header include to reflect actual path
+To: Aurabindo Pillai <aurabindo.pillai@amd.com>,
+ Vineet Gupta <vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>,
+ Guo Ren <guoren@kernel.org>, Michal Simek <monstr@monstr.eu>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Naveen N Rao <naveen@kernel.org>, "David S. Miller" <davem@davemloft.net>,
+ Andreas Larsson <andreas@gaisler.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+ Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>,
+ Max Filippov <jcmvbkbc@gmail.com>, Peter Zijlstra <peterz@infradead.org>,
+ Juri Lelli <juri.lelli@redhat.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
+ Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>
+Cc: linux-snps-arc@lists.infradead.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+ linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+ sparclinux@vger.kernel.org
+References: <20250627153259.301946-1-aurabindo.pillai@amd.com>
+Content-Language: fr-FR
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+In-Reply-To: <20250627153259.301946-1-aurabindo.pillai@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-Only mips and loongarch implemented this API, however what it does was
-checking against stack overflow for either len or addr.  That's already
-done in arch's arch_get_unmapped_area*() functions, even though it may not
-be 100% identical checks.
 
-For example, for both of the architectures, there will be a trivial
-difference on how stack top was defined.  The old code uses STACK_TOP which
-may be slightly smaller than TASK_SIZE on either of them, but the hope is
-that shouldn't be a problem.
 
-It means the whole API is pretty much obsolete at least now, remove it
-completely.
+Le 27/06/2025 à 17:32, Aurabindo Pillai a écrit :
+> [Vous ne recevez pas souvent de courriers de aurabindo.pillai@amd.com. Découvrez pourquoi ceci est important à https://aka.ms/LearnAboutSenderIdentification ]
+> 
+> There are plenty of header includes like:
+> 
+>          #include <asm/kmap_size.h>
 
-Cc: Liam R. Howlett <Liam.Howlett@oracle.com>
-Cc: Huacai Chen <chenhuacai@kernel.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Muchun Song <muchun.song@linux.dev>
-Cc: Oscar Salvador <osalvador@suse.de>
-Cc: loongarch@lists.linux.dev
-Cc: linux-mips@vger.kernel.org
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Reviewed-by: Oscar Salvador <osalvador@suse.de>
-Acked-by: David Hildenbrand <david@redhat.com>
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- arch/loongarch/include/asm/hugetlb.h | 14 --------------
- arch/mips/include/asm/hugetlb.h      | 14 --------------
- fs/hugetlbfs/inode.c                 |  8 ++------
- include/asm-generic/hugetlb.h        |  8 --------
- include/linux/hugetlb.h              |  6 ------
- 5 files changed, 2 insertions(+), 48 deletions(-)
+Yes and in reality that includes those,
 
-diff --git a/arch/loongarch/include/asm/hugetlb.h b/arch/loongarch/include/asm/hugetlb.h
-index 4dc4b3e04225..ab68b594f889 100644
---- a/arch/loongarch/include/asm/hugetlb.h
-+++ b/arch/loongarch/include/asm/hugetlb.h
-@@ -10,20 +10,6 @@
- 
- uint64_t pmd_to_entrylo(unsigned long pmd_val);
- 
--#define __HAVE_ARCH_PREPARE_HUGEPAGE_RANGE
--static inline int prepare_hugepage_range(struct file *file,
--					 unsigned long addr,
--					 unsigned long len)
--{
--	unsigned long task_size = STACK_TOP;
--
--	if (len > task_size)
--		return -ENOMEM;
--	if (task_size - len < addr)
--		return -EINVAL;
--	return 0;
--}
--
- #define __HAVE_ARCH_HUGE_PTE_CLEAR
- static inline void huge_pte_clear(struct mm_struct *mm, unsigned long addr,
- 				  pte_t *ptep, unsigned long sz)
-diff --git a/arch/mips/include/asm/hugetlb.h b/arch/mips/include/asm/hugetlb.h
-index fbc71ddcf0f6..8c460ce01ffe 100644
---- a/arch/mips/include/asm/hugetlb.h
-+++ b/arch/mips/include/asm/hugetlb.h
-@@ -11,20 +11,6 @@
- 
- #include <asm/page.h>
- 
--#define __HAVE_ARCH_PREPARE_HUGEPAGE_RANGE
--static inline int prepare_hugepage_range(struct file *file,
--					 unsigned long addr,
--					 unsigned long len)
--{
--	unsigned long task_size = STACK_TOP;
--
--	if (len > task_size)
--		return -ENOMEM;
--	if (task_size - len < addr)
--		return -EINVAL;
--	return 0;
--}
--
- #define __HAVE_ARCH_HUGE_PTEP_GET_AND_CLEAR
- static inline pte_t huge_ptep_get_and_clear(struct mm_struct *mm,
- 					    unsigned long addr, pte_t *ptep,
-diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
-index 00b2d1a032fd..81a6acddd690 100644
---- a/fs/hugetlbfs/inode.c
-+++ b/fs/hugetlbfs/inode.c
-@@ -179,12 +179,8 @@ hugetlb_get_unmapped_area(struct file *file, unsigned long addr,
- 
- 	if (len & ~huge_page_mask(h))
- 		return -EINVAL;
--	if (flags & MAP_FIXED) {
--		if (addr & ~huge_page_mask(h))
--			return -EINVAL;
--		if (prepare_hugepage_range(file, addr, len))
--			return -EINVAL;
--	}
-+	if ((flags & MAP_FIXED) && (addr & ~huge_page_mask(h)))
-+		return -EINVAL;
- 	if (addr)
- 		addr0 = ALIGN(addr, huge_page_size(h));
- 
-diff --git a/include/asm-generic/hugetlb.h b/include/asm-generic/hugetlb.h
-index 3e0a8fe9b108..4bce4f07f44f 100644
---- a/include/asm-generic/hugetlb.h
-+++ b/include/asm-generic/hugetlb.h
-@@ -114,14 +114,6 @@ static inline int huge_pte_none_mostly(pte_t pte)
- }
- #endif
- 
--#ifndef __HAVE_ARCH_PREPARE_HUGEPAGE_RANGE
--static inline int prepare_hugepage_range(struct file *file,
--		unsigned long addr, unsigned long len)
--{
--	return 0;
--}
--#endif
--
- #ifndef __HAVE_ARCH_HUGE_PTEP_SET_WRPROTECT
- static inline void huge_ptep_set_wrprotect(struct mm_struct *mm,
- 		unsigned long addr, pte_t *ptep)
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index c6c87eae4a8d..474de8e2a8f2 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -359,12 +359,6 @@ static inline void hugetlb_show_meminfo_node(int nid)
- {
- }
- 
--static inline int prepare_hugepage_range(struct file *file,
--				unsigned long addr, unsigned long len)
--{
--	return -EINVAL;
--}
--
- static inline void hugetlb_vma_lock_read(struct vm_area_struct *vma)
- {
- }
--- 
-2.49.0
+./arch/arm64/include/generated/asm/kmap_size.h
+./arch/riscv/include/generated/asm/kmap_size.h
+./arch/arc/include/generated/asm/kmap_size.h
+./arch/x86/include/generated/asm/kmap_size.h
+./arch/powerpc/include/generated/asm/kmap_size.h
+./arch/arm/include/generated/asm/kmap_size.h
+
+Which contain:
+
+$ cat arch/powerpc/include/generated/asm/kmap_size.h
+#include <asm-generic/kmap_size.h>
+
+So what is the problem really ?
+
+architectures are allowed to override the generic kmap_size.h, so you 
+should definitely not change include/linux/sched.h
+
+Or if you think architectures shouldn't be allowed to override it, then 
+explain it and remove the following line in include/asm-generic/Kbuild:
+
+	mandatory-y += kmap_size.h
+
+Also I wonder why you didn't change in mm/highmem.c:
+
+	#include <asm/kmap_size.h>
+
+If you change how it works you have to explain it.
+
+Christophe
+
+> 
+> However, the file kmap_size.h is actually inside the folder asm-generic.
+> Fix the includes in various header files so that the correct path is
+> referenced in the source, so rename them to:
+> 
+>          #include <asm-generic/kmap_size.h>
+> 
+> Signed-off-by: Aurabindo Pillai <aurabindo.pillai@amd.com>
+> ---
+>   arch/arc/include/asm/highmem.h       | 2 +-
+>   arch/arm/include/asm/fixmap.h        | 2 +-
+>   arch/csky/include/asm/fixmap.h       | 2 +-
+>   arch/csky/include/asm/highmem.h      | 2 +-
+>   arch/microblaze/include/asm/fixmap.h | 2 +-
+>   arch/mips/include/asm/fixmap.h       | 2 +-
+>   arch/mips/include/asm/highmem.h      | 2 +-
+>   arch/powerpc/include/asm/fixmap.h    | 2 +-
+>   arch/sparc/include/asm/vaddrs.h      | 2 +-
+>   arch/x86/include/asm/fixmap.h        | 2 +-
+>   arch/xtensa/include/asm/fixmap.h     | 2 +-
+>   include/linux/sched.h                | 2 +-
+>   12 files changed, 12 insertions(+), 12 deletions(-)
+> 
+> diff --git a/arch/arc/include/asm/highmem.h b/arch/arc/include/asm/highmem.h
+> index a6b8e2c352c44..3be6754ab304d 100644
+> --- a/arch/arc/include/asm/highmem.h
+> +++ b/arch/arc/include/asm/highmem.h
+> @@ -9,7 +9,7 @@
+>   #ifdef CONFIG_HIGHMEM
+> 
+>   #include <uapi/asm/page.h>
+> -#include <asm/kmap_size.h>
+> +#include <asm-generic/kmap_size.h>
+> 
+>   #define FIXMAP_SIZE            PGDIR_SIZE
+>   #define PKMAP_SIZE             PGDIR_SIZE
+> diff --git a/arch/arm/include/asm/fixmap.h b/arch/arm/include/asm/fixmap.h
+> index 707068f852c27..149669def2e92 100644
+> --- a/arch/arm/include/asm/fixmap.h
+> +++ b/arch/arm/include/asm/fixmap.h
+> @@ -7,7 +7,7 @@
+>   #define FIXADDR_TOP            (FIXADDR_END - PAGE_SIZE)
+> 
+>   #include <linux/pgtable.h>
+> -#include <asm/kmap_size.h>
+> +#include <asm-generic/kmap_size.h>
+> 
+>   enum fixed_addresses {
+>          FIX_EARLYCON_MEM_BASE,
+> diff --git a/arch/csky/include/asm/fixmap.h b/arch/csky/include/asm/fixmap.h
+> index 49a77cbbe2a9c..c68aabec22429 100644
+> --- a/arch/csky/include/asm/fixmap.h
+> +++ b/arch/csky/include/asm/fixmap.h
+> @@ -7,7 +7,7 @@
+>   #include <asm/memory.h>
+>   #ifdef CONFIG_HIGHMEM
+>   #include <linux/threads.h>
+> -#include <asm/kmap_size.h>
+> +#include <asm-generic/kmap_size.h>
+>   #endif
+> 
+>   enum fixed_addresses {
+> diff --git a/arch/csky/include/asm/highmem.h b/arch/csky/include/asm/highmem.h
+> index 1ed810effb3d1..c3c4d51a93d0d 100644
+> --- a/arch/csky/include/asm/highmem.h
+> +++ b/arch/csky/include/asm/highmem.h
+> @@ -8,7 +8,7 @@
+>   #include <linux/init.h>
+>   #include <linux/interrupt.h>
+>   #include <linux/uaccess.h>
+> -#include <asm/kmap_size.h>
+> +#include <asm-generic/kmap_size.h>
+>   #include <asm/cache.h>
+> 
+>   /* undef for production */
+> diff --git a/arch/microblaze/include/asm/fixmap.h b/arch/microblaze/include/asm/fixmap.h
+> index e6e9288bff761..77996f6605949 100644
+> --- a/arch/microblaze/include/asm/fixmap.h
+> +++ b/arch/microblaze/include/asm/fixmap.h
+> @@ -20,7 +20,7 @@
+>   #include <asm/page.h>
+>   #ifdef CONFIG_HIGHMEM
+>   #include <linux/threads.h>
+> -#include <asm/kmap_size.h>
+> +#include <asm-generic/kmap_size.h>
+>   #endif
+> 
+>   #define FIXADDR_TOP    ((unsigned long)(-PAGE_SIZE))
+> diff --git a/arch/mips/include/asm/fixmap.h b/arch/mips/include/asm/fixmap.h
+> index b037718d7e8b4..85e2854a2fc50 100644
+> --- a/arch/mips/include/asm/fixmap.h
+> +++ b/arch/mips/include/asm/fixmap.h
+> @@ -17,7 +17,7 @@
+>   #include <spaces.h>
+>   #ifdef CONFIG_HIGHMEM
+>   #include <linux/threads.h>
+> -#include <asm/kmap_size.h>
+> +#include <asm-generic/kmap_size.h>
+>   #endif
+> 
+>   /*
+> diff --git a/arch/mips/include/asm/highmem.h b/arch/mips/include/asm/highmem.h
+> index 92a3802100178..80a6409d4a137 100644
+> --- a/arch/mips/include/asm/highmem.h
+> +++ b/arch/mips/include/asm/highmem.h
+> @@ -24,7 +24,7 @@
+>   #include <linux/interrupt.h>
+>   #include <linux/uaccess.h>
+>   #include <asm/cpu-features.h>
+> -#include <asm/kmap_size.h>
+> +#include <asm-generic/kmap_size.h>
+> 
+>   /* declarations for highmem.c */
+>   extern unsigned long highstart_pfn, highend_pfn;
+> diff --git a/arch/powerpc/include/asm/fixmap.h b/arch/powerpc/include/asm/fixmap.h
+> index f9068dd8dfce7..b0622370fbab1 100644
+> --- a/arch/powerpc/include/asm/fixmap.h
+> +++ b/arch/powerpc/include/asm/fixmap.h
+> @@ -20,7 +20,7 @@
+>   #include <asm/page.h>
+>   #ifdef CONFIG_HIGHMEM
+>   #include <linux/threads.h>
+> -#include <asm/kmap_size.h>
+> +#include <asm-generic/kmap_size.h>
+>   #endif
+> 
+>   /*
+> diff --git a/arch/sparc/include/asm/vaddrs.h b/arch/sparc/include/asm/vaddrs.h
+> index 4fec0341e2a81..f21d51153d6ef 100644
+> --- a/arch/sparc/include/asm/vaddrs.h
+> +++ b/arch/sparc/include/asm/vaddrs.h
+> @@ -32,7 +32,7 @@
+>   #define SRMMU_NOCACHE_ALCRATIO 64      /* 256 pages per 64MB of system RAM */
+> 
+>   #ifndef __ASSEMBLY__
+> -#include <asm/kmap_size.h>
+> +#include <asm-generic/kmap_size.h>
+> 
+>   enum fixed_addresses {
+>          FIX_HOLE,
+> diff --git a/arch/x86/include/asm/fixmap.h b/arch/x86/include/asm/fixmap.h
+> index d0dcefb5cc59d..ed2dc040747e4 100644
+> --- a/arch/x86/include/asm/fixmap.h
+> +++ b/arch/x86/include/asm/fixmap.h
+> @@ -14,7 +14,7 @@
+>   #ifndef _ASM_X86_FIXMAP_H
+>   #define _ASM_X86_FIXMAP_H
+> 
+> -#include <asm/kmap_size.h>
+> +#include <asm-generic/kmap_size.h>
+> 
+>   /*
+>    * Exposed to assembly code for setting up initial page tables. Cannot be
+> diff --git a/arch/xtensa/include/asm/fixmap.h b/arch/xtensa/include/asm/fixmap.h
+> index 1c65dc1d33971..af09aafb66687 100644
+> --- a/arch/xtensa/include/asm/fixmap.h
+> +++ b/arch/xtensa/include/asm/fixmap.h
+> @@ -16,7 +16,7 @@
+>   #ifdef CONFIG_HIGHMEM
+>   #include <linux/threads.h>
+>   #include <linux/pgtable.h>
+> -#include <asm/kmap_size.h>
+> +#include <asm-generic/kmap_size.h>
+> 
+>   /* The map slots for temporary mappings via kmap_atomic/local(). */
+>   enum fixed_addresses {
+> diff --git a/include/linux/sched.h b/include/linux/sched.h
+> index 9c15365a30c08..28507df174ee7 100644
+> --- a/include/linux/sched.h
+> +++ b/include/linux/sched.h
+> @@ -46,7 +46,7 @@
+>   #include <linux/rv.h>
+>   #include <linux/livepatch_sched.h>
+>   #include <linux/uidgid_types.h>
+> -#include <asm/kmap_size.h>
+> +#include <asm-generic/kmap_size.h>
+> 
+>   /* task_struct member predeclarations (sorted alphabetically): */
+>   struct audit_context;
+> --
+> 2.50.0
+> 
 
 
