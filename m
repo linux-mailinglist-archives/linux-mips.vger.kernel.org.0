@@ -1,50 +1,53 @@
-Return-Path: <linux-mips+bounces-9546-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9547-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B36AAED5CB
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Jun 2025 09:35:33 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BCA9AED674
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Jun 2025 10:01:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7F873188603A
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Jun 2025 07:35:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 041663AD106
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Jun 2025 08:00:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35774221DB5;
-	Mon, 30 Jun 2025 07:35:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D2F124889B;
+	Mon, 30 Jun 2025 07:59:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="kOK75j+7"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="BnBnVnDr"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
+Received: from mslow3.mail.gandi.net (mslow3.mail.gandi.net [217.70.178.249])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E22041FF7D7;
-	Mon, 30 Jun 2025 07:35:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59DF82475CB;
+	Mon, 30 Jun 2025 07:58:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.178.249
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751268927; cv=none; b=Zq51W5HkghNbnTnQyBM2IRDtXjSXaG7OwG5TnkcaSEiiuUF3ARItZ7k66G3EaUgwCUM8rQdSiNabWVyQXoawJxbIDpMhRkhRIKa4DEY6WUEogwi1L39fDmYHZiOTzz7o202pQTDJXXu9NyY4W2K/Vqs9JZPesMiagydOSm54ys8=
+	t=1751270342; cv=none; b=IXOZ1bG0pFWbT/FXK5yvGTVSHW2J7GAmlGsQcCPLzovd5RyT6aI0wEkh4B4rSYyzMsV4H6W3n7MfrVLLZ4mXzySxoqHLPbGG4zAke5XEiOURMBrZ89HnKyGdzx6kQ3mcE2fyOPjiQJ9mofhjWgQm0JARe+0p3WmgEpF5mZn+53M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751268927; c=relaxed/simple;
-	bh=jkIlxlqR6dkhaRi5tKtg0KroXow+mtT58NSsTlcQK84=;
+	s=arc-20240116; t=1751270342; c=relaxed/simple;
+	bh=Olm3v82XfixtpJ3flX0vWtJlr7MwsOBTenIQ1uoHrdg=;
 	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=ZFo5LQYdvn/hZNGBZ8vKB4HjwAg2udEM3wtuPZEx4yX7YYfMmIMg420LjNxAzNz2PJJXuIxRuNXbh5VkrpHfE0tgT4NiSUu6cgsl8jQbhKM9eA/j8ai6CrUM0Aekcr22/cRCd9JSI/fSZp3CdVf7kP6mp3QDUQNhez/ODF0jl7Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=kOK75j+7; arc=none smtp.client-ip=217.70.183.193
+	 MIME-Version:Content-Type; b=AwbVUFpV16crh5mnncdvlpd8I4mjI0sLr2EF/AXVfSkUBqTHlG20EAJR0/vRhT32RQ1p4mt17JcSLUmuLmvhtPNMXqFUEZLXSy8xAAdb1sosf7QisyLknYXWsecfP08kPaif9ZC0pZ1fjazzigjCnPnJk3I65Y4ENrvfcjFsjsg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=BnBnVnDr; arc=none smtp.client-ip=217.70.178.249
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3A5244436F;
-	Mon, 30 Jun 2025 07:35:16 +0000 (UTC)
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+	by mslow3.mail.gandi.net (Postfix) with ESMTP id B09BC584F54;
+	Mon, 30 Jun 2025 07:37:29 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id B5AB144505;
+	Mon, 30 Jun 2025 07:37:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1751268917;
+	t=1751269041;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=JuVJ/CxPFVKaLj6q3g7OpqlgAGq7QUGwLKk52Bvpvho=;
-	b=kOK75j+7YnpfYwL2R4pu19Ic3etEL48gJSANQnXMicYqwk9NNVSOK7sNwMywPO4XoUDH/c
-	Q0yBqzCKNgteoFeEqaOnLBbLY3+/wIeVL3Wu0AxhOqmGvYJaf0pg0gmTdJ/GegcjKduaL1
-	nxqLq93gFCkiMPmEbXaXl6izG5ciJIPvyJX/LSheuyYD1ik+Mb+HZFSRe1R5jWxTjm3Uku
-	OCSasTw85InjQ48efBNhqAgI2hhHkMOB6sUs0hJjQ2sPUVK7FusZ70cIjggshfhfyDppHL
-	CsEoxzIjWDizKZOpxsJu6m42FkuM+GXM7KWE+u2tp1pQY4drsbPGQlv7C5PCMA==
+	bh=glwRMX5XIwLAgjf/s/syIRQDA+/DawV/G778ACW1TE8=;
+	b=BnBnVnDrS4mTZbEz8oQRFel1BWwpiF9M0U4Z1zPKZ1xHganlxJ2726FA7JEH5Pxsxy+MQ1
+	5Upc9qMCM3YW8Fbx32dr5mFAX9NrMe0AI+ZXDVYWl/tm7GqxmKv9RQWKBXm/yw0AL8uoVZ
+	NgMq7zmwPisUjpkR//WL1EcI/+j0cjrSvfZBOEZEN3lEf0EZPpqxfFWM0LAgSbDkmN4+h9
+	YSprrTXwxzv4ZpUauSqQ5HfB02Wgpcn2Ixkw9SaevwLs9+FPGEK+KA5vSZxl2qdhW78gTJ
+	PQy4mZqvC/X/mC/6DE0DuV0eoRW5bPyTK8pOo/y1xIyesNi9ZoXIIwcI4n8zpw==
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
 To: =?utf-8?Q?Beno=C3=AEt?= Monin <benoit.monin@bootlin.com>, Ulf Hansson
  <ulf.hansson@linaro.org>, Rob Herring <robh@kernel.org>, Krzysztof
@@ -59,12 +62,12 @@ Cc: =?utf-8?Q?Beno=C3=AEt?= Monin <benoit.monin@bootlin.com>,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-mips@vger.kernel.org, Thomas Petazzoni
  <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH 5/6] MIPS: mobileye: dts: eyeq5: add the emmc controller
-In-Reply-To: <1846b26773eb48cc970bba1524e9d2a7a612a2e3.1750156323.git.benoit.monin@bootlin.com>
+Subject: Re: [PATCH 6/6] MIPS: eyeq5_defconfig: add cadence MMC/SDHCI driver
+In-Reply-To: <51dcb9654b88972112f932059b3a52e0057b830a.1750156323.git.benoit.monin@bootlin.com>
 References: <cover.1750156323.git.benoit.monin@bootlin.com>
- <1846b26773eb48cc970bba1524e9d2a7a612a2e3.1750156323.git.benoit.monin@bootlin.com>
-Date: Mon, 30 Jun 2025 09:35:15 +0200
-Message-ID: <87bjq5iswc.fsf@BLaptop.bootlin.com>
+ <51dcb9654b88972112f932059b3a52e0057b830a.1750156323.git.benoit.monin@bootlin.com>
+Date: Mon, 30 Jun 2025 09:37:20 +0200
+Message-ID: <878ql9issv.fsf@BLaptop.bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -75,18 +78,17 @@ Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: quoted-printable
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduudduudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefujghffffkgggtgfesthhqredttddtjeenucfhrhhomhepifhrvghgohhrhicuvefngffogffpvfcuoehgrhgvghhorhihrdgtlhgvmhgvnhhtsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpefghfegvdehgfdtjedvtefhvdeikefgteeuhfeukeettefgvdeuueettddtkeegveenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdugeemheehieemjegrtddtmeeffeekieemsgdvtgdvmegstghfjeemlegurgejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdugeemheehieemjegrtddtmeeffeekieemsgdvtgdvmegstghfjeemlegurgejpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehgrhgvghhorhihrdgtlhgvmhgvnhhtsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeduhedprhgtphhtthhopegsvghnohhithdrmhhonhhinhessghoohhtlhhinhdrtghomhdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopehrohgshhesk
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduudduvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefujghffffkgggtgfesthhqredttddtjeenucfhrhhomhepifhrvghgohhrhicuvefngffogffpvfcuoehgrhgvghhorhihrdgtlhgvmhgvnhhtsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpefghfegvdehgfdtjedvtefhvdeikefgteeuhfeukeettefgvdeuueettddtkeegveenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdugeemheehieemjegrtddtmeeffeekieemsgdvtgdvmegstghfjeemlegurgejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdugeemheehieemjegrtddtmeeffeekieemsgdvtgdvmegstghfjeemlegurgejpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehgrhgvghhorhihrdgtlhgvmhgvnhhtsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeduhedprhgtphhtthhopegsvghnohhithdrmhhonhhinhessghoohhtlhhinhdrtghomhdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopehrohgshhesk
  hgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhriihkodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheptghonhhorhdoughtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehvlhgrughimhhirhdrkhhonhgurhgrthhivghvsehmohgsihhlvgihvgdrtghomhdprhgtphhtthhopehthhgvohdrlhgvsghruhhnsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepthhssghoghgvnhgusegrlhhphhgrrdhfrhgrnhhkvghnrdguvg
 X-GND-Sasl: gregory.clement@bootlin.com
 
-Hello Beno=C3=AEt,
+Helo Beno=C3=AEt,
 
-> Add the MMC/SDHCI controller found in the eyeQ5 SoC. It is based on the
-> cadence sd4hc controller and support modes up to HS400 enhanced strobe.
+> Enable MMC support on eyeQ5 platform so it can be used as the root
+> partition.
 >
 > Signed-off-by: Beno=C3=AEt Monin <benoit.monin@bootlin.com>
 
-The binding being accepted,
 
 Acked-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 
@@ -94,45 +96,24 @@ Thanks,
 
 Gregory
 
-
 > ---
->  arch/mips/boot/dts/mobileye/eyeq5.dtsi | 22 ++++++++++++++++++++++
->  1 file changed, 22 insertions(+)
+>  arch/mips/configs/eyeq5_defconfig | 2 ++
+>  1 file changed, 2 insertions(+)
 >
-> diff --git a/arch/mips/boot/dts/mobileye/eyeq5.dtsi b/arch/mips/boot/dts/=
-mobileye/eyeq5.dtsi
-> index a84e6e720619..e15d9ce0bdf4 100644
-> --- a/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-> +++ b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-> @@ -178,6 +178,28 @@ timer {
->  				clocks =3D <&olb EQ5C_CPU_CORE0>;
->  			};
->  		};
-> +
-> +		emmc: sdhci@2200000 {
-> +			compatible =3D "mobileye,eyeq-sd4hc", "cdns,sd4hc";
-> +			reg =3D <0 0x2200000 0x0 0x1000>;
-> +			interrupt-parent =3D <&gic>;
-> +			interrupts =3D <GIC_SHARED 10 IRQ_TYPE_LEVEL_HIGH>;
-> +			clocks =3D <&olb EQ5C_PER_EMMC>;
-> +			bus-width =3D <8>;
-> +			max-frequency =3D <200000000>;
-> +			mmc-ddr-1_8v;
-> +			sd-uhs-ddr50;
-> +			mmc-hs200-1_8v;
-> +			mmc-hs400-1_8v;
-> +			mmc-hs400-enhanced-strobe;
-> +
-> +			cdns,phy-input-delay-legacy =3D <4>;
-> +			cdns,phy-input-delay-mmc-highspeed =3D <2>;
-> +			cdns,phy-input-delay-mmc-ddr =3D <3>;
-> +			cdns,phy-dll-delay-sdclk =3D <32>;
-> +			cdns,phy-dll-delay-sdclk-hsmmc =3D <32>;
-> +			cdns,phy-dll-delay-strobe =3D <32>;
-> +		};
->  	};
->  };
->=20=20
+> diff --git a/arch/mips/configs/eyeq5_defconfig b/arch/mips/configs/eyeq5_=
+defconfig
+> index ff7af5dc6d9d..328016c1c6f4 100644
+> --- a/arch/mips/configs/eyeq5_defconfig
+> +++ b/arch/mips/configs/eyeq5_defconfig
+> @@ -79,6 +79,8 @@ CONFIG_HID_MICROSOFT=3Dy
+>  CONFIG_HID_MONTEREY=3Dy
+>  CONFIG_MMC=3Dy
+>  CONFIG_MMC_SDHCI=3Dy
+> +CONFIG_MMC_SDHCI_PLTFM=3Dy
+> +CONFIG_MMC_SDHCI_CADENCE=3Dy
+>  # CONFIG_IOMMU_SUPPORT is not set
+>  CONFIG_RESET_CONTROLLER=3Dy
+>  # CONFIG_NVMEM is not set
 
 --=20
 Gr=C3=A9gory CLEMENT, Bootlin
