@@ -1,198 +1,141 @@
-Return-Path: <linux-mips+bounces-9581-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9582-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4A333AEE3E2
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Jun 2025 18:14:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47344AEE726
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Jun 2025 21:03:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F360D17DDF3
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Jun 2025 16:12:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C8EE81BC1F0C
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Jun 2025 19:04:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99F3D2E2678;
-	Mon, 30 Jun 2025 16:09:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90C5A1F874F;
+	Mon, 30 Jun 2025 19:03:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jnBxR32k"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="H9Xmxbbc"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D01D2900AD;
-	Mon, 30 Jun 2025 16:09:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 300221F463E
+	for <linux-mips@vger.kernel.org>; Mon, 30 Jun 2025 19:03:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751299768; cv=none; b=LVoVWk9JZKSI4moBeJ9jm/vrSRlW6tS6fviY8vPgv6/zrXBlvRxyzk7Qf7edoa8aycL4b7GwObuhuR6PQUEMlKJOu1XjG4Q3G9QxViLlcRfvNuVeP6gpDoUPknwPNjKqNtUIGEXq4yUwsHDRCbOc0CLN0McE7fGR5S9hCm8aqtI=
+	t=1751310230; cv=none; b=YtcrR1BWlgu0GtTVEQk3aGIK/w61uibudvN5DLd1eK3P5wRw06HeSoi0hoyVNik5pXgHi6Ea6TFGrpEKYhOWkE1Hm9IqaWUaZbKxaK1AjCdsy6yef28HtN9bZgNCotrhaNDRslLLWAVT92MYRT5AgorVniIRCQZSSqFPDMmWXx0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751299768; c=relaxed/simple;
-	bh=pkoFPfsdz5mUfc5I4FK+MnyFLsCjGsnnD9jc5ME9fN4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Na8mjWQpbhI8bPB3kwceZxUUFP+pIR20reE4hxS3/rD3ByQCjpKOHc5Cwv9quMBhYwqPD4VHLfobEZh5tFmQwfc3igIT/di0iWSlvIUntBPenfD74Ep6gIGPW7S/YMqZ5fSjYbynoaLAUoAijI81qOLL9PzHA0w3nyNt3YyFlXs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jnBxR32k; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EC2DC4CEF3;
-	Mon, 30 Jun 2025 16:09:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751299767;
-	bh=pkoFPfsdz5mUfc5I4FK+MnyFLsCjGsnnD9jc5ME9fN4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jnBxR32keuveFDD/erORneyVQFZMExFVwQ2m1PRHBM8e09zhVEcpdxXezXwhIRIep
-	 1b/hAsrsEPE4GO34uoemDkgD6DfhLn2c+0We3yqTqkDW1Zdqk+usXyKw0ahpO/QyDk
-	 kq8OJiVNVNYv+79sZjwcLRLPE8u+AXxrFrb5rUo1EG4MgLQWKf4VRjl6PqF6ZW6RvL
-	 tO/4ewF4TqSoMw0NJ2cWpzPbScaI6j0B3laWfK7QYlGoz9vuy6ps6Y8wwL6bttBzRT
-	 i6YDWFUv5OhMZDpFhfE2wkKZC04+niDSZ+wBsXg2HLi3z3ji0M2HuML4L/kX6ufOLl
-	 sxIXnWBzurdOw==
-From: Eric Biggers <ebiggers@kernel.org>
-To: linux-crypto@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mips@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org,
-	sparclinux@vger.kernel.org,
-	x86@kernel.org,
-	Ard Biesheuvel <ardb@kernel.org>,
-	"Jason A . Donenfeld" <Jason@zx2c4.com>,
-	Eric Biggers <ebiggers@kernel.org>
-Subject: [PATCH v2 14/14] lib/crypto: sha256: Document the SHA-224 and SHA-256 API
-Date: Mon, 30 Jun 2025 09:06:45 -0700
-Message-ID: <20250630160645.3198-15-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.50.0
-In-Reply-To: <20250630160645.3198-1-ebiggers@kernel.org>
-References: <20250630160645.3198-1-ebiggers@kernel.org>
+	s=arc-20240116; t=1751310230; c=relaxed/simple;
+	bh=i2mQ/9twwOx9w8T1TTlOa0Ols9FQ/dCRclPBjRE1EOA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=G0kohbmk+G6zkUreJKuUUMgWLaWUmoIuJXEDB+HoBPf8R73qnjFazAT0aUALj7uTnCAEBB4AT4uaJWHgl0kov10GnLVnfrZ3+n87pTZi8b+1ZswThbslBblmT8RpwkFkTEgNv0VsjGrPcmTxkYx+oZ1bpAojiOOvfsdbhlSF0FI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=H9Xmxbbc; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2353a2bc210so20879955ad.2
+        for <linux-mips@vger.kernel.org>; Mon, 30 Jun 2025 12:03:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1751310228; x=1751915028; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=EHv9KX52Q/OqdOJMrCOhVGCiwIAbDvRl+pmia9FWC2Y=;
+        b=H9Xmxbbcdwar0HTA8ToPGq67iruS1EeI7V5nTcCbKETaj8S1WYIQfN9ZX4MU7AfdB5
+         y+sBLCKbJu9XuvSpbE+YFLAfwjg8I7wOEyizWvwFESe2T7zjJwZWEfV80Mr8mJymmQa4
+         4HxiNOHbW3mu4pS3dBr2+zHY4RXiJk9Kzt6wY=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751310228; x=1751915028;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EHv9KX52Q/OqdOJMrCOhVGCiwIAbDvRl+pmia9FWC2Y=;
+        b=SZMGVv4PHcxdsGz1g7A+coiufZRa3JNbk40RXJc1kxoz0oJS4oyFQZ55to/YjuZUW8
+         36uk6JrVRGtBGRtPf1x3dxP4E2+Jfzb+5IElp6hHy2b18hE14IBWVFaAyYeYkgVSCM0w
+         Wxn4JVDveA3cEGqJL94igqND5tK2dwUQedTYzV4CRNaFdDAbEmcjEasIGVa7HaFvuIWK
+         2c/kXVFwa+ij/2jzbg3wpsBylM/m9U4hbhB2gp6fUwklxFEwb39lkD5xSY5KG+//5dPh
+         wVTkLXmyoZLyyTUH6bXhyP6gen9x0b4S0tth4AR+SPyX/YIEF+zf0azZHH+SCQbbPBgd
+         uXeg==
+X-Gm-Message-State: AOJu0YxpWufzbgpTUgzFj7UDZ0lt9Que0aqbF7G8DZFjNHXkNyCp+8Bz
+	neMSxuPoGRl5lYwRcrTqiLyVtWcMAPiYzU4sAxzd+JEERKEYqdiHN+4XtPZsRWeY3Q==
+X-Gm-Gg: ASbGncsKaGlAe2LhlwIYAlGbGzj748tFhNe8DbtizDnHSeKr3q6ITg1xquu3eVkAWFm
+	f0M0K0Lp0hjAamtG1gD42UhG0qdIdKZ7jClLdQZJn8OdHABOkSrYHuUap5Qa2EBH24FiHee8soa
+	5FQ+E1iUuZmJJmBa1F2sKF0KE9r883ZvCeOyQkr69yVpjMbPm05bpDUvjgnFyoNJK1uuMUCOXFz
+	eKAG0KcXm71pWVmkXqHGl0BV5KOk4AkmISeQCRvUZkLOrLpa3hRA8cj94bAnEz6fA4c1fu2v/+Q
+	9C3B+FxouAIZtHd3rT7Mxa9e8wiupkyR1WhraGspVvd48MCHdCckhcLAuYrfIuyDaA7tKtksyer
+	CkwrZjoqqDD+g1Q81Y5ufwfbmTQ==
+X-Google-Smtp-Source: AGHT+IGu6vYQvmhRlSNFOrHB5Ok7ZieVswnreyQVFXe+QZO7mTo5pimI/U66dSWpBdg3jsyeQIIa+w==
+X-Received: by 2002:a17:902:f601:b0:235:c9a7:d5fb with SMTP id d9443c01a7336-23ac3deaf2cmr229797665ad.16.1751310228373;
+        Mon, 30 Jun 2025 12:03:48 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23acb3c8649sm89755895ad.236.2025.06.30.12.03.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 30 Jun 2025 12:03:47 -0700 (PDT)
+Message-ID: <ff0cdcc3-db09-44fa-b5f7-8fe150e619f8@broadcom.com>
+Date: Mon, 30 Jun 2025 12:03:46 -0700
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/1] firmware/nvram: bcm47xx: Don't use "proxy" headers
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+ linux-kernel@vger.kernel.org
+Cc: linux-mips@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
+ bcm-kernel-feedback-list@broadcom.com,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+References: <20250626175926.372183-1-andriy.shevchenko@linux.intel.com>
+Content-Language: en-US
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
+ xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
+ M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
+ JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
+ PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
+ KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
+ AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
+ IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
+ ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
+ bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
+ Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
+ tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
+ TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
+ zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
+ WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
+ IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
+ U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
+ 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
+ pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
+ MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
+ IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
+ gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
+ obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
+ N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
+ CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
+ C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
+ wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
+ EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
+ fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
+ MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
+ 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
+ 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
+In-Reply-To: <20250626175926.372183-1-andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Add kerneldoc comments, consistent with the kerneldoc comments of the
-SHA-384 and SHA-512 API.
+On 6/26/25 10:59, Andy Shevchenko wrote:
+> Update header inclusions to follow IWYU (Include What You Use)
+> principle.
+> 
+> Note that kernel.h is discouraged to be included as it's written
+> at the top of that file.
+> 
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-Signed-off-by: Eric Biggers <ebiggers@kernel.org>
----
- include/crypto/sha2.h | 76 +++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 76 insertions(+)
+Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
 
-diff --git a/include/crypto/sha2.h b/include/crypto/sha2.h
-index 2e3fc2cf4aa0d..e0a08f6addd00 100644
---- a/include/crypto/sha2.h
-+++ b/include/crypto/sha2.h
-@@ -153,17 +153,55 @@ void __hmac_sha256_init(struct __hmac_sha256_ctx *ctx,
-  */
- struct sha224_ctx {
- 	struct __sha256_ctx ctx;
- };
- 
-+/**
-+ * sha224_init() - Initialize a SHA-224 context for a new message
-+ * @ctx: the context to initialize
-+ *
-+ * If you don't need incremental computation, consider sha224() instead.
-+ *
-+ * Context: Any context.
-+ */
- void sha224_init(struct sha224_ctx *ctx);
-+
-+/**
-+ * sha224_update() - Update a SHA-224 context with message data
-+ * @ctx: the context to update; must have been initialized
-+ * @data: the message data
-+ * @len: the data length in bytes
-+ *
-+ * This can be called any number of times.
-+ *
-+ * Context: Any context.
-+ */
- static inline void sha224_update(struct sha224_ctx *ctx,
- 				 const u8 *data, size_t len)
- {
- 	__sha256_update(&ctx->ctx, data, len);
- }
-+
-+/**
-+ * sha224_final() - Finish computing a SHA-224 message digest
-+ * @ctx: the context to finalize; must have been initialized
-+ * @out: (output) the resulting SHA-224 message digest
-+ *
-+ * After finishing, this zeroizes @ctx.  So the caller does not need to do it.
-+ *
-+ * Context: Any context.
-+ */
- void sha224_final(struct sha224_ctx *ctx, u8 out[SHA224_DIGEST_SIZE]);
-+
-+/**
-+ * sha224() - Compute SHA-224 message digest in one shot
-+ * @data: the message data
-+ * @len: the data length in bytes
-+ * @out: (output) the resulting SHA-224 message digest
-+ *
-+ * Context: Any context.
-+ */
- void sha224(const u8 *data, size_t len, u8 out[SHA224_DIGEST_SIZE]);
- 
- /**
-  * struct hmac_sha224_key - Prepared key for HMAC-SHA224
-  * @key: private
-@@ -273,17 +311,55 @@ void hmac_sha224_usingrawkey(const u8 *raw_key, size_t raw_key_len,
-  */
- struct sha256_ctx {
- 	struct __sha256_ctx ctx;
- };
- 
-+/**
-+ * sha256_init() - Initialize a SHA-256 context for a new message
-+ * @ctx: the context to initialize
-+ *
-+ * If you don't need incremental computation, consider sha256() instead.
-+ *
-+ * Context: Any context.
-+ */
- void sha256_init(struct sha256_ctx *ctx);
-+
-+/**
-+ * sha256_update() - Update a SHA-256 context with message data
-+ * @ctx: the context to update; must have been initialized
-+ * @data: the message data
-+ * @len: the data length in bytes
-+ *
-+ * This can be called any number of times.
-+ *
-+ * Context: Any context.
-+ */
- static inline void sha256_update(struct sha256_ctx *ctx,
- 				 const u8 *data, size_t len)
- {
- 	__sha256_update(&ctx->ctx, data, len);
- }
-+
-+/**
-+ * sha256_final() - Finish computing a SHA-256 message digest
-+ * @ctx: the context to finalize; must have been initialized
-+ * @out: (output) the resulting SHA-256 message digest
-+ *
-+ * After finishing, this zeroizes @ctx.  So the caller does not need to do it.
-+ *
-+ * Context: Any context.
-+ */
- void sha256_final(struct sha256_ctx *ctx, u8 out[SHA256_DIGEST_SIZE]);
-+
-+/**
-+ * sha256() - Compute SHA-256 message digest in one shot
-+ * @data: the message data
-+ * @len: the data length in bytes
-+ * @out: (output) the resulting SHA-256 message digest
-+ *
-+ * Context: Any context.
-+ */
- void sha256(const u8 *data, size_t len, u8 out[SHA256_DIGEST_SIZE]);
- 
- /**
-  * struct hmac_sha256_key - Prepared key for HMAC-SHA256
-  * @key: private
+Thomas, can you pick this up? Thanks!
 -- 
-2.50.0
-
+Florian
 
