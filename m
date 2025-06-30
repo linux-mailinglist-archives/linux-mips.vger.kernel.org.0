@@ -1,46 +1,46 @@
-Return-Path: <linux-mips+bounces-9551-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9552-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 229A3AEE33F
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Jun 2025 18:05:31 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DB838AEE342
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Jun 2025 18:05:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D6BD17AB6C0
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Jun 2025 16:04:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E03F817D69B
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Jun 2025 16:05:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF10528EA72;
-	Mon, 30 Jun 2025 16:05:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AB6A290080;
+	Mon, 30 Jun 2025 16:05:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dr1yLhc6"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BHeiGcd6"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA3A128DB5E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 266E528FAB9;
 	Mon, 30 Jun 2025 16:05:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751299522; cv=none; b=pbF6lLJ8SU1GATSEe/Wo+8g9/E8ofrwu2cwLmflYWUMjyNvPaLszAkyFC3Cq4astr35Nil/VNWMGw3n9y/ykgLB5iozxB5jfA1iMSX6QJg2jxX30//KDSbNt7CjpOML5x1gfNppuqsMkb26kOMUWRaQ/Z2F36cH+ykgB5ADKOWI=
+	t=1751299523; cv=none; b=q2ig3wE8jExXZyhHRm5UjIfAZaNDWvMIheY2fCv1KT/Uk/mTK8/awy7R/upmk24c3D+8vXnRAFSGHtOALOl9fGU0Lvw19+mE0rncYx6N3P+AyGRa0frUJf5zyd1nvpkQhy7Z+bAaKU6Tw5WXUmPN+5VOSxQefQI+F1J66NmixKo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751299522; c=relaxed/simple;
-	bh=m8b9QVkIhF8M/bhCYfEccNbG5xwp7BU+pMzzoTskfZk=;
+	s=arc-20240116; t=1751299523; c=relaxed/simple;
+	bh=eAlFTDD9aXKbjy6HE+rdkdPi0a/NSm/FPRsme2GVGco=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=q5/ZOeD5JBHdIFHBYDJae7OV5p8yZpH+eLNyfEwe2tjMn1e3kmP2VpHIYR1iVZY93iZfIR22A6oaMI/5IB2AZsMlRcdcyEbtRvItqGC5m8c0Kjsb+CNK0t081bAs6thuXSa+rggv1RGdR1P0d8J2m3bv+/TnwObBJr9n9Gy/PM0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dr1yLhc6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9809C4CEF4;
-	Mon, 30 Jun 2025 16:05:21 +0000 (UTC)
+	 MIME-Version; b=tt4VZQKBDhpKW9/hTPjeTNhyt8g1F/5B8kBePh7uy7Kdk9tYWVMwe5L2xRIyuCJdP0/3B3RFx/DXu1wpTbOhg1EAPVWDrpmADs3ODso9VZcwlOcPrF8348C+DHSXM9MPGom2nV9RbnEPVTtQsjXDIeTpzvA0rtQvUpfNHHAjbfw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BHeiGcd6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 687F0C4CEF3;
+	Mon, 30 Jun 2025 16:05:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1751299522;
-	bh=m8b9QVkIhF8M/bhCYfEccNbG5xwp7BU+pMzzoTskfZk=;
+	bh=eAlFTDD9aXKbjy6HE+rdkdPi0a/NSm/FPRsme2GVGco=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Dr1yLhc6Hd7kiH/o6qs2PCfo54LA/2VhAWi+gIrOvpsnwFWtyuvceA2rFCIC2ES3H
-	 GJGvIWtnt1Dgs7HBOshwa0iW152TaUyUZfkkS8uiKwmVIPvK5gia9LQnANcTFB0ouf
-	 lWlsy3E4vW+8KjhOX4F+xVxAUKRK85Uk3334zsgnM6TzADG0k4Zz2/a0s9DsMUzGgz
-	 n5ZzT1dJR4xFtHaApZ4q0BFe5KTfahX51omf89DdTOys8OrQvoQ0YVO9nBS6M1ClTT
-	 v3rr7GntE1rWyy0lycLESqSvTmKiWgiB+9jnmQpb/GLUB4S8bJr+yqT2C3WIP6sKlF
-	 UyfbKdNCR+Gcw==
+	b=BHeiGcd62HEts1mhgVsYRzmrDKMThTLQzMKUc3qgPUlWgBVbFY28hsE/C9laDkrqA
+	 1fn7CxdoaA1kDYfO/WHa0e6r2flYkYp45CJ/FGbNVGvoGOsLPXajCcEifQUpKqqYxI
+	 LYhUp0t3ZC8Pb8KyuvEOzAyiQDaK3MHIa5dhFIi/ARrqmr5nYRJoXDsTWLcfB3f2mK
+	 fYz6j1Oz1yDGgCy/NcnAvRQc8dBkLBtGexLaNc/5a9l/rFP5gDrIxckZ/l2zvkBtip
+	 RgXDth/m6lpPUFzUXbbOICnj95qePHy4OqgkJ/3Gp2v7nBrlMpaoJG1tGJTQpK8Rem
+	 WJ3ICXpPZdbCQ==
 From: Eric Biggers <ebiggers@kernel.org>
 To: linux-crypto@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -53,9 +53,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Ard Biesheuvel <ardb@kernel.org>,
 	"Jason A . Donenfeld" <Jason@zx2c4.com>,
 	Eric Biggers <ebiggers@kernel.org>
-Subject: [PATCH v3 01/16] crypto: sha512 - Rename conflicting symbols
-Date: Mon, 30 Jun 2025 09:03:05 -0700
-Message-ID: <20250630160320.2888-2-ebiggers@kernel.org>
+Subject: [PATCH v3 02/16] lib/crypto: sha512: Add support for SHA-384 and SHA-512
+Date: Mon, 30 Jun 2025 09:03:06 -0700
+Message-ID: <20250630160320.2888-3-ebiggers@kernel.org>
 X-Mailer: git-send-email 2.50.0
 In-Reply-To: <20250630160320.2888-1-ebiggers@kernel.org>
 References: <20250630160320.2888-1-ebiggers@kernel.org>
@@ -67,249 +67,481 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Rename existing functions and structs in architecture-optimized SHA-512
-code that had names conflicting with the upcoming library interface
-which will be added to <crypto/sha2.h>: sha384_init, sha512_init,
-sha512_update, sha384, and sha512.
+Add basic support for SHA-384 and SHA-512 to lib/crypto/.
 
-Note: all affected code will be superseded by later commits that migrate
-the arch-optimized SHA-512 code into the library.  This commit simply
-keeps the kernel building for the initial introduction of the library.
+Various in-kernel users will be able to use this instead of the
+old-school crypto API, which is harder to use and has more overhead.
+
+The basic support added by this commit consists of the API and its
+documentation, backed by a C implementation of the algorithms.
+sha512_block_generic() is derived from crypto/sha512_generic.c.
 
 Acked-by: Ard Biesheuvel <ardb@kernel.org>
 Signed-off-by: Eric Biggers <ebiggers@kernel.org>
 ---
- arch/arm64/crypto/sha512-glue.c     |  8 ++++----
- arch/s390/crypto/sha512_s390.c      |  8 ++++----
- arch/sparc/crypto/sha512_glue.c     | 14 +++++++-------
- arch/x86/crypto/sha512_ssse3_glue.c | 10 +++++-----
- 4 files changed, 20 insertions(+), 20 deletions(-)
+ include/crypto/sha2.h | 128 ++++++++++++++++++++
+ lib/crypto/Kconfig    |  10 ++
+ lib/crypto/Makefile   |   6 +
+ lib/crypto/sha512.c   | 265 ++++++++++++++++++++++++++++++++++++++++++
+ 4 files changed, 409 insertions(+)
+ create mode 100644 lib/crypto/sha512.c
 
-diff --git a/arch/arm64/crypto/sha512-glue.c b/arch/arm64/crypto/sha512-glue.c
-index 15aa9d8b7b2c4..a78e184c100fa 100644
---- a/arch/arm64/crypto/sha512-glue.c
-+++ b/arch/arm64/crypto/sha512-glue.c
-@@ -25,12 +25,12 @@ static void sha512_arm64_transform(struct sha512_state *sst, u8 const *src,
- 				   int blocks)
- {
- 	sha512_blocks_arch(sst->state, src, blocks);
+diff --git a/include/crypto/sha2.h b/include/crypto/sha2.h
+index 4912572578dc2..f2a6e84b28400 100644
+--- a/include/crypto/sha2.h
++++ b/include/crypto/sha2.h
+@@ -127,6 +127,134 @@ static inline void sha224_init(struct sha256_state *sctx)
+ 	sha224_block_init(&sctx->ctx);
  }
+ /* Simply use sha256_update as it is equivalent to sha224_update. */
+ void sha224_final(struct sha256_state *sctx, u8 out[SHA224_DIGEST_SIZE]);
  
--static int sha512_update(struct shash_desc *desc, const u8 *data,
--			 unsigned int len)
-+static int sha512_update_arm64(struct shash_desc *desc, const u8 *data,
-+			       unsigned int len)
- {
- 	return sha512_base_do_update_blocks(desc, data, len,
- 					    sha512_arm64_transform);
- }
++/* State for the SHA-512 (and SHA-384) compression function */
++struct sha512_block_state {
++	u64 h[8];
++};
++
++/*
++ * Context structure, shared by SHA-384 and SHA-512.  The sha384_ctx and
++ * sha512_ctx structs wrap this one so that the API has proper typing and
++ * doesn't allow mixing the SHA-384 and SHA-512 functions arbitrarily.
++ */
++struct __sha512_ctx {
++	struct sha512_block_state state;
++	u64 bytecount_lo;
++	u64 bytecount_hi;
++	u8 buf[SHA512_BLOCK_SIZE] __aligned(__alignof__(__be64));
++};
++void __sha512_update(struct __sha512_ctx *ctx, const u8 *data, size_t len);
++
++/**
++ * struct sha384_ctx - Context for hashing a message with SHA-384
++ * @ctx: private
++ */
++struct sha384_ctx {
++	struct __sha512_ctx ctx;
++};
++
++/**
++ * sha384_init() - Initialize a SHA-384 context for a new message
++ * @ctx: the context to initialize
++ *
++ * If you don't need incremental computation, consider sha384() instead.
++ *
++ * Context: Any context.
++ */
++void sha384_init(struct sha384_ctx *ctx);
++
++/**
++ * sha384_update() - Update a SHA-384 context with message data
++ * @ctx: the context to update; must have been initialized
++ * @data: the message data
++ * @len: the data length in bytes
++ *
++ * This can be called any number of times.
++ *
++ * Context: Any context.
++ */
++static inline void sha384_update(struct sha384_ctx *ctx,
++				 const u8 *data, size_t len)
++{
++	__sha512_update(&ctx->ctx, data, len);
++}
++
++/**
++ * sha384_final() - Finish computing a SHA-384 message digest
++ * @ctx: the context to finalize; must have been initialized
++ * @out: (output) the resulting SHA-384 message digest
++ *
++ * After finishing, this zeroizes @ctx.  So the caller does not need to do it.
++ *
++ * Context: Any context.
++ */
++void sha384_final(struct sha384_ctx *ctx, u8 out[SHA384_DIGEST_SIZE]);
++
++/**
++ * sha384() - Compute SHA-384 message digest in one shot
++ * @data: the message data
++ * @len: the data length in bytes
++ * @out: (output) the resulting SHA-384 message digest
++ *
++ * Context: Any context.
++ */
++void sha384(const u8 *data, size_t len, u8 out[SHA384_DIGEST_SIZE]);
++
++/**
++ * struct sha512_ctx - Context for hashing a message with SHA-512
++ * @ctx: private
++ */
++struct sha512_ctx {
++	struct __sha512_ctx ctx;
++};
++
++/**
++ * sha512_init() - Initialize a SHA-512 context for a new message
++ * @ctx: the context to initialize
++ *
++ * If you don't need incremental computation, consider sha512() instead.
++ *
++ * Context: Any context.
++ */
++void sha512_init(struct sha512_ctx *ctx);
++
++/**
++ * sha512_update() - Update a SHA-512 context with message data
++ * @ctx: the context to update; must have been initialized
++ * @data: the message data
++ * @len: the data length in bytes
++ *
++ * This can be called any number of times.
++ *
++ * Context: Any context.
++ */
++static inline void sha512_update(struct sha512_ctx *ctx,
++				 const u8 *data, size_t len)
++{
++	__sha512_update(&ctx->ctx, data, len);
++}
++
++/**
++ * sha512_final() - Finish computing a SHA-512 message digest
++ * @ctx: the context to finalize; must have been initialized
++ * @out: (output) the resulting SHA-512 message digest
++ *
++ * After finishing, this zeroizes @ctx.  So the caller does not need to do it.
++ *
++ * Context: Any context.
++ */
++void sha512_final(struct sha512_ctx *ctx, u8 out[SHA512_DIGEST_SIZE]);
++
++/**
++ * sha512() - Compute SHA-512 message digest in one shot
++ * @data: the message data
++ * @len: the data length in bytes
++ * @out: (output) the resulting SHA-512 message digest
++ *
++ * Context: Any context.
++ */
++void sha512(const u8 *data, size_t len, u8 out[SHA512_DIGEST_SIZE]);
++
+ #endif /* _CRYPTO_SHA2_H */
+diff --git a/lib/crypto/Kconfig b/lib/crypto/Kconfig
+index 1ec1466108ccd..2d295c0e0f792 100644
+--- a/lib/crypto/Kconfig
++++ b/lib/crypto/Kconfig
+@@ -165,10 +165,20 @@ config CRYPTO_LIB_SHA256_GENERIC
+ 	  This symbol can be selected by arch implementations of the SHA-256
+ 	  library interface that require the generic code as a fallback, e.g.,
+ 	  for SIMD implementations. If no arch specific implementation is
+ 	  enabled, this implementation serves the users of CRYPTO_LIB_SHA256.
  
-@@ -42,11 +42,11 @@ static int sha512_finup(struct shash_desc *desc, const u8 *data,
- }
++config CRYPTO_LIB_SHA512
++	tristate
++	help
++	  The SHA-384 and SHA-512 library functions.  Select this if your module
++	  uses any of these functions from <crypto/sha2.h>.
++
++config CRYPTO_LIB_SHA512_ARCH
++	bool
++	depends on CRYPTO_LIB_SHA512 && !UML
++
+ config CRYPTO_LIB_SM3
+ 	tristate
  
- static struct shash_alg algs[] = { {
- 	.digestsize		= SHA512_DIGEST_SIZE,
- 	.init			= sha512_base_init,
--	.update			= sha512_update,
-+	.update			= sha512_update_arm64,
- 	.finup			= sha512_finup,
- 	.descsize		= SHA512_STATE_SIZE,
- 	.base.cra_name		= "sha512",
- 	.base.cra_driver_name	= "sha512-arm64",
- 	.base.cra_priority	= 150,
-@@ -55,11 +55,11 @@ static struct shash_alg algs[] = { {
- 	.base.cra_blocksize	= SHA512_BLOCK_SIZE,
- 	.base.cra_module	= THIS_MODULE,
- }, {
- 	.digestsize		= SHA384_DIGEST_SIZE,
- 	.init			= sha384_base_init,
--	.update			= sha512_update,
-+	.update			= sha512_update_arm64,
- 	.finup			= sha512_finup,
- 	.descsize		= SHA512_STATE_SIZE,
- 	.base.cra_name		= "sha384",
- 	.base.cra_driver_name	= "sha384-arm64",
- 	.base.cra_priority	= 150,
-diff --git a/arch/s390/crypto/sha512_s390.c b/arch/s390/crypto/sha512_s390.c
-index 33711a29618c3..e8bb172dbed75 100644
---- a/arch/s390/crypto/sha512_s390.c
-+++ b/arch/s390/crypto/sha512_s390.c
-@@ -15,11 +15,11 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
+ if !KMSAN # avoid false positives from assembly
+ if ARM
+diff --git a/lib/crypto/Makefile b/lib/crypto/Makefile
+index b0c0f8aea2695..f6b6f370451ec 100644
+--- a/lib/crypto/Makefile
++++ b/lib/crypto/Makefile
+@@ -62,10 +62,16 @@ obj-$(CONFIG_CRYPTO_LIB_SHA256)			+= libsha256.o
+ libsha256-y					:= sha256.o
  
- #include "sha.h"
+ obj-$(CONFIG_CRYPTO_LIB_SHA256_GENERIC)		+= libsha256-generic.o
+ libsha256-generic-y				:= sha256-generic.o
  
--static int sha512_init(struct shash_desc *desc)
-+static int sha512_init_s390(struct shash_desc *desc)
- {
- 	struct s390_sha_ctx *ctx = shash_desc_ctx(desc);
++obj-$(CONFIG_CRYPTO_LIB_SHA512) += libsha512.o
++libsha512-y := sha512.o
++ifeq ($(CONFIG_CRYPTO_LIB_SHA512_ARCH),y)
++CFLAGS_sha512.o += -I$(src)/$(SRCARCH)
++endif # CONFIG_CRYPTO_LIB_SHA512_ARCH
++
+ obj-$(CONFIG_MPILIB) += mpi/
  
- 	ctx->sha512.state[0] = SHA512_H0;
- 	ctx->sha512.state[1] = SHA512_H1;
-@@ -60,11 +60,11 @@ static int sha512_import(struct shash_desc *desc, const void *in)
- 	return 0;
- }
+ obj-$(CONFIG_CRYPTO_SELFTESTS_FULL)		+= simd.o
  
- static struct shash_alg sha512_alg = {
- 	.digestsize	=	SHA512_DIGEST_SIZE,
--	.init		=	sha512_init,
-+	.init		=	sha512_init_s390,
- 	.update		=	s390_sha_update_blocks,
- 	.finup		=	s390_sha_finup,
- 	.export		=	sha512_export,
- 	.import		=	sha512_import,
- 	.descsize	=	sizeof(struct s390_sha_ctx),
-@@ -80,11 +80,11 @@ static struct shash_alg sha512_alg = {
- 	}
- };
- 
- MODULE_ALIAS_CRYPTO("sha512");
- 
--static int sha384_init(struct shash_desc *desc)
-+static int sha384_init_s390(struct shash_desc *desc)
- {
- 	struct s390_sha_ctx *ctx = shash_desc_ctx(desc);
- 
- 	ctx->sha512.state[0] = SHA384_H0;
- 	ctx->sha512.state[1] = SHA384_H1;
-@@ -101,11 +101,11 @@ static int sha384_init(struct shash_desc *desc)
- 	return 0;
- }
- 
- static struct shash_alg sha384_alg = {
- 	.digestsize	=	SHA384_DIGEST_SIZE,
--	.init		=	sha384_init,
-+	.init		=	sha384_init_s390,
- 	.update		=	s390_sha_update_blocks,
- 	.finup		=	s390_sha_finup,
- 	.export		=	sha512_export,
- 	.import		=	sha512_import,
- 	.descsize	=	sizeof(struct s390_sha_ctx),
-diff --git a/arch/sparc/crypto/sha512_glue.c b/arch/sparc/crypto/sha512_glue.c
-index 47b9277b6877a..fb81c3290c8c0 100644
---- a/arch/sparc/crypto/sha512_glue.c
-+++ b/arch/sparc/crypto/sha512_glue.c
-@@ -38,11 +38,11 @@ static int sha512_sparc64_finup(struct shash_desc *desc, const u8 *src,
- {
- 	sha512_base_do_finup(desc, src, len, sha512_block);
- 	return sha512_base_finish(desc, out);
- }
- 
--static struct shash_alg sha512 = {
-+static struct shash_alg sha512_alg = {
- 	.digestsize	=	SHA512_DIGEST_SIZE,
- 	.init		=	sha512_base_init,
- 	.update		=	sha512_sparc64_update,
- 	.finup		=	sha512_sparc64_finup,
- 	.descsize	=	SHA512_STATE_SIZE,
-@@ -53,11 +53,11 @@ static struct shash_alg sha512 = {
- 		.cra_blocksize	=	SHA512_BLOCK_SIZE,
- 		.cra_module	=	THIS_MODULE,
- 	}
- };
- 
--static struct shash_alg sha384 = {
-+static struct shash_alg sha384_alg = {
- 	.digestsize	=	SHA384_DIGEST_SIZE,
- 	.init		=	sha384_base_init,
- 	.update		=	sha512_sparc64_update,
- 	.finup		=	sha512_sparc64_finup,
- 	.descsize	=	SHA512_STATE_SIZE,
-@@ -85,17 +85,17 @@ static bool __init sparc64_has_sha512_opcode(void)
- }
- 
- static int __init sha512_sparc64_mod_init(void)
- {
- 	if (sparc64_has_sha512_opcode()) {
--		int ret = crypto_register_shash(&sha384);
-+		int ret = crypto_register_shash(&sha384_alg);
- 		if (ret < 0)
- 			return ret;
- 
--		ret = crypto_register_shash(&sha512);
-+		ret = crypto_register_shash(&sha512_alg);
- 		if (ret < 0) {
--			crypto_unregister_shash(&sha384);
-+			crypto_unregister_shash(&sha384_alg);
- 			return ret;
- 		}
- 
- 		pr_info("Using sparc64 sha512 opcode optimized SHA-512/SHA-384 implementation\n");
- 		return 0;
-@@ -104,12 +104,12 @@ static int __init sha512_sparc64_mod_init(void)
- 	return -ENODEV;
- }
- 
- static void __exit sha512_sparc64_mod_fini(void)
- {
--	crypto_unregister_shash(&sha384);
--	crypto_unregister_shash(&sha512);
-+	crypto_unregister_shash(&sha384_alg);
-+	crypto_unregister_shash(&sha512_alg);
- }
- 
- module_init(sha512_sparc64_mod_init);
- module_exit(sha512_sparc64_mod_fini);
- 
-diff --git a/arch/x86/crypto/sha512_ssse3_glue.c b/arch/x86/crypto/sha512_ssse3_glue.c
-index 067684c543952..97744b7d23817 100644
---- a/arch/x86/crypto/sha512_ssse3_glue.c
-+++ b/arch/x86/crypto/sha512_ssse3_glue.c
-@@ -36,12 +36,12 @@
- #include <crypto/sha512_base.h>
- 
- asmlinkage void sha512_transform_ssse3(struct sha512_state *state,
- 				       const u8 *data, int blocks);
- 
--static int sha512_update(struct shash_desc *desc, const u8 *data,
--		       unsigned int len, sha512_block_fn *sha512_xform)
-+static int sha512_update_x86(struct shash_desc *desc, const u8 *data,
-+			     unsigned int len, sha512_block_fn *sha512_xform)
- {
- 	int remain;
- 
- 	/*
- 	 * Make sure struct sha512_state begins directly with the SHA512
-@@ -67,11 +67,11 @@ static int sha512_finup(struct shash_desc *desc, const u8 *data,
- }
- 
- static int sha512_ssse3_update(struct shash_desc *desc, const u8 *data,
- 		       unsigned int len)
- {
--	return sha512_update(desc, data, len, sha512_transform_ssse3);
-+	return sha512_update_x86(desc, data, len, sha512_transform_ssse3);
- }
- 
- static int sha512_ssse3_finup(struct shash_desc *desc, const u8 *data,
- 	      unsigned int len, u8 *out)
- {
-@@ -139,11 +139,11 @@ static bool avx_usable(void)
- }
- 
- static int sha512_avx_update(struct shash_desc *desc, const u8 *data,
- 		       unsigned int len)
- {
--	return sha512_update(desc, data, len, sha512_transform_avx);
-+	return sha512_update_x86(desc, data, len, sha512_transform_avx);
- }
- 
- static int sha512_avx_finup(struct shash_desc *desc, const u8 *data,
- 	      unsigned int len, u8 *out)
- {
-@@ -201,11 +201,11 @@ asmlinkage void sha512_transform_rorx(struct sha512_state *state,
- 				      const u8 *data, int blocks);
- 
- static int sha512_avx2_update(struct shash_desc *desc, const u8 *data,
- 		       unsigned int len)
- {
--	return sha512_update(desc, data, len, sha512_transform_rorx);
-+	return sha512_update_x86(desc, data, len, sha512_transform_rorx);
- }
- 
- static int sha512_avx2_finup(struct shash_desc *desc, const u8 *data,
- 	      unsigned int len, u8 *out)
- {
+ obj-$(CONFIG_CRYPTO_LIB_SM3)			+= libsm3.o
+diff --git a/lib/crypto/sha512.c b/lib/crypto/sha512.c
+new file mode 100644
+index 0000000000000..536b71481b1ca
+--- /dev/null
++++ b/lib/crypto/sha512.c
+@@ -0,0 +1,265 @@
++// SPDX-License-Identifier: GPL-2.0-or-later
++/*
++ * SHA-384 and SHA-512 library functions
++ *
++ * Copyright (c) Jean-Luc Cooke <jlcooke@certainkey.com>
++ * Copyright (c) Andrew McDonald <andrew@mcdonald.org.uk>
++ * Copyright (c) 2003 Kyle McMartin <kyle@debian.org>
++ * Copyright 2025 Google LLC
++ */
++
++#include <crypto/sha2.h>
++#include <linux/export.h>
++#include <linux/kernel.h>
++#include <linux/module.h>
++#include <linux/overflow.h>
++#include <linux/string.h>
++#include <linux/unaligned.h>
++
++static const struct sha512_block_state sha384_iv = {
++	.h = {
++		SHA384_H0, SHA384_H1, SHA384_H2, SHA384_H3,
++		SHA384_H4, SHA384_H5, SHA384_H6, SHA384_H7,
++	},
++};
++
++static const struct sha512_block_state sha512_iv = {
++	.h = {
++		SHA512_H0, SHA512_H1, SHA512_H2, SHA512_H3,
++		SHA512_H4, SHA512_H5, SHA512_H6, SHA512_H7,
++	},
++};
++
++static const u64 sha512_K[80] = {
++	0x428a2f98d728ae22ULL, 0x7137449123ef65cdULL, 0xb5c0fbcfec4d3b2fULL,
++	0xe9b5dba58189dbbcULL, 0x3956c25bf348b538ULL, 0x59f111f1b605d019ULL,
++	0x923f82a4af194f9bULL, 0xab1c5ed5da6d8118ULL, 0xd807aa98a3030242ULL,
++	0x12835b0145706fbeULL, 0x243185be4ee4b28cULL, 0x550c7dc3d5ffb4e2ULL,
++	0x72be5d74f27b896fULL, 0x80deb1fe3b1696b1ULL, 0x9bdc06a725c71235ULL,
++	0xc19bf174cf692694ULL, 0xe49b69c19ef14ad2ULL, 0xefbe4786384f25e3ULL,
++	0x0fc19dc68b8cd5b5ULL, 0x240ca1cc77ac9c65ULL, 0x2de92c6f592b0275ULL,
++	0x4a7484aa6ea6e483ULL, 0x5cb0a9dcbd41fbd4ULL, 0x76f988da831153b5ULL,
++	0x983e5152ee66dfabULL, 0xa831c66d2db43210ULL, 0xb00327c898fb213fULL,
++	0xbf597fc7beef0ee4ULL, 0xc6e00bf33da88fc2ULL, 0xd5a79147930aa725ULL,
++	0x06ca6351e003826fULL, 0x142929670a0e6e70ULL, 0x27b70a8546d22ffcULL,
++	0x2e1b21385c26c926ULL, 0x4d2c6dfc5ac42aedULL, 0x53380d139d95b3dfULL,
++	0x650a73548baf63deULL, 0x766a0abb3c77b2a8ULL, 0x81c2c92e47edaee6ULL,
++	0x92722c851482353bULL, 0xa2bfe8a14cf10364ULL, 0xa81a664bbc423001ULL,
++	0xc24b8b70d0f89791ULL, 0xc76c51a30654be30ULL, 0xd192e819d6ef5218ULL,
++	0xd69906245565a910ULL, 0xf40e35855771202aULL, 0x106aa07032bbd1b8ULL,
++	0x19a4c116b8d2d0c8ULL, 0x1e376c085141ab53ULL, 0x2748774cdf8eeb99ULL,
++	0x34b0bcb5e19b48a8ULL, 0x391c0cb3c5c95a63ULL, 0x4ed8aa4ae3418acbULL,
++	0x5b9cca4f7763e373ULL, 0x682e6ff3d6b2b8a3ULL, 0x748f82ee5defb2fcULL,
++	0x78a5636f43172f60ULL, 0x84c87814a1f0ab72ULL, 0x8cc702081a6439ecULL,
++	0x90befffa23631e28ULL, 0xa4506cebde82bde9ULL, 0xbef9a3f7b2c67915ULL,
++	0xc67178f2e372532bULL, 0xca273eceea26619cULL, 0xd186b8c721c0c207ULL,
++	0xeada7dd6cde0eb1eULL, 0xf57d4f7fee6ed178ULL, 0x06f067aa72176fbaULL,
++	0x0a637dc5a2c898a6ULL, 0x113f9804bef90daeULL, 0x1b710b35131c471bULL,
++	0x28db77f523047d84ULL, 0x32caab7b40c72493ULL, 0x3c9ebe0a15c9bebcULL,
++	0x431d67c49c100d4cULL, 0x4cc5d4becb3e42b6ULL, 0x597f299cfc657e2aULL,
++	0x5fcb6fab3ad6faecULL, 0x6c44198c4a475817ULL,
++};
++
++#define Ch(x, y, z) ((z) ^ ((x) & ((y) ^ (z))))
++#define Maj(x, y, z) (((x) & (y)) | ((z) & ((x) | (y))))
++#define e0(x) (ror64((x), 28) ^ ror64((x), 34) ^ ror64((x), 39))
++#define e1(x) (ror64((x), 14) ^ ror64((x), 18) ^ ror64((x), 41))
++#define s0(x) (ror64((x), 1) ^ ror64((x), 8) ^ ((x) >> 7))
++#define s1(x) (ror64((x), 19) ^ ror64((x), 61) ^ ((x) >> 6))
++
++static void sha512_block_generic(struct sha512_block_state *state,
++				 const u8 *data)
++{
++	u64 a = state->h[0];
++	u64 b = state->h[1];
++	u64 c = state->h[2];
++	u64 d = state->h[3];
++	u64 e = state->h[4];
++	u64 f = state->h[5];
++	u64 g = state->h[6];
++	u64 h = state->h[7];
++	u64 t1, t2;
++	u64 W[16];
++
++	for (int j = 0; j < 16; j++)
++		W[j] = get_unaligned_be64(data + j * sizeof(u64));
++
++	for (int i = 0; i < 80; i += 8) {
++		if ((i & 15) == 0 && i != 0) {
++			for (int j = 0; j < 16; j++) {
++				W[j & 15] += s1(W[(j - 2) & 15]) +
++					     W[(j - 7) & 15] +
++					     s0(W[(j - 15) & 15]);
++			}
++		}
++		t1 = h + e1(e) + Ch(e, f, g) + sha512_K[i]   + W[(i & 15)];
++		t2 = e0(a) + Maj(a, b, c);    d += t1;    h = t1 + t2;
++		t1 = g + e1(d) + Ch(d, e, f) + sha512_K[i+1] + W[(i & 15) + 1];
++		t2 = e0(h) + Maj(h, a, b);    c += t1;    g = t1 + t2;
++		t1 = f + e1(c) + Ch(c, d, e) + sha512_K[i+2] + W[(i & 15) + 2];
++		t2 = e0(g) + Maj(g, h, a);    b += t1;    f = t1 + t2;
++		t1 = e + e1(b) + Ch(b, c, d) + sha512_K[i+3] + W[(i & 15) + 3];
++		t2 = e0(f) + Maj(f, g, h);    a += t1;    e = t1 + t2;
++		t1 = d + e1(a) + Ch(a, b, c) + sha512_K[i+4] + W[(i & 15) + 4];
++		t2 = e0(e) + Maj(e, f, g);    h += t1;    d = t1 + t2;
++		t1 = c + e1(h) + Ch(h, a, b) + sha512_K[i+5] + W[(i & 15) + 5];
++		t2 = e0(d) + Maj(d, e, f);    g += t1;    c = t1 + t2;
++		t1 = b + e1(g) + Ch(g, h, a) + sha512_K[i+6] + W[(i & 15) + 6];
++		t2 = e0(c) + Maj(c, d, e);    f += t1;    b = t1 + t2;
++		t1 = a + e1(f) + Ch(f, g, h) + sha512_K[i+7] + W[(i & 15) + 7];
++		t2 = e0(b) + Maj(b, c, d);    e += t1;    a = t1 + t2;
++	}
++
++	state->h[0] += a;
++	state->h[1] += b;
++	state->h[2] += c;
++	state->h[3] += d;
++	state->h[4] += e;
++	state->h[5] += f;
++	state->h[6] += g;
++	state->h[7] += h;
++}
++
++static void __maybe_unused
++sha512_blocks_generic(struct sha512_block_state *state,
++		      const u8 *data, size_t nblocks)
++{
++	do {
++		sha512_block_generic(state, data);
++		data += SHA512_BLOCK_SIZE;
++	} while (--nblocks);
++}
++
++#ifdef CONFIG_CRYPTO_LIB_SHA512_ARCH
++#include "sha512.h" /* $(SRCARCH)/sha512.h */
++#else
++#define sha512_blocks sha512_blocks_generic
++#endif
++
++static void __sha512_init(struct __sha512_ctx *ctx,
++			  const struct sha512_block_state *iv,
++			  u64 initial_bytecount)
++{
++	ctx->state = *iv;
++	ctx->bytecount_lo = initial_bytecount;
++	ctx->bytecount_hi = 0;
++}
++
++void sha384_init(struct sha384_ctx *ctx)
++{
++	__sha512_init(&ctx->ctx, &sha384_iv, 0);
++}
++EXPORT_SYMBOL_GPL(sha384_init);
++
++void sha512_init(struct sha512_ctx *ctx)
++{
++	__sha512_init(&ctx->ctx, &sha512_iv, 0);
++}
++EXPORT_SYMBOL_GPL(sha512_init);
++
++void __sha512_update(struct __sha512_ctx *ctx, const u8 *data, size_t len)
++{
++	size_t partial = ctx->bytecount_lo % SHA512_BLOCK_SIZE;
++
++	if (check_add_overflow(ctx->bytecount_lo, len, &ctx->bytecount_lo))
++		ctx->bytecount_hi++;
++
++	if (partial + len >= SHA512_BLOCK_SIZE) {
++		size_t nblocks;
++
++		if (partial) {
++			size_t l = SHA512_BLOCK_SIZE - partial;
++
++			memcpy(&ctx->buf[partial], data, l);
++			data += l;
++			len -= l;
++
++			sha512_blocks(&ctx->state, ctx->buf, 1);
++		}
++
++		nblocks = len / SHA512_BLOCK_SIZE;
++		len %= SHA512_BLOCK_SIZE;
++
++		if (nblocks) {
++			sha512_blocks(&ctx->state, data, nblocks);
++			data += nblocks * SHA512_BLOCK_SIZE;
++		}
++		partial = 0;
++	}
++	if (len)
++		memcpy(&ctx->buf[partial], data, len);
++}
++EXPORT_SYMBOL_GPL(__sha512_update);
++
++static void __sha512_final(struct __sha512_ctx *ctx,
++			   u8 *out, size_t digest_size)
++{
++	u64 bitcount_hi = (ctx->bytecount_hi << 3) | (ctx->bytecount_lo >> 61);
++	u64 bitcount_lo = ctx->bytecount_lo << 3;
++	size_t partial = ctx->bytecount_lo % SHA512_BLOCK_SIZE;
++
++	ctx->buf[partial++] = 0x80;
++	if (partial > SHA512_BLOCK_SIZE - 16) {
++		memset(&ctx->buf[partial], 0, SHA512_BLOCK_SIZE - partial);
++		sha512_blocks(&ctx->state, ctx->buf, 1);
++		partial = 0;
++	}
++	memset(&ctx->buf[partial], 0, SHA512_BLOCK_SIZE - 16 - partial);
++	*(__be64 *)&ctx->buf[SHA512_BLOCK_SIZE - 16] = cpu_to_be64(bitcount_hi);
++	*(__be64 *)&ctx->buf[SHA512_BLOCK_SIZE - 8] = cpu_to_be64(bitcount_lo);
++	sha512_blocks(&ctx->state, ctx->buf, 1);
++
++	for (size_t i = 0; i < digest_size; i += 8)
++		put_unaligned_be64(ctx->state.h[i / 8], out + i);
++}
++
++void sha384_final(struct sha384_ctx *ctx, u8 out[SHA384_DIGEST_SIZE])
++{
++	__sha512_final(&ctx->ctx, out, SHA384_DIGEST_SIZE);
++	memzero_explicit(ctx, sizeof(*ctx));
++}
++EXPORT_SYMBOL_GPL(sha384_final);
++
++void sha512_final(struct sha512_ctx *ctx, u8 out[SHA512_DIGEST_SIZE])
++{
++	__sha512_final(&ctx->ctx, out, SHA512_DIGEST_SIZE);
++	memzero_explicit(ctx, sizeof(*ctx));
++}
++EXPORT_SYMBOL_GPL(sha512_final);
++
++void sha384(const u8 *data, size_t len, u8 out[SHA384_DIGEST_SIZE])
++{
++	struct sha384_ctx ctx;
++
++	sha384_init(&ctx);
++	sha384_update(&ctx, data, len);
++	sha384_final(&ctx, out);
++}
++EXPORT_SYMBOL_GPL(sha384);
++
++void sha512(const u8 *data, size_t len, u8 out[SHA512_DIGEST_SIZE])
++{
++	struct sha512_ctx ctx;
++
++	sha512_init(&ctx);
++	sha512_update(&ctx, data, len);
++	sha512_final(&ctx, out);
++}
++EXPORT_SYMBOL_GPL(sha512);
++
++#ifdef sha512_mod_init_arch
++static int __init sha512_mod_init(void)
++{
++	sha512_mod_init_arch();
++	return 0;
++}
++subsys_initcall(sha512_mod_init);
++
++static void __exit sha512_mod_exit(void)
++{
++}
++module_exit(sha512_mod_exit);
++#endif
++
++MODULE_DESCRIPTION("SHA-384 and SHA-512 library functions");
++MODULE_LICENSE("GPL");
 -- 
 2.50.0
 
