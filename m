@@ -1,210 +1,141 @@
-Return-Path: <linux-mips+bounces-9543-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9544-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51ED3AED597
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Jun 2025 09:29:46 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CCECAED5BD
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Jun 2025 09:33:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 781EE163DDE
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Jun 2025 07:29:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B41B163288
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Jun 2025 07:33:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A567221B191;
-	Mon, 30 Jun 2025 07:29:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 754C0221286;
+	Mon, 30 Jun 2025 07:33:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="NkPVXBLO"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90A166BFC0;
-	Mon, 30 Jun 2025 07:29:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from relay8-d.mail.gandi.net (relay8-d.mail.gandi.net [217.70.183.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07F3F1ABED9;
+	Mon, 30 Jun 2025 07:33:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751268581; cv=none; b=n/a6AHMyzBnYsE2d3D6sBG+kMQLtRr4V7kNvCNKTmxfeGx8dMRJ37av1xrKwYSwEzVmoPbvA8XkifBi3rT1gyqBMZc+zKB8GTsKZv7SJU/eQFnYIbqA+SHjNwtBItmxTsArMwiQ0CQIYItGgQmRxTsu3euZoGV4hkwQFGM2+4wI=
+	t=1751268831; cv=none; b=rM5WF+Zn+9la6HClPm+U3DVx1Rg/7Ogp0oQK0jBDVSqsc97IYWfqi8XcFkIUesmjZza2DwNlQbjMFCjz2MtJ5/FlRajKzptdjqDFXT/Oa4wh7EyAeR+JUy3sArufvKm5ZbOB19mk7wWQHF/8DZp/i3ZJ2U8Yz9DWi1Bz/AwOM+Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751268581; c=relaxed/simple;
-	bh=a0h2GHTo3K13Mw0AUJepxxnoHiBa6c5feuRAOj5bqrc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=se+8uCAb693l/ZudXpleRgZ8KNozfSPYjDPG+86xD1UfRWv4y0cm2GZBtIrS01d1raW4kxYxnpSDziC1gQzh/iyUWaJyli7WBQlkTEJDbO5COsS2yXjz0iwb15kmJVnA8blOvdK2afwnOS/HqY+JOqogwFpqhRi2ni7sQGwtbBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D663F152B;
-	Mon, 30 Jun 2025 00:29:22 -0700 (PDT)
-Received: from [10.163.37.132] (unknown [10.163.37.132])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 800EF3F6A8;
-	Mon, 30 Jun 2025 00:29:34 -0700 (PDT)
-Message-ID: <4f8b7ac8-7dcd-4cc9-a97f-4d6ab573e83a@arm.com>
-Date: Mon, 30 Jun 2025 12:59:31 +0530
+	s=arc-20240116; t=1751268831; c=relaxed/simple;
+	bh=DJHTEQv4/hw/Znph4oB4Nw/gbXO3L4/U9QiCv+OHl0g=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=DbPq9ikZqgPUlC8fWBTPZcWSBstO7iJ1xv6KodZicNS45as0/gADJLluiyfy30HWE66eYPgZu4BjyyZaXuEmHnq3pSnLijSaF28wuh1Sd42/UOSLHqqaXZKyj3YFRdz0o6TZhf3F9JyeRTejqqRJMGhc7kdtqG0VwhBthSfYdT4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=NkPVXBLO; arc=none smtp.client-ip=217.70.183.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 3C83E4446E;
+	Mon, 30 Jun 2025 07:33:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1751268820;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4UmfBvVb/I4lQOU9Au4t6rTT14BmfLwehVsevL7PaYs=;
+	b=NkPVXBLOFGYNXeUp/ByHOq5+fh6CRSa5MOw8lAXBVzrsFhPSoX4/q73bigjuaaxJAF0w2/
+	/jMFjh0X2P0DWekH5+e8RzSQ03tW5QHjkaLbh7AlYI6XHShk3hXG73/QkdCJu/xSDcTsI+
+	5pg5UGdC4xPCniw0VdNYe5lZJmduwQnlbr1cjP15cGfHbUbLF9nx7GMoQilgNI+Jw39XkD
+	hE5PtfPTUTzRptYW6X6KNTzzaEKNekwn67QAUqjj5mxQak62OyHz3iV0rn19NVOM3KLifP
+	V+HWWuKFnfbMEwHPDI9aOpuiv4N/VRbWidDw47CpRAXbvOZiZGVDNUTZqx4qTQ==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+To: =?utf-8?Q?Beno=C3=AEt?= Monin <benoit.monin@bootlin.com>, Ulf Hansson
+ <ulf.hansson@linaro.org>, Rob Herring <robh@kernel.org>, Krzysztof
+ Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, =?utf-8?Q?Th?=
+ =?utf-8?Q?=C3=A9o?= Lebrun
+ <theo.lebrun@bootlin.com>, Thomas Bogendoerfer
+ <tsbogend@alpha.franken.de>, Adrian Hunter <adrian.hunter@intel.com>,
+ Masahiro Yamada <yamada.masahiro@socionext.com>
+Cc: =?utf-8?Q?Beno=C3=AEt?= Monin <benoit.monin@bootlin.com>,
+ linux-mmc@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mips@vger.kernel.org, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH 3/6] MIPS: mobileye: dts: eyeq6h: add the emmc controller
+In-Reply-To: <9b482b7469695b303269dba26b476ac70695dc3a.1750156323.git.benoit.monin@bootlin.com>
+References: <cover.1750156323.git.benoit.monin@bootlin.com>
+ <9b482b7469695b303269dba26b476ac70695dc3a.1750156323.git.benoit.monin@bootlin.com>
+Date: Mon, 30 Jun 2025 09:33:38 +0200
+Message-ID: <87h5zxisz1.fsf@BLaptop.bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] mm/hugetlb: Remove prepare_hugepage_range()
-To: Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Huacai Chen <chenhuacai@kernel.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>,
- loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
- Jason Gunthorpe <jgg@nvidia.com>, David Hildenbrand <david@redhat.com>
-References: <20250627160707.2124580-1-peterx@redhat.com>
-Content-Language: en-US
-From: Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <20250627160707.2124580-1-peterx@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduudduudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefujghffffkgggtgfesthhqredttddtjeenucfhrhhomhepifhrvghgohhrhicuvefngffogffpvfcuoehgrhgvghhorhihrdgtlhgvmhgvnhhtsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpefghfegvdehgfdtjedvtefhvdeikefgteeuhfeukeettefgvdeuueettddtkeegveenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdugeemheehieemjegrtddtmeeffeekieemsgdvtgdvmegstghfjeemlegurgejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdugeemheehieemjegrtddtmeeffeekieemsgdvtgdvmegstghfjeemlegurgejpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehgrhgvghhorhihrdgtlhgvmhgvnhhtsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeduhedprhgtphhtthhopegsvghnohhithdrmhhonhhinhessghoohhtlhhinhdrtghomhdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopehrohgshhesk
+ hgvrhhnvghlrdhorhhgpdhrtghpthhtohepkhhriihkodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheptghonhhorhdoughtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehvlhgrughimhhirhdrkhhonhgurhgrthhivghvsehmohgsihhlvgihvgdrtghomhdprhgtphhtthhopehthhgvohdrlhgvsghruhhnsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepthhssghoghgvnhgusegrlhhphhgrrdhfrhgrnhhkvghnrdguvg
+X-GND-Sasl: gregory.clement@bootlin.com
 
-On 27/06/25 9:37 PM, Peter Xu wrote:
-> Only mips and loongarch implemented this API, however what it does was
-> checking against stack overflow for either len or addr.  That's already
-> done in arch's arch_get_unmapped_area*() functions, even though it may not
-> be 100% identical checks.
-> 
-> For example, for both of the architectures, there will be a trivial
-> difference on how stack top was defined.  The old code uses STACK_TOP which
-> may be slightly smaller than TASK_SIZE on either of them, but the hope is
-> that shouldn't be a problem.
-> 
-> It means the whole API is pretty much obsolete at least now, remove it
-> completely.
+Hello Beno=C3=AEt,
 
-Agreed, this API is now redundant.
+> Add the MMC/SDHCI controller found in the eyeQ6 SoC. It is based on the
+> cadence sd4hc controller and support modes up to HS400 enhanced strobe.
+>
+> Signed-off-by: Beno=C3=AEt Monin <benoit.monin@bootlin.com>
 
-> 
-> Cc: Liam R. Howlett <Liam.Howlett@oracle.com>
-> Cc: Huacai Chen <chenhuacai@kernel.org>
-> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> Cc: Muchun Song <muchun.song@linux.dev>
-> Cc: Oscar Salvador <osalvador@suse.de>
-> Cc: loongarch@lists.linux.dev
-> Cc: linux-mips@vger.kernel.org
-> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-> Reviewed-by: Oscar Salvador <osalvador@suse.de>
-> Acked-by: David Hildenbrand <david@redhat.com>
-> Signed-off-by: Peter Xu <peterx@redhat.com>
+As the binding had been accpeted and merged:
+
+Acked-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+
+Thanks,
+
+Gregory
+
+
 > ---
->  arch/loongarch/include/asm/hugetlb.h | 14 --------------
->  arch/mips/include/asm/hugetlb.h      | 14 --------------
->  fs/hugetlbfs/inode.c                 |  8 ++------
->  include/asm-generic/hugetlb.h        |  8 --------
->  include/linux/hugetlb.h              |  6 ------
->  5 files changed, 2 insertions(+), 48 deletions(-)
-> 
-> diff --git a/arch/loongarch/include/asm/hugetlb.h b/arch/loongarch/include/asm/hugetlb.h
-> index 4dc4b3e04225..ab68b594f889 100644
-> --- a/arch/loongarch/include/asm/hugetlb.h
-> +++ b/arch/loongarch/include/asm/hugetlb.h
-> @@ -10,20 +10,6 @@
->  
->  uint64_t pmd_to_entrylo(unsigned long pmd_val);
->  
-> -#define __HAVE_ARCH_PREPARE_HUGEPAGE_RANGE
-> -static inline int prepare_hugepage_range(struct file *file,
-> -					 unsigned long addr,
-> -					 unsigned long len)
-> -{
-> -	unsigned long task_size = STACK_TOP;
-> -
-> -	if (len > task_size)
-> -		return -ENOMEM;
-> -	if (task_size - len < addr)
-> -		return -EINVAL;
-> -	return 0;
-> -}
-> -
->  #define __HAVE_ARCH_HUGE_PTE_CLEAR
->  static inline void huge_pte_clear(struct mm_struct *mm, unsigned long addr,
->  				  pte_t *ptep, unsigned long sz)
-> diff --git a/arch/mips/include/asm/hugetlb.h b/arch/mips/include/asm/hugetlb.h
-> index fbc71ddcf0f6..8c460ce01ffe 100644
-> --- a/arch/mips/include/asm/hugetlb.h
-> +++ b/arch/mips/include/asm/hugetlb.h
-> @@ -11,20 +11,6 @@
->  
->  #include <asm/page.h>
->  
-> -#define __HAVE_ARCH_PREPARE_HUGEPAGE_RANGE
-> -static inline int prepare_hugepage_range(struct file *file,
-> -					 unsigned long addr,
-> -					 unsigned long len)
-> -{
-> -	unsigned long task_size = STACK_TOP;
-> -
-> -	if (len > task_size)
-> -		return -ENOMEM;
-> -	if (task_size - len < addr)
-> -		return -EINVAL;
-> -	return 0;
-> -}
-> -
->  #define __HAVE_ARCH_HUGE_PTEP_GET_AND_CLEAR
->  static inline pte_t huge_ptep_get_and_clear(struct mm_struct *mm,
->  					    unsigned long addr, pte_t *ptep,
-> diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
-> index 00b2d1a032fd..81a6acddd690 100644
-> --- a/fs/hugetlbfs/inode.c
-> +++ b/fs/hugetlbfs/inode.c
-> @@ -179,12 +179,8 @@ hugetlb_get_unmapped_area(struct file *file, unsigned long addr,
->  
->  	if (len & ~huge_page_mask(h))
->  		return -EINVAL;
-> -	if (flags & MAP_FIXED) {
-> -		if (addr & ~huge_page_mask(h))
-> -			return -EINVAL;
-> -		if (prepare_hugepage_range(file, addr, len))
-> -			return -EINVAL;
-> -	}
-> +	if ((flags & MAP_FIXED) && (addr & ~huge_page_mask(h)))
-> +		return -EINVAL;
->  	if (addr)
->  		addr0 = ALIGN(addr, huge_page_size(h));
->  
-> diff --git a/include/asm-generic/hugetlb.h b/include/asm-generic/hugetlb.h
-> index 3e0a8fe9b108..4bce4f07f44f 100644
-> --- a/include/asm-generic/hugetlb.h
-> +++ b/include/asm-generic/hugetlb.h
-> @@ -114,14 +114,6 @@ static inline int huge_pte_none_mostly(pte_t pte)
->  }
->  #endif
->  
-> -#ifndef __HAVE_ARCH_PREPARE_HUGEPAGE_RANGE
-> -static inline int prepare_hugepage_range(struct file *file,
-> -		unsigned long addr, unsigned long len)
-> -{
-> -	return 0;
-> -}
-> -#endif
-> -
->  #ifndef __HAVE_ARCH_HUGE_PTEP_SET_WRPROTECT
->  static inline void huge_ptep_set_wrprotect(struct mm_struct *mm,
->  		unsigned long addr, pte_t *ptep)
-> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-> index c6c87eae4a8d..474de8e2a8f2 100644
-> --- a/include/linux/hugetlb.h
-> +++ b/include/linux/hugetlb.h
-> @@ -359,12 +359,6 @@ static inline void hugetlb_show_meminfo_node(int nid)
->  {
->  }
->  
-> -static inline int prepare_hugepage_range(struct file *file,
-> -				unsigned long addr, unsigned long len)
-> -{
-> -	return -EINVAL;
-> -}
-> -
->  static inline void hugetlb_vma_lock_read(struct vm_area_struct *vma)
->  {
->  }
+>  arch/mips/boot/dts/mobileye/eyeq6h.dtsi | 22 ++++++++++++++++++++++
+>  1 file changed, 22 insertions(+)
+>
+> diff --git a/arch/mips/boot/dts/mobileye/eyeq6h.dtsi b/arch/mips/boot/dts=
+/mobileye/eyeq6h.dtsi
+> index dabd5ed778b7..bbd463435ad6 100644
+> --- a/arch/mips/boot/dts/mobileye/eyeq6h.dtsi
+> +++ b/arch/mips/boot/dts/mobileye/eyeq6h.dtsi
+> @@ -109,6 +109,28 @@ olb_east: system-controller@d3358000 {
+>  			clock-names =3D "ref";
+>  		};
+>=20=20
+> +		emmc: sdhci@d8010000 {
+> +			compatible =3D "mobileye,eyeq-sd4hc", "cdns,sd4hc";
+> +			reg =3D <0 0xd8010000 0x0 0x1000>;
+> +			interrupt-parent =3D <&gic>;
+> +			interrupts =3D <GIC_SHARED 91 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks =3D <&olb_south EQ6HC_SOUTH_DIV_EMMC>;
+> +			bus-width =3D <8>;
+> +			max-frequency =3D <200000000>;
+> +			mmc-ddr-1_8v;
+> +			sd-uhs-ddr50;
+> +			mmc-hs200-1_8v;
+> +			mmc-hs400-1_8v;
+> +			mmc-hs400-enhanced-strobe;
+> +
+> +			cdns,phy-input-delay-legacy =3D <4>;
+> +			cdns,phy-input-delay-mmc-highspeed =3D <2>;
+> +			cdns,phy-input-delay-mmc-ddr =3D <3>;
+> +			cdns,phy-dll-delay-sdclk =3D <32>;
+> +			cdns,phy-dll-delay-sdclk-hsmmc =3D <32>;
+> +			cdns,phy-dll-delay-strobe =3D <32>;
+> +		};
+> +
+>  		olb_south: system-controller@d8013000 {
+>  			compatible =3D "mobileye,eyeq6h-south-olb", "syscon";
+>  			reg =3D <0x0 0xd8013000 0x0 0x1000>;
 
-A small nit - there is a now stale in code comment still referring
-to prepare_hugepage_range() in hugetlbfs_file_mmap().
-
-Otherwise LGTM.
-
-Reviewed-by: Anshuman Khandual <anshuman.khandual@arm.com>
+--=20
+Gr=C3=A9gory CLEMENT, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
