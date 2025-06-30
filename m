@@ -1,403 +1,364 @@
-Return-Path: <linux-mips+bounces-9548-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9549-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26C1FAEDF3E
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Jun 2025 15:36:29 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2010AEE0A0
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Jun 2025 16:27:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 550061885E74
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Jun 2025 13:36:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0AB81888281
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Jun 2025 14:27:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EA5028B3F6;
-	Mon, 30 Jun 2025 13:36:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8207928C014;
+	Mon, 30 Jun 2025 14:26:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="1Ck77Bxu";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="OAgRftnr"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="Glpi3wiy";
+	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="KkFmNRj3"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fhigh-b5-smtp.messagingengine.com (fhigh-b5-smtp.messagingengine.com [202.12.124.156])
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 802AA2CCC9;
-	Mon, 30 Jun 2025 13:36:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.156
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751290582; cv=none; b=oFr9C99ldm3VmZ1pQRZ/Alu2w0DnflcWOPkT8cLLE9TQSYW33/v2bq8PNzLZWlB4NkbbUH600qnTEpUiOWU+chGY9s1UQquGKe5LXY3o92J3XAhUyKggGlu3MunPWFOarlbgwv4wphi1tYflldqeFfUUaLlnFWErSvkzEk5SQVo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751290582; c=relaxed/simple;
-	bh=Pb4IoNggSqEdmedEpRIpUE25EINncePR4G0HuxwQTSA=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=PrSY4vAUjVe+B9Bqlws3wJzQ0gpJscVbpOUMlr/FskLLbN6/MNdfCVfJUu5UDDUxrhdiMBWmKAYOyTVzyUgAZjf6xn/hoiavAHrB5ccVW/TBjCITLGW1dQpzZpbMbNloTG6MSnh/NXjY/w22Rv09RLkxolJp7QkldzLtg7wc2jE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=1Ck77Bxu; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=OAgRftnr; arc=none smtp.client-ip=202.12.124.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id AB4B17A028A;
-	Mon, 30 Jun 2025 09:36:18 -0400 (EDT)
-Received: from phl-imap-08 ([10.202.2.84])
-  by phl-compute-06.internal (MEProxy); Mon, 30 Jun 2025 09:36:19 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1751290578;
-	 x=1751376978; bh=sEJ54Vv0MKysQVh8ZZThGPEIYeoAzfDcUt3/WS4I3aY=; b=
-	1Ck77Bxu+qRsqjIc1GeGMqiDluXPHlmc+u3HsUpCc+yE/m+C059TvHvzdeDfTZCg
-	DjiqvmmRwA0iu2Z6E3vMmDpRxggdAYq9a3cQGdL1IAniwdVTeXXU9DCAP0tEF3ZG
-	7vP4LQ+5TXAcaa6YJyx+XPcqaqutHaoxZU1QGv4A2RUcdWEKiwYL3C2buhuAJeY9
-	53Rtrtb4gokLy7alPCtC5KzHJC/xyDO3o8wEtdWf/Iad7rLzfg6AjlQLSyoKzn+O
-	o13WYWe/ibIwpZH7BMeC9qav3wED/iUmkwbVvpZkaUt/N7LadKdF/YLpr4DSofCh
-	frtgWjzOvovE6apgC7Kt7A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1751290578; x=
-	1751376978; bh=sEJ54Vv0MKysQVh8ZZThGPEIYeoAzfDcUt3/WS4I3aY=; b=O
-	AgRftnrSCElHAYl69PJH2WAxdW0C+xo13S2wIHkPj75qtg+c8mmcEwkvCFToqJ7O
-	EH6AL51wdbAeiP94nXWQtZAWm72XlxFLvuVKEooVBkZlBvwHJZAXoCg72QHA2ndj
-	XVfwgAOSHEYGCbwp4A5KStMEWhKFYTCJrSHXJ1A5IDhMDxCh6x1+/OkP+hrHadLR
-	JldCChL0jabESvngrlVjP7VrA3QjKOMn48mLvi3nuxV1qvw9tvW/pWleiup6hqfU
-	zY+ouVL6BtKrVRSq6fyXLt4gVvCLR2z7JflbsYm6HS5S715o6oiPIHfdpHqUxj9F
-	o9Pla5umPveFZtTMKHcpw==
-X-ME-Sender: <xms:ypJiaAGUKc9juD2ygJc6gAQDRDDb69IhFLXjikqdogHKGGbG6WVrOA>
-    <xme:ypJiaJUGjybum50JJYy259ashIWukFEOdIFn0F88VPQAomV-jQSC25ZCq-UrYqQnX
-    nYwIowVR-TBvEpVQOI>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduudekfecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthhqredtredtjeenucfhrhhomhepfdflihgrgihu
-    nhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
-    ggtffrrghtthgvrhhnpeejheefuddvtdfggfdvffekteehhfelgfdvvedvkeeuffefkeeh
-    heegvefhveetjeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmpdhnsggprhgtphht
-    thhopeeffedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepthhssghoghgvnhguse
-    grlhhphhgrrdhfrhgrnhhkvghnrdguvgdprhgtphhtthhopehlihhnuhigsegrrhhmlhhi
-    nhhugidrohhrghdruhhkpdhrtghpthhtoheptgihrhhilhhlvgdrphhithgthhgvnhesrg
-    htmhgvlhdrtghomhdprhgtphhtthhopehhshhkihhnnhgvmhhovghnsegrthhmvghlrdgt
-    ohhmpdhrtghpthhtohepghhrvghgohhrhidrtghlvghmvghnthessghoohhtlhhinhdrtg
-    homhdprhgtphhtthhopehthhgvohdrlhgvsghruhhnsegsohhothhlihhnrdgtohhmpdhr
-    tghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpd
-    hrtghpthhtoheprhgrfhgrlhhosegtrgguvghntggvrdgtohhmpdhrtghpthhtohepphgr
-    lhhmvghrsegurggssggvlhhtrdgtohhm
-X-ME-Proxy: <xmx:ypJiaKIDjCkyusFfkgBNhMk7LFXNmT2o5Ag8yvPSvsmTvlLeZDbKjw>
-    <xmx:ypJiaCGEHJZPw4N69DXz1l8BumTrqz_MAivU6Za3Vemr2WQqzvdbNA>
-    <xmx:ypJiaGWsiTEyymJTuPjZLZFpQUpXPG1ze56EMEjdaeMBqRKh8oOHOQ>
-    <xmx:ypJiaFPBg8zesaEEF8vBWRkELBv3dpBarBlIvB2si3vDbZEJgwwVug>
-    <xmx:0pJiaPk5vhhp_Whm7tXgy9jrXCmp5NUUyrActcYcLCuoup2TS2gBQij_>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id C28682CE0071; Mon, 30 Jun 2025 09:36:10 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A351E28BAB5;
+	Mon, 30 Jun 2025 14:26:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.165.32
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751293617; cv=fail; b=c8b5Q1fAOvK0gwzK3Yqv068vv5n4emKa5iXyq5MG8IvSyU6tOIKwyMa6LCBIqvRTbyd0s439mr7TmrDkTeqIGraVxFAsEGfZPN6n/qs0DVJ+ZfxyHZNJxD7LQGLV5ZsTp+v6ALbugXGKNtD2IfSMYeoKW7tM8wkG3Vm2UenW3bg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751293617; c=relaxed/simple;
+	bh=Ofu4EEvWYM5V4Vh8zh5kuIRpddH7AobLEHXbs/YeqKk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=AGG1ihYgGGi976oWcf604KKlSPS6HiHFzt3VIWwmerX5xkyZmGkufViHGsvpFo5TL+yDM+aczBLxiRDpsozO7eNkZ/ng5yOl+AgVzFJZdFmViNKDWonSOpwPq/oaU/lj2mx5kCWb7G3sOMGZlf+uMvL1e4hQZTNiYNHuhZadoB4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=Glpi3wiy; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=KkFmNRj3; arc=fail smtp.client-ip=205.220.165.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 55UDffNg017350;
+	Mon, 30 Jun 2025 14:26:33 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=corp-2025-04-25; bh=vdTKdv8jxM7eOEb3fa
+	aSKTYFFcen844A5gf4Zoj48F8=; b=Glpi3wiy/MJ6NLqb32+3pnVQFN3PJOedB5
+	9WOJ5cVm0pW0nPFdcVfLEkdh3vZ7hs/mgDkzZ35EC2EEXAFf48233TTwezeEcsqt
+	1xBIXLUpsEwSnzaXFI/Nq+tXOKA37rbVkVXaRY1/zbZBt7wiJ/V9MRtAxeYVPEnX
+	htzJTOldGckaHXPSWkkoTBi1j6d1cCh5d/t+XT5edFICuM9Oe8qG19Ag0DE5qqkO
+	sbUQ8Qin/JIPM8of3Mx6quXzxG9IH14G2qxzMAAo5DPmF4/Z9kQVDJZv4TJtaw5/
+	QN7r7IImngKhAIRZSjiIJNfeL9HH9fTFB+JD5S1QmDCSyZtzeJbA==
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 47j704an7n-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 30 Jun 2025 14:26:33 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 55UE0SMD005961;
+	Mon, 30 Jun 2025 14:26:19 GMT
+Received: from nam10-mw2-obe.outbound.protection.outlook.com (mail-mw2nam10on2047.outbound.protection.outlook.com [40.107.94.47])
+	by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 47j6ufnc84-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 30 Jun 2025 14:26:19 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=H0/h098BdSHhJx9r+FXPl1kWaerRFojSsWCGz6ZorT6UOu1ukinZa2JWA56Gpjv0Ed9MCyTJy8FE6DKgaNAe6FdoXQLmUN0lr3S834l93OHftDfYWBpcsnUzu+gYmbFmQJ/nTXa1SLD3M3wPCMIlJEC7jFLWgVGmAc/+9vxXEiF+U7a4uY1QVigHNprBA5DEt9HJGc5pMUtbHcQg7yhPSvD5Dy1o5YUb9KRVzaD+hL7E2JKJpjeyis8Iury8bVP2k5SYZLm4lvs6tddLG2xGSvsgBdV7DzN4c6J/W7ftv09bCt8CbXZ/jG5AY3QFcg8/vDj0pqwKuqGdjPsyS4cSNQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vdTKdv8jxM7eOEb3faaSKTYFFcen844A5gf4Zoj48F8=;
+ b=jZw7KaiGMl7Q8TzSZVl0hx0SXey2JrTKilDaCv19aaFzegWobK75briEbfxZzq6S5nlpcu5++7mKGdPMAWhGFhBlUC9NeF/b2Fge4sLfob46arhCHb1M15RIqceOPOKbNfpla+XtA5Ij0iZUYOU9crQK22RoxwqWVgIg2sjC/bT+lkZ+kGLwp40RYvRFL/8p4ov7sg10/UgE33x9Zi2tuTfvRPCzW1O10iw7eUvNAAM8GdKel/V7R1ol8ZVWNyAMJ7RZspcm3WD9PnxUMpFc5h5vfelXydfR2Q1F1fLYekWwZmOGtdPMidhcWD1ghhYgsBBp5WHPSgKLtq8vPHVKsw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vdTKdv8jxM7eOEb3faaSKTYFFcen844A5gf4Zoj48F8=;
+ b=KkFmNRj3xla2tStX0nHX7/10jfDD8teG5HUZpAqLaosJ5F+SdFIvCkLIVotlmJwb5jkXcgtuOZSFAmx6HRaZtxrH+q2NqNoJGTiXr3X5/35Y42R15K4abTDTBYg5avpY4drUez4S5o6Af0xlbCt5aj7TI5oyOfHgC+xm0y15ToE=
+Received: from PH0PR10MB5777.namprd10.prod.outlook.com (2603:10b6:510:128::16)
+ by CH3PR10MB6689.namprd10.prod.outlook.com (2603:10b6:610:153::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.32; Mon, 30 Jun
+ 2025 14:26:16 +0000
+Received: from PH0PR10MB5777.namprd10.prod.outlook.com
+ ([fe80::75a8:21cc:f343:f68c]) by PH0PR10MB5777.namprd10.prod.outlook.com
+ ([fe80::75a8:21cc:f343:f68c%6]) with mapi id 15.20.8880.015; Mon, 30 Jun 2025
+ 14:26:16 +0000
+Date: Mon, 30 Jun 2025 10:26:13 -0400
+From: "Liam R. Howlett" <Liam.Howlett@oracle.com>
+To: Peter Xu <peterx@redhat.com>
+Cc: linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Muchun Song <muchun.song@linux.dev>,
+        Oscar Salvador <osalvador@suse.de>, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH] mm/hugetlb: Remove prepare_hugepage_range()
+Message-ID: <jjwzfnbz7uzuniwd2qc6prfg4sboa7dnjswnbeotjbaqngbs6s@2y42bsqcjpv6>
+Mail-Followup-To: "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Peter Xu <peterx@redhat.com>, linux-kernel@vger.kernel.org, linux-mm@kvack.org, 
+	Andrew Morton <akpm@linux-foundation.org>, Huacai Chen <chenhuacai@kernel.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Muchun Song <muchun.song@linux.dev>, 
+	Oscar Salvador <osalvador@suse.de>, loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
+	Jason Gunthorpe <jgg@nvidia.com>, David Hildenbrand <david@redhat.com>
+References: <20250627160707.2124580-1-peterx@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250627160707.2124580-1-peterx@redhat.com>
+User-Agent: NeoMutt/20250404
+X-ClientProxiedBy: YT4PR01CA0317.CANPRD01.PROD.OUTLOOK.COM
+ (2603:10b6:b01:10a::10) To PH0PR10MB5777.namprd10.prod.outlook.com
+ (2603:10b6:510:128::16)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: T1801f58283c6cf22
-Date: Mon, 30 Jun 2025 14:35:50 +0100
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- "Andrew Lunn" <andrew+netdev@lunn.ch>,
- "David S . Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>, "Rob Herring" <robh@kernel.org>,
- "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
- "Conor Dooley" <conor+dt@kernel.org>,
- "Nicolas Ferre" <nicolas.ferre@microchip.com>,
- "Claudiu Beznea" <claudiu.beznea@tuxon.dev>,
- "Paul Walmsley" <paul.walmsley@sifive.com>,
- "Palmer Dabbelt" <palmer@dabbelt.com>,
- "Albert Ou" <aou@eecs.berkeley.edu>, "Alexandre Ghiti" <alex@ghiti.fr>,
- "Samuel Holland" <samuel.holland@sifive.com>,
- "Richard Cochran" <richardcochran@gmail.com>,
- "Russell King" <linux@armlinux.org.uk>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>,
- "Gregory CLEMENT" <gregory.clement@bootlin.com>,
- "Cyrille Pitchen" <cyrille.pitchen@atmel.com>,
- "Harini Katakam" <harini.katakam@xilinx.com>,
- "Rafal Ozieblo" <rafalo@cadence.com>,
- "Haavard Skinnemoen" <hskinnemoen@atmel.com>,
- "Jeff Garzik" <jeff@garzik.org>
-Cc: netdev@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>,
- "Tawfik Bayouk" <tawfik.bayouk@mobileye.com>
-Message-Id: <984c1bea-7020-4121-9fea-7d657a5e8da1@app.fastmail.com>
-In-Reply-To: <20250627-macb-v2-16-ff8207d0bb77@bootlin.com>
-References: <20250627-macb-v2-0-ff8207d0bb77@bootlin.com>
- <20250627-macb-v2-16-ff8207d0bb77@bootlin.com>
-Subject: Re: [PATCH net-next v2 16/18] MIPS: mobileye: add EyeQ5 DMA IOCU support
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH0PR10MB5777:EE_|CH3PR10MB6689:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0da75527-63ff-4eac-1469-08ddb7e212dc
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|7416014|376014|366016|1800799024|7053199007;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?nFHPo0Qopgpzp7G1Av/zKSkQN5GXJu2YhzdxJ681H8t22r09bM9CkPpxPHLg?=
+ =?us-ascii?Q?PhGunf7tiUEJxg8wz/fQ98OxgGazHmlOlvclCEZ5QNkekoz/gyd8sQAMkNIu?=
+ =?us-ascii?Q?vk54Uf5EWil3tNp7x3cq1DNkrJ2zex3FzxiLy13OhGXUXaB8udWfvs1K9FiE?=
+ =?us-ascii?Q?zSjesbPWWYUhCQDKOXw4JVTbn0OG2ktQsVylGBQqkAO2QG1E19zHeyxewRlX?=
+ =?us-ascii?Q?ZPI8Wu1YSZ6afAywZBofrIn0xw8qc6N6t+BkVzNYQRRHApgWGVvQoO03EvLE?=
+ =?us-ascii?Q?kYMUPzPPr4M9MCxuIW4nd/iZRrkcVI7aCE61IVZJenLWk8vf7JkefhjZLSLM?=
+ =?us-ascii?Q?u1AK5kU1z+OVs9OxG8IIAm+G1wArdPltWu64Ya4fGB1XqiRupt+XAjyF3v2L?=
+ =?us-ascii?Q?GxDuio24LgAWt2sOsoSFtQnBesyLsWuRwc5bjKmi8b5CaV6dQ6MlLo5MDX3J?=
+ =?us-ascii?Q?8+x3ccQo+gKVeWqnkvVNoZ8BkoeZ5I13jF4W7bD270VsDQqsxVkEp8SbKKR7?=
+ =?us-ascii?Q?VRmGB/yVpAp70VaaHF71UGp5uUWwUXgrvETLzWrdg5CsIww/s7BCpky5/zzf?=
+ =?us-ascii?Q?PpX8JBCUWJ/3JRvftZFS6KNdsFVxYxdxbtp2kyIDsGfIe1xaV4XddFH3kZQr?=
+ =?us-ascii?Q?SFK4Ttbq07LjXbDc9WIN0pIFwWoVfen4p9iM2O8Vq3TmNhHlTjqxN6B7rK34?=
+ =?us-ascii?Q?Gu8q+Cp9mdSU4GssfjR2vXAoDCiQMeIYXK9v1va8Yd6cf/2Ar5321O85sNKw?=
+ =?us-ascii?Q?hB0llqtGfAfPVClUjkDU3oPNMqdqkh2Tb61OpVP4L65nHxnSU7PcqWwINdAO?=
+ =?us-ascii?Q?+FnbmHKltxd43UocGpdD39cbc82f0aokju3TyGwz7cOeNu7lPMD3wIcI596p?=
+ =?us-ascii?Q?0Xlz/fx2c89fNwRCi/iYZk/LVOn0uO8/yIxpdeUn7kgvDzg3V2V39Qy2aGyF?=
+ =?us-ascii?Q?b5orvXIz3JQA+QA3Nh+YkbZnWPUa6xq2rC3POrXaOC5+ry8ymFzu/F5tKqa7?=
+ =?us-ascii?Q?vi75p9tbxYWo9j02il2WQOKDUkV+B0NiLEuo64GbVgcdJTBEbHHZKoyQ/z3o?=
+ =?us-ascii?Q?o7ziou98Uvo/Zz9DWW2za0m8dIHvjIWBWg1b+ZGjLJLW6zsGPFjuBZZOGmyZ?=
+ =?us-ascii?Q?af4B4S6rfjiv9G4cAdUU4jaJXJnaLMOfJTqWXDTnNpCl+lnLFrtRLPp1Jwl+?=
+ =?us-ascii?Q?fRWrcv3A5Dw0I/22KZSmmBphpC3ieH/ljnFEZfSjZrWjI0kHBWn3LYy+gmns?=
+ =?us-ascii?Q?kC11vvkHL6XC+OaNOc41mkaG1hIRLoqMjnI02Sfygx5fR31xEqIMITWsyh7T?=
+ =?us-ascii?Q?Zt/hwEHYNfhVadZhGsyH6UCp7t9KtuY/dgvYivdhqQKovs/RdwA0Bi91gM11?=
+ =?us-ascii?Q?z3EWZp55ExLtOsUFyeN+KwFE3geyitmJiStjG4yMy/4Wwi/39a99y+ZgZFRV?=
+ =?us-ascii?Q?D8dBu0K9l+E=3D?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH0PR10MB5777.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(366016)(1800799024)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?j9Ww4mhNY+ffUOsqarc9UmvFj500Z3hmEWKp+I+m9OZYgLN/XFoElfniC/2i?=
+ =?us-ascii?Q?Jkqc5YjL0/2OakfxMxwjuoeNwL+GZvYBkqShnc7CVkBJ+tWBdLPhjjNQ/QBE?=
+ =?us-ascii?Q?Ns6aRObCJ9L3t3hQ3c9hstZD4Nsvy4yNqZNMpfOyYmqHDtm6SnFIN2XBOFXB?=
+ =?us-ascii?Q?O/3GvAt13POg2w1LNfMAniS08lZVAPoY3uQwGXav20F8VxOmoyFzUR+0mODO?=
+ =?us-ascii?Q?d+ARDb3avAoD8ZAEEqjTcN1PKt97qWF/gGGithW8lxGHn6LucIbawTgppg2S?=
+ =?us-ascii?Q?uJ5TO+Zt1YrsMq3sFik+oHNIdnTxYa7l1KSlYQJmv/yckebyG/cGk828WA6X?=
+ =?us-ascii?Q?zMh2regvs6LpnttkCjda7IkGP4DzImYrtfNaodu3q1dAHopA370OFjjZL+6o?=
+ =?us-ascii?Q?oLBK/ZPkuVBlf/Omm7503fL/6yoA1LIKf8Dr8uIHgVm8jtamhSu58ywsRFw9?=
+ =?us-ascii?Q?xeQA8bgd1uB6Obl1qSfSfIIYx/0zWV3CmEAbDin/3dVAkY1b8ta/VoKtYb6f?=
+ =?us-ascii?Q?A5ps9TtfOmneW1c8wBZ/G8C0J9QYBfCQ5LW0QDCgcGlNpeKBaBFdCiu/YuPv?=
+ =?us-ascii?Q?yhRUdMDG6PnqvKtOrbwVb5kgfExwCEdB6aQ6oHAfCQrgqNvTiQLSlTTChL1u?=
+ =?us-ascii?Q?+iMsbMROTuhww9Z8sqvTaf3kTggd99UpvWjfmsU8rKcczCIGA87AuonagtOH?=
+ =?us-ascii?Q?i7GRc3upLXVJluhDNQTSouKOBETp36oxh+058WOeDj+WMkfVrhb/yyoRH5G5?=
+ =?us-ascii?Q?aZakp1qLCb535/nlgKMHoH11GbOYv+5g4v9wxnggjP1WPejB3uvUc2XlgMeM?=
+ =?us-ascii?Q?IvyAGjboV+AuGOKaWyWvMzPy2bWVrmu4lZFAS4oeLLc11kFh8PqsyHfWCh6n?=
+ =?us-ascii?Q?3MW5kUSPBxhJPOP1VVw6HvCQUOiFm1RNmissbl5IDrpxly/gIAbfxgH6DnRv?=
+ =?us-ascii?Q?ZPDvjlC/WBtDKU/czw4XJ+fgkqeIyZBnCCL6bVGqe/01FI6wxeKOnGKIN5u5?=
+ =?us-ascii?Q?bTuVkhMCZ/9H+Iecn/ENw9JVZmUkxXU6W/B/KsgPOsXzy4GHAPG2dbvzbYx4?=
+ =?us-ascii?Q?EcNnyxRwZ1G679PdhrogOVNrqGjl3EKdGjFOWnc72aqabOyDk8MsxeZj9Zbl?=
+ =?us-ascii?Q?rtgQCR7MDPQfIXscP8O3XFUCqObxzLrDvnReTpRuY+1lzTmP0ahyRcrWC5IF?=
+ =?us-ascii?Q?+Gu4M1tzv08m6W/3W5o9cmZhbDpOP5abJPeFF57ULFVkLi7wEqiQAbyx3RgE?=
+ =?us-ascii?Q?/XklMLKP9xbs6g9feUj/UTIWrNb7UH88ioRiTTXh5CmJE9WagAs+/YYACSRK?=
+ =?us-ascii?Q?hySGkfL2mk8BkoyA+Uj/x44s0rt8yAhNeIK029iCuItVbUbsP+dGU9ryPjFQ?=
+ =?us-ascii?Q?SkDNEX08jHH/6JrcS0ig1Gd25bXlmr9VqTCd1mV18qlr0sibDH7JTiFJpcie?=
+ =?us-ascii?Q?je1es12dWj7Q2bIe45qDtPniLW9TgB2psvoYqafdos4I/u+2ENa7bC2ZSUan?=
+ =?us-ascii?Q?Dztv4fD4T1+s3vGaNzf/Xzz5aACaM6TIb5qcFGqxsq7StFGXARUOaSSxT2mj?=
+ =?us-ascii?Q?1UWuvw/J4OzBI0AWRXjXqQGLTaJEuTyZ5624y2H7?=
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
+	jCr7zQsc+1yvQZbs/a6j/OigToCJULO8+k+WTti8jXLAr6u8DtIT/9Eg8X/vcxoGUgzG/yeyYjo0/dZF1kM1XTwE+P4pXLgKMNxL+xn+ZiFWEtP+tD+T/0+hCsPSzdDBxnJpyVCouyY5XgbcvRq7AU6QNZhRT3TESM3hR+sNKFviImvAAFUveMytIq3AgKs3hw+O7suoCr2A+pS14JJpg5A90rrAydHzTSKGyjtA3DOhdw091XVwx4GAdl1OkYYvhvzckB0vY+W14XK0RBqkryJODe3BaqhvYPQrBBpTs8uYmjghleHhAoe4hiUc4fXy7WCirsbI5aYcbHtyKcTCgz5qXQUtfVIKKuFRXZVsCBqla4VcUDGgn3APl2YHtKiSn1Yi1RQ2zTztqVmoSab69fwYyRdmUAaLoPZfn3HK4zicdoIbBHSYRLVcqqYRIhEIunV3lunhGULotEMaOlOOx3FZO6cAR6ARtBYaatyW1IBnmmmo7sgEK698PutKtqJj/mDKxiRW7WUvRwAIPQ5ZbXnGxLk0yhL6gUlVUpQALOPXES6sPeWFqyzG1FfTOv3TrNMerp9W6KMID1X9uv302FwdmKLgN7nEfPUZGwUwuVI=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0da75527-63ff-4eac-1469-08ddb7e212dc
+X-MS-Exchange-CrossTenant-AuthSource: PH0PR10MB5777.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 30 Jun 2025 14:26:16.5012
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: EvanJgt43VUmzC28gXRoc4j0+F2b2x2qZzWXIp9kckNIuzhzAzFjQJPh6PR1zZJzx4Oz0k99q/uYd/xugpX9qw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR10MB6689
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
+ definitions=2025-06-30_03,2025-06-27_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 mlxlogscore=999 adultscore=0
+ bulkscore=0 malwarescore=0 spamscore=0 phishscore=0 suspectscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2505160000 definitions=main-2506300118
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNjMwMDExOSBTYWx0ZWRfX7mCQ8oVFjzqB gwpB71RhLWQMhn72kPSvQLl78o0Y63n7U6CQ2jdo4OlnWQ+51k5Nldq5W+i7MTF8w6amT3JQaxU OfKhYQgaykw0MnIYXgLod97cWiPUP/8SnyC3nMhaJVj6GBzkluCv9VdKWBrENMuRFyun1tb5lFZ
+ Mj5y6+2WQEAxsCfTYxGL+U21Q92UBvGvB1norubkc5XoZJzwWMIIRn4OOcIV+n79ZNyI9q21azU BEdee/2z+V0n+SYufe5Z7IGQrB1R+UeP7qmXVlYXY78NgcaXdqVxYaT+hWatWDyGbGHaZg2hmMh 0JiVAuid7EX4MEbPPqtuUGLAKMTgGf3hcUAFnlLR5UdFIpO0je+qSUhX9rNlgguqHkmSNO1kkMk
+ v5YRPAE5j0hWfwuCF1gmZcfi6cY7ERZ4HcHMU1ZQoRMGk7ay4bVeE7OPErnHLmk5s0Edv917
+X-Authority-Analysis: v=2.4 cv=LcU86ifi c=1 sm=1 tr=0 ts=68629e99 b=1 cx=c_pps a=zPCbziy225d3KhSqZt3L1A==:117 a=zPCbziy225d3KhSqZt3L1A==:17 a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19
+ a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=kj9zAlcOel0A:10 a=6IFa9wvqVegA:10 a=GoEa3M9JfhUA:10 a=20KFwNOVAAAA:8 a=yPCof4ZbAAAA:8 a=VwQbUJbxAAAA:8 a=Ikd4Dj_1AAAA:8 a=YDmsJLAXTuk0YopicaMA:9 a=CjuIK1q_8ugA:10 cc=ntf awl=host:13215
+X-Proofpoint-GUID: wVo01pxcPl4u3o6AyYRtXj5ACeX8gOKL
+X-Proofpoint-ORIG-GUID: wVo01pxcPl4u3o6AyYRtXj5ACeX8gOKL
 
+* Peter Xu <peterx@redhat.com> [250627 12:07]:
+> Only mips and loongarch implemented this API, however what it does was
+> checking against stack overflow for either len or addr.  That's already
+> done in arch's arch_get_unmapped_area*() functions, even though it may not
+> be 100% identical checks.
+> 
+> For example, for both of the architectures, there will be a trivial
+> difference on how stack top was defined.  The old code uses STACK_TOP which
+> may be slightly smaller than TASK_SIZE on either of them, but the hope is
+> that shouldn't be a problem.
+> 
+> It means the whole API is pretty much obsolete at least now, remove it
+> completely.
 
+Thanks for rewording this change, apologies for the late response on
+your change log.  I think it's fine.
 
-=E5=9C=A82025=E5=B9=B46=E6=9C=8827=E6=97=A5=E5=91=A8=E4=BA=94 =E4=B8=8A=E5=
-=8D=8810:09=EF=BC=8CTh=C3=A9o Lebrun=E5=86=99=E9=81=93=EF=BC=9A
-> Both Cadence GEM Ethernet controllers on EyeQ5 are hardwired through C=
-M3
-> IO Coherency Units (IOCU). For DMA coherent accesses, BIT(36) must be
-> set in DMA addresses.
+I think the only meaningful difference is that the failure would have
+aborted entirely if stack_top - len < addr, but with this change it will
+attempt to search in the opposite direction.  Unless I missed something?
 
-Hi Th=C3=A9o,
+I suspect that this wasn't meant to happen in the first place anyways,
+and I bet there are no tests for it and no real-world harm in changing
+an error scenario into a potential successful mapping.
 
-Just quick question, it seems like this special driver is only applying a
-fixed offset (1 << 36) to the DMA physical address, can we achieve that =
-with dma-ranges
-property in DeviceTree?
+Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
 
-I belive:
-```
-dma-coherent;
-             # Bus addr       # Phys  # Size
-dma-ranges =3D <0x10 0x00000000 0x0 0x0 0x10 0>;
-```
-
-Will do the job.
-
-Thanks
-Jiaxun
->
-> Implement that in platform-specific dma_map_ops which get attached to
-> both instances of `cdns,eyeq5-gem` through a notifier block.
->
-> Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> 
+> Cc: Liam R. Howlett <Liam.Howlett@oracle.com>
+> Cc: Huacai Chen <chenhuacai@kernel.org>
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: Muchun Song <muchun.song@linux.dev>
+> Cc: Oscar Salvador <osalvador@suse.de>
+> Cc: loongarch@lists.linux.dev
+> Cc: linux-mips@vger.kernel.org
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> Reviewed-by: Oscar Salvador <osalvador@suse.de>
+> Acked-by: David Hildenbrand <david@redhat.com>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
 > ---
->  MAINTAINERS                         |   2 +-
->  arch/mips/mobileye/Kconfig          |   1 +
->  arch/mips/mobileye/Makefile         |   2 +
->  arch/mips/mobileye/eyeq5-iocu-dma.c | 160 +++++++++++++++++++++++++++=
-+++++++++
->  4 files changed, 164 insertions(+), 1 deletion(-)
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index=20
-> bb9df569a3fff41ab40d7da5843f1e8564b47bf2..7ee68d7f8e8d0632846f59579412=
-458e301bd8fb=20
-> 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -16789,7 +16789,7 @@=20
-> F:	Documentation/devicetree/bindings/mips/mobileye.yaml
->  F:	Documentation/devicetree/bindings/soc/mobileye/
->  F:	arch/mips/boot/dts/mobileye/
->  F:	arch/mips/configs/eyeq5_defconfig
-> -F:	arch/mips/mobileye/board-epm5.its.S
-> +F:	arch/mips/mobileye/
->  F:	drivers/clk/clk-eyeq.c
->  F:	drivers/pinctrl/pinctrl-eyeq5.c
->  F:	drivers/reset/reset-eyeq.c
-> diff --git a/arch/mips/mobileye/Kconfig b/arch/mips/mobileye/Kconfig
-> index=20
-> f9abb2d6e1787dbc5a173db48606ed5a02088e41..b9040f3a9b3ddc7f5addcd8e5f11=
-0cb9c775b6b1=20
-> 100644
-> --- a/arch/mips/mobileye/Kconfig
-> +++ b/arch/mips/mobileye/Kconfig
-> @@ -9,6 +9,7 @@ choice
->=20
->  	config MACH_EYEQ5
->  		bool "Mobileye EyeQ5 SoC"
-> +		select ARCH_HAS_DMA_OPS
->=20
->  	config MACH_EYEQ6H
->  		bool "Mobileye EyeQ6H SoC"
-> diff --git a/arch/mips/mobileye/Makefile b/arch/mips/mobileye/Makefile
-> index=20
-> 315c06b689cfbb83f9f205d1140ecf5058e2aa02..50fc7d0ae167c3fb3dc8585bcd45=
-583c6cc3f2d2=20
-> 100644
-> --- a/arch/mips/mobileye/Makefile
-> +++ b/arch/mips/mobileye/Makefile
-> @@ -1 +1,3 @@
->  # SPDX-License-Identifier: GPL-2.0-or-later
-> +
-> +obj-$(CONFIG_MACH_EYEQ5)               +=3D eyeq5-iocu-dma.o
-> diff --git a/arch/mips/mobileye/eyeq5-iocu-dma.c=20
-> b/arch/mips/mobileye/eyeq5-iocu-dma.c
-> new file mode 100644
-> index=20
-> 0000000000000000000000000000000000000000..71d1c35f911636db141c4467dccc=
-405af69835ec
-> --- /dev/null
-> +++ b/arch/mips/mobileye/eyeq5-iocu-dma.c
-> @@ -0,0 +1,160 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +#include <linux/bits.h>
-> +#include <linux/device.h>
-> +#include <linux/device/bus.h>
-> +#include <linux/dma-direct.h>
-> +#include <linux/dma-direction.h>
-> +#include <linux/dma-map-ops.h>
-> +#include <linux/dma-mapping.h>
-> +#include <linux/errno.h>
-> +#include <linux/export.h>
-> +#include <linux/gfp_types.h>
-> +#include <linux/init.h>
-> +#include <linux/mm.h>
-> +#include <linux/mm_types.h>
-> +#include <linux/notifier.h>
-> +#include <linux/pfn.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/property.h>
-> +#include <linux/scatterlist.h>
-> +#include <linux/types.h>
-> +
-> +static void *eyeq5_iocu_alloc(struct device *dev, size_t size,
-> +			      dma_addr_t *dma_handle, gfp_t gfp,
-> +			      unsigned long attrs)
-> +{
-> +	void *p =3D dma_direct_alloc(dev, size, dma_handle, gfp, attrs);
-> +
-> +	*dma_handle |=3D BIT_ULL(36);
-> +	return p;
-> +}
-> +
-> +static void eyeq5_iocu_free(struct device *dev, size_t size,
-> +			    void *vaddr, dma_addr_t dma_handle,
-> +			    unsigned long attrs)
-> +{
-> +	dma_handle &=3D ~BIT_ULL(36);
-> +	dma_direct_free(dev, size, vaddr, dma_handle, attrs);
-> +}
-> +
-> +static int eyeq5_iocu_mmap(struct device *dev, struct vm_area_struct=20
-> *vma,
-> +			   void *cpu_addr, dma_addr_t dma_addr, size_t size,
-> +			   unsigned long attrs)
-> +{
-> +	unsigned long pfn =3D PHYS_PFN(dma_to_phys(dev, dma_addr));
-> +	unsigned long count =3D PAGE_ALIGN(size) >> PAGE_SHIFT;
-> +	unsigned long user_count =3D vma_pages(vma);
-> +	int ret;
-> +
-> +	vma->vm_page_prot =3D dma_pgprot(dev, vma->vm_page_prot, attrs);
-> +
-> +	if (dma_mmap_from_dev_coherent(dev, vma, cpu_addr, size, &ret))
-> +		return ret;
-> +
-> +	if (vma->vm_pgoff >=3D count || user_count > count - vma->vm_pgoff)
-> +		return -ENXIO;
-> +
-> +	return remap_pfn_range(vma, vma->vm_start, pfn + vma->vm_pgoff,
-> +			       user_count << PAGE_SHIFT, vma->vm_page_prot);
-> +}
-> +
-> +static int eyeq5_iocu_get_sgtable(struct device *dev, struct sg_table=20
-> *sgt,
-> +				  void *cpu_addr, dma_addr_t dma_addr, size_t size,
-> +				  unsigned long attrs)
-> +{
-> +	struct page *page =3D virt_to_page(cpu_addr);
-> +	int ret;
-> +
-> +	ret =3D sg_alloc_table(sgt, 1, GFP_KERNEL);
-> +	if (!ret)
-> +		sg_set_page(sgt->sgl, page, PAGE_ALIGN(size), 0);
-> +	return ret;
-> +}
-> +
-> +static dma_addr_t eyeq5_iocu_map_page(struct device *dev, struct page=20
-> *page,
-> +				      unsigned long offset, size_t size,
-> +				      enum dma_data_direction dir,
-> +				      unsigned long attrs)
-> +{
-> +	phys_addr_t phys =3D page_to_phys(page) + offset;
-> +
-> +	/* BIT(36) toggles routing through IOCU for DMA operations. */
-> +	return phys_to_dma(dev, phys) | BIT_ULL(36);
-> +}
-> +
-> +static void eyeq5_iocu_unmap_page(struct device *dev, dma_addr_t=20
-> dma_handle,
-> +				  size_t size, enum dma_data_direction dir,
-> +		unsigned long attrs)
-> +{
-> +}
-> +
-> +static int eyeq5_iocu_map_sg(struct device *dev, struct scatterlist=20
-> *sgl,
-> +			     int nents, enum dma_data_direction dir,
-> +			     unsigned long attrs)
-> +{
-> +	struct scatterlist *sg;
-> +	int i;
-> +
-> +	for_each_sg(sgl, sg, nents, i) {
-> +		sg->dma_address =3D eyeq5_iocu_map_page(dev, sg_page(sg),
-> +						      sg->offset, sg->length,
-> +						      dir, attrs);
-> +		if (sg->dma_address =3D=3D DMA_MAPPING_ERROR)
-> +			return 0; /* No cleanup because ->unmap_page() is a no-op. */
-> +		sg_dma_len(sg) =3D sg->length;
-> +	}
-> +
-> +	return nents;
-> +}
-> +
-> +static void eyeq5_iocu_unmap_sg(struct device *dev, struct scatterlis=
-t=20
-> *sgl,
-> +				int nents, enum dma_data_direction dir,
-> +				unsigned long attrs)
-> +{
-> +	/* We know page ->unmap_page() is a no-op. */
-> +}
-> +
-> +const struct dma_map_ops eyeq5_iocu_ops =3D {
-> +	.alloc			=3D eyeq5_iocu_alloc,
-> +	.free			=3D eyeq5_iocu_free,
-> +	.alloc_pages_op		=3D dma_direct_alloc_pages,
-> +	.free_pages		=3D dma_direct_free_pages,
-> +	.mmap			=3D eyeq5_iocu_mmap,
-> +	.get_sgtable		=3D eyeq5_iocu_get_sgtable,
-> +	.map_page		=3D eyeq5_iocu_map_page,
-> +	.unmap_page		=3D eyeq5_iocu_unmap_page,
-> +	.map_sg			=3D eyeq5_iocu_map_sg,
-> +	.unmap_sg		=3D eyeq5_iocu_unmap_sg,
-> +	.get_required_mask	=3D dma_direct_get_required_mask,
-> +};
-> +EXPORT_SYMBOL(eyeq5_iocu_ops);
-> +
-> +static int eyeq5_iocu_notifier(struct notifier_block *nb,
-> +			       unsigned long event,
-> +			       void *data)
-> +{
-> +	struct device *dev =3D data;
-> +
-> +	/*
-> +	 * IOCU routing is hardwired; we must use our above custom
-> +	 * routines for cache-coherent DMA on ethernet interfaces.
-> +	 */
-> +	if (event =3D=3D BUS_NOTIFY_ADD_DEVICE &&
-> +	    device_is_compatible(dev, "mobileye,eyeq5-gem")) {
-> +		set_dma_ops(dev, &eyeq5_iocu_ops);
-> +		return NOTIFY_OK;
-> +	}
-> +
-> +	return NOTIFY_DONE;
-> +}
-> +
-> +static struct notifier_block eyeq5_iocu_nb =3D {
-> +	.notifier_call =3D eyeq5_iocu_notifier,
-> +};
-> +
-> +static int __init eyeq5_iocu_init(void)
-> +{
-> +	return bus_register_notifier(&platform_bus_type, &eyeq5_iocu_nb);
-> +}
-> +postcore_initcall(eyeq5_iocu_init);
->
-> --=20
-> 2.50.0
-
---=20
-- Jiaxun
+>  arch/loongarch/include/asm/hugetlb.h | 14 --------------
+>  arch/mips/include/asm/hugetlb.h      | 14 --------------
+>  fs/hugetlbfs/inode.c                 |  8 ++------
+>  include/asm-generic/hugetlb.h        |  8 --------
+>  include/linux/hugetlb.h              |  6 ------
+>  5 files changed, 2 insertions(+), 48 deletions(-)
+> 
+> diff --git a/arch/loongarch/include/asm/hugetlb.h b/arch/loongarch/include/asm/hugetlb.h
+> index 4dc4b3e04225..ab68b594f889 100644
+> --- a/arch/loongarch/include/asm/hugetlb.h
+> +++ b/arch/loongarch/include/asm/hugetlb.h
+> @@ -10,20 +10,6 @@
+>  
+>  uint64_t pmd_to_entrylo(unsigned long pmd_val);
+>  
+> -#define __HAVE_ARCH_PREPARE_HUGEPAGE_RANGE
+> -static inline int prepare_hugepage_range(struct file *file,
+> -					 unsigned long addr,
+> -					 unsigned long len)
+> -{
+> -	unsigned long task_size = STACK_TOP;
+> -
+> -	if (len > task_size)
+> -		return -ENOMEM;
+> -	if (task_size - len < addr)
+> -		return -EINVAL;
+> -	return 0;
+> -}
+> -
+>  #define __HAVE_ARCH_HUGE_PTE_CLEAR
+>  static inline void huge_pte_clear(struct mm_struct *mm, unsigned long addr,
+>  				  pte_t *ptep, unsigned long sz)
+> diff --git a/arch/mips/include/asm/hugetlb.h b/arch/mips/include/asm/hugetlb.h
+> index fbc71ddcf0f6..8c460ce01ffe 100644
+> --- a/arch/mips/include/asm/hugetlb.h
+> +++ b/arch/mips/include/asm/hugetlb.h
+> @@ -11,20 +11,6 @@
+>  
+>  #include <asm/page.h>
+>  
+> -#define __HAVE_ARCH_PREPARE_HUGEPAGE_RANGE
+> -static inline int prepare_hugepage_range(struct file *file,
+> -					 unsigned long addr,
+> -					 unsigned long len)
+> -{
+> -	unsigned long task_size = STACK_TOP;
+> -
+> -	if (len > task_size)
+> -		return -ENOMEM;
+> -	if (task_size - len < addr)
+> -		return -EINVAL;
+> -	return 0;
+> -}
+> -
+>  #define __HAVE_ARCH_HUGE_PTEP_GET_AND_CLEAR
+>  static inline pte_t huge_ptep_get_and_clear(struct mm_struct *mm,
+>  					    unsigned long addr, pte_t *ptep,
+> diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+> index 00b2d1a032fd..81a6acddd690 100644
+> --- a/fs/hugetlbfs/inode.c
+> +++ b/fs/hugetlbfs/inode.c
+> @@ -179,12 +179,8 @@ hugetlb_get_unmapped_area(struct file *file, unsigned long addr,
+>  
+>  	if (len & ~huge_page_mask(h))
+>  		return -EINVAL;
+> -	if (flags & MAP_FIXED) {
+> -		if (addr & ~huge_page_mask(h))
+> -			return -EINVAL;
+> -		if (prepare_hugepage_range(file, addr, len))
+> -			return -EINVAL;
+> -	}
+> +	if ((flags & MAP_FIXED) && (addr & ~huge_page_mask(h)))
+> +		return -EINVAL;
+>  	if (addr)
+>  		addr0 = ALIGN(addr, huge_page_size(h));
+>  
+> diff --git a/include/asm-generic/hugetlb.h b/include/asm-generic/hugetlb.h
+> index 3e0a8fe9b108..4bce4f07f44f 100644
+> --- a/include/asm-generic/hugetlb.h
+> +++ b/include/asm-generic/hugetlb.h
+> @@ -114,14 +114,6 @@ static inline int huge_pte_none_mostly(pte_t pte)
+>  }
+>  #endif
+>  
+> -#ifndef __HAVE_ARCH_PREPARE_HUGEPAGE_RANGE
+> -static inline int prepare_hugepage_range(struct file *file,
+> -		unsigned long addr, unsigned long len)
+> -{
+> -	return 0;
+> -}
+> -#endif
+> -
+>  #ifndef __HAVE_ARCH_HUGE_PTEP_SET_WRPROTECT
+>  static inline void huge_ptep_set_wrprotect(struct mm_struct *mm,
+>  		unsigned long addr, pte_t *ptep)
+> diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
+> index c6c87eae4a8d..474de8e2a8f2 100644
+> --- a/include/linux/hugetlb.h
+> +++ b/include/linux/hugetlb.h
+> @@ -359,12 +359,6 @@ static inline void hugetlb_show_meminfo_node(int nid)
+>  {
+>  }
+>  
+> -static inline int prepare_hugepage_range(struct file *file,
+> -				unsigned long addr, unsigned long len)
+> -{
+> -	return -EINVAL;
+> -}
+> -
+>  static inline void hugetlb_vma_lock_read(struct vm_area_struct *vma)
+>  {
+>  }
+> -- 
+> 2.49.0
+> 
+> 
 
