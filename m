@@ -1,46 +1,46 @@
-Return-Path: <linux-mips+bounces-9565-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9566-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44ED3AEE384
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Jun 2025 18:08:19 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBBF4AEE392
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Jun 2025 18:09:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B6BA3BA8EF
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Jun 2025 16:07:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF69B1BC1368
+	for <lists+linux-mips@lfdr.de>; Mon, 30 Jun 2025 16:08:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8637C29DB7E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF0C32BDC28;
 	Mon, 30 Jun 2025 16:05:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t3JvUmlQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="No3QeIRm"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EEF929C32B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B95AA2BD5AB;
 	Mon, 30 Jun 2025 16:05:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751299529; cv=none; b=VQJDeB+VSuYt1JFAwOhMrLhwY5hCNdFNNGVTBbYeE9HL5wBYvCV694WRkEMSwBXoTkdVAkKFtjx5JISKRHyglB2H7SxJKswpO9IdUZ+jXSBu9xyxAhXVOQfK5wc2AKWuyJMWjQ3UM7uF7K6qJLzKMszoA9HvoLpXMBGn9a4dBCc=
+	t=1751299529; cv=none; b=OSpSgpcWVM6Yqk8hRbChkPZGshW2FudL9qXdJj2rk3aJAC4NBStB28WE78/kVJWpkfUkXHPtGCKvt1OUKbzZSNcxI9prQIFaXKK9tfe8cYlonHuIN47At8e57XNeNFS6BqYlbYdoisEpYcFsw1VkaYaX7pGnRQaWHHf+GJVK3PA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1751299529; c=relaxed/simple;
-	bh=x0Z9wiotmf8jNMw5UZ8kqkasukLKKyE27l+fQpQiAtU=;
+	bh=Re8d5TuPUDJdqxyH89C7qlYblbZnrA5EjF86KsH1XwY=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GFFvxuuGKV04Wbc56Bd7SIOTUTrh0tC2EcT0XLPOKEgMLjdybN5oXDpghcWh6Lyoqfta8EtfanxS3jw5+dRgdHgNXt6eJmjbxQULRb9m6XWrjuQoTvQH8ZD/z+4J0Wydx4JI8JSI54AYNnmuqtsVfqPWnPRcK4OQEX2fpftXZqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t3JvUmlQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B986C4CEF3;
-	Mon, 30 Jun 2025 16:05:28 +0000 (UTC)
+	 MIME-Version; b=bCupi5/YrAnmdOaaKnBw22Da6MA5Z5mKy+kRF8lgcZ1mcYDeqlud4sVwlv9TSxIoY8z5S5hlispsx3d9DkSGkMcmAC65KWiD2gOg4VW9f9IP2Nb2XWExw+3O+j3FV/5Tuw21+q+78755UQmXtmGhNc7+1T+WGiHPEmlqRuKdjps=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=No3QeIRm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0AA2BC4CEF2;
+	Mon, 30 Jun 2025 16:05:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751299528;
-	bh=x0Z9wiotmf8jNMw5UZ8kqkasukLKKyE27l+fQpQiAtU=;
+	s=k20201202; t=1751299529;
+	bh=Re8d5TuPUDJdqxyH89C7qlYblbZnrA5EjF86KsH1XwY=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=t3JvUmlQQ4INyHMwXd8NDAuXQfblNIw7bb2A+AkbC1bEfjMvbGr9VVWYBufCEWja+
-	 vRPcUj3Eh3HA5CCYjFNEPIvrkd5V+fCYMMRfLjgfRMBAOIDzx501JkRTOw24STASVN
-	 GlXEfFZ4QhPwvdzhL7Brq7NcN40QmKVHP3lciFUL9Eh22O7hkrRSsErLEcExvfFcRk
-	 RtTIKQjSwaglVhNVylmaJW3TUINxj06OACBE4anK4ueu1Kh2nnmHyNEfuaK4GIntCE
-	 GlPmSy5LDlWkdSrGWFPNlZVad3KFf1R78b5H9wRTMsFkiIVpiIi4UYjq+LAS4uKKW9
-	 oLn9LSYQOwH8Q==
+	b=No3QeIRmm7nlNERtKsn+ZyD7ApGiWkaIJk7FG/8b02RBvVt8BnEm4mMr1kGFRguX7
+	 bZse8gOMDl2RguH9Al5RMXRfo4nMMB50ohKZVkdfhLnFRIrOxW9gvzUC+n00XH0+iY
+	 9TH1JM6PrKklHfOntc9odhZozTrfFL7mhOzBliq2FCV5TlP968eIkkL1Ao0AXuC2Xd
+	 aiiB+i1f+mH0ulGtZTu7oHtA749yaAWdo2f/7TRILzujisMvwU7MP9ogNQ3M17vTMJ
+	 4Qx9NLxIq4BVav5bn31e4LZnHmRGclQY/IXM+CjEJBahQ5XnqBxt8dyb/U4BzbSsRz
+	 tM1D5LSdhxLZg==
 From: Eric Biggers <ebiggers@kernel.org>
 To: linux-crypto@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org,
@@ -53,9 +53,9 @@ Cc: linux-kernel@vger.kernel.org,
 	Ard Biesheuvel <ardb@kernel.org>,
 	"Jason A . Donenfeld" <Jason@zx2c4.com>,
 	Eric Biggers <ebiggers@kernel.org>
-Subject: [PATCH v3 15/16] lib/crypto: x86/sha512: Remove unnecessary checks for nblocks==0
-Date: Mon, 30 Jun 2025 09:03:19 -0700
-Message-ID: <20250630160320.2888-16-ebiggers@kernel.org>
+Subject: [PATCH v3 16/16] crypto: sha512 - Remove sha512_base.h
+Date: Mon, 30 Jun 2025 09:03:20 -0700
+Message-ID: <20250630160320.2888-17-ebiggers@kernel.org>
 X-Mailer: git-send-email 2.50.0
 In-Reply-To: <20250630160320.2888-1-ebiggers@kernel.org>
 References: <20250630160320.2888-1-ebiggers@kernel.org>
@@ -67,128 +67,138 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Since sha512_blocks() is called only with nblocks >= 1, remove
-unnecessary checks for nblocks == 0 from the x86 SHA-512 assembly code.
+sha512_base.h is no longer used, so remove it.
 
+Acked-by: Ard Biesheuvel <ardb@kernel.org>
 Signed-off-by: Eric Biggers <ebiggers@kernel.org>
 ---
- lib/crypto/x86/sha512-avx-asm.S   | 6 +-----
- lib/crypto/x86/sha512-avx2-asm.S  | 5 +----
- lib/crypto/x86/sha512-ssse3-asm.S | 6 +-----
- 3 files changed, 3 insertions(+), 14 deletions(-)
+ include/crypto/sha512_base.h | 117 -----------------------------------
+ 1 file changed, 117 deletions(-)
+ delete mode 100644 include/crypto/sha512_base.h
 
-diff --git a/lib/crypto/x86/sha512-avx-asm.S b/lib/crypto/x86/sha512-avx-asm.S
-index 0b5f69179d624..7732aa8fd8506 100644
---- a/lib/crypto/x86/sha512-avx-asm.S
-+++ b/lib/crypto/x86/sha512-avx-asm.S
-@@ -270,17 +270,14 @@ frame_size = frame_WK + WK_SIZE
- #			    const u8 *data, size_t nblocks);
- # Purpose: Updates the SHA512 digest stored at "state" with the message
- # stored in "data".
- # The size of the message pointed to by "data" must be an integer multiple
- # of SHA512 message blocks.
--# "nblocks" is the message length in SHA512 blocks
-+# "nblocks" is the message length in SHA512 blocks.  Must be >= 1.
- ########################################################################
- SYM_FUNC_START(sha512_transform_avx)
- 
--	test msglen, msglen
--	je .Lnowork
+diff --git a/include/crypto/sha512_base.h b/include/crypto/sha512_base.h
+deleted file mode 100644
+index d1361b3eb70b0..0000000000000
+--- a/include/crypto/sha512_base.h
++++ /dev/null
+@@ -1,117 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0-only */
+-/*
+- * sha512_base.h - core logic for SHA-512 implementations
+- *
+- * Copyright (C) 2015 Linaro Ltd <ard.biesheuvel@linaro.org>
+- */
 -
- 	# Save GPRs
- 	push	%rbx
- 	push	%r12
- 	push	%r13
- 	push	%r14
-@@ -360,11 +357,10 @@ SYM_FUNC_START(sha512_transform_avx)
- 	pop	%r14
- 	pop	%r13
- 	pop	%r12
- 	pop	%rbx
- 
--.Lnowork:
- 	RET
- SYM_FUNC_END(sha512_transform_avx)
- 
- ########################################################################
- ### Binary Data
-diff --git a/lib/crypto/x86/sha512-avx2-asm.S b/lib/crypto/x86/sha512-avx2-asm.S
-index 2309c01e316b9..22bdbfd899d0f 100644
---- a/lib/crypto/x86/sha512-avx2-asm.S
-+++ b/lib/crypto/x86/sha512-avx2-asm.S
-@@ -562,11 +562,11 @@ frame_size = frame_CTX + CTX_SIZE
- #			     const u8 *data, size_t nblocks);
- # Purpose: Updates the SHA512 digest stored at "state" with the message
- # stored in "data".
- # The size of the message pointed to by "data" must be an integer multiple
- # of SHA512 message blocks.
--# "nblocks" is the message length in SHA512 blocks
-+# "nblocks" is the message length in SHA512 blocks.  Must be >= 1.
- ########################################################################
- SYM_FUNC_START(sha512_transform_rorx)
- 
- 	# Save GPRs
- 	push	%rbx
-@@ -580,11 +580,10 @@ SYM_FUNC_START(sha512_transform_rorx)
- 	mov	%rsp, %rbp
- 	sub	$frame_size, %rsp
- 	and	$~(0x20 - 1), %rsp
- 
- 	shl	$7, NUM_BLKS	# convert to bytes
--	jz	.Ldone_hash
- 	add	INP, NUM_BLKS	# pointer to end of data
- 	mov	NUM_BLKS, frame_INPEND(%rsp)
- 
- 	## load initial digest
- 	mov	8*0(CTX1), a
-@@ -666,12 +665,10 @@ SYM_FUNC_START(sha512_transform_rorx)
- 	mov	frame_INP(%rsp), INP
- 	add	$128, INP
- 	cmp	frame_INPEND(%rsp), INP
- 	jne	.Lloop0
- 
--.Ldone_hash:
+-#ifndef _CRYPTO_SHA512_BASE_H
+-#define _CRYPTO_SHA512_BASE_H
 -
- 	# Restore Stack Pointer
- 	mov	%rbp, %rsp
- 	pop	%rbp
- 
- 	# Restore GPRs
-diff --git a/lib/crypto/x86/sha512-ssse3-asm.S b/lib/crypto/x86/sha512-ssse3-asm.S
-index 12e78142f2e38..4cae7445b2a86 100644
---- a/lib/crypto/x86/sha512-ssse3-asm.S
-+++ b/lib/crypto/x86/sha512-ssse3-asm.S
-@@ -269,17 +269,14 @@ frame_size = frame_WK + WK_SIZE
- #			      const u8 *data, size_t nblocks);
- # Purpose: Updates the SHA512 digest stored at "state" with the message
- # stored in "data".
- # The size of the message pointed to by "data" must be an integer multiple
- # of SHA512 message blocks.
--# "nblocks" is the message length in SHA512 blocks
-+# "nblocks" is the message length in SHA512 blocks.  Must be >= 1.
- ########################################################################
- SYM_FUNC_START(sha512_transform_ssse3)
- 
--	test msglen, msglen
--	je .Lnowork
+-#include <crypto/internal/hash.h>
+-#include <crypto/sha2.h>
+-#include <linux/compiler.h>
+-#include <linux/math.h>
+-#include <linux/string.h>
+-#include <linux/types.h>
+-#include <linux/unaligned.h>
 -
- 	# Save GPRs
- 	push	%rbx
- 	push	%r12
- 	push	%r13
- 	push	%r14
-@@ -359,11 +356,10 @@ SYM_FUNC_START(sha512_transform_ssse3)
- 	pop	%r14
- 	pop	%r13
- 	pop	%r12
- 	pop	%rbx
- 
--.Lnowork:
- 	RET
- SYM_FUNC_END(sha512_transform_ssse3)
- 
- ########################################################################
- ### Binary Data
+-typedef void (sha512_block_fn)(struct sha512_state *sst, u8 const *src,
+-			       int blocks);
+-
+-static inline int sha384_base_init(struct shash_desc *desc)
+-{
+-	struct sha512_state *sctx = shash_desc_ctx(desc);
+-
+-	sctx->state[0] = SHA384_H0;
+-	sctx->state[1] = SHA384_H1;
+-	sctx->state[2] = SHA384_H2;
+-	sctx->state[3] = SHA384_H3;
+-	sctx->state[4] = SHA384_H4;
+-	sctx->state[5] = SHA384_H5;
+-	sctx->state[6] = SHA384_H6;
+-	sctx->state[7] = SHA384_H7;
+-	sctx->count[0] = sctx->count[1] = 0;
+-
+-	return 0;
+-}
+-
+-static inline int sha512_base_init(struct shash_desc *desc)
+-{
+-	struct sha512_state *sctx = shash_desc_ctx(desc);
+-
+-	sctx->state[0] = SHA512_H0;
+-	sctx->state[1] = SHA512_H1;
+-	sctx->state[2] = SHA512_H2;
+-	sctx->state[3] = SHA512_H3;
+-	sctx->state[4] = SHA512_H4;
+-	sctx->state[5] = SHA512_H5;
+-	sctx->state[6] = SHA512_H6;
+-	sctx->state[7] = SHA512_H7;
+-	sctx->count[0] = sctx->count[1] = 0;
+-
+-	return 0;
+-}
+-
+-static inline int sha512_base_do_update_blocks(struct shash_desc *desc,
+-					       const u8 *data,
+-					       unsigned int len,
+-					       sha512_block_fn *block_fn)
+-{
+-	unsigned int remain = len - round_down(len, SHA512_BLOCK_SIZE);
+-	struct sha512_state *sctx = shash_desc_ctx(desc);
+-
+-	len -= remain;
+-	sctx->count[0] += len;
+-	if (sctx->count[0] < len)
+-		sctx->count[1]++;
+-	block_fn(sctx, data, len / SHA512_BLOCK_SIZE);
+-	return remain;
+-}
+-
+-static inline int sha512_base_do_finup(struct shash_desc *desc, const u8 *src,
+-				       unsigned int len,
+-				       sha512_block_fn *block_fn)
+-{
+-	unsigned int bit_offset = SHA512_BLOCK_SIZE / 8 - 2;
+-	struct sha512_state *sctx = shash_desc_ctx(desc);
+-	union {
+-		__be64 b64[SHA512_BLOCK_SIZE / 4];
+-		u8 u8[SHA512_BLOCK_SIZE * 2];
+-	} block = {};
+-
+-	if (len >= SHA512_BLOCK_SIZE) {
+-		int remain;
+-
+-		remain = sha512_base_do_update_blocks(desc, src, len, block_fn);
+-		src += len - remain;
+-		len = remain;
+-	}
+-
+-	if (len >= bit_offset * 8)
+-		bit_offset += SHA512_BLOCK_SIZE / 8;
+-	memcpy(&block, src, len);
+-	block.u8[len] = 0x80;
+-	sctx->count[0] += len;
+-	block.b64[bit_offset] = cpu_to_be64(sctx->count[1] << 3 |
+-					    sctx->count[0] >> 61);
+-	block.b64[bit_offset + 1] = cpu_to_be64(sctx->count[0] << 3);
+-	block_fn(sctx, block.u8, (bit_offset + 2) * 8 / SHA512_BLOCK_SIZE);
+-	memzero_explicit(&block, sizeof(block));
+-
+-	return 0;
+-}
+-
+-static inline int sha512_base_finish(struct shash_desc *desc, u8 *out)
+-{
+-	unsigned int digest_size = crypto_shash_digestsize(desc->tfm);
+-	struct sha512_state *sctx = shash_desc_ctx(desc);
+-	__be64 *digest = (__be64 *)out;
+-	int i;
+-
+-	for (i = 0; digest_size > 0; i++, digest_size -= sizeof(__be64))
+-		put_unaligned_be64(sctx->state[i], digest++);
+-	return 0;
+-}
+-
+-#endif /* _CRYPTO_SHA512_BASE_H */
 -- 
 2.50.0
 
