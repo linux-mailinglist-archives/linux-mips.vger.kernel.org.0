@@ -1,141 +1,91 @@
-Return-Path: <linux-mips+bounces-9582-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9583-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 47344AEE726
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Jun 2025 21:03:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2F9CAEF0AA
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Jul 2025 10:16:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C8EE81BC1F0C
-	for <lists+linux-mips@lfdr.de>; Mon, 30 Jun 2025 19:04:10 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 682351BC50B6
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Jul 2025 08:16:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90C5A1F874F;
-	Mon, 30 Jun 2025 19:03:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 748982620F5;
+	Tue,  1 Jul 2025 08:16:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="H9Xmxbbc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HhASyXBS"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 300221F463E
-	for <linux-mips@vger.kernel.org>; Mon, 30 Jun 2025 19:03:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 417B442AA9;
+	Tue,  1 Jul 2025 08:16:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751310230; cv=none; b=YtcrR1BWlgu0GtTVEQk3aGIK/w61uibudvN5DLd1eK3P5wRw06HeSoi0hoyVNik5pXgHi6Ea6TFGrpEKYhOWkE1Hm9IqaWUaZbKxaK1AjCdsy6yef28HtN9bZgNCotrhaNDRslLLWAVT92MYRT5AgorVniIRCQZSSqFPDMmWXx0=
+	t=1751357780; cv=none; b=K49e0Yl3CriMLNcQsxO7ltPeh+jodTfi+Q8Os7gskZl0o0NmMbxoaYQdqdptUkEQm0AekJ9Sec0VcJy0DQbIcqBu4yLYKQeiOiFQsjoCpOfecrZczmsUufNfn1YB4hkJP5pRvDkrLxc7M3p1Cm3UA002J9m1eOng1FdZThx1a6Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751310230; c=relaxed/simple;
-	bh=i2mQ/9twwOx9w8T1TTlOa0Ols9FQ/dCRclPBjRE1EOA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=G0kohbmk+G6zkUreJKuUUMgWLaWUmoIuJXEDB+HoBPf8R73qnjFazAT0aUALj7uTnCAEBB4AT4uaJWHgl0kov10GnLVnfrZ3+n87pTZi8b+1ZswThbslBblmT8RpwkFkTEgNv0VsjGrPcmTxkYx+oZ1bpAojiOOvfsdbhlSF0FI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=H9Xmxbbc; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2353a2bc210so20879955ad.2
-        for <linux-mips@vger.kernel.org>; Mon, 30 Jun 2025 12:03:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1751310228; x=1751915028; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=EHv9KX52Q/OqdOJMrCOhVGCiwIAbDvRl+pmia9FWC2Y=;
-        b=H9Xmxbbcdwar0HTA8ToPGq67iruS1EeI7V5nTcCbKETaj8S1WYIQfN9ZX4MU7AfdB5
-         y+sBLCKbJu9XuvSpbE+YFLAfwjg8I7wOEyizWvwFESe2T7zjJwZWEfV80Mr8mJymmQa4
-         4HxiNOHbW3mu4pS3dBr2+zHY4RXiJk9Kzt6wY=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751310228; x=1751915028;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EHv9KX52Q/OqdOJMrCOhVGCiwIAbDvRl+pmia9FWC2Y=;
-        b=SZMGVv4PHcxdsGz1g7A+coiufZRa3JNbk40RXJc1kxoz0oJS4oyFQZ55to/YjuZUW8
-         36uk6JrVRGtBGRtPf1x3dxP4E2+Jfzb+5IElp6hHy2b18hE14IBWVFaAyYeYkgVSCM0w
-         Wxn4JVDveA3cEGqJL94igqND5tK2dwUQedTYzV4CRNaFdDAbEmcjEasIGVa7HaFvuIWK
-         2c/kXVFwa+ij/2jzbg3wpsBylM/m9U4hbhB2gp6fUwklxFEwb39lkD5xSY5KG+//5dPh
-         wVTkLXmyoZLyyTUH6bXhyP6gen9x0b4S0tth4AR+SPyX/YIEF+zf0azZHH+SCQbbPBgd
-         uXeg==
-X-Gm-Message-State: AOJu0YxpWufzbgpTUgzFj7UDZ0lt9Que0aqbF7G8DZFjNHXkNyCp+8Bz
-	neMSxuPoGRl5lYwRcrTqiLyVtWcMAPiYzU4sAxzd+JEERKEYqdiHN+4XtPZsRWeY3Q==
-X-Gm-Gg: ASbGncsKaGlAe2LhlwIYAlGbGzj748tFhNe8DbtizDnHSeKr3q6ITg1xquu3eVkAWFm
-	f0M0K0Lp0hjAamtG1gD42UhG0qdIdKZ7jClLdQZJn8OdHABOkSrYHuUap5Qa2EBH24FiHee8soa
-	5FQ+E1iUuZmJJmBa1F2sKF0KE9r883ZvCeOyQkr69yVpjMbPm05bpDUvjgnFyoNJK1uuMUCOXFz
-	eKAG0KcXm71pWVmkXqHGl0BV5KOk4AkmISeQCRvUZkLOrLpa3hRA8cj94bAnEz6fA4c1fu2v/+Q
-	9C3B+FxouAIZtHd3rT7Mxa9e8wiupkyR1WhraGspVvd48MCHdCckhcLAuYrfIuyDaA7tKtksyer
-	CkwrZjoqqDD+g1Q81Y5ufwfbmTQ==
-X-Google-Smtp-Source: AGHT+IGu6vYQvmhRlSNFOrHB5Ok7ZieVswnreyQVFXe+QZO7mTo5pimI/U66dSWpBdg3jsyeQIIa+w==
-X-Received: by 2002:a17:902:f601:b0:235:c9a7:d5fb with SMTP id d9443c01a7336-23ac3deaf2cmr229797665ad.16.1751310228373;
-        Mon, 30 Jun 2025 12:03:48 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-23acb3c8649sm89755895ad.236.2025.06.30.12.03.47
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 30 Jun 2025 12:03:47 -0700 (PDT)
-Message-ID: <ff0cdcc3-db09-44fa-b5f7-8fe150e619f8@broadcom.com>
-Date: Mon, 30 Jun 2025 12:03:46 -0700
+	s=arc-20240116; t=1751357780; c=relaxed/simple;
+	bh=lkyQWlDYZofRSdo3cjmJVwtr+h8AbrUJVHwsg1OHwAw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XPhvJhalDD93lc8Xs4djyqejIiVo6xV3mc1j3mQXjZWHZl+Py8LKtL618rKasKcENYxy0ejc5+AmOe9tIIvTMZgQKA/UJtYNmYyfV+D9mIAF/9aS5YP9VWoht0CsaUDEzRgZ6wHci7lTi5VoPFMWfXtmJAxjmJENYJoa1cJlJsg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HhASyXBS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10349C4CEEB;
+	Tue,  1 Jul 2025 08:16:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751357778;
+	bh=lkyQWlDYZofRSdo3cjmJVwtr+h8AbrUJVHwsg1OHwAw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HhASyXBSp1TfbTVVt9FzAonfgB5IzVQg25SEFAEiWqtr24f8TCOMdbHdPDore/c+c
+	 BSlhDV0j1Y+DuRr7e2rDUhv7NRmdZd4awvExo6UVAZyZkEQuLQCPdRfdSqaRbM/cnB
+	 MeE/FK/cZvXYRUM9m4u3qZ/lxDySrM3wdS97caPomlAmmWg+kotBptY9W7OTj4h6bQ
+	 m1wTjrml48N/8bJh++SLxzDCsKrJ9V+9aVTs8LLJEe3iQa6Ejb8M0x3i1GHuDr8bLq
+	 Y/gOPtkpaC49ptHNe9wriifPqwopfTYVKozbsI6M6c3CjOca7exr0plX8bzyCasItT
+	 6cRwoOS8EvGHQ==
+Date: Tue, 1 Jul 2025 10:16:15 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Nicolas Ferre <nicolas.ferre@microchip.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+	Samuel Holland <samuel.holland@sifive.com>, Richard Cochran <richardcochran@gmail.com>, 
+	Russell King <linux@armlinux.org.uk>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, Gregory CLEMENT <gregory.clement@bootlin.com>, 
+	Cyrille Pitchen <cyrille.pitchen@atmel.com>, Harini Katakam <harini.katakam@xilinx.com>, 
+	Rafal Ozieblo <rafalo@cadence.com>, Haavard Skinnemoen <hskinnemoen@atmel.com>, 
+	Jeff Garzik <jeff@garzik.org>, netdev@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, linux-mips@vger.kernel.org, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>
+Subject: Re: [PATCH net-next v2 01/18] dt-bindings: net: cdns,macb: sort
+ compatibles
+Message-ID: <20250701-archetypal-teal-of-virtuosity-9a9e9b@krzk-bin>
+References: <20250627-macb-v2-0-ff8207d0bb77@bootlin.com>
+ <20250627-macb-v2-1-ff8207d0bb77@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/1] firmware/nvram: bcm47xx: Don't use "proxy" headers
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
- linux-kernel@vger.kernel.org
-Cc: linux-mips@vger.kernel.org, Florian Fainelli <f.fainelli@gmail.com>,
- bcm-kernel-feedback-list@broadcom.com,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-References: <20250626175926.372183-1-andriy.shevchenko@linux.intel.com>
-Content-Language: en-US
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
- xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
- M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
- JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
- PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
- KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
- AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
- IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
- ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
- bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
- Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
- tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
- TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
- zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
- WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
- IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
- U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
- 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
- pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
- MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
- IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
- gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
- obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
- N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
- CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
- C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
- wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
- EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
- fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
- MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
- 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
- 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <20250626175926.372183-1-andriy.shevchenko@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20250627-macb-v2-1-ff8207d0bb77@bootlin.com>
 
-On 6/26/25 10:59, Andy Shevchenko wrote:
-> Update header inclusions to follow IWYU (Include What You Use)
-> principle.
-> 
-> Note that kernel.h is discouraged to be included as it's written
-> at the top of that file.
-> 
-> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+On Fri, Jun 27, 2025 at 11:08:47AM +0200, Th=C3=A9o Lebrun wrote:
+> Compatibles inside this enum are sorted-ish. Make it sorted.
+>=20
+> Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> ---
+>  Documentation/devicetree/bindings/net/cdns,macb.yaml | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 
-Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Thomas, can you pick this up? Thanks!
--- 
-Florian
+Best regards,
+Krzysztof
+
 
