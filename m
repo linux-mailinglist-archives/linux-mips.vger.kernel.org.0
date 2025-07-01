@@ -1,47 +1,47 @@
-Return-Path: <linux-mips+bounces-9584-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9585-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8E0BAEF0BD
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Jul 2025 10:18:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id F305CAEF0C7
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Jul 2025 10:19:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C92141BC50FA
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Jul 2025 08:18:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC0671BC3977
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Jul 2025 08:20:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8859C264625;
-	Tue,  1 Jul 2025 08:18:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D80C26A0DB;
+	Tue,  1 Jul 2025 08:19:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="o2ZS5y16"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xa+mrao6"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59D3A4A0C;
-	Tue,  1 Jul 2025 08:18:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BDFC202995;
+	Tue,  1 Jul 2025 08:19:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751357896; cv=none; b=AMz+zjSGjxzAywUdvatbdIDhd+4dUQgOJC26tjzD7Gm35vgv1V45V5Ow/V7b+6I4U1EbzcjOqAS4J0fJJNe2xN7GPYmsyS0b50bQhojz+WRE4SQxT74do9C8IHdpdI7a41fkdjxI0LZxH3OPKhYSHZffFjOe/hH8cUH5rSdwfIs=
+	t=1751357987; cv=none; b=OlVgKB2vndmcq7y2KDtB/9zGDUM5S0P/0iCAz1v2MLXUZl74KgHlGetCWQWBBiQJTuAuQQdi3LpvHx0MmISe5695lXdz4Qaz6lSJqLWTdl6DO4j6Rp20hSgah4MdBfeUg/U+VWavH3PMJTiGtClLveHRwzlCdRTFHF3PLMe06TU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751357896; c=relaxed/simple;
-	bh=JawAbuKcYWoYST8hWbMbcg8n7XTzLeaxNe5wApabh/w=;
+	s=arc-20240116; t=1751357987; c=relaxed/simple;
+	bh=noDPpUqNBlR3C1l21VfaQdGGoXDiw11U2/HL+tU819c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NmmvjkUtQVLGQMVAluOT3CvdqOxRIChJ4jNkVfGtZPekDpGerReoHYK5EsN17l2ACmJChC1HcT05bA0IbNn8IZaB+HtT1f9x6PBL+5GMkQnO5S08qD6iDNnXNJAuzsuJDWnpAGGo601Bg5PHpI42+bTFaBR6qQCuHNmBLNV8VCE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=o2ZS5y16; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D7BBFC4CEEB;
-	Tue,  1 Jul 2025 08:18:14 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=CnMvziQkhejnj7S+frqb/pbS/1w1davMf6w3NkVMuEoVBLFTQQazSvAPE4yZrRkZC8KDiWrSZXrSaePwplGIz5qWhoJsqNosiYbawNYNSUNmI3j1avmpiTwxnwccSscE1Qy/g0Ue+iet3s4dPVQiN8P6PdT3jPwZVVpgLTXyBJc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xa+mrao6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22F7DC4CEEB;
+	Tue,  1 Jul 2025 08:19:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751357895;
-	bh=JawAbuKcYWoYST8hWbMbcg8n7XTzLeaxNe5wApabh/w=;
+	s=k20201202; t=1751357987;
+	bh=noDPpUqNBlR3C1l21VfaQdGGoXDiw11U2/HL+tU819c=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=o2ZS5y16YEMWNAlU4163CjQiZrBNWx6Zza7l5DkjrQ4AW7eYVsTzHSRr5w2TO3vkC
-	 x+AzNqw8iQc1Dp0NePGjQzi0yiQODrW6hRIeEYJWOZAq8Jn1rRGuh+5sNmumc7MRPP
-	 7TQZvYsYu0650q71rjAFkiUz5JqB906jTLfqSKWrqCJvRedzvbTQRgthFd/jKQ7vWm
-	 3bnC7HYVeMJrnX7MvT2/ij73m1xwDjwz5w45/DcRX+Dm7X3d6xEBuHHLWc5e5sjX8o
-	 nCNmqyydP90bH0p6cpBUSu87GBHc6/Ni++naIpR//Nkj/UyPzyfwxDisjjx8LDQZql
-	 zAqOlPUMGrz8w==
-Date: Tue, 1 Jul 2025 10:18:12 +0200
+	b=Xa+mrao6L0WNrIkAf7cSiPnL+A0XZrn96x1cTOaBOzHD5akO255zfXAJYH/HCP5nW
+	 4tX+mCvc/HL9m/CfiK9p0ZcqpP6wLKg/MgvLFEdZmcfxizOLmLNJK3OKM1klOZ+/11
+	 p7/yYB3jnApoK8yp2NoEa2jrQ8bREGd9n/E4z+kPVH4FtIZZvCVtBbz2YqlQlmkTPq
+	 R3G+UXVUUECJI/tyNQgmCBgoMa17+Esa/eZnTLS0uWQi4XuvvvlwA/JHKc2Goa/Gk8
+	 Fyar7I34ltkPlyO6CjGZiVT0fvKw50OBTPq1GFIVFkPE8IuB1w7aSRWu5uo6l7oO0A
+	 3YLh26PiUW5IQ==
+Date: Tue, 1 Jul 2025 10:19:43 +0200
 From: Krzysztof Kozlowski <krzk@kernel.org>
 To: =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>
 Cc: Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -59,11 +59,11 @@ Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
 	Jeff Garzik <jeff@garzik.org>, netdev@vger.kernel.org, devicetree@vger.kernel.org, 
 	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, linux-mips@vger.kernel.org, 
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>
-Subject: Re: [PATCH net-next v2 02/18] dt-bindings: net: cdns,macb: add
- Mobileye EyeQ5 ethernet interface
-Message-ID: <20250701-hulking-idealistic-adder-80ae8f@krzk-bin>
+Subject: Re: [PATCH net-next v2 03/18] dt-bindings: net: cdns,macb: allow
+ tsu_clk without tx_clk
+Message-ID: <20250701-spotted-crimson-puffin-dffabd@krzk-bin>
 References: <20250627-macb-v2-0-ff8207d0bb77@bootlin.com>
- <20250627-macb-v2-2-ff8207d0bb77@bootlin.com>
+ <20250627-macb-v2-3-ff8207d0bb77@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -73,51 +73,20 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20250627-macb-v2-2-ff8207d0bb77@bootlin.com>
+In-Reply-To: <20250627-macb-v2-3-ff8207d0bb77@bootlin.com>
 
-On Fri, Jun 27, 2025 at 11:08:48AM +0200, Th=C3=A9o Lebrun wrote:
-> Add cdns,eyeq5-gem as compatible for the integrated GEM block inside
-> Mobileye EyeQ5 SoCs. Add a phandle (and two offset arguments) for
-> accessing syscon registers.
+On Fri, Jun 27, 2025 at 11:08:49AM +0200, Th=C3=A9o Lebrun wrote:
+> Allow providing tsu_clk without a tx_clk as both are optional.
+>=20
+> This is about relaxing unneeded constraints. It so happened that in the
+> past HW that needed a tsu_clk always needed a tx_clk.
 >=20
 > Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
 > ---
->  .../devicetree/bindings/net/cdns,macb.yaml         | 24 ++++++++++++++++=
-++++++
->  1 file changed, 24 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/net/cdns,macb.yaml b/Docum=
-entation/devicetree/bindings/net/cdns,macb.yaml
-> index df883354c7e635099885da42e4604e1c31b05c72..6cf43cc50377f23d60ef40bf1=
-c8efa22ce1ae0bb 100644
-> --- a/Documentation/devicetree/bindings/net/cdns,macb.yaml
-> +++ b/Documentation/devicetree/bindings/net/cdns,macb.yaml
-> @@ -57,6 +57,7 @@ properties:
->            - cdns,np4-macb             # NP4 SoC devices
->            - microchip,sama7g5-emac    # Microchip SAMA7G5 ethernet inter=
-face
->            - microchip,sama7g5-gem     # Microchip SAMA7G5 gigabit ethern=
-et interface
-> +          - mobileye,eyeq5-gem        # Mobileye EyeQ5 SoCs
->            - sifive,fu540-c000-gem     # SiFive FU540-C000 SoC
-> =20
->        - items:
-> @@ -137,6 +138,17 @@ properties:
->        Node containing PHY children. If this node is not present, then PH=
-Ys will
->        be direct children.
-> =20
-> +  mobileye,olb:
-> +    $ref: /schemas/types.yaml#/definitions/phandle-array
-> +    description:
-> +      Handle to the OLB system controller that owns registers configurin=
-g the
-> +      MACB integration.
+>  Documentation/devicetree/bindings/net/cdns,macb.yaml | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-=2E.. to do what?
-
-Maybe you just miss some sort of phy or power domain provider. Syscon is
-not a replacement for that.
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
