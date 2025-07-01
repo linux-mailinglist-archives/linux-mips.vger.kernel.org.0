@@ -1,262 +1,927 @@
-Return-Path: <linux-mips+bounces-9600-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9601-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BED6AF00ED
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Jul 2025 18:58:33 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C147AF06B5
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Jul 2025 00:54:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C0568173034
-	for <lists+linux-mips@lfdr.de>; Tue,  1 Jul 2025 16:55:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D97C1C05E76
+	for <lists+linux-mips@lfdr.de>; Tue,  1 Jul 2025 22:54:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6966627F183;
-	Tue,  1 Jul 2025 16:53:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62C5228312E;
+	Tue,  1 Jul 2025 22:54:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=seco.com header.i=@seco.com header.b="IK8P+Qla";
-	dkim=pass (2048-bit key) header.d=seco.com header.i=@seco.com header.b="IK8P+Qla"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TLYvXWMm"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from PA4PR04CU001.outbound.protection.outlook.com (mail-francecentralazon11023096.outbound.protection.outlook.com [40.107.162.96])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36AE927D770;
-	Tue,  1 Jul 2025 16:53:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.162.96
-ARC-Seal:i=3; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751388836; cv=fail; b=lsXOIX+UeUdYQ1C8eSS8eeq7LAmA0Hg2ehsfuND1bX/9Qx89ou2wrje6xRKdceT70ZvLEpIqwVnOJNcYUP5LBv3J9a91cau4rZ5cHZC6FYfjeb7akzw7z/BDgDLZ70I9iwq5pua+YaFkFMvV09rwEE5nXYHz70ZizUHs/Z3Q9/Q=
-ARC-Message-Signature:i=3; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751388836; c=relaxed/simple;
-	bh=GCykdNn1qFHZlf4IbFNKiVYByA+I3zDf2oh+Hio5sCU=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=ciTQbV4MAkzfq1K1fx96SssavOHbHJcy4T1ROdqniv2cnRj3LxhBeY4BEKWhr6ZuuXhAECWy+q+Za2u3Otnm9MG8SQ2hnRDLp9ievXrKJaSC8bMk4GNYTOPrBw4eG/MimV9YMqbqGboUtNVIbQRG9W/UZrwtmenHXzKJpeDFF5Q=
-ARC-Authentication-Results:i=3; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=seco.com; spf=pass smtp.mailfrom=seco.com; dkim=pass (2048-bit key) header.d=seco.com header.i=@seco.com header.b=IK8P+Qla; dkim=pass (2048-bit key) header.d=seco.com header.i=@seco.com header.b=IK8P+Qla; arc=fail smtp.client-ip=40.107.162.96
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=seco.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seco.com
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=pass;
- b=jCn83X5/CFBf6ugyhjIJh2feeYzWpS/L0lRRE8elsA3LA6+/SFacEpsn13bsKjzZAa9HOEThcCKMPE8dMoTp6msE8IrqLk7psLrHwWm223Y6Y03J6odojnLC9BBnsyvLIBdTpUY1Gn2GtDFnFQiQz52+xKDccvcAmtvuNc0M5nEwREzDDFRMVd25ey3k2tMta7uXGK2Vubar1fT2pGbVp7uzNKrk9GtGlTSx9Yox3+K/DMWFOJFzNKJcdy4e3AXCcUcKefXmCQG6khfv+mn6XBpEWj76NErwEMWJ6pvkKFjh2Ys0wwxcBsUNSqlT/aD8zq71C/SYZXKU/QgUzMdQdA==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kBiRGmDC+lhaQxS6YhR2eZjXV1Jh5P9dh7CMzsgfTfA=;
- b=In9T6x2OtiO9ApGRS9eN2YiWjq+bLYcupDuNUJzL22VHyyW6FHYU8wDXoxJhgppSZyj6rV2kerDYBdOWU1qXDLVe5VWT16QFg/4uMGJrStWW+p461o9Hyl2B3+KNdy+zKTb34FPFiP1VYwraUK0xg14gCY0iPZzbUgraJ0tNUa4F2ZQ7Ro5d8WkQYtlsHSplnO+3c4Xzdh+kdKkNdNK7izTNxIHYjGn8h6L9qi4yc9spvMKTVRqG7MPhGIP93azNaOKqAimOzwxxz4VyaDwWv64D/h5z3WS/t218N/9WVOgvp+SppQF8n403HNyT6B4CgVO6DxLlWaKjZWUqLuDSqg==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 20.160.56.87) smtp.rcpttodomain=alpha.franken.de smtp.mailfrom=seco.com;
- dmarc=pass (p=reject sp=reject pct=100) action=none header.from=seco.com;
- dkim=pass (signature was verified) header.d=seco.com; arc=pass (0 oda=1
- ltdi=1 spf=[1,1,smtp.mailfrom=seco.com] dkim=[1,1,header.d=seco.com]
- dmarc=[1,1,header.from=seco.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kBiRGmDC+lhaQxS6YhR2eZjXV1Jh5P9dh7CMzsgfTfA=;
- b=IK8P+QlaiLXAzpJj99TFJwF4w6UqO55vLKYS1kHpi+2C8RmCTdZX4cuI4eroiaKeyx/94UDeYt+Ssk4X6eP4FLuhEFam9Y1PcmpDRmvm/vqTz/U4Q7emR7voND9wYJBN0liTZhyD/i0U9VV1vCNfzlZdqXMrZ8MZXPTXsnV2JtcVZgPCpDVbxt9kpKkqnEEufvw0C4aZiK3LLTbSxaG+eKJ7xl4Io3Ojro5vTlCsYbN0qLmgQsnn2C+W8pIOlGPy1dssw5JEVIiF9oCGpLUMr9sk++vJQkJioEAEIEGr8G/n3RUldqrM8YqDeJmItnIJvDPZQCmS/N9+Nx5fK35l5Q==
-Received: from DU2PR04CA0086.eurprd04.prod.outlook.com (2603:10a6:10:232::31)
- by AS8PR03MB6856.eurprd03.prod.outlook.com (2603:10a6:20b:29f::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.21; Tue, 1 Jul
- 2025 16:53:47 +0000
-Received: from DU6PEPF0000B620.eurprd02.prod.outlook.com
- (2603:10a6:10:232:cafe::cd) by DU2PR04CA0086.outlook.office365.com
- (2603:10a6:10:232::31) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8901.19 via Frontend Transport; Tue,
- 1 Jul 2025 16:53:47 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 20.160.56.87)
- smtp.mailfrom=seco.com; dkim=pass (signature was verified)
- header.d=seco.com;dmarc=pass action=none header.from=seco.com;
-Received-SPF: Pass (protection.outlook.com: domain of seco.com designates
- 20.160.56.87 as permitted sender) receiver=protection.outlook.com;
- client-ip=20.160.56.87; helo=repost-eu.tmcas.trendmicro.com; pr=C
-Received: from repost-eu.tmcas.trendmicro.com (20.160.56.87) by
- DU6PEPF0000B620.mail.protection.outlook.com (10.167.8.136) with Microsoft
- SMTP Server (version=TLS1_3, cipher=TLS_AES_256_GCM_SHA384) id 15.20.8901.15
- via Frontend Transport; Tue, 1 Jul 2025 16:53:47 +0000
-Received: from outmta (unknown [192.168.82.136])
-	by repost-eu.tmcas.trendmicro.com (Trend Micro CAS) with ESMTP id AE82A20083980;
-	Tue,  1 Jul 2025 16:53:46 +0000 (UTC)
-Received: from DU2PR03CU002.outbound.protection.outlook.com (unknown [52.101.65.83])
-	by repre.tmcas.trendmicro.com (Trend Micro CAS) with ESMTPS id D203F2008006E;
-	Tue,  1 Jul 2025 16:53:44 +0000 (UTC)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=JbkwE0j2Bdt5zarGCe68e8BuI+JuESLCO7f96lESGrL4s3Ak8JvcMmM7Xk446zlBM4ohSdVcVrYw8n466V3+EZW7qzn5KNCtKlT0lcTaX0RXetGvVg0X9GaZJ8Pe3m9AL9c4/Ov8DWk/IzWrqf3eappgYFEF3dKO73v6PZHz7AKD81YeJnR7wai+Xnmx2s3qtShEenkbxYymecm6IrJGUhB/wRvv7dMyhcbSoVS2kaTS2Md3pB54TfJoRkTBmhBQowTfVz/UM7UzF+bnu5VqI0bH3ZBsbQx0ubF07AyLYg8tz3pcB9vr28JMPaEsR/ROy9qADso4p23l1vEJg8RAuQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=kBiRGmDC+lhaQxS6YhR2eZjXV1Jh5P9dh7CMzsgfTfA=;
- b=b13K6IN78Vptd0fafu7OBJDfYbt6sC7dMgK0+ZoAzGuFaVTyg1z+QDldeAOboPBpHrGfF5GRBl/bd6qvMWxhf4a+JxuARm0pu4zJa3CELjD+wxRBQniTYnIIL8uL1Fn8bgk07m4QonKbo7z5AUQqWT69H6l6sKAvzVYQxPzTDtHgHmQs/78b20CqiYrRzGf5nY0vQRxyqT+ZMnfazYLeBQTpJZ5aXYlN3GiosNaGEh/MnJdfP6k5k4vXHTJRL1zzr9j/+ZiOTaUVxvYFPb0ygqc2tSj5XyoEs8HXRuezO+FFNcdvokM+wXzx4tE6bpUNp6jRzbAUn7gCxtwIh1nzDQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
- dkim=pass header.d=seco.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=kBiRGmDC+lhaQxS6YhR2eZjXV1Jh5P9dh7CMzsgfTfA=;
- b=IK8P+QlaiLXAzpJj99TFJwF4w6UqO55vLKYS1kHpi+2C8RmCTdZX4cuI4eroiaKeyx/94UDeYt+Ssk4X6eP4FLuhEFam9Y1PcmpDRmvm/vqTz/U4Q7emR7voND9wYJBN0liTZhyD/i0U9VV1vCNfzlZdqXMrZ8MZXPTXsnV2JtcVZgPCpDVbxt9kpKkqnEEufvw0C4aZiK3LLTbSxaG+eKJ7xl4Io3Ojro5vTlCsYbN0qLmgQsnn2C+W8pIOlGPy1dssw5JEVIiF9oCGpLUMr9sk++vJQkJioEAEIEGr8G/n3RUldqrM8YqDeJmItnIJvDPZQCmS/N9+Nx5fK35l5Q==
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=seco.com;
-Received: from DU0PR03MB9005.eurprd03.prod.outlook.com (2603:10a6:10:478::7)
- by AM9PR03MB8025.eurprd03.prod.outlook.com (2603:10a6:20b:43c::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8880.30; Tue, 1 Jul
- 2025 16:53:42 +0000
-Received: from DU0PR03MB9005.eurprd03.prod.outlook.com
- ([fe80::ed7c:3f8:4f86:40dd]) by DU0PR03MB9005.eurprd03.prod.outlook.com
- ([fe80::ed7c:3f8:4f86:40dd%2]) with mapi id 15.20.8880.029; Tue, 1 Jul 2025
- 16:53:42 +0000
-Message-ID: <7e409619-0e36-4cb5-9db9-b7bf1effc920@seco.com>
-Date: Tue, 1 Jul 2025 12:53:37 -0400
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next v2 00/18] Support the Cadence MACB/GEM instances
- on Mobileye EyeQ5 SoCs
-To: =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Nicolas Ferre <nicolas.ferre@microchip.com>,
- Claudiu Beznea <claudiu.beznea@tuxon.dev>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Alexandre Ghiti <alex@ghiti.fr>, Samuel Holland <samuel.holland@sifive.com>,
- Richard Cochran <richardcochran@gmail.com>,
- Russell King <linux@armlinux.org.uk>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
- Gregory CLEMENT <gregory.clement@bootlin.com>,
- Harini Katakam <harini.katakam@xilinx.com>, Jeff Garzik <jeff@garzik.org>
-Cc: netdev@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-mips@vger.kernel.org, Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, Andrew Lunn <andrew@lunn.ch>
-References: <20250627-macb-v2-0-ff8207d0bb77@bootlin.com>
-Content-Language: en-US
-From: Sean Anderson <sean.anderson@seco.com>
-In-Reply-To: <20250627-macb-v2-0-ff8207d0bb77@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MN2PR01CA0037.prod.exchangelabs.com (2603:10b6:208:23f::6)
- To DU0PR03MB9005.eurprd03.prod.outlook.com (2603:10a6:10:478::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30EC91465A1;
+	Tue,  1 Jul 2025 22:54:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1751410441; cv=none; b=mJKBfmf06Cw4gpnQarkfbttc5HLlbcEJMad2p0spCEN5skvTYNlMtgI1LB0sAB5ZdZGH1xinb9PjY74Q5Jus4EpAdy2FgIi6b2ypdWnKzU4bK8rs2gW/qlYzm012Fmg3ugyJ6RJRLEqp5WvPsMDJC3uFaOCgPWtYo6Pw3Zi5DmU=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1751410441; c=relaxed/simple;
+	bh=4lr2RLEbUpnITU4V7bmYHUkiT+nk+EHlKhuQ2bFKCrk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=pcAVWvghQBNChkC1N6WByu/xe6YntDkD+o4POUBBbcBOhMhiG+MyVJ3nZEvimEDfohyhh5KbvpsxWKXtefTb7kzL4b2T6FcOm8lduT2OHCj3Vlq/X4vcdVuIs90keS0RK4rBhDfM6CHEpD+tKX7hwS5jNzaBXzh/Hlkcxf7qxPM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TLYvXWMm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D1EDC4CEEB;
+	Tue,  1 Jul 2025 22:54:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751410440;
+	bh=4lr2RLEbUpnITU4V7bmYHUkiT+nk+EHlKhuQ2bFKCrk=;
+	h=From:To:Cc:Subject:Date:From;
+	b=TLYvXWMm4ggfYlz/+mG8RBgwc++pdGk2tNrSousr4zWJxrL7CLeX6bnYmtTpXEQC+
+	 ZN2wolQSRt6hPLCfqniqhaGqM3BtCAboXZXnSPRmMRgeUsn1Ddaz+9MdSTL1IPnMPo
+	 RsxkGVM+azP7d6iuha8Piuvh3zOkbFFj+rT6KtTSAAGfMkip4PYDSEXXJ4oHdweXRt
+	 S8LnkVmvc0PlNGgQvdDvGGyRKo6+aBfPSV8azNebkja9l7kuXrAZFdrsv2NuFTf1Pg
+	 tR+9b1vqOBTJ/32DSMz1yxtyymNRwyUfTnk+j9gLpVd1HW1XjbziJxlWPGxCy56960
+	 5cGK2WUnDJtYw==
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	=?UTF-8?q?Marek=20Beh=C3=BAn?= <kabel@kernel.org>,
+	Keguang Zhang <keguang.zhang@gmail.com>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>
+Cc: linux-gpio@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org
+Subject: [PATCH] dt-bindings: gpio: Create a trivial GPIO schema
+Date: Tue,  1 Jul 2025 17:53:50 -0500
+Message-ID: <20250701225355.2977294-1-robh@kernel.org>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic:
-	DU0PR03MB9005:EE_|AM9PR03MB8025:EE_|DU6PEPF0000B620:EE_|AS8PR03MB6856:EE_
-X-MS-Office365-Filtering-Correlation-Id: a58bea0b-4daa-463a-0460-08ddb8bfd8c9
-X-TrendMicro-CAS-OUT-LOOP-IDENTIFIER: 656f966764b7fb185830381c646b41a1
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted:
- BCL:0;ARA:13230040|376014|7416014|366016|1800799024|921020;
-X-Microsoft-Antispam-Message-Info-Original:
- =?utf-8?B?RG56QVVqTmtVWXYwdEpZWXcrKzhaSXhNbXFJRkk1YXVRUGw4U3gzTm9RT1Zi?=
- =?utf-8?B?bmNYSnd3eThWRHZFTWRzS0IxcU81SFRVVHRkSHJpVWJpYk5wUUhzVVVkZGh2?=
- =?utf-8?B?bU8yeUtxSnpQQ2NXRVMwRTgrUmQvdFhuU2F4ZmJ1eHFrYW9BKzRwY0lUZnUx?=
- =?utf-8?B?SUFqUWRSM3BWVE41a1BXaWN4UkYwV1NFNmRmQjQvY1dxNzZoYURuRVltTGxh?=
- =?utf-8?B?bzkvL0cvcEw4Kzl0STIybkhYY1Z4MjE1RnlLZkZKUkhLSENLbEpCb3VsWnVo?=
- =?utf-8?B?UHRiM0tlQzJUbHVzRU9ja0ljVkkyN0NXOXFDN1hINmhkTC9PK3lTUXIvRUtn?=
- =?utf-8?B?RjFwWVB4RWxMLzdnWDR2SWhjNHJIQ25xMjRYeHVKMFVkR0dzS1orb1dsSkd5?=
- =?utf-8?B?blVMZlcxTUk4dys3ZTJmRE5VNm1UWlR4OTdVY3NLTDF2OUhiQ1NFMWpaV20v?=
- =?utf-8?B?dGFCeE8yNm1JRUcrNkpnWnVDSFFIY3Jra3hIK051dlNmYSs1UHNuT0tmN2FQ?=
- =?utf-8?B?ZG53eThXcHdvVWpuZys2S01oSWw3cFpkREpPWHJ3UUxvdGVKcjREbU1GNmF0?=
- =?utf-8?B?ZjBBR3pvRWxSTnBBanFZb0tKdEJ0VWJHQnNUQngvUkJjQ1BXKzJzQk9MVTdF?=
- =?utf-8?B?WVpld0x4RnlNbXNodE1TekpjaC9ORmQwQnJ3SjZrSWZkS0lleEJ2VjBPYytS?=
- =?utf-8?B?VHlnWTJEM2YzRjlBYzBwQ2xxbXFxcXI3ZE1GdG9WbnlYK3I4bnFoNHMwaEEz?=
- =?utf-8?B?NUUrWjg2QmxvQ3ZxbkhpcGNnUDlWRTl0VlV1WEhac2MxUmxaUmthSUlSMG9M?=
- =?utf-8?B?UXNqUmdZTTFWbUtHMU1kTkt1OVkvTVhxUnZKV3hnU0xvNlNkaVJpVjFZSVd3?=
- =?utf-8?B?VENZUHV2ZlNWTFlZZWNhVXJaWVlXOVk5TjI3SkJKZW81U01ybExScUE0UkN2?=
- =?utf-8?B?M3g1SmtxY0dBa2RsK29QWldxcmdaOU1PNVRFbGRMZXlOVWNmTGQwU08zUWVi?=
- =?utf-8?B?dU4yTTNlNW5MVWliN2NuTHQwWkJESGU5VWdVbU5oSGlKcm9OVE9LeU5FVW9C?=
- =?utf-8?B?enljMjVQN0ZQMHdBcXVPbElWZmt1TXczSnpsWjBVcHFLUHJNVklkS1hpVHZz?=
- =?utf-8?B?UHVXajkram93K3NHNzJuTWxrL1ovTlNjeFNnZFR6V1pUU2JoSUdpRGJKZnhR?=
- =?utf-8?B?Z1kzam1maUxDMEYwRzFidzNoV3ozQUdoUzNFYXpUem56MmRYQkxDdlE2SnNM?=
- =?utf-8?B?OHdOclU5Mm1vQjNIeVRId2M0OFdIcEJlT3RGN0IySTF1UGRKZnpuYXBXWEQr?=
- =?utf-8?B?Z2o0RUorUGdWYlV5MDJqS0hKdkdtY0hOKys4eVovYldBK3E3MVJVdncxNTg1?=
- =?utf-8?B?Kzdva0pCVXVHcUw3M2tTeHl0SHRhQUZBT2djQ1U0a1lGOHhibE1MQzY4N1ov?=
- =?utf-8?B?eXVpZFpWOUdPZTVycXB2NWdwT1NqL2JUanVUMVJ1aG9ZOEY5UTQzQWI1dllW?=
- =?utf-8?B?eXFoa281eFE4RlhpcUo0aXNSS09pWm5SMFpMNUVpR0hlWmFDZWc2TjdwRFF3?=
- =?utf-8?B?UEZuTU9jREkvYmErbWVhU0FZNlRBei9leWJ3RjN0dkZ5VEhPWFlDaEkxKzFj?=
- =?utf-8?B?d3V6aUd3OGtQMmt1ajhJUUlVNWRPaEhRb0R6aHVuWm9lN05CTFNFd1JaN1Bz?=
- =?utf-8?B?ZUVCT0QvZjR0Z3l0YTVvWEUrTjdCUk1qMTRnMkhlQTBaMVcyZVZQdHl2eFhC?=
- =?utf-8?B?eGQ2R2N4ZjUrb09UajUzSkxVYTUyQlVNdWNkZ1l1ZklxSVV4Tmh2YW52bmE1?=
- =?utf-8?B?ODVnMnlWWkw0TFovT2lVR0pGZk5FVUN2ZjF6L1RzeEZwcXNpQTVwM3J3VFRB?=
- =?utf-8?B?N1NEajZqK1d6UUExVEluWUNka3ZIZE9GYS9uTXphM3YyN1hwWlJ6SERkNDBY?=
- =?utf-8?Q?Kiq/wwwW+Aj/AOsBeTa1Me0cLpMgfJZt?=
-X-Forefront-Antispam-Report-Untrusted:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR03MB9005.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(921020);DIR:OUT;SFP:1102;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM9PR03MB8025
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped:
- DU6PEPF0000B620.eurprd02.prod.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs:
-	7aea2fc3-bd29-4c70-0dba-08ddb8bfd5b2
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|7416014|376014|36860700013|14060799003|1800799024|82310400026|35042699022|921020;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?WVk2bmZwUXpDYXQ1Um5yNTNjcUVSSTlTL0RtNm5NclRrTitibmJHWmx5Mmgx?=
- =?utf-8?B?QnQrejU3bjFsSFVBU0ljTE5JSnMwbnZRemNGUUFEYS82QkxVU25mcjNiVENN?=
- =?utf-8?B?bVJJaC9MT2dFai9tS3ZQMjNXbnZGVHJhVERHTDF1c3lZS2I5RnpVTklkaTl4?=
- =?utf-8?B?eVlENlFOVk1zdmlTbmNLMDlyMEErdmVmUEFiMU1ZcWwreVFvMGk4ZEJVeVpQ?=
- =?utf-8?B?OG51bWVnSmZhcVFMTWoyQnVPWC9YdFM0aVJLemtEcVhvZHJTVkgvdTU4UDN4?=
- =?utf-8?B?dU9ZMGZtaHhMYmFFUGpvd0hVbXVPR1JDSzdjcTYyandYNEFQTHBubWNyck5S?=
- =?utf-8?B?SXZMcVFseGttSmZsemJONkZQVS9ueFJoMmRMak9PQVkxSmQ1RHVBRGlDcC8x?=
- =?utf-8?B?UWQ0NE41UUEwdjZyVXk3bGhBYUhpbGt2bUt0d0RCK1JlaUNYZi94K0dIdDkx?=
- =?utf-8?B?bk9UU25NcWgzTVpFMUFzTW1qZ0tMS0d2SFB2SVZWTyt3NzZrUXdsUWtEM3VW?=
- =?utf-8?B?QVN6QXRCWEJCWGFyMUpVSGVQcitpbnhvZENCck5EUG5Nb3VQUXJhdjJ3RlFJ?=
- =?utf-8?B?OGtGeUJ6UzArRmlHS1AwYVhWd3RnWVljbWM5MDJ6U1VDVUE3R2g2dHR6TTdt?=
- =?utf-8?B?QnBZU0xtdnowQzVSREFDTXhmYnZXbE5Ea1BCbVpPTE43d0xLZDNFZE90QnZR?=
- =?utf-8?B?bjF2Q3FFeU0zcWxVemEyWkExQml3TkdnLy9kRHlIRlhDVTJPN1VVUVU2UzB4?=
- =?utf-8?B?eXQ5dGdqQUFaL0xJSkdDUC9QUFJPbDd3azF2dnZTVkZ4RFk5Q0dWQlVVd1Ry?=
- =?utf-8?B?UVhIQzJ4TmhWMldLZHBEN204NFJQR0JCSHU4LzR5ZDM2QUdJU0hwZTRyQ0c1?=
- =?utf-8?B?eUpiL1JmdEg5UHdNdk1ZWGp6cWFCYUVkRXYzS2NyempVN0NQcExUZUdFNlRQ?=
- =?utf-8?B?NS9tSW1iNDRlMUVZdklMaGVkblViSVdUbHViL3NCb04vdUhaU2lxa3RHOFVK?=
- =?utf-8?B?ajU1aHZKb3Q4Skd4ZkYyNE9XWmJkbFU4MndNa2xONDJra1pBRzhBK2lyczVJ?=
- =?utf-8?B?ZlYvSEV6QUNhbEwyNmErSm5NV2ljb1g1aVF1eHhydzVWa1hweDA4QTJ6SlRy?=
- =?utf-8?B?a0F6RHlkS0lkRUpSMUZZKzhKZi9YcHVsM2Zxci9TRkhldTY4SFNlSVBydkRI?=
- =?utf-8?B?TklyaXRNSWtwNW9BekxkMmk4bUtrRm81bHRJSnZUWEJ5M1l3eENIMyswc1JO?=
- =?utf-8?B?QXRIQXp1cElLcGw5ZkI3UkNYRGFzaFdQTHMzMHhTYkVXSzhqbFZ2QlFJMm9a?=
- =?utf-8?B?d0NEWjBLWkptc0NUUURYbEE1d1l4d2JnYXRMWWlSVzRxczlwRkxxbWxNWTJk?=
- =?utf-8?B?bDlrZ3BDY1ZzRVpYVVlUVlEyQXFzMDZCVHJ1Wnk4WDhUU1IwVW9rNDgxemRD?=
- =?utf-8?B?Vy9tcFM3NVFsa2d3S1UrZ1hvOXlIZUM4ZWNJaFhVV3ZaT01sTHFrZlROY3Vr?=
- =?utf-8?B?RG12eFpub0xuOHduQUNDSi9GeXE2U2ZnaFExL1FOWjJhZ0tRSi9RbmJMNmRU?=
- =?utf-8?B?aG0wQXloTTBYVllockpzSk00dXdwTHVER3dBZkRXTnVTTGpuTFEzbGRxOFRn?=
- =?utf-8?B?akM5RFRzNWtrUXg1S1NMcTAwUklLOXFVcUhuOWpRYy9pcUVnZHM1L3lZeEMy?=
- =?utf-8?B?dS9pSmowWFUrZnNvaHFkRU0rWTh6VGdjRU9SYUlhZndBNCs0QW5DT0lLQzZ0?=
- =?utf-8?B?OE8xSGhIMWVlSkx6TDFudHE1VEh0eVBud2YwWEx4Qm1GMEhGSURDTzV4MEts?=
- =?utf-8?B?WUZqMllVWkNZdWFpNEp2UDVWU3lzaG5JMEZVZG12SS9HQWtDZHlUODNhb2U3?=
- =?utf-8?B?TVhsa2YrZE1NNTZ4alBEUUEwNmFYUjgzcDJ0RFcvUjBTS2Q2dW93MDczMWYv?=
- =?utf-8?B?eEc5M05JTHdWenZwWGkwMmtYTnZHUHNwblpjNlUydUQySE1qRDl0LzdGMDVh?=
- =?utf-8?B?Tjk4VlRUNjFwRSt0bGx3UUhEd1B0aWlKeHh0M3hSZHNyclRISVJxRHBNN3M1?=
- =?utf-8?B?elRIeDdDTHNPQXlJTVEwQ0Y0U0VhcHVzK2F0QT09?=
-X-Forefront-Antispam-Report:
-	CIP:20.160.56.87;CTRY:NL;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:repost-eu.tmcas.trendmicro.com;PTR:repost-eu.tmcas.trendmicro.com;CAT:NONE;SFS:(13230040)(7416014)(376014)(36860700013)(14060799003)(1800799024)(82310400026)(35042699022)(921020);DIR:OUT;SFP:1102;
-X-OriginatorOrg: seco.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Jul 2025 16:53:47.1325
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: a58bea0b-4daa-463a-0460-08ddb8bfd8c9
-X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=bebe97c3-6438-442e-ade3-ff17aa50e733;Ip=[20.160.56.87];Helo=[repost-eu.tmcas.trendmicro.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	DU6PEPF0000B620.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR03MB6856
+Content-Transfer-Encoding: 8bit
 
-Hi Theo,
+Many simple GPIO controllers without interrupt capability have the same
+schema other than their compatible value. Combine all these bindings
+into a single schema. The criteria to be included here is must use 2
+cells, have no interrupt capability, have 0 or 1 "reg" entries, and
+have no other resources (like clocks).
 
-Please remember to take the following recipients off CC for next patch:
+Note that "ngpios" is now allowed in some cases it wasn't before and
+constraints on it have been dropped.
 
-<cyrille.pitchen@atmel.com>: host mx1.microchip.iphmx.com[68.232.147.91] said:
-    550 #5.1.0 Address rejected. (in reply to RCPT TO command)
+Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+---
+We could also do this for ones with interrupts, but that seems a bit
+more varied.
+---
+ .../devicetree/bindings/gpio/fcs,fxl6408.yaml |  59 ----------
+ .../bindings/gpio/gateworks,pld-gpio.txt      |  19 ----
+ .../devicetree/bindings/gpio/gpio-lp3943.txt  |  37 -------
+ .../bindings/gpio/gpio-max77620.txt           |  25 -----
+ .../devicetree/bindings/gpio/gpio-moxtet.txt  |  18 ---
+ .../devicetree/bindings/gpio/gpio-palmas.txt  |  27 -----
+ .../bindings/gpio/gpio-pca9570.yaml           |  56 ----------
+ .../bindings/gpio/gpio-tpic2810.yaml          |  51 ---------
+ .../devicetree/bindings/gpio/gpio-ts4800.txt  |  20 ----
+ .../devicetree/bindings/gpio/gpio-ts4900.txt  |  30 -----
+ .../devicetree/bindings/gpio/gpio-xgene.txt   |  22 ----
+ .../bindings/gpio/ibm,ppc4xx-gpio.txt         |  24 ----
+ .../bindings/gpio/loongson,ls1x-gpio.yaml     |  49 ---------
+ .../bindings/gpio/nintendo,hollywood-gpio.txt |  26 -----
+ .../gpio/rockchip,rk3328-grf-gpio.yaml        |  50 ---------
+ .../bindings/gpio/snps,creg-gpio.txt          |  21 ----
+ .../devicetree/bindings/gpio/ti,7416374.yaml  |  56 ----------
+ .../bindings/gpio/trivial-gpio.yaml           | 104 ++++++++++++++++++
+ 18 files changed, 104 insertions(+), 590 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/gpio/fcs,fxl6408.yaml
+ delete mode 100644 Documentation/devicetree/bindings/gpio/gateworks,pld-gpio.txt
+ delete mode 100644 Documentation/devicetree/bindings/gpio/gpio-lp3943.txt
+ delete mode 100644 Documentation/devicetree/bindings/gpio/gpio-max77620.txt
+ delete mode 100644 Documentation/devicetree/bindings/gpio/gpio-moxtet.txt
+ delete mode 100644 Documentation/devicetree/bindings/gpio/gpio-palmas.txt
+ delete mode 100644 Documentation/devicetree/bindings/gpio/gpio-pca9570.yaml
+ delete mode 100644 Documentation/devicetree/bindings/gpio/gpio-tpic2810.yaml
+ delete mode 100644 Documentation/devicetree/bindings/gpio/gpio-ts4800.txt
+ delete mode 100644 Documentation/devicetree/bindings/gpio/gpio-ts4900.txt
+ delete mode 100644 Documentation/devicetree/bindings/gpio/gpio-xgene.txt
+ delete mode 100644 Documentation/devicetree/bindings/gpio/ibm,ppc4xx-gpio.txt
+ delete mode 100644 Documentation/devicetree/bindings/gpio/loongson,ls1x-gpio.yaml
+ delete mode 100644 Documentation/devicetree/bindings/gpio/nintendo,hollywood-gpio.txt
+ delete mode 100644 Documentation/devicetree/bindings/gpio/rockchip,rk3328-grf-gpio.yaml
+ delete mode 100644 Documentation/devicetree/bindings/gpio/snps,creg-gpio.txt
+ delete mode 100644 Documentation/devicetree/bindings/gpio/ti,7416374.yaml
+ create mode 100644 Documentation/devicetree/bindings/gpio/trivial-gpio.yaml
 
-<rafalo@cadence.com>: host mxa-0014ca01.gslb.pphosted.com[208.86.201.193] said:
-    550 5.1.1 User Unknown (in reply to DATA command)
+diff --git a/Documentation/devicetree/bindings/gpio/fcs,fxl6408.yaml b/Documentation/devicetree/bindings/gpio/fcs,fxl6408.yaml
+deleted file mode 100644
+index b74fa81e7d05..000000000000
+--- a/Documentation/devicetree/bindings/gpio/fcs,fxl6408.yaml
++++ /dev/null
+@@ -1,59 +0,0 @@
+-# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+-%YAML 1.2
+----
+-$id: http://devicetree.org/schemas/gpio/fcs,fxl6408.yaml#
+-$schema: http://devicetree.org/meta-schemas/core.yaml#
+-
+-title: Fairchild FXL6408 I2C GPIO Expander
+-
+-maintainers:
+-  - Emanuele Ghidoli <emanuele.ghidoli@toradex.com>
+-
+-properties:
+-  compatible:
+-    enum:
+-      - fcs,fxl6408
+-
+-  reg:
+-    maxItems: 1
+-
+-  "#gpio-cells":
+-    const: 2
+-
+-  gpio-controller: true
+-
+-  gpio-line-names:
+-    minItems: 1
+-    maxItems: 8
+-
+-patternProperties:
+-  "^(hog-[0-9]+|.+-hog(-[0-9]+)?)$":
+-    type: object
+-    required:
+-      - gpio-hog
+-
+-required:
+-  - compatible
+-  - reg
+-  - gpio-controller
+-  - "#gpio-cells"
+-
+-additionalProperties: false
+-
+-examples:
+-  - |
+-    i2c {
+-        #address-cells = <1>;
+-        #size-cells = <0>;
+-
+-        gpio_expander_43: gpio-expander@43 {
+-            compatible = "fcs,fxl6408";
+-            reg = <0x43>;
+-            gpio-controller;
+-            #gpio-cells = <2>;
+-            gpio-line-names = "Wi-Fi_W_DISABLE", "Wi-Fi_WKUP_WLAN",
+-                              "PWR_EN_+V3.3_WiFi_N", "PCIe_REF_CLK_EN",
+-                              "USB_RESET_N", "USB_BYPASS_N", "Wi-Fi_PDn",
+-                              "Wi-Fi_WKUP_BT";
+-        };
+-    };
+diff --git a/Documentation/devicetree/bindings/gpio/gateworks,pld-gpio.txt b/Documentation/devicetree/bindings/gpio/gateworks,pld-gpio.txt
+deleted file mode 100644
+index d543fd1b8b23..000000000000
+--- a/Documentation/devicetree/bindings/gpio/gateworks,pld-gpio.txt
++++ /dev/null
+@@ -1,19 +0,0 @@
+-Gateworks PLD GPIO controller bindings
+-
+-The GPIO controller should be a child node on an I2C bus.
+-
+-Required properties:
+-- compatible: Should be "gateworks,pld-gpio"
+-- reg: I2C slave address
+-- gpio-controller: Marks the device node as a GPIO controller.
+-- #gpio-cells: Should be <2>. The first cell is the gpio number and
+-  the second cell is used to specify optional parameters.
+-
+-Example:
+-
+-pld@56 {
+-	compatible = "gateworks,pld-gpio";
+-	reg = <0x56>;
+-	gpio-controller;
+-	#gpio-cells = <2>;
+-};
+diff --git a/Documentation/devicetree/bindings/gpio/gpio-lp3943.txt b/Documentation/devicetree/bindings/gpio/gpio-lp3943.txt
+deleted file mode 100644
+index 80fcb7d70e13..000000000000
+--- a/Documentation/devicetree/bindings/gpio/gpio-lp3943.txt
++++ /dev/null
+@@ -1,37 +0,0 @@
+-TI/National Semiconductor LP3943 GPIO controller
+-
+-Required properties:
+-  - compatible: "ti,lp3943-gpio"
+-  - gpio-controller: Marks the device node as a GPIO controller.
+-  - #gpio-cells: Should be 2. See gpio.txt in this directory for a
+-                 description of the cells format.
+-
+-Example:
+-Simple LED controls with LP3943 GPIO controller
+-
+-&i2c4 {
+-	lp3943@60 {
+-		compatible = "ti,lp3943";
+-		reg = <0x60>;
+-
+-		gpioex: gpio {
+-			compatible = "ti,lp3943-gpio";
+-			gpio-controller;
+-			#gpio-cells = <2>;
+-		};
+-	};
+-};
+-
+-leds {
+-	compatible = "gpio-leds";
+-	indicator1 {
+-		label = "indi1";
+-		gpios = <&gpioex 9 GPIO_ACTIVE_LOW>;
+-	};
+-
+-	indicator2 {
+-		label = "indi2";
+-		gpios = <&gpioex 10 GPIO_ACTIVE_LOW>;
+-		default-state = "off";
+-	};
+-};
+diff --git a/Documentation/devicetree/bindings/gpio/gpio-max77620.txt b/Documentation/devicetree/bindings/gpio/gpio-max77620.txt
+deleted file mode 100644
+index 410e716fd3d2..000000000000
+--- a/Documentation/devicetree/bindings/gpio/gpio-max77620.txt
++++ /dev/null
+@@ -1,25 +0,0 @@
+-GPIO driver for MAX77620 Power management IC from Maxim Semiconductor.
+-
+-Device has 8 GPIO pins which can be configured as GPIO as well as the
+-special IO functions.
+-
+-Required properties:
+--------------------
+-- gpio-controller : 	Marks the device node as a gpio controller.
+-- #gpio-cells : 	Should be two.  The first cell is the pin number and
+-			the second cell is used to specify the gpio polarity:
+-				0 = active high
+-				1 = active low
+-For more details, please refer generic GPIO DT binding document
+-<devicetree/bindings/gpio/gpio.txt>.
+-
+-Example:
+---------
+-#include <dt-bindings/mfd/max77620.h>
+-...
+-max77620@3c {
+-	compatible = "maxim,max77620";
+-
+-	gpio-controller;
+-	#gpio-cells = <2>;
+-};
+diff --git a/Documentation/devicetree/bindings/gpio/gpio-moxtet.txt b/Documentation/devicetree/bindings/gpio/gpio-moxtet.txt
+deleted file mode 100644
+index 410759de9f09..000000000000
+--- a/Documentation/devicetree/bindings/gpio/gpio-moxtet.txt
++++ /dev/null
+@@ -1,18 +0,0 @@
+-Turris Mox Moxtet GPIO expander via Moxtet bus
+-
+-Required properties:
+- - compatible		: Should be "cznic,moxtet-gpio".
+- - gpio-controller	: Marks the device node as a GPIO controller.
+- - #gpio-cells		: Should be two. For consumer use see gpio.txt.
+-
+-Other properties are required for a Moxtet bus device, please refer to
+-Documentation/devicetree/bindings/bus/moxtet.txt.
+-
+-Example:
+-
+-	moxtet_sfp: gpio@0 {
+-		compatible = "cznic,moxtet-gpio";
+-		gpio-controller;
+-		#gpio-cells = <2>;
+-		reg = <0>;
+-	}
+diff --git a/Documentation/devicetree/bindings/gpio/gpio-palmas.txt b/Documentation/devicetree/bindings/gpio/gpio-palmas.txt
+deleted file mode 100644
+index 08b5b52a3ae0..000000000000
+--- a/Documentation/devicetree/bindings/gpio/gpio-palmas.txt
++++ /dev/null
+@@ -1,27 +0,0 @@
+-Palmas GPIO controller bindings
+-
+-Required properties:
+-- compatible:
+-  - "ti,palams-gpio" for palma series of the GPIO controller
+-  - "ti,tps80036-gpio" for Palma series device TPS80036.
+-  - "ti,tps65913-gpio" for palma series device TPS65913.
+-  - "ti,tps65914-gpio" for palma series device TPS65914.
+-- #gpio-cells : Should be two.
+-  - first cell is the gpio pin number
+-  - second cell is used to specify the gpio polarity:
+-      0 = active high
+-      1 = active low
+-- gpio-controller : Marks the device node as a GPIO controller.
+-
+-Note: This gpio node will be sub node of palmas node.
+-
+-Example:
+-	palmas: tps65913@58 {
+-		:::::::::::
+-		palmas_gpio: palmas_gpio {
+-			compatible = "ti,palmas-gpio";
+-			gpio-controller;
+-			#gpio-cells = <2>;
+-		};
+-		:::::::::::
+-	};
+diff --git a/Documentation/devicetree/bindings/gpio/gpio-pca9570.yaml b/Documentation/devicetree/bindings/gpio/gpio-pca9570.yaml
+deleted file mode 100644
+index 6f73961001b7..000000000000
+--- a/Documentation/devicetree/bindings/gpio/gpio-pca9570.yaml
++++ /dev/null
+@@ -1,56 +0,0 @@
+-# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+-%YAML 1.2
+----
+-$id: http://devicetree.org/schemas/gpio/gpio-pca9570.yaml#
+-$schema: http://devicetree.org/meta-schemas/core.yaml#
+-
+-title: PCA9570 I2C GPO expander
+-
+-maintainers:
+-  - Sungbo Eo <mans0n@gorani.run>
+-
+-properties:
+-  compatible:
+-    enum:
+-      - dlg,slg7xl45106
+-      - nxp,pca9570
+-      - nxp,pca9571
+-
+-  reg:
+-    maxItems: 1
+-
+-  gpio-controller: true
+-
+-  '#gpio-cells':
+-    const: 2
+-
+-  gpio-line-names:
+-    minItems: 4
+-    maxItems: 8
+-
+-  label:
+-    description: A descriptive name for this device.
+-
+-required:
+-  - compatible
+-  - reg
+-  - gpio-controller
+-  - "#gpio-cells"
+-
+-additionalProperties: false
+-
+-examples:
+-  - |
+-    i2c {
+-        #address-cells = <1>;
+-        #size-cells = <0>;
+-
+-        gpio@24 {
+-            compatible = "nxp,pca9570";
+-            reg = <0x24>;
+-            gpio-controller;
+-            #gpio-cells = <2>;
+-        };
+-    };
+-
+-...
+diff --git a/Documentation/devicetree/bindings/gpio/gpio-tpic2810.yaml b/Documentation/devicetree/bindings/gpio/gpio-tpic2810.yaml
+deleted file mode 100644
+index 157969bc4c46..000000000000
+--- a/Documentation/devicetree/bindings/gpio/gpio-tpic2810.yaml
++++ /dev/null
+@@ -1,51 +0,0 @@
+-# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+-%YAML 1.2
+----
+-$id: http://devicetree.org/schemas/gpio/gpio-tpic2810.yaml#
+-$schema: http://devicetree.org/meta-schemas/core.yaml#
+-
+-title: TPIC2810 GPIO controller
+-
+-maintainers:
+-  - Aswath Govindraju <a-govindraju@ti.com>
+-
+-properties:
+-  compatible:
+-    enum:
+-      - ti,tpic2810
+-
+-  reg:
+-    maxItems: 1
+-
+-  gpio-controller: true
+-
+-  "#gpio-cells":
+-    const: 2
+-
+-  gpio-line-names:
+-    minItems: 1
+-    maxItems: 32
+-
+-required:
+-  - compatible
+-  - reg
+-  - gpio-controller
+-  - "#gpio-cells"
+-
+-additionalProperties: false
+-
+-examples:
+-  - |
+-    #include <dt-bindings/gpio/gpio.h>
+-
+-    i2c {
+-        #address-cells = <1>;
+-        #size-cells = <0>;
+-        gpio@60 {
+-            compatible = "ti,tpic2810";
+-            reg = <0x60>;
+-            gpio-controller;
+-            #gpio-cells = <2>;
+-            gpio-line-names = "LED A", "LED B", "LED C";
+-        };
+-    };
+diff --git a/Documentation/devicetree/bindings/gpio/gpio-ts4800.txt b/Documentation/devicetree/bindings/gpio/gpio-ts4800.txt
+deleted file mode 100644
+index 92ea9c8f6399..000000000000
+--- a/Documentation/devicetree/bindings/gpio/gpio-ts4800.txt
++++ /dev/null
+@@ -1,20 +0,0 @@
+-* TS-4800 FPGA's GPIO controller bindings
+-
+-Required properties:
+-- compatible: Must be "technologic,ts4800-gpio".
+-- #gpio-cells: Should be two. The first cell is the pin number.
+-- reg: Physical base address of the controller and length
+-       of memory mapped region.
+-
+-Optional property:
+-- ngpios: See "gpio.txt"
+-
+-Example:
+-
+-gpio1: gpio {
+-	compatible = "technologic,ts4800-gpio";
+-	reg = <0x10020 0x6>;
+-	ngpios = <8>;
+-	gpio-controller;
+-	#gpio-cells = <2>;
+-};
+diff --git a/Documentation/devicetree/bindings/gpio/gpio-ts4900.txt b/Documentation/devicetree/bindings/gpio/gpio-ts4900.txt
+deleted file mode 100644
+index 3f8e71b1ab2a..000000000000
+--- a/Documentation/devicetree/bindings/gpio/gpio-ts4900.txt
++++ /dev/null
+@@ -1,30 +0,0 @@
+-* Technologic Systems I2C-FPGA's GPIO controller bindings
+-
+-This bindings describes the GPIO controller for Technologic's FPGA core.
+-TS-4900's FPGA encodes the GPIO state on 3 bits, whereas the TS-7970's FPGA
+-uses 2 bits: it doesn't use a dedicated input bit.
+-
+-Required properties:
+-- compatible: Should be one of the following
+-		"technologic,ts4900-gpio"
+-		"technologic,ts7970-gpio"
+-- reg: Physical base address of the controller and length
+-       of memory mapped region.
+-- #gpio-cells: Should be two. The first cell is the pin number.
+-- gpio-controller: Marks the device node as a gpio controller.
+-
+-Optional property:
+-- ngpios: Number of GPIOs this controller is instantiated with,
+-  the default is 32. See gpio.txt for more details.
+-
+-Example:
+-
+-&i2c2 {
+-	gpio8: gpio@28 {
+-		compatible = "technologic,ts4900-gpio";
+-		reg = <0x28>;
+-		#gpio-cells = <2>;
+-		gpio-controller;
+-		ngpios = <32>;
+-	};
+-};
+diff --git a/Documentation/devicetree/bindings/gpio/gpio-xgene.txt b/Documentation/devicetree/bindings/gpio/gpio-xgene.txt
+deleted file mode 100644
+index 86dbb05e7758..000000000000
+--- a/Documentation/devicetree/bindings/gpio/gpio-xgene.txt
++++ /dev/null
+@@ -1,22 +0,0 @@
+-APM X-Gene SoC GPIO controller bindings
+-
+-This is a gpio controller that is part of the flash controller.
+-This gpio controller controls a total of 48 gpios.
+-
+-Required properties:
+-- compatible: "apm,xgene-gpio" for X-Gene GPIO controller
+-- reg: Physical base address and size of the controller's registers
+-- #gpio-cells: Should be two.
+-	- first cell is the pin number
+-	- second cell is used to specify the gpio polarity:
+-		0 = active high
+-		1 = active low
+-- gpio-controller: Marks the device node as a GPIO controller.
+-
+-Example:
+-	gpio0: gpio0@1701c000 {
+-		compatible = "apm,xgene-gpio";
+-		reg = <0x0 0x1701c000 0x0 0x40>;
+-		gpio-controller;
+-		#gpio-cells = <2>;
+-	};
+diff --git a/Documentation/devicetree/bindings/gpio/ibm,ppc4xx-gpio.txt b/Documentation/devicetree/bindings/gpio/ibm,ppc4xx-gpio.txt
+deleted file mode 100644
+index d58b3958f3ea..000000000000
+--- a/Documentation/devicetree/bindings/gpio/ibm,ppc4xx-gpio.txt
++++ /dev/null
+@@ -1,24 +0,0 @@
+-* IBM/AMCC/APM GPIO Controller for PowerPC 4XX series and compatible SoCs
+-
+-All GPIOs are pin-shared with other functions. DCRs control whether a
+-particular pin that has GPIO capabilities acts as a GPIO or is used for
+-another purpose. GPIO outputs are separately programmable to emulate
+-an open-drain driver.
+-
+-Required properties:
+-	- compatible: must be "ibm,ppc4xx-gpio"
+-	- reg: address and length of the register set for the device
+-	- #gpio-cells: must be set to 2. The first cell is the pin number
+-		and the second cell is used to specify the gpio polarity:
+-		0 = active high
+-		1 = active low
+-	- gpio-controller: marks the device node as a gpio controller.
+-
+-Example:
+-
+-GPIO0: gpio@ef600b00 {
+-	compatible = "ibm,ppc4xx-gpio";
+-	reg = <0xef600b00 0x00000048>;
+-	#gpio-cells = <2>;
+-	gpio-controller;
+-};
+diff --git a/Documentation/devicetree/bindings/gpio/loongson,ls1x-gpio.yaml b/Documentation/devicetree/bindings/gpio/loongson,ls1x-gpio.yaml
+deleted file mode 100644
+index 1a472c05697c..000000000000
+--- a/Documentation/devicetree/bindings/gpio/loongson,ls1x-gpio.yaml
++++ /dev/null
+@@ -1,49 +0,0 @@
+-# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+-%YAML 1.2
+----
+-$id: http://devicetree.org/schemas/gpio/loongson,ls1x-gpio.yaml#
+-$schema: http://devicetree.org/meta-schemas/core.yaml#
+-
+-title: Loongson-1 GPIO controller
+-
+-maintainers:
+-  - Keguang Zhang <keguang.zhang@gmail.com>
+-
+-properties:
+-  compatible:
+-    const: loongson,ls1x-gpio
+-
+-  reg:
+-    maxItems: 1
+-
+-  gpio-controller: true
+-
+-  "#gpio-cells":
+-    const: 2
+-
+-  ngpios:
+-    minimum: 1
+-    maximum: 32
+-
+-required:
+-  - compatible
+-  - reg
+-  - gpio-controller
+-  - "#gpio-cells"
+-  - ngpios
+-
+-additionalProperties: false
+-
+-examples:
+-  - |
+-    gpio0: gpio@1fd010c0 {
+-        compatible = "loongson,ls1x-gpio";
+-        reg = <0x1fd010c0 0x4>;
+-
+-        gpio-controller;
+-        #gpio-cells = <2>;
+-
+-        ngpios = <32>;
+-    };
+-
+-...
+diff --git a/Documentation/devicetree/bindings/gpio/nintendo,hollywood-gpio.txt b/Documentation/devicetree/bindings/gpio/nintendo,hollywood-gpio.txt
+deleted file mode 100644
+index df63da46309c..000000000000
+--- a/Documentation/devicetree/bindings/gpio/nintendo,hollywood-gpio.txt
++++ /dev/null
+@@ -1,26 +0,0 @@
+-Nintendo Wii (Hollywood) GPIO controller
+-
+-Required properties:
+-- compatible: "nintendo,hollywood-gpio"
+-- reg: Physical base address and length of the controller's registers.
+-- gpio-controller: Marks the device node as a GPIO controller.
+-- #gpio-cells: Should be <2>. The first cell is the pin number and the
+-  second cell is used to specify optional parameters:
+-   - bit 0 specifies polarity (0 for normal, 1 for inverted).
+-
+-Optional properties:
+-- ngpios: see Documentation/devicetree/bindings/gpio/gpio.txt
+-- interrupt-controller: Marks the device node as an interrupt controller.
+-- #interrupt-cells: Should be two.
+-- interrupts: Interrupt specifier for the controller's Broadway (PowerPC)
+-  interrupt.
+-
+-Example:
+-
+-	GPIO: gpio@d8000c0 {
+-		#gpio-cells = <2>;
+-		compatible = "nintendo,hollywood-gpio";
+-		reg = <0x0d8000c0 0x40>;
+-		gpio-controller;
+-		ngpios = <24>;
+-	}
+diff --git a/Documentation/devicetree/bindings/gpio/rockchip,rk3328-grf-gpio.yaml b/Documentation/devicetree/bindings/gpio/rockchip,rk3328-grf-gpio.yaml
+deleted file mode 100644
+index d8cce73ea0ae..000000000000
+--- a/Documentation/devicetree/bindings/gpio/rockchip,rk3328-grf-gpio.yaml
++++ /dev/null
+@@ -1,50 +0,0 @@
+-# SPDX-License-Identifier: GPL-2.0
+-%YAML 1.2
+----
+-$id: http://devicetree.org/schemas/gpio/rockchip,rk3328-grf-gpio.yaml#
+-$schema: http://devicetree.org/meta-schemas/core.yaml#
+-
+-title: Rockchip RK3328 General Register Files GPIO controller
+-
+-description:
+-  The Rockchip RK3328 General Register File (GRF) outputs only the
+-  GPIO_MUTE pin, originally for codec mute control, but it can also be used
+-  for general purpose. It is manipulated by the GRF_SOC_CON10 register.
+-  If needed in the future support for the HDMI pins can also be added.
+-  The GPIO node should be declared as the child of the GRF node.
+-
+-  The GPIO_MUTE pin is referred to in the format
+-
+-  <&grf_gpio 0 GPIO_ACTIVE_LOW>
+-
+-  The first cell is the pin number and
+-  the second cell is used to specify the GPIO polarity
+-    0 = Active high
+-    1 = Active low
+-
+-maintainers:
+-  - Heiko Stuebner <heiko@sntech.de>
+-
+-properties:
+-  compatible:
+-    const: rockchip,rk3328-grf-gpio
+-
+-  gpio-controller: true
+-
+-  "#gpio-cells":
+-    const: 2
+-
+-required:
+-  - compatible
+-  - gpio-controller
+-  - "#gpio-cells"
+-
+-additionalProperties: false
+-
+-examples:
+-  - |
+-    grf_gpio: gpio {
+-      compatible = "rockchip,rk3328-grf-gpio";
+-      gpio-controller;
+-      #gpio-cells = <2>;
+-    };
+diff --git a/Documentation/devicetree/bindings/gpio/snps,creg-gpio.txt b/Documentation/devicetree/bindings/gpio/snps,creg-gpio.txt
+deleted file mode 100644
+index 1b30812b015b..000000000000
+--- a/Documentation/devicetree/bindings/gpio/snps,creg-gpio.txt
++++ /dev/null
+@@ -1,21 +0,0 @@
+-Synopsys GPIO via CREG (Control REGisters) driver
+-
+-Required properties:
+-- compatible : "snps,creg-gpio-hsdk" or "snps,creg-gpio-axs10x".
+-- reg : Exactly one register range with length 0x4.
+-- #gpio-cells : Since the generic GPIO binding is used, the
+-  amount of cells must be specified as 2. The first cell is the
+-  pin number, the second cell is used to specify optional parameters:
+-  See "gpio-specifier" in .../devicetree/bindings/gpio/gpio.txt.
+-- gpio-controller : Marks the device node as a GPIO controller.
+-- ngpios: Number of GPIO pins.
+-
+-Example:
+-
+-gpio: gpio@f00014b0 {
+-	compatible = "snps,creg-gpio-hsdk";
+-	reg = <0xf00014b0 0x4>;
+-	gpio-controller;
+-	#gpio-cells = <2>;
+-	ngpios = <2>;
+-};
+diff --git a/Documentation/devicetree/bindings/gpio/ti,7416374.yaml b/Documentation/devicetree/bindings/gpio/ti,7416374.yaml
+deleted file mode 100644
+index 33472f091101..000000000000
+--- a/Documentation/devicetree/bindings/gpio/ti,7416374.yaml
++++ /dev/null
+@@ -1,56 +0,0 @@
+-# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+-%YAML 1.2
+----
+-$id: http://devicetree.org/schemas/gpio/ti,7416374.yaml#
+-$schema: http://devicetree.org/meta-schemas/core.yaml#
+-
+-title: TI 74XX MMIO GPIO
+-
+-maintainers:
+-  - Frank Li <Frank.Li@nxp.com>
+-
+-properties:
+-  compatible:
+-    enum:
+-      - ti,741g125 # for 741G125 (1-bit Input),
+-      - ti,741g174 # for 741G74 (1-bit Output),
+-      - ti,742g125 # for 742G125 (2-bit Input),
+-      - ti,7474    # for 7474 (2-bit Output),
+-      - ti,74125   # for 74125 (4-bit Input),
+-      - ti,74175   # for 74175 (4-bit Output),
+-      - ti,74365   # for 74365 (6-bit Input),
+-      - ti,74174   # for 74174 (6-bit Output),
+-      - ti,74244   # for 74244 (8-bit Input),
+-      - ti,74273   # for 74273 (8-bit Output),
+-      - ti,741624  # for 741624 (16-bit Input),
+-      - ti,7416374 # for 7416374 (16-bit Output).
+-
+-  reg:
+-    maxItems: 1
+-
+-  gpio-controller: true
+-
+-  '#gpio-cells':
+-    const: 2
+-    description: |
+-      The first cell is the pin number and
+-      the second cell is used to specify the GPIO polarity:
+-        0 = Active High,
+-        1 = Active Low.
+-
+-required:
+-  - compatible
+-  - reg
+-  - gpio-controller
+-  - '#gpio-cells'
+-
+-additionalProperties: false
+-
+-examples:
+-  - |
+-    gpio@30008004 {
+-        compatible = "ti,74174";
+-        reg = <0x30008004 0x1>;
+-        gpio-controller;
+-        #gpio-cells = <2>;
+-    };
+diff --git a/Documentation/devicetree/bindings/gpio/trivial-gpio.yaml b/Documentation/devicetree/bindings/gpio/trivial-gpio.yaml
+new file mode 100644
+index 000000000000..dd271aa9d97c
+--- /dev/null
++++ b/Documentation/devicetree/bindings/gpio/trivial-gpio.yaml
+@@ -0,0 +1,104 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/trivial-gpio.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Trivial 2-cell GPIO controllers
++
++maintainers:
++  - Bartosz Golaszewski <brgl@bgdev.pl>
++
++properties:
++  compatible:
++    enum:
++      - apm,xgene-gpio
++      - cznic,moxtet-gpio
++      - dlg,slg7xl45106
++      - fcs,fxl6408
++      - gateworks,pld-gpio
++      - ibm,ppc4xx-gpio
++      - loongson,ls1x-gpio
++      - maxim,max77620
++      - nintendo,hollywood-gpio
++      - nxp,pca9570
++      - nxp,pca9571
++      - rockchip,rk3328-grf-gpio
++      - snps,creg-gpio-hsdk
++      - technologic,ts4800-gpio
++      - technologic,ts4900-gpio
++      - technologic,ts7970-gpio
++      - ti,741g125 # for 741G125 (1-bit Input),
++      - ti,741g174 # for 741G74 (1-bit Output),
++      - ti,742g125 # for 742G125 (2-bit Input),
++      - ti,7474    # for 7474 (2-bit Output),
++      - ti,74125   # for 74125 (4-bit Input),
++      - ti,74175   # for 74175 (4-bit Output),
++      - ti,74365   # for 74365 (6-bit Input),
++      - ti,74174   # for 74174 (6-bit Output),
++      - ti,74244   # for 74244 (8-bit Input),
++      - ti,74273   # for 74273 (8-bit Output),
++      - ti,741624  # for 741624 (16-bit Input),
++      - ti,7416374 # for 7416374 (16-bit Output).
++      - ti,lp3943-gpio
++      - ti,palmas-gpio
++      - ti,tpic2810
++      - ti,tps80036-gpio
++      - ti,tps65913-gpio
++      - ti,tps65914-gpio
++
++  reg:
++    maxItems: 1
++
++  '#gpio-cells':
++    const: 2
++
++  gpio-controller: true
++
++  gpio-line-names: true
++
++  ngpios: true
++
++  # Don't add more properties
++
++patternProperties:
++  "^(hog-[0-9]+|.+-hog(-[0-9]+)?)$":
++    type: object
++    required:
++      - gpio-hog
++
++required:
++  - compatible
++  - '#gpio-cells'
++  - gpio-controller
++
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - maxim,max77620
++              - rockchip,rk3328-grf-gpio
++              - ti,lp3943-gpio
++              - ti,palmas-gpio
++              - ti,tps80036-gpio
++              - ti,tps65913-gpio
++              - ti,tps65914-gpio
++    then:
++      properties:
++        reg: false
++    else:
++      required:
++        - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    gpio@1701c000 {
++        compatible = "apm,xgene-gpio";
++        reg = <0x1701c000 0x40>;
++        gpio-controller;
++        #gpio-cells = <2>;
++    };
+-- 
+2.47.2
 
-<hskinnemoen@atmel.com>: host mx1.microchip.iphmx.com[68.232.147.91] said: 550
-    #5.1.0 Address rejected. (in reply to RCPT TO command)
-
-Thanks.
-
---Sean
 
