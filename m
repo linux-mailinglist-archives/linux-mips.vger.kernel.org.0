@@ -1,101 +1,86 @@
-Return-Path: <linux-mips+bounces-9604-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9603-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B12CAF586E
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Jul 2025 15:20:06 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24286AF58F4
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Jul 2025 15:29:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B9ADA7B9C3A
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Jul 2025 13:18:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AC2157BB353
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Jul 2025 13:18:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F30F27978D;
-	Wed,  2 Jul 2025 13:19:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCA56275AFF;
+	Wed,  2 Jul 2025 13:19:03 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4D921E485;
-	Wed,  2 Jul 2025 13:19:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92A0227735;
+	Wed,  2 Jul 2025 13:18:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751462347; cv=none; b=AX+tqf4FU4eu/JTHzk7QXzpld7wXIOqxObRDfORmwesF0gwIAuTW7opHcLi1/Yj4FPP8HZBDiIBdjXwBrR6WYjr8EnGkNwzmhRbdNUcSHVb6+Yn3n7J2rHsCB7BtvszebkTZd1BQFIkrmCwd5Z1RV+P4B1LUk2KbEFKLTu9BHhQ=
+	t=1751462343; cv=none; b=fkHqb3EWEj47KOQzpsZAZzZOUrjxswyy5EmKCwtincB6YsxtW6q6nJLl92bm6gmW/nDdJ6UcZfgMPnmTMDAnfvg0NdsQVhMNhld8xsxNLA7f93gqZevhds0vLQbWCGfgZGeRknAyf6FDAEHb6ZzvdZYSGsBmgzkEPeafqQpI7UI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751462347; c=relaxed/simple;
-	bh=a3Wyp5SqjigUho7y7SxxcO6AUOzylt0NJ22sAZJxEPE=;
+	s=arc-20240116; t=1751462343; c=relaxed/simple;
+	bh=QAwDg8AZhLOV8WryL5g2y7bANhcj6k8F/gQErZRvyrw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZDnihphMIOmyBNZT6hXnfHuG3GA7F0KksF85al6P+XDkWTqXblHuijimC1BIs55mwhwBoMCWQQ0QM+3aut8okhHwKVFw3dvtvq3vfoIp1Z0+pRxNcKn2odRekYmt7IeOY8NZ4n0qG2HhXNOVLsVWL+gV3BP+jAn1YGS+7yHH+Yw=
+	 Content-Type:Content-Disposition:In-Reply-To; b=aVQEHykEB5c2Hw3qHSPsmuzBhvDMga8sYnLe3aTbz8gDiMt5zagYO4TnjAJP11xsDXPyz/Q6kpplhNAoNo3yJ0x4MeoT2pt4I9DbxOpmnSmdqf0Z/CwQzmibC6mqOzlechiCt2bpr6M8f+iLOvLgogPepLFRcFahSWYwcrsWUnk=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1uWwab-00058O-00; Wed, 02 Jul 2025 14:29:25 +0200
+	id 1uWwab-00058Q-00; Wed, 02 Jul 2025 14:29:25 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id B451FC0C37; Wed,  2 Jul 2025 14:08:48 +0200 (CEST)
-Date: Wed, 2 Jul 2025 14:08:48 +0200
+	id 989A3C0C1C; Wed,  2 Jul 2025 14:14:47 +0200 (CEST)
+Date: Wed, 2 Jul 2025 14:14:47 +0200
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: disable MMID if GINVT is not usable
-Message-ID: <aGUhUM1y-ZLGWZg-@alpha.franken.de>
-References: <20250625-mmid_disable_no_ginv_on_noc-v1-1-38a3902607a7@bootlin.com>
- <808e21d2-1212-4358-9ba6-29f9d097be8a@app.fastmail.com>
+To: Masahiro Yamada <masahiroy@kernel.org>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mips: boot: use 'targets' instead of extra-y in Makefile
+Message-ID: <aGUit7vdpeC1jVm8@alpha.franken.de>
+References: <20250608015136.2960777-1-masahiroy@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <808e21d2-1212-4358-9ba6-29f9d097be8a@app.fastmail.com>
+In-Reply-To: <20250608015136.2960777-1-masahiroy@kernel.org>
 
-On Wed, Jun 25, 2025 at 03:44:00PM +0100, Jiaxun Yang wrote:
-> 在2025年6月25日周三 下午2:27，Gregory CLEMENT写道：
+On Sun, Jun 08, 2025 at 10:51:34AM +0900, Masahiro Yamada wrote:
+> vmlinux.bin.* files are built as prerequisites of other objects.
+> There is no need to use extra-y, which is planned for deprecation.
 > 
-> Hi Gregory,
+> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> ---
 > 
-> > If System-level Interconnect (aka Network on Chip) does not support
-> > the global invalidation, then MMID feature is not usable. Indeed the
-> > current implementation of MMID relies on the GINV* instruction.
+>  arch/mips/boot/Makefile | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 > 
-> Yes, it is the case if the NoC IP can't handle AMBA ACE DVM requests.
-> 
-> >
-> > Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
-> > ---
-> >  arch/mips/Kconfig                    | 6 ++++++
-> >  arch/mips/include/asm/cpu-features.h | 5 ++++-
-> >  arch/mips/mobileye/Kconfig           | 2 ++
-> >  3 files changed, 12 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-> > index 
-> > 1e48184ecf1ec8e29c0a25de6452ece5da835e30..05ce008459b89f03fa71d94429607feb9d06526f 
-> > 100644
-> > --- a/arch/mips/Kconfig
-> > +++ b/arch/mips/Kconfig
-> > @@ -2575,6 +2575,12 @@ config WAR_R10000_LLSC
-> >  config WAR_MIPS34K_MISSED_ITLB
-> >  	bool
-> > 
-> > +# Some I6500 based SoC do not support the global invalidation on their
-> > +# System-level Interconnect (aka Network on Chip), this have an
-> > +# influence on the MMID support.
-> > +config GINVT_UNSUPPORTED_NOC
-> > +	bool
-> > +
-> 
-> I believe this should be a DeviceTree property of CM node instead of Kconfig
-> hack.
+> diff --git a/arch/mips/boot/Makefile b/arch/mips/boot/Makefile
+> index 196c44fa72d9..8473c4671702 100644
+> --- a/arch/mips/boot/Makefile
+> +++ b/arch/mips/boot/Makefile
+> @@ -54,10 +54,10 @@ UIMAGE_ENTRYADDR = $(VMLINUX_ENTRY_ADDRESS)
+>  # Compressed vmlinux images
+>  #
+>  
+> -extra-y += vmlinux.bin.bz2
+> -extra-y += vmlinux.bin.gz
+> -extra-y += vmlinux.bin.lzma
+> -extra-y += vmlinux.bin.lzo
+> +targets += vmlinux.bin.bz2
+> +targets += vmlinux.bin.gz
+> +targets += vmlinux.bin.lzma
+> +targets += vmlinux.bin.lzo
+>  
+>  $(obj)/vmlinux.bin.bz2: $(obj)/vmlinux.bin FORCE
+>  	$(call if_changed,bzip2)
+> -- 
+> 2.43.0
 
-Either that or by a runtime check, if possible.
+applied to mips-next.
 
 Thomas.
 
