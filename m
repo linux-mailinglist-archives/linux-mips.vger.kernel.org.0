@@ -1,97 +1,101 @@
-Return-Path: <linux-mips+bounces-9612-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9604-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C5558AF5915
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Jul 2025 15:30:39 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B12CAF586E
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Jul 2025 15:20:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 610747BCAB5
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Jul 2025 13:20:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B9ADA7B9C3A
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Jul 2025 13:18:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AC1128640E;
-	Wed,  2 Jul 2025 13:19:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F30F27978D;
+	Wed,  2 Jul 2025 13:19:07 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9908428640A;
-	Wed,  2 Jul 2025 13:19:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4D921E485;
+	Wed,  2 Jul 2025 13:19:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751462372; cv=none; b=kcjmULwDiMF9zSv4xijJzljrz93xwVOHgNukCxl+ftSo22Nr/3a0+y4QLaes8gc6CrzgkPkyJVMMOovqWIEEz9fTmIZL/raIpb+6ypwGp3e7tetMNgJqMu+TBSDXuuU2lkb0oSYoyGqTr04tVOYwFs+r+EJL3NzPhylUXuTcGfQ=
+	t=1751462347; cv=none; b=AX+tqf4FU4eu/JTHzk7QXzpld7wXIOqxObRDfORmwesF0gwIAuTW7opHcLi1/Yj4FPP8HZBDiIBdjXwBrR6WYjr8EnGkNwzmhRbdNUcSHVb6+Yn3n7J2rHsCB7BtvszebkTZd1BQFIkrmCwd5Z1RV+P4B1LUk2KbEFKLTu9BHhQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751462372; c=relaxed/simple;
-	bh=1BbhlC+l1xKw8p+Nevl5eUTHDecQXYfUOAsFqanGWjY=;
+	s=arc-20240116; t=1751462347; c=relaxed/simple;
+	bh=a3Wyp5SqjigUho7y7SxxcO6AUOzylt0NJ22sAZJxEPE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FSkSx8VeMMdEGHUdu1g7B9bbZSPUn0bsNpjJvZqC4+PKMKb/XO/OACXmgTpUyTqGY8mWcDCFaLzmB+vblhV21ivpigl32HBEEvKPdiL0jOil8SYvgzhQYEGS9pSg1Y5Y+jb5fiLbjXfbSpRZCHK3fD96W20AnQUr74BL5G9VK24=
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZDnihphMIOmyBNZT6hXnfHuG3GA7F0KksF85al6P+XDkWTqXblHuijimC1BIs55mwhwBoMCWQQ0QM+3aut8okhHwKVFw3dvtvq3vfoIp1Z0+pRxNcKn2odRekYmt7IeOY8NZ4n0qG2HhXNOVLsVWL+gV3BP+jAn1YGS+7yHH+Yw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1uWwab-00058M-00; Wed, 02 Jul 2025 14:29:25 +0200
+	id 1uWwab-00058O-00; Wed, 02 Jul 2025 14:29:25 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id A43D6C0C1C; Wed,  2 Jul 2025 14:07:45 +0200 (CEST)
-Date: Wed, 2 Jul 2025 14:07:45 +0200
+	id B451FC0C37; Wed,  2 Jul 2025 14:08:48 +0200 (CEST)
+Date: Wed, 2 Jul 2025 14:08:48 +0200
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Shiji Yang <yangshiji66@outlook.com>
-Cc: linux-mips@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-spi@vger.kernel.org, John Crispin <john@phrozen.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 00/16] MIPS: some compilation fixes for the Lantiq
- platform
-Message-ID: <aGUhERHN5FH5Rwtc@alpha.franken.de>
-References: <OSBPR01MB1670163BDCA60924B3671D45BC72A@OSBPR01MB1670.jpnprd01.prod.outlook.com>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: disable MMID if GINVT is not usable
+Message-ID: <aGUhUM1y-ZLGWZg-@alpha.franken.de>
+References: <20250625-mmid_disable_no_ginv_on_noc-v1-1-38a3902607a7@bootlin.com>
+ <808e21d2-1212-4358-9ba6-29f9d097be8a@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <OSBPR01MB1670163BDCA60924B3671D45BC72A@OSBPR01MB1670.jpnprd01.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <808e21d2-1212-4358-9ba6-29f9d097be8a@app.fastmail.com>
 
-On Wed, Jun 18, 2025 at 10:53:13PM +0800, Shiji Yang wrote:
-> This patch series fixes some MIPS Lantiq platform compilation issues
-> found on the 6.12 kernel[1].
+On Wed, Jun 25, 2025 at 03:44:00PM +0100, Jiaxun Yang wrote:
+> 在2025年6月25日周三 下午2:27，Gregory CLEMENT写道：
 > 
-> [1] https://github.com/openwrt/openwrt/pull/18751
+> Hi Gregory,
 > 
-> Shiji Yang (16):
->   MIPS: lantiq: xway: mark ltq_ar9_sys_hz() as static
->   MIPS: lantiq: xway: mark dma_init() as static
->   MIPS: lantiq: xway: mark dcdc_init() as static
->   MIPS: lantiq: irq: fix misc missing-prototypes warnings
->   MIPS: lantiq: xway: add prototype for ltq_get_cp1_base()
->   MIPS: pci: lantiq: marks pcibios_init() as static
->   MIPS: lantiq: falcon: fix misc missing-prototypes warnings
->   MIPS: lantiq: falcon: sysctrl: remove unused falcon_trigger_hrst()
->   MIPS: lantiq: falcon: sysctrl: add missing header prom.h
->   MIPS: lantiq: falcon: sysctrl: fix request memory check logic
->   MIPS: lantiq: xway: gptu: mark gptu_init() as static
->   MIPS: vpe-mt: mark vpe_free() and vpe_stop() as static
->   MIPS: vpe-mt: drop unused functions vpe_alloc() and vpe_start()
->   pinctrl: xway: mark xway_pinconf_group_set() as static
->   pinctrl: falcon: mark pinctrl_falcon_init() as static
->   spi: falcon: mark falcon_sflash_xfer() as static
+> > If System-level Interconnect (aka Network on Chip) does not support
+> > the global invalidation, then MMID feature is not usable. Indeed the
+> > current implementation of MMID relies on the GINV* instruction.
 > 
->  .../include/asm/mach-lantiq/xway/lantiq_soc.h |  3 ++
->  arch/mips/kernel/vpe-mt.c                     | 35 ++-----------------
->  arch/mips/lantiq/falcon/prom.c                |  4 +--
->  arch/mips/lantiq/falcon/sysctrl.c             | 29 ++++++---------
->  arch/mips/lantiq/irq.c                        |  3 +-
->  arch/mips/lantiq/xway/clk.c                   |  2 +-
->  arch/mips/lantiq/xway/dcdc.c                  |  2 +-
->  arch/mips/lantiq/xway/dma.c                   |  2 +-
->  arch/mips/lantiq/xway/gptu.c                  |  2 +-
->  arch/mips/pci/pci-lantiq.c                    |  2 +-
->  drivers/pinctrl/pinctrl-falcon.c              |  2 +-
->  drivers/pinctrl/pinctrl-xway.c                |  2 +-
->  drivers/spi/spi-falcon.c                      |  2 +-
->  13 files changed, 28 insertions(+), 62 deletions(-)
+> Yes, it is the case if the NoC IP can't handle AMBA ACE DVM requests.
+> 
+> >
+> > Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+> > ---
+> >  arch/mips/Kconfig                    | 6 ++++++
+> >  arch/mips/include/asm/cpu-features.h | 5 ++++-
+> >  arch/mips/mobileye/Kconfig           | 2 ++
+> >  3 files changed, 12 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+> > index 
+> > 1e48184ecf1ec8e29c0a25de6452ece5da835e30..05ce008459b89f03fa71d94429607feb9d06526f 
+> > 100644
+> > --- a/arch/mips/Kconfig
+> > +++ b/arch/mips/Kconfig
+> > @@ -2575,6 +2575,12 @@ config WAR_R10000_LLSC
+> >  config WAR_MIPS34K_MISSED_ITLB
+> >  	bool
+> > 
+> > +# Some I6500 based SoC do not support the global invalidation on their
+> > +# System-level Interconnect (aka Network on Chip), this have an
+> > +# influence on the MMID support.
+> > +config GINVT_UNSUPPORTED_NOC
+> > +	bool
+> > +
+> 
+> I believe this should be a DeviceTree property of CM node instead of Kconfig
+> hack.
 
-applied patches 1-11 to mips-next.
+Either that or by a runtime check, if possible.
 
 Thomas.
 
