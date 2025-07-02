@@ -1,46 +1,52 @@
-Return-Path: <linux-mips+bounces-9605-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9610-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 576F5AF5877
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Jul 2025 15:21:08 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A65BAF5894
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Jul 2025 15:23:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A74961C23776
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Jul 2025 13:20:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1BE8F4E0BF5
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Jul 2025 13:21:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B468F27E7EE;
-	Wed,  2 Jul 2025 13:19:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D95827702D;
+	Wed,  2 Jul 2025 13:19:27 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CEFD275B0A;
-	Wed,  2 Jul 2025 13:19:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E6D2F28541A;
+	Wed,  2 Jul 2025 13:19:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751462350; cv=none; b=Es9by2ONvK6GK97FrkMx1lt/4WQiPL7fV4ozjxd6vDO/acWj0hskOEDN1R9ej8OFfoFsnXXKfAiw8NxC8XhYM81inP4Tb/Zo5z8+WMBeLl+Wf0tIcBNSDedoDX0TFxpiF90o4kthBk7BNVaAkz0oR0bTCddtlfV1AYdZWtgKWxc=
+	t=1751462366; cv=none; b=TEI2splvfWZYBhZoE2VWl72BNQtzPSWYIaqORooy7q+lkjtbgGKmS7mSy91IniIJQPM4r1w1QHjyQWBBaU+f9KygL2WPcHaczN2q7NLkHARZwWcl5d8WRtJ85RzUcG5vbeBbNNktnANgx4x1KCa6KCtn378BiPi2TUauc8nP/4s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751462350; c=relaxed/simple;
-	bh=6VbctXr1HBmpPa4pxAPQly7LQ9NAwqI/QXAnT6EFxzM=;
+	s=arc-20240116; t=1751462366; c=relaxed/simple;
+	bh=za+ahsJl3QAV648TPMaYsd1GcjFiLAeapw44Eq/9I2s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CfFD7Zq4UGxhPtuZFeYrNcXrLzqEL2E7cvnmMaH9Z65EwNObvi6SWNLUwT05cvr7wSTTTAALj+/pPngpSzx5DxtSqIcV7XYzQlONqClAtX/LtC+lVcJJC+vetDPmCYgKPLtjpq+yDoWKHKvG4EUzS4QOdQl5kWe6nl1JlCqHtPg=
+	 Content-Type:Content-Disposition:In-Reply-To; b=cSo9/iY/ZGuIgIjxaHszm2jVAgNulmO7TozJ5QlAvi4Stoe3FeAEVAkham/iCAjvyVvhit9obZZ2GpnokLBWLDqN9pPGEcbmFQMJvntfa3baRf0KQicJx7EfH3TuOPkfTkoiq/PgQSozX9c3LZZAKwBb4LlFwT2+KD1ubgJYna8=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1uWwaa-00058G-00; Wed, 02 Jul 2025 14:29:24 +0200
+	id 1uWwab-00058I-00; Wed, 02 Jul 2025 14:29:25 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 5A574C0B23; Wed,  2 Jul 2025 14:02:30 +0200 (CEST)
-Date: Wed, 2 Jul 2025 14:02:30 +0200
+	id D3D63C0B44; Wed,  2 Jul 2025 14:03:02 +0200 (CEST)
+Date: Wed, 2 Jul 2025 14:03:02 +0200
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Chris Packham <chris.packham@alliedtelesis.co.nz>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	sander@svanheule.net, markus.stockhausen@gmx.de,
-	linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/4] mips: dts: Updates for RTL9300
-Message-ID: <aGUf1rLBbcuKCHTC@alpha.franken.de>
-References: <20250619010754.3760612-1-chris.packham@alliedtelesis.co.nz>
+To: Ezra Buehler <ezra@easyb.ch>
+Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+	Conor Dooley <conor+dt@kernel.org>,
+	Harvey Hunt <harveyhuntnexus@gmail.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Reto Schneider <reto.schneider@husqvarnagroup.com>,
+	Rob Herring <robh@kernel.org>,
+	Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+	Stefan Roese <sr@denx.de>,
+	Ezra Buehler <ezra.buehler@husqvarnagroup.com>
+Subject: Re: [PATCH v4 0/4] MIPS: dts: ralink: mt7628a: Tweak for GARDENA
+ smart Gateway
+Message-ID: <aGUf9sLDQgJHGy3M@alpha.franken.de>
+References: <20250624115810.37851-1-ezra@easyb.ch>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -49,21 +55,40 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250619010754.3760612-1-chris.packham@alliedtelesis.co.nz>
+In-Reply-To: <20250624115810.37851-1-ezra@easyb.ch>
 
-On Thu, Jun 19, 2025 at 01:07:50PM +1200, Chris Packham wrote:
-> This is a series of small dts changes for the RTL9300 to enable various
-> peripherals.
+On Tue, Jun 24, 2025 at 01:58:06PM +0200, Ezra Buehler wrote:
+> From: Ezra Buehler <ezra.buehler@husqvarnagroup.com>
 > 
-> Chris Packham (4):
->   mips: dts: cameo-rtl9302c: Add switch block
->   mips: dts: realtek: Add switch interrupts
->   mips: dts: realtek: Add watchdog
->   mips: dts: realtek: Add gpio block
+> Various devicetree changes needed for the MT7688-based GARDENA smart
+> Gateway.
 > 
->  .../cameo-rtl9302c-2x-rtl8224-2xge.dts        | 96 +++++++++++++++++++
->  arch/mips/boot/dts/realtek/rtl930x.dtsi       | 31 ++++++
->  2 files changed, 127 insertions(+)
+> Signed-off-by: Ezra Buehler <ezra.buehler@husqvarnagroup.com>
+> ---
+> Changes in v4:
+> - Re-add ralink,mt7688-sysc to enum in mediatek,mtmips-sysc DT binding
+> - Link to v3: https://lore.kernel.org/20250619203502.1293695-1-ezra@easyb.ch
+> 
+> Changes in v3:
+> - Remove duplicate entries in mediatek,mtmips-sysc DT binding
+> - Link to v2: https://lore.kernel.org/20250617103058.1125836-1-ezra@easyb.ch
+> 
+> Changes in v2:
+> - Add patch for mediatek,mtmips-sysc DT binding
+> - Add Reviewed-by tags
+> - Link to v1: https://lore.kernel.org/20250611194716.302126-1-ezra@easyb.ch
+> 
+> Ezra Buehler (4):
+>   dt-bindings: clock: mediatek,mtmips-sysc: Adapt compatible for MT7688
+>     boards
+>   MIPS: dts: ralink: mt7628a: Fix sysc's compatible property for MT7688
+>   MIPS: dts: ralink: mt7628a: Update watchdog node according to bindings
+>   MIPS: dts: ralink: gardena_smart_gateway_mt7688: Fix power LED
+> 
+>  .../bindings/clock/mediatek,mtmips-sysc.yaml  | 28 +++++++++++--------
+>  .../ralink/gardena_smart_gateway_mt7688.dts   |  2 +-
+>  arch/mips/boot/dts/ralink/mt7628a.dtsi        | 11 ++------
+>  3 files changed, 20 insertions(+), 21 deletions(-)
 
 series applied to mips-next.
 
