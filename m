@@ -1,78 +1,89 @@
-Return-Path: <linux-mips+bounces-9613-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9614-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 887C5AF588A
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Jul 2025 15:22:57 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82D44AF5890
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Jul 2025 15:23:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B488188BF7E
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Jul 2025 13:23:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 050D816CCFE
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Jul 2025 13:23:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35CEB285CAE;
-	Wed,  2 Jul 2025 13:19:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C49D28750C;
+	Wed,  2 Jul 2025 13:19:38 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B75B286D5D;
-	Wed,  2 Jul 2025 13:19:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 292ED2874E0;
+	Wed,  2 Jul 2025 13:19:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751462375; cv=none; b=ShalVzZFRv8eW6/Ic19GCHfeL39tNb7yeePA2dFwcO2+I+1q4OEhvRNGG9rjfcv9dpOJEyX5G/R0lFBv1rAkk1Fb7SOMtLnEXf7wsvsfKEqxDwCXBz2mcDdesa0myZoq7QCcIgASxMGQYb8QKMMZggJbyYFQC8ghaKa9KZ5FbP4=
+	t=1751462378; cv=none; b=PdsOgiZgXI568l8YZV30QBAUadedVCcRmCYTa/cDGAUU8AVd9rrbAYBXgCzgab5181noG8ZLlVz1NAqT3G70HlpBLfGTQH1Zod8h7fGKydUIpSpGEIEUsxfAwZwp+/eQvo1H51bDaE5x/FsjgY0ytljH+sFC5DlLpy+0KI6B1zY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751462375; c=relaxed/simple;
-	bh=U21Vck/VgyCaiFV68QQ9fY52qyjiIU3NzWjI2rcDFEI=;
+	s=arc-20240116; t=1751462378; c=relaxed/simple;
+	bh=tuVAUH59+l/O8UCrXTZ5Z+cA00nPP9nSSO/OIl+MgdQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Fxe6UfwCrSm/AeBepOOkyizstYvZK24OS9McVE74g+y5buLDYZ4F9BNW0z1SQ/M+YNOKwu36QrkpZ+Be8HqHu7jsXSEE/D6ZoCH+eLbjzrKpE4cfi/AINjFg0+hXlmXjZfT1kH2Qs8ucOqjtlfr/3yYZvcC1iipGNG7sl99ztDA=
+	 Content-Type:Content-Disposition:In-Reply-To; b=VBCIy0Bb0mRHwFneiz8vMCvdQlJfftWVJE6amIukS7E8Bliha8ubTOecT4oxXWMdR1lGzFEQ2WMJTPpuKuyeUwGgV/+BZzpgr+fmvb7H91Iskjb2N1/Iwuy0kGgKhQ+UI9FHqZskANI3C6aWMdg05mUng0usblpZwp3LNgGgbMw=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1uWwab-00058S-00; Wed, 02 Jul 2025 14:29:25 +0200
+	id 1uWwab-00058l-00; Wed, 02 Jul 2025 14:29:25 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id E7961C0C1C; Wed,  2 Jul 2025 14:28:11 +0200 (CEST)
-Date: Wed, 2 Jul 2025 14:28:11 +0200
+	id 9F5D4C0C86; Wed,  2 Jul 2025 14:28:58 +0200 (CEST)
+Date: Wed, 2 Jul 2025 14:28:58 +0200
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Rosen Penev <rosenp@gmail.com>
-Cc: linux-wireless@vger.kernel.org,
-	Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@toke.dk>,
-	nbd@nbd.name, Johannes Berg <johannes@sipsolutions.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
-	open list <linux-kernel@vger.kernel.org>,
-	"open list:MIPS" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCHv5 5/5] mips: dts: qca: add wmac support
-Message-ID: <aGUl2_kSTkF4qUgZ@alpha.franken.de>
-References: <20250609030851.17739-1-rosenp@gmail.com>
- <20250609030851.17739-6-rosenp@gmail.com>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Brendan Higgins <brendan.higgins@linux.dev>,
+	David Gow <davidgow@google.com>, Rae Moar <rmoar@google.com>,
+	Huacai Chen <chenhuacai@kernel.org>, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+	kunit-dev@googlegroups.com
+Subject: Re: [PATCH v4 1/2] MIPS: Don't crash in stack_top() for tasks
+ without ABI or vDSO
+Message-ID: <aGUmClZQXMIQAIif@alpha.franken.de>
+References: <20250611-kunit-mips-v4-0-1d8997fb2ae4@linutronix.de>
+ <20250611-kunit-mips-v4-1-1d8997fb2ae4@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250609030851.17739-6-rosenp@gmail.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250611-kunit-mips-v4-1-1d8997fb2ae4@linutronix.de>
 
-On Sun, Jun 08, 2025 at 08:08:51PM -0700, Rosen Penev wrote:
-> Now that OF ahb support was added to the ath9k driver, we can use it to
-> enable and use the SoC wireless found in these chipsets.
+On Wed, Jun 11, 2025 at 01:28:26PM +0200, Thomas Weiﬂschuh wrote:
+> Not all tasks have an ABI associated or vDSO mapped,
+> for example kthreads never do.
+> If such a task ever ends up calling stack_top(), it will derefence the
+> NULL ABI pointer and crash.
 > 
-> Signed-off-by: Rosen Penev <rosenp@gmail.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> This can for example happen when using kunit:
+> 
+>     mips_stack_top+0x28/0xc0
+>     arch_pick_mmap_layout+0x190/0x220
+>     kunit_vm_mmap_init+0xf8/0x138
+>     __kunit_add_resource+0x40/0xa8
+>     kunit_vm_mmap+0x88/0xd8
+>     usercopy_test_init+0xb8/0x240
+>     kunit_try_run_case+0x5c/0x1a8
+>     kunit_generic_run_threadfn_adapter+0x28/0x50
+>     kthread+0x118/0x240
+>     ret_from_kernel_thread+0x14/0x1c
+> 
+> Only dereference the ABI point if it is set.
+> 
+> The GIC page is also included as it is specific to the vDSO.
+> Also move the randomization adjustment into the same conditional.
+> 
+> Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+> Reviewed-by: David Gow <davidgow@google.com>
 > ---
->  arch/mips/boot/dts/qca/ar9132.dtsi                       | 9 +++++++++
->  arch/mips/boot/dts/qca/ar9132_tl_wr1043nd_v1.dts         | 4 ++++
->  arch/mips/boot/dts/qca/ar9331.dtsi                       | 9 +++++++++
->  arch/mips/boot/dts/qca/ar9331_dpt_module.dts             | 4 ++++
->  arch/mips/boot/dts/qca/ar9331_dragino_ms14.dts           | 4 ++++
->  arch/mips/boot/dts/qca/ar9331_omega.dts                  | 4 ++++
->  .../mips/boot/dts/qca/ar9331_openembed_som9331_board.dts | 4 ++++
->  arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts              | 4 ++++
->  8 files changed, 42 insertions(+)
+>  arch/mips/kernel/process.c | 16 +++++++++-------
+>  1 file changed, 9 insertions(+), 7 deletions(-)
 
 applied to mips-next.
 
