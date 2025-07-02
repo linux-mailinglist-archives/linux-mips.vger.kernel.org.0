@@ -1,43 +1,52 @@
-Return-Path: <linux-mips+bounces-9603-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9613-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24286AF58F4
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Jul 2025 15:29:28 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 887C5AF588A
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Jul 2025 15:22:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AC2157BB353
-	for <lists+linux-mips@lfdr.de>; Wed,  2 Jul 2025 13:18:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9B488188BF7E
+	for <lists+linux-mips@lfdr.de>; Wed,  2 Jul 2025 13:23:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCA56275AFF;
-	Wed,  2 Jul 2025 13:19:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35CEB285CAE;
+	Wed,  2 Jul 2025 13:19:35 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92A0227735;
-	Wed,  2 Jul 2025 13:18:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B75B286D5D;
+	Wed,  2 Jul 2025 13:19:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751462343; cv=none; b=fkHqb3EWEj47KOQzpsZAZzZOUrjxswyy5EmKCwtincB6YsxtW6q6nJLl92bm6gmW/nDdJ6UcZfgMPnmTMDAnfvg0NdsQVhMNhld8xsxNLA7f93gqZevhds0vLQbWCGfgZGeRknAyf6FDAEHb6ZzvdZYSGsBmgzkEPeafqQpI7UI=
+	t=1751462375; cv=none; b=ShalVzZFRv8eW6/Ic19GCHfeL39tNb7yeePA2dFwcO2+I+1q4OEhvRNGG9rjfcv9dpOJEyX5G/R0lFBv1rAkk1Fb7SOMtLnEXf7wsvsfKEqxDwCXBz2mcDdesa0myZoq7QCcIgASxMGQYb8QKMMZggJbyYFQC8ghaKa9KZ5FbP4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751462343; c=relaxed/simple;
-	bh=QAwDg8AZhLOV8WryL5g2y7bANhcj6k8F/gQErZRvyrw=;
+	s=arc-20240116; t=1751462375; c=relaxed/simple;
+	bh=U21Vck/VgyCaiFV68QQ9fY52qyjiIU3NzWjI2rcDFEI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aVQEHykEB5c2Hw3qHSPsmuzBhvDMga8sYnLe3aTbz8gDiMt5zagYO4TnjAJP11xsDXPyz/Q6kpplhNAoNo3yJ0x4MeoT2pt4I9DbxOpmnSmdqf0Z/CwQzmibC6mqOzlechiCt2bpr6M8f+iLOvLgogPepLFRcFahSWYwcrsWUnk=
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fxe6UfwCrSm/AeBepOOkyizstYvZK24OS9McVE74g+y5buLDYZ4F9BNW0z1SQ/M+YNOKwu36QrkpZ+Be8HqHu7jsXSEE/D6ZoCH+eLbjzrKpE4cfi/AINjFg0+hXlmXjZfT1kH2Qs8ucOqjtlfr/3yYZvcC1iipGNG7sl99ztDA=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1uWwab-00058Q-00; Wed, 02 Jul 2025 14:29:25 +0200
+	id 1uWwab-00058S-00; Wed, 02 Jul 2025 14:29:25 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 989A3C0C1C; Wed,  2 Jul 2025 14:14:47 +0200 (CEST)
-Date: Wed, 2 Jul 2025 14:14:47 +0200
+	id E7961C0C1C; Wed,  2 Jul 2025 14:28:11 +0200 (CEST)
+Date: Wed, 2 Jul 2025 14:28:11 +0200
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Masahiro Yamada <masahiroy@kernel.org>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mips: boot: use 'targets' instead of extra-y in Makefile
-Message-ID: <aGUit7vdpeC1jVm8@alpha.franken.de>
-References: <20250608015136.2960777-1-masahiroy@kernel.org>
+To: Rosen Penev <rosenp@gmail.com>
+Cc: linux-wireless@vger.kernel.org,
+	Toke =?iso-8859-1?Q?H=F8iland-J=F8rgensen?= <toke@toke.dk>,
+	nbd@nbd.name, Johannes Berg <johannes@sipsolutions.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:MIPS" <linux-mips@vger.kernel.org>
+Subject: Re: [PATCHv5 5/5] mips: dts: qca: add wmac support
+Message-ID: <aGUl2_kSTkF4qUgZ@alpha.franken.de>
+References: <20250609030851.17739-1-rosenp@gmail.com>
+ <20250609030851.17739-6-rosenp@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -46,39 +55,24 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250608015136.2960777-1-masahiroy@kernel.org>
+In-Reply-To: <20250609030851.17739-6-rosenp@gmail.com>
 
-On Sun, Jun 08, 2025 at 10:51:34AM +0900, Masahiro Yamada wrote:
-> vmlinux.bin.* files are built as prerequisites of other objects.
-> There is no need to use extra-y, which is planned for deprecation.
+On Sun, Jun 08, 2025 at 08:08:51PM -0700, Rosen Penev wrote:
+> Now that OF ahb support was added to the ath9k driver, we can use it to
+> enable and use the SoC wireless found in these chipsets.
 > 
-> Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+> Signed-off-by: Rosen Penev <rosenp@gmail.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > ---
-> 
->  arch/mips/boot/Makefile | 8 ++++----
->  1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/arch/mips/boot/Makefile b/arch/mips/boot/Makefile
-> index 196c44fa72d9..8473c4671702 100644
-> --- a/arch/mips/boot/Makefile
-> +++ b/arch/mips/boot/Makefile
-> @@ -54,10 +54,10 @@ UIMAGE_ENTRYADDR = $(VMLINUX_ENTRY_ADDRESS)
->  # Compressed vmlinux images
->  #
->  
-> -extra-y += vmlinux.bin.bz2
-> -extra-y += vmlinux.bin.gz
-> -extra-y += vmlinux.bin.lzma
-> -extra-y += vmlinux.bin.lzo
-> +targets += vmlinux.bin.bz2
-> +targets += vmlinux.bin.gz
-> +targets += vmlinux.bin.lzma
-> +targets += vmlinux.bin.lzo
->  
->  $(obj)/vmlinux.bin.bz2: $(obj)/vmlinux.bin FORCE
->  	$(call if_changed,bzip2)
-> -- 
-> 2.43.0
+>  arch/mips/boot/dts/qca/ar9132.dtsi                       | 9 +++++++++
+>  arch/mips/boot/dts/qca/ar9132_tl_wr1043nd_v1.dts         | 4 ++++
+>  arch/mips/boot/dts/qca/ar9331.dtsi                       | 9 +++++++++
+>  arch/mips/boot/dts/qca/ar9331_dpt_module.dts             | 4 ++++
+>  arch/mips/boot/dts/qca/ar9331_dragino_ms14.dts           | 4 ++++
+>  arch/mips/boot/dts/qca/ar9331_omega.dts                  | 4 ++++
+>  .../mips/boot/dts/qca/ar9331_openembed_som9331_board.dts | 4 ++++
+>  arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts              | 4 ++++
+>  8 files changed, 42 insertions(+)
 
 applied to mips-next.
 
