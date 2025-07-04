@@ -1,120 +1,141 @@
-Return-Path: <linux-mips+bounces-9629-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9632-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0BEDAF9680
-	for <lists+linux-mips@lfdr.de>; Fri,  4 Jul 2025 17:14:08 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DC48AF969E
+	for <lists+linux-mips@lfdr.de>; Fri,  4 Jul 2025 17:17:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1046C1CA224D
-	for <lists+linux-mips@lfdr.de>; Fri,  4 Jul 2025 15:13:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E49CE7ACF3C
+	for <lists+linux-mips@lfdr.de>; Fri,  4 Jul 2025 15:16:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38E8E2BEC3A;
-	Fri,  4 Jul 2025 15:13:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32AD014D29B;
+	Fri,  4 Jul 2025 15:17:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="SQQrVaDz"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="OjYSZsw8"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2B661CCEE0;
-	Fri,  4 Jul 2025 15:13:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D63A214B08A;
+	Fri,  4 Jul 2025 15:17:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751642009; cv=none; b=kZ35fGvjwmHgFihHroKxmD8O7dmEg1XVkMTa3ezC8aFrH0SDgmajzRoqksf5gpo714f1k6eoO0xYgCL6oh5U6FlcNAYz3UipKlruW+qIh5L3yc4fUQwV/vfYXssWl8WW1H44wpN99Ofp4RA1yDJCHpxnWa4E2IVuO5Yt0qO8wQY=
+	t=1751642246; cv=none; b=Saq8iAaRF9nTxERlSZTYYL8g+Ij36iMdpCL7WovxmFQKhHky/mj24Ot/8ZIqcPTt7PFPKbKHD9fQx+05KVCeU0YX+dpziPQRgGM6rynlC+3tq3UKHJ4h0VEvP9pVIEprxq6G+fNbYPvnYFATemjSrF8T8gPYJGg3G96Om6tDhGs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751642009; c=relaxed/simple;
-	bh=fcwf7YfKJAeIkLvcCaYJ53dpv6SjXwc1DwOndJgGk30=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=NuSnig9jePiVj8tH9fHc4ZX4S7on3WSfr9QEjVIYl3sE5lQI77zsQAnzJmuW9HBESdniLDcE3c6xPbzUdyJUiU5OxfBH3oGorX7OiCRh6SNbGsHo5uL4uUQP9JXgKsHy9aYMKOO/br3cgi98WSdyipzmpAXf1jCP060dW2zacjU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=SQQrVaDz; arc=none smtp.client-ip=217.70.183.198
+	s=arc-20240116; t=1751642246; c=relaxed/simple;
+	bh=n7LOfSsjXE2FVStfZuw4MIKye9uX/BCPm/v95WafbBg=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=IS1JNecey6xJDRPZM3NsnEzkFL3wwPROwZnSbli3O3R0liYcIo3lqcWcKYiZHnxask5xrPvmQS+g5mIoPlI1QJDyk8D0MJlxMEf6EWpSBaVzuo5/s2u3iNAmho4DJ3W4EKH0kU2i8zoHHsuDeg8sqJJaU9hwyFPR096WasRXttQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=OjYSZsw8; arc=none smtp.client-ip=217.70.183.196
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 3F2AD44289;
-	Fri,  4 Jul 2025 15:13:24 +0000 (UTC)
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 7BC48444D5;
+	Fri,  4 Jul 2025 15:17:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1751642004;
+	t=1751642235;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=QgtaQ/ncbSN/RDre0wgEPgUaRpu7wPSsUfotLVPVN9Y=;
-	b=SQQrVaDzWxQ0lS5d6dipt5TiQzvt4CnCDPsU1jeaEyszai/m21Oab/z5mSLD7/G/syGP/p
-	6Wj89D7bbDy3kgiyRQ3Qap28WwsEXBdXnvQuHGswXLhegyoAWaa5URiMivOxXN6A4QiSdi
-	+P5deYYvvbYcgb9tklhUe8QeKSaJebRneYWFPQSaLR6IZOYwwUzPyrFhOy+//6VzP3UbAg
-	Gi9DMHCLKGZrqhR8MEGVcluEkfvNauygtH/HTi8qs+ak3RLkGtbwAvniAgNp/NxjhWS9Ep
-	Nc5IU6GDS5H2S1IQGUfAO+X7F1gSFc8dfEwJFDr32770MFKuh1XgaL29IN0b2A==
+	bh=/vPDsl7h2Bce2nbFPpZwQgcXwb0DMKbxlxKdGJMWDlk=;
+	b=OjYSZsw8Bn/lPEEuZ/zT/ZWBMzACf1NkagEE6r3RmYhuXncRqUKcozz8UbibxN8M+UM53w
+	5KCH3FY+8+bYmUYW8qJTughgWJ+1qgywUibS0SjsnHWskADrYiNSCOnjiLt7hzAtHvuLb9
+	P+buEXUFLCp+TU4+Wtd2PWVTE+8gCZdWzSaI8WTQAjlbHr83pVLyYctwf7z/LVEK7pMhIX
+	Pz2sArh5UPnXVepkpVIJtW0zCYkqV++Ds+VTdCkP0Lo54B2E8UfDpSJu0Ces4HB22tZQvH
+	RBenF7bqjxNeDa3klct1EFjGEI+SHFRnEtgsVaJHgCMFKDJKR6oofzU3VD+khQ==
 From: Gregory CLEMENT <gregory.clement@bootlin.com>
-Date: Fri, 04 Jul 2025 17:13:12 +0200
-Subject: [PATCH v2 3/3] MIPS: CPS: Optimise delay CPU calibration for SMP
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Jiaxun Yang
+ <jiaxun.yang@flygoat.com>
+Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, =?utf-8?Q?Th?=
+ =?utf-8?Q?=C3=A9o?= Lebrun
+ <theo.lebrun@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: disable MMID if GINVT is not usable
+In-Reply-To: <aGUhUM1y-ZLGWZg-@alpha.franken.de>
+References: <20250625-mmid_disable_no_ginv_on_noc-v1-1-38a3902607a7@bootlin.com>
+ <808e21d2-1212-4358-9ba6-29f9d097be8a@app.fastmail.com>
+ <aGUhUM1y-ZLGWZg-@alpha.franken.de>
+Date: Fri, 04 Jul 2025 17:17:14 +0200
+Message-ID: <87h5zsgf45.fsf@BLaptop.bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250704-smp_calib-v2-3-bade7e9c0463@bootlin.com>
-References: <20250704-smp_calib-v2-0-bade7e9c0463@bootlin.com>
-In-Reply-To: <20250704-smp_calib-v2-0-bade7e9c0463@bootlin.com>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>, 
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-mips@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Gregory CLEMENT <gregory.clement@bootlin.com>
-X-Mailer: b4 0.14.2
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-GND-State: clean
 X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddvfeeglecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpefirhgvghhorhihucevnffgoffgpffvuceoghhrvghgohhrhidrtghlvghmvghnthessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepfedvffevfefhieefteeuieeuleevgffhveegvdegueegjeehfeejudettdegvdffnecukfhppedvrgdtudemtggsudegmeehheeimeejrgdttdemuggrtdgumeejtdehheemugdtudgvmedugeekheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudegmeehheeimeejrgdttdemuggrtdgumeejtdehheemugdtudgvmedugeekhedphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomhepghhrvghgohhrhidrtghlvghmvghnthessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepledprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopehvlhgrughimhhirhdrkhhonhgurhgrthhivghvsehmohgsihhlvgihvgdrtghomhdprhgtphhtthhopehtrgiffhhikhdrsggrhihou
- hhksehmohgsihhlvgihvgdrtghomhdprhgtphhtthhopehgrhgvghhorhihrdgtlhgvmhgvnhhtsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepthhssghoghgvnhgusegrlhhphhgrrdhfrhgrnhhkvghnrdguvgdprhgtphhtthhopehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmpdhrtghpthhtohepthhhvghordhlvggsrhhunhessghoohhtlhhinhdrtghomhdprhgtphhtthhopehlihhnuhigqdhmihhpshesvhhgvghrrdhkvghrnhgvlhdrohhrgh
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddvfeehtdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefujghffffkgggtgfesthhqredttddtjeenucfhrhhomhepifhrvghgohhrhicuvefngffogffpvfcuoehgrhgvghhorhihrdgtlhgvmhgvnhhtsegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpefghfegvdehgfdtjedvtefhvdeikefgteeuhfeukeettefgvdeuueettddtkeegveenucffohhmrghinhepsghoohhtlhhinhdrtghomhenucfkphepvdgrtddumegtsgdugeemheehieemjegrtddtmegurgdtugemjedtheehmegutdduvgemudegkeehnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddumegtsgdugeemheehieemjegrtddtmegurgdtugemjedtheehmegutdduvgemudegkeehpdhhvghloheplhhotggrlhhhohhsthdpmhgrihhlfhhrohhmpehgrhgvghhorhihrdgtlhgvmhgvnhhtsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopeekpdhrtghpthhtohepthhssghoghgvnhgusegrlhhphhgrrdhfrhgrnhhkvghnrdguvgdprhgtphhtthhopehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmpdhrtghpthhtohepvhhlrggui
+ hhmihhrrdhkohhnughrrghtihgvvhesmhhosghilhgvhigvrdgtohhmpdhrtghpthhtohepthhhvghordhlvggsrhhunhessghoohhtlhhinhdrtghomhdprhgtphhtthhopehtrgiffhhikhdrsggrhihouhhksehmohgsihhlvgihvgdrtghomhdprhgtphhtthhopehthhhomhgrshdrphgvthgriiiiohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopehlihhnuhigqdhmihhpshesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrgh
 X-GND-Sasl: gregory.clement@bootlin.com
 
-On MIPS architecture with CPS-based SMP support, all CPU cores in the
-same cluster run at the same frequency since they share the same L2
-cache, requiring a fixed CPU/L2 cache ratio.
+Thomas Bogendoerfer <tsbogend@alpha.franken.de> writes:
 
-This allows to implement calibrate_delay_is_known(), which will return
-0 (triggering calibration) only for the primary CPU of each
-cluster. For other CPUs, we can simply reuse the value from their
-cluster's primary CPU core.
+> On Wed, Jun 25, 2025 at 03:44:00PM +0100, Jiaxun Yang wrote:
+>> =E5=9C=A82025=E5=B9=B46=E6=9C=8825=E6=97=A5=E5=91=A8=E4=B8=89 =E4=B8=8B=
+=E5=8D=882:27=EF=BC=8CGregory CLEMENT=E5=86=99=E9=81=93=EF=BC=9A
+>>=20
+>> Hi Gregory,
+>>=20
+>> > If System-level Interconnect (aka Network on Chip) does not support
+>> > the global invalidation, then MMID feature is not usable. Indeed the
+>> > current implementation of MMID relies on the GINV* instruction.
+>>=20
+>> Yes, it is the case if the NoC IP can't handle AMBA ACE DVM requests.
+>>=20
+>> >
+>> > Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+>> > ---
+>> >  arch/mips/Kconfig                    | 6 ++++++
+>> >  arch/mips/include/asm/cpu-features.h | 5 ++++-
+>> >  arch/mips/mobileye/Kconfig           | 2 ++
+>> >  3 files changed, 12 insertions(+), 1 deletion(-)
+>> >
+>> > diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+>> > index=20
+>> > 1e48184ecf1ec8e29c0a25de6452ece5da835e30..05ce008459b89f03fa71d9442960=
+7feb9d06526f=20
+>> > 100644
+>> > --- a/arch/mips/Kconfig
+>> > +++ b/arch/mips/Kconfig
+>> > @@ -2575,6 +2575,12 @@ config WAR_R10000_LLSC
+>> >  config WAR_MIPS34K_MISSED_ITLB
+>> >  	bool
+>> >=20
+>> > +# Some I6500 based SoC do not support the global invalidation on their
+>> > +# System-level Interconnect (aka Network on Chip), this have an
+>> > +# influence on the MMID support.
+>> > +config GINVT_UNSUPPORTED_NOC
+>> > +	bool
+>> > +
+>>=20
+>> I believe this should be a DeviceTree property of CM node instead of Kco=
+nfig
+>> hack.
+>
+> Either that or by a runtime check, if possible.
 
-With the introduction of this patch, a configuration running 32 cores
-spread across two clusters sees a significant reduction in boot time
-by approximately 600 milliseconds.
+Unfortunately we can't detect at runtime this (lack of) feature on the
+NoC, so it has to be a device tree property.
 
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
----
- arch/mips/kernel/smp-cps.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Gregory
 
-diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
-index a5c538742769dcbf22e27d2d4485c071e2e64ec2..9c4882c3c69d20f15d4826f125e975e64e712e9b 100644
---- a/arch/mips/kernel/smp-cps.c
-+++ b/arch/mips/kernel/smp-cps.c
-@@ -283,6 +283,17 @@ static void __init cps_smp_setup(void)
- #endif /* CONFIG_MIPS_MT_FPAFF */
- }
- 
-+unsigned long calibrate_delay_is_known(void)
-+{
-+	int first_cpu_cluster = 0;
-+
-+	/* The calibration has to be done on the primary CPU of the cluster */
-+	if (mips_cps_first_online_in_cluster(&first_cpu_cluster))
-+		return 0;
-+
-+	return cpu_data[first_cpu_cluster].udelay_val;
-+}
-+
- static void __init cps_prepare_cpus(unsigned int max_cpus)
- {
- 	unsigned int nclusters, ncores, core_vpes, c, cl, cca;
+>
+> Thomas.
+>
+> --=20
+> Crap can work. Given enough thrust pigs will fly, but it's not necessaril=
+y a
+> good idea.                                                [ RFC1925, 2.3 ]
 
--- 
-2.47.2
-
+--=20
+Gr=C3=A9gory CLEMENT, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
