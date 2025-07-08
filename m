@@ -1,175 +1,144 @@
-Return-Path: <linux-mips+bounces-9679-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9680-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB5A7AFDA1D
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Jul 2025 23:43:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6E1A5AFDBFA
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Jul 2025 01:54:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C17034E6CE4
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Jul 2025 21:42:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 43EE71C22EDB
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Jul 2025 23:54:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 324142248AC;
-	Tue,  8 Jul 2025 21:43:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFA4D23770D;
+	Tue,  8 Jul 2025 23:54:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="hm9omw8v";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="i31DRMRU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iHzA3Flh"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fhigh-b7-smtp.messagingengine.com (fhigh-b7-smtp.messagingengine.com [202.12.124.158])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3638D1A8F84;
-	Tue,  8 Jul 2025 21:42:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.158
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59A7518E3F;
+	Tue,  8 Jul 2025 23:54:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752010981; cv=none; b=jxnS4yMAAYTad2A+Y0kHMqOq3bzRJb8aHZAeJS59dDLsNZ1qmFDhYZZoN7AUcBrVM/A7SwIOLCAReJlq5nV3MDtDH+0uQI7dGxXf7pXJVU7FyDKMAsTMke+3hDMQQuC8TocC4ruea32MWg06qFJ2Cig9sPa1mjr63dINdYUaKuw=
+	t=1752018852; cv=none; b=usKhsIY0quSSpCR97v+qXtCbea1I6rwE50Bvy4cBsWvpSLxju6arSpl/nGHzT6frPmkFgeVgPBzYuw+rIShpLt9Fnw8kCkKHKn+UO09FYvAFe4NSo4SHlhQssVHuZ2dJdi9i6+4U4SmKY3yibG7IyCzgVmJ8YrFofaFwhNJ6Lj4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752010981; c=relaxed/simple;
-	bh=rlUpxaefP62xVFcgqrG1RemxR+OP20zTE2mFC8Jwm6k=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=DvB0YZ22VlVlWDDJQgxKHm/46w0Ip9BSl2ZWYzRZXG8Aun0LfCHYId5R8AWC3/haLvILeAe/G7MewozdyZaEFThux5UT22JOuT3PtOyI4R9VIXt3uqpF9ftMMASxiuWku6rUzoEn818rooCqptak1AghznZroV5erhYlFPO9sX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=hm9omw8v; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=i31DRMRU; arc=none smtp.client-ip=202.12.124.158
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from phl-compute-06.internal (phl-compute-06.phl.internal [10.202.2.46])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id 30B157A0139;
-	Tue,  8 Jul 2025 17:42:58 -0400 (EDT)
-Received: from phl-imap-08 ([10.202.2.84])
-  by phl-compute-06.internal (MEProxy); Tue, 08 Jul 2025 17:42:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1752010978;
-	 x=1752097378; bh=122JoHfcZ2JTLSx2NlHDO3Rynz7MlgiM2NceyIsAJR8=; b=
-	hm9omw8vjMbPKDGX++H2mY6IRXMxRX6qFobPArQl0D6xBWgG/cXyVs6qLebnorHd
-	bTNGQ1gvL1CsluoyQPv7u3R62ujhivXiPH1dUJopwpVWO1somJRr2RjG5PfbH0rd
-	Ep5IekVW/GbrmWSezyMjokjoJfpB3Z9UhafVEX6uIBBnTZRQzfkR55DNIhkd6ccg
-	6KW5x05fdlZr1jCZ63TMwDMbYo+Jg+vch01lZn+MUU0CRytjcMj2DM1tSavgPhag
-	SLjhtkvHYCerVIZTyENRbhPfKAVNfrQ9BzMMmMi8m/Iz5+8m0bT1vZgKswnTqEff
-	ctqSIQZ0j2XMWFLJSFqw6A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1752010978; x=
-	1752097378; bh=122JoHfcZ2JTLSx2NlHDO3Rynz7MlgiM2NceyIsAJR8=; b=i
-	31DRMRUltTAQdMl96JTnzTKm89i0zzgEx5fV7w8PBQS6SExdndtOQkdsFEnAFIkG
-	LXU8773vUzW988F/IpVx5/KBmCElG7a5TA7lc+EvGl9/agyi88M97hfzWY1yKjtR
-	aWYmwo2R/d5k3Ccu3YlhWBBjV1qNpH7EKUrgCDWsVbpDtyDsQL+VzhOL/fjQqGg1
-	z6fee5a/dadw3sFV27hqsEVN+NTIL87ori8sBRq7vvMcv4R7HoLi53T/Oi/nVCTU
-	SgcGhXYee883sRedRk7bosTB0Sajhps08EaX+V6zTSQkv36lmI5ViEWOpFz39ceW
-	2IDXf4lZAV3TNT+hak/Vg==
-X-ME-Sender: <xms:4ZBtaPaLeoVmism6rhms5Yt2xjzC2aDnfZEe12eYG-66vCzt_R38bA>
-    <xme:4ZBtaOa3qpEpHQVn53itbuntQTdz7e9l8ZlxxPkKUHaF8nXJ2CDZVK1XALFY7as4E
-    1awkNHxEkMlm3dOO8c>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdefheejlecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthhqredtredtjeenucfhrhhomhepfdflihgrgihu
-    nhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
-    ggtffrrghtthgvrhhnpeejheefuddvtdfggfdvffekteehhfelgfdvvedvkeeuffefkeeh
-    heegvefhveetjeenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepmhgrihhlfh
-    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmpdhnsggprhgtphht
-    thhopeekpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehtshgsohhgvghnugesrg
-    hlphhhrgdrfhhrrghnkhgvnhdruggvpdhrtghpthhtohepghhrvghgohhrhidrtghlvghm
-    vghnthessghoohhtlhhinhdrtghomhdprhgtphhtthhopehthhgvohdrlhgvsghruhhnse
-    gsohhothhlihhnrdgtohhmpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhi
-    segsohhothhlihhnrdgtohhmpdhrtghpthhtohepthgrfihfihhkrdgsrgihohhukhesmh
-    hosghilhgvhigvrdgtohhmpdhrtghpthhtohepvhhlrgguihhmihhrrdhkohhnughrrght
-    ihgvvhesmhhosghilhgvhigvrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvg
-    hlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqmhhiphhs
-    sehvghgvrhdrkhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:4ZBtaI5LZF_6NA4mBvxL4sljGe2YDehU1y0rPAteLsCj_jRLaXGZHg>
-    <xmx:4ZBtaGyUmwvJ0V_oWimqnGxRDXg_FnZ3gDVz8w_ojxSMlM6DIA25Hw>
-    <xmx:4ZBtaHPvs0FAqChrcG-QpYL6USL5_yBjLJYLMAy787jS_NWga4HR-g>
-    <xmx:4ZBtaMl1QpzmvpylhpA5q1AB7Jvx4gW_XwHyiewEB4HApf_-hQHlVA>
-    <xmx:4pBtaAuQ5kCk3cba5sDNk5GkJCIdw8tebhis12cdBgHKG9GKafJiYco3>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id D62642CE0071; Tue,  8 Jul 2025 17:42:57 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1752018852; c=relaxed/simple;
+	bh=0nMJ7C41R4YrKo0xC2/UiGGAaKAYM8CZRyHurLTLpw0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=c/sCaKKoyjg2k+j+S0Gq3ihsuAadA8W3FwLUn817oBGWkzZvWBS+UBOT7We2tnVnSUmEe6MfnJTN2Bd9lxsFj98dVc4+feQPp8LZV6l9g5gaXeCx21hfFd8b8PvY1BlEdFl3qoX1dpCTEdKFdq7JnaRRx2EHcu+UD1R3sATfqmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iHzA3Flh; arc=none smtp.client-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-712be7e034cso43931927b3.0;
+        Tue, 08 Jul 2025 16:54:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1752018850; x=1752623650; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LIpnI+/KkKYMz9Wfww8vVb4elUGSQP7L8IBvr/OnuBk=;
+        b=iHzA3FlhmQ7njDGu0fb1TBx9yfWtGIZ6eCcAK/9INcXoXcPNDxr7I7OPaiLr1pobjf
+         1DEu0wyj0dQL6UK/ca9XEtd1d1MLOpwBpzEbq2DlbT5A7IZCZnvFy5eYTdmLMmptrNbM
+         ZXAYZdKC+vTBD4d2WXOO3DQ9gAKvqjoTv3tmtLPYGuk/FIhTOqYS1Z5xZm8K0v3mzrtr
+         uK1aH1qYtzb4tODUt/aMQNMfqL1c537DOhJ4WcPNig+z+cpjhIwbNKoG48rH+QgFqpN7
+         pcVPIOPeHpbrW5FtuKnfQeKaXoqV6r7N2smJSCG7ARkSm7S6zBY3caFp8CRCl4B47dkH
+         XvNQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752018850; x=1752623650;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LIpnI+/KkKYMz9Wfww8vVb4elUGSQP7L8IBvr/OnuBk=;
+        b=aIP+2Gem3xd0c9c7rHAUBSXnd0DXt86sgGlYZWeohub3L8McmXGCgZiJMwsQg0r//c
+         iSIrIgjg/8R/qmFLpn/84u/0H3uCsDiemVb+P9BUIKD/IL2ON/8zYC373cPiXJAkKuxB
+         RKCSnmYYxufIKPfXOBOPU2MxJK3wqjlSb4aYVoDcU+gq81IhMVBZQXNhTsq7jRrjxcG9
+         3Wu8tuHCnhtQ7UKrasisPCELodGCF4h1Eb9qj3q/3Cv4CNbFDvEPMtoR95GBSzawkXtB
+         lcxj5JdY/8+XIFSasdSZIkgyS1/E4VylTD/jeNreykifX96XjOKshi4m0KH+N8bXl0QA
+         T7Mw==
+X-Forwarded-Encrypted: i=1; AJvYcCUOvAaUbwpP7hOEWOAj4ZsM4ruN2+AFJG6rp6+fz4kWKDk2U6MyGuFUaXEyEFlq0G7jqJaTSs0eEqarCSB5gzw=@vger.kernel.org, AJvYcCVGaMwVxV0YPK9sKO5OHZlyC5m8I9vEg8ien7VqZYbkjv+dHee+5j9aj6QY541yOynM/B/cV+TZI6BjPw==@vger.kernel.org, AJvYcCViBIr1clX5w96w97Kl7f3T85GFpqFi/seRIxGKmzjWeblAoqitP5cd8/CNaEMHXFYdfiRK58ZtqJ/P2zYK@vger.kernel.org, AJvYcCWZnu6NaAYuf5jqNSiO/ZTmHs3pGY3sAeIT4FOX8tebY84Vnzx0J8H+W/WuJa/TOTPtKm5K0XXKzTtM@vger.kernel.org
+X-Gm-Message-State: AOJu0YwPXSznygmsWuJY5nL72lca/jjz3w8dRVbp94JJiah7Aqo/8K8P
+	XobNSA7msH07V05EQ7jKwHnFhZdwejk6Ftja4krIVB6LzeeiWM6WOILrQLhzkZyvLFkt3ENugWu
+	Y9EEcCKOEvDHu5w2amu0YE7R+CnNUdYlT5f4pPNTlnA==
+X-Gm-Gg: ASbGncsGO3LvQlLaqg+wsvoqNH6AGgEfHGa3A+nQTTSHCpWtZIhFj8EI26IBnDigyR/
+	fXtIBbkXnJQGz7mK6XT/TijggYz4/7bG90Z939QxnmE1qEqTM5cz/KKcATbQAKbAFOO/w82XNbD
+	4YolOufwTpsTEoimK+6UAjFuEA/EgDuj49YsJLe5wpYNNYt622ZLw5rncEDqtUPE8ACuw=
+X-Google-Smtp-Source: AGHT+IHHnkecJrTiDBVoCM7eM4g32Pk1c3raG4mqxUk9pSpJNW1vy947mDXE0F5WHjldRJe6WxHFFxEogzvUMtezeI0=
+X-Received: by 2002:a05:690c:9c0e:b0:70e:2ba2:659d with SMTP id
+ 00721157ae682-717b19634eamr9861137b3.23.1752018850202; Tue, 08 Jul 2025
+ 16:54:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: T0d515a0de5731984
-Date: Tue, 08 Jul 2025 22:42:37 +0100
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Gregory CLEMENT" <gregory.clement@bootlin.com>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
-Cc: "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>,
- =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- "Tawfik Bayouk" <tawfik.bayouk@mobileye.com>,
- "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- linux-kernel@vger.kernel.org
-Message-Id: <cd148cc2-bc18-43f0-9b6d-1b59b45cb400@app.fastmail.com>
-In-Reply-To: <20250708-smp_calib-v3-2-6dabf01a7d9f@bootlin.com>
-References: <20250708-smp_calib-v3-0-6dabf01a7d9f@bootlin.com>
- <20250708-smp_calib-v3-2-6dabf01a7d9f@bootlin.com>
-Subject: Re: [PATCH v3 2/2] MIPS: CPS: Optimise delay CPU calibration for SMP
-Content-Type: text/plain; charset=utf-8
+References: <20250708201745.5900-1-rosenp@gmail.com> <20250708201745.5900-8-rosenp@gmail.com>
+ <175201013411.1121693.17824456704959772294.robh@kernel.org>
+In-Reply-To: <175201013411.1121693.17824456704959772294.robh@kernel.org>
+From: Rosen Penev <rosenp@gmail.com>
+Date: Tue, 8 Jul 2025 16:53:59 -0700
+X-Gm-Features: Ac12FXyerQ4XgpTDcxgbBtlk_P_w9tWTj-9IUlprsdtZUPLTaj8qf2lgKgQNTww
+Message-ID: <CAKxU2N_oUgqdOymr6RRSe3KYQpXrUUFm0SvOYFogx7NOVMv5LA@mail.gmail.com>
+Subject: Re: [PATCHv2 wireless-next 7/7] dt-bindings: net: wireless: rt2800: add
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, Stanislaw Gruszka <stf_xl@wp.pl>, linux-mips@vger.kernel.org, 
+	linux-mediatek@lists.infradead.org, linux-wireless@vger.kernel.org, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-kernel@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	Conor Dooley <conor+dt@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	Johannes Berg <johannes@sipsolutions.net>, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-
-
-=E5=9C=A82025=E5=B9=B47=E6=9C=888=E6=97=A5=E5=91=A8=E4=BA=8C =E4=B8=8B=E5=
-=8D=882:46=EF=BC=8CGregory CLEMENT=E5=86=99=E9=81=93=EF=BC=9A
-> On MIPS architecture with CPS-based SMP support, all CPU cores in the
-> same cluster run at the same frequency since they share the same L2
-> cache, requiring a fixed CPU/L2 cache ratio.
+On Tue, Jul 8, 2025 at 2:28=E2=80=AFPM Rob Herring (Arm) <robh@kernel.org> =
+wrote:
 >
-> This allows to implement calibrate_delay_is_known(), which will return
-> 0 (triggering calibration) only for the primary CPU of each
-> cluster. For other CPUs, we can simply reuse the value from their
-> cluster's primary CPU core.
 >
-> With the introduction of this patch, a configuration running 32 cores
-> spread across two clusters sees a significant reduction in boot time
-> by approximately 600 milliseconds.
+> On Tue, 08 Jul 2025 13:17:45 -0700, Rosen Penev wrote:
+> > Add device-tree bindings for the RT2800 SOC wifi device found in older
+> > Ralink/Mediatek devices.
+> >
+> > Signed-off-by: Rosen Penev <rosenp@gmail.com>
+> > ---
+> >  .../bindings/net/wireless/ralink,rt2800.yaml  | 47 +++++++++++++++++++
+> >  1 file changed, 47 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/net/wireless/rali=
+nk,rt2800.yaml
+> >
 >
-> Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+> My bot found errors running 'make dt_binding_check' on your patch:
+>
+> yamllint warnings/errors:
+>
+> dtschema/dtc warnings/errors:
+> Documentation/devicetree/bindings/net/wireless/ralink,rt2800.example.dtb:=
+ /example-0/wifi@110180000: failed to match any schema with compatible: ['r=
+alink,rt2880-wifi']
+ralink,rt2880-wifi vs ralink,rt2800-wifi
 
-Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-
-> ---
->  arch/mips/kernel/smp-cps.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
+lovely...
 >
-> diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
-> index=20
-> 6c5f15293a8e58a701601b242f43ba19a6814f06..22d4f9ff3ae2671b07da5bb14915=
-4c686e07b209=20
-> 100644
-> --- a/arch/mips/kernel/smp-cps.c
-> +++ b/arch/mips/kernel/smp-cps.c
-> @@ -281,6 +281,17 @@ static void __init cps_smp_setup(void)
->  #endif /* CONFIG_MIPS_MT_FPAFF */
->  }
->=20
-> +unsigned long calibrate_delay_is_known(void)
-> +{
-> +	int first_cpu_cluster =3D 0;
-> +
-> +	/* The calibration has to be done on the primary CPU of the cluster =
-*/
-> +	if (mips_cps_first_online_in_cluster(&first_cpu_cluster))
-> +		return 0;
-> +
-> +	return cpu_data[first_cpu_cluster].udelay_val;
-> +}
-> +
->  static void __init cps_prepare_cpus(unsigned int max_cpus)
->  {
->  	unsigned int nclusters, ncores, core_vpes, nvpe =3D 0, c, cl, cca;
+> doc reference errors (make refcheckdocs):
 >
-> --=20
-> 2.47.2
-
---=20
-- Jiaxun
+> See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/202507=
+08201745.5900-8-rosenp@gmail.com
+>
+> The base for the series is generally the latest rc1. A different dependen=
+cy
+> should be noted in *this* patch.
+>
+> If you already ran 'make dt_binding_check' and didn't see the above
+> error(s), then make sure 'yamllint' is installed and dt-schema is up to
+> date:
+>
+> pip3 install dtschema --upgrade
+>
+> Please check and re-submit after running the above command yourself. Note
+> that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+> your schema. However, it must be unset to test all examples with your sch=
+ema.
+>
 
