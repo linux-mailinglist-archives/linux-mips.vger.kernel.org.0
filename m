@@ -1,129 +1,91 @@
-Return-Path: <linux-mips+bounces-9654-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9655-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4B7FAFBE6D
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Jul 2025 00:55:23 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 032C6AFBFCA
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Jul 2025 03:19:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1119542110C
-	for <lists+linux-mips@lfdr.de>; Mon,  7 Jul 2025 22:54:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31E613B157E
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Jul 2025 01:19:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7EE332874F4;
-	Mon,  7 Jul 2025 22:55:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fUo0oddH"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24BE013B5AE;
+	Tue,  8 Jul 2025 01:19:32 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from pidgin.makrotopia.org (pidgin.makrotopia.org [185.142.180.65])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E83C72116E7;
-	Mon,  7 Jul 2025 22:55:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E622C7464;
+	Tue,  8 Jul 2025 01:19:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.142.180.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751928921; cv=none; b=PWNfBZQj+J9SG5UYxxqdl4h2ugJalIqe4BCx+LJdC9FB1jGEAhXMZBWpkezNzARwAxCkkPs11R/NpDzr4odjWiffM3ROKY21hj4rofkYELrK92m1gBULZmBwewMGoxSBOzvjrW7OHHJtAOEoddSmxrVRkkSInhZsNWVQpCPYWTg=
+	t=1751937572; cv=none; b=JEVU0d18ISuvR19pRb/1tamjeKMoo+d16hA7J+AWsFD3w4EMhy7qGSe5BTYcBNPh+AhMWQkD9H/2pJX1Mf9e/6WmFKUWhIMHhLLBUZkkUdIdqrChD5gDCf0c4aDd9qYJGKAT1PFTxepcmhPcrQyPkmZ1doeo/VYmcDIi9diBgUk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751928921; c=relaxed/simple;
-	bh=BfplGAGYJSY9LdA74Otq/aYHP1O1UBCgPOBZ2j23Jrs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TiQC36EdEzOKB/coUVIadN0ziF1TvK5EyEEEAbTHDi6GEnVJNFTQcvAyxFTzF6mGRcT30v/vIEr0oGUsM5zTuRkWtG52kbvy7RSaIPpssT2Z52PBgCCzIemroTfinMWiTG+mwyOMAZtROf/yWFQn9kMwA5r12ENxz2gzfMT5zVc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fUo0oddH; arc=none smtp.client-ip=209.85.219.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e8b3cc12dceso1987866276.1;
-        Mon, 07 Jul 2025 15:55:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1751928918; x=1752533718; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LyTXGd3oxrcdwN+ZWfUesTZPlQxy4H1ZYTRObcRWa8Q=;
-        b=fUo0oddHCkZ5vUhnWZgCww7gTbNZ2EGpxT9yAsfFwyRry1wVtAN1BUhA36KxXY7x5U
-         cA4RP2sHTEpOCzrrd7NVAnfWFdh33fhDO6DsMrqz9J8w6IjsRd3+GvofyYMrth7xUwLp
-         vhs0wnStFZ0/H4zlCLmp9bkXxNGyk2BM4gE2Gjo9Hk8CpR2uN0lz3GDGutxaHxmQ3CGM
-         E2UpCDYIUGErYWNl/HIU9+oQJHuaCPdV1Ek0GLpMktvk7+F5LWes3eY6BWIrCj6Dm6fo
-         vxcosBcyfzPiLwqWwg+5SnQ5JbA1u2jWtDkULhOVoFs7HrmaQewfU2uB5XWUPtiunowr
-         kmkQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1751928918; x=1752533718;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LyTXGd3oxrcdwN+ZWfUesTZPlQxy4H1ZYTRObcRWa8Q=;
-        b=U1sMkT5gNeGQPLnie6117kfF2yoOUZHmz0Jkv8WjbsCLFsEfK34vDMb5nrAUlSgTKU
-         KDxccDHIrv5yMnqmW8VRQp/feji2cRb19l2F1orMTw9fK4YL+9shOsHzTisXB6gl8tph
-         B6hwPbpZ/lODYkBSQzoAvpN3GiPeXWDGPLAELKmYxFL081ri3f6w15jGYo+O1TEuk5Qr
-         wrszhH4lWKgZRFSj1V2vD70g6KtR0v/s9nwrLUhUno3HOJFQdYQVErjHNhmiDG3sblm0
-         ivniOBQ/vgy0izOxo64fCv8cABNyH7mucDPQ/AzJUW8fCQMibMhfL9R2d3LYuVo16hsV
-         8NdQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVeGtjZmDDklAD4ZXF85M9snMUc0BD6fePCKaq/YvjJONG/ZHxD1xFeM5QbtdUS/48JOSgSOUMvRIklFA==@vger.kernel.org, AJvYcCVfGawMTShJCGSzzRwHzv6DyOfe8x2215Zpzobr7jHdH84GvVKg49d2YDUjF+rbWBlbqvBWZKEc0qhv@vger.kernel.org, AJvYcCXbJOUIcufQAdfn5dcXN1hIgd7rLCKDvfga7XZfQziQXU6o+SbuDO/iJg7Ub8qrUO7r2nzSx0MrFH02XObB@vger.kernel.org
-X-Gm-Message-State: AOJu0YyrIWMtd22q5kJmJmEtZV1uowOz56ifaEIT+j2x5N8G3LSOyfAo
-	UfDQzeqV1lTX2ixU7k6WdQ1sc7kqRa+nu1+ZQUVLW+zmOS8yymajnP2qijrS363/HAEE1UIXGH/
-	k+gy9CDf3vIBJvidNTLPGWzMRfJ7njmE=
-X-Gm-Gg: ASbGncuwZEwNC3EUui5DW50RpclzcmdNzfjT0MHcM+Z+1nOBqAOAej+8XR8bqrEUQjf
-	8sYSmbVu53SzLoY1E9X/eZSm1t7/suQJdLLkws33mJ1QszKQxHnHGyJnKbg+NAPYcML5uQ+TkhI
-	XJxDz8Rp3Kusdc8+z65aRcXwPvu8PeQ72nvd/xc/zqTRk5v9M7qbf9/mf6zXKCcSICP0w=
-X-Google-Smtp-Source: AGHT+IFUqlSeXO7TN1tNOxRHWSczuY+UdbyZo5ZiJbvWxxUDKKmr0+ZLKF63xcIULGwasrd0gN8rpXhvNOBtbXtWouQ=
-X-Received: by 2002:a05:690c:690e:b0:70e:18c0:daba with SMTP id
- 00721157ae682-7166b7e8151mr182180917b3.25.1751928917782; Mon, 07 Jul 2025
- 15:55:17 -0700 (PDT)
+	s=arc-20240116; t=1751937572; c=relaxed/simple;
+	bh=oBIIPlnYrfnbzhQJIN4o0z5areYZlkrUgzPse2JkzhM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gpZ6TwcBGMcqUFdQzgJdJpWoX6aA3RKYLytb/Wq/kbaTtMhntpyeXTTSJsak8bCS/XQrr1+fiB3wh+O1VMa6QIwPL6rLNYjJ+o9nfYamcJpSju22CaX2Ssc3tw/1wLfBOQqrI/BA5LdtRgsbEooDK9/phSEW/uwxxbJywgC7VDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org; spf=pass smtp.mailfrom=makrotopia.org; arc=none smtp.client-ip=185.142.180.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=makrotopia.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=makrotopia.org
+Received: from local
+	by pidgin.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
+	 (Exim 4.98.2)
+	(envelope-from <daniel@makrotopia.org>)
+	id 1uYwzK-000000007oP-40A6;
+	Tue, 08 Jul 2025 01:19:15 +0000
+Date: Tue, 8 Jul 2025 02:19:11 +0100
+From: Daniel Golle <daniel@makrotopia.org>
+To: Rosen Penev <rosenp@gmail.com>
+Cc: linux-wireless@vger.kernel.org,
+	Johannes Berg <johannes@sipsolutions.net>, yangshiji66@qq.com,
+	ansuelsmth@gmail.com, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Stanislaw Gruszka <stf_xl@wp.pl>,
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:MIPS" <linux-mips@vger.kernel.org>,
+	"moderated list:ARM/Mediatek SoC support" <linux-arm-kernel@lists.infradead.org>,
+	"moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>
+Subject: Re: [PATCH 6/6] MIPS: dts: ralink: mt7628a: add wifi binding
+Message-ID: <aGxyD3mtzdNZPPnx@makrotopia.org>
+References: <20250706214111.45687-1-rosenp@gmail.com>
+ <20250706214111.45687-7-rosenp@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250706214111.45687-1-rosenp@gmail.com> <8c6f18ca47bf0dd78b6675d8b94000679b6c75cd.camel@sipsolutions.net>
- <CAKxU2N9vs5o4tj-9KxCHKevWU+J9wv+ZCOeD8o602y1GY8FzNw@mail.gmail.com> <b3a63d616c1ca337f6b9d14a9afaafe73bfbe8cc.camel@sipsolutions.net>
-In-Reply-To: <b3a63d616c1ca337f6b9d14a9afaafe73bfbe8cc.camel@sipsolutions.net>
-From: Rosen Penev <rosenp@gmail.com>
-Date: Mon, 7 Jul 2025 15:55:06 -0700
-X-Gm-Features: Ac12FXycPvJ6904Rtx31RRwaAeo58C7gGYz-ADfCLyeTnPkiok4GspDzrArWUl4
-Message-ID: <CAKxU2N-XviPav1Bh0yidyMUr=QbMr=0jyYyHKc+h0oaM9vak=Q@mail.gmail.com>
-Subject: Re: [PATCH 0/6] wifi: rt2x00: add OF bindings + cleanup
-To: Johannes Berg <johannes@sipsolutions.net>
-Cc: linux-wireless@vger.kernel.org, yangshiji66@qq.com, ansuelsmth@gmail.com, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Stanislaw Gruszka <stf_xl@wp.pl>, 
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
-	"open list:MIPS" <linux-mips@vger.kernel.org>, 
-	"moderated list:ARM/Mediatek SoC support" <linux-arm-kernel@lists.infradead.org>, 
-	"moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250706214111.45687-7-rosenp@gmail.com>
 
-On Mon, Jul 7, 2025 at 11:36=E2=80=AFAM Johannes Berg <johannes@sipsolution=
-s.net> wrote:
->
-> On Mon, 2025-07-07 at 10:41 -0700, Rosen Penev wrote:
-> > On Mon, Jul 7, 2025 at 2:01=E2=80=AFAM Johannes Berg <johannes@sipsolut=
-ions.net> wrote:
-> > >
-> > > On Sun, 2025-07-06 at 14:41 -0700, Rosen Penev wrote:
-> > > > It doesn't even compile. Added OF bindings, documentation, and othe=
-r
-> > > > stuff to hopefully this doesn't happen again.
-> > > >
-> > > > Rosen Penev (6):
-> > > >   wifi: rt2x00: fix compilation
-> > > >
-> > >
-> > > That was half covered by Felix already, and really shouldn't do two
-> > > things at the same time anyway.
-> > Just saw what you're talking about. That's gonna be annoying though.
-> > The COMPILE_TEST commit will cause compilation to fail and the bot to
-> > complain before Felix' patch gets merged.
-> >
->
-> Yeah well. That doesn't really mean it should be merged together though,
-> and we can pretty easily make that work by just putting the further work
-> in after net/wireless is merged back.
-Looking at it again, I'm effectively removing rt2x00soc.c . Meaning
-Felix' patch is mostly useless here.
+On Sun, Jul 06, 2025 at 02:41:11PM -0700, Rosen Penev wrote:
+> MT7620A devices all contain a wifi device as part of the SOC. Add it
+> here to get it working.
+> 
+> Signed-off-by: Rosen Penev <rosenp@gmail.com>
+> ---
+>  arch/mips/boot/dts/ralink/mt7620a.dtsi | 10 ++++++++++
+>  1 file changed, 10 insertions(+)
 
-It might make more sense to submit this series at a later time.
->
-> johannes
+The commit title
+
+MIPS: dts: ralink: mt7628a: add wifi binding 
+
+seems wrong as the commit (correctly) touches mt7620a.dtsi and not
+mt7628a.dtsi (which would be wrong as the WiFi part of MT7628A is
+already supported by the mt76 driver and part of the device tree).
+Also the word 'binding' seems wrong in this context, you are adding
+a node to the device tree, not to the device tree bindings.
+
+I'd hence suggest to change the commit title to
+
+MIPS: dts: ralink: mt7620a: add wifi
 
