@@ -1,104 +1,110 @@
-Return-Path: <linux-mips+bounces-9657-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9658-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 346A7AFC361
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Jul 2025 08:55:30 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93C32AFC654
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Jul 2025 10:56:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0D49E5621D3
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Jul 2025 06:52:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B2A273A9006
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Jul 2025 08:56:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93196222593;
-	Tue,  8 Jul 2025 06:52:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E932218845;
+	Tue,  8 Jul 2025 08:56:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b="n4rnXU8Y"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q597ERJK"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from sipsolutions.net (s3.sipsolutions.net [168.119.38.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA85C9461;
-	Tue,  8 Jul 2025 06:52:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=168.119.38.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 456631D5150;
+	Tue,  8 Jul 2025 08:56:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751957543; cv=none; b=kzjCSOsFqclMlDB8LU7jlVOCUTIYOryDAuId2ENhAGsJBMo2/VY7WSHioKBRH+rEHIekR3zeGH7r923h/nhV0DwQenFyDURPa6nUYT6HB3AXmC4XU1EKN7O4QCWVNaapkKMb+hVs7Db7rUIMogt/ZmeufO828yit5zqeNcW4ej0=
+	t=1751965000; cv=none; b=T5YFk/a6kMIGGt9D9cQ0ZxnkqOU1yW6BOyN9ugADNS+eRoWj3ROUgbDH3l1GCHQb1U91JOa+eaPEUjJ3FOaqCcKU/5vqZNa2WpIzrlKNaT31icnskXPJZmLZuocYxBqfeDlIYPCbeUt5w1qjHQrDeEWWrNcl1S7NQyI4UmeNSPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751957543; c=relaxed/simple;
-	bh=QgkicBTpwhIu4KhwMQ9MKtUqejjyYnHk87N/snpkRoM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=f6Z4uTWaMO8GQ4FZzXFalcDreTnMfeGHcRHbPTGUVB5YSxkMBtA+6s7yJAWD68vv0bp/L9xZQuDHdrOD/gPmLAwW6bUHwpOJXWUpAdG6auTmCm00bm+XulCXTkV6/IbGQbTDVWOhPMjNyhoCAR3qqzqKZiBzqjVyD7v11cNmho4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net; spf=pass smtp.mailfrom=sipsolutions.net; dkim=pass (2048-bit key) header.d=sipsolutions.net header.i=@sipsolutions.net header.b=n4rnXU8Y; arc=none smtp.client-ip=168.119.38.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sipsolutions.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sipsolutions.net
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=sipsolutions.net; s=mail; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:Sender
-	:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:Resent-To:
-	Resent-Cc:Resent-Message-ID; bh=QgkicBTpwhIu4KhwMQ9MKtUqejjyYnHk87N/snpkRoM=;
-	t=1751957542; x=1753167142; b=n4rnXU8YwOUQP1z7Vh14gcY7GRmkgNNX04XcYJMzWOkDkBo
-	Mu+AHAmEoxXdFpcmUMqXq7JqihpB+qgkt+l7Ep7KLwz0ZTpxVqQu8QVKDwgHzXvMwT5EwjVZKVhQW
-	8UZR5MBi3HMvBjEeWL9nrtl4E40Lr16l23O5P4qyS6KtLLKIvVI7sqKvVhAHQbEsbNSq+sRfSOXss
-	iFDm5z2NQyARgBRjfMoF0uOMJu5kaqtXXNOsXMNXrvYVPt2o9aZ+SywBNrZxCYvViy6HCHY7BZ89e
-	EqShB7dTWdOxvmgnJ91SGR92t2xJ/Pln2Nk+07Hy+5kCwSswCfMiLaIh0QxlfxjA==;
-Received: by sipsolutions.net with esmtpsa (TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
-	(Exim 4.98.2)
-	(envelope-from <johannes@sipsolutions.net>)
-	id 1uZ2BD-0000000BePp-1ddS;
-	Tue, 08 Jul 2025 08:51:54 +0200
-Message-ID: <304f48242d99fec81990d492777cb45a58aa038c.camel@sipsolutions.net>
-Subject: Re: [PATCH 0/6] wifi: rt2x00: add OF bindings + cleanup
-From: Johannes Berg <johannes@sipsolutions.net>
-To: Rosen Penev <rosenp@gmail.com>
-Cc: linux-wireless@vger.kernel.org, yangshiji66@qq.com,
- ansuelsmth@gmail.com,  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,  Thomas
- Bogendoerfer <tsbogend@alpha.franken.de>, Matthias Brugger
- <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno	
- <angelogioacchino.delregno@collabora.com>, Stanislaw Gruszka
- <stf_xl@wp.pl>,  "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE
- BINDINGS"	 <devicetree@vger.kernel.org>, open list
- <linux-kernel@vger.kernel.org>,  "open list:MIPS"
- <linux-mips@vger.kernel.org>, "moderated list:ARM/Mediatek SoC support"	
- <linux-arm-kernel@lists.infradead.org>, "moderated list:ARM/Mediatek SoC
- support" <linux-mediatek@lists.infradead.org>
-Date: Tue, 08 Jul 2025 08:51:44 +0200
-In-Reply-To: <CAKxU2N-XviPav1Bh0yidyMUr=QbMr=0jyYyHKc+h0oaM9vak=Q@mail.gmail.com> (sfid-20250708_005520_408645_C4B0336E)
-References: <20250706214111.45687-1-rosenp@gmail.com>
-	 <8c6f18ca47bf0dd78b6675d8b94000679b6c75cd.camel@sipsolutions.net>
-	 <CAKxU2N9vs5o4tj-9KxCHKevWU+J9wv+ZCOeD8o602y1GY8FzNw@mail.gmail.com>
-	 <b3a63d616c1ca337f6b9d14a9afaafe73bfbe8cc.camel@sipsolutions.net>
-	 <CAKxU2N-XviPav1Bh0yidyMUr=QbMr=0jyYyHKc+h0oaM9vak=Q@mail.gmail.com>
-	 (sfid-20250708_005520_408645_C4B0336E)
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 (3.56.2-1.fc42) 
+	s=arc-20240116; t=1751965000; c=relaxed/simple;
+	bh=jVeU/Aqjln3fLCA6Ax+qBHjjU3PAAeYBKzZ1p6qf+ko=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=sIdCjjioETsDq7WhgASEtmtBVrFEEUxIqSkcavWaWcbGXM7auVni/UYL7lsUFRc5UUa/audelaOwcgSRfin19YFpI//V2AIFmKRLp1Q8MQIi1QmpZlX8HNZllQRj7SQkiQLlpNoLJksmRQfrVBn1io46OLZAO+cEYG4U68BSitY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q597ERJK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF39EC4CEED;
+	Tue,  8 Jul 2025 08:56:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1751964998;
+	bh=jVeU/Aqjln3fLCA6Ax+qBHjjU3PAAeYBKzZ1p6qf+ko=;
+	h=From:To:Cc:Subject:Date:From;
+	b=q597ERJKuVl37lKf0Fyh85894iLsQwmWcs9hj4ELH3V5Vw3vfAKB/xkhJGAs0RUa/
+	 rTtJW9yp0GDVhjDSFWdDGcaueJE0tSTSH13OKPi6oa2cxiz47ZS9gsGuvknRS5qnWy
+	 aGeaCpo2Lss3mVzJuNOfb9u1FQqtO4/4y1XpAxN2vRjntpj9pTMduY+AJk5RkUsYk0
+	 /LEj7glfanoiu3UZsQ9dHN7SvXJNnISMvBerZztE0AOYS1doGbgb8cHiqAl3CWxs5Z
+	 vPHsTpAJ77NbupoOYZPpAdNFFT9d1DCvSl5qwMPdoslQdWEPm4UWOSk2Uyis16INfL
+	 WyD2paJAZZaCw==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1uZ47q-0000000047f-2jJL;
+	Tue, 08 Jul 2025 10:56:30 +0200
+From: Johan Hovold <johan@kernel.org>
+To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	=?UTF-8?q?Th=C3=A9o=20Lebrun?= <theo.lebrun@bootlin.com>,
+	Philipp Zabel <p.zabel@pengutronix.de>
+Cc: linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Johan Hovold <johan@kernel.org>
+Subject: [PATCH] reset: eyeq: fix OF node leak
+Date: Tue,  8 Jul 2025 10:56:13 +0200
+Message-ID: <20250708085613.15823-1-johan@kernel.org>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-malware-bazaar: not-scanned
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, 2025-07-07 at 15:55 -0700, Rosen Penev wrote:
-> >=20
-> > Yeah well. That doesn't really mean it should be merged together though=
-,
-> > and we can pretty easily make that work by just putting the further wor=
-k
-> > in after net/wireless is merged back.
-> Looking at it again, I'm effectively removing rt2x00soc.c . Meaning
-> Felix' patch is mostly useless here.
+Make sure to drop the OF node reference taken when probing the auxiliary
+device when the device is later unbound.
 
-But we're not going to put your changes into 6.16. They're not even
-entirely ready yet, from what I see in the thread.
+Fixes: 487b1b32e317 ("reset: eyeq: add platform driver")
+Cc: Théo Lebrun <theo.lebrun@bootlin.com>
+Signed-off-by: Johan Hovold <johan@kernel.org>
+---
+ drivers/reset/reset-eyeq.c | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
 
-> It might make more sense to submit this series at a later time.
->=20
+diff --git a/drivers/reset/reset-eyeq.c b/drivers/reset/reset-eyeq.c
+index 02d50041048b..2d3998368a1c 100644
+--- a/drivers/reset/reset-eyeq.c
++++ b/drivers/reset/reset-eyeq.c
+@@ -410,6 +410,13 @@ static int eqr_of_xlate_twocells(struct reset_controller_dev *rcdev,
+ 	return eqr_of_xlate_internal(rcdev, reset_spec->args[0], reset_spec->args[1]);
+ }
+ 
++static void eqr_of_node_put(void *_dev)
++{
++	struct device *dev = _dev;
++
++	of_node_put(dev->of_node);
++}
++
+ static int eqr_probe(struct auxiliary_device *adev,
+ 		     const struct auxiliary_device_id *id)
+ {
+@@ -428,6 +435,10 @@ static int eqr_probe(struct auxiliary_device *adev,
+ 	if (!dev->of_node)
+ 		return -ENODEV;
+ 
++	ret = devm_add_action_or_reset(dev, eqr_of_node_put, dev);
++	if (ret)
++		return ret;
++
+ 	/*
+ 	 * Using our newfound OF node, we can get match data. We cannot use
+ 	 * device_get_match_data() because it does not match reused OF nodes.
+-- 
+2.49.0
 
-By end of the week Felix's patch should be in wireless-next too, if I
-get all the things done right...
-
-johannes
 
