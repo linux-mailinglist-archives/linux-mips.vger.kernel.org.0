@@ -1,120 +1,82 @@
-Return-Path: <linux-mips+bounces-9665-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9666-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CDD6AFCC69
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Jul 2025 15:46:54 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7B32AFCF9A
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Jul 2025 17:48:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 92C543A79A0
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Jul 2025 13:46:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B5193423088
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Jul 2025 15:47:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DD052DECB1;
-	Tue,  8 Jul 2025 13:46:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Z9L5syEc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B5552E172E;
+	Tue,  8 Jul 2025 15:47:36 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0315422DA15;
-	Tue,  8 Jul 2025 13:46:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.197
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A8232DF3FB;
+	Tue,  8 Jul 2025 15:47:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751982384; cv=none; b=IWO1o6odCgOnUt46hoEzRvbUn3ZnzRoUxypESfn76U6hb3RA+Dl+nnaVLgvTtF3Tjp0+b3pV9Kdv+g0XKKeZB1VWgDuvblYPieVc4z0AuZMUBzS/mpW0w9R+FLhjJrYQdnK4lq2W1GWMiuBqJ7jK4fFzU77FZxEtc8VnMDr0z3g=
+	t=1751989656; cv=none; b=eEdxbh2a6BG1hhTBH2NalS7MvNySTeeGcLpEj3JUrUg6ZbQggNnepTE+Qd8gajteqa5fFO5ucIw7FZVvTehOp5BhiH5AMypbVsl5SB//+uqOM8k/GmYJyTcI6hEA2wInG/tqqVtzg9v8ng17+e7SlxcZKiaTEUcPFwBf+p9Y2sE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751982384; c=relaxed/simple;
-	bh=u3mOjZL8HlprN+ucqtSMLbYsiTcrRkQEcZv4axstnkk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=oPE62SifV9fQ6U8rpE8ZqggRbnHQvyYgVnoVDE6Ovp/u3iC08xbNM9qMRdHCoLFb45Yq24bhA/dWqLG0BEbeEaaHZXq2P6pHNVp4+iITvvex2qL7hamZcOOixz2lkABIVFzjO75sRlItMTjVbE/6Whsv0jTExqnMEQMF5uMlO+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Z9L5syEc; arc=none smtp.client-ip=217.70.183.197
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 8292243A23;
-	Tue,  8 Jul 2025 13:46:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1751982380;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ynEjQanVjx7lJcfMhqKPdS9j3JjYwrWdI9qW+hDgZ4c=;
-	b=Z9L5syEcixFSUv0ag2d92k4CL1O6UB7JVgtkpbULM3NuUC+0rvcLJFxn9Yb4YVMzJ02rc4
-	yk7n1ZIUuBXUqLBw3PgV7hOkvZCwXXPTYW4TrXJYZaSn7hxWUiqH1UNNLRdjZzjfmXmd7U
-	wCLztpxdlqKnJPFF+NxNKJq0mEtuoAv6MXkg36m/BSc3ZwZ+MqAPuD4j538apDAFOg3gIf
-	bUiS5dDJGd8rRFmhNqZwhBoQBKHyImNtqc17UA4qxkn82xPx33EjGGzbsr4TPPUFmfg0yW
-	3Re5BBrNF3q//1TrLHO/cC3I08YfbEusZWxOGLJDcmBIiNOG0RadcokfarEevA==
-From: Gregory CLEMENT <gregory.clement@bootlin.com>
-Date: Tue, 08 Jul 2025 15:46:12 +0200
-Subject: [PATCH v3 2/2] MIPS: CPS: Optimise delay CPU calibration for SMP
+	s=arc-20240116; t=1751989656; c=relaxed/simple;
+	bh=gaMKsqU+Nh1+keJmHDwOYUCbZaHBYH6JUWi1mu3uyx8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KzYIzNLQp80PQP0nK7aJBiehCyksnG42kvoAcIDQlNs8xajHJ7l1gvHmxqCAh8gg+KFnXGRhJR+cPts8z3dMa3dYSOM4ehHwxRxshoj93Eniu3TWhNCZ6/RRonrcwQERPR3USJgiOG6y1iFZd3UaZ+c2pYjOavwMMCWikLQidsY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CEB56C4CEED;
+	Tue,  8 Jul 2025 15:47:33 +0000 (UTC)
+From: Geert Uytterhoeven <geert+renesas@glider.be>
+To: Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+	Mark Brown <broonie@kernel.org>,
+	Rahul Bedarkar <rahulbedarkar89@gmail.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>
+Cc: linux-sound@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Geert Uytterhoeven <geert+renesas@glider.be>
+Subject: [PATCH] ASoC: img: Imagination Technologies sound should depend on MIPS
+Date: Tue,  8 Jul 2025 17:47:29 +0200
+Message-ID: <242832f225ae68018111648ea9934dc059741567.1751989463.git.geert+renesas@glider.be>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250708-smp_calib-v3-2-6dabf01a7d9f@bootlin.com>
-References: <20250708-smp_calib-v3-0-6dabf01a7d9f@bootlin.com>
-In-Reply-To: <20250708-smp_calib-v3-0-6dabf01a7d9f@bootlin.com>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>, 
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-mips@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Gregory CLEMENT <gregory.clement@bootlin.com>
-X-Mailer: b4 0.14.2
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdefgeekfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephfffufggtgfgkfhfjgfvvefosehtjeertdertdejnecuhfhrohhmpefirhgvghhorhihucevnffgoffgpffvuceoghhrvghgohhrhidrtghlvghmvghnthessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepfedvffevfefhieefteeuieeuleevgffhveegvdegueegjeehfeejudettdegvdffnecukfhppedvrgdtudemtggsudegmeehheeimeejrgdttdemieejgedtmeeftdgrleemheguleejmegrvdegleenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudegmeehheeimeejrgdttdemieejgedtmeeftdgrleemheguleejmegrvdegledphhgvlhhopehlohgtrghlhhhoshhtpdhmrghilhhfrhhomhepghhrvghgohhrhidrtghlvghmvghnthessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepledprhgtphhtthhopehgrhgvghhorhihrdgtlhgvmhgvnhhtsegsohhothhlihhnrdgtohhmpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtohepthhssghoghgvnhgusegrlhhphhgrrdhfr
- hgrnhhkvghnrdguvgdprhgtphhtthhopehvlhgrughimhhirhdrkhhonhgurhgrthhivghvsehmohgsihhlvgihvgdrtghomhdprhgtphhtthhopehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmpdhrtghpthhtohepthgrfihfihhkrdgsrgihohhukhesmhhosghilhgvhigvrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhhvghordhlvggsrhhunhessghoohhtlhhinhdrtghomh
-X-GND-Sasl: gregory.clement@bootlin.com
+Content-Transfer-Encoding: 8bit
 
-On MIPS architecture with CPS-based SMP support, all CPU cores in the
-same cluster run at the same frequency since they share the same L2
-cache, requiring a fixed CPU/L2 cache ratio.
+Before, all Imagination sound symbols were gated by the SND_SOC_IMG
+symbol, offering the user a simple option to hide them all.  After the
+removal of this gate symbol, all symbols are exposed to the user, even
+when configuring a kernel for a non-Imagination platform.
+Fix this by adding a dependency on MIPS, to prevent asking the user
+about these drivers when configuring a kernel for a different
+architecture.
 
-This allows to implement calibrate_delay_is_known(), which will return
-0 (triggering calibration) only for the primary CPU of each
-cluster. For other CPUs, we can simply reuse the value from their
-cluster's primary CPU core.
-
-With the introduction of this patch, a configuration running 32 cores
-spread across two clusters sees a significant reduction in boot time
-by approximately 600 milliseconds.
-
-Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+Fixes: b13f7eef9ff82e01 ("ASoC: img: Standardize ASoC menu")
+Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
- arch/mips/kernel/smp-cps.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+ sound/soc/img/Kconfig | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/mips/kernel/smp-cps.c b/arch/mips/kernel/smp-cps.c
-index 6c5f15293a8e58a701601b242f43ba19a6814f06..22d4f9ff3ae2671b07da5bb149154c686e07b209 100644
---- a/arch/mips/kernel/smp-cps.c
-+++ b/arch/mips/kernel/smp-cps.c
-@@ -281,6 +281,17 @@ static void __init cps_smp_setup(void)
- #endif /* CONFIG_MIPS_MT_FPAFF */
- }
+diff --git a/sound/soc/img/Kconfig b/sound/soc/img/Kconfig
+index 9a4cba6fdb505d69..22b75a8144a18170 100644
+--- a/sound/soc/img/Kconfig
++++ b/sound/soc/img/Kconfig
+@@ -1,5 +1,6 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+ menu "Imagination Technologies"
++	depends on MIPS || COMPILE_TEST
  
-+unsigned long calibrate_delay_is_known(void)
-+{
-+	int first_cpu_cluster = 0;
-+
-+	/* The calibration has to be done on the primary CPU of the cluster */
-+	if (mips_cps_first_online_in_cluster(&first_cpu_cluster))
-+		return 0;
-+
-+	return cpu_data[first_cpu_cluster].udelay_val;
-+}
-+
- static void __init cps_prepare_cpus(unsigned int max_cpus)
- {
- 	unsigned int nclusters, ncores, core_vpes, nvpe = 0, c, cl, cca;
-
+ config SND_SOC_IMG_I2S_IN
+ 	tristate "Imagination I2S Input Device Driver"
 -- 
-2.47.2
+2.43.0
 
 
