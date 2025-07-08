@@ -1,110 +1,117 @@
-Return-Path: <linux-mips+bounces-9658-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9659-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93C32AFC654
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Jul 2025 10:56:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E63E5AFC7A3
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Jul 2025 12:01:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B2A273A9006
-	for <lists+linux-mips@lfdr.de>; Tue,  8 Jul 2025 08:56:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 347944A3764
+	for <lists+linux-mips@lfdr.de>; Tue,  8 Jul 2025 10:01:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E932218845;
-	Tue,  8 Jul 2025 08:56:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 245131C84D6;
+	Tue,  8 Jul 2025 10:01:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="q597ERJK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="IZxfI62n"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 456631D5150;
-	Tue,  8 Jul 2025 08:56:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD00272610;
+	Tue,  8 Jul 2025 10:01:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1751965000; cv=none; b=T5YFk/a6kMIGGt9D9cQ0ZxnkqOU1yW6BOyN9ugADNS+eRoWj3ROUgbDH3l1GCHQb1U91JOa+eaPEUjJ3FOaqCcKU/5vqZNa2WpIzrlKNaT31icnskXPJZmLZuocYxBqfeDlIYPCbeUt5w1qjHQrDeEWWrNcl1S7NQyI4UmeNSPA=
+	t=1751968865; cv=none; b=NW6c62+bzmhYTKdj9BaAyHIH/WQKeVwdHjyQ9VDyBshiN+BA/6a+6TbPNaadJHJDUgfOJf9WGUF3xsyWluF56eri7fD20aRVR/l3s8bIfBC/hPAVAw7Bh0gkEZQ/m7jesB28e69MatCkFolfD1rOoXDhSLLvGQ3+lINKxF9Hs5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1751965000; c=relaxed/simple;
-	bh=jVeU/Aqjln3fLCA6Ax+qBHjjU3PAAeYBKzZ1p6qf+ko=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=sIdCjjioETsDq7WhgASEtmtBVrFEEUxIqSkcavWaWcbGXM7auVni/UYL7lsUFRc5UUa/audelaOwcgSRfin19YFpI//V2AIFmKRLp1Q8MQIi1QmpZlX8HNZllQRj7SQkiQLlpNoLJksmRQfrVBn1io46OLZAO+cEYG4U68BSitY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=q597ERJK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF39EC4CEED;
-	Tue,  8 Jul 2025 08:56:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1751964998;
-	bh=jVeU/Aqjln3fLCA6Ax+qBHjjU3PAAeYBKzZ1p6qf+ko=;
-	h=From:To:Cc:Subject:Date:From;
-	b=q597ERJKuVl37lKf0Fyh85894iLsQwmWcs9hj4ELH3V5Vw3vfAKB/xkhJGAs0RUa/
-	 rTtJW9yp0GDVhjDSFWdDGcaueJE0tSTSH13OKPi6oa2cxiz47ZS9gsGuvknRS5qnWy
-	 aGeaCpo2Lss3mVzJuNOfb9u1FQqtO4/4y1XpAxN2vRjntpj9pTMduY+AJk5RkUsYk0
-	 /LEj7glfanoiu3UZsQ9dHN7SvXJNnISMvBerZztE0AOYS1doGbgb8cHiqAl3CWxs5Z
-	 vPHsTpAJ77NbupoOYZPpAdNFFT9d1DCvSl5qwMPdoslQdWEPm4UWOSk2Uyis16INfL
-	 WyD2paJAZZaCw==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1uZ47q-0000000047f-2jJL;
-	Tue, 08 Jul 2025 10:56:30 +0200
-From: Johan Hovold <johan@kernel.org>
-To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
-	=?UTF-8?q?Th=C3=A9o=20Lebrun?= <theo.lebrun@bootlin.com>,
-	Philipp Zabel <p.zabel@pengutronix.de>
-Cc: linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Johan Hovold <johan@kernel.org>
-Subject: [PATCH] reset: eyeq: fix OF node leak
-Date: Tue,  8 Jul 2025 10:56:13 +0200
-Message-ID: <20250708085613.15823-1-johan@kernel.org>
-X-Mailer: git-send-email 2.49.0
+	s=arc-20240116; t=1751968865; c=relaxed/simple;
+	bh=pPJ3ZM+61NoEPP7sVqf8nRihh6saAoswmamcXrU9qmQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dLlX60JMu/Yes88DMcfF4Yly1Bj0U59/wZxbzqU+EzTYwiRc0N1cOiPSD89G59/9nkCyv/iEUQFGaSbozxpkzDF0bduObqkyjofWIEnuD/YR+R/gAoaeKfyUSoRC3XFIzbuFK/hOgyFa1lV+TRFaM5EFwK+3Nzaysnks87X2PVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=IZxfI62n; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-23508d30142so49865685ad.0;
+        Tue, 08 Jul 2025 03:01:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1751968863; x=1752573663; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=x3wkBIAWu6vMGhx4ihyYrJkvVRzXaSU5Nke0PKHHZR0=;
+        b=IZxfI62nuRf0pcjI1fu+dN6UyT1eGG0tzqEEA25u7KNC4DGXZP024LK0hY8cree43g
+         UAazC3ReUUvOft8J/m4PLyWBSJOu+uQwvHbl2euqcm2V6h94RpWnZN8HPVb1rHOAskyW
+         UDvBjjvHGmoGczuQQtaEyx0kuRJw1MQN5lc3ax6QcJZWn5+RC9CmMIBLcvIS7Ef4EI1N
+         5KFbqaMmJaI3CILzFZGv/Z+J+3DAeCCze8LVv31aekFdvHSAhKti/JUxHb83XtyPtUIf
+         FmyPeG3esN9rin/97TCTTXFHigNFnMRjZkX5W+NFf1Ufe9qdGa5dDv95BnuSoPxAxbUd
+         g0lQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1751968863; x=1752573663;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=x3wkBIAWu6vMGhx4ihyYrJkvVRzXaSU5Nke0PKHHZR0=;
+        b=E5WuYOPf+5JF7sFuDcTu9/WSXq9cPkBAv7JOuW4b459Rq2NRmYC1p2QyP6nknS/KD7
+         TYZxh1wpFEbfiDWvvMmMf3syKfoIPR4ip81CicgbPDO/Oj4t8K1lvc6wj4XIG4RxpE3z
+         bUaYWhToOF73/hQF1Gx0VaNJIsa7Jm/7PYG3d4WsuAmIbmTZst+1TV9EEhxCcNINdglF
+         FKf2KQnF/BXjyIDjA2i9ZmG2Exn3fiyL1pxBs8oK5gdOm3CmDrKkTISuBIXSdcT+dgmU
+         /wCeowTwU2eP/LwCvTf996wuHu+CtF+my18g8CkSeKSxcXuYpQGqC5r4dGLoGKiuorD4
+         BTYg==
+X-Forwarded-Encrypted: i=1; AJvYcCUzWn04IQnjz/KSis1bpakEM4UkpVhKJgIY92p2vUR72gvA+BeotcWiG6CPlTvk+Fm9eaSgzLGtNPtrjLM2@vger.kernel.org, AJvYcCWlQPsIUnn/etJ7LCckJ8XX5MsVhywHg5crSy4Bu7wVrFFIhbOoROUG6TV7jNtgWauGg1Mo0f/jV2MB@vger.kernel.org, AJvYcCXLs61sEZWto39E8sCoy+a7BqVVtHOoFE6FnZ6SSjaGK64oCj4D5boIk4R73L3C8ahxF/dO9ggJxn15zw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx5eNakFf2wf10ZP1MyNaoBjpfdwd6c7z+7KBMEap1AMgGzc5/t
+	yzCx69Z2G5A/kidiobf6lyB7CQlLkkt7RCEgI3eY0J2HpsrzSz71UhmMdhZjc9BYjITjVtChRnN
+	FH6beLy0IxrJATHW3Ne923mBDH8pyK48=
+X-Gm-Gg: ASbGnctpdaLC6CHRh2rC2h/ipOJHQKtffjxrRMkAzV4zRKyMY9CZPo34UX5/xTzUSoS
+	y+Y1kqxNlu6LIjE58nQ+DjnJ3V4gTJeMxWIpmjcEUfbpKbCJ9LC2BUtXjwZRZbnBZDORe5cSHov
+	b8E9JxM/EMT8GjUpKcqDNV9EcL29g/N2h94wV00tpb
+X-Google-Smtp-Source: AGHT+IGAe+59sFXxJtTzkwvN/ahnPXiW4uDCXu7SJ3GxoxXjyVqLVVp4TiGhxGEmNwLOC3JUTpSndKTB39EzWdmJQBw=
+X-Received: by 2002:a17:902:cec1:b0:21f:617a:f1b2 with SMTP id
+ d9443c01a7336-23c85ec7c0amr255897365ad.46.1751968862766; Tue, 08 Jul 2025
+ 03:01:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <20250706214111.45687-1-rosenp@gmail.com> <20250706214111.45687-2-rosenp@gmail.com>
+In-Reply-To: <20250706214111.45687-2-rosenp@gmail.com>
+From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Date: Tue, 8 Jul 2025 12:00:51 +0200
+X-Gm-Features: Ac12FXz_arerdXgv7XWPfT5u_8acT2yjf8UClrrHDQjOZEpD7ryHNclY75AcmHs
+Message-ID: <CAMhs-H-DNZik1EhM03QjUk=KwJwdQ=MCS-XdkA_dy6G7EpjBbQ@mail.gmail.com>
+Subject: Re: [PATCH 1/6] wifi: rt2x00: fix compilation
+To: Rosen Penev <rosenp@gmail.com>
+Cc: linux-wireless@vger.kernel.org, Johannes Berg <johannes@sipsolutions.net>, 
+	yangshiji66@qq.com, ansuelsmth@gmail.com, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Stanislaw Gruszka <stf_xl@wp.pl>, 
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
+	"open list:MIPS" <linux-mips@vger.kernel.org>, 
+	"moderated list:ARM/Mediatek SoC support" <linux-arm-kernel@lists.infradead.org>, 
+	"moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Make sure to drop the OF node reference taken when probing the auxiliary
-device when the device is later unbound.
+On Sun, Jul 6, 2025 at 11:41=E2=80=AFPM Rosen Penev <rosenp@gmail.com> wrot=
+e:
+>
+> The .remove prototype commits seem to have missed this driver. Probably
+> because COMPILE_TEST is missing.
+>
+> This is a mess anyway. These non static functions will be moved to their
+> proper place.
+>
+> Signed-off-by: Rosen Penev <rosenp@gmail.com>
+> ---
+>  drivers/net/wireless/ralink/rt2x00/Kconfig     | 2 +-
+>  drivers/net/wireless/ralink/rt2x00/rt2x00soc.c | 4 +---
+>  drivers/net/wireless/ralink/rt2x00/rt2x00soc.h | 2 +-
+>  3 files changed, 3 insertions(+), 5 deletions(-)
 
-Fixes: 487b1b32e317 ("reset: eyeq: add platform driver")
-Cc: Théo Lebrun <theo.lebrun@bootlin.com>
-Signed-off-by: Johan Hovold <johan@kernel.org>
----
- drivers/reset/reset-eyeq.c | 11 +++++++++++
- 1 file changed, 11 insertions(+)
+Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
 
-diff --git a/drivers/reset/reset-eyeq.c b/drivers/reset/reset-eyeq.c
-index 02d50041048b..2d3998368a1c 100644
---- a/drivers/reset/reset-eyeq.c
-+++ b/drivers/reset/reset-eyeq.c
-@@ -410,6 +410,13 @@ static int eqr_of_xlate_twocells(struct reset_controller_dev *rcdev,
- 	return eqr_of_xlate_internal(rcdev, reset_spec->args[0], reset_spec->args[1]);
- }
- 
-+static void eqr_of_node_put(void *_dev)
-+{
-+	struct device *dev = _dev;
-+
-+	of_node_put(dev->of_node);
-+}
-+
- static int eqr_probe(struct auxiliary_device *adev,
- 		     const struct auxiliary_device_id *id)
- {
-@@ -428,6 +435,10 @@ static int eqr_probe(struct auxiliary_device *adev,
- 	if (!dev->of_node)
- 		return -ENODEV;
- 
-+	ret = devm_add_action_or_reset(dev, eqr_of_node_put, dev);
-+	if (ret)
-+		return ret;
-+
- 	/*
- 	 * Using our newfound OF node, we can get match data. We cannot use
- 	 * device_get_match_data() because it does not match reused OF nodes.
--- 
-2.49.0
-
+Best regards,
+    Sergio Paracuellos
 
