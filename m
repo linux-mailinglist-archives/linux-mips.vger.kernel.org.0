@@ -1,145 +1,152 @@
-Return-Path: <linux-mips+bounces-9684-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9685-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24EEAAFE417
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Jul 2025 11:31:25 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19BC6AFE6FE
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Jul 2025 13:08:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 26CB07A9BBF
-	for <lists+linux-mips@lfdr.de>; Wed,  9 Jul 2025 09:29:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9EA63AD95C
+	for <lists+linux-mips@lfdr.de>; Wed,  9 Jul 2025 11:07:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46EE82853E2;
-	Wed,  9 Jul 2025 09:31:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E074928C840;
+	Wed,  9 Jul 2025 11:07:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TY69fjRo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l0Ayf6ZX"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6391721ABDB;
-	Wed,  9 Jul 2025 09:31:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3A8526F45A;
+	Wed,  9 Jul 2025 11:07:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752053474; cv=none; b=M01qtJlvcegB8Xlz5AQKJAN+txELqdtiBJ0gyg+0HRdaNty3IfMCnrQDXq9V+4FoKa5N470L2OmXbJKPyNeR+k9PoiPxdbA62qxgcLJZ05UQAfmVxtLv9w5AHEgVvAdUtFfMxjzNafRxj6tjGFR/32DsK7bA2xo0M+xVSTbdPaI=
+	t=1752059247; cv=none; b=ojPc35uy+GaOeuM/h+JLiHk4xz0K45qu6agU7GN2RFI/EiLbWOtw8lQp9cGPAeq/p/PxrxFGjVAu2IV9C+US0ZNxnvCp6wdzYfryslSl2TkuL6W/VvRsCCU1GquO6qeN1Q6kouIpAQWZxdFa+GMm4YSHNterTjKTwTwOi6FVDss=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752053474; c=relaxed/simple;
-	bh=NDIeKvKN6PhyGm+E4n56kqaD22eU91kCw5AVe3oMfyA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Tm9bbjb11Xw/ja+IE7497EWaUv1hwK6FIrsAgY+2hv3W6a+q7dFSubiKg3PjW6vr1OrzKgIF48VR94hoZqsZCbHJIBJC23K85b3d2ggXRFuCW3ZuArYg8fA9l37XEzz8loqNF4q+Vk2IU3kQjjR13mFLMJUg4Ng0o9RxhTqTu/4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TY69fjRo; arc=none smtp.client-ip=198.175.65.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1752053472; x=1783589472;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NDIeKvKN6PhyGm+E4n56kqaD22eU91kCw5AVe3oMfyA=;
-  b=TY69fjRo9VxIAF8Nxx76P2gqL3LVVGJVrwm7QZcZfuwGuPTbLpUEJHNw
-   RnP3YK3/q08kjCxbMhFtkWcDqp+FnGtPwyMt4PEZvJsU2FsdP7OkTxEHm
-   C20yoIkCDTyJsUA/XUWLsmd6mSeRlnj8k3gOYM1Ll4FXVe9NaH+s51JPZ
-   +5PDrgJtnGLg33B/ixWu2XkoX+gmHlDTDymcde5ywnEm+PnWr2mMDhzY4
-   JOJUys5liEUcA3XQlTV1FYRpenkqZeQWdCotcGsF40uFeTqqFIaGOnLzK
-   JWZXjkzB1Ifu1SYisbq9AasmSp4dkS/pt6OArphUfE3EFiP5+xpVpO9zr
-   Q==;
-X-CSE-ConnectionGUID: bFNP7nVeRnqKOiYgMeW/dg==
-X-CSE-MsgGUID: Opoe+V57SJ+bQrylKr+jEg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11487"; a="64556060"
-X-IronPort-AV: E=Sophos;i="6.16,298,1744095600"; 
-   d="scan'208";a="64556060"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jul 2025 02:31:11 -0700
-X-CSE-ConnectionGUID: EoIfbataRlSJM9AyKJtNYA==
-X-CSE-MsgGUID: afWGX1HFQAapc7+fWbUdRA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.16,298,1744095600"; 
-   d="scan'208";a="156462685"
-Received: from lkp-server01.sh.intel.com (HELO 9ee84586c615) ([10.239.97.150])
-  by fmviesa010.fm.intel.com with ESMTP; 09 Jul 2025 02:31:08 -0700
-Received: from kbuild by 9ee84586c615 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1uZR8s-0003M3-06;
-	Wed, 09 Jul 2025 09:31:06 +0000
-Date: Wed, 9 Jul 2025 17:30:36 +0800
-From: kernel test robot <lkp@intel.com>
-To: Rosen Penev <rosenp@gmail.com>, linux-wireless@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Stanislaw Gruszka <stf_xl@wp.pl>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCHv2 wireless-next 4/7] wifi: rt2800: move 2x00soc to 2800soc
-Message-ID: <202507091735.YeYeU2tw-lkp@intel.com>
-References: <20250708201745.5900-5-rosenp@gmail.com>
+	s=arc-20240116; t=1752059247; c=relaxed/simple;
+	bh=9xgK+fBhA8h6jU2nAkgquJvvHtf3UTyu5jZV7nmkulY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=lqxKAR4Nd4qq6HHAqj4cfx30mvF12VMal1NTDtQ7tfOEmJaCyLUtsMK504QhNOM7v+mIXYcnRVfiWkcR9PXhPYwcxbQKus+sMfMprR51J2fSUYcq1UWEmyCGzj3AG7XALW+nJbizgrwUYjHbvA+Qz5s95YTU0NcvD0Jg6hmJf0Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l0Ayf6ZX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 87503C4CEEF;
+	Wed,  9 Jul 2025 11:07:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752059247;
+	bh=9xgK+fBhA8h6jU2nAkgquJvvHtf3UTyu5jZV7nmkulY=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=l0Ayf6ZXcoKrtMmriIZLctPpPQQ+doQ/iXreRso00nHWkXJqDa9EGTe/a76dERfUf
+	 CKY+D54U1F39xa+stGjhAH94xUgPZBjbeoCDk1ZmhD8aOGy7LetCR0MIA0MP5ZbnPY
+	 e69SvQsM+soSjGtDH32XmydI5AnGheg01k5eOnLMk3AjvcUxdFm/4PpDOHQm8Oslsd
+	 Kg7WgigAWkHKBpqxulAvcfdbKsVL34/pQVGr1oBXgJkkxvRw/Gm5lwGHVuycxbcxHw
+	 PiiuXcxXwlYaBFKkjV9jNtQ5nxTzFF50XCcgK+5NIiOJ5puS5b3SHDneJN3BaHpYCg
+	 TbkJOLpjAwlWg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 77566C83F0A;
+	Wed,  9 Jul 2025 11:07:27 +0000 (UTC)
+From: Keguang Zhang via B4 Relay <devnull+keguang.zhang.gmail.com@kernel.org>
+Subject: [PATCH v2 0/9] MIPS: loongson32: Convert all platform devices to
+ DT
+Date: Wed, 09 Jul 2025 19:05:51 +0800
+Message-Id: <20250709-loongson1-arch-v2-0-bcff6e518c09@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250708201745.5900-5-rosenp@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAA9NbmgC/zWNSw7CIBQAr9K8tY8ApR9ceQ/jgtBXILZgQI2x6
+ d1FE5ezmJkNCuVABY7NBpmeoYQUK8hDA9ab6AjDVBkklx1XQuGSUnQlRYEmW48dmdHSpKw2Gqp
+ 0yzSH1y94vlSec1rx7jOZf6blg9SiVa0Ymei1Uv2AAq/kHnXH3t/pya0mLMymFfb9A3byxBqjA
+ AAA
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
+ Keguang Zhang <keguang.zhang@gmail.com>
+Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752059245; l=3440;
+ i=keguang.zhang@gmail.com; s=20231129; h=from:subject:message-id;
+ bh=9xgK+fBhA8h6jU2nAkgquJvvHtf3UTyu5jZV7nmkulY=;
+ b=H+G1PpJx5Jx4sLoMA0qdN+92ka3q+Vr90XkUJakkUx8pUHiGmrDHCKGJh7ShbhBrmbFWrjXRi
+ kfMkC6BMBMcCQx97SH4ple36WcC5lWv6ymHDOBlFDRjzU3bHkabn0bF
+X-Developer-Key: i=keguang.zhang@gmail.com; a=ed25519;
+ pk=FMKGj/JgKll/MgClpNZ3frIIogsh5e5r8CeW2mr+WLs=
+X-Endpoint-Received: by B4 Relay for keguang.zhang@gmail.com/20231129 with
+ auth_id=102
+X-Original-From: Keguang Zhang <keguang.zhang@gmail.com>
+Reply-To: keguang.zhang@gmail.com
 
-Hi Rosen,
+Convert all platform devices to Device Tree.  
+Remove all obsolete platform device code.  
+Switch to the generic MIPS kernel.  
+Update Kconfig and Makefile accordingly.  
+Update and rename the defconfig.
 
-kernel test robot noticed the following build errors:
+Changes in v2:
+- Document two new boards: loongson,ls1b-demo and loongson,cq-t300b.
+- Submit complete DTS files for each board.
+- Switch to the generic MIPS kernel.
+- Consolidate Loongson1 defconfigs.
+- Link to v1: https://lore.kernel.org/all/20230729134318.1694467-1-keguang.zhang@gmail.com/
 
-[auto build test ERROR on wireless/main]
-[also build test ERROR on next-20250708]
-[cannot apply to wireless-next/main robh/for-next linus/master v6.16-rc5]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+---
+Keguang Zhang (9):
+      dt-bindings: mips: loongson: Add LS1B demo board
+      dt-bindings: mips: loongson: Add CQ-T300B board
+      MIPS: dts: loongson: Add LS1B-DEMO board
+      MIPS: dts: loongson: Add LSGZ_1B_DEV board
+      MIPS: dts: loongson: Add Smartloong-1C board
+      MIPS: dts: loongson: Add CQ-T300B board
+      MIPS: loongson32: Switch to generic kernel
+      MIPS: Unify Loongson1 PRID_REV
+      MIPS: configs: Consolidate Loongson1 defconfigs
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Rosen-Penev/wifi-rt2x00-add-COMPILE_TEST/20250709-042051
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/wireless/wireless.git main
-patch link:    https://lore.kernel.org/r/20250708201745.5900-5-rosenp%40gmail.com
-patch subject: [PATCHv2 wireless-next 4/7] wifi: rt2800: move 2x00soc to 2800soc
-config: m68k-allmodconfig (https://download.01.org/0day-ci/archive/20250709/202507091735.YeYeU2tw-lkp@intel.com/config)
-compiler: m68k-linux-gcc (GCC) 15.1.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250709/202507091735.YeYeU2tw-lkp@intel.com/reproduce)
+ .../devicetree/bindings/mips/loongson/devices.yaml |   2 +
+ MAINTAINERS                                        |   3 +-
+ arch/mips/Kconfig                                  |  64 ++---
+ arch/mips/boot/dts/Makefile                        |   1 +
+ arch/mips/boot/dts/loongson/Makefile               |   9 +
+ arch/mips/boot/dts/loongson/cq-t300b.dts           |  93 +++++++
+ arch/mips/boot/dts/loongson/loongson1.dtsi         | 136 ++++++++++
+ arch/mips/boot/dts/loongson/loongson1b.dtsi        | 198 ++++++++++++++
+ arch/mips/boot/dts/loongson/loongson1c.dtsi        | 141 ++++++++++
+ arch/mips/boot/dts/loongson/ls1b-demo.dts          | 108 ++++++++
+ arch/mips/boot/dts/loongson/lsgz_1b_dev.dts        | 145 +++++++++++
+ arch/mips/boot/dts/loongson/smartloong-1c.dts      |  93 +++++++
+ .../{loongson1b_defconfig => loongson1_defconfig}  |  94 +++++--
+ arch/mips/configs/loongson1c_defconfig             | 121 ---------
+ arch/mips/include/asm/cpu-type.h                   |   3 +-
+ arch/mips/include/asm/cpu.h                        |   3 +-
+ arch/mips/include/asm/mach-loongson32/irq.h        | 107 --------
+ arch/mips/include/asm/mach-loongson32/loongson1.h  |  50 ----
+ arch/mips/include/asm/mach-loongson32/platform.h   |  23 --
+ arch/mips/include/asm/mach-loongson32/regs-mux.h   | 124 ---------
+ arch/mips/kernel/cpu-probe.c                       |   6 +-
+ arch/mips/loongson32/Kconfig                       |  43 +---
+ arch/mips/loongson32/Makefile                      |  17 --
+ arch/mips/loongson32/Platform                      |   1 -
+ arch/mips/loongson32/common/Makefile               |   6 -
+ arch/mips/loongson32/common/irq.c                  | 191 --------------
+ arch/mips/loongson32/common/platform.c             | 285 ---------------------
+ arch/mips/loongson32/common/prom.c                 |  42 ---
+ arch/mips/loongson32/common/setup.c                |  26 --
+ arch/mips/loongson32/common/time.c                 |  23 --
+ arch/mips/loongson32/ls1b/Makefile                 |   6 -
+ arch/mips/loongson32/ls1b/board.c                  |  55 ----
+ arch/mips/loongson32/ls1c/Makefile                 |   6 -
+ arch/mips/loongson32/ls1c/board.c                  |  23 --
+ 34 files changed, 1049 insertions(+), 1199 deletions(-)
+---
+base-commit: b5a1f9870f9828bd6625d6c946c66be4983d56f6
+change-id: 20250414-loongson1-arch-5ea8ced4c9a9
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202507091735.YeYeU2tw-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/net/wireless/ralink/rt2x00/rt2800soc.c:376:27: error: 'rt2x00soc_suspend' undeclared here (not in a function); did you mean 'rt2x00lib_suspend'?
-     376 |         .suspend        = rt2x00soc_suspend,
-         |                           ^~~~~~~~~~~~~~~~~
-         |                           rt2x00lib_suspend
->> drivers/net/wireless/ralink/rt2x00/rt2800soc.c:377:27: error: 'rt2x00soc_resume' undeclared here (not in a function); did you mean 'rt2x00soc_remove'?
-     377 |         .resume         = rt2x00soc_resume,
-         |                           ^~~~~~~~~~~~~~~~
-         |                           rt2x00soc_remove
-
-
-vim +376 drivers/net/wireless/ralink/rt2x00/rt2800soc.c
-
-90ce325a735fa7 drivers/net/wireless/ralink/rt2x00/rt2800soc.c Rosen Penev 2025-07-08  368  
-fe7ef7c60c33fd drivers/net/wireless/rt2x00/rt2800soc.c        Gabor Juhos 2013-10-17  369  static struct platform_driver rt2800soc_driver = {
-fe7ef7c60c33fd drivers/net/wireless/rt2x00/rt2800soc.c        Gabor Juhos 2013-10-17  370  	.driver		= {
-fe7ef7c60c33fd drivers/net/wireless/rt2x00/rt2800soc.c        Gabor Juhos 2013-10-17  371  		.name		= "rt2800_wmac",
-90ce325a735fa7 drivers/net/wireless/ralink/rt2x00/rt2800soc.c Rosen Penev 2025-07-08  372  		.of_match_table = rt2880_wmac_match,
-fe7ef7c60c33fd drivers/net/wireless/rt2x00/rt2800soc.c        Gabor Juhos 2013-10-17  373  	},
-fe7ef7c60c33fd drivers/net/wireless/rt2x00/rt2800soc.c        Gabor Juhos 2013-10-17  374  	.probe		= rt2800soc_probe,
-fe7ef7c60c33fd drivers/net/wireless/rt2x00/rt2800soc.c        Gabor Juhos 2013-10-17  375  	.remove		= rt2x00soc_remove,
-fe7ef7c60c33fd drivers/net/wireless/rt2x00/rt2800soc.c        Gabor Juhos 2013-10-17 @376  	.suspend	= rt2x00soc_suspend,
-fe7ef7c60c33fd drivers/net/wireless/rt2x00/rt2800soc.c        Gabor Juhos 2013-10-17 @377  	.resume		= rt2x00soc_resume,
-fe7ef7c60c33fd drivers/net/wireless/rt2x00/rt2800soc.c        Gabor Juhos 2013-10-17  378  };
-fe7ef7c60c33fd drivers/net/wireless/rt2x00/rt2800soc.c        Gabor Juhos 2013-10-17  379  
-
+Best regards,
 -- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Keguang Zhang <keguang.zhang@gmail.com>
+
+
 
