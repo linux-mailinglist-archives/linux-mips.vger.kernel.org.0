@@ -1,154 +1,327 @@
-Return-Path: <linux-mips+bounces-9716-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9717-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61222B001A7
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Jul 2025 14:26:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A011B001B7
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Jul 2025 14:28:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F7095A6B7B
-	for <lists+linux-mips@lfdr.de>; Thu, 10 Jul 2025 12:26:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85C1A6405B9
+	for <lists+linux-mips@lfdr.de>; Thu, 10 Jul 2025 12:27:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6986D2561D9;
-	Thu, 10 Jul 2025 12:26:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3ED752505A9;
+	Thu, 10 Jul 2025 12:27:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="NXEEgYd+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BBZZ/5G2"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA0892505BA
-	for <linux-mips@vger.kernel.org>; Thu, 10 Jul 2025 12:26:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F1CD24C068;
+	Thu, 10 Jul 2025 12:27:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752150375; cv=none; b=KYxHsjv4s2Z/XvERGXfonnZInxlsPjXdyYlyEllY7WcNC20Zxv3VHVWij/2DnuXQFmv8FNamOmQI7j2jGY90XdutKlRXS6LuIlForKdN50x+g3x5dRsEDDKtPqZvANBnGrEzQeNIYVCXafBCGtG7YXpRSfHl29+NbA7vI7BeJNc=
+	t=1752150475; cv=none; b=jkPUA9vUKODHF0ySHQr0AiKFn7p3nCsiG/oeQT67Wx8lx48WIadnmlMdEcBvH9AmQJuh/zYyBssNHSdyVICe6m5kIfGG7HjVr9hbFi+HxWfCD8iF/9IKaBr0nydbiNDlkOrEv1ShgVkDXk7C+hdJw5hBzVHI3xBN6uxKN53WRYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752150375; c=relaxed/simple;
-	bh=at4PJj61Rjxc4Od3ayPh5DnmEL4cEmAZ23qhK0P61rI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=dAOjpgEQgexnGMoykiWl0a/ze3woZ+Kob5Taapk5mWBCGoGqcpDU063b5GtSztnd46zg/VbgIAgg0MsXm2Yl3GWcEZ8Sxt5Uf2QS9Yy9fdwvZ/IvFjeCaNwK124aoqSIyjRmXqy8ty4uRA/f4B9ILED4zJwzvsEwKTcIBIFps50=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=NXEEgYd+; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56A93UlW016276
-	for <linux-mips@vger.kernel.org>; Thu, 10 Jul 2025 12:26:13 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	FbtxCizFqVmxij5XWo+R6iw22/lNiJfKJkPmSZ113lM=; b=NXEEgYd+NswWueGn
-	kf2mUE+Mon8YCT33JJSf3IUKY+Olh1LlhK/jbirwF37334gq2xwKoISTazBhDzbc
-	2jf0GtiCng+vWYoa+5lP+i+2sNVux0VqjycX6naffBY11yn/U/GiGy80suvXD+Kp
-	kUm3VQKes3tTfVGzPTfOozQo0wWqPESkeiof9+y7g7RgSegZ15SJaqUNtBcsCL36
-	Jqr6N6nVO1FHS+dxW/12MeWC89YXJ5BlZI5Pcp5OrJZ3HlqEYJRvNnviBAMlHdXa
-	HNsmoI/u3yfzKsl5BbUf2XJ3BZ2L2k0zw7zpMEA/ZRmYI0QlGKYLgiQgjIn0lLOc
-	1fm1ig==
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 47pvefrcfp-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-mips@vger.kernel.org>; Thu, 10 Jul 2025 12:26:12 +0000 (GMT)
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4a804126ed6so3943501cf.1
-        for <linux-mips@vger.kernel.org>; Thu, 10 Jul 2025 05:26:12 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752150371; x=1752755171;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FbtxCizFqVmxij5XWo+R6iw22/lNiJfKJkPmSZ113lM=;
-        b=Qbt6zSOEV7pHIUX0SDZRozGkdXDh78bo5w1Nv4Nwn9TR1YcnQzxpho0INCGJao8MLH
-         d+RYQhyas82LVb0h9Zv+0VPvNkJ8q2Lto260dvAKgfWi9vV6M4j+L0aqLjB+g1R+2TCz
-         NHNXk6idW0OA0tCW1VTuFXb3eMELeIPO07yJllI3IjeXXdfT0ovLA8773R3E//oXLBYy
-         Tb3hq7sKERcANjtIe9EU6EaZ/crURH6omyF53czrROKnu+OhapN+4Zie8vW0hX8nVmHa
-         rqjDTupEq9chlBGOMZYPcAc5zvUFMkdTbgQ5A8+hw4dpONULuutI+kaGMQ7DZALJRRcS
-         kYUw==
-X-Forwarded-Encrypted: i=1; AJvYcCXzObzjZYak5CJIihzvVpdF9wKZqvcqmZ/IrjTwLwcG9rrczFLVhJrket1AAWOsrOO9fLBTc1bpKNEY@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDN9iKJcX+Qlfw9hHZj3YlUjHx83qgZuIXwc+AZ0FRQSl4mtbk
-	iw/e/zdOVHBnIj6ZQlu+cqJQVsIi9i9bUTxNpur7frddeCa7fBU87xsrGL6Z5xRqTuPfK+QBNks
-	Bv4rF0rnTmnTfm9GVsStYkpyuxahItMpISiLLapat9lH8q9JZaxFb0BHn8wHYadTarLkEW/RG
-X-Gm-Gg: ASbGncvYVhLBrLEe7DtLiCUe7r5WIQ/o8A2ReeoQ+/syB/J+2i1fX9XueqjRABbi7vF
-	ebx3ZuurEAqhaKTo2fsxpTIwLgi6wUSGYcNmJZv/iMJnhEgZMpV+YGo8yG3NTuvfaIIfb1oJ+4B
-	kiMymHLkqYg5/FP8nLUYQJx7IkCnMmDI/pYPuEgW3S8F9zneRvirXDDClc1H0eqKzsuFqBbe8ce
-	ZCI1vHqclzY1Ww4exIacTU1ntFFD3LC8kam3dFRpgY11hb7OeDXCa81AMOdRwlh/LnQTKfJD0Jn
-	H+6yhH6awtam/vVfgCfbOaHJd6CTKXIt4H5AUOsuvVHvi0AqDsVT0gZ99Sy4MOVwcEdPbB5+VJK
-	4+kw=
-X-Received: by 2002:a05:622a:148a:b0:4a4:323a:2d76 with SMTP id d75a77b69052e-4a9decf6af5mr34077071cf.10.1752150371460;
-        Thu, 10 Jul 2025 05:26:11 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IF6rD3KBw+n4YbMxLbNBGM2hSLhxtVZ+IZYWVEKjer3BHqjIzVfrtLkflN1y+COvTFzgl5lDA==
-X-Received: by 2002:a05:622a:148a:b0:4a4:323a:2d76 with SMTP id d75a77b69052e-4a9decf6af5mr34076541cf.10.1752150370531;
-        Thu, 10 Jul 2025 05:26:10 -0700 (PDT)
-Received: from [192.168.143.225] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-611c95242e4sm821075a12.26.2025.07.10.05.26.08
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 10 Jul 2025 05:26:09 -0700 (PDT)
-Message-ID: <1f0debc7-bde0-404b-a395-dc72ca4c82c2@oss.qualcomm.com>
-Date: Thu, 10 Jul 2025 14:26:07 +0200
+	s=arc-20240116; t=1752150475; c=relaxed/simple;
+	bh=cFB/EhdezCpnpkMXdJFVEGoonbjQEG6w7wqWiZXZcyI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=RLFffDxkqfgi7Bv0XvQ5+LgTt8Wxw9Mp4MID9BAfwbDm60sanf8miGE7zu8JeYnKimobvSgtrWmHFuHCurk08AUMLBXpZ85imVMrk1iXYAAC4WX0qp/Cj+uv7x4/czY3tBEj+dNhp9VV4W62B2hhntziRr/cqSOl5uZqaVP+aJs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BBZZ/5G2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2C0BC4CEE3;
+	Thu, 10 Jul 2025 12:27:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752150474;
+	bh=cFB/EhdezCpnpkMXdJFVEGoonbjQEG6w7wqWiZXZcyI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BBZZ/5G2NnuDX8Glsh7TEY33ApFcHma+adNsE2fxlWCIoisPvpEO5TlEH/6gKiijp
+	 ewJYvlUGepHnrWmDaLdCzTKVHhXnHKk0hn4WBKX+/UVMRPDS8QhhbplbVCVYDOMCgu
+	 ROD/E0xrjzlyN3zBOoBFFz72Kk+yaBDM+ME8Z90aRC42MxKbMU2dOKKVxff0NvBFCh
+	 JQ+43mxwjp7uMHk0ChS4WoSeI4HurbnWXlnWx5t8KIOhpGkZuBW9SdWLGQOOUpCryK
+	 3565DUOd+W+Sg/JfQAaTQTbOVqZ0oTowXQU7lZorqo/hH1Krf6PJtp2yE2/NSaY7Nz
+	 gl0xBvvRZhtyw==
+Date: Thu, 10 Jul 2025 14:27:51 +0200
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Keguang Zhang <keguang.zhang@gmail.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
+	linux-mips@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 3/9] MIPS: dts: loongson: Add LS1B-DEMO board
+Message-ID: <20250710-ancient-ibex-of-adventure-30030a@krzk-bin>
+References: <20250709-loongson1-arch-v2-0-bcff6e518c09@gmail.com>
+ <20250709-loongson1-arch-v2-3-bcff6e518c09@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 12/12] pinctrl: qcom: make the pinmuxing strict
-To: Bartosz Golaszewski <brgl@bgdev.pl>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Alexey Klimov <alexey.klimov@linaro.org>,
-        Lorenzo Bianconi <lorenzo@kernel.org>,
-        Sean Wang <sean.wang@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-        Paul Cercueil <paul@crapouillou.net>
-Cc: linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-        Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-References: <20250709-pinctrl-gpio-pinfuncs-v2-0-b6135149c0d9@linaro.org>
- <20250709-pinctrl-gpio-pinfuncs-v2-12-b6135149c0d9@linaro.org>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250709-pinctrl-gpio-pinfuncs-v2-12-b6135149c0d9@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzEwMDEwNiBTYWx0ZWRfX0wfjFIrnVDP/
- /pWdiqrVOTkG34dkE8YuRfqOQ1+NpRekIiBzShaQUMD6D4XaZgCYIDodIzQ5CLrQ1je7mti/4l4
- 4XsGZyYZJHLhy6nCAUTJYy9SFMH0rEdKhYTvQPzWpbRrgjLedRwXD+axLXRekXcNy047zFFjfUy
- 07LWrwlWuthXXifwBKA7hEBbCt3CypexW3eRIuD8kydSefdcvFSQFdQ2yZ31ix49KTmCYJoIIhK
- 83Gnn8q6nYbTDej9hX+n3AL0rda9zSBU3EaiknOmCr7vvy1msqhDHwKSk2Upr+02T1LeA6YBxvw
- 3Wpj1jpuF8KCJE0jhiZPqAvvUjfkBICer0Q+YZkvQ/4CE2vRjjrTAuqMsW6MQcPBE7bCAD2Bf3u
- RDDGRGV8BZm9xAXnrgfvo8N8DC4vv2mW0RHlvahegMVb0V/vddkDegP4WakTEG5QtGG67fL8
-X-Authority-Analysis: v=2.4 cv=dciA3WXe c=1 sm=1 tr=0 ts=686fb164 cx=c_pps
- a=WeENfcodrlLV9YRTxbY/uA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=Wb1JkmetP80A:10 a=KKAkSRfTAAAA:8 a=EUspDBNiAAAA:8
- a=sOBEMjS50dyNa0exkEgA:9 a=QEXdDO2ut3YA:10 a=kacYvNCVWA4VmyqE58fU:22
- a=cvBusfyB2V15izCimMoJ:22
-X-Proofpoint-GUID: LLkSoZGMccYFClgF82mUm4uOHGxTomGg
-X-Proofpoint-ORIG-GUID: LLkSoZGMccYFClgF82mUm4uOHGxTomGg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-07-10_02,2025-07-09_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- clxscore=1015 malwarescore=0 suspectscore=0 impostorscore=0 phishscore=0
- mlxscore=0 mlxlogscore=825 bulkscore=0 lowpriorityscore=0 adultscore=0
- spamscore=0 priorityscore=1501 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2507100106
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250709-loongson1-arch-v2-3-bcff6e518c09@gmail.com>
 
-On 7/9/25 4:39 PM, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On Wed, Jul 09, 2025 at 07:05:54PM +0800, Keguang Zhang wrote:
+> Add a device tree for LS1B-DEMO board, supporting CPU, clock, INTC,
+> UART, Ethernet, GPIO, USB host, RTC, watchdog, DMA, NAND, and AC97.
 > 
-> The strict flag in struct pinmux_ops disallows the usage of the same pin
-> as a GPIO and for another function. Without it, a rouge user-space
-> process with enough privileges (or even a buggy driver) can request a
-> used pin as GPIO and drive it, potentially confusing devices or even
-> crashing the system. Set it globally for all pinctrl-msm users.
+> Additionally, since the current bootloader for Loongson1 does not support
+> FDT, introduce CONFIG_BUILTIN_DTB_NAME to enable a built-in DTB.
 > 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
 > ---
+>  MAINTAINERS                                 |   1 +
+>  arch/mips/boot/dts/Makefile                 |   1 +
+>  arch/mips/boot/dts/loongson/Makefile        |   6 +
+>  arch/mips/boot/dts/loongson/loongson1.dtsi  | 136 +++++++++++++++++++
+>  arch/mips/boot/dts/loongson/loongson1b.dtsi | 198 ++++++++++++++++++++++++++++
+>  arch/mips/boot/dts/loongson/ls1b-demo.dts   | 108 +++++++++++++++
+>  6 files changed, 450 insertions(+)
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index c3f7fbd0d67a..0089ebca31cf 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -16683,6 +16683,7 @@ M:	Keguang Zhang <keguang.zhang@gmail.com>
+>  L:	linux-mips@vger.kernel.org
+>  S:	Maintained
+>  F:	Documentation/devicetree/bindings/*/loongson,ls1*.yaml
+> +F:	arch/mips/boot/dts/loongson/loongson1*
+>  F:	arch/mips/include/asm/mach-loongson32/
+>  F:	arch/mips/loongson32/
+>  F:	drivers/*/*loongson1*
+> diff --git a/arch/mips/boot/dts/Makefile b/arch/mips/boot/dts/Makefile
+> index 7375c6ced82b..6d9dbe945541 100644
+> --- a/arch/mips/boot/dts/Makefile
+> +++ b/arch/mips/boot/dts/Makefile
+> @@ -8,6 +8,7 @@ subdir-$(CONFIG_FIT_IMAGE_FDT_BOSTON)	+= img
+>  subdir-$(CONFIG_MACH_INGENIC)		+= ingenic
+>  subdir-$(CONFIG_LANTIQ)			+= lantiq
+>  subdir-$(CONFIG_MACH_LOONGSON64)	+= loongson
+> +subdir-$(CONFIG_MACH_LOONGSON32)	+= loongson
+>  subdir-$(CONFIG_SOC_VCOREIII)		+= mscc
+>  subdir-$(CONFIG_MIPS_MALTA)		+= mti
+>  subdir-$(CONFIG_LEGACY_BOARD_SEAD3)	+= mti
+> diff --git a/arch/mips/boot/dts/loongson/Makefile b/arch/mips/boot/dts/loongson/Makefile
+> index 5e3ab984d70f..2facf251fb6a 100644
+> --- a/arch/mips/boot/dts/loongson/Makefile
+> +++ b/arch/mips/boot/dts/loongson/Makefile
+> @@ -5,3 +5,9 @@ dtb-$(CONFIG_MACH_LOONGSON64)	+= loongson64c_4core_rs780e.dtb
+>  dtb-$(CONFIG_MACH_LOONGSON64)	+= loongson64c_8core_rs780e.dtb
+>  dtb-$(CONFIG_MACH_LOONGSON64)	+= loongson64g_4core_ls7a.dtb
+>  dtb-$(CONFIG_MACH_LOONGSON64)	+= loongson64v_4core_virtio.dtb
+> +
+> +ifneq ($(CONFIG_BUILTIN_DTB_NAME),)
+> +dtb-y	:= $(addsuffix .dtb, $(CONFIG_BUILTIN_DTB_NAME))
+> +else
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+This does not really look related to new board.
 
-Konrad
+> +dtb-$(CONFIG_MACH_LOONGSON32)	+= ls1b-demo.dtb
+> +endif
+> diff --git a/arch/mips/boot/dts/loongson/loongson1.dtsi b/arch/mips/boot/dts/loongson/loongson1.dtsi
+> new file mode 100644
+> index 000000000000..5ba5a5d131ba
+
+...
+
+> +		opp-220000000 {
+> +			opp-hz = /bits/ 64 <220000000>;
+> +		};
+> +	};
+> +
+> +	clocksource: timer@1fe5c030 {
+
+This should be in the SoC (see writing bindings, maintainer soc, DTS
+coding style).
+
+> +		compatible = "loongson,ls1b-pwmtimer";
+> +		reg = <0x1fe5c030 0x10>;
+> +		clocks = <&clkc LS1X_CLKID_APB>;
+> +		interrupt-parent = <&intc0>;
+> +		interrupts = <20 IRQ_TYPE_LEVEL_HIGH>;
+> +	};
+> +
+> +	clkc: clock-controller@1fe78030 {
+> +		compatible = "loongson,ls1b-clk";
+> +		reg = <0x1fe78030 0x8>;
+> +		clocks = <&xtal>;
+> +		#clock-cells = <1>;
+> +	};
+> +};
+> +
+> +&soc {
+> +	syscon: syscon@420 {
+> +		compatible = "loongson,ls1b-syscon", "syscon";
+> +		reg = <0x420 0x8>;
+> +	};
+> +
+> +	dma: dma-controller@1160 {
+> +		compatible = "loongson,ls1b-apbdma";
+> +		reg = <0x1160 0x4>;
+> +		interrupt-parent = <&intc0>;
+> +		interrupts = <13 IRQ_TYPE_EDGE_RISING>,
+> +			     <14 IRQ_TYPE_EDGE_RISING>,
+> +			     <15 IRQ_TYPE_EDGE_RISING>;
+> +		interrupt-names = "ch0", "ch1", "ch2";
+> +		#dma-cells = <1>;
+> +	};
+> +
+> +	ehci: usb@100000 {
+> +		compatible = "generic-ehci";
+> +		reg = <0x100000 0x100>;
+> +		interrupt-parent = <&intc1>;
+> +		interrupts = <0 IRQ_TYPE_LEVEL_HIGH>;
+> +		status = "disabled";
+> +	};
+> +
+> +	ohci: usb@108000 {
+> +		compatible = "generic-ohci";
+> +		reg = <0x108000 0x100>;
+> +		interrupt-parent = <&intc1>;
+> +		interrupts = <1 IRQ_TYPE_LEVEL_HIGH>;
+> +		status = "disabled";
+> +	};
+> +
+> +	gmac0: ethernet@110000 {
+> +		compatible = "loongson,ls1b-gmac", "snps,dwmac-3.50a";
+> +		reg = <0x110000 0x10000>;
+> +		clocks = <&clkc LS1X_CLKID_AHB>;
+> +		clock-names = "stmmaceth";
+> +		interrupt-parent = <&intc1>;
+> +		interrupts = <2 IRQ_TYPE_LEVEL_HIGH>;
+> +		interrupt-names = "macirq";
+> +		loongson,ls1-syscon = <&syscon>;
+> +		snps,pbl = <1>;
+> +		status = "disabled";
+> +	};
+> +
+> +	gmac1: ethernet@120000 {
+> +		compatible = "loongson,ls1b-gmac", "snps,dwmac-3.50a";
+> +		reg = <0x120000 0x10000>;
+> +		clocks = <&clkc LS1X_CLKID_AHB>;
+> +		clock-names = "stmmaceth";
+> +		interrupt-parent = <&intc1>;
+> +		interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
+> +		interrupt-names = "macirq";
+> +		loongson,ls1-syscon = <&syscon>;
+> +		snps,pbl = <1>;
+> +		status = "disabled";
+> +	};
+> +};
+> +
+> +&apb {
+> +	watchdog: watchdog@1c060 {
+> +		compatible = "loongson,ls1b-wdt";
+> +		reg = <0x1c060 0xc>;
+> +		clocks = <&clkc LS1X_CLKID_APB>;
+> +		status = "disabled";
+> +	};
+> +
+> +	rtc: rtc@24000 {
+> +		compatible = "loongson,ls1b-rtc";
+> +		reg = <0x24000 0x78>;
+> +		interrupt-parent = <&intc0>;
+> +		interrupts = <24 IRQ_TYPE_LEVEL_HIGH>;
+> +		status = "disabled";
+> +	};
+> +
+> +	ac97: audio-controller@34000 {
+> +		compatible = "loongson,ls1b-ac97";
+> +		reg = <0x34000 0x60>, <0x32420 0x4>, <0x34c4c 0x4>;
+> +		reg-names = "ac97", "audio-tx", "audio-rx";
+> +		dmas = <&dma 1>, <&dma 2>;
+> +		dma-names = "tx", "rx";
+> +		#sound-dai-cells = <0>;
+> +		status = "disabled";
+> +	};
+> +
+> +	nand: nand-controller@38000 {
+> +		compatible = "loongson,ls1b-nand-controller";
+> +		reg = <0x38000 0x24>, <0x38040 0x4>;
+> +		reg-names = "nand", "nand-dma";
+> +		dmas = <&dma 0>;
+> +		dma-names = "rxtx";
+> +		#address-cells = <1>;
+> +		#size-cells = <0>;
+> +		status = "disabled";
+> +
+> +		nand@0 {
+> +			reg = <0>;
+> +			label = "ls1x-nand";
+> +			nand-use-soft-ecc-engine;
+> +			nand-ecc-algo = "hamming";
+> +		};
+> +	};
+> +};
+> +
+> +&cpu0 {
+> +	operating-points-v2 = <&cpu_opp_table>;
+> +};
+> +
+> +&gpio0 {
+> +	ngpios = <31>;
+> +};
+> +
+> +&gpio1 {
+> +	ngpios = <30>;
+> +};
+> +
+> +&uart1 {
+> +	interrupts = <3 IRQ_TYPE_LEVEL_HIGH>;
+> +};
+> +
+> +&uart2 {
+> +	interrupts = <4 IRQ_TYPE_LEVEL_HIGH>;
+> +};
+> +
+> +&uart3 {
+> +	interrupts = <5 IRQ_TYPE_LEVEL_HIGH>;
+> +};
+> diff --git a/arch/mips/boot/dts/loongson/ls1b-demo.dts b/arch/mips/boot/dts/loongson/ls1b-demo.dts
+> new file mode 100644
+> index 000000000000..19ea772e6649
+> --- /dev/null
+> +++ b/arch/mips/boot/dts/loongson/ls1b-demo.dts
+> @@ -0,0 +1,108 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright (c) 2023-2025 Keguang Zhang <keguang.zhang@gmail.com>
+> + */
+> +
+> +/dts-v1/;
+> +
+> +#include <dt-bindings/gpio/gpio.h>
+> +
+> +#include "loongson1b.dtsi"
+> +
+> +/ {
+> +	compatible = "loongson,ls1b-demo", "loongson,ls1b";
+> +	model = "LS1B-DEMO Board";
+> +
+> +	memory@0 {
+> +		device_type = "memory";
+> +		reg = <0x0 0x10000000>;
+> +	};
+> +
+> +	aliases {
+> +		ethernet0 = &gmac0;
+> +		ethernet1 = &gmac1;
+> +		gpio0 = &gpio0;
+> +		gpio1 = &gpio1;
+> +		serial0 = &uart0;
+> +	};
+> +
+> +	chosen {
+> +		bootargs = "console=ttyS0,38400";
+
+Drop bootargs. You duplicate stdout path.
+
+> +		stdout-path = "serial0:38400n8";
+> +	};
+
+Best regards,
+Krzysztof
+
 
