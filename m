@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-9798-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9799-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2503B03097
-	for <lists+linux-mips@lfdr.de>; Sun, 13 Jul 2025 12:05:20 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB01CB0309A
+	for <lists+linux-mips@lfdr.de>; Sun, 13 Jul 2025 12:05:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2CD633BC3B8
-	for <lists+linux-mips@lfdr.de>; Sun, 13 Jul 2025 10:04:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 25AF916493C
+	for <lists+linux-mips@lfdr.de>; Sun, 13 Jul 2025 10:05:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 341AA1DC198;
-	Sun, 13 Jul 2025 10:05:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9577E30100;
+	Sun, 13 Jul 2025 10:05:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=o2.pl header.i=@o2.pl header.b="za9OXL79"
+	dkim=pass (2048-bit key) header.d=o2.pl header.i=@o2.pl header.b="dEF2U9pX"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.142])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A25130100
-	for <linux-mips@vger.kernel.org>; Sun, 13 Jul 2025 10:05:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39E3A1F0994
+	for <linux-mips@vger.kernel.org>; Sun, 13 Jul 2025 10:05:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.222.135.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752401117; cv=none; b=qVjqYCmjk+NXQPK34QPGiwWskbjZtnSj2LJy4R6u8ROf0gya4g5v8pJS/v3nEHK0bCaEUC4/2nOwIyYDiVchK0g3RepMbznNwylJTFcQxhWOcCpdIIWN8Hv7RssdigKNQJNdng3hXOFAJb0qkH+dwIDflRVZpMr3oNJIWMnlJnQ=
+	t=1752401119; cv=none; b=B8mgvnq20ry7oVW1tfjyx/C43VDX8Qd5qXowGK5bApw5Rg+mWS55fQL+IwS0aNIQ3xSOnPbif4wUS32daTOP13NPtkYtVlcGkIknvBHkv3xQjmEAyzSkzImqc5PV2j4BcP7SBTGiERxRp6oG6Y09fTPULaj7ZmjTaTfPjdoZx3Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752401117; c=relaxed/simple;
-	bh=b7b+BiUcV0QfBrTgpAhC9TgYhAcALB/7v8wfMnqVCcc=;
+	s=arc-20240116; t=1752401119; c=relaxed/simple;
+	bh=bGBQDtR+6Z6cAV9LfZQmdCyopOJw19msfoWEJXzNwHE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=S69riEKqEjH6qc+0aTaJc2yeAmrLuQCsHpuH03iWu5angS+AQtcq/YJ7XD1guyYkUECiPBhzn+nai0q+ze0q+q6pLIdYUa8HlumNbtoZyh9ykuXzmIm2WKm3bpd5ivoRf54bYe3jMFa1qgoVxPtdi6MbO3/JkhCE4bOt7YytWvg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=o2.pl; spf=pass smtp.mailfrom=o2.pl; dkim=pass (2048-bit key) header.d=o2.pl header.i=@o2.pl header.b=za9OXL79; arc=none smtp.client-ip=193.222.135.142
+	 MIME-Version:Content-Type; b=jM0Luhm7WU1AfJVC4wnC3DX3WGAfX5Fc/CQFiR2JvlXUaRE+9e5MypdPa3EyWCS3Pq7UfMFR0BqhOcCtMsmls2frh7QVAf59gsWknL/ouaEX06UY9vRWFKWRqHUP05hlN7/DqkThTvNfdeNvOpIMny2kEDx1dbHjMinu7TN3kYU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=o2.pl; spf=pass smtp.mailfrom=o2.pl; dkim=pass (2048-bit key) header.d=o2.pl header.i=@o2.pl header.b=dEF2U9pX; arc=none smtp.client-ip=193.222.135.142
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=o2.pl
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=o2.pl
-Received: (wp-smtpd smtp.tlen.pl 26647 invoked from network); 13 Jul 2025 12:05:05 +0200
+Received: (wp-smtpd smtp.tlen.pl 47151 invoked from network); 13 Jul 2025 12:05:12 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=20241105;
-          t=1752401105; bh=otji79oRxh05+WW4Agm5i4NTC7ABRqtnubFQ3DJFaeg=;
+          t=1752401113; bh=2WHH9leCL20zYk/IJKiOltbTf1FDg0xIXHKJpRqHleM=;
           h=From:To:Cc:Subject;
-          b=za9OXL798y5YF+0Pqf7Wzjb3KEpqhSsaFjIKufqmN+E0KG6xbgQtRpzvNcogXrb+a
-           KdlmFuQxnjbGBotDalJ8mv9D65PFgT50p8GIb7BsQ390wQWt5dBSRUZKcPuBuu5nnG
-           +TqrdWFmq7+GKsTeQXCph8Gh3RyA7eCLb+pAiFY9bRmyNIAvba4iwEgR0qduIwHYB7
-           lta4shUgMBmTvaw5ECzfBzqHdCBLWSGZ9LNN0mpfH1Q/N4Ab533y6oN/yAs+OZ3SVQ
-           5SfHL1/e74bkyVFuQkDghsoXmPhobT+Vt+pqiJ1/+LDz82+bOgXPRyFJ0TB19R8vTA
-           sgkz0ZAHhCxbA==
+          b=dEF2U9pXLLuraoWdjHGfZLMB7zey/WiBFkCHQI0hWV/qno+Udm7FUPkqfy43XdsZv
+           qg3k8eiUpFpTBr9uqh0per7J9T8vjS9dz0kViKGYbnHISsyaKyPNQcVDQXoOHWbdab
+           zwAGARsTiytDUFAIJXH3sLaXBI8Ei0kBrcA9+wy08y8Pjh+EN6bVylc2JhGUSDZL+g
+           sTdsag7sHW/MwpX5Q9FVNM6xtuI/bS9EL0xzY7/aQBEOzYTD3vGoDM4IQD84XDnSzZ
+           fqKd7/R/5X8GWxznljCaOyHPlBdykdgM3uW9y4cRVA0qQaQAq2NKPy4+dwp3aiH0Zo
+           7rk6j5EkjT8mA==
 Received: from apn-78-30-72-196.dynamic.gprs.plus.pl (HELO localhost.localdomain) (mat.jonczyk@o2.pl@[78.30.72.196])
           (envelope-sender <mat.jonczyk@o2.pl>)
           by smtp.tlen.pl (WP-SMTPD) with SMTP
-          for <jiaxun.yang@flygoat.com>; 13 Jul 2025 12:05:05 +0200
+          for <jiaxun.yang@flygoat.com>; 13 Jul 2025 12:05:12 +0200
 From: =?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
 To: Jiaxun Yang <jiaxun.yang@flygoat.com>,
 	Huacai Chen <chenhuacai@kernel.org>,
@@ -53,9 +53,9 @@ Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
 	linux-mips@vger.kernel.org,
 	linux-rtc@vger.kernel.org,
 	=?UTF-8?q?Mateusz=20Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
-Subject: [PATCH 1/4] mips: remove unused function mc146818_set_rtc_mmss
-Date: Sun, 13 Jul 2025 12:04:31 +0200
-Message-Id: <20250713100434.699843-2-mat.jonczyk@o2.pl>
+Subject: [PATCH 2/4] mips/mach-rm: remove custom mc146818rtc.h file
+Date: Sun, 13 Jul 2025 12:04:32 +0200
+Message-Id: <20250713100434.699843-3-mat.jonczyk@o2.pl>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20250713100434.699843-1-mat.jonczyk@o2.pl>
 References: <20250713100434.699843-1-mat.jonczyk@o2.pl>
@@ -68,112 +68,54 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-WP-DKIM-Status: good (id: o2.pl)                                                      
-X-WP-MailID: 4a8feaf425475db3ad0aa7175b576a0f
+X-WP-MailID: f1b4d652ec2decfbd19ef1cd7040fb8b
 X-WP-AV: skaner antywirusowy Poczty o2
-X-WP-SPAM: NO 0000000 [QUP0]                               
+X-WP-SPAM: NO 0000000 [ITMh]                               
 
-I have checked carefully: this function is unused, so remove it.
+The mc146818_decode_year macro is used only in mc146818_get_cmos_time,
+which in turn is called only in
+	arch/mips/loongson2ef/common/time.c
+and
+	arch/mips/mti-malta/malta-time.c
 
-The last caller appears to have been removed in 2007 in
-commit 4b550488f894 ("[MIPS] Deforest the function pointer jungle in the time code.")
-
-mc146818-time.h is included only in three files:
-- arch/mips/mti-malta/malta-time.c
-- arch/mips/loongson64/numa.c
-- arch/mips/loongson2ef/common/time.c
-
-Also, remove unused macros USEC_AFTER/USEC_BEFORE.
+So no SNI or mach-rm content. SNI did not use mc146818_get_cmos_time
+apparently since
+commit 06cf5583fd9a ("[MIPS] SNI RM updates")
+in 2007.
 
 Signed-off-by: Mateusz Jończyk <mat.jonczyk@o2.pl>
 ---
- arch/mips/include/asm/mc146818-time.h | 74 ---------------------------
- 1 file changed, 74 deletions(-)
+ arch/mips/include/asm/mach-rm/mc146818rtc.h | 21 ---------------------
+ 1 file changed, 21 deletions(-)
+ delete mode 100644 arch/mips/include/asm/mach-rm/mc146818rtc.h
 
-diff --git a/arch/mips/include/asm/mc146818-time.h b/arch/mips/include/asm/mc146818-time.h
-index cbf5cec345f1..07bf30bee792 100644
---- a/arch/mips/include/asm/mc146818-time.h
-+++ b/arch/mips/include/asm/mc146818-time.h
-@@ -12,80 +12,6 @@
- #include <linux/mc146818rtc.h>
- #include <linux/time.h>
- 
+diff --git a/arch/mips/include/asm/mach-rm/mc146818rtc.h b/arch/mips/include/asm/mach-rm/mc146818rtc.h
+deleted file mode 100644
+index a074f4f84f75..000000000000
+--- a/arch/mips/include/asm/mach-rm/mc146818rtc.h
++++ /dev/null
+@@ -1,21 +0,0 @@
 -/*
-- * For check timing call set_rtc_mmss() 500ms; used in timer interrupt.
-- */
--#define USEC_AFTER	500000
--#define USEC_BEFORE	500000
--
--/*
-- * In order to set the CMOS clock precisely, set_rtc_mmss has to be
-- * called 500 ms after the second nowtime has started, because when
-- * nowtime is written into the registers of the CMOS clock, it will
-- * jump to the next second precisely 500 ms later. Check the Motorola
-- * MC146818A or Dallas DS12887 data sheet for details.
+- * This file is subject to the terms and conditions of the GNU General Public
+- * License.  See the file "COPYING" in the main directory of this archive
+- * for more details.
 - *
-- * BUG: This routine does not handle hour overflow properly; it just
-- *	sets the minutes. Usually you'll only notice that after reboot!
+- * Copyright (C) 2004 by Ralf Baechle
+- *
+- * RTC routines for PC style attached Dallas chip with ARC epoch.
 - */
--static inline int mc146818_set_rtc_mmss(unsigned long nowtime)
--{
--	int real_seconds, real_minutes, cmos_minutes;
--	unsigned char save_control, save_freq_select;
--	int retval = 0;
--	unsigned long flags;
+-#ifndef __ASM_MACH_RM_MC146818RTC_H
+-#define __ASM_MACH_RM_MC146818RTC_H
 -
--	spin_lock_irqsave(&rtc_lock, flags);
--	save_control = CMOS_READ(RTC_CONTROL); /* tell the clock it's being set */
--	CMOS_WRITE((save_control|RTC_SET), RTC_CONTROL);
+-#ifdef CONFIG_CPU_BIG_ENDIAN
+-#define mc146818_decode_year(year) ((year) < 70 ? (year) + 2000 : (year) + 1900)
+-#else
+-#define mc146818_decode_year(year) ((year) + 1980)
+-#endif
 -
--	save_freq_select = CMOS_READ(RTC_FREQ_SELECT); /* stop and reset prescaler */
--	CMOS_WRITE((save_freq_select|RTC_DIV_RESET2), RTC_FREQ_SELECT);
+-#include <asm/mach-generic/mc146818rtc.h>
 -
--	cmos_minutes = CMOS_READ(RTC_MINUTES);
--	if (!(save_control & RTC_DM_BINARY) || RTC_ALWAYS_BCD)
--		cmos_minutes = bcd2bin(cmos_minutes);
--
--	/*
--	 * since we're only adjusting minutes and seconds,
--	 * don't interfere with hour overflow. This avoids
--	 * messing with unknown time zones but requires your
--	 * RTC not to be off by more than 15 minutes
--	 */
--	real_seconds = nowtime % 60;
--	real_minutes = nowtime / 60;
--	if (((abs(real_minutes - cmos_minutes) + 15)/30) & 1)
--		real_minutes += 30;		/* correct for half hour time zone */
--	real_minutes %= 60;
--
--	if (abs(real_minutes - cmos_minutes) < 30) {
--		if (!(save_control & RTC_DM_BINARY) || RTC_ALWAYS_BCD) {
--			real_seconds = bin2bcd(real_seconds);
--			real_minutes = bin2bcd(real_minutes);
--		}
--		CMOS_WRITE(real_seconds, RTC_SECONDS);
--		CMOS_WRITE(real_minutes, RTC_MINUTES);
--	} else {
--		printk_once(KERN_NOTICE
--		       "set_rtc_mmss: can't update from %d to %d\n",
--		       cmos_minutes, real_minutes);
--		retval = -1;
--	}
--
--	/* The following flags have to be released exactly in this order,
--	 * otherwise the DS12887 (popular MC146818A clone with integrated
--	 * battery and quartz) will not reset the oscillator and will not
--	 * update precisely 500 ms later. You won't find this mentioned in
--	 * the Dallas Semiconductor data sheets, but who believes data
--	 * sheets anyway ...			       -- Markus Kuhn
--	 */
--	CMOS_WRITE(save_control, RTC_CONTROL);
--	CMOS_WRITE(save_freq_select, RTC_FREQ_SELECT);
--	spin_unlock_irqrestore(&rtc_lock, flags);
--
--	return retval;
--}
--
- static inline time64_t mc146818_get_cmos_time(void)
- {
- 	unsigned int year, mon, day, hour, min, sec;
+-#endif /* __ASM_MACH_RM_MC146818RTC_H */
 -- 
 2.25.1
 
