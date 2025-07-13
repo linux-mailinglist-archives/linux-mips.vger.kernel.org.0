@@ -1,243 +1,102 @@
-Return-Path: <linux-mips+bounces-9804-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9805-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B84CDB031EA
-	for <lists+linux-mips@lfdr.de>; Sun, 13 Jul 2025 17:55:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69B0EB03235
+	for <lists+linux-mips@lfdr.de>; Sun, 13 Jul 2025 18:54:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2675B3B0021
-	for <lists+linux-mips@lfdr.de>; Sun, 13 Jul 2025 15:54:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BD79D177F62
+	for <lists+linux-mips@lfdr.de>; Sun, 13 Jul 2025 16:54:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89816223DFA;
-	Sun, 13 Jul 2025 15:55:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72237278774;
+	Sun, 13 Jul 2025 16:54:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b="V149hTY1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="psBeNjv+"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06A8410E5;
-	Sun, 13 Jul 2025 15:55:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=148.163.147.86
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752422121; cv=fail; b=tMMgAgHnNU/DNWHDxCrzt52xjOX2jMn/LSQF5crhIIpTT8Kj9yKh8XnklpJITBhngWx6jwUe+fX7oS6HvPY2MIw6ezqsulYqONVxz28Xk5dKm/ZfJvoX1++EXDlZol8HlIcyOWC/m4h9ThLVB2Oj+Asqq/16IgjdhaB1Rfeijg8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752422121; c=relaxed/simple;
-	bh=pc2GeIQTN+fUZ8ofTNieDyq4HHGyVz9YBPgqx2PRcik=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=a/qBJCsCNlPHe5dtNEUv+UHoiJNka6vGZISvO/M3ta+UKzbaQRdOw8lh7/PosPZ2AQrgMD8dtLVwoFlCTTyyynxIl0ULjfFqzYgmsBSH2sl+XpQKx5BUHYky6SUFGUYczaM3OwvHPhbMseVmqE3Pe+fhC4M6UZdIh1eiGgNM1Yg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com; spf=pass smtp.mailfrom=hpe.com; dkim=pass (2048-bit key) header.d=hpe.com header.i=@hpe.com header.b=V149hTY1; arc=fail smtp.client-ip=148.163.147.86
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=hpe.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hpe.com
-Received: from pps.filterd (m0134420.ppops.net [127.0.0.1])
-	by mx0b-002e3701.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 56DEUvsi031381;
-	Sun, 13 Jul 2025 15:05:58 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pps0720; bh=TK
-	pak/x1bssmtcAbnOj2fXhOFi1IMBasQm3T5CkeALo=; b=V149hTY19UyOZs/kww
-	P+SSZ5Nb4RKrUVdEMMhKBJ2cw2Nvk4jeCJa0pWwVckVcuFacAoqe32avcSK5/8yx
-	sWJh7/VwiR/DR1u3zHlRV8i7eSl3gXWDvCfOpYH6WmQ+JduOgptwNGzOrwqUCItO
-	WHAP/A+92JRkqJOJSHSdz0fyR+1ht7WfQqjkH+BD/6DncUBoIfy0S6aNHbaaNZ/8
-	yex4dapzZBVIOksuSGaT5YDQrJTPvoHKkU/o4r84w1DFXeXKPGKlbPTPAxYsmakh
-	D6+rjGiNtU8r4xqhn3FBOGwSXTBMc5dnBjOKgOqXoyKN2hd2DbElp+FMdiVpICvs
-	YFow==
-Received: from p1lg14881.it.hpe.com ([16.230.97.202])
-	by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 47vemb85yg-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 13 Jul 2025 15:05:58 +0000 (GMT)
-Received: from p1wg14923.americas.hpqcorp.net (unknown [10.119.18.111])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by p1lg14881.it.hpe.com (Postfix) with ESMTPS id 3EE00805E7E;
-	Sun, 13 Jul 2025 15:05:57 +0000 (UTC)
-Received: from p1wg14927.americas.hpqcorp.net (10.119.18.117) by
- p1wg14923.americas.hpqcorp.net (10.119.18.111) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Sun, 13 Jul 2025 03:05:33 -1200
-Received: from p1wg14924.americas.hpqcorp.net (10.119.18.113) by
- p1wg14927.americas.hpqcorp.net (10.119.18.117) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Sun, 13 Jul 2025 03:05:32 -1200
-Received: from p1wg14921.americas.hpqcorp.net (16.230.19.124) by
- p1wg14924.americas.hpqcorp.net (10.119.18.113) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11 via Frontend Transport; Sun, 13 Jul 2025 03:05:32 -1200
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (192.58.206.35)
- by edge.it.hpe.com (16.230.19.124) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Sun, 13 Jul 2025 03:05:27 -1200
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=SZpLQ9at+kfXwvA7A7RfFAWg29P0fB0MANNgbyP79smhnthWYhPZUkOs7vzPzV39a/OJ2koQ+anEOZ7kjywFx3gJcjAIgUOZ07cGlxHCWvYlpxykvReuaY9YvZUk4ZM1gqXWE3m7EjT95nMRVRvGdsWf429wZ2f/cJ8gRdi0PxTmjJvbafi0NT1DXdQfR++jdCyGu6UM5M2z9lOyt6Vqd71ffWxsmRYXqGuZ8Tqd8X9JQc0DmgcC7s31iSrhCP/8H9TMYDvsLq1xYNHZkCQyaYp6qE7hCQ4PjuyEPUjFv5T6F5uUEBu7VKpAa6Y9PgNMsBhkXAYTdCX8fws7d4Kl5w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=TKpak/x1bssmtcAbnOj2fXhOFi1IMBasQm3T5CkeALo=;
- b=gKyUSWnscZqwQS6CUxUCWTSuGwpTotfuUZYWEHFDdhrlWOjkHsAm5DcC985d+Qu8ulvS3n+35u439AYqJ1vRB1nhjFukE2tV6fmFV6iHCSY+sP52XBD+YDJ9iQKRqdhlrmmxQnY/ZNZdDkvlP1UBUCJzCPLYlNUYsSOXxcDhZdifAbqY6d5EvX8emanmXTANMGDp2luzAZzXKYcZMuG3qzGvs9EpPf4Adw3dburUvA2YJyLJKNOLDCc80QJSKIMr4CE1C97jPGFWFo26fgPPMmCq0w7tW7fGTgMcAzJtjIg2LUrNhB1d1VzqJFyQrZk7DBlgP71TzhEc6m+UZvQq2Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=hpe.com; dmarc=pass action=none header.from=hpe.com; dkim=pass
- header.d=hpe.com; arc=none
-Received: from IA4PR84MB4011.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:208:54f::12)
- by SJ2PR84MB3369.NAMPRD84.PROD.OUTLOOK.COM (2603:10b6:a03:58e::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8901.26; Sun, 13 Jul
- 2025 15:05:16 +0000
-Received: from IA4PR84MB4011.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::766:753d:9ff8:1c8b]) by IA4PR84MB4011.NAMPRD84.PROD.OUTLOOK.COM
- ([fe80::766:753d:9ff8:1c8b%3]) with mapi id 15.20.8901.024; Sun, 13 Jul 2025
- 15:05:16 +0000
-From: "Elliott, Robert (Servers)" <elliott@hpe.com>
-To: Eric Biggers <ebiggers@kernel.org>,
-        "linux-crypto@vger.kernel.org"
-	<linux-crypto@vger.kernel.org>
-CC: "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Ard
- Biesheuvel" <ardb@kernel.org>,
-        "Jason A . Donenfeld" <Jason@zx2c4.com>,
-        "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>,
-        "linux-mips@vger.kernel.org"
-	<linux-mips@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org"
-	<linuxppc-dev@lists.ozlabs.org>,
-        "linux-s390@vger.kernel.org"
-	<linux-s390@vger.kernel.org>,
-        "sparclinux@vger.kernel.org"
-	<sparclinux@vger.kernel.org>,
-        "x86@kernel.org" <x86@kernel.org>
-Subject: RE: [PATCH 03/26] lib/crypto: sha1: Add SHA-1 library functions
-Thread-Topic: [PATCH 03/26] lib/crypto: sha1: Add SHA-1 library functions
-Thread-Index: AQHb84R/vrwXWCY70UKmrSHlkDqWyLQwJxdg
-Date: Sun, 13 Jul 2025 15:05:16 +0000
-Message-ID: <IA4PR84MB4011819C07CD123FEDD4EC75AB55A@IA4PR84MB4011.NAMPRD84.PROD.OUTLOOK.COM>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E4BE69D2B;
+	Sun, 13 Jul 2025 16:54:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1752425645; cv=none; b=rwXt3cJb6r6/fKKuY9r7/VFsUhzr3nt0LRhygW8imb76mfh+kiTpsgGplSq8bSQ3f/E4MuZVjKbimVvy4mXLL1w5JGn22ZdfSF8kZ3IPdSN6jlttYEgb/yTvRB9DfafuVilP4zdR+xnAihN5qkkDl8VztgMJSZo25lgMcAoYjtQ=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1752425645; c=relaxed/simple;
+	bh=Ow06yQH+u1TUlWbbAwuQ6n6w8NZPq6HcKp1HGVfdQHc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZNO5I2m+DIFo+x83XRuYCNWlFGD4IoMPBPqeemLjQ3fXGw8mlXL9W2klykq75DEgeQSQAgnv6QQ8t6egBSxv1VppPb2eehRJ5IMB8dNo0glaV5hx9g+gkuxvVEtRYyqXZ9cWs6YnFks54/GI8IYkzdZbjE+pMfNQUDqfmIvkleA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=psBeNjv+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ECB5CC4CEE3;
+	Sun, 13 Jul 2025 16:54:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752425644;
+	bh=Ow06yQH+u1TUlWbbAwuQ6n6w8NZPq6HcKp1HGVfdQHc=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=psBeNjv+mOu40r53jPAVUKkDWtOk29oQIjMtjuLacb0tSv7EYhwPGGy6ZIDNaeC5J
+	 KLGDmHHNB6+CME4dLYfequUVCrgryGgkQH3/ZtSzl4Yh3rWI+TLRdtDli+cU7oBIR9
+	 zTOcoykL/TuRZrmJp07fl9qyX5HaP+gNdLKl1Qkj21ZJxQ4c34NFHgWsvkF1Yvqpac
+	 eXeBG/x7hXS2z+QMZ9oYTXXdBknoip3I9nOkH1YdWeRxSH9ljLerT2DjATvVmjB0kV
+	 z3v7vio7962xSabdWzzE4DRFI1u18UTLVjtmdSYnSdykM0mDtU6xhHaZqh0NBwhRGn
+	 IFi7rHIUzSk7Q==
+Date: Sun, 13 Jul 2025 09:54:01 -0700
+From: Eric Biggers <ebiggers@kernel.org>
+To: "Elliott, Robert (Servers)" <elliott@hpe.com>
+Cc: "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	"Jason A . Donenfeld" <Jason@zx2c4.com>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+	"linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+	"sparclinux@vger.kernel.org" <sparclinux@vger.kernel.org>,
+	"x86@kernel.org" <x86@kernel.org>
+Subject: Re: [PATCH 03/26] lib/crypto: sha1: Add SHA-1 library functions
+Message-ID: <20250713165401.GA1773@quark>
 References: <20250712232329.818226-1-ebiggers@kernel.org>
  <20250712232329.818226-4-ebiggers@kernel.org>
-In-Reply-To: <20250712232329.818226-4-ebiggers@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: IA4PR84MB4011:EE_|SJ2PR84MB3369:EE_
-x-ms-office365-filtering-correlation-id: 10edd64d-5d74-4ab4-fcf9-08ddc21ead1d
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|366016|376014|7416014|38070700018;
-x-microsoft-antispam-message-info: =?us-ascii?Q?05N5YSyJ1Qx/MCkFRJ/xKqy55jKUDnGJzBNOih+jbtcdqutCQTz+s6rfTDYn?=
- =?us-ascii?Q?0y9Tk+877HPCC5HghW2qEtxjwBAkfVpiqFjmQyKiA8hW3p7t5sEuz+V0lU35?=
- =?us-ascii?Q?i/0xWQUyUfdxExUQFYGSblUZ/L5E5cDUMgdjKX5SpXG0RGiFVIXF8aFyYq9b?=
- =?us-ascii?Q?HwCL8r/Jq1NzYKqctfAliE80BRzNEXfKaAgg90JcI4b7UrYq6P92q6wSbIQu?=
- =?us-ascii?Q?tBXdYJDfUn610GNcVtzXRDjyzZmTm1EHvLte73F4ceW3d4miCQYjEWAU3WDY?=
- =?us-ascii?Q?JTq+sjyi8ZuXty/JmGuGwohl5uO7uL1f9/U9WodfTN3cZcweGkgeMJMWrOmQ?=
- =?us-ascii?Q?ArPVX5RHIlfdCK1Z4Qn0qQ8zEtLMxvlYWM/1Qko9ShUoTzijI36wLWLQc/9W?=
- =?us-ascii?Q?DiFk8lu+gRqxutZvGAZy9Dn44i9bf1YWQnX6lXzzO3He8jzNb/DEYeuys5YW?=
- =?us-ascii?Q?iAtAdfD0HLHIktU9dwdT8fYw7em3bB60jO2eJ0TzNRn23Z5Gbr58+ZjXhfad?=
- =?us-ascii?Q?hHHydWd2KIUkv6Wk7SRLbJEbWP7Vih8uJ/ZdTz2dE4MjSQ0j6vovTT5pq/YS?=
- =?us-ascii?Q?rLFECi4HRDCV3/RrGDXKfAiiIvRPVJ5EhOcNEhn8bH4yBH/w0W6CnVKjtgBb?=
- =?us-ascii?Q?pvzQx+hOlagKhwYP8jqyKFIgasXN3bG3dgHOkCKp1mhHuQOUr6A/TuYXyWpz?=
- =?us-ascii?Q?wDejdp3Yu5eEQqc3Swx+8r1CoooWY/HUdCT97EPEagk3f3HPtC5MYf2XuGhJ?=
- =?us-ascii?Q?AxEV6CU65XeyXj/L4JbQ7BA+asO8jv5NJYjyFTatffdZc2jJ+UmW49A9Aj8t?=
- =?us-ascii?Q?Id0RkkIjUodWJahmGMbY+UP0nYQntl4Cc2/6GDponfFiJi7A/9oM1qGmXAiu?=
- =?us-ascii?Q?zgGHF9IErZgG9bhGD7HRljXrenX3PwX3gmJ9yW8dzEMtut8m+323pxuTemrT?=
- =?us-ascii?Q?qMo8DC0X6f5WtneFd6UGa+jLiOryN2Q2qdBAc764zcElIQCeDwKE2q00iY3E?=
- =?us-ascii?Q?U50hpqHGp6wR2w40sbR63P2jeqJbEBueTXsJaOm1sCUoGOo+2dBtsES8IO6J?=
- =?us-ascii?Q?m19f77PQBLae5TFvfPpD/6y1OVF3PcpQxNu0cOiul4qQaZf3/iVe7fbn3gHg?=
- =?us-ascii?Q?+6aClnjqduUSbInqPvM+xf6uy5Sbcu9XihVQxzQS5ERgscss5mu0QukBfWfK?=
- =?us-ascii?Q?dnH1XdXv468NuJqsjAUULMk4jalrGtL5cnGwnKoXp42hqrvyzNx94E/row/+?=
- =?us-ascii?Q?1jiLPxpvchgbHVXfO5CxIaco5PWahMe/+zEW89ipMZek8siLwIaclC9kdBtM?=
- =?us-ascii?Q?AI3U9iba+Y68bKZMGTb3Cw1rr1g6cI5x8rNP7hGXUQcKqn+1Y6dJ37gD9cNs?=
- =?us-ascii?Q?6hffxAPNYMscUc9a7cR/9yFAuAvbBCm7nJNze8O7/2To52ZDidjV2ZHphj8h?=
- =?us-ascii?Q?vAiZnV8NjdfBCc1O7iH4I0oKDgbKZngh8sMEauFnPXcuatwZUC0ZDg=3D=3D?=
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:IA4PR84MB4011.NAMPRD84.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?NXJR7HZritrV4pR3wCou0oOKlf79f67E5Z//eoH0s+vlGXe9IZUAxA6Yk1YB?=
- =?us-ascii?Q?RN32mLr4Z1AV0QD1h9y8CKl0//0aXvLyFGbfQkzYQDg9t44mPzl9ieOA+TjE?=
- =?us-ascii?Q?Seh2X46ycQOGbYtaQsIusMuL6YSkN91TOdvChiCUUIJo81qv1SOhWUW/T3ec?=
- =?us-ascii?Q?+8wKSrAAo2LUEKW1mjLJSISV74ZkXKhCqYZkd8b7KKCFiNTDvaKGjdzqj5KG?=
- =?us-ascii?Q?bizeqw71hQ2nt7HxnX+OY2M9iOkxu+abt6fUr2yXaFBfXs0hONULPtQR7aF1?=
- =?us-ascii?Q?KxdoJ+79sfFMFBtyYL9NKtoOvl71AXjbuK4cfBZW3aMlHNlT5gAFP0iS8xwb?=
- =?us-ascii?Q?cYpIR6LzIwJtXHvHtUu9UcBgQzyu5LmjwOQ9Ip1TIXfc+5PCy5dbfon4pOwF?=
- =?us-ascii?Q?FLaD8LPqlUWhj55+S7zeCjZRQHdWU/k24zzNJ3+vNEsZ1elsZO3vovVo62nx?=
- =?us-ascii?Q?Xq48Jc2JE9tcuGlPGxDN+/vaUyxi+SrhI96U4fnVy+5+6gb0E1NPy/SjwZ7j?=
- =?us-ascii?Q?v/QQpio2llXR2IrACALMzeyd1VXdSgra8UlKDki2uItn95YezgMbRoQNMPVm?=
- =?us-ascii?Q?w2jQW5COPcFC/826KGS98LzlPRABuzmfxrw5cLr2J6PaKkEn6Qb2X886tYZt?=
- =?us-ascii?Q?o8UcvkVn2ASkpyK+lqTWv92ceT2B8P34TlLp8UYqXgsPcdYLHmmsBYDRZTz0?=
- =?us-ascii?Q?L1pBP3wP0xmyZdACErVVJeHdgOIdAhCAIXMMcHGaY91bbSr7Jh3f9i7jgysQ?=
- =?us-ascii?Q?xMs9TLdBNpwsz6BT8yMXIj6yqLz0Z9sHlyK8yYQUzG4f0vuSsXf22jhcJB5d?=
- =?us-ascii?Q?x0haCGGaolzTQBPkbbVA4agzKcGdoJmN8l9GFUL1VKHcf+lvh0TAKRRUv9QU?=
- =?us-ascii?Q?bMm0KJgPXmvrbbOPRd+jemMzxuTCgRghgHxQbVggJ1suBifrIzUnKhi47Dc/?=
- =?us-ascii?Q?No0s2CQnBwPIr0A8IMAykDj+pB7ZFrakioZjlSzy/QCd4PU8exUw+1K/G2BA?=
- =?us-ascii?Q?+Q6yzfIemeoYj7uuIQYlrgR31O2n6VWO1H6yek1tWfYZ1kMUWvUPmIGsL/UO?=
- =?us-ascii?Q?8Kt+N6HbOOdbdPhJbBCWRQpdSzUvdBdKSyj5WYZL+OHN9fpoI0g1Q24SpNmM?=
- =?us-ascii?Q?RsiflDAMZelxVwoVasEX4VeenAVxfvUWXOWTfj9+pqBdFJX9Saymg8/MEb6B?=
- =?us-ascii?Q?rpmUN98ZkvmG33RL5ZcTbI6jeRwKOVKs+QfNr+fNfvcKLTmZ2eHWzn7mop4D?=
- =?us-ascii?Q?w6u0bg/0vrWu19HNkiQcyEbvQFsqpjbtvABsHUbRucYvXTaDV0smvpmWCKmK?=
- =?us-ascii?Q?2kaRwA1ohwJnmNh6WxbYTCQt0N58gqI2eM+MDROH+draHTOe54SNxcEto7vh?=
- =?us-ascii?Q?PvyLXODJdiPkTUqLPrpoDh2Y3e5kNu5LhURLjdETRrvDBWqEtAHNX88q78Nj?=
- =?us-ascii?Q?H1ewsPo42bxl1U3g/HkxTQ+8SXJ/lNYBQ7gmc1zTFuaonbO1ahdoxPPuPZPV?=
- =?us-ascii?Q?eDT/PXWqiCOd88oMaYZ0rM3lu5AOvqcXjkT597OonIp70gyZ19LmrQ5rWPHT?=
- =?us-ascii?Q?ff46PhvPWqxCpXpLQe4=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ <IA4PR84MB4011819C07CD123FEDD4EC75AB55A@IA4PR84MB4011.NAMPRD84.PROD.OUTLOOK.COM>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: IA4PR84MB4011.NAMPRD84.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 10edd64d-5d74-4ab4-fcf9-08ddc21ead1d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 13 Jul 2025 15:05:16.5125
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 105b2061-b669-4b31-92ac-24d304d195dc
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: umOtybOUvd1JsgDQhA2tTOdpoWnMsAnLHhx1JbD7Zb5Th2OLT5fsCOw0WTGuJ2HC
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR84MB3369
-X-OriginatorOrg: hpe.com
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwNzEzMDEwNSBTYWx0ZWRfX9J0xbCvkK67x laI1HJ1EeboYepKUtJlNOaGtv8PCe/sQQdzHMKlZryHQRG3SggbF/L6HVPHCU45Ibbw978Cu24n e5NrxOgAKjIXgaloUPuo6j2wM971o846ljVzVUyvxIEzXcdaEyH9vsEZAVS3DUtsTftYIuOc67T
- 2Me2r7BENMwu6ky/+fduKxl+sT/kPLYoEcmO//oB/QB3xTYZDgyk1RcgvJ0+n2CFzyyuVkVbXPD iphYsU1/VLj3J+ic4wDaFgvr82YBUwHkVs36fFKqgYzDfjc0UriQUooWTQNx+4cF8bPaSxaDkkS 7mXza8qO34VGt371gjHR1sfpK2qynBxYPPwyZHpMFiV3/+EnP8a/F4R2oAt216iVXrzQ9uTTuSg
- yjoBGbajS2CDXeKt5rsCHNDyTbLeJ6bvYVQsW4wXEb65h0oV3nufU/oK9t4qxjumRzr0GCCv
-X-Authority-Analysis: v=2.4 cv=MN1gmNZl c=1 sm=1 tr=0 ts=6873cb56 cx=c_pps a=FAnPgvRYq/vnBSvlTDCQOQ==:117 a=FAnPgvRYq/vnBSvlTDCQOQ==:17 a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10
- a=kj9zAlcOel0A:10 a=Wb1JkmetP80A:10 a=VwQbUJbxAAAA:8 a=ES8MNo1sd1zJ02czjd0A:9 a=CjuIK1q_8ugA:10 a=0lgtpPvCYYIA:10
-X-Proofpoint-ORIG-GUID: pAxFgtBncnd_2Q6pbi4erKhZGiWnwhYd
-X-Proofpoint-GUID: pAxFgtBncnd_2Q6pbi4erKhZGiWnwhYd
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.7,FMLib:17.12.80.40
- definitions=2025-07-13_01,2025-07-09_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
- phishscore=0 priorityscore=1501 malwarescore=0 lowpriorityscore=0
- clxscore=1011 mlxlogscore=995 suspectscore=0 mlxscore=0 adultscore=0
- spamscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2507130105
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <IA4PR84MB4011819C07CD123FEDD4EC75AB55A@IA4PR84MB4011.NAMPRD84.PROD.OUTLOOK.COM>
 
+On Sun, Jul 13, 2025 at 03:05:16PM +0000, Elliott, Robert (Servers) wrote:
+> > -----Original Message-----
+> > From: Eric Biggers <ebiggers@kernel.org>
+> > Sent: Saturday, July 12, 2025 6:23 PM
+> > Subject: [PATCH 03/26] lib/crypto: sha1: Add SHA-1 library functions
+> ...
+> > +static void __maybe_unused sha1_blocks_generic(struct sha1_block_state
+> > *state,
+> > +					       const u8 *data, size_t nblocks)
+> > +{
+> > +	u32 workspace[SHA1_WORKSPACE_WORDS];
+> > +
+> > +	do {
+> > +		sha1_transform(state->h, data, workspace);
+> > +		data += SHA1_BLOCK_SIZE;
+> > +	} while (--nblocks);
+> > +
+> > +	memzero_explicit(workspace, sizeof(workspace));
+> > +}
+> 
+> That assumes the caller will never pass nblocks of 0... should that be
+> checked first?
 
+No.  This is a static function, and it's easy to verify that all callers
+pass a positive nblocks.  All these code paths are also well-covered by
+sha1_kunit.  Also, lib/crypto/sha256.c and lib/crypto/sha512.c do the
+exact same thing.  Also, most of the architecture-specfiic
+implementations of sha{1,256,512}_blocks() assume positive nblocks too.
 
-> -----Original Message-----
-> From: Eric Biggers <ebiggers@kernel.org>
-> Sent: Saturday, July 12, 2025 6:23 PM
-> Subject: [PATCH 03/26] lib/crypto: sha1: Add SHA-1 library functions
-...
-> +static void __maybe_unused sha1_blocks_generic(struct sha1_block_state
-> *state,
-> +					       const u8 *data, size_t nblocks)
-> +{
-> +	u32 workspace[SHA1_WORKSPACE_WORDS];
-> +
-> +	do {
-> +		sha1_transform(state->h, data, workspace);
-> +		data +=3D SHA1_BLOCK_SIZE;
-> +	} while (--nblocks);
-> +
-> +	memzero_explicit(workspace, sizeof(workspace));
-> +}
-
-That assumes the caller will never pass nblocks of 0... should that be
-checked first?
-
+- Eric
 
