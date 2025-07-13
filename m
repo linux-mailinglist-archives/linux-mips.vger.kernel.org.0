@@ -1,225 +1,143 @@
-Return-Path: <linux-mips+bounces-9791-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9792-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F9F9B02E26
-	for <lists+linux-mips@lfdr.de>; Sun, 13 Jul 2025 01:31:59 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CDDF2B02F12
+	for <lists+linux-mips@lfdr.de>; Sun, 13 Jul 2025 09:15:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 912511893086
-	for <lists+linux-mips@lfdr.de>; Sat, 12 Jul 2025 23:31:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 277A117F4B1
+	for <lists+linux-mips@lfdr.de>; Sun, 13 Jul 2025 07:15:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCC5D248863;
-	Sat, 12 Jul 2025 23:26:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAC1F1D7E35;
+	Sun, 13 Jul 2025 07:15:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fX0E8o1k"
+	dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b="FRjGIAFt"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 947D72472BD;
-	Sat, 12 Jul 2025 23:26:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92533433B1
+	for <linux-mips@vger.kernel.org>; Sun, 13 Jul 2025 07:15:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.77.101.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752362792; cv=none; b=dTG9KHaMSPBQwqewle2OdrqmHDr6JMZrQ9BFvMz++1AG8OdNrdlRiYZIT/aHbIn6z3Dz1P4cby3QuaE5y5Ta4nLM0bx1xRz7oFfF/F5TKcsaUV0OQP1fAjPXkkzSCMaUU72xn0dipp4pFIMfgskC9+C/MbWnrPPmjyDDkMSPVx0=
+	t=1752390938; cv=none; b=hLJ4yBnMONxJVFdWcGFew6vBRYH94xEaXFDG4jL3qehCWMOdUmlLHqHeuf6QuWyzJAHpK7SjW8ZIPXzXLyhmKAVpGozaG6HpwtDX7hhsS5549/peF6rcMk0U/mQzjSIsqhp2BAIHhyIAx9xZdRK8SlpLzt4QQe6ppBQkJf2bqTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752362792; c=relaxed/simple;
-	bh=yc9nP0AyrYTSdnZBDBrGS14R619T+8Od6p+X/EDi6Wk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tBKYwSFpu/k+c9UO0XOukIk0aPvr77iaumcFLjJqcY7OmikQby4zD8FQKOZHzili86uYlU0RFgvGqP4ilY56GLsDDPpBN79DZ6XNkH5tVBY+dAR7YOmV0gfynoHTBy08ibQozu5JCoP2kb+WfT/QlYHQqf4fLnjOL+p8phkSnDo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fX0E8o1k; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25260C4CEF7;
-	Sat, 12 Jul 2025 23:26:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752362792;
-	bh=yc9nP0AyrYTSdnZBDBrGS14R619T+8Od6p+X/EDi6Wk=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=fX0E8o1k57ipPAfx4Uzk0gPIv9zXrwOi7EklV1MTTwN4CCofX0j1AgCETrLo46xpR
-	 Fb/HAiIDk0Q2P043QlgVPWAz6ctV/JLTH2RJwvNw1pAU/2HI7xBrHJ7zDBInTtl6pG
-	 mzEoqG3qquK7rGUpI1L2ysFaTLshgPnAeVAFNEt+PnuRxP2jzd7FmS0aJqJE6xV0G4
-	 UAiLiC0Y1UK5bxhY8SxwNggognGdbLAPtfPBg71+lwZI1/NRIuLrUi/bGrX7oCfzlo
-	 jkJE8G03Pxs0HpkZAiPARUZk5aGWGElD8l3JOFy2Vc19sZYmnKIZ8d0fCNYAFiC01z
-	 WBJQa9HaiH7NQ==
-From: Eric Biggers <ebiggers@kernel.org>
-To: linux-crypto@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org,
-	Ard Biesheuvel <ardb@kernel.org>,
-	"Jason A . Donenfeld" <Jason@zx2c4.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mips@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org,
-	sparclinux@vger.kernel.org,
-	x86@kernel.org,
-	Eric Biggers <ebiggers@kernel.org>
-Subject: [PATCH 26/26] lib/crypto: sha1: Remove low-level functions from API
-Date: Sat, 12 Jul 2025 16:23:17 -0700
-Message-ID: <20250712232329.818226-27-ebiggers@kernel.org>
-X-Mailer: git-send-email 2.50.1
-In-Reply-To: <20250712232329.818226-1-ebiggers@kernel.org>
-References: <20250712232329.818226-1-ebiggers@kernel.org>
+	s=arc-20240116; t=1752390938; c=relaxed/simple;
+	bh=f0BZ1aEY6y4Cc1MStO+sICC9i1OV/GQNzAgioBiOqus=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uWAQyWzsp0YW+7JTQeJsYEb4kHgV4scP0EbAq1JEdNxD7saT8q5Hf6huVwDzavjc0F0SMiW3E/RvgInYfUmJWpTkwctv06YDuSZr0YkAm2grcPHrWjiI0P1rT80ufp7WCuTyUEPJZxHuAvUyKdPB0kfxtpTJKV6+nr9gMVgEloc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl; spf=pass smtp.mailfrom=wp.pl; dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b=FRjGIAFt; arc=none smtp.client-ip=212.77.101.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wp.pl
+Received: (wp-smtpd smtp.wp.pl 19348 invoked from network); 13 Jul 2025 09:15:32 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=20241105;
+          t=1752390932; bh=w6uk2vSSK6kqFUYuqq9wRIV5THBtnHlaQCSQ8TziC3o=;
+          h=From:To:Cc:Subject;
+          b=FRjGIAFts+ncFni3a1QtStmqoRjGSBbzbv+fu3CCrvg0POfGxtRWy1qe9BDOdMv05
+           Jgufu28olMCo4lCy3gPEaC8Dtt0HTwAAUJti3zEEq+lbgP+qGGTjSgNVYY7tF6ECtG
+           GLQpn2fay8FHGilvqOc+/+XeYVIBavvoXRz6I9Qpj68JowKrrd9YhnRQzI28eb+A9C
+           8BtpVXwEBMRol9SJUvlvFF9aoE86vfLer19dJtVHzi99olSl7rMbQt7zuNt1FvEW+K
+           Bh6ZGVr4iRyVqvJVOEwHWe9OvldV49IM5X77YFpIUJrZS0Tuj3is0zaL+EJ3N0s+aJ
+           qbF6niVbKxudg==
+Received: from 89-64-3-180.dynamic.play.pl (HELO localhost) (stf_xl@wp.pl@[89.64.3.180])
+          (envelope-sender <stf_xl@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <rosenp@gmail.com>; 13 Jul 2025 09:15:32 +0200
+Date: Sun, 13 Jul 2025 09:15:32 +0200
+From: Stanislaw Gruszka <stf_xl@wp.pl>
+To: Rosen Penev <rosenp@gmail.com>
+Cc: linux-wireless@vger.kernel.org,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:MIPS" <linux-mips@vger.kernel.org>,
+	"moderated list:ARM/Mediatek SoC support" <linux-arm-kernel@lists.infradead.org>,
+	"moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>
+Subject: Re: [PATCHv3 wireless-next 3/7] wifi: rt2800soc: allow loading from
+ OF
+Message-ID: <20250713071532.GA18469@wp.pl>
+References: <20250710200820.262295-1-rosenp@gmail.com>
+ <20250710200820.262295-4-rosenp@gmail.com>
+ <20250712101418.GD9845@wp.pl>
+ <CAKxU2N-RXgFKYPAqEu3iZDMAisj_K-b+ZZTGFsabWz7pMK+02A@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAKxU2N-RXgFKYPAqEu3iZDMAisj_K-b+ZZTGFsabWz7pMK+02A@mail.gmail.com>
+X-WP-MailID: a575d8a94d89fffda96a0f3af808d2f5
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 0000000 [kZMB]                               
 
-Now that there are no users of the low-level SHA-1 interface, remove it.
+On Sat, Jul 12, 2025 at 12:02:35PM -0700, Rosen Penev wrote:
+> On Sat, Jul 12, 2025 at 3:14 AM Stanislaw Gruszka <stf_xl@wp.pl> wrote:
+> >
+> > On Thu, Jul 10, 2025 at 01:08:16PM -0700, Rosen Penev wrote:
+> > > Add a single binding to help the already present dts files load the
+> > > driver. More are possible but there doesn't seem to be a significant
+> > > difference between them to justify this.
+> > >
+> > > Use wifi name per dtschema requirements.
+> > >
+> > > The data field will be used to remove the custom non static probe
+> > > function and use of_device_get_match_data.
+> > >
+> > > Added OF dependency to SOC CONFIG as adding of_match_table without OF
+> > > being present makes no sense.
+> > >
+> > > Signed-off-by: Rosen Penev <rosenp@gmail.com>
+> > > Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+> > > ---
+> > >  drivers/net/wireless/ralink/rt2x00/Kconfig     | 2 +-
+> > >  drivers/net/wireless/ralink/rt2x00/rt2800soc.c | 7 +++++++
+> > >  2 files changed, 8 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/drivers/net/wireless/ralink/rt2x00/Kconfig b/drivers/net/wireless/ralink/rt2x00/Kconfig
+> > > index 3a32ceead54f..a0dc9a751234 100644
+> > > --- a/drivers/net/wireless/ralink/rt2x00/Kconfig
+> > > +++ b/drivers/net/wireless/ralink/rt2x00/Kconfig
+> > > @@ -202,7 +202,7 @@ endif
+> > >
+> > >  config RT2800SOC
+> > >       tristate "Ralink WiSoC support"
+> > > -     depends on SOC_RT288X || SOC_RT305X || SOC_MT7620 || COMPILE_TEST
+> > > +     depends on OF && (SOC_RT288X || SOC_RT305X || SOC_MT7620 || COMPILE_TEST)
+> > >       select RT2X00_LIB_SOC
+> > >       select RT2X00_LIB_MMIO
+> > >       select RT2X00_LIB_CRYPTO
+> > > diff --git a/drivers/net/wireless/ralink/rt2x00/rt2800soc.c b/drivers/net/wireless/ralink/rt2x00/rt2800soc.c
+> > > index e73394cf6ea6..db8d01f0cdc3 100644
+> > > --- a/drivers/net/wireless/ralink/rt2x00/rt2800soc.c
+> > > +++ b/drivers/net/wireless/ralink/rt2x00/rt2800soc.c
+> > > @@ -243,9 +243,16 @@ static int rt2800soc_probe(struct platform_device *pdev)
+> > >       return rt2x00soc_probe(pdev, &rt2800soc_ops);
+> > >  }
+> > >
+> > > +static const struct of_device_id rt2880_wmac_match[] = {
+> > > +     { .compatible = "ralink,rt2880-wifi", .data = &rt2800soc_ops },
+> >
+> > Why do .data = rt2800soc_ops here and use it via of_device_get_match_data()
+> > in patch 5, insead of just use rt2800soc_ops directly in rt2800soc_probe ?
+> I see more of the former instead of the latter in drivers.
 
-Specifically:
+If there is no technical reason to use indirection, this can be
+simplified as well. Can be done as separate patch since you already
+posed v4.
 
-- Remove SHA1_DIGEST_WORDS (no longer used)
-- Remove sha1_init_raw() (no longer used)
-- Rename sha1_transform() to sha1_block_generic() and make it static
-- Move SHA1_WORKSPACE_WORDS into lib/crypto/sha1.c
-
-Signed-off-by: Eric Biggers <ebiggers@kernel.org>
----
- include/crypto/sha1.h | 10 -------
- lib/crypto/sha1.c     | 63 ++++++++++++-------------------------------
- 2 files changed, 17 insertions(+), 56 deletions(-)
-
-diff --git a/include/crypto/sha1.h b/include/crypto/sha1.h
-index 162a529ec8413..34658f4d76e3b 100644
---- a/include/crypto/sha1.h
-+++ b/include/crypto/sha1.h
-@@ -24,20 +24,10 @@ struct sha1_state {
- 	u32 state[SHA1_DIGEST_SIZE / 4];
- 	u64 count;
- 	u8 buffer[SHA1_BLOCK_SIZE];
- };
- 
--/*
-- * An implementation of SHA-1's compression function.  Don't use in new code!
-- * You shouldn't be using SHA-1, and even if you *have* to use SHA-1, this isn't
-- * the correct way to hash something with SHA-1 (use crypto_shash instead).
-- */
--#define SHA1_DIGEST_WORDS	(SHA1_DIGEST_SIZE / 4)
--#define SHA1_WORKSPACE_WORDS	16
--void sha1_init_raw(__u32 *buf);
--void sha1_transform(__u32 *digest, const char *data, __u32 *W);
--
- /* State for the SHA-1 compression function */
- struct sha1_block_state {
- 	u32 h[SHA1_DIGEST_SIZE / 4];
- };
- 
-diff --git a/lib/crypto/sha1.c b/lib/crypto/sha1.c
-index 89831f7f27793..87a76bf97f445 100644
---- a/lib/crypto/sha1.c
-+++ b/lib/crypto/sha1.c
-@@ -49,11 +49,11 @@ static const struct sha1_block_state sha1_iv = {
- #else
-   #define setW(x, val) (W(x) = (val))
- #endif
- 
- /* This "rolls" over the 512-bit array */
--#define W(x) (array[(x)&15])
-+#define W(x) (workspace[(x)&15])
- 
- /*
-  * Where do we get the source from? The first 16 iterations get it from
-  * the input data, the next mix it from the 512-bit array.
-  */
-@@ -70,38 +70,24 @@ static const struct sha1_block_state sha1_iv = {
- #define T_16_19(t, A, B, C, D, E) SHA_ROUND(t, SHA_MIX, (((C^D)&B)^D) , 0x5a827999, A, B, C, D, E )
- #define T_20_39(t, A, B, C, D, E) SHA_ROUND(t, SHA_MIX, (B^C^D) , 0x6ed9eba1, A, B, C, D, E )
- #define T_40_59(t, A, B, C, D, E) SHA_ROUND(t, SHA_MIX, ((B&C)+(D&(B^C))) , 0x8f1bbcdc, A, B, C, D, E )
- #define T_60_79(t, A, B, C, D, E) SHA_ROUND(t, SHA_MIX, (B^C^D) ,  0xca62c1d6, A, B, C, D, E )
- 
--/**
-- * sha1_transform - single block SHA1 transform (deprecated)
-- *
-- * @digest: 160 bit digest to update
-- * @data:   512 bits of data to hash
-- * @array:  16 words of workspace (see note)
-- *
-- * This function executes SHA-1's internal compression function.  It updates the
-- * 160-bit internal state (@digest) with a single 512-bit data block (@data).
-- *
-- * Don't use this function.  SHA-1 is no longer considered secure.  And even if
-- * you do have to use SHA-1, this isn't the correct way to hash something with
-- * SHA-1 as this doesn't handle padding and finalization.
-- *
-- * Note: If the hash is security sensitive, the caller should be sure
-- * to clear the workspace. This is left to the caller to avoid
-- * unnecessary clears between chained hashing operations.
-- */
--void sha1_transform(__u32 *digest, const char *data, __u32 *array)
-+#define SHA1_WORKSPACE_WORDS 16
-+
-+static void sha1_block_generic(struct sha1_block_state *state,
-+			       const u8 data[SHA1_BLOCK_SIZE],
-+			       u32 workspace[SHA1_WORKSPACE_WORDS])
- {
- 	__u32 A, B, C, D, E;
- 	unsigned int i = 0;
- 
--	A = digest[0];
--	B = digest[1];
--	C = digest[2];
--	D = digest[3];
--	E = digest[4];
-+	A = state->h[0];
-+	B = state->h[1];
-+	C = state->h[2];
-+	D = state->h[3];
-+	E = state->h[4];
- 
- 	/* Round 1 - iterations 0-16 take their input from 'data' */
- 	for (; i < 16; ++i)
- 		T_0_15(i, A, B, C, D, E);
- 
-@@ -119,39 +105,24 @@ void sha1_transform(__u32 *digest, const char *data, __u32 *array)
- 
- 	/* Round 4 */
- 	for (; i < 80; ++i)
- 		T_60_79(i, A, B, C, D, E);
- 
--	digest[0] += A;
--	digest[1] += B;
--	digest[2] += C;
--	digest[3] += D;
--	digest[4] += E;
--}
--EXPORT_SYMBOL(sha1_transform);
--
--/**
-- * sha1_init_raw - initialize the vectors for a SHA1 digest
-- * @buf: vector to initialize
-- */
--void sha1_init_raw(__u32 *buf)
--{
--	buf[0] = 0x67452301;
--	buf[1] = 0xefcdab89;
--	buf[2] = 0x98badcfe;
--	buf[3] = 0x10325476;
--	buf[4] = 0xc3d2e1f0;
-+	state->h[0] += A;
-+	state->h[1] += B;
-+	state->h[2] += C;
-+	state->h[3] += D;
-+	state->h[4] += E;
- }
--EXPORT_SYMBOL(sha1_init_raw);
- 
- static void __maybe_unused sha1_blocks_generic(struct sha1_block_state *state,
- 					       const u8 *data, size_t nblocks)
- {
- 	u32 workspace[SHA1_WORKSPACE_WORDS];
- 
- 	do {
--		sha1_transform(state->h, data, workspace);
-+		sha1_block_generic(state, data, workspace);
- 		data += SHA1_BLOCK_SIZE;
- 	} while (--nblocks);
- 
- 	memzero_explicit(workspace, sizeof(workspace));
- }
--- 
-2.50.1
+Regards
+Stanislaw
 
 
