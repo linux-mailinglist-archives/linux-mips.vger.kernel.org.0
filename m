@@ -1,126 +1,184 @@
-Return-Path: <linux-mips+bounces-9808-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9809-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BF021B03D66
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Jul 2025 13:29:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE5EBB0480C
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Jul 2025 21:44:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4AB7617DCD8
-	for <lists+linux-mips@lfdr.de>; Mon, 14 Jul 2025 11:29:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E41A91A60F76
+	for <lists+linux-mips@lfdr.de>; Mon, 14 Jul 2025 19:45:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86F52246BAA;
-	Mon, 14 Jul 2025 11:29:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C82C22CBC6;
+	Mon, 14 Jul 2025 19:44:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="gFzHwEOu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OZ1fX7Ck"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02BE11C54AF;
-	Mon, 14 Jul 2025 11:29:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A09612BF24;
+	Mon, 14 Jul 2025 19:44:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752492551; cv=none; b=cg2hIWEsrdiUkmjB9Z/YZvZuMnysRdy4Lz8jIGc/KA1Mr07qcCYh/BVDBr0InLMUqo5wrBkiCvsvKv1yzjf+CdG7Ozbf7OJda5DhlmVAfV4g8Pg/NhHo4pDc55adPtiXFaHZl1Dj5qrgqqgCkzVSqKFyaL8fHn+CPmBD9NoRv70=
+	t=1752522289; cv=none; b=W0Wr7cUsuMInerj2tQGjJ2p3+1lzh79ctbjbZyabcL7yQWDW+4xU0D2qdhlAtzdBpsLDu4F3LuNrC10iOweUMNAQN2LOzrixsx6lsTFV97ccQdR004VjiJxzuWDaylEyfUIIPZsFTN2vHEWGq2Y0zhBLAgT28MKriVStpWjOzQ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752492551; c=relaxed/simple;
-	bh=IHeaZkmR3o1h+r0vSawI9hhyMrY40fjBlCfxkbgtCHE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=WgNsNw2znpRks9DrerJfsSMIQaHvnnsQAS1Q9mk2RwKOJ2Bsycsij3cHOfIbGFAfF9jKl0DrjGSZwCPgPVvjpVi5veg8U1yS1HuB0RFHhyR1RbeFoM1nLHUr1vi955E5EnuCJd63NXXXJ0JShBIlRsXgxb8Q9M8inntbZcDdTBU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=gFzHwEOu; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Reply-To;
-	bh=Yt0pEgiOw5D20asS7w9+koIyg+3FrGpHgzGJycRNdqs=; b=gFzHwEOunPxcWiAMs5c57JGmBA
-	1i9gdYcrvYX29m70SzdEFbb949zBkFdvThNwJKQhzyJ3vz63/HJ1jVg/SqRuGP6n4gWIfjUiccouh
-	P6KnCGtkMsx1a1QQNrL8jQIZ49P75WLOx+rlYn0bQB+2wVwhdnl721IvhTuDmNYdNVe5pAbt9ry3r
-	/RoZjj89dZL+hcZYQojrwClpv3YSiPvK4/2ywr4rKpCY38bVQj98vjQR3JbcWmt8iXRlTCD0vcUbS
-	UQwyw9zH6H36xlLQYifZECz0isuti6nChKskuuzSIiEqCqAEDnDQFMnIb/oDf1WYaJgVwW4dg+ZXE
-	kcLZNHaA==;
-Received: from i53875a13.versanet.de ([83.135.90.19] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1ubHMj-0007NV-40; Mon, 14 Jul 2025 13:29:01 +0200
-From: Heiko =?UTF-8?B?U3TDvGJuZXI=?= <heiko@sntech.de>
-To: Linus Walleij <linus.walleij@linaro.org>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Alexey Klimov <alexey.klimov@linaro.org>,
- Lorenzo Bianconi <lorenzo@kernel.org>, Sean Wang <sean.wang@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Paul Cercueil <paul@crapouillou.net>, Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, linux-mediatek@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject:
- Re: [PATCH v2 09/12] pinctrl: allow to mark pin functions as requestable
- GPIOs
-Date: Mon, 14 Jul 2025 13:29:01 +0200
-Message-ID: <5911205.31r3eYUQgx@diego>
-In-Reply-To: <20250709-pinctrl-gpio-pinfuncs-v2-9-b6135149c0d9@linaro.org>
-References:
- <20250709-pinctrl-gpio-pinfuncs-v2-0-b6135149c0d9@linaro.org>
- <20250709-pinctrl-gpio-pinfuncs-v2-9-b6135149c0d9@linaro.org>
+	s=arc-20240116; t=1752522289; c=relaxed/simple;
+	bh=oK+GzCnTtE/GVZkDozk8xGm58FvGdJaCuIeAS7oANOk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=E6a46gEUNtoLFhpsnKvYuP/m9bJuWt4NfV7v2wRmJIh5nDAsIhaqThsq0zZS+JweXWNybxSeX8OPq9kaZ2gfyvRv7kcj3Ahf1LY4il5tJyUNf8gEwsjUjl8tB2PfMwARErxlunjWS4IspocboWudi0RX9nvzwnRXiiGp5gofUc0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OZ1fX7Ck; arc=none smtp.client-ip=209.85.219.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e8ba9f36550so991015276.0;
+        Mon, 14 Jul 2025 12:44:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1752522286; x=1753127086; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=titEX2y3+9/xscj56vYw1l9vJIIgnO8oj3qH72QFLTw=;
+        b=OZ1fX7Ckx6sEIONsuQiEOUETwerwoSv9i3bBqejfKNr2V37xZHo+rHdDEhci9gOePG
+         lQEcaGbgWX3Wr8nBbCsk7V2yJg4nTgoEKFzOO60LHfkSCm+GnXyNxHfH8b8eLycOFoe0
+         25n8QgpV5Vd2O9yNxIhFRIbqh7ax8CNKex+JyeOwIJPxKsIqN5DXCu7T0a0k6UwT21DD
+         BNgMT59/+azOhUKtLyMRv/6hNkWQ0UEvj/63kzkIiFVIisQCbn1LsdXWAbIZNZnBhCCj
+         Jqunu8kKHBI/y9HQt8RlDJUqsNgJHLXBzq14aTKRJIWUYYTOyjbvbqQAtaV5mixNHdVP
+         B2sA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1752522286; x=1753127086;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=titEX2y3+9/xscj56vYw1l9vJIIgnO8oj3qH72QFLTw=;
+        b=VIEd9SwOgglRLIA1nL5k/m0m/ka8B4/Llwzh9DZZnMzAJvWUJOm1pyQRibwkADyOU3
+         nUV8fZmC0ZkdWr0oo/VvXiYyA+CP5E10w89pTGryEMMddTkOlT+ktF21vBvB2fqXV8QK
+         SfPXodG2EFR558XRHFJOi3THoq6mmntyddlxmsZfD584l32Us0H2vth3YxQuaijC+gj9
+         NTvT57tz0le5G0y2pVXE+nUqONavKtQNvYngBH+eGtbuDGyYsn8ow1Zm6OES6s1NScM8
+         8FL4qy53F3KXTCBkcDhOXWKIZgwH2HoaUUPkfsZuw55OMcMzeZ0B77FDwmb9iJ+QZdYU
+         quDA==
+X-Forwarded-Encrypted: i=1; AJvYcCUQTmgHNdibhTFb5bKvAhdxf5HuqeAOKjn13XOJ02+sosMDwnczpeTcva514fvK3GtZLV308+HhVtekLw==@vger.kernel.org, AJvYcCUZIpmUv+YW1QxeV8YEZ5CC9WN7H+Xev+z7ZpzfpUCw7CS7Ml4S8PDLomNKRhb1LS6og/Q6vNrXH92u3pTk@vger.kernel.org, AJvYcCXgYZGgBwqU/4EWa+Wx/PDSmal0JjfdkizoS7UsT2Wea9eg88gZihIHtDXytVednJ8oCsJ7goYZUX7d@vger.kernel.org
+X-Gm-Message-State: AOJu0YzXfh/bR0cDOgWx9oXWaCpLFjNy8RLHk0R9gQG9BOrDEjT0fOg2
+	0DtDdX0id3sbG5bATuloXgjlNHpSdRJ6flQID8hjyR6ejEXIqOl3mwgIvbRxCKfJAjNAHbFOcBY
+	rIjExDr2p4TBp1WaRxeMzjOggxS/RHDk=
+X-Gm-Gg: ASbGncvpyNCzUF8dXKX0UVS3S8So+K3y5L/pnVglryYvfCe1zpnk++Hjc5iyE0FYzat
+	rq0yNVJ1iIJBHA2L4nQDch6cYdR6ciCkiEyQwItBfCSEY1gFjPMRLTVHBHNSrR5TagwYgpPFIld
+	osJyVIoyvEyvF2exmlxZdezyxC5F+XiGy0CkoCSR0Yptz2P8ujEevkUvg7QURumFGOZj8wvOwts
+	37Qc0v3aKTM7WcOyxlL
+X-Google-Smtp-Source: AGHT+IHDaQy35GA+Qses/SKs7Ih1reu0z/6Xmv8VCPpNc9I9mI3lGzILxxovXV+PULcNjOZ/ySpa/++hRe2/LR3lxNI=
+X-Received: by 2002:a05:690c:60c4:b0:70e:404f:6714 with SMTP id
+ 00721157ae682-71822cea95bmr12446627b3.19.1752522286247; Mon, 14 Jul 2025
+ 12:44:46 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20250712210448.429318-1-rosenp@gmail.com> <20250712210448.429318-8-rosenp@gmail.com>
+ <20250714-subtle-origami-gopher-c9099f@krzk-bin>
+In-Reply-To: <20250714-subtle-origami-gopher-c9099f@krzk-bin>
+From: Rosen Penev <rosenp@gmail.com>
+Date: Mon, 14 Jul 2025 12:44:35 -0700
+X-Gm-Features: Ac12FXxoR7CKJ2q8b56sbgmGdKBzHJHT0GepGHfBUGsgSAe8RihtGnci6IAEay4
+Message-ID: <CAKxU2N8au-uncWoP+vGH4cHhHMOtq+VRFGNDs6rRLuHn-i1G-Q@mail.gmail.com>
+Subject: Re: [PATCHv4 wireless-next 7/7] dt-bindings: net: wireless: rt2800: add
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: linux-wireless@vger.kernel.org, Johannes Berg <johannes@sipsolutions.net>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Stanislaw Gruszka <stf_xl@wp.pl>, 
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
+	"open list:MIPS" <linux-mips@vger.kernel.org>, 
+	"moderated list:ARM/Mediatek SoC support" <linux-arm-kernel@lists.infradead.org>, 
+	"moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
 
-Am Mittwoch, 9. Juli 2025, 16:39:05 Mitteleurop=C3=A4ische Sommerzeit schri=
-eb Bartosz Golaszewski:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->=20
-> The name of the pin function has no real meaning to pinctrl core and is
-> there only for human readability of device properties. Some pins are
-> muxed as GPIOs but for "strict" pinmuxers it's impossible to request
-> them as GPIOs if they're bound to a devide - even if their function name
-> explicitly says "gpio". Add a new field to struct pinfunction that
-> allows to pass additional flags to pinctrl core. While we could go with
-> a boolean "is_gpio" field, a flags field is more future-proof.
->=20
-> If the PINFUNCTION_FLAG_GPIO is set for a given function, the pin muxed
-> to it can be requested as GPIO even on strict pin controllers. Add a new
-> callback to struct pinmux_ops - function_is_gpio() - that allows pinmux
-> core to inspect a function and see if it's a GPIO one. Provide a generic
-> implementation of this callback.
->=20
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> ---
+On Mon, Jul 14, 2025 at 12:27=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel.o=
+rg> wrote:
+>
+> On Sat, Jul 12, 2025 at 02:04:48PM -0700, Rosen Penev wrote:
+> > Add device-tree bindings for the RT2800 SOC wifi device found in older
+> > Ralink/Mediatek devices.
+>
+> Your subject was cut. Probably you wanted something like add "Realtek foo=
+ adapter" etc.
+Not sure I follow.
+>
+>
+> >
+> > Signed-off-by: Rosen Penev <rosenp@gmail.com>
+> > ---
+> >  .../bindings/net/wireless/ralink,rt2880.yaml  | 47 +++++++++++++++++++
+> >  1 file changed, 47 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/net/wireless/rali=
+nk,rt2880.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/net/wireless/ralink,rt28=
+80.yaml b/Documentation/devicetree/bindings/net/wireless/ralink,rt2880.yaml
+> > new file mode 100644
+> > index 000000000000..a92aedf6ba01
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/net/wireless/ralink,rt2880.yaml
+> > @@ -0,0 +1,47 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/net/wireless/ralink,rt2880.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Ralink RT2880 wireless device
+> > +
+> > +maintainers:
+> > +  - Stanislaw Gruszka <stf_xl@wp.pl>
+> > +
+> > +description: |
+> > +  This node provides properties for configuring RT2880 SOC wifi device=
+s.
+> > +  The node is expected to be specified as a root node of the device.
+> > +
+> > +allOf:
+> > +  - $ref: ieee80211.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> > +    enum:
+> > +      - ralink,rt2880-wifi
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  clocks:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +required:
+> > +  - compatible
+> > +  - reg
+>
+> Why clocks are optional? SoC devices rarely work without a clock.
+Before this patchset the code was doing
 
-[...]
+ 25         rt2x00dev->clk =3D clk_get(&pdev->dev, NULL);
+ 24         if (IS_ERR(rt2x00dev->clk))
+ 23                 rt2x00dev->clk =3D NULL;
 
-> diff --git a/include/linux/pinctrl/pinmux.h b/include/linux/pinctrl/pinmu=
-x.h
-> index d6f7b58d6ad0cce421aad80463529c9ccc65d68e..6db6c3e1ccc2249d4b4204e6f=
-c19bf7b4397cc81 100644
-> --- a/include/linux/pinctrl/pinmux.h
-> +++ b/include/linux/pinctrl/pinmux.h
-> @@ -66,6 +66,8 @@ struct pinmux_ops {
->  				    unsigned int selector,
->  				    const char * const **groups,
->  				    unsigned int *num_groups);
-> +	bool (*function_is_gpio) (struct pinctrl_dev *pctldev,
-> +				  unsigned int selector);
+I changed it to use devm_clk_get_optional since that's what it looks
+like here. It's not returning under failure so I assume that means
+it's optional.
 
-hmm, I think using the set_mux function arguments here might make this
-usable by more drivers? Aka func_selector + group_selector ?
+OTOH all downstream OpenWrt users of this code (as well as
+mt7620a.dtsi here) do specify a clock. _optional might be a mistake.
 
-While the generic pinmux might not need that, when pinmuxings are
-arranged in functions + pingroups in them, this would be helpful.
-
-
-Heiko
-
-
-
+Maybe Stanislaw knows more.
+>
+>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>
+> Best regards,
+> Krzysztof
+>
 
