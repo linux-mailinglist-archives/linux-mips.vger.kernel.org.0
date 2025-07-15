@@ -1,115 +1,143 @@
-Return-Path: <linux-mips+bounces-9820-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9821-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD4F0B054C7
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Jul 2025 10:24:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0EC6B057E0
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Jul 2025 12:33:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 196D01C23187
-	for <lists+linux-mips@lfdr.de>; Tue, 15 Jul 2025 08:24:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0AF904E45F7
+	for <lists+linux-mips@lfdr.de>; Tue, 15 Jul 2025 10:32:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E34EA274B26;
-	Tue, 15 Jul 2025 08:23:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kISjnJZq"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33EA22D63FF;
+	Tue, 15 Jul 2025 10:33:04 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FD8426C396;
-	Tue, 15 Jul 2025 08:23:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2742825E816;
+	Tue, 15 Jul 2025 10:33:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752567831; cv=none; b=OGT3UfEhzqhoLymfjTy6R88zQoZsahk/7JVKuvYJ79evdDbdXUQq+X8dzKxJc7qD31WjsLDTkzWW1twX8kezoAvXXkYdO4ooPu4Q0axoSBNjQb8Z5352eGSq7rpR/GQ7jRpARKpUdksNB1r9ZlGfz+lqG1t2cqQ1KYcJAGC04wA=
+	t=1752575584; cv=none; b=JkvQMgLOfae0Qa4uCatnpZ5xSdQIAd0hjLWQNjM6wsVRKJYCeCsrMEBeV8feFv7IvcSAksF2UDvuNYbSTACKpNraNhzh3FPO6rVs3rSeYcF/xGabV/v8TnSNkhQKf5YLAK+l1jLaXQcxoix18KdhJ/4xAr+z1OBTGXUk+eYuG+I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752567831; c=relaxed/simple;
-	bh=IXRCyqqh4GTD9xil3vhdDoGw5vRt665/k6/t0dxA3pI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fpldVkuh3meKTBzsjoxc1LAYfa4Dz9w1lhtWKsCuV6CIGxGsm6EurfP78lGdP5Dc6MFZG78S5EoZJgK8ec5JmMO3AxTiWA950S75XsCF3zLl14bU6nepMxqkTjiWf0emj1FA2gJFjjN1ucQVXPVyU6nbnURiWSx4a6bp4dvEzbM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kISjnJZq; arc=none smtp.client-ip=209.85.216.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-311e2cc157bso4437662a91.2;
-        Tue, 15 Jul 2025 01:23:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752567830; x=1753172630; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AR57cyXHpNdEBRao+1ozE9zC0Ys9s/kP9hmKhK9UHUA=;
-        b=kISjnJZq8sexE3vCQ2FpiUTcVlba4K1+zW+0xTsyZ4ySdKqADeN5oYsQvYy3TklpVV
-         3Bshb0O1tHsUnGwzY6ExK87+75Szj5NGB56rUAYaSbDTa/jlpK7/0gu4vS9O6aX10I/N
-         usk0XgM7nbfc1bZkAX/Q0rk1kkRBVzMk1KfN6WE6JR8Nvn5l45gKX3ycEm0kaD4bOJb3
-         527MawZul9w7rPynDhXQoAK+BrRcFHE7R0G8fFfiQMueGtZ86FA2zF4ztJoc7tPAgK0s
-         XkBZnIdyU6BfO0KL/MPUkZxwTTTZ+gWiu2T4aIhg1QxkcVpVd33XALqWrqsAvmF5x7UD
-         EGPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752567830; x=1753172630;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AR57cyXHpNdEBRao+1ozE9zC0Ys9s/kP9hmKhK9UHUA=;
-        b=rsKmsuuQ1M3cuU6hC2mOf2V057uT7Cclg7F3+IEa/85eG/OCm3LouQmfWulci0S0g2
-         /+2KvYTvygjq70vRw2YgG6ua3M+I7Bd1/vtdJq1478mVcviv9QJwxL+qEwBKqId4cL8y
-         18ND9Wt75BW/AX7o+y85Z13bq5HxdtM/qRNp16/IIPJ9GHZrGgEnPgoO/1H6k/iLs9dz
-         yUuzxZzvVzyaDngVa2MiFd6r2ELQDS81NfI7piIn66A9/fsc4/694a35oVB/PYVibvlr
-         r2LpO1MljGvDs0fNA5M7cf5me84zNL6K+Kqa7OR09mYP+j//b8xxAxISLfJuzfNxHIMt
-         2u6g==
-X-Forwarded-Encrypted: i=1; AJvYcCUghI2edBraYd7A7mGiu4pctV8vmvxkodJdFlo8SlJ3zm2POzoxPTxKvZSImhXnSt9iKKUgNfsrx/0s@vger.kernel.org, AJvYcCWLsIZwFqgPwK5psZAkW/Xt3aRTOphLBDn1xHzAIOWS6bh0Shh1AdardqJOyC9mzeKCG8lYHx6cQoWLTQ==@vger.kernel.org, AJvYcCXoZ69i0Un1eKG4jnuK7qgCsY/AhPu8LDcPwVOYvRHF2vAb+Mx01jjRD1ui0gHMXCk2wKxVrtbvW9YFoph8@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx1mgjhyWhz2zXzJuu5t+JztAIQ0DK9II+HQeRPnrteUC8sL3Fw
-	ItAPgYN5YEJtr5+GkqDuAAcV/mbQqsksxoe8UI8Azl+T1K6dVhFtHOfuJvQ0tdmFPeTsOvviiUf
-	F3y6AihkbLJcMvAy/v3PgspBzUwNTcTGiI7pTybBFsQYD
-X-Gm-Gg: ASbGncsO7ycElB22Rgj/dBQMk4dyVV3wdYcPoMm98c991fD4IM/Y/fI7MaTbo9tfi30
-	xJxjJ2rMcNDFCJevrui2j5g0GdeirpXt/NU5s23quRFngEG6OxsGilv9aHUJlVqHf5BvgFNVcIJ
-	S9ZD5d0FE08jSN/WKj8h3T1Btrw20Wdm6IvQN1Cer5bwAq6T3sAfXSY4ttEh99HvNI8HY6nWsLB
-	mau
-X-Google-Smtp-Source: AGHT+IGQim4tVu7RMI5fjr1GyhLLVevwXHUGV3YhMyRCmfDdHKplROEF+/5RsJJ3UPhiAa6LDTi+DGZv63jRAIn0aBU=
-X-Received: by 2002:a17:90b:5885:b0:319:bf4:c3e8 with SMTP id
- 98e67ed59e1d1-31c91f25558mr3528982a91.18.1752567829634; Tue, 15 Jul 2025
- 01:23:49 -0700 (PDT)
+	s=arc-20240116; t=1752575584; c=relaxed/simple;
+	bh=xwq2Wx5SphMaUmADLHLqoOqRQ+nHABl3M0HNZKp0p0M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=AXcfHtB6GrNvS/CQFcIpiuFm1jy5yvVuPNcqBjXGxmFkxQ/yT+AdgLElHVnTBYrdkRuTl4BPVkNFGIFx132zC//xfGP/zwX5VBY3cWvIStardIqphdpn1ArzWFIkWDLHupSWsWMhcg+somrRjcBLohKNzDO93BkFpxhSpy6REL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 83C4A1515;
+	Tue, 15 Jul 2025 03:32:52 -0700 (PDT)
+Received: from e133380.arm.com (e133380.arm.com [10.1.197.59])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C689E3F694;
+	Tue, 15 Jul 2025 03:32:52 -0700 (PDT)
+Date: Tue, 15 Jul 2025 11:32:47 +0100
+From: Dave Martin <Dave.Martin@arm.com>
+To: Kees Cook <kees@kernel.org>
+Cc: linux-kernel@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Akihiko Odaki <akihiko.odaki@daynix.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Chris Zankel <chris@zankel.net>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Heiko Carstens <hca@linux.ibm.com>,
+	Helge Deller <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Jonas Bonn <jonas@southpole.se>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Rich Felker <dalias@libc.org>, Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>,
+	Stafford Horne <shorne@gmail.com>,
+	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vasily Gorbik <gor@linux.ibm.com>, Vineet Gupta <vgupta@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-um@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+	loongarch@lists.linux.dev, sparclinux@vger.kernel.org,
+	x86@kernel.org
+Subject: Re: [PATCH 00/23] binfmt_elf,arch/*: Use elf.h for coredump note
+ names
+Message-ID: <aHYuT0SxX65tAEp3@e133380.arm.com>
+References: <20250701135616.29630-1-Dave.Martin@arm.com>
+ <175255782864.3413694.2008555655056311560.b4-ty@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250712210448.429318-1-rosenp@gmail.com> <20250712210448.429318-6-rosenp@gmail.com>
-In-Reply-To: <20250712210448.429318-6-rosenp@gmail.com>
-From: Sergio Paracuellos <sergio.paracuellos@gmail.com>
-Date: Tue, 15 Jul 2025 10:23:38 +0200
-X-Gm-Features: Ac12FXyjagyqzzwK9h4VxCo7FvGtmHUddwyUc5g6qUy0YRPcOqUgDiJgtz5UTuw
-Message-ID: <CAMhs-H_xaV6o7ah=7m8KVBqRgudjKS5o5JA0LTLxf+S2gsuDAQ@mail.gmail.com>
-Subject: Re: [PATCHv4 wireless-next 5/7] wifi: rt2x00: soc: modernize probe
-To: Rosen Penev <rosenp@gmail.com>
-Cc: linux-wireless@vger.kernel.org, Johannes Berg <johannes@sipsolutions.net>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Stanislaw Gruszka <stf_xl@wp.pl>, 
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
-	"open list:MIPS" <linux-mips@vger.kernel.org>, 
-	"moderated list:ARM/Mediatek SoC support" <linux-arm-kernel@lists.infradead.org>, 
-	"moderated list:ARM/Mediatek SoC support" <linux-mediatek@lists.infradead.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <175255782864.3413694.2008555655056311560.b4-ty@kernel.org>
 
-On Sat, Jul 12, 2025 at 11:06=E2=80=AFPM Rosen Penev <rosenp@gmail.com> wro=
-te:
->
-> Remove a bunch of static memory management functions and simplify with
-> devm.
->
-> Also move allocation before ieee80211_alloc_hw to get rid of goto
-> statements and clarify the error handling a bit more.
->
-> Signed-off-by: Rosen Penev <rosenp@gmail.com>
-> ---
->  .../net/wireless/ralink/rt2x00/rt2800soc.c    | 185 ++++++++----------
->  1 file changed, 79 insertions(+), 106 deletions(-)
+On Mon, Jul 14, 2025 at 10:37:11PM -0700, Kees Cook wrote:
+> On Tue, 01 Jul 2025 14:55:53 +0100, Dave Martin wrote:
+> > This series aims to clean up an aspect of coredump generation:
+> > 
+> > ELF coredumps contain a set of notes describing the state of machine
+> > registers and other information about the dumped process.
+> > 
+> > Notes are identified by a numeric identifier n_type and a "name"
+> > string, although this terminology is somewhat misleading.  Officially,
+> > the "name" of a note is really an "originator" or namespace identifier
+> > that indicates how to interpret n_type [1], although in practice it is
+> > often used more loosely.
+> > 
+> > [...]
+> 
+> Applied to for-next/execve, thanks!
+> 
+> [01/23] regset: Fix kerneldoc for struct regset_get() in user_regset
+>         https://git.kernel.org/kees/c/6fd9e1aa0784
 
-Reviewed-by: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+[...]
 
-Thanks,
-    Sergio Paracuellos
+> [23/23] binfmt_elf: Warn on missing or suspicious regset note names
+>         https://git.kernel.org/kees/c/a55128d392e8
+> 
+> Take care,
+> 
+> -- 
+> Kees Cook
+
+Thanks!
+
+Assuming nobody screams about things going wrong in next, I'll plan to
+water down the paranoid check in binfmt_elf.c:fill_thread_core_info().
+
+Anyone copy-pasting a new arch after this is in mainline shouldn't fall
+foul of this.
+
+Cheers
+---Dave
 
