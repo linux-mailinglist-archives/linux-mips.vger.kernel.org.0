@@ -1,435 +1,570 @@
-Return-Path: <linux-mips+bounces-9834-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9835-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18162B074B1
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Jul 2025 13:25:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D931B07B9E
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Jul 2025 18:59:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1912F3A939A
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Jul 2025 11:25:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4F96F4E3AA6
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Jul 2025 16:59:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE8232F4317;
-	Wed, 16 Jul 2025 11:25:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD99C2F5C37;
+	Wed, 16 Jul 2025 16:59:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gk3tx/ti"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="iVMrVZ7w"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B621C2F3C3E;
-	Wed, 16 Jul 2025 11:25:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A04F62F5C20;
+	Wed, 16 Jul 2025 16:59:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752665139; cv=none; b=hepYH+/Ru1p6uiaC6IZAt/OzcUfWcDmBkG9/e959FD4krhtM9v3wqDLZGh/cJNaoQSiyUmLOrHqGkYU6bOk0rt6MHSVGezoukgTc3j/uhFDPSMkFo420poj2/E/qLPkb6LEyeIj/IcFNWFQTYsSaNUf++y5+9mLf6NTfW47jE8s=
+	t=1752685168; cv=none; b=fWJl3U9y09ohrEXI/xic8bp4wtB2MNgmB5Gg7UJP0U4SdvV9N6lEa2VK2UJZ6/AaABQ6kun6fRVc2/zegeJEQtCGRQG7Xf/RZhr5Fhw2Df03to1H0GL1+cfaEbxatYYZEvjJjxFAgiMvJy4EdBYMyGXNKiwR/1xj44jI2PxZau8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752665139; c=relaxed/simple;
-	bh=YezpPpr9MkIy8MdAiZQpsV+wych1Eokmh7cdGM1/b9Q=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=UQHCd87zlesrLl0KZs3xIOdjHrlg3lKj1VcGPPIpACVWrImp26Gc7Xxb9RF5yaXwMN488YYblruvnKY61y0w+HamKYiLiRBXotUv1cXWFkSvZoPHUT/S1yYZ1rTo3+62Ytuz26ZChUozk3KdZ/dq2aivqeEswjPsE72RyPsvMlA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gk3tx/ti; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 6805DC4CEF7;
-	Wed, 16 Jul 2025 11:25:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1752665139;
-	bh=YezpPpr9MkIy8MdAiZQpsV+wych1Eokmh7cdGM1/b9Q=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=gk3tx/tivZ9M2H6ZJ1ebouXZwJTZ7cHj5vyzmGQ+EUnjNQP08kXPhXIXOtuMX2td0
-	 xZNdCC0SUIKVZmbMqiMrC9/yWi/9hPS+hW5l5gQ5r769Wdn7uq70tphW+FHEuzeWWh
-	 VuhPVTHD+HTQ974n6ZxcYkt0x+j2Ra4MHUhHr2l8mXOf8xnqTTJLQ0IH800A5xSnHI
-	 9TNePbKN0uTszVo0dXvFrmTDxxnaaOEzV7VZ7SvBoq8LQoby1JMflx/IJxpFAxmTMC
-	 L5DTivAidpvnYFGWaZZ/imCr+8aHSLiNgPR++KsOpX6vekSlCVGHsTPKDsOsqY982y
-	 UgTXjOjJ/FVaA==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6080BC83F34;
-	Wed, 16 Jul 2025 11:25:39 +0000 (UTC)
-From: Keguang Zhang via B4 Relay <devnull+keguang.zhang.gmail.com@kernel.org>
-Date: Wed, 16 Jul 2025 19:25:18 +0800
-Subject: [PATCH v3 9/9] MIPS: configs: Consolidate Loongson1 defconfigs
+	s=arc-20240116; t=1752685168; c=relaxed/simple;
+	bh=8tKAW3ILK63tvFgopBEPcTxEPxSi4i6zqnD0dg4NOrE=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=ijk/c2YyIyGmvaY1Ve1sCRJOulquwote2e+WXDQ6cs+5o2ure/hCGnvUiwNtYi4VvwAlRA1ZMHYx5ZiXF1Z+l0JSrRwlcaajSm9htqagw8P29jPRs70i1iapo/cW5DVWA0WeaWyY8gnfCPsNSnqIOWARdIVGOnTnBxb6xKDOJxo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=fail (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=iVMrVZ7w reason="signature verification failed"; arc=none smtp.client-ip=198.137.202.136
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
+Received: from mail.zytor.com ([IPv6:2601:646:8081:9482:6dc:b955:47cb:dcbb])
+	(authenticated bits=0)
+	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 56GGlgcB1606025
+	(version=TLSv1.3 cipher=TLS_AES_256_GCM_SHA384 bits=256 verify=NO);
+	Wed, 16 Jul 2025 09:47:44 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 56GGlgcB1606025
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+	s=2025062101; t=1752684483;
+	bh=Pi512eHi9UqcH1NIe21hPNH34+JTvpPZpIBQ9bkTpeo=;
+	h=From:To:Subject:Date:From;
+	b=iVMrVZ7wCY+XR+v+/5lGaQK0wtkobCborN8fAcNbqMDyZci7UAzAbz6/wkfvH8sml
+	 yQuQrqcZYdI4rVp7Cb4tmJF3SAB/7/Bnn45T+6/vLbmdVlw/iKcjNzcjDQZsRNADMU
+	 2uGk2Q4+1McKUub7sk1zw8j0WQNs9JUdbWdZHTymZ9oCzx42BRH9Opvt0sRdKFTnjE
+	 r5Pxq+Te1DUEUkR3blNMxL6s9Ty/LyXU/8mCYaLcEMp4eCRa6T8/O9vlNQQJ7xkwq3
+	 bWubqVadZ0JXsRMKm4thdvRgAW4s9CUjgaqkkPit8nThtZY7X+pDf6dfxDrcHy407k
+	 pQSnTF2Ke3B0A==
+From: "H. Peter Anvin" <hpa@zytor.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jiri Slaby <jirislaby@kernel.org>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Matt Turner <mattst88@gmail.com>, Vineet Gupta <vgupta@kernel.org>,
+        Russell King <linux@armlinux.org.uk>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>,
+        Brian Cain <bcain@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        Michal Simek <monstr@monstr.eu>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Helge Deller <deller@gmx.de>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
+        Alexandre Ghiti <alex@ghiti.fr>, Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Yoshinori Sato <ysato@users.osdn.me>, Rich Felker <dalias@libc.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        "David S. Miller" <davem@davemloft.net>,
+        Andreas Larsson <andreas@gaisler.com>,
+        Richard Weinberger <richard@nod.at>,
+        Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        "H. Peter Anvin" <hpa@zytor.com>, linux-arch@vger.kernel.org,
+        linux-serial@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-api@vger.kernel.org, Chris Zankel <chris@zankel.net>,
+        Max Filippov <jcmvbkbc@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-m68k@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-um@lists.infradead.org
+Subject: [PATCH 1/1] uapi/termios: remove struct ktermios from uapi headers
+Date: Wed, 16 Jul 2025 09:47:32 -0700
+Message-ID: <20250716164735.170713-1-hpa@zytor.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250716-loongson1-arch-v3-9-d160974d696b@gmail.com>
-References: <20250716-loongson1-arch-v3-0-d160974d696b@gmail.com>
-In-Reply-To: <20250716-loongson1-arch-v3-0-d160974d696b@gmail.com>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
- Keguang Zhang <keguang.zhang@gmail.com>
-Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org
-X-Mailer: b4 0.13.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1752665136; l=10713;
- i=keguang.zhang@gmail.com; s=20231129; h=from:subject:message-id;
- bh=vXaIa8N3GToUGpAmk80FkzsQAYrU6OjHna1ZLvsKN7s=;
- b=TXulWvlekYH10mgmEKNMpSHZTHGFm8BteCB79xroD70KiFpzV6qJYpFNDO4DVjYMiYCQT6p54
- l/U+F+LkfKeCuzSnNVe6ArwGVVhXuauePC+GKQ9Eh7eA2OAgW939W17
-X-Developer-Key: i=keguang.zhang@gmail.com; a=ed25519;
- pk=FMKGj/JgKll/MgClpNZ3frIIogsh5e5r8CeW2mr+WLs=
-X-Endpoint-Received: by B4 Relay for keguang.zhang@gmail.com/20231129 with
- auth_id=102
-X-Original-From: Keguang Zhang <keguang.zhang@gmail.com>
-Reply-To: keguang.zhang@gmail.com
+Content-Transfer-Encoding: 8bit
 
-From: Keguang Zhang <keguang.zhang@gmail.com>
+struct ktermios is not, nor has it ever been, a UAPI.  Remove it from
+the UAPI headers.
 
-Unify loongson{1b,1c}_defconfig into a single loongson1_defconfig.
+Normally we have shadowed kernel-only headers that include the uapi
+ones; in this case this would be <asm/termbits.h>, however, I was
+unable to find a way by which *some* paths would still somehow pick up
+the UAPI header only (presumably due to the mix of arch-specific and
+asm-generic headers), so I separated out the kernel-specific parts
+into a new header <asm/ktermios.h>.
 
-Enable the following options by default:
- - CONFIG_SERIAL_OF_PLATFORM
- - CONFIG_RTC_DRV_LOONGSON
- - CONFIG_LOONGSON1_APB_DMA
- - CONFIG_MTD_NAND_LOONGSON1
- - CONFIG_SND_LOONGSON1_AC97
+<linux/termios.h> now has a kernel version, which only differs by
+including <asm/ktermios.h>.
 
-Also disable unnecessary options.
-
-Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+Signed-off-by: H. Peter Anvin <hpa@zytor.com>
 ---
- MAINTAINERS                                        |   1 +
- .../{loongson1b_defconfig => loongson1_defconfig}  |  94 +++++++++++++---
- arch/mips/configs/loongson1c_defconfig             | 121 ---------------------
- 3 files changed, 78 insertions(+), 138 deletions(-)
+ arch/alpha/include/asm/ktermios.h        |  2 ++
+ arch/alpha/include/uapi/asm/termbits.h   | 17 ++--------------
+ arch/arc/include/asm/ktermios.h          |  1 +
+ arch/arm/include/asm/ktermios.h          |  1 +
+ arch/arm64/include/asm/ktermios.h        |  1 +
+ arch/csky/include/asm/ktermios.h         |  1 +
+ arch/hexagon/include/asm/ktermios.h      |  1 +
+ arch/loongarch/include/asm/ktermios.h    |  1 +
+ arch/m68k/include/asm/ktermios.h         |  1 +
+ arch/microblaze/include/asm/ktermios.h   |  1 +
+ arch/mips/include/asm/ktermios.h         |  1 +
+ arch/mips/include/uapi/asm/termbits.h    | 15 ++------------
+ arch/nios2/include/asm/ktermios.h        |  1 +
+ arch/openrisc/include/asm/ktermios.h     |  1 +
+ arch/parisc/include/asm/ktermios.h       |  1 +
+ arch/parisc/include/uapi/asm/termbits.h  | 15 ++------------
+ arch/powerpc/include/asm/ktermios.h      |  2 ++
+ arch/powerpc/include/uapi/asm/termbits.h | 13 ------------
+ arch/riscv/include/asm/ktermios.h        |  1 +
+ arch/s390/include/asm/ktermios.h         |  1 +
+ arch/sh/include/asm/ktermios.h           |  1 +
+ arch/sparc/include/asm/ktermios.h        | 11 ++++++++++
+ arch/sparc/include/asm/termbits.h        |  9 --------
+ arch/um/include/asm/ktermios.h           |  1 +
+ arch/x86/include/asm/ktermios.h          |  1 +
+ arch/xtensa/include/asm/ktermios.h       |  1 +
+ include/asm-generic/ktermios.h           | 26 ++++++++++++++++++++++++
+ include/linux/termios.h                  |  7 +++++++
+ include/uapi/asm-generic/termbits.h      | 15 ++------------
+ include/uapi/linux/termios.h             |  4 ++--
+ 30 files changed, 76 insertions(+), 78 deletions(-)
+ create mode 100644 arch/alpha/include/asm/ktermios.h
+ create mode 100644 arch/arc/include/asm/ktermios.h
+ create mode 100644 arch/arm/include/asm/ktermios.h
+ create mode 100644 arch/arm64/include/asm/ktermios.h
+ create mode 100644 arch/csky/include/asm/ktermios.h
+ create mode 100644 arch/hexagon/include/asm/ktermios.h
+ create mode 100644 arch/loongarch/include/asm/ktermios.h
+ create mode 100644 arch/m68k/include/asm/ktermios.h
+ create mode 100644 arch/microblaze/include/asm/ktermios.h
+ create mode 100644 arch/mips/include/asm/ktermios.h
+ create mode 100644 arch/nios2/include/asm/ktermios.h
+ create mode 100644 arch/openrisc/include/asm/ktermios.h
+ create mode 100644 arch/parisc/include/asm/ktermios.h
+ create mode 100644 arch/powerpc/include/asm/ktermios.h
+ create mode 100644 arch/riscv/include/asm/ktermios.h
+ create mode 100644 arch/s390/include/asm/ktermios.h
+ create mode 100644 arch/sh/include/asm/ktermios.h
+ create mode 100644 arch/sparc/include/asm/ktermios.h
+ delete mode 100644 arch/sparc/include/asm/termbits.h
+ create mode 100644 arch/um/include/asm/ktermios.h
+ create mode 100644 arch/x86/include/asm/ktermios.h
+ create mode 100644 arch/xtensa/include/asm/ktermios.h
+ create mode 100644 include/asm-generic/ktermios.h
+ create mode 100644 include/linux/termios.h
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d42a83656879..c73e25af147c 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -16684,6 +16684,7 @@ L:	linux-mips@vger.kernel.org
- S:	Maintained
- F:	Documentation/devicetree/bindings/*/loongson,ls1*.yaml
- F:	arch/mips/boot/dts/loongson/loongson1*
-+F:	arch/mips/configs/loongson1_defconfig
- F:	arch/mips/loongson32/
- F:	drivers/*/*loongson1*
- F:	drivers/mtd/nand/raw/loongson1-nand-controller.c
-diff --git a/arch/mips/configs/loongson1b_defconfig b/arch/mips/configs/loongson1_defconfig
-similarity index 51%
-rename from arch/mips/configs/loongson1b_defconfig
-rename to arch/mips/configs/loongson1_defconfig
-index 68207b31dc20..81acae6f61c8 100644
---- a/arch/mips/configs/loongson1b_defconfig
-+++ b/arch/mips/configs/loongson1_defconfig
-@@ -1,7 +1,6 @@
- # CONFIG_LOCALVERSION_AUTO is not set
- CONFIG_KERNEL_XZ=y
- CONFIG_SYSVIPC=y
--CONFIG_HIGH_RES_TIMERS=y
- CONFIG_PREEMPT=y
- CONFIG_BSD_PROCESS_ACCT=y
- CONFIG_BSD_PROCESS_ACCT_V3=y
-@@ -12,15 +11,16 @@ CONFIG_NAMESPACES=y
- CONFIG_CC_OPTIMIZE_FOR_SIZE=y
- CONFIG_EXPERT=y
- CONFIG_PERF_EVENTS=y
--# CONFIG_COMPAT_BRK is not set
- CONFIG_MACH_LOONGSON32=y
--# CONFIG_SECCOMP is not set
- # CONFIG_SUSPEND is not set
-+# CONFIG_SECCOMP is not set
-+# CONFIG_GCC_PLUGINS is not set
- CONFIG_MODULES=y
- CONFIG_MODULE_UNLOAD=y
- CONFIG_MODVERSIONS=y
--# CONFIG_BLK_DEV_BSG is not set
-+# CONFIG_BLOCK_LEGACY_AUTOLOAD is not set
- # CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
-+# CONFIG_COMPAT_BRK is not set
- CONFIG_NET=y
- CONFIG_PACKET=y
- CONFIG_UNIX=y
-@@ -31,6 +31,7 @@ CONFIG_SYN_COOKIES=y
- # CONFIG_INET_DIAG is not set
- # CONFIG_IPV6 is not set
- # CONFIG_WIRELESS is not set
-+# CONFIG_ETHTOOL_NETLINK is not set
- CONFIG_DEVTMPFS=y
- CONFIG_DEVTMPFS_MOUNT=y
- # CONFIG_STANDALONE is not set
-@@ -38,32 +39,75 @@ CONFIG_MTD=y
- CONFIG_MTD_CMDLINE_PARTS=y
- CONFIG_MTD_BLOCK=y
- CONFIG_MTD_RAW_NAND=y
-+CONFIG_MTD_NAND_LOONGSON1=y
- CONFIG_MTD_UBI=y
- CONFIG_BLK_DEV_LOOP=y
- CONFIG_SCSI=m
- # CONFIG_SCSI_PROC_FS is not set
- CONFIG_BLK_DEV_SD=m
-+# CONFIG_BLK_DEV_BSG is not set
- # CONFIG_SCSI_LOWLEVEL is not set
- CONFIG_NETDEVICES=y
-+# CONFIG_NET_VENDOR_ALACRITECH is not set
-+# CONFIG_NET_VENDOR_AMAZON is not set
-+# CONFIG_NET_VENDOR_AQUANTIA is not set
-+# CONFIG_NET_VENDOR_ARC is not set
-+# CONFIG_NET_VENDOR_ASIX is not set
- # CONFIG_NET_VENDOR_BROADCOM is not set
-+# CONFIG_NET_VENDOR_CADENCE is not set
-+# CONFIG_NET_VENDOR_CAVIUM is not set
-+# CONFIG_NET_VENDOR_CORTINA is not set
-+# CONFIG_NET_VENDOR_DAVICOM is not set
-+# CONFIG_NET_VENDOR_ENGLEDER is not set
-+# CONFIG_NET_VENDOR_EZCHIP is not set
-+# CONFIG_NET_VENDOR_FUNGIBLE is not set
-+# CONFIG_NET_VENDOR_GOOGLE is not set
-+# CONFIG_NET_VENDOR_HISILICON is not set
-+# CONFIG_NET_VENDOR_HUAWEI is not set
- # CONFIG_NET_VENDOR_INTEL is not set
-+# CONFIG_NET_VENDOR_LITEX is not set
- # CONFIG_NET_VENDOR_MARVELL is not set
-+# CONFIG_NET_VENDOR_META is not set
- # CONFIG_NET_VENDOR_MICREL is not set
-+# CONFIG_NET_VENDOR_MICROCHIP is not set
-+# CONFIG_NET_VENDOR_MICROSEMI is not set
-+# CONFIG_NET_VENDOR_MICROSOFT is not set
-+# CONFIG_NET_VENDOR_NI is not set
- # CONFIG_NET_VENDOR_NATSEMI is not set
-+# CONFIG_NET_VENDOR_NETRONOME is not set
-+# CONFIG_NET_VENDOR_PENSANDO is not set
-+# CONFIG_NET_VENDOR_QUALCOMM is not set
-+# CONFIG_NET_VENDOR_RENESAS is not set
-+# CONFIG_NET_VENDOR_ROCKER is not set
-+# CONFIG_NET_VENDOR_SAMSUNG is not set
- # CONFIG_NET_VENDOR_SEEQ is not set
-+# CONFIG_NET_VENDOR_SOLARFLARE is not set
- # CONFIG_NET_VENDOR_SMSC is not set
-+# CONFIG_NET_VENDOR_SOCIONEXT is not set
- CONFIG_STMMAC_ETH=y
-+# CONFIG_DWMAC_GENERIC is not set
-+# CONFIG_NET_VENDOR_SYNOPSYS is not set
-+# CONFIG_NET_VENDOR_VERTEXCOM is not set
-+# CONFIG_NET_VENDOR_VIA is not set
-+# CONFIG_NET_VENDOR_WANGXUN is not set
- # CONFIG_NET_VENDOR_WIZNET is not set
-+# CONFIG_NET_VENDOR_XILINX is not set
-+CONFIG_DAVICOM_PHY=y
-+CONFIG_REALTEK_PHY=y
-+# CONFIG_USB_NET_DRIVERS is not set
- # CONFIG_WLAN is not set
- CONFIG_INPUT_EVDEV=y
- # CONFIG_INPUT_KEYBOARD is not set
- # CONFIG_INPUT_MOUSE is not set
- # CONFIG_SERIO is not set
-+# CONFIG_VT_CONSOLE is not set
- CONFIG_VT_HW_CONSOLE_BINDING=y
- CONFIG_LEGACY_PTY_COUNT=8
- CONFIG_SERIAL_8250=y
- CONFIG_SERIAL_8250_CONSOLE=y
-+CONFIG_SERIAL_OF_PLATFORM=y
- # CONFIG_HW_RANDOM is not set
-+# CONFIG_PTP_1588_CLOCK is not set
- CONFIG_GPIOLIB=y
- CONFIG_GPIO_LOONGSON1=y
- # CONFIG_HWMON is not set
-@@ -71,7 +115,15 @@ CONFIG_WATCHDOG=y
- CONFIG_WATCHDOG_NOWAYOUT=y
- CONFIG_WATCHDOG_SYSFS=y
- CONFIG_LOONGSON1_WDT=y
--# CONFIG_VGA_CONSOLE is not set
-+CONFIG_SOUND=y
-+CONFIG_SND=y
-+# CONFIG_SND_SUPPORT_OLD_API is not set
-+# CONFIG_SND_DRIVERS is not set
-+# CONFIG_SND_MIPS is not set
-+# CONFIG_SND_USB is not set
-+CONFIG_SND_SOC=y
-+CONFIG_SND_LOONGSON1_AC97=y
-+CONFIG_SND_SIMPLE_CARD=y
- CONFIG_HID_GENERIC=m
- CONFIG_USB_HID=m
- CONFIG_USB=y
-@@ -86,17 +138,20 @@ CONFIG_NEW_LEDS=y
- CONFIG_LEDS_CLASS=y
- CONFIG_LEDS_GPIO=y
- CONFIG_LEDS_TRIGGERS=y
-+CONFIG_LEDS_TRIGGER_MTD=y
- CONFIG_LEDS_TRIGGER_HEARTBEAT=y
- CONFIG_RTC_CLASS=y
--CONFIG_RTC_DRV_LOONGSON1=y
-+# CONFIG_RTC_NVMEM is not set
-+CONFIG_RTC_DRV_LOONGSON=y
-+CONFIG_DMADEVICES=y
-+CONFIG_LOONGSON1_APB_DMA=y
-+# CONFIG_VIRTIO_MENU is not set
-+# CONFIG_VHOST_MENU is not set
-+# CONFIG_MIPS_PLATFORM_DEVICES is not set
- # CONFIG_IOMMU_SUPPORT is not set
--CONFIG_EXT2_FS=y
--CONFIG_EXT2_FS_XATTR=y
--CONFIG_EXT2_FS_POSIX_ACL=y
--CONFIG_EXT2_FS_SECURITY=y
--CONFIG_EXT3_FS=y
--CONFIG_EXT3_FS_POSIX_ACL=y
--CONFIG_EXT3_FS_SECURITY=y
-+# CONFIG_NVMEM is not set
-+CONFIG_EXT4_FS=y
-+CONFIG_EXT4_FS_POSIX_ACL=y
- # CONFIG_DNOTIFY is not set
- CONFIG_VFAT_FS=y
- CONFIG_PROC_KCORE=y
-@@ -105,16 +160,21 @@ CONFIG_TMPFS_POSIX_ACL=y
- CONFIG_UBIFS_FS=y
- CONFIG_UBIFS_FS_ADVANCED_COMPR=y
- CONFIG_UBIFS_ATIME_SUPPORT=y
-+# CONFIG_UBIFS_FS_SECURITY is not set
- CONFIG_NFS_FS=y
- CONFIG_ROOT_NFS=y
- CONFIG_NLS_CODEPAGE_437=m
- CONFIG_NLS_ISO8859_1=m
--# CONFIG_CRYPTO_ECHAINIV is not set
- # CONFIG_CRYPTO_HW is not set
-+# CONFIG_XZ_DEC_X86 is not set
-+# CONFIG_XZ_DEC_POWERPC is not set
-+# CONFIG_XZ_DEC_ARM is not set
-+# CONFIG_XZ_DEC_ARMTHUMB is not set
-+# CONFIG_XZ_DEC_ARM64 is not set
-+# CONFIG_XZ_DEC_SPARC is not set
-+# CONFIG_XZ_DEC_RISCV is not set
- CONFIG_DYNAMIC_DEBUG=y
--CONFIG_DEBUG_FS=y
-+# CONFIG_DEBUG_MISC is not set
- CONFIG_MAGIC_SYSRQ=y
--# CONFIG_SCHED_DEBUG is not set
--# CONFIG_DEBUG_PREEMPT is not set
- # CONFIG_FTRACE is not set
- # CONFIG_EARLY_PRINTK is not set
-diff --git a/arch/mips/configs/loongson1c_defconfig b/arch/mips/configs/loongson1c_defconfig
+diff --git a/arch/alpha/include/asm/ktermios.h b/arch/alpha/include/asm/ktermios.h
+new file mode 100644
+index 000000000000..f1e3d24b8e61
+--- /dev/null
++++ b/arch/alpha/include/asm/ktermios.h
+@@ -0,0 +1,2 @@
++#define KTERMIOS_C_CC_BEFORE_C_LINE 1
++#include <asm-generic/ktermios.h>
+diff --git a/arch/alpha/include/uapi/asm/termbits.h b/arch/alpha/include/uapi/asm/termbits.h
+index f1290b22072b..50a1b468b81c 100644
+--- a/arch/alpha/include/uapi/asm/termbits.h
++++ b/arch/alpha/include/uapi/asm/termbits.h
+@@ -1,6 +1,6 @@
+ /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+-#ifndef _ALPHA_TERMBITS_H
+-#define _ALPHA_TERMBITS_H
++#ifndef _UAPI_ALPHA_TERMBITS_H
++#define _UAPI_ALPHA_TERMBITS_H
+ 
+ #include <asm-generic/termbits-common.h>
+ 
+@@ -37,19 +37,6 @@ struct termios2 {
+ 	speed_t c_ospeed;		/* output speed */
+ };
+ 
+-/* Alpha has matching termios and ktermios */
+-
+-struct ktermios {
+-	tcflag_t c_iflag;		/* input mode flags */
+-	tcflag_t c_oflag;		/* output mode flags */
+-	tcflag_t c_cflag;		/* control mode flags */
+-	tcflag_t c_lflag;		/* local mode flags */
+-	cc_t c_cc[NCCS];		/* control characters */
+-	cc_t c_line;			/* line discipline (== c_cc[19]) */
+-	speed_t c_ispeed;		/* input speed */
+-	speed_t c_ospeed;		/* output speed */
+-};
+-
+ /* c_cc characters */
+ #define VEOF		 0
+ #define VEOL		 1
+diff --git a/arch/arc/include/asm/ktermios.h b/arch/arc/include/asm/ktermios.h
+new file mode 100644
+index 000000000000..4320921a82a9
+--- /dev/null
++++ b/arch/arc/include/asm/ktermios.h
+@@ -0,0 +1 @@
++#include <asm-generic/ktermios.h>
+diff --git a/arch/arm/include/asm/ktermios.h b/arch/arm/include/asm/ktermios.h
+new file mode 100644
+index 000000000000..4320921a82a9
+--- /dev/null
++++ b/arch/arm/include/asm/ktermios.h
+@@ -0,0 +1 @@
++#include <asm-generic/ktermios.h>
+diff --git a/arch/arm64/include/asm/ktermios.h b/arch/arm64/include/asm/ktermios.h
+new file mode 100644
+index 000000000000..4320921a82a9
+--- /dev/null
++++ b/arch/arm64/include/asm/ktermios.h
+@@ -0,0 +1 @@
++#include <asm-generic/ktermios.h>
+diff --git a/arch/csky/include/asm/ktermios.h b/arch/csky/include/asm/ktermios.h
+new file mode 100644
+index 000000000000..4320921a82a9
+--- /dev/null
++++ b/arch/csky/include/asm/ktermios.h
+@@ -0,0 +1 @@
++#include <asm-generic/ktermios.h>
+diff --git a/arch/hexagon/include/asm/ktermios.h b/arch/hexagon/include/asm/ktermios.h
+new file mode 100644
+index 000000000000..4320921a82a9
+--- /dev/null
++++ b/arch/hexagon/include/asm/ktermios.h
+@@ -0,0 +1 @@
++#include <asm-generic/ktermios.h>
+diff --git a/arch/loongarch/include/asm/ktermios.h b/arch/loongarch/include/asm/ktermios.h
+new file mode 100644
+index 000000000000..4320921a82a9
+--- /dev/null
++++ b/arch/loongarch/include/asm/ktermios.h
+@@ -0,0 +1 @@
++#include <asm-generic/ktermios.h>
+diff --git a/arch/m68k/include/asm/ktermios.h b/arch/m68k/include/asm/ktermios.h
+new file mode 100644
+index 000000000000..4320921a82a9
+--- /dev/null
++++ b/arch/m68k/include/asm/ktermios.h
+@@ -0,0 +1 @@
++#include <asm-generic/ktermios.h>
+diff --git a/arch/microblaze/include/asm/ktermios.h b/arch/microblaze/include/asm/ktermios.h
+new file mode 100644
+index 000000000000..4320921a82a9
+--- /dev/null
++++ b/arch/microblaze/include/asm/ktermios.h
+@@ -0,0 +1 @@
++#include <asm-generic/ktermios.h>
+diff --git a/arch/mips/include/asm/ktermios.h b/arch/mips/include/asm/ktermios.h
+new file mode 100644
+index 000000000000..4320921a82a9
+--- /dev/null
++++ b/arch/mips/include/asm/ktermios.h
+@@ -0,0 +1 @@
++#include <asm-generic/ktermios.h>
+diff --git a/arch/mips/include/uapi/asm/termbits.h b/arch/mips/include/uapi/asm/termbits.h
+index 1eb60903d6f0..dacefee984d6 100644
+--- a/arch/mips/include/uapi/asm/termbits.h
++++ b/arch/mips/include/uapi/asm/termbits.h
+@@ -8,8 +8,8 @@
+  * Copyright (C) 1999 Silicon Graphics, Inc.
+  * Copyright (C) 2001 MIPS Technologies, Inc.
+  */
+-#ifndef _ASM_TERMBITS_H
+-#define _ASM_TERMBITS_H
++#ifndef _UAPI_ASM_TERMBITS_H
++#define _UAPI_ASM_TERMBITS_H
+ 
+ #include <asm-generic/termbits-common.h>
+ 
+@@ -40,17 +40,6 @@ struct termios2 {
+ 	speed_t c_ospeed;		/* output speed */
+ };
+ 
+-struct ktermios {
+-	tcflag_t c_iflag;		/* input mode flags */
+-	tcflag_t c_oflag;		/* output mode flags */
+-	tcflag_t c_cflag;		/* control mode flags */
+-	tcflag_t c_lflag;		/* local mode flags */
+-	cc_t c_line;			/* line discipline */
+-	cc_t c_cc[NCCS];		/* control characters */
+-	speed_t c_ispeed;		/* input speed */
+-	speed_t c_ospeed;		/* output speed */
+-};
+-
+ /* c_cc characters */
+ #define VINTR		 0		/* Interrupt character [ISIG] */
+ #define VQUIT		 1		/* Quit character [ISIG] */
+diff --git a/arch/nios2/include/asm/ktermios.h b/arch/nios2/include/asm/ktermios.h
+new file mode 100644
+index 000000000000..4320921a82a9
+--- /dev/null
++++ b/arch/nios2/include/asm/ktermios.h
+@@ -0,0 +1 @@
++#include <asm-generic/ktermios.h>
+diff --git a/arch/openrisc/include/asm/ktermios.h b/arch/openrisc/include/asm/ktermios.h
+new file mode 100644
+index 000000000000..4320921a82a9
+--- /dev/null
++++ b/arch/openrisc/include/asm/ktermios.h
+@@ -0,0 +1 @@
++#include <asm-generic/ktermios.h>
+diff --git a/arch/parisc/include/asm/ktermios.h b/arch/parisc/include/asm/ktermios.h
+new file mode 100644
+index 000000000000..4320921a82a9
+--- /dev/null
++++ b/arch/parisc/include/asm/ktermios.h
+@@ -0,0 +1 @@
++#include <asm-generic/ktermios.h>
+diff --git a/arch/parisc/include/uapi/asm/termbits.h b/arch/parisc/include/uapi/asm/termbits.h
+index 3a8938d26fb4..d8818b887680 100644
+--- a/arch/parisc/include/uapi/asm/termbits.h
++++ b/arch/parisc/include/uapi/asm/termbits.h
+@@ -1,6 +1,6 @@
+ /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+-#ifndef __ARCH_PARISC_TERMBITS_H__
+-#define __ARCH_PARISC_TERMBITS_H__
++#ifndef _UAPI_PARISC_TERMBITS_H
++#define _UAPI_PARISC_TERMBITS_H
+ 
+ #include <asm-generic/termbits-common.h>
+ 
+@@ -27,17 +27,6 @@ struct termios2 {
+ 	speed_t c_ospeed;		/* output speed */
+ };
+ 
+-struct ktermios {
+-	tcflag_t c_iflag;		/* input mode flags */
+-	tcflag_t c_oflag;		/* output mode flags */
+-	tcflag_t c_cflag;		/* control mode flags */
+-	tcflag_t c_lflag;		/* local mode flags */
+-	cc_t c_line;			/* line discipline */
+-	cc_t c_cc[NCCS];		/* control characters */
+-	speed_t c_ispeed;		/* input speed */
+-	speed_t c_ospeed;		/* output speed */
+-};
+-
+ /* c_cc characters */
+ #define VINTR		 0
+ #define VQUIT		 1
+diff --git a/arch/powerpc/include/asm/ktermios.h b/arch/powerpc/include/asm/ktermios.h
+new file mode 100644
+index 000000000000..f1e3d24b8e61
+--- /dev/null
++++ b/arch/powerpc/include/asm/ktermios.h
+@@ -0,0 +1,2 @@
++#define KTERMIOS_C_CC_BEFORE_C_LINE 1
++#include <asm-generic/ktermios.h>
+diff --git a/arch/powerpc/include/uapi/asm/termbits.h b/arch/powerpc/include/uapi/asm/termbits.h
+index 21dc86dcb2f1..f4e4d8270c8e 100644
+--- a/arch/powerpc/include/uapi/asm/termbits.h
++++ b/arch/powerpc/include/uapi/asm/termbits.h
+@@ -31,19 +31,6 @@ struct termios {
+ 	speed_t c_ospeed;		/* output speed */
+ };
+ 
+-/* For PowerPC the termios and ktermios are the same */
+-
+-struct ktermios {
+-	tcflag_t c_iflag;		/* input mode flags */
+-	tcflag_t c_oflag;		/* output mode flags */
+-	tcflag_t c_cflag;		/* control mode flags */
+-	tcflag_t c_lflag;		/* local mode flags */
+-	cc_t c_cc[NCCS];		/* control characters */
+-	cc_t c_line;			/* line discipline (== c_cc[19]) */
+-	speed_t c_ispeed;		/* input speed */
+-	speed_t c_ospeed;		/* output speed */
+-};
+-
+ /* c_cc characters */
+ #define VINTR 	         0
+ #define VQUIT 	         1
+diff --git a/arch/riscv/include/asm/ktermios.h b/arch/riscv/include/asm/ktermios.h
+new file mode 100644
+index 000000000000..4320921a82a9
+--- /dev/null
++++ b/arch/riscv/include/asm/ktermios.h
+@@ -0,0 +1 @@
++#include <asm-generic/ktermios.h>
+diff --git a/arch/s390/include/asm/ktermios.h b/arch/s390/include/asm/ktermios.h
+new file mode 100644
+index 000000000000..4320921a82a9
+--- /dev/null
++++ b/arch/s390/include/asm/ktermios.h
+@@ -0,0 +1 @@
++#include <asm-generic/ktermios.h>
+diff --git a/arch/sh/include/asm/ktermios.h b/arch/sh/include/asm/ktermios.h
+new file mode 100644
+index 000000000000..4320921a82a9
+--- /dev/null
++++ b/arch/sh/include/asm/ktermios.h
+@@ -0,0 +1 @@
++#include <asm-generic/ktermios.h>
+diff --git a/arch/sparc/include/asm/ktermios.h b/arch/sparc/include/asm/ktermios.h
+new file mode 100644
+index 000000000000..bdd3682eecef
+--- /dev/null
++++ b/arch/sparc/include/asm/ktermios.h
+@@ -0,0 +1,11 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef _SPARC_KTERMIOS_H
++#define _SPARC_KTERMIOS_H
++
++#define VMIN     16
++#define VTIME    17
++#define KNCCS	 (NCCS+2)
++
++#include <asm-generic/ktermios.h>
++
++#endif /* !(_SPARC_KTERMIOS_H) */
+diff --git a/arch/sparc/include/asm/termbits.h b/arch/sparc/include/asm/termbits.h
 deleted file mode 100644
-index c3910a9dee9e..000000000000
---- a/arch/mips/configs/loongson1c_defconfig
+index fa9de4a46d36..000000000000
+--- a/arch/sparc/include/asm/termbits.h
 +++ /dev/null
-@@ -1,121 +0,0 @@
--# CONFIG_LOCALVERSION_AUTO is not set
--CONFIG_KERNEL_XZ=y
--CONFIG_SYSVIPC=y
--CONFIG_HIGH_RES_TIMERS=y
--CONFIG_PREEMPT=y
--CONFIG_BSD_PROCESS_ACCT=y
--CONFIG_BSD_PROCESS_ACCT_V3=y
--CONFIG_IKCONFIG=y
--CONFIG_IKCONFIG_PROC=y
--CONFIG_LOG_BUF_SHIFT=16
--CONFIG_NAMESPACES=y
--CONFIG_CC_OPTIMIZE_FOR_SIZE=y
--CONFIG_EXPERT=y
--CONFIG_PERF_EVENTS=y
--# CONFIG_COMPAT_BRK is not set
--CONFIG_MACH_LOONGSON32=y
--CONFIG_LOONGSON1_LS1C=y
--# CONFIG_SECCOMP is not set
--# CONFIG_SUSPEND is not set
--CONFIG_MODULES=y
--CONFIG_MODULE_UNLOAD=y
--CONFIG_MODVERSIONS=y
--# CONFIG_BLK_DEV_BSG is not set
--# CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS is not set
--CONFIG_NET=y
--CONFIG_PACKET=y
--CONFIG_UNIX=y
--CONFIG_INET=y
--CONFIG_IP_PNP=y
--CONFIG_IP_PNP_DHCP=y
--CONFIG_SYN_COOKIES=y
--# CONFIG_INET_DIAG is not set
--# CONFIG_IPV6 is not set
--# CONFIG_WIRELESS is not set
--CONFIG_DEVTMPFS=y
--CONFIG_DEVTMPFS_MOUNT=y
--# CONFIG_STANDALONE is not set
--CONFIG_MTD=y
--CONFIG_MTD_CMDLINE_PARTS=y
--CONFIG_MTD_BLOCK=y
--CONFIG_MTD_RAW_NAND=y
--CONFIG_MTD_UBI=y
--CONFIG_BLK_DEV_LOOP=y
--CONFIG_SCSI=m
--# CONFIG_SCSI_PROC_FS is not set
--CONFIG_BLK_DEV_SD=m
--# CONFIG_SCSI_LOWLEVEL is not set
--CONFIG_NETDEVICES=y
--# CONFIG_NET_VENDOR_BROADCOM is not set
--# CONFIG_NET_VENDOR_INTEL is not set
--# CONFIG_NET_VENDOR_MARVELL is not set
--# CONFIG_NET_VENDOR_MICREL is not set
--# CONFIG_NET_VENDOR_NATSEMI is not set
--# CONFIG_NET_VENDOR_SEEQ is not set
--# CONFIG_NET_VENDOR_SMSC is not set
--CONFIG_STMMAC_ETH=y
--# CONFIG_NET_VENDOR_WIZNET is not set
--# CONFIG_WLAN is not set
--CONFIG_INPUT_EVDEV=y
--# CONFIG_INPUT_KEYBOARD is not set
--# CONFIG_INPUT_MOUSE is not set
--# CONFIG_SERIO is not set
--CONFIG_VT_HW_CONSOLE_BINDING=y
--CONFIG_LEGACY_PTY_COUNT=8
--CONFIG_SERIAL_8250=y
--CONFIG_SERIAL_8250_CONSOLE=y
--# CONFIG_HW_RANDOM is not set
--CONFIG_GPIOLIB=y
--CONFIG_GPIO_LOONGSON1=y
--# CONFIG_HWMON is not set
--CONFIG_WATCHDOG=y
--CONFIG_WATCHDOG_NOWAYOUT=y
--CONFIG_WATCHDOG_SYSFS=y
--CONFIG_LOONGSON1_WDT=y
--# CONFIG_VGA_CONSOLE is not set
--CONFIG_HID_GENERIC=m
--CONFIG_USB_HID=m
--CONFIG_USB=y
--CONFIG_USB_ANNOUNCE_NEW_DEVICES=y
--CONFIG_USB_EHCI_HCD=y
--# CONFIG_USB_EHCI_TT_NEWSCHED is not set
--CONFIG_USB_EHCI_HCD_PLATFORM=y
--CONFIG_USB_STORAGE=m
--CONFIG_USB_SERIAL=m
--CONFIG_USB_SERIAL_PL2303=m
--CONFIG_NEW_LEDS=y
--CONFIG_LEDS_CLASS=y
--CONFIG_LEDS_GPIO=y
--CONFIG_LEDS_TRIGGERS=y
--CONFIG_LEDS_TRIGGER_HEARTBEAT=y
--CONFIG_RTC_CLASS=y
--CONFIG_RTC_DRV_LOONGSON1=y
--# CONFIG_IOMMU_SUPPORT is not set
--CONFIG_EXT2_FS=y
--CONFIG_EXT2_FS_XATTR=y
--CONFIG_EXT2_FS_POSIX_ACL=y
--CONFIG_EXT2_FS_SECURITY=y
--CONFIG_EXT3_FS=y
--CONFIG_EXT3_FS_POSIX_ACL=y
--CONFIG_EXT3_FS_SECURITY=y
--# CONFIG_DNOTIFY is not set
--CONFIG_VFAT_FS=y
--CONFIG_PROC_KCORE=y
--CONFIG_TMPFS=y
--CONFIG_TMPFS_POSIX_ACL=y
--CONFIG_UBIFS_FS=y
--CONFIG_UBIFS_FS_ADVANCED_COMPR=y
--CONFIG_UBIFS_ATIME_SUPPORT=y
--CONFIG_NFS_FS=y
--CONFIG_ROOT_NFS=y
--CONFIG_NLS_CODEPAGE_437=m
--CONFIG_NLS_ISO8859_1=m
--# CONFIG_CRYPTO_ECHAINIV is not set
--# CONFIG_CRYPTO_HW is not set
--CONFIG_DYNAMIC_DEBUG=y
--CONFIG_DEBUG_FS=y
--CONFIG_MAGIC_SYSRQ=y
--# CONFIG_SCHED_DEBUG is not set
--# CONFIG_DEBUG_PREEMPT is not set
--# CONFIG_FTRACE is not set
--# CONFIG_EARLY_PRINTK is not set
-
+@@ -1,9 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef _SPARC_TERMBITS_H
+-#define _SPARC_TERMBITS_H
+-
+-#include <uapi/asm/termbits.h>
+-
+-#define VMIN     16
+-#define VTIME    17
+-#endif /* !(_SPARC_TERMBITS_H) */
+diff --git a/arch/um/include/asm/ktermios.h b/arch/um/include/asm/ktermios.h
+new file mode 100644
+index 000000000000..4320921a82a9
+--- /dev/null
++++ b/arch/um/include/asm/ktermios.h
+@@ -0,0 +1 @@
++#include <asm-generic/ktermios.h>
+diff --git a/arch/x86/include/asm/ktermios.h b/arch/x86/include/asm/ktermios.h
+new file mode 100644
+index 000000000000..4320921a82a9
+--- /dev/null
++++ b/arch/x86/include/asm/ktermios.h
+@@ -0,0 +1 @@
++#include <asm-generic/ktermios.h>
+diff --git a/arch/xtensa/include/asm/ktermios.h b/arch/xtensa/include/asm/ktermios.h
+new file mode 100644
+index 000000000000..4320921a82a9
+--- /dev/null
++++ b/arch/xtensa/include/asm/ktermios.h
+@@ -0,0 +1 @@
++#include <asm-generic/ktermios.h>
+diff --git a/include/asm-generic/ktermios.h b/include/asm-generic/ktermios.h
+new file mode 100644
+index 000000000000..bf22e22d8130
+--- /dev/null
++++ b/include/asm-generic/ktermios.h
+@@ -0,0 +1,26 @@
++#ifndef _ASM_GENERIC_KTERMIOS_H
++#define _ASM_GENERIC_KTERMIOS_H
++
++#ifndef KNCCS
++# define KNCCS NCCS
++#endif
++
++struct ktermios {
++	tcflag_t c_iflag;		/* input mode flags */
++	tcflag_t c_oflag;		/* output mode flags */
++	tcflag_t c_cflag;		/* control mode flags */
++	tcflag_t c_lflag;		/* local mode flags */
++#ifndef KTERMIOS_C_CC_BEFORE_C_LINE
++	/* Most architectures */
++	cc_t c_line;			/* line discipline */
++	cc_t c_cc[KNCCS];		/* control characters */
++#else
++	/* Alpha and PowerPC */
++	cc_t c_cc[KNCCS];		/* control characters */
++	cc_t c_line;			/* line discipline */
++#endif
++	speed_t c_ispeed;		/* input speed */
++	speed_t c_ospeed;		/* output speed */
++};
++
++#endif /* _ASM_GENERIC_KTERMIOS_H */
+diff --git a/include/linux/termios.h b/include/linux/termios.h
+new file mode 100644
+index 000000000000..9d37d24cae02
+--- /dev/null
++++ b/include/linux/termios.h
+@@ -0,0 +1,7 @@
++#ifndef _LINUX_TERMIOS_H
++#define _LINUX_TERMIOS_H
++
++#include <uapi/linux/termios.h>
++#include <asm/ktermios.h>
++
++#endif
+diff --git a/include/uapi/asm-generic/termbits.h b/include/uapi/asm-generic/termbits.h
+index 890ef29053e2..df60b006657f 100644
+--- a/include/uapi/asm-generic/termbits.h
++++ b/include/uapi/asm-generic/termbits.h
+@@ -1,6 +1,6 @@
+ /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+-#ifndef __ASM_GENERIC_TERMBITS_H
+-#define __ASM_GENERIC_TERMBITS_H
++#ifndef _UAPI_ASM_GENERIC_TERMBITS_H
++#define _UAPI_ASM_GENERIC_TERMBITS_H
+ 
+ #include <asm-generic/termbits-common.h>
+ 
+@@ -27,17 +27,6 @@ struct termios2 {
+ 	speed_t c_ospeed;		/* output speed */
+ };
+ 
+-struct ktermios {
+-	tcflag_t c_iflag;		/* input mode flags */
+-	tcflag_t c_oflag;		/* output mode flags */
+-	tcflag_t c_cflag;		/* control mode flags */
+-	tcflag_t c_lflag;		/* local mode flags */
+-	cc_t c_line;			/* line discipline */
+-	cc_t c_cc[NCCS];		/* control characters */
+-	speed_t c_ispeed;		/* input speed */
+-	speed_t c_ospeed;		/* output speed */
+-};
+-
+ /* c_cc characters */
+ #define VINTR		 0
+ #define VQUIT		 1
+diff --git a/include/uapi/linux/termios.h b/include/uapi/linux/termios.h
+index e6da9d4433d1..32ff18b0dfbc 100644
+--- a/include/uapi/linux/termios.h
++++ b/include/uapi/linux/termios.h
+@@ -1,6 +1,6 @@
+ /* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+-#ifndef _LINUX_TERMIOS_H
+-#define _LINUX_TERMIOS_H
++#ifndef _UAPI_LINUX_TERMIOS_H
++#define _UAPI_LINUX_TERMIOS_H
+ 
+ #include <linux/types.h>
+ #include <asm/termios.h>
 -- 
-2.43.0
-
+2.50.1
 
 
