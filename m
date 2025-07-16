@@ -1,47 +1,54 @@
-Return-Path: <linux-mips+bounces-9842-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9840-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 087D4B07CBC
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Jul 2025 20:22:54 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id C41ECB07CB5
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Jul 2025 20:22:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 767C51AA7906
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Jul 2025 18:23:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 47ED81AA6D48
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Jul 2025 18:22:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A0C32BD023;
-	Wed, 16 Jul 2025 18:21:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05BA829B766;
+	Wed, 16 Jul 2025 18:21:50 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B2342BDC11;
-	Wed, 16 Jul 2025 18:21:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E81329AAF7;
+	Wed, 16 Jul 2025 18:21:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752690115; cv=none; b=B4UoAQIPrO9/S+GJQArTW40QTXkS77L5mGkTY+3Rq+mK4IwdzAl5OYlDiWm7OG96/C8SX5ebdvBrrn2gdajhgU0OSg+Dp6Q0Gs1UpaMqDv0kB8mqWipkZ+RQSAFPKpKhADy06H4yotXQDvqkkmANX4mknzHgVBzjtRpNlmDTD8s=
+	t=1752690109; cv=none; b=uA11jLLSZnfoxaGt2UK4tTqvjKO9RFnnlQXngILwCCvic24Tj8yWa1/PognbgFrvGr8am3FdAMDWv/S2rfi67L4ZX+/fJ2RFp+Ppx9wmq2fqxmb3hvoMtED9fEqJ+04OHl4Bn9pksfoXXRkB9OhObW9Z1pTVu4RGVyAn/93DTes=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752690115; c=relaxed/simple;
-	bh=ydtojz9hNJsFsakBuijbNO3E8a7kHM4z42aoSjzWsxg=;
+	s=arc-20240116; t=1752690109; c=relaxed/simple;
+	bh=OISzIwgKW9Ut4RNYygd7oYWqpTp409ADl/d7dz7BO2k=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IB0XAcV6jBLdE9PH0qqqFWM8JnuahotEdgZw/Pp16bnY2G4TDHA2TP1EISiNvTj478X5SpYQZ1dwJxW8CwZZmRmz/+wkgkaSlcGDdFUP9KieT553ZwNAMd/HbmNAepX7uUStlAzwWzUdx4X81yEh1bDvrEfBlLXvig7dsTtL600=
+	 Content-Type:Content-Disposition:In-Reply-To; b=t7+PT2W7Fj1FzGTUzl8jnETmYNwM2SPS/nUxeEVb/wRxrnTcK9u2bYZo8vcD4OzsZAZ81KyM/XdntqNQUoajXGG0njsr5moQthVS1IlH0ihOFLXqVYUtclN2UkZ2Bn3BNrR1JxZhqDQp9BVdkDzWsXHiB2jWkfu6jOdaDSj0Ahc=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1uc6ZW-0006DJ-00; Wed, 16 Jul 2025 20:09:38 +0200
+	id 1uc6ZW-0006DN-00; Wed, 16 Jul 2025 20:09:38 +0200
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 040E7C076D; Wed, 16 Jul 2025 20:04:54 +0200 (CEST)
-Date: Wed, 16 Jul 2025 20:04:53 +0200
+	id 81182C0976; Wed, 16 Jul 2025 20:05:41 +0200 (CEST)
+Date: Wed, 16 Jul 2025 20:05:41 +0200
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Markus Elfring <Markus.Elfring@web.de>
-Cc: linux-mips@vger.kernel.org, Jiri Slaby <jirislaby@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	LKML <linux-kernel@vger.kernel.org>,
-	kernel-janitors@vger.kernel.org
-Subject: Re: [PATCH] MIPS: SGI-IP27: Delete an unnecessary check before
- kfree() in hub_domain_free()
-Message-ID: <aHfpxcZG_QMXT_Um@alpha.franken.de>
-References: <d3066a18-2e78-43ae-ad3b-8931777ee265@web.de>
+To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Andi Shyti <andi.shyti@kernel.org>
+Subject: Re: [PATCH 0/6] MIPS: Mobileye: EyeQ5: add GPIO/I2C
+ devicetrees/defconfigs
+Message-ID: <aHfp9ZkSZ3x6hEhx@alpha.franken.de>
+References: <20250704-of-commits-v1-0-dc2006bf2846@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -51,42 +58,47 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <d3066a18-2e78-43ae-ad3b-8931777ee265@web.de>
+In-Reply-To: <20250704-of-commits-v1-0-dc2006bf2846@bootlin.com>
 
-On Tue, Jun 10, 2025 at 12:28:43PM +0200, Markus Elfring wrote:
-> From: Markus Elfring <elfring@users.sourceforge.net>
-> Date: Tue, 10 Jun 2025 11:44:20 +0200
+On Fri, Jul 04, 2025 at 01:47:05PM +0200, Théo Lebrun wrote:
+> Here we push changes to have GPIO and I2C support by default in EyeQ5
+> defconfigs and devicetrees.
 > 
-> It can be known that the function “kfree” performs a null pointer check
-> for its input parameter.
-> It is therefore not needed to repeat such a check before its call.
+> Linux driver work has been pushed in the past. Devicetree patches
+> accompanied those series but didn't get merged at that time. Acked-by
+> on I2C DTS patches come from there.
 > 
-> Thus remove a redundant pointer check.
+> We start by a small new defconfig patch that a clean working tree after:
 > 
-> The source code was transformed by using the Coccinelle software.
+>    ⟩ make eyeq5_defconfig && \
+>      make savedefconfig   && \
+>      mv defconfig arch/mips/configs/eyeq5_defconfig
 > 
-> Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+> I2C DTS patches:
+> https://lore.kernel.org/lkml/20240306-mbly-i2c-v3-0-605f866aa4ec@bootlin.com/
+> 
+> GPIO DTS patch:
+> https://lore.kernel.org/lkml/20240228-mbly-gpio-v2-28-3ba757474006@bootlin.com/
+> 
+> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 > ---
->  arch/mips/sgi-ip27/ip27-irq.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> Théo Lebrun (6):
+>       MIPS: eyeq5_defconfig: Update for v6.16-rc1
+>       MIPS: mobileye: eyeq5: add 5 I2C controller nodes
+>       MIPS: mobileye: eyeq5: add evaluation board I2C temp sensor
+>       MIPS: mobileye: eyeq5: add two GPIO bank nodes
+>       MIPS: eyeq5_defconfig: add GPIO subsystem & driver
+>       MIPS: eyeq5_defconfig: add I2C subsystem, driver and temp sensor driver
 > 
-> diff --git a/arch/mips/sgi-ip27/ip27-irq.c b/arch/mips/sgi-ip27/ip27-irq.c
-> index 288d4d17eddd..20ef663af16e 100644
-> --- a/arch/mips/sgi-ip27/ip27-irq.c
-> +++ b/arch/mips/sgi-ip27/ip27-irq.c
-> @@ -165,7 +165,7 @@ static void hub_domain_free(struct irq_domain *domain,
->  		return;
->  
->  	irqd = irq_domain_get_irq_data(domain, virq);
-> -	if (irqd && irqd->chip_data)
-> +	if (irqd)
->  		kfree(irqd->chip_data);
->  }
->  
-> -- 
-> 2.49.0
+>  arch/mips/boot/dts/mobileye/eyeq5-epm5.dts |   8 +++
+>  arch/mips/boot/dts/mobileye/eyeq5.dtsi     | 105 +++++++++++++++++++++++++++++
+>  arch/mips/configs/eyeq5_defconfig          |  10 ++-
+>  3 files changed, 120 insertions(+), 3 deletions(-)
+> ---
+> base-commit: b4674c5af605321f2ec0c8ac5a884c4ecfad7214
+> change-id: 20250704-of-commits-d76e6d76a6f1
 
-applied to mips-next.
+series applied to mips-next.
 
 Thomas.
 
