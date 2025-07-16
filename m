@@ -1,129 +1,163 @@
-Return-Path: <linux-mips+bounces-9824-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9827-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 35701B0721A
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Jul 2025 11:45:55 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id AD6C4B074A8
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Jul 2025 13:25:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 39A1F3A87AD
-	for <lists+linux-mips@lfdr.de>; Wed, 16 Jul 2025 09:45:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A3CC93A7200
+	for <lists+linux-mips@lfdr.de>; Wed, 16 Jul 2025 11:25:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F7042C158E;
-	Wed, 16 Jul 2025 09:45:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86FCF2F3C1A;
+	Wed, 16 Jul 2025 11:25:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QebFb0+D"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bIUzTA3y"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7EEC273D9E;
-	Wed, 16 Jul 2025 09:45:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56C752F1FF2;
+	Wed, 16 Jul 2025 11:25:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752659151; cv=none; b=E0qcYbkYoc5cZAMKKJzDeEPS9AZXCo3RzoCKfuZMYWiTQnz6o7mvq73uhjKo+5fy6IiEPgyATVA8Q93lvrMcboon/rsQCTPGGcH+ZjP4fKz45TipIv6jGO9NYlgnBukmrA4GfSr3dyr5FvEeiO18qgSpAD8iZXbVag8IWbzRnPU=
+	t=1752665139; cv=none; b=WF4fG/7QAuWJ7LztVLmEQ2M2JIzvWjzAy/skOufkMqa1ZpjcfkoUqfaJmyaZjeu/jPP8MJvBW9T0KpOCi/yOfD/nRhaBhW6wzzLUmMJnypO2b5cf+zEsMr4bk64v+v5EPUS1YbzLGjPgYZa4uhTLOoqggLeB+G3cJzzHYLOQu6U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752659151; c=relaxed/simple;
-	bh=ib4v895jWgxSm+mNVCMPRRCf4CuxSGhOx0k/DpjpzS0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=g5axZ9vdQ9TC01bnYp3AgNPaiW+XL7ZuZFjL8Rp8hDUKFhq0Sd3fIPMaccD+qwU++AE8bp6rhbxA2rRl3wrCnnnQhABuflsrX9XxjAl+nORKfW6xWHnOtSClLdr5gSkShatAwxplz5B/34o0ItcpdVvWjvSf9A0NZp6tvNOrwNo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QebFb0+D; arc=none smtp.client-ip=209.85.219.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-e740a09eae0so6432302276.1;
-        Wed, 16 Jul 2025 02:45:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1752659149; x=1753263949; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S2lJu1PUW1cuTa8j8qT1jriWuKixRDa5iGkg98uYZYw=;
-        b=QebFb0+DO7NGOr3/52lAnyMRHYmuJqbhY/DARSB4FsZuNshjLPBivT4XrBY+QKO2D9
-         AV8fBzWnLckvtDyD50VrSkmn5mCLkldZEyKuItW/AQ7oU8JwCqBTXSjJnknsN+D6Xair
-         8omiM1LeCTtZEELoj3cfYWe+Blu0X+MzsHCNq+mQGy95xXkUPmkYDHjb2dAeCetizyDX
-         QFGan+eEUNg78bxBFjoNGS00B98IaWTU5hvgneDm6LUPe5t3iAgnK0YV7xWs09ucgbXM
-         IJZFWKzgNVRdc8bAWWU9DVaubpOxFGYrFzNYUnw0SFoxjj0i3md1XgeEaltHubs+dG2W
-         nJIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752659149; x=1753263949;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S2lJu1PUW1cuTa8j8qT1jriWuKixRDa5iGkg98uYZYw=;
-        b=aaWM0SIwEPvgj3X9Px6u0IpJjVrSfoUs34nBNh54GI32aTdVLqK90n4s2HR/kcEbj7
-         vufm8NJLQV5TG0vWrdmYKMaIO0RJCpAmJGCtKgHoiskTWs6VYYTypCAgltq86HhOA7dZ
-         EHsclsNljA0dTVr9JPshgIyeyqJuV4fkx/xIE7OyegZ0nNa6iHEcOe8jS5+E6BlARw7V
-         OKQvTZh58Bk/qf+g9fI32AiKByUVj7efnKFhrxP+4XfoJUrTAUpVcIDOuGdwU5EN+pl3
-         dNDKhDlMhjIDdZL4p7wmy6pCv/CHI+1sSWpIbyr/m/Kgx1dtI74/Yh4ZO1fT7jUYNU9X
-         CVyA==
-X-Forwarded-Encrypted: i=1; AJvYcCUAjivHHN06hci60U93Bdn6hEGTYpxK/I39ekLflPI7Pqf74Vc0DV4c/V4Ph012vtVrzpg05e5BDaJa@vger.kernel.org, AJvYcCV7OlaNkxX6LYb/mUfVbX8AumV7oDY5soNzxYsRyr55B87ZByS8WHEXb4k6DLnfqQOpSxKZxi/V+Hqpv+3+@vger.kernel.org, AJvYcCXjE7BP1ZCFIWK5uzFp74Wv4aWTWihYxqeuUahjzMrlWpRcJyy6Mqcp83scV4xb2KscVc21h4aISo9fyA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOeFfHs8l0epphf0bIT3W7tABttMXZcHxWGSkwtu8qyVTyoimJ
-	BBm9h9uXyFjPP4K/QOTIW2mb1JGVV8AlJAu/7eASqlDCfc0AKeG6V/bcq0JL+G3KP4RB1jlRKY7
-	ohV9EO3pW7b3/nKRqjFsg/m+lTDbQc5YZ/WUtHSc1Xw==
-X-Gm-Gg: ASbGncuMnOSTLAM42Zfj33K8ZTFsh1PsaeUwUurbz86WxtQWj0mz4mX6npfkNMkhEJg
-	LoNiYPNk5jskGw/MuwUOLFQpDReXU4+yfCVws7Qv+PFvnzeytz2iWRvKB7RFPCaC6Jk/e/rDyIH
-	IIJAdysHgzW4FbMh6P2fb+Xg5KSxzZPrwXI2EbpJaMIa9i53i7xJ4wxIaDPOiwmnZae4E5AXT4W
-	/L9RsxY
-X-Google-Smtp-Source: AGHT+IHFzjb2lZBeq0vcW38r3st56S+gBZuw/xv7RdKkGX0pEIrU9nEOqtohAAdJwXvahlak22+qQcRZQJgozKpQZgo=
-X-Received: by 2002:a05:6902:161e:b0:e8b:908a:a932 with SMTP id
- 3f1490d57ef6-e8bc1b9086bmr2841393276.0.1752659148649; Wed, 16 Jul 2025
- 02:45:48 -0700 (PDT)
+	s=arc-20240116; t=1752665139; c=relaxed/simple;
+	bh=p3BSUcDo5y0Wn2DQ5Qi8LbjrebDK6eyOiu8A1DTmYoo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=cXvacbpUBzwDX8YFwEYRpSDgt7mOER63464W5youB0vtKK1KNj53BE5V/wdr1ZyblxvcHwb0U48vkhqbNT/8X0G1BmCSegW59G7eQe6tFGbC4hcyHd1GDATtX4XS5ncHGOxj0x8cEM0X+QVpHY7tnu0YEkGKYfoPE0KRxPH4HEE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bIUzTA3y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DEE79C4CEF6;
+	Wed, 16 Jul 2025 11:25:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752665138;
+	bh=p3BSUcDo5y0Wn2DQ5Qi8LbjrebDK6eyOiu8A1DTmYoo=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=bIUzTA3yB0fqnHADbrelM61uSuGB1RujDklsx70m5UfsLgpZel2IPTaF0fZwO5JVg
+	 GIkCfvYj+SnnveHffbt/o6mVBVdjXnsIBZN+W0uP/1xCIbifDasGCgfzvtiKpE1J/a
+	 s1Uyj+flvF3UyJzVJGWkyNXv6Ael5OurlVKrBE903Gb1/57M0kyND3XKXHa5wyZD5w
+	 Sv/lH5VMOVBgcrFixO+qKBKgGSjkJCxvbK//2dCxJ5YfI7laiXrlkBfB/d7RECxq1c
+	 oDf+pvoB+pF37fOYSygOZ+MyNo+ykANC765xhnYBcpQsJUfcjG2ZOAbO+YxeI9MC2Z
+	 tI0rx+mgMyUVQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC5AFC83F27;
+	Wed, 16 Jul 2025 11:25:38 +0000 (UTC)
+From: Keguang Zhang via B4 Relay <devnull+keguang.zhang.gmail.com@kernel.org>
+Subject: [PATCH v3 0/9] MIPS: loongson32: Convert all platform devices to
+ DT
+Date: Wed, 16 Jul 2025 19:25:09 +0800
+Message-Id: <20250716-loongson1-arch-v3-0-d160974d696b@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250709-loongson1-arch-v2-0-bcff6e518c09@gmail.com>
- <20250709-loongson1-arch-v2-4-bcff6e518c09@gmail.com> <20250710-wondrous-copper-bonobo-b11dcd@krzk-bin>
-In-Reply-To: <20250710-wondrous-copper-bonobo-b11dcd@krzk-bin>
-From: Keguang Zhang <keguang.zhang@gmail.com>
-Date: Wed, 16 Jul 2025 17:45:10 +0800
-X-Gm-Features: Ac12FXzOY9yqLfALZsN0SFfmS7-jXoun3VBZAodX-KGknn49Xrz9WULq7FGDGqc
-Message-ID: <CAJhJPsWq0mPri2ZcZkufvnLEnpZ9A_FOv5kE+vpER9vw8vLsSQ@mail.gmail.com>
-Subject: Re: [PATCH v2 4/9] MIPS: dts: loongson: Add LSGZ_1B_DEV board
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABWMd2gC/12Oyw6CMBQFf4V07SVtKY+68j8Mi1ou0AitaZGoh
+ H+3YEyMy1mcObOQgN5gIMdkIR5nE4yzEbJDQnSvbIdgmsiEU55TwQQMztkuOMtAed1DjqrS2Ag
+ tlSRxdPPYmscuPNeRW+9GmHqP6qvJaMkly0TGqpQVUoiiBAZX7O7xLn1tp6duVGZItRs3ZW/C5
+ PxzT5z5Jv7UlFT+18wcKFx02xaYs0pT+WOq13V9A4gnywLvAAAA
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
+ Keguang Zhang <keguang.zhang@gmail.com>
+Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ =?utf-8?q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>
+X-Mailer: b4 0.13.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1752665136; l=3912;
+ i=keguang.zhang@gmail.com; s=20231129; h=from:subject:message-id;
+ bh=p3BSUcDo5y0Wn2DQ5Qi8LbjrebDK6eyOiu8A1DTmYoo=;
+ b=bGgm74usr1scB/TvEdJlAVUw5GvU3MMAKStrhD4cikw0SATfq+esZ2p2h3TpmtWONuK1J046W
+ dlyTbPfCw26DLKh/qRfkJhAzEr7GQatC0WfSotQfyVCDDLmZAag6IL+
+X-Developer-Key: i=keguang.zhang@gmail.com; a=ed25519;
+ pk=FMKGj/JgKll/MgClpNZ3frIIogsh5e5r8CeW2mr+WLs=
+X-Endpoint-Received: by B4 Relay for keguang.zhang@gmail.com/20231129 with
+ auth_id=102
+X-Original-From: Keguang Zhang <keguang.zhang@gmail.com>
+Reply-To: keguang.zhang@gmail.com
 
-On Thu, Jul 10, 2025 at 8:29=E2=80=AFPM Krzysztof Kozlowski <krzk@kernel.or=
-g> wrote:
->
-> On Wed, Jul 09, 2025 at 07:05:55PM +0800, Keguang Zhang wrote:
-> > +     aliases {
-> > +             ethernet0 =3D &gmac0;
-> > +             ethernet1 =3D &gmac1;
-> > +             gpio0 =3D &gpio0;
-> > +             gpio1 =3D &gpio1;
-> > +             serial0 =3D &uart2;
-> > +             serial1 =3D &uart3;
-> > +     };
-> > +
-> > +     chosen {
-> > +             bootargs =3D "mtdparts=3Dls1x-nand:16m(kernel),-(rootfs)"=
-;
->
-> And if someone wants to partition differently? bootargs rarely belong to
-> upstream DTS.
+Convert all platform devices to Device Tree.
+Remove all obsolete platform device code.
+Switch to the generic MIPS core.
+Add built-in DTB support.
+Update Kconfig and Makefile accordingly.
+Update and rename the defconfig.
 
-Will replace this with a "partitions" node.
-Thanks for the review!
->
-> > +             stdout-path =3D "serial0:115200n8";
-> > +     };
->
-> Best regards,
-> Krzysztof
->
+Changes in v3:
+- Squash two previous changes that documented DT bindings for the
+  LS1B-DEMO and CQ-T300B into a single patch.
+- Separate the built-in DTB support into a single patch.
+- Move the timer node under the APB bus.
+- Remove redundant console bootargs since it is covered by stdout-path.
+- Replace mtdparts bootargs with a "partitions" node.
+- Link to v2: https://lore.kernel.org/r/20250709-loongson1-arch-v2-0-bcff6e518c09@gmail.com
 
+Changes in v2:
+- Document two new boards: loongson,ls1b-demo and loongson,cq-t300b.
+- Submit complete DTS files for each board.
+- Switch to the generic MIPS kernel.
+- Consolidate Loongson1 defconfigs.
+- Link to v1: https://lore.kernel.org/all/20230729134318.1694467-1-keguang.zhang@gmail.com/
 
---=20
+---
+Keguang Zhang (9):
+      dt-bindings: mips: loongson: Add LS1B-DEMO and CQ-T300B
+      MIPS: dts: loongson: Add LS1B-DEMO board
+      MIPS: dts: loongson: Add LSGZ_1B_DEV board
+      MIPS: dts: loongson: Add Smartloong-1C board
+      MIPS: dts: loongson: Add CQ-T300B board
+      MIPS: loongson: Add built-in DTB support
+      MIPS: loongson32: Switch to generic core
+      MIPS: Unify Loongson1 PRID_REV
+      MIPS: configs: Consolidate Loongson1 defconfigs
+
+ .../devicetree/bindings/mips/loongson/devices.yaml |   2 +
+ MAINTAINERS                                        |   3 +-
+ arch/mips/Kconfig                                  |  64 ++---
+ arch/mips/boot/dts/Makefile                        |   1 +
+ arch/mips/boot/dts/loongson/Makefile               |  10 +
+ arch/mips/boot/dts/loongson/cq-t300b.dts           | 110 ++++++++
+ arch/mips/boot/dts/loongson/loongson1.dtsi         | 136 ++++++++++
+ arch/mips/boot/dts/loongson/loongson1b.dtsi        | 198 ++++++++++++++
+ arch/mips/boot/dts/loongson/loongson1c.dtsi        | 141 ++++++++++
+ arch/mips/boot/dts/loongson/ls1b-demo.dts          | 125 +++++++++
+ arch/mips/boot/dts/loongson/lsgz_1b_dev.dts        | 162 ++++++++++++
+ arch/mips/boot/dts/loongson/smartloong-1c.dts      | 110 ++++++++
+ .../{loongson1b_defconfig => loongson1_defconfig}  |  94 +++++--
+ arch/mips/configs/loongson1c_defconfig             | 121 ---------
+ arch/mips/include/asm/cpu-type.h                   |   3 +-
+ arch/mips/include/asm/cpu.h                        |   3 +-
+ arch/mips/include/asm/mach-loongson32/irq.h        | 107 --------
+ arch/mips/include/asm/mach-loongson32/loongson1.h  |  50 ----
+ arch/mips/include/asm/mach-loongson32/platform.h   |  23 --
+ arch/mips/include/asm/mach-loongson32/regs-mux.h   | 124 ---------
+ arch/mips/kernel/cpu-probe.c                       |   6 +-
+ arch/mips/loongson32/Kconfig                       |  43 +---
+ arch/mips/loongson32/Makefile                      |  17 --
+ arch/mips/loongson32/Platform                      |   1 -
+ arch/mips/loongson32/common/Makefile               |   6 -
+ arch/mips/loongson32/common/irq.c                  | 191 --------------
+ arch/mips/loongson32/common/platform.c             | 285 ---------------------
+ arch/mips/loongson32/common/prom.c                 |  42 ---
+ arch/mips/loongson32/common/setup.c                |  26 --
+ arch/mips/loongson32/common/time.c                 |  23 --
+ arch/mips/loongson32/ls1b/Makefile                 |   6 -
+ arch/mips/loongson32/ls1b/board.c                  |  55 ----
+ arch/mips/loongson32/ls1c/Makefile                 |   6 -
+ arch/mips/loongson32/ls1c/board.c                  |  23 --
+ 34 files changed, 1118 insertions(+), 1199 deletions(-)
+---
+base-commit: b5a1f9870f9828bd6625d6c946c66be4983d56f6
+change-id: 20250414-loongson1-arch-5ea8ced4c9a9
+
 Best regards,
+-- 
+Keguang Zhang <keguang.zhang@gmail.com>
 
-Keguang Zhang
+
 
