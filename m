@@ -1,106 +1,123 @@
-Return-Path: <linux-mips+bounces-9854-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9855-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 998C5B08C9B
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Jul 2025 14:12:13 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 38EDDB0978C
+	for <lists+linux-mips@lfdr.de>; Fri, 18 Jul 2025 01:26:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 188233A3E4C
-	for <lists+linux-mips@lfdr.de>; Thu, 17 Jul 2025 12:11:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 45D82A47129
+	for <lists+linux-mips@lfdr.de>; Thu, 17 Jul 2025 23:26:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D70A629E0E5;
-	Thu, 17 Jul 2025 12:11:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD41426981E;
+	Thu, 17 Jul 2025 23:25:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="2Qt6Z4X1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NteDUBwa"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83BB1288C12;
-	Thu, 17 Jul 2025 12:11:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56EB125DD1C;
+	Thu, 17 Jul 2025 23:25:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752754307; cv=none; b=VEeOKMwsVdO2xz/HKJykigcVoAuxuz70NbmcJud/jXAF2oRw+gtWUxgjOv3c+4Owm3DGVD34KCxdtmqzs2jCRfrRC2e7zu0d5T/fx8LC29Moq4isXQrsMkU4beiwU2srsxEsBT/lBvH393OVaXHka2ii6OcwG0B40KWzPZ8ZulU=
+	t=1752794721; cv=none; b=uYejgms/uMdlS4T9KehWCIJqjLV7JCCdcnyz2KBiAVZd4daRCyOAGp8MxeG4jW4JiYXFsnCD4ACquB6DIHChWcQS+URHuvwbkGZNS69IuNNTv4Wx2mDRvXMZnMf/9WeJn7iUAabgN50+2YoMdwJXaSi/pPE8whTQvKSfgAyEJQY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752754307; c=relaxed/simple;
-	bh=u7SEQClQAB7gDVI1zZ2Aqc9od3vbr6CRMh/fPM8fFwc=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ArdXTH85FX9CJ3p0BrkLjcDicb2FdcHqahZT4yKOErT6WehUUi1W8p12BNko/WzoNZoWqbS6D9eo5Ev0ZUN1sm1oypnJwGPR0bDzTOKur4PK71G9gi8/4Wm3DCGxKIluyGOCnHYxVqHal46jDhQ9XL1yDU1OrKlWJRrg9ZwrcEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=2Qt6Z4X1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 663D5C4CEEB;
-	Thu, 17 Jul 2025 12:11:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1752754305;
-	bh=u7SEQClQAB7gDVI1zZ2Aqc9od3vbr6CRMh/fPM8fFwc=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=2Qt6Z4X11YhogWwmPVhJNTezRMtYrXrmvZKzpaNeXXzrRKVkm27yaCiy5/7CxAvjd
-	 YkN/PYtnuacWtPoixP/hG2zdXON89AXUdXcpob0TSY8888tb0EIehkEW0RBPkmwf/I
-	 5rwizpj+UPQM+PsLiZ95EScAmEzGwG7w2hBjdInI=
-Date: Thu, 17 Jul 2025 14:11:41 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Thierry Reding <thierry.reding@gmail.com>
-Cc: x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, linux-mips@vger.kernel.org,
-	loongarch@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
-	linux-sh@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/7] syscore: Pass context data to callbacks
-Message-ID: <2025071716-phoney-object-1648@gregkh>
-References: <20250717103241.2806798-1-thierry.reding@gmail.com>
+	s=arc-20240116; t=1752794721; c=relaxed/simple;
+	bh=2ug/lH8nh3wdYXaBdZPOL2AvIMcZUPQ6EhDC2jpITSk=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=CLt9ZWDjSQnqG5JLeuiCbTlReGNNCa40eJEkCgiivrDkUABvEjkqLIsG1UYe/zJbR5bZaWrz9VospUonKoHP179Hf1jN+rVYz5T8LcvHPxLb7x9yIiURP0hIvBV3S1FVbNgOSMm1icDLOaXXrKkxKUuZbUMwjugcu6qyCz2P/l0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NteDUBwa; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DBF8C2BCB1;
+	Thu, 17 Jul 2025 23:25:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752794720;
+	bh=2ug/lH8nh3wdYXaBdZPOL2AvIMcZUPQ6EhDC2jpITSk=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=NteDUBwai+jItLwcpYckNP0xUiUtzclbkaFWn020YjQgwFVuyGGWrARl8Vn8ogjbU
+	 HA7N6JUbwARRKiomN6gJkMEtj3ziS/fItDI81YF+wfJMRXtKK3j0GP8SF0gvhoO51X
+	 oCI2fsMsgsVBz/v7awiAMsuOKmnfKRD72nOBmmxlXSV9CvjEStIWVUPEtq6gBKTXfH
+	 f9qwUWBwEQ3d6FAPVDsBxaPct1USs9Cn4jw01nkaUPzrxrGxP/fXlkew24VQuyaEGH
+	 PVVayYayn3gDzPIYcf1Hm8MivLp/HLHtpzhQm2HDSnwA74AgKf1aZYpvBe0CeBN0Zw
+	 F8AX99YLu6fsw==
+From: Kees Cook <kees@kernel.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: Kees Cook <kees@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-mips@vger.kernel.org,
+	Ingo Molnar <mingo@kernel.org>,
+	"Gustavo A. R. Silva" <gustavoars@kernel.org>,
+	Christoph Hellwig <hch@lst.de>,
+	Andrey Konovalov <andreyknvl@gmail.com>,
+	Andrey Ryabinin <ryabinin.a.a@gmail.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Masahiro Yamada <masahiroy@kernel.org>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nicolas Schier <nicolas.schier@linux.dev>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	linux-kernel@vger.kernel.org,
+	x86@kernel.org,
+	kasan-dev@googlegroups.com,
+	linux-doc@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	kvmarm@lists.linux.dev,
+	linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org,
+	linux-efi@vger.kernel.org,
+	linux-hardening@vger.kernel.org,
+	linux-kbuild@vger.kernel.org,
+	linux-security-module@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	sparclinux@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: [PATCH v3 09/13] mips: Handle KCOV __init vs inline mismatch
+Date: Thu, 17 Jul 2025 16:25:14 -0700
+Message-Id: <20250717232519.2984886-9-kees@kernel.org>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250717231756.make.423-kees@kernel.org>
+References: <20250717231756.make.423-kees@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250717103241.2806798-1-thierry.reding@gmail.com>
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1054; i=kees@kernel.org; h=from:subject; bh=2ug/lH8nh3wdYXaBdZPOL2AvIMcZUPQ6EhDC2jpITSk=; b=owGbwMvMwCVmps19z/KJym7G02pJDBmVbTEaTpwT/CqkP/gFhCj/XO54+7qYREShYs8l04cXr l6frm7XUcrCIMbFICumyBJk5x7n4vG2Pdx9riLMHFYmkCEMXJwCMBEtE4b/Xqd+XFyVnrjymfWn 4Kf1C05k68rFv26yrf/i2iH18eJ2SUaGV0lMd+enHioMXSjkm7z02hWe6SLiP1bPKvlVrXb+1vx GFgA=
+X-Developer-Key: i=kees@kernel.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+Content-Transfer-Encoding: 8bit
 
-On Thu, Jul 17, 2025 at 12:32:34PM +0200, Thierry Reding wrote:
-> From: Thierry Reding <treding@nvidia.com>
-> 
-> Hi,
-> 
-> Something that's been bugging me over the years is how some drivers have
-> had to adopt file-scoped variables to pass data into something like the
-> syscore operations. This is often harmless, but usually leads to drivers
-> not being able to deal with multiple instances, or additional frameworks
-> or data structures needing to be created to handle multiple instances.
-> 
-> This series proposes to "objectify" struct syscore_ops by passing a
-> pointer to struct syscore_ops to the syscore callbacks. Implementations
-> of these callbacks can then make use of container_of() to get access to
-> contextual data that struct syscore_ops was embedded in. This elegantly
-> avoids the need for file-scoped, singleton variables, by tying syscore
-> to individual instances.
-> 
-> Patch 1 contains the bulk of these changes. It's fairly intrusive
-> because it does the conversion of the function signature all in one
-> patch. An alternative would've been to introduce new callbacks such that
-> these changes could be staged in. However, the amount of changes here
-> are not quite numerous enough to justify that, in my opinion, and
-> syscore isn't very frequently used, so the risk of another user getting
-> added while this is merged is rather small. All in all I think merging
-> this in one go is the simplest way.
+When KCOV is enabled all functions get instrumented, unless
+the __no_sanitize_coverage attribute is used. To prepare for
+__no_sanitize_coverage being applied to __init functions, we
+have to handle differences in how GCC's inline optimizations get
+resolved. For mips this requires adding the __init annotation on
+init_mips_clocksource().
 
-All at once is good, I like the idea, but:
+Signed-off-by: Kees Cook <kees@kernel.org>
+---
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: <linux-mips@vger.kernel.org>
+---
+ arch/mips/include/asm/time.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> Patches 2-7 are conversions of some existing drivers to take advantage
-> of this new parameter and tie the code to per-instance data.
+diff --git a/arch/mips/include/asm/time.h b/arch/mips/include/asm/time.h
+index e855a3611d92..5e7193b759f3 100644
+--- a/arch/mips/include/asm/time.h
++++ b/arch/mips/include/asm/time.h
+@@ -55,7 +55,7 @@ static inline int mips_clockevent_init(void)
+  */
+ extern int init_r4k_clocksource(void);
+ 
+-static inline int init_mips_clocksource(void)
++static inline __init int init_mips_clocksource(void)
+ {
+ #ifdef CONFIG_CSRC_R4K
+ 	return init_r4k_clocksource();
+-- 
+2.34.1
 
-That's great, but none of these conversions actually get rid of the
-global structure, so what actually was helped here other than the churn
-of this "potentially" allowing the global data variables from being
-removed in the future?
-
-So how does this actually help?
-
-Also, small nit, make the function pointers const please :)
-
-thanks,
-
-greg k-h
 
