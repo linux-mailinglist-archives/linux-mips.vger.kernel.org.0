@@ -1,135 +1,123 @@
-Return-Path: <linux-mips+bounces-9856-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9857-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EF2EB09D31
-	for <lists+linux-mips@lfdr.de>; Fri, 18 Jul 2025 09:59:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13DB5B09F0B
+	for <lists+linux-mips@lfdr.de>; Fri, 18 Jul 2025 11:18:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4F8F27B8648
-	for <lists+linux-mips@lfdr.de>; Fri, 18 Jul 2025 07:57:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2F256A84294
+	for <lists+linux-mips@lfdr.de>; Fri, 18 Jul 2025 09:18:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B4FA29CB5A;
-	Fri, 18 Jul 2025 07:56:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBE72298270;
+	Fri, 18 Jul 2025 09:18:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="LmK9Wy/v"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="upUCLIdr"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3257F2BCF67
-	for <linux-mips@vger.kernel.org>; Fri, 18 Jul 2025 07:56:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91A111E5B78;
+	Fri, 18 Jul 2025 09:18:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752825397; cv=none; b=NOLfGITBJShHzrIYkvLcqMOryekG0fdw3qbputxPoYGC6CxCdw5metoRBJeIVXa4c6N6I4YGkqQ75ifc84MR+O6tNrUpeWOehzmuG3bKKoJ5F+FN/m4A+pTkAn6HYhvnohessshYh6a6wmfjlI7rdmh9rZF4yU9XujF/KsoeJJo=
+	t=1752830296; cv=none; b=ueIBKhxETet13/O0JaXx4rHoN6bhxSBHQeuE1fVw2qkgikiwlL7Zp3UQHUdjnHzgSaGDaXmWDBQ+N9p9EAEnDKE4/ikJS/sekO3Iybw2GnNJjnch8DEE5fvCCuId1nbxhv8mIja29JFJ4s1q+NkBDHLxjrLEeG2IZ72W+3AdZ3Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752825397; c=relaxed/simple;
-	bh=PwuTsPsOI9bcEcs74QRkQaUqtP5pEnUywVzKLkjeu0w=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LvI3g4CdNuGsYDI97wJFH86GSxePgv4s2hLj3hzPMaX3LGEiJWsS797XvwdaSJpLG4Pr5zg8TVVHWbYmRV2eo5s6XKHRQBLRrkOZa9vagub/bsY/qUOsYN79T4unLCZ9i1s0onzMbVMwtDf2yxwClln5mcI/ki69loOsY7JNsdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=LmK9Wy/v; arc=none smtp.client-ip=209.85.221.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-3a4f379662cso1332508f8f.0
-        for <linux-mips@vger.kernel.org>; Fri, 18 Jul 2025 00:56:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1752825393; x=1753430193; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yIkRard6W+E126nlrFH68FBbJJING0uBmwMIZSswXsA=;
-        b=LmK9Wy/vWSfdoQaFT8qg83f4PRZFbiHGkso/yZKVBgPP4PaEBTqm7Uf65DSPCkjne6
-         oiocn+uJ/AbMPNUGCPhlD+Gbtho83/Zv9mb9EroK5/eZMDNIUJc6atRBPllWHmHypLpB
-         kzTy5nvTWMy2iZwOTIwQ2ARXB9vLCQkfzSpdY6kFjRU8RH/9BQ3PgwmVp/ANXpHkcf97
-         G5OjlImsCBQ6tSWaYW5WPyV5KSEI7fg+5Dv7H4PXmEtfn1xX8fLgOUeO2i1Ymrv0I1YH
-         Kw6msFj+m7684x2Lpvbe8mzNxUD5tPzpM3/20b1Lqgzghil2rpzQz5zey0e9G29M82Fn
-         bEzg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752825393; x=1753430193;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yIkRard6W+E126nlrFH68FBbJJING0uBmwMIZSswXsA=;
-        b=iwHdK9hsucmiTMISLyp+inFJSPWSfBdnRJwnA1xJyAFv+IS7GPGP4fODrp0IRBFnAj
-         vSndChsl6TvgtX/JGZe6W32vne61lxL8/l2a6mllz/W472y5ynZR3zsTPHW1pjw/Jpt6
-         RkTFB9mjv7M2RSvOTuBu6untmBWWTGWHFydTw45fgCjJTQCBCEGNxzk2M4wvJxtSgGdk
-         eQqD19xMgv1rxL177PGyDplvl96nyslcHh4G8CDWjiCjZYEQq4HIGBh6+aEnWvjMpnn0
-         mlrXh4CIVGdvjN+gdKuZcTat/ur9iXtgb+qEKQrbBkU8f34e9qF/mCzT2CPy6PUWdFev
-         baaQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUPtNNkKa+masCfE1/mQk8cz+XpXyK/JgPwyULkB95tyX0ifnfvtyd89oY85COAoGHYc4cFSd7xln5p@vger.kernel.org
-X-Gm-Message-State: AOJu0YzA9nIAwitLnPmJOivLuhn57WwzsZ7GJACpBO3a7OnVTLCuIPJi
-	l1lTIsXABI9tZHBBKH62YVtgP7LYquH2zGlA/lSMDYGnUFmPaBR2JPVD+Tt+gJO+9jw=
-X-Gm-Gg: ASbGncsm1S+ju/Y1M84PoqPlY5ZnzaWnTUieAYdWsOWz9OpXvqxxdmX74/j+e4PEKXf
-	FMbp3iR2mpgu0UcOxThcUsl/CPrZFG4qhJtymsRsXMhFqUxjq6E64VX4LRqa2rPkahq8CXROKLX
-	9BWH9kdE5ApCL3ZV8L8euMS9wCgVa03u3qh+58RvhSA2FNIO/qlq/XIuxQcB/G26Cy+fUMgXex9
-	7/95PN2gPUds+T+vwyHY1LkOSnKYNwOg52yEAhfpeOF2ZXRpI4W8b0xCFIheP73c1QiRCVqb/EZ
-	8j0WQtKkMzGxo4w0Pc3nIV4oGkUy1Xg57RP2nxw0OwtEh9H8A05+sSCmdc34M+gWYOt2PcZJZBW
-	ocLo3bgCowPF51uaXwU15
-X-Google-Smtp-Source: AGHT+IFR7z0xrtW7kV+L/PWsVn19Mve34KO13llGmq0De9UTBvi6IEowVSVAnjHLfBTTi45HhGu+EQ==
-X-Received: by 2002:a05:6000:1a85:b0:3a4:ef36:1f4d with SMTP id ffacd0b85a97d-3b60e4f2c6amr7520566f8f.38.1752825392621;
-        Fri, 18 Jul 2025 00:56:32 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:be63:a233:df8:a223])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3b61ca48a23sm1080851f8f.54.2025.07.18.00.56.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 18 Jul 2025 00:56:32 -0700 (PDT)
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-To: Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Keguang Zhang <keguang.zhang@gmail.com>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Lee Jones <lee@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	"Rob Herring (Arm)" <robh@kernel.org>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	linux-gpio@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
-	linuxppc-dev@lists.ozlabs.org
-Subject: Re: [PATCH v2] dt-bindings: gpio: Create a trivial GPIO schema
-Date: Fri, 18 Jul 2025 09:56:01 +0200
-Message-ID: <175282531516.45055.8482528409833116992.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250714201959.2983482-1-robh@kernel.org>
-References: <20250714201959.2983482-1-robh@kernel.org>
+	s=arc-20240116; t=1752830296; c=relaxed/simple;
+	bh=iN0MjV8lG6vlPY6QKWEDWqXP3y58juMGr+peNv9I/+Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=AYWM+8wuerHdH4uclnn1P1V5B4lZzQfsfVzWPL2PAAUp0bevycDJ0BfbUxPdhLOH2vsQY9xeX3tR5m4Fu9z+H+Lv+GF9K3uWkRaULer50Q9VxA97mpxISj78zZsqA1VxBaZJlx+hY5d9f9Z/2Lgbw+1REBz49VboqjwgiFtneMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=upUCLIdr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 191D5C4CEF0;
+	Fri, 18 Jul 2025 09:18:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1752830296;
+	bh=iN0MjV8lG6vlPY6QKWEDWqXP3y58juMGr+peNv9I/+Y=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=upUCLIdrbbvEbKjUsZgTdUEGyRbXXPVKgUMJXI8oVEu7IuCo+NlAr8pZ3hP/3OpCS
+	 z+m8WoLkMvYdx42mseDFgent82TIUAOPaXDuO0MHrSBPWaortApspXcggf+7lhNmY8
+	 tOaGg0j7eaXiZqMy8OhhL3BAvuI4qqptGCOW5qdmQyljlx4c3DuNukqLAdC4airAsq
+	 nJKi0Be3SrrR2xHh9RGmjhMqPl6sRDW75QEF/7Lu21+PwIinNh5ZPzzmyUHWJMe6cp
+	 dzghcLYsnfaa3tVtbk0VeArOxbSMW6EX7TzfWbBD0ifZlVbF7q2+xGG6ugEJd7zFXx
+	 5DD1NmgbOVSgg==
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-60c4521ae2cso3330368a12.0;
+        Fri, 18 Jul 2025 02:18:16 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCV0AKoUIuonJeWHXWR2Cf7jQZCRjErGiIBNVCjuW0tpqJD3VWWQANTownXAYV244/9x+GvGSnXz7RM=@vger.kernel.org, AJvYcCV1TzUiHaDkQFdVridp0GhxD2QtBGx6xg0Lr3SAHadBj8NveE8r0J+4KYw8N9NpbhNp0K9s8iPNyi/xFTtJ@vger.kernel.org, AJvYcCV2RECSTJAxpYbYkY1rF1Lmt4kB3iosuDgXE19K1ASc8SE6fNRcv92tm/AHUzPKsA8+5FB65qL3NxnsoeKoZUx8@vger.kernel.org, AJvYcCV2fhkW998v5WZH4nLwEFwnzJO9W7r645GdDIgGB3cHzpXmDvZBGe03Upj0r4vlUbk44Oh0fDx97PlMAQ==@vger.kernel.org, AJvYcCVHdEZ8u7svwgKUodrkLtM/yJIIvU6xWOJc2TZJBZxyOX9PxZcyAJ0FmM5nCiAGOa7F1nRqPsmDjedv@vger.kernel.org, AJvYcCW4IDaSJazeWSwFFgACWN7b69epSroBWv2UjtCV4FoSmmVDdLNrz0ZML2pgVp0fPyOFulXTEhsYGbk7yA==@vger.kernel.org, AJvYcCX54pACOS+AT+fpvWNPmgl03ntroAgVDVSeFEZLJCxJoA7bevDnRDhIiCiI4qh+bhZoOHbq223hNnGkOq8KPjz3@vger.kernel.org, AJvYcCXI1xdPeZEbwcZTymERqI5WYVZVnRug5O0uQP3+54Ly+XPRoFapANuj6cb7nMIR75kkF9JyOiLz3rlpclN5@vger.kernel.org, AJvYcCXWHCcRsafKEhSZun1fPA+F8bDs0z7gysLDMQj5i4bfYF4K6fFmjSEG068g/vYSBMUDDLQC77HKfITkIj956HRV8Rob5ZLW@vger.kernel.org, AJvY
+ cCXqNg6XyAk9/D4vsEBX1q7rzepaXITLUvpATBsxMYuqEQPgjantjzmPcNjOZr6xYNATsfGYAM5TpRD2rQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKJwdOXXj+QpoI1AL07zJBq6cn8RioZhFakuWRHcCYSS299SHg
+	B6dE6nWhyVZBwFGCBr4SkKevZyzO9uT19Cf5S5TC1wdpfbrwO03biextpt0qsRIGo2Dz+QevQ2k
+	y2LtfM2znofuQa60xHNXrOK5iQYEJz44=
+X-Google-Smtp-Source: AGHT+IH+CR6kK9khsoUi4kQxVa0vWTn3qqM4Z4G6WAw+0g0YyuRvDHP3ooIXGfMWBaXJUiPtMEtFUptkHeWtXN/zID4=
+X-Received: by 2002:a05:6402:26d5:b0:60c:6a48:8047 with SMTP id
+ 4fb4d7f45d1cf-612d456bb15mr803449a12.11.1752830294637; Fri, 18 Jul 2025
+ 02:18:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+References: <20250717231756.make.423-kees@kernel.org> <20250717232519.2984886-9-kees@kernel.org>
+In-Reply-To: <20250717232519.2984886-9-kees@kernel.org>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Fri, 18 Jul 2025 17:18:03 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4RyZQTak5AgYj6TaXHyEefgw+wmXs9Gi8jUJWrUV5HQw@mail.gmail.com>
+X-Gm-Features: Ac12FXyrA9A9-rpLV3MB79YH2kXhj6f2Fk9F6HAlk-0emUPTHthuyPP3lR9zQXg
+Message-ID: <CAAhV-H4RyZQTak5AgYj6TaXHyEefgw+wmXs9Gi8jUJWrUV5HQw@mail.gmail.com>
+Subject: Re: [PATCH v3 09/13] mips: Handle KCOV __init vs inline mismatch
+To: Kees Cook <kees@kernel.org>
+Cc: Arnd Bergmann <arnd@arndb.de>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org, 
+	Ingo Molnar <mingo@kernel.org>, "Gustavo A. R. Silva" <gustavoars@kernel.org>, Christoph Hellwig <hch@lst.de>, 
+	Andrey Konovalov <andreyknvl@gmail.com>, Andrey Ryabinin <ryabinin.a.a@gmail.com>, 
+	Ard Biesheuvel <ardb@kernel.org>, Masahiro Yamada <masahiroy@kernel.org>, 
+	Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>, 
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
+	Justin Stitt <justinstitt@google.com>, linux-kernel@vger.kernel.org, x86@kernel.org, 
+	kasan-dev@googlegroups.com, linux-doc@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
+	linux-efi@vger.kernel.org, linux-hardening@vger.kernel.org, 
+	linux-kbuild@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, sparclinux@vger.kernel.org, 
+	llvm@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
 
-
-On Mon, 14 Jul 2025 15:19:51 -0500, Rob Herring (Arm) wrote:
-> Many simple GPIO controllers without interrupt capability have the same
-> schema other than their compatible value. Combine all these bindings
-> into a single schema. The criteria to be included here is must use 2
-> cells, have no interrupt capability, have 0 or 1 "reg" entries, and
-> have no other resources (like clocks).
-> 
-> Note that "ngpios" is now allowed in some cases it wasn't before and
-> constraints on it have been dropped.
-> 
-> [...]
-
-Applied, thanks!
-
-[1/1] dt-bindings: gpio: Create a trivial GPIO schema
-      https://git.kernel.org/brgl/linux/c/2ace85b5bbd065a4e037970154854dc2b41d7b31
-
-Best regards,
--- 
-Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On Fri, Jul 18, 2025 at 7:26=E2=80=AFAM Kees Cook <kees@kernel.org> wrote:
+>
+> When KCOV is enabled all functions get instrumented, unless
+> the __no_sanitize_coverage attribute is used. To prepare for
+> __no_sanitize_coverage being applied to __init functions, we
+> have to handle differences in how GCC's inline optimizations get
+> resolved. For mips this requires adding the __init annotation on
+> init_mips_clocksource().
+>
+> Signed-off-by: Kees Cook <kees@kernel.org>
+> ---
+> Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Cc: <linux-mips@vger.kernel.org>
+> ---
+>  arch/mips/include/asm/time.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/mips/include/asm/time.h b/arch/mips/include/asm/time.h
+> index e855a3611d92..5e7193b759f3 100644
+> --- a/arch/mips/include/asm/time.h
+> +++ b/arch/mips/include/asm/time.h
+> @@ -55,7 +55,7 @@ static inline int mips_clockevent_init(void)
+>   */
+>  extern int init_r4k_clocksource(void);
+>
+> -static inline int init_mips_clocksource(void)
+> +static inline __init int init_mips_clocksource(void)
+>  {
+>  #ifdef CONFIG_CSRC_R4K
+>         return init_r4k_clocksource();
+> --
+> 2.34.1
+>
+>
 
