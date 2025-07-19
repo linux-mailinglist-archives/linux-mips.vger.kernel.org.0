@@ -1,56 +1,73 @@
-Return-Path: <linux-mips+bounces-9862-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9863-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D04EB0AE4C
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Jul 2025 08:52:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92C1FB0AF8D
+	for <lists+linux-mips@lfdr.de>; Sat, 19 Jul 2025 13:15:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 07F6B1899D68
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Jul 2025 06:53:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A41B4E834F
+	for <lists+linux-mips@lfdr.de>; Sat, 19 Jul 2025 11:14:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F283822C339;
-	Sat, 19 Jul 2025 06:52:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34FE8237163;
+	Sat, 19 Jul 2025 11:14:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="xKbO697j"
+	dkim=pass (1024-bit key) header.d=iitb.ac.in header.i=@iitb.ac.in header.b="K+UoZQOX"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtp1.iitb.ac.in (smtpd9.iitb.ac.in [103.21.126.64])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B33E421B18B;
-	Sat, 19 Jul 2025 06:52:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55A8121770A
+	for <linux-mips@vger.kernel.org>; Sat, 19 Jul 2025 11:14:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.21.126.64
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752907965; cv=none; b=GtagsNOEqY2n+jaMpFUEvdzU/ev/wH5DI7Wtt89e6EHqYgLrUugcbg+PKHLgEJ5dGso2cFk5g5wHLh/L96NomTOgszfedyXWWkHVT88/nNjhIkbPLXoUKaajAIslPnIbcbjnskMiLzjydSdALpiulN9Igev/ehprk5zKKMcaqsE=
+	t=1752923696; cv=none; b=Mq2/ecxG7hzEBNH5g/sqv/EmiwtpD9avWS5ahudhfABSY6C7UdxDul21UGjCfAtjoIH2j+Y2Rg93Cc8pvu8xl7GbIgk/n5TZBzdV4ly3aQnE6gkdOjXAzMSQIEc9ansdMSbHGLcrKSsXtMhlY2rDP4duIR+NYAxx6A4MhNUNP6w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752907965; c=relaxed/simple;
-	bh=6OH2X3Wst3e0vy94IdDlrw8pEvX7FDKjFs7Y/qkgnGA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iR1tO3V0DCKrJUv/OwbqUopLhS0y70sFi4zXFmVqxGa/1vkRaLozZc6mrQCGbx1Au2ayrA4TBzgvH62IelkZNe9KGIXRsnugLUx1hV/Q2VxXqhtIyP6qHbHAojmVd3fVGLh//1aaYFJEX0B4asCOGnsoOe6t/Mt07UINQfHZZCY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=xKbO697j; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D7EAC4CEE3;
-	Sat, 19 Jul 2025 06:52:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1752907965;
-	bh=6OH2X3Wst3e0vy94IdDlrw8pEvX7FDKjFs7Y/qkgnGA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=xKbO697jatzdRrok3rYuTBbyv8uR0uNOxEioC1xrZuTZJNDfY9ulx1P0yONafeWyS
-	 AQntVtchLzGHw9/6TbYdhlZFHgCGrMFLVe22um6xdMjrqZ5867cidTVu/m90RtpCV5
-	 ZbC3nSzJqX3/m1/V4xxVP6s321IisGi081KQRfis=
-Date: Sat, 19 Jul 2025 08:52:41 +0200
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Thierry Reding <thierry.reding@gmail.com>
-Cc: x86@kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, linux-mips@vger.kernel.org,
-	loongarch@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
-	linux-sh@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/7] syscore: Pass context data to callbacks
-Message-ID: <2025071919-patience-cattishly-cf7c@gregkh>
-References: <20250717103241.2806798-1-thierry.reding@gmail.com>
- <2025071716-phoney-object-1648@gregkh>
- <rzbzah5iigz25jtxyqadnitkzkazxsaxntajhlfrfdslyioevk@pylcjkfh5n42>
+	s=arc-20240116; t=1752923696; c=relaxed/simple;
+	bh=+0kK/Y15aF1bpxFAxKzHM/pKrf3ofsKUM/hU9dOfhbo=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=UMVPi8iLNnEvzh8i0OXL/e6KuNDWHmqijhhhMd0AcR3RtmcRQQTd2vExB2i5rvzZ0iLzOigrYmPz23Tmv6XfSC+tNYwZcRAYYproSe7kFHmFPaXhiLK6IKlzkdy6yu81f8zLpYyGJmxA+CFIdekoZ3JGm/vlHgZNY7qspnhEALc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ee.iitb.ac.in; spf=pass smtp.mailfrom=ee.iitb.ac.in; dkim=pass (1024-bit key) header.d=iitb.ac.in header.i=@iitb.ac.in header.b=K+UoZQOX; arc=none smtp.client-ip=103.21.126.64
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=ee.iitb.ac.in
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ee.iitb.ac.in
+Received: from ldns2.iitb.ac.in (ldns2.iitb.ac.in [10.200.12.2])
+	by smtp1.iitb.ac.in (Postfix) with SMTP id 74012104C1F3
+	for <linux-mips@vger.kernel.org>; Sat, 19 Jul 2025 16:44:38 +0530 (IST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 smtp1.iitb.ac.in 74012104C1F3
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=iitb.ac.in; s=mail;
+	t=1752923678; bh=+0kK/Y15aF1bpxFAxKzHM/pKrf3ofsKUM/hU9dOfhbo=;
+	h=Date:From:To:Cc:Subject:From;
+	b=K+UoZQOX3D6eH1OVq4E+TiIhdmB3havFN6P0wdgt239niSqV5a36XhpLCMzVdLpiw
+	 7HUsRlJnfIJ1nn6FpSypYYC32sZnBkbcVOOfMUU6mUsxKCS4CC2I+rMApznQcB495v
+	 b5DFUGiZyXq92yPX0aTwEyi4xB0gfeytvTEmTdHg=
+Received: (qmail 27692 invoked by uid 510); 19 Jul 2025 16:44:38 +0530
+X-Qmail-Scanner-Diagnostics: from 10.200.1.25 by ldns2 (envelope-from <akhilesh@ee.iitb.ac.in>, uid 501) with qmail-scanner-2.11
+ spamassassin: 3.4.1. mhr: 1.0. {clamdscan: 0.100.0/26337} 
+ Clear:RC:1(10.200.1.25):SA:0(0.0/7.0):. Processed in 3.975814 secs; 19 Jul 2025 16:44:38 +0530
+X-Spam-Level: 
+X-Spam-Pyzor: Reported 0 times.
+X-Envelope-From: akhilesh@ee.iitb.ac.in
+X-Qmail-Scanner-Mime-Attachments: |
+X-Qmail-Scanner-Zip-Files: |
+Received: from unknown (HELO ldns2.iitb.ac.in) (10.200.1.25)
+  by ldns2.iitb.ac.in with SMTP; 19 Jul 2025 16:44:34 +0530
+Received: from bhairav.ee.iitb.ac.in (bhairav.ee.iitb.ac.in [10.107.1.1])
+	by ldns2.iitb.ac.in (Postfix) with ESMTP id E50AB3414FB;
+	Sat, 19 Jul 2025 16:44:33 +0530 (IST)
+Received: from bhairav-test.ee.iitb.ac.in (bhairav.ee.iitb.ac.in [10.107.1.1])
+	(Authenticated sender: akhilesh)
+	by bhairav.ee.iitb.ac.in (Postfix) with ESMTPSA id BFD481E81340;
+	Sat, 19 Jul 2025 16:44:33 +0530 (IST)
+Date: Sat, 19 Jul 2025 16:44:27 +0530
+From: Akhilesh Patil <akhilesh@ee.iitb.ac.in>
+To: zajec5@gmail.com
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+	f.fainelli@gmail.com, bcm-kernel-feedback-list@broadcom.com,
+	tsbogend@alpha.franken.de, akhileshpatilvnit@gmail.com,
+	skhan@linuxfoundation.org
+Subject: [PATCH] drivers: firmware: bcm47xx_sprom: fix spelling
+Message-ID: <aHt+Ey5AQ0dsCuB4@bhairav-test.ee.iitb.ac.in>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -59,115 +76,29 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <rzbzah5iigz25jtxyqadnitkzkazxsaxntajhlfrfdslyioevk@pylcjkfh5n42>
 
-On Fri, Jul 18, 2025 at 03:49:37PM +0200, Thierry Reding wrote:
-> On Thu, Jul 17, 2025 at 02:11:41PM +0200, Greg Kroah-Hartman wrote:
-> > On Thu, Jul 17, 2025 at 12:32:34PM +0200, Thierry Reding wrote:
-> > > From: Thierry Reding <treding@nvidia.com>
-> > > 
-> > > Hi,
-> > > 
-> > > Something that's been bugging me over the years is how some drivers have
-> > > had to adopt file-scoped variables to pass data into something like the
-> > > syscore operations. This is often harmless, but usually leads to drivers
-> > > not being able to deal with multiple instances, or additional frameworks
-> > > or data structures needing to be created to handle multiple instances.
-> > > 
-> > > This series proposes to "objectify" struct syscore_ops by passing a
-> > > pointer to struct syscore_ops to the syscore callbacks. Implementations
-> > > of these callbacks can then make use of container_of() to get access to
-> > > contextual data that struct syscore_ops was embedded in. This elegantly
-> > > avoids the need for file-scoped, singleton variables, by tying syscore
-> > > to individual instances.
-> > > 
-> > > Patch 1 contains the bulk of these changes. It's fairly intrusive
-> > > because it does the conversion of the function signature all in one
-> > > patch. An alternative would've been to introduce new callbacks such that
-> > > these changes could be staged in. However, the amount of changes here
-> > > are not quite numerous enough to justify that, in my opinion, and
-> > > syscore isn't very frequently used, so the risk of another user getting
-> > > added while this is merged is rather small. All in all I think merging
-> > > this in one go is the simplest way.
-> > 
-> > All at once is good, I like the idea, but:
-> > 
-> > > Patches 2-7 are conversions of some existing drivers to take advantage
-> > > of this new parameter and tie the code to per-instance data.
-> > 
-> > That's great, but none of these conversions actually get rid of the
-> > global structure, so what actually was helped here other than the churn
-> > of this "potentially" allowing the global data variables from being
-> > removed in the future?
-> > 
-> > So how does this actually help?
-> 
-> Thanks for pointing this out and letting me look at it again. Most of
-> these actually do get rid of the global data variables. The MIPS patch
-> doesn't because I forgot, but the __alchemy_pci_ctx is no longer used
-> after the patch (except where it's initialized to the ctx variable, but
-> that's no longer needed now). I've updated that patch.
-> 
-> The Ingenic TCU patch gets rid of it, and so do the clk/mvebu and
-> irq-imx-gpcv2 patches. The two exceptions where it wasn't possible to
-> get rid of the global data variables are mvebu-mbus and Tegra PMC, in
-> both cases because there is other functionality that relies on the
-> global variable. The bits that make it very difficult to remove these
-> entirely is that they export functions that are called without context
-> from other parts of code.
+Fix spelling in bcm47xx_sprom.c as follows,
+specififc --> specific
 
-Ah, I must have looked at the wrong examples in the patch series, sorry.
+Signed-off-by: Akhilesh Patil <akhilesh@ee.iitb.ac.in>
+---
+ drivers/firmware/broadcom/bcm47xx_sprom.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> I have a fairly large series on top of this that converts the Tegra PMC
-> driver to move away from this as much as possible. It's not possible to
-> do on 32-bit ARM because there is some low-level CPU code that needs to
-> call into this function. However, the goal is to at least make the PMC
-> driver data completely instance-specific on 64-bit ARM so that we can
-> support multiple instances eventually.
-> 
-> Maybe something similar could be done for mvebu-bus, but I'm not sure
-> it's worth it. Typically for these cases you need some form of context
-> in order to replace the global data. On Tegra we do have that in many
-> cases (via DT phandle references), but I'm not familiar enough with
-> mvebu to know if something similar exists.
-> 
-> My goal with this series is to get this a bit more established so that
-> people don't use the lack of context in syscore as an excuse for not
-> properly encapsulating things. These usually tend to go hand in hand,
-> where people end up using a global data variable for syscore and since
-> they can't get around that one, they keep using it for a bunch of other
-> shortcuts.
+diff --git a/drivers/firmware/broadcom/bcm47xx_sprom.c b/drivers/firmware/broadcom/bcm47xx_sprom.c
+index 14fbcd11657c..fdcd3a07abcd 100644
+--- a/drivers/firmware/broadcom/bcm47xx_sprom.c
++++ b/drivers/firmware/broadcom/bcm47xx_sprom.c
+@@ -404,7 +404,7 @@ static void bcm47xx_sprom_fill_auto(struct ssb_sprom *sprom,
+ 	ENTRY(0x00000700, u8, pre, "noiselvl5gua1", noiselvl5gua[1], 0, fb);
+ 	ENTRY(0x00000700, u8, pre, "noiselvl5gua2", noiselvl5gua[2], 0, fb);
+ }
+-#undef ENTRY /* It's specififc, uses local variable, don't use it (again). */
++#undef ENTRY /* It's specific, uses local variable, don't use it (again). */
+ 
+ static void bcm47xx_fill_sprom_path_r4589(struct ssb_sprom *sprom,
+ 					  const char *prefix, bool fallback)
+-- 
+2.34.1
 
-I agree, I overall like this change, just expected to see more global
-structures being able to be removed.
-
-> > Also, small nit, make the function pointers const please :)
-> 
-> I originally tried that. Unfortunately, the struct syscore_ops contains
-> a struct list_head to add it to the global list of structures. I suppose
-> I could move the function pointers into a different structure and make
-> pointers to that const, something like this:
-> 
-> 	struct syscore;
-> 
-> 	struct syscore_ops {
-> 		int (*suspend)(struct syscore *syscore);
-> 		void (*resume)(struct syscore *syscore);
-> 		void (*shutdown)(struct syscore *syscore);
-> 	};
-> 
-> 	struct syscore {
-> 		const struct syscore_ops *ops;
-> 		struct list_head node;
-> 	};
-> 
-> Is that what you had in mind?
-
-I missed the list_head, so yes, this would be better, but don't pass
-back the syscore structure, how about just a void * instead, making the
-whole container_of() stuff go away?
-
-thanks,
-
-greg k-h
 
