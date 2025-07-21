@@ -1,117 +1,205 @@
-Return-Path: <linux-mips+bounces-9864-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9865-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58709B0B0CC
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Jul 2025 18:02:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05926B0C928
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Jul 2025 18:58:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EA1203B1AEC
-	for <lists+linux-mips@lfdr.de>; Sat, 19 Jul 2025 16:02:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 29A79545BA0
+	for <lists+linux-mips@lfdr.de>; Mon, 21 Jul 2025 16:58:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8967B28641C;
-	Sat, 19 Jul 2025 16:02:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="LE2BqCM5"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78F032918C8;
+	Mon, 21 Jul 2025 16:57:58 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9F472236F4
-	for <linux-mips@vger.kernel.org>; Sat, 19 Jul 2025 16:02:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BA461D540
+	for <linux-mips@vger.kernel.org>; Mon, 21 Jul 2025 16:57:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=140.211.166.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1752940950; cv=none; b=eOlorMimB6T/k/AhQz0MHzx1cFZ/2/CrDg0CdcdJ1mEOzV/AjE5Y2dJ18JqPKEhka5FRZf+KXAJt8Ro7MhIN95Q71SbWsNCCWg8iHa/9BYYl7hb1StAmv7NLSQQObpthZdc7OLrS7NrSvRbxVdtE/pAYtmwdOpNHy8sOmvTzF5Q=
+	t=1753117078; cv=none; b=HMbdTzfqjuPeyzWNXf0NrI9OaEC9W9SG34UAFYlQnQIYbahlCfQoG+adc9yXxzpAfXXgg5bxsehuzmy9Nigp2m7YgNsbir5oEEzyw8i/3VhwpWM+JnjDLDpuvaxz9bfhRxDEjEeSV7fiyC9rZyOnsCnF4t0HUZMhtde5TvJeMnY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1752940950; c=relaxed/simple;
-	bh=omxcvlFB5WsNU7W/SPacQy7pFjeWx/NXXRV3R/gNeMk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=s0+76bRVwAgqtQcnl//8hQZmgQNbCvBqAAojNKJXmf8vaYTEBZz+a3lFVPNbZvZGrQPRGQOg6uvUFn+epliJyBtv1yN2Iu9Jm3DlXa/Haoa6FkLMBfy0FfsCNWA0sASsZzJMyy5RQgGENbwx6aV0DW1o9uIRFzo509ee8OXuulA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=LE2BqCM5; arc=none smtp.client-ip=209.85.167.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-555024588b1so3340373e87.1
-        for <linux-mips@vger.kernel.org>; Sat, 19 Jul 2025 09:02:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1752940947; x=1753545747; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WJxRZr7iN1QAKs2m80VW48YbRh0uObEphOGlhuo4nf8=;
-        b=LE2BqCM5hp9mS1GmvHga7NVq3laPX2EZtx69qWEeidhXmOCJyc+9rVO2IOpA3QoWfT
-         QVnut84cqtlhsWWrBDZ3x3BAzj3XlUkhVxA7VHWMvaeLpm5IFdqME/G60u3gl0SiPBpH
-         xPXWqwP4VpHqscqBsQ7I09Ed0w6/SOTXE2TpfyhJ3RBxnPJxNp9VBouWVBnTaT9JfPqi
-         7o+IaR+DdrgP+K/Avh90KxJQPkLoufmSqYGTkFY3B2ko0SxMDxiKEeIelC7stOdPTN6L
-         cm9E3HR0lmp+VXmp+Su6hDg9AfCfScwJHgQ9RPtpfi0m+YC/DSfKHnmntKDQcl70Hzs/
-         Pyig==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1752940947; x=1753545747;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WJxRZr7iN1QAKs2m80VW48YbRh0uObEphOGlhuo4nf8=;
-        b=aZxyMQ7m0AtuYGio5d320gsSxnujVLtquuhLVtd7NZ126FP+YKpm3JPF18+96QqUvm
-         F00Z0lmC+KAHpjs2yCLRy9u9P1ubuHhvAIaQyZvNmQS1ldFT1crYWpKot5xcFsGxceSJ
-         3xj7kCnIKUFcMeInBwgEy4t6PUAflTPNiMhZSNEdML7jrs4M4zWKueWSqSPi3+Out/tn
-         1QK9fPiJA+wNM4plMrAm5iR8L4lNnBpzfaxL8os2ohzJy8j/a9pe/JnhsxmhUcj/78Ah
-         p2i31mgxx3xPgeenh6zHWHhbBPjSgY5WkCM13dQQ8tmiwqU1dzznGNkEr2ZVxh1b4Y/2
-         9Hcw==
-X-Forwarded-Encrypted: i=1; AJvYcCW2vmivPW1ozho4LSNfzRjxYPbQjt3PxiZrnt8ApynpNf88ThoRuIeYObQ3vgloA19k7RMX49xsMp9Y@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7IcougLEeQJ/EEhgs/efaOkYQ1RcQNYwWsl4BhLz7dx2KOuwJ
-	4JL6HZgnvmNJYAzIHLqRFX1n+Uryn2tQnqAbyaEwXt7v6tPoxG8pjeoxqRk1F4OEtPUJzVf6Kwl
-	5jS4/Tf6LjmXn5EjHLNI1aPh3lbhqAjfkeFVr0ox9Qg==
-X-Gm-Gg: ASbGncsGKQY4rDGlupcfwcZzfmQdxGDRdZhDoP70Jt+x/2eWftvpW2Dep/rpxl6M/zo
-	IAiPk4QHzIK98BKFWepRErj8Y7qVYYoW1YIhPOOBy3Wg0UVdTTpbq63g6yWSaHe7/0TsWrGB5/n
-	ukyaNUlyOqrDXKxfVg9eQTvkuh8EmzJJKbaVN6bVG6B6oXriauhneanj5bbb4kdMk6uLcaPDSqQ
-	i51+6A=
-X-Google-Smtp-Source: AGHT+IEoUxfZHhjopPDobqn7dOjOmBm5Yh2lx21AMKQLkwO7yH4BlU0K80uOKrtvDizTOqyz64KGrJ56htRl33CUOe0=
-X-Received: by 2002:a05:6512:3406:b0:553:241d:4e7d with SMTP id
- 2adb3069b0e04-55a23f6dd82mr3887668e87.42.1752940946812; Sat, 19 Jul 2025
- 09:02:26 -0700 (PDT)
+	s=arc-20240116; t=1753117078; c=relaxed/simple;
+	bh=k+1wCmJZwoTZemfIdGikHAoh0FlWCpXxI43xBF3R5K8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uE+gU9Y+prlMHJ8qCyJkLWgQTwzr5O0/6IChs5X6b+ws6Me73a/UATAjOXkkKe0QKCfMaZQKqUdFQnd6VdicJuEwlbwOsS3CymE4x+Gc3pg9n4+0hpBG2yN/pUbVAO1nkJjlVg2rwWTTkYORIZBrJ2KnQwA4RXJjTlbMMNhOZEc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org; spf=pass smtp.mailfrom=gentoo.org; arc=none smtp.client-ip=140.211.166.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentoo.org
+Received: from caradhras.arda (pool-96-241-31-235.washdc.fios.verizon.net [96.241.31.235])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kumba)
+	by smtp.gentoo.org (Postfix) with ESMTPSA id 35B8F340D23;
+	Mon, 21 Jul 2025 16:57:53 +0000 (UTC)
+From: Joshua Kinard <kumba@gentoo.org>
+To: linux-mips@vger.kernel.org
+Cc: Joshua Kinard <linux@kumba.dev>,
+	Joshua Kinard <kumba@gentoo.org>
+Subject: [PATCH] MIPS: Update Joshua Kinard's e-mail address
+Date: Mon, 21 Jul 2025 12:57:15 -0400
+Message-ID: <20250721165715.20478-1-kumba@gentoo.org>
+X-Mailer: git-send-email 2.50.0
+Reply-To: Joshua Kinard <linux@kumba.dev>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250709-pinctrl-gpio-pinfuncs-v2-0-b6135149c0d9@linaro.org>
-In-Reply-To: <20250709-pinctrl-gpio-pinfuncs-v2-0-b6135149c0d9@linaro.org>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Sat, 19 Jul 2025 18:02:15 +0200
-X-Gm-Features: Ac12FXztrlt_TII82ZBIkZmMLTzLg24otRAxfGOCzM7K4BljVaj3bGcukozw-cQ
-Message-ID: <CACRpkdZN3qAJdvDkzvr0_=7grNHWFQ6M+_b=BvREq+PyosBmiA@mail.gmail.com>
-Subject: Re: [PATCH v2 00/12] pinctrl: introduce the concept of a GPIO pin
- function category
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Alexey Klimov <alexey.klimov@linaro.org>, Lorenzo Bianconi <lorenzo@kernel.org>, 
-	Sean Wang <sean.wang@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Paul Cercueil <paul@crapouillou.net>, linux-gpio@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
-	linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mips@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jul 9, 2025 at 4:39=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl> =
-wrote:
+I am switching my address to a personal domain, so some files in the
+SGI IP30 and IOC3 files need to be updated.  I will send updates for
+the MAINTAINERS file and rtc-ds1685 separately to linux-rtc.
 
-> Bartosz Golaszewski (12):
->       pinctrl: pinmux: open-code PINCTRL_FUNCTION_DESC()
->       pinctrl: provide pinmux_generic_add_pinfunction()
->       pinctrl: equilibrium: use pinmux_generic_add_pinfunction()
->       pinctrl: airoha: use pinmux_generic_add_pinfunction()
->       pinctrl: mediatek: moore: use pinmux_generic_add_pinfunction()
->       pinctrl: keembay: use pinmux_generic_add_pinfunction()
->       pinctrl: ingenic: use pinmux_generic_add_pinfunction()
+Signed-off-by: Joshua Kinard <kumba@gentoo.org>
+---
+ arch/mips/include/asm/mach-ip30/cpu-feature-overrides.h | 2 +-
+ arch/mips/include/asm/mach-ip30/spaces.h                | 2 +-
+ arch/mips/include/asm/sgi/heart.h                       | 2 +-
+ arch/mips/sgi-ip30/ip30-power.c                         | 2 +-
+ arch/mips/sgi-ip30/ip30-setup.c                         | 2 +-
+ arch/mips/sgi-ip30/ip30-smp.c                           | 2 +-
+ arch/mips/sgi-ip30/ip30-timer.c                         | 2 +-
+ arch/mips/sgi-ip30/ip30-xtalk.c                         | 2 +-
+ drivers/mfd/ioc3.c                                      | 2 +-
+ drivers/tty/serial/8250/8250_ioc3.c                     | 2 +-
+ 10 files changed, 10 insertions(+), 10 deletions(-)
 
-Patches 1-7 applied!
+diff --git a/arch/mips/include/asm/mach-ip30/cpu-feature-overrides.h b/arch/mips/include/asm/mach-ip30/cpu-feature-overrides.h
+index ce4e4c6e09e2..50d487a4c95e 100644
+--- a/arch/mips/include/asm/mach-ip30/cpu-feature-overrides.h
++++ b/arch/mips/include/asm/mach-ip30/cpu-feature-overrides.h
+@@ -5,7 +5,7 @@
+  * Copyright (C) 2003 Ralf Baechle <ralf@linux-mips.org>
+  *		 2004-2007 Stanislaw Skowronek <skylark@unaligned.org>
+  *		 2009 Johannes Dickgreber <tanzy@gmx.de>
+- *		 2015 Joshua Kinard <kumba@gentoo.org>
++ *		 2015 Joshua Kinard <linux@kumba.dev>
+  *
+  */
+ #ifndef __ASM_MACH_IP30_CPU_FEATURE_OVERRIDES_H
+diff --git a/arch/mips/include/asm/mach-ip30/spaces.h b/arch/mips/include/asm/mach-ip30/spaces.h
+index c8a302dfbe05..d381b93d6ad3 100644
+--- a/arch/mips/include/asm/mach-ip30/spaces.h
++++ b/arch/mips/include/asm/mach-ip30/spaces.h
+@@ -1,6 +1,6 @@
+ /* SPDX-License-Identifier: GPL-2.0 */
+ /*
+- * Copyright (C) 2016 Joshua Kinard <kumba@gentoo.org>
++ * Copyright (C) 2016 Joshua Kinard <linux@kumba.dev>
+  *
+  */
+ #ifndef _ASM_MACH_IP30_SPACES_H
+diff --git a/arch/mips/include/asm/sgi/heart.h b/arch/mips/include/asm/sgi/heart.h
+index 0d03751955c4..c224c2e3575a 100644
+--- a/arch/mips/include/asm/sgi/heart.h
++++ b/arch/mips/include/asm/sgi/heart.h
+@@ -4,7 +4,7 @@
+  *
+  * Copyright (C) 2004-2007 Stanislaw Skowronek <skylark@unaligned.org>
+  *		 2009 Johannes Dickgreber <tanzy@gmx.de>
+- *		 2007-2015 Joshua Kinard <kumba@gentoo.org>
++ *		 2007-2015 Joshua Kinard <linux@kumba.dev>
+  */
+ #ifndef __ASM_SGI_HEART_H
+ #define __ASM_SGI_HEART_H
+diff --git a/arch/mips/sgi-ip30/ip30-power.c b/arch/mips/sgi-ip30/ip30-power.c
+index 120b3f3d5108..66851e17c5a7 100644
+--- a/arch/mips/sgi-ip30/ip30-power.c
++++ b/arch/mips/sgi-ip30/ip30-power.c
+@@ -3,7 +3,7 @@
+  * ip30-power.c: Software powerdown and reset handling for IP30 architecture.
+  *
+  * Copyright (C) 2004-2007 Stanislaw Skowronek <skylark@unaligned.org>
+- *               2014 Joshua Kinard <kumba@gentoo.org>
++ *               2014 Joshua Kinard <linux@kumba.dev>
+  *               2009 Johannes Dickgreber <tanzy@gmx.de>
+  */
+ 
+diff --git a/arch/mips/sgi-ip30/ip30-setup.c b/arch/mips/sgi-ip30/ip30-setup.c
+index e8547636a748..3fcb3ec9f802 100644
+--- a/arch/mips/sgi-ip30/ip30-setup.c
++++ b/arch/mips/sgi-ip30/ip30-setup.c
+@@ -3,7 +3,7 @@
+  * SGI IP30 miscellaneous setup bits.
+  *
+  * Copyright (C) 2004-2007 Stanislaw Skowronek <skylark@unaligned.org>
+- *               2007 Joshua Kinard <kumba@gentoo.org>
++ *               2007 Joshua Kinard <linux@kumba.dev>
+  *               2009 Johannes Dickgreber <tanzy@gmx.de>
+  */
+ 
+diff --git a/arch/mips/sgi-ip30/ip30-smp.c b/arch/mips/sgi-ip30/ip30-smp.c
+index 4bfe654602b1..1e8210f2a9f8 100644
+--- a/arch/mips/sgi-ip30/ip30-smp.c
++++ b/arch/mips/sgi-ip30/ip30-smp.c
+@@ -5,7 +5,7 @@
+  * and smp-bmips.c.
+  *
+  * Copyright (C) 2005-2007 Stanislaw Skowronek <skylark@unaligned.org>
+- *               2006-2007, 2014-2015 Joshua Kinard <kumba@gentoo.org>
++ *               2006-2007, 2014-2015 Joshua Kinard <linux@kumba.dev>
+  *               2009 Johannes Dickgreber <tanzy@gmx.de>
+  */
+ 
+diff --git a/arch/mips/sgi-ip30/ip30-timer.c b/arch/mips/sgi-ip30/ip30-timer.c
+index d13e105478ae..7652f72f0daf 100644
+--- a/arch/mips/sgi-ip30/ip30-timer.c
++++ b/arch/mips/sgi-ip30/ip30-timer.c
+@@ -5,7 +5,7 @@
+  *
+  * Copyright (C) 2004-2007 Stanislaw Skowronek <skylark@unaligned.org>
+  * Copyright (C) 2009 Johannes Dickgreber <tanzy@gmx.de>
+- * Copyright (C) 2011 Joshua Kinard <kumba@gentoo.org>
++ * Copyright (C) 2011 Joshua Kinard <linux@kumba.dev>
+  */
+ 
+ #include <linux/clocksource.h>
+diff --git a/arch/mips/sgi-ip30/ip30-xtalk.c b/arch/mips/sgi-ip30/ip30-xtalk.c
+index 7ceb2b23ea1c..d798ee8c998c 100644
+--- a/arch/mips/sgi-ip30/ip30-xtalk.c
++++ b/arch/mips/sgi-ip30/ip30-xtalk.c
+@@ -3,7 +3,7 @@
+  * ip30-xtalk.c - Very basic Crosstalk (XIO) detection support.
+  *   Copyright (C) 2004-2007 Stanislaw Skowronek <skylark@unaligned.org>
+  *   Copyright (C) 2009 Johannes Dickgreber <tanzy@gmx.de>
+- *   Copyright (C) 2007, 2014-2016 Joshua Kinard <kumba@gentoo.org>
++ *   Copyright (C) 2007, 2014-2016 Joshua Kinard <linux@kumba.dev>
+  */
+ 
+ #include <linux/init.h>
+diff --git a/drivers/mfd/ioc3.c b/drivers/mfd/ioc3.c
+index 58656837b7c6..5f8ac364b610 100644
+--- a/drivers/mfd/ioc3.c
++++ b/drivers/mfd/ioc3.c
+@@ -6,7 +6,7 @@
+  *
+  * Based on work by:
+  *   Stanislaw Skowronek <skylark@unaligned.org>
+- *   Joshua Kinard <kumba@gentoo.org>
++ *   Joshua Kinard <linux@kumba.dev>
+  *   Brent Casavant <bcasavan@sgi.com> - IOC4 master driver
+  *   Pat Gefre <pfg@sgi.com> - IOC3 serial port IRQ demuxer
+  */
+diff --git a/drivers/tty/serial/8250/8250_ioc3.c b/drivers/tty/serial/8250/8250_ioc3.c
+index 499e80aa4cf9..eea543f97a84 100644
+--- a/drivers/tty/serial/8250/8250_ioc3.c
++++ b/drivers/tty/serial/8250/8250_ioc3.c
+@@ -5,7 +5,7 @@
+  * Copyright (C) 2019 Thomas Bogendoerfer <tbogendoerfer@suse.de>
+  *
+  * based on code Copyright (C) 2005 Stanislaw Skowronek <skylark@unaligned.org>
+- *               Copyright (C) 2014 Joshua Kinard <kumba@gentoo.org>
++ *               Copyright (C) 2014 Joshua Kinard <linux@kumba.dev>
+  */
+ 
+ #include <linux/module.h>
+-- 
+2.50.0
 
-Expect qcom to follow early in the next development cycle.
-
-Yours,
-Linus Walleij
 
