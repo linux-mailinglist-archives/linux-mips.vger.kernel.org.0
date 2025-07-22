@@ -1,107 +1,134 @@
-Return-Path: <linux-mips+bounces-9870-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9871-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99214B0E039
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Jul 2025 17:18:15 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 64676B0E0C1
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Jul 2025 17:40:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9BB4D1883D95
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Jul 2025 15:16:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E7B92188919F
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Jul 2025 15:40:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 010A9245033;
-	Tue, 22 Jul 2025 15:15:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3BE5264626;
+	Tue, 22 Jul 2025 15:39:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="DycZFgPq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BzvFqCVC"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay2-d.mail.gandi.net (relay2-d.mail.gandi.net [217.70.183.194])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75B5923B62B;
-	Tue, 22 Jul 2025 15:15:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.194
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8282A7F9;
+	Tue, 22 Jul 2025 15:39:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753197353; cv=none; b=ANhmYwGP5uDyJDLUEbZkTO/ewacVJZ1t2Yl16WizxNvUUDnbY3Ghz5ZuumEOL8S6EhW3WsHK8qtGvM7HA4inXCGcJ9G2OW4UF27LDdANrhCzjAJAnfmcuQsl2dTaimNuL4OaSpji157rEPageWRlyWIKd2eXbUbrmKXpcN9feEE=
+	t=1753198787; cv=none; b=Go5DWqpCqzt77EjSfKUXmWQz60DhzeKHFTzaCrDb9kl6kJMLY1AJCLOVe6wUuaHgFlv2ZBwcsOzRXxE00KDsad9/lEWi7GeIusoMR7d/h6KyeJ9YkyxcfIIVSY80AWjKv6m4nwU4nWPW0drds4I32DYoevoyHtZB21zPpAJaniQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753197353; c=relaxed/simple;
-	bh=uk8lMsAdJeKUbDd8hlCoUXYBYkf+zJJniYwJBxbKCps=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=rsVdlNri7owPYfI2SZJbvpQwJYJm5oIFrXY+gMJGrl6SX/p/FXIMOeNqtoF0nEr48A8/eSGbN3yXVUbDGP3YYhtEVRzYUJsGhYw8XAmrtDAYqz4Zw//gR4y5FegVcyQxkzZ/qd55I9YLUbTbAwR8JjhyzkdKvrnvA6KTvOHI4PU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=DycZFgPq; arc=none smtp.client-ip=217.70.183.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 420A0438DC;
-	Tue, 22 Jul 2025 15:15:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1753197349;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=ggz89UiruJ+IKaN9iykZ93xSbQgCXL3G5HnjNJV4Ruk=;
-	b=DycZFgPqUJO1s7o1dKpaCc7NJ8sV4IseRQyuTonuGnk+GcQwJuoxCx9l9oI9wqa+bTg7dS
-	E2aJPqTJvRPRIo6LQZ9WLcU7wX03RiFzXnxZxd+p8h85dc9rQfGeo97W+nIOWoABlaJQeP
-	ysEDPWqMk9T3/i5Sv201t873pFHs3PHzxjx0/frsd6dmnJkvtbCZBkZB+MgaZuDVMIX8Lq
-	EkZtdpDPtnQG26Qn9LBvdDMo3sQDuD5XAVmUk4has2gHCsI9ovt5H90XJeTOwT2r9Cv5R2
-	NBNbRNrqokwFBoDIVvSDIUG/IHYjJnLLPmAha1wnSeaYTSbROHJeezuD+U0BnQ==
-From: =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
-Date: Tue, 22 Jul 2025 17:15:21 +0200
-Subject: [PATCH 2/2] MIPS: mobileye: dts: eyeq6h: rename the emmc
- controller
+	s=arc-20240116; t=1753198787; c=relaxed/simple;
+	bh=2T8ZH1HyZDNhXxPm85UiHpTaZiBGX7WQnZsC+C+Ii4c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=EyKjQmcRFD3A34BY9zPr3kGst86RJJFUIgITTqpR/YHgZFhIHV/xx/XClxRCHmLbivUWJIG6oA5DuNfyXwefCwDoiEKebDdc/rhUpOg66F1WEQVV4bP0rNmIMzx6y4u2qCN8m5a0O4Sk98LPfSS4rwvbRG30eraDza53Lby8lmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BzvFqCVC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBEA2C4CEF6;
+	Tue, 22 Jul 2025 15:39:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753198786;
+	bh=2T8ZH1HyZDNhXxPm85UiHpTaZiBGX7WQnZsC+C+Ii4c=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=BzvFqCVCqsh+JLOq4YnBjmkFLFVwcp2LCfnTBGeA3e6jS2HZcnaSMp+YgdWnwYPb+
+	 +MRnh7r40H6PRx9iLyt9ZDTE7uij5zoRuljlHMDmbP+YAFg+MPk4EeZp6io6NlJ9ec
+	 5KX7Ze/RQW1qsRnsHOWwzoFA5SwxEMlc0Mg/GEis2pw4jvSFzX6G/RYC2TTg0sI7DA
+	 EcuxLPzP9PxQknzj0lV1QsmqwHtuix4xyGg793hxZ1+HDeBupkIKI25q8jtLy9jXDi
+	 v3cD1lElltNRk6uQTzfF/DwNxuIkPedHAbCmR9rizXpWMpAzYsS6yUSk/oGobB1LH6
+	 hz4ClYcCjlxUQ==
+Message-ID: <fed126f4-20e6-4d7b-a29e-e7206875b5a0@kernel.org>
+Date: Tue, 22 Jul 2025 17:39:40 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250722-mmc_dts_warnings-v1-2-8a8a1594dfd2@bootlin.com>
-References: <20250722-mmc_dts_warnings-v1-0-8a8a1594dfd2@bootlin.com>
-In-Reply-To: <20250722-mmc_dts_warnings-v1-0-8a8a1594dfd2@bootlin.com>
-To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
- Gregory CLEMENT <gregory.clement@bootlin.com>, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] MIPS: mobileye: dts: eyeq5: rename the emmc
+ controller
+To: =?UTF-8?Q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>,
+ Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+ Gregory CLEMENT <gregory.clement@bootlin.com>,
+ =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
  Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>, 
+Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  kernel test robot <lkp@intel.com>
-X-Mailer: b4 0.14.2
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdejhedvfecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfitefpfffkpdcuggftfghnshhusghstghrihgsvgenuceurghilhhouhhtmecufedtudenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephfffufggtgfgkfhfjgfvvefosehtkeertdertdejnecuhfhrohhmpeeuvghnohpfthcuofhonhhinhcuoegsvghnohhithdrmhhonhhinhessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgfefvdejledtvddvudehueejjeelhedtgfdvueffiedtieeutdegueetteejgeeinecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepvdgrtddumegtsgdugeemheehieemjegrtddtmeduheefjeemfhefheemleefiegumegvledvheenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtudemtggsudegmeehheeimeejrgdttdemudehfeejmehffeehmeelfeeiugemvgelvdehpdhhvghloheplgduledvrdduieekrddutddrudejvdgnpdhmrghilhhfrhhomhepsggvnhhoihhtrdhmohhnihhnsegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedugedprhgtphhtthhopeguvghvihgtvghtrhgvvgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehkrhiikhdoughtsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegtohhnohhrodgutheskhgvr
- hhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepthgrfihfihhkrdgsrgihohhukhesmhhosghilhgvhigvrdgtohhmpdhrtghpthhtoheplhhinhhugidqmhhiphhssehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepthhhohhmrghsrdhpvghtrgiiiihonhhisegsohhothhlihhnrdgtohhmpdhrtghpthhtohepthhssghoghgvnhgusegrlhhphhgrrdhfrhgrnhhkvghnrdguvg
-X-GND-Sasl: benoit.monin@bootlin.com
+References: <20250722-mmc_dts_warnings-v1-0-8a8a1594dfd2@bootlin.com>
+ <20250722-mmc_dts_warnings-v1-1-8a8a1594dfd2@bootlin.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250722-mmc_dts_warnings-v1-1-8a8a1594dfd2@bootlin.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-The name should match the pattern defined in the mmc-controller binding.
+On 22/07/2025 17:15, Benoît Monin wrote:
+> The name should match the pattern defined in the mmc-controller binding.
+> 
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202507220336.JhvVLL7k-lkp@intel.com/
+> Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202507220215.wVoUMK5B-lkp@intel.com/
-Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
----
- arch/mips/boot/dts/mobileye/eyeq6h.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+The important point of that binding here:
+https://lore.kernel.org/linux-devicetree/9b34b471d1e71cf47c503aed7145fab896767ba7.1750156323.git.benoit.monin@bootlin.com/
 
-diff --git a/arch/mips/boot/dts/mobileye/eyeq6h.dtsi b/arch/mips/boot/dts/mobileye/eyeq6h.dtsi
-index bbd463435ad658105a862c5b550d21e1110e7c8c..5ae939d25ea87ddc15cb848c249beed3d07e32e0 100644
---- a/arch/mips/boot/dts/mobileye/eyeq6h.dtsi
-+++ b/arch/mips/boot/dts/mobileye/eyeq6h.dtsi
-@@ -109,7 +109,7 @@ olb_east: system-controller@d3358000 {
- 			clock-names = "ref";
- 		};
- 
--		emmc: sdhci@d8010000 {
-+		emmc: mmc@d8010000 {
- 			compatible = "mobileye,eyeq-sd4hc", "cdns,sd4hc";
- 			reg = <0 0xd8010000 0x0 0x1000>;
- 			interrupt-parent = <&gic>;
+was to USE it for testing it. Before you send such work, you are
+supposed to check your code with the toolset.
 
--- 
-2.50.1
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
+Best regards,
+Krzysztof
 
