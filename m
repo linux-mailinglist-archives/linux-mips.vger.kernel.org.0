@@ -1,132 +1,139 @@
-Return-Path: <linux-mips+bounces-9872-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9873-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 54A12B0E0C2
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Jul 2025 17:40:26 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7237AB0E570
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Jul 2025 23:29:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 83BFA564B6C
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Jul 2025 15:40:26 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 62B687A2E0B
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Jul 2025 21:27:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC64625A327;
-	Tue, 22 Jul 2025 15:40:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DF2C286409;
+	Tue, 22 Jul 2025 21:29:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kcsm+nJ0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bNGjIj56"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5C927F9;
-	Tue, 22 Jul 2025 15:40:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E036038DDB;
+	Tue, 22 Jul 2025 21:28:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753198821; cv=none; b=Ak83d8fj6lp0YaWsRPfuttO5W8+5UucU2YDpSvGdypZAnHr3XPUoxUKN2YK5V+g/PWfHwUIz5JJZE/GsC+vbiS6oLPu1nALSsxoiK84z/zso8GD0b+e8OS1JW0xghAkzuMQhLwo8ZC/7ePPrWAI8CEMTeEkNRodg/vSPJMmD5Zo=
+	t=1753219740; cv=none; b=LmyeYZeFYmqM19OcKwawqH7P9JEtcrIi0/ZI3LMnF+phBHcyqwOorETZLONcMb9kO2pXFwK6/6Yw7VfhDA6OWZySYcf3Sggknd6HMvT0zliMccc/Uj6OAVLrXjldmpmJ1BJ6tNkjEHDfDa/uDrbXljSAHO9GPfvcxX/Y0awIHpE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753198821; c=relaxed/simple;
-	bh=auL+hG0nmvo3opx1RXwaVoxmnBRbux+9KiGUSw4cmUM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ugvANSSCi7SCA4nUKgciRzAFzD9p4LXsCd4Zher7ncYt9is2+lhbhjkqJQKsvir5chFUcziNRULK19lxdN4goF4O6zzknnpa8/zAMoWBZNZFDkhrSnWTqdVRsjXmer9jq0aHihYGWPZxRXdQP2XJMuwZMLzoz1CU16R/BLz8V5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kcsm+nJ0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E1F7C4CEEB;
-	Tue, 22 Jul 2025 15:40:17 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753198821;
-	bh=auL+hG0nmvo3opx1RXwaVoxmnBRbux+9KiGUSw4cmUM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=kcsm+nJ06ETXO/OPXma7PwnI41nkDrONNfPjsM3pQLxkwBKcMhCF+dU36BaPArHOw
-	 Kpu2HYQtR/llc2FkJGWpaS+xv7jFGtMD5PU9X6Yq5u7Kxn81RP+5kqEAHbmBMsvpvj
-	 USeuMRfcjPaJtMkdQorebhqaEQ8XEvAeQj5qdSEMxS/aXOzGPvqCKuDZuo8q9riZzh
-	 pvb10ZxUfzhOMHKkWVXVbLZ0ewG+jIlZrNgb7mwHfSUJ0fjQRy9NtD71LcC/vypzLc
-	 r39FUY5ujW3Dmn963y+zZRbiepH9tIe/HQl23Ml5WwlymQ/UvriofhO/PTXYhdWWRo
-	 DSg1N+R/CxVQg==
-Message-ID: <8557c0f0-d851-4d08-a92e-ff8a0e2b3c60@kernel.org>
-Date: Tue, 22 Jul 2025 17:40:16 +0200
+	s=arc-20240116; t=1753219740; c=relaxed/simple;
+	bh=iL3Cc8xg7BQi2OW9rzWQ+J9fwwH9zN9iT7L2oo1EA84=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=oz78a4VLWyo98HYmKXceoCUaSzOCp6LLoRs7jDuuOBy9UKeHkREqFBjjmedJL6CIxwL8j+Faa29XcUbS9T4KEcXJi8Vzx+EUfrh3PnoHPmdIjj/2adKUARWoLuuL3rpBxZlsOksiEKMADwSWdqcdn4k2xwV7YfTlsbB84NMBU9Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bNGjIj56; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-3122368d7c4so5095252a91.1;
+        Tue, 22 Jul 2025 14:28:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753219738; x=1753824538; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=48867Pal/1jOpEz3/91Ogv4kveVZARbA4EPs2QFDNFE=;
+        b=bNGjIj560kRivo2U2Tc7Fi+LqojOajXt/dViWJLFTbzESirPjgb6z4SbmvRvLW8RPL
+         syA5uOcrSkK1QqFLe9bzh9lqwsQpT30Gxl9kYwPsgmn2L5KJuLGZKHc7pq2j3kg5awU4
+         ZThS/xOL6guyT+xusThsMOV4hFMJ++gIfeTh+a+e44aSEP0bKdsdCwHK+n/UtCRrGyKN
+         pGtcxeG5U6noyQvKBEkVjFkC62s1n5lbHuflfDA2OBVGBvNeW+D5dGeU+Kik0Agv0bSv
+         GBo+TLAxPQXou4BsrpTwU3tCc5WAi1LQyEgUowJagztsmZbQiPej+om20GleuTFrxidG
+         UmFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753219738; x=1753824538;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=48867Pal/1jOpEz3/91Ogv4kveVZARbA4EPs2QFDNFE=;
+        b=NHd4vEtxNeBIVrCuC7xxbOlsGsiShX7CAPJ2V80ThctUeYT+0gU5T4QtLvArT19b7P
+         Y8vcuXMXbiOeWKjS7f4sv1OY4yTS1Q1BIvyZohnY/gHrp6wmYVRt15IAj4pskpZ3BuMx
+         5iLQB9WE2E/cJLpWpichIgrYn5KhtUx9bYmHKLZMYbMGpLwedcVRdgn9nrT85dSX0VQP
+         wHECUuF26D7E8Qo4LyAev4vOpEeErn14VK/1Ht99ojAh36YrVobq1TkH3NSC5FYOlmh3
+         pK1hgIt3wSfrli10nx4jQh1Tb3N0FBFn5N0PfIvgQSCpphiqFCKwJqmblnjzHeBpHr7E
+         3/JA==
+X-Forwarded-Encrypted: i=1; AJvYcCVTmKMy0Dd3Bap6Yi5ALTUwdKiuMwJ2fINotgGE0dy32dteWwEXrbvpEQeijW1hZ+SG47SkVnSAicJv@vger.kernel.org, AJvYcCVxlqWbJSfPEP3tSujufiZXMm8FfM9VsUy2WnH8boLGXnBxDCK6IbDkbcY+GQfkIqiuRas3JcRLMLDDww==@vger.kernel.org, AJvYcCWOgRWKK5XRETsNlVZL5IGEQNeJoiM7qs5FOGpZ3scS8cmQnFp8EmGNk9JJw4mSx86Hxdpyfgn7MeNmAI4U@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7E1QwgDIRaYWyCd3rFrHQRHfZ3XkZDjuntAvKspkvVrQLfbTZ
+	emX5oH5xqxNOk3ruRXRa+PA6nWgqJmpADIlo9TfbWYxaOL0qzIA1HO/B+l8a+1go
+X-Gm-Gg: ASbGnctW2YQ08VHHvFwfyYLp5K5NW61TYh7eLuPWuRTMn0oOLP3xvlbEJK6ZXg6wSts
+	SKLQCMWG+wEDGDlVYoIKGCycnVF4HPflhZGPscq/GDRBlBtIAhNvnjLO8u5XkZhKJJ9LMLT6KCV
+	9BNl494YctKJAfQeRbSfwqs/liqkbNYH7vTyz9qJKS7tCNujC3+Y55zJ9QmyWmKKWbAnG7wbZ/t
+	J/HwD80FhzfjoxwVQP4lKk51Q3v8uLMPSZ1uYl1j7CddxQKpPQTf1cclD+qh8art/vLHJheMnkP
+	N1lOvG5CYfXv383jMwO1KAqB3UEalRatIPX6bsCIKlyWvv3vnIcPszyaeCoYMvkMVR3mWMYKDi9
+	3mik=
+X-Google-Smtp-Source: AGHT+IGdeHskm5Ee4Q3qMconqScb7wNu5KePjyblDVvV/Acs8WP6sY23sealp7liXFINeKE+T0WJQQ==
+X-Received: by 2002:a17:90b:4b0f:b0:311:d258:3473 with SMTP id 98e67ed59e1d1-31e5076a94emr948092a91.13.1753219737973;
+        Tue, 22 Jul 2025 14:28:57 -0700 (PDT)
+Received: from archlinux.lan ([2601:644:8200:dab8::1f6])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31e519ce384sm94942a91.2.2025.07.22.14.28.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Jul 2025 14:28:57 -0700 (PDT)
+From: Rosen Penev <rosenp@gmail.com>
+To: linux-wireless@vger.kernel.org
+Cc: Johannes Berg <johannes@sipsolutions.net>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Stanislaw Gruszka <stf_xl@wp.pl>,
+	devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS),
+	linux-kernel@vger.kernel.org (open list),
+	linux-mips@vger.kernel.org (open list:MIPS),
+	linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC support),
+	linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC support)
+Subject: [PATCHv5 wireless-next 0/7] wifi: rt2x00: add OF bindings + cleanup
+Date: Tue, 22 Jul 2025 14:28:49 -0700
+Message-ID: <20250722212856.11343-1-rosenp@gmail.com>
+X-Mailer: git-send-email 2.50.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] MIPS: mobileye: dts: eyeq6h: rename the emmc
- controller
-To: =?UTF-8?Q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>,
- Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
- Gregory CLEMENT <gregory.clement@bootlin.com>,
- =?UTF-8?Q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- kernel test robot <lkp@intel.com>
-References: <20250722-mmc_dts_warnings-v1-0-8a8a1594dfd2@bootlin.com>
- <20250722-mmc_dts_warnings-v1-2-8a8a1594dfd2@bootlin.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 a/A=
-In-Reply-To: <20250722-mmc_dts_warnings-v1-2-8a8a1594dfd2@bootlin.com>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On 22/07/2025 17:15, Benoît Monin wrote:
-> The name should match the pattern defined in the mmc-controller binding.
-> 
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202507220215.wVoUMK5B-lkp@intel.com/
-> Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
-> ---
->  arch/mips/boot/dts/mobileye/eyeq6h.dtsi | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+It doesn't even compile. Added OF bindings, documentation, and other
+stuff to hopefully this doesn't happen again.
 
-This should be squashed. It is trivial node name alignment with schema.
-We don't fix it one by one, it's a churn.
+v2: move all of 2x00soc to 2800soc. I didn't realize only two functions
+remained for no good reason.
+Fixed typos.
+Slightly changed probe for clarity.
 
-Best regards,
-Krzysztof
+v3: fix wrong compatible in Documentation.
+
+v4: renamed documentation file as there's only a single compatible.
+
+v5: made clocks and interrupts required in the documentation.
+
+Rosen Penev (7):
+  wifi: rt2x00: add COMPILE_TEST
+  wifi: rt2x00: remove mod_name from platform_driver
+  wifi: rt2800soc: allow loading from OF
+  wifi: rt2800: move 2x00soc to 2800soc
+  wifi: rt2x00: soc: modernize probe
+  MIPS: dts: ralink: mt7620a: add wifi
+  dt-bindings: net: wireless: rt2800: add
+
+ .../bindings/net/wireless/ralink,rt2800.yaml  |  47 ++++++
+ arch/mips/boot/dts/ralink/mt7620a.dtsi        |  10 ++
+ drivers/net/wireless/ralink/rt2x00/Kconfig    |   7 +-
+ drivers/net/wireless/ralink/rt2x00/Makefile   |   1 -
+ .../net/wireless/ralink/rt2x00/rt2800soc.c    | 102 +++++++++++-
+ .../net/wireless/ralink/rt2x00/rt2x00soc.c    | 151 ------------------
+ .../net/wireless/ralink/rt2x00/rt2x00soc.h    |  29 ----
+ 7 files changed, 156 insertions(+), 191 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/net/wireless/ralink,rt2800.yaml
+ delete mode 100644 drivers/net/wireless/ralink/rt2x00/rt2x00soc.c
+ delete mode 100644 drivers/net/wireless/ralink/rt2x00/rt2x00soc.h
+
+-- 
+2.50.0
+
 
