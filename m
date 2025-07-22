@@ -1,205 +1,166 @@
-Return-Path: <linux-mips+bounces-9865-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9866-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05926B0C928
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Jul 2025 18:58:02 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85B86B0DC35
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Jul 2025 15:59:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 29A79545BA0
-	for <lists+linux-mips@lfdr.de>; Mon, 21 Jul 2025 16:58:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 338AC18925B6
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Jul 2025 13:57:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78F032918C8;
-	Mon, 21 Jul 2025 16:57:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 852912EA728;
+	Tue, 22 Jul 2025 13:56:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MTF8JVtM"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4BA461D540
-	for <linux-mips@vger.kernel.org>; Mon, 21 Jul 2025 16:57:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=140.211.166.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BACD1288C01;
+	Tue, 22 Jul 2025 13:56:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753117078; cv=none; b=HMbdTzfqjuPeyzWNXf0NrI9OaEC9W9SG34UAFYlQnQIYbahlCfQoG+adc9yXxzpAfXXgg5bxsehuzmy9Nigp2m7YgNsbir5oEEzyw8i/3VhwpWM+JnjDLDpuvaxz9bfhRxDEjEeSV7fiyC9rZyOnsCnF4t0HUZMhtde5TvJeMnY=
+	t=1753192608; cv=none; b=lj6VovM8Pc1ZLCSTZV6ysKP2Pb6KBByC82E4nh+H6Fmf01GL3QYLH9N83TxIUsGnC2cP0mFRGOJYIEXjXg9ZyVPlZF8ZL3Aknlh/uVXvsinBVXHMTjLOGUp8zmS/O4Swt2QxYfn4iWjc+0gcJFKAmF5qEFRopFXZ1FIVUhrtb38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753117078; c=relaxed/simple;
-	bh=k+1wCmJZwoTZemfIdGikHAoh0FlWCpXxI43xBF3R5K8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=uE+gU9Y+prlMHJ8qCyJkLWgQTwzr5O0/6IChs5X6b+ws6Me73a/UATAjOXkkKe0QKCfMaZQKqUdFQnd6VdicJuEwlbwOsS3CymE4x+Gc3pg9n4+0hpBG2yN/pUbVAO1nkJjlVg2rwWTTkYORIZBrJ2KnQwA4RXJjTlbMMNhOZEc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org; spf=pass smtp.mailfrom=gentoo.org; arc=none smtp.client-ip=140.211.166.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentoo.org
-Received: from caradhras.arda (pool-96-241-31-235.washdc.fios.verizon.net [96.241.31.235])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kumba)
-	by smtp.gentoo.org (Postfix) with ESMTPSA id 35B8F340D23;
-	Mon, 21 Jul 2025 16:57:53 +0000 (UTC)
-From: Joshua Kinard <kumba@gentoo.org>
-To: linux-mips@vger.kernel.org
-Cc: Joshua Kinard <linux@kumba.dev>,
-	Joshua Kinard <kumba@gentoo.org>
-Subject: [PATCH] MIPS: Update Joshua Kinard's e-mail address
-Date: Mon, 21 Jul 2025 12:57:15 -0400
-Message-ID: <20250721165715.20478-1-kumba@gentoo.org>
-X-Mailer: git-send-email 2.50.0
-Reply-To: Joshua Kinard <linux@kumba.dev>
+	s=arc-20240116; t=1753192608; c=relaxed/simple;
+	bh=kYYGasiChIGrOp2WfdbyJu8FXaB5dOTDpOSPPXTmqKc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Isdz7THZ7xXLLi5fH+IKr/BsB8TU+4qy5Rrgjns4j8J6LbeQVLTJDKspN7Atn8H8yjAVm/W9SNK5uSh7NTb8WC3MvNkp68MDZFvdWuH08eAneaneJAVX1O60SjN2DEv0/nRtKa4tqcDZG3ooQN6jq4jtYV3coFHFZxyVAd5izcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MTF8JVtM; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-45610582d07so43416425e9.0;
+        Tue, 22 Jul 2025 06:56:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1753192604; x=1753797404; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=juq2LsaB2ZlgXJfLDxNWAXy+l+g+CamQA/55GYnNXGQ=;
+        b=MTF8JVtMdMfifC7WMEG5jFRRgshh2dk4WsmDSnnHnMOhK2U9M04ZL/0X+r46Gttd+t
+         TUoJdwShZPbr5wvm3m6dZKML+9vxPvGQ+aBwqapqoJYjwVyTDYhNosuJTvtpN7iE5jfp
+         a7tO455Ql2nkDUBvl0IFdHw7021yPU8cZJnNNyTwLCLxu/Hppwwcmwk1qxHaUjg6oncI
+         kkQdrZ/dQSPDjhpoRt/if2zcK1B6/7in26kSntWsfBbeXmq6qZEVU+6VhctuW0q5wDrV
+         Hapk88JXd3tQROZARhaZ+De4/nUTTC8IiqQJi4/h6qVq775aYoas2njGBSGvajgrHBdX
+         sDMg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753192604; x=1753797404;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=juq2LsaB2ZlgXJfLDxNWAXy+l+g+CamQA/55GYnNXGQ=;
+        b=H2/enbslyVmfAbdjqjb9fGsJqzOtVBVE7PF1XQXGL98F1d/0prT8yo5PJxYU+Ej4Qb
+         EfkltjI9wqw7NbAkAbMcODVg0HejLrKO2r8D9iEJn134q02GHlSNEV/rIVGTM1CN4Pld
+         rzFh9d0zzf7L29hj5N1ioMhvJ/WVoAgi/20XcD9TJhRWiKLSqWe0QhvbAsYfdzuw2Fw0
+         TgvFON+qVIw2N5K4AQ/3x6jWmouUjF9qAgmivNCDJZ0Z2euLOecOSTmzrs90ZOOmoNlt
+         pDm9FPDXIdp20Bw+iots5IgUXl+IQFzLKI2mH9NW4GQSxVMTnMmSKizdg9fz9scJZ3/0
+         K/Yg==
+X-Forwarded-Encrypted: i=1; AJvYcCUApe6s2fksXuUZlg1hX4fxXAZS+NS1F3WvfAiMIWt9yBm0V44FFul9rzbPfl83zpQKLELv57O9XWfcyssa@vger.kernel.org, AJvYcCUU59zv/vSrCcdQzolNQ9eAlhcIg7p/mh5kRfpDtbZb4p1gnUSNUNFZAM+Y2SHvhBWqn+FtRCwZSLbc@vger.kernel.org, AJvYcCUykiTcRYOrPN0b/mSfOgDMvSt33jgUp/RMyle1+cBe9yOy2hUerMsSASwkR0peowtK8y8Ia93Et884@vger.kernel.org, AJvYcCVS1OaIfZAsZNo82qthNxiU2es0KZ/YkGNjFvo87ZE85q9k0k/MX3voYYT2DcD5x1KWQekaH8Zwzaut4w==@vger.kernel.org, AJvYcCWrFODVljnhkpRLphUK24v1pQi3+dKxn9BaNFQuFBLICe3ROzwTMc7okbrB4NDdM9u9iRQi4Su2o/g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwBMDjysXRIJR9IHggEhZvP4qd3gLRMjlL863QagtEZmuWwl+A6
+	ajjenTAIuJbmjKEH2oIVnsl4w0hLHgwUjA7xrygVz6hEyzHm4mcZcpEBjlzoHQ==
+X-Gm-Gg: ASbGncuGRNOXeMvc+TkpmaQk/x0ZPr/3OOJ/Z2h/wvpv5SZ1+9i8Ezq80EMHE/Qu40Y
+	zw5WEGu1mf3/+gbnZPQ1Q0hvddH1HnL/XljvRxRYxF594kOrHTGWbToTlczFAACDCEPiJwbBQbX
+	UUj7G0ErpLkeWvLRpGZRp3fhKfvsSgXeGa22sBSBqEmL4wTrw+EcQxpp8fWIDbUx9wlSQ+ICyOW
+	nvVO/rSZFwNURADwpH5IQHh2ZUtbsaECsiPsGgOmE8VsMR1y5yP+pwRoOGSfE4VZHaiDq/rkTyj
+	hS/wVi802+PWnllhG2zWyV6LgEWvMeZP4io1IyeWyMsM/rGBF6Ug2s9E3Imckx4l2t2037a4IAg
+	zJEuNfnIEIz0oZ8qLIPFvm66FnvSRksPuieik5z+cEk38cys3dI/yRzkU8a/iEw2Q53rz4pBFAA
+	3NiVH5eufQ
+X-Google-Smtp-Source: AGHT+IEXfV5AQDvaaCQOegEyKdsH0umt5I9YjBYWNMUwcatDOEmZLLM8MRQ3Lk0kGHyWW+MsfUSbDg==
+X-Received: by 2002:a05:600c:c16d:b0:442:dc75:5625 with SMTP id 5b1f17b1804b1-456352d0b70mr190106725e9.5.1753192603600;
+        Tue, 22 Jul 2025 06:56:43 -0700 (PDT)
+Received: from orome (p200300e41f4e9b00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f4e:9b00:f22f:74ff:fe1f:3a53])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4562e7f2d4fsm197624025e9.4.2025.07.22.06.56.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 22 Jul 2025 06:56:42 -0700 (PDT)
+Date: Tue, 22 Jul 2025 15:56:40 +0200
+From: Thierry Reding <thierry.reding@gmail.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: x86@kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, linux-mips@vger.kernel.org, loongarch@lists.linux.dev, 
+	linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org, linux-pci@vger.kernel.org, 
+	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/7] syscore: Pass context data to callbacks
+Message-ID: <l54i36uk33je744w4f47tehdopk5dsjotvozfv5b2hehmxrwpq@eins7awyq4dy>
+References: <20250717103241.2806798-1-thierry.reding@gmail.com>
+ <2025071716-phoney-object-1648@gregkh>
+ <rzbzah5iigz25jtxyqadnitkzkazxsaxntajhlfrfdslyioevk@pylcjkfh5n42>
+ <2025071919-patience-cattishly-cf7c@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="sm7baow4ljogvsjb"
+Content-Disposition: inline
+In-Reply-To: <2025071919-patience-cattishly-cf7c@gregkh>
 
-I am switching my address to a personal domain, so some files in the
-SGI IP30 and IOC3 files need to be updated.  I will send updates for
-the MAINTAINERS file and rtc-ds1685 separately to linux-rtc.
 
-Signed-off-by: Joshua Kinard <kumba@gentoo.org>
----
- arch/mips/include/asm/mach-ip30/cpu-feature-overrides.h | 2 +-
- arch/mips/include/asm/mach-ip30/spaces.h                | 2 +-
- arch/mips/include/asm/sgi/heart.h                       | 2 +-
- arch/mips/sgi-ip30/ip30-power.c                         | 2 +-
- arch/mips/sgi-ip30/ip30-setup.c                         | 2 +-
- arch/mips/sgi-ip30/ip30-smp.c                           | 2 +-
- arch/mips/sgi-ip30/ip30-timer.c                         | 2 +-
- arch/mips/sgi-ip30/ip30-xtalk.c                         | 2 +-
- drivers/mfd/ioc3.c                                      | 2 +-
- drivers/tty/serial/8250/8250_ioc3.c                     | 2 +-
- 10 files changed, 10 insertions(+), 10 deletions(-)
+--sm7baow4ljogvsjb
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v2 0/7] syscore: Pass context data to callbacks
+MIME-Version: 1.0
 
-diff --git a/arch/mips/include/asm/mach-ip30/cpu-feature-overrides.h b/arch/mips/include/asm/mach-ip30/cpu-feature-overrides.h
-index ce4e4c6e09e2..50d487a4c95e 100644
---- a/arch/mips/include/asm/mach-ip30/cpu-feature-overrides.h
-+++ b/arch/mips/include/asm/mach-ip30/cpu-feature-overrides.h
-@@ -5,7 +5,7 @@
-  * Copyright (C) 2003 Ralf Baechle <ralf@linux-mips.org>
-  *		 2004-2007 Stanislaw Skowronek <skylark@unaligned.org>
-  *		 2009 Johannes Dickgreber <tanzy@gmx.de>
-- *		 2015 Joshua Kinard <kumba@gentoo.org>
-+ *		 2015 Joshua Kinard <linux@kumba.dev>
-  *
-  */
- #ifndef __ASM_MACH_IP30_CPU_FEATURE_OVERRIDES_H
-diff --git a/arch/mips/include/asm/mach-ip30/spaces.h b/arch/mips/include/asm/mach-ip30/spaces.h
-index c8a302dfbe05..d381b93d6ad3 100644
---- a/arch/mips/include/asm/mach-ip30/spaces.h
-+++ b/arch/mips/include/asm/mach-ip30/spaces.h
-@@ -1,6 +1,6 @@
- /* SPDX-License-Identifier: GPL-2.0 */
- /*
-- * Copyright (C) 2016 Joshua Kinard <kumba@gentoo.org>
-+ * Copyright (C) 2016 Joshua Kinard <linux@kumba.dev>
-  *
-  */
- #ifndef _ASM_MACH_IP30_SPACES_H
-diff --git a/arch/mips/include/asm/sgi/heart.h b/arch/mips/include/asm/sgi/heart.h
-index 0d03751955c4..c224c2e3575a 100644
---- a/arch/mips/include/asm/sgi/heart.h
-+++ b/arch/mips/include/asm/sgi/heart.h
-@@ -4,7 +4,7 @@
-  *
-  * Copyright (C) 2004-2007 Stanislaw Skowronek <skylark@unaligned.org>
-  *		 2009 Johannes Dickgreber <tanzy@gmx.de>
-- *		 2007-2015 Joshua Kinard <kumba@gentoo.org>
-+ *		 2007-2015 Joshua Kinard <linux@kumba.dev>
-  */
- #ifndef __ASM_SGI_HEART_H
- #define __ASM_SGI_HEART_H
-diff --git a/arch/mips/sgi-ip30/ip30-power.c b/arch/mips/sgi-ip30/ip30-power.c
-index 120b3f3d5108..66851e17c5a7 100644
---- a/arch/mips/sgi-ip30/ip30-power.c
-+++ b/arch/mips/sgi-ip30/ip30-power.c
-@@ -3,7 +3,7 @@
-  * ip30-power.c: Software powerdown and reset handling for IP30 architecture.
-  *
-  * Copyright (C) 2004-2007 Stanislaw Skowronek <skylark@unaligned.org>
-- *               2014 Joshua Kinard <kumba@gentoo.org>
-+ *               2014 Joshua Kinard <linux@kumba.dev>
-  *               2009 Johannes Dickgreber <tanzy@gmx.de>
-  */
- 
-diff --git a/arch/mips/sgi-ip30/ip30-setup.c b/arch/mips/sgi-ip30/ip30-setup.c
-index e8547636a748..3fcb3ec9f802 100644
---- a/arch/mips/sgi-ip30/ip30-setup.c
-+++ b/arch/mips/sgi-ip30/ip30-setup.c
-@@ -3,7 +3,7 @@
-  * SGI IP30 miscellaneous setup bits.
-  *
-  * Copyright (C) 2004-2007 Stanislaw Skowronek <skylark@unaligned.org>
-- *               2007 Joshua Kinard <kumba@gentoo.org>
-+ *               2007 Joshua Kinard <linux@kumba.dev>
-  *               2009 Johannes Dickgreber <tanzy@gmx.de>
-  */
- 
-diff --git a/arch/mips/sgi-ip30/ip30-smp.c b/arch/mips/sgi-ip30/ip30-smp.c
-index 4bfe654602b1..1e8210f2a9f8 100644
---- a/arch/mips/sgi-ip30/ip30-smp.c
-+++ b/arch/mips/sgi-ip30/ip30-smp.c
-@@ -5,7 +5,7 @@
-  * and smp-bmips.c.
-  *
-  * Copyright (C) 2005-2007 Stanislaw Skowronek <skylark@unaligned.org>
-- *               2006-2007, 2014-2015 Joshua Kinard <kumba@gentoo.org>
-+ *               2006-2007, 2014-2015 Joshua Kinard <linux@kumba.dev>
-  *               2009 Johannes Dickgreber <tanzy@gmx.de>
-  */
- 
-diff --git a/arch/mips/sgi-ip30/ip30-timer.c b/arch/mips/sgi-ip30/ip30-timer.c
-index d13e105478ae..7652f72f0daf 100644
---- a/arch/mips/sgi-ip30/ip30-timer.c
-+++ b/arch/mips/sgi-ip30/ip30-timer.c
-@@ -5,7 +5,7 @@
-  *
-  * Copyright (C) 2004-2007 Stanislaw Skowronek <skylark@unaligned.org>
-  * Copyright (C) 2009 Johannes Dickgreber <tanzy@gmx.de>
-- * Copyright (C) 2011 Joshua Kinard <kumba@gentoo.org>
-+ * Copyright (C) 2011 Joshua Kinard <linux@kumba.dev>
-  */
- 
- #include <linux/clocksource.h>
-diff --git a/arch/mips/sgi-ip30/ip30-xtalk.c b/arch/mips/sgi-ip30/ip30-xtalk.c
-index 7ceb2b23ea1c..d798ee8c998c 100644
---- a/arch/mips/sgi-ip30/ip30-xtalk.c
-+++ b/arch/mips/sgi-ip30/ip30-xtalk.c
-@@ -3,7 +3,7 @@
-  * ip30-xtalk.c - Very basic Crosstalk (XIO) detection support.
-  *   Copyright (C) 2004-2007 Stanislaw Skowronek <skylark@unaligned.org>
-  *   Copyright (C) 2009 Johannes Dickgreber <tanzy@gmx.de>
-- *   Copyright (C) 2007, 2014-2016 Joshua Kinard <kumba@gentoo.org>
-+ *   Copyright (C) 2007, 2014-2016 Joshua Kinard <linux@kumba.dev>
-  */
- 
- #include <linux/init.h>
-diff --git a/drivers/mfd/ioc3.c b/drivers/mfd/ioc3.c
-index 58656837b7c6..5f8ac364b610 100644
---- a/drivers/mfd/ioc3.c
-+++ b/drivers/mfd/ioc3.c
-@@ -6,7 +6,7 @@
-  *
-  * Based on work by:
-  *   Stanislaw Skowronek <skylark@unaligned.org>
-- *   Joshua Kinard <kumba@gentoo.org>
-+ *   Joshua Kinard <linux@kumba.dev>
-  *   Brent Casavant <bcasavan@sgi.com> - IOC4 master driver
-  *   Pat Gefre <pfg@sgi.com> - IOC3 serial port IRQ demuxer
-  */
-diff --git a/drivers/tty/serial/8250/8250_ioc3.c b/drivers/tty/serial/8250/8250_ioc3.c
-index 499e80aa4cf9..eea543f97a84 100644
---- a/drivers/tty/serial/8250/8250_ioc3.c
-+++ b/drivers/tty/serial/8250/8250_ioc3.c
-@@ -5,7 +5,7 @@
-  * Copyright (C) 2019 Thomas Bogendoerfer <tbogendoerfer@suse.de>
-  *
-  * based on code Copyright (C) 2005 Stanislaw Skowronek <skylark@unaligned.org>
-- *               Copyright (C) 2014 Joshua Kinard <kumba@gentoo.org>
-+ *               Copyright (C) 2014 Joshua Kinard <linux@kumba.dev>
-  */
- 
- #include <linux/module.h>
--- 
-2.50.0
+On Sat, Jul 19, 2025 at 08:52:41AM +0200, Greg Kroah-Hartman wrote:
+> On Fri, Jul 18, 2025 at 03:49:37PM +0200, Thierry Reding wrote:
+> > On Thu, Jul 17, 2025 at 02:11:41PM +0200, Greg Kroah-Hartman wrote:
+> > > On Thu, Jul 17, 2025 at 12:32:34PM +0200, Thierry Reding wrote:
+[...]
+> > 	struct syscore;
+> >=20
+> > 	struct syscore_ops {
+> > 		int (*suspend)(struct syscore *syscore);
+> > 		void (*resume)(struct syscore *syscore);
+> > 		void (*shutdown)(struct syscore *syscore);
+> > 	};
+> >=20
+> > 	struct syscore {
+> > 		const struct syscore_ops *ops;
+> > 		struct list_head node;
+> > 	};
+> >=20
+> > Is that what you had in mind?
+>=20
+> I missed the list_head, so yes, this would be better, but don't pass
+> back the syscore structure, how about just a void * instead, making the
+> whole container_of() stuff go away?
 
+Yeah, that's a possibility. I personally don't like passing the void *
+around because it's easier to make mistakes that way. I also find it
+unintuitive because it doesn't immediately show you what the functions
+expect.
+
+My understanding is that the container_of() should get optimized away
+most of the time, so there aren't any obvious downsides that I can see.
+
+But I don't feel very strongly, so if you have a strong preference for
+void pointers, I can do that.
+
+Thierry
+
+--sm7baow4ljogvsjb
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmh/mJUACgkQ3SOs138+
+s6FyzhAAq8z/gI18SVH4qmKTQkcFaPuXBegHTP2dgId1CA1dad3cmBj4tcAz1+Ng
+liio3geyWrxKqZSJTrQOYYYloM4s9UhkY3AvXvDB+L4/DZC/HBgAGnL5dMKte/WQ
+sNUniNOWw1gW2tluO+vi9saSGE4Test34XaIWpBaItJYO9uhuiAC57jJw9Uutl0h
+wkjvwyxaOXSleKiCSwlnSBx31PCz7k5nhb8pIeptnxbxw+Q7+IsDzK/cH2PrV979
+7AzVNifmqUfpO9Xy0FsSrYU0SrUCM7I8WU6elGSeuswDL7+Mlsh9kn/KfVyL86ed
+0jP2iQRyzteg2ATh6dQJLM7KEPK8DnGZqaLDLJlzn3af7Mv5MvRGO1cx7dVGhcTA
+ADto5YN6dKXC63ijHppnQ2xjZ725T1zuVpj1z5OTlXpKtlGvYiIejh+B5tjFMMrr
+zTNbjIBbykgIZXvIvn52ttFRDrLgpnh2mQPzI8VWp9Bv0DaBH6Q1jfxUlWXQiSaQ
+bWrFys6N7IBy5+o83FiAGZvQ//IFZhyF8T/6HD+6OuoX26vTOa5vwrPgs5qru2/s
+T5iJf9UOqnHAuzssCGk2OZcqcVn17seSpXcJScckVPt/HhegIgcgxoVTCOBQ0K7J
+xUhlsns/ZnbEGVKtLr2T/t7UTeCDZIkqo0pEloVCu9UGfeAI16c=
+=Cczj
+-----END PGP SIGNATURE-----
+
+--sm7baow4ljogvsjb--
 
