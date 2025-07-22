@@ -1,48 +1,48 @@
-Return-Path: <linux-mips+bounces-9871-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9872-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64676B0E0C1
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Jul 2025 17:40:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 54A12B0E0C2
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Jul 2025 17:40:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E7B92188919F
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Jul 2025 15:40:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 83BFA564B6C
+	for <lists+linux-mips@lfdr.de>; Tue, 22 Jul 2025 15:40:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3BE5264626;
-	Tue, 22 Jul 2025 15:39:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC64625A327;
+	Tue, 22 Jul 2025 15:40:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BzvFqCVC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kcsm+nJ0"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8282A7F9;
-	Tue, 22 Jul 2025 15:39:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5C927F9;
+	Tue, 22 Jul 2025 15:40:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753198787; cv=none; b=Go5DWqpCqzt77EjSfKUXmWQz60DhzeKHFTzaCrDb9kl6kJMLY1AJCLOVe6wUuaHgFlv2ZBwcsOzRXxE00KDsad9/lEWi7GeIusoMR7d/h6KyeJ9YkyxcfIIVSY80AWjKv6m4nwU4nWPW0drds4I32DYoevoyHtZB21zPpAJaniQ=
+	t=1753198821; cv=none; b=Ak83d8fj6lp0YaWsRPfuttO5W8+5UucU2YDpSvGdypZAnHr3XPUoxUKN2YK5V+g/PWfHwUIz5JJZE/GsC+vbiS6oLPu1nALSsxoiK84z/zso8GD0b+e8OS1JW0xghAkzuMQhLwo8ZC/7ePPrWAI8CEMTeEkNRodg/vSPJMmD5Zo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753198787; c=relaxed/simple;
-	bh=2T8ZH1HyZDNhXxPm85UiHpTaZiBGX7WQnZsC+C+Ii4c=;
+	s=arc-20240116; t=1753198821; c=relaxed/simple;
+	bh=auL+hG0nmvo3opx1RXwaVoxmnBRbux+9KiGUSw4cmUM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EyKjQmcRFD3A34BY9zPr3kGst86RJJFUIgITTqpR/YHgZFhIHV/xx/XClxRCHmLbivUWJIG6oA5DuNfyXwefCwDoiEKebDdc/rhUpOg66F1WEQVV4bP0rNmIMzx6y4u2qCN8m5a0O4Sk98LPfSS4rwvbRG30eraDza53Lby8lmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BzvFqCVC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBEA2C4CEF6;
-	Tue, 22 Jul 2025 15:39:42 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=ugvANSSCi7SCA4nUKgciRzAFzD9p4LXsCd4Zher7ncYt9is2+lhbhjkqJQKsvir5chFUcziNRULK19lxdN4goF4O6zzknnpa8/zAMoWBZNZFDkhrSnWTqdVRsjXmer9jq0aHihYGWPZxRXdQP2XJMuwZMLzoz1CU16R/BLz8V5Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kcsm+nJ0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E1F7C4CEEB;
+	Tue, 22 Jul 2025 15:40:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753198786;
-	bh=2T8ZH1HyZDNhXxPm85UiHpTaZiBGX7WQnZsC+C+Ii4c=;
+	s=k20201202; t=1753198821;
+	bh=auL+hG0nmvo3opx1RXwaVoxmnBRbux+9KiGUSw4cmUM=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=BzvFqCVCqsh+JLOq4YnBjmkFLFVwcp2LCfnTBGeA3e6jS2HZcnaSMp+YgdWnwYPb+
-	 +MRnh7r40H6PRx9iLyt9ZDTE7uij5zoRuljlHMDmbP+YAFg+MPk4EeZp6io6NlJ9ec
-	 5KX7Ze/RQW1qsRnsHOWwzoFA5SwxEMlc0Mg/GEis2pw4jvSFzX6G/RYC2TTg0sI7DA
-	 EcuxLPzP9PxQknzj0lV1QsmqwHtuix4xyGg793hxZ1+HDeBupkIKI25q8jtLy9jXDi
-	 v3cD1lElltNRk6uQTzfF/DwNxuIkPedHAbCmR9rizXpWMpAzYsS6yUSk/oGobB1LH6
-	 hz4ClYcCjlxUQ==
-Message-ID: <fed126f4-20e6-4d7b-a29e-e7206875b5a0@kernel.org>
-Date: Tue, 22 Jul 2025 17:39:40 +0200
+	b=kcsm+nJ06ETXO/OPXma7PwnI41nkDrONNfPjsM3pQLxkwBKcMhCF+dU36BaPArHOw
+	 Kpu2HYQtR/llc2FkJGWpaS+xv7jFGtMD5PU9X6Yq5u7Kxn81RP+5kqEAHbmBMsvpvj
+	 USeuMRfcjPaJtMkdQorebhqaEQ8XEvAeQj5qdSEMxS/aXOzGPvqCKuDZuo8q9riZzh
+	 pvb10ZxUfzhOMHKkWVXVbLZ0ewG+jIlZrNgb7mwHfSUJ0fjQRy9NtD71LcC/vypzLc
+	 r39FUY5ujW3Dmn963y+zZRbiepH9tIe/HQl23Ml5WwlymQ/UvriofhO/PTXYhdWWRo
+	 DSg1N+R/CxVQg==
+Message-ID: <8557c0f0-d851-4d08-a92e-ff8a0e2b3c60@kernel.org>
+Date: Tue, 22 Jul 2025 17:40:16 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] MIPS: mobileye: dts: eyeq5: rename the emmc
+Subject: Re: [PATCH 2/2] MIPS: mobileye: dts: eyeq6h: rename the emmc
  controller
 To: =?UTF-8?Q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>,
  Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
@@ -64,7 +64,7 @@ Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  kernel test robot <lkp@intel.com>
 References: <20250722-mmc_dts_warnings-v1-0-8a8a1594dfd2@bootlin.com>
- <20250722-mmc_dts_warnings-v1-1-8a8a1594dfd2@bootlin.com>
+ <20250722-mmc_dts_warnings-v1-2-8a8a1594dfd2@bootlin.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -110,7 +110,7 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <20250722-mmc_dts_warnings-v1-1-8a8a1594dfd2@bootlin.com>
+In-Reply-To: <20250722-mmc_dts_warnings-v1-2-8a8a1594dfd2@bootlin.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
@@ -118,16 +118,14 @@ On 22/07/2025 17:15, Benoît Monin wrote:
 > The name should match the pattern defined in the mmc-controller binding.
 > 
 > Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202507220336.JhvVLL7k-lkp@intel.com/
+> Closes: https://lore.kernel.org/oe-kbuild-all/202507220215.wVoUMK5B-lkp@intel.com/
 > Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
+> ---
+>  arch/mips/boot/dts/mobileye/eyeq6h.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-The important point of that binding here:
-https://lore.kernel.org/linux-devicetree/9b34b471d1e71cf47c503aed7145fab896767ba7.1750156323.git.benoit.monin@bootlin.com/
-
-was to USE it for testing it. Before you send such work, you are
-supposed to check your code with the toolset.
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+This should be squashed. It is trivial node name alignment with schema.
+We don't fix it one by one, it's a churn.
 
 Best regards,
 Krzysztof
