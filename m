@@ -1,172 +1,148 @@
-Return-Path: <linux-mips+bounces-9880-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9881-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 808ECB0E58A
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Jul 2025 23:30:38 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D0E29B0EA3F
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Jul 2025 07:58:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 631981898A59
-	for <lists+linux-mips@lfdr.de>; Tue, 22 Jul 2025 21:30:56 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 062A21AA594C
+	for <lists+linux-mips@lfdr.de>; Wed, 23 Jul 2025 05:58:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02D3628C2CD;
-	Tue, 22 Jul 2025 21:29:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0852D248867;
+	Wed, 23 Jul 2025 05:58:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NZuWQ4Lz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NkX4MEOc"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pg1-f182.google.com (mail-pg1-f182.google.com [209.85.215.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CE0F28B4F9;
-	Tue, 22 Jul 2025 21:29:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA38A2594;
+	Wed, 23 Jul 2025 05:58:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753219750; cv=none; b=ml/frTnbQTtfQVl+X+I7VA5c5Cx5IX7dfAKAqZyeMbpazUyI1yICvy8CUfJB3W9xzrABimWPciHI0wB5m79ZAzBju3V55z3he5rjiQY3jJrUkkvmRUg4sh9tMOB3Dy53vg80U6XxrUvxy2Iazk4PBK9KFG8fhWqexdtVUx2UBgs=
+	t=1753250315; cv=none; b=S3rxgSmv6kqYIuiKjnT7Vj4ZcL5esCUuTgDdXw//oaV/+F/sDU7Txf0+4EcsfCvGIKNZupv8Q/Y5G3bwZHhTiQLntgfkKWPHwbmWKiddXP6ZbTmQqTFMMSX+nXkU33KUY1C17yB6ncer5C2uHc/gleeE5Nb9zrQaqXelqENdzzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753219750; c=relaxed/simple;
-	bh=WlASZmzxpzAYoKS6z6rmk+EebRMMXhqLWuJ12i3hyCM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PO06lo7XicMAwXWPrOOa0Qi7b+RZb3aNF/ZnvTbEOnhWXZgY2DEu920PeENkBLYXrGslBXha8Eg+2EepuwO+yiuxVMc2ouL/a+45i/Eik6PUI4VCk/y1+U8THXwzbd4ew3kvQh8Ui37lNUWM/s6PaIlJTHMGrCcFwHYCq6eSZ2k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NZuWQ4Lz; arc=none smtp.client-ip=209.85.215.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f182.google.com with SMTP id 41be03b00d2f7-b26f5f47ba1so4827393a12.1;
-        Tue, 22 Jul 2025 14:29:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753219748; x=1753824548; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=67QEz9S+95ZQDu3rHCjWe+DFBCPwq22amqFwl+XgLLI=;
-        b=NZuWQ4LztHDavN2mwgNpq0wwW34A0ururLf3VC67tdo9IZ1QoEacDicbOE2d09BweI
-         WahELTqLIJcEJuyc4z3uLe4kmZH2472KIJZxXU1rywVqchWALJkJuhoA3IQjcNulLiB0
-         tF2y9Tx8h0EifOO7IX+fxRAbK4JeX0+VJHiwZBNDL3IIldXdBHiyy2v7lJtr6M85SjC+
-         yGgJKGYv8TtFzucVOqmuIB2WZyd5otBaeK+NKBtL4eCoyYhdf/Nc3gelPQH6q06MqGD6
-         nya68ED3uzRbCRHNR+Fa+a4P+U9vcfl5YzrpSXLFIt0HKokByrL241W5+tSP4u1XlnL0
-         BpkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753219748; x=1753824548;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=67QEz9S+95ZQDu3rHCjWe+DFBCPwq22amqFwl+XgLLI=;
-        b=Q85UYg8tHeZEu5p4q8KQ4lKseJS4/Nau1h+SIiZUjNxgy1Xta6DDAahh08F9+uOhhi
-         +t+WvNhYEm80gSnPdPSWfk2iPCANW/S/dsztXMjPqyMT786f2kLq1c2HM+1sImND5vs3
-         0I3aHjFOVM2478wztB3BAHt+DK02KD2n+ZszpGQBFzbwI2+7j719MGv8WM6DkTIhB43k
-         hP3hB5WK+zxhEFcySIGTP93n9OX0zFWrnz8FX8tQQCpbKj9VVtJ/4ICJvtdP1RpD2e/l
-         MBnaubE9hQJ62mwc1zJmDQgiD/EsUtWcisoIvswkaBTpdtHZjxOSvdPqdjQAcSCHJVmB
-         JtkQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUMiKHtzMM2rZJDcU4eMlBINVW6OZ9uPBTeSRmLhs9qQpdvdoUb/gQ8BTdRqPrbY9KSWJQF1mKQxTeevYeM@vger.kernel.org, AJvYcCXUvzxAWj0XLKRzc92KWOvtZVASIJd1yHd3Q28yhYgNhKOBS9GB3wZxU2efVc4zSiqlee36rFVrrlszcA==@vger.kernel.org, AJvYcCXyWtVLfoIIC8Zef8lvPEpDDbqq7rzE66e/Jol73Pcvbr8OcdtPE2YU5bokffc7j1VeR5WMCmihleZv@vger.kernel.org
-X-Gm-Message-State: AOJu0YxUh26Itd1cM2SI/6XPDYCCqwBsvqIhlGQVNdo74MIVi2byLyhA
-	xq0E7mOhQX8i44Is4HtCedmmbuyEZT8LT2nwnRjnXFFq3ZjrizQLA9ZZQgDfMyx7
-X-Gm-Gg: ASbGnctFQQSrqGDYX2jIOGMXR+HkLfZeXuWvWZIPLL/WAZGF1r2OfzhzDFXVwTiNaKo
-	djY9GDJ1nGRsrMOAg9zoVmKPs6w+pRDO67xXMPnAMGx1wPUNJl9mICKAZik5R6oSAu8PkLqTXU+
-	bgHlFGso7WimUxAHRlNf43Cm5mGEI08DpFz2deoZ25osT2Vv7RL8rk637Lifpzz6sPDj3aqCTBO
-	PF6eKJ0Kb+k8UId5kJ81qzFI/d9IIUSdsoeLPtSLVvIdmIac2oF6sqyVcbTn1vZSpTuvlGqMh0V
-	adLbiPaP2u6I4hlxuSGYFU550WSe2uN3QNl+TFoN2c2agk6FZiPNY8kwAMAlts3S/d3aqvph5EI
-	ySls=
-X-Google-Smtp-Source: AGHT+IHAVxGiZOrlaAUSxgUbUh6FKWopOqgmAMQnmnuTA3s27a7MO8YmCyqzn+U2fdYiR74X38P2ww==
-X-Received: by 2002:a17:90b:5844:b0:31c:3651:2d18 with SMTP id 98e67ed59e1d1-31e507b41d4mr1284874a91.16.1753219748471;
-        Tue, 22 Jul 2025 14:29:08 -0700 (PDT)
-Received: from archlinux.lan ([2601:644:8200:dab8::1f6])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-31e519ce384sm94942a91.2.2025.07.22.14.29.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 22 Jul 2025 14:29:08 -0700 (PDT)
-From: Rosen Penev <rosenp@gmail.com>
-To: linux-wireless@vger.kernel.org
-Cc: Johannes Berg <johannes@sipsolutions.net>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Stanislaw Gruszka <stf_xl@wp.pl>,
-	devicetree@vger.kernel.org (open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS),
-	linux-kernel@vger.kernel.org (open list),
-	linux-mips@vger.kernel.org (open list:MIPS),
-	linux-arm-kernel@lists.infradead.org (moderated list:ARM/Mediatek SoC support),
-	linux-mediatek@lists.infradead.org (moderated list:ARM/Mediatek SoC support)
-Subject: [PATCHv5 wireless-next 7/7] dt-bindings: net: wireless: rt2800: add SOC Wifi
-Date: Tue, 22 Jul 2025 14:28:56 -0700
-Message-ID: <20250722212856.11343-8-rosenp@gmail.com>
-X-Mailer: git-send-email 2.50.0
-In-Reply-To: <20250722212856.11343-1-rosenp@gmail.com>
-References: <20250722212856.11343-1-rosenp@gmail.com>
+	s=arc-20240116; t=1753250315; c=relaxed/simple;
+	bh=mtV6PtNaUOkVWENMgyWOyGp2r589sffVzijjl/VKBVs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uPMXzm31ucMPXrPQq3P4y0EzfIi7Ov2aG2UWucjapAAyWEi+8tKtBd7f8nQqd2snsq3nJXKNru1TBl9/t4H6z/CHg0yHcrMKVNWc/6it7QdUG+uEOJMQ0rKvIYll+xlRu4hOZLy4g9djZAYGvilKNHk2EJI5xWNaBp1LadoajFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NkX4MEOc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0797BC4CEE7;
+	Wed, 23 Jul 2025 05:58:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753250315;
+	bh=mtV6PtNaUOkVWENMgyWOyGp2r589sffVzijjl/VKBVs=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=NkX4MEOcrd8F/ufhbz5yVg7ZqwkIWhm2IdBoB7eJLTs7yjtVm+EmSCCnGH3XS14Lj
+	 3/9WjCMMgrrKrSg8+MtIOHljZnoQkHSgLEzuvEj2F7hBXmIhOOjBJLgrsaeLF5sQNB
+	 yDunzZkKjcRTgF3/Sh1taA11PW/6kGDhN0beVhcFkVTL7uwSegXqbFcr19QGlm+oXj
+	 LgYe4qD5x/hghTRXalnoqrChtbWJ4WWPFbXhXsqF29Dp2zA+e8DszKLxGbUcHvRwj8
+	 Ftr45gPb7jmL+m9CapBFVEOzn8hFL1+/XUgjq8hQgbnon4zv2K4hpuoOTyhmNeE/cx
+	 P14fm0njw7pyg==
+Message-ID: <25f80663-c896-4bbd-b1a5-0b5a93e047e1@kernel.org>
+Date: Wed, 23 Jul 2025 07:58:30 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCHv5 wireless-next 7/7] dt-bindings: net: wireless: rt2800:
+ add SOC Wifi
+To: Rosen Penev <rosenp@gmail.com>, linux-wireless@vger.kernel.org
+Cc: Johannes Berg <johannes@sipsolutions.net>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Stanislaw Gruszka <stf_xl@wp.pl>,
+ "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
+ <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>,
+ "open list:MIPS" <linux-mips@vger.kernel.org>,
+ "moderated list:ARM/Mediatek SoC support"
+ <linux-arm-kernel@lists.infradead.org>,
+ "moderated list:ARM/Mediatek SoC support"
+ <linux-mediatek@lists.infradead.org>
+References: <20250722212856.11343-1-rosenp@gmail.com>
+ <20250722212856.11343-8-rosenp@gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 a/A=
+In-Reply-To: <20250722212856.11343-8-rosenp@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Add device-tree bindings for the RT2800 SOC wifi device found in older
-Ralink/Mediatek devices.
+On 22/07/2025 23:28, Rosen Penev wrote:
+> Add device-tree bindings for the RT2800 SOC wifi device found in older
+> Ralink/Mediatek devices.
+> 
+> Signed-off-by: Rosen Penev <rosenp@gmail.com>
 
-Signed-off-by: Rosen Penev <rosenp@gmail.com>
----
- .../bindings/net/wireless/ralink,rt2880.yaml  | 49 +++++++++++++++++++
- 1 file changed, 49 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/net/wireless/ralink,rt2880.yaml
+<form letter>
+This is a friendly reminder during the review process.
 
-diff --git a/Documentation/devicetree/bindings/net/wireless/ralink,rt2880.yaml b/Documentation/devicetree/bindings/net/wireless/ralink,rt2880.yaml
-new file mode 100644
-index 000000000000..04dc5bb2edcc
---- /dev/null
-+++ b/Documentation/devicetree/bindings/net/wireless/ralink,rt2880.yaml
-@@ -0,0 +1,49 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/net/wireless/ralink,rt2880.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Ralink RT2880 wireless device
-+
-+maintainers:
-+  - Stanislaw Gruszka <stf_xl@wp.pl>
-+
-+description: |
-+  This node provides properties for configuring RT2880 SOC wifi devices.
-+  The node is expected to be specified as a root node of the device.
-+
-+allOf:
-+  - $ref: ieee80211.yaml#
-+
-+properties:
-+  compatible:
-+    enum:
-+      - ralink,rt2880-wifi
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    wifi@110180000 {
-+      compatible = "ralink,rt2880-wifi";
-+      reg = <0x10180000 0x40000>;
-+      clocks = <&sysc 16>;
-+      interrupt-parent = <&cpuintc>;
-+      interrupts = <6>;
-+    };
--- 
-2.50.0
+It looks like you received a tag and forgot to add it.
 
+If you do not know the process, here is a short explanation:
+Please add Acked-by/Reviewed-by/Tested-by tags when posting new versions
+of patchset, under or above your Signed-off-by tag, unless patch changed
+significantly (e.g. new properties added to the DT bindings). Tag is
+"received", when provided in a message replied to you on the mailing
+list. Tools like b4 can help here. However, there's no need to repost
+patches *only* to add the tags. The upstream maintainer will do that for
+tags received on the version they apply.
+
+Please read:
+https://elixir.bootlin.com/linux/v6.12-rc3/source/Documentation/process/submitting-patches.rst#L577
+
+If a tag was not added on purpose, please state why and what changed.
+</form letter>
+
+Best regards,
+Krzysztof
 
