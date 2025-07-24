@@ -1,87 +1,88 @@
-Return-Path: <linux-mips+bounces-9912-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9913-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC086B10879
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Jul 2025 13:05:06 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3BBEFB10890
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Jul 2025 13:07:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BE7F11765B1
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Jul 2025 11:05:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1186A189F8F2
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Jul 2025 11:07:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E71BE26B2D2;
-	Thu, 24 Jul 2025 11:05:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74B5826B77B;
+	Thu, 24 Jul 2025 11:07:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XCIyTMqu"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l/IOc/rj"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B7E626B0BE;
-	Thu, 24 Jul 2025 11:04:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5CFF26B762;
+	Thu, 24 Jul 2025 11:07:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753355100; cv=none; b=QCDXDIW70zs+HsQPMU419+ARAspjJgnB09scX+bjLFqUafsNq1VyqIahFQQTEDe3/D9fikLS8W9VZTA6APwf5UO7WSfsHghrCtfALk4NT+R1Hf6ZBAJojZ7K/YBd3OiLjm1ev/Ne1AzzrIO6CAyDGIYsCScWbvmmBZbxT9w7kkw=
+	t=1753355229; cv=none; b=KxrQ25lHNA9tTpHn4VHmLqa1o7KGquOEcIPn8Xf2ZDCkOTvQWF/QM3ZdBTP3ajWX5AwdSR6Ht9g/y5NdOcR1NoIbl6lzhbXxCNrLtPJ2uP6sq9ShNueb0v/XWbtNRKVt09fEK467JjY1W+7M8CFlbVWNy456kYS8FN6QyDAzkjI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753355100; c=relaxed/simple;
-	bh=igMiFZD+4/xHRfFv0ukEPDyxclLRIIklR7KHCUrrWFY=;
+	s=arc-20240116; t=1753355229; c=relaxed/simple;
+	bh=DXwtrodih9JXts+Xu3a7jWDDhz6m3rxPn9mOHcSx1D8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YYAd2jr7GyalGLiQ6X9R3PQSiQTzKvc2rRu2CfXTvZzC/9SSt99k5aaluCkYnOpNTjgZ08QuwNwxN0ONQucAnw9TfaMOJfFSG9GDQdNtzQ7qOnwEZvoZXHj4W/ZGDCMc+K1vvY30TOQtb6MupZho5slgd/VPIJSjgDTIs8HxYHc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XCIyTMqu; arc=none smtp.client-ip=209.85.208.48
+	 To:Cc:Content-Type; b=f1eod4q9Xy7qxNQaOVP0lANw2CKv3/iITC1jx7Tp42Q++V1bFv1mQtlQJAIxceMF1PQpDTmhrYy9E1gAYSzME8bY/M/EA4ec6UWIWLQudXCCnoSDvsuOYXQlRdWYFFEPCdj6nH+z69s+ST8qnR/09Coxzg0CMzblGjIq6uk3kCw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l/IOc/rj; arc=none smtp.client-ip=209.85.218.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-60cc11b34f6so3498182a12.0;
-        Thu, 24 Jul 2025 04:04:58 -0700 (PDT)
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-ae3be3eabd8so200896666b.1;
+        Thu, 24 Jul 2025 04:07:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753355097; x=1753959897; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1753355226; x=1753960026; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=hIUwmPHAS5I/CUOP00py81w0hjNzvTvkcVdQbKas/DA=;
-        b=XCIyTMquI3r7gLojxtddyYInXAV4SfPARqR2yceoOrodLKVDvRCX4w33WxWv5pjDsw
-         7Ia0Mt3CSE7abk/9spC/c4ti1rKasxfGeKM3plKA++mvFJ4MrgLBMd8qxgdA9sNHWvr8
-         jMbnmtUxhm5E3aouXJH2mkDCmCQvtCEpSW3djojdtpFbSxJNQs/r/+wrywJsceZ46PK7
-         vsRDCmXjPLEBObnzPBxswk0uT4+07sPJLuxKBbW9ek/W6oWsCHFspJ22U9xSE6/T6x/D
-         grrkIymf2lBG2O7Yl6Ocr+te/VMuaxtcUCPO1DVkYFwOdIw4AFsBkLjRM/jnFzSmKtRQ
-         g47w==
+        bh=43dwDfmrGoNVQcXDC2wAL8Jp+SeF4PP+nL7X5CzoIgA=;
+        b=l/IOc/rjY5/3FVXsUIIdoQD9wBg1aJOuMrrzs6f6OkK821MBEgTvt5la5WMIuOYWfQ
+         2si4dVVgJT0yQ+H8AdE9Yp4xdanzIYi62EaSJkJdD4aKQCis1z8qYAng2hVB1pUDGxmR
+         eQy4Cn5tFUfVOEyHer7XDU1K38vP0a+8VLK/ZGmjmXE6/f5Bqr2VKL38CD/pCJ+l9SHX
+         oL0MkF/Gbr7JdIDvMMx6l5Tu8HLrG4Q7eHBk3FYy9l37wlb11EFpl2X7sq4zn6il13jV
+         2vHvIv9Vb2ix11v5FIkuFuw1pmO90SGYfLPQyV2J9gQAVa3KM6goEFiZfW7GzSNvbGMB
+         cFKQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753355097; x=1753959897;
+        d=1e100.net; s=20230601; t=1753355226; x=1753960026;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=hIUwmPHAS5I/CUOP00py81w0hjNzvTvkcVdQbKas/DA=;
-        b=IpshgJJOOwV650oitIkovl4DWpFkuwYHzIdSRIv7GXvkrVAGYBZyLWQ4nPFflxFVkV
-         Qp6/sm+jfhwiYMHdePavY9RJ/fKcGbPWiCNXVmhKNm+RlyeKummKiGCSp1GCFXkqPeiC
-         oWSK77Hy9EGihyIR1RA80YbHsLpRNjFLZ4WIOUt5geJOqwsnS7totqxxJuXMjfIMSQxJ
-         K5L2X+o1V3/5L/pMn4hIDS2XfrkOXCzhz6GsowjYL3tTEJoGeunTORH3t3Y8UIYtLQ34
-         r7RmhfcVf84bCt2zYmDPf9mxZhkE0Zk1Q6YgcLs6KLs7f8QsI4j/HnXNGIdVuCUFHM4l
-         vZEg==
-X-Forwarded-Encrypted: i=1; AJvYcCUArrNmZ4+XdX5JoXI+n88C/FIDGoC+nhJS4C0QBXVwL7LCUnAWGXdjgsW9S3BXyVdh+EPvxJfj1FgP3QOg@vger.kernel.org, AJvYcCUMRy9Y9Yc720/fzQEuSuosC9vlju4dhHwCgtbllLiHGsCd3KPasz8YmVIkDPrH4C9xPWvwQjF4LE/4SVEP@vger.kernel.org, AJvYcCVmTc9KNldWG4UivRqnYngbzri1TvoSixIwqNvARo8C2FD+PfKO0YhaRgg2fDDAZq7XlUPm/idoqZh8SA==@vger.kernel.org, AJvYcCVt7Q36Y30H4LMUufi1L1FfxkNx7DSCTHBsA3bE8htyKOl3Wh5kBWaiFdwU3JOOG/Xm84skydKLOLe2d50u3qn4@vger.kernel.org, AJvYcCWIl9DnKDSmF4kQh+YVIwU2S4dlc+ABDuGUceWYE2nhjjSc4BJZSojUUuzl8hQKppG32y2dC3P0Y/ZM/A==@vger.kernel.org, AJvYcCWlNwS0VZzR4pV+LtBbXQ8ItzQoKKL999I+TfQb481KnG1YSJNLmgQygUBv45f7OCxB1cB0xvb/2fteWuHA0GBeOIk=@vger.kernel.org, AJvYcCXndcRMSGA7kj0Ig8jBDjjmHPancsh7rtlwu0Ha0ZPanoZ/hPPMbs9b8dVASXQwsi5qnAn2qQs8CdSR/A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz5PY1Bz+2XMIPc1vqTR4aTWJhjgoEvmSWRczCRuX8AOYzuiDfZ
-	qwCmiTMxFfK0WftWT7pmvyu0DsWbjbKl2KeUnvLN4RIQBzix9iG8yBqRq2PsaAqb7MwbkHLeyC/
-	YVuLDSRQMwcSCD86N1/31jmzEiA3SIDk=
-X-Gm-Gg: ASbGncv5oKkWXRecSN67NCQXOUPaCyFU4UW4beQIEyTdlt7pAcpt1Q1DqyuK8BtSQbV
-	i3gk5s7gulB+sGm+loZMpGoXCxu/BXXX2Tl+Cwo7kP2Gl3d1xUcmJxXvHLZqhNhqEuvKoVvUWUM
-	AwjcRb+mQ/8fD6PRFTBFtAJkVyxjo5sdokMSKClq9SC1iw+YvCYWLWwIvHRBzWMs8ueC6rDBUja
-	Zs6nz3ftg==
-X-Google-Smtp-Source: AGHT+IHPG9CppWQlW2WG11oa6jW9jIvsCOFaEPh9C4R84HymaGR9H07ZVvtMJ1em3UaqkyymENVRG1C3VhJB+3+pi38=
-X-Received: by 2002:a17:906:478a:b0:ae0:7e95:fb with SMTP id
- a640c23a62f3a-af4c1e2633dmr202631066b.5.1753355097066; Thu, 24 Jul 2025
- 04:04:57 -0700 (PDT)
+        bh=43dwDfmrGoNVQcXDC2wAL8Jp+SeF4PP+nL7X5CzoIgA=;
+        b=vo7E2uTM4six/+hhguH/iRQzQO/UO+mURxJ3wJp41N+xrnfK1pfJBhta1FtrFmbys8
+         sX8YPzNyANth/E38rkUvCo3qHeWz1UZvXjxByt+gMpqxBimmwz/SuXvXpFY7bK+BopZb
+         0ZEyw3WG6nV8qHrCIWOJzwaupHqagFY9lovnfM9+ejbSq5mDqLp78CAeRJJ7d4igbX0g
+         bx8HUA/++M1UdlyKh+XBu5Je+2vzNn8Frj72cn8P1Z8+ag7q6ssuOrvMiXXcHPVlc8zB
+         5oVdHf3STqPimwTp3uWlSGDNNNFFhpwhjMpqIRQzUZdNs1X6rhpR4sJy4Oe/S2Oc/ni7
+         YXCw==
+X-Forwarded-Encrypted: i=1; AJvYcCU0ydln8J+3BT/etmmZzgXy3WNu794K8kJKZ87D8EKfb34y1TLP5aYfSsHWROddjwPgx5AodkCZf0Mjpw==@vger.kernel.org, AJvYcCUfAixA7aV49Ap30KZCAVHUvrzNnPtQBB2hpBv9qyHIzh12gVz5RV2aehLO2SDk27GdmlkIDxTHAuVZNg==@vger.kernel.org, AJvYcCWJzDkfubWJtjPYvEkI6Pr/wL7pcGUBmeHXPSm7WiXjBORcLVW81Cu/Z9GQvFutfdSnNIJRn13fMpID6g==@vger.kernel.org, AJvYcCWNpFU0ahGBOU8WifvV9+HOchxpyompZILVYo6MhEbrScF3fJcWX5YJInNzCX7CKoBEUyjW3MbcfywVjf+q@vger.kernel.org, AJvYcCWXYQt+/cToNXnd0tmMwONosOiA018i/MfmIWR8mGQYzPiszYCbGm0ws9IUQXl9JRRVYVvArEUoPDIyq8Ni@vger.kernel.org, AJvYcCX6HGlmZ6d8aDDVQeLnnF2GESkztp52ue8Trtw46kVf0ecNh5WsQTmJGGwHaHHygddAqJ4nkE/oXmeZCKIAXzY8@vger.kernel.org, AJvYcCXu+uupEkbkcTj92MLodRFa93/L4cjvz16cQH8DnOZ2NE56y8S7tuC3keLYH99Imlyy03jMmu3wL7D4EZIBU+wgrMk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQgZq21dszgV7hcTRQl2lYQVDBKnfrUK7HmdJNQ2rbnTTtOJf3
+	+x5eAbIM6LhjgAtyzxr+Lx9nI6ilKUaPTgwIHjp1Ie8goTgQPv3/1nIvLZGktzssTSs5TUk7tFj
+	wsBkSAIpr0ohjGEo+e1Zn10VbdLHGrDE=
+X-Gm-Gg: ASbGncsxPg56qdzfN3S5cyROb7r89482iDsZZEuxiTAXlG2Rp1iJR5ThivzqyYnDFhl
+	2d9WLU2ogldplCDXpXmHUqCAMhfYJ8TFvexxqpkM0aRDa7cotabKWLl5kUuVl1Y1ZJ+on2qrBAF
+	/eL/+GFVzc6Bj4N9waFo2NNaezahFpBToVSHu6cHiYvllTxGU0o7bafoDkunR5r217Xx2N7sGl+
+	bIcpFHiuw==
+X-Google-Smtp-Source: AGHT+IEQNn6mc1SbQNgvNLpYIewbgmuOfADdxy4q8WVZzoOl9KNmTiYVcFlWZZpZmc6xxLaaxaSRyyOaGbD95ShsFlU=
+X-Received: by 2002:a17:906:4785:b0:ae6:c334:af3a with SMTP id
+ a640c23a62f3a-af4c1e266admr182496066b.6.1753355225671; Thu, 24 Jul 2025
+ 04:07:05 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250724-pinctrl-gpio-pinfuncs-v3-0-af4db9302de4@linaro.org> <20250724-pinctrl-gpio-pinfuncs-v3-1-af4db9302de4@linaro.org>
-In-Reply-To: <20250724-pinctrl-gpio-pinfuncs-v3-1-af4db9302de4@linaro.org>
+References: <20250724-pinctrl-gpio-pinfuncs-v3-0-af4db9302de4@linaro.org> <20250724-pinctrl-gpio-pinfuncs-v3-7-af4db9302de4@linaro.org>
+In-Reply-To: <20250724-pinctrl-gpio-pinfuncs-v3-7-af4db9302de4@linaro.org>
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Thu, 24 Jul 2025 13:04:20 +0200
-X-Gm-Features: Ac12FXwYO9py2pad9YYkUaWtcE51AjTlJa3erYsopqu9ohpn5SMp_S7iBIXDS4k
-Message-ID: <CAHp75VdoZr0YCm3Pc7F5jOV8Q-H9K+gje2fi71nonHoXq2YPdQ@mail.gmail.com>
-Subject: Re: [PATCH v3 01/15] lib: provide kmemdup_const()
+Date: Thu, 24 Jul 2025 13:06:29 +0200
+X-Gm-Features: Ac12FXwnivN4zoY_g5_4Ly7908cvVHMEFQ3vZsc8P3-b_-oZW11Scn4jIzuxtTQ
+Message-ID: <CAHp75VcLaVsztRtiwUkNZJRGwd5+T-x3t2VGog=0E82D3U-qLw@mail.gmail.com>
+Subject: Re: [PATCH v3 07/15] pinctrl: keembay: release allocated memory in
+ detach path
 To: Bartosz Golaszewski <brgl@bgdev.pl>
 Cc: Linus Walleij <linus.walleij@linaro.org>, Bjorn Andersson <andersson@kernel.org>, 
 	Konrad Dybcio <konradybcio@kernel.org>, Alexey Klimov <alexey.klimov@linaro.org>, 
@@ -107,38 +108,34 @@ Cc: Linus Walleij <linus.walleij@linaro.org>, Bjorn Andersson <andersson@kernel.
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 24, 2025 at 11:24=E2=80=AFAM Bartosz Golaszewski <brgl@bgdev.pl=
+On Thu, Jul 24, 2025 at 11:25=E2=80=AFAM Bartosz Golaszewski <brgl@bgdev.pl=
 > wrote:
 >
 > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 >
-> Provide a function similar to strdup_const() but for copying blocks of
-> memory that are likely to be placed in .rodata.
+> Unlike all the other allocations in this driver, the memory for storing
+> the pin function descriptions allocated with kcalloc() and later resized
+> with krealloc() is never freed. Use devres like elsewhere to handle
+> that.
+>
+> Note: the logic in this module is pretty convoluted and could probably
+> use some revisiting, we should probably be able to calculate the exact
+> amount of memory needed in advance or even skip the allocation
+> alltogether and just add each function to the radix tree separately.
 
-Makes sense, one nit-pick below.
+altogether
 
 ...
 
->  extern void *kmemdup_noprof(const void *src, size_t len, gfp_t gfp) __re=
-alloc_size(2);
->  #define kmemdup(...)   alloc_hooks(kmemdup_noprof(__VA_ARGS__))
->
-> +extern const void *kmemdup_const(const void *src, size_t len, gfp_t gfp)=
-;
+>         /* Reallocate memory based on actual number of functions */
+> -       new_funcs =3D krealloc(keembay_funcs, kpc->nfuncs * sizeof(*new_f=
+uncs), GFP_KERNEL);
+> +       new_funcs =3D devm_krealloc(kpc->dev, keembay_funcs,
+> +                                 kpc->nfuncs * sizeof(*new_funcs), GFP_K=
+ERNEL);
+>         if (!new_funcs) {
 
-Can we locate this in the similar order to the C-file? I would put it
-before kmemdup_array().
-
->  extern void *kvmemdup(const void *src, size_t len, gfp_t gfp) __realloc_=
-size(2);
->  extern char *kmemdup_nul(const char *s, size_t len, gfp_t gfp);
->  extern void *kmemdup_array(const void *src, size_t count, size_t element=
-_size, gfp_t gfp)
-
-(below left for the context)
-> +
->  /**
->   * kmemdup_array - duplicate a given array.
+krealloc_array() ?
 
 --=20
 With Best Regards,
