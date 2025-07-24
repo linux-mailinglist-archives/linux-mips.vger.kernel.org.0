@@ -1,101 +1,100 @@
-Return-Path: <linux-mips+bounces-9915-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9916-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DA4ACB108AF
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Jul 2025 13:11:49 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5E861B108BB
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Jul 2025 13:13:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 15294584CC5
-	for <lists+linux-mips@lfdr.de>; Thu, 24 Jul 2025 11:11:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C947D7AFF2A
+	for <lists+linux-mips@lfdr.de>; Thu, 24 Jul 2025 11:12:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EB9B26C3AC;
-	Thu, 24 Jul 2025 11:11:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6378B26CE01;
+	Thu, 24 Jul 2025 11:13:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SnMiIuef"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AxNtpO5D"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6729E3BBF0;
-	Thu, 24 Jul 2025 11:11:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2A9126A0AF;
+	Thu, 24 Jul 2025 11:13:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753355505; cv=none; b=rfbnsT6CcPtxCOybCpIHUxQdnODXkvq4s3hHsEMLecpp8s2skYlWbqhvp7VINN3AWXUrUrmMPSB8HIdOujJwhePq5XnRgZnixTbOiNqrQ2BZFcXR2+ri7waaaI3JoWk2VoOn9Y8KGYyKpgesjOwHRnGUzMFugGzZYzi4irprBU0=
+	t=1753355609; cv=none; b=rB7bfe6xppOhTJbSWGlhTMB86GlSWbi2UzPitCbIQLD6HAHALbLSmXB9mN0NgGrl9Xq9UJIa8oh1rGe8fspwWHYE6s3jtGih9aA1mnpWZ8JI7Bfmu1Q3jPW3odR+ky7YoaDpBNvbT1Uq84swFYUjwd4XLiv9hpho/AWiGrjcPSs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753355505; c=relaxed/simple;
-	bh=LO3S7VvW0yLWS/aA7Ztz2n2SjnGIc3GFyf0h1H0tplM=;
+	s=arc-20240116; t=1753355609; c=relaxed/simple;
+	bh=+xsk3eLTqVSLGwJ2sXxrjX5jHw9wBvQeSl2HaOa9FDQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=o63ivUXI6V+S25JrRZk6gDEQ2Aku1FkGvPjP6rRCGZEtNSrKT7AxYNC5Vx2Fpqj1kYHC/pubvAQuSlLNUzoDlqgHvkaU0hfTuyiShteCUveBwc8jdDKyR98DO5CRnGmXwDLLs6l/l4nLM5ydd4JL6/BcOK49pTV3QZMBr5bwE4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SnMiIuef; arc=none smtp.client-ip=209.85.208.51
+	 To:Cc:Content-Type; b=YPX2ZhcxZBKWc0ud1E/U3Ba2VF7dx3igx4LlCBM3eDZw9h9j8FlHr3Zg1JLEbvqGv4rhvUgw0/zBr2rexECBoYzG+5OFikwd2kpZFVPIOcvipO9S1qiBaITPtkE+UDM2G49yZzinvBj3SdJ/AQp58hgKHOu4/yZkNtsNMqvXlmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AxNtpO5D; arc=none smtp.client-ip=209.85.218.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-60c93c23b08so1735861a12.3;
-        Thu, 24 Jul 2025 04:11:43 -0700 (PDT)
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-ae3ec622d2fso134833466b.1;
+        Thu, 24 Jul 2025 04:13:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753355502; x=1753960302; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1753355606; x=1753960406; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1M55MjNHLP2A27D0IMUuTEokYqJMg2OTuUCTRKpy8Hg=;
-        b=SnMiIuefE3u5BeaCN45RIK5LnACyuxDl1t1jyi8q6WhyQKYmshZOTH7ttjNLV/v35i
-         5fZmtgrQxWT76yWe4YdWx33ZVgUkSsVXgxfTyQG64waN1JiJ9//tDIAOPy/zdrkVHEa9
-         UUS2r5BQO9WKFezgkJpgfN2osP2n0H/M10EhogPqLyixRtn/yUiMMobhGHkKMl231Tb5
-         zmq+a5RXcjZBRoU5kO3dk+05UO7ZhNu7y5++Spk063rhFGq6Wpe/DaXyXP8qjcYgKV/J
-         48Zh50vaL1fzUPZOVBBZQcWIQ8TRl9O2IExiSMPX3bQd8zvwZQC90aDmCRhewSXwayBK
-         wzLQ==
+        bh=hZNixusr+c3cACc4GCTidZUQE/E0dLpa/Bb6bVcQhms=;
+        b=AxNtpO5DIHSsRjjyovHtPDGYA+NKHESbyEpMSkOIoOqJjeSi4TSxhkuEYhBPVqo/ja
+         XrJvDpkKXOTZxNoRoG+v1RCpkx7STK+Z25hxoMprW5MZGDF6GjhXABbQZpx1WanTOa9A
+         k0thij43Vc2/6VL9aHbOrw7lgRR0dsMY8vzYgoSOotZPEmf1pzzECpVkV39KOh6xFqoY
+         4B7S3oRGFGmBdn69ZVoSCrgQ4VhekkdNw+AhT0BjcxcfSd71OViI+qXjMOe6DvVZRaSx
+         Mz8ML8TuY8uQhwIb2tpndtqDZRvQx/K0XkKCSdfCY7lgNIYKSh8dYNHfscAvQ6Xktw+H
+         rfcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753355502; x=1753960302;
+        d=1e100.net; s=20230601; t=1753355606; x=1753960406;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=1M55MjNHLP2A27D0IMUuTEokYqJMg2OTuUCTRKpy8Hg=;
-        b=qpPFYSIq9gC3WNAmHlpDipvWt83WdkRstPnsoNFfDGO7dejXfWxAeha/NjVrzOC9dx
-         8eZHbBC2BJsX7xn9ogTcQJ/nr5khejswq+eauhA2TaQVrlBumYJTr5r+Sndr+piGRuvE
-         QXSu/Ok215FiJhNHkXd1kmOkfHMJb1sFflvBpckqhLvcruRTvvkOmGrq/ht8UtCuj+YV
-         vhKFAvEtx/7gwpr7e9GMa8Mwb/AHcNlxli1Ad55rouK/NjeZR1jJQL18R2e/GTLQL3zq
-         g2ouNQzPI/KkKax4xKsX89U+dz8g+pBuAYs+zyfvOgI1Qn6RM08MU55R/clY5OrzD0Ty
-         9fBg==
-X-Forwarded-Encrypted: i=1; AJvYcCV680Wwvc3KnvHP3CESVtmC+BX5RN4CHmhsXs40fI96IUKWbN+BeXK/26H0jNmvFMDnq7iDzgHT6IQn35lJXvB5DDI=@vger.kernel.org, AJvYcCVD5i5UhR9RlHVisnhEi3wPpLbLttmhRd//5iwE+FRuLvENt05sbuhIXStaabILLyPZWQKcG7U9yiWG0g==@vger.kernel.org, AJvYcCVRSgZ7qMoM2PWRsbdDrl0ynQruncxI4gwyNBd3BE0CJIam0MhXyxndduIllBQ/A7RzYaRuELh5w5N67Q==@vger.kernel.org, AJvYcCVsTzAIbaQDbgKnFVh8OywcPhlD0X/xqSDTlCXNmg1Xl/cdTa+jHyTSt5QsGvzsgzdMXhwvukFOF+x7xwsOMjpK@vger.kernel.org, AJvYcCW6tms0lRxPfpVFA/32shMB6csbBLoKI/sbWUmZ0Ro8Iot0akogrvFqSd79uDjgpfEC+ol0Cx8SM+budMB8@vger.kernel.org, AJvYcCWlq9Lht9yJjvw08JjdS3h0uqw1AiNCuYrtA+e4U/Y/qBRU8xXKEODK+RW6Q44qtOWUoSSbu/NVG4R6Nw==@vger.kernel.org, AJvYcCXIIM5gLt5M79N7lE0hbnRtg29x6X4VR0WvP3vtHHj7zNvhD/uuUivZnZP/2DZg50csGBL4e4FibZzIL9yE@vger.kernel.org
-X-Gm-Message-State: AOJu0YzjJhCQs/5qzefKUzegYNp7WicPYpkQ5af0/1xst0IXYwjJh+mI
-	XYAkCn/OD/XrsfITlObDTm94VN0Kn+1VOjB/IWtLKZCgYLu1Eur/XiurAcmVyifujLTSiaZ524k
-	rCAxMj7T9SbqdtqubPA+/PdGCswFKXh0=
-X-Gm-Gg: ASbGnct6ufrnWULytC2jFFJ9Mtu58lRL+Lbp+AtGeAIM47dL1S6tq5At4Utnki7yAeK
-	8BzS/AF4dHgphqXs5hgphcT62nv7DBw4OqWkWddox2TOWlKEOpCsUjzHA8Lpq++QRq3vvoCSJfB
-	99geqILlrop55AMx8egTtQRtQ7yDmDEFXxGNYYQ5R9pwn7w3vjGW/Grm1PAXeZNIASfQaVgRMoa
-	MMyjtGyLQ==
-X-Google-Smtp-Source: AGHT+IGQZoX+LT1IzNpJkxMjSxSTE0HFrqyLNxJY+NiaWstSlkBVLBDC3jnocxQOgR/J/b6wSO0Ggtf4mqZ5QLUuoio=
-X-Received: by 2002:a17:907:724a:b0:ae3:6068:235f with SMTP id
- a640c23a62f3a-af2f8d4a15amr677213666b.48.1753355501419; Thu, 24 Jul 2025
- 04:11:41 -0700 (PDT)
+        bh=hZNixusr+c3cACc4GCTidZUQE/E0dLpa/Bb6bVcQhms=;
+        b=vq9q/8CfykK6plBVVi1B8s0SEG+78ZfYp5SGG424SwotEv3/oLd8xchBHzW4KKqtTf
+         knLhT1RCgFgeHaMI3VLzmTEXr3f7ftISdhXDU5Zj3UqaW8AB3/Nd68JhQZqvrKoJ82L5
+         CMuUL5qLWCspQPLblVpmCb1aOzWyx/NnNRyRFU5oHBJCXPOiXIywSrDDwvpYoeKBlrTP
+         4R/bN7fLCmVf3fig5SI5JTGf5FTmJef/7NSE1XVqnqdxY9HGCiNZURRuuwChNOl2htjv
+         rAdWEHND/x3bCK9QPHjSVQGmXNTe8mTDzLSWT63G8q3qDSkktQqdY/agyQgnTHOyf/Uu
+         xRNg==
+X-Forwarded-Encrypted: i=1; AJvYcCUdqrV3iBHQUPbrs726ElTgXABClarpUMZtFwORjOATf+nR8LJ4UhVwQWyH0bOqk+5hM/SnBQvKaH7yBly0eW7VLDw=@vger.kernel.org, AJvYcCV8H4bOnadWVsN5A/HrtYNhjy7CJO/ckHr5xY/n93weSMRrnMSi+5MXu7TAriSmBpTS9q/r5C35D9lDYhgq@vger.kernel.org, AJvYcCVC6PpUHIixdtfr17AurYyYwMzttO2dkGxH7KaYT3ixMFwZi0CakkAYB/ujkmLbaNAWzIOoSmkeoXmpHKIL@vger.kernel.org, AJvYcCVs7nO7nZiWhlRHSlUQUB37VlBJJ0m4g+OoEzu97NsLisnnmStSa11mVRhFV7whooYGQ9n1z2cnFEf3Fg==@vger.kernel.org, AJvYcCW4JUk6xhEZ9/w3lulCW91baYOsOp+/O4RgoCf1+gjPOcUYJ7jgEGo9F8HxD6Vh8Zpv6OcnJPYeduAnGQ==@vger.kernel.org, AJvYcCWDMLVSKKiUjIs/hbtMDOi2ImZo1u9BxrCub5V+I9ujrCqOPcPCsINffALTgwDAPqWNYbk0NGuwN2hGUw==@vger.kernel.org, AJvYcCWinreuYOjTtgg9QdQVuCdnGYbzN/xoutRHCIsJvmutbjriuupw3DUYrSfIvbxUUyxukcero9T8hMIb+HSE1l7i@vger.kernel.org
+X-Gm-Message-State: AOJu0YyouimeAmgIMYhW5ij4/rVGSN6n97+j8LVEDw8aJe+bWystlMnG
+	Xcs6nI3zD2s+/9hz5k3TA2Degk88DlqkHmtl4oCPSXUPzWuQH7vsXXP5qPHPzl1lBOt8AH5iSoU
+	74gcJsvd7Yova8RD05IQWbdiBGsTe0Ys=
+X-Gm-Gg: ASbGncuCj7Riql345BQNFmtCIICMEMGEmi+e2ecHyUyUZSS2X8quHylsCHU7/uodwKF
+	lF6Uwj0YbGipujLS7xIfv5oidG9rgmPRnJTyYqxtbxQtAPpmxao8IinJ7wReZtiW0u9+cedKB6Z
+	S0D5IpPrxM+a/VFfGgw7p42KwKM9HB3Up+ecZF4XZZu3+lADtmZdok9hoao041YA64obRG48y98
+	W1Nc9Xb400f7hLridvm
+X-Google-Smtp-Source: AGHT+IELZnhRssUojeUfzx03q7k6D/HSNcNEJ5i+elToR/sTLOJXIaiozbv7LfFc6lY38aKQkwYpn9FdGW+sEeYsiSw=
+X-Received: by 2002:a17:906:f581:b0:ade:2e4b:50d1 with SMTP id
+ a640c23a62f3a-af2f895ad43mr692412466b.29.1753355605638; Thu, 24 Jul 2025
+ 04:13:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250724-pinctrl-gpio-pinfuncs-v3-0-af4db9302de4@linaro.org> <20250724-pinctrl-gpio-pinfuncs-v3-8-af4db9302de4@linaro.org>
-In-Reply-To: <20250724-pinctrl-gpio-pinfuncs-v3-8-af4db9302de4@linaro.org>
+References: <20250724-pinctrl-gpio-pinfuncs-v3-0-af4db9302de4@linaro.org>
+ <20250724-pinctrl-gpio-pinfuncs-v3-1-af4db9302de4@linaro.org> <e1253b8a-4940-417f-b530-09e57c6a8932@lucifer.local>
+In-Reply-To: <e1253b8a-4940-417f-b530-09e57c6a8932@lucifer.local>
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Thu, 24 Jul 2025 13:11:04 +0200
-X-Gm-Features: Ac12FXzgEQ0Ku4jr2sgSveo2Ph25gzNpv1tdxFI9mpW2KmHkqCwhSh2Uki2L2dY
-Message-ID: <CAHp75VdMmfV=z75K9AmB7GsWV8C1bZPLGi33duTCt+CM79spJg@mail.gmail.com>
-Subject: Re: [PATCH v3 08/15] pinctrl: keembay: use a dedicated structure for
- the pinfunction description
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Linus Walleij <linus.walleij@linaro.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Alexey Klimov <alexey.klimov@linaro.org>, 
-	Lorenzo Bianconi <lorenzo@kernel.org>, Sean Wang <sean.wang@kernel.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
+Date: Thu, 24 Jul 2025 13:12:49 +0200
+X-Gm-Features: Ac12FXx4uwXTilr-eVY-szF3msWYq6-eRwPAeJOQDJhF69DCjZUNeC203FQ8yl0
+Message-ID: <CAHp75VeWbhuL1pYvEza44Pnb5YUufgY=1WYXSx2nNMJVfcytTA@mail.gmail.com>
+Subject: Re: [PATCH v3 01/15] lib: provide kmemdup_const()
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>, Linus Walleij <linus.walleij@linaro.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Alexey Klimov <alexey.klimov@linaro.org>, Lorenzo Bianconi <lorenzo@kernel.org>, 
+	Sean Wang <sean.wang@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
 	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
 	Paul Cercueil <paul@crapouillou.net>, Kees Cook <kees@kernel.org>, 
 	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@redhat.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Dong Aisheng <aisheng.dong@nxp.com>, Fabio Estevam <festevam@gmail.com>, 
-	Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>, 
+	David Hildenbrand <david@redhat.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, Dong Aisheng <aisheng.dong@nxp.com>, 
+	Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>, 
 	Pengutronix Kernel Team <kernel@pengutronix.de>, NXP S32 Linux Team <s32@nxp.com>, 
 	Sascha Hauer <s.hauer@pengutronix.de>, Tony Lindgren <tony@atomide.com>, 
 	Haojian Zhuang <haojian.zhuang@linaro.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
@@ -108,37 +107,31 @@ Cc: Linus Walleij <linus.walleij@linaro.org>, Bjorn Andersson <andersson@kernel.
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 24, 2025 at 11:25=E2=80=AFAM Bartosz Golaszewski <brgl@bgdev.pl=
-> wrote:
->
-> struct function_desc is a wrapper around struct pinfunction with an
-> additional void *data pointer. We're working towards reducing the usage
-> of struct function_desc in pinctrl drivers - they should only be created
-> by pinmux core and accessed by drivers using
-> pinmux_generic_get_function().
-
-Any link to the discussion and perhaps an updated in-kernel
-documentation and/or TODO?
-
-> This driver uses the data pointer so in
-> order to stop using struct function_desc, we need to provide an
-> alternative that also wraps the mux mode which is passed to pinctrl core
-> as user data.
+On Thu, Jul 24, 2025 at 1:10=E2=80=AFPM Lorenzo Stoakes
+<lorenzo.stoakes@oracle.com> wrote:
+> On Thu, Jul 24, 2025 at 11:24:29AM +0200, Bartosz Golaszewski wrote:
 
 ...
 
-> +struct keembay_pinfunction {
-> +       struct pinfunction func;
-> +       u8 mux_mode;
-> +};
+> >  extern void *kmemdup_noprof(const void *src, size_t len, gfp_t gfp) __=
+realloc_size(2);
+> >  #define kmemdup(...) alloc_hooks(kmemdup_noprof(__VA_ARGS__))
+> >
+> > +extern const void *kmemdup_const(const void *src, size_t len, gfp_t gf=
+p);
+>
+> Please drop extern, it's unnecessary.
 
-My gut's feeling that this type of construction will be in tons of the
-drivers, perhaps better to provide an alternative like
-struct pinfunction_with_mode {
-  ...
-};
+It's all over the header. This should be done as a precursor patch and
+I know that usually people push back on doing that. I gave up on this.
+Kernel is going to rot sooner or later... :-(
 
-Or even with variadic arguments... (just saying)
+> >  extern void *kvmemdup(const void *src, size_t len, gfp_t gfp) __reallo=
+c_size(2);
+> >  extern char *kmemdup_nul(const char *s, size_t len, gfp_t gfp);
+> >  extern void *kmemdup_array(const void *src, size_t count, size_t eleme=
+nt_size, gfp_t gfp)
+
 
 --=20
 With Best Regards,
