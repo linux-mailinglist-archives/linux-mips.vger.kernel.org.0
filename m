@@ -1,618 +1,202 @@
-Return-Path: <linux-mips+bounces-9922-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9923-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 128A0B11F75
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Jul 2025 15:40:35 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D88C1B12CAA
+	for <lists+linux-mips@lfdr.de>; Sat, 26 Jul 2025 23:39:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1543C7A5B16
-	for <lists+linux-mips@lfdr.de>; Fri, 25 Jul 2025 13:39:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D3DE2189A69F
+	for <lists+linux-mips@lfdr.de>; Sat, 26 Jul 2025 21:39:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5ABAB1E8337;
-	Fri, 25 Jul 2025 13:40:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26E7621E094;
+	Sat, 26 Jul 2025 21:39:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XHrb3axi"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B112D8635D
-	for <linux-mips@vger.kernel.org>; Fri, 25 Jul 2025 13:40:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D81EC19F135;
+	Sat, 26 Jul 2025 21:39:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753450826; cv=none; b=QPwvZJzk5enaBBOi56Dbtmnnl3UhgDKMn3O4eyRMPDqJIMF3yJMxulEv+LUOxnMuAiu9OE1gosV8sRV1emucVlP/hJH2t3yuPPkubaBJMca9Cc4wy7ZvtdzGMTZeO2PHVv1K67grm5piiIm/CLGjcF+CVURKIuJodlj91VQK5t8=
+	t=1753565961; cv=none; b=AYW6DX/jJbWAa/YeYROeslCdtVtKC3bgtd7uXQOAV/TeuLZEybb7ml7pBNz3Jpfqr+bcUW/UtU7YuFe2L3V1WM+a+JvLXfXM/ADNXnE3TNkUWfng9gNC6LBWexsCRrMADEvgeSy/qpIAc7jcauOFOaaza4km8rODsW5RVxyPuTQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753450826; c=relaxed/simple;
-	bh=RGdpSmgxHFF6xYZE0XScte35A7YmK5X2mPyAytSGyCc=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=azCi1I2w9DvFstLbgRVWwMV/PZ9gkNL65JZ6lLscCJB54Tx2IulC/fv9Qgje6g+rnlTd2i/CMNxqtYqpwtDMLKs9GqjcQ69SjLOwY7tcBKepFt7r0vw2N6D7fopM98S8HKzBg22xOwUF7QH8v7oqGDV5ufkT+bZJwL9IkVGGMNI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=fail smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=alpha.franken.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id A294021A50;
-	Fri, 25 Jul 2025 13:40:19 +0000 (UTC)
-Authentication-Results: smtp-out1.suse.de;
-	none
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 8755713A8D;
-	Fri, 25 Jul 2025 13:40:19 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id zueVIEOJg2hdQwAAD6G6ig
-	(envelope-from <tsbogend@alpha.franken.de>); Fri, 25 Jul 2025 13:40:19 +0000
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-serial@vger.kernel.org
-Subject: [PATCH v2] tty: serial: ip22zilog: Use platform device for probing
-Date: Fri, 25 Jul 2025 15:40:17 +0200
-Message-ID: <20250725134018.136113-1-tsbogend@alpha.franken.de>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1753565961; c=relaxed/simple;
+	bh=bE8gOgUvTZi4vI0lg9qUYLnf/GEXOkxooNHihx3vuJw=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=sBGjGdkGKPUtN645G7k253uakuUi42RnGpsHMRz2Y/seKy898lgIfL+Xit52iEESYEqlo3cryRrQI5O7taXO8jUkJWHOmH7aKWnib+Kug1OKvwSxjrS6c829qpIFbi/ydI3HdKw0bBQEFkWaW04FtVU3Js1b6qmrRm9DgZP1UYg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XHrb3axi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85239C4CEF4;
+	Sat, 26 Jul 2025 21:39:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753565960;
+	bh=bE8gOgUvTZi4vI0lg9qUYLnf/GEXOkxooNHihx3vuJw=;
+	h=Date:From:To:Cc:Subject:From;
+	b=XHrb3axiSsGzIoF2z2Ix7pQjSMf1Hy42ar894fKLOABDtiMSiJhU7EOw7iJrgd6tB
+	 IbaRdb5qeWEpZin3fRvADFhKWu6rwXZK251hn0vmJbDMaGw9ALbzwGt5jlO4g1Ev/5
+	 38kyT5jk9ILeJA/C732uod/apU+rxyQj7EYgW1D/FfLwRv3xciKcU+EEYDtA1K1HQw
+	 89qGLSJb5I1UF5EVZNysHbVA4poyaagUpDWiSn+7w1Wkxrul3aS8xbgWpQmDVmq97o
+	 1XX7DFiDUydJ2ZJduymhDp4XdKL9MxP2XYT1rwFJYEc0IFFTjUHBVSjh8qB39SdIcg
+	 FmVRs5hgMDysg==
+Date: Sat, 26 Jul 2025 14:39:20 -0700
+From: Kees Cook <kees@kernel.org>
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: linux-kernel@vger.kernel.org, Akihiko Odaki <akihiko.odaki@daynix.com>,
+	Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
+	Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Chris Zankel <chris@zankel.net>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Dave Martin <Dave.Martin@arm.com>,
+	David Hildenbrand <david@redhat.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Dishank Jogi <dishank.jogi@siqol.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Heiko Carstens <hca@linux.ibm.com>,
+	Helge Deller <deller@gmx.de>, "H. Peter Anvin" <hpa@zytor.com>,
+	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Jonas Bonn <jonas@southpole.se>, Kees Cook <kees@kernel.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+	linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+	linux-um@lists.infradead.org, loongarch@lists.linux.dev,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Oleg Nesterov <oleg@redhat.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Richard Weinberger <richard@nod.at>, Rich Felker <dalias@libc.org>,
+	Russell King <linux@armlinux.org.uk>, sparclinux@vger.kernel.org,
+	Stafford Horne <shorne@gmail.com>,
+	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vasily Gorbik <gor@linux.ibm.com>, Vineet Gupta <vgupta@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>,
+	x86@kernel.org, Yin Fengwei <fengwei_yin@linux.alibaba.com>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>
+Subject: [GIT PULL] execve updates for v6.17
+Message-ID: <202507261437.F2079B3B7@keescook>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Level: 
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[imap1.dmz-prg2.suse.org:helo];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_COUNT_TWO(0.00)[2];
-	RCPT_COUNT_FIVE(0.00)[5];
-	RCVD_TLS_ALL(0.00)[]
-X-Spam-Flag: NO
-X-Spam-Score: -2.80
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-After commit 84a9582fd203 ("serial: core: Start managing serial controllers
-to enable runtime PM") serial drivers need to provide a device in
-struct uart_port.dev otherwise an oops happens. To fix this issue
-for ip22zilog driver switch driver to a platform driver and setup
-the serial device in sgi-ip22 code.
+Hi Linus,
 
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
----
-v2: removed copy&pasted useless code form sgi_zilog_devinit()
-v1: https://lore.kernel.org/all/20250723115823.76341-1-tsbogend@alpha.franken.de/
+Please pull these execve updates for v6.17. Note that while the REGSET
+macro changes touch all the architectures, they are fairly mechanical
+and have been in linux-next for almost the entire development window.
 
- arch/mips/sgi-ip22/ip22-platform.c |  32 +++
- drivers/tty/serial/ip22zilog.c     | 360 ++++++++++++-----------------
- 2 files changed, 179 insertions(+), 213 deletions(-)
+Thanks!
 
-diff --git a/arch/mips/sgi-ip22/ip22-platform.c b/arch/mips/sgi-ip22/ip22-platform.c
-index 0b2002e02a47..3a53690b4b33 100644
---- a/arch/mips/sgi-ip22/ip22-platform.c
-+++ b/arch/mips/sgi-ip22/ip22-platform.c
-@@ -221,3 +221,35 @@ static int __init sgi_ds1286_devinit(void)
- }
- 
- device_initcall(sgi_ds1286_devinit);
-+
-+#define SGI_ZILOG_BASE	(HPC3_CHIP0_BASE + \
-+			 offsetof(struct hpc3_regs, pbus_extregs[6]) + \
-+			 offsetof(struct sgioc_regs, uart))
-+
-+static struct resource sgi_zilog_resources[] = {
-+	{
-+		.start	= SGI_ZILOG_BASE,
-+		.end	= SGI_ZILOG_BASE + 15,
-+		.flags	= IORESOURCE_MEM
-+	},
-+	{
-+		.start	= SGI_SERIAL_IRQ,
-+		.end	= SGI_SERIAL_IRQ,
-+		.flags	= IORESOURCE_IRQ
-+	}
-+};
-+
-+static struct platform_device zilog_device = {
-+	.name		= "ip22zilog",
-+	.id		= 0,
-+	.num_resources	= ARRAY_SIZE(sgi_zilog_resources),
-+	.resource	= sgi_zilog_resources,
-+};
-+
-+
-+static int __init sgi_zilog_devinit(void)
-+{
-+	return platform_device_register(&zilog_device);
-+}
-+
-+device_initcall(sgi_zilog_devinit);
-diff --git a/drivers/tty/serial/ip22zilog.c b/drivers/tty/serial/ip22zilog.c
-index c2cae50f06f3..6e19c6713849 100644
---- a/drivers/tty/serial/ip22zilog.c
-+++ b/drivers/tty/serial/ip22zilog.c
-@@ -30,6 +30,7 @@
- #include <linux/console.h>
- #include <linux/spinlock.h>
- #include <linux/init.h>
-+#include <linux/platform_device.h>
- 
- #include <linux/io.h>
- #include <asm/irq.h>
-@@ -50,8 +51,9 @@
- #define ZSDELAY_LONG()		udelay(20)
- #define ZS_WSYNC(channel)	do { } while (0)
- 
--#define NUM_IP22ZILOG		1
--#define NUM_CHANNELS		(NUM_IP22ZILOG * 2)
-+#define NUM_CHANNELS		2
-+#define CHANNEL_B		0
-+#define CHANNEL_A		1
- 
- #define ZS_CLOCK		3672000	/* Zilog input clock rate. */
- #define ZS_CLOCK_DIVISOR	16      /* Divisor this driver uses. */
-@@ -62,9 +64,6 @@
- struct uart_ip22zilog_port {
- 	struct uart_port		port;
- 
--	/* IRQ servicing chain.  */
--	struct uart_ip22zilog_port	*next;
--
- 	/* Current values of Zilog write registers.  */
- 	unsigned char			curregs[NUM_ZSREGS];
- 
-@@ -72,7 +71,6 @@ struct uart_ip22zilog_port {
- #define IP22ZILOG_FLAG_IS_CONS		0x00000004
- #define IP22ZILOG_FLAG_IS_KGDB		0x00000008
- #define IP22ZILOG_FLAG_MODEM_STATUS	0x00000010
--#define IP22ZILOG_FLAG_IS_CHANNEL_A	0x00000020
- #define IP22ZILOG_FLAG_REGS_HELD	0x00000040
- #define IP22ZILOG_FLAG_TX_STOPPED	0x00000080
- #define IP22ZILOG_FLAG_TX_ACTIVE	0x00000100
-@@ -84,6 +82,8 @@ struct uart_ip22zilog_port {
- 	unsigned char			prev_status;
- };
- 
-+static struct uart_ip22zilog_port ip22zilog_port_table[NUM_CHANNELS];
-+
- #define ZILOG_CHANNEL_FROM_PORT(PORT)	((struct zilog_channel *)((PORT)->membase))
- #define UART_ZILOG(PORT)		((struct uart_ip22zilog_port *)(PORT))
- #define IP22ZILOG_GET_CURR_REG(PORT, REGNUM)		\
-@@ -93,7 +93,6 @@ struct uart_ip22zilog_port {
- #define ZS_IS_CONS(UP)	((UP)->flags & IP22ZILOG_FLAG_IS_CONS)
- #define ZS_IS_KGDB(UP)	((UP)->flags & IP22ZILOG_FLAG_IS_KGDB)
- #define ZS_WANTS_MODEM_STATUS(UP)	((UP)->flags & IP22ZILOG_FLAG_MODEM_STATUS)
--#define ZS_IS_CHANNEL_A(UP)	((UP)->flags & IP22ZILOG_FLAG_IS_CHANNEL_A)
- #define ZS_REGS_HELD(UP)	((UP)->flags & IP22ZILOG_FLAG_REGS_HELD)
- #define ZS_TX_STOPPED(UP)	((UP)->flags & IP22ZILOG_FLAG_TX_STOPPED)
- #define ZS_TX_ACTIVE(UP)	((UP)->flags & IP22ZILOG_FLAG_TX_ACTIVE)
-@@ -423,60 +422,57 @@ static void ip22zilog_transmit_chars(struct uart_ip22zilog_port *up,
- 
- static irqreturn_t ip22zilog_interrupt(int irq, void *dev_id)
- {
--	struct uart_ip22zilog_port *up = dev_id;
-+	struct uart_ip22zilog_port *up;
-+	struct zilog_channel *channel;
-+	unsigned char r3;
-+	bool push = false;
- 
--	while (up) {
--		struct zilog_channel *channel
--			= ZILOG_CHANNEL_FROM_PORT(&up->port);
--		unsigned char r3;
--		bool push = false;
-+	up = &ip22zilog_port_table[CHANNEL_A];
-+	channel = ZILOG_CHANNEL_FROM_PORT(&up->port);
- 
--		uart_port_lock(&up->port);
--		r3 = read_zsreg(channel, R3);
-+	uart_port_lock(&up->port);
-+	r3 = read_zsreg(channel, R3);
- 
--		/* Channel A */
--		if (r3 & (CHAEXT | CHATxIP | CHARxIP)) {
--			writeb(RES_H_IUS, &channel->control);
--			ZSDELAY();
--			ZS_WSYNC(channel);
-+	/* Channel A */
-+	if (r3 & (CHAEXT | CHATxIP | CHARxIP)) {
-+		writeb(RES_H_IUS, &channel->control);
-+		ZSDELAY();
-+		ZS_WSYNC(channel);
- 
--			if (r3 & CHARxIP)
--				push = ip22zilog_receive_chars(up, channel);
--			if (r3 & CHAEXT)
--				ip22zilog_status_handle(up, channel);
--			if (r3 & CHATxIP)
--				ip22zilog_transmit_chars(up, channel);
--		}
--		uart_port_unlock(&up->port);
--
--		if (push)
--			tty_flip_buffer_push(&up->port.state->port);
--
--		/* Channel B */
--		up = up->next;
--		channel = ZILOG_CHANNEL_FROM_PORT(&up->port);
--		push = false;
--
--		uart_port_lock(&up->port);
--		if (r3 & (CHBEXT | CHBTxIP | CHBRxIP)) {
--			writeb(RES_H_IUS, &channel->control);
--			ZSDELAY();
--			ZS_WSYNC(channel);
--
--			if (r3 & CHBRxIP)
--				push = ip22zilog_receive_chars(up, channel);
--			if (r3 & CHBEXT)
--				ip22zilog_status_handle(up, channel);
--			if (r3 & CHBTxIP)
--				ip22zilog_transmit_chars(up, channel);
--		}
--		uart_port_unlock(&up->port);
--
--		if (push)
--			tty_flip_buffer_push(&up->port.state->port);
--
--		up = up->next;
-+		if (r3 & CHARxIP)
-+			push = ip22zilog_receive_chars(up, channel);
-+		if (r3 & CHAEXT)
-+			ip22zilog_status_handle(up, channel);
-+		if (r3 & CHATxIP)
-+			ip22zilog_transmit_chars(up, channel);
- 	}
-+	uart_port_unlock(&up->port);
-+
-+	if (push)
-+		tty_flip_buffer_push(&up->port.state->port);
-+
-+	/* Channel B */
-+	up = &ip22zilog_port_table[CHANNEL_B];
-+	channel = ZILOG_CHANNEL_FROM_PORT(&up->port);
-+	push = false;
-+
-+	uart_port_lock(&up->port);
-+	if (r3 & (CHBEXT | CHBTxIP | CHBRxIP)) {
-+		writeb(RES_H_IUS, &channel->control);
-+		ZSDELAY();
-+		ZS_WSYNC(channel);
-+
-+		if (r3 & CHBRxIP)
-+			push = ip22zilog_receive_chars(up, channel);
-+		if (r3 & CHBEXT)
-+			ip22zilog_status_handle(up, channel);
-+		if (r3 & CHBTxIP)
-+			ip22zilog_transmit_chars(up, channel);
-+	}
-+	uart_port_unlock(&up->port);
-+
-+	if (push)
-+		tty_flip_buffer_push(&up->port.state->port);
- 
- 	return IRQ_HANDLED;
- }
-@@ -692,16 +688,16 @@ static void __ip22zilog_reset(struct uart_ip22zilog_port *up)
- 		udelay(100);
- 	}
- 
--	if (!ZS_IS_CHANNEL_A(up)) {
--		up++;
--		channel = ZILOG_CHANNEL_FROM_PORT(&up->port);
--	}
-+	up = &ip22zilog_port_table[CHANNEL_A];
-+	channel = ZILOG_CHANNEL_FROM_PORT(&up->port);
-+
- 	write_zsreg(channel, R9, FHWRES);
- 	ZSDELAY_LONG();
- 	(void) read_zsreg(channel, R0);
- 
- 	up->flags |= IP22ZILOG_FLAG_RESET_DONE;
--	up->next->flags |= IP22ZILOG_FLAG_RESET_DONE;
-+	up = &ip22zilog_port_table[CHANNEL_B];
-+	up->flags |= IP22ZILOG_FLAG_RESET_DONE;
- }
- 
- static void __ip22zilog_startup(struct uart_ip22zilog_port *up)
-@@ -942,47 +938,6 @@ static const struct uart_ops ip22zilog_pops = {
- 	.verify_port	=	ip22zilog_verify_port,
- };
- 
--static struct uart_ip22zilog_port *ip22zilog_port_table;
--static struct zilog_layout **ip22zilog_chip_regs;
--
--static struct uart_ip22zilog_port *ip22zilog_irq_chain;
--static int zilog_irq = -1;
--
--static void * __init alloc_one_table(unsigned long size)
--{
--	return kzalloc(size, GFP_KERNEL);
--}
--
--static void __init ip22zilog_alloc_tables(void)
--{
--	ip22zilog_port_table = (struct uart_ip22zilog_port *)
--		alloc_one_table(NUM_CHANNELS * sizeof(struct uart_ip22zilog_port));
--	ip22zilog_chip_regs = (struct zilog_layout **)
--		alloc_one_table(NUM_IP22ZILOG * sizeof(struct zilog_layout *));
--
--	if (ip22zilog_port_table == NULL || ip22zilog_chip_regs == NULL) {
--		panic("IP22-Zilog: Cannot allocate IP22-Zilog tables.");
--	}
--}
--
--/* Get the address of the registers for IP22-Zilog instance CHIP.  */
--static struct zilog_layout * __init get_zs(int chip)
--{
--	unsigned long base;
--
--	if (chip < 0 || chip >= NUM_IP22ZILOG) {
--		panic("IP22-Zilog: Illegal chip number %d in get_zs.", chip);
--	}
--
--	/* Not probe-able, hard code it. */
--	base = (unsigned long) &sgioc->uart;
--
--	zilog_irq = SGI_SERIAL_IRQ;
--	request_mem_region(base, 8, "IP22-Zilog");
--
--	return (struct zilog_layout *) base;
--}
--
- #define ZS_PUT_CHAR_MAX_DELAY	2000	/* 10 ms */
- 
- #ifdef CONFIG_SERIAL_IP22_ZILOG_CONSOLE
-@@ -1070,144 +1025,123 @@ static struct uart_driver ip22zilog_reg = {
- #endif
- };
- 
--static void __init ip22zilog_prepare(void)
-+static void __init ip22zilog_prepare(struct uart_ip22zilog_port *up)
- {
- 	unsigned char sysrq_on = IS_ENABLED(CONFIG_SERIAL_IP22_ZILOG_CONSOLE);
--	struct uart_ip22zilog_port *up;
--	struct zilog_layout *rp;
--	int channel, chip;
-+	int brg;
- 
--	/*
--	 * Temporary fix.
--	 */
--	for (channel = 0; channel < NUM_CHANNELS; channel++)
--		spin_lock_init(&ip22zilog_port_table[channel].port.lock);
-+	spin_lock_init(&up->port.lock);
- 
--	ip22zilog_irq_chain = &ip22zilog_port_table[NUM_CHANNELS - 1];
--        up = &ip22zilog_port_table[0];
--	for (channel = NUM_CHANNELS - 1 ; channel > 0; channel--)
--		up[channel].next = &up[channel - 1];
--	up[channel].next = NULL;
-+	up->port.iotype = UPIO_MEM;
-+	up->port.uartclk = ZS_CLOCK;
-+	up->port.fifosize = 1;
-+	up->port.has_sysrq = sysrq_on;
-+	up->port.ops = &ip22zilog_pops;
-+	up->port.type = PORT_IP22ZILOG;
- 
--	for (chip = 0; chip < NUM_IP22ZILOG; chip++) {
--		if (!ip22zilog_chip_regs[chip]) {
--			ip22zilog_chip_regs[chip] = rp = get_zs(chip);
--
--			up[(chip * 2) + 0].port.membase = (char *) &rp->channelB;
--			up[(chip * 2) + 1].port.membase = (char *) &rp->channelA;
--
--			/* In theory mapbase is the physical address ...  */
--			up[(chip * 2) + 0].port.mapbase =
--				(unsigned long) ioremap((unsigned long) &rp->channelB, 8);
--			up[(chip * 2) + 1].port.mapbase =
--				(unsigned long) ioremap((unsigned long) &rp->channelA, 8);
--		}
--
--		/* Channel A */
--		up[(chip * 2) + 0].port.iotype = UPIO_MEM;
--		up[(chip * 2) + 0].port.irq = zilog_irq;
--		up[(chip * 2) + 0].port.uartclk = ZS_CLOCK;
--		up[(chip * 2) + 0].port.fifosize = 1;
--		up[(chip * 2) + 0].port.has_sysrq = sysrq_on;
--		up[(chip * 2) + 0].port.ops = &ip22zilog_pops;
--		up[(chip * 2) + 0].port.type = PORT_IP22ZILOG;
--		up[(chip * 2) + 0].port.flags = 0;
--		up[(chip * 2) + 0].port.line = (chip * 2) + 0;
--		up[(chip * 2) + 0].flags = 0;
--
--		/* Channel B */
--		up[(chip * 2) + 1].port.iotype = UPIO_MEM;
--		up[(chip * 2) + 1].port.irq = zilog_irq;
--		up[(chip * 2) + 1].port.uartclk = ZS_CLOCK;
--		up[(chip * 2) + 1].port.fifosize = 1;
--		up[(chip * 2) + 1].port.has_sysrq = sysrq_on;
--		up[(chip * 2) + 1].port.ops = &ip22zilog_pops;
--		up[(chip * 2) + 1].port.type = PORT_IP22ZILOG;
--		up[(chip * 2) + 1].port.line = (chip * 2) + 1;
--		up[(chip * 2) + 1].flags |= IP22ZILOG_FLAG_IS_CHANNEL_A;
--	}
--
--	for (channel = 0; channel < NUM_CHANNELS; channel++) {
--		struct uart_ip22zilog_port *up = &ip22zilog_port_table[channel];
--		int brg;
--
--		/* Normal serial TTY. */
--		up->parity_mask = 0xff;
--		up->curregs[R1] = EXT_INT_ENAB | INT_ALL_Rx | TxINT_ENAB;
--		up->curregs[R4] = PAR_EVEN | X16CLK | SB1;
--		up->curregs[R3] = RxENAB | Rx8;
--		up->curregs[R5] = TxENAB | Tx8;
--		up->curregs[R9] = NV | MIE;
--		up->curregs[R10] = NRZ;
--		up->curregs[R11] = TCBR | RCBR;
--		brg = BPS_TO_BRG(9600, ZS_CLOCK / ZS_CLOCK_DIVISOR);
--		up->curregs[R12] = (brg & 0xff);
--		up->curregs[R13] = (brg >> 8) & 0xff;
--		up->curregs[R14] = BRENAB;
--	}
-+	/* Normal serial TTY. */
-+	up->parity_mask = 0xff;
-+	up->curregs[R1] = EXT_INT_ENAB | INT_ALL_Rx | TxINT_ENAB;
-+	up->curregs[R4] = PAR_EVEN | X16CLK | SB1;
-+	up->curregs[R3] = RxENAB | Rx8;
-+	up->curregs[R5] = TxENAB | Tx8;
-+	up->curregs[R9] = NV | MIE;
-+	up->curregs[R10] = NRZ;
-+	up->curregs[R11] = TCBR | RCBR;
-+	brg = BPS_TO_BRG(9600, ZS_CLOCK / ZS_CLOCK_DIVISOR);
-+	up->curregs[R12] = (brg & 0xff);
-+	up->curregs[R13] = (brg >> 8) & 0xff;
-+	up->curregs[R14] = BRENAB;
- }
- 
--static int __init ip22zilog_ports_init(void)
-+static int ip22zilog_probe(struct platform_device *pdev)
- {
--	int ret;
-+	struct uart_ip22zilog_port *up;
-+	char __iomem *membase;
-+	struct resource *res;
-+	int irq;
-+	int i;
- 
--	printk(KERN_INFO "Serial: IP22 Zilog driver (%d chips).\n", NUM_IP22ZILOG);
-+	up = &ip22zilog_port_table[CHANNEL_B];
-+	if (up->port.dev)
-+		return -ENOSPC;
- 
--	ip22zilog_prepare();
-+	irq = platform_get_irq(pdev, 0);
-+	if (irq < 0)
-+		return irq;
- 
--	if (request_irq(zilog_irq, ip22zilog_interrupt, 0,
--			"IP22-Zilog", ip22zilog_irq_chain)) {
-+	membase = devm_platform_get_and_ioremap_resource(pdev, 0, &res);
-+	if (IS_ERR(membase))
-+		return PTR_ERR(membase);
-+
-+	ip22zilog_prepare(up);
-+
-+	up->port.mapbase = res->start + offsetof(struct zilog_layout, channelB);
-+	up->port.membase = membase + offsetof(struct zilog_layout, channelB);
-+	up->port.line = 0;
-+	up->port.dev = &pdev->dev;
-+	up->port.irq = irq;
-+
-+	up = &ip22zilog_port_table[CHANNEL_A];
-+	ip22zilog_prepare(up);
-+
-+	up->port.mapbase = res->start + offsetof(struct zilog_layout, channelA);
-+	up->port.membase = membase + offsetof(struct zilog_layout, channelA);
-+	up->port.line = 1;
-+	up->port.dev = &pdev->dev;
-+	up->port.irq = irq;
-+
-+	if (request_irq(irq, ip22zilog_interrupt, 0,
-+			"IP22-Zilog", NULL)) {
- 		panic("IP22-Zilog: Unable to register zs interrupt handler.\n");
- 	}
- 
--	ret = uart_register_driver(&ip22zilog_reg);
--	if (ret == 0) {
--		int i;
--
--		for (i = 0; i < NUM_CHANNELS; i++) {
--			struct uart_ip22zilog_port *up = &ip22zilog_port_table[i];
--
--			uart_add_one_port(&ip22zilog_reg, &up->port);
--		}
--	}
--
--	return ret;
--}
--
--static int __init ip22zilog_init(void)
--{
--	/* IP22 Zilog setup is hard coded, no probing to do.  */
--	ip22zilog_alloc_tables();
--	ip22zilog_ports_init();
-+	for (i = 0; i < NUM_CHANNELS; i++)
-+		uart_add_one_port(&ip22zilog_reg,
-+				  &ip22zilog_port_table[i].port);
- 
- 	return 0;
- }
- 
--static void __exit ip22zilog_exit(void)
-+static void ip22zilog_remove(struct platform_device *pdev)
- {
- 	int i;
--	struct uart_ip22zilog_port *up;
- 
- 	for (i = 0; i < NUM_CHANNELS; i++) {
--		up = &ip22zilog_port_table[i];
--
--		uart_remove_one_port(&ip22zilog_reg, &up->port);
-+		uart_remove_one_port(&ip22zilog_reg,
-+				     &ip22zilog_port_table[i].port);
-+		ip22zilog_port_table[i].port.dev = NULL;
- 	}
-+}
- 
--	/* Free IO mem */
--	up = &ip22zilog_port_table[0];
--	for (i = 0; i < NUM_IP22ZILOG; i++) {
--		if (up[(i * 2) + 0].port.mapbase) {
--		   iounmap((void*)up[(i * 2) + 0].port.mapbase);
--		   up[(i * 2) + 0].port.mapbase = 0;
--		}
--		if (up[(i * 2) + 1].port.mapbase) {
--			iounmap((void*)up[(i * 2) + 1].port.mapbase);
--			up[(i * 2) + 1].port.mapbase = 0;
--		}
-+static struct platform_driver ip22zilog_driver = {
-+	.probe	= ip22zilog_probe,
-+	.remove	= ip22zilog_remove,
-+	.driver	= {
-+		.name = "ip22zilog"
- 	}
-+};
- 
-+static int __init ip22zilog_init(void)
-+{
-+	int ret;
-+
-+	ret = uart_register_driver(&ip22zilog_reg);
-+	if (ret)
-+		return ret;
-+
-+	ret = platform_driver_register(&ip22zilog_driver);
-+	if (ret)
-+		uart_unregister_driver(&ip22zilog_reg);
-+
-+	return ret;
-+
-+}
-+
-+static void __exit ip22zilog_exit(void)
-+{
- 	uart_unregister_driver(&ip22zilog_reg);
-+	platform_driver_unregister(&ip22zilog_driver);
- }
- 
- module_init(ip22zilog_init);
+-Kees
+
+The following changes since commit e04c78d86a9699d136910cfc0bdcf01087e3267e:
+
+  Linux 6.16-rc2 (2025-06-15 13:49:41 -0700)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/execve-v6.17
+
+for you to fetch changes up to 7f71195c15dcf5f34c4c7f056603659374e3a525:
+
+  fork: reorder function qualifiers for copy_clone_args_from_user (2025-07-17 16:37:05 -0700)
+
+----------------------------------------------------------------
+execve updates for v6.17
+
+- Introduce regular REGSET note macros arch-wide (Dave Martin)
+
+- Remove arbitrary 4K limitation of program header size (Yin Fengwei)
+
+- Reorder function qualifiers for copy_clone_args_from_user() (Dishank Jogi)
+
+----------------------------------------------------------------
+Dave Martin (23):
+      regset: Fix kerneldoc for struct regset_get() in user_regset
+      regset: Add explicit core note name in struct user_regset
+      binfmt_elf: Dump non-arch notes with strictly matching name and type
+      ARC: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+      ARM: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+      arm64: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+      csky: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+      hexagon: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+      LoongArch: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+      m68k: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+      MIPS: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+      nios2: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+      openrisc: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+      parisc: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+      powerpc/ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+      riscv: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+      s390/ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+      sh: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+      sparc: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+      x86/ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+      um: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+      xtensa: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
+      binfmt_elf: Warn on missing or suspicious regset note names
+
+Dishank Jogi (1):
+      fork: reorder function qualifiers for copy_clone_args_from_user
+
+Yin Fengwei (1):
+      binfmt_elf: remove the 4k limitation of program header size
+
+ include/linux/regset.h                   | 12 +++++-
+ arch/arc/kernel/ptrace.c                 |  4 +-
+ arch/arm/kernel/ptrace.c                 |  6 +--
+ arch/arm64/kernel/ptrace.c               | 52 +++++++++++-----------
+ arch/csky/kernel/ptrace.c                |  4 +-
+ arch/hexagon/kernel/ptrace.c             |  2 +-
+ arch/loongarch/kernel/ptrace.c           | 16 +++----
+ arch/m68k/kernel/ptrace.c                |  4 +-
+ arch/mips/kernel/ptrace.c                | 20 ++++-----
+ arch/nios2/kernel/ptrace.c               |  2 +-
+ arch/openrisc/kernel/ptrace.c            |  4 +-
+ arch/parisc/kernel/ptrace.c              |  8 ++--
+ arch/powerpc/kernel/ptrace/ptrace-view.c | 74 ++++++++++++++++----------------
+ arch/riscv/kernel/ptrace.c               | 12 +++---
+ arch/s390/kernel/ptrace.c                | 42 +++++++++---------
+ arch/sh/kernel/ptrace_32.c               |  4 +-
+ arch/sparc/kernel/ptrace_32.c            |  4 +-
+ arch/sparc/kernel/ptrace_64.c            |  8 ++--
+ arch/x86/kernel/ptrace.c                 | 22 +++++-----
+ arch/x86/um/ptrace.c                     | 10 ++---
+ arch/xtensa/kernel/ptrace.c              |  4 +-
+ fs/binfmt_elf.c                          | 38 ++++++++++------
+ fs/binfmt_elf_fdpic.c                    | 17 ++++----
+ kernel/fork.c                            |  2 +-
+ 24 files changed, 196 insertions(+), 175 deletions(-)
+
 -- 
-2.43.0
-
+Kees Cook
 
