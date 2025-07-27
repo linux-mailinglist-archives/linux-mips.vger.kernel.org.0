@@ -1,202 +1,160 @@
-Return-Path: <linux-mips+bounces-9923-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9924-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D88C1B12CAA
-	for <lists+linux-mips@lfdr.de>; Sat, 26 Jul 2025 23:39:25 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0A10B12E8F
+	for <lists+linux-mips@lfdr.de>; Sun, 27 Jul 2025 10:24:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D3DE2189A69F
-	for <lists+linux-mips@lfdr.de>; Sat, 26 Jul 2025 21:39:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2131A17AC07
+	for <lists+linux-mips@lfdr.de>; Sun, 27 Jul 2025 08:24:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26E7621E094;
-	Sat, 26 Jul 2025 21:39:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D55E1FC3;
+	Sun, 27 Jul 2025 08:24:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XHrb3axi"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="gIkkdEN6"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D81EC19F135;
-	Sat, 26 Jul 2025 21:39:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82F687DA66
+	for <linux-mips@vger.kernel.org>; Sun, 27 Jul 2025 08:24:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753565961; cv=none; b=AYW6DX/jJbWAa/YeYROeslCdtVtKC3bgtd7uXQOAV/TeuLZEybb7ml7pBNz3Jpfqr+bcUW/UtU7YuFe2L3V1WM+a+JvLXfXM/ADNXnE3TNkUWfng9gNC6LBWexsCRrMADEvgeSy/qpIAc7jcauOFOaaza4km8rODsW5RVxyPuTQ=
+	t=1753604689; cv=none; b=r4aKnlM5anoLIhzqG0BFkvf7X2p48E5ZwYD0I6TOF+g+wpBkeFEiomdWjg31qw/5XYZnirYsv427npCK8fZ8yCjs9OT8bF+J591FIFbtAHZqEtIVpNxwM8RDPLCzJDOqw6XNtL/rGi2d3pgOIHHDECKfvyY/3XqZIcKXIJvMgc4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753565961; c=relaxed/simple;
-	bh=bE8gOgUvTZi4vI0lg9qUYLnf/GEXOkxooNHihx3vuJw=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=sBGjGdkGKPUtN645G7k253uakuUi42RnGpsHMRz2Y/seKy898lgIfL+Xit52iEESYEqlo3cryRrQI5O7taXO8jUkJWHOmH7aKWnib+Kug1OKvwSxjrS6c829qpIFbi/ydI3HdKw0bBQEFkWaW04FtVU3Js1b6qmrRm9DgZP1UYg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XHrb3axi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85239C4CEF4;
-	Sat, 26 Jul 2025 21:39:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753565960;
-	bh=bE8gOgUvTZi4vI0lg9qUYLnf/GEXOkxooNHihx3vuJw=;
-	h=Date:From:To:Cc:Subject:From;
-	b=XHrb3axiSsGzIoF2z2Ix7pQjSMf1Hy42ar894fKLOABDtiMSiJhU7EOw7iJrgd6tB
-	 IbaRdb5qeWEpZin3fRvADFhKWu6rwXZK251hn0vmJbDMaGw9ALbzwGt5jlO4g1Ev/5
-	 38kyT5jk9ILeJA/C732uod/apU+rxyQj7EYgW1D/FfLwRv3xciKcU+EEYDtA1K1HQw
-	 89qGLSJb5I1UF5EVZNysHbVA4poyaagUpDWiSn+7w1Wkxrul3aS8xbgWpQmDVmq97o
-	 1XX7DFiDUydJ2ZJduymhDp4XdKL9MxP2XYT1rwFJYEc0IFFTjUHBVSjh8qB39SdIcg
-	 FmVRs5hgMDysg==
-Date: Sat, 26 Jul 2025 14:39:20 -0700
-From: Kees Cook <kees@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-kernel@vger.kernel.org, Akihiko Odaki <akihiko.odaki@daynix.com>,
-	Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Chris Zankel <chris@zankel.net>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Dave Martin <Dave.Martin@arm.com>,
-	David Hildenbrand <david@redhat.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Dinh Nguyen <dinguyen@kernel.org>,
-	Dishank Jogi <dishank.jogi@siqol.com>,
-	Geert Uytterhoeven <geert@linux-m68k.org>,
-	Guo Ren <guoren@kernel.org>, Heiko Carstens <hca@linux.ibm.com>,
-	Helge Deller <deller@gmx.de>, "H. Peter Anvin" <hpa@zytor.com>,
-	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Jonas Bonn <jonas@southpole.se>, Kees Cook <kees@kernel.org>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
-	linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org,
-	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org,
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org,
-	linux-um@lists.infradead.org, loongarch@lists.linux.dev,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Max Filippov <jcmvbkbc@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Oleg Nesterov <oleg@redhat.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Richard Weinberger <richard@nod.at>, Rich Felker <dalias@libc.org>,
-	Russell King <linux@armlinux.org.uk>, sparclinux@vger.kernel.org,
-	Stafford Horne <shorne@gmail.com>,
-	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Vasily Gorbik <gor@linux.ibm.com>, Vineet Gupta <vgupta@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>,
-	x86@kernel.org, Yin Fengwei <fengwei_yin@linux.alibaba.com>,
-	Yoshinori Sato <ysato@users.sourceforge.jp>
-Subject: [GIT PULL] execve updates for v6.17
-Message-ID: <202507261437.F2079B3B7@keescook>
+	s=arc-20240116; t=1753604689; c=relaxed/simple;
+	bh=pCDzxxUimKSB3EwsfWX+tNITt36sdeo51kdPivLWWcA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=i9zv3owMAfzylea11VIFzN82hV200bFC0VoQGlYll6MSB3dq0tkerHe/IeDOht7I6Sr9LpZaD+674971FIb795zrTouoBDKip52sFoK5U30prPsHGfMINsR5r2Us2aVkVC8yqP8iNZTQ+JolhUj6djkQ7FrupxsjCCP9Iy5ETLk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=gIkkdEN6; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-451d6ade159so23817595e9.1
+        for <linux-mips@vger.kernel.org>; Sun, 27 Jul 2025 01:24:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1753604686; x=1754209486; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=5Zp8NqMfP+9ZJxnvW6z72aJPcVY++D23DSoUHtspQxU=;
+        b=gIkkdEN6Gwjh9Hj4j2CXqy/8h/LtGxx9uhA9h2zrfJkxY5EBOhB/H3MOmklfJdUYpH
+         dLSW4JpB0D34Gy23PD9hCuVUIGZ+litflM20RC8rmaIW1Z8fRw0aBpm3AZzT44gba2E1
+         sSUTg1JzyHJv7R4AkI1lUS6bP0udCvXG3ph9IfONLXcMTbILEcZFCk7e0z0x+FnUupWD
+         ouWrbjUhOB8JJIqSmwYFCAPaKzAR4RwCLPC8RdDTGp4da+VK7ZQ0AyGBf3dxAfc+ZNPD
+         57XOC3vTxeMPa2MTM9q+7K3D490X9kjsspnx/SBMpeWv9WEKA9byC/nI3jCaVD3k91HO
+         Tabw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1753604686; x=1754209486;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5Zp8NqMfP+9ZJxnvW6z72aJPcVY++D23DSoUHtspQxU=;
+        b=eMgUpq/V/O2KeLHhcYafx71bim2SDAMxuPfQ8mW7KU96z7NUW2ODwfG+jTLxxmY0W9
+         pqWqvgNT8huePhhMw4lElQ3xrVLxjNh8hrpnU37GTBf9T8LeePR4rgNquKY8KlMnR4Rj
+         xjr5PGUTWwg1i9ChBkpqkoLPMmensS0U4LKRxHKLUsWkF4JoU4dOtETBhk5KFFjp2k0a
+         09EFgQ4ZljP0zd4gOpmnZuFecXaWDj4A3rI6Ueo+BRXbM7uka/UtPXc/TdiNVIDzxBg4
+         6HsCM17EzPK0Bp3DQRuTs8KzEbJbvun7qjU+ki1Gt3wij3EzOyv00VVzodqgoexG1l9p
+         fhKw==
+X-Gm-Message-State: AOJu0YyfsoNWCMbZFP2UeFz4ztkzRFmrFVp+LFqjjiEbsyjA+gXqBa2w
+	UV7s6MWn89iNdmivN5YvL4BkcTYRGAtf9y3SYo8C+5Lm3vibVyVE/xpUEO+2oX71LVo=
+X-Gm-Gg: ASbGncvJ4zgF2kX6F5xTZCLVIWB6GnH8ujQmybT6TpA5k3BJIjoYEV3m9SFGMKjfeXp
+	Rs0rMCws0hIfAHf/W6Tn4Q10yIA7vakBP4dSLnbVT2HOr1f4oD1PTyJruiVwB1rh3YuaZJO25Sb
+	PHSuShQey6pZZ99OX1fYG8XdKFGxfz6nRHTacVtsM9vQKMRXuB3Cc3ViA5e4x4tGYRAxDHUcJVI
+	7X4L9s/8qx0TsKk2P+UL7DXzGwtXPPMyEyX8pEgVQQ9gz6ziy6eXiAmCFzTTqhjR+FdiqPLIRSB
+	tt+mvGvH5EtkVEunUfFoLHD8JamcWMGbqbpTEgBDjdnDFoYZtH4dgc/sor5cWt5dCpJ32UWRX/p
+	NT+5CV8gQbHWSEUbS+c6r
+X-Google-Smtp-Source: AGHT+IG0veFybI//mpXDZL/MaqbtHsXicikTiM5496C0+N6+f4l7RapcJmOC2qPj/0wNY7u3GXYAYQ==
+X-Received: by 2002:a05:600c:34cf:b0:450:d3b9:4ba4 with SMTP id 5b1f17b1804b1-458763032b6mr69544875e9.2.1753604685682;
+        Sun, 27 Jul 2025 01:24:45 -0700 (PDT)
+Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:7619:fb4:5db:aeb8])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4587ac58162sm54201335e9.18.2025.07.27.01.24.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 27 Jul 2025 01:24:45 -0700 (PDT)
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Linus Walleij <linus.walleij@linaro.org>
+Cc: linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: [PATCH] MIPS: alchemy: gpio: use new GPIO line value setter callbacks for the remaining chips
+Date: Sun, 27 Jul 2025 10:24:42 +0200
+Message-ID: <20250727082442.13182-1-brgl@bgdev.pl>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-Hi Linus,
+From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Please pull these execve updates for v6.17. Note that while the REGSET
-macro changes touch all the architectures, they are fairly mechanical
-and have been in linux-next for almost the entire development window.
+Previous commit missed two other places that need converting, it only
+came out in tests on autobuilders now. Convert the rest of the driver.
 
-Thanks!
+Fixes: 68bdc4dc1130 ("MIPS: alchemy: gpio: use new line value setter callbacks")
+Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+---
+Thomas: this flew under my radar until it came out in autobuilder tests
+now. Thomas: if it's too late for you to take it through the MIPS tree
+for v6.17, can you Ack it and let me take it directly through the GPIO
+tree? This change is needed for us to complete the rework of GPIO
+callbacks during the next cycle.
 
--Kees
+ arch/mips/alchemy/common/gpiolib.c | 12 ++++++++----
+ 1 file changed, 8 insertions(+), 4 deletions(-)
 
-The following changes since commit e04c78d86a9699d136910cfc0bdcf01087e3267e:
-
-  Linux 6.16-rc2 (2025-06-15 13:49:41 -0700)
-
-are available in the Git repository at:
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/execve-v6.17
-
-for you to fetch changes up to 7f71195c15dcf5f34c4c7f056603659374e3a525:
-
-  fork: reorder function qualifiers for copy_clone_args_from_user (2025-07-17 16:37:05 -0700)
-
-----------------------------------------------------------------
-execve updates for v6.17
-
-- Introduce regular REGSET note macros arch-wide (Dave Martin)
-
-- Remove arbitrary 4K limitation of program header size (Yin Fengwei)
-
-- Reorder function qualifiers for copy_clone_args_from_user() (Dishank Jogi)
-
-----------------------------------------------------------------
-Dave Martin (23):
-      regset: Fix kerneldoc for struct regset_get() in user_regset
-      regset: Add explicit core note name in struct user_regset
-      binfmt_elf: Dump non-arch notes with strictly matching name and type
-      ARC: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      ARM: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      arm64: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      csky: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      hexagon: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      LoongArch: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      m68k: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      MIPS: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      nios2: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      openrisc: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      parisc: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      powerpc/ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      riscv: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      s390/ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      sh: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      sparc: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      x86/ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      um: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      xtensa: ptrace: Use USER_REGSET_NOTE_TYPE() to specify regset note names
-      binfmt_elf: Warn on missing or suspicious regset note names
-
-Dishank Jogi (1):
-      fork: reorder function qualifiers for copy_clone_args_from_user
-
-Yin Fengwei (1):
-      binfmt_elf: remove the 4k limitation of program header size
-
- include/linux/regset.h                   | 12 +++++-
- arch/arc/kernel/ptrace.c                 |  4 +-
- arch/arm/kernel/ptrace.c                 |  6 +--
- arch/arm64/kernel/ptrace.c               | 52 +++++++++++-----------
- arch/csky/kernel/ptrace.c                |  4 +-
- arch/hexagon/kernel/ptrace.c             |  2 +-
- arch/loongarch/kernel/ptrace.c           | 16 +++----
- arch/m68k/kernel/ptrace.c                |  4 +-
- arch/mips/kernel/ptrace.c                | 20 ++++-----
- arch/nios2/kernel/ptrace.c               |  2 +-
- arch/openrisc/kernel/ptrace.c            |  4 +-
- arch/parisc/kernel/ptrace.c              |  8 ++--
- arch/powerpc/kernel/ptrace/ptrace-view.c | 74 ++++++++++++++++----------------
- arch/riscv/kernel/ptrace.c               | 12 +++---
- arch/s390/kernel/ptrace.c                | 42 +++++++++---------
- arch/sh/kernel/ptrace_32.c               |  4 +-
- arch/sparc/kernel/ptrace_32.c            |  4 +-
- arch/sparc/kernel/ptrace_64.c            |  8 ++--
- arch/x86/kernel/ptrace.c                 | 22 +++++-----
- arch/x86/um/ptrace.c                     | 10 ++---
- arch/xtensa/kernel/ptrace.c              |  4 +-
- fs/binfmt_elf.c                          | 38 ++++++++++------
- fs/binfmt_elf_fdpic.c                    | 17 ++++----
- kernel/fork.c                            |  2 +-
- 24 files changed, 196 insertions(+), 175 deletions(-)
-
+diff --git a/arch/mips/alchemy/common/gpiolib.c b/arch/mips/alchemy/common/gpiolib.c
+index 411f70ceb762..194034eba75f 100644
+--- a/arch/mips/alchemy/common/gpiolib.c
++++ b/arch/mips/alchemy/common/gpiolib.c
+@@ -40,9 +40,11 @@ static int gpio2_get(struct gpio_chip *chip, unsigned offset)
+ 	return !!alchemy_gpio2_get_value(offset + ALCHEMY_GPIO2_BASE);
+ }
+ 
+-static void gpio2_set(struct gpio_chip *chip, unsigned offset, int value)
++static int gpio2_set(struct gpio_chip *chip, unsigned offset, int value)
+ {
+ 	alchemy_gpio2_set_value(offset + ALCHEMY_GPIO2_BASE, value);
++
++	return 0;
+ }
+ 
+ static int gpio2_direction_input(struct gpio_chip *chip, unsigned offset)
+@@ -68,10 +70,12 @@ static int gpio1_get(struct gpio_chip *chip, unsigned offset)
+ 	return !!alchemy_gpio1_get_value(offset + ALCHEMY_GPIO1_BASE);
+ }
+ 
+-static void gpio1_set(struct gpio_chip *chip,
++static int gpio1_set(struct gpio_chip *chip,
+ 				unsigned offset, int value)
+ {
+ 	alchemy_gpio1_set_value(offset + ALCHEMY_GPIO1_BASE, value);
++
++	return 0;
+ }
+ 
+ static int gpio1_direction_input(struct gpio_chip *chip, unsigned offset)
+@@ -97,7 +101,7 @@ struct gpio_chip alchemy_gpio_chip[] = {
+ 		.direction_input	= gpio1_direction_input,
+ 		.direction_output	= gpio1_direction_output,
+ 		.get			= gpio1_get,
+-		.set			= gpio1_set,
++		.set_rv			= gpio1_set,
+ 		.to_irq			= gpio1_to_irq,
+ 		.base			= ALCHEMY_GPIO1_BASE,
+ 		.ngpio			= ALCHEMY_GPIO1_NUM,
+@@ -107,7 +111,7 @@ struct gpio_chip alchemy_gpio_chip[] = {
+ 		.direction_input	= gpio2_direction_input,
+ 		.direction_output	= gpio2_direction_output,
+ 		.get			= gpio2_get,
+-		.set			= gpio2_set,
++		.set_rv			= gpio2_set,
+ 		.to_irq			= gpio2_to_irq,
+ 		.base			= ALCHEMY_GPIO2_BASE,
+ 		.ngpio			= ALCHEMY_GPIO2_NUM,
 -- 
-Kees Cook
+2.48.1
+
 
