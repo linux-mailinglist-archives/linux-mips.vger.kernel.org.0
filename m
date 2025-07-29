@@ -1,77 +1,81 @@
-Return-Path: <linux-mips+bounces-9928-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9930-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00CA6B13605
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Jul 2025 10:05:53 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06997B1459A
+	for <lists+linux-mips@lfdr.de>; Tue, 29 Jul 2025 03:11:45 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 069D11898977
-	for <lists+linux-mips@lfdr.de>; Mon, 28 Jul 2025 08:06:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E4E5354306A
+	for <lists+linux-mips@lfdr.de>; Tue, 29 Jul 2025 01:11:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DEB8224225;
-	Mon, 28 Jul 2025 08:05:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D67AE1B3925;
+	Tue, 29 Jul 2025 01:11:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VYacduDB"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E06F621C9E1
-	for <linux-mips@vger.kernel.org>; Mon, 28 Jul 2025 08:05:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ACF21A3179;
+	Tue, 29 Jul 2025 01:11:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753689944; cv=none; b=Wib/3jr4OSQPNsY8pqzNL6qtGuNpXQLSea+Ov/JXQWAYcq8fXCpyLZ4si0iKr1lu83q3iV2Hiy0vn4CBOIK+g31UKfkISjvCWpNxFp2Fe2CUA6fBGazmiIja1GgGaoZltuZKKId+dUOh8194WiqzKlCBajT5rpPavyGdLgZS5ss=
+	t=1753751496; cv=none; b=RVpD+xGwXaZxurLmjchsBAqEqWExB29AytC+MKATHC3dkrWJfm+XLk8hquTlGPVQrzm8ez3C/PAOfOWiSghsacnHXw70RFlcBKY1e6FO+fhcIeI1rKCGCubn5Puh04Od3Wyuhnb7oBLlukmN8xrqV8qqHgmD5P95WYT4tyUtIS0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753689944; c=relaxed/simple;
-	bh=r5pNTU0ZBNQC6BD4BpEkUQGgvQV4ApyxObsIs4Teh7U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=U64q9RaMgjcWuh0IpylaRFRkjvSHzzZV3rHDLN80fVhIQg9BROIlR5fAhrvEaJntsKDUDIi19c8XS1vtCz7HiqKcRtrgHrp+jXDP6j1tPL4xg5NHtCGnG4MfelkJCjXZ5GN/i9tZ5c8RpqZTmdS80/YxMpJz3OR18pw5FZvBUgU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1ugIrZ-0003qT-00; Mon, 28 Jul 2025 10:05:37 +0200
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id D66B4C075D; Mon, 28 Jul 2025 10:05:14 +0200 (CEST)
-Date: Mon, 28 Jul 2025 10:05:14 +0200
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: Joshua Kinard <linux@kumba.dev>
-Cc: linux-mips@vger.kernel.org, Joshua Kinard <kumba@gentoo.org>
-Subject: Re: [PATCH] MIPS: Update Joshua Kinard's e-mail address
-Message-ID: <aIcvOlSQglDlhkQ8@alpha.franken.de>
-References: <20250721165715.20478-1-kumba@gentoo.org>
+	s=arc-20240116; t=1753751496; c=relaxed/simple;
+	bh=8ZaxoHBTEhVL12axKf/WX+LwUM3Y/BFGh5lAMOgD5zg=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=UTZZzhhFFmnHGy8MNxOlmms2pMURZYHdtKvwv0UpDYQU9lfj91GU3qIo4VDYcJfmG7+q2m2wUqDlVojK1TpJEpnTKKEb0HGqAlcx6jaBYhXwgwTaadWEtTRJRkhB8dzbDVX+NLY4i40IC+gcGsZ92xznkGXwsdEYHgAT+pMfZ24=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VYacduDB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A163C4CEE7;
+	Tue, 29 Jul 2025 01:11:36 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753751496;
+	bh=8ZaxoHBTEhVL12axKf/WX+LwUM3Y/BFGh5lAMOgD5zg=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=VYacduDBsz15Xg+SgB5nuf2LLCwR/ZQLnHAeY89QssQwJkwueQk+gOc3P9X3M8ERc
+	 StQHaCIjU+ApLe7jJ1kkQ1SZSrlnoE0XfZBTw8Yh+roL1ES9ZIfl3oMlPK7Nd5vIme
+	 keZEIUjTWzO7k+Xn5laz3kmccx4u/wXUQCxvKazPAkCcbgCoN5asGQOK49wsxNUWzg
+	 4V8Tr4vXYS3H1wOaKUIe57TRZzvYstxc8p2ZRo6fWA+RbWlSndzB3fEL4aGd9Fgn3b
+	 ZBNnQvFR6RJKhSTgEfjDhuJgvmCxPS2qK55MY85inxik6zCKjNO7RH2cHI8IhVIhst
+	 yOtThARlrGBsA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 34A0C383BF5F;
+	Tue, 29 Jul 2025 01:11:54 +0000 (UTC)
+Subject: Re: [GIT PULL] execve updates for v6.17
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <202507261437.F2079B3B7@keescook>
+References: <202507261437.F2079B3B7@keescook>
+X-PR-Tracked-List-Id: <linux-sh.vger.kernel.org>
+X-PR-Tracked-Message-Id: <202507261437.F2079B3B7@keescook>
+X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/execve-v6.17
+X-PR-Tracked-Commit-Id: 7f71195c15dcf5f34c4c7f056603659374e3a525
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: d900c4ce638d707f09c7e5c2afa71e035c0bb33d
+Message-Id: <175375151288.918485.7118599213274098690.pr-tracker-bot@kernel.org>
+Date: Tue, 29 Jul 2025 01:11:52 +0000
+To: Kees Cook <kees@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org, Akihiko Odaki <akihiko.odaki@daynix.com>, Akihiko Odaki <odaki@rsg.ci.i.u-tokyo.ac.jp>, Albert Ou <aou@eecs.berkeley.edu>, Alexander Gordeev <agordeev@linux.ibm.com>, Alexandre Ghiti <alex@ghiti.fr>, Andreas Larsson <andreas@gaisler.com>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, Chris Zankel <chris@zankel.net>, Dave Hansen <dave.hansen@linux.intel.com>, Dave Martin <Dave.Martin@arm.com>, David Hildenbrand <david@redhat.com>, "David S. Miller" <davem@davemloft.net>, Dinh Nguyen <dinguyen@kernel.org>, Dishank Jogi <dishank.jogi@siqol.com>, Geert Uytterhoeven <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>, Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>, "H. Peter Anvin" <hpa@
+ zytor.com>, Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>, "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Johannes Berg <johannes@sipsolutions.net>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Jonas Bonn <jonas@southpole.se>, Kees Cook <kees@kernel.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org, linux-um@lists.infradead.org, loongarch@lists.linux.dev, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Madhavan Srinivasan <maddy@linux.ibm.com>, Max Filippov <jcmvbkbc@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, Oleg Nesterov
+  <oleg@redhat.com>, Palmer Dabbelt <palmer@dabbelt.com>, Paul Walmsley <paul.walmsley@sifive.com>, Richard Weinberger <richard@nod.at>, Rich Felker <dalias@libc.org>, Russell King <linux@armlinux.org.uk>, sparclinux@vger.kernel.org, Stafford Horne <shorne@gmail.com>, Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>, Sven Schnelle <svens@linux.ibm.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner <tglx@linutronix.de>, Vasily Gorbik <gor@linux.ibm.com>, Vineet Gupta <vgupta@kernel.org>, WANG Xuerui <kernel@xen0n.name>, Will Deacon <will@kernel.org>, x86@kernel.org, Yin Fengwei <fengwei_yin@linux.alibaba.com>, Yoshinori Sato <ysato@users.sourceforge.jp>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250721165715.20478-1-kumba@gentoo.org>
 
-On Mon, Jul 21, 2025 at 12:57:15PM -0400, Joshua Kinard wrote:
-> I am switching my address to a personal domain, so some files in the
-> SGI IP30 and IOC3 files need to be updated.  I will send updates for
-> the MAINTAINERS file and rtc-ds1685 separately to linux-rtc.
-> 
-> Signed-off-by: Joshua Kinard <kumba@gentoo.org>
-> ---
->  arch/mips/include/asm/mach-ip30/cpu-feature-overrides.h | 2 +-
->  arch/mips/include/asm/mach-ip30/spaces.h                | 2 +-
->  arch/mips/include/asm/sgi/heart.h                       | 2 +-
->  arch/mips/sgi-ip30/ip30-power.c                         | 2 +-
->  arch/mips/sgi-ip30/ip30-setup.c                         | 2 +-
->  arch/mips/sgi-ip30/ip30-smp.c                           | 2 +-
->  arch/mips/sgi-ip30/ip30-timer.c                         | 2 +-
->  arch/mips/sgi-ip30/ip30-xtalk.c                         | 2 +-
->  drivers/mfd/ioc3.c                                      | 2 +-
->  drivers/tty/serial/8250/8250_ioc3.c                     | 2 +-
->  10 files changed, 10 insertions(+), 10 deletions(-)
+The pull request you sent on Sat, 26 Jul 2025 14:39:20 -0700:
 
-applied to mips-next.
+> https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git tags/execve-v6.17
 
-Thomas.
- 
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/d900c4ce638d707f09c7e5c2afa71e035c0bb33d
+
+Thank you!
+
 -- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
