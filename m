@@ -1,130 +1,158 @@
-Return-Path: <linux-mips+bounces-9944-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9945-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C18D7B15D8F
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Jul 2025 11:56:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 19136B15E01
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Jul 2025 12:19:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E9785A7013
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Jul 2025 09:54:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9E9C17A3F71
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Jul 2025 10:18:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 18BCF28BA8C;
-	Wed, 30 Jul 2025 09:54:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E49A277CBA;
+	Wed, 30 Jul 2025 10:19:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="y6v1Y+rP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eyQOpxcV"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20C15148FE6
-	for <linux-mips@vger.kernel.org>; Wed, 30 Jul 2025 09:54:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE402266B66;
+	Wed, 30 Jul 2025 10:19:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753869294; cv=none; b=OuHgZAuje6zwYie39bAP93XELiz8g+2UCpR4BlsH6zxCcvy4+SzppK/o1Hn3jW6er5gmUpk4Yc8GcV1GQRNkQJU8UuGu6tG27wbaFfl0jPIqbzP9C3a9Doljh6N8eDTH4g/ZC+UnIWw5kKePGIvODybSv0LdFmxQ1Cs7ErLVVCQ=
+	t=1753870772; cv=none; b=L+Ao2YRDUh0xIQWhsuVTcQ4+gynhrpCyBYWoA4Gs6XfvPL5ZPj4AjJP22wnoW3bRCG6c6dJqk7Ug5OudumeeZcw3nCZiuiivaCBL6mlC+MQI8zTT64qxBb/c+zf2//oM0MDUarod+NQIsYThgxl5eeDH9w4Vu09LlKRuDu1ODj8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753869294; c=relaxed/simple;
-	bh=hp7bAnlyWbMe0UagxjClRdoFhPBImgjJBDcHhbMOPBc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PGCWQn3bdYq4Rda/svzYftdh2yEPcgXmwM3fPSelXjBqFIY1oG8fn8GnEiZI4CTbQu422dtB7WTRhAF8KGh5ChlR7M1aRqja780JlcqTA+S+ctr1w6CkO5/9N7BVDmMddNWCMzL6IhsxzRzEJFMQkvuGz1TJFFjJC3xFam1UBmU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=y6v1Y+rP; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-55b827aba01so321014e87.0
-        for <linux-mips@vger.kernel.org>; Wed, 30 Jul 2025 02:54:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1753869290; x=1754474090; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=b6vdhp2EWkPtq+IAr0ObGae8XoJd1fUV2G+NSQOgeB0=;
-        b=y6v1Y+rPEVDHOkrqc2KWOfhiugmQ47csz1p9+cPsKrBxMu6N++Lx7mDSVzJx9n6oqS
-         UB5hMz5e/MChLsSvAmzP82OKI7y6HHDsJkHIQqJ10ekWc9qTbZH4JevVzniY4W09B0A/
-         VbMUa0prk04D/p8/3TRqlWvGNSKC2kXTwf/bhns+HC7/CXVhXgBURVJR/9r87Bn9GlN0
-         gv/+LXG6hJV0a64I7ABkBgPr6iaKk6lKUYzENYZv0W+E8GgTmxZDjeJpjUQvzGsRYgUw
-         UIsm9yMb4dS4lePbwKM+ubqez2QY+tIytNFSDWF2gXWKi7MulASGNSolQFMpNoSrFq9C
-         RciA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753869290; x=1754474090;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=b6vdhp2EWkPtq+IAr0ObGae8XoJd1fUV2G+NSQOgeB0=;
-        b=Hoo5dphVS3MljjvqATDkXJGf8pUdNeX3Wh/rsgLbr+N5ei5P3Yw1DanDwGK7D9r5AN
-         LAyyCmA2qUSBfin2vQJeHKquYH4LoAjTgwaZNe77khC3cwl5qbsaS31hlT8UEvVqfQlw
-         EB/YgCETr0wtmd/vgmxpAnA278uWk3JoJP/4Pe7Jay3Lgg9p23e33gK4p2WVpeMW+xwl
-         Ovsj6xHn+MTEm9mS3ENz7uaqhA2eeylhgjC3XnmnDPavd0tYYoGarGtO5CLdPVlL5KNz
-         sJZLCVZrZ+M5E00XiGlpgw7lExWR2J33h3V5n592h/UDtrSt2kcyxZ9IuNSemOZmORGM
-         WwQw==
-X-Forwarded-Encrypted: i=1; AJvYcCXdLKGi8YrhqqZCpjHV/Cj9AxlTxgZwdGaE/z57KuBemNZwcgeOjG9igt0XUR0L1NlLd1XUkTJ7+LiL@vger.kernel.org
-X-Gm-Message-State: AOJu0YwsJEb3zCIoTkYEL+ELqZ6zDlV1WsFwnQCZVSXwbb66dFYmzjZb
-	cCZ4aQuTpMEw9NS9Usd3v02zz7DZHujv7VYOfyNBYw8Wmjm3N8uTwieWWTpbsZSPcpCxagQIMFx
-	QhCq94g2qsNyQmmQeLKzU5BeqyKqo86zDn0xvz2WBTA==
-X-Gm-Gg: ASbGnct1EAPb8v17plV4X8cR17SbTEZcRXKypojOxZmUA4Ad1icpZ4jR+HkP2yyK6gl
-	FV9426XTB1KQdOBg25l5UACQKH/WmoPgPq3q2MVavj9yw2RBeUFPIs6O5pgMZu6DiVFSxPFNwV6
-	Nianub4lt2jcFqnmzlM0cofYU7Bx5r6SakvlyrVjzLWFr5sSBT84dHMFP7MGgBJZ0i0h1cQD6i4
-	Wo+LuVpcAGLZuZvVJpKZwzTnEnbO4YeOJruAIo=
-X-Google-Smtp-Source: AGHT+IFD0mC+adTu2tQIUqoYqi4YbEm6lb9KfHl4WlQUhUVwQ9owZPBnvnUOvhF+89ksRVwAv/r0YIR9B2aVVdKhoAo=
-X-Received: by 2002:a05:6512:33c7:b0:554:e7f2:d76b with SMTP id
- 2adb3069b0e04-55b7c0b0f66mr939851e87.56.1753869289592; Wed, 30 Jul 2025
- 02:54:49 -0700 (PDT)
+	s=arc-20240116; t=1753870772; c=relaxed/simple;
+	bh=EAo1JwLwQmSVpdRh6bDezMwGkO6es9S03FxPuaNswug=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XbeqL9dy2oqF8GDT/+kVUw4S7fGhNSByiN/Qecrzd317OH5tao2u3Xbwq3ixgsFHwvlfFjOt0Fh8nY0UZKzCqtzqNVK9Pin+4DOo/P6joeaqpF+UhDZ/6WMaVk5UyUJtgE+BX2AQzCIh6OkSzR4y57uq44CWjMZPFskyQ1+NAfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eyQOpxcV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 582B1C4CEE7;
+	Wed, 30 Jul 2025 10:19:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1753870771;
+	bh=EAo1JwLwQmSVpdRh6bDezMwGkO6es9S03FxPuaNswug=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=eyQOpxcVcR1H63+BHWg/CFKigaLqUqMvNvXsUknLdHPeMkodeiZl5MPug/8DsVw/a
+	 giBEQoO6YJfc2IYMup/cB5/tzxUNdpq26OkCCKKEyijv3HeDTvTPB42bZ/LAWWap1W
+	 HSU9KVqt3jnCYHFHTDpwJjFf8xW2jB/JQQE+K88VmHLkDDwagXryM/B6XDesFEu6sE
+	 dSdDZ+j8pNDSjEmeF0IcFGmPg4/QvfL9hUVm6h9WtgU6dBsthpBa+4155dTYEuncfm
+	 LoudalTEKGq6b4IJRJAblOtrJzxaq8mDhKnhvwKxJ1GJAz0exZz3MffWB+GUVgM/Fm
+	 qi3d0rU9EWtOg==
+Date: Wed, 30 Jul 2025 11:19:07 +0100
+From: Mark Brown <broonie@kernel.org>
+To: Konrad Dybcio <konradybcio@kernel.org>
+Cc: Vinod Koul <vkoul@kernel.org>, Sven Peter <sven@kernel.org>,
+	Janne Grunau <j@jannau.net>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>,
+	Ludovic Desroches <ludovic.desroches@microchip.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+	Viresh Kumar <vireshk@kernel.org>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Frank Li <Frank.Li@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Taichi Sugaya <sugaya.taichi@socionext.com>,
+	Takao Orito <orito.takao@socionext.com>,
+	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Daniel Mack <daniel@zonque.org>,
+	Haojian Zhuang <haojian.zhuang@gmail.com>,
+	Robert Jarzmik <robert.jarzmik@free.fr>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Patrice Chotard <patrice.chotard@foss.st.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	=?iso-8859-1?Q?Am=E9lie?= Delaunay <amelie.delaunay@foss.st.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Laxman Dewangan <ldewangan@nvidia.com>,
+	Jon Hunter <jonathanh@nvidia.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Michal Simek <michal.simek@amd.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
+	Viken Dadhaniya <quic_vdadhani@quicinc.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	imx@lists.linux.dev, linux-actions@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-sound@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Subject: Re: [PATCH RFC 5/6] spi: geni-qcom: Hint GENI protocol ID to GPI DMA
+Message-ID: <490091ee-ba84-4f97-96b4-fe30ed082e17@sirena.org.uk>
+References: <20250730-topic-dma_genise_cookie-v1-0-b505c1238f9f@oss.qualcomm.com>
+ <20250730-topic-dma_genise_cookie-v1-5-b505c1238f9f@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250724-pinctrl-gpio-pinfuncs-v3-0-af4db9302de4@linaro.org>
- <20250724-pinctrl-gpio-pinfuncs-v3-12-af4db9302de4@linaro.org> <CAHp75Vc4vsJh_-GbP+YO50veoGoGtfAPL4tjcF+73uophfmnGw@mail.gmail.com>
-In-Reply-To: <CAHp75Vc4vsJh_-GbP+YO50veoGoGtfAPL4tjcF+73uophfmnGw@mail.gmail.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Wed, 30 Jul 2025 11:54:38 +0200
-X-Gm-Features: Ac12FXyouWksKyGI1Z-cYawOTPPQ3IbuMxJxWat2oIDr-ST0nxIlLBCifNIDusI
-Message-ID: <CAMRc=Mc1ophkofB6MmtD4adBAi69C3JyovM-S9YD_y7UA3V1qA@mail.gmail.com>
-Subject: Re: [PATCH v3 12/15] pinctrl: allow to mark pin functions as
- requestable GPIOs
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Alexey Klimov <alexey.klimov@linaro.org>, 
-	Lorenzo Bianconi <lorenzo@kernel.org>, Sean Wang <sean.wang@kernel.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Paul Cercueil <paul@crapouillou.net>, Kees Cook <kees@kernel.org>, 
-	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@redhat.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Dong Aisheng <aisheng.dong@nxp.com>, Fabio Estevam <festevam@gmail.com>, 
-	Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, NXP S32 Linux Team <s32@nxp.com>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Tony Lindgren <tony@atomide.com>, 
-	Haojian Zhuang <haojian.zhuang@linaro.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-mediatek@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, 
-	linux-hardening@vger.kernel.org, linux-mm@kvack.org, imx@lists.linux.dev, 
-	linux-omap@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="bAEzP5efOXdEgXiD"
+Content-Disposition: inline
+In-Reply-To: <20250730-topic-dma_genise_cookie-v1-5-b505c1238f9f@oss.qualcomm.com>
+X-Cookie: Linux is obsolete
+
+
+--bAEzP5efOXdEgXiD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jul 24, 2025 at 2:22=E2=80=AFPM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
->
-> >  struct pinfunction {
-> >         const char *name;
-> >         const char * const *groups;
-> >         size_t ngroups;
-> > +       unsigned long flags;
->
-> Not sure we need this. If the function is GPIO, pin control already
-> knows about this. The pin muxing has gpio request / release callbacks
-> that change the state. Why do we need an additional flag(s)?
->
+On Wed, Jul 30, 2025 at 11:33:32AM +0200, Konrad Dybcio wrote:
+> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+>=20
+> With the API in place, request the correct protocol ID with the GPI DMA
+> to avoid having to hardcode this obvious information in the device
+> tree.
 
-I'm not following, how does the pin controller know that the function
-is GPIO exactly, other than by the bit set in this field?
+Acked-by: Mark Brown <broonie@kernel.org>
 
-Bartosz
+--bAEzP5efOXdEgXiD
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmiJ8ZoACgkQJNaLcl1U
+h9DnvAf+LbcTzds/hsfTeLtLPENpavgpdBbC/kj+eo3NQESPHZy9K7kiL8p7Xjbr
+hMSf6upQxsK7NZMFyKsLc0oAEP6LLyDU16ON/R+QDQiNYou0xOm9vYoJwtmhMvDY
+PDJaohO2ZSfEwodlxhodZ0HxhrSaPXLEiJt2tA/ASGUdRtCC15yUoXItcUf+b04C
+/A3TjgtsVE32Xz6HKLh2/Z6WkBWVgqpGswljAu7JkNAvKlp7BTviSUX645kuiQYz
+/o32yfxiCCO5LO/s2/wvMjiCgaKi2Kf8uLjifxymS8nOhqcw/yZjAZ70/lo6j8IO
+EmQkB6uCcv8iOoBmuo/fb2/ULFapvQ==
+=j7vN
+-----END PGP SIGNATURE-----
+
+--bAEzP5efOXdEgXiD--
 
