@@ -1,74 +1,74 @@
-Return-Path: <linux-mips+bounces-9948-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9949-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85807B160BA
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Jul 2025 14:53:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70849B160BE
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Jul 2025 14:54:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4934B17CB1B
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Jul 2025 12:53:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 855CD3BA7D7
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Jul 2025 12:53:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39CDB298CC5;
-	Wed, 30 Jul 2025 12:53:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65C39298993;
+	Wed, 30 Jul 2025 12:53:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cERN9kFy"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="N/kuqWZ+"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B0C629899A;
-	Wed, 30 Jul 2025 12:53:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 13813296155
+	for <linux-mips@vger.kernel.org>; Wed, 30 Jul 2025 12:53:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753880008; cv=none; b=jv6mjRfOObTMveokAx4AnT3EjAVJdSuz//usSjD1sVnwa5p2talSCGxJDxTyI5DjDvpyWLGsq5tzbwGrZmAdxCqr0jPwOkY6gawOUVFezDu27pZF6488yQrrzkIp5vTpHhbkTJ6HzFizBDnWOf+unGNu87lwv0fzkb7b6+OnqDQ=
+	t=1753880033; cv=none; b=C8irK/JruPh8qONDj5aoskrgaJZoLTtNB9m/Lsox9He7oQIpwUyf6fs6xse/SmvYNeyzVx2tEWxfyX9PcFr3+AMzWwrto0ukp5PnKBrY3joUVFWhGaFLFog6VIfFb2kHxw+eHSrpY4V56EoBCfoUvgfRABuVev5ASAZvBOEa7Nw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753880008; c=relaxed/simple;
-	bh=yp7SViKG4Gt6cuPjj1Me5hhtNgyA0i/vd/UWUlXH6fs=;
+	s=arc-20240116; t=1753880033; c=relaxed/simple;
+	bh=RNeM7UB4fAERU2LPOJtuWeYJSG/9TTk9Yot9abhDF6k=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nk4r9c5zn7vcfwo618qn/E2kU94bbEaweKjiCZpBzTi8snYo+l4hie2o4arOQwZSH79lyHE+mscXquP8eV3BSFBoxvpK4mVqeLz/9kpe+e6r4nuy/lgc8VyqwSsUGGinpaSaZI5FUeR/EQ0JILQfoDxsJf1kP/AFR/3gUJfoDwY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cERN9kFy; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-60bfcada295so10856201a12.1;
-        Wed, 30 Jul 2025 05:53:26 -0700 (PDT)
+	 To:Cc:Content-Type; b=QeWWh7lYNl/0gUctfN5l4O+yQW7pHWrw6NDi45ovfAHb3hg4goN0xtZ2l5zfUTPt9zBaPfa/qJHEfVNTdGLbV8bLCHLxP/leJAcFCVWenkL6gudcGgXNhsdoVCX6QIdQIK2icXRcOh85qfiDg6ULgRYCXjOqDDpkG4Ty6KWm2sk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=N/kuqWZ+; arc=none smtp.client-ip=209.85.167.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-553d52cb80dso991737e87.1
+        for <linux-mips@vger.kernel.org>; Wed, 30 Jul 2025 05:53:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753880005; x=1754484805; darn=vger.kernel.org;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1753880029; x=1754484829; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iHuGd1o3geC90thSCnWisGLP32owTrOKYJC4wfO+xvA=;
-        b=cERN9kFya4ZDlCG2luCfC91O/Bi5nilAaAFOuqBAfl6ELDWD8QA9hMEhwqTmPKCJE6
-         NOL7y9dIvwVCxoRJqwGGklAPomI2DOgZ6XYLzkmuKEEa8mbdkvjSfRWelbGKszGWX7rn
-         +3je6r16CdAioNbQCpKYlK0m+q/u01NC6AXw21XMUMAAHJdfaaxQEFkQmyxXr35sZhs2
-         8TdxvYjiGaOvDkcHMjTOuXtJggdlRztoyCHPkVLIP0PGlH5H70lFoSFk2gK/zz0aWNKE
-         2v6Wc8+7kdose4ypVc99566FbzoWVmph9OFokRyYF8vdMvIZAolSD/T2peBssfDfVmZu
-         E/jg==
+        bh=qUTEvgPr5pDo52lKZf6mOXPWs0RWvEkRiwEoyLLTu3o=;
+        b=N/kuqWZ+n2E10szoUZ24/6F4JuCqCRJgIiSJ+13vx4RL08ntqRjKnWOUv3CReInxOU
+         RHq+XhAf2t/ltRbFuhsbgN6TO4nPzRBRVuYk9xYDQMSzjwBn4vRQklSpSF0n4x13/Akp
+         HltCRODxOSbnP3MX3m0jV2K0dfXv6tdEODM+V8GbBhMQAjLnJ4mC448itgqV7a32K2zG
+         6huj2nFU0UyK5TCqYfapyzNciidjWGBZEhjUPUxsGrUibrXSt1YcgTE/WVtg8c93RDxU
+         cNIJuMLyavB5KXHA8bfnDrlGWvHGd/mWQHprk+vfnlwGskSesPW+AbY6GuMT3nAC2BlH
+         1dyA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753880005; x=1754484805;
+        d=1e100.net; s=20230601; t=1753880029; x=1754484829;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iHuGd1o3geC90thSCnWisGLP32owTrOKYJC4wfO+xvA=;
-        b=q9EydRWfV6Vab5Av354O5VeZTXvE3v/uPFb6CvpefiYrtNjupo8DCDNvVhtoQVYmWP
-         8hIhPCO6iIbeini4g7dqFkxcuxArylcCMaSUbigfLdYJtFiAtDV38s+b5ZWRjWB/dveA
-         x00sDW/eTxvrSYVwWMkOa6S3KzpU9VD7p3j70n3mc0fsY97OplYca2JiTOQhMxbqDR38
-         IAVvhqzpi0Z6NUdPfw+hmOFaMYqGJUrDImf/fw//7kpT/R71ez7ehkLoLVrdKdjNiasV
-         1XvpMoBkwrsyt+bIEGj3A1P3iahHg8RhFAGavI9IhL90KlN47UA7j5yzxUxWQjLPlfmo
-         CBrQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU+UIPizUklnrAD1k9vpaILAV33Gw4Wy0QCUp+OPYGB8hrPPlQObzUW7O/XcmvlBTFQ1vozpgAtclb2g9ip@vger.kernel.org, AJvYcCUL+lCWK3IDdN2bJ0jU36kv+A7X94UCD9awZHsBBxxdlS+FlIkRDxfv5ICOGMxetqw0eT87OQBZtTQvX12/hT3kUYg=@vger.kernel.org, AJvYcCVJlcvqte7HuDqR4TwnOyQB5u4hFplwVzbg0Kr1/nDyEdwMiiKi92jjJzY0PxJMn+dFpwrVYv3csaQuVHeMiDrN@vger.kernel.org, AJvYcCVy4Dn4jcc0+rMxCs5ScWlXQoTTvYIBOSa+vRWUlQtvMwjC4548SjoP0MT4XudEDNyJQmY7xyAzM8+/vA==@vger.kernel.org, AJvYcCWiFOgZfhah1ZBUNUxGZph/BZJLxaZgGG63k2+fb4Ldlp1uUvQbQ/bfigotE8QblnXp0XClWR7Rqr9doGCh@vger.kernel.org, AJvYcCWkWdqZ0IM4/wQNHnJ1y+3kW9hFZZqD2upFuUhrYxu6rEY0E8BCfQOmvDKK6XQvRzsHm0N/QirF/eEhNg==@vger.kernel.org, AJvYcCXO8pgY6ezrbuJUAf/SNFk7WIXCFL38uffRJ85MGxfJkDxpYnAXhmwg1xtSZhq4eK0vbsaqDyGqmAzerQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwjT4hsclPVcasDWKLDgZs9rxfuGEViSp8SvjODTb+ur5dzIQy1
-	6ttiIFu8ggo7/RgiMOqp40XTBQAOB4dskf+HO/KJ480x67fkdGcNKaA9+fsP68nIyF5HUEc/SdX
-	3K5ywifxIKDLpkguR9LlWSAJU4JKsKU4=
-X-Gm-Gg: ASbGncsL6mAfPP5LgjTiojzseEDna1W4uh88nzFOvUNz9MQB+RFaic/tjIYb3u9seL7
-	rTGL6HIfMEOLYjE3M3+gGk9/n+mCI15KWZrmr0Q44VFPXRi2A34EhD2xwIMSuq/wMzelaFHqkt+
-	PZxA4XPMzgNOj4XavR3BZlOQUlhUL0J+7CogKZqoHmD5d3atmWVD6JP0/FKYYZZdqyspJL0odWK
-	0UAbpKuZA==
-X-Google-Smtp-Source: AGHT+IExcFLcRiu5QtKTR/cGupB5CiCW+Pjw09y0EZqUm/lnXA4CrvfRLkkrfhzcJE8+pxyrQnSgTbf1NQKA1MoVcOw=
-X-Received: by 2002:a17:907:60d0:b0:ae1:1a30:6682 with SMTP id
- a640c23a62f3a-af8fd739a45mr409970266b.18.1753880004488; Wed, 30 Jul 2025
- 05:53:24 -0700 (PDT)
+        bh=qUTEvgPr5pDo52lKZf6mOXPWs0RWvEkRiwEoyLLTu3o=;
+        b=IQTVga5g4bkL0Vet71bhFyfkxJ0bqyk3E+WHsKnntL370xEoi4GfCEFb4pWDkjKxEF
+         AAHMQF8yWSSWHS6EaeWS29n09vB0hTh2u/VXiWbahDIgqoGWH+wOyyg9b5fDTy+Mn2KI
+         9Pe3UTZQ59Nqz3EVM+4d/LH4UgviVM3HfP7dBkQn108ZoHx4TBhQibabB+tH+bGTrjId
+         g5MSgtEOHuREsFWyD2jnL1elnbgLFhw5bFMfEdsZL87KJxN5BIbM9lN0HZXfEVnpJ+/u
+         iaeLQyDzBNLSnuibF9mHUcm18OYujYeAisBvB4agFsEv1WI7WZ/BIZjf53EJdJr3Wdyq
+         54WA==
+X-Forwarded-Encrypted: i=1; AJvYcCVwW2Ado5lwv1x0Trn08GtLZfFzvcYFyUfQUvuRhGvyiPC6DPRJnJZ5psb6Ji0l3Z0u925HhnMPny4T@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGstWrXv2FNzsIhESVImUYsbn6+blH9N1A9woUys8ZlR+6FKwa
+	5f2rEf3SHvSmnDygirei5i1bqdOlog0HyRXK73CieADosjeXJBqNhaXk/bLi9syby7sv2u4H0It
+	M8E3L0r3tOJdfakIGb9fybA0zG5nR1uj0L8bZVcy9BQ==
+X-Gm-Gg: ASbGnctMoRPS8P89ZTD+K61E8CQCRMLaOPEBGJAQNEeSbZlonFEi4S831NiXcCDh9kd
+	J6Tfx8miEUp2z/bSWCjrcQwz6sENVtgj5cnpBQ+jkkQF5EHA1vds3uEoRjyR+gcYdFMWUerYJ5Y
+	kX054Ob6n6eLQjBM+dKNbc+x4UQD30J0F7X/lDIJIs5jkl5w1KqZQUXLdTo0/vLmx7UQl/QoQNX
+	CID8Lzccqew1faUPaRsG0YTqZlS3GQYm4Bpe4s=
+X-Google-Smtp-Source: AGHT+IGSuyPnAInz8gQT37fKK4pgrT4+RIAYI9IrKjK2MWPd45oP6K0zUhD/GSonCiRI3dzBbJ8n7cWJZ+qNt54xgoU=
+X-Received: by 2002:a05:6512:ba1:b0:55b:83cf:b260 with SMTP id
+ 2adb3069b0e04-55b83cfb693mr305928e87.11.1753880028944; Wed, 30 Jul 2025
+ 05:53:48 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -80,13 +80,13 @@ References: <20250724-pinctrl-gpio-pinfuncs-v3-0-af4db9302de4@linaro.org>
  <CAHp75Vc4vsJh_-GbP+YO50veoGoGtfAPL4tjcF+73uophfmnGw@mail.gmail.com>
  <CAMRc=Mc1ophkofB6MmtD4adBAi69C3JyovM-S9YD_y7UA3V1qA@mail.gmail.com> <CAHp75VcV=K-DfOGs0z64==nO+wQNoEB2Ngd2vc+dLYr3WLChjg@mail.gmail.com>
 In-Reply-To: <CAHp75VcV=K-DfOGs0z64==nO+wQNoEB2Ngd2vc+dLYr3WLChjg@mail.gmail.com>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Wed, 30 Jul 2025 14:52:47 +0200
-X-Gm-Features: Ac12FXy6gmS688CUsaG6BseFKvaIP4Sk1EUtOxMURXryhfGHjEY11oJr_rDyuZs
-Message-ID: <CAHp75Vc-kFPz9J5CQgrwb+5Wgzyxne4RVn5efEDwwATAHTxC+A@mail.gmail.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Wed, 30 Jul 2025 14:53:37 +0200
+X-Gm-Features: Ac12FXya2mYA_HSI46S7KktzTvTwdWuT-o4vBrrr3z0vtr46fp0gRnU_ZqynDBk
+Message-ID: <CAMRc=MeVOEFkdqf+SwQ-a=7ZPvpoerb4G_kn-aZgNLR3aTTUog@mail.gmail.com>
 Subject: Re: [PATCH v3 12/15] pinctrl: allow to mark pin functions as
  requestable GPIOs
-To: Bartosz Golaszewski <brgl@bgdev.pl>
+To: Andy Shevchenko <andy.shevchenko@gmail.com>
 Cc: Linus Walleij <linus.walleij@linaro.org>, Bjorn Andersson <andersson@kernel.org>, 
 	Konrad Dybcio <konradybcio@kernel.org>, Alexey Klimov <alexey.klimov@linaro.org>, 
 	Lorenzo Bianconi <lorenzo@kernel.org>, Sean Wang <sean.wang@kernel.org>, 
@@ -111,10 +111,12 @@ Cc: Linus Walleij <linus.walleij@linaro.org>, Bjorn Andersson <andersson@kernel.
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jul 30, 2025 at 2:49=E2=80=AFPM Andy Shevchenko
+On Wed, Jul 30, 2025 at 2:50=E2=80=AFPM Andy Shevchenko
 <andy.shevchenko@gmail.com> wrote:
+>
 > On Wed, Jul 30, 2025 at 11:54=E2=80=AFAM Bartosz Golaszewski <brgl@bgdev.=
 pl> wrote:
+> >
 > > On Thu, Jul 24, 2025 at 2:22=E2=80=AFPM Andy Shevchenko
 > > <andy.shevchenko@gmail.com> wrote:
 > > >
@@ -127,21 +129,22 @@ pl> wrote:
 > > > Not sure we need this. If the function is GPIO, pin control already
 > > > knows about this. The pin muxing has gpio request / release callbacks
 > > > that change the state. Why do we need an additional flag(s)?
+> > >
 > >
 > > I'm not following, how does the pin controller know that the function
 > > is GPIO exactly, other than by the bit set in this field?
 >
 > AFAICS the gpio_owner !=3D NULL means that. No need to have a duplicate
 > of this information.
+>
 
-To be clear, the pin control and muxing core knows about this, if the
-certain pin control driver needs that information it can request this
-from the core or do some other shortcuts (as it knows the state as
-well in the HW). So, I do not see any need for this flag. But again,
-maybe I'm missing the subtle corner case?
+No, that's not at all what this series does... gpio_owner is the
+consumer label of a pin used by the GPIOLIB framework. The flag I'm
+introducing it telling the pinctrl core - before GPIOLIB is ever
+involved - that *this pin can be requested as a GPIO by GPIOLIB*. It's
+the other way around - without knowing this, for strict pinmuxers,
+GPIOLIB would never be able to request this pin if it was muxed to a
+function (even if the function is called "GPIO").
 
-
---=20
-With Best Regards,
-Andy Shevchenko
+Bart
 
