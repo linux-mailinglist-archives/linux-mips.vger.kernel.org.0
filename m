@@ -1,164 +1,222 @@
-Return-Path: <linux-mips+bounces-9950-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9951-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56842B1618A
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Jul 2025 15:30:50 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85D3BB16238
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Jul 2025 16:05:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8514118C822B
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Jul 2025 13:31:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8B81A7B4CA2
+	for <lists+linux-mips@lfdr.de>; Wed, 30 Jul 2025 14:03:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C2D82D3A6D;
-	Wed, 30 Jul 2025 13:30:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XXGIxDbQ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 772022D978C;
+	Wed, 30 Jul 2025 14:04:34 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D0F72D3730;
-	Wed, 30 Jul 2025 13:30:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 791FD2D9EC4;
+	Wed, 30 Jul 2025 14:04:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753882246; cv=none; b=YG3yCi9FYmyW8weN+EsEm1HuNv/R5qPgCMxOB2XJE1lkIzVubD4OEcn4AqpqHMfHFMMjt077VU1gGP6PFUTSOz7sFWjrgW5pJQo5FwizJLvHJIwnpSkQNvzdGWoptl8DEEVLIyBM0J9h60dmUMX9of82MrVaQ/wozMwhzDnK+fg=
+	t=1753884274; cv=none; b=PEa/pPJfdxA2d14wR88sL46rkAfID/6h+ozqWmEKGQ92B9Va/Bq88kJZ0Il9PPbH65mR9j9cXiWNZBAtiwhWjrJV29+eqziN//queOZ3FCuIU8b0G8ESzVG+jWdVATjhXhDPKLJo+gE59+3RgqsIdzP4UzNWEo1eJOqsKxKHHjA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753882246; c=relaxed/simple;
-	bh=8ONcE8oQ6Ovxim91GXFYg9iUHoLisltD7bWCaIaZE7o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VTQGcgyRn4WmWkqP64GtskoXvTsZcexZhvPOUFWU5qz3r2xOG006FMDagfOFNqmxxi+clPItbJMuKjYVhW59yWq22NrdKhgMZXYD4kkXOeTiAWGVNg8nK47AMWvorFnHcz8z701ZAuPaRpY31V44LS7H4uxICp6BMafsXKftvVQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XXGIxDbQ; arc=none smtp.client-ip=209.85.218.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-af66f444488so494854366b.0;
-        Wed, 30 Jul 2025 06:30:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1753882243; x=1754487043; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qi9l6TBdgjaQnQAqpjO6D0pjlwGQDGt3b3+CN6Y3/yI=;
-        b=XXGIxDbQgUFtyfBsiUhmmtuDMRBamLuWISnO9xdTQF/YAQ8WANE9CZvOqvJxvQftjo
-         veUyXpuqERLCF1u+hgKEmk1YBCxNHtuNYWFbfXaqrmhqRZ7P5l3ZU+FBvyRcvLoS+IDg
-         24uU4nabWjNkcyYdk5KN5pntSEfseKkrsGCmhhJcwkzKGl7VyI8oo/m+7ldXcdyi+pP/
-         aPff05j7XsXRmSPfEZHJ0dFYnx6W4rUMe6b6ccFga3Odbb7aLvlxN+Kl+UJLXs1SbGT/
-         rzOf67HGCELMZeaBHd0czDvOGHEGlGWQSpanulTHNQViqXTfTopHRhOM86mBmgnKz8oI
-         sEoQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1753882243; x=1754487043;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qi9l6TBdgjaQnQAqpjO6D0pjlwGQDGt3b3+CN6Y3/yI=;
-        b=phAso52mGoBHFyZkp0DlaBkyB9T4jn9hZkhp0di5/folX5q/ce/Egp7CzVpS/v20aI
-         O2Fpgmpa8cbw+DG6mDCTkVRLWXhz4VipX0nA7vOuH7JWUvz/cyLCN05ldMMfNwgPWmXB
-         KxeJqsr0XAsbgX8cB7NhsOBWJMLN5E+zKN4Q/PZLvEPG4g/7cvKGJAfWCDqt1zEUu4dS
-         AvWJmccr88XO5DE514guSZ5f6eT2Tcmk/aUaq0xcaU5mviBcP53SY+LkK0RvzZPc8PB7
-         JvycNsG+XnKqXpzhwjOgMgAevbiwywlNsxTDS8BoUMpUJDiZgR8TIYrRRQcJ8tFY9wN/
-         0UKA==
-X-Forwarded-Encrypted: i=1; AJvYcCUghB4NKzq1UKJ6JtGBF0T3HfYkkLaqx5TehD994Gc5yJz1YZ43CkFRP1w8C4qudvFfnGUQ0QZfbUGpPA==@vger.kernel.org, AJvYcCVWOjxdQ8yRBaL3EMd0bTZGIcPsEVBmoS109dHedLroHhx6ZK+xOcaSkAgkGTltSNgE3iCzI8u43+lyiw==@vger.kernel.org, AJvYcCVmEOJfEeQTPHUeIquLEkeBV1I/TOzkMnwdLql9BruT5Bl0HWiG1SD5Uk52oSe4Tuq6LGvKjNewFYpu/nK4z5Vt/Tg=@vger.kernel.org, AJvYcCW7TdmarISvfHFMqh6Vz04SgPNH7a4i0QSyTpeqxa+N3oVsHkjtxtP1IHJGTciG5KxZ9G2trz6MiachTrtbvje/@vger.kernel.org, AJvYcCWRR6QRIzCpZPxb2O4RjOKzcALg/XmGmk4JMzhOBcNSDjuVz5fV9xCTJBvlN1If/FiDnaTfqJHo0F1kWjiz@vger.kernel.org, AJvYcCX/x2cAhZeGKc5Hlem2la7wocuSCT+m1TS/dmPwrfX7YSOuSDOMZbo9sSzuMElcqwmw8xGElmurwXgXCiTI@vger.kernel.org, AJvYcCXk2paaTIFp057xMFhZBUX4ne0MP/ArqGhRSoB/lYvPvIc+lZaW2i+klLxZlcqipT8z4BFlX5ABFxn7KQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxnTnHTzzY+UpszFobwBpkFac2Dw3G7WijzArDjDD4fv8VXnlKn
-	ueoErsC3TXnGtBFUyakO6zL50PfvSO05lqKvDm4rndc3EQ6w6EuG61WIVTwh84BPa0Sf5xKLu+o
-	FE/MhvLKBy76T2uXpYBgZV0cgGJnptII=
-X-Gm-Gg: ASbGnctjCOoHz2FKEAKZ60ryb1/XGNJ/tXr8uDufUsHONcXrEpyI+txILJXl9+q92St
-	o/ilXlISXAiDHbgl3d8rje3/ZUVrCx3Y3PAMIJFg8Bs/EIVs4ck6oOqN3QmhCV39dYvgZva/5mR
-	8KOcsI8md2xqeauvTZMEnvZVIhHxwbG68OL/c7RGOxApbi+0TQY6qdgTy+RKVnBm0rme6NmxPIF
-	VS9Bmaa+OE8IT3JL9uR
-X-Google-Smtp-Source: AGHT+IE7FH6m4Dj0jSn6Xv2SOxyVdUI56jx+oEPv/YLtr96ycR8jtmVTuCl5DRsdQyIzWn8vHcnXCm+w9rLeyqQEmTc=
-X-Received: by 2002:a17:907:dab:b0:ae3:60fb:1b3b with SMTP id
- a640c23a62f3a-af8fda93d6emr386293566b.58.1753882242487; Wed, 30 Jul 2025
- 06:30:42 -0700 (PDT)
+	s=arc-20240116; t=1753884274; c=relaxed/simple;
+	bh=gZRPD95/soQMhSkwWf1uGpIQQ9RTp0+6YEXUTxv9pp8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=BCYkz9dNiKhIqCSZzHkKlbyiE++vruDiV1L+fB94+YCmiLEJ684n7eF6CmzqEG/gY7/HsSiLkSB4koZO2nP9tF4JYqHgFq44Zw9P5PqwgN8aRQep0opv6aKySl6zfoLxPQEjZP7OdSFjUfobIHsH40ZfI2Z7jKsSe83TeMkCrIU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1uh7Po-0005uy-00; Wed, 30 Jul 2025 16:04:20 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id F3FDCC035D; Wed, 30 Jul 2025 16:04:09 +0200 (CEST)
+Date: Wed, 30 Jul 2025 16:04:09 +0200
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: torvalds@linux-foundation.org
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] MIPS changes for v6.17
+Message-ID: <aIomWdeNOQwaKPu1@alpha.franken.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250724-pinctrl-gpio-pinfuncs-v3-0-af4db9302de4@linaro.org>
- <20250724-pinctrl-gpio-pinfuncs-v3-12-af4db9302de4@linaro.org>
- <CAHp75Vc4vsJh_-GbP+YO50veoGoGtfAPL4tjcF+73uophfmnGw@mail.gmail.com>
- <CAMRc=Mc1ophkofB6MmtD4adBAi69C3JyovM-S9YD_y7UA3V1qA@mail.gmail.com>
- <CAHp75VcV=K-DfOGs0z64==nO+wQNoEB2Ngd2vc+dLYr3WLChjg@mail.gmail.com> <CAMRc=MeVOEFkdqf+SwQ-a=7ZPvpoerb4G_kn-aZgNLR3aTTUog@mail.gmail.com>
-In-Reply-To: <CAMRc=MeVOEFkdqf+SwQ-a=7ZPvpoerb4G_kn-aZgNLR3aTTUog@mail.gmail.com>
-From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Wed, 30 Jul 2025 15:30:04 +0200
-X-Gm-Features: Ac12FXyFKinLiyKOfaCHk8Jvp-MCK0UJT4pw-WeZSCiJVFAceB4TVkbq9UOtwlo
-Message-ID: <CAHp75Vd_5HVwzuiV17XKkzpEvzd8dzPDRRx5w-VqZnjuCz6m6A@mail.gmail.com>
-Subject: Re: [PATCH v3 12/15] pinctrl: allow to mark pin functions as
- requestable GPIOs
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Linus Walleij <linus.walleij@linaro.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Alexey Klimov <alexey.klimov@linaro.org>, 
-	Lorenzo Bianconi <lorenzo@kernel.org>, Sean Wang <sean.wang@kernel.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Paul Cercueil <paul@crapouillou.net>, Kees Cook <kees@kernel.org>, 
-	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@redhat.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Dong Aisheng <aisheng.dong@nxp.com>, Fabio Estevam <festevam@gmail.com>, 
-	Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, NXP S32 Linux Team <s32@nxp.com>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Tony Lindgren <tony@atomide.com>, 
-	Haojian Zhuang <haojian.zhuang@linaro.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-mediatek@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, 
-	linux-hardening@vger.kernel.org, linux-mm@kvack.org, imx@lists.linux.dev, 
-	linux-omap@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jul 30, 2025 at 2:53=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl>=
- wrote:
-> On Wed, Jul 30, 2025 at 2:50=E2=80=AFPM Andy Shevchenko
-> <andy.shevchenko@gmail.com> wrote:
-> > On Wed, Jul 30, 2025 at 11:54=E2=80=AFAM Bartosz Golaszewski <brgl@bgde=
-v.pl> wrote:
-> > > On Thu, Jul 24, 2025 at 2:22=E2=80=AFPM Andy Shevchenko
-> > > <andy.shevchenko@gmail.com> wrote:
-> > > >
-> > > > >  struct pinfunction {
-> > > > >         const char *name;
-> > > > >         const char * const *groups;
-> > > > >         size_t ngroups;
-> > > > > +       unsigned long flags;
-> > > >
-> > > > Not sure we need this. If the function is GPIO, pin control already
-> > > > knows about this. The pin muxing has gpio request / release callbac=
-ks
-> > > > that change the state. Why do we need an additional flag(s)?
-> > >
-> > > I'm not following, how does the pin controller know that the function
-> > > is GPIO exactly, other than by the bit set in this field?
-> >
-> > AFAICS the gpio_owner !=3D NULL means that. No need to have a duplicate
-> > of this information.
->
-> No, that's not at all what this series does... gpio_owner is the
-> consumer label of a pin used by the GPIOLIB framework. The flag I'm
-> introducing it telling the pinctrl core - before GPIOLIB is ever
-> involved - that *this pin can be requested as a GPIO by GPIOLIB*.
+The following changes since commit 86731a2a651e58953fc949573895f2fa6d456841:
 
-The certain pin control driver may even not know about this. But even
-though the proposed change is an overkill. If it indeed needs to be
-done, the solution of valid_mask approach sounds to me much better. It
-will be a single bitmask per pin control to tell this.
+  Linux 6.16-rc3 (2025-06-22 13:30:08 -0700)
 
-> It's
-> the other way around - without knowing this, for strict pinmuxers,
-> GPIOLIB would never be able to request this pin if it was muxed to a
-> function (even if the function is called "GPIO").
+are available in the Git repository at:
 
-I need to read the series again, but I truly believe we don't need
-this new field in the struct pinfunction.
+  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_6.17
 
+for you to fetch changes up to 3ebcbf079c26ab6e82faa7f896b66def55547eee:
 
+  MIPS: Don't use %pK through printk (2025-07-28 09:58:49 +0200)
 
---=20
-With Best Regards,
-Andy Shevchenko
+----------------------------------------------------------------
+DT updates for ralink, mobileye and ralink
+Clean up of mc146818 usage
+Speed up delay calibration for CPS
+Other cleanups and fixes
+
+----------------------------------------------------------------
+Andy Shevchenko (1):
+      firmware/nvram: bcm47xx: Don't use "proxy" headers
+
+Benoît Monin (5):
+      MIPS: mobileye: dts: eyeq6h: add the emmc controller
+      MIPS: eyeq6_defconfig: add cadence MMC/SDHCI driver
+      MIPS: mobileye: dts: eyeq5: add the emmc controller
+      MIPS: eyeq5_defconfig: add cadence MMC/SDHCI driver
+      MIPS: mobileye: dts: eyeq5,eyeq6h: rename the emmc controller
+
+Chris Packham (4):
+      mips: dts: cameo-rtl9302c: Add switch block
+      mips: dts: realtek: Add switch interrupts
+      mips: dts: realtek: Add watchdog
+      mips: dts: realtek: Add gpio block
+
+Ezra Buehler (4):
+      dt-bindings: clock: mediatek,mtmips-sysc: Adapt compatible for MT7688 boards
+      MIPS: dts: ralink: mt7628a: Fix sysc's compatible property for MT7688
+      MIPS: dts: ralink: mt7628a: Update watchdog node according to bindings
+      MIPS: dts: ralink: gardena_smart_gateway_mt7688: Fix power LED
+
+Geert Uytterhoeven (1):
+      MIPS: txx9: Constify bin_attribute arguments of txx9_sram_{read,write}()
+
+Gregory CLEMENT (3):
+      MIPS: disable MMID when not supported by the hardware
+      MIPS: CPS: Improve mips_cps_first_online_in_cluster()
+      MIPS: CPS: Optimise delay CPU calibration for SMP
+
+Huacai Chen (1):
+      MIPS/Loongson: Fix build warnings about export.h
+
+Jiaxun Yang (1):
+      MIPS: mm: tlb-r4k: Uniquify TLB entries on init
+
+Joshua Kinard (1):
+      MIPS: Update Joshua Kinard's e-mail address
+
+Markus Elfring (1):
+      MIPS: SGI-IP27: Delete an unnecessary check before kfree() in hub_domain_free()
+
+Masahiro Yamada (1):
+      mips: boot: use 'targets' instead of extra-y in Makefile
+
+Mateusz Jończyk (4):
+      mips: remove unused function mc146818_set_rtc_mmss
+      mips/mach-rm: remove custom mc146818rtc.h file
+      mips: remove redundant macro mc146818_decode_year
+      mips/malta,loongson2ef: use generic mc146818_get_time function
+
+Mieczyslaw Nalewaj (2):
+      MIPS: ralink: add missing header include
+      MIPS: pci-rt2880: make pcibios_init() static
+
+Rosen Penev (1):
+      mips: dts: qca: add wmac support
+
+Shiji Yang (12):
+      MIPS: lantiq: xway: mark dma_init() as static
+      MIPS: pci: lantiq: marks pcibios_init() as static
+      MIPS: lantiq: xway: mark dcdc_init() as static
+      MIPS: lantiq: irq: fix misc missing-prototypes warnings
+      MIPS: lantiq: xway: mark ltq_ar9_sys_hz() as static
+      MIPS: lantiq: xway: gptu: mark gptu_init() as static
+      MIPS: lantiq: xway: add prototype for ltq_get_cp1_base()
+      MIPS: lantiq: falcon: fix misc missing-prototypes warnings
+      MIPS: lantiq: falcon: sysctrl: remove unused falcon_trigger_hrst()
+      MIPS: lantiq: falcon: sysctrl: add missing header prom.h
+      MIPS: lantiq: falcon: sysctrl: fix request memory check logic
+      MIPS: vpe-mt: add missing prototypes for vpe_{alloc,start,stop,free}
+
+Thomas Weißschuh (2):
+      MIPS: Don't crash in stack_top() for tasks without ABI or vDSO
+      MIPS: Don't use %pK through printk
+
+Théo Lebrun (6):
+      MIPS: eyeq5_defconfig: Update for v6.16-rc1
+      MIPS: mobileye: eyeq5: add 5 I2C controller nodes
+      MIPS: mobileye: eyeq5: add evaluation board I2C temp sensor
+      MIPS: mobileye: eyeq5: add two GPIO bank nodes
+      MIPS: eyeq5_defconfig: add GPIO subsystem & driver
+      MIPS: eyeq5_defconfig: add I2C subsystem, driver and temp sensor driver
+
+ .../bindings/clock/mediatek,mtmips-sysc.yaml       |  28 +++--
+ arch/mips/Kconfig                                  |   2 +
+ arch/mips/boot/Makefile                            |   8 +-
+ arch/mips/boot/dts/mobileye/eyeq5-epm5.dts         |   8 ++
+ arch/mips/boot/dts/mobileye/eyeq5.dtsi             | 127 +++++++++++++++++++++
+ arch/mips/boot/dts/mobileye/eyeq6h.dtsi            |  22 ++++
+ arch/mips/boot/dts/qca/ar9132.dtsi                 |   9 ++
+ arch/mips/boot/dts/qca/ar9132_tl_wr1043nd_v1.dts   |   4 +
+ arch/mips/boot/dts/qca/ar9331.dtsi                 |   9 ++
+ arch/mips/boot/dts/qca/ar9331_dpt_module.dts       |   4 +
+ arch/mips/boot/dts/qca/ar9331_dragino_ms14.dts     |   4 +
+ arch/mips/boot/dts/qca/ar9331_omega.dts            |   4 +
+ .../dts/qca/ar9331_openembed_som9331_board.dts     |   4 +
+ arch/mips/boot/dts/qca/ar9331_tl_mr3020.dts        |   4 +
+ .../dts/ralink/gardena_smart_gateway_mt7688.dts    |   2 +-
+ arch/mips/boot/dts/ralink/mt7628a.dtsi             |  11 +-
+ .../dts/realtek/cameo-rtl9302c-2x-rtl8224-2xge.dts |  96 ++++++++++++++++
+ arch/mips/boot/dts/realtek/rtl930x.dtsi            |  31 +++++
+ arch/mips/configs/eyeq5_defconfig                  |  12 +-
+ arch/mips/configs/eyeq6_defconfig                  |   2 +
+ arch/mips/include/asm/cpu-info.h                   |   1 +
+ arch/mips/include/asm/mach-generic/mc146818rtc.h   |   4 -
+ .../include/asm/mach-ip30/cpu-feature-overrides.h  |   2 +-
+ arch/mips/include/asm/mach-ip30/spaces.h           |   2 +-
+ arch/mips/include/asm/mach-jazz/mc146818rtc.h      |   2 -
+ .../mips/include/asm/mach-lantiq/xway/lantiq_soc.h |   3 +
+ arch/mips/include/asm/mach-malta/mc146818rtc.h     |   2 -
+ arch/mips/include/asm/mach-rm/mc146818rtc.h        |  21 ----
+ arch/mips/include/asm/mc146818-time.h              | 105 ++---------------
+ arch/mips/include/asm/mips-cps.h                   |   4 +-
+ arch/mips/include/asm/sgi/heart.h                  |   2 +-
+ arch/mips/include/asm/smp-cps.h                    |   1 +
+ arch/mips/include/asm/vpe.h                        |   8 ++
+ arch/mips/kernel/cpu-probe.c                       |  42 ++++++-
+ arch/mips/kernel/mips-cm.c                         |  52 ++++-----
+ arch/mips/kernel/process.c                         |  16 +--
+ arch/mips/kernel/relocate.c                        |  10 +-
+ arch/mips/kernel/smp-cps.c                         |  16 ++-
+ arch/mips/kvm/mips.c                               |   2 +-
+ arch/mips/lantiq/falcon/prom.c                     |   4 +-
+ arch/mips/lantiq/falcon/sysctrl.c                  |  29 ++---
+ arch/mips/lantiq/irq.c                             |   4 +-
+ arch/mips/lantiq/xway/clk.c                        |   2 +-
+ arch/mips/lantiq/xway/dcdc.c                       |   2 +-
+ arch/mips/lantiq/xway/dma.c                        |   2 +-
+ arch/mips/lantiq/xway/gptu.c                       |   2 +-
+ arch/mips/loongson64/setup.c                       |   1 -
+ arch/mips/mm/physaddr.c                            |   2 +-
+ arch/mips/mm/tlb-r4k.c                             |  56 ++++++++-
+ arch/mips/pci/pci-lantiq.c                         |   2 +-
+ arch/mips/pci/pci-rt2880.c                         |   2 +-
+ arch/mips/ralink/irq.c                             |   1 +
+ arch/mips/sgi-ip27/ip27-irq.c                      |   2 +-
+ arch/mips/sgi-ip30/ip30-power.c                    |   2 +-
+ arch/mips/sgi-ip30/ip30-setup.c                    |   2 +-
+ arch/mips/sgi-ip30/ip30-smp.c                      |   2 +-
+ arch/mips/sgi-ip30/ip30-timer.c                    |   2 +-
+ arch/mips/sgi-ip30/ip30-xtalk.c                    |   2 +-
+ arch/mips/txx9/generic/setup.c                     |   4 +-
+ drivers/mfd/ioc3.c                                 |   2 +-
+ drivers/tty/serial/8250/8250_ioc3.c                |   2 +-
+ include/linux/bcm47xx_nvram.h                      |   1 -
+ include/linux/bcm47xx_sprom.h                      |   2 +-
+ 63 files changed, 570 insertions(+), 248 deletions(-)
+ delete mode 100644 arch/mips/include/asm/mach-rm/mc146818rtc.h
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
