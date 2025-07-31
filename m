@@ -1,178 +1,190 @@
-Return-Path: <linux-mips+bounces-9959-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9960-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71019B16969
-	for <lists+linux-mips@lfdr.de>; Thu, 31 Jul 2025 01:47:37 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 887FAB16C2E
+	for <lists+linux-mips@lfdr.de>; Thu, 31 Jul 2025 08:49:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5DE5E18C7ADA
-	for <lists+linux-mips@lfdr.de>; Wed, 30 Jul 2025 23:47:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D6441887EB0
+	for <lists+linux-mips@lfdr.de>; Thu, 31 Jul 2025 06:49:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14D282405E4;
-	Wed, 30 Jul 2025 23:46:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D111C28D8F8;
+	Thu, 31 Jul 2025 06:49:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N6aMB3CE"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="1DyNygN+";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="HBMdvfdS";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="AbxKMfV3";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="GEpkOdu1"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A889D23ED76;
-	Wed, 30 Jul 2025 23:46:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44D2628D8CC
+	for <linux-mips@vger.kernel.org>; Thu, 31 Jul 2025 06:49:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1753919193; cv=none; b=tAwPUWwl6mJxi2gitAMtDBHpCBUiQ+QOOLXlMyXa9iw1bIDXEtjbiGkqb/78I3Ok6x64u+maRES53/uOPIwBe92KBfZuABdFQZgaRz6AF8QCluYI3510kFWDKZQ+Bcg5aOYirfeis1sL4VRggGxuWctGPamAbnWzW/eLtzz1x7I=
+	t=1753944541; cv=none; b=ZtJqQPSEG1O/WpS4dj6bwTSbM8aFxXWUnvmWih4XHlVNMEESaU5x1IL8b4ZYozmraprTT8g8+eSqUR2qp44xHpc4K68sAYdjq8SCYcf27IlFKF95R3XSKM2hpxNYTp/2vd6qgj7NXSpl+zuxU6lI2huihfSNjEKjNnuZc7PnYxE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1753919193; c=relaxed/simple;
-	bh=lVT1wO7Gp792FLsRAdREUHlRgKkz5jzpbMWb3qz8oAY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gPB/MkVNtCMEG6TUrVqcoqD6vhQ/tG9tQfzK0z7kDcIIWU7mEHlLAbozIIPcmyfeNcTghomvjhm/kMKpIy1TXoT6at0zhLd7vru1haB2dTk9sPzyZJl2W4NEUdce9VyMco8iI0pwGFdmSi6jFA9cSBI9FQfZwZCoRgK8gY4Jjyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N6aMB3CE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DE60C4CEEB;
-	Wed, 30 Jul 2025 23:46:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1753919193;
-	bh=lVT1wO7Gp792FLsRAdREUHlRgKkz5jzpbMWb3qz8oAY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=N6aMB3CEnMYdRMvFhM0HoWxdlsfSHx5m9Bk/+p1Tu0UGicuWCsqhq19gp+dX0Al9h
-	 ufzZFFn01VVIdroTIq4MKl0fZ/jXA0kQi1QCdTjqDcwTjZxYoyfU/uuJyEJFJ07qA3
-	 JeevVFdeYuOabfOwyqTlFCWN1dNkch6m/kOPdEHig9UkogvqR0kkVlL3sW42idySmr
-	 x7aqCguqpUrMz8Z85WFv4WuLtwZBipysMMnejHZV3hwlBdm9je7Ql0SKF+YJtdXmhy
-	 NHQOsrp+G1CwLUn1GZ0rWyOwYzqJkYhvDIzHrpoYxleGqrTIE6mU0fyubuC2rc1aQK
-	 gJh+uVlo0psBg==
-Date: Wed, 30 Jul 2025 18:46:31 -0500
-From: Rob Herring <robh@kernel.org>
-To: Konrad Dybcio <konradybcio@kernel.org>
-Cc: Vinod Koul <vkoul@kernel.org>, Sven Peter <sven@kernel.org>,
-	Janne Grunau <j@jannau.net>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Neal Gompa <neal@gompa.dev>,
-	Ludovic Desroches <ludovic.desroches@microchip.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-	Viresh Kumar <vireshk@kernel.org>,
-	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-	Frank Li <Frank.Li@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Taichi Sugaya <sugaya.taichi@socionext.com>,
-	Takao Orito <orito.takao@socionext.com>,
-	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Patrice Chotard <patrice.chotard@foss.st.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	=?iso-8859-1?Q?Am=E9lie?= Delaunay <amelie.delaunay@foss.st.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Laxman Dewangan <ldewangan@nvidia.com>,
-	Jon Hunter <jonathanh@nvidia.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Michal Simek <michal.simek@amd.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Saravana Kannan <saravanak@google.com>,
-	Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
-	Viken Dadhaniya <quic_vdadhani@quicinc.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	imx@lists.linux.dev, linux-actions@lists.infradead.org,
-	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-sound@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: Re: [PATCH RFC 1/6] dt-bindings: dma: qcom,gpi: Retire passing the
- protocol ID
-Message-ID: <20250730234631.GA1899887-robh@kernel.org>
-References: <20250730-topic-dma_genise_cookie-v1-0-b505c1238f9f@oss.qualcomm.com>
- <20250730-topic-dma_genise_cookie-v1-1-b505c1238f9f@oss.qualcomm.com>
+	s=arc-20240116; t=1753944541; c=relaxed/simple;
+	bh=CqsFK7oDj01XXg0a94OMJm8oKUj+s55i2UDMBS/JovE=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=J6oeUo638M1zRYqEcNLNuYfQ4kd84WAA21Xh+txmXChYH04OyyWGGaJXe+5YWT06SJdaa1E2uzD2+8nZyOuDaRiTxAidEYFmWurihP1plkc3XzyiJ8oF+uSzZNS8qblvEl2b17FCfN3FVI4oAz1oreTle4XlNcHNPB2jcT3vKWU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=1DyNygN+; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=HBMdvfdS; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=AbxKMfV3; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=GEpkOdu1; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 8FBD11FB88;
+	Thu, 31 Jul 2025 06:48:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1753944537; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=I+Sr1yVB5vm02uTRDlNOKYJAicCZq7yfJFLlBIkZrtM=;
+	b=1DyNygN+ZhfbGBe7OGIyIfwFynE76yyxnAtLxwQ6MKGaCgh/cDD7w5144hpuUcgQ7R9o0Q
+	fBd7HhrxwHZ3WRq9f0tY3dRjSgm+Vs/lWZtmQn69WxvgXSRkvz3PPYkE8ul2+I87YyICN3
+	4V9pmZNC822Zv6fm1ElW/inSSjOUePE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1753944537;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=I+Sr1yVB5vm02uTRDlNOKYJAicCZq7yfJFLlBIkZrtM=;
+	b=HBMdvfdS9/vxvgiO33HuSE/Jmfrwf7IztvAVHA4A5VE2qQ0pm8rKUmIrl4kiGedtAh46zi
+	5K/vAyTozJiMSGBQ==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=AbxKMfV3;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=GEpkOdu1
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1753944536; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=I+Sr1yVB5vm02uTRDlNOKYJAicCZq7yfJFLlBIkZrtM=;
+	b=AbxKMfV3EX1epuW7lqHOxfbIEFi3JUE3ziWlHiP8mKjxEsWgiA3bpUgKB2Jp/yQopJ4ttv
+	y2lI1jIhywmr6byIm+eJpnZiRYFSbXcPnBIFvPi1Y/h7tRBHQZCYRN7kri0EnpmU0f8exs
+	JzsNU1hBTVFVC/JSGP+iJdk4gR4QFv8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1753944536;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=I+Sr1yVB5vm02uTRDlNOKYJAicCZq7yfJFLlBIkZrtM=;
+	b=GEpkOdu1RJkT3v9Mm8HA3YgfYYL2j7yzpzfWsbMYHgA4z4qz/xltXHtJMuZvTzeNf3n3Iy
+	oNHs95hslHkdZYDA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 5AECE13AB4;
+	Thu, 31 Jul 2025 06:48:56 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id QFzgFNgRi2hnZAAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Thu, 31 Jul 2025 06:48:56 +0000
+From: Takashi Iwai <tiwai@suse.de>
+To: linux-sound@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org
+Subject: [PATCH 3/3] mips: Update HD-audio configs again
+Date: Thu, 31 Jul 2025 08:48:09 +0200
+Message-ID: <20250731064813.1622-4-tiwai@suse.de>
+X-Mailer: git-send-email 2.50.1
+In-Reply-To: <20250731064813.1622-1-tiwai@suse.de>
+References: <20250731064813.1622-1-tiwai@suse.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250730-topic-dma_genise_cookie-v1-1-b505c1238f9f@oss.qualcomm.com>
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-3.01 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	MID_CONTAINS_FROM(1.00)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	R_MISSING_CHARSET(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	TO_DN_NONE(0.00)[];
+	ARC_NA(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:mid,suse.de:dkim,suse.de:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
+	RCVD_COUNT_TWO(0.00)[2];
+	RCVD_TLS_ALL(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	DKIM_TRACE(0.00)[suse.de:+]
+X-Spam-Flag: NO
+X-Spam-Level: 
+X-Rspamd-Queue-Id: 8FBD11FB88
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Score: -3.01
 
-On Wed, Jul 30, 2025 at 11:33:28AM +0200, Konrad Dybcio wrote:
-> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> 
-> This is a software construct that has no business being expressed in
-> dt-bindings. Drivers can be constructed to retrieve the protocol ID at
-> runtime or hardcode them per protocol.
-> 
-> Remove it, as a pre-requisite for further simplifying the GENI
-> bindings.
-> 
-> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> ---
->  Documentation/devicetree/bindings/dma/qcom,gpi.yaml | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/dma/qcom,gpi.yaml b/Documentation/devicetree/bindings/dma/qcom,gpi.yaml
-> index bbe4da2a11054f0d272017ddf5d5f7e47cf7a443..745613b93b210afd38946030f7477e91e08c907a 100644
-> --- a/Documentation/devicetree/bindings/dma/qcom,gpi.yaml
-> +++ b/Documentation/devicetree/bindings/dma/qcom,gpi.yaml
-> @@ -61,14 +61,13 @@ properties:
->      maxItems: 13
->  
->    "#dma-cells":
-> -    const: 3
-> +    const: 2
+The HD-audio codec driver configs have been updated again since the
+previous change.  Correct the types and add the missing kconfig items
+for loongson default configs.
 
-I think you need to keep 3 and note it is deprecated. Does an existing 
-kernel support this being 2 already. If not, ABI break...
+Fixes: 1d8dd982c409 ("ALSA: hda/realtek: Enable drivers as default")
+Fixes: 81231ad173d8 ("ALSA: hda/hdmi: Enable drivers as default")
+Cc: linux-mips@vger.kernel.org
+Signed-off-by: Takashi Iwai <tiwai@suse.de>
+---
 
->      description: >
->        DMA clients must use the format described in dma.txt, giving a phandle
->        to the DMA controller plus the following 3 integer cells:
->        - channel: if set to 0xffffffff, any available channel will be allocated
->          for the client. Otherwise, the exact channel specified will be used.
->        - seid: serial id of the client as defined in the SoC documentation.
-> -      - client: type of the client as defined in dt-bindings/dma/qcom-gpi.h
->  
->    iommus:
->      maxItems: 1
-> @@ -98,7 +97,7 @@ examples:
->      #include <dt-bindings/dma/qcom-gpi.h>
->      gpi_dma0: dma-controller@800000 {
->          compatible = "qcom,sdm845-gpi-dma";
-> -        #dma-cells = <3>;
-> +        #dma-cells = <2>;
->          reg = <0x00800000 0x60000>;
->          iommus = <&apps_smmu 0x0016 0x0>;
->          dma-channels = <13>;
-> 
-> -- 
-> 2.50.1
-> 
+The changes are only in sound.git tree, so I'll pick up this there, too
+
+ arch/mips/configs/loongson2k_defconfig | 1 +
+ arch/mips/configs/loongson3_defconfig  | 3 ++-
+ 2 files changed, 3 insertions(+), 1 deletion(-)
+
+diff --git a/arch/mips/configs/loongson2k_defconfig b/arch/mips/configs/loongson2k_defconfig
+index 4b7f914d01d0..b1b370a227dc 100644
+--- a/arch/mips/configs/loongson2k_defconfig
++++ b/arch/mips/configs/loongson2k_defconfig
+@@ -257,6 +257,7 @@ CONFIG_SND_HDA_INTEL=y
+ CONFIG_SND_HDA_HWDEP=y
+ CONFIG_SND_HDA_PATCH_LOADER=y
+ CONFIG_SND_HDA_CODEC_REALTEK=y
++CONFIG_SND_HDA_CODEC_ALC269=y
+ CONFIG_SND_HDA_CODEC_ANALOG=y
+ CONFIG_SND_HDA_CODEC_SIGMATEL=y
+ CONFIG_SND_HDA_CODEC_VIA=y
+diff --git a/arch/mips/configs/loongson3_defconfig b/arch/mips/configs/loongson3_defconfig
+index 5ff0c1554168..b5c18d847908 100644
+--- a/arch/mips/configs/loongson3_defconfig
++++ b/arch/mips/configs/loongson3_defconfig
+@@ -292,11 +292,12 @@ CONFIG_SND_SEQ_DUMMY=m
+ # CONFIG_SND_ISA is not set
+ CONFIG_SND_HDA_INTEL=m
+ CONFIG_SND_HDA_PATCH_LOADER=y
+-CONFIG_SND_HDA_CODEC_REALTEK=y
++CONFIG_SND_HDA_CODEC_REALTEK=m
+ CONFIG_SND_HDA_CODEC_REALTEK_LIB=m
+ CONFIG_SND_HDA_CODEC_ALC269=m
+ CONFIG_SND_HDA_CODEC_SIGMATEL=m
+ CONFIG_SND_HDA_CODEC_HDMI=m
++CONFIG_SND_HDA_CODEC_HDMI_GENERIC=m
+ CONFIG_SND_HDA_CODEC_CONEXANT=m
+ # CONFIG_SND_USB is not set
+ CONFIG_HIDRAW=y
+-- 
+2.50.1
+
 
