@@ -1,69 +1,309 @@
-Return-Path: <linux-mips+bounces-9969-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9970-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25697B1840B
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Aug 2025 16:39:22 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73BA7B18E6B
+	for <lists+linux-mips@lfdr.de>; Sat,  2 Aug 2025 14:38:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A3F311C26CFA
-	for <lists+linux-mips@lfdr.de>; Fri,  1 Aug 2025 14:39:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94D0917E1A4
+	for <lists+linux-mips@lfdr.de>; Sat,  2 Aug 2025 12:38:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F3DB26FD9D;
-	Fri,  1 Aug 2025 14:39:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C64038FA6;
+	Sat,  2 Aug 2025 12:38:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="iLj+yzbI"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 63C8D26E6FF;
-	Fri,  1 Aug 2025 14:39:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEB2022B5B8
+	for <linux-mips@vger.kernel.org>; Sat,  2 Aug 2025 12:38:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754059148; cv=none; b=RkhGsLxpY3Dipdntg5FRpCF1AKX8T0eEyNx8QDS7qpe2uKggjDnvcyhlhqhSOtZX3oMUjqY7KVCN0wXF3K6Mr5CW8wGjeKXRfvRlCPvZBARHdPd+wWPyiY3fjpjUx0ENVq5qXTL3+a4eBIqov41X1fD62NBX6mWw0EoJI3LNKhs=
+	t=1754138290; cv=none; b=Yy8x48quSsK9BX8J8jkbUsJbQ4AXKcECbmKgJsaJAQT5jN0ZAL93ynJ3UPG4gCSIVg7u8KVpALbmAvvLSG9ugJANq5V0I647gn6S/hIA/GfvzarZTEo2/8mPbotygkF2qN7B28gq5UCXHCJPtua40HTdIDyqmBBkQDVGWskH1Kc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754059148; c=relaxed/simple;
-	bh=IcezTalOWFZQSNIiHJiqCX6sCIDcVXeYSjmRMAwhAV8=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=GWno3/zTHiiCZdGNDLGJzNklgYZSexsKB+J+lQP6nhuug612UM9g+Ye42b+ELIsmoo/A6hD2xoJyqMbBLOVo7nOBGA1oXzq/VqmCDqTcL2dIcl7OewICyAqxWZHCiO2NfuGAIki59izrIIixIGvTt9sRnbSGNv9YbXqvZxEvmbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id AFFE692009C; Fri,  1 Aug 2025 16:38:57 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id AAF1792009B;
-	Fri,  1 Aug 2025 15:38:57 +0100 (BST)
-Date: Fri, 1 Aug 2025 15:38:57 +0100 (BST)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-    Jiri Slaby <jirislaby@kernel.org>, linux-mips@vger.kernel.org, 
-    linux-kernel@vger.kernel.org, linux-serial@vger.kernel.org
-Subject: Re: [PATCH v2] tty: serial: ip22zilog: Use platform device for
- probing
-In-Reply-To: <20250725134018.136113-1-tsbogend@alpha.franken.de>
-Message-ID: <alpine.DEB.2.21.2508011536550.5060@angie.orcam.me.uk>
-References: <20250725134018.136113-1-tsbogend@alpha.franken.de>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1754138290; c=relaxed/simple;
+	bh=kjNMGi0IvuVGXF8RnqYfZcDE+z5GAU+wzdFjcp7iLnM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=sTjq4nEN6r3gt4P1EFf5gtNAVdyZeYWyiy6qGyAQFHCVq6ljAZ98KPU7hOJ397/yTrYTNY6PIirye62+iKxBnh6eYlR+lXlrxH+UkQ9s0Onti4q41Az/gUi9t7ASE0sNX33H35Xb3/esvg00vbXjZSKmugKKnnwQuFxZWHiiKCg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=iLj+yzbI; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5727NcuE010019
+	for <linux-mips@vger.kernel.org>; Sat, 2 Aug 2025 12:38:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	yY+5Vc4wWCp8Q+lqkXgyh1f1Eka3dbE6PZDRDj30axM=; b=iLj+yzbIUQdJmpPE
+	HSCMNc/WukNLpBT4WQTMuU2Elh3jlNsbdJ3wd7gziWpdQ65t+tBxIrNYtMU+MFuJ
+	HkIflk49HRXLBE2e9aKmEFEMADiJXGpyVkCfWqzZ2oRbpsC/Is+DUfmvIOCD1CL7
+	+su5CJLM5ymQuGWntuLQlXV8emoqlaA1Boot08Xzssob33f1R3HI/ecNvYw7Rexb
+	A0P7DlMACxYME3GtSMcdlQDuCabxpvlQxkQpGykwEkKpz6XKqy0U5VviVBINJlk4
+	vqmrWlp/XyTcfHt6AsjKW9089optU/83B4pIoedJbH9vwu6CHrl90A4PA/AyXS0L
+	8x2ZGA==
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 489a0m0uv3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-mips@vger.kernel.org>; Sat, 02 Aug 2025 12:38:06 +0000 (GMT)
+Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4aef8afd26bso7088211cf.0
+        for <linux-mips@vger.kernel.org>; Sat, 02 Aug 2025 05:38:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1754138285; x=1754743085;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=yY+5Vc4wWCp8Q+lqkXgyh1f1Eka3dbE6PZDRDj30axM=;
+        b=M7k+lwjlTfbYTDMWFuHP18mIm34Z/fS9Jq8PK9TZjeN18bNwlaNlEebZXcMA4vbLJI
+         Ror/VF4pKwX4rFXMpsNqqk5S66XvkGJI30Ce/o2xen6t7TfVIwuxBdqZqAQWiYyGJDXN
+         KLAg/EEwipgv4YjnehS/xufdr5Qm9jFJRLF7hPEx53+ia+UAz1EYI+13287xTIqUTUpd
+         QlJqzWDIDB0vSFWQ/xtM8YeUXpibqUktcV6+k4Lyz/uyjiH94oNExithIXXqMvtpFkSB
+         poDlV0BiJmLVTT2j2DpV7AcpYrPrru7MhrxDD1wRnhvff6xSmh5G+cAdo3ik4U1M47nU
+         59yA==
+X-Forwarded-Encrypted: i=1; AJvYcCW6wsn8E94QH1fx6/hqyctNOJQjCL/vz4xRcMjeYXzylZ9Ooh9OdYVYMTSyLDUxgd+jde1OSrdAq3tG@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyb0JwnwWRHU8ZTZlo0jbbD+gCDQKoPWawy7qSxZ73uvhSVEZfq
+	bsaj8tUK939mikBVnNHN+CWD8gIG5jpkCnSEs/5b8ac0LL+YdOecKAV5FBUfi+6P3kicpkLSeRL
+	EolyrftkkRzAZNASS5HlzN0cTwuxKXlX4e4/YOrgPgR19Yt/eME++o0ToRdn2AEZR
+X-Gm-Gg: ASbGncsiKMTBfVHH5xyyd/uDrmcjfMaFXK8zcpDuQedNjO6ZZvZZFn/Qjaw2JTI513b
+	gEPUZe5D0GXgbZ8W0w+dO+NR8WQGIPIs3PYIxqNOQgt6eIL2fUH5ivvFTt0v1CXjsJN/FvGLP6F
+	wH1PlfQ5KZe6gvBxbIbwGBvgQ77pFKW6xVFdZb7t1TMptYp8bx9XAVWLB0DQ9KGfYVvWw+0pr2/
+	A5cSZWOBF2OTPaIm3EOEXKOkXFBgREGug6A/YjJdGSuVsTUZmsiBc/l/Ab9oRqOROqA4Tgf2z/q
+	xaFuB868UjKGKJAL+35ZHjT6PAJd6eNg5SbAloYzNtVqZ8uNPK+/o59+p8tTg5NP8zcz/A3/LAY
+	fVSNeSfdVNpUaxbH8wQ==
+X-Received: by 2002:a05:622a:54e:b0:4ab:67a3:ec09 with SMTP id d75a77b69052e-4af1094cd78mr22382381cf.6.1754138285270;
+        Sat, 02 Aug 2025 05:38:05 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGFPF9qOzJpGO98jPyAvuhk/RML1vSf6VMcwdOoFpMcr/LQVR1VYdVHuTAn5xus4wthkO0plg==
+X-Received: by 2002:a05:622a:54e:b0:4ab:67a3:ec09 with SMTP id d75a77b69052e-4af1094cd78mr22381721cf.6.1754138284551;
+        Sat, 02 Aug 2025 05:38:04 -0700 (PDT)
+Received: from [192.168.43.16] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91a0761f2sm434931766b.11.2025.08.02.05.37.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 02 Aug 2025 05:38:03 -0700 (PDT)
+Message-ID: <0c2cc631-21fd-41fd-9293-fd86dd09a2d2@oss.qualcomm.com>
+Date: Sat, 2 Aug 2025 14:37:54 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 2/6] dmaengine: Make of_dma_request_slave_channel pass
+ a cookie to of_xlate
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Frank Li <Frank.li@nxp.com>
+Cc: Konrad Dybcio <konradybcio@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Takao Orito <orito.takao@socionext.com>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?=
+ <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        =?UTF-8?Q?Am=C3=A9lie_Delaunay?= <amelie.delaunay@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Chen-Yu Tsai
+ <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Laxman Dewangan
+ <ldewangan@nvidia.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Michal Simek <michal.simek@amd.com>, Rob Herring <robh@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        =?UTF-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
+        Viken Dadhaniya <quic_vdadhani@quicinc.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Krzysztof Kozlowski
+ <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        imx@lists.linux.dev, linux-actions@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, linux-sunxi@lists.linux.dev,
+        linux-tegra@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-sound@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-spi@vger.kernel.org
+References: <20250730-topic-dma_genise_cookie-v1-0-b505c1238f9f@oss.qualcomm.com>
+ <20250730-topic-dma_genise_cookie-v1-2-b505c1238f9f@oss.qualcomm.com>
+ <aIpKz495WI1SJTeB@lizhi-Precision-Tower-5810>
+ <20250730180417.GC21430@pendragon.ideasonboard.com>
+ <aIpmgpXME1BmThxU@lizhi-Precision-Tower-5810>
+ <20250801120007.GB4906@pendragon.ideasonboard.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20250801120007.GB4906@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=JOM7s9Kb c=1 sm=1 tr=0 ts=688e06ae cx=c_pps
+ a=WeENfcodrlLV9YRTxbY/uA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=EUspDBNiAAAA:8 a=Hh3C_mqfd76DgmRPW0UA:9
+ a=QEXdDO2ut3YA:10 a=kacYvNCVWA4VmyqE58fU:22
+X-Proofpoint-GUID: VLbyW2sXjJZIqWBgN0Lah-Nrs-fzRW30
+X-Proofpoint-ORIG-GUID: VLbyW2sXjJZIqWBgN0Lah-Nrs-fzRW30
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODAyMDEwNSBTYWx0ZWRfX26oMp7aupliV
+ 8ijFIEdxQeqPNNLUBjq9wLY0bMuz5vCoysmGXG42teWB7ugDpS8Keo2OpAHENwf17yU1tReE48L
+ pGcyVilyHoFtt2egOqJ0sS2eBLSSaGco+HKfpR+YEQZh0jBXugBSDyMJRxV92DmVmPr0VQtFC3h
+ qX2yxUBQ6hJn3WEPxtW34JnfxinMpCdLJmjQL1c7ZZLz50ot4T63zic6pSM+oINCqbg8rbkYNWj
+ lSuM4GtPX7b3AZ4c8oVcEQs+56jSluWw1CWZeXM25SYJpj245HmcYQmR0nNZ5I61x5Re/mrYNhy
+ kiDQENp0TxQHyUEWGDyvBMhnn2e3sUaZ0AJduvJGvW9PqNteVt0BBTuGwewVheDcFb4TQnaPLXj
+ pfQzXumdsEP8+BIm508pj5w3FqFFykYL/egTMnKqG8Db57VzpzfOGax2nDm3GOfxxZzs6nMx
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-01_08,2025-08-01_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ phishscore=0 adultscore=0 suspectscore=0 mlxlogscore=999 spamscore=0
+ clxscore=1015 priorityscore=1501 malwarescore=0 lowpriorityscore=0 mlxscore=0
+ impostorscore=0 bulkscore=0 classifier=spam authscore=0 authtc=n/a authcc=
+ route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
+ definitions=main-2508020105
 
-On Fri, 25 Jul 2025, Thomas Bogendoerfer wrote:
-
-> After commit 84a9582fd203 ("serial: core: Start managing serial controllers
-> to enable runtime PM") serial drivers need to provide a device in
-> struct uart_port.dev otherwise an oops happens. To fix this issue
-> for ip22zilog driver switch driver to a platform driver and setup
-> the serial device in sgi-ip22 code.
+On 8/1/25 2:00 PM, Laurent Pinchart wrote:
+> Hi Frank,
 > 
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> ---
+> On Wed, Jul 30, 2025 at 02:37:54PM -0400, Frank Li wrote:
+>> On Wed, Jul 30, 2025 at 09:04:17PM +0300, Laurent Pinchart wrote:
+>>> On Wed, Jul 30, 2025 at 12:39:43PM -0400, Frank Li wrote:
+>>>> On Wed, Jul 30, 2025 at 11:33:29AM +0200, Konrad Dybcio wrote:
+>>>>> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+>>>>>
+>>>>> The DMA subsystem attempts to make it theoretically possible to pair
+>>>>> any DMA block with any user. While that's convenient from a
+>>>>> codebase sanity perspective, some blocks are more intertwined.
+>>>>>
+>>>>> One such case is the Qualcomm GENI, where each wrapper contains a
+>>>>> number of Serial Engine instances, each one of which can be programmed
+>>>>> to support a different protocol (such as I2C, I3C, SPI, UART, etc.).
+>>>>>
+>>>>> The GPI DMA it's designed together with, needs to receive the ID of the
+>>>>> protocol that's in use, to adjust its behavior accordingly. Currently,
+>>>>> that's done through passing that ID through device tree, with each
+>>>>> Serial Engine expressed NUM_PROTOCOL times, resulting in terrible
+>>>>> dt-bindings that are full of useless copypasta.
+>>>>>
+>>>>> In a step to cut down on that, let the DMA user give the engine driver
+>>>>> a hint at request time.
+>>>>>
+>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+>>>>> ---
 
- Shouldn't this be backported as a fatal regression?
+[...]
 
-  Maciej
+>>>>> diff --git a/include/linux/of_dma.h b/include/linux/of_dma.h
+>>>>> index fd706cdf255c61c82ce30ef9a2c44930bef34bc8..9f9bc4207b85d48d73c25aad4b362e7c84c01756 100644
+>>>>> --- a/include/linux/of_dma.h
+>>>>> +++ b/include/linux/of_dma.h
+>>>>> @@ -19,7 +19,7 @@ struct of_dma {
+>>>>>  	struct list_head	of_dma_controllers;
+>>>>>  	struct device_node	*of_node;
+>>>>>  	struct dma_chan		*(*of_dma_xlate)
+>>>>> -				(struct of_phandle_args *, struct of_dma *);
+>>>>> +				(struct of_phandle_args *, struct of_dma *, void *);
+>>>>
+>>>> I suggest pass down more informaiton, like client's dev point. So we can
+>>>> auto create device link between client's dev and dma chan's device.
+>>>
+>>> Is .of_dma_xlate() really the right place to do that ? If you want to
+>>> create a device link for PM reasons, isn't it better created when the
+>>> channel is requested ? It should also be removed when the channel is
+>>> freed.
+>>
+>> I remember just need record client device pointer here.
+>>
+>>>>
+>>>> DMA Engineer device
+>>>>    DMA chan device
+>>>>        consumer clients' device.
+>>>>
+>>>> If consumer device runtime pm suspend can auto trigger DMA chan's device's
+>>>> runtime pm function.
+>>>>
+>>>> It will simplifly DMA engine's run time pm manage. Currently many DMA run
+>>>> time pm implement as, runtime_pm_get() when alloc and runtime_pm_put() at
+>>>> free channel.  But many devices request dma channel at probe, which make
+>>>> dma engine work at always 'on' state.
+>>>>
+>>>> But ideally, dma chan should be resume only when it is used to transfer.
+>>>
+>>> This is exactly what I was going to mention after reading the last
+>>> paragraph. Is there anything that prevents a DMA engine driver to
+>>> perform a rutime PM get() when a transfer is submitted
+>>
+>> DMA description is a queue, It is hard to track each descriptor submit and
+>> finished. espcially cycle buffer case.
+>>
+>> And according to dma engine API defination, submit a descriptor not
+>> neccessary to turn on clock, maybe just pure software operation, such as
+>> enqueue it to a software list.
+>>
+>> Many driver call dmaengine_submit() in irq context,  submit new descriptor
+>> when previous descriptor finished. runtime_pm_get() can NOT be called in
+>> atomic context.
+>>
+>> And some driver submit many descripor advance. Only issue_transfer() is
+>> actually trigger hardware to start transfer.
+>>
+>> Some client use cycle descripor, such audio devices.  Some audio devices
+>> have not free descriptor at their run time suspend function, just disable
+>> audio devices's clocks.  Audio devices run time suspend, which means no
+>> one use this dma channel, dma channel can auto suspend if built device link
+>> between audio device and dma chan devices.
+>>
+>> Some DMA client have not devices, such as memory to memory. for this kind
+>> case, it need keep chan always on.
+>>
+>> issue_transfer() can be call in atomic context. but trigger hardware transfer
+>> need clock and runtime_pm_get() can't be called in atomic context.
+>>
+>> Most case issue_transfer() is call in irq handle, which means device should
+>> already be in runtime resume statue.  DMA engine can safely access their
+>> register if using device link.
+> 
+> You have good points there, in particular the fact the issue_transfer()
+> can be called in interrupt context.
+> 
+> For me this calls for new DMA engine operations to "start/stop" the DMA
+> engine (better names are likely needed) from a client perspective.
+> 
+>>> and a put() when
+>>> it completes ? (Logically speaking, the actual implementation would
+>>> likely be a bit different in drivers, but the result would be similar.)
+
+So.. do you folks want me to alter the patch in any way?
+
+Konrad
 
