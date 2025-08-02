@@ -1,88 +1,88 @@
-Return-Path: <linux-mips+bounces-9970-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9971-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73BA7B18E6B
-	for <lists+linux-mips@lfdr.de>; Sat,  2 Aug 2025 14:38:18 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07A34B18E7F
+	for <lists+linux-mips@lfdr.de>; Sat,  2 Aug 2025 14:41:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94D0917E1A4
-	for <lists+linux-mips@lfdr.de>; Sat,  2 Aug 2025 12:38:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5F9CE7AE433
+	for <lists+linux-mips@lfdr.de>; Sat,  2 Aug 2025 12:39:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C64038FA6;
-	Sat,  2 Aug 2025 12:38:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 881A223C4E9;
+	Sat,  2 Aug 2025 12:40:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="iLj+yzbI"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="DOQMtJD9"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEB2022B5B8
-	for <linux-mips@vger.kernel.org>; Sat,  2 Aug 2025 12:38:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C8B0232785
+	for <linux-mips@vger.kernel.org>; Sat,  2 Aug 2025 12:40:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754138290; cv=none; b=Yy8x48quSsK9BX8J8jkbUsJbQ4AXKcECbmKgJsaJAQT5jN0ZAL93ynJ3UPG4gCSIVg7u8KVpALbmAvvLSG9ugJANq5V0I647gn6S/hIA/GfvzarZTEo2/8mPbotygkF2qN7B28gq5UCXHCJPtua40HTdIDyqmBBkQDVGWskH1Kc=
+	t=1754138403; cv=none; b=Mn2m8h2qoiq1+3lOdnKVwKx22bhOenXb/TTWLbc3GUfIhGpajGzwFg47GMpNR1eL+EFqMKqvri1y81EG1vM3LHrBQWXQu9/ORcbCod860wb8GrsfBpJvAGcE6q7j3CFbhqSHlbWmImIgkkJ5ndMFPOhGlK0ebsb8a3r0WL+0iGE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754138290; c=relaxed/simple;
-	bh=kjNMGi0IvuVGXF8RnqYfZcDE+z5GAU+wzdFjcp7iLnM=;
+	s=arc-20240116; t=1754138403; c=relaxed/simple;
+	bh=20GZjV/9etu8Dh+QrGksTZEKnBLbOiAfPjovI45mWjE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sTjq4nEN6r3gt4P1EFf5gtNAVdyZeYWyiy6qGyAQFHCVq6ljAZ98KPU7hOJ397/yTrYTNY6PIirye62+iKxBnh6eYlR+lXlrxH+UkQ9s0Onti4q41Az/gUi9t7ASE0sNX33H35Xb3/esvg00vbXjZSKmugKKnnwQuFxZWHiiKCg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=iLj+yzbI; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:Content-Type; b=YBb5VEu+vTIqi6JgJyIAilGg0iO8tLqGmRBBoKVN8XO+7ihJC4cWcca6DoQ6lTGscgxUjob0GHPudKWbH8LM895OrtNLgHw/fgc+IgP69V40BzGW031pRBmj8CVrD8OKwMluaeqxgf4qVcmasaQju4JaZZMJjIs9XEPOsrigEQs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=DOQMtJD9; arc=none smtp.client-ip=205.220.180.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5727NcuE010019
-	for <linux-mips@vger.kernel.org>; Sat, 2 Aug 2025 12:38:07 GMT
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5725fp5A018802
+	for <linux-mips@vger.kernel.org>; Sat, 2 Aug 2025 12:39:59 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	yY+5Vc4wWCp8Q+lqkXgyh1f1Eka3dbE6PZDRDj30axM=; b=iLj+yzbIUQdJmpPE
-	HSCMNc/WukNLpBT4WQTMuU2Elh3jlNsbdJ3wd7gziWpdQ65t+tBxIrNYtMU+MFuJ
-	HkIflk49HRXLBE2e9aKmEFEMADiJXGpyVkCfWqzZ2oRbpsC/Is+DUfmvIOCD1CL7
-	+su5CJLM5ymQuGWntuLQlXV8emoqlaA1Boot08Xzssob33f1R3HI/ecNvYw7Rexb
-	A0P7DlMACxYME3GtSMcdlQDuCabxpvlQxkQpGykwEkKpz6XKqy0U5VviVBINJlk4
-	vqmrWlp/XyTcfHt6AsjKW9089optU/83B4pIoedJbH9vwu6CHrl90A4PA/AyXS0L
-	8x2ZGA==
-Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com [209.85.160.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 489a0m0uv3-1
+	r9VK3kXUy5TNVKQthyOGQ0SFCHNZ+dt1IH8nz2OWv34=; b=DOQMtJD9xjdE7K4H
+	vt+tAL+ijFCF/Ppx46PTq6wc0Tn4/X98XLLrGBLGuzMvbAxreC3RezQp8EyPZa0+
+	UzJW6dPZmAIDc6+9IQeviwcJmVcn12IlqcBecAfYSutXBJr+KyZvSqxFtgMMo9du
+	llmeNIzI2yHwmB8wloQBV8amiGbLg6kLeWquA++hJ11zyqHDF33b7slzh3B0tFYr
+	A1fOQ+7KHo3LhiJjF1ji/no0ao8zJy6eh31X7yiFpqa2FD+ip3SBTFBwj/8a5s4d
+	xvZZXb4ZGPo/7wRpiihVK7awCZ1GbbBUY6miBEig1e3yCvdFUp5HadPxMnra5b45
+	h8VRQw==
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com [209.85.160.197])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4899pa8w6f-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-mips@vger.kernel.org>; Sat, 02 Aug 2025 12:38:06 +0000 (GMT)
-Received: by mail-qt1-f199.google.com with SMTP id d75a77b69052e-4aef8afd26bso7088211cf.0
-        for <linux-mips@vger.kernel.org>; Sat, 02 Aug 2025 05:38:06 -0700 (PDT)
+	for <linux-mips@vger.kernel.org>; Sat, 02 Aug 2025 12:39:59 +0000 (GMT)
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-4abc1e8bd11so9122321cf.3
+        for <linux-mips@vger.kernel.org>; Sat, 02 Aug 2025 05:39:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754138285; x=1754743085;
+        d=1e100.net; s=20230601; t=1754138398; x=1754743198;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yY+5Vc4wWCp8Q+lqkXgyh1f1Eka3dbE6PZDRDj30axM=;
-        b=M7k+lwjlTfbYTDMWFuHP18mIm34Z/fS9Jq8PK9TZjeN18bNwlaNlEebZXcMA4vbLJI
-         Ror/VF4pKwX4rFXMpsNqqk5S66XvkGJI30Ce/o2xen6t7TfVIwuxBdqZqAQWiYyGJDXN
-         KLAg/EEwipgv4YjnehS/xufdr5Qm9jFJRLF7hPEx53+ia+UAz1EYI+13287xTIqUTUpd
-         QlJqzWDIDB0vSFWQ/xtM8YeUXpibqUktcV6+k4Lyz/uyjiH94oNExithIXXqMvtpFkSB
-         poDlV0BiJmLVTT2j2DpV7AcpYrPrru7MhrxDD1wRnhvff6xSmh5G+cAdo3ik4U1M47nU
-         59yA==
-X-Forwarded-Encrypted: i=1; AJvYcCW6wsn8E94QH1fx6/hqyctNOJQjCL/vz4xRcMjeYXzylZ9Ooh9OdYVYMTSyLDUxgd+jde1OSrdAq3tG@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyb0JwnwWRHU8ZTZlo0jbbD+gCDQKoPWawy7qSxZ73uvhSVEZfq
-	bsaj8tUK939mikBVnNHN+CWD8gIG5jpkCnSEs/5b8ac0LL+YdOecKAV5FBUfi+6P3kicpkLSeRL
-	EolyrftkkRzAZNASS5HlzN0cTwuxKXlX4e4/YOrgPgR19Yt/eME++o0ToRdn2AEZR
-X-Gm-Gg: ASbGncsiKMTBfVHH5xyyd/uDrmcjfMaFXK8zcpDuQedNjO6ZZvZZFn/Qjaw2JTI513b
-	gEPUZe5D0GXgbZ8W0w+dO+NR8WQGIPIs3PYIxqNOQgt6eIL2fUH5ivvFTt0v1CXjsJN/FvGLP6F
-	wH1PlfQ5KZe6gvBxbIbwGBvgQ77pFKW6xVFdZb7t1TMptYp8bx9XAVWLB0DQ9KGfYVvWw+0pr2/
-	A5cSZWOBF2OTPaIm3EOEXKOkXFBgREGug6A/YjJdGSuVsTUZmsiBc/l/Ab9oRqOROqA4Tgf2z/q
-	xaFuB868UjKGKJAL+35ZHjT6PAJd6eNg5SbAloYzNtVqZ8uNPK+/o59+p8tTg5NP8zcz/A3/LAY
-	fVSNeSfdVNpUaxbH8wQ==
-X-Received: by 2002:a05:622a:54e:b0:4ab:67a3:ec09 with SMTP id d75a77b69052e-4af1094cd78mr22382381cf.6.1754138285270;
-        Sat, 02 Aug 2025 05:38:05 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGFPF9qOzJpGO98jPyAvuhk/RML1vSf6VMcwdOoFpMcr/LQVR1VYdVHuTAn5xus4wthkO0plg==
-X-Received: by 2002:a05:622a:54e:b0:4ab:67a3:ec09 with SMTP id d75a77b69052e-4af1094cd78mr22381721cf.6.1754138284551;
-        Sat, 02 Aug 2025 05:38:04 -0700 (PDT)
+        bh=r9VK3kXUy5TNVKQthyOGQ0SFCHNZ+dt1IH8nz2OWv34=;
+        b=EKs1GTvBNJbM9TOM/it9EwTOqnHWoInwh9+0zDouTe/+tHKnQjahUYvpXQyoDA2FHk
+         OMplmBQM7h8t5xtn8NXMnQp6gi4Cg/gJud9PKSummj1qtlaTeXuNfEbkKNI4nV93YLK9
+         JekZx4W8sY4TxTtc7sERal3D8+otNXuogQlFpgp+LR8Hr++R1Cyy/hTdPTCHV/eKduqI
+         27VaKC0F9pWE5Xz0aizOflSYw2jV0wzztJgjyCtFbkKifmG3FJ+X5u+IhUm7HLLPbnKR
+         VCFVWVai2LVjmbm5+N/VXxSYNLGgx32f9f71L3prlZ3l3klFyaPz9fj/f/Cc5oCmmYik
+         d1GQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW/fNe+/BjJ/Htm9MPawvADKuzUJN22RYAFgJt+wjDFOBuZx7rDuJ3+XjuypyH7sK6x7D2PiRnmJmKx@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx305e1xzw8GYVF4bRaprkXM6jbTnhWfkW3ruPNnO5ukW+JjB+a
+	T3XzFKx2gacDtz+c8AzB35/Xx0IycYxlXwAuTV7TylT1/PUmE+7CGxant9FNu/xo4v9H2VwQMCP
+	jeMPhp+48ghSwEgEFvTAG4lpcN7aEcdfAHxdezzgBP08NSJll6ut7Sx/lkzV2ePJn
+X-Gm-Gg: ASbGncs27yeV1R6FzoKx2CAVXdvY5vJp4UVnunwyxTU1Zroz+hlR5JF93QTMUYVjJ6b
+	5g8VZHLwxvGgyd2kjbVps5kRwR2KIftvIIYo/lmVxgckVsl+eTCiWsq0R8Z5/5lw7hhpSdFooaB
+	C/EeSExy7X+w8iqL5k9ev1jiBwO175JpSe0DYu5kNsguNICpo4bUS82wBX58R365QKGBRMiSbVt
+	7GBjU3HMYMCJPxVtYe5aOBI/Bd9Bqnmqw/5FMVCfQhacKQI1yxyDH8A4sD3z2pxgKn7+uX3qLJA
+	XL8GbY5eOan6oL8+FucmjILY7oNiyWtyehNYwiQRySeidHMSSyP/MWTfaFnbV9AO7vSF6/WV02z
+	Rg1+dyjsIOIDmit+EUQ==
+X-Received: by 2002:ac8:5f90:0:b0:4ab:5ac3:1347 with SMTP id d75a77b69052e-4af10a84c91mr23333861cf.13.1754138398215;
+        Sat, 02 Aug 2025 05:39:58 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEm4NEl6EUx3LCCGFmAhcLGEPc2/M/pvg1mmL0vg2ErLHKHgVKDYHB4PV/P/gfOCagScMPDYw==
+X-Received: by 2002:ac8:5f90:0:b0:4ab:5ac3:1347 with SMTP id d75a77b69052e-4af10a84c91mr23333291cf.13.1754138397693;
+        Sat, 02 Aug 2025 05:39:57 -0700 (PDT)
 Received: from [192.168.43.16] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91a0761f2sm434931766b.11.2025.08.02.05.37.55
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-615a8fe77cfsm4167407a12.42.2025.08.02.05.39.49
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 02 Aug 2025 05:38:03 -0700 (PDT)
-Message-ID: <0c2cc631-21fd-41fd-9293-fd86dd09a2d2@oss.qualcomm.com>
-Date: Sat, 2 Aug 2025 14:37:54 +0200
+        Sat, 02 Aug 2025 05:39:57 -0700 (PDT)
+Message-ID: <e0886f9e-bcc1-48dc-a175-2147d8d4fc3e@oss.qualcomm.com>
+Date: Sat, 2 Aug 2025 14:39:48 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -90,13 +90,12 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC 2/6] dmaengine: Make of_dma_request_slave_channel pass
- a cookie to of_xlate
-To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Frank Li <Frank.li@nxp.com>
-Cc: Konrad Dybcio <konradybcio@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-        Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>,
+Subject: Re: [PATCH RFC 3/6] dmaengine: qcom: gpi: Accept protocol ID hints
+To: Geert Uytterhoeven <geert@linux-m68k.org>,
+        Konrad Dybcio <konradybcio@kernel.org>
+Cc: Vinod Koul <vkoul@kernel.org>, Sven Peter <sven@kernel.org>,
+        Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Neal Gompa <neal@gompa.dev>,
         Ludovic Desroches <ludovic.desroches@microchip.com>,
         Florian Fainelli <florian.fainelli@broadcom.com>,
         Broadcom internal kernel review list
@@ -106,7 +105,8 @@ Cc: Konrad Dybcio <konradybcio@kernel.org>, Vinod Koul <vkoul@kernel.org>,
         Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
         Viresh Kumar <vireshk@kernel.org>,
         Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
+        Frank Li <Frank.Li@nxp.com>, Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
         Fabio Estevam <festevam@gmail.com>,
         Taichi Sugaya <sugaya.taichi@socionext.com>,
@@ -135,8 +135,9 @@ Cc: Konrad Dybcio <konradybcio@kernel.org>, Vinod Koul <vkoul@kernel.org>,
         Peter Ujfalusi <peter.ujfalusi@gmail.com>,
         Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
         Masami Hiramatsu <mhiramat@kernel.org>,
-        Michal Simek <michal.simek@amd.com>, Rob Herring <robh@kernel.org>,
-        Saravana Kannan <saravanak@google.com>,
+        Michal Simek <michal.simek@amd.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Rob Herring <robh@kernel.org>, Saravana Kannan <saravanak@google.com>,
         =?UTF-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>,
         Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
         Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
@@ -159,151 +160,74 @@ Cc: Konrad Dybcio <konradybcio@kernel.org>, Vinod Koul <vkoul@kernel.org>,
         linux-sound@vger.kernel.org, linux-i2c@vger.kernel.org,
         linux-spi@vger.kernel.org
 References: <20250730-topic-dma_genise_cookie-v1-0-b505c1238f9f@oss.qualcomm.com>
- <20250730-topic-dma_genise_cookie-v1-2-b505c1238f9f@oss.qualcomm.com>
- <aIpKz495WI1SJTeB@lizhi-Precision-Tower-5810>
- <20250730180417.GC21430@pendragon.ideasonboard.com>
- <aIpmgpXME1BmThxU@lizhi-Precision-Tower-5810>
- <20250801120007.GB4906@pendragon.ideasonboard.com>
+ <20250730-topic-dma_genise_cookie-v1-3-b505c1238f9f@oss.qualcomm.com>
+ <CAMuHMdV0JO=qtregrrHsBZ-6tpNdPUj3G1_LWRfRsj0vBb+qyw@mail.gmail.com>
 Content-Language: en-US
 From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20250801120007.GB4906@pendragon.ideasonboard.com>
+In-Reply-To: <CAMuHMdV0JO=qtregrrHsBZ-6tpNdPUj3G1_LWRfRsj0vBb+qyw@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Authority-Analysis: v=2.4 cv=JOM7s9Kb c=1 sm=1 tr=0 ts=688e06ae cx=c_pps
- a=WeENfcodrlLV9YRTxbY/uA==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
- a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=EUspDBNiAAAA:8 a=Hh3C_mqfd76DgmRPW0UA:9
- a=QEXdDO2ut3YA:10 a=kacYvNCVWA4VmyqE58fU:22
-X-Proofpoint-GUID: VLbyW2sXjJZIqWBgN0Lah-Nrs-fzRW30
-X-Proofpoint-ORIG-GUID: VLbyW2sXjJZIqWBgN0Lah-Nrs-fzRW30
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODAyMDEwNSBTYWx0ZWRfX26oMp7aupliV
- 8ijFIEdxQeqPNNLUBjq9wLY0bMuz5vCoysmGXG42teWB7ugDpS8Keo2OpAHENwf17yU1tReE48L
- pGcyVilyHoFtt2egOqJ0sS2eBLSSaGco+HKfpR+YEQZh0jBXugBSDyMJRxV92DmVmPr0VQtFC3h
- qX2yxUBQ6hJn3WEPxtW34JnfxinMpCdLJmjQL1c7ZZLz50ot4T63zic6pSM+oINCqbg8rbkYNWj
- lSuM4GtPX7b3AZ4c8oVcEQs+56jSluWw1CWZeXM25SYJpj245HmcYQmR0nNZ5I61x5Re/mrYNhy
- kiDQENp0TxQHyUEWGDyvBMhnn2e3sUaZ0AJduvJGvW9PqNteVt0BBTuGwewVheDcFb4TQnaPLXj
- pfQzXumdsEP8+BIm508pj5w3FqFFykYL/egTMnKqG8Db57VzpzfOGax2nDm3GOfxxZzs6nMx
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODAyMDEwNSBTYWx0ZWRfX3oQpSJlqMWl0
+ LyZ1LNbf5oCr9ekHaAtIYq3d7ADnHn2HE9NP1r4Af3hXVPkVdY744MZ4BJoVmnlzTlPfjESe3L9
+ BJzGwGCnXIc1mN3PMj6VVVJPCfDITvZ665ls7AXlQBUrkYmYZMwrWIkHqMICszNohj8/9DeEmQA
+ bWGUauP0ZH6bwbXw45D+R1Kr7tEVNFiXuR0KILwWjdDbdYQrktOQzGhmcPAziKeh/CeGdbDxXly
+ UPCZOKbG6+nreOWWyE9pSNArmhd+xQpZ/3Z9JUIRkLTz16D81AQzYmW103iL6Y7d4OlDOMNknKl
+ 63SW7tvwZHO9GAnJjbnJadY6EZ3x895+ltqzpyHhXYLaK/kfVBEliiYsz406kbXHOiAdXA4MWZM
+ wVAltQ3bEXofTga0MS9n1DZPpsMod235O0Rmb4JgNJZOpZy9o+awK+IhVfurZdq5Q2G7O4Qz
+X-Proofpoint-GUID: fyOuGehPYXSFV4oF-1Qku1cUPT7rT18c
+X-Authority-Analysis: v=2.4 cv=N88pF39B c=1 sm=1 tr=0 ts=688e071f cx=c_pps
+ a=EVbN6Ke/fEF3bsl7X48z0g==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=VwQbUJbxAAAA:8 a=EUspDBNiAAAA:8
+ a=sidZTQT7lcrlHK7IIakA:9 a=QEXdDO2ut3YA:10 a=a_PwQJl-kcHnX1M80qC6:22
+X-Proofpoint-ORIG-GUID: fyOuGehPYXSFV4oF-1Qku1cUPT7rT18c
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
  definitions=2025-08-01_08,2025-08-01_01,2025-03-28_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- phishscore=0 adultscore=0 suspectscore=0 mlxlogscore=999 spamscore=0
- clxscore=1015 priorityscore=1501 malwarescore=0 lowpriorityscore=0 mlxscore=0
- impostorscore=0 bulkscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2505280000
- definitions=main-2508020105
+ clxscore=1015 malwarescore=0 mlxlogscore=839 spamscore=0 phishscore=0
+ bulkscore=0 adultscore=0 suspectscore=0 impostorscore=0 mlxscore=0
+ lowpriorityscore=0 priorityscore=1501 classifier=spam authscore=0 authtc=n/a
+ authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2508020105
 
-On 8/1/25 2:00 PM, Laurent Pinchart wrote:
-> Hi Frank,
+On 7/30/25 1:32 PM, Geert Uytterhoeven wrote:
+> Hi Konrad,
 > 
-> On Wed, Jul 30, 2025 at 02:37:54PM -0400, Frank Li wrote:
->> On Wed, Jul 30, 2025 at 09:04:17PM +0300, Laurent Pinchart wrote:
->>> On Wed, Jul 30, 2025 at 12:39:43PM -0400, Frank Li wrote:
->>>> On Wed, Jul 30, 2025 at 11:33:29AM +0200, Konrad Dybcio wrote:
->>>>> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
->>>>>
->>>>> The DMA subsystem attempts to make it theoretically possible to pair
->>>>> any DMA block with any user. While that's convenient from a
->>>>> codebase sanity perspective, some blocks are more intertwined.
->>>>>
->>>>> One such case is the Qualcomm GENI, where each wrapper contains a
->>>>> number of Serial Engine instances, each one of which can be programmed
->>>>> to support a different protocol (such as I2C, I3C, SPI, UART, etc.).
->>>>>
->>>>> The GPI DMA it's designed together with, needs to receive the ID of the
->>>>> protocol that's in use, to adjust its behavior accordingly. Currently,
->>>>> that's done through passing that ID through device tree, with each
->>>>> Serial Engine expressed NUM_PROTOCOL times, resulting in terrible
->>>>> dt-bindings that are full of useless copypasta.
->>>>>
->>>>> In a step to cut down on that, let the DMA user give the engine driver
->>>>> a hint at request time.
->>>>>
->>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
->>>>> ---
+> On Wed, 30 Jul 2025 at 11:35, Konrad Dybcio <konradybcio@kernel.org> wrote:
+>> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+>>
+>> Client drivers may now pass hints to dmaengine drivers. GPI DMA's only
+>> consumers (GENI SEs) need to pass a protocol (I2C, I3C, SPI, etc.) ID
+>> to the DMA engine driver, for it to take different actions.
+>>
+>> Currently, that's done through passing that ID through device tree,
+>> with each Serial Engine expressed NUM_PROTOCOL times, resulting in
+>> terrible dt-bindings that are full of useless copypasta.
+>>
+>> To help get rid of that, accept the driver cookie instead, while
+>> keeping backwards compatibility.
+>>
+>> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> 
+> Thanks for your patch!
+> 
+>> --- a/drivers/dma/qcom/gpi.c
+>> +++ b/drivers/dma/qcom/gpi.c
+>> @@ -2145,7 +2151,8 @@ static struct dma_chan *gpi_of_dma_xlate(struct of_phandle_args *args,
+>>         }
+>>
+>>         gchan->seid = seid;
+>> -       gchan->protocol = args->args[2];
+>> +       /* The protocol ID is in the teens range, simply ignore the higher bits */
+>> +       gchan->protocol = (u32)((u64)proto);
+> 
+> A single cast "(uintptr_t)" should be sufficient.
+> Casing the pointer to u64 on 32-bit may trigger:
+> 
+>     warning: cast from pointer to integer of different size
+> [-Wpointer-to-int-cast]
 
-[...]
-
->>>>> diff --git a/include/linux/of_dma.h b/include/linux/of_dma.h
->>>>> index fd706cdf255c61c82ce30ef9a2c44930bef34bc8..9f9bc4207b85d48d73c25aad4b362e7c84c01756 100644
->>>>> --- a/include/linux/of_dma.h
->>>>> +++ b/include/linux/of_dma.h
->>>>> @@ -19,7 +19,7 @@ struct of_dma {
->>>>>  	struct list_head	of_dma_controllers;
->>>>>  	struct device_node	*of_node;
->>>>>  	struct dma_chan		*(*of_dma_xlate)
->>>>> -				(struct of_phandle_args *, struct of_dma *);
->>>>> +				(struct of_phandle_args *, struct of_dma *, void *);
->>>>
->>>> I suggest pass down more informaiton, like client's dev point. So we can
->>>> auto create device link between client's dev and dma chan's device.
->>>
->>> Is .of_dma_xlate() really the right place to do that ? If you want to
->>> create a device link for PM reasons, isn't it better created when the
->>> channel is requested ? It should also be removed when the channel is
->>> freed.
->>
->> I remember just need record client device pointer here.
->>
->>>>
->>>> DMA Engineer device
->>>>    DMA chan device
->>>>        consumer clients' device.
->>>>
->>>> If consumer device runtime pm suspend can auto trigger DMA chan's device's
->>>> runtime pm function.
->>>>
->>>> It will simplifly DMA engine's run time pm manage. Currently many DMA run
->>>> time pm implement as, runtime_pm_get() when alloc and runtime_pm_put() at
->>>> free channel.  But many devices request dma channel at probe, which make
->>>> dma engine work at always 'on' state.
->>>>
->>>> But ideally, dma chan should be resume only when it is used to transfer.
->>>
->>> This is exactly what I was going to mention after reading the last
->>> paragraph. Is there anything that prevents a DMA engine driver to
->>> perform a rutime PM get() when a transfer is submitted
->>
->> DMA description is a queue, It is hard to track each descriptor submit and
->> finished. espcially cycle buffer case.
->>
->> And according to dma engine API defination, submit a descriptor not
->> neccessary to turn on clock, maybe just pure software operation, such as
->> enqueue it to a software list.
->>
->> Many driver call dmaengine_submit() in irq context,  submit new descriptor
->> when previous descriptor finished. runtime_pm_get() can NOT be called in
->> atomic context.
->>
->> And some driver submit many descripor advance. Only issue_transfer() is
->> actually trigger hardware to start transfer.
->>
->> Some client use cycle descripor, such audio devices.  Some audio devices
->> have not free descriptor at their run time suspend function, just disable
->> audio devices's clocks.  Audio devices run time suspend, which means no
->> one use this dma channel, dma channel can auto suspend if built device link
->> between audio device and dma chan devices.
->>
->> Some DMA client have not devices, such as memory to memory. for this kind
->> case, it need keep chan always on.
->>
->> issue_transfer() can be call in atomic context. but trigger hardware transfer
->> need clock and runtime_pm_get() can't be called in atomic context.
->>
->> Most case issue_transfer() is call in irq handle, which means device should
->> already be in runtime resume statue.  DMA engine can safely access their
->> register if using device link.
-> 
-> You have good points there, in particular the fact the issue_transfer()
-> can be called in interrupt context.
-> 
-> For me this calls for new DMA engine operations to "start/stop" the DMA
-> engine (better names are likely needed) from a client perspective.
-> 
->>> and a put() when
->>> it completes ? (Logically speaking, the actual implementation would
->>> likely be a bit different in drivers, but the result would be similar.)
-
-So.. do you folks want me to alter the patch in any way?
+Good point, not compiling for 32-bit always ends up biting.. thanks
 
 Konrad
 
