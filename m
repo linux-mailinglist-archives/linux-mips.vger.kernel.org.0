@@ -1,46 +1,46 @@
-Return-Path: <linux-mips+bounces-9985-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-9986-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27F0AB19758
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Aug 2025 02:27:12 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3546FB197DD
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Aug 2025 02:31:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24FEC18951B9
-	for <lists+linux-mips@lfdr.de>; Mon,  4 Aug 2025 00:27:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 625273AE6CD
+	for <lists+linux-mips@lfdr.de>; Mon,  4 Aug 2025 00:31:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2682119755B;
-	Mon,  4 Aug 2025 00:26:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 638841BD01D;
+	Mon,  4 Aug 2025 00:30:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z03sz03V"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jpFk3MiK"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE6521953BB;
-	Mon,  4 Aug 2025 00:26:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3948018A6B0;
+	Mon,  4 Aug 2025 00:30:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754267217; cv=none; b=SU8XsZlnzTBj/asvHjQINyID/QYL0gU+hJa8uzXVxsDT8EMPltb3utEIU+uQOPGcWSL7Lv4rlXWrIp7ZJ36t/PYSd1jV56aP2TW6nIBYtzX4TpU+Z5Hsd9aSGeiWJdawU/Bk3iSFI2Coi9hGrVlwK9Hb2xOjIou03OjPjQAQ1aU=
+	t=1754267427; cv=none; b=HCBiHP1oNq6+JnVn/GtyEN4SpNgxhD3qf1fw7Ria89Z+WgjmdyrsYHft8B22VAeJqQHaI14pbhv60K4nnsgSr/Q/M2sQbzMb/08t35x7W9D8UCxU0tgegrNmv9C11nzCVj7hZh6fqBO93+s1y25CPzDG8ofzH9rkMq7SNJPrjJY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754267217; c=relaxed/simple;
-	bh=ILa5ZfgqrPlkncC8c94V2KPQ9zh6+csI8lmsrBllFis=;
+	s=arc-20240116; t=1754267427; c=relaxed/simple;
+	bh=bpjOl8QPs/qtwg9quRdOdv7JLK/YtIXcp0IDLoBOWt8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=VHrnQN6w1VIGWmFQFTkVWOuKM8Nf69ITSkeRbqxxKwC4EFfMcocrbPWQp4LuiUL1MZfIdwEb67upafYHkUxX79vcTfgvdtS0vZIQylfoBuVGavW3XmWYuq/hsLPEPYs6OHItyjm92Maf9REnGwuxXW0oOKBwYaQZX4Hci8+0LOw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z03sz03V; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C1CCC4CEEB;
-	Mon,  4 Aug 2025 00:26:55 +0000 (UTC)
+	 MIME-Version; b=GabVFB4NaVYQ0GB/h6TxC9GIQL2yYLSMHxqSSdjKtUbYgPOfMNSqQVpHVbANgQF9raiPIIhYLwfyARJU4RmMKJp60B3A5+YGeavU+mxALOJqyyIiCh+QHTz7qpR6KDEaI2Cq4tNzOq4iA4cyb4a0N2SahMIM/LiY8SVlkCiYIvE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jpFk3MiK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D8C8C4CEEB;
+	Mon,  4 Aug 2025 00:30:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754267216;
-	bh=ILa5ZfgqrPlkncC8c94V2KPQ9zh6+csI8lmsrBllFis=;
+	s=k20201202; t=1754267427;
+	bh=bpjOl8QPs/qtwg9quRdOdv7JLK/YtIXcp0IDLoBOWt8=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Z03sz03V/EYVh60dSYp/XNYxy4AJq4s7kNeuGLR+p5yurZ56sHXvxkntTUBT6ZVcG
-	 2yVEP0fhofc0xgZhpaL9Kl6A+KGwggOdLk5xmRkvqnKgtpR+tUtbZ8cT3hyR75k/zV
-	 locBTe79gSS5mXlnVyIndqIlE6fH7j+TK+EYcyp3HSTaMULBc3kp0VKcr2oqv4tRC/
-	 cv0JWWWuLalyTnKV/G+xGufMs6KY2atHldndsRmar7R6r66u//b2mlrD5o9EeC0P2R
-	 D1/HgtjRhZJRvs0D2iaQpBXdrVB/bHbxw/ssFvDLkFr/yrwhKw3fgtI746F50Lrgg3
-	 Qq3yURs1j+jrQ==
+	b=jpFk3MiKspE9w9ZXIg1evyxQ4yvGaHVeL3jGuoRNqbzxPQLdGtgyULJfOm5+jMig5
+	 fIWI8McIW8Xi+TvszW2Hnu7lGWsCHe6khB368fnmc1QcC7JbSVaTBLA8+f2p2Sy8fu
+	 OeS5HW79wp7nKSNIwF1/DplJ6FyXjvfmX+FnMtM9POGBsjjEYf/i6C1aJHu05fNXfB
+	 c3ItwxLVnlUthqqZCLnvCjda6A8EpNC3QUHXsXnzGge5FnGiZwXLP5tlBU2OI9Y1t5
+	 fJgMnmzLq/CEHAjaDx81OcUBK4zzst0hgShIEgYEGM3xfcztQhWlIu29jNheRrLJZC
+	 OoZIvjGqNDtag==
 From: Sasha Levin <sashal@kernel.org>
 To: patches@lists.linux.dev,
 	stable@vger.kernel.org
@@ -51,12 +51,12 @@ Cc: Markus Stockhausen <markus.stockhausen@gmx.de>,
 	tsbogend@alpha.franken.de,
 	linux-mips@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.16 67/85] irqchip/mips-gic: Allow forced affinity
-Date: Sun,  3 Aug 2025 20:23:16 -0400
-Message-Id: <20250804002335.3613254-67-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.15 62/80] irqchip/mips-gic: Allow forced affinity
+Date: Sun,  3 Aug 2025 20:27:29 -0400
+Message-Id: <20250804002747.3617039-62-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250804002335.3613254-1-sashal@kernel.org>
-References: <20250804002335.3613254-1-sashal@kernel.org>
+In-Reply-To: <20250804002747.3617039-1-sashal@kernel.org>
+References: <20250804002747.3617039-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -65,7 +65,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.16
+X-stable-base: Linux 6.15.9
 Content-Transfer-Encoding: 8bit
 
 From: Markus Stockhausen <markus.stockhausen@gmx.de>
@@ -156,7 +156,7 @@ minimal risk.
  1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/irqchip/irq-mips-gic.c b/drivers/irqchip/irq-mips-gic.c
-index 34e8d09c12a0..19a57c5e2b2e 100644
+index bca8053864b2..1c2284297354 100644
 --- a/drivers/irqchip/irq-mips-gic.c
 +++ b/drivers/irqchip/irq-mips-gic.c
 @@ -375,9 +375,13 @@ static int gic_set_affinity(struct irq_data *d, const struct cpumask *cpumask,
