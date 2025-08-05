@@ -1,140 +1,254 @@
-Return-Path: <linux-mips+bounces-10024-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10025-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C46CB1B00B
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Aug 2025 10:13:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C562B1B5FD
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Aug 2025 16:12:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA69C17B154
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Aug 2025 08:13:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 629CF16F739
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Aug 2025 14:08:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33C672459FE;
-	Tue,  5 Aug 2025 08:13:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F0EE27F74C;
+	Tue,  5 Aug 2025 14:05:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="JswbVhN9"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7191124502D;
-	Tue,  5 Aug 2025 08:13:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2049527F16A
+	for <linux-mips@vger.kernel.org>; Tue,  5 Aug 2025 14:05:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754381593; cv=none; b=AtyHyoOcrJBdJbfs9gVtraV6zIyw2T2EJN87nkBuAVfHYQvzX0/RRi88ykLK2s8mpmnfyJPdjKKMS7IqxYN+6AUDTvE2hzjsGscx0Hwgp9DQp7XAg2itZxHYxhketsRfixLPxLH06RO8TTsVovK2vSjwzNuNnmfsYWmgktGsm2U=
+	t=1754402713; cv=none; b=MGbi88mVgCEUZA3rF+tTGaIgTQ/N7zxF7OFEvatkSHskH4vszwmmeyGUzs9NSdCXKEBS4NwmqmmATwykPs/cCuESnVTAO7D36rnUlE+0AvIZ8T2f8t8um5yFR2EtMbF3JYLYgPraNp+ojVTYL6UYq8dOxx0LIgigNGUGlxSnpRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754381593; c=relaxed/simple;
-	bh=XY5X8rTqj6KCB7z+WOowtTK7MrFk016Y1kqMLEFIi1Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=E0h7DJK0xgp290RvVwaOAmVZiHicoP+4EMXQQxkSGYiVtBv+1S78+XK8kuzoeJTPO76IwebepqXdOXlETV9D0HX+GuS/Mq6cGneanRGYeAMT9hWfoTMknx/Dgk6Vegedfz4yVzZvUl3TO370asMz5M2DZfhoawH4H041VsPgJOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-4fc18de8e1bso1597728137.0;
-        Tue, 05 Aug 2025 01:13:10 -0700 (PDT)
+	s=arc-20240116; t=1754402713; c=relaxed/simple;
+	bh=VwwDGPh3ds9A+awGPqwqcnNh6Gh4WFl0HqGJuWyvkkU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bGkkhO1Jg0S9CuhbSPJHyfAbFg21oBWk0Na5ypLCRhapEYhXlYueJUnpjibja1rEUbpNRE6+DhpT+b9NIK4xlJOWIQp1UxPtzicdwrvIdY3/7e3RohYgLtnLvkwsK7yTI8KPqoJUmITDWjotuEsFLCyrZ0B2b4R7UshecvCrZeY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=JswbVhN9; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5756EICl031483
+	for <linux-mips@vger.kernel.org>; Tue, 5 Aug 2025 14:05:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	FUcLnureUr1s/7YsNTnvW5Csv2CIZeOY1lQ56p5/Cj8=; b=JswbVhN9EiO/3bXB
+	KFFT2FK5zmrdDsAM9Z4O6z5zh7QsngVwmJQyJVPLIRQZy9tXuLlXFzx5q8QeK24Z
+	UuASYCo8lC5r5kPQilhktpk99gMDFXxhv/dT55dfFGKBCQXaaStS6SqslNBHs+Pk
+	6lpCnGjbmxM9hWGEUq1bYfANmhL1k2BCrodCT2z4jODPS9GZvl5Ka+gigTeBZa4j
+	hrLEdMvf9GRA+didrRj1V7EI/VkbiYXs7SbD328oyEfQp3RkEeUY0iTi8A1CYyOi
+	HGtkEWfS1GX9/TR+jdWzEglaT9vngedtZgPPmRClZ0L8g80N1lRCZfR6JAq2vIX7
+	73cJtw==
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 489bek8ph3-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-mips@vger.kernel.org>; Tue, 05 Aug 2025 14:05:09 +0000 (GMT)
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7e802ee0d2aso14089585a.1
+        for <linux-mips@vger.kernel.org>; Tue, 05 Aug 2025 07:05:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754381589; x=1754986389;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=FYbREyEF6GDi+6BqzkUaervyY8mSRtfMj7JERduR6Tc=;
-        b=obqFiUzJ2OPsKkHd0eqTl3a3iv5hfIiUxuCpyjCe/m0Jm0RbWDoMx8Tvx24TjGGopD
-         bh6aT16071W7O0SWwPDOar9xtihYS8bJtfBlrszDuo0aJOBFhjLwq2/HbIUqso40Rh75
-         H97pP8R8amKfQr43DSwZWs5LPcnC+9ZgQFP24BjB6XcwV1Zq6CKSS+sKOITjuknnzTja
-         7cpO+E2jNYIxK01Qys5+8d300u8dN7EA4o5ylOO/OF8/mbeXopzX7nSvcRws1ouWk4UK
-         Ufx7Jbn3yzHpk2PrOP54RV4D1iBYa34EkR2zok/KcI28FTM1IY9+EHvaJwz84FI7H1qc
-         IjuQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU7VXLaRmS9abg7Bp2VG8ACV21ytilyLmvSxoJA1QPkk1rhSWNiDPHKszYrLNuPaAZVp3KdChlMtQxyDg==@vger.kernel.org, AJvYcCUFd8DZl9/8VZ33zhxmpqdBShGS/kznRF7qwx/XG+18AyVDA8UPJV8tKzXHkJvfyOjgKINZsFphTI9QZg==@vger.kernel.org, AJvYcCUrq2ay9MJs0o522tTld/NBRUE5wkWEGYVe38ZR0vVL0U50jAQjF8PuTRc5iUBtydcOWEe9OeEMg0NXQNmL@vger.kernel.org, AJvYcCVhU5tJRl6ifN0WMd5qlx2qM+C+IYPH7zTwh+F05q6fKiqdHq+tiDU4JlIodweE7RSfKrunFkmjhIYfUw==@vger.kernel.org, AJvYcCVlsDVrc3elU6LwNlte/z1r9+75FvCAf7401WmJQ4/t65YzDnRj+s3dTdaregTn+Ip09MEz1BVnfCr5NqAl@vger.kernel.org, AJvYcCWUFzlnMUMFuxWoIssTZ3uoOG2J0cWMFUuuS2SW7p3RThnfPha2LaBJT6mkymMk1LbsGbpPK/G2hNI=@vger.kernel.org, AJvYcCWUM17ywiUSewmsi6e9mWpDjpAtjTTKIhv1U9El1HiEM28iKZWPEVdswVEzPYEO3aq4qVT2Hx8ZTCx+wA==@vger.kernel.org, AJvYcCX/DMi7GixA3rz58ntY9BJyEgDC6Wb+humsIllUOyL1Id3JnYoTxMCjvGW42WkdI4/kz6J724VidcnCPGeIDA==@vger.kernel.org, AJvYcCXRGoxkZVoirASvhObE6uODdKwiFtho6jHLh/jGscZD8pcvoox4xpBTuPA+mNfMq9IBa4FXsArjvJjc+Q==@vger.kernel.org, AJvYcCXZ2zlYcIlo
- 2ke1JnWD5puPRnUeZc9GxMTnZ7Tnnuwm4gGpXM1V7BWWSfSZlptf6c6vc7hnA7AlnMHegGd6WvO9@vger.kernel.org, AJvYcCXjBtlSaqBN4rrAnhmuLIPy0Hq4fuv9p4kp72s3WNVlkwPyxZa7NUtCRY6/ohB8AT9e55Pk6w9iH4LBxSpRl30=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz1Uplx/rjI1GwQN3tLF+QP5AaqwiAXKoGUDQixv2wS6Eo9lK+f
-	KmPfJDwQqNFdp3EYq88fKEtaZRX8IzLaJtnkx5xNBw15MmxsTqkrj6VUpXTASBWd
-X-Gm-Gg: ASbGncvzB1ek0gQb8B52vu9wO0P0ByoequieyX+O5BL0HqnkH96QYKMLZIG/5dWgLpr
-	JUlOqWQTBSUztykQP4V11G0WwZ6fGFxZUiZTuwYqcivzRd+z8OxtB8cLjiAwNMykT8DyZ8Eaphk
-	1C53YForWLfj3n4zXe0rd6aIgwn7SV78jBrhQEEqUJnap0wRkBhMnsDNx50ARsUfan0CR9bq92p
-	F+RaAzHNIuK5UNSZfb+aP74FKkwKfC04AE3LOm1gR6HSin2PgDBjVis1j+54HOJsGOnWBcMgJKq
-	UpCj5Tl4mDYL9peaGkzUEFYn+ss21o1kW17cosB/KQYn8V97EJ7utCzO3bVT+CfT/rsT6IvrtaD
-	Athc1TCBUyHpg7sqMHoYNbQjWGey3j0lEYRhaTOPLSNLTNhcnmKKC90gRHrWKv+De7oF1uPE=
-X-Google-Smtp-Source: AGHT+IFdOe61nFJIUOcSEnlYcSchsWN/94QrRyWLlS24zFBUOfKImNT6AdVPffIk52sInJJy1DiPRg==
-X-Received: by 2002:a05:6102:6cc:b0:4e5:9426:f9e6 with SMTP id ada2fe7eead31-4fdc480e1cbmr4690428137.23.1754381588930;
-        Tue, 05 Aug 2025 01:13:08 -0700 (PDT)
-Received: from mail-ua1-f44.google.com (mail-ua1-f44.google.com. [209.85.222.44])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-88d8f3f016dsm2687418241.15.2025.08.05.01.13.07
+        d=1e100.net; s=20230601; t=1754402707; x=1755007507;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FUcLnureUr1s/7YsNTnvW5Csv2CIZeOY1lQ56p5/Cj8=;
+        b=lN1x4eBdzJh8OC8TZ18q1a/7/lOzHhMwat+INGfnWyTsCJrwUQyeZXXildH+8Ig48E
+         3warx+Vryn3ASFv2bMi1MglesTjlAsyf0RlXs97fuUd+4xdL+E16AUw/OYmeLNar2HRt
+         W5chqfqAVgL3Z74WOCqsDAcxFlVCuFn+IuuhBvFJnKBnyRkv5feDFRTJMkI555ThZ4j1
+         B/qu39VcPvmW5JfEXAvLZ9rHYPZGa10uKHgdaLg+auiivsVarWxw6rbRbT+iYElntWUz
+         lhux7lyWqL1Bxyp8hj7TKjbR3246FTI1E/E3zOEtZEx+UDHfaUOTF85Z4AEyWP+N3KmK
+         swSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWEocMmHqRqyA2zP0of1I1aHLBA1i2ZcCjevsgfuEpPyxwoN0CjNr6MAy+tIY/Q41US9aIzwqfSxPx9@vger.kernel.org
+X-Gm-Message-State: AOJu0YywVqMdOVf3KGl/qp1SkFj9oGfmf6KwJzXmmRCLEOehduW7YTYV
+	5N3CmWAwzJ7VroifsNtTW5iYDY/r3FfHUnyLbex2ww93EACdSe6vySTz17rQ1pd7B/1JUNh8BeZ
+	bf8LeM6+ujt2XD7eo1/h5tIl0MZj7e6L/KvvX+wKYP3ep7AACBtUqKdyoMfKvsxV8
+X-Gm-Gg: ASbGncsEF2vmQafW586n2qjCz9MaDEOzV8YCpdU6/X/7s2gCBTKuRFJBud338VGiWMX
+	JSx2nFvJ3vjXSZhf/88UDPm6c6Do0ubS8SKVZ0IF6tykC7p64dQ0UK+X3TWZUyZbmT8mst4VJqE
+	BGJsuNAdvNCAvtTqrHVyPAErsdubDB4eS5aIbTlmYAkr9gXYIMdGzenRH+ZtQuX+GQoFoJ8QJxO
+	9E4ex4nl7jVh48IC/MWogsLyre4d8ynQZBj51Z/WczwqZ04RBn8d088DdDKC98tm20Ne8AhsYTl
+	7MkerUAZ6C36IQIMU/sI3zti/DWzzmirU805rv+ddOPKkQTEA42Nyfjb3G7igQJTq7/4XTxnIzk
+	7RA4MhOezRUTEpOw19Q==
+X-Received: by 2002:a05:620a:2a14:b0:7e7:fbbe:a193 with SMTP id af79cd13be357-7e7fbbea796mr612198985a.3.1754402706961;
+        Tue, 05 Aug 2025 07:05:06 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGu0CtTCnSeovH7oZZIpOsR6SihrS+IeJBeYEWKx2ZbtzZuol650T7aTGGDwlvwPzoxkQZS7A==
+X-Received: by 2002:a05:620a:2a14:b0:7e7:fbbe:a193 with SMTP id af79cd13be357-7e7fbbea796mr612187885a.3.1754402706081;
+        Tue, 05 Aug 2025 07:05:06 -0700 (PDT)
+Received: from [192.168.43.16] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-615a8f17829sm8316020a12.19.2025.08.05.07.04.59
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 05 Aug 2025 01:13:08 -0700 (PDT)
-Received: by mail-ua1-f44.google.com with SMTP id a1e0cc1a2514c-88bbfe763ecso1192580241.3;
-        Tue, 05 Aug 2025 01:13:07 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCU3qh6UCKMGE7jnkUHkVkzHp4TN4Wfv2ZGwkNTduyZHYnn4utOUPisL0iK0G8QhknqhZ+6zQ9C1l6SgYg==@vger.kernel.org,
- AJvYcCUL4a4H1opxEDW1HuK6XpL8gNKGsMhuWHDKu71TjooXNzA8UuzcrYDTw2mI/a7OwMjpqkpLIuZaad32XkPC8g==@vger.kernel.org,
- AJvYcCUnQjrQVqx1urB49quzXXxpEgU0cwa4XPBQB38Z5e/OcIwrnSUBfwf/uO3ay/8NxNXYns7BNbR2UGvAD4kaX5s=@vger.kernel.org,
- AJvYcCUx40Oiprm67hf9rZSqss4NPrLnptaoZx/jRQQ3UWhbEhrRl0AzoystuV56RnIxGzS2KRoDisEVvJ8=@vger.kernel.org,
- AJvYcCV9WkuIaaPAdVumcqLOVtZcZUWYtOCr99IOZ2vnggBt3srZHb0lVmtd6MugieQwltYxvIQlVzpcsDNBDg==@vger.kernel.org,
- AJvYcCVQPy0vnqWfFSMztPIJJdDhA3RcWX79I9OrNOB/NFm+U6lXmGfbnwT9aAl0z8oy28UCvKV6LU/J4Swk+Q==@vger.kernel.org,
- AJvYcCWdroWswvftkvg8FTzX+tfXLXSO3Vm0WDM7fVmmzQJHqE5f5AxR4k83hYwnzT5IoWOAP0/25qrcGkfjAUmk@vger.kernel.org,
- AJvYcCWgyPjJLJwMAxIJcq8Hqmnwe+2UliWdvG/gLBEg+W7axJ21fU7r/NxTIbh9PU7F/T6l6vDVk5CT60IRMA==@vger.kernel.org,
- AJvYcCWj9H2OperikDSa80G76TUkt4FxIVqEQ99k+B4ckW012p6G2gxEiBp9gWTizDxUvMcCfo5W3e7V6pNMFjjr@vger.kernel.org,
- AJvYcCXOVbbF3haTd6plu5a/9/jHhttGkwXNF43NMhgnwQaGr5LMXDS7nvWTlyQPyE4kJueRUeUTajoK8QLdpQ==@vger.kernel.org,
- AJvYcCXTAUjwr3JWn203O4e3bPaLB1UAVXFJ+13HzLJt/y8CfLELYC0WjISTK9vYJL4PTDOY2MxNXBdrrQKY3Z5CW326@vger.kernel.org
-X-Received: by 2002:a05:6102:3a0b:b0:4d7:11d1:c24e with SMTP id
- ada2fe7eead31-4fdc480dc77mr4806207137.21.1754381587163; Tue, 05 Aug 2025
- 01:13:07 -0700 (PDT)
+        Tue, 05 Aug 2025 07:05:05 -0700 (PDT)
+Message-ID: <96cf6022-ef69-4749-88b0-e18a07bb8427@oss.qualcomm.com>
+Date: Tue, 5 Aug 2025 16:04:58 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250804163910.work.929-kees@kernel.org> <20250804164417.1612371-11-kees@kernel.org>
-In-Reply-To: <20250804164417.1612371-11-kees@kernel.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 5 Aug 2025 10:12:55 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdWRAxGqLxPY0eZkrg4zMr4qY5KUcTqPjNXEKOTeNYGc8A@mail.gmail.com>
-X-Gm-Features: Ac12FXxoASDmKZziFEtov1BZOWBk9xds-hH6z1CBqhINtQO4YVRNUk0c1YQzJUM
-Message-ID: <CAMuHMdWRAxGqLxPY0eZkrg4zMr4qY5KUcTqPjNXEKOTeNYGc8A@mail.gmail.com>
-Subject: Re: [PATCH 11/17] m68k: Add __attribute_const__ to ffs()-family implementations
-To: Kees Cook <kees@kernel.org>
-Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org, x86@kernel.org, 
-	linux-alpha@vger.kernel.org, linux-csky@vger.kernel.org, 
-	linux-hexagon@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
-	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, llvm@lists.linux.dev, 
-	linux-hardening@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 2/6] dmaengine: Make of_dma_request_slave_channel pass
+ a cookie to of_xlate
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Cc: Frank Li <Frank.li@nxp.com>, Konrad Dybcio <konradybcio@kernel.org>,
+        Vinod Koul <vkoul@kernel.org>, Sven Peter <sven@kernel.org>,
+        Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Neal Gompa <neal@gompa.dev>,
+        Ludovic Desroches <ludovic.desroches@microchip.com>,
+        Florian Fainelli <florian.fainelli@broadcom.com>,
+        Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>,
+        Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+        Paul Cercueil <paul@crapouillou.net>,
+        Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+        Viresh Kumar <vireshk@kernel.org>,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Taichi Sugaya <sugaya.taichi@socionext.com>,
+        Takao Orito <orito.takao@socionext.com>,
+        =?UTF-8?Q?Andreas_F=C3=A4rber?=
+ <afaerber@suse.de>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Daniel Mack <daniel@zonque.org>,
+        Haojian Zhuang <haojian.zhuang@gmail.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Magnus Damm <magnus.damm@gmail.com>,
+        Patrice Chotard <patrice.chotard@foss.st.com>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        =?UTF-8?Q?Am=C3=A9lie_Delaunay?= <amelie.delaunay@foss.st.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Chen-Yu Tsai
+ <wens@csie.org>,
+        Jernej Skrabec <jernej.skrabec@gmail.com>,
+        Samuel Holland <samuel@sholland.org>,
+        Laxman Dewangan
+ <ldewangan@nvidia.com>,
+        Jon Hunter <jonathanh@nvidia.com>,
+        Thierry Reding <thierry.reding@gmail.com>,
+        Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+        Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Michal Simek <michal.simek@amd.com>, Rob Herring <robh@kernel.org>,
+        Saravana Kannan <saravanak@google.com>,
+        =?UTF-8?Q?Martin_Povi=C5=A1er?= <povik+lin@cutebit.org>,
+        Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+        Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
+        Viken Dadhaniya <quic_vdadhani@quicinc.com>,
+        Andi Shyti <andi.shyti@kernel.org>,
+        Krzysztof Kozlowski
+ <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Marijn Suijten <marijn.suijten@somainline.org>,
+        dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+        imx@lists.linux.dev, linux-actions@lists.infradead.org,
+        linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+        linux-stm32@st-md-mailman.stormreply.com, linux-sunxi@lists.linux.dev,
+        linux-tegra@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-sound@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-spi@vger.kernel.org
+References: <20250730-topic-dma_genise_cookie-v1-0-b505c1238f9f@oss.qualcomm.com>
+ <20250730-topic-dma_genise_cookie-v1-2-b505c1238f9f@oss.qualcomm.com>
+ <aIpKz495WI1SJTeB@lizhi-Precision-Tower-5810>
+ <20250730180417.GC21430@pendragon.ideasonboard.com>
+ <aIpmgpXME1BmThxU@lizhi-Precision-Tower-5810>
+ <20250801120007.GB4906@pendragon.ideasonboard.com>
+ <0c2cc631-21fd-41fd-9293-fd86dd09a2d2@oss.qualcomm.com>
+ <20250804235140.GB12087@pendragon.ideasonboard.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20250804235140.GB12087@pendragon.ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Authority-Analysis: v=2.4 cv=M7tNKzws c=1 sm=1 tr=0 ts=68920f95 cx=c_pps
+ a=HLyN3IcIa5EE8TELMZ618Q==:117 a=FpWmc02/iXfjRdCD7H54yg==:17
+ a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=EUspDBNiAAAA:8 a=IUwAV-ZVHCOG9dU_XxAA:9
+ a=QEXdDO2ut3YA:10 a=bTQJ7kPSJx9SKPbeHEYW:22
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODA1MDEwMyBTYWx0ZWRfXxMO2eSi0CbO1
+ tiEuo3Gdj4QmTDdYwHUY2B2LbM+JPTWjqgiOnDgLjSvI37MOX9pIcIO3xa/+f3NUqFvP1vwe7F5
+ kvyFGXD6p0NRVj9H3y8Ak174GV3kfAIbcKBqkJDZsOTp1JjdqidfoIGMSXqA8rzX5b8VLWiAGex
+ WVz3o0GsLRk90MFj2TYV37Ckj6ufGVr24f27bv5998iwpbIAq5n9rJzlYRIDnB+6SWM+LK273zh
+ 3rOw02Xr8pghdgCqSAap0/s2p6+uTIiO4m2ZMjJMsjW/hThRqoGw1xvcGaNbwB50Uj2VaFkw0Uh
+ svaPjHoYqV03UvOz6EB7Av8YKkaqA8SZdRhcWQTo0ggrjsoIEUehpy5+N+ySYHoztwcB2vlkpCL
+ Oo9nO6r7dUvgYJOb8UZv1LUIg0D/nd5L47QajFev11M9KOzOr80L1GIH1yD4froyj2ltFIqt
+X-Proofpoint-ORIG-GUID: KIs1sNl3ODpo_rJCMlVugChxbYUm4BDY
+X-Proofpoint-GUID: KIs1sNl3ODpo_rJCMlVugChxbYUm4BDY
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-05_04,2025-08-04_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ impostorscore=0 lowpriorityscore=0 priorityscore=1501 malwarescore=0
+ clxscore=1015 mlxlogscore=999 mlxscore=0 bulkscore=0 spamscore=0
+ suspectscore=0 phishscore=0 adultscore=0 classifier=spam authscore=0
+ authtc=n/a authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2505280000 definitions=main-2508050103
 
-On Mon, 4 Aug 2025 at 18:44, Kees Cook <kees@kernel.org> wrote:
-> While tracking down a problem where constant expressions used by
-> BUILD_BUG_ON() suddenly stopped working[1], we found that an added static
-> initializer was convincing the compiler that it couldn't track the state
-> of the prior statically initialized value. Tracing this down found that
-> ffs() was used in the initializer macro, but since it wasn't marked with
-> __attribute__const__, the compiler had to assume the function might
-> change variable states as a side-effect (which is not true for ffs(),
-> which provides deterministic math results).
->
-> Add missing __attribute_const__ annotations to M68K's implementations
-> of ffs(), __ffs(), fls(), __fls(), and ffz() functions. These are
-> pure mathematical functions that always return the same result for
-> the same input with no side effects, making them eligible for compiler
-> optimization.
->
-> Build tested ARCH=m68k defconfig with GCC m68k-linux-gnu 14.2.0.
->
-> Link: https://github.com/KSPP/linux/issues/364 [1]
-> Signed-off-by: Kees Cook <kees@kernel.org>
+On 8/5/25 1:51 AM, Laurent Pinchart wrote:
+> On Sat, Aug 02, 2025 at 02:37:54PM +0200, Konrad Dybcio wrote:
+>> On 8/1/25 2:00 PM, Laurent Pinchart wrote:
+>>> On Wed, Jul 30, 2025 at 02:37:54PM -0400, Frank Li wrote:
+>>>> On Wed, Jul 30, 2025 at 09:04:17PM +0300, Laurent Pinchart wrote:
+>>>>> On Wed, Jul 30, 2025 at 12:39:43PM -0400, Frank Li wrote:
+>>>>>> On Wed, Jul 30, 2025 at 11:33:29AM +0200, Konrad Dybcio wrote:
+>>>>>>> From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+>>>>>>>
+>>>>>>> The DMA subsystem attempts to make it theoretically possible to pair
+>>>>>>> any DMA block with any user. While that's convenient from a
+>>>>>>> codebase sanity perspective, some blocks are more intertwined.
+>>>>>>>
+>>>>>>> One such case is the Qualcomm GENI, where each wrapper contains a
+>>>>>>> number of Serial Engine instances, each one of which can be programmed
+>>>>>>> to support a different protocol (such as I2C, I3C, SPI, UART, etc.).
+>>>>>>>
+>>>>>>> The GPI DMA it's designed together with, needs to receive the ID of the
+>>>>>>> protocol that's in use, to adjust its behavior accordingly. Currently,
+>>>>>>> that's done through passing that ID through device tree, with each
+>>>>>>> Serial Engine expressed NUM_PROTOCOL times, resulting in terrible
+>>>>>>> dt-bindings that are full of useless copypasta.
+>>>>>>>
+>>>>>>> In a step to cut down on that, let the DMA user give the engine driver
+>>>>>>> a hint at request time.
+>>>>>>>
+>>>>>>> Signed-off-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+>>>>>>> ---
 
-Reviewed-by: Geert Uytterhoeven <geert@linux-m68k.org>
-Acked-by: Geert Uytterhoeven <geert@linux-m68k.org>
+[...]
 
-# ffs: pass:9 fail:0 skip:0 total:9
+>> So.. do you folks want me to alter the patch in any way?
+> 
+> I think the runtime PM issue is orthogonal to the problem this series
+> addresses. It can be addressed separately.
+> 
+> That being said, I'm not a big fan of passing a void pointer to
+> .of_xlate() to carry device-specific information, in a device-specific
+> format. This seems prone to mismatch between clients and DMA engines.
+> .of_xlate() also seems the wrong place to do this. It would be cleaner
+> if we could use another operation, such as dmaengine_slave_config() for
+> instance.
 
-Gr{oetje,eeting}s,
+Right, I noticed that the drivers in question already apparently do the
+very same thing (passing data through a voidptr), inside slave_config
+(via the peripheral_config/_size fields)..
+But that doesn't solve the issue this series is trying to tackle, since
+every DMA consumer driver passes its own structure (or NULL).
 
-                        Geert
+My immediate idea is to add yet another field, but that's lame. The other
+immediate idea would be to put an `u8 variant` at the start of all of 
+these structs ("we have tagged enums at home"), but that's lame *and*
+dangerous.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Ideas?
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+Konrad
 
