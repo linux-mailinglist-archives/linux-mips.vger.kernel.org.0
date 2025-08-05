@@ -1,65 +1,139 @@
-Return-Path: <linux-mips+bounces-10027-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10028-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0E343B1B917
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Aug 2025 19:17:03 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id DFCFCB1BC64
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Aug 2025 00:08:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 04C3917D818
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Aug 2025 17:17:03 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B465E4E12F8
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Aug 2025 22:08:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA3341F8EEC;
-	Tue,  5 Aug 2025 17:16:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AED6724C692;
+	Tue,  5 Aug 2025 22:08:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bRYG99sc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b2NjuO8i"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8606F1C01;
-	Tue,  5 Aug 2025 17:16:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C80BD200127;
+	Tue,  5 Aug 2025 22:08:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754414217; cv=none; b=QFSwtLPnX8Yp+BlVAUa6+L1yHLiwsUa7vv6zsYpJRKy2gJF7gqaF7n4VhkuLOVv31BjiksK4DiDYAYfA8ubpifkRwATUA8NxfXR1LvJpvKjzf4fZiG7pssLukKThwJSDp/bpH6fiNs/EH4WcUvy2HAGHi332v4uFGHohaIeAjGE=
+	t=1754431715; cv=none; b=EpC2It5y7dcM7aqZwagOxgTyeM04F/Kw79mpFwoN06fUi1eMzE1GnP8zy0hI3IWaxTAJmaYpyp2/wo1005vm/tQNUXsv9A+S9NL009YjlDSyywHidyQ03IjpEegHa95/mvfkyfw+Igne6wXNbqeIGtsRQYYlax4fennFav8Zt7Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754414217; c=relaxed/simple;
-	bh=YfPLugcY/4DNYLvJWGV+HUVg0Siur4tr4bhOtIjPq3c=;
+	s=arc-20240116; t=1754431715; c=relaxed/simple;
+	bh=/aoxjBnanB6z5ZymLaTy2qG1GykI0n2CxoPSGTJMDc4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hblrzJmXVpwYiKZQ3gidYAaQEBHDl/20OmcnbQG6ehJu3kJCrF4jHhmektoG0rY4qffdEHWGU1KdkCX3i7jYVhABr+5wBkhXb8O3+9rSUqWRmnqIp6F2uca4q2cgyZcPHvwph7/p4dfLyi5tVbyJbRv693hqEcn3WCiOfM/vzAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bRYG99sc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 762CBC4CEF0;
-	Tue,  5 Aug 2025 17:16:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754414216;
-	bh=YfPLugcY/4DNYLvJWGV+HUVg0Siur4tr4bhOtIjPq3c=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bRYG99scX5PpcPD92+lXtvbuNPsFs1I6wKB5/PXi/6ldu2DQpZe+ntBllKw1dCqu0
-	 vztlgCn9/cBqwNnXtFy8Q91/UQlNGVdl/iqdUNSoOqhbryjPDerQBCxto3nwMfh6Uw
-	 xY5kn00Yt0nPi71vufuyf74O2qgJhSKRtDhcV80MMAVGMIzU6bjyX43oroScX1yKmp
-	 B3v/Fq+/VCem8zYFbOPxA+GPZ+QSdQine5wA9kEprm9h0V6fRk2qjFhmDILnPWWOqW
-	 GSZV4xr71jAJtUnusPCPxeKZZ2hChxgvS6z9PbfRVR8IPA58TMq5pEtz5ZrMhteDPp
-	 Pfob2koRbbVJA==
-Date: Tue, 5 Aug 2025 10:15:58 -0700
-From: Eric Biggers <ebiggers@kernel.org>
-To: Simon Richter <Simon.Richter@hogyros.de>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
-	linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Ard Biesheuvel <ardb@kernel.org>,
-	"Jason A . Donenfeld" <Jason@zx2c4.com>, linux-mips@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org
-Subject: Re: Crypto use cases
-Message-ID: <20250805171558.GC1286@sol>
-References: <20250803204433.75703-1-ebiggers@kernel.org>
- <20250803204433.75703-4-ebiggers@kernel.org>
- <593b6997-9da4-439c-ba82-84e8bb2ed980@csgroup.eu>
- <20250804180923.GA54248@google.com>
- <187412bd-3ae0-4fe8-b526-f96af6bea6dc@csgroup.eu>
- <20250804225901.GC54248@google.com>
- <913e23f9-d039-4de1-a0d3-d1067dcda8ac@hogyros.de>
- <20250805045846.GA10695@sol>
- <854efc41-c40f-46c9-b8ae-84bda9d17faa@hogyros.de>
+	 Content-Type:Content-Disposition:In-Reply-To; b=DyDB85tvR610tvDSoFcMTV/SyXAlh/vpyOO2ExdNNMC5lj6mmPUZIcntAoQe/O6/aT7/yEprwTK2tHGPknLuQ3Jvl3l0gRoYKsR+PKFEL3E5vMsTyBFSWqyX7Wl8ShIvC30a+kDBX9tZHroa9DvQaE0WkBDS4f4oKGwUQOwGiFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b2NjuO8i; arc=none smtp.client-ip=192.198.163.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1754431714; x=1785967714;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=/aoxjBnanB6z5ZymLaTy2qG1GykI0n2CxoPSGTJMDc4=;
+  b=b2NjuO8iTJIz0Qa11KYK5cBntET/zISaNwW9gGnM4qCOKwKQaFWzjRUZ
+   hlqv+3DlBUvapOVF8iKTD6fONZcj984qRGr6P43l6oWhW0ULbrfWMLayv
+   MRrBaU3zi7UTtOpdD2yYVGNP0DW9Jo0+MMixRGHLK781k/+C16X+goEY0
+   cHdLG2twL40QWhyV0/sMNTI6FllBwtQxUo0KWN2cUMGpcuFaWmzt5JcLI
+   lzPf7ZwXqxZzfp9kBBK7SKgEXqPb+fXDYArw/1K4Iw1MYgwAJJQMNxC6G
+   Jpy4vufPM89a9/u21rben3iuTNjdIMbgUcP5yH+hlnK0AnrsRrQIBotkN
+   Q==;
+X-CSE-ConnectionGUID: 7JyA5hHQQF+77Qe2lZlMPA==
+X-CSE-MsgGUID: IeyhPkPyQQSJhwRlOc8Tqg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11513"; a="44334918"
+X-IronPort-AV: E=Sophos;i="6.17,268,1747724400"; 
+   d="scan'208";a="44334918"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2025 15:08:31 -0700
+X-CSE-ConnectionGUID: cvABU6gySmCN+nSbWkFxIg==
+X-CSE-MsgGUID: QOXnb3dlQReNBMfKeCvA3A==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,268,1747724400"; 
+   d="scan'208";a="164139100"
+Received: from smile.fi.intel.com ([10.237.72.52])
+  by fmviesa007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2025 15:08:13 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1ujPpG-00000003rhU-3uHR;
+	Wed, 06 Aug 2025 01:08:06 +0300
+Date: Wed, 6 Aug 2025 01:08:06 +0300
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Konrad Dybcio <konradybcio@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>,
+	Ludovic Desroches <ludovic.desroches@microchip.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+	Viresh Kumar <vireshk@kernel.org>, Frank Li <Frank.Li@nxp.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Taichi Sugaya <sugaya.taichi@socionext.com>,
+	Takao Orito <orito.takao@socionext.com>,
+	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Daniel Mack <daniel@zonque.org>,
+	Haojian Zhuang <haojian.zhuang@gmail.com>,
+	Robert Jarzmik <robert.jarzmik@free.fr>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Magnus Damm <magnus.damm@gmail.com>,
+	Patrice Chotard <patrice.chotard@foss.st.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	=?iso-8859-1?Q?Am=E9lie?= Delaunay <amelie.delaunay@foss.st.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Laxman Dewangan <ldewangan@nvidia.com>,
+	Jon Hunter <jonathanh@nvidia.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Peter Ujfalusi <peter.ujfalusi@gmail.com>,
+	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+	Masami Hiramatsu <mhiramat@kernel.org>,
+	Michal Simek <michal.simek@amd.com>,
+	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+	Rob Herring <robh@kernel.org>,
+	Saravana Kannan <saravanak@google.com>,
+	Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
+	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
+	Viken Dadhaniya <quic_vdadhani@quicinc.com>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+	linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	imx@lists.linux.dev, linux-actions@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-sound@vger.kernel.org,
+	linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Subject: Re: [PATCH RFC 3/6] dmaengine: qcom: gpi: Accept protocol ID hints
+Message-ID: <aJKAxkXO7csIi5Oi@smile.fi.intel.com>
+References: <20250730-topic-dma_genise_cookie-v1-0-b505c1238f9f@oss.qualcomm.com>
+ <20250730-topic-dma_genise_cookie-v1-3-b505c1238f9f@oss.qualcomm.com>
+ <CAMuHMdV0JO=qtregrrHsBZ-6tpNdPUj3G1_LWRfRsj0vBb+qyw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -68,79 +142,33 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <854efc41-c40f-46c9-b8ae-84bda9d17faa@hogyros.de>
+In-Reply-To: <CAMuHMdV0JO=qtregrrHsBZ-6tpNdPUj3G1_LWRfRsj0vBb+qyw@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Tue, Aug 05, 2025 at 04:17:49PM +0900, Simon Richter wrote:
-> Hi,
+On Wed, Jul 30, 2025 at 01:32:58PM +0200, Geert Uytterhoeven wrote:
+> On Wed, 30 Jul 2025 at 11:35, Konrad Dybcio <konradybcio@kernel.org> wrote:
+
+...
+
+> > +       /* The protocol ID is in the teens range, simply ignore the higher bits */
+> > +       gchan->protocol = (u32)((u64)proto);
 > 
-> On 8/5/25 13:58, Eric Biggers wrote:
+> A single cast "(uintptr_t)" should be sufficient.
+
+FWIW, this means (unsigned long) as Torvalds is quite against uintptr_t in the kernel.
+
+> Casing the pointer to u64 on 32-bit may trigger:
 > 
-> > What does this have to do with this thread, which is about the PowerPC
-> > optimized MD5 code?
+>     warning: cast from pointer to integer of different size
+> [-Wpointer-to-int-cast]
 > 
-> Hence the new subject. It is still related to removal of code, but asks
-> about the bigger picture.
-> 
-> The code removal changes you've been pushing lately absolutely make sense in
-> the context of "the crypto subsystem is for internal use by the kernel, and
-> all known users will only ever submit small work items."
-> 
-> However, there is also the userspace API, and hardware accelerators also
-> register with the crypto subsystem, so it is *also* the way for userspace to
-> use specialized hardware.
-> 
-> If these are separate, then it makes sense to acknowledge that the kernel
-> will never use asynchronous transforms for anything, simplify the internal
-> API, and move all the hardware support to a separate registry that is for
-> userspace applications only.
+> >         return dma_get_slave_channel(&gchan->vc.chan);
+> >  }
 
-I think you're grouping together different things that aren't actually
-very related.  For example this patch series proposed removing some
-software code, not async drivers.  The only async driver I removed
-recently is one of the crc32c ones.
+-- 
+With Best Regards,
+Andy Shevchenko
 
-Doesn't lib/crypto/ largely accomplish what you're thinking of as
-"separate registries"?  As we migrate more in-kernel users to
-lib/crypto/, the old-school crypto API becomes more focused just on
-accomodating AF_ALG users.  However, that is, and will continue to be, a
-long process.  In the mean time we still have many in-kernel users of
-the old-school crypto API to decide what to do with.
 
-> I'm also not convinced that fscrypt cannot ever learn to submit a single
-> large request or a large batch of small requests if it is asked to decrypt a
-> large file, so in my opinion the common registry makes more sense.
-
-It's certainly never going to be the entire file or a single batch.
-That's just not how filesystems work.
-
-As for offloading entire I/O requests, fscrypt already supports that,
-just for inline crypto engines instead of the old-school separate ones.
-Inline encryption is fundamentally much more efficient.  The same
-efficiency can't be achieved with a separate engine, even with a large
-batch.  If people would like to continue to explore that approach
-anyway, they're free to do so, but it's not a promising approach, at
-least not on any of the platforms I examined.  (And pointing to
-irrelevant data, like for compression, is not helpful.)
-
-> Making sure that hardware support actually works and is tested is the
-> responsibility of the driver and port maintainers. We understand that
-> subsystem maintainers do not have all the hardware available, but the same
-> goes for all the other subsystems -- the DRM maintainers routinely merge
-> drivers for hardware they do not own, because the changes come from people
-> who *do* own the hardware, and have tested the changes.
-> 
-> The latter is a project management issue, mostly: if there is a lack of
-> working relationships with driver and port maintainers, then that needs to
-> be fixed, not assumed to be an unchangeable part of the environment that
-> technical decisions are made in.
-
-This significantly understates the challenge that exists with a large
-number of drivers, including orphaned drivers and architectures, as well
-as the high standard of correctness that cryptography code needs to have
-vs. more everyday device drivers.  And also the fact that async offload
-drivers are fundamentally much harder to get correct than software code.
-The odds are really stacked against everyone here, and I think calling
-it a "project management issue" largely misses the point.
-
-- Eric
 
