@@ -1,174 +1,141 @@
-Return-Path: <linux-mips+bounces-10028-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10029-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFCFCB1BC64
-	for <lists+linux-mips@lfdr.de>; Wed,  6 Aug 2025 00:08:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 48BFBB1BC83
+	for <lists+linux-mips@lfdr.de>; Wed,  6 Aug 2025 00:30:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B465E4E12F8
-	for <lists+linux-mips@lfdr.de>; Tue,  5 Aug 2025 22:08:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D60A86280C8
+	for <lists+linux-mips@lfdr.de>; Tue,  5 Aug 2025 22:30:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AED6724C692;
-	Tue,  5 Aug 2025 22:08:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A2AD2609CC;
+	Tue,  5 Aug 2025 22:30:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="b2NjuO8i"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uI+dm8Jr"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C80BD200127;
-	Tue,  5 Aug 2025 22:08:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2DB4215198;
+	Tue,  5 Aug 2025 22:30:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754431715; cv=none; b=EpC2It5y7dcM7aqZwagOxgTyeM04F/Kw79mpFwoN06fUi1eMzE1GnP8zy0hI3IWaxTAJmaYpyp2/wo1005vm/tQNUXsv9A+S9NL009YjlDSyywHidyQ03IjpEegHa95/mvfkyfw+Igne6wXNbqeIGtsRQYYlax4fennFav8Zt7Q=
+	t=1754433007; cv=none; b=SxDn1x7wGK2qc+2JbeptRhRqE3kxqgstVxmLHiajVAlHS/2Scm9LI0Bnsj8jQ2YNk4mOqgPPhIh7XJEJ+6zL0FYf/qNe/D+AdfwDp1EM1QSi39iIClcsJH0/LwDLbqRPVmNTqNwggJdAivw6MQ/zz+10ob8Mg9hvwldqgML2Ao8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754431715; c=relaxed/simple;
-	bh=/aoxjBnanB6z5ZymLaTy2qG1GykI0n2CxoPSGTJMDc4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DyDB85tvR610tvDSoFcMTV/SyXAlh/vpyOO2ExdNNMC5lj6mmPUZIcntAoQe/O6/aT7/yEprwTK2tHGPknLuQ3Jvl3l0gRoYKsR+PKFEL3E5vMsTyBFSWqyX7Wl8ShIvC30a+kDBX9tZHroa9DvQaE0WkBDS4f4oKGwUQOwGiFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=b2NjuO8i; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1754431714; x=1785967714;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/aoxjBnanB6z5ZymLaTy2qG1GykI0n2CxoPSGTJMDc4=;
-  b=b2NjuO8iTJIz0Qa11KYK5cBntET/zISaNwW9gGnM4qCOKwKQaFWzjRUZ
-   hlqv+3DlBUvapOVF8iKTD6fONZcj984qRGr6P43l6oWhW0ULbrfWMLayv
-   MRrBaU3zi7UTtOpdD2yYVGNP0DW9Jo0+MMixRGHLK781k/+C16X+goEY0
-   cHdLG2twL40QWhyV0/sMNTI6FllBwtQxUo0KWN2cUMGpcuFaWmzt5JcLI
-   lzPf7ZwXqxZzfp9kBBK7SKgEXqPb+fXDYArw/1K4Iw1MYgwAJJQMNxC6G
-   Jpy4vufPM89a9/u21rben3iuTNjdIMbgUcP5yH+hlnK0AnrsRrQIBotkN
-   Q==;
-X-CSE-ConnectionGUID: 7JyA5hHQQF+77Qe2lZlMPA==
-X-CSE-MsgGUID: IeyhPkPyQQSJhwRlOc8Tqg==
-X-IronPort-AV: E=McAfee;i="6800,10657,11513"; a="44334918"
-X-IronPort-AV: E=Sophos;i="6.17,268,1747724400"; 
-   d="scan'208";a="44334918"
-Received: from fmviesa007.fm.intel.com ([10.60.135.147])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2025 15:08:31 -0700
-X-CSE-ConnectionGUID: cvABU6gySmCN+nSbWkFxIg==
-X-CSE-MsgGUID: QOXnb3dlQReNBMfKeCvA3A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.17,268,1747724400"; 
-   d="scan'208";a="164139100"
-Received: from smile.fi.intel.com ([10.237.72.52])
-  by fmviesa007.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Aug 2025 15:08:13 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1ujPpG-00000003rhU-3uHR;
-	Wed, 06 Aug 2025 01:08:06 +0300
-Date: Wed, 6 Aug 2025 01:08:06 +0300
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Konrad Dybcio <konradybcio@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Neal Gompa <neal@gompa.dev>,
-	Ludovic Desroches <ludovic.desroches@microchip.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-	Viresh Kumar <vireshk@kernel.org>, Frank Li <Frank.Li@nxp.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Taichi Sugaya <sugaya.taichi@socionext.com>,
-	Takao Orito <orito.takao@socionext.com>,
-	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Daniel Mack <daniel@zonque.org>,
-	Haojian Zhuang <haojian.zhuang@gmail.com>,
-	Robert Jarzmik <robert.jarzmik@free.fr>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Patrice Chotard <patrice.chotard@foss.st.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	=?iso-8859-1?Q?Am=E9lie?= Delaunay <amelie.delaunay@foss.st.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Laxman Dewangan <ldewangan@nvidia.com>,
-	Jon Hunter <jonathanh@nvidia.com>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-	Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
-	Masami Hiramatsu <mhiramat@kernel.org>,
-	Michal Simek <michal.simek@amd.com>,
-	Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-	Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Martin =?utf-8?Q?Povi=C5=A1er?= <povik+lin@cutebit.org>,
-	Liam Girdwood <lgirdwood@gmail.com>,
-	Mark Brown <broonie@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
-	Takashi Iwai <tiwai@suse.com>,
-	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>,
-	Mukesh Kumar Savaliya <quic_msavaliy@quicinc.com>,
-	Viken Dadhaniya <quic_vdadhani@quicinc.com>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
-	asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-	linux-rpi-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	imx@lists.linux.dev, linux-actions@lists.infradead.org,
-	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-sound@vger.kernel.org,
-	linux-i2c@vger.kernel.org, linux-spi@vger.kernel.org,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: Re: [PATCH RFC 3/6] dmaengine: qcom: gpi: Accept protocol ID hints
-Message-ID: <aJKAxkXO7csIi5Oi@smile.fi.intel.com>
-References: <20250730-topic-dma_genise_cookie-v1-0-b505c1238f9f@oss.qualcomm.com>
- <20250730-topic-dma_genise_cookie-v1-3-b505c1238f9f@oss.qualcomm.com>
- <CAMuHMdV0JO=qtregrrHsBZ-6tpNdPUj3G1_LWRfRsj0vBb+qyw@mail.gmail.com>
+	s=arc-20240116; t=1754433007; c=relaxed/simple;
+	bh=7ylTPhqKIZKqcaCZzAUkFz0JFvQR09C/unf3SduQA68=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=c5HwvTk5ybnUnh5nXjZEy3gpAwnJBSdbHP/Brb1INqexzrzM0yUB/mKV9+0vBVuEsLNNRNWOjm46O7HsqAHKDMtjYEG1slxvoVLBFOuArvf8XJ9p6XAzDLsPGhlx55LoRGIx4D6rC1wQzh/u6NrD4mhpWEjUDX7MQSb1biGGE0I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uI+dm8Jr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E859BC4CEF0;
+	Tue,  5 Aug 2025 22:30:05 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1754433006;
+	bh=7ylTPhqKIZKqcaCZzAUkFz0JFvQR09C/unf3SduQA68=;
+	h=From:To:Cc:Subject:Date:From;
+	b=uI+dm8JrGYlbEptuLosbA376eEtZB3eyNYrv7b5JBvFPQSxCZXVXb+gHdeAkVZAes
+	 C7h6VOmn3DI/jO1iy81zLEC64c4bGfyw7Xn1Z0gnFy3GJHHOODVU18dw+NdH1UWatj
+	 vaXBnMEEqR96Fv81P8iqtkf9SM968MEnDOXEbpZK9NSiIOqsPL9UnF1/uYElHxkTYu
+	 dY5FExx/Gh0Gp1GVh50gEomRbvqQ+P66nq3xIquMXRh0O5aCUvUnJdWS4lYwTdf+HX
+	 WWcGDMVh0kOnqKg5kB9kPMbBGYyW95b52Zn6HoJXKITouqAY2RYQZoO/Ia1q1ZoMK2
+	 9UAsRpJ37UeVg==
+From: Eric Biggers <ebiggers@kernel.org>
+To: linux-crypto@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org,
+	Ard Biesheuvel <ardb@kernel.org>,
+	"Jason A . Donenfeld" <Jason@zx2c4.com>,
+	linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	sparclinux@vger.kernel.org,
+	Eric Biggers <ebiggers@kernel.org>
+Subject: [PATCH v2 0/7] MD5 library functions
+Date: Tue,  5 Aug 2025 15:28:48 -0700
+Message-ID: <20250805222855.10362-1-ebiggers@kernel.org>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMuHMdV0JO=qtregrrHsBZ-6tpNdPUj3G1_LWRfRsj0vBb+qyw@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+Content-Transfer-Encoding: 8bit
 
-On Wed, Jul 30, 2025 at 01:32:58PM +0200, Geert Uytterhoeven wrote:
-> On Wed, 30 Jul 2025 at 11:35, Konrad Dybcio <konradybcio@kernel.org> wrote:
+This series is targeting libcrypto-next and can also be retrieved from:
 
-...
+    git fetch https://git.kernel.org/pub/scm/linux/kernel/git/ebiggers/linux.git md5-lib-v2
 
-> > +       /* The protocol ID is in the teens range, simply ignore the higher bits */
-> > +       gchan->protocol = (u32)((u64)proto);
-> 
-> A single cast "(uintptr_t)" should be sufficient.
+This series introduces a library API for MD5 and HMAC-MD5 and
+reimplements the crypto_shash "md5" and "hmac(md5)" on top of it.
 
-FWIW, this means (unsigned long) as Torvalds is quite against uintptr_t in the kernel.
+The library API will also be usable directly by various in-kernel users
+that are stuck with MD5 due to having to implement legacy protocols.
 
-> Casing the pointer to u64 on 32-bit may trigger:
-> 
->     warning: cast from pointer to integer of different size
-> [-Wpointer-to-int-cast]
-> 
-> >         return dma_get_slave_channel(&gchan->vc.chan);
-> >  }
+This should again look quite boring and familiar, as it mirrors the
+SHA-1 and SHA-2 changes closely.
 
+Changed in v2:
+  - Kept the architecture-optimized MD5 code, since unfortunately there
+    were objections to removing it.
+
+Eric Biggers (7):
+  lib/crypto: md5: Add MD5 and HMAC-MD5 library functions
+  lib/crypto: mips/md5: Migrate optimized code into library
+  mips: cavium-octeon: Move octeon-crypto.c into parent dir
+  lib/crypto: powerpc/md5: Migrate optimized code into library
+  lib/crypto: sparc/md5: Migrate optimized code into library
+  crypto: md5 - Wrap library and add HMAC support
+  lib/crypto: tests: Add KUnit tests for MD5 and HMAC-MD5
+
+ arch/mips/cavium-octeon/Makefile              |   2 +-
+ arch/mips/cavium-octeon/crypto/Makefile       |   8 -
+ arch/mips/cavium-octeon/crypto/octeon-md5.c   | 214 -----------
+ .../{crypto => }/octeon-crypto.c              |   0
+ arch/mips/configs/cavium_octeon_defconfig     |   1 -
+ arch/mips/crypto/Kconfig                      |  10 -
+ arch/powerpc/configs/powernv_defconfig        |   1 -
+ arch/powerpc/configs/ppc64_defconfig          |   1 -
+ arch/powerpc/crypto/Kconfig                   |   8 -
+ arch/powerpc/crypto/Makefile                  |   2 -
+ arch/powerpc/crypto/md5-glue.c                |  99 -----
+ arch/sparc/crypto/Kconfig                     |  10 -
+ arch/sparc/crypto/Makefile                    |   4 -
+ arch/sparc/crypto/md5_glue.c                  | 174 ---------
+ crypto/Kconfig                                |   2 +-
+ crypto/md5.c                                  | 359 ++++++++----------
+ crypto/testmgr.c                              |   3 +
+ drivers/crypto/img-hash.c                     |   2 +-
+ include/crypto/md5.h                          | 181 ++++++++-
+ lib/crypto/Kconfig                            |  13 +
+ lib/crypto/Makefile                           |  12 +
+ lib/crypto/md5.c                              | 322 ++++++++++++++++
+ lib/crypto/mips/md5.h                         |  65 ++++
+ .../crypto => lib/crypto/powerpc}/md5-asm.S   |   0
+ lib/crypto/powerpc/md5.h                      |  12 +
+ lib/crypto/sparc/md5.h                        |  48 +++
+ .../crypto => lib/crypto/sparc}/md5_asm.S     |   0
+ lib/crypto/tests/Kconfig                      |  10 +
+ lib/crypto/tests/Makefile                     |   1 +
+ lib/crypto/tests/md5-testvecs.h               | 186 +++++++++
+ lib/crypto/tests/md5_kunit.c                  |  39 ++
+ 31 files changed, 1060 insertions(+), 729 deletions(-)
+ delete mode 100644 arch/mips/cavium-octeon/crypto/Makefile
+ delete mode 100644 arch/mips/cavium-octeon/crypto/octeon-md5.c
+ rename arch/mips/cavium-octeon/{crypto => }/octeon-crypto.c (100%)
+ delete mode 100644 arch/powerpc/crypto/md5-glue.c
+ delete mode 100644 arch/sparc/crypto/md5_glue.c
+ create mode 100644 lib/crypto/md5.c
+ create mode 100644 lib/crypto/mips/md5.h
+ rename {arch/powerpc/crypto => lib/crypto/powerpc}/md5-asm.S (100%)
+ create mode 100644 lib/crypto/powerpc/md5.h
+ create mode 100644 lib/crypto/sparc/md5.h
+ rename {arch/sparc/crypto => lib/crypto/sparc}/md5_asm.S (100%)
+ create mode 100644 lib/crypto/tests/md5-testvecs.h
+ create mode 100644 lib/crypto/tests/md5_kunit.c
+
+
+base-commit: 186f3edfdd41f2ae87fc40a9ccba52a3bf930994
 -- 
-With Best Regards,
-Andy Shevchenko
-
+2.50.1
 
 
