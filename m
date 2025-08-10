@@ -1,69 +1,50 @@
-Return-Path: <linux-mips+bounces-10045-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10046-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28109B1EB7F
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Aug 2025 17:20:24 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id E080DB1FC1C
+	for <lists+linux-mips@lfdr.de>; Sun, 10 Aug 2025 23:12:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D50815A15E6
-	for <lists+linux-mips@lfdr.de>; Fri,  8 Aug 2025 15:20:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B18A173D29
+	for <lists+linux-mips@lfdr.de>; Sun, 10 Aug 2025 21:12:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54E5E28369A;
-	Fri,  8 Aug 2025 15:19:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98F6621D5AA;
+	Sun, 10 Aug 2025 21:12:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TRI/MDRQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gwjn8bTb"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29D6C283141;
-	Fri,  8 Aug 2025 15:19:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66CF17E0E8;
+	Sun, 10 Aug 2025 21:12:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754666394; cv=none; b=BwWuWRAu3jeCOJLHkp4ENqZvO7HjnvX6fQBxNQOtzm6mLwHuZCWy3lmLt92zs/tB5VT9kkYhCJN53oogc856Gp+QF/MJ1L/d144mVcqAeN+RMNMcVHnHyL6y9QWpEJFkT62XUWL0wQ0r2ghwc7UqkGv7NvJOXu8boRwGup4VcKI=
+	t=1754860323; cv=none; b=SZNfJBlPZ7pFbGAMR+GLsuVyJOxzc3gAed0YwoirUVr3OIhoARDBT5ywDFk+2feom//RQT1phtGsEfITj4fAwl49XacwptPCsaoDKU6UNlalMyHTkXTiSMZCMyQa0/jFi17epQRmthHvSc9Pl10uBTxCk4ogGgR47kvdLYQsprg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754666394; c=relaxed/simple;
-	bh=jrVReShttlw4WSCG9fL1fq8w/f/q4FwWTmPVMp4s4uo=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=tXWD/jLwehkE45hNRF7FmHUtqfxtWyIjgdGoV+alc68f96CxhWSBVo0CuS4zPu+YO+UdSEFKkiRq5VbsIpV06IaM8TKCIHuj8r+xFpAhbDWMTGgDSD0xKz3lKbd/eqq5ZzWroAQduOf9CfnhY3jfq6wY8UddSFd+VZLtrA8aYVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TRI/MDRQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C509EC4CEF4;
-	Fri,  8 Aug 2025 15:19:50 +0000 (UTC)
+	s=arc-20240116; t=1754860323; c=relaxed/simple;
+	bh=XrfQgl5l4McAsqhy747liDQB2Wk7PKkiU9eU9e0wRRM=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=OYdmxN84gKsklqX1Oq9/g5TA05Yf/CW5nJZG0MxU++qUmmjSqy7zUCKa5Jg+FvAbG2/v61gDByMCVVQqWn3ZZTF1Vl8SQxwwo2hAWkkjvF5xr+sJ6BYizVPdTsj/YsxKXEd0+E+JxFxrawIwvksL2slW06R0cCtjNp+Rez0Awq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gwjn8bTb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DED3CC4CEEB;
+	Sun, 10 Aug 2025 21:12:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754666393;
-	bh=jrVReShttlw4WSCG9fL1fq8w/f/q4FwWTmPVMp4s4uo=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=TRI/MDRQD/kmJpJT7zK8JUMsUT6WicR1LCz6OLha8IFsvJQXXxQQ/MQFNnfRxLH2B
-	 DQ1GygEY6m5sjY7h3QyDwx2J+gTDn/Ztbivh/+N0ktALuqc0uCMUiwXwJtXdrFd437
-	 P8Vf4HEJmo6JJM07KU25taUl7eu7f1IVH7H7dOexAPdlzMqODTgwUkvwc812VB7jIR
-	 C9hGmviJJq4tr57qPYJL3ts7Mz20iegMlC9uv/FsOSiqRn6+LX2gofBrdPhda3h1HO
-	 QojBpK8WyGTD569K96ma57Rc+QJM6y1FTmdrxJjA8ZeVYDRDpb8/cYdmUGbwCsqn/+
-	 dS5qW/6ezOCsQ==
-From: Arnd Bergmann <arnd@kernel.org>
-To: Bartosz Golaszewski <brgl@bgdev.pl>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	linux-gpio@vger.kernel.org,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Arnd Bergmann <arnd@arndb.de>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
-	Masahiro Yamada <masahiroy@kernel.org>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Caleb James DeLisle <cjd@cjdns.fr>,
-	Eric Biggers <ebiggers@kernel.org>,
-	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
-	Dave Vasilevsky <dave@vasilevsky.ca>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 03/21] mips: select legacy gpiolib interfaces where used
-Date: Fri,  8 Aug 2025 17:17:47 +0200
-Message-Id: <20250808151822.536879-4-arnd@kernel.org>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250808151822.536879-1-arnd@kernel.org>
-References: <20250808151822.536879-1-arnd@kernel.org>
+	s=k20201202; t=1754860322;
+	bh=XrfQgl5l4McAsqhy747liDQB2Wk7PKkiU9eU9e0wRRM=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=Gwjn8bTbzGhzzolmVUPo9n7gcBleM2ZVFGDflhWOkdwNBJ0e6wotBLuXD0buvnF7g
+	 aXoNaKfXoEDoNj4lZ/8pa6odo8DFWObVF3OfZG3lrpWmvwF9AJmOUqEzkaWzOeq7Yd
+	 DpcJnBQo9Z4JNU1FE++ilb7nhN/t2KWXk7okkwr6WQvrfPpvZrLhMXDkZ6HQcXTy6q
+	 oJdFW6I2y1cQ+XGdnxUPHqxnZ8SZfN7pdNeHUDKckOniwED43a0ZbSyUveH+xY3V9p
+	 M3Gg6vutVvVco0CLG4wUKYmINApUE8HUs9Uyk6Lbw9URsrzxtpmDb+/V1rKT1fuakD
+	 n8BmE1Qp9O4Dg==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADE7439D0C2B;
+	Sun, 10 Aug 2025 21:12:16 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -71,96 +52,71 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 00/12] irqchip: MSI cleanup and conversion to MSI parent
+ domain
+From: patchwork-bot+linux-riscv@kernel.org
+Message-Id: 
+ <175486033550.1221929.7725164280675452092.git-patchwork-notify@kernel.org>
+Date: Sun, 10 Aug 2025 21:12:15 +0000
+References: <cover.1750860131.git.namcao@linutronix.de>
+In-Reply-To: <cover.1750860131.git.namcao@linutronix.de>
+To: Nam Cao <namcao@linutronix.de>
+Cc: linux-riscv@lists.infradead.org, maz@kernel.org, tglx@linutronix.de,
+ atenart@kernel.org, andrew@lunn.ch, gregory.clement@bootlin.com,
+ sebastian.hesselbarth@gmail.com, shawnguo@kernel.org, s.hauer@pengutronix.de,
+ kernel@pengutronix.de, festevam@gmail.com, chenhuacai@kernel.org,
+ jiaxun.yang@flygoat.com, anup@brainfault.org, paul.walmsley@sifive.com,
+ palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ imx@lists.linux.dev, linux-mips@vger.kernel.org
 
-From: Arnd Bergmann <arnd@arndb.de>
+Hello:
 
-A few old machines have not been converted away from the old-style
-gpiolib interfaces. Make these select the new CONFIG_GPIOLIB_LEGACY
-symbol so the code still works where it is needed but can be left
-out otherwise.
+This series was applied to riscv/linux.git (fixes)
+by Thomas Gleixner <tglx@linutronix.de>:
 
-This is the list of all gpio_request() calls in mips:
+On Thu, 26 Jun 2025 16:48:57 +0200 you wrote:
+> The initial implementation of PCI/MSI interrupt domains in the hierarchical
+> interrupt domain model used a shortcut by providing a global PCI/MSI
+> domain.
+> 
+> This works because the PCI/MSI[X] hardware is standardized and uniform, but
+> it violates the basic design principle of hierarchical interrupt domains:
+> Each hardware block involved in the interrupt delivery chain should have a
+> separate interrupt domain.
+> 
+> [...]
 
-  arch/mips/alchemy/board-mtx1.c: rc = gpio_request(mtx1_gpio_button[0].gpio,
-  arch/mips/alchemy/devboards/db1000.c:           gpio_request(19, "sd0_cd");
-  arch/mips/alchemy/devboards/db1000.c:           gpio_request(20, "sd1_cd");
-  arch/mips/alchemy/devboards/db1200.c:   gpio_request(215, "otg-vbus");
-  arch/mips/bcm47xx/workarounds.c:        err = gpio_request_one(usb_power, GPIOF_OUT_INIT_HIGH, "usb_power");
-  arch/mips/bcm63xx/boards/board_bcm963xx.c:              gpio_request_one(board.ephy_reset_gpio,
-  arch/mips/txx9/rbtx4927/setup.c:        gpio_request(15, "sio-dtr");
+Here is the summary with links:
+  - [01/12] irqdomain: Add device pointer to irq_domain_info and msi_domain_info
+    https://git.kernel.org/riscv/c/858e65af9135
+  - [02/12] irqchip/bcm2712-mip: Switch to msi_create_parent_irq_domain()
+    https://git.kernel.org/riscv/c/91650ca5efcf
+  - [03/12] irqchip/riscv-imsic: Convert to msi_create_parent_irq_domain() helper
+    https://git.kernel.org/riscv/c/59422904dd98
+  - [04/12] irqchip/imx-mu-msi: Convert to msi_create_parent_irq_domain() helper
+    https://git.kernel.org/riscv/c/c7cc7b122a4c
+  - [05/12] irqchip/loongson-pch-msi.c: Switch to msi_create_parent_irq_domain()
+    https://git.kernel.org/riscv/c/7f91d608cc43
+  - [06/12] irqchip/sg2042-msi: Switch to msi_create_parent_irq_domain()
+    https://git.kernel.org/riscv/c/7c0dbd80de03
+  - [07/12] irqchip/alpine-msi: Clean up whitespace style
+    https://git.kernel.org/riscv/c/6e44ac411255
+  - [08/12] irqchip/alpine-msi: Convert to lock guards
+    https://git.kernel.org/riscv/c/71476f915f92
+  - [09/12] irqchip/alpine-msi: Convert to __free
+    https://git.kernel.org/riscv/c/f7c2dd9f4c2d
+  - [10/12] irqchip/alpine-msi: Switch to msi_create_parent_irq_domain()
+    https://git.kernel.org/riscv/c/7a91ad7ebd61
+  - [11/12] irqchip/armada-370-xp: Switch to msi_create_parent_irq_domain()
+    https://git.kernel.org/riscv/c/bafb2901317f
+  - [12/12] irqchip/ls-scfg-msi: Switch to use msi_create_parent_irq_domain()
+    https://git.kernel.org/riscv/c/94b59d5f567a
 
-Most of these should be easy enough to change to modern gpio descriptors
-or remove if they are no longer in use.
-
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
----
- arch/mips/Kconfig         | 5 +++++
- arch/mips/alchemy/Kconfig | 1 -
- arch/mips/txx9/Kconfig    | 1 +
- 3 files changed, 6 insertions(+), 1 deletion(-)
-
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index caf508f6e9ec..27f16c5b112a 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -205,6 +205,8 @@ config MIPS_ALCHEMY
- 	select CSRC_R4K
- 	select IRQ_MIPS_CPU
- 	select DMA_NONCOHERENT		# Au1000,1500,1100 aren't, rest is
-+	select GPIOLIB
-+	select GPIOLIB_LEGACY
- 	select MIPS_FIXUP_BIGPHYS_ADDR if PCI
- 	select SYS_HAS_CPU_MIPS32_R1
- 	select SYS_SUPPORTS_32BIT_KERNEL
-@@ -306,6 +308,7 @@ config BCM47XX
- 	select SYS_HAS_EARLY_PRINTK
- 	select USE_GENERIC_EARLY_PRINTK_8250
- 	select GPIOLIB
-+	select GPIOLIB_LEGACY
- 	select LEDS_GPIO_REGISTER
- 	select BCM47XX_NVRAM
- 	select BCM47XX_SPROM
-@@ -329,6 +332,7 @@ config BCM63XX
- 	select SYS_HAS_CPU_BMIPS4380
- 	select SWAP_IO_SPACE
- 	select GPIOLIB
-+	select GPIOLIB_LEGACY
- 	select MIPS_L1_CACHE_SHIFT_4
- 	select HAVE_LEGACY_CLK
- 	help
-@@ -981,6 +985,7 @@ config MIKROTIK_RB532
- 	select SWAP_IO_SPACE
- 	select BOOT_RAW
- 	select GPIOLIB
-+	select GPIOLIB_LEGACY
- 	select MIPS_L1_CACHE_SHIFT_4
- 	help
- 	  Support the Mikrotik(tm) RouterBoard 532 series,
-diff --git a/arch/mips/alchemy/Kconfig b/arch/mips/alchemy/Kconfig
-index 6ca81e1bd35c..cf5ad52c0a0f 100644
---- a/arch/mips/alchemy/Kconfig
-+++ b/arch/mips/alchemy/Kconfig
-@@ -12,7 +12,6 @@ config MIPS_MTX1
- 
- config MIPS_DB1XXX
- 	bool "Alchemy DB1XXX / PB1XXX boards"
--	select GPIOLIB
- 	select HAVE_PCI
- 	select HAVE_PATA_PLATFORM
- 	select SYS_SUPPORTS_LITTLE_ENDIAN
-diff --git a/arch/mips/txx9/Kconfig b/arch/mips/txx9/Kconfig
-index 7335efa4d528..92b759a434c0 100644
---- a/arch/mips/txx9/Kconfig
-+++ b/arch/mips/txx9/Kconfig
-@@ -37,6 +37,7 @@ config SOC_TX4927
- 	select IRQ_TXX9
- 	select PCI_TX4927
- 	select GPIO_TXX9
-+	select GPIOLIB_LEGACY
- 
- config SOC_TX4938
- 	bool
+You are awesome, thank you!
 -- 
-2.39.5
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
 
