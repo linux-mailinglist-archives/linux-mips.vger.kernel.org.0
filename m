@@ -1,81 +1,81 @@
-Return-Path: <linux-mips+bounces-10175-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10176-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE972B2112C
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 18:12:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A3E4B210DE
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 18:06:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 51E9617DDDF
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 16:01:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 566F27B8813
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 16:02:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88A7329BDA0;
-	Mon, 11 Aug 2025 15:47:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACB5B2DE1FE;
+	Mon, 11 Aug 2025 15:50:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UtKBmngQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Wup8ElIv"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 997F829BD92;
-	Mon, 11 Aug 2025 15:47:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92A352E0926;
+	Mon, 11 Aug 2025 15:50:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754927260; cv=none; b=kib5Ek9i12VjG4OkKaumetYpNoJNNQvsEyVPOmsqc3u7e/AoijLtc37fd+1gRLGSrr6JmN1WfksgVw6wd48JbAn7R161u24XE/ySZTfBVUWpNpjsWQ8MMuXPfF6ZTHkGc6kGvBVNHLsnUn7OQj6X9LA7bHYr/yZqAqu/DwQbic8=
+	t=1754927454; cv=none; b=jxGWiSJl886XcXWC0gvZaaWqOkA7jQmww5A1ult3PPw2eG4ApwcKjlwBkxIfzpw1+aa0qyj//EtnzDrO0G5uFAB4bq+fXCQ3UOudFOuGq1Fj9UY+jpgwE9tsCCbSO2+WiN1y1GnLH2EYE5ZptzmeMGs30HEMT94c7OGK8Ut4gNw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754927260; c=relaxed/simple;
-	bh=HqZVUyZfVpIoagKLdA4Wnmr1ax/f/DpaIg2D3Ho4d+g=;
+	s=arc-20240116; t=1754927454; c=relaxed/simple;
+	bh=3MrMePu5qHYOOUklAMogGuKMAutTQLNLRBh4z2IBUxA=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=LWqW+KDWJWfC3+8sQcJjW2LFiMlnAG0/kfDPrA4Qxtv7sSQFkCuVXVwyNBv1OHxdTzRRiyDWVz5LhpbD/PPQGCve5N7iBp26MKiMoK7VIhoDFy5v+0FoN6tofc5CeJTieyvyLsLzLiHSaGHsDspM8y3sdIOeLBil6hEaJD6dHHM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UtKBmngQ; arc=none smtp.client-ip=209.85.218.54
+	 Content-Type:MIME-Version; b=qIu4TNU3S1ZoRNx0JjS/ft7K15LYR9L2JqIIOIUQAriwAx7i1m/v0V6w8Sz3/XEC6jj5KJ93mfrPl9t+c0UFOB7HCrkmf7zBKzp1wrSHwq/45dkuu8kMCsrV8auAG3pn93/kGP/+wYtttEAF6oG+iZ2OI1VC+cGvPEsNKo/xpqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Wup8ElIv; arc=none smtp.client-ip=209.85.208.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-af90fd52147so680495666b.3;
-        Mon, 11 Aug 2025 08:47:37 -0700 (PDT)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-615460d9897so5212528a12.0;
+        Mon, 11 Aug 2025 08:50:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754927256; x=1755532056; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1754927451; x=1755532251; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=HepA4l2VLL2ahLpWoV8gVaUs9oZFV/xKVn3GOH58US4=;
-        b=UtKBmngQszzpO/c/ctnB40SRIOUZT6tLbRDUjZi9DKZtMpnr7jFzBrEVy/fwtso+u6
-         U0nSQHxxTuuer8Xzkr7pDhmZZRmrh3E/sUX4YdSvvkNaBD6WNspBc4bvEYHWta7X8p95
-         1MvDyPU5PptjG23Y3VRxB5HXCdUK+fdtHmfdFT68M/pIDM/KyrJSgwwfok2qrvfvwXWn
-         bXjnYn3XbkHspkDNCo4dobqmwYL6NIGhf/Dv5PNttoVIuhmuKsRa6BKCAYohExhXOgw/
-         XGhKqQaBqZODgGqYXUP8hkhfNsxi8NpEm3c1+I9cLb6ije4UENh7PCwBJTrjJ2opYt8s
-         FzMQ==
+        bh=gtZQ94WBszTISCSHtIKTauM3dit5VcpLWsofgTPpah4=;
+        b=Wup8ElIvPHTB/kwFguFnPS+JSJqgriXAq/y8Znf60hTwcA8vZ7pAGzPeZ9BfmB8Kjr
+         ChsCd1OIhcNsEIy8bNHUnVIxkKYRsOfzi0vUPuNLz89RV6Wj8KSSCxymJa/HR3vcf6Xn
+         c1De3VtigqKniHhLfJ7ujs68zbzpa1vocKgoxX/9CP15Aw+X2Et53MmWS7kym5Z4kLaI
+         W+ZydTyc1WBcOjZkxMY9qsu4UPukrYgCxLC9EPnbXSF6H5ue8rwc1wzQVXU9BSYggdZ9
+         9gKEIHPzBbMn0LFb9Cq4Op/kdTs6oug++w4QhGdpWHtfMeVOXkp6lxuNV2hSichJq4o9
+         YQaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754927256; x=1755532056;
+        d=1e100.net; s=20230601; t=1754927451; x=1755532251;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=HepA4l2VLL2ahLpWoV8gVaUs9oZFV/xKVn3GOH58US4=;
-        b=SD0bSH8/uQjXb1x5yzHai4WVyN4cVhFWdqAeukwkvAAvsKgTHEJ/IfWutFFWDTcj4O
-         PfEbq9HlNk8nL7q3+t86ffdoqet8LvkFAbv8fDxz9kLq9dDvvsXEyed5nBW9q5RTP3No
-         ZdI8AtO+iqeFMnnDl8cvH5EGFsYcs0NqRk9CEUisGTmsmFmEXHUJVafSCpjLL3GxKQ8z
-         snMGBpbSRyc21AhIWsNTLK9011pzdK9PLPWK0SoihKUDhiWgwsQi24tj+qHwX4bT7oiq
-         cCRN2pCx0oq9dCpKmzkLw22MPc/7W/G2V7jz0szvXHsaubzZCvFgSNu6ENA1eqIh99xc
-         pIOw==
-X-Forwarded-Encrypted: i=1; AJvYcCVUIl27eZeb01jvnx7i3Q4Eh4Nob3pNA7TLx/GYVDB2sGPDHjwHM84aPpdwJJZLNUcGg3LQe+YIcZS+gw==@vger.kernel.org, AJvYcCViP9GKPFjtRgjBjpIdLmNJ8LteLbHk+PawV7Ad+S+k7qITMCdfRaI5gZf+iQG6Tu8/QFnJcDALv45dJ1xI@vger.kernel.org, AJvYcCWSrNzpwt193uMS8+bxWWWHZBFp9rnGY6fWf2UrBMZr8nG+tyN6sR/67rzGjfgQjyJyf+7kRYZkTJnrzkEZAA==@vger.kernel.org, AJvYcCXEWYhQaAsvJaah4CFFkK8cihpc5LGTy70MouYRRt2xIP7gjJFTyBPu/TSoVrgRZpCOnlQeUHcw9wcj3rQ8M8+pXiY=@vger.kernel.org, AJvYcCXu8uEI+/nPV18muaMVxxPET5Rsp3IRxmyMPYnYwv1aLfemygLcO689jVGh5nZZHIbD/eK2JLOdrG2kEs2mOlHRxuM=@vger.kernel.org, AJvYcCXy7qNYMFevUdGvdXOHtO1fJxKW0Cnov6rWQZD7hSkxQ9zmyMgmW4qdkxe6G0nbU6XbWQB1hvybJg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyGT+oXUCXQakCXWVtDvvRpCOA101Q5xHJiN4IyfUe1frynTKhi
-	5ZtSYIG3bICUbn24ygIQY831AY1URKkzswdJRoxO0+uJYxc3tqdPqGa2
-X-Gm-Gg: ASbGnctEdPi1O2lQ50Mjqxh5yA2hEYeN/l6KW4PvhuFs6k5c9P4JVYT64N6c2ex1oei
-	H0KlEBicL/jFp5I7gsYyae0jt8+3aPKG71S2JuCm/r8W6MlzxO8nu6Ax1Fr/6VLuIDo2KBHovsa
-	2Imtyv60AAJzX9TdbRuIc6eSjb2of/p+1KDNRRZNpykjIehDC5K1nXVc58JhoHBeKqm9IIlflOZ
-	TrYzVg9ckmSn7C4GYzH5/Iftrd5Qox4o+wDR5+ZYU9T9+xeydKH/XDG+8bBsE+ddWL5ihIvn0Z8
-	TrLgBbJNaDowBI4mXtdnfGkiV3B7rt1cP5iWYZ8W/9Hy+YClZy2GOKR58bK8HkDWr3TBIqOrat2
-	b17maqN4BP2cbgpw1ua5tNk5G/MksJRxepDmJY0g=
-X-Google-Smtp-Source: AGHT+IF0QNexCp3wac3HqRrzYFcQwTmRLRgzyDHjNrtoHTrtc/DjgfXz7LJ4ALK6NtSRdUvSvS+HtQ==
-X-Received: by 2002:a17:906:9f91:b0:af9:7823:620b with SMTP id a640c23a62f3a-af9c6517c2cmr1234169966b.44.1754927255767;
-        Mon, 11 Aug 2025 08:47:35 -0700 (PDT)
+        bh=gtZQ94WBszTISCSHtIKTauM3dit5VcpLWsofgTPpah4=;
+        b=BqF0FmtvgQASP6Gw5k+MIC+q6HI1SV2ayKVERiKKxzSB2gIMTBITSQIak+2+eP74eR
+         rIToarxHbAWjMf+5AGFsDP0//Eggw4TUfvdcoM3CBUmMCyhYIOofWfzKifLBWCY3xB9B
+         z7Y0QN+wbeE5IBO/A7bgHMgQrVwZIxC7Ll3QrdQMFwlLbr3k1boNo/7/adsAxzgZhJ0Q
+         JlYRt+uKL3UVD9TvR2Ztat+nJACDqMu10z5NQ2ptedCw6DxTWIyBvhdncvkJ3a4xGA06
+         OXekikv2B9RBv1E9P4gZCWxu14D+cAHXt6vZVS8NgQ6i/o9sOU5Zn5qcQAznXy5hw4d5
+         0fZA==
+X-Forwarded-Encrypted: i=1; AJvYcCUvuk2Zpu3/UBRCEY4UC6GbDsgjaj8jjBzZJ1fPK5sPv3oOUde7k1p0SNE3XDI33bfTv4jP8RUZU6bsJw==@vger.kernel.org, AJvYcCV1wiQjTj+rKrL3EacnrgDwd69qRtHLyG8Gb7HPAcUUia5MXuJAzkyyclH86FObiyQN5VcrADecBj6AmOiOr0x1ZQc=@vger.kernel.org, AJvYcCW0K2tJezYCK5IG1BF67qNanHA62O9F78irFZMNjjwJPWiS06Apvjjb44nHxG1x8YKNQECrdhAkc4bXnIZ7@vger.kernel.org, AJvYcCWP5WewCmnK2eYo0ysUO5anp6TZKvsMxq9Ay2KypVnhenjMQ+zicBrKzPjASN5ptWwgq2cy8z5FbQwo9Q7Z+g==@vger.kernel.org, AJvYcCWzsQDVqX7e6Qg96yw5hnCH5WSi90Qr5B69M1HhvKy9NADKOuZASDHL/StZT57IAXf45XYfQaSPqkDYWBwy9ufL5Bc=@vger.kernel.org, AJvYcCXc22zAE761os2kWOK0dvLqCsPKIuJQJNS2W9JLDKc1ly6Ss26Jn/FgwN1iV76lQXyWCesMS5Mz2g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyyHBaWeuLg7oam9m05D3MuIcvPnoGfEWJOJzUvYjmpgpZFlUlR
+	6CjzybhmDY4GWu0Xs5+HUNzcTxXWjFRAiZWbZmQ5z58LT9RnNh0HyaQ8
+X-Gm-Gg: ASbGncuSp6nUmsoZ1Akh8viexfAlBO2/6h5XQbJ+go625hiUH+ABqBK/YQCedRC3P+8
+	WNYUTuyJSY+do7w9sINoNZngvTCFyi62zmUfbOk8W4xDFmTB97X4mHl5zMuzYSopO/T4D78AbO2
+	0Bz5c0pOiAh+3jF5RdKFwA3KMkLeCRIKZD6whn1gtumR5NsKupr5E83oz2FHZFMBQrbiKqeC+GW
+	K9GdbltBuuzh0s/29p5cWi2m0LuPe3uPEl6P8XuPIzyrmn4FMllu3l+7p6KNTcUb+aUaFsMj0nZ
+	2+ScjgXgAXY7npzB0aDBFyoRy/vRN1CE7O0fEKqq8Wt7/uMSxYZOfdHzGk/yEu5/Imos1ybHBrv
+	YpBLGJTWZ9+ilodTytYvtC4EnDJxJYyameOc9AIxvSmvf7qto0A==
+X-Google-Smtp-Source: AGHT+IHe8ajBJUyXwu1jxvqnFBotZVZqGKDHQgYwFn+fyltnooA7uDIcyyMAL7hOfbd71etw3G4PSg==
+X-Received: by 2002:a05:6402:26c2:b0:618:3a61:b1c with SMTP id 4fb4d7f45d1cf-6183a610b1fmr2169187a12.31.1754927450586;
+        Mon, 11 Aug 2025 08:50:50 -0700 (PDT)
 Received: from giga-mm.home ([2a02:1210:8642:2b00:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91a076409sm2048822966b.12.2025.08.11.08.47.32
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-615a8f000c3sm18680418a12.4.2025.08.11.08.50.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Aug 2025 08:47:35 -0700 (PDT)
-Message-ID: <597d4a777a13c2b67effaf5ba32959710d2f58f8.camel@gmail.com>
-Subject: Re: [PATCH 047/114] clk: sophgo: cv18xx-ip: convert from
- round_rate() to determine_rate()
+        Mon, 11 Aug 2025 08:50:50 -0700 (PDT)
+Message-ID: <d3b0ae61d0bb5dc4e115ace27e1672444ae90d83.camel@gmail.com>
+Subject: Re: [PATCH 014/114] clk: ep93xx: convert from round_rate() to
+ determine_rate()
 From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 To: bmasney@redhat.com, Michael Turquette <mturquette@baylibre.com>, Stephen
  Boyd <sboyd@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>, Cristian
@@ -129,11 +129,11 @@ Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
 	linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org, 
 	linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev
-Date: Mon, 11 Aug 2025 17:47:31 +0200
-In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-47-b3bf97b038dc@redhat.com>
+Date: Mon, 11 Aug 2025 17:50:46 +0200
+In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-14-b3bf97b038dc@redhat.com>
 References: 
 	<20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
-	 <20250811-clk-for-stephen-round-rate-v1-47-b3bf97b038dc@redhat.com>
+	 <20250811-clk-for-stephen-round-rate-v1-14-b3bf97b038dc@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.1 
@@ -156,39 +156,56 @@ On Mon, 2025-08-11 at 11:18 -0400, Brian Masney via B4 Relay wrote:
 Reviewed-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 
 > ---
-> =C2=A0drivers/clk/sophgo/clk-cv18xx-ip.c | 10 ++++++----
-> =C2=A01 file changed, 6 insertions(+), 4 deletions(-)
+> =C2=A0drivers/clk/clk-ep93xx.c | 18 ++++++++++--------
+> =C2=A01 file changed, 10 insertions(+), 8 deletions(-)
 >=20
-> diff --git a/drivers/clk/sophgo/clk-cv18xx-ip.c b/drivers/clk/sophgo/clk-=
-cv18xx-ip.c
-> index b186e64d4813e2701b17520e544c453fc13d0e77..c2b58faf0938b7d537dc3a81a=
-ef59c549b9c9c79 100644
-> --- a/drivers/clk/sophgo/clk-cv18xx-ip.c
-> +++ b/drivers/clk/sophgo/clk-cv18xx-ip.c
-> @@ -45,10 +45,12 @@ static unsigned long gate_recalc_rate(struct clk_hw *=
-hw,
-> =C2=A0	return parent_rate;
+> diff --git a/drivers/clk/clk-ep93xx.c b/drivers/clk/clk-ep93xx.c
+> index 4bd8d6ecf6a2bde26287e4e949b062a5660139e6..b081ef920e250dd99134af684=
+5c443ee11266da8 100644
+> --- a/drivers/clk/clk-ep93xx.c
+> +++ b/drivers/clk/clk-ep93xx.c
+> @@ -389,23 +389,25 @@ static unsigned long ep93xx_div_recalc_rate(struct =
+clk_hw *hw,
+> =C2=A0	return DIV_ROUND_CLOSEST(parent_rate, clk->div[index]);
 > =C2=A0}
 > =C2=A0
-> -static long gate_round_rate(struct clk_hw *hw, unsigned long rate,
-> -			=C2=A0=C2=A0=C2=A0 unsigned long *parent_rate)
-> +static int gate_determine_rate(struct clk_hw *hw,
-> +			=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct clk_rate_request *req)
+> -static long ep93xx_div_round_rate(struct clk_hw *hw, unsigned long rate,
+> -				=C2=A0=C2=A0 unsigned long *parent_rate)
+> +static int ep93xx_div_determine_rate(struct clk_hw *hw,
+> +				=C2=A0=C2=A0=C2=A0=C2=A0 struct clk_rate_request *req)
 > =C2=A0{
-> -	return *parent_rate;
-> +	req->rate =3D req->best_parent_rate;
+> =C2=A0	struct ep93xx_clk *clk =3D ep93xx_clk_from(hw);
+> =C2=A0	unsigned long best =3D 0, now;
+> =C2=A0	unsigned int i;
+> =C2=A0
+> =C2=A0	for (i =3D 0; i < clk->num_div; i++) {
+> -		if ((rate * clk->div[i]) =3D=3D *parent_rate)
+> -			return rate;
+> +		if (req->rate * clk->div[i] =3D=3D req->best_parent_rate)
+> +			return 0;
+> =C2=A0
+> -		now =3D DIV_ROUND_CLOSEST(*parent_rate, clk->div[i]);
+> -		if (!best || is_best(rate, now, best))
+> +		now =3D DIV_ROUND_CLOSEST(req->best_parent_rate, clk->div[i]);
+> +		if (!best || is_best(req->rate, now, best))
+> =C2=A0			best =3D now;
+> =C2=A0	}
+> =C2=A0
+> -	return best;
+> +	req->rate =3D best;
 > +
 > +	return 0;
 > =C2=A0}
 > =C2=A0
-> =C2=A0static int gate_set_rate(struct clk_hw *hw, unsigned long rate,
-> @@ -63,7 +65,7 @@ const struct clk_ops cv1800_clk_gate_ops =3D {
-> =C2=A0	.is_enabled =3D gate_is_enabled,
-> =C2=A0
-> =C2=A0	.recalc_rate =3D gate_recalc_rate,
-> -	.round_rate =3D gate_round_rate,
-> +	.determine_rate =3D gate_determine_rate,
-> =C2=A0	.set_rate =3D gate_set_rate,
+> =C2=A0static int ep93xx_div_set_rate(struct clk_hw *hw, unsigned long rat=
+e,
+> @@ -437,7 +439,7 @@ static const struct clk_ops ep93xx_div_ops =3D {
+> =C2=A0	.disable =3D ep93xx_clk_disable,
+> =C2=A0	.is_enabled =3D ep93xx_clk_is_enabled,
+> =C2=A0	.recalc_rate =3D ep93xx_div_recalc_rate,
+> -	.round_rate =3D ep93xx_div_round_rate,
+> +	.determine_rate =3D ep93xx_div_determine_rate,
+> =C2=A0	.set_rate =3D ep93xx_div_set_rate,
 > =C2=A0};
 
 --=20
