@@ -1,52 +1,52 @@
-Return-Path: <linux-mips+bounces-10166-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10142-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A069B20F92
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 17:32:03 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02149B20F45
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 17:30:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 119652A8024
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 15:29:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2EE0422DD4
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 15:27:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7241307AF7;
-	Mon, 11 Aug 2025 15:18:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 276862F0C7F;
+	Mon, 11 Aug 2025 15:18:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="noLQ+tAl"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gCBN9kkh"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C57712F49ED;
-	Mon, 11 Aug 2025 15:18:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DA882EFD94;
+	Mon, 11 Aug 2025 15:18:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754925518; cv=none; b=LOAsXUKnU4GAX9Iyo1VEaBoVrW/a/v97fujYX3+0X8EFHPJjfO1J8QQ+X+snpB8MIBkUdlET2MaVODNxgr14oS3f0KWdbekFfmrdnp9eR5LDTkIXsdllAWKbiOjtZQyb/ogwvlPQ0yQX7WVv9l47Occrol+uPTa71cWwbOPX4pU=
+	t=1754925517; cv=none; b=uu2RoUY5niHSNyMBj9GTxNiE46LIf1BzCoDyuq3vbIg5ETwQxH1n2wMPt81hjgkGYQA0VeT4O16PzZlmqkaavymPbAU+y3Mbrh2+1v3HJgODfbi7q7ONA8gMws7PLriECBQ9OKzrZZ1A1mDYi5G4a+Dhi3c/t87q/wOYFt4TiPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754925518; c=relaxed/simple;
-	bh=95nJNVyHARzLkGa9z0lh7B2BLhwNxZAqYCnshJkN1zA=;
+	s=arc-20240116; t=1754925517; c=relaxed/simple;
+	bh=9DhtN6HDc9ThLb4rklRbed5ca1Ez4N6HQQpJ8sOni6g=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=XmmKo70NJpWno0zrzeAp+F8AMJsnCNo1/OAO5Ib5eEhcPk9PE9YEOosEg+aXrIkiw9vO2AM9db4T/cFXFFzxNtYWIs1T5sz7gvS8q2E+hihY/jg5V00MEI6SvuOzckQiDEDfgNf4Xu3MuJdon/OtBqV0+sTqe/u1heHwf5Z5ULs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=noLQ+tAl; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id E5EB4C4FF54;
+	 In-Reply-To:To:Cc; b=oQ6YkPtCi2GAgekViYrq2uO1kGVPtE+TRYGqx+iR1Kuv7p9RuHbBlAZNXftKgD+XmxAeF3AljF4XQv3ZkKILmrqFSQfnT5u0Omm8P8qGtzVhu9fjc6Gp+NOAxS4mljPu3KqggSH6/xPmPsxj1f0erKomjSSzKaQ0IxitlG5S2xY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gCBN9kkh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E8E56C2BCC7;
 	Mon, 11 Aug 2025 15:18:35 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1754925516;
-	bh=95nJNVyHARzLkGa9z0lh7B2BLhwNxZAqYCnshJkN1zA=;
+	bh=9DhtN6HDc9ThLb4rklRbed5ca1Ez4N6HQQpJ8sOni6g=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=noLQ+tAllsdJsRyJZi892ugQQOb+/v2nRGmSsAtKhAkmiNMuCczG28eAP6hfKGK0B
-	 2v061h5JPTTKlgs9YUfSVpLesXlYJ7egzMrj7QHXxh2/ZquBrRm82taDO54cJzd90y
-	 NIcV6GV3PT7Uao7bjL4O1V5AtiTb6N9hQ+NG8r7O0a0GobijwhlfA2/9cjelXAWr+G
-	 +G+hXmkdSclWxzaJNub7GxfonHW/4Bgm95D14zf1LeIyVOgUeW/xo2BD2y9/h6Q1x6
-	 f0xR9+Ymk8Y22Vj50yxFjg8tI+dS/TwH/icIARGFri/E392L1zJJC7xWkq0+VIaVCj
-	 H2sOrkNOh8x5Q==
+	b=gCBN9kkhPenIQ8/o4MOtGaUKkXcX5eiziYAdGSNlX1zZSV/qn+VsWVJDm8diq1Uuc
+	 QXFseVBc6N9wFkKEYhAm2LBgVocycxhN1xXVUGRKjNTWZoc973XYJMM18YxINwx0EW
+	 tSU3bZstH0+ppN2EauyWXTVjt+U2T4hNe+vCkALcd3BEkfDtgkEz8pycFPsQFRTfNr
+	 SUu1jIbb71znM/WSJraxnSJK48adW+3JVaSI1u8p6rYiPec2pKPHFz1iRXdt6LanrF
+	 iHHBI0S3TnXBW4V6AoiZYFSWxBdDqRoDdnjKoNtgt1NM8gHGPuLIML3RX03xwkVrnP
+	 E95yGFsJe4rhA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id B28B2CA0ED1;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CDF9ECA0EC8;
 	Mon, 11 Aug 2025 15:18:35 +0000 (UTC)
 From: Brian Masney via B4 Relay <devnull+bmasney.redhat.com@kernel.org>
-Date: Mon, 11 Aug 2025 11:19:37 -0400
-Subject: [PATCH 105/114] clk: ux500: prcmu: convert from round_rate() to
+Date: Mon, 11 Aug 2025 11:19:38 -0400
+Subject: [PATCH 106/114] clk: versaclock5: convert from round_rate() to
  determine_rate()
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250811-clk-for-stephen-round-rate-v1-105-b3bf97b038dc@redhat.com>
+Message-Id: <20250811-clk-for-stephen-round-rate-v1-106-b3bf97b038dc@redhat.com>
 References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
 In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
 To: Michael Turquette <mturquette@baylibre.com>, 
@@ -122,11 +122,11 @@ Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev, 
  Brian Masney <bmasney@redhat.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1754925498; l=2161;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1754925498; l=6516;
  i=bmasney@redhat.com; s=20250528; h=from:subject:message-id;
- bh=Iri56Jk5inQfMBQxAgO8VkEUwGzLeEItJq1ve9UYodA=;
- b=DsD44CqhHZt7aqK04qeiU6Ui+tTj7Lyld//Cp+zJ9xJgJTaAKY6yIDLLPqTRsL+cXpcocyy+k
- Hdl2EQH1B1kDq9SF4a2SNeCj0tmgb2D4I3LgqSWcj/91T4w7R8vzOOG
+ bh=XKgkkzQfXsal4tbcIQtc1juzVPJNcjhK8nlpaSZyjxs=;
+ b=/kjWcKQ9Zcr2pUuyG6Lr+yWj6Q4DGldsVrZfZ8dUcszB2kOq+wcYal8JNiLPoeTKadFCo9Tka
+ YkV2e4JPDpDCttNDDbSVeAhG4NLOZp0im3I/GBJ1u6SmobtclsiEMpv
 X-Developer-Key: i=bmasney@redhat.com; a=ed25519;
  pk=x20f2BQYftANnik+wvlm4HqLqAlNs/npfVcbhHPOK2U=
 X-Endpoint-Received: by B4 Relay for bmasney@redhat.com/20250528 with
@@ -142,55 +142,188 @@ on the cover letter of this series.
 
 Signed-off-by: Brian Masney <bmasney@redhat.com>
 ---
- drivers/clk/ux500/clk-prcmu.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ drivers/clk/clk-versaclock5.c | 71 ++++++++++++++++++++++++-------------------
+ 1 file changed, 40 insertions(+), 31 deletions(-)
 
-diff --git a/drivers/clk/ux500/clk-prcmu.c b/drivers/clk/ux500/clk-prcmu.c
-index 5cbf24c94606081b0ec18c8aaa201ef89b54edf0..f775e18acd468d91cc2d6cf7a289bb722d614141 100644
---- a/drivers/clk/ux500/clk-prcmu.c
-+++ b/drivers/clk/ux500/clk-prcmu.c
-@@ -53,11 +53,13 @@ static unsigned long clk_prcmu_recalc_rate(struct clk_hw *hw,
- 	return prcmu_clock_rate(clk->cg_sel);
+diff --git a/drivers/clk/clk-versaclock5.c b/drivers/clk/clk-versaclock5.c
+index 4200022d20846038f02e191042da2a188c392402..57228e88e81dc6f2af955a82a3275430e46c0920 100644
+--- a/drivers/clk/clk-versaclock5.c
++++ b/drivers/clk/clk-versaclock5.c
+@@ -304,11 +304,11 @@ static unsigned long vc5_dbl_recalc_rate(struct clk_hw *hw,
+ 	return parent_rate;
  }
  
--static long clk_prcmu_round_rate(struct clk_hw *hw, unsigned long rate,
--				 unsigned long *parent_rate)
-+static int clk_prcmu_determine_rate(struct clk_hw *hw,
-+				    struct clk_rate_request *req)
+-static long vc5_dbl_round_rate(struct clk_hw *hw, unsigned long rate,
+-			       unsigned long *parent_rate)
++static int vc5_dbl_determine_rate(struct clk_hw *hw,
++				  struct clk_rate_request *req)
  {
- 	struct clk_prcmu *clk = to_clk_prcmu(hw);
--	return prcmu_round_clock_rate(clk->cg_sel, rate);
-+	req->rate = prcmu_round_clock_rate(clk->cg_sel, req->rate);
+-	if ((*parent_rate == rate) || ((*parent_rate * 2) == rate))
+-		return rate;
++	if ((req->best_parent_rate == req->rate) || ((req->best_parent_rate * 2) == req->rate))
++		return 0;
+ 	else
+ 		return -EINVAL;
+ }
+@@ -332,7 +332,7 @@ static int vc5_dbl_set_rate(struct clk_hw *hw, unsigned long rate,
+ 
+ static const struct clk_ops vc5_dbl_ops = {
+ 	.recalc_rate	= vc5_dbl_recalc_rate,
+-	.round_rate	= vc5_dbl_round_rate,
++	.determine_rate = vc5_dbl_determine_rate,
+ 	.set_rate	= vc5_dbl_set_rate,
+ };
+ 
+@@ -363,24 +363,29 @@ static unsigned long vc5_pfd_recalc_rate(struct clk_hw *hw,
+ 		return parent_rate / VC5_REF_DIVIDER_REF_DIV(div);
+ }
+ 
+-static long vc5_pfd_round_rate(struct clk_hw *hw, unsigned long rate,
+-			       unsigned long *parent_rate)
++static int vc5_pfd_determine_rate(struct clk_hw *hw,
++				  struct clk_rate_request *req)
+ {
+ 	unsigned long idiv;
+ 
+ 	/* PLL cannot operate with input clock above 50 MHz. */
+-	if (rate > 50000000)
++	if (req->rate > 50000000)
+ 		return -EINVAL;
+ 
+ 	/* CLKIN within range of PLL input, feed directly to PLL. */
+-	if (*parent_rate <= 50000000)
+-		return *parent_rate;
++	if (req->best_parent_rate <= 50000000) {
++		req->rate = req->best_parent_rate;
++
++		return 0;
++	}
+ 
+-	idiv = DIV_ROUND_UP(*parent_rate, rate);
++	idiv = DIV_ROUND_UP(req->best_parent_rate, req->rate);
+ 	if (idiv > 127)
+ 		return -EINVAL;
+ 
+-	return *parent_rate / idiv;
++	req->rate = req->best_parent_rate / idiv;
 +
 +	return 0;
  }
  
- static int clk_prcmu_set_rate(struct clk_hw *hw, unsigned long rate,
-@@ -157,7 +159,7 @@ static const struct clk_ops clk_prcmu_scalable_ops = {
- 	.prepare = clk_prcmu_prepare,
- 	.unprepare = clk_prcmu_unprepare,
- 	.recalc_rate = clk_prcmu_recalc_rate,
--	.round_rate = clk_prcmu_round_rate,
-+	.determine_rate = clk_prcmu_determine_rate,
- 	.set_rate = clk_prcmu_set_rate,
+ static int vc5_pfd_set_rate(struct clk_hw *hw, unsigned long rate,
+@@ -420,7 +425,7 @@ static int vc5_pfd_set_rate(struct clk_hw *hw, unsigned long rate,
+ 
+ static const struct clk_ops vc5_pfd_ops = {
+ 	.recalc_rate	= vc5_pfd_recalc_rate,
+-	.round_rate	= vc5_pfd_round_rate,
++	.determine_rate = vc5_pfd_determine_rate,
+ 	.set_rate	= vc5_pfd_set_rate,
  };
  
-@@ -169,7 +171,7 @@ static const struct clk_ops clk_prcmu_gate_ops = {
+@@ -444,30 +449,32 @@ static unsigned long vc5_pll_recalc_rate(struct clk_hw *hw,
+ 	return (parent_rate * div_int) + ((parent_rate * div_frc) >> 24);
+ }
  
- static const struct clk_ops clk_prcmu_scalable_rate_ops = {
- 	.recalc_rate = clk_prcmu_recalc_rate,
--	.round_rate = clk_prcmu_round_rate,
-+	.determine_rate = clk_prcmu_determine_rate,
- 	.set_rate = clk_prcmu_set_rate,
+-static long vc5_pll_round_rate(struct clk_hw *hw, unsigned long rate,
+-			       unsigned long *parent_rate)
++static int vc5_pll_determine_rate(struct clk_hw *hw,
++				  struct clk_rate_request *req)
+ {
+ 	struct vc5_hw_data *hwdata = container_of(hw, struct vc5_hw_data, hw);
+ 	struct vc5_driver_data *vc5 = hwdata->vc5;
+ 	u32 div_int;
+ 	u64 div_frc;
+ 
+-	rate = clamp(rate, VC5_PLL_VCO_MIN, vc5->chip_info->vco_max);
++	req->rate = clamp(req->rate, VC5_PLL_VCO_MIN, vc5->chip_info->vco_max);
+ 
+ 	/* Determine integer part, which is 12 bit wide */
+-	div_int = rate / *parent_rate;
++	div_int = req->rate / req->best_parent_rate;
+ 	if (div_int > 0xfff)
+-		rate = *parent_rate * 0xfff;
++		req->rate = req->best_parent_rate * 0xfff;
+ 
+ 	/* Determine best fractional part, which is 24 bit wide */
+-	div_frc = rate % *parent_rate;
++	div_frc = req->rate % req->best_parent_rate;
+ 	div_frc *= BIT(24) - 1;
+-	do_div(div_frc, *parent_rate);
++	do_div(div_frc, req->best_parent_rate);
+ 
+ 	hwdata->div_int = div_int;
+ 	hwdata->div_frc = (u32)div_frc;
+ 
+-	return (*parent_rate * div_int) + ((*parent_rate * div_frc) >> 24);
++	req->rate = (req->best_parent_rate * div_int) + ((req->best_parent_rate * div_frc) >> 24);
++
++	return 0;
+ }
+ 
+ static int vc5_pll_set_rate(struct clk_hw *hw, unsigned long rate,
+@@ -488,7 +495,7 @@ static int vc5_pll_set_rate(struct clk_hw *hw, unsigned long rate,
+ 
+ static const struct clk_ops vc5_pll_ops = {
+ 	.recalc_rate	= vc5_pll_recalc_rate,
+-	.round_rate	= vc5_pll_round_rate,
++	.determine_rate = vc5_pll_determine_rate,
+ 	.set_rate	= vc5_pll_set_rate,
  };
  
-@@ -187,7 +189,7 @@ static const struct clk_ops clk_prcmu_opp_volt_scalable_ops = {
- 	.prepare = clk_prcmu_opp_volt_prepare,
- 	.unprepare = clk_prcmu_opp_volt_unprepare,
- 	.recalc_rate = clk_prcmu_recalc_rate,
--	.round_rate = clk_prcmu_round_rate,
-+	.determine_rate = clk_prcmu_determine_rate,
- 	.set_rate = clk_prcmu_set_rate,
+@@ -520,17 +527,17 @@ static unsigned long vc5_fod_recalc_rate(struct clk_hw *hw,
+ 	return div64_u64((u64)f_in << 24ULL, ((u64)div_int << 24ULL) + div_frc);
+ }
+ 
+-static long vc5_fod_round_rate(struct clk_hw *hw, unsigned long rate,
+-			       unsigned long *parent_rate)
++static int vc5_fod_determine_rate(struct clk_hw *hw,
++				  struct clk_rate_request *req)
+ {
+ 	struct vc5_hw_data *hwdata = container_of(hw, struct vc5_hw_data, hw);
+ 	/* VCO frequency is divided by two before entering FOD */
+-	u32 f_in = *parent_rate / 2;
++	u32 f_in = req->best_parent_rate / 2;
+ 	u32 div_int;
+ 	u64 div_frc;
+ 
+ 	/* Determine integer part, which is 12 bit wide */
+-	div_int = f_in / rate;
++	div_int = f_in / req->rate;
+ 	/*
+ 	 * WARNING: The clock chip does not output signal if the integer part
+ 	 *          of the divider is 0xfff and fractional part is non-zero.
+@@ -538,18 +545,20 @@ static long vc5_fod_round_rate(struct clk_hw *hw, unsigned long rate,
+ 	 */
+ 	if (div_int > 0xffe) {
+ 		div_int = 0xffe;
+-		rate = f_in / div_int;
++		req->rate = f_in / div_int;
+ 	}
+ 
+ 	/* Determine best fractional part, which is 30 bit wide */
+-	div_frc = f_in % rate;
++	div_frc = f_in % req->rate;
+ 	div_frc <<= 24;
+-	do_div(div_frc, rate);
++	do_div(div_frc, req->rate);
+ 
+ 	hwdata->div_int = div_int;
+ 	hwdata->div_frc = (u32)div_frc;
+ 
+-	return div64_u64((u64)f_in << 24ULL, ((u64)div_int << 24ULL) + div_frc);
++	req->rate = div64_u64((u64)f_in << 24ULL, ((u64)div_int << 24ULL) + div_frc);
++
++	return 0;
+ }
+ 
+ static int vc5_fod_set_rate(struct clk_hw *hw, unsigned long rate,
+@@ -589,7 +598,7 @@ static int vc5_fod_set_rate(struct clk_hw *hw, unsigned long rate,
+ 
+ static const struct clk_ops vc5_fod_ops = {
+ 	.recalc_rate	= vc5_fod_recalc_rate,
+-	.round_rate	= vc5_fod_round_rate,
++	.determine_rate = vc5_fod_determine_rate,
+ 	.set_rate	= vc5_fod_set_rate,
  };
  
 
