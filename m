@@ -1,52 +1,52 @@
-Return-Path: <linux-mips+bounces-10097-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10099-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34225B20E78
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 17:24:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E35BBB20E85
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 17:25:16 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DDA02422DEC
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 15:22:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AE798427A3C
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 15:23:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AC872E8DEF;
-	Mon, 11 Aug 2025 15:18:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 069352E92D5;
+	Mon, 11 Aug 2025 15:18:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="raf8cYBj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pc2y+ckB"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD7962E7BDE;
-	Mon, 11 Aug 2025 15:18:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAB1B2E8E1D;
+	Mon, 11 Aug 2025 15:18:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754925509; cv=none; b=ZmjweKNEN4U9BcGJH6WaZaPI0GYTAHARpchQzx+l7fFFkxwtek2aM9F3pdRqpMDcX4VZk3c7atXmJfI+K4yJgJgG9lP/QvvyJJHNGaGFbWWPYGAVMGI0WTJpDLMFJEd8hF62rxGYXMkigrM1ex9liatmNVYPGoBgyXMFp2Q1zYM=
+	t=1754925510; cv=none; b=iggEghcZTeSj38H/w0vsFlDkc62QkBwF2+9R5NUkUcIws8tJZ0pxLkKFeHtusaIt39CLotRvT0wWqACbLIyOLsxAjJ7N4YIlJ828cMtAhPovJAMLEUTJFFvhKQhYkgmgLpUGX61nT508c64CEuWi7VTFVEP0e/daT+b495g5utY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754925509; c=relaxed/simple;
-	bh=ZK2ueDcN0UvIf+WpMaEl1nVptCb1de8SKwqwC/gyshI=;
+	s=arc-20240116; t=1754925510; c=relaxed/simple;
+	bh=Apc2qzNpfS9aAHI8h/9ad7fvCKlHY8Hm4ds5yDJuMxY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=idjWsQ5uCUoabCbEd3JPN1BTvwuCc4C1wEkil+u95a8Ulyxi7UIfjj4sDREoFEVe+10bP0fTClEJuwFWEeJhXU+eO2eJ3MGf+barJhbJ5XsPj6KP5Ihf0jMSk5ft41Xea/2SRQo+S5jfEhUaWtVNsS+QlIy5cmkw6LnH54RJ3ss=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=raf8cYBj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 95EE5C4AF68;
+	 In-Reply-To:To:Cc; b=ZJx+gm5KMn64xkiX87eqqywL60Z4ERDV97Ss/u8H3uOXjzt+r+RqyPytJkdjVsPR73FVyswqggVLgRwjJBZrvwUR7YY0ZWgNX2z8MqCCkfAYZkMbqh6JWbCzD46oNzpAr8jn2OdBbUprRtXlFJLvRcygRlcJ89IKL3rnve3mNu4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pc2y+ckB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id B6125C19421;
 	Mon, 11 Aug 2025 15:18:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1754925509;
-	bh=ZK2ueDcN0UvIf+WpMaEl1nVptCb1de8SKwqwC/gyshI=;
+	bh=Apc2qzNpfS9aAHI8h/9ad7fvCKlHY8Hm4ds5yDJuMxY=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=raf8cYBj0nLy2iZuKvJkM5PLfOsGQ9ZTj4SRIlQxjY1MgolaaaAFtTFG4xF9KYk4A
-	 1FZVwTC7PIfcb/xCQ0eOsD/epBfPT8/B7+ZBFclUOT1PFJwwccyva4exu29+nd5T/T
-	 Gl7PVatNXLp/bKr4/wJpjEpIb2mQ2nl3zZmJ8zTKLakgBHuQY8Ls4gOIf5plI3o1v+
-	 i2W4DzI5C9ED6xrIhGIkjMUiE/cV8+OeddiVEbdzbzQV+Gw+N0nCxy66ktjeNbG7W4
-	 8NR/c2/ZN2zJ/kjgmBovfjlPUbv83XBZpiBNBMcBPgh6i85cxlpfNkh2hkTWFoVm4/
-	 mLpBIl3NDdrpg==
+	b=Pc2y+ckBwV6Rdu49pgbnKxX8piZe7F+BV9WP5MLfbHVH9rYb3qLklc2ucy3MxIrpo
+	 Ez8CA8oE1fk0yFR1LgKKedg8trPwICBnZsEhl2IgwFt234xrsj49yEv5hX56Iq1uD1
+	 F2o0UQ7o1zBc6v8INWCZvtQ4emAbXpiDRhX9cRER0+VfVSzRPLc8fgP+psn+W1O5OP
+	 xuv8nMzO7ym+lDgJBQe8UIVtUgf9PigsaNLs3f8EGfEy5+l7gT5a8aJr51mKVmN3wG
+	 2SraZuhAlNj+AcxdWycxr/btBCZOM7mY2+5QhqPP7xDxbBR01mOk2938UL41QbFmXh
+	 KgiaTMhfUfQzQ==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 80A9ACA0EC4;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 9657DC87FDA;
 	Mon, 11 Aug 2025 15:18:29 +0000 (UTC)
 From: Brian Masney via B4 Relay <devnull+bmasney.redhat.com@kernel.org>
-Date: Mon, 11 Aug 2025 11:18:34 -0400
-Subject: [PATCH 042/114] clk: si521xx: convert from round_rate() to
+Date: Mon, 11 Aug 2025 11:18:35 -0400
+Subject: [PATCH 043/114] clk: si5341: convert from round_rate() to
  determine_rate()
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250811-clk-for-stephen-round-rate-v1-42-b3bf97b038dc@redhat.com>
+Message-Id: <20250811-clk-for-stephen-round-rate-v1-43-b3bf97b038dc@redhat.com>
 References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
 In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
 To: Michael Turquette <mturquette@baylibre.com>, 
@@ -122,11 +122,11 @@ Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev, 
  Brian Masney <bmasney@redhat.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1754925498; l=1821;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1754925498; l=1946;
  i=bmasney@redhat.com; s=20250528; h=from:subject:message-id;
- bh=IYfcBgwkQpHDyc8q2RV5A5vv1udYTKTPHUiTmW2Cwno=;
- b=waUAjIfKrQAV57XrANvP9EEjChBsr6Yt07UIfnBK3ZshiRnoCJySmfzJCRr5NSot/62ay4Kev
- 5PzOKFX1ommBOmvXhrcksOjRNQwgxc2iotqiGVZtfsSVOH+sJncYevs
+ bh=VSclFs7R89Y+Lsm61Wi5Kzy/FJb3iOqfzn5aANhegPc=;
+ b=flWSSXi6CEENtdFwyXcyp3r9Kub5eRxDOAYKZ/Npi1LtbV7xxzxgOYvzm2I3AsyOaNwIt8AHw
+ esev6EsAl3zCadBDavASsob5DvzObWhBdDc6yl/uXR7h9oJCiYxZi60
 X-Developer-Key: i=bmasney@redhat.com; a=ed25519;
  pk=x20f2BQYftANnik+wvlm4HqLqAlNs/npfVcbhHPOK2U=
 X-Endpoint-Received: by B4 Relay for bmasney@redhat.com/20250528 with
@@ -142,45 +142,60 @@ on the cover letter of this series.
 
 Signed-off-by: Brian Masney <bmasney@redhat.com>
 ---
- drivers/clk/clk-si521xx.c | 14 ++++++++------
- 1 file changed, 8 insertions(+), 6 deletions(-)
+ drivers/clk/clk-si5341.c | 22 ++++++++++++++--------
+ 1 file changed, 14 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/clk/clk-si521xx.c b/drivers/clk/clk-si521xx.c
-index 4f7b74f889f1e7e9400a61f15d1e6671408bb1fc..4ed4e1a5f4f2b3b9fe063d79fc5140f1b41c4ace 100644
---- a/drivers/clk/clk-si521xx.c
-+++ b/drivers/clk/clk-si521xx.c
-@@ -164,15 +164,17 @@ static unsigned long si521xx_diff_recalc_rate(struct clk_hw *hw,
- 	return (unsigned long)rate;
+diff --git a/drivers/clk/clk-si5341.c b/drivers/clk/clk-si5341.c
+index 5004888c7eca5f85a444ec6de684b8dd79635622..2499b771cd83e313eafd83cb0519b1b94da73a61 100644
+--- a/drivers/clk/clk-si5341.c
++++ b/drivers/clk/clk-si5341.c
+@@ -663,8 +663,8 @@ static unsigned long si5341_synth_clk_recalc_rate(struct clk_hw *hw,
+ 	return f;
  }
  
--static long si521xx_diff_round_rate(struct clk_hw *hw, unsigned long rate,
--				    unsigned long *prate)
-+static int si521xx_diff_determine_rate(struct clk_hw *hw,
-+				       struct clk_rate_request *req)
+-static long si5341_synth_clk_round_rate(struct clk_hw *hw, unsigned long rate,
+-		unsigned long *parent_rate)
++static int si5341_synth_clk_determine_rate(struct clk_hw *hw,
++					   struct clk_rate_request *req)
  {
- 	unsigned long best_parent;
+ 	struct clk_si5341_synth *synth = to_clk_si5341_synth(hw);
+ 	u64 f;
+@@ -672,15 +672,21 @@ static long si5341_synth_clk_round_rate(struct clk_hw *hw, unsigned long rate,
+ 	/* The synthesizer accuracy is such that anything in range will work */
+ 	f = synth->data->freq_vco;
+ 	do_div(f, SI5341_SYNTH_N_MAX);
+-	if (rate < f)
+-		return f;
++	if (req->rate < f) {
++		req->rate = f;
++
++		return 0;
++	}
  
--	best_parent = (rate / SI521XX_DIFF_MULT) * SI521XX_DIFF_DIV;
--	*prate = clk_hw_round_rate(clk_hw_get_parent(hw), best_parent);
-+	best_parent = (req->rate / SI521XX_DIFF_MULT) * SI521XX_DIFF_DIV;
-+	req->best_parent_rate = clk_hw_round_rate(clk_hw_get_parent(hw), best_parent);
+ 	f = synth->data->freq_vco;
+ 	do_div(f, SI5341_SYNTH_N_MIN);
+-	if (rate > f)
+-		return f;
++	if (req->rate > f) {
++		req->rate = f;
  
--	return (*prate / SI521XX_DIFF_DIV) * SI521XX_DIFF_MULT;
-+	req->rate = (req->best_parent_rate / SI521XX_DIFF_DIV) * SI521XX_DIFF_MULT;
+-	return rate;
++		return 0;
++	}
 +
 +	return 0;
  }
  
- static int si521xx_diff_set_rate(struct clk_hw *hw, unsigned long rate,
-@@ -208,7 +210,7 @@ static void si521xx_diff_unprepare(struct clk_hw *hw)
- }
+ static int si5341_synth_program(struct clk_si5341_synth *synth,
+@@ -741,7 +747,7 @@ static const struct clk_ops si5341_synth_clk_ops = {
+ 	.prepare = si5341_synth_clk_prepare,
+ 	.unprepare = si5341_synth_clk_unprepare,
+ 	.recalc_rate = si5341_synth_clk_recalc_rate,
+-	.round_rate = si5341_synth_clk_round_rate,
++	.determine_rate = si5341_synth_clk_determine_rate,
+ 	.set_rate = si5341_synth_clk_set_rate,
+ };
  
- static const struct clk_ops si521xx_diff_clk_ops = {
--	.round_rate	= si521xx_diff_round_rate,
-+	.determine_rate = si521xx_diff_determine_rate,
- 	.set_rate	= si521xx_diff_set_rate,
- 	.recalc_rate	= si521xx_diff_recalc_rate,
- 	.prepare	= si521xx_diff_prepare,
 
 -- 
 2.50.1
