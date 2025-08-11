@@ -1,52 +1,52 @@
-Return-Path: <linux-mips+bounces-10061-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10062-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B076B20DA1
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 17:20:09 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C976B20D8A
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 17:19:41 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B25983BE58D
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 15:19:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 87ACC189367B
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 15:19:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13D4C2E2640;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24B382E265E;
 	Mon, 11 Aug 2025 15:18:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LbJ6Kzgs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m7vsQ40O"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0EE62E11D6;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C21452E03FB;
 	Mon, 11 Aug 2025 15:18:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754925505; cv=none; b=ryBhsEZfoPT7V2n70NmXEMsijRbuiQwAj4joC/LiF7mNyiIZpWvqSbVxlLLRvrGObvs3CPR23GCCHX7ls7R/GIsJGW6lJ0R7aAauXd69Pp9SjeMbD3VojUam6SgK3HRhhix7CSvl+FV+72chi/EXZ4HU/gGp6GcxQCzJm7aFqMk=
+	t=1754925505; cv=none; b=py9mKbBcVsACuMk0b7hTxQuON48PHFfxxV9JKJbXZtYVZZqoVhLZUjHBpVSmb9VqIIUKCPD+OZRrS6OSadRXBkOGW3R1yd0yUL/QueExgeDDEl5qYzL6mnWyer/Rvz2UPcC2y7Sp4V+RYVEVU67639GN1crWjh090aE2uABytr0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1754925505; c=relaxed/simple;
-	bh=Wnk8BgOipo2N9m2Ea9uOpJhaiYbl+Z6j0QpOrSLOTE0=;
+	bh=7WmGWgP3WNri1LLXKAy/zJm3kSpxQVuXXEoOiN65vHg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=XHA+zLkMZod1n4BXaSOv5gR+r4Y0H6xHuvXHPmM0XhewfvTTMArDRWfxhjgDFwzhjZ337xxrqkD/2wuWIMJo0Dsw+4pIrdz+H2TWEEFO5AOxUzLaH1e2gB6x0pbQG05BnOYs3M4YOVJ0ap3lrQ/slGriRnBOaGtkClTVC+GjFYo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LbJ6Kzgs; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 69288C19421;
+	 In-Reply-To:To:Cc; b=C+b/96IGqFLYOILpOvj9t/XYfjabx6zgOzMJUQWx9mwi8Fc8HaDyva55LSQ854hyFOiKz6AXBd+rD4igZVVlGIoP6gZ3x+Wbme6JI0kxn5UnYhrvBVFQkLchB0Og8yxDqdTgxnaVq0tAHPTfK+7yQKPYxniGm6d7ot3VLHocCWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m7vsQ40O; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 854F6C19424;
 	Mon, 11 Aug 2025 15:18:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1754925505;
-	bh=Wnk8BgOipo2N9m2Ea9uOpJhaiYbl+Z6j0QpOrSLOTE0=;
+	bh=7WmGWgP3WNri1LLXKAy/zJm3kSpxQVuXXEoOiN65vHg=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=LbJ6KzgspBgsAPmYGfJknK33s/eHMgzX7lVbHf2pzr9DVHzBc9chYcOZa8nM6tEvM
-	 yZi72iJaf6E6ldHVy7FDw7pJf0nmJk4Y+KWi06jIrqKk5+XVfz1iMNvh3heUCBiTSL
-	 PeAn0G3lHG4sU5yTRGYZrtukRYvJXUkOh1PvjUAMlciQpMLMGLPAnjO4+93p8FkZtv
-	 RlKwIzVENygfObbosflZzrq+kiRxBrBgYclKP2u2sf7BEiLZSLMR2CsFsQi/PZJluU
-	 8jNPTmZhPjj1qr5niXk47aZrSo9aExytqHFLH0XcfTeW5TFTCMOknimrKqS9zf5cL0
-	 fhrmC8kPAotSw==
+	b=m7vsQ40O/cmDToM9CJvbrZpSBevMuFDVwG9T2no8A5an9BqjR+pVGbQhiKZ/MUsVn
+	 U4+24QovGNQh9BJ4EqTPzwm3zZvr+xGwpwclqd2T9FMgI/XDow/Rxc/i6bt191O18b
+	 pLQbamZBd0SlVG29gBNKTcmiZgNNZflQMtmcGT30zJqLU1PnvFFeaXOm6+96TJQ3Qu
+	 Gg+jGZ8++Ifi+MlMAziZVEgqHRS5OlBHatomQoZNi5aWJOIPCeuWvvzX2qID1gDlvr
+	 mcKaHgffIc6WM/kpqFB18syeY0x38XnVxLsP9m49xGeFlNf7z+jYmhlTqKvqeOQcGr
+	 1nPrTQAltet1g==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 5C336CA0EC4;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7146EC88CB9;
 	Mon, 11 Aug 2025 15:18:25 +0000 (UTC)
 From: Brian Masney via B4 Relay <devnull+bmasney.redhat.com@kernel.org>
-Date: Mon, 11 Aug 2025 11:17:57 -0400
-Subject: [PATCH 005/114] clk: at91: h32mx: convert from round_rate() to
+Date: Mon, 11 Aug 2025 11:17:58 -0400
+Subject: [PATCH 006/114] clk: at91: pll: convert from round_rate() to
  determine_rate()
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250811-clk-for-stephen-round-rate-v1-5-b3bf97b038dc@redhat.com>
+Message-Id: <20250811-clk-for-stephen-round-rate-v1-6-b3bf97b038dc@redhat.com>
 References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
 In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
 To: Michael Turquette <mturquette@baylibre.com>, 
@@ -122,11 +122,11 @@ Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev, 
  Brian Masney <bmasney@redhat.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1754925497; l=1996;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1754925497; l=1623;
  i=bmasney@redhat.com; s=20250528; h=from:subject:message-id;
- bh=+Gy4fG2AJvROWxLhbBjQuuilZZnIYreI5B1/XGUumAw=;
- b=bddnmfr4Qq1udz7evPQmYKx0VTkqElCn38ZpoP64EqHSc8I+tppgsKu0InDLdio46Q6TiYUZ2
- DhMOktZu9bvDKJ96MsnGmtOMrcr/Nv5jIn3B5BUb3PZfzg+8EZLKNzL
+ bh=vfsDxiC2IUHSzZtKUSDsaKTcB8+E7YIHSMdXPK9DC4M=;
+ b=1tVdQO0+g32jeinRamf1aU4AQ3DAUsqxNp/uXni/3ausTrQyJaqHkDziXDBr1WSUAE3bWGYja
+ wVbxog6lOoSBLVI9mjVziVOvfH6ldLKbK5E2u0a5do1lqdtwXx2Dx9v
 X-Developer-Key: i=bmasney@redhat.com; a=ed25519;
  pk=x20f2BQYftANnik+wvlm4HqLqAlNs/npfVcbhHPOK2U=
 X-Endpoint-Received: by B4 Relay for bmasney@redhat.com/20250528 with
@@ -142,65 +142,42 @@ on the cover letter of this series.
 
 Signed-off-by: Brian Masney <bmasney@redhat.com>
 ---
- drivers/clk/at91/clk-h32mx.c | 33 ++++++++++++++++++++++-----------
- 1 file changed, 22 insertions(+), 11 deletions(-)
+ drivers/clk/at91/clk-pll.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/clk/at91/clk-h32mx.c b/drivers/clk/at91/clk-h32mx.c
-index 1e6c12eeda10c4abb51c2046ea27b238db2560cb..a9aa93b5a870988677ad4609a210ed9570295228 100644
---- a/drivers/clk/at91/clk-h32mx.c
-+++ b/drivers/clk/at91/clk-h32mx.c
-@@ -40,21 +40,32 @@ static unsigned long clk_sama5d4_h32mx_recalc_rate(struct clk_hw *hw,
- 	return parent_rate;
+diff --git a/drivers/clk/at91/clk-pll.c b/drivers/clk/at91/clk-pll.c
+index 249d6a53cedf5da1c2d877762474592e4b3fda40..5c5f7398effee1447ff86516c2cec1ddc1adc542 100644
+--- a/drivers/clk/at91/clk-pll.c
++++ b/drivers/clk/at91/clk-pll.c
+@@ -231,13 +231,15 @@ static long clk_pll_get_best_div_mul(struct clk_pll *pll, unsigned long rate,
+ 	return bestrate;
  }
  
--static long clk_sama5d4_h32mx_round_rate(struct clk_hw *hw, unsigned long rate,
--				       unsigned long *parent_rate)
-+static int clk_sama5d4_h32mx_determine_rate(struct clk_hw *hw,
-+					    struct clk_rate_request *req)
+-static long clk_pll_round_rate(struct clk_hw *hw, unsigned long rate,
+-					unsigned long *parent_rate)
++static int clk_pll_determine_rate(struct clk_hw *hw,
++				  struct clk_rate_request *req)
  {
- 	unsigned long div;
+ 	struct clk_pll *pll = to_clk_pll(hw);
  
--	if (rate > *parent_rate)
--		return *parent_rate;
--	div = *parent_rate / 2;
--	if (rate < div)
--		return div;
-+	if (req->rate > req->best_parent_rate) {
-+		req->rate = req->best_parent_rate;
- 
--	if (rate - div < *parent_rate - rate)
--		return div;
-+		return 0;
-+	}
-+	div = req->best_parent_rate / 2;
-+	if (req->rate < div) {
-+		req->rate = div;
-+
-+		return 0;
-+	}
-+
-+	if (req->rate - div < req->best_parent_rate - req->rate) {
-+		req->rate = div;
- 
--	return *parent_rate;
-+		return 0;
-+	}
-+
-+	req->rate = req->best_parent_rate;
+-	return clk_pll_get_best_div_mul(pll, rate, *parent_rate,
+-					NULL, NULL, NULL);
++	req->rate = clk_pll_get_best_div_mul(pll, req->rate, req->best_parent_rate,
++					     NULL, NULL, NULL);
 +
 +	return 0;
  }
  
- static int clk_sama5d4_h32mx_set_rate(struct clk_hw *hw, unsigned long rate,
-@@ -77,7 +88,7 @@ static int clk_sama5d4_h32mx_set_rate(struct clk_hw *hw, unsigned long rate,
- 
- static const struct clk_ops h32mx_ops = {
- 	.recalc_rate = clk_sama5d4_h32mx_recalc_rate,
--	.round_rate = clk_sama5d4_h32mx_round_rate,
-+	.determine_rate = clk_sama5d4_h32mx_determine_rate,
- 	.set_rate = clk_sama5d4_h32mx_set_rate,
- };
- 
+ static int clk_pll_set_rate(struct clk_hw *hw, unsigned long rate,
+@@ -302,7 +304,7 @@ static const struct clk_ops pll_ops = {
+ 	.unprepare = clk_pll_unprepare,
+ 	.is_prepared = clk_pll_is_prepared,
+ 	.recalc_rate = clk_pll_recalc_rate,
+-	.round_rate = clk_pll_round_rate,
++	.determine_rate = clk_pll_determine_rate,
+ 	.set_rate = clk_pll_set_rate,
+ 	.save_context = clk_pll_save_context,
+ 	.restore_context = clk_pll_restore_context,
 
 -- 
 2.50.1
