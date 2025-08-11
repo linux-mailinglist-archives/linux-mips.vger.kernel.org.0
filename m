@@ -1,52 +1,52 @@
-Return-Path: <linux-mips+bounces-10095-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10098-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06E1FB20E4F
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 17:24:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA698B20E76
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 17:24:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 038E33AE6E1
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 15:22:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 57416422016
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 15:22:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4524C2E88A3;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 920522E8E07;
 	Mon, 11 Aug 2025 15:18:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gPd1fsd7"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jGRs0sC9"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A8CA2E765E;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF7852E763A;
 	Mon, 11 Aug 2025 15:18:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754925509; cv=none; b=WEoBk3Imsj4AzGgmqnW42CTkS3Ytmb4cJzxMlfOAxWpERjM2Qqlpzy1BjBzWc3Yam6rPoe0T8No27lDY7pnSLfeKdPk/rU0aMTGi7aGAtcPK961lrYuzRkt0NUzVwFmHeYX6jWeSxT4dK/n84CXZ5Yw2Q++roRWfT+dMyZdy7SY=
+	t=1754925510; cv=none; b=Lvgbyetr3tu42PRIUnM1zmgJAzhvXM2gkTQxeseNjBtDqud8A3tT7/KzqL8rAYZIgQIUhnYDF98/DqvGB6QbSSG9WFv8RPdBAvbb00zixrwOpvu2dVKTrDqPkaPUgSyUWpzYT6F4sxBWav9wW5V17KwBHsWe+0wL7gqRtngOIF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754925509; c=relaxed/simple;
-	bh=fH+OQ8HNhs0jPs+lrzzkvSrlgeoldgmOrg2g6P5gfZw=;
+	s=arc-20240116; t=1754925510; c=relaxed/simple;
+	bh=oS/ZrCjBTdyPuJMM+Yew4C7cf0HwcK6IhmTH8w2E3wE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Hni/4lNvFJFt17RqDPHcYPB++P/a6okvlVu+1xwYCHg+e6Pbph2v90nUzZx+TLG6JjKeH7XSLkwREukd3O2/M0oaBF/jJBuXn3P3yB8H0eaaPqowA/jQAUsRmj5ynaDzIUJV+Llxb9P2xPpwNm0BpCPP+Y+IVHhtsSfsjhUrzZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gPd1fsd7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 658B4C4AF0B;
+	 In-Reply-To:To:Cc; b=FpCsNLTsCIF4dvAXcNaJ3XMDpSzjdc3g4P+EJiB+r95LH/7ZD/zlCptmlNWwBmAJXAZxpoLA84SruYcjXENrH2LFhWZrgTHSWjAkxlGagMINsivRPpYPsjOj3OHHWNz+vfrDgRJrCOL+CN+xSUoG7FDZ50m9qobaATSVka3iuA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jGRs0sC9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8673BC4AF50;
 	Mon, 11 Aug 2025 15:18:29 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1754925509;
-	bh=fH+OQ8HNhs0jPs+lrzzkvSrlgeoldgmOrg2g6P5gfZw=;
+	bh=oS/ZrCjBTdyPuJMM+Yew4C7cf0HwcK6IhmTH8w2E3wE=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=gPd1fsd7/tRSL68xwqYTHSlr71CP/gWKhUeUPKHCr+z+NWV1Kc7uUzOOMSgLn2GxK
-	 HCICwR89CUko9lgt7Rn7XWQXYKKSMtHPIkFbvL4yv28JIjIa7vc2rjEv2mdavWuchf
-	 z8oPF4CblaatVKyBbz32GskeOBoJVAI7B5qOW3wIjQofa004NpUw3TPFBi3W26xlLF
-	 Rk+CdorT3uLqwrAjw/wwM7Y/7WxjWCtornQZq71+z5Vp8P6a0jd6OIPaN5lvVJAsuH
-	 G9McGTh68c+MIkWkae6I5SV168LezvqzXQ3c9oLq0FfBBX2z0bpJSYSAxKk7CxG90Y
-	 MOKRsfmqsWvfg==
+	b=jGRs0sC9HKEJgF+GylLW+yPT6UtkqueBYMVsEYZfuh1GMoTY6F3k1xgHWqIkDv7bX
+	 r1/ksDc39F5Q6cjY2Ld4ZMKHeweTjYUMGW//WbVPqrsPyuruyqBAsh01Q2TY0c+/1C
+	 ot3cS7wxuR/eJ2H6cJTpAkHKR+9xPi6NP08M8Ldl1+EH9Z+f2TVBa3sYT3DK+QDzGi
+	 z1/BLkkskQZJwMJds9/UcuU3UCnoQp2Ny4b+t9c8qIUTZijvEBNRsyAleHOOw1GXlM
+	 hRJ1oDesembcMrCUU+CV//f14i/zuE29ST6pCG7OEPLPFPHa6qWpRZn/zqyAaBGzlK
+	 HM12quohQcCOw==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 51D11C88CB9;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 69CA0CA0ECD;
 	Mon, 11 Aug 2025 15:18:29 +0000 (UTC)
 From: Brian Masney via B4 Relay <devnull+bmasney.redhat.com@kernel.org>
-Date: Mon, 11 Aug 2025 11:18:32 -0400
-Subject: [PATCH 040/114] clk: scpi: convert from round_rate() to
+Date: Mon, 11 Aug 2025 11:18:33 -0400
+Subject: [PATCH 041/114] clk: si514: convert from round_rate() to
  determine_rate()
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250811-clk-for-stephen-round-rate-v1-40-b3bf97b038dc@redhat.com>
+Message-Id: <20250811-clk-for-stephen-round-rate-v1-41-b3bf97b038dc@redhat.com>
 References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
 In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
 To: Michael Turquette <mturquette@baylibre.com>, 
@@ -122,11 +122,11 @@ Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev, 
  Brian Masney <bmasney@redhat.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1754925498; l=2456;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1754925498; l=1615;
  i=bmasney@redhat.com; s=20250528; h=from:subject:message-id;
- bh=i3OzFCzWIu+3CNTyPqrnC3B/fnrjfsI1+Trm/rpL92U=;
- b=FENhA7e/HJ5XZKpYqLEVYyyNlipzXrux4wgwSxe3R2p3IpPoHzG+b37zRGolXL6DACb5Kb+sQ
- 4X5ICnW38r1ByNyVl4QFWdyb6jIdtgyU1UVPoSPHPZxCFBO//oAmiVn
+ bh=dagTZ8T2ZWlrRPVjhpPlS47bP85AKVvJF75/1IUEHCk=;
+ b=1G8W5arP5g5axnUnhxSv5YFklILV589JL7kyFbnUXIZgHs6LZyzSE1SQAd6sETEfbnA0vagtV
+ TgNeOblAgxGB6iJ3x8RECdptL4wESj05RTuXKsNZL/ykW5cKJ0IGgBZ
 X-Developer-Key: i=bmasney@redhat.com; a=ed25519;
  pk=x20f2BQYftANnik+wvlm4HqLqAlNs/npfVcbhHPOK2U=
 X-Endpoint-Received: by B4 Relay for bmasney@redhat.com/20250528 with
@@ -142,67 +142,56 @@ on the cover letter of this series.
 
 Signed-off-by: Brian Masney <bmasney@redhat.com>
 ---
- drivers/clk/clk-scpi.c | 18 ++++++++++--------
- 1 file changed, 10 insertions(+), 8 deletions(-)
+ drivers/clk/clk-si514.c | 24 ++++++++++++++++--------
+ 1 file changed, 16 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/clk/clk-scpi.c b/drivers/clk/clk-scpi.c
-index 19d530d52e647be3337225aa7c662d8ecee9ce0f..0b592de7bdb2a07d58a867e4ab00d493927b0b53 100644
---- a/drivers/clk/clk-scpi.c
-+++ b/drivers/clk/clk-scpi.c
-@@ -32,8 +32,8 @@ static unsigned long scpi_clk_recalc_rate(struct clk_hw *hw,
- 	return clk->scpi_ops->clk_get_val(clk->id);
+diff --git a/drivers/clk/clk-si514.c b/drivers/clk/clk-si514.c
+index 1127c35ce57d70f93fb77feb6a971dae98e871d7..f61590d70575bca52d0255ba114ba6ab381e6f54 100644
+--- a/drivers/clk/clk-si514.c
++++ b/drivers/clk/clk-si514.c
+@@ -227,20 +227,28 @@ static unsigned long si514_recalc_rate(struct clk_hw *hw,
+ 	return si514_calc_rate(&settings);
  }
  
--static long scpi_clk_round_rate(struct clk_hw *hw, unsigned long rate,
--				unsigned long *parent_rate)
-+static int scpi_clk_determine_rate(struct clk_hw *hw,
-+				   struct clk_rate_request *req)
+-static long si514_round_rate(struct clk_hw *hw, unsigned long rate,
+-		unsigned long *parent_rate)
++static int si514_determine_rate(struct clk_hw *hw,
++				struct clk_rate_request *req)
  {
- 	/*
- 	 * We can't figure out what rate it will be, so just return the
-@@ -41,7 +41,7 @@ static long scpi_clk_round_rate(struct clk_hw *hw, unsigned long rate,
- 	 * after the rate is set and we'll know what rate the clock is
- 	 * running at then.
- 	 */
--	return rate;
-+	return 0;
- }
+ 	struct clk_si514_muldiv settings;
+ 	int err;
  
- static int scpi_clk_set_rate(struct clk_hw *hw, unsigned long rate,
-@@ -54,7 +54,7 @@ static int scpi_clk_set_rate(struct clk_hw *hw, unsigned long rate,
+-	if (!rate)
++	if (!req->rate) {
++		req->rate = 0;
++
+ 		return 0;
++	}
  
- static const struct clk_ops scpi_clk_ops = {
- 	.recalc_rate = scpi_clk_recalc_rate,
--	.round_rate = scpi_clk_round_rate,
-+	.determine_rate = scpi_clk_determine_rate,
- 	.set_rate = scpi_clk_set_rate,
- };
+-	err = si514_calc_muldiv(&settings, rate);
+-	if (err)
+-		return err;
++	err = si514_calc_muldiv(&settings, req->rate);
++	if (err) {
++		req->rate = err;
  
-@@ -92,12 +92,14 @@ static unsigned long scpi_dvfs_recalc_rate(struct clk_hw *hw,
- 	return opp->freq;
- }
- 
--static long scpi_dvfs_round_rate(struct clk_hw *hw, unsigned long rate,
--				 unsigned long *parent_rate)
-+static int scpi_dvfs_determine_rate(struct clk_hw *hw,
-+				    struct clk_rate_request *req)
- {
- 	struct scpi_clk *clk = to_scpi_clk(hw);
- 
--	return __scpi_dvfs_round_rate(clk, rate);
-+	req->rate = __scpi_dvfs_round_rate(clk, req->rate);
+-	return si514_calc_rate(&settings);
++		return 0;
++	}
++
++	req->rate = si514_calc_rate(&settings);
 +
 +	return 0;
  }
  
- static int __scpi_find_dvfs_index(struct scpi_clk *clk, unsigned long rate)
-@@ -124,7 +126,7 @@ static int scpi_dvfs_set_rate(struct clk_hw *hw, unsigned long rate,
- 
- static const struct clk_ops scpi_dvfs_ops = {
- 	.recalc_rate = scpi_dvfs_recalc_rate,
--	.round_rate = scpi_dvfs_round_rate,
-+	.determine_rate = scpi_dvfs_determine_rate,
- 	.set_rate = scpi_dvfs_set_rate,
+ /*
+@@ -289,7 +297,7 @@ static const struct clk_ops si514_clk_ops = {
+ 	.unprepare = si514_unprepare,
+ 	.is_prepared = si514_is_prepared,
+ 	.recalc_rate = si514_recalc_rate,
+-	.round_rate = si514_round_rate,
++	.determine_rate = si514_determine_rate,
+ 	.set_rate = si514_set_rate,
  };
  
 
