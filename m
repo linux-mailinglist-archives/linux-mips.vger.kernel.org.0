@@ -1,62 +1,62 @@
-Return-Path: <linux-mips+bounces-10050-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10051-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4AC32B20358
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 11:27:44 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58A9EB20835
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 13:51:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 06F303B61BA
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 09:27:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 147423A7335
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 11:51:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1E8F22B8A9;
-	Mon, 11 Aug 2025 09:27:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F22922B8A9;
+	Mon, 11 Aug 2025 11:51:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b="Z3MPyC/y"
+	dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b="b8O/82Rd"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.10])
+Received: from mx4.wp.pl (mx4.wp.pl [212.77.101.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F18DA2DCF56
-	for <linux-mips@vger.kernel.org>; Mon, 11 Aug 2025 09:27:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.77.101.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16959199223
+	for <linux-mips@vger.kernel.org>; Mon, 11 Aug 2025 11:51:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.77.101.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754904456; cv=none; b=PyDTVVoXaV6UnF9mB14VKzKulAtS27YtXO/8Ig5iiB9JiSK0fNNWAq7uZVowy+5yUPGHC6ePZCf82WORyy2XWeic4C2jLPzuEeLE8FMBfaRfpqFx9bIjxUQfsoGC3tkQ1fVF/v6SY+h3YtPAP8z6WFJKZzbEoAQoTXY+48rB0zc=
+	t=1754913080; cv=none; b=MuW7BIt/naOhaZJDFHMa/fs0IRtloprTHvqbdtmsIRi4sDHav4d1jcLnEuwA3BXXOR3CwTtKZyUArRV3oKG7O/vR/1yVeXzjuElX87bfU3OuTpDZb5gO7W8y/5OIDT3raCYfNFh1Opd7j0G02GsVl1ER+4wyfed3h3BPndwzXV4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754904456; c=relaxed/simple;
-	bh=B6OgfGWrJTmOPWVma9W95ySOuNbVX75iwTf6/mPCbQ8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ke4pOl4lDRZfutyU0LTKbjPKDkDLdn4I12uMh/pcHVASLwUJdQe6EOm0KV9WsjrygoURBopO2+qkqv3rh+7q3xc3TrDHsvu388ap+xhVxJiAK7iZRWRgYDglmd4HUOmJDBQBqYjdxpzv/Pt6/hDjolZFDRI0dF4AdjVQCG70eZs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl; spf=pass smtp.mailfrom=wp.pl; dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b=Z3MPyC/y; arc=none smtp.client-ip=212.77.101.10
+	s=arc-20240116; t=1754913080; c=relaxed/simple;
+	bh=Ez6SINq3WRAmM/Dg8l/3+nB/nR+O83xlym6fKiLRzVQ=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=PBQ/asJLmbuSDITd3U/kLm10LDj1Gf8GEgYEulUwvUvirFkzMTYV6UdhJxoXsm6WcArInB+pSlCTOTetGf+Txte4uzT8OWd7lC4w0LHXSktpYg1z9Y7G2Opl4hs4Lzc6RZA5wUDXezyHikunCe4lNdeHuyVB+iEgheV8qmO/pMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl; spf=pass smtp.mailfrom=wp.pl; dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b=b8O/82Rd; arc=none smtp.client-ip=212.77.101.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wp.pl
-Received: (wp-smtpd smtp.wp.pl 36672 invoked from network); 11 Aug 2025 11:20:53 +0200
+Received: (wp-smtpd smtp.wp.pl 11193 invoked from network); 11 Aug 2025 13:44:34 +0200
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=20241105;
-          t=1754904053; bh=3umHQDcb0zjHfkJbR08wpJ0dPt9WRkjKc/Qo2lTT0iA=;
-          h=From:To:Cc:Subject;
-          b=Z3MPyC/y3Fqc1WPlf/+le4mK0yu3Etq/U9OFZZfT6GVqk2vgmiOprsdeaPVjVpySJ
-           ml11s/0l90KsBK4TFZD1VIDw7ijqLclFkJyahC7rR0F83ogZoQuBl9aM5gRFT6dQT+
-           M6UE7lzO9Iw9N74yzSjAsZYXZ8adW8CLRJAS6KGNWfuxG9Z2bwz0UMC7gGB4i0LoMI
-           N0O37HdhpgEwClHk11iGQpZaiQwuG/ypc/2lt/TF8cqm6FyNjObv2cZjhQD1EvjnkS
-           myTKjTCUk05rpddlIKqyOjCSCVjO9GrZrxXQYm5mnt4F1NEGGeiCDOiGJDXsTT4oxZ
-           FXCkHc/9Xwh9w==
+          t=1754912674; bh=P9Mojr1dPjuPYog11ph6cxB1cTkaM1gR2irGlGlo2wA=;
+          h=From:To:Subject;
+          b=b8O/82RdfB8sn6+6Y+YKlNoX7aDZ9jG243/EC5lZtHGo4MZcmOti7vj5Tzcamubck
+           lEhGcafay+OeRodtv1gxYuwoED5FoZ5vf8aT6NFELx5o2+EP+vXshYkG4RwkupXdOz
+           xZ7VkaJYNrhibntKnvDafntxaUEWyZddk3ylr6nAi/tCEOlkIDiF6nF8Tv82qM8pjc
+           BX2NLtTenIDMTkVTDtsGa6S6V5+dLVTONLxi6O60vxXWI+aw85oawRdXolDp62D2Ho
+           vlyWxrfJvitzb5+jvXuQ1LNEyferedCkTpfpX0yTcADAaXJ8s27LEogu0nfa7dpDbg
+           0oe8yHqvRWkRQ==
 Received: from 83.24.148.125.ipv4.supernova.orange.pl (HELO laptop-olek.lan) (olek2@wp.pl@[83.24.148.125])
           (envelope-sender <olek2@wp.pl>)
           by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <tsbogend@alpha.franken.de>; 11 Aug 2025 11:20:53 +0200
+          for <robh@kernel.org>; 11 Aug 2025 13:44:34 +0200
 From: Aleksander Jan Bajkowski <olek2@wp.pl>
-To: tsbogend@alpha.franken.de,
-	robh@kernel.org,
+To: robh@kernel.org,
 	krzk+dt@kernel.org,
 	conor+dt@kernel.org,
-	zhouyanjie@wanyeetech.com,
-	linux-mips@vger.kernel.org,
+	tsbogend@alpha.franken.de,
+	olek2@wp.pl,
+	davem@davemloft.net,
 	devicetree@vger.kernel.org,
+	linux-mips@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Cc: Aleksander Jan Bajkowski <olek2@wp.pl>
-Subject: [PATCH] dt-bindings: mips: cpu: Add MIPS 34Kc Core
-Date: Mon, 11 Aug 2025 11:20:36 +0200
-Message-ID: <20250811092048.497087-1-olek2@wp.pl>
+Subject: [PATCH net] mips: lantiq: add missing burst length property
+Date: Mon, 11 Aug 2025 13:44:23 +0200
+Message-ID: <20250811114432.732587-1-olek2@wp.pl>
 X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -65,31 +65,49 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-WP-DKIM-Status: good (id: wp.pl)                                                      
-X-WP-MailID: c31b38db7f8f9720d512873d28b9fe54
+X-WP-MailID: 82fa28d6888cff3bfe4d1195cced04de
 X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 000000A [0WME]                               
+X-WP-SPAM: NO 0000000 [4ZNN]                               
 
-Document MIPS 34Kc device tree bindings. It is used in the Realtek
-RTL930x SoC.
+The upstream dts lacks the lantiq,{rx/tx}-burst-length property. Other
+issues were also fixed:
+/home/aleksander/workspace/linux/arch/mips/boot/dts/lantiq/danube_easy50712.dtb: etop@e180000 (lantiq,etop-xway): $nodename:0: 'etop@e180000' does not match '^ethernet@[0-9a-f]+$'
+	from schema $id: http://devicetree.org/schemas/net/lantiq,etop-xway.yaml#
+/home/aleksander/workspace/linux/arch/mips/boot/dts/lantiq/danube_easy50712.dtb: etop@e180000 (lantiq,etop-xway): 'interrupt-names' is a required property
+	from schema $id: http://devicetree.org/schemas/net/lantiq,etop-xway.yaml#
+/home/aleksander/workspace/linux/arch/mips/boot/dts/lantiq/danube_easy50712.dtb: etop@e180000 (lantiq,etop-xway): 'lantiq,tx-burst-length' is a required property
+	from schema $id: http://devicetree.org/schemas/net/lantiq,etop-xway.yaml#
+/home/aleksander/workspace/linux/arch/mips/boot/dts/lantiq/danube_easy50712.dtb: etop@e180000 (lantiq,etop-xway): 'lantiq,rx-burst-length' is a required property
+	from schema $id: http://devicetree.org/schemas/net/lantiq,etop-xway.yaml#
 
+Fixes: 14d4e308e0aa ("net: lantiq: configure the burst length in ethernet drivers")
 Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
 ---
- Documentation/devicetree/bindings/mips/cpus.yaml | 1 +
- 1 file changed, 1 insertion(+)
+ arch/mips/boot/dts/lantiq/danube_easy50712.dts | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/Documentation/devicetree/bindings/mips/cpus.yaml b/Documentation/devicetree/bindings/mips/cpus.yaml
-index 471373ad0cfb..d3677f53f142 100644
---- a/Documentation/devicetree/bindings/mips/cpus.yaml
-+++ b/Documentation/devicetree/bindings/mips/cpus.yaml
-@@ -33,6 +33,7 @@ properties:
-       - mips,mips1004Kc
-       - mips,mips24KEc
-       - mips,mips24Kc
-+      - mips,mips34Kc
-       - mips,mips4KEc
-       - mips,mips4Kc
-       - mips,mips74Kc
+diff --git a/arch/mips/boot/dts/lantiq/danube_easy50712.dts b/arch/mips/boot/dts/lantiq/danube_easy50712.dts
+index 1ce20b7d05cb..c4d7aa5753b0 100644
+--- a/arch/mips/boot/dts/lantiq/danube_easy50712.dts
++++ b/arch/mips/boot/dts/lantiq/danube_easy50712.dts
+@@ -82,13 +82,16 @@ conf_out {
+ 			};
+ 		};
+ 
+-		etop@e180000 {
++		ethernet@e180000 {
+ 			compatible = "lantiq,etop-xway";
+ 			reg = <0xe180000 0x40000>;
+ 			interrupt-parent = <&icu0>;
+ 			interrupts = <73 78>;
++			interrupt-names = "tx", "rx";
+ 			phy-mode = "rmii";
+ 			mac-address = [ 00 11 22 33 44 55 ];
++			lantiq,rx-burst-length = <4>;
++			lantiq,tx-burst-length = <4>;
+ 		};
+ 
+ 		stp0: stp@e100bb0 {
 -- 
 2.47.2
 
