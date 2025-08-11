@@ -1,80 +1,81 @@
-Return-Path: <linux-mips+bounces-10172-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10173-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F540B21059
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 17:56:22 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E7EAB210C0
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 18:03:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E04DC7B3DA1
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 15:54:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AF7C018A1C35
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 15:57:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31DD92E8DE3;
-	Mon, 11 Aug 2025 15:38:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3ACE2E973E;
+	Mon, 11 Aug 2025 15:38:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cAamtShV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XEj+bPbT"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41A7F2E2F00;
-	Mon, 11 Aug 2025 15:38:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BF3AB2E973B;
+	Mon, 11 Aug 2025 15:38:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754926686; cv=none; b=jL4SE8w+kn4ExJnLZCh78DI+rDdPB4+BVlQ/fzDppHWhtL4jLsMVPn2f/vZK3MeZVdrXfQlTyxym5u+hkMvBSUSCsfV7XAmp/+a3BC9bexw5ASJW2KiFWcyGOxkFtwDrUuBFz1nFE1eZf8fBn+GGoSR3UfVlOd7GzdIXeSwwwRI=
+	t=1754926731; cv=none; b=bsJgvJ27BhOc6dku0z1bbRrmWwuRdW/plStloYv1cEafh2gJ0ei4kPhnY6mgOP8DKw8ytbeGXlT5T7/9yiXXr5IaD8pTo1lZFc5+866+suvWHo0cnKbAW/F/q6LWLFciWveWFhxkYkV1Xr83owPKNY4SuHsFieOfas8ID8ZLp1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754926686; c=relaxed/simple;
-	bh=CqlyMujMU6ydNDStKnts5DDKJU1MVb00JtDeW/Rdvt0=;
+	s=arc-20240116; t=1754926731; c=relaxed/simple;
+	bh=FPbaAa28Nh3lMI3CatP7a4lPc6OfLL2O6SW4T1FANsI=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=lrTeczh9ZsmJyye0BbhS9wu9QZWB+jw0awrxn66XrdSHkznC1M8hYkYflPSkmmd/FXEo/41y0k15X2W6P41GidOpTHXq19ndeQu0FWcpMwL1+Zt83+v++htt/3o7CVhD1TdkUDDjvQsVW6Hh8ksdaG9xvcbzGQnVPOILxgRv7eM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cAamtShV; arc=none smtp.client-ip=209.85.218.48
+	 Content-Type:MIME-Version; b=i9aedr5cFSUp3S2qZotpU2Nzqg5rzojefUwSNmXNrZPaN0lTnyEwcT3KjGylwGYfR2J+CH7Yb898As37bJK41BfUHIB6KlxhjOjfRmpT9zDsbu+0en8xXt/WjiUqzx76+FPs4eCDJOnJX+KrY0NcJLGMHvqVm7KXeZD1rUvXsz4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XEj+bPbT; arc=none smtp.client-ip=209.85.218.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-af95b919093so664720466b.2;
-        Mon, 11 Aug 2025 08:38:04 -0700 (PDT)
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-af8fd1b80e5so790058466b.2;
+        Mon, 11 Aug 2025 08:38:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1754926682; x=1755531482; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1754926728; x=1755531528; darn=vger.kernel.org;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
          :date:message-id:reply-to;
-        bh=2HmgB4i0ef6G9gBd9c3iPtpa4z8Vmw9rM+uJkjjYMMg=;
-        b=cAamtShVD9T9SXCvROnAGPRnl/pXKEDLVtz3DHRDgD1mLTmfc1E03BDfp/os9Cw6R5
-         HCwG27Q1jGeJprCvhMwha/JBjmq+t6bkWzYT9O2yvNSVGspp2Cv14p9EcLtsGjnjojco
-         JgAK0Xo79NcOpzyWWDSUQysqgxKGkbXnJmOmm/fqwfyyauhI+51wtAJ8nudWa153oSCm
-         0FlrS9Nvxd3EOgEqseFvk84T2O7nJmUC7lD/pT/71Q303KTn0BZ4Ub61X68cNF9BrTp0
-         DPOczqeJORSUBodGefq5ZsRoLYS31cFDA+ro+c9yvNvk/CdleeIsqxJmGaUgAmwMjxis
-         wa+w==
+        bh=qD3PnaCJHe7CAGf98jDIpzJE6HGS8eh/nvSCm5VXAxc=;
+        b=XEj+bPbTLybxmPdSuOG26St4lpw4Y3/ASUiBKPZQhvDZqgfO3oMql/EBYdZdTDmEjK
+         J7V17/QfKBE5VmnjELOVEI9hEyesgH4GVs+49w3WiZQuBl+rxd2QVF77plfr3U9RxEgc
+         ueFfPe1OmjO8yETU+7oXAzFDC/JU6dCL7pitfeDrlNiUhRMAzyE3LCxy0C9LCqlKz+1M
+         6x4MPQ/Jj2iozPBgZok1IyBmfynHYqSX/OD5IMx2kn6yt3pq+e5mvcIgfwtTC3VmOLk8
+         l6KLWB9dLPZ9K0/3T+3kZ1cnyM6q7a7z0x42CJeAJQRK9fo9/ir9KeBmcPNJH8yTZyWF
+         pJSA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1754926682; x=1755531482;
+        d=1e100.net; s=20230601; t=1754926728; x=1755531528;
         h=mime-version:user-agent:content-transfer-encoding:references
          :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=2HmgB4i0ef6G9gBd9c3iPtpa4z8Vmw9rM+uJkjjYMMg=;
-        b=DvcrSXOnyh1BCLcLcIDD4xVjRytiwg0RZzYBrkztcTeOoYA+42JJMdUoe1/GAw1U9I
-         btW4Yy0d9QHaZaa7FXaHNAbuIRpbPJBX+UtAg2BFjESeGgT3hIMwiw1hKy22nAUuu1XI
-         Ggv903C+dXdVaXScTLc99+Rn+CpeFumVtCi5FuBQRlm/CQJoNU6L6K8t7ZJsk9FqkExA
-         nClzOGGELFshy2+ZbquB3Lw2zJejD1HLotxeV1/QXVEUK9mMYypa2tw9FTOclnIID3wQ
-         0mZzVQW1fQ9pYhZ4kavMC1fe0kWl+r3BqXM9I2Egs23TmJyViPBwy42dvFNifIIAFItx
-         Bdxg==
-X-Forwarded-Encrypted: i=1; AJvYcCUhXP3hwJBrgOCvwf4+NyVh1tEM4JyOXSyVb9kfjaEm0cP5cPkiHAurJ8kpxtKlYyfwB3F7n48JZXu6Gg==@vger.kernel.org, AJvYcCWCLERGawAXb54etonkY/IBilrTZl+jQNnKDWSBoLhkVhajdQNsMTW2isd91aJvxxugqkL8GaYgIjrxuqfBU4YKh70=@vger.kernel.org, AJvYcCWtIzKyTNrXfWN/e+PO9F566jOLof1Mv00AbHScD1iWeEvL4SVf5ll1E7jbJ4PH0/tRucy8VOyYuFKl3EL+ww==@vger.kernel.org, AJvYcCX9cZA7leWiYCgRX/3vNyeQkMlzaoXtg8raylj1hTmVe8VAZuYILd7GvSk0U01e3sVgMEFmlmJInA==@vger.kernel.org, AJvYcCXWxY+y5ErsODj92SpWbtIxcFiWw+xwT9hrg4gA9PltN2Hl8a0nfgofUWzSKrcH4Tvz4VW0SzMEmR+E6mZRy2WGT5c=@vger.kernel.org, AJvYcCXp1QiDmATVrfvyFU51oVUnTjg6y9v9tPTQN9fGtaG7IQqb+HCQfKm8x35SxZCUqIAekQr+y5d0mM0hqtOC@vger.kernel.org
-X-Gm-Message-State: AOJu0YzJoid5YzzOE4nIHWZm6Cfz5uXd/P9ECG/pQ9TT7O9SpLPodgPc
-	3Gl/EjiTmWUHgUPDWGgha6MFCI/KBDRCNwsRJZN9YOn83yPoKFYfTasP
-X-Gm-Gg: ASbGnctE9SOPhPKyjre9H9BGQ2lAZc7wsBaR+kfOKPlfRZU1B6XiRf2VcnnfJjfyp9r
-	W7gVkH6s7Ah1hb0eTf1ukBj/3MGhsobDTeo+AsKZPsEE8sxtn8v+fuKrZwjQdBCGaR49DTTDWDZ
-	wgbU83agc5uQ1Dq3aerq4toGS0nO1vTrdt2PMwl9TuvdqnC+IQiv2N5tLXINPfOiHmio7tkc1Lp
-	AIDOzcHSep0jcgRC4u1dAAi7iCbts0+0hghN+yW5Y3h2mgaUoFafSs1U1/MGBibAvOXQn8ogsWl
-	aKfgLbMmMBmbp7BFk+RYqcfMx4R40Mmj3dZWzywf6HC2Rb5naEYxlAHTyk1MJ308N847mnBFRNh
-	85tu7rWP1WhTVx7Oyc4n1D/yHsKgcxqwYpC3StJc=
-X-Google-Smtp-Source: AGHT+IHSK7yv3/D8orY0Pvy2Zzp8DcIZ6EslOLXmLH2atPhWs8y14U6F2aebL6rKGw4mDoY3DumHmw==
-X-Received: by 2002:a17:907:7ea8:b0:af9:8c1c:b9be with SMTP id a640c23a62f3a-af9c645d565mr1274686466b.14.1754926682117;
-        Mon, 11 Aug 2025 08:38:02 -0700 (PDT)
+        bh=qD3PnaCJHe7CAGf98jDIpzJE6HGS8eh/nvSCm5VXAxc=;
+        b=VLcTyrB13YjrLb6hPhwHlj0yovoYmIUjYBN7O0190bh+t+9LWIVGhbm5T7Z2nIQ/Q0
+         GjV549+5yitoGmWDBK+9WFzILkEHXHBXvdg8CTm4jbliCKkoeaE1XMt/skeeOsXQAjmv
+         L7zEv/Zg1VcBjurFcG1LIlExVRqtnGZrmEquqirI6Lb+mtHju84qAnc/Hj0UDStOgv/0
+         3MAzWLF5GvTz+PN+xSdFB9cdMqATXlBKuoC2Us1EFq+dGdRb3zid132b1iDkf3PmqpRE
+         FfjXHcZ1bc339UIw29xUWFaB2kCIFyuQ8CJKD9cLQ5HOVCr+QAQZItAQDNm/WBJ1h0WJ
+         d/Pw==
+X-Forwarded-Encrypted: i=1; AJvYcCUol9W2JDAx90jFu6jU+1dhZnAbebupytFXIgK3FT5ipU6IP94ZtXrMJcEhl7YQme9Lh8jNdacpyg1DVU0o@vger.kernel.org, AJvYcCVyOQFx/FkblYg8BU9NSWTmOrfMX2kKaqyut9uG+OxPJ0fWRPmjliXYXAp2XocXlcsjpA4I+HHKad6eVhbAcE+SU1g=@vger.kernel.org, AJvYcCWHoH97vjWhHrWctXrKKBOQVwO175eugAbEZN1R1KfkvsEEeqquckOyJvY1pXrPduxPAvxWXBugkw==@vger.kernel.org, AJvYcCXASBXxDNlqjDG/DdBLf+5HVzn6JSq/7t+xj4QQgi6ePHsY6/px/PpqIJtNUdcGA0Q7WW8efes7MMXCUaFK4w==@vger.kernel.org, AJvYcCXrQSHhmQgOivJbbZ0vKVYbqdwyzpRVJeoKftlS461WS6hDe00ngNNGpBX3W1tUWeK0F2215i+fo34enQ==@vger.kernel.org, AJvYcCXsmt4KAGJMnsCB1nneGLtDaO7Tw7IaqWj1xvAZOJdnz3jJ0wdm7RNo38BruUiB8sJDCyJvlPBkiOPVO9OcfME5+5w=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyl20mentCq/qxBIH1qEh+nw71XvGpew2bXFdoMSKoIW2JGbMr5
+	2Bd5HO2xIq71XCbzMEkHeiRGaRCXKzN3xt7jr7EyGwiGogW4avoCdIU2
+X-Gm-Gg: ASbGncsNu8h3JbA278YGz/zsLxtUuKRA7v+F4lm0ScG7gMl+d3+uD3iblITrlCiOIH6
+	5qayIwfVpZTPEr1E99QnQYxjClCcV9fHzmQK1+b/h8gMtqiztDvCASX76QlK0SAlFKZh9OI6c4y
+	qdCM9EpZlEZTHK6F1GpMf2MhbcGX23mg8TN2WGaJSt145HZR9Q/DwEp9oPXgojFTyA+FgAPEKjA
+	A/QEeA0MuEV2YEZB4vnIOqXNz3GcHK77ZxMNhU0C5Gq4HtQckHe2eldQo0IjTd84wZaunMBZeMD
+	eiG/w58fHyqfgsnaOom/7gDEd9x9eri0rjjz0mdGe94BlOpbrEEwlnM0WE0MI36o8v5IO8F3STy
+	OBP+qu3lRO0B99tzyJxxrOCvESZ1YaVy4VXI8NA4=
+X-Google-Smtp-Source: AGHT+IEwAIMMmXMguO85CuFME8BHuByHpdLqU2yJrGASpVc+AuhN3x1kaE4ymuvmmSr6MxnWK7LVvA==
+X-Received: by 2002:a17:906:b07:b0:afa:1453:6632 with SMTP id a640c23a62f3a-afa14536b03mr150166866b.50.1754926727869;
+        Mon, 11 Aug 2025 08:38:47 -0700 (PDT)
 Received: from giga-mm.home ([2a02:1210:8642:2b00:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91a21c0afsm2032301266b.117.2025.08.11.08.37.59
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91a21c157sm2047222366b.100.2025.08.11.08.38.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 11 Aug 2025 08:38:01 -0700 (PDT)
-Message-ID: <84788b3be1d340f7a085c0d2a5903fd1032dd9eb.camel@gmail.com>
-Subject: Re: [PATCH 114/114] clk: fixed-factor: drop round_rate() clk ops
+        Mon, 11 Aug 2025 08:38:47 -0700 (PDT)
+Message-ID: <09635747dcd29f45a90dd33a74a9902d7bfa9649.camel@gmail.com>
+Subject: Re: [PATCH 112/114] clk: scmi: remove round_rate() in favor of
+ determine_rate()
 From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 To: bmasney@redhat.com, Michael Turquette <mturquette@baylibre.com>, Stephen
  Boyd <sboyd@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>, Cristian
@@ -128,11 +129,11 @@ Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
 	linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org, 
 	linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev
-Date: Mon, 11 Aug 2025 17:37:58 +0200
-In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-114-b3bf97b038dc@redhat.com>
+Date: Mon, 11 Aug 2025 17:38:43 +0200
+In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-112-b3bf97b038dc@redhat.com>
 References: 
 	<20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
-	 <20250811-clk-for-stephen-round-rate-v1-114-b3bf97b038dc@redhat.com>
+	 <20250811-clk-for-stephen-round-rate-v1-112-b3bf97b038dc@redhat.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 User-Agent: Evolution 3.56.1 
@@ -143,65 +144,74 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-Hi Brian!
-
 On Mon, 2025-08-11 at 11:19 -0400, Brian Masney via B4 Relay wrote:
 > From: Brian Masney <bmasney@redhat.com>
 >=20
 > This driver implements both the determine_rate() and round_rate() clk
 > ops, and the round_rate() clk ops is deprecated. When both are defined,
 > clk_core_determine_round_nolock() from the clk core will only use the
-> determine_rate() clk ops. Also all clk drivers that directly calls
-> fixed-factor's round_rate() have been migrated over to determine_rate().
-> So let's remove the round_rate() clk ops.
+> determine_rate() clk ops, so let's remove the round_rate() clk ops since
+> it's unused.
 >=20
 > Signed-off-by: Brian Masney <bmasney@redhat.com>
 
 Reviewed-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 
 > ---
-> =C2=A0drivers/clk/clk-fixed-factor.c | 16 ----------------
-> =C2=A01 file changed, 16 deletions(-)
+> =C2=A0drivers/clk/clk-scmi.c | 30 ------------------------------
+> =C2=A01 file changed, 30 deletions(-)
 >=20
-> diff --git a/drivers/clk/clk-fixed-factor.c b/drivers/clk/clk-fixed-facto=
-r.c
-> index 79b9a8c57d4b84be990955d8bc3159b818f38d50..de658c9e4c5386a7a8d220743=
-22577e0e9efd2b8 100644
-> --- a/drivers/clk/clk-fixed-factor.c
-> +++ b/drivers/clk/clk-fixed-factor.c
-> @@ -47,21 +47,6 @@ static int clk_factor_determine_rate(struct clk_hw *hw=
-,
-> =C2=A0	return 0;
+> diff --git a/drivers/clk/clk-scmi.c b/drivers/clk/clk-scmi.c
+> index d2408403283fc72f0cf902e65f4c08bcbc7b4b0b..6c6ddb92e7cf6a0cfac2c7e19=
+c0f15f777bb8c51 100644
+> --- a/drivers/clk/clk-scmi.c
+> +++ b/drivers/clk/clk-scmi.c
+> @@ -54,35 +54,6 @@ static unsigned long scmi_clk_recalc_rate(struct clk_h=
+w *hw,
+> =C2=A0	return rate;
 > =C2=A0}
 > =C2=A0
-> -static long clk_factor_round_rate(struct clk_hw *hw, unsigned long rate,
-> -				unsigned long *prate)
+> -static long scmi_clk_round_rate(struct clk_hw *hw, unsigned long rate,
+> -				unsigned long *parent_rate)
 > -{
-> -	struct clk_fixed_factor *fix =3D to_clk_fixed_factor(hw);
+> -	u64 fmin, fmax, ftmp;
+> -	struct scmi_clk *clk =3D to_scmi_clk(hw);
 > -
-> -	if (clk_hw_get_flags(hw) & CLK_SET_RATE_PARENT) {
-> -		unsigned long best_parent;
+> -	/*
+> -	 * We can't figure out what rate it will be, so just return the
+> -	 * rate back to the caller. scmi_clk_recalc_rate() will be called
+> -	 * after the rate is set and we'll know what rate the clock is
+> -	 * running at then.
+> -	 */
+> -	if (clk->info->rate_discrete)
+> -		return rate;
 > -
-> -		best_parent =3D (rate / fix->mult) * fix->div;
-> -		*prate =3D clk_hw_round_rate(clk_hw_get_parent(hw), best_parent);
-> -	}
+> -	fmin =3D clk->info->range.min_rate;
+> -	fmax =3D clk->info->range.max_rate;
+> -	if (rate <=3D fmin)
+> -		return fmin;
+> -	else if (rate >=3D fmax)
+> -		return fmax;
 > -
-> -	return (*prate / fix->div) * fix->mult;
+> -	ftmp =3D rate - fmin;
+> -	ftmp +=3D clk->info->range.step_size - 1; /* to round up */
+> -	do_div(ftmp, clk->info->range.step_size);
+> -
+> -	return ftmp * clk->info->range.step_size + fmin;
 > -}
 > -
-> =C2=A0static int clk_factor_set_rate(struct clk_hw *hw, unsigned long rat=
-e,
-> =C2=A0				unsigned long parent_rate)
+> =C2=A0static int scmi_clk_set_rate(struct clk_hw *hw, unsigned long rate,
+> =C2=A0			=C2=A0=C2=A0=C2=A0=C2=A0 unsigned long parent_rate)
 > =C2=A0{
-> @@ -87,7 +72,6 @@ static unsigned long clk_factor_recalc_accuracy(struct =
-clk_hw *hw,
+> @@ -300,7 +271,6 @@ scmi_clk_ops_alloc(struct device *dev, unsigned long =
+feats_key)
 > =C2=A0
-> =C2=A0const struct clk_ops clk_fixed_factor_ops =3D {
-> =C2=A0	.determine_rate =3D clk_factor_determine_rate,
-> -	.round_rate =3D clk_factor_round_rate,
-> =C2=A0	.set_rate =3D clk_factor_set_rate,
-> =C2=A0	.recalc_rate =3D clk_factor_recalc_rate,
-> =C2=A0	.recalc_accuracy =3D clk_factor_recalc_accuracy,
+> =C2=A0	/* Rate ops */
+> =C2=A0	ops->recalc_rate =3D scmi_clk_recalc_rate;
+> -	ops->round_rate =3D scmi_clk_round_rate;
+> =C2=A0	ops->determine_rate =3D scmi_clk_determine_rate;
+> =C2=A0	if (feats_key & BIT(SCMI_CLK_RATE_CTRL_SUPPORTED))
+> =C2=A0		ops->set_rate =3D scmi_clk_set_rate;
 
 --=20
 Alexander Sverdlin.
