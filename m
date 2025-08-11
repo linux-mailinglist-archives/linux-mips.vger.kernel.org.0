@@ -1,53 +1,53 @@
-Return-Path: <linux-mips+bounces-10129-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10146-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78E73B20F0F
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 17:29:16 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 41423B20FA4
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 17:32:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2DBB6624D82
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 15:26:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9DC2818941E4
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 15:28:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97C6B2ED85D;
-	Mon, 11 Aug 2025 15:18:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DB332F3C10;
+	Mon, 11 Aug 2025 15:18:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dSDSxRPU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fqfY2rea"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5328E2E610B;
-	Mon, 11 Aug 2025 15:18:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9D002EFDA2;
+	Mon, 11 Aug 2025 15:18:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754925516; cv=none; b=sG9O+NDfa5WzrCq8I1yRSsBmcrQzK1yXxxyIuwIhMMYVMgRHatUKmdbuihNA0GjixlAQ0o6/MRpIq+65QMtKkyv11pSAL5nP6w2Qz0emj4WbdfavBVnzaOtP3WpFe6Q+D4Uhhl1Qa+uFP833yCe+gqog5mSkqX3elhQwm8GuKCo=
+	t=1754925517; cv=none; b=DBzEXTvTwh20KSPW+yZw+ltb8niNNRS8ATDBmWWYc6Bny6SFYQ0Dv/30t5ypZ1AWAEcaMRrIsAONVc98hGmrNoiw62mvfzTnDvsT0M/1F8fbnskxqe61JY3xjDTIHNo8A8xAUK6DxR7/jBEfqvZBtLFBv7F5W/PKYC+iXtmOIew=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754925516; c=relaxed/simple;
-	bh=2MQP3in/0DNTL1tFUNdoKk8zcgy1cktnTa17pA2Cp5Y=;
+	s=arc-20240116; t=1754925517; c=relaxed/simple;
+	bh=3Gx03Ubsd5XMlMsMuFXdQK6hi5zxv2zoI8SJJjgJbSc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=oZt/V6m5gbvEM6uo66/m0emYRLX7V/evGGWS1tsjT5vwaDYF1z1zDoThSpk8MJ5Nu6F1OlAgHq06SaOxdDIYiXEs0k5TBf2piBV6YRGEVcAINl2kGVH/FQPHsPZ7iI+89OndHZTFrt1UKgZX0KOgKUsqLFSdd8/fEJsR4f/6TJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dSDSxRPU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id C8301C4FF69;
+	 In-Reply-To:To:Cc; b=kuDt/jWQ4UJ1DkU0kWA+N+RlCixC7E2LpoQvmDLfK3ieW2hBRtHFIxWnsWufXPOwpYrzgP3MKgeJQDbSyX3YB+QuSrwySo+uLbG7bd29ZqBlIdzwtgcxXd3Pqrh5DyTDYCVIdvxF59tkLeAgNUopZawIxIIZMrsDveg9xKZsou8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fqfY2rea; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id DF6A9C4AF0D;
 	Mon, 11 Aug 2025 15:18:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1754925512;
-	bh=2MQP3in/0DNTL1tFUNdoKk8zcgy1cktnTa17pA2Cp5Y=;
+	s=k20201202; t=1754925513;
+	bh=3Gx03Ubsd5XMlMsMuFXdQK6hi5zxv2zoI8SJJjgJbSc=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=dSDSxRPUQIAPgz0kTtWerHwYTdLYx+GJW0d1n75xbXQ1d9v2VeIxgWHOfj3ZObpMA
-	 QtVIlZR3nZkn5RmZZLOi6NxtHkz2xOgYTfXHKIWQRpXNWcXISyYn4aFl4YXOzwQp91
-	 nN77D3K2ahZmgh5ztNYyX8n+Fnlfg/UJqOUu6FonVvyHXP6EHAjJ8lZvqYi2TL58Tg
-	 RONZrVrJXc66Ku7qwFmBU/D515zpS6T+yexGdx73f9fCb+nz/js1bbi2c4o9e8dxbC
-	 iMxQlNYhYkPnLTtYIKJ6uA5K//no6YIZNaJLzwe5G7TWjMrQKngLyiMSmd73xgI498
-	 PDUfGumoOryDQ==
+	b=fqfY2reaIr3raNTN9sLMwGg9AlG+1pJUTsqxpKAz0JGBosE5iPq0GoM8LLMewTysx
+	 tUP1EmXe2IBufRm8Q1AqHIZEIlaISl/9hQhrH2QSSz6+eu2g9g/UDFKLjINAKpQjRj
+	 2PY69D256RPQ8s6vX8+OPu65GCAz31a2NkLEdE6ASHyKZ0wC7h3Ai0cNlF3Dtzaqmh
+	 mkiEJ62ax5dM32lWCN0vYRdLL9Yezx4WuV+hPmjK+E6jCJTOlI+y1ND0BZuHFN0cFa
+	 DqWVcZTH31KbSJGjzlPds/F5vigTvrBWv53b9HNXxXfkaz445KrHyS9z5Wvmvsl9W8
+	 mc595lwvvLJcg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id ABD62C87FD2;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id C519ECA0ED1;
 	Mon, 11 Aug 2025 15:18:32 +0000 (UTC)
 From: Brian Masney via B4 Relay <devnull+bmasney.redhat.com@kernel.org>
-Date: Mon, 11 Aug 2025 11:19:06 -0400
-Subject: [PATCH 074/114] clk: actions: owl-pll: convert from round_rate()
- to determine_rate()
+Date: Mon, 11 Aug 2025 11:19:07 -0400
+Subject: [PATCH 075/114] clk: apple-nco: convert from round_rate() to
+ determine_rate()
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250811-clk-for-stephen-round-rate-v1-74-b3bf97b038dc@redhat.com>
+Message-Id: <20250811-clk-for-stephen-round-rate-v1-75-b3bf97b038dc@redhat.com>
 References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
 In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
 To: Michael Turquette <mturquette@baylibre.com>, 
@@ -122,11 +122,11 @@ Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev, 
  Brian Masney <bmasney@redhat.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1754925498; l=2031;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1754925498; l=1712;
  i=bmasney@redhat.com; s=20250528; h=from:subject:message-id;
- bh=sPT71oy/nWfZWaCZ7el7QuoJ5ywx213EbLL8JhnT798=;
- b=IDpLSapmJO7PXGkC7plnr+o3NMSOGWmV/eJXMUiAXrlNF8HuVybNrfzkKp237krZ1OQLKwfma
- Reujd9fb10CBJ2DdQyK7WJxk2x6RExm5QnmSYYCR1C8ckWx/0GcYV4t
+ bh=6h2xxwGEdK+Wqe4OGkdQF+YuCDgQOB1uNjeimgHHxDs=;
+ b=GzFETmQ8VLKjT+mYaxzbS2sPx4d1/254ZhtTZRz5jRInTKHnyUcJbXAPDOt34cI1WGcpcU0P7
+ RZ0Ve+f7ARsCKVlLe63f0XM/7NRMtZOv/L4h2vtQ1TrfZGQ8yrTuEpb
 X-Developer-Key: i=bmasney@redhat.com; a=ed25519;
  pk=x20f2BQYftANnik+wvlm4HqLqAlNs/npfVcbhHPOK2U=
 X-Endpoint-Received: by B4 Relay for bmasney@redhat.com/20250528 with
@@ -142,64 +142,43 @@ on the cover letter of this series.
 
 Signed-off-by: Brian Masney <bmasney@redhat.com>
 ---
- drivers/clk/actions/owl-pll.c | 25 ++++++++++++++++---------
- 1 file changed, 16 insertions(+), 9 deletions(-)
+ drivers/clk/clk-apple-nco.c | 14 ++++++++------
+ 1 file changed, 8 insertions(+), 6 deletions(-)
 
-diff --git a/drivers/clk/actions/owl-pll.c b/drivers/clk/actions/owl-pll.c
-index 155f313986b40f15b7c426f4d49b1ed560acf9c3..869690b79cc16f05d63383b965ae5fc96deee79f 100644
---- a/drivers/clk/actions/owl-pll.c
-+++ b/drivers/clk/actions/owl-pll.c
-@@ -56,8 +56,8 @@ static const struct clk_pll_table *_get_pll_table(
- 	return table;
+diff --git a/drivers/clk/clk-apple-nco.c b/drivers/clk/clk-apple-nco.c
+index 457a48d4894128fff24d50eb7c9a3cbd7d35f245..d3ced4a0f029ec0440ff42d49d31e314fdf86846 100644
+--- a/drivers/clk/clk-apple-nco.c
++++ b/drivers/clk/clk-apple-nco.c
+@@ -212,13 +212,15 @@ static unsigned long applnco_recalc_rate(struct clk_hw *hw,
+ 			((u64) div) * incbase + inc1);
  }
  
--static long owl_pll_round_rate(struct clk_hw *hw, unsigned long rate,
--		unsigned long *parent_rate)
-+static int owl_pll_determine_rate(struct clk_hw *hw,
+-static long applnco_round_rate(struct clk_hw *hw, unsigned long rate,
+-				unsigned long *parent_rate)
++static int applnco_determine_rate(struct clk_hw *hw,
 +				  struct clk_rate_request *req)
  {
- 	struct owl_pll *pll = hw_to_owl_pll(hw);
- 	struct owl_pll_hw *pll_hw = &pll->pll_hw;
-@@ -65,17 +65,24 @@ static long owl_pll_round_rate(struct clk_hw *hw, unsigned long rate,
- 	u32 mul;
+-	unsigned long lo = *parent_rate / (COARSE_DIV_OFFSET + LFSR_TBLSIZE) + 1;
+-	unsigned long hi = *parent_rate / COARSE_DIV_OFFSET;
++	unsigned long lo = req->best_parent_rate / (COARSE_DIV_OFFSET + LFSR_TBLSIZE) + 1;
++	unsigned long hi = req->best_parent_rate / COARSE_DIV_OFFSET;
  
- 	if (pll_hw->table) {
--		clkt = _get_pll_table(pll_hw->table, rate);
--		return clkt->rate;
-+		clkt = _get_pll_table(pll_hw->table, req->rate);
-+		req->rate = clkt->rate;
-+
-+		return 0;
- 	}
- 
- 	/* fixed frequency */
--	if (pll_hw->width == 0)
--		return pll_hw->bfreq;
-+	if (pll_hw->width == 0) {
-+		req->rate = pll_hw->bfreq;
- 
--	mul = owl_pll_calculate_mul(pll_hw, rate);
-+		return 0;
-+	}
-+
-+	mul = owl_pll_calculate_mul(pll_hw, req->rate);
- 
--	return pll_hw->bfreq * mul;
-+	req->rate = pll_hw->bfreq * mul;
+-	return clamp(rate, lo, hi);
++	req->rate = clamp(req->rate, lo, hi);
 +
 +	return 0;
  }
  
- static unsigned long owl_pll_recalc_rate(struct clk_hw *hw,
-@@ -188,7 +195,7 @@ const struct clk_ops owl_pll_ops = {
- 	.enable = owl_pll_enable,
- 	.disable = owl_pll_disable,
- 	.is_enabled = owl_pll_is_enabled,
--	.round_rate = owl_pll_round_rate,
-+	.determine_rate = owl_pll_determine_rate,
- 	.recalc_rate = owl_pll_recalc_rate,
- 	.set_rate = owl_pll_set_rate,
- };
+ static int applnco_enable(struct clk_hw *hw)
+@@ -246,7 +248,7 @@ static void applnco_disable(struct clk_hw *hw)
+ static const struct clk_ops applnco_ops = {
+ 	.set_rate = applnco_set_rate,
+ 	.recalc_rate = applnco_recalc_rate,
+-	.round_rate = applnco_round_rate,
++	.determine_rate = applnco_determine_rate,
+ 	.enable = applnco_enable,
+ 	.disable = applnco_disable,
+ 	.is_enabled = applnco_is_enabled,
 
 -- 
 2.50.1
