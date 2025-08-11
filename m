@@ -1,53 +1,53 @@
-Return-Path: <linux-mips+bounces-10158-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10159-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5DE6B20FB5
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 17:33:00 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 786BCB20F9D
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 17:32:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 899BD1A24160
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 15:29:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5FD23625590
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 15:29:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDA78302CCC;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA0F9302CC8;
 	Mon, 11 Aug 2025 15:18:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="muXlH9I1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rMvcJ6AE"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBA7D2F49FB;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E383B2F4A02;
 	Mon, 11 Aug 2025 15:18:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754925519; cv=none; b=eiItNnrYcz+lDIQSxP+L0DfiseImDBljSawEtRAQ+p8hHouamfzaUiFqpcllBipf37i41GWqzc58aKnMCMAtu1W44E10c0q//k5qMk6AQPIIUa5QJadR6xdW460NHorsnW/h/rguj0YDUVluvm0ffw64NJyo68ZbLMGbaG2rl7o=
+	t=1754925519; cv=none; b=LJBesARziPdPODH2WhYGYvUrIaa3zoQmYnsfjhLnGMtZFHxRmpwl9O2ifY6M0bgoZvr14uuha8UCdAVexOtsQ5t33qbS0oEeeGVm4l2+SLc5Hn1VI1f4axVn8g8NHx3CvuuC1woenZUt9cNQ6zjAVsKIeF4LHoYO4cxOxcKqPkk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1754925519; c=relaxed/simple;
-	bh=I06g9EZ+WeE9wpMdXbgUNj6cuTI+vnV/N4MiCLjBRto=;
+	bh=3YHiafO5ai5TDjyb1XuiS4P3RZCXD0dPBkmj+Wz8urA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BfYvzAwZISoiqyDyq2MtURD4WHcm325jwPAExcAItiwWXaEw3vcNnfK63xVD76N57JPov3gZ3F5a/P+X9rvV9ttvbA2SH5tKSfvWa5frz/CQ/8HUlFFsKQF6kWubAMrPX9dkqck+XtAki2lgcCMGe+dQfcD584i90W4XswlYRQs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=muXlH9I1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3F222C4FE0F;
+	 In-Reply-To:To:Cc; b=onkaruNa7wFpldE9npkmhd6ZO5r5rzkubXkujKRDRzkWikSA4IMgrzoOhm+strzk2548zRxj/ji281abFExl6Vo1IHZkFVhspRnxy1sgymthby42s1Ia1k6QHkwl0y37TSy7UPqI4qurZBZXjOa0WWh0plsbn3fIgahdDd79vSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rMvcJ6AE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 38939C56890;
 	Mon, 11 Aug 2025 15:18:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1754925516;
-	bh=I06g9EZ+WeE9wpMdXbgUNj6cuTI+vnV/N4MiCLjBRto=;
+	bh=3YHiafO5ai5TDjyb1XuiS4P3RZCXD0dPBkmj+Wz8urA=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=muXlH9I12xudI1gel43aCQiNXldBaYO92+fpo+deer1eYA+4PlBbVjrbo2tjk3OR/
-	 32k3HwoanF4BrW2/Jgdx+E/GCQifGj83wRm3+dlt0O08zO0kU3osha3vowrnGesSXa
-	 KH+fcCiZKrtwotho5j7Dz+jZmbhMOsNygrJXw2xpjwBefljTfL0goVnOeJN1H+yVtw
-	 atj9gVbqosDL5GEq5X0jviMCtdNJIYEKQ1jH203gIl7+COrVZKwwATn4A7P6VSiaoT
-	 Ak+n9Uvtgs/kfxSukJYgfEUZIVtnjb5XPhoxXywbPNwd5vxyIVFKmfr87UeGhayu50
-	 49Oc0JXirtPvg==
+	b=rMvcJ6AEni5KWK0ZfZGbq0BcXk+Lw742zf3c0TcrVL7ng/biXVnab+a60hfxdW4Ow
+	 /xKh5d9U1wrRu4QYvFNpzalzbqZlyy7tKdbbzNuGEAvjQ8Rpz0zgqpzXxCE/XjSqPz
+	 nLRQ1a2lY4S5pNfVkMrJcidkTovihCe7pxftRO53orFz5JVwYaMMsgF32R6MaUwL8z
+	 yct4fGERFqbnBn989+Udc/vSvDILEb/mTgu/HJgzEfaKKiWFSgnJP+jOPi1E7vcYkg
+	 +VtKqd25H3z+tmVbHHXHekbm4waPWLcPlA4DHj3XWWz6Uclmk9FAzxMHFt91csXvQk
+	 UXVTdmR0K9NIg==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 03D5ACA0ED3;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 1894ECA0ED7;
 	Mon, 11 Aug 2025 15:18:36 +0000 (UTC)
 From: Brian Masney via B4 Relay <devnull+bmasney.redhat.com@kernel.org>
-Date: Mon, 11 Aug 2025 11:19:40 -0400
-Subject: [PATCH 108/114] clk: versatile: icst: convert from round_rate() to
- determine_rate()
+Date: Mon, 11 Aug 2025 11:19:41 -0400
+Subject: [PATCH 109/114] clk: versatile: vexpress-osc: convert from
+ round_rate() to determine_rate()
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250811-clk-for-stephen-round-rate-v1-108-b3bf97b038dc@redhat.com>
+Message-Id: <20250811-clk-for-stephen-round-rate-v1-109-b3bf97b038dc@redhat.com>
 References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
 In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
 To: Michael Turquette <mturquette@baylibre.com>, 
@@ -122,11 +122,11 @@ Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev, 
  Brian Masney <bmasney@redhat.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1754925498; l=3737;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1754925498; l=1786;
  i=bmasney@redhat.com; s=20250528; h=from:subject:message-id;
- bh=s6RrIFratukpDYKqOi9KzbyMVPMeFX+Sv4XuD3QoLpU=;
- b=u+oEBWc/MchojuVxUSN0tz+lCPTO3tXOYo+ZzRrOF/c29BFEP2K2uZuXAcj8p7GUxOUfw7pDI
- LHL7LIH8TfNAi3s/C2jJXayNi/tsw7YnWMh8Xvmo0uF0O2HJvTdYhBb
+ bh=WxkhOFvXpJuPJ7xh1egBdlkK/xyPytMRdcsFFyltjAo=;
+ b=S77BI7+2cZZGQObG51SfDHh+3vtt0iyhJIgVxfXMtet+TJGdq4KheCro0npIZwM5MMmAZsVli
+ SX29nDOYn69AWncz3ZURtGQ9bxHYYmErvSXT7FYv1mWHeRHy8gJ9APm
 X-Developer-Key: i=bmasney@redhat.com; a=ed25519;
  pk=x20f2BQYftANnik+wvlm4HqLqAlNs/npfVcbhHPOK2U=
 X-Endpoint-Received: by B4 Relay for bmasney@redhat.com/20250528 with
@@ -142,119 +142,46 @@ on the cover letter of this series.
 
 Signed-off-by: Brian Masney <bmasney@redhat.com>
 ---
- drivers/clk/versatile/clk-icst.c | 72 +++++++++++++++++++++++++---------------
- 1 file changed, 45 insertions(+), 27 deletions(-)
+ drivers/clk/versatile/clk-vexpress-osc.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
-diff --git a/drivers/clk/versatile/clk-icst.c b/drivers/clk/versatile/clk-icst.c
-index b69c3fbdfbce66876d5b1d4faaf4050759e44561..86ca04ad9fab0334f7b051377db709338a1f7244 100644
---- a/drivers/clk/versatile/clk-icst.c
-+++ b/drivers/clk/versatile/clk-icst.c
-@@ -234,39 +234,51 @@ static unsigned long icst_recalc_rate(struct clk_hw *hw,
- 	return icst->rate;
+diff --git a/drivers/clk/versatile/clk-vexpress-osc.c b/drivers/clk/versatile/clk-vexpress-osc.c
+index c385ca2f4a744dff3c3e4cf30add2e80718075ad..9adbf5c33bd1cadab0968134ddee1d1061f61239 100644
+--- a/drivers/clk/versatile/clk-vexpress-osc.c
++++ b/drivers/clk/versatile/clk-vexpress-osc.c
+@@ -33,18 +33,18 @@ static unsigned long vexpress_osc_recalc_rate(struct clk_hw *hw,
+ 	return rate;
  }
  
--static long icst_round_rate(struct clk_hw *hw, unsigned long rate,
--			    unsigned long *prate)
-+static int icst_determine_rate(struct clk_hw *hw,
-+			       struct clk_rate_request *req)
+-static long vexpress_osc_round_rate(struct clk_hw *hw, unsigned long rate,
+-		unsigned long *parent_rate)
++static int vexpress_osc_determine_rate(struct clk_hw *hw,
++				       struct clk_rate_request *req)
  {
- 	struct clk_icst *icst = to_icst(hw);
- 	struct icst_vco vco;
+ 	struct vexpress_osc *osc = to_vexpress_osc(hw);
  
- 	if (icst->ctype == ICST_INTEGRATOR_AP_CM ||
- 	    icst->ctype == ICST_INTEGRATOR_CP_CM_CORE) {
--		if (rate <= 12000000)
--			return 12000000;
--		if (rate >= 160000000)
--			return 160000000;
--		/* Slam to closest megahertz */
--		return DIV_ROUND_CLOSEST(rate, 1000000) * 1000000;
-+		if (req->rate <= 12000000)
-+			req->rate = 12000000;
-+		else if (req->rate >= 160000000)
-+			req->rate = 160000000;
-+		else {
-+			/* Slam to closest megahertz */
-+			req->rate = DIV_ROUND_CLOSEST(req->rate, 1000000) * 1000000;
-+		}
-+
-+		return 0;
- 	}
+-	if (osc->rate_min && rate < osc->rate_min)
+-		rate = osc->rate_min;
++	if (osc->rate_min && req->rate < osc->rate_min)
++		req->rate = osc->rate_min;
  
- 	if (icst->ctype == ICST_INTEGRATOR_CP_CM_MEM) {
--		if (rate <= 6000000)
--			return 6000000;
--		if (rate >= 66000000)
--			return 66000000;
--		/* Slam to closest 0.5 megahertz */
--		return DIV_ROUND_CLOSEST(rate, 500000) * 500000;
-+		if (req->rate <= 6000000)
-+			req->rate = 6000000;
-+		else if (req->rate >= 66000000)
-+			req->rate = 66000000;
-+		else {
-+			/* Slam to closest 0.5 megahertz */
-+			req->rate = DIV_ROUND_CLOSEST(req->rate, 500000) * 500000;
-+		}
-+
-+		return 0;
- 	}
+-	if (osc->rate_max && rate > osc->rate_max)
+-		rate = osc->rate_max;
++	if (osc->rate_max && req->rate > osc->rate_max)
++		req->rate = osc->rate_max;
  
- 	if (icst->ctype == ICST_INTEGRATOR_AP_SYS) {
- 		/* Divides between 3 and 50 MHz in steps of 0.25 MHz */
--		if (rate <= 3000000)
--			return 3000000;
--		if (rate >= 50000000)
--			return 5000000;
--		/* Slam to closest 0.25 MHz */
--		return DIV_ROUND_CLOSEST(rate, 250000) * 250000;
-+		if (req->rate <= 3000000)
-+			req->rate = 3000000;
-+		else if (req->rate >= 50000000)
-+			req->rate = 5000000;
-+		else {
-+			/* Slam to closest 0.25 MHz */
-+			req->rate = DIV_ROUND_CLOSEST(req->rate, 250000) * 250000;
-+		}
-+
-+		return 0;
- 	}
- 
- 	if (icst->ctype == ICST_INTEGRATOR_AP_PCI) {
-@@ -274,14 +286,20 @@ static long icst_round_rate(struct clk_hw *hw, unsigned long rate,
- 		 * If we're below or less than halfway from 25 to 33 MHz
- 		 * select 25 MHz
- 		 */
--		if (rate <= 25000000 || rate < 29000000)
--			return 25000000;
--		/* Else just return the default frequency */
--		return 33000000;
-+		if (req->rate <= 25000000 || req->rate < 29000000)
-+			req->rate = 25000000;
-+		else {
-+			/* Else just return the default frequency */
-+			req->rate = 33000000;
-+		}
-+
-+		return 0;
- 	}
- 
--	vco = icst_hz_to_vco(icst->params, rate);
--	return icst_hz(icst->params, vco);
-+	vco = icst_hz_to_vco(icst->params, req->rate);
-+	req->rate = icst_hz(icst->params, vco);
-+
+-	return rate;
 +	return 0;
  }
  
- static int icst_set_rate(struct clk_hw *hw, unsigned long rate,
-@@ -329,7 +347,7 @@ static int icst_set_rate(struct clk_hw *hw, unsigned long rate,
+ static int vexpress_osc_set_rate(struct clk_hw *hw, unsigned long rate,
+@@ -57,7 +57,7 @@ static int vexpress_osc_set_rate(struct clk_hw *hw, unsigned long rate,
  
- static const struct clk_ops icst_ops = {
- 	.recalc_rate = icst_recalc_rate,
--	.round_rate = icst_round_rate,
-+	.determine_rate = icst_determine_rate,
- 	.set_rate = icst_set_rate,
+ static const struct clk_ops vexpress_osc_ops = {
+ 	.recalc_rate = vexpress_osc_recalc_rate,
+-	.round_rate = vexpress_osc_round_rate,
++	.determine_rate = vexpress_osc_determine_rate,
+ 	.set_rate = vexpress_osc_set_rate,
  };
  
 
