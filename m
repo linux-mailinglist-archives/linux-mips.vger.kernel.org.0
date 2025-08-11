@@ -1,52 +1,52 @@
-Return-Path: <linux-mips+bounces-10127-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10128-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17D8EB20ED6
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 17:27:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29B93B20F02
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 17:28:47 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1481A16727D
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 15:26:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0AA1B625A90
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 15:26:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D0E32ECEB4;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEBA82ED141;
 	Mon, 11 Aug 2025 15:18:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L/y13anz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qEqu94T3"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40FCE2ECE82;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5ADE42ECE8C;
 	Mon, 11 Aug 2025 15:18:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754925515; cv=none; b=DHr3f7EFTcgq1HBLv0yej68ov2HPAqWD6D2Lmcoxi7PSCgt1sQORfhMrxDMb38Xc+wAhhLBgpSn29fJXBQ9m2mST0nz67h1zZYm4n2WBsOwhNITSvCKtYlvFs07/APfqmNKiDEVv4RLW2Du7Pn4K1KoFkVqnI5HVaTSY8Zk8J40=
+	t=1754925515; cv=none; b=BG+gyvskvAUkqcXCWTPHdUumj8W1t2kDFZpnFFPXuHa2GBy9jUVRxQbFMyMDk0qGhjtXsK+gSzX25huPLfJMVo/KgvIU4tP7M21IJAcqnScY/MfZmyw8gt4DFOY0HlFoYhGtP/WMIy60h1XU94+vW0v53eNH8iHwsyyll8a+lRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1754925515; c=relaxed/simple;
-	bh=lXLR/sjZF3OxBMI7CV5QCN8xGpgzHebbw94cyNRqqXU=;
+	bh=MPc+Yv4nYsTTGgc67HPtmd0NQ7USJuEoSTM6T5YfHfg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=sIzSEQjnLrZuNdxrYUOfE3x7+pwtnk/a9jIiJK0r+YcZ+AvVWuYX04zpHZwZI0zTESU2kJ8UJqQHgg59EJDEZ9xvXMDldpwGXJSsxzx+g7ycLWz+KrfEIUj6FOU/uAn6NbuXI/zMzbARKQffZoYGmPMVzDxATnYiF0fdxPjpQhg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L/y13anz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 84B33C4FF1F;
+	 In-Reply-To:To:Cc; b=BmmG5KOCZkIARDh2INa4yRcCYZw2/wrQ7OBL9e7cniaEbkj88FknW5L6AQRjnDzb7HUd4OfoCppz9yrPbLgwjKReQIsTLeQbUYuvSOJMUCWCiCJB8LJkOw6Y2hOCN7q+cLDTtriwd4kk6hGDfanM9ToGD3pBWLE/p04bzl1nk1A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qEqu94T3; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A0016C2BCC4;
 	Mon, 11 Aug 2025 15:18:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1754925512;
-	bh=lXLR/sjZF3OxBMI7CV5QCN8xGpgzHebbw94cyNRqqXU=;
+	bh=MPc+Yv4nYsTTGgc67HPtmd0NQ7USJuEoSTM6T5YfHfg=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
-	b=L/y13anz54HdfR8C+AY5cqd7x2tWjsHHv4xmWfuGCwR7WDlmJHiKTyyeRJtt47Fla
-	 0TQmC1QKAqIU/lFlxHzR4A3w17dv1dYLXsoJn+pxcTrZLh7wvWNn80469+3Ki1wjBE
-	 crNDwgRbNyuBXscsGoqgRtwxrgWG+4bjvjR/cTre1C4tfgjnEIWxlk412J6UB5Nnbx
-	 q560xtNvuuVDxBTdm/kA0Hp6bF2rc5Ey4igwANsMx1MIAvy/8oLhx0WK6Mvw9fP+BP
-	 HaI7+dkNmce90U9aKzIgpR7BlzCIieAoaNL4Xo17GGddOHa9W2xqXfwXEQus1/jMeK
-	 IrUTidwSp+0tw==
+	b=qEqu94T34FL0UgNJJGh2kI0lluY4sY5/IkXb+1IA9mPTksq4h6eUc79ch+7Rio+5c
+	 vi4JnPEVZuSReQ4YLyTy4rRbaA1LU4thtt8qTITY14a1sf+RzKO4xGL3XcJ5SWJ3d8
+	 qvzkKFtoxXosnyBzxILeKuypVv26fg3SMFArKN3AqbnVJcTpTfMCLRDFaVAjHx9VAo
+	 ufeTSmsMayyuUDQME1zcQHvnoaXzzBVTEjOZQMoSoxNgsIiRE8q8T6l9pwgLktNTEn
+	 ptttOgrrFgYA6lWvvX78o0MEWQMzR5XwhEtdP0Pr2/rJ4O71EhzzXj46yQAawj5pyU
+	 hZRBteq2BcU6A==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 6ACD3CA0EC4;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 7FF9ACA0ED3;
 	Mon, 11 Aug 2025 15:18:32 +0000 (UTC)
 From: Brian Masney via B4 Relay <devnull+bmasney.redhat.com@kernel.org>
-Date: Mon, 11 Aug 2025 11:19:04 -0400
-Subject: [PATCH 072/114] clk: actions: owl-divider: convert from
+Date: Mon, 11 Aug 2025 11:19:05 -0400
+Subject: [PATCH 073/114] clk: actions: owl-factor: convert from
  round_rate() to determine_rate()
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250811-clk-for-stephen-round-rate-v1-72-b3bf97b038dc@redhat.com>
+Message-Id: <20250811-clk-for-stephen-round-rate-v1-73-b3bf97b038dc@redhat.com>
 References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
 In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
 To: Michael Turquette <mturquette@baylibre.com>, 
@@ -122,11 +122,11 @@ Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev, 
  Brian Masney <bmasney@redhat.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1754925498; l=1651;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1754925498; l=1689;
  i=bmasney@redhat.com; s=20250528; h=from:subject:message-id;
- bh=6TLio8bK2u/5BWyPOuTBs7pxbCYENT1TzWhbgYDGl1M=;
- b=AJ2YBi1H7opEMTvu68HEFYbEJsf9y3u6hmpdAKQUz6ucFwpBAItDhSbhQ3Iiiiv8fk6//PpBV
- g9/gItkpQdJD7TvlAeVW9+2rBx26k9R+wAFmQRpUophEdJtX6nRi6pf
+ bh=6PNa8WpcC6mwv4TEYVw3W71jmOw2oyJa+wUKGlL4bJg=;
+ b=3YAQ+lVynoDRQ3P56dl8a0kTnOGOKAsNQGcchZluvQmI5w/V10cLszFMgYXmfJ6duxXbwit8e
+ 0pDVwHELrBICutrQ3LGeMRmMZAqZwgcoZTqzU7XOkXSBtj3Z7tdrk1s
 X-Developer-Key: i=bmasney@redhat.com; a=ed25519;
  pk=x20f2BQYftANnik+wvlm4HqLqAlNs/npfVcbhHPOK2U=
 X-Endpoint-Received: by B4 Relay for bmasney@redhat.com/20250528 with
@@ -142,41 +142,42 @@ on the cover letter of this series.
 
 Signed-off-by: Brian Masney <bmasney@redhat.com>
 ---
- drivers/clk/actions/owl-divider.c | 13 ++++++++-----
- 1 file changed, 8 insertions(+), 5 deletions(-)
+ drivers/clk/actions/owl-factor.c | 12 +++++++-----
+ 1 file changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/clk/actions/owl-divider.c b/drivers/clk/actions/owl-divider.c
-index cddac00fe324aef0c2dd723df280bade9728d07d..118f1393c6780f287d26736b2547a8b43751655a 100644
---- a/drivers/clk/actions/owl-divider.c
-+++ b/drivers/clk/actions/owl-divider.c
-@@ -23,13 +23,16 @@ long owl_divider_helper_round_rate(struct owl_clk_common *common,
- 				  div_hw->div_flags);
+diff --git a/drivers/clk/actions/owl-factor.c b/drivers/clk/actions/owl-factor.c
+index 64f316cf7cfcc3d05d59522b347cf4e17f80e9e2..12f41f6bacd66d9b31323b1fe41236fb4655b24f 100644
+--- a/drivers/clk/actions/owl-factor.c
++++ b/drivers/clk/actions/owl-factor.c
+@@ -130,14 +130,16 @@ long owl_factor_helper_round_rate(struct owl_clk_common *common,
+ 	return *parent_rate * mul / div;
  }
  
--static long owl_divider_round_rate(struct clk_hw *hw, unsigned long rate,
--				unsigned long *parent_rate)
-+static int owl_divider_determine_rate(struct clk_hw *hw,
-+				      struct clk_rate_request *req)
+-static long owl_factor_round_rate(struct clk_hw *hw, unsigned long rate,
+-			unsigned long *parent_rate)
++static int owl_factor_determine_rate(struct clk_hw *hw,
++				     struct clk_rate_request *req)
  {
- 	struct owl_divider *div = hw_to_owl_divider(hw);
+ 	struct owl_factor *factor = hw_to_owl_factor(hw);
+ 	struct owl_factor_hw *factor_hw = &factor->factor_hw;
  
--	return owl_divider_helper_round_rate(&div->common, &div->div_hw,
--					     rate, parent_rate);
-+	req->rate = owl_divider_helper_round_rate(&div->common, &div->div_hw,
-+						  req->rate,
-+						  &req->best_parent_rate);
+-	return owl_factor_helper_round_rate(&factor->common, factor_hw,
+-					rate, parent_rate);
++	req->rate = owl_factor_helper_round_rate(&factor->common, factor_hw,
++						 req->rate, &req->best_parent_rate);
 +
 +	return 0;
  }
  
- unsigned long owl_divider_helper_recalc_rate(struct owl_clk_common *common,
-@@ -89,6 +92,6 @@ static int owl_divider_set_rate(struct clk_hw *hw, unsigned long rate,
+ unsigned long owl_factor_helper_recalc_rate(struct owl_clk_common *common,
+@@ -214,7 +216,7 @@ static int owl_factor_set_rate(struct clk_hw *hw, unsigned long rate,
+ }
  
- const struct clk_ops owl_divider_ops = {
- 	.recalc_rate = owl_divider_recalc_rate,
--	.round_rate = owl_divider_round_rate,
-+	.determine_rate = owl_divider_determine_rate,
- 	.set_rate = owl_divider_set_rate,
+ const struct clk_ops owl_factor_ops = {
+-	.round_rate	= owl_factor_round_rate,
++	.determine_rate = owl_factor_determine_rate,
+ 	.recalc_rate	= owl_factor_recalc_rate,
+ 	.set_rate	= owl_factor_set_rate,
  };
 
 -- 
