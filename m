@@ -1,104 +1,101 @@
-Return-Path: <linux-mips+bounces-10052-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10053-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13181B20842
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 13:58:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA94DB20957
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 14:52:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A157442672A
-	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 11:58:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2C0318A473B
+	for <lists+linux-mips@lfdr.de>; Mon, 11 Aug 2025 12:53:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A56842BE637;
-	Mon, 11 Aug 2025 11:58:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29BCA25393B;
+	Mon, 11 Aug 2025 12:52:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b="SsFYy8zO"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="P+SwpmTJ";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="6OkO09b5"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.10])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01FA58248B
-	for <linux-mips@vger.kernel.org>; Mon, 11 Aug 2025 11:58:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.77.101.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5959217709;
+	Mon, 11 Aug 2025 12:52:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754913508; cv=none; b=C7jI+2ysutOmsh/YcWbrn2hNo4/xTU4hBvD7xnyEAFMoeaa02af9L6l3zNAZpYeaugxuuoOcbsyVI5bTPkDVy4lJxiHQowzN6qJAxOfMXtZKWp1wK1u2qZgVWnCqB9XTnYFaeAggm8WcMkdZWVHKzGIFi85q6539GbyYYfmr9yk=
+	t=1754916772; cv=none; b=cVpMIw/lo3jxBVXbyPdq8QRF7iPMR1RQ47RmWvLUv9sJc7HHZCjgZsWiwXLIjT5jBkVXMAwbv7hNWqDUB0ezon9fCBVCno2FE45Pymaaohc7nK6AJOAs6pIbLHIIGFGral8Lkjfj7J3DeX1s/oK5KKbzpr+JCR2oUXFMg9E0Iok=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754913508; c=relaxed/simple;
-	bh=yvLIgwAGw38VJJkAvUN0mEV+cxHYec3LK9NKk3AQX3g=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=jMkD8P4yR4yv8nH6MaO2gJX5JimPBfVKX2vukIlkXzjQPBygSPRLMO6ukb0y0nhmKHyJ+AAzaU0zc0cd43+nL1moVJEedjjRlVaXFsA2jBow5JWBgia0s0fuCjbe+QM6fWCBTGrTnFDfi7UZkM+yk8Uomq/9DxIbUpEWj1zHmuA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl; spf=pass smtp.mailfrom=wp.pl; dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b=SsFYy8zO; arc=none smtp.client-ip=212.77.101.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wp.pl
-Received: (wp-smtpd smtp.wp.pl 16475 invoked from network); 11 Aug 2025 13:58:20 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=20241105;
-          t=1754913500; bh=W/g/Hibh3hvAkdudgvOt5kmtLe3KXD5a8hM66tf97zI=;
-          h=From:To:Subject;
-          b=SsFYy8zOljX65jiFZ7PDLoBoL46f4I58dNu5CrA9u1joCsT4kg4CbwI4Dmj6S/Oed
-           1aUmbs371gxGLnXst7ZLpolWSIX4/rKI/Pxi4NnAi78vgbb5xshBG6QSSf0b3Vp49d
-           5gLCXNvcB6KXPsgctIoGYtPAgj4Z5SYYfQr4Dl92nNdY5Jy2cuzPpgqyqhPJJ1Elqq
-           XDjHbD46yJr3/qHxT3+goGT+KsAUCD1lPIACWZMropyWAwkSFkWidRV4D//5oo/dKu
-           9P7O9FS6F9AQxHGTZkbt5nA/OKln2FBtrYRn9L4N3LKXCotiEyboY5qv1s4Wf7S2pm
-           lRWziKlDmxsnA==
-Received: from 83.24.148.125.ipv4.supernova.orange.pl (HELO laptop-olek.lan) (olek2@wp.pl@[83.24.148.125])
-          (envelope-sender <olek2@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <robh@kernel.org>; 11 Aug 2025 13:58:19 +0200
-From: Aleksander Jan Bajkowski <olek2@wp.pl>
-To: robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	tsbogend@alpha.franken.de,
-	olek2@wp.pl,
-	devicetree@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] mips: lantiq: danube: add missing properties to cpu node
-Date: Mon, 11 Aug 2025 13:58:15 +0200
-Message-ID: <20250811115818.735670-1-olek2@wp.pl>
-X-Mailer: git-send-email 2.47.2
+	s=arc-20240116; t=1754916772; c=relaxed/simple;
+	bh=789mkSTOHiZ7pRR4fC3eijxb1s0QPMpnLD0wjVRR360=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=AJFLtHKE9QQYphavGWMyIt9m9Y5TXiVFbSmYvIjXqCezZbfiuoiuVpYEdp1OYCHUO3opcv97LZpgwJfgyqCLJwm2jurgHEMmsymktBDZ5yBz8sAysV9iZHWJYPBlv41LSLzCScZxJ4h/em54+Ibkqe9WUnfs24qW+nJP+dkhgzQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=P+SwpmTJ; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=6OkO09b5; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: Thomas Gleixner <tglx@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1754916768;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=z8wb/yQcraBD38A6ZGHYoXhCAbkH7/ii4JJPfnbEvOY=;
+	b=P+SwpmTJB1x2jNcuFUAHaluKSlCKiJuebZIYRBo5LFBQ9lEXLBfIq7/iAPPylOYpfx54Jd
+	wdmfSHUjTeri6geIuPz+/5zBEwMWHIBqwaYqAxJdD1dljQKnRY7wCjT+ZLQ88H8ZC+SK7o
+	D9h2upzLrRk6wF+Zbj6pZepPdjDNFoaSqwkkz7P8mT4np5hbRRWwkIxatkjqllQKcf5o3f
+	J0Rk17d5wH1xz3rrO//pKwVaBLEeoa/IX4AJZIbcksQ+DzGcvVNGQf6JcN0mDvxWFcFKXU
+	0Z5ff0DEoHeEFCRluJLduKnPdEDkjVpzGI2QkHaK/9fDXEaHIdo/efSzGi5z0A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1754916768;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=z8wb/yQcraBD38A6ZGHYoXhCAbkH7/ii4JJPfnbEvOY=;
+	b=6OkO09b5uefLLQygsaYrxy4/iIH6iDnvW2eOBtCYNvtDrER4xoq4YKH0PZuEFSXTXXMwMr
+	pPGuAV5UXewH+pDg==
+To: patchwork-bot+linux-riscv@kernel.org, Nam Cao <namcao@linutronix.de>
+Cc: linux-riscv@lists.infradead.org, maz@kernel.org, atenart@kernel.org,
+ andrew@lunn.ch, gregory.clement@bootlin.com,
+ sebastian.hesselbarth@gmail.com, shawnguo@kernel.org,
+ s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+ chenhuacai@kernel.org, jiaxun.yang@flygoat.com, anup@brainfault.org,
+ paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+ alex@ghiti.fr, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
+ linux-mips@vger.kernel.org
+Subject: Re: [PATCH 00/12] irqchip: MSI cleanup and conversion to MSI parent
+ domain
+In-Reply-To: <175486033550.1221929.7725164280675452092.git-patchwork-notify@kernel.org>
+References: <cover.1750860131.git.namcao@linutronix.de>
+ <175486033550.1221929.7725164280675452092.git-patchwork-notify@kernel.org>
+Date: Mon, 11 Aug 2025 14:52:47 +0200
+Message-ID: <87ecti81gg.ffs@tglx>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-WP-MailID: f2511a3017b372137fdf91dbd0a40eb9
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 000000A [4ZPE]                               
+Content-Type: text/plain
 
-This fixes the following warnings:
-arch/mips/boot/dts/lantiq/danube_easy50712.dtb: cpus: '#address-cells' is a required property
-	from schema $id: http://devicetree.org/schemas/cpus.yaml#
-arch/mips/boot/dts/lantiq/danube_easy50712.dtb: cpus: '#size-cells' is a required property
-	from schema $id: http://devicetree.org/schemas/cpus.yaml#
-arch/mips/boot/dts/lantiq/danube_easy50712.dtb: cpu@0 (mips,mips24Kc): 'reg' is a required property
-	from schema $id: http://devicetree.org/schemas/mips/cpus.yaml#
+On Sun, Aug 10 2025 at 21:12, patchwork-bot wrote:
 
-Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
----
- arch/mips/boot/dts/lantiq/danube.dtsi | 4 ++++
- 1 file changed, 4 insertions(+)
+> Hello:
+>
+> This series was applied to riscv/linux.git (fixes)
+> by Thomas Gleixner <tglx@linutronix.de>:
+...
+> Here is the summary with links:
+>   - [01/12] irqdomain: Add device pointer to irq_domain_info and msi_domain_info
+>     https://git.kernel.org/riscv/c/858e65af9135
+...
+> You are awesome, thank you!
 
-diff --git a/arch/mips/boot/dts/lantiq/danube.dtsi b/arch/mips/boot/dts/lantiq/danube.dtsi
-index 7a7ba66aa534..0a942bc09143 100644
---- a/arch/mips/boot/dts/lantiq/danube.dtsi
-+++ b/arch/mips/boot/dts/lantiq/danube.dtsi
-@@ -5,8 +5,12 @@ / {
- 	compatible = "lantiq,xway", "lantiq,danube";
- 
- 	cpus {
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
- 		cpu@0 {
- 			compatible = "mips,mips24Kc";
-+			reg = <0>;
- 		};
- 	};
- 
--- 
-2.47.2
+I know that I'm awesome, but this broken patchwork bot is _not_
+
+Why the hell does it waste electrons and inbox space on stuff which is
+
+    A) applied on a different tree
+
+    B) already upstream
 
 
