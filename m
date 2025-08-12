@@ -1,35 +1,35 @@
-Return-Path: <linux-mips+bounces-10186-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10189-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9749B21D22
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Aug 2025 07:45:20 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0001FB21D2E
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Aug 2025 07:45:50 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E1201893CE8
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Aug 2025 05:45:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 649DE684EB3
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Aug 2025 05:45:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5C162DA753;
-	Tue, 12 Aug 2025 05:44:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C87AA2E2DE8;
+	Tue, 12 Aug 2025 05:44:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="wFb0RLzj";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="qsESN/r8"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="OzPn4l9b";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="pafKDyE9"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03FD62D2390;
-	Tue, 12 Aug 2025 05:44:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 116E52D8375;
+	Tue, 12 Aug 2025 05:44:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754977479; cv=none; b=YZZpptv616jenvRNMF4xUxEYoX9fVISFOPD0SFYkHkPdmwayh9x+WtWPsizle/9nhll9vG3nhY6YEpgG9FTC4YcWKr7rdzEslW/ZPQcnvDtG/0Xu6lAZGYHyWaU2rxBCwKRgrhjJqdTzMAWRn5MRa5WvLlazzIRr1JgMZgZxfEY=
+	t=1754977480; cv=none; b=NvjTZRkI+dz87IbUfxxJG61TDhJHrepjgO2NYGEmGT7uBCv3SZqJ+ir+r42gTMPScJehazkViIMxzNzW/cHgxUySSfyJywqEyeRNDoK6LNB4BVc0ykIlkiFKzeISXStplhQrHcHUKJc4MHVxjLcqdkbOM3hVgZtNCW7Yo6OjXyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754977479; c=relaxed/simple;
-	bh=1uMAsIGnLSAarJHPAhyn1ZCQ7+laGQoWKQA2Xxq0mGY=;
+	s=arc-20240116; t=1754977480; c=relaxed/simple;
+	bh=jOcL1seJLYtGvYImS8V7KrNCGiyauUm9m0luaNV+25o=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DKYarHKeelLVrWJGrCYBUyd7wpa7T5jWjtgY30cTUBK9J0PQV7OvKHMiU6uwmQDZeHtrYnl7qNgnUiA+efTBgEgPEPb4mEwXnmVvl79NiRhjvi2vNzRnvXhCyGm8TLAMRAVRTLAEClDiqoX/ADBIQKXsjVDUqpT8NLlMfyaa2+Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=wFb0RLzj; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=qsESN/r8; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=XL2p4+dFUsni2MUPZdPwT8OLKHtZojqmOhPEt2R+4oEgOAMAcch7+xjkxxMWCl1sgEFYBg99EC1nmp9WPfcccbxlP9JrlEW9FuTYGgf//1G6FB80mVfDRM7g+qEwqCkTG6g8LpCx8NY9XNWEHFY/BANcq7znctteIRsHHgIPtB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=OzPn4l9b; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=pafKDyE9; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
@@ -39,24 +39,23 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=1fbs+jreI++pzzR3zWEjWTxnX9u6RnqE0RQf6GOU1NY=;
-	b=wFb0RLzjRR+m6XuM7TOWlo2yvCJnPhA+25xIrhYVyQU7vW3qK3ogLB5/FoNBtbGXFhaQKY
-	pr4aI4RliMtnnHAuihu1YwOpPa1YAFE6NNdNYTDGqtqXIgkvCGwOYClR54N7bodbqmR8ib
-	3FR59W6tTyZySeu5nec68ShzfSWdVtepYdrHKuUMyY5PDvLGMSfolpeOUlC1s249oPH+6P
-	/nNoPZTWkgEcLEgiFvoUsib1/knAtoR53VJtqoUm2UIq7TEvFyRcp1/WlztCfeuCCPyn1R
-	c9ok2s6GcRDtHFeAJPnrNr3pTIJwl25pnQginm0asRgcm/Y3wFJdfZ+h1y1MIA==
+	bh=3NxCSEvj2PqT9z+zh43cxWZPZy/pc7lSYDl/HSYdpX0=;
+	b=OzPn4l9bPnlKixJ4UTB4AhAiLkjej71xwPtqSacSd+DsXZttorULyXy0fBr+6XMEYsbpyX
+	pktj9XCWQ8ee9sbQ7TYV8xKn9kXKt4m2MmDnVX9oK64iccISEQVpCVAjKsf5kfo2Y4wKUi
+	D/gtoJVpdPcUWflVbX6Hs6iChwze2AWD5Nd6p9SmoIAq7Qmyf8+MGJgz+NTXtkznsfMX+o
+	j3OCtHeIk3g8dw8i98Qx5qdXUibd3WkJPpTCzYYDMYJG02MGifnkCYLytDJNMiDCMFGFIu
+	8/+eeYubofn5+rAsSCT5GEPgNyX67Wj5B38v0AvV+ZRmEt8rhZK2/TA3OnjrCQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
 	s=2020e; t=1754977471;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=1fbs+jreI++pzzR3zWEjWTxnX9u6RnqE0RQf6GOU1NY=;
-	b=qsESN/r84WX54Bw78PaDXL3DZH9tinqCzw/9z447eYrhrk5rauDW2NqzQLxz4cWxfapa1Y
-	nlSHAbkBNOdd0fAw==
-Date: Tue, 12 Aug 2025 07:44:15 +0200
-Subject: [PATCH v4 02/24] x86/elf, um/x86/elf: Move relocation constants to
- UAPI
+	bh=3NxCSEvj2PqT9z+zh43cxWZPZy/pc7lSYDl/HSYdpX0=;
+	b=pafKDyE9bffqSWjpfAcol5Guig2fgcH1bW+oS2Qi1sEvJ6rykUviC/BNs2xCa8jswWQoAY
+	SQ7jPA+bZKqPUaBg==
+Date: Tue, 12 Aug 2025 07:44:16 +0200
+Subject: [PATCH v4 03/24] ARM: elf: Move relocation constants to UAPI
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -65,7 +64,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250812-vdso-absolute-reloc-v4-2-61a8b615e5ec@linutronix.de>
+Message-Id: <20250812-vdso-absolute-reloc-v4-3-61a8b615e5ec@linutronix.de>
 References: <20250812-vdso-absolute-reloc-v4-0-61a8b615e5ec@linutronix.de>
 In-Reply-To: <20250812-vdso-absolute-reloc-v4-0-61a8b615e5ec@linutronix.de>
 To: Paul Walmsley <paul.walmsley@sifive.com>, 
@@ -107,11 +106,11 @@ Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
  Arnaldo Carvalho de Melo <acme@redhat.com>, 
  Alexandre Ghiti <alexghiti@rivosinc.com>, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1754977469; l=6035;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1754977469; l=3153;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=1uMAsIGnLSAarJHPAhyn1ZCQ7+laGQoWKQA2Xxq0mGY=;
- b=LSso+CtnXCvSqq7w3arcGFjj/9JO1wvGscYCVoeDZOhj/IpFN3GTrmCLD7/dVw71XSDOqEtKb
- ryK7StfnfXPByrB7+MMfsCwMUX3kib3KkE19P5uuPZjIm2SN2cxtCaS
+ bh=jOcL1seJLYtGvYImS8V7KrNCGiyauUm9m0luaNV+25o=;
+ b=2ZpJfDEg6FCwuTFwU3Nv++0bd6D+4hY16G/VIAHUE+ed4/E2i08I8MElZpFB/ZPj/iol+ibfT
+ +7b+Uoz0sN9CIxjr9xcNzEwxHV7UcmSg7w4o2Gs4g4sQ4acRe/ztk9b
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
@@ -120,157 +119,94 @@ process ELF files during kernel cross-compilation.
 
 Move them from the kernel-private architecture-specific header to the UAPI.
 
+One arm64 header is also changed as it duplicates an arm definition.
+
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- arch/x86/include/asm/elf.h | 34 ----------------------------------
- arch/x86/um/asm/elf.h      | 33 ---------------------------------
- include/uapi/linux/elf-r.h | 34 ++++++++++++++++++++++++++++++++++
- 3 files changed, 34 insertions(+), 67 deletions(-)
+ arch/arm/include/asm/elf.h   | 24 ------------------------
+ arch/arm64/include/asm/elf.h |  1 -
+ include/uapi/linux/elf-r.h   | 25 +++++++++++++++++++++++++
+ 3 files changed, 25 insertions(+), 25 deletions(-)
 
-diff --git a/arch/x86/include/asm/elf.h b/arch/x86/include/asm/elf.h
-index 6c8fdc96be7e8bd33919d9b56ae8a8a68f4b0c3f..a2538561a84b8dae0479c43238f6f297fe88924b 100644
---- a/arch/x86/include/asm/elf.h
-+++ b/arch/x86/include/asm/elf.h
-@@ -22,19 +22,6 @@ typedef struct user_i387_struct elf_fpregset_t;
+diff --git a/arch/arm/include/asm/elf.h b/arch/arm/include/asm/elf.h
+index 9f21e170320fc57f1dc21a33d637bcfd3d1d3917..ec2d416baa9f7ef4b860c4a18b2e2bf2f05e4a9d 100644
+--- a/arch/arm/include/asm/elf.h
++++ b/arch/arm/include/asm/elf.h
+@@ -47,30 +47,6 @@ typedef struct user_fp elf_fpregset_t;
+ #define EF_ARM_HASENTRY		0x00000002	/* All */
+ #define EF_ARM_RELEXEC		0x00000001	/* All */
  
- #ifdef __i386__
- 
--#define R_386_NONE	0
--#define R_386_32	1
--#define R_386_PC32	2
--#define R_386_GOT32	3
--#define R_386_PLT32	4
--#define R_386_COPY	5
--#define R_386_GLOB_DAT	6
--#define R_386_JMP_SLOT	7
--#define R_386_RELATIVE	8
--#define R_386_GOTOFF	9
--#define R_386_GOTPC	10
--#define R_386_NUM	11
+-#define R_ARM_NONE		0
+-#define R_ARM_PC24		1
+-#define R_ARM_ABS32		2
+-#define R_ARM_REL32		3
+-#define R_ARM_CALL		28
+-#define R_ARM_JUMP24		29
+-#define R_ARM_TARGET1		38
+-#define R_ARM_V4BX		40
+-#define R_ARM_PREL31		42
+-#define R_ARM_MOVW_ABS_NC	43
+-#define R_ARM_MOVT_ABS		44
+-#define R_ARM_MOVW_PREL_NC	45
+-#define R_ARM_MOVT_PREL		46
+-#define R_ARM_ALU_PC_G0_NC	57
+-#define R_ARM_ALU_PC_G1_NC	59
+-#define R_ARM_LDR_PC_G2		63
+-
+-#define R_ARM_THM_CALL		10
+-#define R_ARM_THM_JUMP24	30
+-#define R_ARM_THM_MOVW_ABS_NC	47
+-#define R_ARM_THM_MOVT_ABS	48
+-#define R_ARM_THM_MOVW_PREL_NC	49
+-#define R_ARM_THM_MOVT_PREL	50
 -
  /*
   * These are used to set parameters in the core dumps.
   */
-@@ -44,27 +31,6 @@ typedef struct user_i387_struct elf_fpregset_t;
- 
- #else
- 
--/* x86-64 relocation types */
--#define R_X86_64_NONE		0	/* No reloc */
--#define R_X86_64_64		1	/* Direct 64 bit  */
--#define R_X86_64_PC32		2	/* PC relative 32 bit signed */
--#define R_X86_64_GOT32		3	/* 32 bit GOT entry */
--#define R_X86_64_PLT32		4	/* 32 bit PLT address */
--#define R_X86_64_COPY		5	/* Copy symbol at runtime */
--#define R_X86_64_GLOB_DAT	6	/* Create GOT entry */
--#define R_X86_64_JUMP_SLOT	7	/* Create PLT entry */
--#define R_X86_64_RELATIVE	8	/* Adjust by program base */
--#define R_X86_64_GOTPCREL	9	/* 32 bit signed pc relative offset to GOT */
--#define R_X86_64_GOTPCRELX	41
--#define R_X86_64_REX_GOTPCRELX	42
--#define R_X86_64_32		10	/* Direct 32 bit zero extended */
--#define R_X86_64_32S		11	/* Direct 32 bit sign extended */
--#define R_X86_64_16		12	/* Direct 16 bit zero extended */
--#define R_X86_64_PC16		13	/* 16 bit sign extended pc relative */
--#define R_X86_64_8		14	/* Direct 8 bit sign extended  */
--#define R_X86_64_PC8		15	/* 8 bit sign extended pc relative */
--#define R_X86_64_PC64		24	/* Place relative 64-bit signed */
--
- /*
-  * These are used to set parameters in the core dumps.
+diff --git a/arch/arm64/include/asm/elf.h b/arch/arm64/include/asm/elf.h
+index 3f93f4eef9530a7b5bc966bf4a16d83093a016ee..8efcfe7efe0c70c59b9b81f93ac9c1442bc7656a 100644
+--- a/arch/arm64/include/asm/elf.h
++++ b/arch/arm64/include/asm/elf.h
+@@ -18,7 +18,6 @@
   */
-diff --git a/arch/x86/um/asm/elf.h b/arch/x86/um/asm/elf.h
-index 62ed5d68a9788ffbf9dd0b4ebbe2caad4ac7a7c6..2e79193f396cda854ab4f17af2cd5b15c1e078cd 100644
---- a/arch/x86/um/asm/elf.h
-+++ b/arch/x86/um/asm/elf.h
-@@ -12,19 +12,6 @@
  
- #ifdef CONFIG_X86_32
+ /* Miscellaneous. */
+-#define R_ARM_NONE			0
+ #define R_AARCH64_NONE			256
  
--#define R_386_NONE	0
--#define R_386_32	1
--#define R_386_PC32	2
--#define R_386_GOT32	3
--#define R_386_PLT32	4
--#define R_386_COPY	5
--#define R_386_GLOB_DAT	6
--#define R_386_JMP_SLOT	7
--#define R_386_RELATIVE	8
--#define R_386_GOTOFF	9
--#define R_386_GOTPC	10
--#define R_386_NUM	11
--
- /*
-  * This is used to ensure we don't load something for the wrong architecture.
-  */
-@@ -100,26 +87,6 @@ do {								\
- 
- #else
- 
--/* x86-64 relocation types, taken from asm-x86_64/elf.h */
--#define R_X86_64_NONE		0	/* No reloc */
--#define R_X86_64_64		1	/* Direct 64 bit  */
--#define R_X86_64_PC32		2	/* PC relative 32 bit signed */
--#define R_X86_64_GOT32		3	/* 32 bit GOT entry */
--#define R_X86_64_PLT32		4	/* 32 bit PLT address */
--#define R_X86_64_COPY		5	/* Copy symbol at runtime */
--#define R_X86_64_GLOB_DAT	6	/* Create GOT entry */
--#define R_X86_64_JUMP_SLOT	7	/* Create PLT entry */
--#define R_X86_64_RELATIVE	8	/* Adjust by program base */
--#define R_X86_64_GOTPCREL	9	/* 32 bit signed pc relative
--					   offset to GOT */
--#define R_X86_64_32		10	/* Direct 32 bit zero extended */
--#define R_X86_64_32S		11	/* Direct 32 bit sign extended */
--#define R_X86_64_16		12	/* Direct 16 bit zero extended */
--#define R_X86_64_PC16		13	/* 16 bit sign extended pc relative */
--#define R_X86_64_8		14	/* Direct 8 bit sign extended  */
--#define R_X86_64_PC8		15	/* 8 bit sign extended pc relative */
--#define R_X86_64_PC64		24	/* Place relative 64-bit signed */
--
- /*
-  * This is used to ensure we don't load something for the wrong architecture.
-  */
+ /* Data. */
 diff --git a/include/uapi/linux/elf-r.h b/include/uapi/linux/elf-r.h
-index 2c382c8a4807f394a3ccabf39a81e9e9b6f7ea45..45a160ecf40570f3ac916344be363d7e74908ea6 100644
+index 45a160ecf40570f3ac916344be363d7e74908ea6..001884641e7703146f91e2dd96fb5a2bbfc7a324 100644
 --- a/include/uapi/linux/elf-r.h
 +++ b/include/uapi/linux/elf-r.h
-@@ -2,4 +2,38 @@
- #ifndef _UAPI_LINUX_ELF_R_H
- #define _UAPI_LINUX_ELF_R_H
+@@ -36,4 +36,29 @@
+ #define R_X86_64_PC8		15	/* 8 bit sign extended pc relative */
+ #define R_X86_64_PC64		24	/* Place relative 64-bit signed */
  
-+/* i386 relocation types */
-+#define R_386_NONE	0
-+#define R_386_32	1
-+#define R_386_PC32	2
-+#define R_386_GOT32	3
-+#define R_386_PLT32	4
-+#define R_386_COPY	5
-+#define R_386_GLOB_DAT	6
-+#define R_386_JMP_SLOT	7
-+#define R_386_RELATIVE	8
-+#define R_386_GOTOFF	9
-+#define R_386_GOTPC	10
-+#define R_386_NUM	11
++/* arm relocation types */
++#define R_ARM_NONE		0
++#define R_ARM_PC24		1
++#define R_ARM_ABS32		2
++#define R_ARM_REL32		3
++#define R_ARM_CALL		28
++#define R_ARM_JUMP24		29
++#define R_ARM_TARGET1		38
++#define R_ARM_V4BX		40
++#define R_ARM_PREL31		42
++#define R_ARM_MOVW_ABS_NC	43
++#define R_ARM_MOVT_ABS		44
++#define R_ARM_MOVW_PREL_NC	45
++#define R_ARM_MOVT_PREL		46
++#define R_ARM_ALU_PC_G0_NC	57
++#define R_ARM_ALU_PC_G1_NC	59
++#define R_ARM_LDR_PC_G2		63
 +
-+/* x86-64 relocation types */
-+#define R_X86_64_NONE		0	/* No reloc */
-+#define R_X86_64_64		1	/* Direct 64 bit  */
-+#define R_X86_64_PC32		2	/* PC relative 32 bit signed */
-+#define R_X86_64_GOT32		3	/* 32 bit GOT entry */
-+#define R_X86_64_PLT32		4	/* 32 bit PLT address */
-+#define R_X86_64_COPY		5	/* Copy symbol at runtime */
-+#define R_X86_64_GLOB_DAT	6	/* Create GOT entry */
-+#define R_X86_64_JUMP_SLOT	7	/* Create PLT entry */
-+#define R_X86_64_RELATIVE	8	/* Adjust by program base */
-+#define R_X86_64_GOTPCREL	9	/* 32 bit signed pc relative
-+					   offset to GOT */
-+#define R_X86_64_32		10	/* Direct 32 bit zero extended */
-+#define R_X86_64_32S		11	/* Direct 32 bit sign extended */
-+#define R_X86_64_16		12	/* Direct 16 bit zero extended */
-+#define R_X86_64_PC16		13	/* 16 bit sign extended pc relative */
-+#define R_X86_64_8		14	/* Direct 8 bit sign extended  */
-+#define R_X86_64_PC8		15	/* 8 bit sign extended pc relative */
-+#define R_X86_64_PC64		24	/* Place relative 64-bit signed */
++#define R_ARM_THM_CALL		10
++#define R_ARM_THM_JUMP24	30
++#define R_ARM_THM_MOVW_ABS_NC	47
++#define R_ARM_THM_MOVT_ABS	48
++#define R_ARM_THM_MOVW_PREL_NC	49
++#define R_ARM_THM_MOVT_PREL	50
 +
  #endif /* _UAPI_LINUX_ELF_R_H */
 
