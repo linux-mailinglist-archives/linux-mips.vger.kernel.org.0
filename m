@@ -1,61 +1,62 @@
-Return-Path: <linux-mips+bounces-10207-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10208-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25341B21D92
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Aug 2025 07:54:11 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id DDF1BB21D94
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Aug 2025 07:54:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CD68424ADC
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Aug 2025 05:49:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 887A66859F1
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Aug 2025 05:50:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B40032EA15F;
-	Tue, 12 Aug 2025 05:44:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C0C42EA47E;
+	Tue, 12 Aug 2025 05:44:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="YVIBrzVs";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="AHGoK11e"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="DOgN3Y5E";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Xp94uLfR"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B95A2E9731;
-	Tue, 12 Aug 2025 05:44:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBFC52E9EDE;
+	Tue, 12 Aug 2025 05:44:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754977497; cv=none; b=c9fQjZMEfBT/CzSZseAHGPWOyh/xsH0td0rTV14PB98uORaAIjFIOIG7BerreCziIfC93zWaM/OzDnSP22spSh6WNk08LqN12vkFGWDYTsK66Ksqi71cXUnSWp0eCkSaVOT4VakuIRX6/2d7Ib/5evGr9QG5hm0rNO5kwgpZjwk=
+	t=1754977499; cv=none; b=Z8ADI8+IS/AVdAHIM+djFphaZ7EJIVQ1Y8xX/4QuA+/SyzW4NePTqrvnHFQ1kjqdVzSTRqQ57hGmDAR22z+vqPEp32u7HyUIJpFRdAUq4z1OfF5NLXQVJ4mCmba5EUibw1jhhFgxkg4aN0SNtF/WPRocn3ox1R7UnagaxfSnabw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754977497; c=relaxed/simple;
-	bh=PbETMq9VTMEwxP8nGcVWnIK4aa/sB1ug5A+6i2j8Dag=;
+	s=arc-20240116; t=1754977499; c=relaxed/simple;
+	bh=Kx23G/jdGST0tg6021hFwad6UPxIH/+IOFc6beuEorU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=PTXj7t1JzKY6mwI8T3+tKCwpWs1Cp98tUDuAWsadyifu8e1j1lotQ8/h1IDRdoBylwKx8bLDH/ZDgsFYYxNk0mtN3GFbLm/ut2HoT2ca7Zw8MjfFmYvdTLUb8E6OUqF7pFsDf6HRX/45NetU88WAN7GHKruO67UetRrcGk7uxa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=YVIBrzVs; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=AHGoK11e; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=cv3iOljajRdOINqLBsccjST4l7cEh7SiscxTKatADlmKSFrmXHkkn1/rSmwWhGKIbwJ0OmW7cqmxVQ/3Ad0SJTUrZqO/nnVLfJ1ZXiG6lYUhDd45SVPAdSd9bPkF3k8efPhUjvIx/8KZY4qtsq6TeQn/v3PeYy9VATYi0yy/4o0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=DOgN3Y5E; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Xp94uLfR; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1754977481;
+	s=2020; t=1754977482;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ZNmm+0jjK/cu4H5GKrhccpCqW984gVWKwBZnN5hgc4w=;
-	b=YVIBrzVs6jMRgP60RbLocRZINlpYIvgh/R8TmjjX9sgPwnMSGZAXRyMlQNpfj8cGpZ/fxK
-	G1/ToFEH5kb8MyAyKBkqwWZy3FKtIaGyFnw/jDcC7cDfkV57unEWUErdw+4OFfUlhZ4I+Z
-	u8LwflPKLpav+TZK1MYkSfenBQn967+uc5qSfgthMGz/rbRyu5ep6Dm6EBqZkIbqP0QvA/
-	DEO9YwRG3oLtdNHQfyHGqGzKfO4J2v2y0izQdU6www5cNj6J0F/5SABcNgh9oQkLaiJmvS
-	5ypEzeVA2rzpysAIPhXAr1gdv1DqmozBuroN9m2hnP3Ep+YD2Fk+LtTvniAoEQ==
+	bh=8Kjpq5eR3VtQueM0L6XasJAF39E5US6j25ec6FsCv3w=;
+	b=DOgN3Y5EQB5kdutA1572V0LhXOZXnmRl6p0P18a1t7ObF9ucTKlbEHkVhxaejvdIZK3PIY
+	lIUNnRcEoWpe9jMcL/sz5eDD1osU0bJplewxq79IGnmKl56iuX34wGlZkE8q0QXbW8ODPS
+	/tRsjn5u/aceWhclEIiQoXuf5PoMDguQZFCa+gVrW0g1vlK8gccXdEQDtujNgXNNo0KdxN
+	WuCKV7zOYOnI0NnSYDP7lGE+2WUwTHGjY7UEreXmXplASXvZjXyi/1+qv/lFjFdZDmXlU/
+	TSNZ1c1JACCFOcsJSoennrnbZSFvpsaVg3kBWIxDpWM65m2K7yxEzt3JfuJQug==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1754977481;
+	s=2020e; t=1754977482;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=ZNmm+0jjK/cu4H5GKrhccpCqW984gVWKwBZnN5hgc4w=;
-	b=AHGoK11e3ONpNsRnJ36Q4yzXjYjg8Xc+9ohCcoySpaOfSk5kLWkDoRsDYtFjalcZguXquc
-	0s1EVjzvsI3du6Bg==
-Date: Tue, 12 Aug 2025 07:44:34 +0200
-Subject: [PATCH v4 21/24] s390/vdso: Enable the vdsocheck tool
+	bh=8Kjpq5eR3VtQueM0L6XasJAF39E5US6j25ec6FsCv3w=;
+	b=Xp94uLfRG/UGZ4I0EOrrP3/TrL+9J/C3gXEU1nyi3fx2RRuH8xCgRiBDmDN3dECl7takoc
+	IY8Vx1R01mdHNgCQ==
+Date: Tue, 12 Aug 2025 07:44:35 +0200
+Subject: [PATCH v4 22/24] MIPS: ELF: Add more PC-relative relocation
+ definitions
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -64,7 +65,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250812-vdso-absolute-reloc-v4-21-61a8b615e5ec@linutronix.de>
+Message-Id: <20250812-vdso-absolute-reloc-v4-22-61a8b615e5ec@linutronix.de>
 References: <20250812-vdso-absolute-reloc-v4-0-61a8b615e5ec@linutronix.de>
 In-Reply-To: <20250812-vdso-absolute-reloc-v4-0-61a8b615e5ec@linutronix.de>
 To: Paul Walmsley <paul.walmsley@sifive.com>, 
@@ -106,92 +107,66 @@ Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
  Arnaldo Carvalho de Melo <acme@redhat.com>, 
  Alexandre Ghiti <alexghiti@rivosinc.com>, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1754977469; l=3294;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1754977469; l=1659;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=PbETMq9VTMEwxP8nGcVWnIK4aa/sB1ug5A+6i2j8Dag=;
- b=0cxT7S8ALFBcremtG1GBYu7CMsjCUUhSxQ1TwTPoImStmnRVATckJ934fbovkMMjfs5d2wReE
- xM4bYW6HkdvAmAnJ8M3DKlcu59tynIH+5lbTlWBXo2H7IRGxFBIBEy2
+ bh=Kx23G/jdGST0tg6021hFwad6UPxIH/+IOFc6beuEorU=;
+ b=9721hy+2tPJhw7rgs5OUlE+6rM6NCuWPGCnHL0GckAQKuaqMknOzzL6abxn133J0vzAnS6u6/
+ H4ms/FvzKN2ALTXQO9bp4r8ji2uMhcnak2odoRO0TaHpLw+mLogGUf1
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-The vdsocheck tool validates the object files and final .so library.
-It can detect if the compiler created relocations which are incompatible
-with the vDSO which need to be worked around.
+These are used by userspace and are necessary for the vdsocheck tool.
 
-Wire it up for the architecture.
+Also update the copy in tools/ so they can be used by vdsocheck.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- arch/s390/kernel/vdso32/Makefile | 4 ++--
- arch/s390/kernel/vdso64/Makefile | 4 ++--
- lib/vdso/Kconfig                 | 1 +
- lib/vdso/check/vdsocheck.rs      | 8 ++++++++
- 4 files changed, 13 insertions(+), 4 deletions(-)
+ include/uapi/linux/elf-r.h       | 6 ++++++
+ tools/include/uapi/linux/elf-r.h | 6 ++++++
+ 2 files changed, 12 insertions(+)
 
-diff --git a/arch/s390/kernel/vdso32/Makefile b/arch/s390/kernel/vdso32/Makefile
-index 1e4ddd1a683ff84492f0f4b48d0efa00688129c2..6e8fba248d1aa8787f44aca2d82d77c245871b65 100644
---- a/arch/s390/kernel/vdso32/Makefile
-+++ b/arch/s390/kernel/vdso32/Makefile
-@@ -36,9 +36,9 @@ CPPFLAGS_vdso32.lds += -P -C -U$(ARCH)
- $(obj)/vdso32_wrapper.o : $(obj)/vdso32.so
+diff --git a/include/uapi/linux/elf-r.h b/include/uapi/linux/elf-r.h
+index e750989e44e8f517d7dacf9d3a338af7a136e40f..9f7457ba1c63252d10b9ab25601581bd99af7a21 100644
+--- a/include/uapi/linux/elf-r.h
++++ b/include/uapi/linux/elf-r.h
+@@ -616,10 +616,16 @@
+  */
+ #define R_MIPS_PC21_S2		60
+ #define R_MIPS_PC26_S2		61
++#define R_MIPS_PC18_S3		62
++#define R_MIPS_PC19_S2		63
++#define R_MIPS_PCHI16		64
++#define R_MIPS_PCLO16		65
+ /*
+  * This range is reserved for vendor specific relocations.
+  */
+ #define R_MIPS_LOVENDOR		100
+ #define R_MIPS_HIVENDOR		127
  
- quiet_cmd_vdso_and_check = VDSO    $@
--      cmd_vdso_and_check = $(cmd_ld); $(cmd_vdso_check)
-+      cmd_vdso_and_check = $(cmd_ld_vdso); $(cmd_vdso_check)
++#define R_MIPS_PC32		248
++
+ #endif /* _UAPI_LINUX_ELF_R_H */
+diff --git a/tools/include/uapi/linux/elf-r.h b/tools/include/uapi/linux/elf-r.h
+index e750989e44e8f517d7dacf9d3a338af7a136e40f..9f7457ba1c63252d10b9ab25601581bd99af7a21 100644
+--- a/tools/include/uapi/linux/elf-r.h
++++ b/tools/include/uapi/linux/elf-r.h
+@@ -616,10 +616,16 @@
+  */
+ #define R_MIPS_PC21_S2		60
+ #define R_MIPS_PC26_S2		61
++#define R_MIPS_PC18_S3		62
++#define R_MIPS_PC19_S2		63
++#define R_MIPS_PCHI16		64
++#define R_MIPS_PCLO16		65
+ /*
+  * This range is reserved for vendor specific relocations.
+  */
+ #define R_MIPS_LOVENDOR		100
+ #define R_MIPS_HIVENDOR		127
  
--$(obj)/vdso32.so.dbg: $(obj)/vdso32.lds $(obj-vdso32) FORCE
-+$(obj)/vdso32.so.dbg: $(obj)/vdso32.lds $(obj-vdso32) $(vdsocheck) FORCE
- 	$(call if_changed,vdso_and_check)
- 
- # strip rule for the .so file
-diff --git a/arch/s390/kernel/vdso64/Makefile b/arch/s390/kernel/vdso64/Makefile
-index d8f0df74280960cb351154a8a73b4f7fe83a9125..1334b6a188cedc883fe98dc271a995ee690c7fad 100644
---- a/arch/s390/kernel/vdso64/Makefile
-+++ b/arch/s390/kernel/vdso64/Makefile
-@@ -46,10 +46,10 @@ CPPFLAGS_vdso64.lds += -P -C -U$(ARCH)
- $(obj)/vdso64_wrapper.o : $(obj)/vdso64.so
- 
- quiet_cmd_vdso_and_check = VDSO    $@
--      cmd_vdso_and_check = $(cmd_ld); $(cmd_vdso_check)
-+      cmd_vdso_and_check = $(cmd_ld_vdso); $(cmd_vdso_check)
- 
- # link rule for the .so file, .lds has to be first
--$(obj)/vdso64.so.dbg: $(obj)/vdso64.lds $(obj-vdso64) $(obj-cvdso64) FORCE
-+$(obj)/vdso64.so.dbg: $(obj)/vdso64.lds $(obj-vdso64) $(obj-cvdso64) $(vdsocheck) FORCE
- 	$(call if_changed,vdso_and_check)
- 
- # strip rule for the .so file
-diff --git a/lib/vdso/Kconfig b/lib/vdso/Kconfig
-index 0fe70b3604f9925ef8c5608bb4cac24d3a28faab..b5b6673897e24a1f36147c21d00dff057f293980 100644
---- a/lib/vdso/Kconfig
-+++ b/lib/vdso/Kconfig
-@@ -57,6 +57,7 @@ config HAVE_VDSOCHECK
- 	default y if PPC
- 	default y if RISCV
- 	default y if LOONGARCH
-+	default y if S390
- 	help
- 	  Selected for architectures that are supported by the 'vdsocheck' progam.
- 	  Only transitional.
-diff --git a/lib/vdso/check/vdsocheck.rs b/lib/vdso/check/vdsocheck.rs
-index 93819f668d8a4f623f41403bb09b42c4aec2c8de..01073062f2b2d276291ccfbc6aa516f14a13fdd5 100644
---- a/lib/vdso/check/vdsocheck.rs
-+++ b/lib/vdso/check/vdsocheck.rs
-@@ -138,6 +138,14 @@ fn allowed_relocations_for_machine(machine: u16) -> Option<AllowedRelocations<'s
-                 bindings::R_LARCH_32_PCREL,
-             ],
-         }),
-+        bindings::EM_S390 => Some(AllowedRelocations {
-+            ignored_object_file_sections: None,
-+            in_object_file: &[
-+                bindings::R_390_PC32,
-+                bindings::R_390_PC32DBL,
-+                bindings::R_390_PLT32DBL,
-+            ],
-+        }),
-         _ => None,
-     }
- }
++#define R_MIPS_PC32		248
++
+ #endif /* _UAPI_LINUX_ELF_R_H */
 
 -- 
 2.50.1
