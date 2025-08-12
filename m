@@ -1,61 +1,62 @@
-Return-Path: <linux-mips+bounces-10209-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10210-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBFBDB21D98
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Aug 2025 07:54:45 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B316B21DA0
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Aug 2025 07:55:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1317B6864C3
-	for <lists+linux-mips@lfdr.de>; Tue, 12 Aug 2025 05:50:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 79B15687251
+	for <lists+linux-mips@lfdr.de>; Tue, 12 Aug 2025 05:50:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 294342EA72A;
-	Tue, 12 Aug 2025 05:45:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 827C32EAB6A;
+	Tue, 12 Aug 2025 05:45:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="u02ULTpX";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="dCjTzytX"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="gVUd2BKN";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="E3zfUlZM"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3202A2EA167;
-	Tue, 12 Aug 2025 05:44:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 805A82EA173;
+	Tue, 12 Aug 2025 05:44:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1754977500; cv=none; b=SroiZnK6n0SHO7MXftnWYQ8lWYSTAeAEAQDh2hugVC1dTk50tkaG/qgLLbxQik+xsUwRiA+UT2/HWW3yTvCYIhHMe3D1KeK58QpOCx9pKcEhG7nDOKeXRJkbR4MTdwgGfvgtzhTeR1gZfI96YT8W44rEiVufm0rmRPpn8CcVAts=
+	t=1754977501; cv=none; b=h5JI7Lfs4eVYtEm3u720YUfMvfbQokbvVQcgxyu18q1AGplhz5Tp9iS2yQ1/qi8VL98+T12BuWcgkIaml41AB2h7ya9x0I6SISA4Q9AYoA/EU5PnBm9R0w7Fxdi/iZKa7mSWGRGVpYKC9Fh3nZGqFgM1U2CBN8OXEWvBL6fUo1I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1754977500; c=relaxed/simple;
-	bh=zF65fVgprCI+5PEX2Gd11z0u6ua3JxVTHzfPFJcJjKs=;
+	s=arc-20240116; t=1754977501; c=relaxed/simple;
+	bh=XgLT+HRfIExEaxGQakA0kG9YYMgwqfszT+N1NJLYmAY=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Vm00DRCj9G919S2A7MLzjzVzFjj2Nyrrs/BJEdIYgmJaJ5Hm+1m3pXhvIjYRy0r9aSvrm8tDBjgcbmQCRydovZxz5spgPAnCPgsX+B8L0ojhisO3t+snfGjRiUhFWWhKXyQIWtOsDIS2tGAwY8Iu5IM1UZcpDe3NGRsHz6YR54Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=u02ULTpX; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=dCjTzytX; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=g+q/0HveeKCwqoHRg/MVC04BlskXanrt6kRU8uVYrGqwo9GnoNW+4wJloBWWFq8lYpcyz9z/6YxvyT/buBxdz26TnyQik0jmlKTMWlbyRu565lTNnIR8D6V67cibxSAFzeV2hWENQsERpSH2gKdVRE8B/i+5/ccdYApNGAowRRk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=gVUd2BKN; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=E3zfUlZM; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1754977482;
+	s=2020; t=1754977483;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=cZ20UpxcMxk4CxqTAsOEg+d3tEufNIUEKrmXXn+g7es=;
-	b=u02ULTpXMKVYfa57toc79SeSvHFZXxCkrNoUYan+T5r+jzG+jErgF3lH3L6hpXG5GD7AiP
-	BIUXfeq2JImvh4BYaqWeRcsPcpQWyQhVM6L37lOS8/C3ZaJKOGeEyLxqjYZEbvX/ROLkBH
-	u79IO6ttBD1PVC+tYif7r2bAXlngTkKup+NLj++0//mmwP8JvHnpMe87VUFc0bOwAeIITA
-	jDpSHVlj7jvidjWsVLXDskx33s+au1U1XzyN/9KPs2LnIbFp5cV3y+a+R/VTZv4VZHKIAG
-	LWkElhMb8xt5p1hHetTPMUO1bZj316mgGQEbOwBvZ0KYDGtgbZwU0kEgUkCLYA==
+	bh=4Ohsn0uRwU+hqw8smnbWosllb5/RpGYnB9VEAvO1A/o=;
+	b=gVUd2BKNRu49lqg4NSeZ4pKy2oD1HLdzTFOjP5wa3OkUArCPejQi3q6nUUr2hwWVlPH2Kd
+	CpxufrleSj5IZe8RVpKM1ltFMzRJO9obwhqsMGuapaXgAqGhXqHAW1SITBjzjuIFxYogme
+	VHW9rhxA7fc8nsd57iZTz0NzWxS4qCvj0HR7XdalckB95CeAtDcPREEN4EOpD8wSUEK1Fj
+	JpEDuofzGC0RATmSZcEZf8c/4R+6SxzYN4hGrvSuM267wDyFyN3n0HVqzoxPKY02BuyYgJ
+	Z9VulQJw/Kd9S+FCzxMpZgWlnADluI2ZtXqh+SyfPfSKvhoitMn+YWd5L9OT6A==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1754977482;
+	s=2020e; t=1754977483;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=cZ20UpxcMxk4CxqTAsOEg+d3tEufNIUEKrmXXn+g7es=;
-	b=dCjTzytXjhSAHdYjPLNNi/GmmKuNlP6Pk8Piyd2jaSGduNETuOdwRfsVItAyacB+69vj23
-	yvuwshG6rMcH0pAw==
-Date: Tue, 12 Aug 2025 07:44:36 +0200
-Subject: [PATCH v4 23/24] MIPS: vdso: Enable the vdsocheck tool
+	bh=4Ohsn0uRwU+hqw8smnbWosllb5/RpGYnB9VEAvO1A/o=;
+	b=E3zfUlZMz5EWlnuWD04WRwJZzaIYqsb9Hq174OOh7rbwH0by1UeqdRfVLVDKyXeX8pZQ9r
+	AHYbNMgU+lq97wCQ==
+Date: Tue, 12 Aug 2025 07:44:37 +0200
+Subject: [PATCH v4 24/24] vdso/vdsocheck: Drop the transitional kconfig
+ option
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -64,7 +65,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250812-vdso-absolute-reloc-v4-23-61a8b615e5ec@linutronix.de>
+Message-Id: <20250812-vdso-absolute-reloc-v4-24-61a8b615e5ec@linutronix.de>
 References: <20250812-vdso-absolute-reloc-v4-0-61a8b615e5ec@linutronix.de>
 In-Reply-To: <20250812-vdso-absolute-reloc-v4-0-61a8b615e5ec@linutronix.de>
 To: Paul Walmsley <paul.walmsley@sifive.com>, 
@@ -106,103 +107,59 @@ Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
  Arnaldo Carvalho de Melo <acme@redhat.com>, 
  Alexandre Ghiti <alexghiti@rivosinc.com>, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1754977469; l=3783;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1754977469; l=1638;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=zF65fVgprCI+5PEX2Gd11z0u6ua3JxVTHzfPFJcJjKs=;
- b=Esy6EbfOm7fmj2t+sBDFIgicd0JzbcJSTuk1wzj0YxPaqfzdPFEbZ+ivqSYv677dvrTRTHpOG
- hG06K4nNRAiASYK8xK3m4Pu8PF6fSaApaCF0D/lo8n5VKUT5XEMMGlM
+ bh=XgLT+HRfIExEaxGQakA0kG9YYMgwqfszT+N1NJLYmAY=;
+ b=1I1jQfDAIUdxhhr5poZTNsBtXG7kI9OeSFZyV1uG5GiskTP3f4x0XtJf5y22KDovg2SDqYoC/
+ 1/LS9SuRW0lC44pibDwoRDG1rIxAT00dk7cwwtQfK+pJ8Esyu7dhqf4
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-The vdsocheck tool validates the object files and final .so library.
-It can detect if the compiler created relocations which are incompatible
-with the vDSO which need to be worked around.
+All users of the generic vDSO are now using the vdsocheck tool.
 
-Wire it up for the architecture.
+Remove the now unnecessary kconfig option.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- arch/mips/vdso/Makefile     |  8 ++++----
- lib/vdso/Kconfig            |  1 +
- lib/vdso/check/vdsocheck.rs | 13 +++++++++++++
- 3 files changed, 18 insertions(+), 4 deletions(-)
+ lib/vdso/Kconfig          | 14 --------------
+ lib/vdso/Makefile.include |  2 +-
+ 2 files changed, 1 insertion(+), 15 deletions(-)
 
-diff --git a/arch/mips/vdso/Makefile b/arch/mips/vdso/Makefile
-index 69d4593f64fee593c9ea5b030eabdea40b39b89a..24de045737580fb6a0148abb87e459d8f4be1d89 100644
---- a/arch/mips/vdso/Makefile
-+++ b/arch/mips/vdso/Makefile
-@@ -69,7 +69,7 @@ quiet_cmd_vdso_mips_check = VDSOCHK $@
- #
- 
- quiet_cmd_vdsold_and_vdso_check = LD      $@
--      cmd_vdsold_and_vdso_check = $(cmd_ld); $(cmd_vdso_check); $(cmd_vdso_mips_check)
-+      cmd_vdsold_and_vdso_check = $(cmd_ld_vdso); $(cmd_vdso_check); $(cmd_vdso_mips_check)
- 
- quiet_cmd_vdsoas_o_S = AS      $@
-       cmd_vdsoas_o_S = $(CC) $(a_flags) -c -o $@ $<
-@@ -106,7 +106,7 @@ $(obj-vdso): KBUILD_AFLAGS := $(aflags-vdso) $(native-abi)
- 
- $(obj)/vdso.lds: KBUILD_CPPFLAGS := $(ccflags-vdso) $(native-abi)
- 
--$(obj)/vdso.so.dbg.raw: $(obj)/vdso.lds $(obj-vdso) FORCE
-+$(obj)/vdso.so.dbg.raw: $(obj)/vdso.lds $(obj-vdso) $(vdsocheck) FORCE
- 	$(call if_changed,vdsold_and_vdso_check)
- 
- $(obj)/vdso-image.c: $(obj)/vdso.so.dbg.raw $(obj)/vdso.so.raw \
-@@ -144,7 +144,7 @@ $(obj)/vdso-o32.lds: KBUILD_CPPFLAGS := $(ccflags-vdso) -mabi=32
- $(obj)/vdso-o32.lds: $(src)/vdso.lds.S FORCE
- 	$(call if_changed_dep,cpp_lds_S)
- 
--$(obj)/vdso-o32.so.dbg.raw: $(obj)/vdso-o32.lds $(obj-vdso-o32) FORCE
-+$(obj)/vdso-o32.so.dbg.raw: $(obj)/vdso-o32.lds $(obj-vdso-o32) $(vdsocheck) FORCE
- 	$(call if_changed,vdsold_and_vdso_check)
- 
- $(obj)/vdso-o32-image.c: VDSO_NAME := o32
-@@ -184,7 +184,7 @@ $(obj)/vdso-n32.lds: KBUILD_CPPFLAGS := $(ccflags-vdso) -mabi=n32
- $(obj)/vdso-n32.lds: $(src)/vdso.lds.S FORCE
- 	$(call if_changed_dep,cpp_lds_S)
- 
--$(obj)/vdso-n32.so.dbg.raw: $(obj)/vdso-n32.lds $(obj-vdso-n32) FORCE
-+$(obj)/vdso-n32.so.dbg.raw: $(obj)/vdso-n32.lds $(obj-vdso-n32) $(vdsocheck) FORCE
- 	$(call if_changed,vdsold_and_vdso_check)
- 
- $(obj)/vdso-n32-image.c: VDSO_NAME := n32
 diff --git a/lib/vdso/Kconfig b/lib/vdso/Kconfig
-index b5b6673897e24a1f36147c21d00dff057f293980..567ac937a9c3084fd5669e1b890b667af8a2f12d 100644
+index 567ac937a9c3084fd5669e1b890b667af8a2f12d..45df764b49ad62479e6456e00c053e46131936a3 100644
 --- a/lib/vdso/Kconfig
 +++ b/lib/vdso/Kconfig
-@@ -58,6 +58,7 @@ config HAVE_VDSOCHECK
- 	default y if RISCV
- 	default y if LOONGARCH
- 	default y if S390
-+	default y if MIPS
+@@ -48,17 +48,3 @@ config GENERIC_VDSO_DATA_STORE
+ 	bool
  	help
- 	  Selected for architectures that are supported by the 'vdsocheck' progam.
- 	  Only transitional.
-diff --git a/lib/vdso/check/vdsocheck.rs b/lib/vdso/check/vdsocheck.rs
-index 01073062f2b2d276291ccfbc6aa516f14a13fdd5..d9e660385e154fea179665ef9c5ba90223bf72be 100644
---- a/lib/vdso/check/vdsocheck.rs
-+++ b/lib/vdso/check/vdsocheck.rs
-@@ -146,6 +146,19 @@ fn allowed_relocations_for_machine(machine: u16) -> Option<AllowedRelocations<'s
-                 bindings::R_390_PLT32DBL,
-             ],
-         }),
-+        bindings::EM_MIPS => Some(AllowedRelocations {
-+            ignored_object_file_sections: Some(&[".rel.pdr", ".rela.pdr"]),
-+            in_object_file: &[
-+                bindings::R_MIPS_PC16,
-+                bindings::R_MIPS_PC21_S2,
-+                bindings::R_MIPS_PC26_S2,
-+                bindings::R_MIPS_PC18_S3,
-+                bindings::R_MIPS_PC19_S2,
-+                bindings::R_MIPS_PCHI16,
-+                bindings::R_MIPS_PCLO16,
-+                bindings::R_MIPS_PC32,
-+            ],
-+        }),
-         _ => None,
-     }
- }
+ 	  Selected by architectures that use the generic vDSO data store.
+-
+-config HAVE_VDSOCHECK
+-	bool
+-	default y if X86
+-	default y if ARM
+-	default y if ARM64
+-	default y if PPC
+-	default y if RISCV
+-	default y if LOONGARCH
+-	default y if S390
+-	default y if MIPS
+-	help
+-	  Selected for architectures that are supported by the 'vdsocheck' progam.
+-	  Only transitional.
+diff --git a/lib/vdso/Makefile.include b/lib/vdso/Makefile.include
+index 759fe41b48f658c399f54aa7d54a3dfeb07e5c9c..a5621b1d6ab51fde3fdab6e72309d51943939860 100644
+--- a/lib/vdso/Makefile.include
++++ b/lib/vdso/Makefile.include
+@@ -6,7 +6,7 @@ GENERIC_VDSO_DIR := $(dir $(GENERIC_VDSO_MK_PATH))
+ c-gettimeofday-$(CONFIG_GENERIC_GETTIMEOFDAY) := $(addprefix $(GENERIC_VDSO_DIR), gettimeofday.c)
+ c-getrandom-$(CONFIG_VDSO_GETRANDOM) := $(addprefix $(GENERIC_VDSO_DIR), getrandom.c)
+ 
+-ifeq ($(CONFIG_RUST_IS_AVAILABLE)$(CONFIG_HAVE_VDSOCHECK),yy)
++ifdef CONFIG_RUST_IS_AVAILABLE
+ vdsocheck := lib/vdso/check/vdsocheck
+ 
+ $(vdsocheck): FORCE
 
 -- 
 2.50.1
