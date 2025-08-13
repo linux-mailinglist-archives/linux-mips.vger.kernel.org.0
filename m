@@ -1,142 +1,117 @@
-Return-Path: <linux-mips+bounces-10249-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10250-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC5A0B24506
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Aug 2025 11:08:19 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9051FB2477A
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Aug 2025 12:37:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F24DB7A7B40
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Aug 2025 09:06:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97AD73B4F2A
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Aug 2025 10:37:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D39A320EB;
-	Wed, 13 Aug 2025 09:08:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1078B2F49F8;
+	Wed, 13 Aug 2025 10:36:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="RBcxly02"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Dzqowq6t"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from relay1-d.mail.gandi.net (relay1-d.mail.gandi.net [217.70.183.193])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD2E527280E;
-	Wed, 13 Aug 2025 09:08:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.193
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F8D62F5301
+	for <linux-mips@vger.kernel.org>; Wed, 13 Aug 2025 10:36:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755076091; cv=none; b=KVuB4MrIQs1aQDnOV1Ox2SirZC1xVYjYJnYS/Lqgg9wko3k5QADFynXZlHjCC4Jmes/VURTwqmFr7G3swqh1PlO4Q9eJACpBp/5xIlYyBTSIziM64XcPm60JM7ytT8U8YNAuHl3BVPlWYhSY9m1tsrNrZp4RLqAv4ddAZChI+Fo=
+	t=1755081406; cv=none; b=owlr4qeBtirgXtFZhHVnNz5S7ttbPimNc+VrvH+j5wXJCq4Wcoph2hmd+oVXVbquCQDUprJRnSk10YA0iSrJDcn2nrRU/Vec5PbIg+af7Yi6m5xMpV82sbvjKy44A3/yY5xeMMH+q3xbU6c1t5F4Nf+DZombQrHYzfL+c7vPI6M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755076091; c=relaxed/simple;
-	bh=/SPdHAwhvXyCqoH/t4/l4FNys/9/FT+CFV8bKu69lmc=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=L7knbgfvoSv1a3+yKX+lc1RHA8j4Q6QPLM5+4XWngLQbVDCe4VGlrR5VWtXz2KRaLLaQqeSNGS8ScIi/Bbt9qTm5ukHAyWVacziXqX+w4KWVxkoywaUQEUvTCka7e86EnDzeMGuSE7/WR2UV3/HKw4giX60Ua+pR7e7uewP9cZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=RBcxly02; arc=none smtp.client-ip=217.70.183.193
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 9806843283;
-	Wed, 13 Aug 2025 09:07:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1755076079;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=zeW3w+muABU56lk8AynPRRMO7XtEP4qDrJkq+5Lwhw0=;
-	b=RBcxly02YqHg6yIG6IVGb6L0wWxwyXgbzexV7fz5MW/s00R1yXLzqz8R0Q4Hp6XCzFEgKy
-	aJQuxXVY2VuM3LcR+HuKLiDTJxPk7hPeIic299sk4PSxG2ekcA+2ZeJQZ9DJMqGpdiEK55
-	dlmn2pZocXR5RTpeMH7mXYpDsa1p5LBc6yeLbl5BB9RJI44aKGy2UdQyipWgEiGweTT6Zs
-	yKZjMHYwq/2e6TLrhQ1n/5tSh0xMWWU8ZMi+8EvpkTaKYRbcurnOinRJ6WojpOPIpt9hGK
-	EGL3JqryRCMP/IrQCvVCa6eDAFIGmMSS2+OxScw07Z8iZPtIZg8PP1xYwoncfg==
-Date: Wed, 13 Aug 2025 11:07:45 +0200
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-To: Brian Masney via B4 Relay <devnull+bmasney.redhat.com@kernel.org>
-Cc: bmasney@redhat.com, Michael Turquette <mturquette@baylibre.com>, Stephen
- Boyd <sboyd@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>, Cristian
- Marussi <cristian.marussi@arm.com>, Chen Wang <unicorn_wang@outlook.com>,
- Inochi Amaoto <inochiama@gmail.com>, Nicolas Ferre
- <nicolas.ferre@microchip.com>, Alexandre Belloni
- <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>,
- Paul Cercueil <paul@crapouillou.net>, Keguang Zhang
- <keguang.zhang@gmail.com>, Taichi Sugaya <sugaya.taichi@socionext.com>,
- Takao Orito <orito.takao@socionext.com>, Shawn Guo <shawnguo@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team
- <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Jacky Huang
- <ychuang3@nuvoton.com>, Shan-Chun Hung <schung@nuvoton.com>, Vladimir
- Zapolskiy <vz@mleia.com>, Piotr Wojtaszczyk
- <piotr.wojtaszczyk@timesys.com>, Paul Walmsley <paul.walmsley@sifive.com>,
- Samuel Holland <samuel.holland@sifive.com>, Yixun Lan <dlan@gentoo.org>,
- Steen Hegelund <Steen.Hegelund@microchip.com>, Daniel Machon
- <daniel.machon@microchip.com>, UNGLinuxDriver@microchip.com, Orson Zhai
- <orsonzhai@gmail.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, Chunyan
- Zhang <zhang.lyra@gmail.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>, Michal Simek
- <michal.simek@amd.com>, Maxime Ripard <mripard@kernel.org>, Andreas
- =?UTF-8?B?RsOkcmJlcg==?= <afaerber@suse.de>, Manivannan Sadhasivam
- <mani@kernel.org>, Sven Peter <sven@kernel.org>, Janne Grunau
- <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa
- <neal@gompa.dev>, Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>, Ray Jui
- <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, Broadcom
- internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Max
- Filippov <jcmvbkbc@gmail.com>, Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Daniel Palmer <daniel@thingy.jp>, Romain Perier <romain.perier@gmail.com>,
- Andrew Lunn <andrew@lunn.ch>, Gregory Clement
- <gregory.clement@bootlin.com>, Sebastian Hesselbarth
- <sebastian.hesselbarth@gmail.com>, Bjorn Andersson <andersson@kernel.org>,
- Geert Uytterhoeven <geert+renesas@glider.be>, Heiko Stuebner
- <heiko@sntech.de>, Andrea della Porta <andrea.porta@suse.com>, Krzysztof
- Kozlowski <krzk@kernel.org>, Sylwester Nawrocki <s.nawrocki@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>, Alim Akhtar
- <alim.akhtar@samsung.com>, Qin Jian <qinjian@cqplus1.com>, Viresh Kumar
- <vireshk@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, Alex Helms
- <alexander.helms.jy@renesas.com>, Linus Walleij <linus.walleij@linaro.org>,
- Liviu Dudau <liviu.dudau@arm.com>, Lorenzo Pieralisi
- <lpieralisi@kernel.org>, Nobuhiro Iwamatsu
- <nobuhiro1.iwamatsu@toshiba.co.jp>, linux-clk@vger.kernel.org,
- linux-kernel@vger.kernel.org, arm-scmi@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, sophgo@lists.linux.dev,
- linux-mips@vger.kernel.org, imx@lists.linux.dev,
- linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
- linux-stm32@st-md-mailman.stormreply.com, patches@opensource.cirrus.com,
- linux-actions@lists.infradead.org, asahi@lists.linux.dev,
- linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org,
- linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev
-Subject: Re: [PATCH 106/114] clk: versaclock5: convert from round_rate() to
- determine_rate()
-Message-ID: <20250813110745.63523645@booty>
-In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-106-b3bf97b038dc@redhat.com>
-References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
-	<20250811-clk-for-stephen-round-rate-v1-106-b3bf97b038dc@redhat.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
+	s=arc-20240116; t=1755081406; c=relaxed/simple;
+	bh=Q1NhbFtp2McdwP1oX5NSBNJM1rtYXPpcXrqt1U91T0k=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=NQIS45g/MD5dcRvrQEurtcHbPX0HiIEuIGLywQGFlHNHBp53tK+YKTrK3rHaGjV5gOL1H/qvQfcZmdwwZD7g0SwoUXdYIDR9XmDJrqzaoCxXFSidqvdGp5ZWYfJgE65VAXfwLFgyiDOp1p5FhRC1O707EsyssV9Y5EVynxHnxUA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Dzqowq6t; arc=none smtp.client-ip=209.85.208.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-6183b1541d0so445348a12.1
+        for <linux-mips@vger.kernel.org>; Wed, 13 Aug 2025 03:36:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1755081402; x=1755686202; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4F86Ss5ZDMwE+bMtUpttaC71xy+/6MJqMSZw67R4Rmc=;
+        b=Dzqowq6tm6k3VCdEkX2dE2Wd86TvSaNTyZ7UN+AaDziYmisppYm+C+mVURFnYNOnOy
+         ZZPsaZr2ZbI5Z6inqjIcZxgeqp6mMmJvvyAazOoSUDYZNb+Bq4pcB2Z+n4irh+5A47tZ
+         xaCk8vMtzqtPX69ukPvY+bt/HYpkQDmOoJsCvebftxiUGhdzUx2YHlnbF7Qeh/Xy1gUF
+         2/8+MtZtEmUewkeUKGPhjAkG7ATHKRd1AHcqCtDpNV08x+HSr79Tx08uF1mUhmNeMQmn
+         v3wzswax7TQQLoEsD4ZJebkzFvoo7M6Hi8aZtj5z29zUKynz6ZLLZKPIGSZS5+ZCGwqq
+         6ulw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755081402; x=1755686202;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4F86Ss5ZDMwE+bMtUpttaC71xy+/6MJqMSZw67R4Rmc=;
+        b=q1C29d4+mz0uD0vElOxOODoTh10uGWc3LFhgp8u1HztB2Rs0si2hCrYTGuEShuEixI
+         cw6TVG9V8q7IowFDElO0ANDblo5DnwwlpBXebUPd4Ytb0CsNoFO8W8UgLA6R7+mM468R
+         HG3lAgeaxp7DIOxfZAU+EwaWhDMvpgVxiO9pXqiAiAlAMfjHGKx78EP5Hzr29dt96vNn
+         OlPlgagsEILtpHs3w3y0AGa1+XvBkISCY8J4yuolktPqwQJ03UW2wTfNg1g0vGmeeSEj
+         83yViWpHOEGgkIw6lBF+k0d0Cu5C4e0zuQEQ+CXJ/CiwF/XngBFRpc8sINQY4vyBh+kJ
+         FkRg==
+X-Gm-Message-State: AOJu0YzNy2ssZsyQfleliyxALTmOhfSC78VVd+Vn+raoV6SH6cLOv8LC
+	veyF8Xjf1DJG0xMD6YLjs2lmr2lCzLYnH9bjso5IcXb5zV6t7ZQuzk+QOA4NG4Hp9E4=
+X-Gm-Gg: ASbGncslBoDwlACIlXDgmRm2s0SBHNbh2jof6+hLnf8pFuhMeFwomv4BgPYabzt4ne6
+	RtJZToqW/4Wrl3Y0TeRGIZ1lPP8fgkgOU/IZ04Qm+tQmLRQ5Thu3W7+1GEtRpz/LdJ8VQUjigFV
+	lvwsjWOlfRG+908Noh1gtgYaB5GgTZZBnRvB3qrUKy3ZLVpk0qHHk25ZOKjoAzYrWbMfKLv2v6z
+	VQmwKyw7QBwUpnNJfobymlX+FK9ZhwyRTiAaQFWuY2/IoLH2Fqzb1KTGiXn4KhBezD8qtw9p/Zg
+	ibfJtGDRlrBkQP87wEGwfRxr6cJ238zR7ZFhT4OuidSBmxCfkIL729yqRp7qBxfQymBH6Gp7b4E
+	+xOZhu6HUWO2nmt2EHZtU04cX4IlDeCvUmyCXYugD+SEMqECRdg==
+X-Google-Smtp-Source: AGHT+IEt6eCGHIHdgJ5Hbdvmi361TPvwrKg2DTzTL0d0QkRcJbr+DkoNmxRzQ+Jj9IKe7RsN66mllQ==
+X-Received: by 2002:a17:907:1c0a:b0:ae3:63fd:c3b4 with SMTP id a640c23a62f3a-afca4cff92dmr105537666b.5.1755081402373;
+        Wed, 13 Aug 2025 03:36:42 -0700 (PDT)
+Received: from [127.0.1.1] ([178.197.219.123])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-af91a21c0e7sm2367644366b.114.2025.08.13.03.36.41
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 13 Aug 2025 03:36:41 -0700 (PDT)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: linux-mips@vger.kernel.org, 
+ Florian Fainelli <florian.fainelli@broadcom.com>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org
+In-Reply-To: <20250729205213.3392481-2-florian.fainelli@broadcom.com>
+References: <20250729205213.3392481-1-florian.fainelli@broadcom.com>
+ <20250729205213.3392481-2-florian.fainelli@broadcom.com>
+Subject: Re: (subset) [PATCH 1/2] dt-bindings: memory: Update
+ brcmstb-memc-ddr binding with older chips
+Message-Id: <175508140104.40429.8279921018476182386.b4-ty@linaro.org>
+Date: Wed, 13 Aug 2025 12:36:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-GND-State: clean
-X-GND-Score: -100
-X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgddufeejkedtucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtjeeftdertddvnecuhfhrohhmpefnuhgtrgcuvegvrhgvshholhhiuceolhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhepgeehffejffekudfhkeeklefgjeeuheekffelheejgfeijeehieelkedttdfhjedtnecuffhomhgrihhnpegsohhothhlihhnrdgtohhmnecukfhppedvrgdtvdemieejtdemvddtvddtmegvrgdtudemsggvgedumeelhegvjeemfeegfeemledufegvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegsvgegudemleehvgejmeefgeefmeeludefvgdphhgvlhhopegsohhothihpdhmrghilhhfrhhomheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepkeelpdhrtghpthhtohepuggvvhhnuhhllhdosghmrghsnhgvhidrrhgvughhrghtrdgtohhmsehkvghrnhgvlhdrohhrghdprhgtphhtthhopegsmhgrshhnvgihsehrvgguhhgrthdrtghomhdprhgtphhtthhopehmthhurhhqu
- hgvthhtvgessggrhihlihgsrhgvrdgtohhmpdhrtghpthhtohepshgsohihugeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhuuggvvghprdhhohhllhgrsegrrhhmrdgtohhmpdhrtghpthhtoheptghrihhsthhirghnrdhmrghruhhsshhisegrrhhmrdgtohhmpdhrtghpthhtohepuhhnihgtohhrnhgpfigrnhhgsehouhhtlhhoohhkrdgtohhmpdhrtghpthhtohepihhnohgthhhirghmrgesghhmrghilhdrtghomh
-X-GND-Sasl: luca.ceresoli@bootlin.com
+X-Mailer: b4 0.14.2
 
-On Mon, 11 Aug 2025 11:19:38 -0400
-Brian Masney via B4 Relay <devnull+bmasney.redhat.com@kernel.org> wrote:
 
-> From: Brian Masney <bmasney@redhat.com>
+On Tue, 29 Jul 2025 13:52:12 -0700, Florian Fainelli wrote:
+> The older MIPS-based chips incorporated a memory controller with the
+> revision A.0.0, update the binding to list that compatible.
 > 
-> The round_rate() clk ops is deprecated, so migrate this driver from
-> round_rate() to determine_rate() using the Coccinelle semantic patch
-> on the cover letter of this series.
 > 
-> Signed-off-by: Brian Masney <bmasney@redhat.com>
 
-Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Applied, thanks!
 
+[1/2] dt-bindings: memory: Update brcmstb-memc-ddr binding with older chips
+      https://git.kernel.org/krzk/linux-mem-ctrl/c/1aba1eab0bd896928ae20dbf1f60a175a6e1ad0f
+
+Best regards,
 -- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
 
