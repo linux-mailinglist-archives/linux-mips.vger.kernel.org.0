@@ -1,120 +1,221 @@
-Return-Path: <linux-mips+bounces-10258-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10259-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76DC6B250AD
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Aug 2025 19:02:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0B132B250C1
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Aug 2025 19:03:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D62F55A2E6B
-	for <lists+linux-mips@lfdr.de>; Wed, 13 Aug 2025 16:58:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1830518815EF
+	for <lists+linux-mips@lfdr.de>; Wed, 13 Aug 2025 17:01:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA9DB286D69;
-	Wed, 13 Aug 2025 16:58:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HzytL42x"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8B3E28D839;
+	Wed, 13 Aug 2025 17:01:27 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F5062DF68;
-	Wed, 13 Aug 2025 16:58:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D74E622DF9E;
+	Wed, 13 Aug 2025 17:01:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755104331; cv=none; b=pKuoNaJupSlwutzVuQ7r27N1Oh80hRNC3abZvsEXi/TaDYMXzVXAfXr4+2fWRpgHK1JmTAME0+BJMwoos0iNtL1Y9+qeLJO/Uv8jxIEGGEK5ycZ9CZsgAta1IBxPgCvRm4piq8Y3a0jBxCIBxh+ZJcGwwcpGMgPnvH31P7hpato=
+	t=1755104487; cv=none; b=MikvVOR+bL/opdP5p4U0CmuUZT+GXSWgAyc3+cW9FvWNEVpuBTqMAFQldCLALD/bM2tDoUAODqqta1iRaP8m8FLhkJfnR9KQbskJiuo6fecHo1eq4IjTgS4J5EDtUrxY2r5PK20VyLzWsbtpjuUBF2r0B/JLMFT6l7FGOsh5vTU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755104331; c=relaxed/simple;
-	bh=KIj8yRKZn+5Ed7R2bYlN6ypghV5xN0JHlTp6GulnulQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B/KxbYN6qSr/ff1gh0SykTIuTwvv6laXZu075QsqqujIClHtFeTlXWrYCV74rnYQwy3fMQgShK7bENi6QfObea8hB7NSa+I9nGdvVF/Fj5LjiQCW2BYI2b1iZXvpSgHDC06o/K3F97wPSG9T8QH85VVM00/SKfwmXq4onQ/TA+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HzytL42x; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F47EC4CEEB;
-	Wed, 13 Aug 2025 16:58:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755104330;
-	bh=KIj8yRKZn+5Ed7R2bYlN6ypghV5xN0JHlTp6GulnulQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HzytL42xSAJDY3fDH6Tg8aGWEG8CxSrRH2Zo8fhfMrYYhQY2YiW1SLnV1Nz+shQLr
-	 TrrPtvNqbBFWkROMULeOPxGd6mLMmR9kpYkUJO6ZE+VuT5MvY3mOZOj8OaT91dLRmx
-	 tQ4XAE/vekTblGpmkeYvWxtgTqhOsjTTxCp4ZVmWHTEmNPFbwcZbdIwi9cK3kcpado
-	 9JkGGIdPBu/J7XdxRz8O0g7t6gU5Fo/fMM6Hh/oncOXIU9x0BDIQNzQvpGYYbLpZbi
-	 SeDUGdlT+OfaR8FxdlIKy+g8EdM4v/PvY/z2WapJ8VNF6fMcTha6P6XzIYqvDHoJxG
-	 WT1nmLP+B2DvA==
-Date: Wed, 13 Aug 2025 17:58:44 +0100
-From: Conor Dooley <conor@kernel.org>
-To: Aleksander Jan Bajkowski <olek2@wp.pl>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	neil.armstrong@linaro.org, heiko@sntech.de,
-	kever.yang@rock-chips.com, mani@kernel.org,
-	tsbogend@alpha.franken.de, john@phrozen.org, masahiroy@kernel.org,
-	devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/3] dt-bindings: vendor-prefixes: add British Telecom
-Message-ID: <20250813-scorecard-sanction-d3ed821909e7@spud>
-References: <20250813142917.2053814-1-olek2@wp.pl>
- <20250813142917.2053814-2-olek2@wp.pl>
+	s=arc-20240116; t=1755104487; c=relaxed/simple;
+	bh=9Z/RmbrVLmkjIv2T64d6k3xZWFq+o5FbpjFxow0TKU4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=uNb1YOWvgQo3IvoG5yOhVHm4TtQfnCxonaWfpXNgVsdlhFaUAoqRCP8Tas8pKGZ+qkugrW2bxv9bs1Fh6WbxkN1K+8tGnCEX6HwIQ1zCBpca1YXc30Q5ycnu67446Bo6rlghBaX8bkwhF7SvxgOJvjiHDudVdre81AG6QLiGaHc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0CD3A12FC;
+	Wed, 13 Aug 2025 10:01:17 -0700 (PDT)
+Received: from e121345-lin.cambridge.arm.com (e121345-lin.cambridge.arm.com [10.1.196.50])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id E4DF23F738;
+	Wed, 13 Aug 2025 10:01:20 -0700 (PDT)
+From: Robin Murphy <robin.murphy@arm.com>
+To: peterz@infradead.org,
+	mingo@redhat.com,
+	will@kernel.org,
+	mark.rutland@arm.com,
+	acme@kernel.org,
+	namhyung@kernel.org,
+	alexander.shishkin@linux.intel.com,
+	jolsa@kernel.org,
+	irogers@google.com,
+	adrian.hunter@intel.com,
+	kan.liang@linux.intel.com
+Cc: linux-perf-users@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-alpha@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org,
+	imx@lists.linux.dev,
+	linux-csky@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org,
+	sparclinux@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	dmaengine@vger.kernel.org,
+	linux-fpga@vger.kernel.org,
+	amd-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	intel-gfx@lists.freedesktop.org,
+	intel-xe@lists.freedesktop.org,
+	coresight@lists.linaro.org,
+	iommu@lists.linux.dev,
+	linux-amlogic@lists.infradead.org,
+	linux-cxl@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: [PATCH 00/19] perf: Rework event_init checks
+Date: Wed, 13 Aug 2025 18:00:52 +0100
+Message-Id: <cover.1755096883.git.robin.murphy@arm.com>
+X-Mailer: git-send-email 2.39.2.101.g768bb238c484.dirty
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="sy/5Z08SDOE3s5yi"
-Content-Disposition: inline
-In-Reply-To: <20250813142917.2053814-2-olek2@wp.pl>
+Content-Transfer-Encoding: 8bit
+
+Hi all,
+
+[ Note I'm only CC'ing lists for now to avoid spamming nearly 100 
+  individual maintainers/reviewers while we work out the basics ]
+
+Reviving my idea from a few years back, the aim here is to minimise
+the amount of event_init boilerplate that most new drivers have to
+implement (and so many get wrong), while also trying to establish
+some more consistent and easy-to-follow patterns for the things that
+drivers should still care about (mostly group validation).
+
+It's ended up somewhat big and ugly, so to start with I've tried to
+optimise for ease of review - based on the typical "fixes, cleanup,
+new development" order the split of the current patches is like so:
+
+* Group validation rework (patches #1-#15)
+  - Specific drivers with functional issues by inspection (#1-#7)
+  - Specific drivers where cleanup changes were non-trivial (#8-#11)
+  - Common patterns across remaining drivers (#12-#15)
+* Capabilities rework (patches #16-#18)
+* Giant bonfire of remaining boilerplate! (patch #19)
+
+If the overall idea is acceptable then a more relaxed merge strategy
+might be to look at landing the common parts first (#16-#18 and maybe
+#13), then rearrange the rest into per-driver patches, but I'm sure
+nobody wants a ~70-patch series out of the gate :)
+
+Thanks,
+Robin.
 
 
---sy/5Z08SDOE3s5yi
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Robin Murphy (19):
+  perf/arm-cmn: Fix event validation
+  perf/hisilicon: Fix group validation
+  perf/imx8_ddr: Fix group validation
+  perf/starfive: Fix group validation
+  iommu/vt-d: Fix perfmon group validation
+  ARM: l2x0: Fix group validation
+  ARM: imx: Fix MMDC PMU group validation
+  perf/arm_smmu_v3: Improve group validation
+  perf/qcom: Improve group validation
+  perf/arm-ni: Improve event validation
+  perf/arm-cci: Tidy up event validation
+  perf: Ignore event state for group validation
+  perf: Add helper for checking grouped events
+  perf: Clean up redundant group validation
+  perf: Simplify group validation
+  perf: Introduce positive capability for sampling
+  perf: Retire PERF_PMU_CAP_NO_INTERRUPT
+  perf: Introduce positive capability for raw events
+  perf: Garbage-collect event_init checks
 
-On Wed, Aug 13, 2025 at 04:21:32PM +0200, Aleksander Jan Bajkowski wrote:
-> British Telecom is a telecommunications operator. It provides various
-> home routers popular among OpenWRT enthusiasts.
-> Link: https://www.bt.com/
->=20
-> Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+ arch/alpha/kernel/perf_event.c                |  5 +-
+ arch/arc/kernel/perf_event.c                  |  4 +-
+ arch/arm/mach-imx/mmdc.c                      | 29 ++----
+ arch/arm/mm/cache-l2x0-pmu.c                  | 19 +---
+ arch/csky/kernel/perf_event.c                 |  3 +-
+ arch/loongarch/kernel/perf_event.c            |  1 +
+ arch/mips/kernel/perf_event_mipsxx.c          |  1 +
+ arch/powerpc/perf/8xx-pmu.c                   |  3 +-
+ arch/powerpc/perf/core-book3s.c               |  4 +-
+ arch/powerpc/perf/core-fsl-emb.c              |  4 +-
+ arch/powerpc/perf/hv-24x7.c                   | 11 ---
+ arch/powerpc/perf/hv-gpci.c                   | 11 ---
+ arch/powerpc/perf/imc-pmu.c                   | 31 +-----
+ arch/powerpc/perf/kvm-hv-pmu.c                |  5 +-
+ arch/powerpc/perf/vpa-pmu.c                   | 13 +--
+ arch/powerpc/platforms/pseries/papr_scm.c     | 18 +---
+ arch/s390/kernel/perf_cpum_cf.c               |  8 +-
+ arch/s390/kernel/perf_cpum_sf.c               |  2 +
+ arch/s390/kernel/perf_pai_crypto.c            |  1 +
+ arch/s390/kernel/perf_pai_ext.c               |  1 +
+ arch/sh/kernel/perf_event.c                   |  1 -
+ arch/sparc/kernel/perf_event.c                |  4 +-
+ arch/x86/events/amd/ibs.c                     | 32 ++-----
+ arch/x86/events/amd/iommu.c                   | 15 ---
+ arch/x86/events/amd/power.c                   |  7 --
+ arch/x86/events/amd/uncore.c                  | 12 +--
+ arch/x86/events/core.c                        |  7 +-
+ arch/x86/events/intel/bts.c                   |  3 -
+ arch/x86/events/intel/cstate.c                | 16 +---
+ arch/x86/events/intel/pt.c                    |  3 -
+ arch/x86/events/intel/uncore.c                | 16 +---
+ arch/x86/events/intel/uncore_snb.c            | 18 ----
+ arch/x86/events/msr.c                         |  8 +-
+ arch/x86/events/rapl.c                        | 11 ---
+ arch/xtensa/kernel/perf_event.c               |  1 +
+ drivers/devfreq/event/rockchip-dfi.c          | 13 +--
+ drivers/dma/idxd/perfmon.c                    | 17 +---
+ drivers/fpga/dfl-fme-perf.c                   | 18 +---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_pmu.c       |  4 -
+ drivers/gpu/drm/i915/i915_pmu.c               | 13 ---
+ drivers/gpu/drm/xe/xe_pmu.c                   | 13 ---
+ .../hwtracing/coresight/coresight-etm-perf.c  |  5 -
+ drivers/hwtracing/ptt/hisi_ptt.c              |  8 --
+ drivers/iommu/intel/perfmon.c                 | 28 +++---
+ drivers/perf/alibaba_uncore_drw_pmu.c         | 28 +-----
+ drivers/perf/amlogic/meson_ddr_pmu_core.c     |  9 --
+ drivers/perf/arm-cci.c                        | 56 +++--------
+ drivers/perf/arm-ccn.c                        | 34 -------
+ drivers/perf/arm-cmn.c                        | 15 +--
+ drivers/perf/arm-ni.c                         | 35 +++----
+ drivers/perf/arm_cspmu/arm_cspmu.c            | 34 +------
+ drivers/perf/arm_dmc620_pmu.c                 | 28 +-----
+ drivers/perf/arm_dsu_pmu.c                    | 26 +----
+ drivers/perf/arm_pmu.c                        | 19 +---
+ drivers/perf/arm_pmu_platform.c               |  2 +-
+ drivers/perf/arm_smmuv3_pmu.c                 | 35 ++-----
+ drivers/perf/arm_spe_pmu.c                    |  7 +-
+ drivers/perf/cxl_pmu.c                        |  6 --
+ drivers/perf/dwc_pcie_pmu.c                   | 21 +---
+ drivers/perf/fsl_imx8_ddr_perf.c              | 32 +------
+ drivers/perf/fsl_imx9_ddr_perf.c              | 27 ------
+ drivers/perf/hisilicon/hisi_pcie_pmu.c        | 25 ++---
+ drivers/perf/hisilicon/hisi_uncore_pmu.c      | 41 ++------
+ drivers/perf/hisilicon/hns3_pmu.c             | 24 ++---
+ drivers/perf/marvell_cn10k_ddr_pmu.c          | 18 ----
+ drivers/perf/marvell_cn10k_tad_pmu.c          | 12 +--
+ drivers/perf/marvell_pem_pmu.c                | 22 +----
+ drivers/perf/qcom_l2_pmu.c                    | 96 ++++++-------------
+ drivers/perf/qcom_l3_pmu.c                    | 33 ++-----
+ drivers/perf/riscv_pmu_legacy.c               |  1 -
+ drivers/perf/riscv_pmu_sbi.c                  |  3 +-
+ drivers/perf/starfive_starlink_pmu.c          | 32 ++-----
+ drivers/perf/thunderx2_pmu.c                  | 45 ++-------
+ drivers/perf/xgene_pmu.c                      | 29 ------
+ drivers/powercap/intel_rapl_common.c          |  9 +-
+ include/linux/perf_event.h                    | 10 +-
+ kernel/events/core.c                          | 35 +++++--
+ kernel/events/hw_breakpoint.c                 |  1 +
+ 78 files changed, 244 insertions(+), 1053 deletions(-)
 
-The blank line should be before the Link, not between Link and signoff
-FWIW.
-Otherwise,
-Acked-by: Conor Dooley <conor.dooley@microchip.com>
+-- 
+2.39.2.101.g768bb238c484.dirty
 
-> ---
->  Documentation/devicetree/bindings/vendor-prefixes.yaml | 2 ++
->  1 file changed, 2 insertions(+)
->=20
-> diff --git a/Documentation/devicetree/bindings/vendor-prefixes.yaml b/Doc=
-umentation/devicetree/bindings/vendor-prefixes.yaml
-> index 77160cd47f54..e91879137e43 100644
-> --- a/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> +++ b/Documentation/devicetree/bindings/vendor-prefixes.yaml
-> @@ -243,6 +243,8 @@ patternProperties:
->      description: Shanghai Broadmobi Communication Technology Co.,Ltd.
->    "^bsh,.*":
->      description: BSH Hausgeraete GmbH
-> +  "^bt,.*":
-> +    description: British Telecom
->    "^bticino,.*":
->      description: Bticino International
->    "^buffalo,.*":
-> --=20
-> 2.47.2
->=20
-
---sy/5Z08SDOE3s5yi
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaJzERAAKCRB4tDGHoIJi
-0rixAP9R49qRJeqsmEulMyZRNTvNzRojYxBZNZJUwbon1QFofgD+LCRXjdpSxpgs
-Uw+T6ppFQhKFMkZwHs1FlL/o0BMzPwY=
-=LrQ/
------END PGP SIGNATURE-----
-
---sy/5Z08SDOE3s5yi--
 
