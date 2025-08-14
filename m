@@ -1,122 +1,127 @@
-Return-Path: <linux-mips+bounces-10293-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10295-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4906CB2609C
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Aug 2025 11:19:17 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 82A84B2615F
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Aug 2025 11:48:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 432551CC3D30
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Aug 2025 09:13:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 048265A34F4
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Aug 2025 09:39:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0F2929BDA9;
-	Thu, 14 Aug 2025 09:11:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6FE882F5323;
+	Thu, 14 Aug 2025 09:37:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p2LR4MNA"
+	dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b="morrRifc"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C0032EAB90;
-	Thu, 14 Aug 2025 09:11:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 619472356DA
+	for <linux-mips@vger.kernel.org>; Thu, 14 Aug 2025 09:37:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.77.101.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755162719; cv=none; b=f+V7L9oJslkUcfe/K848Tf+CF6WtKwmGu/TfY2BCJ/3Rgs/R0LYu3rhnT1fF2dp8jNuNUV4xh9f/fWSN8zidRchnclX+ksF+cd33HAlvTjpV3FRBM1CrGGoiuYUEN3QeyAYJxUm54LgNnLZFSRcuwbbLe+EcAxz3Hx1MubZmIMk=
+	t=1755164243; cv=none; b=dZnTIFLfbZudFLx6IL/BCp/N6CdTEGdTxaVDfIYkz/Vl+Tr+/vKwNtMz7vL0xGQQot9qbiMKlfCGKUgwQ6Y5dLg7GITJAVefN3S/HBW4IvlL0W6PCPToinW8bl5xCV3XiEKAYBeaioTOKkjqRjOjHagL0/rBfx0DuNryDcm9zQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755162719; c=relaxed/simple;
-	bh=KpPt0fkcfW+EkmwbLOQPg8tnnnTCZmXxVb8az3l0UWo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fWQG6eA7po+buycmojPcOPgl/40uwpBjaf2ZjkAcPSGVNVbVwscHYnOJPkGozzRcEEvqoAU1m1pqXkxc+9xdB7Ve7endIVv+gJjO1VrQSBr0BbdiNg3Lv+5G2mGJoNcjCt34eLGg0bJKBoSdP1Vhf1XiC45nwOeh9ePqiqVWToY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p2LR4MNA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6BAE0C4CEED;
-	Thu, 14 Aug 2025 09:11:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755162719;
-	bh=KpPt0fkcfW+EkmwbLOQPg8tnnnTCZmXxVb8az3l0UWo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=p2LR4MNAJtYja39bXuF6NPDdvuiX3a0LgHExroY+OLXuR7DaBbg04P8zyIRZYShg1
-	 pM5wdlIWjMw4ExrGN2JxXvuntQOs6MsH/NKnEskujnZsK3HpI6rMHx1fTUNgvLTihu
-	 Ht/v6gec/Mak8UJCiAGVcbzWz7gDaC68lHWR8geteWEZKPD0bEQzck2/HlxTvtOZmY
-	 nUx9cz+jBCeXWkU4K1oHh3BNOAFVzD1g6X2eoAvwtUZ5fJxl2uaVxjk1GDjxtEXg21
-	 iyCFuJnCPNc6XG/ISzi2Tj4dr5V3qfjU2ru6qXI/xDiboCWp8gZdprsr+iR2nK4WnL
-	 Jy5BAUDILqJcg==
-Date: Thu, 14 Aug 2025 11:11:56 +0200
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Rosen Penev <rosenp@gmail.com>
-Cc: linux-wireless@vger.kernel.org, 
-	Toke =?utf-8?Q?H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>, Johannes Berg <johannes@sipsolutions.net>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
-	"open list:MIPS" <linux-mips@vger.kernel.org>
-Subject: Re: [PATCHv2 1/3] dt-bindings: net: wireless: ath9k: add led bindings
-Message-ID: <20250814-dramatic-glorious-dugong-eecfae@kuoka>
-References: <20250812192334.11651-1-rosenp@gmail.com>
- <20250812192334.11651-2-rosenp@gmail.com>
- <14f0cb76-1694-4330-899a-7565af0dfdfc@kernel.org>
- <CAKxU2N_vo9NThjGaiX1Fq5jet0vdw390ZYpVct4=XPa5gwj-Kg@mail.gmail.com>
+	s=arc-20240116; t=1755164243; c=relaxed/simple;
+	bh=dW/xr3vfgNuCDhueJr+yTDWl3zvG+UZlbW8h3X4Hqv0=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=YF5VPvVXObM9agi5K9v4ZgU0J3pnU/DgLP6dEoo7QEZkFhzLjFrTVF3CF9Li3XFQp+XIquDTysgVFYyfP8kb6OzDcrOZ/MMscWZxM0sph3Et5smd0Nw6bmuQSCP8iiLCzO+fzsXaauJghECBsbNYvqtPit4Gzyg41qTD7TrRuzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl; spf=pass smtp.mailfrom=wp.pl; dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b=morrRifc; arc=none smtp.client-ip=212.77.101.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wp.pl
+Received: (wp-smtpd smtp.wp.pl 31925 invoked from network); 14 Aug 2025 11:37:13 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=20241105;
+          t=1755164233; bh=8l/lnnXu3QrQ/y3L8Ck9okdvOOxwUP3ntLh2uTCv6t4=;
+          h=From:To:Subject;
+          b=morrRifcFiLjgI8tlOVH/IO6VzZ2+UvxMUlyNwVZItlB/yO3Tj+W3fqHPaUdvmF95
+           ZLOiAZ9gpweBhGcG+LTmFqpO37QinW7175luAl7AQWUc6ednBBk7pZp/BVxON+M7KD
+           Y+T2OdYk88A5LBu2YXmTUfKxQW5UmP4DW/neMFsPPN8PoophtNl53NaH4DY9slkvRi
+           xfFW1t8Zy2JpU2zcMurXfm3Rq9L9P0xhEOg7r8A+FFNp6IXemJ4R7ACj3lODTIhbc/
+           2CSFyuZC3X2Apc8eFu8czTacDdhci0J1QgAt3XiDzTw9FX6gANb8ARYwpqHCbd1L05
+           NXqH/sHJNT6aw==
+Received: from 83.24.134.210.ipv4.supernova.orange.pl (HELO laptop-olek.lan) (olek2@wp.pl@[83.24.134.210])
+          (envelope-sender <olek2@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <tsbogend@alpha.franken.de>; 14 Aug 2025 11:37:13 +0200
+From: Aleksander Jan Bajkowski <olek2@wp.pl>
+To: tsbogend@alpha.franken.de,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	olek2@wp.pl,
+	linux-mips@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/2] dt-bindings: mips: lantiq: Document Lantiq Xway GPTU
+Date: Thu, 14 Aug 2025 11:36:59 +0200
+Message-ID: <20250814093704.3197030-1-olek2@wp.pl>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <CAKxU2N_vo9NThjGaiX1Fq5jet0vdw390ZYpVct4=XPa5gwj-Kg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: b0a65c4fa6f64b97e001525c45aeb3b6
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 000000A [kTNU]                               
 
-On Wed, Aug 13, 2025 at 04:04:27PM -0700, Rosen Penev wrote:
-> On Wed, Aug 13, 2025 at 1:16=E2=80=AFAM Krzysztof Kozlowski <krzk@kernel.=
-org> wrote:
-> >
-> > On 12/08/2025 21:23, Rosen Penev wrote:
-> > > The ath9k driver has various pin GPIO numbers for different chipsets
-> > > which are not always correct for every device.
-> > >
-> > > Add bindings to specify the correct number and if it should be
-> > > active-low.
-> > >
-> > > Signed-off-by: Rosen Penev <rosenp@gmail.com>
-> > > ---
-> > >  .../bindings/net/wireless/qca,ath9k.yaml           | 14 ++++++++++++=
-++
-> > >  1 file changed, 14 insertions(+)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/net/wireless/qca,ath9k=
-=2Eyaml b/Documentation/devicetree/bindings/net/wireless/qca,ath9k.yaml
-> > > index d16ca8e0a25d..e701046146f2 100644
-> > > --- a/Documentation/devicetree/bindings/net/wireless/qca,ath9k.yaml
-> > > +++ b/Documentation/devicetree/bindings/net/wireless/qca,ath9k.yaml
-> > > @@ -50,6 +50,17 @@ properties:
-> > >
-> > >    ieee80211-freq-limit: true
-> > >
-> > > +  led:
-> > > +    type: object
-> >
-> > Each node must end with additional/unevaluatedProperties: false. See
-> > example schema and writing schema.
-> >
-> > That will probably lead you to missing LED common binding.
->=20
-> >
-> > > +    properties:
-> > > +      reg:
-> > > +        maxItems: 1
-> > > +
-> > > +      led-active-low:
-> > > +        description:
-> > > +          LED is enabled with ground signal.
-> >
-> > Aren't you redefining existing properties?
-> I don't think led-active-low is specified in any central location:
+The Lantiq SoC has six built-in 16-bit general purpose timers (GPTU).
 
-True, because it is active-low which you could easily find if you opened
-and read the LED binding you were already referencing here.
+Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+---
+ .../mips/lantiq/lantiq,gptu-xway.yaml         | 39 +++++++++++++++++++
+ 1 file changed, 39 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mips/lantiq/lantiq,gptu-xway.yaml
 
-Best regards,
-Krzysztof
+diff --git a/Documentation/devicetree/bindings/mips/lantiq/lantiq,gptu-xway.yaml b/Documentation/devicetree/bindings/mips/lantiq/lantiq,gptu-xway.yaml
+new file mode 100644
+index 000000000000..fcfc634dd391
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mips/lantiq/lantiq,gptu-xway.yaml
+@@ -0,0 +1,39 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mips/lantiq/lantiq,gptu-xway.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Lantiq Xway SoC series General Purpose Timer Unit (GPTU)
++
++maintainers:
++  - Aleksander Jan Bajkowski <olek2@wp.pl>
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - lantiq,gptu-xway
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    minItems: 6
++    maxItems: 6
++
++required:
++  - compatible
++  - reg
++  - interrupts
++
++additionalProperties: false
++
++examples:
++  - |
++    gptu@e100a00 {
++        compatible = "lantiq,gptu-xway";
++        reg = <0xe100a00 0x100>;
++        interrupt-parent = <&icu0>;
++        interrupts = <126>, <127>, <128>, <129> ,<130>, <131>;
++    };
+-- 
+2.47.2
 
 
