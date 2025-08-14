@@ -1,220 +1,154 @@
-Return-Path: <linux-mips+bounces-10296-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10300-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E805B26834
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Aug 2025 15:56:05 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDB19B26AFE
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Aug 2025 17:30:13 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5AD0A3AB73B
-	for <lists+linux-mips@lfdr.de>; Thu, 14 Aug 2025 13:50:42 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B00634E3507
+	for <lists+linux-mips@lfdr.de>; Thu, 14 Aug 2025 15:30:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA2703002D7;
-	Thu, 14 Aug 2025 13:50:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0114F222560;
+	Thu, 14 Aug 2025 15:30:11 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF63B2FFDDE;
-	Thu, 14 Aug 2025 13:50:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5F8D5217F34;
+	Thu, 14 Aug 2025 15:30:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755179438; cv=none; b=M+/GR9OPN2EJMxsFVNsK4LgsqSsRAoHGYjzEcDiFGswpuHT4qKarraPv8hksTyh004MaJ/niIxkpiIPYV5P1hPRNYXkhgG+FYA/+4tm8h1f8QPquHq6LXMbwUISY+JvIYxHzBtAzIg81voAfaTo5oSpmmlDvAS/1TqkswRAkRQM=
+	t=1755185410; cv=none; b=k7rOo7uJVir9MYoLiuz4umSFH/aM7hL3b9G09uOmNUCWQedFh2p9nlMuuZxXfIkfKJCsxkUigagRjheewOfIhdg232rOjRJ4eaYPXthFA+1kVcrYYoB1a77paXHcxWbU8/N4IxxXSMJ7LpGHbyruZcy7Nueu9x68iakeBNNWCvY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755179438; c=relaxed/simple;
-	bh=vFczm8e5OaiPzDro8LfC6emO/k/Igt0MHXU7T1y7z8g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HTFYqDf5JsR6ImuBh7i77+YLW1BXiaPjEYt5q/9AAS8X5+TaSndzVRHybOQvPGRUOrJegKoHTOef6GcilvK5Wf6QZaCRfDft1d5uvGkFOmbv8jKzEb952lr62rUZ8vBdXsmMbgbeJLV985rBdVxHAijOggqZX6qKllGUfSU9t60=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
-Received: from localhost (mailhub4.si.c-s.fr [172.26.127.67])
-	by localhost (Postfix) with ESMTP id 4c2mf83rJXz9sSN;
-	Thu, 14 Aug 2025 15:43:12 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from pegase2.c-s.fr ([172.26.127.65])
-	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
-	with ESMTP id DBzqxKLEhtqg; Thu, 14 Aug 2025 15:43:12 +0200 (CEST)
-Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
-	by pegase2.c-s.fr (Postfix) with ESMTP id 4c2mf82mg0z9sSH;
-	Thu, 14 Aug 2025 15:43:12 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id 48B088B764;
-	Thu, 14 Aug 2025 15:43:12 +0200 (CEST)
-X-Virus-Scanned: amavisd-new at c-s.fr
-Received: from messagerie.si.c-s.fr ([127.0.0.1])
-	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
-	with ESMTP id u4JdrB2diOCo; Thu, 14 Aug 2025 15:43:12 +0200 (CEST)
-Received: from [192.168.235.99] (unknown [192.168.235.99])
-	by messagerie.si.c-s.fr (Postfix) with ESMTP id C584A8B763;
-	Thu, 14 Aug 2025 15:43:09 +0200 (CEST)
-Message-ID: <86186254-b2c6-4818-af0a-4eb67d90e501@csgroup.eu>
-Date: Thu, 14 Aug 2025 15:43:09 +0200
+	s=arc-20240116; t=1755185410; c=relaxed/simple;
+	bh=QYRUK4EXKQ3Br3Wc32yS0rLX0zRpM2iSrQbV0k4msLA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=W5HaWJNB5yFOWH6ORohcWcjxlNHxkOlGsKLnAmPqyscyHSFNo7kq5OUrqGGCp6C7e42BMNNGupoqRf6DyZwQ6TFFZSIogP4IZWK4cA74b8oa9iUzFCB7+U+p64mxiQB/mAtjLohw4qzWxsMh3MNWIy5gAXao3fcIRK+Nyv1jb5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.210.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-74381ed5567so549123a34.1;
+        Thu, 14 Aug 2025 08:30:09 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755185408; x=1755790208;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n9du/Bs1Vwkuk15qOOpl62+YeIchI37tbTZ/WdEUy2s=;
+        b=WaHN2/mYnRT+unxLRZOZ+kEa3l1yZdDfqt7WWxL9VEVeCN7GwnyTLXeHAUkrlga27k
+         7+OV3iSRxu6EKR5KS8H8hQ47/PGO7LfStqt9DG9dlyginSlE5s30L3XmdiaHRs5LOsjt
+         XCMHvOi7AgaNy93QOKKuZ/Bz3/uq3V8QMiRymwVJziXgsXkgNOIx+fUBVQ39LOuWGTIi
+         peA8nuuB9l4ZcI0F1zQ2U6rkd5hTccS2ejCK6xQ0DSJ5SxzER4tWaqvGDaZVkCGTXYys
+         U8lPGvBBiTKYxiJxFFgewcYuEfOupqaGFQa7WG5uY5w/F36mTJgSNxwLAdalGjOyxP9v
+         AC9A==
+X-Forwarded-Encrypted: i=1; AJvYcCU4gRhRyvAySezY67c6igw65uZ5HuUFdUpoTdGUxBE2gVibmJQIFkqO8MVWGU6DYNzCRnEMANcH7Q==@vger.kernel.org, AJvYcCUBVf5+8s4eAmJe9ntYm4gGyLCWcDxy/+0J+Q1svNLn6l8p/vCQDAAclRja7xM4LZFq6p7ei6o0LzL0VQ==@vger.kernel.org, AJvYcCUWur4iOlN14ame+Y5nhwwpzIli8pvJxmrW4CqWKzk+tbSygDcmQhE10i921un6B9JsWCFSW1DYKscpekooww==@vger.kernel.org, AJvYcCVVW9nJ++owPEt/fgroLh2NS4H6t88vdsOfxBEVMcwYTHgGa5EmadgnIYKcQvi9XMMJlc9VgmdN6PVom4dYP/Ze4FI=@vger.kernel.org, AJvYcCVs48fAsh1ErLmLhzxf/Fao4/5VJMoacj8/M6ik8A8q8ax4Un4D/DpvAvFSER7QUojHCNxa+Qdwq2YilcC79SZAvR8=@vger.kernel.org, AJvYcCWn8oFMEqlJoluVsfrFni2hJ2x1XxXdUa0PFsmbfbKEkN4hdMzH3LYjl6Ng1Pmih15J/Yj9I12qIFeEGMqf@vger.kernel.org, AJvYcCXGTOzeWqWg5O15R60qs/XJaO5jsrr8x7y17lG23YB0rfG+GT2hCjnllMbhrVi7SG11h4sWf1j56C2y@vger.kernel.org
+X-Gm-Message-State: AOJu0YxBDw0THRN4Q46qgLQkFoW8FpLg3CaVPomqdcCkOsZhPQ/woOyx
+	kakVk76E0EdfNMXS8TvQBvlQIj4muuTJRldymROE1iPF4IM7o0X29lF++927D1oZ
+X-Gm-Gg: ASbGncscS+Sbh+mDgUneinz05aB0yT7boHrW9WHr8ADWJnj8pGBhVVgWQ0gOOEDIbA8
+	M2KADpZKSCgrAJFNzv/FqKyQ/ZHwuWHAydHAvTjmEUz+c/Lu4SN34KKYf8q7MMUK4Bb/9zImor+
+	VUAipw396zRgvllF1NLWDmiTD5LKdawyfIUzugTlXMUKAIBG/q8CEMU2Grb7J88TJKU43THncG5
+	Yg37bn0IHJXSAGfTa9+fprHoWlnWLwPy2wmLqLgJ5rLIwJ8saMw75+CxkOUmZuhQV0jjvhBlY1s
+	CedxA0s/4KSeokUBoPmFLWjZFcXoYs/+xW65Qez9q75TBi9m4j1X0ymLkM5oUFeTIWc/gZrQIWw
+	4QcHhJ4k2l4jkoIznp1sHJCP9PvRmaMbN/P0XO0hSfWT7v1FEE3nYSL8XDXVS2JIZ7b+md6g=
+X-Google-Smtp-Source: AGHT+IEBDxnMmtw1mGlZxi3sooeebHiN8D20hnUAg1n9o8DiDqOJlvJCPF0OHdbMATdI2suzUal3RA==
+X-Received: by 2002:a05:6830:661a:b0:741:b827:feda with SMTP id 46e09a7af769-74382c02786mr2278808a34.25.1755185408212;
+        Thu, 14 Aug 2025 08:30:08 -0700 (PDT)
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com. [209.85.210.51])
+        by smtp.gmail.com with ESMTPSA id 46e09a7af769-7436f7a3e73sm1514152a34.0.2025.08.14.08.30.07
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 14 Aug 2025 08:30:07 -0700 (PDT)
+Received: by mail-ot1-f51.google.com with SMTP id 46e09a7af769-74381dd4c61so502515a34.0;
+        Thu, 14 Aug 2025 08:30:07 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU+5+VbG8A5HplG2YF5gMN5YBXYrcmt9co6DXu2dQwbs115RxWEzBT9tkbWPviUZ4scC9pEZTvAXot0phoM@vger.kernel.org, AJvYcCU3caaQfm9J4CkDm4Xxc6tFebVuGkUM7gzmc4IG/nOWQ+RGV7JV3RWHCNb7otHImvLJbTBtV7ug4w==@vger.kernel.org, AJvYcCV2VHiy91g1zcG/3ec3wR8HE3lY+kGnSpTXsd3eOwakmPO7vK8KgU/5s3dipWYSgKPMD4s4IcQNMRdq@vger.kernel.org, AJvYcCW4a0S7PVZTtUTpIQmbikGoIZRXYqpq9pXzuimfZpxc8ANuu8bZjJEInNdct40klHVS83YARanaQoAStmdyQQ==@vger.kernel.org, AJvYcCWN1BCj0jaVuIfUzcr11dN35Ed8iFJQWDts/s9d3mlHrzsFwVOnHGyBnBA8ScXEp4iwHGHqk1dIv+CSO6wvhRuMdoM=@vger.kernel.org, AJvYcCWroU6fm2UL6HGy7s6/1XLC4aiaSan0APJb+J8iwBvVGfR1obVluDaebcomd6+Didl11tP24iNmZOb3CQ==@vger.kernel.org, AJvYcCXxrcwzKyKPkXZczkpFUZYAhPpGyTGoRBJT7H+MGODzLbDOSxwhPLfWHeaesnsC17nG6oo5ueIdRwdnOZbuLMx8Eh8=@vger.kernel.org
+X-Received: by 2002:a05:690c:700b:b0:719:f582:be17 with SMTP id
+ 00721157ae682-71d635fe81bmr48846567b3.35.1755183986689; Thu, 14 Aug 2025
+ 08:06:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 00/24] vdso: Reject absolute relocations during build
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Alexandre Ghiti <alex@ghiti.fr>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>, Kees Cook <kees@kernel.org>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, Richard Weinberger <richard@nod.at>,
- Anton Ivanov <anton.ivanov@cambridgegreys.com>,
- Johannes Berg <johannes@sipsolutions.net>,
- Russell King <linux@armlinux.org.uk>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>,
- Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
- =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
- Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>,
- Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
- Danilo Krummrich <dakr@kernel.org>, Nicolas Schier <nicolas.schier@linux.dev>
-Cc: linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
- llvm@lists.linux.dev, linux-mm@kvack.org, linux-um@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
- loongarch@lists.linux.dev, linux-s390@vger.kernel.org,
- linux-mips@vger.kernel.org, rust-for-linux@vger.kernel.org,
- linux-kbuild@vger.kernel.org, Jan Stancek <jstancek@redhat.com>,
- Arnaldo Carvalho de Melo <acme@redhat.com>,
- Alexandre Ghiti <alexghiti@rivosinc.com>
-References: <20250812-vdso-absolute-reloc-v4-0-61a8b615e5ec@linutronix.de>
-From: Christophe Leroy <christophe.leroy@csgroup.eu>
-Content-Language: fr-FR
-In-Reply-To: <20250812-vdso-absolute-reloc-v4-0-61a8b615e5ec@linutronix.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com> <20250811-clk-for-stephen-round-rate-v1-92-b3bf97b038dc@redhat.com>
+In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-92-b3bf97b038dc@redhat.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 14 Aug 2025 17:06:14 +0200
+X-Gmail-Original-Message-ID: <CAMuHMdUR9phiPyhi9=f3gdA_f5oRmaX=ucj8SUquXQEq7bUTkg@mail.gmail.com>
+X-Gm-Features: Ac12FXzt8_e3pGt50aBSDpwDZhCGVBhDLrUDheSmsSXHpMoy_pb5BR_R7aHtEdE
+Message-ID: <CAMuHMdUR9phiPyhi9=f3gdA_f5oRmaX=ucj8SUquXQEq7bUTkg@mail.gmail.com>
+Subject: Re: [PATCH 092/114] clk: renesas: rzg2l-cpg: convert from
+ round_rate() to determine_rate()
+To: bmasney@redhat.com
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Sudeep Holla <sudeep.holla@arm.com>, Cristian Marussi <cristian.marussi@arm.com>, 
+	Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@gmail.com>, 
+	Nicolas Ferre <nicolas.ferre@microchip.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+	Paul Cercueil <paul@crapouillou.net>, Keguang Zhang <keguang.zhang@gmail.com>, 
+	Taichi Sugaya <sugaya.taichi@socionext.com>, Takao Orito <orito.takao@socionext.com>, 
+	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
+	Jacky Huang <ychuang3@nuvoton.com>, Shan-Chun Hung <schung@nuvoton.com>, 
+	Vladimir Zapolskiy <vz@mleia.com>, Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Samuel Holland <samuel.holland@sifive.com>, 
+	Yixun Lan <dlan@gentoo.org>, Steen Hegelund <Steen.Hegelund@microchip.com>, 
+	Daniel Machon <daniel.machon@microchip.com>, UNGLinuxDriver@microchip.com, 
+	Orson Zhai <orsonzhai@gmail.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
+	Chunyan Zhang <zhang.lyra@gmail.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+	Alexandre Torgue <alexandre.torgue@foss.st.com>, Michal Simek <michal.simek@amd.com>, 
+	Maxime Ripard <mripard@kernel.org>, =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, 
+	Manivannan Sadhasivam <mani@kernel.org>, Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>, 
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>, 
+	Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>, Ray Jui <rjui@broadcom.com>, 
+	Scott Branden <sbranden@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Max Filippov <jcmvbkbc@gmail.com>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Daniel Palmer <daniel@thingy.jp>, 
+	Romain Perier <romain.perier@gmail.com>, Andrew Lunn <andrew@lunn.ch>, 
+	Gregory Clement <gregory.clement@bootlin.com>, 
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Bjorn Andersson <andersson@kernel.org>, 
+	Heiko Stuebner <heiko@sntech.de>, Andrea della Porta <andrea.porta@suse.com>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Sylwester Nawrocki <s.nawrocki@samsung.com>, 
+	Chanwoo Choi <cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	Qin Jian <qinjian@cqplus1.com>, Viresh Kumar <vireshk@kernel.org>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
+	Alex Helms <alexander.helms.jy@renesas.com>, Linus Walleij <linus.walleij@linaro.org>, 
+	Liviu Dudau <liviu.dudau@arm.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>, linux-clk@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, arm-scmi@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, sophgo@lists.linux.dev, 
+	linux-mips@vger.kernel.org, imx@lists.linux.dev, 
+	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev, 
+	linux-stm32@st-md-mailman.stormreply.com, patches@opensource.cirrus.com, 
+	linux-actions@lists.infradead.org, asahi@lists.linux.dev, 
+	linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
 
+On Mon, 11 Aug 2025 at 17:19, Brian Masney via B4 Relay
+<devnull+bmasney.redhat.com@kernel.org> wrote:
+> From: Brian Masney <bmasney@redhat.com>
+>
+> The round_rate() clk ops is deprecated, so migrate this driver from
+> round_rate() to determine_rate() using the Coccinelle semantic patch
+> on the cover letter of this series.
+>
+> Signed-off-by: Brian Masney <bmasney@redhat.com>
 
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-clk for v6.18.
 
-Le 12/08/2025 à 07:44, Thomas Weißschuh a écrit :
-> The compiler can emit absolute relocations in vDSO code,
-> which are invalid in vDSO code.
-> Detect them at compile-time.
+Gr{oetje,eeting}s,
 
-I'm a bit puzzled with this series.
+                        Geert
 
-If I understand correctly, the check will be done only when you have 
-RUST available ?
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-I wouldn't expect having RUST to build a C kernel.
-
-By the way, aren't relocations already detected by command 
-cmd_vdso_check in lib/vdso/Makefile.include , using readelf ? Why is a 
-new tool needed and why does it have to be written in RUST langage ?
-
-Thanks
-Christophe
-
-> 
-> libc elf.h is missing some of the relocation constants,
-> so make user of the kernels own UAPI headers instead.
-> 
-> Kbuild and Rust folks: This contains custom definitions of hostprog
-> bindgen and rust library commands.
-> These are currently only defined inside the subsystem directory.
-> Let me know if they should go into scripts/Makefile.host.
-> 
-> This will conflict with my SPARC64 generic vDSO patches [0].
-> If both end up being applied at the same time, please leave out commit
-> 'vdso/vdsocheck: Drop the transitional kconfig option' from this series.
-> 
-> [0] https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Flkml%2F20250724-vdso-sparc64-generic-2-v1-0-e376a3bd24d1%40linutronix.de%2F&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C3f03f6747325451ee98808ddd9634f27%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638905742749561064%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=HacF%2FvlUoxA9P6fTiN1ytw49gwayX1wNE7IxfEkFutE%3D&reserved=0
-> 
-> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-> ---
-> Changes in v4:
-> - Replace the inline shell logic with a dedicated build-time tool
-> - Link to v3: https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fr%2F20250611-vdso-absolute-reloc-v3-0-47897d73784b%40linutronix.de&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C3f03f6747325451ee98808ddd9634f27%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638905742749584369%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=7NxAhutk6IXl%2B3fe1kkZEzhZz6CWye%2FVAcFO%2BgtS4uo%3D&reserved=0
-> 
-> Changes in v3:
-> - Drop already applied bugfix for arm64
-> - Disable LTO for the riscv vDSO, as it is incompatible
-> - Link to v2: https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fr%2F20250430-vdso-absolute-reloc-v2-0-5efcc3bc4b26%40linutronix.de&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C3f03f6747325451ee98808ddd9634f27%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638905742749600546%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=uv0qMS5qq0DovLHtxfRvT42atbJEkztylpOS8zt6bJ4%3D&reserved=0
-> 
-> Changes in v2:
-> - Link to openend (invalid) GCC bug containing more explanations
-> - Refine commit messages
-> - Don't fail on commit absolute relocations in debug info
-> - Link to v1: https://eur01.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Fr%2F20250429-vdso-absolute-reloc-v1-0-987a0afd10b5%40linutronix.de&data=05%7C02%7Cchristophe.leroy%40csgroup.eu%7C3f03f6747325451ee98808ddd9634f27%7C8b87af7d86474dc78df45f69a2011bb5%7C0%7C0%7C638905742749616057%7CUnknown%7CTWFpbGZsb3d8eyJFbXB0eU1hcGkiOnRydWUsIlYiOiIwLjAuMDAwMCIsIlAiOiJXaW4zMiIsIkFOIjoiTWFpbCIsIldUIjoyfQ%3D%3D%7C0%7C%7C%7C&sdata=K5iwoz0Xqc8kheotWEc4M2KrZ7UVMDObOyFfCPj4N8Q%3D&reserved=0
-> 
-> ---
-> Thomas Weißschuh (24):
->        elf, uapi: Add a header for relocation constants
->        x86/elf, um/x86/elf: Move relocation constants to UAPI
->        ARM: elf: Move relocation constants to UAPI
->        arm64: elf: Move relocation constants to UAPI
->        powerpc/elf: Move relocation constants to UAPI
->        riscv: elf: Move relocation constants to UAPI
->        LoongArch: Move relocation constants to UAPI
->        s390/elf: Move relocation constants to UAPI
->        MIPS: ELF: Move relocation constants to UAPI
->        tools headers UAPI: Sync ELF headers with the kernel sources
->        vdso: Add the vdsocheck tool
->        x86/vdso: Enable the vdsocheck tool
->        ARM: vdso: Enable the vdsocheck tool
->        arm64: vdso: Enable the vdsocheck tool
->        powerpc/elf: Add 32-bit REL16 relocation definitions
->        powerpc/vdso: Enable the vdsocheck tool
->        riscv: vdso: Deduplicate CFLAGS_REMOVE_* variables
->        riscv: vdso: Disable LTO for the vDSO
->        riscv: vdso: Enable the vdsocheck tool
->        LoongArch: vDSO: Enable the vdsocheck tool
->        s390/vdso: Enable the vdsocheck tool
->        MIPS: ELF: Add more PC-relative relocation definitions
->        MIPS: vdso: Enable the vdsocheck tool
->        vdso/vdsocheck: Drop the transitional kconfig option
-> 
->   arch/arm/include/asm/elf.h          |  24 --
->   arch/arm/vdso/Makefile              |   4 +-
->   arch/arm64/include/asm/elf.h        |  55 ----
->   arch/arm64/kernel/vdso/Makefile     |   4 +-
->   arch/loongarch/include/asm/elf.h    | 100 ------
->   arch/loongarch/vdso/Makefile        |   4 +-
->   arch/mips/include/asm/elf.h         |  53 ---
->   arch/mips/vdso/Makefile             |   8 +-
->   arch/powerpc/include/uapi/asm/elf.h | 201 ------------
->   arch/powerpc/kernel/vdso/Makefile   |   4 +-
->   arch/riscv/include/uapi/asm/elf.h   |  66 ----
->   arch/riscv/kernel/vdso/Makefile     |  11 +-
->   arch/s390/include/asm/elf.h         |  83 -----
->   arch/s390/kernel/vdso32/Makefile    |   4 +-
->   arch/s390/kernel/vdso64/Makefile    |   4 +-
->   arch/x86/entry/vdso/Makefile        |   6 +-
->   arch/x86/include/asm/elf.h          |  34 --
->   arch/x86/um/asm/elf.h               |  33 --
->   include/uapi/linux/elf-r.h          | 631 ++++++++++++++++++++++++++++++++++++
->   include/uapi/linux/elf.h            |   1 +
->   lib/vdso/Makefile                   |   2 +
->   lib/vdso/Makefile.include           |  17 +
->   lib/vdso/check/.gitignore           |   3 +
->   lib/vdso/check/Makefile             |  28 ++
->   lib/vdso/check/elf.rs               | 488 ++++++++++++++++++++++++++++
->   lib/vdso/check/vdsocheck.rs         | 279 ++++++++++++++++
->   tools/include/uapi/linux/elf-em.h   |  71 ++++
->   tools/include/uapi/linux/elf-r.h    | 631 ++++++++++++++++++++++++++++++++++++
->   tools/include/uapi/linux/elf.h      | 112 ++++++-
->   29 files changed, 2277 insertions(+), 684 deletions(-)
-> ---
-> base-commit: 5180c6526acc9f1cb58f8b11fba67583c22e0854
-> change-id: 20250428-vdso-absolute-reloc-a226293c1761
-> 
-> Best regards,
-
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
