@@ -1,116 +1,97 @@
-Return-Path: <linux-mips+bounces-10328-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10329-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51CDEB2816B
-	for <lists+linux-mips@lfdr.de>; Fri, 15 Aug 2025 16:16:30 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1ECDB28178
+	for <lists+linux-mips@lfdr.de>; Fri, 15 Aug 2025 16:18:33 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6CF21B67169
-	for <lists+linux-mips@lfdr.de>; Fri, 15 Aug 2025 14:14:44 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 39163BA0697
+	for <lists+linux-mips@lfdr.de>; Fri, 15 Aug 2025 14:16:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 751F222068B;
-	Fri, 15 Aug 2025 14:16:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1967E21C9ED;
+	Fri, 15 Aug 2025 14:18:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="PQ0jZW3G"
+	dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b="JVi8WLPP"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A39B621CA1E;
-	Fri, 15 Aug 2025 14:16:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70EBF21ABC8
+	for <linux-mips@vger.kernel.org>; Fri, 15 Aug 2025 14:18:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.77.101.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755267372; cv=none; b=bgkM3LXQ5rUiB3Fe0vy/cRBfV/Oxj83EeWvzq9pcipDIE1vsW4Drr6vgTWjHUvKbDVcXO+l155B6SaeEzpbnVDHU6VRgcsPIB03OWd4bEQTsAteS50lD8Yr5zuHjeCyyYwsZQXffuwGRpoOeVugZJtRkHLbsgfazjUOxGnJI8FU=
+	t=1755267489; cv=none; b=VabfVkNLH7VmGUP57kPz/zCLW99yquwnS6wbvmwDXJrp/vSPR4jUrrcWTgjsXy8XjkRbAvio8fB8iWMwqiijp/QHpw3si8+yCtJw08tFJLieH/d2wM0Ca+HaQPvbwRLuldMmyWPST8qk0I4OJLWQ7Q7l/e6q+XL/erfDwViHMnU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755267372; c=relaxed/simple;
-	bh=s9kJmwCMSziAcLWlTjDKKVLqzB9UYAY5Fd1NiDLoqx8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=etep9HeGlFxoIv5L6EUDj4El/Gxi525WEAS5zOnfTSV5riuoypT+YWEHWZ48C1Nyh1SBz74FHLzJez+iJrcAaBmGdDcu+SYwd1KO+ksFWa+zvqHEyu5LFW6bzioDGMnK6sdhCvze+D8J5MBy3bDFxMT0+QoI4kp+ElMtNnLNbd8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=PQ0jZW3G; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=XDxHrD3TX9AedrU5KLSEMO2f62ogJmkuypzBhYFI+es=; b=PQ0jZW3Gt/YKfyB7A9r1pgw76l
-	rQduqzGPLkQ6qEnBZFb6+RR2IWvSJxDQkyXws/quSXO6w3t0Y/GauRAzWcz+vfu9vAXu8+r9WtEqz
-	pO1M0U1IYfbHyn7ovx/CqXvlDxUowuK2hwhgEOC5/5/xSqZaGha3kCpLP1sWAyzpgpLxJ6kIeqhUy
-	8N1Ntpnt10+ZtqxNTwXRffrvqjsxlIuwiaqwN4OZu95RYXqeHs6lc2RhU1zyeSMWjzT9B8d81/qL2
-	S0LnmRilElUK6EZHNhjBzN7tq3Au2y7CfHhIfaYnLxoi+IPnPoi/JsU02NkSYL7vRkxf5Tryc4mth
-	L8aoK0Tg==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1umvDx-0000000Gje9-2EVx;
-	Fri, 15 Aug 2025 14:16:05 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 83BC03002ED; Fri, 15 Aug 2025 16:16:04 +0200 (CEST)
-Date: Fri, 15 Aug 2025 16:16:04 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Kees Cook <kees@kernel.org>
-Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-	x86@kernel.org, linux-alpha@vger.kernel.org,
-	linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org,
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, llvm@lists.linux.dev,
-	linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 00/17] Add __attribute_const__ to ffs()-family
- implementations
-Message-ID: <20250815141604.GD3289052@noisy.programming.kicks-ass.net>
-References: <20250804163910.work.929-kees@kernel.org>
+	s=arc-20240116; t=1755267489; c=relaxed/simple;
+	bh=gb22G96UgMgP6kiSQT/XW6yIPv/GFoi8E3F+7hBpKco=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=QhldFbLtWix8jP9fwM6DYtPTapqg/U0jDiRhC4tcztZ0iQX82K9Y24BFPTToAEvaDIWgyHGEQURTp28VHeqSiE2M68Fp9Fu+u+f+H9xn6HHmhDqng2/VB8rBlYJLNwuPpBp5+48KHWRGDzHhxI+q3+z8Rx9dwL+AZE4nweF7Mq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl; spf=pass smtp.mailfrom=wp.pl; dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b=JVi8WLPP; arc=none smtp.client-ip=212.77.101.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wp.pl
+Received: (wp-smtpd smtp.wp.pl 10829 invoked from network); 15 Aug 2025 16:18:02 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=20241105;
+          t=1755267482; bh=Q6jMKEa6BoWd+2xeRenu01SS+R4HqsisI3hjsomi4jM=;
+          h=From:To:Subject;
+          b=JVi8WLPPMMTT5EDjeK28MoVwNBIps2oRri4UCz6I4Yeaa63udvXGZ22iSbCBT/2wa
+           Re0ADYVIuWrrorfnqJnvqJLgMWtmo8/QR6SxF3Kjr3v2A2/Y+ZAkfF1032fFWsJ1Ih
+           D0QIfKRinFgyZhce5twzk0TLCuThl0Ty9CK2SMcrVEiXaKsVKn03FnDwdbxFbLH7U4
+           HlGanMGdxw+MiG7zL0IfaJmasXXRsj/DR6upTLr7/r+lxyGv0FUglloi0X0UPtjeiv
+           rdv3I3IAgWQYo8YyR26hn1gee2xGT5L9q7x3TkLCGnPc5+smoSQmH0xEwAgjMqsyB6
+           Cxjk4iR4157kg==
+Received: from 83.24.134.210.ipv4.supernova.orange.pl (HELO laptop-olek.lan) (olek2@wp.pl@[83.24.134.210])
+          (envelope-sender <olek2@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <tsbogend@alpha.franken.de>; 15 Aug 2025 16:18:02 +0200
+From: Aleksander Jan Bajkowski <olek2@wp.pl>
+To: tsbogend@alpha.franken.de,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	olek2@wp.pl,
+	john@phrozen.org,
+	linux-mips@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH 1/3] dt-bindings: mips: lantiq: ebu: add name pattern
+Date: Fri, 15 Aug 2025 16:17:40 +0200
+Message-ID: <20250815141759.3408909-1-olek2@wp.pl>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250804163910.work.929-kees@kernel.org>
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: a1f4c9dae71836cb19e0e4c1137d3f82
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 000000A [YdNE]                               
 
-On Mon, Aug 04, 2025 at 09:43:56AM -0700, Kees Cook wrote:
-> Hi,
-> 
-> While tracking down a problem where constant expressions used by
-> BUILD_BUG_ON() suddenly stopped working[1], we found that an added static
-> initializer was convincing the compiler that it couldn't track the state
-> of the prior statically initialized value. Tracing this down found that
-> ffs() was used in the initializer macro, but since it wasn't marked with
-> __attribute_const__, the compiler had to assume the function might
-> change variable states as a side-effect (which is not true for ffs(),
-> which provides deterministic math results).
-> 
-> Add KUnit tests for the family of functions and then add __attribute_const__
-> to all architecture implementations and wrappers.
-> 
-> -Kees
-> 
-> [1] https://github.com/KSPP/linux/issues/364
-> 
-> Kees Cook (17):
->   KUnit: Introduce ffs()-family tests
->   bitops: Add __attribute_const__ to generic ffs()-family
->     implementations
->   csky: Add __attribute_const__ to ffs()-family implementations
->   x86: Add __attribute_const__ to ffs()-family implementations
->   powerpc: Add __attribute_const__ to ffs()-family implementations
->   sh: Add __attribute_const__ to ffs()-family implementations
->   alpha: Add __attribute_const__ to ffs()-family implementations
->   hexagon: Add __attribute_const__ to ffs()-family implementations
->   riscv: Add __attribute_const__ to ffs()-family implementations
->   openrisc: Add __attribute_const__ to ffs()-family implementations
->   m68k: Add __attribute_const__ to ffs()-family implementations
->   mips: Add __attribute_const__ to ffs()-family implementations
->   parisc: Add __attribute_const__ to ffs()-family implementations
->   s390: Add __attribute_const__ to ffs()-family implementations
->   xtensa: Add __attribute_const__ to ffs()-family implementations
->   sparc: Add __attribute_const__ to ffs()-family implementations
->   KUnit: ffs: Validate all the __attribute_const__ annotations
+Lantiq target doesn't use Common clock Framework and requires strict
+node names. This patch adds the name pattern to the binding.
 
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+---
+ Documentation/devicetree/bindings/mips/lantiq/lantiq,ebu.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
+
+diff --git a/Documentation/devicetree/bindings/mips/lantiq/lantiq,ebu.yaml b/Documentation/devicetree/bindings/mips/lantiq/lantiq,ebu.yaml
+index 0fada1f085a9..c1f31084f793 100644
+--- a/Documentation/devicetree/bindings/mips/lantiq/lantiq,ebu.yaml
++++ b/Documentation/devicetree/bindings/mips/lantiq/lantiq,ebu.yaml
+@@ -10,6 +10,9 @@ maintainers:
+   - John Crispin <john@phrozen.org>
+ 
+ properties:
++  $nodename:
++    pattern: "^ebu@[0-9a-f]+$"
++
+   compatible:
+     items:
+       - enum:
+-- 
+2.47.2
+
 
