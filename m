@@ -1,144 +1,122 @@
-Return-Path: <linux-mips+bounces-10323-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10324-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6F09B27DF0
-	for <lists+linux-mips@lfdr.de>; Fri, 15 Aug 2025 12:10:07 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4469CB27E0F
+	for <lists+linux-mips@lfdr.de>; Fri, 15 Aug 2025 12:15:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF6C51BC581A
-	for <lists+linux-mips@lfdr.de>; Fri, 15 Aug 2025 10:06:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BBB23B63ADA
+	for <lists+linux-mips@lfdr.de>; Fri, 15 Aug 2025 10:12:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D35D2FE561;
-	Fri, 15 Aug 2025 10:06:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 965EB1917E3;
+	Fri, 15 Aug 2025 10:13:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="aO2iazZB";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="S6z9FpXD"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b="DR1Uc4N0"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mx4.wp.pl (mx4.wp.pl [212.77.101.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 333492FCC15;
-	Fri, 15 Aug 2025 10:06:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E122FD7B5
+	for <linux-mips@vger.kernel.org>; Fri, 15 Aug 2025 10:13:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.77.101.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755252366; cv=none; b=NI0+5yFsz4XxlVB9jEdoY/Z+jHn5G1lxQlCAIBH/SMNHDV3oe7Jb9JYf/KDeNJLCC8aUJFaJAv2fxghFfTTb2GPxqwXybudAfvZG/7Wqy4hq8dRHedDV3NzfOUKEOGxNv835w0u/xpTQTc5fpBphfsTva/qSTPxpUOLfTsSWIuk=
+	t=1755252832; cv=none; b=Tc0fouZeTJ8rEGuNe+JFWqZJYlUNaSmmQhw97ExTpAFF76c3YPjSXV2ZUgiQXWhYFAQZ8E0ahvZYniZxwj0Kh0pp39VM0cuAfuIqycVMaTek2io73XROntLQ5llhhYKMbdNR+Yo/pIQkHagh9MOTPgWMIpD6ATASWGhiAwZSsmg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755252366; c=relaxed/simple;
-	bh=Qum2QJiRlsLf40QcWgyKpHqDOId5H79nbhv7G1AXN9Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=msdvAgmOBcDqm7R6i4MEo/D0lB/vJJBGS5wPBZZJqmgAhKlv2QHAi37dyC5JmupKmxfyj5kNu3i1KfWIxjejRFE6zK6F1e3qEqrCPHQ+WM4mnyE81oM7V+fG0dw4clsqrHMi+5/BIKidIjYiKyoDMpAqSFE3SNthkydu0r/L4ks=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=aO2iazZB; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=S6z9FpXD; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Fri, 15 Aug 2025 12:06:02 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1755252363;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NKM6vYBTvYJgJZpC+3klg9OwyY5OfNg57KkNb0OocWg=;
-	b=aO2iazZBVl4jvGHcxioVfsh65iLR3Izq+qWPXADbutMqMavKgUaUthaDr+R6w1r6xC69M7
-	pL5h2TEWtWYewAnpScYhJCkIaFAKgULbi15SjfGtKC8LJ/mZc1hQQzLg71FWu25eDTH0y1
-	MdUY3+nnowrj0PdDzw1hyrQ8ozJ0BdBe+J6xfrhxUNOLMiWm7280NRlOtJuKnvCK2Hl4+R
-	JjnaSPjNDatrg+pgW4dq3uCQftbz45AWPj/EWmXs4IklOD4k8lw//0rXGaZQYflfEXqJDN
-	ZoNnis/wD+gc1ASC2wdlydN0BBi8bv7A4d+0Pi34HL6a8GZJXUQvVqO1fxQIkg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1755252363;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=NKM6vYBTvYJgJZpC+3klg9OwyY5OfNg57KkNb0OocWg=;
-	b=S6z9FpXDI0m5KmQAvWcT/IWg9tN8RVfisToJ75YI5pbqWTKx4VxzrYh7GLy6FZouW5QiYj
-	9qWhB6v7+0ZZRyBg==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Ghiti <alex@ghiti.fr>, Nathan Chancellor <nathan@kernel.org>, 
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, 
-	Justin Stitt <justinstitt@google.com>, Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	Kees Cook <kees@kernel.org>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	Richard Weinberger <richard@nod.at>, Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
-	Johannes Berg <johannes@sipsolutions.net>, Russell King <linux@armlinux.org.uk>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Huacai Chen <chenhuacai@kernel.org>, 
-	WANG Xuerui <kernel@xen0n.name>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Miguel Ojeda <ojeda@kernel.org>, 
-	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>, Benno Lossin <lossin@kernel.org>, 
-	Andreas Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, 
-	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, 
-	Nicolas Schier <nicolas.schier@linux.dev>, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	llvm@lists.linux.dev, linux-mm@kvack.org, linux-um@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
-	linux-s390@vger.kernel.org, linux-mips@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	linux-kbuild@vger.kernel.org, Jan Stancek <jstancek@redhat.com>, 
-	Arnaldo Carvalho de Melo <acme@redhat.com>, Alexandre Ghiti <alexghiti@rivosinc.com>
-Subject: Re: [PATCH v4 00/24] vdso: Reject absolute relocations during build
-Message-ID: <20250815112851-e613308f-d49e-44ae-b2dd-ca7946fa1fd9@linutronix.de>
-References: <20250812-vdso-absolute-reloc-v4-0-61a8b615e5ec@linutronix.de>
- <86186254-b2c6-4818-af0a-4eb67d90e501@csgroup.eu>
+	s=arc-20240116; t=1755252832; c=relaxed/simple;
+	bh=VRc3rQ7+La7aIkyerSr7PwkoKxI1T0FHfNo7SL3je3A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fY3ft90R8NSbUbZ/vZ1XLATM4bxb76sVxAOqMyCm8CXa/40FEwJ3MZa7MV+/77W7RSGeOiiQB+Mj4U3YNLW4ZNsYsq/ITmjxkt6Z6tyDFtfXMJIBsHnir9vgP2yQ06DXLHAdq2Uka73YaWYeV8DqGbokOP9B+LWyUdooOhGuBmc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl; spf=pass smtp.mailfrom=wp.pl; dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b=DR1Uc4N0; arc=none smtp.client-ip=212.77.101.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wp.pl
+Received: (wp-smtpd smtp.wp.pl 5539 invoked from network); 15 Aug 2025 12:13:41 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=20241105;
+          t=1755252821; bh=6r56aWOWGPsFTWKVJBoTW8tov6K5rxxKHvtf2/SRI2s=;
+          h=Subject:To:Cc:From;
+          b=DR1Uc4N0PXwAmbcc2WRaNUAfOZYD9W2PvpHq8HOtkQ6Cka1EJEtmbDAhT7532f+ok
+           vUeeNR6oyxoa78p8Y33w5d96f4gLL4NiuLgLSHLJKhuTiubieIS8rS2gcgYhL2VpLq
+           ruBE16OZ6SnTzGwLSh7fY0ytPPLSCRap7NnVLI8JbBXvoLrCTfBEK7VZ7nZlvAAitS
+           9l3/kFqRyRzDrOtwYfQOfWIY8iNo6sgazD5LM7z8iHtUHLewGE+nqULe3ebfHxEhJ2
+           jU40h+f1pgfvwer4pLmaJSlwl6zHHsLOrDhONElaWYecdOX4rCS7HVJi1zt7TwMk1r
+           yRcM1m+NhCUDw==
+Received: from 83.24.134.210.ipv4.supernova.orange.pl (HELO [192.168.3.229]) (olek2@wp.pl@[83.24.134.210])
+          (envelope-sender <olek2@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <conor@kernel.org>; 15 Aug 2025 12:13:41 +0200
+Message-ID: <e327b6ce-11ad-4909-9c6f-cd833b44e15f@wp.pl>
+Date: Fri, 15 Aug 2025 12:13:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] dt-bindings: mips: lantiq: Document lantiq dcdc
+ binding
+To: Conor Dooley <conor@kernel.org>, y@spud.smtp.subspace.kernel.org
+Cc: tsbogend@alpha.franken.de, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250814082705.3183231-1-olek2@wp.pl>
+ <20250814-vocation-viscous-b54bc343e8c6@spud>
+Content-Language: en-US
+From: Aleksander Jan Bajkowski <olek2@wp.pl>
+In-Reply-To: <20250814-vocation-viscous-b54bc343e8c6@spud>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <86186254-b2c6-4818-af0a-4eb67d90e501@csgroup.eu>
+X-WP-MailID: d35a1fff0ca298d56e43c5fe00b3bfb7
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 0000000 [YTOB]                               
 
-Hi Christophe,
+Hi Conor,
 
-On Thu, Aug 14, 2025 at 03:43:09PM +0200, Christophe Leroy wrote:
-> Le 12/08/2025 ‡ 07:44, Thomas Weiﬂschuh a Ècrit†:
-> > The compiler can emit absolute relocations in vDSO code,
-> > which are invalid in vDSO code.
-> > Detect them at compile-time.
-> 
-> I'm a bit puzzled with this series.
-> 
-> If I understand correctly, the check will be done only when you have RUST
-> available ?
-
-Yes, this new check will only be performed if a rust toolchain is available.
-CONFIG_RUST however is *not* required.
-
-> I wouldn't expect having RUST to build a C kernel.
-
-The build will work fine without Rust present and will fall back to the
-simplistic readelf test. A single report of breakage will allow us to fix the code,
-not everybody needs to run the full thing.
-
-> By the way, aren't relocations already detected by command cmd_vdso_check in
-> lib/vdso/Makefile.include , using readelf ? Why is a new tool needed
-
-The current cmd_vdso_check only validates the final vDSO image.
-However that is not sufficient, as some problematic relocations will not show
-up in the final image anymore but only the intermediary object files.
-And there the logic is more complex than can be reasonably expressed in inline
-shell scripts, see the previous revisions of this series for the attempts.
-The valid relocations depend on each architecture and the specific ELF section
-they appear in.
-For the real example that triggered all of this, see commit
-0c314cda9325 ("arm64: vdso: Work around invalid absolute relocations from GCC")
-
-> and why does it have to be written in RUST langage ?
-
-There is no hard requirement for Rust. I chose it for convenience of
-implementation, especially around descriptive error handling and generic
-functions. tglx was fine with it.
+On 8/14/25 22:48, Conor Dooley wrote:
+> On Thu, Aug 14, 2025 at 10:26:56AM +0200, Aleksander Jan Bajkowski wrote:
+>> Lantiq DCDC is a voltage converter with a voltage sensor.
+>>
+>> Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+>> ---
+>>   .../mips/lantiq/lantiq,dcdc-xrx200.yaml       | 32 +++++++++++++++++++
+>>   1 file changed, 32 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/mips/lantiq/lantiq,dcdc-xrx200.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/mips/lantiq/lantiq,dcdc-xrx200.yaml b/Documentation/devicetree/bindings/mips/lantiq/lantiq,dcdc-xrx200.yaml
+>> new file mode 100644
+>> index 000000000000..5648b9676b3c
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/mips/lantiq/lantiq,dcdc-xrx200.yaml
+>> @@ -0,0 +1,32 @@
+>> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/mips/lantiq/lantiq,dcdc-xrx200.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Lantiq DCDC (DC-DC converter with voltage sensor)
+>> +
+>> +maintainers:
+>> +  - Aleksander Jan Bajkowski <olek2@wp.pl>
+>> +
+>> +properties:
+>> +  compatible:
+>> +    items:
+>> +      - enum:
+>> +          - lantiq,dcdc-xrx200
+> What is "xrx2000" in this context?
 
 
-Thomas
+‚Äúxrx200‚Äù is one of the generations of Lantiq SoCs. It includes four part 
+numbers
+with the same memory map. The other generations are amazon-se, danube, 
+ARX100,
+GRX100, xRX200, xRX300, xRX330. These correspond to the internal code 
+names: ase,
+danube, ar9, gr9, vr9, ar10, grx390.
+
+
+Best regards,
+Aleksander
 
