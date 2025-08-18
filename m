@@ -1,88 +1,87 @@
-Return-Path: <linux-mips+bounces-10368-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10369-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56DBDB2B500
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Aug 2025 01:45:26 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CED79B2B528
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Aug 2025 01:59:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C774A3A5E7D
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Aug 2025 23:45:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B0B0527792
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Aug 2025 23:58:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9593827C17F;
-	Mon, 18 Aug 2025 23:45:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7E2E27B348;
+	Mon, 18 Aug 2025 23:58:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lHaXPjCm"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="mffIIZQB"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-il1-f181.google.com (mail-il1-f181.google.com [209.85.166.181])
+Received: from mail-il1-f173.google.com (mail-il1-f173.google.com [209.85.166.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0321B1FBE87
-	for <linux-mips@vger.kernel.org>; Mon, 18 Aug 2025 23:45:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D78A27A931
+	for <linux-mips@vger.kernel.org>; Mon, 18 Aug 2025 23:58:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755560707; cv=none; b=u/+47QRksF6y1Hm5WmlFHBTX8pGak/mxE3nqqF86BVNLqP6jbBW/z5PVDKDazl5jL7yXNklcwBxVRScs79AoPcCyAzxhQoEB16SRs6mlXkBnTAMuRFFe74UnrQID5AGvHzcte6KYvf0UQk6262ygVvYRgrl5ofFu6h5qrHX/uxg=
+	t=1755561530; cv=none; b=Fr7Q++nLwopN+TjS16xeK08ZbzFtu+wURaSI6HB/yM7+ZJ4vqhfg783H3Z8FkFcA3MOV1Q7oK9eNcktepZz1ODA5D38Q73+ImH1s6jq7MO0XXlxFmZEOZjd6VP4EcEFI1vh54NNgtW38ZqHAkSczU3wBu1oEXHp4jhTZ1GtlDKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755560707; c=relaxed/simple;
-	bh=20GbQYSlKyvlXvDnnjkkcG80NKWGMOYxQbD0qXNg3pE=;
+	s=arc-20240116; t=1755561530; c=relaxed/simple;
+	bh=glVk/hY3UV087gQCtno8h+R3ZP+p7PuN1b//8T9JP7c=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VGJLCLj1ijdooFS69Zxv3g6rU80F4XqnIAsEfnU3CyxtmqVyuZbV0nTTJNnpzX8ov1Ql1WKb3v0QfKt1n6Vu9+SjGHl3il2/aJBuGGip+H42JEatMbvssfGgSlpn7PiMMwwz/AGUq92UapXJnhRtswRijNxEMW6miaJboqY0ZOY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lHaXPjCm; arc=none smtp.client-ip=209.85.166.181
+	 Content-Type:Content-Disposition:In-Reply-To; b=vA2EDCTiN6kTu9JSwcZ27nGAFkAkp0/fmBaa4BDZUymm4WDFJNzhvjhIUVixQbh0tPzmg/Xz2Nzvrrdgn3FQvLMrvotIliZHpY8ilEzCiInx0F8vV4RNpvUaO4Hh8+P0ln0x55zE1z1SDKvrNrbnPUg1S14UvSdkpcCvq2DEL5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=mffIIZQB; arc=none smtp.client-ip=209.85.166.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-il1-f181.google.com with SMTP id e9e14a558f8ab-3e57376f5ceso43895795ab.0
-        for <linux-mips@vger.kernel.org>; Mon, 18 Aug 2025 16:45:05 -0700 (PDT)
+Received: by mail-il1-f173.google.com with SMTP id e9e14a558f8ab-3e575ff1b80so21786635ab.3
+        for <linux-mips@vger.kernel.org>; Mon, 18 Aug 2025 16:58:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755560705; x=1756165505; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1755561528; x=1756166328; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Tr/+srRnInstoyTTTLvFCgnYoosQgmYpeHv/fgPsY8Q=;
-        b=lHaXPjCmWqCSTJlzeQINh6keuNXZoDwfyrV4BmVDS2OgG4FoqW5wRPsaEVUVEh/0dA
-         U0DPFCZ77P6Y2cwZvz+bwFYMvApZpqmLYVhUdilEG0B/uCDJFvlXzGP8mKqO0oTf9Iwj
-         ygWP+fnrs+xNkB1+lJScsKHracnMmctTB7/srQTD3Hm71P8v/SdCOaQ4PKJ7jlJ1AdUv
-         1qhLt6RPk2yAaRHTy2d6buZ4EUW1vuPTGRDXUaxRTJ5qUdgTsj5m+kqhOqn/ZfXPnrNh
-         qFT8S1aWmBAOWmpnVxzjGYnl6U7i/SYC1VjTPH+kzlfW+R5m7ho3SPJf6U8I7hfUk980
-         EHQg==
+        bh=i19yi9n59eMxo8uVt+mvLfPM1/Jk8FxebqQQMeUMWso=;
+        b=mffIIZQBPNk6uCAAQSeq90VMwd+6Vm8I5APcRrg+MvbgbrVGOqT+e1VEkMDFn3TQCn
+         2FPd+ucQLZ+e/0lkXeqHTvjAcpyeEFc3Z/Pel8E7USfdvtWYUko64R4PvpFMUkikAbGm
+         YOWbpOpIRakQzg/XkXKAd2QVlFlHtoPMxu9wh0URzJ2T4fTDIVZQasfNH0WmRh4MJGHP
+         E3Hb7RKdbryPQTTsdz0P5Y0fQhJTGnBbyV6dTDe5zHoPoauUgUHAPk/SR7kq+4iuxdUD
+         nbRDRtJ6HWPSotQnB/IvudTZgopRER4k1GDsBByztdnVwxjxzGWQInb1rNUO+MhsFoCo
+         sGow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755560705; x=1756165505;
+        d=1e100.net; s=20230601; t=1755561528; x=1756166328;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Tr/+srRnInstoyTTTLvFCgnYoosQgmYpeHv/fgPsY8Q=;
-        b=f7zGuqMB6KN9V5n0p41/JQZgqbuAOcvUIGoArwk9GpamnH8Vw2PYC+ADPq8md0JkPM
-         iUJPMW3RIkcLkv0oPtnU4HFJrHY4FRVBE/nfeNn2caFSAcf6otMovHd8d4Xgn5AQ4U8q
-         pHX7VWvow/XexgqywaxfvF1GD1f2P/Kh6c/huilIbTLCyH0KGQ6bt3PYwfNsKzzO2+rm
-         7PdWTJqWV2/AeavfEQt+o6Ceic60elVTdqhnzYRwoq0wjsoFou0R2vTexl2RYB0JnWY0
-         XaofuAX1GXya0WG3BNwlqiOHU6PKbwd/qt8We/aoeZPrph6on9QIYMtfeIWFCf7jM4+9
-         EUbA==
-X-Forwarded-Encrypted: i=1; AJvYcCX0+322xXFXZV+rhuQX5xorHgCXqiajRkVd/d4eg7igcsEkIAzUJ3C63wDYRkTMCvSzHHX3q/Bg9Aw6@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywrjjjxdh5qz88sTMJjC5A9dEqZA8lYEyhPnpzUyIYEMpYNBwgq
-	zUEIHrvSB6iwM4soat2U94B/ELKH3EsyXJyLXfNN1yMdHuauQlddKbMmBijUEZGOCA==
-X-Gm-Gg: ASbGncu0ntno10UfjbyRXgZZ8W96mcN0VEavUlNlfyqxKWrGavUn6eLjQWE4XvZzHpv
-	Ups97XwnrXeoKoiZAmIcgjKRmWlbx3TZhtICX7yrtFpQ04HB7trtwqOUh/kcZZCvncoQT2+RDLv
-	la7gpdXWvf1O/5upMUjvPOoUBxQZ2BMgQ6G5875QqG1DZn/lX0xPZ/UbAFafGitTdvUFpmPwfLW
-	Q/qPfYJagGFTPJumv+FGqwtxyr3t3//QPK9ij8lbPcawo2eEMuABzGRMWGyEJ8s7QcI/no/w2ne
-	XiBESo+9JwX+3ZNpVpQV7ppWo6ub8lT/cajnaDVV7uDbj+9B1HrkDfrncZnZxOpBIf7NtRWLn4N
-	hwp3jTb5N9mwC67rY5R0rd9rVwDfze3/rrvF8THa3uyG7v8bhHEjK+pqrRtPT3ts=
-X-Google-Smtp-Source: AGHT+IFgrO8Ncrqq+4A/cmmyJGbffL5WUyP9hfiMe85kNg5r66Z0zlRCako1lOTHiPISU60//YjCvw==
-X-Received: by 2002:a05:6e02:2782:b0:3e5:4da2:93ad with SMTP id e9e14a558f8ab-3e676639feemr10482265ab.11.1755560704218;
-        Mon, 18 Aug 2025 16:45:04 -0700 (PDT)
+        bh=i19yi9n59eMxo8uVt+mvLfPM1/Jk8FxebqQQMeUMWso=;
+        b=Fpy4Ap+aqDcr6ClAs68E1aCJosNeDxF/tK+EU3tZNfJAiK7AFbWk9QU8YAu5h6dYwI
+         s3Ebw01xxVgfVadnH/bjBM8CYHtFU4gJO/0L8Hb/RiqPyYW7rDGpLgEOj6WjdMW84oMH
+         g79zrUrS2TnYLDvrfgPxNqrW8ST621SXSUOueyOFlDDVtIfLYP/uy4+cN1wRVBqmzWli
+         XjbKtYuOf8YrA0yNDHADpYZQWrTpCKUdHdDwXzxb35ySdjSIotLWrUIrGtA61kWWftcg
+         WVK0jwJle9c7FLP5vDIthMe0xzqfJg8DGA6/G4oGEZVQ0gzpR5XMdsURFtcPXVkAq+/Q
+         53NQ==
+X-Forwarded-Encrypted: i=1; AJvYcCW3yMTuLWxtTQRy2/s3YmKG0ShHa6KEo+siL7rj9dhp/CIMGfLbKiLfCuikwallCZZBvxbnA4NivI4X@vger.kernel.org
+X-Gm-Message-State: AOJu0YzXahlssrig7OSoC14OnuysdYEgh80fmnWN6pOwgSbXO3ymW952
+	HFmfRTfCOn3adKL72Edb7ryNvFYge48Davy5isO4CCe6AYrfKymMiTyG9W8q9vCMbw==
+X-Gm-Gg: ASbGncscsu4EdA5swcW/XFMwoQLCULCcLmAPbWbLQOYQbc3sjvPU+2C2TuMF59f8YqT
+	QbgerJDvbrBOBwZ1+eQAklU/UEkX16f2tOsGPAQcJpvoxZN7V/tLOx8l7naVgaIT72OUyUjb6qJ
+	NMPvUM7fdtSiAckKzsm88nA3p3MYRKUhwNeij7s6/4z4buwWKxhtNW0dgDsuXvhjwlX2ZzoH9Oc
+	ur1bbKhM6avcMedrzwE3ZYRUNJuvg4eD6jlEjhcHoIQo3wvXl8FKKjXgIs29CNAySr2b5ueskU4
+	VbUgYHzoslDkTu0Y4LYCkEmCeB9145F66wX1t0GBJh++/vJz7Z2ASqkw3cgzKmQuxaF3cXcRwhQ
+	ty8GXTpUrTdJ/GOaIi2fX0/JMou8rzndO+jDmyt1BHZUQUUNCx6TwEn0pZGeDirwOaz6FGLPZbw
+	==
+X-Google-Smtp-Source: AGHT+IEz/EI+LZtyAIW9MjYSAxlsQgeLXFtkoryUpRnIuhRS73z7iBfg2JLP0JM/2ebqh0wR5R8r8g==
+X-Received: by 2002:a05:6e02:1947:b0:3e5:7de6:c348 with SMTP id e9e14a558f8ab-3e6765ce30dmr12922565ab.3.1755561528238;
+        Mon, 18 Aug 2025 16:58:48 -0700 (PDT)
 Received: from google.com (2.82.29.34.bc.googleusercontent.com. [34.29.82.2])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3e57e58c57dsm38431015ab.4.2025.08.18.16.45.03
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-50c94781b7csm2898883173.15.2025.08.18.16.58.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Aug 2025 16:45:03 -0700 (PDT)
-Date: Mon, 18 Aug 2025 16:45:01 -0700
+        Mon, 18 Aug 2025 16:58:47 -0700 (PDT)
+Date: Mon, 18 Aug 2025 16:58:45 -0700
 From: Justin Stitt <justinstitt@google.com>
 To: Thorsten Blum <thorsten.blum@linux.dev>
 Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Thomas Zimmermann <tzimmermann@suse.de>, linux-hardening@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 3/8] MIPS: sni: Replace deprecated strcpy() in
- sni_console_setup()
-Message-ID: <2xo5aonnmv5wfyomeh3ju6x4m2x3akr2kcjwx3c25fxwgdgczm@v6m5gtp3apsf>
+	linux-hardening@vger.kernel.org, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 5/8] MIPS: arc: Replace deprecated strcpy() with memcpy()
+Message-ID: <yisgcmjp5cj27yozthudyrdpfcovhcrgpqbyip5kcum4aa7qwl@52bccatjuiak>
 References: <20250817183728.612012-1-thorsten.blum@linux.dev>
- <20250817183728.612012-3-thorsten.blum@linux.dev>
+ <20250817183728.612012-5-thorsten.blum@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -91,46 +90,95 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250817183728.612012-3-thorsten.blum@linux.dev>
+In-Reply-To: <20250817183728.612012-5-thorsten.blum@linux.dev>
 
 Hi,
 
-On Sun, Aug 17, 2025 at 08:37:13PM +0200, Thorsten Blum wrote:
-> strcpy() is deprecated; use strscpy() instead.
+On Sun, Aug 17, 2025 at 08:37:15PM +0200, Thorsten Blum wrote:
+> strcpy() is deprecated; use memcpy() instead.
+> 
+> Use pr_debug() instead of printk(KERN_DEBUG) to silence a checkpatch
+> warning.
+
+I'd like to see more reasoning for why you chose memcpy() here. With api
+refactors like this I think most folks want to know if 1) there is any
+functional change and 2) why you chose the api.
+
 > 
 > Link: https://github.com/KSPP/linux/issues/88
 > Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
 > ---
->  arch/mips/sni/setup.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
+>  arch/mips/fw/arc/cmdline.c | 22 +++++++++++++---------
+>  1 file changed, 13 insertions(+), 9 deletions(-)
 > 
-> diff --git a/arch/mips/sni/setup.c b/arch/mips/sni/setup.c
-> index 03cb69937258..fc7da12284f5 100644
-> --- a/arch/mips/sni/setup.c
-> +++ b/arch/mips/sni/setup.c
-> @@ -13,6 +13,7 @@
->  #include <linux/export.h>
->  #include <linux/console.h>
->  #include <linux/screen_info.h>
-> +#include <linux/string.h>
-
-This include isn't strictly necessary but I suppose it makes the
-dependency explicit.
-
-Reviewed-by: Justin Stitt <justinstitt@google.com>
-
+> diff --git a/arch/mips/fw/arc/cmdline.c b/arch/mips/fw/arc/cmdline.c
+> index 155c5e911723..86b0e377b713 100644
+> --- a/arch/mips/fw/arc/cmdline.c
+> +++ b/arch/mips/fw/arc/cmdline.c
+> @@ -42,12 +42,13 @@ static char __init *move_firmware_args(int argc, LONG *argv, char *cp)
+>  {
+>  	char *s;
+>  	int actr, i;
+> +	size_t len;
 >  
->  #ifdef CONFIG_FW_ARC
->  #include <asm/fw/arc/types.h>
-> @@ -80,7 +81,7 @@ static void __init sni_console_setup(void)
->  			break;
+>  	actr = 1; /* Always ignore argv[0] */
+>  
+>  	while (actr < argc) {
+> -		for(i = 0; i < ARRAY_SIZE(used_arc); i++) {
+> -			int len = strlen(used_arc[i][0]);
+> +		for (i = 0; i < ARRAY_SIZE(used_arc); i++) {
+> +			len = strlen(used_arc[i][0]);
+>  
+>  			if (!strncmp(prom_argv(actr), used_arc[i][0], len)) {
+>  			/* Ok, we want it. First append the replacement... */
+> @@ -57,8 +58,9 @@ static char __init *move_firmware_args(int argc, LONG *argv, char *cp)
+>  				s = strchr(prom_argv(actr), '=');
+>  				if (s) {
+>  					s++;
+> -					strcpy(cp, s);
+> -					cp += strlen(s);
+> +					len = strlen(s);
+> +					memcpy(cp, s, len + 1);
+> +					cp += len;
+>  				}
+>  				*cp++ = ' ';
+>  				break;
+> @@ -74,6 +76,7 @@ void __init prom_init_cmdline(int argc, LONG *argv)
+>  {
+>  	char *cp;
+>  	int actr, i;
+> +	size_t len;
+>  
+>  	actr = 1; /* Always ignore argv[0] */
+>  
+> @@ -86,14 +89,15 @@ void __init prom_init_cmdline(int argc, LONG *argv)
+>  
+>  	while (actr < argc) {
+>  		for (i = 0; i < ARRAY_SIZE(ignored); i++) {
+> -			int len = strlen(ignored[i]);
+> -
+> +			len = strlen(ignored[i]);
+>  			if (!strncmp(prom_argv(actr), ignored[i], len))
+>  				goto pic_cont;
 >  		}
->  		if (baud)
-> -			strcpy(options, baud);
-> +			strscpy(options, baud);
->  		if (strncmp(cdev, "tty552", 6) == 0)
->  			add_preferred_console("ttyS", port,
->  					      baud ? options : NULL);
+> +
+>  		/* Ok, we want it. */
+> -		strcpy(cp, prom_argv(actr));
+> -		cp += strlen(prom_argv(actr));
+> +		len = strlen(prom_argv(actr));
+> +		memcpy(cp, prom_argv(actr), len + 1);
+> +		cp += len;
+>  		*cp++ = ' ';
+>  
+>  	pic_cont:
+> @@ -105,6 +109,6 @@ void __init prom_init_cmdline(int argc, LONG *argv)
+>  	*cp = '\0';
+>  
+>  #ifdef DEBUG_CMDLINE
+> -	printk(KERN_DEBUG "prom cmdline: %s\n", arcs_cmdline);
+> +	pr_debug("prom cmdline: %s\n", arcs_cmdline);
+>  #endif
+>  }
 > -- 
 > 2.50.1
 > 
