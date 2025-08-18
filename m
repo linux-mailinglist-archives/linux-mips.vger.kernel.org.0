@@ -1,106 +1,135 @@
-Return-Path: <linux-mips+bounces-10364-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10365-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89066B2B103
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Aug 2025 20:59:15 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0348CB2B390
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Aug 2025 23:42:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 919947A7B33
-	for <lists+linux-mips@lfdr.de>; Mon, 18 Aug 2025 18:57:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 067F55602F3
+	for <lists+linux-mips@lfdr.de>; Mon, 18 Aug 2025 21:42:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C68F277C88;
-	Mon, 18 Aug 2025 18:58:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02BB3224B1B;
+	Mon, 18 Aug 2025 21:42:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uz+TJsLM"
+	dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b="NAf3VkSl"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AF062737E7;
-	Mon, 18 Aug 2025 18:58:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7610218E91
+	for <linux-mips@vger.kernel.org>; Mon, 18 Aug 2025 21:42:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.77.101.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755543481; cv=none; b=hqhQIO1d0PquxRpTIjRhR+nviVJTsYIRyKVY5DeiVlIDml38V6wgZ1of/xAN6eiubJIdmPMTvweMt99BBo86UI3eiGOIhwRnLMjseY/6F12fqOjfXwxWI/QyS+0gaKxpzZRpje1Bab75G01cSwPVxUkse9uLoRabA28ezkKXePc=
+	t=1755553326; cv=none; b=LxroDwN2TzpO9kOmpCB2WKvSrvC6cS7B6TF2gjU5bSKeMztVGWQa5nFE6LEJd524/hgvUpZXMIlwKjbxRyeLbzPqV+Hx8pjauE6C+jsOVgDmqLgKPJDCmamGEd/OexwRTGlc+x4jSKIrXZgjwhqnuHRv371OIpHMWtnnxTapRIY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755543481; c=relaxed/simple;
-	bh=iSf8NbjxWft8sc/26Xjf1ql6E2qmURE4VPlw2KstR+k=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=o+X7fvUacrS/hDRfbf03aRzeFSGKp1t/IqhJwR2QE1R6gev6RGnSLXvEIcTFc2Ulay1oMTW0e0qdOgcfmENMIB2OqUJjeJTPDSCHO4zjfiAZPmuDUUke4AwCx7Pxw5s9eXfW/Jzl7lzbj6qPnpWV92EIamSMnh/BEyGsTIN3gRM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uz+TJsLM; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 549A9C4CEED;
-	Mon, 18 Aug 2025 18:57:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755543480;
-	bh=iSf8NbjxWft8sc/26Xjf1ql6E2qmURE4VPlw2KstR+k=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=uz+TJsLMHeO3a0fpmfNBwSynX6EL0fMknQHvgakcZxd7+FpuIg1FDH9n0iFHhjC+G
-	 PBzNSAsx7Z6EhgQmTR+oez5UzZrCDr56LvxpdsvWG7jWb2eJehFjjEcpXgMEQUr4Mn
-	 luz6hI7FEC14EuNenqRIIv7urSnIQ0jT1f48PKUiZqGy5APMkTZKTgTUs1eOOi+TTg
-	 WLeHXrLFjaGDxyCzhxShdocQh8Ikgq0M1/VK7eCGGLhC9PzObEMGCUZd1TLm9sfXIO
-	 /zkQZfx+kBA0B4NaviaOpzyp2f6GD+lwnLX3q5Xgtu6IeFe8Kin6g4LNU5RE4pQXwV
-	 yLquAfc++Kc3A==
-From: Nathan Chancellor <nathan@kernel.org>
-Date: Mon, 18 Aug 2025 11:57:21 -0700
-Subject: [PATCH 05/10] mips: Unconditionally select
- ARCH_HAS_CURRENT_STACK_POINTER
+	s=arc-20240116; t=1755553326; c=relaxed/simple;
+	bh=LfMTzHrgXvJH1WzVBSPQTxWPwCFFoMLIhKpt6VyIHlQ=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=O0UW1lsrYvVgSTsyr6DToPEH23ybMHIUFh/TrMK66I6NXLDQuGohf524UHjLW/OPWzTczgJLudN21A3Mb8PCd3UW1z5pnBJKVFMX+AFTuK47MYxKhI3/myyJGUvKw1MiHnTaSZmTkNa79a2jEuHAo6PaFSvwCW9mENib6ppLo5k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl; spf=pass smtp.mailfrom=wp.pl; dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b=NAf3VkSl; arc=none smtp.client-ip=212.77.101.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wp.pl
+Received: (wp-smtpd smtp.wp.pl 28773 invoked from network); 18 Aug 2025 23:41:55 +0200
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=20241105;
+          t=1755553315; bh=b++cVNitR7MJz4F2QuWH0QsXKvZh6qHTONJSyY8D1eU=;
+          h=From:To:Subject;
+          b=NAf3VkSltT0Q7PaF4RItKbn5ppPxIUcykV8kPJKCEerIBK84UvIH7FbpV6yheOMnN
+           ubCRJHksWBwiyrCox2RsbcprsMtmFAFNsjAPfxSizv4zQpeKRTRzXjaspfR1ajGTC5
+           OBqcyq95N2DeepMEFenN1nVB3QmEaRJVpW7zsLBtdF9YDKdUq7NwqTOJ69Da0PNXcX
+           /djJg/aeEen8eqIf5PAXAiVduzwKU2j0QffQA5137XKEF6gsN7vOf1lKIp+QbnTKHa
+           HsZhAGxj18qNjWo53t4eRfO4zje2HjsaLZpqGmJatXtxN3A3DWwDgp/lwPzHPtWFtg
+           Ka03aAlSUg8zg==
+Received: from 83.24.134.210.ipv4.supernova.orange.pl (HELO laptop-olek.lan) (olek2@wp.pl@[83.24.134.210])
+          (envelope-sender <olek2@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <tsbogend@alpha.franken.de>; 18 Aug 2025 23:41:55 +0200
+From: Aleksander Jan Bajkowski <olek2@wp.pl>
+To: tsbogend@alpha.franken.de,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	olek2@wp.pl,
+	linux-mips@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3] dt-bindings: mips: lantiq: Document lantiq dcdc binding
+Date: Mon, 18 Aug 2025 23:37:28 +0200
+Message-ID: <20250818214153.1084844-1-olek2@wp.pl>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250818-bump-min-llvm-ver-15-v1-5-c8b1d0f955e0@kernel.org>
-References: <20250818-bump-min-llvm-ver-15-v1-0-c8b1d0f955e0@kernel.org>
-In-Reply-To: <20250818-bump-min-llvm-ver-15-v1-0-c8b1d0f955e0@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Kees Cook <kees@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- linux-kernel@vger.kernel.org, llvm@lists.linux.dev, patches@lists.linux.dev, 
- Nathan Chancellor <nathan@kernel.org>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org
-X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=984; i=nathan@kernel.org;
- h=from:subject:message-id; bh=iSf8NbjxWft8sc/26Xjf1ql6E2qmURE4VPlw2KstR+k=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDBmLyxd+fvDiR+bq4+u0vN8bBE4KN/+6JyNe980Vj6dFl
- 4zvedSd7ihlYRDjYpAVU2Spfqx63NBwzlnGG6cmwcxhZQIZwsDFKQAT+eLI8Itp4bXyG33NhduO
- flRcESkl9UejqEpuHveLlFvWiec7p8cxMvRcM31s9X66evsv5w1+LD0HjurtunI8nde9+3nFnUV
- vF3ECAA==
-X-Developer-Key: i=nathan@kernel.org; a=openpgp;
- fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
+Content-Transfer-Encoding: 8bit
+X-WP-MailID: 7d74713a7ee91f2f150aa2096ca6e0c0
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 000000A [UTNE]                               
 
-Now that the minimum supported version of LLVM for building the kernel
-has been bumped to 15.0.0, the selection of
-ARCH_HAS_CURRENT_STACK_POINTER can be made unconditional since it is
-always true.
+Lantiq DCDC is a voltage converter with a voltage sensor. The converter
+is inside the SoC. This driver only reads the voltage and prints it at
+startup. The voltage supplied by this converter powers one of the power
+domains. It powers the CPU core and probably other peripherals as well.
+The voltage is programmed by the bootloader and Linux never touches it.
 
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
 ---
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
+v3:
+- extended commit description
+v2:
+- added missing commit description
 ---
- arch/mips/Kconfig | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ .../mips/lantiq/lantiq,dcdc-xrx200.yaml       | 38 +++++++++++++++++++
+ 1 file changed, 38 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mips/lantiq/lantiq,dcdc-xrx200.yaml
 
-diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
-index caf508f6e9ec..bc7473505f4a 100644
---- a/arch/mips/Kconfig
-+++ b/arch/mips/Kconfig
-@@ -6,7 +6,7 @@ config MIPS
- 	select ARCH_BINFMT_ELF_STATE if MIPS_FP_SUPPORT
- 	select ARCH_HAS_CPU_CACHE_ALIASING
- 	select ARCH_HAS_CPU_FINALIZE_INIT
--	select ARCH_HAS_CURRENT_STACK_POINTER if !CC_IS_CLANG || CLANG_VERSION >= 140000
-+	select ARCH_HAS_CURRENT_STACK_POINTER
- 	select ARCH_HAS_DEBUG_VIRTUAL if !64BIT
- 	select ARCH_HAS_DMA_OPS if MACH_JAZZ
- 	select ARCH_HAS_FORTIFY_SOURCE
-
+diff --git a/Documentation/devicetree/bindings/mips/lantiq/lantiq,dcdc-xrx200.yaml b/Documentation/devicetree/bindings/mips/lantiq/lantiq,dcdc-xrx200.yaml
+new file mode 100644
+index 000000000000..d951012392bf
+--- /dev/null
++++ b/Documentation/devicetree/bindings/mips/lantiq/lantiq,dcdc-xrx200.yaml
+@@ -0,0 +1,38 @@
++# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/mips/lantiq/lantiq,dcdc-xrx200.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Lantiq DCDC (DC-DC converter with voltage sensor)
++
++maintainers:
++  - Aleksander Jan Bajkowski <olek2@wp.pl>
++
++description:
++  Lantiq DCDC is a voltage converter with a voltage sensor. The converter is
++  inside the xRX200 SoC. This driver only reads the voltage and prints it at
++  startup. The voltage supplied by this converter powers one of the power
++  domains. It powers the CPU core and probably other peripherals as well.
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - lantiq,dcdc-xrx200
++
++  reg:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++
++additionalProperties: false
++
++examples:
++  - |
++    dcdc@106a00 {
++        compatible = "lantiq,dcdc-xrx200";
++        reg = <0x106a00 0x200>;
++    };
 -- 
-2.50.1
+2.47.2
 
 
