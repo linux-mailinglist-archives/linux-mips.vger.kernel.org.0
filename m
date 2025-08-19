@@ -1,152 +1,162 @@
-Return-Path: <linux-mips+bounces-10387-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10388-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97BA7B2CB72
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Aug 2025 19:51:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DF98B2CB88
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Aug 2025 19:57:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 77B423B8CE3
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Aug 2025 17:49:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E84E63B66E9
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Aug 2025 17:56:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ACD9830DD0E;
-	Tue, 19 Aug 2025 17:49:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F12E30DD3E;
+	Tue, 19 Aug 2025 17:56:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cmsNpGGT"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 737C02206B8;
-	Tue, 19 Aug 2025 17:49:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 342CF27B33A;
+	Tue, 19 Aug 2025 17:56:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755625757; cv=none; b=TWHBLcq0Gx3x8clSJkLLPfNmgS5SG1v/cwwScY4/JJeAS5u9WreIdTfcAXkgKa5NuDubaY65bbq2f4zjD+IyfKLqLeQb2U2wnmfcwTYg8arXHQ4lAXfzFiIQQv1lws1ktlc0TaUHdHon1b94GVnm0R7KRDw3jvN5zavjoDPwFWc=
+	t=1755626176; cv=none; b=MToGlj7TzA56DyYh0z+zj/0wiNWtSyH9Z0kljrUVGUCb7o4LZXET1TTEtzk7/FozHbmGGXfCW8pr96s5vRJ8EDb+erV/Zp63DJ4cqF/54BBTSrALU8TTb2sTKLnNTQmV1SJ+1DM8Jff2UhEDMirgfxbt+txG/OvtKD/yyavW2LA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755625757; c=relaxed/simple;
-	bh=yfhPbDJoc+6CdAo/HUDbAHjm5EOHsprDS0bgOVBPTUo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=u1ggeva+JSjhmo79XKXV92uGsDx2Tdb8tuc4mz+mpH+ImeqLDAPjyuBirabjGLv44dFqqLANceqyhF4DxjP72whhJ+U9T2aEbizeuZrAWMJAbT6xkzIpg4oyVAazkCowyJKO8xToNxIFDhibYKPFUXzL/oWUVdYGz1k3gngk5Lw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8E877152B;
-	Tue, 19 Aug 2025 10:49:06 -0700 (PDT)
-Received: from [10.1.196.50] (e121345-lin.cambridge.arm.com [10.1.196.50])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 475103F738;
-	Tue, 19 Aug 2025 10:49:10 -0700 (PDT)
-Message-ID: <cdb7b1e7-6e51-4c0e-bffb-b0d4b654a623@arm.com>
-Date: Tue, 19 Aug 2025 18:49:08 +0100
+	s=arc-20240116; t=1755626176; c=relaxed/simple;
+	bh=F0pzTDSvW+ccw2vtjCHXF9l6KK99zjYqcuK7Yl/OJTk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=tgGlzmdwtDpm1vp7EfgB+ebWUuHqCZ99VM8k7RMbePZR7rv+U4FTAxc/u1ARk0GTUHb9tWI/MclrVN0hP3pbJbVTIFYFi2SO88WVeEkuzSrbdgymTKCkFL0auCCZJxqUtiVc9djUawxwfvgtlbY8w5H0V0nnUn6gi25bqT9KUus=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cmsNpGGT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A7C8C4CEF1;
+	Tue, 19 Aug 2025 17:56:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1755626175;
+	bh=F0pzTDSvW+ccw2vtjCHXF9l6KK99zjYqcuK7Yl/OJTk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=cmsNpGGTdra5c+b6Bs6bmH5nGP6BfEX2ZGV6bH8cWWVTobZw2/BHGQJgbHsrf5SPi
+	 3r4ssvIv67Y3hWPCmfBSeRItW17plpMViQPzwiW3El9SLq9jHiw+7ZWrDwcd76LaXD
+	 nv2bhpimJkvlIuBy/RmyDGMLy1mRqzAkZFBBEO9c0XBKg9ko6dsx8HmnUrq1eTaOzA
+	 VA1K7fFb+XbjxAtvj/e4f++tQEZEJUxVHzDmwOTV8XJyB/d3MZ81ZgLIR8CMhXIfHp
+	 absJqLGk0Pq+LGHxhQ5zr/wRuxpgwPXUSAwUPzTfzdY7W6BqcDR/msw91JBGKNzV4s
+	 Fz4Wegw2aifcQ==
+Date: Tue, 19 Aug 2025 18:56:12 +0100
+From: Conor Dooley <conor@kernel.org>
+To: Aleksander Jan Bajkowski <olek2@wp.pl>
+Cc: tsbogend@alpha.franken.de, robh@kernel.org, krzk+dt@kernel.org,
+	conor+dt@kernel.org, linux-mips@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3] dt-bindings: mips: lantiq: Document lantiq dcdc
+ binding
+Message-ID: <20250819-mongrel-scrubbed-e0a281674afb@spud>
+References: <20250818214153.1084844-1-olek2@wp.pl>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 19/19] perf: Garbage-collect event_init checks
-To: kernel test robot <oliver.sang@intel.com>
-Cc: oe-lkp@lists.linux.dev, lkp@intel.com,
- linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
- linux-s390@vger.kernel.org, linux-perf-users@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-rockchip@lists.infradead.org,
- dmaengine@vger.kernel.org, linux-fpga@vger.kernel.org,
- amd-gfx@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
- intel-xe@lists.freedesktop.org, coresight@lists.linaro.org,
- iommu@lists.linux.dev, linux-amlogic@lists.infradead.org,
- linux-cxl@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-pm@vger.kernel.org, peterz@infradead.org, mingo@redhat.com,
- will@kernel.org, mark.rutland@arm.com, acme@kernel.org, namhyung@kernel.org,
- alexander.shishkin@linux.intel.com, jolsa@kernel.org, irogers@google.com,
- adrian.hunter@intel.com, kan.liang@linux.intel.com,
- linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
- imx@lists.linux.dev, linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
- linux-mips@vger.kernel.org, linux-sh@vger.kernel.org,
- sparclinux@vger.kernel.org, dri-devel@lists.freedesktop.org,
- linux-riscv@lists.infradead.org
-References: <202508190403.33c83ece-lkp@intel.com>
-From: Robin Murphy <robin.murphy@arm.com>
-Content-Language: en-GB
-In-Reply-To: <202508190403.33c83ece-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="NMhKQHuj2uEhMvrE"
+Content-Disposition: inline
+In-Reply-To: <20250818214153.1084844-1-olek2@wp.pl>
 
-On 19/08/2025 3:44 am, kernel test robot wrote:
-> 
-> 
-> Hello,
-> 
-> kernel test robot noticed "BUG:unable_to_handle_page_fault_for_address" on:
-> 
-> commit: 1ba20479196e5af3ebbedf9321de6b26f2a0cdd3 ("[PATCH 19/19] perf: Garbage-collect event_init checks")
-> url: https://github.com/intel-lab-lkp/linux/commits/Robin-Murphy/perf-arm-cmn-Fix-event-validation/20250814-010626
-> base: https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git 91325f31afc1026de28665cf1a7b6e157fa4d39d
-> patch link: https://lore.kernel.org/all/ace3532a8a438a96338bf349a27636d8294c7111.1755096883.git.robin.murphy@arm.com/
-> patch subject: [PATCH 19/19] perf: Garbage-collect event_init checks
 
-OK, after looking a bit more deeply at x86 and PowerPC, I think it
-probably is nicest to solve this commonly too. Below is what I've cooked
-up for a v2 (I'll save reposting the whole series this soon...)
+--NMhKQHuj2uEhMvrE
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
-Robin.
+On Mon, Aug 18, 2025 at 11:37:28PM +0200, Aleksander Jan Bajkowski wrote:
+> Lantiq DCDC is a voltage converter with a voltage sensor. The converter
+> is inside the SoC. This driver only reads the voltage and prints it at
+> startup. The voltage supplied by this converter powers one of the power
+> domains. It powers the CPU core and probably other peripherals as well.
+> The voltage is programmed by the bootloader and Linux never touches it.
+>=20
+> Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
+> ---
+> v3:
+> - extended commit description
+> v2:
+> - added missing commit description
+> ---
+>  .../mips/lantiq/lantiq,dcdc-xrx200.yaml       | 38 +++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mips/lantiq/lantiq,=
+dcdc-xrx200.yaml
+>=20
+> diff --git a/Documentation/devicetree/bindings/mips/lantiq/lantiq,dcdc-xr=
+x200.yaml b/Documentation/devicetree/bindings/mips/lantiq/lantiq,dcdc-xrx20=
+0.yaml
+> new file mode 100644
+> index 000000000000..d951012392bf
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/mips/lantiq/lantiq,dcdc-xrx200.ya=
+ml
 
------>8-----
-Subject: [PATCH 18.5/19] perf: Add common uncore-CPU check
+Still in a weird directory, why isn't this under regulators?
 
-Many uncore drivers depend on event->cpu being valid in order to look
-up various data in their event_init call. Since we've now factored out
-common PMU identification, we can factor out this check in the correct
-order too. While it might technically be possible to hoist the general
-task/cgroup check up here now, that would be horribly messy, so for
-clarity let's keep these as distinct (albeit related) concerns.
+> @@ -0,0 +1,38 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/mips/lantiq/lantiq,dcdc-xrx200.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Lantiq DCDC (DC-DC converter with voltage sensor)
+> +
+> +maintainers:
+> +  - Aleksander Jan Bajkowski <olek2@wp.pl>
+> +
+> +description:
+> +  Lantiq DCDC is a voltage converter with a voltage sensor. The converte=
+r is
+> +  inside the xRX200 SoC. This driver only reads the voltage and prints i=
+t at
+> +  startup. The voltage supplied by this converter powers one of the power
+> +  domains. It powers the CPU core and probably other peripherals as well.
+> +
+> +properties:
+> +  compatible:
+> +    items:
+> +      - enum:
+> +          - lantiq,dcdc-xrx200
 
-Reported-by: kernel test robot <oliver.sang@intel.com>
-Closes: https://lore.kernel.org/oe-lkp/202508190403.33c83ece-lkp@intel.com
-Signed-off-by: Robin Murphy <robin.murphy@arm.com>
----
-  kernel/events/core.c | 12 +++++++++++-
-  1 file changed, 11 insertions(+), 1 deletion(-)
+An items list containing one element doesn't do anything, just get rid
+of it and use enum directly.
 
-diff --git a/kernel/events/core.c b/kernel/events/core.c
-index 5f7eb526d87c..ddf045ad4d83 100644
---- a/kernel/events/core.c
-+++ b/kernel/events/core.c
-@@ -12562,6 +12562,11 @@ static bool is_raw_pmu(const struct pmu *pmu)
-  	       pmu->capabilities & PERF_PMU_CAP_RAW_EVENTS;
-  }
-  
-+static bool is_uncore_pmu(const struct pmu *pmu)
-+{
-+	return pmu->task_ctx_nr == perf_invalid_context;
-+}
-+
-  static int perf_try_init_event(struct pmu *pmu, struct perf_event *event)
-  {
-  	struct perf_event_context *ctx = NULL;
-@@ -12571,11 +12576,16 @@ static int perf_try_init_event(struct pmu *pmu, struct perf_event *event)
-  	 * Before touching anything, we can safely skip:
-  	 * - any event for a specific PMU which is not this one
-  	 * - any common event if this PMU doesn't support them
-+	 * - non-CPU-bound uncore events (so drivers can assume event->cpu is
-+	 *   valid; we'll check the actual task/cgroup attach state later)
-  	 */
-  	if (event->attr.type != pmu->type &&
-  	    (event->attr.type >= PERF_TYPE_MAX || !is_raw_pmu(pmu)))
-  		return -ENOENT;
-  
-+	if (is_uncore_pmu(pmu) && event->cpu < 0)
-+		return -EINVAL;
-+
-  	if (!try_module_get(pmu->module))
-  		return -ENODEV;
-  
-@@ -12990,7 +13000,7 @@ perf_event_alloc(struct perf_event_attr *attr, int cpu,
-  	 * events (they don't make sense as the cgroup will be different
-  	 * on other CPUs in the uncore mask).
-  	 */
--	if (pmu->task_ctx_nr == perf_invalid_context && (task || cgroup_fd != -1))
-+	if (is_uncore_pmu(pmu) && (task || cgroup_fd != -1))
-  		return ERR_PTR(-EINVAL);
-  
-  	if (event->attr.aux_output &&
--- 
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    dcdc@106a00 {
+> +        compatible =3D "lantiq,dcdc-xrx200";
+> +        reg =3D <0x106a00 0x200>;
+> +    };
+> --=20
+> 2.47.2
+>=20
+
+--NMhKQHuj2uEhMvrE
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaKS6uwAKCRB4tDGHoIJi
+0kQmAP9AeB9RE81d1AmBOdkCkO5JB8JPBu1OoJdju9i5Y4Zi5AD+Nz3LqCUeqVfu
+ljUW6trkuKI+qwxaeebfSsYiXEXczAM=
+=lo4h
+-----END PGP SIGNATURE-----
+
+--NMhKQHuj2uEhMvrE--
 
