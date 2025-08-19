@@ -1,142 +1,100 @@
-Return-Path: <linux-mips+bounces-10370-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10371-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 101CBB2B530
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Aug 2025 02:02:25 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1361DB2B556
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Aug 2025 02:34:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C85BA52517D
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Aug 2025 00:02:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 459BA7AD29F
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Aug 2025 00:32:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E453F469D;
-	Tue, 19 Aug 2025 00:02:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 221FD1494A8;
+	Tue, 19 Aug 2025 00:34:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="W4tMuMFn"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="KxI8Cjev"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65D7C4690
-	for <linux-mips@vger.kernel.org>; Tue, 19 Aug 2025 00:02:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90A67CA6B
+	for <linux-mips@vger.kernel.org>; Tue, 19 Aug 2025 00:34:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755561741; cv=none; b=Zi11occ9E1h9p2SO4kjGlmt7aQtB08msqbhHfLk7oYyXiB8hlnXUFD0RqHjGy6sGhNo0aQcUGLn0w6zb/icYNSr9iG7YTlSz1QZwbEEBdfp1tRJVEAimN4WM517khPTmYG5GXHmAU2TOyG4+PhgpvazQFxIjOncjMv3eANwRdAk=
+	t=1755563662; cv=none; b=ZlrbEuquYnK50AXO+5rvaofukQe+G4c3Q3SGk4O0ojNIAp9lk8m5mJGMAqJnZi/Mv76/AwAQk6iou/w5d9+MrgPS0HymyVhSgyQ1tM9HshYohorV2d7Jc3qkhGZKw4qunirYDf2VTKiZbAvnvXtD/gfN/wXh8jxU/rxOsx//DSU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755561741; c=relaxed/simple;
-	bh=IYI91/LE9Llcly1/RR9GAXRgHt5xZK04GitaKe7QsYg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XL02ElLKQ7YaTyK9nen2ciZuERgT6ICyAaFS5cNeljDoY0ArJoc7DmmfMITBJYWKcStNMmAy6QautD+c7Jpny0bdXkuHvjCTqyfT/mt0XMhBrQ4ijvj85FqXkJwbeJcpj6e9sePCeQizjXAlGJcEISNH9cXSscxr2AWib4owKgE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=W4tMuMFn; arc=none smtp.client-ip=209.85.167.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-oi1-f175.google.com with SMTP id 5614622812f47-435de702f1fso2717552b6e.1
-        for <linux-mips@vger.kernel.org>; Mon, 18 Aug 2025 17:02:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1755561738; x=1756166538; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oMsgbwBVAVhf//iwhRHAmazuWGfkfHKPwkTozN8mYH0=;
-        b=W4tMuMFnm25GdNZbPYhPn7cwIhzmZU7JAQ54Nx5hcDY4ZvarRH/o5jDOkUL2YAbG2g
-         lnuGIGF3aGFdgaF+4j7mDk3X8CFNvDQEjhIdrA6JvyvYgUj9nEzBFu8nCXyEKqa8TuaY
-         cZBaOpOCAPNNFmVe5dnw5ERkOMAMsMo9kWnMT8snfWi7+mGq/bfBE2NJj1WpokRLBnFp
-         h+JJWEeA1G/NHsQoY6lm844YTdNfHv6aAxKLpWIVg1m31FpNgyWm0n0Xh0/1ggAmxs4a
-         Ewyco05MWIm8QQNy2bzdIXppbPBbdBDBPoB7tZu/p8wuCOajACLWd5wBsQ9efx00YLv3
-         k+Uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755561738; x=1756166538;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oMsgbwBVAVhf//iwhRHAmazuWGfkfHKPwkTozN8mYH0=;
-        b=d8O2hJ9o4A9xnFr5Kky0vunHLnLKlkOjvaGal0sz8aXVsYsSV+vvRiuc6SLNHSIyca
-         Jsf4MRe68j4HIC1X6DD/rxOU7IPooWy5SPqQnAqizOaa/Dqbx4E12wRiajgCn7r0W600
-         46nMu0LUwkt2vPlZM0JJMHJ7zA+z7UEGNIzGQWW/U+h9AlvIgfTABeLSFEC5cZHEFj5E
-         TpttGI4RD0bNh/VJ1WFNPHS1/1Mu2QVLyZPUMdCtpLk9cUIf4dcA4LWAto0k0aFkQ4g3
-         v8J3RYEReI5GFzIQUUP12P8FQWEWzPcO8jjl3X8+9Kew3rmWTQZmc141tj36srbJK+gB
-         nZMg==
-X-Forwarded-Encrypted: i=1; AJvYcCUIXcv5rD0mRjQqskMvNDIps9jiweO3fIpAJthpGMv+l95N/wU0qo1hXLHtKtOY1JKX9f92TyXza/cZ@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxr8vdBMTvn1SBrgNwD2q/1y0lfA7HuaWT45Jveb3xItgpr1M59
-	bvPix/RWxJe8x3hg26ePA61vkXozkTTRADmD7DDGapE64izqL4Rgvlb4oeMmwVgG8spfy7M74AC
-	6hvupxg==
-X-Gm-Gg: ASbGncs2+cf9SzygGZH+zRC7X6XZ34XOzMfVYheTjIfatgTA0EN4DF/lQGUmB5CeH93
-	4v+zD5ykgaKOw44NTmp2UG0LSAejrBf3XtOBISmilWBnyj/pTYIUQExlzp0Qd/y1mocncXFgrsP
-	N03vJ8FCpRhEwjLqBjOR8emW0lc/YToHFTp/rMcgQ9EeQ948rsYjTxaxkpWLkguodyNMEF1rZJt
-	ZmSrIBzJzWVLlO81bwVKwZiwS5W94wVCVQOwYbVYy48x5BEm9F7bWU4i4Xqxq9O62W/BHoYNpa0
-	RyRbMyJ1GSTwE0M6sETF2xdgNHJ3U0Db5C7v7tNf0vw0iKMo+7Ua5cQpDXAYzX8JiU+waO6xTs4
-	QB0AtRdo7TwlOXN0z6YZ3KRcA3ButKPuZAbC6gTujeEgYAr5ftF+RtX2hrQz/mZU=
-X-Google-Smtp-Source: AGHT+IHxC2a8ADbE8Man2mxRnjf7l32j3oW2wJDIpc4tYOrxF0mDpcOuNs9sRV+UqoA+G+aHiT1l0g==
-X-Received: by 2002:a05:6808:11ce:b0:433:fe69:fd85 with SMTP id 5614622812f47-436da1e48dfmr462238b6e.20.1755561738182;
-        Mon, 18 Aug 2025 17:02:18 -0700 (PDT)
-Received: from google.com (2.82.29.34.bc.googleusercontent.com. [34.29.82.2])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-50c94786c0fsm2917906173.3.2025.08.18.17.02.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 18 Aug 2025 17:02:17 -0700 (PDT)
-Date: Mon, 18 Aug 2025 17:02:14 -0700
-From: Justin Stitt <justinstitt@google.com>
-To: Thorsten Blum <thorsten.blum@linux.dev>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	linux-hardening@vger.kernel.org, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 6/8] MIPS: octeon: Replace memset(0) + deprecated
- strcpy() with strscpy_pad()
-Message-ID: <mnqgvgvlnnamfyy7eb54thjs4edkrcdwqy6mg2ybqhf3nxtapu@rntlepvgtbd6>
-References: <20250817183728.612012-1-thorsten.blum@linux.dev>
- <20250817183728.612012-6-thorsten.blum@linux.dev>
+	s=arc-20240116; t=1755563662; c=relaxed/simple;
+	bh=VIj2YbU5o1RNHaFfyeLVtpSo78+d55miYm5h6O1qnN4=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=EeC30/Fpnq8ovhYez/pi79PSevZRZZjp2YDPpZ5splAaUQKMA4/sk1pdoyBUuvoIBXidqfZgKTYb5HDOUzk9FauOYYi4BL/p8jJ9ZWawsZEqDD3KvIJFjlJOXd6RSYwm7WWYjmE3YybObioCyqEJXm2kz4WiCns6Yr5alGOUXww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=KxI8Cjev; arc=none smtp.client-ip=95.215.58.183
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Content-Type: text/plain;
+	charset=us-ascii
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1755563646;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VIj2YbU5o1RNHaFfyeLVtpSo78+d55miYm5h6O1qnN4=;
+	b=KxI8CjevBfsn7Z0BxhF1SbGMKg+RgAwIxiXyAWUW/S1KSGEbLLDNayeWDLdFvYxRLte4+T
+	4MngId6ICTspUMQqmzRCZBaw5ksNq7Pe9qczEV24tZ7/8flpgQ8QMseMNqTqLN4Dyrtx7/
+	3PpVbxzore0atenB9myOpoqSoB4EDYU=
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250817183728.612012-6-thorsten.blum@linux.dev>
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
+Subject: Re: [PATCH 2/8] MIPS: sgi-ip32: Replace deprecated strcpy() in
+ plat_mem_setup()
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Thorsten Blum <thorsten.blum@linux.dev>
+In-Reply-To: <6d7mznlomgbhqexp64tswbozmlqk7svrek66zggjnhljsdzan3@3f66zsc5jm5y>
+Date: Tue, 19 Aug 2025 02:33:53 +0200
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ linux-hardening@vger.kernel.org,
+ linux-mips@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <F4431470-322B-49C5-B55A-B236C8E04D77@linux.dev>
+References: <20250817183728.612012-1-thorsten.blum@linux.dev>
+ <20250817183728.612012-2-thorsten.blum@linux.dev>
+ <6d7mznlomgbhqexp64tswbozmlqk7svrek66zggjnhljsdzan3@3f66zsc5jm5y>
+To: Justin Stitt <justinstitt@google.com>
+X-Migadu-Flow: FLOW_OUT
 
-Hi,
+On 19. Aug 2025, at 01:40, Justin Stitt wrote:
+> On Sun, Aug 17, 2025 at 08:37:12PM +0200, Thorsten Blum wrote:
+>> strcpy() is deprecated; use strscpy() instead.
+>>=20
+>> Link: https://github.com/KSPP/linux/issues/88
+>> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+>> ---
+>> arch/mips/sgi-ip32/ip32-setup.c | 3 ++-
+>> 1 file changed, 2 insertions(+), 1 deletion(-)
+>>=20
+>> diff --git a/arch/mips/sgi-ip32/ip32-setup.c =
+b/arch/mips/sgi-ip32/ip32-setup.c
+>> index aeb0805aae57..c2ebc4bbd866 100644
+>> --- a/arch/mips/sgi-ip32/ip32-setup.c
+>> +++ b/arch/mips/sgi-ip32/ip32-setup.c
+>> @@ -14,6 +14,7 @@
+>> #include <linux/interrupt.h>
+>> #include <linux/param.h>
+>> #include <linux/sched.h>
+>> +#include <linux/string.h>
+>=20
+> This new include isn't strictly necessary as it was building with
+> strcpy() fine before?
 
-On Sun, Aug 17, 2025 at 08:37:16PM +0200, Thorsten Blum wrote:
-> Replace memset(0) followed by the deprecated strcpy() with strscpy_pad()
-> to improve octeon_fdt_set_phy(). This avoids zeroing the memory before
-> copying the string and ensures the destination buffer is only written to
-> once, simplifying the code and improving efficiency.
-> 
-> Link: https://github.com/KSPP/linux/issues/88
-> Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+It's not strictly necessary, but since I was often asked to explicitly
+include it, I made it a habit.
 
-Reviewed-by: Justin Stitt <justinstitt@google.com>
+Best,
+Thorsten
 
-> ---
->  arch/mips/cavium-octeon/octeon-platform.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/arch/mips/cavium-octeon/octeon-platform.c b/arch/mips/cavium-octeon/octeon-platform.c
-> index 5e1dd4e6e82f..47677b5d7ed0 100644
-> --- a/arch/mips/cavium-octeon/octeon-platform.c
-> +++ b/arch/mips/cavium-octeon/octeon-platform.c
-> @@ -13,6 +13,7 @@
->  #include <linux/of_fdt.h>
->  #include <linux/platform_device.h>
->  #include <linux/libfdt.h>
-> +#include <linux/string.h>
->  
->  #include <asm/octeon/octeon.h>
->  #include <asm/octeon/cvmx-helper-board.h>
-> @@ -538,8 +539,7 @@ static void __init octeon_fdt_set_phy(int eth, int phy_addr)
->  
->  	if (octeon_has_88e1145()) {
->  		fdt_nop_property(initial_boot_params, phy, "marvell,reg-init");
-> -		memset(new_name, 0, sizeof(new_name));
-> -		strcpy(new_name, "marvell,88e1145");
-> +		strscpy_pad(new_name, "marvell,88e1145");
->  		p = fdt_getprop(initial_boot_params, phy, "compatible",
->  				&current_len);
->  		if (p && current_len >= strlen(new_name))
-> -- 
-> 2.50.1
-> 
->
-
-Thanks
-Justin
 
