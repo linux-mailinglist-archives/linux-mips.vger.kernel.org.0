@@ -1,94 +1,107 @@
-Return-Path: <linux-mips+bounces-10380-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10381-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D854B2BE53
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Aug 2025 12:02:29 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 733D1B2BED5
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Aug 2025 12:24:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AF89B584209
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Aug 2025 10:00:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A0D262704B
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Aug 2025 10:24:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E07602135DD;
-	Tue, 19 Aug 2025 10:00:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70BE730E842;
+	Tue, 19 Aug 2025 10:24:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="gDP4IC/0"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="ZuquCRj5"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out-170.mta1.migadu.com (out-170.mta1.migadu.com [95.215.58.170])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18244320CAF
-	for <linux-mips@vger.kernel.org>; Tue, 19 Aug 2025 10:00:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DE292FD7B1
+	for <linux-mips@vger.kernel.org>; Tue, 19 Aug 2025 10:24:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755597611; cv=none; b=msHuzVHvPzc1uHRzlY27Kxm+S/7RNhsmueIhf9re5LMJ+TbRH5DbC1rOYREGOds+mshgI06cHzzReDqd0PntUAJLSlm15NMkIsfGG9iijGvb45AvKUcG7xkYqvMtogB1qcambz0aXzySO/2m37R5Wxiim1EqhVWsNL3nTnedarQ=
+	t=1755599055; cv=none; b=g802ut7SgLEVoah0wDW56VYxVh7GwolYM4halW+V2LDM6S7ZttWBdh+yp4r4al3iY4lQ5WA1n47ZQWWaHBwrYm2lIt7yIT3XUwFJyOm6WPryMWQZoV62owyuekpsxhAUMJfZ1iWLhSXEdKrIPsERVdwV5jIzhmmvO791oQLGem0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755597611; c=relaxed/simple;
-	bh=v/okojaX1odAcTkpye83LrAb63NZEvMcO+JDGF8HSew=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=ah7pqvbNKmQVUAKem5nTdNWpRZshG0ndy3i97ooQFJHLB6voSX+uzMjQUQHtaXocUghr4hpMgtAaYmZ0d/4Jdfe74kmutORtpM6VaIElTFEzi361q3I2Kpe5uxvSJh+DAuSlLXlTIhKWICxdVcLgXzwbdbkaAmf/fv6zY7LqTDk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=gDP4IC/0; arc=none smtp.client-ip=95.215.58.170
+	s=arc-20240116; t=1755599055; c=relaxed/simple;
+	bh=5qGHrbETbnkQCEhw61vymQOpVfGIMhyW0YhkYa8YKnI=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=inhzF1Xwfejoy7UTqFco9/7NFCmniwf50sE8h0Xtu2HIQYLiFNNWjbLvahM8NB9k1Uv6i9wmrSQ9RcOO3n4+QD10rj8nKeSCkcc/4sgN95TOZPg+uw6v0BBPS4PZqzOzPlU57nQphkuea0nr603Q10M24QPnpDDNJQAnEBg+y6Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=ZuquCRj5; arc=none smtp.client-ip=91.218.175.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Content-Type: text/plain;
-	charset=us-ascii
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1755597608;
+	t=1755599041;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=CjgCdFdN/p2XjO4xt3tgWE95EILx00Dh/AKJ/jlTXSQ=;
-	b=gDP4IC/0Ko3V3/IF1R8VGT2HoCz6HdkyUbdEPEapgXFqi0NcNmIb1hTH8nQstdbdqFv8ts
-	kP8b6/ndatZ9BbA24Vt/ZdThxjrnVqs0QveSS3PjfzlQm+uTye0ZlPcRvJTs59k+pkWWBN
-	kT1RsmxEBMXeESZBgNhO500qNpZIqy0=
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=vKWmZt8ypwV6+dYKs/xoeIekRcxze7cLQDSxbkdqqpU=;
+	b=ZuquCRj5N2LgW+btJvB4kkYQ5J2pvYOUsJ99Wh69B5CEpy4otq6mRfw2LEthmA5+Rl2aDl
+	zNLFcbyh+lhhQjMtALpY04YRFLCG2N2JiJtIHmmqAHVIBynOcrJ0X5RRQhtxcCEUZXUYhw
+	tcQcFtcUeXAq+/WFGyRmrqjNAAsrT9w=
+From: Thorsten Blum <thorsten.blum@linux.dev>
+To: Huacai Chen <chenhuacai@kernel.org>,
+	Jiaxun Yang <jiaxun.yang@flygoat.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-hardening@vger.kernel.org,
+	Thorsten Blum <thorsten.blum@linux.dev>,
+	linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: Loongson64: Replace deprecated strcpy() with strscpy_pad()
+Date: Tue, 19 Aug 2025 12:23:19 +0200
+Message-ID: <20250819102319.711935-2-thorsten.blum@linux.dev>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.700.81\))
-Subject: Re: [PATCH 5/8] MIPS: arc: Replace deprecated strcpy() with memcpy()
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Thorsten Blum <thorsten.blum@linux.dev>
-In-Reply-To: <yisgcmjp5cj27yozthudyrdpfcovhcrgpqbyip5kcum4aa7qwl@52bccatjuiak>
-Date: Tue, 19 Aug 2025 12:00:02 +0200
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- linux-hardening@vger.kernel.org,
- linux-mips@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Content-Transfer-Encoding: 7bit
-Message-Id: <53007EE9-0DF2-4772-8254-0551F4093CE8@linux.dev>
-References: <20250817183728.612012-1-thorsten.blum@linux.dev>
- <20250817183728.612012-5-thorsten.blum@linux.dev>
- <yisgcmjp5cj27yozthudyrdpfcovhcrgpqbyip5kcum4aa7qwl@52bccatjuiak>
-To: Justin Stitt <justinstitt@google.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Migadu-Flow: FLOW_OUT
 
-Hi Justin,
+strcpy() is deprecated; use strscpy_pad() instead.
 
-On 19. Aug 2025, at 01:58, Justin Stitt wrote:
-> On Sun, Aug 17, 2025 at 08:37:15PM +0200, Thorsten Blum wrote:
->> strcpy() is deprecated; use memcpy() instead.
->> 
->> Use pr_debug() instead of printk(KERN_DEBUG) to silence a checkpatch
->> warning.
-> 
-> I'd like to see more reasoning for why you chose memcpy() here. With api
-> refactors like this I think most folks want to know if 1) there is any
-> functional change and 2) why you chose the api.
+strscpy_pad() already copies the source strings and zero-pads the tail
+of the destination buffers, making the explicit initializations to zero
+redundant. Remove them to ensure the buffers are only written to once.
 
-1) No functional changes intended.
+No functional changes intended.
 
-2) To advance the pointer 'cp', we already determine the string length
-'len' using strlen(), which allows us to use memcpy() directly. This is
-slightly more efficient than strscpy(), which would recompute the length
-before calling memcpy() internally. We could also use strscpy() and its
-return value as the length, but that would require checking for string
-truncation, which might introduce a functional change.
+Link: https://github.com/KSPP/linux/issues/88
+Signed-off-by: Thorsten Blum <thorsten.blum@linux.dev>
+---
+ arch/mips/loongson64/boardinfo.c | 9 +++++----
+ 1 file changed, 5 insertions(+), 4 deletions(-)
 
-Thanks,
-Thorsten
+diff --git a/arch/mips/loongson64/boardinfo.c b/arch/mips/loongson64/boardinfo.c
+index 8bb275c93ac0..827ab94b98b3 100644
+--- a/arch/mips/loongson64/boardinfo.c
++++ b/arch/mips/loongson64/boardinfo.c
+@@ -1,17 +1,18 @@
+ // SPDX-License-Identifier: GPL-2.0
+ #include <linux/kobject.h>
++#include <linux/string.h>
+ #include <boot_param.h>
+ 
+ static ssize_t boardinfo_show(struct kobject *kobj,
+ 			      struct kobj_attribute *attr, char *buf)
+ {
+-	char board_manufacturer[64] = {0};
++	char board_manufacturer[64];
+ 	char *tmp_board_manufacturer = board_manufacturer;
+-	char bios_vendor[64] = {0};
++	char bios_vendor[64];
+ 	char *tmp_bios_vendor = bios_vendor;
+ 
+-	strcpy(board_manufacturer, eboard->name);
+-	strcpy(bios_vendor, einter->description);
++	strscpy_pad(board_manufacturer, eboard->name);
++	strscpy_pad(bios_vendor, einter->description);
+ 
+ 	return sprintf(buf,
+ 		       "Board Info\n"
+-- 
+2.50.1
 
 
