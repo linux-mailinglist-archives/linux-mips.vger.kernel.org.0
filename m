@@ -1,87 +1,88 @@
-Return-Path: <linux-mips+bounces-10377-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10378-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F090B2BDDB
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Aug 2025 11:47:44 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id D396FB2BDE3
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Aug 2025 11:48:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4DD39525090
-	for <lists+linux-mips@lfdr.de>; Tue, 19 Aug 2025 09:47:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B695F521801
+	for <lists+linux-mips@lfdr.de>; Tue, 19 Aug 2025 09:48:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0C2331B11A;
-	Tue, 19 Aug 2025 09:47:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B9E931B13E;
+	Tue, 19 Aug 2025 09:48:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="R7CjSAxR"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="hhkLWNTF"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lj1-f169.google.com (mail-lj1-f169.google.com [209.85.208.169])
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2296F319864
-	for <linux-mips@vger.kernel.org>; Tue, 19 Aug 2025 09:47:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5457831AF1C
+	for <linux-mips@vger.kernel.org>; Tue, 19 Aug 2025 09:48:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755596857; cv=none; b=CPFIR4DixPPy53bDsMz0YmPx6led8egv/lyRPfmVEA5yoiyl+dyzvtA3MWn9Mqc7YUeMVXjbeEETu/ix4NwpDArE0/HDW/VID2+wlJpw+3BtaWE7G8R9WdTDwcEJrBXspNj5lb4VXM09mPhMcook8cRqAow8Ju3JPF4UGRn7qIE=
+	t=1755596887; cv=none; b=Ol8PyUxMIN9pdV0zJAvPYG86ThRA+sPdyOWC42d2kCjrvAglO7V3pgqpcCkzZAbx82g7nK+cyjrFw/EWfF7MT6Muud6Squh1A8rwq1a2g8xRXGrfEvT40h8gwhzpny6UoxCrfOHi8ib+AyRiEGCel1++d8fMsWSn0Kxay8o4mzI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755596857; c=relaxed/simple;
+	s=arc-20240116; t=1755596887; c=relaxed/simple;
 	bh=RdTVW2acL3x4TY+q3fiwzcKJmZ14PXDkj8EpJokxAbo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XTScIt6X2K7YyF8OZaI2ozD+sE1PCiaoJvTW3YtnPe3TJDiTSCcDqrkWK+jmdrf3/ZekllmTkUA6+u/tnDeQX8Uh+JKy8ZyMp6nVCQUGaK84LVviR3khTQ6tD3gTvp9cRnkbYboNeMIGw71JmNyLro8+RZB8L8JdSX+uQJKEm14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=R7CjSAxR; arc=none smtp.client-ip=209.85.208.169
+	 To:Cc:Content-Type; b=KawX1kQCUq5C6JunFvYs4oyDltSx6vHp3S3Ltz/IpdTUiYp4Uq+IKLcahgcORip0vkgzhbzBfOFldzuWFfWacrwXQxV1sxlRuo6eKfW4UlhndiG77x9k1l4kVxA2laJdHOCstd+mzAemLwtA3v56/Q4abUB2j5EJ9EdSZiqKAn8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=hhkLWNTF; arc=none smtp.client-ip=209.85.208.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f169.google.com with SMTP id 38308e7fff4ca-333f8f0dd71so39477061fa.1
-        for <linux-mips@vger.kernel.org>; Tue, 19 Aug 2025 02:47:34 -0700 (PDT)
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-333f92cb94eso39497391fa.3
+        for <linux-mips@vger.kernel.org>; Tue, 19 Aug 2025 02:48:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1755596853; x=1756201653; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1755596882; x=1756201682; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
         bh=RdTVW2acL3x4TY+q3fiwzcKJmZ14PXDkj8EpJokxAbo=;
-        b=R7CjSAxR0SKigMJF92+IG4arICNf+bYM3a0PT09TwwgVJ0fevbid0lUF4QIKu0/Q5P
-         9AGRr/VuxpP6G32aKpi5VYR1rPmsiIMgJs0dR7kCQIBHGhnAx+TdNuH595f0SwLn5djq
-         MtQnoZ6pYNnm/ZrC+uSGQKTaRRblyN9rrvOhIVSCBPRdEiBU9BGuSW/4B29ph7ZbBCOO
-         1NejzfzXWfxmF5cHj+JBVt23PyBejugUsJUM2RQvXU8GQs1ms3DNgVxpaIHM/POISiNs
-         DOfkqdTUMMwXzsG3IcNKjz6sCXRQwSbriB2JC8dRDOkzt0jqWQKnL0mbTZMoMCbTv+34
-         t5bg==
+        b=hhkLWNTFdjEbwwjL7FisLg0gDUyRvtp1bby7rXiuQN0gvj0aaLdVZMtTr/HCqvMmNu
+         dZi+AZ7MTnqjD1WLb2L6JDfpWWGXvFySZY0ijl9rz9QoZ6YKnwXctP99sx4jaSNN7oPB
+         /z8kv9fHoRaD2YOJL9ZtRpf0EcbAlVrVjALcgolPMd36S4sJIMjeA6lrh5sPpmT6ouAm
+         VW3QM+8pFZJFnDDCFjO8MFS6LYOOfL1Vz5NFwiveiFoYNMjRyxTJsiU9SOz4OnZUG+lp
+         2uUgQvw9xUEHz7lQjrxS44fHV0beDHUvIgV7HScOJgTfLehm42PHpxStRXEv3lHs7Ecv
+         ucTg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755596853; x=1756201653;
+        d=1e100.net; s=20230601; t=1755596882; x=1756201682;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
         bh=RdTVW2acL3x4TY+q3fiwzcKJmZ14PXDkj8EpJokxAbo=;
-        b=FTKc/CG9OwtLMtD6I80SwybuE98+LBZoKhdtyv4L/JEzvKZgJMzQCwUz4aGEfi/X7G
-         hJ6ynQeo11Wzi8f/CT0wN4lTS7/oLLulxZxuuH+S7XbGX5xLsgtfRVkbDi9d2ELXfRB4
-         9udevvmdcY8zT1LOegGz+NbsTfJLZaZtWLidv9vttk7DLeNxyAl6rn5A4yEwzQ0b9SpH
-         GGrBoRqnhbuRYPf5yPEXqWw8M0OgakmtvdjMVTg0gMQcJ5U/VT3Uck/SjcdMa83tzqyd
-         N5DXp8a5jFIKI57dJI8viAvaAl8f2ri8K/rjVaN4H3K7hGBazcuwaCVNywQ2HabTYpj5
-         dUKg==
-X-Forwarded-Encrypted: i=1; AJvYcCUAl8L4gVwIRBoN6EHNqyqSy+DVhs+4lvrs/07XxTafr0bNaL8GkNUb7XvzSkku0vvIJtl02cq9CmMo@vger.kernel.org
-X-Gm-Message-State: AOJu0YxToF5U6UuNNc4hVWghBv7jA52zs9za1AZhFbvMbcqnCbnWzy4S
-	1RZgC0RpKrTDLOmLGhD4CreGWw38GjGh1FWnujEomaWq0qcG+n2u0l2pyVk23Oa3DtJWqZ+HAAH
-	67hmmpCrULmpPKB5nfiN1fetIBdxn2Yky14K5bh7cSA==
-X-Gm-Gg: ASbGncuLxno+nEmJB+z8Zbj7WlqOJBNPStr1HGmLn5k22wW5clLyoARj8zUc5Bh/K/B
-	tJvyj/r0Mtx3I3Vf+XmJ66n9WQoHqbksLAU5emauoktgztvnK841q0v1p042fo+jbvF+SrHE5Wb
-	bbN7CheSRZl0J3jAc9cwhwNBO4k+6u4u1Zkpzut8hhFklRwMJ4UGN6d3MyYJpPLWGrsl4/A9OVh
-	KYnddSNogzz
-X-Google-Smtp-Source: AGHT+IFaAkF1r4GWgj+j3Xeyk0sBgHgQuFXAyBRPToaJvqEtDi6Qt1cFt8RtILv6l5mltG8+0huqL2sCrZ81MI3EBAM=
-X-Received: by 2002:a05:651c:b2c:b0:333:ad0c:a44e with SMTP id
- 38308e7fff4ca-335305347dbmr5252501fa.7.1755596852940; Tue, 19 Aug 2025
- 02:47:32 -0700 (PDT)
+        b=kp6yk8Jhgc+Yvs1F6Wt6d5+k3x9Ra9c3BhEy7FJPQRE4hU5TpPlUcRJlB0lV/OZ8+V
+         +WbOLhs6r0gOmgapFFWa4xZGY5URfWZR0XaTyVJy9065NkYiYBcSypkG/LvN7MJQUSrm
+         Ge0jCoRoMtSCO1HhpDxmjGy+ZFFIcReKRzG0EyyMaMd9og019k85eu8m/5VadiX53aFr
+         4FcPMP0ue3027RL3+Jct0jIRd1lGojUrUMVvX34bGkZFvSeV3cRQbDjI88G4KZvj4qpQ
+         rbZDyhnZxyQ7w53oWwr9SUJvJPr3iaFIYmY4mj3jRPbMJcO9h6pUQO1v2jarnQpzSl7o
+         csnA==
+X-Forwarded-Encrypted: i=1; AJvYcCXvZ3DixRP1S7jDWvKzKh3l8Z0H1bmTpGPkNE9UHNSbOSGOeanyj34CnxUcWm3+om7ekgmL2I76RB2Y@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDKGF1onblmArbuZTzEb9UZNLRS72MLZ2LT6sxyM3L+n94lL5N
+	xl2d4tyCwgBBuZfUB6y2tGGZlIFhW3L4gXkfDa3XvX0JbtqGT5dEWsR1NP29GIWMLOWu6g4hiav
+	dqMPeJsMaQA2RCotawJYIIo7J9JMwwY2+nTu4nc/rGQ==
+X-Gm-Gg: ASbGncvlbJWAmzR5NQ4p2YSJIlHZfjtsZF8nBNV916ZeGwMCAjJbyLpLIgNjnYkdhU6
+	/G7Vikmr3ZWBlZSKnsZL/WCXXduMDQQlDcGABNVHPMw7klIyzocNx1Yl1i3PceH6geKKWaZMWhn
+	TwlfM8F/VT10CuaaIk1w0bmYHu5yMkT31LjrCRZNApAHw7jqPOKdwiCf0i/OCIpQ0TZXv1gqGLd
+	GDc7dU=
+X-Google-Smtp-Source: AGHT+IEolFO6aeJABYr1hNPxQasixpAjIgJqFl/o9dwJCRxvFjpbc3xagoFqiJPlswYsIWJYgR30Ss513xxDR9NTkTU=
+X-Received: by 2002:a2e:b8c1:0:b0:332:45b5:d68a with SMTP id
+ 38308e7fff4ca-335305347e8mr6104861fa.5.1755596882380; Tue, 19 Aug 2025
+ 02:48:02 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com> <20250811-clk-for-stephen-round-rate-v1-105-b3bf97b038dc@redhat.com>
-In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-105-b3bf97b038dc@redhat.com>
+References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com> <20250811-clk-for-stephen-round-rate-v1-108-b3bf97b038dc@redhat.com>
+In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-108-b3bf97b038dc@redhat.com>
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Tue, 19 Aug 2025 11:47:21 +0200
-X-Gm-Features: Ac12FXwQ8ZNlahHw5FRReJn3coSNBp0waFbtb0dR-jKWl_cQ9vhC2BCpFgBry0M
-Message-ID: <CACRpkdZ3M65bKzaHcKPRhEFCy+TvHUq8bZ-8Zr_7HSRKsk_TWQ@mail.gmail.com>
-Subject: Re: [PATCH 105/114] clk: ux500: prcmu: convert from round_rate() to determine_rate()
+Date: Tue, 19 Aug 2025 11:47:51 +0200
+X-Gm-Features: Ac12FXyAMutAnmM6yYaTGFkQgGmOcrXudlcTGzS_av87nGHcGPs7Xb4FZygWAbE
+Message-ID: <CACRpkdZonmP8rSQS-rwzthNPv_MyddMReZQaD13b1qkRexxWyA@mail.gmail.com>
+Subject: Re: [PATCH 108/114] clk: versatile: icst: convert from round_rate()
+ to determine_rate()
 To: bmasney@redhat.com
 Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
 	Sudeep Holla <sudeep.holla@arm.com>, Cristian Marussi <cristian.marussi@arm.com>, 
