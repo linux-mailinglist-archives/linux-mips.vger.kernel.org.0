@@ -1,154 +1,292 @@
-Return-Path: <linux-mips+bounces-10391-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10392-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EF83B2D4A0
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Aug 2025 09:15:05 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92A9BB2D5B9
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Aug 2025 10:11:24 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 797FD682939
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Aug 2025 07:13:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5BFBD188DD5B
+	for <lists+linux-mips@lfdr.de>; Wed, 20 Aug 2025 08:10:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0897B2D4812;
-	Wed, 20 Aug 2025 07:13:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B13E62D8370;
+	Wed, 20 Aug 2025 08:09:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="u+nFfGdZ"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="Xixm2oi8"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lj1-f179.google.com (mail-lj1-f179.google.com [209.85.208.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B74E02D47FC
-	for <linux-mips@vger.kernel.org>; Wed, 20 Aug 2025 07:13:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7AD1286D55;
+	Wed, 20 Aug 2025 08:09:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755673985; cv=none; b=LoNABeVL6JKWinuP1y1vhiB4pRvFdQgZwSFqnuYbi7dw7PuXrr/bLGnz+cNh/BrUWi40LOa9GFrEej787BxDpZwlgNVwjQ5Ml7PufJyUkFmT0RhHxG4qPba+W+Cl2sfIdriFaCDfK9Jv08lh83c+rZDlPO8ZY14RXmBeV4+2hNE=
+	t=1755677383; cv=none; b=MDWIBRcBnKvMIaeyxCeCrQJLo1Z5///qwXekUjwNDvmmy6ELie0/6mtUGeZPvhlk3JSJpWPaPyCUGFZNFQ0kyel19nDPdr3wfg4LQWseC29k/3UctYYxywZeVIFCjx8rbQ/9Z3x0Zz5awskbjkiEc6D0JIdWECC6ioKz621xt2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755673985; c=relaxed/simple;
-	bh=c5+S/1Gf7ZsoEnmy+5rJrXdwibFww9JCyR0LQDM420Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BOI/QzvtSaMibV3DdFcXkhLHx5fzgSVTXwlTuOq9jE59RmXvKu7ySQ4MM2fGyggKX2wwOEO0p945wq9J3rus3UJKqtbZcq6f6efb5oxH3Lz069epPZ05JG0ewYIGgYX3I2YFHevxdIaoBrcu4UweN7avZpmi+eo9n+DRMX+h3XA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=u+nFfGdZ; arc=none smtp.client-ip=209.85.208.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f179.google.com with SMTP id 38308e7fff4ca-333f8f2d6c2so50926161fa.1
-        for <linux-mips@vger.kernel.org>; Wed, 20 Aug 2025 00:13:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1755673982; x=1756278782; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S2fgjYTxYjXy8UMOqphDGxwyeF/52vWVWRMlWTcUmd0=;
-        b=u+nFfGdZWm2upyZ8H8Q/1YeiqrdWui+lZFdVlGkny+R3i65205+6S5Ibzk6sevqvgV
-         4rb8JHRMYClP/cJ23SQUKqMuTE29Uqb1DX8u21fcy4o4x6snD6BxvMzhrPIVGK2Lm+Nc
-         oXDYLXx+/51/qtJWoWAYJQCrNgWTHAB1PtK30KrDJzVxEQR7WZQQ/ydXZjYow5wdFRWp
-         mblnL7SnWhAFef3QbfiNmMhy0IEK1RwIbimvt3zNOyKoTyJdEeKH4EzOt7/YYLBa66U0
-         yqRbk7ufFn9mj2IrpOKCtgpBmd8+eF1uo1icxjl3Ft8G34HtRw1e2DLievg2aGr6EY6i
-         zhaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755673982; x=1756278782;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S2fgjYTxYjXy8UMOqphDGxwyeF/52vWVWRMlWTcUmd0=;
-        b=pWD9w5GhmrBupjm8zMUB4a6n6XvMdYSXm8KhPSqjFhaEQLZK3XcJPxoSjCPwBGeSLU
-         WzRYXC6Rzs7iKiAxbPenCxT606pu1BNDA+s/1nw9bESKPTKK8FrvD0HKCrZlsAcb2gZN
-         K5sFrtyNNgmXzB+//rBfCU9y7KUKv/yeRlNYGY5DsL2zSdea/Ck7rgRtVTwz1pUHY0wk
-         vyM3D6/nBG9N1KQvsX4AQncJKDCr2qH5H4hqKcdhKvPF8a2hBVjCCG9JK3tG/XBYN5js
-         tYjamlaiJjbUxe8aEGFPmSQ5RPXcWWE5nGyO3lkCVOvqh9NYRXyhq3iuw6nrZP0oSYfO
-         KyWw==
-X-Forwarded-Encrypted: i=1; AJvYcCXDFvON5QUsy4AgFx0+ZMl0pZF2aEV7s4uUQu94nxsYypuAPNpC3TzFAt9VKXt77CW86DjJ7unEO66W@vger.kernel.org
-X-Gm-Message-State: AOJu0YzjWI8tyend0hk6eE8bZwZeE0i9hF1eSKOy0YBX4ylRoot0w0HU
-	xr3Y/HtZ61qPi8vpV+T5zWQUWpiBzzPSVcKe7BtTwbTkxiuaN/dkxG1I4ThUWxEv21ZrPWsqwEe
-	T/Ybh59xXYxtcFFJhz2zhBRtyQ3dha1RiGd6fkWNQKA==
-X-Gm-Gg: ASbGnctmMh/TGLWg66prHmTZzOkKspMFUsUBtDw56uJ3AiaHdwNuLU+HvDIMAZp3QsT
-	Z1lJAEplXaxhz1Twbl0VvJDWXcMWjlvnjEwSrWRQlvlmQ7vJOE8xBNRQhtu5+HWyhlehRlAti/6
-	gCzNj8fO6kacmHVl1JT5Gl4NnIS5bLMubaFmJgdB6DdcRqFC/kLYcvRVTaoh8ZksnKPC8e1rZbI
-	IvigmZWi/F0
-X-Google-Smtp-Source: AGHT+IF6EyOC5NaF9ylfzmvC/lF+XZ8ruNEnYsDF5O1GCCUBAqJgipnFljpMN/OqbECQRkpVCXWcXHbvMHeyWEs8R7M=
-X-Received: by 2002:a05:651c:41d4:b0:332:45e8:3aca with SMTP id
- 38308e7fff4ca-3353be058demr4837631fa.19.1755673981615; Wed, 20 Aug 2025
- 00:13:01 -0700 (PDT)
+	s=arc-20240116; t=1755677383; c=relaxed/simple;
+	bh=QtPa4Xm8uTmy+B5vWLRgRCy9n5XjZIkEIBssgZ3jQWw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ti1LuwTdLcGeG08oYP+3KhP6+E7oOPQEclQAfeFb7lqtuV/zGVXIgZgYsPt883eJ2b7N5VgZerJ+WOVMIwx5P8uU2Eya2VCrYwLFWEEBrTTMAu9xmp9n1WWeZLtl1LPalwXRjnNYZmSHYhG8bIVWtX+LzLs074wtY+8/sn8RcZQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=Xixm2oi8; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57JNmmLo017631;
+	Wed, 20 Aug 2025 08:09:13 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=XyEp7P
+	B6Crc5O/n3hDpRBdclhiXWepi7f2DlP7ISOnE=; b=Xixm2oi8D/e/+wAITPeDp3
+	TALHrRG4EBVti1e3wM1Z6LnCfvINBVfhRGmgOPkipNfgbFhBD0MWSeZRRuGZ/NN+
+	NKDq98HPciL4Zozeql4srzji2nvV3CzcZ3UlmCS5mUo4axD1CO9niYr/utY3r3nU
+	R/k9YIllh44h9uoNOFLeppTj5ZpJGLc7EDb+zLBQQ5R2NO8ZqfzYF65N+NeIflzl
+	gTcYt/B8t87ieiFU691ZjDHQqARPeaX+Fy6nA8Cm30nsgWe9R3Iis8b6CyGL5Xlw
+	ovWuvSCaaobgeWwxqiRAGHpZnDDJ13JX7jkAK7240Uso3SZWpw/1sppbNb+XqHPQ
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48n38vhrww-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 20 Aug 2025 08:09:13 +0000 (GMT)
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 57K89CuX005377;
+	Wed, 20 Aug 2025 08:09:12 GMT
+Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 48n38vhrwp-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 20 Aug 2025 08:09:12 +0000 (GMT)
+Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
+	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 57K4xm2t015619;
+	Wed, 20 Aug 2025 08:09:11 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 48my422cjr-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 20 Aug 2025 08:09:11 +0000
+Received: from smtpav07.fra02v.mail.ibm.com (smtpav07.fra02v.mail.ibm.com [10.20.54.106])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 57K899B961342160
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 20 Aug 2025 08:09:09 GMT
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A734720043;
+	Wed, 20 Aug 2025 08:09:09 +0000 (GMT)
+Received: from smtpav07.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 407A620040;
+	Wed, 20 Aug 2025 08:09:08 +0000 (GMT)
+Received: from [9.111.5.117] (unknown [9.111.5.117])
+	by smtpav07.fra02v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 20 Aug 2025 08:09:08 +0000 (GMT)
+Message-ID: <295ae4dd-4734-42a0-be63-2d322f00c799@linux.ibm.com>
+Date: Wed, 20 Aug 2025 10:09:07 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250815-pinctrl-gpio-pinfuncs-v5-0-955de9fd91db@linaro.org>
- <CACRpkdaDGmdhaik+1saRv7Ts4myQ+tg1aQqGU3xQyT7ma8dJFw@mail.gmail.com> <CAHp75VephepLq61HrVy=PX2oKUQd5NK2qS-vOC5h_NR65td3Uw@mail.gmail.com>
-In-Reply-To: <CAHp75VephepLq61HrVy=PX2oKUQd5NK2qS-vOC5h_NR65td3Uw@mail.gmail.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Wed, 20 Aug 2025 09:12:49 +0200
-X-Gm-Features: Ac12FXx_mHZvAEY3OP5MA3Uo1ED7cgPY59m1esPAFUlhfqgk9BLjcKH2xKwqp3I
-Message-ID: <CACRpkda4soRCLF5=W=6R4wnwT3pjk743j022XfJxjTTQzuarAA@mail.gmail.com>
-Subject: Re: [PATCH v5 00/15] pinctrl: introduce the concept of a GPIO pin
- function category
-To: Andy Shevchenko <andy.shevchenko@gmail.com>
-Cc: Bartosz Golaszewski <brgl@bgdev.pl>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Alexey Klimov <alexey.klimov@linaro.org>, 
-	Lorenzo Bianconi <lorenzo@kernel.org>, Sean Wang <sean.wang@kernel.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Paul Cercueil <paul@crapouillou.net>, Kees Cook <kees@kernel.org>, 
-	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
-	David Hildenbrand <david@redhat.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
-	Dong Aisheng <aisheng.dong@nxp.com>, Fabio Estevam <festevam@gmail.com>, 
-	Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, NXP S32 Linux Team <s32@nxp.com>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Tony Lindgren <tony@atomide.com>, 
-	Haojian Zhuang <haojian.zhuang@linaro.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Danilo Krummrich <dakr@kernel.org>, linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-mediatek@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org, 
-	linux-hardening@vger.kernel.org, linux-mm@kvack.org, imx@lists.linux.dev, 
-	linux-omap@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Chen-Yu Tsai <wenst@chromium.org>, 
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 18/19] perf: Introduce positive capability for raw events
+To: Robin Murphy <robin.murphy@arm.com>, peterz@infradead.org,
+        mingo@redhat.com, will@kernel.org, mark.rutland@arm.com,
+        acme@kernel.org, namhyung@kernel.org,
+        alexander.shishkin@linux.intel.com, jolsa@kernel.org,
+        irogers@google.com, adrian.hunter@intel.com, kan.liang@linux.intel.com
+Cc: linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
+        linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org, dmaengine@vger.kernel.org,
+        linux-fpga@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+        intel-xe@lists.freedesktop.org, coresight@lists.linaro.org,
+        iommu@lists.linux.dev, linux-amlogic@lists.infradead.org,
+        linux-cxl@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-riscv@lists.infradead.org
+References: <cover.1755096883.git.robin.murphy@arm.com>
+ <542787fd188ea15ef41c53d557989c962ed44771.1755096883.git.robin.murphy@arm.com>
+ <67a0d778-6e2c-4955-a7ce-56a10043ae8d@arm.com>
+Content-Language: en-US
+From: Thomas Richter <tmricht@linux.ibm.com>
+Organization: IBM
+In-Reply-To: <67a0d778-6e2c-4955-a7ce-56a10043ae8d@arm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: rc1CmpHVUr4PjN6HeVNNaTAKVoWbVX32
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODE5MDIyMiBTYWx0ZWRfX4xTzLYCTQsxG
+ AGD1we0J4ezItB0ejTfm7DJNuDAARyH4VivdukTDV+G2c134zt0WbxSJSEE76uDxTym3DRzLeZX
+ mOf6bUkLRc8HI2z83HLeSrLnCDaUzt6ctsGigqq+Yny6dHl56O82/ysxGcmIZx9UyZO+hyMZvb/
+ ecuWa/hbBYOZ6yeacF65qy/00k1eAjO++Mj45cxXjqV85T1khiwKHAStutPkN05LIcWmzIOI2N6
+ JcZUW/XH3ZbwPgzY20enHnuM+rxpiC2AXWamVYRgBgnxytZoHYJTbh5BurqPVICmyND/IQHxcAh
+ w3J7un0oPnbnMNdQ3B2TA6VUHKYY82ln4UWEvFzI/Jn0XaQRTQr//JuEseTSCgQIqbo5FGoTW85
+ ypKOH5UDXA9ip20lItNjpe1wLNO1nQ==
+X-Proofpoint-GUID: GZ2wu60A03msHy_JXXsuf0f5WSTi9QT-
+X-Authority-Analysis: v=2.4 cv=KPwDzFFo c=1 sm=1 tr=0 ts=68a582a9 cx=c_pps
+ a=bLidbwmWQ0KltjZqbj+ezA==:117 a=bLidbwmWQ0KltjZqbj+ezA==:17
+ a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=7CQSdrXTAAAA:8 a=gUTjnckvcJroK4elFEgA:9
+ a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=a-qgeE7W1pNrGK8U0ZQC:22
+ a=DXsff8QfwkrTrK3sU8N1:22 a=Z5ABNNGmrOfJ6cZ5bIyy:22 a=bWyr8ysk75zN3GCy5bjg:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-08-20_03,2025-08-20_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1011 spamscore=0 adultscore=0 malwarescore=0 lowpriorityscore=0
+ bulkscore=0 priorityscore=1501 suspectscore=0 phishscore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2508110000 definitions=main-2508190222
 
-On Tue, Aug 19, 2025 at 8:31=E2=80=AFPM Andy Shevchenko
-<andy.shevchenko@gmail.com> wrote:
-> On Tue, Aug 19, 2025 at 4:02=E2=80=AFPM Linus Walleij <linus.walleij@lina=
-ro.org> wrote:
-> > On Fri, Aug 15, 2025 at 11:09=E2=80=AFAM Bartosz Golaszewski <brgl@bgde=
-v.pl> wrote:
+On 8/19/25 15:15, Robin Murphy wrote:
+> On 13/08/2025 6:01 pm, Robin Murphy wrote:
+>> Only a handful of CPU PMUs accept PERF_TYPE_{RAW,HARDWARE,HW_CACHE}
+>> events without registering themselves as PERF_TYPE_RAW in the first
+>> place. Add an explicit opt-in for these special cases, so that we can
+>> make life easier for every other driver (and probably also speed up the
+>> slow-path search) by having perf_try_init_event() do the basic type
+>> checking to cover the majority of cases.
+>>
+>> Signed-off-by: Robin Murphy <robin.murphy@arm.com>
+>> ---
+>>
+>> A further possibility is to automatically add the cap to PERF_TYPE_RAW
+>> PMUs in perf_pmu_register() to have a single point-of-use condition; I'm
+>> undecided...
+>> ---
+>>   arch/s390/kernel/perf_cpum_cf.c    |  1 +
+>>   arch/s390/kernel/perf_pai_crypto.c |  2 +-
+>>   arch/s390/kernel/perf_pai_ext.c    |  2 +-
+>>   arch/x86/events/core.c             |  2 +-
+>>   drivers/perf/arm_pmu.c             |  1 +
+>>   include/linux/perf_event.h         |  1 +
+>>   kernel/events/core.c               | 15 +++++++++++++++
+>>   7 files changed, 21 insertions(+), 3 deletions(-)
+>>
+>> diff --git a/arch/s390/kernel/perf_cpum_cf.c b/arch/s390/kernel/perf_cpum_cf.c
+>> index 1a94e0944bc5..782ab755ddd4 100644
+>> --- a/arch/s390/kernel/perf_cpum_cf.c
+>> +++ b/arch/s390/kernel/perf_cpum_cf.c
+>> @@ -1054,6 +1054,7 @@ static void cpumf_pmu_del(struct perf_event *event, int flags)
+>>   /* Performance monitoring unit for s390x */
+>>   static struct pmu cpumf_pmu = {
+>>       .task_ctx_nr  = perf_sw_context,
+>> +    .capabilities = PERF_PMU_CAP_RAW_EVENTS,
+>>       .pmu_enable   = cpumf_pmu_enable,
+>>       .pmu_disable  = cpumf_pmu_disable,
+>>       .event_init   = cpumf_pmu_event_init,
+>> diff --git a/arch/s390/kernel/perf_pai_crypto.c b/arch/s390/kernel/perf_pai_crypto.c
+>> index a64b6b056a21..b5b6d8b5d943 100644
+>> --- a/arch/s390/kernel/perf_pai_crypto.c
+>> +++ b/arch/s390/kernel/perf_pai_crypto.c
+>> @@ -569,7 +569,7 @@ static const struct attribute_group *paicrypt_attr_groups[] = {
+>>   /* Performance monitoring unit for mapped counters */
+>>   static struct pmu paicrypt = {
+>>       .task_ctx_nr  = perf_hw_context,
+>> -    .capabilities = PERF_PMU_CAP_SAMPLING,
+>> +    .capabilities = PERF_PMU_CAP_SAMPLING | PERF_PMU_CAP_RAW_EVENTS,
+>>       .event_init   = paicrypt_event_init,
+>>       .add          = paicrypt_add,
+>>       .del          = paicrypt_del,
+>> diff --git a/arch/s390/kernel/perf_pai_ext.c b/arch/s390/kernel/perf_pai_ext.c
+>> index 1261f80c6d52..bcd28c38da70 100644
+>> --- a/arch/s390/kernel/perf_pai_ext.c
+>> +++ b/arch/s390/kernel/perf_pai_ext.c
+>> @@ -595,7 +595,7 @@ static const struct attribute_group *paiext_attr_groups[] = {
+>>   /* Performance monitoring unit for mapped counters */
+>>   static struct pmu paiext = {
+>>       .task_ctx_nr  = perf_hw_context,
+>> -    .capabilities = PERF_PMU_CAP_SAMPLING,
+>> +    .capabilities = PERF_PMU_CAP_SAMPLING | PERF_PMU_CAP_RAW_EVENTS,
+>>       .event_init   = paiext_event_init,
+>>       .add          = paiext_add,
+>>       .del          = paiext_del,
+>> diff --git a/arch/x86/events/core.c b/arch/x86/events/core.c
+>> index 789dfca2fa67..764728bb80ae 100644
+>> --- a/arch/x86/events/core.c
+>> +++ b/arch/x86/events/core.c
+>> @@ -2697,7 +2697,7 @@ static bool x86_pmu_filter(struct pmu *pmu, int cpu)
+>>   }
+>>     static struct pmu pmu = {
+>> -    .capabilities        = PERF_PMU_CAP_SAMPLING,
+>> +    .capabilities        = PERF_PMU_CAP_SAMPLING | PERF_PMU_CAP_RAW_EVENTS,
+>>         .pmu_enable        = x86_pmu_enable,
+>>       .pmu_disable        = x86_pmu_disable,
+>> diff --git a/drivers/perf/arm_pmu.c b/drivers/perf/arm_pmu.c
+>> index 72d8f38d0aa5..bc772a3bf411 100644
+>> --- a/drivers/perf/arm_pmu.c
+>> +++ b/drivers/perf/arm_pmu.c
+>> @@ -877,6 +877,7 @@ struct arm_pmu *armpmu_alloc(void)
+>>            * specific PMU.
+>>            */
+>>           .capabilities    = PERF_PMU_CAP_SAMPLING |
+>> +                  PERF_PMU_CAP_RAW_EVENTS |
+>>                     PERF_PMU_CAP_EXTENDED_REGS |
+>>                     PERF_PMU_CAP_EXTENDED_HW_TYPE,
+>>       };
+>> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
+>> index 183b7c48b329..c6ad036c0037 100644
+>> --- a/include/linux/perf_event.h
+>> +++ b/include/linux/perf_event.h
+>> @@ -305,6 +305,7 @@ struct perf_event_pmu_context;
+>>   #define PERF_PMU_CAP_EXTENDED_HW_TYPE    0x0100
+>>   #define PERF_PMU_CAP_AUX_PAUSE        0x0200
+>>   #define PERF_PMU_CAP_AUX_PREFER_LARGE    0x0400
+>> +#define PERF_PMU_CAP_RAW_EVENTS        0x0800
+>>     /**
+>>    * pmu::scope
+>> diff --git a/kernel/events/core.c b/kernel/events/core.c
+>> index 71b2a6730705..2ecee76d2ae2 100644
+>> --- a/kernel/events/core.c
+>> +++ b/kernel/events/core.c
+>> @@ -12556,11 +12556,26 @@ static inline bool has_extended_regs(struct perf_event *event)
+>>              (event->attr.sample_regs_intr & PERF_REG_EXTENDED_MASK);
+>>   }
+>>   +static bool is_raw_pmu(const struct pmu *pmu)
+>> +{
+>> +    return pmu->type == PERF_TYPE_RAW ||
+>> +           pmu->capabilities & PERF_PMU_CAP_RAW_EVENTS;
+>> +}
+>> +
+>>   static int perf_try_init_event(struct pmu *pmu, struct perf_event *event)
+>>   {
+>>       struct perf_event_context *ctx = NULL;
+>>       int ret;
+>>   +    /*
+>> +     * Before touching anything, we can safely skip:
+>> +     * - any event for a specific PMU which is not this one
+>> +     * - any common event if this PMU doesn't support them
+>> +     */
+>> +    if (event->attr.type != pmu->type &&
+>> +        (event->attr.type >= PERF_TYPE_MAX || is_raw_pmu(pmu)))
+> 
+> Ah, that should be "!is_raw_pmu(pmu)" there (although it's not entirely the cause of the LKP report on the final patch.)
+> 
+> Thanks,
+> Robin.
+> 
+>> +        return -ENOENT;
+>> +
+>>       if (!try_module_get(pmu->module))
+>>           return -ENODEV;
+>>   
+> 
+> 
 
-> > >       devres: provide devm_kmemdup_const()
-> > >       pinctrl: ingenic: use struct pinfunction instead of struct func=
-tion_desc
-> > >       pinctrl: airoha: replace struct function_desc with struct pinfu=
-nction
-> > >       pinctrl: mediatek: mt7988: use PINCTRL_PIN_FUNCTION()
-> > >       pinctrl: mediatek: moore: replace struct function_desc with str=
-uct pinfunction
-> > >       pinctrl: imx: don't access the pin function radix tree directly
-> > >       pinctrl: keembay: release allocated memory in detach path
-> > >       pinctrl: keembay: use a dedicated structure for the pinfunction=
- description
-> > >       pinctrl: constify pinmux_generic_get_function()
-> > >       pinctrl: make struct pinfunction a pointer in struct function_d=
-esc
-> > >       pinctrl: qcom: use generic pin function helpers
-> > >       pinctrl: allow to mark pin functions as requestable GPIOs
-> >
-> > I applied these 12 patches as a starter so they can
-> > stabilize in linux-next.
->
-> Hmm... I'm still sure that we don't need to have a separate flags
-> field, but since I am on vacation and will be able to look at this
-> closer next week, I can't look closer to it.
+Hi Robin,
 
-The qualcomm 32bit platforms fail in next anyway so I dropped the patches
-for now.
+what is the intention of that patch?
+Can you explain that a bit more.
 
-Both you and Bartosz are on vacation so let's let it rest for a week or two=
-.
+Thanks.
 
-Yours,
-Linus Walleij
+-- 
+Thomas Richter, Dept 3303, IBM s390 Linux Development, Boeblingen, Germany
+--
+IBM Deutschland Research & Development GmbH
+
+Vorsitzender des Aufsichtsrats: Wolfgang Wendt
+
+Geschäftsführung: David Faller
+
+Sitz der Gesellschaft: Böblingen / Registergericht: Amtsgericht Stuttgart, HRB 243294
 
