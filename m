@@ -1,352 +1,333 @@
-Return-Path: <linux-mips+bounces-10400-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10401-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C33C0B2E523
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Aug 2025 20:41:49 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 60911B2EB73
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Aug 2025 04:53:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D093D5E2B4B
-	for <lists+linux-mips@lfdr.de>; Wed, 20 Aug 2025 18:41:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 34FC95C7E62
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Aug 2025 02:53:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1ECA327A91D;
-	Wed, 20 Aug 2025 18:41:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D5A62D3ED7;
+	Thu, 21 Aug 2025 02:53:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IRw0Y2Kq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="iyHtJF2d"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC4E92F4A;
-	Wed, 20 Aug 2025 18:41:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755715300; cv=none; b=p8eWaOWGA/b5XzIfv1R3Ls08n2HydWDpFyB+tYfgBdd35w9mKDhRPdwEZWuO4T0AnJTQLoJro3jvD8z9hA6BbQHvwhlHk/wGKPoGQMKoIGN6L6tUGmRmb37asVy+JsgQmvjLGYpQgLOWMJqqs7uK/rUCmm/JJnrpQJpWoxm70Dc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755715300; c=relaxed/simple;
-	bh=M5XEnOFREG6GMi9TBf8OOHitW0MuoZ1UyjUQop82X9g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UGAzcW8LZ/t7KN2zUmLGpDDKUiCzvQp4rNLdsshrEPaSzn0/NZDpXJz1eyGTKCrm8lI0dD/+tg5fH2lywehra4592zKJfkASQiNYF+ZpiWmnmReNDNQIk2uF/mj+0XrKhoFp3b2h/JxZCbBmVZtCnT6o1AMyez3SZHbyBSxToS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IRw0Y2Kq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A1A2C4CEE7;
-	Wed, 20 Aug 2025 18:41:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755715299;
-	bh=M5XEnOFREG6GMi9TBf8OOHitW0MuoZ1UyjUQop82X9g=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=IRw0Y2KqhY/SDk6LaVeVThSNpmLyzDfFQs5bFtAVoFUqtP1ZFfOotLhbfO7Zp+hTs
-	 DLfqafLN2d7muUQ8yVUrXfsNf9/5PggxSi0DyRd2ivehu+Mu0uLQd5jLMkU/O6Lr4K
-	 rJxE0kXBkzWLCMUoj/oXA7ee3yAaIDG1LPq+siSbD6ks/R0XSvXostGjYxKWVcLGqt
-	 VtXRDdecITNNNM8TqV4Vz6WH0xhdCFMobtBq70ojgUTnfif0dn4eIZvoPjxgH6cl3l
-	 Sk4T0cItD60JQ+WEgP360a+AE2+OEzFxGTnrcvE7mdUDGAXIWOxMnILycRhVCzjyBW
-	 YfzzXASMN9dwQ==
-Date: Wed, 20 Aug 2025 19:41:28 +0100
-From: Mark Brown <broonie@kernel.org>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Alexey Klimov <alexey.klimov@linaro.org>,
-	Lorenzo Bianconi <lorenzo@kernel.org>,
-	Sean Wang <sean.wang@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Paul Cercueil <paul@crapouillou.net>, Kees Cook <kees@kernel.org>,
-	Andy Shevchenko <andy@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	David Hildenbrand <david@redhat.com>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Dong Aisheng <aisheng.dong@nxp.com>,
-	Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>,
-	Jacky Bai <ping.bai@nxp.com>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	NXP S32 Linux Team <s32@nxp.com>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Tony Lindgren <tony@atomide.com>,
-	Haojian Zhuang <haojian.zhuang@linaro.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>, linux-gpio@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-mediatek@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	linux-hardening@vger.kernel.org, linux-mm@kvack.org,
-	imx@lists.linux.dev, linux-omap@vger.kernel.org,
-	linux-renesas-soc@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	Chen-Yu Tsai <wenst@chromium.org>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: Re: [PATCH v5 00/15] pinctrl: introduce the concept of a GPIO pin
- function category
-Message-ID: <534ad082-08fa-42c0-9c24-f0c11af7d5b2@sirena.org.uk>
-References: <20250815-pinctrl-gpio-pinfuncs-v5-0-955de9fd91db@linaro.org>
- <CACRpkdaDGmdhaik+1saRv7Ts4myQ+tg1aQqGU3xQyT7ma8dJFw@mail.gmail.com>
- <CAHp75VephepLq61HrVy=PX2oKUQd5NK2qS-vOC5h_NR65td3Uw@mail.gmail.com>
- <CACRpkda4soRCLF5=W=6R4wnwT3pjk743j022XfJxjTTQzuarAA@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 166692D3746;
+	Thu, 21 Aug 2025 02:53:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.8
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755744827; cv=fail; b=MRhHY64xc0r5chxRphbkKLkshDuET4c9BVzU/rhp/fQpzYMwrTL6MUvAcSD1bNGl7coCWghpm3A0VYnNrwaZJo0qlk0mIxgzB6fjp3eMVtsVsEkEH6oMsipavYxL0al20X3inWFQ8PGFeYiDxejPmVhrP2aFwBDnXdJI2GF5vPc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755744827; c=relaxed/simple;
+	bh=b7VLiopQ1dbd3Y4njnqpMQGBEPS7AkoecSlMrdrOwh0=;
+	h=Date:From:To:CC:Subject:Message-ID:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=W6qU2YsjkUvBRfaNPH6NtM5UDuob9/bgEuIXvqmRCQ5iZfe1+ZBSdTi5NNowGZR8SASg9KCgs9picAOasotCSAbY9N7cm/EdGUeYv1atUGuqf+ZP1aH6fvrHBSUPWHNq1djsPbuGKXwJIPvsWnk6ttZim+3ZaI4n0SgdmjnR+ZE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=iyHtJF2d; arc=fail smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755744825; x=1787280825;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   mime-version;
+  bh=b7VLiopQ1dbd3Y4njnqpMQGBEPS7AkoecSlMrdrOwh0=;
+  b=iyHtJF2dOqc198pXUiNo1+3tpU28E1k4d1t6r8fZcKOk9fLAugTZAMil
+   55r3TwfUb8ex82ElFe36ttIq0vjQ5pE3Lx9GHrfcA0t1fs4xtFoq7Ah3U
+   Fuo4IELl9MkUqXKSoippOKiwT70JP3t5+9fj38ckdVRrzBZNTEmU1tBcR
+   oGObGDjZ6zqmqH4knOm78u0O+Gr3TZ3scjCZHohFt+TT1YVT9EEbO0Cht
+   OybSnAYvdJyB5Eh44fL7DrVK3+jzWA4dI2dl8d2wGjf36axgc1/H9YnEU
+   BcDKoiUjovQhrxArje1HBhbcb4hXD5OQrtmzHyJ/12qhr+dp4ICtT1kXK
+   Q==;
+X-CSE-ConnectionGUID: hMFluoTiSNSc380U3nFTdg==
+X-CSE-MsgGUID: /8JZ1NIyQWS6vArR2MgJBg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11527"; a="75607325"
+X-IronPort-AV: E=Sophos;i="6.17,306,1747724400"; 
+   d="scan'208";a="75607325"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2025 19:53:44 -0700
+X-CSE-ConnectionGUID: 9/oHiCbGTXyUbvJs8bgumg==
+X-CSE-MsgGUID: 6hWzjSJhTtydzjcQLdujwg==
+X-ExtLoop1: 1
+Received: from fmsmsx902.amr.corp.intel.com ([10.18.126.91])
+  by fmviesa003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Aug 2025 19:53:44 -0700
+Received: from FMSMSX902.amr.corp.intel.com (10.18.126.91) by
+ fmsmsx902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17; Wed, 20 Aug 2025 19:53:43 -0700
+Received: from fmsedg902.ED.cps.intel.com (10.1.192.144) by
+ FMSMSX902.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17 via Frontend Transport; Wed, 20 Aug 2025 19:53:43 -0700
+Received: from NAM12-BN8-obe.outbound.protection.outlook.com (40.107.237.63)
+ by edgegateway.intel.com (192.55.55.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.17; Wed, 20 Aug 2025 19:53:43 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=I9XrXixsqSYwkcuGgttTLcaEyRQ+EZJ3ILk2juqiiHiM4V3j1iC8PuJJcXRvv7gXL0MegDrzitnQRMkrFSWt3VCL0BnEMTQVk10XexV3etk6cWjz9FIHetXwCkFc3+vC92MHVzsfz+UQqjp0yqosoC92VBBNBONP6sT+b1TTyO5lQYhjvz0CZeW4SDaQWCMizE7+5cLAXYfSCR60PDqRrFnjI+thofSL0zTNVP7aW+rogKCUiahRk4ZIMzqd0vGzmEPNjcIyGj+olusUa68Xft3sB+Whuv45r5G98O7azlGQBu2rtM1y1qrGi7+jT2CcRjkPhOS0SDc89FZlpvwjPQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=us5HPxEWak+Z5wIcd9yL1Je4zM6FA2HXHnNZtF6tjio=;
+ b=SpqTTXMz0ChA3MWLc5qNIRfZFOz/d+c99qL8EA4Pg/x0PAiGXZZKyJ75hXqy5BVMLxMKBihvrQMUD9Zi7znEOdOf8dyxbICE+3DsqjtEsk5J6F3Q0TNQdYR5oR+mp57mxQucq+H2TgFXJPeEgz/rcw6RN5osq9pqflHXur/+a3jaqVCTP5VD2BxiLqeoczTOS/Yt8jwYDDU+IiknlIKPEoAEPQyjr+EGbb4IViY4/xzA1hRwdkbWp2UjZELnyTFtPDot0VtMJIrH+FyN/YlLRKpGX0WoZ16JdmTt6xaUrjU2xZa5QmGxsqWs4yrv5MC3DbrlFlCqUtYThTAhpBEb0g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from LV3PR11MB8603.namprd11.prod.outlook.com (2603:10b6:408:1b6::9)
+ by SA3PR11MB7612.namprd11.prod.outlook.com (2603:10b6:806:31b::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9052.14; Thu, 21 Aug
+ 2025 02:53:40 +0000
+Received: from LV3PR11MB8603.namprd11.prod.outlook.com
+ ([fe80::4622:29cf:32b:7e5c]) by LV3PR11MB8603.namprd11.prod.outlook.com
+ ([fe80::4622:29cf:32b:7e5c%5]) with mapi id 15.20.9052.013; Thu, 21 Aug 2025
+ 02:53:40 +0000
+Date: Thu, 21 Aug 2025 10:53:21 +0800
+From: kernel test robot <oliver.sang@intel.com>
+To: Robin Murphy <robin.murphy@arm.com>
+CC: <oe-lkp@lists.linux.dev>, <lkp@intel.com>, <linux-s390@vger.kernel.org>,
+	<linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <peterz@infradead.org>,
+	<mingo@redhat.com>, <will@kernel.org>, <mark.rutland@arm.com>,
+	<acme@kernel.org>, <namhyung@kernel.org>,
+	<alexander.shishkin@linux.intel.com>, <jolsa@kernel.org>,
+	<irogers@google.com>, <adrian.hunter@intel.com>, <kan.liang@linux.intel.com>,
+	<linux-alpha@vger.kernel.org>, <linux-snps-arc@lists.infradead.org>,
+	<imx@lists.linux.dev>, <linux-csky@vger.kernel.org>,
+	<loongarch@lists.linux.dev>, <linux-mips@vger.kernel.org>,
+	<linuxppc-dev@lists.ozlabs.org>, <linux-sh@vger.kernel.org>,
+	<sparclinux@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+	<linux-rockchip@lists.infradead.org>, <dmaengine@vger.kernel.org>,
+	<linux-fpga@vger.kernel.org>, <amd-gfx@lists.freedesktop.org>,
+	<dri-devel@lists.freedesktop.org>, <intel-gfx@lists.freedesktop.org>,
+	<intel-xe@lists.freedesktop.org>, <coresight@lists.linaro.org>,
+	<iommu@lists.linux.dev>, <linux-amlogic@lists.infradead.org>,
+	<linux-cxl@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+	<linux-riscv@lists.infradead.org>, <oliver.sang@intel.com>
+Subject: Re: [PATCH 18/19] perf: Introduce positive capability for raw events
+Message-ID: <202508211037.3f897218-lkp@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <542787fd188ea15ef41c53d557989c962ed44771.1755096883.git.robin.murphy@arm.com>
+X-ClientProxiedBy: SG2PR02CA0049.apcprd02.prod.outlook.com
+ (2603:1096:4:54::13) To LV3PR11MB8603.namprd11.prod.outlook.com
+ (2603:10b6:408:1b6::9)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ykJoQEoXCL0DuqqK"
-Content-Disposition: inline
-In-Reply-To: <CACRpkda4soRCLF5=W=6R4wnwT3pjk743j022XfJxjTTQzuarAA@mail.gmail.com>
-X-Cookie: BARBARA STANWYCK makes me nervous!!
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV3PR11MB8603:EE_|SA3PR11MB7612:EE_
+X-MS-Office365-Filtering-Correlation-Id: a79f70fb-d67f-4713-7430-08dde05def31
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014|7053199007;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?pV6vx/h8482Dn1wfx7nKgj3YF6GePZP4stTQELhvnJTZ093VIGEKopRjbbR3?=
+ =?us-ascii?Q?wKYx/r0IAB7G/y/lsJ+KThMirkTNq6duoC5Vw7yNdtZK2nkhxz5wwJmkxj18?=
+ =?us-ascii?Q?nCLbBwO5JcDJ0md0Q9RwJXUG5iDtGU3fcgoO2BTREpS4j0KxDnRPNA1wUKFI?=
+ =?us-ascii?Q?lFbarX2LTwIy9124Fr1HXGAoBiwYvy97QB6GH6yI1NuroOu/W2+UdDdHhK/3?=
+ =?us-ascii?Q?AAcalJzXQf/0w+GodUXGl/+o6iaPtzqRVqU2i9twCHo+1ksx3nJAxJUFoHQK?=
+ =?us-ascii?Q?VO0JroYI5Pp173IBSzdp8HHjtaCtiVEemx/f+CeioMa74eoBS4KwTRtbyobi?=
+ =?us-ascii?Q?vnBaPuDCX1M5PQsOM/eHT9IC/yODtZLgeIz+meYJz7//4BXviw9x+WeRvaN6?=
+ =?us-ascii?Q?TQA4BuFpnBYnDX236pyGP6e+rQndUtXcYM4XmYR4BB8GLhISM/oJzrklqcBZ?=
+ =?us-ascii?Q?5t2ANTxp/5BxI38qXUqMskggbGRjCY/2zoN6ERej2brNiSwqtwqxNDrP04fj?=
+ =?us-ascii?Q?PcZTFwvIZ9eRyyMmBGKG4+rbwH4I2x3Tq8G4Ctb0/fC6BvHn3CSJYbW26BzY?=
+ =?us-ascii?Q?zWhh+ELySDTj44nRzIEe6jqGJgPT+dnEFKnmM6FiyZh1fLsYltHVMOSRisqw?=
+ =?us-ascii?Q?o6hR96eZx8gx7kkY7VYkv/c9pSgHAhS0I7+qGS7ruiFjPC2LnsadYG29SaPu?=
+ =?us-ascii?Q?OAdBG7eRhKSU5yHO7MdOtj2ojXX9Wj7NoJESgugQD0Eug4Q4mRy0pyOTXWn1?=
+ =?us-ascii?Q?rPm0LXTCXKxRYqXgCIh3fgoK/XIqjl8Y6u7c1vBx+Mi4F04ftcldU0tMfcl9?=
+ =?us-ascii?Q?sxEPQ4ZNs7iwh4ADKMzcxhh62A6V0kF6QoYQIW71SLfQGsz2poBP+SbCU7Id?=
+ =?us-ascii?Q?BQLvXzSz3hWoobqR3uEEjX1uRlETMfUa5KLiWgFlsBq5M4MOQuzH00t34sCp?=
+ =?us-ascii?Q?V3pR18XY8HPB7HigcxO57VvykM/WfnyVvroy00cnHsRUH5M/mKPQkBsE/ba3?=
+ =?us-ascii?Q?I3sCUi3bchoXciD/wA5SExOYzSV/diVYgOZHvKJc3VWwj5Tds8G1N4OcRy4i?=
+ =?us-ascii?Q?wjLEtT8IiBoRhCixj/HvEz3/cMKhgbu5W0T0lCEv5czF7heeN7qKkiWVfuiO?=
+ =?us-ascii?Q?6ZwmhTnOitA3Zzt5TUbSgTH6yKK58cOBFov90XmeevZ5z60CzpE0qmyTo1U3?=
+ =?us-ascii?Q?nv/MPJxk9FiLImgz3INidQ+s/obqLs0J1Qp2h+K/Gn0YBGQYY4TqLTIpBdTg?=
+ =?us-ascii?Q?cbN84T4otD/V0oJJN7mz8hWn7ef2ZTGQNfC5dy8fE+u5lRVdJmcRlJkliGCX?=
+ =?us-ascii?Q?i7kS6i+5knhpLRJ4Of0bVaF1gUZCn20cM9+7xARoZ3rt/hpcCWC0GUwPudHV?=
+ =?us-ascii?Q?aO7kU8mQtV3aW5ZP5gnzaiF6qdnB?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV3PR11MB8603.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?HC2UktMXOfxw2RO7xeHgyIqB2IHTOeXPIq2ZKdhAiBzIP0ROwLDmcyWqplqC?=
+ =?us-ascii?Q?uOdQ6lh/ItDxGRPBw1hJPcaNcmwQgW/rX2xT25FFMVagSIhTBR7mk7T93LuN?=
+ =?us-ascii?Q?ThD1aTnAsr9NBM6/sw/tibLg27VM8RirnQXfFSHPWShI8EYtqfwv9m9cxRsU?=
+ =?us-ascii?Q?qh7ATwvmIx4kBC9npk4v5IKynvp1eh6Vbl0LH8T6xMb2pyS/30+1gA6j8UCb?=
+ =?us-ascii?Q?9dfwMb33ZHGtj8acuseQ+IUv8O/ZZkFiIUvORzVKklY9Ge/k3DW6vSWAmYYo?=
+ =?us-ascii?Q?j4ldkpKLCshK+cFKRjFcAQ0ibn9p1/DqoXF+pyYsiwMu/t0RsiLA12YCLzI2?=
+ =?us-ascii?Q?M8sVljDYj/rMpdMnq/D3fFWGIocR5qiXLDCPKAwh2QL/2sDz4wGet3wBGc6e?=
+ =?us-ascii?Q?ZjgLcuwhbCFlgjtpZjNQlPav8c2OA2RHXX67+76aqtHAGluul9zPL1mIVXIa?=
+ =?us-ascii?Q?UgPvDFYQPIYgoRFalHq6Nhs8oA4ZO6+AjycrdEigHjZPoqliYWZyD/jogbqq?=
+ =?us-ascii?Q?OYUT2HrFKp4VT0fX/CVx0jS0EB6DBBOb0XgASKksvYoGznyNJu7BwMhDZU2J?=
+ =?us-ascii?Q?83X64RS0q9uEtOrc0dURPinK3EdTor02mED7F2Oq/bJoYhf6Yo5eFHFXx3qj?=
+ =?us-ascii?Q?Ciytdw4ptkecG5P+3/7CQbJ9x8ZXEIRxwLbK+JY0U1BYlS1/BpAFOtvpXyH6?=
+ =?us-ascii?Q?5+X8VTWK9ZAN64VBshP3PbAIFMg3upmwtoqLNCAovXxQ5bkMpS+XasLJ3n6m?=
+ =?us-ascii?Q?E8sd+X1k/0PMn4rEMWBIam0xEQlEGz6sHE7KFU+OovbMFe8EgYq57gk8Zpju?=
+ =?us-ascii?Q?EpaRC6gx6AIE4VRBFjRYQPpokigU77IYhCH/Fg6/G6D0DXfT56W9WaL/Uv/4?=
+ =?us-ascii?Q?ulEZzzi0G7c9S9UzmAHZYeBR5Qfy4USn1xVAFva45Zb4HCvnQPymQ/FxbwdN?=
+ =?us-ascii?Q?CXDlX7/B4WHf7TdwxrIooAufL7byavbUZCwGQCwxIs6FzcOYU3vdAX2OMXeD?=
+ =?us-ascii?Q?mHczCWwAhWlyEJByyGDwlQnU+dMmdunVlgq6vEnZbLIllDX6vpf17UyPS/bd?=
+ =?us-ascii?Q?ZL9iy4epX5ms7mVSXWn2UKDen41M1HqBBYLWf00JATJYMnk3kGIBiIm0dvO2?=
+ =?us-ascii?Q?4m5UWErCsqaUhhGxkZ9W4bCnTerDraHmdN6EFElkjd1phLlMMxozm39R6jUa?=
+ =?us-ascii?Q?MTIKn8iinvlG3kFNig6GlF7mxkFHcYQ7fxOefI5VkU0N9vCu053Pr+icKDhl?=
+ =?us-ascii?Q?zSGmeAq4h/8CP/1bueQgxMB6rlAfm/sMBfbBHKezfVj8BtgWf4SwtvR/biIZ?=
+ =?us-ascii?Q?9TjgqWImKItN56ZhfsuCkexxaxrUNC95prMtq9yVW1Lh7nZzp16YWpQXPYDR?=
+ =?us-ascii?Q?AW3Pf5ypyHIny6c/vxYXz2SnNPIhBrpiUOvHta5B02vMJQFuSVzJysFO15s0?=
+ =?us-ascii?Q?yu60pktaLF61zilpa0bOs+p/H+RC2+hGxB3mWSMzqkJ2nZIP+fKsuyz+zrgA?=
+ =?us-ascii?Q?/XSnXnbCVNqd9iL5cKWMQbPcLGlLImPNs5W5LuvFLb2tAEqT0h98o43GDkcL?=
+ =?us-ascii?Q?kD409CleM5U9CqF9wcqPfx6uEq3Kmtgn5ZqSZ2abjJS+W0+mnqGM6gCa5ZpM?=
+ =?us-ascii?Q?Pw=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: a79f70fb-d67f-4713-7430-08dde05def31
+X-MS-Exchange-CrossTenant-AuthSource: LV3PR11MB8603.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Aug 2025 02:53:40.7764
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 0Vz8UsI+7Aqf5HI6rtkycfIj/aRohd2CR4G55WpRZtUEvnAjF9uq+brWDTcSXdZf+L4yAVN/gu7i7e1YdDBYTQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA3PR11MB7612
+X-OriginatorOrg: intel.com
 
 
---ykJoQEoXCL0DuqqK
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Aug 20, 2025 at 09:12:49AM +0200, Linus Walleij wrote:
+Hello,
 
-> The qualcomm 32bit platforms fail in next anyway so I dropped the patches
-> for now.
+kernel test robot noticed "perf-sanity-tests.Event_groups.fail" on:
 
-FWIW the i.MX8MP also seems to have been broken by this:
+commit: a704f7a13544a408baee6fa78f0f24fa05bfa406 ("[PATCH 18/19] perf: Introduce positive capability for raw events")
+url: https://github.com/intel-lab-lkp/linux/commits/Robin-Murphy/perf-arm-cmn-Fix-event-validation/20250814-010626
+base: https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git 91325f31afc1026de28665cf1a7b6e157fa4d39d
+patch link: https://lore.kernel.org/all/542787fd188ea15ef41c53d557989c962ed44771.1755096883.git.robin.murphy@arm.com/
+patch subject: [PATCH 18/19] perf: Introduce positive capability for raw events
 
-# bad: [5303936d609e09665deda94eaedf26a0e5c3a087] Add linux-next specific f=
-iles for 20250820
-# good: [3233c80d0aae77da9bf9a69c06c5bc1778e45fd0] Merge branch 'for-linux-=
-next-fixes' of https://gitlab.freedesktop.org/drm/misc/kernel.git
-# good: [ec0be3cdf40b5302248f3fb27a911cc630e8b855] regulator: consumer.rst:=
- document bulk operations
-# good: [27848c082ba0b22850fd9fb7b185c015423dcdc7] spi: s3c64xx: Remove the=
- use of dev_err_probe()
-# good: [c1dd310f1d76b4b13f1854618087af2513140897] spi: SPISG: Use devm_kca=
-lloc() in aml_spisg_clk_init()
-# good: [da9881d00153cc6d3917f6b74144b1d41b58338c] ASoC: qcom: audioreach: =
-add support for SMECNS module
-# good: [cf65182247761f7993737b710afe8c781699356b] ASoC: codecs: wsa883x: H=
-andle shared reset GPIO for WSA883x speakers
-# good: [2a55135201d5e24b80b7624880ff42eafd8e320c] ASoC: Intel: avs: Stream=
-line register-component function names
-# good: [550bc517e59347b3b1af7d290eac4fb1411a3d4e] regulator: bd718x7: Use =
-kcalloc() instead of kzalloc()
-# good: [0056b410355713556d8a10306f82e55b28d33ba8] spi: offload trigger: ad=
-i-util-sigma-delta: clean up imports
-# good: [daf855f76a1210ceed9541f71ac5dd9be02018a6] ASoC: es8323: enable DAP=
-M power widgets for playback DAC
-# good: [90179609efa421b1ccc7d8eafbc078bafb25777c] spi: spl022: use min_t()=
- to improve code
-# good: [258384d8ce365dddd6c5c15204de8ccd53a7ab0a] ASoC: es8323: enable DAP=
-M power widgets for playback DAC and output
-# good: [6d068f1ae2a2f713d7f21a9a602e65b3d6b6fc6d] regulator: rt5133: Fix s=
-pelling mistake "regualtor" -> "regulator"
-# good: [a46e95c81e3a28926ab1904d9f754fef8318074d] ASoC: wl1273: Remove
-# good: [48124569bbc6bfda1df3e9ee17b19d559f4b1aa3] spi: remove unneeded 'fa=
-st_io' parameter in regmap_config
-# good: [37533933bfe92cd5a99ef4743f31dac62ccc8de0] regulator: remove unneed=
-ed 'fast_io' parameter in regmap_config
-# good: [0e62438e476494a1891a8822b9785bc6e73e9c3f] ASoC: Intel: sst: Remove=
- redundant semicolons
-# good: [5c36b86d2bf68fbcad16169983ef7ee8c537db59] regmap: Remove superfluo=
-us check for !config in __regmap_init()
-# good: [714165e1c4b0d5b8c6d095fe07f65e6e7047aaeb] regulator: rt5133: Add R=
-T5133 PMIC regulator Support
-# good: [9c45f95222beecd6a284fd1284d54dd7a772cf59] spi: spi-qpic-snand: han=
-dle 'use_ecc' parameter of qcom_spi_config_cw_read()
-# good: [bab4ab484a6ca170847da9bffe86f1fa90df4bbe] ASoC: dt-bindings: Conve=
-rt brcm,bcm2835-i2s to DT schema
-# good: [b832b19318534bb4f1673b24d78037fee339c679] spi: loopback-test: Don'=
-t use %pK through printk
-# good: [8c02c8353460f8630313aef6810f34e134a3c1ee] ASoC: dt-bindings: realt=
-ek,alc5623: convert to DT schema
-# good: [6b7e2aa50bdaf88cd4c2a5e2059a7bf32d85a8b1] spi: spi-qpic-snand: rem=
-ove 'clr*status' members of struct 'qpic_ecc'
-# good: [2291a2186305faaf8525d57849d8ba12ad63f5e7] MAINTAINERS: Add entry f=
-or FourSemi audio amplifiers
-# good: [a54ef14188519a0994d0264f701f5771815fa11e] regulator: dt-bindings: =
-Clean-up active-semi,act8945a duplication
-# good: [595b7f155b926460a00776cc581e4dcd01220006] ASoC: Intel: avs: Condit=
-ional-path support
-# good: [cf25eb8eae91bcae9b2065d84b0c0ba0f6d9dd34] ASoC: soc-component: unp=
-ack snd_soc_component_init_bias_level()
-# good: [3059067fd3378a5454e7928c08d20bf3ef186760] ASoC: cs48l32: Use PTR_E=
-RR_OR_ZERO() to simplify code
-# good: [a1d0b0ae65ae3f32597edfbb547f16c75601cd87] spi: spi-qpic-snand: avo=
-id double assignment in qcom_spi_probe()
-# good: [2d86d2585ab929a143d1e6f8963da1499e33bf13] ASoC: pxa: add GPIOLIB_L=
-EGACY dependency
-# good: [9a200cbdb54349909a42b45379e792e4b39dd223] rust: regulator: impleme=
-nt Send and Sync for Regulator<T>
-# good: [162e23657e5379f07c6404dbfbf4367cb438ea7d] regulator: pf0900: Add P=
-MIC PF0900 support
-# good: [886f42ce96e7ce80545704e7168a9c6b60cd6c03] regmap: mmio: Add missin=
-g MODULE_DESCRIPTION()
-git bisect start '5303936d609e09665deda94eaedf26a0e5c3a087' '3233c80d0aae77=
-da9bf9a69c06c5bc1778e45fd0' 'ec0be3cdf40b5302248f3fb27a911cc630e8b855' '278=
-48c082ba0b22850fd9fb7b185c015423dcdc7' 'c1dd310f1d76b4b13f1854618087af25131=
-40897' 'da9881d00153cc6d3917f6b74144b1d41b58338c' 'cf65182247761f7993737b71=
-0afe8c781699356b' '2a55135201d5e24b80b7624880ff42eafd8e320c' '550bc517e5934=
-7b3b1af7d290eac4fb1411a3d4e' '0056b410355713556d8a10306f82e55b28d33ba8' 'da=
-f855f76a1210ceed9541f71ac5dd9be02018a6' '90179609efa421b1ccc7d8eafbc078bafb=
-25777c' '258384d8ce365dddd6c5c15204de8ccd53a7ab0a' '6d068f1ae2a2f713d7f21a9=
-a602e65b3d6b6fc6d' 'a46e95c81e3a28926ab1904d9f754fef8318074d' '48124569bbc6=
-bfda1df3e9ee17b19d559f4b1aa3' '37533933bfe92cd5a99ef4743f31dac62ccc8de0' '0=
-e62438e476494a1891a8822b9785bc6e73e9c3f' '5c36b86d2bf68fbcad16169983ef7ee8c=
-537db59' '714165e1c4b0d5b8c6d095fe07f65e6e7047aaeb' '9c45f95222beecd6a284fd=
-1284d54dd7a772cf59' 'bab4ab484a6ca170847da9bffe86f1fa90df4bbe' 'b832b193185=
-34bb4f1673b24d78037fee339c679' '8c02c8353460f8630313aef6810f34e134a3c1ee' '=
-6b7e2aa50bdaf88cd4c2a5e2059a7bf32d85a8b1' '2291a2186305faaf8525d57849d8ba12=
-ad63f5e7' 'a54ef14188519a0994d0264f701f5771815fa11e' '595b7f155b926460a0077=
-6cc581e4dcd01220006' 'cf25eb8eae91bcae9b2065d84b0c0ba0f6d9dd34' '3059067fd3=
-378a5454e7928c08d20bf3ef186760' 'a1d0b0ae65ae3f32597edfbb547f16c75601cd87' =
-'2d86d2585ab929a143d1e6f8963da1499e33bf13' '9a200cbdb54349909a42b45379e792e=
-4b39dd223' '162e23657e5379f07c6404dbfbf4367cb438ea7d' '886f42ce96e7ce805457=
-04e7168a9c6b60cd6c03'
-# test job: [ec0be3cdf40b5302248f3fb27a911cc630e8b855] https://lava.sirena.=
-org.uk/scheduler/job/1694307
-# test job: [27848c082ba0b22850fd9fb7b185c015423dcdc7] https://lava.sirena.=
-org.uk/scheduler/job/1693517
-# test job: [c1dd310f1d76b4b13f1854618087af2513140897] https://lava.sirena.=
-org.uk/scheduler/job/1693018
-# test job: [da9881d00153cc6d3917f6b74144b1d41b58338c] https://lava.sirena.=
-org.uk/scheduler/job/1693440
-# test job: [cf65182247761f7993737b710afe8c781699356b] https://lava.sirena.=
-org.uk/scheduler/job/1687555
-# test job: [2a55135201d5e24b80b7624880ff42eafd8e320c] https://lava.sirena.=
-org.uk/scheduler/job/1685791
-# test job: [550bc517e59347b3b1af7d290eac4fb1411a3d4e] https://lava.sirena.=
-org.uk/scheduler/job/1685919
-# test job: [0056b410355713556d8a10306f82e55b28d33ba8] https://lava.sirena.=
-org.uk/scheduler/job/1685951
-# test job: [daf855f76a1210ceed9541f71ac5dd9be02018a6] https://lava.sirena.=
-org.uk/scheduler/job/1685448
-# test job: [90179609efa421b1ccc7d8eafbc078bafb25777c] https://lava.sirena.=
-org.uk/scheduler/job/1686039
-# test job: [258384d8ce365dddd6c5c15204de8ccd53a7ab0a] https://lava.sirena.=
-org.uk/scheduler/job/1673401
-# test job: [6d068f1ae2a2f713d7f21a9a602e65b3d6b6fc6d] https://lava.sirena.=
-org.uk/scheduler/job/1673160
-# test job: [a46e95c81e3a28926ab1904d9f754fef8318074d] https://lava.sirena.=
-org.uk/scheduler/job/1673778
-# test job: [48124569bbc6bfda1df3e9ee17b19d559f4b1aa3] https://lava.sirena.=
-org.uk/scheduler/job/1670205
-# test job: [37533933bfe92cd5a99ef4743f31dac62ccc8de0] https://lava.sirena.=
-org.uk/scheduler/job/1668953
-# test job: [0e62438e476494a1891a8822b9785bc6e73e9c3f] https://lava.sirena.=
-org.uk/scheduler/job/1669557
-# test job: [5c36b86d2bf68fbcad16169983ef7ee8c537db59] https://lava.sirena.=
-org.uk/scheduler/job/1667973
-# test job: [714165e1c4b0d5b8c6d095fe07f65e6e7047aaeb] https://lava.sirena.=
-org.uk/scheduler/job/1667708
-# test job: [9c45f95222beecd6a284fd1284d54dd7a772cf59] https://lava.sirena.=
-org.uk/scheduler/job/1667594
-# test job: [bab4ab484a6ca170847da9bffe86f1fa90df4bbe] https://lava.sirena.=
-org.uk/scheduler/job/1664700
-# test job: [b832b19318534bb4f1673b24d78037fee339c679] https://lava.sirena.=
-org.uk/scheduler/job/1659191
-# test job: [8c02c8353460f8630313aef6810f34e134a3c1ee] https://lava.sirena.=
-org.uk/scheduler/job/1659680
-# test job: [6b7e2aa50bdaf88cd4c2a5e2059a7bf32d85a8b1] https://lava.sirena.=
-org.uk/scheduler/job/1656553
-# test job: [2291a2186305faaf8525d57849d8ba12ad63f5e7] https://lava.sirena.=
-org.uk/scheduler/job/1655728
-# test job: [a54ef14188519a0994d0264f701f5771815fa11e] https://lava.sirena.=
-org.uk/scheduler/job/1656000
-# test job: [595b7f155b926460a00776cc581e4dcd01220006] https://lava.sirena.=
-org.uk/scheduler/job/1653539
-# test job: [cf25eb8eae91bcae9b2065d84b0c0ba0f6d9dd34] https://lava.sirena.=
-org.uk/scheduler/job/1654787
-# test job: [3059067fd3378a5454e7928c08d20bf3ef186760] https://lava.sirena.=
-org.uk/scheduler/job/1654021
-# test job: [a1d0b0ae65ae3f32597edfbb547f16c75601cd87] https://lava.sirena.=
-org.uk/scheduler/job/1654843
-# test job: [2d86d2585ab929a143d1e6f8963da1499e33bf13] https://lava.sirena.=
-org.uk/scheduler/job/1654129
-# test job: [9a200cbdb54349909a42b45379e792e4b39dd223] https://lava.sirena.=
-org.uk/scheduler/job/1654752
-# test job: [162e23657e5379f07c6404dbfbf4367cb438ea7d] https://lava.sirena.=
-org.uk/scheduler/job/1652983
-# test job: [886f42ce96e7ce80545704e7168a9c6b60cd6c03] https://lava.sirena.=
-org.uk/scheduler/job/1654290
-# test job: [5303936d609e09665deda94eaedf26a0e5c3a087] https://lava.sirena.=
-org.uk/scheduler/job/1697747
-# bad: [5303936d609e09665deda94eaedf26a0e5c3a087] Add linux-next specific f=
-iles for 20250820
-git bisect bad 5303936d609e09665deda94eaedf26a0e5c3a087
-# test job: [a04a7cfd17ecdf952dad025c42602e35f06cbe26] https://lava.sirena.=
-org.uk/scheduler/job/1697920
-# good: [a04a7cfd17ecdf952dad025c42602e35f06cbe26] Merge branch 'for-next' =
-of https://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git
-git bisect good a04a7cfd17ecdf952dad025c42602e35f06cbe26
-# test job: [9dee0ee90f388dcd58c3cde7a4ebf2f9e3754862] https://lava.sirena.=
-org.uk/scheduler/job/1697987
-# good: [9dee0ee90f388dcd58c3cde7a4ebf2f9e3754862] Merge branch 'drm-xe-nex=
-t' of https://gitlab.freedesktop.org/drm/xe/kernel.git
-git bisect good 9dee0ee90f388dcd58c3cde7a4ebf2f9e3754862
-# test job: [58e76aa12190454eb2edcb1cc651d77186e6a2be] https://lava.sirena.=
-org.uk/scheduler/job/1698079
-# good: [58e76aa12190454eb2edcb1cc651d77186e6a2be] Merge branch 'usb-next' =
-of https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/usb.git
-git bisect good 58e76aa12190454eb2edcb1cc651d77186e6a2be
-# test job: [1135450b9d5cef61b2b9e6127f1b9436fcc2f043] https://lava.sirena.=
-org.uk/scheduler/job/1698167
-# good: [1135450b9d5cef61b2b9e6127f1b9436fcc2f043] Merge branch 'for-next' =
-of https://git.kernel.org/pub/scm/linux/kernel/git/tj/cgroup.git
-git bisect good 1135450b9d5cef61b2b9e6127f1b9436fcc2f043
-# test job: [e8fa3be5815c2241a72d1875e0e34bebe83c296a] https://lava.sirena.=
-org.uk/scheduler/job/1698576
-# bad: [e8fa3be5815c2241a72d1875e0e34bebe83c296a] Merge branch 'for-next' o=
-f https://git.kernel.org/pub/scm/linux/kernel/git/linusw/linux-pinctrl.git
-git bisect bad e8fa3be5815c2241a72d1875e0e34bebe83c296a
-# test job: [c5998be4099bd35f2959e7a22072f33cc7791262] https://lava.sirena.=
-org.uk/scheduler/job/1699088
-# bad: [c5998be4099bd35f2959e7a22072f33cc7791262] Merge branch 'devel' into=
- for-next
-git bisect bad c5998be4099bd35f2959e7a22072f33cc7791262
-# test job: [15e3363af00a9e5b4f5c10b17940733a8613ef57] https://lava.sirena.=
-org.uk/scheduler/job/1699178
-# good: [15e3363af00a9e5b4f5c10b17940733a8613ef57] dt-bindings: pinctrl: Do=
-cument Tegra186 pin controllers
-git bisect good 15e3363af00a9e5b4f5c10b17940733a8613ef57
-# test job: [1e42d3e06bef6548215c45288d12974bfa295ba0] https://lava.sirena.=
-org.uk/scheduler/job/1700639
-# bad: [1e42d3e06bef6548215c45288d12974bfa295ba0] pinctrl: imx: don't acces=
-s the pin function radix tree directly
-git bisect bad 1e42d3e06bef6548215c45288d12974bfa295ba0
-# test job: [fe2e8f17a56fe14915cd6b709e9f56a16029f104] https://lava.sirena.=
-org.uk/scheduler/job/1700756
-# good: [fe2e8f17a56fe14915cd6b709e9f56a16029f104] pinctrl: sx150x: Make th=
-e driver tristate
-git bisect good fe2e8f17a56fe14915cd6b709e9f56a16029f104
-# test job: [cb21815ebd17be84a93e49ce7e1641651424692b] https://lava.sirena.=
-org.uk/scheduler/job/1700885
-# good: [cb21815ebd17be84a93e49ce7e1641651424692b] pinctrl: airoha: replace=
- struct function_desc with struct pinfunction
-git bisect good cb21815ebd17be84a93e49ce7e1641651424692b
-# test job: [3d2d080dc8bbe3ec23ee5b61aae81aaaf3009169] https://lava.sirena.=
-org.uk/scheduler/job/1701027
-# good: [3d2d080dc8bbe3ec23ee5b61aae81aaaf3009169] pinctrl: mediatek: moore=
-: replace struct function_desc with struct pinfunction
-git bisect good 3d2d080dc8bbe3ec23ee5b61aae81aaaf3009169
-# first bad commit: [1e42d3e06bef6548215c45288d12974bfa295ba0] pinctrl: imx=
-: don't access the pin function radix tree directly
+in testcase: perf-sanity-tests
+version: 
+with following parameters:
 
---ykJoQEoXCL0DuqqK
-Content-Type: application/pgp-signature; name="signature.asc"
+	perf_compiler: gcc
+	group: group-01
 
------BEGIN PGP SIGNATURE-----
 
-iQEyBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmimFtcACgkQJNaLcl1U
-h9Baywf4p+dojeFAcsrzcBqcjenyfuNAG1DS6m2FKGOdly3A0D/5bu2sHfE3OLPO
-WnEv3kf/lxkHF8yH9pmPBiAojsJFymU0qPVZrzBMPuELDKK214f1tWFoevrj0AZg
-0UVVPxnPE1DOczyzUGSt7pOnNly/Bz5XzLbIL6DCxl87fUua76KdXFzqMJlFUMSy
-h3dLCNR9TJxm+sZ+4O5DuYyisMNQFHILWIp60ws5BbrseVcqhdc31basf8LJWpXC
-wC7izJI9bu+Lb0ObJZxUFB/9z22PUYa3XjMy5lmDlV5/eTDiwL/x1TqNGt4JquuO
-O8i4i1O03fUY1PGOa0AJ/NZIyRVV
-=IcT8
------END PGP SIGNATURE-----
 
---ykJoQEoXCL0DuqqK--
+config: x86_64-rhel-9.4-bpf
+compiler: gcc-12
+test machine: 224 threads 4 sockets Intel(R) Xeon(R) Platinum 8380H CPU @ 2.90GHz (Cooper Lake) with 192G memory
+
+(please refer to attached dmesg/kmsg for entire log/backtrace)
+
+
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <oliver.sang@intel.com>
+| Closes: https://lore.kernel.org/oe-lkp/202508211037.3f897218-lkp@intel.com
+
+
+besides Event_groups, we also noticed perf_stat_JSON_output_linter and
+perf_stat_STD_output_linter become failed upon this commit but pass on parent.
+
+0129bbf0ee6f109a a704f7a13544a408baee6fa78f0
+---------------- ---------------------------
+       fail:runs  %reproduction    fail:runs
+           |             |             |
+           :38          16%           6:6     perf-sanity-tests.Event_groups.fail
+           :38          16%           6:6     perf-sanity-tests.perf_stat_JSON_output_linter.fail
+           :38          16%           6:6     perf-sanity-tests.perf_stat_STD_output_linter.fail
+
+
+
+2025-08-18 13:20:21 sudo /usr/src/linux-perf-x86_64-rhel-9.4-bpf-a704f7a13544a408baee6fa78f0f24fa05bfa406/tools/perf/perf test 66 -v
+ 66: Event groups                                                    : Running (1 active)
+--- start ---
+test child forked, pid 9619
+Using CPUID GenuineIntel-6-55-B
+Using uncore_imc_0 for uncore pmu event
+0x0 0x0, 0x0 0x0, 0x0 0x1: Fail
+0x0 0x0, 0x0 0x0, 0x1 0x3: Fail
+0x0 0x0, 0x0 0x0, 0xf 0x1: Fail
+0x0 0x0, 0x1 0x3, 0x0 0x0: Fail
+0x0 0x0, 0x1 0x3, 0x1 0x3: Fail
+0x0 0x0, 0x1 0x3, 0xf 0x1: Fail
+0x0 0x0, 0xf 0x1, 0x0 0x0: Fail
+0x0 0x0, 0xf 0x1, 0x1 0x3: Fail
+0x0 0x0, 0xf 0x1, 0xf 0x1: Fail
+0x1 0x3, 0x0 0x0, 0x0 0x0: Fail
+0x1 0x3, 0x0 0x0, 0x1 0x3: Fail
+0x1 0x3, 0x0 0x0, 0xf 0x1: Pass
+0x1 0x3, 0x1 0x3, 0x0 0x0: Fail
+0x1 0x3, 0x1 0x3, 0x1 0x3: Pass
+0x1 0x3, 0x1 0x3, 0xf 0x1: Pass
+0x1 0x3, 0xf 0x1, 0x0 0x0: Pass
+0x1 0x3, 0xf 0x1, 0x1 0x3: Pass
+0x1 0x3, 0xf 0x1, 0xf 0x1: Pass
+0xf 0x1, 0x0 0x0, 0x0 0x0: Pass
+0xf 0x1, 0x0 0x0, 0x1 0x3: Pass
+0xf 0x1, 0x0 0x0, 0xf 0x1: Pass
+0xf 0x1, 0x1 0x3, 0x0 0x0: Pass
+0xf 0x1, 0x1 0x3, 0x1 0x3: Pass
+0xf 0x1, 0x1 0x3, 0xf 0x1: Pass
+0xf 0x1, 0xf 0x1, 0x0 0x0: Pass
+0xf 0x1, 0xf 0x1, 0x1 0x3: Pass
+0xf 0x1, 0xf 0x1, 0xf 0x1: Pass
+---- end(-1) ----
+ 66: Event groups                                                    : FAILED!
+
+...
+
+2025-08-18 13:29:36 sudo /usr/src/linux-perf-x86_64-rhel-9.4-bpf-a704f7a13544a408baee6fa78f0f24fa05bfa406/tools/perf/perf test 97 -v
+ 97: perf stat JSON output linter                                    : Running (1 active)
+--- start ---
+test child forked, pid 20715
+Checking json output: no args [Success]
+Checking json output: system wide [Success]
+Checking json output: interval [Success]
+Checking json output: event [Success]
+Checking json output: per thread [Success]
+Checking json output: per node [Success]
+Checking json output: metric only Test failed for input:
+{"metric-value" : "none"}
+
+Traceback (most recent call last):
+  File "/usr/src/perf_selftests-x86_64-rhel-9.4-bpf-a704f7a13544a408baee6fa78f0f24fa05bfa406/tools/perf/tests/shell/lib/perf_json_output_lint.py", line 108, in <module>
+    check_json_output(expected_items)
+  File "/usr/src/perf_selftests-x86_64-rhel-9.4-bpf-a704f7a13544a408baee6fa78f0f24fa05bfa406/tools/perf/tests/shell/lib/perf_json_output_lint.py", line 93, in check_json_output
+    raise RuntimeError(f'Check failed for: key={key} value={value}')
+RuntimeError: Check failed for: key=metric-value value=none
+---- end(-1) ----
+ 97: perf stat JSON output linter                                    : FAILED!
+
+...
+
+2025-08-18 13:29:46 sudo /usr/src/linux-perf-x86_64-rhel-9.4-bpf-a704f7a13544a408baee6fa78f0f24fa05bfa406/tools/perf/perf test 99 -v
+ 99: perf stat STD output linter                                     : Running (1 active)
+--- start ---
+test child forked, pid 20818
+Checking STD output: no args [Success]
+Checking STD output: system wide [Success]
+Checking STD output: interval [Success]
+Checking STD output: per thread [Success]
+Checking STD output: per node [Success]
+Checking STD output: metric only ---- end(-1) ----
+ 99: perf stat STD output linter                                     : FAILED!
+
+
+
+The kernel config and materials to reproduce are available at:
+https://download.01.org/0day-ci/archive/20250821/202508211037.3f897218-lkp@intel.com
+
+
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
+
 
