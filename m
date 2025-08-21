@@ -1,201 +1,382 @@
-Return-Path: <linux-mips+bounces-10403-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10404-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB65DB2FB4C
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Aug 2025 15:53:55 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3118AB30379
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Aug 2025 22:07:39 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1FB6BAE6724
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Aug 2025 13:48:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E130D7B771F
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Aug 2025 20:06:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F29E9343202;
-	Thu, 21 Aug 2025 13:43:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BA6E34DCF6;
+	Thu, 21 Aug 2025 20:07:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cpmcPQfb"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TyvButBN"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pg1-f176.google.com (mail-pg1-f176.google.com [209.85.215.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C3FC3431E7
-	for <linux-mips@vger.kernel.org>; Thu, 21 Aug 2025 13:43:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAAB92E9733
+	for <linux-mips@vger.kernel.org>; Thu, 21 Aug 2025 20:07:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755783812; cv=none; b=JB/UvymSeLw89X/eCuGpRol+arwmbq0gIwF0tHEBJUT3I0NsMNpOr3oSxmJzqwV72P1H0SdzRtlVUSCF1h/0ojWSD3NDM4K0x3IHha2L06Ba6Rf1DxG/D9iECbjcPuvwrm7Y4EjY9vQ1fEV8a4PepjGyUmMR4jCJSgU2LQPlwSE=
+	t=1755806835; cv=none; b=dTZMJjtifX3lhQdlZMfT39EuGyPJDVEGCuz2FxDkEkcgfEkGpdP/IbBbJOeRFWU6FYOwq5s1NUfgs0agkWpvtUzSkugKQiVEcvi8rdbUgHGdVLE0O7kTV28DvCNAON/VTFOtnOMrV+lNEtkKJXS83dpOTakjcHJL6Aag2b49mik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755783812; c=relaxed/simple;
-	bh=kDR7IcPzIqy9bbYLH2uEiJyNApziIC+MQ80BckAIB5M=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=I1CfRRb4GOaEwA0c4S9NtAKuQgm6mvCrkOtZtSTq2rne5UYfZaIu+xt8DvOfW16HHlXte/EJ7qk5wlXbqIfKoEFzdzo5ZyCLZSpnooDxslx487GNsLLY/7lmXZy4aP0xE2y2fdDBvY259KkNWmns4nMcbN4NzZYF7JXESP4yqXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cpmcPQfb; arc=none smtp.client-ip=209.85.215.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pg1-f176.google.com with SMTP id 41be03b00d2f7-b477029ea5eso928991a12.3
-        for <linux-mips@vger.kernel.org>; Thu, 21 Aug 2025 06:43:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1755783810; x=1756388610; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=4TKKxJUqDz6CrlAYZ9i2quMno6mJSPy8hdIxNc2ssT8=;
-        b=cpmcPQfbjUlWMhJNPPc7JicgOpKyhLXw1DdQkTh3drNSnOPdLFEjlpdVdNsOUcPZwj
-         3I2QDYSrdLYTEA2kYP4yHGsxNkihn4EF2+JecaHUUANhJuGXAF90HdE3qQ/hC96qpnKz
-         K6m2/QDiPgIEUEPW/LoUCJGp/pw3qSKOihaFaOIRpmP3UXC49t0FhvavZHW55GdaHwPz
-         AU41+5hBmVNCuMloRaYD1Rc1yUiTPFSiZ7PnVwI7UkNlaRBHoyLzFkV1YXbIeWufPxLb
-         7yCuZnwEUPTCTHGMme7hQNobEenKwGb7Aqlpw183GNRtU8b2DYtRhx5lVuK+zQ3W6QYj
-         /KQw==
+	s=arc-20240116; t=1755806835; c=relaxed/simple;
+	bh=1aX6aTG8s6ax1CtK3pZ1UQ/TXpBX5+Ze6lBjUUjUQPw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=P/BgYx5rVchX0Kxq8RU/h72nevlzwqc4MjiJFUjMqRB4e+ibgvA7fmntPY2pIUnecyeKEaMkjhKzMj6hLznQvRh2tLqjAbkyoqPQDW7sK1/9p3ykYsOMowjU4XoRkqHU1htGZWMycMd+yprqd5YRaN5PhAs0t5ssitj759IFHpU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TyvButBN; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1755806831;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=LLdMjSHtv+zm1bY5U2c0p8D/d+U3cemLYeHBKaj7voE=;
+	b=TyvButBNSzALOml1tau2KagepWSsZjQd3ZXyE9noQ995Hnsw9dCBh0PyvUrAf8loI+PI7g
+	WYLGNAtozVq8iRC73goomianLwE1THMMAvdZFX45LdBmlC2lxDTb6ROKsjSnsaQVBUm2W/
+	iJ92wi7olta3AcDgh/iN/aU5AUXKz/E=
+Received: from mail-wm1-f70.google.com (mail-wm1-f70.google.com
+ [209.85.128.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-386-PsYK4JnKNT2mFoSArknH4A-1; Thu, 21 Aug 2025 16:07:08 -0400
+X-MC-Unique: PsYK4JnKNT2mFoSArknH4A-1
+X-Mimecast-MFC-AGG-ID: PsYK4JnKNT2mFoSArknH4A_1755806827
+Received: by mail-wm1-f70.google.com with SMTP id 5b1f17b1804b1-45b51411839so818875e9.0
+        for <linux-mips@vger.kernel.org>; Thu, 21 Aug 2025 13:07:07 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755783810; x=1756388610;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1755806826; x=1756411626;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=4TKKxJUqDz6CrlAYZ9i2quMno6mJSPy8hdIxNc2ssT8=;
-        b=CK5X0o3UKYvcysCoqDPZPAQua82zVslFL/tjMEU/dl3y27S6xDxhGmiRCztYaZYhTo
-         smPpshjMwfTn8sruhBWUVIhV0xxmxC/EZJBAvA9xggc+dnIxawPfnrpneR6EQVDa5IEd
-         1VdoPiQoKS8kXeHQs+oMm38oI1FH15mAjWbEF+PqHZR3Kz53qWbrM8zk3eoIbTXbPGR9
-         hAKk5bpQevAlge94V6QCdh1FpnIxzzQaBmFQGObZmjzcrAXu6p6EFw/vVAab9FbyqM7O
-         xvJnpyZchEphxA+y5OECNtoog2e8FSOHSVn7pqQgu1FzYPAspZAabd/lnEwEh1EWPvv+
-         CT2w==
-X-Forwarded-Encrypted: i=1; AJvYcCU+cst9uRy5Rqzerd1DmveDrK1TLnvvBq7VhgyXpeRQe1oNFcmvM1kN8HaDP10s3bt9du5XCKh00/5p@vger.kernel.org
-X-Gm-Message-State: AOJu0YyTeF3hel+Mp2cwAoVeJtJsjdgTDcOpbvv6MccqrtElGuKPPFTR
-	EAbyNkc1qgZOQYj9R6dQy5Tynycqg9iS0ZxUW7aV15yH/7OlG18S2XTSKPqobIx/NGnC3G0XOBi
-	eZWxMI0Ni/4AMdkerLW44LmSv1Gr9X/TzfBAT/PyTkw==
-X-Gm-Gg: ASbGnctpyd7PAbrrY836nkhnUuci9fdPRsz4dqYWxLkxf0BVT1O2CUzfFZJ/cnJ2ds+
-	arkowKnOBdI+1OOUqVF83jqDBPqzGkLgL0y5dE5GNMJkUxmcSk8t340gFrvGrtFzctiKDlIs3xG
-	Fexp7Tp8wXz4RE1KohEtRsD93Y7JR2uuggbDREF83P8OiGxIIg1zEWxBxSxudtdhP+BdqA9RUQj
-	qAE7vK6b+hhNTErgBGA+Z9WAMdQJ+Bb6OaX666PsyR3hVtLXAQ=
-X-Google-Smtp-Source: AGHT+IELgByc3NnsMiO4ohlSNnw7P3I9l1WOk61YcazCJ1eLTSo0Jd6s6qKsge3KcqTIkNDOkvcx67/Y6od2fhS10yk=
-X-Received: by 2002:a17:902:d584:b0:23f:c760:fdf0 with SMTP id
- d9443c01a7336-245fedc8c92mr33954055ad.45.1755783810391; Thu, 21 Aug 2025
- 06:43:30 -0700 (PDT)
+        bh=LLdMjSHtv+zm1bY5U2c0p8D/d+U3cemLYeHBKaj7voE=;
+        b=ZOj8DIYTwRoA9tmloQ7Ud7pfmGfjojVm8jDPQ88uztD+3kWpK0HZWIDUU8IEuPguG7
+         B0wGZa6zvt+AqCIqORcym6Uly6/2zYxEUGUDdDj2pkuTbiDmDjyjUWLRMHeN1S2cEu5f
+         oJB7aQEyjLCGO6au5TMtNtiSsnxFiSg9cfkHpS6XRVt85rHyq4stXbp35+obOYJUWMz2
+         sp9K0uf5ynYk0gmbU/9jMwLGFkF3AdVy3UrmP6V2zukJsbHkZOBel4wssm2Ez70A/hDs
+         dpF4211EdVie2Mc2etzU76xpQIGTmh+cKd01rumoJMV4uIa6Je0K8Gjwv502P73taYfu
+         imhg==
+X-Forwarded-Encrypted: i=1; AJvYcCUvEux5pc9QiAV7vD3i7mK/yHnt/BvpOVgy+5Lf527DmjqUJDsd/vnBmfpxzyToPc1tkJ0Cy9pjQoGk@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz6en2kNTr3atuOeQSJd1DI38jDHjmwEoyPmsbJDX7B8gzGJiZY
+	QA+TMGq7snIS3FoypRjb5wxx4/9H+Rd6mzvomgjEA+AXclDHO9FocdDz6CwrYm+hbR8FI6xJt6H
+	NxhdD/jQecTaHo0JM9/M8p7mSSjMFNIgwg6pKLyofwCbm8g3zthjvFwu7BvMLGzc=
+X-Gm-Gg: ASbGncvPjZxtjlwyE1OgM5lEw+G1Ctck5MLm20J0F/e8U6I0f4tVij/UqRw2pzQ4naV
+	DeIjTZOliF40YE97dPfn2M9NlIc8fpaZPubrCpzwETps29QjaV5WjZI7s1bkemARafJn3MFbLbS
+	TKVzthmeUTYsYi5RqxvBKG2B5vblSkXJ+WV6N0m7J6B2TpAROnd+eqf5KyPhG7rU9GF9hfHf1md
+	UEoZ8R/ESjAVMCiTMvV5XMA3HQNHKt26c/YFZw6POW+1DzxNFP12DugbcDTjuq5FT4qi7YFBib0
+	+T7VcoZr7zfpBTdnpLP0Qzc3ee3p9deHLFQar8ZsyHG394jNKHnTzoMBump2BsiGc5VAmGg5v4g
+	lSZwIQdpWcJJs/DCMLapeCQ==
+X-Received: by 2002:a05:600c:4506:b0:456:1bae:5470 with SMTP id 5b1f17b1804b1-45b5179b6camr3190915e9.8.1755806826442;
+        Thu, 21 Aug 2025 13:07:06 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IG7XEacdneicK9OezeDu7E6BzvwjamEpx7+RbUEh0t7qSo20kryXdXhBwYQdhu2/m95zw+e6A==
+X-Received: by 2002:a05:600c:4506:b0:456:1bae:5470 with SMTP id 5b1f17b1804b1-45b5179b6camr3190665e9.8.1755806825859;
+        Thu, 21 Aug 2025 13:07:05 -0700 (PDT)
+Received: from localhost (p200300d82f26ba0008036ec5991806fd.dip0.t-ipconnect.de. [2003:d8:2f26:ba00:803:6ec5:9918:6fd])
+        by smtp.gmail.com with UTF8SMTPSA id ffacd0b85a97d-3c077788df7sm12764142f8f.48.2025.08.21.13.07.02
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 21 Aug 2025 13:07:05 -0700 (PDT)
+From: David Hildenbrand <david@redhat.com>
+To: linux-kernel@vger.kernel.org
+Cc: David Hildenbrand <david@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Jason Gunthorpe <jgg@nvidia.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Robin Murphy <robin.murphy@arm.com>,
+	John Hubbard <jhubbard@nvidia.com>,
+	Peter Xu <peterx@redhat.com>,
+	Alexander Potapenko <glider@google.com>,
+	Marco Elver <elver@google.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Brendan Jackman <jackmanb@google.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Zi Yan <ziy@nvidia.com>,
+	Dennis Zhou <dennis@kernel.org>,
+	Tejun Heo <tj@kernel.org>,
+	Christoph Lameter <cl@gentwo.org>,
+	Muchun Song <muchun.song@linux.dev>,
+	Oscar Salvador <osalvador@suse.de>,
+	x86@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mips@vger.kernel.org,
+	linux-s390@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	linux-ide@vger.kernel.org,
+	intel-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	linux-mmc@vger.kernel.org,
+	linux-arm-kernel@axis.com,
+	linux-scsi@vger.kernel.org,
+	kvm@vger.kernel.org,
+	virtualization@lists.linux.dev,
+	linux-mm@kvack.org,
+	io-uring@vger.kernel.org,
+	iommu@lists.linux.dev,
+	kasan-dev@googlegroups.com,
+	wireguard@lists.zx2c4.com,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Alex Dubov <oakad@yahoo.com>,
+	Alex Williamson <alex.williamson@redhat.com>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Brett Creeley <brett.creeley@amd.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	David Airlie <airlied@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Doug Gilbert <dgilbert@interlog.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Jesper Nilsson <jesper.nilsson@axis.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Lars Persson <lars.persson@axis.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Maxim Levitsky <maximlevitsky@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Niklas Cassel <cassel@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Simona Vetter <simona@ffwll.ch>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Tvrtko Ursulin <tursulin@ursulin.net>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Will Deacon <will@kernel.org>,
+	Yishai Hadas <yishaih@nvidia.com>
+Subject: [PATCH RFC 00/35] mm: remove nth_page()
+Date: Thu, 21 Aug 2025 22:06:26 +0200
+Message-ID: <20250821200701.1329277-1-david@redhat.com>
+X-Mailer: git-send-email 2.50.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CA+G9fYthMAr3w=U_GmbLPgMb7xNdjbqmxYWF0iUEuJzxnw3dxg@mail.gmail.com>
-In-Reply-To: <CA+G9fYthMAr3w=U_GmbLPgMb7xNdjbqmxYWF0iUEuJzxnw3dxg@mail.gmail.com>
-From: Naresh Kamboju <naresh.kamboju@linaro.org>
-Date: Thu, 21 Aug 2025 19:13:18 +0530
-X-Gm-Features: Ac12FXweVlItcIxXxm0jYGOpeOdEH-mXExl8DfwFQGTW8B_Dt-4zHZjVzLsg8Gc
-Message-ID: <CA+G9fYvkpmqGr6wjBNHY=dRp71PLCoi2341JxOudi60yqaeUdg@mail.gmail.com>
-Subject: Re: next-20250821 cacheflush.h:61:3: error: incompatible pointer
- types passing 'memdesc_flags_t *' to parameter of type 'volatile unsigned
- long *' [-Werror,-Wincompatible-pointer-types]
-To: open list <linux-kernel@vger.kernel.org>, linux-mips@vger.kernel.org, 
-	lkft-triage@lists.linaro.org, Linux Regressions <regressions@lists.linux.dev>
-Cc: Anders Roxell <anders.roxell@linaro.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Arnd Bergmann <arnd@arndb.de>, 
-	Ben Copeland <benjamin.copeland@linaro.org>, Dan Carpenter <dan.carpenter@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Thu, 21 Aug 2025 at 16:26, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
->
-> The following build warnings / errors noticed with mips defconfig with
-> clang-20 and gcc-12 toolchains.
->
-> Regression Analysis:
-> - New regression? yes
-> - Reproducibility? yes
->
-> Build regression: next-20250821 cacheflush.h:61:3: error: incompatible
-> pointer types passing 'memdesc_flags_t *' to parameter of type
-> 'volatile unsigned long *' [-Werror,-Wincompatible-pointer-types]
+This is based on mm-unstable and was cross-compiled heavily.
 
-Anders bisected and found this,
+I should probably have already dropped the RFC label but I want to hear
+first if I ignored some corner case (SG entries?) and I need to do
+at least a bit more testing.
 
-# first bad commit:
-   [30f45bf18d55a411f576afe48d50e78a2eef7e23]
-    mm: introduce memdesc_flags_t
+I will only CC non-MM folks on the cover letter and the respective patch
+to not flood too many inboxes (the lists receive all patches).
 
->
-> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
->
-> * mips, build
->   - clang-nightly-allnoconfig
->   - clang-nightly-defconfig
->   - clang-nightly-lkftconfig-hardening
->   - clang-nightly-lkftconfig-lto-full
->   - clang-nightly-lkftconfig-lto-thing
->   - clang-nightly-tinyconfig
->   - gcc-12-allnoconfig
->   - gcc-12-ath79_defconfig
->   - gcc-12-bcm47xx_defconfig
->   - gcc-12-bcm63xx_defconfig
->   - gcc-12-cavium_octeon_defconfig
->   - gcc-12-defconfig
->   - gcc-12-malta_defconfig
->   - gcc-12-rt305x_defconfig
->   - gcc-12-tinyconfig
->   - gcc-13-lkftconfig-hardening
->   - gcc-8-allnoconfig
->   - gcc-8-ath79_defconfig
->   - gcc-8-bcm47xx_defconfig
->   - gcc-8-bcm63xx_defconfig
->   - gcc-8-cavium_octeon_defconfig
->   - gcc-8-defconfig
->   - gcc-8-lkftconfig-hardening
->   - gcc-8-malta_defconfig
->   - gcc-8-rt305x_defconfig
->   - gcc-8-tinyconfig
->
->
-> ## Build error mips
-> In file included from include/linux/cacheflush.h:5:
-> arch/mips/include/asm/cacheflush.h:61:3: error: incompatible pointer
-> types passing 'memdesc_flags_t *' to parameter of type 'volatile
-> unsigned long *' [-Werror,-Wincompatible-pointer-types]
->    61 |                 folio_set_dcache_dirty(folio);
->       |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> arch/mips/include/asm/cacheflush.h:42:27: note: expanded from macro
-> 'folio_set_dcache_dirty'
->    42 |         set_bit(PG_dcache_dirty, &(folio)->flags)
->       |                                  ^~~~~~~~~~~~~~~
-> arch/mips/include/asm/bitops.h:89:70: note: passing argument to
-> parameter 'addr' here
->    89 | static inline void set_bit(unsigned long nr, volatile unsigned
-> long *addr)
->       |                                                                      ^
->
-> In file included from include/linux/cacheflush.h:5:
-> arch/mips/include/asm/cacheflush.h:70:3: error: incompatible pointer
-> types passing 'memdesc_flags_t *' to parameter of type 'volatile
-> unsigned long *' [-Werror,-Wincompatible-pointer-types]
->    70 |                 folio_set_dcache_dirty(page_folio(page));
->       |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-> arch/mips/include/asm/cacheflush.h:42:27: note: expanded from macro
-> 'folio_set_dcache_dirty'
->    42 |         set_bit(PG_dcache_dirty, &(folio)->flags)
->       |                                  ^~~~~~~~~~~~~~~
-> arch/mips/include/asm/bitops.h:89:70: note: passing argument to
-> parameter 'addr' here
->    89 | static inline void set_bit(unsigned long nr, volatile unsigned
-> long *addr)
->       |                                                                      ^
-> 2 errors generated.
->
-> ## Source
-> * Kernel version: 6.17.0-rc2
-> * Git tree: https://kernel.googlesource.com/pub/scm/linux/kernel/git/next/linux-next.git
-> * Git describe: next-20250821
-> * Git commit: 7fa4d8dc380fbd81a9d702a855c50690c9c6442c
-> * Architectures: mips
-> * Toolchains: clang-20 gcc-12
-> * Kconfigs: defconfig
->
-> ## Build
-> * Build log: https://qa-reports.linaro.org/api/testruns/29616797/log_file/
-> * Build details mips:
-> https://regressions.linaro.org/lkft/linux-next-master/next-20250821/build/clang-nightly-defconfig/
-> * Build plan: https://tuxapi.tuxsuite.com/v1/groups/linaro/projects/lkft/builds/31aRYnoYJbpEW0zZyTGvO2w7OCn
-> * Build link: https://storage.tuxsuite.com/public/linaro/lkft/builds/31aRYnoYJbpEW0zZyTGvO2w7OCn/
-> * Kernel config:
-> https://storage.tuxsuite.com/public/linaro/lkft/builds/31aRYnoYJbpEW0zZyTGvO2w7OCn/config
->
-> --
-> Linaro LKFT
-> https://lkft.linaro.org
+---
 
-- Naresh
+As discussed recently with Linus, nth_page() is just nasty and we would
+like to remove it.
+
+To recap, the reason we currently need nth_page() within a folio is because
+on some kernel configs (SPARSEMEM without SPARSEMEM_VMEMMAP), the
+memmap is allocated per memory section.
+
+While buddy allocations cannot cross memory section boundaries, hugetlb
+and dax folios can.
+
+So crossing a memory section means that "page++" could do the wrong thing.
+Instead, nth_page() on these problematic configs always goes from
+page->pfn, to the go from (++pfn)->page, which is rather nasty.
+
+Likely, many people have no idea when nth_page() is required and when
+it might be dropped.
+
+We refer to such problematic PFN ranges and "non-contiguous pages".
+If we only deal with "contiguous pages", there is not need for nth_page().
+
+Besides that "obvious" folio case, we might end up using nth_page()
+within CMA allocations (again, could span memory sections), and in
+one corner case (kfence) when processing memblock allocations (again,
+could span memory sections).
+
+So let's handle all that, add sanity checks, and remove nth_page().
+
+Patch #1 -> #5   : stop making SPARSEMEM_VMEMMAP user-selectable + cleanups
+Patch #6 -> #12  : disallow folios to have non-contiguous pages
+Patch #13 -> #20 : remove nth_page() usage within folios
+Patch #21        : disallow CMA allocations of non-contiguous pages
+Patch #22 -> #31 : sanity+check + remove nth_page() usage within SG entry
+Patch #32        : sanity-check + remove nth_page() usage in
+                   unpin_user_page_range_dirty_lock()
+Patch #33        : remove nth_page() in kfence
+Patch #34        : adjust stale comment regarding nth_page
+Patch #35        : mm: remove nth_page()
+
+A lot of this is inspired from the discussion at [1] between Linus, Jason
+and me, so cudos to them.
+
+[1] https://lore.kernel.org/all/CAHk-=wiCYfNp4AJLBORU-c7ZyRBUp66W2-Et6cdQ4REx-GyQ_A@mail.gmail.com/T/#u
+
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Mike Rapoport <rppt@kernel.org>
+Cc: Suren Baghdasaryan <surenb@google.com>
+Cc: Michal Hocko <mhocko@suse.com>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: Robin Murphy <robin.murphy@arm.com>
+Cc: John Hubbard <jhubbard@nvidia.com>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: Alexander Potapenko <glider@google.com>
+Cc: Marco Elver <elver@google.com>
+Cc: Dmitry Vyukov <dvyukov@google.com>
+Cc: Brendan Jackman <jackmanb@google.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Zi Yan <ziy@nvidia.com>
+Cc: Dennis Zhou <dennis@kernel.org>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Christoph Lameter <cl@gentwo.org>
+Cc: Muchun Song <muchun.song@linux.dev>
+Cc: Oscar Salvador <osalvador@suse.de>
+Cc: x86@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-s390@vger.kernel.org
+Cc: linux-crypto@vger.kernel.org
+Cc: linux-ide@vger.kernel.org
+Cc: intel-gfx@lists.freedesktop.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-mmc@vger.kernel.org
+Cc: linux-arm-kernel@axis.com
+Cc: linux-scsi@vger.kernel.org
+Cc: kvm@vger.kernel.org
+Cc: virtualization@lists.linux.dev
+Cc: linux-mm@kvack.org
+Cc: io-uring@vger.kernel.org
+Cc: iommu@lists.linux.dev
+Cc: kasan-dev@googlegroups.com
+Cc: wireguard@lists.zx2c4.com
+Cc: netdev@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-riscv@lists.infradead.org
+
+David Hildenbrand (35):
+  mm: stop making SPARSEMEM_VMEMMAP user-selectable
+  arm64: Kconfig: drop superfluous "select SPARSEMEM_VMEMMAP"
+  s390/Kconfig: drop superfluous "select SPARSEMEM_VMEMMAP"
+  x86/Kconfig: drop superfluous "select SPARSEMEM_VMEMMAP"
+  wireguard: selftests: remove CONFIG_SPARSEMEM_VMEMMAP=y from qemu
+    kernel config
+  mm/page_alloc: reject unreasonable folio/compound page sizes in
+    alloc_contig_range_noprof()
+  mm/memremap: reject unreasonable folio/compound page sizes in
+    memremap_pages()
+  mm/hugetlb: check for unreasonable folio sizes when registering hstate
+  mm/mm_init: make memmap_init_compound() look more like
+    prep_compound_page()
+  mm/hugetlb: cleanup hugetlb_folio_init_tail_vmemmap()
+  mm: sanity-check maximum folio size in folio_set_order()
+  mm: limit folio/compound page sizes in problematic kernel configs
+  mm: simplify folio_page() and folio_page_idx()
+  mm/mm/percpu-km: drop nth_page() usage within single allocation
+  fs: hugetlbfs: remove nth_page() usage within folio in
+    adjust_range_hwpoison()
+  mm/pagewalk: drop nth_page() usage within folio in folio_walk_start()
+  mm/gup: drop nth_page() usage within folio when recording subpages
+  io_uring/zcrx: remove "struct io_copy_cache" and one nth_page() usage
+  io_uring/zcrx: remove nth_page() usage within folio
+  mips: mm: convert __flush_dcache_pages() to
+    __flush_dcache_folio_pages()
+  mm/cma: refuse handing out non-contiguous page ranges
+  dma-remap: drop nth_page() in dma_common_contiguous_remap()
+  scatterlist: disallow non-contigous page ranges in a single SG entry
+  ata: libata-eh: drop nth_page() usage within SG entry
+  drm/i915/gem: drop nth_page() usage within SG entry
+  mspro_block: drop nth_page() usage within SG entry
+  memstick: drop nth_page() usage within SG entry
+  mmc: drop nth_page() usage within SG entry
+  scsi: core: drop nth_page() usage within SG entry
+  vfio/pci: drop nth_page() usage within SG entry
+  crypto: remove nth_page() usage within SG entry
+  mm/gup: drop nth_page() usage in unpin_user_page_range_dirty_lock()
+  kfence: drop nth_page() usage
+  block: update comment of "struct bio_vec" regarding nth_page()
+  mm: remove nth_page()
+
+ arch/arm64/Kconfig                            |  1 -
+ arch/mips/include/asm/cacheflush.h            | 11 +++--
+ arch/mips/mm/cache.c                          |  8 ++--
+ arch/s390/Kconfig                             |  1 -
+ arch/x86/Kconfig                              |  1 -
+ crypto/ahash.c                                |  4 +-
+ crypto/scompress.c                            |  8 ++--
+ drivers/ata/libata-sff.c                      |  6 +--
+ drivers/gpu/drm/i915/gem/i915_gem_pages.c     |  2 +-
+ drivers/memstick/core/mspro_block.c           |  3 +-
+ drivers/memstick/host/jmb38x_ms.c             |  3 +-
+ drivers/memstick/host/tifm_ms.c               |  3 +-
+ drivers/mmc/host/tifm_sd.c                    |  4 +-
+ drivers/mmc/host/usdhi6rol0.c                 |  4 +-
+ drivers/scsi/scsi_lib.c                       |  3 +-
+ drivers/scsi/sg.c                             |  3 +-
+ drivers/vfio/pci/pds/lm.c                     |  3 +-
+ drivers/vfio/pci/virtio/migrate.c             |  3 +-
+ fs/hugetlbfs/inode.c                          | 25 ++++------
+ include/crypto/scatterwalk.h                  |  4 +-
+ include/linux/bvec.h                          |  7 +--
+ include/linux/mm.h                            | 48 +++++++++++++++----
+ include/linux/page-flags.h                    |  5 +-
+ include/linux/scatterlist.h                   |  4 +-
+ io_uring/zcrx.c                               | 34 ++++---------
+ kernel/dma/remap.c                            |  2 +-
+ mm/Kconfig                                    |  3 +-
+ mm/cma.c                                      | 36 +++++++++-----
+ mm/gup.c                                      | 13 +++--
+ mm/hugetlb.c                                  | 23 ++++-----
+ mm/internal.h                                 |  1 +
+ mm/kfence/core.c                              | 17 ++++---
+ mm/memremap.c                                 |  3 ++
+ mm/mm_init.c                                  | 13 ++---
+ mm/page_alloc.c                               |  5 +-
+ mm/pagewalk.c                                 |  2 +-
+ mm/percpu-km.c                                |  2 +-
+ mm/util.c                                     | 33 +++++++++++++
+ tools/testing/scatterlist/linux/mm.h          |  1 -
+ .../selftests/wireguard/qemu/kernel.config    |  1 -
+ 40 files changed, 203 insertions(+), 150 deletions(-)
+
+
+base-commit: c0e3b3f33ba7b767368de4afabaf7c1ddfdc3872
+-- 
+2.50.1
+
 
