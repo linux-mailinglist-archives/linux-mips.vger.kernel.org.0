@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-10454-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10455-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1FE8B30824
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Aug 2025 23:16:45 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5C3DDB30834
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Aug 2025 23:20:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A43EF5A0C0F
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Aug 2025 21:15:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 90DA51C249EC
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Aug 2025 21:17:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C4C928727C;
-	Thu, 21 Aug 2025 21:15:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92F6C2DFF1D;
+	Thu, 21 Aug 2025 21:16:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uQZ01Sr4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cKYszfa7"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07F8A2877E0;
-	Thu, 21 Aug 2025 21:15:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 630A42D837C;
+	Thu, 21 Aug 2025 21:16:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755810955; cv=none; b=nAg+BcYot4Kc5IFCLLUon+46mwrHLmrBGH8vxaf4UAgrZUWvYPf+9Z47NPlNvI4na2++oXx2lC7UyWpjk/zMEeEuCauS5WHAdMFE/UkpZUBSDC7BEo/nvynssYdMzb7ApYdYkF03eB1P4NzzoQakZ1lSTxYKh7i5CiLe0baVEyY=
+	t=1755810968; cv=none; b=s6V2DiS7PClzexYzYU71oK6ICeZDIlZAzdDVj520LOhli4VgKx/I760z0yZiIfP0QuNb9nW/owJPAORNRmC/fWdw0tO9egMaj0yg32UHKncL0xhu7ljyW2BHldxnTf88rmvJ9k/KmcHPuJ4P+kY+PTccQvSHbL/GdRJxrDLw610=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755810955; c=relaxed/simple;
-	bh=pOQAZPk+siIZkKBpkkHyydqf+iJWdipFSBVhf2HWXnk=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=fjqipuv3QvM0mXzW4qFfU8EBrZztAk8fS6HeEXNbtzhA55fkAL2jHyJOWQHBoASEJQip0KUNujo/B3lJsgz0B34w+O08oV74u6yOo5F+x241hpn5+qdjuBUUQ/6K3Uv/PlsZ8VweNoGgGPAnGjtI2PnqP0mL+/xIJHCZU7Ox07E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uQZ01Sr4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AE9A8C4CEEB;
-	Thu, 21 Aug 2025 21:15:48 +0000 (UTC)
+	s=arc-20240116; t=1755810968; c=relaxed/simple;
+	bh=66yWNnzAMgeGutikhZxcg+vm/xcsjv8NO+92CQLqj+k=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=L80UoOX71IL0Ony/WMsIRjXpwuZC8GwMQsPgPTorTIK47qE7KGrGT9ycFSaMmby6cPSnLXbZ2gMYCVCVU0EIebJ1i4ZcYEnyR6poyaDO/7dmuyOGCz20wM7UOjArVeri+ttgyH9FARp1cynDJJOV0Ux5FuKeOTd+q1pfRjOjWH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cKYszfa7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1C79C4CEF4;
+	Thu, 21 Aug 2025 21:16:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755810954;
-	bh=pOQAZPk+siIZkKBpkkHyydqf+iJWdipFSBVhf2HWXnk=;
-	h=From:Subject:Date:To:Cc:From;
-	b=uQZ01Sr4y5UBxZbhDZfvUDEeNvw7RqMPpecFt11yc7bsaW5ovYL0XUfzrWWsiNXzZ
-	 c8++tipPQjqwKYp0k0gDhrvljaAd7re4WVkFUF5WrFBqQqEIN8iR74Vee7BNt/CA+g
-	 /tG0RI1G9MmS/0WG3vAsp0ldl5sjGRh0EGxzNxVH1Tm0PYZoCyCQqG00dIozdKH/oE
-	 pE+AKTCsKwpp5uIo1NEGnmB8ycta84iEl1LU6UXiRm6kopTiphBIqE2wbsbInRJaJl
-	 x/kzDSN/k618a3jDJ0BA65cb43YnV0uqrkYoP768loOw8+WrPigrhNPUtuX3uXdZuq
-	 W/LW5Ik2tcyqg==
+	s=k20201202; t=1755810968;
+	bh=66yWNnzAMgeGutikhZxcg+vm/xcsjv8NO+92CQLqj+k=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=cKYszfa7HOCM4dC8RjdGv7hpuvVFQ01VBOFV/Sbb+oBhSySTpc1tbuIWodOeDz4WT
+	 aJiMf7RBqTe/L/Y/TCcod78yhuJv2HZE16iiq7hsKIQBxENoYnyZJqAWFYA8UBrt4R
+	 Wjx5Q6YMzV5Tvzev7TzE/ToEsGozjnQcisFWmiZ6Zu+nvu+2ifN4Ka7qibNXDHuUoy
+	 wxRLCAnikKFGiSrE+bzshh1ElDZHmJChwGDZi726IhQtvEzjmjuABsrof0dTGf7GLA
+	 /7GwzeYV3WnivK1w32xmDRRZ6wNUhb9UB0qxYBiCewsT2Rs+ygtDK3x9cEfIhUj6uM
+	 0H/8V7/zF1ITg==
 From: Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH v2 00/12] Bump minimum supported version of LLVM for
- building the kernel to 15.0.0
-Date: Thu, 21 Aug 2025 14:15:37 -0700
-Message-Id: <20250821-bump-min-llvm-ver-15-v2-0-635f3294e5f0@kernel.org>
+Date: Thu, 21 Aug 2025 14:15:42 -0700
+Subject: [PATCH v2 05/12] mips: Unconditionally select
+ ARCH_HAS_CURRENT_STACK_POINTER
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -53,113 +53,55 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAHqMp2gC/22NQQ6CMBBFr0Jm7ZhOzSi48h6GhcAAE6GQVhsN4
- e5W3Lp8L/nvLxDEqwQ4Zwt4iRp0cgnsLoO6v7lOUJvEYI1lcyKD1XOccVSHwxBHjOKRGAu2B2p
- JqiMzpOnspdXXlr2WiXsNj8m/t5dIX/sL5pT/D0ZCg3VeUWPaglnM5S7eybCffAfluq4fb81km
- bkAAAA=
-X-Change-ID: 20250710-bump-min-llvm-ver-15-95231f1eb655
+Message-Id: <20250821-bump-min-llvm-ver-15-v2-5-635f3294e5f0@kernel.org>
+References: <20250821-bump-min-llvm-ver-15-v2-0-635f3294e5f0@kernel.org>
+In-Reply-To: <20250821-bump-min-llvm-ver-15-v2-0-635f3294e5f0@kernel.org>
 To: linux-kernel@vger.kernel.org
 Cc: Arnd Bergmann <arnd@arndb.de>, Kees Cook <kees@kernel.org>, 
  Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
  Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
  llvm@lists.linux.dev, patches@lists.linux.dev, 
- Nicolas Schier <nsc@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- linux-kbuild@vger.kernel.org, linux-hardening@vger.kernel.org, 
- Russell King <linux@armlinux.org.uk>, Ard Biesheuvel <ardb@kernel.org>, 
- linux-arm-kernel@lists.infradead.org, Will Deacon <will@kernel.org>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org, 
- Madhavan Srinivasan <maddy@linux.ibm.com>, 
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
- Christophe Leroy <christophe.leroy@csgroup.eu>, 
- linuxppc-dev@lists.ozlabs.org, Palmer Dabbelt <palmer@dabbelt.com>, 
- Alexandre Ghiti <alex@ghiti.fr>, linux-riscv@lists.infradead.org, 
- Marco Elver <elver@google.com>, 
- "Peter Zijlstra (Intel)" <peterz@infraded.org>, kasan-dev@googlegroups.com
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Nathan Chancellor <nathan@kernel.org>, linux-mips@vger.kernel.org
 X-Mailer: b4 0.15-dev
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3775; i=nathan@kernel.org;
- h=from:subject:message-id; bh=pOQAZPk+siIZkKBpkkHyydqf+iJWdipFSBVhf2HWXnk=;
- b=owGbwMvMwCUmm602sfCA1DTG02pJDBnLexp5jt71uLBmLnPYsZJXWxZZ/jvpEC46Jadf9c7Uw
- ETlF/9MO0pZGMS4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBEbpkw/I9487fgnDGfn0/r
- 3M6FSqzXJdY9UrRtFZK/fJjFtn+JsiAjw7+LX1KSfVQYtyp9370iKU3tw4SvX9nUW67uL1go/I+
- LnxkA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1032; i=nathan@kernel.org;
+ h=from:subject:message-id; bh=66yWNnzAMgeGutikhZxcg+vm/xcsjv8NO+92CQLqj+k=;
+ b=owGbwMvMwCUmm602sfCA1DTG02pJDBnLe5r2/+34JPGAh3GeQW72/mPFD5IOdzprXGOIe/t3S
+ mXh4QP3O0pZGMS4GGTFFFmqH6seNzScc5bxxqlJMHNYmUCGMHBxCsBEdJ4zMtxZvTrXS4P9fMrr
+ hdvD+T+vUGdP1nVLPnXyzQxL7o3X4y8z/OGrq7wU/ZLtzGkGA8Ebtidso/RTP69neZHA+4P54b/
+ 7jxkA
 X-Developer-Key: i=nathan@kernel.org; a=openpgp;
  fpr=2437CB76E544CB6AB3D9DFD399739260CB6CB716
 
-s390 and x86 have required LLVM 15 since
+Now that the minimum supported version of LLVM for building the kernel
+has been bumped to 15.0.0, the selection of
+ARCH_HAS_CURRENT_STACK_POINTER can be made unconditional since it is
+always true.
 
-  30d17fac6aae ("scripts/min-tool-version.sh: raise minimum clang version to 15.0.0 for s390")
-  7861640aac52 ("x86/build: Raise the minimum LLVM version to 15.0.0")
-
-respectively. This series bumps the rest of the kernel to 15.0.0 to
-match, which allows for a decent number of clean ups.
-
-On the distros front, we will only leave behind Debian Bookworm and
-Ubuntu Jammy. In both of those cases, builders / developers can either
-use the kernel.org toolchains or https://apt.llvm.org to get newer
-versions that will run on those distributions, if they cannot upgrade.
-
-  archlinux:latest              clang version 20.1.8
-  debian:oldoldstable-slim      Debian clang version 11.0.1-2
-  debian:oldstable-slim         Debian clang version 14.0.6
-  debian:stable-slim            Debian clang version 19.1.7 (3+b1)
-  debian:testing-slim           Debian clang version 19.1.7 (3+b1)
-  debian:unstable-slim          Debian clang version 19.1.7 (3+b2)
-  fedora:41                     clang version 19.1.7 (Fedora 19.1.7-4.fc41)
-  fedora:latest                 clang version 20.1.8 (Fedora 20.1.8-3.fc42)
-  fedora:rawhide                clang version 20.1.8 (Fedora 20.1.8-3.fc43)
-  opensuse/leap:latest          clang version 17.0.6
-  opensuse/tumbleweed:latest    clang version 20.1.8
-  ubuntu:focal                  clang version 10.0.0-4ubuntu1
-  ubuntu:jammy                  Ubuntu clang version 14.0.0-1ubuntu1.1
-  ubuntu:noble                  Ubuntu clang version 18.1.3 (1ubuntu1)
-  ubuntu:latest                 Ubuntu clang version 18.1.3 (1ubuntu1)
-  ubuntu:rolling                Ubuntu clang version 20.1.2 (0ubuntu1)
-  ubuntu:devel                  Ubuntu clang version 20.1.8 (0ubuntu1)
-
-I plan to carry this via the Kbuild tree with the appropriate acks.
-
+Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Reviewed-by: Kees Cook <kees@kernel.org>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
-Changes in v2:
-- Add two new patches for RISC-V to clean up more LLD_VERSION checks
-  (Alex)
-- Pick up provided tags (thanks all!)
-- Link to v1: https://lore.kernel.org/r/20250818-bump-min-llvm-ver-15-v1-0-c8b1d0f955e0@kernel.org
-
+Cc: linux-mips@vger.kernel.org
 ---
-Nathan Chancellor (12):
-      kbuild: Bump minimum version of LLVM for building the kernel to 15.0.0
-      arch/Kconfig: Drop always true condition from RANDOMIZE_KSTACK_OFFSET
-      ARM: Clean up definition of ARM_HAS_GROUP_RELOCS
-      arm64: Remove tautological LLVM Kconfig conditions
-      mips: Unconditionally select ARCH_HAS_CURRENT_STACK_POINTER
-      powerpc: Drop unnecessary initializations in __copy_inst_from_kernel_nofault()
-      riscv: Remove version check for LTO_CLANG selects
-      riscv: Unconditionally use linker relaxation
-      riscv: Remove ld.lld version checks from many TOOLCHAIN_HAS configs
-      lib/Kconfig.debug: Drop CLANG_VERSION check from DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
-      objtool: Drop noinstr hack for KCSAN_WEAK_MEMORY
-      KMSAN: Remove tautological checks
+ arch/mips/Kconfig | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- Documentation/process/changes.rst |  2 +-
- arch/Kconfig                      |  1 -
- arch/arm/Kconfig                  | 11 ++++-------
- arch/arm64/Kconfig                |  5 +----
- arch/mips/Kconfig                 |  2 +-
- arch/powerpc/include/asm/inst.h   |  4 ----
- arch/riscv/Kconfig                | 21 +++++++--------------
- arch/riscv/Makefile               |  9 +--------
- lib/Kconfig.debug                 |  2 +-
- lib/Kconfig.kcsan                 |  6 ------
- lib/Kconfig.kmsan                 | 11 +----------
- scripts/min-tool-version.sh       |  6 ++----
- tools/objtool/check.c             | 10 ----------
- 13 files changed, 19 insertions(+), 71 deletions(-)
----
-base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
-change-id: 20250710-bump-min-llvm-ver-15-95231f1eb655
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index caf508f6e9ec..bc7473505f4a 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -6,7 +6,7 @@ config MIPS
+ 	select ARCH_BINFMT_ELF_STATE if MIPS_FP_SUPPORT
+ 	select ARCH_HAS_CPU_CACHE_ALIASING
+ 	select ARCH_HAS_CPU_FINALIZE_INIT
+-	select ARCH_HAS_CURRENT_STACK_POINTER if !CC_IS_CLANG || CLANG_VERSION >= 140000
++	select ARCH_HAS_CURRENT_STACK_POINTER
+ 	select ARCH_HAS_DEBUG_VIRTUAL if !64BIT
+ 	select ARCH_HAS_DMA_OPS if MACH_JAZZ
+ 	select ARCH_HAS_FORTIFY_SOURCE
 
-Best regards,
---  
-Nathan Chancellor <nathan@kernel.org>
+-- 
+2.50.1
 
 
