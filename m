@@ -1,92 +1,90 @@
-Return-Path: <linux-mips+bounces-10408-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10409-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17076B30407
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Aug 2025 22:11:37 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20FA5B303FA
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Aug 2025 22:10:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F1A2CAC4E1C
-	for <lists+linux-mips@lfdr.de>; Thu, 21 Aug 2025 20:09:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3268B5E6D99
+	for <lists+linux-mips@lfdr.de>; Thu, 21 Aug 2025 20:10:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97CE536997D;
-	Thu, 21 Aug 2025 20:07:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16B542C026E;
+	Thu, 21 Aug 2025 20:07:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WYIYoMlW"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="T2b9wZzk"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1D083570C2
-	for <linux-mips@vger.kernel.org>; Thu, 21 Aug 2025 20:07:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F423B36CDE0
+	for <linux-mips@vger.kernel.org>; Thu, 21 Aug 2025 20:07:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755806844; cv=none; b=JpYS77o25zejd0J6pm71fefjntBzzwXGFGm4JRanILBn3iVV6USUk4EeoS0MmqLMnwUQGifNVRctGQltw05XLob/1jpqaRu8oHj16NkmsZLC7agXj9wpwfSfJHy4xPbd400sZCnrm0C3TzD7Mf6uO76ErHsYkmHuW3XWCqRxgg0=
+	t=1755806848; cv=none; b=K64y8EwyPadwihCOBSDNoCj8cX02LUQGVkAB68llB5lJICsh7ld1T3vwanub6BduoMEhrm9BeUt9LtadKbApoQpaeFaRrEccsMwAmzcqULuyv0tSscyIzAfMvvpfRGHhkp1d9cZIXdgw93AWOeeyOlqg1So8YbrHFzj6MHQJcvw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755806844; c=relaxed/simple;
-	bh=Cw7Tggvlta2Xmlg9ZVygUv1C92bk8NKTD0n9SH6aeIk=;
+	s=arc-20240116; t=1755806848; c=relaxed/simple;
+	bh=vLP4m8ubY62ddowshnJEYGhNc+fB41I1n0umGIUlXAI=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=phAyJx0rBTXOWdr81MFtf/i+BtBiOOBwjHsagmLLh9C8d14Ayj3JBSRnK4CD5mySDMPNGPn0XsK7ODnAnG8EWa86qrNHJWzH5c17Ae4m9VC+6kLVPvEN/9xRthl1jAyee8VADAvoL0XKYC4skdMNy5oq9rmOUTS+VSFb/S9/IVY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WYIYoMlW; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=pCPrUxWXNCBkbqCtkn3PL8AQLf8pjF2foF3Z72GCYpXryeJwn93FFG6r4/55ApsVaGVVNd606EsPsqAq1LpgE318uhySsDBJ6ew5bjdyGdwohN6oQEYs+iwMoVcYwvZAh0GJq8MNpQ3c6ia8BGBMYuHjqE2BTHw9vF8qxO5OE4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=T2b9wZzk; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1755806841;
+	s=mimecast20190719; t=1755806845;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=iU84NUWejaBSUFBs/T0/O04YrYLlq1RcxZMywEFGjU0=;
-	b=WYIYoMlWacp2r7qNmwcpi1+0At+LSwhjqbQA/jXa0bs/nyO9JlTkYZwDqUnePI9k2s7ANo
-	dh7FppcVyrJTlwPunLc/qw9melOsZxQg1sqaVcroQMVlKCbypmteAHrvgPMjDaL6C2WRFq
-	Q1hxU6iMy3LaqBQ4CtK2xvmsqe31hvo=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=aOl+Pd7m6DQCTUATshUDhXjEbKNtUx8aQQ0CVjE/d9w=;
+	b=T2b9wZzkC/xtgKn0ukr1t3QPXzSS8koSErP70VVlBJTnOOS6+oUpk4YqREoCKecgtdFRIx
+	kGW2IIM/tgsuWykBgbG17G0j4gTen4UC+bNsSqM6/3hdTCdVEEjGP6KqUCVvLPRcpMl4xM
+	kkKGre4Sb/rfgzVn3cYIqgkm329u0Nk=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-519-lo_surGJMbKCsRir9R5z9g-1; Thu, 21 Aug 2025 16:07:20 -0400
-X-MC-Unique: lo_surGJMbKCsRir9R5z9g-1
-X-Mimecast-MFC-AGG-ID: lo_surGJMbKCsRir9R5z9g_1755806839
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-45a1b0cb0aaso10734145e9.3
-        for <linux-mips@vger.kernel.org>; Thu, 21 Aug 2025 13:07:20 -0700 (PDT)
+ us-mta-625-IpxztrQmOKuAVoU366-0Qw-1; Thu, 21 Aug 2025 16:07:23 -0400
+X-MC-Unique: IpxztrQmOKuAVoU366-0Qw-1
+X-Mimecast-MFC-AGG-ID: IpxztrQmOKuAVoU366-0Qw_1755806842
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-45a1b0cc989so8650025e9.3
+        for <linux-mips@vger.kernel.org>; Thu, 21 Aug 2025 13:07:22 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755806839; x=1756411639;
+        d=1e100.net; s=20230601; t=1755806842; x=1756411642;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iU84NUWejaBSUFBs/T0/O04YrYLlq1RcxZMywEFGjU0=;
-        b=HxfOvlT6kS2aM/5ciMW3NQZIdlo/cmveAcHc1JBNqoMGmM8k/alzVYedQaMZ7wXTsk
-         /OtZIsTawIZeTfUpcS7YggKhy6w4IsmHNvuH+5A4Y2HRYBhEzLbZMQmqrxYGxKJ/u78r
-         vJHytcYHqzj/I72ns2GjmEwNH/DxAJ8wu17LFaHe+FnTWm4kZKBeRqx/kQQqFLlKoXSe
-         elVgzTZrjU4WMubTNgD7+Vqka0MmtDnqFFP4ckQmg4+aQbyW1cWDl5+k2r4PVxrc5bjS
-         /pBLIPYjPDTteodasriJBsfjjXf3vtcvEKTaccrGx0wKXCDtwuTCAnRTFCGqGggAICol
-         zQMQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXVuc8/r07/kPSpT21frJxY2XLO0J/OlNY0mhPXr+R3X3jerLeRj5pc2SGaZkLAsynGMIhczaGo4q5q@vger.kernel.org
-X-Gm-Message-State: AOJu0YyRtaK0Z9HZp7DrTO77Q3SCde21zyYkB6Mrz2VJ+BDvsxsCCPCA
-	17v9i5OsgtuqNxcLaveDEpu0dQz6kDg2pOkrdhKNEaCs2KILE+9c1tbnL9PAoxZlAyx1lAMID6S
-	JAJ9dj+Ot8P0xvpqsLNpIXjY8d4AjQbb33FvGiviBkY/+AoFla2L6c883ZkeLYAY=
-X-Gm-Gg: ASbGncuVT64EPPvAc71Hw96YXDZTTgBSPER84h3Kp8rWlf7/aHw7FKaEp6Kb4PeBvKa
-	opHQQpJhDyo0j/Z7vo8fvtp5zgmeaoQ1hpeiTSBJygeQBnHJT6Q0WqQFV1NfMXCFTaUD/fUzQzk
-	rJ3bY18XvP9/9cN/p8N1qyo5vsl/XB3QG8zdW6w8uehmdgmdTix5Tl5dpjg6TEToF9N4G+xt7pe
-	dnnEXhnbw4+wYq4/15buMb8UCc6I5JyC14Sb1//qx9Pz/vrco+wFqH3PoOBXueTvXzdZyj1L5Pb
-	nAM9xgFdw8haVJM4fvpwLY2APMEhW7OPMH1fzY/LEiW/VEjOee6ZqEIRGV1LDhOw9ERT6yp24H1
-	xbGWjKFT7TtQlaBwJBUdtMg==
-X-Received: by 2002:a05:600c:1f95:b0:459:db80:c2ce with SMTP id 5b1f17b1804b1-45b51799428mr2845715e9.7.1755806838972;
-        Thu, 21 Aug 2025 13:07:18 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IHMhnqxttMNkrL8PAxIX9Mfq64uKkvY2MjzJ39LtAH2Yg7PxwVl8kOZ6CXLaaMF5rYTxrWwyA==
-X-Received: by 2002:a05:600c:1f95:b0:459:db80:c2ce with SMTP id 5b1f17b1804b1-45b51799428mr2845125e9.7.1755806838506;
-        Thu, 21 Aug 2025 13:07:18 -0700 (PDT)
+        bh=aOl+Pd7m6DQCTUATshUDhXjEbKNtUx8aQQ0CVjE/d9w=;
+        b=YJZJ8DbJpAdRHhaV/PCd1XrayuNMGi6vEjSDh3HROhc9T98b6QfCls4nsFL1pW5wve
+         tVCgRZBQz3oItnnzXgkmyWNqIAGTkVdEWlWnT3SlS2DckXrpZ+NRT9mQ+nrFVBZwDCog
+         sDso9Z2YBAX3n3wf9f8AYZQ6a5A4JU5JCcMG0M8BjhrTB+yxDn/TghVfCUnZ0LhKiGeh
+         B6UKQdlJQJ2wuSQTUvXdXkjZMYvkdrSUv2sVYPm9FA6lkQAL2GdshpDjL/4vgZscX90d
+         T3Gb9/sLPeyx7EnBLfHy9wElbyC4wENW/sPT4MYplinxuLLIXg2+dxZL38tFs9OMUUrF
+         bGPA==
+X-Forwarded-Encrypted: i=1; AJvYcCW0JMHlLH/4OI/+AQdBgUvpewJKguE/Qs3HDIk151lQnFfOxdTUJ6s6A4kxXFZEnA3ZNVKVW+VLl3qz@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHb2SzdaUJvY8q1kxbJxuDLm05cA+lgPvNfm4jC3fkZ20ZXxke
+	ZeqQf6lYHJiKdnSq1foE7cQLHOMhOM5Q3UsYRFw19Lh7rR88WbxdkicPPhbTOL4j5vt2hEqBFYE
+	IiqhGXOzm3ZqrSammXFS0UB/xmQIhPbudxyLDmzkFN84eus5gZ1pCL0m7fO5m4IY=
+X-Gm-Gg: ASbGncvEGCEXM8t+1Pz+qnlqenTia1cJJbhJ/xB29/rwDCurRMLPjJ8mXVQzE2uwiM0
+	BVgzBLxTOl2DnZ4kr3AO917zlu4X8xiFXMVBBbv+CS8MIMFRVp/qfceKcyPCTtZm9QG2itp5pLv
+	8USvTehyIiv0hguGPcgIKiuIXR3ZRCCi3Zks15LBeCx5v9i2TObtPeQN3FQFfzQVDATxyc+UjG1
+	YsHAJOHiLy2zY4LyLcjljWuS3p9IP7IIzZT49TpU0D2S3MLNfgwDoJSd2JCxIzQjUQTM2vY/IgK
+	yqp8BVyrNJtR8zjZsaCi/xMHaDS6HFxFFUW+VZN+evIqHs6soWEus1j2HdaX/AsV9S34EoU2GE5
+	HdCtOn6Dxmoq2+gFYW1XY9w==
+X-Received: by 2002:a05:600c:1993:b0:456:e39:ec1a with SMTP id 5b1f17b1804b1-45b517ad4a9mr2412515e9.14.1755806841682;
+        Thu, 21 Aug 2025 13:07:21 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IHtBnzBdejX2oNj8vG9iZBZKJew+pPrkGWxHzVnhFEnb5RkXIsj+cBFTtJrIXnzr/4lYhSU+w==
+X-Received: by 2002:a05:600c:1993:b0:456:e39:ec1a with SMTP id 5b1f17b1804b1-45b517ad4a9mr2412295e9.14.1755806841198;
+        Thu, 21 Aug 2025 13:07:21 -0700 (PDT)
 Received: from localhost (p200300d82f26ba0008036ec5991806fd.dip0.t-ipconnect.de. [2003:d8:2f26:ba00:803:6ec5:9918:6fd])
-        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-45b50dea2b9sm8988005e9.15.2025.08.21.13.07.16
+        by smtp.gmail.com with UTF8SMTPSA id 5b1f17b1804b1-45b50dc00a8sm10960275e9.1.2025.08.21.13.07.19
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 21 Aug 2025 13:07:18 -0700 (PDT)
+        Thu, 21 Aug 2025 13:07:20 -0700 (PDT)
 From: David Hildenbrand <david@redhat.com>
 To: linux-kernel@vger.kernel.org
 Cc: David Hildenbrand <david@redhat.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Shuah Khan <shuah@kernel.org>,
 	Alexander Potapenko <glider@google.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Brendan Jackman <jackmanb@google.com>,
@@ -133,9 +131,9 @@ Cc: David Hildenbrand <david@redhat.com>,
 	wireguard@lists.zx2c4.com,
 	x86@kernel.org,
 	Zi Yan <ziy@nvidia.com>
-Subject: [PATCH RFC 04/35] x86/Kconfig: drop superfluous "select SPARSEMEM_VMEMMAP"
-Date: Thu, 21 Aug 2025 22:06:30 +0200
-Message-ID: <20250821200701.1329277-5-david@redhat.com>
+Subject: [PATCH RFC 05/35] wireguard: selftests: remove CONFIG_SPARSEMEM_VMEMMAP=y from qemu kernel config
+Date: Thu, 21 Aug 2025 22:06:31 +0200
+Message-ID: <20250821200701.1329277-6-david@redhat.com>
 X-Mailer: git-send-email 2.50.1
 In-Reply-To: <20250821200701.1329277-1-david@redhat.com>
 References: <20250821200701.1329277-1-david@redhat.com>
@@ -147,30 +145,28 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Now handled by the core automatically once SPARSEMEM_VMEMMAP_ENABLE
-is selected.
+It's no longer user-selectable (and the default was already "y"), so
+let's just drop it.
 
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Borislav Petkov <bp@alien8.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
+Cc: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: Shuah Khan <shuah@kernel.org>
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- arch/x86/Kconfig | 1 -
+ tools/testing/selftests/wireguard/qemu/kernel.config | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index 58d890fe2100e..e431d1c06fecd 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -1552,7 +1552,6 @@ config ARCH_SPARSEMEM_ENABLE
- 	def_bool y
- 	select SPARSEMEM_STATIC if X86_32
- 	select SPARSEMEM_VMEMMAP_ENABLE if X86_64
--	select SPARSEMEM_VMEMMAP if X86_64
- 
- config ARCH_SPARSEMEM_DEFAULT
- 	def_bool X86_64 || (NUMA && X86_32)
+diff --git a/tools/testing/selftests/wireguard/qemu/kernel.config b/tools/testing/selftests/wireguard/qemu/kernel.config
+index 0a5381717e9f4..1149289f4b30f 100644
+--- a/tools/testing/selftests/wireguard/qemu/kernel.config
++++ b/tools/testing/selftests/wireguard/qemu/kernel.config
+@@ -48,7 +48,6 @@ CONFIG_JUMP_LABEL=y
+ CONFIG_FUTEX=y
+ CONFIG_SHMEM=y
+ CONFIG_SLUB=y
+-CONFIG_SPARSEMEM_VMEMMAP=y
+ CONFIG_SMP=y
+ CONFIG_SCHED_SMT=y
+ CONFIG_SCHED_MC=y
 -- 
 2.50.1
 
