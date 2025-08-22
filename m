@@ -1,218 +1,213 @@
-Return-Path: <linux-mips+bounces-10468-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10469-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED189B318FA
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Aug 2025 15:14:44 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C7F4B31A8C
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Aug 2025 16:02:53 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D201B3ABBA1
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Aug 2025 13:09:28 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 83A747B79F2
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Aug 2025 14:00:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AC692FD7AA;
-	Fri, 22 Aug 2025 13:09:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08007311C3E;
+	Fri, 22 Aug 2025 14:00:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="e5JcKPQp"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="S2RDm1yB"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C37B02FCBF8
-	for <linux-mips@vger.kernel.org>; Fri, 22 Aug 2025 13:09:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7BC3311591
+	for <linux-mips@vger.kernel.org>; Fri, 22 Aug 2025 14:00:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755868159; cv=none; b=WMJ5u8uFw9Red73T0KIaGBL+IXGt+CWkvNw1Bkcfbkuqlc1JYy70nxgv4W/YFZaFA4ZmhTef0UxeqcYOJ0sEKusKkgrvwFZh9JHI95QA/q3lsAggnXCa7/rOUAyj5L3ya1rECz9P/B0e6stCuhFGNxy+giQhuqg4bss2u987f24=
+	t=1755871206; cv=none; b=U7kC44fZ4G6ZWeMwrf46f9NzvsqySnF+Cs4GVeYxm6BlPOBy2HWW2eeKUpUM/0UFKLh4qpOLAhhZKOFAvqWY0LMg2NWWVf7Q0B3u46dJ88Uz+o3wx++D/h96/h/4nMWX4LtGOg3qUIo9xUVzL5Z7NsYH9E0egQkG74UI7bCV7Rc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755868159; c=relaxed/simple;
-	bh=O0asdK8SeOVtorPLNtX9IHFVw5PwpWz+Y/IXMS4KmCU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eVuHik/fC23f8YMR9Tgb+lTqACQmalYwAwU5q3OTc4myqBJAoUZJrrNCnSSXwKP72r3Dpe4nHKGykbazeS18vEsvr8YUmQFZzq+KhW9pVT84nptqDL3dF35rRrSXyWqDIzhknOeHbA2xRpLflspsm9Gq5TL17HVyke+BvKbY8EE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=e5JcKPQp; arc=none smtp.client-ip=170.10.129.124
+	s=arc-20240116; t=1755871206; c=relaxed/simple;
+	bh=Uf5BeT2cOeXT45NhomHkgVDa9aHp8Q7A4AmKdNga0dA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CFpXgzT1BtdbS72wzwlrQHuLABu8qToMX4oIGu9W2755yVehk4SSyEbfL7ybn3EpeVHtFs8elCXnprW0Ns37ANt0XPEdurtsVRtIGG0zAjXH0a40rk6yj8mCDDOGQjZZ8NlAzuXoN3VR8srJMH1AU0NJzTdNr9Q2Xgo9o4VuIU4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=S2RDm1yB; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1755868156;
+	s=mimecast20190719; t=1755871203;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=a26YwWriI/cAZNSFk7MZK1EJDFmLtTh5uMUvUQRBu1c=;
-	b=e5JcKPQpMPpiORnmnxJoAeuLPnzAdfa90NM9JK3H273fWWIkszLJ1cdgJfpOAIfErssA3O
-	ETkMAbC/gje/pEudqa7HDbMI/IV3Kn8ISjloK2IlvSvWxobn9O+gH6L3UnAKbfVvwryZoN
-	Kc2EaAF84ycUCbdFN7fs2NIZDJXV564=
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
- [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=K6aDoQ2nZkjhSfUgeR22UAGAXQBWHHuCN2RUasZyd3Q=;
+	b=S2RDm1yB6c1GB56ZgV5tcXh1KAFlFALQMn2dyFrAeOpNyUFP8+eYcgH0B5JChbpsLILSne
+	TLRufLCWU76iALicbHkw+JlBl0U2Bu9MWAtnPz1RBG5ao3jUeNmgsjSh4C0ik81xNqfXeZ
+	AV8zU3QJlstKesvTlK0FhINku+XxI1k=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-125-SSgBrDsGNK2gqn1xvZQHIA-1; Fri, 22 Aug 2025 09:09:13 -0400
-X-MC-Unique: SSgBrDsGNK2gqn1xvZQHIA-1
-X-Mimecast-MFC-AGG-ID: SSgBrDsGNK2gqn1xvZQHIA_1755868153
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-7e9fa5f80e7so503713285a.0
-        for <linux-mips@vger.kernel.org>; Fri, 22 Aug 2025 06:09:13 -0700 (PDT)
+ us-mta-299-2crhD9xTM7uxnXIY2wTlXQ-1; Fri, 22 Aug 2025 10:00:01 -0400
+X-MC-Unique: 2crhD9xTM7uxnXIY2wTlXQ-1
+X-Mimecast-MFC-AGG-ID: 2crhD9xTM7uxnXIY2wTlXQ_1755871201
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-45a256a20fcso12451445e9.2
+        for <linux-mips@vger.kernel.org>; Fri, 22 Aug 2025 07:00:01 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755868153; x=1756472953;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=a26YwWriI/cAZNSFk7MZK1EJDFmLtTh5uMUvUQRBu1c=;
-        b=Bpt1QS3NnF4q9ByyUbqGJXDSGB5zVmmPaFhTjU9aBzFCZA2Nq+gdI/Y692ZTWmU8UV
-         kNmv0VxIfXGY5PEqWEssSmLw57z1gkmVwr/0w2GOp6c+aN+efy3dZwsTQfpGaShfPchW
-         m8hQXeOmsmqpx8f+p7CeJybIh3flagU227owK8ts9hbMoZqX3HGWbM68oLkeY/pQVLY8
-         Awwqkw6szRTedYiPY/H93yhXzKjDCRmZhsKMd1/vsdbdgqwwa5aN1ymrLwV5vL33qpns
-         /pKKB2jwgpMIkiB83dPfQKaax8ocSkeBKeA5eipJjusUI8l6fQxpWpVh1ztOmMP/fQkv
-         EimQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVG5v1KqL0GUzrODkhNBhAbozoFFDimQxuCXFZFIWn3DLZDIeAICWZOyS4RbrHa7JqKceBEgJOpEk/O@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAk7CUz+fmEC6DHQw200V9hZxZcToipGbaUo9/p4XC72YcBLfl
-	F4PpvHK6Yyqn9x8n/Smws1SP1puPIsRDz/pI6IHACsjyZ9of9bpQGqnAJ5v2W6ZqlIStGp3KSi7
-	6ZLiF54fOMmPY85tTPuienhL5KFj/p8+w9MSh+blxCRBJaS6xqlYmfFAs1LjppBY=
-X-Gm-Gg: ASbGncs74j2WxTN86SNNtg5zH1kdVdLv8afFX+js5Xtax/sog3AZe1xd3h8Ik81Kj73
-	SyEp3lVZEptzpWFg3VYyJ5Nz7xJI9mQV+seuqk1oW9kuxCwVjsRR/PMIvKWgO0Wog80kWq5Sf7J
-	4YJ4zPJ1EYzupxdghcHlFSyTGFPr4G385CzEcFlgNpntMPJc+DjFhWXshXd+B4JGbeQ5e+64vHp
-	SqftsDwunWewQ0b3TMwkQpGc9lfR4FlkDifqcgCF4dA+96D+QNWDHmOMUDgORpzQB+C+ueRRua1
-	AqvyWDjEWZQWPoz0PtsSCJURC9NENsk4JBJKvfhhHqo/cpANcqFn+QKjPKqdtd3OxI5Vohp1glU
-	4H+SGDrH+efZJ6QQntF4=
-X-Received: by 2002:a05:620a:6cc2:b0:7e3:6a01:e6ba with SMTP id af79cd13be357-7ea10f538ddmr299226785a.8.1755868152306;
-        Fri, 22 Aug 2025 06:09:12 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEW1uvjDvOlgb0eZoGZSzJHV+ZTat1aB9dEJTqNDB/h4VuJNJ3Q109+V4G1CkIe7Ilb4zQPqA==
-X-Received: by 2002:a05:620a:6cc2:b0:7e3:6a01:e6ba with SMTP id af79cd13be357-7ea10f538ddmr299210885a.8.1755868151398;
-        Fri, 22 Aug 2025 06:09:11 -0700 (PDT)
-Received: from x1 (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7e87e1c9b9dsm1332247685a.70.2025.08.22.06.09.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 22 Aug 2025 06:09:10 -0700 (PDT)
-Date: Fri, 22 Aug 2025 09:09:04 -0400
-From: Brian Masney <bmasney@redhat.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	Chen Wang <unicorn_wang@outlook.com>,
-	Inochi Amaoto <inochiama@gmail.com>,
-	Nicolas Ferre <nicolas.ferre@microchip.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Paul Cercueil <paul@crapouillou.net>,
-	Keguang Zhang <keguang.zhang@gmail.com>,
-	Taichi Sugaya <sugaya.taichi@socionext.com>,
-	Takao Orito <orito.takao@socionext.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Jacky Huang <ychuang3@nuvoton.com>,
-	Shan-Chun Hung <schung@nuvoton.com>,
-	Vladimir Zapolskiy <vz@mleia.com>,
-	Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Yixun Lan <dlan@gentoo.org>,
-	Steen Hegelund <Steen.Hegelund@microchip.com>,
-	Daniel Machon <daniel.machon@microchip.com>,
-	UNGLinuxDriver@microchip.com, Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Michal Simek <michal.simek@amd.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Neal Gompa <neal@gompa.dev>,
-	Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
-	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Max Filippov <jcmvbkbc@gmail.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Daniel Palmer <daniel@thingy.jp>,
-	Romain Perier <romain.perier@gmail.com>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Gregory Clement <gregory.clement@bootlin.com>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Andrea della Porta <andrea.porta@suse.com>,
-	Sylwester Nawrocki <s.nawrocki@samsung.com>,
-	Chanwoo Choi <cw00.choi@samsung.com>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Qin Jian <qinjian@cqplus1.com>, Viresh Kumar <vireshk@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>,
-	Alex Helms <alexander.helms.jy@renesas.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Liviu Dudau <liviu.dudau@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
-	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-	arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	sophgo@lists.linux.dev, linux-mips@vger.kernel.org,
-	imx@lists.linux.dev, linux-riscv@lists.infradead.org,
-	spacemit@lists.linux.dev, linux-stm32@st-md-mailman.stormreply.com,
-	patches@opensource.cirrus.com, linux-actions@lists.infradead.org,
-	asahi@lists.linux.dev, linux-mediatek@lists.infradead.org,
-	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-	linux-rockchip@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev
-Subject: Re: [PATCH 000/114] clk: convert drivers from deprecated
- round_rate() to determine_rate()
-Message-ID: <aKhr8NYhei59At0s@x1>
-References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
- <1907e1c7-2b15-4729-8497-a7e6f0526366@kernel.org>
- <aKhVVJPEPxCoKKjI@x1>
- <4d31df9e-62c9-4988-9301-2911ff7de229@kernel.org>
+        d=1e100.net; s=20230601; t=1755871201; x=1756476001;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K6aDoQ2nZkjhSfUgeR22UAGAXQBWHHuCN2RUasZyd3Q=;
+        b=JY36xzozZPzwup+vyA91uIGHBeWPJYg3fGGN6kfVzaymmSYcAQVTWo+6Y+r9bJ7nhm
+         47KeRl397vSAKcI4RVRCCow7Wl1klPBSPuJkGpKm+nh6nKVZ/mKwmLTfq/hXsjJsgd3s
+         JZmQObukcH8dX8oJYczyOo0dMyiSp2JbgI2+4RBX7vL+4B3111ym/810lxw9shiUf6Lj
+         rQJX2dJX4yRvL5UEqLo1DXdSiJaBF3cAFy1mdBOnVLPdlQKCdV/UzSiJTc2LL3a/j82u
+         MhUbxf32X0ElmyfIvccHmRhAN62W3rN6J0J6WzOariu9OSacXATRme1vgaOjcj0Uhoua
+         vFEg==
+X-Forwarded-Encrypted: i=1; AJvYcCUoJDtCu0DwJKFgshjc1UKrHsKaSorGZTJlONmIfyXVB/XditwPb5HqgEe+UyY0RhViBe3cRlVz3t9r@vger.kernel.org
+X-Gm-Message-State: AOJu0YwlZswg0mI+eGgRluhlvgKsI0ZuBpcnKoVQWxJYddbRwPZgvU/I
+	k4cA4pfivstRl/ORkbai4MBugjcs8jQP5kZNVzOXGk7Wy1DYEB/0XJRw/+2tjzxsxb7TzARYU8S
+	hPj7Dhj00c38IiJqitYjW+xc3k5ZfnrfQNldf4ptjsA/bn9i+k54wxpvv57anLLE=
+X-Gm-Gg: ASbGnctUmdKgau/9N2YGmxF4BTV/DoY3uBWxW0zvmlpei5nyrqT8dTsZASnRVrAnUIB
+	ylRkPWu6U4D3n8TLjoTBjokm9yHUbE6MvdjR6PPJDRXw8jeTXdxcFQWhCaj1nngYndKnYEjYK8I
+	I7qQNGxW5DFNPwyCALnhny4aCug7g3dMRZDO/tS9Vs8cb42iUfD8/OTIkbxzV95EXIbM5gU4mLR
+	M4IlLZvp1F3HDaT24aKn/Wq8M6kXqWe1qZw9+iP5HocPyYOgxfSgPxd68X9U69C40N0v5DP3M8v
+	BQ+7DaHWWj2y6FUOCr4CDzAe8VR2rSxt0hxQhyFHdJZ0QLlZICUztnGFvR2BjncliFKjegPyl+2
+	bYXApaRoR/Ef+jehC39QU4Z5NLeCW++7kvEOIA5VKHhPPLo+65hjGrFmYxUPs6+qSisE=
+X-Received: by 2002:a05:600c:1554:b0:459:e06b:afb4 with SMTP id 5b1f17b1804b1-45b5179b4fcmr28181595e9.4.1755871200654;
+        Fri, 22 Aug 2025 07:00:00 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IGwWP+gcyHz5PASikvY9eCVK8ixT+7ngDF6OHjbY0O7J0DLjuT/QVU1ki3KQXQcrTer6FnpTg==
+X-Received: by 2002:a05:600c:1554:b0:459:e06b:afb4 with SMTP id 5b1f17b1804b1-45b5179b4fcmr28181195e9.4.1755871200176;
+        Fri, 22 Aug 2025 07:00:00 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f2e:6100:d9da:ae87:764c:a77e? (p200300d82f2e6100d9daae87764ca77e.dip0.t-ipconnect.de. [2003:d8:2f2e:6100:d9da:ae87:764c:a77e])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b57498d9csm82525e9.22.2025.08.22.06.59.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 22 Aug 2025 06:59:59 -0700 (PDT)
+Message-ID: <473f3576-ddf3-4388-aeec-d486f639950a@redhat.com>
+Date: Fri, 22 Aug 2025 15:59:57 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4d31df9e-62c9-4988-9301-2911ff7de229@kernel.org>
-User-Agent: Mutt/2.2.14 (2025-02-20)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 18/35] io_uring/zcrx: remove "struct io_copy_cache"
+ and one nth_page() usage
+To: Pavel Begunkov <asml.silence@gmail.com>, linux-kernel@vger.kernel.org
+Cc: Jens Axboe <axboe@kernel.dk>, Alexander Potapenko <glider@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Brendan Jackman <jackmanb@google.com>, Christoph Lameter <cl@gentwo.org>,
+ Dennis Zhou <dennis@kernel.org>, Dmitry Vyukov <dvyukov@google.com>,
+ dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+ iommu@lists.linux.dev, io-uring@vger.kernel.org,
+ Jason Gunthorpe <jgg@nvidia.com>, Johannes Weiner <hannes@cmpxchg.org>,
+ John Hubbard <jhubbard@nvidia.com>, kasan-dev@googlegroups.com,
+ kvm@vger.kernel.org, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>, linux-arm-kernel@axis.com,
+ linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+ linux-ide@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org, linux-mm@kvack.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-scsi@vger.kernel.org, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Marco Elver <elver@google.com>, Marek Szyprowski <m.szyprowski@samsung.com>,
+ Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>,
+ Muchun Song <muchun.song@linux.dev>, netdev@vger.kernel.org,
+ Oscar Salvador <osalvador@suse.de>, Peter Xu <peterx@redhat.com>,
+ Robin Murphy <robin.murphy@arm.com>, Suren Baghdasaryan <surenb@google.com>,
+ Tejun Heo <tj@kernel.org>, virtualization@lists.linux.dev,
+ Vlastimil Babka <vbabka@suse.cz>, wireguard@lists.zx2c4.com, x86@kernel.org,
+ Zi Yan <ziy@nvidia.com>
+References: <20250821200701.1329277-1-david@redhat.com>
+ <20250821200701.1329277-19-david@redhat.com>
+ <b5b08ad3-d8cd-45ff-9767-7cf1b22b5e03@gmail.com>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ xsFNBFXLn5EBEAC+zYvAFJxCBY9Tr1xZgcESmxVNI/0ffzE/ZQOiHJl6mGkmA1R7/uUpiCjJ
+ dBrn+lhhOYjjNefFQou6478faXE6o2AhmebqT4KiQoUQFV4R7y1KMEKoSyy8hQaK1umALTdL
+ QZLQMzNE74ap+GDK0wnacPQFpcG1AE9RMq3aeErY5tujekBS32jfC/7AnH7I0v1v1TbbK3Gp
+ XNeiN4QroO+5qaSr0ID2sz5jtBLRb15RMre27E1ImpaIv2Jw8NJgW0k/D1RyKCwaTsgRdwuK
+ Kx/Y91XuSBdz0uOyU/S8kM1+ag0wvsGlpBVxRR/xw/E8M7TEwuCZQArqqTCmkG6HGcXFT0V9
+ PXFNNgV5jXMQRwU0O/ztJIQqsE5LsUomE//bLwzj9IVsaQpKDqW6TAPjcdBDPLHvriq7kGjt
+ WhVhdl0qEYB8lkBEU7V2Yb+SYhmhpDrti9Fq1EsmhiHSkxJcGREoMK/63r9WLZYI3+4W2rAc
+ UucZa4OT27U5ZISjNg3Ev0rxU5UH2/pT4wJCfxwocmqaRr6UYmrtZmND89X0KigoFD/XSeVv
+ jwBRNjPAubK9/k5NoRrYqztM9W6sJqrH8+UWZ1Idd/DdmogJh0gNC0+N42Za9yBRURfIdKSb
+ B3JfpUqcWwE7vUaYrHG1nw54pLUoPG6sAA7Mehl3nd4pZUALHwARAQABzSREYXZpZCBIaWxk
+ ZW5icmFuZCA8ZGF2aWRAcmVkaGF0LmNvbT7CwZoEEwEIAEQCGwMCF4ACGQEFCwkIBwICIgIG
+ FQoJCAsCBBYCAwECHgcWIQQb2cqtc1xMOkYN/MpN3hD3AP+DWgUCaJzangUJJlgIpAAKCRBN
+ 3hD3AP+DWhAxD/9wcL0A+2rtaAmutaKTfxhTP0b4AAp1r/eLxjrbfbCCmh4pqzBhmSX/4z11
+ opn2KqcOsueRF1t2ENLOWzQu3Roiny2HOU7DajqB4dm1BVMaXQya5ae2ghzlJN9SIoopTWlR
+ 0Af3hPj5E2PYvQhlcqeoehKlBo9rROJv/rjmr2x0yOM8qeTroH/ZzNlCtJ56AsE6Tvl+r7cW
+ 3x7/Jq5WvWeudKrhFh7/yQ7eRvHCjd9bBrZTlgAfiHmX9AnCCPRPpNGNedV9Yty2Jnxhfmbv
+ Pw37LA/jef8zlCDyUh2KCU1xVEOWqg15o1RtTyGV1nXV2O/mfuQJud5vIgzBvHhypc3p6VZJ
+ lEf8YmT+Ol5P7SfCs5/uGdWUYQEMqOlg6w9R4Pe8d+mk8KGvfE9/zTwGg0nRgKqlQXrWRERv
+ cuEwQbridlPAoQHrFWtwpgYMXx2TaZ3sihcIPo9uU5eBs0rf4mOERY75SK+Ekayv2ucTfjxr
+ Kf014py2aoRJHuvy85ee/zIyLmve5hngZTTe3Wg3TInT9UTFzTPhItam6dZ1xqdTGHZYGU0O
+ otRHcwLGt470grdiob6PfVTXoHlBvkWRadMhSuG4RORCDpq89vu5QralFNIf3EysNohoFy2A
+ LYg2/D53xbU/aa4DDzBb5b1Rkg/udO1gZocVQWrDh6I2K3+cCs7BTQRVy5+RARAA59fefSDR
+ 9nMGCb9LbMX+TFAoIQo/wgP5XPyzLYakO+94GrgfZjfhdaxPXMsl2+o8jhp/hlIzG56taNdt
+ VZtPp3ih1AgbR8rHgXw1xwOpuAd5lE1qNd54ndHuADO9a9A0vPimIes78Hi1/yy+ZEEvRkHk
+ /kDa6F3AtTc1m4rbbOk2fiKzzsE9YXweFjQvl9p+AMw6qd/iC4lUk9g0+FQXNdRs+o4o6Qvy
+ iOQJfGQ4UcBuOy1IrkJrd8qq5jet1fcM2j4QvsW8CLDWZS1L7kZ5gT5EycMKxUWb8LuRjxzZ
+ 3QY1aQH2kkzn6acigU3HLtgFyV1gBNV44ehjgvJpRY2cC8VhanTx0dZ9mj1YKIky5N+C0f21
+ zvntBqcxV0+3p8MrxRRcgEtDZNav+xAoT3G0W4SahAaUTWXpsZoOecwtxi74CyneQNPTDjNg
+ azHmvpdBVEfj7k3p4dmJp5i0U66Onmf6mMFpArvBRSMOKU9DlAzMi4IvhiNWjKVaIE2Se9BY
+ FdKVAJaZq85P2y20ZBd08ILnKcj7XKZkLU5FkoA0udEBvQ0f9QLNyyy3DZMCQWcwRuj1m73D
+ sq8DEFBdZ5eEkj1dCyx+t/ga6x2rHyc8Sl86oK1tvAkwBNsfKou3v+jP/l14a7DGBvrmlYjO
+ 59o3t6inu6H7pt7OL6u6BQj7DoMAEQEAAcLBfAQYAQgAJgIbDBYhBBvZyq1zXEw6Rg38yk3e
+ EPcA/4NaBQJonNqrBQkmWAihAAoJEE3eEPcA/4NaKtMQALAJ8PzprBEXbXcEXwDKQu+P/vts
+ IfUb1UNMfMV76BicGa5NCZnJNQASDP/+bFg6O3gx5NbhHHPeaWz/VxlOmYHokHodOvtL0WCC
+ 8A5PEP8tOk6029Z+J+xUcMrJClNVFpzVvOpb1lCbhjwAV465Hy+NUSbbUiRxdzNQtLtgZzOV
+ Zw7jxUCs4UUZLQTCuBpFgb15bBxYZ/BL9MbzxPxvfUQIPbnzQMcqtpUs21CMK2PdfCh5c4gS
+ sDci6D5/ZIBw94UQWmGpM/O1ilGXde2ZzzGYl64glmccD8e87OnEgKnH3FbnJnT4iJchtSvx
+ yJNi1+t0+qDti4m88+/9IuPqCKb6Stl+s2dnLtJNrjXBGJtsQG/sRpqsJz5x1/2nPJSRMsx9
+ 5YfqbdrJSOFXDzZ8/r82HgQEtUvlSXNaXCa95ez0UkOG7+bDm2b3s0XahBQeLVCH0mw3RAQg
+ r7xDAYKIrAwfHHmMTnBQDPJwVqxJjVNr7yBic4yfzVWGCGNE4DnOW0vcIeoyhy9vnIa3w1uZ
+ 3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
+ CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
+ qIws/H2t
+In-Reply-To: <b5b08ad3-d8cd-45ff-9767-7cf1b22b5e03@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Aug 22, 2025 at 02:23:50PM +0200, Krzysztof Kozlowski wrote:
-> On 22/08/2025 13:32, Brian Masney wrote:
-> > 7 of the 114 patches in this series needs a v2 with a minor fix. I see
-> > several paths forward to merging this. It's ultimately up to Stephen how
-> > he wants to proceed.
-> > 
-> > - I send Stephen a PULL request with all of these patches with the minor
-> >   cleanups to the 7 patches. Depending on the timing, Stephen can merge
-> >   the other work first, and I deal with cleaning up the merge conflicts.
-> >   Or he can if he prefers to instead.
-> > 
-> > - Stephen applies everyone else's work first to his tree, and then the
-> >   good 107 patches in this series. He skips anything that doesn't apply
-> >   due to other people's work and I follow up with a smaller series.
+On 22.08.25 13:32, Pavel Begunkov wrote:
+> On 8/21/25 21:06, David Hildenbrand wrote:
+>> We always provide a single dst page, it's unclear why the io_copy_cache
+>> complexity is required.
 > 
-> Both cause cross tree merge conflicts. Anyway, please document clearly
-> the dependencies between patches.
+> Because it'll need to be pulled outside the loop to reuse the page for
+> multiple copies, i.e. packing multiple fragments of the same skb into
+> it. Not finished, and currently it's wasting memory.
 
-This series only touches drivers/clk, so it shouldn't cause any issues
-with other subsystems, unless there's a topic branch somewhere, or I'm
-missing something?
+Okay, so what you're saying is that there will be follow-up work that 
+will actually make this structure useful.
 
-There are some drivers under drivers/clk/ where there is an entry in the
-MAINTAINERS file that's not Stephen, although it wasn't clear to me if
-all of those people will send PULL requests to Stephen. I described on
-the cover how how the series was broken up.
+> 
+> Why not do as below? Pages there never cross boundaries of their folios. > Do you want it to be taken into the io_uring tree?
 
-  - Patches 4-70 are for drivers where there is no clk submaintainer
-  - Patches 71-110 are for drivers where this is an entry in MAINTAINERS
-    (for drivers/clk)
+This should better all go through the MM tree where we actually 
+guarantee contiguous pages within a folio. (see the cover letter)
 
-For the clk subdirectories that had say more than 3 patches, I sent
-those off as separate patch series. The ones in this series have an
-entry in MAINTAINERS only have a few patches for each maintainer.
+> 
+> diff --git a/io_uring/zcrx.c b/io_uring/zcrx.c
+> index e5ff49f3425e..18c12f4b56b6 100644
+> --- a/io_uring/zcrx.c
+> +++ b/io_uring/zcrx.c
+> @@ -975,9 +975,9 @@ static ssize_t io_copy_page(struct io_copy_cache *cc, struct page *src_page,
+>    
+>    		if (folio_test_partial_kmap(page_folio(dst_page)) ||
+>    		    folio_test_partial_kmap(page_folio(src_page))) {
+> -			dst_page = nth_page(dst_page, dst_offset / PAGE_SIZE);
+> +			dst_page += dst_offset / PAGE_SIZE;
+>    			dst_offset = offset_in_page(dst_offset);
+> -			src_page = nth_page(src_page, src_offset / PAGE_SIZE);
+> +			src_page += src_offset / PAGE_SIZE;
 
-As for patch dependencies, patches 111 (clk/divider) and
-114 (clk/fixed-factor) should go in last. It doesn't matter the order
-everything else goes in.
+Yeah, I can do that in the next version given that you have plans on 
+extending that code soon.
 
-Brian
+-- 
+Cheers
+
+David / dhildenb
 
 
