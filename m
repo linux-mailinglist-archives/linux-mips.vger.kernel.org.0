@@ -1,158 +1,222 @@
-Return-Path: <linux-mips+bounces-10464-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10466-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10AB6B31162
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Aug 2025 10:16:13 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6D02B31668
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Aug 2025 13:32:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 63145B65F8C
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Aug 2025 08:14:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F83E1D04587
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Aug 2025 11:33:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C1DC2EB854;
-	Fri, 22 Aug 2025 08:15:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9AB982F8BC0;
+	Fri, 22 Aug 2025 11:32:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="e4dvoXQd"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BE8CoLr/"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DCCD2EAB8E;
-	Fri, 22 Aug 2025 08:15:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C9F51B4141
+	for <linux-mips@vger.kernel.org>; Fri, 22 Aug 2025 11:32:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755850524; cv=none; b=ozLI64b9GVkgPSCwtPCuert4I6ajVEbnwo5JDaG/kwfv67Vvr2lFsAsePrm3dyJk5ndnPtnehOczlDXuFYFGu7UY9EAhd3qR+KCng0lYVHtvjV1vP9nqcPkYMPTqEKhE8xuaeZrLjp4bTnRR8UwvJPEWWv2smbcRlaF6DLdihPk=
+	t=1755862369; cv=none; b=PlN/SQqVQeS3f/4ol/hhusoP+80JwnDOwppBS3c3GrN/PkH6Qqt4Kj4iJPcBpHOpUxbgY9Qa0LlKjpV0lv8jSZ8wpm+T51/s8f3mFh3pKS1MaWvRz2DNVxbipp11nbdNJqeEffVOPpbiNN/bqp7ZRjZmsPWdmnZNyN18OsXviJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755850524; c=relaxed/simple;
-	bh=kTBgh0y3vRHtAXTeRcbbIloycHJMI8lellSKLz/etxs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=KyXfAKy0F6ybvStAwcrXAl3biBkLUUQ6DEZFSRmOfzmRYRgIG37lB7OaWyfJgYV8T9iF4iIytitS2ZQo+FvY+BvEeLQGgc3/hWgMYDQuNEmWbaqbO9kH927iWHN4aCUrICUaWEobQwpuar4If72hJzV66dkJG9o3P8TNiyk9L8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=e4dvoXQd; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20250822081519euoutp01946853c37392c604dd0c3ef7d9f9864d~eCL6pnShX0804708047euoutp01V;
-	Fri, 22 Aug 2025 08:15:19 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20250822081519euoutp01946853c37392c604dd0c3ef7d9f9864d~eCL6pnShX0804708047euoutp01V
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1755850519;
-	bh=gSgM5v5QN4mf4R9UjO3p9g49c5fElcblzx9rfuNpgCM=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=e4dvoXQdSu6m2XApKflo9WPmqpXymYx8peucZKWnnidxwTqyyGT6vyRmLSZhDupfy
-	 UQS833Dv4xDvMpcINMnXzIPqm8717h4UDC2WHsJO8GSlXAIbIu/HM+EmSf5f03lk+1
-	 DvviTyYYSXyxJn74yEGOVwAsfz9e64KnZWqZgVcw=
-Received: from eusmtip1.samsung.com (unknown [203.254.199.221]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20250822081519eucas1p173966299ee7e4ed7e44e5668490c5bb1~eCL6VCjyQ0206902069eucas1p1F;
-	Fri, 22 Aug 2025 08:15:19 +0000 (GMT)
-Received: from [106.210.134.192] (unknown [106.210.134.192]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20250822081515eusmtip1e7bc345219f25d2646a53b4e40310c91~eCL2XTm3N1429714297eusmtip1U;
-	Fri, 22 Aug 2025 08:15:14 +0000 (GMT)
-Message-ID: <8c4b0068-92be-427b-8bfc-9926eea6aa09@samsung.com>
-Date: Fri, 22 Aug 2025 10:15:14 +0200
+	s=arc-20240116; t=1755862369; c=relaxed/simple;
+	bh=L8r+qozRR4+oRg0gjEnUdgQIlMMDMWyJ7V174VmYI18=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=set4EGVADaXaD0tJ7aq7puQKWwo6Eq7CfUhkS7k+BwYUi8OIbyjJkKkqLFKpbakv6btzwxMRdCZnCwwCgaAbX4HyFK4UnaF8T566YRuq53604RWBXxAcdIp0AHlYx8coSB846y3Q4tVVnmlqreWYHjB0f7YVuuYAHuVw1UpJwwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BE8CoLr/; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1755862366;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=szopGzlKxzQVjhy80Hyf8D8Trqw2L0U+tNPu86d0YYI=;
+	b=BE8CoLr/UTBBNqQsuYyg+Z7I5egLwLXk/zkjwbSJO9qn7gxAjQU3YYnoMeiSs4VtE76gCR
+	lWHeeyH8nptERunJscai8+z/TetKt2naz9dp4bGVEpWZUIpSqpO23Y/iyaSfuY7+0Cc8pG
+	IuCUBiPY6GnkPrVZ+TJxyHlRioBpPv0=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-583-ACIuBVXhMYqWxSfiFBIRQA-1; Fri, 22 Aug 2025 07:32:45 -0400
+X-MC-Unique: ACIuBVXhMYqWxSfiFBIRQA-1
+X-Mimecast-MFC-AGG-ID: ACIuBVXhMYqWxSfiFBIRQA_1755862365
+Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7e87062832bso522373585a.2
+        for <linux-mips@vger.kernel.org>; Fri, 22 Aug 2025 04:32:45 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1755862365; x=1756467165;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=szopGzlKxzQVjhy80Hyf8D8Trqw2L0U+tNPu86d0YYI=;
+        b=AlHASHtMzfnNXHsLksiTsuhI/SQMRRCLBZzoNkhMckbeoIOKV8+wN9b1R5+5JATyyl
+         w98BAVGvAeBBTvRDGsbk6VBw78ECg5AMcAEXs4PNtF28NOPn1VIO25OoVk8l1Q9cbWIc
+         42KPbDLjBRu6RjFWxc9OMHDf007RH1aL0wy0nCsr2N/dTTxlSKy6ES5NkJASHSh2A1Ei
+         ckl+k7DpeJBGfRhIRVwC9RJ424dh8zcntKZaWNFBCC6CquUi+K+BlkLfcRc69D2l4eVq
+         KVIiza2dh7BpB79wNKGMWLs+zIGNtMjsfZ2WSopVq7f1dwZmy1TCJqmrDpjFgBl6RKdu
+         0VSA==
+X-Forwarded-Encrypted: i=1; AJvYcCUjDDBwDUiiaUbUEyXlACElUxlIKsw1u9Ory/wCu/9BfT4A1wuqNxnK4WqwnoApGOtIDo03Kj3vB+Lj@vger.kernel.org
+X-Gm-Message-State: AOJu0YwtQ4DOCJJ7QbpujiWubf3WYrB9zS+ATnuCsCgWgqnmJ6DNyLgA
+	i6r4dUO/54jnvZlkCRer8ygI2CwgKE0Zzb8QwLo6LUS/cdUT8C57E/uZRaNRwj4IQ2aKG/KJuCl
+	0SV5CGsJ0Rg7PTFbQ9Bu3aRsts5ApLMSl1nxneUa0q8q0UcbS6g+4cwfxrH5KZpU=
+X-Gm-Gg: ASbGncvr/n3KN1wbYZS44v9/7XdxJ12VHMCc2sZ7pWztUL/UXLtQoZqc8Pe31qCDtoB
+	6PgXDbCUhhtkBwmselULPn29QhUib77CKDin2pCsPdMffbG6MEcgij0hYiishf3T2xTfikJUwTf
+	gZV5l9pYNfv53rZpt4h7WVpiAOUFeOi9Nf6/bMr+zX1wKRvtXvSBfQAXDnvaNDIPkpCcC9JBZ4A
+	Rw/LlfGgyumZ1jx8Lu96CGo7+6YmNdvFXjF6Et5Ef0ujgi5VF38p8a3+KgaQNdvCsaxCZu0Q9bW
+	8DytS1Fx0EwubdYhao6TG3cWdfNsL9Hbm4vI/V+GE6qBpJpiPHTvngAex1dQrYCH0YuWMyfbxYI
+	bv43i8TshOIf0Ws/fHkA=
+X-Received: by 2002:a05:620a:404c:b0:7e8:46ff:baac with SMTP id af79cd13be357-7ea10fc7a12mr283061485a.1.1755862364575;
+        Fri, 22 Aug 2025 04:32:44 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IEmUibDYWQCc5l/mEz36xU/pWXO/c0soUOFhWHapUhi9osq4o9OwXIif6VsGjeizcb9uRTquQ==
+X-Received: by 2002:a05:620a:404c:b0:7e8:46ff:baac with SMTP id af79cd13be357-7ea10fc7a12mr283046685a.1.1755862363659;
+        Fri, 22 Aug 2025 04:32:43 -0700 (PDT)
+Received: from x1 (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-7e87e1c186esm1319562485a.68.2025.08.22.04.32.37
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 22 Aug 2025 04:32:42 -0700 (PDT)
+Date: Fri, 22 Aug 2025 07:32:36 -0400
+From: Brian Masney <bmasney@redhat.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Chen Wang <unicorn_wang@outlook.com>,
+	Inochi Amaoto <inochiama@gmail.com>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Paul Cercueil <paul@crapouillou.net>,
+	Keguang Zhang <keguang.zhang@gmail.com>,
+	Taichi Sugaya <sugaya.taichi@socionext.com>,
+	Takao Orito <orito.takao@socionext.com>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Jacky Huang <ychuang3@nuvoton.com>,
+	Shan-Chun Hung <schung@nuvoton.com>,
+	Vladimir Zapolskiy <vz@mleia.com>,
+	Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Yixun Lan <dlan@gentoo.org>,
+	Steen Hegelund <Steen.Hegelund@microchip.com>,
+	Daniel Machon <daniel.machon@microchip.com>,
+	UNGLinuxDriver@microchip.com, Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Michal Simek <michal.simek@amd.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Neal Gompa <neal@gompa.dev>,
+	Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>,
+	Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Daniel Palmer <daniel@thingy.jp>,
+	Romain Perier <romain.perier@gmail.com>,
+	Andrew Lunn <andrew@lunn.ch>,
+	Gregory Clement <gregory.clement@bootlin.com>,
+	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Andrea della Porta <andrea.porta@suse.com>,
+	Sylwester Nawrocki <s.nawrocki@samsung.com>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Qin Jian <qinjian@cqplus1.com>, Viresh Kumar <vireshk@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>,
+	Alex Helms <alexander.helms.jy@renesas.com>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Liviu Dudau <liviu.dudau@arm.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
+	linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+	arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	sophgo@lists.linux.dev, linux-mips@vger.kernel.org,
+	imx@lists.linux.dev, linux-riscv@lists.infradead.org,
+	spacemit@lists.linux.dev, linux-stm32@st-md-mailman.stormreply.com,
+	patches@opensource.cirrus.com, linux-actions@lists.infradead.org,
+	asahi@lists.linux.dev, linux-mediatek@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev
+Subject: Re: [PATCH 000/114] clk: convert drivers from deprecated
+ round_rate() to determine_rate()
+Message-ID: <aKhVVJPEPxCoKKjI@x1>
+References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
+ <1907e1c7-2b15-4729-8497-a7e6f0526366@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Betterbird (Windows)
-Subject: Re: [PATCH RFC 23/35] scatterlist: disallow non-contigous page
- ranges in a single SG entry
-To: David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
-Cc: Alexander Potapenko <glider@google.com>, Andrew Morton
-	<akpm@linux-foundation.org>, Brendan Jackman <jackmanb@google.com>,
-	Christoph Lameter <cl@gentwo.org>, Dennis Zhou <dennis@kernel.org>, Dmitry
-	Vyukov <dvyukov@google.com>, dri-devel@lists.freedesktop.org,
-	intel-gfx@lists.freedesktop.org, iommu@lists.linux.dev,
-	io-uring@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>, Jens Axboe
-	<axboe@kernel.dk>, Johannes Weiner <hannes@cmpxchg.org>, John Hubbard
-	<jhubbard@nvidia.com>, kasan-dev@googlegroups.com, kvm@vger.kernel.org,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Linus Torvalds
-	<torvalds@linux-foundation.org>, linux-arm-kernel@axis.com,
-	linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
-	linux-ide@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org, linux-mm@kvack.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-scsi@vger.kernel.org, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Marco Elver <elver@google.com>, Michal Hocko <mhocko@suse.com>, Mike
-	Rapoport <rppt@kernel.org>, Muchun Song <muchun.song@linux.dev>,
-	netdev@vger.kernel.org, Oscar Salvador <osalvador@suse.de>, Peter Xu
-	<peterx@redhat.com>, Robin Murphy <robin.murphy@arm.com>, Suren Baghdasaryan
-	<surenb@google.com>, Tejun Heo <tj@kernel.org>,
-	virtualization@lists.linux.dev, Vlastimil Babka <vbabka@suse.cz>,
-	wireguard@lists.zx2c4.com, x86@kernel.org, Zi Yan <ziy@nvidia.com>
-Content-Language: en-US
-From: Marek Szyprowski <m.szyprowski@samsung.com>
-In-Reply-To: <20250821200701.1329277-24-david@redhat.com>
-Content-Transfer-Encoding: 7bit
-X-CMS-MailID: 20250822081519eucas1p173966299ee7e4ed7e44e5668490c5bb1
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20250821200818eucas1p2c3df1e12eeba86a68679743d2f5929a8
-X-EPHeader: CA
-X-CMS-RootMailID: 20250821200818eucas1p2c3df1e12eeba86a68679743d2f5929a8
-References: <20250821200701.1329277-1-david@redhat.com>
-	<CGME20250821200818eucas1p2c3df1e12eeba86a68679743d2f5929a8@eucas1p2.samsung.com>
-	<20250821200701.1329277-24-david@redhat.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1907e1c7-2b15-4729-8497-a7e6f0526366@kernel.org>
+User-Agent: Mutt/2.2.14 (2025-02-20)
 
-On 21.08.2025 22:06, David Hildenbrand wrote:
-> The expectation is that there is currently no user that would pass in
-> non-contigous page ranges: no allocator, not even VMA, will hand these
-> out.
->
-> The only problematic part would be if someone would provide a range
-> obtained directly from memblock, or manually merge problematic ranges.
-> If we find such cases, we should fix them to create separate
-> SG entries.
->
-> Let's check in sg_set_page() that this is really the case. No need to
-> check in sg_set_folio(), as pages in a folio are guaranteed to be
-> contiguous.
->
-> We can now drop the nth_page() usage in sg_page_iter_page().
->
-> Signed-off-by: David Hildenbrand <david@redhat.com>
-Acked-by: Marek Szyprowski <m.szyprowski@samsung.com>
-> ---
->   include/linux/scatterlist.h | 4 +++-
->   1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/include/linux/scatterlist.h b/include/linux/scatterlist.h
-> index 6f8a4965f9b98..8196949dfc82c 100644
-> --- a/include/linux/scatterlist.h
-> +++ b/include/linux/scatterlist.h
-> @@ -6,6 +6,7 @@
->   #include <linux/types.h>
->   #include <linux/bug.h>
->   #include <linux/mm.h>
-> +#include <linux/mm_inline.h>
->   #include <asm/io.h>
->   
->   struct scatterlist {
-> @@ -158,6 +159,7 @@ static inline void sg_assign_page(struct scatterlist *sg, struct page *page)
->   static inline void sg_set_page(struct scatterlist *sg, struct page *page,
->   			       unsigned int len, unsigned int offset)
->   {
-> +	VM_WARN_ON_ONCE(!page_range_contiguous(page, ALIGN(len + offset, PAGE_SIZE) / PAGE_SIZE));
->   	sg_assign_page(sg, page);
->   	sg->offset = offset;
->   	sg->length = len;
-> @@ -600,7 +602,7 @@ void __sg_page_iter_start(struct sg_page_iter *piter,
->    */
->   static inline struct page *sg_page_iter_page(struct sg_page_iter *piter)
->   {
-> -	return nth_page(sg_page(piter->sg), piter->sg_pgoffset);
-> +	return sg_page(piter->sg) + piter->sg_pgoffset;
->   }
->   
->   /**
+Hi Krzysztof (and Stephen),
 
-Best regards
--- 
-Marek Szyprowski, PhD
-Samsung R&D Institute Poland
+On Fri, Aug 22, 2025 at 08:31:08AM +0200, Krzysztof Kozlowski wrote:
+> On 11/08/2025 17:17, Brian Masney via B4 Relay wrote:
+> > The round_rate() clk ops is deprecated in the clk framework in favor
+> > of the determine_rate() clk ops, so let's go ahead and convert the
+> > various clk drivers using the Coccinelle semantic patch posted below.
+> > I did a few minor cosmetic cleanups of the code in a few cases.
+> 
+> This is going to create huge conflicts and I did not find here any
+> merging strategy.
+> 
+> What do you expect from us here?
+
+That's a good question. You are right that there's a handful of drivers
+where this will create a merge conflict with some other work that's been
+posted this development cycle due to other unrelated changes. I suspect
+the majority of these will still apply cleanly.
+
+This series doesn't remove round_rate from the clk core, and I'll post
+that change once everything else has been merged across the tree. I've
+been trying to catch any new round_rate implementations that are posted
+in review.
+
+7 of the 114 patches in this series needs a v2 with a minor fix. I see
+several paths forward to merging this. It's ultimately up to Stephen how
+he wants to proceed.
+
+- I send Stephen a PULL request with all of these patches with the minor
+  cleanups to the 7 patches. Depending on the timing, Stephen can merge
+  the other work first, and I deal with cleaning up the merge conflicts.
+  Or he can if he prefers to instead.
+
+- Stephen applies everyone else's work first to his tree, and then the
+  good 107 patches in this series. He skips anything that doesn't apply
+  due to other people's work and I follow up with a smaller series.
+
+I would prefer to not to have to post a v2 114 patch series if
+possible.
+
+If I don't hear back from Stephen about how he wants to proceed, then
+I'm planning to send him a PULL request the week of Sep 1st.
+
+Does this sound good? I'm open to other suggestions.
+
+Brian
 
 
