@@ -1,252 +1,235 @@
-Return-Path: <linux-mips+bounces-10470-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10471-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 76801B31C2F
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Aug 2025 16:41:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90297B31D13
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Aug 2025 16:59:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 97A293B1CDE
-	for <lists+linux-mips@lfdr.de>; Fri, 22 Aug 2025 14:34:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1354B1C21BA4
+	for <lists+linux-mips@lfdr.de>; Fri, 22 Aug 2025 14:56:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C39483128C8;
-	Fri, 22 Aug 2025 14:30:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 80E733128B9;
+	Fri, 22 Aug 2025 14:56:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="uhOaTwj2"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Di4xZ6rU"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2045.outbound.protection.outlook.com [40.107.236.45])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDEB63128AF;
-	Fri, 22 Aug 2025 14:30:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.45
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755873052; cv=fail; b=PtsVB7gl5KkZsBVKBOvSPvAoyWZ5lgK2qxikChmdUx09KOGghAnnOFax5ku9SaOtUqnMgP5mLuNr7ys/h+JCRaLl8B9PSqBVD0vd4kkDHIBuDhmeab23c1qLoc/6eOe4VQ+HXA9pVXnCu07S0/xCyrvFCYwH2UDp297rGUfxYak=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755873052; c=relaxed/simple;
-	bh=i8oKhhm645HKGdMNnL+CqSeh6ysPava2pLxctXOymeU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=A4BKFT4b1OFUm3M+Pzsk5XzcF8Gxht4k/LPzin5+FObel0LUX1IX9w2WbpeyZcbsztNFcyVExgLpFzlPWOOqOwxikOqfos4zi8r2Xi1RagueikAWmlvpOafYk+y98ZgNJnXV5LuuJ7e4VFIhqvAAsBoyQT4NbDGeHLx4783vRZ4=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=uhOaTwj2; arc=fail smtp.client-ip=40.107.236.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=EpHCemWmGaJPOCO0fywXNNlXtT8gkDIzfWloxU9oFpXbEBiImI/1hxOEI+yoOQkkk8ArWwoY2nS0Bs1DDvJ4wD34j7EW0rp5YJK6dHDbvVbWo1Fl7ki4RfhZxA41Vob/rJXUpsU9NshMxeBF7/1zDPHJw5UD3aPqV2qpkSr1MxmIGP3CRJxUiYlZPEvXmF2ulY0A22uoDpp6944htt/QYVxdRS1EBbiMGeIlOccRF1EeprX4+5QgP+WnECtx0PaZIngbSHNpYWuh1JsVnqnJK5y0hwa+UFZCs+ZLAL83dqXGrYaGD968JHGRKkXO/vEO/mq90ton4Y12evgdDDJoHw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ACOf1O1PLD4ZSCVgv3MS4fsXCYCqkOYdums6O1hrUrY=;
- b=RR4Rep2Ibzmq0uRyXFyzbn9KdLkutEAHnkWNZ53MV8A1El2BkrU4y2GE3dswjLuGLfclWd6C/ur2z80xZQUiwBBxIN3E56vyjVT0wddNcj38rIGaYWEDTAT4f8aepSAzxdjFBApVX/MVvHFS4n0rd6skoYgXypull4yfPtGCGNlSuKct0mRzQhcTf8pZgFtoIFmEeOiX38K8sEcMdphWUK7YN/m/T7i/xeI8MRnUaH0ZKt7BbDmZ585vFntfuj9xh9mLUJKnKBuhdUxktznB1lcI2Ouzo4Cawa5rNGxJFunQfRALdtBdaLnbvJp7a5MoE2KIvegGo3r6ka3g9+C3IA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ACOf1O1PLD4ZSCVgv3MS4fsXCYCqkOYdums6O1hrUrY=;
- b=uhOaTwj2xkAzResJBRa2gO7tDBgdGF7sLcdlMcT2XNa2aS57rSWId9TtsHzAhUcz9MCSPSr7eDH41W/UHCOZWfItF039bZZeps1ZUOFNqeX0Cfz0m3LbXt8ZOcJQVE2HksdYxmqyxHO6VwjZF3n5A3HklIq+WLeolEuaXfdGD9vfPqj4jxlqKDdMo3PpI6xTo/CU2rgg8BKyM2OEPh66yoP0rX875eS5NxGlMtb/LX6qi+1/L62q1C/d+i2HF/Ux/F6g8m7jZNWF33+KbNjuM8LE4hI2ZnxvV5RrGknJ/L90QgzFc71+i5ZGbur6dillWFnlnohUi2JgQhQvl7v2GA==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com (2603:10b6:610:17c::13)
- by DM4PR12MB6591.namprd12.prod.outlook.com (2603:10b6:8:8e::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9031.13; Fri, 22 Aug
- 2025 14:30:46 +0000
-Received: from CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732]) by CH3PR12MB8659.namprd12.prod.outlook.com
- ([fe80::6eb6:7d37:7b4b:1732%4]) with mapi id 15.20.9052.014; Fri, 22 Aug 2025
- 14:30:45 +0000
-Date: Fri, 22 Aug 2025 11:30:43 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Jens Axboe <axboe@kernel.dk>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Robin Murphy <robin.murphy@arm.com>,
-	John Hubbard <jhubbard@nvidia.com>, Peter Xu <peterx@redhat.com>,
-	Alexander Potapenko <glider@google.com>,
-	Marco Elver <elver@google.com>, Dmitry Vyukov <dvyukov@google.com>,
-	Brendan Jackman <jackmanb@google.com>,
-	Johannes Weiner <hannes@cmpxchg.org>, Zi Yan <ziy@nvidia.com>,
-	Dennis Zhou <dennis@kernel.org>, Tejun Heo <tj@kernel.org>,
-	Christoph Lameter <cl@gentwo.org>,
-	Muchun Song <muchun.song@linux.dev>,
-	Oscar Salvador <osalvador@suse.de>, x86@kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	linux-s390@vger.kernel.org, linux-crypto@vger.kernel.org,
-	linux-ide@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, linux-mmc@vger.kernel.org,
-	linux-arm-kernel@axis.com, linux-scsi@vger.kernel.org,
-	kvm@vger.kernel.org, virtualization@lists.linux.dev,
-	linux-mm@kvack.org, io-uring@vger.kernel.org, iommu@lists.linux.dev,
-	kasan-dev@googlegroups.com, wireguard@lists.zx2c4.com,
-	netdev@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-riscv@lists.infradead.org, Albert Ou <aou@eecs.berkeley.edu>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Alexandre Ghiti <alex@ghiti.fr>, Alex Dubov <oakad@yahoo.com>,
-	Alex Williamson <alex.williamson@redhat.com>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Brett Creeley <brett.creeley@amd.com>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Damien Le Moal <dlemoal@kernel.org>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	David Airlie <airlied@gmail.com>,
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 726F73128B1;
+	Fri, 22 Aug 2025 14:56:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1755874580; cv=none; b=DKUw0TTN3pltMWELBQijrDDl2k6B/rpxoRvkE09AwdwM+zu1/FchqJLS3YeYRmc+3xXWw3vQkTJIg/fVACg/YXFasDS9eEtpkzzwHvK/9748cH1R/6qnINa8UMRHuRIQQcIM4pXM9r2s3YMBL9SzvIbLfJKXfnCegGwRhzRFnTw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1755874580; c=relaxed/simple;
+	bh=RvRkItUYJ0ETFE5CancMO5F68qXMPOtLToh8/qa/woA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type; b=NZU1bsKf6yyLv6IeZIfovvTYyP2RVflTXf1ZvawBqu1SvLJWRhQ68jAQmKSCm/Xlf4/tV+h4i7/1SCLaDa0+wgqXQu1/zqrMLUQCXcrflPqXsUudSkVxewD/tUqs9qz0AadboGZpWALYDlrpwB+u4QX4IB6LDXJ2MK4AvPjpvfI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Di4xZ6rU; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1755874579; x=1787410579;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=RvRkItUYJ0ETFE5CancMO5F68qXMPOtLToh8/qa/woA=;
+  b=Di4xZ6rUk0uNQSxjD8w/qt3PV0TX3UBA/I/Et1ysCF/cF/XYeacyZwMW
+   +zFPyp15LNfF9KPq0rp1A4EB16F7I9SnGjnGBSeDUwVCPpmHVLrBbnwX+
+   QiWRjGevZEdX2JD/twqBCKJ0O6jb5INZ0F9vZUrSGIh46h4iV0Y1neDnd
+   mYQbR3lG/x5iKJQnqBleVWaguklfLfF17M5HigNjdsSqHT0kKoMzXNBKV
+   IddLpktg2cfFc658FCmJfAHwT5cSXFPfRqReYHVMGnV7qr80dmqLL7Fuh
+   7bW5fWmtCUzKHQk4Tk/9tffoBhVTAlM7WSd4gXlfqRYHwz/ppirJXioue
+   w==;
+X-CSE-ConnectionGUID: mPLE1BxTS8qWYtXakDpVCw==
+X-CSE-MsgGUID: 8ey9AF37SY+GjFuPndTksQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11529"; a="69552247"
+X-IronPort-AV: E=Sophos;i="6.17,309,1747724400"; 
+   d="scan'208";a="69552247"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2025 07:56:17 -0700
+X-CSE-ConnectionGUID: xkRYlbZZQ0K+NwgRSu7KdQ==
+X-CSE-MsgGUID: 8+r9yxO9Rjy+vpGvbZE8yQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.17,309,1747724400"; 
+   d="scan'208";a="167956179"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.115])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Aug 2025 07:56:12 -0700
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+To: Andreas Larsson <andreas@gaisler.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
 	"David S. Miller" <davem@davemloft.net>,
-	Doug Gilbert <dgilbert@interlog.com>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Jani Nikula <jani.nikula@linux.intel.com>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Jesper Nilsson <jesper.nilsson@axis.com>,
-	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-	Kevin Tian <kevin.tian@intel.com>,
-	Lars Persson <lars.persson@axis.com>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,
-	Maxim Levitsky <maximlevitsky@gmail.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Niklas Cassel <cassel@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Rodrigo Vivi <rodrigo.vivi@intel.com>,
-	Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
-	Shuah Khan <shuah@kernel.org>, Simona Vetter <simona@ffwll.ch>,
-	Sven Schnelle <svens@linux.ibm.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	sparclinux@vger.kernel.org,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Tvrtko Ursulin <tursulin@ursulin.net>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Vasily Gorbik <gor@linux.ibm.com>, WANG Xuerui <kernel@xen0n.name>,
-	Will Deacon <will@kernel.org>, Yishai Hadas <yishaih@nvidia.com>
-Subject: Re: [PATCH RFC 00/35] mm: remove nth_page()
-Message-ID: <20250822143043.GG1311579@nvidia.com>
-References: <20250821200701.1329277-1-david@redhat.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250821200701.1329277-1-david@redhat.com>
-X-ClientProxiedBy: BN0PR04CA0184.namprd04.prod.outlook.com
- (2603:10b6:408:e9::9) To CH3PR12MB8659.namprd12.prod.outlook.com
- (2603:10b6:610:17c::13)
+	=?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+	Yinghai Lu <yinghai@kernel.org>,
+	Igor Mammedov <imammedo@redhat.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+	=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>
+Cc: linux-kernel@vger.kernel.org,
+	=?UTF-8?q?Micha=C5=82=20Winiarski?= <michal.winiarski@intel.com>,
+	linuxppc-dev@lists.ozlabs.org,
+	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Subject: [PATCH 00/24] PCI: Bridge window selection improvements
+Date: Fri, 22 Aug 2025 17:55:41 +0300
+Message-Id: <20250822145605.18172-1-ilpo.jarvinen@linux.intel.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH3PR12MB8659:EE_|DM4PR12MB6591:EE_
-X-MS-Office365-Filtering-Correlation-Id: d3ddd353-fedc-4b8c-944f-08dde1887b1f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|7416014|376014|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?DdkQ1n08o6MwOJbucunbwqZv1Lt9Bxc/J40IJFQH9OUi8FHycBEvpJSyEHGI?=
- =?us-ascii?Q?SNBeMGD3R96YLB+KSVcOKZF8wkL8hzquftLr36iMaPjh4RXmGB24FdvVAOs7?=
- =?us-ascii?Q?w9Cl9kbXNZWAbrhF/YP/fsYoPsc/5+ydhR6Oos1F0eIohWBk20g/MuI2Folv?=
- =?us-ascii?Q?TcPDxaquS+GqqQ/lI8iwoTPaeDHDAVie0FNGWKgGOiUHmpzAl+4oVfageQxa?=
- =?us-ascii?Q?v8vjgO7uoB/DyS1NKywLY5O6ImQJICZTCDWKPH2BceBmdp+gTH+FmQ+dGtFW?=
- =?us-ascii?Q?YLfj3Nb38v5RvhqeNeIzQ2ajqCv/7ALh90D8Q+6fL3yPB0R5RtNTVFpnraPc?=
- =?us-ascii?Q?ZgmWPm7P9DZAKs00Nws4VXuzUxIR3qfc5hEZjiEt054RuW/LkUYzs5qnh05J?=
- =?us-ascii?Q?VqJtL7OC0enzfOZHexNLxo2BKNq7Bb49mL182hd4eoYuUAf8WnntkdA3Np2P?=
- =?us-ascii?Q?5RCF6F4crNzpsPWzSq3jel9Pvl/TaRBv79PJ18s86KDusUepBt+ByaQrA55S?=
- =?us-ascii?Q?xEl7LYM4axrSyLxItnO6Q1up/EkoxpiNON5LaW8755cV+CjHdmVWrQbhTgvm?=
- =?us-ascii?Q?2dtvlPCO7pNdHB+If9iX5c5ZuvJkrrZ/D+j19Xh8EZyJinO7SRQieitUNB4V?=
- =?us-ascii?Q?FOUITKSVddPppo+w7jJDl479aQ2y/ktaq1bF/orNHknEHq3E/iGBZR0uKjxy?=
- =?us-ascii?Q?2/aD2VVcXFR7f8gGIxqAntXZbq6nlSmK1g+hBrccG+XLZnedOPY3fBWAaiqD?=
- =?us-ascii?Q?K9/hYE8ZKNPVhZ2dMymvKmh4p76vhQP8P6NvtPVFnK+uK48lux0i/7sLjtbS?=
- =?us-ascii?Q?2Yaa07LyakI+P3FZWtC7Hj/1pjaQmY+6Kex8qWc88iEJ9gtCpLNflD6+FqJU?=
- =?us-ascii?Q?g7oMliTYjv4NphFxoiLyTqv6h6IM5FVIBDxYks8hBDTHqUwFsQpxF1c+clF2?=
- =?us-ascii?Q?NT/XJS9/5RgdyRBxMdvQA4rPNv+WpFBwVt/7S6dELmz9etf3n52laspmp/qO?=
- =?us-ascii?Q?yi4VnDG4+k9YSlpuD56eNwgikq0Fj1X9aP6cCoApB4HoexltCh2x+GfbE66G?=
- =?us-ascii?Q?wD8DbP9GMAATAA2C+yWG8omlcIADkQ82VMNDJm/IQEqNnpW5kDTCcLImIHA6?=
- =?us-ascii?Q?oDbwinZXUYbqmyUHzo8Ha3MrTwPnlO81aMAZ41cPavJQm6YsxHj34peTZg+O?=
- =?us-ascii?Q?mANFCb3Px0IpmZKulMWhUIussglyTd5wZmyIHTu7eMkxRXBLn1tqREUmcSua?=
- =?us-ascii?Q?CzNq0Z8DKCEksCBDhUFxb6CfVA+q99arZ0MSWkT3e96oPY1ofdO0Tfj6bOTP?=
- =?us-ascii?Q?Bs0Y5njDVElFsS7VI4366nTxyqvk/dc3/XpHjFicET/4lXBP0DbF9q/h51C/?=
- =?us-ascii?Q?tQFz6Z8fLz1vLNW/dM94pH8bwEN5kojzyYZwxaMR+IPkoBtC6V79aFtRC9HR?=
- =?us-ascii?Q?QRgxTj29Dhk=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH3PR12MB8659.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(7416014)(376014)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?xsmiQxApSOK4Oh/idsdA7WuEOm+1DXmH25mMSNxi7dcpWvKf4jssrz+7bcZL?=
- =?us-ascii?Q?x+rdJVjeEChZHdfVt2a4cx4iyENuSUcgI2y5hg57xigoM+lcTQMZ9GYWMvZP?=
- =?us-ascii?Q?wdohwx9jpz5bbmMS6y5EZOfSJlGXNTboPWSs9qOitXXq5BwmrwpAAQdqCoWm?=
- =?us-ascii?Q?CTZvmg2erApEuGo8D9UYQaGLMpsAtjBRZfqsyeD13HOWEM7ja+NiCTrdfO9/?=
- =?us-ascii?Q?Fjj1VbZkZtEd9YTZQ3tGEbl89+X99EWOAjxS/QDvE+WUNLc1pl9lvKK2PiLV?=
- =?us-ascii?Q?NjHz7PvcLiGP+XXAA1AwAL10EgxkazPVOlErLFc4j4i3Gxher3zLRlbepAWB?=
- =?us-ascii?Q?3bKK/vZJuPtMRhjCh3pAl6KvXoWXAb6i38Nyw36AlzjvrjOZ3YFH4qKbzjsZ?=
- =?us-ascii?Q?ZHt9Ld/oOaR4J5wrhQRYZWFSZCXp1sNw09+VMTXsycX+GbzDaBNhVU86e0v0?=
- =?us-ascii?Q?Vf7FPKTEBfXgymnt7U2aEQGjHjC9WFt4Vy4TXpNPYuMEfHfvpHWNikbxuMcc?=
- =?us-ascii?Q?Qv0hCGIpryIyox2sLFMS4ybWTixCsmwFPTRzQN1CswK1CaPseFThZl02azWE?=
- =?us-ascii?Q?WVslweXg4JDEvmXU0gsMaVZA+uYCDpPiNO8hzx4WuN1kBe7+4JP4KgeLG4bi?=
- =?us-ascii?Q?y/c69gYSECaiKxhzUOLYbsZvZE8dqMOrKRTxXoluHU4/bSBCN5oo93cPWX1W?=
- =?us-ascii?Q?Nzw+D11qOJb8n4oqCbTq7nXKMOqxpZgNL4KI2/QF4y90NvWMRRXkNxJNq+fu?=
- =?us-ascii?Q?RGjGZWVJ2Sp0J4qyspZRL0h8kwm5p+dSnCAH1uptWx646s3iMTDKATOXRPR/?=
- =?us-ascii?Q?p195PaTdb3U0qFCmzkajtl92Qlyx9SuE8jrVrb4y+eTYsT7SPQtfBC7Umr50?=
- =?us-ascii?Q?LzzvteYDH3ET2rzIDCqd9wwFhBfPdn6NjcJ8GL+99cnLswXrG/qfvmVVlOgR?=
- =?us-ascii?Q?j6gWF81tqKjAejC+UwQCze8SiK0sJg/ctaLsj1mnpde90672ONRsatw32jsx?=
- =?us-ascii?Q?bF1m0IUNRiqoq5bZ/h6BsXNUQXFapFEepJjVyn+YF23bife9YzkCHBMVIPLy?=
- =?us-ascii?Q?ga6qhGMz0jEekA51Kuur9heYC3IrzWw6dk3MA/wXU1rA3VOI5U+mGbYsuRNa?=
- =?us-ascii?Q?Z2QoURa4itA3Hb29reyvswAPz5915GgA/3z84OdyE4yHBhDnyVvzh0Lpvuwe?=
- =?us-ascii?Q?h7ODJJ0E9H41cNzPeQLlugohIrbiEuhI3YerwZjJnWnjJLIy56V7WuvXHZXZ?=
- =?us-ascii?Q?gMNKV5jyqwnav29TIRsHyX0S7BTcQ0CLkKTdhtS1uSni+71S0L1+AHD3X0sR?=
- =?us-ascii?Q?EadQQpIo/RhnlZ/EsEZUPhmZKH9zbIgP0NUzyFNlyPZ3RcMhXvIWt0iy2seB?=
- =?us-ascii?Q?T77nJtogXXrEdpwCN1PY4Z4wJytJQOoAdA7yt3zP50ipO/3AyPiZPT49lj/N?=
- =?us-ascii?Q?rU4EfnV/ZxQ5csyQ6jAtcw6m9mrJ9i9+nlxcEsPPQTtz2AuFQewM6CaIbX93?=
- =?us-ascii?Q?s0pPhVO187W+n6nLNCJAiXcSEW7pOXvYeFpvoOi9+Cx6R8pQTEkO1sb83Bin?=
- =?us-ascii?Q?XZEjZ3YUgj/kMQRDaT5fACiJff7I2KQFIZATedbE?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: d3ddd353-fedc-4b8c-944f-08dde1887b1f
-X-MS-Exchange-CrossTenant-AuthSource: CH3PR12MB8659.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Aug 2025 14:30:45.7354
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: EVsHixaNqI9KMqq+rfkiyi0QDX3x7XzlS5itLRgPsnc/YXDOqjJAhWngclDt8gvH
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR12MB6591
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Thu, Aug 21, 2025 at 10:06:26PM +0200, David Hildenbrand wrote:
-> As discussed recently with Linus, nth_page() is just nasty and we would
-> like to remove it.
-> 
-> To recap, the reason we currently need nth_page() within a folio is because
-> on some kernel configs (SPARSEMEM without SPARSEMEM_VMEMMAP), the
-> memmap is allocated per memory section.
-> 
-> While buddy allocations cannot cross memory section boundaries, hugetlb
-> and dax folios can.
-> 
-> So crossing a memory section means that "page++" could do the wrong thing.
-> Instead, nth_page() on these problematic configs always goes from
-> page->pfn, to the go from (++pfn)->page, which is rather nasty.
-> 
-> Likely, many people have no idea when nth_page() is required and when
-> it might be dropped.
-> 
-> We refer to such problematic PFN ranges and "non-contiguous pages".
-> If we only deal with "contiguous pages", there is not need for nth_page().
->
-> Besides that "obvious" folio case, we might end up using nth_page()
-> within CMA allocations (again, could span memory sections), and in
-> one corner case (kfence) when processing memblock allocations (again,
-> could span memory sections).
+This series is based on top of the three resource fitting and
+assignment algorithm fixes (v3).
 
-I browsed the patches and it looks great to me, thanks for doing this
+PCI resource fitting and assignment code needs to find the bridge
+window a resource belongs to in multiple places, yet, no common
+function for that exists. Thus, each site has its own version of
+the decision, each with their own corner cases, misbehaviors, and
+some resulting in complex interfaces between internal functions.
 
-Jason
+This series tries to rectify the situation by adding two new functions
+to select the bridge window. To support these functions, bridge windows
+must always contain their type information in flags which requires
+modifying the flags behavior for bridge window resources.
+
+I've hit problems related to zeroed resource flags so many times by now
+that I've already lost count which has highlighted over and over again
+that clearing type information is not a good idea. As also proven by
+some changes of this series, retaining the flags for bridge windows
+ended up fixing existing issues (although kernel ended up recovering
+from the worst problem graciously and the other just results in dormant
+code).
+
+This series only changes resource flags behavior for bridge windows.
+The sensible direction is to make a similar change for the other
+resources as well eventually but making that change involves more
+uncertainty and is not strictly necessary yet. Driver code outside of
+PCI core could have assumptions about the flags, whereas bridge windows
+are mostly internal to PCI core code (or should be, sane endpoint
+drivers shouldn't be messing with the bridge windows). Thus, limiting
+the flags behavior changes to bridge windows for now is safer than
+attempting full behavioral change in a single step.
+
+
+I've tried to look out for any trouble that code under arch/ could
+cause after the flags start to behave differently and therefore ended
+up consolidating arch/ code to use pci_enable_resources(). My
+impression is that strictly speaking only the MIPS code would break
+similar to PCI core's copy of pci_enable_resources(), the others were
+much more lax in checking so they'd likely keep working but
+consolidation seemed still the best approach there as the enable checks
+seemed diverging for no apparent reason.
+
+Most sites are converted by this change. There are three known places
+that are not yet converted:
+
+  - fail_type based logic in __assign_resources_sorted():
+    I'm expecting to cover this along with the resizable BAR
+    changes as I need to change the fallback logic anyway (one
+    of the motivators what got me started with this series,
+    I need an easy way to acquire the bridge window during
+    retries/fallbacks if maximum sized BARs do not fit, which
+    is what this series provides).
+
+  - Failure detection after BAR resize: Keeps using the type
+    based heuristic for failure detection. It isn't very clear how
+    to decide which assignment failures should be counted and which
+    not. There could be pre-existing failures that keep happening
+    that end up blocking BAR resize but that's no worse than behavior
+    before this series. How to identify the relevant failures does
+    not look straightforward given the current structures. This
+    clearly needs more thought before coding any solution.
+
+  - resource assignment itself: This is a very complex change
+    due to bus and kernel resources abstractions and might not be
+    realistic any time soon.
+
+I'd have wanted to also get rid of pci_bridge_check_ranges() that
+(re)adds type information which seemed now unnecessary. It turns out,
+however, that root windows still require so it will have to wait for
+now.
+
+This change has been tested on a large number of machine I've access to
+which come with heterogeneous PCI configurations. Some resources
+retained their original addresses now also with pci=realloc because
+this series fixed the unnecessary release(+assign) of those resources.
+Other than that, nothing worth of note from that testing.
+
+
+My test coverage is x86 centric unfortunately so I'd appreciate if
+somebody with access to non-x86 archs takes the effort to test this
+series.
+
+Info for potential testers:
+
+Usually, it's enough to gather lspci -vvv pre and post the series, and
+use diff to see whether the resources remained the same and also check
+that the same drivers are still bound to the devices to confirm that
+devices got properly enabled (also shown by lspci -vvv). I normally
+test both with and without pci=realloc. In case of a trouble, besides
+lspci -vvv output, providing pre and post dmesg and /proc/iomem
+contents would be helpful, please take the dmesg with dyndbg="file
+drivers/pci/*.c +p" on the kernel cmdline.
+
+Ilpo Järvinen (24):
+  m68k/PCI: Use pci_enable_resources() in pcibios_enable_device()
+  sparc/PCI: Remove pcibios_enable_device() as they do nothing extra
+  MIPS: PCI: Use pci_enable_resources()
+  PCI: Move find_bus_resource_of_type() earlier
+  PCI: Refactor find_bus_resource_of_type() logic checks
+  PCI: Always claim bridge window before its setup
+  PCI: Disable non-claimed bridge window
+  PCI: Use pci_release_resource() instead of release_resource()
+  PCI: Enable bridge even if bridge window fails to assign
+  PCI: Preserve bridge window resource type flags
+  PCI: Add defines for bridge window indexing
+  PCI: Add bridge window selection functions
+  PCI: Fix finding bridge window in pci_reassign_bridge_resources()
+  PCI: Warn if bridge window cannot be released when resizing BAR
+  PCI: Use pbus_select_window() during BAR resize
+  PCI: Use pbus_select_window_for_type() during IO window sizing
+  PCI: Rename resource variable from r to res
+  PCI: Use pbus_select_window() in space available checker
+  PCI: Use pbus_select_window_for_type() during mem window sizing
+  PCI: Refactor distributing available memory to use loops
+  PCI: Refactor remove_dev_resources() to use pbus_select_window()
+  PCI: Add pci_setup_one_bridge_window()
+  PCI: Pass bridge window to pci_bus_release_bridge_resources()
+  PCI: Alter misleading recursion to pci_bus_release_bridge_resources()
+
+ arch/m68k/kernel/pcibios.c   |  39 +-
+ arch/mips/pci/pci-legacy.c   |  38 +-
+ arch/sparc/kernel/leon_pci.c |  27 --
+ arch/sparc/kernel/pci.c      |  27 --
+ arch/sparc/kernel/pcic.c     |  27 --
+ drivers/pci/bus.c            |   3 +
+ drivers/pci/pci-sysfs.c      |  27 +-
+ drivers/pci/pci.h            |   8 +-
+ drivers/pci/probe.c          |  35 +-
+ drivers/pci/setup-bus.c      | 798 ++++++++++++++++++-----------------
+ drivers/pci/setup-res.c      |  46 +-
+ include/linux/pci.h          |   5 +-
+ 12 files changed, 504 insertions(+), 576 deletions(-)
+
+
+base-commit: 8f5ae30d69d7543eee0d70083daf4de8fe15d585
+prerequisite-patch-id: 801e8dd3aa9847d4945cb7d8958574a6006004ab
+prerequisite-patch-id: 0233311f04e3ea013676b6cc00626410bbe11e41
+prerequisite-patch-id: 9841faf37d56c1acf1167559613e862ef62e509d
+-- 
+2.39.5
+
 
