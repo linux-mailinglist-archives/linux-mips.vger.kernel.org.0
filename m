@@ -1,48 +1,48 @@
-Return-Path: <linux-mips+bounces-10512-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10513-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1528BB32B0D
-	for <lists+linux-mips@lfdr.de>; Sat, 23 Aug 2025 18:48:00 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6BE85B32B23
+	for <lists+linux-mips@lfdr.de>; Sat, 23 Aug 2025 18:51:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC646189967C
-	for <lists+linux-mips@lfdr.de>; Sat, 23 Aug 2025 16:46:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D7BCE5A1BC3
+	for <lists+linux-mips@lfdr.de>; Sat, 23 Aug 2025 16:48:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A83A72E9757;
-	Sat, 23 Aug 2025 16:43:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B67C1218AAF;
+	Sat, 23 Aug 2025 16:48:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="itdiEScC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HOXXqNd5"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 455622E7BDC;
-	Sat, 23 Aug 2025 16:43:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A3628635C;
+	Sat, 23 Aug 2025 16:48:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755967424; cv=none; b=FzbRjNVIcWa8uyus557iE4+5/h9QiMq1D9vDitIWxhTyZ99mvcIkEiGIId/1GcOd54uHdIwRl7T2NuWvAwayKRAmcHGuYyyWHX+hOeeGJ7rKKCwgWBvem3p+NzrlcqVpowKe+x3I6O+88npcijFOIAV87HssNL1LwGZ+7mkkjOU=
+	t=1755967720; cv=none; b=KfHix44yTJW9KycVxJABF0UfP400twopue5UnWvU9+xMpxjmqvt4VTb+a/i4litA5z8iGyINbfjmWsk4vRCC4cCOjws7BnBWG53KHw+xy/BxOEHN6aUzK6ZYvwKANcBKUpWI2ZUp6Vfq3/x6iNAxAuibeA5QOHwAybXTW45CLgw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755967424; c=relaxed/simple;
-	bh=xFZkeJN2BuDgCkOi+KgCMmmiWf02TF4MkQxM0ILCb/c=;
+	s=arc-20240116; t=1755967720; c=relaxed/simple;
+	bh=PDfxYI4xJFYmIUFeVYOEcKsGHc9UOGEej4nxqYpMpgE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fjBISyCS4bJlAyjJbpHKfpblIcDwbstrw4DMkMz7EA2zA7jh4UcW2dmUmdHo75RHC8cMr2kSKdz/SZOG7P5WUi7ey6DlxY1B/EBC00nvXtGjKFikwkCxV4X85X2QmvZn/+EQaUvwNxyzutsfSedNMk8S8dvTBZe96SzFUIkAyxs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=itdiEScC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D084DC113CF;
-	Sat, 23 Aug 2025 16:43:25 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=YJXd/0X+nxxH7UFkTaE5luG6MrJ40SI02k7Ht2TobRqdZNPBbFDc+UkJkX89FtOEIjPHqPG7YV8WQJzGi7MNn42hTxwckQ7eViVQUiJM6axAd7HCcBRC/CWeyflsrxcbPwao0uh6QjK0av/2fYbYUdNGAOo8cguu88VNHMpK9/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HOXXqNd5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3333C4CEE7;
+	Sat, 23 Aug 2025 16:48:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1755967423;
-	bh=xFZkeJN2BuDgCkOi+KgCMmmiWf02TF4MkQxM0ILCb/c=;
+	s=k20201202; t=1755967718;
+	bh=PDfxYI4xJFYmIUFeVYOEcKsGHc9UOGEej4nxqYpMpgE=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=itdiEScC2Beeu6c63pmd/CTzPnWhE183hRyVzasZY+gmKVI5vd3nuihdYSmXUtzqM
-	 n5pXlMOZ4f4CfdZ3y+9TL4OAfKF1rUicpUcWpAKV25yexOoQiIUVRBOvzvVlnT7m1x
-	 Ow/syOgbGs/7sFzlP8M9T9k2hQaa02Q05lgaQ79U07gOCwpaS6+/LYxvOeLuY9D4Yg
-	 tFdZWFXEVSKg+nsuehNXz2gcumXyv2a/Cv5In16FOD/gqLYo3Ce8RoRceAlgwmH+KZ
-	 F0iWduD+DHlVLd9Xvqi99qFs+b/bjDIb80nCd1xXSh9G2AR1wHFNtLXyjiCEgmjyyG
-	 kbRIEhswFKxGg==
-Message-ID: <7c6cc42c-fc76-4300-b0d2-8dabf54cf337@kernel.org>
-Date: Sat, 23 Aug 2025 18:43:23 +0200
+	b=HOXXqNd5ZbNFfXhPJvOSJpuLPaIFgLCHSTOAh/B1wd0Q2+30Sz2yxhHeQ70I+6ira
+	 0Y5NvdqZewIGHh3fkbPEhG731f/9TGrKaqfi79StYlzLt0GkPuc4NLdiVOkkkxLTNj
+	 lCF/coYvgjNcuwJWCN2zhq4sqXhpK39/OUs5pH4vNM0y+kq4UP444vgPGrnlvtOBZ3
+	 vWypYT/Tu9R0zxIRm9lNFsGdK0gPihI1EbGXWDeLh+oYTOkC391/3865/PLGswrKR0
+	 ci3Jz3vltoNG+fME7+Z7D1Hi98pBVKINaG1l8/tKH5WKRXP5EgThnk9ap13vHnwjWY
+	 WyuxowF5X6EHQ==
+Message-ID: <64c311f7-1cc1-4d0d-9f9d-b586050b8fec@kernel.org>
+Date: Sat, 23 Aug 2025 18:48:19 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -52,8 +52,7 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 000/114] clk: convert drivers from deprecated round_rate()
  to determine_rate()
-To: Brian Masney <bmasney@redhat.com>
-Cc: Michael Turquette <mturquette@baylibre.com>,
+To: bmasney@redhat.com, Michael Turquette <mturquette@baylibre.com>,
  Stephen Boyd <sboyd@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>,
  Cristian Marussi <cristian.marussi@arm.com>,
  Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@gmail.com>,
@@ -100,8 +99,8 @@ Cc: Michael Turquette <mturquette@baylibre.com>,
  Alex Helms <alexander.helms.jy@renesas.com>,
  Linus Walleij <linus.walleij@linaro.org>, Liviu Dudau <liviu.dudau@arm.com>,
  Lorenzo Pieralisi <lpieralisi@kernel.org>,
- Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>,
- linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>
+Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
  arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
  sophgo@lists.linux.dev, linux-mips@vger.kernel.org, imx@lists.linux.dev,
  linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
@@ -111,8 +110,6 @@ Cc: Michael Turquette <mturquette@baylibre.com>,
  linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org,
  linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev
 References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
- <1907e1c7-2b15-4729-8497-a7e6f0526366@kernel.org> <aKhVVJPEPxCoKKjI@x1>
- <4d31df9e-62c9-4988-9301-2911ff7de229@kernel.org> <aKhr8NYhei59At0s@x1>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -158,52 +155,20 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <aKhr8NYhei59At0s@x1>
+In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 22/08/2025 15:09, Brian Masney wrote:
-> On Fri, Aug 22, 2025 at 02:23:50PM +0200, Krzysztof Kozlowski wrote:
->> On 22/08/2025 13:32, Brian Masney wrote:
->>> 7 of the 114 patches in this series needs a v2 with a minor fix. I see
->>> several paths forward to merging this. It's ultimately up to Stephen how
->>> he wants to proceed.
->>>
->>> - I send Stephen a PULL request with all of these patches with the minor
->>>   cleanups to the 7 patches. Depending on the timing, Stephen can merge
->>>   the other work first, and I deal with cleaning up the merge conflicts.
->>>   Or he can if he prefers to instead.
->>>
->>> - Stephen applies everyone else's work first to his tree, and then the
->>>   good 107 patches in this series. He skips anything that doesn't apply
->>>   due to other people's work and I follow up with a smaller series.
->>
->> Both cause cross tree merge conflicts. Anyway, please document clearly
->> the dependencies between patches.
+On 11/08/2025 17:17, Brian Masney via B4 Relay wrote:
+> The round_rate() clk ops is deprecated in the clk framework in favor
+> of the determine_rate() clk ops, so let's go ahead and convert the
+> various clk drivers using the Coccinelle semantic patch posted below.
+> I did a few minor cosmetic cleanups of the code in a few cases.
 > 
-> This series only touches drivers/clk, so it shouldn't cause any issues
-> with other subsystems, unless there's a topic branch somewhere, or I'm
-> missing something?
+@Stephen,
 
-Individual maintainers handle subdirectories.
-
-> 
-> There are some drivers under drivers/clk/ where there is an entry in the
-> MAINTAINERS file that's not Stephen, although it wasn't clear to me if
-> all of those people will send PULL requests to Stephen. I described on
-> the cover how how the series was broken up.
-> 
->   - Patches 4-70 are for drivers where there is no clk submaintainer
->   - Patches 71-110 are for drivers where this is an entry in MAINTAINERS
->     (for drivers/clk)
-
-It's hidden between multiple other descriptions of patches, so I really
-would not think that this means that it is okay by individual maintainer
-to take the patch.
-
-This really should be the one most important part of the cover letter
-for something like this.
-..
+There will be dependencies/conflicts for Samsung, so I will take the two
+Samsung patches. Let me know if you disagree.
 
 Best regards,
 Krzysztof
