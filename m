@@ -1,156 +1,79 @@
-Return-Path: <linux-mips+bounces-10519-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10520-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C46FB33013
-	for <lists+linux-mips@lfdr.de>; Sun, 24 Aug 2025 15:24:48 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 66F3EB33057
+	for <lists+linux-mips@lfdr.de>; Sun, 24 Aug 2025 16:19:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 476523BE069
-	for <lists+linux-mips@lfdr.de>; Sun, 24 Aug 2025 13:24:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 21F18446D82
+	for <lists+linux-mips@lfdr.de>; Sun, 24 Aug 2025 14:19:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 094D12DA75B;
-	Sun, 24 Aug 2025 13:24:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A51352D9EC5;
+	Sun, 24 Aug 2025 14:19:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SquWihWK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q1tAD+aB"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C3D2393DE3;
-	Sun, 24 Aug 2025 13:24:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D78E1E1DE3;
+	Sun, 24 Aug 2025 14:19:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756041880; cv=none; b=VP4If5ozBuciAvANxGkykqsy5cYI2s6CmQASw/YAAqldG3NPH1K2d8y3nT03z1xK/Wn/MdvkrTaq9qUZlXEUCoD/40poqJi68er6jh1Yub3tFG09ifLIjjzfKO3xKSDjiNqtrp20Ba01qgIiuANRSB3rkS3y4AFOqGTT5lYPJG8=
+	t=1756045148; cv=none; b=em3OirDiUwmY2KIthixLSAVTKwQ0YJ7SNJqNkIxryKUy25AaWADuiokcDNdVpguHwjwCR/egzRG1NKoR5fVsAb+2tShZN5DIZuTVRgioDmXrm4iuSDdkR+yvy4dCRCZxuC6T9x6OSdNjlZ+SeTXRcbAlzhtFEAAui2orDtHWKOI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756041880; c=relaxed/simple;
-	bh=ULWSWvx5qOQocuXhhEVwmUdZJ/jQrpo8zzXV1kr+XYk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ull+/HlBVmEZZhKNv/0sF3Fn0DS7SlawRmd45WFjUcqhk6vXZn+ZJRH0gdfvL+szbq3qH/vrNmxBQiRIDrUmnj5odiEMPyrVd8IVLdTS1jYwx3VQgA/2P1BdSidVqMXbvEYDwQ5VAJulrtq5kSIboWrVEqZwW0XH9JdD3c5I0ZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SquWihWK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B4638C4CEEB;
-	Sun, 24 Aug 2025 13:24:26 +0000 (UTC)
+	s=arc-20240116; t=1756045148; c=relaxed/simple;
+	bh=kIJf0VJJt3ewq7gJl50PmY1mDYlsRdah2ULtnLt7AGE=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=lMQd3tjWQK8aRkpr24PoZZtqf6WCHvgdqZKl+dBNwIJW6p4elU0fnTynZfGxgZpVl24HHzaIJOIRKvLsuBBBtrHCcaF1uVW0SZ2ssdMYMfgm17Lfs87ekXMvdMkUzYBCLBif8SsAnMC7xc1Reepx8Cn9dvJ234FaItR1WDk6Ntk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q1tAD+aB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 546B6C116B1;
+	Sun, 24 Aug 2025 14:19:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756041880;
-	bh=ULWSWvx5qOQocuXhhEVwmUdZJ/jQrpo8zzXV1kr+XYk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SquWihWK3f+VpRPVHREvb/KU1Ip2U18TP7N1MuJITOAx4rQrPZH3cvqtkOP5SvK7q
-	 i6NO1TPVUbZk8RWkAk3LTCsFqBTBZ14HIKev8nasvhFuIsLkIUiO3cKzio2Q51II/F
-	 wyed5FtAlddWEWPif7U0YGP0VU7Jz0WnTx8oiBRZXCVwF7SJXztCvl7h61L8oudm/m
-	 ZzJcPQiQ6a3vkdslZGaL+map5bzuxrOH69hNlp4a8gDkADVHKqlXnjP6H9fUKUPAle
-	 G5RP+5YSDJFPCZAOfsIK30ngRx5fl+uNMhMZuFtvohYRU68gjsyw/nUrRlnisE/5CR
-	 1GDLoGVBUCvXA==
-Date: Sun, 24 Aug 2025 16:24:23 +0300
-From: Mike Rapoport <rppt@kernel.org>
-To: David Hildenbrand <david@redhat.com>
-Cc: linux-kernel@vger.kernel.org, Alexander Potapenko <glider@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Brendan Jackman <jackmanb@google.com>,
-	Christoph Lameter <cl@gentwo.org>, Dennis Zhou <dennis@kernel.org>,
-	Dmitry Vyukov <dvyukov@google.com>, dri-devel@lists.freedesktop.org,
-	intel-gfx@lists.freedesktop.org, iommu@lists.linux.dev,
-	io-uring@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
-	Jens Axboe <axboe@kernel.dk>, Johannes Weiner <hannes@cmpxchg.org>,
-	John Hubbard <jhubbard@nvidia.com>, kasan-dev@googlegroups.com,
-	kvm@vger.kernel.org, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-arm-kernel@axis.com, linux-arm-kernel@lists.infradead.org,
-	linux-crypto@vger.kernel.org, linux-ide@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-mmc@vger.kernel.org, linux-mm@kvack.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-scsi@vger.kernel.org,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Marco Elver <elver@google.com>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>,
-	netdev@vger.kernel.org, Oscar Salvador <osalvador@suse.de>,
-	Peter Xu <peterx@redhat.com>, Robin Murphy <robin.murphy@arm.com>,
-	Suren Baghdasaryan <surenb@google.com>, Tejun Heo <tj@kernel.org>,
-	virtualization@lists.linux.dev, Vlastimil Babka <vbabka@suse.cz>,
-	wireguard@lists.zx2c4.com, x86@kernel.org, Zi Yan <ziy@nvidia.com>
-Subject: Re: [PATCH RFC 12/35] mm: limit folio/compound page sizes in
- problematic kernel configs
-Message-ID: <aKsSh0OEjf4GLmIG@kernel.org>
-References: <20250821200701.1329277-1-david@redhat.com>
- <20250821200701.1329277-13-david@redhat.com>
+	s=k20201202; t=1756045148;
+	bh=kIJf0VJJt3ewq7gJl50PmY1mDYlsRdah2ULtnLt7AGE=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=Q1tAD+aBscTv7TOAUXdFYqYXaQSmDeCBXqlrsh9waDdv8d6UsmqrC+tf95G/BHAuX
+	 LnBf0IRxqRjlXehUhy/flWrG8sL7HWl/jpITfK2w0h/AL7C29XEpZs3ZONqPNWu98r
+	 6Vle84Ipah/e9ZL3GoyDycwtNqUFXr4MHyeDlarBMjoVFGnhw15XruhnR4IDNj/TFt
+	 CC74Z/b0Ie/XqP9umkC2BE+xZLbZMBJ5+BZCffNf2mfxZ0C+kXawejTInQbt3N9YVh
+	 QXa5G3IxsIhIs+LtFErgH4xeU1QzlPiFPeGOVfQ2bhphhtOWLl3m3/ZoHB+2/JzuxA
+	 ik1AFLzbNLwjA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EADC5383BF69;
+	Sun, 24 Aug 2025 14:19:17 +0000 (UTC)
+Subject: Re: [GIT PULL] MIPS fixes for v6.17
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <aKrHQC7qQxQV3TKW@alpha.franken.de>
+References: <aKrHQC7qQxQV3TKW@alpha.franken.de>
+X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
+X-PR-Tracked-Message-Id: <aKrHQC7qQxQV3TKW@alpha.franken.de>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.17_1
+X-PR-Tracked-Commit-Id: 8c431ea8f3f795c4b9cfa57a85bc4166b9cce0ac
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: a69dfb4e0acb22fb6347656626520157948b3aa8
+Message-Id: <175604515656.2399738.12691829872827627473.pr-tracker-bot@kernel.org>
+Date: Sun, 24 Aug 2025 14:19:16 +0000
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: torvalds@linux-foundation.org, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250821200701.1329277-13-david@redhat.com>
 
-On Thu, Aug 21, 2025 at 10:06:38PM +0200, David Hildenbrand wrote:
-> Let's limit the maximum folio size in problematic kernel config where
-> the memmap is allocated per memory section (SPARSEMEM without
-> SPARSEMEM_VMEMMAP) to a single memory section.
-> 
-> Currently, only a single architectures supports ARCH_HAS_GIGANTIC_PAGE
-> but not SPARSEMEM_VMEMMAP: sh.
-> 
-> Fortunately, the biggest hugetlb size sh supports is 64 MiB
-> (HUGETLB_PAGE_SIZE_64MB) and the section size is at least 64 MiB
-> (SECTION_SIZE_BITS == 26), so their use case is not degraded.
-> 
-> As folios and memory sections are naturally aligned to their order-2 size
-> in memory, consequently a single folio can no longer span multiple memory
-> sections on these problematic kernel configs.
-> 
-> nth_page() is no longer required when operating within a single compound
-> page / folio.
-> 
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+The pull request you sent on Sun, 24 Aug 2025 10:03:12 +0200:
 
-Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.17_1
 
-> ---
->  include/linux/mm.h | 22 ++++++++++++++++++----
->  1 file changed, 18 insertions(+), 4 deletions(-)
-> 
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 77737cbf2216a..48a985e17ef4e 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -2053,11 +2053,25 @@ static inline long folio_nr_pages(const struct folio *folio)
->  	return folio_large_nr_pages(folio);
->  }
->  
-> -/* Only hugetlbfs can allocate folios larger than MAX_ORDER */
-> -#ifdef CONFIG_ARCH_HAS_GIGANTIC_PAGE
-> -#define MAX_FOLIO_ORDER		PUD_ORDER
-> -#else
-> +#if !defined(CONFIG_ARCH_HAS_GIGANTIC_PAGE)
-> +/*
-> + * We don't expect any folios that exceed buddy sizes (and consequently
-> + * memory sections).
-> + */
->  #define MAX_FOLIO_ORDER		MAX_PAGE_ORDER
-> +#elif defined(CONFIG_SPARSEMEM) && !defined(CONFIG_SPARSEMEM_VMEMMAP)
-> +/*
-> + * Only pages within a single memory section are guaranteed to be
-> + * contiguous. By limiting folios to a single memory section, all folio
-> + * pages are guaranteed to be contiguous.
-> + */
-> +#define MAX_FOLIO_ORDER		PFN_SECTION_SHIFT
-> +#else
-> +/*
-> + * There is no real limit on the folio size. We limit them to the maximum we
-> + * currently expect.
-> + */
-> +#define MAX_FOLIO_ORDER		PUD_ORDER
->  #endif
->  
->  #define MAX_FOLIO_NR_PAGES	(1UL << MAX_FOLIO_ORDER)
-> -- 
-> 2.50.1
-> 
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/a69dfb4e0acb22fb6347656626520157948b3aa8
+
+Thank you!
 
 -- 
-Sincerely yours,
-Mike.
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
