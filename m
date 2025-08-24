@@ -1,173 +1,288 @@
-Return-Path: <linux-mips+bounces-10515-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10516-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC20AB32B2A
-	for <lists+linux-mips@lfdr.de>; Sat, 23 Aug 2025 18:54:38 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F8A7B32D65
+	for <lists+linux-mips@lfdr.de>; Sun, 24 Aug 2025 05:45:30 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 84EC816CE5F
-	for <lists+linux-mips@lfdr.de>; Sat, 23 Aug 2025 16:51:16 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1952B7AA1C6
+	for <lists+linux-mips@lfdr.de>; Sun, 24 Aug 2025 03:43:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AB862E7BCD;
-	Sat, 23 Aug 2025 16:50:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5D6F1E5B7A;
+	Sun, 24 Aug 2025 03:45:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="oGDVYWhB"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="H1GyrSCy"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+Received: from mail-pg1-f174.google.com (mail-pg1-f174.google.com [209.85.215.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 682BB2E8E00
-	for <linux-mips@vger.kernel.org>; Sat, 23 Aug 2025 16:50:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0160119CCEC;
+	Sun, 24 Aug 2025 03:45:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1755967855; cv=none; b=lonBgdvNytHWAls7LTH7W0sBIXtAztJuWxWmznQKedKo+SrBLq9+spjwDSLBUBYrcE/+Yqyxtu+npyVoE2RtU8JAUgysiwOFExhXkHlPKfU/nClIctYdijGaMssDcO2Iro7bhlW9nuOI4ORQT1arYomzrlzDRByiK+iAQ2eUwIE=
+	t=1756007120; cv=none; b=Zu8y4/cGb12xGhsdjSDL/IWMUjMtLE+1jVrvdDMEcplyo9j9qrVgOwAH7asIP4vBMNWuVdhx6b4ohiF9kjyDTXG3/cddGl9HauqmOclGFvik+fT6hG1vsuNWtSimZwHIK++hoRW7sTKX2xj3uv9pCGXicj7b6+9GlyMejTJSphM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1755967855; c=relaxed/simple;
-	bh=ll4kgop1oU/2MiH1wKMG9HwPL4Ffv5IU0KbLcPeRX0w=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=gVfkPDVCSMYh4Y7Akx5AqZhvVVq80VNSp8F1sYYwCgsSYHKyjI3htu9mtin/drfE8pA9+80HWgafLmi1ZqavqXnE7uv7CLqU5lwCQ4VBWaaOPRv/0J2TaL8yQBTfVv3hPZ/2pTp8f7w5KchKO439HINVLbU7vLz4p1jp3crifhI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=oGDVYWhB; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-6188b72d690so413422a12.2
-        for <linux-mips@vger.kernel.org>; Sat, 23 Aug 2025 09:50:52 -0700 (PDT)
+	s=arc-20240116; t=1756007120; c=relaxed/simple;
+	bh=Fobfznerq163i338BAGNATR36BkRUL2Fo6o5aL4g2TQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=cssb3/GKZ7Md7jqvkYJpiXf2q1y12MzVC7EhN3mlrqB/76a6CX3z/Zs21TPKdVQfmmeDod1ZMB6NfPojHCzufFsVDH+JlUEGOQzoX5hUPjJShNircJYlqauRWo2oLjr4OHHsQPtnLjKlvqWnxiZrqkzSF+9UIpQcWxSy5+EZRHI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=H1GyrSCy; arc=none smtp.client-ip=209.85.215.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f174.google.com with SMTP id 41be03b00d2f7-b476c67c5easo2081223a12.0;
+        Sat, 23 Aug 2025 20:45:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1755967850; x=1756572650; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1756007118; x=1756611918; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=rswAVyuJvRa6TX9BXHZuTzZwEBPSMziKik/9EoWIi4w=;
-        b=oGDVYWhBwVsCp4cNmgu01bBTD+4L+zo2PM5C9UJcBtUqELEXyXEuS4IZ4yS2WrT9Q+
-         pnHCkG1JbKGVD+OmLNPp9fybkFEm10iMo5fzLIpfs8hn9PIaVL7j/lBpGhDWtHT1gQKa
-         Uawi+jgN0QGXFI0WNcLsSwUbaqTupEnsDPme8UKLmt2bf4ljbxpeZxDCWq03at0lqWPl
-         qQaWzDwBqINxq/Fj8wRRkFHubQMJlch3Lhqg0Mazx6CN2GEEpz4vDXVckSQBmhkl1cL3
-         QYSo3z754V/9OldgP8FJKJjlMymNr1ncLCKDMO1LhAa+Ko3eWBW0N8BNHJak80TpIQz5
-         3ADg==
+        bh=7KqycpELhCWaVApA3dTlAE5icBtVyPG6RcdSJ5TYwHo=;
+        b=H1GyrSCyxiydizqLNpnrKEpvzbOmHsWh/VMxV29KQYfx3o9mmhKrPfpxcHNlPgEuaK
+         2xtxuV6UvqjUwT4dQSyDPRWi/+r7cOWHPwDb4CcWs+c6THcxPF4Ztiw+J+vjLZebYuLw
+         EW25so1y6dfBfb8c4wxSw9xjRB7WoY4Vxe7mC25XGOcRQ82/bchEd7BNDSUJBb+wpG17
+         VtLwDMKy+sW7k9vCVVBlepO+Sf71f1TCryoVUbV8AAG4P/DanXwFyg8ZgHAP5alQJrEq
+         gP55t0cNxiEMIi9BAs1dN1iG7kIgwWp9GKWe3/qU18Az1hYfZEhgLmFR/0aeQrExfovW
+         w2xA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1755967851; x=1756572651;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1756007118; x=1756611918;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=rswAVyuJvRa6TX9BXHZuTzZwEBPSMziKik/9EoWIi4w=;
-        b=YB+3B1E3R+rJsGPkOUAzqGEu1pirKlbqRoHugaQ7jdewj9xn1ClrdjnR/EWWbY3iyw
-         s68G7YXIDL1E2W177RzbNsY/u3JnBVOUa494tBRPlJaKdjA6G4GMLlVT5s5kzle2e7uo
-         4UvK7+T+lEu2jhrfV760CjPj4U9uA6qtV7bKMdM25RjHKkv7lGTNyycpA1173/zjI4Nm
-         yMnrV/mhcAW10DdYLKJBGPz56AQkHO2tSaVFqXLQBPl0CEGqZy2zywjNH34H1fOPP7LP
-         2DIVNrSwfscEYEO5SVI7wVLkdOXv44o+CqIpqFAlaBRW4atr7LqXMnsJkFNWFxo3Iz33
-         jeLg==
-X-Forwarded-Encrypted: i=1; AJvYcCUDey/MXMGCjoD/wGUbFwEIFX/5LK2mu89lrGRTGYVS6ToPDefM9aoD0tpHCyzXlpUX102ufP+lqavw@vger.kernel.org
-X-Gm-Message-State: AOJu0YxRRIozhJc2i/cmE3e6d/C2o4mN1tp0olr13SLp+8/CVhGvWC6W
-	uqkaz3pqjmkRnIzGcb63g/9E/l5nWRLL/RyQJdKa4/AGXofT8Q8bvRA5/MH5XVODjy4=
-X-Gm-Gg: ASbGncu0uNoa+ixJLRj8AG6JFoJ52bkOXc6roD1rv7lHigdklDfgiH7BJsSsC0V+JBI
-	WxDv9rTQPeJWtb6KV7nyzRoaRZc0fRFlgkrUTBgtgMrYUNgrKqFGGqDMrLMs5bF7CIyGRcNefGh
-	2g594m9xGWk6U5CytwPIFCwjwpj0sDvO5J6hgYEoEWCmmc5GscI9/IA7NMDhwCAqtJFEgL/wVaa
-	H+ynaWYxcjT3zCcYVmvtAJUvWoS9sS7pqEkaeO06SbE2ZZZ9HAF30bvmwnO0dyCgwRLWfNj8Pf3
-	qTFpvw8vZJ+frqmuLeBcTfszbuqhyg5ISsG5Ce9C2eUfhher/621a550DpZLFr01mgvqPHRkbcw
-	30WWUat1g63iLhpObrgTJjm6RPDjSETbJ1pnPE2Q=
-X-Google-Smtp-Source: AGHT+IHjBstjuzxQsJVLkeGYHgOE3wWdKaHmumAPQvcdN50PYZzwBsMeGzXzhJUjnQCkGBQZZA30xg==
-X-Received: by 2002:a05:6402:274e:b0:61a:927b:a79c with SMTP id 4fb4d7f45d1cf-61c1b703ddfmr2766014a12.8.1755967850448;
-        Sat, 23 Aug 2025 09:50:50 -0700 (PDT)
-Received: from [127.0.1.1] ([178.197.219.123])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-61c312c4cdesm1797880a12.23.2025.08.23.09.50.46
+        bh=7KqycpELhCWaVApA3dTlAE5icBtVyPG6RcdSJ5TYwHo=;
+        b=p4EPvY7oMe5+0NAU2L64H9O3dWY9ekvdAL17yBK3ZgO5E8yO3jOZHFFDq8si5jyJnF
+         XEiNzrqKPzjc8RhL7d14BM5FTMkEafPB7lH96+BCmLj03n63S7WySKJgbc0heomIcz/H
+         vxdmHQ3ZnRwJ+ESXRi85DeFUVs3uSO0XlWJr7VhB5uYwwrzo2f4gIepG2UWGobkCuOvC
+         G9xsXG+zN8lzh3eIx9oiF/MVV+/n3DGao5bWeOS8EvcJ771SVfKVtoWwG1DyY3OYkcd3
+         o/7TgA2qEjCH8fKt/DZZL9WVNyjcXM4qEDAaSu9bYG7w/p4AvPB1V/DG43MhXfi83Dra
+         IKhA==
+X-Forwarded-Encrypted: i=1; AJvYcCUegiYD3Thm5nYRbxNWtVxpJFY1JWbe1fp08jcoizSZwoZLU8xaE+m6LnKcE2wd++6fdDR9oixGoLY=@vger.kernel.org, AJvYcCUk6UFpXICTkpSVfR6JJZqPGBAnOdaxGqBZfIJtI9vr2wM6ENUVdXfw/+8OVacDnksQlaS+Z1o+6QK0YQWb@vger.kernel.org, AJvYcCVUo3n52Z1DYq5JaoNKXJonmQxiom1Vd941l8X4HkJrIWiM7xuGIj6WGofvBJC+wZk/OFGdP54UPYY68Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxNeNy2a2EF2oV6/vp11f50jw2+AjOjcuxcuisZjs+s+5uTunw3
+	TOAYDgpMX1nbs+8O9nASFfiDxNyZfu5sBGp1Qm0mgjhn2RXQUzKxN7w2I/IwgQvp
+X-Gm-Gg: ASbGncvQDAj2SEDakOYsny2hp2Bi7RKHrQymDgV1JiRLXMiCuVNaT7ludMNb7rnJ+Yl
+	jQAkqKo6kBZM6SGYjsPBnvNwaqlmZL8gNhe0WGrd2NUkpihTtIYfKusFWDQ2PD/5m+x8K5dQT2J
+	8aC6ySRFYOrEC6NN30FOGTrg4kiPmYVLUpo/TpUrDAcTIZj4KIBbOBKXiJzugrzlMvohx4OiO+z
+	zQ/IH8cMqrjaXOltp0uLQvWz6pGfl0o7g/5UMbi+qoS63BURcB3AVks+ogauGS5mYpbjmNg92uN
+	Hfovf2cxHm3sttvGrCwlXCDeJfdForevkIBtQoyUarBynjYGxbHL2PcrpVx7PhbHTPxV2G0++U0
+	4d0OukeCwXCYSZIR9Lu5f9rAaKxvcpZCiqsrdkd/Dbj/rrWYiPDsH8g==
+X-Google-Smtp-Source: AGHT+IHhhmvTD0z6paM5o8siIs3IUwj8S/aQcL+EZ/xGaDk7HxEkYscU/Ezyh2RqpPyvpIhDvynD9g==
+X-Received: by 2002:a17:902:f711:b0:246:a8c3:99fe with SMTP id d9443c01a7336-246a8c3b8e1mr15090055ad.9.1756007117716;
+        Sat, 23 Aug 2025 20:45:17 -0700 (PDT)
+Received: from 100ask.localdomain ([116.234.74.152])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-24668896cb9sm33474565ad.133.2025.08.23.20.45.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 23 Aug 2025 09:50:49 -0700 (PDT)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>, 
- Cristian Marussi <cristian.marussi@arm.com>, 
- Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@gmail.com>, 
- Nicolas Ferre <nicolas.ferre@microchip.com>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
- Paul Cercueil <paul@crapouillou.net>, 
- Keguang Zhang <keguang.zhang@gmail.com>, 
- Taichi Sugaya <sugaya.taichi@socionext.com>, 
- Takao Orito <orito.takao@socionext.com>, Shawn Guo <shawnguo@kernel.org>, 
- Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, Jacky Huang <ychuang3@nuvoton.com>, 
- Shan-Chun Hung <schung@nuvoton.com>, Vladimir Zapolskiy <vz@mleia.com>, 
- Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>, 
- Paul Walmsley <paul.walmsley@sifive.com>, 
- Samuel Holland <samuel.holland@sifive.com>, Yixun Lan <dlan@gentoo.org>, 
- Steen Hegelund <Steen.Hegelund@microchip.com>, 
- Daniel Machon <daniel.machon@microchip.com>, UNGLinuxDriver@microchip.com, 
- Orson Zhai <orsonzhai@gmail.com>, 
- Baolin Wang <baolin.wang@linux.alibaba.com>, 
- Chunyan Zhang <zhang.lyra@gmail.com>, 
- Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
- Alexandre Torgue <alexandre.torgue@foss.st.com>, 
- Michal Simek <michal.simek@amd.com>, Maxime Ripard <mripard@kernel.org>, 
- =?utf-8?q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, 
- Manivannan Sadhasivam <mani@kernel.org>, Sven Peter <sven@kernel.org>, 
- Janne Grunau <j@jannau.net>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
- Neal Gompa <neal@gompa.dev>, Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>, 
- Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, 
- Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
- Max Filippov <jcmvbkbc@gmail.com>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Daniel Palmer <daniel@thingy.jp>, Romain Perier <romain.perier@gmail.com>, 
- Andrew Lunn <andrew@lunn.ch>, Gregory Clement <gregory.clement@bootlin.com>, 
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, 
- Bjorn Andersson <andersson@kernel.org>, 
- Geert Uytterhoeven <geert+renesas@glider.be>, 
- Heiko Stuebner <heiko@sntech.de>, 
- Andrea della Porta <andrea.porta@suse.com>, 
- Krzysztof Kozlowski <krzk@kernel.org>, 
- Sylwester Nawrocki <s.nawrocki@samsung.com>, 
- Chanwoo Choi <cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
- Qin Jian <qinjian@cqplus1.com>, Viresh Kumar <vireshk@kernel.org>, 
- Ulf Hansson <ulf.hansson@linaro.org>, 
- Luca Ceresoli <luca.ceresoli@bootlin.com>, 
- Alex Helms <alexander.helms.jy@renesas.com>, 
- Linus Walleij <linus.walleij@linaro.org>, Liviu Dudau <liviu.dudau@arm.com>, 
- Lorenzo Pieralisi <lpieralisi@kernel.org>, 
- Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>, 
- Brian Masney <bmasney@redhat.com>
-Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
- arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- sophgo@lists.linux.dev, linux-mips@vger.kernel.org, imx@lists.linux.dev, 
- linux-riscv@lists.infradead.org, spacemit@lists.linux.dev, 
- linux-stm32@st-md-mailman.stormreply.com, patches@opensource.cirrus.com, 
- linux-actions@lists.infradead.org, asahi@lists.linux.dev, 
- linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
- linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org, 
- linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev
-In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-99-b3bf97b038dc@redhat.com>
-References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
- <20250811-clk-for-stephen-round-rate-v1-99-b3bf97b038dc@redhat.com>
-Subject: Re: (subset) [PATCH 099/114] clk: samsung: pll: convert from
- round_rate() to determine_rate()
-Message-Id: <175596784601.52468.3851559862193091574.b4-ty@linaro.org>
-Date: Sat, 23 Aug 2025 18:50:46 +0200
+        Sat, 23 Aug 2025 20:45:17 -0700 (PDT)
+From: Nino Zhang <ninozhang001@gmail.com>
+To: devicetree@vger.kernel.org
+Cc: robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	vkoul@kernel.org,
+	rahulbedarkar89@gmail.com,
+	linux-mips@vger.kernel.org,
+	dmaengine@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Nino Zhang <ninozhang001@gmail.com>
+Subject: [PATCH v2] dt-bindings: dma: img-mdc-dma: convert to DT schema
+Date: Sun, 24 Aug 2025 11:45:09 +0800
+Message-ID: <20250824034509.445743-1-ninozhang001@gmail.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250821150255.236884-1-ninozhang001@gmail.com>
+References: <20250821150255.236884-1-ninozhang001@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14.2
+Content-Transfer-Encoding: 8bit
 
+Convert the img-mdc-dma binding from txt to YAML schema.
+No functional changes except dropping the consumer node
+(spi@18100f00) from the example, which belongs to the
+consumer binding instead.
 
-On Mon, 11 Aug 2025 11:19:31 -0400, Brian Masney wrote:
-> The round_rate() clk ops is deprecated, so migrate this driver from
-> round_rate() to determine_rate() using the Coccinelle semantic patch
-> on the cover letter of this series.
-> 
-> 
+Signed-off-by: Nino Zhang <ninozhang001@gmail.com>
+---
+Changes since v1:
+- All review comments addressed.
 
-Applied, thanks!
+Open:
+- Maintainers: set to Rahul Bedarkar + linux-mips per MAINTAINERS entry
+  for Pistachio/CI40 device tree. This seems the closest match to the
+  hardware. Happy to adjust if platform maintainers suggest otherwise.
+- img,max-burst-multiplier: defined as uint32. A minimum of 1 is used to
+  exclude the invalid case of 0, but the actual supported range has not
+  been confirmed in available documentation. Example uses 16. A maximum
+  will be added once confirmed by platform maintainers or hardware docs.
 
-[099/114] clk: samsung: pll: convert from round_rate() to determine_rate()
-          https://git.kernel.org/krzk/linux/c/e278e39b014d789fb670695d422ff33c3ef56040
+ .../bindings/dma/img,pistachio-mdc-dma.yaml   | 90 +++++++++++++++++++
+ .../devicetree/bindings/dma/img-mdc-dma.txt   | 57 ------------
+ 2 files changed, 90 insertions(+), 57 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/dma/img,pistachio-mdc-dma.yaml
+ delete mode 100644 Documentation/devicetree/bindings/dma/img-mdc-dma.txt
 
-Best regards,
+diff --git a/Documentation/devicetree/bindings/dma/img,pistachio-mdc-dma.yaml b/Documentation/devicetree/bindings/dma/img,pistachio-mdc-dma.yaml
+new file mode 100644
+index 000000000000..4dde54a17f52
+--- /dev/null
++++ b/Documentation/devicetree/bindings/dma/img,pistachio-mdc-dma.yaml
+@@ -0,0 +1,90 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/dma/img,pistachio-mdc-dma.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: IMG Multi-threaded DMA Controller (MDC)
++
++maintainers:
++  - Rahul Bedarkar <rahulbedarkar89@gmail.com>
++  - linux-mips@vger.kernel.org
++
++allOf:
++  - $ref: /schemas/dma/dma-controller.yaml#
++
++properties:
++  compatible:
++    const: img,pistachio-mdc-dma
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    minItems: 1
++    maxItems: 32
++
++  clocks:
++    maxItems: 1
++
++  clock-names:
++    items:
++      - const: sys
++
++  img,cr-periph:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description: >
++      Phandle to peripheral control syscon node with DMA request to channel
++      mapping registers.
++
++  img,max-burst-multiplier:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    minimum: 1
++    description: >
++      Maximum supported burst size multiplier. The maximum burst size is this
++      value multiplied by the hardware-reported bus width.
++
++  "#dma-cells":
++    const: 3
++    description: |
++      DMA specifier cells:
++        1: peripheral's DMA request line
++        2: channel bitmap: bit N set indicates channel N is usable
++        3: thread ID to be used by the channel
++
++  dma-channels:
++    $ref: /schemas/types.yaml#/definitions/uint32
++    minimum: 1
++    maximum: 32
++    description: Number of supported DMA channels (defaults to HW-reported value)
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - clocks
++  - clock-names
++  - img,cr-periph
++  - img,max-burst-multiplier
++  - "#dma-cells"
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/mips-gic.h>
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    dma-controller@18143000 {
++      compatible = "img,pistachio-mdc-dma";
++      reg = <0x18143000 0x1000>;
++      interrupts = <GIC_SHARED 27 IRQ_TYPE_LEVEL_HIGH>,
++                   <GIC_SHARED 28 IRQ_TYPE_LEVEL_HIGH>;
++      clocks = <&system_clk>;
++      clock-names = "sys";
++
++      img,max-burst-multiplier = <16>;
++      img,cr-periph = <&cr_periph>;
++
++      #dma-cells = <3>;
++    };
+diff --git a/Documentation/devicetree/bindings/dma/img-mdc-dma.txt b/Documentation/devicetree/bindings/dma/img-mdc-dma.txt
+deleted file mode 100644
+index 28c1341db346..000000000000
+--- a/Documentation/devicetree/bindings/dma/img-mdc-dma.txt
++++ /dev/null
+@@ -1,57 +0,0 @@
+-* IMG Multi-threaded DMA Controller (MDC)
+-
+-Required properties:
+-- compatible: Must be "img,pistachio-mdc-dma".
+-- reg: Must contain the base address and length of the MDC registers.
+-- interrupts: Must contain all the per-channel DMA interrupts.
+-- clocks: Must contain an entry for each entry in clock-names.
+-  See ../clock/clock-bindings.txt for details.
+-- clock-names: Must include the following entries:
+-  - sys: MDC system interface clock.
+-- img,cr-periph: Must contain a phandle to the peripheral control syscon
+-  node which contains the DMA request to channel mapping registers.
+-- img,max-burst-multiplier: Must be the maximum supported burst size multiplier.
+-  The maximum burst size is this value multiplied by the hardware-reported bus
+-  width.
+-- #dma-cells: Must be 3:
+-  - The first cell is the peripheral's DMA request line.
+-  - The second cell is a bitmap specifying to which channels the DMA request
+-    line may be mapped (i.e. bit N set indicates channel N is usable).
+-  - The third cell is the thread ID to be used by the channel.
+-
+-Optional properties:
+-- dma-channels: Number of supported DMA channels, up to 32.  If not specified
+-  the number reported by the hardware is used.
+-
+-Example:
+-
+-mdc: dma-controller@18143000 {
+-	compatible = "img,pistachio-mdc-dma";
+-	reg = <0x18143000 0x1000>;
+-	interrupts = <GIC_SHARED 27 IRQ_TYPE_LEVEL_HIGH>,
+-		     <GIC_SHARED 28 IRQ_TYPE_LEVEL_HIGH>,
+-		     <GIC_SHARED 29 IRQ_TYPE_LEVEL_HIGH>,
+-		     <GIC_SHARED 30 IRQ_TYPE_LEVEL_HIGH>,
+-		     <GIC_SHARED 31 IRQ_TYPE_LEVEL_HIGH>,
+-		     <GIC_SHARED 32 IRQ_TYPE_LEVEL_HIGH>,
+-		     <GIC_SHARED 33 IRQ_TYPE_LEVEL_HIGH>,
+-		     <GIC_SHARED 34 IRQ_TYPE_LEVEL_HIGH>,
+-		     <GIC_SHARED 35 IRQ_TYPE_LEVEL_HIGH>,
+-		     <GIC_SHARED 36 IRQ_TYPE_LEVEL_HIGH>,
+-		     <GIC_SHARED 37 IRQ_TYPE_LEVEL_HIGH>,
+-		     <GIC_SHARED 38 IRQ_TYPE_LEVEL_HIGH>;
+-	clocks = <&system_clk>;
+-	clock-names = "sys";
+-
+-	img,max-burst-multiplier = <16>;
+-	img,cr-periph = <&cr_periph>;
+-
+-	#dma-cells = <3>;
+-};
+-
+-spi@18100f00 {
+-	...
+-	dmas = <&mdc 9 0xffffffff 0>, <&mdc 10 0xffffffff 0>;
+-	dma-names = "tx", "rx";
+-	...
+-};
 -- 
-Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+2.43.0
 
 
