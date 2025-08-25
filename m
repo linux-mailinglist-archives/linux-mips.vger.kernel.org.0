@@ -1,50 +1,49 @@
-Return-Path: <linux-mips+bounces-10559-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10560-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 608F4B341DE
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 15:52:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8BCF0B341D4
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 15:51:35 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A24723A2673
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 13:51:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 43344162995
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 13:51:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CD642F90D3;
-	Mon, 25 Aug 2025 13:44:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54A902F9C2A;
+	Mon, 25 Aug 2025 13:44:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AyofisIO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tjrx7CYm"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66FA32F8BCA;
-	Mon, 25 Aug 2025 13:44:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00D8C2F99A5;
+	Mon, 25 Aug 2025 13:44:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756129486; cv=none; b=U2TIMn8NzCvWWcb8Pg+iJX35p8b7aBi8oW1Mp4MuKmTPjz6og+WplBKFer9abbZoRhAP+oe8u9kyYkttXWgXiehXMrEMlmKagZ6i24rs6JeLPrXy+3tCUZRsXIB0L8Lgp/3mzNY3LJ+j9GwE0+qKhy9EjYZeoKx4dsABdDz8HDU=
+	t=1756129489; cv=none; b=gY1T07/QowAvnTFDErHAkHLPvjsNE/972c+JZwpGqWVcOBl+kMhuV1XOISPnizihdn9uF86IVEQ705uagTYVt49F6w6DspzpxHFvmrUnsWKKa98w1iyMj7a3UGS7AgWLq0Jj/aCYMwzNxE8ZfxkVVaLLP+2/VULRqheVB6p7ukM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756129486; c=relaxed/simple;
-	bh=HcSbzm6xiAcXfwnDx0Cv/dA7CqHgBV6SnVkm3VTl8b8=;
+	s=arc-20240116; t=1756129489; c=relaxed/simple;
+	bh=SN8xsGM0guLejBO7WDM1EeAeOFP+rHf/JALVgqpXlwE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=DcRxrF+2naYx7A5Db4gxsQ6yVcvZFFtk3Fp9rxZrWdfY/FbjttTT0ejr+fHHN5WrNVbcZEvaNrStA9FPr2unPAjdk9hJYHXQFNWIUw6j5j2tns5Ds4D6wnJECfWX/B3XCtC+u2inljBU1cbIsgBDz98Q9qhzZqyDJNNu9U7HHuw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AyofisIO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 605F5C4CEF4;
-	Mon, 25 Aug 2025 13:44:45 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=H69r8irOxm383m7he+wvi5BBw7BrK+3qFP1NWu+WJT3bFUlkyZs9xTqViDKyPM/2pePLwrufAUaY16zP7d0lOlYEjYcjzuvzZtQvDp934rXKppyatc2LD5r6XQ3Dbt7r+MtTtpT/jLTZFZyAD+UsW/JP6yQvr7IIjVVdLIxbba8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tjrx7CYm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F14A6C116D0;
+	Mon, 25 Aug 2025 13:44:47 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756129485;
-	bh=HcSbzm6xiAcXfwnDx0Cv/dA7CqHgBV6SnVkm3VTl8b8=;
+	s=k20201202; t=1756129488;
+	bh=SN8xsGM0guLejBO7WDM1EeAeOFP+rHf/JALVgqpXlwE=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=AyofisIOZGuv/zRqYOaeXnjJZg1MeSrRJi2kw0vA+ULf2PuI4GYVAWgFhqhNxLdvZ
-	 tvMLfEiL/5nB0r8R0SBdzojjnkCRbUcWvQN+EzfdUi26iGbYKIxFAKrf2B49kynvle
-	 MHgQ5sCxepLsLs0bkvUZO+TG3vd5nx9HuZhYbfEWu1Pjgfq79LuEB0h4U86JhIZmbJ
-	 TYJ2bLTdBsn0nao5cQs0ebKgRoCXRHIfpFLwFFviKMbRypi3JxYNlUmLzTNzxFnVc1
-	 JwDlUzCIUEx2PygCcNcHOPkM1dOTOu3AZS8w/LaPBLbkhYLsMCZmfa+qmcwGIgS9oa
-	 +BGknHV8Hpy5w==
+	b=Tjrx7CYmt0WUm3wAg1kZfqJLdLOqZbNKpif59kR4Xs8d1aE4b/QUGwAHgwEEcO/ne
+	 +n8lOx70olZGFMqZ2t3DvHU5UEy/2Zayb9nDJ7vRUVb0bO87OSPnetFhgZncfwnr14
+	 gdU8nN1DYqvlw1CpMTFXo2otvbjJRWVLbajUYc017VmbnIFdbVfXWAdiN4HP0fhOPS
+	 NKbcbQaJT0YLA74RGstZCtqrVgvUrGeinRo5gQygoI5Gq6e3g+jvQtS3tpo64FjbhL
+	 KLmKpnocOfWnqv9dNRl3S/sGz6q8YEmMX0PEqXYnrQPoqpEIBC6j+hZA7YXQ0DYQv2
+	 xhL3EXuYTq9gg==
 From: Maxime Ripard <mripard@kernel.org>
-Date: Mon, 25 Aug 2025 15:43:31 +0200
-Subject: [PATCH 26/39] drm/msm/mdp5: Switch to
- drm_atomic_get_new_crtc_state()
+Date: Mon, 25 Aug 2025 15:43:32 +0200
+Subject: [PATCH 27/39] drm/omap: Switch to drm_atomic_get_new_crtc_state()
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -53,7 +52,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250825-drm-no-more-existing-state-v1-26-f08ccd9f85c9@kernel.org>
+Message-Id: <20250825-drm-no-more-existing-state-v1-27-f08ccd9f85c9@kernel.org>
 References: <20250825-drm-no-more-existing-state-v1-0-f08ccd9f85c9@kernel.org>
 In-Reply-To: <20250825-drm-no-more-existing-state-v1-0-f08ccd9f85c9@kernel.org>
 To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
@@ -109,16 +108,16 @@ Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
  linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org, 
  Maxime Ripard <mripard@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1778; i=mripard@kernel.org;
- h=from:subject:message-id; bh=HcSbzm6xiAcXfwnDx0Cv/dA7CqHgBV6SnVkm3VTl8b8=;
- b=owGbwMvMwCmsHn9OcpHtvjLG02pJDBlrMmp3bz6RONOjzXdyXarlBweLvcmn58/k6N7sKxf4/
- znje32vjqksDMKcDLJiiixPZMJOL29fXOVgv/IHzBxWJpAhDFycAjCRmVKMDftn/mbblDC9wyT4
- tFDQxL4bCbeOuSbu1d3zo1xh2ceEm6oOgrW7hGQ1bonfXd6429HoD2PD0Wcue/Qt96gb2x2Us9M
- 3OVl9rkRoYvdJwSkbf868bHT+uYXUplYJxqVfhLZunHyZza0AAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1194; i=mripard@kernel.org;
+ h=from:subject:message-id; bh=SN8xsGM0guLejBO7WDM1EeAeOFP+rHf/JALVgqpXlwE=;
+ b=owGbwMvMwCmsHn9OcpHtvjLG02pJDBlrMuqyyuobNYpedgTfXhfx7p2x8pETX+z77j8tv70pz
+ ktTo/trx1QWBmFOBlkxRZYnMmGnl7cvrnKwX/kDZg4rE8gQBi5OAZjIjjzGhhmXEzbuvfRyg4Js
+ fgRb6uJosewVX06X9VuHzEiNcf/BaVIYF8saunWS75eezRxL7dq8GeuLHqgmPihouvKxRXbxqWc
+ P/Zbd5DNV+jbLS+ihtPY5b/mK36q3RJO9ti2JNWB9yPPwbCYA
 X-Developer-Key: i=mripard@kernel.org; a=openpgp;
  fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 
-The msm atomic_check implementation uses the deprecated
+The omap atomic_check implementation uses the deprecated
 drm_atomic_get_existing_crtc_state() helper.
 
 This hook is called as part of the global atomic_check, thus before the
@@ -127,42 +126,26 @@ we can use drm_atomic_get_new_crtc_state() instead.
 
 Signed-off-by: Maxime Ripard <mripard@kernel.org>
 ---
- drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/omapdrm/omap_plane.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c b/drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c
-index 7c790406d533fbabb330c438419efb18204cc4b7..4ca183fb61a95af60ef5a2c011ae6b2a0df963f0 100644
---- a/drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c
-+++ b/drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c
-@@ -334,12 +334,11 @@ static int mdp5_plane_atomic_check(struct drm_plane *plane,
+diff --git a/drivers/gpu/drm/omapdrm/omap_plane.c b/drivers/gpu/drm/omapdrm/omap_plane.c
+index 24a2ded08b454c4f2225e84f7b0ed09ed733d6b7..d74ef6694c10995c7393217a4d81275b36e00e2b 100644
+--- a/drivers/gpu/drm/omapdrm/omap_plane.c
++++ b/drivers/gpu/drm/omapdrm/omap_plane.c
+@@ -227,11 +227,11 @@ static int omap_plane_atomic_check(struct drm_plane *plane,
  
- 	crtc = new_plane_state->crtc ? new_plane_state->crtc : old_plane_state->crtc;
+ 	crtc = new_plane_state->crtc ? new_plane_state->crtc : plane->state->crtc;
  	if (!crtc)
  		return 0;
  
--	crtc_state = drm_atomic_get_existing_crtc_state(state,
--							crtc);
+-	crtc_state = drm_atomic_get_existing_crtc_state(state, crtc);
 +	crtc_state = drm_atomic_get_new_crtc_state(state, crtc);
+ 	/* we should have a crtc state if the plane is attached to a crtc */
  	if (WARN_ON(!crtc_state))
- 		return -EINVAL;
+ 		return 0;
  
- 	return mdp5_plane_atomic_check_with_state(crtc_state, new_plane_state);
- }
-@@ -371,12 +370,12 @@ static int mdp5_plane_atomic_async_check(struct drm_plane *plane,
- 	struct mdp5_plane_state *mdp5_state = to_mdp5_plane_state(new_plane_state);
- 	struct drm_crtc_state *crtc_state;
- 	int min_scale, max_scale;
- 	int ret;
- 
--	crtc_state = drm_atomic_get_existing_crtc_state(state,
--							new_plane_state->crtc);
-+	crtc_state = drm_atomic_get_new_crtc_state(state,
-+						   new_plane_state->crtc);
- 	if (WARN_ON(!crtc_state))
- 		return -EINVAL;
- 
- 	if (!crtc_state->active)
- 		return -EINVAL;
+ 	/*
 
 -- 
 2.50.1
