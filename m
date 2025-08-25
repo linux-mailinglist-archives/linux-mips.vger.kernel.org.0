@@ -1,168 +1,144 @@
-Return-Path: <linux-mips+bounces-10572-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10573-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A987B3422E
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 15:55:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 070B1B3443D
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 16:40:51 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 840CE5E2F65
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 13:53:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7FB6417CC44
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 14:35:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85A2B2ECEAB;
-	Mon, 25 Aug 2025 13:45:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A2EB2FF155;
+	Mon, 25 Aug 2025 14:32:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gbd9TFFp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n7YZsnMU"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 725C226CE32;
-	Mon, 25 Aug 2025 13:45:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C05212FE581;
+	Mon, 25 Aug 2025 14:32:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756129521; cv=none; b=nThNCor5dIkLdngGpGlzRhVz5vFHiTcSG5rCv0Vm5n2TKH8bRHOfAhBML/CiurpU4WUEFXAO66tGlhuXk0DXxPY6vFKzxp3+sP5epOZFgUOmz0bsC1Sy5FGMTF0R6K9zJ8NP98DsMZk3kdOMD4X0BMSLuCJ0YxFCSssOQiuTgaw=
+	t=1756132362; cv=none; b=rvaKFmxPUXNMBH2MAesz5Qlpp/xkFerUU/SKfTXcIoOtlqi/YtFO9qUgSjde1sEIck4M0f9LjgFbLzGFxb5rEvRBuXjB6DUdWyWUBhPQ8m85JpvwgUQojiBmfA/49tA3flosM8W6RLpXW2O3I2NrUXZNy4Z0HyIncL44H02QLBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756129521; c=relaxed/simple;
-	bh=JLMIgCAsxjzxuydkVuFbaW+CIAKd8FHbajZuUIMyqfg=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=AH5Edl3/D3C4uvmhtZ9m1lvKYuohDL8LcFLrqjwvUQvxv9f1+aw1UpTIBsyGA362QcGQzKBD44dX6Ruef/XAlqndPeK4rMOlHzvIsKdG5SFqausyiXVslHk41SsZvee/l/0nerxQu0FfwkdlHwaG1qkD52/qK/HhjhS5E2SnUTw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gbd9TFFp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 76D3BC113D0;
-	Mon, 25 Aug 2025 13:45:20 +0000 (UTC)
+	s=arc-20240116; t=1756132362; c=relaxed/simple;
+	bh=DU+1S4Dtf6BzIA9TMfJpqm5TRVwGVofXB+Dj9RHsm1g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=h5U2W8teEHwEHSAEReWUSuboArGJz/KcccWbLgRYbbEqsTqBX7LtXHdcNag1oRJzbwFhEryM52hhe0TnA5ZWLQyqFZVJgJ3hsiVibG+jzAkGTNAQkhNYKhjeeNexmu3cbMcSiMUUWrzRocKGYTpXeRxqMADeLqRxW5OjwxAsRf8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n7YZsnMU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28395C4CEED;
+	Mon, 25 Aug 2025 14:32:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756129521;
-	bh=JLMIgCAsxjzxuydkVuFbaW+CIAKd8FHbajZuUIMyqfg=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Gbd9TFFphA8CsNadp5kIg68cFiPRgIGBzQXqFxl4f5sE34+h3jyfL90zokSNigLi4
-	 OKtMVh2T/9d0WN0xpmsjujI22Ml6/Auy+PTXywkhRmgEk43Dgxe9EZdlkDpj6T5tcx
-	 h+tITF3cx9j5cpYIqGvQvAqjHeyUG54Y65RhTeVtZfJJkzFLjVnKhkhoVmJnzk2CaR
-	 f+g7xw7kIzBqMPtofuGEdXTG43+AFzWZ/AotyCnLFh/O2MooVX/MK/7z0LcP2xP6a4
-	 EMgZB+mnrz6RqLmNK7UnLbVao22QdoznSLQXNRpCt+TCV86tPXyEKdkjWV9ZgaJObI
-	 FIuUqaBo7t6EA==
-From: Maxime Ripard <mripard@kernel.org>
-Date: Mon, 25 Aug 2025 15:43:44 +0200
-Subject: [PATCH 39/39] drm/atomic: Document __drm_private_objs_state state
- pointer
+	s=k20201202; t=1756132360;
+	bh=DU+1S4Dtf6BzIA9TMfJpqm5TRVwGVofXB+Dj9RHsm1g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=n7YZsnMUaPKieR6Aen8NXplrqXq649ng2cWds08Paw0ZE1V9/s04MYuzfMJunBPPM
+	 e9q5l/4IYbHR+zLW6tZ3Ain+SM/EPsptEidQNiwcBG+gIXbD0MDb3NpuMIodH9q/bK
+	 gfUkw7ZqtLUllteesZei9c9/9Nob4tERnp37xBWgOfA8ssretvfGAj7ddnS1nJ/eSw
+	 gYK9m1P9+EEv6DvwLeTd0I1ynl3rIVfEsEIPpMbPhXNcaQgQQCdndA/xeV7DIotpxx
+	 J60e7ZU1ZivKd3L40DdBa/CHbHS/SOS0E/lE/sJu2Rz1DevUCKw6IvTf/zpKfAvZXV
+	 BIxp/l6R3haNQ==
+Date: Mon, 25 Aug 2025 17:32:20 +0300
+From: Mike Rapoport <rppt@kernel.org>
+To: David Hildenbrand <david@redhat.com>
+Cc: Mika =?iso-8859-1?Q?Penttil=E4?= <mpenttil@redhat.com>,
+	linux-kernel@vger.kernel.org,
+	Alexander Potapenko <glider@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Brendan Jackman <jackmanb@google.com>,
+	Christoph Lameter <cl@gentwo.org>, Dennis Zhou <dennis@kernel.org>,
+	Dmitry Vyukov <dvyukov@google.com>, dri-devel@lists.freedesktop.org,
+	intel-gfx@lists.freedesktop.org, iommu@lists.linux.dev,
+	io-uring@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
+	Jens Axboe <axboe@kernel.dk>, Johannes Weiner <hannes@cmpxchg.org>,
+	John Hubbard <jhubbard@nvidia.com>, kasan-dev@googlegroups.com,
+	kvm@vger.kernel.org, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-arm-kernel@axis.com, linux-arm-kernel@lists.infradead.org,
+	linux-crypto@vger.kernel.org, linux-ide@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-mmc@vger.kernel.org, linux-mm@kvack.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Marco Elver <elver@google.com>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>,
+	netdev@vger.kernel.org, Oscar Salvador <osalvador@suse.de>,
+	Peter Xu <peterx@redhat.com>, Robin Murphy <robin.murphy@arm.com>,
+	Suren Baghdasaryan <surenb@google.com>, Tejun Heo <tj@kernel.org>,
+	virtualization@lists.linux.dev, Vlastimil Babka <vbabka@suse.cz>,
+	wireguard@lists.zx2c4.com, x86@kernel.org, Zi Yan <ziy@nvidia.com>
+Subject: Re: [PATCH RFC 10/35] mm/hugetlb: cleanup
+ hugetlb_folio_init_tail_vmemmap()
+Message-ID: <aKxz9HLQTflFNYEu@kernel.org>
+References: <20250821200701.1329277-1-david@redhat.com>
+ <20250821200701.1329277-11-david@redhat.com>
+ <9156d191-9ec4-4422-bae9-2e8ce66f9d5e@redhat.com>
+ <7077e09f-6ce9-43ba-8f87-47a290680141@redhat.com>
+ <aKmDBobyvEX7ZUWL@kernel.org>
+ <a90cf9a3-d662-4239-ad54-7ea917c802a5@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250825-drm-no-more-existing-state-v1-39-f08ccd9f85c9@kernel.org>
-References: <20250825-drm-no-more-existing-state-v1-0-f08ccd9f85c9@kernel.org>
-In-Reply-To: <20250825-drm-no-more-existing-state-v1-0-f08ccd9f85c9@kernel.org>
-To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
- Simona Vetter <simona@ffwll.ch>, Louis Chauvet <louis.chauvet@bootlin.com>, 
- Haneen Mohammed <hamohammed.sa@gmail.com>, 
- Melissa Wen <melissa.srw@gmail.com>, Jyri Sarha <jyri.sarha@iki.fi>, 
- Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
- Paul Cercueil <paul@crapouillou.net>, Liviu Dudau <liviu.dudau@arm.com>, 
- Russell King <linux@armlinux.org.uk>, 
- Manikandan Muralidharan <manikandan.m@microchip.com>, 
- Dharma Balasubiramani <dharma.b@microchip.com>, 
- Nicolas Ferre <nicolas.ferre@microchip.com>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Claudiu Beznea <claudiu.beznea@tuxon.dev>, Inki Dae <inki.dae@samsung.com>, 
- Seung-Woo Kim <sw0312.kim@samsung.com>, 
- Kyungmin Park <kyungmin.park@samsung.com>, 
- Krzysztof Kozlowski <krzk@kernel.org>, 
- Alim Akhtar <alim.akhtar@samsung.com>, Liu Ying <victor.liu@nxp.com>, 
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, 
- Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>, 
- Lucas Stach <l.stach@pengutronix.de>, 
- Philipp Zabel <p.zabel@pengutronix.de>, 
- Anitha Chrisanthus <anitha.chrisanthus@intel.com>, 
- Edmund Dea <edmund.j.dea@intel.com>, Paul Kocialkowski <paulk@sys-base.io>, 
- Sui Jingfeng <suijingfeng@loongson.cn>, 
- Chun-Kuang Hu <chunkuang.hu@kernel.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Rob Clark <robin.clark@oss.qualcomm.com>, 
- Dmitry Baryshkov <lumag@kernel.org>, 
- Abhinav Kumar <abhinav.kumar@linux.dev>, 
- Jessica Zhang <jessica.zhang@oss.qualcomm.com>, Sean Paul <sean@poorly.run>, 
- Marijn Suijten <marijn.suijten@somainline.org>, 
- Sandy Huang <hjc@rock-chips.com>, 
- =?utf-8?q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, 
- Andy Yan <andy.yan@rock-chips.com>, Chen-Yu Tsai <wens@csie.org>, 
- Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Samuel Holland <samuel@sholland.org>, 
- Thierry Reding <thierry.reding@gmail.com>, 
- Mikko Perttunen <mperttunen@nvidia.com>, 
- Jonathan Hunter <jonathanh@nvidia.com>, Hans de Goede <hansg@kernel.org>, 
- Dave Stevenson <dave.stevenson@raspberrypi.com>, 
- =?utf-8?q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>, 
- Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>
-Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org, 
- linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-samsung-soc@vger.kernel.org, imx@lists.linux.dev, 
- linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
- freedreno@lists.freedesktop.org, linux-rockchip@lists.infradead.org, 
- linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org, 
- Maxime Ripard <mripard@kernel.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1478; i=mripard@kernel.org;
- h=from:subject:message-id; bh=JLMIgCAsxjzxuydkVuFbaW+CIAKd8FHbajZuUIMyqfg=;
- b=owGbwMvMwCmsHn9OcpHtvjLG02pJDBlrMprNd0U4trEo204sdVznvn9uxM7dL9fWXJ05WcBui
- uRnJ4EzHVNZGIQ5GWTFFFmeyISdXt6+uMrBfuUPmDmsTCBDGLg4BWAiv/kYG+a6Wz5Y42Vho3Jr
- h7P23y+KAYuDZlvLqmjGCVe9uebfqV0iVpKQ2bw+U5H7c1DIkk//GOtj5ZLqjY5uONkxz9Oo121
- ekb2Sif22bcLft74z5K44bLVR5Y/TpHUxxx2kI6S3lrU1CwMA
-X-Developer-Key: i=mripard@kernel.org; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a90cf9a3-d662-4239-ad54-7ea917c802a5@redhat.com>
 
-While the old and new state pointers are somewhat self-explanatory, the
-state pointer and its relation to the other two really isn't.
+On Mon, Aug 25, 2025 at 02:48:58PM +0200, David Hildenbrand wrote:
+> On 23.08.25 10:59, Mike Rapoport wrote:
+> > On Fri, Aug 22, 2025 at 08:24:31AM +0200, David Hildenbrand wrote:
+> > > On 22.08.25 06:09, Mika Penttilä wrote:
+> > > > 
+> > > > On 8/21/25 23:06, David Hildenbrand wrote:
+> > > > 
+> > > > > All pages were already initialized and set to PageReserved() with a
+> > > > > refcount of 1 by MM init code.
+> > > > 
+> > > > Just to be sure, how is this working with MEMBLOCK_RSRV_NOINIT, where MM is supposed not to
+> > > > initialize struct pages?
+> > > 
+> > > Excellent point, I did not know about that one.
+> > > 
+> > > Spotting that we don't do the same for the head page made me assume that
+> > > it's just a misuse of __init_single_page().
+> > > 
+> > > But the nasty thing is that we use memblock_reserved_mark_noinit() to only
+> > > mark the tail pages ...
+> > 
+> > And even nastier thing is that when CONFIG_DEFERRED_STRUCT_PAGE_INIT is
+> > disabled struct pages are initialized regardless of
+> > memblock_reserved_mark_noinit().
+> > 
+> > I think this patch should go in before your updates:
+> 
+> Shouldn't we fix this in memblock code?
+> 
+> Hacking around that in the memblock_reserved_mark_noinit() user sound wrong
+> -- and nothing in the doc of memblock_reserved_mark_noinit() spells that
+> behavior out.
 
-Now that we've cleaned up everything and it isn't used in any
-modesetting path, we can document what it's still useful for: to free
-the right state when we free the global state.
-
-Signed-off-by: Maxime Ripard <mripard@kernel.org>
----
- include/drm/drm_atomic.h | 16 +++++++++++++++-
- 1 file changed, 15 insertions(+), 1 deletion(-)
-
-diff --git a/include/drm/drm_atomic.h b/include/drm/drm_atomic.h
-index e8edf33ab260c03c81e16917a6a5a7d9648d46c9..a7e75bb0bdc6a38eb83c07b844dd97af48006f0f 100644
---- a/include/drm/drm_atomic.h
-+++ b/include/drm/drm_atomic.h
-@@ -383,11 +383,25 @@ struct drm_private_state {
- 	struct drm_private_obj *obj;
- };
+We can surely update the docs, but unfortunately I don't see how to avoid
+hacking around it in hugetlb. 
+Since it's used to optimise HVO even further to the point hugetlb open
+codes memmap initialization, I think it's fair that it should deal with all
+possible configurations.
  
- struct __drm_private_objs_state {
- 	struct drm_private_obj *ptr;
--	struct drm_private_state *state, *old_state, *new_state;
-+
-+	/**
-+	 * @state:
-+	 *
-+	 * Used to track the @drm_private_state we will need to free
-+	 * when tearing down the associated &drm_atomic_state.
-+	 *
-+	 * Before a commit, and the call to
-+	 * drm_atomic_helper_swap_state() in particular, it points to
-+	 * the same state than @new_state. After a commit, it points to
-+	 * the same state than @old_state.
-+	 */
-+	struct drm_private_state *state;
-+
-+	struct drm_private_state *old_state, *new_state;
- };
- 
- /**
-  * struct drm_atomic_state - Atomic commit structure
-  *
+> -- 
+> Cheers
+> 
+> David / dhildenb
+> 
+> 
 
 -- 
-2.50.1
-
+Sincerely yours,
+Mike.
 
