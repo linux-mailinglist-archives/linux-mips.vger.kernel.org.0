@@ -1,49 +1,50 @@
-Return-Path: <linux-mips+bounces-10566-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10567-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04C0EB341FE
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 15:53:24 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65F6FB341F9
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 15:53:12 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 04E171A85E11
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 13:52:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 677F3206125
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 13:52:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82B262FD1BF;
-	Mon, 25 Aug 2025 13:45:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F1932FD7D0;
+	Mon, 25 Aug 2025 13:45:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qqRxq6Fu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GHF+7tRg"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AC0D27703E;
-	Mon, 25 Aug 2025 13:45:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 38C9B2FD7C7;
+	Mon, 25 Aug 2025 13:45:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756129505; cv=none; b=L5t4XDK3IWYKligQz88dzusG36Zn8njuDlZnLrAIRvulvA0Do8DSqtXviJrMZNlzSxyUJ/2Irsu0+dKMcSYXGit7V9VR7Xu2Sb1Zb/w329Kj4WlN9SOFxK5EEtqmbGxv1/7bmnXXgpsXLqZSTBZwMUKnB6IRPK0qPnfGT42hvhA=
+	t=1756129508; cv=none; b=GmhwwWM3LOYzM71g9dptLt8xL9Fln+VfsGS0qs/vFcLdm2nRQJPb+yweazYXe1iawH6xMwtuYNHAwZo2YopGxYurhVCKl9g4MbuDFKjzhu+cRu8RcjNA4QAzm2l181wFgQUU5hUpcaNX3vJtoDbrsw4QUa7wcCjax3EssQOB6Ts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756129505; c=relaxed/simple;
-	bh=GVCQVXgqlXIQqoFKKvRG4d8j+VMj99ulhE3PjHHUahc=;
+	s=arc-20240116; t=1756129508; c=relaxed/simple;
+	bh=/RrEqrRKd+T1PhrtfogiHBNfo2H9EgVQA7gJqnN/Zg4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=RiGGCzBDyovXjupGenEzsExS7WLi6x9TC07H4vwR1C6FRNTxtFJ++e8pM5BaIaQ4pLX4beonMxEutvtpxBIX6L5P+NUtetlrZN9Y308/PCBNkJ65kqPH6d8/hnYwPLxOWKPp++2mOB4L+wIXCq3Lr8kFUxVJErpHzs5h9pNjjMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qqRxq6Fu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 78C4CC116C6;
-	Mon, 25 Aug 2025 13:45:04 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=H27ppCUO7OeyZ2nrb6fAjbWDByfGNyZH314EDupiz3mWpSfw5Za0JQ4KbFrS5Do+B9tly/pXkp+nfFPa8me63c+Lj2TvsLlTzKUM72L/xpZAQjntUie3VKA4pm4IuhVDZAapmCZAaXvY/UoSZjYTPYZyiNEpK+5DJYOpZjEIqms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GHF+7tRg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F38FC116D0;
+	Mon, 25 Aug 2025 13:45:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756129505;
-	bh=GVCQVXgqlXIQqoFKKvRG4d8j+VMj99ulhE3PjHHUahc=;
+	s=k20201202; t=1756129507;
+	bh=/RrEqrRKd+T1PhrtfogiHBNfo2H9EgVQA7gJqnN/Zg4=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=qqRxq6FuF6J6qzpaV4wO2Uzah4+ol8zsgdDB7soEAXzYTWjCBHd/VpODhx1JvOnSL
-	 8iCB5b0/ngm026gAElFp7jAcZu0miEKYYtq9u5bNBQUF4o7UnPIwUuDhtd2C4TY+/c
-	 I5ysyLNCkAeYwWkWLWCM5Wz5IXDvwqMlFqAHtPDmpXl8AeO/IHtZstLXpoN1jRNiS3
-	 o4DHysweEnhC+aYGiN1XXKsAHbXYM+Z/S4tZaAnv4A6ZLHyyJM0dWfy1j1ZbCw8VFR
-	 Z9FIQD85aYZ4ddVPobiMw2tMUQ8iNxMqAxGopVx7i4bGian99GNhb7+l9PMoRU3JnF
-	 Ma/LH3J6ES8Og==
+	b=GHF+7tRgVoYuv49ODZps3m2Zz5pqY9po5IN6kisz1CWIb/dQU7VHasSAmKKWMayJb
+	 FjxKaigK/HXVfuQt01ACRd+At+Wtl477HW42wS+1KVMLNtog5Ujbj7pTKdaKmHheVt
+	 hZwSXxosMwz8+3nWdaD1KXe0gC7LDz1wc8y9PYvJU0lxOdLyHIm4BEEgcX5LJBHgMk
+	 plHNT1pRImP3nW63OW/z1O20VMeuYLq/R+yczEFtajhYs8gCmiZ887NkfOXyVJptW7
+	 PvjohPDiuHteQD2tYa1ND9L9l07DIgR+0t2WSbplAnZmwcEF4j936klfD1jdEmAVGc
+	 0NROFs91f6KMA==
 From: Maxime Ripard <mripard@kernel.org>
-Date: Mon, 25 Aug 2025 15:43:38 +0200
-Subject: [PATCH 33/39] drm/vc4: Switch to drm_atomic_get_new_crtc_state()
+Date: Mon, 25 Aug 2025 15:43:39 +0200
+Subject: [PATCH 34/39] drm/atomic: Switch to
+ drm_atomic_get_new_crtc_state()
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -52,7 +53,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250825-drm-no-more-existing-state-v1-33-f08ccd9f85c9@kernel.org>
+Message-Id: <20250825-drm-no-more-existing-state-v1-34-f08ccd9f85c9@kernel.org>
 References: <20250825-drm-no-more-existing-state-v1-0-f08ccd9f85c9@kernel.org>
 In-Reply-To: <20250825-drm-no-more-existing-state-v1-0-f08ccd9f85c9@kernel.org>
 To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
@@ -108,16 +109,16 @@ Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
  linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org, 
  Maxime Ripard <mripard@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1861; i=mripard@kernel.org;
- h=from:subject:message-id; bh=GVCQVXgqlXIQqoFKKvRG4d8j+VMj99ulhE3PjHHUahc=;
- b=owGbwMvMwCmsHn9OcpHtvjLG02pJDBlrMhqYZAWqr5/UO2el8W236oc9BT/zt17UTj5mV/6Dx
- e+WCW9/x1QWBmFOBlkxRZYnMmGnl7cvrnKwX/kDZg4rE8gQBi5OAZiI/UvGOo21masFXIs3Fm39
- sPCaOmOY/OL/7i+Y1H/tbRS5c7rw7tfAYjdP6dWHlaP6JCfzdZj7MzZsannlv/YAc63K+dlxv5+
- fXq8W79YjES0YXNnaUXLC99vZW69ick/MOWvS9uLQkbePz8wHAA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1299; i=mripard@kernel.org;
+ h=from:subject:message-id; bh=/RrEqrRKd+T1PhrtfogiHBNfo2H9EgVQA7gJqnN/Zg4=;
+ b=owGbwMvMwCmsHn9OcpHtvjLG02pJDBlrMhordkzcXHr8tNdLY2Wjm17td/2mHBVZe+VQtep95
+ ae394gXdExlYRDmZJAVU2R5IhN2enn74ioH+5U/YOawMoEMYeDiFICJMDUyNtyXOxErqPDqp/Xl
+ zlPSkzLebE/s7/vyTuyI3Vue72K9L68cWXP2/IvpnJWn+J9ZrGr6H8nY8K4oLe3r++muq14c0kt
+ Qq32SFvV++Z7AA90/2oTfmf36U7PjSZDfnUrXrxNi016+nd7gBwA=
 X-Developer-Key: i=mripard@kernel.org; a=openpgp;
  fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 
-The vc4 atomic_check implementation uses the deprecated
+The drm_atomic_connector_check() function uses the deprecated
 drm_atomic_get_existing_crtc_state() helper.
 
 This hook is called as part of the global atomic_check, thus before the
@@ -126,41 +127,28 @@ we can use drm_atomic_get_new_crtc_state() instead.
 
 Signed-off-by: Maxime Ripard <mripard@kernel.org>
 ---
- drivers/gpu/drm/vc4/vc4_plane.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+ drivers/gpu/drm/drm_atomic.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/vc4/vc4_plane.c b/drivers/gpu/drm/vc4/vc4_plane.c
-index 056d344c5411db0eae975b0fa52c0de7418306f1..b4a53f68865bc18f6cb1fa92b1057890d3fe0382 100644
---- a/drivers/gpu/drm/vc4/vc4_plane.c
-+++ b/drivers/gpu/drm/vc4/vc4_plane.c
-@@ -495,12 +495,11 @@ static int vc4_plane_setup_clipping_and_scaling(struct drm_plane_state *state)
- 	struct drm_crtc_state *crtc_state;
- 	u32 h_subsample = fb->format->hsub;
- 	u32 v_subsample = fb->format->vsub;
- 	int ret;
- 
--	crtc_state = drm_atomic_get_existing_crtc_state(state->state,
--							state->crtc);
-+	crtc_state = drm_atomic_get_new_crtc_state(state->state, state->crtc);
- 	if (!crtc_state) {
- 		DRM_DEBUG_KMS("Invalid crtc state\n");
+diff --git a/drivers/gpu/drm/drm_atomic.c b/drivers/gpu/drm/drm_atomic.c
+index 1147fa890a03ef2c3283972c816796d8de6307c9..6d92f13d489f299aea5cd14f900ae766588462da 100644
+--- a/drivers/gpu/drm/drm_atomic.c
++++ b/drivers/gpu/drm/drm_atomic.c
+@@ -478,12 +478,12 @@ static int drm_atomic_connector_check(struct drm_connector *connector,
+ 			       connector->base.id, connector->name);
  		return -EINVAL;
  	}
  
-@@ -873,12 +872,11 @@ static void vc4_plane_calc_load(struct drm_plane_state *state)
- 	struct vc4_plane_state *vc4_state;
- 	struct drm_crtc_state *crtc_state;
- 	unsigned int vscale_factor;
+ 	if (state->crtc)
+-		crtc_state = drm_atomic_get_existing_crtc_state(state->state,
+-								state->crtc);
++		crtc_state = drm_atomic_get_new_crtc_state(state->state,
++							   state->crtc);
  
- 	vc4_state = to_vc4_plane_state(state);
--	crtc_state = drm_atomic_get_existing_crtc_state(state->state,
--							state->crtc);
-+	crtc_state = drm_atomic_get_new_crtc_state(state->state, state->crtc);
- 	vrefresh = drm_mode_vrefresh(&crtc_state->adjusted_mode);
- 
- 	/* The HVS is able to process 2 pixels/cycle when scaling the source,
- 	 * 4 pixels/cycle otherwise.
- 	 * Alpha blending step seems to be pipelined and it's always operating
+ 	if (writeback_job->fb && !crtc_state->active) {
+ 		drm_dbg_atomic(connector->dev,
+ 			       "[CONNECTOR:%d:%s] has framebuffer, but [CRTC:%d] is off\n",
+ 			       connector->base.id, connector->name,
 
 -- 
 2.50.1
