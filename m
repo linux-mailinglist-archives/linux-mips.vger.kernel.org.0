@@ -1,49 +1,49 @@
-Return-Path: <linux-mips+bounces-10564-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10565-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C07A1B341FC
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 15:53:21 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B06EB341F6
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 15:53:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8590F5E2634
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 13:52:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7357C1A8612E
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 13:52:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E9CF2FC024;
-	Mon, 25 Aug 2025 13:44:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD87C2FC89C;
+	Mon, 25 Aug 2025 13:45:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fO6CEb6z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="W9bbviJf"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 563742FB99E;
-	Mon, 25 Aug 2025 13:44:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D6732FC008;
+	Mon, 25 Aug 2025 13:45:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756129499; cv=none; b=DA6XNW2SQ7ifV0mt6moH4BDaNrWvnL5qeYA2ozxIcaxppJLYzIs/r7wWB5RRlpp31fEPC5yunYsb7ETB/QLWIl9vK0CfV8libvSCD24XEZZsqnjV8zw1MQ3DQWOL3Igd+boRwjXNYB814dMcywGC0GRz4nTsCRKp7z6+z3dT7T8=
+	t=1756129502; cv=none; b=oqaWt+cOjG0PiEyytGSxo3fJ/0MsHA6TY6Lhhbn3LgJE8TJgz+KDFG23Q5e/8rO3mFh0mL83k5dwvUGEhJgMfHlaCJO99oIr9FbEJDW2b15VRl9U119lSsW/5YTsjy5u5ae5vP3x5u72TqaxN5ZArx/QlcGBPn1D3mTSBMLgbfc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756129499; c=relaxed/simple;
-	bh=CjCSo+oPB1WlkfucnEtjtkaHt6K9iYh8hFc7Ed1HjPs=;
+	s=arc-20240116; t=1756129502; c=relaxed/simple;
+	bh=c0CdOMShkVXZZKjK+bbptCPCZqzOvjNz6ZMbDLQ9b1k=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=YW5ZeqyGbW6tOqJNK1DUpqXDMdbMNQ3DilX++6ec9uyk+todApJttXwonrDdg8C54gu5DxIXO6g8m39Hz6FbYdTsToePJ00ssXEG7k1cnhYgd0f6WSfm23ue973ZeIQNOS9RXFvpJJ65JosRLbduzzFgOJPRhLgqkNukvjU6kfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fO6CEb6z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC03EC16AAE;
-	Mon, 25 Aug 2025 13:44:58 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=MjXU83HD1Ss0cWk0W7Dl8IXY454qjZQ2xxVyibfQgyOXJfxLcwBHm1s6ULp2h2gdw+9DyXuuW0XxMQDZtDIEaaKY18PcGrOQgr2Dpji4uDL4l98Mt4ghejN45b4XzmLAfiS+Y13STdvRHoK+aTp4p4E6xZjW9zPQvZAUKfq1Gxs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=W9bbviJf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A820C116D0;
+	Mon, 25 Aug 2025 13:45:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756129499;
-	bh=CjCSo+oPB1WlkfucnEtjtkaHt6K9iYh8hFc7Ed1HjPs=;
+	s=k20201202; t=1756129502;
+	bh=c0CdOMShkVXZZKjK+bbptCPCZqzOvjNz6ZMbDLQ9b1k=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=fO6CEb6zlLXXcS9V8uEQdq4DKdfVd+BGxXbBa+C5ZAZREoFTYo/V2CvA9vvmti72y
-	 XScAXdCuuDGVIBUe1H6aU3jrkS0AQtisxHiH7e+GXWGMPDK/dHHyhizCIpDBo8/GTy
-	 P1+085c/oNew3SSU+STUoY2Z7NAWk/Yzdkc9pspNxU6TgEu4/qJLjcWMBmNmnUpCME
-	 /p5mdrLqpqPwBg9VL5oWSsbFdKwwj8NeP5GOdEjHnM5WERHiu7Yq9sv4tcOvWnBW73
-	 QSznIM45BIwOFiOTXXLZDO+m5qCkAafgBTTlZKxpw9rylyiVVroDur4MA+OuShBtvW
-	 KOeGvO/YlIgSA==
+	b=W9bbviJfe5pXPMc1R8qqNSWgesz/4yT0wMMjsz9lstmOloS4JAQk6AUW8OO92xrWz
+	 4jjPNZXIXpXcdSEO1ZJY1l1oO8sPBAyx3yqbynUIQymxySzjJJPs+6+mW4+GuL5uOx
+	 yRTLg0eEgixuC39N4D78lLTS8wFBKqqNyXSPzjoO1YMtrgzlp0W8irh2s8qtL57LQ6
+	 Gy03bIyxUMFwYN4MbjP8wfhqtE1NwJWy7cya6EAR+OFvYqsdsDl6TEjgTWR3NaAVMc
+	 YyrqR/8/SZN4wU0D3djNoychkVonj9sPgGs6jB38XLXJL4MHCN51g0kAxneWTQC5D0
+	 InMCOc+L8TrsQ==
 From: Maxime Ripard <mripard@kernel.org>
-Date: Mon, 25 Aug 2025 15:43:36 +0200
-Subject: [PATCH 31/39] drm/tilcdc: Switch to
+Date: Mon, 25 Aug 2025 15:43:37 +0200
+Subject: [PATCH 32/39] drm/vboxvideo: Switch to
  drm_atomic_get_new_crtc_state()
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250825-drm-no-more-existing-state-v1-31-f08ccd9f85c9@kernel.org>
+Message-Id: <20250825-drm-no-more-existing-state-v1-32-f08ccd9f85c9@kernel.org>
 References: <20250825-drm-no-more-existing-state-v1-0-f08ccd9f85c9@kernel.org>
 In-Reply-To: <20250825-drm-no-more-existing-state-v1-0-f08ccd9f85c9@kernel.org>
 To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
@@ -109,16 +109,16 @@ Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
  linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org, 
  Maxime Ripard <mripard@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1281; i=mripard@kernel.org;
- h=from:subject:message-id; bh=CjCSo+oPB1WlkfucnEtjtkaHt6K9iYh8hFc7Ed1HjPs=;
- b=owGbwMvMwCmsHn9OcpHtvjLG02pJDBlrMuqn9p+eJrogQYJnn9ea9FKhmS2hNxWLTtecLd9hJ
- rl5+aetHVNZGIQ5GWTFFFmeyISdXt6+uMrBfuUPmDmsTCBDGLg4BeAmxzHWZ3nWPuWbvHqx4KzV
- rXflLl1fsnv6a+WPNVonYkIbuSYd38hUaNX1/3FP4ekHETzb43rEGesz57fr//xwSVAi4IJ5RNj
- dOyeMqm4aiE3fJ3J0IqeCanOXftir3sfa1t4eC8yzc5vPWAIA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1817; i=mripard@kernel.org;
+ h=from:subject:message-id; bh=c0CdOMShkVXZZKjK+bbptCPCZqzOvjNz6ZMbDLQ9b1k=;
+ b=owGbwMvMwCmsHn9OcpHtvjLG02pJDBlrMhqmrD795O8U65qwmdo7X+wNall+T6phn/XR5A6OE
+ KmVqnuOdUxlYRDmZJAVU2R5IhN2enn74ioH+5U/YOawMoEMYeDiFICJtP5nbLi0XqDgkqjqvpIN
+ XWq9HMG/eKeZBCwx2NtgEJVp9zfk7RHdw7lOEaqTbhdW6f+42GrzmrE+TGXt3ZeGdo2XVV131wV
+ 7nAw/ozf95jVebtVJQV9NltQLLDwhF5pZx7N0vkxXo9Z8lkMA
 X-Developer-Key: i=mripard@kernel.org; a=openpgp;
  fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 
-The tilcdc atomic_check implementation uses the deprecated
+The vboxvideo atomic_check implementation uses the deprecated
 drm_atomic_get_existing_crtc_state() helper.
 
 This hook is called as part of the global atomic_check, thus before the
@@ -127,27 +127,43 @@ we can use drm_atomic_get_new_crtc_state() instead.
 
 Signed-off-by: Maxime Ripard <mripard@kernel.org>
 ---
- drivers/gpu/drm/tilcdc/tilcdc_plane.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/gpu/drm/vboxvideo/vbox_mode.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/tilcdc/tilcdc_plane.c b/drivers/gpu/drm/tilcdc/tilcdc_plane.c
-index cf77a8ce7398040814ec20eeffc6da960e36dfc0..aa72ca679598b6617366e89ffb3838ed8b323f2f 100644
---- a/drivers/gpu/drm/tilcdc/tilcdc_plane.c
-+++ b/drivers/gpu/drm/tilcdc/tilcdc_plane.c
-@@ -40,12 +40,11 @@ static int tilcdc_plane_atomic_check(struct drm_plane *plane,
- 		dev_err(plane->dev->dev, "%s: crtc position must be zero.",
- 			__func__);
- 		return -EINVAL;
+diff --git a/drivers/gpu/drm/vboxvideo/vbox_mode.c b/drivers/gpu/drm/vboxvideo/vbox_mode.c
+index 9ff3bade979577df0bc2e6e9653b3fb8fd486062..aa0dded595b6e00a9aa2027b36ca11711ccc0439 100644
+--- a/drivers/gpu/drm/vboxvideo/vbox_mode.c
++++ b/drivers/gpu/drm/vboxvideo/vbox_mode.c
+@@ -260,12 +260,12 @@ static int vbox_primary_atomic_check(struct drm_plane *plane,
+ 	struct drm_plane_state *new_state = drm_atomic_get_new_plane_state(state,
+ 									   plane);
+ 	struct drm_crtc_state *crtc_state = NULL;
+ 
+ 	if (new_state->crtc) {
+-		crtc_state = drm_atomic_get_existing_crtc_state(state,
+-								new_state->crtc);
++		crtc_state = drm_atomic_get_new_crtc_state(state,
++							   new_state->crtc);
+ 		if (WARN_ON(!crtc_state))
+ 			return -EINVAL;
  	}
  
--	crtc_state = drm_atomic_get_existing_crtc_state(state,
--							new_state->crtc);
-+	crtc_state = drm_atomic_get_new_crtc_state(state, new_state->crtc);
- 	/* we should have a crtc state if the plane is attached to a crtc */
- 	if (WARN_ON(!crtc_state))
- 		return 0;
+ 	return drm_atomic_helper_check_plane_state(new_state, crtc_state,
+@@ -342,12 +342,12 @@ static int vbox_cursor_atomic_check(struct drm_plane *plane,
+ 	u32 width = new_state->crtc_w;
+ 	u32 height = new_state->crtc_h;
+ 	int ret;
  
- 	if (crtc_state->mode.hdisplay != new_state->crtc_w ||
+ 	if (new_state->crtc) {
+-		crtc_state = drm_atomic_get_existing_crtc_state(state,
+-								new_state->crtc);
++		crtc_state = drm_atomic_get_new_crtc_state(state,
++							   new_state->crtc);
+ 		if (WARN_ON(!crtc_state))
+ 			return -EINVAL;
+ 	}
+ 
+ 	ret = drm_atomic_helper_check_plane_state(new_state, crtc_state,
 
 -- 
 2.50.1
