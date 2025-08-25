@@ -1,49 +1,50 @@
-Return-Path: <linux-mips+bounces-10560-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10561-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BCF0B341D4
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 15:51:35 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E107CB341E9
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 15:52:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 43344162995
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 13:51:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 00B2B3A5B05
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 13:51:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54A902F9C2A;
-	Mon, 25 Aug 2025 13:44:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7FAA2FA0F5;
+	Mon, 25 Aug 2025 13:44:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tjrx7CYm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UBdZ4fvb"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00D8C2F99A5;
-	Mon, 25 Aug 2025 13:44:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3B452F9C39;
+	Mon, 25 Aug 2025 13:44:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756129489; cv=none; b=gY1T07/QowAvnTFDErHAkHLPvjsNE/972c+JZwpGqWVcOBl+kMhuV1XOISPnizihdn9uF86IVEQ705uagTYVt49F6w6DspzpxHFvmrUnsWKKa98w1iyMj7a3UGS7AgWLq0Jj/aCYMwzNxE8ZfxkVVaLLP+2/VULRqheVB6p7ukM=
+	t=1756129491; cv=none; b=ZKc4vffhvWyw8Rj5/k8m+HH8wMZQjZ3JxJyKwfChPK6+mQiRfk9pLI9hrBl7sYM29zkaTDdj7PsbJNDpM+LN9r1umGoQgjIBn1LnRfotG7uWGYauP8qISfF0H66D5k34Vgu1zoLr9A+v45dCyjbL+tMUe0YNTINAsePimMA1JXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756129489; c=relaxed/simple;
-	bh=SN8xsGM0guLejBO7WDM1EeAeOFP+rHf/JALVgqpXlwE=;
+	s=arc-20240116; t=1756129491; c=relaxed/simple;
+	bh=6I4cjWmc+WVPkO4VqeMBMZH+a0S+K78ArYVVbJCy75Y=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=H69r8irOxm383m7he+wvi5BBw7BrK+3qFP1NWu+WJT3bFUlkyZs9xTqViDKyPM/2pePLwrufAUaY16zP7d0lOlYEjYcjzuvzZtQvDp934rXKppyatc2LD5r6XQ3Dbt7r+MtTtpT/jLTZFZyAD+UsW/JP6yQvr7IIjVVdLIxbba8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tjrx7CYm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F14A6C116D0;
-	Mon, 25 Aug 2025 13:44:47 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=sT31n2xECNM99TI6IvyO8Cn/ygPSPFmAzhQyDf618P5s+zrY3975KIBLVUBK37q8r2nRQNzlctUeLcCI7eMi/nd89e9NcC7ar2Wq/5XmAgupKPihApj2uwSnt8i9IV7nJPCJEy/W6qCHONZ1WV/nKCqjg2zXYNEkYD26F3MMjVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UBdZ4fvb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99272C4CEF4;
+	Mon, 25 Aug 2025 13:44:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756129488;
-	bh=SN8xsGM0guLejBO7WDM1EeAeOFP+rHf/JALVgqpXlwE=;
+	s=k20201202; t=1756129491;
+	bh=6I4cjWmc+WVPkO4VqeMBMZH+a0S+K78ArYVVbJCy75Y=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Tjrx7CYmt0WUm3wAg1kZfqJLdLOqZbNKpif59kR4Xs8d1aE4b/QUGwAHgwEEcO/ne
-	 +n8lOx70olZGFMqZ2t3DvHU5UEy/2Zayb9nDJ7vRUVb0bO87OSPnetFhgZncfwnr14
-	 gdU8nN1DYqvlw1CpMTFXo2otvbjJRWVLbajUYc017VmbnIFdbVfXWAdiN4HP0fhOPS
-	 NKbcbQaJT0YLA74RGstZCtqrVgvUrGeinRo5gQygoI5Gq6e3g+jvQtS3tpo64FjbhL
-	 KLmKpnocOfWnqv9dNRl3S/sGz6q8YEmMX0PEqXYnrQPoqpEIBC6j+hZA7YXQ0DYQv2
-	 xhL3EXuYTq9gg==
+	b=UBdZ4fvbcB1gK1sPvlc52XJT6vIylouOXMxiTewWW3hWnHN10+5S61d2kYXfRcpTR
+	 nSzJAcyff47d8IrGfcWUmu55Xi4jjvfgah/sih7/rKeB5ZjSJn1RqEYRgwmmGw7gBS
+	 aOUVGTtQTDppuaBctyt/nBuJzLOO/C/54XJM+TftDyJVNgGm6Qms30K+o6+6LQ3dKa
+	 ExFWKB4zyxlSqaGzX+p7IJxm7g6BySjZFfCoB+sGcZ+P+gXp85TfV9ECJhwRB7anbU
+	 kiZKCUupNZr+2DafU3269x/YhhRyOsq4d1DIL8z11nuX6RejgDn/wPQPwJ0khJ2yJC
+	 hxxLMLIddLyxg==
 From: Maxime Ripard <mripard@kernel.org>
-Date: Mon, 25 Aug 2025 15:43:32 +0200
-Subject: [PATCH 27/39] drm/omap: Switch to drm_atomic_get_new_crtc_state()
+Date: Mon, 25 Aug 2025 15:43:33 +0200
+Subject: [PATCH 28/39] drm/rockchip: Switch to
+ drm_atomic_get_new_crtc_state()
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -52,7 +53,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250825-drm-no-more-existing-state-v1-27-f08ccd9f85c9@kernel.org>
+Message-Id: <20250825-drm-no-more-existing-state-v1-28-f08ccd9f85c9@kernel.org>
 References: <20250825-drm-no-more-existing-state-v1-0-f08ccd9f85c9@kernel.org>
 In-Reply-To: <20250825-drm-no-more-existing-state-v1-0-f08ccd9f85c9@kernel.org>
 To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
@@ -108,16 +109,16 @@ Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
  linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org, 
  Maxime Ripard <mripard@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1194; i=mripard@kernel.org;
- h=from:subject:message-id; bh=SN8xsGM0guLejBO7WDM1EeAeOFP+rHf/JALVgqpXlwE=;
- b=owGbwMvMwCmsHn9OcpHtvjLG02pJDBlrMuqyyuobNYpedgTfXhfx7p2x8pETX+z77j8tv70pz
- ktTo/trx1QWBmFOBlkxRZYnMmGnl7cvrnKwX/kDZg4rE8gQBi5OAZjIjjzGhhmXEzbuvfRyg4Js
- fgRb6uJosewVX06X9VuHzEiNcf/BaVIYF8saunWS75eezRxL7dq8GeuLHqgmPihouvKxRXbxqWc
- P/Zbd5DNV+jbLS+ihtPY5b/mK36q3RJO9ti2JNWB9yPPwbCYA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2507; i=mripard@kernel.org;
+ h=from:subject:message-id; bh=6I4cjWmc+WVPkO4VqeMBMZH+a0S+K78ArYVVbJCy75Y=;
+ b=owGbwMvMwCmsHn9OcpHtvjLG02pJDBlrMur+pf76lrLm4LXnv5ZzPP6Tq56oGpR9I1d/8aMdr
+ Ld5v/1o6ZjKwiDMySArpsjyRCbs9PL2xVUO9it/wMxhZQIZwsDFKQATqd7B2PDrqNQt9cmMHx8H
+ PjjOMLnkiuE0rcrudMmf2znz4hKdm9iLCqzOx+/92vM/cU9ajNLeCMaGfc4GLTkLr+1pkv24xYm
+ JvW5N4ldHv6K3GbpXUz7W+Fj3/5p6+/RRd9NT3AodSV/5Vq8AAA==
 X-Developer-Key: i=mripard@kernel.org; a=openpgp;
  fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 
-The omap atomic_check implementation uses the deprecated
+The rockchip atomic_check implementation uses the deprecated
 drm_atomic_get_existing_crtc_state() helper.
 
 This hook is called as part of the global atomic_check, thus before the
@@ -126,26 +127,59 @@ we can use drm_atomic_get_new_crtc_state() instead.
 
 Signed-off-by: Maxime Ripard <mripard@kernel.org>
 ---
- drivers/gpu/drm/omapdrm/omap_plane.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/rockchip/rockchip_drm_vop.c  | 6 +++---
+ drivers/gpu/drm/rockchip/rockchip_drm_vop2.c | 2 +-
+ 2 files changed, 4 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/omapdrm/omap_plane.c b/drivers/gpu/drm/omapdrm/omap_plane.c
-index 24a2ded08b454c4f2225e84f7b0ed09ed733d6b7..d74ef6694c10995c7393217a4d81275b36e00e2b 100644
---- a/drivers/gpu/drm/omapdrm/omap_plane.c
-+++ b/drivers/gpu/drm/omapdrm/omap_plane.c
-@@ -227,11 +227,11 @@ static int omap_plane_atomic_check(struct drm_plane *plane,
+diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
+index ba6b0528d1e5a493cdef85dd1ea258e70c31ccd5..5369b77ea434c794ed7d509802fa29c39d2bfa7a 100644
+--- a/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
++++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop.c
+@@ -824,12 +824,11 @@ static int vop_plane_atomic_check(struct drm_plane *plane,
+ 					DRM_PLANE_NO_SCALING;
  
- 	crtc = new_plane_state->crtc ? new_plane_state->crtc : plane->state->crtc;
- 	if (!crtc)
+ 	if (!crtc || WARN_ON(!fb))
  		return 0;
  
--	crtc_state = drm_atomic_get_existing_crtc_state(state, crtc);
+-	crtc_state = drm_atomic_get_existing_crtc_state(state,
+-							crtc);
 +	crtc_state = drm_atomic_get_new_crtc_state(state, crtc);
- 	/* we should have a crtc state if the plane is attached to a crtc */
  	if (WARN_ON(!crtc_state))
- 		return 0;
+ 		return -EINVAL;
  
- 	/*
+ 	ret = drm_atomic_helper_check_plane_state(new_plane_state, crtc_state,
+ 						  min_scale, max_scale,
+@@ -1090,11 +1089,12 @@ static int vop_plane_atomic_async_check(struct drm_plane *plane,
+ 		return -EINVAL;
+ 
+ 	if (!plane->state->fb)
+ 		return -EINVAL;
+ 
+-	crtc_state = drm_atomic_get_existing_crtc_state(state, new_plane_state->crtc);
++	crtc_state = drm_atomic_get_new_crtc_state(state,
++						   new_plane_state->crtc);
+ 
+ 	/* Special case for asynchronous cursor updates. */
+ 	if (!crtc_state)
+ 		crtc_state = plane->crtc->state;
+ 
+diff --git a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+index b50927a824b4020a7ffd57974070ed202cd8b838..4556cf7a33641529c673b8d7842115dc739dede2 100644
+--- a/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
++++ b/drivers/gpu/drm/rockchip/rockchip_drm_vop2.c
+@@ -1011,11 +1011,11 @@ static int vop2_plane_atomic_check(struct drm_plane *plane,
+ 
+ 	vp = to_vop2_video_port(crtc);
+ 	vop2 = vp->vop2;
+ 	vop2_data = vop2->data;
+ 
+-	cstate = drm_atomic_get_existing_crtc_state(pstate->state, crtc);
++	cstate = drm_atomic_get_new_crtc_state(pstate->state, crtc);
+ 	if (WARN_ON(!cstate))
+ 		return -EINVAL;
+ 
+ 	ret = drm_atomic_helper_check_plane_state(pstate, cstate,
+ 						  min_scale, max_scale,
 
 -- 
 2.50.1
