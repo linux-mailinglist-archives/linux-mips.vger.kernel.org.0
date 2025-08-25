@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-10536-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10537-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6A2E6B3413A
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 15:44:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3286B3414F
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 15:45:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EBEFB16347F
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 13:44:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4792D173B10
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 13:44:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47BCB2EA483;
-	Mon, 25 Aug 2025 13:43:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C2E52EBDD3;
+	Mon, 25 Aug 2025 13:43:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IsunBBc0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JxtopDQj"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AB5C279357;
-	Mon, 25 Aug 2025 13:43:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43EA62EBBA2;
+	Mon, 25 Aug 2025 13:43:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756129424; cv=none; b=LLh8NWtEiXhJip4FxWVR/lL0bAm1PivB7iYn6ea5+h/1/JafQwo++NW45YK370BHALF6YWxYzoWEmFsYUl/coFlJVM+XJGCJmks2aq+DcvoXOMsKNwRUGG4/LG0DLUyHOleu4zgECGwoWGO1AVPKujAdiofmhycZmMWU93YPSTk=
+	t=1756129427; cv=none; b=TIqAv3G29uht4RFRdaeidbzuY1w6W1O8iI6shgioYDREeCN8HEBRTvi81FPinesbfTsVQ2eLYODkaCUz24IFHkcWlCBVi+m+R8s8P7OfIzSC49NL7Yqs7wttp3eSd2O9bdwKn+tvaH8uItpPhkbQfxDHDS1f2gmK65cLze2Mb4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756129424; c=relaxed/simple;
-	bh=SkC2OYWRCfo1mXdc8s1OlAFhd2ZbE2QZTG+wQcJNj0E=;
+	s=arc-20240116; t=1756129427; c=relaxed/simple;
+	bh=wFYe8IhxpCJtPvgevdyVNVoa1kh0rXMyxXaOMW2sjnE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=n//wXSydsPwKbv7MTMvjYl1kyNw12UhR9SKhl58aV0QI43g+5CKQ9pN62ahFR8Pdn9cukMEuwyUB0ZvYhPeejXFQTmMwHRdQLTqrP3fd517O89T/zCq2bFD/DcRDfrzCuB+mfMRjsvKTX5BODKBVVrnXr5vA6AeMoAYX6JyY9AI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IsunBBc0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 619D3C4CEED;
-	Mon, 25 Aug 2025 13:43:43 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=TakTNm9omWOS0r09aRMQUu7k4ro90nDk02CUh3BrUrkOmVOB5JLFRU3IAuk0GevFlGokaZ0zj5Nn4KjnecMqe1EGu9AWHAOSH3piSG/mKBe8YRJztxgwPDt167+ZIdyAAryA66Nmq1YTgKRGVWL/6fEk/YMPUiePfoBbvALj7Mc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JxtopDQj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 407D2C116D0;
+	Mon, 25 Aug 2025 13:43:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756129423;
-	bh=SkC2OYWRCfo1mXdc8s1OlAFhd2ZbE2QZTG+wQcJNj0E=;
+	s=k20201202; t=1756129426;
+	bh=wFYe8IhxpCJtPvgevdyVNVoa1kh0rXMyxXaOMW2sjnE=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=IsunBBc0zfRo4QhcTj1sI593baVUz/CmfiWpv5tMmzRRWObXuu4WfoPby56Qxy2Mz
-	 ng9S8qtZQWLcZOkd8l3kIv6BEW7yLczrw6h9f9kOlMHDTL3zG+w1SChW/gTDq4O82Z
-	 KMKsQVsWdCcUV7grOjnpRO4spHxfrQEPl7f+ShCpj8wEgM3B16htTf61RQREvheIzr
-	 M53s3OsSWv47q5XanoZjijN/j2r/A1tnDGgba51bX6ph4NLT951pvoJlNgDRyjuztX
-	 3uvunmUK+keyYQLlNIc441l1ugZP0A6PNSKJqvK9/tqYZhIO7Huf8WEQpluLUG902V
-	 k0sKmNxNDc2tg==
+	b=JxtopDQj6ULDe0mqR9DVwTgnUmVDas9rVHH6T+25o1ZWzYgj2ldH8ysOL2+Jz/sOX
+	 GkED+1LHZrZlhCniMPY2Bd7R1uxFiviqZ+R4efulj1fnh8noIAI+Y0GtPW43rNAhPz
+	 NL6tbkZIASVWOFlfJUzGCYwl7xnZfzFTD1rYx3pzpK0hsZKL9VEUs0iWY2ukqqegV1
+	 R/TsbH5UPxLzAA/ynadvyfVVgClyMIYImnS0wu7Z7AsyJPV73+/ycT+n08cqbFY+qo
+	 iOZTxiUiRfI1q28EeadUhBEdVlIgUs5ChVSCmTi5yGNQQ3sgyzIQ0pyJQWphC+GJy6
+	 hu8FvRcQYUTAw==
 From: Maxime Ripard <mripard@kernel.org>
-Date: Mon, 25 Aug 2025 15:43:08 +0200
-Subject: [PATCH 03/39] drm/atomic: Convert drm_atomic_get_connector_state()
- to use new connector state
+Date: Mon, 25 Aug 2025 15:43:09 +0200
+Subject: [PATCH 04/39] drm/atomic: Remove unused
+ drm_atomic_get_existing_connector_state()
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250825-drm-no-more-existing-state-v1-3-f08ccd9f85c9@kernel.org>
+Message-Id: <20250825-drm-no-more-existing-state-v1-4-f08ccd9f85c9@kernel.org>
 References: <20250825-drm-no-more-existing-state-v1-0-f08ccd9f85c9@kernel.org>
 In-Reply-To: <20250825-drm-no-more-existing-state-v1-0-f08ccd9f85c9@kernel.org>
 To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
@@ -109,47 +109,61 @@ Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
  linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org, 
  Maxime Ripard <mripard@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1416; i=mripard@kernel.org;
- h=from:subject:message-id; bh=SkC2OYWRCfo1mXdc8s1OlAFhd2ZbE2QZTG+wQcJNj0E=;
- b=owGbwMvMwCmsHn9OcpHtvjLG02pJDBlrMopt70yavNOwXCkkvl34m/ujb+KTp7Dd9d6eYHNdJ
- PhJvGtYx1QWBmFOBlkxRZYnMmGnl7cvrnKwX/kDZg4rE8gQBi5OAZjI0XLGepdio+IF9xh+Mz2+
- sOvNFHUxgdzZoYvmZ8Y+fLHq38YFqg/SLEw1dQoZ36dsWrTLXqqxhLHhr7xV7bZdTf1er3u77k+
- U6X3/jsOC/+6FqM585T97y2KNmGKFzjTHFNTOc/tr8KOg+BQA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1652; i=mripard@kernel.org;
+ h=from:subject:message-id; bh=wFYe8IhxpCJtPvgevdyVNVoa1kh0rXMyxXaOMW2sjnE=;
+ b=owGbwMvMwCmsHn9OcpHtvjLG02pJDBlrMooDdRfpr76ywjU/fVb0zH8FnB/PBATmPZ7rpyqse
+ 1dwpl5sx1QWBmFOBlkxRZYnMmGnl7cvrnKwX/kDZg4rE8gQBi5OAZjIJQfG+hQhb85JMc///dmV
+ 4jUh+RNrzPEfYoJ+PDE2pcw199I/LGX6f3djmZ3h1vUbD5XYJb5zZmx4OnHh7j3Hu2VvBny8u75
+ rhdJftY1qDiyZSptOZ089E9QUnLBCQvKriES7pveHOUsZeTUA
 X-Developer-Key: i=mripard@kernel.org; a=openpgp;
  fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 
-The drm_atomic_get_connector_state() function calls the deprecated
-drm_atomic_get_existing_connector_state() helper to get find if a
-connector state had already been allocated and was part of the given
-drm_atomic_state.
-
-At the point in time where drm_atomic_get_connector_state() can be
-called (ie, during atomic_check), the existing state is the new state
-and drm_atomic_get_existing_connector_state() can thus be replaced by
-drm_atomic_get_new_connector_state().
+The drm_atomic_get_existing_connector_state() function is deprecated and
+isn't used anymore, so let's remove it.
 
 Signed-off-by: Maxime Ripard <mripard@kernel.org>
 ---
- drivers/gpu/drm/drm_atomic.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ include/drm/drm_atomic.h | 23 -----------------------
+ 1 file changed, 23 deletions(-)
 
-diff --git a/drivers/gpu/drm/drm_atomic.c b/drivers/gpu/drm/drm_atomic.c
-index 660b081ff5d8c39061cebfb5ea122ac1e51677ad..30b7ec05a1af07075e40cd2822ecfd67df004ba2 100644
---- a/drivers/gpu/drm/drm_atomic.c
-+++ b/drivers/gpu/drm/drm_atomic.c
-@@ -1128,11 +1128,11 @@ drm_atomic_get_connector_state(struct drm_atomic_state *state,
- 	struct drm_mode_config *config = &connector->dev->mode_config;
- 	struct drm_connector_state *connector_state;
+diff --git a/include/drm/drm_atomic.h b/include/drm/drm_atomic.h
+index 38636a593c9d98cadda85ccd67326cb152f0dd27..321c866d5b0a46df7a9adbbf5e4cabd1ff987aad 100644
+--- a/include/drm/drm_atomic.h
++++ b/include/drm/drm_atomic.h
+@@ -729,33 +729,10 @@ drm_atomic_get_new_plane_state(const struct drm_atomic_state *state,
+ 			       struct drm_plane *plane)
+ {
+ 	return state->planes[drm_plane_index(plane)].new_state;
+ }
  
- 	WARN_ON(!state->acquire_ctx);
- 
--	connector_state = drm_atomic_get_existing_connector_state(state, connector);
-+	connector_state = drm_atomic_get_new_connector_state(state, connector);
- 	if (connector_state)
- 		return connector_state;
- 
- 	ret = drm_modeset_lock(&config->connection_mutex, state->acquire_ctx);
- 	if (ret)
+-/**
+- * drm_atomic_get_existing_connector_state - get connector state, if it exists
+- * @state: global atomic state object
+- * @connector: connector to grab
+- *
+- * This function returns the connector state for the given connector,
+- * or NULL if the connector is not part of the global atomic state.
+- *
+- * This function is deprecated, @drm_atomic_get_old_connector_state or
+- * @drm_atomic_get_new_connector_state should be used instead.
+- */
+-static inline struct drm_connector_state *
+-drm_atomic_get_existing_connector_state(const struct drm_atomic_state *state,
+-					struct drm_connector *connector)
+-{
+-	int index = drm_connector_index(connector);
+-
+-	if (index >= state->num_connector)
+-		return NULL;
+-
+-	return state->connectors[index].state;
+-}
+-
+ /**
+  * drm_atomic_get_old_connector_state - get connector state, if it exists
+  * @state: global atomic state object
+  * @connector: connector to grab
+  *
 
 -- 
 2.50.1
