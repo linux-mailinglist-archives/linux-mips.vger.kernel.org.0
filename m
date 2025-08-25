@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-10539-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10540-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC512B34175
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 15:45:38 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F418FB34178
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 15:45:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9BBEF188C261
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 13:45:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 918E23B3489
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 13:45:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D3702EDD41;
-	Mon, 25 Aug 2025 13:43:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 017A52EDD7E;
+	Mon, 25 Aug 2025 13:43:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AhAn3qoC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M/BsQxIZ"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8696279795;
-	Mon, 25 Aug 2025 13:43:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD2A82EDD78;
+	Mon, 25 Aug 2025 13:43:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756129434; cv=none; b=QQB9Hqbxoyh3idVR9Yi0e9+Zst5uLu4Iik/jJuoGtQfWhfAmStWit7eL4/xXgZ04nOu6yCHrnLk6ss+gZyZt39hBYRIOGk3lAXYgsCdtFEOe9G6IeyQD4oIPfPESJBgA4wcAp8SBgET9D/Ma43YRrXmyM/7x2vfdhwYX5ELPEgw=
+	t=1756129435; cv=none; b=Y7xhJBO7UfCTguMzEdmdqKENk5Nd9B6Rf+640w6cEgpb50deavkqs9wsbX2HBkpcxmMXvi7f7xeqLSl3LgdqexlyZ86en3zMJx61SDwoTSEr9vCxB1ct5+oQytPm0eGGqg050XTZNFqojQdITU6BiODHJ95U7oDfox7V7ycLNLQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756129434; c=relaxed/simple;
-	bh=hPkYpjjK8bCQC44rJu7lNiZBmDfOgndbqW2Fo7+BgNM=;
+	s=arc-20240116; t=1756129435; c=relaxed/simple;
+	bh=G7LZIEMwrZ2zs/QrPyVfL7lc9nJFGoxjHACLt6UBy9o=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=nKpXtO8x1ehtQF/YwBybpbFlN/Zz/QXj5fvjYbu4fgugAga7BRUqREWXxqMr/DjVT793/40PeF0j6VzdSuOwAHBfDluteQnkpiUNmNQvB88/kcZXQAzTxeP/JbKsQe2w0HdObF2IGlfHXd+4/g6Mqm0NYuR88OamHq7S7JpynEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AhAn3qoC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4ADCC19422;
-	Mon, 25 Aug 2025 13:43:51 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=oXSAjgbwnS54r5uodjr6SOODKV29DolVixf6wrsWzOtALEIdxmkb9pMBKFB2sRz5gv1A3Bq8roUwbQjiazym0gNDTv/jiTaO7x2QcFvTE4I7iE9o2gT6JcWj8zZQY2ExelCnpWn1m7yR466tOMkSJM8WB2XBCL1n/S1KMO414pA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M/BsQxIZ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CBCB2C4CEF4;
+	Mon, 25 Aug 2025 13:43:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756129432;
-	bh=hPkYpjjK8bCQC44rJu7lNiZBmDfOgndbqW2Fo7+BgNM=;
+	s=k20201202; t=1756129435;
+	bh=G7LZIEMwrZ2zs/QrPyVfL7lc9nJFGoxjHACLt6UBy9o=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=AhAn3qoCdMtapd99k6ZoD/oXwVQ/kVyCCjCNABKOLJDzEYivbssTrbEL20Yg9+z5I
-	 9WXC5nFWahFh6YvQgVh+sKuV0oM3Qr/hzYC4Nc4mfVl3u8oL3HZ9hDoN8474D1DQcV
-	 YiSWLE3qkiweBRkyqIDkxPK3SiyixEy1kajlXYSqWrEcyzTACuoD8MuyggEzXQLdzc
-	 S/ZDdU2UbEIhCOmo9m3rQLI7aQvZVyU9QFW+/HMWvPMCObx+COmxWoadKGulPdpTwl
-	 QKdwYBvoIpXGPt3WnGpEwCouwanvYlcQb9HJH576f6Hf/+XkR9L+APfPjzKOvZ5KRL
-	 ikiiQ4gsIPLNg==
+	b=M/BsQxIZAn8XM7JzzrFjrZdUc3D7InIlugU3ivp0a8mMND6PxsoAoexYQW5s1BJP2
+	 wve75h+QT609gIKmHIj7eLk86c2scDorUwU0sZd5Q9KnKlhEHAXkbQCDfYfiVFX0IB
+	 Uy5Bksa2k8bBVCuYcZk6rw953OgjfmP+kFaqtXvMZu7+GD6WpNiA7VqKk73Ga/5I+A
+	 6sAcrYhhRPMcXVfHRDHmoc7CEbY1bzTJcsu05NCrweIUeQREfFNaU/Azf5j1948QSt
+	 kmSQdVZUUGLfBUQbWBRaiUAEETrP6m0g9TfsC8cGKG6GUE59orm69u5Z5PTORkzbkk
+	 k5qQGn2VDLGRw==
 From: Maxime Ripard <mripard@kernel.org>
-Date: Mon, 25 Aug 2025 15:43:11 +0200
-Subject: [PATCH 06/39] drm/atomic: Convert
- __drm_atomic_get_current_plane_state() to modern accessor
+Date: Mon, 25 Aug 2025 15:43:12 +0200
+Subject: [PATCH 07/39] drm/atomic: Convert drm_atomic_get_plane_state() to
+ use new plane state
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250825-drm-no-more-existing-state-v1-6-f08ccd9f85c9@kernel.org>
+Message-Id: <20250825-drm-no-more-existing-state-v1-7-f08ccd9f85c9@kernel.org>
 References: <20250825-drm-no-more-existing-state-v1-0-f08ccd9f85c9@kernel.org>
 In-Reply-To: <20250825-drm-no-more-existing-state-v1-0-f08ccd9f85c9@kernel.org>
 To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
@@ -109,96 +109,47 @@ Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
  linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org, 
  Maxime Ripard <mripard@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3722; i=mripard@kernel.org;
- h=from:subject:message-id; bh=hPkYpjjK8bCQC44rJu7lNiZBmDfOgndbqW2Fo7+BgNM=;
- b=owGbwMvMwCmsHn9OcpHtvjLG02pJDBlrMkpSrAr3/f7E/kv2DcfpZdVWT/lTlsbe81id8jg0u
- e/Qs/7NHVNZGIQ5GWTFFFmeyISdXt6+uMrBfuUPmDmsTCBDGLg4BWAiM5QZ611f1X7gcxPX3uYQ
- XHPUV2zfrq/vWozDthaenHBrXyjrYhe3r9udF00o1JItb7gccFJUjbFOuc/qlQCviningbv855g
- tBZOXG4ha7NLtuudw4VdZ/kZ7oYvqod89mEKfvnp/d/Ln5H8A
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1316; i=mripard@kernel.org;
+ h=from:subject:message-id; bh=G7LZIEMwrZ2zs/QrPyVfL7lc9nJFGoxjHACLt6UBy9o=;
+ b=kA0DAAkTJ1/OGaI9vnYByyZiAGisaHWi6ZggXb88wKCQXxIWkOcMML7Jvt56wKJuQOV0chzIg
+ 4iVBAATCQAdFiEE5BxWy6eHo3pAP6n4J1/OGaI9vnYFAmisaHUACgkQJ1/OGaI9vnbwhwF8Dodd
+ Y17XQ7BXnBlQbBZweZe/gruGXs9NZZHUrjXtF5ou5REq7DNpnpqIYKxd5QbSAYDrOKSG4/Mu545
+ epolGS0QNE0nxjmucr4U/9WReHLXGgcWZ1SGDiizipXF9ST6M9Sg=
 X-Developer-Key: i=mripard@kernel.org; a=openpgp;
  fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 
-The __drm_atomic_get_current_plane_state() function tries to get and
-return the existing plane state, and if it doesn't exist returns the one
-stored in the drm_plane->state field.
+The drm_atomic_get_plane_state() function calls the deprecated
+drm_atomic_get_existing_plane_state() helper to get find if a plane
+state had already been allocated and was part of the given
+drm_atomic_state.
 
-Using the current nomenclature, it tries to get the existing plane state
-with an ad-hoc implementation of drm_atomic_get_existing_plane_state(),
-and falls back to either the old or new plane state, depending on
-whether it is called before or after drm_atomic_helper_swap_state().
-
-The existing plane state itself is deprecated, because it also changes
-when swapping states from the new state to the old state.
-
-Fortunately for us, we can simplify things. Indeed,
-__drm_atomic_get_current_plane_state() is only used in two macros:
-intel_atomic_crtc_state_for_each_plane_state and
-drm_atomic_crtc_state_for_each_plane_state().
-
-The intel variant is only used through the intel_wm_compute() function
-that is only ever called in intel_crtc_atomic_check().
-
-The generic variant is more widely used, and can be found in the malidp,
-msm, tegra and vc4 drivers. All of these call sites though are during
-atomic_check(), so we end up in the same situation than Intel's.
-
-Thus, we only ever use the existing state as the new state, and
-plane->state is always going to be the old state. Any plane isn't
-guaranteed to be part of the state though, so we can't rely on
-drm_atomic_get_old_plane_state() and we still need to use plane->state.
+At the point in time where drm_atomic_get_plane_state() can be called
+(ie, during atomic_check), the existing state is the new state and
+drm_atomic_get_existing_plane_state() can thus be replaced by
+drm_atomic_get_new_plane_state().
 
 Signed-off-by: Maxime Ripard <mripard@kernel.org>
 ---
- include/drm/drm_atomic.h | 20 +++++++++++++-------
- 1 file changed, 13 insertions(+), 7 deletions(-)
+ drivers/gpu/drm/drm_atomic.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/include/drm/drm_atomic.h b/include/drm/drm_atomic.h
-index 798d33b50ef7497ce938ce3dbabee32487dda2d6..82e74d9444c4fa7f02ee0e472c8c68f7bc44cc6a 100644
---- a/include/drm/drm_atomic.h
-+++ b/include/drm/drm_atomic.h
-@@ -789,15 +789,15 @@ drm_atomic_get_new_connector_state(const struct drm_atomic_state *state,
- /**
-  * __drm_atomic_get_current_plane_state - get current plane state
-  * @state: global atomic state object
-  * @plane: plane to grab
-  *
-- * This function returns the plane state for the given plane, either from
-- * @state, or if the plane isn't part of the atomic state update, from @plane.
-- * This is useful in atomic check callbacks, when drivers need to peek at, but
-- * not change, state of other planes, since it avoids threading an error code
-- * back up the call chain.
-+ * This function returns the plane state for the given plane, either the
-+ * new plane state from @state, or if the plane isn't part of the atomic
-+ * state update, from @plane. This is useful in atomic check callbacks,
-+ * when drivers need to peek at, but not change, state of other planes,
-+ * since it avoids threading an error code back up the call chain.
-  *
-  * WARNING:
-  *
-  * Note that this function is in general unsafe since it doesn't check for the
-  * required locking for access state structures. Drivers must ensure that it is
-@@ -814,13 +814,19 @@ drm_atomic_get_new_connector_state(const struct drm_atomic_state *state,
-  */
- static inline const struct drm_plane_state *
- __drm_atomic_get_current_plane_state(const struct drm_atomic_state *state,
- 				     struct drm_plane *plane)
- {
--	if (state->planes[drm_plane_index(plane)].state)
--		return state->planes[drm_plane_index(plane)].state;
-+	struct drm_plane_state *plane_state;
+diff --git a/drivers/gpu/drm/drm_atomic.c b/drivers/gpu/drm/drm_atomic.c
+index 30b7ec05a1af07075e40cd2822ecfd67df004ba2..a9d1265e34602c454866869b81b8837b2c0a97a4 100644
+--- a/drivers/gpu/drm/drm_atomic.c
++++ b/drivers/gpu/drm/drm_atomic.c
+@@ -532,11 +532,11 @@ drm_atomic_get_plane_state(struct drm_atomic_state *state,
+ 	/* the legacy pointers should never be set */
+ 	WARN_ON(plane->fb);
+ 	WARN_ON(plane->old_fb);
+ 	WARN_ON(plane->crtc);
  
+-	plane_state = drm_atomic_get_existing_plane_state(state, plane);
 +	plane_state = drm_atomic_get_new_plane_state(state, plane);
-+	if (plane_state)
-+		return plane_state;
-+
-+	/*
-+	 * If the plane isn't part of the state, fallback to the currently active one.
-+	 */
- 	return plane->state;
- }
+ 	if (plane_state)
+ 		return plane_state;
  
- int __must_check
- drm_atomic_add_encoder_bridges(struct drm_atomic_state *state,
+ 	ret = drm_modeset_lock(&plane->mutex, state->acquire_ctx);
+ 	if (ret)
 
 -- 
 2.50.1
