@@ -1,70 +1,70 @@
-Return-Path: <linux-mips+bounces-10576-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10577-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C41AB34580
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 17:19:57 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C5CE8B3458E
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 17:20:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F21622A0C56
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 15:19:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A1553AC987
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 15:20:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FF4C2FDC31;
-	Mon, 25 Aug 2025 15:19:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2535B2FFDCE;
+	Mon, 25 Aug 2025 15:19:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=4d2.org header.i=@4d2.org header.b="DrW4njwd";
-	dkim=pass (2048-bit key) header.d=4d2.org header.i=@4d2.org header.b="XbzP8DhB"
+	dkim=pass (2048-bit key) header.d=4d2.org header.i=@4d2.org header.b="LVBNi+Im";
+	dkim=pass (2048-bit key) header.d=4d2.org header.i=@4d2.org header.b="IrRd//3z"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from bayard.4d2.org (bayard.4d2.org [155.254.16.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BB992F99BC;
-	Mon, 25 Aug 2025 15:19:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 856542FF164;
+	Mon, 25 Aug 2025 15:19:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=155.254.16.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756135154; cv=none; b=VT0elzt4ztm+kuIE9ako0Z4i0RjQogotEop1j4wSVPm40aPxSN14xaSeZb5PvNxeFld7O/qFu3iYE/ZuEOOo4Zl+tlI/BRtsOsTFlgsVjgSq2njqSwRCAgLOph/XjCFP/bCW6EAb7Z1yq3XzAopjzawuh9EZxBZp0WTe1DaZWkA=
+	t=1756135158; cv=none; b=nCShYWCiu37k/2TMwSY+wYSyucx1IXCjcRXmqCR+kdhJfeeITqhsfc7InjBnJMfn6cz0YIDaJQPHf4lTlW2n/8/+CDHF8XgHfe3TTXTaeTSFztxlKq0TObd6y8w2nPFUFhqjjUIsfqOZVKcykfy96i4KVmbFz8lX4NkC+Yb2P5Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756135154; c=relaxed/simple;
-	bh=1D+OO1Z+2hy3PuE7cQ3HZhhpy2c1X8740B+Ft/pujPA=;
+	s=arc-20240116; t=1756135158; c=relaxed/simple;
+	bh=sMV/r13xaDCOGwclCYrCYPx8JsEJQfAVbK0WWd0PfCk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=EeCRK7h5AiKiN5zflQx06CV6A/ZEk0nsELkRr4nulWhUNLYj6mXPOMqTrPnJchs/lclrhsdyUuEk0yn+7PavFKjuwEwfUBYcbtOREwzhJ93UONSJ7CplLDOwmZrYU6aewao+gL9bfTSeWCGkdCj7grw6hCfDbBLT9M7P+1tE9ds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=4d2.org; spf=pass smtp.mailfrom=4d2.org; dkim=pass (2048-bit key) header.d=4d2.org header.i=@4d2.org header.b=DrW4njwd; dkim=pass (2048-bit key) header.d=4d2.org header.i=@4d2.org header.b=XbzP8DhB; arc=none smtp.client-ip=155.254.16.17
+	 Content-Type:Content-Disposition:In-Reply-To; b=aSrP1pLffttyePFt9/j7htou0dacIfkjpFtYGvo3/8EEX/M4hyMzFX/zvh3FGZ1z/XIulK4ArzW8vS/wjXAdFxejmI8qnpPkUW8I235BLAosr9nUR28MEZXrwFeWthFMEDha+iDvEElMavH+M2azZNemfnizauyAMy2QuJwAdZM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=4d2.org; spf=pass smtp.mailfrom=4d2.org; dkim=pass (2048-bit key) header.d=4d2.org header.i=@4d2.org header.b=LVBNi+Im; dkim=pass (2048-bit key) header.d=4d2.org header.i=@4d2.org header.b=IrRd//3z; arc=none smtp.client-ip=155.254.16.17
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=4d2.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=4d2.org
 Received: from localhost (bayard.4d2.org [127.0.0.1])
-	by bayard.4d2.org (Postfix) with ESMTP id 9C8B812FB9E0;
-	Mon, 25 Aug 2025 08:17:30 -0700 (PDT)
+	by bayard.4d2.org (Postfix) with ESMTP id 0609712FB9EB;
+	Mon, 25 Aug 2025 08:19:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=4d2.org; s=mail;
-	t=1756135050; bh=1D+OO1Z+2hy3PuE7cQ3HZhhpy2c1X8740B+Ft/pujPA=;
+	t=1756135155; bh=sMV/r13xaDCOGwclCYrCYPx8JsEJQfAVbK0WWd0PfCk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=DrW4njwdTos7Tr4D/hJWJfzXOiEf+SRDsAo4Ry/JJOyWw3h955TVHky0fTmZIMc6b
-	 l6HICNWR7CusICgbxTme1oFf2gCXZ0ld9o3r6i+RPGR/fbOiERLbFTfKgGWXgrQsxZ
-	 6tpMcjGI0yEaC2KCaMwFx16QGYsGVgEc2q7UhryAL7TuopvR9SP+oFRN9uZqDB87Oa
-	 ZRJ64Oujs0ftwCrSLWRrMWSAgZUNvurIGuMkzqRAh9EeFQZTPOqJzJ7VcHnR2Uw9Dj
-	 07MvAkU27F1Qxx+h3HKk0DSKuCRQ7v0QHfBj5pxg/8yHIT0c4AorBN9bGUK+uxQaG0
-	 RyA+s94fkFtBg==
+	b=LVBNi+Im+aE9A0i5lAqxDVbL8nde7dQ0kJ1y4RfcnGxgXlSKWf5ABjkDhp66hQl4E
+	 L/Ihmrybt8QmU3CGGxWCaYDVeSHEOXcjwruSHd0yVxhsRSK1pxH2DDx5xY1T3yL+P8
+	 KaZ9N+IIVMAR8E2Cry7XdVzoLg1tCN/l1nYOB5MI9nCGcFhHmgYBaHQmPo/93JZoDV
+	 1qTluZsjJdXrXS+2FheIvSlos9kKnFD7uEAUD6nwGo98yhV1IYFJ82xS50RbstuKWI
+	 N3HuH3hJt010tYYMf/yeJRsg9CenroFQ5av1pu/eXHgvpLL79MvnRdysDZix0+7tzo
+	 WBtEFY4C7ccLg==
 X-Virus-Scanned: amavis at 4d2.org
 Received: from bayard.4d2.org ([127.0.0.1])
  by localhost (bayard.4d2.org [127.0.0.1]) (amavis, port 10024) with ESMTP
- id KVwsL0Vo9y59; Mon, 25 Aug 2025 08:17:28 -0700 (PDT)
+ id Yrx7ihXHFQrb; Mon, 25 Aug 2025 08:19:13 -0700 (PDT)
 Received: from ketchup (unknown [117.171.64.92])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange x25519 server-signature ECDSA (prime256v1) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: heylenay@4d2.org)
-	by bayard.4d2.org (Postfix) with ESMTPSA id 9CF6712FB435;
-	Mon, 25 Aug 2025 08:17:07 -0700 (PDT)
+	by bayard.4d2.org (Postfix) with ESMTPSA id 10EB112FB435;
+	Mon, 25 Aug 2025 08:18:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=4d2.org; s=mail;
-	t=1756135048; bh=1D+OO1Z+2hy3PuE7cQ3HZhhpy2c1X8740B+Ft/pujPA=;
+	t=1756135108; bh=sMV/r13xaDCOGwclCYrCYPx8JsEJQfAVbK0WWd0PfCk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=XbzP8DhBaP3scQswWTdz5ACYHQ4v/MZQMcqpn0puVv3NztnWZ9pb0nNcTuNgThLe6
-	 UTWPEb4p9AoOb1GbiOYD7lF6F38zGqG/lgWkPfd9bKqI1XZJDIn4C4UJki7Lj7iYKB
-	 MOL+BfMvxNc7F/jqvSgeLFL4tC6yjuuz2cvWV21gIOar+KZPS/n8KHH5XAaoqkPmrC
-	 q+np6SgnoazpMdVzPSJaatTZSlIOov+HfEt0O6fh1/o/Gmnxhy288PLt8u6rkW0KUj
-	 rFs299O5KC4mHBhvhdmvnTLT81m2MaYEUoztmIvwYua4Pp3hB/WkMuCgjNFsakwFXX
-	 tkMsfI3899c5w==
-Date: Mon, 25 Aug 2025 15:17:00 +0000
+	b=IrRd//3zvi/Xe7ZKmGPCo0Qo7oL9twAQW4yP6V/ajKSU8jvufzcK3JPGF+z+hZcKm
+	 ++Q94D6SultYJ8lvWKyvCXegESPdKdtWJCcSNJVGKuwpMn/Y3z1PKJpukDw/lbK7Xh
+	 LyNsb7Y4uYafp9bd+7+uP7BGV0kjsTtGI2o10xvfd96VVsD/6yBjBpZiFtcbmG/aQS
+	 zX51QF6IrHFZs4FrUQ43w42nbzhmzMZvH/XhjtqG6Ul26kuNYr7VuowAkaH81wardA
+	 R8K/dmy27Idr7nhcOCjaf80CTfywcJywGfHO700ptNzCL20BRirZ1y0kyWmO/5qYz5
+	 8f+DJCtT1p1lw==
+Date: Mon, 25 Aug 2025 15:18:04 +0000
 From: Haylen Chu <heylenay@4d2.org>
 To: bmasney@redhat.com, Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>,
@@ -141,11 +141,11 @@ Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
 	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
 	linux-rockchip@lists.infradead.org,
 	linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev
-Subject: Re: [PATCH 049/114] clk: spacemit: ccu_ddn: convert from
+Subject: Re: [PATCH 050/114] clk: spacemit: ccu_mix: convert from
  round_rate() to determine_rate()
-Message-ID: <aKx-bEJr9uvYUZVA@ketchup>
+Message-ID: <aKx-rDkmp5V-RVjZ@ketchup>
 References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
- <20250811-clk-for-stephen-round-rate-v1-49-b3bf97b038dc@redhat.com>
+ <20250811-clk-for-stephen-round-rate-v1-50-b3bf97b038dc@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -154,9 +154,9 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-49-b3bf97b038dc@redhat.com>
+In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-50-b3bf97b038dc@redhat.com>
 
-On Mon, Aug 11, 2025 at 11:18:41AM -0400, Brian Masney via B4 Relay wrote:
+On Mon, Aug 11, 2025 at 11:18:42AM -0400, Brian Masney via B4 Relay wrote:
 > From: Brian Masney <bmasney@redhat.com>
 > 
 > The round_rate() clk ops is deprecated, so migrate this driver from
@@ -165,52 +165,8 @@ On Mon, Aug 11, 2025 at 11:18:41AM -0400, Brian Masney via B4 Relay wrote:
 > 
 > Signed-off-by: Brian Masney <bmasney@redhat.com>
 > ---
->  drivers/clk/spacemit/ccu_ddn.c | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
+>  drivers/clk/spacemit/ccu_mix.c | 12 +++++++-----
+>  1 file changed, 7 insertions(+), 5 deletions(-)
 
 Reviewed-by: Haylen Chu <heylenay@4d2.org>
-
-Thanks for cleaning it up, I should have done this when submitting the
-driver.
-
-Best regards,
-Haylen Chu
-
-> diff --git a/drivers/clk/spacemit/ccu_ddn.c b/drivers/clk/spacemit/ccu_ddn.c
-> index be311b045698e95a688a35858a8ac1bcfbffd2c7..02b68ea84db9bd3ecdde41f8013c48263edbd917 100644
-> --- a/drivers/clk/spacemit/ccu_ddn.c
-> +++ b/drivers/clk/spacemit/ccu_ddn.c
-> @@ -39,13 +39,16 @@ static unsigned long ccu_ddn_calc_best_rate(struct ccu_ddn *ddn,
->  	return ccu_ddn_calc_rate(prate, *num, *den);
->  }
->  
-> -static long ccu_ddn_round_rate(struct clk_hw *hw, unsigned long rate,
-> -			       unsigned long *prate)
-> +static int ccu_ddn_determine_rate(struct clk_hw *hw,
-> +				  struct clk_rate_request *req)
->  {
->  	struct ccu_ddn *ddn = hw_to_ccu_ddn(hw);
->  	unsigned long num, den;
->  
-> -	return ccu_ddn_calc_best_rate(ddn, rate, *prate, &num, &den);
-> +	req->rate = ccu_ddn_calc_best_rate(ddn, req->rate,
-> +					   req->best_parent_rate, &num, &den);
-> +
-> +	return 0;
->  }
->  
->  static unsigned long ccu_ddn_recalc_rate(struct clk_hw *hw, unsigned long prate)
-> @@ -78,6 +81,6 @@ static int ccu_ddn_set_rate(struct clk_hw *hw, unsigned long rate,
->  
->  const struct clk_ops spacemit_ccu_ddn_ops = {
->  	.recalc_rate	= ccu_ddn_recalc_rate,
-> -	.round_rate	= ccu_ddn_round_rate,
-> +	.determine_rate = ccu_ddn_determine_rate,
->  	.set_rate	= ccu_ddn_set_rate,
->  };
-> 
-> -- 
-> 2.50.1
-> 
-> 
 
