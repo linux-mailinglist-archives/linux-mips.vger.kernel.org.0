@@ -1,49 +1,50 @@
-Return-Path: <linux-mips+bounces-10555-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10556-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA992B341C0
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 15:50:35 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 79FCEB341C7
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 15:50:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 686E41A8586A
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 13:50:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B38551A85BF6
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 13:50:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01A192E11D5;
-	Mon, 25 Aug 2025 13:44:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95FEA2F7473;
+	Mon, 25 Aug 2025 13:44:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TCkJc+Xm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D4I3x/yB"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFD212F6591;
-	Mon, 25 Aug 2025 13:44:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 626C52F7464;
+	Mon, 25 Aug 2025 13:44:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756129475; cv=none; b=JA41SWdQ3bUrBqiUOfgJ15N7XJ0Cp2G/qyefSMDCtTawLicxOaWuyppsTWi7eI9OJNKkS+LrWxnkRHxTtmdyfpoM4rqUwUwxQYUR14u2CLXpVDkhJ4Pc9njFasMFELCuFTqq/4GBTgq6PC8ME7nhdIESm9E9zUAXtVMns5ZY/XI=
+	t=1756129478; cv=none; b=WgBiXa8GlOKt5qcdToaFrmO5nf6LiItEz6gArf2ORWKaFkhjr+wP0T7+3gZ5QcWTijiYY6r5sTLciwdbuWPiqqHo7kB5H5S/AirqEwJasBfRPzSdBc2cDEs6g8y2tauB24qu4UXmXqnuaLy3qIHO6nEa4ZJgpEynljpmT/DI3ts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756129475; c=relaxed/simple;
-	bh=r//PbdFPjHr7vUob6ri6yFjKMzvvCTRP454ffiE2Ecc=;
+	s=arc-20240116; t=1756129478; c=relaxed/simple;
+	bh=5ghhYDBMFJyKIkZbVGAo2O5nXbSJDY0ydQcOIHmbhJU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=SMhj0+GKhVMhd0Mws71mrMjafCz0hg3M/a+F2Gm6hB8rmV6oc0QhPrvA/K2CqTFfjNC0/tb3SINoWJG0cVoeBfowGirOXsmTTBytMx1n6CvUT+3LgfnEsLW46gB1QnK9wDOrZM3UguSuZSQ6hpsKGh7d3D/2h54zCSapucLbLtA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TCkJc+Xm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DBDE8C4CEF4;
-	Mon, 25 Aug 2025 13:44:34 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=IejEynRvRTZBavCb8xye4QPexj88uSycDSBCus0Y/Jl7Xp1hWVmWgl8cq+Bo/Ab9w+fS3xCK/Q7JF9nnYBwq+oWIEZPEfaj+B1Dqm4AmbmJRuO02DBIwBlD3BJ1ROms0fqxIWD1r/cGdfQK66qMLN8zvGqRBhmdSVg9U2nxhNS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D4I3x/yB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7DC87C19421;
+	Mon, 25 Aug 2025 13:44:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756129475;
-	bh=r//PbdFPjHr7vUob6ri6yFjKMzvvCTRP454ffiE2Ecc=;
+	s=k20201202; t=1756129478;
+	bh=5ghhYDBMFJyKIkZbVGAo2O5nXbSJDY0ydQcOIHmbhJU=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=TCkJc+XmHGkjaks4GDLVAXSvsoo/DUF15Wv+s3w5PSpoinfeP0lRoscvqt/dAEyRN
-	 /mdgP2nKlD9c8cPA5gfSWq65zZI2f8COJisGk2Qvq/VZgoUlCvb9ETNKe3RwgdENFy
-	 ygQt0eStc8muabQqn9iLALMxVB8Csg4rn0Lw1nIQ2ByQyf8KypJJND79lE0JJ35h0d
-	 M04mrOvmzBMFaXX/bMbbL8qJSJO/3TskneugpfRnfEJict1X65h+JOAc/ESbi7O7M8
-	 se9OzCE2t36W6+/AsE1vPXuCxh/NJtQm6BgTQJH7xO31PsWLLl27VA90Di08zzo3Vi
-	 K/9A7syg8gNXg==
+	b=D4I3x/yBjanVz2cYz/LhIcwvv6sPWavU9NDr7nkjzQ66ZA8eNRmFoS6iZlpkxl8oM
+	 RyJYXlwJbLDPC3njIBNJKU1JElOQ7tgCO8WIdKf+AFGR9JfIVYd2G3jalytW2K2hKF
+	 QbTINWgea+BKxb929KBbzjf1cWGpQDFZ8xVgBPQvTUxhMBTmpnc29vZvAFkTHTrCzQ
+	 UqWGRRlvaUORwAo4lwIrDyWHKz+FO11GGRmg/mO5nHGuie08/i96EEMEuOsXV60vlP
+	 rZTKjsTOXl7WivMXMXLoP+gsko6sVWE0a9hzvH3rcCfIOLy+BDWQsZpACyfH/OH+Kz
+	 CHZxYTyhJvY2A==
 From: Maxime Ripard <mripard@kernel.org>
-Date: Mon, 25 Aug 2025 15:43:27 +0200
-Subject: [PATCH 22/39] drm/kmb: Switch to drm_atomic_get_new_crtc_state()
+Date: Mon, 25 Aug 2025 15:43:28 +0200
+Subject: [PATCH 23/39] drm/logicvc: Switch to
+ drm_atomic_get_new_crtc_state()
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -52,7 +53,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250825-drm-no-more-existing-state-v1-22-f08ccd9f85c9@kernel.org>
+Message-Id: <20250825-drm-no-more-existing-state-v1-23-f08ccd9f85c9@kernel.org>
 References: <20250825-drm-no-more-existing-state-v1-0-f08ccd9f85c9@kernel.org>
 In-Reply-To: <20250825-drm-no-more-existing-state-v1-0-f08ccd9f85c9@kernel.org>
 To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
@@ -108,16 +109,16 @@ Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
  linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org, 
  Maxime Ripard <mripard@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1329; i=mripard@kernel.org;
- h=from:subject:message-id; bh=r//PbdFPjHr7vUob6ri6yFjKMzvvCTRP454ffiE2Ecc=;
- b=owGbwMvMwCmsHn9OcpHtvjLG02pJDBlrMqpT21gUhGLdKnj09j9gf56yS9Tn/f1nz6IiP9RWn
- 9UV2fOzYyoLgzAng6yYIssTmbDTy9sXVznYr/wBM4eVCWQIAxenAEyE4zRjDdfMJM6i79fsmvKd
- nm9j1zysZKg/6aZrVVD2MgPrb4+ins+P4+TqtxHLCElL/mI74bkGYzVL/qqAD/qCPkoVh7d4KW6
- 45LLx3GnB59GM28zUi1bvkjFQDvlRUeC/ISnsqp7WyW/JXwA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1236; i=mripard@kernel.org;
+ h=from:subject:message-id; bh=5ghhYDBMFJyKIkZbVGAo2O5nXbSJDY0ydQcOIHmbhJU=;
+ b=owGbwMvMwCmsHn9OcpHtvjLG02pJDBlrMmpiJOO1V55NWWtX0vOaee7OgJJls9q75Xbqdu1J6
+ lxYrbilYyoLgzAng6yYIssTmbDTy9sXVznYr/wBM4eVCWQIAxenANzkJ4wNkwIXXO1pdri+u2J7
+ 8sIa/9bLUYLFZ4K/eD4T+mPufO2aTMFD6Um/yj9/PpP3ZWnkrT/ljPUFWt0x3BNcVEN6lwrm6qx
+ e0fYvcJn2xolu255IMR/ouvY4bLNiTluYhLKa2qkM7+DlnQA=
 X-Developer-Key: i=mripard@kernel.org; a=openpgp;
  fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 
-The kmb atomic_check implementation uses the deprecated
+The logicvc atomic_check implementation uses the deprecated
 drm_atomic_get_existing_crtc_state() helper.
 
 This hook is called as part of the global atomic_check, thus before the
@@ -126,27 +127,28 @@ we can use drm_atomic_get_new_crtc_state() instead.
 
 Signed-off-by: Maxime Ripard <mripard@kernel.org>
 ---
- drivers/gpu/drm/kmb/kmb_plane.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ drivers/gpu/drm/logicvc/logicvc_layer.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/kmb/kmb_plane.c b/drivers/gpu/drm/kmb/kmb_plane.c
-index 9e0562aa2bcb5ab4e2cbd71940ef4c147a7aa5ad..9562fe6711ffe2c5ad377e9973fcfdb76bf04daa 100644
---- a/drivers/gpu/drm/kmb/kmb_plane.c
-+++ b/drivers/gpu/drm/kmb/kmb_plane.c
-@@ -127,12 +127,11 @@ static int kmb_plane_atomic_check(struct drm_plane *plane,
- 		drm_dbg(&kmb->drm, "Cannot change plane height or width after initial configuration");
+diff --git a/drivers/gpu/drm/logicvc/logicvc_layer.c b/drivers/gpu/drm/logicvc/logicvc_layer.c
+index 464000aea765378894002fdb02dab16d197c27b1..eab4d773f92b66a9edb9770aa7a95349d665ec18 100644
+--- a/drivers/gpu/drm/logicvc/logicvc_layer.c
++++ b/drivers/gpu/drm/logicvc/logicvc_layer.c
+@@ -94,12 +94,12 @@ static int logicvc_plane_atomic_check(struct drm_plane *drm_plane,
+ 	int ret;
+ 
+ 	if (!new_state->crtc)
+ 		return 0;
+ 
+-	crtc_state = drm_atomic_get_existing_crtc_state(new_state->state,
+-							new_state->crtc);
++	crtc_state = drm_atomic_get_new_crtc_state(new_state->state,
++						   new_state->crtc);
+ 	if (WARN_ON(!crtc_state))
  		return -EINVAL;
- 	}
- 	can_position = (plane->type == DRM_PLANE_TYPE_OVERLAY);
- 	crtc_state =
--		drm_atomic_get_existing_crtc_state(state,
--						   new_plane_state->crtc);
-+		drm_atomic_get_new_crtc_state(state, new_plane_state->crtc);
- 	return drm_atomic_helper_check_plane_state(new_plane_state,
- 						   crtc_state,
- 						   DRM_PLANE_NO_SCALING,
- 						   DRM_PLANE_NO_SCALING,
- 						   can_position, true);
+ 
+ 	if (new_state->crtc_x < 0 || new_state->crtc_y < 0) {
+ 		drm_err(drm_dev,
 
 -- 
 2.50.1
