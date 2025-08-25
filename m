@@ -1,47 +1,47 @@
-Return-Path: <linux-mips+bounces-10530-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10531-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71FA7B339B7
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 10:43:52 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E8AEB339C7
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 10:44:48 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5684A1B23B6F
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 08:44:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8BF83B9957
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 08:44:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D8602C08C2;
-	Mon, 25 Aug 2025 08:41:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEF552D0C6C;
+	Mon, 25 Aug 2025 08:41:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kOMZ2uUV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Gc94G2p0"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D3A2A2BF009;
-	Mon, 25 Aug 2025 08:41:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A787A2D0626;
+	Mon, 25 Aug 2025 08:41:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756111271; cv=none; b=Sce6MPBNUUdNDzyfjvCdGNC88wODCFfhZ6PDtSxfi83BC5VILvapz2jllBVa3wBZJySsg8Kav28wn2SLwh2P4dvacbOMIKS0/iLD1Tg6JOU5ay9A55FdHdXZh03re4dq/qsNMbNJLIKjfuFK3Lub9w9szxe6jkAFHZFiKZe/DZU=
+	t=1756111298; cv=none; b=k6OVyQ3xQ+YRvllbFq8HtzBlxNy/hU1elnYi+iOEBhWZDy5jxlmZYMwSqL+xKp7k2Z3u1nw/LVajH6Qf015iAhdciEsYB71+bq6yd7HdgyxSxOYeYHiwoi5bP1jWjVFZ7nkFVRZK1kBSS13i3/aOT9Y755ZgtAx4/h8/OvjkbGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756111271; c=relaxed/simple;
-	bh=YvGhFydXbrmE9yimRweNKCZChGzfZ1CATQpB6bIekEY=;
+	s=arc-20240116; t=1756111298; c=relaxed/simple;
+	bh=QBpsTTorkc4pTkqdyLYFQrl7G/3d/UIHjKHmGDhjvh8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OIYT+iVRGZfxMUHy0dpsQXK65gfvAjGw7nN8V6Kn9vbRqIn0ERWxSQnTJedSNg6d61hDDiUMOhS5JXgIj43+6fTnq1HCcGxWuCdCaYW8SDKMOZcOr7K2aHhK+811K4UVpw3EEtH1jyJEZK0VXoxy9bD5AVH10ZCpQUuAEh7qyqI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kOMZ2uUV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7064FC4CEF1;
-	Mon, 25 Aug 2025 08:41:09 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=os/uEZq/hCt4NHbRVpLtcRO2oCrqIdcZSarRsZGQY+OAKotvcnLhPN1rCbGXyZxUCSVVOTKgCCV0yTDW9jwJVlCgQYk3OeINMCr6ku0ep1Urk3auIRdP5uvonEAietL2EI6r/Sg/GTSpqWH2s0CWet0v4YM0bAIwG+RiQM1lGLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Gc94G2p0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86D14C116B1;
+	Mon, 25 Aug 2025 08:41:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756111270;
-	bh=YvGhFydXbrmE9yimRweNKCZChGzfZ1CATQpB6bIekEY=;
+	s=k20201202; t=1756111298;
+	bh=QBpsTTorkc4pTkqdyLYFQrl7G/3d/UIHjKHmGDhjvh8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kOMZ2uUVb/0wo3syOidoV1f0HRnUy2RJHSLMdGqk7yLVCovHqwhjwaAlh5RRjGhHZ
-	 vntVwdIrQaIPc6RHyWqxDvKuJf4yALVzvwSkz6MQRZOCjYqhY5PmaPIKYrOPpB1p8u
-	 ZQQcgaSOLbnXSBweKyIJlNLbQ4eko+2s1j1Kyd2DdcthL3uR+6Q+zm9V6VZoqVXEwk
-	 YjSDNkhA9rZ9AoJyJlfQ5AVgcfN/tGkd589lOdTPjxZRJZFSYBmnMyeGFXPtEjvyYF
-	 AaBOk5ZqAGeb9e0X69QoM8YFdfSFRB83tOPM4vDNmgfhRwb0C+7Wd6fILQWTsgyp8c
-	 FHQseDkSJrtGw==
-Date: Mon, 25 Aug 2025 16:41:07 +0800
+	b=Gc94G2p0qbx0jlafND6WSRRDnjNbakv8JEjLETlT1wvutg3+AKWAm9shTWfHSh9nH
+	 T3texahUXyK7O2oESbwoBQBkFFAJ3KFnYqMT+ZeGTLrgd0yWOnXXMJNOOub9b6eZI4
+	 JrKqx6X1NQNrc11YZTMBuP3PvLEcW0W2sbbEeCdQbPszV7fGgdNErXWZKIKoECTuXj
+	 JAjAzrvziLXDJ4eGJMeZFJR8kqTAzP5Crlc95tXJwtxy5c+mIbpcVZc0GjmMuNWbUV
+	 NQjvrL/A+++kZ/GkL8H/vC77AZONQxtF8wgd/bwy1pjDXOppGKbfgT+fCUOjE0Ahlx
+	 OMRZXPhsipZpg==
+Date: Mon, 25 Aug 2025 16:41:35 +0800
 From: Yixun Lan <dlan@kernel.org>
 To: bmasney@redhat.com
 Cc: Michael Turquette <mturquette@baylibre.com>,
@@ -119,11 +119,11 @@ Cc: Michael Turquette <mturquette@baylibre.com>,
 	linux-arm-msm@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
 	linux-rockchip@lists.infradead.org,
 	linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev
-Subject: Re: [PATCH 050/114] clk: spacemit: ccu_mix: convert from
+Subject: Re: [PATCH 051/114] clk: spacemit: ccu_pll: convert from
  round_rate() to determine_rate()
-Message-ID: <20250825084107-GYB1096417@kernel.org>
+Message-ID: <20250825084135-GYC1096417@kernel.org>
 References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
- <20250811-clk-for-stephen-round-rate-v1-50-b3bf97b038dc@redhat.com>
+ <20250811-clk-for-stephen-round-rate-v1-51-b3bf97b038dc@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -132,7 +132,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-50-b3bf97b038dc@redhat.com>
+In-Reply-To: <20250811-clk-for-stephen-round-rate-v1-51-b3bf97b038dc@redhat.com>
 
 Hi Brian,
 
@@ -147,46 +147,38 @@ On 11:18 Mon 11 Aug     , Brian Masney via B4 Relay wrote:
 
 Reviewed-by: Yixun Lan <dlan@kernel.org>
 > ---
->  drivers/clk/spacemit/ccu_mix.c | 12 +++++++-----
->  1 file changed, 7 insertions(+), 5 deletions(-)
+>  drivers/clk/spacemit/ccu_pll.c | 10 ++++++----
+>  1 file changed, 6 insertions(+), 4 deletions(-)
 > 
-> diff --git a/drivers/clk/spacemit/ccu_mix.c b/drivers/clk/spacemit/ccu_mix.c
-> index 9b852aa61f78aed5256bfe6fc3b01932d6db6256..7b7990875372314dce131295af7f40267d0a127a 100644
-> --- a/drivers/clk/spacemit/ccu_mix.c
-> +++ b/drivers/clk/spacemit/ccu_mix.c
-> @@ -80,10 +80,12 @@ static int ccu_mix_trigger_fc(struct clk_hw *hw)
->  					       MIX_FC_TIMEOUT_US);
+> diff --git a/drivers/clk/spacemit/ccu_pll.c b/drivers/clk/spacemit/ccu_pll.c
+> index 45f540073a656c0edc341a903acc3f2405971fc9..d92f0dae65a490e9db52f25a538a518baa487ea8 100644
+> --- a/drivers/clk/spacemit/ccu_pll.c
+> +++ b/drivers/clk/spacemit/ccu_pll.c
+> @@ -125,12 +125,14 @@ static unsigned long ccu_pll_recalc_rate(struct clk_hw *hw,
+>  	return entry ? entry->rate : 0;
 >  }
 >  
-> -static long ccu_factor_round_rate(struct clk_hw *hw, unsigned long rate,
-> -				  unsigned long *prate)
-> +static int ccu_factor_determine_rate(struct clk_hw *hw,
-> +				     struct clk_rate_request *req)
+> -static long ccu_pll_round_rate(struct clk_hw *hw, unsigned long rate,
+> -			       unsigned long *prate)
+> +static int ccu_pll_determine_rate(struct clk_hw *hw,
+> +				  struct clk_rate_request *req)
 >  {
-> -	return ccu_factor_recalc_rate(hw, *prate);
-> +	req->rate = ccu_factor_recalc_rate(hw, req->best_parent_rate);
+>  	struct ccu_pll *pll = hw_to_ccu_pll(hw);
+>  
+> -	return ccu_pll_lookup_best_rate(pll, rate)->rate;
+> +	req->rate = ccu_pll_lookup_best_rate(pll, req->rate)->rate;
 > +
 > +	return 0;
 >  }
 >  
->  static int ccu_factor_set_rate(struct clk_hw *hw, unsigned long rate,
-> @@ -198,7 +200,7 @@ const struct clk_ops spacemit_ccu_gate_ops = {
->  };
->  
->  const struct clk_ops spacemit_ccu_factor_ops = {
-> -	.round_rate	= ccu_factor_round_rate,
-> +	.determine_rate = ccu_factor_determine_rate,
->  	.recalc_rate	= ccu_factor_recalc_rate,
->  	.set_rate	= ccu_factor_set_rate,
->  };
-> @@ -220,7 +222,7 @@ const struct clk_ops spacemit_ccu_factor_gate_ops = {
->  	.enable		= ccu_gate_enable,
->  	.is_enabled	= ccu_gate_is_enabled,
->  
-> -	.round_rate	= ccu_factor_round_rate,
-> +	.determine_rate = ccu_factor_determine_rate,
->  	.recalc_rate	= ccu_factor_recalc_rate,
->  	.set_rate	= ccu_factor_set_rate,
+>  static int ccu_pll_init(struct clk_hw *hw)
+> @@ -152,6 +154,6 @@ const struct clk_ops spacemit_ccu_pll_ops = {
+>  	.disable	= ccu_pll_disable,
+>  	.set_rate	= ccu_pll_set_rate,
+>  	.recalc_rate	= ccu_pll_recalc_rate,
+> -	.round_rate	= ccu_pll_round_rate,
+> +	.determine_rate = ccu_pll_determine_rate,
+>  	.is_enabled	= ccu_pll_is_enabled,
 >  };
 > 
 > -- 
