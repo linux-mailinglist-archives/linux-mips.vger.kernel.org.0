@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-10545-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10546-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 798E2B3418B
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 15:47:20 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90DF2B341B7
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 15:50:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 50DEB169BAC
-	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 13:47:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 66A3D7B8390
+	for <lists+linux-mips@lfdr.de>; Mon, 25 Aug 2025 13:46:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DAC82EF646;
-	Mon, 25 Aug 2025 13:44:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 671862F360C;
+	Mon, 25 Aug 2025 13:44:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QadmStP2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VzhR3Q5r"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15F2F2F067D;
-	Mon, 25 Aug 2025 13:44:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F0BD2F291D;
+	Mon, 25 Aug 2025 13:44:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756129449; cv=none; b=p+CiU1zfnqz/S7eElN2cjSS07Gzidi+I/NUJWmQRcALEz1uvxU13AolqyYvBgEd2pQU1eZzPOWTATCVgDtj6EJ/iMmxatpQ9Djn6tgcGDhdrZRkr/FfRQjauc85wPDy7gbR/R/szMucqrgR8eJjSgShZTAcVZcjDud0XQJjF2qM=
+	t=1756129452; cv=none; b=qny6qY9TG6Eln0gSPFz1IoXiYXCMnPivM8DOLwmPwpGygK7ZQeabFkZaPhAxhPWg2M/7R2DCAr4omVGhrcSb2hl9l9Cw+2GtpL1Ip9vXbsarfLj0NrDOuepShrjlCIoxkJ1BVT3btAsv+rcRH4mgPmzR2E+Qoon+leb69M20zSw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756129449; c=relaxed/simple;
-	bh=GtAQSdS1ZwpO1wrhzVk13OKCtrYrUZErGzdK85qhnG4=;
+	s=arc-20240116; t=1756129452; c=relaxed/simple;
+	bh=OVEekJ412TDrWcPosT5PbcAORq/ZSX10mh7GmfSf1w4=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=MmU3IQtlNS6Rap9uO2jYnrDl4B+dQUJtl6BS92NQqF+rb/GreOvv0j4bqeXkfYLhTE3CNA7ALX7ZriuD6Fwb6bnvPQ2EGNeFt2CI1ob6WDHKZ0eN4Q17ZC90gRbXVEfNojw60E/qi9vE9KinvFgbYVTfwm1yTfNdY2EZ9cII6BQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QadmStP2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 733CCC116C6;
-	Mon, 25 Aug 2025 13:44:08 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=HXSc3X4Th4rMbIpsBc+p+VIFz03XesoGPhCmYicNN2I1IBkJp4NhVlpOW8yyOZSGG7qaqxyY1yBM9fLGasGnB3OVU7AVxmho+fYY0dv3f4hvWSlof6sGJkaI7Wp5QShbCj1L3xI0mAsUiS7XiH/A4nMr7PVSsjIkrNl1Rcw6NQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VzhR3Q5r; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A538C113D0;
+	Mon, 25 Aug 2025 13:44:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756129448;
-	bh=GtAQSdS1ZwpO1wrhzVk13OKCtrYrUZErGzdK85qhnG4=;
+	s=k20201202; t=1756129451;
+	bh=OVEekJ412TDrWcPosT5PbcAORq/ZSX10mh7GmfSf1w4=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=QadmStP2v9UsuOYT311avWLlpP/l6egme0AcjpIDhH9ksImI4ORKZ3DWspjrDHPgX
-	 2x6HjZLLaiPUn3WL6Qm2ObWzvKYprTC4VDHS0rhLOjWSWTJ2GnJUIxSwRcjWv2yckw
-	 l8ahX7DN03D2kQsSy79t4TDEgCMcLzLDTp3A2zv52af5r0fgSGjecjNIuzwGZ1nVJW
-	 eFzfPExQ6XUlQqeN8TDT9xjBOJdwXi9T77+svalT5fTLRbHn9VOCulUbwJQhLs1o7z
-	 WEJBMUjjdObXQ0DaH3GjBKTGNiKlHziXtKPcsZ43x49mFnStg8DrIMPX9pn21+T3Rc
-	 ZO0ChC/8E/mag==
+	b=VzhR3Q5rh3V4HDtcuCLmgfBZ+t53W1q97NCBIe9yGooqYjO3WbtF7roOG8gNpzAoI
+	 +knkrfgaKj7VP6SAuVqMESK+mTtWVoFsbGv1HapCN/2R5t4CHYInBU1PrLwUjn+ggg
+	 G2G3m8AnOQbSmPh1SQsD6Ab1xz7Dfz2SPs1KweBHxwCwT2Pj//Xi6TRkFm0JTbfNu7
+	 I3b3bQwK9lZk4if44f8RtxaEKQJxfCsNNTCNm03A60uHpmqCHn070ana4/rZU4lgXY
+	 oo+0F5+JKJmR4NE2k9CvfdNzi+GTsqNXnBIoGzJvGsN5vP0dB68F8bTDsmKfXJbhPy
+	 16R4HxPcv0Hmw==
 From: Maxime Ripard <mripard@kernel.org>
-Date: Mon, 25 Aug 2025 15:43:17 +0200
-Subject: [PATCH 12/39] drm/atomic: Convert drm_atomic_get_crtc_state() to
- use new connector state
+Date: Mon, 25 Aug 2025 15:43:18 +0200
+Subject: [PATCH 13/39] drm/ingenic: ipu: Switch to
+ drm_atomic_get_new_crtc_state()
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250825-drm-no-more-existing-state-v1-12-f08ccd9f85c9@kernel.org>
+Message-Id: <20250825-drm-no-more-existing-state-v1-13-f08ccd9f85c9@kernel.org>
 References: <20250825-drm-no-more-existing-state-v1-0-f08ccd9f85c9@kernel.org>
 In-Reply-To: <20250825-drm-no-more-existing-state-v1-0-f08ccd9f85c9@kernel.org>
 To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
@@ -109,46 +109,45 @@ Cc: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
  linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org, 
  Maxime Ripard <mripard@kernel.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1291; i=mripard@kernel.org;
- h=from:subject:message-id; bh=GtAQSdS1ZwpO1wrhzVk13OKCtrYrUZErGzdK85qhnG4=;
- b=owGbwMvMwCmsHn9OcpHtvjLG02pJDBlrMsqb7n1MlciLNLj+baGYzBGv5o++wa+/Hb3W3b2iI
- VjL1flLx1QWBmFOBlkxRZYnMmGnl7cvrnKwX/kDZg4rE8gQBi5OAZjI7wDGWqFc1+IbP6z/9FlJ
- VrSbn4pqiO179fVn0iet9HbF3YXW8xc1vrstM5utTsbd332F9H0Hxobnc5h9fB1jt/3prU0r9nK
- rK4x+45n+Y3mkrPiHnoN6rV4LrF5leh1xnibf7mSqr/auCQA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1234; i=mripard@kernel.org;
+ h=from:subject:message-id; bh=OVEekJ412TDrWcPosT5PbcAORq/ZSX10mh7GmfSf1w4=;
+ b=owGbwMvMwCmsHn9OcpHtvjLG02pJDBlrMsqPKNnscJ/EkLEysv9qzRqmZdKRilP2FadeZJx6t
+ jFsGrNux1QWBmFOBlkxRZYnMmGnl7cvrnKwX/kDZg4rE8gQBi5OAZhImAdjfeXk9bnq/B+VPr9l
+ n/bwkGn9yhVuk1ZzPJlve+kPl5xI1IxV09qZbttnb3268qTnDI1XeYz1buI+OTfzitff1WlwnGO
+ uVGJ2k1F22f+1KzQiLfPFItjel36bZPpeJO+p8E/D00nHT3kAAA==
 X-Developer-Key: i=mripard@kernel.org; a=openpgp;
  fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 
-The drm_atomic_get_crtc_state() function calls the deprecated
-drm_atomic_get_existing_crtc_state() helper to get find if a crtc state
-had already been allocated and was part of the given drm_atomic_state.
+The ingenic IPU atomic_set_property implementation uses the deprecated
+drm_atomic_get_existing_crtc_state() helper.
 
-At the point in time where drm_atomic_get_crtc_state() can be
-called (ie, during atomic_check), the existing state is the new state
-and drm_atomic_get_existing_crtc_state() can thus be replaced by
-drm_atomic_get_new_crtc_state().
+This hook is called during the state building process, before
+atomic_check, and thus before the states are swapped. The existing state
+thus points to the new state, and we can use
+drm_atomic_get_new_crtc_state() instead.
 
 Signed-off-by: Maxime Ripard <mripard@kernel.org>
 ---
- drivers/gpu/drm/drm_atomic.c | 2 +-
+ drivers/gpu/drm/ingenic/ingenic-ipu.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/gpu/drm/drm_atomic.c b/drivers/gpu/drm/drm_atomic.c
-index a9d1265e34602c454866869b81b8837b2c0a97a4..1147fa890a03ef2c3283972c816796d8de6307c9 100644
---- a/drivers/gpu/drm/drm_atomic.c
-+++ b/drivers/gpu/drm/drm_atomic.c
-@@ -347,11 +347,11 @@ drm_atomic_get_crtc_state(struct drm_atomic_state *state,
- 	int ret, index = drm_crtc_index(crtc);
- 	struct drm_crtc_state *crtc_state;
+diff --git a/drivers/gpu/drm/ingenic/ingenic-ipu.c b/drivers/gpu/drm/ingenic/ingenic-ipu.c
+index 26ebf424d63ec21ccee80221745c3e8bcc6b3d7f..2574a4b4d40a2c27cb212114117829d9f6ab3ddb 100644
+--- a/drivers/gpu/drm/ingenic/ingenic-ipu.c
++++ b/drivers/gpu/drm/ingenic/ingenic-ipu.c
+@@ -703,11 +703,11 @@ ingenic_ipu_plane_atomic_set_property(struct drm_plane *plane,
  
- 	WARN_ON(!state->acquire_ctx);
+ 	mode_changed = val != ipu->sharpness;
+ 	ipu->sharpness = val;
  
--	crtc_state = drm_atomic_get_existing_crtc_state(state, crtc);
-+	crtc_state = drm_atomic_get_new_crtc_state(state, crtc);
- 	if (crtc_state)
- 		return crtc_state;
+ 	if (state->crtc) {
+-		crtc_state = drm_atomic_get_existing_crtc_state(state->state, state->crtc);
++		crtc_state = drm_atomic_get_new_crtc_state(state->state, state->crtc);
+ 		if (WARN_ON(!crtc_state))
+ 			return -EINVAL;
  
- 	ret = drm_modeset_lock(&crtc->mutex, state->acquire_ctx);
- 	if (ret)
+ 		crtc_state->mode_changed |= mode_changed;
+ 	}
 
 -- 
 2.50.1
