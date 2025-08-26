@@ -1,125 +1,114 @@
-Return-Path: <linux-mips+bounces-10610-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10611-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 864F6B35EBA
-	for <lists+linux-mips@lfdr.de>; Tue, 26 Aug 2025 14:04:06 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B8785B3612F
+	for <lists+linux-mips@lfdr.de>; Tue, 26 Aug 2025 15:07:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A1E1361908
-	for <lists+linux-mips@lfdr.de>; Tue, 26 Aug 2025 11:52:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 40E803BFA13
+	for <lists+linux-mips@lfdr.de>; Tue, 26 Aug 2025 13:03:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F80529BDB8;
-	Tue, 26 Aug 2025 11:52:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="ubPX1amN"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93593223DD4;
+	Tue, 26 Aug 2025 13:03:29 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F939286D57;
-	Tue, 26 Aug 2025 11:51:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 338221FBE9B;
+	Tue, 26 Aug 2025 13:03:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756209121; cv=none; b=aM8TeZCSB1syPmY8M7QwuaKbFWVzHxsYGb0kJCwfjeJhshjQpWTdU0H6fBpf0vYZ9VLkndcspU5sYMcF7QJ5KWoCNPYOtcPN2mWnia4OYKyoTYY4l+Iev0uD0E8KU1ciaDRf2EyRAyLfD0QoIXI9Ag7jYkXmDwsq1d96+hNtw1Q=
+	t=1756213409; cv=none; b=YYKLJLgtX0P9ZjVxnyH1jr/DA9TrgfmLqLlgKF5LQ2rN/gLduE9IYFP4OradlZQpgn5kXXpxUp1aqDTnoYlvMXes78XIapXm7WU4ej4p9fh4ybcIlTYvtAGlLtzZwwqRLSIf39rfmTd+d6n21knZcBq3ZAT3un2F2JFGOlvuE8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756209121; c=relaxed/simple;
-	bh=ZSeR+xDmWnuglFSrG20AI4myAYDMAl0a9GSppGLrSqc=;
+	s=arc-20240116; t=1756213409; c=relaxed/simple;
+	bh=T9Gkxrj+Jbh4BEF2Xoy+VopdtFjdz7eGQjhjbYkar1Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a+i+nFO/7cp4rjxweWJh1XOIUk94Ns1T1rrjSEsFkAzmOxBOV4ON2t/yBSRtUW/ypaz/QUKh3PqGD5g0Is9oaap2Jni7XvOQ0mHhstbMt+hh1PG1xGjrhvOolxHnenJlY8UysRhwQHpos5MfdB7n8J4YBETHued5xIZCUtTjo6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=ubPX1amN; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Transfer-Encoding:
-	Content-Type:MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:
-	Sender:Reply-To:Content-ID:Content-Description;
-	bh=aeWcMmtGU27RiHkVsjvjCiSraFzVxUlIfCo0EiMxcYM=; b=ubPX1amNhC4glLCYSkxvTZRMGh
-	2ejzDNTCZnSvAvHTGCOuOeFQRXn6WZlN8JL3/MGsZ5/TMxw6L0GD5RqTUvaUqzAePjDQEbZoVHKHN
-	Qci7j9Ami1xdSxgfH9UP4Sqx+xA+CbCpOxI7TbmbQ4TpvAPlGdjrrdyY2gF4ykvnA3TGmUk7DsXHp
-	k8UB0Aq5gNKiHgZs96g9XLIOR4hYWLDRZKYu7tNTpswfhYsv3oH9NQadIFT2Ic9K/CzyMW5LHuFK7
-	9e8+IV7w8XkmuYbdED/sHqpW2NwuKC8LLAZZ+nWC9UOaMibByUV86DbWECpW4Z2+kL+SXdX+48mFd
-	72n0RTNg==;
-Received: from willy by casper.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uqsDU-00000000wNi-2iwA;
-	Tue, 26 Aug 2025 11:51:56 +0000
-Date: Tue, 26 Aug 2025 12:51:56 +0100
-From: Matthew Wilcox <willy@infradead.org>
-To: Andrew Morton <akpm@linux-foundation.org>,
-	Nicola Vetrini <nicola.vetrini@gmail.com>
-Cc: linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-	regressions@lists.linux.dev, tsbogend@alpha.franken.de,
-	anders.roxell@linaro.org, naresh.kamboju@linaro.org
-Subject: Re: [PATCH] mips: fix compilation error
-Message-ID: <aK2f3C9bT-cvPR87@casper.infradead.org>
-References: <20250825214245.1838158-1-nicola.vetrini@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=qtWmARSB3t93ksPeigFaw03FdIV/swq5lerGJxmziRLiCNXa0zyBPkEaQWZ3t1w1Mocd65b8S6Sc2Nd2zoqZbMjQ5Ob/pZ/nqcbk9y/jNbYv53T+nMo1uBRbzckOyruxf53xPKi457Iy+G41tDbMn+Rrp2YFKqoKUBSqPUqQ6i8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 025E02C23;
+	Tue, 26 Aug 2025 06:03:18 -0700 (PDT)
+Received: from raptor (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A5B423F63F;
+	Tue, 26 Aug 2025 06:03:19 -0700 (PDT)
+Date: Tue, 26 Aug 2025 14:03:16 +0100
+From: Alexandru Elisei <alexandru.elisei@arm.com>
+To: David Hildenbrand <david@redhat.com>
+Cc: linux-kernel@vger.kernel.org, Alexander Potapenko <glider@google.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Brendan Jackman <jackmanb@google.com>,
+	Christoph Lameter <cl@gentwo.org>, Dennis Zhou <dennis@kernel.org>,
+	Dmitry Vyukov <dvyukov@google.com>, dri-devel@lists.freedesktop.org,
+	intel-gfx@lists.freedesktop.org, iommu@lists.linux.dev,
+	io-uring@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
+	Jens Axboe <axboe@kernel.dk>, Johannes Weiner <hannes@cmpxchg.org>,
+	John Hubbard <jhubbard@nvidia.com>, kasan-dev@googlegroups.com,
+	kvm@vger.kernel.org, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	linux-arm-kernel@axis.com, linux-arm-kernel@lists.infradead.org,
+	linux-crypto@vger.kernel.org, linux-ide@vger.kernel.org,
+	linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
+	linux-mmc@vger.kernel.org, linux-mm@kvack.org,
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+	linux-scsi@vger.kernel.org,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Marco Elver <elver@google.com>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>,
+	Muchun Song <muchun.song@linux.dev>, netdev@vger.kernel.org,
+	Oscar Salvador <osalvador@suse.de>, Peter Xu <peterx@redhat.com>,
+	Robin Murphy <robin.murphy@arm.com>,
+	Suren Baghdasaryan <surenb@google.com>, Tejun Heo <tj@kernel.org>,
+	virtualization@lists.linux.dev, Vlastimil Babka <vbabka@suse.cz>,
+	wireguard@lists.zx2c4.com, x86@kernel.org, Zi Yan <ziy@nvidia.com>
+Subject: Re: [PATCH RFC 21/35] mm/cma: refuse handing out non-contiguous page
+ ranges
+Message-ID: <aK2wlGYvCaFQXzBm@raptor>
+References: <20250821200701.1329277-1-david@redhat.com>
+ <20250821200701.1329277-22-david@redhat.com>
+ <aK2QZnzS1ErHK5tP@raptor>
+ <ad521f4f-47aa-4728-916f-3704bf01f770@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250825214245.1838158-1-nicola.vetrini@gmail.com>
+In-Reply-To: <ad521f4f-47aa-4728-916f-3704bf01f770@redhat.com>
 
-On Mon, Aug 25, 2025 at 11:42:45PM +0200, Nicola Vetrini wrote:
-> The following build error occurs on a mips build configuration
-> (32r2el_defconfig and similar ones)
-> ./arch/mips/include/asm/cacheflush.h:42:34: error: passing argument 2 of ‘set_bit’
-> from incompatible pointer type [-Werror=incompatible-pointer-types]
->    42 |         set_bit(PG_dcache_dirty, &(folio)->flags)
->       |                                  ^~~~~~~~~~~~~~~
->       |                                  |
->       |                                  memdesc_flags_t *
-> 
-> This is due to changes introduced by
-> commit 30f45bf18d55 ("mm: introduce memdesc_flags_t"), which did not update
-> these usage sites.
-> 
-> Link: https://lore.kernel.org/lkml/CA+G9fYvkpmqGr6wjBNHY=dRp71PLCoi2341JxOudi60yqaeUdg@mail.gmail.com/
-> Fixes: 30f45bf18d55 ("mm: introduce memdesc_flags_t")
-> Signed-off-by: Nicola Vetrini <nicola.vetrini@gmail.com>
-> ---
-> First time sending a Linux patch, so I may have gotten some part of
-> it wrong.
+Hi David,
 
-Well, Naresh was the one who got it wrong BY NOT CCing THE AUTHOR
-OF THE PATCH THAT IT WAS BISECTED TO.  Honestly, Naresh, do better.
-syzbot manages this, and it's a shell script.
+On Tue, Aug 26, 2025 at 01:04:33PM +0200, David Hildenbrand wrote:
+..
+> > Just so I can better understand the problem being fixed, I guess you can have
+> > two consecutive pfns with non-consecutive associated struct page if you have two
+> > adjacent memory sections spanning the same physical memory region, is that
+> > correct?
+> 
+> Exactly. Essentially on SPARSEMEM without SPARSEMEM_VMEMMAP it is not
+> guaranteed that
+> 
+> 	pfn_to_page(pfn + 1) == pfn_to_page(pfn) + 1
+> 
+> when we cross memory section boundaries.
+> 
+> It can be the case for early boot memory if we allocated consecutive areas
+> from memblock when allocating the memmap (struct pages) per memory section,
+> but it's not guaranteed.
 
-Anyway, this can just be fixed up as the patch is still in mm-new.
-Andrew, please apply.
+Thank you for the explanation, but I'm a bit confused by the last paragraph. I
+think what you're saying is that we can also have the reverse problem, where
+consecutive struct page * represent non-consecutive pfns, because memmap
+allocations happened to return consecutive virtual addresses, is that right?
 
-> Bisection was done at the provided link.
-> ---
->  arch/mips/include/asm/cacheflush.h | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
-> 
-> diff --git a/arch/mips/include/asm/cacheflush.h b/arch/mips/include/asm/cacheflush.h
-> index 1f14132b3fc9..5d283ef89d90 100644
-> --- a/arch/mips/include/asm/cacheflush.h
-> +++ b/arch/mips/include/asm/cacheflush.h
-> @@ -37,11 +37,11 @@
->  #define PG_dcache_dirty			PG_arch_1
->  
->  #define folio_test_dcache_dirty(folio)		\
-> -	test_bit(PG_dcache_dirty, &(folio)->flags)
-> +	test_bit(PG_dcache_dirty, &(folio)->flags.f)
->  #define folio_set_dcache_dirty(folio)	\
-> -	set_bit(PG_dcache_dirty, &(folio)->flags)
-> +	set_bit(PG_dcache_dirty, &(folio)->flags.f)
->  #define folio_clear_dcache_dirty(folio)	\
-> -	clear_bit(PG_dcache_dirty, &(folio)->flags)
-> +	clear_bit(PG_dcache_dirty, &(folio)->flags.f)
->  
->  extern void (*flush_cache_all)(void);
->  extern void (*__flush_cache_all)(void);
-> 
-> base-commit: 6c68f4c0a147c025ae0b25fab688c7c47964a02f
-> -- 
-> 2.43.0
-> 
+If that's correct, I don't think that's the case for CMA, which deals out
+contiguous physical memory. Or were you just trying to explain the other side of
+the problem, and I'm just overthinking it?
+
+Thanks,
+Alex
 
