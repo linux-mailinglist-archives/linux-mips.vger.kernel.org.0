@@ -1,119 +1,216 @@
-Return-Path: <linux-mips+bounces-10613-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10614-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1ADEB3619C
-	for <lists+linux-mips@lfdr.de>; Tue, 26 Aug 2025 15:11:05 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 623F7B361DA
+	for <lists+linux-mips@lfdr.de>; Tue, 26 Aug 2025 15:13:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5C6621BA48AC
-	for <lists+linux-mips@lfdr.de>; Tue, 26 Aug 2025 13:08:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E68F2A74DE
+	for <lists+linux-mips@lfdr.de>; Tue, 26 Aug 2025 13:08:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0242D242D6A;
-	Tue, 26 Aug 2025 13:08:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66110196C7C;
+	Tue, 26 Aug 2025 13:08:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="tTA/3PiA"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DcyAQm9N"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56B30184540;
-	Tue, 26 Aug 2025 13:08:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99256268C40
+	for <linux-mips@vger.kernel.org>; Tue, 26 Aug 2025 13:08:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756213694; cv=none; b=ZE88xS9qerwBHKbPHE+L1FDoOpsCOnius5W6cPTf78/IeU+sW1qXnmskCswemo9LbXoZPxqkZDg7loW6sFYwrXFkHXF5dYLEqkYqZxvzq1Y08ELfPyBc2Yuz9uaam51FExdUgtGkaZYGF6oLWGB4x6KDrH5+Joif0u9qcRtePv8=
+	t=1756213697; cv=none; b=TnAv/boyeng3E1bTDYBok0R46TfngBFjp8EDolgdRIPjIF9YG55RgEPVj41YnpVlHRu/WFgylu0ESFrbM8ZbFl7VaWXdShnFsJ2yhQPbIT3pMZqYLblUgr5lU5pTa/inNFoJWGqguMUzv+MlrgucSwqdbUJeYxuP9jFp2IZJQZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756213694; c=relaxed/simple;
-	bh=K5Hq8A3EfCbmeiLfsfr4d1nDO6kRorI56BAyDsThWmo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=klvpv9HYhNGZn6PC3oLwfENyrx7P2IjzEuW9tdbFQaIIopxN3BkJHO2hboRwEgp6Xscz/Y+fqXvN+cgwsa+sFAACpu+4jhfuHOZyQatdRqYGzQoBF5gPzqz+5vZIFLkmfMPXVJrGs5TFQSx7ftgxWhY2dmhKYY7XLlZtBuBrYUk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=tTA/3PiA; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=1anwaqC6FtBZhv/AdRsioHe6z7ff2/NtObpshRSmtXo=; b=tTA/3PiAJQSpvqwn9JBse0zv8x
-	XpRRlvytBaU8d04FPgmaRAhvvZSqAROIZ/4ezjLoE6WsNdrr9/VlG41rEHCWsnk6JH8UsrGv5T5LT
-	zWsAXDZBYt6RN2vrodVyAq1DmmcYAol3ljF/QPWtrzgIrZdA+eDohdH+O3MOT2cIfR3SAL6oZFxxT
-	a0buqH4Cjn32e+/T6hw9u+ioPisD3zaMrQKEyQ6W0w6+Ct9SXam4tKJBvFWH9AMfHquCJRKF+Zp4I
-	PdyzFVdx3HFHpHhkOPtwcc+TPPHK59R640Wqk+YmnwDvNpXZJgmWLR1JQJ9jnUMah3B3H6sSqGhBU
-	hjKnAxuQ==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uqtPC-00000002GIP-3rVi;
-	Tue, 26 Aug 2025 13:08:07 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id DB2A63002C5; Tue, 26 Aug 2025 15:08:06 +0200 (CEST)
-Date: Tue, 26 Aug 2025 15:08:06 +0200
-From: Peter Zijlstra <peterz@infradead.org>
-To: Robin Murphy <robin.murphy@arm.com>
-Cc: mingo@redhat.com, will@kernel.org, mark.rutland@arm.com,
-	acme@kernel.org, namhyung@kernel.org,
-	alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-	irogers@google.com, adrian.hunter@intel.com,
-	kan.liang@linux.intel.com, linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
-	linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-rockchip@lists.infradead.org, dmaengine@vger.kernel.org,
-	linux-fpga@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-	intel-xe@lists.freedesktop.org, coresight@lists.linaro.org,
-	iommu@lists.linux.dev, linux-amlogic@lists.infradead.org,
-	linux-cxl@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 16/19] perf: Introduce positive capability for sampling
-Message-ID: <20250826130806.GY4067720@noisy.programming.kicks-ass.net>
-References: <cover.1755096883.git.robin.murphy@arm.com>
- <ae81cb65b38555c628e395cce67ac6c7eaafdd23.1755096883.git.robin.murphy@arm.com>
+	s=arc-20240116; t=1756213697; c=relaxed/simple;
+	bh=96oZjGpBhsGM6T5RqD1Jhcz8DPmt/ETyRKKVXbbqnx8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=n2IUFNv270BFZ/Pk62gXXnC6VBUIdbcAtGu5DKrI9HrAnTo3SSnvz9LGkgCxLfWufN8XJTFOMN/6XXwb1laXJg+Vu0KjQbzyFGS5Ys4FAJg8Y3UEL1JRZyWosz5Zpb/Pe1QI+2EeJrq9sVkcpOrQwgd1/JOKkl+RvJ4GB5Z8lfE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DcyAQm9N; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1756213694;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=+33Ue2Cu5Y5oxJByCwLn3TsnRWViKb51w/F+XvIasfg=;
+	b=DcyAQm9NeNX0gNflVUjQyILC7pOSj8BOQuPJkoc9Ws5tkI4pIyooy809jkrmo/dtSfvM0u
+	hfeTmrpUGOhtQW9NHApP4OmOlmgQVVx3j5nklKh0erN9odZL3Y8P3mYu2mSgxKFENZBUi4
+	RKRvrldVHpFiQsfFXa2rkx/Re4Oy2Ro=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-367-NkQlrtCIPBWwS2w4kOdC-w-1; Tue, 26 Aug 2025 09:08:13 -0400
+X-MC-Unique: NkQlrtCIPBWwS2w4kOdC-w-1
+X-Mimecast-MFC-AGG-ID: NkQlrtCIPBWwS2w4kOdC-w_1756213692
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-45a1b0cb0aaso42882845e9.3
+        for <linux-mips@vger.kernel.org>; Tue, 26 Aug 2025 06:08:12 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756213692; x=1756818492;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+33Ue2Cu5Y5oxJByCwLn3TsnRWViKb51w/F+XvIasfg=;
+        b=NspI1La9j3nwyvvy1Bf+OYyXAmMzgClhvZ+p2Ied16fRo36zTV9qkduQQdh+wksgQl
+         paYMPtxAuvMorJvBGJuKtqL8TRVtA0RK4KvH96FtBhy/PxEI/hk7ald3k2RpoAMLluVU
+         NNI9syKg+y9cVBu3MgCWqvtA+2LJxoCEWAFJede23FdJVAKKfNqKXWStI6vFtAMS3szs
+         RtmYE32h/25drArl3qcrzOcmc+EBX5ZJur13UqjKRro+0IbcrXW5U/7rt8PNUdK70wSH
+         fZzgLLkJyhOt+PmqG/szH3ZIlBooKiJ3t+awI/3NroMM0iQiI7Z/nhl/2sXqV9D6JRUB
+         gedQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXcJasTX69BOSUIl9JtjyXdIQUTdZWx7cZtFRc2RlEG8sMzbgrebXF/bwgj/PF5MMzhVQ/+dpL5XMij@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0gSImEXyRv/RIdO3j18uR9DOO4UBPV+kHX+m3uWhhIjrS6tVG
+	TWLxy8PyTncu0X5IZAwabRZnH5t21KRyI3XRybRoPBjxr71gnExgm0/PRL5leHfigXZu3Plpi2w
+	N8/WoTy9Em6s4yJojJE33X8FI9qzCYx2yuN9HT9ZYI6IjnxFcin7YEeMqZfrtKpg=
+X-Gm-Gg: ASbGnct/d5ruOIipgQfNJT5LZFrZ6ozxR7w2KD0GydRW52tf1Ie+U6ir8EOjKr2174f
+	8l4Bzy7JxIhTEML6KoFbPdHjMUXirvLTap91zelYAAUpFJ52SDZkvOFX/NYCkcwC9fD7Ut/JNSL
+	AYxa3iQo0WtJzB9KBaG3ijNp8r3EpOUPTqeETSbqZ3fTZxV0YcjiDBsATEgi9nzQpsfy4XVt0Cy
+	QU5yF7RdWoaf08RJSV1FSxLnTbSO5hK2Vmvq9lPcX9jPFAWD68sxHUX4WKhXoWIqqGJzPumwShc
+	5U3YZ544iyNqS+RQ3C0Em1srg3qy0FNqI0wVigYKi+QZws/SYkz1dCfWdssskwlnZSg4playhQ=
+	=
+X-Received: by 2002:a05:600c:19cb:b0:458:6733:fb5c with SMTP id 5b1f17b1804b1-45b517d2751mr126238655e9.28.1756213691657;
+        Tue, 26 Aug 2025 06:08:11 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE0uVvd3bkBu8Q9HfrtdCgTiP652NIGyMgKGC7lB/H2NXiQPCgnz3LGDq701BEdJbsSh2Pm8g==
+X-Received: by 2002:a05:600c:19cb:b0:458:6733:fb5c with SMTP id 5b1f17b1804b1-45b517d2751mr126238015e9.28.1756213691060;
+        Tue, 26 Aug 2025 06:08:11 -0700 (PDT)
+Received: from ?IPV6:2a09:80c0:192:0:5dac:bf3d:c41:c3e7? ([2a09:80c0:192:0:5dac:bf3d:c41:c3e7])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b57444963sm165603375e9.3.2025.08.26.06.08.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 26 Aug 2025 06:08:10 -0700 (PDT)
+Message-ID: <ecc599ee-4175-4356-ab66-1d76a75f44f7@redhat.com>
+Date: Tue, 26 Aug 2025 15:08:08 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <ae81cb65b38555c628e395cce67ac6c7eaafdd23.1755096883.git.robin.murphy@arm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC 21/35] mm/cma: refuse handing out non-contiguous page
+ ranges
+To: Alexandru Elisei <alexandru.elisei@arm.com>
+Cc: linux-kernel@vger.kernel.org, Alexander Potapenko <glider@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Brendan Jackman <jackmanb@google.com>, Christoph Lameter <cl@gentwo.org>,
+ Dennis Zhou <dennis@kernel.org>, Dmitry Vyukov <dvyukov@google.com>,
+ dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+ iommu@lists.linux.dev, io-uring@vger.kernel.org,
+ Jason Gunthorpe <jgg@nvidia.com>, Jens Axboe <axboe@kernel.dk>,
+ Johannes Weiner <hannes@cmpxchg.org>, John Hubbard <jhubbard@nvidia.com>,
+ kasan-dev@googlegroups.com, kvm@vger.kernel.org,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>, linux-arm-kernel@axis.com,
+ linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+ linux-ide@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org, linux-mm@kvack.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-scsi@vger.kernel.org, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Marco Elver <elver@google.com>, Marek Szyprowski <m.szyprowski@samsung.com>,
+ Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>,
+ Muchun Song <muchun.song@linux.dev>, netdev@vger.kernel.org,
+ Oscar Salvador <osalvador@suse.de>, Peter Xu <peterx@redhat.com>,
+ Robin Murphy <robin.murphy@arm.com>, Suren Baghdasaryan <surenb@google.com>,
+ Tejun Heo <tj@kernel.org>, virtualization@lists.linux.dev,
+ Vlastimil Babka <vbabka@suse.cz>, wireguard@lists.zx2c4.com, x86@kernel.org,
+ Zi Yan <ziy@nvidia.com>
+References: <20250821200701.1329277-1-david@redhat.com>
+ <20250821200701.1329277-22-david@redhat.com> <aK2QZnzS1ErHK5tP@raptor>
+ <ad521f4f-47aa-4728-916f-3704bf01f770@redhat.com> <aK2wlGYvCaFQXzBm@raptor>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <aK2wlGYvCaFQXzBm@raptor>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Aug 13, 2025 at 06:01:08PM +0100, Robin Murphy wrote:
-> Sampling is inherently a feature for CPU PMUs, given that the thing
-> to be sampled is a CPU context. These days, we have many more
-> uncore/system PMUs than CPU PMUs, so it no longer makes much sense to
-> assume sampling support by default and force the ever-growing majority
-> of drivers to opt out of it (or erroneously fail to). Instead, let's
-> introduce a positive opt-in capability that's more obvious and easier to
-> maintain.
+On 26.08.25 15:03, Alexandru Elisei wrote:
+> Hi David,
 > 
+> On Tue, Aug 26, 2025 at 01:04:33PM +0200, David Hildenbrand wrote:
+> ..
+>>> Just so I can better understand the problem being fixed, I guess you can have
+>>> two consecutive pfns with non-consecutive associated struct page if you have two
+>>> adjacent memory sections spanning the same physical memory region, is that
+>>> correct?
+>>
+>> Exactly. Essentially on SPARSEMEM without SPARSEMEM_VMEMMAP it is not
+>> guaranteed that
+>>
+>> 	pfn_to_page(pfn + 1) == pfn_to_page(pfn) + 1
+>>
+>> when we cross memory section boundaries.
+>>
+>> It can be the case for early boot memory if we allocated consecutive areas
+>> from memblock when allocating the memmap (struct pages) per memory section,
+>> but it's not guaranteed.
+> 
+> Thank you for the explanation, but I'm a bit confused by the last paragraph. I
+> think what you're saying is that we can also have the reverse problem, where
+> consecutive struct page * represent non-consecutive pfns, because memmap
+> allocations happened to return consecutive virtual addresses, is that right?
 
-> diff --git a/include/linux/perf_event.h b/include/linux/perf_event.h
-> index 4d439c24c901..bf2cfbeabba2 100644
-> --- a/include/linux/perf_event.h
-> +++ b/include/linux/perf_event.h
-> @@ -294,7 +294,7 @@ struct perf_event_pmu_context;
->  /**
->   * pmu::capabilities flags
->   */
-> -#define PERF_PMU_CAP_NO_INTERRUPT	0x0001
-> +#define PERF_PMU_CAP_SAMPLING		0x0001
->  #define PERF_PMU_CAP_NO_NMI		0x0002
->  #define PERF_PMU_CAP_AUX_NO_SG		0x0004
->  #define PERF_PMU_CAP_EXTENDED_REGS	0x0008
-> @@ -305,6 +305,7 @@ struct perf_event_pmu_context;
->  #define PERF_PMU_CAP_EXTENDED_HW_TYPE	0x0100
->  #define PERF_PMU_CAP_AUX_PAUSE		0x0200
->  #define PERF_PMU_CAP_AUX_PREFER_LARGE	0x0400
-> +#define PERF_PMU_CAP_NO_INTERRUPT	0x0800
+Exactly, that's something we have to deal with elsewhere [1]. For this 
+code, it's not a problem because we always allocate a contiguous PFN range.
 
-So NO_INTERRUPT was supposed to be the negative of your new SAMPLING
-(and I agree with your reasoning).
+> 
+> If that's correct, I don't think that's the case for CMA, which deals out
+> contiguous physical memory. Or were you just trying to explain the other side of
+> the problem, and I'm just overthinking it?
 
-What I'm confused/curious about is why we retain NO_INTERRUPT?
+The latter :)
+
+[1] https://lkml.kernel.org/r/20250814064714.56485-2-lizhe.67@bytedance.com
+
+-- 
+Cheers
+
+David / dhildenb
+
 
