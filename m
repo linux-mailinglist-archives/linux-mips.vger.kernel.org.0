@@ -1,156 +1,164 @@
-Return-Path: <linux-mips+bounces-10593-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10594-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 92DF3B35146
-	for <lists+linux-mips@lfdr.de>; Tue, 26 Aug 2025 03:58:03 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90360B35406
+	for <lists+linux-mips@lfdr.de>; Tue, 26 Aug 2025 08:18:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 99EA71A87518
-	for <lists+linux-mips@lfdr.de>; Tue, 26 Aug 2025 01:58:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 553DC2032B8
+	for <lists+linux-mips@lfdr.de>; Tue, 26 Aug 2025 06:18:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D7C3A1F1527;
-	Tue, 26 Aug 2025 01:57:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B2162F548C;
+	Tue, 26 Aug 2025 06:18:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TzKbUsYx"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="EoHq8It+";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="eX2IPWAG"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yb1-f177.google.com (mail-yb1-f177.google.com [209.85.219.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 451F2BA34;
-	Tue, 26 Aug 2025 01:57:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 800BF22D9F7;
+	Tue, 26 Aug 2025 06:18:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756173478; cv=none; b=Xw4/AiNVXDEKjkPKaVzKBm5A0Or/FBFOoU7tvSuqDbN788nUsy0WmIm4vEOjyonUH8wqb/aSAvQhkPRhvxNLkspF+ucFbGI/BFmgrrAfEk3sn3KaseW15jrowZeMb4bY3cZAKImj7drVr2H7nSW14FJem1Vp+c4CHarexSpztfY=
+	t=1756189102; cv=none; b=hXwHYIWfohLq7XOqCcqV4QJIr7s7oHxiqwH/9b7DV1NPp8FcvNR0h7cRHJVjP3Wgrh96IGOkjjmK2Q2bLwNy/O14SV6nJptsQi57JZ5tUnGmvhcKC2NKeNaaWylQtvJdducILx+N1d3Rut42quUSD+LLobyQ5e0z0AHXg7qrIRs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756173478; c=relaxed/simple;
-	bh=KOSGvM2wr2KyAD8w0lLgrFelRa0BX8NcqdyrgZ4XNjs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rLNvY6nfXsRW/ucLw4kc0vDeYaBzNAF0+TOZpV6APO0xiGXM4U16LzDs/YdfcZAatsPgQW7Zi02PiJXvVlLOr4DMvbXFBEFpmiUrHKy7Qcnz71bSVHvd3DKV6+PxBzRI6qquzZ+HuwGst3BChTDI3jSHYBU6A/vCWttx3fav7DE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TzKbUsYx; arc=none smtp.client-ip=209.85.219.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f177.google.com with SMTP id 3f1490d57ef6-e96c77b8dc1so1194695276.1;
-        Mon, 25 Aug 2025 18:57:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1756173476; x=1756778276; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WGzUuOtgiIDZGYqyc4niKfZa1KTffiDbn6vc4yrAiuI=;
-        b=TzKbUsYxt/rSc/TjsMcJDD4zjheF0q+Xmhiw9GpDUeIyiRDkFAvg2ZUOPeh0980QvR
-         2ZXBLGfPtbioil6eVNvT1T9LMAm41aJ0gpRfu8gcMAqLlI2CpODHGnds6211rtr7pLzp
-         KtVa5qR4UA4mbrkywdv7NMEfmHkkV/VABEuTyTjAsNC2gWIVZvI/kIa6htGvU+d7ryhX
-         ROv2vYpg8q41oLvyzXwdPH8qUH7Y+W2uN9AIeCiZTkjR8m1wItcledvSS75LUnMR5UAV
-         dsItDqWdRdJppRucbd9ERPzSPVC/TSz2DgCMr5v+UGlX2ZAxoOFYvcslfU88cCHDSKzD
-         sZpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756173476; x=1756778276;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WGzUuOtgiIDZGYqyc4niKfZa1KTffiDbn6vc4yrAiuI=;
-        b=jD8Q9P+veIGN1xwrw+P+knkuHmKO+dHQs2+mWjSM4gvYaRT29xY1MyWBLdwRpKGrUE
-         DLg4FxMPzXIsZwvpek88MxepC/MclE6T3bpCe//B0y2ENUYNNN/Thnh6KuNLjaBkz8DJ
-         x42fkjDh7mnU9yO+9289sCiaJ4HTn/kP+OraLhbzjWuxKi/W7g4k7S6qt/Utdm7Kh8wX
-         yZ6P7z1q2rMy3P4SZA7YHkC9j1+1MXB+6OVzoUXAxwULRljV8sPwdXINRJPiiEuNv0+r
-         A71QVtLWXEmEt8+5L2qzqxLYLLCpcUUrh7VYvZnCCWi3bRWVfxcgHGOn8aZfh1hjGzd8
-         hpnA==
-X-Forwarded-Encrypted: i=1; AJvYcCWDIAiDHd95k8UuaN8mGq6UGWdlahCCxIIX4wXEoFioUwABsU9/oWHI7BVCC3UQrMchasIlVw7bci63SiPZ@vger.kernel.org, AJvYcCWP49lS6IesarWV3friy/dInzvsMJFDfZjCDDaZYE6vye3tNu3K2FeuDkhpzOaI9H5RxZZ3Bn2g38RJcA==@vger.kernel.org, AJvYcCXWOjU1NGTDIXpSyy22jY1luaBW+3NbEmRHOhb3k0X0yNz6PrFGQmNaBuW2R8dJif57pgAyvjWUBMgF@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz0sqyGYUcNpCGhP4Ob97HPAlIksgUxh5j2fl91TWJLQSqNZNu7
-	+6lkvR+k/oFxxCE9nazezJVwrASktvGGDKwLpy562UGdUY6cn8jWm3LX/w928ghzBOwJ3hrO015
-	0Gk5P8vFqd7EXdGCXKLaBLtKD7v9no3hVWg==
-X-Gm-Gg: ASbGncvqWA6nSRGke12DQdF1aBQfo/f1LXtQurRLFOgfWeOTbICxf2Sa0e/K7uWkNAZ
-	F9UjaHUaCa+I31aqRIs5RiaTOG41HoMbhpruwPa3kIPVNOVe6LJKQfYfcNoDyX/4zOfF0tuxC4V
-	JAM7nCx67WhTsp5soACJJisnn3YN1A9ZO+rxkIEKVcrqYVi1Cw1OBLSg8kz7F/fSBKHsWcz2nGL
-	UolNyxyvG4Hmwi3ZPbUzvDfSOLFU2/ENbc51bXJ++qFNcV4CKYxCppqQtm2F2cNhVZhonI19EZ/
-	4Aeisg==
-X-Google-Smtp-Source: AGHT+IFfyuSfKOrinrXKhXAscdQLNk2jhywIHMg8w6Be6P0uEmW6nfWxCJ0lVEYWuVzh3vDojbOberGKMV91mQSrLXo=
-X-Received: by 2002:a05:6902:600b:b0:e95:2d88:513a with SMTP id
- 3f1490d57ef6-e952d8852fcmr9666163276.36.1756173476124; Mon, 25 Aug 2025
- 18:57:56 -0700 (PDT)
+	s=arc-20240116; t=1756189102; c=relaxed/simple;
+	bh=OKdbTtNFiNAfKDCNOTVL/ZRLmxAuqZzdXzmwBIqDanM=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=pKOmLcAY0FI2gWPf6/qS5dWdp++VOkZsSkGxImaZnZUlo7rxhUPg6JjlIHeHq9mlpIc/fUD8D1/Ti0Er+4WxtIBWvsPIXRzTjOYooMlxnYNlVFos53oU75OwLt1005sHtkIIYBt7pf7/ZVBrBISIwF4jcJwvrMh1quda/zGF0JI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=EoHq8It+; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=eX2IPWAG; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1756189098;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=8Qx8zdXwUDEN+QDzIjybGTquRbhLyER4hmo5HtXCS3M=;
+	b=EoHq8It+802uE8/W/ZgT+WU1MhU30ljvVJg6J8CsR2XdSCY1W8iKO/0yhuhlIWg93gjtVN
+	yjsiguKOCe8MXqL7t5b5NeIYigkWxr9EZY2Mkn3x2W0dIf65A5h/s69Jx20ZLL24VmAnXl
+	wWm91dlrX8UnePleqQexNGzu9SWDwlcPXJ8DztYUIGGk65aJetDl/MNeXhull8xcLDd2T/
+	Xdhztn1zm0BL6qd7sdPVV8txFwrP1lt98FW2I+LmBrQOqG2Iv+EpggKyKaF35t2W+WDCO2
+	x4LqgXrpkfrN62Egk6oQBRYWy9iOgErie977mytBr36Yc1c7jJeu3fV2/Qh79g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1756189098;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=8Qx8zdXwUDEN+QDzIjybGTquRbhLyER4hmo5HtXCS3M=;
+	b=eX2IPWAG+DvooY6YzvBNYPIk4d7JwL6SQGjcVcR/3nVRkZUD/9wZEdubuxvUX29zgYJ6tr
+	+6ncwJ9ZGLDV8KDQ==
+Subject: [PATCH 00/11] vdso: Various cleanups
+Date: Tue, 26 Aug 2025 08:17:03 +0200
+Message-Id: <20250826-vdso-cleanups-v1-0-d9b65750e49f@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250825044812.1575524-1-rosenp@gmail.com> <20250825044812.1575524-2-rosenp@gmail.com>
- <20250825-clobber-disdain-9e50d85ab1df@spud>
-In-Reply-To: <20250825-clobber-disdain-9e50d85ab1df@spud>
-From: Rosen Penev <rosenp@gmail.com>
-Date: Mon, 25 Aug 2025 18:57:38 -0700
-X-Gm-Features: Ac12FXyRhTW5a8l2A5nZHymS4qhy8hJOYEjTo51J0bZ-dMOqKSbdtxy2kV2Vc_o
-Message-ID: <CAKxU2N9y-2eG2nz-ng9afuv-rT=agBt3rE7P3dFfybcHzhndWQ@mail.gmail.com>
-Subject: Re: [PATCHv3 1/3] dt-bindings: net: wireless: ath9k: add led bindings
-To: Conor Dooley <conor@kernel.org>
-Cc: linux-wireless@vger.kernel.org, =?UTF-8?B?VG9rZSBIw7hpbGFuZC1Kw7hyZ2Vuc2Vu?= <toke@toke.dk>, 
-	Johannes Berg <johannes@sipsolutions.net>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, open list <linux-kernel@vger.kernel.org>, 
-	"open list:MIPS" <linux-mips@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAF9RrWgC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDCyNT3bKU4nzd5JzUxLzSgmLdtBSztKQkY6O0ZENLJaCegqLUtMwKsHn
+ RsbW1AHxpxT5fAAAA
+X-Change-ID: 20250825-vdso-cleanups-fd6fbb32fc19
+To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, 
+ Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+ Alexandre Ghiti <alex@ghiti.fr>, Nam Cao <namcao@linutronix.de>, 
+ Russell King <linux@armlinux.org.uk>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Madhavan Srinivasan <maddy@linux.ibm.com>, 
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+ Christophe Leroy <christophe.leroy@csgroup.eu>, 
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+ Alexander Gordeev <agordeev@linux.ibm.com>, 
+ Christian Borntraeger <borntraeger@linux.ibm.com>, 
+ Sven Schnelle <svens@linux.ibm.com>, Arnd Bergmann <arnd@arndb.de>, 
+ Christian Brauner <brauner@kernel.org>, Shuah Khan <shuah@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+ linux-arm-kernel@lists.infradead.org, loongarch@lists.linux.dev, 
+ linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+ linux-s390@vger.kernel.org, linux-arch@vger.kernel.org, 
+ linux-kselftest@vger.kernel.org, 
+ Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1756189098; l=3008;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=OKdbTtNFiNAfKDCNOTVL/ZRLmxAuqZzdXzmwBIqDanM=;
+ b=xXLb28HhyOp2V5PAl7NV8Ih+DLTz+T0EwU3m8mTK7t+YdB+1/WbVwG3q2LXi/d5YbmXMM3lwS
+ UE/A4xDXG50Ay40TUaB+Dz47MZKMYqchu5q89DYuvoo2r9Z3sDlnSRd
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-On Mon, Aug 25, 2025 at 9:38=E2=80=AFAM Conor Dooley <conor@kernel.org> wro=
-te:
->
-> On Sun, Aug 24, 2025 at 09:48:10PM -0700, Rosen Penev wrote:
-> > The ath9k driver has various pin GPIO numbers for different chipsets
-> > which are not always correct for every device.
-> >
-> > Add bindings to specify the correct number and if it should be
-> > active-low.
-> >
-> > Signed-off-by: Rosen Penev <rosenp@gmail.com>
-> > ---
-> >  .../bindings/net/wireless/qca,ath9k.yaml         | 16 ++++++++++++++++
-> >  1 file changed, 16 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/net/wireless/qca,ath9k.y=
-aml b/Documentation/devicetree/bindings/net/wireless/qca,ath9k.yaml
-> > index d16ca8e0a25d..bbac017d34d0 100644
-> > --- a/Documentation/devicetree/bindings/net/wireless/qca,ath9k.yaml
-> > +++ b/Documentation/devicetree/bindings/net/wireless/qca,ath9k.yaml
-> > @@ -50,6 +50,18 @@ properties:
-> >
-> >    ieee80211-freq-limit: true
-> >
-> > +  led:
-> > +    type: object
-> > +    additionalProperties: false
-> > +    properties:
-> > +      reg:
-> > +        maxItems: 1
-> > +
-> > +      led-active-low:
->
-> How come you are not including leds/common.yaml and making use of the
-> active-low property defined there? Seems to be in use by mediatek,mt76.ya=
-ml
-Probably makes more sense to use active-high instead. Will do so in next se=
-ries.
->
-> > +        description:
-> > +          LED is enabled with ground signal.
-> > +        type: boolean
-> > +
-> >    qca,no-eeprom:
-> >      $ref: /schemas/types.yaml#/definitions/flag
-> >      description:
-> > @@ -102,5 +114,9 @@ examples:
-> >          compatible =3D "qca,ar9130-wifi";
-> >          reg =3D <0x180c0000 0x230000>;
-> >          interrupts =3D <2>;
-> > +        led {
-> > +          reg =3D <0>;
-> > +          led-active-low;
-> > +        };
-> >        };
-> >      };
-> > --
-> > 2.50.1
-> >
+Various cleanups to the generic vDSO infrastructure and a patch for ARM
+which was never applied.
+
+This series has one trivial syntactic conflict with "dso/datastore: Allow
+prefaulting by mlockall()" [0] and a semantic one with "sparc64: vdso:
+Switch to generic vDSO library" [1], which still uses the removed
+GENERIC_VDSO_DATA_STORE.
+
+[0] https://lore.kernel.org/lkml/20250812-vdso-mlockall-v1-0-2f49ba7cf819@linutronix.de/
+[1] https://lore.kernel.org/lkml/20250815-vdso-sparc64-generic-2-v2-0-b5ff80672347@linutronix.de/
+
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+Rasmus Villemoes (1):
+      ARM: VDSO: remove cntvct_ok global variable
+
+Thomas Weißschuh (10):
+      vdso/datastore: Gate time data behind CONFIG_GENERIC_GETTIMEOFDAY
+      vdso: Move ENABLE_COMPAT_VDSO from core to arm64
+      vdso/gettimeofday: Remove !CONFIG_TIME_NS stubs
+      time: Build generic update_vsyscall() only with generic time vDSO
+      riscv: vdso: Untangle kconfig logic
+      vdso: Drop kconfig GENERIC_VDSO_32
+      vdso: Drop kconfig GENERIC_COMPAT_VDSO
+      vdso: Drop kconfig GENERIC_VDSO_DATA_STORE
+      vdso: Drop kconfig GENERIC_VDSO_TIME_NS
+      vdso: Gate VDSO_GETRANDOM behind HAVE_GENERIC_VDSO
+
+ arch/Kconfig                                      |  2 +-
+ arch/arm/include/asm/vdso/vsyscall.h              |  2 --
+ arch/arm/kernel/vdso.c                            | 10 +++------
+ arch/arm/mm/Kconfig                               |  2 --
+ arch/arm64/Kconfig                                |  3 ---
+ arch/arm64/include/asm/vdso/compat_barrier.h      |  7 +++---
+ arch/arm64/include/asm/vdso/compat_gettimeofday.h |  6 ++---
+ arch/arm64/include/asm/vdso/gettimeofday.h        |  8 +++++++
+ arch/arm64/kernel/vdso32/Makefile                 |  1 -
+ arch/loongarch/Kconfig                            |  2 --
+ arch/mips/Kconfig                                 |  1 -
+ arch/powerpc/Kconfig                              |  2 --
+ arch/riscv/Kconfig                                | 12 +++++-----
+ arch/s390/Kconfig                                 |  2 --
+ arch/x86/Kconfig                                  |  3 ---
+ include/asm-generic/vdso/vsyscall.h               |  4 ----
+ include/vdso/datapage.h                           |  9 +-------
+ init/Kconfig                                      |  2 +-
+ kernel/time/Makefile                              |  2 +-
+ lib/vdso/Kconfig                                  | 25 +--------------------
+ lib/vdso/Makefile                                 |  2 +-
+ lib/vdso/datastore.c                              |  6 ++---
+ lib/vdso/gettimeofday.c                           | 27 -----------------------
+ tools/testing/selftests/pidfd/config              |  1 -
+ 24 files changed, 31 insertions(+), 110 deletions(-)
+---
+base-commit: 3cd1f6bc6aa056cfd32946f9ce0aa3eb3db180e8
+change-id: 20250825-vdso-cleanups-fd6fbb32fc19
+
+Best regards,
+-- 
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+
 
