@@ -1,132 +1,93 @@
-Return-Path: <linux-mips+bounces-10653-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10654-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 861A7B3845B
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Aug 2025 16:03:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1675CB38531
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Aug 2025 16:42:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 80B78367BCE
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Aug 2025 14:03:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 385477C1E22
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Aug 2025 14:41:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 699233570BB;
-	Wed, 27 Aug 2025 14:03:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FD79216E24;
+	Wed, 27 Aug 2025 14:41:38 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D1E02777FD;
-	Wed, 27 Aug 2025 14:03:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63C5A20298D
+	for <linux-mips@vger.kernel.org>; Wed, 27 Aug 2025 14:41:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756303427; cv=none; b=YuIkowAHhNFN8sAC3wHQJoukNZ/UvCk9JQwpihFHJnnImCRJnipAeY/729UmcBShrr8/GlEBGSJI/8Ejy3naxzZTuwLJ5t2i1Z2bBAR/ira5nFLVwSCrISxd6k00mZARtuBfwXG5H34AK0B4dH0TXmHfoURWvhlj2ICAqnVA90c=
+	t=1756305698; cv=none; b=VYq1S8E6IvbhPU2NrwijsRNPF7irCN/DFFckh/UwBqcMRaOrUCbAoMMPkN9bvrTCN9qBfzyhcBmTCD6kkzM1tshTyhmwvyosy3SnCP80t5bD2OpEwdnlQaAL5XMPfQvc3skA5BltTcf8s09uAwnz4F1EXcuqWkAbHBJ8wkD6dYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756303427; c=relaxed/simple;
-	bh=Raut/Y3QhFz4pCtCI4WlrGPrxYFCg/MxG6p0mRrxWl4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZjIuRSZZnm3YZ2e9Gbe7ZVrcI76yluX0INvboYOL3liQ1R9BQQ29B8d365OgBOlHnmNlr1Jw5FnQ38jfYW8lETTN53A1V4VhVpxncfv+MZfq5wJLegXclL7CFB1klFQz3cwlKERM/ZhM7GpSRlCQGTa4knjabGPIbqRPVRLnCDQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 417AD2720;
-	Wed, 27 Aug 2025 07:03:36 -0700 (PDT)
-Received: from J2N7QTR9R3 (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 662DB3F738;
-	Wed, 27 Aug 2025 07:03:37 -0700 (PDT)
-Date: Wed, 27 Aug 2025 15:03:22 +0100
-From: Mark Rutland <mark.rutland@arm.com>
-To: Robin Murphy <robin.murphy@arm.com>
-Cc: peterz@infradead.org, mingo@redhat.com, will@kernel.org,
-	acme@kernel.org, namhyung@kernel.org,
-	alexander.shishkin@linux.intel.com, jolsa@kernel.org,
-	irogers@google.com, adrian.hunter@intel.com,
-	kan.liang@linux.intel.com, linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-alpha@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org, imx@lists.linux.dev,
-	linux-csky@vger.kernel.org, loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-rockchip@lists.infradead.org, dmaengine@vger.kernel.org,
-	linux-fpga@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-	dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
-	intel-xe@lists.freedesktop.org, coresight@lists.linaro.org,
-	iommu@lists.linux.dev, linux-amlogic@lists.infradead.org,
-	linux-cxl@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 02/19] perf/hisilicon: Fix group validation
-Message-ID: <aK8QKlGsjB4WWg2e@J2N7QTR9R3>
-References: <cover.1755096883.git.robin.murphy@arm.com>
- <c7b877e66ba0d34d8558c5af8bbb620e8c0e47d9.1755096883.git.robin.murphy@arm.com>
- <aK2XS_GhLw1EQ2ml@J2N7QTR9R3>
- <ab80cb84-42b2-4ce8-aa6c-4ce6be7a12b7@arm.com>
- <aK3TS3s5_Pczx1nu@J2N7QTR9R3>
+	s=arc-20240116; t=1756305698; c=relaxed/simple;
+	bh=A0v5E35atnNyUAejA2XC9G9AGfZpybvn0B3jm9jLe54=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=aZcI3Cn+kUInqcguU0Gph717ulHFFKQl8OYFnpyNZrOBiR0f5RS7iFUHF4oKWAckPAyvf7Swc8YVqRozG6zDiq9OHsPlRQNlY/ZNzKd4q0Wg94V9R9yRWC0Sb+E09huwWKDHeuUG1Vg6QIjkAP9EQdBtG4WRzHF/nlT2M4/5l40=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1urHLA-0001Iy-1D; Wed, 27 Aug 2025 16:41:32 +0200
+Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1urHL9-002PS4-2D;
+	Wed, 27 Aug 2025 16:41:31 +0200
+Received: from pza by lupine with local (Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1urHL9-000Mek-1z;
+	Wed, 27 Aug 2025 16:41:31 +0200
+Message-ID: <6b52d1ea9d9a857e1ae9e4ab253edd6af10bfe47.camel@pengutronix.de>
+Subject: Re: [PATCH] reset: eyeq: fix OF node leak
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: Johan Hovold <johan@kernel.org>, Vladimir Kondratiev
+	 <vladimir.kondratiev@mobileye.com>, Gregory CLEMENT
+	 <gregory.clement@bootlin.com>, =?ISO-8859-1?Q?Th=E9o?= Lebrun
+	 <theo.lebrun@bootlin.com>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Wed, 27 Aug 2025 16:41:31 +0200
+In-Reply-To: <aK7Ua3GRBKSFC7Xu@hovoldconsulting.com>
+References: <20250708085613.15823-1-johan@kernel.org>
+	 <aK7Ua3GRBKSFC7Xu@hovoldconsulting.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <aK3TS3s5_Pczx1nu@J2N7QTR9R3>
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-mips@vger.kernel.org
 
-On Tue, Aug 26, 2025 at 04:31:23PM +0100, Mark Rutland wrote:
-> On Tue, Aug 26, 2025 at 03:35:48PM +0100, Robin Murphy wrote:
-> > On 2025-08-26 12:15 pm, Mark Rutland wrote:
-> > > On Wed, Aug 13, 2025 at 06:00:54PM +0100, Robin Murphy wrote:
+On Mi, 2025-08-27 at 11:48 +0200, Johan Hovold wrote:
+> On Tue, Jul 08, 2025 at 10:56:13AM +0200, Johan Hovold wrote:
+> > Make sure to drop the OF node reference taken when probing the auxiliar=
+y
+> > device when the device is later unbound.
+> >=20
+> > Fixes: 487b1b32e317 ("reset: eyeq: add platform driver")
+> > Cc: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
+> > Signed-off-by: Johan Hovold <johan@kernel.org>
+>=20
+> Can this one be picked up?
 
-> > > > diff --git a/drivers/perf/hisilicon/hisi_pcie_pmu.c b/drivers/perf/hisilicon/hisi_pcie_pmu.c
-> > > > index c5394d007b61..3b0b2f7197d0 100644
-> > > > --- a/drivers/perf/hisilicon/hisi_pcie_pmu.c
-> > > > +++ b/drivers/perf/hisilicon/hisi_pcie_pmu.c
-> > > > @@ -338,21 +338,16 @@ static bool hisi_pcie_pmu_validate_event_group(struct perf_event *event)
-> > > >   	int counters = 1;
-> > > >   	int num;
-> > > > -	event_group[0] = leader;
-> > > > -	if (!is_software_event(leader)) {
-> > > > -		if (leader->pmu != event->pmu)
-> > > > -			return false;
-> > > > +	if (leader == event)
-> > > > +		return true;
-> > > > -		if (leader != event && !hisi_pcie_pmu_cmp_event(leader, event))
-> > > > -			event_group[counters++] = event;
-> > > > -	}
-> > > > +	event_group[0] = event;
-> > > > +	if (leader->pmu == event->pmu && !hisi_pcie_pmu_cmp_event(leader, event))
-> > > > +		event_group[counters++] = leader;
-> > > 
-> > > Looking at this, the existing logic to share counters (which
-> > > hisi_pcie_pmu_cmp_event() is trying to permit) looks to be bogus, given
-> > > that the start/stop callbacks will reprogram the HW counters (and hence
-> > > can fight with one another).
+Thank you for the reminder, applied to reset/fixes.
 
-> > It does seem somewhat nonsensical to have multiple copies of the same event
-> > in the same group, but I imagine it could happen with some sort of scripted
-> > combination of metrics, and supporting it at this level saves needing
-> > explicit deduplication further up. So even though my initial instinct was to
-> > rip it out too, in the end I concluded that that doesn't seem justified.
-> 
-> As above, I think it's clearly bogus. I don't think we should have
-> merged it as-is and it's not something I'd like to see others copy.
-> Other PMUs don't do this sort of event deduplication, and in general it
-> should be up to the user or userspace software to do that rather than
-> doing that badly in the kernel.
-> 
-> Given it was implemented with no rationale I think we should rip it out.
-> If that breaks someone's scripting, then we can consider implementing
-> something that actually works.
+[1/1] reset: eyeq: fix OF node leak
+      https://git.pengutronix.de/cgit/pza/linux/commit/?id=3D9a52827a9bbb
 
-Having dug some more, I see that this was intended to handle the way
-the hardware shares a single config register between pairs of counter
-and counter_ext registers, with the idea being that two related events
-could be allocated into the same counter pair (but would only occupy a
-single counter each).
+regards
+Philipp
 
-I still think the code is wrong, but it is more complex than I made it
-out to be, and you're right that we should leave it as-is for now. I can
-follow up after we've got this series in.
-
-Mark.
 
