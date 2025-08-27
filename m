@@ -1,80 +1,68 @@
-Return-Path: <linux-mips+bounces-10659-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10660-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA48FB38C08
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Aug 2025 00:03:20 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 154DFB38C23
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Aug 2025 00:04:02 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B81DA3B601C
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Aug 2025 22:03:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E2013B82A0
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Aug 2025 22:03:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC5C92F28E9;
-	Wed, 27 Aug 2025 22:02:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35E8730F94B;
+	Wed, 27 Aug 2025 22:03:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ZB7YluZH"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="NU4gUAmd"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6BFE2080C8
-	for <linux-mips@vger.kernel.org>; Wed, 27 Aug 2025 22:02:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 819FD2D9ECD
+	for <linux-mips@vger.kernel.org>; Wed, 27 Aug 2025 22:03:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756332164; cv=none; b=DNzC1ZzCY0jF//bVDhC6/16u3NxfQLZyyUdwLxsQ3R7g0TvmeCOd/hpbwauEEIgdnMm9LvRQ/M0+fKEo1N34QpIA2AKjINSF24WAoJXZgGi266JXsL8lqIGzrgMdKxZF3H5t4mPlKfMz02CRFwBzbdz1YEkpY5olyH6v9GkdRYU=
+	t=1756332188; cv=none; b=SXAEIs5WFwWmECXyHbcLDJNVh3A/ZjcBWdTx7t5MAo/qGeRMU8gnJCXvb+Hs3qnRpbf/TIMwJTwkLIETuIKIdTaJ1IqXVmTX1XjZjzrzU1JF69fLJH/DxPQSwzGRWpAYtrYoflE3Ak6ZhL1zkBcH2OyISVviKpKpe+E5KAdb4p8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756332164; c=relaxed/simple;
-	bh=H2SWzTVtouqlHgy66pNIKuhmUqaGGXz+PZrCbP6LLZ4=;
+	s=arc-20240116; t=1756332188; c=relaxed/simple;
+	bh=S5VrvUcjpxhydIR6Mvo5t70Ssf/ZNtkSTX4vtRX9Sbk=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=tY6KpC2ADWmsRGh+EphqyU755wGr/YFZMECrT82vBo7ohJqO1DW2FsN5aZG5ncvgBg4LaTHYf/Tba6bekQPa/+Bm/1j0VlCNgwzSi2uxvLWuLkQEydJZ9jPeCRdzGltHl8IaHg5hufy8lDJPShGVc8ujXmDc3HipEMj/12la8ZA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ZB7YluZH; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=U6L49Q2JFxAAbiw7W8FnnFINC/aTrZPlAPMQSW09CryhO52B62vqZRd6Y90ds/YyiorxJ+CaErIO58BsJwobxycU0M43VJEmi/x7838kuVH/oc+NncCQvW2THJIHl+qfK7FGCRHeyvhNzIqFnWWK64amJj/1FuvX/CP7Indtnl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=NU4gUAmd; arc=none smtp.client-ip=170.10.133.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1756332162;
+	s=mimecast20190719; t=1756332185;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=sgMQXV8BYAImHmyQ+Wvnc2XZf0WEI6U3t/6BUO8LjHk=;
-	b=ZB7YluZH3Gg0tmkhceeWj9A7AFeFJ6n4g1y+o8gBvkJqrTUvFyAm6hrXbOOAFaETgKzSSU
-	JHsKNaj/9KI8Agll26xh0KL2beYa28yE8SmbkP0eUeImQxFeGUT+gwqLEoXpqJ0pkbiLVL
-	VEVSSeRycC3T7mKor6lYzS7aICxKaMs=
-Received: from mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com
+	bh=5DykevL+FF0TVTnCIKFrimPfVjOwsHIDZG+ZjBK1smY=;
+	b=NU4gUAmdLUHaX9pi3vhajP3PctANnGId62RMaAmJgbIWX1qHdkDKQms4JiZq5PpOYBdV1S
+	LXuMAzlCOUaAT1aEBInS4R89h86+Mh2h37q56G0HV9m9IdKGmYxBh1xs0ITqU7zKRrg/WP
+	y0nnRVYVxBgCOunrDMGHhwv2YdqY148=
+Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-669-yZUchzvTOFuCRMN35kMArA-1; Wed,
- 27 Aug 2025 18:02:40 -0400
-X-MC-Unique: yZUchzvTOFuCRMN35kMArA-1
-X-Mimecast-MFC-AGG-ID: yZUchzvTOFuCRMN35kMArA_1756332159
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-18-QHoxSYI_OH-QMUQwo98hZg-1; Wed,
+ 27 Aug 2025 18:03:02 -0400
+X-MC-Unique: QHoxSYI_OH-QMUQwo98hZg-1
+X-Mimecast-MFC-AGG-ID: QHoxSYI_OH-QMUQwo98hZg_1756332177
 Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-05.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 62B361956095;
-	Wed, 27 Aug 2025 22:02:39 +0000 (UTC)
+	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 050E619560A2;
+	Wed, 27 Aug 2025 22:02:56 +0000 (UTC)
 Received: from t14s.redhat.com (unknown [10.22.80.195])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id F3A0E30001A1;
-	Wed, 27 Aug 2025 22:02:18 +0000 (UTC)
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id F159030001A5;
+	Wed, 27 Aug 2025 22:02:39 +0000 (UTC)
 From: David Hildenbrand <david@redhat.com>
 To: linux-kernel@vger.kernel.org
 Cc: David Hildenbrand <david@redhat.com>,
-	Zi Yan <ziy@nvidia.com>,
 	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
-	SeongJae Park <sj@kernel.org>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Alexandre Ghiti <alex@ghiti.fr>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
 	Alexander Potapenko <glider@google.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Brendan Jackman <jackmanb@google.com>,
@@ -118,10 +106,11 @@ Cc: David Hildenbrand <david@redhat.com>,
 	virtualization@lists.linux.dev,
 	Vlastimil Babka <vbabka@suse.cz>,
 	wireguard@lists.zx2c4.com,
-	x86@kernel.org
-Subject: [PATCH v1 01/36] mm: stop making SPARSEMEM_VMEMMAP user-selectable
-Date: Thu, 28 Aug 2025 00:01:05 +0200
-Message-ID: <20250827220141.262669-2-david@redhat.com>
+	x86@kernel.org,
+	Zi Yan <ziy@nvidia.com>
+Subject: [PATCH v1 02/36] arm64: Kconfig: drop superfluous "select SPARSEMEM_VMEMMAP"
+Date: Thu, 28 Aug 2025 00:01:06 +0200
+Message-ID: <20250827220141.262669-3-david@redhat.com>
 In-Reply-To: <20250827220141.262669-1-david@redhat.com>
 References: <20250827220141.262669-1-david@redhat.com>
 Precedence: bulk
@@ -133,66 +122,29 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-In an ideal world, we wouldn't have to deal with SPARSEMEM without
-SPARSEMEM_VMEMMAP, but in particular for 32bit SPARSEMEM_VMEMMAP is
-considered too costly and consequently not supported.
+Now handled by the core automatically once SPARSEMEM_VMEMMAP_ENABLE
+is selected.
 
-However, if an architecture does support SPARSEMEM with
-SPARSEMEM_VMEMMAP, let's forbid the user to disable VMEMMAP: just
-like we already do for arm64, s390 and x86.
-
-So if SPARSEMEM_VMEMMAP is supported, don't allow to use SPARSEMEM without
-SPARSEMEM_VMEMMAP.
-
-This implies that the option to not use SPARSEMEM_VMEMMAP will now be
-gone for loongarch, powerpc, riscv and sparc. All architectures only
-enable SPARSEMEM_VMEMMAP with 64bit support, so there should not really
-be a big downside to using the VMEMMAP (quite the contrary).
-
-This is a preparation for not supporting
-
-(1) folio sizes that exceed a single memory section
-(2) CMA allocations of non-contiguous page ranges
-
-in SPARSEMEM without SPARSEMEM_VMEMMAP configs, whereby we
-want to limit possible impact as much as possible (e.g., gigantic hugetlb
-page allocations suddenly fails).
-
-Acked-by: Zi Yan <ziy@nvidia.com>
-Acked-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-Acked-by: SeongJae Park <sj@kernel.org>
-Cc: Huacai Chen <chenhuacai@kernel.org>
-Cc: WANG Xuerui <kernel@xen0n.name>
-Cc: Madhavan Srinivasan <maddy@linux.ibm.com>
-Cc: Michael Ellerman <mpe@ellerman.id.au>
-Cc: Nicholas Piggin <npiggin@gmail.com>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Paul Walmsley <paul.walmsley@sifive.com>
-Cc: Palmer Dabbelt <palmer@dabbelt.com>
-Cc: Albert Ou <aou@eecs.berkeley.edu>
-Cc: Alexandre Ghiti <alex@ghiti.fr>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Andreas Larsson <andreas@gaisler.com>
+Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- mm/Kconfig | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ arch/arm64/Kconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/mm/Kconfig b/mm/Kconfig
-index 4108bcd967848..330d0e698ef96 100644
---- a/mm/Kconfig
-+++ b/mm/Kconfig
-@@ -439,9 +439,8 @@ config SPARSEMEM_VMEMMAP_ENABLE
- 	bool
+diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+index e9bbfacc35a64..b1d1f2ff2493b 100644
+--- a/arch/arm64/Kconfig
++++ b/arch/arm64/Kconfig
+@@ -1570,7 +1570,6 @@ source "kernel/Kconfig.hz"
+ config ARCH_SPARSEMEM_ENABLE
+ 	def_bool y
+ 	select SPARSEMEM_VMEMMAP_ENABLE
+-	select SPARSEMEM_VMEMMAP
  
- config SPARSEMEM_VMEMMAP
--	bool "Sparse Memory virtual memmap"
-+	def_bool y
- 	depends on SPARSEMEM && SPARSEMEM_VMEMMAP_ENABLE
--	default y
- 	help
- 	  SPARSEMEM_VMEMMAP uses a virtually mapped memmap to optimise
- 	  pfn_to_page and page_to_pfn operations.  This is the most
+ config HW_PERF_EVENTS
+ 	def_bool y
 -- 
 2.50.1
 
