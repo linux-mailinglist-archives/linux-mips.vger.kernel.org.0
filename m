@@ -1,247 +1,402 @@
-Return-Path: <linux-mips+bounces-10657-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10658-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DD74AB388C5
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Aug 2025 19:41:04 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E44B2B38BF0
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Aug 2025 00:02:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9991546024D
-	for <lists+linux-mips@lfdr.de>; Wed, 27 Aug 2025 17:41:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F3092041D9
+	for <lists+linux-mips@lfdr.de>; Wed, 27 Aug 2025 22:02:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DC3929B8D9;
-	Wed, 27 Aug 2025 17:40:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 867DD2DA746;
+	Wed, 27 Aug 2025 22:02:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="aYQoa5Tq"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ChrmnK9v"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E4BF2BE7A7
-	for <linux-mips@vger.kernel.org>; Wed, 27 Aug 2025 17:40:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31F2825A640
+	for <linux-mips@vger.kernel.org>; Wed, 27 Aug 2025 22:02:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756316458; cv=none; b=KCx8Nuq55cGfGyIs8Z7ElRfQL30tSt1dszO1eneqao5sFIzB/Dy1JltitKdauu8lZv/GfG9kUL6J7sGcdJi3+JzHz1mtLUxcUzJE1R3fqBAsJ8b01uFmE0VA88L3lLjzV0rrwA8PY2dk+oyIrP/HwxYk52b+M86ZISiv13cmWSs=
+	t=1756332151; cv=none; b=DEIzsN0DaH7LZDNQfu1QqJVBtnzpbL/HGO7gWC+ENEQU1bh38Ojlcr2LToQiaGNAVV4EHFeiQ/HRvqSERwjeZc6Y6aYR4Lmeln7YYDaM6lg7ZO3r2UWu64JWGKpwGntWCmimnn+Hb1/fFjKe1RP+vhfCrmHHmoL9DV2ouVJbv9c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756316458; c=relaxed/simple;
-	bh=8mZSXa5tllwYg7Vri8XTHsFCezJ/LPItoC8qISf/FQg=;
-	h=Date:From:To:CC:Subject:In-Reply-To:References:Message-ID:
-	 MIME-Version:Content-Type; b=u8X7dsJdRtCRazXHmSo5739yweOcGkC/ZG8Wf72iIzyGY9vaeMd4V2hRK/96mWvs2N9DZ9xwSt98AH8ELOL3mKd94HUsaMd29Q3IkJqWasF49U8oPOBqp3V+a6hwjbDbDMNIE/+BNbjERR8Ch+WQ3y4sNuwhFdnrMH/KsoeuInU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=aYQoa5Tq; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 57RGc1IR031830
-	for <linux-mips@vger.kernel.org>; Wed, 27 Aug 2025 17:40:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	9pryiKbesf4KLCmykOzJgOnqNMnr4CU7A7f1EXmgKk4=; b=aYQoa5Tqtc2tN8AL
-	iq3IQTavdCc6+N80wDp9/1ryQ6rtURE8hJYJ1JEf8GeMDt8Z57Ye+hrSjWGiS71g
-	dhTRly7ADDiCbZ+3yuhupKzFgyym6AZwAcOPdPXs4ELX8pirZMJET9j7BYqPdz6F
-	ZDY3xCJRWorp+AKCGAuCK09e4laJy4I4REdEF1KxFyiaKUObIG+jnZSoOJ8hsS/P
-	20/Lf4vNVU0EKTh1RpsR1NuG7UbcbDM0y4LlPFN3ItahZrHzGcEe80H5Dqu1duk/
-	fYwIxae0xwk6pCPszhHTrzdgVA9KKBlKZFlMQ3qfiDI1b8OwiDD7D9G8+1hGmZRi
-	jBWi7Q==
-Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com [209.85.219.72])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 48q5xpwp70-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-mips@vger.kernel.org>; Wed, 27 Aug 2025 17:40:55 +0000 (GMT)
-Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-70dd6d255c4so4979106d6.0
-        for <linux-mips@vger.kernel.org>; Wed, 27 Aug 2025 10:40:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756316454; x=1756921254;
-        h=content-transfer-encoding:mime-version:message-id:references
-         :in-reply-to:user-agent:subject:cc:to:from:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9pryiKbesf4KLCmykOzJgOnqNMnr4CU7A7f1EXmgKk4=;
-        b=wRaM/C9texBFRepkGiBpqtuR0PifK96eP6bFPznWKZh75xo8E6t/OErk+Z1bmn/hAs
-         uoLnlWp3ol+nmO8GHedRp/ipGx13oPrFwd1xarm9m7n0nFrHXKlDZaGlWUKvj2kG1uTG
-         dl4cJXYZNGG3qZMS0I+ewKJecQ8rLxXS61iaKaGToSLqO1M5hokHjm178L/eSfXfD5aF
-         vSyxN4pCifbRXY/4eTCMUM1a0AQiHgzVSSUKeKkN7KHx6jkSC60rn/0uQ0omtiGF52yz
-         q6vjDQbueng/hpPgsn7kueTb7ij+H79wPq19RDczoAIoLQfSHB9/4EV3JkKYsfWHzMXC
-         ppGg==
-X-Forwarded-Encrypted: i=1; AJvYcCVwKpQWNrgFWEC+EoO0R3FdTNnTxy3WAO7HNTg6DzWTRcaTcv+i327sKmObcYPaZCT6Jelc9PcYPbJL@vger.kernel.org
-X-Gm-Message-State: AOJu0YzpniB/gu4zadHtLV+gAa9M7M5TI69lIFXCCgESiDsLDCU9irX/
-	8avfzWFwCvqG5cTfKDpY7l97DPmMxqVNp5cS6j8J+eD6B+2JGM6xg1v3bPaoq4rJJiqX/TkTrUw
-	34Hgueqa4IBR7NFYpNtzTmIcXgNZzPjR6YmkPM2Xk6IhToYHdGJDjv0d6fNGUMKFF
-X-Gm-Gg: ASbGnculs+vYY74Ok+uaB8Zxjp/PVajTq6o2MIZ7228hecEW1K2fGSyfPn3a1S061xt
-	Hw3w/pES6QyQcsIb6XbqT9wKDeZtcP/3Q3vBqUU85O0a9WOQw7ktZAz+WEaiqd/8MK+dJOJ/jcC
-	kq6xIuJVNqwXx0Kq2Xdzkv3cYdeQ2DC83C93qDiSfkUrtF74UIXTpB02AFi0k6pFdPrR+1/0RD8
-	/DjEuy/HhmJ3fe1ec7MyJSBx3fLKHgafrBQHVMAxIDK1G+XTbN84aQlnw0DkzKG5p/eyB0SR7QP
-	f6JbSN6LxQv41cAwQ80M0Rd1vy6NEPYcbfE9uzxUXFSytYBauIxsQfXaKLAFXzmqFAJYhyVDYvt
-	rqRWdd5MV/HC2pIIDblgabQ==
-X-Received: by 2002:a05:6214:27c1:b0:70b:5320:d416 with SMTP id 6a1803df08f44-70d970cd29fmr238271696d6.14.1756316453923;
-        Wed, 27 Aug 2025 10:40:53 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGhCi0u3Z5H0bwldj3p8+1IvfpKHSh571vUpFu3K1OKrspl//SOwGcmP4Yk4ANptZX5dCndsg==
-X-Received: by 2002:a05:6214:27c1:b0:70b:5320:d416 with SMTP id 6a1803df08f44-70d970cd29fmr238270536d6.14.1756316452731;
-        Wed, 27 Aug 2025 10:40:52 -0700 (PDT)
-Received: from ehlo.thunderbird.net (85-76-46-56-nat.elisa-mobile.fi. [85.76.46.56])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3365e5aa917sm28124531fa.41.2025.08.27.10.40.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 27 Aug 2025 10:40:50 -0700 (PDT)
-Date: Wed, 27 Aug 2025 20:40:47 +0300
-From: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-To: Maxime Ripard <mripard@kernel.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Louis Chauvet <louis.chauvet@bootlin.com>,
-        Haneen Mohammed <hamohammed.sa@gmail.com>,
-        Melissa Wen <melissa.srw@gmail.com>, Jyri Sarha <jyri.sarha@iki.fi>,
-        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
-        Paul Cercueil <paul@crapouillou.net>,
-        Liviu Dudau <liviu.dudau@arm.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Manikandan Muralidharan <manikandan.m@microchip.com>,
-        Dharma Balasubiramani <dharma.b@microchip.com>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-        Inki Dae <inki.dae@samsung.com>,
-        Seung-Woo Kim <sw0312.kim@samsung.com>,
-        Kyungmin Park <kyungmin.park@samsung.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>, Liu Ying <victor.liu@nxp.com>,
-        Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabio Estevam <festevam@gmail.com>,
-        Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>,
-        Lucas Stach <l.stach@pengutronix.de>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Anitha Chrisanthus <anitha.chrisanthus@intel.com>,
-        Edmund Dea <edmund.j.dea@intel.com>,
-        Paul Kocialkowski <paulk@sys-base.io>,
-        Sui Jingfeng <suijingfeng@loongson.cn>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-        Rob Clark <robin.clark@oss.qualcomm.com>,
-        Dmitry Baryshkov <lumag@kernel.org>,
-        Abhinav Kumar <abhinav.kumar@linux.dev>,
-        Jessica Zhang <jessica.zhang@oss.qualcomm.com>,
-        Sean Paul <sean@poorly.run>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        Sandy Huang <hjc@rock-chips.com>,
-        =?ISO-8859-1?Q?Heiko_St=FCbner?= <heiko@sntech.de>,
-        Andy Yan <andy.yan@rock-chips.com>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Mikko Perttunen <mperttunen@nvidia.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Hans de Goede <hansg@kernel.org>,
-        Dave Stevenson <dave.stevenson@raspberrypi.com>,
-        =?ISO-8859-1?Q?Ma=EDra_Canal?= <mcanal@igalia.com>,
-        Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>
-CC: dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org, imx@lists.linux.dev,
-        linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, linux-rockchip@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, linux-tegra@vger.kernel.org
-Subject: =?US-ASCII?Q?Re=3A_=5BPATCH_01/39=5D_drm/atomic=3A_Make_drm=5Fatomic?=
- =?US-ASCII?Q?=5Fget=5Fconnector=5Fstate=28=29_early_return_consistent?=
-User-Agent: Thunderbird for Android
-In-Reply-To: <20250825-drm-no-more-existing-state-v1-1-f08ccd9f85c9@kernel.org>
-References: <20250825-drm-no-more-existing-state-v1-0-f08ccd9f85c9@kernel.org> <20250825-drm-no-more-existing-state-v1-1-f08ccd9f85c9@kernel.org>
-Message-ID: <BBD9E72B-B1B6-4072-A465-68204879684C@oss.qualcomm.com>
+	s=arc-20240116; t=1756332151; c=relaxed/simple;
+	bh=Pby6qgYBnR2otkF5H5Ih41dk4WANChiWpDseM73+CH4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lUaJL5OqHOQhAhb5krUOXqppnte+mQl3ll3YrSq8DEQsgIMD7j416AxVjNRTd9d9ff7P5dfREsKYO0hEsQUkAZOepEaFlWGnCO7dREWksbzX18JOtnzoQNuvgprWCU6RDwaWuoqI9vf6usJJ2dx+YmZx3BLJaXHXP4G5jtb+5Jg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ChrmnK9v; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1756332148;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=f98zaxrJvycSnAQcu/39hCOw4ptNGiOoTMWM+eDqoaw=;
+	b=ChrmnK9vKcLyfTZkS+yk0L/9ofoTnAeVvlxCFn3dZecSeTLtthLrCbDK8jaaUUnZ5St2gU
+	tubUSyZl3BRgSy0XsTLLHRvZ0w3UWnYrUHE00UzDJLbv7HYkrRmKaICzvA18F553YLBYaj
+	QfbTwx5fgczju4BSFhDY4ypL2VzYG4o=
+Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-20-1LbWQP2kMBGXOP4ayV8mdA-1; Wed,
+ 27 Aug 2025 18:02:25 -0400
+X-MC-Unique: 1LbWQP2kMBGXOP4ayV8mdA-1
+X-Mimecast-MFC-AGG-ID: 1LbWQP2kMBGXOP4ayV8mdA_1756332140
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 64F29180035D;
+	Wed, 27 Aug 2025 22:02:18 +0000 (UTC)
+Received: from t14s.redhat.com (unknown [10.22.80.195])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id E90FC30001A5;
+	Wed, 27 Aug 2025 22:01:42 +0000 (UTC)
+From: David Hildenbrand <david@redhat.com>
+To: linux-kernel@vger.kernel.org
+Cc: David Hildenbrand <david@redhat.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Linus Torvalds <torvalds@linux-foundation.org>,
+	Jason Gunthorpe <jgg@nvidia.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>,
+	Jens Axboe <axboe@kernel.dk>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Robin Murphy <robin.murphy@arm.com>,
+	John Hubbard <jhubbard@nvidia.com>,
+	Peter Xu <peterx@redhat.com>,
+	Alexander Potapenko <glider@google.com>,
+	Marco Elver <elver@google.com>,
+	Dmitry Vyukov <dvyukov@google.com>,
+	Brendan Jackman <jackmanb@google.com>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Zi Yan <ziy@nvidia.com>,
+	Dennis Zhou <dennis@kernel.org>,
+	Tejun Heo <tj@kernel.org>,
+	Christoph Lameter <cl@gentwo.org>,
+	Muchun Song <muchun.song@linux.dev>,
+	Oscar Salvador <osalvador@suse.de>,
+	x86@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mips@vger.kernel.org,
+	linux-s390@vger.kernel.org,
+	linux-crypto@vger.kernel.org,
+	linux-ide@vger.kernel.org,
+	intel-gfx@lists.freedesktop.org,
+	dri-devel@lists.freedesktop.org,
+	linux-mmc@vger.kernel.org,
+	linux-arm-kernel@axis.com,
+	linux-scsi@vger.kernel.org,
+	kvm@vger.kernel.org,
+	virtualization@lists.linux.dev,
+	linux-mm@kvack.org,
+	io-uring@vger.kernel.org,
+	iommu@lists.linux.dev,
+	kasan-dev@googlegroups.com,
+	wireguard@lists.zx2c4.com,
+	netdev@vger.kernel.org,
+	linux-kselftest@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Alexandre Ghiti <alex@ghiti.fr>,
+	Alexandru Elisei <alexandru.elisei@arm.com>,
+	Alex Dubov <oakad@yahoo.com>,
+	Alex Williamson <alex.williamson@redhat.com>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	Borislav Petkov <bp@alien8.de>,
+	Brett Creeley <brett.creeley@amd.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Christian Borntraeger <borntraeger@linux.ibm.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Damien Le Moal <dlemoal@kernel.org>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	David Airlie <airlied@gmail.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Doug Gilbert <dgilbert@interlog.com>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+	Jani Nikula <jani.nikula@linux.intel.com>,
+	"Jason A. Donenfeld" <Jason@zx2c4.com>,
+	Jason Gunthorpe <jgg@ziepe.ca>,
+	Jesper Nilsson <jesper.nilsson@axis.com>,
+	Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+	Kevin Tian <kevin.tian@intel.com>,
+	Lars Persson <lars.persson@axis.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Maxim Levitsky <maximlevitsky@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Niklas Cassel <cassel@kernel.org>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Pavel Begunkov <asml.silence@gmail.com>,
+	Rodrigo Vivi <rodrigo.vivi@intel.com>,
+	SeongJae Park <sj@kernel.org>,
+	Shameer Kolothum <shameerali.kolothum.thodi@huawei.com>,
+	Shuah Khan <shuah@kernel.org>,
+	Simona Vetter <simona@ffwll.ch>,
+	Sven Schnelle <svens@linux.ibm.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Tvrtko Ursulin <tursulin@ursulin.net>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	WANG Xuerui <kernel@xen0n.name>,
+	Will Deacon <will@kernel.org>,
+	Yishai Hadas <yishaih@nvidia.com>
+Subject: [PATCH v1 00/36] mm: remove nth_page()
+Date: Thu, 28 Aug 2025 00:01:04 +0200
+Message-ID: <20250827220141.262669-1-david@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
- charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Authority-Analysis: v=2.4 cv=KOlaDEFo c=1 sm=1 tr=0 ts=68af4327 cx=c_pps
- a=7E5Bxpl4vBhpaufnMqZlrw==:117 a=ntis2/2Y3p1p47GkerkPQg==:17
- a=IkcTkHD0fZMA:10 a=2OwXVqhp2XgA:10 a=puQWGBksFvoA:10 a=VwQbUJbxAAAA:8
- a=V78A4Cvkybgf4icwE48A:9 a=QEXdDO2ut3YA:10 a=pJ04lnu7RYOZP9TFuWaZ:22
-X-Proofpoint-GUID: KbtsnQp-MQ__eeiu_Giu4Sc3pH0PAdiQ
-X-Proofpoint-ORIG-GUID: KbtsnQp-MQ__eeiu_Giu4Sc3pH0PAdiQ
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwODIzMDAzMyBTYWx0ZWRfX3sjvR1VbaOqN
- 1f7FMSyoHQoFJ7H7z5KV+eI19BHb3c3yldZIji/F2hglMzl7yysSz4eU1rZWqae+1RkjzSYBmAB
- o0X2oQEjdO34IfTxJ3lSEdrVihIc8RH15RdAlijQoEcwfA8KNus0O/E/nEoBSBl6e/Ix96euPAA
- rhy8nKbaLtrMkO5+hOwJfwRVdW2zBGtCm8E5yPmG016ko07M5zaBdf9K3Kee7yGD7+LreX/GEuK
- t6YFF0QxuRyZ06tlMLBv9YR7tdHKAFEuTjM6LUvmAz1CRrKzqQFnFlOeK3DBuZ1Pz2559GVIopW
- QtP6rhfIwY0JrNBvuYLjJzt2WPu76S6X+CyZDUZiAUm4hZJFVq/UUNmg6oqZIn4IZDBp/m/jsrp
- Rkr6U9M/
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1099,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-08-27_04,2025-08-26_01,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- malwarescore=0 clxscore=1015 bulkscore=0 adultscore=0 phishscore=0
- impostorscore=0 spamscore=0 suspectscore=0 priorityscore=1501
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.19.0-2507300000 definitions=main-2508230033
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On 25 August 2025 16=2E43=2E06 EEST, Maxime Ripard <mripard@kernel=2Eorg> w=
-rote:
->The drm_atomic_get_connector_state() tries to lookup if a connector
->state was already allocated in the global state to return early if it
->was the case=2E drm_atomic_get_plane_state() and
->drm_atomic_get_crtc_state() behave similarly=2E
->
->However, and unlike the other two, drm_atomic_get_connector_state() will
->do that lookup after having called drm_modeset_lock(), when the others
->will do it before=2E
->
->Let's move the early return before the lock to make it consistent=2E
->
->Signed-off-by: Maxime Ripard <mripard@kernel=2Eorg>
->---
-> drivers/gpu/drm/drm_atomic=2Ec | 6 +++---
-> 1 file changed, 3 insertions(+), 3 deletions(-)
->
->diff --git a/drivers/gpu/drm/drm_atomic=2Ec b/drivers/gpu/drm/drm_atomic=
-=2Ec
->index cd15cf52f0c9144711da5879da57884674aea9e4=2E=2Efe21f154e0fa030f85fb3=
-d6d35e2684adcf36e26 100644
->--- a/drivers/gpu/drm/drm_atomic=2Ec
->+++ b/drivers/gpu/drm/drm_atomic=2Ec
->@@ -1128,10 +1128,13 @@ drm_atomic_get_connector_state(struct drm_atomic_=
-state *state,
-> 	struct drm_mode_config *config =3D &connector->dev->mode_config;
-> 	struct drm_connector_state *connector_state;
->=20
-> 	WARN_ON(!state->acquire_ctx);
->=20
->+	if (state->connectors[index]=2Estate)
->+		return state->connectors[index]=2Estate;
+This is based on mm-unstable.
 
-Unlike other DRM objects, connectors are dynamic=2E There is no guarantee =
-that at this point this array entry exists and it's valid=2E You might be t=
-ampering with the unallocated memory=2E
+I will only CC non-MM folks on the cover letter and the respective patch
+to not flood too many inboxes (the lists receive all patches).
 
->+
-> 	ret =3D drm_modeset_lock(&config->connection_mutex, state->acquire_ctx)=
-;
-> 	if (ret)
-> 		return ERR_PTR(ret);
->=20
-> 	index =3D drm_connector_index(connector);
->@@ -1150,13 +1153,10 @@ drm_atomic_get_connector_state(struct drm_atomic_=
-state *state,
-> 		       sizeof(*state->connectors) * (alloc - state->num_connector));
->=20
-> 		state->num_connector =3D alloc;
-> 	}
->=20
->-	if (state->connectors[index]=2Estate)
->-		return state->connectors[index]=2Estate;
->-
-> 	connector_state =3D connector->funcs->atomic_duplicate_state(connector)=
-;
-> 	if (!connector_state)
-> 		return ERR_PTR(-ENOMEM);
->=20
-> 	drm_connector_get(connector);
->
+--
+
+As discussed recently with Linus, nth_page() is just nasty and we would
+like to remove it.
+
+To recap, the reason we currently need nth_page() within a folio is because
+on some kernel configs (SPARSEMEM without SPARSEMEM_VMEMMAP), the
+memmap is allocated per memory section.
+
+While buddy allocations cannot cross memory section boundaries, hugetlb
+and dax folios can.
+
+So crossing a memory section means that "page++" could do the wrong thing.
+Instead, nth_page() on these problematic configs always goes from
+page->pfn, to the go from (++pfn)->page, which is rather nasty.
+
+Likely, many people have no idea when nth_page() is required and when
+it might be dropped.
+
+We refer to such problematic PFN ranges and "non-contiguous pages".
+If we only deal with "contiguous pages", there is not need for nth_page().
+
+Besides that "obvious" folio case, we might end up using nth_page()
+within CMA allocations (again, could span memory sections), and in
+one corner case (kfence) when processing memblock allocations (again,
+could span memory sections).
+
+So let's handle all that, add sanity checks, and remove nth_page().
+
+Patch #1 -> #5   : stop making SPARSEMEM_VMEMMAP user-selectable + cleanups
+Patch #6 -> #13  : disallow folios to have non-contiguous pages
+Patch #14 -> #20 : remove nth_page() usage within folios
+Patch #21        : disallow CMA allocations of non-contiguous pages
+Patch #22 -> #32 : sanity+check + remove nth_page() usage within SG entry
+Patch #33        : sanity-check + remove nth_page() usage in
+                   unpin_user_page_range_dirty_lock()
+Patch #34        : remove nth_page() in kfence
+Patch #35        : adjust stale comment regarding nth_page
+Patch #36        : mm: remove nth_page()
+
+A lot of this is inspired from the discussion at [1] between Linus, Jason
+and me, so cudos to them.
+
+[1] https://lore.kernel.org/all/CAHk-=wiCYfNp4AJLBORU-c7ZyRBUp66W2-Et6cdQ4REx-GyQ_A@mail.gmail.com/T/#u
+
+RFC -> v1:
+* "wireguard: selftests: remove CONFIG_SPARSEMEM_VMEMMAP=y from qemu kernel
+   config"
+ -> Mention that it was never really relevant for the test
+* "mm/mm_init: make memmap_init_compound() look more like
+   prep_compound_page()"
+ -> Mention the setup of page links
+* "mm: limit folio/compound page sizes in problematic kernel configs"
+ -> Improve comment for PUD handling, mentioning hugetlb and dax
+* "mm: simplify folio_page() and folio_page_idx()"
+ -> Call variable "n"
+* "mm/hugetlb: cleanup hugetlb_folio_init_tail_vmemmap()"
+ -> Keep __init_single_page() and refer to the usage of
+    memblock_reserved_mark_noinit()
+* "fs: hugetlbfs: cleanup folio in adjust_range_hwpoison()"
+* "fs: hugetlbfs: remove nth_page() usage within folio in
+   adjust_range_hwpoison()"
+ -> Separate nth_page() removal from cleanups
+ -> Further improve cleanups
+* "io_uring/zcrx: remove nth_page() usage within folio"
+ -> Keep the io_copy_cache for now and limit to nth_page() removal
+* "mm/gup: drop nth_page() usage within folio when recording subpages"
+ -> Cleanup record_subpages as bit
+* "mm/cma: refuse handing out non-contiguous page ranges"
+ -> Replace another instance of "pfn_to_page(pfn)" where we already have
+    the page
+* "scatterlist: disallow non-contigous page ranges in a single SG entry"
+ -> We have to EXPORT the symbol. I thought about moving it to mm_inline.h,
+    but I really don't want to include that in include/linux/scatterlist.h
+* "ata: libata-eh: drop nth_page() usage within SG entry"
+* "mspro_block: drop nth_page() usage within SG entry"
+* "memstick: drop nth_page() usage within SG entry"
+* "mmc: drop nth_page() usage within SG entry"
+ -> Keep PAGE_SHIFT
+* "scsi: scsi_lib: drop nth_page() usage within SG entry"
+* "scsi: sg: drop nth_page() usage within SG entry"
+ -> Split patches, Keep PAGE_SHIFT
+* "crypto: remove nth_page() usage within SG entry"
+ -> Keep PAGE_SHIFT
+* "kfence: drop nth_page() usage"
+ -> Keep modifying i and use "start_pfn" only instead
+
+Cc: Andrew Morton <akpm@linux-foundation.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: "Liam R. Howlett" <Liam.Howlett@oracle.com>
+Cc: Vlastimil Babka <vbabka@suse.cz>
+Cc: Mike Rapoport <rppt@kernel.org>
+Cc: Suren Baghdasaryan <surenb@google.com>
+Cc: Michal Hocko <mhocko@suse.com>
+Cc: Jens Axboe <axboe@kernel.dk>
+Cc: Marek Szyprowski <m.szyprowski@samsung.com>
+Cc: Robin Murphy <robin.murphy@arm.com>
+Cc: John Hubbard <jhubbard@nvidia.com>
+Cc: Peter Xu <peterx@redhat.com>
+Cc: Alexander Potapenko <glider@google.com>
+Cc: Marco Elver <elver@google.com>
+Cc: Dmitry Vyukov <dvyukov@google.com>
+Cc: Brendan Jackman <jackmanb@google.com>
+Cc: Johannes Weiner <hannes@cmpxchg.org>
+Cc: Zi Yan <ziy@nvidia.com>
+Cc: Dennis Zhou <dennis@kernel.org>
+Cc: Tejun Heo <tj@kernel.org>
+Cc: Christoph Lameter <cl@gentwo.org>
+Cc: Muchun Song <muchun.song@linux.dev>
+Cc: Oscar Salvador <osalvador@suse.de>
+Cc: x86@kernel.org
+Cc: linux-arm-kernel@lists.infradead.org
+Cc: linux-mips@vger.kernel.org
+Cc: linux-s390@vger.kernel.org
+Cc: linux-crypto@vger.kernel.org
+Cc: linux-ide@vger.kernel.org
+Cc: intel-gfx@lists.freedesktop.org
+Cc: dri-devel@lists.freedesktop.org
+Cc: linux-mmc@vger.kernel.org
+Cc: linux-arm-kernel@axis.com
+Cc: linux-scsi@vger.kernel.org
+Cc: kvm@vger.kernel.org
+Cc: virtualization@lists.linux.dev
+Cc: linux-mm@kvack.org
+Cc: io-uring@vger.kernel.org
+Cc: iommu@lists.linux.dev
+Cc: kasan-dev@googlegroups.com
+Cc: wireguard@lists.zx2c4.com
+Cc: netdev@vger.kernel.org
+Cc: linux-kselftest@vger.kernel.org
+Cc: linux-riscv@lists.infradead.org
+
+David Hildenbrand (36):
+  mm: stop making SPARSEMEM_VMEMMAP user-selectable
+  arm64: Kconfig: drop superfluous "select SPARSEMEM_VMEMMAP"
+  s390/Kconfig: drop superfluous "select SPARSEMEM_VMEMMAP"
+  x86/Kconfig: drop superfluous "select SPARSEMEM_VMEMMAP"
+  wireguard: selftests: remove CONFIG_SPARSEMEM_VMEMMAP=y from qemu
+    kernel config
+  mm/page_alloc: reject unreasonable folio/compound page sizes in
+    alloc_contig_range_noprof()
+  mm/memremap: reject unreasonable folio/compound page sizes in
+    memremap_pages()
+  mm/hugetlb: check for unreasonable folio sizes when registering hstate
+  mm/mm_init: make memmap_init_compound() look more like
+    prep_compound_page()
+  mm: sanity-check maximum folio size in folio_set_order()
+  mm: limit folio/compound page sizes in problematic kernel configs
+  mm: simplify folio_page() and folio_page_idx()
+  mm/hugetlb: cleanup hugetlb_folio_init_tail_vmemmap()
+  mm/mm/percpu-km: drop nth_page() usage within single allocation
+  fs: hugetlbfs: remove nth_page() usage within folio in
+    adjust_range_hwpoison()
+  fs: hugetlbfs: cleanup folio in adjust_range_hwpoison()
+  mm/pagewalk: drop nth_page() usage within folio in folio_walk_start()
+  mm/gup: drop nth_page() usage within folio when recording subpages
+  io_uring/zcrx: remove nth_page() usage within folio
+  mips: mm: convert __flush_dcache_pages() to
+    __flush_dcache_folio_pages()
+  mm/cma: refuse handing out non-contiguous page ranges
+  dma-remap: drop nth_page() in dma_common_contiguous_remap()
+  scatterlist: disallow non-contigous page ranges in a single SG entry
+  ata: libata-eh: drop nth_page() usage within SG entry
+  drm/i915/gem: drop nth_page() usage within SG entry
+  mspro_block: drop nth_page() usage within SG entry
+  memstick: drop nth_page() usage within SG entry
+  mmc: drop nth_page() usage within SG entry
+  scsi: scsi_lib: drop nth_page() usage within SG entry
+  scsi: sg: drop nth_page() usage within SG entry
+  vfio/pci: drop nth_page() usage within SG entry
+  crypto: remove nth_page() usage within SG entry
+  mm/gup: drop nth_page() usage in unpin_user_page_range_dirty_lock()
+  kfence: drop nth_page() usage
+  block: update comment of "struct bio_vec" regarding nth_page()
+  mm: remove nth_page()
+
+ arch/arm64/Kconfig                            |  1 -
+ arch/mips/include/asm/cacheflush.h            | 11 +++--
+ arch/mips/mm/cache.c                          |  8 ++--
+ arch/s390/Kconfig                             |  1 -
+ arch/x86/Kconfig                              |  1 -
+ crypto/ahash.c                                |  4 +-
+ crypto/scompress.c                            |  8 ++--
+ drivers/ata/libata-sff.c                      |  6 +--
+ drivers/gpu/drm/i915/gem/i915_gem_pages.c     |  2 +-
+ drivers/memstick/core/mspro_block.c           |  3 +-
+ drivers/memstick/host/jmb38x_ms.c             |  3 +-
+ drivers/memstick/host/tifm_ms.c               |  3 +-
+ drivers/mmc/host/tifm_sd.c                    |  4 +-
+ drivers/mmc/host/usdhi6rol0.c                 |  4 +-
+ drivers/scsi/scsi_lib.c                       |  3 +-
+ drivers/scsi/sg.c                             |  3 +-
+ drivers/vfio/pci/pds/lm.c                     |  3 +-
+ drivers/vfio/pci/virtio/migrate.c             |  3 +-
+ fs/hugetlbfs/inode.c                          | 33 +++++--------
+ include/crypto/scatterwalk.h                  |  4 +-
+ include/linux/bvec.h                          |  7 +--
+ include/linux/mm.h                            | 48 +++++++++++++++----
+ include/linux/page-flags.h                    |  5 +-
+ include/linux/scatterlist.h                   |  3 +-
+ io_uring/zcrx.c                               |  4 +-
+ kernel/dma/remap.c                            |  2 +-
+ mm/Kconfig                                    |  3 +-
+ mm/cma.c                                      | 39 +++++++++------
+ mm/gup.c                                      | 14 ++++--
+ mm/hugetlb.c                                  | 22 +++++----
+ mm/internal.h                                 |  1 +
+ mm/kfence/core.c                              | 12 +++--
+ mm/memremap.c                                 |  3 ++
+ mm/mm_init.c                                  | 15 +++---
+ mm/page_alloc.c                               |  5 +-
+ mm/pagewalk.c                                 |  2 +-
+ mm/percpu-km.c                                |  2 +-
+ mm/util.c                                     | 34 +++++++++++++
+ tools/testing/scatterlist/linux/mm.h          |  1 -
+ .../selftests/wireguard/qemu/kernel.config    |  1 -
+ 40 files changed, 202 insertions(+), 129 deletions(-)
 
 
-With best wishes=20
-Dmitry
+base-commit: efa7612003b44c220551fd02466bfbad5180fc83
+-- 
+2.50.1
+
 
