@@ -1,89 +1,115 @@
-Return-Path: <linux-mips+bounces-10720-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10721-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id ED057B39A80
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Aug 2025 12:43:51 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 35EA4B39EF9
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Aug 2025 15:32:01 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9DA5516A7BE
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Aug 2025 10:43:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B9E713BA031
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Aug 2025 13:30:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A8FC30BF7E;
-	Thu, 28 Aug 2025 10:43:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36DA030FC14;
+	Thu, 28 Aug 2025 13:30:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bQFcZuAe"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 039212F39DD;
-	Thu, 28 Aug 2025 10:43:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0777930F7E6;
+	Thu, 28 Aug 2025 13:30:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756377827; cv=none; b=FsTyjdP/z1UaTEgDkGMiOCFC3+lPyZtXWDWI+5/ktuCvmeHwQP4M2mBA3HiU13BbaDV5NQ0h+2zxaTkMabEnuw3t+sgxsByziICAU4stVrmIuyKHjvt2CgXxzJoZzIiXl1d2XvqOu3Q8v2h4y1DJm81mcYYhPya6JIIftkEqhsQ=
+	t=1756387826; cv=none; b=hInv6nxwnk129HZ0YbwyAq5wIZUmo1l9DLwArf5ApR3uhqLo/Ofgu4EFZhaZY+bGunv2HotPVhgrsXIi7X09lCya0aIeBjw5YXlHmP2//pm1KGVs6uh00Xa+GIBnSLtU7Wf6WRTz7yO3Oa+z/8wOhvLgDF0WN4jgxB7MiNIaOE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756377827; c=relaxed/simple;
-	bh=M+qaOTR7l/7Db+24ZSXKfcL7Cs6yzi/ZCKCoZpm9Jjs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lcwiKuNCXkHb9IERzHlMvyr6VUd/AMDrd1XOV+bRSWR4vcdSbvkTJVQm3loBVP5HKRua2dmdWtnZFM5GxIHGdQZux3k6XtAU1qzCWFg5C5UKc7CcKEDRBA5UZtMxZ5ZXv4fIZPOJLuh7Py6AQ80yKFsHba0OrZy6TFejiSGdits=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4E7A7C4CEEB;
-	Thu, 28 Aug 2025 10:43:39 +0000 (UTC)
-Date: Thu, 28 Aug 2025 11:43:36 +0100
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: David Hildenbrand <david@redhat.com>
-Cc: linux-kernel@vger.kernel.org,
-	"Mike Rapoport (Microsoft)" <rppt@kernel.org>,
-	Will Deacon <will@kernel.org>,
-	Alexander Potapenko <glider@google.com>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Brendan Jackman <jackmanb@google.com>,
-	Christoph Lameter <cl@gentwo.org>, Dennis Zhou <dennis@kernel.org>,
-	Dmitry Vyukov <dvyukov@google.com>, dri-devel@lists.freedesktop.org,
-	intel-gfx@lists.freedesktop.org, iommu@lists.linux.dev,
-	io-uring@vger.kernel.org, Jason Gunthorpe <jgg@nvidia.com>,
-	Jens Axboe <axboe@kernel.dk>, Johannes Weiner <hannes@cmpxchg.org>,
-	John Hubbard <jhubbard@nvidia.com>, kasan-dev@googlegroups.com,
-	kvm@vger.kernel.org, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Linus Torvalds <torvalds@linux-foundation.org>,
-	linux-arm-kernel@axis.com, linux-arm-kernel@lists.infradead.org,
-	linux-crypto@vger.kernel.org, linux-ide@vger.kernel.org,
-	linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-mmc@vger.kernel.org, linux-mm@kvack.org,
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-	linux-scsi@vger.kernel.org,
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Marco Elver <elver@google.com>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Michal Hocko <mhocko@suse.com>, Muchun Song <muchun.song@linux.dev>,
-	netdev@vger.kernel.org, Oscar Salvador <osalvador@suse.de>,
-	Peter Xu <peterx@redhat.com>, Robin Murphy <robin.murphy@arm.com>,
-	Suren Baghdasaryan <surenb@google.com>, Tejun Heo <tj@kernel.org>,
-	virtualization@lists.linux.dev, Vlastimil Babka <vbabka@suse.cz>,
-	wireguard@lists.zx2c4.com, x86@kernel.org, Zi Yan <ziy@nvidia.com>
-Subject: Re: [PATCH v1 02/36] arm64: Kconfig: drop superfluous "select
- SPARSEMEM_VMEMMAP"
-Message-ID: <aLAy2GJ9YuNgvxCd@arm.com>
-References: <20250827220141.262669-1-david@redhat.com>
- <20250827220141.262669-3-david@redhat.com>
+	s=arc-20240116; t=1756387826; c=relaxed/simple;
+	bh=PxEep1c4CF+Tc8cos7oMoyl+CrwSHJTT/SjzKqYUkYc=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=JQdXEEPujnknPa2o5rkc8S0gsY790bQ7BmuPUKuw6Q9Zxd+jFZzpENB8a6pIHYjGfQH6F1eVDdWP8AZvo0PnQhgreoKBEz74XRWdA9h+rTNqCIcvf0d1U+ssxYeXaIp51X+YgvPBbH+1gOeUxl6R9bDXEK/ZV41aWNVIJjMy97Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bQFcZuAe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C626C4CEEB;
+	Thu, 28 Aug 2025 13:30:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756387825;
+	bh=PxEep1c4CF+Tc8cos7oMoyl+CrwSHJTT/SjzKqYUkYc=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=bQFcZuAeqFrlrhjvEdn38U+z5iKQHrIPvWn727CQWJGOp5bP/+wwZx4SMQ3v0K2TT
+	 hq8SmBp4eJAObgotbKYBNthTJayUsahN+92YFuWfLQwaq5Qo5b/EB1V0R0O1CjFAt7
+	 Vq+bNLtitkBMUiBmboQWB+R/aBlfp3SY3EP9t+EBRA3eARhHjj88BdilEpUvaOgf8Z
+	 a45QlNOPl2PZSAsgz1sCi2OKeXUKpmNRf0shxAypHmc/MVN1KK4BoeIvt38JL7UZhx
+	 5Qlss/DhKrxNtSXlJk5XHZLFl4Cx5T+HfPWF+FRkdqKTjkA6svfHFLaW5vFFt0ySvA
+	 k6W1uCuSXUmmA==
+Date: Thu, 28 Aug 2025 08:30:24 -0500
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250827220141.262669-3-david@redhat.com>
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Johannes Berg <johannes@sipsolutions.net>, devicetree@vger.kernel.org, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ linux-kernel@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>, 
+ linux-mips@vger.kernel.org, linux-wireless@vger.kernel.org, 
+ =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>
+To: Rosen Penev <rosenp@gmail.com>
+In-Reply-To: <20250827005658.3464-2-rosenp@gmail.com>
+References: <20250827005658.3464-1-rosenp@gmail.com>
+ <20250827005658.3464-2-rosenp@gmail.com>
+Message-Id: <175638709817.1370637.10754263567298002001.robh@kernel.org>
+Subject: Re: [PATCHv4 1/3] dt-bindings: net: wireless: ath9k: add led
+ bindings
 
-On Thu, Aug 28, 2025 at 12:01:06AM +0200, David Hildenbrand wrote:
-> Now handled by the core automatically once SPARSEMEM_VMEMMAP_ENABLE
-> is selected.
+
+On Tue, 26 Aug 2025 17:56:56 -0700, Rosen Penev wrote:
+> The ath9k driver has various pin GPIO numbers for different chipsets
+> which are not always correct for every device.
 > 
-> Reviewed-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+> Add bindings to specify the correct number and if it should be
+> active-high.
+> 
+> Signed-off-by: Rosen Penev <rosenp@gmail.com>
+> ---
+>  .../bindings/net/wireless/qca,ath9k.yaml        | 17 +++++++++++++++++
+>  1 file changed, 17 insertions(+)
+> 
 
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+My bot found errors running 'make dt_binding_check' on your patch:
+
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/net/wireless/qca,ath9k.example.dts:92.15-25: Warning (reg_format): /example-2/ahb/wifi@180c0000/led:reg: property has invalid length (4 bytes) (#address-cells == 2, #size-cells == 1)
+Documentation/devicetree/bindings/net/wireless/qca,ath9k.example.dts:91.17-94.15: Warning (unit_address_vs_reg): /example-2/ahb/wifi@180c0000/led: node has a reg or ranges property, but no unit name
+Documentation/devicetree/bindings/net/wireless/qca,ath9k.example.dtb: Warning (pci_device_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/net/wireless/qca,ath9k.example.dtb: Warning (pci_device_bus_num): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/net/wireless/qca,ath9k.example.dtb: Warning (simple_bus_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/net/wireless/qca,ath9k.example.dtb: Warning (i2c_bus_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/net/wireless/qca,ath9k.example.dtb: Warning (spi_bus_reg): Failed prerequisite 'reg_format'
+Documentation/devicetree/bindings/net/wireless/qca,ath9k.example.dts:91.17-94.15: Warning (avoid_default_addr_size): /example-2/ahb/wifi@180c0000/led: Relying on default #address-cells value
+Documentation/devicetree/bindings/net/wireless/qca,ath9k.example.dts:91.17-94.15: Warning (avoid_default_addr_size): /example-2/ahb/wifi@180c0000/led: Relying on default #size-cells value
+Documentation/devicetree/bindings/net/wireless/qca,ath9k.example.dtb: Warning (unique_unit_address_if_enabled): Failed prerequisite 'avoid_default_addr_size'
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20250827005658.3464-2-rosenp@gmail.com
+
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
 
