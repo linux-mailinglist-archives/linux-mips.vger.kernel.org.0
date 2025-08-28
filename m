@@ -1,102 +1,91 @@
-Return-Path: <linux-mips+bounces-10702-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10709-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 581E6B3928A
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Aug 2025 06:27:53 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C90D7B395A0
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Aug 2025 09:41:40 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 197AC688174
-	for <lists+linux-mips@lfdr.de>; Thu, 28 Aug 2025 04:27:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A1573BB07B
+	for <lists+linux-mips@lfdr.de>; Thu, 28 Aug 2025 07:41:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 543BD22A4E1;
-	Thu, 28 Aug 2025 04:27:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MDOpy7Q7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F236E2D46D1;
+	Thu, 28 Aug 2025 07:38:44 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2A6830CD97;
-	Thu, 28 Aug 2025 04:27:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CEC029D28B;
+	Thu, 28 Aug 2025 07:38:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756355265; cv=none; b=r2UIBl3fzj8XOTo2LGZrcrtlQ5xoTTX7n40oXyt42m/Zre12gLcN2OxXDNg11r+Y0obdizIwa7c9u9+4SQ9FXexUpr9XRdZGx6WpdXThBMzhcHJv4LFnIDAfueEeW2sR3hJT+KYvNGuP4KzVUqnWV0n2HJtFT86pabw6Aq8El+8=
+	t=1756366724; cv=none; b=FOiOiHAUzEaNDbp5+yW7Kj78aFMmqbOEZZCMAYyC48t1kCXtOHlLahUe4NYLXBl56ZpLwqXAcLQlAS+Bq6SrLzvG4d1IoY89J6ddNoIkJIBXxmHGGygZOjqeXViWcURyJS4sq/TJ1f1uNCVcqRhPBu3nKYLFql74E7A8azu5+Gw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756355265; c=relaxed/simple;
-	bh=hUnNfjGCPEWmiNNGGLZKDOsScYWj511icwVWbnrMbSE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gE86G8YGZBmkIG9k7GPXf1bScrcjGn4WEPmcPw/M1D9uGUWwf3Ghr3OEmcgTmCtyC0BhnkTHq05Wiou0SvFFyZLlbkdajwARCMNLB9eqW+I76kO7xduMb1y64kHuctDWVi/bnJ63PN+jjUz85QjUFYtwE37hqwKAmHR8nU0AS4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MDOpy7Q7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33984C4CEEB;
-	Thu, 28 Aug 2025 04:27:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756355264;
-	bh=hUnNfjGCPEWmiNNGGLZKDOsScYWj511icwVWbnrMbSE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=MDOpy7Q7+PtjV9ZnI/+71mkZCJrWQwTtFvdW0afXONz8h7wR9ImGTrV4WCC7mXn2B
-	 7EbOn3HGpIWLqjjSjwF8rGcKZhPtc4Gfky+zbxOUAt8Kl+cAXdXSfuUaya8Zvy1ya1
-	 F1mYHsgG9WcnDg0zKq2bACZzcl/UPORrd7FsCsy3qdsnuRy8wAbqlzxL98joSNwLF6
-	 w9WMn87Hpnp8f8IF6pk5vnsO7wQiX+Ib8XV+pManWrp62VQ4CdQPenZjvMUQSDERoQ
-	 eOJ33fQuGDSZ49Qcix6/vKNOIhOhF/f6epJTEq5OJkbiyKYIE1xM/FteX3oGbk+Ymp
-	 Up7jZQPpsB0CA==
-Message-ID: <c39104cf-f066-45d8-a13c-cad558312b6e@kernel.org>
-Date: Thu, 28 Aug 2025 13:24:45 +0900
+	s=arc-20240116; t=1756366724; c=relaxed/simple;
+	bh=1FeGWWkpnViziSe6lc+DKmue88Hh0SsFpGyGy5ESXBs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=nDLWwlHTXAHERnXRk4Zv4uLjpYZYfy7y/pKmRfLRQ3nBAdPZl2Ffaz0iXldkaimAV4fhSMT3vVhmRvrKRAsCS8zC1K7Olit+K+mDWRkXLf7QsYRGEqxDVKttw06ENebi38baog0rKiFy7sNOjxzSm3dP/K36e8soQH0H9Swz4Sw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1urXDA-0001jz-00; Thu, 28 Aug 2025 09:38:20 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 09775C04FD; Thu, 28 Aug 2025 08:57:33 +0200 (CEST)
+Date: Thu, 28 Aug 2025 08:57:33 +0200
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: Andreas Larsson <andreas@gaisler.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+	linux-pci@vger.kernel.org, sparclinux@vger.kernel.org,
+	Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+	Yinghai Lu <yinghai@kernel.org>,
+	Igor Mammedov <imammedo@redhat.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	linux-kernel@vger.kernel.org,
+	=?utf-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>,
+	linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH 03/24] MIPS: PCI: Use pci_enable_resources()
+Message-ID: <aK_93U_PnpKayqZD@alpha.franken.de>
+References: <20250822145605.18172-1-ilpo.jarvinen@linux.intel.com>
+ <20250822145605.18172-4-ilpo.jarvinen@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 24/36] ata: libata-eh: drop nth_page() usage within SG
- entry
-To: David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
-Cc: Niklas Cassel <cassel@kernel.org>, Alexander Potapenko
- <glider@google.com>, Andrew Morton <akpm@linux-foundation.org>,
- Brendan Jackman <jackmanb@google.com>, Christoph Lameter <cl@gentwo.org>,
- Dennis Zhou <dennis@kernel.org>, Dmitry Vyukov <dvyukov@google.com>,
- dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
- iommu@lists.linux.dev, io-uring@vger.kernel.org,
- Jason Gunthorpe <jgg@nvidia.com>, Jens Axboe <axboe@kernel.dk>,
- Johannes Weiner <hannes@cmpxchg.org>, John Hubbard <jhubbard@nvidia.com>,
- kasan-dev@googlegroups.com, kvm@vger.kernel.org,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Linus Torvalds <torvalds@linux-foundation.org>, linux-arm-kernel@axis.com,
- linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
- linux-ide@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org, linux-mm@kvack.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- linux-scsi@vger.kernel.org, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Marco Elver <elver@google.com>, Marek Szyprowski <m.szyprowski@samsung.com>,
- Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>,
- Muchun Song <muchun.song@linux.dev>, netdev@vger.kernel.org,
- Oscar Salvador <osalvador@suse.de>, Peter Xu <peterx@redhat.com>,
- Robin Murphy <robin.murphy@arm.com>, Suren Baghdasaryan <surenb@google.com>,
- Tejun Heo <tj@kernel.org>, virtualization@lists.linux.dev,
- Vlastimil Babka <vbabka@suse.cz>, wireguard@lists.zx2c4.com, x86@kernel.org,
- Zi Yan <ziy@nvidia.com>
-References: <20250827220141.262669-1-david@redhat.com>
- <20250827220141.262669-25-david@redhat.com>
-From: Damien Le Moal <dlemoal@kernel.org>
-Content-Language: en-US
-Organization: Western Digital Research
-In-Reply-To: <20250827220141.262669-25-david@redhat.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250822145605.18172-4-ilpo.jarvinen@linux.intel.com>
 
-On 8/28/25 7:01 AM, David Hildenbrand wrote:
-> It's no longer required to use nth_page() when iterating pages within a
-> single SG entry, so let's drop the nth_page() usage.
+On Fri, Aug 22, 2025 at 05:55:44PM +0300, Ilpo Järvinen wrote:
+> pci-legacy.c under MIPS has a copy of pci_enable_resources() named as
+> pcibios_enable_resources(). Having own copy of same functionality could
+> lead to inconsistencies in behavior, especially now as
+> pci_enable_resources() and the bridge window resource flags behavior
+> are going to be altered by upcoming changes.
 > 
-> Cc: Damien Le Moal <dlemoal@kernel.org>
-> Cc: Niklas Cassel <cassel@kernel.org>
-> Signed-off-by: David Hildenbrand <david@redhat.com>
+> The check for !r->start && r->end is already covered by the more
+> generic checks done in pci_enable_resources().
+> 
+> Call pci_enable_resources() from MIPS's pcibios_enable_device() and
+> remove pcibios_enable_resources().
+> 
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+>  arch/mips/pci/pci-legacy.c | 38 ++------------------------------------
+>  1 file changed, 2 insertions(+), 36 deletions(-)
 
-Acked-by: Damien Le Moal <dlemoal@kernel.org>
+Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
 -- 
-Damien Le Moal
-Western Digital Research
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
