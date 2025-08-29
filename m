@@ -1,48 +1,48 @@
-Return-Path: <linux-mips+bounces-10823-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10824-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A49AB3B8FF
-	for <lists+linux-mips@lfdr.de>; Fri, 29 Aug 2025 12:37:59 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78021B3B904
+	for <lists+linux-mips@lfdr.de>; Fri, 29 Aug 2025 12:39:09 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C6C91364C86
-	for <lists+linux-mips@lfdr.de>; Fri, 29 Aug 2025 10:37:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2DE8BA213B5
+	for <lists+linux-mips@lfdr.de>; Fri, 29 Aug 2025 10:39:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F39883093C6;
-	Fri, 29 Aug 2025 10:37:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 836443093BB;
+	Fri, 29 Aug 2025 10:39:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t9bIU6j4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="j0YCRNWd"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7926304BD7;
-	Fri, 29 Aug 2025 10:37:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56A8E1DF256;
+	Fri, 29 Aug 2025 10:39:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756463874; cv=none; b=PgBvrtPMsP6SJ4R0oeDHlY/ZKOlRO2RA8L9m0pQbHdkxnozC/hkT7F/uCVykpfqDrjcTxWusRWpheBpWYytNllg5/X+SLFSBP78Bt4PCvczTVlFfWVoEHlWN2EZqxD65zmFYYMTK87bo3amV4v3Ell868ww/ghyQi0HsRR8lMGs=
+	t=1756463946; cv=none; b=Xq723/tXz4NIzFhlmBl9u/FywzUvMZMR1MVQuyIkCRsT/oRWsTvhxKAgCmM0QlbxHxe/cX5Jdy1Uf5nWOJnFYqt/A5yAzf5ZD6IxCxuNQ/1m79ulYWbuMh5X7tqdDwkvyuFCaRfyjQGvRbmXQ7NIyh3SPktOJFe88Cm/xHFp4W8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756463874; c=relaxed/simple;
-	bh=6+IneIRXnN1BtRMi9Cul7I1x7ymoX1yi29SUkCkGlZs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gRq3uZuMFuSuFSjeSZNq0q70N5Ksa7ieWWdJZkxu5LhPr8IRF0UFpvRrTVG+EGM/OMxYqNrKqRAba5snoH8pXzxFBI6OECy7R1rLzCLyvwxnvptrOKXqNHYVXe+QI/r+0MQyfFjkeluSxuKz02mTmI8TDRqWv+v56+w3+p+X74k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t9bIU6j4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4549C4CEF4;
-	Fri, 29 Aug 2025 10:37:51 +0000 (UTC)
+	s=arc-20240116; t=1756463946; c=relaxed/simple;
+	bh=/peVqt9NTGN9k4jEtiweT1qPpb63RX6iogY8nuVswHw=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=oRhZwTFQ5MfWOFnkWrcny5UOYuB+qSwCjLKSiq0uedTqEMFaLes8nykdSz/53OOJOgmXhJb1pO9Bpor12u3w2TfySbiIcYSCkFOeAzO3Jv8q7V+J37uCUlQaEFW7a/BTDALEgHv/koy6ZRJRMmvG6IWaBub1R91su9LMu1nKbjk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=j0YCRNWd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 805DFC4CEF0;
+	Fri, 29 Aug 2025 10:39:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756463874;
-	bh=6+IneIRXnN1BtRMi9Cul7I1x7ymoX1yi29SUkCkGlZs=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=t9bIU6j4hHvqXcrCYkruZfMHBSejaoEkmGnT3v2LE09vwrOdO0jrhzsX5+qPxzN72
-	 2YcJgepC7FhjzNQhH1Ror3Kyk7H+I6NGZkW/EocJoD9s6kYSJYhBPCVppoL9QJhZxK
-	 78o13UpN6h9/IRzaOFpJedRKMLY1QEt0GZoH+F1kQwDTqvD2RXprcraOSOtX11z51m
-	 Vy8eV0GU17giqlm3VShZ+JCOgAdTXhNtdaIRPipIZvjCNlYOvHjVU5wQmMKzFKN/Ju
-	 wtvrn+W8R7+P1ox14bFI96fI37SbGRmnH8bGJFMsi3HhCYVO/lrpqQ2gWBgsmIr1lb
-	 MxByKS8W50jGA==
-Message-ID: <dcb0c746-62ed-48f6-9247-03bdf36c6e92@kernel.org>
-Date: Fri, 29 Aug 2025 12:37:50 +0200
+	s=k20201202; t=1756463944;
+	bh=/peVqt9NTGN9k4jEtiweT1qPpb63RX6iogY8nuVswHw=;
+	h=Date:Subject:From:To:Cc:References:In-Reply-To:From;
+	b=j0YCRNWdJqmbCxKo2Kf0tjk4Ukk3m3OJpb3WC/naTjTYpKXaq2qjUQoJaqjNcbigv
+	 UhgxQncms9beaNXV65oZViN5oDY3C5viRKVwFTH1tFdTgol2a3+5QZ1zSLG2SuwK0n
+	 9F4niVyiq9EW/iD1ghby37FifdRsUNg9B1wiPgupqz0KN2d9iB/BhZ6ZTaE5Hjv+B8
+	 WaxHPmf8QtVnZMb0QVAkZ0NxTiU3aDtAB+l1hTJMmgT1em3pYGZ+4cb6AFJIuq0VPe
+	 ZwMCfKHs2VK5Dm1GBpD73kctMYo7zzMdLT7WzvelUovsAx9SoSbTz1lOyNSR+aKAQf
+	 ufIFv2uEgpxTQ==
+Message-ID: <60e55e14-7712-4f82-93af-6751009327fd@kernel.org>
+Date: Fri, 29 Aug 2025 12:39:00 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -51,6 +51,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 0/2] brcmstb-memc-ddr binding updates for MIPS boards
+From: Krzysztof Kozlowski <krzk@kernel.org>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
  Florian Fainelli <florian.fainelli@broadcom.com>
 Cc: linux-mips@vger.kernel.org, Rob Herring <robh@kernel.org>,
@@ -64,8 +65,8 @@ Cc: linux-mips@vger.kernel.org, Rob Herring <robh@kernel.org>,
  <linux-arm-kernel@lists.infradead.org>
 References: <20250729205213.3392481-1-florian.fainelli@broadcom.com>
  <aLF_DEu6YNSCSRxu@alpha.franken.de>
+ <dcb0c746-62ed-48f6-9247-03bdf36c6e92@kernel.org>
 Content-Language: en-US
-From: Krzysztof Kozlowski <krzk@kernel.org>
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -109,33 +110,36 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  jWt87ecuHlpL3uuQ0ZZNWqHgZoQLXoqC2ZV5KrtKWb/jyiFX/sxSrodALf0zf+tfHv0FZWT2
  zHjUqd0t4njD/UOsuIMOQn4Ig0SdivYPfZukb5cdasKJukG1NOpbW7yRNivaCnfZz6dTawXw
  XRIV/KDsHQiyVxKvN73bThKhONkcX2LWuD928tAR6XMM2G5ovxLe09vuOzzfTWQDsm++9UKF a/A=
-In-Reply-To: <aLF_DEu6YNSCSRxu@alpha.franken.de>
+In-Reply-To: <dcb0c746-62ed-48f6-9247-03bdf36c6e92@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 29/08/2025 12:21, Thomas Bogendoerfer wrote:
-> On Tue, Jul 29, 2025 at 01:52:11PM -0700, Florian Fainelli wrote:
->> This patch series updates the MIPS-based Broadcom STB chips to use a
->> proper compatible string for their memory controller node(s) after
->> 501be7cecec9 ("dt-bindings: memory-controller: Define fallback
->> compatible").
+On 29/08/2025 12:37, Krzysztof Kozlowski wrote:
+> On 29/08/2025 12:21, Thomas Bogendoerfer wrote:
+>> On Tue, Jul 29, 2025 at 01:52:11PM -0700, Florian Fainelli wrote:
+>>> This patch series updates the MIPS-based Broadcom STB chips to use a
+>>> proper compatible string for their memory controller node(s) after
+>>> 501be7cecec9 ("dt-bindings: memory-controller: Define fallback
+>>> compatible").
+>>>
+>>> Florian Fainelli (2):
+>>>   dt-bindings: memory: Update brcmstb-memc-ddr binding with older chips
+>>>   MIPS: BMIPS: Properly define memory controller compatible
+>>>
+>>>  .../bindings/memory-controllers/brcm,brcmstb-memc-ddr.yaml  | 4 ++++
+>>>  arch/mips/boot/dts/brcm/bcm7346.dtsi                        | 3 ++-
+>>>  arch/mips/boot/dts/brcm/bcm7360.dtsi                        | 3 ++-
+>>>  arch/mips/boot/dts/brcm/bcm7362.dtsi                        | 3 ++-
+>>>  arch/mips/boot/dts/brcm/bcm7425.dtsi                        | 6 ++++--
+>>>  arch/mips/boot/dts/brcm/bcm7435.dtsi                        | 6 ++++--
+>>>  6 files changed, 18 insertions(+), 7 deletions(-)
 >>
->> Florian Fainelli (2):
->>   dt-bindings: memory: Update brcmstb-memc-ddr binding with older chips
->>   MIPS: BMIPS: Properly define memory controller compatible
->>
->>  .../bindings/memory-controllers/brcm,brcmstb-memc-ddr.yaml  | 4 ++++
->>  arch/mips/boot/dts/brcm/bcm7346.dtsi                        | 3 ++-
->>  arch/mips/boot/dts/brcm/bcm7360.dtsi                        | 3 ++-
->>  arch/mips/boot/dts/brcm/bcm7362.dtsi                        | 3 ++-
->>  arch/mips/boot/dts/brcm/bcm7425.dtsi                        | 6 ++++--
->>  arch/mips/boot/dts/brcm/bcm7435.dtsi                        | 6 ++++--
->>  6 files changed, 18 insertions(+), 7 deletions(-)
+>> series applied to mips-next.
 > 
-> series applied to mips-next.
+> Why entire series? You were notified two weeks ago that I already took
+> the driver subsystem patch.
 
-Why entire series? You were notified two weeks ago that I already took
-the driver subsystem patch.
+...and you do not have even ack from memory-controllers for that patch.
 
 Best regards,
 Krzysztof
