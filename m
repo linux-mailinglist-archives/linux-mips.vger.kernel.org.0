@@ -1,121 +1,126 @@
-Return-Path: <linux-mips+bounces-10855-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10856-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B8CFB3C4E8
-	for <lists+linux-mips@lfdr.de>; Sat, 30 Aug 2025 00:33:56 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 73F86B3C902
+	for <lists+linux-mips@lfdr.de>; Sat, 30 Aug 2025 10:05:23 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D01613A890A
-	for <lists+linux-mips@lfdr.de>; Fri, 29 Aug 2025 22:33:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2A6B67C5D19
+	for <lists+linux-mips@lfdr.de>; Sat, 30 Aug 2025 08:05:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37DCB26FDBB;
-	Fri, 29 Aug 2025 22:33:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D8962848BF;
+	Sat, 30 Aug 2025 08:05:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CeI1Uyyw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OWCttz1i"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f52.google.com (mail-ej1-f52.google.com [209.85.218.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0222B2A1AA;
-	Fri, 29 Aug 2025 22:33:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA02F21B185;
+	Sat, 30 Aug 2025 08:05:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756506832; cv=none; b=vCSXcb3tONzlxX8lGWE4RfH9MzadJKSKN8KpuOzRbxRM4xyGxCWkBAMMYD8xWpkpBmMqSRZL9ZhsUysqOaKMArGu8gFK5AhEcZDdOitMjjhT4LB86ZCX9wu29wVzR3XdMR2zdi/4AfwvgMJjzKfFpCks03mrdUmUedM0Sq9Ic/c=
+	t=1756541117; cv=none; b=beMi2nv1wxvcZ/XkMcgbSqa1YM7ExmFzUlpbBPh4cB8dIRDk+ICDW2jMQUueJBXOjwH0F5B8W7kwXpROJCqpXINA38FySSt5zYkhWUAth7pjNV5kQtX7rRo3nPMSvt3t5+h+24A41n7f19SxCklDgGSicObV2UihcPCGPqE7iUQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756506832; c=relaxed/simple;
-	bh=gW3UREhITNbhZNhXVhy/1JzS54isi8alO3SClI/0N4U=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=OR0jCuckKwC+/om4uA/xqjZIFiQDrlbyj1/B/fyWYk66So9zIi3gPnpxjGBQ5q9F9OZ1dggmD+qSIwnQt+CvaqDHdc6a0WjvqigEHzNyxR4RyfnYRyVXdRgGw/7AM0x5fYkwtzbEinlCHb8s/I4LZ2Lu3AylE0Mz2ZRAfKgc6qU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CeI1Uyyw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5459DC4CEF0;
-	Fri, 29 Aug 2025 22:33:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756506831;
-	bh=gW3UREhITNbhZNhXVhy/1JzS54isi8alO3SClI/0N4U=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=CeI1UyywLphq6rbxihW3K12s6RgLJ57FMTz4eKtrVBaIOZQlRF5Mw5MGN9VZqsyUF
-	 ws1VVPK2A9Aphpeu08IZ+PBsvH/hZxYQZ/E8LlLJ2UoQZh6ZiWU7Ee+Bxfnwgu4wDN
-	 qm+ussMtaWLdi83SF8aT0+Btb7yjNB9Ygip41cIO0PmgxXzADx6IHAKLQjnLPLfqj2
-	 5eqSmq9NNuwF0+wjF3Nc60azb8fAUFVptz94yF9f9Xn6OeJKPvhEVPRSVPcQIiH9ig
-	 389Jr83bSdXVSFqVbGJ4RM5keAw6x2twpNgOifIA2xME7cb4HiY+r6PWu/R5+ICtHu
-	 LsNzjw1Q4Twaw==
-From: Nathan Chancellor <nathan@kernel.org>
-To: linux-kernel@vger.kernel.org, Nathan Chancellor <nathan@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Kees Cook <kees@kernel.org>, 
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>, 
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, 
- llvm@lists.linux.dev, patches@lists.linux.dev, 
- Nicolas Schier <nsc@kernel.org>, linux-kbuild@vger.kernel.org, 
- linux-hardening@vger.kernel.org, Russell King <linux@armlinux.org.uk>, 
- Ard Biesheuvel <ardb@kernel.org>, linux-arm-kernel@lists.infradead.org, 
- Will Deacon <will@kernel.org>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org, 
- Madhavan Srinivasan <maddy@linux.ibm.com>, 
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
- Christophe Leroy <christophe.leroy@csgroup.eu>, 
- linuxppc-dev@lists.ozlabs.org, Palmer Dabbelt <palmer@dabbelt.com>, 
- Alexandre Ghiti <alex@ghiti.fr>, linux-riscv@lists.infradead.org, 
- Marco Elver <elver@google.com>, 
- "Peter Zijlstra (Intel)" <peterz@infraded.org>, kasan-dev@googlegroups.com
-In-Reply-To: <20250821-bump-min-llvm-ver-15-v2-0-635f3294e5f0@kernel.org>
-References: <20250821-bump-min-llvm-ver-15-v2-0-635f3294e5f0@kernel.org>
-Subject: Re: [PATCH v2 00/12] Bump minimum supported version of LLVM for
- building the kernel to 15.0.0
-Message-Id: <175650682606.3003527.17329504429724755241.b4-ty@kernel.org>
-Date: Fri, 29 Aug 2025 15:33:46 -0700
+	s=arc-20240116; t=1756541117; c=relaxed/simple;
+	bh=E+3FytFWpN13QNaZlIP9PT23YkoDdof1b13hg+sNa10=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KXg9bYg2G4O+N7Si7/3SCG4M2xFcY0/qDX/Goahhb0fG9vvJkl+bFoqYZ7AkGnG3QxWiYxj6LyavefyNbZ96W+x+WOv/+dMXHmoVVIAhR/arJSZ5kUw6jqB4yV9nljm85LRb9yWt6sFiyrvcWgC1U3amD2ovTl8HwzboZixd79I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OWCttz1i; arc=none smtp.client-ip=209.85.218.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-afeceee8bb1so421738966b.3;
+        Sat, 30 Aug 2025 01:05:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1756541114; x=1757145914; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E+3FytFWpN13QNaZlIP9PT23YkoDdof1b13hg+sNa10=;
+        b=OWCttz1idIoD0VnsSHFGIawRXJFYgGlr1IsFW5L65nEQ2+rYy0cZ31g5jNyBrLABOo
+         5hbz+t8YtsXhYYiuNy1ZlRlFXMqfzEBx6XgAPA8pjWkUM72j2g6BVF+160+JVuC6vhmN
+         fpnRCewYZujadFszMCKLa382P8UIVOIOsUKAJeqTpW4f9gMw54tEIpem1kc/DIzQnMyv
+         CWGdfilRifCnzpNS3iJiATZtxTJsYoJBuaptC328zBxTQ3EZBQqEQUDGZeeSyXh8Oz3d
+         bf7ONrj/gb2xfcoekvf2DiOUO/bX13LtqJL5TW55DUsnZ2brvp1pYbverT/kaj/cGKdt
+         m5PQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756541114; x=1757145914;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E+3FytFWpN13QNaZlIP9PT23YkoDdof1b13hg+sNa10=;
+        b=VcAhQPrfOLv8LXg3m0EZQWxedyNB0S0CjLiZQqK1Mz+ACiNYyaVURxvW6Yzc2auDaD
+         FCsVC89+3519zmw5uEb8jhfKipgWld2FfxisQz+7mdu3Ee95vitwBiZxaYPTKHIZdGdD
+         UEDK+9alQifsAdxc+tPMcE2hxmceJFWqWDokhSykzwxLm7SmaIA0w9Xm2LTwd24hr1tE
+         9uBGjD5i+gVWl2klDIcVATWXpBMp9MKNbAVxKKd7dzEtc66elTG0VvhKsLBpxyL6icpx
+         BP02yivy/uiksDHEocZ2OhwxAI95F9kPhALBtK9ZNC3bb3jxVTczSf9XpGjlEJo87NtB
+         Pjbg==
+X-Forwarded-Encrypted: i=1; AJvYcCU+wP2t9w4C9MDx8bCjeG9XxWAAo/8b6AVfUxeOXlkK7ppQO+kDDwEycAW5SolbktEhVEoRG2UysjC0fUbB@vger.kernel.org, AJvYcCUXI+sPMYtg485TDQanhuYWVwMyKVr8MF4t+LSN4ED5s2EcAjaqC5OaHGHQTTQ8WMRRuFjWk82tuCoboykf+wyk@vger.kernel.org, AJvYcCUmmXCsQ+TSou4R/2bwtDRhDPGoD6wZ+FG3ntD3IZYu1PcvIa17n2vUR/tY4tptv5gfvElGvB2Jlqwilw==@vger.kernel.org, AJvYcCVjZO+WVMqoeuVyXw4GRTqCB/3rauHwTuW0mr10JhvyC7ViLrxRfq0k+FTgNAxRhkTx2rN8cakc53wcFA==@vger.kernel.org, AJvYcCWCoy0HamBYezqdodix7IQo5nOBMmfkbfGTznwitFUoJIKnkZ5gWZGa0dVW0I6+lIFIKbcFsbzG1ed2JExD1J6+A00=@vger.kernel.org, AJvYcCXi1qMLwiJ9uzcUURLMIvHXQndaUtuQe+Euwr0uzQLKyHGoDpj4kMDq/n7Jyk6xFxIYE2Uh5ARnw/RIEA==@vger.kernel.org, AJvYcCXvaxj+NXAiZMudh1Od+pz4mgmWAdl28dX6/IoZucd7DoFqzy8JAzHjHEg5lHBHXu/H+kNe7946F2M2/lMY@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw3A7v62H8aMswOsoCZQXYkweYah+OfSh/udtmcXJvQWHAkk0GY
+	ZeafaQKNicV1nil93d8BmEEgAQYixGYwNV7rYiiA1tUUPzdFK5bJTLM1gmXd61Z1rYYDFnC2Fl5
+	RI9g79Ny5xfM4jjmSUETESjUvdVk4UgU=
+X-Gm-Gg: ASbGncubCSj6ETjgY1Zef7OBfHA0X2Mg3K8kCNROOFhuySp7lY2p9LHAzsc+VvsedaN
+	IA/Z/m/nlFHyFSZfwDoeBLO8UQYDkVUxvSAgPHlWIFQkn5YhfXcCnR+SjKk39O/p75A1UrLvoau
+	Z3XBA93wLiWDbh005j47p6l85RR3bBsIXbypWOJ4pyA0qE4KqmOIGhovj3MHZx5CsKk0K+Inpv/
+	caekSU=
+X-Google-Smtp-Source: AGHT+IGzflFMFHhQCk11BPmcxfewbn8R9ACv8Yo0SSn9TtnTW1JgawjqxVwsmdBQr0ZCbodUJMXZIPy39a0Dt37TD0k=
+X-Received: by 2002:a17:907:7244:b0:af9:6e2b:f30c with SMTP id
+ a640c23a62f3a-b01d972f530mr112838566b.34.1756541113922; Sat, 30 Aug 2025
+ 01:05:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev
+References: <20250828-pinctrl-gpio-pinfuncs-v6-0-c9abb6bdb689@linaro.org> <20250828-pinctrl-gpio-pinfuncs-v6-4-c9abb6bdb689@linaro.org>
+In-Reply-To: <20250828-pinctrl-gpio-pinfuncs-v6-4-c9abb6bdb689@linaro.org>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Sat, 30 Aug 2025 11:04:37 +0300
+X-Gm-Features: Ac12FXzW7SA_uUOkcPEFLfZfGLYsYzzZVOKlWfYhU6akvDLYnA0W6YgK2rZDIDs
+Message-ID: <CAHp75Vci1uAcA9ahofn95hxufa+Yi1Fjt4w74HSObQq-Rz5zMQ@mail.gmail.com>
+Subject: Re: [PATCH v6 04/15] pinctrl: mediatek: mt7988: use PINCTRL_PIN_FUNCTION()
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Linus Walleij <linus.walleij@linaro.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Alexey Klimov <alexey.klimov@linaro.org>, 
+	Lorenzo Bianconi <lorenzo@kernel.org>, Sean Wang <sean.wang@kernel.org>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	Paul Cercueil <paul@crapouillou.net>, Kees Cook <kees@kernel.org>, 
+	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	David Hildenbrand <david@redhat.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+	Dong Aisheng <aisheng.dong@nxp.com>, Fabio Estevam <festevam@gmail.com>, 
+	Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, NXP S32 Linux Team <s32@nxp.com>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Tony Lindgren <tony@atomide.com>, 
+	Haojian Zhuang <haojian.zhuang@linaro.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Danilo Krummrich <dakr@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Mark Brown <broonie@kernel.org>, linux-gpio@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	linux-mips@vger.kernel.org, linux-hardening@vger.kernel.org, 
+	linux-mm@kvack.org, imx@lists.linux.dev, linux-omap@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, Chen-Yu Tsai <wenst@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Aug 28, 2025 at 7:00=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl>=
+ wrote:
+>
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>
+> We have a dedicated initializer macro for defining pin functions for
+> mediatek drivers so use it here.
 
-On Thu, 21 Aug 2025 14:15:37 -0700, Nathan Chancellor wrote:
-> s390 and x86 have required LLVM 15 since
-> 
->   30d17fac6aae ("scripts/min-tool-version.sh: raise minimum clang version to 15.0.0 for s390")
->   7861640aac52 ("x86/build: Raise the minimum LLVM version to 15.0.0")
-> 
-> respectively. This series bumps the rest of the kernel to 15.0.0 to
-> match, which allows for a decent number of clean ups.
-> 
-> [...]
+Reviewed-by: Andy Shevchenko <andy@kernel.org>
 
-Applied, thanks!
-
-[01/12] kbuild: Bump minimum version of LLVM for building the kernel to 15.0.0
-        https://git.kernel.org/kbuild/c/20c0989283564
-[02/12] arch/Kconfig: Drop always true condition from RANDOMIZE_KSTACK_OFFSET
-        https://git.kernel.org/kbuild/c/65aebf6f5880e
-[03/12] ARM: Clean up definition of ARM_HAS_GROUP_RELOCS
-        https://git.kernel.org/kbuild/c/02aba266e391f
-[04/12] arm64: Remove tautological LLVM Kconfig conditions
-        https://git.kernel.org/kbuild/c/23cb0514208da
-[05/12] mips: Unconditionally select ARCH_HAS_CURRENT_STACK_POINTER
-        https://git.kernel.org/kbuild/c/e633c2e78fd1c
-[06/12] powerpc: Drop unnecessary initializations in __copy_inst_from_kernel_nofault()
-        https://git.kernel.org/kbuild/c/488954ca195d0
-[07/12] riscv: Remove version check for LTO_CLANG selects
-        https://git.kernel.org/kbuild/c/6578a1ff6aa49
-[08/12] riscv: Unconditionally use linker relaxation
-        https://git.kernel.org/kbuild/c/7ccbe91796d7b
-[09/12] riscv: Remove ld.lld version checks from many TOOLCHAIN_HAS configs
-        https://git.kernel.org/kbuild/c/87b28d71396bf
-[10/12] lib/Kconfig.debug: Drop CLANG_VERSION check from DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT
-        https://git.kernel.org/kbuild/c/a817de20091c3
-[11/12] objtool: Drop noinstr hack for KCSAN_WEAK_MEMORY
-        https://git.kernel.org/kbuild/c/573ad421cc551
-[12/12] KMSAN: Remove tautological checks
-        https://git.kernel.org/kbuild/c/5ff8c11775c74
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+--=20
+With Best Regards,
+Andy Shevchenko
 
