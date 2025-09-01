@@ -1,222 +1,150 @@
-Return-Path: <linux-mips+bounces-10872-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10873-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91583B3E491
-	for <lists+linux-mips@lfdr.de>; Mon,  1 Sep 2025 15:20:08 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B626FB3E49F
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Sep 2025 15:21:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8ED117A149F
-	for <lists+linux-mips@lfdr.de>; Mon,  1 Sep 2025 13:18:31 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8D6C77A6641
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Sep 2025 13:19:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A193423A564;
-	Mon,  1 Sep 2025 13:20:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D5E22773F5;
+	Mon,  1 Sep 2025 13:20:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="CnAwI6SL";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="ck+bLnVy"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="NXqh/pNg"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from flow-b2-smtp.messagingengine.com (flow-b2-smtp.messagingengine.com [202.12.124.137])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FEBF229B36;
-	Mon,  1 Sep 2025 13:20:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.137
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56EEF266565
+	for <linux-mips@vger.kernel.org>; Mon,  1 Sep 2025 13:20:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756732802; cv=none; b=rVlXMVzDQ4wVafMyr3UOr0/eCqg3U+i5h8d2ja4tH5Yrb7UwKOYBpbCIvQ73SIl9Z/sGl3W5J7vqsKDbIVsOIwKTnTgqveXq6BM/b1ggZxEaZMvNwZ9mRegkEunZBwtYmXUvEbuvoefcP8dnhrbsh1bMUF+CSl+BH/Q7F6dkUso=
+	t=1756732859; cv=none; b=FeIN+OVy9coRWwQdjrTHZQIORhxeY/Zpjgj4lPuNq8amRiGCfMqeVO/waD+yBZ3ZlWrLJztMTBHnkAq+J8CtWHYeyGJTUt1O2tIJ4k9nwpfZ3ApYH99j8/M70GqbpTeeRZIyyGjEHwJ+Klzym5Fjp0lL8avtwnB83iGoAB8A+rs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756732802; c=relaxed/simple;
-	bh=Mw8Cn4/OCWn4lPhhW5QgwqsK4SmxabwHi0TRYO6VF1s=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=Cx5MQMuMRB/23Gd/1l5tLbAJ2oBpFSSscM3yiLrlt9jUj3C4zkEbLt4VlXbpfC+U8fH3X90tNLsBGV2+kwQw3z91ltgIayRosbKEsz4l68y3ML14LsWs4a+pLZsgPgpld1EmOIz0fNZvSkVNKRPmy9Mk35nt+cKRehJ3Zjpp+tw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=CnAwI6SL; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=ck+bLnVy; arc=none smtp.client-ip=202.12.124.137
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailflow.stl.internal (Postfix) with ESMTP id 0273F1300C7C;
-	Mon,  1 Sep 2025 09:19:58 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Mon, 01 Sep 2025 09:19:59 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1756732798;
-	 x=1756739998; bh=Mw8Cn4/OCWn4lPhhW5QgwqsK4SmxabwHi0TRYO6VF1s=; b=
-	CnAwI6SLiAzw0ll8Zcw4x5ea+0Wq8HSRDsTA+9idX6q1fQOlDdE3T68T/kysPsIG
-	nKO9tHyF6Fkm5B/udz2FfkCejBvRRR69H9aA2BrCMMr0ANRdSOH6v/vmUfCY6aKN
-	9al2A9m+/LbUpShQmy9n/+vOjS0OpgsEZXq0Hj3P0uQRDAZ6sDBza6GbHCFQZfCU
-	bK3sxkJn4xh0u5pizVBli7lqdFPr0vIypTIrsNVvRo5/G3G98pikcIa/SMLnU+XR
-	joMia7KY2YpR6qcrOYAY4upTkIkbmsxCcG7v0eDIzuymSe6UVhl0vDVJcf8/pwuU
-	ub3tO2OuWEVDh/PNC1ns9Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1756732798; x=
-	1756739998; bh=Mw8Cn4/OCWn4lPhhW5QgwqsK4SmxabwHi0TRYO6VF1s=; b=c
-	k+bLnVyuYvhrOGGKenVyE6fBWoVEDNzhfGsMxUqDAGiBXMw3Y0aqSZrO99yruehh
-	7SuaY3v8ffaiwA7q/f2441rlWzMGV2KhxDUvwd5dJkD0oNAnUbFI+noFJSDwLkKD
-	jaa1OqQOv30Qbm6ICXD545lYhFrDJwWshMDunmIO1s2irCc75wtkhZpAT5hwAc4C
-	n9m0gNYy7MoNjydJqkXVeuEM3iLHeA2rOUyPeXYXDswUfkuw0LeEthOs5ReQ8jiv
-	c3Pd+c7YESEkFE+JbQiaKxUimpiO9cHD2qvSqsWz4lgmPWBj3I05MDeoALVGtNaJ
-	UzJmRoeKiveqvY5CekgRA==
-X-ME-Sender: <xms:d521aC0u7k4amQJoLyVrcBLNx0wUYznM_zSAvZLeU2-BlC0z8244DA>
-    <xme:d521aFEzWHjBQoSajlcp_aq_RTDvOyBr8PFD3opgNZ-35p-O7Zx_pio9feaRUauPA
-    -6F_cY6_RIsBvHmh9o>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdefgdduledvvdeiucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrnhgu
-    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
-    hrnhephfdthfdvtdefhedukeetgefggffhjeeggeetfefggfevudegudevledvkefhvdei
-    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
-    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepvdeipdhmohguvgepshhmthhpohhu
-    thdprhgtphhtthhopehvsggrsghkrgesshhushgvrdgtiidprhgtphhtthhopehmghhorh
-    hmrghnsehsuhhsvgdruggvpdhrtghpthhtohephihsrghtohesuhhsvghrshdrshhouhhr
-    tggvfhhorhhgvgdrjhhppdhrtghpthhtoheptghgrhhouhhpshesvhhgvghrrdhkvghrnh
-    gvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgrlhhphhgrsehvghgvrhdrkhgvrhhn
-    vghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqsghlohgtkhesvhhgvghrrdhkvghrnh
-    gvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdgtshhkhiesvhhgvghrrdhkvghrnhgv
-    lhdrohhrghdprhgtphhtthhopehlihhnuhigqdhfshguvghvvghlsehvghgvrhdrkhgvrh
-    hnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqhhgvgigrghhonhesvhhgvghrrdhk
-    vghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:d521aJbYCfJKFnzAy-OwM6PqVQ_fcrhaLANYO3c1UvIPGTz1tYdAUg>
-    <xmx:d521aDlZ48FyGpG0KTdhHL5zxMK2x_1O5V_gv9k1zeUP7_YKQmjAHg>
-    <xmx:d521aCxJr_e5WBMfalpY5TZjIvP2obRwdbIREpkCkdp_PdpJfjYe1w>
-    <xmx:d521aMvMgCtTy5OqA64XDSsEufV7f6lUl9HluAjsXVu6CwKxpthR6A>
-    <xmx:fp21aNvM5R6PYH-zyKAm8vBU6cruj05d3bRLorh9nyzV2V9Fz9q0KKLP>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 76793700065; Mon,  1 Sep 2025 09:19:51 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1756732859; c=relaxed/simple;
+	bh=+FzHD6P3GIG+WbvurBqu4eNuHXM1ihNGPdVL0Rl46EY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=PYr0+VPU+G37r+xMs7ArdU1X3b43c2KOipxEcSrxqqua5THUwzOAyIob0dWFXElKe7lwEcMDrf0jKkjwY1LeI+XOXLemICrlLTIudEFzq2xLP4i3zZoMbiNdhdOopcqbKdPuHEFeSRFLnccWpkJcilALgdVFfMPWjndKo5yUkiA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=NXqh/pNg; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-55f6b0049fbso3209704e87.0
+        for <linux-mips@vger.kernel.org>; Mon, 01 Sep 2025 06:20:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1756732855; x=1757337655; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/ApJifxHePLgmXB9tTWAWedH0XfL5fOO8paxsOA3xkw=;
+        b=NXqh/pNgFvdh9534gdG5el6/ZagbcM4qdqFZr+bWDTOqlYOI7PzxLWNJpKAk0Jgw1o
+         s0tv+sMZ1fZfMi3cl0T8CdMrzwyvldKPomK1W+l9cLLBhtRBFqMYxk+MIhqu352PH1FT
+         PBoChcd91xX7UCHGjfj9JfHSxJGjH+w1vA2E39gFTUVFDLhItLGeT/Pfj5lTzSy+u+L+
+         OZz2VDGzuqaMeTUlrGP0aZEP6BDnjizjkuyz4hPpPspV1+PUkkfcCcSBLyrjgJDaT80r
+         /+xEWKIfUPKJMg4uwzkVzJBqSKLL4VEHXvCwu4IaATXnNwATlNbZ01/S335v8zUvalv5
+         AMYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756732855; x=1757337655;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/ApJifxHePLgmXB9tTWAWedH0XfL5fOO8paxsOA3xkw=;
+        b=rdlETqYASg16/O4jrC8rzRPqcYgPH3dYhHF4ObBmwUpz3j2Sk4K3ZlqOeFXphWsqbj
+         w0kQ9T7oHgeyyVZhcbb5DIjcq9UHH3XFsOJ9h7gZPCdA8Avb1Eo6ED2YK/cirTJqaC2o
+         5EVeMb1wLc9SRv5X7wi6ns6LZs517bctmOodLEIFYRkoKa/f9OLLh2GeEzxHWXDnYtyA
+         jSUiupcDg69CJ7YcY89TG6p4ALTG4Ysh1DeswclXwrZ4oADhun0KCh6dFnvMNX1oAD5x
+         y4TfH8v3/bpI98UKxEOpBRS9A/5F4svqkf0hmwC/z9nY7q9ugktwhn2QWsoAXAWbix6v
+         uqdw==
+X-Forwarded-Encrypted: i=1; AJvYcCWR1dIORO99x4D+i9bCQB0bucpqq/ncqXUPRUV4JsznfxGlCKGbCNG0LENbS6DCgsIQc7uTkLg6OnP+@vger.kernel.org
+X-Gm-Message-State: AOJu0YxJZIAFQzlhJHbu+GFGkO8J8kB0nL32rOzh3wPm905/xPqNfnoB
+	ZWaD/yaMDAaIcsZj7K/opLBjrA77ER250EhdEb2cabGNhy2yJ7aVG+t4/jTpn6WnCDq0hwdnF3g
+	o9OgZzZ9L2AqwQ7Tki6kesVMdq3TmN6M2iAXp8cMF2A==
+X-Gm-Gg: ASbGncvMqWnyX9EhmskSWrfH2c/cViallTI3IUbQUgajR28pD91xzL4YsYZx0Bfaw6p
+	xHTZvohmFFV8oyIwGF/+hwwYCuKu647bO7FBFKugDSbjuSzqqie0lEgxzdGJnuxoC3UyXhHfdAX
+	amO4nrA4EfZqMlY6z3QvhMVip9FqGVlA2k7JrhAH7WdC1sfV8vjtdJwD+4gU6tblWEnvFSeut1+
+	a8VyPdVvC8Y1yPGVcatPjorkOrgzW9/RfH0hhk=
+X-Google-Smtp-Source: AGHT+IH912XrSXzjBk2qT9512Zc2BnDvh2hCyUh1tIL/e/b5XAWzm9U6VOUb2k8kMnjWcaLf9C4w4UWLuNtsABXzYyY=
+X-Received: by 2002:a05:6512:2513:b0:55f:4016:ad2b with SMTP id
+ 2adb3069b0e04-55f708eae52mr2361617e87.30.1756732855435; Mon, 01 Sep 2025
+ 06:20:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: AngmsHLdt4H3
-Date: Mon, 01 Sep 2025 15:19:31 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "schuster.simon@siemens-energy.com" <schuster.simon@siemens-energy.com>,
- "Dinh Nguyen" <dinguyen@kernel.org>,
- "Christian Brauner" <brauner@kernel.org>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "David Hildenbrand" <david@redhat.com>,
- "Lorenzo Stoakes" <lorenzo.stoakes@oracle.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- "Vlastimil Babka" <vbabka@suse.cz>, "Mike Rapoport" <rppt@kernel.org>,
- "Suren Baghdasaryan" <surenb@google.com>,
- "Michal Hocko" <mhocko@suse.com>, "Ingo Molnar" <mingo@redhat.com>,
- "Peter Zijlstra" <peterz@infradead.org>,
- "Juri Lelli" <juri.lelli@redhat.com>,
- "Vincent Guittot" <vincent.guittot@linaro.org>,
- "Dietmar Eggemann" <dietmar.eggemann@arm.com>,
- "Steven Rostedt" <rostedt@goodmis.org>,
- "Benjamin Segall" <bsegall@google.com>, "Mel Gorman" <mgorman@suse.de>,
- "Valentin Schneider" <vschneid@redhat.com>,
- "Kees Cook" <kees@kernel.org>,
- "Paul Walmsley" <paul.walmsley@sifive.com>,
- "Palmer Dabbelt" <palmer@dabbelt.com>,
- "Albert Ou" <aou@eecs.berkeley.edu>, "Alexandre Ghiti" <alex@ghiti.fr>,
- guoren <guoren@kernel.org>, "Oleg Nesterov" <oleg@redhat.com>,
- "Jens Axboe" <axboe@kernel.dk>,
- "Alexander Viro" <viro@zeniv.linux.org.uk>, "Jan Kara" <jack@suse.cz>,
- "Tejun Heo" <tj@kernel.org>, "Johannes Weiner" <hannes@cmpxchg.org>,
- =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>,
- "Paul Moore" <paul@paul-moore.com>, "Serge Hallyn" <sergeh@kernel.org>,
- "James Morris" <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>,
- "Anna-Maria Gleixner" <anna-maria@linutronix.de>,
- "Frederic Weisbecker" <frederic@kernel.org>,
- "Thomas Gleixner" <tglx@linutronix.de>,
- "Masami Hiramatsu" <mhiramat@kernel.org>,
- "David S . Miller" <davem@davemloft.net>,
- "Eric Dumazet" <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
- "Paolo Abeni" <pabeni@redhat.com>, "Simon Horman" <horms@kernel.org>,
- "Mathieu Desnoyers" <mathieu.desnoyers@efficios.com>,
- "Arnaldo Carvalho de Melo" <acme@kernel.org>,
- "Namhyung Kim" <namhyung@kernel.org>,
- "Mark Rutland" <mark.rutland@arm.com>,
- "Alexander Shishkin" <alexander.shishkin@linux.intel.com>,
- "Jiri Olsa" <jolsa@kernel.org>, "Ian Rogers" <irogers@google.com>,
- "Adrian Hunter" <adrian.hunter@intel.com>,
- "John Johansen" <john.johansen@canonical.com>,
- "Stephen Smalley" <stephen.smalley.work@gmail.com>,
- "Ondrej Mosnacek" <omosnace@redhat.com>,
- "Kentaro Takeda" <takedakn@nttdata.co.jp>,
- "Tetsuo Handa" <penguin-kernel@i-love.sakura.ne.jp>,
- "Richard Henderson" <richard.henderson@linaro.org>,
- "Matt Turner" <mattst88@gmail.com>, "Vineet Gupta" <vgupta@kernel.org>,
- "Russell King" <linux@armlinux.org.uk>,
- "Catalin Marinas" <catalin.marinas@arm.com>,
- "Will Deacon" <will@kernel.org>, "Brian Cain" <bcain@kernel.org>,
- "Huacai Chen" <chenhuacai@kernel.org>, "WANG Xuerui" <kernel@xen0n.name>,
- "Geert Uytterhoeven" <geert@linux-m68k.org>,
- "Michal Simek" <monstr@monstr.eu>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "Jonas Bonn" <jonas@southpole.se>,
- "Stefan Kristiansson" <stefan.kristiansson@saunalahti.fi>,
- "Stafford Horne" <shorne@gmail.com>,
- "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
- "Helge Deller" <deller@gmx.de>,
- "Madhavan Srinivasan" <maddy@linux.ibm.com>,
- "Michael Ellerman" <mpe@ellerman.id.au>,
- "Nicholas Piggin" <npiggin@gmail.com>,
- "Christophe Leroy" <christophe.leroy@csgroup.eu>,
- "Heiko Carstens" <hca@linux.ibm.com>,
- "Vasily Gorbik" <gor@linux.ibm.com>,
- "Alexander Gordeev" <agordeev@linux.ibm.com>,
- "Christian Borntraeger" <borntraeger@linux.ibm.com>,
- "Sven Schnelle" <svens@linux.ibm.com>,
- "Yoshinori Sato" <ysato@users.sourceforge.jp>,
- "Rich Felker" <dalias@libc.org>,
- "John Paul Adrian Glaubitz" <glaubitz@physik.fu-berlin.de>,
- "Andreas Larsson" <andreas@gaisler.com>,
- "Richard Weinberger" <richard@nod.at>,
- "Anton Ivanov" <anton.ivanov@cambridgegreys.com>,
- "Johannes Berg" <johannes@sipsolutions.net>,
- "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, "Chris Zankel" <chris@zankel.net>,
- "Max Filippov" <jcmvbkbc@gmail.com>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-riscv@lists.infradead.org,
- "linux-csky@vger.kernel.org" <linux-csky@vger.kernel.org>,
- linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- cgroups@vger.kernel.org, linux-security-module@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, Netdev <netdev@vger.kernel.org>,
- linux-perf-users@vger.kernel.org, apparmor@lists.ubuntu.com,
- selinux@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
- linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
- "linux-openrisc@vger.kernel.org" <linux-openrisc@vger.kernel.org>,
- linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
- sparclinux@vger.kernel.org, linux-um@lists.infradead.org,
- stable@vger.kernel.org
-Message-Id: <13f8ca46-92f0-47bb-a046-165402122a44@app.fastmail.com>
-In-Reply-To: 
- <20250901-nios2-implement-clone3-v2-1-53fcf5577d57@siemens-energy.com>
-References: 
- <20250901-nios2-implement-clone3-v2-0-53fcf5577d57@siemens-energy.com>
- <20250901-nios2-implement-clone3-v2-1-53fcf5577d57@siemens-energy.com>
-Subject: Re: [PATCH v2 1/4] copy_sighand: Handle architectures where sizeof(unsigned
- long) < sizeof(u64)
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+References: <20250828-pinctrl-gpio-pinfuncs-v6-0-c9abb6bdb689@linaro.org>
+ <20250828-pinctrl-gpio-pinfuncs-v6-6-c9abb6bdb689@linaro.org> <61bad868-d976-4f49-805c-8d14d4d8b3e4@sirena.org.uk>
+In-Reply-To: <61bad868-d976-4f49-805c-8d14d4d8b3e4@sirena.org.uk>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Mon, 1 Sep 2025 15:20:44 +0200
+X-Gm-Features: Ac12FXxw4k3UY5TBARAefSnKyhMDuDCBaUNs2qyNKYW8yrbkHP8etuyQPhIAuGM
+Message-ID: <CAMRc=MfB_3e0sjCpV+XaKcKvit7Opk5LczH2wsxO=RftrAabjg@mail.gmail.com>
+Subject: Re: [PATCH v6 06/15] pinctrl: imx: don't access the pin function
+ radix tree directly
+To: Mark Brown <broonie@kernel.org>
+Cc: Linus Walleij <linus.walleij@linaro.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Alexey Klimov <alexey.klimov@linaro.org>, 
+	Lorenzo Bianconi <lorenzo@kernel.org>, Sean Wang <sean.wang@kernel.org>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	Paul Cercueil <paul@crapouillou.net>, Kees Cook <kees@kernel.org>, 
+	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
+	David Hildenbrand <david@redhat.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+	Dong Aisheng <aisheng.dong@nxp.com>, Fabio Estevam <festevam@gmail.com>, 
+	Shawn Guo <shawnguo@kernel.org>, Jacky Bai <ping.bai@nxp.com>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, NXP S32 Linux Team <s32@nxp.com>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Tony Lindgren <tony@atomide.com>, 
+	Haojian Zhuang <haojian.zhuang@linaro.org>, Geert Uytterhoeven <geert+renesas@glider.be>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Danilo Krummrich <dakr@kernel.org>, Neil Armstrong <neil.armstrong@linaro.org>, linux-gpio@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-mediatek@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	linux-mips@vger.kernel.org, linux-hardening@vger.kernel.org, 
+	linux-mm@kvack.org, imx@lists.linux.dev, linux-omap@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Sep 1, 2025, at 15:09, Simon Schuster via B4 Relay wrote:
-
-> This commit fixes the bug by always passing clone_flags to copy_sighand
-> via their declared u64 type, invariant of architecture-dependent integer
-> sizes.
+On Mon, Sep 1, 2025 at 2:07=E2=80=AFPM Mark Brown <broonie@kernel.org> wrot=
+e:
 >
-> Fixes: b612e5df4587 ("clone3: add CLONE_CLEAR_SIGHAND")
-> Cc: stable@vger.kernel.org # linux-5.5+
-> Signed-off-by: Simon Schuster <schuster.simon@siemens-energy.com>
-> Reviewed-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> On Thu, Aug 28, 2025 at 06:00:14PM +0200, Bartosz Golaszewski wrote:
+> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >
+> > The radix tree containing pin function descriptors should not be
+> > accessed directly by drivers. There are dedicated functions for it. I
+> > suppose this driver does it so that the memory containing the function
+> > description is not duplicated but we're going to address that shortly s=
+o
+> > convert it to using generic pinctrl APIs.
+>
+> This is still failing for me:
+>
+> [    0.628221] Unable to handle kernel NULL pointer dereference at virtua=
+l address 0000000000000000
+> [    0.636506] Mem abort info:
+>
+> ...
+>
+> [    0.801855]  __pi_strcmp+0x20/0x140 (P)
+> [    0.805704]  pinmux_generic_add_pinfunction+0x28/0xe0
+> [    0.810777]  imx_pinctrl_parse_functions.isra.0+0xf8/0x4a0
+> [    0.816289]  imx_pinctrl_probe+0x404/0x520
+>
+> Full log:
+>
+>    https://lava.sirena.org.uk/scheduler/job/1758025#L704
 
-Reviewed-by: Arnd Bergmann <arnd@arndb.de>
+That's not a lot of info but it fails in strcmp() which - I suppose -
+is the one in pinmux_func_name_to_selector(). Any chance you could
+check what the value of np->name is in imx_pinctrl_parse_functions()?
+Is it NULL for some reason?
+
+Bart
 
