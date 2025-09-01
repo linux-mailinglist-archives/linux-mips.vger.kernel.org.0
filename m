@@ -1,66 +1,66 @@
-Return-Path: <linux-mips+bounces-10893-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10894-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 28F1AB3E905
-	for <lists+linux-mips@lfdr.de>; Mon,  1 Sep 2025 17:13:35 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D437BB3E92E
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Sep 2025 17:15:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E305C189BBDE
-	for <lists+linux-mips@lfdr.de>; Mon,  1 Sep 2025 15:11:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D4C5F165F89
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Sep 2025 15:11:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 302C135E4C3;
-	Mon,  1 Sep 2025 15:06:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E4C6346A02;
+	Mon,  1 Sep 2025 15:06:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="DwOOtT7J"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="O3U61D4Q"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E1C83451A5
-	for <linux-mips@vger.kernel.org>; Mon,  1 Sep 2025 15:06:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCFA8343D91
+	for <linux-mips@vger.kernel.org>; Mon,  1 Sep 2025 15:06:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756739203; cv=none; b=TYyoNvj+UOVky2UJ4JWza63KbnTFCFO/4NJU5+k7XMXJ8aS7R+gG2XILi4nSYOzaOeL6Tr9GuRdba9f5HnyjTG6KqV6gfQ9zPJ1dMklhcQhq6YXzWUKGPZGZD4EjRePT+LHOhYsH/MaVDr+3wboRzUpyIyUujH78lb+gclfv6rI=
+	t=1756739217; cv=none; b=tXz25LbnZk+AOKrLojH2/fyEG8DXyfUiYSQsbRwGrhzd76L6SA9X27YLtO5wse1sk1cV++v90F8BnKPsJHs6oGwGk8JosOeWi21YkU4upVSngEisN3a1LLJJAcle8aSvod1X0GYwzuO+Fz4FFj8ivFN7Whz1m5pxLRgtnUigCg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756739203; c=relaxed/simple;
-	bh=fIHjwe8iDU4F3nB0vO5G8hRmV8J7PfLovD62oorovAM=;
+	s=arc-20240116; t=1756739217; c=relaxed/simple;
+	bh=b8eOU5FrI4fHaNnFCFSoHHDLHQDM1EDooeGg8Kslvrc=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ULVd485h0w8hVtcNwAFuynhPUeYcsXhlmRxvrxIfDqB+IY1kOJ7px6TImbacCSGYW/ar59abR7JDHvda0kkkKl32rFfdOMOY0ldapWiSRfZvR/U6v2Mqk58z/F8Zg+W6J05XzWPGpwfK0XQal9NFs8QzYcN+1yoCQwithlXUE3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=DwOOtT7J; arc=none smtp.client-ip=170.10.129.124
+	 MIME-Version; b=WKkX5Onvg1MpvzCnAiCSEmVVsgZZCasQOfs1JJCjbmCgr8CP67KlHry7jadQh0feUX4Otp3fjG/nDoVDs+7psnUHgZopzq1j5BREDNVL9U7VMX0Axgoc3Fl7vN93JIoLqKl0kFQ+TEW8DN9BrIGBa/7PWRVmxTUkzb18hztrRQU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=O3U61D4Q; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1756739200;
+	s=mimecast20190719; t=1756739215;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=dzO5XeQXA+92El5MTIOjMpy0CzhO3womFwma0oFqoHc=;
-	b=DwOOtT7JyBjPmauTNE4LZvN99O3ANBfvQpTMNJKLBL+EVnsqD9vNRLGl2b/9+Qy1ixImx3
-	AzGPVBrN5ns5d+jrVsP0C3VuInmQXCEDRXq14Q6KLFHsCBRit9Geqh0oeRepYw6qQw9h2B
-	NBR3yhux3yjWnTSBYvcYD49NegwV/Kg=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+	bh=VuRYozOj4jxmWMcjtZVJC7s6FW6AbDAZr6KxBuADLqo=;
+	b=O3U61D4Q/0AN+zwnhOjQNOgpUPANR+bXx1CiAlyhz2PvVQbarzfY5q8ylHri6bz/lLXmqU
+	3wIWK17B87GMC+HZmZFAPfoTJ5vKai5ZZGZ8fiKpVyDCpw60xaPyzuYqZFzMx/294NJJV3
+	Az5NCDIYR6cFITLSMScznLYW0qSNRrE=
+Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
  (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
  relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-473-jaRusggRNe6QfB0GmQhKbw-1; Mon,
- 01 Sep 2025 11:06:38 -0400
-X-MC-Unique: jaRusggRNe6QfB0GmQhKbw-1
-X-Mimecast-MFC-AGG-ID: jaRusggRNe6QfB0GmQhKbw_1756739193
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-307-0sc7uRoVMaCioWHY8YjrVg-1; Mon,
+ 01 Sep 2025 11:06:54 -0400
+X-MC-Unique: 0sc7uRoVMaCioWHY8YjrVg-1
+X-Mimecast-MFC-AGG-ID: 0sc7uRoVMaCioWHY8YjrVg_1756739207
 Received: from mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.93])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E34BB19560AA;
-	Mon,  1 Sep 2025 15:06:32 +0000 (UTC)
+	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id BE64D19560AE;
+	Mon,  1 Sep 2025 15:06:46 +0000 (UTC)
 Received: from t14s.fritz.box (unknown [10.22.88.45])
-	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A8FF618003FC;
-	Mon,  1 Sep 2025 15:06:17 +0000 (UTC)
+	by mx-prod-int-06.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id 69EDB1800447;
+	Mon,  1 Sep 2025 15:06:33 +0000 (UTC)
 From: David Hildenbrand <david@redhat.com>
 To: linux-kernel@vger.kernel.org
 Cc: David Hildenbrand <david@redhat.com>,
-	SeongJae Park <sj@kernel.org>,
+	Zi Yan <ziy@nvidia.com>,
 	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
 	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
 	Alexander Potapenko <glider@google.com>,
@@ -105,11 +105,10 @@ Cc: David Hildenbrand <david@redhat.com>,
 	virtualization@lists.linux.dev,
 	Vlastimil Babka <vbabka@suse.cz>,
 	wireguard@lists.zx2c4.com,
-	x86@kernel.org,
-	Zi Yan <ziy@nvidia.com>
-Subject: [PATCH v2 07/37] mm/memremap: reject unreasonable folio/compound page sizes in memremap_pages()
-Date: Mon,  1 Sep 2025 17:03:28 +0200
-Message-ID: <20250901150359.867252-8-david@redhat.com>
+	x86@kernel.org
+Subject: [PATCH v2 08/37] mm/hugetlb: check for unreasonable folio sizes when registering hstate
+Date: Mon,  1 Sep 2025 17:03:29 +0200
+Message-ID: <20250901150359.867252-9-david@redhat.com>
 In-Reply-To: <20250901150359.867252-1-david@redhat.com>
 References: <20250901150359.867252-1-david@redhat.com>
 Precedence: bulk
@@ -121,39 +120,46 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.93
 
-Let's reject unreasonable folio sizes early, where we can still fail.
-We'll add sanity checks to prepare_compound_head/prepare_compound_page
-next.
+Let's check that no hstate that corresponds to an unreasonable folio size
+is registered by an architecture. If we were to succeed registering, we
+could later try allocating an unsupported gigantic folio size.
 
-Is there a way to configure a system such that unreasonable folio sizes
-would be possible? It would already be rather questionable.
+Further, let's add a BUILD_BUG_ON() for checking that HUGETLB_PAGE_ORDER
+is sane at build time. As HUGETLB_PAGE_ORDER is dynamic on powerpc, we have
+to use a BUILD_BUG_ON_INVALID() to make it compile.
 
-If so, we'd probably want to bail out earlier, where we can avoid a
-WARN and just report a proper error message that indicates where
-something went wrong such that we messed up.
+No existing kernel configuration should be able to trigger this check:
+either SPARSEMEM without SPARSEMEM_VMEMMAP cannot be configured or
+gigantic folios will not exceed a memory section (the case on sparse).
 
-Acked-by: SeongJae Park <sj@kernel.org>
+Reviewed-by: Zi Yan <ziy@nvidia.com>
 Reviewed-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
 Reviewed-by: Liam R. Howlett <Liam.Howlett@oracle.com>
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- mm/memremap.c | 3 +++
- 1 file changed, 3 insertions(+)
+ mm/hugetlb.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/mm/memremap.c b/mm/memremap.c
-index b0ce0d8254bd8..a2d4bb88f64b6 100644
---- a/mm/memremap.c
-+++ b/mm/memremap.c
-@@ -275,6 +275,9 @@ void *memremap_pages(struct dev_pagemap *pgmap, int nid)
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 1e777cc51ad04..d3542e92a712e 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -4657,6 +4657,7 @@ static int __init hugetlb_init(void)
  
- 	if (WARN_ONCE(!nr_range, "nr_range must be specified\n"))
- 		return ERR_PTR(-EINVAL);
-+	if (WARN_ONCE(pgmap->vmemmap_shift > MAX_FOLIO_ORDER,
-+		      "requested folio size unsupported\n"))
-+		return ERR_PTR(-EINVAL);
+ 	BUILD_BUG_ON(sizeof_field(struct page, private) * BITS_PER_BYTE <
+ 			__NR_HPAGEFLAGS);
++	BUILD_BUG_ON_INVALID(HUGETLB_PAGE_ORDER > MAX_FOLIO_ORDER);
  
- 	switch (pgmap->type) {
- 	case MEMORY_DEVICE_PRIVATE:
+ 	if (!hugepages_supported()) {
+ 		if (hugetlb_max_hstate || default_hstate_max_huge_pages)
+@@ -4740,6 +4741,7 @@ void __init hugetlb_add_hstate(unsigned int order)
+ 	}
+ 	BUG_ON(hugetlb_max_hstate >= HUGE_MAX_HSTATE);
+ 	BUG_ON(order < order_base_2(__NR_USED_SUBPAGE));
++	WARN_ON(order > MAX_FOLIO_ORDER);
+ 	h = &hstates[hugetlb_max_hstate++];
+ 	__mutex_init(&h->resize_lock, "resize mutex", &h->resize_key);
+ 	h->order = order;
 -- 
 2.50.1
 
