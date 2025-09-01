@@ -1,197 +1,278 @@
-Return-Path: <linux-mips+bounces-10864-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10865-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA268B3DF16
-	for <lists+linux-mips@lfdr.de>; Mon,  1 Sep 2025 11:55:42 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92AC3B3E1B3
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Sep 2025 13:35:25 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1A09818888CE
-	for <lists+linux-mips@lfdr.de>; Mon,  1 Sep 2025 09:56:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 554DA7ACE51
+	for <lists+linux-mips@lfdr.de>; Mon,  1 Sep 2025 11:33:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEF7D30C608;
-	Mon,  1 Sep 2025 09:55:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7BEE31CA65;
+	Mon,  1 Sep 2025 11:35:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Oi4kPtKW"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21872277813;
-	Mon,  1 Sep 2025 09:55:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40E1F314A93
+	for <linux-mips@vger.kernel.org>; Mon,  1 Sep 2025 11:35:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756720538; cv=none; b=Tsliqz45cZjkZgGGpSU8HVZIUxPFf7ZVpn/h1yBd21SymK7hztyJndE9PBzIPXxR8gOOLKv9UAq96vuQ4Vt+q4AY0IJkGqNoerjv5WOuglB/2huVIs9Vbg0306xOYZaQWgCeRTNCAoFNmQYacpIL9X+rLxAIShGytVxyQF2hphk=
+	t=1756726514; cv=none; b=PG6E+HZvQ6WK7ozKbfDzjv1eCuzq3IyTYSjjXkm6CHlLNnvtkn7jUnhrASM3AyjuJUFcvJS+HXH48bA1T8siUrkBaOZLr4InSF8H0W0oZIEzHqLxAkH/uiYMtEXJ6wv+zgGk/uAuGoSlfT+zDfYwP0ZT0wfGKHgJfUdSDRruknM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756720538; c=relaxed/simple;
-	bh=ZHCWs4HH+c5lN4IlE9gqTWg9pmmhgAFoeTj2IWPQWHQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gP3rpIjhpMrjmvgT8TeP5SiSIUxN04fAcwYIRwuhiTtwe95wEIkJ9cZbquW/1OsWlzJZ+XhKH1Kvoneq8gSmzX+i5csHp+l9WsKpEF2ZNyTUcGkLBJfzJvjO/MfvRcfrFEErUn+b2ju5TBHv9tRYQj5qHhaSOb2wn8qawr/Fdhk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-7e86faa158fso433481885a.1;
-        Mon, 01 Sep 2025 02:55:36 -0700 (PDT)
+	s=arc-20240116; t=1756726514; c=relaxed/simple;
+	bh=yAPERDIoeRASAaUpYs1LNdA8p7G30Qgz6mkvFlYbF3c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Z5L91rbhwA+huRCZLD1LD2dmFRs4kcJOsoOIIQEdoom8C51kmCSta2g7cKyASAJJS6PZe0dnkYeCPc7SsJDa3YOOkQMlOCC8sNI92UMpMtoG37t3TXfa2hOzmYW8lTMU/gsCxC6WbcafkmiYXay8ui59g5lG6U4tZFigDVLEZNU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Oi4kPtKW; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1756726511;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=89QceRiDVJR9qzpuoMtjZ42nHjE3zxx93/plzyge73k=;
+	b=Oi4kPtKW6msMclc99VeFrwikaUAGGqFo1qJnSWm3pfX32GugEguMEBTt/RA9KGrQE3tb4j
+	YtiYW6OJ1Nf+URcS2bvEOvL21+u3d0ZwUU+NiPfSgFJGlqRVG2YtLvYkpcs3/KyhMvLVUd
+	76BrqD6X7mJLnFX2+Ua8oSR8rNiVpn4=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-505-zPfGPVYqNl6C8bC6-2ITFg-1; Mon, 01 Sep 2025 07:35:10 -0400
+X-MC-Unique: zPfGPVYqNl6C8bC6-2ITFg-1
+X-Mimecast-MFC-AGG-ID: zPfGPVYqNl6C8bC6-2ITFg_1756726509
+Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-45b7265febdso29179845e9.1
+        for <linux-mips@vger.kernel.org>; Mon, 01 Sep 2025 04:35:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756720536; x=1757325336;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1756726509; x=1757331309;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=5tFy+S32zcH8SOQI+WY2rqVzMFSU7CQi//EUuweLF5I=;
-        b=gkgVRwmTvrHY8QjA24Ae5C0EU6BTXQJ4h83NWkwEJv3qr7ZdZrzvKtrdxEJqQJy8Op
-         y6DgfdGRSQBoMfTkfyJxfqoVrUfBCG2hLXKq8YhJorvSPrhgaHeARofrUxHmSxRPqzWm
-         VuWGjx9dUVzde0HzHmnR7vVJzJtAmfLEoyKDPgk1YNOYUdTifQ3RZ40LOLdShW0dyhtL
-         ayU0eR76FlL6baN1derAx20KU5vkrddPZ4FWQlSzma7r1bfpJBoWh1JzVRuquwzmUjjF
-         sJzpRQfoJCL51DIvr9fOkduFpkhkLOqIJn0xQvsG7mb+SgBen7eaLY0bm8pm4aJK5cE0
-         dlsA==
-X-Forwarded-Encrypted: i=1; AJvYcCVM69MgPxyoR5Ut5aeWygoHr2XUIaQDJwu1fyTWaibj5wv3J0XXzx7sim4+tW69urS9w2kcpJkq8A==@vger.kernel.org, AJvYcCVbL6OrZIOvBxOjnR+pyPDujq/LoDpLxHhzNZ9oD/DY7jng2U9a8i37TUz8/BYT7beZOHT2EmL5UPAaXQ==@vger.kernel.org, AJvYcCVdop25MYNDUoYyn0qe2IPO/jihXUygnuWkDkWkMq5JD62Wl029HYSBB6cg+A9EVkjdu68ZsFZ80+CCHbMSiAP/qyI=@vger.kernel.org, AJvYcCVeqjHQ21KWXaPYHKnsy/aryWgyEAfHB8rWCG3j38KgkuJvKcoht4IkRS8fC7fby/+h/9MTLfFeXfgnFUTvJA==@vger.kernel.org, AJvYcCWaHvinxtxPdxoeffoboUjY4hchGV/xRfqRPc6USd0Op9t0swuHYuuI955q07VPWXH1OuGRaByyjdBPbH3g@vger.kernel.org, AJvYcCXSVMZ7HMvDMxhqmun1tiiRk9p8fp7hXonWnCXu9vXJAGIOMHbXQpSz2MayBL6w2M1/jCGfK1+lpjaRDexarHk4K70=@vger.kernel.org, AJvYcCXot2odj62uBzP9nx/PMNOiRePPiFxnvNANdVQVRz8kMJBtZBXqH7sTJUaBJZxYkUnwV3l70OKLZM9N@vger.kernel.org
-X-Gm-Message-State: AOJu0YwiWOitpcdaO9ZiOGO1JFv1SDQ3Da8V1V6FvQgxtCo+iwWvtksw
-	UrNjJIWy5w6UkJ45fRVkeXKRkDNizN1vnUK2QtYMJdRZkPcXjhFTwOlj2UWANFcR
-X-Gm-Gg: ASbGnctTlLPATc09KAlNjicABySP6ryuDvuUDlOlvSOc3gNXPynQvjTlaN01aabJy9p
-	l7Bn0OCZGVCtNRN5mOxmi0XdM6jWYAdblhQlwJ9QWP8WZR0TUDXZkHSMstxgBr8I6RmZBcRIFBp
-	cxT+Niw8ADiVKobPVbQuCRZ4ZkUVRaONb7p5RojucufCT31jBSfr8YLWRueYqdqKhEVh4uYRE+O
-	T6COdIlMjXpGdFseIQxUDXohyXdfqVPyFXn1q+e+ZE6kaktAbOT/lsMK7Idimd//aFwDmFuERc3
-	wo6Fl1Nwby6OKNDHeX7hXDklTWPZQE8Cen1aiuhBEgNBx2E1Wp3MCV02/ZYfbowMt6wzZMqJW93
-	kAunp35i02klmrThHDPFPeRUoIQfrzXFjpmr2h7wJNQvFQJNbFX69Mj4HC7sU9uN1
-X-Google-Smtp-Source: AGHT+IF8wII5eWZgQBadnO5DQfaiFS5/z1JMcEs8d28tEnWe/M9RrAxpKwKDZsxBK/TMzbXJ9H2a6w==
-X-Received: by 2002:a05:620a:46a5:b0:7e6:81cc:6999 with SMTP id af79cd13be357-7fed6bab7f7mr818725185a.32.1756720535666;
-        Mon, 01 Sep 2025 02:55:35 -0700 (PDT)
-Received: from mail-qk1-f181.google.com (mail-qk1-f181.google.com. [209.85.222.181])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7fc1654744csm641029085a.70.2025.09.01.02.55.35
+        bh=89QceRiDVJR9qzpuoMtjZ42nHjE3zxx93/plzyge73k=;
+        b=ATWFnNm2wAetCKBLYM/kVBzpYiSjZ40dZXe58K3cSn/Ll89ZEnjfgVL1U+mV0sEDBt
+         IY+zerV38kcAL8s8Q1Q33//EyzVLJyAPnLsqB58Id49ULGRFJASZZxfBDz6+KCAzGuJH
+         nklQaewEl6muGn9l1RaF/igzkVddXUzD5wCUd6eM5w02wrovl91uQqfUsa4t2MkuJ69H
+         q2HJ15wrQ+gyc5pFcFhi4lTSihkaYGr4TUqTOIonw6h8jluyeZyUGSYjuoS07lFCXwaF
+         xJbrBGLtEIr1YEoZC80DdbdObC2Mrl1lZG1OmcefGqqiiiVZX0ezA7/el7jIukuJR9dP
+         t9iw==
+X-Forwarded-Encrypted: i=1; AJvYcCWO3JnhcanEPin7aeQ+JLD2eHdEOyVUHZJSUY1hvSnHLa3gXwpdTy2aaUPf1VnRJ6jT6+gOoqyORJ2z@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdO1JWLEd8srTSfLjFiE1qLysA56AOLO2z49WwRaSyi7k3m0Cf
+	lJvMOX9Z/emRD1T3eTJXQJfXhTh1kXCo/Ws4SrISjZco4jUwINNoEEzuSbD/vLvALgqD0NxASWH
+	0PO6P4676/Q2bVMF2SI8Yfxu4OdhVEdF3QwRSU5grM3SvwJqkReNvlDbUY7N0w8o=
+X-Gm-Gg: ASbGncvGIiDX3rHOjpnfFK/inO5kv+u+grkhidyHIXDjjAWyvxDY1l8TJQxGFybaBhM
+	vU/WaNRbT6q+mz+c3jDQuNNVmStGZ867QZrFstqW/Om0I4RLfYhmYlQBjvIaE+LASPh4HoaYGfX
+	SNWm+ORCjJSNZUzLGq41gQUYMIBS9ZEqjwZi2feTAcZiIotITWt0WAU/6j8/nTbsdIKgKabWdS5
+	L7yAqjP8fup2aEjnCGriBkxXkviP03cc8YzBBIorfoVuelKbU6fgjcdCUA8o4VHMWy3TRKN8Mh0
+	mIVhLt6RQWcFt1nSN3Z5jvrKnN4cth1LsscCfR/2iZmX1SIpCKVy1GwiKzJYbd4oNQ+XZbQV63+
+	tm2TVgn6Nz292tFp/SOvW5334c5z1tPAHUxROw2y3ewOyF9wpXvY2r1NLsYkzqnSGcg8=
+X-Received: by 2002:a5d:5f8c:0:b0:3cf:5f17:f350 with SMTP id ffacd0b85a97d-3d1b16f0165mr6056401f8f.18.1756726508819;
+        Mon, 01 Sep 2025 04:35:08 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IE0RKJ8MgbrMGxtF+aataA+fh1iSiigcyDX0AK/3/6NRoLPIE0BwSmxJshAaTyrpOEmePBJCw==
+X-Received: by 2002:a5d:5f8c:0:b0:3cf:5f17:f350 with SMTP id ffacd0b85a97d-3d1b16f0165mr6056350f8f.18.1756726508320;
+        Mon, 01 Sep 2025 04:35:08 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f37:2b00:948c:dd9f:29c8:73f4? (p200300d82f372b00948cdd9f29c873f4.dip0.t-ipconnect.de. [2003:d8:2f37:2b00:948c:dd9f:29c8:73f4])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b6f0c6fe5sm233831875e9.5.2025.09.01.04.35.06
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 01 Sep 2025 02:55:35 -0700 (PDT)
-Received: by mail-qk1-f181.google.com with SMTP id af79cd13be357-7e86faa158fso433481385a.1;
-        Mon, 01 Sep 2025 02:55:35 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUXw615kq5XrGvYFkU1BLhtLw4rGwyHzEv7Z2H3SDkwpe43pjhT1RoyPC+thz/DSHqKsfDStgLYH15WArsUpisQZhM=@vger.kernel.org, AJvYcCV5VrtR3uT/x1JzzMIDprdcFs+obhmjjUdj3elf9JcRU1W183Gqu5gkFqUcQqUC/6SAZb62InEUgIgvoQ==@vger.kernel.org, AJvYcCVoIuidq2GYFe0raAPkO6C3zClF02UgpIj/4qPAeZS3K9JKMq9b0JnjQlIXXPQfPYZFS2sjjo+6k3kgG+CEdg==@vger.kernel.org, AJvYcCWF3dvjLB2rAkX28vi0foTXvMYvCBz+56BvqDHySa5EchIKDcjFC3bAy8eX1QwFOZijNt4/KBwMsuKa6a1O@vger.kernel.org, AJvYcCWIYremoaJEEbaaotkhJhxiTdgpTdsfQ33n6yRqVwUsh0i3FKKrW1RblL2LBZxVVQt8j2u+FzfnFw==@vger.kernel.org, AJvYcCWM62SW2FvpqbErLI00vjtChxU5iFI+2NeKrUPoWU/RhLuSS/zraz7DTci1AN6hGUabgfl1V+XycdKZ@vger.kernel.org, AJvYcCWxlejoKbpjStSOSvBW076S1QroRHDeTDl5sWwhSR+Goz3va+z4XuPlHcF2HZUzASRDPGH+4QErwLfbyx40rRchMdg=@vger.kernel.org
-X-Received: by 2002:a05:6102:5e8e:b0:50d:feb0:316e with SMTP id
- ada2fe7eead31-52aeb7798e1mr2104974137.2.1756720196368; Mon, 01 Sep 2025
- 02:49:56 -0700 (PDT)
+        Mon, 01 Sep 2025 04:35:07 -0700 (PDT)
+Message-ID: <44072455-fc68-430d-ad38-0b9ce6a10b8d@redhat.com>
+Date: Mon, 1 Sep 2025 13:35:05 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250811-clk-for-stephen-round-rate-v1-0-b3bf97b038dc@redhat.com>
- <1907e1c7-2b15-4729-8497-a7e6f0526366@kernel.org> <aKhVVJPEPxCoKKjI@x1>
- <4d31df9e-62c9-4988-9301-2911ff7de229@kernel.org> <aKhr8NYhei59At0s@x1> <7c6cc42c-fc76-4300-b0d2-8dabf54cf337@kernel.org>
-In-Reply-To: <7c6cc42c-fc76-4300-b0d2-8dabf54cf337@kernel.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Mon, 1 Sep 2025 11:49:45 +0200
-X-Gmail-Original-Message-ID: <CAMuHMdUB4QGBaMk5r5eNRCPriUWAY+LBE2C7kVEkE9eCNE1TUA@mail.gmail.com>
-X-Gm-Features: Ac12FXwQn8nZWuX__OUteos14KQ8Ceq7TOY9AfEwCR3rwgzCn6YxJiejdZ6ywp8
-Message-ID: <CAMuHMdUB4QGBaMk5r5eNRCPriUWAY+LBE2C7kVEkE9eCNE1TUA@mail.gmail.com>
-Subject: Re: [PATCH 000/114] clk: convert drivers from deprecated round_rate()
- to determine_rate()
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Brian Masney <bmasney@redhat.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>, 
-	Cristian Marussi <cristian.marussi@arm.com>, Chen Wang <unicorn_wang@outlook.com>, 
-	Inochi Amaoto <inochiama@gmail.com>, Nicolas Ferre <nicolas.ferre@microchip.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
-	Paul Cercueil <paul@crapouillou.net>, Keguang Zhang <keguang.zhang@gmail.com>, 
-	Taichi Sugaya <sugaya.taichi@socionext.com>, Takao Orito <orito.takao@socionext.com>, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Jacky Huang <ychuang3@nuvoton.com>, Shan-Chun Hung <schung@nuvoton.com>, 
-	Vladimir Zapolskiy <vz@mleia.com>, Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Samuel Holland <samuel.holland@sifive.com>, 
-	Yixun Lan <dlan@gentoo.org>, Steen Hegelund <Steen.Hegelund@microchip.com>, 
-	Daniel Machon <daniel.machon@microchip.com>, UNGLinuxDriver@microchip.com, 
-	Orson Zhai <orsonzhai@gmail.com>, Baolin Wang <baolin.wang@linux.alibaba.com>, 
-	Chunyan Zhang <zhang.lyra@gmail.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
-	Alexandre Torgue <alexandre.torgue@foss.st.com>, Michal Simek <michal.simek@amd.com>, 
-	Maxime Ripard <mripard@kernel.org>, =?UTF-8?Q?Andreas_F=C3=A4rber?= <afaerber@suse.de>, 
-	Manivannan Sadhasivam <mani@kernel.org>, Sven Peter <sven@kernel.org>, Janne Grunau <j@jannau.net>, 
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>, Neal Gompa <neal@gompa.dev>, 
-	Eugeniy Paltsev <Eugeniy.Paltsev@synopsys.com>, Ray Jui <rjui@broadcom.com>, 
-	Scott Branden <sbranden@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, Max Filippov <jcmvbkbc@gmail.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Daniel Palmer <daniel@thingy.jp>, 
-	Romain Perier <romain.perier@gmail.com>, Andrew Lunn <andrew@lunn.ch>, 
-	Gregory Clement <gregory.clement@bootlin.com>, 
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, Bjorn Andersson <andersson@kernel.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Heiko Stuebner <heiko@sntech.de>, 
-	Andrea della Porta <andrea.porta@suse.com>, Sylwester Nawrocki <s.nawrocki@samsung.com>, 
-	Chanwoo Choi <cw00.choi@samsung.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	Qin Jian <qinjian@cqplus1.com>, Viresh Kumar <vireshk@kernel.org>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
-	Alex Helms <alexander.helms.jy@renesas.com>, Linus Walleij <linus.walleij@linaro.org>, 
-	Liviu Dudau <liviu.dudau@arm.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
-	Nobuhiro Iwamatsu <nobuhiro1.iwamatsu@toshiba.co.jp>, linux-clk@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, arm-scmi@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, sophgo@lists.linux.dev, 
-	linux-mips@vger.kernel.org, imx@lists.linux.dev, 
-	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev, 
-	linux-stm32@st-md-mailman.stormreply.com, patches@opensource.cirrus.com, 
-	linux-actions@lists.infradead.org, asahi@lists.linux.dev, 
-	linux-mediatek@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org, soc@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 18/36] mm/gup: drop nth_page() usage within folio when
+ recording subpages
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: linux-kernel@vger.kernel.org, Alexander Potapenko <glider@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Brendan Jackman <jackmanb@google.com>, Christoph Lameter <cl@gentwo.org>,
+ Dennis Zhou <dennis@kernel.org>, Dmitry Vyukov <dvyukov@google.com>,
+ dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+ iommu@lists.linux.dev, io-uring@vger.kernel.org,
+ Jason Gunthorpe <jgg@nvidia.com>, Jens Axboe <axboe@kernel.dk>,
+ Johannes Weiner <hannes@cmpxchg.org>, John Hubbard <jhubbard@nvidia.com>,
+ kasan-dev@googlegroups.com, kvm@vger.kernel.org,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>, linux-arm-kernel@axis.com,
+ linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+ linux-ide@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org, linux-mm@kvack.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-scsi@vger.kernel.org, Marco Elver <elver@google.com>,
+ Marek Szyprowski <m.szyprowski@samsung.com>, Michal Hocko <mhocko@suse.com>,
+ Mike Rapoport <rppt@kernel.org>, Muchun Song <muchun.song@linux.dev>,
+ netdev@vger.kernel.org, Oscar Salvador <osalvador@suse.de>,
+ Peter Xu <peterx@redhat.com>, Robin Murphy <robin.murphy@arm.com>,
+ Suren Baghdasaryan <surenb@google.com>, Tejun Heo <tj@kernel.org>,
+ virtualization@lists.linux.dev, Vlastimil Babka <vbabka@suse.cz>,
+ wireguard@lists.zx2c4.com, x86@kernel.org, Zi Yan <ziy@nvidia.com>
+References: <20250827220141.262669-1-david@redhat.com>
+ <20250827220141.262669-19-david@redhat.com>
+ <c0dadc4f-6415-4818-a319-e3e15ff47a24@lucifer.local>
+ <632fea32-28aa-4993-9eff-99fc291c64f2@redhat.com>
+ <8a26ae97-9a78-4db5-be98-9c1f6e4fb403@lucifer.local>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <8a26ae97-9a78-4db5-be98-9c1f6e4fb403@lucifer.local>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sat, 23 Aug 2025 at 18:43, Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> On 22/08/2025 15:09, Brian Masney wrote:
-> > On Fri, Aug 22, 2025 at 02:23:50PM +0200, Krzysztof Kozlowski wrote:
-> >> On 22/08/2025 13:32, Brian Masney wrote:
-> >>> 7 of the 114 patches in this series needs a v2 with a minor fix. I see
-> >>> several paths forward to merging this. It's ultimately up to Stephen how
-> >>> he wants to proceed.
-> >>>
-> >>> - I send Stephen a PULL request with all of these patches with the minor
-> >>>   cleanups to the 7 patches. Depending on the timing, Stephen can merge
-> >>>   the other work first, and I deal with cleaning up the merge conflicts.
-> >>>   Or he can if he prefers to instead.
-> >>>
-> >>> - Stephen applies everyone else's work first to his tree, and then the
-> >>>   good 107 patches in this series. He skips anything that doesn't apply
-> >>>   due to other people's work and I follow up with a smaller series.
-> >>
-> >> Both cause cross tree merge conflicts. Anyway, please document clearly
-> >> the dependencies between patches.
-> >
-> > This series only touches drivers/clk, so it shouldn't cause any issues
-> > with other subsystems, unless there's a topic branch somewhere, or I'm
-> > missing something?
->
-> Individual maintainers handle subdirectories.
+>>
+>>
+>> The nice thing is that we only record pages in the array if they actually passed our tests.
+> 
+> Yeah that's nice actually.
+> 
+> This is fine (not the meme :P)
 
-FWI(still)W, I have taken the Renesas SoC-specific patches through
-the renesas-clk tree...
+:D
 
-> > There are some drivers under drivers/clk/ where there is an entry in the
-> > MAINTAINERS file that's not Stephen, although it wasn't clear to me if
-> > all of those people will send PULL requests to Stephen. I described on
-> > the cover how how the series was broken up.
-> >
-> >   - Patches 4-70 are for drivers where there is no clk submaintainer
-> >   - Patches 71-110 are for drivers where this is an entry in MAINTAINERS
-> >     (for drivers/clk)
->
-> It's hidden between multiple other descriptions of patches, so I really
-> would not think that this means that it is okay by individual maintainer
-> to take the patch.
->
-> This really should be the one most important part of the cover letter
-> for something like this.
-> ..
+> 
+> So yes let's do this!
 
-It was indeed rather implicit:
+That leaves us with the following on top of this patch:
 
-   "Once all of my conversion patches across the various trees in the kernel
-    have been merged, I will post a small series that removes the
-    round_rate() op from the clk core and the documentation. Here's the
-    other patch series that are currently in flight that need to be merged
-    before we can remove round_rate() from the core. [...]"
+ From 4533c6e3590cab0c53e81045624d5949e0ad9015 Mon Sep 17 00:00:00 2001
+From: David Hildenbrand <david@redhat.com>
+Date: Fri, 29 Aug 2025 15:41:45 +0200
+Subject: [PATCH] mm/gup: remove record_subpages()
 
-Gr{oetje,eeting}s,
+We can just cleanup the code by calculating the #refs earlier,
+so we can just inline what remains of record_subpages().
 
-                        Geert
+Calculate the number of references/pages ahead of times, and record them
+only once all our tests passed.
+
+Signed-off-by: David Hildenbrand <david@redhat.com>
+---
+  mm/gup.c | 25 ++++++++-----------------
+  1 file changed, 8 insertions(+), 17 deletions(-)
+
+diff --git a/mm/gup.c b/mm/gup.c
+index 89ca0813791ab..5a72a135ec70b 100644
+--- a/mm/gup.c
++++ b/mm/gup.c
+@@ -484,19 +484,6 @@ static inline void mm_set_has_pinned_flag(struct mm_struct *mm)
+  #ifdef CONFIG_MMU
+  
+  #ifdef CONFIG_HAVE_GUP_FAST
+-static int record_subpages(struct page *page, unsigned long sz,
+-			   unsigned long addr, unsigned long end,
+-			   struct page **pages)
+-{
+-	int nr;
+-
+-	page += (addr & (sz - 1)) >> PAGE_SHIFT;
+-	for (nr = 0; addr != end; nr++, addr += PAGE_SIZE)
+-		pages[nr] = page++;
+-
+-	return nr;
+-}
+-
+  /**
+   * try_grab_folio_fast() - Attempt to get or pin a folio in fast path.
+   * @page:  pointer to page to be grabbed
+@@ -2963,8 +2950,8 @@ static int gup_fast_pmd_leaf(pmd_t orig, pmd_t *pmdp, unsigned long addr,
+  	if (pmd_special(orig))
+  		return 0;
+  
+-	page = pmd_page(orig);
+-	refs = record_subpages(page, PMD_SIZE, addr, end, pages + *nr);
++	refs = (end - addr) >> PAGE_SHIFT;
++	page = pmd_page(orig) + ((addr & ~PMD_MASK) >> PAGE_SHIFT);
+  
+  	folio = try_grab_folio_fast(page, refs, flags);
+  	if (!folio)
+@@ -2985,6 +2972,8 @@ static int gup_fast_pmd_leaf(pmd_t orig, pmd_t *pmdp, unsigned long addr,
+  	}
+  
+  	*nr += refs;
++	for (; refs; refs--)
++		*(pages++) = page++;
+  	folio_set_referenced(folio);
+  	return 1;
+  }
+@@ -3003,8 +2992,8 @@ static int gup_fast_pud_leaf(pud_t orig, pud_t *pudp, unsigned long addr,
+  	if (pud_special(orig))
+  		return 0;
+  
+-	page = pud_page(orig);
+-	refs = record_subpages(page, PUD_SIZE, addr, end, pages + *nr);
++	refs = (end - addr) >> PAGE_SHIFT;
++	page = pud_page(orig) + ((addr & ~PUD_MASK) >> PAGE_SHIFT);
+  
+  	folio = try_grab_folio_fast(page, refs, flags);
+  	if (!folio)
+@@ -3026,6 +3015,8 @@ static int gup_fast_pud_leaf(pud_t orig, pud_t *pudp, unsigned long addr,
+  	}
+  
+  	*nr += refs;
++	for (; refs; refs--)
++		*(pages++) = page++;
+  	folio_set_referenced(folio);
+  	return 1;
+  }
+-- 
+2.50.1
+
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+Cheers
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+David / dhildenb
+
 
