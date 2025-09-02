@@ -1,102 +1,79 @@
-Return-Path: <linux-mips+bounces-10934-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10935-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C816B3FE3A
-	for <lists+linux-mips@lfdr.de>; Tue,  2 Sep 2025 13:47:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86BB7B3FEDA
+	for <lists+linux-mips@lfdr.de>; Tue,  2 Sep 2025 13:59:37 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 38ABD179E92
-	for <lists+linux-mips@lfdr.de>; Tue,  2 Sep 2025 11:47:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D968D1B2607D
+	for <lists+linux-mips@lfdr.de>; Tue,  2 Sep 2025 11:59:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3F31287254;
-	Tue,  2 Sep 2025 11:45:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="jXmzEnXa"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD5772F4A18;
+	Tue,  2 Sep 2025 11:56:32 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp-out3.simply.com (smtp-out3.simply.com [94.231.106.210])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D20302FF159;
-	Tue,  2 Sep 2025 11:44:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.231.106.210
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68F0026F298;
+	Tue,  2 Sep 2025 11:56:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756813502; cv=none; b=GqVCtkGags45mKFqBAVTH1SuSl8cOdxReSIHiVDZK4PtJwXMZrWkUUW28i+ltsja/j2PSQdc2bVpZEZ9kdzKilKaqVolRm1feS6udwLb/ia3eNfhP7ZAxnr9pzelqUOxSW6SoGqv95zxrDD+uUTVA7SDeodfkyMSG+m++krA4BE=
+	t=1756814192; cv=none; b=tlnY21e45oii6lTD5yA2zLv/mZ7tIEMS8YnEY01l/P1OuH99sMpyAu/Q3HLcUluhGaQbJhFFR6ahHcASZWt3o/b88f3KUhPNXWLm5RgbKeYuEU096zIdijr0krpOdF+OlloACAPvwMt3zLbFwUAEmLPMvcvtRHHoZ9pVzbLDQ50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756813502; c=relaxed/simple;
-	bh=0o5C5Ly/rHsnoowmYx3m8IcTZ1cPVbKim17lOjF7UUg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Yr99fq3LKd2sOGPqzXWTUgrntYafMafyWYpftc7jDAzWfecr0WG1Ub7D8gMijEC4SwxcBl6NFyyJsXN1ld62UMoKvIvLOlitEsQhmblHnR6Fq6O/AY91Lt7Nxv02Mz5VrJhsVI6HlMjwvwjOaRYaMnspm/e0NWPvOj1le/Ik8WI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=fail (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=jXmzEnXa reason="key not found in DNS"; arc=none smtp.client-ip=94.231.106.210
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gaisler.com
-Received: from localhost (localhost [127.0.0.1])
-	by smtp.simply.com (Simply.com) with ESMTP id 4cGP6x6Rpwz1FZPJ;
-	Tue,  2 Sep 2025 13:44:57 +0200 (CEST)
-Received: from [192.168.0.25] (h-98-128-223-123.NA.cust.bahnhof.se [98.128.223.123])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by smtp.simply.com (Simply.com) with ESMTPSA id 4cGP6w5mgsz1FXjD;
-	Tue,  2 Sep 2025 13:44:56 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gaisler.com;
-	s=simplycom2; t=1756813497;
-	bh=voGobjfJ+JDIyxPuu8fGQb2u9QP7Z513vboXRHjWrpI=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=jXmzEnXapdgWj3k2C76LGG7k/5mt1kwvMqAYSfMFYlJ0dMOQ80Oj2YE0pnZAtNJ4t
-	 tXQk/LzaZA57Nv160y42KGcSc12HLtx5zDkXLTwO001yujBIUCUp0jXWbSqOup1wEK
-	 caelEQWo/j1aiLxV7BPWjSbstlue7ClkuM93YSG2cSzlCJSLWryT6cSw2EEQcr+aVF
-	 FTt0lGn6fnMuHg7U0U6sd3U2Ku9tEiPKwlVMzDHUsOHxPUryMAOV1qAvelOgjen0aR
-	 RoDQinmHdiIG1eCVLztKOXDNMYphrSPAPE4G8u5ceaF4FDq1DzCH6UTTJUx5w29cc0
-	 vZYTj+Lq2QLjQ==
-Message-ID: <92bace9a-b5c4-4ea1-a1f7-4742c15a64a0@gaisler.com>
-Date: Tue, 2 Sep 2025 13:44:56 +0200
+	s=arc-20240116; t=1756814192; c=relaxed/simple;
+	bh=shc/J8ooiiB5CLgwUwFUvAqayCLu3IHyVA97gI0n+mc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=O3+2iYvsnHV9i8jdmQmgEM8ooNgDPPPSG4TTIF6Ii6Aa11cKv9H51d+AqoHmlCX3VdJVhcCIVTwzhkjS+TPleimNr5ltrLguFRjpunD+w1VFZzClgy5dFd+6v6zdIAmC25+TmMepbNtMM5jb3m1MVcsJWnfYXtPoFKcU0in1QVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1utPca-0005h8-00; Tue, 02 Sep 2025 13:56:20 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 4F32BC04FD; Tue,  2 Sep 2025 13:55:47 +0200 (CEST)
+Date: Tue, 2 Sep 2025 13:55:47 +0200
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Osama Abdelkader <osama.abdelkader@gmail.com>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mips: math-emu: replace deprecated strcpy() in me-debugfs
+Message-ID: <aLbbQ1vwnXYwU6JJ@alpha.franken.de>
+References: <20250901133920.94022-1-osama.abdelkader@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/4] arch: copy_thread: pass clone_flags as u64
-To: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- Arnd Bergmann <arnd@arndb.de>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org,
- linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org,
- linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org,
- cgroups@vger.kernel.org, linux-security-module@vger.kernel.org,
- linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org,
- linux-perf-users@vger.kernel.org, apparmor@lists.ubuntu.com,
- selinux@vger.kernel.org, linux-alpha@vger.kernel.org,
- linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
- linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev,
- linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
- linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org,
- linux-sh@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-um@lists.infradead.org
-References: <20250901-nios2-implement-clone3-v2-0-53fcf5577d57@siemens-energy.com>
- <20250901-nios2-implement-clone3-v2-3-53fcf5577d57@siemens-energy.com>
- <f2371539-cd4e-4d70-9576-4bb1c677104c@gaisler.com>
- <11a4d0a953e3a9405177d67f287c69379a2b2f8f.camel@physik.fu-berlin.de>
-Content-Language: en-US
-From: Andreas Larsson <andreas@gaisler.com>
-In-Reply-To: <11a4d0a953e3a9405177d67f287c69379a2b2f8f.camel@physik.fu-berlin.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250901133920.94022-1-osama.abdelkader@gmail.com>
 
-On 2025-09-02 09:15, John Paul Adrian Glaubitz wrote:
->> Thanks for this and for the whole series! Needed foundation for a
->> sparc32 clone3 implementation as well.
+On Mon, Sep 01, 2025 at 03:39:19PM +0200, Osama Abdelkader wrote:
+> use strscpy() instead of deprecated strcpy().
 > 
-> Can you implement clone3 for sparc64 as well?
+> Signed-off-by: Osama Abdelkader <osama.abdelkader@gmail.com>
+> ---
+>  arch/mips/math-emu/me-debugfs.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/mips/math-emu/me-debugfs.c b/arch/mips/math-emu/me-debugfs.c
+> index d5ad76b2bb67..94667cbe18e7 100644
+> --- a/arch/mips/math-emu/me-debugfs.c
+> +++ b/arch/mips/math-emu/me-debugfs.c
+> @@ -41,7 +41,7 @@ static void adjust_instruction_counter_name(char *out_name, char *in_name)
+>  {
+>  	int i = 0;
+>  
+> -	strcpy(out_name, in_name);
+> +	strscpy(out_name, in_name, sizeof(out_name));
 
-(heavily pairing down the to list)
+this is wrong. sizeof(out_name) is the size of the pointer, but not the
+size of the storage behind it. To be able to use strscpy() here you
+need to pass in the size of the given buffer and use that.
 
-We'll take a look at that as well.
+Thomas.
 
-Cheers,
-Andreas
-
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
