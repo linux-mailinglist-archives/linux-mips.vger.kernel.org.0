@@ -1,187 +1,161 @@
-Return-Path: <linux-mips+bounces-10926-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10927-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89133B3F664
-	for <lists+linux-mips@lfdr.de>; Tue,  2 Sep 2025 09:15:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6788DB3FA29
+	for <lists+linux-mips@lfdr.de>; Tue,  2 Sep 2025 11:22:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88EE43A769E
-	for <lists+linux-mips@lfdr.de>; Tue,  2 Sep 2025 07:15:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7C61D4E1714
+	for <lists+linux-mips@lfdr.de>; Tue,  2 Sep 2025 09:22:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A58F52E2DF2;
-	Tue,  2 Sep 2025 07:15:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E077C2E8B77;
+	Tue,  2 Sep 2025 09:22:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="X921ENld"
+	dkim=pass (2048-bit key) header.d=ursulin-net.20230601.gappssmtp.com header.i=@ursulin-net.20230601.gappssmtp.com header.b="BjJ4DkI0"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC27918DB0D;
-	Tue,  2 Sep 2025 07:15:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0A4722E9EC0
+	for <linux-mips@vger.kernel.org>; Tue,  2 Sep 2025 09:22:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756797327; cv=none; b=VvNEulg7vZYy63HUGUoXi046kUdpYQlVpX7tVffT01ujcNhBmwaDpq6IMdmU8ObLZ16y08rBA3QkIARm/Dvz7e23gxyk1JVIxphKDhBytz8KI+BaX+LqDag6LehQdkev+E/TOO23Ik3j/+U1Ixf+J+Yo889cj8wIJN7vCf7IXpY=
+	t=1756804935; cv=none; b=BoTwtIo1u7W1oq15TEVfJVFrRPDYOxhAt72WlhsErWLg9VYN2RxSCGudF4auLV7IMHzwL/3xfHCFwDXDbUVJKHgdGHzkj2lm8i/0wFW8upppRP3VHcBVijk/c01APYfr0SOdJR5QQmCzDPXEK+ym71iJ1VfBpXcRXnVI0i/9lAE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756797327; c=relaxed/simple;
-	bh=63Ypg42QVZ06s8ykliKTqwl+/W5CTIpV8b7Xr3N12cs=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=BFzdm5jLr0zocw9nsdSeklYN9QCW5WlBCGwGIRGLJbtE4459FkhidLnjrPoU62//Ik7IrBoPd2u14/qY4WRFDLvUJu1DDz6L9QEOt3BSMJWWC2QTcHbK1gNF7DGkzzNNZGMcEHYLn5T4roLrNbXzHhYXUb9I+65/43b/0IyDtqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=X921ENld; arc=none smtp.client-ip=130.133.4.66
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
-	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:From:
-	Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
-	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
-	References; bh=75QsosR73EP7Bhx5dXwnnBiSrQlTSAdKIHehZonw/2s=; t=1756797323;
-	x=1757402123; b=X921ENldUxkTG2iEalnRJczAydGr+60jnSCemShmum7owLYveZD+utCqGKrDy
-	JxsQx+SR98LaDjqI5miAet79XGeKpnPG7pU3BPd3n7/p7jj0zED8JzynlUkYCEXmxO1C+S2YqjUVS
-	V5R+cn5H4MJ8GQ5lESC0XBVCeQWyJDgTJO6mH8pHWkK2Ql2ysaeO0po59wRj2FP9QgbfCVp5rkRUo
-	QrFBccBSWRKwxSgXOohUG2j8ZgCj04hDsSPMblP/7B1bUN6leCRxM1sThlrpmLA6s9V+5QZfZYVck
-	/wq/gloVjZWpqTUN4PorQGEzcaw3hEsFw6JDm7DJLVzjE57ybw==;
-Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
-          by outpost.zedat.fu-berlin.de (Exim 4.98)
-          with esmtps (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@zedat.fu-berlin.de>)
-          id 1utLEY-00000000Jm5-12co; Tue, 02 Sep 2025 09:15:14 +0200
-Received: from p5b13aa34.dip0.t-ipconnect.de ([91.19.170.52] helo=[192.168.178.61])
-          by inpost2.zedat.fu-berlin.de (Exim 4.98)
-          with esmtpsa (TLS1.3)
-          tls TLS_AES_256_GCM_SHA384
-          (envelope-from <glaubitz@physik.fu-berlin.de>)
-          id 1utLEX-00000002jxi-2pMt; Tue, 02 Sep 2025 09:15:13 +0200
-Message-ID: <11a4d0a953e3a9405177d67f287c69379a2b2f8f.camel@physik.fu-berlin.de>
-Subject: Re: [PATCH v2 3/4] arch: copy_thread: pass clone_flags as u64
-From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
-To: Andreas Larsson <andreas@gaisler.com>,
- schuster.simon@siemens-energy.com,  Dinh Nguyen <dinguyen@kernel.org>,
- Christian Brauner <brauner@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
- Andrew Morton <akpm@linux-foundation.org>, David Hildenbrand
- <david@redhat.com>, Lorenzo Stoakes	 <lorenzo.stoakes@oracle.com>, "Liam R.
- Howlett" <Liam.Howlett@oracle.com>,  Vlastimil Babka	 <vbabka@suse.cz>,
- Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan	 <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>, Ingo Molnar	 <mingo@redhat.com>, Peter
- Zijlstra <peterz@infradead.org>, Juri Lelli	 <juri.lelli@redhat.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,  Dietmar Eggemann
- <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, Ben
- Segall <bsegall@google.com>,  Mel Gorman <mgorman@suse.de>, Valentin
- Schneider <vschneid@redhat.com>, Kees Cook <kees@kernel.org>,  Paul
- Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>,
- Albert Ou <aou@eecs.berkeley.edu>,  Alexandre Ghiti	 <alex@ghiti.fr>, Guo
- Ren <guoren@kernel.org>, Oleg Nesterov <oleg@redhat.com>,  Jens Axboe
- <axboe@kernel.dk>, Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara
- <jack@suse.cz>, Tejun Heo <tj@kernel.org>, Johannes Weiner
- <hannes@cmpxchg.org>, Michal =?ISO-8859-1?Q?Koutn=FD?=	 <mkoutny@suse.com>,
- Paul Moore <paul@paul-moore.com>, Serge Hallyn	 <sergeh@kernel.org>, James
- Morris <jmorris@namei.org>, "Serge E. Hallyn"	 <serge@hallyn.com>,
- Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic Weisbecker
- <frederic@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Masami
- Hiramatsu	 <mhiramat@kernel.org>, "David S. Miller" <davem@davemloft.net>,
- Eric Dumazet	 <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni	 <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Mathieu
- Desnoyers	 <mathieu.desnoyers@efficios.com>, Arnaldo Carvalho de Melo
- <acme@kernel.org>,  Namhyung Kim <namhyung@kernel.org>, Mark Rutland
- <mark.rutland@arm.com>, Alexander Shishkin	
- <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Ian
- Rogers	 <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, John
- Johansen	 <john.johansen@canonical.com>, Stephen Smalley
- <stephen.smalley.work@gmail.com>,  Ondrej Mosnacek <omosnace@redhat.com>,
- Kentaro Takeda <takedakn@nttdata.co.jp>, Tetsuo Handa	
- <penguin-kernel@I-love.SAKURA.ne.jp>, Richard Henderson	
- <richard.henderson@linaro.org>, Matt Turner <mattst88@gmail.com>, Vineet
- Gupta	 <vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>, Catalin
- Marinas	 <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Brian
- Cain	 <bcain@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui	
- <kernel@xen0n.name>, Geert Uytterhoeven <geert@linux-m68k.org>, Michal
- Simek	 <monstr@monstr.eu>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Jonas Bonn	 <jonas@southpole.se>, Stefan Kristiansson
- <stefan.kristiansson@saunalahti.fi>,  Stafford Horne <shorne@gmail.com>,
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, Helge
- Deller	 <deller@gmx.de>, Madhavan Srinivasan <maddy@linux.ibm.com>, Michael
- Ellerman	 <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Christophe Leroy	 <christophe.leroy@csgroup.eu>, Heiko Carstens
- <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev
- <agordeev@linux.ibm.com>, Christian Borntraeger	
- <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, Yoshinori
- Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, Richard
- Weinberger	 <richard@nod.at>, Anton Ivanov
- <anton.ivanov@cambridgegreys.com>, Johannes Berg	
- <johannes@sipsolutions.net>, Borislav Petkov <bp@alien8.de>, Dave Hansen	
- <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin"
- <hpa@zytor.com>,  Chris Zankel <chris@zankel.net>, Max Filippov
- <jcmvbkbc@gmail.com>
-Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org, 
-	linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
-	cgroups@vger.kernel.org, linux-security-module@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-perf-users@vger.kernel.org, apparmor@lists.ubuntu.com, 
-	selinux@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
-	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
-	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
-	linux-um@lists.infradead.org
-Date: Tue, 02 Sep 2025 09:15:08 +0200
-In-Reply-To: <f2371539-cd4e-4d70-9576-4bb1c677104c@gaisler.com>
-References: 
-	<20250901-nios2-implement-clone3-v2-0-53fcf5577d57@siemens-energy.com>
-	 <20250901-nios2-implement-clone3-v2-3-53fcf5577d57@siemens-energy.com>
-	 <f2371539-cd4e-4d70-9576-4bb1c677104c@gaisler.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.56.2 
+	s=arc-20240116; t=1756804935; c=relaxed/simple;
+	bh=Pv1NlzKjL0xFo8BfGbhy/7KnNZN8WrItjraHEOkXixw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kzTZP6ZDMNgQfDToWsJCVoQX5vZT3zSvnGxa8OZJkExt6ZA2c5yv+Pu1GN9o9l6rgQL7pt10eVIeIO5QYiEvm6A1JJUYoMMxFmT2yNKAe6dam8p8lFc4jOAYKB47hifww5UAO2l01Qt7klrb/qY4Z/yTi+b901mKfZIvef1mKAQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ursulin.net; spf=none smtp.mailfrom=ursulin.net; dkim=pass (2048-bit key) header.d=ursulin-net.20230601.gappssmtp.com header.i=@ursulin-net.20230601.gappssmtp.com header.b=BjJ4DkI0; arc=none smtp.client-ip=209.85.128.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ursulin.net
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ursulin.net
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-45b8b2712d8so22268695e9.3
+        for <linux-mips@vger.kernel.org>; Tue, 02 Sep 2025 02:22:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ursulin-net.20230601.gappssmtp.com; s=20230601; t=1756804931; x=1757409731; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=0Be300C9M54HN2j6qqn3KzILYOn0Dm/rUn/s4aJntRQ=;
+        b=BjJ4DkI0nOIeBWi829gHdcdGEnRHe1ZnQO1njdb+Jyp0kjPhbqnc/pH3IqlbX/mPRt
+         KImIiC5IOBhDUsCOe+bsijMfqcLKa+dXYa461vlf8W43jDTp2NN/HyQttUmEPfTyMDsa
+         +znjOYbf7zmMPfsw7iujVXgeGLUXtwGXlQ+SY2EucQk11hSB12zyiFkHuuLs1Vp+GMQK
+         znrByajiS5QwRXsCGGX/uEAkboujg3cDsCxXhSDvaaKtpi9xTJYSIPVmQMJW+nANv+26
+         x3bpMDTCAYkVqg6BQ0C/DVGa/O/iwl4l6QGYI8jJHyq5e0aZ7lgtishdDOyJn3yv5f02
+         d/Ew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1756804931; x=1757409731;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0Be300C9M54HN2j6qqn3KzILYOn0Dm/rUn/s4aJntRQ=;
+        b=ocsaNlFU5melF/mPDsShBd+PhKWwuh7w6ST6+K1TJQHsDM/NL46MjaX8m1ZQVPfQ3c
+         CBfVt6hUOUb1Ta5zbq4F1KWnvaFWjHTy6s0e22gGg8P1AbtT9yPJK1pPH+Kkl34wh6bM
+         k8A9C90iRhtplSMqGSpMlI9kdUQ2jDLB7Hi8oI81SgIiQPCUagvyAngygiZthkSyVc1z
+         ZqbIQiO+ZeHyo1VorbFWSsBNCit2SOgzIWJ46Tv4UZm3c4B44ECKdp19+XGQaFUfWK0g
+         TyNA6fjzFh/CCFg+aG3xRbdYyxjXl8okykiIiC3pB4VmCufv5MBXyhiH70vphhHPeevq
+         DLPA==
+X-Forwarded-Encrypted: i=1; AJvYcCU2U/WZYDnaO0gt4qN2DaNp3l0BEb6rZ3HVNMlPpkDk4r+Z+ykU7iHoMi8yM6WsAgwpQHusIvsYeP7U@vger.kernel.org
+X-Gm-Message-State: AOJu0YybUciTGZUHb1QTuyjIajhyYWoJgXLLrELobEOfAS9c2hB727d/
+	0aGc852NZr06ceM3YDcMTPQmiJvtHXDW906uszqMms/a7AY05GD43Le7uLK4xsQLY2M=
+X-Gm-Gg: ASbGncsCaDboRT4H97oDb3swN5q++ACQ5HpqBB2SZDTaFSZb3NKqvQn6Kegp4tfjZTK
+	VWScf9XDMipTI0BgMaw1Pr+L7Ba6HtGMHf1swyl9tzPCjXkaEO8F2u7bkog7Bd0qYx0k322wGho
+	EQ4tpQU1kcmY/LhRafcJcUiRziTQG3a5O9MHWqL6Hgm5u4yBXMFrst2F3e4o0pbBgseOoj6/PI5
+	Htlkh+jjB5F1TXCd21xFj/GFtnXp0Rh2QihDcG2uIUrkGOf2kH2/k+ODMepD+g1Gki+M1bNt16I
+	Y/NQ34/ww1ka445KiC3yAm9SXBdlANAvIu5VKaNXasnQKEwV7kme3HLF5umXS81xPflHDb8Q4NA
+	LWcwqnaEthy8ac6FlvvImGpyDzeIKaYAEzdY=
+X-Google-Smtp-Source: AGHT+IFjGWdM7r4OC2xPYq10JBW42QzIVS9ISDbv655toZnOdc57tKWSkMByc2ni755H7QY3mBnVYA==
+X-Received: by 2002:a05:600c:a04:b0:45b:7d24:beac with SMTP id 5b1f17b1804b1-45b8553335amr94619035e9.10.1756804930815;
+        Tue, 02 Sep 2025 02:22:10 -0700 (PDT)
+Received: from [192.168.0.101] ([84.66.36.92])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3d0b9402299sm17994846f8f.18.2025.09.02.02.22.09
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 02 Sep 2025 02:22:10 -0700 (PDT)
+Message-ID: <4bbf5590-7591-4dfc-a23e-0bda6cb31a80@ursulin.net>
+Date: Tue, 2 Sep 2025 10:22:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Original-Sender: glaubitz@physik.fu-berlin.de
-X-ZEDAT-Hint: PO
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 26/37] drm/i915/gem: drop nth_page() usage within SG
+ entry
+To: David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Jani Nikula <jani.nikula@linux.intel.com>,
+ Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+ Rodrigo Vivi <rodrigo.vivi@intel.com>, David Airlie <airlied@gmail.com>,
+ Simona Vetter <simona@ffwll.ch>, Alexander Potapenko <glider@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Brendan Jackman <jackmanb@google.com>, Christoph Lameter <cl@gentwo.org>,
+ Dennis Zhou <dennis@kernel.org>, Dmitry Vyukov <dvyukov@google.com>,
+ dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+ iommu@lists.linux.dev, io-uring@vger.kernel.org,
+ Jason Gunthorpe <jgg@nvidia.com>, Jens Axboe <axboe@kernel.dk>,
+ Johannes Weiner <hannes@cmpxchg.org>, John Hubbard <jhubbard@nvidia.com>,
+ kasan-dev@googlegroups.com, kvm@vger.kernel.org,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>, linux-arm-kernel@axis.com,
+ linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+ linux-ide@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org, linux-mm@kvack.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-scsi@vger.kernel.org, Marco Elver <elver@google.com>,
+ Marek Szyprowski <m.szyprowski@samsung.com>, Michal Hocko <mhocko@suse.com>,
+ Mike Rapoport <rppt@kernel.org>, Muchun Song <muchun.song@linux.dev>,
+ netdev@vger.kernel.org, Oscar Salvador <osalvador@suse.de>,
+ Peter Xu <peterx@redhat.com>, Robin Murphy <robin.murphy@arm.com>,
+ Suren Baghdasaryan <surenb@google.com>, Tejun Heo <tj@kernel.org>,
+ virtualization@lists.linux.dev, Vlastimil Babka <vbabka@suse.cz>,
+ wireguard@lists.zx2c4.com, x86@kernel.org, Zi Yan <ziy@nvidia.com>
+References: <20250901150359.867252-1-david@redhat.com>
+ <20250901150359.867252-27-david@redhat.com>
+Content-Language: en-GB
+From: Tvrtko Ursulin <tursulin@ursulin.net>
+In-Reply-To: <20250901150359.867252-27-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Andreas,
 
-On Tue, 2025-09-02 at 09:02 +0200, Andreas Larsson wrote:
-> On 2025-09-01 15:09, Simon Schuster via B4 Relay wrote:
-> > From: Simon Schuster <schuster.simon@siemens-energy.com>
-> >=20
-> > With the introduction of clone3 in commit 7f192e3cd316 ("fork: add
-> > clone3") the effective bit width of clone_flags on all architectures wa=
-s
-> > increased from 32-bit to 64-bit, with a new type of u64 for the flags.
-> > However, for most consumers of clone_flags the interface was not
-> > changed from the previous type of unsigned long.
-> >=20
-> > While this works fine as long as none of the new 64-bit flag bits
-> > (CLONE_CLEAR_SIGHAND and CLONE_INTO_CGROUP) are evaluated, this is stil=
-l
-> > undesirable in terms of the principle of least surprise.
-> >=20
-> > Thus, this commit fixes all relevant interfaces of the copy_thread
-> > function that is called from copy_process to consistently pass
-> > clone_flags as u64, so that no truncation to 32-bit integers occurs on
-> > 32-bit architectures.
-> >=20
-> > Signed-off-by: Simon Schuster <schuster.simon@siemens-energy.com>
-> > ---
->=20
-> Thanks for this and for the whole series! Needed foundation for a
-> sparc32 clone3 implementation as well.
+On 01/09/2025 16:03, David Hildenbrand wrote:
+> It's no longer required to use nth_page() when iterating pages within a
+> single SG entry, so let's drop the nth_page() usage.
+> 
+> Reviewed-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> Cc: Jani Nikula <jani.nikula@linux.intel.com>
+> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
+> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
+> Cc: Tvrtko Ursulin <tursulin@ursulin.net>
+> Cc: David Airlie <airlied@gmail.com>
+> Cc: Simona Vetter <simona@ffwll.ch>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
+> ---
+>   drivers/gpu/drm/i915/gem/i915_gem_pages.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_pages.c b/drivers/gpu/drm/i915/gem/i915_gem_pages.c
+> index c16a57160b262..031d7acc16142 100644
+> --- a/drivers/gpu/drm/i915/gem/i915_gem_pages.c
+> +++ b/drivers/gpu/drm/i915/gem/i915_gem_pages.c
+> @@ -779,7 +779,7 @@ __i915_gem_object_get_page(struct drm_i915_gem_object *obj, pgoff_t n)
+>   	GEM_BUG_ON(!i915_gem_object_has_struct_page(obj));
+>   
+>   	sg = i915_gem_object_get_sg(obj, n, &offset);
+> -	return nth_page(sg_page(sg), offset);
+> +	return sg_page(sg) + offset;
+>   }
+>   
+>   /* Like i915_gem_object_get_page(), but mark the returned page dirty */
 
-Can you implement clone3 for sparc64 as well?
+LGTM. If you want an ack to merge via a tree other than i915 you have 
+it. I suspect it might be easier to coordinate like that.
 
-Adrian
+Regards,
 
---=20
- .''`.  John Paul Adrian Glaubitz
-: :' :  Debian Developer
-`. `'   Physicist
-  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
+Tvrtko
+
 
