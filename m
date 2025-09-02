@@ -1,74 +1,74 @@
-Return-Path: <linux-mips+bounces-10975-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10976-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74056B40C76
-	for <lists+linux-mips@lfdr.de>; Tue,  2 Sep 2025 19:50:24 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6405EB40EBF
+	for <lists+linux-mips@lfdr.de>; Tue,  2 Sep 2025 22:47:14 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 41FC1564D04
-	for <lists+linux-mips@lfdr.de>; Tue,  2 Sep 2025 17:50:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0A7087B551E
+	for <lists+linux-mips@lfdr.de>; Tue,  2 Sep 2025 20:45:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA1D2346A02;
-	Tue,  2 Sep 2025 17:50:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11B2E345733;
+	Tue,  2 Sep 2025 20:46:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="0Eer1kR0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T8Y7Gnac"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
+Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91482342C9C
-	for <linux-mips@vger.kernel.org>; Tue,  2 Sep 2025 17:50:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 343622DECB4;
+	Tue,  2 Sep 2025 20:46:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756835415; cv=none; b=dLWeMTU3hcSq03kgmWszdo7TnagF31oA2HxVPo/sD+MemalOgX2YhHYXPIqGwI7/RiRIcrmSsZxz05KfbTZsAh4lNnvshuYvxwsuPiOCnF0oJaOCAZSUU589FCeYASaY6k0Z2zybHGHUn3SSlcRBdjdVzTeN7AUU0no8xpiKLKg=
+	t=1756846018; cv=none; b=obDxSM3gyLOWPJ8mVgQAx4isqFEYCnnjvl3AFMJMU6hnu4m2Ahbkol/+oY+eSs5vUsq7QMek5cz2bdyOuf4dRqlhVn8fkXNAp4uZhLz8y9i1xyZikmMyu9pqZSX0Fh1x3vq7LvIuKTHHORQyifz7WyQAXxSsB0bqb7duHrbmKn0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756835415; c=relaxed/simple;
-	bh=Qq79ok73NgzUNSPN3ElH84ehBnROIulXyA0yyA4cddE=;
+	s=arc-20240116; t=1756846018; c=relaxed/simple;
+	bh=kutjVkpcvEETb1qEj2HY122cngSwuEsceeDMIRlTOiM=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fq9cOjirY6G8SNSrJoRmFtaxWAjzw5LCJC0GO16Y1Q6dXME7iJoWQQ8EiUpQR9pIyr2ax37Bq0XwJLzHMKTKqbhekXyLzIzxqLUrWNGJl7s2hX3L276yvRSrVcWlTbW7m/33rIMwvLlkhncP+GlyEch2M4vmlx6UptjYs62hjFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=0Eer1kR0; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-560888dc903so433266e87.2
-        for <linux-mips@vger.kernel.org>; Tue, 02 Sep 2025 10:50:13 -0700 (PDT)
+	 To:Cc:Content-Type; b=YlDj1sPeQt0ch6tyzhVrGFGtbT2wHzg8Ykpx+k8C6337FfzOQT6QN3gzSU/5wx91MdWJ6S9XDdpizGjiLzoG/pH54O1aameCZV4Q6i7Vz/uRQmKrn7yymQbUbr5j2u5TE22sSDZbAnr2nKTFXfbDmBXoGoBQnGv15wbw5O3FYPI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T8Y7Gnac; arc=none smtp.client-ip=209.85.218.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-afcb7ace3baso440904166b.3;
+        Tue, 02 Sep 2025 13:46:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1756835412; x=1757440212; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1756846015; x=1757450815; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Qq79ok73NgzUNSPN3ElH84ehBnROIulXyA0yyA4cddE=;
-        b=0Eer1kR0WtKHGcMrO/7bSVfIYNsu9xRoEmIbCIYaLosSLtg3My9vqxz4PdqlxF/Zzj
-         kuODRv4VrTZHkI3/u6S4R6dt9yQCPoq+YJECvzOxCg2kt2AptOw0Gpvlfo12pNFzsFUw
-         9MhxOXd+T6H9pYGg5IsVSx4Ss6ITrM4IYzVTISKEZVS0JLZKIcVtY7v+G8drgmExGN1d
-         ZKd3T1Fp7aKLIoCy0CtI+Ga2rEbKU7RGRPMoQ5xv4vw+kYO0hPRN6FJp0Cb+XvS9hDEM
-         uWqkGH1aI8qktgfDq8cKwa6GTRBj57l+MuEnbAINhsQdgMfis1qIHkz6rFsiHqzFU2a9
-         Jxhg==
+        bh=kutjVkpcvEETb1qEj2HY122cngSwuEsceeDMIRlTOiM=;
+        b=T8Y7Gnacmq4vOiGY8YqsBkmMTB3Tq4pHX6BLsj+eL8A7Yq0rXmwFbT7amtInhH2IPO
+         Yl9eB9W0SRTOM3yCvwMh8/TEVmmapxjCyGZlJOJ5mVWhUCOm+EHC96sPLSRLz0mf45hr
+         ml1me73jxUtHCB/aNPOip7svo8Frg+JLQTi4E9FysfNaIg8uasZ87S/+67txw9e9Lkep
+         qZEjHgj5EWbSQDBui5vlZh17Mn87AUud00YFD3yKrFywJ9NhVqKNBeyClKNYaTl/Fv7n
+         Rw6giI4jUeL5w/kEIBWz4vJfqJtc9MZ79Itb/GKpnooXI9lTZwK6a5lxp5S/aWBGyqNu
+         F5YQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756835412; x=1757440212;
+        d=1e100.net; s=20230601; t=1756846015; x=1757450815;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Qq79ok73NgzUNSPN3ElH84ehBnROIulXyA0yyA4cddE=;
-        b=gOyHg3k9gKfIMsmd2Mb613jtwP7NFgS5z6S9YqN2s9gjgG8paaMqGaRWRvwQOEQ7JL
-         AK3+CDcX3Wz9p3CY5hYMhN0qVBlxTUviIBxpjp+ZwR3d7Mc9FWwSE3ORmqpMfZ1B3kqd
-         V26JC09nMeZ/i0TOSTUS29ZH94/j4Uw/wihzbLpl33JKirwGjI+HIL2KcV1fbclwlJ3s
-         HhzvAhZGeWKc5nAFhsN2lV1urUjtxiE43P2PLTqFShRjWABTGbntQt/MNtFJdssSiYaQ
-         xlDY4sJOwoPA6D/KkPdvsKl3tY2D1h/Bz01Qwu9cL1avDLp7C3/+eyMRlo0spawnBczI
-         c3Fw==
-X-Forwarded-Encrypted: i=1; AJvYcCVf+tlm5quPe0poZh6D+B/4ddLr0KDiUGf2+OGJ2e1kcxAnEyVgXy9ufgXlaX9qfThzey/QYZ8As4fv@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5rFAniHq0HVAUFlfZJhfmFh5HxICZNyCbX95VEeOBlPrO1+Gp
-	jYACCVm9z0gko0IhQ4fB9GDzusqDUg9gJpnAPbpgagsZYP9NhpbT4/DbwGO76EZafKMC8wW5zql
-	zQD/ro90cOP06omP342aUlxC4quGO17Rj+TUteOAAaQ==
-X-Gm-Gg: ASbGncu1ZSTHbJjsq3cmKlHzvHPHcScH6QrHnrXJTEB7z6oemBl2IaD+fDjjuuP1xYb
-	tBz7P4xqr3aGD5PM86Sd/LvNZSoZdbW5F2D+ZHq0iYYN+tGoJ1BjmSfHLocr4uOvP76MqwFwQ8h
-	L83gnmhQdC9kdcBMLLMpRDMNpMCdXJ9Pj6FJRBniSHbD/xXizN0fcM9UKhJ6dufaP4fltNwuAK3
-	nEThRbrXAvXBie/sxD52a552RbGknlcrj8Dk+/YpA9PXWxs2A==
-X-Google-Smtp-Source: AGHT+IHWxMY/UX5pahdxyPomER2R5wCG7WJNOYIC76WLDnRgZXryLWeY1Ce628zgGwqGftmJqN1QawcJ1KuqTk6lVI8=
-X-Received: by 2002:a05:6512:3b12:b0:55f:4f99:f3c9 with SMTP id
- 2adb3069b0e04-55f708ec830mr4334057e87.32.1756835411674; Tue, 02 Sep 2025
- 10:50:11 -0700 (PDT)
+        bh=kutjVkpcvEETb1qEj2HY122cngSwuEsceeDMIRlTOiM=;
+        b=MeXiP+dWOvp+Qvn+4P21IayjVCclGsSWtSrppFuw8lMmZwkqO5n0U68+qM/QZao6U0
+         xfBzj/fuB/AjNIZ8B6744IJx7ECSQgfwXeKixaIDk32CKrIlZYXMGHf9VZu3/s5Ytb0Q
+         ibFTS08cBLhxHn6aYJXBowzx9lhdXQRVBdyk4MLt1Gbcue6B2dYC8NwvsE20PITyMLmS
+         V99LL+5Z5LLNlD7u2mg4pVZIllvjIIdXXanbjxBqjtWNzNFn8HDpWfqsQNL+D0iTpU3v
+         DVifrilFttYrDPgenb8Gfl+c2jUMFJ3gzryuXiEeZzbJ7ZC7bYp1lbkaFnLuakmtSj6V
+         iUsw==
+X-Forwarded-Encrypted: i=1; AJvYcCU1TvCmK+n7id47Z415vcSXbK/8tf7XIG5+Y6nt3V+RzWKGgtxIMb8CDsHFUpqBmpIVgYETfxThi0c02l57@vger.kernel.org, AJvYcCVOX1dHAk8aIZIWF8UfE8AzM3dAQ82sjDmR582LD/TXJcgUAzLyUpkJPrB0dSdzSCLd05ox2zTlesrsEg==@vger.kernel.org, AJvYcCVpacStE7ESxxu+OLaLrNSkp4Y/7HeorGOKsQoTXWACcTE97LNn5p0yZ1r6FyThuBaXkGNNxyrsiP8Yww==@vger.kernel.org, AJvYcCW3K1eKLORm8BIahs8gFOcvpYxlqzipmXGB+KioQwn0aI++2kT7AhZB/E2/6CRAHVHxoqcgIWFrXyFv23q6@vger.kernel.org, AJvYcCWJDjcgX+lR/Yjk5CvZxBdaBKc0hSODdIgYao1RvTq0lg/JnMqi6tXjrBLjxdl5R0QPLONY2gWGRry9YGNkuZrS@vger.kernel.org, AJvYcCWzE2hR8/HtmQU7JNzDCGZ+qOi+WSbU2HNWovH5HuCgB7hdAx7JxcppoRols3BUGsHvdo7nRZK5lMv4z9p5akQq/T8=@vger.kernel.org, AJvYcCXhYLdvVXghPyBZ4bXGdhP6Xi6EFTmIqcNrjPbKexUlsfpmgx1DH0SfYPfml+Yi6tb73sgxdah4ol39Hw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzt8Hm2y3HRY9md8l5/peqTgNLAxdNL301e/CsrijbLxSUEB29f
+	FUj8pVRqotcgoyNN9QxHVxtdbGIFo9PsyIHPhoOktUeZGSEJNbgzxmZIUf0cxbI6fAvCjC3b4+f
+	bVt8Jc1ImuLaPECVyM3KzQjxfWCmnSrw=
+X-Gm-Gg: ASbGncsoYLFieQjMd+7fkkaXNtrVv8BNuZH9au/9u3+5xgQqknnkg2CSGgd7ZxbJezj
+	h2FZrxTDfUTaVyaqMI3jrIGqbHDc7/556ASrU0dg0XFtm9pQfOYHymgYwG4SxZoP9EdZTNQ3U+w
+	dPdVas31u4BjPivkpkuAhO6xBaZKbJMHNyrF4ZkPhoAK+JfOLqw3LX78gGzJFy0X0U6+JqVPwMs
+	RMq4rd7aBaGjRVUwQ==
+X-Google-Smtp-Source: AGHT+IG4zlhdZMe5YSuufGeqwlIQK8acaeuuvg5xL+VVOl3StpGEjjD0yfcY2w04cC3rT7k1Cl4bbDXfAthjT80xlmI=
+X-Received: by 2002:a17:906:4fca:b0:b04:6546:347e with SMTP id
+ a640c23a62f3a-b0465463a5bmr50237566b.51.1756846015338; Tue, 02 Sep 2025
+ 13:46:55 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -76,19 +76,19 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20250902-pinctrl-gpio-pinfuncs-v7-0-bb091daedc52@linaro.org>
- <20250902-pinctrl-gpio-pinfuncs-v7-13-bb091daedc52@linaro.org> <aLb_pOG-yc-CHoiY@smile.fi.intel.com>
-In-Reply-To: <aLb_pOG-yc-CHoiY@smile.fi.intel.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Tue, 2 Sep 2025 19:50:00 +0200
-X-Gm-Features: Ac12FXzmJRg8_mGsvbk9kTYEAk6i5wfrx-8rp8gdl4L5LHxLn-6rA1BsDeyDmdo
-Message-ID: <CAMRc=Mc-NEFawz11Lr5JGStoe=PU7b91E-MVB3xkdBr_JoiStQ@mail.gmail.com>
-Subject: Re: [PATCH v7 13/16] pinctrl: allow to mark pin functions as
- requestable GPIOs
-To: Andy Shevchenko <andriy.shevchenko@intel.com>
-Cc: Linus Walleij <linus.walleij@linaro.org>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Alexey Klimov <alexey.klimov@linaro.org>, 
-	Lorenzo Bianconi <lorenzo@kernel.org>, Sean Wang <sean.wang@kernel.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
+ <20250902-pinctrl-gpio-pinfuncs-v7-16-bb091daedc52@linaro.org>
+ <aLcBcjvMbrxoDYoC@smile.fi.intel.com> <CAMRc=MfcFMgkNqWNZV5o0NxkAvxBTjC3vv56Cr98n0R2CkxuPw@mail.gmail.com>
+In-Reply-To: <CAMRc=MfcFMgkNqWNZV5o0NxkAvxBTjC3vv56Cr98n0R2CkxuPw@mail.gmail.com>
+From: Andy Shevchenko <andy.shevchenko@gmail.com>
+Date: Tue, 2 Sep 2025 23:46:18 +0300
+X-Gm-Features: Ac12FXzQiEATdvX4DXbIt31zcGrGliq36XoLvlgsSrCLd-DIw99Mu03fZo98CMc
+Message-ID: <CAHp75VcgaqnDrPH27wxfgyK6zz4RAKJQB0r7G2vbTONTxkEzTw@mail.gmail.com>
+Subject: Re: [PATCH v7 16/16] pinctrl: qcom: make the pinmuxing strict
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Andy Shevchenko <andriy.shevchenko@intel.com>, Linus Walleij <linus.walleij@linaro.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Alexey Klimov <alexey.klimov@linaro.org>, Lorenzo Bianconi <lorenzo@kernel.org>, 
+	Sean Wang <sean.wang@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
 	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
 	Paul Cercueil <paul@crapouillou.net>, Kees Cook <kees@kernel.org>, 
 	Andy Shevchenko <andy@kernel.org>, Andrew Morton <akpm@linux-foundation.org>, 
@@ -108,68 +108,37 @@ Cc: Linus Walleij <linus.walleij@linaro.org>, Bjorn Andersson <andersson@kernel.
 	linux-mips@vger.kernel.org, linux-hardening@vger.kernel.org, 
 	linux-mm@kvack.org, imx@lists.linux.dev, linux-omap@vger.kernel.org, 
 	linux-renesas-soc@vger.kernel.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, 
+	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 2, 2025 at 4:31=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@intel.com> wrote:
+On Tue, Sep 2, 2025 at 8:42=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl> =
+wrote:
 >
-> On Tue, Sep 02, 2025 at 01:59:22PM +0200, Bartosz Golaszewski wrote:
+> On Tue, Sep 2, 2025 at 4:38=E2=80=AFPM Andy Shevchenko
+> <andriy.shevchenko@intel.com> wrote:
 > >
-> > The name of the pin function has no real meaning to pinctrl core and is
-> > there only for human readability of device properties. Some pins are
-> > muxed as GPIOs but for "strict" pinmuxers it's impossible to request
-> > them as GPIOs if they're bound to a devide - even if their function nam=
-e
-> > explicitly says "gpio". Add a new field to struct pinfunction that
-> > allows to pass additional flags to pinctrl core.
+> > On Tue, Sep 02, 2025 at 01:59:25PM +0200, Bartosz Golaszewski wrote:
+> > > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> > >
+> > > The strict flag in struct pinmux_ops disallows the usage of the same =
+pin
+> > > as a GPIO and for another function. Without it, a rouge user-space
+> > > process with enough privileges (or even a buggy driver) can request a
+> > > used pin as GPIO and drive it, potentially confusing devices or even
+> > > crashing the system. Set it globally for all pinctrl-msm users.
+> >
+> > How does this keep (or allow) I=E6=B6=8E generic recovery mechanism to =
+work?
 >
-> Which I disagree with. The pin control _knows_ about itself. If one needs
-> to request a pin as GPIO it can be done differently (perhaps with a new,
-> special callback or with the existing ones, I need to dive to this).
+> What even is the "generic recovery mechanism"? That's the first time
+> I'm hearing this name.
 
-What? Why? Makes no sense, there already is a function for requesting
-a pin as GPIO, it's called pinctrl_gpio_request(). And it's affected
-by this series because otherwise we fail as explained in the cover
-letter.
+"I=C2=B2C generic recovery mechanism" (I dunno why you put away the I=C2=B2=
+C keyword).
 
-> On a brief view this can be done in the same way as valid_mask in GPIO,
-> actually this is exactly what should be (re-)used in my opinion here.
->
-
-Except that the valid_mask is very unclear and IMO it's much cleaner
-to have a flag for that.
-
-> > While we could go with
-> > a boolean "is_gpio" field, a flags field is more future-proof.
->
-> This sentence is probably extra in the commit message and can be omitted.
->
-> > If the PINFUNCTION_FLAG_GPIO is set for a given function, the pin muxed
-> > to it can be requested as GPIO even on strict pin controllers.
->
-> So. this changes the contract between pin control (mux) core and drivers.
-
-Yes, that's allowed in the kernel. The current contract is wrong and
-the reason why we can for instance confuse debug UARTs by requesting
-its pins as GPIOs from user-space whereas a strict pinmuxer will not
-allow it. But to convert pinmuxers to "strict" we need to change the
-behavior.
-
-> Why? How is it supposed to work on the really strict controllers, please?
->
-
-Like what I explained several times? You have pins used by a device.
-User-space comes around and requests them and fiddles with them and
-now the state of your device is undefined/broken. With a strict
-pinmuxer user-space will fail to request the pins muxed to a non-GPIO
-function.
-
-> > Add a new callback to struct pinmux_ops - function_is_gpio() - that all=
-ows
-> > pinmux core to inspect a function and see if it's a GPIO one. Provide a
-> > generic implementation of this callback.
-
-Bartosz
+--=20
+With Best Regards,
+Andy Shevchenko
 
