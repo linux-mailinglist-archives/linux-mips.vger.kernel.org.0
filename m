@@ -1,119 +1,165 @@
-Return-Path: <linux-mips+bounces-10953-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10954-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8271CB401B8
-	for <lists+linux-mips@lfdr.de>; Tue,  2 Sep 2025 15:00:38 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8F3BB401FD
+	for <lists+linux-mips@lfdr.de>; Tue,  2 Sep 2025 15:07:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A3224E591D
-	for <lists+linux-mips@lfdr.de>; Tue,  2 Sep 2025 12:58:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9CC08188C4A3
+	for <lists+linux-mips@lfdr.de>; Tue,  2 Sep 2025 13:07:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A38A72D97B8;
-	Tue,  2 Sep 2025 12:56:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F1612D9ED7;
+	Tue,  2 Sep 2025 13:06:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pwazNMHJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UQCIDNYV"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E7272D5C95;
-	Tue,  2 Sep 2025 12:56:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 932C52D59F7;
+	Tue,  2 Sep 2025 13:06:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756817774; cv=none; b=OflUV30N9gXKLZY2hp1scbAjUj1nG7/F7KbOGURtB9TKkMiYSECYRchaPr+iogtlSvc0M3LDgz+FL4yizQttHuOfFP4CCFOnGUcufEgK+5v8aovMvDfMsQmQGbHUPGGCFhnaPGC4Wuqs26I/xM+E9Z44vn1YgwlaY6H4MBQhDP0=
+	t=1756818403; cv=none; b=t6zXLZ1rCudLDag6mrKlOfqi/NhmzaWKdddXKIQ9WLPuINAQCmeF7kc84mqWyaYxDiDO1wBttlNwnuY1JQ1xZneiQauS9hjfuCx89pZz9h2MV5CnWGoOqM5Jqq/IJFRrXVsBdkY7j6ABlJ0/1xG6szKrnQmXE8/gZV4TL7lxMlo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756817774; c=relaxed/simple;
-	bh=6fXt4bhKhGQeDgocLc+VTGxwmm9hlaSYbwbrhqO4eo4=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=lucBmrwg++jHdYRdZCeDdEewQV8yTkO9VH8r6aYoCyLEEhM0cDDeEv8/AIXY67ZL3LWYQcVHHiNWJD5xn5U+4WUcSIpBx3RR4JXNSxUZLX+nXr1non7c0csbBC4IV4YCXN7SAqCKcTorBGJl/TCEpKSfyYL+WcrC63s32vPSHTI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pwazNMHJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 11F86C4CEF4;
-	Tue,  2 Sep 2025 12:56:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1756817774;
-	bh=6fXt4bhKhGQeDgocLc+VTGxwmm9hlaSYbwbrhqO4eo4=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=pwazNMHJ405xvwddvksWXCvf2Bzxx2noy2IUYDoxR08pNT70eoYJ6avMGFl9/Brfy
-	 djIhKc4IwsWYRDzf4ckgbuj4YCoKw+9YxQrmPP2zcN5BTWN72msT/8L7gG1b4AnNXA
-	 H4LLv6NBYhzDqxK03/Bs/TmEL+LOYNY+NS+YPvoSxcEaL2K4fCDy8dQcwcD1Yoj3r7
-	 9WeAzZMLfWuw825r0YE0Jvdw3d0z5Gpm6BLaVjSBhLdAAnUEwVxIWvjvouZoMk16IB
-	 vPb54RivBXsgQ9vEkrWC7YCee6GXl108+ujfuPj+LCZ1l3MNDksA1EisuEfyh34BqK
-	 8exw6nerb4i/Q==
-From: Lee Jones <lee@kernel.org>
-To: Bartosz Golaszewski <brgl@bgdev.pl>, 
- Linus Walleij <linus.walleij@linaro.org>, linux-gpio@vger.kernel.org, 
- Arnd Bergmann <arnd@kernel.org>
-Cc: Arnd Bergmann <arnd@arndb.de>, Andrew Lunn <andrew@lunn.ch>, 
- Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>, 
- Gregory Clement <gregory.clement@bootlin.com>, 
- Russell King <linux@armlinux.org.uk>, Daniel Mack <daniel@zonque.org>, 
- Haojian Zhuang <haojian.zhuang@gmail.com>, 
- Robert Jarzmik <robert.jarzmik@free.fr>, 
- Krzysztof Kozlowski <krzk@kernel.org>, 
- Alim Akhtar <alim.akhtar@samsung.com>, 
- Geert Uytterhoeven <geert@linux-m68k.org>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
- x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, Lee Jones <lee@kernel.org>, 
- Pavel Machek <pavel@kernel.org>, Mauro Carvalho Chehab <mchehab@kernel.org>, 
- Matti Vaittinen <mazziesaccount@gmail.com>, 
- Florian Fainelli <florian.fainelli@broadcom.com>, 
- Jeff Johnson <jjohnson@kernel.org>, Hans de Goede <hansg@kernel.org>, 
- =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
- "Dr. David Alan Gilbert" <linux@treblig.org>, 
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
- linux-samsung-soc@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
- linux-mips@vger.kernel.org, linux-sh@vger.kernel.org, 
- linux-input@vger.kernel.org, linux-leds@vger.kernel.org, 
- linux-media@vger.kernel.org, patches@opensource.cirrus.com, 
- netdev@vger.kernel.org, linux-wireless@vger.kernel.org, 
- ath10k@lists.infradead.org, platform-driver-x86@vger.kernel.org, 
- linux-usb@vger.kernel.org, linux-sound@vger.kernel.org
-In-Reply-To: <20250808151822.536879-1-arnd@kernel.org>
-References: <20250808151822.536879-1-arnd@kernel.org>
-Subject: Re: (subset) [PATCH 00/21] gpiolib: fence off legacy interfaces
-Message-Id: <175681776381.2341743.17892612215782644085.b4-ty@kernel.org>
-Date: Tue, 02 Sep 2025 13:56:03 +0100
+	s=arc-20240116; t=1756818403; c=relaxed/simple;
+	bh=304mhcCsZ3DPW/ZeHF0UCdKTce70KODDh/J7W7FbB/E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=p1s0H/6pSDMlH+uwD4YCX6th3hQUBuGFBRW5p3uivbxaY9zKwRoT763+mrOCyLAeLaoorB7TPy2+ffHHlDVZsW+/BBE2scBYlsGErf+2CYyEwdvPyyOnepJx/aP3Kk+ZVEjg6rq5kiPZ4PT87G/oB7PN+CcUeWKLiow20jSiSNE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UQCIDNYV; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1756818402; x=1788354402;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=304mhcCsZ3DPW/ZeHF0UCdKTce70KODDh/J7W7FbB/E=;
+  b=UQCIDNYVGpxtvgbkoY7oFmF1uEHsOnvPkPekgEus5qGJynNt6xWHlzFa
+   TWHxSPe0G3h5Utjn7kuBwsm64ho/mdg76e2OvNOzK8lNOHc9KIr9WD+p8
+   3zER82Z0y7/EQNQ1p0NDn++8QH1CpnQbKEWuxamzkJzp4+v1Rc37odw56
+   wDJ30Ycr7hTDWtJcY45rF0SjGNTR+BQ+EaM2ai9fSVUTo7ipuwHJ87ge+
+   zug56QWzODqP8bIW1vfmvzkiaU6dRqgDEm/EZfxU0PAkON0tcjPECUrLN
+   ZeLPftYJbNYKKjKs677gxRgzPge20DevVGRTYJsP+Tug/Y/AKJfPvkntz
+   g==;
+X-CSE-ConnectionGUID: v59mql1DQYSn9d5KaX9Kow==
+X-CSE-MsgGUID: Kjs3JnUMS8GhbW3/WQUYzw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11541"; a="59028180"
+X-IronPort-AV: E=Sophos;i="6.18,230,1751266800"; 
+   d="scan'208";a="59028180"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2025 06:06:39 -0700
+X-CSE-ConnectionGUID: ahJv6su8QkCwIee8PybbEA==
+X-CSE-MsgGUID: WBNgT/TJTkOlqIdmDhs4Zg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,230,1751266800"; 
+   d="scan'208";a="171432863"
+Received: from smile.fi.intel.com ([10.237.72.52])
+  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Sep 2025 06:06:29 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@intel.com>)
+	id 1utQiN-0000000AhP0-4600;
+	Tue, 02 Sep 2025 16:06:23 +0300
+Date: Tue, 2 Sep 2025 16:06:23 +0300
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Alexey Klimov <alexey.klimov@linaro.org>,
+	Lorenzo Bianconi <lorenzo@kernel.org>,
+	Sean Wang <sean.wang@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Paul Cercueil <paul@crapouillou.net>, Kees Cook <kees@kernel.org>,
+	Andy Shevchenko <andy@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	David Hildenbrand <david@redhat.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Michal Hocko <mhocko@suse.com>, Dong Aisheng <aisheng.dong@nxp.com>,
+	Fabio Estevam <festevam@gmail.com>, Shawn Guo <shawnguo@kernel.org>,
+	Jacky Bai <ping.bai@nxp.com>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	NXP S32 Linux Team <s32@nxp.com>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Tony Lindgren <tony@atomide.com>,
+	Haojian Zhuang <haojian.zhuang@linaro.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Danilo Krummrich <dakr@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	Mark Brown <broonie@kernel.org>, linux-gpio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	linux-hardening@vger.kernel.org, linux-mm@kvack.org,
+	imx@lists.linux.dev, linux-omap@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH v7 01/16] pinctrl: check the return value of
+ pinmux_ops::get_function_name()
+Message-ID: <aLbrz5DYS5Yxx_UE@smile.fi.intel.com>
+References: <20250902-pinctrl-gpio-pinfuncs-v7-0-bb091daedc52@linaro.org>
+ <20250902-pinctrl-gpio-pinfuncs-v7-1-bb091daedc52@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.15-dev-c81fc
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250902-pinctrl-gpio-pinfuncs-v7-1-bb091daedc52@linaro.org>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Fri, 08 Aug 2025 17:17:44 +0200, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
+On Tue, Sep 02, 2025 at 01:59:10PM +0200, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
-> Commit 678bae2eaa81 ("gpiolib: make legacy interfaces optional") was
-> merged for linux-6.17, so now it is possible to use the legacy interfaces
-> conditionally and eventually have the support left out of the kernel
-> whenever it is not needed.
-> 
-> [...]
+> While the API contract in docs doesn't specify it explicitly,
 
-Applied, thanks!
+So, why not to amend the doc at the same time?
 
-[12/21] mfd: arizona: make legacy gpiolib interface optional
-        commit: 12f6c0afc8987d72017a3ecf7c1183cb951b0d24
-[13/21] mfd: si476x: add GPIOLIB_LEGACY dependency
-        commit: 1ae250257e43b3fba225e4f8ea7d87125dc861ae
-[14/21] mfd: aat2870: add GPIOLIB_LEGACY dependency
-        commit: 3144986f37911f131f373743f294b2941a8ef37c
+> the generic implementation of the get_function_name() callback from struct
+> pinmux_ops - pinmux_generic_get_function_name() - can fail and return
+> NULL. This is already checked in pinmux_check_ops() so add a similar
+> check in pinmux_func_name_to_selector() instead of passing the returned
+> pointer right down to strcmp() where the NULL can get dereferenced. This
+> is normal operation when adding new pinfunctions.
 
---
-Lee Jones [李琼斯]
+Fixes?
+Reported?
+Closes?
+
+...
+
+>  	while (selector < nfuncs) {
+>  		const char *fname = ops->get_function_name(pctldev, selector);
+>  
+> -		if (!strcmp(function, fname))
+> +		if (fname && !strcmp(function, fname))
+>  			return selector;
+
+I would slightly refactor this:
+
+		const char *fname;
+
+		fname = ops->get_function_name(pctldev, selector);
+		if (fname && !strcmp(function, fname))
+			return selector;
+
+>  		selector++;
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
 
