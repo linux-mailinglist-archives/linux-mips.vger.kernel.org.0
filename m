@@ -1,218 +1,591 @@
-Return-Path: <linux-mips+bounces-10931-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10932-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCA33B3FAE0
-	for <lists+linux-mips@lfdr.de>; Tue,  2 Sep 2025 11:42:45 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F2473B3FB0A
+	for <lists+linux-mips@lfdr.de>; Tue,  2 Sep 2025 11:48:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3D7911A823BD
-	for <lists+linux-mips@lfdr.de>; Tue,  2 Sep 2025 09:43:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BDBF4206687
+	for <lists+linux-mips@lfdr.de>; Tue,  2 Sep 2025 09:48:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FB142EC093;
-	Tue,  2 Sep 2025 09:42:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 197B92ECE8C;
+	Tue,  2 Sep 2025 09:48:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="E9zJZ1ao"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PVdLu0g9"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D76E2EC09D
-	for <linux-mips@vger.kernel.org>; Tue,  2 Sep 2025 09:42:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96B3F27D771;
+	Tue,  2 Sep 2025 09:48:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756806161; cv=none; b=PTZAcVrxWw0Qfx8fzvnfUMNwTmtB819LszXSeJ0rqwBa7r017hrDbT8FbekMdCDDcyPq9sl28/t8imUW4+aq1RXJLjleHtZvlny7lnjLUxGC2BAq+EnQT2yCPMa2xlgb8eXeOAQJaZZlpjV7DM9mhBPM+CeyWkBxC3AYUs9e5nw=
+	t=1756806506; cv=none; b=V4+6wexPH5+H5GI+81dAVtpHcPspGn69QijGGNTbpfu0sX2Lg/KPJDouMVZqb2Rqk/dbkUjrDozWWye7FlIlJa/kMmuBPtLckHREXM6u5K+RqqFyIhGWuyyrt4xX7DvaOlhcF6AcM3OcgaP5e5g4A0xhbIfrwXfdqcj9/i683uA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756806161; c=relaxed/simple;
-	bh=i4FWrMpTncOFRXoqXlabsDTohw1HlWD08a2XpGq8Mr4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TAOciglP0j2Jy4LpAdBe38e5rzwg4nk2pwwQ/kzyRlE5dCwy4Q+oHA8TRnhjtx3BNabT7gqsMINs4Jv7igpwLDI7lAacGiV+TWPsiCntHyn/d3Ct0gPKq2KdqX6i1g6Mx9iKq5IzSN9aWX6pzv1gf99YH+fDDWWwU3j41oZmo9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=E9zJZ1ao; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1756806157;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=asWSuLH6iU8nN8yxFqi4dFvgrrSedS75Z/J4pSraBcc=;
-	b=E9zJZ1aoIwXJLF8wtF0rPENWj8qxa0CoI7H1xy4OIJ5KNO8nqolaTnri3pmpEvVZnmlBc+
-	c/JvZvfvQRe9OCz4oAasfVW6exC529zBP4v7YhSH6c12gSCUNzTFWeghucHKTelhZxJOAQ
-	RbOADTL875KPGE75VjXAqmUyCY/ZpO4=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-20-RKZwN-1nNjCs2bnVBGC0VQ-1; Tue, 02 Sep 2025 05:42:36 -0400
-X-MC-Unique: RKZwN-1nNjCs2bnVBGC0VQ-1
-X-Mimecast-MFC-AGG-ID: RKZwN-1nNjCs2bnVBGC0VQ_1756806155
-Received: by mail-wm1-f71.google.com with SMTP id 5b1f17b1804b1-45b7f0d1449so19751445e9.0
-        for <linux-mips@vger.kernel.org>; Tue, 02 Sep 2025 02:42:35 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1756806155; x=1757410955;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :from:references:cc:to:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=asWSuLH6iU8nN8yxFqi4dFvgrrSedS75Z/J4pSraBcc=;
-        b=oLBqZOcaHF/4/K5YgD6BztuH08JNeGYHYhY83i56rPQwqZtNZnoP8cCmCO7p56lnc8
-         CYbvzSr/CAPhESUAvYQ6bO3J1yO10+efP1Giv+GXLmcVgGwx8+bdRRo9DMpsUHxO8BHs
-         SYc2yARb6TRh1w0zPIb7/oFCy3C8+FgotjEuA16eSp1KwGag6Pg0XtnLab7GmUqaBZhZ
-         obHKL/AFHFc3mAbSBmzBw6e8VvFz1gzkdIFTS2wxHaTI5aA+n7xrnQ9o6awwU3OZl3iw
-         8QTTf5iKYsks3IAw/XYIhw7umtlkCpPlJTecMXr8+Xx32comToOArGMLgYqhmwX8l6Bt
-         TFfg==
-X-Forwarded-Encrypted: i=1; AJvYcCXBPESgL4KjJwFlW5dgaGeyAdn3WFwPY1F6NW3M7jLEICUJH3glxHSgkCSM6qd3Q3w3RR8LHcI3Dlqm@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw3fNLsI4X2hgAj1UW5NR5lYY/8tv2QMlOblzTR3Ez/geIJw5a0
-	iihSrovWtbFP/LKYRAcmx74rBQc7tjTQN0SrnziRGyPUeLfwCLti0jwHMYWsrJ9j0hAMP1FjMln
-	epAaKdAfSBl0vxwlA1T28+bLMuZoZQSi3Wozk95cUAaqEpPbh4exTfBsMEgQdpsA=
-X-Gm-Gg: ASbGnctN38134BXoaIzinUflWdM+NB1AB58XdCu+aTTG2ezCZCYQnHNK9+RyYyfuF5p
-	Kwr7h3CkGBnQ846EGqVoa2VGy5wa+Yh9ePrJAxIcMpOEEp9TMds1lbnzd+pm9BM4tVtTPJwi/gt
-	YlktDQNpjshTsWpV1JfFYf1EjPfKohlyqoX/NZdAMlK4KWdLKaMSn3SOmNsdUwdfXd+59l6DVTh
-	6kBck84bDHeYy9lAnqflimdFODQpt7OYWkykJEpE0cQ8b53Txyg26PF+6Su6nnhu3AXiXxN7jTw
-	GlQIdk6tiqgDTwwCW3JpjN64gnNdLYjTBAk8FKZLSif2bOPwxyJED/SemDylMD0NoOj8bdbj4uq
-	SvK+Jqwmnh6BziL3Ur91tdP+PAQXZEM8fHw5mSiRxgQaAOM9P4+J5XLJXDxxmnDuqtcs=
-X-Received: by 2002:a05:600c:1ca4:b0:43c:ec4c:25b4 with SMTP id 5b1f17b1804b1-45b8554e2ffmr100852415e9.10.1756806154808;
-        Tue, 02 Sep 2025 02:42:34 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IEDiNU8UZPL8aTl3qS6g7/9CMF4yIxtcwFaCcDzAuhGVy5bNnLkv/vvSAEHWB2EXNvzk4IR6w==
-X-Received: by 2002:a05:600c:1ca4:b0:43c:ec4c:25b4 with SMTP id 5b1f17b1804b1-45b8554e2ffmr100852105e9.10.1756806154215;
-        Tue, 02 Sep 2025 02:42:34 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f1f:3f00:731a:f5e5:774e:d40c? (p200300d82f1f3f00731af5e5774ed40c.dip0.t-ipconnect.de. [2003:d8:2f1f:3f00:731a:f5e5:774e:d40c])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45b8acbe982sm57017205e9.6.2025.09.02.02.42.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 02 Sep 2025 02:42:33 -0700 (PDT)
-Message-ID: <22019944-2ef2-4463-9b3f-23c9e7c70b2f@redhat.com>
-Date: Tue, 2 Sep 2025 11:42:30 +0200
+	s=arc-20240116; t=1756806506; c=relaxed/simple;
+	bh=jzNLAHZlBcvJuQ2aYkxoxli/Nilcz4jvKLTl8uTm8/o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nZD9hWpGXECt6xoXyV/QRihBj/OZjlstUPD550H63F5/cSRrafbazfiBb8PxUBRaxDIkmkumGwepltQKPCUEw0fJP2juGB7JtE76ut2UGvJyQAUAzTnqs3B6pNUx8849SSgReUlpZX6tn+pAU9aGeQmjtwmsiR02bgshn/6lH70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PVdLu0g9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 12D64C4CEF7;
+	Tue,  2 Sep 2025 09:48:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1756806506;
+	bh=jzNLAHZlBcvJuQ2aYkxoxli/Nilcz4jvKLTl8uTm8/o=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=PVdLu0g9g/zTd5bZFlMjRyZRLtTmjkXNdbsBh70mYvy5dPzg9Q5SbRepk7sswJUdO
+	 xi1e1EbIiGhaq43COuGsAjmgkSJIadbAu//mKnTpbEhKxEe89CzxrMlVP6/ysj6jGH
+	 KaNh8tBB08QkIi64RKhVVl87ZqKZweDE80CHwoChilP8PKVJqXZdlwAjILttnl4SdO
+	 8bQe9lSCh6w0t3n3QtNPnyD2Ii/iIAHjqFFZYya5jNVsuLruOdOoMHlN0+a1uQPIWJ
+	 t21FiV0UPgiFoql1PnpKiGfnqC2a+mZgAd8k1Y8P0qlqGuTwYm2MXZvihJSYbjewso
+	 OHpYM4cgtuY2w==
+Received: by mail-wm1-f41.google.com with SMTP id 5b1f17b1804b1-45b84c9775cso16979795e9.0;
+        Tue, 02 Sep 2025 02:48:26 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCU5iH+uc3yti2ThIy8HnRcb0t9RsCpsaJWgPxCiwPL/tiMlLSxRSO8xeJoTK0x1zcSPj4YQOMBVX5aJCw==@vger.kernel.org, AJvYcCUR4eVUNlGKDH7MuKk4LcBp47kfI6tZRqGedXcapQdYG3wm/aW0FpYC3kDfUDR2blHgvN8w7xSg+ul9naCJ6uu2dA==@vger.kernel.org, AJvYcCUZdnMnrpULKgyQH6GMdgZLLDXPBiSBxhldNIbaJf+K4rMBNndBBtH9D5ivgMY5X2MZSNKeuwE3Uu/Jvg==@vger.kernel.org, AJvYcCUlGX7VfC7T8uuZGlhHPAD+xrznso3GPn0lkSzvGHU79hEtESaFZWCmDWMspOqlRdy1XIDXfxO1AC8=@vger.kernel.org, AJvYcCV4Pvkr7XHgzNTx8phOXkjDWIgx8vmYbV2p2lnkQHTpcd/lb2H/YS8uj/WyBiHVsLXaDYbKz67xtxhyfmr3@vger.kernel.org, AJvYcCV5oWOPAMb4/ZL6gTIb9C/hzt5oTx4GhXNeXPpimATcq2XkP4brlviIqlUAD2N1kr4nj8htxZbFJQYPHA==@vger.kernel.org, AJvYcCVGAN5CGSDBaI8xkxvDEYC3K8XVOpxr7zZt/jLWLcKolfeS6tRfr8Gl7xXqnkUkSUeibvm4pl75Jt73jr4=@vger.kernel.org, AJvYcCVQWjKgWEHO0mLlBNM4wFPdS+lnhtCh3dZq4OWopXv5SFKu+Ojx41snIIHJHRr+aPf3oU95rUejkQo5n4ba@vger.kernel.org, AJvYcCVVB+e+uqEGqvLCfTHfKyKd4tFmrnE/PK8o/Nn8lOMHowFr45NOQhf/vukFCTIZWucVS3tcuUCApg==@vger.kernel.org, AJvYcCWPQPYp0SVW
+ NILGxSA9NN7kDo6cAjZnktFyq1tnFp17A/pQeYLH1BvkghwwYCifEc1AshzUCDhtTiv2/g==@vger.kernel.org, AJvYcCWRGX9cWmp/zpDvOwTST2wJfTpKng2bdzr9UH/X4svOPksItK8/78J54t/sB9POsysXeQPYSYmP@vger.kernel.org, AJvYcCWe+nHkrDrI5N6dunIcr2lvD7eNOFzMrsA6GqSzCSKAwJQKZ53AJt3BnxdS/W34fs3nYZml+AEpUElCy+LK4w==@vger.kernel.org, AJvYcCWkje49Q2TWdB1ncouJAMafKZiTfEzUzyeRShNa4PvWa96kji9cUXFHVa7jAji3uXu6Y7o1AX+nf4hp1ws=@vger.kernel.org, AJvYcCWqFPTbmlJyRyYqRPy0MQQcw75hnNYsijadqBr3tdnkvgGvLVGUekWk3phbgrsk3wBd1hSDeeqZOs14ImAVATM=@vger.kernel.org, AJvYcCXXkfD80h5FVzyFNW0g21R12ynQR5CH5rpqmOntSxYqB5/g61w6uLgT4k59JC6M0l/LbaZb7+iw@vger.kernel.org, AJvYcCXhM3Z4ye6GuzXJ3K75VU6C4yesX+wmM/4p29jeDvjtTZDyJvgjEKLiW+n+d+aqwx1K8r7xXN4WEjb3lNpuUA==@vger.kernel.org, AJvYcCXqv4L49+yw1UrSuZpt08Du36IUcI59c5GMmq5UzI5r66uECsQuBDOLDRayNzwyraLW3hwYtUvG+Sns56j9eHrt0bvv@vger.kernel.org, AJvYcCXuaAnWMxxZ0/2gQ6nCivdDn9mI00Bp+4JpeTKOTKZXjbcoOW4iTzln6y83ABDNbyTbOMhQ9Fzjmg5vxSIei1RIF3fLLyIN@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzp3JyAImktsgEks5wzMqVvbDk7pIkZiolyTxvZWwY/N4V/srs/
+	SyJ1QXb9CJrS2LffASJvtcI/Ssd4sUhLbZcqmHJPhXU8ky7v5MNWqnGh3ryLCiyi38Sktpq9IEb
+	u28d7SYhUclm2wiE4Vu1SPF7TtHZk0zs=
+X-Google-Smtp-Source: AGHT+IH/ikYQ9n6KZhk3vS7BJ424SAfyOcvFX60PB80IL/7yJH7DF0/GxjISiXQ0eBIjWRAfhg1Rx19NBBTMfVab8MA=
+X-Received: by 2002:a05:600c:470a:b0:45b:8b34:34a5 with SMTP id
+ 5b1f17b1804b1-45b8b343742mr61100365e9.23.1756806503824; Tue, 02 Sep 2025
+ 02:48:23 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 26/37] drm/i915/gem: drop nth_page() usage within SG
- entry
-To: Tvrtko Ursulin <tursulin@ursulin.net>, linux-kernel@vger.kernel.org
-Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Jani Nikula <jani.nikula@linux.intel.com>,
- Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
- Rodrigo Vivi <rodrigo.vivi@intel.com>, David Airlie <airlied@gmail.com>,
- Simona Vetter <simona@ffwll.ch>, Alexander Potapenko <glider@google.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Brendan Jackman <jackmanb@google.com>, Christoph Lameter <cl@gentwo.org>,
- Dennis Zhou <dennis@kernel.org>, Dmitry Vyukov <dvyukov@google.com>,
- dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
- iommu@lists.linux.dev, io-uring@vger.kernel.org,
- Jason Gunthorpe <jgg@nvidia.com>, Jens Axboe <axboe@kernel.dk>,
- Johannes Weiner <hannes@cmpxchg.org>, John Hubbard <jhubbard@nvidia.com>,
- kasan-dev@googlegroups.com, kvm@vger.kernel.org,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Linus Torvalds <torvalds@linux-foundation.org>, linux-arm-kernel@axis.com,
- linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
- linux-ide@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org, linux-mm@kvack.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- linux-scsi@vger.kernel.org, Marco Elver <elver@google.com>,
- Marek Szyprowski <m.szyprowski@samsung.com>, Michal Hocko <mhocko@suse.com>,
- Mike Rapoport <rppt@kernel.org>, Muchun Song <muchun.song@linux.dev>,
- netdev@vger.kernel.org, Oscar Salvador <osalvador@suse.de>,
- Peter Xu <peterx@redhat.com>, Robin Murphy <robin.murphy@arm.com>,
- Suren Baghdasaryan <surenb@google.com>, Tejun Heo <tj@kernel.org>,
- virtualization@lists.linux.dev, Vlastimil Babka <vbabka@suse.cz>,
- wireguard@lists.zx2c4.com, x86@kernel.org, Zi Yan <ziy@nvidia.com>
-References: <20250901150359.867252-1-david@redhat.com>
- <20250901150359.867252-27-david@redhat.com>
- <4bbf5590-7591-4dfc-a23e-0bda6cb31a80@ursulin.net>
-From: David Hildenbrand <david@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- qIws/H2t
-In-Reply-To: <4bbf5590-7591-4dfc-a23e-0bda6cb31a80@ursulin.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20250901-nios2-implement-clone3-v2-0-53fcf5577d57@siemens-energy.com>
+ <20250901-nios2-implement-clone3-v2-3-53fcf5577d57@siemens-energy.com>
+In-Reply-To: <20250901-nios2-implement-clone3-v2-3-53fcf5577d57@siemens-energy.com>
+From: Guo Ren <guoren@kernel.org>
+Date: Tue, 2 Sep 2025 17:48:10 +0800
+X-Gmail-Original-Message-ID: <CAJF2gTQRxjqX-Rhg=15cNtwM8vVkAjAuLx1Q6rx0NqDOYhP8_g@mail.gmail.com>
+X-Gm-Features: Ac12FXxfLAsbSEfk-FgUbhEV2UzUOmDZPXqEd1PN-me5Q9FCX6ZXFOyZmMMbhC4
+Message-ID: <CAJF2gTQRxjqX-Rhg=15cNtwM8vVkAjAuLx1Q6rx0NqDOYhP8_g@mail.gmail.com>
+Subject: Re: [PATCH v2 3/4] arch: copy_thread: pass clone_flags as u64
+To: schuster.simon@siemens-energy.com
+Cc: Dinh Nguyen <dinguyen@kernel.org>, Christian Brauner <brauner@kernel.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Andrew Morton <akpm@linux-foundation.org>, 
+	David Hildenbrand <david@redhat.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, 
+	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, Kees Cook <kees@kernel.org>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, Oleg Nesterov <oleg@redhat.com>, 
+	Jens Axboe <axboe@kernel.dk>, Alexander Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, 
+	Tejun Heo <tj@kernel.org>, Johannes Weiner <hannes@cmpxchg.org>, =?UTF-8?Q?Michal_Koutn=C3=BD?= <mkoutny@suse.com>, 
+	Paul Moore <paul@paul-moore.com>, Serge Hallyn <sergeh@kernel.org>, 
+	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
+	Anna-Maria Behnsen <anna-maria@linutronix.de>, Frederic Weisbecker <frederic@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Masami Hiramatsu <mhiramat@kernel.org>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+	Mathieu Desnoyers <mathieu.desnoyers@efficios.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
+	Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, 
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
+	John Johansen <john.johansen@canonical.com>, 
+	Stephen Smalley <stephen.smalley.work@gmail.com>, Ondrej Mosnacek <omosnace@redhat.com>, 
+	Kentaro Takeda <takedakn@nttdata.co.jp>, Tetsuo Handa <penguin-kernel@i-love.sakura.ne.jp>, 
+	Richard Henderson <richard.henderson@linaro.org>, Matt Turner <mattst88@gmail.com>, 
+	Vineet Gupta <vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Brian Cain <bcain@kernel.org>, 
+	Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, Michal Simek <monstr@monstr.eu>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Jonas Bonn <jonas@southpole.se>, 
+	Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>, Stafford Horne <shorne@gmail.com>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Helge Deller <deller@gmx.de>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, Yoshinori Sato <ysato@users.sourceforge.jp>, 
+	Rich Felker <dalias@libc.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
+	Andreas Larsson <andreas@gaisler.com>, Richard Weinberger <richard@nod.at>, 
+	Anton Ivanov <anton.ivanov@cambridgegreys.com>, Johannes Berg <johannes@sipsolutions.net>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, 
+	"H. Peter Anvin" <hpa@zytor.com>, Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>, 
+	linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-csky@vger.kernel.org, 
+	linux-block@vger.kernel.org, linux-fsdevel@vger.kernel.org, 
+	cgroups@vger.kernel.org, linux-security-module@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-perf-users@vger.kernel.org, apparmor@lists.ubuntu.com, 
+	selinux@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, linux-s390@vger.kernel.org, 
+	linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-um@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 02.09.25 11:22, Tvrtko Ursulin wrote:
-> 
-> On 01/09/2025 16:03, David Hildenbrand wrote:
->> It's no longer required to use nth_page() when iterating pages within a
->> single SG entry, so let's drop the nth_page() usage.
->>
->> Reviewed-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
->> Cc: Jani Nikula <jani.nikula@linux.intel.com>
->> Cc: Joonas Lahtinen <joonas.lahtinen@linux.intel.com>
->> Cc: Rodrigo Vivi <rodrigo.vivi@intel.com>
->> Cc: Tvrtko Ursulin <tursulin@ursulin.net>
->> Cc: David Airlie <airlied@gmail.com>
->> Cc: Simona Vetter <simona@ffwll.ch>
->> Signed-off-by: David Hildenbrand <david@redhat.com>
->> ---
->>    drivers/gpu/drm/i915/gem/i915_gem_pages.c | 2 +-
->>    1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/gpu/drm/i915/gem/i915_gem_pages.c b/drivers/gpu/drm/i915/gem/i915_gem_pages.c
->> index c16a57160b262..031d7acc16142 100644
->> --- a/drivers/gpu/drm/i915/gem/i915_gem_pages.c
->> +++ b/drivers/gpu/drm/i915/gem/i915_gem_pages.c
->> @@ -779,7 +779,7 @@ __i915_gem_object_get_page(struct drm_i915_gem_object *obj, pgoff_t n)
->>    	GEM_BUG_ON(!i915_gem_object_has_struct_page(obj));
->>    
->>    	sg = i915_gem_object_get_sg(obj, n, &offset);
->> -	return nth_page(sg_page(sg), offset);
->> +	return sg_page(sg) + offset;
->>    }
->>    
->>    /* Like i915_gem_object_get_page(), but mark the returned page dirty */
-> 
-> LGTM. If you want an ack to merge via a tree other than i915 you have
-> it. I suspect it might be easier to coordinate like that.
+On Mon, Sep 1, 2025 at 9:10=E2=80=AFPM Simon Schuster via B4 Relay
+<devnull+schuster.simon.siemens-energy.com@kernel.org> wrote:
+>
+> From: Simon Schuster <schuster.simon@siemens-energy.com>
+>
+> With the introduction of clone3 in commit 7f192e3cd316 ("fork: add
+> clone3") the effective bit width of clone_flags on all architectures was
+> increased from 32-bit to 64-bit, with a new type of u64 for the flags.
+> However, for most consumers of clone_flags the interface was not
+> changed from the previous type of unsigned long.
+>
+> While this works fine as long as none of the new 64-bit flag bits
+> (CLONE_CLEAR_SIGHAND and CLONE_INTO_CGROUP) are evaluated, this is still
+> undesirable in terms of the principle of least surprise.
+>
+> Thus, this commit fixes all relevant interfaces of the copy_thread
+> function that is called from copy_process to consistently pass
+> clone_flags as u64, so that no truncation to 32-bit integers occurs on
+> 32-bit architectures.
+>
+> Signed-off-by: Simon Schuster <schuster.simon@siemens-energy.com>
+> ---
+>  arch/alpha/kernel/process.c      | 2 +-
+>  arch/arc/kernel/process.c        | 2 +-
+>  arch/arm/kernel/process.c        | 2 +-
+>  arch/arm64/kernel/process.c      | 2 +-
+>  arch/csky/kernel/process.c       | 2 +-
+>  arch/hexagon/kernel/process.c    | 2 +-
+>  arch/loongarch/kernel/process.c  | 2 +-
+>  arch/m68k/kernel/process.c       | 2 +-
+>  arch/microblaze/kernel/process.c | 2 +-
+>  arch/mips/kernel/process.c       | 2 +-
+>  arch/nios2/kernel/process.c      | 2 +-
+>  arch/openrisc/kernel/process.c   | 2 +-
+>  arch/parisc/kernel/process.c     | 2 +-
+>  arch/powerpc/kernel/process.c    | 2 +-
+>  arch/riscv/kernel/process.c      | 2 +-
+>  arch/s390/kernel/process.c       | 2 +-
+>  arch/sh/kernel/process_32.c      | 2 +-
+>  arch/sparc/kernel/process_32.c   | 2 +-
+>  arch/sparc/kernel/process_64.c   | 2 +-
+>  arch/um/kernel/process.c         | 2 +-
+>  arch/x86/include/asm/fpu/sched.h | 2 +-
+>  arch/x86/include/asm/shstk.h     | 4 ++--
+>  arch/x86/kernel/fpu/core.c       | 2 +-
+>  arch/x86/kernel/process.c        | 2 +-
+>  arch/x86/kernel/shstk.c          | 2 +-
+>  arch/xtensa/kernel/process.c     | 2 +-
+>  26 files changed, 27 insertions(+), 27 deletions(-)
+>
+> diff --git a/arch/alpha/kernel/process.c b/arch/alpha/kernel/process.c
+> index 582d96548385..06522451f018 100644
+> --- a/arch/alpha/kernel/process.c
+> +++ b/arch/alpha/kernel/process.c
+> @@ -231,7 +231,7 @@ flush_thread(void)
+>   */
+>  int copy_thread(struct task_struct *p, const struct kernel_clone_args *a=
+rgs)
+>  {
+> -       unsigned long clone_flags =3D args->flags;
+> +       u64 clone_flags =3D args->flags;
+>         unsigned long usp =3D args->stack;
+>         unsigned long tls =3D args->tls;
+>         extern void ret_from_fork(void);
+> diff --git a/arch/arc/kernel/process.c b/arch/arc/kernel/process.c
+> index 186ceab661eb..8166d0908713 100644
+> --- a/arch/arc/kernel/process.c
+> +++ b/arch/arc/kernel/process.c
+> @@ -166,7 +166,7 @@ asmlinkage void ret_from_fork(void);
+>   */
+>  int copy_thread(struct task_struct *p, const struct kernel_clone_args *a=
+rgs)
+>  {
+> -       unsigned long clone_flags =3D args->flags;
+> +       u64 clone_flags =3D args->flags;
+>         unsigned long usp =3D args->stack;
+>         unsigned long tls =3D args->tls;
+>         struct pt_regs *c_regs;        /* child's pt_regs */
+> diff --git a/arch/arm/kernel/process.c b/arch/arm/kernel/process.c
+> index e16ed102960c..d7aa95225c70 100644
+> --- a/arch/arm/kernel/process.c
+> +++ b/arch/arm/kernel/process.c
+> @@ -234,7 +234,7 @@ asmlinkage void ret_from_fork(void) __asm__("ret_from=
+_fork");
+>
+>  int copy_thread(struct task_struct *p, const struct kernel_clone_args *a=
+rgs)
+>  {
+> -       unsigned long clone_flags =3D args->flags;
+> +       u64 clone_flags =3D args->flags;
+>         unsigned long stack_start =3D args->stack;
+>         unsigned long tls =3D args->tls;
+>         struct thread_info *thread =3D task_thread_info(p);
+> diff --git a/arch/arm64/kernel/process.c b/arch/arm64/kernel/process.c
+> index 96482a1412c6..fba7ca102a8c 100644
+> --- a/arch/arm64/kernel/process.c
+> +++ b/arch/arm64/kernel/process.c
+> @@ -409,7 +409,7 @@ asmlinkage void ret_from_fork(void) asm("ret_from_for=
+k");
+>
+>  int copy_thread(struct task_struct *p, const struct kernel_clone_args *a=
+rgs)
+>  {
+> -       unsigned long clone_flags =3D args->flags;
+> +       u64 clone_flags =3D args->flags;
+>         unsigned long stack_start =3D args->stack;
+>         unsigned long tls =3D args->tls;
+>         struct pt_regs *childregs =3D task_pt_regs(p);
+> diff --git a/arch/csky/kernel/process.c b/arch/csky/kernel/process.c
+> index 0c6e4b17fe00..a7a90340042a 100644
+> --- a/arch/csky/kernel/process.c
+> +++ b/arch/csky/kernel/process.c
+> @@ -32,7 +32,7 @@ void flush_thread(void){}
+>
+>  int copy_thread(struct task_struct *p, const struct kernel_clone_args *a=
+rgs)
+>  {
+> -       unsigned long clone_flags =3D args->flags;
+> +       u64 clone_flags =3D args->flags;
+Acked-by: Guo Ren (Alibaba Damo Academy) <guoren@kernel.org>
 
-Yeah, it would be best to route all of that through the MM tree. Thanks!
+>         unsigned long usp =3D args->stack;
+>         unsigned long tls =3D args->tls;
+>         struct switch_stack *childstack;
+> diff --git a/arch/hexagon/kernel/process.c b/arch/hexagon/kernel/process.=
+c
+> index 2a77bfd75694..15b4992bfa29 100644
+> --- a/arch/hexagon/kernel/process.c
+> +++ b/arch/hexagon/kernel/process.c
+> @@ -52,7 +52,7 @@ void arch_cpu_idle(void)
+>   */
+>  int copy_thread(struct task_struct *p, const struct kernel_clone_args *a=
+rgs)
+>  {
+> -       unsigned long clone_flags =3D args->flags;
+> +       u64 clone_flags =3D args->flags;
+>         unsigned long usp =3D args->stack;
+>         unsigned long tls =3D args->tls;
+>         struct thread_info *ti =3D task_thread_info(p);
+> diff --git a/arch/loongarch/kernel/process.c b/arch/loongarch/kernel/proc=
+ess.c
+> index 3582f591bab2..efd9edf65603 100644
+> --- a/arch/loongarch/kernel/process.c
+> +++ b/arch/loongarch/kernel/process.c
+> @@ -167,7 +167,7 @@ int copy_thread(struct task_struct *p, const struct k=
+ernel_clone_args *args)
+>         unsigned long childksp;
+>         unsigned long tls =3D args->tls;
+>         unsigned long usp =3D args->stack;
+> -       unsigned long clone_flags =3D args->flags;
+> +       u64 clone_flags =3D args->flags;
+>         struct pt_regs *childregs, *regs =3D current_pt_regs();
+>
+>         childksp =3D (unsigned long)task_stack_page(p) + THREAD_SIZE;
+> diff --git a/arch/m68k/kernel/process.c b/arch/m68k/kernel/process.c
+> index fda7eac23f87..f5a07a70e938 100644
+> --- a/arch/m68k/kernel/process.c
+> +++ b/arch/m68k/kernel/process.c
+> @@ -141,7 +141,7 @@ asmlinkage int m68k_clone3(struct pt_regs *regs)
+>
+>  int copy_thread(struct task_struct *p, const struct kernel_clone_args *a=
+rgs)
+>  {
+> -       unsigned long clone_flags =3D args->flags;
+> +       u64 clone_flags =3D args->flags;
+>         unsigned long usp =3D args->stack;
+>         unsigned long tls =3D args->tls;
+>         struct fork_frame {
+> diff --git a/arch/microblaze/kernel/process.c b/arch/microblaze/kernel/pr=
+ocess.c
+> index 56342e11442d..6cbf642d7b80 100644
+> --- a/arch/microblaze/kernel/process.c
+> +++ b/arch/microblaze/kernel/process.c
+> @@ -54,7 +54,7 @@ void flush_thread(void)
+>
+>  int copy_thread(struct task_struct *p, const struct kernel_clone_args *a=
+rgs)
+>  {
+> -       unsigned long clone_flags =3D args->flags;
+> +       u64 clone_flags =3D args->flags;
+>         unsigned long usp =3D args->stack;
+>         unsigned long tls =3D args->tls;
+>         struct pt_regs *childregs =3D task_pt_regs(p);
+> diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
+> index 02aa6a04a21d..29191fa1801e 100644
+> --- a/arch/mips/kernel/process.c
+> +++ b/arch/mips/kernel/process.c
+> @@ -107,7 +107,7 @@ int arch_dup_task_struct(struct task_struct *dst, str=
+uct task_struct *src)
+>   */
+>  int copy_thread(struct task_struct *p, const struct kernel_clone_args *a=
+rgs)
+>  {
+> -       unsigned long clone_flags =3D args->flags;
+> +       u64 clone_flags =3D args->flags;
+>         unsigned long usp =3D args->stack;
+>         unsigned long tls =3D args->tls;
+>         struct thread_info *ti =3D task_thread_info(p);
+> diff --git a/arch/nios2/kernel/process.c b/arch/nios2/kernel/process.c
+> index f84021303f6a..151404139085 100644
+> --- a/arch/nios2/kernel/process.c
+> +++ b/arch/nios2/kernel/process.c
+> @@ -101,7 +101,7 @@ void flush_thread(void)
+>
+>  int copy_thread(struct task_struct *p, const struct kernel_clone_args *a=
+rgs)
+>  {
+> -       unsigned long clone_flags =3D args->flags;
+> +       u64 clone_flags =3D args->flags;
+>         unsigned long usp =3D args->stack;
+>         unsigned long tls =3D args->tls;
+>         struct pt_regs *childregs =3D task_pt_regs(p);
+> diff --git a/arch/openrisc/kernel/process.c b/arch/openrisc/kernel/proces=
+s.c
+> index eef99fee2110..73ffb9fa3118 100644
+> --- a/arch/openrisc/kernel/process.c
+> +++ b/arch/openrisc/kernel/process.c
+> @@ -165,7 +165,7 @@ extern asmlinkage void ret_from_fork(void);
+>  int
+>  copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+>  {
+> -       unsigned long clone_flags =3D args->flags;
+> +       u64 clone_flags =3D args->flags;
+>         unsigned long usp =3D args->stack;
+>         unsigned long tls =3D args->tls;
+>         struct pt_regs *userregs;
+> diff --git a/arch/parisc/kernel/process.c b/arch/parisc/kernel/process.c
+> index ed93bd8c1545..e64ab5d2a40d 100644
+> --- a/arch/parisc/kernel/process.c
+> +++ b/arch/parisc/kernel/process.c
+> @@ -201,7 +201,7 @@ arch_initcall(parisc_idle_init);
+>  int
+>  copy_thread(struct task_struct *p, const struct kernel_clone_args *args)
+>  {
+> -       unsigned long clone_flags =3D args->flags;
+> +       u64 clone_flags =3D args->flags;
+>         unsigned long usp =3D args->stack;
+>         unsigned long tls =3D args->tls;
+>         struct pt_regs *cregs =3D &(p->thread.regs);
+> diff --git a/arch/powerpc/kernel/process.c b/arch/powerpc/kernel/process.=
+c
+> index 855e09886503..eb23966ac0a9 100644
+> --- a/arch/powerpc/kernel/process.c
+> +++ b/arch/powerpc/kernel/process.c
+> @@ -1805,7 +1805,7 @@ int copy_thread(struct task_struct *p, const struct=
+ kernel_clone_args *args)
+>                         f =3D ret_from_kernel_user_thread;
+>                 } else {
+>                         struct pt_regs *regs =3D current_pt_regs();
+> -                       unsigned long clone_flags =3D args->flags;
+> +                       u64 clone_flags =3D args->flags;
+>                         unsigned long usp =3D args->stack;
+>
+>                         /* Copy registers */
+> diff --git a/arch/riscv/kernel/process.c b/arch/riscv/kernel/process.c
+> index a0a40889d79a..31a392993cb4 100644
+> --- a/arch/riscv/kernel/process.c
+> +++ b/arch/riscv/kernel/process.c
+> @@ -223,7 +223,7 @@ asmlinkage void ret_from_fork_user(struct pt_regs *re=
+gs)
+>
+>  int copy_thread(struct task_struct *p, const struct kernel_clone_args *a=
+rgs)
+>  {
+> -       unsigned long clone_flags =3D args->flags;
+> +       u64 clone_flags =3D args->flags;
+>         unsigned long usp =3D args->stack;
+>         unsigned long tls =3D args->tls;
+>         struct pt_regs *childregs =3D task_pt_regs(p);
+> diff --git a/arch/s390/kernel/process.c b/arch/s390/kernel/process.c
+> index f55f09cda6f8..b107dbca4ed7 100644
+> --- a/arch/s390/kernel/process.c
+> +++ b/arch/s390/kernel/process.c
+> @@ -106,7 +106,7 @@ int arch_dup_task_struct(struct task_struct *dst, str=
+uct task_struct *src)
+>
+>  int copy_thread(struct task_struct *p, const struct kernel_clone_args *a=
+rgs)
+>  {
+> -       unsigned long clone_flags =3D args->flags;
+> +       u64 clone_flags =3D args->flags;
+>         unsigned long new_stackp =3D args->stack;
+>         unsigned long tls =3D args->tls;
+>         struct fake_frame
+> diff --git a/arch/sh/kernel/process_32.c b/arch/sh/kernel/process_32.c
+> index 92b6649d4929..62f753a85b89 100644
+> --- a/arch/sh/kernel/process_32.c
+> +++ b/arch/sh/kernel/process_32.c
+> @@ -89,7 +89,7 @@ asmlinkage void ret_from_kernel_thread(void);
+>
+>  int copy_thread(struct task_struct *p, const struct kernel_clone_args *a=
+rgs)
+>  {
+> -       unsigned long clone_flags =3D args->flags;
+> +       u64 clone_flags =3D args->flags;
+>         unsigned long usp =3D args->stack;
+>         unsigned long tls =3D args->tls;
+>         struct thread_info *ti =3D task_thread_info(p);
+> diff --git a/arch/sparc/kernel/process_32.c b/arch/sparc/kernel/process_3=
+2.c
+> index 9c7c662cb565..5a28c0e91bf1 100644
+> --- a/arch/sparc/kernel/process_32.c
+> +++ b/arch/sparc/kernel/process_32.c
+> @@ -260,7 +260,7 @@ extern void ret_from_kernel_thread(void);
+>
+>  int copy_thread(struct task_struct *p, const struct kernel_clone_args *a=
+rgs)
+>  {
+> -       unsigned long clone_flags =3D args->flags;
+> +       u64 clone_flags =3D args->flags;
+>         unsigned long sp =3D args->stack;
+>         unsigned long tls =3D args->tls;
+>         struct thread_info *ti =3D task_thread_info(p);
+> diff --git a/arch/sparc/kernel/process_64.c b/arch/sparc/kernel/process_6=
+4.c
+> index 529adfecd58c..25781923788a 100644
+> --- a/arch/sparc/kernel/process_64.c
+> +++ b/arch/sparc/kernel/process_64.c
+> @@ -567,7 +567,7 @@ void fault_in_user_windows(struct pt_regs *regs)
+>   */
+>  int copy_thread(struct task_struct *p, const struct kernel_clone_args *a=
+rgs)
+>  {
+> -       unsigned long clone_flags =3D args->flags;
+> +       u64 clone_flags =3D args->flags;
+>         unsigned long sp =3D args->stack;
+>         unsigned long tls =3D args->tls;
+>         struct thread_info *t =3D task_thread_info(p);
+> diff --git a/arch/um/kernel/process.c b/arch/um/kernel/process.c
+> index 1be644de9e41..9c9c66dc45f0 100644
+> --- a/arch/um/kernel/process.c
+> +++ b/arch/um/kernel/process.c
+> @@ -143,7 +143,7 @@ static void fork_handler(void)
+>
+>  int copy_thread(struct task_struct * p, const struct kernel_clone_args *=
+args)
+>  {
+> -       unsigned long clone_flags =3D args->flags;
+> +       u64 clone_flags =3D args->flags;
+>         unsigned long sp =3D args->stack;
+>         unsigned long tls =3D args->tls;
+>         void (*handler)(void);
+> diff --git a/arch/x86/include/asm/fpu/sched.h b/arch/x86/include/asm/fpu/=
+sched.h
+> index c060549c6c94..89004f4ca208 100644
+> --- a/arch/x86/include/asm/fpu/sched.h
+> +++ b/arch/x86/include/asm/fpu/sched.h
+> @@ -11,7 +11,7 @@
+>
+>  extern void save_fpregs_to_fpstate(struct fpu *fpu);
+>  extern void fpu__drop(struct task_struct *tsk);
+> -extern int  fpu_clone(struct task_struct *dst, unsigned long clone_flags=
+, bool minimal,
+> +extern int  fpu_clone(struct task_struct *dst, u64 clone_flags, bool min=
+imal,
+>                       unsigned long shstk_addr);
+>  extern void fpu_flush_thread(void);
+>
+> diff --git a/arch/x86/include/asm/shstk.h b/arch/x86/include/asm/shstk.h
+> index ba6f2fe43848..0f50e0125943 100644
+> --- a/arch/x86/include/asm/shstk.h
+> +++ b/arch/x86/include/asm/shstk.h
+> @@ -16,7 +16,7 @@ struct thread_shstk {
+>
+>  long shstk_prctl(struct task_struct *task, int option, unsigned long arg=
+2);
+>  void reset_thread_features(void);
+> -unsigned long shstk_alloc_thread_stack(struct task_struct *p, unsigned l=
+ong clone_flags,
+> +unsigned long shstk_alloc_thread_stack(struct task_struct *p, u64 clone_=
+flags,
+>                                        unsigned long stack_size);
+>  void shstk_free(struct task_struct *p);
+>  int setup_signal_shadow_stack(struct ksignal *ksig);
+> @@ -28,7 +28,7 @@ static inline long shstk_prctl(struct task_struct *task=
+, int option,
+>                                unsigned long arg2) { return -EINVAL; }
+>  static inline void reset_thread_features(void) {}
+>  static inline unsigned long shstk_alloc_thread_stack(struct task_struct =
+*p,
+> -                                                    unsigned long clone_=
+flags,
+> +                                                    u64 clone_flags,
+>                                                      unsigned long stack_=
+size) { return 0; }
+>  static inline void shstk_free(struct task_struct *p) {}
+>  static inline int setup_signal_shadow_stack(struct ksignal *ksig) { retu=
+rn 0; }
+> diff --git a/arch/x86/kernel/fpu/core.c b/arch/x86/kernel/fpu/core.c
+> index aefd412a23dc..1f71cc135e9a 100644
+> --- a/arch/x86/kernel/fpu/core.c
+> +++ b/arch/x86/kernel/fpu/core.c
+> @@ -631,7 +631,7 @@ static int update_fpu_shstk(struct task_struct *dst, =
+unsigned long ssp)
+>  }
+>
+>  /* Clone current's FPU state on fork */
+> -int fpu_clone(struct task_struct *dst, unsigned long clone_flags, bool m=
+inimal,
+> +int fpu_clone(struct task_struct *dst, u64 clone_flags, bool minimal,
+>               unsigned long ssp)
+>  {
+>         /*
+> diff --git a/arch/x86/kernel/process.c b/arch/x86/kernel/process.c
+> index 1b7960cf6eb0..e3a3987b0c4f 100644
+> --- a/arch/x86/kernel/process.c
+> +++ b/arch/x86/kernel/process.c
+> @@ -159,7 +159,7 @@ __visible void ret_from_fork(struct task_struct *prev=
+, struct pt_regs *regs,
+>
+>  int copy_thread(struct task_struct *p, const struct kernel_clone_args *a=
+rgs)
+>  {
+> -       unsigned long clone_flags =3D args->flags;
+> +       u64 clone_flags =3D args->flags;
+>         unsigned long sp =3D args->stack;
+>         unsigned long tls =3D args->tls;
+>         struct inactive_task_frame *frame;
+> diff --git a/arch/x86/kernel/shstk.c b/arch/x86/kernel/shstk.c
+> index 2ddf23387c7e..5eba6c5a6775 100644
+> --- a/arch/x86/kernel/shstk.c
+> +++ b/arch/x86/kernel/shstk.c
+> @@ -191,7 +191,7 @@ void reset_thread_features(void)
+>         current->thread.features_locked =3D 0;
+>  }
+>
+> -unsigned long shstk_alloc_thread_stack(struct task_struct *tsk, unsigned=
+ long clone_flags,
+> +unsigned long shstk_alloc_thread_stack(struct task_struct *tsk, u64 clon=
+e_flags,
+>                                        unsigned long stack_size)
+>  {
+>         struct thread_shstk *shstk =3D &tsk->thread.shstk;
+> diff --git a/arch/xtensa/kernel/process.c b/arch/xtensa/kernel/process.c
+> index 7bd66677f7b6..94d43f44be13 100644
+> --- a/arch/xtensa/kernel/process.c
+> +++ b/arch/xtensa/kernel/process.c
+> @@ -267,7 +267,7 @@ int arch_dup_task_struct(struct task_struct *dst, str=
+uct task_struct *src)
+>
+>  int copy_thread(struct task_struct *p, const struct kernel_clone_args *a=
+rgs)
+>  {
+> -       unsigned long clone_flags =3D args->flags;
+> +       u64 clone_flags =3D args->flags;
+>         unsigned long usp_thread_fn =3D args->stack;
+>         unsigned long tls =3D args->tls;
+>         struct pt_regs *childregs =3D task_pt_regs(p);
+>
+> --
+> 2.39.5
+>
+>
 
--- 
-Cheers
 
-David / dhildenb
-
+--=20
+Best Regards
+ Guo Ren
 
