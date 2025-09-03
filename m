@@ -1,56 +1,57 @@
-Return-Path: <linux-mips+bounces-11004-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11005-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1DADCB41FD3
-	for <lists+linux-mips@lfdr.de>; Wed,  3 Sep 2025 14:50:51 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2661EB41FD7
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Sep 2025 14:50:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D3B1C54117A
-	for <lists+linux-mips@lfdr.de>; Wed,  3 Sep 2025 12:50:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E4A315407E2
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Sep 2025 12:50:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD776301472;
-	Wed,  3 Sep 2025 12:48:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A1C1308F2C;
+	Wed,  3 Sep 2025 12:48:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="LqP0HypL"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="BF3nfutE"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E3F33074AB
-	for <linux-mips@vger.kernel.org>; Wed,  3 Sep 2025 12:48:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10087307AE4
+	for <linux-mips@vger.kernel.org>; Wed,  3 Sep 2025 12:48:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756903684; cv=none; b=WudgdqINNcn8OSgfxCYMwbdm0LJHOE7lFEO65H9MwNVPX3GHLF2+NoPNcSZo4VUpBDhKx1OlsxhLK7JqdNUJoin1w6VCg5iUjUpxrkrqnWzZjXyB4vV2U76QunC+hPZx5/SQSuAcF2fabw8ASzi2pl6R1eBc8TXQfaA0iDqrXFI=
+	t=1756903685; cv=none; b=Yhz1QRFh3sm4zI2n7buLU/eTRHIJyr3Jzzb0qpsDFHQ0fVCrFE9DqPDx+f1cUGtH+gKkYm6xTVRK5apIB5XHNaCrQjNGbDIJuWQygmPyfNeY3BBHNPvWKqS+LyCBR5Klf4gz6bj+wtJcC1O3MBmzeBy9YaTaF9bIDlIU/DojApw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756903684; c=relaxed/simple;
-	bh=RkW5y4rZ49JdAHh0nxP4TIpnjzpp214s3igwWvMZVFE=;
+	s=arc-20240116; t=1756903685; c=relaxed/simple;
+	bh=YbkzBj87bNiH9dr8n9qI7MSjJOTkbr6y/UMdoSkgchc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=PDkr6oWO8MYk0wzR6Ort/Iwu7drSv8kAYBqxhfUXmDtJ8C9bx2EENDYPM6YQphnD1h/eXBYzQncU6ZakrODjZQtyLJQ2aBufXi+lrhh/Sc5RRCDWvZ+AhFF2uDoLeFB73LRN41g7r8/DeI/snWO/1cqaQMkZH0HusIiu7d8+7UM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=LqP0HypL; arc=none smtp.client-ip=185.246.84.56
+	 In-Reply-To:To:Cc; b=b8Bp8q1uUlBZinPabhgHjG2NK/g1BeAZgFg6+m4F9G7E7vWHd/HXL6Wu32hCwP07WSuEHE3RckWUosvEcPKlrY7RYXc5SgVSgOGZwnIP57sBTPskQ1jtkytaQW+8ncD7Hzbycx0oZsZA8BiBABKTTXRssxh3H0rLUgvi2HP2Nb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=BF3nfutE; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id B0A521A08EC;
-	Wed,  3 Sep 2025 12:47:59 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 81E281A0DB4;
+	Wed,  3 Sep 2025 12:48:01 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 89D2C606C3;
-	Wed,  3 Sep 2025 12:47:59 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A4A8A1C22C3F8;
-	Wed,  3 Sep 2025 14:47:56 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 5930B606C3;
+	Wed,  3 Sep 2025 12:48:01 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id C837B1C22CCD6;
+	Wed,  3 Sep 2025 14:47:58 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1756903678; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1756903680; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=/VSLyI+Ovanq4kgxvJjgjN4r0Yaa6e1OA7Uan/Os3TY=;
-	b=LqP0HypLLhdL+74Ib7TF+9WC3yi5nvcCu1q0lhfqVCfNNA3oifrSourQlUhDKzQ1pBcE2U
-	wqyF5VH0EESeOxh6hBctpY5THV2/eJaG+8tZCffnD/AoQgGgdud/42lT5kmgTBQuRFXlC4
-	7tVUcJR3d8Lhw6AuVARir4lelSdGoXPLdFVLeAlqKFhwGG1miYdIizRjDM6NRCwlUHym9I
-	OLDAN40w9cIfk6aXn6gQJ8MDiSMiuwnUMD9qjkXYdgaplNbtCSKyHcpdNKdwk4NTwUcgJZ
-	pp6GY9GMnteBf5o4dfnJzq7rnbLHXsFVDgoToswlhBd4hDYgWU1o+QqaYFC2Xg==
+	bh=x+dTceR5i9aJItNSeVUHs9v1PElS49Iavdx8taEX/wI=;
+	b=BF3nfutEUj+Fd2eM2kLx0t4H3wEUBM82BpCgKh436gGxGMfLnym2wsqciJbmMfYIAEbHrr
+	yRNNri9FM7sez2d1k2H55hDZwSRPAoW/dD34v7NTLYl6cvbsKLnS1TOsGuEe8vvxGKNPwM
+	hnxVspArgSKsbjWzm0LZ0sPXNr6vS3NNN4CQnWGerlk0TVyVsiBg+/cvove0nay7H37YM0
+	BC+E4ixLABpsAyk/IBw7pCfg85CqnU9xvWZ9YF5E8IGHy+pGZ7fGlAqDpkGXe5x7iDJYKD
+	UL4jjl8ePyvH7tbHXnXWeTJ35HVsKnEsLjD6yXzNcZ20FD57QRhyhDNltgBdrw==
 From: =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
-Date: Wed, 03 Sep 2025 14:47:19 +0200
-Subject: [PATCH 12/19] clk: eyeq: lookup parent clock by name
+Date: Wed, 03 Sep 2025 14:47:20 +0200
+Subject: [PATCH 13/19] clk: eyeq: prefix the PLL registers with the PLL
+ type
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -59,7 +60,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250903-clk-eyeq7-v1-12-3f5024b5d6e2@bootlin.com>
+Message-Id: <20250903-clk-eyeq7-v1-13-3f5024b5d6e2@bootlin.com>
 References: <20250903-clk-eyeq7-v1-0-3f5024b5d6e2@bootlin.com>
 In-Reply-To: <20250903-clk-eyeq7-v1-0-3f5024b5d6e2@bootlin.com>
 To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
@@ -79,124 +80,115 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 X-Mailer: b4 0.14.2
 X-Last-TLS-Session-Version: TLSv1.3
 
-When registering a divider or a fixed factor during probe, lookup its
-parent by name if the parent clock was registered early. Looking up the
-parent clock by index in this case leads to orphaned clocks or clocks
-with the wrong parent, since the index refers to clocks from the device
-tree.
+Rename the PLL registers to make room for other PLL types that are
+present in the eyeQ7H.
 
-This is applicable to the eyeQ5 where some probed dividers and fixed
-factors refer to PLL and fixed factors registered in early init.
+We only prefix the register with the PLL type (FRACG), no other change.
 
 Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
 ---
- drivers/clk/clk-eyeq.c | 48 ++++++++++++++++++++++++++----------------------
- 1 file changed, 26 insertions(+), 22 deletions(-)
+ drivers/clk/clk-eyeq.c | 50 +++++++++++++++++++++++++-------------------------
+ 1 file changed, 25 insertions(+), 25 deletions(-)
 
 diff --git a/drivers/clk/clk-eyeq.c b/drivers/clk/clk-eyeq.c
-index 89e0782b5cbe16a7c2010d9d441ace139fd0deb5..a0581016100c7367efb373a3fb3b7c6d51b49912 100644
+index a0581016100c7367efb373a3fb3b7c6d51b49912..63093a3099261e6798a6752651d25efa1b3e7592 100644
 --- a/drivers/clk/clk-eyeq.c
 +++ b/drivers/clk/clk-eyeq.c
-@@ -84,6 +84,7 @@ struct eqc_div {
+@@ -47,28 +47,28 @@
+ #include <dt-bindings/clock/mobileye,eyeq-clk.h>
+ 
+ /* In frac mode, it enables fractional noise canceling DAC. Else, no function. */
+-#define PCSR0_DAC_EN			BIT(0)
++#define FRACG_PCSR0_DAC_EN			BIT(0)
+ /* Fractional or integer mode */
+-#define PCSR0_DSM_EN			BIT(1)
+-#define PCSR0_PLL_EN			BIT(2)
++#define FRACG_PCSR0_DSM_EN			BIT(1)
++#define FRACG_PCSR0_PLL_EN			BIT(2)
+ /* All clocks output held at 0 */
+-#define PCSR0_FOUTPOSTDIV_EN		BIT(3)
+-#define PCSR0_POST_DIV1			GENMASK(6, 4)
+-#define PCSR0_POST_DIV2			GENMASK(9, 7)
+-#define PCSR0_REF_DIV			GENMASK(15, 10)
+-#define PCSR0_INTIN			GENMASK(27, 16)
+-#define PCSR0_BYPASS			BIT(28)
++#define FRACG_PCSR0_FOUTPOSTDIV_EN		BIT(3)
++#define FRACG_PCSR0_POST_DIV1			GENMASK(6, 4)
++#define FRACG_PCSR0_POST_DIV2			GENMASK(9, 7)
++#define FRACG_PCSR0_REF_DIV			GENMASK(15, 10)
++#define FRACG_PCSR0_INTIN			GENMASK(27, 16)
++#define FRACG_PCSR0_BYPASS			BIT(28)
+ /* Bits 30..29 are reserved */
+-#define PCSR0_PLL_LOCKED		BIT(31)
++#define FRACG_PCSR0_PLL_LOCKED			BIT(31)
+ 
+-#define PCSR1_RESET			BIT(0)
+-#define PCSR1_SSGC_DIV			GENMASK(4, 1)
++#define FRACG_PCSR1_RESET			BIT(0)
++#define FRACG_PCSR1_SSGC_DIV			GENMASK(4, 1)
+ /* Spread amplitude (% = 0.1 * SPREAD[4:0]) */
+-#define PCSR1_SPREAD			GENMASK(9, 5)
+-#define PCSR1_DIS_SSCG			BIT(10)
++#define FRACG_PCSR1_SPREAD			GENMASK(9, 5)
++#define FRACG_PCSR1_DIS_SSCG			BIT(10)
+ /* Down-spread or center-spread */
+-#define PCSR1_DOWN_SPREAD		BIT(11)
+-#define PCSR1_FRAC_IN			GENMASK(31, 12)
++#define FRACG_PCSR1_DOWN_SPREAD			BIT(11)
++#define FRACG_PCSR1_FRAC_IN			GENMASK(31, 12)
+ 
+ struct eqc_pll {
  	unsigned int	index;
- 	const char	*name;
- 	unsigned int	parent_idx;
-+	const char	*parent_name;
- 	unsigned int	reg;
- 	u8		shift;
- 	u8		width;
-@@ -95,6 +96,7 @@ struct eqc_fixed_factor {
- 	unsigned int	mult;
- 	unsigned int	div;
- 	unsigned int	parent_idx;
-+	const char	*parent_name;
- };
+@@ -167,29 +167,29 @@ static int eqc_pll_parse_registers(u32 r0, u32 r1, unsigned long *mult,
+ {
+ 	u32 spread;
  
- struct eqc_match_data {
-@@ -273,7 +275,8 @@ static void eqc_probe_init_divs(struct device *dev, const struct eqc_match_data
+-	if (r0 & PCSR0_BYPASS) {
++	if (r0 & FRACG_PCSR0_BYPASS) {
+ 		*mult = 1;
+ 		*div = 1;
+ 		*acc = 0;
+ 		return 0;
+ 	}
  
- 		if (IS_ERR(parent)) {
- 			/* Parent is in early clk provider. */
--			parent_data.index = div->parent_idx;
-+			parent_data.index = -1;
-+			parent_data.name = div->parent_name;
- 			parent_data.hw = NULL;
- 		} else {
- 			/* Avoid clock lookup when we already have the hw reference. */
-@@ -305,8 +308,8 @@ static void eqc_probe_init_fixed_factors(struct device *dev,
+-	if (!(r0 & PCSR0_PLL_LOCKED))
++	if (!(r0 & FRACG_PCSR0_PLL_LOCKED))
+ 		return -EINVAL;
  
- 		if (IS_ERR(parent_hw)) {
- 			/* Parent is in early clk provider. */
--			hw = clk_hw_register_fixed_factor_index(dev, ff->name,
--					ff->parent_idx, 0, ff->mult, ff->div);
-+			hw = clk_hw_register_fixed_factor(dev, ff->name,
-+					ff->parent_name, 0, ff->mult, ff->div);
- 		} else {
- 			/* Avoid clock lookup when we already have the hw reference. */
- 			hw = clk_hw_register_fixed_factor_parent_hw(dev, ff->name,
-@@ -487,35 +490,35 @@ static const struct eqc_fixed_factor eqc_eyeq5_early_fixed_factors[] = {
+-	*mult = FIELD_GET(PCSR0_INTIN, r0);
+-	*div = FIELD_GET(PCSR0_REF_DIV, r0);
++	*mult = FIELD_GET(FRACG_PCSR0_INTIN, r0);
++	*div = FIELD_GET(FRACG_PCSR0_REF_DIV, r0);
  
- static const struct eqc_fixed_factor eqc_eyeq5_fixed_factors[] = {
- 	/* EQ5C_PLL_CPU children */
--	{ EQ5C_CPU_CPC,		"cpc",		1, 1,	EQ5C_CPU_SI_CSS0 },
--	{ EQ5C_CPU_CM,		"cm",		1, 1,	EQ5C_CPU_SI_CSS0 },
--	{ EQ5C_CPU_MEM,		"mem",		1, 1,	EQ5C_CPU_SI_CSS0 },
--	{ EQ5C_CPU_OCC_ISRAM,	"occ-isram",	1, 2,	EQ5C_PLL_CPU },
-+	{ EQ5C_CPU_CPC,		"cpc",		1, 1,	EQ5C_CPU_SI_CSS0,	"si-css0" },
-+	{ EQ5C_CPU_CM,		"cm",		1, 1,	EQ5C_CPU_SI_CSS0,	"si-css0" },
-+	{ EQ5C_CPU_MEM,		"mem",		1, 1,	EQ5C_CPU_SI_CSS0,	"si-css0" },
-+	{ EQ5C_CPU_OCC_ISRAM,	"occ-isram",	1, 2,	EQ5C_PLL_CPU,		"pll-cpu" },
- 	{ EQ5C_CPU_ISRAM,	"isram",	1, 1,	EQ5C_CPU_OCC_ISRAM },
--	{ EQ5C_CPU_OCC_DBU,	"occ-dbu",	1, 10,	EQ5C_PLL_CPU },
-+	{ EQ5C_CPU_OCC_DBU,	"occ-dbu",	1, 10,	EQ5C_PLL_CPU,		"pll-cpu" },
- 	{ EQ5C_CPU_SI_DBU_TP,	"si-dbu-tp",	1, 1,	EQ5C_CPU_OCC_DBU },
+ 	/* Fractional mode, in 2^20 (0x100000) parts. */
+-	if (r0 & PCSR0_DSM_EN) {
++	if (r0 & FRACG_PCSR0_DSM_EN) {
+ 		*div *= (1ULL << 20);
+-		*mult = *mult * (1ULL << 20) + FIELD_GET(PCSR1_FRAC_IN, r1);
++		*mult = *mult * (1ULL << 20) + FIELD_GET(FRACG_PCSR1_FRAC_IN, r1);
+ 	}
  
- 	/* EQ5C_PLL_VDI children */
--	{ EQ5C_VDI_OCC_VDI,	"occ-vdi",	1, 2,	EQ5C_PLL_VDI },
-+	{ EQ5C_VDI_OCC_VDI,	"occ-vdi",	1, 2,	EQ5C_PLL_VDI,		"pll-vdi" },
- 	{ EQ5C_VDI_VDI,		"vdi",		1, 1,	EQ5C_VDI_OCC_VDI },
--	{ EQ5C_VDI_OCC_CAN_SER,	"occ-can-ser",	1, 16,	EQ5C_PLL_VDI },
-+	{ EQ5C_VDI_OCC_CAN_SER,	"occ-can-ser",	1, 16,	EQ5C_PLL_VDI,		"pll-vdi" },
- 	{ EQ5C_VDI_CAN_SER,	"can-ser",	1, 1,	EQ5C_VDI_OCC_CAN_SER },
--	{ EQ5C_VDI_I2C_SER,	"i2c-ser",	1, 20,	EQ5C_PLL_VDI },
-+	{ EQ5C_VDI_I2C_SER,	"i2c-ser",	1, 20,	EQ5C_PLL_VDI,		"pll-vdi" },
+ 	if (!*mult || !*div)
+ 		return -EINVAL;
  
- 	/* EQ5C_PLL_PER children */
--	{ EQ5C_PER_PERIPH,	"periph",	1, 1,	EQ5C_PER_OCC },
--	{ EQ5C_PER_CAN,		"can",		1, 1,	EQ5C_PER_OCC },
--	{ EQ5C_PER_SPI,		"spi",		1, 1,	EQ5C_PER_OCC },
--	{ EQ5C_PER_I2C,		"i2c",		1, 1,	EQ5C_PER_OCC },
--	{ EQ5C_PER_TIMER,	"timer",	1, 1,	EQ5C_PER_OCC },
--	{ EQ5C_PER_GPIO,	"gpio",		1, 1,	EQ5C_PER_OCC },
--	{ EQ5C_PER_EMMC,	"emmc-sys",	1, 10,	EQ5C_PLL_PER },
--	{ EQ5C_PER_CCF,		"ccf-ctrl",	1, 4,	EQ5C_PLL_PER },
--	{ EQ5C_PER_OCC_MJPEG,	"occ-mjpeg",	1, 2,	EQ5C_PLL_PER },
-+	{ EQ5C_PER_PERIPH,	"periph",	1, 1,	EQ5C_PER_OCC,		 "occ-periph" },
-+	{ EQ5C_PER_CAN,		"can",		1, 1,	EQ5C_PER_OCC,		 "occ-periph" },
-+	{ EQ5C_PER_SPI,		"spi",		1, 1,	EQ5C_PER_OCC,		 "occ-periph" },
-+	{ EQ5C_PER_I2C,		"i2c",		1, 1,	EQ5C_PER_OCC,		 "occ-periph" },
-+	{ EQ5C_PER_TIMER,	"timer",	1, 1,	EQ5C_PER_OCC,		 "occ-periph" },
-+	{ EQ5C_PER_GPIO,	"gpio",		1, 1,	EQ5C_PER_OCC,		 "occ-periph" },
-+	{ EQ5C_PER_EMMC,	"emmc-sys",	1, 10,	EQ5C_PLL_PER,		 "pll-per" },
-+	{ EQ5C_PER_CCF,		"ccf-ctrl",	1, 4,	EQ5C_PLL_PER,		 "pll-per" },
-+	{ EQ5C_PER_OCC_MJPEG,	"occ-mjpeg",	1, 2,	EQ5C_PLL_PER,		 "pll-per" },
- 	{ EQ5C_PER_HSM,		"hsm",		1, 1,	EQ5C_PER_OCC_MJPEG },
- 	{ EQ5C_PER_MJPEG,	"mjpeg",	1, 1,	EQ5C_PER_OCC_MJPEG },
--	{ EQ5C_PER_FCMU_A,	"fcmu-a",	1, 20,	EQ5C_PLL_PER },
--	{ EQ5C_PER_OCC_PCI,	"occ-pci-sys",	1, 8,	EQ5C_PLL_PER },
-+	{ EQ5C_PER_FCMU_A,	"fcmu-a",	1, 20,	EQ5C_PLL_PER,		 "pll-per" },
-+	{ EQ5C_PER_OCC_PCI,	"occ-pci-sys",	1, 8,	EQ5C_PLL_PER,		 "pll-per" },
- };
+-	if (r1 & (PCSR1_RESET | PCSR1_DIS_SSCG)) {
++	if (r1 & (FRACG_PCSR1_RESET | FRACG_PCSR1_DIS_SSCG)) {
+ 		*acc = 0;
+ 		return 0;
+ 	}
+@@ -204,10 +204,10 @@ static int eqc_pll_parse_registers(u32 r0, u32 r1, unsigned long *mult,
+ 	 *   with acc in parts per billion and,
+ 	 *        spread in parts per thousand.
+ 	 */
+-	spread = FIELD_GET(PCSR1_SPREAD, r1);
++	spread = FIELD_GET(FRACG_PCSR1_SPREAD, r1);
+ 	*acc = spread * 500000;
  
- static const struct eqc_div eqc_eyeq5_divs[] = {
-@@ -523,6 +526,7 @@ static const struct eqc_div eqc_eyeq5_divs[] = {
- 		.index = EQ5C_DIV_OSPI,
- 		.name = "div-ospi",
- 		.parent_idx = EQ5C_PLL_PER,
-+		.parent_name = "pll-per",
- 		.reg = 0x11C,
- 		.shift = 0,
- 		.width = 4,
+-	if (r1 & PCSR1_DOWN_SPREAD) {
++	if (r1 & FRACG_PCSR1_DOWN_SPREAD) {
+ 		/*
+ 		 * Downspreading: the central frequency is half a
+ 		 * spread lower.
 
 -- 
 2.51.0
