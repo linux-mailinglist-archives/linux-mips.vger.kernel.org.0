@@ -1,72 +1,71 @@
-Return-Path: <linux-mips+bounces-10988-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-10989-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5474BB41DB2
-	for <lists+linux-mips@lfdr.de>; Wed,  3 Sep 2025 13:55:04 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8786DB41DC2
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Sep 2025 13:56:05 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF9773A181B
-	for <lists+linux-mips@lfdr.de>; Wed,  3 Sep 2025 11:54:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 17D3E7AFF28
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Sep 2025 11:54:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48E382FF16C;
-	Wed,  3 Sep 2025 11:51:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2D982FCBF5;
+	Wed,  3 Sep 2025 11:52:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WwwQj+ZQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kKny0KDG"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82CF82FC874;
-	Wed,  3 Sep 2025 11:51:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFB932FB991;
+	Wed,  3 Sep 2025 11:52:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756900283; cv=none; b=TS9ygs5naXv2AyojqHIm3c3pbx17u3eRNasTbQ5ENMMaNeq+hzizAJH1RuKlgx2lswhqoM2YsWlXVoMki0onOhZWjzuXcnCjG4IYSeMw4dNpsijJU1jvrifHqWvxylbfhLeTzgXIeXqTh7PtMrUqfUx3ZOQrluAdvXrrh5BUqJc=
+	t=1756900339; cv=none; b=dgSn4QTA17qKAgNK6Ff9WBcJe151gkhGSrp7AJTU9YUymjMID7HvDzpPHpiwVV+kBdwiyPzdkzvE4gwFSZze88lglXzB1hcuCTG5Ozr1PeeE8e9XizrT+RtxZf+8n7WwyFQwOxvEgvN7c1m32gADL3XUKZRNVH4knt3iDg1P9aM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756900283; c=relaxed/simple;
-	bh=nDvbAiY6rHd3SKV/DYo7HnX4lUjAZdHwuJei+GGsRW8=;
+	s=arc-20240116; t=1756900339; c=relaxed/simple;
+	bh=rCkMsvnUjuBn7HONdhIgvsPhXdCF7ZF1EijdEX8RKxc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u1DbPP2WGFUSLNSDO6h4efG+WSOfOc7mKqEz1pflQFtyieGV0H4KPDUaNCp4Y3WyHssX2GRESmTRyzHGT7s35YiOs/Zs9qUvtmyi6/DPFTpuoCwvK3HyK6MJW4HDm6Mupvk3H7bTI1qwXUinGscMm4AOij/6fJP/FXXbXrQpd74=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WwwQj+ZQ; arc=none smtp.client-ip=192.198.163.11
+	 Content-Type:Content-Disposition:In-Reply-To; b=VuIVgkZAZYV30zfzqoWI62EY7I0e95zcUCOsyYphIxhdNJ9Cv8OKMu2cTCeVLtTNSkQgmhpQ3jXpI4r6wf7Rocks9bNw15QHy14Imo+d1U327HIiZpkdT4xLEdD40kVsW4jhx+huTUtbnAQ2mHFDBe26yF1OUj16tooIaImaEyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kKny0KDG; arc=none smtp.client-ip=198.175.65.14
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1756900281; x=1788436281;
+  t=1756900338; x=1788436338;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:content-transfer-encoding:in-reply-to;
-  bh=nDvbAiY6rHd3SKV/DYo7HnX4lUjAZdHwuJei+GGsRW8=;
-  b=WwwQj+ZQYt/6BqYvYcHz7lWjbLg26wheztfaS2gTmdYfpxM5/MgwvfII
-   BmBMFbCNBcsh5Kaz8VDNYj0d6DKUYdeoTgPIJF59OT97w0hNdf6OJCy+W
-   Pm3y1faZw5lyBEJNILax+qF7ro175aFBhLXz3Xiq4j+hik6TNgODxwJCR
-   v1tEek+nGSDaFEq73+53KqX9N/TV/bCocuy+74h+pIcloDSoU/uOc1zSe
-   J2xfobxUZr6sjyb8IVIz/m622/2hadnvpNc+D9ZSuDiHC5ghUXlhrZqjt
-   /e631TOHFuerOOohDB/7jIdZxxzlOJ1Q2l6ZGLnqsDYZe+IMmXz1TcwiE
-   g==;
-X-CSE-ConnectionGUID: cpzLltgHSHCTGRqOo9j6CQ==
-X-CSE-MsgGUID: Sqg7Ly4pR+awcUjJMbSaIA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11541"; a="69822588"
-X-IronPort-AV: E=Sophos;i="6.18,235,1751266800"; 
-   d="scan'208";a="69822588"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2025 04:51:19 -0700
-X-CSE-ConnectionGUID: IwmxuAerSUCIeLGnj4/KSA==
-X-CSE-MsgGUID: exSghXJzT32WBa3jKCspRQ==
+  bh=rCkMsvnUjuBn7HONdhIgvsPhXdCF7ZF1EijdEX8RKxc=;
+  b=kKny0KDGjeWU6AUNiIgDwk82a849XrXLFERs7ASz2e3leJApksTDR90g
+   WwUNd2l5X5wj/LPeYwqG23/tmTmLJZ0dc40Sx78F5TvUQRFS0fDK8fGhH
+   r48wWp8UqXymF4xEnUkgneo2wXvhbfVEozq+l5zfCxVNJAYZpq/43FEM1
+   aUD1AEDPRzBTXsDCwo6A7QDFR1eYUK0Yrtu25eQqfpTvAmgrwsEac6JIW
+   uo1x4I1SBcNSnjw0WAZMEVhChLkVfdKHyapK6Jvv931o6ETC6pZupB0In
+   QzWiE+cy+LScvIKKamERBPVwLAuzpn108fw2ngEBCbPIwAqkYPnCWxBnf
+   A==;
+X-CSE-ConnectionGUID: fK0acRAMR8e0M49SUYYmIQ==
+X-CSE-MsgGUID: bS88Lc6oR9+erFmyDuLzkA==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="63043870"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="63043870"
+Received: from orviesa005.jf.intel.com ([10.64.159.145])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2025 04:52:17 -0700
+X-CSE-ConnectionGUID: LSXzFaryTGiV559A8n4EkQ==
+X-CSE-MsgGUID: vvcyrhQPS3KYbuchLY9f0g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,235,1751266800"; 
-   d="scan'208";a="195199401"
+   d="scan'208";a="176849676"
 Received: from smile.fi.intel.com ([10.237.72.52])
-  by fmviesa002.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2025 04:51:09 -0700
+  by orviesa005.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Sep 2025 04:52:06 -0700
 Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
 	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1utm13-0000000AyQC-2iW1;
-	Wed, 03 Sep 2025 14:51:05 +0300
-Date: Wed, 3 Sep 2025 14:51:05 +0300
+	id 1utm1v-0000000AyQf-39cY;
+	Wed, 03 Sep 2025 14:51:59 +0300
+Date: Wed, 3 Sep 2025 14:51:59 +0300
 From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: Bartosz Golaszewski <brgl@bgdev.pl>,
 	Bjorn Andersson <andersson@kernel.org>,
 	Konrad Dybcio <konradybcio@kernel.org>,
 	Alexey Klimov <alexey.klimov@linaro.org>,
@@ -103,19 +102,13 @@ Cc: Andy Shevchenko <andy.shevchenko@gmail.com>,
 	imx@lists.linux.dev, linux-omap@vger.kernel.org,
 	linux-renesas-soc@vger.kernel.org,
 	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	stable@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>,
 	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: Re: [PATCH v7 16/16] pinctrl: qcom: make the pinmuxing strict
-Message-ID: <aLgrqZETNLmuMHhv@smile.fi.intel.com>
-References: <aLcBcjvMbrxoDYoC@smile.fi.intel.com>
- <CAMRc=MfcFMgkNqWNZV5o0NxkAvxBTjC3vv56Cr98n0R2CkxuPw@mail.gmail.com>
- <CAHp75VcgaqnDrPH27wxfgyK6zz4RAKJQB0r7G2vbTONTxkEzTw@mail.gmail.com>
- <CAMRc=MfhhX2NJ0fhhX8u+7=sdyUy0G27n7caGf9=TpHxUDJVxg@mail.gmail.com>
- <aLgW7J-j4nn0u8uo@smile.fi.intel.com>
- <CAMRc=MdA21fwnamymG6YhqBjKDso_nJs_4xefPNONQNfEcPHXA@mail.gmail.com>
- <aLgaoivmBUgoeO6B@smile.fi.intel.com>
- <CAMRc=Me84OX=UEmAXxmwE8oOH=1UBsyHe-7XmU0c8a2gG9JnCA@mail.gmail.com>
- <aLgeDNLABpmkShIU@smile.fi.intel.com>
- <CAMRc=MdD9g4WiBCP0qYGuy5e3pnQf5MUHTqkUOnrUvcWUYK27A@mail.gmail.com>
+Subject: Re: [PATCH v7 00/16] pinctrl: introduce the concept of a GPIO pin
+ function category
+Message-ID: <aLgr30rvGBCcsOWa@smile.fi.intel.com>
+References: <20250902-pinctrl-gpio-pinfuncs-v7-0-bb091daedc52@linaro.org>
+ <CACRpkdZ-Toq9MziPisZCcT7zcL3rosQYZ1Jw=RWCH1KZTbeBug@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -125,84 +118,39 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMRc=MdD9g4WiBCP0qYGuy5e3pnQf5MUHTqkUOnrUvcWUYK27A@mail.gmail.com>
+In-Reply-To: <CACRpkdZ-Toq9MziPisZCcT7zcL3rosQYZ1Jw=RWCH1KZTbeBug@mail.gmail.com>
 Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
  krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On Wed, Sep 03, 2025 at 01:05:27PM +0200, Bartosz Golaszewski wrote:
-> On Wed, Sep 3, 2025 at 12:53 PM Andy Shevchenko
-> <andriy.shevchenko@intel.com> wrote:
-> > On Wed, Sep 03, 2025 at 12:41:48PM +0200, Bartosz Golaszewski wrote:
-> > > On Wed, Sep 3, 2025 at 12:38 PM Andy Shevchenko
-> > > <andriy.shevchenko@intel.com> wrote:
-> > > > On Wed, Sep 03, 2025 at 12:34:00PM +0200, Bartosz Golaszewski wrote:
-> > > > > On Wed, Sep 3, 2025 at 12:22 PM Andy Shevchenko
-> > > > > <andriy.shevchenko@intel.com> wrote:
-> > > > > > On Wed, Sep 03, 2025 at 09:33:34AM +0200, Bartosz Golaszewski wrote:
-> > > > > > > On Tue, Sep 2, 2025 at 10:46 PM Andy Shevchenko
-> > > > > > > <andy.shevchenko@gmail.com> wrote:
-> > > > > > > > On Tue, Sep 2, 2025 at 8:42 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
-> > > > > > > > > On Tue, Sep 2, 2025 at 4:38 PM Andy Shevchenko
-> > > > > > > > > <andriy.shevchenko@intel.com> wrote:
-> > > > > > > > > > On Tue, Sep 02, 2025 at 01:59:25PM +0200, Bartosz Golaszewski wrote:
-
-...
-
-> > > > > > > > > > > The strict flag in struct pinmux_ops disallows the usage of the same pin
-> > > > > > > > > > > as a GPIO and for another function. Without it, a rouge user-space
-> > > > > > > > > > > process with enough privileges (or even a buggy driver) can request a
-> > > > > > > > > > > used pin as GPIO and drive it, potentially confusing devices or even
-> > > > > > > > > > > crashing the system. Set it globally for all pinctrl-msm users.
-> > > > > > > > > >
-> > > > > > > > > > How does this keep (or allow) I²C generic recovery mechanism to work?
-> > > > > > >
-> > > > > > > Anyway, what is your point? I don't think it has any impact on this.
-> > > > > >
-> > > > > > If we have a group of pins that are marked as I²C, and we want to use recovery
-> > > > > > via GPIOs, would it be still possible to request as GPIO when controller driver
-> > > > > > is in the strict mode?
-> > > > >
-> > > > > Yes, if you mark that function as a "GPIO" function in the pin
-> > > > > controller driver.
-> > > >
-> > > > How would it prevent from requesting from user space?
-> > >
-> > > It wouldn't, we don't discriminate between user-space and in-kernel
-> > > GPIO users. A function either is a GPIO or isn't. Can you point me to
-> > > the driver you're thinking about or is this a purely speculative
-> > > question?
-> >
-> > The recovery mechanism is in I²C core and many drivers use that.
-> > I'm not aware of Qualcomm drivers in particular. But mechanism is
-> > in use in I²C DesignWare which is distributed a lot among platforms,
-> > so using word 'purely' is incorrect, and word 'speculative' is a bit
-> > strong, but you can think of the issue coming later on when somebody
-> > does something like this.
-> >
-> > The same applies to the in-band wakeup UART mechanism.
-> >
-> > Which means that with this series we will relax it back anyway for
-> > the above mentioned cases.
-> >
-> > (Not sure, but SPI DesignWare requires programming SPI native chip selects even
-> >  if the GPIO is used for that, this might have also some implications, but here
-> >  it's for real 'purely speculative'.)
+On Wed, Sep 03, 2025 at 12:18:18AM +0200, Linus Walleij wrote:
+> On Tue, Sep 2, 2025 at 1:59 PM Bartosz Golaszewski <brgl@bgdev.pl> wrote:
 > 
-> The high-level answer is: yes, a pin that will be used by GPIOLIB
-> needs the function it's muxed to, to be marked as "GPIOable" in its
-> parent pin controller if it's strict. That's still better than the
-> current situation.
+> > We have many Qualcomm SoCs (and I can imagine it's a common pattern in
+> > other platforms as well) where we mux a pin to "gpio" function using the
+> > `pinctrl-X` property in order to configure bias or drive-strength and
+> > then access it using the gpiod API. This makes it impossible to mark the
+> > pin controller module as "strict".
+> >
+> > This series proposes to introduce a concept of a sub-category of
+> > pinfunctions: GPIO functions where the above is not true and the pin
+> > muxed as a GPIO can still be accessed via the GPIO consumer API even for
+> > strict pinmuxers.
 > 
-> I can imagine we could differentiate between in-kernel and user-space
-> users of GPIOs and then make it impossible for the latter to request
-> certain pins while they could still be requested in the kernel but
-> that's outside of the scope of this series.
-> 
-> I don't see why this would stop these patches though, as they don't
-> break anything unless you decide to make your pin controller strict in
-> which situation you'd need to verify which functions can GPIOs anyway.
+> This is what I want for pin control, and fixes an ages old issue
+> that pin control has no intrinsic awareness of if a pin is muxed
+> to a function providing GPIO.
+> So patches applied!
 
-It can't anyway, Linus already applied :-)
+No objections, let's move on.
+
+> Any remaining code nitpicks can be fixed in-tree, I need this
+> to be able to apply the much desired Broadcom STB driver,
+> so this needs to go into -next now for cooking.
+> 
+> I also want to strictify some drivers using this, bringing GPIO
+> function awareness into them, which is a good thing!
+
+Well said!
 
 -- 
 With Best Regards,
