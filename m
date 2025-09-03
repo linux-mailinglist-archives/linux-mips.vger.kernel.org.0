@@ -1,57 +1,56 @@
-Return-Path: <linux-mips+bounces-11005-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11006-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2661EB41FD7
-	for <lists+linux-mips@lfdr.de>; Wed,  3 Sep 2025 14:50:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 83A2FB41FE0
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Sep 2025 14:51:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E4A315407E2
-	for <lists+linux-mips@lfdr.de>; Wed,  3 Sep 2025 12:50:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4177F5408B7
+	for <lists+linux-mips@lfdr.de>; Wed,  3 Sep 2025 12:51:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A1C1308F2C;
-	Wed,  3 Sep 2025 12:48:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E1863093A5;
+	Wed,  3 Sep 2025 12:48:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="BF3nfutE"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="N2H2I/zY"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10087307AE4
-	for <linux-mips@vger.kernel.org>; Wed,  3 Sep 2025 12:48:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0349D3074AF;
+	Wed,  3 Sep 2025 12:48:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1756903685; cv=none; b=Yhz1QRFh3sm4zI2n7buLU/eTRHIJyr3Jzzb0qpsDFHQ0fVCrFE9DqPDx+f1cUGtH+gKkYm6xTVRK5apIB5XHNaCrQjNGbDIJuWQygmPyfNeY3BBHNPvWKqS+LyCBR5Klf4gz6bj+wtJcC1O3MBmzeBy9YaTaF9bIDlIU/DojApw=
+	t=1756903686; cv=none; b=ZGP1SxAy8b4clsvDKfzQKnnrBoyXHDhy4cVu//AxN+4IPzIPWh3KkwLh1WaQR0S2qQVk2b3l0+AOWDBdLlEyc6u7z8JwNOMIAHT8IZLp5C2DSS9KoC+SGbss8YgCHnkDHlG8O+LdMXHp5xUEtpV2bxU84giiHix2ba6IDKDVpfI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1756903685; c=relaxed/simple;
-	bh=YbkzBj87bNiH9dr8n9qI7MSjJOTkbr6y/UMdoSkgchc=;
+	s=arc-20240116; t=1756903686; c=relaxed/simple;
+	bh=EPqmwwZ0f90bOzU8V5eQYfHIX7JI0YJEm0PuKVv+4Pw=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=b8Bp8q1uUlBZinPabhgHjG2NK/g1BeAZgFg6+m4F9G7E7vWHd/HXL6Wu32hCwP07WSuEHE3RckWUosvEcPKlrY7RYXc5SgVSgOGZwnIP57sBTPskQ1jtkytaQW+8ncD7Hzbycx0oZsZA8BiBABKTTXRssxh3H0rLUgvi2HP2Nb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=BF3nfutE; arc=none smtp.client-ip=185.246.84.56
+	 In-Reply-To:To:Cc; b=lN9x/wURblg1j91NVhxUretDxE8zMFaasV1I8oLR4PbBb9NDFxfSWlZBS9tzOd7awyuXhVdlYFnTOMXFhyqG8cg/FC/yk3VUvmiwQtFWr1vXW1D6WVIxzqzrhji4KT1uMLopIqxkKpnr2XMexS9LSr9CJqGxYJrz0OYpYsxaWJw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=N2H2I/zY; arc=none smtp.client-ip=185.246.85.4
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 81E281A0DB4;
-	Wed,  3 Sep 2025 12:48:01 +0000 (UTC)
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 838EB4E40C12;
+	Wed,  3 Sep 2025 12:48:03 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 5930B606C3;
-	Wed,  3 Sep 2025 12:48:01 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id C837B1C22CCD6;
-	Wed,  3 Sep 2025 14:47:58 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 5BF2E606C3;
+	Wed,  3 Sep 2025 12:48:03 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A17131C22DDD0;
+	Wed,  3 Sep 2025 14:48:00 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1756903680; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1756903682; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=x+dTceR5i9aJItNSeVUHs9v1PElS49Iavdx8taEX/wI=;
-	b=BF3nfutEUj+Fd2eM2kLx0t4H3wEUBM82BpCgKh436gGxGMfLnym2wsqciJbmMfYIAEbHrr
-	yRNNri9FM7sez2d1k2H55hDZwSRPAoW/dD34v7NTLYl6cvbsKLnS1TOsGuEe8vvxGKNPwM
-	hnxVspArgSKsbjWzm0LZ0sPXNr6vS3NNN4CQnWGerlk0TVyVsiBg+/cvove0nay7H37YM0
-	BC+E4ixLABpsAyk/IBw7pCfg85CqnU9xvWZ9YF5E8IGHy+pGZ7fGlAqDpkGXe5x7iDJYKD
-	UL4jjl8ePyvH7tbHXnXWeTJ35HVsKnEsLjD6yXzNcZ20FD57QRhyhDNltgBdrw==
+	bh=DJ1DuDyv3KQPQ4Ddd0dIiiyvMJY53s+wrB6U+LwgtA0=;
+	b=N2H2I/zY0L63M0PS1CHma/SUEbnQBdKalT5Xw4uZ/8DnzisuylKoi9gOsKNRvzHQWKY2eV
+	CKjHzHvxDZaBQGVYs6/U9l37n57gVW5Jk/RAhlneqrPt3MqAt4RowKsYxpzSPfuiq6gUPm
+	iKp9KBpE8f4JuUZVJ6wn3IsgoZitYYAUD3NnkBpT4kKofn5wB2/ELKGaWynEWcZS9Z2x23
+	q64bdsR9Ao8ztNK7k0ZZe6teZvX/XaOEqKN0eMLvUlJHqQJHsoUAyDAHV+3V8Qrt6hBNWI
+	E9Ks6dWzmEuFKsyplISPhHLD4xKK+u1th0w5l3gmonF8zAln9/xDOKKs4wat/g==
 From: =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
-Date: Wed, 03 Sep 2025 14:47:20 +0200
-Subject: [PATCH 13/19] clk: eyeq: prefix the PLL registers with the PLL
- type
+Date: Wed, 03 Sep 2025 14:47:21 +0200
+Subject: [PATCH 14/19] clk: eyeq: rename the reg64 field of eqc_pll
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -60,7 +59,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250903-clk-eyeq7-v1-13-3f5024b5d6e2@bootlin.com>
+Message-Id: <20250903-clk-eyeq7-v1-14-3f5024b5d6e2@bootlin.com>
 References: <20250903-clk-eyeq7-v1-0-3f5024b5d6e2@bootlin.com>
 In-Reply-To: <20250903-clk-eyeq7-v1-0-3f5024b5d6e2@bootlin.com>
 To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
@@ -80,115 +79,176 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 X-Mailer: b4 0.14.2
 X-Last-TLS-Session-Version: TLSv1.3
 
-Rename the PLL registers to make room for other PLL types that are
-present in the eyeQ7H.
-
-We only prefix the register with the PLL type (FRACG), no other change.
+Not all PLL types need a 64 bits access, make the field name more
+generic by renaming it to reg.
 
 Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
 ---
- drivers/clk/clk-eyeq.c | 50 +++++++++++++++++++++++++-------------------------
- 1 file changed, 25 insertions(+), 25 deletions(-)
+ drivers/clk/clk-eyeq.c | 64 +++++++++++++++++++++++++-------------------------
+ 1 file changed, 32 insertions(+), 32 deletions(-)
 
 diff --git a/drivers/clk/clk-eyeq.c b/drivers/clk/clk-eyeq.c
-index a0581016100c7367efb373a3fb3b7c6d51b49912..63093a3099261e6798a6752651d25efa1b3e7592 100644
+index 63093a3099261e6798a6752651d25efa1b3e7592..0379fe7593453e72dd8983c743561caa385a3fbd 100644
 --- a/drivers/clk/clk-eyeq.c
 +++ b/drivers/clk/clk-eyeq.c
-@@ -47,28 +47,28 @@
- #include <dt-bindings/clock/mobileye,eyeq-clk.h>
- 
- /* In frac mode, it enables fractional noise canceling DAC. Else, no function. */
--#define PCSR0_DAC_EN			BIT(0)
-+#define FRACG_PCSR0_DAC_EN			BIT(0)
- /* Fractional or integer mode */
--#define PCSR0_DSM_EN			BIT(1)
--#define PCSR0_PLL_EN			BIT(2)
-+#define FRACG_PCSR0_DSM_EN			BIT(1)
-+#define FRACG_PCSR0_PLL_EN			BIT(2)
- /* All clocks output held at 0 */
--#define PCSR0_FOUTPOSTDIV_EN		BIT(3)
--#define PCSR0_POST_DIV1			GENMASK(6, 4)
--#define PCSR0_POST_DIV2			GENMASK(9, 7)
--#define PCSR0_REF_DIV			GENMASK(15, 10)
--#define PCSR0_INTIN			GENMASK(27, 16)
--#define PCSR0_BYPASS			BIT(28)
-+#define FRACG_PCSR0_FOUTPOSTDIV_EN		BIT(3)
-+#define FRACG_PCSR0_POST_DIV1			GENMASK(6, 4)
-+#define FRACG_PCSR0_POST_DIV2			GENMASK(9, 7)
-+#define FRACG_PCSR0_REF_DIV			GENMASK(15, 10)
-+#define FRACG_PCSR0_INTIN			GENMASK(27, 16)
-+#define FRACG_PCSR0_BYPASS			BIT(28)
- /* Bits 30..29 are reserved */
--#define PCSR0_PLL_LOCKED		BIT(31)
-+#define FRACG_PCSR0_PLL_LOCKED			BIT(31)
- 
--#define PCSR1_RESET			BIT(0)
--#define PCSR1_SSGC_DIV			GENMASK(4, 1)
-+#define FRACG_PCSR1_RESET			BIT(0)
-+#define FRACG_PCSR1_SSGC_DIV			GENMASK(4, 1)
- /* Spread amplitude (% = 0.1 * SPREAD[4:0]) */
--#define PCSR1_SPREAD			GENMASK(9, 5)
--#define PCSR1_DIS_SSCG			BIT(10)
-+#define FRACG_PCSR1_SPREAD			GENMASK(9, 5)
-+#define FRACG_PCSR1_DIS_SSCG			BIT(10)
- /* Down-spread or center-spread */
--#define PCSR1_DOWN_SPREAD		BIT(11)
--#define PCSR1_FRAC_IN			GENMASK(31, 12)
-+#define FRACG_PCSR1_DOWN_SPREAD			BIT(11)
-+#define FRACG_PCSR1_FRAC_IN			GENMASK(31, 12)
- 
+@@ -73,7 +73,7 @@
  struct eqc_pll {
  	unsigned int	index;
-@@ -167,29 +167,29 @@ static int eqc_pll_parse_registers(u32 r0, u32 r1, unsigned long *mult,
- {
- 	u32 spread;
+ 	const char	*name;
+-	unsigned int	reg64;
++	unsigned int	reg;
+ };
  
--	if (r0 & PCSR0_BYPASS) {
-+	if (r0 & FRACG_PCSR0_BYPASS) {
- 		*mult = 1;
- 		*div = 1;
- 		*acc = 0;
- 		return 0;
- 	}
+ /*
+@@ -239,7 +239,7 @@ static void eqc_probe_init_plls(struct device *dev, const struct eqc_match_data
+ 	for (i = 0; i < data->pll_count; i++) {
+ 		pll = &data->plls[i];
  
--	if (!(r0 & PCSR0_PLL_LOCKED))
-+	if (!(r0 & FRACG_PCSR0_PLL_LOCKED))
- 		return -EINVAL;
+-		val = readq(base + pll->reg64);
++		val = readq(base + pll->reg);
+ 		r0 = val;
+ 		r1 = val >> 32;
  
--	*mult = FIELD_GET(PCSR0_INTIN, r0);
--	*div = FIELD_GET(PCSR0_REF_DIV, r0);
-+	*mult = FIELD_GET(FRACG_PCSR0_INTIN, r0);
-+	*div = FIELD_GET(FRACG_PCSR0_REF_DIV, r0);
+@@ -422,19 +422,19 @@ static int eqc_probe(struct platform_device *pdev)
  
- 	/* Fractional mode, in 2^20 (0x100000) parts. */
--	if (r0 & PCSR0_DSM_EN) {
-+	if (r0 & FRACG_PCSR0_DSM_EN) {
- 		*div *= (1ULL << 20);
--		*mult = *mult * (1ULL << 20) + FIELD_GET(PCSR1_FRAC_IN, r1);
-+		*mult = *mult * (1ULL << 20) + FIELD_GET(FRACG_PCSR1_FRAC_IN, r1);
- 	}
+ /* Required early for GIC timer (pll-cpu) and UARTs (pll-per). */
+ static const struct eqc_pll eqc_eyeq5_early_plls[] = {
+-	{ .index = EQ5C_PLL_CPU, .name = "pll-cpu",  .reg64 = 0x02C },
+-	{ .index = EQ5C_PLL_PER, .name = "pll-per",  .reg64 = 0x05C },
++	{ .index = EQ5C_PLL_CPU, .name = "pll-cpu",  .reg = 0x02C },
++	{ .index = EQ5C_PLL_PER, .name = "pll-per",  .reg = 0x05C },
+ };
  
- 	if (!*mult || !*div)
- 		return -EINVAL;
+ static const struct eqc_pll eqc_eyeq5_plls[] = {
+-	{ .index = EQ5C_PLL_VMP,  .name = "pll-vmp",  .reg64 = 0x034 },
+-	{ .index = EQ5C_PLL_PMA,  .name = "pll-pma",  .reg64 = 0x03C },
+-	{ .index = EQ5C_PLL_VDI,  .name = "pll-vdi",  .reg64 = 0x044 },
+-	{ .index = EQ5C_PLL_DDR0, .name = "pll-ddr0", .reg64 = 0x04C },
+-	{ .index = EQ5C_PLL_PCI,  .name = "pll-pci",  .reg64 = 0x054 },
+-	{ .index = EQ5C_PLL_PMAC, .name = "pll-pmac", .reg64 = 0x064 },
+-	{ .index = EQ5C_PLL_MPC,  .name = "pll-mpc",  .reg64 = 0x06C },
+-	{ .index = EQ5C_PLL_DDR1, .name = "pll-ddr1", .reg64 = 0x074 },
++	{ .index = EQ5C_PLL_VMP,  .name = "pll-vmp",  .reg = 0x034 },
++	{ .index = EQ5C_PLL_PMA,  .name = "pll-pma",  .reg = 0x03C },
++	{ .index = EQ5C_PLL_VDI,  .name = "pll-vdi",  .reg = 0x044 },
++	{ .index = EQ5C_PLL_DDR0, .name = "pll-ddr0", .reg = 0x04C },
++	{ .index = EQ5C_PLL_PCI,  .name = "pll-pci",  .reg = 0x054 },
++	{ .index = EQ5C_PLL_PMAC, .name = "pll-pmac", .reg = 0x064 },
++	{ .index = EQ5C_PLL_MPC,  .name = "pll-mpc",  .reg = 0x06C },
++	{ .index = EQ5C_PLL_DDR1, .name = "pll-ddr1", .reg = 0x074 },
+ };
  
--	if (r1 & (PCSR1_RESET | PCSR1_DIS_SSCG)) {
-+	if (r1 & (FRACG_PCSR1_RESET | FRACG_PCSR1_DIS_SSCG)) {
- 		*acc = 0;
- 		return 0;
- 	}
-@@ -204,10 +204,10 @@ static int eqc_pll_parse_registers(u32 r0, u32 r1, unsigned long *mult,
- 	 *   with acc in parts per billion and,
- 	 *        spread in parts per thousand.
- 	 */
--	spread = FIELD_GET(PCSR1_SPREAD, r1);
-+	spread = FIELD_GET(FRACG_PCSR1_SPREAD, r1);
- 	*acc = spread * 500000;
+ enum {
+@@ -562,10 +562,10 @@ static const struct eqc_match_data eqc_eyeq5_match_data = {
+ };
  
--	if (r1 & PCSR1_DOWN_SPREAD) {
-+	if (r1 & FRACG_PCSR1_DOWN_SPREAD) {
- 		/*
- 		 * Downspreading: the central frequency is half a
- 		 * spread lower.
+ static const struct eqc_pll eqc_eyeq6l_plls[] = {
+-	{ .index = EQ6LC_PLL_DDR, .name = "pll-ddr", .reg64 = 0x02C },
+-	{ .index = EQ6LC_PLL_CPU, .name = "pll-cpu", .reg64 = 0x034 }, /* also acc */
+-	{ .index = EQ6LC_PLL_PER, .name = "pll-per", .reg64 = 0x03C },
+-	{ .index = EQ6LC_PLL_VDI, .name = "pll-vdi", .reg64 = 0x044 },
++	{ .index = EQ6LC_PLL_DDR, .name = "pll-ddr", .reg = 0x02C },
++	{ .index = EQ6LC_PLL_CPU, .name = "pll-cpu", .reg = 0x034 }, /* also acc */
++	{ .index = EQ6LC_PLL_PER, .name = "pll-per", .reg = 0x03C },
++	{ .index = EQ6LC_PLL_VDI, .name = "pll-vdi", .reg = 0x044 },
+ };
+ 
+ static const struct eqc_match_data eqc_eyeq6l_match_data = {
+@@ -580,7 +580,7 @@ static const struct eqc_match_data eqc_eyeq6h_west_match_data = {
+ };
+ 
+ static const struct eqc_pll eqc_eyeq6h_east_plls[] = {
+-	{ .index = 0, .name = "pll-east", .reg64 = 0x074 },
++	{ .index = 0, .name = "pll-east", .reg = 0x074 },
+ };
+ 
+ static const struct eqc_match_data eqc_eyeq6h_east_match_data = {
+@@ -591,10 +591,10 @@ static const struct eqc_match_data eqc_eyeq6h_east_match_data = {
+ };
+ 
+ static const struct eqc_pll eqc_eyeq6h_south_plls[] = {
+-	{ .index = EQ6HC_SOUTH_PLL_VDI,  .name = "pll-vdi",  .reg64 = 0x000 },
+-	{ .index = EQ6HC_SOUTH_PLL_PCIE, .name = "pll-pcie", .reg64 = 0x008 },
+-	{ .index = EQ6HC_SOUTH_PLL_PER,  .name = "pll-per",  .reg64 = 0x010 },
+-	{ .index = EQ6HC_SOUTH_PLL_ISP,  .name = "pll-isp",  .reg64 = 0x018 },
++	{ .index = EQ6HC_SOUTH_PLL_VDI,  .name = "pll-vdi",  .reg = 0x000 },
++	{ .index = EQ6HC_SOUTH_PLL_PCIE, .name = "pll-pcie", .reg = 0x008 },
++	{ .index = EQ6HC_SOUTH_PLL_PER,  .name = "pll-per",  .reg = 0x010 },
++	{ .index = EQ6HC_SOUTH_PLL_ISP,  .name = "pll-isp",  .reg = 0x018 },
+ };
+ 
+ static const struct eqc_div eqc_eyeq6h_south_divs[] = {
+@@ -641,7 +641,7 @@ static const struct eqc_match_data eqc_eyeq6h_south_match_data = {
+ };
+ 
+ static const struct eqc_pll eqc_eyeq6h_ddr0_plls[] = {
+-	{ .index = 0, .name = "pll-ddr0", .reg64 = 0x074 },
++	{ .index = 0, .name = "pll-ddr0", .reg = 0x074 },
+ };
+ 
+ static const struct eqc_match_data eqc_eyeq6h_ddr0_match_data = {
+@@ -650,7 +650,7 @@ static const struct eqc_match_data eqc_eyeq6h_ddr0_match_data = {
+ };
+ 
+ static const struct eqc_pll eqc_eyeq6h_ddr1_plls[] = {
+-	{ .index = 0, .name = "pll-ddr1", .reg64 = 0x074 },
++	{ .index = 0, .name = "pll-ddr1", .reg = 0x074 },
+ };
+ 
+ static const struct eqc_match_data eqc_eyeq6h_ddr1_match_data = {
+@@ -659,11 +659,11 @@ static const struct eqc_match_data eqc_eyeq6h_ddr1_match_data = {
+ };
+ 
+ static const struct eqc_pll eqc_eyeq6h_acc_plls[] = {
+-	{ .index = EQ6HC_ACC_PLL_XNN, .name = "pll-xnn", .reg64 = 0x040 },
+-	{ .index = EQ6HC_ACC_PLL_VMP, .name = "pll-vmp", .reg64 = 0x050 },
+-	{ .index = EQ6HC_ACC_PLL_PMA, .name = "pll-pma", .reg64 = 0x05C },
+-	{ .index = EQ6HC_ACC_PLL_MPC, .name = "pll-mpc", .reg64 = 0x068 },
+-	{ .index = EQ6HC_ACC_PLL_NOC, .name = "pll-noc", .reg64 = 0x070 },
++	{ .index = EQ6HC_ACC_PLL_XNN, .name = "pll-xnn", .reg = 0x040 },
++	{ .index = EQ6HC_ACC_PLL_VMP, .name = "pll-vmp", .reg = 0x050 },
++	{ .index = EQ6HC_ACC_PLL_PMA, .name = "pll-pma", .reg = 0x05C },
++	{ .index = EQ6HC_ACC_PLL_MPC, .name = "pll-mpc", .reg = 0x068 },
++	{ .index = EQ6HC_ACC_PLL_NOC, .name = "pll-noc", .reg = 0x070 },
+ };
+ 
+ static const struct eqc_match_data eqc_eyeq6h_acc_match_data = {
+@@ -697,7 +697,7 @@ builtin_platform_driver(eqc_driver);
+ 
+ /* Required early for GIC timer. */
+ static const struct eqc_pll eqc_eyeq6h_central_early_plls[] = {
+-	{ .index = EQ6HC_CENTRAL_PLL_CPU, .name = "pll-cpu", .reg64 = 0x02C },
++	{ .index = EQ6HC_CENTRAL_PLL_CPU, .name = "pll-cpu", .reg = 0x02C },
+ };
+ 
+ static const struct eqc_fixed_factor eqc_eyeq6h_central_early_fixed_factors[] = {
+@@ -714,7 +714,7 @@ static const struct eqc_early_match_data eqc_eyeq6h_central_early_match_data __i
+ 
+ /* Required early for UART. */
+ static const struct eqc_pll eqc_eyeq6h_west_early_plls[] = {
+-	{ .index = EQ6HC_WEST_PLL_PER, .name = "pll-west", .reg64 = 0x074 },
++	{ .index = EQ6HC_WEST_PLL_PER, .name = "pll-west", .reg = 0x074 },
+ };
+ 
+ static const struct eqc_fixed_factor eqc_eyeq6h_west_early_fixed_factors[] = {
+@@ -758,7 +758,7 @@ static void __init eqc_early_init(struct device_node *np,
+ 	for (i = 0; i < clk_count; i++)
+ 		cells->hws[i] = ERR_PTR(-EPROBE_DEFER);
+ 
+-	/* Offsets (reg64) of early PLLs are relative to OLB block. */
++	/* Offsets (reg) of early PLLs are relative to OLB block. */
+ 	base = of_iomap(np, 0);
+ 	if (!base) {
+ 		ret = -ENODEV;
+@@ -772,7 +772,7 @@ static void __init eqc_early_init(struct device_node *np,
+ 		u32 r0, r1;
+ 		u64 val;
+ 
+-		val = readq(base + pll->reg64);
++		val = readq(base + pll->reg);
+ 		r0 = val;
+ 		r1 = val >> 32;
+ 
 
 -- 
 2.51.0
