@@ -1,210 +1,177 @@
-Return-Path: <linux-mips+bounces-11031-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11032-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C07BB469B4
-	for <lists+linux-mips@lfdr.de>; Sat,  6 Sep 2025 09:01:12 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2180EB46AC8
+	for <lists+linux-mips@lfdr.de>; Sat,  6 Sep 2025 12:13:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F35B583CC4
-	for <lists+linux-mips@lfdr.de>; Sat,  6 Sep 2025 07:01:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E8C771B25B97
+	for <lists+linux-mips@lfdr.de>; Sat,  6 Sep 2025 10:13:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BF672C15BE;
-	Sat,  6 Sep 2025 07:01:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AFC72E7F25;
+	Sat,  6 Sep 2025 10:13:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="KGpHYhHx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VzjDEbJs"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10DD8275AE6
-	for <linux-mips@vger.kernel.org>; Sat,  6 Sep 2025 07:01:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 010EA16F265;
+	Sat,  6 Sep 2025 10:13:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757142064; cv=none; b=tdc3KeCdG4h7ggbfe1S1wo5HquSGFjJlTyF0RQukQ7tRS1eXfJPConCuVhGmBMR5hoUaJkQrla1Cf7D52p0wOwSwBbt/lWV+3HA6Hpsd8xK3sRa5XfUnzwyOQZsDM5wLDTSaB2fvSVJAikbPG0GnMV6Vz59AowrivYrn3t2AGWQ=
+	t=1757153596; cv=none; b=lua9YheLU9ijYZu56MeIP0lJRlryPjzF//X5M3NfHrrhUzw+RRZx44VD7BayLMW/LwdQIML5hyQLGvEZ0KkhvP88eEM86zMdaPPnBddL+l/xhUxD9IAz2yHLkmcXeCx2zX7+3gJksuqeWc3EGEKfQoE+VZ2/6Nhj8ixLxBCuKtk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757142064; c=relaxed/simple;
-	bh=IG++ZkBD59wzKHu12fgNu7jyIoQUxrPSNiCWC9IyrGQ=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=i+jJw84RZWPmNoweb/e90C6QTQ+u59fb1pkP92q7kVwkihZu4T2ZwBNIc9OJYAhsog7wgRwSiGeuaJ+o70y585JoAQM/gpPhEvSl535jrKtQQGPD8QwFl8WYg/UA8xDROE1Bqr4TI82Vu7+bajmF9r0Xs4WVQ4I5CjSJp0+egi4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=KGpHYhHx; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1757142061;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=T2JJG+ZfsCIb5mNyWFksWhvinuGju8fueKzmBULEe5U=;
-	b=KGpHYhHxiD+7YN+3JLfySWCD7JyAQN3s8PfW4RiZZ9qT9dRIHfry+6iURcKqBrBPRxXdWb
-	rXSxYNYPeWOMiXtxXanJGit9pBd2MNdqtU4X89wcEcOUuSM+qI+s3tcka3S09glBbgvt0y
-	QDjNdBfQd+6hmiwdej2bcPn8MaAjUPI=
-Received: from mail-wr1-f70.google.com (mail-wr1-f70.google.com
- [209.85.221.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-583-uPw-ClzrPFaxxrbzwIsTLg-1; Sat, 06 Sep 2025 03:00:59 -0400
-X-MC-Unique: uPw-ClzrPFaxxrbzwIsTLg-1
-X-Mimecast-MFC-AGG-ID: uPw-ClzrPFaxxrbzwIsTLg_1757142058
-Received: by mail-wr1-f70.google.com with SMTP id ffacd0b85a97d-3da4c617a95so2803240f8f.0
-        for <linux-mips@vger.kernel.org>; Sat, 06 Sep 2025 00:00:59 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757142058; x=1757746858;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :references:cc:to:from:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=T2JJG+ZfsCIb5mNyWFksWhvinuGju8fueKzmBULEe5U=;
-        b=UnAaMg8ka5zsFzm7upncaMG2HjhYsJ10yNUa8bNJkLZ42QwGxYTNAXhdkGe4Vz6Bqg
-         Ply4rIxvHMfpnLZnJRrKkMMRomMtjp42DDBaL0Qdi8W3lMg3Kf4jI4R8BA9tg6wTUZiu
-         SRkpLdunwdThlB/HGqoDhQPQ2nNdXMJFV+WKFm4oxpRCKWAsonGizL/VoQwBymEJhNjO
-         yo8x1yqeJgynQXGyJks3Zxs+/trhFJzV3opq9gYacXMtzLgbzf2eGm5HFOgbZqvVxO0u
-         3+GQJAXeVHQgz7XngXblL26/WLaJywvYADXe/r/QQ7KAxL03pZZz7u6lUqIVQMHqWytQ
-         yykA==
-X-Forwarded-Encrypted: i=1; AJvYcCWiNPLLT2Y066VVKtj1ewtJ1BskpnNn70vCNR8ua0rFWswAAxg3q/8+9ilf9Uy0Nz6BH29/VZm70jfK@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw2igzFm0ZUPOA3aB82op1D4wbWng03xc0QClg/5dyPeXwjzuZj
-	HbxXU5HA6yeIXAem43TrekGKdSIiodYpqusNl/SoXDIPUClWAVc8vpuzuZlSXasVvDQxJp/RPX4
-	r9qHc+RLNrcmsVFi6xqfmo6XJ8kAD9vbXBlIP7tAvpmPom/Ft3AMAEYW1A0BPQjY=
-X-Gm-Gg: ASbGncuEcFgcezJh2FWOKS3wqAcYyVApU5Jn5rzi8+PfE7S3Rf2MvhYiF30C9wjQ1G6
-	rcO89JBGCv6IA1LgkGTRB/Np4llquco5+TXyUDtrRNem1t0yHrddUsFdV89M7AXDw++BTZ5vcE3
-	wQtVS//2cE+r/5gt7kLbazCZfF11Nd2u2XY+8dSqL7ECMoiQgkeDhD6qNEhjh7PCNtD3ufYzGlN
-	nc9ghKxpy8m1x/ZCAvf7t1dNwUH7F/Cv37N30kxaAUPZGFn9H5JuColgnNl2kBPW8Fkye3QmMt2
-	VHwy1jCbRb709sPXwGmi19b8EwOHnacLlN84JUf8d41+qYD8jkfj0wx+KHxKUTVdS41NpIQDJJB
-	QTssmpVGUnQvFGOlCLriLehgEf5G2CUOZMUYTz4WWDKU9VHWdLWB3jQf+SVr/pDK5OBY=
-X-Received: by 2002:a5d:5f87:0:b0:3e2:804b:bfed with SMTP id ffacd0b85a97d-3e64c1c2183mr835268f8f.42.1757142058278;
-        Sat, 06 Sep 2025 00:00:58 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGdr4VmZX14HWt6vWJrgVQl61309Yoz3EBz+B4BvfuTuYDfgHO59nfbR4v+s7YipRZZX7VN6g==
-X-Received: by 2002:a5d:5f87:0:b0:3e2:804b:bfed with SMTP id ffacd0b85a97d-3e64c1c2183mr835230f8f.42.1757142057809;
-        Sat, 06 Sep 2025 00:00:57 -0700 (PDT)
-Received: from ?IPV6:2003:d8:2f30:de00:8132:f6dc:cba2:9134? (p200300d82f30de008132f6dccba29134.dip0.t-ipconnect.de. [2003:d8:2f30:de00:8132:f6dc:cba2:9134])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3cf3458a67fsm6794555f8f.62.2025.09.06.00.00.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 06 Sep 2025 00:00:56 -0700 (PDT)
-Message-ID: <815cbde4-a56d-446d-b517-c63e12e473de@redhat.com>
-Date: Sat, 6 Sep 2025 09:00:54 +0200
+	s=arc-20240116; t=1757153596; c=relaxed/simple;
+	bh=ByOyrmhw76sib+QC/DJ6J5eB0YKm5Is8sHXtlb8k4h0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=j5Q9uSXgdgFe925xUxe2R2eBn+Ta7VBKnyGBd7jOAFFyzgc640w7SzxIeyQ2+piWGVJ7S2MME8SxgXBwMyjuoIJhyIV/n5AWr4e6W8FHQvmsGArXo8yIOUaqHL3jvIKTMcnYVu5MVUeobeQgZn48cKac9LHBIkbsQMbVKNPvNmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VzjDEbJs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 717F9C4CEF9;
+	Sat,  6 Sep 2025 10:13:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757153594;
+	bh=ByOyrmhw76sib+QC/DJ6J5eB0YKm5Is8sHXtlb8k4h0=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=VzjDEbJsBI1t1KRfad2SrgQsTlU7cw8xn2wieA02kasSBzGR9g98kmqiV9aZhnulT
+	 zwA4ifPkoKEdgJeVHqEtCcS7adH6gjAPkRBLHAz8di2hz/K9/gfHNf94X8zlgZACyK
+	 dE5xLySOJHiQZ6T/wNziqDcefh8t7wFN8egSuQTXwVERaDRI3IklKkNluzOcZKcaZu
+	 IJDLJTOpiRi/4aySxttaUoIEo72Y99+Mkjio4cyJJ4bbh7tQVyZp/B/5EluoAJ6mPr
+	 w9Gh6fmLLfxGBSjZG2g3H85tMl8maC2F7LcyTBZcYCnfSDEd98j+pCAHnWghBnO1we
+	 bZ+vRPKiiusbQ==
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-6188b5ad4f0so4559821a12.0;
+        Sat, 06 Sep 2025 03:13:14 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCVNdV7sePSEJP1Ktr+jVODwesWMb5lmiccbak/6vmDf6D68+QMfqWzbCGyeK07mLAkHoeG2muEn/StGCw==@vger.kernel.org, AJvYcCX3bwlnc6/S4MlXLw/unvnwpWPiz1ft/S/ECWAlqih9OtH4uGwGIX8kW1CYr3Wi29OfdccQU+RkBEKdjLY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyAG4k7bB/cn1zz4Smu/5jozcI4RlTYeA59oFkgydEqFpJnz26V
+	bP9kWMv2e9Gn7FSwXLfpt584vphVDAn3N7tSF4H+dKmu3jZ04x5hdSy5GoRq8w7JaBw/KPWwPB1
+	RPq4S9Jy1BDXa4cQUbYPMkVYPYcuoxd0=
+X-Google-Smtp-Source: AGHT+IFEMzcpjb1F7HrVerRmNEAClo3vMkaFyoQwQqbZwmYnq/aFQUripeKqB1JRCdMek9nRuVaw+OrWqYjQ4KyAFVQ=
+X-Received: by 2002:a05:6402:1ed3:b0:61c:7a45:583a with SMTP id
+ 4fb4d7f45d1cf-6237b8740cfmr1867207a12.10.1757153593035; Sat, 06 Sep 2025
+ 03:13:13 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 19/37] mm/gup: remove record_subpages()
-From: David Hildenbrand <david@redhat.com>
-To: John Hubbard <jhubbard@nvidia.com>, linux-kernel@vger.kernel.org
-Cc: Alexander Potapenko <glider@google.com>,
- Andrew Morton <akpm@linux-foundation.org>,
- Brendan Jackman <jackmanb@google.com>, Christoph Lameter <cl@gentwo.org>,
- Dennis Zhou <dennis@kernel.org>, Dmitry Vyukov <dvyukov@google.com>,
- dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
- iommu@lists.linux.dev, io-uring@vger.kernel.org,
- Jason Gunthorpe <jgg@nvidia.com>, Jens Axboe <axboe@kernel.dk>,
- Johannes Weiner <hannes@cmpxchg.org>, kasan-dev@googlegroups.com,
- kvm@vger.kernel.org, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Linus Torvalds <torvalds@linux-foundation.org>, linux-arm-kernel@axis.com,
- linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
- linux-ide@vger.kernel.org, linux-kselftest@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org, linux-mm@kvack.org,
- linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
- linux-scsi@vger.kernel.org, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Marco Elver <elver@google.com>, Marek Szyprowski <m.szyprowski@samsung.com>,
- Michal Hocko <mhocko@suse.com>, Mike Rapoport <rppt@kernel.org>,
- Muchun Song <muchun.song@linux.dev>, netdev@vger.kernel.org,
- Oscar Salvador <osalvador@suse.de>, Peter Xu <peterx@redhat.com>,
- Robin Murphy <robin.murphy@arm.com>, Suren Baghdasaryan <surenb@google.com>,
- Tejun Heo <tj@kernel.org>, virtualization@lists.linux.dev,
- Vlastimil Babka <vbabka@suse.cz>, wireguard@lists.zx2c4.com, x86@kernel.org,
- Zi Yan <ziy@nvidia.com>
-References: <20250901150359.867252-1-david@redhat.com>
- <20250901150359.867252-20-david@redhat.com>
- <016307ba-427d-4646-8e4d-1ffefd2c1968@nvidia.com>
- <85e760cf-b994-40db-8d13-221feee55c60@redhat.com>
-Content-Language: en-US
-Autocrypt: addr=david@redhat.com; keydata=
- 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
- qIws/H2t
-In-Reply-To: <85e760cf-b994-40db-8d13-221feee55c60@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20250804081946.1456573-1-maobibo@loongson.cn> <20250804081946.1456573-2-maobibo@loongson.cn>
+In-Reply-To: <20250804081946.1456573-2-maobibo@loongson.cn>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Sat, 6 Sep 2025 18:13:00 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H76VOW2yzqUZznUzXAx-bDRjLjtyVe2KmMpEkg_hZT8YQ@mail.gmail.com>
+X-Gm-Features: Ac12FXxqfcbVS0Oym9-liirSElqMSdq0UiJiq0Bqz9Z7H5gY7RTp5ic7UgEqCgU
+Message-ID: <CAAhV-H76VOW2yzqUZznUzXAx-bDRjLjtyVe2KmMpEkg_hZT8YQ@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] irqchip/loongson-eiointc: Route interrupt parsed
+ from bios table
+To: Bibo Mao <maobibo@loongson.cn>, Mingcong Bai <jeffbai@aosc.io>
+Cc: Jianmin Lv <lvjianmin@loongson.cn>, WANG Xuerui <kernel@xen0n.name>, 
+	Thomas Gleixner <tglx@linutronix.de>, loongarch@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+
+Hi, Mingcong,
+
+On Mon, Aug 4, 2025 at 4:19=E2=80=AFPM Bibo Mao <maobibo@loongson.cn> wrote=
+:
+>
+> Interrupt controller eiointc routes irq to cpu interface IP0 - IP7,
+> now it is hard-coded that eiointc routes irq to CPU started from IP1,
+> however with function irq_create_mapping() parameter parent hwirq
+> uses irq parsed from ACPI or DTS table.
+>
+> Routed interrupt pin need be the consistent with parent hwirq.
+I remember that you want to test as many machine types as possible,
+have you completed it?
 
 
->    	pmdp = pmd_offset_lockless(pudp, pud, addr);
-> @@ -3046,23 +3041,21 @@ static int gup_fast_pmd_range(pud_t *pudp, pud_t pud, unsigned long addr,
->    
->    		next = pmd_addr_end(addr, end);
->    		if (!pmd_present(pmd))
-> -			return 0;
-> +			break;
->    
-> -		if (unlikely(pmd_leaf(pmd))) {
-> -			/* See gup_fast_pte_range() */
-> -			if (pmd_protnone(pmd))
-> -				return 0;
-> +		if (unlikely(pmd_leaf(pmd)))
-> +			cur_nr_pages = gup_fast_pmd_leaf(pmd, pmdp, addr, next, flags, pages);
-> +		else
-> +			cur_nr_pages = gup_fast_pte_range(pmd, pmdp, addr, next, flags, pages);
->    
-> -			if (!gup_fast_pmd_leaf(pmd, pmdp, addr, next, flags,
-> -				pages, nr))
-> -				return 0;
-> +		nr_pages += cur_nr_pages;
-> +		pages += cur_nr_pages;
->    
-> -		} else if (!gup_fast_pte_range(pmd, pmdp, addr, next, flags,
-> -					       pages, nr))
-> -			return 0;
-> +		if (nr_pages != (next - addr) >> PAGE_SIZE)
-> +			break;
+Huacai
 
-^ cur_nr_pages. Open for suggestions on how to make that thing here even 
-better.
-
--- 
-Cheers
-
-David / dhildenb
-
+>
+> Signed-off-by: Bibo Mao <maobibo@loongson.cn>
+> ---
+>  drivers/irqchip/irq-loongson-eiointc.c | 19 ++++++++++++++++---
+>  1 file changed, 16 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/irqchip/irq-loongson-eiointc.c b/drivers/irqchip/irq=
+-loongson-eiointc.c
+> index b2860eb2d32c..3e987d1232d2 100644
+> --- a/drivers/irqchip/irq-loongson-eiointc.c
+> +++ b/drivers/irqchip/irq-loongson-eiointc.c
+> @@ -68,6 +68,7 @@ struct eiointc_priv {
+>         struct fwnode_handle    *domain_handle;
+>         struct irq_domain       *eiointc_domain;
+>         int                     flags;
+> +       irq_hw_number_t         parent_hwirq;
+>  };
+>
+>  static struct eiointc_priv *eiointc_priv[MAX_IO_PICS];
+> @@ -211,7 +212,12 @@ static int eiointc_router_init(unsigned int cpu)
+>                 }
+>
+>                 for (i =3D 0; i < eiointc_priv[0]->vec_count / 32 / 4; i+=
++) {
+> -                       bit =3D BIT(1 + index); /* Route to IP[1 + index]=
+ */
+> +                       /*
+> +                        * Route to interrupt pin, relative offset used h=
+ere
+> +                        * Offset 0 means routing to IP0 and so on
+> +                        * Every 32 vector routing to one interrupt pin
+> +                        */
+> +                       bit =3D BIT(eiointc_priv[index]->parent_hwirq - I=
+NT_HWI0);
+>                         data =3D bit | (bit << 8) | (bit << 16) | (bit <<=
+ 24);
+>                         iocsr_write32(data, EIOINTC_REG_IPMAP + i * 4);
+>                 }
+> @@ -495,7 +501,7 @@ int __init eiointc_acpi_init(struct irq_domain *paren=
+t,
+>
+>         priv->vec_count =3D VEC_COUNT;
+>         priv->node =3D acpi_eiointc->node;
+> -
+> +       priv->parent_hwirq =3D acpi_eiointc->cascade;
+>         parent_irq =3D irq_create_mapping(parent, acpi_eiointc->cascade);
+>
+>         ret =3D eiointc_init(priv, parent_irq, acpi_eiointc->node_map);
+> @@ -529,6 +535,7 @@ static int __init eiointc_of_init(struct device_node =
+*of_node,
+>  {
+>         int parent_irq, ret;
+>         struct eiointc_priv *priv;
+> +       struct irq_data *irq_data;
+>
+>         priv =3D kzalloc(sizeof(*priv), GFP_KERNEL);
+>         if (!priv)
+> @@ -544,6 +551,12 @@ static int __init eiointc_of_init(struct device_node=
+ *of_node,
+>         if (ret < 0)
+>                 goto out_free_priv;
+>
+> +       irq_data =3D irq_get_irq_data(parent_irq);
+> +       if (!irq_data) {
+> +               ret =3D -ENODEV;
+> +               goto out_free_priv;
+> +       }
+> +
+>         /*
+>          * In particular, the number of devices supported by the LS2K0500
+>          * extended I/O interrupt vector is 128.
+> @@ -552,7 +565,7 @@ static int __init eiointc_of_init(struct device_node =
+*of_node,
+>                 priv->vec_count =3D 128;
+>         else
+>                 priv->vec_count =3D VEC_COUNT;
+> -
+> +       priv->parent_hwirq =3D irqd_to_hwirq(irq_data);
+>         priv->node =3D 0;
+>         priv->domain_handle =3D of_fwnode_handle(of_node);
+>
+> --
+> 2.39.3
+>
 
