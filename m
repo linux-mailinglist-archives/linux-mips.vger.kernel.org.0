@@ -1,88 +1,88 @@
-Return-Path: <linux-mips+bounces-11110-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11111-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62758B496F2
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Sep 2025 19:30:51 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85198B49749
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Sep 2025 19:38:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 52DF718878D5
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Sep 2025 17:31:12 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 6B0134E1F51
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Sep 2025 17:38:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7AAA31329D;
-	Mon,  8 Sep 2025 17:30:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C8CC3164B0;
+	Mon,  8 Sep 2025 17:37:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QYWRPAmM"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MpD/HCrg"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDEDD3081AC
-	for <linux-mips@vger.kernel.org>; Mon,  8 Sep 2025 17:30:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB1CD3164A1
+	for <linux-mips@vger.kernel.org>; Mon,  8 Sep 2025 17:37:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757352644; cv=none; b=cNYEd36hDmIU6hRKwLfxFTRlGkmzuZ89qytzlq+TKRZtC0MiCXCiDUktbU+8dnlwpoK8hnaHQELkGJeHXGHGsZqD8V+NvTpgLDGZRY2tnnCOqSceZ8u6sD5hFvBWcEGiV77QskzAx/V1ik2orzDiD+vWUJE9/yzJbIZatzRo0sg=
+	t=1757353031; cv=none; b=bkPBt9t2sNML/zDbxYkHy1yr3bax2jdfkHwNNJxsOb9LqJYMmvd6WtBP4V3chPT/iy1HIg+0sX2WrFCFTf/Yf0EMgnQAJC/qqHid36/zHqWF/AY4oJcLnc3/BFV5jJaRaBEIhJF/EZ+tU3FNF08nM8tGguVE8+uysKzd9dqDeeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757352644; c=relaxed/simple;
-	bh=JyPkBfczRRzXpM98VuI8SgsMu1wrAKH/fI6gRLdmGRQ=;
+	s=arc-20240116; t=1757353031; c=relaxed/simple;
+	bh=nwOWcisl2sQ8iPTojuZE0ZYmJOKQX1fDwEt2YMCeNM8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k8+knreiPkcaAo70BRDfaQZ6pbgUaLiJFHVAZd7cYvkoHh8LygcV8VbJfHWyZRTxS+Rg2J3f2/LoEQ+zhUYpSCRonEbOzrVF/kBfvB6SiGse/Fkn9/57lo0pOZjqJf8lU56gcMY8Rwlo04WFSwUXOmQtCh3KBa46beE+nNMRGSI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QYWRPAmM; arc=none smtp.client-ip=170.10.129.124
+	 In-Reply-To:Content-Type; b=I4v8vdAk8iW4/+t8/x1zPl2alMTqbQm4xxms2S871XtUyHk+eGfIHG1Y2D5rYc7rKN7yllPVmH4T8aKzFoIVoK8+idMsRG5Q7FUwxG05nZA5s1dWYS5/LiqlUYMA5EFhrS3yrnzvD2tCbz8PeAmFBMEVGWnux2T8QobU9W/Q1Tg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MpD/HCrg; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1757352642;
+	s=mimecast20190719; t=1757353028;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=RAwcm1nPLLX4X92euXLnYeRyvAbGSoqBmBe5SHTlwFM=;
-	b=QYWRPAmMwbZts0Ti25U4biMsPO0W0rW3vaFAt8iGyyL/bFPGhx6bTVRPjIXHPzjqdr8kxT
-	MAKI0LRi76XtwURBmzC1gLEqPP5vnPfZ53GkK6+HhHLelPMFKxXUugtnppeutSAtnBRAI3
-	N2zjPHRHpF7UkI94R/mmVzv+EfYgz1Q=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=ddTrLlBONI++Tc0vmAVCsKGI5mMqVsSsSog7PjuxMWA=;
+	b=MpD/HCrg0OigBnnyiR0PPkxjQBilIAH5lCRXO3DImrkMeJWlOmdZhAF7O0K6z6IL5vgOhP
+	zUFnU4PI+RWEk855ckxgzQO8fCWrwphIB6JATrMJeOcQXYAOmAV7+v8fOonsnhsJ0oNDtW
+	GU7oJJiMXFdFO43hqSRtMTJvGJ0KMgA=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-613-0OfdgB4JOi2SKGMU-eBnAQ-1; Mon, 08 Sep 2025 13:30:40 -0400
-X-MC-Unique: 0OfdgB4JOi2SKGMU-eBnAQ-1
-X-Mimecast-MFC-AGG-ID: 0OfdgB4JOi2SKGMU-eBnAQ_1757352640
-Received: by mail-wr1-f71.google.com with SMTP id ffacd0b85a97d-3dbf3054ac4so2739071f8f.3
-        for <linux-mips@vger.kernel.org>; Mon, 08 Sep 2025 10:30:40 -0700 (PDT)
+ us-mta-569-2RZKMS-KNB-aVkdfvq301A-1; Mon, 08 Sep 2025 13:37:06 -0400
+X-MC-Unique: 2RZKMS-KNB-aVkdfvq301A-1
+X-Mimecast-MFC-AGG-ID: 2RZKMS-KNB-aVkdfvq301A_1757353025
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-45dd66e1971so31503305e9.2
+        for <linux-mips@vger.kernel.org>; Mon, 08 Sep 2025 10:37:06 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757352639; x=1757957439;
+        d=1e100.net; s=20230601; t=1757353025; x=1757957825;
         h=content-transfer-encoding:in-reply-to:autocrypt:content-language
          :from:references:cc:to:subject:user-agent:mime-version:date
          :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=RAwcm1nPLLX4X92euXLnYeRyvAbGSoqBmBe5SHTlwFM=;
-        b=Wep+b7S53bsql0OzsG26z2FT7PpekgCmDgY9gQSov0DbrCRLxkEpi1/sIb+AzJx+RA
-         WB6S4oN6MXYOVpiaorzeeXPuklbFSbWxMr+QtYwvQjoVmu0+wA6rMgVZEMW6E/4HMbr9
-         IMRJBaTlHJ7oJZVBhN8t8Jdg8gCLiCUvaCZfRlyu7aRRqPvO4AlI473maZGTHMYo1Op/
-         8mbRUuGusT8LiWut2HkaJvQkoTop0yDNhloWt4vK0RB6sbwjT7cZcTfwJfKMywBiZBHG
-         7Yo0pYSt3EZHO42ohcDm+LJKfKTfiLr4zKahakxtxjS4OaIc+8s9yO0C0l7CArjgY0Df
-         E0aQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVLknJYNUicAn6byLFD60sMFPF0xUIl++DgXRE1VzwRlUuvsjf/CJwMsPiY4gH/l2/NKRccUUrDGdYu@vger.kernel.org
-X-Gm-Message-State: AOJu0YwyDtBwvpAvmCc0Pl5iBW4xD0v2eeR3TWC5iqWq1Hlp50Lzi6+Y
-	ZB3KR8Lb3dfdSS+OXy6vM6gOpFTowWCvqub61V6PW9YGkLgJ7nSwF3tjqbhcbuREhzI7oDCn8g1
-	+Wsp1v2ueHkUyDJxmo3OCL/iACN8lTqFqGJbLW3D62tQT3kiX0NWgkCp6/0JVR6U=
-X-Gm-Gg: ASbGncuFtui5xabMsH5LjbKauuxfZI2mBko21WE64xSI0wzWgx9PnBtvKWicVge18q7
-	YtY1ukI6fqMYpeOq9KmJFXHG6g7ON2uW5fTDDXqILdkXZ6UUXob10QvHTB9ZHib+O4WN9sJ/fDr
-	LHTB0KsQfmuueiePFtWga16WYg1zWwaVoxAwu4GaY74mcwobSo30KupkFvBz8tOkMtPcnFzXFJo
-	7ppP/aanso+oWbd60TwVZxBgj5mKHIoQaEDDi4QC3Bs72eULE3BcYoLPDc6YlWzNK4MevLRHKZZ
-	wshO3rNGkKNTxYL5Cz4koBCVY19G6jA2efQMRxO+yS7+Sb396hgG/gn+Uz2WmBJUdLAocXixy9l
-	FsWmm1acT1gwMUvHN45YetZ/Qi9OxDxwBHGhgqP9/swP59f0mjOqLmN4/pWPivS6s
-X-Received: by 2002:a5d:5d05:0:b0:3ce:f0a5:d581 with SMTP id ffacd0b85a97d-3e636d8ff6dmr7012176f8f.7.1757352639327;
-        Mon, 08 Sep 2025 10:30:39 -0700 (PDT)
-X-Google-Smtp-Source: AGHT+IGj6Fx/oJ/i3mGb5tdhsyoUu3a7TRpHUY03SW3dQRjVAjsi0xq639ZH0YB5uZksW3RpOLFefg==
-X-Received: by 2002:a5d:5d05:0:b0:3ce:f0a5:d581 with SMTP id ffacd0b85a97d-3e636d8ff6dmr7012120f8f.7.1757352638837;
-        Mon, 08 Sep 2025 10:30:38 -0700 (PDT)
+        bh=ddTrLlBONI++Tc0vmAVCsKGI5mMqVsSsSog7PjuxMWA=;
+        b=FKcfOi0sbWScs7HogKztWZSWBnfg2IpBKDNMf1FHbO8YQu1+Fin9VkrS8PMp6DLgF4
+         EU0ILbzFLVsrI1rJKgp+g7FxYoiH6cvKmSULQ4v5UnuGHOeJ+O730mIEbA6fVR6QdTLG
+         jQxKX2DvhzER4PjB5/RoWIVJUfH+QM+q4/Wg5Uen/B5n56e11BKDCre9PCxBwQJmmuCz
+         2vYdDE5dzJ/9PlFor5rJAqv1zpm4x4/1Fpj49Zyw6Kdcgr0aHe6U/13E40b24+HE0rhQ
+         5vmOvV8nxQcb9nk5t0iVddOYnOGN+GEB+QXPtV9ZaRKYKaiHGGWcAm9LQruG5hwmZpHI
+         yM7Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUiQfiq7TIv3Wpe3fKLEPrt24z676luyWTCRSPbuYLkAK6ymbuCpYw8dg/4UDgJ8U7PEHE8BgoKjFn6@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywv06zZGiVwC9rEGazxi5aM8FORhmdHjaHEBdPL4kHpGiZoG1xf
+	IZJrYpbrPk2zxfx+bP1kQWUCGWlcHHMGLkq8Nskxj1qJD1aIiZ0mc2Q3h7ajBa9k3V6CMbwWfbf
+	g1urd/eL1OsqxhKuvPHEhfRbEQS9FiXj3DlIy/mN6tgB92AVquBcNYYW79B12dqU=
+X-Gm-Gg: ASbGncsiIzQLYK+3HD/Xbj7XTqCStGDUkcn7z/9rIYWlJn/eVxrgABNupKEIYPUyTcf
+	dXEOq76UklgDpSHKTFcmgbi/CKI6gJlD4Jwbao+40DaZxHQIYf/kRuOP635cY4+SxjiRZ58PO2S
+	DxywaxTr3PDIF6JCdXtGF0w31+RfZUNu1b+YgGL4oMi4vucIxxykwoJjV2dhppjm2siGzIgggHe
+	6s1/ZUjrmIg9IFrIayAYQTIAa0A7qz5gVCgNJtbgYNQd4Fr4l5OTs/nwP2nzuAJqSFbes4CCsZ8
+	aNTlsJIdffYLYjIgsR4tuq+g8e1JOVgHXPvxCtBdwmz87XLEbI4+aJgH7LFtq0PiNB0MGtasB0H
+	UBiPl/ulB0DSNDrqUqWBc7SMl7Fi9RaXV++uJFiCqedWnX4xl/UqP3Av2KxkVWi2B
+X-Received: by 2002:a05:600c:4e93:b0:45d:e0d8:a0aa with SMTP id 5b1f17b1804b1-45de0d8a342mr90484735e9.17.1757353024896;
+        Mon, 08 Sep 2025 10:37:04 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFbv9r9FbyFKOKYYRfwPOE7IG/CuXRebsq1QPIBNdBs4sMFncfDfGM1509u6wSlpw7tNCWppg==
+X-Received: by 2002:a05:600c:4e93:b0:45d:e0d8:a0aa with SMTP id 5b1f17b1804b1-45de0d8a342mr90484185e9.17.1757353024430;
+        Mon, 08 Sep 2025 10:37:04 -0700 (PDT)
 Received: from ?IPV6:2003:d8:2f25:700:d846:15f3:6ca0:8029? (p200300d82f250700d84615f36ca08029.dip0.t-ipconnect.de. [2003:d8:2f25:700:d846:15f3:6ca0:8029])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45dd296ed51sm197762845e9.3.2025.09.08.10.30.35
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45de16b8b58sm99810995e9.4.2025.09.08.10.37.00
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Sep 2025 10:30:38 -0700 (PDT)
-Message-ID: <92def589-a76f-4360-8861-6bc9f94c1987@redhat.com>
-Date: Mon, 8 Sep 2025 19:30:34 +0200
+        Mon, 08 Sep 2025 10:37:03 -0700 (PDT)
+Message-ID: <7b0f5b81-e18c-4629-a715-b5fee722b4aa@redhat.com>
+Date: Mon, 8 Sep 2025 19:36:59 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -91,8 +91,8 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [PATCH 03/16] mm: add vma_desc_size(), vma_desc_pages() helpers
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Jason Gunthorpe <jgg@nvidia.com>,
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
  Andrew Morton <akpm@linux-foundation.org>, Jonathan Corbet <corbet@lwn.net>,
  Matthew Wilcox <willy@infradead.org>, Guo Ren <guoren@kernel.org>,
  Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
@@ -127,16 +127,17 @@ Cc: Jason Gunthorpe <jgg@nvidia.com>,
  sparclinux@vger.kernel.org, nvdimm@lists.linux.dev,
  linux-cxl@vger.kernel.org, linux-mm@kvack.org, ntfs3@lists.linux.dev,
  kexec@lists.infradead.org, kasan-dev@googlegroups.com
-References: <cover.1757329751.git.lorenzo.stoakes@oracle.com>
- <d8767cda1afd04133e841a819bcedf1e8dda4436.1757329751.git.lorenzo.stoakes@oracle.com>
- <20250908125101.GX616306@nvidia.com>
- <e71b7763-4a62-4709-9969-8579bdcff595@lucifer.local>
+References: <e71b7763-4a62-4709-9969-8579bdcff595@lucifer.local>
  <20250908133224.GE616306@nvidia.com>
  <090675bd-cb18-4148-967b-52cca452e07b@lucifer.local>
  <20250908142011.GK616306@nvidia.com>
  <764d413a-43a3-4be2-99c4-616cd8cd3998@lucifer.local>
- <af3695c3-836a-4418-b18d-96d8ae122f25@redhat.com>
- <d47b68a2-9376-425c-86ce-0a3746819f38@lucifer.local>
+ <20250908151637.GM616306@nvidia.com>
+ <8edb13fc-e58d-4480-8c94-c321da0f4d8e@redhat.com>
+ <20250908153342.GA789684@nvidia.com>
+ <365c1ec2-cda6-4d94-895c-b2a795101857@redhat.com>
+ <3229ac90-943f-4574-a9b8-bd4f5fa6cf03@redhat.com>
+ <20250908155652.GE789684@nvidia.com>
 From: David Hildenbrand <david@redhat.com>
 Content-Language: en-US
 Autocrypt: addr=david@redhat.com; keydata=
@@ -183,64 +184,58 @@ Autocrypt: addr=david@redhat.com; keydata=
  3iyY2Nsd7JxfKu1PRhCGwXzRw5TlfEsoRI7V9A8isUCoqE2Dzh3FvYHVeX4Us+bRL/oqareJ
  CIFqgYMyvHj7Q06kTKmauOe4Nf0l0qEkIuIzfoLJ3qr5UyXc2hLtWyT9Ir+lYlX9efqh7mOY
  qIws/H2t
-In-Reply-To: <d47b68a2-9376-425c-86ce-0a3746819f38@lucifer.local>
+In-Reply-To: <20250908155652.GE789684@nvidia.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On 08.09.25 17:35, Lorenzo Stoakes wrote:
-> On Mon, Sep 08, 2025 at 05:07:57PM +0200, David Hildenbrand wrote:
->> On 08.09.25 16:47, Lorenzo Stoakes wrote:
->>> On Mon, Sep 08, 2025 at 11:20:11AM -0300, Jason Gunthorpe wrote:
->>>> On Mon, Sep 08, 2025 at 03:09:43PM +0100, Lorenzo Stoakes wrote:
->>>>>> Perhaps
->>>>>>
->>>>>> !vma_desc_cowable()
->>>>>>
->>>>>> Is what many drivers are really trying to assert.
->>>>>
->>>>> Well no, because:
->>>>>
->>>>> static inline bool is_cow_mapping(vm_flags_t flags)
->>>>> {
->>>>> 	return (flags & (VM_SHARED | VM_MAYWRITE)) == VM_MAYWRITE;
->>>>> }
->>>>>
->>>>> Read-only means !CoW.
->>>>
->>>> What drivers want when they check SHARED is to prevent COW. It is COW
->>>> that causes problems for whatever the driver is doing, so calling the
->>>> helper cowable and making the test actually right for is a good thing.
->>>>
->>>> COW of this VMA, and no possibilty to remap/mprotect/fork/etc it into
->>>> something that is COW in future.
->>>
->>> But you can't do that if !VM_MAYWRITE.
->>>
->>> I mean probably the driver's just wrong and should use is_cow_mapping() tbh.
->>>
->>>>
->>>> Drivers have commonly various things with VM_SHARED to establish !COW,
->>>> but if that isn't actually right then lets fix it to be clear and
->>>> correct.
->>>
->>> I think we need to be cautious of scope here :) I don't want to accidentally
->>> break things this way.
->>>
->>> OK I think a sensible way forward - How about I add desc_is_cowable() or
->>> vma_desc_cowable() and only set this if I'm confident it's correct?
->>
->> I'll note that the naming is bad.
->>
->> Why?
->>
->> Because the vma_desc is not cowable. The underlying mapping maybe is.
+On 08.09.25 17:56, Jason Gunthorpe wrote:
+> On Mon, Sep 08, 2025 at 05:50:18PM +0200, David Hildenbrand wrote:
 > 
-> Right, but the vma_desc desribes a VMA being set up.
+>> So in practice there is indeed not a big difference between a private and
+>> cow mapping.
 > 
-> I mean is_cow_mapping(desc->vm_flags) isn't too egregious anyway, so maybe
-> just use that for that case?
+> Right and most drivers just check SHARED.
+> 
+> But if we are being documentative why they check shared is because the
+> driver cannot tolerate COW.
+> 
+> I think if someone is cargo culting a diver and sees
+> 'vma_never_cowable' they will have a better understanding of the
+> driver side issues.
+> 
+> Driver's don't actually care about private vs shared, except this
+> indirectly implies something about cow.
 
-Yes, I don't think we would need another wrapper.
+I recall some corner cases, but yes, most drivers don't clear MAP_MAYWRITE so
+is_cow_mapping() would just rule out what they wanted to rule out (no anon
+pages / cow semantics).
+
+FWIW, I recalled some VM_MAYWRITE magic in memfd, but it's really just for
+!cow mappings, so the following should likely work:
+
+diff --git a/mm/memfd.c b/mm/memfd.c
+index 1de610e9f2ea2..2a3aa26444bbb 100644
+--- a/mm/memfd.c
++++ b/mm/memfd.c
+@@ -346,14 +346,11 @@ static int check_write_seal(vm_flags_t *vm_flags_ptr)
+         vm_flags_t vm_flags = *vm_flags_ptr;
+         vm_flags_t mask = vm_flags & (VM_SHARED | VM_WRITE);
+  
+-       /* If a private mapping then writability is irrelevant. */
+-       if (!(mask & VM_SHARED))
++       /* If a CoW mapping then writability is irrelevant. */
++       if (is_cow_mapping(vm_flags))
+                 return 0;
+  
+-       /*
+-        * New PROT_WRITE and MAP_SHARED mmaps are not allowed when
+-        * write seals are active.
+-        */
++       /* New PROT_WRITE mappings are not allowed when write-sealed. */
+         if (mask & VM_WRITE)
+                 return -EPERM;
+  
+
 
 -- 
 Cheers
