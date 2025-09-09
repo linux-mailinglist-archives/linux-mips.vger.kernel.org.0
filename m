@@ -1,74 +1,74 @@
-Return-Path: <linux-mips+bounces-11162-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11163-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DEBEB500CF
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Sep 2025 17:16:18 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id B4C66B50113
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Sep 2025 17:26:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F2F741C601BA
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Sep 2025 15:16:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A36581B24D08
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Sep 2025 15:27:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB1B7350824;
-	Tue,  9 Sep 2025 15:16:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F5B0352FC3;
+	Tue,  9 Sep 2025 15:26:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HgT9jkV7"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gbm4IJy3"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFD7C338F23
-	for <linux-mips@vger.kernel.org>; Tue,  9 Sep 2025 15:16:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AA09352FDE;
+	Tue,  9 Sep 2025 15:26:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757430968; cv=none; b=KwY2Jex+XEGVnOl0IFfmWmpCNOeqQbiJ6R7U+PzcV37DVOldOX4aXhMSNlTCywz08NefXF8SCywsWyulUa1VWuIoBDCcU5OIdoBrcto9ygzZ1aobTM+gsdzr+JDrTVvVSsicE3PMInJkEf9lsiR7Hk+zJCJSMdKdrVlG7YfvgK4=
+	t=1757431586; cv=none; b=s+H3YWDBOEEDQlMsYSDFHdP62OggHj2yse8hbj7mqtgWiRttLLfOEBKZN6+t4gNpAsu7tVGDtvlX3dSEEXig1rftkt1Eh4yyJ9jfP+2MBaLVV7rx+lerN94F6hmjnQYlqpPHk3AfduMahuVeqvRT3BF92yjqqU4vVNKTdTQQidc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757430968; c=relaxed/simple;
-	bh=HhszSRQXIU5hyXmbHS1r8ihhw943QEplSsfQYmIy1lw=;
+	s=arc-20240116; t=1757431586; c=relaxed/simple;
+	bh=ACvYPivQ1a8I17yD0UYeNvhtUQ6DCC5FT/ARS5wLzjU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=a1Pal/08n3qWx8zATl/DBqO6ea7pSE4KDvq7tI0IU6LpxEQq6JIZGcOnvSXSDS6NZBrq1CuTbWfYKrO/VyrRL3n1TSHJ1+J7R6c6+mS46o5iypnalP1vY9DOCNROYhKq29RDQ1Yy1OlCCSeKnjr3+VQn+TrfRI7K3XfiKs6Ea3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HgT9jkV7; arc=none smtp.client-ip=209.85.218.44
+	 To:Cc:Content-Type; b=ZHaz+ZUz3xyMCBpJHzNyGdUwtviJIN3y0XNBpGkTJEZSc5RPfUF2+xX7m0PLndzUBw0Smnkz1KKuTMEw9uvnIqjGmDlFlbAF32HXfnNtDUm4oDR1MgjjoB7mqpdZ94ecYNShw8X/Adc+WNtTwblO3lenUYyvpqYEoF9N7jhW/7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gbm4IJy3; arc=none smtp.client-ip=209.85.218.49
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-b0428b537e5so920507666b.3
-        for <linux-mips@vger.kernel.org>; Tue, 09 Sep 2025 08:16:06 -0700 (PDT)
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-b04ba58a84fso468911266b.2;
+        Tue, 09 Sep 2025 08:26:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757430965; x=1758035765; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1757431583; x=1758036383; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=HhszSRQXIU5hyXmbHS1r8ihhw943QEplSsfQYmIy1lw=;
-        b=HgT9jkV72Ek5jVAJfgKMo0NY1Xee9cmxE7wMVdNroBd9lwTzKY1OPToUkcaaiVfA1Q
-         w+HqEoBYBV1C4z/1V/aXFwb5/P6xIeCWXw1jQiRuO1E0tpxEogi7KQjSuZ9UJJIfxHtr
-         srt6hpJq/20lHtorszEHi+nBfkSNHWCV4LVBWat8AW+UDlMlFa2nD8kXn9kVztF0slZY
-         e+pR0ldJH0KxkMqT8dZJKIwlhXD+9IkKn7rN7OgBXD5M05vok/Xsc1I/4m8bHKMAbmY3
-         B4QWURkumU478t/8T0f/wz/GzkmiBRU8S4ejTXxSVpSRgMyjDLEeiUcWtV+jLMzKLGV4
-         JJsw==
+        bh=ACvYPivQ1a8I17yD0UYeNvhtUQ6DCC5FT/ARS5wLzjU=;
+        b=gbm4IJy3e6UL0LePmt9IYTk6xg7Web5uUChIe2d0VFFTocIbyESexp4E3qo0a5E/2r
+         LYCSsGiYIQS7A62g96pNHMCvKytJ7PVmCJqPbkRUimKHz4IgLBiMoTHEARQz6qJQZqu+
+         8pVAU1C1alnAV5+6Jj7WfW+S/xJDIz2UfojQASTLC9HEubjhS3+dc5ub8n1LIgXLnp4u
+         OFabA9hczR37by4FdGrVjMewGsiUR8SdJEKEJo+EO82vqUp8MR0KjmJLMq6pUYMv4EiE
+         6sOYZ5GMRgMXWaVXVcWj+kXUVozhMqh+77RwUC3dFzud5ce4pgUoufZotUrIHdNtHqXz
+         v75A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757430965; x=1758035765;
+        d=1e100.net; s=20230601; t=1757431583; x=1758036383;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=HhszSRQXIU5hyXmbHS1r8ihhw943QEplSsfQYmIy1lw=;
-        b=VLAvSk5aWmoSmZdQlwAGH0RaPjJfmgSDTcc7PeFtYRyq3UMQoy+0RumqlwLlgIBoeZ
-         jh8+McoHrop7mBTcA8ZraIt+N3a8OBJpHAeCiPCj6hcNkVN+PkOPiC+LpweiSOc7xoEF
-         Y73C9eKzQ1thBbP8vEYHy45EA5K3lLBz+3QQA0Cf2fBOs1JEGwiGMxqe/mKmIkPJtXjo
-         8VzLuJLU1Zr+02rUmClfO1pC5iaBN5gzYI+Ac2vjpsEaVMvzbNdFg+LDoLcMLoI2qXqJ
-         qIGm2o4DBTVLDbVGGINX8nyJA0eFTQGyRhjmXdOf3kMrmNtDajUV3i3OUf1S00C2o4U/
-         IkMg==
-X-Forwarded-Encrypted: i=1; AJvYcCWSdLOkfZpEy1R4qDck4oIwy6atO7dWVbb+hPAdXgH8bIAoxQj0ED2wF6Awk8sVcup0SQXttusj/M9X@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzm+6QKmmCQogUjFrEv2fQKY3SDwAPmexkacipvjkXkKD8gOSMT
-	A4NRxQN2/6NETIeEz4NxXyLogn1z9tDu6A8tymXF7bRgYqk0PvU24tbx2ikS6h3fMVapkcXPJEU
-	E5qNf79M0v5a0I+/Dk1yLCmzngXNSTpM=
-X-Gm-Gg: ASbGncvuSgSdTNL1Tv3lmLIG9PzA8x5LCPImvjm9tw4mEXKpNHmYIXvEXy+Lkwuw1QN
-	dwStz3Qh+3rR4GXp8zZ0rcH2tdFIuUHWcIkKlsP8rOyKvNCrC1of5HX7TgkxIppLe4KbddP/W5D
-	vuFDLuD79DMGbireEfKrQ12YQ49WZJ28dC+N2ckGwmhWPF8p6YoH/D0FghTrITLsRl6QbbeqjDu
-	at+OEvu5Q==
-X-Google-Smtp-Source: AGHT+IGeaHcV2kH627FcZIyd8vYLnu/2Up2e6b2i9sBG/bmosVjOp6dqHGnQ87UTIB1WpGArwM97TNlubL6NJn+jj/k=
-X-Received: by 2002:a17:907:7e8c:b0:b04:39af:bee9 with SMTP id
- a640c23a62f3a-b04b1003707mr1194942566b.0.1757430964857; Tue, 09 Sep 2025
- 08:16:04 -0700 (PDT)
+        bh=ACvYPivQ1a8I17yD0UYeNvhtUQ6DCC5FT/ARS5wLzjU=;
+        b=YJE0IbLiKR+0lQmElVJOuzvJj4IJatTbD3VYBdSLOcg1QVjK9+kDBf/RsiF82OMRPy
+         HK6wrg9BTG1zPtShQjE24LzhS7MkFlsjQSs8AbXXl3VvAF37J50q/H3LL5we/4KOD6ts
+         LbPGzE1tg6GUUu5LaHqF4C/zdVcYxCdaY1xV9yraN6DyOPwuvosLB66bjMDWIwrKcP/R
+         rV//a/kJJdLjltDrFcJ3P6IoCeRkQ1ZnrtU5moFbCQkRsLaFZNZSKSIEGEydzy3o+Bdq
+         41+hCkke4sxywse0agItExB6IWfiTPx/hKQqdTy83nv/5wekLyc1M/A7gTkuXUBvaS64
+         OpZA==
+X-Forwarded-Encrypted: i=1; AJvYcCUCS06AqZq/XRc6x5DhiFkgNeZeSLjHUSshB7Nue4mnNcK8rF/oc6jph8OCc9ol9QBMRhE9/BQI5aSm@vger.kernel.org, AJvYcCXUwpadPkSSA5xwMp5wFHP1+a+GyONbeii9L2VjpTYM59SS0D/P+dfadK6aYqm41SbzZdLdgaGYoggnpg==@vger.kernel.org, AJvYcCXrgZ6GZmup4qhv/ZkVZkbkQbPegLnTSK8bjHrHFOJSjR8hYsbfLYik4NsvMqlcaCYkGQGShKdMMwGmZzeg@vger.kernel.org
+X-Gm-Message-State: AOJu0YxX9azzr8OHxlJfIOIAzEDzKOwRHPgwTZVD8m5llj1V4sK357Rf
+	y3gROWs/qCe/qxsThOHxBaBOlB/4F6NoDF4PtMCu1Z1qhp3nbG+yg0lgoIa7TCqtsVZiFgJAioO
+	wev9K5QZ7eNWS1yrVaRgZUCKbet+qW3A=
+X-Gm-Gg: ASbGncurmSBkYa4cTMu/e9vJ9vJqWSeXWBqZOGhSI8mQPJ0LCVTozS/XJxjE0Gnrvdl
+	0ELEyhoBNcQoAIlkY5RKLU4Bz26b37BNxDTwHW27TUpVU/2fe+Fkw/JbZT5Lc6A8CcCAFuPWmBe
+	T6ddgBO/5A0HuX+NEszzbpj32dTrqBbuU95lxHmlLfvYCf8L2jEIxHUwHfOCv2bCgQ6p+J5Ky37
+	2RGKy8i6Q==
+X-Google-Smtp-Source: AGHT+IGZg15DrtF72G9h9dyt21xSsowFAKz71cJqtEpccOZC9aRv/EPnYIUJriaKNXq/eDdw8hEDX9pZ4E1DPi0ePuo=
+X-Received: by 2002:a17:907:8687:b0:b04:5200:5ebe with SMTP id
+ a640c23a62f3a-b04b173704cmr1239828766b.54.1757431582431; Tue, 09 Sep 2025
+ 08:26:22 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -82,11 +82,12 @@ References: <20250909-gpio-mmio-gpio-conv-part4-v1-0-9f723dc3524a@linaro.org>
  <aMAve1MbONmKVjjg@smile.fi.intel.com> <aMAv3STeZUdSQ14p@smile.fi.intel.com>
  <CAMRc=MeA87p0QAzq_3MACQM90MhN0eRccr7u-VzcfyP8b90AaQ@mail.gmail.com>
  <aMAzZAbNwrRTgFi-@smile.fi.intel.com> <CAMRc=Mfn7atHTqKc9nMTQ19ZserqeNi3skb-QhG3CVdEhmr0gg@mail.gmail.com>
-In-Reply-To: <CAMRc=Mfn7atHTqKc9nMTQ19ZserqeNi3skb-QhG3CVdEhmr0gg@mail.gmail.com>
+ <CAHp75VdDAJO3+NPp29GnqL=C5m7tdWbyYvNFax=Dh+dG49YAnA@mail.gmail.com>
+In-Reply-To: <CAHp75VdDAJO3+NPp29GnqL=C5m7tdWbyYvNFax=Dh+dG49YAnA@mail.gmail.com>
 From: Andy Shevchenko <andy.shevchenko@gmail.com>
-Date: Tue, 9 Sep 2025 18:15:28 +0300
-X-Gm-Features: Ac12FXySsG8IXlocwCfN3VG6y5KLpIc0a90AoYqlSY-xU72GOTjlNCZIc8n9fs0
-Message-ID: <CAHp75VdDAJO3+NPp29GnqL=C5m7tdWbyYvNFax=Dh+dG49YAnA@mail.gmail.com>
+Date: Tue, 9 Sep 2025 18:25:45 +0300
+X-Gm-Features: Ac12FXzLAWj8jy-m4m9ZPXb_pPgfqX2JAuL57q-duTifXdjD_POsau2MIQgkxqI
+Message-ID: <CAHp75VffDLfvdVhnzZk6V6a9eXq4R0ZBYLUw3S=g0ABqozhWFQ@mail.gmail.com>
 Subject: Re: [PATCH 13/15] gpio: sodaville: use new generic GPIO chip API
 To: Bartosz Golaszewski <brgl@bgdev.pl>
 Cc: Andy Shevchenko <andriy.shevchenko@intel.com>, Linus Walleij <linus.walleij@linaro.org>, 
@@ -104,44 +105,55 @@ Cc: Andy Shevchenko <andriy.shevchenko@intel.com>, Linus Walleij <linus.walleij@
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Sep 9, 2025 at 5:05=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl> =
-wrote:
-> On Tue, Sep 9, 2025 at 4:02=E2=80=AFPM Andy Shevchenko
-> <andriy.shevchenko@intel.com> wrote:
-> > On Tue, Sep 09, 2025 at 03:56:41PM +0200, Bartosz Golaszewski wrote:
-> > > On Tue, Sep 9, 2025 at 3:47=E2=80=AFPM Andy Shevchenko
-> > > <andriy.shevchenko@intel.com> wrote:
+On Tue, Sep 9, 2025 at 6:15=E2=80=AFPM Andy Shevchenko
+<andy.shevchenko@gmail.com> wrote:
+> On Tue, Sep 9, 2025 at 5:05=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl=
+> wrote:
+> > On Tue, Sep 9, 2025 at 4:02=E2=80=AFPM Andy Shevchenko
+> > <andriy.shevchenko@intel.com> wrote:
+> > > On Tue, Sep 09, 2025 at 03:56:41PM +0200, Bartosz Golaszewski wrote:
+> > > > On Tue, Sep 9, 2025 at 3:47=E2=80=AFPM Andy Shevchenko
+> > > > <andriy.shevchenko@intel.com> wrote:
 
 ...
 
-> > > > TBH, I think those 6 all made the same mistake, i.e. thinking of th=
-e compound
-> > > > literal as a cast. Which is not!
+> > > > > TBH, I think those 6 all made the same mistake, i.e. thinking of =
+the compound
+> > > > > literal as a cast. Which is not!
+> > > >
+> > > > What do you suggest?
 > > >
-> > > What do you suggest?
+> > > Write it in less odd way :-)
+> > >
+> > > foo =3D (struct bar) { ... };
 > >
-> > Write it in less odd way :-)
+> > I don't get your reasoning. typeof() itself is well established in the
+> > kernel and doesn't
 > >
-> > foo =3D (struct bar) { ... };
+> > foo =3D (struct bar){ ... };
+> >
+> > evaluate to the same thing as
+> >
+> > foo =3D (typeof(foo)){ ... };
+> >
+> > ? Isn't it still the same compound literal?
 >
-> I don't get your reasoning. typeof() itself is well established in the
-> kernel and doesn't
->
-> foo =3D (struct bar){ ... };
->
-> evaluate to the same thing as
->
-> foo =3D (typeof(foo)){ ... };
->
-> ? Isn't it still the same compound literal?
+> It makes it so, but typeof() usually is used for casts and not for
+> compound literals. That's (usage typeof() for compound literals) what
+> I am against in this case.
 
-It makes it so, but typeof() usually is used for casts and not for
-compound literals. That's (usage typeof() for compound literals) what
-I am against in this case.
+FWIW, brief googling showed that nobody (okay, I haven't found yet
+reddit/SO/GCC or LLVM documentation) uses typeof() for compound
+literals. So, this makes me feel right, that the form of typeof() is
+weird and works due to unknown reasons. Any pointers to the
+documentation you read about it?
 
-> > > And are we not allowed to use C99 features now anyway?
-> >
-> > It's fine, it's not about the C standard number.
+> > > > And are we not allowed to use C99 features now anyway?
+> > >
+> > > It's fine, it's not about the C standard number.
+
+E.g., https://gcc.gnu.org/onlinedocs/gcc-15.1.0/gcc/Compound-Literals.html
+(8.1.0 is the same).
 
 
 --=20
