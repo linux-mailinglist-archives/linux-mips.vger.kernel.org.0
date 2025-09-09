@@ -1,192 +1,152 @@
-Return-Path: <linux-mips+bounces-11155-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11156-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8429B4FE1B
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Sep 2025 15:52:07 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7441FB4FE59
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Sep 2025 15:57:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D2B133A94F0
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Sep 2025 13:47:24 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 266C21687F9
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Sep 2025 13:52:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50A9F32275B;
-	Tue,  9 Sep 2025 13:47:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC39032A3D8;
+	Tue,  9 Sep 2025 13:52:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="CpJvyial"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="m4P90aeS"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 50B1632CF7A;
-	Tue,  9 Sep 2025 13:47:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0E2F2EB849
+	for <linux-mips@vger.kernel.org>; Tue,  9 Sep 2025 13:52:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757425641; cv=none; b=pc7XYsIg8B38OAubDh6Q42et7OhwdLouauG0GDC9YqhJLF5Na8YiqNJL7HTKBJVXKRwFovZsq4fUEuXb41ucw5MWLAeiFZvl7aThyzgZk/PPUplYyC1RNIdP6E2T8MlipaYpj+Dq9jzGGYC+YWngRGmtoB9e8WlzkqLbDYltqqA=
+	t=1757425946; cv=none; b=r9Q3wGfYed11tyGeDe4M9vO2u8oo4/7x4arzo6Bny7Ydkn312+uQwcZqcBKOfB1Sutu/nMGLZy4rmThNdwA71k9yTunZ+h4klUP1K2/Ijp8PhW1UXVIieUKVB7q2pRDrDlJGXpQlimm3k4VJEV7ImywFSA7CSJDk5sUVOSbvu7o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757425641; c=relaxed/simple;
-	bh=SgpPAjADQzC6Aebwe3Gl5hrmCduvtTFHZe4sNN8KxNA=;
+	s=arc-20240116; t=1757425946; c=relaxed/simple;
+	bh=cB60dTH36cJn6bhj7LO4fYyxsqTwnBK5gWYnVm8iKcc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DaqCEVBWZjkIPWohYqLMJS2Zsv0EiDmWQVgm52K7NIfVRfyoD1yvFJ+jadqZ+Re9fNs6KMD0gxrb5LhPpUwFz33P2WCRyDqhGKrjTBm6/lY16YPWyIo2vXgm3N9y7CzbGhDpGaK0LgSwesnm5Gi7JdhlGHRkuvIRQitfTKhsaS0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=CpJvyial; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+	 Content-Type:Content-Disposition:In-Reply-To; b=H7gUwl89jhzdU9BT6ZlkhEgoUEi7/+EH3FUXN6G/tBuYEckztiibjlFJVtwPHdg3H5KhHAESOhlbb2//MgojaZGvAck3oce9dq1bqYzxOV+y/9autpLxnMxhCDQpvk3cCslw3aDLsjXLp0KuUTD1TRJZkuNBA2Q2ilHPIb1e1qA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=m4P90aeS; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757425640; x=1788961640;
+  t=1757425945; x=1788961945;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:content-transfer-encoding:in-reply-to;
-  bh=SgpPAjADQzC6Aebwe3Gl5hrmCduvtTFHZe4sNN8KxNA=;
-  b=CpJvyialNhQqSwiAUvGUNEgyH7jPPjni4Q4TRZKoZ6lglirQB+n6vG8o
-   M8AFYfdEgROxCUOWUFnQj7hO+rvdWbsALT3lL5js+9qeWlN2wgJ/J1VVt
-   3QRxI+y8FSt75U2Ko1FvMEfI8oiYlFljT23iotGtUFRKJEpJRNlr8q1rj
-   p95fOzUfZ9STedj4Wn07o2CmF3MN5tQbu7oTlYtrtUUDoARjlOBp6oVww
-   wLw3zLr/pa2bo/BVpIbhgpFDKof6aVirp+h6dWZxOKBRi/g+QwB0pyLAy
-   mQUxaZJrHJYY2CrbnE3IdNRGNFUzbA9WyPP0phCz0QnOgtwoFRYgNcgHL
-   Q==;
-X-CSE-ConnectionGUID: 4yFjxPBDTauivDFKi7dx6w==
-X-CSE-MsgGUID: YDSPkkzZR3envU1LghONAw==
-X-IronPort-AV: E=McAfee;i="6800,10657,11548"; a="85156569"
-X-IronPort-AV: E=Sophos;i="6.18,251,1751266800"; 
-   d="scan'208";a="85156569"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2025 06:47:19 -0700
-X-CSE-ConnectionGUID: aQJ5SNjrRiC9oY5or5hmCw==
-X-CSE-MsgGUID: IvhvaCp3Shak7FgkN3F39Q==
+  bh=cB60dTH36cJn6bhj7LO4fYyxsqTwnBK5gWYnVm8iKcc=;
+  b=m4P90aeSp08u2fdRRTzZbaPXCgG5GZnLqdywp6JvJyJujpNIHP7Z/Iie
+   rg9IuvwhB7YpR4Z3xE2gM7QGdjDT9ob9VVDTGaU/zADm6f2yjO2vVuhsi
+   oN7ANv7s4idN6NgyKG31qyakYo2FopV+t/HZ2468KWzviG8oFWvkmKj1a
+   UC0tcxPehyCBqTlvc/EcJtq0X8CbzfB0lpqMU7/biPfhrX92TFI0YRa4e
+   mkIlPtn8nEunvO3axkssCce59cOETwGgiZhR4Kateahd4PY/b0oCch1CO
+   1cJvYwc+fWUVXrkQMRWeJ1ASAQvdE1hIoKFUhKr2u4j+txE3O/RW6CHak
+   w==;
+X-CSE-ConnectionGUID: lzObk+nPTWOwyE7mL41y2g==
+X-CSE-MsgGUID: in8itdR7TfuAog2VXPncmQ==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="63540494"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="63540494"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2025 06:52:24 -0700
+X-CSE-ConnectionGUID: uOtQ303AQT+UUb7RYD4Arg==
+X-CSE-MsgGUID: emVJJelAQGC2XlamoX9law==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.18,251,1751266800"; 
-   d="scan'208";a="173207838"
-Received: from smile.fi.intel.com ([10.237.72.51])
-  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2025 06:47:13 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1uvygf-00000001SBf-44Rc;
-	Tue, 09 Sep 2025 16:47:09 +0300
-Date: Tue, 9 Sep 2025 16:47:09 +0300
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Linus Walleij <linus.walleij@linaro.org>,
-	Keguang Zhang <keguang.zhang@gmail.com>,
-	Alban Bedel <albeu@free.fr>, Doug Berger <opendmb@gmail.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Yixun Lan <dlan@gentoo.org>, Andy Shevchenko <andy@kernel.org>,
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-riscv@lists.infradead.org,
-	spacemit@lists.linux.dev,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH 13/15] gpio: sodaville: use new generic GPIO chip API
-Message-ID: <aMAv3STeZUdSQ14p@smile.fi.intel.com>
-References: <20250909-gpio-mmio-gpio-conv-part4-v1-0-9f723dc3524a@linaro.org>
- <20250909-gpio-mmio-gpio-conv-part4-v1-13-9f723dc3524a@linaro.org>
- <aMAP9hAWars0T83r@smile.fi.intel.com>
- <CAMRc=MeLTGq8Qu2aT43tkt3vaYCSaJPJPLmaUQ1SAyD_OgVr_g@mail.gmail.com>
- <aMAn4MM_Fs8q8qwj@smile.fi.intel.com>
- <CAMRc=Mdr4oW2d7XZ90rRr_fKC7WToz72v=_kW-s8=Urd0g8k3g@mail.gmail.com>
- <aMAve1MbONmKVjjg@smile.fi.intel.com>
+   d="scan'208";a="177148881"
+Received: from dalessan-mobl3.ger.corp.intel.com (HELO localhost) ([10.245.244.181])
+  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2025 06:52:22 -0700
+Date: Tue, 9 Sep 2025 16:52:18 +0300
+From: Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To: Maxime Ripard <mripard@kernel.org>
+Cc: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	dri-devel@lists.freedesktop.org,
+	Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>,
+	Paul Cercueil <paul@crapouillou.net>, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v3 37/39] drm/ingenic: crtc: Switch to
+ ingenic_drm_get_new_priv_state()
+Message-ID: <aMAxEjIJOvxmOj2D@intel.com>
+References: <20250909-drm-no-more-existing-state-v3-0-1c7a7d960c33@kernel.org>
+ <20250909-drm-no-more-existing-state-v3-37-1c7a7d960c33@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <aMAve1MbONmKVjjg@smile.fi.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+In-Reply-To: <20250909-drm-no-more-existing-state-v3-37-1c7a7d960c33@kernel.org>
+X-Patchwork-Hint: comment
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Tue, Sep 09, 2025 at 04:45:31PM +0300, Andy Shevchenko wrote:
-> On Tue, Sep 09, 2025 at 08:24:23AM -0500, Bartosz Golaszewski wrote:
-> > On Tue, 9 Sep 2025 15:13:04 +0200, Andy Shevchenko
-> > <andriy.shevchenko@intel.com> said:
-> > > On Tue, Sep 09, 2025 at 01:35:04PM +0200, Bartosz Golaszewski wrote:
-> > >> On Tue, Sep 9, 2025 at 1:31â€¯PM Andy Shevchenko
-> > >> <andriy.shevchenko@intel.com> wrote:
-> > >> > On Tue, Sep 09, 2025 at 11:15:40AM +0200, Bartosz Golaszewski wrote:
+On Tue, Sep 09, 2025 at 01:27:56PM +0200, Maxime Ripard wrote:
+> The ingenic CRTC atomic_enable() implementation will indirectly call
+> drm_atomic_get_private_obj_state() through ingenic_drm_get_priv_state().
+> 
+> drm_atomic_get_private_obj_state() will either return the new state for
+> the object in the global state if it exists, or will allocate a new one
+> and add it to the global state.
+> 
+> atomic_enable() however isn't allowed to modify the global state. So
+> what the implementation should use is the
+> drm_atomic_get_new_private_obj_state() helper to get the new state for
+> the CRTC, without performing an extra allocation.
+> 
+> The ingenic driver has a wrapper around that helper with
+> ingenic_drm_get_new_priv_state(), so let's use that instead.
+> 
+> Reported-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
+> Suggested-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
+> Signed-off-by: Maxime Ripard <mripard@kernel.org>
+> 
+> ---
+> To: Paul Cercueil <paul@crapouillou.net>
+> Cc: linux-mips@vger.kernel.org
+> ---
+>  drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> index 05faed933e5619c796f2a4fa1906e0eaa029ac68..a1b641d63fc500dc169d0b0e22f93168c343a242 100644
+> --- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> +++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+> @@ -245,11 +245,11 @@ static void ingenic_drm_crtc_atomic_enable(struct drm_crtc *crtc,
+>  {
+>  	struct ingenic_drm *priv = drm_crtc_get_priv(crtc);
+>  	struct ingenic_drm_private_state *priv_state;
+>  	unsigned int next_id;
+>  
+> -	priv_state = ingenic_drm_get_priv_state(priv, state);
+> +	priv_state = ingenic_drm_get_new_priv_state(priv, state);
+>  	if (WARN_ON(IS_ERR(priv_state)))
 
-...
+get_new_state() will never return an error pointer. It's either
+a valid pointer or NULL.
 
-> > >> > > +     config = (typeof(config)){
-> > >> >
-> > >> > This looks unusual. Why can't properly formed compound literal be used as in
-> > >> > many other places in the kernel?
-> > >>
-> > >> It is correct C
-> > >
-> > > If it compiles, it doesn't mean it's correct C, it might be non-standard.
-> > > Have you checked with the standard (note, I read that part in the past,
-> > > but I may forgot the details, so I don't know the answer to this)?
-> > 
-> > It's a GNU extension alright
-> 
-> clang, I suppose, also okay with this?
-> 
-> > but it's supported in the kernel as it evaluates
-> > to a simple cast.
-> 
-> There is no cast. And that's make a big difference to what the code tries to do.
-> 
-> > >> and checkpatch doesn't raise any warnings.
-> > >
-> > > checkpatch is far from being useful in the questions like this.
-> > > It false positively complains for for_each*() macros all over
-> > > the kernel, for example.
-> > >
-> > >> It's the
-> > >> same kind of argument as between kmalloc(sizeof(struct foo)) vs
-> > >> kmalloc(sizeof(f)).
-> > >
-> > > Maybe, but it introduces a new style while all other cases use the other,
-> > > _established_ style. So we have a precedent and the form the code is written
-> > > in is against the de facto usage of the compound literals.
-> > 
-> > It may not be *very* common but it's hardly new style:
-> 
-> I think your statement is incorrect see below why.
-> 
-> > $ git grep -P "\(typeof\(.*\)\) ?\{" | wc
-> >     108     529    7315
-> 
-> Not correct. The correct output will be closer to
-> 
-> $ git grep -l -P "\(typeof\(.*\)\) ?\{" | wc -l
-> 15
-> 
-> And if you looked at the output carefully, you see the bug in the RE you used.
-> 
-> So, even closer will be this one:
-> 
-> $ git grep -l -P "=[[:space:]]+\(typeof\(.*\)\) ?\{" | wc -l
-> 7
-> 
-> 2 out of which are related to libeth, effectively makes this 6.
+To me it looks like this could potentially be NULL here as the
+get_pvi_state() call is done from the plane .atomic_check()
+whereas this gets called for the crtc. So if the plane is
+disabled there might not be any private state included in the
+commit.
 
-TBH, I think those 6 all made the same mistake, i.e. thinking of the compound
-literal as a cast. Which is not!
+Not sure how this driver/hardware is supposed to work so not
+sure what the proper fix for that is...
 
-> No, this is completely non-standard and unusual thing in the kernel.
+>  		return;
+>  
+>  	/* Set addresses of our DMA descriptor chains */
+>  	next_id = priv_state->use_palette ? HWDESC_PALETTE : 0;
 > 
-> > >> I guess it's personal taste but I like this version better.
-> > >
-> > > In kernel we also try to be consistent. This add inconsistency. Am I wrong?
-> > >
-> > >> > > +             .dev = &pdev->dev,
-> > >> > > +             .sz = 4,
-> > >> > > +             .dat = sd->gpio_pub_base + GPINR,
-> > >> > > +             .set = sd->gpio_pub_base + GPOUTR,
-> > >> > > +             .dirout = sd->gpio_pub_base + GPOER,
-> > >> > > +     };
+> -- 
+> 2.50.1
 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Ville Syrjälä
+Intel
 
