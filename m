@@ -1,315 +1,287 @@
-Return-Path: <linux-mips+bounces-11167-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11168-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CD7CB5048E
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Sep 2025 19:37:57 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1DC95B50813
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Sep 2025 23:24:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3CA6C7ABABB
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Sep 2025 17:36:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0072B7A5909
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Sep 2025 21:23:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A53C4340D8C;
-	Tue,  9 Sep 2025 17:37:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24E2A257ACF;
+	Tue,  9 Sep 2025 21:24:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="EzJ9F4yV";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="GfFc5jmB"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="S5wTqYtM";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="CnNoO4VJ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from fout-b3-smtp.messagingengine.com (fout-b3-smtp.messagingengine.com [202.12.124.146])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3A841E1E04;
-	Tue,  9 Sep 2025 17:37:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757439467; cv=fail; b=uoajfj710I3DbB1HAMhIuDjmBvPfIaNTbftNM005izxrg0bWVZzI6Sm6CyT7OSiW2ZxlUI+lDvxgIeTkhy91KpoQqMEJ+EFcq8XmM5VlBjfJmiZIlDmvV7K/ONO3vUesKtMTb3pzJOhlTUsZ/J2xK1aaTEvh5B4/uxWZKrftHjg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757439467; c=relaxed/simple;
-	bh=psQlTRrToIbuW9boZ/pstfnUrwQEWb14WVKI5VAhI8I=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=lST/Y/Cx2DWcoSj9AsfAwX8pNBECmD/Et7pZlFFBBaIHrFGZXgbeSn92LjxSPHxaeKxLValTd3rUtyiLZuR3YMHhCTTrslWLE5pEoRIC+uREyeZ2nMQpK/H+dWlIQyK4tSkG/Sq74H+9UxsOYg9olQdhok6gkWg5tkJ1gTOtF8g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=EzJ9F4yV; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=GfFc5jmB; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 589Ftew2017610;
-	Tue, 9 Sep 2025 17:36:52 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=Z4imtT5bhQSm36VBtsneRmycV93bCClBZo7SSFJGfdI=; b=
-	EzJ9F4yV93206yAwVZAejJu5F227papBYwIE+isYS+mPN4Yyg8m/TT37IoAYGLVZ
-	gIuXK7wIm61Y+ix+FYkQoLJ1motbigLMNP9z6NV0P8JLeZPod15eZLHIKgU10A7H
-	OOjv9lbg0sXzsArFLuejQB4K+sRjltBsWguAoQW/OJjVb+T5KiyUwfkeLSIoS5zT
-	7AuG5TF+weC2K+/E8q8MmmAoV08GZen1riq54DLFc7wyWdTPqdqbHBeGku0EGshD
-	sxWC/CBhmv0BHRHWcZSSXXvdZJ4AZ/YKgJ5RMoPZoJXhekm5BqQncjaZZOYWadpP
-	QP3UbJWp4N2KXfCY0juQfQ==
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4921m2tjdv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 09 Sep 2025 17:36:52 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 589GYuFo013729;
-	Tue, 9 Sep 2025 17:36:51 GMT
-Received: from nam12-mw2-obe.outbound.protection.outlook.com (mail-mw2nam12on2066.outbound.protection.outlook.com [40.107.244.66])
-	by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 490bda5aq9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 09 Sep 2025 17:36:51 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=iAW9C+5yMu9wtoVj0vbABIwRwl11oMNAfczV7YnWc7NFRDkL4cNtvbr/XCx5Ifm6YaB+PCZZru+f2BPMDl+8abKKYmSpnDpqJWTdu3TloTPx8Jl44MOZM7H0vN0A9RrYEZhcOQcmb6afjUwCNYuLpc2j85tKP2VwzCb/HMCREgCb0yHeYDJc0ku7OmB1UosONHKLBQvGs07wLUhhAvOJtILPl3QmZJVPZWtOeDb313EgBqwdliyK4rnvsXmcbS/H+lFWRy1XiyyMrVsbPOsjrvuH8YFXYcq7I68NI0kZEPQTBHmzEoPF6/akx4e3PgK1pQDSTq6jf8DYQp8GbbRYDg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Z4imtT5bhQSm36VBtsneRmycV93bCClBZo7SSFJGfdI=;
- b=skYFiiT4jgm/pl1YX7JrxyoVe9dH6IcP5Chylsqmmls8uxlcnUkAQBXhIg8aolE9bJCusHKqM+5ZCNhvX2uCfv4Ed4nIjwcUPgg860yaRN2rmolxDuxqhrSITaavsUbGK6tUy9wimE8CE5/NQjJ8ay/GOQWRtXFZox7H9kwBK8RDi1+rVoJDbqExeT1GXwBSv/PxTCJaSHfnoKIVhcZ0Kp3WYhyovQtB8k/iU++cSa6UvCjLtuPa/gxpGsd4TbZHkqM5GC9EmMoUJhKFLItTvRjvr7auMqVrXSXASVtaKuS1Zykbh2SJpMZu7kxCK4lMleq82qyNE0TpZ+egrLID1A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Z4imtT5bhQSm36VBtsneRmycV93bCClBZo7SSFJGfdI=;
- b=GfFc5jmBt/751z/z2hkJ4i6Hx56jPnT9nupVH/XwEWgEynQVTaut9wPBgsFXnhbM3Ax2BX1REn0GfVhQUwwGxQu846Sok5N7HjlL0B8Ns7wfgrbcrnZObcwuQKpriMxpGRdSM83nRqh0SbzLkakJpILAlM1/SZoIM+gSAvJeT5w=
-Received: from DM4PR10MB8218.namprd10.prod.outlook.com (2603:10b6:8:1cc::16)
- by DS0PR10MB6726.namprd10.prod.outlook.com (2603:10b6:8:139::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9094.22; Tue, 9 Sep
- 2025 17:36:46 +0000
-Received: from DM4PR10MB8218.namprd10.prod.outlook.com
- ([fe80::2650:55cf:2816:5f2]) by DM4PR10MB8218.namprd10.prod.outlook.com
- ([fe80::2650:55cf:2816:5f2%5]) with mapi id 15.20.9094.021; Tue, 9 Sep 2025
- 17:36:46 +0000
-Date: Tue, 9 Sep 2025 18:36:42 +0100
-From: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-To: Suren Baghdasaryan <surenb@google.com>
-Cc: David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>, Matthew Wilcox <willy@infradead.org>,
-        Guo Ren <guoren@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Andreas Larsson <andreas@gaisler.com>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Vishal Verma <vishal.l.verma@intel.com>,
-        Dave Jiang <dave.jiang@intel.com>, Nicolas Pitre <nico@fluxnic.net>,
-        Muchun Song <muchun.song@linux.dev>,
-        Oscar Salvador <osalvador@suse.de>,
-        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-        Dave Young <dyoung@redhat.com>, Tony Luck <tony.luck@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Dave Martin <Dave.Martin@arm.com>, James Morse <james.morse@arm.com>,
-        Alexander Viro <viro@zeniv.linux.org.uk>,
-        Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
-        Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
-        Michal Hocko <mhocko@suse.com>, Hugh Dickins <hughd@google.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Uladzislau Rezki <urezki@gmail.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Andrey Konovalov <andreyknvl@gmail.com>, Jann Horn <jannh@google.com>,
-        Pedro Falcato <pfalcato@suse.de>, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-csky@vger.kernel.org, linux-mips@vger.kernel.org,
-        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
-        nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org, linux-mm@kvack.org,
-        ntfs3@lists.linux.dev, kexec@lists.infradead.org,
-        kasan-dev@googlegroups.com, Jason Gunthorpe <jgg@nvidia.com>
-Subject: Re: [PATCH 06/16] mm: introduce the f_op->mmap_complete, mmap_abort
- hooks
-Message-ID: <4b3a2009-7ad6-4110-bff1-5d3adf43b5ef@lucifer.local>
-References: <cover.1757329751.git.lorenzo.stoakes@oracle.com>
- <ea1a5ab9fff7330b69f0b97c123ec95308818c98.1757329751.git.lorenzo.stoakes@oracle.com>
- <ad69e837-b5c7-4e2d-a268-c63c9b4095cf@redhat.com>
- <c04357f9-795e-4a5d-b762-f140e3d413d8@lucifer.local>
- <e882bb41-f112-4ec3-a611-0b7fcf51d105@redhat.com>
- <8994a0f1-1217-49e6-a0db-54ddb5ab8830@lucifer.local>
- <CAJuCfpEeUkta7UfN2qzSxHuohHnm7qXe=rEzVjfynhmn2WF0fA@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJuCfpEeUkta7UfN2qzSxHuohHnm7qXe=rEzVjfynhmn2WF0fA@mail.gmail.com>
-X-ClientProxiedBy: AM8P190CA0014.EURP190.PROD.OUTLOOK.COM
- (2603:10a6:20b:219::19) To DM4PR10MB8218.namprd10.prod.outlook.com
- (2603:10b6:8:1cc::16)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F232B221F15;
+	Tue,  9 Sep 2025 21:24:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.146
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1757453091; cv=none; b=XwnZ2JM/7T3C2kHCVSabJYbI1sF+3aiUH4FiqgHQycgO4TXMgW/amMjBEY5Q/uHkMJAwEEFnS+buCfClhx1QLNVOLFtdfmxRV/ucokliT2QvsmaN4D4QDxgfkS16Am57d9jps+gyDqWv3L5DANdNFrvy0fhns6XnzZRT2CqrUCs=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1757453091; c=relaxed/simple;
+	bh=mlFK0XXQDuGFAw4opCeOodFgemwUqDJaf+3CNFBfQTU=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:Subject:Content-Type; b=TSkgGhWXyz+riacXH0S5Oai5Vc1HaNbhtDL0+iPxxP08F/afb4TjoT1ZuimqCXT3Rc3bSZvIBzp18Dk1QTbhZOrpTZOVj3OIu6CQ5H3wsh2OuFgfzA7Nc+TDvBLtO6A8y+CUd78bDTTMK+viblS2b6W6dTNHXWL/FLQosbN1TWI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=S5wTqYtM; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=CnNoO4VJ; arc=none smtp.client-ip=202.12.124.146
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfout.stl.internal (Postfix) with ESMTP id 535E01D0009D;
+	Tue,  9 Sep 2025 17:24:47 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Tue, 09 Sep 2025 17:24:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm3; t=1757453087; x=1757539487; bh=Km
+	AXv5RN4xzWEkkqE7xhCId8sGR0ZDNZp4Q8OwYi4mM=; b=S5wTqYtMjI5GP+ybjz
+	l++URQMVSnvXfm2LVkJwzvT9iWvhlgeNQJIO1R6oZKi2eMjeXdMwltmibDshd7LK
+	T6Hk20+klGPnK9s5abxIINZ/10rB4VuCvLCsjYTDRmdIQcIrGfyp86iMa2X8hffD
+	6BuMe+NT08tZ/eMBVdj1RbSkp3ce+f6jeZKBMwCS0W1Fvo1lV8HKa1j0mdnsGV/I
+	ueKVQHFzmMvq9kZHcCgDoHRKhcutvXF/cnrHqY94Uw25zgRfvEVli4IkNbDnWNl0
+	ZlJM2Fnc0OylwbwC0Qt2Y9VmI6AUTL7VBGHhaizOOrpy051Wr7SaQ9p1ar7gV0iZ
+	a8iw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1757453087; x=1757539487; bh=KmAXv5RN4xzWEkkqE7xhCId8sGR0
+	ZDNZp4Q8OwYi4mM=; b=CnNoO4VJGS6ZHP/Ka7rEdezOyzdrHY8fuAWzu8X37tr6
+	IHHAlPeLFzVY2iuwtEv+RYU3H3SJPMzMETnB+n0JEFhBmGd1zQfI74HQ9WTaPxCV
+	FMKzQDPDf02PjHjCallACsg86j/oJfh/85r7CCDSlRLBBFiKVN29hQBM9SbXJQTe
+	aYS0nyf7cYv8b9R8g8qhf/1kk1gqOgiKmRn6dNL6z35Y9TpuYvrkOIvbPBanx8Xz
+	7Mu9euZ2ULJgmpY4oMyJT3UtflNwnpZ7DvpFKF2SRsU3rpLS6nMJ05mMKsYyTA+b
+	OqRoGf62l2o4h5lDE02G3V1qjkCH6mMBRZCiMUoR4Q==
+X-ME-Sender: <xms:HZvAaOk80-aIzLlc88R-gJ6Dbsr6p-CSisCWsOKNXn-4RU3c_vM0lg>
+    <xme:HZvAaF1hbI34vibTWFPzSWGi4ceFSikwvEhmxaMdzrw7BzZ43MRg_7mxP9P9k_V8R
+    MpoIDHe3Q2LTQ-Fo9g>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvudeglecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcuuegv
+    rhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrhhnpe
+    eggeduleellefhteegvdetiefgffejtdfhtdejgfetveekheegtdejfefgteevgfenucff
+    ohhmrghinhepshgthhgvugdrtghomhdphihouhhtuhgsvgdrtghomhdplhifnhdrnhgvth
+    dpkhgvrhhnvghlrdhorhhgpdhlphgtrdgvvhgvnhhtshenucevlhhushhtvghrufhiiigv
+    pedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsg
+    gprhgtphhtthhopedvkedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtoheptghhvghs
+    thgvrhdrrgdruhhnrghlsegrrhhinhgtledrtghomhdprhgtphhtthhopegthhhrihhsth
+    hophhhvgdrlhgvrhhohiestghsghhrohhuphdrvghupdhrtghpthhtoheprghnughrvggr
+    shesghgrihhslhgvrhdrtghomhdprhgtphhtthhopehgvggvrhhtodhrvghnvghsrghsse
+    hglhhiuggvrhdrsggvpdhrtghpthhtoheprghlvgigrghnuggvrhdrshhvvghrughlihhn
+    sehgmhgrihhlrdgtohhmpdhrtghpthhtohepshgvrhhgihhordhprghrrggtuhgvlhhloh
+    hssehgmhgrihhlrdgtohhmpdhrtghpthhtohepshhurhgvnhgssehgohhoghhlvgdrtgho
+    mhdprhgtphhtthhopeifihhllhihsehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtoh
+    epihhrrgdrfigvihhnhiesihhnthgvlhdrtghomh
+X-ME-Proxy: <xmx:HZvAaFgoo_DfPwniM_Ba_NRbjr-NAjUpEBl2hgLAezwds8DkZdW4qA>
+    <xmx:HZvAaE6lPLn2-QRvMEsIj-X5mf9tu625xuDInoNOznW8W6Zswp5Y8w>
+    <xmx:HZvAaGBWRtHuGb-d6P9akzthHK2lFP4CLOwsn4ylVI-r07KO_rit4Q>
+    <xmx:HZvAaBRl4yfkgjX-QCNs9pE-_5-4j1CMwgBapEaDS1idWbtZYs0nSg>
+    <xmx:H5vAaB_k0psbdKb-XOux5x39l6C7CTGwSMVHGHMsh5hVdXcIdz-BvKYw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 171AC700065; Tue,  9 Sep 2025 17:24:45 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM4PR10MB8218:EE_|DS0PR10MB6726:EE_
-X-MS-Office365-Filtering-Correlation-Id: a1741589-c2b5-47b6-6569-08ddefc772db
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|1800799024|376014|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?NTl3Qk5lYjYyVkZtM2U1WDV1WFlZZG10VmpDVGFXUGQ5ckVnQk44SjAwQk1W?=
- =?utf-8?B?Sys1RXBkb01uUkRONG9lWXptSXVoWmN5VlpUM0QwYmY3bk8rLytrdGF5eFlH?=
- =?utf-8?B?c3BrVWxJcHBiK2FPMUZOU1pBOTJITXZpRTQvZ2tjYmxUTWZlRjBNdGw2Mm8x?=
- =?utf-8?B?aCtDcSt4K1pNWHFsRkhOLzFnNUdMclBrOTlvcWxkYytZMUJ0UjdYVDNxS2c5?=
- =?utf-8?B?K2ppczJaRWd4UXEyY24wMHk3MDRGblF0ME5vc0M5clp1Q2d4K1pQaDBJUGNE?=
- =?utf-8?B?K1FENGEzTGgzemhVN1owNmtxTFc4bUxya1RHUWZEV2NpUVoxSlFmVzRKRVBO?=
- =?utf-8?B?NkpJNEtOaUx3VnlvMnI5cGtTdDYwM0RNSVBCQkc5T1lKRmR2Z2RGKzdaNXNu?=
- =?utf-8?B?NEt0ajFXVlFialRkWSsvWENhcWtrK0toVXpBNTdyS0VFQ0dQeEpHUWZYc21h?=
- =?utf-8?B?ckNWc2pRZWRBaDFoWEs4RmJJMDgrekd6ellVU1B6NkdibHpSWTVkQUJhZ2Vk?=
- =?utf-8?B?ZkFaYnlYb1VlMTNyL0pzcXpyM3ViOWsvRk1BNFJxRmRLRjZjN1ZZcXBsQzZW?=
- =?utf-8?B?eHU2ckNPSWh5RTNMMWFFVHB3WmNLcis0TkNmb29vL3Y5ZVlCb2dvbm5Ib0lC?=
- =?utf-8?B?YitGUmM2Sm9YMGNWRUsvOGc4Q1Bralc4T1JTMUxUbVZOQnlvelFSRjlZNzla?=
- =?utf-8?B?WWY1QTROUHdFODdlaUlUTWR2WjU0dm9SVGtvSXRSNWRkM2FGZ1U3eGdlL2FK?=
- =?utf-8?B?YVgzVnBMUUY2dEE1b0dRaWJhVGJkR2Y0cXVlSkhKbjVuckZOWFMyRGVEUS9D?=
- =?utf-8?B?bi8zdUU4RE83OUx5bE50c3NsUDlhOFQ4SmFLOUVZdG9xUnEvdW01WWhhendj?=
- =?utf-8?B?NWV0Mnlra0c5YkhaL0R6SVE1UjQ2cVA2R2t1UkY2MnFpejBCTk10M3NZZWxk?=
- =?utf-8?B?UnZ2M2QvQ3FQdVkyT2dnTTR4ODlTb0ExYWhpdTJUSWtBVUJYUWhmVm5mTGsr?=
- =?utf-8?B?YTFZUzFPTCt4MVVGWHRQeS92VmR0UlB6OEFpUllKaHQ1VElCNExseVlGQ250?=
- =?utf-8?B?eTNtdUQzaEVvT2VIUHFiSUl1TVFrSEVmN1BqOHVMeUNLUHlZVG03WXU2MHZa?=
- =?utf-8?B?UklJSzJyMWtXZVdOUlczSGRCaWRhMWE0N1pSVFhQNDAzWFdzdWh4bEJhS1ZI?=
- =?utf-8?B?a0ZPbHRVWVRuSTZaNTlSVzBSOFdlWlVsV250NkxFTVh6NlpqYzhnV01rS0ZT?=
- =?utf-8?B?VHNZdmdYMlphWkdDaDdGcE5DdEY4NnYyc2FUTjRQSzE0U1FGNlYybllBdlI2?=
- =?utf-8?B?NEh5dldtNkhEYmdRb0FhZjQzVTNDd3Bvak1OKzJHYzQwYkRKYVBYOVdNdUlx?=
- =?utf-8?B?MndBQ0Y2OE9pSTY3UzhtMExLcjVPaU5ENWNnTktLSEptUzQ2RzdFZ2dmbTM4?=
- =?utf-8?B?Q1FWSDU3ZHE4ckpmQ0Z1S1BxRWJpUW5UaHRxZ0VFaWRCbXQwNzVUSE9sRXZx?=
- =?utf-8?B?YTBTQS85cnV5OGtKTHNxd3RrcWxZejFTVnk1amQrQWRzN054Rk5BdFg1TTVz?=
- =?utf-8?B?Q05TQVExSTlkSVBRaFhjT01qdGl1U3VsSE9RSXo3aXh5ZXBSZGZwMHd6WUFI?=
- =?utf-8?B?MGlJblUvNldtRlZNY2VBc1JONmlVT05TMXFsSXd6dnYvVk5MNmU1bkxhd2FO?=
- =?utf-8?B?WHNhMk40RE82d0xvWjZ3b3NrYXpXRy9vVjIwcVhSVXg4VXRJUUVIVUlyKzdj?=
- =?utf-8?B?V1hIYmYyR05ORmEzVmUzOVhEaDFhaC9jSXBscDlZdGVmWWxRRHYrMU9PL1hB?=
- =?utf-8?B?WWIrc2hsejZTSm5IV3NxUWR4anJvcHErSS9rVXBPZmptU25mcDMzV0lmUGRa?=
- =?utf-8?B?dGk4MktPMTlkOC8rOG1EQUlHZG9TOXN3T1RJNU5XbWNjQnE3WXZ1c2hzRlpK?=
- =?utf-8?Q?uq42bGxSCzc=3D?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR10MB8218.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(1800799024)(376014)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?M1JDYVFCNEcydVFmNHdGMEZtNGhmbnd6QUQxNUcrUjZpQkhMZ0pNV09xYitx?=
- =?utf-8?B?d1M4SERDVkpmSXdENzNDVzMrcks0N0tWbW9hYVlQOUlScFVKWE1Ja1VxelR3?=
- =?utf-8?B?MGhwRit1akNWUGVETklSS3pXbXF5T2U5cmxWSmNkREFEWndkMHBHTFFaSFd6?=
- =?utf-8?B?c3puOUpERFk5S29tdDNlcmlqTlhPMTVBU3Z5STNib1VtNWpLbjV1bHRhRnZE?=
- =?utf-8?B?YWR2Qi9OQjN3L005YnR4N1pkb3pVRm9jWmduOEw3RHdCZXJrL0w4bXRVQUp6?=
- =?utf-8?B?QlhyaXBsRm5nY1pYOGVyK0h1MmdCajQ5N1RVNUNLOXVDMXZIZWMyNHhWQnV4?=
- =?utf-8?B?UXQzaVpTUFdJTmhoRDV6WlBqR3k5dUV2ZjhNek96MDB6SjYrUVVGUHpnUS9N?=
- =?utf-8?B?Vk1SbCtsNHNsOUxwcXdTWm92MC8zRHREdHhrUVI2a3VvUXBkSEozczluOGJX?=
- =?utf-8?B?WGN3bnU2VC81TDhwYW9ycnRqc1RISkYzQlYzRVBEdWRvWnh3RmgwdFZ3Tlha?=
- =?utf-8?B?enhHT0ZaYk12MGxoVTlJTCtETUgwdVRXRWwrMzdFV2dJNU1HVGJ5aGNFTlhV?=
- =?utf-8?B?NXg4K0p6bjZHdWlEVnRkcklDcG1IZDdiaGZnNnlsQWQ0ckx1enU4bEdTYjU3?=
- =?utf-8?B?cDNIZll2UVR4YVloeXBDbGM4UWtia0xXdElDN29ha3hGNnNsTUowbTFKc1Bj?=
- =?utf-8?B?ekJCcWQySHBua05IZytPYnUyR1NQVEM4ZzVkNFROYzNGbGtNQys4Sjg0ZUlL?=
- =?utf-8?B?UE51ZzhDUzJCaExLdXA1MnJHNWNtOUpIaW1jOGU1TDZhRHV0Sy9xVU5nWlhh?=
- =?utf-8?B?VGNqZ2lXS3BsUVpRS1ZPUVVXS2RkSFo0M3hUaEFadURaUHpEVXF0Y3BUMFd1?=
- =?utf-8?B?NWxQTlZTdkl1ZlpBMWxicFcvZzhiS0o5R3cvdU9YbVBFL3FhelFodXVYZzUz?=
- =?utf-8?B?eHpiKzcxVFpORU4wTzYyb0N6UHVmTFc4QUhmMktuSzhNRjNaU3J6TDV1SDJZ?=
- =?utf-8?B?QkdJNURhcXJ4b3FOai9GRElUNTBsSTZUdzk4WHVkMS8yd0hWbTZoUnIyWEZM?=
- =?utf-8?B?V0t1TXc0K1diNEkzaUVZSXlzRWRrbURyZ09DUVhwcDlTa2pZLzFqRlpmZHNi?=
- =?utf-8?B?aWpxOThIUVRMZUZGSHRVT2NSdzJPamZ4TkRhd21JZklrRUx3SnRhT21RM3FL?=
- =?utf-8?B?R2J6bTlCbHJGelBnSStFZHBFOGVscytLWXUxa2EwZytmeXNlWFkwNmRyNVpH?=
- =?utf-8?B?N2xMMUQvUG5scGVmOU9LY1J0ZkhQU2F1WllxMFd3R3NwNGdpQjNxYkpnTjVO?=
- =?utf-8?B?dmNmaEQwYnVLa3MyZmNnY2xZeXdzYXJRN0JaTHB6aDFOY3drYXZudVRsVGVF?=
- =?utf-8?B?d0I1cFR5MlNpWG8wc3A3eS9xQi9BZHMrMWZpT3daeXNIWUdId3JTZ3A5ajUw?=
- =?utf-8?B?L2o0bjlPZ3JFMzhBUU9CTkdLalBFbXhOdGVOMk5aMGl3aS83bkcrSVp3QndI?=
- =?utf-8?B?MENZeVpjRHM1R0dJNTV3TkE4OWVPVUR4Q1VuRURIdUtBWW5iRXZxVjJYcUZL?=
- =?utf-8?B?YmJXajJMcnREVERDSjFtOUJvLzdJdCt0RUJFamZOTllKY09KTW5scmw4RUNn?=
- =?utf-8?B?ZE9xVE04YkFoRGJkTnNKSXB5MmJxMVh1dFArL3gzMEl4WTJiOGVnN3pYNFpR?=
- =?utf-8?B?VUQwMzg2amU3ZjVDTzVWSWgvMEp4clZqcTIrNUFrdC9JZS9xaVZ0TExsNmJX?=
- =?utf-8?B?NnNIc1pITDhpWTlVY0Z0WHhWaUt1VWh2WlNLQkZJZGxoNkNPdTlhOWNQSzRh?=
- =?utf-8?B?OUNVRUVaalFsZWovbS9LcFFob3I5VTZ2OENDa0habGxtMVAza09QamRyd1BZ?=
- =?utf-8?B?djFMUUg4RjFmeWZEcXVpa1lqcEtYMjVqdVZ2NTRia1FsZ2RFODVqZUZIK2RS?=
- =?utf-8?B?Ym84L0RGcjhjVHA2VEhpZEk1UGYrMHZBdkQ0S2dXci9qRWRBdk1kU1NXZThR?=
- =?utf-8?B?WWMyd0J2dmVPWVdRWEh4T3A0STJLd255QjRZYlNOek00aW42b3FpMFBSK3dQ?=
- =?utf-8?B?dm1maWtVTWgyL0tsS0dYZ3VjRHpUcTVqWlFlS0FIWTFZd2FGRm1Sd2daZHZ1?=
- =?utf-8?B?VndxSlAwVGhtY3NQOGZpS1VZckRaVVY4VzViRXpjR3FWZzRXZDI2eGRFdWNO?=
- =?utf-8?B?aVE9PQ==?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	1D/webS/xsA5zWyBfg+UkgsZvGcLgj8tuR18wFONlMOEnofnbO2zI0rnB6/cyx7oEswk0zOBgG1+fBz5+cPV4NBUmRB/NCNzuuPl2b/4ou5cXHSSNXARQoxhq4P0N2bI9/Qf/NJCslklHUqgyudghSKyh5UFCo16ecCu4URviv6qx+nV9ug+4JO23xck+pty+sHZupcbbiWaD+O5QFgQsYPStstkWLOEp7t44oP96SE28oKdd1TxvH4TK3lYuXTsjRKCxXFRuEsZfCVVTnEl7Hde5Tuz9P95nU39grYSwmgR7cldg/xxlcnw2SCnXb4pyXcziMbNIFTo8t6eoidgLWyHYgQDXPJ/wQBGDdlFzDa91dqiTToie3CD4yoVAQUDvM6QGi7ThwmrEyfY9tEo3tZZKMpLcGb/MpQ5GdRR1TvqGN/1XLhDcJEwlnu5MfEKFcJygeRmWMFyhxLVZObjtyeqyG1QAcW8b1IfZ9Efys4zcNA+U81uC3lRqp8fGK+4sd9U9mp9kysVg8a51ofFGCbCpkysonOKfdAVypn6lCrBzQcY9VYowaGRg/oZ4gaguq1QAxG7dMIUJKM0bpkokNYpWhf3skG/v/GY96mM7G0=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a1741589-c2b5-47b6-6569-08ddefc772db
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR10MB8218.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 09 Sep 2025 17:36:46.2782
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: PoIjSezM3A65lWsXVAWVNrhE5YBkNqimAGTjk+ZoIh5DB1Ljt4xZjyQ98hN4CDBZb35GHib0iRT6ckGKyzTMUcbRo8wbwg2jlOF5qgB/S3U=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS0PR10MB6726
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
- definitions=2025-09-09_03,2025-09-08_02,2025-03-28_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 malwarescore=0 spamscore=0 mlxscore=0
- mlxlogscore=897 adultscore=0 phishscore=0 bulkscore=0 suspectscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2508110000
- definitions=main-2509090172
-X-Proofpoint-GUID: gLmj6bbQqUW7DegZCPyJMYJ5X2nvdIya
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTA4MDE1MSBTYWx0ZWRfX6uJfDVBvzcx6
- kaJq8sWxVFVadtt9hUoy9x2Tmv5KJm4z1TPjHxAfvkkixaU0OzS1LLVcMc11FTOL73Yd6zwMyp4
- PZB2H5OsQu7JhFj18KG3GviFKd4WzbVzD0Gix2PniCkGUhfMkvHKWAg+aUvYCFQPpogL6ovxyPf
- 9Nu1775uLU4XUIBgo/fvwCCACJjR/akTfgpOb3nQLzQ2nWrw4ZHg7MONI8jOGlDvNqW9Zvh9dao
- DwL59DRMOp12KDeHW8kHAf5sMnN9AfFaCflisFAD+dsxbTd8QiA+gK7mmiKt8fpwJ8MelQmBaa6
- Znygncz0QrXlSNuZ/kDhjz6VRS24OebNZi/e+ZCuND8lSft2BnHVhv2R2HLQMo+mInyhVnJ8FLA
- 2uMGEDxl
-X-Authority-Analysis: v=2.4 cv=Dp5W+H/+ c=1 sm=1 tr=0 ts=68c065b4 b=1 cx=c_pps
- a=WeWmnZmh0fydH62SvGsd2A==:117 a=WeWmnZmh0fydH62SvGsd2A==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19
- a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=yJojWOMRYYMA:10 a=GoEa3M9JfhUA:10 a=yPCof4ZbAAAA:8 a=TIAuxHL14tBz2GebBo4A:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: gLmj6bbQqUW7DegZCPyJMYJ5X2nvdIya
+X-ThreadId: AmcCJOTBQ5ho
+Date: Tue, 09 Sep 2025 23:23:37 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: ksummit@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org,
+ linux-mm@kvack.org, imx@lists.linux.dev,
+ "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+ "Richard Weinberger" <richard@nod.at>,
+ "Lucas Stach" <l.stach@pengutronix.de>,
+ "Linus Walleij" <linus.walleij@linaro.org>,
+ "Geert Uytterhoeven" <geert+renesas@glider.be>,
+ "Ankur Arora" <ankur.a.arora@oracle.com>,
+ "David Hildenbrand" <david@redhat.com>,
+ "Mike Rapoport" <rppt@kernel.org>,
+ "Lorenzo Stoakes" <lorenzo.stoakes@oracle.com>,
+ "Matthew Wilcox" <willy@infradead.org>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ "Vlastimil Babka" <vbabka@suse.cz>,
+ "Suren Baghdasaryan" <surenb@google.com>,
+ "Ira Weiny" <ira.weiny@intel.com>, "Nishanth Menon" <nm@ti.com>,
+ =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+ "Alexander Sverdlin" <alexander.sverdlin@gmail.com>,
+ "Chester A. Unal" <chester.a.unal@arinc9.com>,
+ "Sergio Paracuellos" <sergio.paracuellos@gmail.com>,
+ "Andreas Larsson" <andreas@gaisler.com>
+Message-Id: <4ff89b72-03ff-4447-9d21-dd6a5fe1550f@app.fastmail.com>
+Subject: [TECH TOPIC] Reaching consensus on CONFIG_HIGHMEM phaseout
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Tue, Sep 09, 2025 at 09:43:25AM -0700, Suren Baghdasaryan wrote:
-> On Tue, Sep 9, 2025 at 2:37 AM Lorenzo Stoakes
-> <lorenzo.stoakes@oracle.com> wrote:
-> >
-> > On Tue, Sep 09, 2025 at 11:26:21AM +0200, David Hildenbrand wrote:
-> > > > >
-> > > > > In particular, the mmap_complete() looks like another candidate for letting
-> > > > > a driver just go crazy on the vma? :)
-> > > >
-> > > > Well there's only so much we can do. In an ideal world we'd treat VMAs as
-> > > > entirely internal data structures and pass some sort of opaque thing around, but
-> > > > we have to keep things real here :)
-> > >
-> > > Right, we'd pass something around that cannot be easily abused (like
-> > > modifying random vma flags in mmap_complete).
-> > >
-> > > So I was wondering if most operations that driver would perform during the
-> > > mmap_complete() could be be abstracted, and only those then be called with
-> > > whatever opaque thing we return here.
-> >
-> > Well there's 2 issues at play:
-> >
-> > 1. I might end up having to rewrite _large parts_ of kernel functionality all of
-> >    which relies on there being a vma parameter (or might find that to be
-> >    intractable).
-> >
-> > 2. There's always the 'odd ones out' :) so there'll be some drivers that
-> >    absolutely do need to have access to this.
-> >
-> > But as I was writing this I thought of an idea - why don't we have something
-> > opaque like this, perhaps with accessor functions, but then _give the ability to
-> > get the VMA if you REALLY have to_.
-> >
-> > That way we can handle both problems without too much trouble.
-> >
-> > Also Jason suggested generic functions that can just be assigned to
-> > .mmap_complete for instance, which would obviously eliminate the crazy
-> > factor a lot too.
-> >
-> > I'm going to refactor to try to put ONLY prepopulate logic in
-> > .mmap_complete where possible which fits with all of this.
->
-> Thinking along these lines, do you have a case when mmap_abort() needs
-> vm_private_data? I was thinking if VMA mapping failed, why would you
-> need vm_private_data to unwind prep work? You already have the context
-> pointer for that, no?
+High memory is one of the least popular features of the Linux kernel.
+Added in 1999 for linux-2.3.16 to support large x86 machines, there
+are very few systems that still need it. I talked about about this
+recently at the Embedded Linux Conference on 32-bit systems [1][2][3]
+and there were a few older discussions before[4][5][6].
 
-Actually have removed mmap_abort in latest respin :) the new version will
-be a fairly substantial rewrite based on feedback.
+While removing a feature that is actively used is clearly a regression
+and not normally done, I expect removing highmem is going to happen
+at some point anyway when there are few enough users, but the question
+is when that time will be.
+
+I'm still collecting information about which of the remaining highmem
+users plan to keep updating their kernels and for what reason. Some
+users obviously are alarmed about potentially losing this ability,
+so I hope to get a broad consensus on a specific timeline for how long
+we plan to support highmem in the page cache and to give every user
+sufficient time to migrate to a well-tested alternative setup if that
+is possible, or stay on a highmem-enabled LTS kernel for as long
+as necessary.
+
+These are the assumptions I'm making, based on both what I have
+presented in my talk and feedback I have received so far, let me
+know if something is missing here:
+
+- Highmem in new kernels is almost exclusively an embedded Linux
+  topic. While there were a few late 32-bit desktop and laptop
+  systems that had more than 2GB of RAM, these were fairly short
+  lived and have long been unsupported by both the originally
+  shipping operating systems and most Linux distros. Notable
+  Examples include Pentium 4 "Northwood" desktops (sold 2003-2004),
+  Core Duo laptops (2006-2007), and Arm Chromebooks (rk3288,
+  Tegra k1, Exynos 5800, sold 2014-2017). Some PowerPC G4 Macs
+  and Atom Netbooks could be upgraded to 2GB.
+  There are a small number of users, but they really love these
+  devices and want to keep them alive, especially since they
+  mark the peak of the respective 32-bit product lines.
+
+- Within the embedded market, highmem is mostly used on ARMv7
+  based SoCs, but a few others also need it and still get kernel
+  updates:
+  PowerPC 85xx, 86xx and QoriQ P1/P2/P3/P4 (produced 2003-2021)
+  were used in some long-lived embedded systems with 2GB of RAM
+  or more. Mediatek MT7621 (MIPS32r3, introduced 2014 but still
+  sold) needs highmem to reach the upper 64MB of the 512MB physical
+  memory. Ingenic JZ4780 (MIPS32, released 2012) was used in the
+  short-lived MIPS Creator CI20 with 1GB of RAM (256MB lowmem)
+  and probably othes. Sparc32/LEON seems to be limited to 192MB of
+  lowmem as a kernel design choice. Vortex86DX3 supports 2GB
+  DDR3 memory.
+  The kernel also supports highmem on ARMv4, ARMv5, ARMv6,
+  PPC4xx, PPC82xx, PPC83xx, ARC, CSKY, Microblaze and Xtensa,
+  as well as additional MIPS SoCs,  but so far I could not find
+  any indication of any such machine with more than 1GB that
+  keeps getting kernel updates.
+
+- The vast majority of new embedded ARMv7 machines have 1GB of
+  RAM or less, which on many SoCs is a physical limitation
+  a narrow DDR3 memory interface, as well as a cost tradeoff.
+  The 1GB case is interesting because that usually means having
+  only 768MB of lowmem plus 256MB of highmem, as well as 3GB
+  of virtual addressing. I expect that almost all applications
+  on these work just as well with CONFIG_VMSPLIT_3G_OPT, changing
+  the limit to 1GB of lowmem and 2816MB of user address space.
+  The same thing should work on x86 and powerpc (CONFIG_LOWMEM_SIZE)
+  but not on mips and sparc where the limit is not configurable.
+
+- A few Arm SoCs have sparse physical address ranges for
+  their RAM, e.g. range per memory controllers like the Renesas
+  R-Car Gen 2 or Broadcom BCM4708. These currently require highmem
+  even on configurations with less than 1GB RAM, until we change
+  the way that sparsemem is handled to support rearranging the
+  linear map to fill all of lowmem. This still needs more work.
+
+- ARMv7 machines with 2GB remain in production, in particular
+  with the popular i.MX6Dual/Quad chip that has a 64-bit wide DDR3
+  interface and guaranteed manufacturer support until 2035.
+  This is the configuration I expect to see struggle the most.
+  Setting CONFIG_VMSPLIT_2G or CONFIG_VMSPLIT_2G_OPT should work
+  for most of the users but can break if an application runs out
+  of virtual address space, so this does require extensive testing,
+  and possibly user space changes. An example of possibly affected
+  userspace is Firefox, which needs more address space than other
+  applications but can perhaps be replaced with another embedded
+  browser.
+  
+- ARMv7 machines with 4GB and more exist and keep getting
+  kernel upgrades, but to my knowledge are not in production any
+  more. These are mainly 2010-2015 era chips based on rare
+  out-of-order cores like A15, A17 or PJ4 that were designed for
+  low-end servers, chromebooks and network equipment but replaced
+  with 64-bit chips shortly after. We had planned to bring a
+  CONFIG_VMSPLIT_4G_4G option to ARMv7VE to keep supporting the full
+  memory at a performance penalty, but currently have no plan to
+  finish this (volunteers welcome).
+  There is still some hope to keep them working with a combination
+  of CONFIG_VMSPLIT_2G and a modified ZRAM that can use high
+  pages without CONFIG_HIGHMEM, but whether this works depends
+  a lot on the application. I expect most of these products to
+  stop getting kernel updates in the next few years due to aging
+  hardware and increasing cost for updating out-of-tree patches
+  on platforms that are not fully upstream. I do not remember any
+  such devices with official support beyond 2030.
+
+My proposal based on the above assumptions is to gradually phase
+out highmem over the next 2 years for mainline kernels, obviously
+both the individual items and the timeline are completely up for
+debate:
+
+1. mark CONFIG_HIGHMEM as 'depends on EXPERT', updating the
+   Kconfig description to point to the kernel summit discussion
+   any any decisions made here.
+
+2. Change the ARMv7 Kconfig defaults to CONFIG_VMSPLIT_3G_OPT
+   and HIGHMEM=n, to make it more likely to find possible
+   regressions with that, without changing much for users.
+   Possibly do the same for x86 and powerpc.
+
+3. Start removing __GFP_HIGHMEM from in-kernel allocations
+   other than the page cache, in particular from individual
+   device drivers and filesystem metadata where there is
+   already little benefit.
+
+4. Remove HIGHMEM as an option from platforms that are thought
+   to no longer need it (arc, armv5, ppc4xx, ppc82xx, ppc83xx,
+   csky, microblaze, xtensa), mainly to validate the
+   assertion that these use only lowmem.
+
+5. Split highmem on zram out into a separate Kconfig option
+   that can be enabled without CONFIG_HIGHMEM or CONFIG_EXPERT
+
+6. Finish the "densemem" replacement for sparsemem, ideally
+   allowing both very sparse lowmem areas and a boot-time
+   vmsplit selection instead of the compile-time one.
+
+7. Finally, remove the highmem pagecache option, leaving only
+   zram and custom device drivers as a way to access high
+   pages.
+
+That last step should wait for an LTS kernel, ideally a version
+that the CIP project's SLTS kernel is planning to keep supporting
+for 10 years. The newest SLTS kernel was 6.12 last year, and the
+phb-crytal-ball suggests that the next one in December 2026 may
+be linux-7.4, the one after that in December 2028 (linux-7.15?)
+seems too far out to plan for but would be another option.
+
+Unless there is an easy consensus on this on the mailing list,
+I would like to lead a discussion session at the kernel summit
+in order to get closer to a decision.
+
+     Arnd 
+
+[1] https://osseu2025.sched.com/event/25VmZ/32-bit-linux-support-now-and-in-the-future-arnd-bergmann-linaro
+[2] https://www.youtube.com/watch?v=QiOMiyGCoTw
+[3] https://lwn.net/Articles/1035727/
+[4] https://lore.kernel.org/all/0047f565-ada4-491a-b157-f2d8dfde0ac0@app.fastmail.com/
+[5] https://lwn.net/Articles/813201/
+[6] https://lpc.events/event/16/contributions/1183/attachments/1062/2028/highmem-api-2022-09-12.pdf
 
