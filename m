@@ -1,143 +1,103 @@
-Return-Path: <linux-mips+bounces-11115-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11116-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 570E4B49FE4
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Sep 2025 05:19:34 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA5FEB4A0A4
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Sep 2025 06:25:29 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1835B3AC28B
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Sep 2025 03:19:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F22A1BC25A9
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Sep 2025 04:25:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6576E264636;
-	Tue,  9 Sep 2025 03:19:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C12D02E54D3;
+	Tue,  9 Sep 2025 04:25:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="neOoo9fi"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="i9pJ18PL"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D79A22A7E4;
-	Tue,  9 Sep 2025 03:19:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46B151A314F;
+	Tue,  9 Sep 2025 04:25:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757387968; cv=none; b=T4enqM5JHCIBBHIcqrYYHTG4NbFzcGuN2Cn8IzeySWAR6LQM3Xv9az48CTfWGA93Tlu1+r+NCeuS7JAvm6zrNhc745W57llO07bJIwJHrP4CNhymFmuFGO0DOU32INwCkJSXGQPWjn8p9ShJEnxaGVdJAfV4KPcQCo51ykemrqU=
+	t=1757391923; cv=none; b=SofwvnAlRbCl3ihwkHIUHG/ZBfaayEOoRYV7LpfYFi8sa+yqXynx0BnQmEcVBvz8Vd25YuWfahxjagaUmUUd1a8Zke5SVrc6GLzypi+fEdmeiS+RQ/5e76ryv3R5O+equ3z+tJ6zMHeAUrXmiZFb9kKWh/3FM4Q4wLg8DiLyL1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757387968; c=relaxed/simple;
-	bh=dXeL8bHgEJS0WBDFa6oVj6Cg2JQha9x3GSBxLbSsSp4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=gSqDZVHg4Zx472kGkR+tYRLJspdYZuRjjKjo6CxSmyaDauKcLpk7IU078AXpPziEr7EWy9DGZplR//cep5S7lqI2cr4dBRnw8MpWzKg0pJBrVu7WsqkAOucrKY2bdqXpOyRmWVpJWLeyU8XyWY05PAAL632+OfBrNqLClQ6Ul/U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=neOoo9fi; arc=none smtp.client-ip=115.124.30.113
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
-DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
-	d=linux.alibaba.com; s=default;
-	t=1757387962; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
-	bh=kp/49YwOqYc4XSnECrXc1wc8q5JFsR73JTB4gmB0H9s=;
-	b=neOoo9fiPql50Cf0f0s9a8YQh/khunQ8lY2XlD2dktzPloXUrCLWlf5pOFiqwzzBEvFMWEDG6pRsUWq+HEJaTDjpsGDTssXG99pVuT3y//1TUxM4no2j1JxrY3O7Kthd2X6o5Puo15wFv2fMWFwlMaZGQusUltdTTsm3Kd6qkX8=
-Received: from 30.74.144.127(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Wnc5f31_1757387957 cluster:ay36)
-          by smtp.aliyun-inc.com;
-          Tue, 09 Sep 2025 11:19:18 +0800
-Message-ID: <2a08292a-fdad-49f1-8ad9-550bf3129b2f@linux.alibaba.com>
-Date: Tue, 9 Sep 2025 11:19:16 +0800
+	s=arc-20240116; t=1757391923; c=relaxed/simple;
+	bh=RrzY4SDc18Ci2TyOyhCgyGYX7hmnnBCU2e/pxbH8zRw=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=cUW0WCiRKcepZh5XwvNunFtpOtrgHBbW/VBNMJBSlAOJT7V/truq5opGB6R77PuEFHLv8G12bdOvtlhhkFAhhAZqGtdgMQyC1dU+0hNwJGnJ3fI0p+9G0IuCiPiyX54SO2JoHD8jXuhcW+zy3rlY9eVdm6ZLB2v/d+4Ly7W1y0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=i9pJ18PL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F9D2C4CEF4;
+	Tue,  9 Sep 2025 04:25:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1757391922;
+	bh=RrzY4SDc18Ci2TyOyhCgyGYX7hmnnBCU2e/pxbH8zRw=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=i9pJ18PLXuxKbzs/Iruw3PpLBgKXy9ssEffV+i7Q9gMAvoRB7kzd+iGGYRZ4Vjd4z
+	 nsdDoX1b8RjqFfB2U020ZMoVgWz32DH/3KHr9yu4W24HNyAdp4ShFmw5Gwb3/8dyxq
+	 YI0F046jfWbWEKO92OxW3X9LzuK+WjtFkn1xH7Gk=
+Date: Mon, 8 Sep 2025 21:25:18 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: David Hildenbrand <david@redhat.com>
+Cc: Eric Biggers <ebiggers@kernel.org>, linux-kernel@vger.kernel.org,
+ Alexander Potapenko <glider@google.com>, Brendan Jackman
+ <jackmanb@google.com>, Christoph Lameter <cl@gentwo.org>, Dennis Zhou
+ <dennis@kernel.org>, Dmitry Vyukov <dvyukov@google.com>,
+ dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+ iommu@lists.linux.dev, io-uring@vger.kernel.org, Jason Gunthorpe
+ <jgg@nvidia.com>, Jens Axboe <axboe@kernel.dk>, Johannes Weiner
+ <hannes@cmpxchg.org>, John Hubbard <jhubbard@nvidia.com>,
+ kasan-dev@googlegroups.com, kvm@vger.kernel.org, "Liam R. Howlett"
+ <Liam.Howlett@oracle.com>, Linus Torvalds <torvalds@linux-foundation.org>,
+ linux-arm-kernel@axis.com, linux-arm-kernel@lists.infradead.org,
+ linux-crypto@vger.kernel.org, linux-ide@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-mmc@vger.kernel.org, linux-mm@kvack.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-scsi@vger.kernel.org, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Marco Elver <elver@google.com>, Marek Szyprowski
+ <m.szyprowski@samsung.com>, Michal Hocko <mhocko@suse.com>, Mike Rapoport
+ <rppt@kernel.org>, Muchun Song <muchun.song@linux.dev>,
+ netdev@vger.kernel.org, Oscar Salvador <osalvador@suse.de>, Peter Xu
+ <peterx@redhat.com>, Robin Murphy <robin.murphy@arm.com>, Suren
+ Baghdasaryan <surenb@google.com>, Tejun Heo <tj@kernel.org>,
+ virtualization@lists.linux.dev, Vlastimil Babka <vbabka@suse.cz>,
+ wireguard@lists.zx2c4.com, x86@kernel.org, Zi Yan <ziy@nvidia.com>
+Subject: Re: [PATCH v2 19/37] mm/gup: remove record_subpages()
+Message-Id: <20250908212518.77671b31aaad2832c17eab07@linux-foundation.org>
+In-Reply-To: <64fe4c61-f9cc-4a5a-9c33-07bd0f089e94@redhat.com>
+References: <20250901150359.867252-1-david@redhat.com>
+	<20250901150359.867252-20-david@redhat.com>
+	<5090355d-546a-4d06-99e1-064354d156b5@redhat.com>
+	<20250905230006.GA1776@sol>
+	<64fe4c61-f9cc-4a5a-9c33-07bd0f089e94@redhat.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 01/16] mm/shmem: update shmem to use mmap_prepare
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Jonathan Corbet <corbet@lwn.net>, Matthew Wilcox <willy@infradead.org>,
- Guo Ren <guoren@kernel.org>, Thomas Bogendoerfer
- <tsbogend@alpha.franken.de>, Heiko Carstens <hca@linux.ibm.com>,
- Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev
- <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>, "David S . Miller"
- <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>,
- Arnd Bergmann <arnd@arndb.de>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Dan Williams <dan.j.williams@intel.com>,
- Vishal Verma <vishal.l.verma@intel.com>, Dave Jiang <dave.jiang@intel.com>,
- Nicolas Pitre <nico@fluxnic.net>, Muchun Song <muchun.song@linux.dev>,
- Oscar Salvador <osalvador@suse.de>, David Hildenbrand <david@redhat.com>,
- Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
- Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
- Dave Young <dyoung@redhat.com>, Tony Luck <tony.luck@intel.com>,
- Reinette Chatre <reinette.chatre@intel.com>,
- Dave Martin <Dave.Martin@arm.com>, James Morse <james.morse@arm.com>,
- Alexander Viro <viro@zeniv.linux.org.uk>,
- Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
- "Liam R . Howlett" <Liam.Howlett@oracle.com>,
- Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
- Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Hugh Dickins <hughd@google.com>, Uladzislau Rezki <urezki@gmail.com>,
- Dmitry Vyukov <dvyukov@google.com>, Andrey Konovalov <andreyknvl@gmail.com>,
- Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-fsdevel@vger.kernel.org, linux-csky@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-s390@vger.kernel.org,
- sparclinux@vger.kernel.org, nvdimm@lists.linux.dev,
- linux-cxl@vger.kernel.org, linux-mm@kvack.org, ntfs3@lists.linux.dev,
- kexec@lists.infradead.org, kasan-dev@googlegroups.com,
- Jason Gunthorpe <jgg@nvidia.com>
-References: <cover.1757329751.git.lorenzo.stoakes@oracle.com>
- <2f84230f9087db1c62860c1a03a90416b8d7742e.1757329751.git.lorenzo.stoakes@oracle.com>
-From: Baolin Wang <baolin.wang@linux.alibaba.com>
-In-Reply-To: <2f84230f9087db1c62860c1a03a90416b8d7742e.1757329751.git.lorenzo.stoakes@oracle.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
 
+On Sat, 6 Sep 2025 08:57:37 +0200 David Hildenbrand <david@redhat.com> wrote:
 
-
-On 2025/9/8 19:10, Lorenzo Stoakes wrote:
-> This simply assigns the vm_ops so is easily updated - do so.
+> >> @@ -3024,6 +3025,7 @@ static int gup_fast_pud_leaf(pud_t orig, pud_t *pudp, unsigned long addr,
+> >>                  return 0;
+> >>          }
+> >> +       pages += *nr;
+> >>          *nr += refs;
+> >>          for (; refs; refs--)
+> >>                  *(pages++) = page++;
+> > 
+> > Can this get folded in soon?  This bug is causing crashes in AF_ALG too.
 > 
-> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-> ---
+> Andrew immediately dropped the original patch, so it's gone from 
+> mm-unstable and should be gone from next soon (today?).
 
-LGTM.
-Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
-
->   mm/shmem.c | 9 +++++----
->   1 file changed, 5 insertions(+), 4 deletions(-)
-> 
-> diff --git a/mm/shmem.c b/mm/shmem.c
-> index 29e1eb690125..cfc33b99a23a 100644
-> --- a/mm/shmem.c
-> +++ b/mm/shmem.c
-> @@ -2950,16 +2950,17 @@ int shmem_lock(struct file *file, int lock, struct ucounts *ucounts)
->   	return retval;
->   }
->   
-> -static int shmem_mmap(struct file *file, struct vm_area_struct *vma)
-> +static int shmem_mmap_prepare(struct vm_area_desc *desc)
->   {
-> +	struct file *file = desc->file;
->   	struct inode *inode = file_inode(file);
->   
->   	file_accessed(file);
->   	/* This is anonymous shared memory if it is unlinked at the time of mmap */
->   	if (inode->i_nlink)
-> -		vma->vm_ops = &shmem_vm_ops;
-> +		desc->vm_ops = &shmem_vm_ops;
->   	else
-> -		vma->vm_ops = &shmem_anon_vm_ops;
-> +		desc->vm_ops = &shmem_anon_vm_ops;
->   	return 0;
->   }
->   
-> @@ -5229,7 +5230,7 @@ static const struct address_space_operations shmem_aops = {
->   };
->   
->   static const struct file_operations shmem_file_operations = {
-> -	.mmap		= shmem_mmap,
-> +	.mmap_prepare	= shmem_mmap_prepare,
->   	.open		= shmem_file_open,
->   	.get_unmapped_area = shmem_get_unmapped_area,
->   #ifdef CONFIG_TMPFS
-
+I restored it once you sent out the fix.  It doesn't seem to be in
+present -next but it should be there in the next one.
 
