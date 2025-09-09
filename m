@@ -1,52 +1,46 @@
-Return-Path: <linux-mips+bounces-11114-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11115-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 444E5B49D65
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Sep 2025 01:17:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 570E4B49FE4
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Sep 2025 05:19:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 586501BC3E9A
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Sep 2025 23:18:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1835B3AC28B
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Sep 2025 03:19:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AE302E3AF2;
-	Mon,  8 Sep 2025 23:17:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6576E264636;
+	Tue,  9 Sep 2025 03:19:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="o/yhZAT6"
+	dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b="neOoo9fi"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+Received: from out30-113.freemail.mail.aliyun.com (out30-113.freemail.mail.aliyun.com [115.124.30.113])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E751DFE0B;
-	Mon,  8 Sep 2025 23:17:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D79A22A7E4;
+	Tue,  9 Sep 2025 03:19:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.124.30.113
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757373463; cv=none; b=o2yCZT/SwWuT16yOBK3hJvD6NrolM482KwUFdnWkkRa9rBvOwulASl593WpuxXMJfZCqYTyccDb4oQ15rsy7r4x7GPlaHVOZUw9wKZKDzY/1HpwGxFOIQYG/X8IuZbqoI4KlxDkBjs2FM9FO5mNW+0PTu8nPGrDsFMbYExH1cvI=
+	t=1757387968; cv=none; b=T4enqM5JHCIBBHIcqrYYHTG4NbFzcGuN2Cn8IzeySWAR6LQM3Xv9az48CTfWGA93Tlu1+r+NCeuS7JAvm6zrNhc745W57llO07bJIwJHrP4CNhymFmuFGO0DOU32INwCkJSXGQPWjn8p9ShJEnxaGVdJAfV4KPcQCo51ykemrqU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757373463; c=relaxed/simple;
-	bh=H/1lSf0qRkqLPIS21dDIq6+Jb5KinRAndOcezAcipC4=;
+	s=arc-20240116; t=1757387968; c=relaxed/simple;
+	bh=dXeL8bHgEJS0WBDFa6oVj6Cg2JQha9x3GSBxLbSsSp4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sDJr5dXBb4hu2+iXAOXy+igaYSJ2cELzjZcHXJtHDzG7tT+AYXocDmXkrF+WzkCeq401SYrIJz2hVMyAwWfEmT5k2CO5H5MoHle79je7Tbwhxq0c/Q1P3DYG2tagkJOt8mk9Zw0S/tZrV9CyUT2xSPW9HEcu1mOnaIEsvj82Ja4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=o/yhZAT6; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=CMlqYlKj+ILUokIqP1ABAMFD7Ot5oBLbcsJFMFm2zE0=; b=o/yhZAT6Pleqpfj3cap4+Ocr0X
-	SQndNm93uEb+a4QqInydfI6lMJSJFzsSu3/0qeMTKdhPtlmWw3TUQRbR6L2wKk2W3Fv+UH9KsOJEg
-	9qPRFInLAK8DjwwP3kbclODQZmsO+zdGm2eIzKDYqjx3wV8Z9WwBemPbQiE4A+eNMuh7m64z6qIdV
-	KXBfJtcalLtNb7nUQOkOJ5v6vc4bBx6ZTya7R+MDIox9Nxyg/2OCB4wbhLPO78J0Opb4io0rwvic4
-	NDpaGlW9vP1blgirQfaegykINHE1UsAXggKwlIZNRbsS5mNDQybb9YhDkcTYBLtgKyHdfGed+PEsS
-	przXJOJw==;
-Received: from [50.53.25.54] (helo=[192.168.254.17])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1uvl6s-00000002unf-1xHe;
-	Mon, 08 Sep 2025 23:17:18 +0000
-Message-ID: <c0d7df5f-ac43-4e15-8400-155bf87d5e77@infradead.org>
-Date: Mon, 8 Sep 2025 16:17:16 -0700
+	 In-Reply-To:Content-Type; b=gSqDZVHg4Zx472kGkR+tYRLJspdYZuRjjKjo6CxSmyaDauKcLpk7IU078AXpPziEr7EWy9DGZplR//cep5S7lqI2cr4dBRnw8MpWzKg0pJBrVu7WsqkAOucrKY2bdqXpOyRmWVpJWLeyU8XyWY05PAAL632+OfBrNqLClQ6Ul/U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com; spf=pass smtp.mailfrom=linux.alibaba.com; dkim=pass (1024-bit key) header.d=linux.alibaba.com header.i=@linux.alibaba.com header.b=neOoo9fi; arc=none smtp.client-ip=115.124.30.113
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.alibaba.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.alibaba.com
+DKIM-Signature:v=1; a=rsa-sha256; c=relaxed/relaxed;
+	d=linux.alibaba.com; s=default;
+	t=1757387962; h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type;
+	bh=kp/49YwOqYc4XSnECrXc1wc8q5JFsR73JTB4gmB0H9s=;
+	b=neOoo9fiPql50Cf0f0s9a8YQh/khunQ8lY2XlD2dktzPloXUrCLWlf5pOFiqwzzBEvFMWEDG6pRsUWq+HEJaTDjpsGDTssXG99pVuT3y//1TUxM4no2j1JxrY3O7Kthd2X6o5Puo15wFv2fMWFwlMaZGQusUltdTTsm3Kd6qkX8=
+Received: from 30.74.144.127(mailfrom:baolin.wang@linux.alibaba.com fp:SMTPD_---0Wnc5f31_1757387957 cluster:ay36)
+          by smtp.aliyun-inc.com;
+          Tue, 09 Sep 2025 11:19:18 +0800
+Message-ID: <2a08292a-fdad-49f1-8ad9-550bf3129b2f@linux.alibaba.com>
+Date: Tue, 9 Sep 2025 11:19:16 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -54,8 +48,7 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 07/16] doc: update porting, vfs documentation for
- mmap_[complete, abort]
+Subject: Re: [PATCH 01/16] mm/shmem: update shmem to use mmap_prepare
 To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
  Andrew Morton <akpm@linux-foundation.org>
 Cc: Jonathan Corbet <corbet@lwn.net>, Matthew Wilcox <willy@infradead.org>,
@@ -81,8 +74,7 @@ Cc: Jonathan Corbet <corbet@lwn.net>, Matthew Wilcox <willy@infradead.org>,
  "Liam R . Howlett" <Liam.Howlett@oracle.com>,
  Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
  Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
- Hugh Dickins <hughd@google.com>, Baolin Wang
- <baolin.wang@linux.alibaba.com>, Uladzislau Rezki <urezki@gmail.com>,
+ Hugh Dickins <hughd@google.com>, Uladzislau Rezki <urezki@gmail.com>,
  Dmitry Vyukov <dvyukov@google.com>, Andrey Konovalov <andreyknvl@gmail.com>,
  Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>,
  linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
@@ -93,63 +85,59 @@ Cc: Jonathan Corbet <corbet@lwn.net>, Matthew Wilcox <willy@infradead.org>,
  kexec@lists.infradead.org, kasan-dev@googlegroups.com,
  Jason Gunthorpe <jgg@nvidia.com>
 References: <cover.1757329751.git.lorenzo.stoakes@oracle.com>
- <1ceb56fec97f891df5070b24344bf2009aca6655.1757329751.git.lorenzo.stoakes@oracle.com>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <1ceb56fec97f891df5070b24344bf2009aca6655.1757329751.git.lorenzo.stoakes@oracle.com>
-Content-Type: text/plain; charset=UTF-8
+ <2f84230f9087db1c62860c1a03a90416b8d7742e.1757329751.git.lorenzo.stoakes@oracle.com>
+From: Baolin Wang <baolin.wang@linux.alibaba.com>
+In-Reply-To: <2f84230f9087db1c62860c1a03a90416b8d7742e.1757329751.git.lorenzo.stoakes@oracle.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-Hi--
 
-On 9/8/25 4:10 AM, Lorenzo Stoakes wrote:
-> We have introduced the mmap_complete() and mmap_abort() callbacks, which
-> work in conjunction with mmap_prepare(), so describe what they used for.
-> 
-> We update both the VFS documentation and the porting guide.
+
+On 2025/9/8 19:10, Lorenzo Stoakes wrote:
+> This simply assigns the vm_ops so is easily updated - do so.
 > 
 > Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
 > ---
->  Documentation/filesystems/porting.rst |  9 +++++++
->  Documentation/filesystems/vfs.rst     | 35 +++++++++++++++++++++++++++
->  2 files changed, 44 insertions(+)
+
+LGTM.
+Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+
+>   mm/shmem.c | 9 +++++----
+>   1 file changed, 5 insertions(+), 4 deletions(-)
 > 
-
-> diff --git a/Documentation/filesystems/vfs.rst b/Documentation/filesystems/vfs.rst
-> index 486a91633474..172d36a13e13 100644
-> --- a/Documentation/filesystems/vfs.rst
-> +++ b/Documentation/filesystems/vfs.rst
-
-> @@ -1236,6 +1240,37 @@ otherwise noted.
->  	file-backed memory mapping, most notably establishing relevant
->  	private state and VMA callbacks.
->  
-> +``mmap_complete``
-> +	If mmap_prepare is provided, will be invoked after the mapping is fully
-
-s/mmap_prepare/mmap_complete/ ??
-
-> +	established, with the mmap and VMA write locks held.
-> +
-> +	It is useful for prepopulating VMAs before they may be accessed by
-> +	users.
-> +
-> +	The hook MUST NOT release either the VMA or mmap write locks. This is
-
-You could also do **bold** above:
-
-	The hook **MUST NOT** release ...
-
-
-> +	asserted by the mmap logic.
-> +
-> +	If an error is returned by the hook, the VMA is unmapped and the
-> +	mmap() operation fails with that error.
-> +
-> +	It is not valid to specify this hook if mmap_prepare is not also
-> +	specified, doing so will result in an error upon mapping.
-
--- 
-~Randy
+> diff --git a/mm/shmem.c b/mm/shmem.c
+> index 29e1eb690125..cfc33b99a23a 100644
+> --- a/mm/shmem.c
+> +++ b/mm/shmem.c
+> @@ -2950,16 +2950,17 @@ int shmem_lock(struct file *file, int lock, struct ucounts *ucounts)
+>   	return retval;
+>   }
+>   
+> -static int shmem_mmap(struct file *file, struct vm_area_struct *vma)
+> +static int shmem_mmap_prepare(struct vm_area_desc *desc)
+>   {
+> +	struct file *file = desc->file;
+>   	struct inode *inode = file_inode(file);
+>   
+>   	file_accessed(file);
+>   	/* This is anonymous shared memory if it is unlinked at the time of mmap */
+>   	if (inode->i_nlink)
+> -		vma->vm_ops = &shmem_vm_ops;
+> +		desc->vm_ops = &shmem_vm_ops;
+>   	else
+> -		vma->vm_ops = &shmem_anon_vm_ops;
+> +		desc->vm_ops = &shmem_anon_vm_ops;
+>   	return 0;
+>   }
+>   
+> @@ -5229,7 +5230,7 @@ static const struct address_space_operations shmem_aops = {
+>   };
+>   
+>   static const struct file_operations shmem_file_operations = {
+> -	.mmap		= shmem_mmap,
+> +	.mmap_prepare	= shmem_mmap_prepare,
+>   	.open		= shmem_file_open,
+>   	.get_unmapped_area = shmem_get_unmapped_area,
+>   #ifdef CONFIG_TMPFS
 
 
