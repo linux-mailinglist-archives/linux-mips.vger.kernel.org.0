@@ -1,129 +1,150 @@
-Return-Path: <linux-mips+bounces-11151-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11152-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B78FB4FBEB
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Sep 2025 14:58:52 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 63D77B4FC24
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Sep 2025 15:13:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3C5D31C23376
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Sep 2025 12:59:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 252E01C235CC
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Sep 2025 13:13:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA26D32CF97;
-	Tue,  9 Sep 2025 12:58:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D6E6340D93;
+	Tue,  9 Sep 2025 13:13:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lBTiLlyd"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFD91321F21;
-	Tue,  9 Sep 2025 12:58:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A79DE340D85;
+	Tue,  9 Sep 2025 13:13:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757422727; cv=none; b=Aq23Lr/EPYEZCYOd0+gotBuuAza0fAdDUAR5t9D8fJFF2+6YJnqN1W735wHiwxNTeEip4h0Yh3/eB9psEtW5iC0gMkkQe2Yahm+6TmzsV4g8Znliw0MOzuvL6XECqiaMdp0M38R224guQHUaEMjc7ZUD2xDvn0LVIfoaHsch3iA=
+	t=1757423595; cv=none; b=JWXD+vk91Ph37faCJF/I5J0qBhJcbyu/46isS0LyuA9N6Hqt1aDrxzSD5m4ZNcSu4ZL4JuTwzFOFyIau7cuxc/KPtc0RCRch0F4fQ7T7v5J2hTMVVevaeM044lJzYWlrikKviSk3FcLpAtFXaRWzJx2LW1Zx3stQLRJsjrX/B7I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757422727; c=relaxed/simple;
-	bh=KLl9FirzP8OwgQ9Mucd7toQmRbvppPDs0WxC3Zyp0BI=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=jaAP1NkW64z49ixC8eJ6c73LSGUn6lojBk/JTTOwsxWNcCiXaXuFu30XT7UZ4OZ2i54WYPQ8JOOOvmpmkuDz/UElgytXFzpGxXeYN/pLFMhHS3uTvf/K3NVqOm8pstlab8zA/F19HYrG6sB/XtBxqEUyFMyTIdNyvez8NGxFCqA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [111.207.111.194])
-	by gateway (Coremail) with SMTP id _____8BxG9KBJMBojWAIAA--.17351S3;
-	Tue, 09 Sep 2025 20:58:41 +0800 (CST)
-Received: from ubuntu.. (unknown [111.207.111.194])
-	by front1 (Coremail) with SMTP id qMiowJCxdOSBJMBo20aKAA--.47509S2;
-	Tue, 09 Sep 2025 20:58:41 +0800 (CST)
-From: Ming Wang <wangming01@loongson.cn>
-To: Huacai Chen <chenhuacai@kernel.org>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] irqchip/loongson-pch-lpc: Use legacy domain for PCH-LPC IRQ controller
-Date: Tue,  9 Sep 2025 20:58:40 +0800
-Message-ID: <20250909125840.638418-1-wangming01@loongson.cn>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1757423595; c=relaxed/simple;
+	bh=L6CwOVwYJN4Y/x7PmC4SNNIsn1PcLQu+MvjuP9uomWU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T2dyoFORnn1fttmBzhg1boMEPnqqU0wihWVfekorIZjP3A7KZ3FeBjoUj3l6sjsAl/ilFSmYqm5y13EbNp7HRRK6ecuugAvrJLOdvAJYW7foEjqFIkm3gikEhyyOCmvMryBf3ES/AMVRe5kGjB1np4N7rJfTs/Xyw9pOAjaFr8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lBTiLlyd; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1757423593; x=1788959593;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=L6CwOVwYJN4Y/x7PmC4SNNIsn1PcLQu+MvjuP9uomWU=;
+  b=lBTiLlydhz6UG+xbO2+REzhWCYdJ6xubL1jpQd/sJNXdJ+9c56Rsfjxv
+   E1YRfIpZU3iRIM9xXt0HpOi7a2TC2/4iSP9WDR91GrgU+FmXlMaMwQRrM
+   5N7dOAZSkE814/SCA9Vwa+IU5NFUwiO7UXUuh8MMjaJ3E838Kk5XA8B7X
+   JL4JF4LkluYEIZFvu5AauksMWBfHKzijGMVmf7yBKgJZtdcmaAQg7pdyX
+   D9NsW/AziOWdqlVWiR/PM+Nw61ybzkdnCQHKCdGv5U/s+q39ml8dSEMaD
+   SITWSslEMOylt88zL9h7BZsIuMPHdcnENLTAW7HUWZRVW2bc2eeyPZ3kf
+   Q==;
+X-CSE-ConnectionGUID: xmHsdx8SRxeI+rsQhOEFzw==
+X-CSE-MsgGUID: 0RyCS3CDRTOygfsGOQAXNg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11531"; a="82295496"
+X-IronPort-AV: E=Sophos;i="6.17,312,1747724400"; 
+   d="scan'208";a="82295496"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2025 06:13:13 -0700
+X-CSE-ConnectionGUID: uvql51LsTAqr3Q78sqHnqg==
+X-CSE-MsgGUID: bZMIDd5nSnSWd1c35O6zLA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,251,1751266800"; 
+   d="scan'208";a="210237526"
+Received: from smile.fi.intel.com ([10.237.72.51])
+  by orviesa001.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Sep 2025 06:13:08 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
+	(envelope-from <andriy.shevchenko@intel.com>)
+	id 1uvy9g-00000001Rlg-2b48;
+	Tue, 09 Sep 2025 16:13:04 +0300
+Date: Tue, 9 Sep 2025 16:13:04 +0300
+From: Andy Shevchenko <andriy.shevchenko@intel.com>
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+	Keguang Zhang <keguang.zhang@gmail.com>,
+	Alban Bedel <albeu@free.fr>, Doug Berger <opendmb@gmail.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Samuel Holland <samuel.holland@sifive.com>,
+	Yixun Lan <dlan@gentoo.org>, Andy Shevchenko <andy@kernel.org>,
+	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-riscv@lists.infradead.org,
+	spacemit@lists.linux.dev,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH 13/15] gpio: sodaville: use new generic GPIO chip API
+Message-ID: <aMAn4MM_Fs8q8qwj@smile.fi.intel.com>
+References: <20250909-gpio-mmio-gpio-conv-part4-v1-0-9f723dc3524a@linaro.org>
+ <20250909-gpio-mmio-gpio-conv-part4-v1-13-9f723dc3524a@linaro.org>
+ <aMAP9hAWars0T83r@smile.fi.intel.com>
+ <CAMRc=MeLTGq8Qu2aT43tkt3vaYCSaJPJPLmaUQ1SAyD_OgVr_g@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJCxdOSBJMBo20aKAA--.47509S2
-X-CM-SenderInfo: 5zdqwzxlqjiio6or00hjvr0hdfq/1tbiAgEAEmi-wYsQQwAAsf
-X-Coremail-Antispam: 1Uk129KBj93XoWxZw1kCr1DArWUAr1kur1rAFc_yoW5Xr13pF
-	45Gas2vrWrJF4UAFZ8Cw1UZryfA3s7J3y7tanYkwnxArnxA34v9F1YkFyqvry8AF95X3WY
-	vrWqqayUu3Z09FXCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Jr0_JF4l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Jr0_Gr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2
-	xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
-	Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x
-	0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
-	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIx
-	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
-	wI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
-	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8ctx3UU
-	UUU==
+In-Reply-To: <CAMRc=MeLTGq8Qu2aT43tkt3vaYCSaJPJPLmaUQ1SAyD_OgVr_g@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
+ krs, Bertel Jungin Aukio 5, 02600 Espoo
 
-On certain Loongson platforms, drivers attempting to request a legacy
-ISA IRQ directly via request_irq() (e.g., IRQ 4) may fail. The
-virtual IRQ descriptor is not fully initialized and lacks a valid irqchip.
+On Tue, Sep 09, 2025 at 01:35:04PM +0200, Bartosz Golaszewski wrote:
+> On Tue, Sep 9, 2025 at 1:31 PM Andy Shevchenko
+> <andriy.shevchenko@intel.com> wrote:
+> > On Tue, Sep 09, 2025 at 11:15:40AM +0200, Bartosz Golaszewski wrote:
 
-This issue does not affect ACPI-enumerated devices described in DSDT,
-as their interrupts are properly mapped via the GSI translation path.
-This indicates the LPC irqdomain itself is functional but is not correctly
-handling direct VIRQ-to-HWIRQ mappings.
+...
 
-The root cause is the use of irq_domain_create_linear(). This API sets
-up a domain for dynamic, on-demand mapping, typically triggered by a GSI
-request. It does not pre-populate the mappings for the legacy VIRQ range
-(0-15). Consequently, if no ACPI device claims a specific GSI
-(e.g., GSI 4), the corresponding VIRQ (e.g., VIRQ 4) is never mapped to
-the LPC domain. A direct call to request_irq(4, ...) then fails because
-the kernel cannot resolve this VIRQ to a hardware interrupt managed by
-the LPC controller.
+> > > +     config = (typeof(config)){
+> >
+> > This looks unusual. Why can't properly formed compound literal be used as in
+> > many other places in the kernel?
+> 
+> It is correct C
 
-The PCH-LPC interrupt controller is an i8259-compatible legacy device
-that requires a deterministic, static 1-to-1 mapping for IRQs 0-15 to
-support legacy drivers.
+If it compiles, it doesn't mean it's correct C, it might be non-standard.
+Have you checked with the standard (note, I read that part in the past,
+but I may forgot the details, so I don't know the answer to this)?
 
-Fix this by replacing irq_domain_create_linear() with
-irq_domain_create_legacy(). This API is specifically designed for such
-controllers. It establishes the required static 1-to-1 VIRQ-to-HWIRQ
-mapping for the entire legacy range (0-15) immediately upon domain
-creation. This ensures that any VIRQ in this range is always resolvable,
-making direct calls to request_irq() for legacy IRQs function correctly.
+> and checkpatch doesn't raise any warnings.
 
-Signed-off-by: Ming Wang <wangming01@loongson.cn>
----
- drivers/irqchip/irq-loongson-pch-lpc.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+checkpatch is far from being useful in the questions like this.
+It false positively complains for for_each*() macros all over
+the kernel, for example.
 
-diff --git a/drivers/irqchip/irq-loongson-pch-lpc.c b/drivers/irqchip/irq-loongson-pch-lpc.c
-index 2d4c3ec128b8..68b09cc8c400 100644
---- a/drivers/irqchip/irq-loongson-pch-lpc.c
-+++ b/drivers/irqchip/irq-loongson-pch-lpc.c
-@@ -200,8 +200,13 @@ int __init pch_lpc_acpi_init(struct irq_domain *parent,
- 		goto iounmap_base;
- 	}
- 
--	priv->lpc_domain = irq_domain_create_linear(irq_handle, LPC_COUNT,
--					&pch_lpc_domain_ops, priv);
-+	/*
-+	 * The LPC interrupt controller is a legacy i8259-compatible device,
-+	 * which requires a static 1:1 mapping for IRQs 0-15.
-+	 * Use irq_domain_create_legacy to establish this static mapping early.
-+	 */
-+	priv->lpc_domain = irq_domain_create_legacy(irq_handle, LPC_COUNT, 0, 0,
-+			&pch_lpc_domain_ops, priv);
- 	if (!priv->lpc_domain) {
- 		pr_err("Failed to create IRQ domain\n");
- 		goto free_irq_handle;
+> It's the
+> same kind of argument as between kmalloc(sizeof(struct foo)) vs
+> kmalloc(sizeof(f)).
+
+Maybe, but it introduces a new style while all other cases use the other,
+_established_ style. So we have a precedent and the form the code is written
+in is against the de facto usage of the compound literals.
+
+> I guess it's personal taste but I like this version better.
+
+In kernel we also try to be consistent. This add inconsistency. Am I wrong?
+
+> > > +             .dev = &pdev->dev,
+> > > +             .sz = 4,
+> > > +             .dat = sd->gpio_pub_base + GPINR,
+> > > +             .set = sd->gpio_pub_base + GPOUTR,
+> > > +             .dirout = sd->gpio_pub_base + GPOER,
+> > > +     };
+
 -- 
-2.43.0
+With Best Regards,
+Andy Shevchenko
+
 
 
