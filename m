@@ -1,183 +1,234 @@
-Return-Path: <linux-mips+bounces-11142-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11143-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0C64B4A88F
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Sep 2025 11:46:34 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B943DB4A8FC
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Sep 2025 11:56:20 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6011C1B24C76
-	for <lists+linux-mips@lfdr.de>; Tue,  9 Sep 2025 09:44:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F2CB3A5797
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Sep 2025 09:56:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A60230CDA7;
-	Tue,  9 Sep 2025 09:40:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1E6E2472A8;
+	Tue,  9 Sep 2025 09:56:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="he7uv1AN"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.gentoo.org (woodpecker.gentoo.org [140.211.166.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CC10309DC4;
-	Tue,  9 Sep 2025 09:40:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=140.211.166.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06AA12C21CF
+	for <linux-mips@vger.kernel.org>; Tue,  9 Sep 2025 09:55:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757410809; cv=none; b=fpwj3m87SArCokiRrT/DtpBMHvufX7JhaTj0gY9GqF2Jm76jsRKfgQf06m2GbYumIJeTmWKAGEOte7o50uvoXSHQHyV41jCZ8K5noQ4X5lj7WbpP1/d1xi8EkXZ1EsN44IFOaWKjLD6gJhr6uxoNVx0MGsswZ6eRAhJp3+7F9vY=
+	t=1757411760; cv=none; b=eZADRJPegRFDOK7J6gSmKimqIWic2xHqoKcFLi1Ru2e3xeI51P28uyGUl9cdXPLed8X03y1XZeSvj8pTH0oWDYfBu4m7AoTIHLV2ElxucX347KknoC+ruLa1ybmgtqdoLhWbnXXbhcrW9eyTL1PyUXM+qUbKJRIpkDpAgv9/BZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757410809; c=relaxed/simple;
-	bh=1BLxtqNy/iOf9XPghIOmJi8qyxLBt+poztV5tfMoCPA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=gFTR7LtbRZM5fiK7k6P12iwOyBtms1SDVW9YAkwvKN8eE+ql0oCQ1wBVg/fe2EQViU3ZNm848O9rWD9bu/+fbUM1yNrjU2t7oxDl3TXea7dc8bVeq26Jq2rPT4soaoz0yEzIcg1cyCQWR6+ZCvDcEIqnSCbOrTs7jdIFIdkuHMY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org; spf=pass smtp.mailfrom=gentoo.org; arc=none smtp.client-ip=140.211.166.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gentoo.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentoo.org
-Received: from localhost (unknown [116.232.18.168])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange secp256r1 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: dlan)
-	by smtp.gentoo.org (Postfix) with ESMTPSA id DECA3340EC3;
-	Tue, 09 Sep 2025 09:40:03 +0000 (UTC)
-Date: Tue, 9 Sep 2025 17:39:58 +0800
-From: Yixun Lan <dlan@gentoo.org>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Linus Walleij <linus.walleij@linaro.org>,
-	Keguang Zhang <keguang.zhang@gmail.com>,
-	Alban Bedel <albeu@free.fr>, Doug Berger <opendmb@gmail.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Andy Shevchenko <andy@kernel.org>, linux-gpio@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-riscv@lists.infradead.org,
-	spacemit@lists.linux.dev,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH 12/15] gpio: spacemit-k1: use new generic GPIO chip API
-Message-ID: <20250909093958-GYA1207638@gentoo.org>
-References: <20250909-gpio-mmio-gpio-conv-part4-v1-0-9f723dc3524a@linaro.org>
- <20250909-gpio-mmio-gpio-conv-part4-v1-12-9f723dc3524a@linaro.org>
+	s=arc-20240116; t=1757411760; c=relaxed/simple;
+	bh=VKk+DfPeoBviWHTSePPOcfSJ1Fx+ahLOMPVb2ffk1QY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pkcd+1U1f31WRiv4id7Bfmh6jRuMQiv0hCuDngMi7gMf2UPWqOCvJ/77xoItiJ2aIC8C8e+GvG7gHQbSQwiFNInmgIXqTKPqc854WQaXyTAqKpRAC8jCSmYltaAvU7PzlRYZaqnsHUOh/ZZdH43tmY4B1lrWzXkFfgELuMuYb60=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=he7uv1AN; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1757411757;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
+	bh=uuhn5XZ+k/yXfBkz6uI/EJtHiraKm76UcsqU/6SM9xI=;
+	b=he7uv1ANAW01eUnXD+VlJxKPV9Yg/8eHB0FFOy7vX9PsI3RMRddchVeInBeXBfCt+Njqsd
+	mIZlrOJICr129i4mcdn8gv6Kn/R4KeBGOenSyIexiOOP5RkI5uCpfEj1ysuOuesGxJHpra
+	tsdiZBstVMj0VcVmxEbVH6/XjqSqP6k=
+Received: from mail-wm1-f72.google.com (mail-wm1-f72.google.com
+ [209.85.128.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-43-NBmWpeGFO3GU6Mi9KIbrZA-1; Tue, 09 Sep 2025 05:55:55 -0400
+X-MC-Unique: NBmWpeGFO3GU6Mi9KIbrZA-1
+X-Mimecast-MFC-AGG-ID: NBmWpeGFO3GU6Mi9KIbrZA_1757411754
+Received: by mail-wm1-f72.google.com with SMTP id 5b1f17b1804b1-45dd9a66cfbso37868365e9.1
+        for <linux-mips@vger.kernel.org>; Tue, 09 Sep 2025 02:55:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757411754; x=1758016554;
+        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
+         :from:references:cc:to:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=uuhn5XZ+k/yXfBkz6uI/EJtHiraKm76UcsqU/6SM9xI=;
+        b=Z2zDdki1RhZV346rhgIjY7vT3EA/YuSh7r8lqsFRfF0Q4c6LDMuzyfS3cY/8i3LOqQ
+         TBjrAR9F1Pl4ArM8D9kca0JNpxSr22gVyVSVN80k6sVkvCgf93uTxEVFL/TJXPSEJka4
+         CedUdV7XQnGXV+lNgpCQ3XCGQKKijs2G7fiGkK7/w8+TiJfY/zO3gH/0YV4AVDcMhJkk
+         eJGI7OAe0MN3dXTfVgIIs4Kg6sX6a1OoffSr9swgfc5ZlTOImBd05aR9RytuSnKJUgiJ
+         6gWFfO6JJ3q9yDb60GOk0ZOaD5ZJpmduKkuJhkPy1V8x2OZ7U5m/U4k6vhxtaM3FkTP2
+         Rw0A==
+X-Forwarded-Encrypted: i=1; AJvYcCVrKjHKD3SQVf8MJEpFjXwlgtDQtMOpBrRNnDxyUMoTS2MWJ8DULgMwA7CsKmaj636OXLfTa4goBW+L@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHWjXZJWM6KDvisDjcToqYOow6oaX4wmQ4NDd5VyxZ7K5qInZU
+	/HFBcU+KlGmEsQz37gRe85vFxOhM2AjnJqrTE67h2Pmkx2Mxhb56DF9Dzs/ccyG6nP3B4NZ69eJ
+	KHORdmP/rp9clgKpaY6kehAvrpCkthTfvZ8NzhjmC2+Xm7ZbK7Oy5q2hBfcMADck=
+X-Gm-Gg: ASbGncucT3kGR23XUVNM0tpqWL1wrq5oKTa8ltUQmqbV/svBfTxYFW632cSZUjPMx3L
+	OD0d6FPDWG7e45BrSMK9sv16fNPCUjtZHoNoXFEvImS6zMM6g9M30pzMKNA0SABB5snqKgMQyDx
+	GhqCntc8dXabRXr3gPccpz8ilNyz2P6CoEYOkO9GfAHqOADyAZjD1UaNHAoSAwsru4DgEszJciw
+	YvYNeODzYqbhHujy7yGr/twJkru2/rSrk0NC6bPrXt5msdeqeJAgU03R7YeZ7TuYnqjTSQ2zqOX
+	NVO7itk5J+Cx/ZAj2YKZ3VwVuIMLWHWtF9hyaMsZlYmTCPNixvPZycvf9EhM1UljX6XeDJ3Gard
+	4uwjMNTofRl8edLleIWAltDpqrsTDwgPkN1zKvZTyn/AMQLhjT3wcIEStttOrtTWO/Wo=
+X-Received: by 2002:a05:600c:3510:b0:45b:8366:2a1a with SMTP id 5b1f17b1804b1-45ddde829ebmr106120215e9.11.1757411754422;
+        Tue, 09 Sep 2025 02:55:54 -0700 (PDT)
+X-Google-Smtp-Source: AGHT+IFywLrR0DszeWqgd9Y5zxb2+w3HhCmkVKXj/s/GXP5Ci/2ssUudLpQTkEWfsIqoDp37rN0MYw==
+X-Received: by 2002:a05:600c:3510:b0:45b:8366:2a1a with SMTP id 5b1f17b1804b1-45ddde829ebmr106119935e9.11.1757411753943;
+        Tue, 09 Sep 2025 02:55:53 -0700 (PDT)
+Received: from ?IPV6:2003:d8:2f23:9c00:d1f6:f7fe:8f14:7e34? (p200300d82f239c00d1f6f7fe8f147e34.dip0.t-ipconnect.de. [2003:d8:2f23:9c00:d1f6:f7fe:8f14:7e34])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-45dd296ed51sm228257165e9.3.2025.09.09.02.55.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 09 Sep 2025 02:55:53 -0700 (PDT)
+Message-ID: <6ec933b1-b3f7-41c0-95d8-e518bb87375e@redhat.com>
+Date: Tue, 9 Sep 2025 11:55:51 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250909-gpio-mmio-gpio-conv-part4-v1-12-9f723dc3524a@linaro.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 22/37] mm/cma: refuse handing out non-contiguous page
+ ranges
+To: linux-kernel@vger.kernel.org, Andrew Morton <akpm@linuxfoundation.org>
+Cc: Alexandru Elisei <alexandru.elisei@arm.com>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Alexander Potapenko <glider@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Brendan Jackman <jackmanb@google.com>, Christoph Lameter <cl@gentwo.org>,
+ Dennis Zhou <dennis@kernel.org>, Dmitry Vyukov <dvyukov@google.com>,
+ dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+ iommu@lists.linux.dev, io-uring@vger.kernel.org,
+ Jason Gunthorpe <jgg@nvidia.com>, Jens Axboe <axboe@kernel.dk>,
+ Johannes Weiner <hannes@cmpxchg.org>, John Hubbard <jhubbard@nvidia.com>,
+ kasan-dev@googlegroups.com, kvm@vger.kernel.org,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Linus Torvalds <torvalds@linux-foundation.org>, linux-arm-kernel@axis.com,
+ linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+ linux-ide@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org, linux-mm@kvack.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-scsi@vger.kernel.org, Marco Elver <elver@google.com>,
+ Marek Szyprowski <m.szyprowski@samsung.com>, Michal Hocko <mhocko@suse.com>,
+ Mike Rapoport <rppt@kernel.org>, Muchun Song <muchun.song@linux.dev>,
+ netdev@vger.kernel.org, Oscar Salvador <osalvador@suse.de>,
+ Peter Xu <peterx@redhat.com>, Robin Murphy <robin.murphy@arm.com>,
+ Suren Baghdasaryan <surenb@google.com>, Tejun Heo <tj@kernel.org>,
+ virtualization@lists.linux.dev, Vlastimil Babka <vbabka@suse.cz>,
+ wireguard@lists.zx2c4.com, x86@kernel.org, Zi Yan <ziy@nvidia.com>
+References: <20250901150359.867252-1-david@redhat.com>
+ <20250901150359.867252-23-david@redhat.com>
+From: David Hildenbrand <david@redhat.com>
+Content-Language: en-US
+Autocrypt: addr=david@redhat.com; keydata=
+ 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
+ qIws/H2t
+In-Reply-To: <20250901150359.867252-23-david@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-
-On 11:15 Tue 09 Sep     , Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On 01.09.25 17:03, David Hildenbrand wrote:
+> Let's disallow handing out PFN ranges with non-contiguous pages, so we
+> can remove the nth-page usage in __cma_alloc(), and so any callers don't
+> have to worry about that either when wanting to blindly iterate pages.
 > 
-> Convert the driver to using the new generic GPIO chip interfaces from
-> linux/gpio/generic.h.
+> This is really only a problem in configs with SPARSEMEM but without
+> SPARSEMEM_VMEMMAP, and only when we would cross memory sections in some
+> cases.
 > 
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Thanks for converting this
-
-Reviewed-by: Yixun Lan <dlan@gentoo.org>
-
+> Will this cause harm? Probably not, because it's mostly 32bit that does
+> not support SPARSEMEM_VMEMMAP. If this ever becomes a problem we could
+> look into allocating the memmap for the memory sections spanned by a
+> single CMA region in one go from memblock.
+> 
+> Reviewed-by: Alexandru Elisei <alexandru.elisei@arm.com>
+> Reviewed-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> Signed-off-by: David Hildenbrand <david@redhat.com>
 > ---
->  drivers/gpio/gpio-spacemit-k1.c | 28 ++++++++++++++++++++--------
->  1 file changed, 20 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/gpio/gpio-spacemit-k1.c b/drivers/gpio/gpio-spacemit-k1.c
-> index 3cc75c701ec40194e602b80d3f96f23204ce3b4d..9e57f43d3d13ad28fcd3327ecdc3f359691a44c9 100644
-> --- a/drivers/gpio/gpio-spacemit-k1.c
-> +++ b/drivers/gpio/gpio-spacemit-k1.c
-> @@ -6,6 +6,7 @@
->  
->  #include <linux/clk.h>
->  #include <linux/gpio/driver.h>
-> +#include <linux/gpio/generic.h>
->  #include <linux/init.h>
->  #include <linux/interrupt.h>
->  #include <linux/io.h>
-> @@ -38,7 +39,7 @@
->  struct spacemit_gpio;
->  
->  struct spacemit_gpio_bank {
-> -	struct gpio_chip gc;
-> +	struct gpio_generic_chip chip;
->  	struct spacemit_gpio *sg;
->  	void __iomem *base;
->  	u32 irq_mask;
-> @@ -72,7 +73,7 @@ static irqreturn_t spacemit_gpio_irq_handler(int irq, void *dev_id)
->  		return IRQ_NONE;
->  
->  	for_each_set_bit(n, &pending, BITS_PER_LONG)
-> -		handle_nested_irq(irq_find_mapping(gb->gc.irq.domain, n));
-> +		handle_nested_irq(irq_find_mapping(gb->chip.gc.irq.domain, n));
->  
->  	return IRQ_HANDLED;
->  }
-> @@ -143,7 +144,7 @@ static void spacemit_gpio_irq_print_chip(struct irq_data *data, struct seq_file
->  {
->  	struct spacemit_gpio_bank *gb = irq_data_get_irq_chip_data(data);
->  
-> -	seq_printf(p, "%s-%d", dev_name(gb->gc.parent), spacemit_gpio_bank_index(gb));
-> +	seq_printf(p, "%s-%d", dev_name(gb->chip.gc.parent), spacemit_gpio_bank_index(gb));
->  }
->  
->  static struct irq_chip spacemit_gpio_chip = {
-> @@ -165,7 +166,7 @@ static bool spacemit_of_node_instance_match(struct gpio_chip *gc, unsigned int i
->  	if (i >= SPACEMIT_NR_BANKS)
->  		return false;
->  
-> -	return (gc == &sg->sgb[i].gc);
-> +	return (gc == &sg->sgb[i].chip.gc);
->  }
->  
->  static int spacemit_gpio_add_bank(struct spacemit_gpio *sg,
-> @@ -173,7 +174,8 @@ static int spacemit_gpio_add_bank(struct spacemit_gpio *sg,
->  				  int index, int irq)
->  {
->  	struct spacemit_gpio_bank *gb = &sg->sgb[index];
-> -	struct gpio_chip *gc = &gb->gc;
-> +	struct gpio_generic_chip_config config;
-> +	struct gpio_chip *gc = &gb->chip.gc;
->  	struct device *dev = sg->dev;
->  	struct gpio_irq_chip *girq;
->  	void __iomem *dat, *set, *clr, *dirin, *dirout;
-> @@ -187,9 +189,19 @@ static int spacemit_gpio_add_bank(struct spacemit_gpio *sg,
->  	dirin	= gb->base + SPACEMIT_GCDR;
->  	dirout	= gb->base + SPACEMIT_GSDR;
->  
-> +	config = (typeof(config)){
-> +		.dev = dev,
-> +		.sz = 4,
-> +		.dat = dat,
-> +		.set = set,
-> +		.clr = clr,
-> +		.dirout = dirout,
-> +		.dirin = dirin,
-> +		.flags = BGPIOF_UNREADABLE_REG_SET | BGPIOF_UNREADABLE_REG_DIR,
-> +	};
-> +
->  	/* This registers 32 GPIO lines per bank */
-> -	ret = bgpio_init(gc, dev, 4, dat, set, clr, dirout, dirin,
-> -			 BGPIOF_UNREADABLE_REG_SET | BGPIOF_UNREADABLE_REG_DIR);
-> +	ret = gpio_generic_chip_init(&gb->chip, &config);
->  	if (ret)
->  		return dev_err_probe(dev, ret, "failed to init gpio chip\n");
->  
-> @@ -221,7 +233,7 @@ static int spacemit_gpio_add_bank(struct spacemit_gpio *sg,
->  	ret = devm_request_threaded_irq(dev, irq, NULL,
->  					spacemit_gpio_irq_handler,
->  					IRQF_ONESHOT | IRQF_SHARED,
-> -					gb->gc.label, gb);
-> +					gb->chip.gc.label, gb);
->  	if (ret < 0)
->  		return dev_err_probe(dev, ret, "failed to register IRQ\n");
->  
-> 
-> -- 
-> 2.48.1
-> 
+
+@Andrew, the following fixup on top. I'm still cross-compiling it, but
+at the time you read this mail my cross compiles should have been done.
+
+
+ From cbfa2763e1820b917ce3430f45e5f3a55eb2970f Mon Sep 17 00:00:00 2001
+From: David Hildenbrand <david@redhat.com>
+Date: Tue, 9 Sep 2025 05:50:13 -0400
+Subject: [PATCH] fixup: mm/cma: refuse handing out non-contiguous page ranges
+
+Apparently we can have NUMMU configs with SPARSEMEM enabled.
+
+Signed-off-by: David Hildenbrand <david@redhat.com>
+---
+  mm/util.c | 2 +-
+  1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mm/util.c b/mm/util.c
+index 248f877f629b6..6c1d64ed02211 100644
+--- a/mm/util.c
++++ b/mm/util.c
+@@ -1306,6 +1306,7 @@ unsigned int folio_pte_batch(struct folio *folio, pte_t *ptep, pte_t pte,
+  {
+  	return folio_pte_batch_flags(folio, NULL, ptep, &pte, max_nr, 0);
+  }
++#endif /* CONFIG_MMU */
+  
+  #if defined(CONFIG_SPARSEMEM) && !defined(CONFIG_SPARSEMEM_VMEMMAP)
+  /**
+@@ -1342,4 +1343,3 @@ bool page_range_contiguous(const struct page *page, unsigned long nr_pages)
+  }
+  EXPORT_SYMBOL(page_range_contiguous);
+  #endif
+-#endif /* CONFIG_MMU */
+-- 
+2.50.1
+
 
 -- 
-Yixun Lan (dlan)
+Cheers
+
+David / dhildenb
+
 
