@@ -1,138 +1,112 @@
-Return-Path: <linux-mips+bounces-11223-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11224-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23E14B52380
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Sep 2025 23:32:46 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AB64B52399
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Sep 2025 23:38:56 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8A46A051DA
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Sep 2025 21:32:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD715171A52
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Sep 2025 21:38:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EA8F3112D6;
-	Wed, 10 Sep 2025 21:32:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1DBD313275;
+	Wed, 10 Sep 2025 21:38:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fFwj/L7x"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="ERlNyzA+"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5906630DD0B
-	for <linux-mips@vger.kernel.org>; Wed, 10 Sep 2025 21:32:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5BEB131282F;
+	Wed, 10 Sep 2025 21:38:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757539961; cv=none; b=IOFn2AfZK7sAeZAbzVAlk412A4rZMuA/77f2STQ588o4QOsgUGNnKbpmqEf39lw2+cCWevg9poqBe9AI6O+cpqmIxYYVVqjy91r0w630DX7cNUnNMiSNZURiAlQv0YEvmi0HA6cahXa9qetekiiX3qo/Xl0mppSoIuXvVnuvolM=
+	t=1757540328; cv=none; b=cw4ML15bEZG8krnxGfAOFhH8Jul7Q8VgDf5QQfLCMcLQo+hq3HN96Dy2bq9XSd6WEXefJqWba1nWdh0ONJGLglKo+9QAlkeBLTeaOf9fuExiocsJZn9bcBDDJpJ+AEL9Ph9RxuPpzpY35Ee0WDzckKZn2hKq2Q4eaf4WdAtOxYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757539961; c=relaxed/simple;
-	bh=tDgFFo1KURd80WOddqneN0YLx5E89K1CqsHmGyLdaRg=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Dc1fEsJcEfnCaOvUltVOaDjbm/vmM93pesCRM5MF9Mn1m1vS0tBZytZ6XlDLkqapQPLb4XSk5xrnbNE9VGM3rPlsQyR60XbgOBGBYiqO06IEuSQWQjk8NYWLm5GPRk79AcRWXN2hS0RXnPmSRKICZ2eVhY5g24oiU6XXRre7Hcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fFwj/L7x; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-56d1b40ed70so447447e87.3
-        for <linux-mips@vger.kernel.org>; Wed, 10 Sep 2025 14:32:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1757539957; x=1758144757; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tDgFFo1KURd80WOddqneN0YLx5E89K1CqsHmGyLdaRg=;
-        b=fFwj/L7xMVLXbrafsiUBxoD7MAxOhttI7KRIebIj5TOl47/6pHUwstG+oyhVRiQKiH
-         buogzFmlUB5f2PQDjgejothGY0K4DlSLuyCsKaBhZ0tYy4lRUpzbyL08aFN1uSKZ1bDG
-         SwaDZh5OI7T4EXyuLarVGg7+a6/LkS9bvhR6We4NQQQm9ACEpOD1JoyqZFNVG0pMxHyT
-         OnmyyfB8iOnrNVa4+KqMOsaWig6syyIUVmE81K0XpMJikbhDfgBXGfer5BF+4pI3T2Bv
-         edIUKPC/nO4m6z21NHco09MtuTcljb4aeAAEChVIS3lO2OjtwTogOrriBFrM20qnVhOD
-         xiCQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757539957; x=1758144757;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=tDgFFo1KURd80WOddqneN0YLx5E89K1CqsHmGyLdaRg=;
-        b=BPRVACFrkbqrU+S1QYHZSU14ONaHJP7FeND/l+HjnZJhK05vthE8AaAXorAUMKIQNH
-         nISAlggZc/x+udVM20KhQ1/wsDguvDCRcnFZvkpk5s7cpQjg4mqhZ5H3fE6qQz/o69Eu
-         VvzwfRHD5hCJe86BfB6F/XOz3FYj7qVmRkl/Xwp98oNz09KW3bb8+vzOaTHyVIDR0bIQ
-         ythPeNq+mxed9NfihttKmuPk77WP80CfmdpB2HqHZh6M645zo0WYtA5GcQ3IFHuwSMnu
-         62MpIFKRj0eNjPF4bKZR41+CHitiY12qY466K2h9DmjTEAMr+8sV0pwBt0KqiaKXaHKz
-         yTrQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXDn4vS0NiT+40HvSjpGKj8ee9byJ7AK9ySfUYyv2qFJ378Zkmc9Go0R6PRaQFtFzpNwGMpyo/PNfxe@vger.kernel.org
-X-Gm-Message-State: AOJu0YzQxKw2hZv2h6qKuv3hqB0Tt3LbEM79mO01uEn3Z86YkuOy1BvW
-	ux4UZ1+jO8RfWEEXI1s2mFi3JRHqIfooJWJ/SdmiatvwwqtqJhBCRZyFGdSvDGrRcmb8QScZR5V
-	Ixk+tOjZXX//QoCLnUJ/16Tp8IS8uIJ1zQcDomzP/tQ==
-X-Gm-Gg: ASbGnctdOWPTymke4tORl4QcDaOEsM2eu161VVMZV4JhDJc+sizbaj3H42kj+cnLq7y
-	OvFP8a5M83VS8GmqtWF17vmgxeZ6FOtDx97iHJwkgEQ1xaqbGGOzPmF4JPbiHTfTWKRytlAQvys
-	+hl1AE2i158myo5BfsrEuIuoVjw7wEmFfbl8Wj8z7sNEc+GptzOyKgOxSh/idW3J9mTAE+VTDWN
-	ZHY+K/icMOf8Mqtqg==
-X-Google-Smtp-Source: AGHT+IEDFgI45XU5cTVW9FtG8gM2JjDzoZENa8d1uC1g5vQQ+iix+RIzuYFh88VfTx91WSF4c7ZJi4duHEmeM7k85Mw=
-X-Received: by 2002:a05:6512:6404:b0:55f:595f:9a31 with SMTP id
- 2adb3069b0e04-56262f11dd2mr5910272e87.51.1757539957420; Wed, 10 Sep 2025
- 14:32:37 -0700 (PDT)
+	s=arc-20240116; t=1757540328; c=relaxed/simple;
+	bh=M0egxu8FbVh7lEFbI9KpqlK3Xem+oaa7R3cdZDtUNQQ=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=JEEzDZjnAVMBsBfNIz6QjKnRcKBMNvyxPPe+5ktZwQxJne3fBFc5TyMR+tfoUWPicZsGthqetl/qdfR9Kf00DKelAooh1iBR5k2KasmL+CJuRnVEYaxWz9S0cvOmHBoukDUJk9AAA+L+QyddbF5FKisp2tDyMZY3YnnIYpcjubQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=ERlNyzA+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16257C4CEEB;
+	Wed, 10 Sep 2025 21:38:46 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1757540327;
+	bh=M0egxu8FbVh7lEFbI9KpqlK3Xem+oaa7R3cdZDtUNQQ=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=ERlNyzA+aJCVNQscjQFOcHN3rHi5u0odDg8HJ53DGP17XEJUpaKk2IgWSZVS/hpeF
+	 5p1Ihuc6sdEVaV7cYZYmFtUpA2LlaeGvkTYNkZIfig/XRZmY6YJGSG8lm1Xuk3QIE8
+	 jwrcsmPjtEE9QD5hE3bNL3Ol+tJm9HLfh0DU00FI=
+Date: Wed, 10 Sep 2025 14:38:45 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Jonathan Corbet <corbet@lwn.net>, Matthew Wilcox <willy@infradead.org>,
+ Guo Ren <guoren@kernel.org>, Thomas Bogendoerfer
+ <tsbogend@alpha.franken.de>, Heiko Carstens <hca@linux.ibm.com>, Vasily
+ Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle
+ <svens@linux.ibm.com>, "David S . Miller" <davem@davemloft.net>, Andreas
+ Larsson <andreas@gaisler.com>, Arnd Bergmann <arnd@arndb.de>, Greg
+ Kroah-Hartman <gregkh@linuxfoundation.org>, Dan Williams
+ <dan.j.williams@intel.com>, Vishal Verma <vishal.l.verma@intel.com>, Dave
+ Jiang <dave.jiang@intel.com>, Nicolas Pitre <nico@fluxnic.net>, Muchun Song
+ <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, David
+ Hildenbrand <david@redhat.com>, Konstantin Komarov
+ <almaz.alexandrovich@paragon-software.com>, Baoquan He <bhe@redhat.com>,
+ Vivek Goyal <vgoyal@redhat.com>, Dave Young <dyoung@redhat.com>, Tony Luck
+ <tony.luck@intel.com>, Reinette Chatre <reinette.chatre@intel.com>, Dave
+ Martin <Dave.Martin@arm.com>, James Morse <james.morse@arm.com>, Alexander
+ Viro <viro@zeniv.linux.org.uk>, Christian Brauner <brauner@kernel.org>, Jan
+ Kara <jack@suse.cz>, "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+ Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>, Suren
+ Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>, Hugh
+ Dickins <hughd@google.com>, Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Uladzislau Rezki <urezki@gmail.com>, Dmitry Vyukov <dvyukov@google.com>,
+ Andrey Konovalov <andreyknvl@gmail.com>, Jann Horn <jannh@google.com>,
+ Pedro Falcato <pfalcato@suse.de>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-csky@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+ nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org, linux-mm@kvack.org,
+ ntfs3@lists.linux.dev, kexec@lists.infradead.org,
+ kasan-dev@googlegroups.com, Jason Gunthorpe <jgg@nvidia.com>
+Subject: Re: [PATCH v2 00/16] expand mmap_prepare functionality, port more
+ users
+Message-Id: <20250910143845.7ecfed713e436ed532c93491@linux-foundation.org>
+In-Reply-To: <cover.1757534913.git.lorenzo.stoakes@oracle.com>
+References: <cover.1757534913.git.lorenzo.stoakes@oracle.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250910-gpio-mmio-gpio-conv-part4-v2-0-f3d1a4c57124@linaro.org>
-In-Reply-To: <20250910-gpio-mmio-gpio-conv-part4-v2-0-f3d1a4c57124@linaro.org>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Wed, 10 Sep 2025 23:32:26 +0200
-X-Gm-Features: Ac12FXzHQO4QoWSTSppUbrZutew2n-HjqWu5POboMsRGiUcu6mJnWXdH0E38Eq0
-Message-ID: <CACRpkdb=J+hiC5cu+g0Z-gqzpG8PgX01CXc4P98FfSSAf7PZEA@mail.gmail.com>
-Subject: Re: [PATCH v2 00/15] gpio: replace legacy bgpio_init() with its
- modernized alternative - part 4
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Keguang Zhang <keguang.zhang@gmail.com>, Alban Bedel <albeu@free.fr>, 
-	Doug Berger <opendmb@gmail.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Samuel Holland <samuel.holland@sifive.com>, 
-	Yixun Lan <dlan@gentoo.org>, Andy Shevchenko <andy@kernel.org>, linux-gpio@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Wed, Sep 10, 2025 at 9:12=E2=80=AFAM Bartosz Golaszewski <brgl@bgdev.pl>=
- wrote:
+On Wed, 10 Sep 2025 21:21:55 +0100 Lorenzo Stoakes <lorenzo.stoakes@oracle.com> wrote:
 
-> Here's the final part of the generic GPIO chip conversions. Once all the
-> existing users are switched to the new API, the final patch in the
-> series removes bgpio_init(), moves the gpio-mmio fields out of struct
-> gpio_chip and into struct gpio_generic_chip and adjusts gpio-mmio.c to
-> the new situation.
->
-> Down the line we could probably improve gpio-mmio.c by using lock guards
-> and replacing the - now obsolete - "bgpio" prefix with "gpio_generic" or
-> something similar but this series is already big as is so I'm leaving
-> that for the future.
->
-> Tested in qemu on vexpress-a9.
->
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> Since commit c84bf6dd2b83 ("mm: introduce new .mmap_prepare() file
+> callback"), The f_op->mmap hook has been deprecated in favour of
+> f_op->mmap_prepare.
+> 
+> This was introduced in order to make it possible for us to eventually
+> eliminate the f_op->mmap hook which is highly problematic as it allows
+> drivers and filesystems raw access to a VMA which is not yet correctly
+> initialised.
+> 
+> This hook also introduced complexity for the memory mapping operation, as
+> we must correctly unwind what we do should an error arises.
+> 
+> Overall this interface being so open has caused significant problems for
+> us, including security issues, it is important for us to simply eliminate
+> this as a source of problems.
+> 
+> Therefore this series continues what was established by extending the
+> functionality further to permit more drivers and filesystems to use
+> mmap_prepare.
 
-The patch set is a beauty, hands down.
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
-
-I especially like where you caught local spinlocks being
-(ab)used instead of the generic irqchip ones.
-
-I don't know about merging patch 15/15 into just the GPIO
-tree, that can make things fail in other subsystems depending
-on merge order into Torvalds tree or linux-next if your tree is
-merged first.
-
-I would merge the first 14 and keep the last for the later part
-of the merge window when all other trees with conversions
-are merged.
-
-(You probably already thought of this.)
-
-Yours,
-Linus Walleij
+Cool, I'll add this to mm-new but I'll suppress the usual emails.
 
