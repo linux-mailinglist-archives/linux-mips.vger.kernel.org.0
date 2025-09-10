@@ -1,129 +1,115 @@
-Return-Path: <linux-mips+bounces-11172-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11173-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48ECEB50A0F
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Sep 2025 03:06:12 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 22FFBB50A6E
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Sep 2025 03:46:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 04B6C5E5050
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Sep 2025 01:06:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D1A6D170761
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Sep 2025 01:46:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E24B1E1C3F;
-	Wed, 10 Sep 2025 01:06:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B213B221F06;
+	Wed, 10 Sep 2025 01:46:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="krjcZ1dS"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="f0FcUSZZ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 378911DF99C;
-	Wed, 10 Sep 2025 01:06:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AFD014658D;
+	Wed, 10 Sep 2025 01:46:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757466367; cv=none; b=WvESHgrkaMaLju5lYKwSBH8aBt8fxk/Txf5F39EXtGYpbL9wQ0rDbIfQyo/ye3NSgBXOXGyWOSwZXGTTGR+YligyHzV+IT9irB5e78bp4FFIXdya7dXepdl5fNLrqkzHROO0LK4EIocvgEOy68tnBiIFbzsTogsuYFptWzlB0SA=
+	t=1757468801; cv=none; b=oknEi1CPL2VCOciZKPPAxQ/5nRgFt6T6Zmaszci6UsRkKQx0NYGJ0aqNCh62lqlT84kQG1lWXW6osadwDoNxsAtfNDXPRMrDwAqFPzbXO+IcC52iDrJKB1OzIo4SZj5/sA5x7GkdFE5crx0Ykhued1m45HmdDlUsars3nwu2ums=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757466367; c=relaxed/simple;
-	bh=i4RESWh/U9IijTR7kjtC1xewNFoRiMOQyOIAkv3bc6A=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=Kk/p94ebhCmPD8co9iTHM3IWby/LT2d2O1+quS+ja0cfmefjnMQ1F+Vvp5DenMUSkKA6ocUzh5GYKmZlR5WkjMMFlbpGQ1xAd2tel89+2vd/hpNeEUr2XQRKLx0t/9wwLZ0moW+N/5KgM0rWTGEkyEw6K3QJPkAG0u/NxayMM6s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=krjcZ1dS; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-b043a33b060so980852866b.1;
-        Tue, 09 Sep 2025 18:06:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757466364; x=1758071164; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PDZwAXLouP084B9hVHdN4iMIIVS5iU06EyLqPH/Ivgo=;
-        b=krjcZ1dSfjyeNDfkrnxiu+6b/2czHU6xiYRaOqq4hHefEk+xXAQ1GFfvIhPXAW5zzP
-         RzoxHCoiZ51Bj4wV7h8CEN15LjKQyU0RPOI8x/tH5llqQnswZET7kAhkpecLpv85dxok
-         KY6QwZkj04+9wuwh+LWym72m+/w+2JxyVS2vY6rrhHNoh1VmBwgM3hxPHHxfdvoxrDHe
-         IUZeU72WZqsasU/OBj87/yNxaWrmHWNwlIlMhaW/2gzkMI5ccP0J6aALUshTDvX37m9X
-         ETfxBUm2AouV3CShY4I2lRdj/4ousXMBXoXOQWqHgeFbfh5Rz/Qw7gLGmpedT5tqNKN2
-         Cz+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757466364; x=1758071164;
-        h=content-transfer-encoding:in-reply-to:from:content-language:subject
-         :references:cc:to:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PDZwAXLouP084B9hVHdN4iMIIVS5iU06EyLqPH/Ivgo=;
-        b=i9sBayB7sI/4Lb4nTE5To+bQTUkdslNmge+3fnkEr5fEzhrU/4ysYvMVOmwbz+eI7X
-         87PvaZHmUZyWBumxv9PmxyUa9mp5PM1Bj38QugSnMUFPGZJPOQ8mkHjSEF0RkdoZWTJZ
-         sPFNYe/paJnqH1GEkhaVbrK9S+qrn3qaIkT7HmW+8fDI9rvCZ1hVZsZt5vbIqHncP0yM
-         3gl6bcIMMXNamFYeBqjgScatxV+TAdVVxUXyGOn1wuDqrmawdrZhjZfqwrwGHE3gcT9i
-         ZNJZgqr33UfFDeDu+3GGeJYS/3aeQhEglql6zeR1QHAiSTx6xKTu58pGxtnCvWCEwYzE
-         ZzEw==
-X-Forwarded-Encrypted: i=1; AJvYcCWjKkMpK/YYCJoqcGbmOdv7pZcSTGFwK/sAmxwciXK0dBbLst5r9B14ueqoLXf4cRtn9COu2u92s/o5TAc=@vger.kernel.org, AJvYcCWtx19me9IOb6Nb85UAuPwqx4Vbzz6snCLM5GRwQxRjwH72+vLYUoW27mrKAbPT81wgAPSv+dmnJu7y4A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9Yrj/i4Jx7XsxdixXmhVsLFHrgOuqD39uxKp+4uhFNJoB7Sp9
-	myVRToGXwDKgdN3sI2vJfBi3d/5RJK3kkYewKacFnt2KN/akUO9vQYyD
-X-Gm-Gg: ASbGncuiBDvf49NyZs1Z1evykmNRRIgYGkGal8L94LP2roLNlk7V40G+WOV8NL2JrhN
-	HaiIjb8NG70n2a9artKfXdPc+vGAXdRPl9IhObjjdDO18F8uKDrjHYlK9dUUijQsr+L5xOco2KS
-	xT/OjRMvC415H8e1FZnEk4hIMZFQjMK6O9uSZ9P37FcXqrNZC7283QSp/6P5H5cRGlAz33N+O8M
-	UfGVbUDVe6rREQ0ZAMTi9YlVQ+PzdI5/C3Esn2YNTUm7P1EwYCim0/BRysHC+aMuKEbMR0uZ4R6
-	0DJjH8+16Nl4SlYINkinMeuKONPxq1TqX0PkwPnZ0tkzYKNPdSeU1s0obiDdMui+xBxBuWHjuHz
-	HXzaTFl6jgtowB/pd6aRXiFw+ji8sdey9h/ECQESAzonG61ddCDHtb6Eln+YgBJUfjnQ5fPt6
-X-Google-Smtp-Source: AGHT+IFjBmxeo0iihWNvQGW9XaPHPBKL/NIGGGOL86gq7iDWLkzDSZTSGw6FlnjUE/qdjGTpbeIhew==
-X-Received: by 2002:a17:907:72c9:b0:b04:4ba7:4e0d with SMTP id a640c23a62f3a-b04b148a54emr1331824166b.26.1757466364453;
-        Tue, 09 Sep 2025 18:06:04 -0700 (PDT)
-Received: from [192.168.0.51] (217-62-96-139.cable.dynamic.v4.ziggo.nl. [217.62.96.139])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b07830464f9sm78316966b.9.2025.09.09.18.06.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 09 Sep 2025 18:06:03 -0700 (PDT)
-Message-ID: <bf46e8f6-221a-40c7-9da5-8003397ff113@gmail.com>
-Date: Wed, 10 Sep 2025 03:06:01 +0200
+	s=arc-20240116; t=1757468801; c=relaxed/simple;
+	bh=N6r+NwraDR9bO2wqlxtmcB56JXP9+yvGR4trx8ttnmo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PANA5qeFWfJdG0egHQcLtYMgiy1tXyPvI8igso1HQyQaaX+kh34sat2CxfP//oVSa8nuWOM5LA5bxe4W4TkQppM/lRbrYhSf6kSM8SZobKTC4aDHCjwC3G9g5Uu3bMxrqAQF+EzGFqn5HAo6ufROoZKot8bgnSf5uIEGUf1GTuY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=f0FcUSZZ; arc=none smtp.client-ip=90.155.50.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+	Content-Transfer-Encoding:Content-ID:Content-Description;
+	bh=iVZDanYB1GEfuIgx7b8oUnFAcvHUmEEb2jsYYOOe4vA=; b=f0FcUSZZjVJBUU1eRiHtLrYC8B
+	fX8ygyKP47lN6S0QCXn5v2gT9H3CAbs8IRUKYD4o4ahPPQW9SC1LbIjyzIFy5IpYnJc/Zi35KMKl6
+	GdUlF1LCy0kzBtNQT9ZzXDOjZmQlcu+Xai7VaAjWD7/8ywjnmbm5Ol0aHh6nNDZ+nK+u02Mi2LTbP
+	KkIhdzSbwdYhFuN6+BCgg6md5Cbqr9Wtb/OQnYkHd+LUsIIIrFqJgd3p4eVkD/vtGMjJRJWTj736c
+	yd2K/AZ2RcClBL8DLGKuOfEPa42TkTPx7o/71xbtDzWPW6D8jMVCQK4Hk2xdsrLnqU6R/xPghQ5S7
+	5PHe08Rw==;
+Received: from willy by casper.infradead.org with local (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1uw9uo-00000000UeR-417j;
+	Wed, 10 Sep 2025 01:46:31 +0000
+Date: Wed, 10 Sep 2025 02:46:30 +0100
+From: Matthew Wilcox <willy@infradead.org>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: ksummit@lists.linux.dev, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+	linux-mips@vger.kernel.org, linux-mm@kvack.org, imx@lists.linux.dev,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Richard Weinberger <richard@nod.at>,
+	Lucas Stach <l.stach@pengutronix.de>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Geert Uytterhoeven <geert+renesas@glider.be>,
+	Ankur Arora <ankur.a.arora@oracle.com>,
+	David Hildenbrand <david@redhat.com>,
+	Mike Rapoport <rppt@kernel.org>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Ira Weiny <ira.weiny@intel.com>, Nishanth Menon <nm@ti.com>,
+	Heiko =?iso-8859-1?Q?St=FCbner?= <heiko@sntech.de>,
+	Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+	"Chester A. Unal" <chester.a.unal@arinc9.com>,
+	Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+	Andreas Larsson <andreas@gaisler.com>
+Subject: Re: [TECH TOPIC] Reaching consensus on CONFIG_HIGHMEM phaseout
+Message-ID: <aMDYdp3H-yOHU1Pm@casper.infradead.org>
+References: <4ff89b72-03ff-4447-9d21-dd6a5fe1550f@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: torvalds@linux-foundation.org
-Cc: Liam.Howlett@oracle.com, akpm@linux-foundation.org,
- alexander.sverdlin@gmail.com, andreas@gaisler.com, ankur.a.arora@oracle.com,
- arnd@arndb.de, chester.a.unal@arinc9.com, christophe.leroy@csgroup.eu,
- david@redhat.com, geert+renesas@glider.be, heiko@sntech.de, hpa@zytor.com,
- imx@lists.linux.dev, ira.weiny@intel.com, ksummit@lists.linux.dev,
- l.stach@pengutronix.de, linus.walleij@linaro.org,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-mm@kvack.org,
- linuxppc-dev@lists.ozlabs.org, lorenzo.stoakes@oracle.com, nm@ti.com,
- richard@nod.at, rppt@kernel.org, sergio.paracuellos@gmail.com,
- surenb@google.com, vbabka@suse.cz, willy@infradead.org
-References: <CAHk-=wg0bp-_kqmfaDYQLRJO30LYxEsMu3EKi65sKoi83EUZ3Q@mail.gmail.com>
-Subject: Re: [TECH TOPIC] Reaching consensus on CONFIG_HIGHMEM phaseout
-Content-Language: en-US
-From: =?UTF-8?Q?Ren=C3=A9_Herman?= <rene.herman@gmail.com>
-In-Reply-To: <CAHk-=wg0bp-_kqmfaDYQLRJO30LYxEsMu3EKi65sKoi83EUZ3Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <4ff89b72-03ff-4447-9d21-dd6a5fe1550f@app.fastmail.com>
 
-> Well, while on x86 1GB systems did use highmem, they'd typically not 
-> use very much of it.
-> 
-> IOW, they'd have about 900MB as lowmem (ok, I think it was 896MB to
-> be exact), with something like 120MB highmem.
-> 
-> So they'd either lose a bit of memory, or they'd use the 2G:2G
-> split.
-Right, 1G-128M of VMALLOC_RESERVE, but they didn't generally use 2G/2G 
-but ever since it was introduced late in the 32-bit era VMSPLIT_3G_OPT, 
-i.e., PAGE_OFFSET = 0xb0000000, i.e., 3G-256M/1G+256M.
+On Tue, Sep 09, 2025 at 11:23:37PM +0200, Arnd Bergmann wrote:
+> While removing a feature that is actively used is clearly a regression
+> and not normally done, I expect removing highmem is going to happen
+> at some point anyway when there are few enough users, but the question
+> is when that time will be.
 
-Although at the time the patches died an unceremonious death, 4G/4G 
-patches for x86 were also around; I used to be a (conceptual) fan of 
-them: it takes quite a number of TLB-flushes to suck more than highmem.
+I don't mind that the feature remains ... unless it causes us trouble.
+Which it currently does.  Perhaps we could start by removing HIGHPTE?
+There was a certain amount of complexity introduced into the page fault
+path when support for that was introduced.  x86 removed support for it,
+so it's just ARM left before we can remove the complexity again.
 
-Not one hint of clue if spectre/meltdown is applicable to these systems 
-and if so, if they in fact do or should already be suffering through 
-those same flushes anyway but maybe it'd be an option to dig those 
-patches out of some archive somewhere.
+Most of the other pain points are around storing metadata (directories,
+superblocks, etc) in page cache highmem.  I think we can get rid of that
+now too.
 
-I promise I'll test them on an AMD Duron with 768MB RAM :)
+I don't see any particular need to gt rid of file data stored in highmem,
+nor anonymous memory stored in highmem.  And if we're only talking
+about hundreds of megabytes of memory, I think anon+ file pagecache is
+probably most of the memory in the system already unless you have some
+very weird workloads.
 
-Rene.
+Where we may want to be a bit careful is some people have Plans to
+reuse the kmap infrastructure to support things like unmapping the
+pagecacheto protect against spectre-eqsue attacks.  I know Intel was
+working on this when 3dxp was going to be a Thing, but it's recently
+been brought back:
+
+https://lore.kernel.org/linux-mm/20250812173109.295750-1-jackmanb@google.com/
+
 
