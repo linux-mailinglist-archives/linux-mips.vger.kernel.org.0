@@ -1,263 +1,151 @@
-Return-Path: <linux-mips+bounces-11242-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11243-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55F11B52BF3
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 10:38:52 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 502D4B52C01
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 10:42:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 02F273B65FD
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 08:38:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4D1A617DF38
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 08:42:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 281F42580E4;
-	Thu, 11 Sep 2025 08:38:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E7F02E543E;
+	Thu, 11 Sep 2025 08:42:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="xB4gv7V3";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="PrOFG9bh";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="xB4gv7V3";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="PrOFG9bh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BG2qJ6Qj"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F15D02E5405
-	for <linux-mips@vger.kernel.org>; Thu, 11 Sep 2025 08:38:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2808E2206A7;
+	Thu, 11 Sep 2025 08:42:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757579927; cv=none; b=HLUEGbk0YoUfYpKPiyMevm/zcYWROpajfTUllmlW9g5+L6iKYDTzSsdV+7Rzr5biJfqY+r0OJSjdn6hLvdKJ1hDvJiE6THjH9GHGtR1XVu+GOZr+CzquHAtfplPZEfMPSPrI6ziIehL4y/ai9M+m26Z6BIoMiNS1FNBSRY+zCpE=
+	t=1757580134; cv=none; b=dSXmUyceUoXrdLMlVFYbHtqlyWZuBa/2meS824DMlcWgTQ53iyG3sRdUtBpvriFGPFIuKlpoRs9H3BSgLpVqz/OrmkI4Pe4n9NHLluHqHxpUh3sPC0ZFlC8WLnwDYF+g/45SD8njSMEd+q16Qt/KBK23C8814affFAcaEHExc2A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757579927; c=relaxed/simple;
-	bh=atT5lX6jOkLcVnWSxAH3q2pNOse2zMGHzP1HFQw/Be8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KcTIcJlU2YxkJpLxE/rIYwDlGVwl5lLi5DOkzpz41OWtNZWK0j4IkJfXWfCqMnrpTMF9EyD1oi8ulni/pvfdFkXLwAuz5U0Xl67nD1NXDlftJB14fg5m1lRHwQCy17BynMZVN+UcCI2ZLUMYAU2d8yGYMo04opZCMjGg8vqAg6g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=xB4gv7V3; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=PrOFG9bh; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=xB4gv7V3; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=PrOFG9bh; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id 9D40D6860D;
-	Thu, 11 Sep 2025 08:38:42 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1757579922; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=C9OZHv6l97MqIsXfPxgJwmp3fJXxpsxaT+6E3H63F4A=;
-	b=xB4gv7V39AjvzZqhbFvpMeDM5nwbiNwlcCmMOJwTz+PdsznaXJuTdLn3SoDQMoeUWdkeii
-	1r2pEaTWog+deAhwvgwTELQPnF8oZ0yYguW4upel7rfdVE+3wrH3qFra+HpwdHuYteaBSS
-	arDvuQko9RTMU9ux7Cb1QQtSWsvsur4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1757579922;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=C9OZHv6l97MqIsXfPxgJwmp3fJXxpsxaT+6E3H63F4A=;
-	b=PrOFG9bhllLqFULElo/ImR0TtrXr4AVrHSKP1NkH/s/biYgBBErxRpzuzCM3a8Sfmolf0X
-	olWF0zUGczMgn/Ag==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=xB4gv7V3;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=PrOFG9bh
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1757579922; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=C9OZHv6l97MqIsXfPxgJwmp3fJXxpsxaT+6E3H63F4A=;
-	b=xB4gv7V39AjvzZqhbFvpMeDM5nwbiNwlcCmMOJwTz+PdsznaXJuTdLn3SoDQMoeUWdkeii
-	1r2pEaTWog+deAhwvgwTELQPnF8oZ0yYguW4upel7rfdVE+3wrH3qFra+HpwdHuYteaBSS
-	arDvuQko9RTMU9ux7Cb1QQtSWsvsur4=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1757579922;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=C9OZHv6l97MqIsXfPxgJwmp3fJXxpsxaT+6E3H63F4A=;
-	b=PrOFG9bhllLqFULElo/ImR0TtrXr4AVrHSKP1NkH/s/biYgBBErxRpzuzCM3a8Sfmolf0X
-	olWF0zUGczMgn/Ag==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 92E4713974;
-	Thu, 11 Sep 2025 08:38:42 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id kfnXI5KKwmiBcwAAD6G6ig
-	(envelope-from <jack@suse.cz>); Thu, 11 Sep 2025 08:38:42 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 4D7CAA0A2D; Thu, 11 Sep 2025 10:38:42 +0200 (CEST)
-Date: Thu, 11 Sep 2025 10:38:42 +0200
-From: Jan Kara <jack@suse.cz>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Matthew Wilcox <willy@infradead.org>, 
-	Guo Ren <guoren@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, "David S . Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dan Williams <dan.j.williams@intel.com>, 
-	Vishal Verma <vishal.l.verma@intel.com>, Dave Jiang <dave.jiang@intel.com>, 
-	Nicolas Pitre <nico@fluxnic.net>, Muchun Song <muchun.song@linux.dev>, 
-	Oscar Salvador <osalvador@suse.de>, David Hildenbrand <david@redhat.com>, 
-	Konstantin Komarov <almaz.alexandrovich@paragon-software.com>, Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>, 
-	Dave Young <dyoung@redhat.com>, Tony Luck <tony.luck@intel.com>, 
-	Reinette Chatre <reinette.chatre@intel.com>, Dave Martin <Dave.Martin@arm.com>, 
-	James Morse <james.morse@arm.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Hugh Dickins <hughd@google.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Uladzislau Rezki <urezki@gmail.com>, 
-	Dmitry Vyukov <dvyukov@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
-	Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-csky@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, 
-	nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org, linux-mm@kvack.org, 
-	ntfs3@lists.linux.dev, kexec@lists.infradead.org, kasan-dev@googlegroups.com, 
-	Jason Gunthorpe <jgg@nvidia.com>
-Subject: Re: [PATCH v2 04/16] relay: update relay to use mmap_prepare
-Message-ID: <q5kr5klayp7wcdv5535etvhfcmsftf2h5pi2nhxjpxsyu4h6qt@e6fidg7kolk2>
-References: <cover.1757534913.git.lorenzo.stoakes@oracle.com>
- <3e34bb15a386d64e308c897ea1125e5e24fc6fa4.1757534913.git.lorenzo.stoakes@oracle.com>
+	s=arc-20240116; t=1757580134; c=relaxed/simple;
+	bh=Tb4mY4mFW4j6C2X7p0oCDZvBDicQe45QQXnOwRSNQ+w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=deDaLQ7D/LkrR9TpB3rjiBVEc7R4ZyURLjjl/wM3J6m9nWfcgH6tM+4MwSHzFk/ArFJwxBnAELEyf9L175Ai0O7WeKEyrSkbt2jp+Lb5oQhd63TAn8KU8vuc0z5qObb0Qv3065ZGKLG52QiNH58wFsPeFDwq4fxGadZXZMHCGME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BG2qJ6Qj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B1FACC4AF09;
+	Thu, 11 Sep 2025 08:42:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1757580133;
+	bh=Tb4mY4mFW4j6C2X7p0oCDZvBDicQe45QQXnOwRSNQ+w=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=BG2qJ6Qj3Zgd++kVqEIb9CEfgHmTEriGlx0wYjQMHmcDoD6Qtgg6ut9K+LQJY55PF
+	 qenM8/pC8YXiU0dg8P3PBKZO5rIvQpFYTJQL1bBFWQVjTqGHuav6Aj7DOVqwoO+j4J
+	 5uGvKWD8iVFfVKPuvN8P4k4gCW9vcIsTB0rh6I14wvfmUtValRWnCa12MfdqSOzVmT
+	 JGp0zoSzN5YqKDQ2tPgY00HkB82u1niAX5YaCuJCDlycd9roJP3EIzI6AWSdtUbmox
+	 ljZFCqKYhlj+RaYjg7I7VARqMttJNPNzUPD1u9dxERTsdY0DFRXl19/CCNyeg9t4Xi
+	 cjnJ9RuyPwfpw==
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-afcb7ae6ed0so63647366b.3;
+        Thu, 11 Sep 2025 01:42:13 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUS12fO5x0pkTjQwi6VNK4Ft9+3pOTKmVq5sBRYp2ET0iQzixQ8lFeZRR2llPVXdAAb8hfl7tVYsVHa1Q==@vger.kernel.org, AJvYcCVfwlo4NAZmGBuuvRhLcznx6s3F/FLqWWqvXRNo5RE8POBuS880x7NcDQz4XUBKe7b2XL7ubY0jibWDplk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywvt2wpS8ciMquhFsqKEVxd93yA5P1a2SJcGVLc4T14JZNe18ET
+	iNpKfjekR5OnL1Mgk6vBApfPedT8hIBtac+SlFbVnBEA9xcpkXKwbpdW3akyjBjijM+O7Jz6xes
+	ePUuBh79Qbf8GyBZybDmFZxXrrZ2tS20=
+X-Google-Smtp-Source: AGHT+IGCNRWZexHleebCSpfx1aSECkro4rJmPTtqtIk5TyiQEHbOwU5Kk+Tgn7aWOoS0ew5Z1CnEGtBPHPMKfsUUoFE=
+X-Received: by 2002:a17:907:1ca2:b0:aff:fe6:78f0 with SMTP id
+ a640c23a62f3a-b04b16c47f5mr1929541466b.54.1757580132302; Thu, 11 Sep 2025
+ 01:42:12 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3e34bb15a386d64e308c897ea1125e5e24fc6fa4.1757534913.git.lorenzo.stoakes@oracle.com>
-X-Spamd-Result: default: False [-2.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	MIME_TRACE(0.00)[0:+];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns,oracle.com:email];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[linux-foundation.org,lwn.net,infradead.org,kernel.org,alpha.franken.de,linux.ibm.com,davemloft.net,gaisler.com,arndb.de,linuxfoundation.org,intel.com,fluxnic.net,linux.dev,suse.de,redhat.com,paragon-software.com,arm.com,zeniv.linux.org.uk,suse.cz,oracle.com,google.com,suse.com,linux.alibaba.com,gmail.com,vger.kernel.org,lists.linux.dev,kvack.org,lists.infradead.org,googlegroups.com,nvidia.com];
-	TO_DN_SOME(0.00)[];
-	TO_MATCH_ENVRCPT_SOME(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCPT_COUNT_GT_50(0.00)[59];
-	DKIM_TRACE(0.00)[suse.cz:+]
-X-Spam-Flag: NO
-X-Spam-Level: 
-X-Rspamd-Queue-Id: 9D40D6860D
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Score: -2.51
+References: <20250911083546.649949-1-wangming01@loongson.cn>
+In-Reply-To: <20250911083546.649949-1-wangming01@loongson.cn>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Thu, 11 Sep 2025 16:42:01 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4FtYpgrWnvTm0=2_kit5ETxyhJCXFoV=66NKgVbipPrA@mail.gmail.com>
+X-Gm-Features: AS18NWBB5OUFbWKCB0yhIXcdIShPf3lhsEnwkMqfw21SM-WpT2sYaBJihfEkMvE
+Message-ID: <CAAhV-H4FtYpgrWnvTm0=2_kit5ETxyhJCXFoV=66NKgVbipPrA@mail.gmail.com>
+Subject: Re: [PATCH v2] irqchip/loongson-pch-lpc: Use legacy domain for
+ PCH-LPC IRQ controller
+To: Ming Wang <wangming01@loongson.cn>
+Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>, Thomas Gleixner <tglx@linutronix.de>, 
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed 10-09-25 21:21:59, Lorenzo Stoakes wrote:
-> It is relatively trivial to update this code to use the f_op->mmap_prepare
-> hook in favour of the deprecated f_op->mmap hook, so do so.
-> 
-> Reviewed-by: David Hildenbrand <david@redhat.com>
-> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+On Thu, Sep 11, 2025 at 4:35=E2=80=AFPM Ming Wang <wangming01@loongson.cn> =
+wrote:
+>
+> On certain Loongson platforms, drivers attempting to request a legacy
+> ISA IRQ directly via request_irq() (e.g., IRQ 4) may fail. The
+> virtual IRQ descriptor is not fully initialized and lacks a valid irqchip=
+.
+>
+> This issue does not affect ACPI-enumerated devices described in DSDT,
+> as their interrupts are properly mapped via the GSI translation path.
+> This indicates the LPC irqdomain itself is functional but is not correctl=
+y
+> handling direct VIRQ-to-HWIRQ mappings.
+>
+> The root cause is the use of irq_domain_create_linear(). This API sets
+> up a domain for dynamic, on-demand mapping, typically triggered by a GSI
+> request. It does not pre-populate the mappings for the legacy VIRQ range
+> (0-15). Consequently, if no ACPI device claims a specific GSI
+> (e.g., GSI 4), the corresponding VIRQ (e.g., VIRQ 4) is never mapped to
+> the LPC domain. A direct call to request_irq(4, ...) then fails because
+> the kernel cannot resolve this VIRQ to a hardware interrupt managed by
+> the LPC controller.
+>
+> The PCH-LPC interrupt controller is an i8259-compatible legacy device
+> that requires a deterministic, static 1-to-1 mapping for IRQs 0-15 to
+> support legacy drivers.
+>
+> Fix this by replacing irq_domain_create_linear() with
+> irq_domain_create_legacy(). This API is specifically designed for such
+> controllers. It establishes the required static 1-to-1 VIRQ-to-HWIRQ
+> mapping for the entire legacy range (0-15) immediately upon domain
+> creation. This ensures that any VIRQ in this range is always resolvable,
+> making direct calls to request_irq() for legacy IRQs function correctly.
+>
+> Signed-off-by: Ming Wang <wangming01@loongson.cn>
+Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
 
-Looks good. Feel free to add:
-
-Reviewed-by: Jan Kara <jack@suse.cz>
-
-								Honza
-
+>
 > ---
->  kernel/relay.c | 33 +++++++++++++++++----------------
->  1 file changed, 17 insertions(+), 16 deletions(-)
-> 
-> diff --git a/kernel/relay.c b/kernel/relay.c
-> index 8d915fe98198..e36f6b926f7f 100644
-> --- a/kernel/relay.c
-> +++ b/kernel/relay.c
-> @@ -72,17 +72,18 @@ static void relay_free_page_array(struct page **array)
->  }
->  
->  /**
-> - *	relay_mmap_buf: - mmap channel buffer to process address space
-> - *	@buf: relay channel buffer
-> - *	@vma: vm_area_struct describing memory to be mapped
-> + *	relay_mmap_prepare_buf: - mmap channel buffer to process address space
-> + *	@buf: the relay channel buffer
-> + *	@desc: describing what to map
->   *
->   *	Returns 0 if ok, negative on error
->   *
->   *	Caller should already have grabbed mmap_lock.
->   */
-> -static int relay_mmap_buf(struct rchan_buf *buf, struct vm_area_struct *vma)
-> +static int relay_mmap_prepare_buf(struct rchan_buf *buf,
-> +				  struct vm_area_desc *desc)
->  {
-> -	unsigned long length = vma->vm_end - vma->vm_start;
-> +	unsigned long length = vma_desc_size(desc);
->  
->  	if (!buf)
->  		return -EBADF;
-> @@ -90,9 +91,9 @@ static int relay_mmap_buf(struct rchan_buf *buf, struct vm_area_struct *vma)
->  	if (length != (unsigned long)buf->chan->alloc_size)
->  		return -EINVAL;
->  
-> -	vma->vm_ops = &relay_file_mmap_ops;
-> -	vm_flags_set(vma, VM_DONTEXPAND);
-> -	vma->vm_private_data = buf;
-> +	desc->vm_ops = &relay_file_mmap_ops;
-> +	desc->vm_flags |= VM_DONTEXPAND;
-> +	desc->private_data = buf;
->  
->  	return 0;
->  }
-> @@ -749,16 +750,16 @@ static int relay_file_open(struct inode *inode, struct file *filp)
->  }
->  
->  /**
-> - *	relay_file_mmap - mmap file op for relay files
-> - *	@filp: the file
-> - *	@vma: the vma describing what to map
-> + *	relay_file_mmap_prepare - mmap file op for relay files
-> + *	@desc: describing what to map
->   *
-> - *	Calls upon relay_mmap_buf() to map the file into user space.
-> + *	Calls upon relay_mmap_prepare_buf() to map the file into user space.
->   */
-> -static int relay_file_mmap(struct file *filp, struct vm_area_struct *vma)
-> +static int relay_file_mmap_prepare(struct vm_area_desc *desc)
->  {
-> -	struct rchan_buf *buf = filp->private_data;
-> -	return relay_mmap_buf(buf, vma);
-> +	struct rchan_buf *buf = desc->file->private_data;
-> +
-> +	return relay_mmap_prepare_buf(buf, desc);
->  }
->  
->  /**
-> @@ -1006,7 +1007,7 @@ static ssize_t relay_file_read(struct file *filp,
->  const struct file_operations relay_file_operations = {
->  	.open		= relay_file_open,
->  	.poll		= relay_file_poll,
-> -	.mmap		= relay_file_mmap,
-> +	.mmap_prepare	= relay_file_mmap_prepare,
->  	.read		= relay_file_read,
->  	.release	= relay_file_release,
->  };
-> -- 
-> 2.51.0
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> Changes in v2:
+>   - Address review comments from Huacai Chen.
+>   - Fix function call indentation style.
+> ---
+>  drivers/irqchip/irq-loongson-pch-lpc.c | 9 +++++++--
+>  1 file changed, 7 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/irqchip/irq-loongson-pch-lpc.c b/drivers/irqchip/irq=
+-loongson-pch-lpc.c
+> index 2d4c3ec128b8..01fe4325ff84 100644
+> --- a/drivers/irqchip/irq-loongson-pch-lpc.c
+> +++ b/drivers/irqchip/irq-loongson-pch-lpc.c
+> @@ -200,8 +200,13 @@ int __init pch_lpc_acpi_init(struct irq_domain *pare=
+nt,
+>                 goto iounmap_base;
+>         }
+>
+> -       priv->lpc_domain =3D irq_domain_create_linear(irq_handle, LPC_COU=
+NT,
+> -                                       &pch_lpc_domain_ops, priv);
+> +       /*
+> +        * The LPC interrupt controller is a legacy i8259-compatible devi=
+ce,
+> +        * which requires a static 1:1 mapping for IRQs 0-15.
+> +        * Use irq_domain_create_legacy() to establish this static mappin=
+g early.
+> +        */
+> +       priv->lpc_domain =3D irq_domain_create_legacy(irq_handle, LPC_COU=
+NT, 0, 0,
+> +                                                   &pch_lpc_domain_ops, =
+priv);
+>         if (!priv->lpc_domain) {
+>                 pr_err("Failed to create IRQ domain\n");
+>                 goto free_irq_handle;
+> --
+> 2.43.0
+>
 
