@@ -1,134 +1,232 @@
-Return-Path: <linux-mips+bounces-11240-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11241-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF4C8B52BD7
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 10:36:11 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8CC9B52BDF
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 10:37:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D167586780
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 08:36:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BB6951C82D59
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 08:37:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72A912E5B27;
-	Thu, 11 Sep 2025 08:35:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB27B2E54DA;
+	Thu, 11 Sep 2025 08:37:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="gbVdZ5or";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="aLTXTZFS";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="BXH35BNu";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="onTJLSTl"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C4B62E543E;
-	Thu, 11 Sep 2025 08:35:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A97C42E2DDE
+	for <linux-mips@vger.kernel.org>; Thu, 11 Sep 2025 08:37:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757579754; cv=none; b=sD3aeBh3eXlqgeCstET7+yxcGHvhvxtGz7JKjmByVyq2TiLt78UDAkeZw367JFLkpVtriq67/HSExXgW3pdF0oClSJqdXZppkNYQ/LK5slrISloFCzlRlbgJm2nUDzD0WJwb87VKvhW4tmgK2cZtOxVeL7cydwIlrroOrxiGYV0=
+	t=1757579822; cv=none; b=NIm5m9MTXVcDJRYS9G5l2ud4jRUhmhxR9en7s5rWiqAg7bzhDzphI748/gW1k6PAkMMroWX4OKAVA208i2ZMdLEm6B7bg16ZozjIRG414sCUd0w07tN4P59e12YZjLpZHswa1iIeW8URMbYrzmWDE8hDafp6buU33FBoxMQ/crI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757579754; c=relaxed/simple;
-	bh=xWSHXyXJyyWjcQmEr/ZGbsqq3jPbhKnwEl1uVwTZ7j4=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=pviy3vznI7kSJAEikwTd76dmrxpEFhJesg93W24gzBMgiEOrpBcr1GOJ9WXYqsxIj6/zxp1xUpVb525c1Lr2uS6W0dVEBhojexo8qTc42os6li2pQEPn2bWW40K/9QFD3A+sroAasczCmhUQdBd/LyxFcPcNnC4HBHVOb8PgKfc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [111.207.111.194])
-	by gateway (Coremail) with SMTP id _____8CxJ9HkicJofCYJAA--.19324S3;
-	Thu, 11 Sep 2025 16:35:48 +0800 (CST)
-Received: from ubuntu.. (unknown [111.207.111.194])
-	by front1 (Coremail) with SMTP id qMiowJCxH8LjicJoqaWNAA--.3857S2;
-	Thu, 11 Sep 2025 16:35:47 +0800 (CST)
-From: Ming Wang <wangming01@loongson.cn>
-To: Huacai Chen <chenhuacai@kernel.org>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] irqchip/loongson-pch-lpc: Use legacy domain for PCH-LPC IRQ controller
-Date: Thu, 11 Sep 2025 16:35:46 +0800
-Message-ID: <20250911083546.649949-1-wangming01@loongson.cn>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1757579822; c=relaxed/simple;
+	bh=ZX7RRVZevogotEZL80A6v/Ith9MGrv9zZwmRgxBYRGk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UirhJZP1ZnEpZqtLJz8rRieJ2ktl00h+XBvZFZLXN1L2DMMnaeHFRk/FGfc+z2XXiFTqDz3fAcPJFGjbn6fKgqZwp4hkZ8DtLiO5zPpv48GUScx4iEZz3aUTwwaodh86KfalIFSe+1ImVvSty6PlfqBC2kYaS0Y5RzBRsIkCHOQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=gbVdZ5or; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=aLTXTZFS; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=BXH35BNu; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=onTJLSTl; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id EC21968608;
+	Thu, 11 Sep 2025 08:36:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1757579819; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MVKatHAMv6K0HJB+fE+uvvzEY9BdzRg6mGSrDhfixOc=;
+	b=gbVdZ5ordIwsjok0HGyMjLJHMSMCvd7phfCfms+ZTddXEbopzWQoU9SS+FPbGVcufPMb2x
+	JMqA30UnF9uP4ZX8DjZuMTMu0J3iWh4dqAOgxyk/H1JXK2INNCBYcRL6RtLmBo7y9ghHvL
+	it6KQ2/afG8hGOw9P2K0/2NZIIl4e58=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1757579819;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MVKatHAMv6K0HJB+fE+uvvzEY9BdzRg6mGSrDhfixOc=;
+	b=aLTXTZFSgnI5/Cod9GP6PRHmztHtOqVdF3UN4+Ox//+uZ9pn/LzTYv8Pv/vn52ReXpGA7L
+	LygYn7X671fZo2Cg==
+Authentication-Results: smtp-out2.suse.de;
+	none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1757579818; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MVKatHAMv6K0HJB+fE+uvvzEY9BdzRg6mGSrDhfixOc=;
+	b=BXH35BNu64iIGCB3YP2jGeLYcKsUThmhJ6XH1FZZJOeTGgj8j+AKxuheSOZ825qLuYyoJA
+	Fnp0TF+S3NW+tY9TPbQQJsr0ly3mI21S04Ty4JaNJv85r6FBeE9/XfvhuQjAIdfE3zrgCt
+	iZWZFl6rA6UgTWCABj5n/rG4pREhBLE=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1757579818;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=MVKatHAMv6K0HJB+fE+uvvzEY9BdzRg6mGSrDhfixOc=;
+	b=onTJLSTlgfa3oXRqtjZDgBU2LdJbfKNHu4jUM0BmAA78X6XyIiUUKvU898EivdFRT7NBq1
+	eEDGqyXMCeegHVCg==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id E01B213974;
+	Thu, 11 Sep 2025 08:36:58 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id sqPSNSqKwmjPcgAAD6G6ig
+	(envelope-from <jack@suse.cz>); Thu, 11 Sep 2025 08:36:58 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id 8E4F6A0A2D; Thu, 11 Sep 2025 10:36:58 +0200 (CEST)
+Date: Thu, 11 Sep 2025 10:36:58 +0200
+From: Jan Kara <jack@suse.cz>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Matthew Wilcox <willy@infradead.org>, 
+	Guo Ren <guoren@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, "David S . Miller" <davem@davemloft.net>, 
+	Andreas Larsson <andreas@gaisler.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dan Williams <dan.j.williams@intel.com>, 
+	Vishal Verma <vishal.l.verma@intel.com>, Dave Jiang <dave.jiang@intel.com>, 
+	Nicolas Pitre <nico@fluxnic.net>, Muchun Song <muchun.song@linux.dev>, 
+	Oscar Salvador <osalvador@suse.de>, David Hildenbrand <david@redhat.com>, 
+	Konstantin Komarov <almaz.alexandrovich@paragon-software.com>, Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>, 
+	Dave Young <dyoung@redhat.com>, Tony Luck <tony.luck@intel.com>, 
+	Reinette Chatre <reinette.chatre@intel.com>, Dave Martin <Dave.Martin@arm.com>, 
+	James Morse <james.morse@arm.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, Hugh Dickins <hughd@google.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Uladzislau Rezki <urezki@gmail.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
+	Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-csky@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, 
+	nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org, linux-mm@kvack.org, 
+	ntfs3@lists.linux.dev, kexec@lists.infradead.org, kasan-dev@googlegroups.com, 
+	Jason Gunthorpe <jgg@nvidia.com>
+Subject: Re: [PATCH v2 03/16] mm: add vma_desc_size(), vma_desc_pages()
+ helpers
+Message-ID: <afrz7upbj463hmejktsw2dxvvty7a7jtsibyn4fdlwwyrzogrh@c3svlrvl4job>
+References: <cover.1757534913.git.lorenzo.stoakes@oracle.com>
+ <5ac75e5ac627c06e62401dfda8c908eadac8dfec.1757534913.git.lorenzo.stoakes@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJCxH8LjicJoqaWNAA--.3857S2
-X-CM-SenderInfo: 5zdqwzxlqjiio6or00hjvr0hdfq/1tbiAgECEmjCZIwDbwAAs9
-X-Coremail-Antispam: 1Uk129KBj93XoWxZw1kCr1DArWUAr1kur1rAFc_yoW5Xw4rpF
-	45Gas2vrWrJF4UAFZ8Cw10vryfAa4kJ3y7tanYkwnxArn8A34v9F1YkFyvvr18AF98Xa15
-	Zr4qqay8uFn09FXCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUv0b4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2
-	xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
-	Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvY0x
-	0EwIxGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E
-	14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIx
-	kGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAF
-	wI0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r
-	4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8ctx3UU
-	UUU==
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5ac75e5ac627c06e62401dfda8c908eadac8dfec.1757534913.git.lorenzo.stoakes@oracle.com>
+X-Spamd-Result: default: False [-2.30 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MISSING_XM_UA(0.00)[];
+	ARC_NA(0.00)[];
+	FREEMAIL_CC(0.00)[linux-foundation.org,lwn.net,infradead.org,kernel.org,alpha.franken.de,linux.ibm.com,davemloft.net,gaisler.com,arndb.de,linuxfoundation.org,intel.com,fluxnic.net,linux.dev,suse.de,redhat.com,paragon-software.com,arm.com,zeniv.linux.org.uk,suse.cz,oracle.com,google.com,suse.com,linux.alibaba.com,gmail.com,vger.kernel.org,lists.linux.dev,kvack.org,lists.infradead.org,googlegroups.com,nvidia.com];
+	RCVD_COUNT_THREE(0.00)[3];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	TO_MATCH_ENVRCPT_SOME(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[59];
+	RCVD_TLS_LAST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email]
+X-Spam-Flag: NO
+X-Spam-Level: 
+X-Spam-Score: -2.30
 
-On certain Loongson platforms, drivers attempting to request a legacy
-ISA IRQ directly via request_irq() (e.g., IRQ 4) may fail. The
-virtual IRQ descriptor is not fully initialized and lacks a valid irqchip.
+On Wed 10-09-25 21:21:58, Lorenzo Stoakes wrote:
+> It's useful to be able to determine the size of a VMA descriptor range used
+> on f_op->mmap_prepare, expressed both in bytes and pages, so add helpers
+> for both and update code that could make use of it to do so.
+> 
+> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
 
-This issue does not affect ACPI-enumerated devices described in DSDT,
-as their interrupts are properly mapped via the GSI translation path.
-This indicates the LPC irqdomain itself is functional but is not correctly
-handling direct VIRQ-to-HWIRQ mappings.
+Looks good, I presume more users will come later in the series :). Feel
+free to add:
 
-The root cause is the use of irq_domain_create_linear(). This API sets
-up a domain for dynamic, on-demand mapping, typically triggered by a GSI
-request. It does not pre-populate the mappings for the legacy VIRQ range
-(0-15). Consequently, if no ACPI device claims a specific GSI
-(e.g., GSI 4), the corresponding VIRQ (e.g., VIRQ 4) is never mapped to
-the LPC domain. A direct call to request_irq(4, ...) then fails because
-the kernel cannot resolve this VIRQ to a hardware interrupt managed by
-the LPC controller.
+Reviewed-by: Jan Kara <jack@suse.cz>
 
-The PCH-LPC interrupt controller is an i8259-compatible legacy device
-that requires a deterministic, static 1-to-1 mapping for IRQs 0-15 to
-support legacy drivers.
+								Honza
 
-Fix this by replacing irq_domain_create_linear() with
-irq_domain_create_legacy(). This API is specifically designed for such
-controllers. It establishes the required static 1-to-1 VIRQ-to-HWIRQ
-mapping for the entire legacy range (0-15) immediately upon domain
-creation. This ensures that any VIRQ in this range is always resolvable,
-making direct calls to request_irq() for legacy IRQs function correctly.
-
-Signed-off-by: Ming Wang <wangming01@loongson.cn>
-
----
-Changes in v2:
-  - Address review comments from Huacai Chen.
-  - Fix function call indentation style.
----
- drivers/irqchip/irq-loongson-pch-lpc.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/irqchip/irq-loongson-pch-lpc.c b/drivers/irqchip/irq-loongson-pch-lpc.c
-index 2d4c3ec128b8..01fe4325ff84 100644
---- a/drivers/irqchip/irq-loongson-pch-lpc.c
-+++ b/drivers/irqchip/irq-loongson-pch-lpc.c
-@@ -200,8 +200,13 @@ int __init pch_lpc_acpi_init(struct irq_domain *parent,
- 		goto iounmap_base;
- 	}
- 
--	priv->lpc_domain = irq_domain_create_linear(irq_handle, LPC_COUNT,
--					&pch_lpc_domain_ops, priv);
-+	/*
-+	 * The LPC interrupt controller is a legacy i8259-compatible device,
-+	 * which requires a static 1:1 mapping for IRQs 0-15.
-+	 * Use irq_domain_create_legacy() to establish this static mapping early.
-+	 */
-+	priv->lpc_domain = irq_domain_create_legacy(irq_handle, LPC_COUNT, 0, 0,
-+						    &pch_lpc_domain_ops, priv);
- 	if (!priv->lpc_domain) {
- 		pr_err("Failed to create IRQ domain\n");
- 		goto free_irq_handle;
+> ---
+>  fs/ntfs3/file.c    |  2 +-
+>  include/linux/mm.h | 10 ++++++++++
+>  mm/secretmem.c     |  2 +-
+>  3 files changed, 12 insertions(+), 2 deletions(-)
+> 
+> diff --git a/fs/ntfs3/file.c b/fs/ntfs3/file.c
+> index c1ece707b195..86eb88f62714 100644
+> --- a/fs/ntfs3/file.c
+> +++ b/fs/ntfs3/file.c
+> @@ -304,7 +304,7 @@ static int ntfs_file_mmap_prepare(struct vm_area_desc *desc)
+>  
+>  	if (rw) {
+>  		u64 to = min_t(loff_t, i_size_read(inode),
+> -			       from + desc->end - desc->start);
+> +			       from + vma_desc_size(desc));
+>  
+>  		if (is_sparsed(ni)) {
+>  			/* Allocate clusters for rw map. */
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 892fe5dbf9de..0b97589aec6d 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -3572,6 +3572,16 @@ static inline unsigned long vma_pages(const struct vm_area_struct *vma)
+>  	return (vma->vm_end - vma->vm_start) >> PAGE_SHIFT;
+>  }
+>  
+> +static inline unsigned long vma_desc_size(struct vm_area_desc *desc)
+> +{
+> +	return desc->end - desc->start;
+> +}
+> +
+> +static inline unsigned long vma_desc_pages(struct vm_area_desc *desc)
+> +{
+> +	return vma_desc_size(desc) >> PAGE_SHIFT;
+> +}
+> +
+>  /* Look up the first VMA which exactly match the interval vm_start ... vm_end */
+>  static inline struct vm_area_struct *find_exact_vma(struct mm_struct *mm,
+>  				unsigned long vm_start, unsigned long vm_end)
+> diff --git a/mm/secretmem.c b/mm/secretmem.c
+> index 60137305bc20..62066ddb1e9c 100644
+> --- a/mm/secretmem.c
+> +++ b/mm/secretmem.c
+> @@ -120,7 +120,7 @@ static int secretmem_release(struct inode *inode, struct file *file)
+>  
+>  static int secretmem_mmap_prepare(struct vm_area_desc *desc)
+>  {
+> -	const unsigned long len = desc->end - desc->start;
+> +	const unsigned long len = vma_desc_size(desc);
+>  
+>  	if ((desc->vm_flags & (VM_SHARED | VM_MAYSHARE)) == 0)
+>  		return -EINVAL;
+> -- 
+> 2.51.0
+> 
 -- 
-2.43.0
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
 
