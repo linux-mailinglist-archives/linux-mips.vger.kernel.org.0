@@ -1,173 +1,129 @@
-Return-Path: <linux-mips+bounces-11234-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11235-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64BEFB52AA9
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 09:55:55 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70856B52AB9
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 09:57:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1E28C5834DE
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 07:55:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E13651BC371D
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 07:57:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 592612BEFEF;
-	Thu, 11 Sep 2025 07:55:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47A102BF017;
+	Thu, 11 Sep 2025 07:56:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Iu/xuWao";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="XIlM4cTN"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="3ETJqR4v"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77F462BEC55;
-	Thu, 11 Sep 2025 07:55:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77C7D2C158B
+	for <linux-mips@vger.kernel.org>; Thu, 11 Sep 2025 07:56:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757577351; cv=none; b=nn3rxH7acZGs5D6TvkXiF40IstQxeVA/7zgCAOgST6lqqTcBNlHNCsylse/ctaAoTfkG6mT1HqyCH4g4phOiilK+/PFcYvItfj7lAJnmCyMOSBZUOe4EwxOPTiQEQa1rIS1Fauy8JvZBoMbsdcjftQsKmN3DcD/r64jHG2eYaxA=
+	t=1757577404; cv=none; b=plHJMnQPenEvlhr14KVGuuKN15XdAlHlLvqlTFkfEtu7ovAvSfOd+5JbfjPpXtWFCRFGz20PB9WH6bfBwC8/jGsNN7WZ65d4hyDg8uG3Pwn8Mc0FYMQ93LelWAvZz+CwXx5rJIVwohoXqWRaMcD53DazkX9uitL+GmbHc7OGxbY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757577351; c=relaxed/simple;
-	bh=0i8hnUhy8sTZUL4Vq1iThkRVn9V+TzPj40ZtrBzJyFE=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=Ff0+wVd02L4GqDbPqKcpwaT/20HayKZaGR6DmggLs/x4fRrV8SYQRIGHbdKokp8PJkb11ECqqmxcVxVBsrzCt1mNMBfvXWvYnOuqJqBQysei4xzrx6hZcr5dfX8oPaAysRYmFTsRGh8hvwjuzK0eQUWVkFF+nlBSVqxlS99jljU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Iu/xuWao; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=XIlM4cTN; arc=none smtp.client-ip=103.168.172.153
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 612031400147;
-	Thu, 11 Sep 2025 03:55:48 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Thu, 11 Sep 2025 03:55:48 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1757577348;
-	 x=1757663748; bh=xezEPREPJQkkrl73Yff7UEqumVCaWAif9r9fc2gAvZU=; b=
-	Iu/xuWaoII7KNzuVcloK0wQmhd56+d5wX0Bleltp/a1sZa3XhGzX/yG9JsPSkl/7
-	2cu0Mu9lmvGcmqeKU6/KrMP/1aCgzIef4N/ewbqrmGkduxdjqLHlEalPav5le4TA
-	+jbgQ1Z+mvU5GokUwPzbGIhEj3HxlMneK0jBDzXQV6kMI00VxiXlnhook7P+C5Y7
-	UriP1BgBZbVa1zMIyagjnMw+2sY7iskhAR0+3srbSjSH0y3Yg7G1I2wCRXsEXXYs
-	8KS2JECjFLMhfIZNMjx0egOaiCksw2shqo/EvFx/UtUO1SZUtqDZzPy4b136cHwy
-	fnHZvT9pGYqsuKxHDCD1Vw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1757577348; x=
-	1757663748; bh=xezEPREPJQkkrl73Yff7UEqumVCaWAif9r9fc2gAvZU=; b=X
-	IlM4cTNCufTDuTwE3rh5KIXiSVCwiy8YX9A8fo53sWQ4p2TKGrlQ/9DVCBOHTBG0
-	ffEsLPh+36l9na0nrD2CgxP/dy96GoNkRtEQRzG5aK6nn56aYQGtYTO9P7Y8UiUs
-	an20A9oCUfkbsypc1JODoplvQuBjF8st8s1x31lQ2U0SYE4Jn1XlEMxhnjGHJwJg
-	CNtYItDmOsxdBDmvbtNp8EHZzfn0AGkDnlRRUoNT54QTlsnpmjuslvLqJymldyuB
-	7h+E3hJYEoPPv37Hpq0Dkh4acaBuHq9oAPE4oR1s4jxxyqb8Wde0k9toW89TrDKm
-	U4uNM1J+ErI42a2u/TYQg==
-X-ME-Sender: <xms:goDCaKLlbLhafX1ItUb5fO7F7xQAPgD71xlygMsk3wgbEP7eJM2VEQ>
-    <xme:goDCaCJu-9GwvmuDVC8Y37QomJEPe0pHbKXVqPPiqeh9QFxf908KEUF8un4MQt4Yp
-    DHkwlYQwPBqiaQ5cv4>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvheeivdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
-    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopedvkedpmhhouggvpehsmhhtphhouhht
-    pdhrtghpthhtoheptghhvghsthgvrhdrrgdruhhnrghlsegrrhhinhgtledrtghomhdprh
-    gtphhtthhopegthhhrihhsthhophhhvgdrlhgvrhhohiestghsghhrohhuphdrvghupdhr
-    tghpthhtoheprghnughrvggrshesghgrihhslhgvrhdrtghomhdprhgtphhtthhopehgvg
-    gvrhhtodhrvghnvghsrghssehglhhiuggvrhdrsggvpdhrtghpthhtoheprghlvgigrghn
-    uggvrhdrshhvvghrughlihhnsehgmhgrihhlrdgtohhmpdhrtghpthhtohepshgvrhhgih
-    hordhprghrrggtuhgvlhhlohhssehgmhgrihhlrdgtohhmpdhrtghpthhtohepshhurhgv
-    nhgssehgohhoghhlvgdrtghomhdprhgtphhtthhopeifihhllhihsehinhhfrhgruggvrg
-    gurdhorhhgpdhrtghpthhtohepihhrrgdrfigvihhnhiesihhnthgvlhdrtghomh
-X-ME-Proxy: <xmx:g4DCaPln0xPi_AdWtVR-mPv6uC8M-3Q_mjf16Kd5LjcVVSzFRbJ7CA>
-    <xmx:g4DCaDlZzyLWYRlZII_JRVLfe6viWHF9oK_S1UNgWncQPOR1vmL64w>
-    <xmx:g4DCaJdy81733zjxS4Q3r5w2j6PHhciLt1QMfw2trLXRldoMsUuYcw>
-    <xmx:g4DCaJIi6RXGIaczaDEPnKMDiC-8AkssR85-snNhqeii8rn1LFIfJA>
-    <xmx:hIDCaH7vVqOM0fbJf4funeExzGloqdRoMAB7v2eOhCknP0mHQleXCcBx>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id D083E700065; Thu, 11 Sep 2025 03:55:46 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1757577404; c=relaxed/simple;
+	bh=9XrvhsWNNRvcRClDoeF6Jt3/A7wdBGZCuSPlcTCRTrc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nB2X86ngzcS7uAOvLi4MFP8X1ldpm5a1O2/FLNOJv58bl4Ug0vSzCKcefqagXc63nBvbPUeA4iu6l2ub7BF0FL5Ef94EMx25ISy8sjpYrCclzXE2nZoN+S3ZMHhTfHFe8C2l4mRN6Ihm4eUlN/0lzYbavOJ01L0i28hicMr24G0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=3ETJqR4v; arc=none smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-56088927dcbso463951e87.3
+        for <linux-mips@vger.kernel.org>; Thu, 11 Sep 2025 00:56:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1757577401; x=1758182201; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Bep7Xid77Fho0BbSmSLtdgFH7ZgtGYRYV4JpO6GqPMo=;
+        b=3ETJqR4vgoMaMqt+KEy7Te/f85X46tzQudrlEpUFN2LPx9p9UCLIERH8L24fjT0cJE
+         JF6mO8kJXP9n38SxR9kfsYWiSHUxhP/xvV1JXW7v1S38hsSo+j1jw+eHvKd/UgyKD5h/
+         vXUq/PMlMdm81/xpQ1cuxlWS8vTV2z6fdRDfaknIIsnHd+YPE2rLXFHPOA/6jbIE0rbc
+         aSS9o6d1xFR/hnlaFV9e2Kj3mzYtxYuPR24Hdbo3A/PUUdzppNcFcMeGXHR1hqLf7BtT
+         EIvkzzxyuXPzBzcvapeMgXNXaK9WecfSAvYoOBK2Q5+EvNiZtmALQFI7sb3yAagJf9FO
+         tw6A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757577401; x=1758182201;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Bep7Xid77Fho0BbSmSLtdgFH7ZgtGYRYV4JpO6GqPMo=;
+        b=fjLsOhzoE+DwVtkPk/0NlpQkA6JIAiuOSVAL2Pim29L7d5r4ye87cd0Ar10gClQPUO
+         33Ygl9WlbAwKn55CwAca4g/sgRvJ6bXNI1wGNjH8UMplThg29sX9hMyluNKKpXyiTMGC
+         1K+EV5PT5lpJ6hvKGV0UFNzjP10mKlXq7fgrSS30HkgWE/6AdBv/xt+R+0MH6w/jMEpz
+         jRuw3RLyENDzStg1hFm67KMWD3H7EwmajrK4+4X4RpQpuZ2GbmCkYIasfSz2GNBdU6CD
+         Jpbntd1dN19M+Df5k82i4BxTtuKLC5eroANLj8dfgec97ojQEKWsNNJlGn/tmWjAg/Nb
+         i5dg==
+X-Forwarded-Encrypted: i=1; AJvYcCXGMFmqBYxHmSkwFKd57XN4EsaBaEtNO4dMGK77c9w5KT6yeT37y/OCzkQAmH7yMaCC9VeRZosXW/yX@vger.kernel.org
+X-Gm-Message-State: AOJu0YwRDKhlvjPxd9jFfU4ZtD/zNna5mzlFHDJKfsNkIriO4hqFp3m6
+	1jz4v+1uMe6rDoLfYwXnCCrk1rinz1yppU/hCpwu8osUmpWP6qLUc8MF07R1AncG8Ly7eIVIxlp
+	beJqs0sEd+kO1CPy3jwnSgucRfacWZcdfFGGJiCHjmg==
+X-Gm-Gg: ASbGnctlnmZdSePx0wZ+bKvP3/c64QoWnH2QmdyuBc3d9HPbG8npLoVnFQwkHxNunMo
+	oJMQafC7mIE60d+63D0joOyn4BIlxt5VzL4jZE/o0oeEKgcPGTYkFfdY7+3r2I7q2zWmEoahRzT
+	HlE5xnasjx5R/u59PZwVrrrjOgsI//1LMtKP6uQGVP+GAZ9Zq5UXSi6G0D2OqYOmoYRF7GI1Axv
+	8P2xpSxz549QuqqaiPrK0cVukIiu9N8usYgkuA=
+X-Google-Smtp-Source: AGHT+IFSDgCLPJndg4TOxS4/+K2sQKL3XaKKbJwpYxrHeNncRVK3PIq5fLt3S1TrCjsBx8V+oC1pdTue83tyCk/M6OM=
+X-Received: by 2002:a05:6512:3e23:b0:568:25d0:f843 with SMTP id
+ 2adb3069b0e04-56825d1df24mr3328322e87.4.1757577400507; Thu, 11 Sep 2025
+ 00:56:40 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: AmcCJOTBQ5ho
-Date: Thu, 11 Sep 2025 09:53:45 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Andreas Larsson" <andreas@gaisler.com>, ksummit@lists.linux.dev
-Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org,
- linux-mm@kvack.org, imx@lists.linux.dev,
- "Christophe Leroy" <christophe.leroy@csgroup.eu>,
- "Richard Weinberger" <richard@nod.at>,
- "Lucas Stach" <l.stach@pengutronix.de>,
- "Linus Walleij" <linus.walleij@linaro.org>,
- "Geert Uytterhoeven" <geert+renesas@glider.be>,
- "Ankur Arora" <ankur.a.arora@oracle.com>,
- "David Hildenbrand" <david@redhat.com>,
- "Mike Rapoport" <rppt@kernel.org>,
- "Lorenzo Stoakes" <lorenzo.stoakes@oracle.com>,
- "Matthew Wilcox" <willy@infradead.org>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- "Vlastimil Babka" <vbabka@suse.cz>,
- "Suren Baghdasaryan" <surenb@google.com>,
- "Ira Weiny" <ira.weiny@intel.com>, "Nishanth Menon" <nm@ti.com>,
- =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
- "Alexander Sverdlin" <alexander.sverdlin@gmail.com>,
- "Chester A. Unal" <chester.a.unal@arinc9.com>,
- "Sergio Paracuellos" <sergio.paracuellos@gmail.com>
-Message-Id: <363853cd-7f10-4aa9-8850-47eee6d516b9@app.fastmail.com>
-In-Reply-To: <5d2fec2b-8e59-417e-b9e6-12c6e27dd5f0@gaisler.com>
-References: <4ff89b72-03ff-4447-9d21-dd6a5fe1550f@app.fastmail.com>
- <5d2fec2b-8e59-417e-b9e6-12c6e27dd5f0@gaisler.com>
-Subject: Re: [TECH TOPIC] Reaching consensus on CONFIG_HIGHMEM phaseout
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+References: <20250910-gpio-mmio-gpio-conv-part4-v2-0-f3d1a4c57124@linaro.org>
+ <20250910-gpio-mmio-gpio-conv-part4-v2-7-f3d1a4c57124@linaro.org> <e0941449-7a62-4bbb-8790-616f393f2cc8@gmail.com>
+In-Reply-To: <e0941449-7a62-4bbb-8790-616f393f2cc8@gmail.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Thu, 11 Sep 2025 09:56:28 +0200
+X-Gm-Features: Ac12FXzR1a5xkbJIh_yEzUr3Ha0h6_elTIUATVbDxWcMjvS8AEDuwvbJ1IToPQE
+Message-ID: <CAMRc=MfZ5ss8Gd_TTPV8EYSv04ENp_C26b3=wukO+UTy_boXUA@mail.gmail.com>
+Subject: Re: [PATCH v2 07/15] gpio: brcmstb: use new generic GPIO chip API
+To: Doug Berger <opendmb@gmail.com>
+Cc: Linus Walleij <linus.walleij@linaro.org>, Keguang Zhang <keguang.zhang@gmail.com>, 
+	Alban Bedel <albeu@free.fr>, Florian Fainelli <florian.fainelli@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Samuel Holland <samuel.holland@sifive.com>, 
+	Yixun Lan <dlan@gentoo.org>, Andy Shevchenko <andy@kernel.org>, linux-gpio@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Sep 11, 2025, at 07:38, Andreas Larsson wrote:
+On Thu, Sep 11, 2025 at 2:11=E2=80=AFAM Doug Berger <opendmb@gmail.com> wro=
+te:
 >
-> We have a upcoming SoC with support for up to 16 GiB of DRAM. When that is
-> used in LEON sparc32 configuration (using 36-bit physical addressing), a
-> removed CONFIG_HIGHMEM would be a considerable limitation, even after an
-> introduction of different CONFIG_VMSPLIT_* options for sparc32.
+> >
+> > @@ -700,7 +707,8 @@ static int brcmstb_gpio_probe(struct platform_devic=
+e *pdev)
+> >                * be retained from S5 cold boot
+> >                */
+> >               need_wakeup_event |=3D !!__brcmstb_gpio_get_active_irqs(b=
+ank);
+> > -             gc->write_reg(reg_base + GIO_MASK(bank->id), 0);
+> > +             gpio_generic_write_reg(&bank->chip,
+> > +                                    reg_base + GIO_MASK(bank->id), 0);
+> >
+> >               err =3D gpiochip_add_data(gc, bank);
+> >               if (err) {
+> >
+> I suppose I'm OK with all of this, but I'm just curious about the longer
+> term plans for the member accesses. Is there an intent to have helpers
+> for things like?:
+> chip.gc.offset
+> chip.gc.ngpio
 
-I agree that without highmem that chip is going to be unusable from Linux,
-but I wonder if there is a chance to actually use it even with highmem,
-for a combination of reasons:
+I don't think so. It would require an enormous effort and these fields
+in struct gpio_chip are pretty stable so there's no real reason for
+it.
 
-- sparc32 has 36-bit addressing in the MMU, but Linux apparently never
-  supported a 64-bit phys_addr_t here, which would be required.
-  This is probably the easiest part and I assume you already have patches
-  for it.
-
-- As far as I can tell, the current lowmem area is 192MB, which would
-  be ok(-ish) on a 512MB maxed-out SPARCstation, but for anything bigger
-  you likely run out of lowmem long before being able to touch the
-  all highmem pages. This obviously depends a lot on the workload.
-
-- If you come up with patches to extend lowmem to 2GB at the expense
-  of a lower TASK_SIZE, you're still  looking at a ration of 7:1 with
-  14GB of highmem on the maxed-out configuration, so many workloads
-  would still struggle to actually use that memory for page cache.
-
-- If we remove HIGHPTE (as discussed in this thread) but keep HIGHMEM,
-  you probably still lose on the 16GB configuration. On 4GB configurations,
-  HIGHPTE is not really a requirement, but for workloads with many
-  concurrent tasks using a lot of virtual address space, you would
-  likely want to /add/ HIGHPTE support on sparc32 first.
-
-When you say "used in LEON sparc32 configuration", does that mean
-you can also run Linux in some other confuration like an rv64
-kernel on a NOEL-V core on that chip?
-
-Aside from the upcoming SoC and whatever happens to that, what is
-the largest LEON Linux memory configuration that you know is used
-in production today and still requires kernel updates beyond ~2029?
-
-      Arnd
+Bart
 
