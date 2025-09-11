@@ -1,125 +1,223 @@
-Return-Path: <linux-mips+bounces-11237-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11238-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 25BC0B52B16
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 10:03:49 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D373CB52BB7
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 10:33:17 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 57AE5175B4D
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 08:03:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E983A019B5
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 08:33:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1576C267B7F;
-	Thu, 11 Sep 2025 08:02:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C2922D0610;
+	Thu, 11 Sep 2025 08:33:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="c7guNbje"
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="g69g7tVg";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="0Kn9GhCx";
+	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="Rlw8/zRp";
+	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="10BqmkcK"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 703F122A4DA;
-	Thu, 11 Sep 2025 08:02:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C92A2E1751
+	for <linux-mips@vger.kernel.org>; Thu, 11 Sep 2025 08:32:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757577758; cv=none; b=eHTDoVeVHBp7IOSYRIcTm4nmvM8Vb2yO8hkDyOvlk9zZbcPjUIB73KEdjfjwep+MEImVOr7TUrychWNMAa8jML9g9nvFUazYYbUiu4a+OHXV1Tq3YMUp736udhUUnAutvs2ced517qxtSxF/CVMelyTIRkcy15mctXJIFzTQaOM=
+	t=1757579581; cv=none; b=u3sXnBJF5b1v7C6ygJb6q7GKpigUTiPF58Ndt1uy1syHXXcWLLhKq0KyXF1LSkpkMgQg4v+uJ+cJvbDinFOV35skc4QTIERMLoN/ErU/gyrNJECbXGI8j6wlJ0GJK+3o00JeRT2tyi9Pnok65ReW5fZCaOODVwZLIqCJqd+LUTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757577758; c=relaxed/simple;
-	bh=kdicIERSEGS6CGqV+GThuXvTSIsMgiNJoEUEEMAQ7JM=;
+	s=arc-20240116; t=1757579581; c=relaxed/simple;
+	bh=Wt8bPfv1U7t3vwNps2XxhADQvg87KCyS3JNBXzZls2Q=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dEj2g9AVs5szuTCwpkPLDpHH/7twa7cijy4CVtG04ZhpNXfqriLJcGHk2oM4i+492Znhbb6TdNZA1OY1gIJ2LK7hED7eG/rJp6yS4UkyMof0ZR6ET5x3EtXX/Vk4Ml0VcknEjllduKq+tMbq7B4XeeIcLkCRXQ84fZh1Gp8QZ4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=c7guNbje; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1757577757; x=1789113757;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=kdicIERSEGS6CGqV+GThuXvTSIsMgiNJoEUEEMAQ7JM=;
-  b=c7guNbje9iJPg+0qLq68qWFeoneuyW14ngsfgGOSE4RYTMhgEwhOsnrc
-   0JJGd8ahSwav5d8hfpDGjhMk/6EFve555i/ZJIVC8z71RPQ/RFlbdXM9r
-   QWRGdYAv3oDVWuDuiB8RH8twnTWBCM9UI1ztOoM9zGqlVEMRUsWatbFjE
-   BzztSqB9BAQq3obzOtnP32/33OYdahBb231amxuCZYMKona1c5eZa7v6l
-   OaEBBT6YfNL6NYlIP0EseM8qw4wE1uJTBVmMB5x/V955NExJw4HkImETn
-   Q7W/KTsBbkw+MShs+3wRnWjR2BNpkxrZ2vo17pQlK37El5AFLFmqKMLZ8
-   w==;
-X-CSE-ConnectionGUID: a5DLk4TrTcypGyos7APTYA==
-X-CSE-MsgGUID: NNbTmojcTdeLgzhVOM3RVA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11549"; a="59130651"
-X-IronPort-AV: E=Sophos;i="6.18,256,1751266800"; 
-   d="scan'208";a="59130651"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2025 01:02:36 -0700
-X-CSE-ConnectionGUID: HSAt/B/2T7CyoKV4/Fpp1g==
-X-CSE-MsgGUID: KD+qII/XTDGOjnGuMB8DWg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.18,256,1751266800"; 
-   d="scan'208";a="172805532"
-Received: from smile.fi.intel.com ([10.237.72.51])
-  by orviesa006.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Sep 2025 01:02:30 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.98.2)
-	(envelope-from <andriy.shevchenko@intel.com>)
-	id 1uwcGA-000000022ZP-12Gk;
-	Thu, 11 Sep 2025 11:02:26 +0300
-Date: Thu, 11 Sep 2025 11:02:26 +0300
-From: Andy Shevchenko <andriy.shevchenko@intel.com>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Doug Berger <opendmb@gmail.com>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Keguang Zhang <keguang.zhang@gmail.com>,
-	Alban Bedel <albeu@free.fr>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Samuel Holland <samuel.holland@sifive.com>,
-	Yixun Lan <dlan@gentoo.org>, Andy Shevchenko <andy@kernel.org>,
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-riscv@lists.infradead.org,
-	spacemit@lists.linux.dev,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH v2 07/15] gpio: brcmstb: use new generic GPIO chip API
-Message-ID: <aMKCEjwDUFH4OZAf@smile.fi.intel.com>
-References: <20250910-gpio-mmio-gpio-conv-part4-v2-0-f3d1a4c57124@linaro.org>
- <20250910-gpio-mmio-gpio-conv-part4-v2-7-f3d1a4c57124@linaro.org>
- <e0941449-7a62-4bbb-8790-616f393f2cc8@gmail.com>
- <CAMRc=MfZ5ss8Gd_TTPV8EYSv04ENp_C26b3=wukO+UTy_boXUA@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=mG43Q4RYRkXkDMPl8taQodwLPjM3A+LI0P13mNlzyXkxfMhVG06Z7Wsbv7oL1OPyOWX5ve7Ek3LirIuOeqksmSwe2N+iPbwPcv7q97wYIHKg5g2QBdHhIg5xQnOrndDATJZa8PiiuczvQFVrqJDqSZgB+DqwIgoTTVKrIOp3tRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=g69g7tVg; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=0Kn9GhCx; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=Rlw8/zRp; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=10BqmkcK; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id C0ADD6860C;
+	Thu, 11 Sep 2025 08:32:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1757579570; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pePLUMNa380skWZ7luqeNYuVXr6xGvhkxPkdStUqzL8=;
+	b=g69g7tVggGA4ICLcQNCp2a7FDFhEJgYZx+rlhxptW3OatO+qLAsjc1gwFiT3lagr6ckCae
+	W/ELmYo2UvyoKHg55pepNIQTqKprdkRGz8wGK2RCoVMTIvYZ7hOjyPCUfmPF892jrcts8m
+	6yQx2w5csZ75W+co3a197Outu6bRzj8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1757579570;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pePLUMNa380skWZ7luqeNYuVXr6xGvhkxPkdStUqzL8=;
+	b=0Kn9GhCxwfH7UtNWm0rPiTVf56F7jJTb27XMxMZrnkmLNlf+ZBZNmnvPfhGPo2lW5NDk33
+	Sh850po/Fb1oOjBA==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b="Rlw8/zRp";
+	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=10BqmkcK
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+	t=1757579569; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pePLUMNa380skWZ7luqeNYuVXr6xGvhkxPkdStUqzL8=;
+	b=Rlw8/zRpNMaso5w9hJU5rsFvLwdqP79gThQ0ptKrbOk16/q7H+vryA9mjmyFasd5sko7gs
+	kv2NB3QC3scH9aY6Yti/UmBGb0kXexhPBDR988HTBztTRbzI55KnYlKO3eIddsjqaZcBgT
+	EFQBO91Cut+OCVyQ+KCEaNZyRP2OCtk=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+	s=susede2_ed25519; t=1757579569;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pePLUMNa380skWZ7luqeNYuVXr6xGvhkxPkdStUqzL8=;
+	b=10BqmkcKUZL1Wc7BX4XLQc3Xzt89ZfORi8DPbmWNfCdmEsWQqWW8TCaGQojxjk/Owp6q9B
+	PFZSurPaXwnOuJBQ==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B32A31372E;
+	Thu, 11 Sep 2025 08:32:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id 5xutKzGJwmhAcQAAD6G6ig
+	(envelope-from <jack@suse.cz>); Thu, 11 Sep 2025 08:32:49 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+	id 3E12AA0A2D; Thu, 11 Sep 2025 10:32:49 +0200 (CEST)
+Date: Thu, 11 Sep 2025 10:32:49 +0200
+From: Jan Kara <jack@suse.cz>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, 
+	Jonathan Corbet <corbet@lwn.net>, Matthew Wilcox <willy@infradead.org>, 
+	Guo Ren <guoren@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, "David S . Miller" <davem@davemloft.net>, 
+	Andreas Larsson <andreas@gaisler.com>, Arnd Bergmann <arnd@arndb.de>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dan Williams <dan.j.williams@intel.com>, 
+	Vishal Verma <vishal.l.verma@intel.com>, Dave Jiang <dave.jiang@intel.com>, 
+	Nicolas Pitre <nico@fluxnic.net>, Muchun Song <muchun.song@linux.dev>, 
+	Oscar Salvador <osalvador@suse.de>, David Hildenbrand <david@redhat.com>, 
+	Konstantin Komarov <almaz.alexandrovich@paragon-software.com>, Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>, 
+	Dave Young <dyoung@redhat.com>, Tony Luck <tony.luck@intel.com>, 
+	Reinette Chatre <reinette.chatre@intel.com>, Dave Martin <Dave.Martin@arm.com>, 
+	James Morse <james.morse@arm.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
+	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
+	Michal Hocko <mhocko@suse.com>, Hugh Dickins <hughd@google.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Uladzislau Rezki <urezki@gmail.com>, 
+	Dmitry Vyukov <dvyukov@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
+	Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-csky@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, 
+	nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org, linux-mm@kvack.org, 
+	ntfs3@lists.linux.dev, kexec@lists.infradead.org, kasan-dev@googlegroups.com, 
+	Jason Gunthorpe <jgg@nvidia.com>
+Subject: Re: [PATCH v2 01/16] mm/shmem: update shmem to use mmap_prepare
+Message-ID: <4lfedpbfjq6yexryq4jmdoycky762ewmw2thjm2h6wzgqda46a@p3wzpxlhe7ka>
+References: <cover.1757534913.git.lorenzo.stoakes@oracle.com>
+ <c328d14480808cb0e136db8090f2a203ade72233.1757534913.git.lorenzo.stoakes@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAMRc=MfZ5ss8Gd_TTPV8EYSv04ENp_C26b3=wukO+UTy_boXUA@mail.gmail.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - c/o Alberga Business Park, 6
- krs, Bertel Jungin Aukio 5, 02600 Espoo
+In-Reply-To: <c328d14480808cb0e136db8090f2a203ade72233.1757534913.git.lorenzo.stoakes@oracle.com>
+X-Spamd-Result: default: False [-2.51 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_RHS_NOT_FQDN(0.50)[];
+	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ARC_NA(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	MIME_TRACE(0.00)[0:+];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_THREE(0.00)[3];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.com:email];
+	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	FREEMAIL_CC(0.00)[linux-foundation.org,lwn.net,infradead.org,kernel.org,alpha.franken.de,linux.ibm.com,davemloft.net,gaisler.com,arndb.de,linuxfoundation.org,intel.com,fluxnic.net,linux.dev,suse.de,redhat.com,paragon-software.com,arm.com,zeniv.linux.org.uk,suse.cz,oracle.com,google.com,suse.com,linux.alibaba.com,gmail.com,vger.kernel.org,lists.linux.dev,kvack.org,lists.infradead.org,googlegroups.com,nvidia.com];
+	TO_DN_SOME(0.00)[];
+	TO_MATCH_ENVRCPT_SOME(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	RCPT_COUNT_GT_50(0.00)[59];
+	DKIM_TRACE(0.00)[suse.cz:+]
+X-Spam-Flag: NO
+X-Spam-Level: 
+X-Rspamd-Queue-Id: C0ADD6860C
+X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Score: -2.51
 
-On Thu, Sep 11, 2025 at 09:56:28AM +0200, Bartosz Golaszewski wrote:
-> On Thu, Sep 11, 2025 at 2:11 AM Doug Berger <opendmb@gmail.com> wrote:
-
-...
-
-> > I'm just curious about the longer term plans for the member accesses. Is
-> > there an intent to have helpers for things like?:
-> > chip.gc.offset
-> > chip.gc.ngpio
+On Wed 10-09-25 21:21:56, Lorenzo Stoakes wrote:
+> This simply assigns the vm_ops so is easily updated - do so.
 > 
-> I don't think so. It would require an enormous effort and these fields
-> in struct gpio_chip are pretty stable so there's no real reason for
-> it.
+> Reviewed-by: Baolin Wang <baolin.wang@linux.alibaba.com>
+> Reviewed-by: David Hildenbrand <david@redhat.com>
+> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
 
-What I would like to see in TODO is to "make struct gpio_chip const" when
-passing to the gpiochip_add_*().
+Looks good. Feel free to add:
 
+Reviewed-by: Jan Kara <jack@suse.cz>
+
+								Honza
+
+> ---
+>  mm/shmem.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/mm/shmem.c b/mm/shmem.c
+> index 45e7733d6612..990e33c6a776 100644
+> --- a/mm/shmem.c
+> +++ b/mm/shmem.c
+> @@ -2938,16 +2938,17 @@ int shmem_lock(struct file *file, int lock, struct ucounts *ucounts)
+>  	return retval;
+>  }
+>  
+> -static int shmem_mmap(struct file *file, struct vm_area_struct *vma)
+> +static int shmem_mmap_prepare(struct vm_area_desc *desc)
+>  {
+> +	struct file *file = desc->file;
+>  	struct inode *inode = file_inode(file);
+>  
+>  	file_accessed(file);
+>  	/* This is anonymous shared memory if it is unlinked at the time of mmap */
+>  	if (inode->i_nlink)
+> -		vma->vm_ops = &shmem_vm_ops;
+> +		desc->vm_ops = &shmem_vm_ops;
+>  	else
+> -		vma->vm_ops = &shmem_anon_vm_ops;
+> +		desc->vm_ops = &shmem_anon_vm_ops;
+>  	return 0;
+>  }
+>  
+> @@ -5217,7 +5218,7 @@ static const struct address_space_operations shmem_aops = {
+>  };
+>  
+>  static const struct file_operations shmem_file_operations = {
+> -	.mmap		= shmem_mmap,
+> +	.mmap_prepare	= shmem_mmap_prepare,
+>  	.open		= shmem_file_open,
+>  	.get_unmapped_area = shmem_get_unmapped_area,
+>  #ifdef CONFIG_TMPFS
+> -- 
+> 2.51.0
+> 
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
 
