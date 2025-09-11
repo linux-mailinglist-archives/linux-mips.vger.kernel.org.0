@@ -1,80 +1,80 @@
-Return-Path: <linux-mips+bounces-11245-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11246-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5528B52D9A
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 11:47:11 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FF51B53CB4
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 21:51:28 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7FE8EA84127
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 09:46:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BCDAC5C0BFA
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 19:51:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CE161E5219;
-	Thu, 11 Sep 2025 09:45:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 178CD2673B7;
+	Thu, 11 Sep 2025 19:50:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QV609RYC"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lYbqvfh0"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-qv1-f65.google.com (mail-qv1-f65.google.com [209.85.219.65])
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F841248F68
-	for <linux-mips@vger.kernel.org>; Thu, 11 Sep 2025 09:45:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.65
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DD1E263C8F
+	for <linux-mips@vger.kernel.org>; Thu, 11 Sep 2025 19:50:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757583947; cv=none; b=qeSJlGl1melz85ctf51kQZh0+fpxkkfuihZUFRmBrpe0W7jktFYJ1PsQTQxXLI3/h9WapSD3YAZX/uvNguGzOkpCR3HAZllddp9veOy18F6QCXqGYulnNwnImyYGok6uCm9MvNeHTxZqepoHfhr8qclYSNyRDvq3l2iAL4eYJdY=
+	t=1757620246; cv=none; b=WMxg4av64Fq9u7oRrOTkrt/LUh1m6lNTdKttmXCQU7Rxum6re13NBem76UxYOyoqSoWhWiiFhTK4Yh4fHzGhmBDJEgLEQuk/A3UlNxy+Vt4LpOYS19qPpVKQJ+Leh1re4Nq8esa5ajPY8cfXWhKZO79SLsi6o0Vhb6Oa6HV8YnM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757583947; c=relaxed/simple;
-	bh=MHXNE8zlrdOl/5ERPQ4ETWpKs5fXAkubu4eUasi2MJI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=YKALUrFPdLPOYhSWRXEUVQEtYlcxqnyDgZFtzrk6NsJlVW8nLdaFsIH5FuQuergPJ+ZKrpTrA96nrINw5xeVGsPKnHR5m1GsodaQqCke4Al3Y54XmXNTYC+Aw/t2SvQURzWjiWV6bPiNdJ2CSX3pfCYsFkWgooBfZOvhydYqjn4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QV609RYC; arc=none smtp.client-ip=209.85.219.65
+	s=arc-20240116; t=1757620246; c=relaxed/simple;
+	bh=kjGxb0dqWe7yMsPMZAV2sViKlRrgFATmcxKdL62xjMc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZgPnYUrNIK6JzGYgOIP7RquRC3PONxAvzwxsIOg193+hR+m8p9HPLWIjPmlciIpbG8cXmKp509twa1uw8gVLyZjCRiELkp4S4vf+m1g94SUZvlIJ86ywYPQ8H9ma2/UdL386byL1vCfraAJNY/bKJH7SgL1hkDAmvBZTPFniREg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lYbqvfh0; arc=none smtp.client-ip=209.85.214.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f65.google.com with SMTP id 6a1803df08f44-75512f5a75cso4474966d6.2
-        for <linux-mips@vger.kernel.org>; Thu, 11 Sep 2025 02:45:45 -0700 (PDT)
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2518a38e7e4so24220685ad.1
+        for <linux-mips@vger.kernel.org>; Thu, 11 Sep 2025 12:50:44 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757583944; x=1758188744; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1757620244; x=1758225044; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=qnoq1sH/+JsGWFUbNrxZ5NkQ9Hl7jVr2bsCXWY9X2Yg=;
-        b=QV609RYCbikPan9kZOYTYzKngHfFnmmjqiyEJpoUy3FuW4+uRSm7srgU2OyCoVR2rJ
-         21ON2kkwGbjFx9UGL5AC0TbYk86yUhgMHpW0zigeaWqA/+Bf+6iZUMqYAjUpFRqx756Z
-         IQrJet6LblYxL37rPH/exrxP95neH++dIFz1/xJXQP2CzaBIU45p83enoWdk93AfuzO7
-         vd8xCC05rOiT6I77+KuVzWVzGhxExlasClq/ifXINa6ibIKxuXFby4coyHVOdZ3PiXE7
-         6VSpFmCE3ix9MMr/599XtEV0CaJkvEAdnXkZrN5Vss4mtsX+dAhujexFz+Lks6tEhx5J
-         ki2w==
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TJeew9YIVoP09p3LirTxwS5JzCuSaF7BlgkulwqqjZw=;
+        b=lYbqvfh0apVRXMw+txPj0wP76djiX9rgjxr4pMffpBBxgjA9QIxYKQvqPyWx8yFLYP
+         8l/q3pWkuetePejx6oo+sURwayCHPh2fzsURenVJ14vSn2gFHhPb9MxOx66joJjW/AXm
+         VVfnH8vC1kA7mDA2GGoaNyVgUbrQ/jUj17cTeAAEM8lqP4aYRAAZbJrLF1svu21pFe4I
+         0ESLc0Pp/rY3tMipO/Wl7U37HbTdplJnH43xex4KBq+yB4vbnhBzRyGmLyOFQNFzKGUp
+         i/rDcGTgEuyoH3u3E0YJ8eZWS72evKAgxCUJTw2wigD0TXH/sSyAc7ibOsNwXc0QwcWs
+         58XQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757583944; x=1758188744;
+        d=1e100.net; s=20230601; t=1757620244; x=1758225044;
         h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qnoq1sH/+JsGWFUbNrxZ5NkQ9Hl7jVr2bsCXWY9X2Yg=;
-        b=HCbvZeMeUPfju4NMT4aZJHFvyCQf7rdTqNyv0084P4tTKQTaQp2OKiysHPF1jeVUxa
-         7EujwgVrkAnJ43h7qNZq8hql29XIaELy38ukaejNbdYjzXhocxz9FcDpU+yDwc9Tj2Ry
-         r8mLS+qeaO8h5m1OiaykuR+oW4M0raE+InHc2BJHnuP9RIIFd19/IHGsryL5gFxUaH8G
-         Wutam8Mj+yQ9FH6K1i9yHBXWeXhNs9x7POcOwDri1Qr3HmoMLIeuDYHP3g6i4UUsGyAr
-         IK4VPPh6Gipp2RCCVEHH9XxAqu4HZu+wa0jfGf/zZzWGRn8/gos2+HKQTwYACI5a1h3c
-         DwnQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXTqAxOJDL2y5xLi7HVCYvp0ugB/36CklsZw40dHfT5XbboLB0d9bAukxlFJvPkE0uBZAWpsBbDFPXc@vger.kernel.org
-X-Gm-Message-State: AOJu0YxlSTrc8/zQgPF03EGE4SAHDVzMdXfWJVjkQXk2mw2AN8sEdzP5
-	uIYmnVOpivjAu4Ao/tL3WacKWqJk9HTzIllJTxcjF28uglS6YiJzUEaR
-X-Gm-Gg: ASbGnctMkykXRwnlj/2KsgLHxwRnl0lqqHANvCJsHXTiXpoaNzO9LiOmGfzMnEcMND/
-	JrlouX9jSxDkTPCK2AAGrqsnGl01JWMW1A9Ek5gtjyMK9nPE0+/usiQzeWe3V9yykWFU0RcO1bV
-	yum6XgByBCzZjg4J5N1Vh1kori9fy59nSm0SsYvhFATKi/7irjEu4CUFbSkLdx5uzQjaCWB3UZJ
-	7XofE1zMR4V0V93KyTvYy++FjZdyYMxu6TFEpw+2qGRGQY4PFVNPv8aRECGP/tFg8vLhNNJ7fA3
-	XPBCPNhuxNY3G+ZSnlfkFg13zFKan1ipFkGvKFOTfyBjGQT0hyKh4lcqqc1sRCe801lNNUJa7wr
-	kOlzidTSGagvL5bQGsmk5GMYuDihb
-X-Google-Smtp-Source: AGHT+IF/qNF6kHMbxtt6lZa1Xs7x2CFaNs1iTBAFhbOiFeMIBZiADx07C0NCGdGRh55KRViIimiJSg==
-X-Received: by 2002:ad4:576e:0:b0:70f:a04f:232f with SMTP id 6a1803df08f44-739344a96damr222770416d6.30.1757583944066;
-        Thu, 11 Sep 2025 02:45:44 -0700 (PDT)
-Received: from [0.0.0.0] ([2001:19f0:1000:6e8b:5400:5ff:fe8a:4c2])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-763b3f48f81sm8150226d6.11.2025.09.11.02.45.41
+        bh=TJeew9YIVoP09p3LirTxwS5JzCuSaF7BlgkulwqqjZw=;
+        b=nfV3RahwR2yIQmO3lAcIOhC8ly05snP1qaJIIjxu/Q2fgbhcXbVrG7bAisEDEqmwd2
+         7qO7CqfItEozbv+01FIwb5eogKxp4329ZJkjbwB1Er1HnpCu4+mQD6uqPWtjabkhO951
+         WSG6arHmA0NVkmEKXBME/PCwZwToseSRIBztVFN4Ijcv3w4o8gBrlb8g67j6pybVNR5S
+         AFQhpzYjg2KMhJwOHqVobYLT3CMrv5cMif4CGtQ7xh7sSrA/ftGx2bgA0TWLPLRHmPPs
+         YLQGavVeUxgBEcy4bY6FYUTHUEFihkhnFf8h4wqA54u0HEXpA1xP9pwB21rLdno+SMJq
+         lSZw==
+X-Forwarded-Encrypted: i=1; AJvYcCXYDzq+TxWcBZePHQO0XY9TOOJVkCMBS8TSULh7v61LaOYvvASI4pJKW1fRcusADW1y7BM6p2DD8YnT@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwjxnnOfB/1bucLh1oxwxTFp1PmiiIx0qLpIDnyu0nGyx/NV64
+	SAl3yAG186zosg8bAo0Ut8kbj+LierwH5Qd2tG8/NwukA4n/awZ2I9mw
+X-Gm-Gg: ASbGncu17B5MWsOXc6YzD7mmZzLnrCEo5TLlB/eyeuAQbWyBfKOejeP3MpRY3XOtwFR
+	S2xzRc0pMt9mCoQiAFB6rmtNZjBqLD84tqwUpqYtGFEgaJ6WmvWOcxJdssa825ON1x8YeZSy55e
+	uT3M1UpQvbIEm2Uynfv7ZKUp5qS23bjMr9GQKHKAfaW2FPBpqmVsiPp4/wrzFSFq4Vob8mI2xby
+	ppIsj8af0nUd6TURtq8K/VMazL92A8eCcVikew8FhHqGdmGt/5G0Y85AwKU3QqKkqTNWmiMkCgo
+	JTicQkV1EM+hDjfVnnlcnrGImCX1kvm8KOU0U0KCErHDPz9rNiOu5fBOy+sy9SDjTXOJzeWG9xj
+	JjJYDAneKA/s/b7pWPmlceaIBQmS6CPvKLbpDiyigF319x9tT
+X-Google-Smtp-Source: AGHT+IGM3HY9cYe0k8sf5GxMMVgG9l2ykvqk4n7ayiGGr2GhLio6Ij8ygJsJDwHZ88T4ZvBeMdpxjA==
+X-Received: by 2002:a17:902:d506:b0:25c:9084:4172 with SMTP id d9443c01a7336-25c908466d3mr25755745ad.14.1757620243626;
+        Thu, 11 Sep 2025 12:50:43 -0700 (PDT)
+Received: from [10.69.47.143] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-25c36cc53bcsm26957775ad.28.2025.09.11.12.50.41
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 11 Sep 2025 02:45:43 -0700 (PDT)
-Message-ID: <61dff58f-b425-4af5-b5b9-76d9981ccbd5@gmail.com>
-Date: Thu, 11 Sep 2025 17:45:38 +0800
+        Thu, 11 Sep 2025 12:50:43 -0700 (PDT)
+Message-ID: <cfe7bc19-763f-4e92-b1ae-355c661bcc19@gmail.com>
+Date: Thu, 11 Sep 2025 12:50:47 -0700
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -82,84 +82,62 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] irqchip/loongson-pch-lpc: Use legacy domain for
- PCH-LPC IRQ controller
-To: Ming Wang <wangming01@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
- Jiaxun Yang <jiaxun.yang@flygoat.com>, Thomas Gleixner <tglx@linutronix.de>,
- linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250911083546.649949-1-wangming01@loongson.cn>
+Subject: Re: [PATCH v2 07/15] gpio: brcmstb: use new generic GPIO chip API
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Linus Walleij <linus.walleij@linaro.org>,
+ Keguang Zhang <keguang.zhang@gmail.com>, Alban Bedel <albeu@free.fr>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Paul Walmsley <paul.walmsley@sifive.com>,
+ Samuel Holland <samuel.holland@sifive.com>, Yixun Lan <dlan@gentoo.org>,
+ Andy Shevchenko <andy@kernel.org>, linux-gpio@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ linux-riscv@lists.infradead.org, spacemit@lists.linux.dev,
+ Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+References: <20250910-gpio-mmio-gpio-conv-part4-v2-0-f3d1a4c57124@linaro.org>
+ <20250910-gpio-mmio-gpio-conv-part4-v2-7-f3d1a4c57124@linaro.org>
+ <e0941449-7a62-4bbb-8790-616f393f2cc8@gmail.com>
+ <CAMRc=MfZ5ss8Gd_TTPV8EYSv04ENp_C26b3=wukO+UTy_boXUA@mail.gmail.com>
 Content-Language: en-US
-From: Robin <robin.toplinux@gmail.com>
-In-Reply-To: <20250911083546.649949-1-wangming01@loongson.cn>
+From: Doug Berger <opendmb@gmail.com>
+In-Reply-To: <CAMRc=MfZ5ss8Gd_TTPV8EYSv04ENp_C26b3=wukO+UTy_boXUA@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
+On 9/11/2025 12:56 AM, Bartosz Golaszewski wrote:
+> On Thu, Sep 11, 2025 at 2:11 AM Doug Berger <opendmb@gmail.com> wrote:
+>>
+>>>
+>>> @@ -700,7 +707,8 @@ static int brcmstb_gpio_probe(struct platform_device *pdev)
+>>>                 * be retained from S5 cold boot
+>>>                 */
+>>>                need_wakeup_event |= !!__brcmstb_gpio_get_active_irqs(bank);
+>>> -             gc->write_reg(reg_base + GIO_MASK(bank->id), 0);
+>>> +             gpio_generic_write_reg(&bank->chip,
+>>> +                                    reg_base + GIO_MASK(bank->id), 0);
+>>>
+>>>                err = gpiochip_add_data(gc, bank);
+>>>                if (err) {
+>>>
+>> I suppose I'm OK with all of this, but I'm just curious about the longer
+>> term plans for the member accesses. Is there an intent to have helpers
+>> for things like?:
+>> chip.gc.offset
+>> chip.gc.ngpio
+> 
+> I don't think so. It would require an enormous effort and these fields
+> in struct gpio_chip are pretty stable so there's no real reason for
+> it.
+> 
+> Bart
+Ok, so assuming struct gpio_chip is sticking around long term that makes 
+sense to me.
 
+Thanks!
 
-On 9/11/25 16:35, Ming Wang wrote:
-> On certain Loongson platforms, drivers attempting to request a legacy
-> ISA IRQ directly via request_irq() (e.g., IRQ 4) may fail. The
-> virtual IRQ descriptor is not fully initialized and lacks a valid irqchip.
-> 
-> This issue does not affect ACPI-enumerated devices described in DSDT,
-> as their interrupts are properly mapped via the GSI translation path.
-> This indicates the LPC irqdomain itself is functional but is not correctly
-> handling direct VIRQ-to-HWIRQ mappings.
-> 
-> The root cause is the use of irq_domain_create_linear(). This API sets
-> up a domain for dynamic, on-demand mapping, typically triggered by a GSI
-> request. It does not pre-populate the mappings for the legacy VIRQ range
-> (0-15). Consequently, if no ACPI device claims a specific GSI
-> (e.g., GSI 4), the corresponding VIRQ (e.g., VIRQ 4) is never mapped to
-> the LPC domain. A direct call to request_irq(4, ...) then fails because
-> the kernel cannot resolve this VIRQ to a hardware interrupt managed by
-> the LPC controller.
-> 
-> The PCH-LPC interrupt controller is an i8259-compatible legacy device
-> that requires a deterministic, static 1-to-1 mapping for IRQs 0-15 to
-> support legacy drivers.
-> 
-> Fix this by replacing irq_domain_create_linear() with
-> irq_domain_create_legacy(). This API is specifically designed for such
-> controllers. It establishes the required static 1-to-1 VIRQ-to-HWIRQ
-> mapping for the entire legacy range (0-15) immediately upon domain
-> creation. This ensures that any VIRQ in this range is always resolvable,
-> making direct calls to request_irq() for legacy IRQs function correctly.
-> 
-> Signed-off-by: Ming Wang <wangming01@loongson.cn>
-
-I have tested this patch on a Loongson 3A6000 platform.
-
-Tested-by: Robin <robin.toplinux@gmail.com>
-
-> 
-> ---
-> Changes in v2:
->    - Address review comments from Huacai Chen.
->    - Fix function call indentation style.
-> ---
->   drivers/irqchip/irq-loongson-pch-lpc.c | 9 +++++++--
->   1 file changed, 7 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/irqchip/irq-loongson-pch-lpc.c b/drivers/irqchip/irq-loongson-pch-lpc.c
-> index 2d4c3ec128b8..01fe4325ff84 100644
-> --- a/drivers/irqchip/irq-loongson-pch-lpc.c
-> +++ b/drivers/irqchip/irq-loongson-pch-lpc.c
-> @@ -200,8 +200,13 @@ int __init pch_lpc_acpi_init(struct irq_domain *parent,
->   		goto iounmap_base;
->   	}
->   
-> -	priv->lpc_domain = irq_domain_create_linear(irq_handle, LPC_COUNT,
-> -					&pch_lpc_domain_ops, priv);
-> +	/*
-> +	 * The LPC interrupt controller is a legacy i8259-compatible device,
-> +	 * which requires a static 1:1 mapping for IRQs 0-15.
-> +	 * Use irq_domain_create_legacy() to establish this static mapping early.
-> +	 */
-> +	priv->lpc_domain = irq_domain_create_legacy(irq_handle, LPC_COUNT, 0, 0,
-> +						    &pch_lpc_domain_ops, priv);
->   	if (!priv->lpc_domain) {
->   		pr_err("Failed to create IRQ domain\n");
->   		goto free_irq_handle;
-
+Acked-by: Doug Berger <opendmb@gmail.com>
 
