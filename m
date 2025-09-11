@@ -1,184 +1,150 @@
-Return-Path: <linux-mips+bounces-11232-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11233-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF8CBB529F3
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 09:29:50 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99CB7B52A36
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 09:38:34 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id AD2C34E2209
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 07:29:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B78701889D85
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 07:38:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4BA326E704;
-	Thu, 11 Sep 2025 07:29:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CD312727E7;
+	Thu, 11 Sep 2025 07:38:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="wCZbMyiZ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22E902236FA;
-	Thu, 11 Sep 2025 07:29:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
+Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 846F72741C6
+	for <linux-mips@vger.kernel.org>; Thu, 11 Sep 2025 07:38:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757575782; cv=none; b=Tq+cLy/hPLI8wYlQwrC5Brvip7irDusJ5zF8p1/dCor4F7ugJi6VHd8JJgowln2Jm/L6EKbnMNV1ClDeulGCrwCyG4x2yvtt3yfo2UkXbgcbpMEnAfFcS0OPyK1BEku88LpdlHe3HzNF/SvQGvIjndFJ3L01Hh/ugbe+GU23DZI=
+	t=1757576309; cv=none; b=rWUqoSiiFiRybGRydF43drZF46cWTJ8MMm/rX5ABIMCBKlMQHZXxfNcwo47rQcBuA8W9RUdjRfP4loFp3QuKRpLBpfxq+ZorwIJVNs9J7uTrrdBw1x/alXOMHDoLV6Ssz/Poylod/HwkCeiq4QuU7xr43So0zQs8zqjtHcCj1X0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757575782; c=relaxed/simple;
-	bh=FBcDb9WffmtxjndTke6DMs1Lll7pb+m3IIT1AjKzrTs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NQLMuU8mR5fGvCHd3kwY/kVjY34bjLHaGDQoKlN55ajs1AE2QFh1PEQcMxRXdd7t9b7Pv0/E8v1pAeIY9xhSpdkth/yfYJCLwJe+n+l4vXsdN93fSvrDkGrQc7xOCogVEh8uCAm28Cw053Vgi0IhFCJsag3lwlk457IdFFGEJ8k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
-Received: from loongson.cn (unknown [124.127.222.9])
-	by gateway (Coremail) with SMTP id _____8DxO9JZesJoux8JAA--.19313S3;
-	Thu, 11 Sep 2025 15:29:29 +0800 (CST)
-Received: from [127.0.0.1] (unknown [124.127.222.9])
-	by front1 (Coremail) with SMTP id qMiowJCx3sFYesJoOouNAA--.41628S2;
-	Thu, 11 Sep 2025 15:29:28 +0800 (CST)
-Message-ID: <fb4e8ee2-ff13-4446-aa23-57f0332d0342@loongson.cn>
-Date: Thu, 11 Sep 2025 15:29:27 +0800
+	s=arc-20240116; t=1757576309; c=relaxed/simple;
+	bh=jUK8rXo2J6tdIuNkdbMKBrXU6Rird8FTI89p+KzSTdU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=r3Kf/5Cf84bnJ/+A8XSWx5K8I8QEzY4PbVSW7cLLzRZuE8bAROz0TAT5eWjZI1XzaRsJlaO+g43oT1Ag1cwdRuCQdue4q2Lecti8G5FjrKuW4ZU2qSOebJiYaZuytNgDkKos639kze3a1a0mBpAaPR9p6DPLEk2i+jFLx5p2rlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=wCZbMyiZ; arc=none smtp.client-ip=209.85.167.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-55f7ab2a84eso335985e87.1
+        for <linux-mips@vger.kernel.org>; Thu, 11 Sep 2025 00:38:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1757576305; x=1758181105; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jUK8rXo2J6tdIuNkdbMKBrXU6Rird8FTI89p+KzSTdU=;
+        b=wCZbMyiZTwJnq9pS7/KeUMs+A7K9WGJRXQ5wonRBAknPQ201tGoLXhinlxKm1zXhWe
+         Xc31QrJO0CjLxC6AWuLfc50kiBT8sDV11mv9jWVsa6D00hYWx1riUdBmeEw0V/IREp9q
+         5oQoBmP9Y4wnjXcls6gxP0vdNV/BHZHoDGTSQ2/Ie4x0iNplUTRE5wMUxgzrUw9vnGms
+         9zof++aiF99/+XvbCkQGKJlYOvX657iPx2MDmQXOxI+lzfWWgtt4l/P4aHhnxAtjELej
+         hMUpL8dYFM3uUIFTXerUetDPXV8pOfq3Bw3g+tQK5Rr17bLia0tbNU42Ol6IPqPLUeGL
+         x71g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757576305; x=1758181105;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=jUK8rXo2J6tdIuNkdbMKBrXU6Rird8FTI89p+KzSTdU=;
+        b=j94DWZik9/S7J4tycoOnBF68JbLoZHgOAoTN46jczASRUVOmiImTgXCdADUwuBid8X
+         v265nAOk18er+wLXPUobzQy5oY3hOarfvq9fmh8dKrhYtgw4NPgrIx+nrULeykXm0RD5
+         vkKcch9ijtYapsztkiBXNKwYqHaCL6IfdsAfMHf2U6Pak+KvSeI9TA8ahVd3sDTXxP2i
+         HZlVmTyuXzDKk2iOLlOkcxzimPgjHdv7KbtN1GhnjLR4i8p9BqByAFGuupv5mdA4jvrY
+         tmuIai+0KHZCetns8wgiBsSc+XHAWVQUl9B9M3815QuQQkjoHwKHCR5prA+qjay66SE9
+         e7rQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWAiJOCyEgTmJB65EBryCDL4gBTVmC5ZR12XXLkRajikYq8eeYn/NGA2pI79ALnK8QmesYFnOgeDG96@vger.kernel.org
+X-Gm-Message-State: AOJu0YxM/WVw5xqmGco7kwY2NWqd+WIQW5ytjar1AOAf+aemuaijvy5W
+	XFnZSm7b96gdHCPl7JhnA22rh4a0Nd0tYtapgfkU9pgzWPy03XdKmvmhRQqMPpVsBXq1DyiglGd
+	9TzaljfB3KSw5P09S9UeTLrxjAnNJpJE/SZu0iXQtndutiT/8VlW8
+X-Gm-Gg: ASbGncu4BZ6OWcE4GEDKPv7MWfyyEWi5EPLZiZalgaUSLx7RZ59+iphuJ+5cNdlZneB
+	59g0fKRn3tLbt9A+HXKJu6oZzf9DEsRAPJuI9/YDg4JIfkdJYSpI4849kg5YB5IKUcG9n4FgChM
+	mRZGQu9GMbu1rhamTKd00keoam5kUrNCQ42pod0bgIYjsrhlr0TFF6sI4tlU56l69yCx6VqZrkL
+	xCpS0dCJ38CEE7Gs2fPg3FQOrnKWRyIY1gJddM=
+X-Google-Smtp-Source: AGHT+IGFKCUUrJkt+A6v+xuc1LQXhwUm4KpMBhnA0hSfXgMQG+z+UHy3svEwymKETUJXd9ilc9E5haoHU8vK2eJzapg=
+X-Received: by 2002:a05:6512:b17:b0:55f:498f:f08e with SMTP id
+ 2adb3069b0e04-562614ff71emr7447870e87.24.1757576305171; Thu, 11 Sep 2025
+ 00:38:25 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] irqchip/loongson-pch-lpc: Use legacy domain for PCH-LPC
- IRQ controller
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: Jiaxun Yang <jiaxun.yang@flygoat.com>,
- Thomas Gleixner <tglx@linutronix.de>, linux-mips@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250909125840.638418-1-wangming01@loongson.cn>
- <CAAhV-H4NDsrvuPH2o1D=UzTTH13Q62YxcHCZLN-QvZ2Dc5qEqw@mail.gmail.com>
-Content-Language: en-US
-From: Ming Wang <wangming01@loongson.cn>
-In-Reply-To: <CAAhV-H4NDsrvuPH2o1D=UzTTH13Q62YxcHCZLN-QvZ2Dc5qEqw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qMiowJCx3sFYesJoOouNAA--.41628S2
-X-CM-SenderInfo: 5zdqwzxlqjiio6or00hjvr0hdfq/1tbiAQECEmjCZKYBxwAAs+
-X-Coremail-Antispam: 1Uk129KBj93XoWxWrWfZF1kuryUJw4Uur47ZFc_yoWrAryrpF
-	45Ga9F9rZ8JF1UA3ZxCw10vryfA3s5t3y2ya1FkwnxAr9xZ3sY9F4jkFn09ryxAF98X3W7
-	Zr4jqFW8uF1YkFXCm3ZEXasCq-sJn29KB7ZKAUJUUUU5529EdanIXcx71UUUUU7KY7ZEXa
-	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
-	0xBIdaVrnRJUUUkKb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
-	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
-	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
-	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
-	GcCE3s1lnxkEFVAIw20F6cxK64vIFxWle2I262IYc4CY6c8Ij28IcVAaY2xG8wAqjxCEc2
-	xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_
-	Jrv_JF1lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwI
-	xGrwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v2
-	6r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkGc2
-	Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_
-	Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4UMI
-	IF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7IU8ctx3UUUUU=
-	=
+References: <20250910-gpio-mmio-gpio-conv-part4-v2-0-f3d1a4c57124@linaro.org> <CACRpkdb=J+hiC5cu+g0Z-gqzpG8PgX01CXc4P98FfSSAf7PZEA@mail.gmail.com>
+In-Reply-To: <CACRpkdb=J+hiC5cu+g0Z-gqzpG8PgX01CXc4P98FfSSAf7PZEA@mail.gmail.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Thu, 11 Sep 2025 09:38:12 +0200
+X-Gm-Features: Ac12FXwiBbcmTD8LlFccmOHZdwwoOfYFi61pHLgjut8Pxa8sFHcycGYwle9xiUk
+Message-ID: <CAMRc=McbadZx1yK1jGeyUnXAFZgfA8YpLwacmqC0eMonS-c-9A@mail.gmail.com>
+Subject: Re: [PATCH v2 00/15] gpio: replace legacy bgpio_init() with its
+ modernized alternative - part 4
+To: Linus Walleij <linus.walleij@linaro.org>
+Cc: Keguang Zhang <keguang.zhang@gmail.com>, Alban Bedel <albeu@free.fr>, 
+	Doug Berger <opendmb@gmail.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
+	Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Samuel Holland <samuel.holland@sifive.com>, 
+	Yixun Lan <dlan@gentoo.org>, Andy Shevchenko <andy@kernel.org>, linux-gpio@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Huacai,
+On Wed, Sep 10, 2025 at 11:32=E2=80=AFPM Linus Walleij <linus.walleij@linar=
+o.org> wrote:
+>
+> On Wed, Sep 10, 2025 at 9:12=E2=80=AFAM Bartosz Golaszewski <brgl@bgdev.p=
+l> wrote:
+>
+> > Here's the final part of the generic GPIO chip conversions. Once all th=
+e
+> > existing users are switched to the new API, the final patch in the
+> > series removes bgpio_init(), moves the gpio-mmio fields out of struct
+> > gpio_chip and into struct gpio_generic_chip and adjusts gpio-mmio.c to
+> > the new situation.
+> >
+> > Down the line we could probably improve gpio-mmio.c by using lock guard=
+s
+> > and replacing the - now obsolete - "bgpio" prefix with "gpio_generic" o=
+r
+> > something similar but this series is already big as is so I'm leaving
+> > that for the future.
+> >
+> > Tested in qemu on vexpress-a9.
+> >
+> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+>
+> The patch set is a beauty, hands down.
+> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+>
+> I especially like where you caught local spinlocks being
+> (ab)used instead of the generic irqchip ones.
+>
+> I don't know about merging patch 15/15 into just the GPIO
+> tree, that can make things fail in other subsystems depending
+> on merge order into Torvalds tree or linux-next if your tree is
+> merged first.
+>
+> I would merge the first 14 and keep the last for the later part
+> of the merge window when all other trees with conversions
+> are merged.
+>
+> (You probably already thought of this.)
+>
+> Yours,
+> Linus Walleij
 
-On 9/11/25 12:49, Huacai Chen wrote:
-> Hi, Wangming,
-> 
-> On Tue, Sep 9, 2025 at 8:58 PM Ming Wang <wangming01@loongson.cn> wrote:
->>
->> On certain Loongson platforms, drivers attempting to request a legacy
->> ISA IRQ directly via request_irq() (e.g., IRQ 4) may fail. The
->> virtual IRQ descriptor is not fully initialized and lacks a valid irqchip.
->>
->> This issue does not affect ACPI-enumerated devices described in DSDT,
->> as their interrupts are properly mapped via the GSI translation path.
->> This indicates the LPC irqdomain itself is functional but is not correctly
->> handling direct VIRQ-to-HWIRQ mappings.
->>
->> The root cause is the use of irq_domain_create_linear(). This API sets
->> up a domain for dynamic, on-demand mapping, typically triggered by a GSI
->> request. It does not pre-populate the mappings for the legacy VIRQ range
->> (0-15). Consequently, if no ACPI device claims a specific GSI
->> (e.g., GSI 4), the corresponding VIRQ (e.g., VIRQ 4) is never mapped to
->> the LPC domain. A direct call to request_irq(4, ...) then fails because
->> the kernel cannot resolve this VIRQ to a hardware interrupt managed by
->> the LPC controller.
-> If we create a legacy domain, the VIRQ0~15 are pre-allocated, then an
-> ACPI device claims GSI 4, what will happen?
-There will be no conflict. When the ACPI GSI mapping function is called,
-it first uses irq_find_mapping() to check for an existing mapping.
+I already have both pinctrl and mfd changes in my tree from Lee's and
+your immutable branches. I pushed this into gpio/devel and it built
+just fine.
 
-Since the legacy domain has already created the mapping, the lookup
-will succeed. The function will then simply return the existing VIRQ 4,
-bypassing any new allocation logic.
-
-The simplified call flow for an ACPI device claiming GSI 4 (after my patch)
-is as follows:
-
-acpi_register_gsi(..., .gsi=4, ...)
-   -> irq_create_fwspec_mapping(fwspec)
-     -> domain = irq_find_matching_fwspec(...)  // Finds lpc_domain
-     -> irq_domain_translate(...)               // Translates fwspec to 
-hwirq=4
-     -> virq = irq_find_mapping(lpc_domain, 4)  // SUCCESS, finds 
-existing VIRQ 4
-     -> return virq;                            // Returns 4
-
-> 
->>
->> The PCH-LPC interrupt controller is an i8259-compatible legacy device
->> that requires a deterministic, static 1-to-1 mapping for IRQs 0-15 to
->> support legacy drivers.
->>
->> Fix this by replacing irq_domain_create_linear() with
->> irq_domain_create_legacy(). This API is specifically designed for such
->> controllers. It establishes the required static 1-to-1 VIRQ-to-HWIRQ
->> mapping for the entire legacy range (0-15) immediately upon domain
->> creation. This ensures that any VIRQ in this range is always resolvable,
->> making direct calls to request_irq() for legacy IRQs function correctly.
->>
->> Signed-off-by: Ming Wang <wangming01@loongson.cn>
->> ---
->>   drivers/irqchip/irq-loongson-pch-lpc.c | 9 +++++++--
->>   1 file changed, 7 insertions(+), 2 deletions(-)
->>
->> diff --git a/drivers/irqchip/irq-loongson-pch-lpc.c b/drivers/irqchip/irq-loongson-pch-lpc.c
->> index 2d4c3ec128b8..68b09cc8c400 100644
->> --- a/drivers/irqchip/irq-loongson-pch-lpc.c
->> +++ b/drivers/irqchip/irq-loongson-pch-lpc.c
->> @@ -200,8 +200,13 @@ int __init pch_lpc_acpi_init(struct irq_domain *parent,
->>                  goto iounmap_base;
->>          }
->>
->> -       priv->lpc_domain = irq_domain_create_linear(irq_handle, LPC_COUNT,
->> -                                       &pch_lpc_domain_ops, priv);
->> +       /*
->> +        * The LPC interrupt controller is a legacy i8259-compatible device,
->> +        * which requires a static 1:1 mapping for IRQs 0-15.
->> +        * Use irq_domain_create_legacy to establish this static mapping early.
-> irq_domain_create_legacy()
-OK, I will fix it in the v2 patch.
-
-> 
->> +        */
->> +       priv->lpc_domain = irq_domain_create_legacy(irq_handle, LPC_COUNT, 0, 0,
->> +                       &pch_lpc_domain_ops, priv);
-> The recommended indentation is:
->         priv->lpc_domain = irq_domain_create_legacy(irq_handle, LPC_COUNT, 0, 0,
-> 
->                     &pch_lpc_domain_ops, priv);
-> 
-> which means "&" is below "irq_handle".
-
-You are right. I will fix the indentation in the v2 patch.
-
-Thanks,
-Ming
-
-> 
-> Huacai
-> 
->>          if (!priv->lpc_domain) {
->>                  pr_err("Failed to create IRQ domain\n");
->>                  goto free_irq_handle;
->> --
->> 2.43.0
->>
-
+Bart
 
