@@ -1,220 +1,165 @@
-Return-Path: <linux-mips+bounces-11244-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11245-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE173B52C52
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 10:56:14 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5528B52D9A
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 11:47:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A84D13B41E7
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 08:55:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7FE8EA84127
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 09:46:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84EEC2E7653;
-	Thu, 11 Sep 2025 08:55:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CE161E5219;
+	Thu, 11 Sep 2025 09:45:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="H06dORKL";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="0iIQ+Ipq";
-	dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b="H06dORKL";
-	dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b="0iIQ+Ipq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QV609RYC"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
+Received: from mail-qv1-f65.google.com (mail-qv1-f65.google.com [209.85.219.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 951C02E6CDA
-	for <linux-mips@vger.kernel.org>; Thu, 11 Sep 2025 08:55:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F841248F68
+	for <linux-mips@vger.kernel.org>; Thu, 11 Sep 2025 09:45:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757580951; cv=none; b=KBuOy0wWUEKz4W/iErRdUnyoIezX5ilx6vdwvRm7Y61cFB9OEGcnKZ6OciQ+j7qddPKEK9H4BFZkTaoFjcwyz/jg8Daa4uLCWBmwak8X8ZGkXDuCxXBYX/LwfqpYQW8EQdOehogXCqhQ+T+nSvEamxR+MuYwGzzt5pUmCTlsS+s=
+	t=1757583947; cv=none; b=qeSJlGl1melz85ctf51kQZh0+fpxkkfuihZUFRmBrpe0W7jktFYJ1PsQTQxXLI3/h9WapSD3YAZX/uvNguGzOkpCR3HAZllddp9veOy18F6QCXqGYulnNwnImyYGok6uCm9MvNeHTxZqepoHfhr8qclYSNyRDvq3l2iAL4eYJdY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757580951; c=relaxed/simple;
-	bh=g8rjLkGZDz8l75aKfZa7HlbA3xNuO5qdMG27VMFj5qU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UH6c+7vlQtPGXrmmdk/Me741r0z463L8hbIChmeS5fh0MpccpgAc8v37hJDn9Uyyt4T4Vd51ZI7H/DMbsvRcOrSpNbrhB9EEq759SAZE6fMwibf3UxOtqOfw9lL1alHmMY6g2Si3Is8CqONNxDmpIt08Bbi1ovqn+eLoIMFhRrQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz; spf=pass smtp.mailfrom=suse.cz; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=H06dORKL; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=0iIQ+Ipq; dkim=pass (1024-bit key) header.d=suse.cz header.i=@suse.cz header.b=H06dORKL; dkim=permerror (0-bit key) header.d=suse.cz header.i=@suse.cz header.b=0iIQ+Ipq; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=suse.cz
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.cz
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id BF3946864B;
-	Thu, 11 Sep 2025 08:55:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1757580946; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=g+JbXqJwzf7cOodAKH9xqcseUyaAMBde80ixVE0ZgKU=;
-	b=H06dORKLeqy9oLKCwBAyy8KbyMMgBGmw2umEdwRHB5t4//gwrPu6p/UqepgBh+cqtCMGYj
-	gu16/N0MH0OUE8I2dmmLR/foB3LQlqym6FvW7Qq9xnnjWKvZeFtm5D+PPNO1HxnjqxADHx
-	R9Jg+XWpXeRhDFWLoByfZA9usPYkdhw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1757580946;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=g+JbXqJwzf7cOodAKH9xqcseUyaAMBde80ixVE0ZgKU=;
-	b=0iIQ+Ipqu9W5Px/nULTByH8LjK8QRRM8NgGXedpdy+DrzCu/JG3h5fU1YWI+FWRaeWdOMk
-	PDTOzamFaGTIDVCw==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.cz header.s=susede2_rsa header.b=H06dORKL;
-	dkim=pass header.d=suse.cz header.s=susede2_ed25519 header.b=0iIQ+Ipq
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-	t=1757580946; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=g+JbXqJwzf7cOodAKH9xqcseUyaAMBde80ixVE0ZgKU=;
-	b=H06dORKLeqy9oLKCwBAyy8KbyMMgBGmw2umEdwRHB5t4//gwrPu6p/UqepgBh+cqtCMGYj
-	gu16/N0MH0OUE8I2dmmLR/foB3LQlqym6FvW7Qq9xnnjWKvZeFtm5D+PPNO1HxnjqxADHx
-	R9Jg+XWpXeRhDFWLoByfZA9usPYkdhw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-	s=susede2_ed25519; t=1757580946;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=g+JbXqJwzf7cOodAKH9xqcseUyaAMBde80ixVE0ZgKU=;
-	b=0iIQ+Ipqu9W5Px/nULTByH8LjK8QRRM8NgGXedpdy+DrzCu/JG3h5fU1YWI+FWRaeWdOMk
-	PDTOzamFaGTIDVCw==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id B13C613974;
-	Thu, 11 Sep 2025 08:55:46 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id 4H7vKpKOwmjqeAAAD6G6ig
-	(envelope-from <jack@suse.cz>); Thu, 11 Sep 2025 08:55:46 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-	id 5F916A0A2D; Thu, 11 Sep 2025 10:55:42 +0200 (CEST)
-Date: Thu, 11 Sep 2025 10:55:42 +0200
-From: Jan Kara <jack@suse.cz>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>, 
-	Jonathan Corbet <corbet@lwn.net>, Matthew Wilcox <willy@infradead.org>, 
-	Guo Ren <guoren@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, "David S . Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Arnd Bergmann <arnd@arndb.de>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dan Williams <dan.j.williams@intel.com>, 
-	Vishal Verma <vishal.l.verma@intel.com>, Dave Jiang <dave.jiang@intel.com>, 
-	Nicolas Pitre <nico@fluxnic.net>, Muchun Song <muchun.song@linux.dev>, 
-	Oscar Salvador <osalvador@suse.de>, David Hildenbrand <david@redhat.com>, 
-	Konstantin Komarov <almaz.alexandrovich@paragon-software.com>, Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>, 
-	Dave Young <dyoung@redhat.com>, Tony Luck <tony.luck@intel.com>, 
-	Reinette Chatre <reinette.chatre@intel.com>, Dave Martin <Dave.Martin@arm.com>, 
-	James Morse <james.morse@arm.com>, Alexander Viro <viro@zeniv.linux.org.uk>, 
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, 
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Mike Rapoport <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, 
-	Michal Hocko <mhocko@suse.com>, Hugh Dickins <hughd@google.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Uladzislau Rezki <urezki@gmail.com>, 
-	Dmitry Vyukov <dvyukov@google.com>, Andrey Konovalov <andreyknvl@gmail.com>, 
-	Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>, linux-doc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org, linux-csky@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-s390@vger.kernel.org, sparclinux@vger.kernel.org, 
-	nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org, linux-mm@kvack.org, 
-	ntfs3@lists.linux.dev, kexec@lists.infradead.org, kasan-dev@googlegroups.com, 
-	Jason Gunthorpe <jgg@nvidia.com>
-Subject: Re: [PATCH v2 09/16] doc: update porting, vfs documentation for
- mmap_prepare actions
-Message-ID: <xbz56k25ftkjbjpjpslqad5b77klaxg3ganckhbnwe3mf6vtpy@3ytagvaq4gk5>
-References: <cover.1757534913.git.lorenzo.stoakes@oracle.com>
- <e50e91a6f6173f81addb838c5049bed2833f7b0d.1757534913.git.lorenzo.stoakes@oracle.com>
+	s=arc-20240116; t=1757583947; c=relaxed/simple;
+	bh=MHXNE8zlrdOl/5ERPQ4ETWpKs5fXAkubu4eUasi2MJI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=YKALUrFPdLPOYhSWRXEUVQEtYlcxqnyDgZFtzrk6NsJlVW8nLdaFsIH5FuQuergPJ+ZKrpTrA96nrINw5xeVGsPKnHR5m1GsodaQqCke4Al3Y54XmXNTYC+Aw/t2SvQURzWjiWV6bPiNdJ2CSX3pfCYsFkWgooBfZOvhydYqjn4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QV609RYC; arc=none smtp.client-ip=209.85.219.65
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f65.google.com with SMTP id 6a1803df08f44-75512f5a75cso4474966d6.2
+        for <linux-mips@vger.kernel.org>; Thu, 11 Sep 2025 02:45:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1757583944; x=1758188744; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=qnoq1sH/+JsGWFUbNrxZ5NkQ9Hl7jVr2bsCXWY9X2Yg=;
+        b=QV609RYCbikPan9kZOYTYzKngHfFnmmjqiyEJpoUy3FuW4+uRSm7srgU2OyCoVR2rJ
+         21ON2kkwGbjFx9UGL5AC0TbYk86yUhgMHpW0zigeaWqA/+Bf+6iZUMqYAjUpFRqx756Z
+         IQrJet6LblYxL37rPH/exrxP95neH++dIFz1/xJXQP2CzaBIU45p83enoWdk93AfuzO7
+         vd8xCC05rOiT6I77+KuVzWVzGhxExlasClq/ifXINa6ibIKxuXFby4coyHVOdZ3PiXE7
+         6VSpFmCE3ix9MMr/599XtEV0CaJkvEAdnXkZrN5Vss4mtsX+dAhujexFz+Lks6tEhx5J
+         ki2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1757583944; x=1758188744;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qnoq1sH/+JsGWFUbNrxZ5NkQ9Hl7jVr2bsCXWY9X2Yg=;
+        b=HCbvZeMeUPfju4NMT4aZJHFvyCQf7rdTqNyv0084P4tTKQTaQp2OKiysHPF1jeVUxa
+         7EujwgVrkAnJ43h7qNZq8hql29XIaELy38ukaejNbdYjzXhocxz9FcDpU+yDwc9Tj2Ry
+         r8mLS+qeaO8h5m1OiaykuR+oW4M0raE+InHc2BJHnuP9RIIFd19/IHGsryL5gFxUaH8G
+         Wutam8Mj+yQ9FH6K1i9yHBXWeXhNs9x7POcOwDri1Qr3HmoMLIeuDYHP3g6i4UUsGyAr
+         IK4VPPh6Gipp2RCCVEHH9XxAqu4HZu+wa0jfGf/zZzWGRn8/gos2+HKQTwYACI5a1h3c
+         DwnQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXTqAxOJDL2y5xLi7HVCYvp0ugB/36CklsZw40dHfT5XbboLB0d9bAukxlFJvPkE0uBZAWpsBbDFPXc@vger.kernel.org
+X-Gm-Message-State: AOJu0YxlSTrc8/zQgPF03EGE4SAHDVzMdXfWJVjkQXk2mw2AN8sEdzP5
+	uIYmnVOpivjAu4Ao/tL3WacKWqJk9HTzIllJTxcjF28uglS6YiJzUEaR
+X-Gm-Gg: ASbGnctMkykXRwnlj/2KsgLHxwRnl0lqqHANvCJsHXTiXpoaNzO9LiOmGfzMnEcMND/
+	JrlouX9jSxDkTPCK2AAGrqsnGl01JWMW1A9Ek5gtjyMK9nPE0+/usiQzeWe3V9yykWFU0RcO1bV
+	yum6XgByBCzZjg4J5N1Vh1kori9fy59nSm0SsYvhFATKi/7irjEu4CUFbSkLdx5uzQjaCWB3UZJ
+	7XofE1zMR4V0V93KyTvYy++FjZdyYMxu6TFEpw+2qGRGQY4PFVNPv8aRECGP/tFg8vLhNNJ7fA3
+	XPBCPNhuxNY3G+ZSnlfkFg13zFKan1ipFkGvKFOTfyBjGQT0hyKh4lcqqc1sRCe801lNNUJa7wr
+	kOlzidTSGagvL5bQGsmk5GMYuDihb
+X-Google-Smtp-Source: AGHT+IF/qNF6kHMbxtt6lZa1Xs7x2CFaNs1iTBAFhbOiFeMIBZiADx07C0NCGdGRh55KRViIimiJSg==
+X-Received: by 2002:ad4:576e:0:b0:70f:a04f:232f with SMTP id 6a1803df08f44-739344a96damr222770416d6.30.1757583944066;
+        Thu, 11 Sep 2025 02:45:44 -0700 (PDT)
+Received: from [0.0.0.0] ([2001:19f0:1000:6e8b:5400:5ff:fe8a:4c2])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-763b3f48f81sm8150226d6.11.2025.09.11.02.45.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 11 Sep 2025 02:45:43 -0700 (PDT)
+Message-ID: <61dff58f-b425-4af5-b5b9-76d9981ccbd5@gmail.com>
+Date: Thu, 11 Sep 2025 17:45:38 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e50e91a6f6173f81addb838c5049bed2833f7b0d.1757534913.git.lorenzo.stoakes@oracle.com>
-X-Spamd-Result: default: False [-2.51 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	MIME_TRACE(0.00)[0:+];
-	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[oracle.com:email,suse.com:email,suse.cz:email,suse.cz:dkim,imap1.dmz-prg2.suse.org:helo,imap1.dmz-prg2.suse.org:rdns];
-	DKIM_SIGNED(0.00)[suse.cz:s=susede2_rsa,suse.cz:s=susede2_ed25519];
-	FROM_EQ_ENVFROM(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[linux-foundation.org,lwn.net,infradead.org,kernel.org,alpha.franken.de,linux.ibm.com,davemloft.net,gaisler.com,arndb.de,linuxfoundation.org,intel.com,fluxnic.net,linux.dev,suse.de,redhat.com,paragon-software.com,arm.com,zeniv.linux.org.uk,suse.cz,oracle.com,google.com,suse.com,linux.alibaba.com,gmail.com,vger.kernel.org,lists.linux.dev,kvack.org,lists.infradead.org,googlegroups.com,nvidia.com];
-	TO_DN_SOME(0.00)[];
-	TO_MATCH_ENVRCPT_SOME(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	DNSWL_BLOCKED(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCPT_COUNT_GT_50(0.00)[59];
-	DKIM_TRACE(0.00)[suse.cz:+]
-X-Spam-Flag: NO
-X-Spam-Level: 
-X-Rspamd-Queue-Id: BF3946864B
-X-Rspamd-Server: rspamd2.dmz-prg2.suse.org
-X-Rspamd-Action: no action
-X-Spam-Score: -2.51
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] irqchip/loongson-pch-lpc: Use legacy domain for
+ PCH-LPC IRQ controller
+To: Ming Wang <wangming01@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>,
+ Jiaxun Yang <jiaxun.yang@flygoat.com>, Thomas Gleixner <tglx@linutronix.de>,
+ linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20250911083546.649949-1-wangming01@loongson.cn>
+Content-Language: en-US
+From: Robin <robin.toplinux@gmail.com>
+In-Reply-To: <20250911083546.649949-1-wangming01@loongson.cn>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed 10-09-25 21:22:04, Lorenzo Stoakes wrote:
-> Now we have introduced the ability to specify that actions should be taken
-> after a VMA is established via the vm_area_desc->action field as specified
-> in mmap_prepare, update both the VFS documentation and the porting guide to
-> describe this.
+
+
+On 9/11/25 16:35, Ming Wang wrote:
+> On certain Loongson platforms, drivers attempting to request a legacy
+> ISA IRQ directly via request_irq() (e.g., IRQ 4) may fail. The
+> virtual IRQ descriptor is not fully initialized and lacks a valid irqchip.
 > 
-> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> This issue does not affect ACPI-enumerated devices described in DSDT,
+> as their interrupts are properly mapped via the GSI translation path.
+> This indicates the LPC irqdomain itself is functional but is not correctly
+> handling direct VIRQ-to-HWIRQ mappings.
+> 
+> The root cause is the use of irq_domain_create_linear(). This API sets
+> up a domain for dynamic, on-demand mapping, typically triggered by a GSI
+> request. It does not pre-populate the mappings for the legacy VIRQ range
+> (0-15). Consequently, if no ACPI device claims a specific GSI
+> (e.g., GSI 4), the corresponding VIRQ (e.g., VIRQ 4) is never mapped to
+> the LPC domain. A direct call to request_irq(4, ...) then fails because
+> the kernel cannot resolve this VIRQ to a hardware interrupt managed by
+> the LPC controller.
+> 
+> The PCH-LPC interrupt controller is an i8259-compatible legacy device
+> that requires a deterministic, static 1-to-1 mapping for IRQs 0-15 to
+> support legacy drivers.
+> 
+> Fix this by replacing irq_domain_create_linear() with
+> irq_domain_create_legacy(). This API is specifically designed for such
+> controllers. It establishes the required static 1-to-1 VIRQ-to-HWIRQ
+> mapping for the entire legacy range (0-15) immediately upon domain
+> creation. This ensures that any VIRQ in this range is always resolvable,
+> making direct calls to request_irq() for legacy IRQs function correctly.
+> 
+> Signed-off-by: Ming Wang <wangming01@loongson.cn>
 
-Looks good. Feel free to add:
+I have tested this patch on a Loongson 3A6000 platform.
 
-Reviewed-by: Jan Kara <jack@suse.cz>
+Tested-by: Robin <robin.toplinux@gmail.com>
 
-								Honza
-
+> 
 > ---
->  Documentation/filesystems/porting.rst | 5 +++++
->  Documentation/filesystems/vfs.rst     | 4 ++++
->  2 files changed, 9 insertions(+)
+> Changes in v2:
+>    - Address review comments from Huacai Chen.
+>    - Fix function call indentation style.
+> ---
+>   drivers/irqchip/irq-loongson-pch-lpc.c | 9 +++++++--
+>   1 file changed, 7 insertions(+), 2 deletions(-)
 > 
-> diff --git a/Documentation/filesystems/porting.rst b/Documentation/filesystems/porting.rst
-> index 85f590254f07..6743ed0b9112 100644
-> --- a/Documentation/filesystems/porting.rst
-> +++ b/Documentation/filesystems/porting.rst
-> @@ -1285,3 +1285,8 @@ rather than a VMA, as the VMA at this stage is not yet valid.
->  The vm_area_desc provides the minimum required information for a filesystem
->  to initialise state upon memory mapping of a file-backed region, and output
->  parameters for the file system to set this state.
-> +
-> +In nearly all cases, this is all that is required for a filesystem. However, if
-> +a filesystem needs to perform an operation such a pre-population of page tables,
-> +then that action can be specified in the vm_area_desc->action field, which can
-> +be configured using the mmap_action_*() helpers.
-> diff --git a/Documentation/filesystems/vfs.rst b/Documentation/filesystems/vfs.rst
-> index 486a91633474..9e96c46ee10e 100644
-> --- a/Documentation/filesystems/vfs.rst
-> +++ b/Documentation/filesystems/vfs.rst
-> @@ -1236,6 +1236,10 @@ otherwise noted.
->  	file-backed memory mapping, most notably establishing relevant
->  	private state and VMA callbacks.
->  
-> +	If further action such as pre-population of page tables is required,
-> +	this can be specified by the vm_area_desc->action field and related
-> +	parameters.
-> +
->  Note that the file operations are implemented by the specific
->  filesystem in which the inode resides.  When opening a device node
->  (character or block special) most filesystems will call special
-> -- 
-> 2.51.0
-> 
--- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+> diff --git a/drivers/irqchip/irq-loongson-pch-lpc.c b/drivers/irqchip/irq-loongson-pch-lpc.c
+> index 2d4c3ec128b8..01fe4325ff84 100644
+> --- a/drivers/irqchip/irq-loongson-pch-lpc.c
+> +++ b/drivers/irqchip/irq-loongson-pch-lpc.c
+> @@ -200,8 +200,13 @@ int __init pch_lpc_acpi_init(struct irq_domain *parent,
+>   		goto iounmap_base;
+>   	}
+>   
+> -	priv->lpc_domain = irq_domain_create_linear(irq_handle, LPC_COUNT,
+> -					&pch_lpc_domain_ops, priv);
+> +	/*
+> +	 * The LPC interrupt controller is a legacy i8259-compatible device,
+> +	 * which requires a static 1:1 mapping for IRQs 0-15.
+> +	 * Use irq_domain_create_legacy() to establish this static mapping early.
+> +	 */
+> +	priv->lpc_domain = irq_domain_create_legacy(irq_handle, LPC_COUNT, 0, 0,
+> +						    &pch_lpc_domain_ops, priv);
+>   	if (!priv->lpc_domain) {
+>   		pr_err("Failed to create IRQ domain\n");
+>   		goto free_irq_handle;
+
 
