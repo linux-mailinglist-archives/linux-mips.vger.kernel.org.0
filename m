@@ -1,150 +1,173 @@
-Return-Path: <linux-mips+bounces-11233-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11234-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99CB7B52A36
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 09:38:34 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64BEFB52AA9
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 09:55:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B78701889D85
-	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 07:38:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1E28C5834DE
+	for <lists+linux-mips@lfdr.de>; Thu, 11 Sep 2025 07:55:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CD312727E7;
-	Thu, 11 Sep 2025 07:38:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 592612BEFEF;
+	Thu, 11 Sep 2025 07:55:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="wCZbMyiZ"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="Iu/xuWao";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="XIlM4cTN"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fhigh-a2-smtp.messagingengine.com (fhigh-a2-smtp.messagingengine.com [103.168.172.153])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 846F72741C6
-	for <linux-mips@vger.kernel.org>; Thu, 11 Sep 2025 07:38:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77F462BEC55;
+	Thu, 11 Sep 2025 07:55:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.153
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757576309; cv=none; b=rWUqoSiiFiRybGRydF43drZF46cWTJ8MMm/rX5ABIMCBKlMQHZXxfNcwo47rQcBuA8W9RUdjRfP4loFp3QuKRpLBpfxq+ZorwIJVNs9J7uTrrdBw1x/alXOMHDoLV6Ssz/Poylod/HwkCeiq4QuU7xr43So0zQs8zqjtHcCj1X0=
+	t=1757577351; cv=none; b=nn3rxH7acZGs5D6TvkXiF40IstQxeVA/7zgCAOgST6lqqTcBNlHNCsylse/ctaAoTfkG6mT1HqyCH4g4phOiilK+/PFcYvItfj7lAJnmCyMOSBZUOe4EwxOPTiQEQa1rIS1Fauy8JvZBoMbsdcjftQsKmN3DcD/r64jHG2eYaxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757576309; c=relaxed/simple;
-	bh=jUK8rXo2J6tdIuNkdbMKBrXU6Rird8FTI89p+KzSTdU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=r3Kf/5Cf84bnJ/+A8XSWx5K8I8QEzY4PbVSW7cLLzRZuE8bAROz0TAT5eWjZI1XzaRsJlaO+g43oT1Ag1cwdRuCQdue4q2Lecti8G5FjrKuW4ZU2qSOebJiYaZuytNgDkKos639kze3a1a0mBpAaPR9p6DPLEk2i+jFLx5p2rlM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=wCZbMyiZ; arc=none smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-55f7ab2a84eso335985e87.1
-        for <linux-mips@vger.kernel.org>; Thu, 11 Sep 2025 00:38:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1757576305; x=1758181105; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jUK8rXo2J6tdIuNkdbMKBrXU6Rird8FTI89p+KzSTdU=;
-        b=wCZbMyiZTwJnq9pS7/KeUMs+A7K9WGJRXQ5wonRBAknPQ201tGoLXhinlxKm1zXhWe
-         Xc31QrJO0CjLxC6AWuLfc50kiBT8sDV11mv9jWVsa6D00hYWx1riUdBmeEw0V/IREp9q
-         5oQoBmP9Y4wnjXcls6gxP0vdNV/BHZHoDGTSQ2/Ie4x0iNplUTRE5wMUxgzrUw9vnGms
-         9zof++aiF99/+XvbCkQGKJlYOvX657iPx2MDmQXOxI+lzfWWgtt4l/P4aHhnxAtjELej
-         hMUpL8dYFM3uUIFTXerUetDPXV8pOfq3Bw3g+tQK5Rr17bLia0tbNU42Ol6IPqPLUeGL
-         x71g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757576305; x=1758181105;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=jUK8rXo2J6tdIuNkdbMKBrXU6Rird8FTI89p+KzSTdU=;
-        b=j94DWZik9/S7J4tycoOnBF68JbLoZHgOAoTN46jczASRUVOmiImTgXCdADUwuBid8X
-         v265nAOk18er+wLXPUobzQy5oY3hOarfvq9fmh8dKrhYtgw4NPgrIx+nrULeykXm0RD5
-         vkKcch9ijtYapsztkiBXNKwYqHaCL6IfdsAfMHf2U6Pak+KvSeI9TA8ahVd3sDTXxP2i
-         HZlVmTyuXzDKk2iOLlOkcxzimPgjHdv7KbtN1GhnjLR4i8p9BqByAFGuupv5mdA4jvrY
-         tmuIai+0KHZCetns8wgiBsSc+XHAWVQUl9B9M3815QuQQkjoHwKHCR5prA+qjay66SE9
-         e7rQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWAiJOCyEgTmJB65EBryCDL4gBTVmC5ZR12XXLkRajikYq8eeYn/NGA2pI79ALnK8QmesYFnOgeDG96@vger.kernel.org
-X-Gm-Message-State: AOJu0YxM/WVw5xqmGco7kwY2NWqd+WIQW5ytjar1AOAf+aemuaijvy5W
-	XFnZSm7b96gdHCPl7JhnA22rh4a0Nd0tYtapgfkU9pgzWPy03XdKmvmhRQqMPpVsBXq1DyiglGd
-	9TzaljfB3KSw5P09S9UeTLrxjAnNJpJE/SZu0iXQtndutiT/8VlW8
-X-Gm-Gg: ASbGncu4BZ6OWcE4GEDKPv7MWfyyEWi5EPLZiZalgaUSLx7RZ59+iphuJ+5cNdlZneB
-	59g0fKRn3tLbt9A+HXKJu6oZzf9DEsRAPJuI9/YDg4JIfkdJYSpI4849kg5YB5IKUcG9n4FgChM
-	mRZGQu9GMbu1rhamTKd00keoam5kUrNCQ42pod0bgIYjsrhlr0TFF6sI4tlU56l69yCx6VqZrkL
-	xCpS0dCJ38CEE7Gs2fPg3FQOrnKWRyIY1gJddM=
-X-Google-Smtp-Source: AGHT+IGFKCUUrJkt+A6v+xuc1LQXhwUm4KpMBhnA0hSfXgMQG+z+UHy3svEwymKETUJXd9ilc9E5haoHU8vK2eJzapg=
-X-Received: by 2002:a05:6512:b17:b0:55f:498f:f08e with SMTP id
- 2adb3069b0e04-562614ff71emr7447870e87.24.1757576305171; Thu, 11 Sep 2025
- 00:38:25 -0700 (PDT)
+	s=arc-20240116; t=1757577351; c=relaxed/simple;
+	bh=0i8hnUhy8sTZUL4Vq1iThkRVn9V+TzPj40ZtrBzJyFE=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=Ff0+wVd02L4GqDbPqKcpwaT/20HayKZaGR6DmggLs/x4fRrV8SYQRIGHbdKokp8PJkb11ECqqmxcVxVBsrzCt1mNMBfvXWvYnOuqJqBQysei4xzrx6hZcr5dfX8oPaAysRYmFTsRGh8hvwjuzK0eQUWVkFF+nlBSVqxlS99jljU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=Iu/xuWao; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=XIlM4cTN; arc=none smtp.client-ip=103.168.172.153
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 612031400147;
+	Thu, 11 Sep 2025 03:55:48 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Thu, 11 Sep 2025 03:55:48 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1757577348;
+	 x=1757663748; bh=xezEPREPJQkkrl73Yff7UEqumVCaWAif9r9fc2gAvZU=; b=
+	Iu/xuWaoII7KNzuVcloK0wQmhd56+d5wX0Bleltp/a1sZa3XhGzX/yG9JsPSkl/7
+	2cu0Mu9lmvGcmqeKU6/KrMP/1aCgzIef4N/ewbqrmGkduxdjqLHlEalPav5le4TA
+	+jbgQ1Z+mvU5GokUwPzbGIhEj3HxlMneK0jBDzXQV6kMI00VxiXlnhook7P+C5Y7
+	UriP1BgBZbVa1zMIyagjnMw+2sY7iskhAR0+3srbSjSH0y3Yg7G1I2wCRXsEXXYs
+	8KS2JECjFLMhfIZNMjx0egOaiCksw2shqo/EvFx/UtUO1SZUtqDZzPy4b136cHwy
+	fnHZvT9pGYqsuKxHDCD1Vw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1757577348; x=
+	1757663748; bh=xezEPREPJQkkrl73Yff7UEqumVCaWAif9r9fc2gAvZU=; b=X
+	IlM4cTNCufTDuTwE3rh5KIXiSVCwiy8YX9A8fo53sWQ4p2TKGrlQ/9DVCBOHTBG0
+	ffEsLPh+36l9na0nrD2CgxP/dy96GoNkRtEQRzG5aK6nn56aYQGtYTO9P7Y8UiUs
+	an20A9oCUfkbsypc1JODoplvQuBjF8st8s1x31lQ2U0SYE4Jn1XlEMxhnjGHJwJg
+	CNtYItDmOsxdBDmvbtNp8EHZzfn0AGkDnlRRUoNT54QTlsnpmjuslvLqJymldyuB
+	7h+E3hJYEoPPv37Hpq0Dkh4acaBuHq9oAPE4oR1s4jxxyqb8Wde0k9toW89TrDKm
+	U4uNM1J+ErI42a2u/TYQg==
+X-ME-Sender: <xms:goDCaKLlbLhafX1ItUb5fO7F7xQAPgD71xlygMsk3wgbEP7eJM2VEQ>
+    <xme:goDCaCJu-9GwvmuDVC8Y37QomJEPe0pHbKXVqPPiqeh9QFxf908KEUF8un4MQt4Yp
+    DHkwlYQwPBqiaQ5cv4>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggddvheeivdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
+    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopedvkedpmhhouggvpehsmhhtphhouhht
+    pdhrtghpthhtoheptghhvghsthgvrhdrrgdruhhnrghlsegrrhhinhgtledrtghomhdprh
+    gtphhtthhopegthhhrihhsthhophhhvgdrlhgvrhhohiestghsghhrohhuphdrvghupdhr
+    tghpthhtoheprghnughrvggrshesghgrihhslhgvrhdrtghomhdprhgtphhtthhopehgvg
+    gvrhhtodhrvghnvghsrghssehglhhiuggvrhdrsggvpdhrtghpthhtoheprghlvgigrghn
+    uggvrhdrshhvvghrughlihhnsehgmhgrihhlrdgtohhmpdhrtghpthhtohepshgvrhhgih
+    hordhprghrrggtuhgvlhhlohhssehgmhgrihhlrdgtohhmpdhrtghpthhtohepshhurhgv
+    nhgssehgohhoghhlvgdrtghomhdprhgtphhtthhopeifihhllhihsehinhhfrhgruggvrg
+    gurdhorhhgpdhrtghpthhtohepihhrrgdrfigvihhnhiesihhnthgvlhdrtghomh
+X-ME-Proxy: <xmx:g4DCaPln0xPi_AdWtVR-mPv6uC8M-3Q_mjf16Kd5LjcVVSzFRbJ7CA>
+    <xmx:g4DCaDlZzyLWYRlZII_JRVLfe6viWHF9oK_S1UNgWncQPOR1vmL64w>
+    <xmx:g4DCaJdy81733zjxS4Q3r5w2j6PHhciLt1QMfw2trLXRldoMsUuYcw>
+    <xmx:g4DCaJIi6RXGIaczaDEPnKMDiC-8AkssR85-snNhqeii8rn1LFIfJA>
+    <xmx:hIDCaH7vVqOM0fbJf4funeExzGloqdRoMAB7v2eOhCknP0mHQleXCcBx>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id D083E700065; Thu, 11 Sep 2025 03:55:46 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250910-gpio-mmio-gpio-conv-part4-v2-0-f3d1a4c57124@linaro.org> <CACRpkdb=J+hiC5cu+g0Z-gqzpG8PgX01CXc4P98FfSSAf7PZEA@mail.gmail.com>
-In-Reply-To: <CACRpkdb=J+hiC5cu+g0Z-gqzpG8PgX01CXc4P98FfSSAf7PZEA@mail.gmail.com>
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-Date: Thu, 11 Sep 2025 09:38:12 +0200
-X-Gm-Features: Ac12FXwiBbcmTD8LlFccmOHZdwwoOfYFi61pHLgjut8Pxa8sFHcycGYwle9xiUk
-Message-ID: <CAMRc=McbadZx1yK1jGeyUnXAFZgfA8YpLwacmqC0eMonS-c-9A@mail.gmail.com>
-Subject: Re: [PATCH v2 00/15] gpio: replace legacy bgpio_init() with its
- modernized alternative - part 4
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: Keguang Zhang <keguang.zhang@gmail.com>, Alban Bedel <albeu@free.fr>, 
-	Doug Berger <opendmb@gmail.com>, Florian Fainelli <florian.fainelli@broadcom.com>, 
-	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Paul Walmsley <paul.walmsley@sifive.com>, Samuel Holland <samuel.holland@sifive.com>, 
-	Yixun Lan <dlan@gentoo.org>, Andy Shevchenko <andy@kernel.org>, linux-gpio@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, spacemit@lists.linux.dev, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-ThreadId: AmcCJOTBQ5ho
+Date: Thu, 11 Sep 2025 09:53:45 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Andreas Larsson" <andreas@gaisler.com>, ksummit@lists.linux.dev
+Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org,
+ linux-mm@kvack.org, imx@lists.linux.dev,
+ "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+ "Richard Weinberger" <richard@nod.at>,
+ "Lucas Stach" <l.stach@pengutronix.de>,
+ "Linus Walleij" <linus.walleij@linaro.org>,
+ "Geert Uytterhoeven" <geert+renesas@glider.be>,
+ "Ankur Arora" <ankur.a.arora@oracle.com>,
+ "David Hildenbrand" <david@redhat.com>,
+ "Mike Rapoport" <rppt@kernel.org>,
+ "Lorenzo Stoakes" <lorenzo.stoakes@oracle.com>,
+ "Matthew Wilcox" <willy@infradead.org>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ "Vlastimil Babka" <vbabka@suse.cz>,
+ "Suren Baghdasaryan" <surenb@google.com>,
+ "Ira Weiny" <ira.weiny@intel.com>, "Nishanth Menon" <nm@ti.com>,
+ =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+ "Alexander Sverdlin" <alexander.sverdlin@gmail.com>,
+ "Chester A. Unal" <chester.a.unal@arinc9.com>,
+ "Sergio Paracuellos" <sergio.paracuellos@gmail.com>
+Message-Id: <363853cd-7f10-4aa9-8850-47eee6d516b9@app.fastmail.com>
+In-Reply-To: <5d2fec2b-8e59-417e-b9e6-12c6e27dd5f0@gaisler.com>
+References: <4ff89b72-03ff-4447-9d21-dd6a5fe1550f@app.fastmail.com>
+ <5d2fec2b-8e59-417e-b9e6-12c6e27dd5f0@gaisler.com>
+Subject: Re: [TECH TOPIC] Reaching consensus on CONFIG_HIGHMEM phaseout
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Wed, Sep 10, 2025 at 11:32=E2=80=AFPM Linus Walleij <linus.walleij@linar=
-o.org> wrote:
+On Thu, Sep 11, 2025, at 07:38, Andreas Larsson wrote:
 >
-> On Wed, Sep 10, 2025 at 9:12=E2=80=AFAM Bartosz Golaszewski <brgl@bgdev.p=
-l> wrote:
->
-> > Here's the final part of the generic GPIO chip conversions. Once all th=
-e
-> > existing users are switched to the new API, the final patch in the
-> > series removes bgpio_init(), moves the gpio-mmio fields out of struct
-> > gpio_chip and into struct gpio_generic_chip and adjusts gpio-mmio.c to
-> > the new situation.
-> >
-> > Down the line we could probably improve gpio-mmio.c by using lock guard=
-s
-> > and replacing the - now obsolete - "bgpio" prefix with "gpio_generic" o=
-r
-> > something similar but this series is already big as is so I'm leaving
-> > that for the future.
-> >
-> > Tested in qemu on vexpress-a9.
-> >
-> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->
-> The patch set is a beauty, hands down.
-> Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
->
-> I especially like where you caught local spinlocks being
-> (ab)used instead of the generic irqchip ones.
->
-> I don't know about merging patch 15/15 into just the GPIO
-> tree, that can make things fail in other subsystems depending
-> on merge order into Torvalds tree or linux-next if your tree is
-> merged first.
->
-> I would merge the first 14 and keep the last for the later part
-> of the merge window when all other trees with conversions
-> are merged.
->
-> (You probably already thought of this.)
->
-> Yours,
-> Linus Walleij
+> We have a upcoming SoC with support for up to 16 GiB of DRAM. When that is
+> used in LEON sparc32 configuration (using 36-bit physical addressing), a
+> removed CONFIG_HIGHMEM would be a considerable limitation, even after an
+> introduction of different CONFIG_VMSPLIT_* options for sparc32.
 
-I already have both pinctrl and mfd changes in my tree from Lee's and
-your immutable branches. I pushed this into gpio/devel and it built
-just fine.
+I agree that without highmem that chip is going to be unusable from Linux,
+but I wonder if there is a chance to actually use it even with highmem,
+for a combination of reasons:
 
-Bart
+- sparc32 has 36-bit addressing in the MMU, but Linux apparently never
+  supported a 64-bit phys_addr_t here, which would be required.
+  This is probably the easiest part and I assume you already have patches
+  for it.
+
+- As far as I can tell, the current lowmem area is 192MB, which would
+  be ok(-ish) on a 512MB maxed-out SPARCstation, but for anything bigger
+  you likely run out of lowmem long before being able to touch the
+  all highmem pages. This obviously depends a lot on the workload.
+
+- If you come up with patches to extend lowmem to 2GB at the expense
+  of a lower TASK_SIZE, you're still  looking at a ration of 7:1 with
+  14GB of highmem on the maxed-out configuration, so many workloads
+  would still struggle to actually use that memory for page cache.
+
+- If we remove HIGHPTE (as discussed in this thread) but keep HIGHMEM,
+  you probably still lose on the 16GB configuration. On 4GB configurations,
+  HIGHPTE is not really a requirement, but for workloads with many
+  concurrent tasks using a lot of virtual address space, you would
+  likely want to /add/ HIGHPTE support on sparc32 first.
+
+When you say "used in LEON sparc32 configuration", does that mean
+you can also run Linux in some other confuration like an rv64
+kernel on a NOEL-V core on that chip?
+
+Aside from the upcoming SoC and whatever happens to that, what is
+the largest LEON Linux memory configuration that you know is used
+in production today and still requires kernel updates beyond ~2029?
+
+      Arnd
 
