@@ -1,78 +1,78 @@
-Return-Path: <linux-mips+bounces-11322-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11323-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4392BB56506
-	for <lists+linux-mips@lfdr.de>; Sun, 14 Sep 2025 05:53:47 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D4B1B56516
+	for <lists+linux-mips@lfdr.de>; Sun, 14 Sep 2025 05:54:18 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 82E9F1A20C49
-	for <lists+linux-mips@lfdr.de>; Sun, 14 Sep 2025 03:54:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 59C041A20DCE
+	for <lists+linux-mips@lfdr.de>; Sun, 14 Sep 2025 03:54:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3278D26F2B7;
-	Sun, 14 Sep 2025 03:53:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AE9B26E717;
+	Sun, 14 Sep 2025 03:54:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lnfVFf76"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="m7q9EjnF"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CC1E26C39E
-	for <linux-mips@vger.kernel.org>; Sun, 14 Sep 2025 03:53:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC84726B747
+	for <linux-mips@vger.kernel.org>; Sun, 14 Sep 2025 03:54:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1757822018; cv=none; b=EarAzgqQYQcrBZ1ETGAS1y9dx/GFac8yRmvpPgycKnl87Y8edthV7rERMJ2gCzun3iqXZucKkda3aH+zZV+UYzHAa9nHOt78AG60SDijRyqrbiOCzS3fvR2DvzRFI2L9Fa+0x3VSIPphUbnTZwIFNHYfCujIeU6LoskemJUsc4o=
+	t=1757822052; cv=none; b=Yw7qz9k87tBz38nEu515bTl1JlsPwdmO5EokDb9HXgWwmsOevttr/OwAQlmVHJa+opJvM2qHaK/v2zzpvgF10UbSRe5sJL2SPzuI3rowbR8R2KYP3Ta8wBM6IQv+xkrjgP2YhcurLnYG/SihejOJMtblsm4tETtkD2BzU2GCSMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1757822018; c=relaxed/simple;
-	bh=FZoweijhihxtu6HrPrxAC18gjv4DF8N0f7D122SferU=;
+	s=arc-20240116; t=1757822052; c=relaxed/simple;
+	bh=E3G8T/3zLMm3x5kad8USEbJCkxfjt487WTCm3NfxUQM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MMkhyI5AEXUFaxwtdKWugC5GbghvJ6rljuqKLJK/kM1/hTEKp5LQ5nfDbQMjOb6BSCvoVMzWXZVkPK/5gqBOj4uiHtovTlBD4OFmlI4Vu/miUOpZc28WzKgGNmu4y+dL0/LjdWE7eNc6pxkgIWUKaBbX1/6Im5UFUE3PDzw58z8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lnfVFf76; arc=none smtp.client-ip=209.85.208.43
+	 MIME-Version; b=Xfxj5nwo0ieU4X9yw0BBbBLm62/97S3r35DT1ol9IQxLRIJDvngmg2sK3i8sFqdn6TVUODlUpvSKpXdVV37aH3MNtfnqxEPLsQL0ZzSO1ihV9esJoj8kjjl1n+t0QDCnARmiZJ1jau5K3VvxWi/28cZ/2Chg/mnsg1VHwAecFbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=m7q9EjnF; arc=none smtp.client-ip=209.85.208.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-62ee43b5e5bso3293635a12.1
-        for <linux-mips@vger.kernel.org>; Sat, 13 Sep 2025 20:53:34 -0700 (PDT)
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-62f261a128cso704843a12.2
+        for <linux-mips@vger.kernel.org>; Sat, 13 Sep 2025 20:54:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1757822013; x=1758426813; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1757822048; x=1758426848; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=PB2E9PPBAv72v29AyxICCzYyZlb0WEV+ovfXoPOatKs=;
-        b=lnfVFf762khiYz0FDgghMlXPGvOITxGCtk+wu9qrbN5hxLRAJ1gs2+ppk7BKe0HXlG
-         G5OREfPjiRmY8EwPfB8G4xt1X/oakdJZUIVKAQidEaQcGSNKY/+M0I9BNsBTVp63txq9
-         mWNSh2WPW1lcIW6EbcZonrtOLr+rPOcWu02CjDYUuTOSmFZo9hjdGaUQTIax5JlCS+NZ
-         TNYxrphaJHRheaHZZPcAmZYwIMBqEB73xXkFvBqUDa4R/U5otIgxVvxeHp4zNeeaJNCP
-         7lKrRo7Ge+7IBKugxANcXh/v7/I3r3NwkZPsvZtjWj9jftx6y6vKzysCIfWd+kJWivtX
-         fbww==
+        bh=U0YiDU4Bzw7IKNW2/fgCfvKW6iRx1DQ4l7Ssn455PQA=;
+        b=m7q9EjnFFJXZKnnJWAuHewuPVuFM6vjLTLUvGfzyzdImBQ++EznbIWQrk7ZI2edCxN
+         ABVvHSn4RknXX5w6azOwuYHGkiavtI++cDhw2VB+z9yMG4LKQot3louLK0jFpgqq1FWv
+         Q78TRjdvR0Cw/rFvCF6EeApx0C0A+QEIwW3wsoRz53U0346Ms0IAbOFiBo7TQKjy2D0H
+         6fAS2QfZ95SJNv8tL8ibrMA8/T7EUfTK9KZRsSZi0NwfZi/1IKHCtEKzDysYdoxQDCFa
+         Jvp3JCGDTMjnFlQzVxYRvv7qTI5TjZp2QRR+sCsbevZnJUnSRA7koomaDueq5ksTsrH3
+         uUqg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1757822013; x=1758426813;
+        d=1e100.net; s=20230601; t=1757822048; x=1758426848;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=PB2E9PPBAv72v29AyxICCzYyZlb0WEV+ovfXoPOatKs=;
-        b=DEx2JoqX8titWRgDFp67+X/poEvO8qggYwOBx1d9ltPkj0iSGzXKzXrj/ZqYxg7mA7
-         LBiEpYupbRo/nLMIEbtHHmIhExgv50PAe3eFHwuOmSZyMfbWX1z5SOzmrD9/zQC0mAFk
-         aYLtmNC8qR7GauKf29iq06pV/cddwqJpLTpVhSVhSHgk58GHNPgaFjBLdpiUbtr8C7VD
-         FcbK9x2YEy4G8D68moyy2MkcEMsA9LgzEHc0XWayc5lTOV1St2uE43+3VIlNXVucPuDq
-         Iojkb+b4jGROmZxyi56dVhYM2bwsuwJseXjSK936nFzHiWmEhUCjOLbRlEN1oqzCybw2
-         lmTA==
-X-Forwarded-Encrypted: i=1; AJvYcCUd6TQLDPPmxqtrUfRCbV80uBdtfkIAgaalHHB3aoUKR8Y388+eVjbTz/uGB4vVupUbv++Df1lqmxpT@vger.kernel.org
-X-Gm-Message-State: AOJu0YwV5DsQHU2f3jXawKjwXVYXaO4rO4nIM7inVnfr5gAB0ueY+6EF
-	WwrWm5yCet8BIRp5p1cRtc69SEVWxb2GWMIDFXLjuj1aTlG0KuseJIm2
-X-Gm-Gg: ASbGncvIiry95SQr+Sf81HVzUHoTS27dJDyDPhFnxEKpibvftTgg4uc4VLXp/lYQryW
-	ZGUNMn6vgNC6SRy3YWJOGCKh4GnWUik9V/DKZTogSHXsyKYHrzm5m+Ke7zrG6XkWC12DNtthjtk
-	fqKz5X1bIQ/3sxvz+7ddndLIVwYZjhh0QDdJfyb88nOp6hb7R+w7QABU6cWsQQEa3gkXyeqLh9U
-	ScNAaozJ3UKd+ql+8l0TddKySMqKdAAeG2gOEJgsK9y2SwURQXEbq1Sjzb5KcT1wgzzJDQgknSa
-	yeJS6uIQtyErw8KUXL3b7yM1SfEH7tSW8/9oILZRySG+yW4PPiEFrcNEaGSrutJLRTyeOGAVQos
-	SRr6EUP/3+Cr4wkVsyP1HJtv695/qGg==
-X-Google-Smtp-Source: AGHT+IGUQXhZVcMzH5x4qrxgNQpCZ4sYyZ3ugDsvfNumu2I8pECs9df4oC+H+CMnm997jPnr5crTug==
-X-Received: by 2002:a05:6402:2111:b0:61d:2096:1e92 with SMTP id 4fb4d7f45d1cf-62ed82614c4mr7020136a12.15.1757822012514;
-        Sat, 13 Sep 2025 20:53:32 -0700 (PDT)
+        bh=U0YiDU4Bzw7IKNW2/fgCfvKW6iRx1DQ4l7Ssn455PQA=;
+        b=IpbZPaMP2yTzVOqDC/wG7SJrHundbxvhSUfeQe7qSr9QppTbWIBsCos1OkwWAHwEiy
+         zgVLWDemdldlTL1/j9WPXoshcVqI5qwZyEPVfv2/VPjRuZfL8h8AE0pLIAdxdsg2/3c8
+         vCHbFLqKkxd11SFJ8DlgwyEtBwGrHUVt6BIdA2vDF8a4hkJY4qvEWFNJKLXDxDXCFeD2
+         Q3tj6Bbc4aCoImcjvtlwgJjtxqFgSDc8QGOmtFV5MulxYO37F65Y7817ukYs9Q+GtMmb
+         /r+aPqF7BYEOZnLW1SeYz2SHXlnGSdPYvAUDHU8OAiCnxUzpwWcZfzdbVqZOEyBVKSha
+         nijw==
+X-Forwarded-Encrypted: i=1; AJvYcCU8xjboymuJjg3NjhxzZuede646aeUwBL4iWvKurjvcawuDS4djL8LhbQjSouC2lz2v8iYMux45127t@vger.kernel.org
+X-Gm-Message-State: AOJu0YyRHOUuNVDW4T9HFuBmEszR8Bo/pj4cRB6hjAPs2YcyVTGd3r3m
+	TZE3hhBlwzs0bklJs0DxIpuycyAsfcfzOb1jqXX4/PZBBDIQP5PucAqE
+X-Gm-Gg: ASbGnctGrxAxht2R07egBMdT+pWkqMKV82EPq7PNCqHrHq/t+9+cZPbvWx1Z0qtcvej
+	eW1Hj4jNhVZeQGKVQ51QXADunNzEkf4iPIw4kpkwNTyKEupzTbwuCGMlqXK04OhPTbyLn1Vyf/O
+	hCDPcs6RhRZ7eNBWyEgTlm+ZYgiBLsJnZqxM2Jrlin+XcClbR0QWXwgjVd/oYYrDa/KXk+8rOvA
+	8eU7RV4ztEiwGy0E7c4i4hjOtp1hFHIbHvSmzvbmKt4BSqeQpnMcCDh+TnsINu2VoAn0GlOudqE
+	E3fG2ypBK05YpGCp/k1xmgyZiJtxNMFa23HSWqwyl50WTnzAr6RMKGs2IV6qWralOuy1I4SMYBe
+	1JM3xFi296ILDZpybPYg9g+aj8ZkaQw==
+X-Google-Smtp-Source: AGHT+IEVLkeZlLSkzoTpPLzlBRvNTQ9m/bl133jXYp2zZldNvB+tlYKH8pXYzZ5ISfOO2+UjGM6RFg==
+X-Received: by 2002:a17:907:e8d:b0:b0e:3d88:27fd with SMTP id a640c23a62f3a-b0e3d97e027mr75192266b.8.1757822048020;
+        Sat, 13 Sep 2025 20:54:08 -0700 (PDT)
 Received: from localhost ([212.73.77.104])
-        by smtp.gmail.com with UTF8SMTPSA id 4fb4d7f45d1cf-62ec33f3a5esm6570485a12.30.2025.09.13.20.53.27
+        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-b07da7a8918sm303079766b.56.2025.09.13.20.54.03
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 13 Sep 2025 20:53:32 -0700 (PDT)
+        Sat, 13 Sep 2025 20:54:07 -0700 (PDT)
 From: Askar Safin <safinaskar@gmail.com>
 To: linux-fsdevel@vger.kernel.org,
 	linux-kernel@vger.kernel.org
@@ -128,9 +128,9 @@ Cc: Linus Torvalds <torvalds@linux-foundation.org>,
 	Thorsten Blum <thorsten.blum@linux.dev>,
 	Heiko Carstens <hca@linux.ibm.com>,
 	patches@lists.linux.dev
-Subject: [PATCH RESEND 43/62] setsid: inline ksys_setsid into the only caller
-Date: Sun, 14 Sep 2025 06:53:26 +0300
-Message-ID: <20250914035326.3661003-1-safinaskar@gmail.com>
+Subject: [PATCH RESEND 44/62] doc: kernel-parameters: remove [RAM] from reserve_mem=
+Date: Sun, 14 Sep 2025 06:54:02 +0300
+Message-ID: <20250914035402.3670906-1-safinaskar@gmail.com>
 X-Mailer: git-send-email 2.47.2
 In-Reply-To: <20250913003842.41944-1-safinaskar@gmail.com>
 References: <20250913003842.41944-1-safinaskar@gmail.com>
@@ -142,51 +142,27 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-This is cleanup after initrd removal
+This parameter has nothing to do with ramdisk
 
 Signed-off-by: Askar Safin <safinaskar@gmail.com>
 ---
- include/linux/syscalls.h | 1 -
- kernel/sys.c             | 7 +------
- 2 files changed, 1 insertion(+), 7 deletions(-)
+ Documentation/admin-guide/kernel-parameters.txt | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/include/linux/syscalls.h b/include/linux/syscalls.h
-index 77f45e5d4413..75e9ee03d19b 100644
---- a/include/linux/syscalls.h
-+++ b/include/linux/syscalls.h
-@@ -1231,7 +1231,6 @@ int ksys_fchown(unsigned int fd, uid_t user, gid_t group);
- ssize_t ksys_read(unsigned int fd, char __user *buf, size_t count);
- void ksys_sync(void);
- int ksys_unshare(unsigned long unshare_flags);
--int ksys_setsid(void);
- int ksys_sync_file_range(int fd, loff_t offset, loff_t nbytes,
- 			 unsigned int flags);
- ssize_t ksys_pread64(unsigned int fd, char __user *buf, size_t count,
-diff --git a/kernel/sys.c b/kernel/sys.c
-index 1e28b40053ce..66e1e2dfd585 100644
---- a/kernel/sys.c
-+++ b/kernel/sys.c
-@@ -1265,7 +1265,7 @@ static void set_special_pids(struct pid **pids, struct pid *pid)
- 		change_pid(pids, curr, PIDTYPE_PGID, pid);
- }
+diff --git a/Documentation/admin-guide/kernel-parameters.txt b/Documentation/admin-guide/kernel-parameters.txt
+index a259f2bdba0f..0805d3ebc75a 100644
+--- a/Documentation/admin-guide/kernel-parameters.txt
++++ b/Documentation/admin-guide/kernel-parameters.txt
+@@ -6277,8 +6277,7 @@
+ 			them.  If <base> is less than 0x10000, the region
+ 			is assumed to be I/O ports; otherwise it is memory.
  
--int ksys_setsid(void)
-+SYSCALL_DEFINE0(setsid)
- {
- 	struct task_struct *group_leader = current->group_leader;
- 	struct pid *sid = task_pid(group_leader);
-@@ -1300,11 +1300,6 @@ int ksys_setsid(void)
- 	return err;
- }
- 
--SYSCALL_DEFINE0(setsid)
--{
--	return ksys_setsid();
--}
--
- DECLARE_RWSEM(uts_sem);
- 
- #ifdef COMPAT_UTS_MACHINE
+-	reserve_mem=	[RAM]
+-			Format: nn[KMG]:<align>:<label>
++	reserve_mem=	Format: nn[KMG]:<align>:<label>
+ 			Reserve physical memory and label it with a name that
+ 			other subsystems can use to access it. This is typically
+ 			used for systems that do not wipe the RAM, and this command
 -- 
 2.47.2
 
