@@ -1,151 +1,167 @@
-Return-Path: <linux-mips+bounces-11469-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11471-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D1693B8039E
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Sep 2025 16:48:00 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FC99B80736
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Sep 2025 17:14:19 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4460216F160
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Sep 2025 14:47:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B91246522E
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Sep 2025 15:14:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5FAA2F4A1E;
-	Wed, 17 Sep 2025 14:47:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F8D8332A2F;
+	Wed, 17 Sep 2025 15:14:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oNqET/kH"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="kdxUpA6n"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F6DB1E25FA
-	for <linux-mips@vger.kernel.org>; Wed, 17 Sep 2025 14:47:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6D0636D;
+	Wed, 17 Sep 2025 15:14:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758120475; cv=none; b=WOFOro4/NmceQhIfK/hf8TBu2oDGSHL+ei77JzQzrVRC6fGmEj+DwhhC0VEiF44QsQ+0PAO5A6XPEwjwh0dLw/ObrUqYtH+qOPhihRUZ2iepJeSfSEIiUQHE62k7kiX58a42+C0HjOCijaMNJGT1kpC9VN2CVfn7ATTdVE/JuoI=
+	t=1758122054; cv=none; b=rmUYSjaTPcF8aZgRANMr4s0kKdN2VVgWZyI5Rq00P0VKSKNXYm9k4dbx1MYxV/vlN1JxmYqL0YKy9kblxUSFqWalu7h7GGowm0ILfJTxQ3lTdZ8tR1f5QJiQ2abDQvhIA7xzgdyez2kDtKd/jkfJcu6eEMoSHDj2i+41uEOSDjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758120475; c=relaxed/simple;
-	bh=w9FYSGCFlvp1v1BCXyAA0Xy9sUV+AIrXP/toqUxniEQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=riNt8mWf8oLtq08BdMkgUJOgyEswcwFxw//Ns7RB3JI512CrU8Qj760ORMTONGUU/tj8afdJZ2E6kCP2T7Z1w/EGgXuHQrF4TggTNMuJp08MkjK78pH8qItg3YdROUHDYFZB0+YThb0ll8B0lhyVcVl6z37YF+I7RVb5i2RPxsU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oNqET/kH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 13E81C4CEFA;
-	Wed, 17 Sep 2025 14:47:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758120475;
-	bh=w9FYSGCFlvp1v1BCXyAA0Xy9sUV+AIrXP/toqUxniEQ=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=oNqET/kHKZLRuh4R89fIMtFhu+kPzsP0McepxuDdw8zc1/JEV6/XT4foKK5u334Cx
-	 SMLbRx/jjB7KqxqUYlSzgZb3L4geqYK9p0H/yzw+mCRPjapFsX13MXt/ErvBpTlBaJ
-	 o7ayuzUZfySHw+Kv71KFlhrXEG0NbCELgT7R4DZLGI2PWkhx1Kq9mX3zWAu7R2pVb0
-	 lkcWkCJvfl0UhTT7ZmXUqkFvEPc7GMWwu9y/IQ2u2U3Z7HrK4wQnNVmZx/yWjYdPnm
-	 G0NskpsROE46l74WSI4rn/zHcO5UhREBeSM+EEF6juP2oMvyHoO/LnnE/ouWGJNhnK
-	 1KaQ/5LaTCukQ==
-From: Maxime Ripard <mripard@kernel.org>
-Date: Wed, 17 Sep 2025 16:46:18 +0200
-Subject: [PATCH v4 37/39] drm/ingenic: crtc: Switch to
- ingenic_drm_get_new_priv_state()
+	s=arc-20240116; t=1758122054; c=relaxed/simple;
+	bh=GY7K1aT3tuUAjWTK54bkuu3gu8Ndi5nWOnazTRGkPWQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=a2ZW8zduobd/GibzooqG1DwBE4ehXyjHO8NbynAm/H+oUT91w77fMzd5H+ZIhw2HYIhh+GrDsFg6rb4NNnX4+spUGv7T7z/SmJwb4NAm/k8kslNrhGGIO4M2G/8gYUuWR9zaq4UCHFROT/WMxwoUtPJukTOzy1Wr/U987z7aBbs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=kdxUpA6n; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58HB2heh031364;
+	Wed, 17 Sep 2025 15:13:07 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=Gpbsl9
+	9AcwvMMY8pjAz45RrL3lV0my41naP5Lagcwqg=; b=kdxUpA6nW5Tmi7rGB3AJGR
+	NM/xNi5WIURhafGfjEHgdYGB/psocIFarKbLZ7LR+Xi/jETeHKEloI5I2HX/qqfU
+	Bw/WhoOHsJKnFaPkecwpriLEG/ZyJitxlMMNELYp7qCZLx5Npqe/zn8hm3XPgwhC
+	l+PBZEdcPvlprtcxn3x5dt84pRqYpc7U3cfTn3dW2pzL+3/lWD/I6q7U46UHtbji
+	IqD0yPQyJs7nSLrExCmTcnhUGCyGTEK2EOM1a2I6/Ufxa+rqU7cP2qp3dmd79kFq
+	WX+YEdoojkGTAJa3RoNX4kIiWGtUajT7XIe8Y9oTHLdeXx/vRgxo1jzZ2CbTPo6Q
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 497g4hmj47-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 17 Sep 2025 15:13:07 +0000 (GMT)
+Received: from m0353729.ppops.net (m0353729.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 58HEej22030065;
+	Wed, 17 Sep 2025 15:13:06 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 497g4hmj43-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 17 Sep 2025 15:13:06 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 58HDRm4L029498;
+	Wed, 17 Sep 2025 15:13:04 GMT
+Received: from smtprelay01.fra02v.mail.ibm.com ([9.218.2.227])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 495kb122kc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 17 Sep 2025 15:13:04 +0000
+Received: from smtpav01.fra02v.mail.ibm.com (smtpav01.fra02v.mail.ibm.com [10.20.54.100])
+	by smtprelay01.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 58HFD1rn61604222
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 17 Sep 2025 15:13:01 GMT
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 4A51020043;
+	Wed, 17 Sep 2025 15:13:01 +0000 (GMT)
+Received: from smtpav01.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id DFF1620040;
+	Wed, 17 Sep 2025 15:13:00 +0000 (GMT)
+Received: from osiris (unknown [9.152.212.133])
+	by smtpav01.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Wed, 17 Sep 2025 15:13:00 +0000 (GMT)
+Date: Wed, 17 Sep 2025 17:12:59 +0200
+From: Heiko Carstens <hca@linux.ibm.com>
+To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+        Vincenzo Frascino <vincenzo.frascino@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>, "David S. Miller" <davem@davemloft.net>,
+        Andreas Larsson <andreas@gaisler.com>,
+        Nick Alcock <nick.alcock@oracle.com>, John Stultz <jstultz@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+        Shuah Khan <shuah@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, "Theodore Ts'o" <tytso@mit.edu>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Madhavan Srinivasan <maddy@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Nagarathnam Muthusamy <nagarathnam.muthusamy@oracle.com>,
+        Shannon Nelson <sln@onemain.com>, linux-kernel@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH v3 20/36] s390/time: Set up vDSO datapage later
+Message-ID: <20250917151259.29680Ba8-hca@linux.ibm.com>
+References: <20250917-vdso-sparc64-generic-2-v3-0-3679b1bc8ee8@linutronix.de>
+ <20250917-vdso-sparc64-generic-2-v3-20-3679b1bc8ee8@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250917-drm-no-more-existing-state-v4-37-5d4b9889c3c8@kernel.org>
-References: <20250917-drm-no-more-existing-state-v4-0-5d4b9889c3c8@kernel.org>
-In-Reply-To: <20250917-drm-no-more-existing-state-v4-0-5d4b9889c3c8@kernel.org>
-To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
- Simona Vetter <simona@ffwll.ch>
-Cc: dri-devel@lists.freedesktop.org, Maxime Ripard <mripard@kernel.org>, 
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
- =?utf-8?q?Ville_Syrj=C3=A4l=C3=A4?= <ville.syrjala@linux.intel.com>, 
- Paul Cercueil <paul@crapouillou.net>, linux-mips@vger.kernel.org
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3183; i=mripard@kernel.org;
- h=from:subject:message-id; bh=w9FYSGCFlvp1v1BCXyAA0Xy9sUV+AIrXP/toqUxniEQ=;
- b=owGbwMvMwCmsHn9OcpHtvjLG02pJDBmnTq6fcKfv9fe7Eq+uxLxYd2njuaU/9vs5vHvCvtWAN
- 8chSs/zYMdUFgZhTgZZMUWWJzJhp5e3L65ysF/5A2YOKxPIEAYuTgGYiFwIY8MB4Xpen/3xeTXW
- SReibDjKuSRmCFxetXn6VcEFrS92PbSeMTuKsfXylqX7+SbuEn4oLsRYnzJ1+azsbtW9N9Ujorz
- +TWirqb4Q9Fz1FvtKx+KeOT8/nL3+/ENMVMEpVt6dVoyLuXYwAAA=
-X-Developer-Key: i=mripard@kernel.org; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+In-Reply-To: <20250917-vdso-sparc64-generic-2-v3-20-3679b1bc8ee8@linutronix.de>
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: -lB8-8Z2vm3Dr2RcdiTeItlnik0kFd3-
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTE2MDIwNCBTYWx0ZWRfX0LRupd/nMATB
+ xRH1x3KPf+TeGsBgHzb9CxxubzjsPM3xnWjDFBXVrXb1xnl8dkY4T15BQGOP8AXD1NzuOTVMI9T
+ vyt++8gNnq27pcVi2bYCJP2Zpv85C47f6+JnGasi5qzD4b22Pw8Tfd54sawYgj/G0nN6qX4T+2t
+ KxWPoCxw7oflQSA8CrXDGMKVfJ2GY1fGWARKyxRnD13aQtZjs6NrRvJl8QAdmjvZRG/l8MnuZhS
+ 1G/MCeX/1CDgCgS9UnA+Qf1KwX9KGF/03p/MXyO2dxPmZjecD5qvqxQ2OqtIWFAs2LDX0H7HXO2
+ 1nPDh0fFMqwAjjUFIZbTuRTKdnI0IGr7TwS3bye7rcJIUN/UE+jxDh65KInj/nk1m1BgQN9b8vk
+ KjCbgU2p
+X-Proofpoint-GUID: 9tPi08vdJaon8TFVV3QLHKMPbM8_3wa7
+X-Authority-Analysis: v=2.4 cv=co2bk04i c=1 sm=1 tr=0 ts=68cad003 cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=8nJEP1OIZ-IA:10 a=yJojWOMRYYMA:10 a=VnNF1IyMAAAA:8 a=IMH0LFUbUW6ywGf4fkUA:9
+ a=3ZKOabzyN94A:10 a=wPNLvfGTeEIA:10 a=0lgtpPvCYYIA:10
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-17_01,2025-09-17_02,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1011 impostorscore=0 priorityscore=1501 suspectscore=0 adultscore=0
+ phishscore=0 malwarescore=0 spamscore=0 bulkscore=0 classifier=typeunknown
+ authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2507300000 definitions=main-2509160204
 
-The ingenic CRTC atomic_enable() implementation will indirectly call
-drm_atomic_get_private_obj_state() through ingenic_drm_get_priv_state().
+On Wed, Sep 17, 2025 at 04:00:22PM +0200, Thomas Wei�schuh wrote:
+> Upcoming changes to the generic vDSO library will mean that the vDSO
+> datapage will not yet be usable during time_early_init().
+> 
+> Move the initialization to time_init() which is called later. This is
+> valid as the value of tod_clock_base.tod does not change during the
+> lifetime of the machine and the vDSO datapage is only used much later.
 
-drm_atomic_get_private_obj_state() will either return the new state for
-the object in the global state if it exists, or will allocate a new one
-and add it to the global state.
+This is not true; tod_clock_base is a union and the tod member is changed
+implicitly within clock_sync_global():
 
-atomic_enable() however isn't allowed to modify the global state. So
-what the implementation should use is the
-drm_atomic_get_new_private_obj_state() helper to get the new state for
-the CRTC, without performing an extra allocation.
+	tod_clock_base.eitod += delta;
 
-We still need to make sure the private state will be part of the global
-state by the time atomic_enable runs, so we still need to call
-ingenic_drm_get_priv_state() in atomic_check. We can then call
-ingenic_drm_get_new_priv_state() in atomic_enable, which is a wrapper
-around drm_atomic_get_new_private_obj_state().
+However that happens only in stop_machine() context. Therefore moving the
+initialization to time_init() is indeed ok, since it is called very early
+when even preemption is still disabled.
 
-Reported-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Suggested-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Signed-off-by: Maxime Ripard <mripard@kernel.org>
----
-To: Paul Cercueil <paul@crapouillou.net>
-Cc: linux-mips@vger.kernel.org
----
- drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
+I would appreciate if you would change the commit message a bit.
 
-diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-index 05faed933e5619c796f2a4fa1906e0eaa029ac68..d3213fbf22be14b177fc1b7100c5b721d5f17924 100644
---- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-+++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-@@ -245,12 +245,12 @@ static void ingenic_drm_crtc_atomic_enable(struct drm_crtc *crtc,
- {
- 	struct ingenic_drm *priv = drm_crtc_get_priv(crtc);
- 	struct ingenic_drm_private_state *priv_state;
- 	unsigned int next_id;
- 
--	priv_state = ingenic_drm_get_priv_state(priv, state);
--	if (WARN_ON(IS_ERR(priv_state)))
-+	priv_state = ingenic_drm_get_new_priv_state(priv, state);
-+	if (WARN_ON(!priv_state))
- 		return;
- 
- 	/* Set addresses of our DMA descriptor chains */
- 	next_id = priv_state->use_palette ? HWDESC_PALETTE : 0;
- 	regmap_write(priv->map, JZ_REG_LCD_DA0, dma_hwdesc_addr(priv, next_id));
-@@ -338,17 +338,23 @@ static int ingenic_drm_crtc_atomic_check(struct drm_crtc *crtc,
- {
- 	struct drm_crtc_state *crtc_state = drm_atomic_get_new_crtc_state(state,
- 									  crtc);
- 	struct ingenic_drm *priv = drm_crtc_get_priv(crtc);
- 	struct drm_plane_state *f1_state, *f0_state, *ipu_state = NULL;
-+	struct ingenic_drm_private_state *priv_state;
- 
- 	if (crtc_state->gamma_lut &&
- 	    drm_color_lut_size(crtc_state->gamma_lut) != ARRAY_SIZE(priv->dma_hwdescs->palette)) {
- 		dev_dbg(priv->dev, "Invalid palette size\n");
- 		return -EINVAL;
- 	}
- 
-+	/* We will need the state in atomic_enable, so let's make sure it's part of the state */
-+	priv_state = ingenic_drm_get_priv_state(priv, state);
-+	if (IS_ERR(priv_state))
-+		return PTR_ERR(priv_state);
-+
- 	if (drm_atomic_crtc_needs_modeset(crtc_state) && priv->soc_info->has_osd) {
- 		f1_state = drm_atomic_get_plane_state(crtc_state->state,
- 						      &priv->f1);
- 		if (IS_ERR(f1_state))
- 			return PTR_ERR(f1_state);
-
--- 
-2.50.1
-
+In any case:
+Acked-by: Heiko Carstens <hca@linux.ibm.com>
 
