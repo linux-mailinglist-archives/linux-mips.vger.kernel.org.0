@@ -1,143 +1,147 @@
-Return-Path: <linux-mips+bounces-11528-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11529-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E029CB8A0A9
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Sep 2025 16:42:10 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86407B8A464
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Sep 2025 17:25:57 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 907B31BC15C9
-	for <lists+linux-mips@lfdr.de>; Fri, 19 Sep 2025 14:42:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1BEA43A51F7
+	for <lists+linux-mips@lfdr.de>; Fri, 19 Sep 2025 15:25:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD04730F7E3;
-	Fri, 19 Sep 2025 14:42:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B192319609;
+	Fri, 19 Sep 2025 15:25:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="G2DwRoqW"
+	dkim=pass (2048-bit key) header.d=freebox-fr.20230601.gappssmtp.com header.i=@freebox-fr.20230601.gappssmtp.com header.b="xbo3W1UF"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3657A24DCEB;
-	Fri, 19 Sep 2025 14:42:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C99163191A3
+	for <linux-mips@vger.kernel.org>; Fri, 19 Sep 2025 15:25:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758292925; cv=none; b=cnPd3olKk+NjI7BmpkMCxKeK5qqwQNyAkCFs4N2uiRESG+ZlSZgdCOwkd06QHMfPW4LXYgls2ytw8mq9/8LXtWftK44WwqMB377ZcyG8CmIce0xvwNkz1DgYTwz0Z7EPrVt/Kkd+uRbHQkeyhakfOHH7+I8ttZVLJhRxjpk7jJU=
+	t=1758295506; cv=none; b=TgUNmDTLJ67szeg9+fQfSaI878f3T6AKnmScWMsXR1hdxjfspFH9Qdn+4Ad1ffxla/EzOxQEz8Vky8zeLuTVC0EzufcsSA15g3AKN7qwKHDuR2pW807DYQ+gGShrXy68YgAEuxbIcFZ0dvg0ZTyCL39BhdoWvNw36zbOA7CXtIE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758292925; c=relaxed/simple;
-	bh=BUXNR1hckyrk8jBBQv+MEaTsb/Yxf7QPZcopTVXtsc0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=nBm4p9YnDLAWcKZkp7EUQCIdjhsW5fHTh6G/T+GEZW2aX3so+qdYemGvO0cPd+UYZLL664PNPrOC0TXbdtAsv0C3N507uVGHuPw0ivifKB0dzrWVo7R4lL5fdyYD9CmJ6y+aOPk1xxAIaVDtCA0zX5p3JVyz/ACK9/VCRIMlgXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=G2DwRoqW; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1758292924; x=1789828924;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=BUXNR1hckyrk8jBBQv+MEaTsb/Yxf7QPZcopTVXtsc0=;
-  b=G2DwRoqWAFwBoeiHRW1PnVtBdkifBZ1fDCZYhjljRvAG10hTiyDtoaMm
-   nVcvcUxm89ol5y5wO8MIGUwm4xR32rrdIIU/AC3D53XJ+o+uDcEHowrUJ
-   /2Cezw4LW9el7AD1n6rods7WJpDafF+ZMP3id8XYE1XkhV/14uYSfydb3
-   y9/j1K/spGAfBpKUewoyEqGBvZMFuQoTfJB2KmPagCMtMJm+uzFfIH5Kp
-   Qe48WopOgTVvDZLpDD+/TSUKtDyaAHChh7QWG/ebYkrQaGPYLIlXdluUz
-   H0oLzljSE8xSBBoOLPKZuIMBRU1xXomaMTMysJvHwkP/c0OpCOch6VFAK
-   w==;
-X-CSE-ConnectionGUID: rCtXrXuCRuWl+rA3xsHEKA==
-X-CSE-MsgGUID: EJ/u+s4TQLuYDQ4Fe3Jepw==
-X-IronPort-AV: E=Sophos;i="6.18,278,1751266800"; 
-   d="scan'208";a="52617186"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa1.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 19 Sep 2025 07:42:02 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58; Fri, 19 Sep 2025 07:41:32 -0700
-Received: from [10.159.245.205] (10.10.85.11) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
- Transport; Fri, 19 Sep 2025 07:41:27 -0700
-Message-ID: <cc027fae-8d34-41ca-bd35-569c415fc657@microchip.com>
-Date: Fri, 19 Sep 2025 16:41:26 +0200
+	s=arc-20240116; t=1758295506; c=relaxed/simple;
+	bh=tIBWHHOOKfm2qL1G0oNEg1lQ/EY8RTTkm2B9w+25Bvk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TLjiJLJuoHOndvuLIs2yo8Sea5MU5iKRPsLLNu5XcDFdhZMoZ4/iSx44O/s/F9JHssQDbme8GKWu+FK5CA4c/24jL4XL9bU3Eb/elCPwAH0jCbyv1/HYFZRhV19Lf6tck8feXqYdISgI6K+3Jpns0QnRF+A3XPb53N/UgI4QBkY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=freebox.fr; spf=pass smtp.mailfrom=freebox.fr; dkim=pass (2048-bit key) header.d=freebox-fr.20230601.gappssmtp.com header.i=@freebox-fr.20230601.gappssmtp.com header.b=xbo3W1UF; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=freebox.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=freebox.fr
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-55f7ab2a84eso2641338e87.1
+        for <linux-mips@vger.kernel.org>; Fri, 19 Sep 2025 08:25:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=freebox-fr.20230601.gappssmtp.com; s=20230601; t=1758295500; x=1758900300; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=EztjVQ+y07YMfegmHOd0VyK62XkODMWu0LdNE29WAS0=;
+        b=xbo3W1UFpKFkZ1p3cmir9bHExoubmn+zN65uKZIOYM/VNr4k3So7pYfDI6mX/D9Xs7
+         tKrFxrKGsa1OUV4/BaJm81tBW61J4ZGYYxqxZFHL+2WJXFRTEp/mhXDIaLf+cQRcgUXe
+         AYqPNZvLbxLN1AyYo7ig5n8eVxO+iPi1huE+4hW6lV7MZkf7YHIdjHXfXdto2VLmATJZ
+         knqRg3MYiebrHRGL5TV4krfrv3EaVDwqo3YKPYYlEuRSeFOsywbR4G16hcwfzRVUvkmK
+         +8rrea1TuR59LvTS19HlGLqGt+kLHJ+F5+322OVOV6/84SIcgYqHnsi5cc3ulWFd4ja5
+         pnpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1758295500; x=1758900300;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=EztjVQ+y07YMfegmHOd0VyK62XkODMWu0LdNE29WAS0=;
+        b=GMt/EjY2wuh5+b9Tsj2+C4AKinFV4GX8A4NiY9PCk6v6jVSMkNxJs71s70WlJ16iGN
+         rfzgazRNBeafMLd39Uo5xv0XFJD0GLBZlIlyCtbNc/T0k5rQUbMAz2K6hj4lLPipQvUB
+         JsEX44GR+RyPmTGcPYLGTjfR2XzaswvAjUjkBJ7EIve1hBNi35FUU3gaoKPGMue6H442
+         h8iAGQvX/9GAidZ7VCatj/EPGCNmK3dCQ4SdphIqUEV9glDcAJUWnnLGPV5gT22q6yrj
+         l2AAYYhbdMmlucdYy12FNcmYGOIvJdmjwKFXJfQe4PG4lNmCBU7iSHYqKbytXFSFdVtt
+         06TQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWc6u6UJQMCX4iUCENMC0mEgL1Zed8ysC+bSCXIyplSunkSodO2BtF/SNuOeOcVHzT1F/ObTwQHlYA0@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJcHfGvdVyLXB/1yqLppZM8hDDL7oyZBif7EGwq+a6Ey2YN/4w
+	kvDO8738zfqBFmVHTpPM2ZfxFCSSp2OhjogWnTKJ3fWq9Zzg67ArtmAuwaeSLkCT0k5/CLnCJrM
+	WxY5+WtEDK/D2a4tvYkvAaXd9ine2Ko2qzfXUDc+IDg==
+X-Gm-Gg: ASbGnct9fxPCyx87fLoq9ORh6OnU6I3jeWHU+UfczY8eILyOLMVgfGXHTr3yWMWYiCq
+	de0F0pawbrIL4W2NJGXCzJjOZYUmbvggyskFxWcBiBDNcB/3Z85KNa0bioZ8423Py6v39RqqpmM
+	scAo+ODVfwF4bQAtTqvJkuU8mzr1HYAcuSyNOQd7jWyExnrynZ2vydIig3HFFERfk0Qy2Kem2fG
+	Fvl3UpujYeG2XA=
+X-Google-Smtp-Source: AGHT+IHin4gQus9SrkFEog2pTedfunr2Ers950l0f82oxrEtfjemfexmsAorW/Dsqdjvay/GpFMt6pfW/hwC+qBHF14=
+X-Received: by 2002:a05:6512:2c0b:b0:571:b70b:7dbf with SMTP id
+ 2adb3069b0e04-579e2507c81mr1455897e87.17.1758295499599; Fri, 19 Sep 2025
+ 08:24:59 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [TECH TOPIC] Reaching consensus on CONFIG_HIGHMEM phaseout
-To: Geert Uytterhoeven <geert@linux-m68k.org>, Arnd Bergmann <arnd@arndb.de>
-CC: Jason Gunthorpe <jgg@nvidia.com>, <ksummit@lists.linux.dev>,
-	<linux-kernel@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linuxppc-dev@lists.ozlabs.org>, <linux-mips@vger.kernel.org>,
-	<linux-mm@kvack.org>, <imx@lists.linux.dev>, Christophe Leroy
-	<christophe.leroy@csgroup.eu>, Richard Weinberger <richard@nod.at>, Lucas
- Stach <l.stach@pengutronix.de>, Linus Walleij <linus.walleij@linaro.org>,
-	Geert Uytterhoeven <geert+renesas@glider.be>, Ankur Arora
-	<ankur.a.arora@oracle.com>, David Hildenbrand <david@redhat.com>, Mike
- Rapoport <rppt@kernel.org>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
-	Matthew Wilcox <willy@infradead.org>, Andrew Morton
-	<akpm@linux-foundation.org>, "Liam R. Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>, Suren Baghdasaryan <surenb@google.com>, Ira
- Weiny <ira.weiny@intel.com>, Nishanth Menon <nm@ti.com>,
-	=?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, Alexander Sverdlin
-	<alexander.sverdlin@gmail.com>, "Chester A. Unal"
-	<chester.a.unal@arinc9.com>, Sergio Paracuellos
-	<sergio.paracuellos@gmail.com>, Andreas Larsson <andreas@gaisler.com>
-References: <4ff89b72-03ff-4447-9d21-dd6a5fe1550f@app.fastmail.com>
- <20250917125951.GA1390993@nvidia.com>
- <02b0f383-1c43-4eeb-a76f-830c2970b833@app.fastmail.com>
- <CAMuHMdVecUeLZ2LPpa457C0a=uduvDhQ4KZJx-++dEFJraRi3w@mail.gmail.com>
-From: Nicolas Ferre <nicolas.ferre@microchip.com>
-Content-Language: en-US, fr
-Organization: microchip
-In-Reply-To: <CAMuHMdVecUeLZ2LPpa457C0a=uduvDhQ4KZJx-++dEFJraRi3w@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20250918152830.438554-1-nschichan@freebox.fr> <20250918195806.6337-1-safinaskar@gmail.com>
+In-Reply-To: <20250918195806.6337-1-safinaskar@gmail.com>
+From: Nicolas Schichan <nschichan@freebox.fr>
+Date: Fri, 19 Sep 2025 17:24:48 +0200
+X-Gm-Features: AS18NWBwMqIXE_dMXDlT0ngUIReSbekPPTszWv5gIfg03bAEg3Id33JL3Yqjedw
+Message-ID: <CAHNNwZAzecVcJXZmycX063-=p-M5jVkfStfgYVKJruOFo7y9zg@mail.gmail.com>
+Subject: Re: [PATCH RESEND 00/62] initrd: remove classic initrd support
+To: Askar Safin <safinaskar@gmail.com>
+Cc: akpm@linux-foundation.org, andy.shevchenko@gmail.com, axboe@kernel.dk, 
+	brauner@kernel.org, cyphar@cyphar.com, devicetree@vger.kernel.org, 
+	ecurtin@redhat.com, email2tema@gmail.com, graf@amazon.com, 
+	gregkh@linuxfoundation.org, hca@linux.ibm.com, hch@lst.de, 
+	hsiangkao@linux.alibaba.com, initramfs@vger.kernel.org, jack@suse.cz, 
+	julian.stecklina@cyberus-technology.de, kees@kernel.org, 
+	linux-acpi@vger.kernel.org, linux-alpha@vger.kernel.org, 
+	linux-api@vger.kernel.org, linux-arch@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org, 
+	linux-csky@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-efi@vger.kernel.org, linux-ext4@vger.kernel.org, 
+	linux-fsdevel@vger.kernel.org, linux-hexagon@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
+	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
+	linux-snps-arc@lists.infradead.org, linux-um@lists.infradead.org, 
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, mcgrof@kernel.org, 
+	mingo@redhat.com, monstr@monstr.eu, mzxreary@0pointer.de, 
+	patches@lists.linux.dev, rob@landley.net, sparclinux@vger.kernel.org, 
+	thomas.weissschuh@linutronix.de, thorsten.blum@linux.dev, 
+	torvalds@linux-foundation.org, tytso@mit.edu, viro@zeniv.linux.org.uk, 
+	x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Geert,
+Hello,
 
-On 19/09/2025 at 09:17, Geert Uytterhoeven wrote:
-> Hi Arnd,
-> 
-> On Thu, 18 Sept 2025 at 15:13, Arnd Bergmann <arnd@arndb.de> wrote:
->> On Wed, Sep 17, 2025, at 14:59, Jason Gunthorpe wrote:
->>> On Tue, Sep 09, 2025 at 11:23:37PM +0200, Arnd Bergmann wrote:
->>>
->>>> I'm still collecting information about which of the remaining highmem
->>>> users plan to keep updating their kernels and for what reason.
->>>
->>> On this topic of removing some parts of highmem, can we say goodbye to
->>> kmap_high_get()? Only ARM uses it and only for
->>> !cache_is_vipt_nonaliasing() systems.
->>
->> Good idea. I think we are almost there, just need to verify that
->> there is actually no impact for existing users. I already knew
->> that there is very little highmem usage on ARMv6 and earlier, but
->> I tried to recheck all platforms that might be affected:
-> 
->> * Microchip SAM9x7 is the newest ARMv5 chip, clearly does
->>    get kernel updates, and the only one I can think of with
->>    DDR3 support, but seems to be limited to 256MB total memory.
-> 
-> Are they limited to DDR3?
+> > When booting with root=/dev/ram0 in the kernel commandline,
+> > handle_initrd() where the deprecation message resides is never called,
+> > which is rather unfortunate (init/do_mounts_initrd.c):
 
-For sam9x75:
-- DDR2
-- DDR3  (DLL Off/On mode)
-- DDR3L (DLL Off/On mode)
+> Yes, this is unfortunate.
+>
+> I personally still think that initrd should be removed.
 
-For (older) sam9x60:
-- LPDDR1
-- DDR2
-- SDRAM & Mobile SDRAM
-> IIRC, someone (you? ;-) told me at ELCE that Microchip keeps on spinning
-> new variants of old SoCs, to accommodate the changing DDR landscape
-> and market.  So perhaps they also accept larger RAM sizes?
-No, in fact we address 256 M Bytes max on sam9x60 and sam9x75 as well.
+Considering that the deprecation message didn't get displayed in some
+configurations, maybe it's a bit early at the very least.
+
+> I suggest using workaround I described in cover letter.
+
+I'm not too keen on having an initramfs just to loop-mount
+/sys/firmware/initrd, after all current kernels are able to handle the
+use case just fine.
+
+It looks like there is a lot of code calling into specific filesystems
+so that the initrd code can guess the size of the file system before
+copying into /dev/ram0, and I believe this is what causes the main
+gripe against initrd today. What is wrong with just copying
+/initrd.image using its actual size into /dev/ram0 instead of guessing
+it with the help of filesystem specific code ?
+
+> Also, for unknown reasons I didn't get your letter in my inbox.
+> (Not even in spam folder.) I ocasionally found it on lore.kernel.org .
+
+Sorry about that, When I used git-send-email yesterday to reply, the
+SMTP server I used wasn't authenticated to google, so all gmail
+recipients were dropped. Hopefully this work better today.
 
 Regards,
-   Nicolas
+
+-- 
+Nicolas Schichan
 
