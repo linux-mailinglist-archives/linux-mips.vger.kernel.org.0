@@ -1,109 +1,134 @@
-Return-Path: <linux-mips+bounces-11533-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11534-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 411A1B8BFB4
-	for <lists+linux-mips@lfdr.de>; Sat, 20 Sep 2025 07:24:43 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id 37293B8C8DC
+	for <lists+linux-mips@lfdr.de>; Sat, 20 Sep 2025 15:25:31 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2D3D21BC6FAD
-	for <lists+linux-mips@lfdr.de>; Sat, 20 Sep 2025 05:25:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1178D1BC3F5D
+	for <lists+linux-mips@lfdr.de>; Sat, 20 Sep 2025 13:25:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E968F224B1F;
-	Sat, 20 Sep 2025 05:24:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C092A1EF38E;
+	Sat, 20 Sep 2025 13:25:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CwV/KZHk"
+	dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="k0NH52mT"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF74FFBF6;
-	Sat, 20 Sep 2025 05:24:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B89B0188CB1;
+	Sat, 20 Sep 2025 13:25:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758345877; cv=none; b=R4uxwTapqE4jvHQcbh+JYZfhsasZaIuLxwUYxgiRtK6M9XIMggZvSiJ7PSMiMT8vTK2P3KTvcN94AuTStHcZi4KRxy9Kjb1K6ilQunVtYOwoZ0YStpaJVqGybT6d8WZ8xQwYbPHqlq/Puju5R1UjrOjx86H5aMdmlSboJ2NNoag=
+	t=1758374725; cv=none; b=guiErapX4C2/2fcNie6idKp9E91Yl94iRtVXNeryBBgo6drhBS944D27w1NZtvhUnbtIlc3HlAofcl5bPkOhhjQ/PeNj1uL9dOakrCphHtDOqW9Vq+mv5jRylz55aeVD4O+/nsnWxqjytNZ1FUT71ACzy5EoDZkUnBIhHdAhvCc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758345877; c=relaxed/simple;
-	bh=ArbrsnGKoxvN0kutLPi6f5zCqz6SQWd3RVzb+lWRIlA=;
-	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
-	 To:Date:Message-ID; b=iijuMFX71+8pasX/DemCpkazuxjlitW2H9+10ZPoz9DCm/tuIYPRw+hfLQkaRpwhZc7MDv4eSKwzsJ7cJBkiDbScs7/DVc1O2aeyDOPlEw85rmSSfdiK5Mv05e+v122D/kfQkij7WhPmp3rKVm+J2qbqPDf3zfbgrBitaiTVRgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CwV/KZHk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 19BDFC4CEEB;
-	Sat, 20 Sep 2025 05:24:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1758345877;
-	bh=ArbrsnGKoxvN0kutLPi6f5zCqz6SQWd3RVzb+lWRIlA=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=CwV/KZHkSldV4EkhZFZ1DqKMzwoMYxh6ywQPyKPMnb4RDeu8eS9MTRYMN9rdc0frt
-	 kGAQUAn9Qf4PpMsHCyKvnUql8Q5CZ7lG/jsUpFTGyWqVihgoo0PahG2ntcoeKQwIdX
-	 wAj5+TBAknXu1ONNro/qZM2R+fmfA9prfgXsIq1hmRKFxXtCnd7EawHp+REgRrWE61
-	 6FPemb9QC4YgchUjpSQZSp06EDUstVZ7AUmEm5tn1FUVFOhAaM/co7YWQGLNTG2qit
-	 I95JTNpOnVE7Hy4TlJpHdUXWYUDoK7y5yjTiD1XQJGiyzadcaV1a68hyHyvMNu/7K0
-	 v3NxkS6hnM72A==
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1758374725; c=relaxed/simple;
+	bh=dBrhZ658+q7SnJqsPpJg+tswJRFTHmQ78cNgPBroFd4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=qgeVJklCiqGVSzTS8twLx/UVFEtaWhPyEJWdKe+vb4o1Lwp/8SiFFUNN4VjRClxBMDWvBR4S7fQ2XDSG7o9uI722Hp1cM4baOFeiLhb2ZO1mhW4Efy56NGAM37fIzXl6xZgx0uYmZLNCfy23x3yzl+tEhx0ZaKGXFmftid5psbI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=k0NH52mT; arc=none smtp.client-ip=130.133.4.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:From:
+	Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
+	References; bh=e2U0S+R40JA/8Y/UUs6naRgYG7DrA2GyrAQ3SGnFjZ4=; t=1758374722;
+	x=1758979522; b=k0NH52mTUMTMIupoVjCT3GqXZpfkWbQozThKOrJTg54zTgAhkrV0hizGUvB4h
+	pqe9g5ahCnKN3L2jlSVVBDohP0pWrs3a5kDGt84MLRG7QkBkexJdM9G6/l6tZgPkjIYloiVAI2RLs
+	iMtN1zPVobBec84CCuzNg598Swri9IdKbx8esCLCI4rDiwdrUeL98ZKJ9lUvxD1o0U6V9ilfvG1J2
+	RW7BnCLuZc7HxCE0yLokhLxfjtz6CglAPPVptKRd2ughkfmzF57s3pXWZ04Xyt1o5+BQEKgy9VGOG
+	tvis7DTydNQ5dTNQ/4FQEJHpxtkl/V8uBxLC3+HiPJHn6i0tTQ==;
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.98)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1uzxa9-00000002Tuo-1mKc; Sat, 20 Sep 2025 15:24:53 +0200
+Received: from dynamic-077-011-103-224.77.11.pool.telefonica.de ([77.11.103.224] helo=[192.168.178.50])
+          by inpost2.zedat.fu-berlin.de (Exim 4.98)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1uzxa9-00000000uE8-0N7C; Sat, 20 Sep 2025 15:24:53 +0200
+Message-ID: <9a122c6cf3e2e0e61a62b0512eb97804acebeee9.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH v3 00/36] sparc64: vdso: Switch to the generic vDSO
+ library
+From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To: Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>, 
+ Andy Lutomirski	 <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Vincenzo Frascino	 <vincenzo.frascino@arm.com>, Arnd Bergmann
+ <arnd@arndb.de>, "David S. Miller"	 <davem@davemloft.net>, Andreas Larsson
+ <andreas@gaisler.com>, Nick Alcock	 <nick.alcock@oracle.com>, John Stultz
+ <jstultz@google.com>, Stephen Boyd	 <sboyd@kernel.org>, Shuah Khan
+ <shuah@kernel.org>, Catalin Marinas	 <catalin.marinas@arm.com>, Will Deacon
+ <will@kernel.org>, Theodore Ts'o	 <tytso@mit.edu>, "Jason A. Donenfeld"
+ <Jason@zx2c4.com>, Russell King	 <linux@armlinux.org.uk>, Madhavan
+ Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>,
+ Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy	
+ <christophe.leroy@csgroup.eu>, Huacai Chen <chenhuacai@kernel.org>, WANG
+ Xuerui	 <kernel@xen0n.name>, Thomas Bogendoerfer
+ <tsbogend@alpha.franken.de>, Heiko Carstens <hca@linux.ibm.com>, Vasily
+ Gorbik <gor@linux.ibm.com>, Alexander Gordeev	 <agordeev@linux.ibm.com>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,  Sven Schnelle
+ <svens@linux.ibm.com>, Nagarathnam Muthusamy
+ <nagarathnam.muthusamy@oracle.com>, Shannon Nelson	 <sln@onemain.com>
+Cc: linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
+	linux-mips@vger.kernel.org, linux-s390@vger.kernel.org, Arnd Bergmann
+	 <arnd@kernel.org>
+Date: Sat, 20 Sep 2025 15:24:51 +0200
+In-Reply-To: <20250917-vdso-sparc64-generic-2-v3-0-3679b1bc8ee8@linutronix.de>
+References: 
+	<20250917-vdso-sparc64-generic-2-v3-0-3679b1bc8ee8@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20250903-clk-eyeq7-v1-9-3f5024b5d6e2@bootlin.com>
-References: <20250903-clk-eyeq7-v1-0-3f5024b5d6e2@bootlin.com> <20250903-clk-eyeq7-v1-9-3f5024b5d6e2@bootlin.com>
-Subject: Re: [PATCH 09/19] clk: divider: check validity of flags when a table is provided
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, linux-mips@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, Tawfik Bayouk <tawfik.bayouk@mobileye.com>, Sari Khoury <sari.khoury@mobileye.com>, =?utf-8?q?Beno=C3=AEt?= Monin <benoit.monin@bootlin.com>
-To: =?utf-8?q?Beno=C3=AEt?= Monin <benoit.monin@bootlin.com>, Conor Dooley <conor+dt@kernel.org>, Gregory CLEMENT <gregory.clement@bootlin.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Michael Turquette <mturquette@baylibre.com>, Philipp Zabel <p.zabel@pengutronix.de>, Rob Herring <robh@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, =?utf-8?q?Th=C3=A9o?= Lebrun <theo.lebrun@bootlin.com>, Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
-Date: Fri, 19 Sep 2025 22:24:36 -0700
-Message-ID: <175834587624.4354.6026619740146574818@lazor>
-User-Agent: alot/0.11
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-ZEDAT-Hint: PO
 
-Quoting Beno=C3=AEt Monin (2025-09-03 05:47:16)
-> If any of the flag CLK_DIVIDER_ONE_BASED, CLK_DIVIDER_POWER_OF_TWO,
-> CLK_DIVIDER_MAX_AT_ZERO or CLK_DIVIDER_EVEN_INTEGERS is set, the divider
-> table will be ignored in _get_div and _get_val. This can lead to subtle
-> bug when a clock is registered with some flags and an optional table,
-> with the clock rate and register value being computed with the wrong
-> type of conversion.
+Hi Thomas,
+
+On Wed, 2025-09-17 at 16:00 +0200, Thomas Wei=C3=9Fschuh wrote:
+> The generic vDSO provides a lot common functionality shared between
+> different architectures. SPARC is the last architecture not using it,
+> preventing some necessary code cleanup.
 >=20
-> Prevent this by refusing to register a divider with both the flag and
-> the table set.
+> Make use of the generic infrastructure.
 >=20
-> Signed-off-by: Beno=C3=AEt Monin <benoit.monin@bootlin.com>
-> ---
->  drivers/clk/clk-divider.c | 7 +++++++
->  1 file changed, 7 insertions(+)
+> Follow-up to and replacement for Arnd's SPARC vDSO removal patches:
+> https://lore.kernel.org/lkml/20250707144726.4008707-1-arnd@kernel.org/
 >=20
-> diff --git a/drivers/clk/clk-divider.c b/drivers/clk/clk-divider.c
-> index 8e8f87024e76625f348f1d66c15a7a938fa0c4db..b4861d519bac2121dd015d094=
-c94a5fee2480148 100644
-> --- a/drivers/clk/clk-divider.c
-> +++ b/drivers/clk/clk-divider.c
-> @@ -561,6 +561,13 @@ struct clk_hw *__clk_hw_register_divider(struct devi=
-ce *dev,
->                         return ERR_PTR(-EINVAL);
->                 }
->         }
+> Tested on a Niagara T4 and QEMU.
+>=20
+> This has a semantic conflict with my series "vdso: Reject absolute
+> relocations during build". The last patch of this series expects all user=
+s
+> of the generic vDSO library to use the vdsocheck tool.
+> This is not the case (yet) for SPARC64. I do have the patches for the
+> integration, the specifics will depend on which series is applied first.
+>=20
+> Based on tip/timers/vdso.
 
-Nitpick: Prefer a newline here.
+Could you share a version of the series based on top of 6.17.0-rcN for
+testing purposes? I would like to test the series on a Sun Netra 240
+which is based on the UltraSPARC IIIi.
 
-> +       if (table && (clk_divider_flags & (CLK_DIVIDER_ONE_BASED |
-> +                                          CLK_DIVIDER_POWER_OF_TWO |
-> +                                          CLK_DIVIDER_MAX_AT_ZERO |
-> +                                          CLK_DIVIDER_EVEN_INTEGERS))) {
-> +               pr_warn("divider table and flags incompatible\n");
+Adrian
 
-This pr_warn() (and the one above this one) are not very helpful because
-we don't know which clk is the problem. We also don't know if this is
-going to cause boot failures for devices out there that have this flag
-set and a table. Were all drivers audited?
-
-I wonder if we can check this condition at compile time with some sort
-of test on the clk_divider_flags expression to see if it is a compile
-time constant along with the table pointer being a compile time constant
-as well that isn't NULL?
-
-> +               return ERR_PTR(-EINVAL);
-> +       }
+--=20
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
 
