@@ -1,135 +1,173 @@
-Return-Path: <linux-mips+bounces-11541-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11542-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7A0AFB9350D
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Sep 2025 23:04:27 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0C5DB935D7
+	for <lists+linux-mips@lfdr.de>; Mon, 22 Sep 2025 23:23:10 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2B5F83A531B
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Sep 2025 21:04:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A2B83B7D4E
+	for <lists+linux-mips@lfdr.de>; Mon, 22 Sep 2025 21:23:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EB8A261B78;
-	Mon, 22 Sep 2025 21:04:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC7D42820BA;
+	Mon, 22 Sep 2025 21:23:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BRjSels8"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="BOU6mVcT";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="gmHBoxtT"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-a7-smtp.messagingengine.com (fout-a7-smtp.messagingengine.com [103.168.172.150])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3B8621E9919
-	for <linux-mips@vger.kernel.org>; Mon, 22 Sep 2025 21:04:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A25EC248F66;
+	Mon, 22 Sep 2025 21:23:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758575061; cv=none; b=dETNZoCEeVBzAHE/S9d4jn730vl3CBG8GZ/zmCemDDz/oV8nmNIu8FThoFYAdvPYfyCCPwWPDfVN1LFs453fk8fcK554W8GQkYUQ5e6pa/FCJGnkMjjnYmCEEAyXquonoH9Y9I5EImuLrq+jP12cppQ7T0yJoEiZXVEWyaWknbw=
+	t=1758576186; cv=none; b=VZKhFbSQb78VHtUD1oNB2x/6ByfXK5XakofZWmnj11nfZ0Z9/EgVdzZyo64BGC5OnFgmtqqtJUfcg7pwAiQGrVD4OZb4XuVbGWlPY+iy5pmoo5sVcfEyfs+gNxY+YWnW0oKaB4Hre8EWRgRgRJAX5EGnhEgkvnLk7RNkSZQa848=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758575061; c=relaxed/simple;
-	bh=IR27taLTFITOYV4B00ku0qQKC4bEZ+4qpChrvPMvsvk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DE9wa3bXQ84mwE+dERTFfAM/aLcHkP+7r4MyhV1qbPeqsQvLm84l7ZmNFNtCDYJTVpuhZCKvvLVOz3qbid2tFigrSm/15oZmJDQbjVax/erS1hKxtbYhqPAT9kbbKUBHkzHP1sTBenAGci6hv/RyWX/jbdkDuXbz/n1gkJdodrY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BRjSels8; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-b07883a5feeso972314066b.1
-        for <linux-mips@vger.kernel.org>; Mon, 22 Sep 2025 14:04:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758575058; x=1759179858; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uh7Hyul+h5lwAcNtxj/DI9qojjFccIciQ/b88SlaL0g=;
-        b=BRjSels8DOVs7qW6xbfiJMfD/GfyjPcjHOVYe2Rgt+KQAzD3xMEVJXn/vZai3COf86
-         269dksgcmZHtamVFgfH8sYfTPVXXWSuMj9MoViEJ5+4HLu8qwGyL8EUOtmG2hqR5p35V
-         yI+hLu0BNSLw4AGDXrR09NtFb5VtSS8BBpbe5PJujhaqK2PoEpJVh1aX00FoUE8A2jMh
-         S65Fu9Jqc6iQF0ibDHrITbxfN0HoM2BjS0IqXUlVyhwKuWSvIFhUUw5rAt3xLQDHs/5D
-         F1s6d0NCxxk9yD17M7mGb0zy+bcuTCjw3cgLGT8FGCPFRs0GsBG4kg471XqJ3SJQ2cCK
-         lVVA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758575058; x=1759179858;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uh7Hyul+h5lwAcNtxj/DI9qojjFccIciQ/b88SlaL0g=;
-        b=ahTpfFX9rTmUQfRg+ExdOtuqjkhp8YAsrCvm1yTYPf9elgHwwOAlDlAegizNXIVWj+
-         GT1/FlTnE1Qw0nXifDpFsEokwKyXDjp1FWdafsxRGvjsEYON2NY0TShLnqgbUmV2g8ZO
-         xJCeZNn8Y/qm1CteO4Dzv22nohAtLFoZc0gXgoUQTkzzKxqCSyZDWPYI66V1mx/+FoYn
-         1Rxt2nExkBPKUFHU75jO6hkF80NeFMQ1Xz6zMcFi4E4D1bjouDbkwe+Bixw6REflC57n
-         jsBWWBb7H594WfsawuQWQtPLZGvqRwVTaBWHoAgvRu2RFe196LSHtPgeNX0R/H8MbiuH
-         ix+A==
-X-Forwarded-Encrypted: i=1; AJvYcCVQnmh4lgpZVY/ZSdaQGt0JubfO680+HIv14k2+ic4tSdBvs7xm+qGkmrOcgSh0n1BYRZ5MVY8Bm4NJ@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/yfH6cUy8Uaq/4peVhphobOEdLxEaquA2XM7KP8UiyhsAl4l7
-	12IhllovufNQgHzRi0Y/OPrpd42wl4pWmKt6QgTmvmHK3x/yih5l38nL7geaX5kDXJSxRrX4SbJ
-	IwRJRCiPr3UwVIimieklRsFh+l4l/0Kk=
-X-Gm-Gg: ASbGncv7NY5YQtRLnX14yoXRNfKiqsRz8u65I8ThdJrXiUbk8lzm861CBonDlNyflIU
-	ToAdD1FAvmf8yoTKZOZQSzx1nlI+LSCHS/WbU1U01gsmDCnR5lGc39KmsT3dVAew9grprqyeHa1
-	KLymG8HmkVObQgTShRHZHa0H9D0jyYDPCDBjRX+XilmB8oRj1EB8y5yBJva/MQ4i2QM5i4T2KMk
-	Afql1Zcxc7RQIcLcMs=
-X-Google-Smtp-Source: AGHT+IFr06URzpJ6aUp4DpRFc3gqIF/QKzvPatkXOguRNAK+5vyBht27Wi77YYUi7cw/QJFO8eHWzN6Nc8/pR3lh7aU=
-X-Received: by 2002:a17:907:72cb:b0:afe:d590:b6af with SMTP id
- a640c23a62f3a-b3026c84e0cmr5356866b.20.1758575058272; Mon, 22 Sep 2025
- 14:04:18 -0700 (PDT)
+	s=arc-20240116; t=1758576186; c=relaxed/simple;
+	bh=9MeoJVbhO66Lo2sUM7HZCvvlOclMK/bvVvuvlROFij4=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=renrY4ANz1DT6N90mD3q/2Yid4CeF2wP4z92jyidgI7+Lt/DDb3EOpWbqkgZwvg5032Ks0GPl1oBAfkVI2Fml3QdDsOAEyhoErMcpt80wbI4/AQXguMLOg2D4MJt0A+2Pjmb2QV/l+DrlOjaLcJN766sJwiMJYYiqgaq0QUU9ts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=BOU6mVcT; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=gmHBoxtT; arc=none smtp.client-ip=103.168.172.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
+	by mailfout.phl.internal (Postfix) with ESMTP id 97915EC0301;
+	Mon, 22 Sep 2025 17:23:03 -0400 (EDT)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-05.internal (MEProxy); Mon, 22 Sep 2025 17:23:03 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1758576183;
+	 x=1758662583; bh=Di8U+yHpW9PWxGMprMpa0qfyAiwc5nChUHQPZxjrHH8=; b=
+	BOU6mVcToMxa6qFUiC6cht0bV05a8ANyKR5ukskNj74Kgap+DqTUaWSu+IKdFe3l
+	WRpUM30Wu3H0Q7A2y/voOAEVMz1ItWGdFd+w1g29YJ7Tjl2aT+hQdsIjBYzOSRat
+	P6tosIN336s/ecXEeQ/mGTufNXrxc6oPikF3ykV/4Wx5E6r8XKZkcW5rH07dbYAi
+	hVS+ZWgjs+wGKwhWw9MlR/A61u1V4gi072jORA/RDnj7Nu/QRBfiadbi2FwamY3C
+	z1g3eaCmC+6ZV0VO36eJ9rA4ai9KBUyUl+kX8rwbdvVby3ynOJZk+yOUH9dNivMj
+	J6BkZ2jlIo5ZNgAXnGA8VQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1758576183; x=
+	1758662583; bh=Di8U+yHpW9PWxGMprMpa0qfyAiwc5nChUHQPZxjrHH8=; b=g
+	mHBoxtTQev5hHzzjS7DzOG6LjQc2O42dSxLb4L6WQb2WlRSURFQb5PpcuBN2HTms
+	62d99pLVtJPUCF7OT5ICVSqlboyOqdGHXJIUax+oI0O3IgOolDGEnOWayvlw19bk
+	GTctlMrBtCTrn15fz5C78bks5N4t7sTFyuHhpbp7bypfTbN9jsFm7miJXebzUTbu
+	GkBm5/mf2z9Lam8hkmNkaZhD/Aa8ufZ9KIVP69Ld+kkRg/FCv7kH/PRqbJ/kSgjT
+	Ys/j3Va2f5abW1fJBGV59q3b0QcV6n8w4sBB+Pm5+Jpany6I0MqmylWHR2hKS/7W
+	p6MNsjIRV0fcgvwbafw5Q==
+X-ME-Sender: <xms:Nb7RaHIv0elNNGqKqz2hq59PlbQ1WvH3PQekoKoYN6GHdrkbplcdZg>
+    <xme:Nb7RaF9zWPO1z0eI-85xdehQcHCJ4U-ixtIweYwspyjZNwYzs6sJyQVkn2QKVroo2
+    tuHZCnZ7Y6hRCAk3yvZYtO1xCbsZ8geow9JBfeHT6Z-a8qAnaICeO8>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdehkeelvdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
+    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
+    hnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieen
+    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
+    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeefuddpmhhouggvpehsmhhtphhouhht
+    pdhrtghpthhtoheptghhvghsthgvrhdrrgdruhhnrghlsegrrhhinhgtledrtghomhdprh
+    gtphhtthhopegthhhrihhsthhophhhvgdrlhgvrhhohiestghsghhrohhuphdrvghupdhr
+    tghpthhtohepnhhstghhihgthhgrnhesfhhrvggvsghogidrfhhrpdhrtghpthhtoheprg
+    hnughrvggrshesghgrihhslhgvrhdrtghomhdprhgtphhtthhopehgvggvrhhtodhrvghn
+    vghsrghssehglhhiuggvrhdrsggvpdhrtghpthhtoheprghlvgigrghnuggvrhdrshhvvg
+    hrughlihhnsehgmhgrihhlrdgtohhmpdhrtghpthhtohepshgvrhhgihhordhprghrrggt
+    uhgvlhhlohhssehgmhgrihhlrdgtohhmpdhrtghpthhtohepshhurhgvnhgssehgohhogh
+    hlvgdrtghomhdprhgtphhtthhopeifihhllhihsehinhhfrhgruggvrggurdhorhhg
+X-ME-Proxy: <xmx:Nb7RaHyj4-U5cmLtj8aV6Obmj2wE8qDHFtnv04wApvnSKRdpvOTwyQ>
+    <xmx:Nb7RaPNEf6QOHCcg2sOwG2YcDZEDgMATtieOS7b2v4iNsq7NAARQhg>
+    <xmx:Nb7RaM7LJ7xoeWbjkfv203dQeqEDMpWgwtURBYX5yI5dIc7-dM-KOA>
+    <xmx:Nb7RaGcvvcBerj7e35_eqxKXMQdHMfkXoSuoEeKpoVO0WLLALUm55w>
+    <xmx:N77RaF-PoW2bovyuykM0k5mv84evTeZMjlxPQrSMV7i2vSrQZNKLFHZX>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 2385C70006A; Mon, 22 Sep 2025 17:23:01 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1758219786.git.leon@kernel.org> <0c64474985af55b1aa934b857808068a0e609c6e.1758219787.git.leon@kernel.org>
-In-Reply-To: <0c64474985af55b1aa934b857808068a0e609c6e.1758219787.git.leon@kernel.org>
-From: Magnus Lindholm <linmag7@gmail.com>
-Date: Mon, 22 Sep 2025 23:04:06 +0200
-X-Gm-Features: AS18NWDVFMZZnWEreuo7vPXyYUB8RQkWA0R_TESbZnVi7LcEMvax5dEHcVzVJVI
-Message-ID: <CA+=Fv5Q8dVUFVBh82mAe=fy3mV6mWtQT_0pBPLQwLNBt3f8E1g@mail.gmail.com>
-Subject: Re: [PATCH 1/9] alpha: Convert mapping routine to rely on physical address
-To: Leon Romanovsky <leon@kernel.org>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>, Leon Romanovsky <leonro@nvidia.com>, 
-	Jason Gunthorpe <jgg@nvidia.com>, Andreas Larsson <andreas@gaisler.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "David S. Miller" <davem@davemloft.net>, 
-	Geoff Levand <geoff@infradead.org>, Helge Deller <deller@gmx.de>, Ingo Molnar <mingo@redhat.com>, 
-	iommu@lists.linux.dev, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Jason Wang <jasowang@redhat.com>, 
-	Juergen Gross <jgross@suse.com>, linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Matt Turner <mattst88@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	"Michael S. Tsirkin" <mst@redhat.com>, Richard Henderson <richard.henderson@linaro.org>, 
-	sparclinux@vger.kernel.org, Stefano Stabellini <sstabellini@kernel.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner <tglx@linutronix.de>, 
-	virtualization@lists.linux.dev, x86@kernel.org, 
-	xen-devel@lists.xenproject.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-ThreadId: AneuvEk2E7Kg
+Date: Mon, 22 Sep 2025 23:22:30 +0200
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Nicolas Schichan" <nschichan@freebox.fr>
+Cc: "Jason Gunthorpe" <jgg@nvidia.com>,
+ "Geert Uytterhoeven" <geert@linux-m68k.org>, ksummit@lists.linux.dev,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org,
+ linux-mm@kvack.org, imx@lists.linux.dev,
+ "Christophe Leroy" <christophe.leroy@csgroup.eu>,
+ "Richard Weinberger" <richard@nod.at>,
+ "Lucas Stach" <l.stach@pengutronix.de>,
+ "Linus Walleij" <linus.walleij@linaro.org>,
+ "Geert Uytterhoeven" <geert+renesas@glider.be>,
+ "Ankur Arora" <ankur.a.arora@oracle.com>,
+ "David Hildenbrand" <david@redhat.com>,
+ "Mike Rapoport" <rppt@kernel.org>,
+ "Lorenzo Stoakes" <lorenzo.stoakes@oracle.com>,
+ "Matthew Wilcox" <willy@infradead.org>,
+ "Andrew Morton" <akpm@linux-foundation.org>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ "Vlastimil Babka" <vbabka@suse.cz>,
+ "Suren Baghdasaryan" <surenb@google.com>,
+ "Ira Weiny" <ira.weiny@intel.com>, "Nishanth Menon" <nm@ti.com>,
+ =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+ "Alexander Sverdlin" <alexander.sverdlin@gmail.com>,
+ "Chester A. Unal" <chester.a.unal@arinc9.com>,
+ "Sergio Paracuellos" <sergio.paracuellos@gmail.com>,
+ "Andreas Larsson" <andreas@gaisler.com>
+Message-Id: <598ab56d-7dd0-4adb-b0fe-30ad5cf24335@app.fastmail.com>
+In-Reply-To: 
+ <CAHNNwZCsBY+ta2-OqD40K0-C8N25PLMYfOJowiVeaEMotqR1nQ@mail.gmail.com>
+References: <4ff89b72-03ff-4447-9d21-dd6a5fe1550f@app.fastmail.com>
+ <20250917125951.GA1390993@nvidia.com>
+ <02b0f383-1c43-4eeb-a76f-830c2970b833@app.fastmail.com>
+ <CAMuHMdVecUeLZ2LPpa457C0a=uduvDhQ4KZJx-++dEFJraRi3w@mail.gmail.com>
+ <547dcb81-434d-4910-aa7c-1d69019fcb3d@app.fastmail.com>
+ <20250919143436.GC2132010@nvidia.com>
+ <44f910bf-ac2c-4b2f-8e50-5cfc7dd0761a@app.fastmail.com>
+ <CAHNNwZCsBY+ta2-OqD40K0-C8N25PLMYfOJowiVeaEMotqR1nQ@mail.gmail.com>
+Subject: Re: [TECH TOPIC] Reaching consensus on CONFIG_HIGHMEM phaseout
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-On Thu, Sep 18, 2025 at 8:45=E2=80=AFPM Leon Romanovsky <leon@kernel.org> w=
-rote:
+On Mon, Sep 22, 2025, at 19:05, Nicolas Schichan wrote:
+>> On Fri, Sep 19, 2025, at 16:34, Jason Gunthorpe wrote:
+>> > On Fri, Sep 19, 2025 at 04:22:20PM +0200, Arnd Bergmann wrote:
+>>
+>> I did get an email from Nicolas Schichan (added to Cc here),
+>> and he is still supporting a widely deployed Kirkwood based
+>> platform that uses 1GB RAM configurations. He should get
+>> a chance to test that with CONFIG_VMSPLIT_3G_OPT, but I
+>> would expect that to continue working, possibly with minor
+>> bugfixes.
 >
-> From: Leon Romanovsky <leonro@nvidia.com>
->
-> Alpha doesn't need struct *page and can perform mapping based on
-> physical addresses. So convert it to implement new .map_phys callback.
+> We don't use HIGMEM on our Kirkwood platform, we are happy using a
+> 2G/2G WMSPLIT. We don't need a lot of virtual address space for
+> userland, and with the 2G split we don't waste physical memory.
 
+Ok, good.
 
-Hi,
+> I'm happy to test your patch serie with VMSPLIT_3G_OPT and see if it
+> still boots with it once you send it.
 
-SInce this patch affects the Alpha platform I got curious and decided to
-try it out. The patch series requires some preparatory patches. Leon
-provided me with links to his dmabuf-vfio branch, which had the
-patches (and some prerequisite stuff) applied already.
+The patches I did for turning off HIGHMEM on ARMv5 won't have
+any effect if you are already running without highmem, so I
+don't think we need to wait for your tests specifically.
+Any testing would be useful of course just to check that
+everything still works.
 
-Based on the dmabuf-vfio branch,  I've built a kernel and tested it on
-my ES40 Alphaserver, the kernel booted fine but after a while of
-moderate filesystem load I started seeing some ext3/4 related error
-messages in the system logs. Rebooting with my old kernel into
-single user mode, I was able to recover the filesystem using fsck.
-Clearly this set of patches breaks things (at least on Alpha).
+Jason, I think we can go ahead with your suggestion. I can
+post my patches for review once I've done some testing on
+them.
 
-I haven't yet dug any deeper into the root causes of the file system
-corruptions and I've only tested this on Alpha, maybe there has been
-more testing done on other platforms targeted by this set
-of patches?
-
-Regards
-
-Magnus Lindholm
+     Arnd
 
