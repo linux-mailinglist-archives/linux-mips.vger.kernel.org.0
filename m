@@ -1,173 +1,246 @@
-Return-Path: <linux-mips+bounces-11542-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11543-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0C5DB935D7
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Sep 2025 23:23:10 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B901B95BEE
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Sep 2025 13:53:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A2B83B7D4E
-	for <lists+linux-mips@lfdr.de>; Mon, 22 Sep 2025 21:23:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4E43A1633D7
+	for <lists+linux-mips@lfdr.de>; Tue, 23 Sep 2025 11:53:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC7D42820BA;
-	Mon, 22 Sep 2025 21:23:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87BB0322A27;
+	Tue, 23 Sep 2025 11:53:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="BOU6mVcT";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="gmHBoxtT"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="EFGvr8Qy"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fout-a7-smtp.messagingengine.com (fout-a7-smtp.messagingengine.com [103.168.172.150])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A25EC248F66;
-	Mon, 22 Sep 2025 21:23:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA5782E8881;
+	Tue, 23 Sep 2025 11:53:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758576186; cv=none; b=VZKhFbSQb78VHtUD1oNB2x/6ByfXK5XakofZWmnj11nfZ0Z9/EgVdzZyo64BGC5OnFgmtqqtJUfcg7pwAiQGrVD4OZb4XuVbGWlPY+iy5pmoo5sVcfEyfs+gNxY+YWnW0oKaB4Hre8EWRgRgRJAX5EGnhEgkvnLk7RNkSZQa848=
+	t=1758628385; cv=none; b=LXmK+HXY0ZgEN75GkRox8EDGaxy5MA65bmIE/5LxDFwRwpm14qSxsa2xGSdhmVkzAu/0t6eHAsUn9TU1H1zu4PrOcND+orEf/9Tct380YV/G/8YT37bXpLzk+pyvLbbbLSeWcbLFRqx/6xbJgKWSPObu/2rc01372dtaa2qhZIw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758576186; c=relaxed/simple;
-	bh=9MeoJVbhO66Lo2sUM7HZCvvlOclMK/bvVvuvlROFij4=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=renrY4ANz1DT6N90mD3q/2Yid4CeF2wP4z92jyidgI7+Lt/DDb3EOpWbqkgZwvg5032Ks0GPl1oBAfkVI2Fml3QdDsOAEyhoErMcpt80wbI4/AQXguMLOg2D4MJt0A+2Pjmb2QV/l+DrlOjaLcJN766sJwiMJYYiqgaq0QUU9ts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=BOU6mVcT; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=gmHBoxtT; arc=none smtp.client-ip=103.168.172.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-05.internal (phl-compute-05.internal [10.202.2.45])
-	by mailfout.phl.internal (Postfix) with ESMTP id 97915EC0301;
-	Mon, 22 Sep 2025 17:23:03 -0400 (EDT)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-05.internal (MEProxy); Mon, 22 Sep 2025 17:23:03 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1758576183;
-	 x=1758662583; bh=Di8U+yHpW9PWxGMprMpa0qfyAiwc5nChUHQPZxjrHH8=; b=
-	BOU6mVcToMxa6qFUiC6cht0bV05a8ANyKR5ukskNj74Kgap+DqTUaWSu+IKdFe3l
-	WRpUM30Wu3H0Q7A2y/voOAEVMz1ItWGdFd+w1g29YJ7Tjl2aT+hQdsIjBYzOSRat
-	P6tosIN336s/ecXEeQ/mGTufNXrxc6oPikF3ykV/4Wx5E6r8XKZkcW5rH07dbYAi
-	hVS+ZWgjs+wGKwhWw9MlR/A61u1V4gi072jORA/RDnj7Nu/QRBfiadbi2FwamY3C
-	z1g3eaCmC+6ZV0VO36eJ9rA4ai9KBUyUl+kX8rwbdvVby3ynOJZk+yOUH9dNivMj
-	J6BkZ2jlIo5ZNgAXnGA8VQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1758576183; x=
-	1758662583; bh=Di8U+yHpW9PWxGMprMpa0qfyAiwc5nChUHQPZxjrHH8=; b=g
-	mHBoxtTQev5hHzzjS7DzOG6LjQc2O42dSxLb4L6WQb2WlRSURFQb5PpcuBN2HTms
-	62d99pLVtJPUCF7OT5ICVSqlboyOqdGHXJIUax+oI0O3IgOolDGEnOWayvlw19bk
-	GTctlMrBtCTrn15fz5C78bks5N4t7sTFyuHhpbp7bypfTbN9jsFm7miJXebzUTbu
-	GkBm5/mf2z9Lam8hkmNkaZhD/Aa8ufZ9KIVP69Ld+kkRg/FCv7kH/PRqbJ/kSgjT
-	Ys/j3Va2f5abW1fJBGV59q3b0QcV6n8w4sBB+Pm5+Jpany6I0MqmylWHR2hKS/7W
-	p6MNsjIRV0fcgvwbafw5Q==
-X-ME-Sender: <xms:Nb7RaHIv0elNNGqKqz2hq59PlbQ1WvH3PQekoKoYN6GHdrkbplcdZg>
-    <xme:Nb7RaF9zWPO1z0eI-85xdehQcHCJ4U-ixtIweYwspyjZNwYzs6sJyQVkn2QKVroo2
-    tuHZCnZ7Y6hRCAk3yvZYtO1xCbsZ8geow9JBfeHT6Z-a8qAnaICeO8>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdehkeelvdcutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdetrhhnugcu
-    uegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusgdruggvqeenucggtffrrghtthgvrh
-    hnpefhtdfhvddtfeehudekteeggffghfejgeegteefgffgvedugeduveelvdekhfdvieen
-    ucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnug
-    esrghrnhgusgdruggvpdhnsggprhgtphhtthhopeefuddpmhhouggvpehsmhhtphhouhht
-    pdhrtghpthhtoheptghhvghsthgvrhdrrgdruhhnrghlsegrrhhinhgtledrtghomhdprh
-    gtphhtthhopegthhhrihhsthhophhhvgdrlhgvrhhohiestghsghhrohhuphdrvghupdhr
-    tghpthhtohepnhhstghhihgthhgrnhesfhhrvggvsghogidrfhhrpdhrtghpthhtoheprg
-    hnughrvggrshesghgrihhslhgvrhdrtghomhdprhgtphhtthhopehgvggvrhhtodhrvghn
-    vghsrghssehglhhiuggvrhdrsggvpdhrtghpthhtoheprghlvgigrghnuggvrhdrshhvvg
-    hrughlihhnsehgmhgrihhlrdgtohhmpdhrtghpthhtohepshgvrhhgihhordhprghrrggt
-    uhgvlhhlohhssehgmhgrihhlrdgtohhmpdhrtghpthhtohepshhurhgvnhgssehgohhogh
-    hlvgdrtghomhdprhgtphhtthhopeifihhllhihsehinhhfrhgruggvrggurdhorhhg
-X-ME-Proxy: <xmx:Nb7RaHyj4-U5cmLtj8aV6Obmj2wE8qDHFtnv04wApvnSKRdpvOTwyQ>
-    <xmx:Nb7RaPNEf6QOHCcg2sOwG2YcDZEDgMATtieOS7b2v4iNsq7NAARQhg>
-    <xmx:Nb7RaM7LJ7xoeWbjkfv203dQeqEDMpWgwtURBYX5yI5dIc7-dM-KOA>
-    <xmx:Nb7RaGcvvcBerj7e35_eqxKXMQdHMfkXoSuoEeKpoVO0WLLALUm55w>
-    <xmx:N77RaF-PoW2bovyuykM0k5mv84evTeZMjlxPQrSMV7i2vSrQZNKLFHZX>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 2385C70006A; Mon, 22 Sep 2025 17:23:01 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1758628385; c=relaxed/simple;
+	bh=uC3KukjZxErvZyqVNyTZvCwwhubZja1S6u22ZrF2EwI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KDydQcy4398DaaLTE1shEEXK83C0oajYGMlHMFs3CZ+a04Ol9wrH0XUM7nUV8hMrvloQZ2Re1L8oyP91B9KzL0suQ4EzyEEi08jdSz3h560befX6/B9VWbG8Imphi+SXlRQ+9qwNfDwqAzx4HPjm658pqAcanFcVxB7P0hqf2DE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=EFGvr8Qy; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0356517.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 58N8Y12b008695;
+	Tue, 23 Sep 2025 11:52:19 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=pp1; bh=FZaoT1QNSR93wIPtHts3CPzp0ctIk0
+	vYDNbzffEOi0c=; b=EFGvr8QyltIf32/aszOR/qJfepgW+UcWXreJDplTglupit
+	m+X7rmX3tdEzuL1hJj2o5XWwJ0r+pCJ4BjGEMOhGvQ5uA7F1CUxQtR7TqdF163bV
+	I3YXhbagNN2r+8NAvqFEHYkOG72rBgt1rm+ek1A/MwpmvyPZqT+huO4x+iKBFWTR
+	eo6ih9hfsFn2nHia9aCP+YLY6UeADcGZp/ivckC/FFUA6i0IL4LnbBeJbqc6eiAl
+	5jWsuCjMMTLD7wV7h8suNXD082oB3YYd9QtgvibDoicaRjRsG3bClbPAwbAw7H1U
+	VId+vHnlTcxFpVyEmlJvEr0+HDviZMbBrXxprVQA==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 499n0jgm9c-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 23 Sep 2025 11:52:19 +0000 (GMT)
+Received: from m0356517.ppops.net (m0356517.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 58NBn9Dd005820;
+	Tue, 23 Sep 2025 11:52:18 GMT
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 499n0jgm96-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 23 Sep 2025 11:52:18 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 58N9Tk1U019675;
+	Tue, 23 Sep 2025 11:52:17 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 49a83k31qr-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 23 Sep 2025 11:52:17 +0000
+Received: from smtpav03.fra02v.mail.ibm.com (smtpav03.fra02v.mail.ibm.com [10.20.54.102])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 58NBqDIE43516160
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 23 Sep 2025 11:52:13 GMT
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id F401A20043;
+	Tue, 23 Sep 2025 11:52:12 +0000 (GMT)
+Received: from smtpav03.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A61F420040;
+	Tue, 23 Sep 2025 11:52:10 +0000 (GMT)
+Received: from li-2b55cdcc-350b-11b2-a85c-a78bff51fc11.ibm.com (unknown [9.87.150.243])
+	by smtpav03.fra02v.mail.ibm.com (Postfix) with ESMTPS;
+	Tue, 23 Sep 2025 11:52:10 +0000 (GMT)
+Date: Tue, 23 Sep 2025 13:52:09 +0200
+From: Sumanth Korikkar <sumanthk@linux.ibm.com>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>,
+        Jonathan Corbet <corbet@lwn.net>, Matthew Wilcox <willy@infradead.org>,
+        Guo Ren <guoren@kernel.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Andreas Larsson <andreas@gaisler.com>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>, Nicolas Pitre <nico@fluxnic.net>,
+        Muchun Song <muchun.song@linux.dev>,
+        Oscar Salvador <osalvador@suse.de>,
+        David Hildenbrand <david@redhat.com>,
+        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
+        Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
+        Dave Young <dyoung@redhat.com>, Tony Luck <tony.luck@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Dave Martin <Dave.Martin@arm.com>, James Morse <james.morse@arm.com>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
+        "Liam R . Howlett" <Liam.Howlett@oracle.com>,
+        Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
+        Suren Baghdasaryan <surenb@google.com>, Michal Hocko <mhocko@suse.com>,
+        Hugh Dickins <hughd@google.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Uladzislau Rezki <urezki@gmail.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Andrey Konovalov <andreyknvl@gmail.com>, Jann Horn <jannh@google.com>,
+        Pedro Falcato <pfalcato@suse.de>, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-csky@vger.kernel.org, linux-mips@vger.kernel.org,
+        linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+        nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org, linux-mm@kvack.org,
+        ntfs3@lists.linux.dev, kexec@lists.infradead.org,
+        kasan-dev@googlegroups.com, Jason Gunthorpe <jgg@nvidia.com>,
+        iommu@lists.linux.dev, Kevin Tian <kevin.tian@intel.com>,
+        Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>
+Subject: Re: [PATCH v4 11/14] mm/hugetlbfs: update hugetlbfs to use
+ mmap_prepare
+Message-ID: <aNKJ6b7kmT_u0A4c@li-2b55cdcc-350b-11b2-a85c-a78bff51fc11.ibm.com>
+References: <cover.1758135681.git.lorenzo.stoakes@oracle.com>
+ <e5532a0aff1991a1b5435dcb358b7d35abc80f3b.1758135681.git.lorenzo.stoakes@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: AneuvEk2E7Kg
-Date: Mon, 22 Sep 2025 23:22:30 +0200
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Nicolas Schichan" <nschichan@freebox.fr>
-Cc: "Jason Gunthorpe" <jgg@nvidia.com>,
- "Geert Uytterhoeven" <geert@linux-m68k.org>, ksummit@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org,
- linux-mm@kvack.org, imx@lists.linux.dev,
- "Christophe Leroy" <christophe.leroy@csgroup.eu>,
- "Richard Weinberger" <richard@nod.at>,
- "Lucas Stach" <l.stach@pengutronix.de>,
- "Linus Walleij" <linus.walleij@linaro.org>,
- "Geert Uytterhoeven" <geert+renesas@glider.be>,
- "Ankur Arora" <ankur.a.arora@oracle.com>,
- "David Hildenbrand" <david@redhat.com>,
- "Mike Rapoport" <rppt@kernel.org>,
- "Lorenzo Stoakes" <lorenzo.stoakes@oracle.com>,
- "Matthew Wilcox" <willy@infradead.org>,
- "Andrew Morton" <akpm@linux-foundation.org>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- "Vlastimil Babka" <vbabka@suse.cz>,
- "Suren Baghdasaryan" <surenb@google.com>,
- "Ira Weiny" <ira.weiny@intel.com>, "Nishanth Menon" <nm@ti.com>,
- =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
- "Alexander Sverdlin" <alexander.sverdlin@gmail.com>,
- "Chester A. Unal" <chester.a.unal@arinc9.com>,
- "Sergio Paracuellos" <sergio.paracuellos@gmail.com>,
- "Andreas Larsson" <andreas@gaisler.com>
-Message-Id: <598ab56d-7dd0-4adb-b0fe-30ad5cf24335@app.fastmail.com>
-In-Reply-To: 
- <CAHNNwZCsBY+ta2-OqD40K0-C8N25PLMYfOJowiVeaEMotqR1nQ@mail.gmail.com>
-References: <4ff89b72-03ff-4447-9d21-dd6a5fe1550f@app.fastmail.com>
- <20250917125951.GA1390993@nvidia.com>
- <02b0f383-1c43-4eeb-a76f-830c2970b833@app.fastmail.com>
- <CAMuHMdVecUeLZ2LPpa457C0a=uduvDhQ4KZJx-++dEFJraRi3w@mail.gmail.com>
- <547dcb81-434d-4910-aa7c-1d69019fcb3d@app.fastmail.com>
- <20250919143436.GC2132010@nvidia.com>
- <44f910bf-ac2c-4b2f-8e50-5cfc7dd0761a@app.fastmail.com>
- <CAHNNwZCsBY+ta2-OqD40K0-C8N25PLMYfOJowiVeaEMotqR1nQ@mail.gmail.com>
-Subject: Re: [TECH TOPIC] Reaching consensus on CONFIG_HIGHMEM phaseout
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e5532a0aff1991a1b5435dcb358b7d35abc80f3b.1758135681.git.lorenzo.stoakes@oracle.com>
+X-TM-AS-GCONF: 00
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUwOTIwMDAzMyBTYWx0ZWRfX1/CT4ehdu5F7
+ 6VnJC5JZb/TGq0GTxXqzwutGBpnh5zvXhqXxihnE0ZIBeLxavZe5A1rzKbuxO1bDNyuFhUEM+Rk
+ 4I1KMXyeBzNEU/g4Tedu1h1rULa5Sn/p0/UqkELdAnxrKDhWjf96WssSMg0ltTS+aMBZqn2U8bf
+ Mm6V030K3rfmUmm6+2tKL/Lil9yhk2vaa1ilZs3936p1XOaPfvsu3tSuBabaOBW+S4p6UJCCS7o
+ UssKxq/W9pewKawoXgWRMXrenvRD0Q+OeFvs8GRRauXhjlsHet/L1r4+QnnsJQ0kVijCVo4qQhY
+ p/3nafFZQN3AWkhiFthvrI3hfInHVuTDSlQN3xLdzE/r0zMDPQuTX7WW9M8m8X+BWNkt+j6HOZU
+ bcmWMt/c
+X-Authority-Analysis: v=2.4 cv=TOlFS0la c=1 sm=1 tr=0 ts=68d289f3 cx=c_pps
+ a=3Bg1Hr4SwmMryq2xdFQyZA==:117 a=3Bg1Hr4SwmMryq2xdFQyZA==:17
+ a=kj9zAlcOel0A:10 a=yJojWOMRYYMA:10 a=NEAV23lmAAAA:8 a=yPCof4ZbAAAA:8
+ a=Ikd4Dj_1AAAA:8 a=P7Dlay8f7KcL8MNlhToA:9 a=CjuIK1q_8ugA:10
+X-Proofpoint-ORIG-GUID: F6nP2Q8ol4BSxLNz15joz3bImrmTREZ1
+X-Proofpoint-GUID: 5HR21TLQQZuGh5ctB-qo8M6ErsQDpoDW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1117,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-09-23_02,2025-09-22_05,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1011 priorityscore=1501 phishscore=0 impostorscore=0 adultscore=0
+ suspectscore=0 spamscore=0 bulkscore=0 malwarescore=0 classifier=typeunknown
+ authscore=0 authtc= authcc= route=outbound adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2507300000 definitions=main-2509200033
 
-On Mon, Sep 22, 2025, at 19:05, Nicolas Schichan wrote:
->> On Fri, Sep 19, 2025, at 16:34, Jason Gunthorpe wrote:
->> > On Fri, Sep 19, 2025 at 04:22:20PM +0200, Arnd Bergmann wrote:
->>
->> I did get an email from Nicolas Schichan (added to Cc here),
->> and he is still supporting a widely deployed Kirkwood based
->> platform that uses 1GB RAM configurations. He should get
->> a chance to test that with CONFIG_VMSPLIT_3G_OPT, but I
->> would expect that to continue working, possibly with minor
->> bugfixes.
->
-> We don't use HIGMEM on our Kirkwood platform, we are happy using a
-> 2G/2G WMSPLIT. We don't need a lot of virtual address space for
-> userland, and with the 2G split we don't waste physical memory.
+On Wed, Sep 17, 2025 at 08:11:13PM +0100, Lorenzo Stoakes wrote:
+> Since we can now perform actions after the VMA is established via
+> mmap_prepare, use desc->action_success_hook to set up the hugetlb lock
+> once the VMA is setup.
+> 
+> We also make changes throughout hugetlbfs to make this possible.
+> 
+> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> ---
+>  fs/hugetlbfs/inode.c           | 36 ++++++++++------
+>  include/linux/hugetlb.h        |  9 +++-
+>  include/linux/hugetlb_inline.h | 15 ++++---
+>  mm/hugetlb.c                   | 77 ++++++++++++++++++++--------------
+>  4 files changed, 85 insertions(+), 52 deletions(-)
+> 
+> diff --git a/fs/hugetlbfs/inode.c b/fs/hugetlbfs/inode.c
+> index f42548ee9083..9e0625167517 100644
+> --- a/fs/hugetlbfs/inode.c
+> +++ b/fs/hugetlbfs/inode.c
+> @@ -96,8 +96,15 @@ static const struct fs_parameter_spec hugetlb_fs_parameters[] = {
+>  #define PGOFF_LOFFT_MAX \
+>  	(((1UL << (PAGE_SHIFT + 1)) - 1) <<  (BITS_PER_LONG - (PAGE_SHIFT + 1)))
+>  
+> -static int hugetlbfs_file_mmap(struct file *file, struct vm_area_struct *vma)
+> +static int hugetlb_file_mmap_prepare_success(const struct vm_area_struct *vma)
+>  {
+> +	/* Unfortunate we have to reassign vma->vm_private_data. */
+> +	return hugetlb_vma_lock_alloc((struct vm_area_struct *)vma);
+> +}
 
-Ok, good.
+Hi Lorenzo,
 
-> I'm happy to test your patch serie with VMSPLIT_3G_OPT and see if it
-> still boots with it once you send it.
+The following tests causes the kernel to enter a blocked state,
+suggesting an issue related to locking order. I was able to reproduce
+this behavior in certain test runs.
 
-The patches I did for turning off HIGHMEM on ARMv5 won't have
-any effect if you are already running without highmem, so I
-don't think we need to wait for your tests specifically.
-Any testing would be useful of course just to check that
-everything still works.
+Test case:
+git clone https://github.com/libhugetlbfs/libhugetlbfs.git
+cd libhugetlbfs ; ./configure
+make -j32
+cd tests
+echo 100 > /proc/sys/vm/nr_hugepages
+mkdir -p /test-hugepages && mount -t hugetlbfs nodev /test-hugepages
+./run_tests.py <in a loop>
+...
+shm-fork 10 100 (1024K: 64):    PASS
+set shmmax limit to 104857600
+shm-getraw 100 /dev/full (1024K: 32):
+shm-getraw 100 /dev/full (1024K: 64):   PASS
+fallocate_stress.sh (1024K: 64):  <blocked>
 
-Jason, I think we can go ahead with your suggestion. I can
-post my patches for review once I've done some testing on
-them.
+Blocked task state below:
 
-     Arnd
+task:fallocate_stres state:D stack:0     pid:5106  tgid:5106  ppid:5103
+task_flags:0x400000 flags:0x00000001
+Call Trace:
+ [<00000255adc646f0>] __schedule+0x370/0x7f0
+ [<00000255adc64bb0>] schedule+0x40/0xc0
+ [<00000255adc64d32>] schedule_preempt_disabled+0x22/0x30
+ [<00000255adc68492>] rwsem_down_write_slowpath+0x232/0x610
+ [<00000255adc68922>] down_write_killable+0x52/0x80
+ [<00000255ad12c980>] vm_mmap_pgoff+0xc0/0x1f0
+ [<00000255ad164bbe>] ksys_mmap_pgoff+0x17e/0x220
+ [<00000255ad164d3c>] __s390x_sys_old_mmap+0x7c/0xa0
+ [<00000255adc60e4e>] __do_syscall+0x12e/0x350
+ [<00000255adc6cfee>] system_call+0x6e/0x90
+task:fallocate_stres state:D stack:0     pid:5109  tgid:5106  ppid:5103
+task_flags:0x400040 flags:0x00000001
+Call Trace:
+ [<00000255adc646f0>] __schedule+0x370/0x7f0
+ [<00000255adc64bb0>] schedule+0x40/0xc0
+ [<00000255adc64d32>] schedule_preempt_disabled+0x22/0x30
+ [<00000255adc68492>] rwsem_down_write_slowpath+0x232/0x610
+ [<00000255adc688be>] down_write+0x4e/0x60
+ [<00000255ad1c11ec>] __hugetlb_zap_begin+0x3c/0x70
+ [<00000255ad158b9c>] unmap_vmas+0x10c/0x1a0
+ [<00000255ad180844>] vms_complete_munmap_vmas+0x134/0x2e0
+ [<00000255ad1811be>] do_vmi_align_munmap+0x13e/0x170
+ [<00000255ad1812ae>] do_vmi_munmap+0xbe/0x140
+ [<00000255ad183f86>] __vm_munmap+0xe6/0x190
+ [<00000255ad166832>] __s390x_sys_munmap+0x32/0x40
+ [<00000255adc60e4e>] __do_syscall+0x12e/0x350
+ [<00000255adc6cfee>] system_call+0x6e/0x90
+
+
+Thanks,
+Sumanth
 
