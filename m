@@ -1,115 +1,128 @@
-Return-Path: <linux-mips+bounces-11550-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11551-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D798FB988D3
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Sep 2025 09:32:30 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4E33B98945
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Sep 2025 09:41:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C59C3189B932
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Sep 2025 07:32:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6D5A02E4B83
+	for <lists+linux-mips@lfdr.de>; Wed, 24 Sep 2025 07:41:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B480B27CB0A;
-	Wed, 24 Sep 2025 07:32:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70DD127FB21;
+	Wed, 24 Sep 2025 07:41:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Apr75Ugi"
+	dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="StiioXEs"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED2F627B4FA
-	for <linux-mips@vger.kernel.org>; Wed, 24 Sep 2025 07:32:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A0A727B336;
+	Wed, 24 Sep 2025 07:40:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758699142; cv=none; b=l/wX6M1oiiyUP8IsDj50VT4nM4x/DDDnWuCovki8q/GW60+Ua5X9kRzaGFzI6ki0nVPxqUMG1LFl/i8ODRGI+0L6b3Vd//yqzt+9T05DkCzQ0a8srr28ShK4OBjZsWvy1nora2ML3PK6TybaoH0rORrAbf2moVHyFcLpirTRNFU=
+	t=1758699661; cv=none; b=bIvc8mJ+JVYd/B91Vku3J+zI9kBuMmOW0wNzmnPp67ov9fSLY3wMxcM5/67fHQO1WzW7Jin6eTDeRVz5J4sKPr6fVISKDT633k1vAApF4MFtHOpuMOWoOIvSjDkKWdsIhWIRYL75RgDwaU1coWI6OkFvSODZT2WwqHN9MZURQwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758699142; c=relaxed/simple;
-	bh=TX6kI82yO/RlICOevJbAdNu2g5LXBtW4mVT11ZayfNE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fhqzn2O8wOmyWY8QuNCyfzfLUnVEMJcTGX4osG74FbWPAYnvYaK3jHBIWX60RDvux8pnyPHyGcPM86KBQTPXjxHhpbaFzb7lyhzc6UgnIjs5XvU/etq31FYNyk4ReC2LJRlWjOCNxZm4QbY+YGQEJkU/aowDA11a3QSPTeGBU6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Apr75Ugi; arc=none smtp.client-ip=209.85.208.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-628f29d68ecso11000562a12.3
-        for <linux-mips@vger.kernel.org>; Wed, 24 Sep 2025 00:32:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1758699138; x=1759303938; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=v9ogATJZj1jG8raAY2zUuQe4EmJHk/4W4xvGLcmqNCI=;
-        b=Apr75Ugi6SUfNBAH+kYzUGDTjoRx4+4tdqorCAQPRdi6ZhXxBv0peiMsD+V4puAl/L
-         VnxwZSNbl9FiKKvSAqE1eYwjqdZWh7FJCNF0dlJCMq2k1bWZYIlAjQgIervtcnAm3t8B
-         GN105YKAWQyS6/Cr/MiE0AtzMIVY2JD6Cl6oo5pZJOVanYffCW03eXtoB23UbA49jJ7r
-         M37tNlpRwrjn7OtFzfza/vp/LuwUFXCQHnS9le2rzn9s9XBPgWtVSKHOOn2Jak7mhDnY
-         wGqCR0eC89eG87mkj1IyXNs4+n6M1Xm2c52C76N990iZ2sIOpbDuxtQDSZpysCj2x7fQ
-         cVpw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1758699138; x=1759303938;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=v9ogATJZj1jG8raAY2zUuQe4EmJHk/4W4xvGLcmqNCI=;
-        b=DvrCIvrQNNq8zdQLrMoBJfrRPQsDJ+mc6niZMT5vwEIciaOf8dfeNG5K5+FFzHgzvt
-         I7BwMaz1OgxTKZVdz3i7aNMngVPOTjetzah+c6fJOcmpOlYDOxaTUOJHIbtqEITPJl7g
-         WnvR4u1hOEBJ8SAZdCFlPiksWGN3pO79h5Hm9cllsmKz47UuTUvGYXKO75ictJJ/zq6/
-         YXWvJ+vBpNwo1u6t/9OY2278R5hKLGOa9md9vHoH640ujxdvxJG1WipPmVIo4ngq3zKR
-         UiHU7mRfIssd0gerhxFQTMUfcJy1IAeZWGZPioS1omq+ahL/i//7hW+h87muqHmFxvn1
-         FOyA==
-X-Forwarded-Encrypted: i=1; AJvYcCXEgGs7Co2k3KtokESF2Kx0gZr/Hv9rNRoEHTt32q20GkxErt9aLDLcreZKA4WHfCbVMndSsbazW8aB@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywduy0ESSMt7bxxngaYrb6SPhLXp95+wkvCkPvwjPkzdMYocgyI
-	RbionpI7DUqMYu7drrQfZU6oYXP2Pvm77SyX6cdeL84HOjUy6geOTm8xngh/BvD45pB0cIs5Bqk
-	0yahEzBr6f7gb/8lp+lOUd4Mes6d/C54=
-X-Gm-Gg: ASbGncv4BmWEChz6ReEpxe+tC3J+N8pmFvmZHTtobLV8IIwfLpMdM767cTLNXrbirNd
-	gtowfZba+GNqcObhzUoh4o2FouO70ZSjsfY3es6xxAtPGWVHnrlM/ifHbrkV1f1wnuNf4U7fh7m
-	9tedABNNbievSJwodjUL+Ir6mcr9bb5cuVFwHmwN51qdxq6EFXc2mIT1G0aX0yoTCKMuJ8Qae19
-	wNzTy0D
-X-Google-Smtp-Source: AGHT+IEsD22J4a5V9bbdMWtQv1Ep8AmuRuA2KpP+ndq9VMyD7XFtjS94kSm5rlJirOSxMvazqqoNAsq4GX/ON5RyqyA=
-X-Received: by 2002:a05:6402:44dc:b0:633:4726:a077 with SMTP id
- 4fb4d7f45d1cf-63467796df4mr4258422a12.15.1758699137992; Wed, 24 Sep 2025
- 00:32:17 -0700 (PDT)
+	s=arc-20240116; t=1758699661; c=relaxed/simple;
+	bh=IXh+CgkBJCzUkA/p06Ej2dm1FN4EaL61CAQ3w5pWwmw=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=s7OrnCkBmHf23IE409EZnONYXnt/L30J/tLvpPP3DP2ehs3pkENoiheIa8J4S2BEa3WBMwqDMlrnlxZ5vXAg/usRLR/Gy1lET6QVcAQwO/v2SmX5djXdVHQTuHukMgUio3uT80K/zjOOnFzEORGBBNqxJYyoYEDkhiR1opKagEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=StiioXEs; arc=none smtp.client-ip=130.133.4.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:From:
+	Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
+	References; bh=oxAx55vS2rggMZF7eTbs+MZ7ZqRsew9htCf8ptQSB2w=; t=1758699658;
+	x=1759304458; b=StiioXEsrbpbJIUZKj00ONUJe/FEkZaLBfvmeM2Swteebhg3Md3b18hpt0LEF
+	NNLnxZdao802g3jS8pivUhCYDrK3joaetJouYAqakuPAIddLRQwNajC27tZfOR/7UDy/sY6jijFE+
+	qGbopsjt6BwGSG30WLT+VQ4oswapkDoiHU8bFaeTusqRz6CEUa3Opk5Js5F+emIqdm5VBNCfECdg9
+	l982RVCGBCMtFSe81MnvV8eRabgbntMBaG+IKKmZ5n3OXkU5Jv2jQg+ZjoqV6f8zEBJaskHoaD41c
+	vsG/sadl8E4jFOpUljz+tl3M8mAdr076zvJdJbY2SBrjHNaZXw==;
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.98)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1v1K71-00000003rTv-3nNq; Wed, 24 Sep 2025 09:40:27 +0200
+Received: from p5b13aa34.dip0.t-ipconnect.de ([91.19.170.52] helo=[192.168.178.61])
+          by inpost2.zedat.fu-berlin.de (Exim 4.98)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1v1K71-00000003D15-2K09; Wed, 24 Sep 2025 09:40:27 +0200
+Message-ID: <60a0af09cc1a5de3b33b9606ed07ae91b42c5432.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH v3 00/36] sparc64: vdso: Switch to the generic vDSO
+ library
+From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To: Thomas =?ISO-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+  Vincenzo Frascino <vincenzo.frascino@arm.com>, Arnd Bergmann
+ <arnd@arndb.de>, "David S. Miller" <davem@davemloft.net>,  Andreas Larsson
+ <andreas@gaisler.com>, Nick Alcock <nick.alcock@oracle.com>, John Stultz
+ <jstultz@google.com>,  Stephen Boyd <sboyd@kernel.org>, Shuah Khan
+ <shuah@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,  Will Deacon
+ <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>, "Jason A. Donenfeld"
+ <Jason@zx2c4.com>,  Russell King <linux@armlinux.org.uk>, Madhavan
+ Srinivasan <maddy@linux.ibm.com>, Michael Ellerman	 <mpe@ellerman.id.au>,
+ Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy	
+ <christophe.leroy@csgroup.eu>, Huacai Chen <chenhuacai@kernel.org>, WANG
+ Xuerui	 <kernel@xen0n.name>, Thomas Bogendoerfer
+ <tsbogend@alpha.franken.de>, Heiko Carstens <hca@linux.ibm.com>, Vasily
+ Gorbik <gor@linux.ibm.com>, Alexander Gordeev	 <agordeev@linux.ibm.com>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,  Sven Schnelle
+ <svens@linux.ibm.com>, Nagarathnam Muthusamy
+ <nagarathnam.muthusamy@oracle.com>, Shannon Nelson	 <sln@onemain.com>,
+ linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org, 
+	linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
+	linux-mips@vger.kernel.org, linux-s390@vger.kernel.org, Arnd Bergmann	
+ <arnd@kernel.org>
+Date: Wed, 24 Sep 2025 09:40:25 +0200
+In-Reply-To: <48fd164e-959b-4263-b3c7-cef5771aa40a@linutronix.de>
+References: 
+	<20250917-vdso-sparc64-generic-2-v3-0-3679b1bc8ee8@linutronix.de>
+	 <9a122c6cf3e2e0e61a62b0512eb97804acebeee9.camel@physik.fu-berlin.de>
+	 <48fd164e-959b-4263-b3c7-cef5771aa40a@linutronix.de>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.56.2 
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1758219786.git.leon@kernel.org> <0c64474985af55b1aa934b857808068a0e609c6e.1758219787.git.leon@kernel.org>
- <CA+=Fv5Q8dVUFVBh82mAe=fy3mV6mWtQT_0pBPLQwLNBt3f8E1g@mail.gmail.com>
- <20250923171819.GM10800@unreal> <CA+=Fv5SJcQ5C4UeX2+deV9mPAe5QxrocMG8EJ2eVcYjbLE5U+A@mail.gmail.com>
- <20250923235318.GD2617119@nvidia.com>
-In-Reply-To: <20250923235318.GD2617119@nvidia.com>
-From: Magnus Lindholm <linmag7@gmail.com>
-Date: Wed, 24 Sep 2025 09:32:06 +0200
-X-Gm-Features: AS18NWBrVH-9-wBlZ7ZFV3RxYYp-7iSL9DfIPq4jDzU8rxFLx7xmKKzveUA49as
-Message-ID: <CA+=Fv5Tg7sQACpeG8aMZF6_E6dbRnN5ifg0aiHityXadxiHoPA@mail.gmail.com>
-Subject: Re: [PATCH 1/9] alpha: Convert mapping routine to rely on physical address
-To: Jason Gunthorpe <jgg@nvidia.com>
-Cc: Leon Romanovsky <leon@kernel.org>, Marek Szyprowski <m.szyprowski@samsung.com>, 
-	Andreas Larsson <andreas@gaisler.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, "David S. Miller" <davem@davemloft.net>, 
-	Geoff Levand <geoff@infradead.org>, Helge Deller <deller@gmx.de>, Ingo Molnar <mingo@redhat.com>, 
-	iommu@lists.linux.dev, 
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Jason Wang <jasowang@redhat.com>, 
-	Juergen Gross <jgross@suse.com>, linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Matt Turner <mattst88@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	"Michael S. Tsirkin" <mst@redhat.com>, Richard Henderson <richard.henderson@linaro.org>, 
-	sparclinux@vger.kernel.org, Stefano Stabellini <sstabellini@kernel.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner <tglx@linutronix.de>, 
-	virtualization@lists.linux.dev, x86@kernel.org, 
-	xen-devel@lists.xenproject.org
-Content-Type: text/plain; charset="UTF-8"
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-ZEDAT-Hint: PO
 
-> Suggest testing the same branch with the alpha patch reverted just to
-> rule out any issue in the core code. If it reproduces suggest to
-> bisect Leon's branch.
->
-I can try to revert just the patch containing the alpha-specific stuff and
-see what happens and then, as  you say, maybe do a bisect from there.
-First I'll just try the same kernel again a few times more just to make sure
-that this is really reproducible.
+Hi Thomas,
 
-/Magnus
+On Sat, 2025-09-20 at 16:37 +0200, Thomas Wei=C3=9Fschuh wrote:
+> > Could you share a version of the series based on top of 6.17.0-rcN for
+> > testing purposes? I would like to test the series on a Sun Netra 240
+> > which is based on the UltraSPARC IIIi.
+>=20
+> Here is the git branch based on rc4:
+> https://git.kernel.org/pub/scm/linux/kernel/git/thomas.weissschuh/linux.g=
+it/log/?h=3Db4/vdso-sparc64-generic-2
+>=20
+> Does that work for you?
+
+I'm getting merge conflicts with "vdso/datastore: Allocate data pages dynam=
+ically" and
+"vdso/datapage: Remove inclusion of gettimeofday.h".
+
+Can these be skipped?
+
+Adrian
+
+--=20
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
 
