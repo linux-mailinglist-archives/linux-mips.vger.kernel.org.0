@@ -1,233 +1,142 @@
-Return-Path: <linux-mips+bounces-11562-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11563-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31EB1BA400A
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Sep 2025 15:58:01 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57209BA62C0
+	for <lists+linux-mips@lfdr.de>; Sat, 27 Sep 2025 21:20:44 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 296E97BB23F
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Sep 2025 13:54:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2CF57189AC06
+	for <lists+linux-mips@lfdr.de>; Sat, 27 Sep 2025 19:20:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 734982FB972;
-	Fri, 26 Sep 2025 13:54:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AE07235354;
+	Sat, 27 Sep 2025 19:20:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="exUyD7xU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LmXL504U"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp-out3.simply.com (smtp-out3.simply.com [94.231.106.210])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEDAD2FAC12;
-	Fri, 26 Sep 2025 13:54:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.231.106.210
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 663F122F77E
+	for <linux-mips@vger.kernel.org>; Sat, 27 Sep 2025 19:20:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1758894845; cv=none; b=qdSvvUPOeGQ/X+OmTkxoxUVrTZ01Pk3jxDFXci3nv4cYbtMi8yfwj5AyZ5b5wmgpjtUh0YFwJ07xpVisMhqnz90zo7sZlPMDSvpewfikTc9lCsG5GUwndaOnR4o2DLWLiU49fKsRsi6y7C2WZoSA3l3A1U88LE/H3ocdbjM2hZM=
+	t=1759000830; cv=none; b=sY3NMT5G52+PhShwGYZ8xJctqY9DaE3/wNgjS9xbJzkSZW1FAeLRgHN+dmR6ImbTEwPO2EVDpe1hOppJJDH6LWT2bmlR7cTq5fdEO9S3YHGFg1JrsCWoRFtwy7PZuRYoCv+0XUrKFrw7T37w492tO3xQ94W7+/Cc3+NbLp4dyts=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1758894845; c=relaxed/simple;
-	bh=EAqKV/2RF7bW8arWG9fwnOlAqRNSwPmfuGtdSoCMrbU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iXnkN3q9YiVcVgu3gkINWJo0z1GgVodR44ISm+hEyOUI9Bda+cXkncwdi1gjUWPcclPrM2kaQC+TleROQktICz9nUlfRGkig0Z1/I7dsN1x6tMTW3lTpps4JMeYpNRpc1l3YshzTmFxp7spxhF3V6vr6S7q8y3ETYnmkCwkh7qU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=fail (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=exUyD7xU reason="key not found in DNS"; arc=none smtp.client-ip=94.231.106.210
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gaisler.com
-Received: from localhost (localhost [127.0.0.1])
-	by smtp.simply.com (Simply.com) with ESMTP id 4cYBrd72t9z1DDr7;
-	Fri, 26 Sep 2025 15:53:53 +0200 (CEST)
-Received: from [10.10.15.8] (h-98-128-223-123.NA.cust.bahnhof.se [98.128.223.123])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by smtp.simply.com (Simply.com) with ESMTPSA id 4cYBrc5B6bz1Fb38;
-	Fri, 26 Sep 2025 15:53:52 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gaisler.com;
-	s=simplycom2; t=1758894833;
-	bh=0oKPt5B2BYzle8pqRjAR1Qbv4tzNfaR8uywq90JI968=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=exUyD7xU1FFoAo0zIaGO8L1T0an8JyysSniNaBEN284brN/McStsyIZqRxq8PWEKU
-	 4xjl2QjrfL3v6vRMcSOZA6TsputTD4TBzNeEmQkcG3KIUuhpPXP+zEXF3Yz/NS7pmB
-	 PcxjXfIwjxcneymF0BZH9kKiWkU57AHDRlm5Of+kNpRF0jGMlR6JwP/sN6nrYrb0Z0
-	 guRP8WAhweSnyJbReXLTERryS4IR1w0uYknNh+L2dgFLhbTwnQE2kx++CD7JJaeLrS
-	 PJLHZmJ4jqQSjfHyyxYla7ZzLAyJTcxvyTl+OUIQNZsx642Tr8lLuLkTgoW04lH9tr
-	 uEVtlAUR67olA==
-Message-ID: <76d9171c-4a74-499e-a598-ec51fdfa4e94@gaisler.com>
-Date: Fri, 26 Sep 2025 15:53:52 +0200
+	s=arc-20240116; t=1759000830; c=relaxed/simple;
+	bh=yoeBWfsz0Rxzfbgk6BToAOC/vOnboIpPuqC1fyVrHZ8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=jWtWuK690bAWFh8DOIVPUcK8Gqs7Ysdv/Onm+ufl2QAVy+UkFGnQzSgqqWkwkfQ8DNbTxefKHjiShfkMxDmYkMsM3/xuxDM40kA5T+XqfMtt5XOjen0wDsxl2FyaamJb0hUPpDGdiPPtwosZ1SuJGMhFo9ADk+16aF0REhe7WOQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LmXL504U; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-63486ff378cso6468618a12.0
+        for <linux-mips@vger.kernel.org>; Sat, 27 Sep 2025 12:20:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1759000827; x=1759605627; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=BpNpqT8E7PV/s4bEDWlZ98/qvJvoxkZccIvsTmWeJBY=;
+        b=LmXL504U0c1QG2jy3KW+WIDtc8+FAs3E23849eS0e2Vkfl6p7fq4KCBQzcNYUmMMIn
+         bO0wPHikSYdv/aQEZohRb1KS8AH0g5iWXW18Pok5gfQIfrLPlXE8xgPLz0wMe6Et9dqY
+         1UF4yCh+HhhIWiJYUyYS+Rt26rLu5/8v+kDBoYFTm3wwiU3GCB42340BcFn7AfOte65Z
+         sSHHLLPoaIcQhBGE0YW7htO5AiI2qeQIqcYmyE67vPfGJi6ZVV23XOcsazphMjXG7MCS
+         HjtXRnd2nZGBgrVo6mX9eSs5xkZiwhHmhjUSkhNFCoZk4zaIwt9nZJcW+BgI1CKJcZzn
+         QWCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759000827; x=1759605627;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=BpNpqT8E7PV/s4bEDWlZ98/qvJvoxkZccIvsTmWeJBY=;
+        b=XYJX3bsF8+iu9p8GoAUQCPGXWGbqsp/ut0n2ouzIYL70s1gOxVXuhR+9uHJSJwAqAz
+         HhTmAo1KuPKNDyZ0MfManI8xBzvw/eJGcP8OS0eB7yOpm1xJTzix2rABThjiD2esM5WS
+         VzLVBbi9scmYKjaoOgxO1ioRnnl1kWMbG0pWvzE/rS0+d6lUhztXL5eTJGzXsGesyncM
+         HxOxpspALjnaFqZjMOipdG8r2pt4aX/Bg2/vLVwslOX9Bzeo+wvHq/XiY843FA8JWNhT
+         rnyzlw/bdedcclRgX8nIvVDeKqNp9qxqROrgziEn5BdSckDjVe5+S7FJWesfr+5ieV6i
+         HxeQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUk5o87neNqKRWK1VUZWmLjxm2oz/8JW805owDKjPVV0YjLERR7YgxMfQ6RrRd0sMq8kKDQpEXBZVs5@vger.kernel.org
+X-Gm-Message-State: AOJu0YyP+0Cp5lDVyuuN1t/EkIGH7T2Ww5yzOtjFA5SyuPQJ6D2DEEKl
+	kmGRmFigE7YSG+aWdeC4+OfeDAG2qpCAOZ9HEfPcX/lFlfFQJGno6ZiVIHr4BjQNAQFYYei8YJX
+	V2+RLhZ3f/o307P33dkFYFHUOi7+Dskk=
+X-Gm-Gg: ASbGncvI0J1LO8lYQjpo0LRiO2+mxhiEJ/iGF18/GxLUBVQU0opOXqtpfHe85QyeUbZ
+	eWRt3yisx7qyzcvkdepH9TUIL8mCVu43VQyWOwyWGylviQ7C8YNAj6dL6KZmCXt+/aZ9sBebMm5
+	HoZ5nHDDsjLkcZrtZMN/0VQnncNWP3jyB0zd4jqipBeISqZ7Q0rWwbsZTj211nGvk+MsZF6ERNJ
+	0B0urPnJbQsdCV+LzE=
+X-Google-Smtp-Source: AGHT+IE6MMpG/TRiFXxnrxz1Vvo3fuH5ytNgtdVEgpXL0NxXawEVfUDFtb+tMcdRPN344hi95Su67MTI32H6Ub9xTJM=
+X-Received: by 2002:a17:907:7b8b:b0:b3c:5f99:dac7 with SMTP id
+ a640c23a62f3a-b3c5fa9674amr74488566b.21.1759000826450; Sat, 27 Sep 2025
+ 12:20:26 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 00/36] sparc64: vdso: Switch to the generic vDSO
- library
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
- Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
- Vincenzo Frascino <vincenzo.frascino@arm.com>, Arnd Bergmann
- <arnd@arndb.de>, "David S. Miller" <davem@davemloft.net>,
- Nick Alcock <nick.alcock@oracle.com>, John Stultz <jstultz@google.com>,
- Stephen Boyd <sboyd@kernel.org>,
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- Shuah Khan <shuah@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
- Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
- "Jason A. Donenfeld" <Jason@zx2c4.com>, Russell King
- <linux@armlinux.org.uk>, Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Christophe Leroy <christophe.leroy@csgroup.eu>,
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
- Alexander Gordeev <agordeev@linux.ibm.com>,
- Christian Borntraeger <borntraeger@linux.ibm.com>,
- Sven Schnelle <svens@linux.ibm.com>,
- Nagarathnam Muthusamy <nagarathnam.muthusamy@oracle.com>,
- Shannon Nelson <sln@onemain.com>
-Cc: linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org,
- linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
- linux-mips@vger.kernel.org, linux-s390@vger.kernel.org,
- Arnd Bergmann <arnd@kernel.org>
-References: <20250917-vdso-sparc64-generic-2-v3-0-3679b1bc8ee8@linutronix.de>
-Content-Language: en-US
-From: Andreas Larsson <andreas@gaisler.com>
-In-Reply-To: <20250917-vdso-sparc64-generic-2-v3-0-3679b1bc8ee8@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <cover.1758219786.git.leon@kernel.org> <0c64474985af55b1aa934b857808068a0e609c6e.1758219787.git.leon@kernel.org>
+ <CA+=Fv5Q8dVUFVBh82mAe=fy3mV6mWtQT_0pBPLQwLNBt3f8E1g@mail.gmail.com>
+ <20250923171819.GM10800@unreal> <CA+=Fv5SJcQ5C4UeX2+deV9mPAe5QxrocMG8EJ2eVcYjbLE5U+A@mail.gmail.com>
+ <20250923235318.GD2617119@nvidia.com> <CA+=Fv5Tg7sQACpeG8aMZF6_E6dbRnN5ifg0aiHityXadxiHoPA@mail.gmail.com>
+In-Reply-To: <CA+=Fv5Tg7sQACpeG8aMZF6_E6dbRnN5ifg0aiHityXadxiHoPA@mail.gmail.com>
+From: Magnus Lindholm <linmag7@gmail.com>
+Date: Sat, 27 Sep 2025 21:20:15 +0200
+X-Gm-Features: AS18NWCUkmopfgQP7FxvlAuimXjc1tmQlQb-89CTajXeb-5Nlye2dR2BnBQqzEg
+Message-ID: <CA+=Fv5Sze_BNmHqzypmCh8p2JO6gytXH4E6hXv3gZdfoSJsMUQ@mail.gmail.com>
+Subject: Re: [PATCH 1/9] alpha: Convert mapping routine to rely on physical address
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Leon Romanovsky <leon@kernel.org>, Marek Szyprowski <m.szyprowski@samsung.com>, 
+	Andreas Larsson <andreas@gaisler.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, "David S. Miller" <davem@davemloft.net>, 
+	Geoff Levand <geoff@infradead.org>, Helge Deller <deller@gmx.de>, Ingo Molnar <mingo@redhat.com>, 
+	iommu@lists.linux.dev, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, Jason Wang <jasowang@redhat.com>, 
+	Juergen Gross <jgross@suse.com>, linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Matt Turner <mattst88@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	"Michael S. Tsirkin" <mst@redhat.com>, Richard Henderson <richard.henderson@linaro.org>, 
+	sparclinux@vger.kernel.org, Stefano Stabellini <sstabellini@kernel.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner <tglx@linutronix.de>, 
+	virtualization@lists.linux.dev, x86@kernel.org, 
+	xen-devel@lists.xenproject.org
+Content-Type: text/plain; charset="UTF-8"
 
-On 2025-09-17 16:00, Thomas Weißschuh wrote:
-> The generic vDSO provides a lot common functionality shared between
-> different architectures. SPARC is the last architecture not using it,
-> preventing some necessary code cleanup.
-> 
-> Make use of the generic infrastructure.
-> 
-> Follow-up to and replacement for Arnd's SPARC vDSO removal patches:
-> https://lore.kernel.org/lkml/20250707144726.4008707-1-arnd@kernel.org/
-> 
-> Tested on a Niagara T4 and QEMU.
-> 
-> This has a semantic conflict with my series "vdso: Reject absolute
-> relocations during build". The last patch of this series expects all users
-> of the generic vDSO library to use the vdsocheck tool.
-> This is not the case (yet) for SPARC64. I do have the patches for the
-> integration, the specifics will depend on which series is applied first.
-> 
-> Based on tip/timers/vdso.
-> 
-> [0] https://lore.kernel.org/lkml/20250812-vdso-absolute-reloc-v4-0-61a8b615e5ec@linutronix.de/
-> 
-> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-> ---
-> Changes in v3:
-> - Allocate vDSO data pages dynamically (and lots of preparations for that)
-> - Drop clock_getres()
-> - Fix 32bit clock_gettime() syscall fallback
-> - Link to v2: https://lore.kernel.org/r/20250815-vdso-sparc64-generic-2-v2-0-b5ff80672347@linutronix.de
-> 
-> Changes in v2:
-> - Rebase on v6.17-rc1
-> - Drop RFC state
-> - Fix typo in commit message
-> - Drop duplicate 'select GENERIC_TIME_VSYSCALL'
-> - Merge "sparc64: time: Remove architecture-specific clocksource data" into the
->   main conversion patch. It violated the check in __clocksource_register_scale()
-> - Link to v1: https://lore.kernel.org/r/20250724-vdso-sparc64-generic-2-v1-0-e376a3bd24d1@linutronix.de
-> 
-> ---
-> Arnd Bergmann (1):
->       clocksource: remove ARCH_CLOCKSOURCE_DATA
-> 
-> Thomas Weißschuh (35):
->       selftests: vDSO: vdso_test_correctness: Handle different tv_usec types
->       arm64: vDSO: getrandom: Explicitly include asm/alternative.h
->       arm64: vDSO: gettimeofday: Explicitly include vdso/clocksource.h
->       arm64: vDSO: compat_gettimeofday: Add explicit includes
->       ARM: vdso: gettimeofday: Add explicit includes
->       powerpc/vdso/gettimeofday: Explicitly include vdso/time32.h
->       powerpc/vdso: Explicitly include asm/cputable.h and asm/feature-fixups.h
->       LoongArch: vDSO: Explicitly include asm/vdso/vdso.h
->       MIPS: vdso: Add include guard to asm/vdso/vdso.h
->       MIPS: vdso: Explicitly include asm/vdso/vdso.h
->       random: vDSO: Add explicit includes
->       vdso/gettimeofday: Add explicit includes
->       vdso/helpers: Explicitly include vdso/processor.h
->       vdso/datapage: Remove inclusion of gettimeofday.h
->       vdso/datapage: Trim down unnecessary includes
->       random: vDSO: trim vDSO includes
->       random: vDSO: remove ifdeffery
->       random: vDSO: split out datapage update into helper functions
->       random: vDSO: only access vDSO datapage after random_init()
->       s390/time: Set up vDSO datapage later
->       vdso/datastore: Reduce scope of some variables in vvar_fault()
->       vdso/datastore: Drop inclusion of linux/mmap_lock.h
->       vdso/datastore: Map pages through struct page
->       vdso/datastore: Allocate data pages dynamically
->       sparc64: vdso: Link with -z noexecstack
->       sparc64: vdso: Remove obsolete "fake section table" reservation
->       sparc64: vdso: Replace code patching with runtime conditional
->       sparc64: vdso: Move hardware counter read into header
->       sparc64: vdso: Move syscall fallbacks into header
->       sparc64: vdso: Introduce vdso/processor.h
->       sparc64: vdso: Switch to the generic vDSO library
->       sparc64: vdso2c: Drop sym_vvar_start handling
->       sparc64: vdso2c: Remove symbol handling
->       sparc64: vdso: Implement clock_gettime64()
->       clocksource: drop include of asm/clocksource.h from linux/clocksource.h
-> 
->  arch/arm/include/asm/vdso/gettimeofday.h           |   2 +
->  arch/arm64/include/asm/vdso/compat_gettimeofday.h  |   3 +
->  arch/arm64/include/asm/vdso/gettimeofday.h         |   2 +
->  arch/arm64/kernel/vdso/vgetrandom.c                |   2 +
->  arch/loongarch/kernel/process.c                    |   1 +
->  arch/loongarch/kernel/vdso.c                       |   1 +
->  arch/mips/include/asm/vdso/vdso.h                  |   5 +
->  arch/mips/kernel/vdso.c                            |   1 +
->  arch/powerpc/include/asm/vdso/gettimeofday.h       |   1 +
->  arch/powerpc/include/asm/vdso/processor.h          |   3 +
->  arch/s390/kernel/time.c                            |   4 +-
->  arch/sparc/Kconfig                                 |   3 +-
->  arch/sparc/include/asm/clocksource.h               |   9 -
->  arch/sparc/include/asm/processor.h                 |   3 +
->  arch/sparc/include/asm/processor_32.h              |   2 -
->  arch/sparc/include/asm/processor_64.h              |  25 --
->  arch/sparc/include/asm/vdso.h                      |   2 -
->  arch/sparc/include/asm/vdso/clocksource.h          |  10 +
->  arch/sparc/include/asm/vdso/gettimeofday.h         | 184 ++++++++++
->  arch/sparc/include/asm/vdso/processor.h            |  41 +++
->  arch/sparc/include/asm/vdso/vsyscall.h             |  10 +
->  arch/sparc/include/asm/vvar.h                      |  75 ----
->  arch/sparc/kernel/Makefile                         |   1 -
->  arch/sparc/kernel/time_64.c                        |   6 +-
->  arch/sparc/kernel/vdso.c                           |  69 ----
->  arch/sparc/vdso/Makefile                           |   8 +-
->  arch/sparc/vdso/vclock_gettime.c                   | 380 ++-------------------
->  arch/sparc/vdso/vdso-layout.lds.S                  |  26 +-
->  arch/sparc/vdso/vdso.lds.S                         |   2 -
->  arch/sparc/vdso/vdso2c.c                           |  24 --
->  arch/sparc/vdso/vdso2c.h                           |  45 +--
->  arch/sparc/vdso/vdso32/vdso32.lds.S                |   4 +-
->  arch/sparc/vdso/vma.c                              | 274 +--------------
->  drivers/char/random.c                              |  75 ++--
->  include/linux/clocksource.h                        |   8 -
->  include/linux/vdso_datastore.h                     |   6 +
->  include/vdso/datapage.h                            |  23 +-
->  include/vdso/helpers.h                             |   1 +
->  init/main.c                                        |   2 +
->  kernel/time/Kconfig                                |   4 -
->  lib/vdso/datastore.c                               |  73 ++--
->  lib/vdso/getrandom.c                               |   3 +
->  lib/vdso/gettimeofday.c                            |  17 +
->  .../testing/selftests/vDSO/vdso_test_correctness.c |   8 +-
->  44 files changed, 451 insertions(+), 997 deletions(-)
-> ---
-> base-commit: 5f84f6004e298bd41c9e4ed45c18447954b1dce6
-> change-id: 20250722-vdso-sparc64-generic-2-25f2e058e92c
+> > Suggest testing the same branch with the alpha patch reverted just to
+> > rule out any issue in the core code. If it reproduces suggest to
+> > bisect Leon's branch.
 
-Tested-by: Andreas Larsson <andreas@gaisler.com>
-Reviewed-by: Andreas Larsson <andreas@gaisler.com>
-Acked-by: Andreas Larsson <andreas@gaisler.com> # arch/sparc
+Hi again, I've booted up the ES40 again with the kernel build from Leons
+branch, it boots up but message log is full off messages like
+"EXT4-fs error (device sda4): ext4_find_extent:939: inode
+#16257327: comm init: pblk 65114257 bad header/extent:
+invalid magic"
 
-Thanks,
-Andreas
+The filesystem is broken after just booting with the kernel.
+This time fsck did not fix it, I needed to re-install gentoo stage3.
+So it's for sure reproducible as well as destructive.  It's not possible to
+revert all the commits individually, since this will leave the source tree
+in a state where the kernel doesn't build. I've started off by reverting
+the following commits:
 
+e78a9d72517a88faa6f16dab4d1c6f966ed378ae
+(dma-mapping: remove unused map_page callback)
+
+d459e3b80ad1c81bf596d63d2e3347cf8c7bb0d9
+(alpha: Convert mapping routine to rely on physical address)
+
+3cd47242d513050d7a81ac6e7020fd3ef5462ad4
+(block-dma: properly take MMIO path)
+
+7950995bef32aa7e5f74699c7d0fdac41d2dad14
+ (block-dma: migrate to dma_map_phys instead of map_page)
+
+
+After reverting the above commits, I'm able to build a working kernel,
+that is, no filesystem corruption occurs. I'll take a closer look at this
+after the weekend.
+
+Regards
+
+Magnus
 
