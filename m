@@ -1,46 +1,46 @@
-Return-Path: <linux-mips+bounces-11569-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11570-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2EC7CBA72D4
-	for <lists+linux-mips@lfdr.de>; Sun, 28 Sep 2025 17:02:56 +0200 (CEST)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6D14BA72FE
+	for <lists+linux-mips@lfdr.de>; Sun, 28 Sep 2025 17:03:15 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DE3EB3BB306
-	for <lists+linux-mips@lfdr.de>; Sun, 28 Sep 2025 15:02:54 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3D3827A44FE
+	for <lists+linux-mips@lfdr.de>; Sun, 28 Sep 2025 15:01:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4780229B36;
-	Sun, 28 Sep 2025 15:02:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA6A1233149;
+	Sun, 28 Sep 2025 15:02:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DSOYpsgi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Vx025h1O"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A917234BA59;
-	Sun, 28 Sep 2025 15:02:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A1FA34BA59;
+	Sun, 28 Sep 2025 15:02:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759071763; cv=none; b=Yg4N5gtEgAC/VnTAvbeRvrMXy/dHIInrAwMEPFUg/xh5QpN/011o4ks0SWXDlS8HM2DN7n7gE8ggvv0e+gZkkDOuF87DS60p3+vH/zGSuYMPcOQThBtvSt9bEJjXcYI/1zTbzOd99FC8VUU3Skvothas4uMijPAgF7EKIpBu4/Q=
+	t=1759071767; cv=none; b=R50iqpxElUESomeepk3+h+NhCksL9yL6oYnga+NxBdYxB8Lcx55eJZD+iJYQfFhEKt4lvc93kKMGKDBmhEWBvE77C08ui+tOdufVrQGmncDOnIJkkMOQOAJDKmgAlcj06NZjDgJkaFLkZtrRpMM89W1Ypp63m6mNBT9Ot2a4LJE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759071763; c=relaxed/simple;
-	bh=joV1RJXfMRWLzhpnIVMn+yDni/E+0b2XTKZNLoQGaO4=;
+	s=arc-20240116; t=1759071767; c=relaxed/simple;
+	bh=VCOCqFxGPwggSuBDZKXbtlILkoSR1dboXF2jBBkRDQw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=oDJWZOA9w0ww3RphZWlgSNUPaiIvaK0PwXoHv7mL2G382GOR8KurQ9vVUxkXcx13RLuq1WQcGtUbHR1vRTrskXcuEzeJScYaKpfv9n2xRS0LlfqR9Xu6o6cjDkXo5g7lN2iCqMevaq976J8fbpTgxGjZrhstNpwMo3OSs5+oMzw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DSOYpsgi; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81470C116B1;
-	Sun, 28 Sep 2025 15:02:42 +0000 (UTC)
+	 MIME-Version; b=k0C7CcHVyNNNSteZOw+mFo46DOHo8LdBahUXZgq1D1zbjlivUv7NpnDlZdgkbtPsVkwFsCSieIuOieGrqFJ5syEWFVxdHt0SyK1fInTI5VGqQ9idQCt5uWLi6lVx/09RrGLSy73UdKeVjEr3r4iE4dPXq2lq2YCaT7ANQcQVxzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Vx025h1O; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C568C4CEF0;
+	Sun, 28 Sep 2025 15:02:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759071763;
-	bh=joV1RJXfMRWLzhpnIVMn+yDni/E+0b2XTKZNLoQGaO4=;
+	s=k20201202; t=1759071766;
+	bh=VCOCqFxGPwggSuBDZKXbtlILkoSR1dboXF2jBBkRDQw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=DSOYpsgikSOy8MZ87jPu/KYUDc+l4cdaniO8RKKeI+Ogx+vIbjw3PFXybhxCGiVkL
-	 Svbf9LCD/OLSu1+BhYWYUN2NsbU1qvbAJmkVnyM+ehBPWXa1P8Dfsr10VqVfh+CJ3/
-	 fK0PydC9i55IUTpcrx/WEa8jZeqt059f7qwZBuoA4bLcGPLmEQkD0cguNeebMBEFKT
-	 3RrvQyQn8dehTNH48u0yl6WLA+Tz2ziEbgsKR0IERUfTbFnsVdNo8hdbmtk8QqvVxt
-	 7HSong2gEFWSxqgarqeXxYxR/Gye8uoIqVAF8qNmGQXTAkUC6S5UaNNMSjuWnuDC7u
-	 prcP+vXzgDPsQ==
+	b=Vx025h1O6Widlbf8ZdUWczJlRCdm8t2J75iGS9YkD0Km/lK/Gq6LI2zL+dSoACFz8
+	 vd8RLE751IJj5O7tK5pBaCXWBNz8cqNICZqHk6TPLPMahAofsQXTSw49By6IgGes+Z
+	 leItKHWydjvkNTD6XXLN8xGmEYfoo0VczIt/YLiG1n94Z+IgStH5O2f5h8HfhDcTiQ
+	 RUlO6m75yEL2F46lzosTWw5xsjAXulo0Iaf2bVqvrg5Olbvhf2srEYIDBcV0ZT05BU
+	 qi0J4SOvF+E3fgzXxh/Ss2D+jzwLI3i2MlGFrRfKqWNcrkwmK0sjhhVDcGDWHvdeTw
+	 D3kMaxocGZcJw==
 From: Leon Romanovsky <leon@kernel.org>
 To: Marek Szyprowski <m.szyprowski@samsung.com>
 Cc: Leon Romanovsky <leonro@nvidia.com>,
@@ -74,9 +74,9 @@ Cc: Leon Romanovsky <leonro@nvidia.com>,
 	x86@kernel.org,
 	xen-devel@lists.xenproject.org,
 	Magnus Lindholm <linmag7@gmail.com>
-Subject: [PATCH v1 2/9] MIPS/jazzdma: Provide physical address directly
-Date: Sun, 28 Sep 2025 18:02:22 +0300
-Message-ID: <f64ece5bdf9dc4c7e9407a5089be68a8c5c011a5.1759071169.git.leon@kernel.org>
+Subject: [PATCH v1 3/9] parisc: Convert DMA map_page to map_phys interface
+Date: Sun, 28 Sep 2025 18:02:23 +0300
+Message-ID: <333ec4dabec16d3d913a93780bc6e7ddb5240fcf.1759071169.git.leon@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <cover.1759071169.git.leon@kernel.org>
 References: <cover.1759071169.git.leon@kernel.org>
@@ -90,59 +90,157 @@ Content-Transfer-Encoding: 8bit
 
 From: Leon Romanovsky <leonro@nvidia.com>
 
-MIPS jazz uses physical addresses for mapping pages, so convert
-it to get them directly from DMA mapping routine.
+Perform mechanical conversion from .map_page to .map_phys callback.
 
 Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
 ---
- arch/mips/jazz/jazzdma.c | 20 +++++++++++++-------
- 1 file changed, 13 insertions(+), 7 deletions(-)
+ drivers/parisc/ccio-dma.c  | 25 +++++++++++++------------
+ drivers/parisc/sba_iommu.c | 23 ++++++++++++-----------
+ 2 files changed, 25 insertions(+), 23 deletions(-)
 
-diff --git a/arch/mips/jazz/jazzdma.c b/arch/mips/jazz/jazzdma.c
-index c97b089b9902..45fe71aa454b 100644
---- a/arch/mips/jazz/jazzdma.c
-+++ b/arch/mips/jazz/jazzdma.c
-@@ -521,18 +521,24 @@ static void jazz_dma_free(struct device *dev, size_t size, void *vaddr,
- 	__free_pages(virt_to_page(vaddr), get_order(size));
- }
+diff --git a/drivers/parisc/ccio-dma.c b/drivers/parisc/ccio-dma.c
+index feef537257d0..d45f3634f827 100644
+--- a/drivers/parisc/ccio-dma.c
++++ b/drivers/parisc/ccio-dma.c
+@@ -773,17 +773,18 @@ ccio_map_single(struct device *dev, void *addr, size_t size,
  
--static dma_addr_t jazz_dma_map_page(struct device *dev, struct page *page,
--		unsigned long offset, size_t size, enum dma_data_direction dir,
+ 
+ static dma_addr_t
+-ccio_map_page(struct device *dev, struct page *page, unsigned long offset,
+-		size_t size, enum dma_data_direction direction,
 -		unsigned long attrs)
-+static dma_addr_t jazz_dma_map_phys(struct device *dev, phys_addr_t phys,
-+		size_t size, enum dma_data_direction dir, unsigned long attrs)
++ccio_map_phys(struct device *dev, phys_addr_t phys, size_t size,
++	      enum dma_data_direction direction, unsigned long attrs)
  {
--	phys_addr_t phys = page_to_phys(page) + offset;
+-	return ccio_map_single(dev, page_address(page) + offset, size,
+-			direction);
 +	if (attrs & DMA_ATTR_MMIO)
-+		/*
-+		 * This check is included because older versions of the code lacked
-+		 * MMIO path support, and my ability to test this path is limited.
-+		 * However, from a software technical standpoint, there is no restriction,
-+		 * as the following code operates solely on physical addresses.
-+		 */
 +		return DMA_MAPPING_ERROR;
- 
- 	if (!(attrs & DMA_ATTR_SKIP_CPU_SYNC))
- 		arch_sync_dma_for_device(phys, size, dir);
- 	return vdma_alloc(phys, size);
++
++	return ccio_map_single(dev, phys_to_virt(phys), size, direction);
  }
  
--static void jazz_dma_unmap_page(struct device *dev, dma_addr_t dma_addr,
-+static void jazz_dma_unmap_phys(struct device *dev, dma_addr_t dma_addr,
- 		size_t size, enum dma_data_direction dir, unsigned long attrs)
+ 
+ /**
+- * ccio_unmap_page - Unmap an address range from the IOMMU.
++ * ccio_unmap_phys - Unmap an address range from the IOMMU.
+  * @dev: The PCI device.
+  * @iova: The start address of the DMA region.
+  * @size: The length of the DMA region.
+@@ -791,7 +792,7 @@ ccio_map_page(struct device *dev, struct page *page, unsigned long offset,
+  * @attrs: attributes
+  */
+ static void 
+-ccio_unmap_page(struct device *dev, dma_addr_t iova, size_t size,
++ccio_unmap_phys(struct device *dev, dma_addr_t iova, size_t size,
+ 		enum dma_data_direction direction, unsigned long attrs)
  {
- 	if (!(attrs & DMA_ATTR_SKIP_CPU_SYNC))
-@@ -607,8 +613,8 @@ static void jazz_dma_sync_sg_for_cpu(struct device *dev,
- const struct dma_map_ops jazz_dma_ops = {
- 	.alloc			= jazz_dma_alloc,
- 	.free			= jazz_dma_free,
--	.map_page		= jazz_dma_map_page,
--	.unmap_page		= jazz_dma_unmap_page,
-+	.map_phys		= jazz_dma_map_phys,
-+	.unmap_phys		= jazz_dma_unmap_phys,
- 	.map_sg			= jazz_dma_map_sg,
- 	.unmap_sg		= jazz_dma_unmap_sg,
- 	.sync_single_for_cpu	= jazz_dma_sync_single_for_cpu,
+ 	struct ioc *ioc;
+@@ -873,7 +874,7 @@ static void
+ ccio_free(struct device *dev, size_t size, void *cpu_addr,
+ 		dma_addr_t dma_handle, unsigned long attrs)
+ {
+-	ccio_unmap_page(dev, dma_handle, size, 0, 0);
++	ccio_unmap_phys(dev, dma_handle, size, 0, 0);
+ 	free_pages((unsigned long)cpu_addr, get_order(size));
+ }
+ 
+@@ -1004,7 +1005,7 @@ ccio_unmap_sg(struct device *dev, struct scatterlist *sglist, int nents,
+ #ifdef CCIO_COLLECT_STATS
+ 		ioc->usg_pages += sg_dma_len(sglist) >> PAGE_SHIFT;
+ #endif
+-		ccio_unmap_page(dev, sg_dma_address(sglist),
++		ccio_unmap_phys(dev, sg_dma_address(sglist),
+ 				  sg_dma_len(sglist), direction, 0);
+ 		++sglist;
+ 		nents--;
+@@ -1017,8 +1018,8 @@ static const struct dma_map_ops ccio_ops = {
+ 	.dma_supported =	ccio_dma_supported,
+ 	.alloc =		ccio_alloc,
+ 	.free =			ccio_free,
+-	.map_page =		ccio_map_page,
+-	.unmap_page =		ccio_unmap_page,
++	.map_phys =		ccio_map_phys,
++	.unmap_phys =		ccio_unmap_phys,
+ 	.map_sg =		ccio_map_sg,
+ 	.unmap_sg =		ccio_unmap_sg,
+ 	.get_sgtable =		dma_common_get_sgtable,
+@@ -1072,7 +1073,7 @@ static int ccio_proc_info(struct seq_file *m, void *p)
+ 			   ioc->msingle_calls, ioc->msingle_pages,
+ 			   (int)((ioc->msingle_pages * 1000)/ioc->msingle_calls));
+ 
+-		/* KLUGE - unmap_sg calls unmap_page for each mapped page */
++		/* KLUGE - unmap_sg calls unmap_phys for each mapped page */
+ 		min = ioc->usingle_calls - ioc->usg_calls;
+ 		max = ioc->usingle_pages - ioc->usg_pages;
+ 		seq_printf(m, "pci_unmap_single: %8ld calls  %8ld pages (avg %d/1000)\n",
+diff --git a/drivers/parisc/sba_iommu.c b/drivers/parisc/sba_iommu.c
+index fc3863c09f83..8040aa4e6ff4 100644
+--- a/drivers/parisc/sba_iommu.c
++++ b/drivers/parisc/sba_iommu.c
+@@ -778,17 +778,18 @@ sba_map_single(struct device *dev, void *addr, size_t size,
+ 
+ 
+ static dma_addr_t
+-sba_map_page(struct device *dev, struct page *page, unsigned long offset,
+-		size_t size, enum dma_data_direction direction,
+-		unsigned long attrs)
++sba_map_phys(struct device *dev, phys_addr_t phys, size_t size,
++		enum dma_data_direction direction, unsigned long attrs)
+ {
+-	return sba_map_single(dev, page_address(page) + offset, size,
+-			direction);
++	if (attrs & DMA_ATTR_MMIO)
++		return DMA_MAPPING_ERROR;
++
++	return sba_map_single(dev, phys_to_virt(phys), size, direction);
+ }
+ 
+ 
+ /**
+- * sba_unmap_page - unmap one IOVA and free resources
++ * sba_unmap_phys - unmap one IOVA and free resources
+  * @dev: instance of PCI owned by the driver that's asking.
+  * @iova:  IOVA of driver buffer previously mapped.
+  * @size:  number of bytes mapped in driver buffer.
+@@ -798,7 +799,7 @@ sba_map_page(struct device *dev, struct page *page, unsigned long offset,
+  * See Documentation/core-api/dma-api-howto.rst
+  */
+ static void
+-sba_unmap_page(struct device *dev, dma_addr_t iova, size_t size,
++sba_unmap_phys(struct device *dev, dma_addr_t iova, size_t size,
+ 		enum dma_data_direction direction, unsigned long attrs)
+ {
+ 	struct ioc *ioc;
+@@ -914,7 +915,7 @@ static void
+ sba_free(struct device *hwdev, size_t size, void *vaddr,
+ 		    dma_addr_t dma_handle, unsigned long attrs)
+ {
+-	sba_unmap_page(hwdev, dma_handle, size, 0, 0);
++	sba_unmap_phys(hwdev, dma_handle, size, 0, 0);
+ 	free_pages((unsigned long) vaddr, get_order(size));
+ }
+ 
+@@ -1061,7 +1062,7 @@ sba_unmap_sg(struct device *dev, struct scatterlist *sglist, int nents,
+ 
+ 	while (nents && sg_dma_len(sglist)) {
+ 
+-		sba_unmap_page(dev, sg_dma_address(sglist), sg_dma_len(sglist),
++		sba_unmap_phys(dev, sg_dma_address(sglist), sg_dma_len(sglist),
+ 				direction, 0);
+ #ifdef SBA_COLLECT_STATS
+ 		ioc->usg_pages += ((sg_dma_address(sglist) & ~IOVP_MASK) + sg_dma_len(sglist) + IOVP_SIZE - 1) >> PAGE_SHIFT;
+@@ -1085,8 +1086,8 @@ static const struct dma_map_ops sba_ops = {
+ 	.dma_supported =	sba_dma_supported,
+ 	.alloc =		sba_alloc,
+ 	.free =			sba_free,
+-	.map_page =		sba_map_page,
+-	.unmap_page =		sba_unmap_page,
++	.map_phys =		sba_map_phys,
++	.unmap_phys =		sba_unmap_phys,
+ 	.map_sg =		sba_map_sg,
+ 	.unmap_sg =		sba_unmap_sg,
+ 	.get_sgtable =		dma_common_get_sgtable,
 -- 
 2.51.0
 
