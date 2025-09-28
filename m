@@ -1,64 +1,50 @@
-Return-Path: <linux-mips+bounces-11579-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11580-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEDF4BA73DD
-	for <lists+linux-mips@lfdr.de>; Sun, 28 Sep 2025 17:20:41 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92D9DBA7401
+	for <lists+linux-mips@lfdr.de>; Sun, 28 Sep 2025 17:28:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BDE563ABD65
-	for <lists+linux-mips@lfdr.de>; Sun, 28 Sep 2025 15:20:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4AD84177DCF
+	for <lists+linux-mips@lfdr.de>; Sun, 28 Sep 2025 15:28:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 716D3221294;
-	Sun, 28 Sep 2025 15:20:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF13B22B8B6;
+	Sun, 28 Sep 2025 15:28:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b="CtT4iU2T";
-	dkim=permerror (0-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b="J0+KaShs"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="f1YhjVPK"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mailrelay-egress4.pub.mailoutpod2-cph3.one.com (mailrelay-egress4.pub.mailoutpod2-cph3.one.com [46.30.211.179])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F9B21A3164
-	for <linux-mips@vger.kernel.org>; Sun, 28 Sep 2025 15:20:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.30.211.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CD8410957;
+	Sun, 28 Sep 2025 15:28:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759072836; cv=none; b=jBYlYo2VmwHhO5Egb6Xle0ONj0Muom4j8W/jRloQRs0+azUREotmGDBoTXaJM/Bzv1Qe/qUfqlsmDW+oFwMZcsrpOfZK0g0aB6P32fpS5b2cALYDwb6TgC77bkqqFVSSxsBgj+aLOwR4MhwZete9GL3GUYxrajdjCheuk66HOK4=
+	t=1759073315; cv=none; b=u7SMzf4OnTozPr686ofc85bS4adH6STTrUren1JiBS56xHEr9PS97m9LTmjEcOC3p4yVIbMyDsiH3ULyA1nhKE93fyONEeP8pqd1Wwa97yD8SRkb6zUVMYz8MwbESsfes+3ihUY7EgYnQrJWxPKrRfOTqD2x+/OoYGyyJxZSvm8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759072836; c=relaxed/simple;
-	bh=nlgAinLCqYMESm7W18m91+Ld53eoJMfCRrOPc4ga7/M=;
+	s=arc-20240116; t=1759073315; c=relaxed/simple;
+	bh=j3dJ7dm9Jex7hj7zDSOs/rnehFATrVSGsSj9oi0KREM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uw8QVOprkcK2bw3bd68Cy6QWAiTZeGBQMRDX8AF8LbG8ndJVcIOx8Jps8q/5B8wsshidSdVednRYSwWiUExUAiYwuAgrOq5N0etnXI+51jSWoLlm7j+CVVBEIJXakE5BiRiHG6pXQSStRYqEpPtkBQ7ygi1IvjP+FnpsejeSAlg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ravnborg.org; spf=none smtp.mailfrom=ravnborg.org; dkim=pass (2048-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b=CtT4iU2T; dkim=permerror (0-bit key) header.d=ravnborg.org header.i=@ravnborg.org header.b=J0+KaShs; arc=none smtp.client-ip=46.30.211.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ravnborg.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=ravnborg.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1759072832; x=1759677632;
-	d=ravnborg.org; s=rsa1;
-	h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-	 from:date:from;
-	bh=Ghyryt2xK5vvnvf4Q2js9Uw55oy6LtaOfQDvQKr1uy0=;
-	b=CtT4iU2T9YA3xTrD4cIA+BE+C15rUkNnZplc587YI58g+wt9Z/k8mKxjom62woRw7fEUsvfTw8Ego
-	 OORUvh9fiJQumZdtSymONvY5MMtJ3KJXP3zsnj3KxJxk4Oiw+38jzutzIsRmg9a15NqXsODmCWj0BM
-	 /EaEWRy/uNU7FXsutNnhv+ixhqzFL2HZhBJwBMscK6dVEUiiXxvphkGrAHhj1qC784KABlOh0D02mA
-	 4cLaxB8a5GgAT75FDK3kfCkRHDAAi479jPbM5IFPQLlR8lLKW/rv/Z+yeGIJUaeXNjpvPYpXFP9UyV
-	 lTS7L9y3fNmnKV3eKZ72pOl8CYKOBDg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1759072832; x=1759677632;
-	d=ravnborg.org; s=ed1;
-	h=in-reply-to:content-type:mime-version:references:message-id:subject:cc:to:
-	 from:date:from;
-	bh=Ghyryt2xK5vvnvf4Q2js9Uw55oy6LtaOfQDvQKr1uy0=;
-	b=J0+KaShsfwnmVbs3PB0EalU1KScQKZ0oCMj0q/S47VSr8rYDdT1FCDrtDwmZlUzToU5sipbu8KD09
-	 RgZbdwtBQ==
-X-HalOne-ID: ab2e7cf9-9c7e-11f0-845a-494313b7f784
-Received: from ravnborg.org (2-105-16-150-cable.dk.customer.tdc.net [2.105.16.150])
-	by mailrelay6.pub.mailoutpod2-cph3.one.com (Halon) with ESMTPSA
-	id ab2e7cf9-9c7e-11f0-845a-494313b7f784;
-	Sun, 28 Sep 2025 15:20:31 +0000 (UTC)
-Date: Sun, 28 Sep 2025 17:20:30 +0200
-From: Sam Ravnborg <sam@ravnborg.org>
-To: Leon Romanovsky <leon@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ym+C0iJ2TLmAVnSuNzYu0ONJId0MvrZSgCa4x6YuSg4Kr+WqD1LXhfzcGdeHCqyXs98pBAMIW4pZ5Bcs/f+fjJzzb0BFTeT/OZes35JrCtS1qE0YbiGeQLINiNhZdBHFCpy3G7+opCBw8C4IhD6EErUVRhfHilKxpRpCFkdXXzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=f1YhjVPK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D567C4CEF0;
+	Sun, 28 Sep 2025 15:28:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759073315;
+	bh=j3dJ7dm9Jex7hj7zDSOs/rnehFATrVSGsSj9oi0KREM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=f1YhjVPKUf7C/0/LxXAZBncp5RteetEhwJWXFm/vEFPUulFmvL8IxH077S1rMLJtr
+	 d2ZgZgVpCx6rd1totAk5q+h7xqPmOOTtzW5w30YaKisVYvwJq5gRqIDGRHY5T/f4gQ
+	 O0PYgjbB/cH7oJ1jFPBNLr3rGkOI2qMk/87YL11RjncJuK6Qjt9VPe0h+TqS18yZyA
+	 BZqpYFUKRf23DvC6/+sd1BLnzDDD/hXAh8aUEZqIXh4WqdIZHr4zt3c9wvIaaQFzw4
+	 UZD9hcw+AzQFsbXJe27so0nVBzGtUu2qhqiGBcZy6B5qFDuhtL/1hVaC8gTpWufr4a
+	 sdkGg8+AkSuEw==
+Date: Sun, 28 Sep 2025 18:28:30 +0300
+From: Leon Romanovsky <leon@kernel.org>
+To: Sam Ravnborg <sam@ravnborg.org>
 Cc: Marek Szyprowski <m.szyprowski@samsung.com>,
-	Leon Romanovsky <leonro@nvidia.com>,
 	Jason Gunthorpe <jgg@nvidia.com>,
 	Andreas Larsson <andreas@gaisler.com>,
 	Borislav Petkov <bp@alien8.de>,
@@ -83,7 +69,7 @@ Cc: Marek Szyprowski <m.szyprowski@samsung.com>,
 	virtualization@lists.linux.dev, x86@kernel.org,
 	xen-devel@lists.xenproject.org, Magnus Lindholm <linmag7@gmail.com>
 Subject: Re: [PATCH v1 9/9] dma-mapping: remove unused map_page callback
-Message-ID: <20250928152030.GA136019@ravnborg.org>
+Message-ID: <20250928152830.GA324804@unreal>
 References: <cover.1759071169.git.leon@kernel.org>
  <27727b8ef9b3ad55a3a28f9622a62561c9988335.1759071169.git.leon@kernel.org>
  <20250928151725.GA135708@ravnborg.org>
@@ -96,8 +82,6 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 In-Reply-To: <20250928151725.GA135708@ravnborg.org>
-
-Hi Leon.
 
 On Sun, Sep 28, 2025 at 05:17:25PM +0200, Sam Ravnborg wrote:
 > Hi Leon.
@@ -117,11 +101,58 @@ On Sun, Sep 28, 2025 at 05:17:25PM +0200, Sam Ravnborg wrote:
 > >  3 files changed, 1 insertion(+), 26 deletions(-)
 > 
 > It looks like you missed a few sparc32 bits:
+> mm/iommu.c:
+> static const struct dma_map_ops sbus_iommu_dma_gflush_ops = {
+> #ifdef CONFIG_SBUS
+>         .alloc                  = sbus_iommu_alloc,
+>         .free                   = sbus_iommu_free,
+> #endif
+>         .map_page               = sbus_iommu_map_page_gflush,
+>         .unmap_page             = sbus_iommu_unmap_page,
+>         .map_sg                 = sbus_iommu_map_sg_gflush,
+> 
+> mm/io-unit.c:
+> static const struct dma_map_ops iounit_dma_ops = {
+> #ifdef CONFIG_SBUS
+>         .alloc                  = iounit_alloc,
+>         .free                   = iounit_free,
+> #endif
+>         .map_page               = iounit_map_page,
+>         .unmap_page             = iounit_unmap_page,
+>         .map_sg                 = iounit_map_sg,
+> 
+> I did not compile test, but from a quick look they need to be updated.
 
-They were included, but the patch is named sparc64,
-which is why I missed it.
+There were updated, see patch #5.
+https://lore.kernel.org/all/bac909dab3c82fc6a7a4f5a31f22bac9a69f7f07.1759071169.git.leon@kernel.org/T/#u
 
-If you could rename the patch that would be nice.
+arch/sparc/mm/iommu.c:
+  426 static const struct dma_map_ops sbus_iommu_dma_gflush_ops = {
+  427 #ifdef CONFIG_SBUS
+  428         .alloc                  = sbus_iommu_alloc,
+  429         .free                   = sbus_iommu_free,
+  430 #endif
+  431         .map_phys               = sbus_iommu_map_phys_gflush,
+  432         .unmap_phys             = sbus_iommu_unmap_phys,
+  433         .map_sg                 = sbus_iommu_map_sg_gflush,
+  434         .unmap_sg               = sbus_iommu_unmap_sg,
+  435 };
 
-	Sam
+arch/sparc/mm/io-unit.c:
+  276 static const struct dma_map_ops iounit_dma_ops = {
+  277 #ifdef CONFIG_SBUS
+  278         .alloc                  = iounit_alloc,
+  279         .free                   = iounit_free,
+  280 #endif
+  281         .map_phys               = iounit_map_phys,
+  282         .unmap_phys             = iounit_unmap_phys,
+  283         .map_sg                 = iounit_map_sg,
+  284         .unmap_sg               = iounit_unmap_sg,
+  285 };
+
+Thanks
+
+> 
+> 	Sam
+> 
 
