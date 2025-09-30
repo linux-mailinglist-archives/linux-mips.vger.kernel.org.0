@@ -1,173 +1,251 @@
-Return-Path: <linux-mips+bounces-11584-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11585-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E224BAC645
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Sep 2025 12:02:13 +0200 (CEST)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1B17BAC94C
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Sep 2025 13:00:08 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3CAFA3202D1
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Sep 2025 10:02:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8918F165614
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Sep 2025 11:00:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D863E221D9E;
-	Tue, 30 Sep 2025 10:02:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1B492F9DAF;
+	Tue, 30 Sep 2025 11:00:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hotmail.com header.i=@hotmail.com header.b="ZzZ2tfBV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hMgAjDFi"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from GVXPR05CU001.outbound.protection.outlook.com (mail-swedencentralazolkn19013081.outbound.protection.outlook.com [52.103.35.81])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1048A1E8329;
-	Tue, 30 Sep 2025 10:02:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.103.35.81
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759226529; cv=fail; b=kuq+nO/FC09zDXl0blLTchSoWddu2b87luY8On/15KzhMX/1lAhUf7k1dQ5HyoFBO1HP9f5euJxrXZlawPEHJPsxr6mwij2JCDK6YCpEULcpki7u4KDD8hxCo3/5VR4VqjARzrUW+otOn2AripNw4G/XrCUeI2+J/IJXgFeii6c=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759226529; c=relaxed/simple;
-	bh=x16oZwFHClpkRH/NMVHDfoct7PH+XSYBOfEvTTxyzOc=;
-	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=TCutoMmkA8DKUVy95s5c/DKli4rpBs7a7iwUMQ4zTg2kRc0089bREYu/QtHStqJ37b6DGAfY1FMRG0no6tj7Mng66C8P8V8VAj2P4ZqEndjlzdAB7o+uE8/9pEQneVYok1vUNpzc18H+xmcBe4DX9DRquSD19MdD+71C+YV5rtI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.com; spf=pass smtp.mailfrom=hotmail.com; dkim=pass (2048-bit key) header.d=hotmail.com header.i=@hotmail.com header.b=ZzZ2tfBV; arc=fail smtp.client-ip=52.103.35.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=hotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hotmail.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=wM84IyT09GWkqLwnAzzGUCIDRS3qVKdA1wCkzaFtFo+0c08+v6iZUstHtCFxeHJbQ5pJzINYlZug/ppXzJuK3Aaj31wF/1+X75+4RdsgaU3kCf8tgn/iPVGHmcfA6vZGTLCP9Te7c9Yayugczcd6EAnfqszu8Ls173yZvvspjTJbrK0BlzroR14m/oq8oQau+h1n7It+3eFZXwjHKhVvR0A057qfg3SUYZwPHTkC5N6nUJKVcJZAt/PMt3Zei6yBM8Kp/ZscborJ7JlDoHo7ttR7XKy03xefJwx6NsQamWpA8EVteS240RRePgNmqCyWu8Oyw7Z+DtCU3fT4PGZ1SQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Bv4lVBTY2TMCAphz5lcgoiwwjge5SUkp3EEbq8gunVc=;
- b=nlCsJHQMPfN0XkCP8WxmdRMRwWktLFGZFAHqM7AVmOqO+0/8jzwqVHwE6F/oJU/Bz2AHsLfrr0ubOGNwWiYRk3XEkgUTwIAcw8Emw8hLzcsBbQcvx0iZyG1OYiWuJVy+ss+Csdq3TaVtptf4Foem2TqXVxx2RaYlkdedZxT1pZOGcu1dtz+igYQjArSYdOUId5L4nSMkN9bsP0j2VtPCwInc8sgK8RqjQaL8dxP4pefkHHgecUSSC+/krmKXfUPDHUfCi2J1iRwMCr+4GazxdGWkz+FSyBrvdV6kcaLDosWRCGDclTj/W73hZjpfCyFMOWsmAXjcII8pYeZhQDyzrA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hotmail.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Bv4lVBTY2TMCAphz5lcgoiwwjge5SUkp3EEbq8gunVc=;
- b=ZzZ2tfBVNVDo18YJ3paXvvYILOgio3mhA5bypix41oLc1K/J0YBflRAhWc3TVTtpODV6525xTunS3J1Wpic2fHS/dbD0o5jhQdzjf5A03/0evw9gJWRKDHfaqmsaTEEIWYALaUBD6JeQ/C0dECaWn+aJqJWoWUu0a1DAOIg+/0+5FtVBqvg8E+Y/pf/4DnuyoLMwylijuDzCrOgWGp+bxbpSpCHpH4PyPVLg9GZHvhur78yvGLeWGIoQVCXFp6tIzJct9RK+szlUesUqUQvoZglNN/Ff6VKMml774GaROaDySe5ljiH7to/skfxbDBiHi73rrNM1dHeT3lxjeNAu7g==
-Received: from VI1PR02MB3952.eurprd02.prod.outlook.com (2603:10a6:803:85::14)
- by DB8PR02MB5804.eurprd02.prod.outlook.com (2603:10a6:10:11a::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9160.17; Tue, 30 Sep
- 2025 10:02:03 +0000
-Received: from VI1PR02MB3952.eurprd02.prod.outlook.com
- ([fe80::60e5:4de0:ff18:2fb1]) by VI1PR02MB3952.eurprd02.prod.outlook.com
- ([fe80::60e5:4de0:ff18:2fb1%3]) with mapi id 15.20.9160.013; Tue, 30 Sep 2025
- 10:02:01 +0000
-From: David Binderman <dcb314@hotmail.com>
-To: "tsbogend@alpha.franken.de" <tsbogend@alpha.franken.de>,
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, LKML
-	<linux-kernel@vger.kernel.org>
-Subject: linux-6.17/arch/mips/kernel/kgdb.c: 2 * Array sanity check in wrong
- place ? 
-Thread-Topic: linux-6.17/arch/mips/kernel/kgdb.c: 2 * Array sanity check in
- wrong place ? 
-Thread-Index: AQHcMfDmUnvpzJAQKkmbgorHxmGi4A==
-Date: Tue, 30 Sep 2025 10:02:01 +0000
-Message-ID:
- <VI1PR02MB3952E838628A8350CF4196759C1AA@VI1PR02MB3952.eurprd02.prod.outlook.com>
-Accept-Language: en-GB, en-US
-Content-Language: en-GB
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
-x-ms-exchange-messagesentrepresentingtype: 1
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: VI1PR02MB3952:EE_|DB8PR02MB5804:EE_
-x-ms-office365-filtering-correlation-id: 3939ac2f-5203-4fcc-03c8-08de000866c8
-x-microsoft-antispam:
- BCL:0;ARA:14566002|31061999003|19110799012|8060799015|8062599012|461199028|12121999013|15030799006|15080799012|40105399003|440099028|39105399003|51005399003|3412199025|102099032;
-x-microsoft-antispam-message-info:
- =?iso-8859-1?Q?AaFevZF6mi6AbnmvY1egGMKlbi1Uemqwf2wNyzx+zf33Nh/Lx8oqCHHQ4R?=
- =?iso-8859-1?Q?823e3xAc3l2NmDZNNx1xpqHGIB/c7zWeRpFeF00G9eIOsuP4uxbrOsPzY9?=
- =?iso-8859-1?Q?t4o5OZZpt9T7EvzdXKEhX+l7y5Yc93pAn1tcFFEWoICZ8v3QZ9etElEiwA?=
- =?iso-8859-1?Q?pCYKfjJzJemaIoGklKkDOuhiqAvDQzux5Zr9BZv5XkFF0aK7VK41xVqldg?=
- =?iso-8859-1?Q?EwIZkgdZB69+usdZaBoc0w1IFTYEtmkmxVaIw89Py/oze7Ztl2oVIj9C80?=
- =?iso-8859-1?Q?aZzxN54YXjPZBxAmBbdMadpwC0ifSI63r51lkufMxR98GL/FA3VjM7q8YX?=
- =?iso-8859-1?Q?eZEu5ME0z5U98iHRh8BRgyOtMKKsEGOAf5ilWy83quHwdRzjL+b1b0z9ki?=
- =?iso-8859-1?Q?uKt7YjP4uDWjLw+Ji1OztpHoslRdcbWLEwV414x2lPfhePXi9C+RgJoUlG?=
- =?iso-8859-1?Q?qPIDaNpmIe/G8YrQ6eFJ55vPJ8ZB7SJWZw5kR4l/6xTW0ySr0/F1GzxA+6?=
- =?iso-8859-1?Q?aNAl8ajfXug5E64vDdEI52r49LHk4E2eOCikqfmH1BDkSwJBqSPPwz5TJr?=
- =?iso-8859-1?Q?OxT46vx1THTbp/79zzbtLnxpTeaYEHDL94NpzWr6pdEE8zFLAeAEpkIAYp?=
- =?iso-8859-1?Q?v2IO7kgZ/1rL7E41y8e9Cx8mr4MCHnKk2IC+A6/vbmIICuWFMsla7dex1Q?=
- =?iso-8859-1?Q?aVj5VzSwvPfpDVy92FLCHZ1Eh2GlWjxvltS2IzWpIXQyd4Q5P25xnuMI+r?=
- =?iso-8859-1?Q?84Uxf/rKZvdeMpgLbQti4TDmUuNH4SDAMREZN8+1GKAsKVOVJjfztQaWqY?=
- =?iso-8859-1?Q?7xrufMYkODr9vbhqnhqzMjDjnCszhaNzlUJTWWgDELBFF/g4C6yniM4Ewi?=
- =?iso-8859-1?Q?WGhcC1SIvCFvnGsxkI5J3yX7SZHtoRMjtyUddDKjmVUANWV4GYUmR9yVdC?=
- =?iso-8859-1?Q?BW3JzHwE7CPYos9Lh6gFxyND/ryYrKmH33JSkS07Cqm2UpEmW5Gdseg4Zh?=
- =?iso-8859-1?Q?frnCAXomq6Ah9tGAhylVuT6WiI+7/kzxm9tz4BLUX32H7NUlXJfDUIhVZ9?=
- =?iso-8859-1?Q?67Q8L8ewvMRw/JpV/ws0xp3JaCSTAW2EDxTx0DovY55J3MqLWmb+bufyHF?=
- =?iso-8859-1?Q?AIYfSVklUp7iGsrFKR//a6eH3v4PAuw+xQnWJsp5D1uPkuj2bSYlO9gUbp?=
- =?iso-8859-1?Q?Az88FBJWoRfJ8ayrPg/6KD1ZdnlX/wYmehUMCoTV7JocPIDd+WUCpFcnEf?=
- =?iso-8859-1?Q?bBl//THrsV5Mbo6lPV83GtAfpNPOi81TdSRS95ufgfHg12K1+jbj1J/r1s?=
- =?iso-8859-1?Q?DjqAIOIB+gOmKHtwvjNoP+1bcA=3D=3D?=
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?KW5JtCl0uGYDmisv5e+8hu+A475Q1F0jUEaAQaxZFiUfydijB519PaOXuM?=
- =?iso-8859-1?Q?RyDmb9Ye+L3vSSqYEGgHlmzmhKCdPtNGqAdK/VHRyi5iwX/1ZSBb8jJGgS?=
- =?iso-8859-1?Q?mXzfiaLEm/Z7TP0aOw17uVBHA9kw0a06MAoseAQMcPF6FF5ynmG+YSp5Cp?=
- =?iso-8859-1?Q?K0Op9zsJiz1UF6k/F175wz7nQWvd6PEVsTU5x5Vr3FQ3qZQEsP2G5pS0ef?=
- =?iso-8859-1?Q?odyTFprC+gOPf90z80SM5W17FDqO/fAT2fSU9nFz0LDmNfPBWmYfMDsCtz?=
- =?iso-8859-1?Q?QO6hTqTakynE2ZXacYSglb4v6aS4l/VF6eH/7g1MxIdF0Koqozv5mnlGyg?=
- =?iso-8859-1?Q?fVWsqHyb7dMlVhGKWB7BPfnh1av5UqKDfU/iKOnCT5Nef4Gze01Ja3NKM0?=
- =?iso-8859-1?Q?t8hCzXJUQusU4QfYLcF2qzeZy/HccoXwdfYb3G/ph7k7JkxOh/zqKYz+RK?=
- =?iso-8859-1?Q?9edhJMcYoZo13UsCiJ4ABbheQL2/jDLrftQa+cwVTJBnaUwO0kcVoTZb7g?=
- =?iso-8859-1?Q?Xmy30joWGrIX7/Sg/HJ/zqGq5W7UBNVCsBsfKgDlqL6LDVZKKd/xDCiTVD?=
- =?iso-8859-1?Q?jbVlF4uhjZtAYENKy2Dsy5vooamrnimv4IysKltmSBcoeSdeoGxjhHMEH7?=
- =?iso-8859-1?Q?Z32vY0ZxRUO9dGPIM4l1O3EWXpzDPI9vm6PUDyGNy2LE91w5L9o1UfgSfC?=
- =?iso-8859-1?Q?DxxAzsKleHRfxDI9FB2KM6OL4d3wyDhq8MFB4nvTe1tbVPJuJWoOPeJHe0?=
- =?iso-8859-1?Q?HR3RZdeW+Upf2xHKYVWBfJ4fgZHWVXJdrIophwzhmmd8TtXvD81OcDB0TL?=
- =?iso-8859-1?Q?Uvt9xUdaJjF2ni27eJN35TGULQUp+DJbqoi6wBrf1stD5Cnbo6xqrBePdj?=
- =?iso-8859-1?Q?8Mi1R5/x6iagOrZDevqsreStyN57iKmU2CW8rDf2DING6rzAaZaVxHgsc0?=
- =?iso-8859-1?Q?pnEJAxTlL4gFXtlckJ9r6SIq33Xf82PwN0qooPCEkM/mQH8d/Jo9LgTmPj?=
- =?iso-8859-1?Q?yANxDEjPY+Ua4RhngZv+G8/q+p5cXvkzox/GXls23yv9YGwrDhNawFRqyY?=
- =?iso-8859-1?Q?r9pnT//zPdha+j7V6fhLKPpl0eTfavooEeDfW79eR3jYCdsP6OWy7ByY3q?=
- =?iso-8859-1?Q?G+9+xWyLp/vkUKP5EJZkfVLzAYC0PRp/ZQ0O7IFlcMiAGneCnx9mF5CDLh?=
- =?iso-8859-1?Q?wdJbAxNTm3wCUJBfiKcUNt5kTAzvaZviqgXx1mBUgLf5u21Sb/vQnhDSzm?=
- =?iso-8859-1?Q?+5PIUD0631VGzn5UdCjw=3D=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71B022F9D8E;
+	Tue, 30 Sep 2025 11:00:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1759230004; cv=none; b=bbExXTsfBcFu4hPNBQfoJPzQGWK6D48mdUkrZ0o6e/jCfTt/MTIXKv4MQTGedigz5GR8tmYeqgMmI4CsgNY9OqOscA2iZwtqis+Dm10rHOJdtpv4Z90UviKWkZQ7CRAhlkxyJN1gQd0dQAG5JdXh3fRquzXnZGBa1WLJaQazylA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1759230004; c=relaxed/simple;
+	bh=hl6CpBsFM0yclQLF3Wr1UR3e+Pr0M3yXUJx6ZUgVFTo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=WSYuc+M3UiIhWil9LzeCvIgf0lBpGri/ly+LkJoSOZi0qPSGV24hi1IW6e/vZ+ervFZCC8nYioZjEa04+NPE2cZBcUDg+jTttjzyFMeFsex1+zWJ3dYfVKvgo2QymQ3LnURrWfhgGR3Ng5tsS+EH245O8Dc/ajGRCNI/VYu42ic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hMgAjDFi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51488C4CEF0;
+	Tue, 30 Sep 2025 11:00:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1759230003;
+	bh=hl6CpBsFM0yclQLF3Wr1UR3e+Pr0M3yXUJx6ZUgVFTo=;
+	h=From:Subject:Date:To:Cc:From;
+	b=hMgAjDFiUcHZlHXjNfiivYmi8e8vUVWCi59OcfXv0rRTbwfOXoZRgN9AbmT6dp24I
+	 QG9cauPJW6cadrjxv9LaBeqXg2c41/8Afqvud6K2PeYu5cT41oVL2Rd0dO08HLJ1KN
+	 EzucbmMAqmuZu+7MBn6um5hAXXbmRWnDv/rV8vIGOBaSOEnTsFyZ6ZM571/O9AUMGH
+	 Flap9Gu7hgedgeX22zbtnMoQdL9pkmX/clya9FLtDuexAQAJiXx6m81fUxDWpuNtm+
+	 hQszCjBUs8oMkf3jYBWhJnB4L+H4zNY2ZqKUrJaEKvD8H/JgewXOHCi9u/myHJLxn8
+	 dS3ZTJeRZILEw==
+From: Maxime Ripard <mripard@kernel.org>
+Subject: [PATCH v5 00/39] drm/atomic: Get rid of existing states (not
+ really)
+Date: Tue, 30 Sep 2025 12:59:15 +0200
+Message-Id: <20250930-drm-no-more-existing-state-v5-0-eeb9e1287907@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: sct-15-20-8534-20-msonline-outlook-5faa0.templateTenant
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: VI1PR02MB3952.eurprd02.prod.outlook.com
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3939ac2f-5203-4fcc-03c8-08de000866c8
-X-MS-Exchange-CrossTenant-originalarrivaltime: 30 Sep 2025 10:02:01.7020
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-rms-persistedconsumerorg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB8PR02MB5804
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAAO422gC/43NTWrDMBCG4asErTtFP5at6ar3KF3Yo5Ej2khFM
+ iYl+O5VsmlKwHT5fgzPXETlErmKl8NFFF5jjTm1sE8HQccxzQzRtxZaaiudtuDLCVKGUy4MfI5
+ 1iWmGuowLA05GW01qNGYSDfgqHOL5hr+9tz6261y+b79WdV3/xa4KJATpiDwGZwlfP7gk/nzOZ
+ RZXd9W/Fkq9a+lmeUYXyIbe9/2DZe4t3LVMsxQN4+Cxl2TMg9XdWWrYtbpmWd9N6BySIffH2rb
+ tB24+KlipAQAA
+X-Change-ID: 20250825-drm-no-more-existing-state-9b3252c1a33b
+To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
+ Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
+ Simona Vetter <simona@ffwll.ch>
+Cc: dri-devel@lists.freedesktop.org, Maxime Ripard <mripard@kernel.org>, 
+ Luca Ceresoli <luca.ceresoli@bootlin.com>, 
+ Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
+ =?utf-8?q?Ville_Syrj=C3=A4l=C3=A4?= <ville.syrjala@linux.intel.com>, 
+ Louis Chauvet <louis.chauvet@bootlin.com>, 
+ Haneen Mohammed <hamohammed.sa@gmail.com>, 
+ Melissa Wen <melissa.srw@gmail.com>, Jyri Sarha <jyri.sarha@iki.fi>, 
+ Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
+ Paul Cercueil <paul@crapouillou.net>, linux-mips@vger.kernel.org, 
+ Liviu Dudau <liviu.dudau@arm.com>, Russell King <linux@armlinux.org.uk>, 
+ Manikandan Muralidharan <manikandan.m@microchip.com>, 
+ Dharma Balasubiramani <dharma.b@microchip.com>, 
+ Nicolas Ferre <nicolas.ferre@microchip.com>, 
+ Alexandre Belloni <alexandre.belloni@bootlin.com>, 
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>, 
+ linux-arm-kernel@lists.infradead.org, Inki Dae <inki.dae@samsung.com>, 
+ Seung-Woo Kim <sw0312.kim@samsung.com>, 
+ Kyungmin Park <kyungmin.park@samsung.com>, 
+ Krzysztof Kozlowski <krzk@kernel.org>, 
+ Alim Akhtar <alim.akhtar@samsung.com>, linux-samsung-soc@vger.kernel.org, 
+ Liu Ying <victor.liu@nxp.com>, Shawn Guo <shawnguo@kernel.org>, 
+ Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, imx@lists.linux.dev, 
+ Laurentiu Palcu <laurentiu.palcu@oss.nxp.com>, 
+ Lucas Stach <l.stach@pengutronix.de>, 
+ Philipp Zabel <p.zabel@pengutronix.de>, 
+ Anitha Chrisanthus <anitha.chrisanthus@intel.com>, 
+ Edmund Dea <edmund.j.dea@intel.com>, Paul Kocialkowski <paulk@sys-base.io>, 
+ Sui Jingfeng <suijingfeng@loongson.cn>, 
+ Chun-Kuang Hu <chunkuang.hu@kernel.org>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ Rob Clark <robin.clark@oss.qualcomm.com>, 
+ Dmitry Baryshkov <lumag@kernel.org>, 
+ Abhinav Kumar <abhinav.kumar@linux.dev>, 
+ Jessica Zhang <jessica.zhang@oss.qualcomm.com>, Sean Paul <sean@poorly.run>, 
+ Marijn Suijten <marijn.suijten@somainline.org>, 
+ linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org, 
+ Sandy Huang <hjc@rock-chips.com>, 
+ =?utf-8?q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, 
+ Andy Yan <andy.yan@rock-chips.com>, linux-rockchip@lists.infradead.org, 
+ Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Samuel Holland <samuel@sholland.org>, linux-sunxi@lists.linux.dev, 
+ Thierry Reding <thierry.reding@gmail.com>, 
+ Mikko Perttunen <mperttunen@nvidia.com>, 
+ Jonathan Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org, 
+ Hans de Goede <hansg@kernel.org>, 
+ Dave Stevenson <dave.stevenson@raspberrypi.com>, 
+ =?utf-8?q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>, 
+ Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6084; i=mripard@kernel.org;
+ h=from:subject:message-id; bh=hl6CpBsFM0yclQLF3Wr1UR3e+Pr0M3yXUJx6ZUgVFTo=;
+ b=owGbwMvMwCmsHn9OcpHtvjLG02pJDBm3d8j/a/a6xTLbujO7gOmIX8GRFI/Z08TFfa8l/f2wJ
+ 1vwnOCTjqksDMKcDLJiiixPZMJOL29fXOVgv/IHzBxWJpAhDFycAjCRo76M9RGT5kX9/PrcYUOU
+ Xc3vVCdrnrZQvp8/9rW2TlB2zd9arHTJpL76n8H01qSDffMSOxbsZayPWzpdcdqEsnkMcZ3Su3a
+ bh9aUT/vo9XJ+SPfni76/f52viFVZ8PjkVV3ZNO+5Bldt9xgAAA==
+X-Developer-Key: i=mripard@kernel.org; a=openpgp;
+ fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 
-Hello there,=0A=
-=0A=
-Static analyser cppcheck said:=0A=
-=0A=
-1.=0A=
-=0A=
-linux-6.17/arch/mips/kernel/kgdb.c:137:17: style: Array index 'regno' is us=
-ed before limits check. [arrayIndexThenCheck]=0A=
-=0A=
-Source code is=0A=
-=0A=
-    if (dbg_reg_def[regno].offset !=3D -1 && regno < 38) {=0A=
-=0A=
-Maybe better code:=0A=
-=0A=
-    if (regno < 38 && dbg_reg_def[regno].offset !=3D -1) {=0A=
-=0A=
-2.=0A=
-=0A=
-linux-6.17/arch/mips/kernel/kgdb.c:170:17: style: Array index 'regno' is us=
-ed before limits check. [arrayIndexThenCheck]=0A=
-=0A=
-Duplicate.=0A=
-=0A=
-Regards=0A=
-David Binderman=0A=
+Hi,
+
+Here's a series to get rid of the drm_atomic_helper_get_existing_*_state
+accessors.
+
+The initial intent was to remove the __drm_*_state->state pointer to
+only rely on old and new states, but we still need it now to know which
+of the two we need to free: if a state has not been committed (either
+dropped or checked only), then we need to free the new one, if it has
+been committed we need to free the old state. 
+
+Thus, the state pointer is kept (and documented) only to point to the
+state we should free eventually.
+
+All users have been converted to the relevant old or new state
+accessors.  
+
+This was tested on tidss.
+
+Let me know what you think,
+Maxime
+
+Signed-off-by: Maxime Ripard <mripard@kernel.org>
+---
+Changes in v5:
+- Added some more documentation on state teardown
+- Link to v4: https://lore.kernel.org/r/20250917-drm-no-more-existing-state-v4-0-5d4b9889c3c8@kernel.org
+
+Changes in v4:
+- Fix ingenic
+- Rebased on latest drm-misc-next tag
+- Link to v3: https://lore.kernel.org/r/20250909-drm-no-more-existing-state-v3-0-1c7a7d960c33@kernel.org
+
+Changes in v3:
+- Added an armada rework patch
+- Added an ingenic fix
+- Collected tags
+- Rebased on latest drm-misc-next tag
+- Link to v2: https://lore.kernel.org/r/20250902-drm-no-more-existing-state-v2-0-de98fc5f6d66@kernel.org
+
+Changes in v2:
+- Dropped the first and second patches
+- Reworked the recipient list to be nicer with SMTPs
+- Link to v1: https://lore.kernel.org/r/20250825-drm-no-more-existing-state-v1-0-f08ccd9f85c9@kernel.org
+
+---
+Maxime Ripard (39):
+      drm/atomic: Convert drm_atomic_get_connector_state() to use new connector state
+      drm/atomic: Remove unused drm_atomic_get_existing_connector_state()
+      drm/atomic: Document __drm_connectors_state state pointer
+      drm/atomic: Convert __drm_atomic_get_current_plane_state() to modern accessor
+      drm/atomic: Convert drm_atomic_get_plane_state() to use new plane state
+      drm/vkms: Convert vkms_crtc_atomic_check() to use new plane state
+      drm/tilcdc: crtc: Use drm_atomic_helper_check_crtc_primary_plane()
+      drm/atomic: Remove unused drm_atomic_get_existing_plane_state()
+      drm/atomic: Document __drm_planes_state state pointer
+      drm/atomic: Convert drm_atomic_get_crtc_state() to use new connector state
+      drm/ingenic: ipu: Switch to drm_atomic_get_new_crtc_state()
+      drm/arm/malidp: Switch to drm_atomic_get_new_crtc_state()
+      drm/armada: Drop always true condition in atomic_check
+      drm/armada: Switch to drm_atomic_get_new_crtc_state()
+      drm/atmel-hlcdc: Switch to drm_atomic_get_new_crtc_state()
+      drm/exynos: Switch to drm_atomic_get_new_crtc_state()
+      drm/imx-dc: Switch to drm_atomic_get_new_crtc_state()
+      drm/imx-dcss: Switch to drm_atomic_get_new_crtc_state()
+      drm/imx-ipuv3: Switch to drm_atomic_get_new_crtc_state()
+      drm/ingenic: Switch to drm_atomic_get_new_crtc_state()
+      drm/kmb: Switch to drm_atomic_get_new_crtc_state()
+      drm/logicvc: Switch to drm_atomic_get_new_crtc_state()
+      drm/loongson: Switch to drm_atomic_get_new_crtc_state()
+      drm/mediatek: Switch to drm_atomic_get_new_crtc_state()
+      drm/msm/mdp5: Switch to drm_atomic_get_new_crtc_state()
+      drm/omap: Switch to drm_atomic_get_new_crtc_state()
+      drm/rockchip: Switch to drm_atomic_get_new_crtc_state()
+      drm/sun4i: Switch to drm_atomic_get_new_crtc_state()
+      drm/tegra: Switch to drm_atomic_get_new_crtc_state()
+      drm/tilcdc: Switch to drm_atomic_get_new_crtc_state()
+      drm/vboxvideo: Switch to drm_atomic_get_new_crtc_state()
+      drm/vc4: Switch to drm_atomic_get_new_crtc_state()
+      drm/atomic: Switch to drm_atomic_get_new_crtc_state()
+      drm/framebuffer: Switch to drm_atomic_get_new_crtc_state()
+      drm/atomic: Remove unused drm_atomic_get_existing_crtc_state()
+      drm/atomic: Document __drm_crtcs_state state pointer
+      drm/ingenic: crtc: Switch to ingenic_drm_get_new_priv_state()
+      drm/atomic: Convert drm_atomic_get_private_obj_state() to use new plane state
+      drm/atomic: Document __drm_private_objs_state state pointer
+
+ drivers/gpu/drm/arm/malidp_planes.c             |   2 +-
+ drivers/gpu/drm/armada/armada_plane.c           |   7 +-
+ drivers/gpu/drm/atmel-hlcdc/atmel_hlcdc_plane.c |   2 +-
+ drivers/gpu/drm/drm_atomic.c                    |  21 ++--
+ drivers/gpu/drm/drm_framebuffer.c               |   2 +-
+ drivers/gpu/drm/exynos/exynos_drm_plane.c       |   2 +-
+ drivers/gpu/drm/imx/dc/dc-plane.c               |   2 +-
+ drivers/gpu/drm/imx/dcss/dcss-plane.c           |   4 +-
+ drivers/gpu/drm/imx/ipuv3/ipuv3-plane.c         |   3 +-
+ drivers/gpu/drm/ingenic/ingenic-drm-drv.c       |  13 +-
+ drivers/gpu/drm/ingenic/ingenic-ipu.c           |   4 +-
+ drivers/gpu/drm/kmb/kmb_plane.c                 |   3 +-
+ drivers/gpu/drm/logicvc/logicvc_layer.c         |   4 +-
+ drivers/gpu/drm/loongson/lsdc_plane.c           |   2 +-
+ drivers/gpu/drm/mediatek/mtk_plane.c            |   3 +-
+ drivers/gpu/drm/msm/disp/mdp5/mdp5_plane.c      |   7 +-
+ drivers/gpu/drm/omapdrm/omap_plane.c            |   2 +-
+ drivers/gpu/drm/rockchip/rockchip_drm_vop.c     |   6 +-
+ drivers/gpu/drm/rockchip/rockchip_drm_vop2.c    |   2 +-
+ drivers/gpu/drm/sun4i/sun8i_ui_layer.c          |   3 +-
+ drivers/gpu/drm/sun4i/sun8i_vi_layer.c          |   3 +-
+ drivers/gpu/drm/tegra/dc.c                      |   2 +-
+ drivers/gpu/drm/tilcdc/tilcdc_crtc.c            |   9 +-
+ drivers/gpu/drm/tilcdc/tilcdc_plane.c           |   3 +-
+ drivers/gpu/drm/vboxvideo/vbox_mode.c           |   8 +-
+ drivers/gpu/drm/vc4/vc4_plane.c                 |   6 +-
+ drivers/gpu/drm/vkms/vkms_crtc.c                |   4 +-
+ include/drm/drm_atomic.h                        | 152 +++++++++++++-----------
+ 28 files changed, 140 insertions(+), 141 deletions(-)
+---
+base-commit: 91494dee1091a14d91da6bcb39e12a907765c793
+change-id: 20250825-drm-no-more-existing-state-9b3252c1a33b
+
+Best regards,
+-- 
+Maxime Ripard <mripard@kernel.org>
+
 
