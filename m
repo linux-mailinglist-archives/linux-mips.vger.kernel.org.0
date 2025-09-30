@@ -1,49 +1,49 @@
-Return-Path: <linux-mips+bounces-11586-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11587-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 964B2BAC988
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Sep 2025 13:00:43 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77306BAC99D
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Sep 2025 13:01:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A7901C2F0D
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Sep 2025 11:00:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 34BC73A8C39
+	for <lists+linux-mips@lfdr.de>; Tue, 30 Sep 2025 11:01:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14FAC34BA29;
-	Tue, 30 Sep 2025 11:00:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 178FBE555;
+	Tue, 30 Sep 2025 11:01:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IppY4rsg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aQ3j6rdh"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E516A17736
-	for <linux-mips@vger.kernel.org>; Tue, 30 Sep 2025 11:00:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5B7934BA29
+	for <linux-mips@vger.kernel.org>; Tue, 30 Sep 2025 11:01:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759230037; cv=none; b=pOPu3Qx5fcebaEjy05NWHir6y0S31h+Eo0bwU8LLC9THHJtzmJM9zwqmZ40XYojZJ+6RaZGWLTt087i/ucBpzR8cbhcqME3i9vRhPQCrhj56r132gaS+cd7rOHzaOd+KurhRqNlv+euVaipUR5eAsWGx1x4LxqMUy732tMSdGX4=
+	t=1759230063; cv=none; b=WnB29sEXFsVzq8g9K3S/tgRhmo1f0zGNTaUn311H6Y8HO9RAa2Qda7o0LRlwySoN4kvA6//0VZvaKlNlNG4otp1BPK3Xb+RdOCfkie9o+wxPKcToYFrOtIm/3idw9DPt0ODd7XFsOH0EkeYEMo4ecmqqtm9Dx1HC+B2isBz2U4U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759230037; c=relaxed/simple;
-	bh=jfdzVknbt27HxmQJhWYW7cewyNObAJ41QtcPYohZBOw=;
+	s=arc-20240116; t=1759230063; c=relaxed/simple;
+	bh=3V79yNr53bXA6Oedn2CHlJThOIyV272n0v1+ML86OVg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=EC/FErKf6NRkl07h+DHIpuyEVxmHfiybkA++HuZLORx0cc8UiR/L+sIUNICIDZ71yUCqWmnwmwpq5OivtSKEc7bDbqVK+JPkLapigyhF+jFekHKkXerLVoeyQD4GLjbWPUyIrHCxeIIL07tMQFJjEbeRNy4tbLUnK2NR5r1N4rg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IppY4rsg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E6F2C113D0;
-	Tue, 30 Sep 2025 11:00:35 +0000 (UTC)
+	 In-Reply-To:To:Cc; b=l/xBdxd0xdDwVHUiQeAJAldF32Hr6zwHPnhg2Gf2grV4QMfCp7XxgkdyRTN72qK7xIeywxF1DUu92iQwNAeXd1UPkMtujBpDpuXfiQiEklFTeFaD0eVLYzyKzrALcC2qNJjBzsovidySOHD7CLNovf2gVAJqaDnYCYr2fVmIyac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aQ3j6rdh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6AF0EC4CEF0;
+	Tue, 30 Sep 2025 11:01:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759230036;
-	bh=jfdzVknbt27HxmQJhWYW7cewyNObAJ41QtcPYohZBOw=;
+	s=k20201202; t=1759230062;
+	bh=3V79yNr53bXA6Oedn2CHlJThOIyV272n0v1+ML86OVg=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=IppY4rsgoMLE8DHtmN9Lr3WnprKa/0ux7mU6USAPJIaLiJChZOjUCUODnLVvtWJ48
-	 s6gyqmexQ/OON27DNVIaBjhVjI86QIgw/8J03oFNw8r7ZY2V/g0bPlk3rZgqRsE6tn
-	 BOxSBiZZV1rQD2STUeRq+P2Ua9ey0233bP1XUgPg4SxuvArMANViVhxP/Rq/ovU0jV
-	 t6J5nPXOt2aZAjpTOggJl+I/DcGypFzxVSejG8oXKIaEcAfb22AyE1Iu7wiScfj5kP
-	 b3OsUR/U785SUMJiPpj4KtwbidiEQyqRzgbMUGxwYK/ZF2E53/ru/DKAZEuoHKy47E
-	 0H6Zvm6bRLLHw==
+	b=aQ3j6rdhi+TprIJ73/p4/LIXHjdHwoELOmTSnVdg+5PzhgXd4nYp//UmlerkMscqt
+	 hJPk1f4zM789dKA8wDrYvsiTtiy393h4TtdRoP3LIfS2W5RDOi192RtSWv+mA/B7gX
+	 Ju0srwIdANiiOhjRcyg4GIcCMS9KUBsNmjkkwzBJ9QZoymWWHyAcBXomybEp9cIsYJ
+	 nCwg+Dbx7D8N1ZzCFEurx8Y6h2MuEW4+r4J1xSccsBy0ol48D3zDEKCNyTFLrr8TPQ
+	 6S1wKKhduMQnp9QNHLGxvLwtT9IZn4G5DMEhTICBw4QaXD5eaeX18yv99cAeBjeRMj
+	 33PyoIyY4CvTQ==
 From: Maxime Ripard <mripard@kernel.org>
-Date: Tue, 30 Sep 2025 12:59:26 +0200
-Subject: [PATCH v5 11/39] drm/ingenic: ipu: Switch to
+Date: Tue, 30 Sep 2025 12:59:35 +0200
+Subject: [PATCH v5 20/39] drm/ingenic: Switch to
  drm_atomic_get_new_crtc_state()
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -53,7 +53,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250930-drm-no-more-existing-state-v5-11-eeb9e1287907@kernel.org>
+Message-Id: <20250930-drm-no-more-existing-state-v5-20-eeb9e1287907@kernel.org>
 References: <20250930-drm-no-more-existing-state-v5-0-eeb9e1287907@kernel.org>
 In-Reply-To: <20250930-drm-no-more-existing-state-v5-0-eeb9e1287907@kernel.org>
 To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
@@ -64,22 +64,21 @@ Cc: dri-devel@lists.freedesktop.org, Maxime Ripard <mripard@kernel.org>,
  =?utf-8?q?Ville_Syrj=C3=A4l=C3=A4?= <ville.syrjala@linux.intel.com>, 
  linux-mips@vger.kernel.org
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1475; i=mripard@kernel.org;
- h=from:subject:message-id; bh=jfdzVknbt27HxmQJhWYW7cewyNObAJ41QtcPYohZBOw=;
- b=owGbwMvMwCmsHn9OcpHtvjLG02pJDBm3d6jstlnYwHl5NX+OxMtdv762dvY17hddptfBX5Nw2
- d3jS+C3jqksDMKcDLJiiixPZMJOL29fXOVgv/IHzBxWJpAhDFycAjCRFfsZGxZa82b1xlY3aDBO
- cSw/pB6g2VARVjWFcc9hK9FXBfurLOdduTGx6uqBfLYEkRI3SaVDjA0Pv3RVXvu9JKK5IGpx2l5
- JS5fbFRa3YlQuzOlgnSD1vyxud830433ehx++Wz1l4tPF6SsA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2250; i=mripard@kernel.org;
+ h=from:subject:message-id; bh=3V79yNr53bXA6Oedn2CHlJThOIyV272n0v1+ML86OVg=;
+ b=owGbwMvMwCmsHn9OcpHtvjLG02pJDBm3d2gIRVhlBmkUuJk0Ll1WErkjOtMiQ0HgR5xbnFRhO
+ ZfbqtCOqSwMwpwMsmKKLE9kwk4vb19c5WC/8gfMHFYmkCEMXJwCMJHWlYx1Jvafl5mwt/nNe5N/
+ d59n/ttqlb3Hys80C4WfWsYd8eDsAmEBw9lrf5yKEX/CZh6y0b2aseFFfH3JrITd7vEN7Zt7f2w
+ uToovXljq+Pbs+mk/0+d+XF1lJHyZt0A+79l6V+tpqb8lggA=
 X-Developer-Key: i=mripard@kernel.org; a=openpgp;
  fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 
-The ingenic IPU atomic_set_property implementation uses the deprecated
+The ingenic atomic_check implementation uses the deprecated
 drm_atomic_get_existing_crtc_state() helper.
 
-This hook is called during the state building process, before
-atomic_check, and thus before the states are swapped. The existing state
-thus points to the new state, and we can use
-drm_atomic_get_new_crtc_state() instead.
+This hook is called as part of the global atomic_check, thus before the
+states are swapped. The existing state thus points to the new state, and
+we can use drm_atomic_get_new_crtc_state() instead.
 
 Reviewed-by: Paul Cercueil <paul@crapouillou.net>
 Tested-by: Paul Cercueil <paul@crapouillou.net>
@@ -89,26 +88,45 @@ Signed-off-by: Maxime Ripard <mripard@kernel.org>
 To: Paul Cercueil <paul@crapouillou.net>
 Cc: linux-mips@vger.kernel.org
 ---
- drivers/gpu/drm/ingenic/ingenic-ipu.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 3 +--
+ drivers/gpu/drm/ingenic/ingenic-ipu.c     | 2 +-
+ 2 files changed, 2 insertions(+), 3 deletions(-)
 
+diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+index 9db1ceaed5188a4ef0897280dc72108eb3815b5f..05faed933e5619c796f2a4fa1906e0eaa029ac68 100644
+--- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
++++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+@@ -469,12 +469,11 @@ static int ingenic_drm_plane_atomic_check(struct drm_plane *plane,
+ 		return 0;
+ 
+ 	if (priv->soc_info->plane_f0_not_working && plane == &priv->f0)
+ 		return -EINVAL;
+ 
+-	crtc_state = drm_atomic_get_existing_crtc_state(state,
+-							crtc);
++	crtc_state = drm_atomic_get_new_crtc_state(state, crtc);
+ 	if (WARN_ON(!crtc_state))
+ 		return -EINVAL;
+ 
+ 	priv_state = ingenic_drm_get_priv_state(priv, state);
+ 	if (IS_ERR(priv_state))
 diff --git a/drivers/gpu/drm/ingenic/ingenic-ipu.c b/drivers/gpu/drm/ingenic/ingenic-ipu.c
-index 26ebf424d63ec21ccee80221745c3e8bcc6b3d7f..2574a4b4d40a2c27cb212114117829d9f6ab3ddb 100644
+index 2574a4b4d40a2c27cb212114117829d9f6ab3ddb..32638a713241abbd4eaed09f0aaec2b790650cc9 100644
 --- a/drivers/gpu/drm/ingenic/ingenic-ipu.c
 +++ b/drivers/gpu/drm/ingenic/ingenic-ipu.c
-@@ -703,11 +703,11 @@ ingenic_ipu_plane_atomic_set_property(struct drm_plane *plane,
+@@ -578,11 +578,11 @@ static int ingenic_ipu_plane_atomic_check(struct drm_plane *plane,
+ 	struct ingenic_ipu_private_state *ipu_state;
  
- 	mode_changed = val != ipu->sharpness;
- 	ipu->sharpness = val;
+ 	if (!crtc)
+ 		return 0;
  
- 	if (state->crtc) {
--		crtc_state = drm_atomic_get_existing_crtc_state(state->state, state->crtc);
-+		crtc_state = drm_atomic_get_new_crtc_state(state->state, state->crtc);
- 		if (WARN_ON(!crtc_state))
- 			return -EINVAL;
+-	crtc_state = drm_atomic_get_existing_crtc_state(state, crtc);
++	crtc_state = drm_atomic_get_new_crtc_state(state, crtc);
+ 	if (WARN_ON(!crtc_state))
+ 		return -EINVAL;
  
- 		crtc_state->mode_changed |= mode_changed;
- 	}
+ 	ipu_state = ingenic_ipu_get_priv_state(ipu, state);
+ 	if (IS_ERR(ipu_state))
 
 -- 
 2.51.0
