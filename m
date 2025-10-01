@@ -1,153 +1,101 @@
-Return-Path: <linux-mips+bounces-11588-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11589-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC48BBAC9D3
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Sep 2025 13:01:55 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7758CBAFFCB
+	for <lists+linux-mips@lfdr.de>; Wed, 01 Oct 2025 12:21:38 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3DD271891C93
-	for <lists+linux-mips@lfdr.de>; Tue, 30 Sep 2025 11:02:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D0D23BB55A
+	for <lists+linux-mips@lfdr.de>; Wed,  1 Oct 2025 10:21:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 783451B4236;
-	Tue, 30 Sep 2025 11:01:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jUxp354J"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50BC32BD5BD;
+	Wed,  1 Oct 2025 10:21:31 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5346E11CAF
-	for <linux-mips@vger.kernel.org>; Tue, 30 Sep 2025 11:01:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from vmicros1.altlinux.org (vmicros1.altlinux.org [194.107.17.57])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C93A1B0420;
+	Wed,  1 Oct 2025 10:21:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.107.17.57
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759230112; cv=none; b=F1O9To7Zsqb3TpTM8E24bYYMjrlyxPUo0pIJKxSYrkaHIA17449R+8nSaGSDroU7RXxB+9Hklw+o+QYQ+VNq1kFJe2NrDMh6LoCW0jWskH+oRMoRfI55LYjFtQEutdPQAGJJaDrMO5OaI2LMK1zbLmGx2+l1qyD5iliy04Fzw8Y=
+	t=1759314091; cv=none; b=UsJ45I2B3amXcqjyBI1BY8HkG0OHVfGOE8mRbA43mPoLjJHB8td0ZLzb9WJ6WlGWwvAkQkUiU4GZVoSaAxBzF9kKJfNGuIQ3b102s/JKHzp75Y1QFktdM30CMbcRXx5cRWpvsxuzcypLxih3wcPblRnUiYz83cekU8ye1OCr2wo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759230112; c=relaxed/simple;
-	bh=BVOB8VKSo6jURPigyFDw0woNSHOVXFNYNQ4yWXRlrRY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=GZ+EhjAzdi582NnjB3BthfVx9XrmDsxW6hNxqtbUKEGoYPU3aX2PVqImi+KSfrvFFv2T3oToC2oF9ccdLj/X119aW3w0m8hJyYhiFiKFRBC461FPXAsmWKlpH1V/eibxJQ+/+qOlFv3xaFiPfnHfgAGMiL3LTAT5MfrGd1REobE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jUxp354J; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA311C4CEF0;
-	Tue, 30 Sep 2025 11:01:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1759230112;
-	bh=BVOB8VKSo6jURPigyFDw0woNSHOVXFNYNQ4yWXRlrRY=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=jUxp354JrICggUM5Lj/tBqSGcEBIbhqTLCNNJwFxzpycOy0jcGJKp4iWjzW2BY/DV
-	 lI369DomLITLldaBc/Za6isiRAWug55DhcyTeVm3eMGgbYKqC80L2dUUMzU0j0/JRw
-	 cFV+BTVY/EKMd9Ra16XGKB4o/yExKp82XWWlATnyJ8aJROKEBZBlHNSYgrE3ekuXQd
-	 KIfTtFM1Pe3A9cF5r1c/sq54dsr87cb9IRu4rGeZtFoZbIEGxVAkMu/6e1WIR/eMrY
-	 RV5gi4+Uzac0KyUkOlWuJkHI5txLgxEuYI0ZHiTnlJMXBxW6lz6ZKX2NncO+UFkgSo
-	 CZQJjQq/PC7Dw==
-From: Maxime Ripard <mripard@kernel.org>
-Date: Tue, 30 Sep 2025 12:59:52 +0200
-Subject: [PATCH v5 37/39] drm/ingenic: crtc: Switch to
- ingenic_drm_get_new_priv_state()
+	s=arc-20240116; t=1759314091; c=relaxed/simple;
+	bh=ODeNv/xSjUtbdZAeBsFlGuryHUWRemRcqjm8xDajy7E=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dylHR7wnLcAZvpRQmsJqAtq9FGcz21KK6pkgDWwZDUw5QODIkDNR7tFKFEJIMMF6RTGLJryCqTRCU4Gw9yPf6Dd178KA6K+u21oBRXNpqZ1rAiaoQTvOqZbL4ZKrTsPxE8ZoCJCQdcXAM9Yq4j+OU9YG5w5DKcreL9sCMCXnRoc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org; spf=pass smtp.mailfrom=altlinux.org; arc=none smtp.client-ip=194.107.17.57
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=altlinux.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=altlinux.org
+Received: from imap.altlinux.org (imap.altlinux.org [194.107.17.38])
+	by vmicros1.altlinux.org (Postfix) with ESMTP id 7418972C8CC;
+	Wed,  1 Oct 2025 13:11:48 +0300 (MSK)
+Received: by imap.altlinux.org (Postfix, from userid 705)
+	id 6C02E36D070F; Wed,  1 Oct 2025 13:11:48 +0300 (MSK)
+Date: Wed, 1 Oct 2025 13:11:48 +0300
+From: Michael Shigorin <mike@altlinux.org>
+To: Michael Shigorin <mike@altlinux.ru>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>,
+	Tor Vic <torvic9@mailbox.org>, Kexy Biscuit <kexybiscuit@aosc.io>,
+	jeffbai@aosc.io, gregkh@linuxfoundation.org, wangyuli@uniontech.com,
+	aospan@netup.ru, conor.dooley@microchip.com,
+	ddrokosov@sberdevices.ru, dmaengine@vger.kernel.org,
+	dushistov@mail.ru, fancer.lancer@gmail.com, geert@linux-m68k.org,
+	hoan@os.amperecomputing.com, ink@jurassic.park.msu.ru,
+	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-fpga@vger.kernel.org, linux-gpio@vger.kernel.org,
+	linux-hwmon@vger.kernel.org, linux-ide@vger.kernel.org,
+	linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	linux-spi@vger.kernel.org, manivannan.sadhasivam@linaro.org,
+	mattst88@gmail.com, netdev@vger.kernel.org, nikita@trvn.ru,
+	ntb@lists.linux.dev, patches@lists.linux.dev,
+	richard.henderson@linaro.org, s.shtylyov@omp.ru, serjk@netup.ru,
+	shc_work@mail.ru, tsbogend@alpha.franken.de, v.georgiev@metrotek.ru,
+	wsa+renesas@sang-engineering.com, xeb@mail.ru
+Subject: Re: what about CoC? (was: [PATCH] Revert "MAINTAINERS: Remove some
+ entries due to various compliance requirements.")
+Message-ID: <20251001101148.GA30625@imap.altlinux.org>
+References: <a08dc31ab773604d8f206ba005dc4c7a@aosc.io>
+ <20241023080935.2945-2-kexybiscuit@aosc.io>
+ <124c1b03-24c9-4f19-99a9-6eb2241406c2@mailbox.org>
+ <CAHk-=whNGNVnYHHSXUAsWds_MoZ-iEgRMQMxZZ0z-jY4uHT+Gg@mail.gmail.com>
+ <20241024095339.GA32487@imap.altlinux.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250930-drm-no-more-existing-state-v5-37-eeb9e1287907@kernel.org>
-References: <20250930-drm-no-more-existing-state-v5-0-eeb9e1287907@kernel.org>
-In-Reply-To: <20250930-drm-no-more-existing-state-v5-0-eeb9e1287907@kernel.org>
-To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
- Simona Vetter <simona@ffwll.ch>
-Cc: dri-devel@lists.freedesktop.org, Maxime Ripard <mripard@kernel.org>, 
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
- =?utf-8?q?Ville_Syrj=C3=A4l=C3=A4?= <ville.syrjala@linux.intel.com>, 
- Paul Cercueil <paul@crapouillou.net>, linux-mips@vger.kernel.org
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3296; i=mripard@kernel.org;
- h=from:subject:message-id; bh=BVOB8VKSo6jURPigyFDw0woNSHOVXFNYNQ4yWXRlrRY=;
- b=owGbwMvMwCmsHn9OcpHtvjLG02pJDBm3d+hf/t35ynBNtI38/cd18+vkWH4fZdl9kP9Nn59zd
- dur17luHVNZGIQ5GWTFFFmeyISdXt6+uMrBfuUPmDmsTCBDGLg4BWAil50Y6/NfVQl/iFRfvv3Y
- kuuiokuXP7Nw8Jt86ofWxaDtC53FrbgPBK8qli07POfVOdNqBabzSowNd1Ml23LmvV0nmXLQ87P
- +hkWx88WeTqvvFBItnKU+9ZRMsXIxb5ddqe709ekcNjMX8O4DAA==
-X-Developer-Key: i=mripard@kernel.org; a=openpgp;
- fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241024095339.GA32487@imap.altlinux.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
 
-The ingenic CRTC atomic_enable() implementation will indirectly call
-drm_atomic_get_private_obj_state() through ingenic_drm_get_priv_state().
+On Thu, Oct 24, 2024 at 12:53:39PM +0300, I wrote
+> It's not about the patch but rather about the attitude;
+> Documentation/process/code-of-conduct-interpretation.rst:
+> 
+> "regardless of ... ethnicity, ... nationality, ... race"
+> "Focusing on what is best for the community"
+> 
+> "Examples of unacceptable behavior ... insulting/derogatory
+> comments ... Public or private harassment"
+> 
+> Get back to single-standard integrity for yor own's sake.
 
-drm_atomic_get_private_obj_state() will either return the new state for
-the object in the global state if it exists, or will allocate a new one
-and add it to the global state.
+Glad to hear that ESR thinks -- and speaks! -- in a similar vein.
 
-atomic_enable() however isn't allowed to modify the global state. So
-what the implementation should use is the
-drm_atomic_get_new_private_obj_state() helper to get the new state for
-the CRTC, without performing an extra allocation.
+I believe that Linus -- whose daughter has been basically
+kidnapped mentally[1][2] by the same hypicrites who speak "love"
+but groom real hate -- has his own merits to rise against those.
 
-We still need to make sure the private state will be part of the global
-state by the time atomic_enable runs, so we still need to call
-ingenic_drm_get_priv_state() in atomic_check. We can then call
-ingenic_drm_get_new_priv_state() in atomic_enable, which is a wrapper
-around drm_atomic_get_new_private_obj_state().
+But it does take leadership and guts in a "modern" world.
 
-Reported-by: Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>
-Suggested-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
-Reviewed-by: Ville Syrjälä <ville.syrjala@linux.intel.com>
-Signed-off-by: Maxime Ripard <mripard@kernel.org>
----
-To: Paul Cercueil <paul@crapouillou.net>
-Cc: linux-mips@vger.kernel.org
----
- drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 10 ++++++++--
- 1 file changed, 8 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-index 05faed933e5619c796f2a4fa1906e0eaa029ac68..d3213fbf22be14b177fc1b7100c5b721d5f17924 100644
---- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-+++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
-@@ -245,12 +245,12 @@ static void ingenic_drm_crtc_atomic_enable(struct drm_crtc *crtc,
- {
- 	struct ingenic_drm *priv = drm_crtc_get_priv(crtc);
- 	struct ingenic_drm_private_state *priv_state;
- 	unsigned int next_id;
- 
--	priv_state = ingenic_drm_get_priv_state(priv, state);
--	if (WARN_ON(IS_ERR(priv_state)))
-+	priv_state = ingenic_drm_get_new_priv_state(priv, state);
-+	if (WARN_ON(!priv_state))
- 		return;
- 
- 	/* Set addresses of our DMA descriptor chains */
- 	next_id = priv_state->use_palette ? HWDESC_PALETTE : 0;
- 	regmap_write(priv->map, JZ_REG_LCD_DA0, dma_hwdesc_addr(priv, next_id));
-@@ -338,17 +338,23 @@ static int ingenic_drm_crtc_atomic_check(struct drm_crtc *crtc,
- {
- 	struct drm_crtc_state *crtc_state = drm_atomic_get_new_crtc_state(state,
- 									  crtc);
- 	struct ingenic_drm *priv = drm_crtc_get_priv(crtc);
- 	struct drm_plane_state *f1_state, *f0_state, *ipu_state = NULL;
-+	struct ingenic_drm_private_state *priv_state;
- 
- 	if (crtc_state->gamma_lut &&
- 	    drm_color_lut_size(crtc_state->gamma_lut) != ARRAY_SIZE(priv->dma_hwdescs->palette)) {
- 		dev_dbg(priv->dev, "Invalid palette size\n");
- 		return -EINVAL;
- 	}
- 
-+	/* We will need the state in atomic_enable, so let's make sure it's part of the state */
-+	priv_state = ingenic_drm_get_priv_state(priv, state);
-+	if (IS_ERR(priv_state))
-+		return PTR_ERR(priv_state);
-+
- 	if (drm_atomic_crtc_needs_modeset(crtc_state) && priv->soc_info->has_osd) {
- 		f1_state = drm_atomic_get_plane_state(crtc_state->state,
- 						      &priv->f1);
- 		if (IS_ERR(f1_state))
- 			return PTR_ERR(f1_state);
+[1] http://reddit.com/r/linux/comments/9go8cp/linus_torvalds_daughter_has_signed_the/ [del, heh]
+[2] http://unz.com/isteve/and-they-came-for-somebody-who-actually-gets-things-done-linus-torvalds/
 
 -- 
-2.51.0
-
+Michael Shigorin
+http://t.me/anna_news
 
