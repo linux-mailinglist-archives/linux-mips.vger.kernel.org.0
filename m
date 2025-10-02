@@ -1,130 +1,167 @@
-Return-Path: <linux-mips+bounces-11595-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11596-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCBC8BB58CB
-	for <lists+linux-mips@lfdr.de>; Fri, 03 Oct 2025 00:38:20 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACB27BB5960
+	for <lists+linux-mips@lfdr.de>; Fri, 03 Oct 2025 01:10:52 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 997D74E1E06
-	for <lists+linux-mips@lfdr.de>; Thu,  2 Oct 2025 22:38:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 41A0C19E4761
+	for <lists+linux-mips@lfdr.de>; Thu,  2 Oct 2025 23:11:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A347273D9F;
-	Thu,  2 Oct 2025 22:38:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A3CB2571A1;
+	Thu,  2 Oct 2025 23:10:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gimpelevich-san-francisco-ca-us.20230601.gappssmtp.com header.i=@gimpelevich-san-francisco-ca-us.20230601.gappssmtp.com header.b="qyJkP3IA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="XiaS20Vy"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pg1-f169.google.com (mail-pg1-f169.google.com [209.85.215.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C63901E9B37
-	for <linux-mips@vger.kernel.org>; Thu,  2 Oct 2025 22:38:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AA6234BA4E;
+	Thu,  2 Oct 2025 23:10:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759444697; cv=none; b=mQ/JstU1TuZBgm/S5nZWKK0itR416E5OtUaA+foWM3LnxR6uVeJMsgnnwYLlx0XDeIZhqY/tPGynV9PNUoJ3IR+wulg4NtWU3biC0y9bggGdJj5qGXAOMMWl+BQdDAaMunFdp1oQvmTsmW3e8VD8VnEdJpkyULgV3/464b1pSD4=
+	t=1759446648; cv=none; b=ksV5esuDYRjG9i2xlUq8TQgsCs48MYKLvOyMPWvqRVGOgZqJdzyMkUSzekemt9Dl72g4WgcxlOvGhoBZPddKKoE/TsajjTE6Het9kkBl4nHWDlEfC3KLOskW2nPoF+cu5/fglO8YPc4slAFWxGHanOnvQ4q4zPtnczk2RJ4p6Ag=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759444697; c=relaxed/simple;
-	bh=XC0sO2N0d+uo0Arvt22e4w8FJtUrLDpvY+BPCwyRgx4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:Mime-Version; b=TXBOPRk2E7HwHSD3/XvFIt8sBNVQuNoXjzoWvDUgwh9Nu1BYQNoWvYvrgcRaS3C0DtbnSPqO4h7zigk3kxHFLXzRa1TVZx8I6rmlx2Tdw9Unfis64Gh0xWqPgU2RynLQmBEu3ttsf8hbr1l0ZUlzm2Y9paD0BUhAnutjJ1xrJ/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gimpelevich.san-francisco.ca.us; spf=pass smtp.mailfrom=gimpelevich.san-francisco.ca.us; dkim=pass (2048-bit key) header.d=gimpelevich-san-francisco-ca-us.20230601.gappssmtp.com header.i=@gimpelevich-san-francisco-ca-us.20230601.gappssmtp.com header.b=qyJkP3IA; arc=none smtp.client-ip=209.85.215.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=gimpelevich.san-francisco.ca.us
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gimpelevich.san-francisco.ca.us
-Received: by mail-pg1-f169.google.com with SMTP id 41be03b00d2f7-b6271ea3a6fso414101a12.0
-        for <linux-mips@vger.kernel.org>; Thu, 02 Oct 2025 15:38:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gimpelevich-san-francisco-ca-us.20230601.gappssmtp.com; s=20230601; t=1759444695; x=1760049495; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:disposition-notification-to
-         :references:in-reply-to:date:cc:to:from:subject:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=XC0sO2N0d+uo0Arvt22e4w8FJtUrLDpvY+BPCwyRgx4=;
-        b=qyJkP3IAIdi07QDtg0tHsZsArTI/JwcKVM8w9wcSgyDyFQNsZowbLaFY0Otz4lAwTN
-         t5H607DUYqcqYdumiEygDEPIi9kAN7FHMN8kE/pGwkOe2lY9zBLnUoMn/+yuRc7JG1ZW
-         Ldfag4oEOHJUR9AG1CZ9l+oMWjCvlih9vzaRU+Btq7zv2iiWC9A65VXeEYrNCZtCmWD7
-         EtKpuC9Q6ISh/JJdNouATmKY01hJxZsoycWgb/oX68hqYNwCq1xqMmxCNcTSvPoHAf22
-         I870jlaS07On4DR9s0i23PXDWtRzpyfwijlESzjf4N0F2SljNHO1LtlpV59DMTLil2QO
-         3/ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759444695; x=1760049495;
-        h=content-transfer-encoding:mime-version:disposition-notification-to
-         :references:in-reply-to:date:cc:to:from:subject:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XC0sO2N0d+uo0Arvt22e4w8FJtUrLDpvY+BPCwyRgx4=;
-        b=F9TfHkoojOFWi0qttvWRh3+OOJhPTEIKkvO3vF+UGVMxK2cCfgXTLsWMWq5uIqYbGr
-         AxVgyKl8GCdvs1hbVVEb0fOUj6kUGu41f7SRvSc2kQz1VoIxaRhPzfWVD974vjd1FlNS
-         N7qC5NOANsv3cCQX1dIVgPttbyZGFQd6R0gls64bG5yfSuMaAiDbsrgewTMus3Uk0pAh
-         rMlAivr3aVCLwSe2boSQP4xPI0/WBLd53ZGcV//o7VdOtScslhhmfIZipMYeRc4zyM4w
-         eYGV6ZjzUjQnKZbWugODpWvXuIL49PUpg5Z3YXbCLLJhORVrMvqyumh3Gd+wojD0/vp5
-         +GLw==
-X-Forwarded-Encrypted: i=1; AJvYcCWszO+uJ7+AFH2LzoO814FRDvHRPtTtxiHJUWuNEB5RTQfsP3qbVs9RJbR2q8fwTHEMSq5sfJWNwsPu@vger.kernel.org
-X-Gm-Message-State: AOJu0YyaRREcse5e7cYD1YYAp4rGk1S5+kLAqHYGrVg62tsc9vlrHXSs
-	x0mjNiNdAhsKvLF84deo9pNqSu5YjgT5aBQDuK4EKykFwGsa+j6mH1j10rPwnSTFiA==
-X-Gm-Gg: ASbGncscEBZj0q6YTn9zmTJQDSSZzA9xPxDj0t8pZ0cVJSauATK9mY06dA24bWc9kJV
-	/QMH8v84tSZhJSK8bZvaGSSqRImL2f/pWAnEsJsQeAJ80yQeAVGDpDrwOZp8TWFozE/Fjp+1KML
-	ZbOjhzsg+OiUpXdLhmsj0pF9M5prRfeL88g8ONdxgmNTmlofTRlUPN41Zy9H8+hLsSeeGleWqIw
-	bXOq5u8CUaOq9BHzhXengjjESXIWwlie67IP2OWKf8cvMcSmYgO7+zlsnrDo4oNCMQgxLc38c4F
-	dEzbdMghJZk0QWzKJONS26SW2J5a/89Cbfg8W2ofu7NH2s1ooxK+upaXq6ESZ/LnqNRUglrkgF/
-	ZbW2DuhsYvoPLHrnhMuRDOsKUgb1Dc2qPgORVQjH7iF+iYM2qPO4arb8DQc5/iqWeNEmwvSfVSI
-	E0qay2xxBzcTISY6UVHp93ue8iU/zMMKpGW6apjtC4Zj8=
-X-Google-Smtp-Source: AGHT+IGEWpLAS0bs92zaBuI97EwGsBxqAWGzNiljhk82StCYnXBLZ6FnmN8hBjn83V3/i2Ef8tUENg==
-X-Received: by 2002:a17:902:d544:b0:25c:d4b6:f111 with SMTP id d9443c01a7336-28e9a65258fmr10877855ad.47.1759444694910;
-        Thu, 02 Oct 2025 15:38:14 -0700 (PDT)
-Received: from ?IPv6:2001:5a8:429d:2100:4825:53c7:1977:212e? ([2001:5a8:429d:2100:4825:53c7:1977:212e])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-28e8d1b9e5asm31046705ad.74.2025.10.02.15.38.13
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 02 Oct 2025 15:38:14 -0700 (PDT)
-Message-ID: <1759444692.24579.8.camel@chimera>
-Subject: Re: [PATCH 6/8] CMDLINE: x86: convert to generic builtin command
- line
-From: Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>
-To: Dave Hansen <dave.hansen@intel.com>
-Cc: "Daniel Walker (danielwa)" <danielwa@cisco.com>, Will Deacon
- <will@kernel.org>, Christophe Leroy <christophe.leroy@csgroup.eu>, Rob
- Herring <robh@kernel.org>, Andrew Morton <akpm@linux-foundation.org>,
- Pratyush Brahma <quic_pbrahma@quicinc.com>, Tomas Mudrunka
- <tomas.mudrunka@gmail.com>, Sean Anderson <sean.anderson@seco.com>,
- "x86@kernel.org" <x86@kernel.org>, "linux-mips@vger.kernel.org"
- <linux-mips@vger.kernel.org>, "linuxppc-dev@lists.ozlabs.org"
- <linuxppc-dev@lists.ozlabs.org>, Thomas Gleixner <tglx@linutronix.de>, Ingo
- Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, Dave Hansen
- <dave.hansen@linux.intel.com>, "H. Peter Anvin" <hpa@zytor.com>, 
- "xe-linux-external(mailer list)" <xe-linux-external@cisco.com>, Ruslan
- Ruslichenko <rruslich@cisco.com>,  Ruslan Bilovol
- <ruslan.bilovol@gmail.com>, "linux-kernel@vger.kernel.org"
- <linux-kernel@vger.kernel.org>
-Date: Thu, 02 Oct 2025 15:38:12 -0700
-In-Reply-To: <a2be781f-96b5-47d1-81fa-b20395ca293a@intel.com>
-References: <20231110013817.2378507-1-danielwa@cisco.com>
-	 <20231110013817.2378507-7-danielwa@cisco.com>
-	 <00c11f75-7400-4b2a-9a5d-10fc62363835@intel.com> <aN7n_5oiPjk-dCyJ@goliath>
-	 <c8b65db3-a6cf-479d-9a83-23cbc62db1ef@intel.com> <aN7vKgcUeQgCFglQ@goliath>
-	 <a2be781f-96b5-47d1-81fa-b20395ca293a@intel.com>
-Disposition-Notification-To: daniel@gimpelevich.san-francisco.ca.us
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.10.4-0ubuntu2 
+	s=arc-20240116; t=1759446648; c=relaxed/simple;
+	bh=9aUhMF1jF4+bwEw0BmfYOCRd81wS/BFmfKZXPfLVeCw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=VyRK6yx9ccdQ9LsF1InARabTy67syx+56ltATguIHwyKddBwr3nMoRZWZITCDshFoGLpuFFKdxoDmfJlQ7i36CTb852TPG8xoRbW9mY0URSqSTfjlnA58/2pTSxUeMjupDYLwNa4w22/Mf1cDKwVdfVkC+gxcPnNtZKoaETrTkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=XiaS20Vy; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1759446647; x=1790982647;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=9aUhMF1jF4+bwEw0BmfYOCRd81wS/BFmfKZXPfLVeCw=;
+  b=XiaS20Vy9fFqgyoPpFdrYVoYW3QgbtjKpLEVpHRglvLGcGj8sP34rNNa
+   Kpe6kE1c6sk6YeQzv4LWeFJ55AJoEzVLL0Tfww9XYhlqmSQmfEO8Lvdg9
+   dc5oXvAPujlOmW27Yu/B+SIfPOa461qn9q/l2+zdyX1Zn7qiDHfNpQMJc
+   SrNEl4cpwawLSZ4uQJAyA5ZYhF42W8QAuUsTPh8CoZy8XtYbLiASCR46m
+   ZygA2hTJ9BA2BhrmiT3Ar3ltpfHrXI46fnpyYUXuh7JpHG7VNENNKN/Uz
+   kn4IKqeuFCYFUnEdqWrS4eYAk6QQBh5dN2Zv02EuViJeHcdfjNnselqZa
+   w==;
+X-CSE-ConnectionGUID: +YaNBSMlT2qkuz97CWyQuw==
+X-CSE-MsgGUID: t8pGFfgkSZGz59Qx++wqqg==
+X-IronPort-AV: E=McAfee;i="6800,10657,11570"; a="61774708"
+X-IronPort-AV: E=Sophos;i="6.18,310,1751266800"; 
+   d="scan'208";a="61774708"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2025 16:10:46 -0700
+X-CSE-ConnectionGUID: XpoW4dhpT1OOYopVMjggcg==
+X-CSE-MsgGUID: IKYQRcZfTgWwKhvjgxm5NQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.18,310,1751266800"; 
+   d="scan'208";a="179102182"
+Received: from aschofie-mobl2.amr.corp.intel.com (HELO [10.125.109.249]) ([10.125.109.249])
+  by fmviesa006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Oct 2025 16:10:45 -0700
+Message-ID: <dde17d82-3e56-4b9f-8b6d-dae3d523d44e@intel.com>
+Date: Thu, 2 Oct 2025 16:10:44 -0700
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 6/8] CMDLINE: x86: convert to generic builtin command line
+To: Daniel Gimpelevich <daniel@gimpelevich.san-francisco.ca.us>
+Cc: "Daniel Walker (danielwa)" <danielwa@cisco.com>,
+ Will Deacon <will@kernel.org>, Christophe Leroy
+ <christophe.leroy@csgroup.eu>, Rob Herring <robh@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Pratyush Brahma <quic_pbrahma@quicinc.com>,
+ Tomas Mudrunka <tomas.mudrunka@gmail.com>,
+ Sean Anderson <sean.anderson@seco.com>, "x86@kernel.org" <x86@kernel.org>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H. Peter Anvin" <hpa@zytor.com>,
+ "xe-linux-external(mailer list)" <xe-linux-external@cisco.com>,
+ Ruslan Ruslichenko <rruslich@cisco.com>,
+ Ruslan Bilovol <ruslan.bilovol@gmail.com>,
+ "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+References: <20231110013817.2378507-1-danielwa@cisco.com>
+ <20231110013817.2378507-7-danielwa@cisco.com>
+ <00c11f75-7400-4b2a-9a5d-10fc62363835@intel.com> <aN7n_5oiPjk-dCyJ@goliath>
+ <c8b65db3-a6cf-479d-9a83-23cbc62db1ef@intel.com> <aN7vKgcUeQgCFglQ@goliath>
+ <a2be781f-96b5-47d1-81fa-b20395ca293a@intel.com>
+ <1759444692.24579.8.camel@chimera>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <1759444692.24579.8.camel@chimera>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
-On Thu, 2025-10-02 at 14:55 -0700, Dave Hansen wrote:
-> That's not a bad idea. Or, even if you can pick two amenable
-> architectures to start with it will make it really obvious that this is
-> useful. Two architectures means a *lot*, IMNHO. Two is a billion times
-> better than one.
+On 10/2/25 15:38, Daniel Gimpelevich wrote:
+> On Thu, 2025-10-02 at 14:55 -0700, Dave Hansen wrote:
+>> That's not a bad idea. Or, even if you can pick two amenable
+>> architectures to start with it will make it really obvious that this is
+>> useful. Two architectures means a *lot*, IMNHO. Two is a billion times
+>> better than one.
+> I think it's a bad idea, if I understand it correctly. The patchset
+> conceptually patches a mechanism of the kernel as a whole, but one which
+> just so happens to need to be implemented separately for each arch.
+> Breaking it down like you suggest creates an embarrassingly high
+> likelihood of different architectures' implementations of it going out
+> of sync, a previous situation that this patchset was partly intended to
+> address. I say keep it atomic. If it breaks on an arch or two but not
+> others and nobody notices right away, that would be better addressed
+> with a new patch when someone eventually does notice. Just my 2¢…
 
-I think it's a bad idea, if I understand it correctly. The patchset
-conceptually patches a mechanism of the kernel as a whole, but one which
-just so happens to need to be implemented separately for each arch.
-Breaking it down like you suggest creates an embarrassingly high
-likelihood of different architectures' implementations of it going out
-of sync, a previous situation that this patchset was partly intended to
-address. I say keep it atomic. If it breaks on an arch or two but not
-others and nobody notices right away, that would be better addressed
-with a new patch when someone eventually does notice. Just my 2¢…
+How is the approach to "keep it atomic" working out so far? ;)
+
+The kernel isn't exactly developed in secret. It's also not hard at all
+to, say, once a week to peek at linux-next and do a lore search (or use
+lei) if anyone is desperately worried about the ~50 lines per
+architecture going out of sync.
+
 
 
