@@ -1,384 +1,231 @@
-Return-Path: <linux-mips+bounces-11616-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11617-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 309A1BB8CB3
-	for <lists+linux-mips@lfdr.de>; Sat, 04 Oct 2025 13:20:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9399DBB9186
+	for <lists+linux-mips@lfdr.de>; Sat, 04 Oct 2025 22:02:36 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id F2AA84E169C
-	for <lists+linux-mips@lfdr.de>; Sat,  4 Oct 2025 11:20:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D2813A5DC5
+	for <lists+linux-mips@lfdr.de>; Sat,  4 Oct 2025 20:02:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 035ED26A0D5;
-	Sat,  4 Oct 2025 11:20:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5198A2853F3;
+	Sat,  4 Oct 2025 20:02:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d8uayQTf"
+	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="DTJUp8zC"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from DM5PR21CU001.outbound.protection.outlook.com (mail-centralusazon11011005.outbound.protection.outlook.com [52.101.62.5])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0D3A20FA9C
-	for <linux-mips@vger.kernel.org>; Sat,  4 Oct 2025 11:20:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759576835; cv=none; b=ij+kQbPzBupB3OiV7RE8o3fGKrAK/DkRBPJktA385pD7clJFboykmCtla98IoALxJ9zc9xKekgzsttBOdA0nm73xpzsES3mqfs4co7Sr9/LE4zZqdIH3OKE4HOl31NIJxRpAtPb2DHc5gCPfKZjG7tSF05GgLHmhgk6U9CHq2ic=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759576835; c=relaxed/simple;
-	bh=A6gbkqNPLWsws9l6PA4pY+F5/1LjeKnCBESKwULMJLg=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=G4c4ffjJqShQmjQu4pT/dqqCqLkX/EWqttCRzGi4BeTOtGRjw7X5FemJYXG7PzHOPHNhKcQdNWluAnw9QttAUTR6f6ZXd5IIWAREpdnxNo+ZDgQPr3N1yCF+JEFtHDpzGa64FT7jEvH+acnL9gPaILDI+gkv9LB8xC8PvqhBAQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d8uayQTf; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-46e6a6a5e42so15648905e9.0
-        for <linux-mips@vger.kernel.org>; Sat, 04 Oct 2025 04:20:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1759576832; x=1760181632; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :references:cc:to:from:subject:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=lbkIsP1rGYqTUmDEWbcljfJKLg/5/O6Q1FlSSvW+JqA=;
-        b=d8uayQTfhtLt/DRoJo1i9rLyjYah3ke3w6/qOn32YfPzW1x5RbpLRCnN7YjBj/0lhS
-         7oUJUms4J/ZOc/DOFnU29diqoZAvTvuF7pzD5p9UGH9nBszJxHvoFsaJeaS0Lq6oEdB0
-         2lcbNIDbhnYi6yVYWN2Upj1rY1fGy3OtUeQzXKR+lhEttoWQDEGv6ymJuWii0cPhJ8Mx
-         p3FCoOQNbnJq7mWHkSb8SBVha2NJTNxDvb6ue6Hqexfmo1zUeQrxMp8FrQRQcKBaC4yA
-         jUd0NLXx06xRKpCbkPH7imgf2gcsfmXbc7TOfmvaULBEYw5I3oGlIlpSc1ly5V49HYwP
-         460A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1759576832; x=1760181632;
-        h=content-transfer-encoding:in-reply-to:autocrypt:content-language
-         :references:cc:to:from:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lbkIsP1rGYqTUmDEWbcljfJKLg/5/O6Q1FlSSvW+JqA=;
-        b=Ge7uuFQ+7UFyeNLWjmsKXpChm84nxqcMS5qmFLOZMl3XVXL1W7zPWzM01qO0DORtlu
-         CgQ52btDwQ0mnSPlnegQj6GSGvDk9VrLFumwuAh3NGev4VuFGtOi942XMA9LaLhG15/1
-         Ewb9WFhy2QnNPYMdT+5ZrCAyWAlZBE2NHiZVeHG+RxE7i7qdueOujStbERtM6uie/eQr
-         VcBDhxDiBDLaAxpIOG2PnbepBXqXsUXU+zoqcG+hmc3X4cfK3wL9NcrlbdZrW7MBGBOV
-         15D3BEZEG4rLlZQwT/QrEYiuleA+VKWqA3V4W5H3MQfhLDNrnPfnwxWc5IGPPbCXsKM9
-         je1A==
-X-Forwarded-Encrypted: i=1; AJvYcCWi0/CcTnfISRpThqD7stX2YZOcy4lWpTcsoJlBjqMbkFVEmlYTzgLeWQZSdDKizB4EZEDI5J9C53t3@vger.kernel.org
-X-Gm-Message-State: AOJu0YzXzQ3Mom9nBfTFgqsRpzDGpgZy9e7jHjuNbsX5EWUf4jwR/PpO
-	eJx04crH6QUMUCxLnlNcCuG8OIknmNdYQ7kp/yUbyanclVP3I/UppSpH
-X-Gm-Gg: ASbGncszttJU8X+WyvPDtBXV1cGCGBcX6999NofLiDQEVaL+XdWJfiHrv+d5EAOgS42
-	m91BZ8cq9I+i/t/4LIj33sxJQbVYL5RGyft2aG6bF5CKw1ILxrqttCgRpJEfqQjc66TUw4hlxWE
-	9Xp9Ye8WfM3mVYNMF6ouiiGhrd/ME5IpZ2xNoNBUSwaBJQtj6zA43dqWNmETOt8p1DqVFg8Gn06
-	qNxyup8AsMqdDrMII6VWhMzKwFPMUaReD9JUYBt9jE1m7IA3OZqU760YMgZ3K2g22fqZF+gZ35E
-	5s3O2t5Z8VCcKWJ+zc01Ar9XCFgIw5+v0Bk7es3s9kN5Cu8iKtZo52i8ficLbRq2vD/svPLS90d
-	FeoiaDFkR3Y8LoosuO1QUscPFi7wc1wJFv0PGd/FcIbBBV1Mjp4F0miBdt5auYJnU1/yQYZWnik
-	5gIWDPnjiGKzzWW3aN8U+b5DO+65nLDPuA8pGV8q6Gs1zMe0pJ+6jaCPGhgHb4QZh9gWxdsLFGp
-	LtM14vnOPxRpSWogt8OI7vN
-X-Google-Smtp-Source: AGHT+IFa5UcQgutx0vLHvpiT3XihD7Tx8chIVMEyxBcc9Xb/6ftImpfmkCNl2MA3j99P2OCe52cS7g==
-X-Received: by 2002:a05:600d:8110:b0:45d:d5df:ab2d with SMTP id 5b1f17b1804b1-46e71146584mr41396905e9.26.1759576831860;
-        Sat, 04 Oct 2025 04:20:31 -0700 (PDT)
-Received: from ?IPV6:2003:ea:8f35:9e00:6453:3c70:78b7:3fe5? (p200300ea8f359e0064533c7078b73fe5.dip0.t-ipconnect.de. [2003:ea:8f35:9e00:6453:3c70:78b7:3fe5])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-46e6b23d4c5sm110677325e9.17.2025.10.04.04.20.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 04 Oct 2025 04:20:31 -0700 (PDT)
-Message-ID: <a7ee2623-1377-47a9-8e7b-b4e5101fc0e2@gmail.com>
-Date: Sat, 4 Oct 2025 13:20:38 +0200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A29CD221723;
+	Sat,  4 Oct 2025 20:02:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.62.5
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1759608135; cv=fail; b=Agz2HQgTemgEmrHot48BLXGfc6lDo2ZG0ftR65i8OuhH/FvMSpAvu2f1bhZTo16UQKyEqvRZk5jzyiGxPez9QGMsWYYmeN2Bcn5cXRuysDVRvOeWexUfq6BSlaTsWfy8NjIAc1PlzC92WgA/PxSlNpuDqns3MAcE9mu4E4pX2ss=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1759608135; c=relaxed/simple;
+	bh=w5C4KnGrKTkOElpwz88RZmp1Zy1yhj7r1HZWLJ6BoKA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=ZJTIASSyzSY+Cl+kDByZfGv8hydaqjsqw54RiRv0jvgmL9s6OoY858PAjmzyIbDbdfKsf9V3qvDSxu6nKYPES6oFFqWCcZmFZerZSKbS3uwgyOUQfM4jv8EW1fhX6WGQWNAlfGywURVJYa74EuxpeoAwMmjHwPDGb5X43nFLzjg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=DTJUp8zC; arc=fail smtp.client-ip=52.101.62.5
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=LhyKacLjUMDthF3K2Mi/orOdbBLNqjB7CKeHsCsMDIvTu/PZnfNPEOGWzpwb8enzuV5YPVS5JGFEYjMn5/NXyjJtEMVyDoIU5LC0dbk7E25qiSFpe7xHlclMVHo2DFAdh+7W/l5v/SrrwtCCFNLoI+KBv3NT5ZmWrO8aE+j9/Wdw/qhERMN2QceSgCIuv9O78wyvoXKsngSTTHODGD6Vtexzpdi3DaUODw2oh2bHtXIRtYKx98BhV7IDttLOm2uqeFFF3RNM/0x6Vrir7PTHiPy8ERGwtRqr48pG/XylqaRCzPM38VMs5EYbVbUHs/lU7aYcGenrfDm7WzeZeBM/8A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4ggoiRJiz2Tz/RE7CqNPZ9LXqpWAZN17aMszM2aHEb4=;
+ b=MYVqB6xnUEl1ZpJbUO5LQX1ibif6TJEpOtxd536WJY2mn6+6tXJ9Wu7V8pxEXO+4GTDE5h/zbrGmyNpfgga6oBUEQHwllO+/0DN7Vjup/gTyvghv1cm8obDn0LiVL0bCzQ2n44xjx2vQOtP2fbCZyAX7+A2cyT7/kaaVZhNgkRK/AOtVqbDlvMT7Ah5uV9MvG61RFpSjlkgevHT4FI+yxrQML2CSJod+1rjI611QMq2MZMD5Qq0qx1rqaKmLANbpnyKsOiPWQmNnbPUFobM13IHYADGfGmLdt7yC/vdebP0nwK7TDT5aOSXOk2Lzp7h4ikOplFkqdADe62yfF7F1hA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=4ggoiRJiz2Tz/RE7CqNPZ9LXqpWAZN17aMszM2aHEb4=;
+ b=DTJUp8zCi4kNEi0XzYC7PTJ67pqYffvYJyOE7e/GlAwlRERNWV4zBctem7JYDq0OcSGzA48GU0oKKYBW6luTq41Yub08qbnqvh/kC4BKTXbnw94iQKYbDbFqo0kwuCkKKoeuZgwjrzRQ6qU3ApPlJM8HhOVVGDrwlON0rNZNeo8+aKRGmg3xwsGrsGQeGbk3gOEJTHzjPoVkcfQvg6KKkT/OJ5GfbD4lLH1Oy0zwgHekzLBjLH2sEyprc+7ahV6Lzfbt19LOB8o8dWZ0LUaSt6SAn24UzNHW9b/h08ON7/Ggas+8kcZbjz30i8C48iBnWm9eara5sWOKsWdMO5gINw==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from PH7PR12MB5757.namprd12.prod.outlook.com (2603:10b6:510:1d0::13)
+ by PH8PR12MB6964.namprd12.prod.outlook.com (2603:10b6:510:1bf::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9182.20; Sat, 4 Oct
+ 2025 20:02:06 +0000
+Received: from PH7PR12MB5757.namprd12.prod.outlook.com
+ ([fe80::f012:300c:6bf4:7632]) by PH7PR12MB5757.namprd12.prod.outlook.com
+ ([fe80::f012:300c:6bf4:7632%2]) with mapi id 15.20.9182.015; Sat, 4 Oct 2025
+ 20:02:06 +0000
+Date: Sat, 4 Oct 2025 17:02:04 -0300
+From: Jason Gunthorpe <jgg@nvidia.com>
+To: Christophe Leroy <christophe.leroy@csgroup.eu>
+Cc: Leon Romanovsky <leon@kernel.org>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Leon Romanovsky <leonro@nvidia.com>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Geoff Levand <geoff@infradead.org>, Helge Deller <deller@gmx.de>,
+	Ingo Molnar <mingo@redhat.com>, iommu@lists.linux.dev,
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
+	Jason Wang <jasowang@redhat.com>, Juergen Gross <jgross@suse.com>,
+	linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Matt Turner <mattst88@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	"Michael S. Tsirkin" <mst@redhat.com>,
+	Richard Henderson <richard.henderson@linaro.org>,
+	sparclinux@vger.kernel.org,
+	Stefano Stabellini <sstabellini@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	virtualization@lists.linux.dev, x86@kernel.org,
+	xen-devel@lists.xenproject.org, Magnus Lindholm <linmag7@gmail.com>
+Subject: Re: [PATCH v1 4/9] powerpc: Convert to physical address DMA mapping
+Message-ID: <20251004200204.GK3360665@nvidia.com>
+References: <cover.1759071169.git.leon@kernel.org>
+ <f2b69a0ac2308cc8fd8635dceac951670d41cea2.1759071169.git.leon@kernel.org>
+ <20251003163505.GI3360665@nvidia.com>
+ <909c5ab3-b3d3-4b5b-bc64-8b30c220ac92@csgroup.eu>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <909c5ab3-b3d3-4b5b-bc64-8b30c220ac92@csgroup.eu>
+X-ClientProxiedBy: BN9PR03CA0044.namprd03.prod.outlook.com
+ (2603:10b6:408:fb::19) To PH7PR12MB5757.namprd12.prod.outlook.com
+ (2603:10b6:510:1d0::13)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next] net: phy: fixed: let fixed_phy_add always use
- addr 0 and remove return value
-From: Heiner Kallweit <hkallweit1@gmail.com>
-To: Hauke Mehrtens <hauke@hauke-m.de>, Greg Ungerer <gerg@linux-m68k.org>,
- Geert Uytterhoeven <geert@linux-m68k.org>, =?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?=
- <zajec5@gmail.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Andrew Lunn <andrew@lunn.ch>, Andrew Lunn <andrew+netdev@lunn.ch>,
- Russell King - ARM Linux <linux@armlinux.org.uk>,
- Paolo Abeni <pabeni@redhat.com>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, David Miller <davem@davemloft.net>,
- Takumi Sueda <puhitaku@gmail.com>
-Cc: "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
- linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org
-References: <762700e5-a0b1-41af-aa03-929822a39475@gmail.com>
- <3c0f31ce-38a8-4f1e-8c39-6aa6ac879dc6@hauke-m.de>
- <418949c9-9aa2-4845-be8a-3395413143c3@gmail.com>
-Content-Language: en-US
-Autocrypt: addr=hkallweit1@gmail.com; keydata=
- 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
-In-Reply-To: <418949c9-9aa2-4845-be8a-3395413143c3@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PH7PR12MB5757:EE_|PH8PR12MB6964:EE_
+X-MS-Office365-Filtering-Correlation-Id: f8ff58a9-652b-4bc7-f3fc-08de0380e4b2
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|7416014|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?SG5HdVlQalBObFJFMmlOV2cxbVZlVk5SNHFEWWp2QUlEQ3pUZUxzbmQvMXZ6?=
+ =?utf-8?B?bVNnT2JuZkYwYnlVbERQMkxTSEMxVDdvb3pmVFdvbG1VN0ExWUp4cmFyVXBx?=
+ =?utf-8?B?SjczL3VIUEREcXd2aHZPVGlDUVA5OHh2SlBNRkF5d2JPRXU3WVBPYkJ1WklF?=
+ =?utf-8?B?Wm8rWTJSRzMrODZpck1qR3l3QjB2dVE1U3JTelFoa3kzd3ErZDcrZmNsWGFu?=
+ =?utf-8?B?cmVzWTFZTVhMbjlHMFZCL0Z6WDNUU1dWdUhIa2FZRDA2KzdDZE1sZDIwZStr?=
+ =?utf-8?B?dkozZ1Y4L0drWkp0T1Z2cTJ3eWFhenkvNjFIV0lGYmRCVVZwbjhzcUxycnFt?=
+ =?utf-8?B?L0VNZDFVMlB1QmVVRWNNd2gxRk9wbkxUbytHUkpoQmZUVzIvbm5iczdsTEo3?=
+ =?utf-8?B?SUtVc05IS3U0QVNkT3JYNnc4blFQR3Fyb3FWdHVSUmJrYWZQVEdXbUdsc3NJ?=
+ =?utf-8?B?eWltMU8vRS9ncGtzNGdpM3k2VzJZZnptYXVFTENUSm44bStaSWg0OWZMVHlW?=
+ =?utf-8?B?dDY0V3BJSUl0VjJOUHZrc013QlRpZlBJUGhhbzNIM3ZwOVNEaytHT1F1YnNG?=
+ =?utf-8?B?OEUyN2lUbXRWbUU2WlBDQ2RMS1VieG9tNDFFNGM5QU9ld3lINXEwd2xwVEM3?=
+ =?utf-8?B?TjdXRXRuYXQ1NnJYVWN5dFBUYkg2ZFlPUVIvM3RrYmFSS0RHallweW5ibjFY?=
+ =?utf-8?B?QUNFQXVJakgvd3NIbFpJV3ZseEt1RmtyN29GZC83anhEVXdrL3A2M2ZWRXBp?=
+ =?utf-8?B?ZWQzdUtzWHJZK0J4cHdGUitpWXNVVGd0ejNQeDRPSXNlOGN4aFR3S0VVSi9i?=
+ =?utf-8?B?SFV4clY1eDBtU0o4Znc2cXk1Si9qNHpsRzhPRXE1akpPNUU3K1dqb0NiNWtY?=
+ =?utf-8?B?SzVMekdYZEZYWEFXUzhtSHM0dDFMeUZjRlVLdzQzS0hLM0tJeWtjeUc3Y2ti?=
+ =?utf-8?B?VjEzNTFtNEZSZU1zK2VkY01EUmVnam9wTnhYd3hvZ1BwTGN2MVhFcndBTi92?=
+ =?utf-8?B?NWE5dzRMRUJMTHI4MkJ4MzFJcFBCM2NDWWo5bWg4NHJPQ2pja3ZvcFgyWG9s?=
+ =?utf-8?B?UWFkcDVrd3JFMEZIL2NLM0tkeUZJT281RGNzRW5zVG9sbjZWRUNLUHcwY1g0?=
+ =?utf-8?B?bC9IRmovNHpqcnBJUllHTnlOcHFSaFU3aDEraStWeEZuaDc5TjBQZVZlQXFY?=
+ =?utf-8?B?SDlJdXFrK2ZURkQ5RFl1SXZpS2dKamVrazVGN00wc20yTno2SUFTTDJGT3ll?=
+ =?utf-8?B?bERacnNKb1pxZGhDcXAzek1BY2lqQkoxWFRzY09HV1RFVnFCRENKVGkzQ0hx?=
+ =?utf-8?B?dTN0ai9Xcmd3djFRVmptQ0NCTjJJUU9CSWJZUDJtaTJWNlkvdU5LNXcyd3VT?=
+ =?utf-8?B?RWkvVGQxbWh1UUJTd0RwcWd5dFNENU9sSis4LzlhcXo0Vk1jS1RhU3kyWkVN?=
+ =?utf-8?B?dUtkU2NKbzB4cktJWWlRc2lKTlhKbk9XZHZjd2tTczZVWWhPa25SN0VNT0Ux?=
+ =?utf-8?B?RHlTYTF6ckhreUFOT2FiUGEzR2x3OGdDa2RlYWM1QVl3d0JtQmhQMERRaUJq?=
+ =?utf-8?B?NndyYzJscXl0ZDBCYjZUTWhKWEtPUUFHSERKNTlkbGtKaWoybFlablg2OG04?=
+ =?utf-8?B?WUhaRFEvb0tQWHpwK1hod043RWs2TlcwcEgwaVl2dGo3MzBYbzF6V2lmTkFM?=
+ =?utf-8?B?WjUrN3V3M1d0QjRNUkJiay94OXNCWTdheEZ6dHpnaUg5bThCb1g0eHhGb1dN?=
+ =?utf-8?B?bjFaSW4yb0UwQ1RhZFMxblFxVVMyQlQ3WFBkNmUvdE01K25JQnlQN1ZmeE9p?=
+ =?utf-8?B?VnpwRVJJTml1RFlNZHY5TnptRHRDVWFOZDB5NlJuT1pqQzhOT3VuekRZVFRn?=
+ =?utf-8?B?ODF6dFVXNzdhTkVyZGQzN1d6OFdMbHhUMkJrTlVrYnhyam9QYjJ0d1Bhdy9z?=
+ =?utf-8?Q?axQ4JuA5qDTmgdw215ssRBzg/EhPp5Yx?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR12MB5757.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?SFNtT3d1M3ZHa0JOK0VHYUY4ZGlYMDA5TFRxclZsQUozMGQxdmtGMk54L3Fk?=
+ =?utf-8?B?RUZPTE1ZTDlKSjJrUG1kTUs5eTlXREZuNGFTd1k3V1FVTVAvM1BXdmR6Y0Q5?=
+ =?utf-8?B?eWxLMVZtNVpWTUpDUC9oMk13YTN6bjhqOTFWV0JuWmNkU0V4MU9pdHYwZy9W?=
+ =?utf-8?B?SDRTWUZZQ1RJUUY2aXJaZmxNS1dOTnJ3VTcxaWFZNWNkaVc2bUZROTM2NjRk?=
+ =?utf-8?B?MDFITmJUWDE2MEhCL2lQRmkveUg5N3l6Y2x3MmNEd013cklBZ0Q4VzZvTDVm?=
+ =?utf-8?B?U3dYMUorMFlMc21HYmxROVVHRk5UY2lac2lWWWM0ejN5R1Q1VHZjZWNnNGt6?=
+ =?utf-8?B?YUVuR2NVWlBPM0pTZzQxN09SUGx3TEx0aEFHSjJndXRHRlBXTk1za3d4VlNZ?=
+ =?utf-8?B?SENxOXlsR0lnd2Z3UnY0NXFmVGlPMVE0ekZoS1Z3MTJiNkNUNmUzWkpHSkxT?=
+ =?utf-8?B?MTV0K3NoRnVhdytJK3hkRGRNZzRyd3RnNTJwejdWb3BwVDdwdGZiZ0htbm9F?=
+ =?utf-8?B?TTUvanNYMDBtSGRST0JoZktvdG55VHFTZnJZaTQ2VkJTbkh3RUg5U0IyNzRI?=
+ =?utf-8?B?TTIrVFdrMytkS0E2amcyRGdvcUhtTEc2NWlDMldoRzZjbTVvL1lQRjQvc2xK?=
+ =?utf-8?B?cE5TNXlmbnY5VFJRRm8vYXZNY1E0U3VMTUdyaXZKNk9NWkxBQ1IwdWp4K1o0?=
+ =?utf-8?B?UlArZ2Q2VCtkQ3RYVU82c1dERDAvMWhyZmY0MnpFVVRhcnpHTEFGRWVsN3NU?=
+ =?utf-8?B?WHVnZEpjU3RVV0ZacHpoL25NLzMxbVgxUGV5R3h5T1BTWE0zRGdDclE4MWp0?=
+ =?utf-8?B?a0lhWkNFb0FzbDNjVmNMRmhKZXpYdXp5eGRXRFQwcWFmZlYrTW1YbEY5TGJT?=
+ =?utf-8?B?U0ExcDFEVERzZXdpdVVUVXRob1ZNTTF5aTFYU01rdXZZL0txMU9nVHVDSGtY?=
+ =?utf-8?B?dkVOcjI1dXFEVzRVRkJ3SXgySVlUbVVRaWowQkNIdHNTRnpWbHJIZGpOYzlw?=
+ =?utf-8?B?c1l3U1AxalNtNnVkSjVtRUhCZW83M0M4enl3VUw2TnZBWHMvdTRCQmZpYlAr?=
+ =?utf-8?B?YW9seTVLazNKQm9HUCs0UGM3L3RVTlExTVpmWVMvUnVpdHJqcGFVdGxXR2lL?=
+ =?utf-8?B?THY2SUJZekg3QUVwdDZZZzBaOXRtZUJoZTJXeFVFY2xsWE96UnZMU3ZkMndl?=
+ =?utf-8?B?dERVUlRhMThMbTI5VE1iOHJVbktrODRaRkFkRFB2Z2N0dXdsdmVSKzJZeldF?=
+ =?utf-8?B?TVhZbTBwZWYwa2FscW1XVGJicHJWL2krZStxdENYTzllMHdKVjdRcE9OV0Zz?=
+ =?utf-8?B?bG8wNUhQOXZ4VDFoSllMaU4vV09icHZTN2kzN0Q5TlpxckJSdWlGUVhydXJH?=
+ =?utf-8?B?MGMwWVJMNUtETFE5SkRQWG9NaVA3aGhuc0hqeGRoZmlLc1Mra2N5SEdrL0pO?=
+ =?utf-8?B?YTh4ZG1HK01aYU5zaVZqREpoRlBqWnYycXYrQXp0SmtWbkZOTEtIakpnRkZZ?=
+ =?utf-8?B?QW1WcGRCOFVIcktNTndBN2QwWWk4UC9ERDZQd1ZlTk5xMzVMZElyOEVvb3NF?=
+ =?utf-8?B?SFNyZ0IyOWMxQkM5V25iVGs4YktXVnhCTU1SWlZGWksrdDlNSVdaSS92MGVW?=
+ =?utf-8?B?RVN1Q2VpekhwR1l1WE5Wa0FxZGdjZzRlZUFSVlF5YTFDSEFZR3pmdUtabnIx?=
+ =?utf-8?B?MlVFRkltSDBPTnIxNzU1Sm1YMG5qRHAzRERXTnJVV0xCaW43M2lDUStlMWhh?=
+ =?utf-8?B?NjRKZlJ2REszaVVuK2lrSUh3Nkc1emlwdHdHNzBDa3ZzSHRDNFNPbE1tbWRx?=
+ =?utf-8?B?Y2xVWlFncTFOWVNwNlNZeGw0SEdyNjhXUFVTMVlEa2xVM3lNaXd3cC84cmxp?=
+ =?utf-8?B?SFJmcUQzS3d4Y2pvMWVjdEljcVJ1L1NWZ2pJR0IrZUJ0SlVGUmkwUmRlMVhl?=
+ =?utf-8?B?MW8waHd6eDhpd3RkSnBNUmYyN1d2MmJBN1ErNmk0L2JOajZqeXZMRGdvcWgy?=
+ =?utf-8?B?NTlpZ0Y2N0lHS0syOHc1SGdhOFVPeUlhL1BxUVJqSS9kUGpIWDVZSDlKNzVz?=
+ =?utf-8?B?eklIUWw4ZmUxREJtNHMxa25QT2RQdG5INlFrL0lxUk1JbTI2VGtUNkwydzR2?=
+ =?utf-8?Q?/aic=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: f8ff58a9-652b-4bc7-f3fc-08de0380e4b2
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR12MB5757.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 04 Oct 2025 20:02:06.2816
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: m4DvlEEQGlFkItrYRHh+eDfG5D1shdY/8IeIWNMDV7kkRWGSL+gF2kjnPJ6DwELC
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB6964
 
-On 8/24/2025 6:36 PM, Heiner Kallweit wrote:
-> On 8/24/2025 6:05 PM, Hauke Mehrtens wrote:
->> On 8/22/25 22:36, Heiner Kallweit wrote:
->>> We have only two users of fixed_phy_add(), both use address 0 and
->>> ignore the return value. So simplify fixed_phy_add() accordingly.
->>>
->>> Whilst at it, constify the fixed_phy_status configs.
->>>
->>> Note:
->>> fixed_phy_add() is a legacy function which shouldn't be used in new
->>> code, as it's use may be problematic:
->>> - No check whether a fixed phy exists already at the given address
->>> - If fixed_phy_register() is called afterwards by any other driver,
->>>    then it will also use phy_addr 0, because fixed_phy_add() ignores
->>>    the ida which manages address assignment
->>> Drivers using a fixed phy created by fixed_phy_add() in platform code,
->>> should dynamically create a fixed phy with fixed_phy_register()
->>> instead.
->>>
->>> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
->>> ---
->>>   arch/m68k/coldfire/m5272.c  | 4 ++--
->>>   arch/mips/bcm47xx/setup.c   | 4 ++--
->>>   drivers/net/phy/fixed_phy.c | 4 ++--
->>>   include/linux/phy_fixed.h   | 8 ++------
->>>   4 files changed, 8 insertions(+), 12 deletions(-)
->>>
->>> diff --git a/arch/m68k/coldfire/m5272.c b/arch/m68k/coldfire/m5272.c
->>> index 5b70dfdab..918e2a323 100644
->>> --- a/arch/m68k/coldfire/m5272.c
->>> +++ b/arch/m68k/coldfire/m5272.c
->>> @@ -108,7 +108,7 @@ void __init config_BSP(char *commandp, int size)
->>>    * an ethernet switch. In this case we need to use the fixed phy type,
->>>    * and we need to declare it early in boot.
->>>    */
->>> -static struct fixed_phy_status nettel_fixed_phy_status __initdata = {
->>> +static const struct fixed_phy_status nettel_fixed_phy_status __initconst = {
->>>       .link    = 1,
->>>       .speed    = 100,
->>>       .duplex    = 0,
->>> @@ -119,7 +119,7 @@ static struct fixed_phy_status nettel_fixed_phy_status __initdata = {
->>>   static int __init init_BSP(void)
->>>   {
->>>       m5272_uarts_init();
->>> -    fixed_phy_add(0, &nettel_fixed_phy_status);
->>> +    fixed_phy_add(&nettel_fixed_phy_status);
->>>       clkdev_add_table(m5272_clk_lookup, ARRAY_SIZE(m5272_clk_lookup));
->>>       return 0;
->>>   }
->>> diff --git a/arch/mips/bcm47xx/setup.c b/arch/mips/bcm47xx/setup.c
->>> index de426a474..a93a4266d 100644
->>> --- a/arch/mips/bcm47xx/setup.c
->>> +++ b/arch/mips/bcm47xx/setup.c
->>> @@ -256,7 +256,7 @@ static int __init bcm47xx_cpu_fixes(void)
->>>   }
->>>   arch_initcall(bcm47xx_cpu_fixes);
->>>   -static struct fixed_phy_status bcm47xx_fixed_phy_status __initdata = {
->>> +static const struct fixed_phy_status bcm47xx_fixed_phy_status __initconst = {
->>>       .link    = 1,
->>>       .speed    = SPEED_100,
->>>       .duplex    = DUPLEX_FULL,
->>> @@ -282,7 +282,7 @@ static int __init bcm47xx_register_bus_complete(void)
->>>       bcm47xx_leds_register();
->>>       bcm47xx_workarounds();
->>>   -    fixed_phy_add(0, &bcm47xx_fixed_phy_status);
->>> +    fixed_phy_add(&bcm47xx_fixed_phy_status);
->>>       return 0;
->>>   }
->>>   device_initcall(bcm47xx_register_bus_complete);
->>> diff --git a/drivers/net/phy/fixed_phy.c b/drivers/net/phy/fixed_phy.c
->>> index 7902b35c5..b39532abf 100644
->>> --- a/drivers/net/phy/fixed_phy.c
->>> +++ b/drivers/net/phy/fixed_phy.c
->>> @@ -153,9 +153,9 @@ static int fixed_phy_add_gpiod(unsigned int irq, int phy_addr,
->>>       return 0;
->>>   }
->>>   -int fixed_phy_add(int phy_addr, const struct fixed_phy_status *status)
->>> +void fixed_phy_add(const struct fixed_phy_status *status)
->>>   {
->>> -    return fixed_phy_add_gpiod(PHY_POLL, phy_addr, status, NULL);
->>> +    fixed_phy_add_gpiod(PHY_POLL, 0, status, NULL);
->>>   }
->>>   EXPORT_SYMBOL_GPL(fixed_phy_add);
->>>   diff --git a/include/linux/phy_fixed.h b/include/linux/phy_fixed.h
->>> index 5399b9e41..6227a1bde 100644
->>> --- a/include/linux/phy_fixed.h
->>> +++ b/include/linux/phy_fixed.h
->>> @@ -17,7 +17,7 @@ struct net_device;
->>>     #if IS_ENABLED(CONFIG_FIXED_PHY)
->>>   extern int fixed_phy_change_carrier(struct net_device *dev, bool new_carrier);
->>> -int fixed_phy_add(int phy_id, const struct fixed_phy_status *status);
->>> +void fixed_phy_add(const struct fixed_phy_status *status);
->>>   struct phy_device *fixed_phy_register(const struct fixed_phy_status *status,
->>>                         struct device_node *np);
->>>   @@ -26,11 +26,7 @@ extern int fixed_phy_set_link_update(struct phy_device *phydev,
->>>               int (*link_update)(struct net_device *,
->>>                          struct fixed_phy_status *));
->>>   #else
->>> -static inline int fixed_phy_add(int phy_id,
->>> -                const struct fixed_phy_status *status)
->>> -{
->>> -    return -ENODEV;
->>> -}
->>> +static inline void fixed_phy_add(const struct fixed_phy_status *status) {}
->>>   static inline struct phy_device *
->>>   fixed_phy_register(const struct fixed_phy_status *status,
->>>              struct device_node *np)
->>
->> Hi,
->>
->> I do not use this hardware any more, but Takumi reported that fixed_phy_add() is not working for the PHY registration on brcm47xx any more and we have to use fixed_phy_register(), see:
->> https://github.com/openwrt/openwrt/pull/19610
->>
-> I suspected already that fixed_phy_add() usage doesn't work any longer, but don't
-> have hw to test. I think bfa54812f0bc ("net: phy: fixed_phy: set phy_mask before
-> calling mdiobus_register()") is to blame.
-> Reverting this commit or changing the line to fmb->mii_bus->phy_mask = ~1;
-> should fix the problem. Would be great if Takumi could test this.
+On Sat, Oct 04, 2025 at 08:19:40AM +0200, Christophe Leroy wrote:
 > 
-Did you have the chance to test this?
+> 
+> Le 03/10/2025 à 18:35, Jason Gunthorpe a écrit :
+> > On Sun, Sep 28, 2025 at 06:02:24PM +0300, Leon Romanovsky wrote:
+> > > From: Leon Romanovsky <leonro@nvidia.com>
+> > > 
+> > > Adapt PowerPC DMA to use physical addresses in order to prepare code
+> > > to removal .map_page and .unmap_page.
+> > > 
+> > > Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+> > > ---
+> > >   arch/powerpc/include/asm/iommu.h         |  8 +++---
+> > >   arch/powerpc/kernel/dma-iommu.c          | 22 +++++++---------
+> > >   arch/powerpc/kernel/iommu.c              | 14 +++++-----
+> > >   arch/powerpc/platforms/ps3/system-bus.c  | 33 ++++++++++++++----------
+> > >   arch/powerpc/platforms/pseries/ibmebus.c | 15 ++++++-----
+> > >   arch/powerpc/platforms/pseries/vio.c     | 21 ++++++++-------
+> > >   6 files changed, 60 insertions(+), 53 deletions(-)
+> > 
+> > I think this is good enough for PPC anything more looks quite hard
+> 
+> Can you tell what you have in mind ? What more would be interesting to do
+> but looks hard ? Maybe it can be a follow-up change ?
 
-> The cleaner alternative would be:
-> - remove call to fixed_phy_add() from platform code
-> - let b44 call fixed_phy_register() if a fixed phy is needed
->   Below is a WIP version of this change.
-> 
->> Does this need a bigger refactoring anyway?
->>
->> Hauke
-> 
-> Heiner
-> 
-> 
-> ---
->  drivers/net/ethernet/broadcom/Kconfig |  1 +
->  drivers/net/ethernet/broadcom/b44.c   | 33 ++++++++++++++-------------
->  2 files changed, 18 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/net/ethernet/broadcom/Kconfig b/drivers/net/ethernet/broadcom/Kconfig
-> index 0fc10e6c6..99292392d 100644
-> --- a/drivers/net/ethernet/broadcom/Kconfig
-> +++ b/drivers/net/ethernet/broadcom/Kconfig
-> @@ -25,6 +25,7 @@ config B44
->  	select SSB
->  	select MII
->  	select PHYLIB
-> +	select FIXED_PHY
->  	help
->  	  If you have a network (Ethernet) controller of this type, say Y
->  	  or M here.
-> diff --git a/drivers/net/ethernet/broadcom/b44.c b/drivers/net/ethernet/broadcom/b44.c
-> index 0353359c3..abbb5953c 100644
-> --- a/drivers/net/ethernet/broadcom/b44.c
-> +++ b/drivers/net/ethernet/broadcom/b44.c
-> @@ -31,6 +31,7 @@
->  #include <linux/ssb/ssb.h>
->  #include <linux/slab.h>
->  #include <linux/phy.h>
-> +#include <linux/phy_fixed.h>
->  
->  #include <linux/uaccess.h>
->  #include <asm/io.h>
-> @@ -2233,7 +2234,6 @@ static int b44_register_phy_one(struct b44 *bp)
->  	struct mii_bus *mii_bus;
->  	struct ssb_device *sdev = bp->sdev;
->  	struct phy_device *phydev;
-> -	char bus_id[MII_BUS_ID_SIZE + 3];
->  	struct ssb_sprom *sprom = &sdev->bus->sprom;
->  	int err;
->  
-> @@ -2260,27 +2260,26 @@ static int b44_register_phy_one(struct b44 *bp)
->  		goto err_out_mdiobus;
->  	}
->  
-> -	if (!mdiobus_is_registered_device(bp->mii_bus, bp->phy_addr) &&
-> -	    (sprom->boardflags_lo & (B44_BOARDFLAG_ROBO | B44_BOARDFLAG_ADM))) {
-> -
-> +	phydev = mdiobus_get_phy(bp->mii_bus, bp->phy_addr);
-> +	if (!phydev &&
-> +	    sprom->boardflags_lo & (B44_BOARDFLAG_ROBO | B44_BOARDFLAG_ADM)) {
->  		dev_info(sdev->dev,
->  			 "could not find PHY at %i, use fixed one\n",
->  			 bp->phy_addr);
->  
-> -		bp->phy_addr = 0;
-> -		snprintf(bus_id, sizeof(bus_id), PHY_ID_FMT, "fixed-0",
-> -			 bp->phy_addr);
-> -	} else {
-> -		snprintf(bus_id, sizeof(bus_id), PHY_ID_FMT, mii_bus->id,
-> -			 bp->phy_addr);
-> +		phydev = fixed_phy_register(NULL, NULL);
-> +		if (!IS_ERR(phydev))
-> +			bp->phy_addr = phydev->mdio.addr;
->  	}
->  
-> -	phydev = phy_connect(bp->dev, bus_id, &b44_adjust_link,
-> -			     PHY_INTERFACE_MODE_MII);
-> -	if (IS_ERR(phydev)) {
-> +	if (IS_ERR_OR_NULL(phydev))
-> +		err = -ENODEV;
-> +	else
-> +		err = phy_connect_direct(bp->dev, phydev, &b44_adjust_link,
-> +					 PHY_INTERFACE_MODE_MII);
-> +	if (err) {
->  		dev_err(sdev->dev, "could not attach PHY at %i\n",
->  			bp->phy_addr);
-> -		err = PTR_ERR(phydev);
->  		goto err_out_mdiobus_unregister;
->  	}
->  
-> @@ -2293,7 +2292,6 @@ static int b44_register_phy_one(struct b44 *bp)
->  	linkmode_copy(phydev->advertising, phydev->supported);
->  
->  	bp->old_link = 0;
-> -	bp->phy_addr = phydev->mdio.addr;
->  
->  	phy_attached_info(phydev);
->  
-> @@ -2313,8 +2311,11 @@ static void b44_unregister_phy_one(struct b44 *bp)
->  {
->  	struct net_device *dev = bp->dev;
->  	struct mii_bus *mii_bus = bp->mii_bus;
-> +	struct phy_device *phydev = dev->phydev);
->  
-> -	phy_disconnect(dev->phydev);
-> +	phy_disconnect(phydev);
-> +	if (phy_is_pseudo_fixed_link(phydev))
-> +		fixed_phy_unregister(phydev);
->  	mdiobus_unregister(mii_bus);
->  	mdiobus_free(mii_bus);
->  }
+The phys_addr_t should be pushed down through the ops function pointer
+and only the implementations that need the vaddr should call
+virt_to_phys()
 
+Ie try to avoid doing phys -> virt -> phys as it is not efficient.
+
+Jason
 
