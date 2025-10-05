@@ -1,54 +1,55 @@
-Return-Path: <linux-mips+bounces-11620-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11621-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3AF9ABB9814
-	for <lists+linux-mips@lfdr.de>; Sun, 05 Oct 2025 16:23:06 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEA31BB9831
+	for <lists+linux-mips@lfdr.de>; Sun, 05 Oct 2025 16:29:27 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DA3EC3B8487
-	for <lists+linux-mips@lfdr.de>; Sun,  5 Oct 2025 14:23:04 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id AEA414E3286
+	for <lists+linux-mips@lfdr.de>; Sun,  5 Oct 2025 14:29:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8346821D3F3;
-	Sun,  5 Oct 2025 14:22:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3D1992882A9;
+	Sun,  5 Oct 2025 14:29:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="dCWCKQas"
+	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="Xjfl0yNW"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from lamorak.hansenpartnership.com (lamorak.hansenpartnership.com [198.37.111.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6923FA935;
-	Sun,  5 Oct 2025 14:22:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B845C34BA35;
+	Sun,  5 Oct 2025 14:29:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.37.111.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759674179; cv=none; b=qukE4kw1XoX2t0FTJW5WAYBTK1wEqUXMFmrKvy2V8w+zTGPYTkLRWos+3XgPXfoqrnoERfkVMZjF2lHNmWSSVE6Ha6AG+gltdwACKv6dfYcUNC5SHn85cZso9oVlmTUVz/tbTc4tT323U3mKSXlTE/WxQhi6zfuH84eBg8Oo9JQ=
+	t=1759674563; cv=none; b=uiZrEJNcwglyG1LWq4StQgEdYYXqM/Mx+N1gDrG+CCRCxXbvI94Mgm7k9NVcVLi212ZtOUtzPpvsgr/4GjCyMm4XaoFxSG00esK6oJKqfnbbb2Z2JmWzmKOG+VGKx5AJDhndhO+DKTNKYtmfF6sBTfVFuu23ZYVtZaSj4RVJpMI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759674179; c=relaxed/simple;
-	bh=h8/0VfnLYGz2U7csWzqwHZseTDljgEdp48luuBTRQD0=;
+	s=arc-20240116; t=1759674563; c=relaxed/simple;
+	bh=hrsv2YDzWLNG7Ngtd7/6UjmmDS9vVj1AT8usgE7qgQI=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=tG7BXqeR7YOHtRbLvcZFjmOQSDN+4XHXXVRrThzidghJqLuaCI3FByiH49T1QF9Orhnt2hf1ynp0KpBpwvoYcN1tYYE8mWVbqUhzA3TZC4q5z1lLxWSai3UcYXA0119IwzAsrr5PIoYeZGEmzgODEN0PGljvWGeBJtT4jljvogQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=dCWCKQas; arc=none smtp.client-ip=198.37.111.173
+	 Content-Type:MIME-Version; b=MyOFYMGbedAHDbo4fPt4/g8yt0APtU7Yp269uT8dA+q3c1gJrAVMOFUqjVEB02Jt7dlOMXVLQXPz2BZUhQshv90Qii02SrjOgDCAbvdLUz2KktnmAH+9dRKhDfF329PVkO1pw//m3sF52TS6Y0EKNYZDpY3d8n8hfZkTX7OahRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=Xjfl0yNW; arc=none smtp.client-ip=198.37.111.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1759674176;
-	bh=h8/0VfnLYGz2U7csWzqwHZseTDljgEdp48luuBTRQD0=;
+	d=hansenpartnership.com; s=20151216; t=1759674560;
+	bh=hrsv2YDzWLNG7Ngtd7/6UjmmDS9vVj1AT8usgE7qgQI=;
 	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:From;
-	b=dCWCKQasDDmqK86YFHFQ06W4cUGxZdmuJQrtlZTwnNAcPEgK5AX1S/RG1yah/ME4B
-	 4ebSHYdCfn1lQa6cKNMnNG7E7Uhi4QcETyWOUnWc05NIdbLWDBSKArRXntDtwJ5mol
-	 DZoaJC/udVyI3wt1O8PjwADf3RJ8EaBAdgp2DZZM=
+	b=Xjfl0yNWvNlgfTU8/EAtoWEJVM/U3ViTlMzofQd5PTmLzm6zW9WheCJfZQBWMf/Sx
+	 PS4SvfONhUji+BpjFDo64XZP9T6ZIhKXhywCfLN/UQS3ZvwBWm/hIyqdey/rZSYGFE
+	 L93/5IM0KbGEcCMPzv6xPzkYlBejcfGaIgzTmGwQ=
 Received: from lingrow.int.hansenpartnership.com (unknown [IPv6:2601:5c4:4302:c21::a774])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange x25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	 key-exchange x25519)
 	(No client certificate requested)
-	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id 33EB71C0014;
-	Sun, 05 Oct 2025 10:22:55 -0400 (EDT)
-Message-ID: <abe81a02173f0520145e15127da0b3d3f2ff244b.camel@HansenPartnership.com>
+	by lamorak.hansenpartnership.com (Postfix) with ESMTPSA id A7B691C0096;
+	Sun, 05 Oct 2025 10:29:19 -0400 (EDT)
+Message-ID: <ce05d6629571eba0a2f0a104fb5584021806addc.camel@HansenPartnership.com>
 Subject: Re: [PATCH v1 3/9] parisc: Convert DMA map_page to map_phys
  interface
 From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: Jason Gunthorpe <jgg@nvidia.com>, Leon Romanovsky <leon@kernel.org>
+To: John David Anglin <dave.anglin@bell.net>, Jason Gunthorpe
+ <jgg@nvidia.com>,  Leon Romanovsky <leon@kernel.org>
 Cc: Marek Szyprowski <m.szyprowski@samsung.com>, Leon Romanovsky
  <leonro@nvidia.com>, Andreas Larsson <andreas@gaisler.com>, Borislav Petkov
  <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, "David S.
@@ -65,11 +66,12 @@ Cc: Marek Szyprowski <m.szyprowski@samsung.com>, Leon Romanovsky
  Thomas Bogendoerfer <tsbogend@alpha.franken.de>,  Thomas Gleixner
  <tglx@linutronix.de>, virtualization@lists.linux.dev, x86@kernel.org, 
  xen-devel@lists.xenproject.org, Magnus Lindholm <linmag7@gmail.com>
-Date: Sun, 05 Oct 2025 10:22:54 -0400
-In-Reply-To: <20251003150144.GC3360665@nvidia.com>
+Date: Sun, 05 Oct 2025 10:29:19 -0400
+In-Reply-To: <610b10bc-1aa2-4fad-a40b-be5fcfa04430@bell.net>
 References: <cover.1759071169.git.leon@kernel.org>
 	 <333ec4dabec16d3d913a93780bc6e7ddb5240fcf.1759071169.git.leon@kernel.org>
 	 <20251003150144.GC3360665@nvidia.com>
+	 <610b10bc-1aa2-4fad-a40b-be5fcfa04430@bell.net>
 Autocrypt: addr=James.Bottomley@HansenPartnership.com;
  prefer-encrypt=mutual;
  keydata=mQENBE58FlABCADPM714lRLxGmba4JFjkocqpj1/6/Cx+IXezcS22azZetzCXDpm2MfNElecY3qkFjfnoffQiw5rrOO0/oRSATOh8+2fmJ6el7naRbDuh+i8lVESfdlkoqX57H5R8h/UTIp6gn1mpNlxjQv6QSZbl551zQ1nmkSVRbA5TbEp4br5GZeJ58esmYDCBwxuFTsSsdzbOBNthLcudWpJZHURfMc0ew24By1nldL9F37AktNcCipKpC2U0NtGlJjYPNSVXrCd1izxKmO7te7BLP+7B4DNj1VRnaf8X9+VIApCi/l4Kdx+ZR3aLTqSuNsIMmXUJ3T8JRl+ag7kby/KBp+0OpotABEBAAG0N0phbWVzIEJvdHRvbWxleSA8SmFtZXMuQm90dG9tbGV5QEhhbnNlblBhcnRuZXJzaGlwLmNvbT6JAVgEEwEIAEICGwMGCwkIBwMCBhUIAgkKCwQWAgMBAh4BAheAAhkBFiEE1WBuc8i0YnG+rZrfgUrkfCFIVNYFAmBLmY0FCRs1hL0ACgkQgUrkfCFIVNaEiQgAg18F4G7PGWQ68xqnIrccke7Reh5thjUz6kQIii6Dh64BDW6/UvXn20UxK2uSs/0TBLO81k1mV4c6rNE+H8b7IEjieGR9frBsp/+Q01JpToJfzzMUY7ZTDV1IXQZ+AY9L7vRzyimnJHx0Ba4JTlAyHB+Ly5i4Ab2+uZcnNfBXquWrG3oPWz+qPK88LJLya5Jxse1m1QT6R/isDuPivBzntLOooxPk+Cwf5sFAAJND+idTAzWzslexr9j7rtQ1UW6FjO4CvK9yVNz7dgG6FvEZl6J/HOr1rivtGgpCZTBzKNF8jg034n49zGfKkkzWLuXbPUOp3/oGfsKv8pnEu1c2GbQpSmFtZXMgQm90dG9tbGV5IDxqZWpiQGxpbnV4LnZuZXQuaWJtLmNvbT6JAVYEEwEIAEACGwMHCwkIBwMCAQYVC
@@ -90,54 +92,38 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 
-On Fri, 2025-10-03 at 12:01 -0300, Jason Gunthorpe wrote:
-> On Sun, Sep 28, 2025 at 06:02:23PM +0300, Leon Romanovsky wrote:
-> > +ccio_map_phys(struct device *dev, phys_addr_t phys, size_t size,
-> > +	=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 enum dma_data_direction direction, uns=
-igned long
-> > attrs)
-> > =C2=A0{
-> > -	return ccio_map_single(dev, page_address(page) + offset,
-> > size,
-> > -			direction);
-> > +	if (attrs & DMA_ATTR_MMIO)
-> > +		return DMA_MAPPING_ERROR;
-> > +
-> > +	return ccio_map_single(dev, phys_to_virt(phys), size,
-> > direction);
+On Fri, 2025-10-03 at 13:18 -0400, John David Anglin wrote:
+> On 2025-10-03 11:01 a.m., Jason Gunthorpe wrote:
+> > This doesn't actually use the virt at all:
+> >=20
+> > 	offset =3D ((unsigned long) addr) & ~IOVP_MASK;
+> > 	if((size % L1_CACHE_BYTES) || ((unsigned long)addr %
+> > L1_CACHE_BYTES))
+> > 		ccio_io_pdir_entry(pdir_start, KERNEL_SPACE,
+> > (unsigned long)addr, hint);
+> >=20
+> > And ccio_io_pdir_entry():
+> > 	pa =3D lpa(vba);
+> >=20
+> > Is a special instruction that uses virt but AI tells me that
+> > special LPA instruction is returning phys. Not sure if that is a
+> > different value than virt_to_phys()..
 >=20
-> This doesn't actually use the virt at all:
->=20
-> 	offset =3D ((unsigned long) addr) & ~IOVP_MASK;
-> 	if((size % L1_CACHE_BYTES) || ((unsigned long)addr %
-> L1_CACHE_BYTES))
-> 		ccio_io_pdir_entry(pdir_start, KERNEL_SPACE,
-> (unsigned long)addr, hint);
+> ccio_io_pdir_entry currently only supports KERNEL_SPACE.
 
-Actually, it does: it has to; parisc caches are VIPT.  The iommu needs
-to know both the physical address and the virtual tag (also called the
-coherence index) to instruct the CPU to flush its cache.  The sole use
-of the vba is in ccio_io_pdir_entry() which programs the IOMMU page
-table.  The coherence index is pretty small because the largest VIPT
-cache stride parisc has is 4MB and obviously the lower 12 bits (page
-offset) are the same for both physical and virtual, so it's only the 10
-bits between 4k and 4M that the iommu needs (the entry is 12 bits
-because architecturally there were chips with a 16M stride planned for
-but never produced).
-
->=20
-> And ccio_io_pdir_entry():
-> 	pa =3D lpa(vba);
->=20
-> Is a special instruction that uses virt but AI tells me that special
-> LPA instruction is returning phys. Not sure if that is a different
-> value than virt_to_phys()..
-
-That's right, so if you want to pass both phys and virt addresses to
-the function, this could be dropped.
+Actually there's a bit more nuance to it than that.  Obviously DMA has
+to support user pages otherwise I/O wouldn't work.  The way it does  is
+that all physical pages are mapped in the kernel and we try to make
+sure all user mappings are on cache stride (4MB) boundaries so the
+coherence index of the kernel virtual address and the user virtual
+address are the same, so we can solely use the kernel virtual address
+to calculate the coherence index for the IOMMU.  If that's not true, we
+flush the user virtual address range in gup and the kernel virtual
+address range before sending the I/O completion.
 
 Regards,
 
 James
+
 
 
