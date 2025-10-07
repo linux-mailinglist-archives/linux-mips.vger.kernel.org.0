@@ -1,113 +1,160 @@
-Return-Path: <linux-mips+bounces-11627-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11628-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4005BBF2DF
-	for <lists+linux-mips@lfdr.de>; Mon, 06 Oct 2025 22:22:39 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE1D8BC19D1
+	for <lists+linux-mips@lfdr.de>; Tue, 07 Oct 2025 15:58:58 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 96EAB1897325
-	for <lists+linux-mips@lfdr.de>; Mon,  6 Oct 2025 20:23:02 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BDBC24F6FBD
+	for <lists+linux-mips@lfdr.de>; Tue,  7 Oct 2025 13:58:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF7A725A33A;
-	Mon,  6 Oct 2025 20:22:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96DDA2E22A6;
+	Tue,  7 Oct 2025 13:58:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Kc0DNiPQ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from lithops.sigma-star.at (mailout.nod.at [116.203.167.152])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31F0F226D14;
-	Mon,  6 Oct 2025 20:22:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=116.203.167.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB8CD2E1EF8
+	for <linux-mips@vger.kernel.org>; Tue,  7 Oct 2025 13:58:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1759782155; cv=none; b=tKoZDnB0hBzGO6bffOduMaLHcxW7pythGshR+KvDPxXDHzsDOCTHUhj98N8ulhbX7Z3iXdCmZ00lYzUSIFUpWtB/hz7HfUfypwTFenCsQR+qFL30zFo1SVo/tJXpP5heQcOOjI9ZES9kHouIp4QSQlfL9FFOg+K5X1w5iaPJGh4=
+	t=1759845502; cv=none; b=r4xCO9o19jX+s56zY5iYE7Q3grl0lI8EVpW2dEWlBchX6mMabYbA+vtXR95+RBU57Zb4cHLtVYFhYC6snfcelCgAOs2EC+HzXEBg/GtrOYVPjsC8hy0BpjHw2Snbh7+8q0h0syBUUKK2dRJtfarg6XTIEzLn0FFZgK61qcoFDns=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1759782155; c=relaxed/simple;
-	bh=LhjB5H9mrCqOGAXj5HXNdyEVYPj6mQQyTvJX1KEHiMI=;
-	h=Date:From:To:Cc:Message-ID:In-Reply-To:References:Subject:
-	 MIME-Version:Content-Type; b=jHYxgiin8Aj5maU50jptELm1NBlbc60+XOn3m+L03lF/7CpMu3PF7dxhyXiZZxmlHEqc9tCBTruB39RJg6/J9TzKwdz//kt6rEeh1ibAFEkuLANpHQf3ej1CzcfERrnbmz6Hf56vzf9ISnow50Z8SztWmG7zTgfIxKHwwtgKf7M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nod.at; spf=fail smtp.mailfrom=nod.at; arc=none smtp.client-ip=116.203.167.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=nod.at
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nod.at
-Received: from localhost (localhost [127.0.0.1])
-	by lithops.sigma-star.at (Postfix) with ESMTP id 853FF2B4F9D;
-	Mon,  6 Oct 2025 22:15:23 +0200 (CEST)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-	by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10032)
-	with ESMTP id JD4v2hnJ6q9P; Mon,  6 Oct 2025 22:15:22 +0200 (CEST)
-Received: from localhost (localhost [127.0.0.1])
-	by lithops.sigma-star.at (Postfix) with ESMTP id 0C4012B03C9;
-	Mon,  6 Oct 2025 22:15:22 +0200 (CEST)
-Received: from lithops.sigma-star.at ([127.0.0.1])
-	by localhost (lithops.sigma-star.at [127.0.0.1]) (amavisd-new, port 10026)
-	with ESMTP id j6VbrBHYDJpt; Mon,  6 Oct 2025 22:15:21 +0200 (CEST)
-Received: from lithops.sigma-star.at (lithops.sigma-star.at [195.201.40.130])
-	by lithops.sigma-star.at (Postfix) with ESMTP id B486A2ABFC1;
-	Mon,  6 Oct 2025 22:15:21 +0200 (CEST)
-Date: Mon, 6 Oct 2025 22:15:21 +0200 (CEST)
-From: Richard Weinberger <richard@nod.at>
-To: Arnd Bergmann <arnd@arndb.de>
-Cc: Dave Hansen <dave@sr71.net>, ksummit <ksummit@lists.linux.dev>, 
-	linux-kernel <linux-kernel@vger.kernel.org>, 
-	linux-arm-kernel <linux-arm-kernel@lists.infradead.org>, 
-	linuxppc-dev <linuxppc-dev@lists.ozlabs.org>, 
-	linux-mips <linux-mips@vger.kernel.org>, 
-	linux-mm <linux-mm@kvack.org>, imx <imx@lists.linux.dev>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Lucas Stach <l.stach@pengutronix.de>, 
-	Linus Walleij <linus.walleij@linaro.org>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Ankur Arora <ankur.a.arora@oracle.com>, 
-	David Hildenbrand <david@redhat.com>, 
-	Mike Rapoport <rppt@kernel.org>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
-	Matthew Wilcox <willy@infradead.org>, 
-	Andrew Morton <akpm@linux-foundation.org>, 
-	"Liam R. Howlett" <Liam.Howlett@oracle.com>, vbabka <vbabka@suse.cz>, 
-	Suren Baghdasaryan <surenb@google.com>, 
-	Ira Weiny <ira.weiny@intel.com>, Nishanth Menon <nm@ti.com>, 
-	heiko <heiko@sntech.de>, 
-	Alexander Sverdlin <alexander.sverdlin@gmail.com>, 
-	"Chester A. Unal" <chester.a.unal@arinc9.com>, 
-	Sergio Paracuellos <sergio.paracuellos@gmail.com>, 
-	Andreas Larsson <andreas@gaisler.com>
-Message-ID: <1190290449.3827.1759781721487.JavaMail.zimbra@nod.at>
-In-Reply-To: <4fcd272f-81e3-4729-922b-588ad144e39b@app.fastmail.com>
-References: <4ff89b72-03ff-4447-9d21-dd6a5fe1550f@app.fastmail.com> <497308537.21756.1757513073548.JavaMail.zimbra@nod.at> <dec53524-97ee-4e56-8795-c7549c295fac@sr71.net> <640041197.22387.1757536385810.JavaMail.zimbra@nod.at> <4fcd272f-81e3-4729-922b-588ad144e39b@app.fastmail.com>
-Subject: Re: [TECH TOPIC] Reaching consensus on CONFIG_HIGHMEM phaseout
+	s=arc-20240116; t=1759845502; c=relaxed/simple;
+	bh=2p6sw/d5o9WykeyOnWT+2vs8b7uJ9tBZ8iAVCQgjDZQ=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=EueMggUEFvOg9Z75ZOa9VjNzzQ/Q+qEKkqZz6ejJ6XrpaLJGJ9zxwIFCL3U2uN154sZImauFsO7XVYYvFldhD70PovqTwqcCo77q7VFKhjm+s0JgrCB5ZIQVmFqibWecuuHDH8ClcEa98W+lx0AD9qY5M5Su16W/1vDF5KKA09s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Kc0DNiPQ; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-33428befbbaso7119983a91.0
+        for <linux-mips@vger.kernel.org>; Tue, 07 Oct 2025 06:58:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1759845500; x=1760450300; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=4rlYUY99rqPM8GfD927WUvhieIqn1G/yd0+acs0pn14=;
+        b=Kc0DNiPQcf/Yg01kLqjQ2vgJ4iF8e+BxDeVfek9w09kHNgTtWfloa6M9vZfkcMndko
+         P7OcTak5OqvEIPyvXQWKAWL+I8ggor676Gl/ZAi6tD9BKnndGPwZ7BvztfkW2AhvCb8R
+         tR/GD/91sPOM597EU4hYlxBCxNUOtcOS//siFo9xeGqGNy3zDONYdoD96hDRtLWBhXcm
+         Byeq6nHbFyFT30rJHeC0Nb+6pxh9lH0EVYDxKzB8NWOQutGWPYb4A/qE1Rls4U8bZcHz
+         mYIIdEVyiOuvl7+VmIUkr5Wvefplcgdtd4zFb3OLTfwSavPlW1rnb+pi87r3npqnyNeN
+         Bt2A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1759845500; x=1760450300;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4rlYUY99rqPM8GfD927WUvhieIqn1G/yd0+acs0pn14=;
+        b=DH2+2BFHJeC2DUIL3ENtlVv0yQKc+8XSdsx09kntqJv92PL/PUfrA+0hZFlXUKoktX
+         VUwb1iQAzqhYGf6L0tF8MfNhk8UG4wFzLe7PIDl9feA+3KQPKNMGWJmhgWfcOlqOHx3R
+         itWk5EJLpY6Yav3kmSim1ckvcNcXmKcLTFxu4lFCW89GzTrsTAWi5JcpYTDWcjtDfmY+
+         LibX2tRfZXea74zbqs0rgLKvBifwmsxzKtyAPQ43H+sQFoBFh/uc/3cVtbVkw+pqsBtI
+         t37JBaqWK+R2sMbvjdhHLIDp6Fxk3yiNOD0RBv3hX6w1HuM3TyusPgiwTd4MXILW79ws
+         Dzfw==
+X-Forwarded-Encrypted: i=1; AJvYcCVs+4hX9BUyP2OYASV5z6cpeyqzpHbKQKgxNQXyZdFqtYizvTs3f23m8ynY4S5Q+cPlEvIPuVKWfYC3@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzw4owQP7A2QKPBZm39MEca38nheN6zKKTPplDa7KjYw7nQ7Q2u
+	Gtkl9RhBVphZYuIQVUF4PaKV8D/lBX8QyMrEfq7QuO5N3XK1bByWzo295ReCnlixPPYSTlNN2Lk
+	WVa9qFA==
+X-Google-Smtp-Source: AGHT+IH44LYFtR2Z9aj26aSM38dj+lWGcrky74kzzSLe1xZuZzZCEhZOyIjquiME0rIkS/AaVEe3J4tloO4=
+X-Received: from pjbmw12.prod.google.com ([2002:a17:90b:4d0c:b0:329:b272:45a7])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:1c05:b0:335:2823:3686
+ with SMTP id 98e67ed59e1d1-339c274089dmr20831446a91.2.1759845499915; Tue, 07
+ Oct 2025 06:58:19 -0700 (PDT)
+Date: Tue, 7 Oct 2025 06:58:18 -0700
+In-Reply-To: <fc0bb268-07b7-41ef-9a82-791d381f56ac@amazon.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-X-Mailer: Zimbra 8.8.12_GA_3807 (ZimbraWebClient - FF141 (Linux)/8.8.12_GA_3809)
-Thread-Topic: Reaching consensus on CONFIG_HIGHMEM phaseout
-Thread-Index: 4qe/Jvt6A7Z6bNoIFm3Eugvg7UbUaA==
+Mime-Version: 1.0
+References: <20231105163040.14904-1-pbonzini@redhat.com> <20231105163040.14904-16-pbonzini@redhat.com>
+ <fc0bb268-07b7-41ef-9a82-791d381f56ac@amazon.com>
+Message-ID: <aOUceqlAnsjQ8mo4@google.com>
+Subject: Re: [PATCH 15/34] KVM: Add KVM_CREATE_GUEST_MEMFD ioctl() for
+ guest-specific backing memory
+From: Sean Christopherson <seanjc@google.com>
+To: Nikita Kalyazin <kalyazin@amazon.com>
+Cc: Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>, 
+	Oliver Upton <oliver.upton@linux.dev>, Huacai Chen <chenhuacai@kernel.org>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Anup Patel <anup@brainfault.org>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Alexander Viro <viro@zeniv.linux.org.uk>, 
+	Christian Brauner <brauner@kernel.org>, "Matthew Wilcox (Oracle)" <willy@infradead.org>, 
+	Andrew Morton <akpm@linux-foundation.org>, kvm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
+	linux-fsdevel@vger.kernel.org, linux-mm@kvack.org, 
+	linux-kernel@vger.kernel.org, Xiaoyao Li <xiaoyao.li@intel.com>, 
+	Xu Yilun <yilun.xu@intel.com>, Chao Peng <chao.p.peng@linux.intel.com>, 
+	Fuad Tabba <tabba@google.com>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	Anish Moorthy <amoorthy@google.com>, David Matlack <dmatlack@google.com>, 
+	Yu Zhang <yu.c.zhang@linux.intel.com>, Isaku Yamahata <isaku.yamahata@intel.com>, 
+	"=?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?=" <mic@digikod.net>, Vlastimil Babka <vbabka@suse.cz>, 
+	Vishal Annapurve <vannapurve@google.com>, Ackerley Tng <ackerleytng@google.com>, 
+	Maciej Szmigiero <mail@maciej.szmigiero.name>, David Hildenbrand <david@redhat.com>, 
+	Quentin Perret <qperret@google.com>, Michael Roth <michael.roth@amd.com>, Wang <wei.w.wang@intel.com>, 
+	Liam Merwick <liam.merwick@oracle.com>, Isaku Yamahata <isaku.yamahata@gmail.com>, 
+	"Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>
+Content-Type: text/plain; charset="us-ascii"
 
------ Urspr=C3=BCngliche Mail -----
-> Von: "Arnd Bergmann" <arnd@arndb.de>
->>> Has anybody run into actual end user visible problems when using one of
->>> weirdo PAGE_OFFSET configs?
->>
->> In the past I saw that programs such as the Java Runtime (JRE) ran into
->> address space limitations due to a 2G/2G split on embedded systems.
->> Reverting to a 3G/1G split fixed the problems.
->=20
-> Right, that makes sense, given the tricks they likely play on the
-> virtual address space. Are the 2GB devices you maintain using a JRE,
-> or was this on other embedded hardware? How common is Java still in
-> this type of workload?
+On Fri, Oct 03, 2025, Nikita Kalyazin wrote:
+> On 05/11/2023 16:30, Paolo Bonzini wrote:
+> > From: Sean Christopherson <seanjc@google.com>
+> > 
+> > Introduce an ioctl(), KVM_CREATE_GUEST_MEMFD, to allow creating file-based
+> > memory that is tied to a specific KVM virtual machine and whose primary
+> > purpose is to serve guest memory.
+> 
+> ...
+> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > index f1a575d39b3b..8f46d757a2c5 100644
+> > --- a/virt/kvm/kvm_main.c
+> > +++ b/virt/kvm/kvm_main.c
+> 
+> ...
+> 
+> > -static int check_memory_region_flags(const struct kvm_userspace_memory_region2 *mem)
+> > +static int check_memory_region_flags(struct kvm *kvm,
+> > +				     const struct kvm_userspace_memory_region2 *mem)
+> >   {
+> >   	u32 valid_flags = KVM_MEM_LOG_DIRTY_PAGES;
+> > +	if (kvm_arch_has_private_mem(kvm))
+> > +		valid_flags |= KVM_MEM_GUEST_MEMFD;
+> > +
+> > +	/* Dirty logging private memory is not currently supported. */
+> > +	if (mem->flags & KVM_MEM_GUEST_MEMFD)
+> > +		valid_flags &= ~KVM_MEM_LOG_DIRTY_PAGES;
+> 
+> I was wondering whether this restriction is still required at this stage or
+> can be lifted in cases where the guest memory is accessible by the host.
 
-Sorry for the late reply, I was on vacation.
+Off the top of my head, I can't think of any reason why dirty logging wouldn't
+work with guest_memfd for non-CoCo VMs.  We'd likely need to explicitly enumerate
+support to userspace, and there might be some assumptions lurking in KVM, but
+fundamentally it should Just Work (TM).
 
-No, the devices with the JRE issues are from a different customer.
-Since I work as a consultant lots of strange issues get thrown my way
-
-I wouldn't say Java is super common but I still see it from time to time.
-=20
-Thanks,
-//richard
+> Specifically, it would be useful to support differential memory snapshots
+> based on dirty page tracking in Firecracker [1] or in live migration.  As an
+> experiment, I removed the check and was able to produce a diff snapshot and
+> restore a Firecracker VM from it.
+> 
+> [1] https://github.com/firecracker-microvm/firecracker/blob/main/docs/snapshotting/snapshot-support.md#creating-diff-snapshots
+> 
+> > +
+> >   #ifdef __KVM_HAVE_READONLY_MEM
+> >   	valid_flags |= KVM_MEM_READONLY;
+> >   #endif
+> > @@ -2018,7 +2029,7 @@ int __kvm_set_memory_region(struct kvm *kvm,
+> >   	int as_id, id;
+> >   	int r;
+> > -	r = check_memory_region_flags(mem);
+> > +	r = check_memory_region_flags(kvm, mem);
+> >   	if (r)
+> >   		return r;
 
