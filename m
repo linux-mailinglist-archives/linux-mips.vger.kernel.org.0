@@ -1,131 +1,335 @@
-Return-Path: <linux-mips+bounces-11654-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11655-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 610A0BC8C05
-	for <lists+linux-mips@lfdr.de>; Thu, 09 Oct 2025 13:20:47 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86965BC8F9E
+	for <lists+linux-mips@lfdr.de>; Thu, 09 Oct 2025 14:20:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1A0E642179F
-	for <lists+linux-mips@lfdr.de>; Thu,  9 Oct 2025 11:19:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D74703A6930
+	for <lists+linux-mips@lfdr.de>; Thu,  9 Oct 2025 12:20:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE9132E0B5B;
-	Thu,  9 Oct 2025 11:19:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jNoiJ37l"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2A452DCC04;
+	Thu,  9 Oct 2025 12:20:37 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yx1-f43.google.com (mail-yx1-f43.google.com [74.125.224.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9879E2DFA3A
-	for <linux-mips@vger.kernel.org>; Thu,  9 Oct 2025 11:19:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.43
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE8EB155C88;
+	Thu,  9 Oct 2025 12:20:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760008783; cv=none; b=aNTuUw55jxf9XE0u4MEloQlFAolG5Gx8WJSYqsfRxmTPs0eTL+weFVy5X8jOBoJLflHPTH7aAFO+5zzM084nBFhoCmeGx7euXKm+l+eYp1oXPpN5iqI9w8HZtwyq8YUIIRdwfO918YBf/kgvKyX40X/D68bPL4SHT4yvwTiZVxY=
+	t=1760012437; cv=none; b=NwYeC0kAD/E+zWMaNXxAmONTmNcVrRzrpUB5KjDTZX1ooFQfNtlH5Nty7Ge4MIWAW4B8oJc3xQlzniXzm8g0vkBu0Qo5Vn7CRFUNMuqpihjedxErUWCtzFzWLQwO4gI7j9rVJR4Qq0CzL8dkKmV0yZZ9QnAxqxzNAjfFXl0uLcU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760008783; c=relaxed/simple;
-	bh=mzeWOdj3lBj+Ke0QviDFWI2aF1kcLsskxWN0A79AnHU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tKlocSxO9O6ESL9ru4p2EL2BsQLu2IgRhCW6g4xKZAlnKCVpJr1S/NzcmbijVR+Y1ENBqi6nLOjwAVBTAYN+m93NG6Q12Etm2R1rycwihGJcz/dAw08esuVcaweCM+gIEtm6Fic71Djk4FmYUBQRhMxCIkFgUK4uupHzuw88QI0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jNoiJ37l; arc=none smtp.client-ip=74.125.224.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yx1-f43.google.com with SMTP id 956f58d0204a3-63bbf5f77daso838272d50.3
-        for <linux-mips@vger.kernel.org>; Thu, 09 Oct 2025 04:19:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760008779; x=1760613579; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mzeWOdj3lBj+Ke0QviDFWI2aF1kcLsskxWN0A79AnHU=;
-        b=jNoiJ37lCUQ9Hrm2hMpur0n3OpmXylsTAvQFzFo0gEHLdPW1H7xLOEfZx9IMP3xJGG
-         VvaFojxgSsr0dFIBvT0p9gx6C2qVKiKNUQeCfRio9yhV6GZjq9rpyyrteqxqW9Ew3dBm
-         wtvaqMjirKwpcBo4MgJpiCLn7sWEkQpEyqFiwGTjc5zHrlT4QCRizWiXWVk6zMf3FYYn
-         bzUTIQSKLADIffCIHWelPhf43EqQYtzVSfMGzuGbrzIwj9QJsP6FN+oluyC+bzTKhDgF
-         5nZ3Uo6yeEy5h0e9DLaazODqWGp9Q080LEkzOtn2P2FcQKQiw+6Kon0LQ4PFBZDDcg2+
-         Grtw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760008779; x=1760613579;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mzeWOdj3lBj+Ke0QviDFWI2aF1kcLsskxWN0A79AnHU=;
-        b=Pi4RRFmM0uN4Cas5+b/6n+AMkOsxSJd/2kBnlWsnGMzGDhBt7qA2HdaRmvcc56qoEF
-         Zj1BH2gPKOIHFw2ZoS4F8one1B4UqfffCEdPJO9MSdQe7o6awxaJxFrQcE2cOJTezGA7
-         pg8WWVPBSn2STKgU5x5N1BHggbyhBxjFKGmX6jjrcb1ghwiyNdbGWCLVon0FX1tWAwaG
-         8hx3JsnBDfnKEEYRB7noEyy+xaJhTDetqZUgD2w84ArZ5u4zD9P0pFsOPzD0ljCeB85O
-         XGx6hkbU8LXKTZjanMfIKdFjg5m0uVH3CTHnoQjlix1bPfZMw7pseAAFfgbnpNs+LIZ+
-         8a1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUq3JS7YB5/OsPiPUYkz8KWC3E+ifFaqhK/CQKWb1g3hNEeHCK2vpr0fLjr+grHXrvhmX5nNCddQuoz@vger.kernel.org
-X-Gm-Message-State: AOJu0YzfEstTzwLanyIKUt8mA9cz8xm91/PdFWjGT4FcCtFuu/LKzNPE
-	tB9b1F9cq4p+VF3soa0SFB2FlkDzer3TGTC2+itca/68Rqs2PShNANw0+TIOrGpfZaXVs7HFw/m
-	b3QOgQbNS51CmbNar2mWLTQm9kbBfIjA=
-X-Gm-Gg: ASbGnctfo8oEYI8nge5BLYoRiVEhb5XaegVydjUzUYazfQWE+zq+NZmB8VpIDSk0vXZ
-	87gCjbBcY6ryGmeNcAShx1/q3Ek8p6bw4439FTioxpgC53p79f9fGyg9SXfcuHgG7lI7T2FUZeZ
-	1y4rDj2iTop+Dv1dcIh5VNYS5meSFkq4uG298ifQ4SQYH27tiOMHSRlhhZ6pQmOUnixbBbi3wQ2
-	d4imxZO0yv7XmHM/3+QtZGafQbZdWE=
-X-Google-Smtp-Source: AGHT+IE5U7JyGi1AmeLjDi25hUOta+sU2hpJbVTN9Ai63ARDyOdLqRjdCN3h5Wr4u+tqZlHZJ+/pg/7Xr5jCWFq4BIc=
-X-Received: by 2002:a53:d048:0:10b0:63b:8e80:c017 with SMTP id
- 956f58d0204a3-63ccb672a0emr6807745d50.0.1760008779377; Thu, 09 Oct 2025
- 04:19:39 -0700 (PDT)
+	s=arc-20240116; t=1760012437; c=relaxed/simple;
+	bh=zDonaJpRAiUsN7ef58lzcnUFZxmJYuyagkoOMx7FG34=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=N8bkYhxf8DyEwx7PLHMIvrP84m3uIAGfLsbdp2LO/6GbhhAsoUq47PxHzAyxnNJRpjtKT3ux79oAD7Lpse5WUnB+FiNkHmFZCma20Zh1xNxA6fd9xITE1oQiRYVAa6A9fFJG0l2eu/UzoWd0pxUFvJrPSgvYcS2BuzusfOL4e/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub4.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4cj7tc3BBqz9sSy;
+	Thu,  9 Oct 2025 14:08:08 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id t-GI2jPxTJia; Thu,  9 Oct 2025 14:08:08 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4cj7tc1MWCz9sSv;
+	Thu,  9 Oct 2025 14:08:08 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 08F7B8B76C;
+	Thu,  9 Oct 2025 14:08:08 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id dX5DSkuE_w6O; Thu,  9 Oct 2025 14:08:07 +0200 (CEST)
+Received: from [192.168.235.99] (unknown [192.168.235.99])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id BC52E8B767;
+	Thu,  9 Oct 2025 14:08:05 +0200 (CEST)
+Message-ID: <4632e721-0ac8-4d72-a8ed-e6c928eee94d@csgroup.eu>
+Date: Thu, 9 Oct 2025 14:08:05 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250913003842.41944-1-safinaskar@gmail.com> <20250913003842.41944-29-safinaskar@gmail.com>
- <20250913054837.GAaMUFtd4YlaPqL2Ov@fat_crate.local> <20250913055851.GBaMUIGyF8VhpUsOZg@fat_crate.local>
-In-Reply-To: <20250913055851.GBaMUIGyF8VhpUsOZg@fat_crate.local>
-From: Askar Safin <safinaskar@gmail.com>
-Date: Thu, 9 Oct 2025 14:19:03 +0300
-X-Gm-Features: AS18NWAGN6ExXhEWeXK-ERFvGpf6JdjWShiWpIPYOnPjMCR9bXVHwIY8E_1WxIc
-Message-ID: <CAPnZJGBwFqNAybORpTtRfjtGwMQiBtd+rATD=mh8ZgE3owT_ow@mail.gmail.com>
-Subject: Re: [PATCH RESEND 28/62] init: alpha, arc, arm, arm64, csky, m68k,
- microblaze, mips, nios2, openrisc, parisc, powerpc, s390, sh, sparc, um, x86,
- xtensa: rename initrd_{start,end} to virt_external_initramfs_{start,end}
-To: Borislav Petkov <bp@alien8.de>
-Cc: linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Linus Torvalds <torvalds@linux-foundation.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Christian Brauner <brauner@kernel.org>, 
-	Al Viro <viro@zeniv.linux.org.uk>, Jan Kara <jack@suse.cz>, Christoph Hellwig <hch@lst.de>, 
-	Jens Axboe <axboe@kernel.dk>, Andy Shevchenko <andy.shevchenko@gmail.com>, 
-	Aleksa Sarai <cyphar@cyphar.com>, =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
-	Julian Stecklina <julian.stecklina@cyberus-technology.de>, 
-	Gao Xiang <hsiangkao@linux.alibaba.com>, Art Nikpal <email2tema@gmail.com>, 
-	Andrew Morton <akpm@linux-foundation.org>, Alexander Graf <graf@amazon.com>, 
-	Rob Landley <rob@landley.net>, Lennart Poettering <mzxreary@0pointer.de>, linux-arch@vger.kernel.org, 
-	linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org, 
-	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
-	linux-hexagon@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-um@lists.infradead.org, x86@kernel.org, 
-	Ingo Molnar <mingo@redhat.com>, linux-block@vger.kernel.org, initramfs@vger.kernel.org, 
-	linux-api@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-efi@vger.kernel.org, linux-ext4@vger.kernel.org, 
-	"Theodore Y . Ts'o" <tytso@mit.edu>, linux-acpi@vger.kernel.org, Michal Simek <monstr@monstr.eu>, 
-	devicetree@vger.kernel.org, Luis Chamberlain <mcgrof@kernel.org>, Kees Cook <kees@kernel.org>, 
-	Thorsten Blum <thorsten.blum@linux.dev>, Heiko Carstens <hca@linux.ibm.com>, patches@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: (bisected) [PATCH v2 08/37] mm/hugetlb: check for unreasonable
+ folio sizes when registering hstate
+To: David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org
+Cc: Zi Yan <ziy@nvidia.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Alexander Potapenko <glider@google.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Brendan Jackman <jackmanb@google.com>, Christoph Lameter <cl@gentwo.org>,
+ Dennis Zhou <dennis@kernel.org>, Dmitry Vyukov <dvyukov@google.com>,
+ dri-devel@lists.freedesktop.org, intel-gfx@lists.freedesktop.org,
+ iommu@lists.linux.dev, io-uring@vger.kernel.org,
+ Jason Gunthorpe <jgg@nvidia.com>, Jens Axboe <axboe@kernel.dk>,
+ Johannes Weiner <hannes@cmpxchg.org>, John Hubbard <jhubbard@nvidia.com>,
+ kasan-dev@googlegroups.com, kvm@vger.kernel.org,
+ Linus Torvalds <torvalds@linux-foundation.org>, linux-arm-kernel@axis.com,
+ linux-arm-kernel@lists.infradead.org, linux-crypto@vger.kernel.org,
+ linux-ide@vger.kernel.org, linux-kselftest@vger.kernel.org,
+ linux-mips@vger.kernel.org, linux-mmc@vger.kernel.org, linux-mm@kvack.org,
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+ linux-scsi@vger.kernel.org, Marco Elver <elver@google.com>,
+ Marek Szyprowski <m.szyprowski@samsung.com>, Michal Hocko <mhocko@suse.com>,
+ Mike Rapoport <rppt@kernel.org>, Muchun Song <muchun.song@linux.dev>,
+ netdev@vger.kernel.org, Oscar Salvador <osalvador@suse.de>,
+ Peter Xu <peterx@redhat.com>, Robin Murphy <robin.murphy@arm.com>,
+ Suren Baghdasaryan <surenb@google.com>, Tejun Heo <tj@kernel.org>,
+ virtualization@lists.linux.dev, Vlastimil Babka <vbabka@suse.cz>,
+ wireguard@lists.zx2c4.com, x86@kernel.org,
+ "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
+References: <20250901150359.867252-1-david@redhat.com>
+ <20250901150359.867252-9-david@redhat.com>
+ <3e043453-3f27-48ad-b987-cc39f523060a@csgroup.eu>
+ <d3fc12d4-0b59-4b1f-bb5c-13189a01e13d@redhat.com>
+ <faf62f20-8844-42a0-a7a7-846d8ead0622@csgroup.eu>
+ <9361c75a-ab37-4d7f-8680-9833430d93d4@redhat.com>
+ <03671aa8-4276-4707-9c75-83c96968cbb2@csgroup.eu>
+ <1db15a30-72d6-4045-8aa1-68bd8411b0ba@redhat.com>
+ <0c730c52-97ee-43ea-9697-ac11d2880ab7@csgroup.eu>
+ <543e9440-8ee0-4d9e-9b05-0107032d665b@redhat.com>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+Content-Language: fr-FR
+In-Reply-To: <543e9440-8ee0-4d9e-9b05-0107032d665b@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Sat, Sep 13, 2025 at 9:00=E2=80=AFAM Borislav Petkov <bp@alien8.de> wrot=
-e:
-> Ooh, now I see it - you have virtual and physical initramfs address thing=
-s. We
-> usually call those "va" and "pa". So
->
-> initramfs_{va,pa}_{start,end}
 
-Okay, I will call external_initramfs_{va,pa}_{start,end}
-(after I will remove initrd, which will happen after a year)
 
-"external" means "bootloader-supplied" as opposed to builtin initramfs.
+Le 09/10/2025 à 12:27, David Hildenbrand a écrit :
+> On 09.10.25 12:01, Christophe Leroy wrote:
+>>
+>>
+>> Le 09/10/2025 à 11:20, David Hildenbrand a écrit :
+>>> On 09.10.25 11:16, Christophe Leroy wrote:
+>>>>
+>>>>
+>>>> Le 09/10/2025 à 10:14, David Hildenbrand a écrit :
+>>>>> On 09.10.25 10:04, Christophe Leroy wrote:
+>>>>>>
+>>>>>>
+>>>>>> Le 09/10/2025 à 09:22, David Hildenbrand a écrit :
+>>>>>>> On 09.10.25 09:14, Christophe Leroy wrote:
+>>>>>>>> Hi David,
+>>>>>>>>
+>>>>>>>> Le 01/09/2025 à 17:03, David Hildenbrand a écrit :
+>>>>>>>>> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+>>>>>>>>> index 1e777cc51ad04..d3542e92a712e 100644
+>>>>>>>>> --- a/mm/hugetlb.c
+>>>>>>>>> +++ b/mm/hugetlb.c
+>>>>>>>>> @@ -4657,6 +4657,7 @@ static int __init hugetlb_init(void)
+>>>>>>>>>           BUILD_BUG_ON(sizeof_field(struct page, private) *
+>>>>>>>>> BITS_PER_BYTE <
+>>>>>>>>>                   __NR_HPAGEFLAGS);
+>>>>>>>>> +    BUILD_BUG_ON_INVALID(HUGETLB_PAGE_ORDER > MAX_FOLIO_ORDER);
+>>>>>>>>>           if (!hugepages_supported()) {
+>>>>>>>>>               if (hugetlb_max_hstate ||
+>>>>>>>>> default_hstate_max_huge_pages)
+>>>>>>>>> @@ -4740,6 +4741,7 @@ void __init hugetlb_add_hstate(unsigned int
+>>>>>>>>> order)
+>>>>>>>>>           }
+>>>>>>>>>           BUG_ON(hugetlb_max_hstate >= HUGE_MAX_HSTATE);
+>>>>>>>>>           BUG_ON(order < order_base_2(__NR_USED_SUBPAGE));
+>>>>>>>>> +    WARN_ON(order > MAX_FOLIO_ORDER);
+>>>>>>>>>           h = &hstates[hugetlb_max_hstate++];
+>>>>>>>>>           __mutex_init(&h->resize_lock, "resize mutex", &h-
+>>>>>>>>>> resize_key);
+>>>>>>>>>           h->order = order;
+>>>>>>>
+>>>>>>> We end up registering hugetlb folios that are bigger than
+>>>>>>> MAX_FOLIO_ORDER. So we have to figure out how a config can trigger
+>>>>>>> that
+>>>>>>> (and if we have to support that).
+>>>>>>>
+>>>>>>
+>>>>>> MAX_FOLIO_ORDER is defined as:
+>>>>>>
+>>>>>> #ifdef CONFIG_ARCH_HAS_GIGANTIC_PAGE
+>>>>>> #define MAX_FOLIO_ORDER        PUD_ORDER
+>>>>>> #else
+>>>>>> #define MAX_FOLIO_ORDER        MAX_PAGE_ORDER
+>>>>>> #endif
+>>>>>>
+>>>>>> MAX_PAGE_ORDER is the limit for dynamic creation of hugepages via
+>>>>>> /sys/kernel/mm/hugepages/ but bigger pages can be created at boottime
+>>>>>> with kernel boot parameters without CONFIG_ARCH_HAS_GIGANTIC_PAGE:
+>>>>>>
+>>>>>>       hugepagesz=64m hugepages=1 hugepagesz=256m hugepages=1
+>>>>>>
+>>>>>> Gives:
+>>>>>>
+>>>>>> HugeTLB: registered 1.00 GiB page size, pre-allocated 0 pages
+>>>>>> HugeTLB: 0 KiB vmemmap can be freed for a 1.00 GiB page
+>>>>>> HugeTLB: registered 64.0 MiB page size, pre-allocated 1 pages
+>>>>>> HugeTLB: 0 KiB vmemmap can be freed for a 64.0 MiB page
+>>>>>> HugeTLB: registered 256 MiB page size, pre-allocated 1 pages
+>>>>>> HugeTLB: 0 KiB vmemmap can be freed for a 256 MiB page
+>>>>>> HugeTLB: registered 4.00 MiB page size, pre-allocated 0 pages
+>>>>>> HugeTLB: 0 KiB vmemmap can be freed for a 4.00 MiB page
+>>>>>> HugeTLB: registered 16.0 MiB page size, pre-allocated 0 pages
+>>>>>> HugeTLB: 0 KiB vmemmap can be freed for a 16.0 MiB page
+>>>>>
+>>>>> I think it's a violation of CONFIG_ARCH_HAS_GIGANTIC_PAGE. The 
+>>>>> existing
+>>>>> folio_dump() code would not handle it correctly as well.
+>>>>
+>>>> I'm trying to dig into history and when looking at commit 4eb0716e868e
+>>>> ("hugetlb: allow to free gigantic pages regardless of the
+>>>> configuration") I understand that CONFIG_ARCH_HAS_GIGANTIC_PAGE is
+>>>> needed to be able to allocate gigantic pages at runtime. It is not
+>>>> needed to reserve gigantic pages at boottime.
+>>>>
+>>>> What am I missing ?
+>>>
+>>> That CONFIG_ARCH_HAS_GIGANTIC_PAGE has nothing runtime-specific in its
+>>> name.
+>>
+>> In its name for sure, but the commit I mention says:
+>>
+>>       On systems without CONTIG_ALLOC activated but that support gigantic
+>> pages,
+>>       boottime reserved gigantic pages can not be freed at all.  This 
+>> patch
+>>       simply enables the possibility to hand back those pages to memory
+>>       allocator.
+> 
+> Right, I think it was a historical artifact.
+> 
+>>
+>> And one of the hunks is:
+>>
+>> diff --git a/arch/arm64/Kconfig b/arch/arm64/Kconfig
+>> index 7f7fbd8bd9d5b..7a1aa53d188d3 100644
+>> --- a/arch/arm64/Kconfig
+>> +++ b/arch/arm64/Kconfig
+>> @@ -19,7 +19,7 @@ config ARM64
+>>           select ARCH_HAS_FAST_MULTIPLIER
+>>           select ARCH_HAS_FORTIFY_SOURCE
+>>           select ARCH_HAS_GCOV_PROFILE_ALL
+>> -       select ARCH_HAS_GIGANTIC_PAGE if CONTIG_ALLOC
+>> +       select ARCH_HAS_GIGANTIC_PAGE
+>>           select ARCH_HAS_KCOV
+>>           select ARCH_HAS_KEEPINITRD
+>>           select ARCH_HAS_MEMBARRIER_SYNC_CORE
+>>
+>> So I understand from the commit message that it was possible at that
+>> time to have gigantic pages without ARCH_HAS_GIGANTIC_PAGE as long as
+>> you didn't have to be able to free them during runtime.
+> 
+> Yes, I agree.
+> 
+>>
+>>>
+>>> Can't we just select CONFIG_ARCH_HAS_GIGANTIC_PAGE for the relevant
+>>> hugetlb config that allows for *gigantic pages*.
+>>>
+>>
+>> We probably can, but I'd really like to understand history and how we
+>> ended up in the situation we are now.
+>> Because blind fixes often lead to more problems.
+> 
+> Yes, let's figure out how to to it cleanly.
+> 
+>>
+>> If I follow things correctly I see a helper gigantic_page_supported()
+>> added by commit 944d9fec8d7a ("hugetlb: add support for gigantic page
+>> allocation at runtime").
+>>
+>> And then commit 461a7184320a ("mm/hugetlb: introduce
+>> ARCH_HAS_GIGANTIC_PAGE") is added to wrap gigantic_page_supported()
+>>
+>> Then commit 4eb0716e868e ("hugetlb: allow to free gigantic pages
+>> regardless of the configuration") changed gigantic_page_supported() to
+>> gigantic_page_runtime_supported()
+>>
+>> So where are we now ?
+> 
+> In
+> 
+> commit fae7d834c43ccdb9fcecaf4d0f33145d884b3e5c
+> Author: Matthew Wilcox (Oracle) <willy@infradead.org>
+> Date:   Tue Feb 27 19:23:31 2024 +0000
+> 
+>      mm: add __dump_folio()
+> 
+> 
+> We started assuming that a folio in the system (boottime, dynamic, 
+> whatever)
+> has a maximum of MAX_FOLIO_NR_PAGES.
+> 
+> Any other interpretation doesn't make any sense for MAX_FOLIO_NR_PAGES.
+> 
+> 
+> So we have two questions:
+> 
+> 1) How to teach MAX_FOLIO_NR_PAGES that hugetlb supports gigantic pages
+> 
+> 2) How do we handle CONFIG_ARCH_HAS_GIGANTIC_PAGE
+> 
+> 
+> We have the following options
+> 
+> (A) Rename existing CONFIG_ARCH_HAS_GIGANTIC_PAGE to something else that is
+> clearer and add a new CONFIG_ARCH_HAS_GIGANTIC_PAGE.
+> 
+> (B) Rename existing CONFIG_ARCH_HAS_GIGANTIC_PAGE -> to something else 
+> that is
+> clearer and derive somehow else that hugetlb in that config supports 
+> gigantic pages.
+> 
+> (c) Just use CONFIG_ARCH_HAS_GIGANTIC_PAGE if hugetlb on an architecture
+> supports gigantic pages.
+> 
+> 
+> I don't quite see why an architecture should be able to opt in into 
+> dynamically
+> allocating+freeing gigantic pages. That's just CONTIG_ALLOC magic and 
+> not some
+> arch-specific thing IIRC.
+> 
+> 
+> Note that in mm/hugetlb.c it is
+> 
+>      #ifdef CONFIG_ARCH_HAS_GIGANTIC_PAGE
+>      #ifdef CONFIG_CONTIG_ALLOC
+> 
+> Meaning that at least the allocation side is guarded by CONTIG_ALLOC.
 
---=20
-Askar Safin
+Yes but not the freeing since commit 4eb0716e868e ("hugetlb: allow to 
+free gigantic pages regardless of the configuration")
+
+> 
+> So I think (C) is just the right thing to do.
+> 
+> diff --git a/fs/Kconfig b/fs/Kconfig
+> index 0bfdaecaa8775..12c11eb9279d3 100644
+> --- a/fs/Kconfig
+> +++ b/fs/Kconfig
+> @@ -283,6 +283,8 @@ config HUGETLB_PMD_PAGE_TABLE_SHARING
+>          def_bool HUGETLB_PAGE
+>          depends on ARCH_WANT_HUGE_PMD_SHARE && SPLIT_PMD_PTLOCKS
+> 
+> +# An architecture must select this option if there is any mechanism 
+> (esp. hugetlb)
+> +# could obtain gigantic folios.
+>   config ARCH_HAS_GIGANTIC_PAGE
+>          bool
+> 
+> 
+
+I gave it a try. That's not enough, it fixes the problem for 64 Mbytes 
+pages and 256 Mbytes pages, but not for 1 Gbytes pages.
+
+Max folio is defined by PUD_ORDER, but PUD_SIZE is 256 Mbytes so we need 
+to make MAX_FOLIO larger. Do we change it to P4D_ORDER or is it too much 
+? P4D_SIZE is 128 Gbytes
+
+Christophe
+
 
