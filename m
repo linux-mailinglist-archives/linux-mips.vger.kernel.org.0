@@ -1,130 +1,210 @@
-Return-Path: <linux-mips+bounces-11663-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11665-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45D41BCBABF
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Oct 2025 06:58:12 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE90BBD32D0
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Oct 2025 15:21:22 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0054B408272
-	for <lists+linux-mips@lfdr.de>; Fri, 10 Oct 2025 04:58:11 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 0576D4F237E
+	for <lists+linux-mips@lfdr.de>; Mon, 13 Oct 2025 13:20:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 81201238175;
-	Fri, 10 Oct 2025 04:58:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GrdiTzbT"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 763812FB632;
+	Mon, 13 Oct 2025 13:20:38 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yx1-f53.google.com (mail-yx1-f53.google.com [74.125.224.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BB902247284
-	for <linux-mips@vger.kernel.org>; Fri, 10 Oct 2025 04:57:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.53
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B86D1547D2;
+	Mon, 13 Oct 2025 13:20:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760072282; cv=none; b=n+7usAjaLqVF2WSO99ygSJSTHwT+lHpW1MnkK9CRXHASnX5WZV3x9rH9qyDXu9R5RIc5UHNT7mcS33+Q/opQwrFgG47xP1HjUK+h5uHVa2Jj9TTOUfdVEIUkWmBdImFuy2CY4Pl0WVsF19/wHoQMN2zJMRhPjMpXRihK2BZAUSo=
+	t=1760361638; cv=none; b=VyiMYuhY2bm5dMPcpaX8Xc+UlIPFOLcycQQ3rN2+uHpTnxMYxYtkF8ul85Zr3T1XpQm3WHVQJWDuhYZckyC/T+EQPc3WJF+nA2rR5A8zKfo/PAkBU6TB8pvxgNVTpVNRhbHGuwdYYgtG9i36K0ZyyYap+21WQDoFKjzkkHi18ws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760072282; c=relaxed/simple;
-	bh=20zVq/I1A85ImSdUuzZ7bh9Qs7dqD4eEIEsQzzw5Ci4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hqX4TBrHJxPLRLmQaGHu29WCXsOVJppzidDal/wGIUAs9f+tr5LBK7Bgx3hemMVzNYRvsTyyA8T+fPrgGUhQVcqDP/WJGrJCNs1v15XEPvWVmiYU8kAiulSy9Mh/ivpEV7ErlbHJOfp4FGB7Rpban8OnJ5TXMWSjHtc8SP0KCKk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GrdiTzbT; arc=none smtp.client-ip=74.125.224.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yx1-f53.google.com with SMTP id 956f58d0204a3-63b960a0a2bso2025001d50.1
-        for <linux-mips@vger.kernel.org>; Thu, 09 Oct 2025 21:57:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1760072278; x=1760677078; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=j7qS0AM3lX7OGhXSFEYS6mkC3EKNzPxshbg7hLZcah0=;
-        b=GrdiTzbTpmXrgj0/PjkohCZ6LgFNbxV45gb5L/ZVbzaWKAHJgA12/mfFqFdtOpY72m
-         bZZCyt4k8jRvQo4unsWw4ZeaFcU/eOYR2U/wcLgsvZR/RYdUoV9fmyuViF8Of5PYj/l4
-         634Gm0JHXypxB9ycdlhLckuOP80mjqw4wIO9HLiTQ6purdE8gu3SXgXaNMsYndjRbf75
-         1dPvVv1bpLUsn7UsoLTsiGPIZ2KQmnwtMFB4nrm8RHlzLeSFwrO7OIHtu7G4t0f6Q3Az
-         maevl8wn3jZRwLsUqzTevJOM0Q45hnxhlAkendZd7mXKlZsyaRmG6ugJRYjmZ1sxfyiy
-         qCrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760072278; x=1760677078;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=j7qS0AM3lX7OGhXSFEYS6mkC3EKNzPxshbg7hLZcah0=;
-        b=sJe+el5qiGHinxC+MGZLJ/neNyRZ6JJ9RiHhaZ1494c4QlqoohsGej9Bq89nR3HZxn
-         Y1+dIzoXZESjHLq8fhJ4bQows52LgmfR42yRmJgw/Ej3IjThImImv+H4ZRb/IuJgSGAD
-         VzeE5jLYEeujdU5Zdx11cYGvKMQDQcxIlRjJJG3cdc+vot+h8lgK2/smJE/eDp2obdm8
-         f0f5DEnxHfrtfQAVQvChGqNfpxpYDTx9cboLXeo/c5va7MvU1duEcn4DTYlPTtymABBO
-         aNZR3F+pv6zIt2U/zUFB50lKFfTNY8RC1EfY7/oMPwNdYZ3Nha5CaANzCo9iGkXOXe+O
-         qmRw==
-X-Forwarded-Encrypted: i=1; AJvYcCXJXWjUOCqVZrB2XGjOq7I4p/Qm4IG5fXg/vOQyGpp5EtnvNbdymJOVGfQGPntlnOwTcOdfw7+5p/OR@vger.kernel.org
-X-Gm-Message-State: AOJu0YziwmTL95nwZsT/OWR76FgoN6DptheikiPd0+dmeECZ4e5nYfLl
-	biS+7Yek7Fg8OlT/qqLope+riuz75k5EiSiKpzCrv93LKHJ9JPpsfrpWwG9YegKNjisr73bNfzs
-	wu/HeZXj8NDTUEtG/+Tb7smH7yOomOt4=
-X-Gm-Gg: ASbGnctHRYyzyBlwJrsNTn3V/J1Bys0QElQKjcAZLJ2Wq8rkgqZQ599CtSnJlif8GrY
-	Xcgh3CfWp2u5dpuJAVG0w3ZC1IoxO65KXfPKZdl5kx45MCFlIIHEL7G2QDvflnlMtN1y7tcDTge
-	aeYMAK9iZADqXCLlGL8F7E3mAKkZZemTjPaaRv4DBz7ogJOBWawdg1EEuuUh+Fzap+fQAICW/vb
-	Ly9E9Z8o/HL8zyKmK8BCeV2Wg==
-X-Google-Smtp-Source: AGHT+IHqDciv7GAPYfMGdKr9Fwuo5GT168N8GcrpsJ5KozP5HqYqg/LDALxuogvzJXgNCm6zrA+DoCqu7lr8uhQrVc0=
-X-Received: by 2002:a53:5009:0:b0:636:2420:d3ce with SMTP id
- 956f58d0204a3-63ccb93456dmr7466309d50.51.1760072277565; Thu, 09 Oct 2025
- 21:57:57 -0700 (PDT)
+	s=arc-20240116; t=1760361638; c=relaxed/simple;
+	bh=08P6/S9TSCs7VItMP+DAa4ys+h3oQiIBbFRrGwsYaiY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Rm3cwUaiUisAgdam45k1UGgyspLoHP0lMGP5OKAb9Mx/pOS0wDRT7KVX91EYZwcMSNSHnpae/EbIxn1cAqGGJogwRa2e9b7RWD4yCy4W9MP1t/hYjXPwW77wWwCP/yTyGLOQxUw78cvqEc5LDR6AIdQ/bre+lcQuTjh7zXjK3yI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub4.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4cld112tJkz9sSv;
+	Mon, 13 Oct 2025 15:07:17 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id O5E7p9M28w-y; Mon, 13 Oct 2025 15:07:17 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4cld1122pDz9sSs;
+	Mon, 13 Oct 2025 15:07:17 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 328DF8B768;
+	Mon, 13 Oct 2025 15:07:17 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id 7EZ7Ik3eZcv6; Mon, 13 Oct 2025 15:07:17 +0200 (CEST)
+Received: from PO20335.idsi0.si.c-s.fr (unknown [10.25.207.160])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 02E3C8B763;
+	Mon, 13 Oct 2025 15:07:17 +0200 (CEST)
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+To: Linus Walleij <linus.walleij@linaro.org>,
+	Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Christophe Leroy <christophe.leroy@csgroup.eu>,
+	linux-kernel@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	John Crispin <john@phrozen.org>
+Subject: [PATCH 1/2] gpio: mm-lantiq: Drop legacy-of-mm-gpiochip.h header from GPIO driver
+Date: Mon, 13 Oct 2025 15:07:14 +0200
+Message-ID: <c7415e2870b3bd9109f95bab3784d48e708e30e6.1760360638.git.christophe.leroy@csgroup.eu>
+X-Mailer: git-send-email 2.49.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAHNNwZC7gC7zaZGiSBhobSAb4m2O1BuoZ4r=SQBF-tCQyuAPvw@mail.gmail.com>
- <20250925131055.3933381-1-nschichan@freebox.fr>
-In-Reply-To: <20250925131055.3933381-1-nschichan@freebox.fr>
-From: Askar Safin <safinaskar@gmail.com>
-Date: Fri, 10 Oct 2025 07:57:21 +0300
-X-Gm-Features: AS18NWAQwCKadWHXCZjVUBNaD3TaKIilJiJAQzSbvGFaYuFuE8UDpW1_H3riB-k
-Message-ID: <CAPnZJGBPyONjJoM6cskxysDnN4pxWuWJCK5A6TgikR2xHsrN5Q@mail.gmail.com>
-Subject: Re: [PATCH-RFC] init: simplify initrd code (was Re: [PATCH RESEND
- 00/62] initrd: remove classic initrd support).
-To: nschichan@freebox.fr
-Cc: akpm@linux-foundation.org, andy.shevchenko@gmail.com, axboe@kernel.dk, 
-	brauner@kernel.org, cyphar@cyphar.com, devicetree@vger.kernel.org, 
-	ecurtin@redhat.com, email2tema@gmail.com, graf@amazon.com, 
-	gregkh@linuxfoundation.org, hca@linux.ibm.com, hch@lst.de, 
-	hsiangkao@linux.alibaba.com, initramfs@vger.kernel.org, jack@suse.cz, 
-	julian.stecklina@cyberus-technology.de, kees@kernel.org, 
-	linux-acpi@vger.kernel.org, linux-alpha@vger.kernel.org, 
-	linux-api@vger.kernel.org, linux-arch@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org, 
-	linux-csky@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-efi@vger.kernel.org, linux-ext4@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, linux-hexagon@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
-	linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org, 
-	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
-	linux-snps-arc@lists.infradead.org, linux-um@lists.infradead.org, 
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, mcgrof@kernel.org, 
-	mingo@redhat.com, monstr@monstr.eu, mzxreary@0pointer.de, 
-	patches@lists.linux.dev, rob@landley.net, sparclinux@vger.kernel.org, 
-	thomas.weissschuh@linutronix.de, thorsten.blum@linux.dev, 
-	torvalds@linux-foundation.org, tytso@mit.edu, viro@zeniv.linux.org.uk, 
-	x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1760360834; l=4682; i=christophe.leroy@csgroup.eu; s=20211009; h=from:subject:message-id; bh=08P6/S9TSCs7VItMP+DAa4ys+h3oQiIBbFRrGwsYaiY=; b=Qh7mMJyAZpFgoDIS7x52mAKA0zkU5FMUYQszSuDw8b8vGHyjs02lC8B+QfO9P7yWCBIOpVZhR eed+vVRL6BNDw2CCSpqA+w1EiOScuPSdTCiTmGNDf1gDQpBLOQIpcA3
+X-Developer-Key: i=christophe.leroy@csgroup.eu; a=ed25519; pk=HIzTzUj91asvincQGOFx6+ZF5AoUuP9GdOtQChs7Mm0=
+Content-Transfer-Encoding: 8bit
 
-On Thu, Sep 25, 2025 at 4:12=E2=80=AFPM <nschichan@freebox.fr> wrote:
-> - drop prompt_ramdisk and ramdisk_start kernel parameters
-> - drop compression support
-> - drop image autodetection, the whole /initrd.image content is now
->   copied into /dev/ram0
-> - remove rd_load_disk() which doesn't seem to be used anywhere.
+Remove legacy-of-mm-gpiochip.h header file. The above mentioned
+file provides an OF API that's deprecated. There is no agnostic
+alternatives to it and we have to open code the logic which was
+hidden behind of_mm_gpiochip_add_data(). Note, most of the GPIO
+drivers are using their own labeling schemas and resource retrieval
+that only a few may gain of the code deduplication, so whenever
+alternative is appear we can move drivers again to use that one.
 
-I welcome any initrd simplification!
+[Text copied from commit 34064c8267a6 ("powerpc/8xx: Drop
+legacy-of-mm-gpiochip.h header")]
 
-> Hopefully my email config is now better and reaches gmail users
-> correctly.
+Signed-off-by: Christophe Leroy <christophe.leroy@csgroup.eu>
+---
+ drivers/gpio/Kconfig          |  1 -
+ drivers/gpio/gpio-mm-lantiq.c | 47 +++++++++++++++++++----------------
+ 2 files changed, 25 insertions(+), 23 deletions(-)
 
-Yes, I got this email.
+diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
+index 7ee3afbc2b05d..8fde6730a02dd 100644
+--- a/drivers/gpio/Kconfig
++++ b/drivers/gpio/Kconfig
+@@ -476,7 +476,6 @@ config GPIO_MENZ127
+ config GPIO_MM_LANTIQ
+ 	bool "Lantiq Memory mapped GPIOs"
+ 	depends on LANTIQ && SOC_XWAY
+-	select OF_GPIO_MM_GPIOCHIP
+ 	help
+ 	  This enables support for memory mapped GPIOs on the External Bus Unit
+ 	  (EBU) found on Lantiq SoCs. The GPIOs are output only as they are
+diff --git a/drivers/gpio/gpio-mm-lantiq.c b/drivers/gpio/gpio-mm-lantiq.c
+index 8f1405733d98b..3d2e24d614751 100644
+--- a/drivers/gpio/gpio-mm-lantiq.c
++++ b/drivers/gpio/gpio-mm-lantiq.c
+@@ -10,7 +10,6 @@
+ #include <linux/platform_device.h>
+ #include <linux/mutex.h>
+ #include <linux/gpio/driver.h>
+-#include <linux/gpio/legacy-of-mm-gpiochip.h>
+ #include <linux/of.h>
+ #include <linux/io.h>
+ #include <linux/slab.h>
+@@ -27,7 +26,8 @@
+ #define LTQ_EBU_WP	0x80000000	/* write protect bit */
+ 
+ struct ltq_mm {
+-	struct of_mm_gpio_chip mmchip;
++	struct gpio_chip gc;
++	void __iomem *regs;
+ 	u16 shadow;	/* shadow the latches state */
+ };
+ 
+@@ -44,7 +44,7 @@ static void ltq_mm_apply(struct ltq_mm *chip)
+ 
+ 	spin_lock_irqsave(&ebu_lock, flags);
+ 	ltq_ebu_w32(LTQ_EBU_BUSCON, LTQ_EBU_BUSCON1);
+-	__raw_writew(chip->shadow, chip->mmchip.regs);
++	__raw_writew(chip->shadow, chip->regs);
+ 	ltq_ebu_w32(LTQ_EBU_BUSCON | LTQ_EBU_WP, LTQ_EBU_BUSCON1);
+ 	spin_unlock_irqrestore(&ebu_lock, flags);
+ }
+@@ -87,19 +87,19 @@ static int ltq_mm_dir_out(struct gpio_chip *gc, unsigned offset, int value)
+  * ltq_mm_save_regs() - Set initial values of GPIO pins
+  * @mm_gc: pointer to memory mapped GPIO chip structure
+  */
+-static void ltq_mm_save_regs(struct of_mm_gpio_chip *mm_gc)
++static void ltq_mm_save_regs(struct ltq_mm *chip)
+ {
+-	struct ltq_mm *chip =
+-		container_of(mm_gc, struct ltq_mm, mmchip);
+-
+ 	/* tell the ebu controller which memory address we will be using */
+-	ltq_ebu_w32(CPHYSADDR(chip->mmchip.regs) | 0x1, LTQ_EBU_ADDRSEL1);
++	ltq_ebu_w32(CPHYSADDR((__force void *)chip->regs) | 0x1, LTQ_EBU_ADDRSEL1);
+ 
+ 	ltq_mm_apply(chip);
+ }
+ 
+ static int ltq_mm_probe(struct platform_device *pdev)
+ {
++	struct device *dev = &pdev->dev;
++	struct device_node *np = dev->of_node;
++	struct gpio_chip *gc;
+ 	struct ltq_mm *chip;
+ 	u32 shadow;
+ 
+@@ -107,25 +107,29 @@ static int ltq_mm_probe(struct platform_device *pdev)
+ 	if (!chip)
+ 		return -ENOMEM;
+ 
+-	platform_set_drvdata(pdev, chip);
++	gc = &chip->gc;
++
++	gc->base = -1;
++	gc->ngpio = 16;
++	gc->direction_output = ltq_mm_dir_out;
++	gc->set = ltq_mm_set;
++	gc->parent = dev;
++	gc->owner = THIS_MODULE;
++	gc->label = devm_kasprintf(dev, GFP_KERNEL, "%pOF", np);
++	if (!gc->label)
++		return -ENOMEM;
++
++	chip->regs = devm_of_iomap(dev, np, 0, NULL);
++	if (IS_ERR(chip->regs))
++		return PTR_ERR(chip->regs);
+ 
+-	chip->mmchip.gc.ngpio = 16;
+-	chip->mmchip.gc.direction_output = ltq_mm_dir_out;
+-	chip->mmchip.gc.set = ltq_mm_set;
+-	chip->mmchip.save_regs = ltq_mm_save_regs;
++	ltq_mm_save_regs(chip);
+ 
+ 	/* store the shadow value if one was passed by the devicetree */
+ 	if (!of_property_read_u32(pdev->dev.of_node, "lantiq,shadow", &shadow))
+ 		chip->shadow = shadow;
+ 
+-	return of_mm_gpiochip_add_data(pdev->dev.of_node, &chip->mmchip, chip);
+-}
+-
+-static void ltq_mm_remove(struct platform_device *pdev)
+-{
+-	struct ltq_mm *chip = platform_get_drvdata(pdev);
+-
+-	of_mm_gpiochip_remove(&chip->mmchip);
++	return devm_gpiochip_add_data(dev, gc, chip);
+ }
+ 
+ static const struct of_device_id ltq_mm_match[] = {
+@@ -136,7 +140,6 @@ MODULE_DEVICE_TABLE(of, ltq_mm_match);
+ 
+ static struct platform_driver ltq_mm_driver = {
+ 	.probe = ltq_mm_probe,
+-	.remove = ltq_mm_remove,
+ 	.driver = {
+ 		.name = "gpio-mm-ltq",
+ 		.of_match_table = ltq_mm_match,
+-- 
+2.49.0
 
---
-Askar Safin
 
