@@ -1,61 +1,61 @@
-Return-Path: <linux-mips+bounces-11719-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11720-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 303BEBD99F7
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Oct 2025 15:15:32 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9C289BD999D
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Oct 2025 15:13:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8C9A2583982
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Oct 2025 13:10:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 08EF019A53D5
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Oct 2025 13:10:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43358315D32;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BADC315D48;
 	Tue, 14 Oct 2025 13:05:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="toZTeHZe";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="FpLM2FIx"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="JhNZzK88";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="shg+bvHX"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EDB2314D14;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9CD5314D24;
 	Tue, 14 Oct 2025 13:05:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760447158; cv=none; b=Q3z9tC6GX1+AST3WJItoATuIn0Kyh2uCzH+u+NKaEkZRTWRI4034HDfMmdbIHGacZ4t97c2JSexD7pESPReX/o8XRQkPAnp4kaR31M32WkJw10Y37jZrgZtC/7CyrpMqxIDzVNHqG+jxkYadKWZN388DKdMKOTuPYOebXc5czt4=
+	t=1760447158; cv=none; b=DY4oW0AVJo9w6nMVXZWvstclWdojTN0b52Ss0yedycDHO4rOB/twJVJnGaFqD/L0IbSznolrdWLQ19ee+qhJf2sKesx9BSxuqQ6gNGzesU/DzPgnCEHn8Cp6pvcfnCbZTaCYBxwcnqnucZ+U9aaBBLvyiSlcVSR5Af9QMppXoSQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1760447158; c=relaxed/simple;
-	bh=b6y5QGf5n/DoFSSYq7Ft561zy3R7m1YixtDRRPC4Syk=;
+	bh=dZCLaMpAGc/1vu8ptZyeXWxEiiNKEOUd3NRQEXSEOPk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=oEwaAUxOqsIKy1Gm+Z0cF0/0RivQqBl9c9ZwhSO2Jdc75QC9mMpMwge0fRDbYOhYO2ZIqlUgFUDlDcdzbUt+kP8pJmxLIaSvkrRun+QQnGmll3rLg7FJAv/ilvrL5JO7KFSkvDgn74CyNQYXLk4pOp5qXu16HDCwKhdYTp5i1VY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=toZTeHZe; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=FpLM2FIx; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=Iycyc0az+rF0oDh15+5FOltwfC1v7/sIVeJvBs0j0kmlH5QKeJCOyh2iYZMmfvnXjgYzZ4iiPLfsVb/Yu1wHrUQDrnpSOdMaojciSCl5FMbSW6hDGxBm95semLULRnJPGEyhuGSzVvhnxRuB10dtXoVY+fotdMHeoNwZjEBZG00=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=JhNZzK88; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=shg+bvHX; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1760447154;
+	s=2020; t=1760447155;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=/ZtOYvzpIdd5rLNd2E6ncSSFN/khjvYbV63TeavHrvw=;
-	b=toZTeHZe1uNjGasrKJzCw6aRjpZ0C4FjxOgf9/0KgK/6vuqPpjSuKY8pi+AlgZxcL6swRy
-	gOENcZJv/3PR89wwogqpdZv+lmpci6bHbGRzvHqAR3++S9m2+RTKjniq3b8tO0QKubLcxl
-	tFHW4ODlDTHBdB3n123fRMtazhGmb7f3VwyOsp7lvdlFQzRL2hNN0BTMWOHNAzjKKuI3lV
-	GJWFeiRFUcvqCMGx+IZj2svBi4ifDeN2pd0O9n+JMu2/mJPzso3CCIvMc7dFNGYjR9NNzx
-	hx0ycsNzzhLVpxb5oUuzJZ/hw7Nk5Ubi9y3fDQ2UxfceKUkDgWPT6+kqsIhLfg==
+	bh=5DVnR5cKH1ysJgeyzhsfqmBnURn+edrPqy5/eKSQF/k=;
+	b=JhNZzK88e25jp9GotNrIPt/vZZKb0VKNvXHuMydCbEqd1+HpUDRgpkeBu66g8l0nmzb5hj
+	bJq7M5ewwEwCvoaLib81c2KVP2JXH18KAShW7IVI9vzPyYKeLzPHuQcnCLcuJ3JXd78+cb
+	lUY4MTBSosdoQvzUYAb5icb+K1r5HG4pqLz9oI4bzhBVdZOIowUafsrp3TYAiTbpnnpYfU
+	6qg49Q1Ays+clhKO56SqYcYh+OfTyryQT4RpjMe1QyOMPNBfLHRmczaPjLut258n2GT8QC
+	+N+DKr68mMlHetmPxxPyjf2o5shGkZUkfBqZ9jlR19UUKQxhn11F/G4GGxOBVg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1760447154;
+	s=2020e; t=1760447155;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=/ZtOYvzpIdd5rLNd2E6ncSSFN/khjvYbV63TeavHrvw=;
-	b=FpLM2FIx9lrBLiAi7rZaKk9FxVWGfANDCuRfpLNEQaxOZ4jrMhHLjZzj7y1UkktQxNo626
-	7RN/FMNDE+jb/eCA==
-Date: Tue, 14 Oct 2025 15:05:23 +0200
-Subject: [PATCH v2 08/10] x86/Kconfig: Implement custom CC_CAN_LINK
+	bh=5DVnR5cKH1ysJgeyzhsfqmBnURn+edrPqy5/eKSQF/k=;
+	b=shg+bvHXD8MmVzyiF3EMIesqOVARExahkoJZzsvujW5lTkfMY5VPtwGaJNav+nBBAaMzPo
+	USexF86fUhIfXgDQ==
+Date: Tue, 14 Oct 2025 15:05:24 +0200
+Subject: [PATCH v2 09/10] sparc: Implement custom CC_CAN_LINK
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -64,7 +64,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251014-kbuild-userprogs-bits-v2-8-faeec46e887a@linutronix.de>
+Message-Id: <20251014-kbuild-userprogs-bits-v2-9-faeec46e887a@linutronix.de>
 References: <20251014-kbuild-userprogs-bits-v2-0-faeec46e887a@linutronix.de>
 In-Reply-To: <20251014-kbuild-userprogs-bits-v2-0-faeec46e887a@linutronix.de>
 To: Nathan Chancellor <nathan@kernel.org>, 
@@ -89,38 +89,38 @@ Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
  linux-mips@vger.kernel.org, sparclinux@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1760447149; l=1290;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1760447149; l=1096;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=b6y5QGf5n/DoFSSYq7Ft561zy3R7m1YixtDRRPC4Syk=;
- b=+vm1vR0r4FMZsBIpxV3QN+K0oPDB9pgEvBhAhkeTZXmgDTN7eahpL0dYrQ0dL6ILzr02HF2Zf
- XPjaMmqydtlDwVhKaxupXaW4qFJpS0EQZgzEo/MYf61/Wk9vqQb5nXq
+ bh=dZCLaMpAGc/1vu8ptZyeXWxEiiNKEOUd3NRQEXSEOPk=;
+ b=a1zArIcpsRzC1FZdasb8JGHUsoGoDAycc57M/S3ZNlxKRnq+Q21DHxSr8+hyt3/JppSgvNfcQ
+ bxfFr7HMBuiCdP85ZG5aIqZqJw+JMdqAIBzuwcyKTmbOBLIvkFoAKI5
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
 The generic CC_CAN_LINK detection does not work for all architectures.
-To make it clearer how the detection works on x86 create an
+To make it clearer how the detection works on SPARC create an
 architecture-specific variant.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- arch/x86/Kconfig | 11 +++++++++++
+ arch/sparc/Kconfig | 11 +++++++++++
  1 file changed, 11 insertions(+)
 
-diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
-index fa3b616af03a2d50eaf5f922bc8cd4e08a284045..a98675cd01c0c27e2a5716fb6d051416ddcc956f 100644
---- a/arch/x86/Kconfig
-+++ b/arch/x86/Kconfig
-@@ -73,6 +73,7 @@ config X86
- 	select ARCH_ENABLE_SPLIT_PMD_PTLOCK if (PGTABLE_LEVELS > 2) && (X86_64 || X86_PAE)
- 	select ARCH_ENABLE_THP_MIGRATION if X86_64 && TRANSPARENT_HUGEPAGE
- 	select ARCH_HAS_ACPI_TABLE_UPGRADE	if ACPI
+diff --git a/arch/sparc/Kconfig b/arch/sparc/Kconfig
+index a630d373e6453c745ab8bf58fc5622cf0edaf4c9..68b553a47d039da4368a2de30168aaf80a941148 100644
+--- a/arch/sparc/Kconfig
++++ b/arch/sparc/Kconfig
+@@ -13,6 +13,7 @@ config 64BIT
+ config SPARC
+ 	bool
+ 	default y
 +	select ARCH_HAS_CC_CAN_LINK
- 	select ARCH_HAS_CPU_ATTACK_VECTORS	if CPU_MITIGATIONS
- 	select ARCH_HAS_CACHE_LINE_SIZE
- 	select ARCH_HAS_CPU_CACHE_INVALIDATE_MEMREGION
-@@ -3171,6 +3172,16 @@ config HAVE_ATOMIC_IOMAP
- 	def_bool y
- 	depends on X86_32
+ 	select ARCH_HAS_CPU_CACHE_ALIASING
+ 	select ARCH_HAS_DMA_OPS
+ 	select ARCH_MIGHT_HAVE_PC_PARPORT if SPARC64 && PCI
+@@ -475,4 +476,14 @@ config COMPAT
+ 	select ARCH_WANT_OLD_COMPAT_IPC
+ 	select COMPAT_OLD_SIGACTION
  
 +config ARCH_CC_CAN_LINK
 +	bool
@@ -132,9 +132,7 @@ index fa3b616af03a2d50eaf5f922bc8cd4e08a284045..a98675cd01c0c27e2a5716fb6d051416
 +	default "-m64" if 64BIT
 +	default "-m32"
 +
- source "arch/x86/kvm/Kconfig"
- 
- source "arch/x86/Kconfig.cpufeatures"
+ source "drivers/sbus/char/Kconfig"
 
 -- 
 2.51.0
