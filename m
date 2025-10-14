@@ -1,61 +1,61 @@
-Return-Path: <linux-mips+bounces-11715-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11716-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 888CFBD99D3
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Oct 2025 15:14:39 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F015BD99EE
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Oct 2025 15:15:21 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 70AF5581EAA
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Oct 2025 13:09:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 750CD3E5F28
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Oct 2025 13:09:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 277A5314D05;
-	Tue, 14 Oct 2025 13:05:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48732315760;
+	Tue, 14 Oct 2025 13:05:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="kDPkhNZF";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="zLHxkSgW"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="Cdzz+KJz";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="BwzlN2uX"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1656314A92;
-	Tue, 14 Oct 2025 13:05:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D095314B79;
+	Tue, 14 Oct 2025 13:05:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760447156; cv=none; b=e6fUZXwEVc+/tVxhIRbVEcGKPIne95RRP5+4hnc11jzcU8YlxVO03oPtqD7lfMJDg/hS8FH/W1gR2PKN/DIovP5sodjwS6U6UAo85ZrHTNpP0D+4V96zsmzZpC7WhXhAS6mqkqT9DLanmB+4/597o5TRbkw5MCy12TtE5aywC3s=
+	t=1760447157; cv=none; b=OQ+98VFXuQelDbIwTpwvTclkVa5gCBOSewtuw2Ldo9IJ0+UVQh0/TF8DyFbttqpeBUrd2oI74TKbvaBhGwMTR49EgSDsfhHxG+L54VrDxGKnYnJkDaJOjIqJsqv7b4VrKJ9xViqcFYuEjNroN6LucUy1ACJ3ijZrNrd+6q/BgTs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760447156; c=relaxed/simple;
-	bh=3lgCYGIMr6BqeDPz9pKFvSa3Tpv/XYmPh2f36Wz3/Vw=;
+	s=arc-20240116; t=1760447157; c=relaxed/simple;
+	bh=C5yzpCLqrEUvmfCc9tgMT4vkB0PmGsIVmeRJ/wm+ukg=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=eRey6rhZhc3FhwnniWBTiR0FzW4qlUg/3pG+1cNFB6q7pzVeCLoqsre7vQMlI3bsJ8R4cnmh+21uB1miiYCdwwXjLByATIS3PNnDFNk+VJpL6hRU/cq+NLADYtt/aLQrHrmYrJY/iQD0gC5TyXeu74woJ/W18Z+vtpdi6GAwIrM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=kDPkhNZF; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=zLHxkSgW; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=GwOJoRW+WdxMlCiiotw4/ckW2xeTWxiZA71kWYF6zLC/ep1rP6TEMh5yqRno9HGm+OixPNvRAtNUmLBGyFnbZYGYDZ1b+/e1FbXd/HIGe7kmLvPh7wyznTQq6GjHevZ8XxLcNuhBdhGbhz20Pg4yfc3eQW1SMKgvyPR8sgORYvk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=Cdzz+KJz; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=BwzlN2uX; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1760447152;
+	s=2020; t=1760447153;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=PtEMzaRgOB8kquDpZ2oJC8rCzxEI2hYSKcXXX4oBQqw=;
-	b=kDPkhNZFnKiPIKn2BfUt5pn59Sg5Gn1PrDHdDcLkuN3BevIr2tumGBieAbhxD2f4hflub8
-	e8SRmhJs4vtIcfp9qgaSlijd6Ih1iAbrv0BJWxfaa2XZb15CS5jFUHKZ+yrK8Id2JM78x1
-	95G9tQO2AKOpfPjX/yMBkhWiLEe8Ehyul3lz9yUe15jV/Z/q+EI6Xgu6I5jGxMhWOi5JO+
-	GYy3ovjSpa7MZ++Prynre1P1J+cvYl12KJGCvDwZx2HN8axJYv6DZPE3VJqP8X0RusNIWY
-	fpQUWrS8hmvkUupggb1ITeEYpa/KHeYd5EqoYqt7zeSKYXCey/nDz2gPSKF7/g==
+	bh=0CYU5O26JQub+yqWqbpQg+oK8k+3uTAokj7TeaLTkvI=;
+	b=Cdzz+KJzTSoATXV5Ljvowdfgd+hQ49C2HiCspOUMSbLN4Y/KVwHbpcJlPKJDrYKwBpV1Cl
+	nl8yCfx9g0blauWEMvgfadUL1Xs67s2WkQmzFvJzw9Skl6Se6lLax4sHGzAsfb26klKK4r
+	1BR7dCS9II5sV9DxZS2LrinYR6AYT+BArKduD/fSTt/Rp2tk85LB4DGeGNLC0+s3ZjHIEu
+	COxW7QHALQxTwh7TIVAWN9EATLtrOBhFbB2fenbToNZVXr9gPZ2uc6XeCAsm5sSbnusf+D
+	IkBXOvaPA9/tEih0RaZgPFGhQsTs/IhEkpHFcxJdnU0UXlm4UHC30/jqEm0elg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1760447152;
+	s=2020e; t=1760447153;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=PtEMzaRgOB8kquDpZ2oJC8rCzxEI2hYSKcXXX4oBQqw=;
-	b=zLHxkSgWSjdbKEzJflQ9dcKDaS7KCBMSUJheUled3tqTF+w6qHzcAxxo3/aGtH3oj+wwIC
-	hNdsXlaXlufgbEBw==
-Date: Tue, 14 Oct 2025 15:05:19 +0200
-Subject: [PATCH v2 04/10] riscv: Implement custom CC_CAN_LINK
+	bh=0CYU5O26JQub+yqWqbpQg+oK8k+3uTAokj7TeaLTkvI=;
+	b=BwzlN2uXPCg/X47u0Uh4Y8N28ll/JnhCE8duJmS0jRH2zsnGwBT82W4JCx3IH8lzXaM7kD
+	xkxDEF1BudBfnOCA==
+Date: Tue, 14 Oct 2025 15:05:20 +0200
+Subject: [PATCH v2 05/10] s390: Implement custom CC_CAN_LINK
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -64,7 +64,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251014-kbuild-userprogs-bits-v2-4-faeec46e887a@linutronix.de>
+Message-Id: <20251014-kbuild-userprogs-bits-v2-5-faeec46e887a@linutronix.de>
 References: <20251014-kbuild-userprogs-bits-v2-0-faeec46e887a@linutronix.de>
 In-Reply-To: <20251014-kbuild-userprogs-bits-v2-0-faeec46e887a@linutronix.de>
 To: Nathan Chancellor <nathan@kernel.org>, 
@@ -89,53 +89,53 @@ Cc: linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
  linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
  linux-mips@vger.kernel.org, sparclinux@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1760447149; l=1258;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1760447149; l=1192;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=3lgCYGIMr6BqeDPz9pKFvSa3Tpv/XYmPh2f36Wz3/Vw=;
- b=ljrpmNZOQUkLMN+En8m+6y2KVlfRnUR20ZZD26p+acX5QP7AVUU4yWipMMpv+SjAnIDnFb0Qx
- WUXs2N/Eo+MCXvns+nHls5Gg7cVspWXWzbvjHF5Wo72H4v/yRtTle/C
+ bh=C5yzpCLqrEUvmfCc9tgMT4vkB0PmGsIVmeRJ/wm+ukg=;
+ b=6KMNxZohvV8U55EvTgd5gt+n+aQ06tzHiTyepjAkWCXf3bRHfASgeYcybxotqxOnkE219kD9n
+ 3f3fejzuvHFChDTTBo0UVdS4/IrKpsCny3q6UyLNz4mbPAvOrT8AK4d
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
 The generic CC_CAN_LINK detection relies on -m32/-m64 compiler flags.
-These are not supported by riscv compilers.
+s390 uses -m31 instead of -m32.
 
-Use architecture-specific logic using -mabi instead.
+Use architecture-specific logic using -m31/-m64 instead.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- arch/riscv/Kconfig | 11 +++++++++++
+ arch/s390/Kconfig | 11 +++++++++++
  1 file changed, 11 insertions(+)
 
-diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
-index 0c6038dc5dfd529e1fe623f6bc2729a388b33fde..1faf6e6ec87d1417b4e3213ad54053439c87e331 100644
---- a/arch/riscv/Kconfig
-+++ b/arch/riscv/Kconfig
-@@ -25,6 +25,7 @@ config RISCV
+diff --git a/arch/s390/Kconfig b/arch/s390/Kconfig
+index c4145672ca342a656eece10704706d4b12ff9fd6..77ea17537fa2f938aee1fce0053a48853b1ce638 100644
+--- a/arch/s390/Kconfig
++++ b/arch/s390/Kconfig
+@@ -82,6 +82,7 @@ config S390
+ 	select ARCH_ENABLE_MEMORY_HOTREMOVE
  	select ARCH_ENABLE_SPLIT_PMD_PTLOCK if PGTABLE_LEVELS > 2
  	select ARCH_ENABLE_THP_MIGRATION if TRANSPARENT_HUGEPAGE
- 	select ARCH_HAS_BINFMT_FLAT
 +	select ARCH_HAS_CC_CAN_LINK
+ 	select ARCH_HAS_CPU_FINALIZE_INIT
  	select ARCH_HAS_CURRENT_STACK_POINTER
- 	select ARCH_HAS_DEBUG_VIRTUAL if MMU
- 	select ARCH_HAS_DEBUG_VM_PGTABLE
-@@ -1335,6 +1336,16 @@ config PORTABLE
- config ARCH_PROC_KCORE_TEXT
- 	def_bool y
+ 	select ARCH_HAS_DEBUG_VIRTUAL
+@@ -290,6 +291,16 @@ config PGTABLE_LEVELS
+ 
+ source "kernel/livepatch/Kconfig"
  
 +config ARCH_CC_CAN_LINK
 +	bool
-+	default $(cc_can_link_user,-mabi=lp64d) if 64BIT
-+	default $(cc_can_link_user,-mabi=ilp32d)
++	default $(cc_can_link_user,-m64) if 64BIT
++	default $(cc_can_link_user,-m31)
 +
 +config ARCH_USERFLAGS
 +	string
-+	default "-mabi=lp64d" if 64BIT
-+	default "-mabi=ilp32d"
++	default "-m64" if 64BIT
++	default "-m31"
 +
- menu "Power management options"
+ config ARCH_SUPPORTS_KEXEC
+ 	def_bool y
  
- source "kernel/power/Kconfig"
 
 -- 
 2.51.0
