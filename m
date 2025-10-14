@@ -1,163 +1,126 @@
-Return-Path: <linux-mips+bounces-11704-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11706-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6804EBD7C8B
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Oct 2025 08:59:42 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 436BDBD8011
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Oct 2025 09:50:46 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3867C1886003
-	for <lists+linux-mips@lfdr.de>; Tue, 14 Oct 2025 06:57:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A00F33AACF3
+	for <lists+linux-mips@lfdr.de>; Tue, 14 Oct 2025 07:50:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB99930EF70;
-	Tue, 14 Oct 2025 06:49:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="SJgQY6rh";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="SIY964ib"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D42F30E0E7;
+	Tue, 14 Oct 2025 07:50:38 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A6B4312807;
-	Tue, 14 Oct 2025 06:49:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+Received: from pegase2.c-s.fr (pegase2.c-s.fr [93.17.235.10])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0137A1E3DED;
+	Tue, 14 Oct 2025 07:50:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.17.235.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760424577; cv=none; b=bs9NNKSXaiiSd73zknSI5Qkxi72tA4u5WBPFjvMZzpaEIO/leylliswkb638d6FfQvubpqG+YaWn712Jand1QcsaDnzjTc9FVRAZ+HUMsK5MKe1EjYC86cPQWvueiFs8M42hlNC4vGjih5fw+gZmNgE1EWYxdAPKatifHeNygZ0=
+	t=1760428237; cv=none; b=ZRAbwsPUkxS8Ir7c0xaMa+samitbUgHC8MB+XMGkkW07axcKtjpmLuJe4Fs9ht+CW89M+ChyrUE613ZdpghwqXeJJ892HEVFEjYXqriZRfmvaVEyelHsAWOSNTvnzohri0Et/Y4aOzpzwx/33HKdtkCBcitc8RWmJPumjgKW+hE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760424577; c=relaxed/simple;
-	bh=R2dVhre2T8n2qzoofQAXu+jOBab42AUukdse5kq9VNI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=HKBE+NXw3yyicslN5RoZ7mIXrGI8qH0sCRXyuAxeaZt2KLN9arsP3vN9hBJPn6/VQ43H+Rt0+pZNQyOBSv1uv+QB9KXuR4jwyd/c+z57fsusCFesmfBLUMj0wGeT1O+LifVCyZErNIDZAXtBhSyBaDP8dHl4EYSVi/4f8thLX/w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=SJgQY6rh; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=SIY964ib; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1760424571;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ctw6z2zVCPFpRDjjK/Bor9mxmqzsDUqKVIr3JUMCPTE=;
-	b=SJgQY6rhi25HikAnpR7m/+GjLKzcNc+ulNm4jRwhYzAViDq+VP67/bKFvOBYac0wWIrn+b
-	LR8qvE1dqWDxfktw/5U7BfPdmvX3fw+leswF6u4EUUZt79ha6aaf1DiZ0w1bh1fouAFTuM
-	LMnxZcrPAy4dE2S29w935gxNTNOf6uFnG/AOzGFwHX04yd4PVRBz0mXxa5411vSov58+vz
-	9tTort9wcS77PhZ1BQtYbKyglH9HvCLPxCWo8h8G6fr7gz3Hw8TZw5Mb5xPpH2hYB2s8QS
-	qSc1ahRm2X3yVQoa04eqlEXSreVJUrQ6KKwI77QtKer6u2Y51WjgnEhmbUsIvw==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1760424571;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Ctw6z2zVCPFpRDjjK/Bor9mxmqzsDUqKVIr3JUMCPTE=;
-	b=SIY964ibeBMDBfSWXaREGK3RST6oxNsrRUMtMNHo2iwqdWDn6tl1cXZPULW50EDd444CJr
-	f6JBTw9BW/3/cxBA==
-Date: Tue, 14 Oct 2025 08:49:21 +0200
-Subject: [PATCH v4 35/35] clocksource: remove ARCH_CLOCKSOURCE_DATA
+	s=arc-20240116; t=1760428237; c=relaxed/simple;
+	bh=LF/wX3C8mmlPSeO26AlwuOqnE9fpiLF1bsBkySWWDJk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iHag8F3d8WIPMFzAzqkzjzQ6JtHVWqTcb4FrsNhg78+qYhNpaxk6K0tLZbsMcG1o20zFPQIa4LHYL8E+8jYgx3AltdZp0surKXC0bw+BvxR0yMr0IzX0sHjz2fML2253rX6kgbAXqZvLZL+VgbAUbbNEve53bUWVayRWtGNEIb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu; spf=pass smtp.mailfrom=csgroup.eu; arc=none smtp.client-ip=93.17.235.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=csgroup.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=csgroup.eu
+Received: from localhost (mailhub4.si.c-s.fr [172.26.127.67])
+	by localhost (Postfix) with ESMTP id 4cm5lc3Hnjz9sST;
+	Tue, 14 Oct 2025 09:42:20 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from pegase2.c-s.fr ([172.26.127.65])
+	by localhost (pegase2.c-s.fr [127.0.0.1]) (amavisd-new, port 10024)
+	with ESMTP id dfjcQFiX-ub0; Tue, 14 Oct 2025 09:42:20 +0200 (CEST)
+Received: from messagerie.si.c-s.fr (messagerie.si.c-s.fr [192.168.25.192])
+	by pegase2.c-s.fr (Postfix) with ESMTP id 4cm5lc2Gfnz9sRy;
+	Tue, 14 Oct 2025 09:42:20 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 358268B768;
+	Tue, 14 Oct 2025 09:42:20 +0200 (CEST)
+X-Virus-Scanned: amavisd-new at c-s.fr
+Received: from messagerie.si.c-s.fr ([127.0.0.1])
+	by localhost (messagerie.si.c-s.fr [127.0.0.1]) (amavisd-new, port 10023)
+	with ESMTP id zsFJORiQt4Vt; Tue, 14 Oct 2025 09:42:20 +0200 (CEST)
+Received: from [192.168.235.99] (unknown [192.168.235.99])
+	by messagerie.si.c-s.fr (Postfix) with ESMTP id 4DA788B763;
+	Tue, 14 Oct 2025 09:42:18 +0200 (CEST)
+Message-ID: <6942ea07-e6fa-4a5e-a003-0c7ee5e0c936@csgroup.eu>
+Date: Tue, 14 Oct 2025 09:42:17 +0200
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20251014-vdso-sparc64-generic-2-v4-35-e0607bf49dea@linutronix.de>
-References: <20251014-vdso-sparc64-generic-2-v4-0-e0607bf49dea@linutronix.de>
-In-Reply-To: <20251014-vdso-sparc64-generic-2-v4-0-e0607bf49dea@linutronix.de>
-To: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, 
- Vincenzo Frascino <vincenzo.frascino@arm.com>, 
- Arnd Bergmann <arnd@arndb.de>, "David S. Miller" <davem@davemloft.net>, 
- Andreas Larsson <andreas@gaisler.com>, Nick Alcock <nick.alcock@oracle.com>, 
- John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>, 
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
- Shuah Khan <shuah@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
- Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>, 
- "Jason A. Donenfeld" <Jason@zx2c4.com>, 
- Russell King <linux@armlinux.org.uk>, 
- Madhavan Srinivasan <maddy@linux.ibm.com>, 
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
- Christophe Leroy <christophe.leroy@csgroup.eu>, 
- Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
- Alexander Gordeev <agordeev@linux.ibm.com>, 
- Christian Borntraeger <borntraeger@linux.ibm.com>, 
- Sven Schnelle <svens@linux.ibm.com>, 
- Nagarathnam Muthusamy <nagarathnam.muthusamy@oracle.com>, 
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 06/35] powerpc/vdso/gettimeofday: Explicitly include
+ vdso/time32.h
+To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+ Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, Arnd Bergmann
+ <arnd@arndb.de>, "David S. Miller" <davem@davemloft.net>,
+ Andreas Larsson <andreas@gaisler.com>, Nick Alcock <nick.alcock@oracle.com>,
+ John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>,
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ Shuah Khan <shuah@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
+ "Jason A. Donenfeld" <Jason@zx2c4.com>, Russell King
+ <linux@armlinux.org.uk>, Madhavan Srinivasan <maddy@linux.ibm.com>,
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>,
+ Alexander Gordeev <agordeev@linux.ibm.com>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Sven Schnelle <svens@linux.ibm.com>,
+ Nagarathnam Muthusamy <nagarathnam.muthusamy@oracle.com>,
  Shannon Nelson <sln@onemain.com>
-Cc: linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
- linux-mips@vger.kernel.org, linux-s390@vger.kernel.org, 
- =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1760424546; l=1786;
- i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=dQYrfrH6p59kOQp8CklF/Vp09pCtZ6J6GVY/7odturY=;
- b=Wu1NQgBNvnEB5LIkZlAVc2nl5UHIvAcwoDQQL5xS07arY9KRRtvEqZcoP347fwi2GCQ3xtn0+
- zA44cRMjJacBd8KGBEIzRjLhJyEIekF9k/Hds3wcM4CPYv+/tJE/JoO
-X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
- pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
+Cc: linux-kernel@vger.kernel.org, sparclinux@vger.kernel.org,
+ linux-kselftest@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+ linux-mips@vger.kernel.org, linux-s390@vger.kernel.org
+References: <20251014-vdso-sparc64-generic-2-v4-0-e0607bf49dea@linutronix.de>
+ <20251014-vdso-sparc64-generic-2-v4-6-e0607bf49dea@linutronix.de>
+From: Christophe Leroy <christophe.leroy@csgroup.eu>
+Content-Language: fr-FR
+In-Reply-To: <20251014-vdso-sparc64-generic-2-v4-6-e0607bf49dea@linutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-From: Arnd Bergmann <arnd@arndb.de>
 
-After sparc64, there are no remaining users of ARCH_CLOCKSOURCE_DATA
-and it can just be removed.
 
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-Acked-by: John Stultz <jstultz@google.com>
-[Thomas: drop sparc64 bits from the patch]
-Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-Tested-by: Andreas Larsson <andreas@gaisler.com>
-Reviewed-by: Andreas Larsson <andreas@gaisler.com>
----
- include/linux/clocksource.h | 6 +-----
- kernel/time/Kconfig         | 4 ----
- 2 files changed, 1 insertion(+), 9 deletions(-)
+Le 14/10/2025 à 08:48, Thomas Weißschuh a écrit :
+> The usage of 'struct old_timespec32' requires vdso/time32.h. Currently
+> this header is included transitively, but that transitive inclusion is
+> about to go away.
+> 
+> Explicitly include the header.
+> 
+> Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+> Tested-by: Andreas Larsson <andreas@gaisler.com>
+> Reviewed-by: Andreas Larsson <andreas@gaisler.com>
 
-diff --git a/include/linux/clocksource.h b/include/linux/clocksource.h
-index 65b7c41471c390463770c2da13694e58e83b84ea..12d853b1883265cb47d93e33d8370e3957e7e695 100644
---- a/include/linux/clocksource.h
-+++ b/include/linux/clocksource.h
-@@ -25,8 +25,7 @@ struct clocksource_base;
- struct clocksource;
- struct module;
- 
--#if defined(CONFIG_ARCH_CLOCKSOURCE_DATA) || \
--    defined(CONFIG_GENERIC_GETTIMEOFDAY)
-+#if defined(CONFIG_GENERIC_GETTIMEOFDAY)
- #include <asm/clocksource.h>
- #endif
- 
-@@ -106,9 +105,6 @@ struct clocksource {
- 	u64			max_idle_ns;
- 	u32			maxadj;
- 	u32			uncertainty_margin;
--#ifdef CONFIG_ARCH_CLOCKSOURCE_DATA
--	struct arch_clocksource_data archdata;
--#endif
- 	u64			max_cycles;
- 	u64			max_raw_delta;
- 	const char		*name;
-diff --git a/kernel/time/Kconfig b/kernel/time/Kconfig
-index 7c6a52f7836cef248e0949060b50baa293f446cf..fe33118770978682d0ff6c6e7990896f42703b50 100644
---- a/kernel/time/Kconfig
-+++ b/kernel/time/Kconfig
-@@ -9,10 +9,6 @@
- config CLOCKSOURCE_WATCHDOG
- 	bool
- 
--# Architecture has extra clocksource data
--config ARCH_CLOCKSOURCE_DATA
--	bool
--
- # Architecture has extra clocksource init called from registration
- config ARCH_CLOCKSOURCE_INIT
- 	bool
+Reviewed-by: Christophe Leroy <christophe.leroy@csgroup.eu>
 
--- 
-2.51.0
+> ---
+>   arch/powerpc/include/asm/vdso/gettimeofday.h | 1 +
+>   1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/powerpc/include/asm/vdso/gettimeofday.h b/arch/powerpc/include/asm/vdso/gettimeofday.h
+> index ab3df12c8d947ed3a5b0b173567ca8469afbf2d6..b2f0e971076acaea8bc70107fc0f5b2d23e0b312 100644
+> --- a/arch/powerpc/include/asm/vdso/gettimeofday.h
+> +++ b/arch/powerpc/include/asm/vdso/gettimeofday.h
+> @@ -8,6 +8,7 @@
+>   #include <asm/barrier.h>
+>   #include <asm/unistd.h>
+>   #include <uapi/linux/time.h>
+> +#include <vdso/time32.h>
+>   
+>   #define VDSO_HAS_CLOCK_GETRES		1
+>   
+> 
 
 
