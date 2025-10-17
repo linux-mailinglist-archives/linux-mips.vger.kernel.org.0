@@ -1,209 +1,314 @@
-Return-Path: <linux-mips+bounces-11763-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11764-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9BEA3BE5F8A
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Oct 2025 02:40:08 +0200 (CEST)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFAC0BE7B39
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Oct 2025 11:28:55 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C66EF4F75D1
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Oct 2025 00:40:06 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 70BD935BD8F
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Oct 2025 09:28:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49CE02E88A1;
-	Fri, 17 Oct 2025 00:33:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 700B930F804;
+	Fri, 17 Oct 2025 09:15:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="iBGRhlRn"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="JsaKqEez"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA7C72DEA6B
-	for <linux-mips@vger.kernel.org>; Fri, 17 Oct 2025 00:33:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A563C30DD3F;
+	Fri, 17 Oct 2025 09:15:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760661216; cv=none; b=BokrV7vnNU0dXDj+A+2CVHHKZOagV5QEKyRxej35WidY7DAv5rJiVtVJY5pFCcmPk8deXGwJyd7bVnye/xmuEr+qP3d2Q1FneCWmAF6lEPbJkqOn1jOd+pNPTyu9bfZ5ozwhoW6iGaifzIbHGEOtYBmWZTCtR4ghHQioOH+LixM=
+	t=1760692506; cv=none; b=tJYqgU4S/XzACjx8umDOEfzQ67eB3LicZUbRDJL7zdsF6YQLYL98EddAKdO7DXevRXi+aS9Q/kNppBzjnWYqWT+sgzRZMFKkWH0lgEmmvkJmIrTXSq6PjCRdMm6sJKPzhN9T+21Cyh4TBxMZF6fh3fIop7ItdFDc9GqYpH5Xlb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760661216; c=relaxed/simple;
-	bh=Bv2JFpVKbSOr8w26IO6QkCIXhdunh/T2ahf6bwE6NCw=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=ose2W3BIme3KMqcP8ur5J/53pi+YjyX2+gwHFpoqM4aOGU4xLUPYBwsrAyBAaQr3iLghVMZ0WNlPhy+4rg8W0cBA5w0rD33EJjYfeb50Lnaldfg5xkKifbuJVWRcYQWjYmd9Rjtg6M10xaz7evYea6NSVSvkHS/mtlzFvXovA3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=iBGRhlRn; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-32ec69d22b2so1265805a91.1
-        for <linux-mips@vger.kernel.org>; Thu, 16 Oct 2025 17:33:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760661212; x=1761266012; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=/pSW/fUm0O3ay1Oo9bje5jBv9ucpW+KObLJe4y1pVWI=;
-        b=iBGRhlRntFycHJp61W6uPCtjw066185c9WUSwfyFKn2wvPaHzqCEy4q/VnoYFxzYC8
-         Wmz89f+f8Hx4wed0e178GuuUeCzocnNDdfylbXLmyxiHCf+i9IhjJHhParlKtiTgshoS
-         ZUMCcoSEnfPspN3yfvacgNZjNjMqPlf4sU2HQYbED/VNMbUg8CQd6f+OcpRLJgzqTxnF
-         gBUCTlchG17NGEOCmbUzEv38ommjKE0CgN2480Y/mzOjsWqituxXbyvkEPziX0LXO8Sg
-         l41nqw6hHff/Ot9lguc+/JfVZ5DLQ9EmFxaiWgC0joB3wGrQRJ/ScilAEl16FEGoiUBY
-         GEbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760661212; x=1761266012;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/pSW/fUm0O3ay1Oo9bje5jBv9ucpW+KObLJe4y1pVWI=;
-        b=iXHd4g/+nOImVhnPEcAg8kx89va4N9E06g1yDyFS9wDxnv6QAzqeo+pf8Rm4Qkbaqq
-         Iu8iVD+RJpBpIS8T10QFp/RabrFFpUNc1JxdT+w7nieXAEVgj7Uim4wmDb1wqT+GcA4x
-         Xpm407/IN896tmeLKulc111dzEV/coaxYpQQJ6eHXebTgj5ECL3OYe6/jYlxIRhMbMKD
-         32zkLnbCAzU2Y4keXJG5u+Ef/LVMwCdd2iytaoDi41+9J4Yybk00zcnrYsw6354iooHb
-         rwszKfE3Z0EEDDmhVbdvIr6/W+iaJfjR2oz6Un4O+5manta1yeBPyhhub85LQsQSlNrS
-         0HVg==
-X-Forwarded-Encrypted: i=1; AJvYcCUujLC2mfVyNvXciKpQX2PgwV6Zhfd+t5ZctoTR430coVg0NZDrG1XuvDk0hYnKj9NC7wr4DGEAtMtw@vger.kernel.org
-X-Gm-Message-State: AOJu0YynUGLioTBrgmuixNpfK43TvCOtd1nXWuWJRBKe2TTfiMkhySNm
-	IW4XD+A5sVG/b/y4yzpBlUPpU9wB3fxl3dZbHL8s3EWYHRIw0FGZFHNRDDyUkVxKRzDVTMKU1UB
-	U9kKjEA==
-X-Google-Smtp-Source: AGHT+IGUYXYNMUKz1i83Pw6n8U7DCU7Wd9XYw4AfmAkZINqRiiLRcAvioXFznTZGlb6j2wOsKcjvQ1uSQcI=
-X-Received: from pjsc19.prod.google.com ([2002:a17:90a:bf13:b0:33b:ab21:aff7])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4b0f:b0:32e:8c14:5cd2
- with SMTP id 98e67ed59e1d1-33bcf8faac8mr1848079a91.28.1760661212029; Thu, 16
- Oct 2025 17:33:32 -0700 (PDT)
-Reply-To: Sean Christopherson <seanjc@google.com>
-Date: Thu, 16 Oct 2025 17:32:43 -0700
-In-Reply-To: <20251017003244.186495-1-seanjc@google.com>
+	s=arc-20240116; t=1760692506; c=relaxed/simple;
+	bh=mSjk6FZr791b9H75YuvBcHRyC9djxbilNgqrZo54H6U=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=B8EIvXtoaUWKFaF3dTWnCzt825Yt+NJ1hSvlH6rbsr0LteKtBqhSITx9t38zqEcNRTCDha8awwCja5+TzEN2ws+eo2Vi6VaVuBVDcDm7rDSnn4mFbZF5Fy/WZFFimuLtYc69fzIThJdKI58k/8gkCPVVIMGEIRJk5bSNIki3xj0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=JsaKqEez; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0360083.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 59H7iHlk001398;
+	Fri, 17 Oct 2025 09:14:31 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=+3Upo5
+	OE7pHxEFe3tmbZpeawhzh4FlEoIXRxd4VSv28=; b=JsaKqEezcfpud5WrRLycdc
+	H+oQQuOQKt9AWS2MA2f2AWZxfvs/fKy1XLjRxCuyz+56f5TaICphCw6V+vG/C2bz
+	F5gbzyBcSi8cacGtFSmpTAFrTlG2aUVsmy31GO+qAMN+54h8jCVe9POxWOaK8fN7
+	/hJEpyoIAS2JTMgkwbRRg9OFM1BAa8/e1C7ZI4h8ECcspk29fPXdeARq+uJw8Tjf
+	D5t5GR/pWKBSuIjzJXOp2kI6eD4WxDfkehxYD18sHbNqW2XhzgpvGBF1H6XEoi2M
+	HcjAvo8sAVrEbNJQz08zCz9y9YqXcAvYvdU1ercKZUeSINmh7JZlhpwWWcKvdf1A
+	==
+Received: from pps.reinject (localhost [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 49rfp8c6xn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 17 Oct 2025 09:14:31 +0000 (GMT)
+Received: from m0360083.ppops.net (m0360083.ppops.net [127.0.0.1])
+	by pps.reinject (8.18.1.12/8.18.0.8) with ESMTP id 59H9EULh021760;
+	Fri, 17 Oct 2025 09:14:30 GMT
+Received: from ppma22.wdc07v.mail.ibm.com (5c.69.3da9.ip4.static.sl-reverse.com [169.61.105.92])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 49rfp8c6wu-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 17 Oct 2025 09:14:30 +0000 (GMT)
+Received: from pps.filterd (ppma22.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma22.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 59H8ubTK003613;
+	Fri, 17 Oct 2025 09:14:29 GMT
+Received: from smtprelay03.fra02v.mail.ibm.com ([9.218.2.224])
+	by ppma22.wdc07v.mail.ibm.com (PPS) with ESMTPS id 49r1xyc2fw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 17 Oct 2025 09:14:29 +0000
+Received: from smtpav04.fra02v.mail.ibm.com (smtpav04.fra02v.mail.ibm.com [10.20.54.103])
+	by smtprelay03.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 59H9ENpC44826910
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 17 Oct 2025 09:14:23 GMT
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id A877D2004D;
+	Fri, 17 Oct 2025 09:14:23 +0000 (GMT)
+Received: from smtpav04.fra02v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 12A9920043;
+	Fri, 17 Oct 2025 09:14:22 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.111.16.217])
+	by smtpav04.fra02v.mail.ibm.com (Postfix) with SMTP;
+	Fri, 17 Oct 2025 09:14:21 +0000 (GMT)
+Date: Fri, 17 Oct 2025 11:12:41 +0200
+From: Claudio Imbrenda <imbrenda@linux.ibm.com>
+To: Sean Christopherson <seanjc@google.com>
+Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>,
+        Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Madhavan Srinivasan
+ <maddy@linux.ibm.com>,
+        Anup Patel <anup@brainfault.org>, Paul Walmsley
+ <pjw@kernel.org>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou
+ <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        "Kirill A. Shutemov" <kas@kernel.org>,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvm@vger.kernel.org, loongarch@lists.linux.dev,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
+        x86@kernel.org, linux-coco@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Ira Weiny
+ <ira.weiny@intel.com>,
+        Kai Huang <kai.huang@intel.com>, Michael Roth
+ <michael.roth@amd.com>,
+        Yan Zhao <yan.y.zhao@intel.com>,
+        Vishal Annapurve
+ <vannapurve@google.com>,
+        Rick Edgecombe <rick.p.edgecombe@intel.com>,
+        Ackerley Tng <ackerleytng@google.com>,
+        Binbin Wu
+ <binbin.wu@linux.intel.com>
+Subject: Re: [PATCH v3 01/25] KVM: Make support for
+ kvm_arch_vcpu_async_ioctl() mandatory
+Message-ID: <20251017111241.3ce81f4f@p-imbrenda>
+In-Reply-To: <20251017003244.186495-2-seanjc@google.com>
+References: <20251017003244.186495-1-seanjc@google.com>
+	<20251017003244.186495-2-seanjc@google.com>
+Organization: IBM
+X-Mailer: Claws Mail 4.3.1 (GTK 3.24.49; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20251017003244.186495-1-seanjc@google.com>
-X-Mailer: git-send-email 2.51.0.858.gf9c4a03a3a-goog
-Message-ID: <20251017003244.186495-26-seanjc@google.com>
-Subject: [PATCH v3 25/25] KVM: TDX: Fix list_add corruption during vcpu_load()
-From: Sean Christopherson <seanjc@google.com>
-To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>, 
-	Huacai Chen <chenhuacai@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Anup Patel <anup@brainfault.org>, Paul Walmsley <pjw@kernel.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Sean Christopherson <seanjc@google.com>, 
-	Paolo Bonzini <pbonzini@redhat.com>, "Kirill A. Shutemov" <kas@kernel.org>
-Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	kvm@vger.kernel.org, loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, x86@kernel.org, linux-coco@lists.linux.dev, 
-	linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>, 
-	Kai Huang <kai.huang@intel.com>, Michael Roth <michael.roth@amd.com>, 
-	Yan Zhao <yan.y.zhao@intel.com>, Vishal Annapurve <vannapurve@google.com>, 
-	Rick Edgecombe <rick.p.edgecombe@intel.com>, Ackerley Tng <ackerleytng@google.com>, 
-	Binbin Wu <binbin.wu@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: WPthx5jfwUZwmBXm82Ziu6FlbYNGp6QD
+X-Proofpoint-Spam-Details-Enc: AW1haW4tMjUxMDEyMDA4NCBTYWx0ZWRfX5i24UI+B1MAY
+ VWfB/xDHmOzuGKZz+zkZ2l9x8ZFHXJp4bGgLzsCYZhO0HnyGdmaDMrR3mpcUClvHV/6yUf/DJgW
+ ovv0s0yH2DpJzEoDalTUQ7xn8+BsGsuUL1Evgi81/rNK8f7liy/e1u5Eplk2Ps1PMqe9VGG88Gd
+ B/PWIRzNBJouLYr5zASWk7TtznxP5X/Q7AcX7MyEwpCz/kio7cNBjUypNeg4aqEfYVvH1iNdnqr
+ DDQxOpdTs6xRl/ZL81gMulg8gwbv+0DLWp2ISeg0UnUuPhPGkSeiVmEYx2auRl+f/B7rfTpWlo4
+ 36AvglRUTKXS0RgNKsrmRPKBst0ScMzACFqT/FpbRDvXiLwKYRDDM1MCJ2Zszccck9R4e2QBfwT
+ CUAxfvzW0pSyHs9EaJzGgT7XBGLbiw==
+X-Proofpoint-GUID: R3CWxwVp1MSUDtnlqjQzPeUreuCpS978
+X-Authority-Analysis: v=2.4 cv=af5sXBot c=1 sm=1 tr=0 ts=68f208f7 cx=c_pps
+ a=5BHTudwdYE3Te8bg5FgnPg==:117 a=5BHTudwdYE3Te8bg5FgnPg==:17
+ a=kj9zAlcOel0A:10 a=x6icFKpwvdMA:10 a=VkNPw1HP01LnGYTKEx00:22
+ a=1XWaLZrsAAAA:8 a=VnNF1IyMAAAA:8 a=Pqhxwy0yHowpa1wmBDEA:9
+ a=3CZKy65qupELU2PZ:21 a=CjuIK1q_8ugA:10 a=nl4s5V0KI7Kw-pW0DWrs:22
+ a=pHzHmUro8NiASowvMSCR:22 a=xoEH_sTeL_Rfw54TyV31:22
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.80.40
+ definitions=2025-10-17_03,2025-10-13_01,2025-03-28_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
+ clxscore=1011 priorityscore=1501 spamscore=0 adultscore=0 suspectscore=0
+ bulkscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0 impostorscore=0
+ classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.19.0-2510020000 definitions=main-2510120084
 
-From: Yan Zhao <yan.y.zhao@intel.com>
+On Thu, 16 Oct 2025 17:32:19 -0700
+Sean Christopherson <seanjc@google.com> wrote:
 
-During vCPU creation, a vCPU may be destroyed immediately after
-kvm_arch_vcpu_create() (e.g., due to vCPU id confiliction). However, the
-vcpu_load() inside kvm_arch_vcpu_create() may have associate the vCPU to
-pCPU via "list_add(&tdx->cpu_list, &per_cpu(associated_tdvcpus, cpu))"
-before invoking tdx_vcpu_free().
+> Implement kvm_arch_vcpu_async_ioctl() "natively" in x86 and arm64 instead
+> of relying on an #ifdef'd stub, and drop HAVE_KVM_VCPU_ASYNC_IOCTL in
+> anticipation of using the API on x86.  Once x86 uses the API, providing a
+> stub for one architecture and having all other architectures opt-in
+> requires more code than simply implementing the API in the lone holdout.
+> 
+> Eliminating the Kconfig will also reduce churn if the API is renamed in
+> the future (spoiler alert).
+> 
+> No functional change intended.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-Though there's no need to invoke tdh_vp_flush() on the vCPU, failing to
-dissociate the vCPU from pCPU (i.e., "list_del(&to_tdx(vcpu)->cpu_list)")
-will cause list corruption of the per-pCPU list associated_tdvcpus.
+Acked-by: Claudio Imbrenda <imbrenda@linux.ibm.com>
 
-Then, a later list_add() during vcpu_load() would detect list corruption
-and print calltrace as shown below.
-
-Dissociate a vCPU from its associated pCPU in tdx_vcpu_free() for the vCPUs
-destroyed immediately after creation which must be in
-VCPU_TD_STATE_UNINITIALIZED state.
-
-kernel BUG at lib/list_debug.c:29!
-Oops: invalid opcode: 0000 [#2] SMP NOPTI
-RIP: 0010:__list_add_valid_or_report+0x82/0xd0
-
-Call Trace:
- <TASK>
- tdx_vcpu_load+0xa8/0x120
- vt_vcpu_load+0x25/0x30
- kvm_arch_vcpu_load+0x81/0x300
- vcpu_load+0x55/0x90
- kvm_arch_vcpu_create+0x24f/0x330
- kvm_vm_ioctl_create_vcpu+0x1b1/0x53
- kvm_vm_ioctl+0xc2/0xa60
-  __x64_sys_ioctl+0x9a/0xf0
- x64_sys_call+0x10ee/0x20d0
- do_syscall_64+0xc3/0x470
- entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-Signed-off-by: Yan Zhao <yan.y.zhao@intel.com>
-Signed-off-by: Sean Christopherson <seanjc@google.com>
----
- arch/x86/kvm/vmx/tdx.c | 43 +++++++++++++++++++++++++++++++++++++-----
- 1 file changed, 38 insertions(+), 5 deletions(-)
-
-diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-index d6541b08423f..daec88d4b88d 100644
---- a/arch/x86/kvm/vmx/tdx.c
-+++ b/arch/x86/kvm/vmx/tdx.c
-@@ -833,19 +833,52 @@ void tdx_vcpu_put(struct kvm_vcpu *vcpu)
- 	tdx_prepare_switch_to_host(vcpu);
- }
- 
-+/*
-+ * Life cycles for a TD and a vCPU:
-+ * 1. KVM_CREATE_VM ioctl.
-+ *    TD state is TD_STATE_UNINITIALIZED.
-+ *    hkid is not assigned at this stage.
-+ * 2. KVM_TDX_INIT_VM ioctl.
-+ *    TD transitions to TD_STATE_INITIALIZED.
-+ *    hkid is assigned after this stage.
-+ * 3. KVM_CREATE_VCPU ioctl. (only when TD is TD_STATE_INITIALIZED).
-+ *    3.1 tdx_vcpu_create() transitions vCPU state to VCPU_TD_STATE_UNINITIALIZED.
-+ *    3.2 vcpu_load() and vcpu_put() in kvm_arch_vcpu_create().
-+ *    3.3 (conditional) if any error encountered after kvm_arch_vcpu_create()
-+ *        kvm_arch_vcpu_destroy() --> tdx_vcpu_free().
-+ * 4. KVM_TDX_INIT_VCPU ioctl.
-+ *    tdx_vcpu_init() transitions vCPU state to VCPU_TD_STATE_INITIALIZED.
-+ *    vCPU control structures are allocated at this stage.
-+ * 5. kvm_destroy_vm().
-+ *    5.1 tdx_mmu_release_hkid(): (1) tdh_vp_flush(), disassociates all vCPUs.
-+ *                                (2) puts hkid to !assigned state.
-+ *    5.2 kvm_destroy_vcpus() --> tdx_vcpu_free():
-+ *        transitions vCPU to VCPU_TD_STATE_UNINITIALIZED state.
-+ *    5.3 tdx_vm_destroy()
-+ *        transitions TD to TD_STATE_UNINITIALIZED state.
-+ *
-+ * tdx_vcpu_free() can be invoked only at 3.3 or 5.2.
-+ * - If at 3.3, hkid is still assigned, but the vCPU must be in
-+ *   VCPU_TD_STATE_UNINITIALIZED state.
-+ * - if at 5.2, hkid must be !assigned and all vCPUs must be in
-+ *   VCPU_TD_STATE_INITIALIZED state and have been dissociated.
-+ */
- void tdx_vcpu_free(struct kvm_vcpu *vcpu)
- {
- 	struct kvm_tdx *kvm_tdx = to_kvm_tdx(vcpu->kvm);
- 	struct vcpu_tdx *tdx = to_tdx(vcpu);
- 	int i;
- 
-+	if (vcpu->cpu != -1) {
-+		KVM_BUG_ON(tdx->state == VCPU_TD_STATE_INITIALIZED, vcpu->kvm);
-+		tdx_disassociate_vp(vcpu);
-+		return;
-+	}
-+
- 	/*
- 	 * It is not possible to reclaim pages while hkid is assigned. It might
--	 * be assigned if:
--	 * 1. the TD VM is being destroyed but freeing hkid failed, in which
--	 * case the pages are leaked
--	 * 2. TD VCPU creation failed and this on the error path, in which case
--	 * there is nothing to do anyway
-+	 * be assigned if the TD VM is being destroyed but freeing hkid failed,
-+	 * in which case the pages are leaked.
- 	 */
- 	if (is_hkid_assigned(kvm_tdx))
- 		return;
--- 
-2.51.0.858.gf9c4a03a3a-goog
+> ---
+>  arch/arm64/kvm/arm.c       |  6 ++++++
+>  arch/loongarch/kvm/Kconfig |  1 -
+>  arch/mips/kvm/Kconfig      |  1 -
+>  arch/powerpc/kvm/Kconfig   |  1 -
+>  arch/riscv/kvm/Kconfig     |  1 -
+>  arch/s390/kvm/Kconfig      |  1 -
+>  arch/x86/kvm/x86.c         |  6 ++++++
+>  include/linux/kvm_host.h   | 10 ----------
+>  virt/kvm/Kconfig           |  3 ---
+>  9 files changed, 12 insertions(+), 18 deletions(-)
+> 
+> diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
+> index f21d1b7f20f8..785aaaee6a5d 100644
+> --- a/arch/arm64/kvm/arm.c
+> +++ b/arch/arm64/kvm/arm.c
+> @@ -1828,6 +1828,12 @@ long kvm_arch_vcpu_ioctl(struct file *filp,
+>  	return r;
+>  }
+>  
+> +long kvm_arch_vcpu_async_ioctl(struct file *filp, unsigned int ioctl,
+> +			       unsigned long arg)
+> +{
+> +	return -ENOIOCTLCMD;
+> +}
+> +
+>  void kvm_arch_sync_dirty_log(struct kvm *kvm, struct kvm_memory_slot *memslot)
+>  {
+>  
+> diff --git a/arch/loongarch/kvm/Kconfig b/arch/loongarch/kvm/Kconfig
+> index ae64bbdf83a7..ed4f724db774 100644
+> --- a/arch/loongarch/kvm/Kconfig
+> +++ b/arch/loongarch/kvm/Kconfig
+> @@ -25,7 +25,6 @@ config KVM
+>  	select HAVE_KVM_IRQCHIP
+>  	select HAVE_KVM_MSI
+>  	select HAVE_KVM_READONLY_MEM
+> -	select HAVE_KVM_VCPU_ASYNC_IOCTL
+>  	select KVM_COMMON
+>  	select KVM_GENERIC_DIRTYLOG_READ_PROTECT
+>  	select KVM_GENERIC_HARDWARE_ENABLING
+> diff --git a/arch/mips/kvm/Kconfig b/arch/mips/kvm/Kconfig
+> index ab57221fa4dd..cc13cc35f208 100644
+> --- a/arch/mips/kvm/Kconfig
+> +++ b/arch/mips/kvm/Kconfig
+> @@ -22,7 +22,6 @@ config KVM
+>  	select EXPORT_UASM
+>  	select KVM_COMMON
+>  	select KVM_GENERIC_DIRTYLOG_READ_PROTECT
+> -	select HAVE_KVM_VCPU_ASYNC_IOCTL
+>  	select KVM_MMIO
+>  	select KVM_GENERIC_MMU_NOTIFIER
+>  	select KVM_GENERIC_HARDWARE_ENABLING
+> diff --git a/arch/powerpc/kvm/Kconfig b/arch/powerpc/kvm/Kconfig
+> index 2f2702c867f7..c9a2d50ff1b0 100644
+> --- a/arch/powerpc/kvm/Kconfig
+> +++ b/arch/powerpc/kvm/Kconfig
+> @@ -20,7 +20,6 @@ if VIRTUALIZATION
+>  config KVM
+>  	bool
+>  	select KVM_COMMON
+> -	select HAVE_KVM_VCPU_ASYNC_IOCTL
+>  	select KVM_VFIO
+>  	select HAVE_KVM_IRQ_BYPASS
+>  
+> diff --git a/arch/riscv/kvm/Kconfig b/arch/riscv/kvm/Kconfig
+> index c50328212917..77379f77840a 100644
+> --- a/arch/riscv/kvm/Kconfig
+> +++ b/arch/riscv/kvm/Kconfig
+> @@ -23,7 +23,6 @@ config KVM
+>  	select HAVE_KVM_IRQCHIP
+>  	select HAVE_KVM_IRQ_ROUTING
+>  	select HAVE_KVM_MSI
+> -	select HAVE_KVM_VCPU_ASYNC_IOCTL
+>  	select HAVE_KVM_READONLY_MEM
+>  	select HAVE_KVM_DIRTY_RING_ACQ_REL
+>  	select KVM_COMMON
+> diff --git a/arch/s390/kvm/Kconfig b/arch/s390/kvm/Kconfig
+> index cae908d64550..96d16028e8b7 100644
+> --- a/arch/s390/kvm/Kconfig
+> +++ b/arch/s390/kvm/Kconfig
+> @@ -20,7 +20,6 @@ config KVM
+>  	def_tristate y
+>  	prompt "Kernel-based Virtual Machine (KVM) support"
+>  	select HAVE_KVM_CPU_RELAX_INTERCEPT
+> -	select HAVE_KVM_VCPU_ASYNC_IOCTL
+>  	select KVM_ASYNC_PF
+>  	select KVM_ASYNC_PF_SYNC
+>  	select KVM_COMMON
+> diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
+> index b4b5d2d09634..ca5ba2caf314 100644
+> --- a/arch/x86/kvm/x86.c
+> +++ b/arch/x86/kvm/x86.c
+> @@ -7240,6 +7240,12 @@ static int kvm_vm_ioctl_set_clock(struct kvm *kvm, void __user *argp)
+>  	return 0;
+>  }
+>  
+> +long kvm_arch_vcpu_async_ioctl(struct file *filp, unsigned int ioctl,
+> +			       unsigned long arg)
+> +{
+> +	return -ENOIOCTLCMD;
+> +}
+> +
+>  int kvm_arch_vm_ioctl(struct file *filp, unsigned int ioctl, unsigned long arg)
+>  {
+>  	struct kvm *kvm = filp->private_data;
+> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
+> index 5bd76cf394fa..7186b2ae4b57 100644
+> --- a/include/linux/kvm_host.h
+> +++ b/include/linux/kvm_host.h
+> @@ -2437,18 +2437,8 @@ static inline bool kvm_arch_no_poll(struct kvm_vcpu *vcpu)
+>  }
+>  #endif /* CONFIG_HAVE_KVM_NO_POLL */
+>  
+> -#ifdef CONFIG_HAVE_KVM_VCPU_ASYNC_IOCTL
+>  long kvm_arch_vcpu_async_ioctl(struct file *filp,
+>  			       unsigned int ioctl, unsigned long arg);
+> -#else
+> -static inline long kvm_arch_vcpu_async_ioctl(struct file *filp,
+> -					     unsigned int ioctl,
+> -					     unsigned long arg)
+> -{
+> -	return -ENOIOCTLCMD;
+> -}
+> -#endif /* CONFIG_HAVE_KVM_VCPU_ASYNC_IOCTL */
+> -
+>  void kvm_arch_guest_memory_reclaimed(struct kvm *kvm);
+>  
+>  #ifdef CONFIG_HAVE_KVM_VCPU_RUN_PID_CHANGE
+> diff --git a/virt/kvm/Kconfig b/virt/kvm/Kconfig
+> index 5f0015c5dd95..267c7369c765 100644
+> --- a/virt/kvm/Kconfig
+> +++ b/virt/kvm/Kconfig
+> @@ -78,9 +78,6 @@ config HAVE_KVM_IRQ_BYPASS
+>         tristate
+>         select IRQ_BYPASS_MANAGER
+>  
+> -config HAVE_KVM_VCPU_ASYNC_IOCTL
+> -       bool
+> -
+>  config HAVE_KVM_VCPU_RUN_PID_CHANGE
+>         bool
+>  
 
 
