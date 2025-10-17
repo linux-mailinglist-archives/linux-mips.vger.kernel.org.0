@@ -1,97 +1,109 @@
-Return-Path: <linux-mips+bounces-11770-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11771-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE1CBBEB23A
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Oct 2025 20:01:43 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 053D2BEBD2A
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Oct 2025 23:37:32 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DC47E4E4B46
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Oct 2025 18:01:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 921D11AE12D8
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Oct 2025 21:37:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 321DE2FFFAA;
-	Fri, 17 Oct 2025 18:01:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 907F127702D;
+	Fri, 17 Oct 2025 21:37:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b="LvX26175"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="FE1dBvUV"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx4.wp.pl (mx4.wp.pl [212.77.101.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF08A2C21D4
-	for <linux-mips@vger.kernel.org>; Fri, 17 Oct 2025 18:01:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.77.101.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BDBB2036E9;
+	Fri, 17 Oct 2025 21:37:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760724101; cv=none; b=qseP6fF93bSTMY14XT/7Ky5ACAtsaZklBV/5djWcfqqYJmZtqT3H1Eu+N7aUQL+0CnKcy9rZYd6ZgFFl/AZWrtKxgWeUb0g0i51YVSVujWY1IO/1PDk9W5Ps4j+0QHxz4sTei0o+ub1Chf6fBBBWaHZhdBTi6YpwTxIL1LyxKJk=
+	t=1760737045; cv=none; b=QBEOw+lxd0phQdSYgpcjwzORj5sVJAnKLSsfC/7pmws2jYUff+l/qhwnux6NCqx828MuZQ/rTeRlbtDMebwv4dV48O2RlQZBzNGm8Z1J2xkbFlDJPzmDaaYNbbbIdmRFwuyuHJqDI0guOMt5524LKvHzZApbuARHSysWWsl9e70=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760724101; c=relaxed/simple;
-	bh=uEz8JPPhrI+Zgyxi1YiGmOrJxuRQ6sLk9rBqa8GNTCI=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=lHs8ZKxOHMtlcF9A3duK8L25jQG3tm8CzP534jek/dhK+DXNToqfGlkxbtvaJYULQ0UFneZJPnr5KbU5VhQwiAZnxRzJAm9fMjGVEtRCcgveUCaATw27/Yvtwh9IN5V20av5yOdPwkO16BhAARrOHxkNqoF9q2V0yJQQqBbpIw4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl; spf=pass smtp.mailfrom=wp.pl; dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b=LvX26175; arc=none smtp.client-ip=212.77.101.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wp.pl
-Received: (wp-smtpd smtp.wp.pl 301 invoked from network); 17 Oct 2025 20:01:27 +0200
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=20241105;
-          t=1760724087; bh=55VmtpXFFb4oHifdRS0/Qic3faGPb6qOmUUmEq1Bvpw=;
-          h=From:To:Cc:Subject;
-          b=LvX26175n0nVoaS76aZsMrflTUwWcQTxmLLeZBJTeHBPqri9HBaekcOSo7etxRMR/
-           2h420u/0nL+AD+CLzbk2TUBlfla9JTFtHRHYT6D2d5/3fWLsaX9iU+TZ784+NUOe0t
-           YjxFE7tqvD7yg8MmXjc2FJ2xsmHQ7hEnbW8fuD3t3oIE24W2hncLrAMFFZxYJgq+CE
-           WC5/vmZyCCUWdno/3xK+IX96cO4HVP8i59+ImgqyJsm2Go8wujvN94ayBSD2bt/Omd
-           jnNHYxTRq9HlhJWmZzGerKh9o5fks8p/4RpMKf1kKLQRyFYsXuxxEkD9x2B1cSfpXW
-           FVaTkMy6bhuLA==
-Received: from 83.24.149.147.ipv4.supernova.orange.pl (HELO laptop-olek.lan) (olek2@wp.pl@[83.24.149.147])
-          (envelope-sender <olek2@wp.pl>)
-          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <jd@cjdns.fr>; 17 Oct 2025 20:01:27 +0200
-From: Aleksander Jan Bajkowski <olek2@wp.pl>
-To: jd@cjdns.fr,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	tsbogend@alpha.franken.de,
-	linux-mips@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Aleksander Jan Bajkowski <olek2@wp.pl>
-Subject: [PATCH] mips: dts: econet: fix EN751221 core type
-Date: Fri, 17 Oct 2025 20:01:19 +0200
-Message-ID: <20251017180124.67687-1-olek2@wp.pl>
-X-Mailer: git-send-email 2.47.3
+	s=arc-20240116; t=1760737045; c=relaxed/simple;
+	bh=nYpBafhW7YwCHT2Y3O7Vz/Cfc9k402BvH2+Wh0f/DtA=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=cd9pi7fG1cFjyUBuUA1T/KvVxayvLCNYinxzZkHNwWjUhC+wEPrsqY5nFy0FPpfaInFwhXASPu6m1jVDCLQTUayfplYuiHjIslNzlecVsYjfQe0r6lmQNS8Cm6yrAvC/W3mk+L54YHlZiMJTWC54Glq3d9zcJJ9Uxn+NWnfLmMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=FE1dBvUV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7221C4CEE7;
+	Fri, 17 Oct 2025 21:37:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1760737044;
+	bh=nYpBafhW7YwCHT2Y3O7Vz/Cfc9k402BvH2+Wh0f/DtA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=FE1dBvUVul1ShFrtQ9a2yuuluVLEiX3PNARQaVwbXQaU+qoOwkoZFLo6b4wiRoAnn
+	 EAWR1VKBFA4zRtgkP4k2hogdZvMF/OsA2XiB7rwYq/IaAOtbxaSzMwRQdJIRLlTGrz
+	 ijhhPTnwyBb6OdZP8xn3qakbxsmeiLKTac97LR64=
+Date: Fri, 17 Oct 2025 14:37:22 -0700
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+Cc: Sumanth Korikkar <sumanthk@linux.ibm.com>, Jonathan Corbet
+ <corbet@lwn.net>, Matthew Wilcox <willy@infradead.org>, Guo Ren
+ <guoren@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Heiko
+ Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, Alexander
+ Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger
+ <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>,
+ "David S . Miller" <davem@davemloft.net>, Andreas Larsson
+ <andreas@gaisler.com>, Arnd Bergmann <arnd@arndb.de>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, Dan Williams <dan.j.williams@intel.com>,
+ Vishal Verma <vishal.l.verma@intel.com>, Dave Jiang <dave.jiang@intel.com>,
+ Nicolas Pitre <nico@fluxnic.net>, Muchun Song <muchun.song@linux.dev>,
+ Oscar Salvador <osalvador@suse.de>, David Hildenbrand <david@redhat.com>,
+ Konstantin Komarov <almaz.alexandrovich@paragon-software.com>, Baoquan He
+ <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>, Dave Young
+ <dyoung@redhat.com>, Tony Luck <tony.luck@intel.com>, Reinette Chatre
+ <reinette.chatre@intel.com>, Dave Martin <Dave.Martin@arm.com>, James Morse
+ <james.morse@arm.com>, Alexander Viro <viro@zeniv.linux.org.uk>, Christian
+ Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>, "Liam R . Howlett"
+ <Liam.Howlett@oracle.com>, Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport
+ <rppt@kernel.org>, Suren Baghdasaryan <surenb@google.com>, Michal Hocko
+ <mhocko@suse.com>, Hugh Dickins <hughd@google.com>, Baolin Wang
+ <baolin.wang@linux.alibaba.com>, Uladzislau Rezki <urezki@gmail.com>,
+ Dmitry Vyukov <dvyukov@google.com>, Andrey Konovalov
+ <andreyknvl@gmail.com>, Jann Horn <jannh@google.com>, Pedro Falcato
+ <pfalcato@suse.de>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+ linux-csky@vger.kernel.org, linux-mips@vger.kernel.org,
+ linux-s390@vger.kernel.org, sparclinux@vger.kernel.org,
+ nvdimm@lists.linux.dev, linux-cxl@vger.kernel.org, linux-mm@kvack.org,
+ ntfs3@lists.linux.dev, kexec@lists.infradead.org,
+ kasan-dev@googlegroups.com, Jason Gunthorpe <jgg@nvidia.com>,
+ iommu@lists.linux.dev, Kevin Tian <kevin.tian@intel.com>, Will Deacon
+ <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>
+Subject: Re: [PATCH v4 11/14] mm/hugetlbfs: update hugetlbfs to use
+ mmap_prepare
+Message-Id: <20251017143722.d045a2cd9d1839803da3f28a@linux-foundation.org>
+In-Reply-To: <c64e017a-5219-4382-bba9-d24310ad2c21@lucifer.local>
+References: <cover.1758135681.git.lorenzo.stoakes@oracle.com>
+	<e5532a0aff1991a1b5435dcb358b7d35abc80f3b.1758135681.git.lorenzo.stoakes@oracle.com>
+	<aNKJ6b7kmT_u0A4c@li-2b55cdcc-350b-11b2-a85c-a78bff51fc11.ibm.com>
+	<20250923141704.90fba5bdf8c790e0496e6ac1@linux-foundation.org>
+	<aPI2SZ5rFgZVT-I8@li-2b55cdcc-350b-11b2-a85c-a78bff51fc11.ibm.com>
+	<c64e017a-5219-4382-bba9-d24310ad2c21@lucifer.local>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-WP-DKIM-Status: good (id: wp.pl)                                                      
-X-WP-MailID: c5c271ad7cb4d967f2347832fe9b88e7
-X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 000000A [URMU]                               
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-In fact, it is a multi-threaded MIPS34Kc, not a single-threaded MIPS24Kc.
+On Fri, 17 Oct 2025 13:46:20 +0100 Lorenzo Stoakes <lorenzo.stoakes@oracle.com> wrote:
 
-Fixes: 0ec488700972 ("mips: dts: Add EcoNet DTS with EN751221 and SmartFiber XP8421-B board")
-Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
----
- arch/mips/boot/dts/econet/en751221.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> > The issue is reproducible again in linux-next with the following commit:
+> > 5fdb155933fa ("mm/hugetlbfs: update hugetlbfs to use mmap_prepare")
+> 
+> Andrew - I see this series in mm-unstable, not sure what it's doing there
+> as I need to rework this (when I get a chance, back from a 2 week vacation
+> and this week has been - difficult :)
+> 
+> Can we please drop this until I have a chance to respin?
 
-diff --git a/arch/mips/boot/dts/econet/en751221.dtsi b/arch/mips/boot/dts/econet/en751221.dtsi
-index 66197e73d4f0..2abeef5b744a 100644
---- a/arch/mips/boot/dts/econet/en751221.dtsi
-+++ b/arch/mips/boot/dts/econet/en751221.dtsi
-@@ -18,7 +18,7 @@ cpus: cpus {
- 
- 		cpu@0 {
- 			device_type = "cpu";
--			compatible = "mips,mips24KEc";
-+			compatible = "mips,mips34Kc";
- 			reg = <0>;
- 		};
- 	};
--- 
-2.47.3
-
+No probs, gone.
 
