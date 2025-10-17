@@ -1,126 +1,209 @@
-Return-Path: <linux-mips+bounces-11737-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11738-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EBACBE404D
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Oct 2025 16:52:41 +0200 (CEST)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id E26F0BE5E5E
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Oct 2025 02:32:54 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ACABA5E30AB
-	for <lists+linux-mips@lfdr.de>; Thu, 16 Oct 2025 14:50:03 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 9D9494E1C00
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Oct 2025 00:32:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 349CA34DCDD;
-	Thu, 16 Oct 2025 14:48:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A17D11F9EC0;
+	Fri, 17 Oct 2025 00:32:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="MywwBi5l"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qWVgSgIn"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C387B345734
-	for <linux-mips@vger.kernel.org>; Thu, 16 Oct 2025 14:48:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC6D847F77
+	for <linux-mips@vger.kernel.org>; Fri, 17 Oct 2025 00:32:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760626124; cv=none; b=cKRcCoMjPC6SEmTJ4+KSKNrr4uWuY0LlJCwawfSJfk6fsAZB2f43ugJsWbw51+XlKZPvhQbTYFN2+REYzWzq645wVM719MT00mOL6xkmL1ZcCpGRvSd+Ml4npDQ5TRUqDzq/3BEKzAbrrujc1J9/WIrqwQTsBj0DgIaup6PSzbo=
+	t=1760661170; cv=none; b=g7Q8ca+rCTSP9YIYARAXJMUH6SGWUqRZWhBrI7RI0/DO/p/TKH51NhWaSXzCpQxXJIYNfOiTaWYMbixZ0HWeXnCO43RMyZcxFb1UW5ibxQimQ8w4r1nqXDtpdnsOSMACJWIfCiXngvinsCAzGM29mWxPLlZbXdrNHHSpAEgzECM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760626124; c=relaxed/simple;
-	bh=fEYTH53YDZJZ8C2Er8bOzHta7ybr+V5+FzGrUdlcHBA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gKP8rYjj/CIPw+4Knb/jNLqpNP5Td4lQmj/IS0YFEco3ZWwHyY/z6PIAsnZOclVaXDFnPVh2roEdtUzdCa7OwMv6oakn+rnO2Ao1EJfGgtkKB9xIXqSjuBnSzch5e+kI3WLLa3o0xeRdej/BywLTndaCntV67WYAP1dVsT/+roY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=MywwBi5l; arc=none smtp.client-ip=209.85.221.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3ee12807d97so789895f8f.0
-        for <linux-mips@vger.kernel.org>; Thu, 16 Oct 2025 07:48:35 -0700 (PDT)
+	s=arc-20240116; t=1760661170; c=relaxed/simple;
+	bh=ak2l1w4dqrmwmEISFLg2hMy6SydMKCTU9LZWqVjcy/M=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=fKLepUzS6EUWugzM6xO78q+GGNaA8splAdWfNRsMkdfn0/LS91JX7l5av+lwcA2FCc0UW2N/pT7bpvrjhIzv1grNeDExAZwgVr30UpsKndc9gK8G8WWXAuhAiizKLRWZb/OxjJR4lzXt1TokVY2e10aTJLI5gIeG3ceDhVjUhsU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qWVgSgIn; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-336b646768eso1548076a91.1
+        for <linux-mips@vger.kernel.org>; Thu, 16 Oct 2025 17:32:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1760626114; x=1761230914; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=il5/r0fmHwvIVU3+4q4zkfdvIMAREkRpbu6Q9Q7Tig4=;
-        b=MywwBi5lmsOrpsCmmOV7nsIsxLrHGlTjFrIL4fvXm1GqGyoTm843ZETfE08u+w1whG
-         Pd6itPgMW/hVeJSiobWZt4ZB/69aeq4PnEAvH0W5wWV9I++qCvK0hclteTx8rPbg0li/
-         UECLKcUbJ6bsohZ9z0fC3GOby2FZtqSQVJOF76rdw9zc5NqUSlNHBUNrvu7aNdgfZP6L
-         71UD1mDeKkrNLRX/brgQqU6sXugpZl+YIhHoSzEZkol3xU1yzH+ThXGULoSOvzBH049j
-         wkgpLSoN4VA8Be25FHV1XILDwwuuyX486uJl6aWr3dkUEPrU1gdBFNPEOq6NuZppdUNu
-         iiJg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760626114; x=1761230914;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=google.com; s=20230601; t=1760661168; x=1761265968; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=il5/r0fmHwvIVU3+4q4zkfdvIMAREkRpbu6Q9Q7Tig4=;
-        b=q1vqfQczN++kb1vyqrFU14kFEqSl7hEMwk2yxWoaMGSSeE12S7PaFe/o8I6vutmQNj
-         CgShpW7nsp0u4KDfCRjXgzd5VRQYFZw92chZjQQVtRN585owdHFtE4LRMjP1+yzwmXNt
-         MUfJOW/IDpvYlLVCv6twsgl6jzMi+8wPEK82qfDKBmNpeW1ZfBLk7x5Yu7FzD5IiaJmm
-         NS/IorFAXMOufvJRL/85RIQpE/cctHyAKbY3u2fX7XCZ9F4MEaqGgYe7Y6a9aqEBBFUv
-         ieuxZFqobAwG+JLyVoHqYs8XTJ9a5+gXBwpUSyx+xPcpSck/9T5OPLEqvPe7bGHxs7hf
-         SEhQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU1SVZIZWIzYPShu2eLw+iv8c5h3PLifVahaaUEv5RNT1IaZIDA0tfJfeBriU+f5/T7oVRBbUQuJ0yt@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7NNO8kJFg4VqxHlCRV28nsZYEAPRbNAHAgTqPWJAveJjMfKNj
-	z6jTCMvHGO/vgEIqbbQVOx1ejb9Gu5+VBQYVjx8OhjfHWiKLpNEyhZC5CZ6pUoD/chk=
-X-Gm-Gg: ASbGncuFdE8VztjlwN5NIy1ldLO8w720G7gX3ZCy3gql6Q/hEPFiT93w03DrqTwKFVQ
-	xTeSP2UW5V01/dVlnjUyU4Ow6tW/UNAMh1GPsZgYh5r34Ak1jFwLgiCSFpLcxPTQvlfmRLVW3LO
-	HwN7KXVpKJccHupV/Mtm+42xXvLD+0i1APvq9bJ4ajcZTdxv/tkYfbjfhzIh+fEL5KxjVOUwHIN
-	1xnyDkyNSKMDdbUxSk83XF1qViYfgpZ+6nsw6BK3qe/kZ34VR37caNYa7KIG3q8Gem1D7hZH/vs
-	GMPqhMVmOjV9TltFyKs/cFxNAde7O84lIfljcD69SEeKxXvBh6RGzt6Aszx+k7nwfx+vL3S459j
-	L5UZ4zknoiFIyFqSp66hx/lb21+R2EIhZv8gZ3XdM17aCP1vn7oYOhiE72h10IJ4JG7OXZ7l/ad
-	Wprw==
-X-Google-Smtp-Source: AGHT+IGU+UUv23rPnRMVt1yR35zGCx+QFDbX2GlDTl3HK/z3KL4fSupr6QTfss0me53/F+Mqd2QUFg==
-X-Received: by 2002:a5d:588f:0:b0:425:8591:8f5b with SMTP id ffacd0b85a97d-42704da4b6amr311746f8f.59.1760626114003;
-        Thu, 16 Oct 2025 07:48:34 -0700 (PDT)
-Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:ef97:57cb:86cb:f7c4])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-426e6f03a76sm19507158f8f.36.2025.10.16.07.48.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Oct 2025 07:48:23 -0700 (PDT)
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-To: Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>
-Cc: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
-	linux-kernel@vger.kernel.org,
-	linux-gpio@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	John Crispin <john@phrozen.org>
-Subject: Re: [PATCH 1/2] gpio: mm-lantiq: Drop legacy-of-mm-gpiochip.h header from GPIO driver
-Date: Thu, 16 Oct 2025 16:48:21 +0200
-Message-ID: <176062606134.122017.14455806740339775356.b4-ty@linaro.org>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <c7415e2870b3bd9109f95bab3784d48e708e30e6.1760360638.git.christophe.leroy@csgroup.eu>
-References: <c7415e2870b3bd9109f95bab3784d48e708e30e6.1760360638.git.christophe.leroy@csgroup.eu>
+        bh=IUhhIOZQl1LmuwLSXSpqUy/3rFv/MJFTCRm/41SsmT4=;
+        b=qWVgSgInTGM3PhU5mLfPUxouaOBQzkVXa8q3UoUZvlPQ3GSfKLUb1dw0OdcxERHVRK
+         4d6HOmUkluG59TWxI66h8Io4bvfM/4z82psM5kQ/xj3dNNv5ZW7KQmYs2yPZ6hKEnULe
+         VPdGI+pt0uySb0KmD+EHiFN2pDa9ArfCA2XNUcV1f+3cjg1gMscs5NJC+sXyQJIsgO/8
+         z4L0t49pOwnUZQLVb77bIL8jWFBWjzO9QFIG6cyOFRja+RxUocz81rOg8OelhYPuoFrH
+         DyHMAgLI+M49Rbf4iNI9dlcPq02cV26HA7v0wCRD/EV7BaZI+H/9ie3LGJL0iUlPn/i5
+         tvpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1760661168; x=1761265968;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IUhhIOZQl1LmuwLSXSpqUy/3rFv/MJFTCRm/41SsmT4=;
+        b=oLx3PLQvLNQfw8KXoUK0ThLR+ySKLnd9X9qGhRuwSufbWE09NCvzxt4Eb1P9iNez9B
+         nAjBirOTzbtD7D+OAohHA2GJXT0NLAy3oUkPKC9000RTm55StX7IfnN2KcH3ubElt9vr
+         H2hJvYBO2CsYdKA6YtqvTfyATXF6WMQ6GZM+3qieYZD53A5I0vwJUd/l4jXoRm4SGljZ
+         OEQJKX3xkSo9YCgvyQkIx+G458yS694qzUrpTX7qcoRLB/46OcZgvDUteOrtO6rVJsc5
+         DIzcJenuobABwVPyYYSLYwezLT+8TEz2ywIQzkxWGNNJaW9EeffkvQbE52EP9xn/yJOZ
+         95ng==
+X-Forwarded-Encrypted: i=1; AJvYcCWybivNjTRt7Koss22MIkrn9i43l02B6bwm+0cdWDuAEdJylUENSLLdzEhk4YBcK9Wr63ZS9U32cHaA@vger.kernel.org
+X-Gm-Message-State: AOJu0YxnIpRAYr3ni3fJafvz0w+d4jKOCr77sWeiuoMlYAYkV8TDmK9b
+	Yie10U7DPoZxTtNwjYecl5guC3arec7DkMw/OzYonuFuMz8+sB9UTDxiwHKb+jcfco2A9Qiyo0V
+	HZoGLMQ==
+X-Google-Smtp-Source: AGHT+IGuHGQyD51mVtQEohHO8NdP+zAwWbn/b6u+mCKYmFM3Ij1iHsaMWgJCqF8QAg/mESpyN5uCXlDFqHE=
+X-Received: from pjblk6.prod.google.com ([2002:a17:90b:33c6:b0:33b:51fe:1a74])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4a81:b0:32e:ddbc:9bd6
+ with SMTP id 98e67ed59e1d1-33bcf8f9431mr1768955a91.27.1760661168259; Thu, 16
+ Oct 2025 17:32:48 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date: Thu, 16 Oct 2025 17:32:18 -0700
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.0.858.gf9c4a03a3a-goog
+Message-ID: <20251017003244.186495-1-seanjc@google.com>
+Subject: [PATCH v3 00/25] KVM: x86/mmu: TDX post-populate cleanups
+From: Sean Christopherson <seanjc@google.com>
+To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+	Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>, 
+	Huacai Chen <chenhuacai@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Anup Patel <anup@brainfault.org>, Paul Walmsley <pjw@kernel.org>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, Sean Christopherson <seanjc@google.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, "Kirill A. Shutemov" <kas@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	kvm@vger.kernel.org, loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, x86@kernel.org, linux-coco@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>, 
+	Kai Huang <kai.huang@intel.com>, Michael Roth <michael.roth@amd.com>, 
+	Yan Zhao <yan.y.zhao@intel.com>, Vishal Annapurve <vannapurve@google.com>, 
+	Rick Edgecombe <rick.p.edgecombe@intel.com>, Ackerley Tng <ackerleytng@google.com>, 
+	Binbin Wu <binbin.wu@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Non-x86 folks, patches 1 and 2 are likely the only thing of interest here.
+They make kvm_arch_vcpu_async_ioctl() mandatory and then rename it to
+kvm_arch_vcpu_unlocked_ioctl().  Hopefully they're boring?
+
+As for the x86 side...
+
+Clean up the TDX post-populate paths (and many tangentially related paths) to
+address locking issues between gmem and TDX's post-populate hook[*], and
+within KVM itself (KVM doesn't ensure full mutual exclusivity between paths
+that for all intents and purposes the TDX-Module requires to be serialized).
+
+Compile tested only again on my end, but Rick and Yan took v2 for a spin, so I
+dropped the RFC.
+
+[*] http://lore.kernel.org/all/aG_pLUlHdYIZ2luh@google.com
+
+v3:
+ - Collect more reviews.
+ - Add the async_ioctl() => unlocked_ioctl() patches, and use the "unlocked"
+   variant in the TDX vCPU sub-ioctls so they can take kvm->lock outside of
+   vcpu->mutex.
+ - Add a patch to document that vcpu->mutex is taken *outside* kvm->slots_lock.
+ - Add the tdx_vm_state_guard CLASS() to take kvm->lock, all vcpu->mutex locks,
+   and kvm->slots_lock, in order to make tdx_td_init(), tdx_td_finalize(),
+   tdx_vcpu_init_mem_region(), and tdx_vcpu_init() mutually exclusive with
+   each other, and mutually exclusvie with basically anything that can result
+   in contending one of the TDX-Module locks (can't remember which one).
+ - Refine the changelog for the "Drop PROVE_MMU=y" patch. [Binbin]
+
+v2:
+ - Collect a few reviews (and ignore some because the patches went away).
+   [Rick, Kai, Ira]
+ - Move TDH_MEM_PAGE_ADD under mmu_lock and drop nr_premapped. [Yan, Rick]
+ - Force max_level = PG_LEVEL_4K straightaway. [Yan]
+ - s/kvm_tdp_prefault_page/kvm_tdp_page_prefault. [Rick]
+ - Use Yan's version of "Say no to pinning!".  [Yan, Rick]
+ - Tidy up helpers and macros to reduce boilerplate and copy+pate code, and
+   to eliminate redundant/dead code (e.g. KVM_BUG_ON() the same error
+   multiple times).
+ - KVM_BUG_ON() if TDH_MR_EXTEND fails (I convinced myself it can't).
+
+v1: https://lore.kernel.org/all/20250827000522.4022426-1-seanjc@google.com
+
+Sean Christopherson (23):
+  KVM: Make support for kvm_arch_vcpu_async_ioctl() mandatory
+  KVM: Rename kvm_arch_vcpu_async_ioctl() to
+    kvm_arch_vcpu_unlocked_ioctl()
+  KVM: TDX: Drop PROVE_MMU=y sanity check on to-be-populated mappings
+  KVM: x86/mmu: Add dedicated API to map guest_memfd pfn into TDP MMU
+  Revert "KVM: x86/tdp_mmu: Add a helper function to walk down the TDP
+    MMU"
+  KVM: x86/mmu: Rename kvm_tdp_map_page() to kvm_tdp_page_prefault()
+  KVM: TDX: Return -EIO, not -EINVAL, on a KVM_BUG_ON() condition
+  KVM: TDX: Fold tdx_sept_drop_private_spte() into
+    tdx_sept_remove_private_spte()
+  KVM: x86/mmu: Drop the return code from
+    kvm_x86_ops.remove_external_spte()
+  KVM: TDX: Avoid a double-KVM_BUG_ON() in tdx_sept_zap_private_spte()
+  KVM: TDX: Use atomic64_dec_return() instead of a poor equivalent
+  KVM: TDX: Fold tdx_mem_page_record_premap_cnt() into its sole caller
+  KVM: TDX: Bug the VM if extended the initial measurement fails
+  KVM: TDX: ADD pages to the TD image while populating mirror EPT
+    entries
+  KVM: TDX: Fold tdx_sept_zap_private_spte() into
+    tdx_sept_remove_private_spte()
+  KVM: TDX: Combine KVM_BUG_ON + pr_tdx_error() into TDX_BUG_ON()
+  KVM: TDX: Derive error argument names from the local variable names
+  KVM: TDX: Assert that mmu_lock is held for write when removing S-EPT
+    entries
+  KVM: TDX: Add macro to retry SEAMCALLs when forcing vCPUs out of guest
+  KVM: TDX: Add tdx_get_cmd() helper to get and validate sub-ioctl
+    command
+  KVM: TDX: Convert INIT_MEM_REGION and INIT_VCPU to "unlocked" vCPU
+    ioctl
+  KVM: TDX: Use guard() to acquire kvm->lock in tdx_vm_ioctl()
+  KVM: TDX: Guard VM state transitions with "all" the locks
+
+Yan Zhao (2):
+  KVM: TDX: Drop superfluous page pinning in S-EPT management
+  KVM: TDX: Fix list_add corruption during vcpu_load()
+
+ arch/arm64/kvm/arm.c               |   6 +
+ arch/loongarch/kvm/Kconfig         |   1 -
+ arch/loongarch/kvm/vcpu.c          |   4 +-
+ arch/mips/kvm/Kconfig              |   1 -
+ arch/mips/kvm/mips.c               |   4 +-
+ arch/powerpc/kvm/Kconfig           |   1 -
+ arch/powerpc/kvm/powerpc.c         |   4 +-
+ arch/riscv/kvm/Kconfig             |   1 -
+ arch/riscv/kvm/vcpu.c              |   4 +-
+ arch/s390/kvm/Kconfig              |   1 -
+ arch/s390/kvm/kvm-s390.c           |   4 +-
+ arch/x86/include/asm/kvm-x86-ops.h |   1 +
+ arch/x86/include/asm/kvm_host.h    |   5 +-
+ arch/x86/kvm/mmu.h                 |   3 +-
+ arch/x86/kvm/mmu/mmu.c             |  66 ++-
+ arch/x86/kvm/mmu/tdp_mmu.c         |  45 +-
+ arch/x86/kvm/vmx/main.c            |   9 +
+ arch/x86/kvm/vmx/tdx.c             | 638 ++++++++++++++---------------
+ arch/x86/kvm/vmx/tdx.h             |   8 +-
+ arch/x86/kvm/vmx/x86_ops.h         |   1 +
+ arch/x86/kvm/x86.c                 |  13 +
+ include/linux/kvm_host.h           |  14 +-
+ virt/kvm/Kconfig                   |   3 -
+ virt/kvm/kvm_main.c                |   6 +-
+ 24 files changed, 422 insertions(+), 421 deletions(-)
 
 
-On Mon, 13 Oct 2025 15:07:14 +0200, Christophe Leroy wrote:
-> Remove legacy-of-mm-gpiochip.h header file. The above mentioned
-> file provides an OF API that's deprecated. There is no agnostic
-> alternatives to it and we have to open code the logic which was
-> hidden behind of_mm_gpiochip_add_data(). Note, most of the GPIO
-> drivers are using their own labeling schemas and resource retrieval
-> that only a few may gain of the code deduplication, so whenever
-> alternative is appear we can move drivers again to use that one.
-> 
-> [...]
-
-Awesome work! Thanks for doing it, we really need to keep getting rid of all
-these legacy intefaces. Queued for v6.19.
-
-[1/2] gpio: mm-lantiq: Drop legacy-of-mm-gpiochip.h header from GPIO driver
-      https://git.kernel.org/brgl/linux/c/8d0d46da40c878d082b92771355faba8036aecc7
-[2/2] gpiolib: of: Get rid of <linux/gpio/legacy-of-mm-gpiochip.h>
-      https://git.kernel.org/brgl/linux/c/eba11116f39533d2e38cc5898014f2c95f32d23a
-
-Best regards,
+base-commit: f222788458c8a7753d43befef2769cd282dc008e
 -- 
-Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+2.51.0.858.gf9c4a03a3a-goog
+
 
