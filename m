@@ -1,72 +1,72 @@
-Return-Path: <linux-mips+bounces-11758-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11759-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52B78BE5F5A
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Oct 2025 02:38:53 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1212CBE5F69
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Oct 2025 02:39:11 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0A2CD1888F98
-	for <lists+linux-mips@lfdr.de>; Fri, 17 Oct 2025 00:38:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C1F419A0FFD
+	for <lists+linux-mips@lfdr.de>; Fri, 17 Oct 2025 00:39:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BAAE2BEC44;
-	Fri, 17 Oct 2025 00:33:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 217EF2C0282;
+	Fri, 17 Oct 2025 00:33:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="JG8w4U4N"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="I2d2BaLt"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F22312BE05E
-	for <linux-mips@vger.kernel.org>; Fri, 17 Oct 2025 00:33:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98AED2BEC30
+	for <linux-mips@vger.kernel.org>; Fri, 17 Oct 2025 00:33:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760661206; cv=none; b=jIblLfthOLhtHmHR+erjeFjtm65cv2/UXI0xr0ErhymFwGv9scSlFF2zTOW1hXLRXBJkSqmf5fvqc2ucGoYD2C6PNSzIM3VVi1lu4TBE86fSx8MX0Noo00gQ9byNYc0kkPT0Dvji/Vy9akBPGWfQNPqjAKiKgQMo4Mr8mIp3M9Q=
+	t=1760661207; cv=none; b=Iy3GhZw0aXY42k5yOrmUr3dqpF4oyuZU+ko57wUApj3aKci4TlGUK97jhYChHmC5W2kZUA97ZVkd7/hzMfv90zaXuZjs5My6Vwpq09pUCSKR8vEb5up8oj58X7G3tBul2OPBdtSemaqBwtxfyb1JGuUTM7quG37aflyGmsVyG3U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760661206; c=relaxed/simple;
-	bh=M6cFRGQS8meCCuYW0/U+4dFHJMyHGWBHr9QMgQL+DJ0=;
+	s=arc-20240116; t=1760661207; c=relaxed/simple;
+	bh=7L8ZMSuIkRJTkNiFBvS5epoU4gg7pv9o+BehY7SDauc=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=mmqHtCdjFQtsZtkmnK/OGby8fpwAF8H8XOWAqd7vgoYONIiBcNrvPfnyuEROlFLiJ04WHP2wuZNVH4LeE2AewyP4qYAxIIyd3Iyucnmyi5CzSjKttKatXQReNcWT4m3ZtWtIow4rMcUcucge5pgYb2kCRpVaJ0bvqeGSOctaYYM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=JG8w4U4N; arc=none smtp.client-ip=209.85.216.74
+	 To:Cc:Content-Type; b=K3J1sYf2r6tc32nxwLSLsA6MCe3E1KpNk8yaMhXqqv+lH0SbtGMhdb3IuhV0Yhg/vcZ/4x6Jg6iOeiNRB2YSxchRxNmD+PWwJB/BsIz9pUpnjLhaeFIX5h/5Z01dQypfCeOSqdJwJE8a8E7l5RPbUd35mjbzSBzmRwD2IeWDbWs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=I2d2BaLt; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-32ec69d22b2so1265730a91.1
-        for <linux-mips@vger.kernel.org>; Thu, 16 Oct 2025 17:33:23 -0700 (PDT)
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-32eb18b5659so1156371a91.2
+        for <linux-mips@vger.kernel.org>; Thu, 16 Oct 2025 17:33:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1760661203; x=1761266003; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1760661205; x=1761266005; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=jejy5GHiX1n5ZzK7FS/SwKAPXTIMDzw65QOVqYwFQBI=;
-        b=JG8w4U4Niq55dlrwX/1lGDMW9qhuGwx2MPE04ytJyxTMKWU4aqUHtxNQ4nsCFJyNaB
-         nnLs9iS7YXdN6SneGXWiV3Xd/9zi5q0PUx3Qt+FQvzCuABxjrT5v1VIT32yCNVFCGaZy
-         gBS0LzGGlhEY6lpXnBlfzMh/dUCNpC0mrk1b+2S1ioHkzTfkL2MpfEzO9ipUEkwTWt9O
-         gzpvqgARSoJm5RtnX2Rrg7g6EWJE4oZNHga1deTKV1kRu09blFhE3JFnEbC4iT4bx1h9
-         T9zImFJj9V8gNd8S2jasDPTlFPWeS6JGAX8WM1gZtwFVDWR0QTU2j/91uNMKIy1ocUeZ
-         i1Bw==
+        bh=G1uT4yQcba8Ntip8LDR4veCehne/0rON+KC3PlpYlbc=;
+        b=I2d2BaLtXqDJIKsNYUqpCOnQeIzAGYVpirrMAlP0NvOM+mzhb0h0sgpGfn0PitSFTU
+         +5dns31JOWekYVeclB4cNzOz/l06RBk+7mBe+cupAbWT/FfI0Jl7ZUFTYguzroQROfqw
+         +hFhYY6VZR8XnV7MFhanRhR9G9xvLAxF4X46uQbEubCFfqLGRiEuWlYpVhCb7JpINlyM
+         nlabs3mKEln6vSpYDZEPDRai6uaWjlsqTEFM6xQ8QBrW6ullentcn29VVQnk1T/XsCo/
+         10AWXS1pVYoYiud2ksL9f6HFJzWRLNNxEEJiS3dVOdgcOVLgyGkJ6kiO5T5BMRXMjhNt
+         6VSg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760661203; x=1761266003;
+        d=1e100.net; s=20230601; t=1760661205; x=1761266005;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=jejy5GHiX1n5ZzK7FS/SwKAPXTIMDzw65QOVqYwFQBI=;
-        b=rS23D9h8HTLsiuNLBjKVAxTaq85oPNKUDp+GXte86TGOaftArGQalGCbTaZD1uX0X2
-         9XPzdLq4YuDjBz1L34jyKKs6QIkF9HGDxXhD3LWF7cvjseV9U7E8IoCvmRtRIsSUn3+K
-         7JxfZeB+iCFQcaibZie6CEqWJUNPxX/Wp4YL4+gJXjpg4QURXh2InW0/F/OmAexZ0S5a
-         B7FZ5u1nSMp9GNhi2WPDsljH+Ui0x6QmSwzu8ws9jXdpUWDEidDdR7emOV0MazKTkxHW
-         X217GEv4HC0rS+Ji0s59/ap/bWFbQmLxJ0Zu4NCumhv41uNn9tTHtXhLtS5GDQVq6eQz
-         GYFg==
-X-Forwarded-Encrypted: i=1; AJvYcCVYd4S3MScBpfZ11nfjE8TR+sUz4zpzbnVKVN9Ml0CsixBu6PdRIRgM/WvCQQJEgugTViBoRYOirLP2@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxy/ORUsFhwE3bVseV2EprNm3VKSTHdLqV7g9HNeOZuI9dWvlVE
-	+GTtgYG+qWYUTC0pKKxgkzrd77rHVlu6dkOiaThKkYRx+NCczAQs5wCcLDARkYjQnmyJpgQ/C+E
-	0WLQhPg==
-X-Google-Smtp-Source: AGHT+IFl8lCxI7RawbIX2CACJWbI5vFGM8HhgndqIpbMEKI2O7QrNwa82jxnXWK9S77FfTXYSbFZaN83qL4=
-X-Received: from pjqx20.prod.google.com ([2002:a17:90a:b014:b0:338:3e6b:b835])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:3c02:b0:32c:38b0:593e
- with SMTP id 98e67ed59e1d1-33bcf85ffa4mr1903883a91.5.1760661203423; Thu, 16
- Oct 2025 17:33:23 -0700 (PDT)
+        bh=G1uT4yQcba8Ntip8LDR4veCehne/0rON+KC3PlpYlbc=;
+        b=mpcOYan5iONF3Xb4UyPP4bjvQY8CQo5OGgdSOUZ2l5/EWFcEGmUzs9yI92mxhvBv6j
+         uigIOXW49MaISlR+9YiqQHSngXlFSQynbTZdybKP6iP0NUHTkuiP8Je/TL0FGM6LiR8T
+         4cbG0QyKZDaMnBBSqvAEz9vHjnJTCQPYUFkj1scEmVnimTXkSwq/LWd1KRYPWs9ddabH
+         g/agSwRIwZN0u8EEYS72+wrj98JPTdjdqgm+OGFm1g/Rv3+YUl2HYwudpA5ZCrdu7Zc4
+         QdVyRP8zzuH/wTeDgXqXbfALwiojKYjunNkk9wc2jLqAMuefEuVu9juNq1sov1Qfv+LE
+         OtZQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU8ZJsHPoGP2FcEWlZqoAk1XrzCXT2JH8t4QtiFaMH9XWxwcpiLi9EGrnYq1EHmTzDscRaJps9eYj0a@vger.kernel.org
+X-Gm-Message-State: AOJu0YzU0iT7TtlJJaGO8QHUgSibKO85+nmh7a7If0+LQqN7fTU/MADn
+	2BYWUKYKgng96h7dQVwVNyvMZc5xcdL1WJiAdf7V4etrm4SHj1BCtXJQydtIViwyFvU6zvOZJ3M
+	2GnAZcQ==
+X-Google-Smtp-Source: AGHT+IFb3cb9XScIkfIbQA2oQID7nhqxfExRyWF6N5UGcVhE3T71y0SJP1d51io6pNMM6/KZP3XG25y1rx0=
+X-Received: from pjoa3.prod.google.com ([2002:a17:90a:8c03:b0:32e:a549:83e3])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2d8f:b0:335:2eee:19dc
+ with SMTP id 98e67ed59e1d1-33bcf8f94b6mr1826093a91.28.1760661204960; Thu, 16
+ Oct 2025 17:33:24 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date: Thu, 16 Oct 2025 17:32:38 -0700
+Date: Thu, 16 Oct 2025 17:32:39 -0700
 In-Reply-To: <20251017003244.186495-1-seanjc@google.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -76,9 +76,9 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20251017003244.186495-1-seanjc@google.com>
 X-Mailer: git-send-email 2.51.0.858.gf9c4a03a3a-goog
-Message-ID: <20251017003244.186495-21-seanjc@google.com>
-Subject: [PATCH v3 20/25] KVM: TDX: Add macro to retry SEAMCALLs when forcing
- vCPUs out of guest
+Message-ID: <20251017003244.186495-22-seanjc@google.com>
+Subject: [PATCH v3 21/25] KVM: TDX: Add tdx_get_cmd() helper to get and
+ validate sub-ioctl command
 From: Sean Christopherson <seanjc@google.com>
 To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
 	Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>, 
@@ -99,122 +99,70 @@ Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
 	Binbin Wu <binbin.wu@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Add a macro to handle kicking vCPUs out of the guest and retrying
-SEAMCALLs on -EBUSY instead of providing small helpers to be used by each
-SEAMCALL.  Wrapping the SEAMCALLs in a macro makes it a little harder to
-tease out which SEAMCALL is being made, but significantly reduces the
-amount of copy+paste code and makes it all but impossible to leave an
-elevated wait_for_sept_zap.
+Add a helper to copy a kvm_tdx_cmd structure from userspace and verify
+that must-be-zero fields are indeed zero.
+
+No functional change intended.
 
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/vmx/tdx.c | 72 ++++++++++++++----------------------------
- 1 file changed, 23 insertions(+), 49 deletions(-)
+ arch/x86/kvm/vmx/tdx.c | 31 +++++++++++++++++--------------
+ 1 file changed, 17 insertions(+), 14 deletions(-)
 
 diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-index f6782b0ffa98..2e2dab89c98f 100644
+index 2e2dab89c98f..d5f810435f34 100644
 --- a/arch/x86/kvm/vmx/tdx.c
 +++ b/arch/x86/kvm/vmx/tdx.c
-@@ -294,25 +294,24 @@ static inline void tdx_disassociate_vp(struct kvm_vcpu *vcpu)
- 	vcpu->cpu = -1;
+@@ -2761,20 +2761,25 @@ static int tdx_td_finalize(struct kvm *kvm, struct kvm_tdx_cmd *cmd)
+ 	return 0;
  }
  
--static void tdx_no_vcpus_enter_start(struct kvm *kvm)
--{
--	struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
--
--	lockdep_assert_held_write(&kvm->mmu_lock);
--
--	WRITE_ONCE(kvm_tdx->wait_for_sept_zap, true);
--
--	kvm_make_all_cpus_request(kvm, KVM_REQ_OUTSIDE_GUEST_MODE);
--}
--
--static void tdx_no_vcpus_enter_stop(struct kvm *kvm)
--{
--	struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
--
--	lockdep_assert_held_write(&kvm->mmu_lock);
--
--	WRITE_ONCE(kvm_tdx->wait_for_sept_zap, false);
--}
-+#define tdh_do_no_vcpus(tdh_func, kvm, args...)					\
-+({										\
-+	struct kvm_tdx *__kvm_tdx = to_kvm_tdx(kvm);				\
-+	u64 __err;								\
-+										\
-+	lockdep_assert_held_write(&kvm->mmu_lock);				\
-+										\
-+	__err = tdh_func(args);							\
-+	if (unlikely(tdx_operand_busy(__err))) {				\
-+		WRITE_ONCE(__kvm_tdx->wait_for_sept_zap, true);			\
-+		kvm_make_all_cpus_request(kvm, KVM_REQ_OUTSIDE_GUEST_MODE);	\
-+										\
-+		__err = tdh_func(args);						\
-+										\
-+		WRITE_ONCE(__kvm_tdx->wait_for_sept_zap, false);		\
-+	}									\
-+	__err;									\
-+})
++static int tdx_get_cmd(void __user *argp, struct kvm_tdx_cmd *cmd)
++{
++	if (copy_from_user(cmd, argp, sizeof(*cmd)))
++		return -EFAULT;
++
++	if (cmd->hw_error)
++		return -EINVAL;
++
++	return 0;
++}
++
+ int tdx_vm_ioctl(struct kvm *kvm, void __user *argp)
+ {
+ 	struct kvm_tdx_cmd tdx_cmd;
+ 	int r;
  
- /* TDH.PHYMEM.PAGE.RECLAIM is allowed only when destroying the TD. */
- static int __tdx_reclaim_page(struct page *page)
-@@ -1711,14 +1710,7 @@ static void tdx_track(struct kvm *kvm)
- 	if (unlikely(kvm_tdx->state != TD_STATE_RUNNABLE))
- 		return;
- 
--	err = tdh_mem_track(&kvm_tdx->td);
--	if (unlikely(tdx_operand_busy(err))) {
--		/* After no vCPUs enter, the second retry is expected to succeed */
--		tdx_no_vcpus_enter_start(kvm);
--		err = tdh_mem_track(&kvm_tdx->td);
--		tdx_no_vcpus_enter_stop(kvm);
--	}
+-	if (copy_from_user(&tdx_cmd, argp, sizeof(struct kvm_tdx_cmd)))
+-		return -EFAULT;
 -
-+	err = tdh_do_no_vcpus(tdh_mem_track, kvm, &kvm_tdx->td);
- 	TDX_BUG_ON(err, TDH_MEM_TRACK, kvm);
+-	/*
+-	 * Userspace should never set hw_error. It is used to fill
+-	 * hardware-defined error by the kernel.
+-	 */
+-	if (tdx_cmd.hw_error)
+-		return -EINVAL;
++	r = tdx_get_cmd(argp, &tdx_cmd);
++	if (r)
++		return r;
  
- 	kvm_make_all_cpus_request(kvm, KVM_REQ_OUTSIDE_GUEST_MODE);
-@@ -1770,14 +1762,8 @@ static void tdx_sept_remove_private_spte(struct kvm *kvm, gfn_t gfn,
- 	if (KVM_BUG_ON(level != PG_LEVEL_4K, kvm))
- 		return;
+ 	mutex_lock(&kvm->lock);
  
--	err = tdh_mem_range_block(&kvm_tdx->td, gpa, tdx_level, &entry, &level_state);
--	if (unlikely(tdx_operand_busy(err))) {
--		/* After no vCPUs enter, the second retry is expected to succeed */
--		tdx_no_vcpus_enter_start(kvm);
--		err = tdh_mem_range_block(&kvm_tdx->td, gpa, tdx_level, &entry, &level_state);
--		tdx_no_vcpus_enter_stop(kvm);
--	}
+@@ -3152,11 +3157,9 @@ int tdx_vcpu_ioctl(struct kvm_vcpu *vcpu, void __user *argp)
+ 	if (!is_hkid_assigned(kvm_tdx) || kvm_tdx->state == TD_STATE_RUNNABLE)
+ 		return -EINVAL;
+ 
+-	if (copy_from_user(&cmd, argp, sizeof(cmd)))
+-		return -EFAULT;
 -
-+	err = tdh_do_no_vcpus(tdh_mem_range_block, kvm, &kvm_tdx->td, gpa,
-+			      tdx_level, &entry, &level_state);
- 	if (TDX_BUG_ON_2(err, TDH_MEM_RANGE_BLOCK, entry, level_state, kvm))
- 		return;
+-	if (cmd.hw_error)
+-		return -EINVAL;
++	ret = tdx_get_cmd(argp, &cmd);
++	if (ret)
++		return ret;
  
-@@ -1792,20 +1778,8 @@ static void tdx_sept_remove_private_spte(struct kvm *kvm, gfn_t gfn,
- 	 * with other vcpu sept operation.
- 	 * Race with TDH.VP.ENTER due to (0-step mitigation) and Guest TDCALLs.
- 	 */
--	err = tdh_mem_page_remove(&kvm_tdx->td, gpa, tdx_level, &entry,
--				  &level_state);
--
--	if (unlikely(tdx_operand_busy(err))) {
--		/*
--		 * The second retry is expected to succeed after kicking off all
--		 * other vCPUs and prevent them from invoking TDH.VP.ENTER.
--		 */
--		tdx_no_vcpus_enter_start(kvm);
--		err = tdh_mem_page_remove(&kvm_tdx->td, gpa, tdx_level, &entry,
--					  &level_state);
--		tdx_no_vcpus_enter_stop(kvm);
--	}
--
-+	err = tdh_do_no_vcpus(tdh_mem_page_remove, kvm, &kvm_tdx->td, gpa,
-+			      tdx_level, &entry, &level_state);
- 	if (TDX_BUG_ON_2(err, TDH_MEM_PAGE_REMOVE, entry, level_state, kvm))
- 		return;
- 
+ 	switch (cmd.id) {
+ 	case KVM_TDX_INIT_VCPU:
 -- 
 2.51.0.858.gf9c4a03a3a-goog
 
