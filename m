@@ -1,217 +1,120 @@
-Return-Path: <linux-mips+bounces-11802-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11803-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8365DBF1BC6
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Oct 2025 16:08:22 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A419BF1C14
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Oct 2025 16:13:26 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 61C18401F9A
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Oct 2025 14:08:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 442A6423C41
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Oct 2025 14:13:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAF18320CAA;
-	Mon, 20 Oct 2025 14:08:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b="aKNns40I"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20AA6303C93;
+	Mon, 20 Oct 2025 14:13:23 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from SN4PR0501CU005.outbound.protection.outlook.com (mail-southcentralusazon11011036.outbound.protection.outlook.com [40.93.194.36])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0A1C31986F;
-	Mon, 20 Oct 2025 14:08:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.93.194.36
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760969293; cv=fail; b=UnaiMMsY8uqnN1Gnem2KBCKVaiGpmRfj5l8oI4rFnFW+MJysrMWfe9OJ9Ka1+KecAsw3RqzYA2u32M8Cz7nqNdgL/sW+lFeEFV1QRPEN60keBnWH0Z6YOhy9Khq8oAWPdpbPdOGpGoJj8siPdeBz1nRYDBqnmRSK2IV/qpShO4Q=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760969293; c=relaxed/simple;
-	bh=bOlRKr1YV1vk1xySFrv1vHuTjhKNoGOo3N5hrS3+wl4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=nUk/q8WjIMrJPUqxvAvxXRPJ4vjvJ/WWUckMNL4lCh4OD//q99O2xlRH3U6p6HMMl2npcusmlx2xG9oQhr08+5OLG3i3ewdLQiI00py2EAyLG7+PSG7uVAQu9avjsXQGww/W75/gfLCOpuxRpJnaTxGlHaJde8ChcxRO0VhaCqM=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com; spf=fail smtp.mailfrom=nvidia.com; dkim=pass (2048-bit key) header.d=Nvidia.com header.i=@Nvidia.com header.b=aKNns40I; arc=fail smtp.client-ip=40.93.194.36
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=nvidia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=nvidia.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=y82TM+Uzi8aBznkHMFFC0EOhxIl7xrqeOnEWIlUvAg2x/3qBUrdRkoxsO60BKrl5aMGxzNGwF5CzjQt1TR4I+3n7FS7ZdCCIYjhjiJMd7BuGgUeKNb3tA8WQ0U1uTWhE/vR/T4WvoFcRR8ua25isMMa1ruMwf7v7/GxwbYz1BjWy571OxwMjJhnAaNywKxcZw/SE38wklw+NBDmoIl+ATRNx6jiHmYP8IlUnRqOuAz6CGYeSryNFN+Mxxtb9Ayil76lnpAcei6zqTxHAI0vf+j9CiIFGAHcVwo3Jx2a24cx1BKpHJ5d+RjshvVIRtwbVSdLeIxrv5bzI3rkx/SIMMg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ffE3S7eV2NquZuNccTOETeouskHDSr644Vrofs7AGE8=;
- b=I7ZbYVJKg9oiGJrjYFtu70VwMrRt2sLZPYUlgf+QCJEK3LpA6eVYRpcQbEMZkzB5nlejMw2ye0x3wcsh7Nisc024yduYDNjj2D+jSSGy1satIOJGJ0Klk8P1A2z0vhebWzCqIh6ddl2NBh40rclXfOgB+smgFY4GBMiVgHmvyJEVhym2P/rOZZF2P2kSC9iDQcabBZfjcNv7EcU6SdOUO/3PW1/V2eY6BlntCNXWIrGEwTX/aG8Kq8e6L0crzeHcNp5SrJl5NllWaA6cbMAm8IZJJkWd+R0CQyqBe752o5TEBB6wiBuTPKoNTurutiJp1/D/e2JrLT7NWbGHmNwpwQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
- dkim=pass header.d=nvidia.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ffE3S7eV2NquZuNccTOETeouskHDSr644Vrofs7AGE8=;
- b=aKNns40IbjNcK2iIfuJKgt0IpngNmcBDVKtUoQ+rnbDtP0bgv7wNw6Z/dcd9Z9JrqhrF4b6nxCXkM28jR8ucwE7qsZIIVFQZZudhi3BQ3tWXMuTSEPGqpytE1cijZotiHyAndFZ2I2irRUWznnVC81hQlDfILuqV/2T/8OT1tU70PWkG6ftoCGV+w1L445ATb1RYxyQbDKr/Ldy1aAuG/qPQIfeu3dFUD6ep5/7SQqwAGZ85E8TB3oT/fly7zWn1nhCFz1M6c6fUnz9TeRMwtVflQXLDa40jJBdOEcp3O5CnCm3qIoo0k6JmZnvL9VoVPMiJSGB3swQ4JxMOCozkOg==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nvidia.com;
-Received: from MN2PR12MB3613.namprd12.prod.outlook.com (2603:10b6:208:c1::17)
- by CH3PR12MB9315.namprd12.prod.outlook.com (2603:10b6:610:1cf::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9228.16; Mon, 20 Oct
- 2025 14:07:58 +0000
-Received: from MN2PR12MB3613.namprd12.prod.outlook.com
- ([fe80::1b3b:64f5:9211:608b]) by MN2PR12MB3613.namprd12.prod.outlook.com
- ([fe80::1b3b:64f5:9211:608b%4]) with mapi id 15.20.9228.015; Mon, 20 Oct 2025
- 14:07:58 +0000
-Date: Mon, 20 Oct 2025 11:07:56 -0300
-From: Jason Gunthorpe <jgg@nvidia.com>
-To: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Matthew Wilcox <willy@infradead.org>, Guo Ren <guoren@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	"David S . Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dan Williams <dan.j.williams@intel.com>,
-	Vishal Verma <vishal.l.verma@intel.com>,
-	Dave Jiang <dave.jiang@intel.com>, Nicolas Pitre <nico@fluxnic.net>,
-	Muchun Song <muchun.song@linux.dev>,
-	Oscar Salvador <osalvador@suse.de>,
-	David Hildenbrand <david@redhat.com>,
-	Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-	Baoquan He <bhe@redhat.com>, Vivek Goyal <vgoyal@redhat.com>,
-	Dave Young <dyoung@redhat.com>, Tony Luck <tony.luck@intel.com>,
-	Reinette Chatre <reinette.chatre@intel.com>,
-	Dave Martin <Dave.Martin@arm.com>,
-	James Morse <james.morse@arm.com>,
-	Alexander Viro <viro@zeniv.linux.org.uk>,
-	Christian Brauner <brauner@kernel.org>, Jan Kara <jack@suse.cz>,
-	"Liam R . Howlett" <Liam.Howlett@oracle.com>,
-	Vlastimil Babka <vbabka@suse.cz>, Mike Rapoport <rppt@kernel.org>,
-	Suren Baghdasaryan <surenb@google.com>,
-	Michal Hocko <mhocko@suse.com>, Hugh Dickins <hughd@google.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Uladzislau Rezki <urezki@gmail.com>,
-	Dmitry Vyukov <dvyukov@google.com>,
-	Andrey Konovalov <andreyknvl@gmail.com>,
-	Jann Horn <jannh@google.com>, Pedro Falcato <pfalcato@suse.de>,
-	linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-fsdevel@vger.kernel.org, linux-csky@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-s390@vger.kernel.org,
-	sparclinux@vger.kernel.org, nvdimm@lists.linux.dev,
-	linux-cxl@vger.kernel.org, linux-mm@kvack.org,
-	ntfs3@lists.linux.dev, kexec@lists.infradead.org,
-	kasan-dev@googlegroups.com, iommu@lists.linux.dev,
-	Kevin Tian <kevin.tian@intel.com>, Will Deacon <will@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Sumanth Korikkar <sumanthk@linux.ibm.com>
-Subject: Re: [PATCH v5 03/15] mm/vma: remove unused function, make internal
- functions static
-Message-ID: <20251020140756.GQ316284@nvidia.com>
-References: <cover.1760959441.git.lorenzo.stoakes@oracle.com>
- <f2ab9ea051225a02e6d1d45a7608f4e149220117.1760959442.git.lorenzo.stoakes@oracle.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f2ab9ea051225a02e6d1d45a7608f4e149220117.1760959442.git.lorenzo.stoakes@oracle.com>
-X-ClientProxiedBy: SN7PR04CA0017.namprd04.prod.outlook.com
- (2603:10b6:806:f2::22) To MN2PR12MB3613.namprd12.prod.outlook.com
- (2603:10b6:208:c1::17)
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D88F13BC0C;
+	Mon, 20 Oct 2025 14:13:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1760969603; cv=none; b=S9OZTqW1lm25W6f0dqlwyTvZn8bMj6bfz/PKiGFz+EIBEtBdn4VWR1fNnl6PiXfhEyrAf0y7z6uizGvia8vKkzgpMnz2neBtK5qXYlqGgxAqUrKQlCjaeZtbSpJHRpNzmFM8d59INN79xtQOkzsgTG8OPPqh5i0k6oqNrPS98jo=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1760969603; c=relaxed/simple;
+	bh=LlUYGCMthVCehFdZICIUwVx0slH6kaNxISJiczGG1KM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aKTt6CefO6YOcTJ3nY7SjviDtrm/kIMO+KPxx+JKreikxJTTOqGT1ZboqrS0njINq6Nm0FJ/++86yPPOInKVO0n8wfgl2i8nvpZaJf/8SB1T6oIurU5FWCRbcM16igoaUNmM96wBmsOpDENVZeuBp9V2PQZhQQikAF1vXSkOsmQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1vAqdI-0002ei-00; Mon, 20 Oct 2025 16:13:08 +0200
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 8A959C0256; Mon, 20 Oct 2025 16:12:52 +0200 (CEST)
+Date: Mon, 20 Oct 2025 16:12:52 +0200
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Cc: linux-pci@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+	"Maciej W . Rozycki" <macro@orcam.me.uk>,
+	Bjorn Helgaas <bhelgaas@google.com>, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] MIPS: Malta: Use pcibios_align_resource() to
+ block io range
+Message-ID: <aPZDZJ9DtxQhRSq6@alpha.franken.de>
+References: <20251017110903.1973-1-ilpo.jarvinen@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN2PR12MB3613:EE_|CH3PR12MB9315:EE_
-X-MS-Office365-Filtering-Correlation-Id: aee44070-5705-4b56-1a43-08de0fe21265
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|7416014|366016|1800799024|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?I1G7H3QzzTzRzakzerfbdfgT6dxNneIlP8beVwcJEnU19TCF8+2rG/r3nxIO?=
- =?us-ascii?Q?JFe884TehnJAu9dFWXdna0sv1JW6jHJR1eOnVE7QK4lNodB8W84hmWdOJBVv?=
- =?us-ascii?Q?lNARyHXdu7FBWdy6hn/JY0JMF6FrfYjs7fJjkYGNElo3wsg/H8+sGWZPb5mm?=
- =?us-ascii?Q?r7opXUia8pSM3Z0fvIf13d3ksZwNwtvu68ucOzvAJqJTvuWBSzBxsUtQvjav?=
- =?us-ascii?Q?a060oRNAp5+q+hYMPXsCCHouUd4bFoxNocu7lAlfKEc42ZAgqy+linV26YyK?=
- =?us-ascii?Q?02Dhntuk4p7eVCeVJzoHYrXWwWbnn8mXrFjc7Quqjz6nf6JPD+Ju8B9JLcsU?=
- =?us-ascii?Q?3jy4f/8Iw0Ug+7y2nW0jrf5ZWKs0CfMDBe5wTc/PTg1ueSNkbofeZT1sqQaF?=
- =?us-ascii?Q?cpvGEK4T5nfGxwUmpUSgUHo9qhxKv1XIg6FrR29j6Vh8PHtPfAG54wG3DaiK?=
- =?us-ascii?Q?A+99q0qHDcEXfPT/n4Bv6gxNCJdZ9hGR+DA71JGsAS/HBGprHVKTMlByPPKR?=
- =?us-ascii?Q?fGcWN9Hln/vYI4b+OW4/Zg/1/fNWxPJz/CbNPgvt7lx8yvJo3p+TpknYuE+/?=
- =?us-ascii?Q?v/MKFnU9R2fYyafrpnonjBZc9K7NfQbmnHeVUXfGQCA2VlnpCg1kL06hEgDC?=
- =?us-ascii?Q?RVvRxQ77+2sGQvHX3JKp7joJepIe9OElGQ5jinD0OkRVefwUjTgw4j9X1o7p?=
- =?us-ascii?Q?IaAXOZRPa6CKQ9Gf7m9rFzxnrcADWnJB5ykV3xSitp/2mSa5TkYkMGKvAcUH?=
- =?us-ascii?Q?+AXvXOPxzsLEj1nu7OIkjHWg8h9ik/lBi2pZEcnS6zUYxJMoOKSDHWKUyCBr?=
- =?us-ascii?Q?fNzNC7A3DBHNUxUKBknOQxAZpUevAxZ+sDfoPTWs9lHsqP3aQ7HZThRYG0HT?=
- =?us-ascii?Q?LsI2IFPYwBv9fzM8tJqgpl0xZVmO8CkCyEff333vVhdGyXJkJ+ON7WQ4sssi?=
- =?us-ascii?Q?Crhr5ydDlk//NuIAjIApY5eNb6tcwQhYCa9Y8x8loL/388uitkenok4VD6yf?=
- =?us-ascii?Q?bcJVZBuCug/+3GwVs4/xJg9nXhDHXo+9PonetSVnB2OqHTFT+4O+AMoNy9ss?=
- =?us-ascii?Q?Nmfy8oxqrLaPJwp5U4pLHfuEOux4SNICMHpoY41CkjIm9ZeOBRxhDwtY0ZCD?=
- =?us-ascii?Q?rRAMw/9MflRkf1IgjiTHFxG23LiWZN6SqZ9tpxJ1WGmxLIphRlltWm1r8ytK?=
- =?us-ascii?Q?N7mGQukZbIEQVQluRqskOEw5GrwMYHx/54jQHsvqmX0TUV/yzp18c/xTS4J6?=
- =?us-ascii?Q?yfsc6VKFxhwN125UYp1+44jG2a6K4KRSuxF3wgcajM+tTK9AYSvutShzqVdX?=
- =?us-ascii?Q?xz3ypxgiJIbaJn3t0Th+8h7wqG2mlu2ApZlvAMeTpqbF3AVtfCv8QzalsaCK?=
- =?us-ascii?Q?6CCZR6vWgpkmsMlJTVmkE63KoCpdl2PvgApqZoMOkMDbpY7agPFDErYg04Ko?=
- =?us-ascii?Q?UwIVP48N/npOcg5fYkzRIW3sdRf6dmU6?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN2PR12MB3613.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?ZibO+wB07mSnxnaDI/VyA4JQKAtB3rtb08Rw8wA2AGFu9nbTNo2B+0L1mO6a?=
- =?us-ascii?Q?xv47wl+o2jXscUBaq4Rad36qEA/QPSMu14lSDnJnuSdi4sD9hvNaA23Ig11I?=
- =?us-ascii?Q?6ArApgCvsOzZ+UtGwGsY4rwKKA6MnEW/rWE+x4DtBe6ELKh62S1NJ0iHtRge?=
- =?us-ascii?Q?Vpn09ljeCX8OIJsUoeXhcozEzd2jqCivWz8CqJGFQEjMgtmNBqagOJ3oFcQ2?=
- =?us-ascii?Q?NwppFFb2EXHQqxwdoyQXx+5aKVNmZfJ0N7tSOWRZI2p3TPesI+HHYyvdJjXy?=
- =?us-ascii?Q?bMVYYvhlJsmpf0lDWL7IiDL801MX3zS46jc0IsN14C52m5kp8Z7DgQhpVVnK?=
- =?us-ascii?Q?fOLgrTzTP5Ngo/OPZERQ6lsgaOSNqjbwf6uDu38Bq+xV+dA0FKVusC/pK8nO?=
- =?us-ascii?Q?MF7fJvbgfSjqULcNovil71Q1yI3uap+1B0RbRkLN21zaNAiOC86MsYNzeDV9?=
- =?us-ascii?Q?+js2nVZD/tQhoHn47HGn1EVZPxVpeiBt7jtja46FLwDwYlyt+XFzbd/0sk4p?=
- =?us-ascii?Q?31I25fDjgSRgdqGrBEecs983vbYePfbUTv+7N7ykHg8ImNsQuCFoMs0D/m5c?=
- =?us-ascii?Q?QDd/Z7AQ1SrqhbTLm1QATxGMKHHmcXiDIstrRV+fX9bII/rzWPrfIchGWa/i?=
- =?us-ascii?Q?hosLyAs+xZyDqOP50QXmf2HN8Svirhw1AC3FwxwddCfhZnP2sNIlBsGCmXso?=
- =?us-ascii?Q?SY43EmMxs1aRb6sCgJ4D6TMbQw/90mlGmwmpO1r6BS7utf7u7fNmlG94hp2E?=
- =?us-ascii?Q?mwx2X5HJ+VyiZycbnsBEofQNcGySYXdbu0JZN86ZDQ0WDdGdN0BDzl/FSnAO?=
- =?us-ascii?Q?EMe8IeI8P0qSCJj5okFAsJZyxUHaOeyBZ5JrAr1+sM6BgAsKX//HMxNpZcs2?=
- =?us-ascii?Q?biWNnHeMKwcyefnxP+O38kivdpDeaoHB6ocxM8H73C3LXO3FalnRP996BjuH?=
- =?us-ascii?Q?km3s0s6YLKDsNAjmQI4dzdjxQUty18+QMXLc3kWYZBxbUxk4XmFizamIfYKV?=
- =?us-ascii?Q?8m6mqSAaNYwlmyB37+Yr/B6GmjCKjcKVxyOdjtu6CyfwJ5yiUcSFnNrUWlwD?=
- =?us-ascii?Q?Fhn0MN+jSH4oM5W+pO5BnkrR4WM/nfGaXjtx4NIrqk+wdHoTYMB8t9QPadEY?=
- =?us-ascii?Q?c2pq8eLa9eKccx4tJgeVBBtnK8q+cqahlI6yrcVDfqZFycvOxjbwUQTQX5gG?=
- =?us-ascii?Q?lkHz6Oz0T1yMOEiQ5YRZcItllGMppLnAtKVKinhp3gAVeVMf5b0DwGq6rJhw?=
- =?us-ascii?Q?BL0uff0wAo+FuBj12k1goT97UDJsAHhGIa8EP6FjJ5iWovMXZwdGreV04F7k?=
- =?us-ascii?Q?nlZo0wqZtc5hskCrdg9zjKJ/wMNzcTkYNRwny7oIlB7Qvg8oEz8/EZIJC3TJ?=
- =?us-ascii?Q?9ca9NPT3TC32MdPiaHmy9CqGjqMLVSyMtJUZodxlRdQk/W4zLweHEr4bILyh?=
- =?us-ascii?Q?fSrYtPjxF5pglEPWeGc0Vl6cLJZRps0BX3b5i6Mzegr1Mx6Ccskp2AeZUNQI?=
- =?us-ascii?Q?Fp1meKrc9ehgCP7ZcVP8oIfWoJZ/zNI4/+/h0Gzqb19OkmPRHyo1BkWsom1L?=
- =?us-ascii?Q?L4YphHUdMz5Q0KmStgjOyRGN6VWGGboHeKg/xwx7?=
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: aee44070-5705-4b56-1a43-08de0fe21265
-X-MS-Exchange-CrossTenant-AuthSource: MN2PR12MB3613.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Oct 2025 14:07:58.8192
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: vdPFpJwY6uqxYCYlmIkkyEChF0VLLh2rXtevOJUqGJmg8B/PbPJTRjlxcMJR1yVt
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR12MB9315
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251017110903.1973-1-ilpo.jarvinen@linux.intel.com>
 
-On Mon, Oct 20, 2025 at 01:11:20PM +0100, Lorenzo Stoakes wrote:
-> unlink_file_vma() is not used by anything, so remove it.
+On Fri, Oct 17, 2025 at 02:09:03PM +0300, Ilpo Järvinen wrote:
+> According to Maciej W. Rozycki <macro@orcam.me.uk>, the
+> mips_pcibios_init() for malta adjusts root bus IO resource start
+> address to prevent interfering with PIIX4 I/O cycle decoding. Adjusting
+> lower bound leaves PIIX4 IO resources outside of the root bus resource
+> and assign_fixed_resource_on_bus() does not link the resources into the
+> resource tree.
 > 
-> vma_link() and vma_link_file() are only used within mm/vma.c, so make them
-> static.
+> Prior to commit ae81aad5c2e1 ("MIPS: PCI: Use pci_enable_resources()")
+> the arch specific pcibios_enable_resources() did not check if the
+> resources were assigned which diverges from what PCI core checks,
+> effectively hiding the PIIX4 IO resources were not properly within the
+> resource tree. After starting to use pcibios_enable_resources() from
+> PCI core, enabling PIIX4 fails:
 > 
-> Signed-off-by: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>
+> ata_piix 0000:00:0a.1: BAR 0 [io  0x01f0-0x01f7]: not claimed; can't enable device
+> ata_piix 0000:00:0a.1: probe with driver ata_piix failed with error -22
+> 
+> MIPS PCI code already has support for enforcing lower bounds using
+> PCIBIOS_MIN_IO in pcibios_align_resource() without altering the IO
+> window start address itself. Make malta PCI code too to use
+> PCIBIOS_MIN_IO.
+> 
+> Fixes: ae81aad5c2e1 ("MIPS: PCI: Use pci_enable_resources()")
+> Fixes: aa0980b80908 ("Fixes for system controllers for Atlas/Malta core cards.")
+> Link: https://lore.kernel.org/linux-pci/9085ab12-1559-4462-9b18-f03dcb9a4088@roeck-us.net/
+> Link: https://lore.kernel.org/linux-pci/alpine.DEB.2.21.2510132229120.39634@angie.orcam.me.uk/
+> Reported-by: Guenter Roeck <linux@roeck-us.net>
+> Suggested-by: Maciej W. Rozycki <macro@orcam.me.uk>
+> Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
 > ---
->  mm/vma.c | 21 ++-------------------
->  mm/vma.h |  6 ------
->  2 files changed, 2 insertions(+), 25 deletions(-)
+> 
+> v2:
+> 
+> - Remove if and always set PCIBIOS_MIN_IO (suggested by Maciej).
+> - Minor improvement to the changelog
+> 
+>  arch/mips/pci/pci-malta.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/arch/mips/pci/pci-malta.c b/arch/mips/pci/pci-malta.c
+> index 6aefdf20ca05..2e35aeba45bc 100644
+> --- a/arch/mips/pci/pci-malta.c
+> +++ b/arch/mips/pci/pci-malta.c
+> @@ -230,8 +230,7 @@ void __init mips_pcibios_init(void)
+>  	}
+>  
+>  	/* PIIX4 ACPI starts at 0x1000 */
+> -	if (controller->io_resource->start < 0x00001000UL)
+> -		controller->io_resource->start = 0x00001000UL;
+> +	PCIBIOS_MIN_IO = 0x1000;
+>  
+>  	iomem_resource.end &= 0xfffffffffULL;			/* 64 GB */
+>  	ioport_resource.end = controller->io_resource->end;
+> 
+> base-commit: 2f2c7254931f41b5736e3ba12aaa9ac1bbeeeb92
+> -- 
+> 2.39.5
 
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
-Jason
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
