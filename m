@@ -1,107 +1,148 @@
-Return-Path: <linux-mips+bounces-11807-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11808-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D83B2BF3AED
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Oct 2025 23:16:40 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61E94BF3F24
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Oct 2025 00:40:49 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 74E4B3B7D1C
-	for <lists+linux-mips@lfdr.de>; Mon, 20 Oct 2025 21:16:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DB39C542993
+	for <lists+linux-mips@lfdr.de>; Mon, 20 Oct 2025 22:39:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E33AD33343E;
-	Mon, 20 Oct 2025 21:16:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0F8D2F3609;
+	Mon, 20 Oct 2025 22:37:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="EWcWWI0+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ojXXAGjM"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yx1-f47.google.com (mail-yx1-f47.google.com [74.125.224.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40629202961
-	for <linux-mips@vger.kernel.org>; Mon, 20 Oct 2025 21:16:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F4B72F291E;
+	Mon, 20 Oct 2025 22:37:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1760994996; cv=none; b=I5EfNwPcSWh7Jjj7GDKQS4OoIkj2qfUtGQ+Gt1qK3K8NcG0HAcLP/DDp0XLcccAsOnUMT1K26EMe36EkvI1+JuYDZ/Ca/NmAzfZgb+Kt5JabqeCpaYXW38Lj6vY3SKQQfFmmM4QIutLwgK1aMioEXAzXiaHIsB9vpHH39Ijrp8o=
+	t=1760999837; cv=none; b=Zm26QpkLPt7yqWPVTV/ByBHsOl3EN2hwbjV2bvmpsgpaZIVYFgHKEzC+BaWSHmhOGhaAbO58muIEcGTH22r2n5/7aouEdtNMtExGEpBQxsP3r9ZAnWeON5zBo6Dp5SN5jHGO86VOqMRLygJMmkWK5TO4GXe123KOslWITrMGRNo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1760994996; c=relaxed/simple;
-	bh=Z39XKUjyZrgm6nEjjbRX8r0IFRUqHZXsDHxC2pIscqc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BLxiN92N/DHiNceodyY6HhTActkyP+aErv+5LSE1tlkgxdA3qZfFFaFmoRRutFswcZ/N94Fetzx3tO4Kra5a2yRnYrP9nE9HEZ+qlMiu2gbUxUMexHPGOiaOUci1wyyFklHMapwVN4EpKlM4y+ZS7NZi0Mbmm/VXEIm6W/S7JhQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=EWcWWI0+; arc=none smtp.client-ip=74.125.224.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yx1-f47.google.com with SMTP id 956f58d0204a3-63e365693c8so1558017d50.3
-        for <linux-mips@vger.kernel.org>; Mon, 20 Oct 2025 14:16:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1760994994; x=1761599794; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Z39XKUjyZrgm6nEjjbRX8r0IFRUqHZXsDHxC2pIscqc=;
-        b=EWcWWI0+/gbrT8Hpb0+MH/d9PDGEwEVbVzq2jJVo7gj5HI2ol1ncyEqfaPdJJguLEE
-         G7Gg8sg3QORCxvaULe8AFObISRqPvF2hxXNECs5f6ZoIFIdEY0pk+BeUO9wwsjJpRXhU
-         2T4t/VKsLD3Px1XYJEvs5395p7x37NkU+BkUM1377YaHHL6fTp7CMBlWPAdLWYZWLkvc
-         8QQqT/Kf/25aNhrupyaKKGdCn4rNGJMVu/APpAqsJgEofjEVtd4cxr3/cJTLCdS4gFZ0
-         XCWL/TrrMGALuV0Xxa+mOAUerenLj62dCxzuDMyJal7so3hzmRQnF/o0lRbGZ5jjYl0R
-         TqPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1760994994; x=1761599794;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Z39XKUjyZrgm6nEjjbRX8r0IFRUqHZXsDHxC2pIscqc=;
-        b=JOm8OK4wEXetRHCkahcPNzd+G8+hiMXFUD/WPTr0wdjOQOUrMaqK6+QcjCZi8Ds15M
-         Txbt8ibhfNDyWW/yfCLCU3857DY20IIQiJHw3gjXB/FBx76pnrO3nkytrwhhheHl7MeD
-         oorhbkI6DZayvol+2ed4On4rOeGQ3vxCoQIMLLeROD43x59IAYzPR69z6kKS5hhvXTmt
-         9QnR6tyJS0tiYiht0nj9EMxf9UvUDPW0SByQyJFZHyQCMY0nq/SANkib9ZUCnahUyEmS
-         d+ZjQRV0g0C+Y+a0aBq6k98SCOFcorxC/uRKetlinJ0lJ+t+5J8cT6SbiC2qAtalFPfv
-         n3xA==
-X-Forwarded-Encrypted: i=1; AJvYcCXjeCl/Y6XWK7u1UqpImWqgSdQD/hNz4709Nn/nIO5DjNhdMqd4O8B3Zrq/+seOs+c6nPVUgw0xN1DB@vger.kernel.org
-X-Gm-Message-State: AOJu0YyX4TawGoHAGJOgX77tiBplGIAvYr7oAWAXgRCZvni01IUY/8gZ
-	1Djc3h+ngoimuFZT7tBnMJyFaNncgp3mshZ0PkCcR6m6fyWgsMTFlFAJyW384cDvqhISZ0bDgQY
-	tIFZmVMcNgY3ZtTdoLX8KqElsF7q8GreiHpgko+llng==
-X-Gm-Gg: ASbGncuYe4a/hUm3OquOGY3KSdz8p5kfgTRpRTrvi1/2TyGhjihtXw1mq4DO5TJZl89
-	HiHM4ijaFN635jLH/UHQDqov/9OqL8r+Otu9wYKBLEq4RU6BSWufhrqgdDbdpzuPHBshW8MBlJf
-	6CfZJX+Ef1KpX3ijcu4fTB2HV1EbcqxtYmPiOMBnPQa48Onar/P5vd/FHLhVOncwaXK43yYGuJG
-	D0+oPYfneOfzqgpF/aQVQEEK47NwkHSYSL0GXf2x2JpXVPHi1qNHesICbmxk/S1quaxPUs=
-X-Google-Smtp-Source: AGHT+IFgddNnhWh6OKVZ0qTi4mmYoAX0fPulCNpg9r05luMnstiOJYyZQ51cCpijocVdPz93zIwR2zKGF43lIrhanLw=
-X-Received: by 2002:a05:690e:408d:b0:63e:30d0:61a0 with SMTP id
- 956f58d0204a3-63e30d0632bmr5728377d50.26.1760994994012; Mon, 20 Oct 2025
- 14:16:34 -0700 (PDT)
+	s=arc-20240116; t=1760999837; c=relaxed/simple;
+	bh=X03MLlNZmvU94ilYyWwoQIQq86cMDYcS266UvkvFaP4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=IN5XYOXoSrPRCFiuY6lfFlfN8p0VuRtoXhKBDcwz3eS1N3wJ5wxM4GbWkFbz/creziD3QeVUAxk3t2P+15IJ9RZcj1kJa1UKHuYMaoBjbBFo7/X3HZ5M0Vj6cRNzM0lxtiRBOBsPeUa8tbNA9cF4R391S96WDZ+ZnEscruSxaWQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ojXXAGjM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CDD21C4CEFB;
+	Mon, 20 Oct 2025 22:37:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1760999836;
+	bh=X03MLlNZmvU94ilYyWwoQIQq86cMDYcS266UvkvFaP4=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=ojXXAGjMcvVVLavA9AOYZJch/4+wbt1IikP//ZZFRZ2zHLZC86qZs3boDC5+AypyM
+	 bqrvxZvEvSuIbUspGzFMinCdpryn2F41f4d/+RMzq7j77LK5h/hswUm/d0lF7ZbWgr
+	 /0iETRL2RRpOBsQQJ1ABZRe/G0KwSXambwtpILOMrHz72hGFmqnWGSi5+KN53+aMr3
+	 eQL4levHvEUjBxhtJ7D760Xt/S3o6mxZAw+0AvFoy1DJ6A2egeplwSA4+shbf1UOt3
+	 cU9f5Zs/aJBiqkSuIEzCzgpR1Yxhme5KXDNjOcZNPt9LdJurT7vLjpuvzZfxaOaFHW
+	 szDTN337qF7jg==
+Date: Mon, 20 Oct 2025 17:37:14 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-pci@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+	"Maciej W . Rozycki" <macro@orcam.me.uk>,
+	Bjorn Helgaas <bhelgaas@google.com>, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] MIPS: Malta: Use pcibios_align_resource() to
+ block io range
+Message-ID: <20251020223714.GA1165320@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <c7415e2870b3bd9109f95bab3784d48e708e30e6.1760360638.git.christophe.leroy@csgroup.eu>
- <176062606134.122017.14455806740339775356.b4-ty@linaro.org>
-In-Reply-To: <176062606134.122017.14455806740339775356.b4-ty@linaro.org>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Mon, 20 Oct 2025 23:16:19 +0200
-X-Gm-Features: AS18NWCUioZsQP6x4ZemVNFC2EGIJBPA6Sk-XCQsTICPirre3kuANA4BRArrNEg
-Message-ID: <CACRpkdZZOWSeG6D49x54QWaVG9=hSVSeAen_qvHhwiDBXSB8=Q@mail.gmail.com>
-Subject: Re: [PATCH 1/2] gpio: mm-lantiq: Drop legacy-of-mm-gpiochip.h header
- from GPIO driver
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>, linux-kernel@vger.kernel.org, 
-	linux-gpio@vger.kernel.org, linux-mips@vger.kernel.org, 
-	John Crispin <john@phrozen.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251017221204.GA1050107@bhelgaas>
 
-On Thu, Oct 16, 2025 at 4:48=E2=80=AFPM Bartosz Golaszewski <brgl@bgdev.pl>=
- wrote:
+On Fri, Oct 17, 2025 at 05:12:04PM -0500, Bjorn Helgaas wrote:
+> On Fri, Oct 17, 2025 at 02:09:03PM +0300, Ilpo Järvinen wrote:
+> > According to Maciej W. Rozycki <macro@orcam.me.uk>, the
+> > mips_pcibios_init() for malta adjusts root bus IO resource start
+> > address to prevent interfering with PIIX4 I/O cycle decoding. Adjusting
+> > lower bound leaves PIIX4 IO resources outside of the root bus resource
+> > and assign_fixed_resource_on_bus() does not link the resources into the
+> > resource tree.
+> > 
+> > Prior to commit ae81aad5c2e1 ("MIPS: PCI: Use pci_enable_resources()")
+> > the arch specific pcibios_enable_resources() did not check if the
+> > resources were assigned which diverges from what PCI core checks,
+> > effectively hiding the PIIX4 IO resources were not properly within the
+> > resource tree. After starting to use pcibios_enable_resources() from
+> > PCI core, enabling PIIX4 fails:
+> > 
+> > ata_piix 0000:00:0a.1: BAR 0 [io  0x01f0-0x01f7]: not claimed; can't enable device
+> > ata_piix 0000:00:0a.1: probe with driver ata_piix failed with error -22
+> > 
+> > MIPS PCI code already has support for enforcing lower bounds using
+> > PCIBIOS_MIN_IO in pcibios_align_resource() without altering the IO
+> > window start address itself. Make malta PCI code too to use
+> > PCIBIOS_MIN_IO.
+> > 
+> > Fixes: ae81aad5c2e1 ("MIPS: PCI: Use pci_enable_resources()")
+> > Fixes: aa0980b80908 ("Fixes for system controllers for Atlas/Malta core cards.")
+> > Link: https://lore.kernel.org/linux-pci/9085ab12-1559-4462-9b18-f03dcb9a4088@roeck-us.net/
+> > Link: https://lore.kernel.org/linux-pci/alpine.DEB.2.21.2510132229120.39634@angie.orcam.me.uk/
+> > Reported-by: Guenter Roeck <linux@roeck-us.net>
+> > Suggested-by: Maciej W. Rozycki <macro@orcam.me.uk>
+> > Signed-off-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+> 
+> Since ae81aad5c2e1 ("MIPS: PCI: Use pci_enable_resources()") came
+> through the PCI tree, I'd be happy to merge this as well, given your
+> ack, Thomas.  It would be ideal to have a tested-by from Guenter.
+> 
+> I provisionally put it on pci/for-linus to facilitate testing.  If it
+> doesn't solve the problem or you'd rather take it, Thomas, I'll be
+> glad to drop it.
 
-> Awesome work! Thanks for doing it, we really need to keep getting rid of =
-all
-> these legacy intefaces. Queued for v6.19.
+Added:
 
-+1 on Bartosz comment, you are doing great work with this
-Christophe, keep doing it!
+  Tested-by: Guenter Roeck <linux@roeck-us.net>
+  Tested-by: Maciej W. Rozycki <macro@orcam.me.uk>
+  Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
-Yours,
-Linus Walleij
+and dropped the Fixes: aa0980b80908 ("Fixes for system controllers for
+Atlas/Malta core cards.")
+
+If the missing resource reservations (dma1, tiger, dma page reg)
+mentioned by Maciej are an issue or can be fixed up, let me know and
+we can amend this.
+
+> > ---
+> > 
+> > v2:
+> > 
+> > - Remove if and always set PCIBIOS_MIN_IO (suggested by Maciej).
+> > - Minor improvement to the changelog
+> > 
+> >  arch/mips/pci/pci-malta.c | 3 +--
+> >  1 file changed, 1 insertion(+), 2 deletions(-)
+> > 
+> > diff --git a/arch/mips/pci/pci-malta.c b/arch/mips/pci/pci-malta.c
+> > index 6aefdf20ca05..2e35aeba45bc 100644
+> > --- a/arch/mips/pci/pci-malta.c
+> > +++ b/arch/mips/pci/pci-malta.c
+> > @@ -230,8 +230,7 @@ void __init mips_pcibios_init(void)
+> >  	}
+> >  
+> >  	/* PIIX4 ACPI starts at 0x1000 */
+> > -	if (controller->io_resource->start < 0x00001000UL)
+> > -		controller->io_resource->start = 0x00001000UL;
+> > +	PCIBIOS_MIN_IO = 0x1000;
+> >  
+> >  	iomem_resource.end &= 0xfffffffffULL;			/* 64 GB */
+> >  	ioport_resource.end = controller->io_resource->end;
+> > 
+> > base-commit: 2f2c7254931f41b5736e3ba12aaa9ac1bbeeeb92
+> > -- 
+> > 2.39.5
+> > 
 
