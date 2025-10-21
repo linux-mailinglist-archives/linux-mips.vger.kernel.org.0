@@ -1,261 +1,104 @@
-Return-Path: <linux-mips+bounces-11815-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11816-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC4A4BF560A
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Oct 2025 10:56:42 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6CAFBF6615
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Oct 2025 14:16:04 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A586C1883FA8
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Oct 2025 08:57:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6DFF8189E135
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Oct 2025 12:16:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A6B8329C47;
-	Tue, 21 Oct 2025 08:56:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="uPsWNRB0"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DD051FF1A1;
+	Tue, 21 Oct 2025 12:16:02 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B3E9D32A3DE;
-	Tue, 21 Oct 2025 08:56:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 412206BB5B;
+	Tue, 21 Oct 2025 12:15:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761036986; cv=none; b=tDE6Yv2VRze8WmnJTT5epVz+swcASDzgEEEBCggLvhQwslOWzfqdI11vQ6DDxN13yk3n52AWAPtsdrkUij9spULwlsP1B4COHvvGXQLmCFBTip+BZV9QyIX4/UaeI2lgfDc/byGCSreBosrKX6dd7nEVKu8PFWD3oPHsDWtiW2w=
+	t=1761048962; cv=none; b=S/1Y/YP323K9u7LyL9RIUHzWSOYig0jAzamdx/eccy6wOtuieD1cmxb3NgDEGFB6v8y754wIeDVIXd+Vip0nAjj1HXEkbFDbc5Zbdju4lMJW4m8lry/iM0jpMhScH2v5Gukl42vkcfhJFMZo2qwUTEEdqgWPmO7tWvTkCXewcKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761036986; c=relaxed/simple;
-	bh=GwcY99sR7hfTFHKvYDGUjA/c6o8ru/9It6vAmUiSUjQ=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=gFIIrKuwtbN1aU16/Acqd8cPYJGvsncZsP3FYTmbd4d9ManAQnh5CSd0+JSDgoT/0m8Hek65ZpwzRX3ErLw7U1saE9l6dpYN7ZWXaFSMjRQf6sheCVfZ4v+8UpOrRHO2gHaXmIUyqmey+EPC6905G84Xm2WfWUj+yd4NxPhZHDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=uPsWNRB0; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 12BE91A157B;
-	Tue, 21 Oct 2025 08:56:15 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id D530260680;
-	Tue, 21 Oct 2025 08:56:14 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B6201102F23CA;
-	Tue, 21 Oct 2025 10:55:49 +0200 (CEST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1761036973; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=2jsZwBtV7vcAxoIXxBFATWt9hXEb5kKdYra5Pb8R+Ow=;
-	b=uPsWNRB0+A4j4p75d9ZIHFcTGJnIUItQv++zY88SDuQTyJ26WNQw6boN4+M7z62kHlLqz4
-	X5RtR90esp+xo0ut9aGXxL3bw2h+hakY15G92owMYPe0kEmFx5eqyzgHyU7Gqw1oErwc9n
-	NQvzK6lkr4i3bHid2qDrqvKh1SrQS7xeReUnwjY0t/JCIGhLI/J117ijGWvDo71uaQ23dI
-	38hWbAVlcGD1j2Br2T5NEMnvNAu70hZbX5UzqVjQuKIuiSvHwMVsg/8Q1F7Ym4QHVRSCR6
-	W7J2+pYQGxbWLFBARxxD1fvAb86Iau8RkH0F6o0wjkKZufRFsPIpnzDbB4SmOA==
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-Date: Tue, 21 Oct 2025 10:55:36 +0200
-Subject: [PATCH v2] drm/atomic: drm_atomic_private_obj_fini: protect
- private_obj removal from list
+	s=arc-20240116; t=1761048962; c=relaxed/simple;
+	bh=EdWXsHmmqwuhqUifnjdtEASSh8bC7pcsjZQVWMANaVs=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=OmtRD0Cv7Tg/IOhbm/aVQ42ZvKp+rR0EHiI+Hq15wavw1kwmL47tASEmiQhcQqFtZUHhMCx9P7IKV+R3HqkQkAZC8gBMsOj588oH/605jF924fyBOdy1rNi4QLI+LeBDeaQmKPQg60pT7CWRraK6EydaXkP/ASarkmWT9oHBB8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id 8401792009C; Tue, 21 Oct 2025 14:15:51 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id 7DACD92009B;
+	Tue, 21 Oct 2025 13:15:51 +0100 (BST)
+Date: Tue, 21 Oct 2025 13:15:51 +0100 (BST)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Bjorn Helgaas <helgaas@kernel.org>
+cc: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-pci@vger.kernel.org, 
+    Guenter Roeck <linux@roeck-us.net>, Bjorn Helgaas <bhelgaas@google.com>, 
+    linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/1] MIPS: Malta: Use pcibios_align_resource() to
+ block io range
+In-Reply-To: <20251020223714.GA1165320@bhelgaas>
+Message-ID: <alpine.DEB.2.21.2510210145260.8377@angie.orcam.me.uk>
+References: <20251020223714.GA1165320@bhelgaas>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20251021-drm-bridge-atomic-vs-remove-private_obj-v2-1-412a18399bac@bootlin.com>
-X-B4-Tracking: v=1; b=H4sIAIdK92gC/5WQy04DMQxFf2WUNUZ5dCbprPgPVFV5eKgRmZQkR
- EVV/510yoIty2tLPsf3ygpmwsLm4coyNiqU1h7k08D8ya5vCBR6ZpLLUXChIOQILlPoG1tTJA+
- tQMaYGsI5U7MVj8m9Q9B7afjo0AXP+rVzxoUuG+n10POJSk35ewM3cZ/+n9EEcBCLlzgawSXyF
- 5dS/aD12afIDrcHNuPnV/+rPtjM2YLQ95HqPGi0fDcZZbgUkxfcaTUp5fZ6CkrhYo0XMig9sr9
- 99Ho2U242018juBtlLFjBokCpd11J27nJbnL7AcDtjglpAQAA
-X-Change-ID: 20251013-drm-bridge-atomic-vs-remove-private_obj-d792805bebdc
-To: Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>, 
- Rodrigo Siqueira <siqueira@igalia.com>, 
- Alex Deucher <alexander.deucher@amd.com>, 
- =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
- David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>, 
- Liviu Dudau <liviu.dudau@arm.com>, 
- Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
- Maxime Ripard <mripard@kernel.org>, Thomas Zimmermann <tzimmermann@suse.de>, 
- Andrzej Hajda <andrzej.hajda@intel.com>, 
- Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Paul Cercueil <paul@crapouillou.net>, 
- Rob Clark <robin.clark@oss.qualcomm.com>, 
- Dmitry Baryshkov <lumag@kernel.org>, 
- Abhinav Kumar <abhinav.kumar@linux.dev>, Sean Paul <sean@poorly.run>, 
- Marijn Suijten <marijn.suijten@somainline.org>, 
- Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
- Thierry Reding <thierry.reding@gmail.com>, 
- Mikko Perttunen <mperttunen@nvidia.com>, 
- Jonathan Hunter <jonathanh@nvidia.com>, 
- Dave Stevenson <dave.stevenson@raspberrypi.com>, 
- =?utf-8?q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>, 
- Raspberry Pi Kernel Maintenance <kernel-list@raspberrypi.com>
-Cc: Hui Pu <Hui.Pu@gehealthcare.com>, 
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
- amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org, 
- linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
- linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org, 
- linux-tegra@vger.kernel.org, Luca Ceresoli <luca.ceresoli@bootlin.com>
-X-Mailer: b4 0.14.2
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=US-ASCII
 
-Currently drm_bridge_detach() expects that the bridge private_obj is not
-locked by a drm_modeset_acquire_ctx, and it warns in case that happens:
+On Mon, 20 Oct 2025, Bjorn Helgaas wrote:
 
-  drm_bridge_detach()
-  -> drm_atomic_private_obj_fini()
-     -> list_del(&obj->head) // removes priv_obj from
-                             // dev->mode_config.privobj_list
-     -> obj->funcs->atomic_destroy_state()
-     -> drm_modeset_lock_fini(&obj->lock)
-        -> WARN_ON(!list_empty(&lock->head)) // warn if priv_obj->lock
-	                                     // is still in ctx->locked
+> > Since ae81aad5c2e1 ("MIPS: PCI: Use pci_enable_resources()") came
+> > through the PCI tree, I'd be happy to merge this as well, given your
+> > ack, Thomas.  It would be ideal to have a tested-by from Guenter.
+> > 
+> > I provisionally put it on pci/for-linus to facilitate testing.  If it
+> > doesn't solve the problem or you'd rather take it, Thomas, I'll be
+> > glad to drop it.
+> 
+> Added:
+> 
+>   Tested-by: Guenter Roeck <linux@roeck-us.net>
+>   Tested-by: Maciej W. Rozycki <macro@orcam.me.uk>
+>   Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> 
+> and dropped the Fixes: aa0980b80908 ("Fixes for system controllers for
+> Atlas/Malta core cards.")
+> 
+> If the missing resource reservations (dma1, tiger, dma page reg)
+> mentioned by Maciej are an issue or can be fixed up, let me know and
+> we can amend this.
 
-The expectation is not respected when introducing bridge hot-plugging. In
-such case the warning triggers if the bridge is being removed concurrently
-to an operation that locks the private object using a
-drm_modeset_acquire_ctx, such as in this execution scenario:
+ NB this comes from `plat_mem_setup' in arch/mips/mti-malta/malta-setup.c 
+iterating over `standard_io_resources'.  ISTR now this being my original 
+reason to come up with the approach taken with commit aa0980b80908 rather 
+than using PCIBIOS_MIN_IO.  Since the ranges are now owned by the PCI host 
+bridge, calls to `request_resource' referring `ioport_resource' fail.
 
-  CPU0:
-  drm_mode_obj_get_properties_ioctl() // userspace request
-  -> DRM_MODESET_LOCK_ALL_BEGIN()
-  .  -> drm_for_each_privobj() // loop on dev->mode_config.privobj_list
-  .     - lock the privobj mutex
-  .	- add priv_obj->lock to ctx->locked
-  .	  (list of locks to be released later)
-  .
-  .                         CPU1:
-  .                         drm_bridge_detach() // bridge hot-unplug
-  .		            -> WARN triggers!
-  .
-  -> DRM_MODESET_LOCK_ALL_END()
-     -> for each lock in ctx->locked
-	- remove priv_obj->lock from ctx->locked
-        - unlock the privobj mutex
+ I'm not sure offhand how to get a hold on the right handle under the new 
+arrangement in this platform code, but clearly it must be doable as x86 
+gets it right (and conversely Alpha gets it totally wrong).
 
-Fix this by using DRM_MODESET_LOCK_ALL_BEGIN/END() around the list removal
-in drm_atomic_private_obj_fini(). This ensures that exactly one of these
-happens:
+ Also I think we should reserve the PCI port I/O window in the MMIO space 
+as well; something that I pondered back those 20 years ago already.  For 
+the system I've used here that'd show up as:
 
- * the concurrent code (e.g. drm_mode_obj_get_properties_ioctl()) acquires
-   all the locks first, so it can execute fully and release the
-   privobj->lock before drm_atomic_private_obj_fini() calls list_del() and
-   before the WARN_ON()
- * drm_atomic_private_obj_fini() acquires all the locks first, so it
-   removes its privobj->lock from the dev->mode_config.privobj_list; the
-   concurrent code will run afterwards and not acquire that lock because it
-   is not present anymore
+10000000-1affffff : MSC PCI MEM
+  10000000-100fffff : 0000:00:0b.0
+  [...]
+  10142080-1014209f : 0000:00:0b.0
+1b000000-1bffffff : MSC PCI I/O
+1e000000-1e3fffff : 1e000000.flash flash@1e000000
 
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
----
-This series prevents a race between DRM bridge removal and usage of the
-bridge private_obj during DRM_MODESET_LOCK_ALL_BEGIN/END() and other
-locking operations.
+Most non-x86 PCI host bridges have one, but I haven't come across a Linux
+platform that would report it.
 
-This is part of the work towards removal of bridges from a still existing
-DRM pipeline without use-after-free. The grand plan was discussed in [0].
-Here's the work breakdown (➜ marks the current series):
-
- 1. … add refcounting to DRM bridges (struct drm_bridge)
-    (based on devm_drm_bridge_alloc() [0])
-    A. ✔ add new alloc API and refcounting (v6.16)
-    B. ✔ convert all bridge drivers to new API (v6.17)
-    C. ✔ kunit tests (v6.17)
-    D. ✔ add get/put to drm_bridge_add/remove() + attach/detach()
-         and warn on old allocation pattern (v6.17)
-    E. … add get/put on drm_bridge accessors
-       1. ✔ drm_bridge_chain_get_first_bridge(), add cleanup action (v6.18)
-       2. ✔ drm_bridge_get_prev_bridge() (v6.18)
-       3. ✔ drm_bridge_get_next_bridge() (v6.19)
-       4. ✔ drm_for_each_bridge_in_chain() (v6.19)
-       5. ✔ drm_bridge_connector_init (v6.19)
-       6. … protect encoder bridge chain with a mutex
-       7. of_drm_find_bridge
-       8. drm_of_find_panel_or_bridge, *_of_get_bridge
-       9. … enforce drm_bridge_add before drm_bridge_attach
-    F. ✔ debugfs improvements
-       1. ✔ add top-level 'bridges' file (v6.16)
-       2. ✔ show refcount and list lingering bridges (v6.19)
- 2. ➜ handle gracefully atomic updates during bridge removal
-    A. … Add drm_dev_enter/exit() to protect device resources
-    B. ➜ protect private_obj removal from list
- 3. … DSI host-device driver interaction
- 4. ✔ removing the need for the "always-disconnected" connector
- 5. finish the hotplug bridge work, moving code to the core and potentially
-    removing the hotplug-bridge itself (this needs to be clarified as
-    points 1-3 are developed)
-
-[0] https://lore.kernel.org/lkml/20250206-hotplug-drm-bridge-v6-0-9d6f2c9c3058@bootlin.com/#t
-
-The need for this series emerged during testing of DRM bridge
-hot-plugging. Very rarely on hot-unplug the following warning has appeared:
-
-  WARNING: CPU: 0 PID: 123 at include/drm/drm_modeset_lock.h:114 drm_atomic_private_obj_fini+0x64/0x80
-  ...
-  Call trace:
-   drm_atomic_private_obj_fini+0x64/0x80
-   drm_bridge_detach+0x38/0x98
-
-This series depends on:
- * https://lore.kernel.org/dri-devel/20251014-drm-private-obj-reset-v2-0-6dd60e985e9d@kernel.org
-   - dependency on patch 1 only
-   - reason: this patch uses the obj->dev introduced by the other series
----
-Changes in v2:
-- Adapted to work on top of "drm/atomic: Add dev pointer to drm_private_obj"
-- Removed 'To: jessica.zhang@oss.qualcomm.com', invalid address
-- Link to v1: https://lore.kernel.org/r/20251013-drm-bridge-atomic-vs-remove-private_obj-v1-0-1fc2e58102e0@bootlin.com
----
-
-Changes in v2:
-- added 'drm/atomic:' prefix to commit title
-- Adapted to work on top of "drm/atomic: Add dev pointer to drm_private_obj"
-- Slightly improved commit message
----
- drivers/gpu/drm/drm_atomic.c | 6 ++++++
- 1 file changed, 6 insertions(+)
-
-diff --git a/drivers/gpu/drm/drm_atomic.c b/drivers/gpu/drm/drm_atomic.c
-index c161f561d937e2e26de617912078c739adb521dd..107530c1b9978122d2ebf05f7af2ca77f9faa21b 100644
---- a/drivers/gpu/drm/drm_atomic.c
-+++ b/drivers/gpu/drm/drm_atomic.c
-@@ -810,7 +810,13 @@ EXPORT_SYMBOL(drm_atomic_private_obj_init);
- void
- drm_atomic_private_obj_fini(struct drm_private_obj *obj)
- {
-+	struct drm_modeset_acquire_ctx ctx;
-+	int ret = 0;
-+
-+	DRM_MODESET_LOCK_ALL_BEGIN(obj->dev, ctx, 0, ret);
- 	list_del(&obj->head);
-+	DRM_MODESET_LOCK_ALL_END(obj->dev, ctx, ret);
-+
- 	obj->funcs->atomic_destroy_state(obj, obj->state);
- 	drm_modeset_lock_fini(&obj->lock);
- }
-
----
-base-commit: 7ea0468380216c10b73633b976d33efa8c12d375
-change-id: 20251013-drm-bridge-atomic-vs-remove-private_obj-d792805bebdc
-prerequisite-change-id: 20251008-drm-private-obj-reset-ae1e2741027a:v2
-prerequisite-patch-id: 031aec6ea9c41371568d42df2ab6dc3ca35ac85c
-prerequisite-patch-id: cd9c28ecb798993ed3c3550191cb0fbafbf90bde
-prerequisite-patch-id: e05cb0386e8ed0c82ec6a914f6c6ad47a7c841fa
-prerequisite-patch-id: a68ff4bb5ba6fd882ca11946d92bb33253812e7d
-prerequisite-patch-id: ed1c29018986837cfb0030796a7bfce98aef3445
-prerequisite-patch-id: 1e1efb36e40d79bea5ee70380abcbb956508326a
-prerequisite-patch-id: 48fcc6b38c7acc1e00d57002a4973ccae6b2889d
-prerequisite-patch-id: a122d6d3dd86039f7bf64c082f30c4de676066f9
-prerequisite-patch-id: b1ae0e3be3cb2304ed8820cf36a29b88ef110d5b
-prerequisite-patch-id: e061eea62a9ee500c239229e3d4c8d7e8edd2964
-prerequisite-patch-id: 7e94f6a9760cf58b31d709be849eed855275e140
-prerequisite-patch-id: dd3ac7d8cb8af58ea5f41b6c4b43dd844fb29d81
-prerequisite-patch-id: 410a9287f82c1af0caf3d8ff4f562b83a33c514b
-prerequisite-patch-id: 51e733e1ad1973889a75131c62521b11b16d54d5
-prerequisite-patch-id: bf0a8bf82d137cfd1d672df246116136c82523ca
-prerequisite-patch-id: fcc237e7836e87b3cad72b32ea976bd6a6190dad
-
-Best regards,
--- 
-Luca Ceresoli <luca.ceresoli@bootlin.com>
-
+  Maciej
 
