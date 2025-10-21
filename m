@@ -1,139 +1,76 @@
-Return-Path: <linux-mips+bounces-11817-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11818-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51B1ABF68C8
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Oct 2025 14:51:34 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id EA2BDBF7231
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Oct 2025 16:44:03 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 442E23B2A34
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Oct 2025 12:51:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4EA25405E3A
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Oct 2025 14:41:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C0C432E6B1;
-	Tue, 21 Oct 2025 12:51:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MJYd11Az"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAFE733B97D;
+	Tue, 21 Oct 2025 14:41:07 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 091DF18DB01;
-	Tue, 21 Oct 2025 12:51:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07A1333B957;
+	Tue, 21 Oct 2025 14:41:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761051079; cv=none; b=MgPRzIGEmX3VV4apGgNUyf0F/ZnjHCsyK++08KFrq9dmnfmuCWHh5iDGKOo69Nr7xr+u12IarM74fnF4LFxN6lLxlB0wXF+79eob+ejxkF+/pcfAfEkUMH30xejlt+bPHmI4Wl/F+NjLLFhVynJMMSxbbQ7uhL/2weazoy/KJ3A=
+	t=1761057667; cv=none; b=sctpzHUvODH/8xwDLuFOn4+/tOEFwTmAZSpLWXagrhRrqAaQL8JWajbHMKryuldANPHYxa+gGf/ktdKe7FbvnStAuY+7Ma+PSmfsmEtx6UpQx9YzAgCiBeAGJjJewMTuOgPEmfzyX7HhnSP08rnVo4RIhhYSM1g0TvWODbd+bYc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761051079; c=relaxed/simple;
-	bh=iBaEpS9tsmM3BLuEMwdZUtVD02xo8Z1H1drCBAehBPw=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=Hy4f5yQ21hK9uLp/5XR19JzTnw1i+F0M7gB/fVVF8KM3k7C2HaJEH6PDn1S2BQouJRM7TD3lgxYoT7BZUvKuHfhWhuc/Em/gAOKInJK1Joves0A+rFItk1/+qQ0bY5F3ya3GAHWagZRVXW9sWtxZiHtqsLrT/tlyygQQcwki64s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MJYd11Az; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761051077; x=1792587077;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=iBaEpS9tsmM3BLuEMwdZUtVD02xo8Z1H1drCBAehBPw=;
-  b=MJYd11AzGUwMc8Ca/lkpJq2Ucf2wB36EuEcdlm76A9wR86z4oUduLIF2
-   1DD7QYTbwzVz12UMvwjwAi/+IMpAThdPdQerlOKmq/ru/wS3rpmrKd9NA
-   N99jwRLFyyePjkwnEszZPUVWopdTeai72Q3OqfDLgHxoDD7FWYqyMbksn
-   gCIYH0Ob8JOGd3OEXoWsSrg5PJKqIDrmx0fG+suOUB3LokaLIfcOPLFW2
-   +qGUV1kiEHbDitxf7PVByZuY48zOSELE1Nwmmaez/TRxeXRlH+XEqQMQL
-   S3tS6GEtYJVHWNFdGfs4yqu4jVJYC9PQBemljDcjTgOvIel0iG4/7SeoF
-   g==;
-X-CSE-ConnectionGUID: wbEj31CHRM+YYk8954vsJA==
-X-CSE-MsgGUID: s2BNCi8LTC+lseCTYlcDVQ==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="74294543"
-X-IronPort-AV: E=Sophos;i="6.19,244,1754982000"; 
-   d="scan'208";a="74294543"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 05:51:17 -0700
-X-CSE-ConnectionGUID: fUQcL98RSPyebu7ZpRILAg==
-X-CSE-MsgGUID: LkEiCw6NR1ib1mB6xCDC2A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,244,1754982000"; 
-   d="scan'208";a="183613203"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.189])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Oct 2025 05:51:13 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Tue, 21 Oct 2025 15:51:09 +0300 (EEST)
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
+	s=arc-20240116; t=1761057667; c=relaxed/simple;
+	bh=psNfBZyyNJC/BgyLpkpbbZ23QMFeN9l9ZAGSUVtrzLc=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=cnH43N49ZCIETITb1hNHJ+rUNeKfO+7+vtSX8lVS2Vfg6ahWSTJDBk7IB/SxDrYQn+WB6/f+GJN/t0mMUVIn5a5LdsIkJWOCTN44a0CyTx9BelCI7BTVfb5khys2rCxdrCh6tvJDBS3Pdukk4zWLwpdcZ4swEYWQIyIyK736kmo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id E587992009C; Tue, 21 Oct 2025 16:41:01 +0200 (CEST)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id DF88192009B;
+	Tue, 21 Oct 2025 15:41:01 +0100 (BST)
+Date: Tue, 21 Oct 2025 15:41:01 +0100 (BST)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
 cc: Bjorn Helgaas <helgaas@kernel.org>, 
     Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-pci@vger.kernel.org, 
     Guenter Roeck <linux@roeck-us.net>, Bjorn Helgaas <bhelgaas@google.com>, 
     linux-mips@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>
 Subject: Re: [PATCH v2 1/1] MIPS: Malta: Use pcibios_align_resource() to
  block io range
-In-Reply-To: <alpine.DEB.2.21.2510210145260.8377@angie.orcam.me.uk>
-Message-ID: <9ff182b0-076b-78fd-adec-99ae7ea5341f@linux.intel.com>
-References: <20251020223714.GA1165320@bhelgaas> <alpine.DEB.2.21.2510210145260.8377@angie.orcam.me.uk>
+In-Reply-To: <9ff182b0-076b-78fd-adec-99ae7ea5341f@linux.intel.com>
+Message-ID: <alpine.DEB.2.21.2510211536330.8377@angie.orcam.me.uk>
+References: <20251020223714.GA1165320@bhelgaas> <alpine.DEB.2.21.2510210145260.8377@angie.orcam.me.uk> <9ff182b0-076b-78fd-adec-99ae7ea5341f@linux.intel.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
 
-On Tue, 21 Oct 2025, Maciej W. Rozycki wrote:
+On Tue, 21 Oct 2025, Ilpo Järvinen wrote:
 
-> On Mon, 20 Oct 2025, Bjorn Helgaas wrote:
-> 
-> > > Since ae81aad5c2e1 ("MIPS: PCI: Use pci_enable_resources()") came
-> > > through the PCI tree, I'd be happy to merge this as well, given your
-> > > ack, Thomas.  It would be ideal to have a tested-by from Guenter.
-> > > 
-> > > I provisionally put it on pci/for-linus to facilitate testing.  If it
-> > > doesn't solve the problem or you'd rather take it, Thomas, I'll be
-> > > glad to drop it.
+> > > If the missing resource reservations (dma1, tiger, dma page reg)
+> > > mentioned by Maciej are an issue or can be fixed up, let me know and
+> > > we can amend this.
 > > 
-> > Added:
-> > 
-> >   Tested-by: Guenter Roeck <linux@roeck-us.net>
-> >   Tested-by: Maciej W. Rozycki <macro@orcam.me.uk>
-> >   Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> > 
-> > and dropped the Fixes: aa0980b80908 ("Fixes for system controllers for
-> > Atlas/Malta core cards.")
-> > 
-> > If the missing resource reservations (dma1, tiger, dma page reg)
-> > mentioned by Maciej are an issue or can be fixed up, let me know and
-> > we can amend this.
+> >  NB this comes from `plat_mem_setup' in arch/mips/mti-malta/malta-setup.c 
+> > iterating over `standard_io_resources'.  ISTR now this being my original 
+> > reason to come up with the approach taken with commit aa0980b80908 rather 
+> > than using PCIBIOS_MIN_IO.  Since the ranges are now owned by the PCI host 
+> > bridge, calls to `request_resource' referring `ioport_resource' fail.
 > 
->  NB this comes from `plat_mem_setup' in arch/mips/mti-malta/malta-setup.c 
-> iterating over `standard_io_resources'.  ISTR now this being my original 
-> reason to come up with the approach taken with commit aa0980b80908 rather 
-> than using PCIBIOS_MIN_IO.  Since the ranges are now owned by the PCI host 
-> bridge, calls to `request_resource' referring `ioport_resource' fail.
+> So this platform would actually need multiple root bus IO resources to 
+> cover PIIX4 range without capturing non-PCI ranges?
 
-So this platform would actually need multiple root bus IO resources to 
-cover PIIX4 range without capturing non-PCI ranges?
+ I've got it covered now; will send patches shortly.  It was easier than I 
+thought, phew!
 
->  I'm not sure offhand how to get a hold on the right handle under the new 
-> arrangement in this platform code, but clearly it must be doable as x86 
-> gets it right (and conversely Alpha gets it totally wrong).
-> 
->  Also I think we should reserve the PCI port I/O window in the MMIO space 
-> as well; something that I pondered back those 20 years ago already.  For 
-> the system I've used here that'd show up as:
-> 
-> 10000000-1affffff : MSC PCI MEM
->   10000000-100fffff : 0000:00:0b.0
->   [...]
->   10142080-1014209f : 0000:00:0b.0
-> 1b000000-1bffffff : MSC PCI I/O
-> 1e000000-1e3fffff : 1e000000.flash flash@1e000000
-> 
-> Most non-x86 PCI host bridges have one, but I haven't come across a Linux
-> platform that would report it.
-> 
->   Maciej
-> 
-
--- 
- i.
-
+  Maciej
 
