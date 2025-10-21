@@ -1,57 +1,57 @@
-Return-Path: <linux-mips+bounces-11822-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11823-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id C70CABF7B24
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Oct 2025 18:35:26 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB638BF7B09
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Oct 2025 18:34:43 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 01C9050723E
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Oct 2025 16:34:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1792419A0015
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Oct 2025 16:35:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB46934FF76;
-	Tue, 21 Oct 2025 16:33:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79B763570AB;
+	Tue, 21 Oct 2025 16:33:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="xOOXa3ih"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="B9BCn44P"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4F4532D0E8;
-	Tue, 21 Oct 2025 16:33:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97E4034FF70;
+	Tue, 21 Oct 2025 16:33:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761064400; cv=none; b=FnWFS79YFgiTC08RDRUsnAI2QNhVCSu0HLksV85kufucVOotM/XZ1yGjCZpG1mJEcDXZuRunU45oI0xlOAF/GX3qv4aVD3tT27Eh49EXO1jAZzmzcVynNmbiebHKDpk/cosVOP5W+sNFCXLZW2/DFVj9tEbAUGIsTZoAon479eA=
+	t=1761064402; cv=none; b=Grly7C6td54GtaSCnPW/wYJUR3DbTgSz/9pdrC2GOdDyLZMoCqdA1UBpN5uTWoth5G05dgrCQeHqO/76D1u9nxdh6vIqc81lS0Q2rPe7r4eKw7swbG1M3zKr7R1YT7Z3ofaasfcMQtsPH8BqGfeuKJFTDIqA3UrhoW6y3KST2PU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761064400; c=relaxed/simple;
-	bh=0QkH3T2bEXT83CHCQSI6m5aj4GerMQ/hyyR5h0m9pvw=;
+	s=arc-20240116; t=1761064402; c=relaxed/simple;
+	bh=Tc8l9ZFS/27xtiHKic+Nw9ObTz+Q5Z1+7UxI999xik8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=aRG02fZu8OpStfCEd7PnUVdDzzJ5DqDkDybeY0xxVS7XCjwhOy+Lck8EnROQvAR10mz5eeQ6mcZl+F+KpEQ36GkyEwsaMsZcUAqXs/WthYIcwFHl/ioSDdRZXmXiN0GDTK7wqMnd0VpqHMiA6xknNn4h5rLFaysOhqhk7RWhcFU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=xOOXa3ih; arc=none smtp.client-ip=185.246.85.4
+	 In-Reply-To:To:Cc; b=P3V2SFI6RbExSO/VqytLiBOsezwiMfuAv8HPwHf0R1+Hejcnm+J1LgCDkOnj+83gpIjN8O4uV4ZTtKe84rgB22qBGWK3LSijL0fG7+e6WdlMz/j3nZ2hPCu8N83cmHq46epn8wmvz/Pv+KZQpyEOOcyPwcIwtp9COEXClnJgULg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=B9BCn44P; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 1FB774E41241;
-	Tue, 21 Oct 2025 16:33:16 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 0B31E1A1594;
+	Tue, 21 Oct 2025 16:33:19 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id E1D4F60680;
-	Tue, 21 Oct 2025 16:33:15 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id E3E4B102F23EA;
-	Tue, 21 Oct 2025 18:33:11 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id D414960680;
+	Tue, 21 Oct 2025 16:33:18 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A1457102F2405;
+	Tue, 21 Oct 2025 18:33:14 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1761064394; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1761064397; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=j8hzkMx0NGZAJQ/xFkuORjF0T7wqXOb0/2K4DFFgOl8=;
-	b=xOOXa3ih9rTHX6pBNbuMIj9QgflJXrD8M2PwQra8Sou1iFuJH953sMTHOiFzgJIO3xgO4Q
-	eo0jHAS0RuQIVRK2+L8Kpai4CLYbItShUEmDAhoXbqgB+M9BSSVuOE8I047yPRSj5SLS9B
-	LkiII1STET/nKnamzD2u6Yt+vGaoSWcvBz7T0xE7PyU7lNWJQdESc6pF+y6Tw3id6vzsIV
-	bF1xJKj6n/2k8Di9c3NzGmzhdHPbAvOa8yK0SMv26KfNobS2KgO5o0mQER3GwH4zPEc4xq
-	c6JwVfHCWurZNuMG1DWPJ5ZmbvaQgDZJ4Jv0oOdu3V9GswCOUc5YfeWCyNPgCQ==
+	bh=9mdT22bW8hHz3UcIVW5ieLvCN8QVDlwvevK9AMuWtRA=;
+	b=B9BCn44P1EQNhvnmT7q8H6NA7TPYf+yZ1iSyRr+1SrLAbt1TuWnwmShY4Q6KIpfIsw8VvO
+	t4zMt3FIB3+nPHNhUkseiOirAi6UN1puhnpuKcGWzZdAP9Yaym3HG+N8DbUOpyH9B97r2P
+	OOY1jeisVrox9fOjGc8IobkUePTFQyL03YDP0ytqGhTqWiaJ2bG1V7XGv90w85Pz+pyLIe
+	ZiLDwwj3rWf506aDfuwK3GHxIP02fsYDfqyQiEaKpC44953PNfJaN3uh2FNvkT8pOGXW3i
+	3+Wgyim9kJqJA1IE8+0bF91dbXaTTbQQTg2NJ/F/HI+pukCAS5pYTlbrgsEaug==
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Tue, 21 Oct 2025 18:32:44 +0200
-Subject: [PATCH net-next 03/12] net: macb: match skb_reserve(skb,
- NET_IP_ALIGN) with HW alignment
+Date: Tue, 21 Oct 2025 18:32:45 +0200
+Subject: [PATCH net-next 04/12] net: macb: add no LSO capability
+ (MACB_CAPS_NO_LSO)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -60,7 +60,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251021-macb-eyeq5-v1-3-3b0b5a9d2f85@bootlin.com>
+Message-Id: <20251021-macb-eyeq5-v1-4-3b0b5a9d2f85@bootlin.com>
 References: <20251021-macb-eyeq5-v1-0-3b0b5a9d2f85@bootlin.com>
 In-Reply-To: <20251021-macb-eyeq5-v1-0-3b0b5a9d2f85@bootlin.com>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
@@ -85,97 +85,52 @@ Cc: netdev@vger.kernel.org, devicetree@vger.kernel.org,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
  =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>, 
  Maxime Chevallier <maxime.chevallier@bootlin.com>, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
+ Andrew Lunn <andrew@lunn.ch>
 X-Mailer: b4 0.14.3
 X-Last-TLS-Session-Version: TLSv1.3
 
-If HW is RSC capable, it cannot add dummy bytes at the start of IP
-packets. Alignment (ie number of dummy bytes) is configured using the
-RBOF field inside the NCFGR register.
+LSO is runtime-detected using the PBUF_LSO field inside register DCFG6.
+Allow disabling that feature if it is broken by using bp->caps coming
+from match data.
 
-On the software side, the skb_reserve(skb, NET_IP_ALIGN) call must only
-be done if those dummy bytes are added by the hardware; notice the
-skb_reserve() is done AFTER writing the address to the device.
-
-We cannot do the skb_reserve() call BEFORE writing the address because
-the address field ignores the low 2/3 bits. Conclusion: in some cases,
-we risk not being able to respect the NET_IP_ALIGN value (which is
-picked based on unaligned CPU access performance).
-
-Fixes: 4df95131ea80 ("net/macb: change RX path for GEM")
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 ---
- drivers/net/ethernet/cadence/macb.h      |  3 +++
- drivers/net/ethernet/cadence/macb_main.c | 21 ++++++++++++++++++---
- 2 files changed, 21 insertions(+), 3 deletions(-)
+ drivers/net/ethernet/cadence/macb.h      | 1 +
+ drivers/net/ethernet/cadence/macb_main.c | 7 +++++--
+ 2 files changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/drivers/net/ethernet/cadence/macb.h b/drivers/net/ethernet/cadence/macb.h
-index 5b7d4cdb204d..93e8dd092313 100644
+index 93e8dd092313..05bfa9bd4782 100644
 --- a/drivers/net/ethernet/cadence/macb.h
 +++ b/drivers/net/ethernet/cadence/macb.h
-@@ -537,6 +537,8 @@
- /* Bitfields in DCFG6. */
- #define GEM_PBUF_LSO_OFFSET			27
- #define GEM_PBUF_LSO_SIZE			1
-+#define GEM_PBUF_RSC_OFFSET			26
-+#define GEM_PBUF_RSC_SIZE			1
- #define GEM_PBUF_CUTTHRU_OFFSET			25
- #define GEM_PBUF_CUTTHRU_SIZE			1
- #define GEM_DAW64_OFFSET			23
-@@ -775,6 +777,7 @@
- #define MACB_CAPS_MACB_IS_GEM			BIT(20)
+@@ -778,6 +778,7 @@
  #define MACB_CAPS_DMA_64B			BIT(21)
  #define MACB_CAPS_DMA_PTP			BIT(22)
-+#define MACB_CAPS_RSC				BIT(23)
+ #define MACB_CAPS_RSC				BIT(23)
++#define MACB_CAPS_NO_LSO			BIT(24)
  
  /* LSO settings */
  #define MACB_LSO_UFO_ENABLE			0x01
 diff --git a/drivers/net/ethernet/cadence/macb_main.c b/drivers/net/ethernet/cadence/macb_main.c
-index 214f543af3b8..8d951faf00c3 100644
+index 8d951faf00c3..2010f9290c5c 100644
 --- a/drivers/net/ethernet/cadence/macb_main.c
 +++ b/drivers/net/ethernet/cadence/macb_main.c
-@@ -1301,8 +1301,19 @@ static void gem_rx_refill(struct macb_queue *queue)
- 			dma_wmb();
- 			macb_set_addr(bp, desc, paddr);
+@@ -4563,8 +4563,11 @@ static int macb_init(struct platform_device *pdev)
+ 	/* Set features */
+ 	dev->hw_features = NETIF_F_SG;
  
--			/* properly align Ethernet header */
--			skb_reserve(skb, NET_IP_ALIGN);
-+			/* Properly align Ethernet header.
-+			 *
-+			 * Hardware can add dummy bytes if asked using the RBOF
-+			 * field inside the NCFGR register. That feature isn't
-+			 * available if hardware is RSC capable.
-+			 *
-+			 * We cannot fallback to doing the 2-byte shift before
-+			 * DMA mapping because the address field does not allow
-+			 * setting the low 2/3 bits.
-+			 * It is 3 bits if HW_DMA_CAP_PTP, else 2 bits.
-+			 */
-+			if (!(bp->caps & MACB_CAPS_RSC))
-+				skb_reserve(skb, NET_IP_ALIGN);
- 		} else {
- 			desc->ctrl = 0;
- 			dma_wmb();
-@@ -2774,7 +2785,9 @@ static void macb_init_hw(struct macb *bp)
- 	macb_set_hwaddr(bp);
+-	/* Check LSO capability */
+-	if (GEM_BFEXT(PBUF_LSO, gem_readl(bp, DCFG6)))
++	/* Check LSO capability; runtime detection can be overridden by a cap
++	 * flag if the hardware is known to be buggy
++	 */
++	if (!(bp->caps & MACB_CAPS_NO_LSO) &&
++	    GEM_BFEXT(PBUF_LSO, gem_readl(bp, DCFG6)))
+ 		dev->hw_features |= MACB_NETIF_LSO;
  
- 	config = macb_mdc_clk_div(bp);
--	config |= MACB_BF(RBOF, NET_IP_ALIGN);	/* Make eth data aligned */
-+	/* Make eth data aligned. If RSC capable, that offset is ignored by HW. */
-+	if (!(bp->caps & MACB_CAPS_RSC))
-+		config |= MACB_BF(RBOF, NET_IP_ALIGN);
- 	config |= MACB_BIT(DRFCS);		/* Discard Rx FCS */
- 	if (bp->caps & MACB_CAPS_JUMBO)
- 		config |= MACB_BIT(JFRAME);	/* Enable jumbo frames */
-@@ -4322,6 +4335,8 @@ static void macb_configure_caps(struct macb *bp,
- 		dcfg = gem_readl(bp, DCFG2);
- 		if ((dcfg & (GEM_BIT(RX_PKT_BUFF) | GEM_BIT(TX_PKT_BUFF))) == 0)
- 			bp->caps |= MACB_CAPS_FIFO_MODE;
-+		if (GEM_BFEXT(PBUF_RSC, gem_readl(bp, DCFG6)))
-+			bp->caps |= MACB_CAPS_RSC;
- 		if (gem_has_ptp(bp)) {
- 			if (!GEM_BFEXT(TSU, gem_readl(bp, DCFG5)))
- 				dev_err(&bp->pdev->dev,
+ 	/* Checksum offload is only available on gem with packet buffer */
 
 -- 
 2.51.1
