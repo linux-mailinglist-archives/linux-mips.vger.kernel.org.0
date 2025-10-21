@@ -1,56 +1,57 @@
-Return-Path: <linux-mips+bounces-11820-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11819-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD968BF7AEE
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Oct 2025 18:34:10 +0200 (CEST)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88351BF7AD6
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Oct 2025 18:33:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id C81E44EBF0C
-	for <lists+linux-mips@lfdr.de>; Tue, 21 Oct 2025 16:33:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4949618C7728
+	for <lists+linux-mips@lfdr.de>; Tue, 21 Oct 2025 16:34:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0957734EEF5;
-	Tue, 21 Oct 2025 16:33:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 831F034EEE0;
+	Tue, 21 Oct 2025 16:33:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Bk35bp5z"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="dd2WKl4r"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7938034DB7B;
-	Tue, 21 Oct 2025 16:33:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7829A34DB7A
+	for <linux-mips@vger.kernel.org>; Tue, 21 Oct 2025 16:33:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761064394; cv=none; b=sEiizJ5H6S5inb4fqZAPurCOdyNa8FS6pwuQFSTFWpeyABrhkGYTxFuBsqsEYwn5F0xNtIarj6xKZ//Js+P912P9dZKplk6ejlGbMUkSpP7PVZM8+Z5d4c4KmRVdTVraq+GHEB2fCfiiVdFVEYTBEQcmPxVuWU8fdNLGMhxaQj0=
+	t=1761064394; cv=none; b=mRWzJNsXLfWWLkDpfFdqvFD2T/dtdwJDKsj3aHkcm9YQ4d3xf7uq2mKeD+WOtnd4hBjnnYEJeCXon1AqHsHRxfmGCYlni5N55aTXPMK08CKTOfdLylC0QNQREmvEXeXvGGFjkcQ+xaR+oL09vdTDph4wXC/qHKQv+3y/oUkY73g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1761064394; c=relaxed/simple;
-	bh=eVMrRTLFu012jIHRJzrysd/z4FK2cRudttyNR7qqrX4=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=EFjyVk3DO5lEbHUv0LtTAd0YAL7CSHxXoXrzAJZEdqvRBc496+0VQC9d/x1+tcEvNOULSQv0M08fzv+fpYW//7hk54dVOuskVhk8Iw29Rs13+FMWpRvHcEZDIfRQUvkmjsFzPrDQg4ckhW4t7MiKvRbHOAQwpa4nipZy7LcsZOI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Bk35bp5z; arc=none smtp.client-ip=185.246.85.4
+	bh=k4MMwotRueKQ73IFVBunfx4WBg3XwCGO4UhdsRh7hww=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=qn10JfWT+g7DjHQJTphwxwbXHK4UI8rkjOjikqxZzX448FUtrkGqe3us3QHevEcggkgLAZMmirRLFuDxOh4atUXhK4kATk8qkMP1t/D7BrerUfvWoufLO4rzz/RCv3UCdk/dO0PRXVpc7INeUGMLmIXfQWae+tBM9H+dAEKgYIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=dd2WKl4r; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 965874E41241;
-	Tue, 21 Oct 2025 16:33:07 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id CB177C0B897;
+	Tue, 21 Oct 2025 16:32:50 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 6166960680;
-	Tue, 21 Oct 2025 16:33:07 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id AFCAD102F23EA;
-	Tue, 21 Oct 2025 18:32:46 +0200 (CEST)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 66D0460680;
+	Tue, 21 Oct 2025 16:33:10 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3030F102F2405;
+	Tue, 21 Oct 2025 18:33:06 +0200 (CEST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1761064385; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=aN99o7OkOHWybNH2qjnfg/oT5mK0uPFrJ+4ao/bPan4=;
-	b=Bk35bp5z/HmjI09zpUheBUxeeY8DX1bjpIabg+gBb9ThCzjKu/do7w/IuA/3agfidF977f
-	772od6VR7YP+nodGEw/O1D6LbR0UfrclDv3CrR4comS8ZxjpzWSBiC1igP9ZVAMqn2fpcV
-	VNZ8EzJ0V9UWwfX510ooHsFA/LlB91j+tJWp09neCUyVkgA0TPlbIqy2UER/pyvWT6ndj9
-	70Tzba+s5Ici7nHW8qKJlVi2ePG3pJ5g61oTMBD7RegY/x6NKZIUCrFdEfdpj7Ja3pT5pi
-	9b9ad3M/t6FKkbg/D+r33rsN2OK7c/qXVZrJu9bqtcm6+WoHnjYsj4ODb8WVzw==
+	t=1761064388; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=L/XpHoQ2KPQc9riZ+r/LMfIVvh/XodPx0VGR9VmHzQ0=;
+	b=dd2WKl4rlX7iuNhneCMwl8/nGilha0A6oGI+pLtSZKJzGZRFeYUyZnpqOB9uBhZ2Aegwee
+	FYSAzU+yRZcfq/RU0ZriMlXqtD0aNxcf4erzxc0wrUnFnCcWXfwYF6Z7at63J+0UnFyzDw
+	AEvdOE2zCuZEg+ZmUaAX/+/oaaL/XedOyMV1M2AIPDliW0HK+b2lRy6aDJNWOmWBVYJDm9
+	ZDa5cGU5rKh/T5heRPKK4ZGfLiTNTAhnbWNCDIVmL5FQj9n6IL4UVPlcQbwZaJufYUpSac
+	J+zemdnErjqGuFG73uRCBlqLJlWyF+eO2ka4Ei9j11+TagCvmYxLXlo62RFyfQ==
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: [PATCH net-next 00/12] net: macb: EyeQ5 support (alongside generic
- PHY driver in syscon)
-Date: Tue, 21 Oct 2025 18:32:41 +0200
-Message-Id: <20251021-macb-eyeq5-v1-0-3b0b5a9d2f85@bootlin.com>
+Date: Tue, 21 Oct 2025 18:32:42 +0200
+Subject: [PATCH net-next 01/12] dt-bindings: net: cdns,macb: add Mobileye
+ EyeQ5 ethernet interface
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -59,10 +60,9 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAKm192gC/x3MQQqAIBBG4avErBtQQYKuEi1K/2oWWWlEEd49a
- fkt3nspIQoStdVLEZck2UKBrityyxBmsPhiMspYrYzidXAj48FheYJxymt411gqwR4xyf3POgo
- 4OeA+qc/5A5GaO7pmAAAA
-X-Change-ID: 20251020-macb-eyeq5-fe2c0d1edc75
+Message-Id: <20251021-macb-eyeq5-v1-1-3b0b5a9d2f85@bootlin.com>
+References: <20251021-macb-eyeq5-v1-0-3b0b5a9d2f85@bootlin.com>
+In-Reply-To: <20251021-macb-eyeq5-v1-0-3b0b5a9d2f85@bootlin.com>
 To: Andrew Lunn <andrew+netdev@lunn.ch>, 
  "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
  Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
@@ -85,135 +85,50 @@ Cc: netdev@vger.kernel.org, devicetree@vger.kernel.org,
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
  =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>, 
  Maxime Chevallier <maxime.chevallier@bootlin.com>, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
- Andrew Lunn <andrew@lunn.ch>, Jerome Brunet <jbrunet@baylibre.com>
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
 X-Mailer: b4 0.14.3
 X-Last-TLS-Session-Version: TLSv1.3
 
-This series' goal is adding support to the MACB driver for EyeQ5 GEM.
-The specifics for this compatible are:
-
- - HW cannot add dummy bytes at the start of IP packets for alignment
-   purposes. The behavior can be detected using DCFG6 so it isn't
-   attached to compatible data.
-
- - The hardware LSO/TSO is known to be buggy: add a compatible
-   capability flag to force disable it.
-
- - At init, we have to wiggle two syscon registers that configure the
-   PHY integration.
-
-   In past attempts [0] we did it in macb_config->init() using a syscon
-   regmap. That was far from ideal so now a generic PHY driver
-   abstracts that away. We reuse the bp->sgmii_phy field used by some
-   compatibles.
-
-   We have to add a phy_set_mode() call as the PHY power on sequence
-   depends on whether we do RGMII or SGMII.
-
-I want drivers/phy/phy-eyeq5-eth.c to appear in this series for
-review-ability, but that leads to this series having many patches
-unrelated to net & MACB:
-
- - [02/12] dt-bindings: soc: mobileye: OLB is an Ethernet PHY provider on EyeQ5
-   [07/12] phy: Add driver for EyeQ5 Ethernet PHY wrapper
-   [09/12] clk: eyeq: add EyeQ5 children auxiliary device for generic PHYs
-
-   Add the generic PHY driver that lives in the OLB register region.
-   In Linux, we model that with auxiliary devices (spawned by clk-eyeq).
-
-   [08/12] clk: eyeq: use the auxiliary device creation helper
-   [10/12] reset: eyeq: drop device_set_of_node_from_dev() done by parent
-
-   Auxiliary devices don't inherit a dev->of_node by default. Previously
-   we addressed that with a call to device_set_of_node_from_dev() from
-   each clk-eyeq children device probe. Jerome Brunet improved the
-   situation with creation helpers that do the call in the parent. We
-   take that patch to ensure we get a dev->of_node assigned to our PHY
-   device. [1]
-
-Merging all this won't be easy, sorry. Is this split across trees OK?
-The net-next part is pretty evident, it is the rest that appears
-complex to merge to me. I can resend the series exploded if useful
-(or at least split net-next versus the rest).
-
-=> net-next
-[PATCH net-next 01/12] dt-bindings: net: cdns,macb: add Mobileye EyeQ5 ethernet interface
-[PATCH net-next 03/12] net: macb: match skb_reserve(skb, NET_IP_ALIGN) with HW alignment
-[PATCH net-next 04/12] net: macb: add no LSO capability (MACB_CAPS_NO_LSO)
-[PATCH net-next 05/12] net: macb: rename bp->sgmii_phy field to bp->phy
-[PATCH net-next 06/12] net: macb: Add "mobileye,eyeq5-gem" compatible
-=> linux-phy
-[PATCH net-next 02/12] dt-bindings: soc: mobileye: OLB is an Ethernet PHY provider on EyeQ5
-[PATCH net-next 07/12] phy: Add driver for EyeQ5 Ethernet PHY wrapper
-=> linux-clk
-[PATCH net-next 08/12] clk: eyeq: use the auxiliary device creation helper
-[PATCH net-next 09/12] clk: eyeq: add EyeQ5 children auxiliary device for generic PHYs
-=> linux-reset
-[PATCH net-next 10/12] reset: eyeq: drop device_set_of_node_from_dev() done by parent
-=> linux-mips
-[PATCH net-next 11/12] MIPS: mobileye: eyeq5: add two Cadence GEM Ethernet controllers
-[PATCH net-next 12/12] MIPS: mobileye: eyeq5-epm: add two Cadence GEM Ethernet PHYs
-
-About potential conflicts, Benoît Monin has a series [5] touching
-dt-bindings, clk-eyeq, reset-eyeq and the Mobileye MAINTAINERS section.
-Maybe [02/12] dt-bindings of OLB shouldn't go to the linux-phy tree (?).
-
-Thanks,
-Have a nice day,
-Théo
-
-[0]: https://lore.kernel.org/lkml/20250627-macb-v2-15-ff8207d0bb77@bootlin.com/
-[1]: https://lore.kernel.org/lkml/20250611-clk-aux-v1-0-fb6575ed86a7@baylibre.com/
-[2]: https://lore.kernel.org/lkml/20250903-clk-eyeq7-v1-19-3f5024b5d6e2@bootlin.com/
-
-Past versions of the MACB EyeQ5 patches:
- - March 2025: [PATCH net-next 00/13] Support the Cadence MACB/GEM
-   instances on Mobileye EyeQ5 SoCs
-   https://lore.kernel.org/lkml/20250321-macb-v1-0-537b7e37971d@bootlin.com/
- - June 2025: [PATCH net-next v2 00/18] Support the Cadence MACB/GEM
-   instances on Mobileye EyeQ5 SoCs
-   https://lore.kernel.org/lkml/20250627-macb-v2-0-ff8207d0bb77@bootlin.com/
- - August 2025: [PATCH net v3 00/16] net: macb: various fixes & cleanup
-   https://lore.kernel.org/lkml/20250808-macb-fixes-v3-0-08f1fcb5179f@bootlin.com/
+Add "cdns,eyeq5-gem" as compatible for the integrated GEM block inside
+Mobileye EyeQ5 SoCs. It is different from other compatibles in two main
+ways: (1) it requires a generic PHY and (2) it is better to keep TCP
+Segmentation Offload (TSO) disabled.
 
 Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 ---
-Jerome Brunet (1):
-      clk: eyeq: use the auxiliary device creation helper
+ Documentation/devicetree/bindings/net/cdns,macb.yaml | 10 ++++++++++
+ 1 file changed, 10 insertions(+)
 
-Théo Lebrun (11):
-      dt-bindings: net: cdns,macb: add Mobileye EyeQ5 ethernet interface
-      dt-bindings: soc: mobileye: OLB is an Ethernet PHY provider on EyeQ5
-      net: macb: match skb_reserve(skb, NET_IP_ALIGN) with HW alignment
-      net: macb: add no LSO capability (MACB_CAPS_NO_LSO)
-      net: macb: rename bp->sgmii_phy field to bp->phy
-      net: macb: Add "mobileye,eyeq5-gem" compatible
-      phy: Add driver for EyeQ5 Ethernet PHY wrapper
-      clk: eyeq: add EyeQ5 children auxiliary device for generic PHYs
-      reset: eyeq: drop device_set_of_node_from_dev() done by parent
-      MIPS: mobileye: eyeq5: add two Cadence GEM Ethernet controllers
-      MIPS: mobileye: eyeq5-epm: add two Cadence GEM Ethernet PHYs
+diff --git a/Documentation/devicetree/bindings/net/cdns,macb.yaml b/Documentation/devicetree/bindings/net/cdns,macb.yaml
+index 02f14a0b72f9..ea8337846ab2 100644
+--- a/Documentation/devicetree/bindings/net/cdns,macb.yaml
++++ b/Documentation/devicetree/bindings/net/cdns,macb.yaml
+@@ -57,6 +57,7 @@ properties:
+           - cdns,np4-macb             # NP4 SoC devices
+           - microchip,sama7g5-emac    # Microchip SAMA7G5 ethernet interface
+           - microchip,sama7g5-gem     # Microchip SAMA7G5 gigabit ethernet interface
++          - mobileye,eyeq5-gem        # Mobileye EyeQ5 SoCs
+           - raspberrypi,rp1-gem       # Raspberry Pi RP1 gigabit ethernet interface
+           - sifive,fu540-c000-gem     # SiFive FU540-C000 SoC
+ 
+@@ -183,6 +184,15 @@ allOf:
+         reg:
+           maxItems: 1
+ 
++  - if:
++      properties:
++        compatible:
++          contains:
++            const: mobileye,eyeq5-gem
++    then:
++      required:
++        - phys
++
+ unevaluatedProperties: false
+ 
+ examples:
 
- .../devicetree/bindings/net/cdns,macb.yaml         |  10 +
- .../bindings/soc/mobileye/mobileye,eyeq5-olb.yaml  |   7 +-
- MAINTAINERS                                        |   1 +
- arch/mips/boot/dts/mobileye/eyeq5-epm5.dts         |  26 +++
- arch/mips/boot/dts/mobileye/eyeq5.dtsi             |  47 ++++
- drivers/clk/clk-eyeq.c                             |  60 ++---
- drivers/net/ethernet/cadence/macb.h                |   6 +-
- drivers/net/ethernet/cadence/macb_main.c           |  92 ++++++--
- drivers/phy/Kconfig                                |  13 ++
- drivers/phy/Makefile                               |   1 +
- drivers/phy/phy-eyeq5-eth.c                        | 254 +++++++++++++++++++++
- drivers/reset/reset-eyeq.c                         |  24 +-
- 12 files changed, 454 insertions(+), 87 deletions(-)
----
-base-commit: 3ff9bcecce83f12169ab3e42671bd76554ca521a
-change-id: 20251020-macb-eyeq5-fe2c0d1edc75
-
-Best regards,
 -- 
-Théo Lebrun <theo.lebrun@bootlin.com>
+2.51.1
 
 
