@@ -1,156 +1,158 @@
-Return-Path: <linux-mips+bounces-11849-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11850-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DB32BFB8D2
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Oct 2025 13:10:03 +0200 (CEST)
+	by mail.lfdr.de (Postfix) with ESMTPS id BBF18BFBB34
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Oct 2025 13:44:42 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 134C5420B15
-	for <lists+linux-mips@lfdr.de>; Wed, 22 Oct 2025 11:08:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31626567C02
+	for <lists+linux-mips@lfdr.de>; Wed, 22 Oct 2025 11:44:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2B8D314A93;
-	Wed, 22 Oct 2025 11:08:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E55B341660;
+	Wed, 22 Oct 2025 11:42:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TYr95C9I"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DQbwhOdN"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yx1-f41.google.com (mail-yx1-f41.google.com [74.125.224.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1CD1A301002;
-	Wed, 22 Oct 2025 11:08:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE10A340A73
+	for <linux-mips@vger.kernel.org>; Wed, 22 Oct 2025 11:42:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761131331; cv=none; b=TbBO6Oeae0luByypaDqqgJHPtUyU9ePIQHHI3+YcqVfylaVLyOnIv0Xtv01TJr51A+NlvD1nO7hbf36x6KHLPR+U3dBPT6Dt7UOmzzNOVCJ63dMCXZnXfvRLssfA5o2EwA0aCeaFqImJRR+gF/8HSynmKMIBIdiT2GFD35HsUfk=
+	t=1761133367; cv=none; b=uhqC+coSwsmDc8MtMD3rIvar9U4jtpmj098mT98G5RKIHfoFI1hbueMoM1oeY+2XDPmH6OERQla5XaWumNYY2JHyiVFM9e9HN7BYD+SG99lOvGPHCswKZWvflQqMDQQPoXkeMNG491wzQ7ecstT37LXV3sZnfynLfk0ho20NGFE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761131331; c=relaxed/simple;
-	bh=ZAOA8Sq2UzSr/xWemGA8q+wo44isUSrk/K/xVt8gVqA=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=WgsCN6I2cNllTXc7QAOzQd7zeUKgvMWHkfF20KZ1Nd4+5cZsEv32FuYRlV9/6tpGSg45R3/ALUYYOGcSJLkuuKFeLprZ8g8ug9x4ELglqeuc0Ir2uKjJgYBknbef5uYY/o3O+UoA7+gr/PV8p5lK5gcdwY7mHWi6yPJnBBz22aI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TYr95C9I; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1761131330; x=1792667330;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version:content-id;
-  bh=ZAOA8Sq2UzSr/xWemGA8q+wo44isUSrk/K/xVt8gVqA=;
-  b=TYr95C9I3qu3cXm0t41BDTgmXOoc8XAQOrR4a3bQwGvIDHP67VroPbWc
-   GEYr9xWvi0ajU/4zZc+Ue64F8SHEViFZfa6cq1xHXy8eQ7rimT5tsV1EZ
-   I5Xyspv/gqhrZYu7BaChDLJaPSHBIVHs5+2FUQBrcke48o/6XVr6688AY
-   FKGF5MK2Lc/fQvtFfFDG9SsE7hO6/aLBUbO5ZLkdFbgZOdo6khf4hg09W
-   a0iaCrqJZmGQKLHX3OGNpdPCikEgg6GO17TK5uPpDQ02K/WFN100Ozmzi
-   JowXtLmHpUCKvrK5lA2QTdqK/MGtUC65K5/6miD04yfsuiKi+c/x1qlFR
-   A==;
-X-CSE-ConnectionGUID: YF5Gxc3cQXClc756XgBMxQ==
-X-CSE-MsgGUID: yJA24LK9QN6dEYLJC2A4YA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11586"; a="62303801"
-X-IronPort-AV: E=Sophos;i="6.19,247,1754982000"; 
-   d="scan'208";a="62303801"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2025 04:08:49 -0700
-X-CSE-ConnectionGUID: 5jKxRB+bQUKaxs4FjT6r6w==
-X-CSE-MsgGUID: Iztf2IDtQLWVEVHghxVLrQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,247,1754982000"; 
-   d="scan'208";a="187884681"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.82])
-  by ORVIESA003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Oct 2025 04:08:47 -0700
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Wed, 22 Oct 2025 14:08:43 +0300 (EEST)
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-cc: Bjorn Helgaas <helgaas@kernel.org>, 
-    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-    Bjorn Helgaas <bhelgaas@google.com>, linux-mips@vger.kernel.org, 
-    LKML <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/2] MIPS: Malta: Fix PCI southbridge legacy resource
- clashes
-In-Reply-To: <alpine.DEB.2.21.2510211901530.8377@angie.orcam.me.uk>
-Message-ID: <93ffa5d8-61eb-abdf-8271-8f676d36fe56@linux.intel.com>
-References: <alpine.DEB.2.21.2510211901530.8377@angie.orcam.me.uk>
+	s=arc-20240116; t=1761133367; c=relaxed/simple;
+	bh=zOospmkuyCNXsaHwls226XiyOnnAx3jAnkZv86jQp0A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=n2aPMaelCmb1JDQ1NV/RYjxzq692i4I5k1WM2xPY8GxuDbIAct5r1XT859nEwgJUQkiCo4gCz7qyt5HstUqwQTB9ov7roFdCRnrVwpXor3XUIswhQqIR+Nz3bykv/l8C+vLEFJcfAoCa4ShWXSv/WFExt3oZFDo+rGZcm7GN9Yg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DQbwhOdN; arc=none smtp.client-ip=74.125.224.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yx1-f41.google.com with SMTP id 956f58d0204a3-63bc1aeb427so7079127d50.3
+        for <linux-mips@vger.kernel.org>; Wed, 22 Oct 2025 04:42:45 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1761133365; x=1761738165; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fWByXUQ+8ls0319ngD63nu9ZBrIRih1/y2GUtOGx1mQ=;
+        b=DQbwhOdNnET6y2o0Hf5r60+x2C7TngsCjChvCRzB3GGSN/L+IOvNsdkLkZ1pJAnxpt
+         qOToc2PCb8W4aNUiUKDIKZo+g8s9CqtbaBoh4YqOqM69JyZS0G9eaFbpE5X9Cxx5cIxF
+         1C6OEEHNpcdOl8AZ2jELKFzGno0/CqoZQQ3e7pCGRSx+MuYvxXjMeTxIej95XbDeOXKT
+         cN0FZS9kZ/wTrwdI7xaUWXeUhIzw9Se1u2trvE0V5K9hlc3s4RciDholBXW7v7Kjz/ea
+         b+5ZkiHL8pcQw/ZUMfsF+BVWnr/SeymnP9KXWcs90c1PC8DjwUZHoJBCTNf8zoGuVA3I
+         VDtA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761133365; x=1761738165;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fWByXUQ+8ls0319ngD63nu9ZBrIRih1/y2GUtOGx1mQ=;
+        b=NGtFXrKHrQhzE77PcNSr2te65XAtvFQQCEEBBbDnEo3zJ0FrGbne6hQTs4/a+5jnFv
+         mNsukkPxRpBH4Wm2pQ0bjnbWZ8JHVHALvGlOEdytffY6588bBq7A0MD1gVuko2tm6MZy
+         WWhujyBlFxviSbL/aGr7Z2ugCrYDN4eRMah/De2cN+/EjNIRl6bp8o8+d/2i8wRpba6O
+         jruzz3Fx+prw/a5XvHGQDhghSRK2fYKQ4FedKVhzLPhEztCalG2FyRXDr+HnVUZs+I62
+         bQC/7DX6NYy69vV1MowY7Q8rVJCS+aUtZRBOaev3ja1/Qs/WPdVZMU9VmMW3PywnQ9YD
+         QCDg==
+X-Forwarded-Encrypted: i=1; AJvYcCV4CN3MZ200oXnLz8/JdXLN2lpngOc3qpOkGh72Wb03KoZ2Ac0qqKJ2djU6gJNzG8Ohuh4Nd6bOBUjD@vger.kernel.org
+X-Gm-Message-State: AOJu0YxEb7RMMTJQTvueyZLxZTAvNdc5mM6Q9lC7Eu0antyIqDUYHuyv
+	20RwxirB2eEvIFBd6VsfpyAimXbwnP5urT551XtXQ/dYm+dPmtOxqi8LVmvn1hYJuJKClOc7IHT
+	2wklI+GpsMNtPHiUtPD/6FL3LSaIIPV0=
+X-Gm-Gg: ASbGncuk1UWlhPNaJdjp3zW3TJPDwknN6dck+fiN9i0cPvPJIJOTlkbuUed2mQ/duag
+	6Mr0bEAD5f+3AfSbsTj4/hVeSkVBw1HJRT1jujwgNT52YDtU1tIYwOBx8obQhgLZ86IdlEvwFsC
+	0QWHGwiFSXSBH7fQ2sDfgSRAq2pR1stz8mZlIo3m0asgL0bA3bzmXCws+lgNQm7bbCyeYYlU3Mq
+	OUbV/QuE6W+181E8jyqMydp/OEOqPahtvzYJDAulS+Wd7rDXJ+66YsKyQ==
+X-Google-Smtp-Source: AGHT+IELZe97QxhQ9D0Ydgy8Y/J1wxjgRnJ6WVDd4/Lqiitn0JreGB487p8JvsAzyEYST0oriJRpmMtAcAmNEjRnBp4=
+X-Received: by 2002:a05:690e:1487:b0:63c:ee51:5cf6 with SMTP id
+ 956f58d0204a3-63e16109eb3mr15755076d50.15.1761133364642; Wed, 22 Oct 2025
+ 04:42:44 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; BOUNDARY="8323328-306951886-1761131191=:1437"
-Content-ID: <f9f506e3-2e99-e3d3-7244-be1d23408eb3@linux.intel.com>
+References: <alpine.DEB.2.21.2510211901530.8377@angie.orcam.me.uk> <alpine.DEB.2.21.2510212001250.8377@angie.orcam.me.uk>
+In-Reply-To: <alpine.DEB.2.21.2510212001250.8377@angie.orcam.me.uk>
+From: Jonas Gorski <jonas.gorski@gmail.com>
+Date: Wed, 22 Oct 2025 13:42:33 +0200
+X-Gm-Features: AS18NWCiq1xuAbkU0PmwgAvead88grrIXBJFiQl3qMV_6ZQICZF9yNnj15tVVzI
+Message-ID: <CAOiHx=kHzx=Q_j+BM6jse7jwjzrXtiUoXpzLLgXVRzQhb38r+A@mail.gmail.com>
+Subject: Re: [PATCH 2/2] MIPS: Malta: Fix PCI southbridge legacy resource reservations
+To: "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc: Bjorn Helgaas <helgaas@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	Bjorn Helgaas <bhelgaas@google.com>, linux-mips@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+Hi,
 
---8323328-306951886-1761131191=:1437
-Content-Type: text/plain; CHARSET=ISO-8859-15
-Content-Transfer-Encoding: QUOTED-PRINTABLE
-Content-ID: <a7fbe9a5-5107-7a1f-de83-9c88a7b19da0@linux.intel.com>
+On Tue, Oct 21, 2025 at 9:38=E2=80=AFPM Maciej W. Rozycki <macro@orcam.me.u=
+k> wrote:
+>
+> Covering the PCI southbridge legacy port I/O range with a northbridge
+> resource reservation prevents MIPS Malta platform code from claiming its
+> standard legacy resources.  This is because request_resource() calls
+> cause a clash with the previous reservation and consequently fail.
+>
+> Change to using insert_resource() so as to prevent the clash, switching
+> the legacy reservations from:
+>
+> 00000000-00ffffff : MSC PCI I/O
+>   00000020-00000021 : pic1
+>   00000070-00000077 : rtc0
+>   000000a0-000000a1 : pic2
+>   [...]
+>
+> to:
+>
+> 00000000-00ffffff : MSC PCI I/O
+>   00000000-0000001f : dma1
+>   00000020-00000021 : pic1
+>   00000040-0000005f : timer
+>   00000060-0000006f : keyboard
+>   00000070-00000077 : rtc0
+>   00000080-0000008f : dma page reg
+>   000000a0-000000a1 : pic2
+>   000000c0-000000df : dma2
+>   [...]
+>
+> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+> Fixes: ae81aad5c2e1 ("MIPS: PCI: Use pci_enable_resources()")
+> Cc: stable@vger.kernel.org # v6.18+
+> ---
+>  arch/mips/mti-malta/malta-setup.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> linux-mips-malta-setup-insert-resource.diff
+> Index: linux-macro/arch/mips/mti-malta/malta-setup.c
+> =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
+> --- linux-macro.orig/arch/mips/mti-malta/malta-setup.c
+> +++ linux-macro/arch/mips/mti-malta/malta-setup.c
+> @@ -213,7 +213,7 @@ void __init plat_mem_setup(void)
+>
+>         /* Request I/O space for devices used on the Malta board. */
 
-On Tue, 21 Oct 2025, Maciej W. Rozycki wrote:
+This comment doesn't match the code anymore.
 
-> Hi,
->=20
->  This mini patch series sorts out issues with southbridge legacy resource=
-=20
-> management on the MIPS Malta platform.  Two changes turned out required,=
-=20
-> because merely removing the clash would regress the PS/2 interfaces, fixe=
-d=20
-> by accident with the PCIBIOS_MIN_IO fix.
->=20
->  This does prove nobody has used these interfaces since forever, or most=
-=20
-> likely since the move to the new serio driver.  Things most likely worked=
-=20
-> fine with 2.4 and I still have such old Malta kernel builds lying around=
-=20
-> (though sadly no hardware to try with), although I do know I've never use=
-d=20
-> the PS/2 stuff with this platform, e.g. quoting an arbitrarily picked=20
-> 2.4.19-rc1 bootstrap log:
->=20
-> CPU revision is: 00018101
-> Primary instruction cache 16kb, linesize 32 bytes(4 ways)
-> Primary data cache 16kb, linesize 32 bytes (4 ways)
-> Linux version 2.4.19-rc1 (macro@macro.ds2.pg.gda.pl) (gcc version 2.95.4 =
-20010319 (prerelease)) #1 Fri Aug 23 02:55:02 CEST 2002
-> [...]
-> parport0: PC-style at 0x378 [PCSPP,EPP]
-> initialize_kbd: Keyboard reset failed, no ACK
-> Detected PS/2 Mouse Port.
-> pty: 256 Unix98 ptys configured
-> keyboard: Timeout - AT keyboard not present?(ed)
-> keyboard: Timeout - AT keyboard not present?(f4)
-> Serial driver version 5.05c (2001-07-08) with MANY_PORTS SHARE_IRQ DETECT=
-_IRQ SERIAL_PCI enabled
-> [...]
->=20
-> However to prevent the PS/2 interfaces from getting fixed and then broken=
-=20
-> again with backports in a random fashion I have marked both changes for=
-=20
-> backporting as appropriate.
->=20
->  Bjorn, may I request that these changes be placed, with Thomas's ack of=
-=20
-> course (hopefully a formality), ahead of Ilpo's commit 16fbaba2b78f=20
-> ("MIPS: Malta: Use pcibios_align_resource() to block io range") (or=20
-> whatever the latest version is, as said commit seems to be missing tags=
-=20
-> updates you mentioned), and then merged via your tree?  That will prevent=
-=20
-> things from breaking just to be fixed again shortly, and overall getting=
-=20
-> out of sync.
->=20
->  See individual commit descriptions for details.
+>         for (i =3D 0; i < ARRAY_SIZE(standard_io_resources); i++)
+> -               request_resource(&ioport_resource, standard_io_resources+=
+i);
+> +               insert_resource(&ioport_resource, standard_io_resources +=
+ i);
+>
+>         /*
+>          * Enable DMA channel 4 (cascade channel) in the PIIX4 south brid=
+ge.
+>
 
-FWIW,
-
-Reviewed-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
-
---=20
- i.
---8323328-306951886-1761131191=:1437--
+Best regards,
+Jonas
 
