@@ -1,130 +1,79 @@
-Return-Path: <linux-mips+bounces-11891-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11892-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE660C07E89
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Oct 2025 21:29:13 +0200 (CEST)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 59C6BC0858C
+	for <lists+linux-mips@lfdr.de>; Sat, 25 Oct 2025 01:49:06 +0200 (CEST)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 770C24ED234
-	for <lists+linux-mips@lfdr.de>; Fri, 24 Oct 2025 19:29:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E204D3BB12E
+	for <lists+linux-mips@lfdr.de>; Fri, 24 Oct 2025 23:49:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74AC329A9E9;
-	Fri, 24 Oct 2025 19:29:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECC8A30DD13;
+	Fri, 24 Oct 2025 23:49:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jpjzvzA1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XlqnJiIY"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F342299931;
-	Fri, 24 Oct 2025 19:29:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C08D4303A1A;
+	Fri, 24 Oct 2025 23:49:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761334147; cv=none; b=PCJ3xe03TlhPPqIoXB5CjiQFwvpKK+38yjMx7Re0s+5IGcwGTb9tvuVGCcK1n6YNFKTHRLR8dhb8CvEPLDv2URUoB8WRo7Cep+RuzBp/vxwOqWdcOoR9u0oseTpiX08wklFo5tPpluWYTX3Wu+HBMxk7oPlXn0+0ekLn0I/2w1w=
+	t=1761349740; cv=none; b=KOphZUr/ijAN3srM86hFLdxPkuITZmjzN7riHqm9UxXhsEWqDh4B7EiKWjYUICIcln3LzINGaeOjmplt80i8lYq6WjTfZNJ9otWqPoNSDSghoMSKFrtXEnmMn55wcQ/DS7H8S5gX3NRPI99tFlpcVa0+de0Lb8RwrsvPrU2r8VQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761334147; c=relaxed/simple;
-	bh=N5IIqjmOeWmLOz2zHVxqEA+WLcaesU5e/utvVwXoDkA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=mTUk2RcF+tzl7U8tonmOXmFLHaBRXrX8BMKs8v+s9ThL65nlsAvZSwsjcc39GPZn0GS8b2svoVCeP26bQzP9bBMPRFFOhGHDR7HFWpDfzacVBQGzGthysIUtSFrD8BfmmkwWNd6vuSWmtVcTxpT+Ue61wfcaQ17WupL3e+g05NM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jpjzvzA1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 919E5C4CEF1;
-	Fri, 24 Oct 2025 19:29:04 +0000 (UTC)
+	s=arc-20240116; t=1761349740; c=relaxed/simple;
+	bh=ZyFTDKIxNzvgRWtwrO/yjPr6c+qow1NEKp1HamVZbPI=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=tIXvXeJVp5DhD3+1ibEWF8NVWbmpJVe0NI0vQEH5i+ABrrLtLdp8PgzFO/b1nsDd3Eg0vriOghwzfz4OLQF6Tnq6ge7SNloZWnUcUmsECllTestwS/jR1vS7Cbi+KWEp8gQlXzRh5IJsg45g5BeJ9LsRV+tXInrudLRYuU5R7Q0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XlqnJiIY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 53466C4CEF1;
+	Fri, 24 Oct 2025 23:49:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761334144;
-	bh=N5IIqjmOeWmLOz2zHVxqEA+WLcaesU5e/utvVwXoDkA=;
-	h=Date:From:To:Cc:Subject:From;
-	b=jpjzvzA1haU4EZKYPT016IUISm/tXebW5eU1fIiWnCJpsXoXf1t6Q7nAERG06TFYw
-	 2g7TYeXPbCeNxibyuMz1D18FSfzzQilOj2bHhL6ixjwhHqExW4YMWp1kLp9L0RGxCj
-	 W5ux/6aSa7HWxGQvM06f3Fv8hA5oOnSoPE8cSq9cCH62RwrWSsSrRVpL3XVVFHY3nz
-	 zjZR5SbdW3WYzyAdVdytz1atd1iXpEr38IO7x7R/KgTIEmsidbDZFvQKK+xv8PDbYf
-	 bkTo2jj1VHWhpXiDVHGQ7C69rCFGL/QzKvKL1btgFoiS3h1BBQflOm+Mao1p3231nq
-	 b8qNc1Jo7v+5A==
-Date: Fri, 24 Oct 2025 14:29:03 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>,
-	Ron Economos <re@w6rz.net>, "Maciej W. Rozycki" <macro@orcam.me.uk>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Christian Zigotzky <chzigotzky@xenosoft.de>,
-	FUKAUMI Naoki <naoki@radxa.com>,
-	Herve Codina <herve.codina@bootlin.com>,
-	Diederik de Haas <diederik@cknow-tech.com>,
-	Dragan Simic <dsimic@manjaro.org>, Johan Hovold <johan@kernel.org>,
-	linuxppc-dev@lists.ozlabs.org, linux-rockchip@lists.infradead.org,
-	linux-mips@vger.kernel.org
-Subject: [GIT PULL] PCI fixes for v6.18
-Message-ID: <20251024192903.GA1360890@bhelgaas>
+	s=k20201202; t=1761349740;
+	bh=ZyFTDKIxNzvgRWtwrO/yjPr6c+qow1NEKp1HamVZbPI=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=XlqnJiIYRxG7jDUGlrgYqJuNEyP3QmS68eJ7m8d2MnKUZmQmUwBXHTaojivtAIF7K
+	 da6IGCn8dcXFNtL+ve5Q7ealoLlvAWuzzQcg/QW7GYLli7O9Pm7p28kqKMxiscHP97
+	 h+JT2tDXQa/UYdhuUY28UgLvVrlcM+aOIS8CotyFn1f/4hdEqnXZ/ht8n6py9E9E5A
+	 ZiGh8BrtAYD6BAffx2l+kEHQksGaGKzKbzZon4BTa53+tpL6GsdSJUriDJq85J6Fgg
+	 DbgUIxsl9eEj6NfJ1Zmq1OKhqcb207aMPbZBTG252rxtRC6D0bFwK92Pf535lNeTbK
+	 FE9dbDbBFcwWA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 34216380AA54;
+	Fri, 24 Oct 2025 23:48:41 +0000 (UTC)
+Subject: Re: [GIT PULL] PCI fixes for v6.18
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <20251024192903.GA1360890@bhelgaas>
+References: <20251024192903.GA1360890@bhelgaas>
+X-PR-Tracked-List-Id: <linux-pci.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20251024192903.GA1360890@bhelgaas>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git tags/pci-v6.18-fixes-3
+X-PR-Tracked-Commit-Id: df5192d9bb0e38bf831fb93e8026e346aa017ca8
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: 31009296f8ff7f4cc8feec9bc02b87573b2aceeb
+Message-Id: <176134971993.4096869.5906045247298146805.pr-tracker-bot@kernel.org>
+Date: Fri, 24 Oct 2025 23:48:39 +0000
+To: Bjorn Helgaas <helgaas@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org, Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>, Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kwilczynski@kernel.org>, Manivannan Sadhasivam <mani@kernel.org>, Krishna Chaitanya Chundru <krishna.chundru@oss.qualcomm.com>, Ron Economos <re@w6rz.net>, "Maciej W. Rozycki" <macro@orcam.me.uk>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, Guenter Roeck <linux@roeck-us.net>, Christian Zigotzky <chzigotzky@xenosoft.de>, FUKAUMI Naoki <naoki@radxa.com>, Herve Codina <herve.codina@bootlin.com>, Diederik de Haas <diederik@cknow-tech.com>, Dragan Simic <dsimic@manjaro.org>, Johan Hovold <johan@kernel.org>, linuxppc-dev@lists.ozlabs.org, linux-rockchip@lists.infradead.org, linux-mips@vger.kernel.org
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
 
-The following changes since commit 3a8660878839faadb4f1a6dd72c3179c1df56787:
+The pull request you sent on Fri, 24 Oct 2025 14:29:03 -0500:
 
-  Linux 6.18-rc1 (2025-10-12 13:42:36 -0700)
+> git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git tags/pci-v6.18-fixes-3
 
-are available in the Git repository at:
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/31009296f8ff7f4cc8feec9bc02b87573b2aceeb
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/pci/pci.git tags/pci-v6.18-fixes-3
+Thank you!
 
-for you to fetch changes up to df5192d9bb0e38bf831fb93e8026e346aa017ca8:
-
-  PCI/ASPM: Enable only L0s and L1 for devicetree platforms (2025-10-23 20:08:14 -0500)
-
-----------------------------------------------------------------
-
-- Add DWC custom pci_ops for the root bus instead of overwriting the DBI
-  base address, which broke drivers that rely on the DBI address for iATU
-  programming; fixes an FU740 probe regression (Krishna Chaitanya Chundru)
-
-- Revert qcom ECAM enablement, which is rendered unnecessary by the DWC
-  custom pci_ops (Krishna Chaitanya Chundru)
-
-- Fix longstanding MIPS Malta resource registration issues to avoid
-  exposing them when the next commit fixes the boot failure (Maciej W.
-  Rozycki)
-
-- Use pcibios_align_resource() on MIPS Malta to fix boot failure caused by
-  using the generic pci_enable_resources() (Ilpo Järvinen)
-
-- Enable only ASPM L0s and L1, not L1 PM Substates, for devicetree
-  platforms because we lack information required to configure L1 Substates;
-  fixes regressions on powerpc and rockchip.  A qcom regression (L1
-  Substates no longer enabled) remains and will be addressed next (Bjorn
-  Helgaas)
-
-----------------------------------------------------------------
-Bjorn Helgaas (1):
-      PCI/ASPM: Enable only L0s and L1 for devicetree platforms
-
-Ilpo Järvinen (1):
-      MIPS: Malta: Use pcibios_align_resource() to block io range
-
-Krishna Chaitanya Chundru (2):
-      PCI: dwc: Use custom pci_ops for root bus DBI vs ECAM config access
-      Revert "PCI: qcom: Prepare for the DWC ECAM enablement"
-
-Maciej W. Rozycki (2):
-      MIPS: Malta: Fix keyboard resource preventing i8042 driver from registering
-      MIPS: Malta: Fix PCI southbridge legacy resource reservations
-
- arch/mips/mti-malta/malta-setup.c                 |  4 +-
- arch/mips/pci/pci-malta.c                         |  3 +-
- drivers/pci/controller/dwc/pcie-designware-host.c | 28 ++++++++--
- drivers/pci/controller/dwc/pcie-qcom.c            | 68 -----------------------
- drivers/pci/pcie/aspm.c                           | 34 +++---------
- 5 files changed, 36 insertions(+), 101 deletions(-)
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
