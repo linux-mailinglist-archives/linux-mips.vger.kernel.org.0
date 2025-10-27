@@ -1,173 +1,191 @@
-Return-Path: <linux-mips+bounces-11900-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11901-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7988C0FDCC
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Oct 2025 19:11:29 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id F1B48C10D4F
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Oct 2025 20:21:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3BAC3A44B4
-	for <lists+linux-mips@lfdr.de>; Mon, 27 Oct 2025 18:10:58 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 78531352D03
+	for <lists+linux-mips@lfdr.de>; Mon, 27 Oct 2025 19:21:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4DC43164BC;
-	Mon, 27 Oct 2025 18:10:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB3C0328634;
+	Mon, 27 Oct 2025 19:20:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="HuCGleei"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Qhi4iDs3"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E49EB319867
-	for <linux-mips@vger.kernel.org>; Mon, 27 Oct 2025 18:10:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97A5D31C584
+	for <linux-mips@vger.kernel.org>; Mon, 27 Oct 2025 19:20:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761588654; cv=none; b=Erxm42Jr5ZJ5Ixkb3D555Gv7PaOpRfFF2EsDzVP7OpqAyqZ/WGLsQ18RbwyL149scY8+XOumjFEUqGz2l0Pvh56po6ckRd1PSu5jceNTz3PHiC3wU7Yavk+6PUWirFvCOOxTFHSZ+8CUIR/+D3B/4f3O/qwX3glKuLUsaL5SpVw=
+	t=1761592816; cv=none; b=WmfCjiVhoIkasCS81eU30L2jsFgGhuCre/MqiTqU7Ou8f9jn3eMx4fpuOo+dh5lMfHHjG6E2emUQu23OQ3RCUsqgsJoUS3Lk1yiSSDKeVsSIGAIz4saEgORg4hJBFqtHZbiZY23AL+um1fS3r7Y9cJiTW5ETsxKhq6OrgUgiCEc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761588654; c=relaxed/simple;
-	bh=qWDqTHSGtqyDCU4AAlHRJ9mq1s1hvPRErQWu8I/AXzI=;
+	s=arc-20240116; t=1761592816; c=relaxed/simple;
+	bh=VJkG8MUTQ0ibSOiw5y5AGTqWzk7c71W2hsTJzLp4sxo=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=besXoQUZaBo8GS3xm2VXQhcCfANbS6INj1lQk0ZunNDFX8ODKQOsofRFao5xdz+z18ZozcuyMpC6JknBfkbaeB8vLTh70lgQ5b5/QzNJ/Kngod0z6llQPRqNzkoby3gtnC6jcBe3BzwMxz5SVExPEUxhYrfW+y3+hmjsqYQ0gXY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=HuCGleei; arc=none smtp.client-ip=209.85.216.74
+	 To:Cc:Content-Type; b=l1RilDro10r+G10i8h5ivcy7XU1u4q4oT7sWZ0kWZXnkSm7h5InnMDZXbtbcLpDHlCgL54ZGSgG4jap1MISiFytLUddqiNg9jYtctN3i021ftMHS0mnNIRl9OTtsbrb1ZogH/HlFxliopF/lM9NlVFKQuFEntkCHMWFL9JWyRNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Qhi4iDs3; arc=none smtp.client-ip=209.85.214.201
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-33bcb779733so4316400a91.3
-        for <linux-mips@vger.kernel.org>; Mon, 27 Oct 2025 11:10:52 -0700 (PDT)
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-28c58e009d1so108170555ad.3
+        for <linux-mips@vger.kernel.org>; Mon, 27 Oct 2025 12:20:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761588652; x=1762193452; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=bO0HNahSQ0zli7kg4xL2kKu/rPaiGOzpKxwGHDcn9b4=;
-        b=HuCGleeiQ5Vxy5Vm6iVJmpzhZDeJqlXsJ4ydurVEc9/ZGzkVMS4db2w0kFx5bkp/U8
-         3gR7DX2O+HFR0p19vdYCebpHLNlkyGiR4JU01K6YP5KmrV4ULoCZui6X30jTohAs1pR5
-         S8y1o315i2d1AHoziPTQ6hNOKr1UWSBVZDUaedQC+XAfG9WiRhHrACSpjtwPAbYpGjod
-         rh7auUeEvfA/zOpnenjrJy0niGuH+NNaqewEcSB4YsA4uUOqvI8d9v6LFzMBHXzqXWtb
-         8ugXSA423oiRRcjmHFyCZb8qhHiMaEzygqYmtwBbfTI0I9CEYpBbWUCvEKDuQt4wzijK
-         9iyA==
+        d=google.com; s=20230601; t=1761592812; x=1762197612; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GJ/ihzhnBg2h+OIog5s51f1nDJzu1yBHwy2SCCUQ1bo=;
+        b=Qhi4iDs3Myf7H67dWp307gfFjDizFJCEizyOsUEySFxshjwcSeehuNjbPejwImqCWd
+         jzUlvlknzkXQhBXzZZcaeuYP+0OU5UnTI4zxVrDIjfyyFgmq5gBhla+VLLnUA3Hf4LPH
+         NJx6jGnhvDJ0sgsodj3jWbNYA8xDXNCXn/I3uJDMW1Kd2+I6VvIfz+LhUPSH7lx91wON
+         P0WGzlbhTW6izGpmxd3x5XT3BGVm5TgGDpi+H25OfQwgpdU69LtZdQglplOsQAbMl3ma
+         9X1S1r2LBTZlm1FxhaeTAu9kEOVzXMaBtFDmea6TVnVrOf0G6b5Wm6VYiM1vONQP4qXa
+         SgOg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761588652; x=1762193452;
-        h=content-transfer-encoding:cc:to:from:subject:message-id:references
-         :mime-version:in-reply-to:date:x-gm-message-state:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=bO0HNahSQ0zli7kg4xL2kKu/rPaiGOzpKxwGHDcn9b4=;
-        b=HXQRc7/TopH+1rhwpB47hfhuWwKcuHKdh+A0wnrA7dagSMtFVFA1dke1SY2lMjfIsz
-         JAHXhk/uRHBT7o06n0qTeCHEJkWBU9lP7FNd6i0eq8jkgoEkWkEUfdEG3esTSpeHVi7o
-         ytWnAj/Kz+IguL8GQ+ql/KDJVwOOAloVE7BRnTVELt+R5UOgUQq8+tk4pJF4CVymgtdL
-         j09FMDUwkxCWQrbv4CjVDc5rJ3/Eyqp4zpZqIho2SkzGlOTACNFWTIoIBlLCdbXPfrzO
-         6oHvcdIMWN4pNEBWqqRl6QjxJBX+865zE9ZgCm0c8s/U3ttEWYpRlazPpBU4bbTOmaIo
-         TSqw==
-X-Forwarded-Encrypted: i=1; AJvYcCUofAqjDFyj7W6HYEbUnNDxB1PY9Q9GMJfKK0/Ozk17iFuqpYXmev/HSGQMvIKVyCo+Xqwml0GOP4i/@vger.kernel.org
-X-Gm-Message-State: AOJu0YxhOMHNUQGrP4bONKIPf8sMoeqjS5L1qHEVHl9GoLBufGw/RHDz
-	VrYwGaRMc0v9ICwcXobp2/PWY5ek0SXeQbAAwc5zsk/2EPRBSYZa0I33UTg2hmJggwudlHtiECO
-	YnrzcUQ==
-X-Google-Smtp-Source: AGHT+IFYM0pQ56UGeUzsOnJj3+Ow3Uhx6HMXZ6WjKUcRvfRsyB3bsUItowqHfr7m0JixZWoiV89rDaaCMlA=
+        d=1e100.net; s=20230601; t=1761592812; x=1762197612;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=GJ/ihzhnBg2h+OIog5s51f1nDJzu1yBHwy2SCCUQ1bo=;
+        b=tfBIWPPEhtn6kSYQe6P4fvomoB+4+0XOEVcUpNVUOpRAPqLsPXsxzczBGv77f6j1EH
+         uiHfKGahqa7lNgMk3f8TJF74zYEGbt+H40ZaiCS+94WOcm//piK2/04AehpZ6GH4LXrS
+         nkozholP7zPOv9x3SU5HvGyhEmErQDdrcZ3Pkrhu79iDhRxWtDPcRKBrAEKecGgfC6OY
+         /b/yUXlTA4nLBz+RUtuKRkNz1z1lFOvzUBTVMP8mG7u3Tgof2LyYqtR+97ufQ0vwYB3U
+         ek2q/onlyjsaGWvISJ2qf8nXtB7Qs7WDMzxV29NkcnL1DW4QyBLcWNRkNVUwNWZv0CzT
+         1qNw==
+X-Forwarded-Encrypted: i=1; AJvYcCWsfPqf+OB7YOaezhMXNbCP9qhFL44D6+ukkyMqVFvO9qbllJbQ2e2fYXaVgeWBkbLn1LPlyrEx6y4e@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzv5RlICZzVG15LVoOH6jfmq0QvJvJBT9hxU5DgWht033TaBKF2
+	LtI4/6MIyhicVvd66pzisUGXaJzGrILTbK9pzAVNJpS3znCGbT7aZWUDLkpxANygtWGp61OzhJB
+	UejJWrQ==
+X-Google-Smtp-Source: AGHT+IGEzxKOsu0TIx9JeJ8jo0iJqVMcVQCTPniC3ps1TgJ3BGzDUda18OgqbILlA0+mvKP7+G2jd9/+Iec=
 X-Received: from pjbrs15.prod.google.com ([2002:a17:90b:2b8f:b0:33b:51fe:1a73])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4f81:b0:32e:52aa:3973
- with SMTP id 98e67ed59e1d1-340279e5fc5mr862252a91.8.1761588651707; Mon, 27
- Oct 2025 11:10:51 -0700 (PDT)
-Date: Mon, 27 Oct 2025 11:10:50 -0700
-In-Reply-To: <77d8a0d9541ce3fc2b2c76b58add50d152b52e39.camel@intel.com>
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:e5c4:b0:25d:1640:1d59
+ with SMTP id d9443c01a7336-294cb378610mr8002455ad.8.1761592811798; Mon, 27
+ Oct 2025 12:20:11 -0700 (PDT)
+Date: Mon, 27 Oct 2025 12:20:10 -0700
+In-Reply-To: <4809644b0ba02d0987ac56f4be7c426d0724cdef.camel@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
-References: <20251017003244.186495-1-seanjc@google.com> <20251017003244.186495-25-seanjc@google.com>
- <aPtOtzGLigbY0Vqw@yzhao56-desk.sh.intel.com> <aPuv8F8iDp3SLb9q@google.com>
- <aP86sdBZxXm5I17f@yzhao56-desk.sh.intel.com> <77d8a0d9541ce3fc2b2c76b58add50d152b52e39.camel@intel.com>
-Message-ID: <aP-1qlTkmFUgTld-@google.com>
-Subject: Re: [PATCH v3 24/25] KVM: TDX: Guard VM state transitions with "all"
- the locks
+References: <20251017003244.186495-1-seanjc@google.com> <20251017003244.186495-21-seanjc@google.com>
+ <4809644b0ba02d0987ac56f4be7c426d0724cdef.camel@intel.com>
+Message-ID: <aP_F6tmzomRtdbpU@google.com>
+Subject: Re: [PATCH v3 20/25] KVM: TDX: Add macro to retry SEAMCALLs when
+ forcing vCPUs out of guest
 From: Sean Christopherson <seanjc@google.com>
-To: Rick P Edgecombe <rick.p.edgecombe@intel.com>
-Cc: Yan Y Zhao <yan.y.zhao@intel.com>, 
-	"borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>, 
-	"kvm-riscv@lists.infradead.org" <kvm-riscv@lists.infradead.org>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>, 
-	"pbonzini@redhat.com" <pbonzini@redhat.com>, 
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, 
-	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>, 
-	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>, 
-	"michael.roth@amd.com" <michael.roth@amd.com>, "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"oliver.upton@linux.dev" <oliver.upton@linux.dev>, "palmer@dabbelt.com" <palmer@dabbelt.com>, 
-	"x86@kernel.org" <x86@kernel.org>, "chenhuacai@kernel.org" <chenhuacai@kernel.org>, 
-	"aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>, Vishal Annapurve <vannapurve@google.com>, 
-	"binbin.wu@linux.intel.com" <binbin.wu@linux.intel.com>, "maddy@linux.ibm.com" <maddy@linux.ibm.com>, 
-	"maobibo@loongson.cn" <maobibo@loongson.cn>, "maz@kernel.org" <maz@kernel.org>, 
-	"linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>, "anup@brainfault.org" <anup@brainfault.org>, 
-	Kai Huang <kai.huang@intel.com>, "frankja@linux.ibm.com" <frankja@linux.ibm.com>, 
-	"pjw@kernel.org" <pjw@kernel.org>, "zhaotianrui@loongson.cn" <zhaotianrui@loongson.cn>, 
-	"ackerleytng@google.com" <ackerleytng@google.com>, 
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, Ira Weiny <ira.weiny@intel.com>, 
+To: Kai Huang <kai.huang@intel.com>
+Cc: "chenhuacai@kernel.org" <chenhuacai@kernel.org>, "frankja@linux.ibm.com" <frankja@linux.ibm.com>, 
+	"maz@kernel.org" <maz@kernel.org>, "borntraeger@linux.ibm.com" <borntraeger@linux.ibm.com>, 
+	"pjw@kernel.org" <pjw@kernel.org>, "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>, 
+	"kas@kernel.org" <kas@kernel.org>, "maobibo@loongson.cn" <maobibo@loongson.cn>, 
+	"pbonzini@redhat.com" <pbonzini@redhat.com>, "maddy@linux.ibm.com" <maddy@linux.ibm.com>, 
+	"palmer@dabbelt.com" <palmer@dabbelt.com>, "imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>, 
+	"zhaotianrui@loongson.cn" <zhaotianrui@loongson.cn>, "anup@brainfault.org" <anup@brainfault.org>, 
+	"oliver.upton@linux.dev" <oliver.upton@linux.dev>, "kvm@vger.kernel.org" <kvm@vger.kernel.org>, 
+	"linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>, Yan Y Zhao <yan.y.zhao@intel.com>, 
+	"michael.roth@amd.com" <michael.roth@amd.com>, 
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Ira Weiny <ira.weiny@intel.com>, 
 	"loongarch@lists.linux.dev" <loongarch@lists.linux.dev>, 
-	"imbrenda@linux.ibm.com" <imbrenda@linux.ibm.com>, "kas@kernel.org" <kas@kernel.org>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
+	"binbin.wu@linux.intel.com" <binbin.wu@linux.intel.com>, 
+	"ackerleytng@google.com" <ackerleytng@google.com>, "kvmarm@lists.linux.dev" <kvmarm@lists.linux.dev>, 
+	"kvm-riscv@lists.infradead.org" <kvm-riscv@lists.infradead.org>, Vishal Annapurve <vannapurve@google.com>, 
+	"linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>, 
+	Rick P Edgecombe <rick.p.edgecombe@intel.com>, 
+	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, 
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>, 
+	"linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>, "x86@kernel.org" <x86@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
 
-On Mon, Oct 27, 2025, Rick P Edgecombe wrote:
-> On Mon, 2025-10-27 at 17:26 +0800, Yan Zhao wrote:
-> > > Ugh, I'd rather not?=C2=A0 Refresh me, what's the story with "v1"?=C2=
-=A0 Are we now on
-> > > v2?
-> > No... We are now on v1.
-> > As in [1], I found that TDX module changed SEAMCALL TDH_VP_INIT behavio=
-r to
-> > require exclusive lock on resource TDR when leaf_opcode.version > 0.
-> >=20
-> > Therefore, we moved KVM_TDX_INIT_VCPU to tdx_vcpu_unlocked_ioctl() in p=
-atch
-> > 22.
-> >=20
-> > [1] https://lore.kernel.org/all/aLa34QCJCXGLk%2Ffl@yzhao56-desk.sh.inte=
-l.com/
->=20
-> Looking at the PDF docs, TDR exclusive locking in version =3D=3D 1 is cal=
-led out at
-> least back to the oldest ABI docs I have (March 2024). Not sure about the
-> assertion that the behavior changed, but if indeed this was documented, i=
-t's a
-> little bit our bad. We might consider being flexible around calling it a =
-TDX ABI
-> break?
->=20
-> Sean, can you elaborate why taking mmu_lock is objectionable here, though=
-?
+On Fri, Oct 24, 2025, Kai Huang wrote:
+> On Thu, 2025-10-16 at 17:32 -0700, Sean Christopherson wrote:
+> > Add a macro to handle kicking vCPUs out of the guest and retrying
+> > SEAMCALLs on -EBUSY instead of providing small helpers to be used by each
+> > SEAMCALL.  Wrapping the SEAMCALLs in a macro makes it a little harder to
+> > tease out which SEAMCALL is being made, but significantly reduces the
+> > amount of copy+paste code and makes it all but impossible to leave an
+> > elevated wait_for_sept_zap.
+> > 
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > ---
+> >  arch/x86/kvm/vmx/tdx.c | 72 ++++++++++++++----------------------------
+> >  1 file changed, 23 insertions(+), 49 deletions(-)
+> > 
+> > diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> > index f6782b0ffa98..2e2dab89c98f 100644
+> > --- a/arch/x86/kvm/vmx/tdx.c
+> > +++ b/arch/x86/kvm/vmx/tdx.c
+> > @@ -294,25 +294,24 @@ static inline void tdx_disassociate_vp(struct kvm_vcpu *vcpu)
+> >  	vcpu->cpu = -1;
+> >  }
+> >  
+> > -static void tdx_no_vcpus_enter_start(struct kvm *kvm)
+> > -{
+> > -	struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
+> > -
+> > -	lockdep_assert_held_write(&kvm->mmu_lock);
+> > -
+> > -	WRITE_ONCE(kvm_tdx->wait_for_sept_zap, true);
+> > -
+> > -	kvm_make_all_cpus_request(kvm, KVM_REQ_OUTSIDE_GUEST_MODE);
+> > -}
+> > -
+> > -static void tdx_no_vcpus_enter_stop(struct kvm *kvm)
+> > -{
+> > -	struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
+> > -
+> > -	lockdep_assert_held_write(&kvm->mmu_lock);
+> > -
+> > -	WRITE_ONCE(kvm_tdx->wait_for_sept_zap, false);
+> > -}
+> > +#define tdh_do_no_vcpus(tdh_func, kvm, args...)					\
+> > +({										\
+> > +	struct kvm_tdx *__kvm_tdx = to_kvm_tdx(kvm);				\
+> > +	u64 __err;								\
+> > +										\
+> > +	lockdep_assert_held_write(&kvm->mmu_lock);				\
+> > +										\
+> > +	__err = tdh_func(args);							\
+> > +	if (unlikely(tdx_operand_busy(__err))) {				\
+> > +		WRITE_ONCE(__kvm_tdx->wait_for_sept_zap, true);			\
+> > +		kvm_make_all_cpus_request(kvm, KVM_REQ_OUTSIDE_GUEST_MODE);	\
+> > +										\
+> > +		__err = tdh_func(args);						\
+> > +										\
+> > +		WRITE_ONCE(__kvm_tdx->wait_for_sept_zap, false);		\
+> > +	}									\
+> > +	__err;									\
+> > +})
+> 
+> The comment which says "the second retry should succeed" is lost, could we
+> add it to tdh_do_no_vcpus()?
 
-It's not, I was just hoping we could avoid yet more complexity.
++1, definitely needs a comment.
 
-Assuming we do indeed need to take mmu_lock, can you send a patch that appl=
-ies
-on top?  I'm not planning on sending any of this to stable@, so I don't see=
- any
-reason to try and juggle patches around.
+/*
+ * Execute a SEAMCALL related to removing/blocking S-EPT entries, with a single
+ * retry (if necessary) after forcing vCPUs to exit and wait for the operation
+ * to complete.  All flows that remove/block S-EPT entries run with mmu_lock
+ * held for write, i.e. are mutually exlusive with each other, but they aren't
+ * mutually exclusive with vCPUs running (because that would be overkill), and
+ * so can fail with "operand busy" if a vCPU acquires a required lock in the
+ * TDX-Module.
+ *
+ * Note, the retry is guaranteed to succeed, absent KVM and/or TDX-Module bugs.
+ */
+ 
+> Also, perhaps we can just TDX_BUG_ON() inside tdh_do_no_vcpus() when the
+> second call of tdh_func() fails?
 
-> Note, myself (and I think Yan?) determined the locking by examining TDX m=
-odule
-> source. For myself, it's possible I misread the locking originally.
->=20
-> Also, I'm not sure about switching gears at this point, but it makes me w=
-onder
-> about the previously discussed option of trying to just duplicate the TDX=
- locks
-> on the kernel side.
+Heh, this also caught my eye when typing up the comment.  Unfortunately, I don't
+think it's worth doing the TDX_BUG_ON() inside the macro as that would require
+plumbing in the UPPERCASE name, and doesn't work well with the variadic arguments,
+e.g. TRACK wants TDX_BUG_ON(), but REMOVE and BLOCK want TDX_BUG_ON_2().
 
-Please no.  At best that will yield a pile of effectively useless code.  At=
- worst,
-it will make us lazy and lead to real bugs because we don't propery guard t=
-he *KVM*
-flows that need exclusivity relative to what is going on in the TDX-Module.
-
-> Or perhaps make some kind of debug time lockdep type thing to document/ch=
-eck
-> the assumptions in the kernel. Something along the lines of this patch, b=
-ut
-> to map the TDX locks to KVM locks or something. As we add more things (DP=
-AMT,
-> etc), it doesn't seem like the TDX locking is getting tamer...
-
-Hmm, I like the idea, but actually getting meaningful coverage could be qui=
-te
-difficult.
+Given that REMOVE and BLOCK need to check the return value, getting the TDX_BUG_ON()
+call into the macro wouldn't buy that much.
 
