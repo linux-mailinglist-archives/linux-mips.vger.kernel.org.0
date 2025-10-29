@@ -1,79 +1,79 @@
-Return-Path: <linux-mips+bounces-11917-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11919-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05624C1C3AB
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Oct 2025 17:50:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 021C9C1C29E
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Oct 2025 17:41:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 5440B58517D
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Oct 2025 16:34:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E49631892EEE
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Oct 2025 16:35:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 064F134AB0E;
-	Wed, 29 Oct 2025 16:33:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16A3234FF4E;
+	Wed, 29 Oct 2025 16:33:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a6u7zSRA"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ly00Kxs6"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f48.google.com (mail-ej1-f48.google.com [209.85.218.48])
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 480D633F380
-	for <linux-mips@vger.kernel.org>; Wed, 29 Oct 2025 16:33:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C486634C149
+	for <linux-mips@vger.kernel.org>; Wed, 29 Oct 2025 16:33:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761755634; cv=none; b=nnGtdprXFe2evxza0BWd1VTp3ZfvJZLuEaF3cMyq5YXPIfwTuOiVa2+zOCNSnLJl2EFXEdbgbVqu9+jvccMuQeUj/KgLzaiSuQHjcZ+QVX1Xx2Qp7ru9efSvXuA4TvKrotiS7Ch8RUDnM8ZjJU8KdNkUe87Gt8ednGVhB9woNBE=
+	t=1761755638; cv=none; b=YL+6OpjxAeBRxKJ6+EhZvR4h38FXxVAKlp+a9te1U23dScqVdyIjytj3Mnp079cRd/SGCyaZ8NYVvl6CjG+d8EvUhWMCg78gGubFXVWit8JFXYQWHM8C7wvwEc7ai3MTHcQmKM1MKUG1gamTTU97mjV0UvYQENFjvdX63rrSjrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761755634; c=relaxed/simple;
-	bh=T06l1/4GOHE/LpDkePy4eVSTWo0uNva18SmJ0icOHLI=;
+	s=arc-20240116; t=1761755638; c=relaxed/simple;
+	bh=oprYoP8yymfB2u4RbgujgsNH+i0ZQOd4dygbCg75p/U=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=btptMs/kJNmw5MDGkUPocgwSfYFmaoDpK9+TI4VVNcn9RX8VZepB70aUIT9mdU/uUtFYgbZthThMV3bIep0NUGdyBt42FKACMwUmONNphmV/dKJAHKqFRwCwDJwpm0d/9+q5R1x+QlK6PJJwuRTvo6s/jp+KytaF0dpvA3WYJus=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a6u7zSRA; arc=none smtp.client-ip=209.85.218.48
+	 MIME-Version; b=LBsUOvUoHjx45WZ09t5DyaEp72NQ8uPnMYkoYkH6Z+R6ON+zMIF8ZpYgjuYEls7Jnr+/rR4pNzp8/sUKKjM8KUqDcMOEQkKF9+i2kPu8DB9k7wYLQMpNPnajTTFXBkwSmJEeBfwlVkq97GYD2rn4ZOS48OLHsg7nIWCOewvL464=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ly00Kxs6; arc=none smtp.client-ip=209.85.218.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f48.google.com with SMTP id a640c23a62f3a-b6d70df0851so15525066b.1
-        for <linux-mips@vger.kernel.org>; Wed, 29 Oct 2025 09:33:51 -0700 (PDT)
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b3e9d633b78so23512366b.1
+        for <linux-mips@vger.kernel.org>; Wed, 29 Oct 2025 09:33:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761755630; x=1762360430; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1761755634; x=1762360434; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=8XbRLU+7LExsM1Q2W4kgKdkH4Wh0K6zsU36k2L5dwa0=;
-        b=a6u7zSRALXcD5cAfl7zziHXqingpPMwA+3HQpLoOUYAN+T4DZYbzvXQku88P5LytsG
-         dSepd0zu7KwPEm+SLTpu7V5mZsAQiytCslwBZjiW4yUtTcTJQVUXYl8R4juqoTdj51JI
-         hCf1+U2YwclJoZF5yhDg/VxPsE6YKgy2pkmrqgE4KuIgw4dbPiW6aPL5RpFKbASmU9Fr
-         AQZoN4oxCVq06kTWykouoPPTYq731ySwec2CxMhlePbiX0q6OgoGOpbNmyKXbrtrsNd6
-         Wt1rhpU4kMgjFyK9e0qmJH4LqvKrN/HO0Gl3VvRi3eWCGseFGqkfUaC9te4+Xnky0T79
-         IADQ==
+        bh=D7niwucTDN3MnvT2f7z1+zCVDCBNmgQwG7r5182Kk6g=;
+        b=ly00Kxs6I33Cts0szvsBGq4htnfjRKgDLfJgp+irQhH6eKg2aQ+FeYSXrktnVcZglE
+         LS1X8DzpiRogsiDYx1QlAxeVNlePirHa2e0t8myHtbCX7sceXUAroMRjnaP7pZtJAbGa
+         ZQzZ7QGt9Cgzf9F2250kNiJs2S8eGvhA39TaZ7wBXvUJagjjHROm1FCFEM7ezV7ijWgH
+         yYqbR7ZF6gG5NFwzSbTizMHnnb6tYgQvX8/iw3UfEgYviyLxh7pJ1sBtoXpBN5ZZsY3J
+         VUAZn8FHew4EfgiHNxME1+S8wmyvm3kKigBup4ENf8sONeuxDxeoy2tUw78yc1EHNZon
+         eVtQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761755630; x=1762360430;
+        d=1e100.net; s=20230601; t=1761755634; x=1762360434;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=8XbRLU+7LExsM1Q2W4kgKdkH4Wh0K6zsU36k2L5dwa0=;
-        b=DKJpP7YkkZJL7Xsv1qDYwiSSmU9jyY8xK5HZ8smcmK4nS4VVbCmte2jjzFHBjsW+Tv
-         8PMSggpo/2c1HNQTyImE8xN+4ePS0dmy9UGdyuxX6/O6Btz9zeTNaeFWcBbmErwYkbcO
-         MhtRl22B+KWf7aeXiQu8WnoVQBzYise9XzGnWnk0WFQN/KPEUmJmnvHiM4IPGVXeV/XY
-         6o+lX/usz0+XsA1CE1pqRdHnjFCtoDn+0zTlzEG4poOBAfnc3ti9p4aNb26glRxs8Ku0
-         CSJgJgggyIteSjJQ6dOnfmnQALWShu9sClBCi6WDs87Us4RR0sTQAq/nwDx+4qK5vPSu
-         cl8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWJ1am39yncVMjOp++DOufOuYSBnHKIynf1/rKn6DqQeHZNSwEzXQpayfXzWOUSuIoPGNFO9uJNGKfN@vger.kernel.org
-X-Gm-Message-State: AOJu0YzSBueZTjKgmGxLSVEEOOCYnLyeS/0z0agTNdmdYfnbJ+INL/Rg
-	UPxdt9s3AaGxHCZlPYxXY1oaG0IkmJzJSiWTAnOIgTZxi/pTJmQBApTs
-X-Gm-Gg: ASbGncuvWuUoKGEBQsU9iIpoN5hjwX17zrfBEeKzxvhgGJHHkdQnft8UcpWUbgwmA56
-	x9miSkVHGWMtMDN5W7Rr4cp4b2z/SoGZeU38AY+zihc4j/XPiyCFXoAGNJRTsaFTAmOojiu9Pt+
-	P4il4zVTFWj1nc9/wwfDcT/WZdbLXcizpFzbDoTC7IQg2nFNUnSbUh8NaTQeuUJYR1wBLQjdefp
-	ocwOeJjUc0wIf31dN+Q8ae2igFSK+fEd+doaYNouH4g2ZfPwVcRe79jh9dcsxwqez6spX/EtQrP
-	1J5iVAc5c8AX0/Q1bkWC2n2ULavsQHbnyHFdCBJencKIeX2lYwL9YQavLUPakGQ94nUGvh1p6mX
-	yzphX96qj7UiRGt/S1YfU94wQyeDy4+xWE0Dy1C7ic2eylki2hmDFzGoJUZ6Qadl4lG3Fdl1Qg3
-	p6yvvFTQVYW8eJZFO3Bo/CatD3+/RQOgMCsnf7kWtVNPf7ymL/gtC+zf4CcLN/MJQVFpY/
-X-Google-Smtp-Source: AGHT+IFQlpirQWvqETIaDsilJH4sjQW05iHSTqO+BVFy04krtNR3muOIO8OYFK3MmzGZwCCaLhUORw==
-X-Received: by 2002:a17:907:1c8c:b0:b3e:580a:1842 with SMTP id a640c23a62f3a-b703d557003mr393915166b.48.1761755629552;
-        Wed, 29 Oct 2025 09:33:49 -0700 (PDT)
+        bh=D7niwucTDN3MnvT2f7z1+zCVDCBNmgQwG7r5182Kk6g=;
+        b=X9PoIPXBirGyJ52xfgxCDw2bNiVv3w4ry66JoZa7B3tb5diKRetwbI2GiLJezCfmHt
+         JgxFL+twjJo5J6Ngoe//crES7jb6ctaxdAlaeZ0gvNJYejsttzeiky9oVxETSlbSOwRH
+         zVY8kNb5IJQ9ZV8z2cOYSLHKKN/2saUMYK0fdEFWTnrDAIKDpXd6Iiy8Fl4rQd4MyuDX
+         OHu+FRBdy3H0CVk6g/5RdDdrb/orFfGtBGUD8VvAhw9l3YrgP4Jcjd8MNh9KkfNAfYOm
+         vgFq6761N/u6s2k74gCwbm/SMaUMAkleqoeXYnAYgmglsMNBZHOYyL2XUbbxwBkKKxJ/
+         Irng==
+X-Forwarded-Encrypted: i=1; AJvYcCV7XljYKsu5N0hLcdSBe2PtVePKgOEZN1zPDqQxpI4p2dNwoewRWWa4ejDn4dp9J1NxKJc2tnbAr3G4@vger.kernel.org
+X-Gm-Message-State: AOJu0YxThmMJB7UIfCpPCXWUEOv+KDCE9aS0ANIeoWyFEzm4S6elj4Sy
+	xxlnOP5IIpV9lc8mGy7B0m8ORetD4kOz0NkNh4GvxYgvdA6pyjdYtUfa
+X-Gm-Gg: ASbGnct7W+kSpgPXKzBlrshiT181FpWuQv4+VXJNHrPpg46zy5M07/5MmvX2cL21AIn
+	ArBgyaxqrhfgCQ+Lyg59NvgGuJAgnvWIFWLK85sctGOTRROCuCzhi7mUnuLKKH1MoITAqr2C7uP
+	8U3LOvKjYZ3hRI8xs0pgENfXn2FJLyuwu5Gg8o4n3N98Hkt0H/VU1nIzPXhjs6an3oYwpcicppM
+	oPRQQyMo4IKpN4tYXBOiqqh4ExZH7jAFScKiieuw/4nNreMfqOgFDsLUeGNLDvqsNxuOSH6Vf43
+	nG/PYqEOs6qPQcl7y7ZxmcGoabQoQVJ5RkUu/nmQDEFWMfRcDbyH49oX7KUBMz82Z09fuTvQPDq
+	zw26I0Nc4GDOpZa23QqYrlnCdVWurWMvss/BjkQkMoP9Pvg3kde3jKSjzllwj9xarnv6nSpwpq6
+	EIrG6hU0XzTTZJ+sUe2as5ImzcPrTFSVGOpuQN2/caE7UaT7qU/S4RwxcXtZq477wf+NBc
+X-Google-Smtp-Source: AGHT+IGxst0GGPbE3zlpzuYvmZD7MtT+fgNns/2gbspQBUcAcExwpAJ9gNyBIh9hmr+9IwgchPtgzg==
+X-Received: by 2002:a17:906:6a21:b0:b3f:f6d:1d9e with SMTP id a640c23a62f3a-b7051f278acmr28890666b.6.1761755633985;
+        Wed, 29 Oct 2025 09:33:53 -0700 (PDT)
 Received: from localhost (p200300e41f274600f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f27:4600:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-b6dad195456sm939661066b.72.2025.10.29.09.33.48
+        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-b6d853696a3sm1468789266b.27.2025.10.29.09.33.52
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Oct 2025 09:33:48 -0700 (PDT)
+        Wed, 29 Oct 2025 09:33:52 -0700 (PDT)
 From: Thierry Reding <thierry.reding@gmail.com>
 To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
 	"Rafael J. Wysocki" <rafael@kernel.org>
@@ -87,9 +87,9 @@ Cc: x86@kernel.org,
 	linux-pci@vger.kernel.org,
 	linux-acpi@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 3/7] bus: mvebu-mbus: Use contextual data instead of global variable
-Date: Wed, 29 Oct 2025 17:33:32 +0100
-Message-ID: <20251029163336.2785270-4-thierry.reding@gmail.com>
+Subject: [PATCH v3 5/7] clk: mvebu: Use contextual data instead of global variable
+Date: Wed, 29 Oct 2025 17:33:34 +0100
+Message-ID: <20251029163336.2785270-6-thierry.reding@gmail.com>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251029163336.2785270-1-thierry.reding@gmail.com>
 References: <20251029163336.2785270-1-thierry.reding@gmail.com>
@@ -111,61 +111,77 @@ Signed-off-by: Thierry Reding <treding@nvidia.com>
 Changes in v3:
 - adjust for API changes and update commit message
 
- drivers/bus/mvebu-mbus.c | 13 ++++++-------
- 1 file changed, 6 insertions(+), 7 deletions(-)
+ drivers/clk/mvebu/common.c | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/bus/mvebu-mbus.c b/drivers/bus/mvebu-mbus.c
-index dd94145c9b22..d33c8e42e91c 100644
---- a/drivers/bus/mvebu-mbus.c
-+++ b/drivers/bus/mvebu-mbus.c
-@@ -130,6 +130,7 @@ struct mvebu_mbus_win_data {
- };
+diff --git a/drivers/clk/mvebu/common.c b/drivers/clk/mvebu/common.c
+index 5adbbd91a6db..8797de93472c 100644
+--- a/drivers/clk/mvebu/common.c
++++ b/drivers/clk/mvebu/common.c
+@@ -189,6 +189,7 @@ void __init mvebu_coreclk_setup(struct device_node *np,
+ DEFINE_SPINLOCK(ctrl_gating_lock);
  
- struct mvebu_mbus_state {
+ struct clk_gating_ctrl {
 +	struct syscore syscore;
- 	void __iomem *mbuswins_base;
- 	void __iomem *sdramwins_base;
- 	void __iomem *mbusbridge_base;
-@@ -1008,7 +1009,7 @@ fs_initcall(mvebu_mbus_debugfs_init);
- 
- static int mvebu_mbus_suspend(void *data)
- {
--	struct mvebu_mbus_state *s = &mbus_state;
-+	struct mvebu_mbus_state *s = data;
- 	int win;
- 
- 	if (!s->mbusbridge_base)
-@@ -1042,7 +1043,7 @@ static int mvebu_mbus_suspend(void *data)
- 
- static void mvebu_mbus_resume(void *data)
- {
--	struct mvebu_mbus_state *s = &mbus_state;
-+	struct mvebu_mbus_state *s = data;
- 	int win;
- 
- 	writel(s->mbus_bridge_ctrl,
-@@ -1074,10 +1075,6 @@ static const struct syscore_ops mvebu_mbus_syscore_ops = {
- 	.resume = mvebu_mbus_resume,
+ 	spinlock_t *lock;
+ 	struct clk **gates;
+ 	int num_gates;
+@@ -196,11 +197,10 @@ struct clk_gating_ctrl {
+ 	u32 saved_reg;
  };
  
--static struct syscore mvebu_mbus_syscore = {
--	.ops = &mvebu_mbus_syscore_ops,
--};
+-static struct clk_gating_ctrl *ctrl;
 -
- static int __init mvebu_mbus_common_init(struct mvebu_mbus_state *mbus,
- 					 phys_addr_t mbuswins_phys_base,
- 					 size_t mbuswins_size,
-@@ -1122,7 +1119,9 @@ static int __init mvebu_mbus_common_init(struct mvebu_mbus_state *mbus,
- 		writel(UNIT_SYNC_BARRIER_ALL,
- 		       mbus->mbuswins_base + UNIT_SYNC_BARRIER_OFF);
+ static struct clk *clk_gating_get_src(
+ 	struct of_phandle_args *clkspec, void *data)
+ {
++	struct clk_gating_ctrl *ctrl = data;
+ 	int n;
  
--	register_syscore(&mvebu_mbus_syscore);
-+	mbus->syscore.ops = &mvebu_mbus_syscore_ops;
-+	mbus->syscore.data = mbus;
-+	register_syscore(&mbus->syscore);
+ 	if (clkspec->args_count < 1)
+@@ -217,12 +217,16 @@ static struct clk *clk_gating_get_src(
  
+ static int mvebu_clk_gating_suspend(void *data)
+ {
++	struct clk_gating_ctrl *ctrl = data;
++
+ 	ctrl->saved_reg = readl(ctrl->base);
  	return 0;
  }
+ 
+ static void mvebu_clk_gating_resume(void *data)
+ {
++	struct clk_gating_ctrl *ctrl = data;
++
+ 	writel(ctrl->saved_reg, ctrl->base);
+ }
+ 
+@@ -231,13 +235,10 @@ static const struct syscore_ops clk_gate_syscore_ops = {
+ 	.resume = mvebu_clk_gating_resume,
+ };
+ 
+-static struct syscore clk_gate_syscore = {
+-	.ops = &clk_gate_syscore_ops,
+-};
+-
+ void __init mvebu_clk_gating_setup(struct device_node *np,
+ 				   const struct clk_gating_soc_desc *desc)
+ {
++	static struct clk_gating_ctrl *ctrl;
+ 	struct clk *clk;
+ 	void __iomem *base;
+ 	const char *default_parent = NULL;
+@@ -288,7 +289,9 @@ void __init mvebu_clk_gating_setup(struct device_node *np,
+ 
+ 	of_clk_add_provider(np, clk_gating_get_src, ctrl);
+ 
+-	register_syscore(&clk_gate_syscore);
++	ctrl->syscore.ops = &clk_gate_syscore_ops;
++	ctrl->syscore.data = ctrl;
++	register_syscore(&ctrl->syscore);
+ 
+ 	return;
+ gates_out:
 -- 
 2.51.0
 
