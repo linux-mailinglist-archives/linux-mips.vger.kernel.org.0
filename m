@@ -1,222 +1,179 @@
-Return-Path: <linux-mips+bounces-11918-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11923-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 044D3C1C590
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Oct 2025 18:06:12 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5519EC1C929
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Oct 2025 18:50:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5A45B661E26
-	for <lists+linux-mips@lfdr.de>; Wed, 29 Oct 2025 16:35:05 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 93C954E055E
+	for <lists+linux-mips@lfdr.de>; Wed, 29 Oct 2025 17:46:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FF2834DCC9;
-	Wed, 29 Oct 2025 16:33:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D8E9B3112B7;
+	Wed, 29 Oct 2025 17:46:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nPTPgjgT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K22XA1Hj"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BD6E3491E5
-	for <linux-mips@vger.kernel.org>; Wed, 29 Oct 2025 16:33:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4AE42F60AC;
+	Wed, 29 Oct 2025 17:46:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761755637; cv=none; b=JkKsqmshZYO06J8nwOdgqM+r/JvdZYt8o5fP6HOOAbeEpXpUoYffJKFNSDabwtBkHObeYHpnbKzCr+rUBL0pMTMK2dcCBf/onHhX7IN1WliVXjNKNRGuUvfLpf05fnxpUSczSMQpZHjjQlhGRD+AMfpRNOderOQWmbtcZ1brDW0=
+	t=1761760016; cv=none; b=WpxLa0NE/VdgKIpTEzMfrS7caNQ0OpnYWvXhxC6k6fVioUa++bLLLc4hzij4jf65llZePZW48tq+ZaUR/9IreRIVIEPVvdyea4lV6BkdHe/okn+G93aK3reUtV9sjtK1k5COHj2sGjmQaNpzAiuURd/YoGHwu9d8v6PhhVDdOhc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761755637; c=relaxed/simple;
-	bh=x/c8Gau2O3gfj3+358hMm8pmNs7v1wm+QbURDM7KfoM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QHbE9wtv95WKu1HF/CciF5l6TNBZ+BCpFvqNstdOGBTC0PfDkJ20AqjYS4wa4ti6gkGzrvpedZT6cSdfK7Fa5rNWMulTUxtHg5RagmAKX4W73rH5AERkTpzHsjfsWB8Ly3SyL88t15QyvBIEMlGlrfrDmKxVNRsSfAbFtXvIsWw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nPTPgjgT; arc=none smtp.client-ip=209.85.218.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b6d5c59f2b6so14861666b.2
-        for <linux-mips@vger.kernel.org>; Wed, 29 Oct 2025 09:33:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1761755632; x=1762360432; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=U3ZWzIw+tzavBMOmDgztL9+WJKK3w3KSDq6YVOazGFI=;
-        b=nPTPgjgTOV4QvNiw767EkPXP8nZH+vMB95IK/uUyEapExC1xYDWPM9TY7fbFAnRlyR
-         5go9001Apeiz1bCEoM9ktB19pnCqBYoMUiyerZmB97OscW9O+xPEWD3Y6x1trevTW6Gl
-         gtcCynIa2cisxbIx6H8ZplCo7ErSv7aVeY2Jmyd1HkESnUSaaT5C6jz/K9oiV202/a/O
-         ZCLReL5xckIEkVq8agGcgTNlA51Si/lOJzd6MVTxeioWIsLWGosNJ02BzgImHOjNw+nS
-         ckb+/uuvh3BfuFZedwV9ZcgQrZ6O8PkRxXJZ+nnx1vURNkUTUuBoe6Rt32URkixI8fci
-         PCkw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761755632; x=1762360432;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=U3ZWzIw+tzavBMOmDgztL9+WJKK3w3KSDq6YVOazGFI=;
-        b=KqJwKXrcqVqWio1Gf7Dh81QPxo+FtDXBiXTCOX0QPPfwDlS32f4JvqBvPFGwiwT3Qo
-         enYG9jqXZ0n7Sez2uSOdGVwrrWUfYq7eNnJaa66176GqYNc3KNRgouQc2ZZZfkzMDZRg
-         kk8gow38qOroaPEvKVCsKdaSkPpyG0cGZlya2cafkPXjwdw1sA98g7C8NqTHA1+LOS1G
-         fmeOc6pu7UnqpkF3GFWCEClvYhaFsiXXqMgrybvhZ5K3yaj0zMK4hz/cvPYAIVU4AutZ
-         SPcemSfa54GNkdByR7Drwxz7ae15Vb4zQIvgBZmM8gy6Dw2KkX2nsPCKtrn4wPX2St9V
-         r+qQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXB9g3vapQ3I75/v0l00SQkkENF/dPRVN2Z2BSf97abOmX7umZEyOA3CfHYoC5mZrwx8liTBK9f5pMC@vger.kernel.org
-X-Gm-Message-State: AOJu0YxktjSch8rBDRgxWMbj9oQbTfgrWkDx8x5314i6M/YjLiqMt82v
-	k1jvBxIKIjsGUPFNzJWidOkYeN8nMTp+/q6nGF3Yg9+Jl3LMJB0I15IXuPRGQA==
-X-Gm-Gg: ASbGncvGta1Dg7K/u+hmX+Rl296AVjIc1NCn7xltTlhHuDohB99uNIJi/IQCfBMTeQI
-	T1jgcpLG/sH5kr7saXeGgWXLSevpymM5VbpidF7EWPtAPPmZpMEcHBLxW4AoFRwo5nMvefnXRBr
-	bytZ5WUTI6M/n8amp3zr/PwOp6nWFTfMquhWWLdYTFVO/hIKvRJKnhWZs+nrJa3PZ2wbV74zjgI
-	0n/iyBsM+I9xjHPD/V6JhoDiCcUj21W0/pvqRnSzNQSylb1Pm2aljyvE9nChD3ftxsfCNiTWp6T
-	XcB43h13Ia8/qI3bzhGfQ96EuCLkbLkr0ANGvfbOA8PH4tJ/6kE2uXG1MvDzWVJvtBxo17n1P1D
-	FiKF+bXh+ufsyKg6Z7NNj9XMjpRA1EUhN+vQWKKtJb7f43aVKpBGUBn7qeO40Ugoqve4LPCNSWf
-	dSocNCG46+zZA+obgLrlQtpEZJ/Aapn+G41cF8aSSefUccgKurMoUYuHRCtUL1TmG2b7Wz
-X-Google-Smtp-Source: AGHT+IHRieiPBGU6MC5P5jZHI6G/6PD4P6RVg3Iggx9u+yanu4koYZOv2T4MUr84z07ifr1PiVwzxA==
-X-Received: by 2002:a17:907:3da4:b0:b6d:8da0:9a24 with SMTP id a640c23a62f3a-b703d2dc3fcmr322653366b.9.1761755631652;
-        Wed, 29 Oct 2025 09:33:51 -0700 (PDT)
-Received: from localhost (p200300e41f274600f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f27:4600:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-b6da1e2226fsm1067814666b.20.2025.10.29.09.33.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 29 Oct 2025 09:33:50 -0700 (PDT)
-From: Thierry Reding <thierry.reding@gmail.com>
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>
-Cc: x86@kernel.org,
+	s=arc-20240116; t=1761760016; c=relaxed/simple;
+	bh=KsXdySkGiHmSzsuy7Pi+sVL7aoIePP+MEpnzF2GEcmA=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=NqhaS9F9UI678ciFff1q1qBvGV5IS1IvZUUzYQYhpW/HrrDfr1L4zXEKV+dxL3quK5mqmxOGQdw+fcdT6aj+D6XRlygdFIlUbf9OLEwyMQHGneI/0yETh11OMk4+Cv1AiK5N4WdZstpHYapMFIz0Quch12Kxg5G0GMTYUqfPcSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K22XA1Hj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 202B1C4CEF7;
+	Wed, 29 Oct 2025 17:46:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1761760016;
+	bh=KsXdySkGiHmSzsuy7Pi+sVL7aoIePP+MEpnzF2GEcmA=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=K22XA1Hjw8uOX95mhKKhhconnRdms2qQD/Nbq0dqkODo/qoasd98i4iGIns2To5K7
+	 9LCQCwxZ++SdZB2vSAuCJYW4paAjVRKTA4iWkPcqn9ss6ygExiQXqHziIwzmyr+rkW
+	 +lIxJgcLxAivPEpWGXWHSqI8/7xdlQzr7QsViTjJuJzP8+wsaPDKG5m+0ZtIalIr/k
+	 OungqAalRYCEVyKSHVo57GafE546/x+UVS5pGNUIRUiKo7vIQBPHzK6tyDCTfyy+Hp
+	 yAXyomKjaPtaqAImWTBqtWHwQxnW7/jlC878FpiIrVJhNq87HlEksKBMqgKgcyoNJG
+	 qk2DTbEtU/sOQ==
+Date: Wed, 29 Oct 2025 12:46:54 -0500
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Thierry Reding <thierry.reding@gmail.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>, x86@kernel.org,
 	linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org,
-	linux-mips@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	linuxppc-dev@lists.ozlabs.org,
-	linux-sh@vger.kernel.org,
-	linux-pci@vger.kernel.org,
-	linux-acpi@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v3 4/7] clk: ingenic: tcu: Use contextual data instead of global variable
-Date: Wed, 29 Oct 2025 17:33:33 +0100
-Message-ID: <20251029163336.2785270-5-thierry.reding@gmail.com>
-X-Mailer: git-send-email 2.51.0
-In-Reply-To: <20251029163336.2785270-1-thierry.reding@gmail.com>
-References: <20251029163336.2785270-1-thierry.reding@gmail.com>
+	linux-riscv@lists.infradead.org, linux-mips@vger.kernel.org,
+	loongarch@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
+	linux-sh@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 2/7] MIPS: PCI: Use contextual data instead of global
+ variable
+Message-ID: <20251029174654.GA1571737@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251029163336.2785270-3-thierry.reding@gmail.com>
 
-From: Thierry Reding <treding@nvidia.com>
+On Wed, Oct 29, 2025 at 05:33:31PM +0100, Thierry Reding wrote:
+> From: Thierry Reding <treding@nvidia.com>
+> 
+> Pass the driver-specific data via the syscore struct and use it in the
+> syscore ops.
 
-Pass the driver-specific data via the syscore struct and use it in the
-syscore ops.
+Would be nice to include the "instead of global variable" part here so
+the commit log includes the benefit and can stand alone even without
+the subject.
 
-Signed-off-by: Thierry Reding <treding@nvidia.com>
----
-Changes in v3:
-- adjust for API changes and update commit message
+Awesome to get rid of another global variable!  More comments below.
 
- drivers/clk/ingenic/tcu.c | 63 +++++++++++++++++++--------------------
- 1 file changed, 30 insertions(+), 33 deletions(-)
+> +++ b/arch/mips/pci/pci-alchemy.c
+> @@ -33,6 +33,7 @@
+>  
+>  struct alchemy_pci_context {
+>  	struct pci_controller alchemy_pci_ctrl; /* leave as first member! */
+> +	struct syscore syscore;
+>  	void __iomem *regs;			/* ctrl base */
+>  	/* tools for wired entry for config space access */
+>  	unsigned long last_elo0;
+> @@ -46,12 +47,6 @@ struct alchemy_pci_context {
+>  	int (*board_pci_idsel)(unsigned int devsel, int assert);
+>  };
+>  
+> -/* for syscore_ops. There's only one PCI controller on Alchemy chips, so this
+> - * should suffice for now.
+> - */
+> -static struct alchemy_pci_context *__alchemy_pci_ctx;
+> -
+> -
+>  /* IO/MEM resources for PCI. Keep the memres in sync with fixup_bigphys_addr
+>   * in arch/mips/alchemy/common/setup.c
+>   */
+> @@ -306,9 +301,7 @@ static int alchemy_pci_def_idsel(unsigned int devsel, int assert)
+>  /* save PCI controller register contents. */
+>  static int alchemy_pci_suspend(void *data)
+>  {
+> -	struct alchemy_pci_context *ctx = __alchemy_pci_ctx;
+> -	if (!ctx)
+> -		return 0;
+> +	struct alchemy_pci_context *ctx = data;
+>  
+>  	ctx->pm[0]  = __raw_readl(ctx->regs + PCI_REG_CMEM);
+>  	ctx->pm[1]  = __raw_readl(ctx->regs + PCI_REG_CONFIG) & 0x0009ffff;
+> @@ -328,9 +321,7 @@ static int alchemy_pci_suspend(void *data)
+>  
+>  static void alchemy_pci_resume(void *data)
+>  {
+> -	struct alchemy_pci_context *ctx = __alchemy_pci_ctx;
+> -	if (!ctx)
+> -		return;
+> +	struct alchemy_pci_context *ctx = data;
+>  
+>  	__raw_writel(ctx->pm[0],  ctx->regs + PCI_REG_CMEM);
+>  	__raw_writel(ctx->pm[2],  ctx->regs + PCI_REG_B2BMASK_CCH);
+> @@ -359,10 +350,6 @@ static const struct syscore_ops alchemy_pci_syscore_ops = {
+>  	.resume = alchemy_pci_resume,
+>  };
+>  
+> -static struct syscore alchemy_pci_syscore = {
+> -	.ops = &alchemy_pci_syscore_ops,
+> -};
+> -
+>  static int alchemy_pci_probe(struct platform_device *pdev)
+>  {
+>  	struct alchemy_pci_platdata *pd = pdev->dev.platform_data;
+> @@ -480,9 +467,10 @@ static int alchemy_pci_probe(struct platform_device *pdev)
+>  	__raw_writel(val, ctx->regs + PCI_REG_CONFIG);
+>  	wmb();
+>  
+> -	__alchemy_pci_ctx = ctx;
+>  	platform_set_drvdata(pdev, ctx);
+> -	register_syscore(&alchemy_pci_syscore);
+> +	ctx->syscore.ops = &alchemy_pci_syscore_ops;
+> +	ctx->syscore.data = ctx;
+> +	register_syscore(&ctx->syscore);
 
-diff --git a/drivers/clk/ingenic/tcu.c b/drivers/clk/ingenic/tcu.c
-index bc6a51da2072..8c6337d8e831 100644
---- a/drivers/clk/ingenic/tcu.c
-+++ b/drivers/clk/ingenic/tcu.c
-@@ -53,9 +53,9 @@ struct ingenic_tcu {
- 	struct clk *clk;
- 
- 	struct clk_hw_onecell_data *clocks;
--};
- 
--static struct ingenic_tcu *ingenic_tcu;
-+	struct syscore syscore;
-+};
- 
- static inline struct ingenic_tcu_clk *to_tcu_clk(struct clk_hw *hw)
- {
-@@ -332,6 +332,29 @@ static const struct of_device_id __maybe_unused ingenic_tcu_of_match[] __initcon
- 	{ /* sentinel */ }
- };
- 
-+static int __maybe_unused tcu_pm_suspend(void *data)
-+{
-+	struct ingenic_tcu *tcu = data;
-+
-+	if (tcu->clk)
-+		clk_disable(tcu->clk);
-+
-+	return 0;
-+}
-+
-+static void __maybe_unused tcu_pm_resume(void *data)
-+{
-+	struct ingenic_tcu *tcu = data;
-+
-+	if (tcu->clk)
-+		clk_enable(tcu->clk);
-+}
-+
-+static const struct syscore_ops tcu_pm_ops __maybe_unused = {
-+	.suspend = tcu_pm_suspend,
-+	.resume = tcu_pm_resume,
-+};
-+
- static int __init ingenic_tcu_probe(struct device_node *np)
- {
- 	const struct of_device_id *id = of_match_node(ingenic_tcu_of_match, np);
-@@ -430,7 +453,11 @@ static int __init ingenic_tcu_probe(struct device_node *np)
- 		goto err_unregister_ost_clock;
- 	}
- 
--	ingenic_tcu = tcu;
-+	if (IS_ENABLED(CONFIG_PM_SLEEP)) {
-+		tcu->syscore.ops = &tcu_pm_ops;
-+		tcu->syscore.data = tcu;
-+		register_syscore(&tcu->syscore);
-+	}
- 
- 	return 0;
- 
-@@ -455,42 +482,12 @@ static int __init ingenic_tcu_probe(struct device_node *np)
- 	return ret;
- }
- 
--static int __maybe_unused tcu_pm_suspend(void *data)
--{
--	struct ingenic_tcu *tcu = ingenic_tcu;
--
--	if (tcu->clk)
--		clk_disable(tcu->clk);
--
--	return 0;
--}
--
--static void __maybe_unused tcu_pm_resume(void *data)
--{
--	struct ingenic_tcu *tcu = ingenic_tcu;
--
--	if (tcu->clk)
--		clk_enable(tcu->clk);
--}
--
--static const struct syscore_ops __maybe_unused tcu_pm_ops = {
--	.suspend = tcu_pm_suspend,
--	.resume = tcu_pm_resume,
--};
--
--static struct syscore __maybe_unused tcu_pm = {
--	.ops = &tcu_pm_ops,
--};
--
- static void __init ingenic_tcu_init(struct device_node *np)
- {
- 	int ret = ingenic_tcu_probe(np);
- 
- 	if (ret)
- 		pr_crit("Failed to initialize TCU clocks: %d\n", ret);
--
--	if (IS_ENABLED(CONFIG_PM_SLEEP))
--		register_syscore(&tcu_pm);
- }
- 
- CLK_OF_DECLARE_DRIVER(jz4740_cgu, "ingenic,jz4740-tcu", ingenic_tcu_init);
--- 
-2.51.0
+As far as I can tell, the only use of syscore in this driver is for
+suspend/resume.
 
+This is a regular platform_device driver, so instead of syscore, I
+think it should use generic power management like other PCI host
+controller drivers do, something like this:
+
+  static int alchemy_pci_suspend_noirq(struct device *dev)
+  ...
+
+  static int alchemy_pci_resume_noirq(struct device *dev)
+  ...
+
+  static DEFINE_NOIRQ_DEV_PM_OPS(alchemy_pci_pm_ops,
+                                 alchemy_pci_suspend_noirq,
+                                 alchemy_pci_resume_noirq);
+
+  static struct platform_driver alchemy_pcictl_driver = {
+          .probe          = alchemy_pci_probe,
+          .driver = {
+                  .name   = "alchemy-pci",
+                  .pm     = pm_sleep_ptr(&alchemy_pci_pm_ops),
+          },
+  };
+
+Here's a sample in another driver:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pci/controller/cadence/pci-j721e.c?id=v6.17#n663
+
+>  	register_pci_controller(&ctx->alchemy_pci_ctrl);
+>  
+>  	dev_info(&pdev->dev, "PCI controller at %ld MHz\n",
+> -- 
+> 2.51.0
+> 
 
