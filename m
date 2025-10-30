@@ -1,185 +1,227 @@
-Return-Path: <linux-mips+bounces-11930-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11931-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C0CBC22191
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Oct 2025 20:58:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 28182C22205
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Oct 2025 21:10:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 898FA1A22452
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Oct 2025 19:58:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4A8B51887242
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Oct 2025 20:10:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D01A433343C;
-	Thu, 30 Oct 2025 19:57:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86B6436E363;
+	Thu, 30 Oct 2025 20:10:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="H53jiJ9v"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="qd+iX+HR"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.17.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7CA0332ECC;
-	Thu, 30 Oct 2025 19:57:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D777B36E340
+	for <linux-mips@vger.kernel.org>; Thu, 30 Oct 2025 20:09:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761854256; cv=none; b=pzqTmCuBzPu3zK3zrpK4svfbGhd9G7q1LTtkXrc2QNKo4D6wi10KQiyMULSy5B9nc55HxTp3uJ3qSuhzapS7Luiie9LxK9CCaoRBgd3yyM53Rx/fNnpv0vYwQIDo4Nh/UdJby9ASxCkYg+JIId9uQuYz5r/Dp2AptNAskUlKfos=
+	t=1761855001; cv=none; b=lnFzPvW79jWGifoLbYHmIT1Y87STDbNG7jYTeiAB4/PFBfvlLKeSq2XfX7SsCG3jBDy6Ck/JWMfKmkJf9lRQWj3F/ZHhtR7PJ69qNYUdPNMRj3K/owil5F0kqbMDpMkuOAzS1UpuR8ojq39pGH82a0MvUcc81vkxamXXjWEVaWg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761854256; c=relaxed/simple;
-	bh=7o3eMG/tPNJGFFG92GloVzfDNlzxSqlGIvUiFF1eLqs=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=Ua1awAFTZDpaEeMGjAtK4EUw/wJ9RympJ8znmEz+oIK/EoyulQcp6XHrC9y2TaTsCpV990P8DPETrpIxhHlTLo5zg5ZvWM/crhC1KOIBPxZLSAmCIuJElhPgyLsOwYqRr1rEWuEV6sNF+OpScYRc9XG1JjalFM+hnbZJudGKQlU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=H53jiJ9v; arc=none smtp.client-ip=212.227.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1761854252; x=1762459052; i=markus.elfring@web.de;
-	bh=AD7M4UjLJ4HveL7L1KpshIYpSkrvNHljXd/PxMpIrlo=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:From:
-	 Subject:Content-Type:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=H53jiJ9vkjLKjEDfNmxnLOrJQFfiIGUFvHWEn1q1vd6QLxtx0RgrMmtuZbrvatTz
-	 yrMO1a1oOtDnms2q5eLMfrKJ5Yhh8VLsQXYUuEnD8+cIO7dz3Gah2+4QL9n2aKKR+
-	 w+tHtxlc7Ed/ADFkR9KLeYPvKPClcEUCNRfQjf6Eb+7rEQYBk+tG03MrFs2uGocRK
-	 8IeqzucJvPXvwffc/60BmE7d972KKsV6ewh5AxZZIX3MkxsIXiSgOqcw0RNqsrEeb
-	 ccv03dcw90U/qwlNTfLZhmtqmLjJbxGXKqUaJ1h6uLzj2U0UNrVyNc6s5WDLPAET4
-	 stcHKXP5+Y/uIXAm6g==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.29] ([94.31.69.248]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MoNV4-1w350N2bPc-00gwlr; Thu, 30
- Oct 2025 20:57:31 +0100
-Message-ID: <037fcb01-b723-42f3-b3e8-9a351e1caa47@web.de>
-Date: Thu, 30 Oct 2025 20:57:29 +0100
+	s=arc-20240116; t=1761855001; c=relaxed/simple;
+	bh=iWqK9o5Q9lSs0dNS4loIwGhdjpS9qDnFS67Z8kLa5ZY=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=u3GVurx5bJGzj/MLC0qL5u2BXLkg9SQCEhgzHKpl/VKTwy9FJez2Wc6g1/buAtyUuT0Pj8F2T80ncGcepO+v+WnHbtqKx3NANZqXKeAxb9TF4dl0nOwq3TmyGag5vAZtJmVF6PHdSnaIasQ0GouUgnzNazyldixzv1Rv9O/LNbc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=qd+iX+HR; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-340871b5d89so129410a91.2
+        for <linux-mips@vger.kernel.org>; Thu, 30 Oct 2025 13:09:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1761854999; x=1762459799; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=zrcNX0WZe6UQQAW+Y1acRpaDavildHCqqfp5zf8UBT8=;
+        b=qd+iX+HRguzV8RHinP+d64sx44ccYmm2BMsrzhS4vENzeN1SWeqaQgPgtyV/DWAvKj
+         jTwUwkJdsnBsZbSb/qeJSqq6GedxUJxf1SRgeUh//DgC5OL5iSMRGngr4uPB3KngiC9E
+         5C7xYqTKnnCeqWDxTEW0d4YPSujcz7B17Z40W4rPGyS7uNVgp+MHXyFP9WOJrMbujgRk
+         dNLYzzVOVd/6/WrCNM9aiUVmouZm3NQAZhl9ODa8LaWBivC4+1JMOXpfFO1R5VHRoK18
+         4/K0HRXfJ+8Mb2nVbRUq0sxgOndVg5T3n+0/BerK58U7Wl1jzTICoL9pLv4J3G59RXjX
+         KCAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1761854999; x=1762459799;
+        h=cc:to:from:subject:message-id:mime-version:date:reply-to
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zrcNX0WZe6UQQAW+Y1acRpaDavildHCqqfp5zf8UBT8=;
+        b=u2ZW1L2B+FyOrPAl5XJooLGVcpqC36xBpk+bJEyIceMsLklaU4SD6K+Yz4aTq0lkgI
+         mJyCfYDJtHV+hlFfM5S1+Vx/m2YixaEjUxtLcOqesD2feql8GfzNb2KhJXnEPWYA71U7
+         NxhjxQ+vDydgp/q9ey63CgpZfNscDBr0LXna0K4pz+bixIeq97k/k/ehD8NoS1uDr1cL
+         mgq7IRZqS64JVKECas07wY8M37zdGFABNjs68mXUtJkjHTtoPfCNRvDbRkc26Ee0IKUs
+         pdd493jkK0CIynRmORfYZOcjMJF1OqLtBCpmVeFTllUUVgLtfnZAa0SjhTj9HhJwYDpG
+         sGSw==
+X-Forwarded-Encrypted: i=1; AJvYcCVbikELzI/CYVOJGFiTXdnQwn1ebvBPzKadXNzdctE3F1ONcxuw12mYzoxYN3jNyOiG9ujk3jp/44qX@vger.kernel.org
+X-Gm-Message-State: AOJu0YyU8b9rm0ooDGNKd1dDM/OrN/DGFB45SF7qm+Ta7tj2RLRwcv0M
+	ONyROPN3SEgxqSm3Bu6MyitC8yzkIoRVPouu34wLqW4FBEAhirm4pNIKCApPF+GSZjLBVffFaFO
+	p6xtm6Q==
+X-Google-Smtp-Source: AGHT+IHHZpNGbgjLGw+ZYpoCrFPTV304XH1EL6WE9wIH48O/1tSukWUG1dLDd7KIv/LOoUL3Sr92aGNZzYE=
+X-Received: from pjvp23.prod.google.com ([2002:a17:90a:df97:b0:339:e59f:e26])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90a:d40c:b0:33b:b020:5968
+ with SMTP id 98e67ed59e1d1-34083071b1emr1223925a91.21.1761854998946; Thu, 30
+ Oct 2025 13:09:58 -0700 (PDT)
+Reply-To: Sean Christopherson <seanjc@google.com>
+Date: Thu, 30 Oct 2025 13:09:23 -0700
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-To: linux-mips@vger.kernel.org, Huacai Chen <chenhuacai@kernel.org>,
- Jiaxun Yang <jiaxun.yang@flygoat.com>, Jinyang He <hejinyang@loongson.cn>,
- =?UTF-8?Q?Thomas_Bogend=C3=B6rfer?= <tsbogend@alpha.franken.de>,
- Youling Tang <tangyouling@loongson.cn>
-Content-Language: en-GB, de-DE
-Cc: LKML <linux-kernel@vger.kernel.org>, kernel-janitors@vger.kernel.org,
- Eric Biederman <ebiederm@xmission.com>, Miaoqian Lin <linmq006@gmail.com>
-From: Markus Elfring <Markus.Elfring@web.de>
-Subject: [PATCH] MIPS: Loongson64: Use pointer from memcpy() call for
- assignment in loongson_kexec_prepare()
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:HDnuX2BAkjNSu+EOHCnW/ReiiUh/l6xQmMyYJAcMBeITbqWYpFe
- TNIFWMaKMhPUwcGgtLVu51LkiYsABFTlCOYWPOStkxmkg+CH6YHI9iu+XVQ+xhNkK1nPVlN
- DsFk8ocufFS4HQNiwYgbqkM75uVsla0sRnCKTsFEptWHi7CquXSZ1k6s4htOlEI1LdzU2Kg
- /9uCZRUKTmsBUjPPj5MSg==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:aU1zPsGhGls=;7VV34wt/FdK+TctiU2h0ngBsbeM
- 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
- sKlKlkVsN3a15kP1nmyBAJsWPI=
+Mime-Version: 1.0
+X-Mailer: git-send-email 2.51.1.930.gacf6e81ea2-goog
+Message-ID: <20251030200951.3402865-1-seanjc@google.com>
+Subject: [PATCH v4 00/28] KVM: x86/mmu: TDX post-populate cleanups
+From: Sean Christopherson <seanjc@google.com>
+To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+	Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>, 
+	Huacai Chen <chenhuacai@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Anup Patel <anup@brainfault.org>, Paul Walmsley <pjw@kernel.org>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, Sean Christopherson <seanjc@google.com>, 
+	Paolo Bonzini <pbonzini@redhat.com>, "Kirill A. Shutemov" <kas@kernel.org>
+Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	kvm@vger.kernel.org, loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, x86@kernel.org, linux-coco@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>, 
+	Kai Huang <kai.huang@intel.com>, Binbin Wu <binbin.wu@linux.intel.com>, 
+	Michael Roth <michael.roth@amd.com>, Yan Zhao <yan.y.zhao@intel.com>, 
+	Vishal Annapurve <vannapurve@google.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
+	Ackerley Tng <ackerleytng@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-From: Markus Elfring <elfring@users.sourceforge.net>
-Date: Thu, 30 Oct 2025 20:48:11 +0100
+Non-x86 folks, as with v3, patches 1 and 2 are likely the only thing of
+interest here.  They make kvm_arch_vcpu_async_ioctl() mandatory and then
+rename it to kvm_arch_vcpu_unlocked_ioctl().
 
-A pointer was assigned to a variable. The same pointer was used for
-the destination parameter of a memcpy() call.
-This function is documented in the way that the same value is returned.
-Thus convert two separate statements into a direct variable assignment for
-the return value from a memory copy action.
+As for the x86 side...
 
-The source code was transformed by using the Coccinelle software.
+Clean up the TDX post-populate paths (and many tangentially related paths) to
+address locking issues between gmem and TDX's post-populate hook[*], and
+within KVM itself (KVM doesn't ensure full mutual exclusivity between paths
+that for all intents and purposes the TDX-Module requires to be serialized).
 
-Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
-=2D--
- arch/mips/loongson64/reset.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+I apologize if I missed any trailers or feedback, I think I got everything...
 
-diff --git a/arch/mips/loongson64/reset.c b/arch/mips/loongson64/reset.c
-index 3e20ade0503a..ce412f5616b7 100644
-=2D-- a/arch/mips/loongson64/reset.c
-+++ b/arch/mips/loongson64/reset.c
-@@ -76,8 +76,9 @@ static int loongson_kexec_prepare(struct kimage *image)
- 			 * of parameters (as bootloader does).
- 			 */
- 			int offt;
--			str =3D (char *)argv + KEXEC_ARGV_SIZE/2;
--			memcpy(str, image->segment[i].buf, KEXEC_ARGV_SIZE/2);
-+
-+			str =3D memcpy((char *)argv + KEXEC_ARGV_SIZE / 2, image->segment[i].b=
-uf,
-+				     KEXEC_ARGV_SIZE / 2);
- 			ptr =3D strchr(str, ' ');
-=20
- 			while (ptr && (argc < MAX_ARGS)) {
-=2D-=20
-2.51.1
+[*] http://lore.kernel.org/all/aG_pLUlHdYIZ2luh@google.com
+
+v4:
+ - Collect reviews/acks.
+ - Add a lockdep assertion in kvm_tdp_mmu_map_private_pfn(). [Yan]
+ - Wrap kvm_tdp_mmu_map_private_pfn() with CONFIG_KVM_GUEST_MEMFD=y. [test bot]
+ - Improve (or add) comments. [Kai, and probably others]
+ - s/spte/mirror_spte to make it clear what's being passed in
+ - Update set_external_spte() to take @mirror_spte as well. [Yan]
+ - Move the KVM_BUG_ON() on tdh_mr_extend() failure to the end. [Rick]
+ - Take "all" the locks in tdx_vm_ioctl(). [Kai]
+ - WARN if KVM attempts to map SPTEs into an invalid root. [Yan]
+ - Use tdx_flush_vp_on_cpu() instead of tdx_disassociate_vp() when freeing
+   a vCPU in VCPU_TD_STATE_UNINITIALIZED state. [Yan]
+
+v3:
+ - https://lore.kernel.org/all/20251017003244.186495-1-seanjc@google.com
+ - Collect more reviews.
+ - Add the async_ioctl() => unlocked_ioctl() patches, and use the "unlocked"
+   variant in the TDX vCPU sub-ioctls so they can take kvm->lock outside of
+   vcpu->mutex.
+ - Add a patch to document that vcpu->mutex is taken *outside* kvm->slots_lock.
+ - Add the tdx_vm_state_guard CLASS() to take kvm->lock, all vcpu->mutex locks,
+   and kvm->slots_lock, in order to make tdx_td_init(), tdx_td_finalize(),
+   tdx_vcpu_init_mem_region(), and tdx_vcpu_init() mutually exclusive with
+   each other, and mutually exclusvie with basically anything that can result
+   in contending one of the TDX-Module locks (can't remember which one).
+ - Refine the changelog for the "Drop PROVE_MMU=y" patch. [Binbin]
+
+v2:
+ - Collect a few reviews (and ignore some because the patches went away).
+   [Rick, Kai, Ira]
+ - Move TDH_MEM_PAGE_ADD under mmu_lock and drop nr_premapped. [Yan, Rick]
+ - Force max_level = PG_LEVEL_4K straightaway. [Yan]
+ - s/kvm_tdp_prefault_page/kvm_tdp_page_prefault. [Rick]
+ - Use Yan's version of "Say no to pinning!".  [Yan, Rick]
+ - Tidy up helpers and macros to reduce boilerplate and copy+pate code, and
+   to eliminate redundant/dead code (e.g. KVM_BUG_ON() the same error
+   multiple times).
+ - KVM_BUG_ON() if TDH_MR_EXTEND fails (I convinced myself it can't).
+
+v1: https://lore.kernel.org/all/20250827000522.4022426-1-seanjc@google.com
+
+
+Sean Christopherson (26):
+  KVM: Make support for kvm_arch_vcpu_async_ioctl() mandatory
+  KVM: Rename kvm_arch_vcpu_async_ioctl() to
+    kvm_arch_vcpu_unlocked_ioctl()
+  KVM: TDX: Drop PROVE_MMU=y sanity check on to-be-populated mappings
+  KVM: x86/mmu: Add dedicated API to map guest_memfd pfn into TDP MMU
+  KVM: x86/mmu: WARN if KVM attempts to map into an invalid TDP MMU root
+  Revert "KVM: x86/tdp_mmu: Add a helper function to walk down the TDP
+    MMU"
+  KVM: x86/mmu: Rename kvm_tdp_map_page() to kvm_tdp_page_prefault()
+  KVM: TDX: Return -EIO, not -EINVAL, on a KVM_BUG_ON() condition
+  KVM: TDX: Fold tdx_sept_drop_private_spte() into
+    tdx_sept_remove_private_spte()
+  KVM: x86/mmu: Drop the return code from
+    kvm_x86_ops.remove_external_spte()
+  KVM: TDX: WARN if mirror SPTE doesn't have full RWX when creating
+    S-EPT mapping
+  KVM: TDX: Avoid a double-KVM_BUG_ON() in tdx_sept_zap_private_spte()
+  KVM: TDX: Use atomic64_dec_return() instead of a poor equivalent
+  KVM: TDX: Fold tdx_mem_page_record_premap_cnt() into its sole caller
+  KVM: TDX: ADD pages to the TD image while populating mirror EPT
+    entries
+  KVM: TDX: Fold tdx_sept_zap_private_spte() into
+    tdx_sept_remove_private_spte()
+  KVM: TDX: Combine KVM_BUG_ON + pr_tdx_error() into TDX_BUG_ON()
+  KVM: TDX: Derive error argument names from the local variable names
+  KVM: TDX: Assert that mmu_lock is held for write when removing S-EPT
+    entries
+  KVM: TDX: Add macro to retry SEAMCALLs when forcing vCPUs out of guest
+  KVM: TDX: Add tdx_get_cmd() helper to get and validate sub-ioctl
+    command
+  KVM: TDX: Convert INIT_MEM_REGION and INIT_VCPU to "unlocked" vCPU
+    ioctl
+  KVM: TDX: Use guard() to acquire kvm->lock in tdx_vm_ioctl()
+  KVM: TDX: Don't copy "cmd" back to userspace for KVM_TDX_CAPABILITIES
+  KVM: TDX: Guard VM state transitions with "all" the locks
+  KVM: TDX: Bug the VM if extending the initial measurement fails
+
+Yan Zhao (2):
+  KVM: TDX: Drop superfluous page pinning in S-EPT management
+  KVM: TDX: Fix list_add corruption during vcpu_load()
+
+ arch/arm64/kvm/arm.c               |   6 +
+ arch/loongarch/kvm/Kconfig         |   1 -
+ arch/loongarch/kvm/vcpu.c          |   4 +-
+ arch/mips/kvm/Kconfig              |   1 -
+ arch/mips/kvm/mips.c               |   4 +-
+ arch/powerpc/kvm/Kconfig           |   1 -
+ arch/powerpc/kvm/powerpc.c         |   4 +-
+ arch/riscv/kvm/Kconfig             |   1 -
+ arch/riscv/kvm/vcpu.c              |   4 +-
+ arch/s390/kvm/Kconfig              |   1 -
+ arch/s390/kvm/kvm-s390.c           |   4 +-
+ arch/x86/include/asm/kvm-x86-ops.h |   1 +
+ arch/x86/include/asm/kvm_host.h    |   7 +-
+ arch/x86/kvm/mmu.h                 |   3 +-
+ arch/x86/kvm/mmu/mmu.c             |  87 +++-
+ arch/x86/kvm/mmu/tdp_mmu.c         |  50 +--
+ arch/x86/kvm/vmx/main.c            |   9 +
+ arch/x86/kvm/vmx/tdx.c             | 659 ++++++++++++++---------------
+ arch/x86/kvm/vmx/tdx.h             |   8 +-
+ arch/x86/kvm/vmx/x86_ops.h         |   1 +
+ arch/x86/kvm/x86.c                 |  13 +
+ include/linux/kvm_host.h           |  14 +-
+ virt/kvm/Kconfig                   |   3 -
+ virt/kvm/kvm_main.c                |   6 +-
+ 24 files changed, 468 insertions(+), 424 deletions(-)
+
+
+base-commit: 4cc167c50eb19d44ac7e204938724e685e3d8057
+-- 
+2.51.1.930.gacf6e81ea2-goog
 
 
