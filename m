@@ -1,206 +1,181 @@
-Return-Path: <linux-mips+bounces-11928-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11929-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B4A5C20F49
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Oct 2025 16:34:32 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BA3DC21FFF
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Oct 2025 20:39:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DCF6918876A6
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Oct 2025 15:31:51 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EFE984E0616
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Oct 2025 19:39:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFEC3261B60;
-	Thu, 30 Oct 2025 15:31:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9218F2FD7A0;
+	Thu, 30 Oct 2025 19:38:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XFFZtvmL"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="SWPHrmV7"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.web.de (mout.web.de [212.227.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95BD51E3DCD;
-	Thu, 30 Oct 2025 15:31:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E55101F2C34;
+	Thu, 30 Oct 2025 19:38:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761838283; cv=none; b=EVlyInFj16rSFkA28ebRmtwPGuqaN7VtfdQfzwd50/heNMBNfnIk3mNhLZ9J1Zaj6NWlfdXn2vEWTCPsL05aoyOku/VrPrP2hHzlH1rGF0/nYS5CH4QJjgry8tFR80+1UEA7kpv5bqx3PQBxiQvxGlWGB6ssORyJiEmUIB+5JNk=
+	t=1761853139; cv=none; b=uhx0hMsPcGBz3r+eCdCRZv2EbagohXRQSi1Ba7pag8ho+Usr8YgRGwPcRr889zX8rTH/wn3uBDNPU5saymPWU43XAaZjeMqifVx7KPxo6OxcV2A3cq+w4d0ujgdClMTDsqVxIvjBeNgpaMbLMLbNE5Tiu648B7NiQkN4Pylj08w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761838283; c=relaxed/simple;
-	bh=BQKVwpOXmWrg/NEsihgDHlt6ylYYGyKXQx46PtRBNIE=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition:In-Reply-To; b=kyRUy5mOqNplPbJGsENf9vkzwxjZWNeqalneFJrtajCm6WiOJL1BWNLFwUgHfE4RRIBqH3OUYHyxHmWcOvJOB5IIGat7cKDEzpnHGYSWzBSly8MB8Y1/FIiTn7UHb7vbXKyqM4cRZPOm3WPzoy5KiTz+k6Qu6H3IXEJeFqgjZ+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XFFZtvmL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B243BC4CEF1;
-	Thu, 30 Oct 2025 15:31:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1761838282;
-	bh=BQKVwpOXmWrg/NEsihgDHlt6ylYYGyKXQx46PtRBNIE=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:From;
-	b=XFFZtvmLEsNprsgJCGzuegi3fo25BFtbyMKj/vENFC2KNhctUWYTRw+Ob7OEsPprU
-	 6RLUb4R0FtZX5SuSVghhYpA/qbFQ31O0l8MxxjFENM70+PpO+pvJ7y4nJGg6rYCVSF
-	 f1E/lZIO2nysDztmIhGwZgf77f/GEc/qLlGLVyRJ1bhbGEqIZ0izCUKouYbBbxhPwB
-	 o6ini4Cjp8T6XA47GbGqM/Hcb7VA5Nnpya3KjRlz+AgI/l83VQ/ip73xZZJMLHvUY6
-	 PIR6KCA1wLrqDh7IEl3L0xtmv1duKWtzakHljhYnSWSiCzKNnorQ1GlmH1r7EuGObb
-	 Pl+A6RH05shBg==
-Date: Thu, 30 Oct 2025 10:31:21 -0500
-From: Bjorn Helgaas <helgaas@kernel.org>
-To: Thierry Reding <thierry.reding@gmail.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>, x86@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, linux-mips@vger.kernel.org,
-	loongarch@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
-	linux-sh@vger.kernel.org, linux-pci@vger.kernel.org,
-	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 2/7] MIPS: PCI: Use contextual data instead of global
- variable
-Message-ID: <20251030153121.GA1624982@bhelgaas>
+	s=arc-20240116; t=1761853139; c=relaxed/simple;
+	bh=8FBRzEWP9o32osALYOm9piJ8ROkbp8kMjYaX4Q/uOEY=;
+	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=mtDo0VMFiGW4EbvO7fb8o6K+WAgFcT/G58osD6oo53ODx2DD8OW8ZL9R2jG1EWvgtSECrb+epAzhJCJ8WpmzkyseVjNPJXgeZhVLxzXnxTO4MaTt45cFe4Usecgor2yhuDePyul4jEDz1jcJSMJJyvF1Q3GRNjWrWZPAH8W6yKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=SWPHrmV7; arc=none smtp.client-ip=212.227.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1761853129; x=1762457929; i=markus.elfring@web.de;
+	bh=+77OxXe4H+zEagj7XuwlV+MC6EdOit8F406YA/c3Jpo=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:From:
+	 Subject:Content-Type:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=SWPHrmV7Hx279mcMy7BEmTLJkyPULz4DjIAraY8xlgGr57jfDUr58Vogdz6ucSCK
+	 itcRDYH0RMhnXB6Jz/3oiufVsdK63o7DqPYBWTjUqUGhDC4G+2i8sjdy4u1uHeAeu
+	 h3PUOWwP2QLMFsnWBZGvY8PPGWPu+sp1cWnEliAkuCP8Ap7YoYSWBDKsHLMKwxQKv
+	 fcyadXiIbMAtAtsQURqPwsLUviKwvDFvH/hYQajTSTcoQ0fVaX0UGCy0L4PFWPPdr
+	 KpuZq58PW+XoDZ9442Wk+9nsQIaFbgqcz2bf+X3815IIstS21+uEnMEBjjUgNVd8b
+	 6zYVILeu3HVJUsZd6w==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.29] ([94.31.69.248]) by smtp.web.de (mrweb105
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1N4N9I-1wEahb2UZ4-00rT3n; Thu, 30
+ Oct 2025 20:38:49 +0100
+Message-ID: <2f7c926a-6a23-4b60-b905-859645026e4a@web.de>
+Date: Thu, 30 Oct 2025 20:38:47 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <t3la3jte5tia7rh5ftuv5cchrwdxe4cxa2v3g6lxgoh5u6rmcy@hzw7lbke2vac>
+User-Agent: Mozilla Thunderbird
+To: linux-mips@vger.kernel.org, "David S. Miller" <davem@davemloft.net>,
+ Florian Fainelli <florian@openwrt.org>, Maxime Bizon <mbizon@freebox.fr>,
+ =?UTF-8?Q?Thomas_Bogend=C3=B6rfer?= <tsbogend@alpha.franken.de>
+Content-Language: en-GB, de-DE
+Cc: LKML <linux-kernel@vger.kernel.org>, kernel-janitors@vger.kernel.org,
+ Miaoqian Lin <linmq006@gmail.com>
+From: Markus Elfring <Markus.Elfring@web.de>
+Subject: [PATCH] MIPS: BCM63xx: Use pointer from memcpy() call for assignment
+ in bcm63xx_enet_register()
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:qiVs1KLXinH0W01QzViAIUgFgCD/O4MqncBYb73UGd8lo4wXrA5
+ X5twVb2+PvLXnM+YE4A0wLG2A3bZyy5I5+uWDunMx5A3JzhVzAxYsQmqCs2GLN0WIdExXvi
+ 8/6azKg9YrewAaMpdneTejBewIomYwjn1EyY64OcqeDa3Sgs3vKO07GSC4LHhYhmDfQztKX
+ IyDEmQaOmdXXOFrwbdHsg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:wQxOAj5/7aA=;bn+0dPe7fhFlI+N/5HwFm49uAfq
+ aWTj2rYQQbErx/mlG50W0sIZo63JXEw3uGlZNPepYlq7eMSdvViud+NXC2a3lPu0JFCpmiHTF
+ 7PCYLcgVudVmDd6BLKWhDTaTSQqtQ4deVw9eZo683FM4bQXSwivg8yrZcU3tbUVoSTt+MxF76
+ Q7BxsZ43nA4t2Jb9P+ilCkTAYf++Lhzsau1346AWpYVZwy65kreeAW0XJiMREGAgCPnKlHKHU
+ 41pLRaPBy5WbS3dWmhmAwsGAjWKWtKayW1M55ZF3ydssZrDm8bgv71Y6y/2yXv2yI49bWUNzU
+ 81pjGDNNQVUuw2r78KHRD8quJIJN8xx129s8NL+EamkkfOUMZ3hgj9ijyyIPQhVdnd0VUyd/f
+ MiaHEAGFN0i5M2ksw3No6alqeXvG5eQnK4x3x87bSTY2Otj4U9bQiIMKHD1g6uDxoeQsxoZh7
+ Kp1K+ivc7t+XjWAYyB1mV5x3c3bzsC3Cn5TbPoP0K787F5SbUxiTNPX/f2PmHOmVwVlVFuSQ+
+ gKFSCrBIpGt7NVuTDZKYVvtigloeHYQW92onrjouMiVuRDoUwBio8NEgJqwwZd28xjmlTrNsB
+ JSOutnKmwfa9Kv6bqBRIcSAdskhXMBFvT8FNDFHk794MlJRvdaReJYEl7Y+PU2iVQwyp6tFg/
+ 2eEpWuRHZQr8TyhIUZB7eqRn1Ys6a1HHNDVxe+Q8dQ70UuPIUD7XFFfab+sWIH8ljTZcE8vg4
+ Kizk58ZKSG3sg7FWD2QvfUnj7d1hQJBxp+MGcKdce4cqxf5UHaSp45JLv+XYVfAEVX5L2Iqvj
+ e8EamqIUdSXrGb9hBs/aFGu5b0zeI4KJtCqs3Og74mEGKU++yHJVe9SVlukNKLygIFBvYeTF2
+ +u6kfY00uJm7lhAMQBWhvBxdSrBq3Cv/dGzwlat/Xu3+h93vxLhbUd6LN923mMwl7IXFjtTj1
+ VItgQ7E4+deBpXwJwxUWcvw4UN4xfX+mzt/kwxeNLdmJo46os86601BCJO/PNjOQfK1KARoSJ
+ u4GsyCwznQvShFdhoDacRE93RWj/o9oBTlBr1PE4QhkYm0oT5QHjRiibOnDQtkCZ+TZIkLjco
+ J3H1tL6X9+zB/J7GL2DuUFYf1BjI9hGRS5Vc8zBNK0NOA902LLP0mu1i3/HLa8BMs/e8HRNGg
+ Zf0ZccfzBf6gsXy2+KxL1YAfam+82WCB1eUxtV9pvPAmUYIN1iOxKT8fxhspNfQtWVozav+Lz
+ FUZE7HcfDHulLNSN/xupOdG1VOLFw16PR8ZUOSP8N6WebmEjn+vKpDDi40luaHm1eiWMvH/9M
+ rk+sB70GhX7hX4hhsgtUXPVvJwunzU3AgX0gA7vSK/koCusOonE9QhtigcQXxD2zkjpQDiGpT
+ druloveApYS+YxVPkIUbYrQ5SPk8i1Za+klZSuKHgPK4hAAulR6cvyE0Gah1tpyalc+weBKBj
+ ZiidG/MxG3wkQnKxVdJsp2pJrWw+NEFoFYjUzB6SnMYapkbhPjmbc8bbXxfY3wpSY5ChQ3ohr
+ Jud1eXEfDvwGkXvKLP2a+OLHCoBXDI6jqx+DJNb55jQ2pDL5hoA1G81VBScmmdM/BRm8C95v3
+ kXMu5L6uGdjmUuyx9ydCBnAxMY5CPA8lYI2FfXtv4SyvTIWblyyI8aUcyigA+dhXwV3ohZ7TN
+ XyPmqhHi8fijNsz1OGXTpJAN+dhsGhJvOLGl6BDAG99fnToHPOVCKdtB93/YeejaPFT9/f6ys
+ CgO0z/nz8S2r7Ug/fOEtrgUaWvoWNm13zMCXaO4quywvbTakAHzg6JnYcvMHl4VtJ98hy1BmW
+ 4lfVPPVIggt6yJGSWiQv/ntjm1A28lKjGXMiVe4DwAHusYKgfV1RvUB8VGjfnuL4EUmBqwwfG
+ qZvSP8/PzE647TfJGm9EQvvshUDwikGuDa43ZnYp78HGvIFVXc4HC/IMk8k0KXlg8OwkVtu72
+ V237WJIs5UYquwqidfEcBhUpjf7yUaliOWQgVQ+vh9XKJqLWTI5LDaFuA7auXNyhi5ASEeN2b
+ 9bTKOrO4k6ONDKKZk9gqgyOwm5RwZngiHVazQW1Z8zhn8WUbSPns7cy4ofCu9STkhAoP3Xcmu
+ MifiJPUU02ahJOfKPMhvp1FJ70DCfE/RR9ObEQq0VJRgLGzgNwyX0ZdoisDYJ7sOd3uxrHDh4
+ +pPANl5TqmQGJWMTxP5mC0unluyzLthTu8gvsrFyD3N7jkyWClwJXrt44VDJm1tBOfmScinGS
+ TgDA94C7Hd5YsHhbCfgPP6WAi8w5WLuhTk5jIMSPd6w0djylgx9Us4OGV6urmRixhyGqXQd06
+ /yqrVzcFjOwJQrQdX3//HuUzPcENdQCEz18nm+LcOGfp573MFQWxzAKkLrjy1WE8xkK3Jh+Ce
+ MCfBSiAa1KUeSzWSeHBS0ERQedBTO/jJWWm5ZUo+Mm+SKfdNXd4ZME1WgUlpxhkBmlxsISsih
+ t8GSThV0mIjFM6bICax/1K431PBCgoVTvdi0i3nj9sy76JL5/jhruV0tq5sCFaZH1o70juhVe
+ rcASCCG4jYzWhRtpG08aCUuVdRCS9wKzzB2H/Rf5QhFtBfZxiCHHEk0GpC788YTdB553/O8r0
+ yB/SYAYsPe9W8Mq4ReOS7VJPLtq41irGnEzKpexaNofnyStqT2C6aQwPUqx2LZzylUKnwqTkP
+ RI1MFPadLwEmuVYfOwzPnuEuUObNn5oOz5COxAAAvL9G8F2Kp89kndm5wI9vswCCeHtKuE8Ww
+ xoruqdAeo47RITuBizGT/RRXbwTRuTWHM5tBe7cl7N5s5izfgujcwG82l+eIAiYupkPLi9o+u
+ cJmyHT1yGduDyMGzCyHWaVTjFZf47BHuIIMF4UlfPkaLxH+uCOnSZcD7Ng4oBRdwlc5lJlxZG
+ b+MiPD8ct2gnfqF7uB6dshgOu+taDYW3ZNt1O7FK26hsjBzpErKUscgM2LPfPHMTYY8/TpohQ
+ 1nkDsYrXvQcrWBJMwZJqDsdgMRpjxCl25cxCNtFozj0GCP9om7cop16biCa70BHAIUdafd7T5
+ shThG5QnNcUs6AsD87z5SimhhxQf26n8ovdZTNFpKYVODL1nBwYM+oEg/waBT+xmbVxRp85s/
+ t1JX19rr/FJfT779FIhIHr44fNl4AL2aEnJELiJ7lUY8G6IwbILguFIYBNehWJbWiN2oQBhOR
+ 2Zg8h32tG2DBWqTPN42uLhkPhwpsuNg+Wj8rTdc+CLp0GVlND1E4kdx5y9eqP2dBEk9TIIpSW
+ VkMfD84UYlgYcx8kU4u/e2/QiFGM6nQzteherhXzaOWXTfvhMjY1k7Mg4iKzTrLq5PN2IsJfk
+ VmLiaYO5F3j/4qc/tLitmRiRu+fqoSN1tgOFv/oXpgd66nHOul8c884mXkeNUEho6kaCWXOEe
+ SYH7DaewlILXHaiB7wHGDUuLho+Xd+uvkXzb61P5Bo3VKPAKTrFMSDlpbC2PVO38vJW/aygDE
+ lEAoLDtYo+Eqz+H38A0ON3U+cGBW/vkwHzBSMVGLDnZK7RjuaxYkbx1Q/ODVu9iPZkQdNGZ5H
+ JQLkKRxGzfvo4Pi6XHjIj1BQyXDV/MbxFyfOpjV0iW+X887iDzfTCRCS4IVgQkhx950fNBJLC
+ TavYwHFjX+/brU/xUVDKeC4c0tVMjvONxBLFpa48Y9pf7zEi9QzBNnUmhATMa0YSGaJ97FA+s
+ k2Hbi6ur+cjX4rRL2M7wFzjBvRsf/aUJ9bxVKCfSe3ybwe9E/DHsSfrSOV+pFzP/73b+312TS
+ LIHN9w8Rs//bMb1IK1mPnBBf8/0PHetPrDJZWx41xIFMFcdeXIxEj9CDITvVuAWiQhkC7Ti1X
+ TlEnIaClCGBcVZG4QdwTmENNVsCgsMJDBar88QexCMN0O9mtfmOE6IFDgFtydUHniwDLp2xJM
+ SSjzBY5ByFoyGnCTuhKaIK/V3tPvlIH3IS+JiZKpMLIpYeEJB+4k6Db4MtRXTAAH9ap5mHmvc
+ 9AIpBQTxKaaju7mUpQMsb4FSMbZEmUoK2Q2Q7MkaUCKrI0jC2qU0+NPN3h7TE7tmnOnbggYPf
+ vEgsn2r1YH2lWpwkyN2nPyBpNPtGvSheAHFYMejfJWOZV5heBYzeeU5vJNxVJWrXieL7yyHrH
+ yN2bLYkX7SgjNozoICWrJoc1q8XYU38bsCSlwBzMdnbQgHpJ/X5FYjknEWGYIuA7w5axsJE45
+ 5UmjqgTRQaWsYRI+fz8LnEIUSxAm05x8juMEBMMd5VgMp14y7yOadID2JIIM0lyyy41ehjnKc
+ +JH26qpQv6hkH7yOPsERsUlk5qugdKN+XLYsUKK9h9K27+D7oWVpSP3lIXSyh9IRr3V4nRBL0
+ ugC5NQOmxUFllz1DCtmaAAz4aNyrtex1cM0E/T5VPPoplj9d/+JWOxC/V2IP4r6o5uX9ul9V3
+ M4j2aHXnVTh1ER5qHPDcePCHeRee5N9ofJ60tcW/2+LEAOO598ubgwsCmgYZu214asqqzGZAz
+ dieyWjUeTsXF0cybHG3BvA5V19mLyUMu44g1nkFfknJ7BBaSw+ca72gAXGRxHT/zrJfKVxfce
+ v6oXeUNAsZvyv8m+c0ivTblbsznCmBs5spRdjbeNP7/WPwJHcjXoANAEuHqhKcQGoJnJgYxJ2
+ 9IVKL1VgTdfZIaKuEsfyKeI/vJvdg0dfUthCXy3PZa0QzckUKACQA908eT71t60xkwuFSzoEo
+ BnRn2et5N0dbw92LJ4CAgHntffHkf/wolo4M/5mPhtsKEF7l1VNx/TfVSGGfmbzGHazFNDo+b
+ L+T7BLiTwNPl34FLQ4kgGbRssT48Su+ETaQipEVFEWfKkw3OZLoZDSlxEXdOdzXc9/Cz7MaAu
+ MTxcjDNtWAmr9AxzqxLcrxJgZR+HeQnY0deAPwZUosqNBT2VH19ovkox9fF+Pi+rFjcKGwPKH
+ MPf8OFew4cEkE9JnspU5BEEWTdWUfp2QmezZXmG1fHtXgzcjV1WTHeoolaAP3IgYajjiJTO3N
+ af4y24fHpRZQCsf+lNATrHABudDGn3nWwshDCcnZhrOw8D+oTgNolLQCa4tQkXY4U0eu5qlGg
+ eId7qfgKtLnKWPoJmxJ/28dyCI=
 
-On Thu, Oct 30, 2025 at 01:16:12PM +0100, Thierry Reding wrote:
-> On Wed, Oct 29, 2025 at 12:46:54PM -0500, Bjorn Helgaas wrote:
-> > On Wed, Oct 29, 2025 at 05:33:31PM +0100, Thierry Reding wrote:
-> > > From: Thierry Reding <treding@nvidia.com>
-> > > 
-> > > Pass the driver-specific data via the syscore struct and use it in the
-> > > syscore ops.
+From: Markus Elfring <elfring@users.sourceforge.net>
+Date: Thu, 30 Oct 2025 20:32:07 +0100
 
-> > > +++ b/arch/mips/pci/pci-alchemy.c
-> > > @@ -33,6 +33,7 @@
-> > >  
-> > >  struct alchemy_pci_context {
-> > >  	struct pci_controller alchemy_pci_ctrl; /* leave as first member! */
-> > > +	struct syscore syscore;
-> > >  	void __iomem *regs;			/* ctrl base */
-> > >  	/* tools for wired entry for config space access */
-> > >  	unsigned long last_elo0;
-> > > @@ -46,12 +47,6 @@ struct alchemy_pci_context {
-> > >  	int (*board_pci_idsel)(unsigned int devsel, int assert);
-> > >  };
-> > >  
-> > > -/* for syscore_ops. There's only one PCI controller on Alchemy chips, so this
-> > > - * should suffice for now.
-> > > - */
-> > > -static struct alchemy_pci_context *__alchemy_pci_ctx;
-> > > -
-> > > -
-> > >  /* IO/MEM resources for PCI. Keep the memres in sync with fixup_bigphys_addr
-> > >   * in arch/mips/alchemy/common/setup.c
-> > >   */
-> > > @@ -306,9 +301,7 @@ static int alchemy_pci_def_idsel(unsigned int devsel, int assert)
-> > >  /* save PCI controller register contents. */
-> > >  static int alchemy_pci_suspend(void *data)
-> > >  {
-> > > -	struct alchemy_pci_context *ctx = __alchemy_pci_ctx;
-> > > -	if (!ctx)
-> > > -		return 0;
-> > > +	struct alchemy_pci_context *ctx = data;
-> > >  
-> > >  	ctx->pm[0]  = __raw_readl(ctx->regs + PCI_REG_CMEM);
-> > >  	ctx->pm[1]  = __raw_readl(ctx->regs + PCI_REG_CONFIG) & 0x0009ffff;
-> > > @@ -328,9 +321,7 @@ static int alchemy_pci_suspend(void *data)
-> > >  
-> > >  static void alchemy_pci_resume(void *data)
-> > >  {
-> > > -	struct alchemy_pci_context *ctx = __alchemy_pci_ctx;
-> > > -	if (!ctx)
-> > > -		return;
-> > > +	struct alchemy_pci_context *ctx = data;
-> > >  
-> > >  	__raw_writel(ctx->pm[0],  ctx->regs + PCI_REG_CMEM);
-> > >  	__raw_writel(ctx->pm[2],  ctx->regs + PCI_REG_B2BMASK_CCH);
-> > > @@ -359,10 +350,6 @@ static const struct syscore_ops alchemy_pci_syscore_ops = {
-> > >  	.resume = alchemy_pci_resume,
-> > >  };
-> > >  
-> > > -static struct syscore alchemy_pci_syscore = {
-> > > -	.ops = &alchemy_pci_syscore_ops,
-> > > -};
-> > > -
-> > >  static int alchemy_pci_probe(struct platform_device *pdev)
-> > >  {
-> > >  	struct alchemy_pci_platdata *pd = pdev->dev.platform_data;
-> > > @@ -480,9 +467,10 @@ static int alchemy_pci_probe(struct platform_device *pdev)
-> > >  	__raw_writel(val, ctx->regs + PCI_REG_CONFIG);
-> > >  	wmb();
-> > >  
-> > > -	__alchemy_pci_ctx = ctx;
-> > >  	platform_set_drvdata(pdev, ctx);
-> > > -	register_syscore(&alchemy_pci_syscore);
-> > > +	ctx->syscore.ops = &alchemy_pci_syscore_ops;
-> > > +	ctx->syscore.data = ctx;
-> > > +	register_syscore(&ctx->syscore);
-> > 
-> > As far as I can tell, the only use of syscore in this driver is for
-> > suspend/resume.
-> > 
-> > This is a regular platform_device driver, so instead of syscore, I
-> > think it should use generic power management like other PCI host
-> > controller drivers do, something like this:
-> > 
-> >   static int alchemy_pci_suspend_noirq(struct device *dev)
-> >   ...
-> > 
-> >   static int alchemy_pci_resume_noirq(struct device *dev)
-> >   ...
-> > 
-> >   static DEFINE_NOIRQ_DEV_PM_OPS(alchemy_pci_pm_ops,
-> >                                  alchemy_pci_suspend_noirq,
-> >                                  alchemy_pci_resume_noirq);
-> > 
-> >   static struct platform_driver alchemy_pcictl_driver = {
-> >           .probe          = alchemy_pci_probe,
-> >           .driver = {
-> >                   .name   = "alchemy-pci",
-> >                   .pm     = pm_sleep_ptr(&alchemy_pci_pm_ops),
-> >           },
-> >   };
-> > 
-> > Here's a sample in another driver:
-> > https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/pci/controller/cadence/pci-j721e.c?id=v6.17#n663
-> 
-> I thought so too, but then I looked at the history and saw that it was
-> initially regular PM ops and then fixed by using syscore in this commit:
-> 
->     commit 864c6c22e9a5742b0f43c983b6c405d52817bacd
->     Author: Manuel Lauss <manuel.lauss@googlemail.com>
->     Date:   Wed Nov 16 15:42:28 2011 +0100
->     
->         MIPS: Alchemy: Fix PCI PM
->     
->         Move PCI Controller PM to syscore_ops since the platform_driver PM methods
->         are called way too late on resume and far too early on suspend (after and
->         before PCI device resume/suspend).
->         This also allows to simplify wired entry management a bit.
->     
->         Signed-off-by: Manuel Lauss <manuel.lauss@googlemail.com>
->         Cc: linux-mips@linux-mips.org
->         Patchwork: https://patchwork.linux-mips.org/patch/3007/
->         Signed-off-by: Ralf Baechle <ralf@linux-mips.org>
+A pointer was assigned to a variable. The same pointer was used for
+the destination parameter of a memcpy() call.
+This function is documented in the way that the same value is returned.
+Thus convert two separate statements into a direct variable assignment for
+the return value from a memory copy action.
 
-The alchemy PCI controller is a platform_device, and it must be
-initialized before enumerating the PCI devices below it.  The same
-order should apply for suspend/resume (suspend PCI devices, then PCI
-controller; resume PCI controller, then PCI devices).
+The source code was transformed by using the Coccinelle software.
 
-So if this didn't work before, I think it means something is messed up
-with the device hierarchy.
+Signed-off-by: Markus Elfring <elfring@users.sourceforge.net>
+=2D--
+ arch/mips/bcm63xx/dev-enet.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-But I understand the difficulty of testing changes here, so syscore is
-simplest from that point of view.
+diff --git a/arch/mips/bcm63xx/dev-enet.c b/arch/mips/bcm63xx/dev-enet.c
+index 8e73d65f3480..7a17135e8f13 100644
+=2D-- a/arch/mips/bcm63xx/dev-enet.c
++++ b/arch/mips/bcm63xx/dev-enet.c
+@@ -243,8 +243,7 @@ int __init bcm63xx_enet_register(int unit,
+ 	}
+=20
+ 	/* copy given platform data */
+-	dpd =3D pdev->dev.platform_data;
+-	memcpy(dpd, pd, sizeof(*pd));
++	dpd =3D memcpy(pdev->dev.platform_data, pd, sizeof(*pd));
+=20
+ 	/* adjust them in case internal phy is used */
+ 	if (dpd->use_internal_phy) {
+=2D-=20
+2.51.1
 
-It does complicate maintenance though.  I think all of mips ultimately
-uses register_pci_controller() and pcibios_scanbus().  Neither really
-contains anything mips-specific, so they duplicate a lot of the code
-in pci_host_probe().  Oh well, I guess that's part of the burden of
-supporting old platforms forever.
-
-Bjorn
 
