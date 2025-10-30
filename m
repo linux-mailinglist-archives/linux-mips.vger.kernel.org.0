@@ -1,72 +1,72 @@
-Return-Path: <linux-mips+bounces-11935-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-11936-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D60FC22248
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Oct 2025 21:11:24 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 543F5C22263
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Oct 2025 21:12:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 192433A17D8
-	for <lists+linux-mips@lfdr.de>; Thu, 30 Oct 2025 20:11:23 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id E9FE54EFA66
+	for <lists+linux-mips@lfdr.de>; Thu, 30 Oct 2025 20:11:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0712037DBF9;
-	Thu, 30 Oct 2025 20:10:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CB8E375744;
+	Thu, 30 Oct 2025 20:10:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="UD9OJHc/"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="gz7K7LCI"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C28A336E369
-	for <linux-mips@vger.kernel.org>; Thu, 30 Oct 2025 20:10:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E45EB37DBF3
+	for <linux-mips@vger.kernel.org>; Thu, 30 Oct 2025 20:10:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761855011; cv=none; b=lz7gxaN8zbVxxLDwgWnIKzCfEBz/P2H06wLZqExvEKkj4PJOus8Hmq8h2zDCKSuJL3UScbfutJ0Y5GXbwFS9FMIV0UhBbdDD6RDweg1rnw9c1Db3Ew8uPmE2UCCg832TFWpYBS2x5/4r8FRHD+ChpfRtpb5GUckOH+KsXHH5BBc=
+	t=1761855013; cv=none; b=sBJ0WZHWftacl5guwDLVHQI/XjN7ujYl9AW/ienApMrViyaRbv5C0dp/47fYEEvd2kexnhWTO5AQmhLHHajVz8+bVo45hfXH18Qy8gP/WodrMFxEEyyi7s868NENPyB+d5F5rc/SaRJukjBzb/zCQoMQ9f0FoJNF6vvkBvvIV8Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761855011; c=relaxed/simple;
-	bh=SegAjPYWds/TZjfbFAHGrF/2ieYqFxZV5by845zNTko=;
+	s=arc-20240116; t=1761855013; c=relaxed/simple;
+	bh=Q2c6cNYSKoGYP4CYOI8nHGq0kI85fWBL8NZOIPZmdhU=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=C9wCfYHctHeGMaPTLj93vMzJ7Z4FqJLtMvGUSdk6Zq9Y1n79yC6F+nEAyxZvdkSCaNvv99CDoVtMgxkTJYDeNDK200KsUQc0oEF6jrKeLjgt+1JNXaa2XhsllrNOoQFwqKRjMMpgVZuZtTVfcOk24M8sIhJiBbT4+NP9KvhHiK4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=UD9OJHc/; arc=none smtp.client-ip=209.85.214.201
+	 To:Cc:Content-Type; b=Yi45Y8xIi9qRx2JdAv/6HuyR0jYs/iEYFOTfs3FeYXp6QbV3tTfFbi7h1qcpXQSOpLvrVrTIm3w3U1Ro4bJJaAd5pQEzX8AXai1fwif1K/9qzHdA5T2FlREjk4M4X2PtslUM74eg4s21ffQAUpX2IHXmkAnle8/XCO6i5s6AWxM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=gz7K7LCI; arc=none smtp.client-ip=209.85.216.73
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-286a252bfbfso34206835ad.3
-        for <linux-mips@vger.kernel.org>; Thu, 30 Oct 2025 13:10:09 -0700 (PDT)
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-340299fd99dso1342752a91.0
+        for <linux-mips@vger.kernel.org>; Thu, 30 Oct 2025 13:10:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761855009; x=1762459809; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1761855011; x=1762459811; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:from:to:cc:subject:date:message-id:reply-to;
-        bh=AWjqyewTSxAo5goVGUIy0m+TBQ84l/fAmH7ugD3Pbw4=;
-        b=UD9OJHc/7JqtGgwFVcDVc4qgv8mXaW2u7Z34roFs07bt58HlbkvHDW1LFWpNKSjxFW
-         HRUndqlqW6aieMeJlQNBF/wl5o4MbYVLWj8yi9mT3h9WgQsqepjU+IWofHAKlVrqAbak
-         xJBtPeam5th83Uyvf9RI/g7ZYEPFk0i9ROmEg34o5FCgrl7J+7BFB82KpOR9/l1Fn1hV
-         Gjyj6REuCKSeyAGBPAxWmRqml85aScc7sQiPwh0nUEmZ7ayf51FOpahmZw4Ptk2PTbP8
-         Nu86YnVVDoVMtKt/tr4HnIMaQGFrZQhQXI0CE/1gOIMbV2XEk1V9OzY0tUF3vsBVtJ5v
-         NLbw==
+        bh=pr+88J8V2FFjpoCz/RKjLuOTT6WQDejtYqs45iSU51c=;
+        b=gz7K7LCIaED4skeuMQNZUqP4NIJ3bX8PQX7dV1566hqiO8b+/xoA1fJs2faKHA5s6K
+         UYNXrO8Du5eb91L7nSf/+bG0YCwXt3xfDAJGZG7rIg9tfnKBGSY+3wmDO/YTfoHgGo+8
+         WZINsmqtOq8GGvfVvCf4pRALkAuA7NHbuyDsQReEVv0gW2aeKgp1xiULY3W/CSx3mnN5
+         u3CShr1dkTerZL99tpypYYiKfQa/P0Xqo88tSHukNKBoMXDk2Q+goD6i4ldmD0x0ly1r
+         JxiSsW92L1xw+KJjE+ukd+MSLBIBfjIFTYzt2zielD2sUYUA1fLnHn+JPcrP0TSZZDJ5
+         kQEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761855009; x=1762459809;
+        d=1e100.net; s=20230601; t=1761855011; x=1762459811;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:reply-to:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=AWjqyewTSxAo5goVGUIy0m+TBQ84l/fAmH7ugD3Pbw4=;
-        b=dTlfEUorTp8CPDUTKMvxvOzm0W8KwUj8nMS5M7Ag7jb+ODXK8ExSQ+6Ax9OWTSfnMY
-         Y/FhIu8mAvYcDxGBpyl3CKVf922CuTB8FVze4nONc5E1uZGGtBks+y9m7zvADUwiW+I/
-         4FZSdJql/SAkyMRPWy/ra/6nrhn7NOH6ucPyzjRJRA4Lded2koNg77esNlKsOmRhaNi7
-         W7Smz6WDGEkr41do8sDHmzcxBk9uG6MQBvSybfLufBSa8PvTRvCwGR2lsCXtOZwpKPQy
-         MZ+5aS1w/mkvG5u6QZBhqRQQcr9zCLdkscsYoxXH5LXyG7gKUYpywEqM4/nQT3SNSV5I
-         Q6rQ==
-X-Forwarded-Encrypted: i=1; AJvYcCU3uy2GssPvEKvuncH3yJr0xm6yhmCammVqP5XfzzLhjzI9zMmf4kIqRQ9NlpyDen/fWc4/dpvggJdc@vger.kernel.org
-X-Gm-Message-State: AOJu0YzPAIUE+SQ3AkhFB1ESSEFBqQOrEN8nS7fqVrSVgm7FoPooJb3M
-	1mXwf1jTlsSEIniIdIL1y48lv9G/eH4+XQ8ZGogJESQrkF4qpUUauwybdK35iRlmn0jRcnobzhJ
-	yVaKzTA==
-X-Google-Smtp-Source: AGHT+IEOd6dhhOrMyLm5rAPRaBNRm2puNA7otVNJLczO2HSlc5/6mK5syWdypSUA75SSISTWcIWOwk769kE=
-X-Received: from plkn2.prod.google.com ([2002:a17:902:6a82:b0:292:4a9c:44cf])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:903:2452:b0:267:a55a:8684
- with SMTP id d9443c01a7336-2951a36417cmr13224335ad.2.1761855009104; Thu, 30
- Oct 2025 13:10:09 -0700 (PDT)
+        bh=pr+88J8V2FFjpoCz/RKjLuOTT6WQDejtYqs45iSU51c=;
+        b=XAk1g/YkLx+6dH0FS460G96M6UxFUNTXgEccJuBwnaLq3yXTlBZ1UjcKm3JTJnrJDv
+         nXpLaGiUgW36LsZkGHnxKc/G/iCDWC8KqxmEX1SOS0H/rrGHHMi1SU7+8Po1ROh0NZ3s
+         UYeUX0NvRQSJ1YG+ZOvdWg5HFgBe/NQo5zxXy+WmvIAH/wptRVmCPbDUxyFaIjQMWK/C
+         4ojgplu3w9ml5H+gRUVEyjpUn5qorZnYaxDhf+9AKc80m1J2po67FkqSIaOs4sGq/bOD
+         NL9FvFiFRFUOshcDKuzI0bSqABX5l6P1znN8n6lN5KmjoM2eAcY5mksVttGvk5JyKtb3
+         DiNg==
+X-Forwarded-Encrypted: i=1; AJvYcCV9VQ3+2I8t5XdHu6n4imLNPcd4AKkTgFFDzCTjxrVpBBcLQKShg/m+31nAIY/k12azW/5+dWtq3Xap@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZGK3kuwtEWVox/TjbfmpYOUI3IbnWRT8eVjWwf2keXOr8QmBy
+	MAvvlOMhBYitdiNYFwadok3NHuYbJ6J5zWyf6sNFUI3udBfmLGyhRdqSLygfs0DBP3rEicc+AV5
+	hKOqYLg==
+X-Google-Smtp-Source: AGHT+IHqKKH3jALoT7jRe2OHIQ2mXXV+pELYiJKGwKEjf4ZIM+twJ+5jG3TjV8eGRlfpIUNYgujs+bg0n4E=
+X-Received: from pjji4.prod.google.com ([2002:a17:90a:6504:b0:33b:dccb:b328])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:4c8d:b0:33f:ebc2:63a
+ with SMTP id 98e67ed59e1d1-34082fc2cb0mr1192488a91.14.1761855011296; Thu, 30
+ Oct 2025 13:10:11 -0700 (PDT)
 Reply-To: Sean Christopherson <seanjc@google.com>
-Date: Thu, 30 Oct 2025 13:09:27 -0700
+Date: Thu, 30 Oct 2025 13:09:28 -0700
 In-Reply-To: <20251030200951.3402865-1-seanjc@google.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -76,9 +76,9 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20251030200951.3402865-1-seanjc@google.com>
 X-Mailer: git-send-email 2.51.1.930.gacf6e81ea2-goog
-Message-ID: <20251030200951.3402865-5-seanjc@google.com>
-Subject: [PATCH v4 04/28] KVM: x86/mmu: Add dedicated API to map guest_memfd
- pfn into TDP MMU
+Message-ID: <20251030200951.3402865-6-seanjc@google.com>
+Subject: [PATCH v4 05/28] KVM: x86/mmu: WARN if KVM attempts to map into an
+ invalid TDP MMU root
 From: Sean Christopherson <seanjc@google.com>
 To: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
 	Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>, 
@@ -99,191 +99,28 @@ Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
 	Ackerley Tng <ackerleytng@google.com>
 Content-Type: text/plain; charset="UTF-8"
 
-Add and use a new API for mapping a private pfn from guest_memfd into the
-TDP MMU from TDX's post-populate hook instead of partially open-coding the
-functionality into the TDX code.  Sharing code with the pre-fault path
-sounded good on paper, but it's fatally flawed as simulating a fault loses
-the pfn, and calling back into gmem to re-retrieve the pfn creates locking
-problems, e.g. kvm_gmem_populate() already holds the gmem invalidation
-lock.
+When mapping into the TDP MMU, WARN (if KVM_PROVE_MMU=y) if the root is
+invalid, e.g. if KVM is attempting to insert a mapping without checking if
+the information and MMU context is fresh.
 
-Providing a dedicated API will also removing several MMU exports that
-ideally would not be exposed outside of the MMU, let alone to vendor code.
-On that topic, opportunistically drop the kvm_mmu_load() export.  Leave
-kvm_tdp_mmu_gpa_is_mapped() alone for now; the entire commit that added
-kvm_tdp_mmu_gpa_is_mapped() will be removed in the near future.
-
-Gate the API on CONFIG_KVM_GUEST_MEMFD=y as private memory _must_ be backed
-by guest_memfd.  Add a lockdep-only assert to that the incoming pfn is
-indeed backed by guest_memfd, and that the gmem instance's invalidate lock
-is held (which, combined with slots_lock being held, obviates the need to
-check for a stale "fault").
-
-Cc: Michael Roth <michael.roth@amd.com>
-Cc: Yan Zhao <yan.y.zhao@intel.com>
-Cc: Ira Weiny <ira.weiny@intel.com>
-Cc: Vishal Annapurve <vannapurve@google.com>
-Cc: Rick Edgecombe <rick.p.edgecombe@intel.com>
-Reviewed-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
-Reviewed-by: Kai Huang <kai.huang@intel.com>
-Link: https://lore.kernel.org/all/20250709232103.zwmufocd3l7sqk7y@amd.com
 Signed-off-by: Sean Christopherson <seanjc@google.com>
 ---
- arch/x86/kvm/mmu.h     |  1 +
- arch/x86/kvm/mmu/mmu.c | 81 +++++++++++++++++++++++++++++++++++++++++-
- arch/x86/kvm/vmx/tdx.c | 10 ++----
- 3 files changed, 84 insertions(+), 8 deletions(-)
+ arch/x86/kvm/mmu/tdp_mmu.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/arch/x86/kvm/mmu.h b/arch/x86/kvm/mmu.h
-index f63074048ec6..2f108e381959 100644
---- a/arch/x86/kvm/mmu.h
-+++ b/arch/x86/kvm/mmu.h
-@@ -259,6 +259,7 @@ extern bool tdp_mmu_enabled;
+diff --git a/arch/x86/kvm/mmu/tdp_mmu.c b/arch/x86/kvm/mmu/tdp_mmu.c
+index c5734ca5c17d..440fd8f80397 100644
+--- a/arch/x86/kvm/mmu/tdp_mmu.c
++++ b/arch/x86/kvm/mmu/tdp_mmu.c
+@@ -1273,6 +1273,8 @@ int kvm_tdp_mmu_map(struct kvm_vcpu *vcpu, struct kvm_page_fault *fault)
+ 	struct kvm_mmu_page *sp;
+ 	int ret = RET_PF_RETRY;
  
- bool kvm_tdp_mmu_gpa_is_mapped(struct kvm_vcpu *vcpu, u64 gpa);
- int kvm_tdp_map_page(struct kvm_vcpu *vcpu, gpa_t gpa, u64 error_code, u8 *level);
-+int kvm_tdp_mmu_map_private_pfn(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn);
++	KVM_MMU_WARN_ON(!root || root->role.invalid);
++
+ 	kvm_mmu_hugepage_adjust(vcpu, fault);
  
- static inline bool kvm_memslots_have_rmaps(struct kvm *kvm)
- {
-diff --git a/arch/x86/kvm/mmu/mmu.c b/arch/x86/kvm/mmu/mmu.c
-index 18d69d48bc55..bad0480bdb0d 100644
---- a/arch/x86/kvm/mmu/mmu.c
-+++ b/arch/x86/kvm/mmu/mmu.c
-@@ -5014,6 +5014,86 @@ long kvm_arch_vcpu_pre_fault_memory(struct kvm_vcpu *vcpu,
- 	return min(range->size, end - range->gpa);
- }
- 
-+#ifdef CONFIG_KVM_GUEST_MEMFD
-+static void kvm_assert_gmem_invalidate_lock_held(struct kvm_memory_slot *slot)
-+{
-+#ifdef CONFIG_PROVE_LOCKING
-+	if (WARN_ON_ONCE(!kvm_slot_has_gmem(slot)) ||
-+	    WARN_ON_ONCE(!slot->gmem.file) ||
-+	    WARN_ON_ONCE(!file_count(slot->gmem.file)))
-+		return;
-+
-+	lockdep_assert_held(&file_inode(slot->gmem.file)->i_mapping->invalidate_lock);
-+#endif
-+}
-+
-+int kvm_tdp_mmu_map_private_pfn(struct kvm_vcpu *vcpu, gfn_t gfn, kvm_pfn_t pfn)
-+{
-+	struct kvm_page_fault fault = {
-+		.addr = gfn_to_gpa(gfn),
-+		.error_code = PFERR_GUEST_FINAL_MASK | PFERR_PRIVATE_ACCESS,
-+		.prefetch = true,
-+		.is_tdp = true,
-+		.nx_huge_page_workaround_enabled = is_nx_huge_page_enabled(vcpu->kvm),
-+
-+		.max_level = PG_LEVEL_4K,
-+		.req_level = PG_LEVEL_4K,
-+		.goal_level = PG_LEVEL_4K,
-+		.is_private = true,
-+
-+		.gfn = gfn,
-+		.slot = kvm_vcpu_gfn_to_memslot(vcpu, gfn),
-+		.pfn = pfn,
-+		.map_writable = true,
-+	};
-+	struct kvm *kvm = vcpu->kvm;
-+	int r;
-+
-+	lockdep_assert_held(&kvm->slots_lock);
-+
-+	/*
-+	 * Mapping a pre-determined private pfn is intended only for use when
-+	 * populating a guest_memfd instance.  Assert that the slot is backed
-+	 * by guest_memfd and that the gmem instance's invalidate_lock is held.
-+	 */
-+	kvm_assert_gmem_invalidate_lock_held(fault.slot);
-+
-+	if (KVM_BUG_ON(!tdp_mmu_enabled, kvm))
-+		return -EIO;
-+
-+	if (kvm_gfn_is_write_tracked(kvm, fault.slot, fault.gfn))
-+		return -EPERM;
-+
-+	r = kvm_mmu_reload(vcpu);
-+	if (r)
-+		return r;
-+
-+	r = mmu_topup_memory_caches(vcpu, false);
-+	if (r)
-+		return r;
-+
-+	do {
-+		if (signal_pending(current))
-+			return -EINTR;
-+
-+		if (kvm_test_request(KVM_REQ_VM_DEAD, vcpu))
-+			return -EIO;
-+
-+		cond_resched();
-+
-+		guard(read_lock)(&kvm->mmu_lock);
-+
-+		r = kvm_tdp_mmu_map(vcpu, &fault);
-+	} while (r == RET_PF_RETRY);
-+
-+	if (r != RET_PF_FIXED)
-+		return -EIO;
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_FOR_KVM_INTERNAL(kvm_tdp_mmu_map_private_pfn);
-+#endif
-+
- static void nonpaging_init_context(struct kvm_mmu *context)
- {
- 	context->page_fault = nonpaging_page_fault;
-@@ -5997,7 +6077,6 @@ int kvm_mmu_load(struct kvm_vcpu *vcpu)
- out:
- 	return r;
- }
--EXPORT_SYMBOL_FOR_KVM_INTERNAL(kvm_mmu_load);
- 
- void kvm_mmu_unload(struct kvm_vcpu *vcpu)
- {
-diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
-index 4c3014befe9f..29f344af4cc2 100644
---- a/arch/x86/kvm/vmx/tdx.c
-+++ b/arch/x86/kvm/vmx/tdx.c
-@@ -3157,15 +3157,12 @@ struct tdx_gmem_post_populate_arg {
- static int tdx_gmem_post_populate(struct kvm *kvm, gfn_t gfn, kvm_pfn_t pfn,
- 				  void __user *src, int order, void *_arg)
- {
--	u64 error_code = PFERR_GUEST_FINAL_MASK | PFERR_PRIVATE_ACCESS;
--	struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
- 	struct tdx_gmem_post_populate_arg *arg = _arg;
--	struct kvm_vcpu *vcpu = arg->vcpu;
-+	struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
-+	u64 err, entry, level_state;
- 	gpa_t gpa = gfn_to_gpa(gfn);
--	u8 level = PG_LEVEL_4K;
- 	struct page *src_page;
- 	int ret, i;
--	u64 err, entry, level_state;
- 
- 	/*
- 	 * Get the source page if it has been faulted in. Return failure if the
-@@ -3177,7 +3174,7 @@ static int tdx_gmem_post_populate(struct kvm *kvm, gfn_t gfn, kvm_pfn_t pfn,
- 	if (ret != 1)
- 		return -ENOMEM;
- 
--	ret = kvm_tdp_map_page(vcpu, gpa, error_code, &level);
-+	ret = kvm_tdp_mmu_map_private_pfn(arg->vcpu, gfn, pfn);
- 	if (ret < 0)
- 		goto out;
- 
-@@ -3240,7 +3237,6 @@ static int tdx_vcpu_init_mem_region(struct kvm_vcpu *vcpu, struct kvm_tdx_cmd *c
- 	    !vt_is_tdx_private_gpa(kvm, region.gpa + (region.nr_pages << PAGE_SHIFT) - 1))
- 		return -EINVAL;
- 
--	kvm_mmu_reload(vcpu);
- 	ret = 0;
- 	while (region.nr_pages) {
- 		if (signal_pending(current)) {
+ 	trace_kvm_mmu_spte_requested(fault);
 -- 
 2.51.1.930.gacf6e81ea2-goog
 
