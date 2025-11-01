@@ -1,139 +1,239 @@
-Return-Path: <linux-mips+bounces-12003-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12006-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 67301C26734
-	for <lists+linux-mips@lfdr.de>; Fri, 31 Oct 2025 18:45:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF68BC27A19
+	for <lists+linux-mips@lfdr.de>; Sat, 01 Nov 2025 09:54:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D704E563C86
-	for <lists+linux-mips@lfdr.de>; Fri, 31 Oct 2025 17:37:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 278F93BFB81
+	for <lists+linux-mips@lfdr.de>; Sat,  1 Nov 2025 08:54:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 84C6A308F1A;
-	Fri, 31 Oct 2025 17:34:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00E2C2BD036;
+	Sat,  1 Nov 2025 08:54:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="3TLlFyOs"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="A2VnnmlP"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9FE4B33E374
-	for <linux-mips@vger.kernel.org>; Fri, 31 Oct 2025 17:34:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAC0A2765DF;
+	Sat,  1 Nov 2025 08:53:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1761932095; cv=none; b=u9jCFo9OeWCUXSy6egeLljRixANIMmk5Q73D3vtoccoyM5yce4qbbd5WuIThWAQgsrtynaiHRBdhJ0PaDuw1eVr84otLIHfgMGO9blw1DwLwTz7ZXUQbqGTFn/w5BSR5iznhLwMkfesRAqTZD/4Z5MlrGZBZKRjtspsjPjnuQO0=
+	t=1761987239; cv=none; b=Y9u/LUxVGDev+OPEuJPuc7NG7r6PHBZNJhXBptUV5fnjxDEWGNWi6aBvBxlap0/eNv7gTMwW1mIOZfNVItYgJQGhcwnCo9raqUupQ69ztoElUQV7XhtPnZ0DpXtCPOkzffA3nGRv4dRATev8B3A90wNivTUcs33F83CLE6WYRS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1761932095; c=relaxed/simple;
-	bh=tRSFG9dRXG0FAWpU/Id6Zgckz1056dIV6+Bvj3jPwAc=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=PMPIn+E9A0OV9QUoId+49E8ceyD0EwFWeRa0zssl7ok0k0VlxP+kq1qcm0pfu3GsLzqbuRK8W1drb4OAYqgDPTn7pqMl5eqEnW5L+DmUytnJopxsFzV7cl+9L2KOtSU7/i5uHoUxv+2kpHDx7VeL6jH91iFNgC9+d+MEr+0cKy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=3TLlFyOs; arc=none smtp.client-ip=209.85.216.73
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
-Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-3407734d98bso1859937a91.3
-        for <linux-mips@vger.kernel.org>; Fri, 31 Oct 2025 10:34:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1761932093; x=1762536893; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LtnXaqdbVR8gOvpEPR+6l9cfgKr6bsCXJtfhHUXOVv8=;
-        b=3TLlFyOsKZ39E3sP6F/sSgzfKLTE/aLQmWLs6nTpdumA2BQLMnXZaz4g4Ijjh9X020
-         yzhlz3MQSfUwiLkHevuUuP6mFg/J8NIjBrZXeOk4gA0HUd30/Eu6Kr3vmVpPiZFc/JBd
-         ME1qC+7XylwakWIEppEi3OFJULxxgsraCG0n0iqAjy60azEXEE1I6f8XCnPKSDWh7Xty
-         Z1k0luwe1bzeGknhtm8KyNoTF0jgcRG9lHJuonwW5w0cGxy8W0vwnoyj3UchghrcOEeL
-         Wg3sTxPDD3j45S2+9eIzWgnSyYA/md23HEQivpyw6xIrBagfmg8B2dCkBbREYSzCrwL5
-         qpdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1761932093; x=1762536893;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=LtnXaqdbVR8gOvpEPR+6l9cfgKr6bsCXJtfhHUXOVv8=;
-        b=sQk63wGsdtgouPGbm2SI7cdeQXT3JWZK2kVO+oS1thSA5Nix5IfJlvFRVGjuTFLAUs
-         C7WzU7ViqRLgJ4K2R7Xx6uaQ9TTbqOCLiUAzUA5cqgJ+ya42XT6s+u7ovGsWSTn7yGWh
-         +2o7QvjUzMq/PYDEQRArJSsfLcWUDzjYn2C38rbfHpwnv0LP5FPtFq+OSmFE95DfXZh9
-         psmoQWUm5QQB7w1mb6zdgcJjNn7en6RgV3GoLUg524hOD8QhoM5E364YazZMJwRHVszB
-         OPgjfHY1i8OxfFY0CKIoDDXkLYd51uAO8NN1aZy+Jnlrp3i26/UQC9vsF0fNzdMIsZ4i
-         PL5g==
-X-Forwarded-Encrypted: i=1; AJvYcCXSMjUONh2Lt/n4sQ6wOedv2qY9GROffTdnutdcbWDhsQIAn0SdAM46XhA3ZgejCTZ0H8CyH3rzkSOK@vger.kernel.org
-X-Gm-Message-State: AOJu0YxI2FFbgcL9y3GvP5aOLzOvSVs6er5SgtTNzzRYAYLLB1fDe2+W
-	+qdtAeLhtrNluEJC/pvrkAkW5mHTQFOmXC5JxrGbOif0c6ec/oSAWWFaEBrTcGBWo/SPQ+5Pso9
-	306e3tg==
-X-Google-Smtp-Source: AGHT+IEhd62pQuR9tjnc3Il5ckB3BFxieNfGOf0XAASHT7mISEiuLVbYaHxfkZsCDA/umOxHYLwWX5NLxe4=
-X-Received: from pjbmg14.prod.google.com ([2002:a17:90b:370e:b0:33e:34c2:1e17])
- (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90a:fc4b:b0:32e:5646:d43f
- with SMTP id 98e67ed59e1d1-3408306e65fmr6078929a91.19.1761932092859; Fri, 31
- Oct 2025 10:34:52 -0700 (PDT)
-Date: Fri, 31 Oct 2025 10:34:51 -0700
-In-Reply-To: <aQRyyieyDrZZMpIt@yzhao56-desk.sh.intel.com>
+	s=arc-20240116; t=1761987239; c=relaxed/simple;
+	bh=7aX/PBEQrcbuyC9aErsxSQEAD1hQ8eoMRzgU5nSYlKI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=PsD0I5gKGaPkqebcWRQLsXHTdkVnRJVXkBXTTkWqdu/S44xqYt1nkY/78pDrAlEX72afTxUr1b2zqnHfdxjdTCvWz8vZljfnbp+nBTZ299m17+28DkGFtxIZo56pQsOZnR5yoaNNSEECXCVh1UEZ5W8TYGQUiE2X9Z1svqm3C1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=A2VnnmlP; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 0B59C4E4145E;
+	Sat,  1 Nov 2025 08:53:50 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id BD3FD6070B;
+	Sat,  1 Nov 2025 08:53:49 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 558F411818085;
+	Sat,  1 Nov 2025 09:53:41 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1761987227; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=5WyJ7KLCTmA5rRb0bRTlxs5HWJzEizch8fWH5kQRtnI=;
+	b=A2VnnmlPLPE5gbwOjgo02mjFmC3ZBtPbAW+WKC2SYyheozrWVVXP3kdPCVOp9LDd+VJpke
+	lppza4wAilTS5Q0nmctwJI9Z78Eszhjx0Bc4Ddj+D+lvUmIIwXww1vJblT6MuNBjIesYLA
+	mIVGxxHVERptfNxlePu5Bl2eLnrjrTC0TvcuhHnWQ/mewmNWOv3KA3oUUHF46otE0sOLWs
+	QWK46IQ4VxqWvPyNxL0jQDjJTUL3cxFNiCQM6ICRZje5fnUm00iZaw654mrNUEgSdhGAex
+	PfRgHqVpAM2ulBkhGJBXs6jUectxbkRPaqcDjiIdk55lMdNNZ6hvPgsmAeeldA==
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: [PATCH v2 0/7] Add generic PHY driver used by MACB/GEM on EyeQ5
+Date: Sat, 01 Nov 2025 09:53:28 +0100
+Message-Id: <20251101-macb-phy-v2-0-c1519eef16d3@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20251030200951.3402865-1-seanjc@google.com> <20251030200951.3402865-27-seanjc@google.com>
- <aQRyyieyDrZZMpIt@yzhao56-desk.sh.intel.com>
-Message-ID: <aQTzO7D1O02zQbcD@google.com>
-Subject: Re: [PATCH v4 26/28] KVM: TDX: Guard VM state transitions with "all"
- the locks
-From: Sean Christopherson <seanjc@google.com>
-To: Yan Zhao <yan.y.zhao@intel.com>
-Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
-	Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>, 
-	Huacai Chen <chenhuacai@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Anup Patel <anup@brainfault.org>, Paul Walmsley <pjw@kernel.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	"Kirill A. Shutemov" <kas@kernel.org>, linux-arm-kernel@lists.infradead.org, 
-	kvmarm@lists.linux.dev, kvm@vger.kernel.org, loongarch@lists.linux.dev, 
-	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
-	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
-	x86@kernel.org, linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	Ira Weiny <ira.weiny@intel.com>, Kai Huang <kai.huang@intel.com>, 
-	Binbin Wu <binbin.wu@linux.intel.com>, Michael Roth <michael.roth@amd.com>, 
-	Vishal Annapurve <vannapurve@google.com>, Rick Edgecombe <rick.p.edgecombe@intel.com>, 
-	Ackerley Tng <ackerleytng@google.com>
-Content-Type: text/plain; charset="us-ascii"
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAIjKBWkC/23MQQ7CIBCF4as0sxYDE03VlfdougA6yCQWGmiIT
+ cPdxa5d/i8v3w6ZElOGR7dDosKZY2iBpw6s1+FFgqfWgBKvSiKKWVsjFr8JVMZeSE3OmB7afUn
+ k+HNQw9jac15j2g65qN/6BylKSOHw7vDmNPWonibG9c3hbOMMY631C2tZV8uiAAAA
+X-Change-ID: 20251022-macb-phy-21bc4e1dfbb7
+To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
+ Kishon Vijay Abraham I <kishon@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org, 
+ linux-clk@vger.kernel.org, 
+ =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>, 
+ Maxime Chevallier <maxime.chevallier@bootlin.com>, 
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
+ Conor Dooley <conor.dooley@microchip.com>, 
+ Jerome Brunet <jbrunet@baylibre.com>, Andrew Lunn <andrew@lunn.ch>
+X-Mailer: b4 0.14.3
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Fri, Oct 31, 2025, Yan Zhao wrote:
-> On Thu, Oct 30, 2025 at 01:09:49PM -0700, Sean Christopherson wrote:
-> > Acquire kvm->lock, kvm->slots_lock, and all vcpu->mutex locks when
-> > servicing ioctls that (a) transition the TD to a new state, i.e. when
-> > doing INIT or FINALIZE or (b) are only valid if the TD is in a specific
-> > state, i.e. when initializing a vCPU or memory region.  Acquiring "all"
-> > the locks fixes several KVM_BUG_ON() situations where a SEAMCALL can fail
-> > due to racing actions, e.g. if tdh_vp_create() contends with either
-> > tdh_mr_extend() or tdh_mr_finalize().
-> > 
-> > For all intents and purposes, the paths in question are fully serialized,
-> > i.e. there's no reason to try and allow anything remotely interesting to
-> > happen.  Smack 'em with a big hammer instead of trying to be "nice".
-> > 
-> > Acquire kvm->lock to prevent VM-wide things from happening, slots_lock to
-> > prevent kvm_mmu_zap_all_fast(), and _all_ vCPU mutexes to prevent vCPUs
-> s/kvm_mmu_zap_all_fast/kvm_mmu_zap_memslot
+EyeQ5 SoCs integrate two GEM instances. A system-controller register
+region named "OLB" has some control over the Ethernet PHY integration.
 
-Argh!  Third time's a charm?  Hopefully...
+Past iterations [0] touched those syscon registers directly from MACB.
+It was a bad idea. Extend the current OLB ecosystem with a new generic
+PHY driver.
+ - OLB is carried by one main platform driver: clk-eyeq.
+ - It instantiates auxiliary devices: reset-eyeq & pinctrl-eyeq5.
+ - We add a new one: phy-eyeq5-eth.
 
-> > @@ -3170,7 +3208,8 @@ static int tdx_vcpu_init_mem_region(struct kvm_vcpu *vcpu, struct kvm_tdx_cmd *c
-> >  
-> >  int tdx_vcpu_unlocked_ioctl(struct kvm_vcpu *vcpu, void __user *argp)
-> >  {
-> > -	struct kvm_tdx *kvm_tdx = to_kvm_tdx(vcpu->kvm);
-> > +	struct kvm *kvm = vcpu->kvm;
-> > +	struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
-> reverse xmas tree ?
+Here is a DT overview:
 
-No, because the shorter line generates an input to the longer line.  E.g. we could
-do this if we really, really want an xmas tree:
+   olb: system-controller@e00000 {
+           compatible = "mobileye,eyeq5-olb", "syscon";
+           reg = <0 0xe00000 0x0 0x400>;
+           // ...
+           #reset-cells = <2>;
+           #clock-cells = <1>;
+           #phy-cells = <1>; // <= this is new
+   };
 
-	struct kvm_tdx *kvm_tdx = to_kvm_tdx(vcpu->kvm);
-	struct kvm *kvm = vcpu->kvm;
+   macb0: ethernet@2a00000 {
+           compatible = "mobileye,eyeq5-gem";
+           phys = <&olb 0>; // <= GEM device consumes the PHY
+           // ...
+   };
 
-but this won't compile
+   macb1: ethernet@2b00000 {
+           compatible = "mobileye,eyeq5-gem";
+           phys = <&olb 1>; // <= same thing for the second instance
+           // ...
+   };
 
-	struct kvm_tdx *kvm_tdx = to_kvm_tdx(kvm);
-	struct kvm *kvm = vcpu->kvm;
+The Linux MACB driver already consumes a generic PHY for some other
+compatibles, this is nothing new. The MACB series [1] has been merged
+into net-next/main.
+
+--
+
+One topic to talk about: the whole "we must assign child->of_node
+manually". Auxiliary driver core does not do it automatically, so
+either the parent (clk-eyeq) or the children must do it.
+
+In OLB land, until now, children were doing it with a
+device_set_of_node_from_dev(dev, dev->parent) call in probe.
+
+Recently, Jerome Brunet added devm_auxiliary_device_create():
+eaa0d30216c1 ("driver core: auxiliary bus: add device creation
+helpers"). Using that cleans up clk-eyeq but means we must remove
+device_set_of_node_from_dev() from reset-eyeq in the same patch series,
+as the helpers do the dev->of_node assignement from the parent driver.
+
+That explains why the ideal patch:
+[PATCH 4/7] clk: eyeq: add EyeQ5 children auxiliary device for generic PHYs
+Turned into those three:
+[PATCH 3/7] clk: eyeq: use the auxiliary device creation helper
+[PATCH 4/7] clk: eyeq: add EyeQ5 children auxiliary device for generic PHYs
+[PATCH 5/7] reset: eyeq: drop device_set_of_node_from_dev() done by parent
+
+--
+
+About merging, it'll probably be complex. I see no build dependencies,
+but the board will be in an odd state if only some patches are applied.
+Some dev_warn() at boot and dev->of_node refcounting issues at unload.
+
+ - [PATCH 1/7] dt-bindings: soc: mobileye: OLB is an Ethernet PHY provider on EyeQ5
+   We touch dt-bindings because OLB becomes a PHY provider.
+   => linux-mips (?)
+
+ - [PATCH 2/7] phy: Add driver for EyeQ5 Ethernet PHY wrapper
+   We add the generic PHY driver in drivers/phy/phy-eyeq5-eth.c with the
+   usual Kconfig, Makefile and MAINTAINERS changes.
+   => linux-phy (?)
+
+ - [PATCH 6/7] MIPS: mobileye: eyeq5: add two Cadence GEM Ethernet controllers
+   [PATCH 7/7] MIPS: mobileye: eyeq5-epm: add two Cadence GEM Ethernet PHYs
+   DTS patches to add both the #phy-cells of OLB and the MACB instances.
+   => linux-mips
+
+ - [PATCH 4/7] clk: eyeq: add EyeQ5 children auxiliary device for generic PHYs
+   We must update clk-eyeq because it instantiates a new auxdev.
+   => linux-clk
+
+ - [PATCH 3/7] clk: eyeq: use the auxiliary device creation helper
+   [PATCH 5/7] reset: eyeq: drop device_set_of_node_from_dev() done by parent
+   With the dev->of_node assignement, we must also correct reset-eyeq.
+   => separate them into linux-clk and linux-reset?
+
+Have a nice day,
+Thanks,
+Théo
+
+[0]: https://lore.kernel.org/lkml/20250627-macb-v2-15-ff8207d0bb77@bootlin.com/
+[1]: https://lore.kernel.org/lkml/20251022-macb-eyeq5-v2-0-7c140abb0581@bootlin.com/
+[2]: https://lore.kernel.org/all/20251021-macb-eyeq5-v1-0-3b0b5a9d2f85@bootlin.com/
+
+Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+---
+Changes in v2:
+- Take Acked-by: Conor Dooley on dt-bindings-patch.
+- s/%ld/%tu/ for printing ptrdiff_t; warnings on 32-bit archs.
+  Reported by NIPA's netdev/build_32bit test.
+  https://patchwork.kernel.org/project/netdevbpf/patch/20251021-macb-eyeq5-v1-7-3b0b5a9d2f85@bootlin.com/
+  https://netdev.bots.linux.dev/static/nipa/1014126/14277857/build_32bit/stderr
+- Link to v1: https://lore.kernel.org/r/20251022-macb-phy-v1-0-f29f28fae721@bootlin.com
+
+Changes since MACB V1:
+- Drop the old "mobileye,olb" properties from DT patches; found while
+  running dtbs_check and dt_binding_check.
+- Drop all patches targeting net-next. That is MACB dt-bindings patch
+  and MACB driver code. See there here [1].
+- Link to v1: https://lore.kernel.org/lkml/20251021-macb-eyeq5-v1-0-3b0b5a9d2f85@bootlin.com/
+
+Past versions of MACB patches:
+ - March 2025: [PATCH net-next 00/13] Support the Cadence MACB/GEM
+   instances on Mobileye EyeQ5 SoCs
+   https://lore.kernel.org/lkml/20250321-macb-v1-0-537b7e37971d@bootlin.com/
+ - June 2025: [PATCH net-next v2 00/18] Support the Cadence MACB/GEM
+   instances on Mobileye EyeQ5 SoCs
+   https://lore.kernel.org/lkml/20250627-macb-v2-0-ff8207d0bb77@bootlin.com/
+ - August 2025: [PATCH net v3 00/16] net: macb: various fixes & cleanup
+   https://lore.kernel.org/lkml/20250808-macb-fixes-v3-0-08f1fcb5179f@bootlin.com/
+
+---
+Jerome Brunet (1):
+      clk: eyeq: use the auxiliary device creation helper
+
+Théo Lebrun (6):
+      dt-bindings: soc: mobileye: OLB is an Ethernet PHY provider on EyeQ5
+      phy: Add driver for EyeQ5 Ethernet PHY wrapper
+      clk: eyeq: add EyeQ5 children auxiliary device for generic PHYs
+      reset: eyeq: drop device_set_of_node_from_dev() done by parent
+      MIPS: mobileye: eyeq5: add two Cadence GEM Ethernet controllers
+      MIPS: mobileye: eyeq5-epm: add two Cadence GEM Ethernet PHYs
+
+ .../bindings/soc/mobileye/mobileye,eyeq5-olb.yaml  |   7 +-
+ MAINTAINERS                                        |   1 +
+ arch/mips/boot/dts/mobileye/eyeq5-epm5.dts         |  26 +++
+ arch/mips/boot/dts/mobileye/eyeq5.dtsi             |  45 ++++
+ drivers/clk/clk-eyeq.c                             |  60 ++---
+ drivers/phy/Kconfig                                |  13 ++
+ drivers/phy/Makefile                               |   1 +
+ drivers/phy/phy-eyeq5-eth.c                        | 254 +++++++++++++++++++++
+ drivers/reset/reset-eyeq.c                         |  24 +-
+ 9 files changed, 363 insertions(+), 68 deletions(-)
+---
+base-commit: 01cc760632b875c4ad0d8fec0b0c01896b8a36d4
+change-id: 20251022-macb-phy-21bc4e1dfbb7
+
+Best regards,
+-- 
+Théo Lebrun <theo.lebrun@bootlin.com>
+
 
