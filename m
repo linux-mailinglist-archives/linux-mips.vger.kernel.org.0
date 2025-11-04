@@ -1,139 +1,183 @@
-Return-Path: <linux-mips+bounces-12019-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12020-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C3D4C2D4E4
-	for <lists+linux-mips@lfdr.de>; Mon, 03 Nov 2025 17:59:34 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 440ECC2F6C2
+	for <lists+linux-mips@lfdr.de>; Tue, 04 Nov 2025 07:17:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 30CCF4E82E8
-	for <lists+linux-mips@lfdr.de>; Mon,  3 Nov 2025 16:59:33 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 022794E2AA4
+	for <lists+linux-mips@lfdr.de>; Tue,  4 Nov 2025 06:17:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CFFDB318155;
-	Mon,  3 Nov 2025 16:55:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C0D0254841;
+	Tue,  4 Nov 2025 06:17:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZPmPZfN0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="OXrazto3"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A143E329369;
-	Mon,  3 Nov 2025 16:55:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 557AF158538;
+	Tue,  4 Nov 2025 06:17:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762188955; cv=none; b=NLO7XvtQpsi/u2KVTTfTpEqvPAtk/TE02glxYbOwBMeNpLzA3irRl8iaS/TzGmodH52kpdbE7a2x/RifRM+r5qJnatANKEodX88QixOBuqIVZsjzVnGtmeUkL/NqO5jK3pRI+jTGUi6uM1QKcERytFcSUUEE0W/U6Qm3w8f53i4=
+	t=1762237025; cv=none; b=n/S+SM24o5SsQfZ8DfUU8Quj5oQUw2jJpRGof1ubHWjfv4oH10qKHk/FexexXrkKm+EKpRqK8M4sUELvaCyHaQHEj/ioapWSAG7128nku2yw8V6mo71uW+Wwk+I6hbW1R3HcUCDk7ETxcf5cN7nkWaaOUdtemsC7zd1eUON9swE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762188955; c=relaxed/simple;
-	bh=norwYxHA6VI/ySU0ex5Ew7OW1FQwMlwu39WjPcjgOKw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZBGLTfYMPUcQhGuyFfT3niG/NVkpQEX1q64F6AqrdJHqSxg6LLWaHUBqgD/jEOd/IxBmo67B2aH2bKaSYX5bvYYzgb6vH10NQ682e/6koi9GO/3MiQEoO0g1u0x0GW4CIZEDacPR+PWnRVZS048HD9WXmijllYrUjEkLCkhXSKw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZPmPZfN0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E28A1C116C6;
-	Mon,  3 Nov 2025 16:55:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762188955;
-	bh=norwYxHA6VI/ySU0ex5Ew7OW1FQwMlwu39WjPcjgOKw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZPmPZfN0yXQ5Ndyhd1mm6d5YyvVQn+2NS84I1P7cyPdxS80PfY2ZucI9nnhbgf4WY
-	 s7T0hQkmYh3BvC31fK7wOMt5xVzp7z74BHWa8QiGuneY+AjDKqKSdLT2+rUSqfiIRO
-	 dq+CUk9yAJPAVVOoWmGfXhaovQn/CvtO/zMXNg05HM/YIbPUs0MlUvc8htSP7z6LHt
-	 MfQNRhhp20WhSWzc6Igwle5mi2X3jI4fgZVoTroQvMzbrqdD1j07JdGxQgKVOnVbrm
-	 vd3TNzlzeFyZKWqiC0BIaRsKVR8HfiPDkfKQworpdeGvoSegLcGOaqT5hTJ1SqTz0O
-	 PrtNV6DhYV2Ww==
-Date: Mon, 3 Nov 2025 16:55:52 +0000
-From: Mark Brown <broonie@kernel.org>
-To: Thomas Gleixner <tglx@linutronix.de>
-Cc: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
-	Andy Lutomirski <luto@kernel.org>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Arnd Bergmann <arnd@arndb.de>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Nick Alcock <nick.alcock@oracle.com>,
-	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>,
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
-	Shuah Khan <shuah@kernel.org>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Heiko Carstens <hca@linux.ibm.com>,
-	Vasily Gorbik <gor@linux.ibm.com>,
-	Alexander Gordeev <agordeev@linux.ibm.com>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Sven Schnelle <svens@linux.ibm.com>,
-	Nagarathnam Muthusamy <nagarathnam.muthusamy@oracle.com>,
-	Shannon Nelson <sln@onemain.com>, linux-kernel@vger.kernel.org,
-	sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
-	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-s390@vger.kernel.org, Aishwarya.TCV@arm.com
-Subject: Re: [PATCH v4 23/35] vdso/datastore: Map pages through struct page
-Message-ID: <aQjemPIbHMplGD4N@finisterre.sirena.org.uk>
-References: <20251014-vdso-sparc64-generic-2-v4-0-e0607bf49dea@linutronix.de>
- <20251014-vdso-sparc64-generic-2-v4-23-e0607bf49dea@linutronix.de>
- <aQjJNmwniQwwjeBR@finisterre.sirena.org.uk>
- <87bjljw1ra.ffs@tglx>
+	s=arc-20240116; t=1762237025; c=relaxed/simple;
+	bh=mSKoZmGkcXW407B8mNGjY9EejInAopsSE39gAyEUn9k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=KxyLXMJDWe4f36kzyEg87UBSz78LaRsWAtTEPNCIXeAXBLeZrWNY7QSnHrSrW0eZl7ZlvDMi8UdWS8PpB+l+lGrYORRklXhmbr5nVLR26YzoKdDB+0vmtV0HKCFm80pcKhBYPouGs/qZtmwzAgWFA0lsZtRw1cDsMgiv3grxxsE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=pass smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=OXrazto3; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1762237023; x=1793773023;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=mSKoZmGkcXW407B8mNGjY9EejInAopsSE39gAyEUn9k=;
+  b=OXrazto3bos6ZouLXm81qGUGmuUm3OZdCGxCNDmP4C2W+ykyqxLdNpHM
+   1DxyyS4eKg+f2UC8Kt2DT1ZQ1E34vbMtAEaD2xfzDXma1x2Sr01Q4K+0I
+   aF6SWWtCUu656YkV3TFUFRJN7V4ruPrFIYWNM78ZsGUX5oDCZo057lhKH
+   oGGMjooTh6E1C3Pi0yfsGM4DHcneO6QWuKHfwNwXSgurXHKDEBhDMEfqa
+   fFi5YiitRnTOAaF0VUY+gCJG52aM0x/NnUOEg/B33v6ZZnAMHrb19rw9x
+   Om3sIeQ4LUHVoj0/B1xwvM9Kfz/8Sra1hjkH8hLcR/ILGEc8Cq+pj8vUV
+   w==;
+X-CSE-ConnectionGUID: BSbMDpbCR8uIRATopONiag==
+X-CSE-MsgGUID: 8+m81WFlSHS/ZZsZ26Py2A==
+X-IronPort-AV: E=McAfee;i="6800,10657,11602"; a="74927767"
+X-IronPort-AV: E=Sophos;i="6.19,278,1754982000"; 
+   d="scan'208";a="74927767"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2025 22:17:03 -0800
+X-CSE-ConnectionGUID: IL8VAT68RkmI5IbPyY1fNw==
+X-CSE-MsgGUID: u8bxLoPYS/KxoreV4M7Dmg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.19,278,1754982000"; 
+   d="scan'208";a="210576877"
+Received: from yinghaoj-desk.ccr.corp.intel.com (HELO [10.238.1.225]) ([10.238.1.225])
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2025 22:16:56 -0800
+Message-ID: <31da959f-d004-4ae0-a6a7-d5d31b646b70@linux.intel.com>
+Date: Tue, 4 Nov 2025 14:16:53 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="xyY1KyZQ9jhQldRu"
-Content-Disposition: inline
-In-Reply-To: <87bjljw1ra.ffs@tglx>
-X-Cookie: If in doubt, mumble.
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 27/28] KVM: TDX: Bug the VM if extending the initial
+ measurement fails
+To: Sean Christopherson <seanjc@google.com>
+Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>,
+ Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>,
+ Huacai Chen <chenhuacai@kernel.org>,
+ Madhavan Srinivasan <maddy@linux.ibm.com>, Anup Patel <anup@brainfault.org>,
+ Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>,
+ Christian Borntraeger <borntraeger@linux.ibm.com>,
+ Janosch Frank <frankja@linux.ibm.com>,
+ Claudio Imbrenda <imbrenda@linux.ibm.com>,
+ Paolo Bonzini <pbonzini@redhat.com>, "Kirill A. Shutemov" <kas@kernel.org>,
+ linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+ kvm@vger.kernel.org, loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+ linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+ linux-riscv@lists.infradead.org, x86@kernel.org, linux-coco@lists.linux.dev,
+ linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>,
+ Kai Huang <kai.huang@intel.com>, Michael Roth <michael.roth@amd.com>,
+ Yan Zhao <yan.y.zhao@intel.com>, Vishal Annapurve <vannapurve@google.com>,
+ Rick Edgecombe <rick.p.edgecombe@intel.com>,
+ Ackerley Tng <ackerleytng@google.com>
+References: <20251030200951.3402865-1-seanjc@google.com>
+ <20251030200951.3402865-28-seanjc@google.com>
+Content-Language: en-US
+From: Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <20251030200951.3402865-28-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
 
---xyY1KyZQ9jhQldRu
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
 
-On Mon, Nov 03, 2025 at 04:54:01PM +0100, Thomas Gleixner wrote:
-> On Mon, Nov 03 2025 at 15:24, Mark Brown wrote:
+On 10/31/2025 4:09 AM, Sean Christopherson wrote:
+> WARN and terminate the VM if TDH_MR_EXTEND fails, as extending the
+> measurement should fail if and only if there is a KVM bug, or if the S-EPT
+> mapping is invalid.  Now that KVM makes all state transitions mutually
+> exclusive via tdx_vm_state_guard, it should be impossible for S-EPT
+> mappings to be removed between kvm_tdp_mmu_map_private_pfn() and
+> tdh_mr_extend().
+>
+> Holding slots_lock prevents zaps due to memslot updates,
+> filemap_invalidate_lock() prevents zaps due to guest_memfd PUNCH_HOLE,
+> vcpu->mutex locks prevents updates from other vCPUs, kvm->lock prevents
+> VM-scoped ioctls from creating havoc (e.g. by creating new vCPUs), and all
+> usage of kvm_zap_gfn_range() is mutually exclusive with S-EPT entries that
+> can be used for the initial image.
+>
+> For kvm_zap_gfn_range(), the call from sev.c is obviously mutually
+> exclusive, TDX disallows KVM_X86_QUIRK_IGNORE_GUEST_PAT so the same goes
+> for kvm_noncoherent_dma_assignment_start_or_stop(), and
+> __kvm_set_or_clear_apicv_inhibit() is blocked by virtue of holding all
+> VM and vCPU mutexes (and the APIC page has its own non-guest_memfd memslot
 
-> > which isn't super instructive.  Not all platforms seem to be affected,
-> > I've seen this on at least the Arm FVP, Orion O6 and Libretech Renegade
-> > Elite.  The diagnostics aren't very clear here but given that I'm seeing
-> > the same issue and bisect result on multiple platforms it seemed worth
-> > mentioning.  Some platforms do seem fine.
+Nit:
+It sounds like TDX is using the memslot for the APIC page, but for a TD, the
+memslot for the APIC page is never initialized or used?
 
-> Can you try
+> and so can't be used for the initial image, which means that too is
+> mutually exclusive irrespective of locking).
+>
+> Opportunistically return early if the region doesn't need to be measured
+> in order to reduce line lengths and avoid wraps.  Similarly, immediately
+> and explicitly return if TDH_MR_EXTEND fails to make it clear that KVM
+> needs to bail entirely if extending the measurement fails.
+>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
->     git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git timers/vdso
+Reviewed-by: Binbin Wu <binbin.wu@linux.intel.com>
 
-> which is rc1 based and only contains the VDSO changes. That might give
-> us a better hint.
+> ---
+>   arch/x86/kvm/vmx/tdx.c | 24 +++++++++++++-----------
+>   1 file changed, 13 insertions(+), 11 deletions(-)
+>
+> diff --git a/arch/x86/kvm/vmx/tdx.c b/arch/x86/kvm/vmx/tdx.c
+> index 8bcdec049ac6..762f2896547f 100644
+> --- a/arch/x86/kvm/vmx/tdx.c
+> +++ b/arch/x86/kvm/vmx/tdx.c
+> @@ -3123,21 +3123,23 @@ static int tdx_gmem_post_populate(struct kvm *kvm, gfn_t gfn, kvm_pfn_t pfn,
+>   
+>   	put_page(src_page);
+>   
+> -	if (ret)
+> +	if (ret || !(arg->flags & KVM_TDX_MEASURE_MEMORY_REGION))
+>   		return ret;
+>   
+> -	if (arg->flags & KVM_TDX_MEASURE_MEMORY_REGION) {
+> -		for (i = 0; i < PAGE_SIZE; i += TDX_EXTENDMR_CHUNKSIZE) {
+> -			err = tdh_mr_extend(&kvm_tdx->td, gpa + i, &entry,
+> -					    &level_state);
+> -			if (err) {
+> -				ret = -EIO;
+> -				break;
+> -			}
+> -		}
+> +	/*
+> +	 * Note, MR.EXTEND can fail if the S-EPT mapping is somehow removed
+> +	 * between mapping the pfn and now, but slots_lock prevents memslot
+> +	 * updates, filemap_invalidate_lock() prevents guest_memfd updates,
+> +	 * mmu_notifier events can't reach S-EPT entries, and KVM's internal
+> +	 * zapping flows are mutually exclusive with S-EPT mappings.
+> +	 */
+> +	for (i = 0; i < PAGE_SIZE; i += TDX_EXTENDMR_CHUNKSIZE) {
+> +		err = tdh_mr_extend(&kvm_tdx->td, gpa + i, &entry, &level_state);
+> +		if (TDX_BUG_ON_2(err, TDH_MR_EXTEND, entry, level_state, kvm))
+> +			return -EIO;
+>   	}
+>   
+> -	return ret;
+> +	return 0;
+>   }
+>   
+>   static int tdx_vcpu_init_mem_region(struct kvm_vcpu *vcpu, struct kvm_tdx_cmd *cmd)
 
-Yeah, hopefully - my infrastructure is pretty swamped ATM and I'm in an
-internal conference.  I did kick something off earlier on this specific
-commit which should be equivalent information but it'll be tomorrow
-before I can get a full picture.
-
---xyY1KyZQ9jhQldRu
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmkI3pcACgkQJNaLcl1U
-h9BpwAf9G2OE1wGg3D/F2WCmsKiRzqX8EJTZWpdThdfvEP9vbPytmPqRt4LoPk9E
-cKlt3SaJFVZbyfx2YTDOqcC/FaQr5gdVRVsLuiKavYpVHanTEb/HCx2BvROuDvE2
-Ssx3Em7R+eHCyonl/unY/EOt7PP4hUtDizXKblf1rb5I/tM9ADlHYpQSTKF2Poxr
-/gIn6gPy89C+hD2rrkQJZWraOVcbciUGJVMWtMKRm96l0pPwdHchsimXnrYq6AId
-exk8ECk4hjsPpcarTzTqvJr+UCDMFpF99qq7GWDrkeifMqQqrvR5RY2kcsdyNGMw
-3ssV8/Eg6XLVg7GU0FL9k76qaqD7kA==
-=et8+
------END PGP SIGNATURE-----
-
---xyY1KyZQ9jhQldRu--
 
