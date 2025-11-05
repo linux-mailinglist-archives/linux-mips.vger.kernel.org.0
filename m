@@ -1,179 +1,151 @@
-Return-Path: <linux-mips+bounces-12045-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12046-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0583CC347C3
-	for <lists+linux-mips@lfdr.de>; Wed, 05 Nov 2025 09:33:35 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80866C366F2
+	for <lists+linux-mips@lfdr.de>; Wed, 05 Nov 2025 16:46:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 742E6346706
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Nov 2025 08:33:34 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 73EAB4F6A06
+	for <lists+linux-mips@lfdr.de>; Wed,  5 Nov 2025 15:30:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 058F8288525;
-	Wed,  5 Nov 2025 08:33:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5363338F39;
+	Wed,  5 Nov 2025 15:26:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FWRtcGLQ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="ILGDIP5O"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f74.google.com (mail-pj1-f74.google.com [209.85.216.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B01592652B2;
-	Wed,  5 Nov 2025 08:33:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C815733890E
+	for <linux-mips@vger.kernel.org>; Wed,  5 Nov 2025 15:26:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762331610; cv=none; b=tbktahSzfSNcFJp0SWfG2YbCPYoItudDb/MvDY4hPxDJzH1H56Tz1/B/Vnc6wfpyyYKhEIHrMuENZ9zd11VEtRLbwfL5TmhI8Mx9g8SlzwJmPu63HyhOVUfNorOEjUeYXxs9JGf+PAdNsyZnMt8r6mjVl3OEzKSJ1ne/ykYhE4U=
+	t=1762356397; cv=none; b=uxh2sHG1+/vVaAuH0mZgk734+TEUOjGcNn35HbZEdrWr4Yvi5s96km/HPdWtaXpEZ/TdQwg+x9zYgv+HwlXa9+3NTRYQikuIKMfhrsjXd0So11SIGh6ytzzjs6a3r0l6WaODLXOciBj/wvzDsVtlhviOpDkG0Ex2fCPFCvnDGXY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762331610; c=relaxed/simple;
-	bh=N9DVJZLHg/ikq7JcKb017+GXdHTNHUl1swp5I6YFwKg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CeWoqolGP0OuPswEsquv1ISDKHux62wYqkumOO6wOdoiA/NXMHYlQR3/yDlfuYtTtTp4jdOOodgoL4Nd1ugqayzl/dlwHDky+AJEpiwbDhTXOSG2XYvhH65k8XaqgL5R9jnqpSYSptV11xUA+d+gnyHV5yRFoeKbDk6+JCo7MoI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FWRtcGLQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7CA45C4CEF8;
-	Wed,  5 Nov 2025 08:33:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762331610;
-	bh=N9DVJZLHg/ikq7JcKb017+GXdHTNHUl1swp5I6YFwKg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FWRtcGLQVHMZgFcfCcC2Ue5biDzICOqxbsTH9uRs3nHuk4V9OMogHP0jGb51Z/R1/
-	 jJxkWdC8AHsbMqgtuTPgrjWZOlEwVVOpsHrziXpskkAkKCA1xrAzVVi07M2Ld7UyTP
-	 VJIqW87HIEtASx13s4C1VM/y6/X7on3YXHn7gwZzVxCFO470mCBBKSCNdU9LIk5Cyc
-	 1XM/bvkZNvlVnWDHYXq4thAk5z0FFtDTWqf6wOzceEzFJa6Pqtp/I85AxdCnbThUg5
-	 dL17TQbIUFUeUW15dIGkbb9zPwlX5ZkCMOZjeOPxSyuT7pqNhvIJS5W4nOvExPXANQ
-	 M6yn12bRbQ/3Q==
-Date: Wed, 5 Nov 2025 09:33:27 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Richard Cochran <richardcochran@gmail.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	Vinod Koul <vkoul@kernel.org>, Giuseppe Cavallaro <peppe.cavallaro@st.com>, 
-	Jose Abreu <joabreu@synopsys.com>, Chen-Yu Tsai <wens@kernel.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
-	Matthew Gerlach <matthew.gerlach@altera.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, Keguang Zhang <keguang.zhang@gmail.com>, 
-	Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
-	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, 
-	Jan Petrous <jan.petrous@oss.nxp.com>, s32@nxp.com, Romain Gantois <romain.gantois@bootlin.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, Heiko Stuebner <heiko@sntech.de>, 
-	Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@gmail.com>, 
-	Emil Renner Berthing <kernel@esmil.dk>, Minda Chen <minda.chen@starfivetech.com>, 
-	Drew Fustini <fustini@kernel.org>, Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, 
-	Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>, Geert Uytterhoeven <geert+renesas@glider.be>, 
-	Magnus Damm <magnus.damm@gmail.com>, Maxime Ripard <mripard@kernel.org>, 
-	Shuang Liang <liangshuang@eswincomputing.com>, Zhi Li <lizhi2@eswincomputing.com>, 
-	Shangjuan Wei <weishangjuan@eswincomputing.com>, "G. Jaya Kumaran" <vineetha.g.jaya.kumaran@intel.com>, 
-	Clark Wang <xiaoning.wang@nxp.com>, Linux Team <linux-imx@nxp.com>, Frank Li <Frank.Li@nxp.com>, 
-	David Wu <david.wu@rock-chips.com>, Samin Guo <samin.guo@starfivetech.com>, 
-	Christophe Roullier <christophe.roullier@foss.st.com>, Swathi K S <swathi.ks@samsung.com>, 
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
-	linux-arm-kernel@lists.infradead.org, Drew Fustini <dfustini@tenstorrent.com>, 
-	linux-sunxi@lists.linux.dev, linux-amlogic@lists.infradead.org, linux-mips@vger.kernel.org, 
-	imx@lists.linux.dev, linux-renesas-soc@vger.kernel.org, 
-	linux-rockchip@lists.infradead.org, sophgo@lists.linux.dev, linux-riscv@lists.infradead.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH v4 1/8] dt-bindings: net: qcom: document the ethqos
- device for SCMI-based systems
-Message-ID: <20251105-fat-aromatic-nightingale-1ef8ac@kuoka>
-References: <20251104-qcom-sa8255p-emac-v4-0-f76660087cea@linaro.org>
- <20251104-qcom-sa8255p-emac-v4-1-f76660087cea@linaro.org>
+	s=arc-20240116; t=1762356397; c=relaxed/simple;
+	bh=d8JWxeRGmjq8jXPHzr0bSzSADeEyMQIUeCD2xQhaO6I=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=F0XSCCFgeiRDKFyA+7WCfYTUm/kMnBoaOdtG3Gs4LGHY5+nFihQxSnKHEFG1QqSPdP20gr/2kLmjteJXGVYE8zWJdE88JMBDkRyVfEpZK9zBv5ATSeUC5YFEJzFpvSnobSlc/0QZawdr4RSC+QDJag+P7eNLeDbcb5HPSR5+xoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=ILGDIP5O; arc=none smtp.client-ip=209.85.216.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pj1-f74.google.com with SMTP id 98e67ed59e1d1-341616a6fb7so4124a91.0
+        for <linux-mips@vger.kernel.org>; Wed, 05 Nov 2025 07:26:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1762356395; x=1762961195; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dmjmfo22QwufKip+RFN2GwcKXDk7+fDMohFzNqFh1wo=;
+        b=ILGDIP5O5BP+SYZYgKaOIaimg87TU8QKC8EJF/uP7rDmTzgvxHRnjh26J0McWVE2tX
+         xjdiyiYpL9TXxeCED6TAeEs8jD6PIIhWiDvgW1l4mcsTpVDqohWa8u8IQD8dOmuRI9Td
+         uDNxLQRlPc1dydrRYVGUNHzgHi3xAr5yNki7VN6iKVXwlAx1pN1l999r5o3knbR0QoT4
+         Z2ImKQQjei9H+0BOVHp7DXRQ1IgTVPloVQk3p9UjN3JreJpiEQt3YYxwp6cbLRpB639k
+         AzbBvE8/jpXoFZPNwmqGculRqBCQzzCh7DC6qg7Qt8aZZQ14Z5eDxix6hs1K8iTqhfqx
+         YhAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762356395; x=1762961195;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dmjmfo22QwufKip+RFN2GwcKXDk7+fDMohFzNqFh1wo=;
+        b=m8S5Ly5rbvFiaOsy/u/X5c5ybCzgPJyFTBwgucIAkJWBA6djdNLJlpcxJVj4FC0Ek1
+         UM9qq7tO0eNqtwq6bF2OBsqlUVekOWjtxpPbfIjVaO5HtuMLPNK9h7FxmYTYiSsuQDrp
+         sNW6dUrhhhlBPlJiPTTjM4/8WtT8JFzfxH6pdOCDjnTvrNaveSzWo0Fv6lYXUsD5wphZ
+         /ReM0z0XJyVqwPzFaR1IHrx1PoP4mJQGtIPMzBAcFAykZfNWNkR5o0M7rWkSRogEnjHH
+         RN4fLk5wJFvjMknvz9cBJF15uvG9alJv4aW5H1utUsgkMKGcp+J/8JDP1xgSjdynAyDE
+         8cbQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVt77AyYX8YolVmLmYvsGPbcna56T6CufxLzOZWzRnPQku56a6rOP3eucBuUqrVlHogbCC7G+bHiW8X@vger.kernel.org
+X-Gm-Message-State: AOJu0YwwNl5y85A6OFPJcvc3dl3rWoYiv5HHY4ilz8CNOd7hb9thw3fg
+	kHJEdb+dzStaT5xSvfxmQPimO8LJmuXQ0jPwG+DltZMAPihhVT27X57gXQIiprkI5RF0x1IRkkU
+	C9WBdpQ==
+X-Google-Smtp-Source: AGHT+IEksiko2nLkYHDcuQoizh41Xk4dhEPlLcSxUswEaWhydqjlp9gNPv6q5VYl/pXem0FsGEVxprPZGIk=
+X-Received: from pjbtc7.prod.google.com ([2002:a17:90b:5407:b0:340:b503:505f])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:384d:b0:340:9cf1:54d0
+ with SMTP id 98e67ed59e1d1-341a6c08e65mr4623520a91.1.1762356395074; Wed, 05
+ Nov 2025 07:26:35 -0800 (PST)
+Date: Wed, 5 Nov 2025 07:26:33 -0800
+In-Reply-To: <aQsBI1/SIXGbf9nA@yzhao56-desk.sh.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20251104-qcom-sa8255p-emac-v4-1-f76660087cea@linaro.org>
+Mime-Version: 1.0
+References: <20251017003244.186495-1-seanjc@google.com> <20251017003244.186495-5-seanjc@google.com>
+ <aPhjYcOFjL1Z8m2s@yzhao56-desk.sh.intel.com> <aQMi/n9DVyeaWsVH@yzhao56-desk.sh.intel.com>
+ <aQo-hus99rE7WBgb@google.com> <aQr9jW/7zwWJaDFf@yzhao56-desk.sh.intel.com> <aQsBI1/SIXGbf9nA@yzhao56-desk.sh.intel.com>
+Message-ID: <aQtsqXPaZo2SMdJU@google.com>
+Subject: Re: [PATCH v3 04/25] KVM: x86/mmu: Add dedicated API to map
+ guest_memfd pfn into TDP MMU
+From: Sean Christopherson <seanjc@google.com>
+To: Yan Zhao <yan.y.zhao@intel.com>
+Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oliver.upton@linux.dev>, 
+	Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>, 
+	Huacai Chen <chenhuacai@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Anup Patel <anup@brainfault.org>, Paul Walmsley <pjw@kernel.org>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, Paolo Bonzini <pbonzini@redhat.com>, 
+	"Kirill A. Shutemov" <kas@kernel.org>, linux-arm-kernel@lists.infradead.org, 
+	kvmarm@lists.linux.dev, kvm@vger.kernel.org, loongarch@lists.linux.dev, 
+	linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, 
+	x86@kernel.org, linux-coco@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	Ira Weiny <ira.weiny@intel.com>, Kai Huang <kai.huang@intel.com>, 
+	Michael Roth <michael.roth@amd.com>, Vishal Annapurve <vannapurve@google.com>, 
+	Rick Edgecombe <rick.p.edgecombe@intel.com>, Ackerley Tng <ackerleytng@google.com>, 
+	Binbin Wu <binbin.wu@linux.intel.com>
+Content-Type: text/plain; charset="us-ascii"
 
-On Tue, Nov 04, 2025 at 02:08:52PM +0100, Bartosz Golaszewski wrote:
-> diff --git a/Documentation/devicetree/bindings/net/qcom,ethqos-scmi.yaml b/Documentation/devicetree/bindings/net/qcom,ethqos-scmi.yaml
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..ff70d785d326f39a8fe5698759c56ab2cb7f7eef
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/net/qcom,ethqos-scmi.yaml
-> @@ -0,0 +1,97 @@
-> +# SPDX-License-Identifier: GPL-2.0 OR BSD-2-Clause
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/net/qcom,ethqos-scmi.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+On Wed, Nov 05, 2025, Yan Zhao wrote:
+> On Wed, Nov 05, 2025 at 03:32:29PM +0800, Yan Zhao wrote:
+> > On Tue, Nov 04, 2025 at 09:57:26AM -0800, Sean Christopherson wrote:
+> > > On Thu, Oct 30, 2025, Yan Zhao wrote:
+> > > > On Wed, Oct 22, 2025 at 12:53:53PM +0800, Yan Zhao wrote:
+> > > > > On Thu, Oct 16, 2025 at 05:32:22PM -0700, Sean Christopherson wrote:
+> > > > > > Link: https://lore.kernel.org/all/20250709232103.zwmufocd3l7sqk7y@amd.com
+> > > > > 
+> > > > > Hi Sean,                                                                         
+> > > > > 
+> > > > > Will you post [1] to fix the AB-BA deadlock issue for huge page in-place
+> > > > > conversion as well?
+> > > 
+> > > If you (or anyone) has the bandwidth, please pick it up.  I won't have cycles to
+> > > look at that for many weeks (potentially not even this calendar year).
+> > Got it!
+> > On the other hand, do you think we can address the warning as below?
+> > The code is based on [2].
+> Hmm, updated the diff.
+> 
+> diff --git a/virt/kvm/guest_memfd.c b/virt/kvm/guest_memfd.c
+> index 7b4a4474d468..543e1eb9db65 100644
+> --- a/virt/kvm/guest_memfd.c
+> +++ b/virt/kvm/guest_memfd.c
+> @@ -853,6 +853,9 @@ static int kvm_gmem_init_inode(struct inode *inode, loff_t size, u64 flags)
+>         inode->i_size = size;
+>         mapping_set_gfp_mask(inode->i_mapping, GFP_HIGHUSER);
+>         mapping_set_inaccessible(inode->i_mapping);
+> +       if (flags &GUEST_MEMFD_FLAG_MMAP)
+> +               lockdep_set_subclass(&inode->i_mapping->invalidate_lock, 1);
 > +
-> +title: Qualcomm Ethernet ETHQOS device (firmware managed)
-> +
-> +maintainers:
-> +  - Bjorn Andersson <andersson@kernel.org>
-> +  - Konrad Dybcio <konradybcio@kernel.org>
-> +  - Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> +
-> +description:
-> +  dwmmac based Qualcomm ethernet devices which support Gigabit
-> +  ethernet (version v2.3.0 and onwards) with clocks, interconnects, etc.
-> +  managed by firmware
-> +
-> +allOf:
-> +  - $ref: snps,dwmac.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: qcom,sa8255p-ethqos
-> +
-> +  reg:
-> +    maxItems: 2
-> +
-> +  reg-names:
-> +    items:
-> +      - const: stmmaceth
-> +      - const: rgmii
-> +
-> +  interrupts:
-> +    items:
-> +      - description: Combined signal for various interrupt events
-> +      - description: The interrupt that occurs when HW safety error triggered
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: macirq
-> +      - const: sfty
-> +
-> +  power-domains:
-> +    minItems: 3
+>         /* Unmovable mappings are supposed to be marked unevictable as well. */
+>         WARN_ON_ONCE(!mapping_unevictable(inode->i_mapping));
+> 
+>  
+> > As noted in [3], the only scenario can trigger the warning after [2] is when a
+> > process creates a TDX VM with non-in-place-conversion guest_memfd and a normal
+> > VM with in-place-conversion guest_memfd. The two invalidate_lock's don't contend
+> > with each other theoretically.
 
-You should have here both constraints - min and maxItems. Current code
-works fine, but usually we want it to be explicit.
+Hmm, no, I think we need to hoist gup() call outside of filemap_invalidate_lock(),
+because I don't think this is strictly limited to TDX VMs without in-place
+conversion.  Even with in-place conversion, I think KVM should allow the source
+page to be shared memory, at which point I believe this becomes a legimate AB-BA
+issue.
 
-I found two more nits which I did not notice earlier, so when fixing
-above please also:
+In general, playing lockdep games with so many subsystems involved terrifies me.
 
-1. Please name the file following compatible, so:
-qcom,sa8255p-ethqos.yaml
-(unless this was already discussed...)
-
-> +        snps,tso;
-> +        snps,pbl = <32>;
-> +        rx-fifo-depth = <16384>;
-> +        tx-fifo-depth = <16384>;
-> +
-> +        phy-handle = <&ethernet_phy>;
-> +        phy-mode = "2500base-x";
-> +
-> +        snps,mtl-rx-config = <&mtl_rx_setup1>;
-> +        snps,mtl-tx-config = <&mtl_tx_setup1>;
-> +
-> +        power-domains = <&scmi8_pd 0>, <&scmi8_pd 1>, <&scmi8_dvfs 0>;
-> +        power-domain-names = "core", "mdio","serdes";
-
-2. Missing space after ,
-
-
-Best regards,
-Krzysztof
-
+> > [2] https://lore.kernel.org/all/cover.1760731772.git.ackerleytng@google.com/
+> > [3] https://lore.kernel.org/all/aQMi%2Fn9DVyeaWsVH@yzhao56-desk.sh.intel.com/
 
