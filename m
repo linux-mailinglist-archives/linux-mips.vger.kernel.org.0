@@ -1,52 +1,50 @@
-Return-Path: <linux-mips+bounces-12092-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12093-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 557D3C3B5F5
-	for <lists+linux-mips@lfdr.de>; Thu, 06 Nov 2025 14:46:00 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49418C3B936
+	for <lists+linux-mips@lfdr.de>; Thu, 06 Nov 2025 15:08:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 02DA9350A14
-	for <lists+linux-mips@lfdr.de>; Thu,  6 Nov 2025 13:46:00 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 894004FFEC4
+	for <lists+linux-mips@lfdr.de>; Thu,  6 Nov 2025 14:02:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EEAC432BF4C;
-	Thu,  6 Nov 2025 13:39:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DAF133B6D2;
+	Thu,  6 Nov 2025 14:02:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pj9jE7yo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ud+s8WUS"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B18FC1E2614;
-	Thu,  6 Nov 2025 13:39:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCB0133A015;
+	Thu,  6 Nov 2025 14:02:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762436387; cv=none; b=FF+iPK92bPZT+6bQHzQAk2KEwYiVnhmSuWNyhTzDyEt9CWlwZ3bRvs4qeIeZi1r8u3nFiU9LBRD+WYeCsZ0dWIq8d1K5d35GxX3vguYW27kCL1WT0bdly226HBCcOFAt98QRuov7dYewJ2SyBhzFv+YxU8WlN/rTfZbSlHsA59k=
+	t=1762437747; cv=none; b=IXy7PFLB2MpmjEuA0I2BHbJAEmxvclpsXKkOzvcfFTKPp9EMyn/InFqeNiv3yADgJiC994npwFkPUE+tkYEqGV4BCju+CRqi/QHjs+0x1IZG68k3xFQWOd4FEm8Fign9P2Ycgj7ptiAFx1+jcBudIW2InSoOb8e5a9wPweezK2g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762436387; c=relaxed/simple;
-	bh=lvN082Tgo45NxAv9qOCzujCY0L4Wp+Q7wkeySWpj1K0=;
+	s=arc-20240116; t=1762437747; c=relaxed/simple;
+	bh=rks74Ok2xVDZRYVekwVF/tod1CxxsRBTTzdE/GlxP70=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qxRnyVh1+NhNVYAFWtOaUwrtpoTPLXr96dVLxQaF2Dnv/qOeOfSnkqPkTNBWejR3x8uscK9aMpKFH1lIS+HfjbkwGqqgRdgvSu1hhnMW1Hw29eWruSx3R7skRt2Z9zEN5d4f4cRBpgSGBeH1HJzFkj7UAnelzMBYU0FR13o8djY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pj9jE7yo; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06FADC4CEF7;
-	Thu,  6 Nov 2025 13:39:47 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=DLABcp0Fn8Vr10idJJU94lSuXmV+DANbiJ1Fp4dYvmW+HwDczdp51lNRyayvHjfdK8+bTdG5Zfvfp9P0VYjoEf+SoGoQHNFlm+O1caQ7t8MLcXO9ooPdqpR1g7rxQvfJGLWk5Ouhk/0wu54lhddRmrvz06xA49WhPNH4CGae0uM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ud+s8WUS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2A90C4CEFB;
+	Thu,  6 Nov 2025 14:02:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762436387;
-	bh=lvN082Tgo45NxAv9qOCzujCY0L4Wp+Q7wkeySWpj1K0=;
+	s=k20201202; t=1762437747;
+	bh=rks74Ok2xVDZRYVekwVF/tod1CxxsRBTTzdE/GlxP70=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Pj9jE7yoInr9BCWfLJ0Y8+K6jrgVmgkwml63N4WoByHVsIr4RWQ7jaDOc81VdNYJ8
-	 iTSCutwFS0KKGPYd8MgmLbSZozfDICTrA/EwOxswYw32R5r2FcMvYuyqLSnKlg09GK
-	 ZGqwqyOq5eWuvrCT8KWgRiq/B2qmCmSO815iikAweI9cxudRZAg/pcDZnnUrPzQRrs
-	 cN2lwF4mGeI/cbxWZtf3kduZfEEOnF+HlI1wbjFN0rVAlsEKu9W/Nk6ryO+lT+57Vi
-	 zzU+PGx4Sd+6r49nkGvK51PgNHObALx0PSlYhCn8Qq3ZiZYk2NFEy6IKxYmHxQusBf
-	 Wc8wnQM0TuucA==
-Date: Thu, 6 Nov 2025 13:39:44 +0000
+	b=Ud+s8WUSocuprubvzUOn8VaTTNgP5pI8KL1QrPvB41zFUOTeVRqsg6VXanq7RjXrt
+	 Xn+A/6fKrbkrAoSRxtE7sgs19ET/So8zm9IajCVZ4mSdbwTSULmFfhU5BAo+iF7nTD
+	 ZMUcjlN+rjIbRkhA07YgsdHFpyV+ozJZ/xB4qYFYWSN+AChzURE/gwQXR5xm4ExRgC
+	 f5IG/MS4uEHvmQ/Vp4534qX52O/yMhhPHpmXheOg/bpZX16ILqr8bdwixpllo89E9L
+	 dh0F2VOHbeO7NnGAN2xsSfXTCxZCZ93t4sk6Si+GzjOjs2MhU+GK+MX4wmRD6Ijdjv
+	 z3wqWVhwtQQaQ==
+Date: Thu, 6 Nov 2025 14:02:24 +0000
 From: Mark Brown <broonie@kernel.org>
 To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
+Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@linutronix.de>,
 	Vincenzo Frascino <vincenzo.frascino@arm.com>,
 	Arnd Bergmann <arnd@arndb.de>,
 	"David S. Miller" <davem@davemloft.net>,
@@ -71,22 +69,15 @@ Cc: Marek Szyprowski <m.szyprowski@samsung.com>,
 	Alexander Gordeev <agordeev@linux.ibm.com>,
 	Christian Borntraeger <borntraeger@linux.ibm.com>,
 	Sven Schnelle <svens@linux.ibm.com>,
-	Nagarathnam Muthusamy <nagarathnam.muthusamy@oracle.com>,
 	Shannon Nelson <sln@onemain.com>, linux-kernel@vger.kernel.org,
 	sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org,
 	loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
-	linux-s390@vger.kernel.org, Aishwarya.TCV@arm.com,
-	Ryan.Roberts@arm.com
-Subject: Re: [PATCH v4 23/35] vdso/datastore: Map pages through struct page
-Message-ID: <aQylIPCo1sEnJF4F@finisterre.sirena.org.uk>
-References: <20251014-vdso-sparc64-generic-2-v4-0-e0607bf49dea@linutronix.de>
- <20251014-vdso-sparc64-generic-2-v4-23-e0607bf49dea@linutronix.de>
- <aQjJNmwniQwwjeBR@finisterre.sirena.org.uk>
- <CGME20251104084442eucas1p2af1bd88393f4d6a532df1cd41f32a287@eucas1p2.samsung.com>
- <e7f05748-a11c-47eb-b1fa-cdc9dc6d05e0@samsung.com>
- <aQyig5TNkw2YJm19@finisterre.sirena.org.uk>
- <20251106142956-d6251eba-c696-4a2f-a3e3-af461530d932@linutronix.de>
+	linux-s390@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>
+Subject: Re: [PATCH v5 00/34] sparc64: vdso: Switch to the generic vDSO
+ library
+Message-ID: <aQyqcH39IPLRWMt_@finisterre.sirena.org.uk>
+References: <20251106-vdso-sparc64-generic-2-v5-0-97ff2b6542f7@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -94,46 +85,53 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="EYbPhjGrYVw8SR92"
+	protocol="application/pgp-signature"; boundary="4rnwqeK5vRaFw2+U"
 Content-Disposition: inline
-In-Reply-To: <20251106142956-d6251eba-c696-4a2f-a3e3-af461530d932@linutronix.de>
-X-Cookie: If in doubt, mumble.
+In-Reply-To: <20251106-vdso-sparc64-generic-2-v5-0-97ff2b6542f7@linutronix.de>
+X-Cookie: Dyslexics have more fnu.
 
 
---EYbPhjGrYVw8SR92
+--4rnwqeK5vRaFw2+U
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 06, 2025 at 02:32:56PM +0100, Thomas Wei=DFschuh wrote:
-> On Thu, Nov 06, 2025 at 01:28:35PM +0000, Mark Brown wrote:
+On Thu, Nov 06, 2025 at 11:01:53AM +0100, Thomas Wei=DFschuh wrote:
+> The generic vDSO provides a lot common functionality shared between
+> different architectures. SPARC is the last architecture not using it,
+> preventing some necessary code cleanup.
+>=20
+> Make use of the generic infrastructure.
 
-> > Given that this issue is very disruptive to userspace it's causing us to
-> > miss huge amounts of test coverage for -next, would it be possible to
-> > drop these patches until we resolve the issue?
+> ---
+> Changes in v5:
+> - Merge the patches for 'struct page' mapping and dynamic allocation
+> - Zero out newly-allocated data pages
+> - Pick up review tags
+> - Link to v4: https://lore.kernel.org/r/20251014-vdso-sparc64-generic-2-v=
+4-0-e0607bf49dea@linutronix.de
 
-> This issue and the observed panics should be fixed in v5 of the series:
-> https://lore.kernel.org/lkml/20251106-vdso-sparc64-generic-2-v5-0-97ff2b6=
-542f7@linutronix.de/
+I've validated that the zeroing fixes the issues we were seeing with
+boot failures on a reasonable chunk of the arm64 platforms:
 
-> I'll ping tglx directly.
+Tested-by: Mark Brown <broonie@kernel.org>
 
-Ah, fantastic - I wasn't aware of the new version.
+I didn't get to all of them but I'd expect the rest are also fine.
 
---EYbPhjGrYVw8SR92
+--4rnwqeK5vRaFw2+U
 Content-Type: application/pgp-signature; name="signature.asc"
 
 -----BEGIN PGP SIGNATURE-----
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmkMpSAACgkQJNaLcl1U
-h9ApqAf8DFWNLEwpnWuEpnrOTVfL+iVYzK6YSgBge+QboC8tTBNFnMnnQ5Ht92aC
-QaU0hO+PO0XJiyMXzjXfT5JgDO8ovlQIUShX3kjD7MF/MuSGdEAbRUEzoFj4d170
-GN1BVZ8iAysXN0NytDNcZImpsxwVva2BtBFzYouhWlcDg2eRPWhzd6tvmJY3b0ZI
-qn9eJOHvYiqh6I4jaF/7mI11G/JYp3x3738trx8FMvZxgxL6y0O0MQ8lETGJTaao
-EwYoM4wyzL8dDJ0r4bYy7pGAiIKFQXpASY1pInXJQ/NVO4fcAC7E47S0u5odZz1h
-lhDgGOw14KG8UFp0J4rBQQRfSWDhCA==
-=oxel
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmkMqnAACgkQJNaLcl1U
+h9DdXQf/cqvSjdtV28SWYNX+UHnXmboyHxzenwcfa4zxbnrzgQ8feYntV6Ikfx7L
+ovSme6EY9cGYwoDmmhIHSSVZ0iuMwgiSj/NLxYlzbayc8uJITnfMorXtyOkqn7eQ
+9PngOIxdOAGels3s3oLIZfRg7pXKnfX176OvkFQi6I2gHaBHCpQbBq4o5qVqFo85
+Yra3emkWyARoll2AJ3u/dPVaDlXP2H3z4fm9QzX/1aWFaGN5Ml43iLbTfuC6YPlA
+/XTavzO9jIbi7l2J36K152BdwsgyOEHqQezDy5a/7bSQwA9cH7ok32svP1b5hpl1
+DOGKdUeeQCo9BAzV2TfMQR9jwzkZSQ==
+=zN3L
 -----END PGP SIGNATURE-----
 
---EYbPhjGrYVw8SR92--
+--4rnwqeK5vRaFw2+U--
 
