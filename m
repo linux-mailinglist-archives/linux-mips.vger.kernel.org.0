@@ -1,159 +1,237 @@
-Return-Path: <linux-mips+bounces-12049-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12050-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01CAAC36D6A
-	for <lists+linux-mips@lfdr.de>; Wed, 05 Nov 2025 17:57:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACC54C3973F
+	for <lists+linux-mips@lfdr.de>; Thu, 06 Nov 2025 08:50:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id D846A4E576C
-	for <lists+linux-mips@lfdr.de>; Wed,  5 Nov 2025 16:52:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 945E31A434EE
+	for <lists+linux-mips@lfdr.de>; Thu,  6 Nov 2025 07:50:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5075338917;
-	Wed,  5 Nov 2025 16:52:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1A5BE295516;
+	Thu,  6 Nov 2025 07:50:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AVpbhQKs"
+	dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b="L5WyxcgW"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from outpost1.zedat.fu-berlin.de (outpost1.zedat.fu-berlin.de [130.133.4.66])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEB30337B96
-	for <linux-mips@vger.kernel.org>; Wed,  5 Nov 2025 16:52:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 125052DF12F;
+	Thu,  6 Nov 2025 07:50:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=130.133.4.66
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762361527; cv=none; b=do4Hz3wz7hkhftAXFuhmW91s6nabMrYM/UhLXEnD1vF7u0PR0zZ9RP07gCmFupngsIbmuuFfBHvbCYKk8wdeNxXOy/U9sIHXMFEM8DF6CaDwYgf73663abuv/QAjM2Jypr+FB3NAI14eCXCAMVrRz1fYCv84z2IXiL/6Z2E6jds=
+	t=1762415410; cv=none; b=O8wszDamjXDtEBdpSipzVRfLEZBgeCIUu3Mz8AXs0SmeMvDNDnbX96bYhApzANJwF3m0CEzXuPF4iIdlJ4Tw9nQQygDTqQ2ytcXKQv1003Sbaw2WI2ywpq1kev2wfSV0yj9wvCrFFzFkv/zklm08jmO88ucO47tSTFHeVezqHZI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762361527; c=relaxed/simple;
-	bh=esO8jRq9uTUw55PJsW3htw0zar+bIhexF73TArzHxxk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lxgf9f0zPxVxTOXWrNdexrOasw5SrknBSBxc+49hp8tIGcEj1tZH34K2Fq4QaEugsqosda02aJMsB1WMMfzMheb/l+thJonIBjKUpd9PunMs+2DVkwDHkud3EqgEu0RImf4fV8tICOVANUU2zRW3XkMEM9+jc4VEn1oNJmEPosI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AVpbhQKs; arc=none smtp.client-ip=209.85.128.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-47755a7652eso173165e9.0
-        for <linux-mips@vger.kernel.org>; Wed, 05 Nov 2025 08:52:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1762361524; x=1762966324; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=esO8jRq9uTUw55PJsW3htw0zar+bIhexF73TArzHxxk=;
-        b=AVpbhQKsWHsJPurkBtpFjS569EuYKUxy0Ewl5KvxLz11TynIudTMz6x27b6A6doKWz
-         ip2xD5KKY1oMJCK0Dweum3CzpsfSfe5Azmrly9qy+6lx5DTGxHpK2A+42y5Z3pqNqWXK
-         5oMVmrIxCr+TXfau1fOpH55Ds8Gfkw+SKMup3+25IM0tOOtYD8mCPcmX3YHevXG3I9fS
-         voKjd3O+6JkWCl7xwg0Uy4qskOwo95lmPAQUzNV1zgopuIouOGjmjNsUQ0iiplG4NNw3
-         pJwe6bLtD5Fb+hz4cFTbQ+dE2Dx8twHim57o5xVAlYBYEkIZ+8VVi9pnTa3HqwZj4o61
-         JDfw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762361524; x=1762966324;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=esO8jRq9uTUw55PJsW3htw0zar+bIhexF73TArzHxxk=;
-        b=OlA1hRUaRifF7m8RTpXRg5uVt7Yd+cGyF4D/1sv4rqNiNkbZ6+BDPbb0qL3oDws+NJ
-         AYSwMzuVyg2hhqNfACgv/HJdS8HjoR3j2L0BZ4ao2g3FJSjb9m0XqPlPTXfxUKZTAStb
-         B8jCTZ9W6pSW5GGyRGYNUJxajweXe3YLzHF0g5NHYrFqHcT0sFVLScQgxuiuCuf9N/TV
-         mQ7DgoIzHUMHTcFyl3bAeztkVQtwfs4bCgMpkwPp7U/wOLrdTs1jJnt/l5DrNYbrJTLW
-         tSVwRrjeca+VZyvYwWkC0gHbHW+DetwgxwX5zNcTtJLM2OAnLvdPlq7Jd690zT/p8xkv
-         j9Gg==
-X-Forwarded-Encrypted: i=1; AJvYcCXZX5Y7UJLu2kdnAhpBKaCnW0mxNCRXXcvVyALXf4VRwhyEHX0ZDPNqVPBUesGheaOks+wiQOlMfgbv@vger.kernel.org
-X-Gm-Message-State: AOJu0YxlVj3DrwvaSS80uBM574LubbF4ZU6hGog8P1+23Jri7aYUQnUs
-	1BGXwY6j49Kri1RDikc3cLGCYwDVpPZxPrXofod9ISDaEnGeiCGw9sxU
-X-Gm-Gg: ASbGncvvy6/phvqzS5hFUAtL5vToA26BMUjE3h2pNUmooNfEgSoA2RWZwZrBdViyoJ7
-	L3XBZuxRtrhoKIOdljS1PFEz3Cwu0v/f7n/FTA1RSVcH5CuvcSbwB1oKDfF/S6Oysnj8/XzAzbl
-	bIOydAi9b9YAGDA58In5fPWKz3aeIddD7BSlltieFQCubx51dEJ1ui46dXRU6D3yPzUdygw3yOo
-	OESAicDVbsaFI6BQmpwWg2ja02Tcfsg3eYNh0GLVVDuZE/jsYWOrEmN9sKai0SBIcYebKJmmQfq
-	ec+C0evNF80NImtAW8jVctCPn+VU8sN8xl420lFZF7TEVBlHXTM0Bas3b7qzby8kDykhNHygtUA
-	U6Pb3dyyPIQy8EizaYn60N5ZJGZB+gANAOsrXnMVf3xQxm3fbBFIloq9OxnWS3sk+y0s3y5r9Bb
-	RKBNPdwPvYqbF4dMev3CGTrBg8liw1u4C+Nvx2Tzz9OPNo6XtXhOUGp+2d1SJfH+8=
-X-Google-Smtp-Source: AGHT+IF1eT04urNHEfsD9kdCj32CNL1YcHJ6oGuMVK3cU2BLT/aQRFRmm7ox5OYZe77ML31HK9v5ow==
-X-Received: by 2002:a05:600c:1c94:b0:477:fcb:2256 with SMTP id 5b1f17b1804b1-4775ce23efemr42468465e9.17.1762361524090;
-        Wed, 05 Nov 2025 08:52:04 -0800 (PST)
-Received: from orome (p200300e41f274600f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f27:4600:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4775ce210a7sm59725725e9.12.2025.11.05.08.52.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Nov 2025 08:52:02 -0800 (PST)
-Date: Wed, 5 Nov 2025 17:52:01 +0100
-From: Thierry Reding <thierry.reding@gmail.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: x86@kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, linux-mips@vger.kernel.org, loongarch@lists.linux.dev, 
-	linuxppc-dev@lists.ozlabs.org, linux-sh@vger.kernel.org, linux-pci@vger.kernel.org, 
-	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/7] syscore: Pass context data to callbacks
-Message-ID: <3dzha4qyqdrbutxby3n5nkvihnxrhniqr6w726eumhzgln2w5l@fbu72mzmjz4m>
-References: <20251029163336.2785270-1-thierry.reding@gmail.com>
- <20251029163336.2785270-2-thierry.reding@gmail.com>
- <CAJZ5v0igMJ12KoYCmrWauvOfdxaNP5-XVKoSxUroaKFN7S-rTQ@mail.gmail.com>
+	s=arc-20240116; t=1762415410; c=relaxed/simple;
+	bh=6krB87tTpg7PnjQCqlyzNLsWgUPFNQzg1RuH0acs9H4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=GG0Wq35ZQ4gsalX8CQ0VLpwCgO3vZMwYsGJBsCXuDtydcxmweM1ggYCxctanGakTeHqiL8t0N1QZM2J8RPYuUjNsSvlZ5h7sclLNDWkvO32uAgUt63kxAVgQAXQ6EN+AN/OXfTMETnFuMUdVLCcpSbRYs8FpIDGI+qeu3/SsGcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de; spf=pass smtp.mailfrom=zedat.fu-berlin.de; dkim=pass (2048-bit key) header.d=fu-berlin.de header.i=@fu-berlin.de header.b=L5WyxcgW; arc=none smtp.client-ip=130.133.4.66
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=physik.fu-berlin.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zedat.fu-berlin.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=fu-berlin.de; s=fub01; h=MIME-Version:Content-Transfer-Encoding:
+	Content-Type:References:In-Reply-To:Date:Cc:To:From:Subject:Message-ID:From:
+	Reply-To:Subject:Date:Message-ID:To:Cc:MIME-Version:Content-Type:
+	Content-Transfer-Encoding:Content-ID:Content-Description:In-Reply-To:
+	References; bh=7Daal1mpDnwksHTBXhovLycDkyASp1letXDnqfk8zx0=; t=1762415405;
+	x=1763020205; b=L5WyxcgWmEC4z5z9DknCBodljeCa1B6aqVEvHpXUMHR4eBQYBtViQciJlHEj6
+	JDax301w5OpOO2mYA2VmR1FtivxNn0sBZNTNceTYymqZkZlLVk2IV0OhIYtjMHlmkb9RzECRxQLGv
+	AgZU2ve910D0UUPUOUhtYUmBrnvCywChZHMNvB53loDVLOcq6WxiQVxt6jR+BGzfJFp3pB5Txp3Hy
+	zgKuhn2CAflfkqThRgpQuFxXponvN+om4tuUJhPzlVCjrB4V+Bf8NygzQB1WYuYCFipumhOTqPnYG
+	XJ+5KoAuUswtWaJUspFxLPe2PLmtvxemFYcqHGW28DRDAmP9aA==;
+Received: from inpost2.zedat.fu-berlin.de ([130.133.4.69])
+          by outpost.zedat.fu-berlin.de (Exim 4.98)
+          with esmtps (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@zedat.fu-berlin.de>)
+          id 1vGukh-00000003Msv-3VoG; Thu, 06 Nov 2025 08:49:51 +0100
+Received: from dynamic-077-183-232-018.77.183.pool.telefonica.de ([77.183.232.18] helo=[192.168.178.50])
+          by inpost2.zedat.fu-berlin.de (Exim 4.98)
+          with esmtpsa (TLS1.3)
+          tls TLS_AES_256_GCM_SHA384
+          (envelope-from <glaubitz@physik.fu-berlin.de>)
+          id 1vGukh-00000003VWh-2Pwo; Thu, 06 Nov 2025 08:49:51 +0100
+Message-ID: <8fcc0fd4b74f99d5c4d80d3907e7607a7d4c89da.camel@physik.fu-berlin.de>
+Subject: Re: [PATCH 02/24] sparc/PCI: Remove pcibios_enable_device() as they
+ do nothing extra
+From: John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>
+To: Ilpo =?ISO-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+ Andreas Larsson <andreas@gaisler.com>, Bjorn Helgaas <bhelgaas@google.com>,
+ "David S. Miller" <davem@davemloft.net>,  Geert Uytterhoeven
+ <geert@linux-m68k.org>, linux-m68k@lists.linux-m68k.org,
+ linux-mips@vger.kernel.org, 	linux-pci@vger.kernel.org,
+ sparclinux@vger.kernel.org, Thomas Bogendoerfer	
+ <tsbogend@alpha.franken.de>, Christian =?ISO-8859-1?Q?K=F6nig?=	
+ <christian.koenig@amd.com>, Yinghai Lu <yinghai@kernel.org>, Igor Mammedov	
+ <imammedo@redhat.com>, "Rafael J . Wysocki" <rafael@kernel.org>, Jonathan
+ Cameron <Jonathan.Cameron@huawei.com>, Lorenzo Pieralisi
+ <lorenzo.pieralisi@arm.com>,  Krzysztof =?UTF-8?Q?Wilczy=C5=84ski?=	
+ <kw@linux.com>, linux-kernel@vger.kernel.org
+Cc: =?UTF-8?Q?Micha=C5=82?= Winiarski <michal.winiarski@intel.com>, 
+	linuxppc-dev@lists.ozlabs.org
+Date: Thu, 06 Nov 2025 08:49:50 +0100
+In-Reply-To: <20250822145605.18172-3-ilpo.jarvinen@linux.intel.com>
+References: <20250822145605.18172-1-ilpo.jarvinen@linux.intel.com>
+	 <20250822145605.18172-3-ilpo.jarvinen@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.58.1 
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ykyajizgfjgayrmb"
-Content-Disposition: inline
-In-Reply-To: <CAJZ5v0igMJ12KoYCmrWauvOfdxaNP5-XVKoSxUroaKFN7S-rTQ@mail.gmail.com>
+X-Original-Sender: glaubitz@physik.fu-berlin.de
+X-ZEDAT-Hint: PO
 
+Hello Ilpo,
 
---ykyajizgfjgayrmb
-Content-Type: text/plain; protected-headers=v1; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v3 1/7] syscore: Pass context data to callbacks
-MIME-Version: 1.0
-
-On Mon, Nov 03, 2025 at 05:18:08PM +0100, Rafael J. Wysocki wrote:
-> On Wed, Oct 29, 2025 at 5:33=E2=80=AFPM Thierry Reding <thierry.reding@gm=
-ail.com> wrote:
-> >
-> > From: Thierry Reding <treding@nvidia.com>
-> >
-> > Several drivers can benefit from registering per-instance data along
-> > with the syscore operations. To achieve this, move the modifiable fields
-> > out of the syscore_ops structure and into a separate struct syscore that
-> > can be registered with the framework. Add a void * driver data field for
-> > drivers to store contextual data that will be passed to the syscore ops.
-> >
-> > Signed-off-by: Thierry Reding <treding@nvidia.com>
+On Fri, 2025-08-22 at 17:55 +0300, Ilpo J=C3=A4rvinen wrote:
+> Under arch/sparc/ there are multiple copies of pcibios_enable_device()
+> but none of those seem to do anything extra beyond what
+> pci_enable_resources() is supposed to do. These functions could lead to
+> inconsistencies in behavior, especially now as pci_enable_resources()
+> and the bridge window resource flags behavior are going to be altered
+> by upcoming changes.
 >=20
-> This change is fine with me, so I can apply it unless somebody has any
-> specific heartburn related to it (Greg?), but in case you want to
-> route it differently
+> Remove all pcibios_enable_device() from arch/sparc/ so that PCI core
+> can simply call into pci_enable_resources() instead using it's __weak
+> version of pcibios_enable_device().
 >=20
-> Acked-by: Rafael J. Wysocki (Intel) <rafael@kernel.org>
+> Signed-off-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
+> ---
+>  arch/sparc/kernel/leon_pci.c | 27 ---------------------------
+>  arch/sparc/kernel/pci.c      | 27 ---------------------------
+>  arch/sparc/kernel/pcic.c     | 27 ---------------------------
+>  3 files changed, 81 deletions(-)
+>=20
+> diff --git a/arch/sparc/kernel/leon_pci.c b/arch/sparc/kernel/leon_pci.c
+> index 8de6646e9ce8..10934dfa987a 100644
+> --- a/arch/sparc/kernel/leon_pci.c
+> +++ b/arch/sparc/kernel/leon_pci.c
+> @@ -60,30 +60,3 @@ void leon_pci_init(struct platform_device *ofdev, stru=
+ct leon_pci_info *info)
+>  	pci_assign_unassigned_resources();
+>  	pci_bus_add_devices(root_bus);
+>  }
+> -
+> -int pcibios_enable_device(struct pci_dev *dev, int mask)
+> -{
+> -	struct resource *res;
+> -	u16 cmd, oldcmd;
+> -	int i;
+> -
+> -	pci_read_config_word(dev, PCI_COMMAND, &cmd);
+> -	oldcmd =3D cmd;
+> -
+> -	pci_dev_for_each_resource(dev, res, i) {
+> -		/* Only set up the requested stuff */
+> -		if (!(mask & (1<<i)))
+> -			continue;
+> -
+> -		if (res->flags & IORESOURCE_IO)
+> -			cmd |=3D PCI_COMMAND_IO;
+> -		if (res->flags & IORESOURCE_MEM)
+> -			cmd |=3D PCI_COMMAND_MEMORY;
+> -	}
+> -
+> -	if (cmd !=3D oldcmd) {
+> -		pci_info(dev, "enabling device (%04x -> %04x)\n", oldcmd, cmd);
+> -		pci_write_config_word(dev, PCI_COMMAND, cmd);
+> -	}
+> -	return 0;
+> -}
+> diff --git a/arch/sparc/kernel/pci.c b/arch/sparc/kernel/pci.c
+> index ddac216a2aff..a9448088e762 100644
+> --- a/arch/sparc/kernel/pci.c
+> +++ b/arch/sparc/kernel/pci.c
+> @@ -722,33 +722,6 @@ struct pci_bus *pci_scan_one_pbm(struct pci_pbm_info=
+ *pbm,
+>  	return bus;
+>  }
+> =20
+> -int pcibios_enable_device(struct pci_dev *dev, int mask)
+> -{
+> -	struct resource *res;
+> -	u16 cmd, oldcmd;
+> -	int i;
+> -
+> -	pci_read_config_word(dev, PCI_COMMAND, &cmd);
+> -	oldcmd =3D cmd;
+> -
+> -	pci_dev_for_each_resource(dev, res, i) {
+> -		/* Only set up the requested stuff */
+> -		if (!(mask & (1<<i)))
+> -			continue;
+> -
+> -		if (res->flags & IORESOURCE_IO)
+> -			cmd |=3D PCI_COMMAND_IO;
+> -		if (res->flags & IORESOURCE_MEM)
+> -			cmd |=3D PCI_COMMAND_MEMORY;
+> -	}
+> -
+> -	if (cmd !=3D oldcmd) {
+> -		pci_info(dev, "enabling device (%04x -> %04x)\n", oldcmd, cmd);
+> -		pci_write_config_word(dev, PCI_COMMAND, cmd);
+> -	}
+> -	return 0;
+> -}
+> -
+>  /* Platform support for /proc/bus/pci/X/Y mmap()s. */
+>  int pci_iobar_pfn(struct pci_dev *pdev, int bar, struct vm_area_struct *=
+vma)
+>  {
+> diff --git a/arch/sparc/kernel/pcic.c b/arch/sparc/kernel/pcic.c
+> index 25fe0a061732..3d54ad5656a4 100644
+> --- a/arch/sparc/kernel/pcic.c
+> +++ b/arch/sparc/kernel/pcic.c
+> @@ -641,33 +641,6 @@ void pcibios_fixup_bus(struct pci_bus *bus)
+>  	}
+>  }
+> =20
+> -int pcibios_enable_device(struct pci_dev *dev, int mask)
+> -{
+> -	struct resource *res;
+> -	u16 cmd, oldcmd;
+> -	int i;
+> -
+> -	pci_read_config_word(dev, PCI_COMMAND, &cmd);
+> -	oldcmd =3D cmd;
+> -
+> -	pci_dev_for_each_resource(dev, res, i) {
+> -		/* Only set up the requested stuff */
+> -		if (!(mask & (1<<i)))
+> -			continue;
+> -
+> -		if (res->flags & IORESOURCE_IO)
+> -			cmd |=3D PCI_COMMAND_IO;
+> -		if (res->flags & IORESOURCE_MEM)
+> -			cmd |=3D PCI_COMMAND_MEMORY;
+> -	}
+> -
+> -	if (cmd !=3D oldcmd) {
+> -		pci_info(dev, "enabling device (%04x -> %04x)\n", oldcmd, cmd);
+> -		pci_write_config_word(dev, PCI_COMMAND, cmd);
+> -	}
+> -	return 0;
+> -}
+> -
+>  /* Makes compiler happy */
+>  static volatile int pcic_timer_dummy;
 
-I have a few follow-up patches for the Tegra PMC driver that depend on
-this. 6.19 is what I was targetting, so if we could put this into a
-stable branch that'd be the best solution. I can set that up via the
-Tegra tree if you and Greg are okay with it.
+This change actually broke driver initialization on SPARC, see:
 
-If that's all too complicated, I can probably wait until the next cycle
-to merge the PMC changes.
+https://github.com/sparclinux/issues/issues/22
 
-Thierry
+Adrian
 
---ykyajizgfjgayrmb
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmkLgLAACgkQ3SOs138+
-s6F0Lg//dTn1/PUCYHRhF8cm1xB6JKggiLC40TRct49fcf9eF5gAdCqXm44qKoaF
-67aqiXAiwzovTctJIu3rz8p71/FeXp/qGWDdPm/+wI7yD+BoCcVO0nmvXuPwCzhd
-ZMwqeaRVm57JX4M9S5BdkOGtDLgAjyZ/6Qq/2isiQSPiWWl/IT3YiLyzw8vq8mcY
-VoepQGK5hm7CHFf8FOBs+sMt6q5JJDm0VjNi+seVcCNg9U25GaXCRc2D9ztAqRib
-3768/KMhlftnoJKsizCwWq2Gyw0Se7ifz66djjf51sHd064LLDv7OZpfeGyiFK01
-MvVGXoPFuIJB0yqIoMRBbeRULm4kq+dkUkt1JWwYAMw9ZJnhXPJJI8bal2IASj8/
-E6NADiYd9HS8kAXWYvLkm0xHv4FN5WXWG2a+Gf6K2vpBm07zG2xnI+eVjYQSnb9W
-O9TcZf3jDWvgEQ31plH5JFY32sI4vjLAdcKS2oRfkbxFDJvTS+RRjj3EPqFshNXf
-B5E6pXTCltOkUepuhbGDzIifVWzYgg/GyXNfwzdnJUXcAz7QPPJySfMraf/dn+8S
-hggVgAivRFDEtaNEqKU6iqoePR3HIUJe/Ebjrb199RV9t4FcnVYOpviJRf5EWpsF
-2YEUJPiA7neiac9fPLwCoRh33bJTIzanmWVxmFF1nQ2vozIt68U=
-=3Mmd
------END PGP SIGNATURE-----
-
---ykyajizgfjgayrmb--
+--=20
+ .''`.  John Paul Adrian Glaubitz
+: :' :  Debian Developer
+`. `'   Physicist
+  `-    GPG: 62FF 8A75 84E0 2956 9546  0006 7426 3B37 F5B5 F913
 
