@@ -1,164 +1,105 @@
-Return-Path: <linux-mips+bounces-12138-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12139-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 560C4C4170D
-	for <lists+linux-mips@lfdr.de>; Fri, 07 Nov 2025 20:29:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F6E4C418E4
+	for <lists+linux-mips@lfdr.de>; Fri, 07 Nov 2025 21:14:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE5573A9012
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Nov 2025 19:29:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C58A3ADE41
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Nov 2025 20:13:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71D6B3009F5;
-	Fri,  7 Nov 2025 19:29:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12F283093DD;
+	Fri,  7 Nov 2025 20:12:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="DvEh0tB5";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="xCoannFY"
+	dkim=pass (2048-bit key) header.d=draconx-ca.20230601.gappssmtp.com header.i=@draconx-ca.20230601.gappssmtp.com header.b="vaitNBo9"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fout-b3-smtp.messagingengine.com (fout-b3-smtp.messagingengine.com [202.12.124.146])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B733C221FD0;
-	Fri,  7 Nov 2025 19:29:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.146
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3183A23A9B3
+	for <linux-mips@vger.kernel.org>; Fri,  7 Nov 2025 20:12:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762543789; cv=none; b=UZ8wm3EhBPg51unzY+ok+LmtNoKk4a8BYc5WaF6vonGfMspIw9Y/Vr7Km5nRot093yCeVnGwu4f6Ac+bxX1JuDxzoPXdLCOQLAC3fSm+alDOazKzwxOVpL/74m019gBmJ5lTnDueG37J2f/F1+cnNRLZ4nrbbS+FXJT+SZnTfA8=
+	t=1762546356; cv=none; b=l4AbW9ylMfsO5124TDr+XTqGkilWMhbK9nhK6L4tOJN9XKd4elYXxXuC859CT4oJCTzFTDfDxRmdkhxJmmxhQAPuDUDgUQM4QWn8fKzfDoEYAfFDaxDkkE4LDTjqkFQKyIijxGujiQYNundIF5PWBDYVxn5D4or0PT17qz7eplE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762543789; c=relaxed/simple;
-	bh=v4+AN5rCF0WTHHGwiE3dw4ta/4S0WRMWYUuIPTbqaOs=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=bsm6mZ6r2QiQLKV9on9R0orJzuNUEqNqDKdm/5CwKC4N+JWr6fZ+jWlLR1gN745Oz/tsDNRCxv+UhwIjg5Dp0Ao2r9ec+Jpaf/Yfds3bxuZvkwDYzrEzhSAFGi22bIckJHN6ESkcRd3YkJ0Ha3RymBXPJkasjScilHcRgHrqxG0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=DvEh0tB5; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=xCoannFY; arc=none smtp.client-ip=202.12.124.146
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
-	by mailfout.stl.internal (Postfix) with ESMTP id 005F01D00175;
-	Fri,  7 Nov 2025 14:29:46 -0500 (EST)
-Received: from phl-imap-08 ([10.202.2.84])
-  by phl-compute-03.internal (MEProxy); Fri, 07 Nov 2025 14:29:47 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1762543786;
-	 x=1762630186; bh=uK64V1RHABwDYWcBrcO7CIMo6gQ+hXw+tDq5ENDDMdI=; b=
-	DvEh0tB5C5uwlHUN5cAgVxrM5wA8MyRL3Vg50sqnsSNlv6jU16A6OxCrqK3uKdsV
-	Xsft9Ng1z5raNgmeFMD2DNE3Z1Nn2asdG8Heo5ra40HHUuPaZQSoj+hzIyqldBJZ
-	A3kWsbYgfj3B873H4JfLFFZqqEfKwWNEKMnGk/Q2XQ2p2bYE7VTLtuuqijk/tnPE
-	vIpNHZFLysFwbmDnvBurv/B/Ws+O+GhRR5SoSGtQd5K8pVd4dZj/Er/xOAaIKe4x
-	pC6yv3Sa448czQNXTuVodxy+dkQr8+g7RbLKXsmD/JWeDUxti7r9SxMYGgibkcZb
-	BbfYBQwp1uzpOmI+ttVIeg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1762543786; x=
-	1762630186; bh=uK64V1RHABwDYWcBrcO7CIMo6gQ+hXw+tDq5ENDDMdI=; b=x
-	CoannFYs5aZkDngyO/cGGTS9agZ5KL+s7dYIm74+qFkWp/kxNMVs6Vw5Z78+vFvi
-	rIQ8deTJH3UxW3QgWDABin3WxV/aVoz3gMaHhsjqMR1hsPPnm1lfiYjxflaRDhxU
-	8IahSaDnv1ynzUrkX4MF16frrj1KM80U5pjVKcOaWaAWE0U9oN2La0LANplpS9PP
-	2La2+T5Kcr0rU7LBhkGlPv7Buee11wzEAy8zi0zch1OaSnNHLl0WcEYImVzU8AUF
-	+SUFX2EucZyROZ7a9Jzrk9JSHLbRgTklp385aZMpWE87PAgdcu6rdIYt3ygwryMm
-	z+z42ccU5gOqNnBGfw5mA==
-X-ME-Sender: <xms:qkgOaQVWyrtJzFwWoX4r7UAg5bJr5Z6w9jLlYzXfQItcPBsxCIYQrQ>
-    <xme:qkgOafbxmTy71v9Zx1jxrd5Dv-8khYNupjwibHetSxoPUNYgqp0x4rbS_4y-bSt6Q
-    B6t7ZU4HzfdASVQ-74kp0sYnnU0Kx6ae-rt6cRQE8mGdvMGODCiMNKs>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeeffedrtdeggdduledthedtucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedflfhirgig
-    uhhnucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqne
-    cuggftrfgrthhtvghrnhephfethfdutdeigeelueeitddtheehudevffejtedtkedvueei
-    tddujeefieejieefnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilh
-    hfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomhdpnhgspghrtghp
-    thhtohephedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepnhgsohiflhgvrhesug
-    hrrggtohhngidrtggrpdhrtghpthhtoheprhgvghhrvghsshhiohhnsheslhhishhtshdr
-    lhhinhhugidruggvvhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrd
-    hkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhmihhpshesvhhgvghrrdhk
-    vghrnhgvlhdrohhrghdprhgtphhtthhopehsthgrsghlvgesvhhgvghrrdhkvghrnhgvlh
-    drohhrgh
-X-ME-Proxy: <xmx:qkgOaeCMkX94klJR4Q6_76loyWJRnLr4vcazdF0HdgPm-FTxqdZk9Q>
-    <xmx:qkgOaR2r9xdAMRyKZ6HrI_MiBh5zsXVyNxTGxWfsyV3oIJl_bx2WPA>
-    <xmx:qkgOaY24YQObLI1sWl67QG5H72otGIfCwBtDBu1kPtCQQhpStHar2g>
-    <xmx:qkgOaeBgljORvxCmrM9LeCEdeqj7ZiwZZz9nxVScqlrtAwIb7BkEVg>
-    <xmx:qkgOacJhPZa5eNwnwgA7AWvX8_32TOYnESs8E_A9CZ1gUOVlL9pcVTfU>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 85BF72CE0067; Fri,  7 Nov 2025 14:29:46 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1762546356; c=relaxed/simple;
+	bh=xhuY738tZl353Xy0fNRI/QG1yk1TSCZTX05qyNUVL30=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=B+FbFJ7qH7XiAwBSf9QrNB6Y/t/Z7JAr+tmp6XzcjfzmATAhf8VSWPQ64E+pbJlVulsJMQvzyKv+WaygO1/P6MSBoOMf303MuZMWrWatf31U48CNnnLrljbtCwfgW62Zsmg4NQOfdYGBupfmS/DYbVhl8slF9D3c+YD2cVB7Pwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=draconx.ca; spf=none smtp.mailfrom=draconx.ca; dkim=pass (2048-bit key) header.d=draconx-ca.20230601.gappssmtp.com header.i=@draconx-ca.20230601.gappssmtp.com header.b=vaitNBo9; arc=none smtp.client-ip=209.85.222.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=draconx.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=draconx.ca
+Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-8b21fc25ae1so110968985a.1
+        for <linux-mips@vger.kernel.org>; Fri, 07 Nov 2025 12:12:33 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=draconx-ca.20230601.gappssmtp.com; s=20230601; t=1762546353; x=1763151153; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=WPIKY3pDWsZYiW/KD6AWR+JZdgeQXYTbfkJenmEgskU=;
+        b=vaitNBo9rBs66HultLferXYUElO/jsbDUQ8OEDAsnkQTpHqaQ22X9HIFivEMgAQ9Dt
+         q8X2xwWIdafUEBfqsiIVy9QFFTMsSc2uN1fX0YrAm46qRZhKJzbUz2XLVbUhgI+e+JXR
+         FGl67rDPCCt2X87JgJqSKeBI0xK7156IYdcfOCWV3BwyNSyILGiVXb3YRrv8mGlcmkLr
+         11codF3F3zHBxGti0S/bO3wObBNodnfo709ap2+odXUCe5hNXtXuczfLgzctGc1il5eX
+         kdk2lPC/O39Up/PTnq2lkz0cXLUgJ4qBbXmVYMVx7a0pUpX2UO9Nmyjlt1WKixTXsE4a
+         LMAA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1762546353; x=1763151153;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=WPIKY3pDWsZYiW/KD6AWR+JZdgeQXYTbfkJenmEgskU=;
+        b=QXms26qdKPoK7rplVODtrpIQLoJUlSzb8AY8P37LV9R1YXkT5S/TsNMLgeoRgr/LR5
+         5gFKOpkLdWfSNwMhfgiSTD4/+qAOMVQLoim3e8NYzXqQYFz/0N/uw0+bMBLbhTK1i7+k
+         lAQKsEQO5a7ivLxsU2IkMMw4GathbytFS02MxE80LKEOuKcTDiEGbgKkirXsBPwpS7dF
+         IfDV4xWrHyJ+rHvOVMN34Dl9KCDQ+TE3PYW7pwGCBlndSkRitlMXYAqORov7k2Ge9gUB
+         j4QTqjEPToh4XMrZpMG9hnRJWsXocnne+rvHk11NlC7M4H2fytONKuQA2gQDQm4cLlA0
+         NTWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXXbibPFjqLK6RbHOOHtcBhCLafK2j79h5YXw1jOU+dQYBtwW+PSl7n31z22prOn9cHp8QjuMW2YfAC@vger.kernel.org
+X-Gm-Message-State: AOJu0YxHmgo32l3WqLFP0cEhnYxbE9nZidbNVxWxL+zT11ny16ZcF8XW
+	a6RCg7K4KqH5/K+Hu1hjZ3r0EhfwhdbrQ1M7Q1p/XbljVyHuLNOTkeV6jyACdxhVcKc=
+X-Gm-Gg: ASbGncu2BJhY3odqPDwqXXrhiB8YRnPPgNSdMgaAnsCkTJtjOftHr6cbMyAEO/15zRk
+	GcLSdHSkLkLATKuMhFr/nmtubXize/yDCjuEz2TAQkI0beoHWfB9/KDO4IOqbkXMVPF6v4G+GLE
+	B8IxEa7lO2iTQdUEqXD5Ed9Db4BjplQW2ZIh8u7VQ+mObB8BQ7CdukiJxX710EMw1X1/Dtxme4J
+	o4LQJeCreuA4ltdSVdK2eXRrWofiDPj5nHzxiozqJh0Av0SeyMb25iqCR+qe9h/36ZzMUJRzii0
+	/6lgDJcbgLEAy4DkzR8QhXqElS1YowTEW3KP9qyPFNNuSSdtEPbSVcL4o2c+anKMN166FjdRU6T
+	k5kR7/YL1q2SsiaJFZGlFoTOiYNfxsnGpoblAhmPWA+iEu8/OwujUO5mfQTizDwKHxDqaa4pkjw
+	9JiUjfNxU6ACKq2VpID4tyYfHoB72qzw==
+X-Google-Smtp-Source: AGHT+IFsLLiomLTVAKf0UK7Kqv+I/lwIiIqePUIuZ3D8VSGGRtsZSWpNNzYLl1SSmqIrjJUQd1Y7Lg==
+X-Received: by 2002:a05:620a:44ce:b0:8b2:33bd:7331 with SMTP id af79cd13be357-8b257f68729mr69675385a.83.1762546353068;
+        Fri, 07 Nov 2025 12:12:33 -0800 (PST)
+Received: from localhost (ip-24-156-181-135.user.start.ca. [24.156.181.135])
+        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-8b2355e9bb6sm476602085a.22.2025.11.07.12.12.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Nov 2025 12:12:32 -0800 (PST)
+Date: Fri, 7 Nov 2025 15:12:31 -0500
+From: Nick Bowler <nbowler@draconx.ca>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Cc: linux-kernel@vger.kernel.org, regressions@lists.linux.dev, 
+	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, "stable@vger.kernel.org" <stable@vger.kernel.org>
+Subject: Re: PROBLEM: boot hang on Indy R4400SC (regression)
+Message-ID: <ea6p4efuwbrlqjiwkgjcd7ofj7aahfnnvnkooo2il36ggzrlcj@n6mcofpb2jep>
+References: <g3scb7mfjbsohdszieqkappslj6m7qu3ou766nckt2remg3ide@izgvehzcdbsu>
+ <e4ed75c7-b108-437f-b44b-69a9b340c085@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: AIEMUPQi-EY-
-Date: Fri, 07 Nov 2025 19:29:25 +0000
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Nick Bowler" <nbowler@draconx.ca>, linux-kernel@vger.kernel.org,
- regressions@lists.linux.dev,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Cc: "stable@vger.kernel.org" <stable@vger.kernel.org>
-Message-Id: <e4ed75c7-b108-437f-b44b-69a9b340c085@app.fastmail.com>
-In-Reply-To: 
- <g3scb7mfjbsohdszieqkappslj6m7qu3ou766nckt2remg3ide@izgvehzcdbsu>
-References: <g3scb7mfjbsohdszieqkappslj6m7qu3ou766nckt2remg3ide@izgvehzcdbsu>
-Subject: Re: PROBLEM: boot hang on Indy R4400SC (regression)
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <e4ed75c7-b108-437f-b44b-69a9b340c085@app.fastmail.com>
 
+On Fri, Nov 07, 2025 at 07:29:25PM +0000, Jiaxun Yang wrote:
+> Unfortunately my Indy won't go over ARCS prom so I'm not in a position
+> to debug this on my side. I have inspected the code again and I can't
+> see anything preventing it to work on R4000 family.
 
+I'll try adding some extra prints to at least figure out where it is
+actually hanging.
 
-On Fri, 7 Nov 2025, at 7:04 AM, Nick Bowler wrote:
-> Hi,
-
-Hi Nick,
-
-Many thanks for the issue report! It's pretty rare to get reports from
-hardware that old.
-
-Unfortunately my Indy won't go over ARCS prom so I'm not in a position
-to debug this on my side. I have inspected the code again and I can't
-see anything preventing it to work on R4000 family.
-
-Maybe we can revert this for non-MIPS64R1 system only so we can get something
-working for both old and new systems.
-
-#regzbot introduced: 35ad7e181541aa5757f9f316768d3e64403ec843
-
-Thanks
-
->
-> After a recent 6.1.y stable kernel update, my Indy (mips64 R4400SC) now
-> just stops booting early, just before when I would normally see the
-> kernel messages about mounting the root filesystem.
->
-> There are no further messages of any kind, and the boot process does not
-> appear to ever complete.  However, the kernel is not fully crashed, as
-> it does respond to sysrq commands from the keyboard (and I do get output
-> on the console from these).
->
-> I bisected to the following:
->  
->     794b679a28bb59a4533ae39a7cf945b9d5bbe336 is the first bad commit
->     commit 794b679a28bb59a4533ae39a7cf945b9d5bbe336
->     Author: Jiaxun Yang <jiaxun.yang@flygoat.com>
->     Date:   Sat Jun 7 13:43:56 2025 +0100
->    
->         MIPS: mm: tlb-r4k: Uniquify TLB entries on init
->    
->         commit 35ad7e181541aa5757f9f316768d3e64403ec843 upstream.
->
-> This reverts cleanly on top of 6.1.158 and the resulting kernel boots
-> normally.  I then reproduced this failure on 6.18-rc4.  Reverting
-> 35ad7e181541 on top of 6.18-rc4 also results in a normal boot.
->
-> Let me know if you need any more info!
->
-> Thanks,
->   Nick
-
--- 
-- Jiaxun
+Thanks,
+  Nick
 
