@@ -1,34 +1,34 @@
-Return-Path: <linux-mips+bounces-12133-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12132-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id DBA66C407D2
-	for <lists+linux-mips@lfdr.de>; Fri, 07 Nov 2025 16:00:15 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8FCB3C407AF
+	for <lists+linux-mips@lfdr.de>; Fri, 07 Nov 2025 15:59:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EA8FA4F58AB
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Nov 2025 14:59:11 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 356C835181D
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Nov 2025 14:59:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47C5A3043A2;
-	Fri,  7 Nov 2025 14:59:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A9F9238D54;
+	Fri,  7 Nov 2025 14:58:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="az7B7UIi"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="SEHbXuVu"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7723A1E0DD9;
-	Fri,  7 Nov 2025 14:59:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0FCD1F5437;
+	Fri,  7 Nov 2025 14:58:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762527548; cv=none; b=LPhofyP3WsTdxUE63YpiZJLajy6HBHOd42cQHTyOG1RDRl5RyVRqHHO70UOZ9NXA6C0P60v1dGBi9kz39LtheobW1QDjGNhJz3o+P3st6RMCaSgfHQOrJsvt2H6SKiPWLnb4Q9RxsGzTBWF4pDUXdFNewnjJEm7Yg1mDtcwm7Us=
+	t=1762527535; cv=none; b=r+K6wxec5YLTo3P7TcqRxGNZquWtNsJaEMeIVlfWl5M4JnQpXtt8ugnrAAIHEWjI7RNxtpMPKOlirnzhGBjgIw56ELpuTg4MiLIYjqousjCjlDYQ7DTUaid1OmdV7LspDF+ypUFyqJxFG4ESjyNC5O+J71mhE4GSUPTmHtHigbE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762527548; c=relaxed/simple;
-	bh=U5tT8RqlZdQ3hHWGtAdqTjrgibZo1a3MpY82fV70xKE=;
+	s=arc-20240116; t=1762527535; c=relaxed/simple;
+	bh=CuvEsihijR3QuzpWK00WdOgefjLnGEunZdgoMgRV66c=;
 	h=In-Reply-To:References:From:To:Cc:Subject:MIME-Version:
-	 Content-Disposition:Content-Type:Message-Id:Date; b=Og0gj4tD/voQombAe8ecam1UTwMeZuzLulXnh2c6bqGdyC5/7bJwcno+PBeDq0OzOVYZUdsc8b00mkmzyN7PjU6VRhK4osOKIqjm7ZR4uEZ6Q/W1pZ/2OjPy4BV/XRtM5XyDBcX4AW71J4pGANfcmmJ1xyevgGFIMHxIRJTMVbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=az7B7UIi; arc=none smtp.client-ip=78.32.30.218
+	 Content-Disposition:Content-Type:Message-Id:Date; b=k1KV8CxWZ9RBNPu1JiYRxJ/haFhck5yrWBnPJHZE5nFZE+z5xKnDiNNVUXyP7PbMVujry5aZ6hBhOAa9eRIDtVutNjg7Ns2+HjG4XCo4Y/ew7K1y+NDIQkGb64ckmib5+Smuk/Q8Y9OYGOyTJslIm6AchlSNTFIl1QiHoIn9Tao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=SEHbXuVu; arc=none smtp.client-ip=78.32.30.218
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -37,22 +37,22 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=6tHEJW/uohGXrC6WjLOnZ8INtuIGiGHzzYLj1JRrzuw=; b=az7B7UIiP4X3flwMTakKGhlyQR
-	S3YOu+/7Sj5fS2nd3EP3TLsu3knmkIEazrD9Apt+1bLHhFia8dYdZ2kMm8mJt79xlI+Gf7ooNCwB3
-	s+WkhlE6ZVnRnLqFCvhiRZU1y7Lj69MA9131aH/B3UWQcTdk8z++xx6WZ/8/NmLP2g7yPm3gux+cd
-	LMEooG7bfQN/fGpVVIDDALVhSMSqZeC3+UvnCDQKnAPA+z1nMglY6wNrPJypKPTJ8qOFF3VzZeYuf
-	IvbCtndfbdo7Fx1Rw+0fbE2dU+EPEFvsHdDnAhchhBsT8SRng47dZF2jv9JwejEQIdGdAV5ohiQXU
-	8REM/Vbg==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:58972 helo=rmk-PC.armlinux.org.uk)
+	bh=QXDtOKkim8POljbcAQyTq0idiW82SeDw3CP0xiWbbjs=; b=SEHbXuVupLYiD/8DgJh771/mTn
+	BHMkaVIsg3dSqAzRK1eeF+puMDB1xJNOP1UNtJRd0gNUT5BrNnSW3Z4lX//2EIoxLP3V9b8blGCo3
+	wnj/RMVCulgnJeusNQ2LBglt6j9z/aUkxFPZpMTRUneul7zLlBP7phAqZFi4F19XcBBX8lqX0QqcQ
+	GrJI1po8SR2Qj/0HsC0+XbCmCA0dJmYwB/b/B3XauF87RNWKVwJarZOWeCjhjc/BoSLXOEq0ejuiE
+	2HdgRHVWECM73wHYoKM4Je2g7QS886X8v1MyNbwpBaYo8R178qnE1ztvWIwvLloHMKFCZChMZk7Hl
+	6M71pzig==;
+Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:45234 helo=rmk-PC.armlinux.org.uk)
 	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.98.2)
 	(envelope-from <rmk@armlinux.org.uk>)
-	id 1vHNSn-000000006jh-2nV4;
-	Fri, 07 Nov 2025 14:29:17 +0000
+	id 1vHNSs-000000006k2-06U6;
+	Fri, 07 Nov 2025 14:29:22 +0000
 Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.98.2)
 	(envelope-from <rmk@rmk-PC.armlinux.org.uk>)
-	id 1vHNSl-0000000DkTH-2tGu;
-	Fri, 07 Nov 2025 14:29:15 +0000
+	id 1vHNSq-0000000DkTN-3RoV;
+	Fri, 07 Nov 2025 14:29:20 +0000
 In-Reply-To: <aQ4ByErmsnAPSHIL@shell.armlinux.org.uk>
 References: <aQ4ByErmsnAPSHIL@shell.armlinux.org.uk>
 From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
@@ -81,8 +81,8 @@ Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>,
 	netdev@vger.kernel.org,
 	Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>,
 	Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH net-next 15/16] net: stmmac: visconti: use PHY_INTF_SEL_x to
- select PHY interface
+Subject: [PATCH net-next 16/16] net: stmmac: visconti: use
+ stmmac_get_phy_intf_sel()
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -92,40 +92,63 @@ MIME-Version: 1.0
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1vHNSl-0000000DkTH-2tGu@rmk-PC.armlinux.org.uk>
+Message-Id: <E1vHNSq-0000000DkTN-3RoV@rmk-PC.armlinux.org.uk>
 Sender: Russell King <rmk@armlinux.org.uk>
-Date: Fri, 07 Nov 2025 14:29:15 +0000
+Date: Fri, 07 Nov 2025 14:29:20 +0000
 
-Convert dwmac-visconti to use the PHY_INTF_SEL_x definitions. The
-original definitions used constant 0, BIT(0) (==1) and BIT(2) (==4)
-to define these, but the values of the bits corresponds with the
-PHY_INTF_SEL_x values, so it is highly likely that these are not
-individual bits, but the PHY_INTF_SEL_x bitfield.
-
-This removes this incorrect use of BIT().
+Use stmmac_get_phy_intf_sel() to decode the PHY interface mode to the
+phy_intf_sel value, validate the result and use that to set the
+control register to select the operating mode for the DWMAC core.
 
 Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 ---
- drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+ .../ethernet/stmicro/stmmac/dwmac-visconti.c  | 26 +++++--------------
+ 1 file changed, 6 insertions(+), 20 deletions(-)
 
 diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c
-index bd65d4239054..7b6b048e1be0 100644
+index 7b6b048e1be0..9497b13a5753 100644
 --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c
 +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c
-@@ -42,9 +42,9 @@
+@@ -42,10 +42,6 @@
  
  #define ETHER_CLK_SEL_RX_TX_CLK_EN (ETHER_CLK_SEL_RX_CLK_EN | ETHER_CLK_SEL_TX_CLK_EN)
  
--#define ETHER_CONFIG_INTF_MII 0
--#define ETHER_CONFIG_INTF_RGMII BIT(0)
--#define ETHER_CONFIG_INTF_RMII BIT(2)
-+#define ETHER_CONFIG_INTF_MII	PHY_INTF_SEL_GMII_MII
-+#define ETHER_CONFIG_INTF_RGMII	PHY_INTF_SEL_RGMII
-+#define ETHER_CONFIG_INTF_RMII	PHY_INTF_SEL_RMII
- 
+-#define ETHER_CONFIG_INTF_MII	PHY_INTF_SEL_GMII_MII
+-#define ETHER_CONFIG_INTF_RGMII	PHY_INTF_SEL_RGMII
+-#define ETHER_CONFIG_INTF_RMII	PHY_INTF_SEL_RMII
+-
  struct visconti_eth {
  	void __iomem *reg;
+ 	struct clk *phy_ref_clk;
+@@ -150,22 +146,12 @@ static int visconti_eth_init_hw(struct platform_device *pdev, struct plat_stmmac
+ {
+ 	struct visconti_eth *dwmac = plat_dat->bsp_priv;
+ 	unsigned int clk_sel_val;
+-	u32 phy_intf_sel;
+-
+-	switch (plat_dat->phy_interface) {
+-	case PHY_INTERFACE_MODE_RGMII:
+-	case PHY_INTERFACE_MODE_RGMII_ID:
+-	case PHY_INTERFACE_MODE_RGMII_RXID:
+-	case PHY_INTERFACE_MODE_RGMII_TXID:
+-		phy_intf_sel = ETHER_CONFIG_INTF_RGMII;
+-		break;
+-	case PHY_INTERFACE_MODE_MII:
+-		phy_intf_sel = ETHER_CONFIG_INTF_MII;
+-		break;
+-	case PHY_INTERFACE_MODE_RMII:
+-		phy_intf_sel = ETHER_CONFIG_INTF_RMII;
+-		break;
+-	default:
++	int phy_intf_sel;
++
++	phy_intf_sel = stmmac_get_phy_intf_sel(plat_dat->phy_interface);
++	if (phy_intf_sel != PHY_INTF_SEL_GMII_MII &&
++	    phy_intf_sel != PHY_INTF_SEL_RGMII &&
++	    phy_intf_sel != PHY_INTF_SEL_RMII) {
+ 		dev_err(&pdev->dev, "Unsupported phy-mode (%d)\n", plat_dat->phy_interface);
+ 		return -EOPNOTSUPP;
+ 	}
 -- 
 2.47.3
 
