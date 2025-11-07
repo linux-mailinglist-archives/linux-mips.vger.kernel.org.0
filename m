@@ -1,150 +1,151 @@
-Return-Path: <linux-mips+bounces-12136-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12137-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 14B10C40C8D
-	for <lists+linux-mips@lfdr.de>; Fri, 07 Nov 2025 17:10:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B00DC4145F
+	for <lists+linux-mips@lfdr.de>; Fri, 07 Nov 2025 19:23:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 8A2774F368E
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Nov 2025 16:10:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AFD7A3AA149
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Nov 2025 18:23:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9DCB2F362F;
-	Fri,  7 Nov 2025 16:09:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4514A339716;
+	Fri,  7 Nov 2025 18:23:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="vn3cbOu+"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="nM01/8L7"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB41D2DAFBE;
-	Fri,  7 Nov 2025 16:09:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F3582405F8
+	for <linux-mips@vger.kernel.org>; Fri,  7 Nov 2025 18:23:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762531759; cv=none; b=txfsWlyYR6L3YwY+Ek44gAV8kC1O2w6KYJ3/VNYzQaOGyWCzrb1hOF0B8FyqYqH6T/He5B0JKk3tU22GwuacO9qlnoHqmgaUFx20xXj/I9dWrCEO0YSkLlkMVgb+UvUUpSBZUUa/M7HW24nUK4L2vnkXZrsdPdseDSfBs04vJXk=
+	t=1762539827; cv=none; b=TalLDStwfDwExCT0utlwpJO96OacJ0qY550voubx/TWORazbTjPJBSAhvlg1QhoVywiVPgglxYwOaZfuasGvWtAb9d1ZxzV7/ZqHu2+ThvNBaCK3l6LxLQgCfuqBaycuLDE0NLX/mxvLgyvG5HYqKnM+g5WZRia8UXfw3wlIjHg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762531759; c=relaxed/simple;
-	bh=fsY3NKKjdEAZnR/YNjwGYfIiYz3H855QFv+flLleryQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JGU6JfcNIxoAq9W5FvmX8WPRieo5qLDPCh9+TQmBO/1Nk37WYAe/M2MvQ2XgENPrU4xDywUtbwcTsaP0a76hizQ1ZutHoSvjZozhqeUnYPg49NO/waM/gRPI0h9cxFIdI4eryOlV+UVnaHZ4xLtXh3/fYUH6oBCfJl2ral4S6UY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=vn3cbOu+; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=fwpXxoU8iEmC+DaN7Cr9PGN8QVIi8rUJqHbS4C13YiQ=; b=vn3cbOu+GFQMbus8RTESyhk+QD
-	l4MSz/4gSrLSWpMwTcHMS8POSDqXlYoqW6hd0IVlrkrHN0rw/yZ1S8tjbRotxVZckRVVD5aRb8bPB
-	u2YW04OZjQkWBC/IllYfMqxS3Dir+tyGqw82YW/NF7mlLI684toDkm0bSBsVAcqCbYiV7/jxwioKY
-	+/pe49r2zq2ujlFEiw4kOmyaMOLhRepjPkmnOJVla7Zg8W/csk11yTw9Aw59+2MoFRvcckO8KEMVM
-	IwqMBuTNFDkx39IA961qvS8bRUtzUhe9fuWfVrlXNzSefV5rCz9+Bo9Qr7u3Tve04azN7os0yDbxA
-	N0fCfdkQ==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:32908)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1vHP1N-000000006sy-0WaB;
-	Fri, 07 Nov 2025 16:09:05 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.98.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1vHP1F-000000007hv-1jzX;
-	Fri, 07 Nov 2025 16:08:57 +0000
-Date: Fri, 7 Nov 2025 16:08:57 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Emil Renner Berthing <kernel@esmil.dk>
-Cc: Andrew Lunn <andrew@lunn.ch>, Heiner Kallweit <hkallweit1@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Keguang Zhang <keguang.zhang@gmail.com>,
-	Kevin Hilman <khilman@baylibre.com>,
-	linux-amlogic@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Minda Chen <minda.chen@starfivetech.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>, netdev@vger.kernel.org,
-	Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>,
-	Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH net-next 11/16] net: stmmac: starfive: use
- stmmac_get_phy_intf_sel()
-Message-ID: <aQ4ZmXB_eFjKXgIv@shell.armlinux.org.uk>
-References: <aQ4ByErmsnAPSHIL@shell.armlinux.org.uk>
- <E1vHNSR-0000000DkSt-0wDu@rmk-PC.armlinux.org.uk>
- <CANBLGczzW+kjvSqYm5YVt+2sdLtgyZfa=fhsU1Q-nUjSVvB4cw@mail.gmail.com>
+	s=arc-20240116; t=1762539827; c=relaxed/simple;
+	bh=MUxpleQP/q1CZzvIu98NkMg9Mh7g1TWpe0w3wr0Ud00=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=X58+NSIMpQNJnXrVnUqvVx0gA9PZwRPJszhBAhgmryylaYkcC2bIUf9JWTawpnQsbDxYIUm6DuiFyweDakZ8nRORPhbRWF1e+Uu/WF3QDYRHIK7R4sgkSEr70zgZG80/T92v41L1Er5vfNaL1u+0i8BHggQ3xLF7WZWhmgi8Mpc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=nM01/8L7; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 1FF57C0FAA4;
+	Fri,  7 Nov 2025 18:23:20 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 21613606A6;
+	Fri,  7 Nov 2025 18:23:41 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 0D09611851120;
+	Fri,  7 Nov 2025 19:23:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1762539819; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:content-language:in-reply-to:references;
+	bh=HL/ia/gSVbKi3fiecZNeUOIq6+F0qjFPHUXwwTnWHW8=;
+	b=nM01/8L7C97trD4ZO22+Zl1ZUMI4ARanhQNmuXKobVAYp93mHornwY1U1m1Aal/ZaiJEN0
+	ZmfP1/zdd4aVjq/ZDnaSEXO00WPmCUWwpq8Kloz4McmuyHD9ENJuXnWhoIcxYHqYY78HZh
+	p5DHDP8lNgaZAfvCcfDM1Po9/GgH/OMrIrwqXmMZCRGUTghjpKucx1dwDfclxkTmnY9X1u
+	n5qjVn//S08Br5YZPu9NqjgnOe93QQwFQYODkZWu2PAMfUYUrHD/X7pdIjrQL44tFEp7W6
+	yhrXvGMp0jBec4LpLwZo8w7GRazlJuKZXNW7z/W+J1lQEY4nNUZxA4lvnp0YWA==
+Message-ID: <14f80863-5766-437a-8e38-8991a1a725f9@bootlin.com>
+Date: Fri, 7 Nov 2025 19:23:26 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CANBLGczzW+kjvSqYm5YVt+2sdLtgyZfa=fhsU1Q-nUjSVvB4cw@mail.gmail.com>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next 16/16] net: stmmac: visconti: use
+ stmmac_get_phy_intf_sel()
+To: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>,
+ Andrew Lunn <andrew@lunn.ch>, Heiner Kallweit <hkallweit1@gmail.com>
+Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>,
+ Andrew Lunn <andrew+netdev@lunn.ch>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ "David S. Miller" <davem@davemloft.net>,
+ Emil Renner Berthing <kernel@esmil.dk>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Jerome Brunet <jbrunet@baylibre.com>,
+ Keguang Zhang <keguang.zhang@gmail.com>, Kevin Hilman
+ <khilman@baylibre.com>, linux-amlogic@lists.infradead.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ linux-mips@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+ Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+ Minda Chen <minda.chen@starfivetech.com>,
+ Neil Armstrong <neil.armstrong@linaro.org>, netdev@vger.kernel.org,
+ Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>,
+ Paolo Abeni <pabeni@redhat.com>
+References: <aQ4ByErmsnAPSHIL@shell.armlinux.org.uk>
+ <E1vHNSq-0000000DkTN-3RoV@rmk-PC.armlinux.org.uk>
+From: Maxime Chevallier <maxime.chevallier@bootlin.com>
+Content-Language: en-US
+In-Reply-To: <E1vHNSq-0000000DkTN-3RoV@rmk-PC.armlinux.org.uk>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Fri, Nov 07, 2025 at 11:00:35AM -0500, Emil Renner Berthing wrote:
-> Quoting Russell King (Oracle) (2025-11-07 15:28:55)
-> > Use stmmac_get_phy_intf_sel() to decode the PHY interface mode to the
-> > phy_intf_sel value, validate the result and use that to set the
-> > control register to select the operating mode for the DWMAC core.
-> >
-> > Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
-> > ---
-> >  .../ethernet/stmicro/stmmac/dwmac-starfive.c  | 22 +++++--------------
-> >  1 file changed, 6 insertions(+), 16 deletions(-)
-> >
-> > diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
-> > index 1ef72576c6f1..00078b7a6486 100644
-> > --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
-> > +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-starfive.c
-> > @@ -35,25 +35,15 @@ static int starfive_dwmac_set_mode(struct plat_stmmacenet_data *plat_dat)
-> >         struct starfive_dwmac *dwmac = plat_dat->bsp_priv;
-> >         struct regmap *regmap;
-> >         unsigned int args[2];
-> > -       unsigned int mode;
-> > +       int phy_intf_sel;
-> >         int err;
-> >
-> > -       switch (plat_dat->phy_interface) {
-> > -       case PHY_INTERFACE_MODE_RMII:
-> > -               mode = STARFIVE_DWMAC_PHY_INFT_RMII;
-> > -               break;
-> > -
-> > -       case PHY_INTERFACE_MODE_RGMII:
-> > -       case PHY_INTERFACE_MODE_RGMII_ID:
-> > -       case PHY_INTERFACE_MODE_RGMII_RXID:
-> > -       case PHY_INTERFACE_MODE_RGMII_TXID:
-> > -               mode = STARFIVE_DWMAC_PHY_INFT_RGMII;
-> > -               break;
+Hi Russell,
+
+On 07/11/2025 15:29, Russell King (Oracle) wrote:
+> Use stmmac_get_phy_intf_sel() to decode the PHY interface mode to the
+> phy_intf_sel value, validate the result and use that to set the
+> control register to select the operating mode for the DWMAC core.
 > 
-> After these two patches the STARFIVE_DWMAC_PHY_INFT_RMII and ..RGMII macros are
-> left unused.
+> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+> ---
+>  .../ethernet/stmicro/stmmac/dwmac-visconti.c  | 26 +++++--------------
+>  1 file changed, 6 insertions(+), 20 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c
+> index 7b6b048e1be0..9497b13a5753 100644
+> --- a/drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c
+> +++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c
+> @@ -42,10 +42,6 @@
+>  
+>  #define ETHER_CLK_SEL_RX_TX_CLK_EN (ETHER_CLK_SEL_RX_CLK_EN | ETHER_CLK_SEL_TX_CLK_EN)
+>  
+> -#define ETHER_CONFIG_INTF_MII	PHY_INTF_SEL_GMII_MII
+> -#define ETHER_CONFIG_INTF_RGMII	PHY_INTF_SEL_RGMII
+> -#define ETHER_CONFIG_INTF_RMII	PHY_INTF_SEL_RMII
+> -
+>  struct visconti_eth {
+>  	void __iomem *reg;
+>  	struct clk *phy_ref_clk;
+> @@ -150,22 +146,12 @@ static int visconti_eth_init_hw(struct platform_device *pdev, struct plat_stmmac
+>  {
+>  	struct visconti_eth *dwmac = plat_dat->bsp_priv;
+>  	unsigned int clk_sel_val;
+> -	u32 phy_intf_sel;
+> -
+> -	switch (plat_dat->phy_interface) {
+> -	case PHY_INTERFACE_MODE_RGMII:
+> -	case PHY_INTERFACE_MODE_RGMII_ID:
+> -	case PHY_INTERFACE_MODE_RGMII_RXID:
+> -	case PHY_INTERFACE_MODE_RGMII_TXID:
+> -		phy_intf_sel = ETHER_CONFIG_INTF_RGMII;
+> -		break;
+> -	case PHY_INTERFACE_MODE_MII:
+> -		phy_intf_sel = ETHER_CONFIG_INTF_MII;
+> -		break;
+> -	case PHY_INTERFACE_MODE_RMII:
+> -		phy_intf_sel = ETHER_CONFIG_INTF_RMII;
+> -		break;
+> -	default:
+> +	int phy_intf_sel;
+> +
+> +	phy_intf_sel = stmmac_get_phy_intf_sel(plat_dat->phy_interface);
+> +	if (phy_intf_sel != PHY_INTF_SEL_GMII_MII &&
+> +	    phy_intf_sel != PHY_INTF_SEL_RGMII &&
+> +	    phy_intf_sel != PHY_INTF_SEL_RMII) {
+>  		dev_err(&pdev->dev, "Unsupported phy-mode (%d)\n", plat_dat->phy_interface);
+>  		return -EOPNOTSUPP;
+>  	}
 
-Thanks, I'll remove them in this patch.
+Probably not too big of a deal, but don't we now incorrectly accept the
+"gmii" mode ?
 
-> Maybe just squash the patches and remove the definitions?
-
-It's two logical changes, thus two patches. Reviewers find that this
-makes it easier to review.
-
-Given the number of platform glues that I'm modifying, I don't want
-to change some of them using one big all encompassing patch and
-others as a set of logical changes - that would be totally insane
-to manage.
-
--- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Maxime
 
