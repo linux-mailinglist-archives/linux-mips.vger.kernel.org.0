@@ -1,105 +1,117 @@
-Return-Path: <linux-mips+bounces-12139-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12140-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F6E4C418E4
-	for <lists+linux-mips@lfdr.de>; Fri, 07 Nov 2025 21:14:30 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id EAF0BC41F2F
+	for <lists+linux-mips@lfdr.de>; Sat, 08 Nov 2025 00:28:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6C58A3ADE41
-	for <lists+linux-mips@lfdr.de>; Fri,  7 Nov 2025 20:13:45 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 6C5F234A66E
+	for <lists+linux-mips@lfdr.de>; Fri,  7 Nov 2025 23:28:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12F283093DD;
-	Fri,  7 Nov 2025 20:12:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4FAE313E20;
+	Fri,  7 Nov 2025 23:28:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=draconx-ca.20230601.gappssmtp.com header.i=@draconx-ca.20230601.gappssmtp.com header.b="vaitNBo9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EGapfCye"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-qk1-f175.google.com (mail-qk1-f175.google.com [209.85.222.175])
+Received: from mail-pj1-f51.google.com (mail-pj1-f51.google.com [209.85.216.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3183A23A9B3
-	for <linux-mips@vger.kernel.org>; Fri,  7 Nov 2025 20:12:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49948313E12
+	for <linux-mips@vger.kernel.org>; Fri,  7 Nov 2025 23:28:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762546356; cv=none; b=l4AbW9ylMfsO5124TDr+XTqGkilWMhbK9nhK6L4tOJN9XKd4elYXxXuC859CT4oJCTzFTDfDxRmdkhxJmmxhQAPuDUDgUQM4QWn8fKzfDoEYAfFDaxDkkE4LDTjqkFQKyIijxGujiQYNundIF5PWBDYVxn5D4or0PT17qz7eplE=
+	t=1762558088; cv=none; b=HYKo2R57NBsfipLx2cYuqriZgpLIL7C0x+j363Q85GCRkxyZNC9XysRCRMF9ClZy4xGTHxOxMiZ+HBgJJsDJjt4Ba6/+/aBLwaAunUke+Vp4umC2cPQmHxPHxhHEL/mjXuUPQhYDSv9HVh9SgrrpGpRI/w8SrmTflTAg4rW4TKc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762546356; c=relaxed/simple;
-	bh=xhuY738tZl353Xy0fNRI/QG1yk1TSCZTX05qyNUVL30=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=B+FbFJ7qH7XiAwBSf9QrNB6Y/t/Z7JAr+tmp6XzcjfzmATAhf8VSWPQ64E+pbJlVulsJMQvzyKv+WaygO1/P6MSBoOMf303MuZMWrWatf31U48CNnnLrljbtCwfgW62Zsmg4NQOfdYGBupfmS/DYbVhl8slF9D3c+YD2cVB7Pwg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=draconx.ca; spf=none smtp.mailfrom=draconx.ca; dkim=pass (2048-bit key) header.d=draconx-ca.20230601.gappssmtp.com header.i=@draconx-ca.20230601.gappssmtp.com header.b=vaitNBo9; arc=none smtp.client-ip=209.85.222.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=draconx.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=draconx.ca
-Received: by mail-qk1-f175.google.com with SMTP id af79cd13be357-8b21fc25ae1so110968985a.1
-        for <linux-mips@vger.kernel.org>; Fri, 07 Nov 2025 12:12:33 -0800 (PST)
+	s=arc-20240116; t=1762558088; c=relaxed/simple;
+	bh=+/fFPp+rQE0Kv4hAWny8nwSCwR4OhKVRzT5fLbOpHa4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QYa2SD5klDHwSvlKg0WlLK2Jbcu3hRt+S3JHSbGtPwq9RL4eZGSCnzhjCSb0qplgMMg8O8eqhS9NNYkSzH2btj2MklzQRp2D/3aRz+jTj9/fHThvRIH5dyLeE1WYG252x/dz6uynCQIqClqrkcrBTWHkOSP9DC15BeqXeJyAVhM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EGapfCye; arc=none smtp.client-ip=209.85.216.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f51.google.com with SMTP id 98e67ed59e1d1-3436d6ca17bso192999a91.3
+        for <linux-mips@vger.kernel.org>; Fri, 07 Nov 2025 15:28:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=draconx-ca.20230601.gappssmtp.com; s=20230601; t=1762546353; x=1763151153; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=WPIKY3pDWsZYiW/KD6AWR+JZdgeQXYTbfkJenmEgskU=;
-        b=vaitNBo9rBs66HultLferXYUElO/jsbDUQ8OEDAsnkQTpHqaQ22X9HIFivEMgAQ9Dt
-         q8X2xwWIdafUEBfqsiIVy9QFFTMsSc2uN1fX0YrAm46qRZhKJzbUz2XLVbUhgI+e+JXR
-         FGl67rDPCCt2X87JgJqSKeBI0xK7156IYdcfOCWV3BwyNSyILGiVXb3YRrv8mGlcmkLr
-         11codF3F3zHBxGti0S/bO3wObBNodnfo709ap2+odXUCe5hNXtXuczfLgzctGc1il5eX
-         kdk2lPC/O39Up/PTnq2lkz0cXLUgJ4qBbXmVYMVx7a0pUpX2UO9Nmyjlt1WKixTXsE4a
-         LMAA==
+        d=gmail.com; s=20230601; t=1762558086; x=1763162886; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4FRIkjyQLpnKSuNdHtvanSQnNNTZlAIBvW93bELD2Kc=;
+        b=EGapfCyeIhBL8Yr7SgHoNHSqPpXt/YroOD4EOwyodvIe5hpLH84XTbBt9GwwRFzenc
+         g/Kxh84G/a/RGdtuaxMEf4SkEbBaB5r5Xt9lpQyNYeMZPbOio/uUXZLCuLqajUFSn5iH
+         xn8uwPTwvnEMzel97dVbIMbxukFMmkM5o1S9YnBSDpDeZtEH3KrXV1P92v+C48T4H+/E
+         GWDveuuENdgcZZFA6Zgq6N3LOvZNL0LBnr5TrzTibDXMF3CQxfHAe2Ah7+fl8MClTHbI
+         tOpSPL0ZrdrIbw9HBRq+fqofMREV3MSB9qkK0es79vOftJpULebSn9EL7fyi7vUx2ROs
+         qmxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762546353; x=1763151153;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WPIKY3pDWsZYiW/KD6AWR+JZdgeQXYTbfkJenmEgskU=;
-        b=QXms26qdKPoK7rplVODtrpIQLoJUlSzb8AY8P37LV9R1YXkT5S/TsNMLgeoRgr/LR5
-         5gFKOpkLdWfSNwMhfgiSTD4/+qAOMVQLoim3e8NYzXqQYFz/0N/uw0+bMBLbhTK1i7+k
-         lAQKsEQO5a7ivLxsU2IkMMw4GathbytFS02MxE80LKEOuKcTDiEGbgKkirXsBPwpS7dF
-         IfDV4xWrHyJ+rHvOVMN34Dl9KCDQ+TE3PYW7pwGCBlndSkRitlMXYAqORov7k2Ge9gUB
-         j4QTqjEPToh4XMrZpMG9hnRJWsXocnne+rvHk11NlC7M4H2fytONKuQA2gQDQm4cLlA0
-         NTWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXXbibPFjqLK6RbHOOHtcBhCLafK2j79h5YXw1jOU+dQYBtwW+PSl7n31z22prOn9cHp8QjuMW2YfAC@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHmgo32l3WqLFP0cEhnYxbE9nZidbNVxWxL+zT11ny16ZcF8XW
-	a6RCg7K4KqH5/K+Hu1hjZ3r0EhfwhdbrQ1M7Q1p/XbljVyHuLNOTkeV6jyACdxhVcKc=
-X-Gm-Gg: ASbGncu2BJhY3odqPDwqXXrhiB8YRnPPgNSdMgaAnsCkTJtjOftHr6cbMyAEO/15zRk
-	GcLSdHSkLkLATKuMhFr/nmtubXize/yDCjuEz2TAQkI0beoHWfB9/KDO4IOqbkXMVPF6v4G+GLE
-	B8IxEa7lO2iTQdUEqXD5Ed9Db4BjplQW2ZIh8u7VQ+mObB8BQ7CdukiJxX710EMw1X1/Dtxme4J
-	o4LQJeCreuA4ltdSVdK2eXRrWofiDPj5nHzxiozqJh0Av0SeyMb25iqCR+qe9h/36ZzMUJRzii0
-	/6lgDJcbgLEAy4DkzR8QhXqElS1YowTEW3KP9qyPFNNuSSdtEPbSVcL4o2c+anKMN166FjdRU6T
-	k5kR7/YL1q2SsiaJFZGlFoTOiYNfxsnGpoblAhmPWA+iEu8/OwujUO5mfQTizDwKHxDqaa4pkjw
-	9JiUjfNxU6ACKq2VpID4tyYfHoB72qzw==
-X-Google-Smtp-Source: AGHT+IFsLLiomLTVAKf0UK7Kqv+I/lwIiIqePUIuZ3D8VSGGRtsZSWpNNzYLl1SSmqIrjJUQd1Y7Lg==
-X-Received: by 2002:a05:620a:44ce:b0:8b2:33bd:7331 with SMTP id af79cd13be357-8b257f68729mr69675385a.83.1762546353068;
-        Fri, 07 Nov 2025 12:12:33 -0800 (PST)
-Received: from localhost (ip-24-156-181-135.user.start.ca. [24.156.181.135])
-        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-8b2355e9bb6sm476602085a.22.2025.11.07.12.12.32
+        d=1e100.net; s=20230601; t=1762558086; x=1763162886;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4FRIkjyQLpnKSuNdHtvanSQnNNTZlAIBvW93bELD2Kc=;
+        b=m0yXJ4DkcrTsJ30B65lU1qqz2aywg1F6Fs+1pyJT+S6rkqGKGcWmMYYE1CNYwru3Md
+         ktz0CWYuhFY6Z+yyyXjf+aDY567A/pJQ6HM7+y8bkTHlxu5LJ4Yvfs8KGfDCHbdGJ3p5
+         HjoevcNgX9PdOAfCVEwKrXaWC2RkwoKJd13oZwFB/xlWqyGRe+qcVHqbEG+8QbFMzdMJ
+         0joBU95wznN1dCFn8Wkx/j16tOY70JDRBPf8DYULq5DWFHp5BSMuKMSO+ZYe4WhzczWQ
+         9ppub8FXZF3ReqRoODt29rAtldi0d+GI2S5hJyxwPHaUN9+IslLfaCqLvxeGXjdhHjfK
+         tgkw==
+X-Gm-Message-State: AOJu0YxSaG9GpGlzkZ5xi6EHbQqTcugBuy95PJV7WCDOt5QilYWYGw2Z
+	RllaR+3JXyyhySg7B6L6Q5/SevGxCCnY5BUNBdTwQIbc7GzYRon2LXdNbZvX8Tye
+X-Gm-Gg: ASbGncuB6Iha4ehAGga8AftATFi9Z997B+PA416pQPNm93C5IwLXZi9EyH1ifdv0/Im
+	O7z31QLdpZDiSVlnoChrqln5fUPgGV4wUimsrPFHFlS2RH+X7u2XpRiN+DNnPzfMouYHIu7OvWg
+	NmGEqWVGaczZhiN+ddoulwAReVUFTmEuwwsKJHdoyXsnRLRSEqy1psls9RpRSMQpyM8by/VhKe+
+	7nT19zGoZabAws+qF5dSKSM9NVgUHTL/Bz+xlXPj3EvWZ4FgtYfQVYpTc9/MiSOow1ljG+MB+Jc
+	MONObLpGdeeVrTECRgTVmH3j56p/DKrPS2tpIlWdwKU7z8ICE+i/zAxRwyQRHanJVCCkhzb9DHl
+	552cj8CjK+YdUGjVWMMC5EQIEhaCUbcV+PaNd/FaF47QVLptP/WkHdXi6cfmYTKwPwWm7aNDauW
+	tS2gxhS0Tv/gyyTXYtlTXDbIs4HHeOEUoZHjsL0GWhUrE=
+X-Google-Smtp-Source: AGHT+IEnfB6XHf0tun8R6O8Jd/whhZxRIBexp6VVi1lZY68s7/51Itvmvrdz7VaaTUr138BNkkf6Iw==
+X-Received: by 2002:a17:90b:3885:b0:340:ad5e:cb with SMTP id 98e67ed59e1d1-3436cb7ddacmr770381a91.8.1762558085998;
+        Fri, 07 Nov 2025 15:28:05 -0800 (PST)
+Received: from fedora (c-67-164-59-41.hsd1.ca.comcast.net. [67.164.59.41])
+        by smtp.googlemail.com with ESMTPSA id 41be03b00d2f7-ba90138f614sm6166240a12.27.2025.11.07.15.28.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Nov 2025 12:12:32 -0800 (PST)
-Date: Fri, 7 Nov 2025 15:12:31 -0500
-From: Nick Bowler <nbowler@draconx.ca>
-To: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: linux-kernel@vger.kernel.org, regressions@lists.linux.dev, 
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, "stable@vger.kernel.org" <stable@vger.kernel.org>
-Subject: Re: PROBLEM: boot hang on Indy R4400SC (regression)
-Message-ID: <ea6p4efuwbrlqjiwkgjcd7ofj7aahfnnvnkooo2il36ggzrlcj@n6mcofpb2jep>
-References: <g3scb7mfjbsohdszieqkappslj6m7qu3ou766nckt2remg3ide@izgvehzcdbsu>
- <e4ed75c7-b108-437f-b44b-69a9b340c085@app.fastmail.com>
+        Fri, 07 Nov 2025 15:28:05 -0800 (PST)
+From: "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+To: linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	"Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+Subject: [PATCH] mips: Remove __GFP_HIGHMEM masking
+Date: Fri,  7 Nov 2025 15:27:58 -0800
+Message-ID: <20251107232758.105850-1-vishal.moola@gmail.com>
+X-Mailer: git-send-email 2.51.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <e4ed75c7-b108-437f-b44b-69a9b340c085@app.fastmail.com>
+Content-Transfer-Encoding: 8bit
 
-On Fri, Nov 07, 2025 at 07:29:25PM +0000, Jiaxun Yang wrote:
-> Unfortunately my Indy won't go over ARCS prom so I'm not in a position
-> to debug this on my side. I have inspected the code again and I can't
-> see anything preventing it to work on R4000 family.
+Remove unnecessary __GFP_HIGHMEM masking, which was introduced with
+commit 3e14fb19ad7c ("mips: convert various functions to use ptdescs").
+GFP_KERNEL doesn't contain __GFP_HIGHMEM.
 
-I'll try adding some extra prints to at least figure out where it is
-actually hanging.
+Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+---
+ arch/mips/include/asm/pgalloc.h | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Thanks,
-  Nick
+diff --git a/arch/mips/include/asm/pgalloc.h b/arch/mips/include/asm/pgalloc.h
+index 942af87f1cdd..7a04381efa0b 100644
+--- a/arch/mips/include/asm/pgalloc.h
++++ b/arch/mips/include/asm/pgalloc.h
+@@ -81,8 +81,7 @@ static inline pmd_t *pmd_alloc_one(struct mm_struct *mm, unsigned long address)
+ static inline pud_t *pud_alloc_one(struct mm_struct *mm, unsigned long address)
+ {
+ 	pud_t *pud;
+-	struct ptdesc *ptdesc = pagetable_alloc(GFP_KERNEL & ~__GFP_HIGHMEM,
+-			PUD_TABLE_ORDER);
++	struct ptdesc *ptdesc = pagetable_alloc(GFP_KERNEL, PUD_TABLE_ORDER);
+ 
+ 	if (!ptdesc)
+ 		return NULL;
+-- 
+2.51.1
+
 
