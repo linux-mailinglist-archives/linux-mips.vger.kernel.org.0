@@ -1,133 +1,117 @@
-Return-Path: <linux-mips+bounces-12156-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12157-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15B07C44291
-	for <lists+linux-mips@lfdr.de>; Sun, 09 Nov 2025 17:39:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCC91C44A41
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Nov 2025 00:37:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 91F09346830
-	for <lists+linux-mips@lfdr.de>; Sun,  9 Nov 2025 16:39:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 316173AFA50
+	for <lists+linux-mips@lfdr.de>; Sun,  9 Nov 2025 23:37:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BDFF5303C9C;
-	Sun,  9 Nov 2025 16:39:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4B1B26CE39;
+	Sun,  9 Nov 2025 23:37:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="aIoKA3TZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MwnOpyVs"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0248330103F;
-	Sun,  9 Nov 2025 16:39:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A08D9243376;
+	Sun,  9 Nov 2025 23:37:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762706348; cv=none; b=IHS8RNyGEwwYNXA/iJDEIGvhvV+ob+3Ie9YrMhKw58tRlKd6cTtr8jYYRjYVwpE5BUaiPVQM0IfDMU5k89wAeAj3lm4K5zuRnXYMV7P1iZWJHjVnW4lSm9LRDqkdAK8iffGu0BiF+cGl2jBoX9gCoON31o0scglEo/ZSdR91P7s=
+	t=1762731445; cv=none; b=sG7hWsoEm/J8b8BHpKdFcGvH1yo5K8Yp8XIpf54IjJ9ywbkVCpg54YVJCQFK6AniJyydheSv/ToYJG4od0ENMgJlDaA9xPrPu/6zace7NUY/J1BJI2HAYRuKSwvn7qyQdZkiFGeR3ZweaOXTDQLxfjAuugbEDsy7SSN3cULV+q0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762706348; c=relaxed/simple;
-	bh=558ql1lBrws+DbFADkW8iDQxNoKcbbz+R8lE0Q/Qe7I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=SExuuNRNc/FB20qNGR5albY2fOmN9QpDb3/IAmrcuq7S65BimOu7Cib1zxdKn+MJAyWEmYX2sGOM08Joa+XNNCf8exPV/CUno0VyLbVlrOl1WhyuH9QGlIeCfGEK0vrrZHZJSSHWTIQnxIsm32odxLu+j23PjNoCocVD0w19daQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=aIoKA3TZ; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 7598FC108C7;
-	Sun,  9 Nov 2025 16:38:39 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id BCD0D606F5;
-	Sun,  9 Nov 2025 16:39:00 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 66E9011853189;
-	Sun,  9 Nov 2025 17:38:46 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1762706339; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=ZPRMEMcp2dhUGBHSuTRmxmLz/+slEndBNL5XpFqtZ1U=;
-	b=aIoKA3TZ8t6K+Vrshq3NfDorKiZuRejrlRcVM0UIqysbh10hoVWL/cFDQhnbe6lSgmOWR0
-	uarz8vGDSht8iVMcwkPYyBxJjPFdP7M6zXkR37d8DrJIdoZygxRdQq+7li1H0hHStZwqWR
-	daNbvdSgrgRc7RjtZdrQcXdI8UR0Aph/BG+sFxJJTMPqR/sWkHAj6VUwTAXQK8OSr8e/Mr
-	KGNYX84FHVQkFyJhxmFq51m5AWO/5263nSruhA8vU2zzrFNPt2eFYtVdJFTHqJkYsTJkpW
-	nyIToGDmgTbgMXEt7bAePomqHPtkWBJ+w4z9jj9+8PmpuLrHiKK2RuV0GMylRw==
-Message-ID: <e309efc0-1b03-416c-8464-af92cc428acf@bootlin.com>
-Date: Sun, 9 Nov 2025 17:38:45 +0100
+	s=arc-20240116; t=1762731445; c=relaxed/simple;
+	bh=5YEOu82QTmZW2HELOApkW8zOPzE/QRgh57UZFjoQzaY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=B5ZY42R3WG039uFg08pV3lkZ+DCS0N93+jp5XsztEq8nZAYHhJnC/5WS+CVVgAbOE3KE4TgsVtlXLtkDrsqe3hqHHm1JmqQ75rPN8xuw8VSrMM1V7Crr71byV9Gy5qLffScuCDzuUozIHIHXy4hBeYWEdlgUuDS6WZw4lgRhqKk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MwnOpyVs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0CD19C4CEF7;
+	Sun,  9 Nov 2025 23:37:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1762731445;
+	bh=5YEOu82QTmZW2HELOApkW8zOPzE/QRgh57UZFjoQzaY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=MwnOpyVsRJk5v3uibYeRVnOCS2mEpIYu7UA25lknHfLbVYn5c0tnxogXclky73IXw
+	 yrDTeYj/kkD2tUuLkZnRbrOlrGIlx+gRHuxUgLbIkuRPZEdTMoENUZvLxPWrjXWcXY
+	 TvhOV1UDfUV7n/9tkkg7FkgtHb5nj9cTYTQ0AwmIUpkIC/VkV6yD5XHuPqVF8vK3tU
+	 G7llEsKGssu6wbw7AkmKT+YCjI9Rrl5WWmVGQtqcwALYW6yiBRJqsmDdI0FpEfs6KA
+	 uobnRFDZyqTFZ4mmXZj0E6Mp0YkMnzFCTFeLhtfQBYDeMCopY1sLKNrj/i35WfiMn3
+	 NjCIcAeWhh0LA==
+Date: Sun, 9 Nov 2025 16:37:20 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Jens Reidel <adrian@mainlining.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: Re: [PATCH] mips: Use generic endianness macros instead of
+ MIPS-specific ones
+Message-ID: <20251109233720.GB2977577@ax162>
+References: <20251108-mips-bpf-fix-v1-1-0467c3ee2613@mainlining.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH net-next 16/16] net: stmmac: visconti: use
- stmmac_get_phy_intf_sel()
-To: "Russell King (Oracle)" <linux@armlinux.org.uk>
-Cc: Andrew Lunn <andrew@lunn.ch>, Heiner Kallweit <hkallweit1@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Andrew Lunn <andrew+netdev@lunn.ch>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- "David S. Miller" <davem@davemloft.net>,
- Emil Renner Berthing <kernel@esmil.dk>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Jerome Brunet <jbrunet@baylibre.com>,
- Keguang Zhang <keguang.zhang@gmail.com>, Kevin Hilman
- <khilman@baylibre.com>, linux-amlogic@lists.infradead.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-mips@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
- Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Minda Chen <minda.chen@starfivetech.com>,
- Neil Armstrong <neil.armstrong@linaro.org>, netdev@vger.kernel.org,
- Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>,
- Paolo Abeni <pabeni@redhat.com>
-References: <aQ4ByErmsnAPSHIL@shell.armlinux.org.uk>
- <E1vHNSq-0000000DkTN-3RoV@rmk-PC.armlinux.org.uk>
- <14f80863-5766-437a-8e38-8991a1a725f9@bootlin.com>
- <aQ74G_WqoAusC2wd@shell.armlinux.org.uk>
-From: Maxime Chevallier <maxime.chevallier@bootlin.com>
-Content-Language: en-US
-In-Reply-To: <aQ74G_WqoAusC2wd@shell.armlinux.org.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251108-mips-bpf-fix-v1-1-0467c3ee2613@mainlining.org>
 
-
-
-On 08/11/2025 08:58, Russell King (Oracle) wrote:
-> On Fri, Nov 07, 2025 at 07:23:26PM +0100, Maxime Chevallier wrote:
->> Hi Russell,
->>
->> On 07/11/2025 15:29, Russell King (Oracle) wrote:
->>> -	switch (plat_dat->phy_interface) {
->>> -	case PHY_INTERFACE_MODE_RGMII:
->>> -	case PHY_INTERFACE_MODE_RGMII_ID:
->>> -	case PHY_INTERFACE_MODE_RGMII_RXID:
->>> -	case PHY_INTERFACE_MODE_RGMII_TXID:
->>> -		phy_intf_sel = ETHER_CONFIG_INTF_RGMII;
->>> -		break;
->>> -	case PHY_INTERFACE_MODE_MII:
->>> -		phy_intf_sel = ETHER_CONFIG_INTF_MII;
->>> -		break;
->>> -	case PHY_INTERFACE_MODE_RMII:
->>> -		phy_intf_sel = ETHER_CONFIG_INTF_RMII;
->>> -		break;
->>> -	default:
->>> +	int phy_intf_sel;
->>> +
->>> +	phy_intf_sel = stmmac_get_phy_intf_sel(plat_dat->phy_interface);
->>> +	if (phy_intf_sel != PHY_INTF_SEL_GMII_MII &&
->>> +	    phy_intf_sel != PHY_INTF_SEL_RGMII &&
->>> +	    phy_intf_sel != PHY_INTF_SEL_RMII) {
->>>  		dev_err(&pdev->dev, "Unsupported phy-mode (%d)\n", plat_dat->phy_interface);
->>>  		return -EOPNOTSUPP;
->>>  	}
->>
->> Probably not too big of a deal, but don't we now incorrectly accept the
->> "gmii" mode ?
+On Sat, Nov 08, 2025 at 11:05:55PM +0100, Jens Reidel wrote:
+> Compiling bpf_skel for mips currently fails because clang --target=bpf
+> is invoked and the source files include byteorder.h, which uses the
+> MIPS-specific macros to determine the endianness, rather than the generic
+> __LITTLE_ENDIAN__ / __BIG_ENDIAN__. Fix this by using the generic
+> macros, which are also defined when targeting bpf. This is already done
+> similarly for powerpc.
 > 
-> We will accept GMII mode, but (a) does that matter, and (b) shouldn't
-> the DT binding be checking the phy-mode (we have some bindings that do.)
+> Signed-off-by: Jens Reidel <adrian@mainlining.org>
 
-Thanks for the clarification, that's fine by me then :)
+As far as I can tell, this should be fine since clang defines these
+macros in the generic case since [1] and I assume GCC does as well but
+if there is a risk of this being a problem for userspace, these could be
+added in addition to __MIPSEB__ / __MIPSEL__.
 
-Maxime
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
+[1]: https://github.com/llvm/llvm-project/commit/2c942c64fb521357ed98c380823e79833a121d18
+
+> ---
+>  arch/mips/include/uapi/asm/byteorder.h | 6 ++----
+>  1 file changed, 2 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/mips/include/uapi/asm/byteorder.h b/arch/mips/include/uapi/asm/byteorder.h
+> index b4edc85f9c30c09aafbc189ec820e6e2f7cbe0d8..5e3c3baa24994a9f3637bf2b63ea7c3577cae541 100644
+> --- a/arch/mips/include/uapi/asm/byteorder.h
+> +++ b/arch/mips/include/uapi/asm/byteorder.h
+> @@ -9,12 +9,10 @@
+>  #ifndef _ASM_BYTEORDER_H
+>  #define _ASM_BYTEORDER_H
+>  
+> -#if defined(__MIPSEB__)
+> -#include <linux/byteorder/big_endian.h>
+> -#elif defined(__MIPSEL__)
+> +#ifdef __LITTLE_ENDIAN__
+>  #include <linux/byteorder/little_endian.h>
+>  #else
+> -# error "MIPS, but neither __MIPSEB__, nor __MIPSEL__???"
+> +#include <linux/byteorder/big_endian.h>
+>  #endif
+>  
+>  #endif /* _ASM_BYTEORDER_H */
+> 
+> ---
+> base-commit: 9c0826a5d9aa4d52206dd89976858457a2a8a7ed
+> change-id: 20251108-mips-bpf-fix-8d1f14bc4903
+> 
+> Best regards,
+> -- 
+> Jens Reidel <adrian@mainlining.org>
 
