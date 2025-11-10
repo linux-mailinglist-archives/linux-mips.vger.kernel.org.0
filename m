@@ -1,117 +1,99 @@
-Return-Path: <linux-mips+bounces-12159-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12160-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C5BEC4569C
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Nov 2025 09:46:01 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43EEBC4572F
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Nov 2025 09:52:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6CE73188FB04
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Nov 2025 08:46:26 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BE5404E90B0
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Nov 2025 08:52:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 405AC248891;
-	Mon, 10 Nov 2025 08:45:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59E582FD7A7;
+	Mon, 10 Nov 2025 08:52:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="zc0jjKjA";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="dKrT84Jk"
+	dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b="SEsYRy3t"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from mail-m49198.qiye.163.com (mail-m49198.qiye.163.com [45.254.49.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 955DF2EBBB2;
-	Mon, 10 Nov 2025 08:45:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A21E248891;
+	Mon, 10 Nov 2025 08:52:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762764356; cv=none; b=NnQg8wen6ThHXqzAYSSDTwY/j0xdevej4KkMSpYsyEENk+wowthL2mSTURrb9q62OWJqSVR5wYcjtjR4+A6VXpjbFzGTx9rn6gofp3qWTvr7TIW9nsLxSZZd4C4LbTJCv8J4L6edWTqUmaSi9OD34wAoFsYKaKpg+k1PAYloO1E=
+	t=1762764732; cv=none; b=KHLCLv3K5bMM57Zh+gQq18am2rG/cjk7O5pg0vLYSEsH76O3Aacs4yj95L6oXiq8dsewv9S/AAfpvcfz47tmcOX3Xpn+FgEq31ktay4+yqjEyS+Hd9uFN32LV2+AmZWrsWHZgj17aBlfMBaKUxy+/Va5W0wk/yv91pKKNtmAwbw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762764356; c=relaxed/simple;
-	bh=qFxHyINETSyVLE4+guZZc0myjQ3B+ECx4XBF2wKcF+o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GbWN5oSE/H5o9/wXKrSeOuVsIFHjIeyYCmebmCQTihS4kCHUdx9WmzwsqRmYMhzNl7JSWN+yo8hz1gG0mjgXTVvjKDZoKvOq85MOWvZcmTYMjJeFdEFx03vihO1IokIpQhkEGRHCBTA5I3WKp1tyrNoPwjGeHQ4JTq3tj0V0AO4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=zc0jjKjA; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=dKrT84Jk; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Mon, 10 Nov 2025 09:45:50 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1762764350;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bsLI0Nxueu9BHgoGhAQAGzoBni2o++loH1n4XsHhDVo=;
-	b=zc0jjKjAsp0YnhtHKw7eM1+liJCO5iSx7CCFd73BS2XJvvlXwflG1NFICzbDNPrMliB1Zz
-	z9oijqTWuNr9uWvpbtAZJfvjFOWQZE3AFkPNDdET/ElQz/Xv3oLQmA/M6PJ/hhmHAX6Cpy
-	Iay9FeMMRFmSX+WRkJbz/WiJ+lqtk6zlCxe5YYD/aR+0JWiaTbiZdKvflk/K+zTAKAHRyh
-	iNT7oqeaQjzbbX4GfH8HcmR7cfsveFd4GJFxHPGpcHUVJs+ns0T1guWntAt+nL8WuHcQAH
-	YY2YP6EklQ3einkrNDniOoe3mo7Bw4HTblfZNZoJk+qiWUqrtmRZ9kBC4KKy5Q==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1762764350;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=bsLI0Nxueu9BHgoGhAQAGzoBni2o++loH1n4XsHhDVo=;
-	b=dKrT84JkcQPBJNqu6XZmJfzmvsjkLpa1AvSOPwrcdFwP4VawI33FMJzCLV+t2ZRC2Nv2Nq
-	0e6oPX/MtzX04lDw==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc: Andy Lutomirski <luto@kernel.org>, 
-	Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
-	Arnd Bergmann <arnd@arndb.de>, "David S. Miller" <davem@davemloft.net>, 
-	Andreas Larsson <andreas@gaisler.com>, Nick Alcock <nick.alcock@oracle.com>, 
-	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Shuah Khan <shuah@kernel.org>, 
-	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>, 
-	Russell King <linux@armlinux.org.uk>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Christophe Leroy <christophe.leroy@csgroup.eu>, Huacai Chen <chenhuacai@kernel.org>, 
-	WANG Xuerui <kernel@xen0n.name>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Shannon Nelson <sln@onemain.com>, linux-kernel@vger.kernel.org, 
-	sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
-	linux-mips@vger.kernel.org, linux-s390@vger.kernel.org
-Subject: Re: [PATCH v5 17/34] random: vDSO: remove ifdeffery
-Message-ID: <20251110094145-462671cc-1f51-466a-b448-3dc541e764ca@linutronix.de>
-References: <20251106-vdso-sparc64-generic-2-v5-0-97ff2b6542f7@linutronix.de>
- <20251106-vdso-sparc64-generic-2-v5-17-97ff2b6542f7@linutronix.de>
- <aQ6Cq_5kiIXllEoS@zx2c4.com>
+	s=arc-20240116; t=1762764732; c=relaxed/simple;
+	bh=K+XaybmtfpqHcjKaCkJr8J+VLm4wYXeR6iV5x1IR+HQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=X/Gvpx6YIRYNmTq1iqTpmk8Af5g8+xw28q4qcOOolcU8itvcUWoV4OLiEOKyvusHvrf590Aj6oYqelkCUpIlICp/h3ewovMMHf4AtkOPva1I0b2BPsDsNXdfbCXeG8N9L+ml01zBnGa4YDGu0pckRUqnrWvVxhdtMttAlAdXd+c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn; spf=pass smtp.mailfrom=seu.edu.cn; dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b=SEsYRy3t; arc=none smtp.client-ip=45.254.49.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seu.edu.cn
+Received: from LAPTOP-N070L597.localdomain (unknown [223.112.146.162])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 29056feac;
+	Mon, 10 Nov 2025 16:52:01 +0800 (GMT+08:00)
+From: Zilin Guan <zilin@seu.edu.cn>
+To: keguang.zhang@gmail.com
+Cc: vkoul@kernel.org,
+	linux-mips@vger.kernel.org,
+	dmaengine@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	jianhao.xu@seu.edu.cn,
+	Zilin Guan <zilin@seu.edu.cn>
+Subject: [PATCH] dmaengine: Loongson1: Fix memory leak in ls1x_dma_prep_dma_cyclic()
+Date: Mon, 10 Nov 2025 08:51:59 +0000
+Message-Id: <20251110085159.754528-1-zilin@seu.edu.cn>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <aQ6Cq_5kiIXllEoS@zx2c4.com>
+X-HM-Tid: 0a9a6cf70cca03a1kunm6f9f71c9a59337
+X-HM-MType: 10
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCSkNCVhlOGRhITEhPT0lLTFYeHw5VEwETFhoSFy
+	QUDg9ZV1kYEgtZQVlJSUhVSkpJVUpPTVVKTUlZV1kWGg8SFR0UWUFZT0tIVUpLSUJDQ0xVSktLVU
+	tZBg++
+DKIM-Signature: a=rsa-sha256;
+	b=SEsYRy3t70QomWfnKUNX5YgGVIArj7EpAQYHNlAYLTj1Io55hjZYFyRRHCw3arKl81YBcSDxEmgUteCqvuawSlBur7Ji5HoEj3dBs7q8T8qCpHsIEaMmSu1FWjXc7f0ZVF4d467rQdyDZGAvMssDqyl1Mfh1q4T93tvbEO6dc3o=; s=default; c=relaxed/relaxed; d=seu.edu.cn; v=1;
+	bh=diZNDUepMPp6k3NXFNNQrzxv9BkBiMSl8tvoJAuqeyo=;
+	h=date:mime-version:subject:message-id:from;
 
-On Sat, Nov 08, 2025 at 12:37:15AM +0100, Jason A. Donenfeld wrote:
-> On Thu, Nov 06, 2025 at 11:02:10AM +0100, Thomas Weißschuh wrote:
-> > -#endif
-> > +	if (IS_ENABLED(CONFIG_VDSO_GETRANDOM))
-> > +		smp_store_release((unsigned long *)&vdso_k_rng_data->generation, next_gen + 1);
-> > +
-> 
-> This is possible because vdso_k_rng_data is now defined in the C source
-> on all platforms and under all configurations, even if
-> !CONFIG_VDSO_GETRANDOM means it's null? Whereas before, some config's
-> headers didn't have this at all, so the #ifdef was necessary?
+In ls1x_dma_prep_dma_cyclic(), a descriptor is allocated with
+ls1x_dma_alloc_desc(). If the subsequent allocation for the scatterlist
+fails, the function returns NULL without freeing the descriptor, which
+causes a memory leak.
 
-This is possible because vdso/datapage.h is now included unconditionally.
-(Which was made possible by the previous cleanup patches in this series)
-vdso_k_rng_data is only defined if CONFIG_VDSO_GETRANDOM=y but declared
-unconditionally. If CONFIG_VDSO_GETRANDOM=n all references to the symbol
-are optimized away by the compiler before the linker is invoked, so no
-unresolved references are created.
+Fix this by calling ls1x_dma_free_desc() in the error path to ensure
+the descriptor is freed.
 
-> If so, can you mention this in the commit message?
+Fixes: e06c432312148 ("dmaengine: Loongson1: Add Loongson-1 APB DMA driver")
+Signed-off-by: Zilin Guan <zilin@seu.edu.cn>
+---
+ drivers/dma/loongson1-apb-dma.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-Will do.
+diff --git a/drivers/dma/loongson1-apb-dma.c b/drivers/dma/loongson1-apb-dma.c
+index 255fe7eca212..5ee829bc5c77 100644
+--- a/drivers/dma/loongson1-apb-dma.c
++++ b/drivers/dma/loongson1-apb-dma.c
+@@ -336,8 +336,10 @@ ls1x_dma_prep_dma_cyclic(struct dma_chan *dchan, dma_addr_t buf_addr,
+ 	/* allocate the scatterlist */
+ 	sg_len = buf_len / period_len;
+ 	sgl = kmalloc_array(sg_len, sizeof(*sgl), GFP_NOWAIT);
+-	if (!sgl)
++	if (!sgl) {
++		ls1x_dma_free_desc(&desc->vd);
+ 		return NULL;
++	}
+ 
+ 	sg_init_table(sgl, sg_len);
+ 	for (i = 0; i < sg_len; ++i) {
+-- 
+2.34.1
 
-
-Thomas
 
