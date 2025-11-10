@@ -1,88 +1,77 @@
-Return-Path: <linux-mips+bounces-12171-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12172-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D518C495CC
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Nov 2025 22:09:40 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id E50E3C49637
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Nov 2025 22:20:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ACED33AE114
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Nov 2025 21:08:42 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 81FB14E7DF4
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Nov 2025 21:20:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1B632F6179;
-	Mon, 10 Nov 2025 21:08:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SzK2pMWu"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9511314B8B;
+	Mon, 10 Nov 2025 21:20:48 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F2432F5A3E;
-	Mon, 10 Nov 2025 21:08:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 064362FC865;
+	Mon, 10 Nov 2025 21:20:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762808920; cv=none; b=WiSNx0GHub7JAu923VihQ+bFB+cclFFVw4lfEAmmMWSBkx+q+YNr4vKYUC49gbnYfx2+k2YumRd7yV5MQv7/T5z0bLidX8DgpAuSDZCn2+qvNJzkiS6Ywh26pDiQbmphQdxRS3pyc0cuRDOMwqPJmXTaTf6CNzAGxWEpxFtlb50=
+	t=1762809645; cv=none; b=e5l9PMs1NuSvE6OdKYEqo2piyg7I9vY2tZ23kiIBoJWlxcsYGZMYaWsdRgPh3r01gug7Im0t7bPfg3SKSXKUTjVz/a8M8us3hxF5E7nJaxpIOkVGsKUY40UsHKFrtnQKNX+nUNuCoIm8BDaM+6zwDcFtnfYNQQs/NV4QgPRpMK8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762808920; c=relaxed/simple;
-	bh=WmucaFrI7bJuofCDaZRNIC+CayWlzp1M5K5cIAKTE1k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LKk2vRFCvkUK2ns3/Y0RAKI86Qat60c6vBUBJ1MocpvuP/c2E8DUXM7wtImySk8quyp8NFRFyQnDNn5RuMKtEo1Wwg2Iqv2dI2DnS+WHaYHSWe+TQZsVTIpXLLA1zn9dJavdP8s3kpmmo+3zvBGhKbKraG8h853/QkR1XEqrWmo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SzK2pMWu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E35F1C116B1;
-	Mon, 10 Nov 2025 21:08:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762808919;
-	bh=WmucaFrI7bJuofCDaZRNIC+CayWlzp1M5K5cIAKTE1k=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=SzK2pMWuVz3sx1/VAZ+bnvTBIVzDeFyWdopXWJCN0QXNVvvAgz/CLqWvLeb2jH6Sv
-	 BNpAFiMMFNItLBfwv3XcKAV7CAvM3IcEnlyJTZqaDemuhfKuxQYD6PTiUwyJ+VEM6Q
-	 VN0I+K4SrpW0OeqrCjFWuhud2QfcT2FWMXCottIz8tYwdP1XUFR999gJrC8EVxcrdi
-	 vSjgLwplYB/q7R1wlkF0r5q9M63nr9Eho62ZHjovpbJsPoGl100MDYqr0cslBdZD8z
-	 ZvHY8I8AXzZYtrxI262MqH213vGMGcx08l2AIeiaEeGz20lPLgogHfNOHhdSNS/RH0
-	 uThAo/VD5hBxQ==
-Date: Mon, 10 Nov 2025 14:08:35 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: Jens Reidel <adrian@mainlining.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>, linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-	llvm@lists.linux.dev
-Subject: Re: [PATCH] mips: Use generic endianness macros instead of
- MIPS-specific ones
-Message-ID: <20251110210835.GA302594@ax162>
-References: <20251108-mips-bpf-fix-v1-1-0467c3ee2613@mainlining.org>
- <20251109233720.GB2977577@ax162>
- <alpine.DEB.2.21.2511100050330.25436@angie.orcam.me.uk>
+	s=arc-20240116; t=1762809645; c=relaxed/simple;
+	bh=SIB82DYGsoDdXbGRdYYJPu5MrdH6oNGIZB+RopftBNs=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=gYx+75R0UcMpG3+Yn5wtJb/nes5uC0az//CHnj4pM4YSPhFuKnrfdXGihf9f7odoFKwHHW09En67IYfP5AkRGVd/0kqc2GR6QRPvCZlr0hAFv3DxCxd3yz1sXRUbVz92t/dFTS46lyWlFWUmXP0SZ6hPXa7jOt6v0OJSwExZgtQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id 7AAE592009C; Mon, 10 Nov 2025 22:20:30 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id 773B592009B;
+	Mon, 10 Nov 2025 21:20:30 +0000 (GMT)
+Date: Mon, 10 Nov 2025 21:20:30 +0000 (GMT)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+cc: Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org, 
+    linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: mm: Only uniquify on CPU cores where it's needed
+In-Reply-To: <20251110194754.47626-1-tsbogend@alpha.franken.de>
+Message-ID: <alpine.DEB.2.21.2511102053470.25436@angie.orcam.me.uk>
+References: <20251110194754.47626-1-tsbogend@alpha.franken.de>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2511100050330.25436@angie.orcam.me.uk>
+Content-Type: text/plain; charset=US-ASCII
 
-On Mon, Nov 10, 2025 at 01:34:19AM +0000, Maciej W. Rozycki wrote:
->  Also please don't review changes based on assumptions, "I assume GCC 
-> does[...]" means that you just don't know (and it's trivial to check).
+On Mon, 10 Nov 2025, Thomas Bogendoerfer wrote:
 
-Yes, that is totally valid. I hastily reviewed this when I should have
-taken the time to check but I did not have a MIPS cross compiler
-available locally to test and I forgot that I can use Godbolt for that
-test. I'll be more mindful of that in the future (or at least being
-clear that I did not actually check but it should be verified before the
-change is merged without providing a tag).
+> Commit 35ad7e181541 ("MIPS: mm: tlb-r4k: Uniquify TLB entries on init")
+> switches initial TLB flushing to a mode needed for microAptiv/M5150
+> cores.  This breaks (at least) R4x00 cores if the tlb probe hits
+> multiple matching TLB entries (SGI IP22 prom for examples sets up all
+> TLBs to the same virtual address). Use the new TLB flushing only on
+> M5150 and local_tlb_flush_all() for everything else.
 
-> target macros.  Since our current GCC requirement is 5.1 it will be fine 
+ This surely isn't enough.  Even the plain old 4Kc core will trigger an 
+MCheck under the same condition.  The fix surely has to be more general.  
 
-Just an FYI, the minimum GCC version is 8.1 since commit 118c40b7b503
-("kbuild: require gcc-8 and binutils-2.30") in 6.16.
+ Perhaps we should take the simplest approach: read all the TLB entries 
+with TLBR, sort them by their VPN value and deduplicate to be able to 
+search for a match quickly, assign and write temporary VPN values outside 
+our unique range avoiding a clash with any of the values obtained, and 
+then finally call local_tlb_flush_all().
 
-Cheers,
-Nathan
+ This will require some memory and the computational complexity may exceed 
+O(n), but our TLBs are small with their size architecturally limited to 64 
+entries, so it's not a big deal in reality and this code will only execute 
+once at boot.
+
+  Maciej
 
