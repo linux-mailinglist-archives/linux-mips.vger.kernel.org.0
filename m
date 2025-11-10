@@ -1,99 +1,167 @@
-Return-Path: <linux-mips+bounces-12160-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12161-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43EEBC4572F
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Nov 2025 09:52:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A716C45829
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Nov 2025 10:05:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id BE5404E90B0
-	for <lists+linux-mips@lfdr.de>; Mon, 10 Nov 2025 08:52:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 988A83B5439
+	for <lists+linux-mips@lfdr.de>; Mon, 10 Nov 2025 09:04:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59E582FD7A7;
-	Mon, 10 Nov 2025 08:52:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6AFB92FDC53;
+	Mon, 10 Nov 2025 09:04:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b="SEsYRy3t"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="THzC1+oh";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="+Nqx/ogP"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-m49198.qiye.163.com (mail-m49198.qiye.163.com [45.254.49.198])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2A21E248891;
-	Mon, 10 Nov 2025 08:52:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D73EE2FDC22;
+	Mon, 10 Nov 2025 09:04:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762764732; cv=none; b=KHLCLv3K5bMM57Zh+gQq18am2rG/cjk7O5pg0vLYSEsH76O3Aacs4yj95L6oXiq8dsewv9S/AAfpvcfz47tmcOX3Xpn+FgEq31ktay4+yqjEyS+Hd9uFN32LV2+AmZWrsWHZgj17aBlfMBaKUxy+/Va5W0wk/yv91pKKNtmAwbw=
+	t=1762765462; cv=none; b=kZi9NBOupBlPf+vJqK/yY91af2kiDUK+ZOjncdmRcUNtJaBNz3AncwBW3SYaxp1XLuAsVWO1nZoE5XwGqpevSkQJ/2Uovqgwb2+d3du+1TndNneDChtQC37EaB1OCH1atUnz2JK6kSljZOqAF5u1bn2GhT42fvuhNMzOS6PivCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762764732; c=relaxed/simple;
-	bh=K+XaybmtfpqHcjKaCkJr8J+VLm4wYXeR6iV5x1IR+HQ=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=X/Gvpx6YIRYNmTq1iqTpmk8Af5g8+xw28q4qcOOolcU8itvcUWoV4OLiEOKyvusHvrf590Aj6oYqelkCUpIlICp/h3ewovMMHf4AtkOPva1I0b2BPsDsNXdfbCXeG8N9L+ml01zBnGa4YDGu0pckRUqnrWvVxhdtMttAlAdXd+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn; spf=pass smtp.mailfrom=seu.edu.cn; dkim=pass (1024-bit key) header.d=seu.edu.cn header.i=@seu.edu.cn header.b=SEsYRy3t; arc=none smtp.client-ip=45.254.49.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=seu.edu.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=seu.edu.cn
-Received: from LAPTOP-N070L597.localdomain (unknown [223.112.146.162])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 29056feac;
-	Mon, 10 Nov 2025 16:52:01 +0800 (GMT+08:00)
-From: Zilin Guan <zilin@seu.edu.cn>
-To: keguang.zhang@gmail.com
-Cc: vkoul@kernel.org,
-	linux-mips@vger.kernel.org,
-	dmaengine@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	jianhao.xu@seu.edu.cn,
-	Zilin Guan <zilin@seu.edu.cn>
-Subject: [PATCH] dmaengine: Loongson1: Fix memory leak in ls1x_dma_prep_dma_cyclic()
-Date: Mon, 10 Nov 2025 08:51:59 +0000
-Message-Id: <20251110085159.754528-1-zilin@seu.edu.cn>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1762765462; c=relaxed/simple;
+	bh=3ydwZExzPTVL5H7Bph6AACoiEJH6uJ/+bxisIogOO3A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dsXUHOUB8IsIFDRLnWsIbLHhs12NfFoQqC4bjGeulFdyrga0EKK7Pz9QLFbWRBcuGSWWnPE1KMo/l8Rp2i6c43dWVjnN7u66iS8IZQEkuUgYJCTLjRtko6OeVPW+m50gCeiAzgie0/wUfehbnE0a8lA53IOoGPSrGQYzJvXosLs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=THzC1+oh; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=+Nqx/ogP; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Mon, 10 Nov 2025 10:04:17 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1762765458;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=t7Guwo0wpxf95Dj+W5UROJyXFGtl7LdcWRhhh/Qf98U=;
+	b=THzC1+ohs7W95eY6RMSRaFJ23VdVBGm5I563I8YASdM00wmofpB9awW1xssuqstq1G4GN9
+	sOp/H73rX5A8lDzddsuk8aEuXZEoY8VatUS8uqdA4P1QwSycvK5U5xYCvCQW9Q155hvtp3
+	7ckU266rRRDn0XAp4JFw8QggWtZsAdOzRHV27wCZCUOuJXVoY4kNpRUGWB5Gkn9W3A+Nid
+	ZNdYJVGJc5HIjFvYZ80gZ8VPKbKpROUhWLEJnGJX/MlPmmtBKOsGsmRMNFy48oFYgIc0zU
+	W+Yiule8nXEF4YfdxOus7DWnvJkK4zQXI2Nc/NhrrTfeic27du8bXWM6BV1vSQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1762765458;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=t7Guwo0wpxf95Dj+W5UROJyXFGtl7LdcWRhhh/Qf98U=;
+	b=+Nqx/ogPinQ4vfSfKxwtwM9MURpLI4OvfJJe18bf22Qbmt21zd133O7NoOhjUAYH62UQVr
+	zbqasc8HiwXrEsDA==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: Andy Lutomirski <luto@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	Arnd Bergmann <arnd@arndb.de>, "David S. Miller" <davem@davemloft.net>, 
+	Andreas Larsson <andreas@gaisler.com>, Nick Alcock <nick.alcock@oracle.com>, 
+	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Shuah Khan <shuah@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>, 
+	Russell King <linux@armlinux.org.uk>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Huacai Chen <chenhuacai@kernel.org>, 
+	WANG Xuerui <kernel@xen0n.name>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, Shannon Nelson <sln@onemain.com>, linux-kernel@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
+	linux-mips@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: Re: [PATCH v5 19/34] random: vDSO: only access vDSO datapage after
+ random_init()
+Message-ID: <20251110094555-353883a9-1950-4cc6-a774-bb0ef5db11c5@linutronix.de>
+References: <20251106-vdso-sparc64-generic-2-v5-0-97ff2b6542f7@linutronix.de>
+ <20251106-vdso-sparc64-generic-2-v5-19-97ff2b6542f7@linutronix.de>
+ <aQ6EvdukQytvqK-u@zx2c4.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-HM-Tid: 0a9a6cf70cca03a1kunm6f9f71c9a59337
-X-HM-MType: 10
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFITzdXWS1ZQUlXWQ8JGhUIEh9ZQVlCSkNCVhlOGRhITEhPT0lLTFYeHw5VEwETFhoSFy
-	QUDg9ZV1kYEgtZQVlJSUhVSkpJVUpPTVVKTUlZV1kWGg8SFR0UWUFZT0tIVUpLSUJDQ0xVSktLVU
-	tZBg++
-DKIM-Signature: a=rsa-sha256;
-	b=SEsYRy3t70QomWfnKUNX5YgGVIArj7EpAQYHNlAYLTj1Io55hjZYFyRRHCw3arKl81YBcSDxEmgUteCqvuawSlBur7Ji5HoEj3dBs7q8T8qCpHsIEaMmSu1FWjXc7f0ZVF4d467rQdyDZGAvMssDqyl1Mfh1q4T93tvbEO6dc3o=; s=default; c=relaxed/relaxed; d=seu.edu.cn; v=1;
-	bh=diZNDUepMPp6k3NXFNNQrzxv9BkBiMSl8tvoJAuqeyo=;
-	h=date:mime-version:subject:message-id:from;
+In-Reply-To: <aQ6EvdukQytvqK-u@zx2c4.com>
 
-In ls1x_dma_prep_dma_cyclic(), a descriptor is allocated with
-ls1x_dma_alloc_desc(). If the subsequent allocation for the scatterlist
-fails, the function returns NULL without freeing the descriptor, which
-causes a memory leak.
+On Sat, Nov 08, 2025 at 12:46:05AM +0100, Jason A. Donenfeld wrote:
+> I'm not a huge fan of this change:
+> 
+> On Thu, Nov 06, 2025 at 11:02:12AM +0100, Thomas Weißschuh wrote:
+> > +static DEFINE_STATIC_KEY_FALSE(random_vdso_is_ready);
+> >  
+> >  /* Control how we warn userspace. */
+> >  static struct ratelimit_state urandom_warning =
+> > @@ -252,6 +253,9 @@ static void random_vdso_update_generation(unsigned long next_gen)
+> >  	if (!IS_ENABLED(CONFIG_VDSO_GETRANDOM))
+> >  		return;
+> >  
+> > +	if (!static_branch_likely(&random_vdso_is_ready))
+> > +		return;
+> > +
+> >  	/* base_crng.generation's invalid value is ULONG_MAX, while
+> >  	 * vdso_k_rng_data->generation's invalid value is 0, so add one to the
+> >  	 * former to arrive at the latter. Use smp_store_release so that this
+> > @@ -274,6 +278,9 @@ static void random_vdso_set_ready(void)
+> >  	if (!IS_ENABLED(CONFIG_VDSO_GETRANDOM))
+> >  		return;
+> >  
+> > +	if (!static_branch_likely(&random_vdso_is_ready))
+> > +		return;
+> > +
+> >  	WRITE_ONCE(vdso_k_rng_data->is_ready, true);
+> >  }
+> >  
+> > @@ -925,6 +932,9 @@ void __init random_init(void)
+> >  	_mix_pool_bytes(&entropy, sizeof(entropy));
+> >  	add_latent_entropy();
+> >  
+> > +	if (IS_ENABLED(CONFIG_VDSO_GETRANDOM))
+> > +		static_branch_enable(&random_vdso_is_ready);
+> > +
+> >  	/*
+> >  	 * If we were initialized by the cpu or bootloader before jump labels
+> >  	 * or workqueues are initialized, then we should enable the static
+> > @@ -934,8 +944,10 @@ void __init random_init(void)
+> >  		crng_set_ready(NULL);
+> >  
+> >  	/* Reseed if already seeded by earlier phases. */
+> > -	if (crng_ready())
+> > +	if (crng_ready()) {
+> >  		crng_reseed(NULL);
+> > +		random_vdso_set_ready();
+> > +	}
+> 
+> The fact that the vdso datapage is set up by the time random_init() is
+> called seems incredibly contingent on init details. Why not, instead,
+> make this a necessary part of the structure of vdso setup code, which
+> can actually know about what happens when?
 
-Fix this by calling ls1x_dma_free_desc() in the error path to ensure
-the descriptor is freed.
+The whole early init is "carefully" ordered in any case. I would have been
+happy to allocate the data pages before the random initialization, but the
+allocator is not yet usable by then.
+We could also make the ordering more visible by having the vDSO datastore call
+into a dedicated function to allow the random core to touch the data pages:
+random_vdso_enable_datapages().
 
-Fixes: e06c432312148 ("dmaengine: Loongson1: Add Loongson-1 APB DMA driver")
-Signed-off-by: Zilin Guan <zilin@seu.edu.cn>
----
- drivers/dma/loongson1-apb-dma.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+> For example, one clean way of
+> doing that would be to make vdso_k_rng_data always valid by having it
+> initially point to __initdata memory, and then when it's time to
+> initialize the real datapage, memcpy() the __initdata memory to the new
+> specially allocated memory. Then we don't need the complex state
+> tracking that this commit and the prior one introduce.
 
-diff --git a/drivers/dma/loongson1-apb-dma.c b/drivers/dma/loongson1-apb-dma.c
-index 255fe7eca212..5ee829bc5c77 100644
---- a/drivers/dma/loongson1-apb-dma.c
-+++ b/drivers/dma/loongson1-apb-dma.c
-@@ -336,8 +336,10 @@ ls1x_dma_prep_dma_cyclic(struct dma_chan *dchan, dma_addr_t buf_addr,
- 	/* allocate the scatterlist */
- 	sg_len = buf_len / period_len;
- 	sgl = kmalloc_array(sg_len, sizeof(*sgl), GFP_NOWAIT);
--	if (!sgl)
-+	if (!sgl) {
-+		ls1x_dma_free_desc(&desc->vd);
- 		return NULL;
-+	}
- 
- 	sg_init_table(sgl, sg_len);
- 	for (i = 0; i < sg_len; ++i) {
--- 
-2.34.1
+Wouldn't that require synchronization between the update path and the memcpy()
+path? Also if the pointer is going to change at some point we'll probably need
+to use READ_ONCE()/WRITE_ONCE(). In general I would be happy about a cleaner
+solution for this but didn't find a great one.
 
+
+Thomas
 
