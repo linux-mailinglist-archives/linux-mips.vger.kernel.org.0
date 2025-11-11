@@ -1,61 +1,63 @@
-Return-Path: <linux-mips+bounces-12177-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12178-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 01FD8C4C4B8
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Nov 2025 09:13:04 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3355DC4C527
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Nov 2025 09:16:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 69E131881592
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Nov 2025 08:12:05 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 58B344EF769
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Nov 2025 08:12:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AD8E2BE658;
-	Tue, 11 Nov 2025 08:11:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05CD62BE051;
+	Tue, 11 Nov 2025 08:11:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="qffcZfWR"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="sEqEZtnj"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4883E299928;
-	Tue, 11 Nov 2025 08:11:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 21E93231A30;
+	Tue, 11 Nov 2025 08:11:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762848696; cv=none; b=Son6OFl9FqZ8rPjEYvOtHjNXjMNsxvF+bn+YK+NFq3DnpCainMXoESQoW2pEO6qqyewy9ZSYEuV5PnHd9izY+OD/jXAPVZz/xy1Ao0TW9Q+XUTTsMlS5o6iaQjpIVRFVWho24TdqMb+OxdwqKGD8sI73bq/G9Ga/+17hRknJqXE=
+	t=1762848715; cv=none; b=DWqS2W0evWGTwsTOC9e5QWuY4crIRJxeiFy2T5GPblS72BEz/p+gYFoYBVZF+iwnetz8x9P3ZCumvIbbhASd1jawlgNVHtigKII8uQPTLxkfVNM+kA6ycQApWwVWdr6W4y+94PnIi8SE/5MOMxPxtQkL2CL6e5wS18FAMlUtWQc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762848696; c=relaxed/simple;
-	bh=i+Q4ioBM7V607WyaisEADmcCyphXU4ueLjNTwlUPufA=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=GCjJttUChrC4zshB5od+nP7PYLEF3mp/+FzY6y6aPEvFLzTZR0LS+P6TR0sPKZfIWpxKLX/Xom4wqe7sH1Ia3lGWzyoOZqOjKszKnxLxkWX3nYMfzo+eUFE+S8KJnolsJEPItRIanzX2UdAe8CCBxUj+i5lmuz1q7kFYZi+Bl9o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=qffcZfWR; arc=none smtp.client-ip=78.32.30.218
+	s=arc-20240116; t=1762848715; c=relaxed/simple;
+	bh=+zWQVTHdBOJWqaDZyFRsZXj1PgcmkMbVVYv9a4NRYe8=;
+	h=In-Reply-To:References:From:To:Cc:Subject:MIME-Version:
+	 Content-Disposition:Content-Type:Message-Id:Date; b=pri3oCR+9JYT6tI1RArVrlLzs4wr2otabTHOCQxVkBFaF2KXkO7bgeQDJbEbHttuIq+Yw9WDSjQ1UIXS/Gdouyn38/d6ZfqFHI43NCTnKU796md9W509fR064AS5LWtxfZJNYgMh3vFHE9dyYuY7ItYx82psX79dC/KOI7W3lRw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=sEqEZtnj; arc=none smtp.client-ip=78.32.30.218
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:Content-Type:MIME-Version:
-	Message-ID:Subject:Cc:To:From:Date:Reply-To:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:In-Reply-To:References:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=R4v0T/jYSK8ngu6ACLcnRSLuWsTH7J+YbIQLDPezMxs=; b=qffcZfWRYLgsyXDoZnCmSC8DaU
-	gLwEBczqur0L6JTHiMf48sWjyW0H7eFBsRltMRz++iQ//Xdp0wUkR5VIp8x8vPvonpfTVG+eLCPMX
-	YV0C9bY3IK6t96L2RxpbtfnBOsuewGiT6Tdd0r+2waJVlr41Vi5WNh1Ui+pimwqySOoQmQK17yBsB
-	eVqyNX4p4hqKECB1FcGHpDyL58e7ROLnJV3WqwJRCS9PKX9D93ghM4lb7nAw2kftfgF3BrDYCzIOy
-	8prMLIDMiG78wImay5usyazruInKjFh1npzjmZZPzwysllPwmoUjaUdikR6Wwd9dT7hhWwVDtPtYm
-	HqhbGfUA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:41674)
+	d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
+	Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:References:
+	In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
+	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
+	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=CytaSTnftbEEyTDU2s+KGe4TAAN74Ksg7sEYbIARhBc=; b=sEqEZtnjOTaObER45JO/6G9uTw
+	OYb+sZ98EPbGM1eDN2KUMLi5PE1TtSqrFnntTIp1SmtY8YtdNtzaxEBXflEEIUpGu/01D+VuCCy89
+	Hpc/c/Co8iZC81qq+UQKI6IltM/eRkcees4SSwPOv21ET/jR13MV0T6dsQUGSZIof5oei+A9EeT2a
+	9ibcFVMldVpERTNZjtf+Kdpp05BFyJTcsYUTs8gxM8Acmx7xeTOcDyrT+uCETRjOfUOG/RnurmJwS
+	syV7kJ3RfKpabNlno57OUFwhasMQ6o8ViZ1ryTOw0LtlyBmXTtBeBVFPjO2+efxqFtioeX14zXgQL
+	LFQlVwSg==;
+Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:43514 helo=rmk-PC.armlinux.org.uk)
 	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.98.2)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1vIjTL-00000000295-1GyZ;
-	Tue, 11 Nov 2025 08:11:27 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.98.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1vIjTJ-000000002nI-1GLe;
-	Tue, 11 Nov 2025 08:11:25 +0000
-Date: Tue, 11 Nov 2025 08:11:25 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Andrew Lunn <andrew@lunn.ch>, Heiner Kallweit <hkallweit1@gmail.com>
+	(envelope-from <rmk@armlinux.org.uk>)
+	id 1vIjTg-0000000029T-0HXK;
+	Tue, 11 Nov 2025 08:11:48 +0000
+Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.98.2)
+	(envelope-from <rmk@rmk-PC.armlinux.org.uk>)
+	id 1vIjTf-0000000Dqt0-1CZg;
+	Tue, 11 Nov 2025 08:11:47 +0000
+In-Reply-To: <aRLvrfx6tOa-RhrY@shell.armlinux.org.uk>
+References: <aRLvrfx6tOa-RhrY@shell.armlinux.org.uk>
+From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
+To: Andrew Lunn <andrew@lunn.ch>,
+	Heiner Kallweit <hkallweit1@gmail.com>
 Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>,
 	Andrew Lunn <andrew+netdev@lunn.ch>,
 	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
@@ -65,50 +67,52 @@ Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>,
 	Jakub Kicinski <kuba@kernel.org>,
 	Keguang Zhang <keguang.zhang@gmail.com>,
 	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	linux-mips@vger.kernel.org,
 	linux-stm32@st-md-mailman.stormreply.com,
 	Matthias Brugger <matthias.bgg@gmail.com>,
 	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Minda Chen <minda.chen@starfivetech.com>, netdev@vger.kernel.org,
+	Minda Chen <minda.chen@starfivetech.com>,
+	netdev@vger.kernel.org,
 	Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>,
 	Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH net-next v2 00/13] net: stmmac: convert glue drivers to use
- stmmac_get_phy_intf_sel()
-Message-ID: <aRLvrfx6tOa-RhrY@shell.armlinux.org.uk>
+Subject: [PATCH net-next v2 01/13] net: stmmac: loongson1: use PHY_INTF_SEL_x
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Message-Id: <E1vIjTf-0000000Dqt0-1CZg@rmk-PC.armlinux.org.uk>
+Sender: Russell King <rmk@armlinux.org.uk>
+Date: Tue, 11 Nov 2025 08:11:47 +0000
 
-This series converts the remaining glue drivers that support
-multi-interface to use stmmac_get_phy_intf_sel(). The reason these
-drivers are not converted to the set_phy_intf_sel() method is
-because it is unclear whether there are ordering dependencies that
-would prevent it.
+Use PHY_INTF_SEL_x definitions for phy_intf_sel bitfield.
 
-For example, reading the stm32mp2 documentation, it is required to
-set the ETH1_SEL field while the dwmac core is in reset and before
-clocks are enabled. This requirement can not be satsified at the
-moment (but could with further changes.)
+Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+---
+ drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-v2:
-- sending meson8b seperately
-- updated a number of commit descriptions: PHY_INTF_SEL_xxx ->
-  PHY_INTF_SEL_x, added note where GMII no longer errors out.
-
- .../net/ethernet/stmicro/stmmac/dwmac-loongson1.c  | 18 ++---
- .../net/ethernet/stmicro/stmmac/dwmac-mediatek.c   | 77 ++++++++--------------
- .../net/ethernet/stmicro/stmmac/dwmac-starfive.c   | 24 ++-----
- drivers/net/ethernet/stmicro/stmmac/dwmac-stm32.c  | 44 +++++++------
- .../net/ethernet/stmicro/stmmac/dwmac-visconti.c   | 26 ++------
- 5 files changed, 70 insertions(+), 119 deletions(-)
-
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c
+index 32b5d1492e2e..09e2af1d778a 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-loongson1.c
+@@ -38,8 +38,8 @@
+ #define GMAC_SHUT		BIT(6)
+ 
+ #define PHY_INTF_SELI		GENMASK(30, 28)
+-#define PHY_INTF_MII		FIELD_PREP(PHY_INTF_SELI, 0)
+-#define PHY_INTF_RMII		FIELD_PREP(PHY_INTF_SELI, 4)
++#define PHY_INTF_MII		FIELD_PREP(PHY_INTF_SELI, PHY_INTF_SEL_GMII_MII)
++#define PHY_INTF_RMII		FIELD_PREP(PHY_INTF_SELI, PHY_INTF_SEL_RMII)
+ 
+ struct ls1x_dwmac {
+ 	struct plat_stmmacenet_data *plat_dat;
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+2.47.3
+
 
