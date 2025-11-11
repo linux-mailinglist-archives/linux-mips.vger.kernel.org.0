@@ -1,113 +1,44 @@
-Return-Path: <linux-mips+bounces-12192-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12193-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03A51C4D898
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Nov 2025 12:56:34 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 674AAC4DBC0
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Nov 2025 13:33:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 679454F8D19
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Nov 2025 11:48:28 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 168074F73EF
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Nov 2025 12:27:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5972E3563CE;
-	Tue, 11 Nov 2025 11:48:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U8wDzG2j"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C246358D11;
+	Tue, 11 Nov 2025 12:27:27 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 117782FCC1D;
-	Tue, 11 Nov 2025 11:48:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D49112550D4;
+	Tue, 11 Nov 2025 12:27:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762861690; cv=none; b=cubzvfEkNEPLzbigtnaIyNsDCL6ZbHyZesuF3/PYEFWFt0k/CE0nFarz0fbW4aPxs4TVKt20eqS3YN5TwqqK8olsElk7dEVJ/ubSyaaSHNkE5kgP6XqwXOsi6WXGLtxQYW0mrNddhMIhMhMMEAJT2vEX5vbqRThsYO8ByAQULLI=
+	t=1762864046; cv=none; b=UAZnnSYuShy/Y0VME5Zp2Gzdit/4eOqsX/f1zAUfL2aGf1RXNIKg3expaVdyCKuN5YId3lD0sM+NrD2c2TZdJTwTGJ5B3EfBaMjuAMNgvEoHUqM/Xs+CnekI5HNTc49SSVaUEknrkACqg4gUopR1TZ+ACBZlnZgmyVVEHl40Oo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762861690; c=relaxed/simple;
-	bh=jxi1Gv6OcPtGGFXGFF2QxkwKjLaMbfnLeBrhrAyU/Tg=;
+	s=arc-20240116; t=1762864046; c=relaxed/simple;
+	bh=0WvQS+WeTyVY50j5gvueYLNa+MYoM6suUDTVF7hYWoU=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eBb8CuLulkcRfgDBNrTtvai+z/CPZGRVItQRz7rSFsDqGRI2o6PT3i/ZB3TSNixW3FzznThFhMdiP46o2EBRIaaW8hEblvHrSJVBKgOrhbqUmb0z9fgIJtMfMLKa66ObFGY59erJygs8ZvthxnTwhG8FWxjduQxvhyv/pb6W4Sg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U8wDzG2j; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E74BC116D0;
-	Tue, 11 Nov 2025 11:47:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1762861689;
-	bh=jxi1Gv6OcPtGGFXGFF2QxkwKjLaMbfnLeBrhrAyU/Tg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=U8wDzG2jhPfzS4KLy6BBXjLkq8tbdJdbZ2HLPt/oCduCWbREVPz6XahhQXZNBZvqk
-	 rL61nJbROp9KbKpanxP6Xm+RhhBC2JjGt3mq5g1Vt8UeeKM8gOKgcYiPO0I2jAA8oR
-	 2vP9zcZsjezzMSY7lXp0qcTehuQ5Bvcn5PLIyv21tVd9pJmlDNPzRzYLCVga+fJVZC
-	 exeLAcTwq2GZWVxiqi/O5Hs9YfEKaR3AZUbkmkVOA0uPAeCkVjy4pmp9+BXSwywuet
-	 qQS5xfNfqALbItTHOqCEixH82CxNQPweybJmarDGuJMjWDhzcw/4Ag1g8TdQPeJwJh
-	 M8yYB1Fdu26pw==
-Date: Tue, 11 Nov 2025 11:47:53 +0000
-From: Simon Horman <horms@kernel.org>
-To: Bartosz Golaszewski <brgl@bgdev.pl>
-Cc: Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Vinod Koul <vkoul@kernel.org>,
-	Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-	Jose Abreu <joabreu@synopsys.com>, Chen-Yu Tsai <wens@kernel.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Matthew Gerlach <matthew.gerlach@altera.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Keguang Zhang <keguang.zhang@gmail.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Jan Petrous <jan.petrous@oss.nxp.com>, s32@nxp.com,
-	Romain Gantois <romain.gantois@bootlin.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Chen Wang <unicorn_wang@outlook.com>,
-	Inochi Amaoto <inochiama@gmail.com>,
-	Emil Renner Berthing <kernel@esmil.dk>,
-	Minda Chen <minda.chen@starfivetech.com>,
-	Drew Fustini <fustini@kernel.org>, Guo Ren <guoren@kernel.org>,
-	Fu Wei <wefu@redhat.com>,
-	Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Shuang Liang <liangshuang@eswincomputing.com>,
-	Zhi Li <lizhi2@eswincomputing.com>,
-	Shangjuan Wei <weishangjuan@eswincomputing.com>,
-	"G. Jaya Kumaran" <vineetha.g.jaya.kumaran@intel.com>,
-	Clark Wang <xiaoning.wang@nxp.com>, Linux Team <linux-imx@nxp.com>,
-	Frank Li <Frank.Li@nxp.com>, David Wu <david.wu@rock-chips.com>,
-	Samin Guo <samin.guo@starfivetech.com>,
-	Christophe Roullier <christophe.roullier@foss.st.com>,
-	Swathi K S <swathi.ks@samsung.com>, linux-arm-msm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	netdev@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	Drew Fustini <dfustini@tenstorrent.com>,
-	linux-sunxi@lists.linux.dev, linux-amlogic@lists.infradead.org,
-	linux-mips@vger.kernel.org, imx@lists.linux.dev,
-	linux-renesas-soc@vger.kernel.org,
-	linux-rockchip@lists.infradead.org, sophgo@lists.linux.dev,
-	linux-riscv@lists.infradead.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: Re: [PATCH v5 8/8] net: stmmac: qcom-ethqos: add support for sa8255p
-Message-ID: <aRMiafCQNPVDOljU@horms.kernel.org>
-References: <20251107-qcom-sa8255p-emac-v5-0-01d3e3aaf388@linaro.org>
- <20251107-qcom-sa8255p-emac-v5-8-01d3e3aaf388@linaro.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=hSILPGIIvfPy9KCBJVzSpu2L2BJ/O+ESOS8onPMSR7XDJl1fblWg9jwFiCwpMYn3Xgii4oSvcwwxf2PW/M1eFq9LPfO7FD+Ys3XgcKnElYsF7wrkzPQqPmqtsQsvzat4LgdqY3yYEfTWa9GBCMNd8c62Jn39jQW/OqP0Ym1Fl1I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1vInSx-0008Kw-00; Tue, 11 Nov 2025 13:27:19 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 904BBC0256; Tue, 11 Nov 2025 13:07:50 +0100 (CET)
+Date: Tue, 11 Nov 2025 13:07:50 +0100
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc: Paul Burton <paulburton@kernel.org>, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Malta: Fix !EVA SOC-it PCI MMIO
+Message-ID: <aRMnForYr_wNgbZ6@alpha.franken.de>
+References: <alpine.DEB.2.21.2510191251130.39634@angie.orcam.me.uk>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -116,123 +47,71 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20251107-qcom-sa8255p-emac-v5-8-01d3e3aaf388@linaro.org>
+In-Reply-To: <alpine.DEB.2.21.2510191251130.39634@angie.orcam.me.uk>
 
-On Fri, Nov 07, 2025 at 11:29:58AM +0100, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+On Mon, Oct 20, 2025 at 02:11:49AM +0100, Maciej W. Rozycki wrote:
+> Fix a regression that has caused accesses to the PCI MMIO window to 
+> complete unclaimed in non-EVA configurations with the SOC-it family of 
+> system controllers, preventing PCI devices from working that use MMIO.
+> 
+> In the non-EVA case PHYS_OFFSET is set to 0, meaning that PCI_BAR0 is 
+> set with an empty mask (and PCI_HEAD4 matches addresses starting from 0 
+> accordingly).  Consequently all addresses are matched for incoming DMA 
+> accesses from PCI.  This seems to confuse the system controller's logic 
+> and outgoing bus cycles targeting the PCI MMIO window seem not to make 
+> it to the intended devices.
+> 
+> This happens as well when a wider mask is used with PCI_BAR0, such as 
+> 0x80000000 or 0xe0000000, that makes addresses match that overlap with 
+> the PCI MMIO window, which starts at 0x10000000 in our configuration.
+> 
+> Set the mask in PCI_BAR0 to 0xf0000000 for non-EVA then, covering the 
+> non-EVA maximum 256 MiB of RAM, which is what YAMON does and which used 
+> to work correctly up to the offending commit.  Set PCI_P2SCMSKL to match 
+> PCI_BAR0 as required by the system controller's specification, and match 
+> PCI_P2SCMAPL to PCI_HEAD4 for identity mapping.
+> 
+> Verified with:
+> 
+> Core board type/revision =      0x0d (Core74K) / 0x01
+> System controller/revision =    MIPS SOC-it 101 OCP / 1.3   SDR-FW-4:1
+> Processor Company ID/options =  0x01 (MIPS Technologies, Inc.) / 0x1c
+> Processor ID/revision =         0x97 (MIPS 74Kf) / 0x4c
+> 
+> for non-EVA and with:
+> 
+> Core board type/revision =      0x0c (CoreFPGA-5) / 0x00
+> System controller/revision =    MIPS ROC-it2 / 0.0   FW-1:1 (CLK_unknown) GIC
+> Processor Company ID/options =  0x01 (MIPS Technologies, Inc.) / 0x00
+> Processor ID/revision =         0xa0 (MIPS interAptiv UP) / 0x20
+> 
+> for EVA/non-EVA, fixing:
+> 
+> defxx 0000:00:12.0: assign IRQ: got 10
+> defxx: v1.12 2021/03/10  Lawrence V. Stefani and others
+> 0000:00:12.0: Could not read adapter factory MAC address!
+> 
+> vs:
+> 
+> defxx 0000:00:12.0: assign IRQ: got 10
+> defxx: v1.12 2021/03/10  Lawrence V. Stefani and others
+> 0000:00:12.0: DEFPA at MMIO addr = 0x10142000, IRQ = 10, Hardware addr = 00-00-f8-xx-xx-xx
+> 0000:00:12.0: registered as fddi0
+> 
+> for non-EVA and causing no change for EVA.
+> 
+> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+> Fixes: 422dd256642b ("MIPS: Malta: Allow PCI devices DMA to lower 2GB physical")
+> Cc: stable@vger.kernel.org # v4.9+
+> ---
+>  arch/mips/mti-malta/malta-init.c |   20 +++++++++++++-------
+>  1 file changed, 13 insertions(+), 7 deletions(-)
 
-...
+applied to mips-fixes
 
-> +static int qcom_ethqos_pd_init(struct platform_device *pdev, void *priv)
-> +{
-> +	struct qcom_ethqos *ethqos = priv;
-> +	int ret;
-> +
-> +	/*
-> +	 * Enable functional clock to prevent DMA reset after timeout due
-> +	 * to no PHY clock being enabled after the hardware block has been
-> +	 * power cycled. The actual configuration will be adjusted once
-> +	 * ethqos_fix_mac_speed() is called.
-> +	 */
-> +	ethqos_set_func_clk_en(ethqos);
-> +
-> +	ret = qcom_ethqos_domain_on(ethqos, ETHQOS_PD_CORE);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = qcom_ethqos_domain_on(ethqos, ETHQOS_PD_MDIO);
-> +	if (ret) {
-> +		qcom_ethqos_domain_off(ethqos, ETHQOS_PD_CORE);
-> +		return ret;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static void qcom_ethqos_pd_exit(struct platform_device *pdev, void *data)
-> +{
-> +	struct qcom_ethqos *ethqos = data;
-> +
-> +	qcom_ethqos_domain_off(ethqos, ETHQOS_PD_MDIO);
-> +	qcom_ethqos_domain_off(ethqos, ETHQOS_PD_CORE);
-> +}
-> +
->  static void ethqos_ptp_clk_freq_config(struct stmmac_priv *priv)
->  {
->  	struct plat_stmmacenet_data *plat_dat = priv->plat;
+Thomas.
 
-...
-
-> @@ -852,28 +993,63 @@ static int qcom_ethqos_probe(struct platform_device *pdev)
->  	ethqos->rgmii_config_loopback_en = drv_data->rgmii_config_loopback_en;
->  	ethqos->has_emac_ge_3 = drv_data->has_emac_ge_3;
->  	ethqos->needs_sgmii_loopback = drv_data->needs_sgmii_loopback;
-> -
-> -	ethqos->pm.link_clk = devm_clk_get(dev, clk_name);
-> -	if (IS_ERR(ethqos->pm.link_clk))
-> -		return dev_err_probe(dev, PTR_ERR(ethqos->pm.link_clk),
-> -				     "Failed to get link_clk\n");
-> -
-> -	ret = ethqos_clks_config(ethqos, true);
-> -	if (ret)
-> -		return ret;
-> -
-> -	ret = devm_add_action_or_reset(dev, ethqos_clks_disable, ethqos);
-> -	if (ret)
-> -		return ret;
-> -
-> -	ethqos->pm.serdes_phy = devm_phy_optional_get(dev, "serdes");
-> -	if (IS_ERR(ethqos->pm.serdes_phy))
-> -		return dev_err_probe(dev, PTR_ERR(ethqos->pm.serdes_phy),
-> -				     "Failed to get serdes phy\n");
-> -
-> -	ethqos->set_serdes_speed = ethqos_set_serdes_speed_phy;
->  	ethqos->serdes_speed = SPEED_1000;
-> -	ethqos_update_link_clk(ethqos, SPEED_1000);
-> +
-> +	if (pm_data && pm_data->use_domains) {
-> +		ethqos->set_serdes_speed = ethqos_set_serdes_speed_pd;
-> +
-> +		ret = devm_pm_domain_attach_list(dev, &pm_data->pd,
-> +						 &ethqos->pd.pd_list);
-> +		if (ret < 0)
-> +			return dev_err_probe(dev, ret, "Failed to attach power domains\n");
-> +
-> +		plat_dat->clks_config = ethqos_pd_clks_config;
-> +		plat_dat->serdes_powerup = qcom_ethqos_pd_serdes_powerup;
-> +		plat_dat->serdes_powerdown = qcom_ethqos_pd_serdes_powerdown;
-> +		plat_dat->exit = qcom_ethqos_pd_exit;
-
-Hi Bartosz,
-
-It seems that the intention of this is to ensure
-that domains turned on by qcom_ethqos_pd_init()
-are turned off again on exit or clean-up in error paths.
-
-> +		plat_dat->init = qcom_ethqos_pd_init;
-> +		plat_dat->clk_ptp_rate = pm_data->clk_ptp_rate;
-> +
-> +		ret = qcom_ethqos_pd_init(pdev, ethqos);
-> +		if (ret)
-> +			return ret;
-
-And here those domains are turned on.
-
-> +
-> +		ret = qcom_ethqos_domain_on(ethqos, ETHQOS_PD_SERDES);
-> +		if (ret)
-
-But it seems that if we reach this error path then the cleanup is not
-performed. This is because plat_dat and thus it's exit callback are
-registered until the call to devm_stmmac_pltfr_probe() towards the end of
-this function.
-
-Sorry if I'm on the wrong track here. I did dig into it.
-But this was flagged by Claude Code running
-https://github.com/masoncl/review-prompts/
-
-> +			return dev_err_probe(dev, ret,
-> +					     "Failed to enable the serdes power domain\n");
-
-...
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
