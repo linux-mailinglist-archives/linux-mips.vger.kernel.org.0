@@ -1,153 +1,165 @@
-Return-Path: <linux-mips+bounces-12190-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12191-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 573E2C4C524
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Nov 2025 09:16:16 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD521C4C7DA
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Nov 2025 09:56:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 09E4E1891559
-	for <lists+linux-mips@lfdr.de>; Tue, 11 Nov 2025 08:14:30 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 4592E4E6F26
+	for <lists+linux-mips@lfdr.de>; Tue, 11 Nov 2025 08:56:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C6AD30276E;
-	Tue, 11 Nov 2025 08:13:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0F41D2F1FD1;
+	Tue, 11 Nov 2025 08:55:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="oqR3/Wsd"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ymWd3Lnk";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="PDy55JQ8"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79AE62EC54A;
-	Tue, 11 Nov 2025 08:13:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 59799257846;
+	Tue, 11 Nov 2025 08:55:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762848784; cv=none; b=WRuemWAe8CQU7yiMEjEdZIqPnXfSaZe7D8uipmP5cxJfMEYCroUSYl7I/miiKsOsPUhhLsP2pB+1+5py99T29WvbiSNjbo1XrExujEWV11DSE/aR1V1jDs7jMIcEfqIgi/u2mD4BORxE7O8qxKGxisLC0OkkMfF8mUK3ZwLy3Ck=
+	t=1762851353; cv=none; b=bcaF5GNUzlhLPFA84DxGS0Mn2tZQW+6DLbtB8SsKKvB1kfWsg5qghrf6qhVuhKZ4z4jzbmS4rU0rxWOWmv910Wd27HjgRdslgAJma8G47ODHBhzb9OZwlMisqGE4zeSBQ49rUAFxSSQrLvNNOzNAcoyxHWaiKpV4lMTk7bekmjo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762848784; c=relaxed/simple;
-	bh=BSnHCWtNGCsB4IRZUuulxMnJu4hOw0SfW2UgZLVzAVM=;
-	h=In-Reply-To:References:From:To:Cc:Subject:MIME-Version:
-	 Content-Disposition:Content-Type:Message-Id:Date; b=mrBNn5lwNY1wZBQ5BUmaR6JxI0yIHfusAcGM5JDIIcjYuBaUy4JHGQ9MilQjeSSihP9y1q2edA/Kj4axzks1Fx5Fq6cRR8+aRmLiCQzXlriNB4gdzwAAn68m1nOhP4YW3Pj5ppDNAWcIky3v2qQhgFBjv6p9nmbqULtm+oCLkms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=oqR3/Wsd; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Date:Sender:Message-Id:Content-Type:
-	Content-Transfer-Encoding:MIME-Version:Subject:Cc:To:From:References:
-	In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
-	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
-	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=n+f2vnS/DsYTAF+aCbY0rqGLNCQaEV2shwak8otAGeo=; b=oqR3/Wsd8N0S/3HfZbMbmvWL3j
-	d7tO7FSkJl45JDD9AOLv1j9Ha402wc4sTtZvB3jMFc1rf/pr60y1RHESw8CgFJrG1SbuSawksAtSr
-	DX4bS1e6LoA5pAC6ZhwUtNzmTBtoytDvJnxblGJ7IStzwr8yLfmsYGJCyy3+2SsE/qQ5iau7hMIY/
-	r2dlFbF6VYauGcpjC9Z59DLb5F2+EqcavYLSlanhI6MTihq2nX0bp0edHEom1w6pni/BxidNA6zR3
-	26A7EOR8OCno4U++jV0ZFWlSXgzowF+JXyhxo9VBPpv+IT+tyOvtnpEm4VvIiJ+LP0wJmDH5bQhGm
-	8eONkoHw==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:48894 helo=rmk-PC.armlinux.org.uk)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <rmk@armlinux.org.uk>)
-	id 1vIjUg-000000002DZ-2AyO;
-	Tue, 11 Nov 2025 08:12:50 +0000
-Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.98.2)
-	(envelope-from <rmk@rmk-PC.armlinux.org.uk>)
-	id 1vIjUe-0000000DquB-3JDY;
-	Tue, 11 Nov 2025 08:12:48 +0000
-In-Reply-To: <aRLvrfx6tOa-RhrY@shell.armlinux.org.uk>
-References: <aRLvrfx6tOa-RhrY@shell.armlinux.org.uk>
-From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-To: Andrew Lunn <andrew@lunn.ch>,
-	Heiner Kallweit <hkallweit1@gmail.com>
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	"David S. Miller" <davem@davemloft.net>,
-	Emil Renner Berthing <kernel@esmil.dk>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>,
-	Keguang Zhang <keguang.zhang@gmail.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org,
-	linux-mips@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Minda Chen <minda.chen@starfivetech.com>,
-	netdev@vger.kernel.org,
-	Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>,
-	Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH net-next v2 13/13] net: stmmac: visconti: use
- stmmac_get_phy_intf_sel()
+	s=arc-20240116; t=1762851353; c=relaxed/simple;
+	bh=DCCdV1feBxJd8JPs8bCmq9jkjv7iq1tmUdts5DlDJ2A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Yy4xW1xbhni/Eb/hfF0KPVP2yyAm4xHvPysXNzqFMrVlutCDwT3Y0E+Ds/5C6Tz3w/waVHHIAhuDeJHj5R538fcxJzHKNNGtwt6iJ6l/ojXLmpsWsfl8xTeWiuesHznnGQvTdWje7TeVzSjmbNfN945txCFIXcDFLoKSRJuBcKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ymWd3Lnk; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=PDy55JQ8; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Tue, 11 Nov 2025 09:55:50 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1762851350;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=RKTM993Ma21ZOkCemY+4BJTuWewmn2tKdsb5lj2abpk=;
+	b=ymWd3LnkEfwtX1k261UdYE5R5/7IpCIN6oMUmih0narZm6Bp8Tw+ikKxAJ98mC+Ki8kPMJ
+	dBJpjhxGTVeH7mhIVwraawl+x4rKUcLrgjqLQQNzsEMcCgMEHvECAIV2HVQCLFCkTVlVl8
+	O+nqZiC7VSJQgOJQPi13SRfHbDZLHZEY3z1VK0oryukZg4fmRz3ltZctohv5sJoBejwjBp
+	LiENYCvrtOf0BCLFlrBMSBeAaFEbp7NDLImGC6soMNidgoVLHUkoF1FvWUavi7dVQADk5V
+	c9bVZlXcLAPlv0tkMAeLyrfguAvzyipXRg9zcPQHmJYXL0Pd+CRKopm3fmhPVQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1762851350;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=RKTM993Ma21ZOkCemY+4BJTuWewmn2tKdsb5lj2abpk=;
+	b=PDy55JQ8GnIS/Y2nfebPHMOFIXaZwBf3oeKj/acsXinCUUcGzezaxkS3vc3c9VSFc5YRUL
+	LWQUVLlkyb70aeBw==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: Andy Lutomirski <luto@kernel.org>, 
+	Thomas Gleixner <tglx@linutronix.de>, Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+	Arnd Bergmann <arnd@arndb.de>, "David S. Miller" <davem@davemloft.net>, 
+	Andreas Larsson <andreas@gaisler.com>, Nick Alcock <nick.alcock@oracle.com>, 
+	John Stultz <jstultz@google.com>, Stephen Boyd <sboyd@kernel.org>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Shuah Khan <shuah@kernel.org>, 
+	Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>, 
+	Russell King <linux@armlinux.org.uk>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Huacai Chen <chenhuacai@kernel.org>, 
+	WANG Xuerui <kernel@xen0n.name>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
+	Sven Schnelle <svens@linux.ibm.com>, Shannon Nelson <sln@onemain.com>, linux-kernel@vger.kernel.org, 
+	sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
+	linux-mips@vger.kernel.org, linux-s390@vger.kernel.org
+Subject: Re: [PATCH v5 19/34] random: vDSO: only access vDSO datapage after
+ random_init()
+Message-ID: <20251110124547-66c465dc-5214-46bf-937f-c8fa381b86f3@linutronix.de>
+References: <20251106-vdso-sparc64-generic-2-v5-0-97ff2b6542f7@linutronix.de>
+ <20251106-vdso-sparc64-generic-2-v5-19-97ff2b6542f7@linutronix.de>
+ <aQ6EvdukQytvqK-u@zx2c4.com>
+ <20251110094555-353883a9-1950-4cc6-a774-bb0ef5db11c5@linutronix.de>
+ <aRHAU7bVAIyaOrpA@zx2c4.com>
+ <20251110114550-a3f2afa8-4f86-4048-be5b-2dc4f4ef340d@linutronix.de>
+ <aRHPIXATFJAEv-CF@zx2c4.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1vIjUe-0000000DquB-3JDY@rmk-PC.armlinux.org.uk>
-Sender: Russell King <rmk@armlinux.org.uk>
-Date: Tue, 11 Nov 2025 08:12:48 +0000
+In-Reply-To: <aRHPIXATFJAEv-CF@zx2c4.com>
 
-Use stmmac_get_phy_intf_sel() to decode the PHY interface mode to the
-phy_intf_sel value, validate the result and use that to set the
-control register to select the operating mode for the DWMAC core.
+On Mon, Nov 10, 2025 at 12:40:17PM +0100, Jason A. Donenfeld wrote:
+> On Mon, Nov 10, 2025 at 12:24:13PM +0100, Thomas Weißschuh wrote:
+> > > > > For example, one clean way of
+> > > > > doing that would be to make vdso_k_rng_data always valid by having it
+> > > > > initially point to __initdata memory, and then when it's time to
+> > > > > initialize the real datapage, memcpy() the __initdata memory to the new
+> > > > > specially allocated memory. Then we don't need the complex state
+> > > > > tracking that this commit and the prior one introduce.
+> > > > 
+> > > > Wouldn't that require synchronization between the update path and the memcpy()
+> > > > path? Also if the pointer is going to change at some point we'll probably need
+> > > > to use READ_ONCE()/WRITE_ONCE(). In general I would be happy about a cleaner
+> > > > solution for this but didn't find a great one.
+> > > 
+> > > This is still before userspace has started, and interrupts are disabled,
+> > > so I don't think so?
+> > 
+> > Interrupts being disabled is a good point. But we are still leaking
+> > implementation details from the random code into the vdso datastore.
+> 
+> It wouldn't. You do this generically with memcpy().
 
-Note that this will allow GMII as well as MII as the phy_intf_sel
-value is the same for both.
+With "implementation details" I meant the fact that it is fine to swap out the
+datapage behind its back. And the fact that the memcpy() can not introduce any
+races.
 
-Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
----
- .../ethernet/stmicro/stmmac/dwmac-visconti.c  | 26 +++++--------------
- 1 file changed, 6 insertions(+), 20 deletions(-)
+> > > Also, you only care about being after
+> > > mm_core_init(), right? So move your thing before sched_init() and then
+> > > you'll really have nothing to worry about.
+> > 
+> > The callchains random_init_early() -> crng_reseed()/_credit_init_bits() could
+> > still touch the datapage before it is allocated.
+> > Adding conditionals to prevent those is essentially what my patch does.
+> 
+> I think I wasn't very clear in my proposal, because this isn't an issue
+> in it.
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c
-index 7b6b048e1be0..9497b13a5753 100644
---- a/drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-visconti.c
-@@ -42,10 +42,6 @@
- 
- #define ETHER_CLK_SEL_RX_TX_CLK_EN (ETHER_CLK_SEL_RX_CLK_EN | ETHER_CLK_SEL_TX_CLK_EN)
- 
--#define ETHER_CONFIG_INTF_MII	PHY_INTF_SEL_GMII_MII
--#define ETHER_CONFIG_INTF_RGMII	PHY_INTF_SEL_RGMII
--#define ETHER_CONFIG_INTF_RMII	PHY_INTF_SEL_RMII
--
- struct visconti_eth {
- 	void __iomem *reg;
- 	struct clk *phy_ref_clk;
-@@ -150,22 +146,12 @@ static int visconti_eth_init_hw(struct platform_device *pdev, struct plat_stmmac
- {
- 	struct visconti_eth *dwmac = plat_dat->bsp_priv;
- 	unsigned int clk_sel_val;
--	u32 phy_intf_sel;
--
--	switch (plat_dat->phy_interface) {
--	case PHY_INTERFACE_MODE_RGMII:
--	case PHY_INTERFACE_MODE_RGMII_ID:
--	case PHY_INTERFACE_MODE_RGMII_RXID:
--	case PHY_INTERFACE_MODE_RGMII_TXID:
--		phy_intf_sel = ETHER_CONFIG_INTF_RGMII;
--		break;
--	case PHY_INTERFACE_MODE_MII:
--		phy_intf_sel = ETHER_CONFIG_INTF_MII;
--		break;
--	case PHY_INTERFACE_MODE_RMII:
--		phy_intf_sel = ETHER_CONFIG_INTF_RMII;
--		break;
--	default:
-+	int phy_intf_sel;
-+
-+	phy_intf_sel = stmmac_get_phy_intf_sel(plat_dat->phy_interface);
-+	if (phy_intf_sel != PHY_INTF_SEL_GMII_MII &&
-+	    phy_intf_sel != PHY_INTF_SEL_RGMII &&
-+	    phy_intf_sel != PHY_INTF_SEL_RMII) {
- 		dev_err(&pdev->dev, "Unsupported phy-mode (%d)\n", plat_dat->phy_interface);
- 		return -EOPNOTSUPP;
- 	}
--- 
-2.47.3
+I interpreted your previous mail as two different proposals:
+1) do the memcpy() thing
+2) move the page allocation after mm_core_init()
 
+Now it makes more sense.
+
+> Global scope:
+> 
+> static struct vdso_rng_data placeholder_vdso_k_rng_data __initdata;
+> struct vdso_rng_data *vdso_k_rng_data = &placeholder_vdso_k_rng_data;
+> 
+> Then,
+> 
+> void __init vdso_setup_data_pages(void)
+> {
+>     ...
+>     vdso_k_rng_data = blabla();
+>     ...
+>     memcpy(vdso_k_rng_data, &placeholder_vdso_k_rng_data, sizeof(*vdso_k_rng_data);
+>     ...
+> }
+> 
+> If vdso_setup_data_pages() is called early enough in init, this is safe
+> to do, and then you don't need to muck up the random code with awful
+> state machine ordering stuff.
+
+Yes it is safe, but this safety is not obvious in my opinion.
+However I'll use your proposal for the next revision.
+
+
+Thomas
 
