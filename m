@@ -1,124 +1,100 @@
-Return-Path: <linux-mips+bounces-12200-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12202-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89455C5213B
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Nov 2025 12:49:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71ADEC523B3
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Nov 2025 13:21:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1B24F3A6365
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Nov 2025 11:43:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 694A6188E068
+	for <lists+linux-mips@lfdr.de>; Wed, 12 Nov 2025 12:17:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFE8131283E;
-	Wed, 12 Nov 2025 11:43:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b="hwgqECDs"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3D6B327787;
+	Wed, 12 Nov 2025 12:16:39 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp-relay-internal-0.canonical.com (smtp-relay-internal-0.canonical.com [185.125.188.122])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BF4B27AC3A
-	for <linux-mips@vger.kernel.org>; Wed, 12 Nov 2025 11:43:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.125.188.122
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FFCC327217;
+	Wed, 12 Nov 2025 12:16:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762947793; cv=none; b=qMslvMq26lMZy7gwWBEsl3jcgDvz9hVWjqrKCdZ5ozKb5LjORTXdb9TvHFKzEOzEd5r5zvb4tubb89TIGub6Bc47GxQm+P8fTf8LdYE1i1MsKkQTKJ8GPv5H+crv+OeEItqMyJ5cKKuuTMOUYJSkDrXGgGJTTZQk0OejrZuJ7VM=
+	t=1762949799; cv=none; b=JoNIUKvjo5gmxsvPHkpcy7Bc9UqCeEg1pL7RCOIiyLeb8RHJ5ZWNalxVKCGE9YF1rKDodRMW5gvhlZZfRTy95FcM9L36PWuei1R3asZc43GLAjFafIQqIf8ixX/FvpYCyQB+KqJJGnvv1xZimr2jSCzuneHMbVDcnrLPo8LTI88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762947793; c=relaxed/simple;
-	bh=JH9RQWDlZksP3A5WjT/Tdcm9mFgNLOafV5repVUVXmQ=;
-	h=MIME-Version:In-Reply-To:References:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NbjTld/2U0zD90LFd0GWZKaZLnt0Ue71O/5PdXN073v/lDFtIjVyVsc19DfUXPzOWOoPVLA6ptYejB1wbhZ89+Hvpr5vdHZWQy3iT5AN8re2iFs2orlEAFbUMbO4OBVv2/TR5qwOy0GuAVRtC6cWxgX5K60Vb+odUn9rr67jISk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com; spf=pass smtp.mailfrom=canonical.com; dkim=pass (4096-bit key) header.d=canonical.com header.i=@canonical.com header.b=hwgqECDs; arc=none smtp.client-ip=185.125.188.122
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=canonical.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=canonical.com
-Received: from mail-ej1-f70.google.com (mail-ej1-f70.google.com [209.85.218.70])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-relay-internal-0.canonical.com (Postfix) with ESMTPS id 3660C3FE53
-	for <linux-mips@vger.kernel.org>; Wed, 12 Nov 2025 11:43:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canonical.com;
-	s=20251003; t=1762947790;
-	bh=JH9RQWDlZksP3A5WjT/Tdcm9mFgNLOafV5repVUVXmQ=;
-	h=MIME-Version:In-Reply-To:References:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type;
-	b=hwgqECDsQzlV6AkQZet/s6MW6kquiGQf88sNdGh4gEQ7/0u/341o10m6Eqjcp7YTT
-	 YJ3n4dwsOFKkuRkFZHFQ9I1IYTKpFj2NdNAHKZvw+UoxmQJKWcvGZKhkf11Dpl1N2F
-	 3dxvIw9MweMvZCrUSK3IB1aoiJBnHhvj7VwNQLivzJXVWF+AN0bqIuPKwZghteRu9I
-	 uLUk+KidzELo/6A2YP0z6l756KVR2cT2SBgxK2gPerQhcSyfVGLTcMreYhVJzBYMd9
-	 PNbc/p7Mmh9KVomp3OL6t6ihENY3c3jQsoN0Nz/X73BKLxcWftalvCZlkC/nnHpn21
-	 ZCjG8WNfi9xOUzNOauBCld4Tq0aH5rgmmymdHgzHElJOorZ4uS0wqlpYsqlWRGFujp
-	 QA+N/+hjJICMLh4+b9hmIwDVwTBIeya8e9R9ex1kmLdkpLI3QV2xbO34DZSBbqX2vr
-	 pMZo1w7onvqDEnXdvW9ZxpiaD9l14LaYZATkY7sESRzlHwSalawuNFriZ+mJPBS9IQ
-	 qbf8JkdWJ6gM/xiWCdt5kzzdamWTsUHJAUDzVXy+KL9xPkoQhF3QX6pMtrWHOD0YQR
-	 2PuxYpi8pj5+7POz6rIgi6To+YSRht4s+TV89jY4e9pNpkhxwdAy+BMNRSYBtnkBTc
-	 l5urrNTKcGbtH5AH9HpRTfes=
-Received: by mail-ej1-f70.google.com with SMTP id a640c23a62f3a-b70b974b818so66239366b.1
-        for <linux-mips@vger.kernel.org>; Wed, 12 Nov 2025 03:43:10 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1762947789; x=1763552589;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JH9RQWDlZksP3A5WjT/Tdcm9mFgNLOafV5repVUVXmQ=;
-        b=kGmvt/Nz+lkEYSYOWjlERQiGhnvvjm3W/ixwCLiOCqBltUvSmDfmHntz2lv+joaxBp
-         opJuM78570TlhslAC4Iv4+Nw+TCjSgwYvGQG8yLWg6gnv8OKi/LSM3axvCwpNE6i0MqD
-         mcfwGUJ+Fo9XEI6MzVEoAwawqLd/v+1hzHKdjyLzKTATpdivlqL7Z3kfE6sVIPcbsYY7
-         0rYpv13KW7TN9fUa/l6BOu4monIH13fbfkJfj88/02cE7VcYhrwfVuvSJ53bb3O9KF57
-         NdQRsOpDELI98WQRXYbVB3To8Bq7kw6yX33/aG3dqwCS4Hq6bGrXCy6Jjf/6i/Ajxiw3
-         E/Fw==
-X-Forwarded-Encrypted: i=1; AJvYcCVLZDCcRCm2bjVn186/vdW01n4GUwo2b5ayoeIRjOdMi5UkUnNx+e6qhLSmDXWvGgOyRL1cTgjRI84T@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOF+NW2Rnx8w8fVFWWBmh1G5b/n4RazH/AH2YpadwA7cA6AEa7
-	EIcQFEFndySmu7MW7/VQxjojRWiXDJvsDJvO9Zi1BpFJY/Szlkr3BCHFSGCxWp6+VZQbTF704Jg
-	o/86hElHxSUu/q779hMBwjmFcDb9xsZcF6071L/dwUwy3e/G/wb/tLcTatQygh6sxZplv4DE4/3
-	lHCKMfejEa4CJvU0Tt5GS+PzLwpRDMJB2JQwtpcMAbAavG9Sy4VIZmLA==
-X-Gm-Gg: ASbGncuqMNPjzua3tcs/xJILL+mrNkaKHPYrd32spACb7i3JJBxQ0vhQF/AoS122T8b
-	DTd/JjMmDWe7G6olyaJTtTwzWW0l5uRhRE+uwUA8jmJAD8YCJ2m1tRsj0bSoN0PGIAc2v6fx82j
-	LalCpN5pRAriUPV6EYWkrQ0w2LzyKXW3ZVsZfmXiYYc0j++uYibXibcdIz6GjrxOYFxB/G1502I
-	ALkOxXtEXsh
-X-Received: by 2002:a17:907:9713:b0:b72:5a54:1720 with SMTP id a640c23a62f3a-b7331ae8bbbmr239081166b.57.1762947789542;
-        Wed, 12 Nov 2025 03:43:09 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEACqB0mCN3EX0p95RUNEAUTyaZ39pandxW0+rdirFn7EUt3COrqPK8HKamiHijsSU/fq2Kt0hi/1uzUL2rjsY=
-X-Received: by 2002:a17:907:9713:b0:b72:5a54:1720 with SMTP id
- a640c23a62f3a-b7331ae8bbbmr239077666b.57.1762947789084; Wed, 12 Nov 2025
- 03:43:09 -0800 (PST)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 12 Nov 2025 03:43:08 -0800
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 12 Nov 2025 03:43:08 -0800
+	s=arc-20240116; t=1762949799; c=relaxed/simple;
+	bh=vU1wr0tRxqgLdrwPfflTOnIKU6LiQ8IF96XCZSZkYq4=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=Jb3uDJWWwN6pQvTse5gPGeuQQJaUrtss+aylWjkd2sTTpEf0I+2GFSuGNfvAZxT+2nhqUEtuukQP+xRdMmmntJSnXQiCijivUkbf5Rd/UEjN5vznFE5oGAFjTGRpKIgT+lt5+LaV7eSdLJOGWFv4Ef6+cuYl1M8sHvmMYx0u7V8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id C45D292009C; Wed, 12 Nov 2025 13:16:28 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id BD36392009B;
+	Wed, 12 Nov 2025 12:16:28 +0000 (GMT)
+Date: Wed, 12 Nov 2025 12:16:28 +0000 (GMT)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+cc: Nick Bowler <nbowler@draconx.ca>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
+    linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: mm: Prevent a TLB shutdown on initial
+ uniquification
+In-Reply-To: <aRRZtbBdCfEEhad9@alpha.franken.de>
+Message-ID: <alpine.DEB.2.21.2511121046350.25436@angie.orcam.me.uk>
+References: <alpine.DEB.2.21.2511110547430.25436@angie.orcam.me.uk> <aRMrmjJcLJYR8QO-@alpha.franken.de> <alpine.DEB.2.21.2511111340330.25436@angie.orcam.me.uk> <aRRZtbBdCfEEhad9@alpha.franken.de>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-In-Reply-To: <E1vIjUF-0000000Dqth-0gwD@rmk-PC.armlinux.org.uk>
-References: <aRLvrfx6tOa-RhrY@shell.armlinux.org.uk> <E1vIjUF-0000000Dqth-0gwD@rmk-PC.armlinux.org.uk>
-From: Emil Renner Berthing <emil.renner.berthing@canonical.com>
-User-Agent: alot/0.0.0
-Date: Wed, 12 Nov 2025 03:43:08 -0800
-X-Gm-Features: AWmQ_bkenMvacX26pAHg6nt10w-7MV8cO1nbkR5cqs-fMNBqO4TpuSWeehZ0dCc
-Message-ID: <CAJM55Z9O3BTejaAnTH4nTXT3VcRU701BWdSusRNArt-9vkCFYg@mail.gmail.com>
-Subject: Re: [PATCH net-next v2 08/13] net: stmmac: starfive: use stmmac_get_phy_intf_sel()
-To: Andrew Lunn <andrew@lunn.ch>, Heiner Kallweit <hkallweit1@gmail.com>, 
-	"Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
-Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Keguang Zhang <keguang.zhang@gmail.com>, 
-	linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
-	linux-mips@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
-	Matthias Brugger <matthias.bgg@gmail.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
-	Minda Chen <minda.chen@starfivetech.com>, netdev@vger.kernel.org, 
-	Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>, Paolo Abeni <pabeni@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=US-ASCII
 
-Quoting Russell King (Oracle) (2025-11-11 09:12:23)
-> Use stmmac_get_phy_intf_sel() to decode the PHY interface mode to the
-> phy_intf_sel value, validate the result and use that to set the
-> control register to select the operating mode for the DWMAC core.
->
-> Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
+On Wed, 12 Nov 2025, Thomas Bogendoerfer wrote:
 
-Reviewed-by: Emil Renner Berthing <emil.renner.berthing@canonical.com>
+> >  Can you try the diagnostic patch below, which is what I used to verify 
+> > this change, and report the entries produced?  Otherwise I wonder whether 
+> > I haven't missed a barrier somewhere.
+> 
+> Update on the issue: Your patch is good and the segmentation faults,
+> I'm seeing, have IMHO a different reason. Instead of removing the call
+> to r4k_tlb_uniquify() I've replaced the jal in the binary with a nop.
+> And the issue is still there with this patched kernel. I've seen
+> something similair on a R12k Octanes, which comes and goes probably
+> depeding on code layout. So far I wasn't able to nail this down :-(
+
+ Oh dear!  Something to do with the cache?  Or code alignment perhaps?
+
+ It reminds me of this stuff: 
+<https://lore.kernel.org/r/Pine.GSO.3.96.1010625125007.20469D-100000@delta.ds2.pg.gda.pl/>.  
+
+ Building a particular version of binutils freezed the machine solid ~11h 
+into the build -- a power cycle was required (there's no hardware reset 
+button).  At least it was fully reproducible and always at the same place 
+in a `configure' script and changing the shell script in a trivial way, 
+such as adding a new-line character, ahead of the place of the lock-up 
+made the freeze go away.
+
+ I used the machine's 8-position diagnostic LED display to debug this, by
+making it show the syscall and hardware interrupt numbers as the exception 
+handlers were entered, so as to narrow the origin down (only to realise 
+later on I could have used a 1MiB NVRAM module the system has to store 
+more data across a power cycle and retrieve it afterwards, a persistent 
+kernel log of sorts).  IIRC it triggered in the exit(2) path.
+
+ The most painful was the need to wait said ~11h for the next piece of 
+data in debugging this.
+
+ NB the machine in question is still alive in my lab.  Throwing memory SBE 
+ECC errors again recently, but coping regardless, so more memory connector 
+cleaning required upon next visit.
+
+> Do you want to send a v2 of the patch ? I'm fine with the current version
+> for applying...
+
+ I'll send v2 with an update for the Wired register as we talked.  It may 
+take a day or two.
+
+  Maciej
 
