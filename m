@@ -1,108 +1,271 @@
-Return-Path: <linux-mips+bounces-12218-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12219-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49581C55986
-	for <lists+linux-mips@lfdr.de>; Thu, 13 Nov 2025 04:53:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE9C2C55CB6
+	for <lists+linux-mips@lfdr.de>; Thu, 13 Nov 2025 06:21:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E43ED3A486F
-	for <lists+linux-mips@lfdr.de>; Thu, 13 Nov 2025 03:53:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 78C253A59F5
+	for <lists+linux-mips@lfdr.de>; Thu, 13 Nov 2025 05:21:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CCB11A5B9E;
-	Thu, 13 Nov 2025 03:53:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=draconx-ca.20230601.gappssmtp.com header.i=@draconx-ca.20230601.gappssmtp.com header.b="GeVD/1ru"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD1E11C6FEC;
+	Thu, 13 Nov 2025 05:21:15 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B302929D281
-	for <linux-mips@vger.kernel.org>; Thu, 13 Nov 2025 03:53:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B2E28248C;
+	Thu, 13 Nov 2025 05:21:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763006011; cv=none; b=TFvBUHHaX+5hevTrVMyUyHN3b4DUriBJqUDfvSQenbslreqGMCej9ouL1oKV5sPqnWTyAwV5JaoYia+cctjePl0FQ6WhaHjblP6uRZWearjjL0uAP+Diudh5rNl/WGECbC43gsI2+HlnSN+52e0+Pvzcb4FJS92sYZC81mfH3pA=
+	t=1763011275; cv=none; b=LDDuB0zcoCxeA1GfPc6Y55xGM2fSv9g1W+XVhJ7tzKs21L5zVrXxuUO3WP6ZPVFBAq8S5XBXQ9bNANJAHPipoILijUmTaRAVVIRLRq7xB8XnuGQNX+YcoNSZp7uDD3gURbmKP7QeqCC4RhqleCQihjEh6amjIsGW7CAEcSUXn2E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763006011; c=relaxed/simple;
-	bh=y1LSPNobZQla9NMwQ5IY+yLjCJ+5sj+5zGOH9ueavJk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d/oMhbmwyVJSOU4KsUmA5PHaq1qVsAKvtqr96ZQsDpR54QxHaGEl8Lxy/LjHjGaK0YCDa816rpSk8xfSWn82PTo8MfyKmhoa5HPY8+LC6hpMLFHzX5EQCjanmzOvPFG2mmvfh0eTKdWw7XpwR+OVqEAoM+7HxWp0zXcueuOjxwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=draconx.ca; spf=none smtp.mailfrom=draconx.ca; dkim=pass (2048-bit key) header.d=draconx-ca.20230601.gappssmtp.com header.i=@draconx-ca.20230601.gappssmtp.com header.b=GeVD/1ru; arc=none smtp.client-ip=209.85.222.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=draconx.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=draconx.ca
-Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-8b262add487so41201485a.1
-        for <linux-mips@vger.kernel.org>; Wed, 12 Nov 2025 19:53:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=draconx-ca.20230601.gappssmtp.com; s=20230601; t=1763006008; x=1763610808; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CatzzopAdgFr+BsmM7xa/JPPEprIWTodqEFVEQgfQnQ=;
-        b=GeVD/1ruUJRtJaqo5hmHR545FqUuXkmsGg92bLA4f/ORMTiC70RRihbQa72/KDD/Ql
-         jUmCEa8Ek7bG5bPCIs733ZVPvLn+tX0v8MPgChGeSgXWyWbVbhq8u1+gdC602JzwkNMD
-         fmsYJJUy1Q4yFOExPo5qJtQbXSx6g68qL3SHgg94An0RFLNFgDnxnd/2zzC+NxXLmDUW
-         0/v3VdvClgqfBDTcrh9/DzqX+3A2tYWSRKDdAV10grbtnwuSxjErFKg3fBGdVxWrMNiu
-         nQM6Y9AMCTMy1G+uzSh7FzIePJymtUoWf8+F/5rJtvqW4dIxYzuOthH54zPIXd5ERgG7
-         fUYg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763006008; x=1763610808;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=CatzzopAdgFr+BsmM7xa/JPPEprIWTodqEFVEQgfQnQ=;
-        b=hDnfh08FMYgtDfBemkhoc3C55d8QoE1fgVdOgGVv3ZkzUUYl1Ea+rUHTmfZJ8qW9Z6
-         yw1qTOOBTxTI9fsjEJ3HRO9sxTiFk4leh3mMdxrPyziD2H2SbEN+a6q1FERnWwuSqu2D
-         mZ37ljMp1D7M0kwI1I29ALRNkJguRkuryWypxP7LA30LZZcb2yicUoNwR80Dwfnx15+x
-         nlVGPGcwmrC++cGbJFNUMkybB670IJfhcWtlUg9kLfWDxpWgqNO/GIoyJIFP88WwYsVN
-         j5RL75SQlSLzxvPsjxKRM531YoOxpGirA2QSB+b35dxT8KgFPooncIX4+0d7dTM6SRUY
-         kbMg==
-X-Forwarded-Encrypted: i=1; AJvYcCV+tllOR2PBNdWa5fP0DIa/BgyJf8Oo4FSwdJXzrRBx5lEy/G0bJPrAXJLZ03sfNyhseQJrcMLp2pob@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvlmXifs0lLvlr1tJUiFBlj8BEve9r6QRBr3tGu6rSPGvTVOkG
-	/hRyvgYKuUeUResO1UQYSm3lqUj4MYrh3B/mQYkwkAW7ASNN3pt4KxGWOMmorjsYurM=
-X-Gm-Gg: ASbGncsKFNRyUdLNRwsvG1Dxq6sh+u2jaIvhDYaMHjMXFglJhUzL9rEZjeQ+GF3OMMK
-	jRSUN2YTNTLyypfPuooINxy+7WU9IdrwXnK9tuxgooJScvyRlzIm3icaHJ8prruSZawK4TpQeGo
-	AYdhUF4c7szP8Jo5Cd8sQzjrFf8eNO6YUzW12A7wNEb7XWTmfE8xtUogQ2BLI3pLjxoDxE+DytF
-	wHPFCkwIfPwYSlSgLxnwNi118QFUOtjHba6c5w8Aa2AR65ixTvRKZXiN3h1mxVnA7blVBxnEen7
-	9/+41jeZgRXjjSywg+6PCMeum7p5As4pMYpC0DIt8uZEregk1roKILgWaB8Cynvz0Xcl/DhVRjT
-	Ik0kzZDKLLgtSBmcWlfxTXnxEvRQ27IU43bJc64RRO/rdhX7wgQ6PuocEMpwdqLh4EemJ0PbFWl
-	YD9Hb5cCMfvPYgQ9+MVnPfpyUW6Ca70Q==
-X-Google-Smtp-Source: AGHT+IGpleopjM4MDAheJaXpT7eQ+N9O9y3pHUJlCfRc6efZHo8evHnkFSfXUU+sWtqzH8WQFDcJgQ==
-X-Received: by 2002:a05:620a:2902:b0:8a3:7567:bde6 with SMTP id af79cd13be357-8b29b84c1dfmr782009285a.84.1763006008363;
-        Wed, 12 Nov 2025 19:53:28 -0800 (PST)
-Received: from localhost (ip-24-156-181-135.user.start.ca. [24.156.181.135])
-        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-8b2aee9e4c8sm53627285a.12.2025.11.12.19.53.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Nov 2025 19:53:28 -0800 (PST)
-Date: Wed, 12 Nov 2025 22:53:26 -0500
-From: Nick Bowler <nbowler@draconx.ca>
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] MIPS: mm: Prevent a TLB shutdown on initial
+	s=arc-20240116; t=1763011275; c=relaxed/simple;
+	bh=jO8jB74KjHuUDAYmA+SP2Z73Mt+40xwFkVV1azxk90w=;
+	h=Date:From:To:cc:Subject:Message-ID:MIME-Version:Content-Type; b=rJn8sxFN8YciMZ3a9pPvUlfxyzjONeCN6v4wUgefutueMFLt33TDHY1DpJGlf9v1kXUQWLrdeZGxyYOsaHAOSD8/XcNmRUMTsyStWqLFszp0mCAMn7mOVEmKLFF0WU3Pxm57LsDmxz9w6tqe8+nVUBFq3YXxvGbJ5gBIh+oVzuM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id 8975B92009C; Thu, 13 Nov 2025 06:21:10 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id 7944C92009B;
+	Thu, 13 Nov 2025 05:21:10 +0000 (GMT)
+Date: Thu, 13 Nov 2025 05:21:10 +0000 (GMT)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Nick Bowler <nbowler@draconx.ca>, 
+    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+    Jiaxun Yang <jiaxun.yang@flygoat.com>
+cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] MIPS: mm: Prevent a TLB shutdown on initial
  uniquification
-Message-ID: <tsok52tdbt3z5j3i6ht22iko3mdqeom2ojcvvb52pwfbjnzzyy@mcwnzfpvksee>
-References: <alpine.DEB.2.21.2511122032400.25436@angie.orcam.me.uk>
+Message-ID: <alpine.DEB.2.21.2511130507110.25436@angie.orcam.me.uk>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2511122032400.25436@angie.orcam.me.uk>
+Content-Type: text/plain; charset=US-ASCII
 
-On Wed, Nov 12, 2025 at 11:42:11PM +0000, Maciej W. Rozycki wrote:
-> This fixes (at least) R4x00 cores if TLBP hits multiple matching TLB 
-> entries (SGI IP22 PROM for examples sets up all TLBs to the same virtual 
-> address).
-> 
-> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-> Fixes: 35ad7e181541 ("MIPS: mm: tlb-r4k: Uniquify TLB entries on init")
+Depending on the particular CPU implementation a TLB shutdown may occur 
+if multiple matching entries are detected upon the execution of a TLBP 
+or the TLBWI/TLBWR instructions.  Given that we don't know what entries 
+we have been handed we need to be very careful with the initial TLB 
+setup and avoid all these instructions.
 
-I tried this one too and it also appears to work fine on my R4400SC
-Indy.  The system is booting normally again.
+Therefore read all the TLB entries one by one with the TLBR instruction, 
+bypassing the content addressing logic, and truncate any large pages in 
+place so as to avoid a case in the second step where an incoming entry 
+for a large page at a lower address overlaps with a replacement entry 
+chosen at another index.  Then preinitialize the TLB using addresses 
+outside our usual unique range and avoiding clashes with any entries 
+received, before making the usual call to local_flush_tlb_all().
 
-Thanks,
-  Nick
+This fixes (at least) R4x00 cores if TLBP hits multiple matching TLB 
+entries (SGI IP22 PROM for examples sets up all TLBs to the same virtual 
+address).
+
+Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+Fixes: 35ad7e181541 ("MIPS: mm: tlb-r4k: Uniquify TLB entries on init")
+Cc: stable@vger.kernel.org # v6.17+
+---
+Hi,
+
+ On second thoughts I decided against including wired entries in our VPN 
+matching discovery for clash avoidance.  The reason is as I wrote before 
+it makes no sense to have wired entries for KSEG0 addresses, so it should 
+be safe to assume we won't ever make one, and then if a wired entry maps a 
+large page, which is quite likely, then our clash avoidance logic won't 
+handle an overlap where the two VPN values of a clashing pair don't match, 
+so it makes no sense to pretend we can handle wired entries with the code 
+as proposed.
+
+ Pasting v2 discussion below verbatim as it still applies.
+
+ Verified the same way as before, also with some diagnostics added so as 
+to make sure things get set up correctly, with my Malta/74Kf system for a 
+32-bit configuration and with my SWARM/BCM1250 system for a 64-bit one.
+
+ In addition to the Wired register setup discussed with v1 I have realised 
+the incoming entries may include large pages, possibly exceeding the size 
+of KSEG0 even.  Such entries may overlap with our temporary entries added 
+in the second step, so truncate any large pages in place as this ensures 
+no clash happens with the received contents of the TLB.
+
+ NB this doesn't handle incoming PageGrain.ESP having been set, but it's 
+an unrelated preexisting issue that would have to be handled elsewhere.  
+Possibly it doesn't matter in reality.
+
+ Additionally PageMask is left set at what has been retrieved from the 
+last incoming TLB entry in the first step and has to be reset to our page 
+size before proceeding with the second step.
+
+ And last but not least the comparator function returned 0 incorrectly 
+when the difference between 64-bit elements was positive but with none of 
+the high-order 32 bits set.  Fixed with a branchless sequence of 3 machine 
+instructions, which I think is the minimum here (only the sign and zero 
+matter here, but this sequence actually produces -1/0/1, because why not).
+No change for the 32-bit case, the difference is returned as is.
+
+  Maciej
+
+Changes from v2 (at 
+<https://lore.kernel.org/r/alpine.DEB.2.21.2511122032400.25436@angie.orcam.me.uk/>):
+
+- Revert the v2 update to include wired entries while reading original 
+  contents of TLB.
+
+Changes from v1 (at 
+<https://lore.kernel.org/r/alpine.DEB.2.21.2511110547430.25436@angie.orcam.me.uk/>):
+
+- Also include wired entries while reading original contents of TLB.
+
+- Truncate any large pages in place while reading original TLB entries.
+
+- Reset PageMask to PM_DEFAULT_MASK after reading in TLB entries.
+
+- Fix the 64-bit case for the sort comparator.
+---
+ arch/mips/mm/tlb-r4k.c |  100 ++++++++++++++++++++++++++++++-------------------
+ 1 file changed, 63 insertions(+), 37 deletions(-)
+
+linux-mips-tlb-r4k-uniquify-fix.diff
+Index: linux-swarm64/arch/mips/mm/tlb-r4k.c
+===================================================================
+--- linux-swarm64.orig/arch/mips/mm/tlb-r4k.c
++++ linux-swarm64/arch/mips/mm/tlb-r4k.c
+@@ -15,6 +15,7 @@
+ #include <linux/mm.h>
+ #include <linux/hugetlb.h>
+ #include <linux/export.h>
++#include <linux/sort.h>
+ 
+ #include <asm/cpu.h>
+ #include <asm/cpu-type.h>
+@@ -508,54 +509,78 @@ static int __init set_ntlb(char *str)
+ 
+ __setup("ntlb=", set_ntlb);
+ 
+-/* Initialise all TLB entries with unique values */
++
++/* Comparison function for EntryHi VPN fields.  */
++static int r4k_vpn_cmp(const void *a, const void *b)
++{
++	long v = *(unsigned long *)a - *(unsigned long *)b;
++	int s = sizeof(long) > sizeof(int) ? sizeof(long) * 8 - 1: 0;
++	return s ? (v != 0) | v >> s : v;
++}
++
++/*
++ * Initialise all TLB entries with unique values that do not clash with
++ * what we have been handed over and what we'll be using ourselves.
++ */
+ static void r4k_tlb_uniquify(void)
+ {
+-	int entry = num_wired_entries();
++	unsigned long tlb_vpns[1 << MIPS_CONF1_TLBS_SIZE];
++	int tlbsize = current_cpu_data.tlbsize;
++	int start = num_wired_entries();
++	unsigned long vpn_mask;
++	int cnt, ent, idx, i;
++
++	vpn_mask = GENMASK(cpu_vmbits - 1, 13);
++	vpn_mask |= IS_ENABLED(CONFIG_64BIT) ? 3ULL << 62 : 1 << 31;
+ 
+ 	htw_stop();
++
++	for (i = start, cnt = 0; i < tlbsize; i++, cnt++) {
++		unsigned long vpn;
++
++		write_c0_index(i);
++		mtc0_tlbr_hazard();
++		tlb_read();
++		tlb_read_hazard();
++		vpn = read_c0_entryhi();
++		vpn &= vpn_mask & PAGE_MASK;
++		tlb_vpns[cnt] = vpn;
++
++		/* Prevent any large pages from overlapping regular ones.  */
++		write_c0_pagemask(read_c0_pagemask() & PM_DEFAULT_MASK);
++		mtc0_tlbw_hazard();
++		tlb_write_indexed();
++		tlbw_use_hazard();
++	}
++
++	sort(tlb_vpns, cnt, sizeof(tlb_vpns[0]), r4k_vpn_cmp, NULL);
++
++	write_c0_pagemask(PM_DEFAULT_MASK);
+ 	write_c0_entrylo0(0);
+ 	write_c0_entrylo1(0);
+ 
+-	while (entry < current_cpu_data.tlbsize) {
+-		unsigned long asid_mask = cpu_asid_mask(&current_cpu_data);
+-		unsigned long asid = 0;
+-		int idx;
++	idx = 0;
++	ent = tlbsize;
++	for (i = start; i < tlbsize; i++)
++		while (1) {
++			unsigned long entryhi, vpn;
+ 
+-		/* Skip wired MMID to make ginvt_mmid work */
+-		if (cpu_has_mmid)
+-			asid = MMID_KERNEL_WIRED + 1;
++			entryhi = UNIQUE_ENTRYHI(ent);
++			vpn = entryhi & vpn_mask & PAGE_MASK;
+ 
+-		/* Check for match before using UNIQUE_ENTRYHI */
+-		do {
+-			if (cpu_has_mmid) {
+-				write_c0_memorymapid(asid);
+-				write_c0_entryhi(UNIQUE_ENTRYHI(entry));
++			if (idx >= cnt || vpn < tlb_vpns[idx]) {
++				write_c0_entryhi(entryhi);
++				write_c0_index(i);
++				mtc0_tlbw_hazard();
++				tlb_write_indexed();
++				ent++;
++				break;
++			} else if (vpn == tlb_vpns[idx]) {
++				ent++;
+ 			} else {
+-				write_c0_entryhi(UNIQUE_ENTRYHI(entry) | asid);
++				idx++;
+ 			}
+-			mtc0_tlbw_hazard();
+-			tlb_probe();
+-			tlb_probe_hazard();
+-			idx = read_c0_index();
+-			/* No match or match is on current entry */
+-			if (idx < 0 || idx == entry)
+-				break;
+-			/*
+-			 * If we hit a match, we need to try again with
+-			 * a different ASID.
+-			 */
+-			asid++;
+-		} while (asid < asid_mask);
+-
+-		if (idx >= 0 && idx != entry)
+-			panic("Unable to uniquify TLB entry %d", idx);
+-
+-		write_c0_index(entry);
+-		mtc0_tlbw_hazard();
+-		tlb_write_indexed();
+-		entry++;
+-	}
++		}
+ 
+ 	tlbw_use_hazard();
+ 	htw_start();
+@@ -602,6 +627,7 @@ static void r4k_tlb_configure(void)
+ 
+ 	/* From this point on the ARC firmware is dead.	 */
+ 	r4k_tlb_uniquify();
++	local_flush_tlb_all();
+ 
+ 	/* Did I tell you that ARC SUCKS?  */
+ }
 
