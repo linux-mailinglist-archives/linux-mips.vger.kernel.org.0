@@ -1,127 +1,108 @@
-Return-Path: <linux-mips+bounces-12217-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12218-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78DD6C556C3
-	for <lists+linux-mips@lfdr.de>; Thu, 13 Nov 2025 03:22:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 49581C55986
+	for <lists+linux-mips@lfdr.de>; Thu, 13 Nov 2025 04:53:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF68E3B65E6
-	for <lists+linux-mips@lfdr.de>; Thu, 13 Nov 2025 02:20:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E43ED3A486F
+	for <lists+linux-mips@lfdr.de>; Thu, 13 Nov 2025 03:53:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 748BA2F6569;
-	Thu, 13 Nov 2025 02:20:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CCB11A5B9E;
+	Thu, 13 Nov 2025 03:53:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CSQv8g5l"
+	dkim=pass (2048-bit key) header.d=draconx-ca.20230601.gappssmtp.com header.i=@draconx-ca.20230601.gappssmtp.com header.b="GeVD/1ru"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f174.google.com (mail-qk1-f174.google.com [209.85.222.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 498AE18D636;
-	Thu, 13 Nov 2025 02:20:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B302929D281
+	for <linux-mips@vger.kernel.org>; Thu, 13 Nov 2025 03:53:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763000455; cv=none; b=E/QWNBLzMaudjspT+OMLQmI3YNzyAhGQ7E6eFBSfNZj7pRtm/i8N3iM0KgW+RfJYBezs4uPzRzgQFq3Kj5lnmxYMEHG9n1wjdA5PScrsjs0LADSQObBt8vt5HHy7kWTdXKqpgvacgC984ah3XjuZ1QZBYyIBy1w10hAfdS912Hc=
+	t=1763006011; cv=none; b=TFvBUHHaX+5hevTrVMyUyHN3b4DUriBJqUDfvSQenbslreqGMCej9ouL1oKV5sPqnWTyAwV5JaoYia+cctjePl0FQ6WhaHjblP6uRZWearjjL0uAP+Diudh5rNl/WGECbC43gsI2+HlnSN+52e0+Pvzcb4FJS92sYZC81mfH3pA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763000455; c=relaxed/simple;
-	bh=8ejBa8X0oQZTOqEW8wmzYE3T4O7hj6OmR6op+Ep2U6k=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=Avf67wufc0EPErnnUeuvbLvY+zdLLbfUttPJYkYmODRQqjO+TrFYY+mdeWETuaRv6gHKYB1gRUQMFvzwPDHREfdVliAAP9djNs/DFxreKqCI4iDcZHUKzzNtE0Ev0y0X9Qw1f9Ppcsk3O0gNbv9EjF5zMBljBrIpt21UJaYo3do=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CSQv8g5l; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9C71C16AAE;
-	Thu, 13 Nov 2025 02:20:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763000454;
-	bh=8ejBa8X0oQZTOqEW8wmzYE3T4O7hj6OmR6op+Ep2U6k=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=CSQv8g5loeBZqGzmCvUsSPniqMoFRVNtpoRs0afr+bvThoG+hh30q0camffgh4MaO
-	 JQG6cihmoYGnghBOeRxp6mBxZgq5Hcd2/K4DBMk7XhNwmmWaIFoEop/WrRN6cOVaF+
-	 ovE1OTaKveGq0UT+DQc4wQfxrfG2KTb1Fu8Oo3H9WYK7ZWb+WpxkpP98OIof4+sATD
-	 Joj+Z8Ka9I6buzx809VpN5D55WncG6CnYu0rHOF5E5yR44VUZT7zcGUWjHnKOKj8UK
-	 i+7Z6au5q+VA7oNQ0Ci+SvOlR0hFYuNYaAa4C39P2V40SNmkRQeZ37fO+IR2HlmXn1
-	 MpVw3p+2vu4Cw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70E533A40FD1;
-	Thu, 13 Nov 2025 02:20:25 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1763006011; c=relaxed/simple;
+	bh=y1LSPNobZQla9NMwQ5IY+yLjCJ+5sj+5zGOH9ueavJk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=d/oMhbmwyVJSOU4KsUmA5PHaq1qVsAKvtqr96ZQsDpR54QxHaGEl8Lxy/LjHjGaK0YCDa816rpSk8xfSWn82PTo8MfyKmhoa5HPY8+LC6hpMLFHzX5EQCjanmzOvPFG2mmvfh0eTKdWw7XpwR+OVqEAoM+7HxWp0zXcueuOjxwQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=draconx.ca; spf=none smtp.mailfrom=draconx.ca; dkim=pass (2048-bit key) header.d=draconx-ca.20230601.gappssmtp.com header.i=@draconx-ca.20230601.gappssmtp.com header.b=GeVD/1ru; arc=none smtp.client-ip=209.85.222.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=draconx.ca
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=draconx.ca
+Received: by mail-qk1-f174.google.com with SMTP id af79cd13be357-8b262add487so41201485a.1
+        for <linux-mips@vger.kernel.org>; Wed, 12 Nov 2025 19:53:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=draconx-ca.20230601.gappssmtp.com; s=20230601; t=1763006008; x=1763610808; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CatzzopAdgFr+BsmM7xa/JPPEprIWTodqEFVEQgfQnQ=;
+        b=GeVD/1ruUJRtJaqo5hmHR545FqUuXkmsGg92bLA4f/ORMTiC70RRihbQa72/KDD/Ql
+         jUmCEa8Ek7bG5bPCIs733ZVPvLn+tX0v8MPgChGeSgXWyWbVbhq8u1+gdC602JzwkNMD
+         fmsYJJUy1Q4yFOExPo5qJtQbXSx6g68qL3SHgg94An0RFLNFgDnxnd/2zzC+NxXLmDUW
+         0/v3VdvClgqfBDTcrh9/DzqX+3A2tYWSRKDdAV10grbtnwuSxjErFKg3fBGdVxWrMNiu
+         nQM6Y9AMCTMy1G+uzSh7FzIePJymtUoWf8+F/5rJtvqW4dIxYzuOthH54zPIXd5ERgG7
+         fUYg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763006008; x=1763610808;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CatzzopAdgFr+BsmM7xa/JPPEprIWTodqEFVEQgfQnQ=;
+        b=hDnfh08FMYgtDfBemkhoc3C55d8QoE1fgVdOgGVv3ZkzUUYl1Ea+rUHTmfZJ8qW9Z6
+         yw1qTOOBTxTI9fsjEJ3HRO9sxTiFk4leh3mMdxrPyziD2H2SbEN+a6q1FERnWwuSqu2D
+         mZ37ljMp1D7M0kwI1I29ALRNkJguRkuryWypxP7LA30LZZcb2yicUoNwR80Dwfnx15+x
+         nlVGPGcwmrC++cGbJFNUMkybB670IJfhcWtlUg9kLfWDxpWgqNO/GIoyJIFP88WwYsVN
+         j5RL75SQlSLzxvPsjxKRM531YoOxpGirA2QSB+b35dxT8KgFPooncIX4+0d7dTM6SRUY
+         kbMg==
+X-Forwarded-Encrypted: i=1; AJvYcCV+tllOR2PBNdWa5fP0DIa/BgyJf8Oo4FSwdJXzrRBx5lEy/G0bJPrAXJLZ03sfNyhseQJrcMLp2pob@vger.kernel.org
+X-Gm-Message-State: AOJu0YxvlmXifs0lLvlr1tJUiFBlj8BEve9r6QRBr3tGu6rSPGvTVOkG
+	/hRyvgYKuUeUResO1UQYSm3lqUj4MYrh3B/mQYkwkAW7ASNN3pt4KxGWOMmorjsYurM=
+X-Gm-Gg: ASbGncsKFNRyUdLNRwsvG1Dxq6sh+u2jaIvhDYaMHjMXFglJhUzL9rEZjeQ+GF3OMMK
+	jRSUN2YTNTLyypfPuooINxy+7WU9IdrwXnK9tuxgooJScvyRlzIm3icaHJ8prruSZawK4TpQeGo
+	AYdhUF4c7szP8Jo5Cd8sQzjrFf8eNO6YUzW12A7wNEb7XWTmfE8xtUogQ2BLI3pLjxoDxE+DytF
+	wHPFCkwIfPwYSlSgLxnwNi118QFUOtjHba6c5w8Aa2AR65ixTvRKZXiN3h1mxVnA7blVBxnEen7
+	9/+41jeZgRXjjSywg+6PCMeum7p5As4pMYpC0DIt8uZEregk1roKILgWaB8Cynvz0Xcl/DhVRjT
+	Ik0kzZDKLLgtSBmcWlfxTXnxEvRQ27IU43bJc64RRO/rdhX7wgQ6PuocEMpwdqLh4EemJ0PbFWl
+	YD9Hb5cCMfvPYgQ9+MVnPfpyUW6Ca70Q==
+X-Google-Smtp-Source: AGHT+IGpleopjM4MDAheJaXpT7eQ+N9O9y3pHUJlCfRc6efZHo8evHnkFSfXUU+sWtqzH8WQFDcJgQ==
+X-Received: by 2002:a05:620a:2902:b0:8a3:7567:bde6 with SMTP id af79cd13be357-8b29b84c1dfmr782009285a.84.1763006008363;
+        Wed, 12 Nov 2025 19:53:28 -0800 (PST)
+Received: from localhost (ip-24-156-181-135.user.start.ca. [24.156.181.135])
+        by smtp.gmail.com with UTF8SMTPSA id af79cd13be357-8b2aee9e4c8sm53627285a.12.2025.11.12.19.53.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Nov 2025 19:53:28 -0800 (PST)
+Date: Wed, 12 Nov 2025 22:53:26 -0500
+From: Nick Bowler <nbowler@draconx.ca>
+To: "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] MIPS: mm: Prevent a TLB shutdown on initial
+ uniquification
+Message-ID: <tsok52tdbt3z5j3i6ht22iko3mdqeom2ojcvvb52pwfbjnzzyy@mcwnzfpvksee>
+References: <alpine.DEB.2.21.2511122032400.25436@angie.orcam.me.uk>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH net-next v2 00/13] net: stmmac: convert glue drivers to
- use
- stmmac_get_phy_intf_sel()
-From: patchwork-bot+netdevbpf@kernel.org
-Message-Id: 
- <176300042425.285552.5459936972326957453.git-patchwork-notify@kernel.org>
-Date: Thu, 13 Nov 2025 02:20:24 +0000
-References: <aRLvrfx6tOa-RhrY@shell.armlinux.org.uk>
-In-Reply-To: <aRLvrfx6tOa-RhrY@shell.armlinux.org.uk>
-To: Russell King (Oracle) <linux@armlinux.org.uk>
-Cc: andrew@lunn.ch, hkallweit1@gmail.com, alexandre.torgue@foss.st.com,
- andrew+netdev@lunn.ch, angelogioacchino.delregno@collabora.com,
- davem@davemloft.net, kernel@esmil.dk, edumazet@google.com, kuba@kernel.org,
- keguang.zhang@gmail.com, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com, matthias.bgg@gmail.com,
- mcoquelin.stm32@gmail.com, minda.chen@starfivetech.com,
- netdev@vger.kernel.org, nobuhiro.iwamatsu.x90@mail.toshiba, pabeni@redhat.com
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.2511122032400.25436@angie.orcam.me.uk>
 
-Hello:
-
-This series was applied to netdev/net-next.git (main)
-by Jakub Kicinski <kuba@kernel.org>:
-
-On Tue, 11 Nov 2025 08:11:25 +0000 you wrote:
-> This series converts the remaining glue drivers that support
-> multi-interface to use stmmac_get_phy_intf_sel(). The reason these
-> drivers are not converted to the set_phy_intf_sel() method is
-> because it is unclear whether there are ordering dependencies that
-> would prevent it.
+On Wed, Nov 12, 2025 at 11:42:11PM +0000, Maciej W. Rozycki wrote:
+> This fixes (at least) R4x00 cores if TLBP hits multiple matching TLB 
+> entries (SGI IP22 PROM for examples sets up all TLBs to the same virtual 
+> address).
 > 
-> For example, reading the stm32mp2 documentation, it is required to
-> set the ETH1_SEL field while the dwmac core is in reset and before
-> clocks are enabled. This requirement can not be satsified at the
-> moment (but could with further changes.)
-> 
-> [...]
+> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+> Fixes: 35ad7e181541 ("MIPS: mm: tlb-r4k: Uniquify TLB entries on init")
 
-Here is the summary with links:
-  - [net-next,v2,01/13] net: stmmac: loongson1: use PHY_INTF_SEL_x
-    https://git.kernel.org/netdev/net-next/c/5d88b24c1de8
-  - [net-next,v2,02/13] net: stmmac: loongson1: use PHY_INTF_SEL_x directly
-    https://git.kernel.org/netdev/net-next/c/031f7a05d4b3
-  - [net-next,v2,03/13] net: stmmac: loongson1: use stmmac_get_phy_intf_sel()
-    https://git.kernel.org/netdev/net-next/c/83eb6c7e1864
-  - [net-next,v2,04/13] net: stmmac: mediatek: use PHY_INTF_SEL_x
-    https://git.kernel.org/netdev/net-next/c/c3308d380e2c
-  - [net-next,v2,05/13] net: stmmac: mediatek: use stmmac_get_phy_intf_sel()
-    https://git.kernel.org/netdev/net-next/c/d9c7964fd934
-  - [net-next,v2,06/13] net: stmmac: mediatek: simplify set_interface() methods
-    https://git.kernel.org/netdev/net-next/c/f06620091fe7
-  - [net-next,v2,07/13] net: stmmac: starfive: use PHY_INTF_SEL_x to select PHY interface
-    https://git.kernel.org/netdev/net-next/c/f0917b475378
-  - [net-next,v2,08/13] net: stmmac: starfive: use stmmac_get_phy_intf_sel()
-    https://git.kernel.org/netdev/net-next/c/d22045997b53
-  - [net-next,v2,09/13] net: stmmac: stm32: use PHY_INTF_SEL_x to select PHY interface
-    https://git.kernel.org/netdev/net-next/c/73130c298fa0
-  - [net-next,v2,10/13] net: stmmac: stm32: use PHY_INTF_SEL_x directly
-    https://git.kernel.org/netdev/net-next/c/07669cf12ea8
-  - [net-next,v2,11/13] net: stmmac: stm32: use stmmac_get_phy_intf_sel()
-    https://git.kernel.org/netdev/net-next/c/45c5e24a53f1
-  - [net-next,v2,12/13] net: stmmac: visconti: use PHY_INTF_SEL_x to select PHY interface
-    https://git.kernel.org/netdev/net-next/c/bb68e0183e04
-  - [net-next,v2,13/13] net: stmmac: visconti: use stmmac_get_phy_intf_sel()
-    https://git.kernel.org/netdev/net-next/c/ccb4ff9f24e2
+I tried this one too and it also appears to work fine on my R4400SC
+Indy.  The system is booting normally again.
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
-
+Thanks,
+  Nick
 
