@@ -1,93 +1,127 @@
-Return-Path: <linux-mips+bounces-12216-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12217-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 27BACC54D50
-	for <lists+linux-mips@lfdr.de>; Thu, 13 Nov 2025 00:47:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78DD6C556C3
+	for <lists+linux-mips@lfdr.de>; Thu, 13 Nov 2025 03:22:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C3EC3346C92
-	for <lists+linux-mips@lfdr.de>; Wed, 12 Nov 2025 23:47:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CF68E3B65E6
+	for <lists+linux-mips@lfdr.de>; Thu, 13 Nov 2025 02:20:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 733ED25D208;
-	Wed, 12 Nov 2025 23:47:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 748BA2F6569;
+	Thu, 13 Nov 2025 02:20:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CSQv8g5l"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7383A1C2BD;
-	Wed, 12 Nov 2025 23:47:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 498AE18D636;
+	Thu, 13 Nov 2025 02:20:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1762991266; cv=none; b=aS/vuJ6H5C2ts4CVRrVRCjx8h4EBso/8BJ9XPzLTQOEq+HOY1qS5oZ3uJExm4ZE21zZJMgRIhiCArMjB8OwJw2cXOcbfnPjEVulI+OU4oCITdJZItkWLUO/B1tgwoLI82HJdEOg2G/wsOgK1HFACF4QSrfqAMwg+OdmmLkoxFUI=
+	t=1763000455; cv=none; b=E/QWNBLzMaudjspT+OMLQmI3YNzyAhGQ7E6eFBSfNZj7pRtm/i8N3iM0KgW+RfJYBezs4uPzRzgQFq3Kj5lnmxYMEHG9n1wjdA5PScrsjs0LADSQObBt8vt5HHy7kWTdXKqpgvacgC984ah3XjuZ1QZBYyIBy1w10hAfdS912Hc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1762991266; c=relaxed/simple;
-	bh=wj6zWnzx+RJYwATqI4vHF86YXU+OlrXFmsLHg7q0G+Q=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=P1JYQZdDJFFQU4aEZgz55RnlO9vDfWkMPXi3fzPyi6yV3RJpfeMA1+9+YeKop7lii0nOf5MbDDz87QVOrEI3bEUDePAxB6QukGaQH4uM3AD2B3i3uuLVYrH8qTRWzu5ycFBo26A9PixdgEAZtiP9VM9wHb4pUlybSBaJFYB6ark=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id DC55392009C; Thu, 13 Nov 2025 00:47:42 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id CEDD192009B;
-	Wed, 12 Nov 2025 23:47:42 +0000 (GMT)
-Date: Wed, 12 Nov 2025 23:47:42 +0000 (GMT)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-cc: Nick Bowler <nbowler@draconx.ca>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
-    linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] MIPS: mm: Prevent a TLB shutdown on initial
- uniquification
-In-Reply-To: <aRSXxKacvz4h9_Th@alpha.franken.de>
-Message-ID: <alpine.DEB.2.21.2511121802260.25436@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2511110547430.25436@angie.orcam.me.uk> <aRMrmjJcLJYR8QO-@alpha.franken.de> <alpine.DEB.2.21.2511111340330.25436@angie.orcam.me.uk> <aRRZtbBdCfEEhad9@alpha.franken.de> <alpine.DEB.2.21.2511121046350.25436@angie.orcam.me.uk>
- <aRSXxKacvz4h9_Th@alpha.franken.de>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1763000455; c=relaxed/simple;
+	bh=8ejBa8X0oQZTOqEW8wmzYE3T4O7hj6OmR6op+Ep2U6k=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=Avf67wufc0EPErnnUeuvbLvY+zdLLbfUttPJYkYmODRQqjO+TrFYY+mdeWETuaRv6gHKYB1gRUQMFvzwPDHREfdVliAAP9djNs/DFxreKqCI4iDcZHUKzzNtE0Ev0y0X9Qw1f9Ppcsk3O0gNbv9EjF5zMBljBrIpt21UJaYo3do=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CSQv8g5l; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9C71C16AAE;
+	Thu, 13 Nov 2025 02:20:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763000454;
+	bh=8ejBa8X0oQZTOqEW8wmzYE3T4O7hj6OmR6op+Ep2U6k=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=CSQv8g5loeBZqGzmCvUsSPniqMoFRVNtpoRs0afr+bvThoG+hh30q0camffgh4MaO
+	 JQG6cihmoYGnghBOeRxp6mBxZgq5Hcd2/K4DBMk7XhNwmmWaIFoEop/WrRN6cOVaF+
+	 ovE1OTaKveGq0UT+DQc4wQfxrfG2KTb1Fu8Oo3H9WYK7ZWb+WpxkpP98OIof4+sATD
+	 Joj+Z8Ka9I6buzx809VpN5D55WncG6CnYu0rHOF5E5yR44VUZT7zcGUWjHnKOKj8UK
+	 i+7Z6au5q+VA7oNQ0Ci+SvOlR0hFYuNYaAa4C39P2V40SNmkRQeZ37fO+IR2HlmXn1
+	 MpVw3p+2vu4Cw==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70E533A40FD1;
+	Thu, 13 Nov 2025 02:20:25 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH net-next v2 00/13] net: stmmac: convert glue drivers to
+ use
+ stmmac_get_phy_intf_sel()
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <176300042425.285552.5459936972326957453.git-patchwork-notify@kernel.org>
+Date: Thu, 13 Nov 2025 02:20:24 +0000
+References: <aRLvrfx6tOa-RhrY@shell.armlinux.org.uk>
+In-Reply-To: <aRLvrfx6tOa-RhrY@shell.armlinux.org.uk>
+To: Russell King (Oracle) <linux@armlinux.org.uk>
+Cc: andrew@lunn.ch, hkallweit1@gmail.com, alexandre.torgue@foss.st.com,
+ andrew+netdev@lunn.ch, angelogioacchino.delregno@collabora.com,
+ davem@davemloft.net, kernel@esmil.dk, edumazet@google.com, kuba@kernel.org,
+ keguang.zhang@gmail.com, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, linux-mips@vger.kernel.org,
+ linux-stm32@st-md-mailman.stormreply.com, matthias.bgg@gmail.com,
+ mcoquelin.stm32@gmail.com, minda.chen@starfivetech.com,
+ netdev@vger.kernel.org, nobuhiro.iwamatsu.x90@mail.toshiba, pabeni@redhat.com
 
-On Wed, 12 Nov 2025, Thomas Bogendoerfer wrote:
+Hello:
 
-> > > Update on the issue: Your patch is good and the segmentation faults,
-> > > I'm seeing, have IMHO a different reason. Instead of removing the call
-> > > to r4k_tlb_uniquify() I've replaced the jal in the binary with a nop.
-> > > And the issue is still there with this patched kernel. I've seen
-> > > something similair on a R12k Octanes, which comes and goes probably
-> > > depeding on code layout. So far I wasn't able to nail this down :-(
-> > 
-> >  Oh dear!  Something to do with the cache?  Or code alignment perhaps?
+This series was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Tue, 11 Nov 2025 08:11:25 +0000 you wrote:
+> This series converts the remaining glue drivers that support
+> multi-interface to use stmmac_get_phy_intf_sel(). The reason these
+> drivers are not converted to the set_phy_intf_sel() method is
+> because it is unclear whether there are ordering dependencies that
+> would prevent it.
 > 
-> code alignment is probably the trigger. It's reproducible on an R4400SC
-> and R5000 Indy, but not on a R4000SC Indy. Main difference other than
-> clock speed is L1 cache size...
-
- So both combined!  Trust my guts' feeling. ;)  At least you now have a 
-reproducer you can fiddle with.  But good luck with debugging as this 
-stuff can be tough!
-
-> And I've missremembered the R12k Octane problem. It's not a segmentation
-> fault but a bus error, because of an illegal instruction. I tracked it
-> down to a incorrect data in I-Cache (all 0 cache line, iirc), but never
-> found the reason for that.
-
- Bummer!
-
-> > > Do you want to send a v2 of the patch ? I'm fine with the current version
-> > > for applying...
-> > 
-> >  I'll send v2 with an update for the Wired register as we talked.  It may 
-> > take a day or two.
+> For example, reading the stm32mp2 documentation, it is required to
+> set the ETH1_SEL field while the dwmac core is in reset and before
+> clocks are enabled. This requirement can not be satsified at the
+> moment (but could with further changes.)
 > 
-> no problem, thank you.
+> [...]
 
- Now posted.  It's often good to sleep on things (an afternoon nap in this 
-case).  Thanks for taking the Malta fix BTW.
+Here is the summary with links:
+  - [net-next,v2,01/13] net: stmmac: loongson1: use PHY_INTF_SEL_x
+    https://git.kernel.org/netdev/net-next/c/5d88b24c1de8
+  - [net-next,v2,02/13] net: stmmac: loongson1: use PHY_INTF_SEL_x directly
+    https://git.kernel.org/netdev/net-next/c/031f7a05d4b3
+  - [net-next,v2,03/13] net: stmmac: loongson1: use stmmac_get_phy_intf_sel()
+    https://git.kernel.org/netdev/net-next/c/83eb6c7e1864
+  - [net-next,v2,04/13] net: stmmac: mediatek: use PHY_INTF_SEL_x
+    https://git.kernel.org/netdev/net-next/c/c3308d380e2c
+  - [net-next,v2,05/13] net: stmmac: mediatek: use stmmac_get_phy_intf_sel()
+    https://git.kernel.org/netdev/net-next/c/d9c7964fd934
+  - [net-next,v2,06/13] net: stmmac: mediatek: simplify set_interface() methods
+    https://git.kernel.org/netdev/net-next/c/f06620091fe7
+  - [net-next,v2,07/13] net: stmmac: starfive: use PHY_INTF_SEL_x to select PHY interface
+    https://git.kernel.org/netdev/net-next/c/f0917b475378
+  - [net-next,v2,08/13] net: stmmac: starfive: use stmmac_get_phy_intf_sel()
+    https://git.kernel.org/netdev/net-next/c/d22045997b53
+  - [net-next,v2,09/13] net: stmmac: stm32: use PHY_INTF_SEL_x to select PHY interface
+    https://git.kernel.org/netdev/net-next/c/73130c298fa0
+  - [net-next,v2,10/13] net: stmmac: stm32: use PHY_INTF_SEL_x directly
+    https://git.kernel.org/netdev/net-next/c/07669cf12ea8
+  - [net-next,v2,11/13] net: stmmac: stm32: use stmmac_get_phy_intf_sel()
+    https://git.kernel.org/netdev/net-next/c/45c5e24a53f1
+  - [net-next,v2,12/13] net: stmmac: visconti: use PHY_INTF_SEL_x to select PHY interface
+    https://git.kernel.org/netdev/net-next/c/bb68e0183e04
+  - [net-next,v2,13/13] net: stmmac: visconti: use stmmac_get_phy_intf_sel()
+    https://git.kernel.org/netdev/net-next/c/ccb4ff9f24e2
 
-  Maciej
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
