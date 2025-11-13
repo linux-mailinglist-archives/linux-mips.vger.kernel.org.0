@@ -1,161 +1,161 @@
-Return-Path: <linux-mips+bounces-12223-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12224-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80630C56A19
-	for <lists+linux-mips@lfdr.de>; Thu, 13 Nov 2025 10:37:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 40049C57C41
+	for <lists+linux-mips@lfdr.de>; Thu, 13 Nov 2025 14:46:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3612A3B9C86
-	for <lists+linux-mips@lfdr.de>; Thu, 13 Nov 2025 09:31:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA72D4A81F2
+	for <lists+linux-mips@lfdr.de>; Thu, 13 Nov 2025 13:19:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BED630102A;
-	Thu, 13 Nov 2025 09:31:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83350352933;
+	Thu, 13 Nov 2025 13:19:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ygwUYp2F";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="+qRXOq4J"
+	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="ngVkrRun"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BAE62320380;
-	Thu, 13 Nov 2025 09:31:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C24FB351FC5
+	for <linux-mips@vger.kernel.org>; Thu, 13 Nov 2025 13:19:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763026276; cv=none; b=nBDQXOKXjcNt8V9F/SLl73YkjJ+g0XbTTye6QeUIi8x389HJWjmDAq/eE0+E9KJ2JaICxZp/lwKEnDFBqMAAkj/AC+o+oF7qQTMXiCb/eVImLPJFu7vn2Aa4wku5F0xoVtH3ILHGYbGstNGduE4LCz17eU8cIteqApWRCh01Mn8=
+	t=1763039944; cv=none; b=T8yPuQjvXHeNUdhoGXSopiNZ8MNA/VYwpVCT+sd1abBfmj+hqKtGg3ptEnEZFVRqzrlNzdDaAEHvafaMAC9udwhrEtomLNP0tO3bpu/4cxkwD1aX264WrmkwfQPZ44c3MuzR+if5ZNmlxkQ2zdsQgOpXkVZP+grjsP/vG5QE5LE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763026276; c=relaxed/simple;
-	bh=O2/vwPXeEDFD/mI8BsOKjIlkUNBH5z8ELoKjc7T8RfQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=k7lrnf/2B6Zbm7BgsU3TABcMyWtnxC6PB6QyjNsXG6ci3NgBs+Vjq0wfA7uOWx1iJBMtb5y7XmS+gRSYP9AmiS2uDvPmOXF73MGkj24lqCH+AAxVuqToaK6RDzR/8eXG/1WNnjnS2h3dwBk0ok18SIb5UI2FTcqcEUP1V2tWjm4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ygwUYp2F; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=+qRXOq4J; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Thu, 13 Nov 2025 10:31:10 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1763026270;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=di0zlvtolFZ2ujSvVa+1BFR0CAlyEx4DiO0mYSWQDwc=;
-	b=ygwUYp2FepRzD3HjKdKbHo13iKPe5fGwe/j9Ys6zZiMvxAWN1OBuAhyCiELOtD2RGYJltU
-	8VX7MMGJ5DjE9n6DrWYVAuNwfdZvsbH1aHRwEYX3teYkFw5AJBO35bW4WpF5Tk5kFHUWrL
-	gLNEY+Wc1BUOIms3gsYJ/wOrqfpecWcaeu7T+cTr/m0bQLMtttloE8h10mHvi2/tYzORRN
-	G/jTKrO/gkksvgHb4CvJQr0H0W8vsKeIQ0e8rgMNvSrLaU6xLfa0eBk4Zd3xD9o+7GQDNd
-	mfHowgXQeM41cjXmGj3ubXSd3BExQ+zjAH7KBXzuEcjBpvptyc3CwuDZVPJ21A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1763026270;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=di0zlvtolFZ2ujSvVa+1BFR0CAlyEx4DiO0mYSWQDwc=;
-	b=+qRXOq4Jk2slHhdA1iSs+PP5mTSlOHMcDybHXlytmmFNwk4bSfci9b5O8vXXVZ+OjYzTkf
-	EiwvRX9YrR/EFeCw==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Nicolas Schier <nsc@kernel.org>
-Cc: Nathan Chancellor <nathan@kernel.org>, Paul Walmsley <pjw@kernel.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Ghiti <alex@ghiti.fr>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Masahiro Yamada <masahiroy@kernel.org>, linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH v2 00/10] kbuild: userprogs: introduce
- architecture-specific CC_CAN_LINK and userprog flags
-Message-ID: <20251113102307-ca2180c8-4876-46ea-8678-aaedd9ba36f0@linutronix.de>
-References: <20251014-kbuild-userprogs-bits-v2-0-faeec46e887a@linutronix.de>
- <aRToC77bNUy2sKAK@derry.ads.avm.de>
+	s=arc-20240116; t=1763039944; c=relaxed/simple;
+	bh=dZ2FevfKGBfSlzInaPvMVB0Ytsg/HnbfQojoImKv34o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Janvex4DOBwlalLbwMbStAFVUBvs50PAwg6CbN5y607t3MoXhmufQwrR9362RN+mmSwbrfqzLgDJ7kUHSFmSphAE0FkKccoIfESH1Imb1S8sviOJZMOAvpbv5+1dbbFTJy+/sXOZs/BMZix54PnQu7+1AYLR9Zz1QGXyudBHDfk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=ngVkrRun; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-594270ec7f9so736692e87.3
+        for <linux-mips@vger.kernel.org>; Thu, 13 Nov 2025 05:19:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1763039940; x=1763644740; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=VZfCaucUzkZTNK+50YPVLfmUuvxNRaVom6NqjpdOeAc=;
+        b=ngVkrRuni8C0ZzIICR4M1qJk0YSAc2BqN7tfoFD3K8miMEl3AUoeZTHyH3JTQqVne6
+         0oIe8sCSeQwTobVSMIdt2ef8RLM5qHSU1lYqNBttR0bvsXU8vCs1bqZLP1kDftPQ/GDb
+         t+JTcOKbGgfUFW9xHu2SLEEkIDrU51eaJ1bQfv3tadkzbSwl/i/KM2aFVsvr/ksSaVEW
+         Ija4F7f+3Ey+Zt7u6v1C54rFyngfipxqqC72siJWrM/BI8Sh9H/fAdtE46iAMG5DtuOK
+         WqgdBxKGG3OYy2YWVqE2iLqhQAEKzzM9UweJ+FUj+IQBQvPRye4/iWDTbRjQzESkqQqu
+         WZig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763039940; x=1763644740;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=VZfCaucUzkZTNK+50YPVLfmUuvxNRaVom6NqjpdOeAc=;
+        b=h7HXH2gO3k3Pye3XZ0S5aJWJKag02tc2VkWOaEA+hLOmyx3NeUwThJhA/N9t2gnU/2
+         Lr6okHC3fkMjXrwTvMSmpf2lMWTvoHzRG9qmrfFtDuO3zuo7dYlOdsnUl/WgJzpw40ZV
+         PT5GhT/61LhHd2XLTFZDFQRs9/WidR/f8bPsdIyNx0s7N9gP08dzM9ld3wg41qBaVZ+H
+         IdK9e25DFmfqOd/AmnRR1reRW+hn/gv1bDUafQK4NpdynRkCFaqzfk/I6FP1FsmZHQlP
+         NayQf3ZxmNr2fH54KZ3DizBNKaePdL9phhqCSX/IoQy8wBgm2PeLWWyGNPNZjdSoG8Ht
+         z+3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXVYZgt7ZdjUPkpB09bApOrBF4HG1jN5LvWVKVjTKjXcISxR2dCDlMDBYV6YxyDzUJC31Pd+oiyYaks@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxmt7KRrhv0/nEqUfsUmfF5bKo2eNYImhiusMPdfyPJ4PREmfNG
+	oEfibmXhHrag4EIgAx8ZazQly2e8VD1Bhf4TgQeeN3tbwExbL2eS0l5cTnB/oVOZPZfMx4kQgt4
+	hzoMdoSz6hSTK7c7AovkwcIq5iTo+thbUOR054ML4HQ==
+X-Gm-Gg: ASbGncu98549Dtn9CLypuqghpcN6DTMzav5KalzcO7C66yDnp2eIE6KXfIEC3dqUHjf
+	9Drw3ZuVnqe9zbNeYcic/rpQmAqnpFRbSZrui39EbbqtJ38f0SaUMD0gEbgp3+hud1zq2+AERSX
+	ucmXouKbT5InHJjecPb+G1jpoJJ6V+xUdPDlpAsogaLTm4N6hvIG1ZarM8pcIDMdbPWD6AVsEt1
+	UpJPn795hoJ/rLetTbdQNfUaiI+VKubE4M5BURBV4D+gjMpj+CgIAvu91Wp4V68YJR196UYLp8H
+	1z7CeY64iNciD8t8
+X-Google-Smtp-Source: AGHT+IHeVzTuj43c2XKQpZBw2ErEf3YOWTRFAtQ1vaZEEtKBTkEs3tR1Hd50SIgH+QjYllZZcXodcrSS9KZ8vRhrh3k=
+X-Received: by 2002:a05:6512:3152:b0:595:7b24:d36e with SMTP id
+ 2adb3069b0e04-5957b24d58cmr1396653e87.7.1763039939830; Thu, 13 Nov 2025
+ 05:18:59 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <aRToC77bNUy2sKAK@derry.ads.avm.de>
+References: <20251107-qcom-sa8255p-emac-v5-0-01d3e3aaf388@linaro.org>
+ <20251107-qcom-sa8255p-emac-v5-2-01d3e3aaf388@linaro.org> <21a3d269-76e6-4da9-aa25-bfd1fb6dfb07@oss.qualcomm.com>
+In-Reply-To: <21a3d269-76e6-4da9-aa25-bfd1fb6dfb07@oss.qualcomm.com>
+From: Bartosz Golaszewski <brgl@bgdev.pl>
+Date: Thu, 13 Nov 2025 14:18:48 +0100
+X-Gm-Features: AWmQ_bkdL6yYgjauNyydNchJ2jLFj9s46UQ7WB4-Hc5rFElcxZ0Jmq78mNjUwDc
+Message-ID: <CAMRc=MexMn_GSC2EtMek5hDRLjGYA5HKM8ge9vrxw1pYDqPJgw@mail.gmail.com>
+Subject: Re: [PATCH v5 2/8] net: stmmac: qcom-ethqos: use generic device properties
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Cc: Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Richard Cochran <richardcochran@gmail.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+	Vinod Koul <vkoul@kernel.org>, Giuseppe Cavallaro <peppe.cavallaro@st.com>, 
+	Jose Abreu <joabreu@synopsys.com>, Chen-Yu Tsai <wens@kernel.org>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
+	Matthew Gerlach <matthew.gerlach@altera.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+	Keguang Zhang <keguang.zhang@gmail.com>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Jan Petrous <jan.petrous@oss.nxp.com>, s32@nxp.com, 
+	Romain Gantois <romain.gantois@bootlin.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, Heiko Stuebner <heiko@sntech.de>, 
+	Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@gmail.com>, 
+	Emil Renner Berthing <kernel@esmil.dk>, Minda Chen <minda.chen@starfivetech.com>, 
+	Drew Fustini <fustini@kernel.org>, Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, 
+	Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
+	Maxime Ripard <mripard@kernel.org>, Shuang Liang <liangshuang@eswincomputing.com>, 
+	Zhi Li <lizhi2@eswincomputing.com>, Shangjuan Wei <weishangjuan@eswincomputing.com>, 
+	"G. Jaya Kumaran" <vineetha.g.jaya.kumaran@intel.com>, Clark Wang <xiaoning.wang@nxp.com>, 
+	Linux Team <linux-imx@nxp.com>, Frank Li <Frank.Li@nxp.com>, David Wu <david.wu@rock-chips.com>, 
+	Samin Guo <samin.guo@starfivetech.com>, 
+	Christophe Roullier <christophe.roullier@foss.st.com>, Swathi K S <swathi.ks@samsung.com>, 
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-stm32@st-md-mailman.stormreply.com, 
+	linux-arm-kernel@lists.infradead.org, Drew Fustini <dfustini@tenstorrent.com>, 
+	linux-sunxi@lists.linux.dev, linux-amlogic@lists.infradead.org, 
+	linux-mips@vger.kernel.org, imx@lists.linux.dev, 
+	linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org, 
+	sophgo@lists.linux.dev, linux-riscv@lists.infradead.org, 
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Nov 12, 2025 at 09:03:23PM +0100, Nicolas Schier wrote:
-> On Tue, Oct 14, 2025 at 03:05:15PM +0200, Thomas Weiﬂschuh wrote:
-> > The current logic to inherit -m32/-m64 from the kernel build only works
-> > for a few architectures. It does not handle byte order differences,
-> > architectures using different compiler flags or different kinds of ABIs.
-> > 
-> > Introduce a per-architecture override mechanism to set CC_CAN_LINK and
-> > the flags used for userprogs.
-> > 
-> > Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+On Fri, Nov 7, 2025 at 11:49=E2=80=AFAM Konrad Dybcio
+<konrad.dybcio@oss.qualcomm.com> wrote:
+>
+> On 11/7/25 11:29 AM, Bartosz Golaszewski wrote:
+> > From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+> >
+> > In order to drop the dependency on CONFIG_OF, convert all device proper=
+ty
+> > getters from OF-specific to generic device properties and stop pulling
+> > in any linux/of.h symbols.
+> >
+> > Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > > ---
-> > Changes in v2:
-> > - Rebase and drop already applied patch
-> > - Disable CC_CAN_LINK if the test program generates warnings
-> > - Move to architecture-specific logic
-> > - Link to v1: https://lore.kernel.org/r/20250813-kbuild-userprogs-bits-v1-0-2d9f7f411083@linutronix.de
-> > 
-> > ---
-> > Thomas Weiﬂschuh (10):
-> >       kbuild: don't enable CC_CAN_LINK if the dummy program generates warnings
-> >       init: deduplicate cc-can-link.sh invocations
-> >       kbuild: allow architectures to override CC_CAN_LINK
-> >       riscv: Implement custom CC_CAN_LINK
-> >       s390: Implement custom CC_CAN_LINK
-> >       powerpc: Implement custom CC_CAN_LINK
-> >       MIPS: Implement custom CC_CAN_LINK
-> >       x86/Kconfig: Implement custom CC_CAN_LINK
-> >       sparc: Implement custom CC_CAN_LINK
-> >       kbuild: simplify CC_CAN_LINK
-> > 
-> >  Makefile                |  8 ++++++--
-> >  arch/mips/Kconfig       | 15 +++++++++++++++
-> >  arch/powerpc/Kconfig    | 15 +++++++++++++++
-> >  arch/riscv/Kconfig      | 11 +++++++++++
-> >  arch/s390/Kconfig       | 11 +++++++++++
-> >  arch/sparc/Kconfig      | 11 +++++++++++
-> >  arch/x86/Kconfig        | 11 +++++++++++
-> >  init/Kconfig            |  7 +++++--
-> >  scripts/Kconfig.include |  3 +++
-> >  scripts/cc-can-link.sh  |  2 +-
-> >  10 files changed, 89 insertions(+), 5 deletions(-)
-> > ---
-> > base-commit: 10f8210c7a7098897fcee5ca70236167b39eb797
-> > change-id: 20250813-kbuild-userprogs-bits-03c117da4d50
-> > 
-> > Best regards,
-> > -- 
-> > Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
-> > 
-> 
-> Thanks for the patch set and all the work behind!  I found only one
-> issue in patch 3, the rest looks good to me as they are.
-> 
-> I haven't reviewed the compiler flags for the archs, but from the formal
-> point of view they look good to me, too.
-> 
-> How shall we proceed with here?  I think, easiest would be if we get
-> appropriate acks from the architecture maintainers, so we could take
-> this via kbuild.
+>
+> [...]
+>
+> > -     if (of_property_read_bool(np, "snps,tso"))
+> > +     if (device_property_present(dev, "snps,tso"))
+>
+> This is a change in behavior - "snps,tso =3D <0>" would have previously
+> returned false, it now returns true
+>
 
-That would surely be the best option. Unfortunately quite frequently it is hard
-to get architecture maintainer's feedback on a cross-architecture series.
+This property is a boolean flag, it cannot have a value.
 
-> Other opinions?
+Bartosz
 
-It would also work to only take the first three patches through the kbuild tree
-and push the other ones through the architecture trees.
-
-I don't really have a clear preference.
-
-
-Thomas
+> although it seems like it's the plat driver clunkily working around
+> not including the common compatible and inlining parts of the common
+> probe functions..
+>
+> Konrad
+>
 
