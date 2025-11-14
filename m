@@ -1,47 +1,47 @@
-Return-Path: <linux-mips+bounces-12246-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12247-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1200FC5CD49
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Nov 2025 12:22:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CE006C5CD67
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Nov 2025 12:23:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 521C34F5D9F
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Nov 2025 11:15:15 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 74DD74EBB90
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Nov 2025 11:15:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 208A13148DF;
-	Fri, 14 Nov 2025 11:14:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E26F3168EA;
+	Fri, 14 Nov 2025 11:14:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="L48H43W4"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="B1fHws4v"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+Received: from out-189.mta0.migadu.com (out-189.mta0.migadu.com [91.218.175.189])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 166E43148B3;
-	Fri, 14 Nov 2025 11:14:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 555CC3164BD
+	for <linux-mips@vger.kernel.org>; Fri, 14 Nov 2025 11:14:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.189
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763118849; cv=none; b=n1zdqGwpWyQcZOZ0r2IvAWlTyUi+N8q450etkxTwQbH1fttiJN/Ndw6XgO1UhwBBg3DK5R46QyyQbN6IYQyIPqPnL79GAi/1QdKvIAU2IjFZAErpMnDWZSFZbRFSHfR5M0DOQ5KCZPFuR+L5KNIh0jNv3OC15WiSy6ACNR067SE=
+	t=1763118855; cv=none; b=aXVYiNMtjOZn+YH+tbL6PuGj2xKNtearHZg+W/KgxPJfioiwTTwZrtxtPjJLhN4TLJeiDiCSE2GRpBgdBIPtKdm1JlYNAXa6I5WfyyDy4Ua7O3PdFEj98UrqEIiZLWZtbgmtawL8K9Q4Gxq0Etm8TtHUVLRmQAo8n1XH/Wp29qM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763118849; c=relaxed/simple;
-	bh=L77VHJOsxYGfJl12t5E1P3bJEqsaMDW4GIC4V2YxBI4=;
+	s=arc-20240116; t=1763118855; c=relaxed/simple;
+	bh=CXsWQVszD/4e4l8zbTDqOiyMxntdOa/q50nLcbN+x40=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=PjCk4foLU5MN03OzhrfL0RasVNAEDSglr+V8+CF0bdqySI/c4qLJ+Rzt8m8Eg45QT/S2UXLt8EH5jNtBwZvEJlqIyCpxfd8nmvENkmpLL+TaygGfIVLeJC74UeJkJH8Q+wKV7qLXB0tD0tSLG1lzJY7Ak7T4DBsAwDXXv1UHlT8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=L48H43W4; arc=none smtp.client-ip=91.218.175.173
+	 MIME-Version; b=BonVT6pC5wglR0Mpz0lVCiyRHPz9M4NPjplH0NE4EOh11LlwAxL8lHFXmDg2v4apYV8ueCb2TW6u0iUvwKN9F/342xbJZkfFl8zqxYgSSfA6k1f5OUeuny4yMHEq5eZ/x/2BKSHs/waBSk3/RBM6Orwrf4lJ+HPp4M17OA2m1HY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=B1fHws4v; arc=none smtp.client-ip=91.218.175.189
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1763118845;
+	t=1763118849;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=nUnrWplutHBzvgR2dvaxPt91n3EUIlT8RN+kjzr9YeU=;
-	b=L48H43W4jFZRnZVw9O79JRiRB5m9aw/GV0MPdZjIrgDSOzS1xJajXCccgoMGVVyjHQVMx8
-	ixGDGcGZ9+fwVuXGogoz7wJwNfE66muSzsaVj6jY+ONOTTSdEs5AZWkbAoLKzZN3TJkNEr
-	SLREeZzO+x0CEbQrd41ME+/n9u8TpH4=
+	bh=3MvAZBElD0X3pJk/MX8AXoxW4zTACm8dJmSYdSV26R0=;
+	b=B1fHws4vdV9SHk7Nm4NMEkMGypQnWt5ebGnT0lkQhYxPSrPX9T5usjJtN8D6xLK5/tENRj
+	6lr6jCeTav9vHkLaX2Cm/MDvr39umGBs008BSWf4p0qasklCP7V5XJNNR/0A712o57bV/X
+	UdgHrzzazzIM8MjWkX4twJlrGaTbo7c=
 From: Qi Zheng <qi.zheng@linux.dev>
 To: will@kernel.org,
 	aneesh.kumar@kernel.org,
@@ -60,13 +60,10 @@ Cc: linux-arch@vger.kernel.org,
 	linux-mips@vger.kernel.org,
 	linux-parisc@vger.kernel.org,
 	linux-um@lists.infradead.org,
-	Qi Zheng <zhengqi.arch@bytedance.com>,
-	Richard Weinberger <richard@nod.at>,
-	Anton Ivanov <anton.ivanov@cambridgegreys.com>,
-	Johannes Berg <johannes@sipsolutions.net>
-Subject: [PATCH 6/7] um: mm: enable MMU_GATHER_RCU_TABLE_FREE
-Date: Fri, 14 Nov 2025 19:11:20 +0800
-Message-ID: <27f173b0fc6fdf92104721fc3daba8d7d9d31e2f.1763117269.git.zhengqi.arch@bytedance.com>
+	Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: [PATCH 7/7] mm: make PT_RECLAIM depend on MMU_GATHER_RCU_TABLE_FREE && 64BIT
+Date: Fri, 14 Nov 2025 19:11:21 +0800
+Message-ID: <0a4d1e6f0bf299cafd1fc624f965bd1ca542cea8.1763117269.git.zhengqi.arch@bytedance.com>
 In-Reply-To: <cover.1763117269.git.zhengqi.arch@bytedance.com>
 References: <cover.1763117269.git.zhengqi.arch@bytedance.com>
 Precedence: bulk
@@ -80,31 +77,52 @@ X-Migadu-Flow: FLOW_OUT
 
 From: Qi Zheng <zhengqi.arch@bytedance.com>
 
-On a 64-bit system, madvise(MADV_DONTNEED) may cause a large number of
-empty PTE page table pages (such as 100GB+). To resolve this problem,
-first enable MMU_GATHER_RCU_TABLE_FREE to prepare for enabling the
-PT_RECLAIM feature, which resolves this problem.
+Make PT_RECLAIM depend on MMU_GATHER_RCU_TABLE_FREE so that PT_RECLAIM can
+be enabled by default on all architectures that support
+MMU_GATHER_RCU_TABLE_FREE.
+
+Considering that a large number of PTE page table pages (such as 100GB+)
+can only be caused on a 64-bit system, let PT_RECLAIM also depend on
+64BIT.
 
 Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
-Cc: Richard Weinberger <richard@nod.at>
-Cc: Anton Ivanov <anton.ivanov@cambridgegreys.com>
-Cc: Johannes Berg <johannes@sipsolutions.net>
 ---
- arch/um/Kconfig | 1 +
- 1 file changed, 1 insertion(+)
+ arch/x86/Kconfig | 1 -
+ mm/Kconfig       | 6 +-----
+ 2 files changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/arch/um/Kconfig b/arch/um/Kconfig
-index 097c6a6265ef3..47a41bc77bb24 100644
---- a/arch/um/Kconfig
-+++ b/arch/um/Kconfig
-@@ -41,6 +41,7 @@ config UML
- 	select HAVE_SYSCALL_TRACEPOINTS
- 	select THREAD_INFO_IN_TASK
- 	select SPARSE_IRQ
-+	select MMU_GATHER_RCU_TABLE_FREE
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index eac2e86056902..96bff81fd4787 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -330,7 +330,6 @@ config X86
+ 	select FUNCTION_ALIGNMENT_4B
+ 	imply IMA_SECURE_AND_OR_TRUSTED_BOOT    if EFI
+ 	select HAVE_DYNAMIC_FTRACE_NO_PATCHABLE
+-	select ARCH_SUPPORTS_PT_RECLAIM		if X86_64
+ 	select ARCH_SUPPORTS_SCHED_SMT		if SMP
+ 	select SCHED_SMT			if SMP
+ 	select ARCH_SUPPORTS_SCHED_CLUSTER	if SMP
+diff --git a/mm/Kconfig b/mm/Kconfig
+index a5a90b169435d..e795fbd69e50c 100644
+--- a/mm/Kconfig
++++ b/mm/Kconfig
+@@ -1440,14 +1440,10 @@ config ARCH_HAS_USER_SHADOW_STACK
+ 	  The architecture has hardware support for userspace shadow call
+           stacks (eg, x86 CET, arm64 GCS or RISC-V Zicfiss).
  
- config MMU
- 	bool
+-config ARCH_SUPPORTS_PT_RECLAIM
+-	def_bool n
+-
+ config PT_RECLAIM
+ 	bool "reclaim empty user page table pages"
+ 	default y
+-	depends on ARCH_SUPPORTS_PT_RECLAIM && MMU && SMP
+-	select MMU_GATHER_RCU_TABLE_FREE
++	depends on MMU_GATHER_RCU_TABLE_FREE && MMU && SMP && 64BIT
+ 	help
+ 	  Try to reclaim empty user page table pages in paths other than munmap
+ 	  and exit_mmap path.
 -- 
 2.20.1
 
