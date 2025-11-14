@@ -1,47 +1,47 @@
-Return-Path: <linux-mips+bounces-12236-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12237-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99DE8C5B4FF
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Nov 2025 05:29:47 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 29B26C5B4F3
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Nov 2025 05:29:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 44634345884
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Nov 2025 04:27:57 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 66F784E91F0
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Nov 2025 04:29:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E715296BD1;
-	Fri, 14 Nov 2025 04:27:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7F4F29D266;
+	Fri, 14 Nov 2025 04:29:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MChFGhE2"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z5ruQ2Mt"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 28C22296BA9;
-	Fri, 14 Nov 2025 04:27:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D66F296159;
+	Fri, 14 Nov 2025 04:29:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763094473; cv=none; b=doPgW7jN0n92aEgkcqeLecJOCR/6URe1bMio7cdvjxTWklmhC8wCQAEjxabVC9EOGeQ4c+DUEhsCEasUiNVR8ia0zivJ6HcZG/zbXAex10h3pHef4JZBrFUaevFewvDkhRbyIVnFwWpTdVnBeNe0qGAd3uncW7y8P7duUMvK4cg=
+	t=1763094546; cv=none; b=NsmTyPNttGrdGeySMsXZ7NzDvlcHIVlFF5HaAgDfvKxEHDEQKgJ0t+zyG4+MziOs3meTQtnNbIg4/jqg/jguVk8ljphHliDMyyWM+wYyqYFy1MEVGkDtwRWMShk+Z2WxuccCr9/PQh3Rx6ogoTDa0oPSAL5RhV94fGLKWbv5Urs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763094473; c=relaxed/simple;
-	bh=BElALngLN2nFhaInsP852/aGs6CMGw4etVXE34fZIjs=;
+	s=arc-20240116; t=1763094546; c=relaxed/simple;
+	bh=pNnQKFMOXRv/8psHWwl6fS+z0lU+MW1Zt3XGUGS81hw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IZ6FLhtij9ai7hmlWVt/sdN5Dx6wm7HcEYi1zZVwoEcmDUH5/sjARWiWwt6AsWB+RlUIG7SE70DcAKywxay+VWT22+Bi7KPZIt30oNW2Qq06bpmCbGt5t9+VoMHe2VxR7q/kP3tNWlDq/vk+l6Uu9Xic6UswfvAsHn2oUp4tFn8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MChFGhE2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9BDC3C113D0;
-	Fri, 14 Nov 2025 04:27:44 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=nWdYnxB/MStjjbgznm/vkyWMjnxCCe+YeY2nWiPRY03dEgH8s4Gouiw9wxMqxzEpxN4ft1Nup9eHWFlDL3uJbr0m/qhY+1uspJ6WDd6EG3Z0pm/MMYAHJjMSmu6GRMcMAemSpep+Ynx3e4biEeLqyO6EYckAg7NzKlp00X8Crl4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z5ruQ2Mt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D3C0C16AAE;
+	Fri, 14 Nov 2025 04:28:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763094471;
-	bh=BElALngLN2nFhaInsP852/aGs6CMGw4etVXE34fZIjs=;
+	s=k20201202; t=1763094545;
+	bh=pNnQKFMOXRv/8psHWwl6fS+z0lU+MW1Zt3XGUGS81hw=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=MChFGhE2l/mEBBnjKokUFr/WJR+V2WR/BNdIXlxZ7F4DWvd5LlA7WR+SbIsNd6T5p
-	 XLohdaztk3jTypiLtJViRiMzBcBEj4n3u61lZ6DVKQTtmI2nc6sPXuyui+8eNcpWNN
-	 z60MjTf+BRU/qYwxJnNFL50DT9aK3PSZWE+/UaN4vh2keuunX9DvbkE0d6uIt1rQMB
-	 9xtjhrNA3YvSgTCuhcIYETlamknRCv8pQYWFIIS1hLgub5xGEWBnRrHhH8O0ZTPbG/
-	 6xQOdNn34QRyl9zXUWZ0wi6BB2LZUX+YSZOVyfuQZfrBYX1Qz6BNc1cHvt3eCmgh/P
-	 ND3ELNyp2KMPw==
-Date: Thu, 13 Nov 2025 21:27:41 -0700
+	b=Z5ruQ2MtWCS6I6U+6vV1Z+0TCZU6f+9X82zJurev+eP9mNn3Gh1vAhiv0QiwoIgDg
+	 zObjRFsSETG+fc2lcJT/61HwvIHiOgslQGjxQspUtVRm6JBsrvcGQBfsAjVpoHgTeV
+	 kipy8eHjNGe6zaKCO7/sCwj9xEVqvu9C3WlQlKiE25AwY5zeCaucNEuQCeBqHUy+Jy
+	 k6/FaVMxodHyCWO6HT7dwztd6e/5oJfmcPp5qfHfrsWJ4si05H1uZfaFCbzoAJG3TI
+	 f7WRio/5YJEIzHBD6QhspVqEWtVVeKZBGJrXqqIXnyJO2sQoHHj+9LuPyZ95opyZTl
+	 p9xMfxseUX/8Q==
+Date: Thu, 13 Nov 2025 21:28:56 -0700
 From: Nathan Chancellor <nathan@kernel.org>
 To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
 Cc: Nicolas Schier <nicolas.schier@linux.dev>,
@@ -69,11 +69,10 @@ Cc: Nicolas Schier <nicolas.schier@linux.dev>,
 	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
 	linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org,
 	sparclinux@vger.kernel.org
-Subject: Re: [PATCH v2 01/10] kbuild: don't enable CC_CAN_LINK if the dummy
- program generates warnings
-Message-ID: <20251114042741.GA3582402@ax162>
+Subject: Re: [PATCH v2 02/10] init: deduplicate cc-can-link.sh invocations
+Message-ID: <20251114042856.GB3582402@ax162>
 References: <20251014-kbuild-userprogs-bits-v2-0-faeec46e887a@linutronix.de>
- <20251014-kbuild-userprogs-bits-v2-1-faeec46e887a@linutronix.de>
+ <20251014-kbuild-userprogs-bits-v2-2-faeec46e887a@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -83,55 +82,52 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251014-kbuild-userprogs-bits-v2-1-faeec46e887a@linutronix.de>
+In-Reply-To: <20251014-kbuild-userprogs-bits-v2-2-faeec46e887a@linutronix.de>
 
-On Tue, Oct 14, 2025 at 03:05:16PM +0200, Thomas Weiﬂschuh wrote:
-> It is possible that the kernel toolchain generates warnings when used
-> together with the system toolchain. This happens for example when the
-> older kernel toolchain does not handle new versions of sframe debug
-> information. While these warnings where ignored during the evaluation
-> of CC_CAN_LINK, together with CONFIG_WERROR the actual userprog build
-> will later fail.
+On Tue, Oct 14, 2025 at 03:05:17PM +0200, Thomas Weiﬂschuh wrote:
+> The command to invoke scripts/cc-can-link.sh is very long and new usages
+> are about to be added.
 > 
-> Example warning:
+> Add a helper variable to make the code easier to read and maintain.
 > 
-> .../x86_64-linux/13.2.0/../../../../x86_64-linux/bin/ld:
-> error in /lib/../lib64/crt1.o(.sframe); no .sframe will be created
-> collect2: error: ld returned 1 exit status
-> 
-> Make sure that the very simple example program does not generate
-> warnings already to avoid breaking the userprog compilations.
-> 
-> Fixes: ec4a3992bc0b ("kbuild: respect CONFIG_WERROR for linker and assembler")
-> Fixes: 3f0ff4cc6ffb ("kbuild: respect CONFIG_WERROR for userprogs")
 > Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
 
 Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
-While this makes sense as a way to immediately fix the problem and align
-cc-can-link.sh with the other test functions like cc-option and like, it
-is rather unfortunate that this particular warning causes an error since
-the rest of the userprogs infrastructure does not care about SFrame...
-I wonder if there is a way to avoid it since I think this warning does
-not point to a fundamental problem.
-
 > ---
->  scripts/cc-can-link.sh | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+>  init/Kconfig            | 4 ++--
+>  scripts/Kconfig.include | 3 +++
+>  2 files changed, 5 insertions(+), 2 deletions(-)
 > 
-> diff --git a/scripts/cc-can-link.sh b/scripts/cc-can-link.sh
-> index 6efcead3198989d2ab2ab6772c72d8bb61c89c4e..e67fd8d7b6841e53341045b28dc5196cc1327cbe 100755
-> --- a/scripts/cc-can-link.sh
-> +++ b/scripts/cc-can-link.sh
-> @@ -1,7 +1,7 @@
->  #!/bin/sh
->  # SPDX-License-Identifier: GPL-2.0
+> diff --git a/init/Kconfig b/init/Kconfig
+> index cab3ad28ca49e7ac930207c9cde8d431d55dc7af..7b722e714d5c5a0580467914b226dc0700ec0797 100644
+> --- a/init/Kconfig
+> +++ b/init/Kconfig
+> @@ -84,8 +84,8 @@ config RUSTC_LLVM_VERSION
 >  
-> -cat << "END" | $@ -x c - -o /dev/null >/dev/null 2>&1
-> +cat << "END" | $@ -Werror -Wl,--fatal-warnings -x c - -o /dev/null >/dev/null 2>&1
->  #include <stdio.h>
->  int main(void)
->  {
+>  config CC_CAN_LINK
+>  	bool
+> -	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m64-flag)) if 64BIT
+> -	default $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(m32-flag))
+> +	default $(cc_can_link_user,$(m64-flag)) if 64BIT
+> +	default $(cc_can_link_user,$(m32-flag))
+>  
+>  # Fixed in GCC 14, 13.3, 12.4 and 11.5
+>  # https://gcc.gnu.org/bugzilla/show_bug.cgi?id=113921
+> diff --git a/scripts/Kconfig.include b/scripts/Kconfig.include
+> index 33193ca6e8030e659d6b321acaea1acd42c387a4..d42042b6c9e243b46d1626d892c0c986621ce462 100644
+> --- a/scripts/Kconfig.include
+> +++ b/scripts/Kconfig.include
+> @@ -65,6 +65,9 @@ cc-option-bit = $(if-success,$(CC) -Werror $(1) -E -x c /dev/null -o /dev/null,$
+>  m32-flag := $(cc-option-bit,-m32)
+>  m64-flag := $(cc-option-bit,-m64)
+>  
+> +# Test whether the compiler can link userspace applications
+> +cc_can_link_user = $(success,$(srctree)/scripts/cc-can-link.sh $(CC) $(CLANG_FLAGS) $(USERCFLAGS) $(USERLDFLAGS) $(1))
+> +
+>  rustc-version := $(shell,$(srctree)/scripts/rustc-version.sh $(RUSTC))
+>  rustc-llvm-version := $(shell,$(srctree)/scripts/rustc-llvm-version.sh $(RUSTC))
+>  
 > 
 > -- 
 > 2.51.0
