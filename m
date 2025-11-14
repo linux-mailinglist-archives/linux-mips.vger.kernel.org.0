@@ -1,132 +1,155 @@
-Return-Path: <linux-mips+bounces-12249-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12250-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A059C5D6FB
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Nov 2025 14:51:57 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79867C5D8DD
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Nov 2025 15:25:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id E9FF436101E
-	for <lists+linux-mips@lfdr.de>; Fri, 14 Nov 2025 13:43:36 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 15DF14E8CA6
+	for <lists+linux-mips@lfdr.de>; Fri, 14 Nov 2025 14:18:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6E552459E1;
-	Fri, 14 Nov 2025 13:43:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9559132145A;
+	Fri, 14 Nov 2025 14:18:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="gIRir/4L";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="PJp/vBSm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="p6kGJMPG"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 142B11DE4DC;
-	Fri, 14 Nov 2025 13:43:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A40D3164AB
+	for <linux-mips@vger.kernel.org>; Fri, 14 Nov 2025 14:18:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763127810; cv=none; b=kV8WuLPZdmhv3DUdXcS4t/Rt5EEI8HHuMw0UBdrzROSAjv29Ikija+X3x8Q6fefcT1S5qZUYsIHtp5fcYkWFvVHURu4LCyA+liAr69wlF9AKKYhah4RiKjFtFkT3v0OLMoVeeoibVaCFCftJQaXv+4Jq7FeJ2X+JsDXxIoMUoLM=
+	t=1763129889; cv=none; b=bp1OwNZD6DA5dUQxBLtl1VzHyY8ubldPlrHWp+OYXgJt0wH9/Nm0d4jjvfkVet5yv1Ytg3rVOmdzm2e6yOOpHGG/2kDF+RKxKaNwm13fOuS0J2zjWXq7JKN6Bg/E51Pc8QUYIb17UEXJxGfduBOwnCkq6BZG+p1OIAMsFZ/ZF3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763127810; c=relaxed/simple;
-	bh=ISg/AK+QzVsVcyIt5OGx/BlA/TtkDDhIO1Pr2OUhGnY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tSeJf3zP+4+tR3lfKLeTsqLspN3l9sQOMt4x05tmD2uWo4VLvELbSX/XYsSYqTGBrW0N7LpX0KWckU20kjZQ4wrFbNSiMtgEoGDYw6WLXgHEk3OFAQeaICSq6F+JUHx35wKXuMEvbO2BEZzacGx37WrfRe5SMJhqCnXYbVXDwSM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=gIRir/4L; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=PJp/vBSm; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Fri, 14 Nov 2025 14:43:24 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1763127807;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xQUB6KjOBhp5NcnouuFZQn81BWCzOQnuwQGVzcoOc6s=;
-	b=gIRir/4Lzgj/mHOd7JZaVUa1E9UZ0Kp6SBQjTGTYc3zBB9Uccw1PDQZgKCugDD7SNkLJc4
-	rWTA1bZOYnnxFBU1c3I5+6pxafi3efAKVcvOfQxa8mYLHkao6U1a+WgjquQRNJGq7KMi70
-	KU9KOzGVJgkI8JKU94Xqv5bvdlgDzk5qNnnCwypNirbyc7n9xcDwwQTJr5+ysJL63QDwuN
-	v4Zoxyc9j/Niyifj12WxqFysmUyas8fb1CvF8xpXQm6Uqhxo+L+tYv/l1uziRIrJw4fWPL
-	jpQKVyMnpupxpF8qCOOc7QA9LHCLSTU3hyevSChE6sWIUtC5QvXQSjxHIH2nHg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1763127807;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=xQUB6KjOBhp5NcnouuFZQn81BWCzOQnuwQGVzcoOc6s=;
-	b=PJp/vBSmzIi+3+3HURui2pgktdSqU9eraGxE64lkXGPNdO6ZlBzcYl1MFyPqJRIG+bG6hX
-	hK2GxotHfbZs93BQ==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Nathan Chancellor <nathan@kernel.org>
-Cc: Nicolas Schier <nicolas.schier@linux.dev>, 
-	Nicolas Schier <nsc@kernel.org>, Paul Walmsley <pjw@kernel.org>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Alexandre Ghiti <alex@ghiti.fr>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner <tglx@linutronix.de>, 
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
-	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Masahiro Yamada <masahiroy@kernel.org>, linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org, sparclinux@vger.kernel.org
-Subject: Re: [PATCH v2 01/10] kbuild: don't enable CC_CAN_LINK if the dummy
- program generates warnings
-Message-ID: <20251114143845-ff0d3849-4495-469c-b9c1-bebf2e8808db@linutronix.de>
-References: <20251014-kbuild-userprogs-bits-v2-0-faeec46e887a@linutronix.de>
- <20251014-kbuild-userprogs-bits-v2-1-faeec46e887a@linutronix.de>
- <20251114042741.GA3582402@ax162>
+	s=arc-20240116; t=1763129889; c=relaxed/simple;
+	bh=FAWHKTbojrVdbFJ8884Lh9DTaMatsBJR+ahGaIp46Mc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=KGaD9WZK9zcE9rkgXsdVWsiNXsFx+6wwPBFJNxyVVnWHVRK85R5DWV72ASp8Wf0VQdZgbnpJz/kGbv1VbeW8Jubt2I6Ezghhw4Lw7YxTntSbXM15GeYwyWTwPhP2t4xEakjE22k4BpqrqX6tnFQ7kAhVA2YpV5Ul4HCSBrXbnvc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=p6kGJMPG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 144B3C116D0
+	for <linux-mips@vger.kernel.org>; Fri, 14 Nov 2025 14:18:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763129889;
+	bh=FAWHKTbojrVdbFJ8884Lh9DTaMatsBJR+ahGaIp46Mc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=p6kGJMPGPO4zhpMUmlK1tkVdWLKi0QGIypBU+p95zDqcd+pZowWKhEf6ejWqW4yoZ
+	 ppDZobHsg4oFBstR9nfLvP7LotZhd03W0gLFcgXkdbIl9gzSd8NzEtcmAKiX8JNkEq
+	 AkfuN0V/0mNO/ac65VkYiv5phg2ILI8Y4QOjMVL4KPqgSEuDas+wGNlmtQk/xTdxZB
+	 LAhoMr1qcbKLx+FqvqyKVAQfLmhOZ+LqeNleJvo7L9SmaaqrZwafDKouEuEOKyWY8A
+	 bjynM/Z2VdSW/VCRw9yYO3zav1+Un7AYJtdn5oQHqA28L5S0Dgb0JOQortqUBXJCOk
+	 6QZCfGCd7yKPQ==
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-b735b89501fso181891066b.0
+        for <linux-mips@vger.kernel.org>; Fri, 14 Nov 2025 06:18:09 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUyf35udUFdOvkxMKei4OdKjeD0cugk8Ft3wfaLvVIapFZf3pYbn/NyvDF96yYrW0H6JRR8ym1Dkc5B@vger.kernel.org
+X-Gm-Message-State: AOJu0YxOhnzr7mszUKZQijJ22IIvWDeEBdFSN5V2qStIwwJuL6HwTIVH
+	pyJ/TqlH0hQvPYAZXhZTcBgKNxJktOu3gpp2hqCFtAyoCwfpxGmvZE6dYlgLSv0yhajvQlfZAUE
+	hG4rEQcsEMP/K0XKIV8Zj8sUqb+OkhXc=
+X-Google-Smtp-Source: AGHT+IH2APpWlx01lvRmsEjk25T/BroXvRMmdJoqcqdhkk/l43ih7kDnYxsJFdqG1+mvDKp0yNH6Z0TrYw4LGkrxjmI=
+X-Received: by 2002:a17:907:748:b0:b70:b661:cfcb with SMTP id
+ a640c23a62f3a-b73678ee3a8mr261903966b.31.1763129887364; Fri, 14 Nov 2025
+ 06:18:07 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20251114042741.GA3582402@ax162>
+References: <cover.1763117269.git.zhengqi.arch@bytedance.com> <146b5a0207052b38d04caac6b20756a61c2189b3.1763117269.git.zhengqi.arch@bytedance.com>
+In-Reply-To: <146b5a0207052b38d04caac6b20756a61c2189b3.1763117269.git.zhengqi.arch@bytedance.com>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Fri, 14 Nov 2025 22:17:55 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6HL+mXeuLqgo5BOVBB0_GHTUmn7_7NTzdUpLX7NbuQ5w@mail.gmail.com>
+X-Gm-Features: AWmQ_bnB_yOPM8We43AKxCyF0R_mmEJVAbU9qloFW-YqOpGJ4QJ0yARhVtFDLLs
+Message-ID: <CAAhV-H6HL+mXeuLqgo5BOVBB0_GHTUmn7_7NTzdUpLX7NbuQ5w@mail.gmail.com>
+Subject: Re: [PATCH 3/7] loongarch: mm: enable MMU_GATHER_RCU_TABLE_FREE
+To: Qi Zheng <qi.zheng@linux.dev>
+Cc: will@kernel.org, aneesh.kumar@kernel.org, npiggin@gmail.com, 
+	peterz@infradead.org, dev.jain@arm.com, akpm@linux-foundation.org, 
+	david@redhat.com, ioworker0@gmail.com, linux-arch@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org, linux-alpha@vger.kernel.org, 
+	linux-snps-arc@lists.infradead.org, loongarch@lists.linux.dev, 
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linux-um@lists.infradead.org, Qi Zheng <zhengqi.arch@bytedance.com>, 
+	WANG Xuerui <kernel@xen0n.name>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 13, 2025 at 09:27:41PM -0700, Nathan Chancellor wrote:
-> On Tue, Oct 14, 2025 at 03:05:16PM +0200, Thomas Weiﬂschuh wrote:
-> > It is possible that the kernel toolchain generates warnings when used
-> > together with the system toolchain. This happens for example when the
-> > older kernel toolchain does not handle new versions of sframe debug
-> > information. While these warnings where ignored during the evaluation
-> > of CC_CAN_LINK, together with CONFIG_WERROR the actual userprog build
-> > will later fail.
-> > 
-> > Example warning:
-> > 
-> > .../x86_64-linux/13.2.0/../../../../x86_64-linux/bin/ld:
-> > error in /lib/../lib64/crt1.o(.sframe); no .sframe will be created
-> > collect2: error: ld returned 1 exit status
-> > 
-> > Make sure that the very simple example program does not generate
-> > warnings already to avoid breaking the userprog compilations.
-> > 
-> > Fixes: ec4a3992bc0b ("kbuild: respect CONFIG_WERROR for linker and assembler")
-> > Fixes: 3f0ff4cc6ffb ("kbuild: respect CONFIG_WERROR for userprogs")
-> > Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
-> 
-> Reviewed-by: Nathan Chancellor <nathan@kernel.org>
+Hi, Qi Zheng,
 
-Thanks!
+We usually use LoongArch rather than loongarch, but if you want to
+keep consistency for all patches, just do it.
 
-> While this makes sense as a way to immediately fix the problem and align
-> cc-can-link.sh with the other test functions like cc-option and like, it
-> is rather unfortunate that this particular warning causes an error since
-> the rest of the userprogs infrastructure does not care about SFrame...
-> I wonder if there is a way to avoid it since I think this warning does
-> not point to a fundamental problem.
+On Fri, Nov 14, 2025 at 7:13=E2=80=AFPM Qi Zheng <qi.zheng@linux.dev> wrote=
+:
+>
+> From: Qi Zheng <zhengqi.arch@bytedance.com>
+>
+> On a 64-bit system, madvise(MADV_DONTNEED) may cause a large number of
+> empty PTE page table pages (such as 100GB+). To resolve this problem,
+> first enable MMU_GATHER_RCU_TABLE_FREE to prepare for enabling the
+> PT_RECLAIM feature, which resolves this problem.
+>
+> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+> Cc: Huacai Chen <chenhuacai@kernel.org>
+> Cc: WANG Xuerui <kernel@xen0n.name>
+> ---
+>  arch/loongarch/Kconfig               | 1 +
+>  arch/loongarch/include/asm/pgalloc.h | 6 ++++--
+>  2 files changed, 5 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/loongarch/Kconfig b/arch/loongarch/Kconfig
+> index 5b1116733d881..3bf2f2a9cd647 100644
+> --- a/arch/loongarch/Kconfig
+> +++ b/arch/loongarch/Kconfig
+> @@ -210,6 +210,7 @@ config LOONGARCH
+>         select USER_STACKTRACE_SUPPORT
+>         select VDSO_GETRANDOM
+>         select ZONE_DMA32
+> +       select MMU_GATHER_RCU_TABLE_FREE
+Please use alpha-betical order.
 
-I did not find any way to avoid this specific warning, unfortunately.
-This patch should make sense in any case. If we find a way to avoid the
-sframe warning then that should go on top.
+>
+>  config 32BIT
+>         bool
+> diff --git a/arch/loongarch/include/asm/pgalloc.h b/arch/loongarch/includ=
+e/asm/pgalloc.h
+> index 1c63a9d9a6d35..0539d04bf1525 100644
+> --- a/arch/loongarch/include/asm/pgalloc.h
+> +++ b/arch/loongarch/include/asm/pgalloc.h
+> @@ -79,7 +79,8 @@ static inline pmd_t *pmd_alloc_one(struct mm_struct *mm=
+, unsigned long address)
+>         return pmd;
+>  }
+>
+> -#define __pmd_free_tlb(tlb, x, addr)   pmd_free((tlb)->mm, x)
+> +#define __pmd_free_tlb(tlb, x, addr)   \
+> +       tlb_remove_ptdesc((tlb), virt_to_ptdesc(x))
+I think we can define it in one line.
 
-(...)
+>
+>  #endif
+>
+> @@ -99,7 +100,8 @@ static inline pud_t *pud_alloc_one(struct mm_struct *m=
+m, unsigned long address)
+>         return pud;
+>  }
+>
+> -#define __pud_free_tlb(tlb, x, addr)   pud_free((tlb)->mm, x)
+> +#define __pud_free_tlb(tlb, x, addr)   \
+> +       tlb_remove_ptdesc((tlb), virt_to_ptdesc(x))
+The same.
 
+Other patches have the same problem.
 
-Thomas
+Huacai
+
+>
+>  #endif /* __PAGETABLE_PUD_FOLDED */
+>
+> --
+> 2.20.1
+>
 
