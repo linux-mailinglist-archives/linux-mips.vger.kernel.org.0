@@ -1,139 +1,103 @@
-Return-Path: <linux-mips+bounces-12256-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12257-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 299F9C5FD16
-	for <lists+linux-mips@lfdr.de>; Sat, 15 Nov 2025 02:13:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B8DE7C601F7
+	for <lists+linux-mips@lfdr.de>; Sat, 15 Nov 2025 10:08:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 977304E333A
-	for <lists+linux-mips@lfdr.de>; Sat, 15 Nov 2025 01:13:08 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 7C62F4E159D
+	for <lists+linux-mips@lfdr.de>; Sat, 15 Nov 2025 09:08:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DBB51A9FA7;
-	Sat, 15 Nov 2025 01:13:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0059F86359;
+	Sat, 15 Nov 2025 09:08:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GQ6VT86g"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="kNysVfHs"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
+Received: from out-182.mta0.migadu.com (out-182.mta0.migadu.com [91.218.175.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DB512A1C7;
-	Sat, 15 Nov 2025 01:13:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDE2619DF66;
+	Sat, 15 Nov 2025 09:08:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763169185; cv=none; b=f1d8tgZA5iDWa6r+IKriUncgfZs1Cpssurn4EIIn6y8vSafmG/eGQDRsVPpEiiAT4IfXjJ1C686pf6VwRFAjJTJQlpkL/r166sFsHJpLtsd/zrickiS4Y33EzVWW9GyIvOnO85uDNloH9SPft7H8+MVzAiPlruKzUKBfU0OgXSQ=
+	t=1763197686; cv=none; b=AFc5IvoZpBLl630upXdGycRKvoohXILxm5DbMY1p4d62RmxetW0hVOu4WYhxCajXG/GP65uvi+1z1R4UzY9p2bevMwGA8goAbjhZ280qfGmZqgu6kA9/POK2I0wMzvWKnf1X/skXB517JR2YVA4mY5XMqQdKLuLzNoWTVPgXfeA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763169185; c=relaxed/simple;
-	bh=ZYpyydEIKJdUZcKYOQA153wYBuCQw3r8OGWjWBD7bf0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ok3R8BiIvCEcPnjCQZk0YQfsbL0qMW637gAdpXbl/fwDT8ltWXeiW1YPBKF4VgzNl+oXdruWZ2IcuYl29ZCH1dk7RiD6LXLH/o/DrZY1VHT3d5I0hpO5qCM4zgYAuvLizoDjgkc5PwSqz8dAbdYc+cH4vJ6aa/m2RxG48iQfJBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GQ6VT86g; arc=none smtp.client-ip=198.175.65.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1763169185; x=1794705185;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=ZYpyydEIKJdUZcKYOQA153wYBuCQw3r8OGWjWBD7bf0=;
-  b=GQ6VT86gYd0zdopeUWvYFUKPw/stO6DxY1sbhFnQpqP5x5Ls2nzV5d81
-   Co+vW1XzBrID5yjAoKXxuR2sTtppKBrcx8rlcrc7hlqkANE72xRUC5hW7
-   zLMrb+LjwNbfeOnQvY08oCtViiKftD4NPtFpiWEoszJcoLAix7t4Txd23
-   PkpE2x0EkL3Y48nUpvWvGD8rKUQeMAlqT1dxt0tzA4Um2OcqoRE4qASEH
-   Am0cOxl9TIFuMBZO1MUQb90TtkjY+l1yV/qfqGPTqFZ2mk7OvRlC6sRw5
-   1ZzIP2RUzfCMqGZtg4ukaDIeFGNysD7Vz1R++7OqNpXLjTI0zBK72GOxw
-   Q==;
-X-CSE-ConnectionGUID: cPmPaZU1SKaYUB+870+RMQ==
-X-CSE-MsgGUID: 6FgbEz60Q8e6X5i7zlgleA==
-X-IronPort-AV: E=McAfee;i="6800,10657,11613"; a="65152400"
-X-IronPort-AV: E=Sophos;i="6.19,306,1754982000"; 
-   d="scan'208";a="65152400"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Nov 2025 17:13:04 -0800
-X-CSE-ConnectionGUID: OyXkE+18SIC4r9bUHnq2cQ==
-X-CSE-MsgGUID: 7wNDei3wRnCT1vSqROvBmg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.19,306,1754982000"; 
-   d="scan'208";a="194228351"
-Received: from lkp-server01.sh.intel.com (HELO 7b01c990427b) ([10.239.97.150])
-  by fmviesa005.fm.intel.com with ESMTP; 14 Nov 2025 17:12:59 -0800
-Received: from kbuild by 7b01c990427b with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1vK4qW-0007Zv-1X;
-	Sat, 15 Nov 2025 01:12:56 +0000
-Date: Sat, 15 Nov 2025 09:12:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Qi Zheng <qi.zheng@linux.dev>, will@kernel.org, aneesh.kumar@kernel.org,
-	npiggin@gmail.com, peterz@infradead.org, dev.jain@arm.com,
-	akpm@linux-foundation.org, david@redhat.com, ioworker0@gmail.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-mm@kvack.org, linux-alpha@vger.kernel.org,
-	linux-snps-arc@lists.infradead.org, loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linux-um@lists.infradead.org, Qi Zheng <zhengqi.arch@bytedance.com>
-Subject: Re: [PATCH 7/7] mm: make PT_RECLAIM depend on
- MMU_GATHER_RCU_TABLE_FREE && 64BIT
-Message-ID: <202511150832.iAyO0SAW-lkp@intel.com>
-References: <0a4d1e6f0bf299cafd1fc624f965bd1ca542cea8.1763117269.git.zhengqi.arch@bytedance.com>
+	s=arc-20240116; t=1763197686; c=relaxed/simple;
+	bh=iz3UFYendPSPOta+oby8oOHSNrjAc7U+hK6M3s9Qt5U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=YP4lSXRmWuNFAsLsLkf4OnESP8rZXjNEOK3cVH6MgavPY8qQmzq0G3YsQc34RZf6eBezgVlVF3QGzq3E/ZWEMlHC540cFcVUPM63X0un3U4otX3ogG7obPuIO/XA6cMtuwreH7PjMF8k1Preo/auQyhNxCafy8o3D9J/HNwiYeo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=kNysVfHs; arc=none smtp.client-ip=91.218.175.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <d58a6475-15f2-4e7c-b384-146623ce55fc@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1763197672;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=QuGUgkNBhxAyHgvlC2Rtd4xfIzwmCu+LetoLyFbR46Y=;
+	b=kNysVfHsdj+0Qseu6HcgTet+NVlC+EYvKu/FOU10GOWi/nxL8FolfSVt4/dADuwt4v6eGO
+	ihunYFsAestSz7zz/fhdf7/MlU9A15UpPrX0hNXtoFRGbUs2QnpKQ2keo3fNajZYWhiuZW
+	+qGkodE+uZWV2JrmnmGzM7YxCyKUZy4=
+Date: Sat, 15 Nov 2025 17:06:51 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0a4d1e6f0bf299cafd1fc624f965bd1ca542cea8.1763117269.git.zhengqi.arch@bytedance.com>
+Subject: Re: [PATCH 1/7] alpha: mm: enable MMU_GATHER_RCU_TABLE_FREE
+To: Magnus Lindholm <linmag7@gmail.com>
+Cc: will@kernel.org, aneesh.kumar@kernel.org, npiggin@gmail.com,
+ peterz@infradead.org, dev.jain@arm.com, akpm@linux-foundation.org,
+ david@redhat.com, ioworker0@gmail.com, linux-arch@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-alpha@vger.kernel.org, linux-snps-arc@lists.infradead.org,
+ loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linux-um@lists.infradead.org,
+ Qi Zheng <zhengqi.arch@bytedance.com>,
+ Richard Henderson <richard.henderson@linaro.org>,
+ Matt Turner <mattst88@gmail.com>
+References: <cover.1763117269.git.zhengqi.arch@bytedance.com>
+ <66cd5b21aecc3281318b66a3a4aae078c4b9d37b.1763117269.git.zhengqi.arch@bytedance.com>
+ <CA+=Fv5SGu_Y-zwryrQiTQDy32SipMk_dfjZezth1=aZmnDKNeA@mail.gmail.com>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Qi Zheng <qi.zheng@linux.dev>
+In-Reply-To: <CA+=Fv5SGu_Y-zwryrQiTQDy32SipMk_dfjZezth1=aZmnDKNeA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 
-Hi Qi,
+Hi Magnus,
 
-kernel test robot noticed the following build errors:
+On 11/15/25 3:13 AM, Magnus Lindholm wrote:
+> Hi,
+> 
+> I applied your patches to a fresh pull of torvalds/linux.git repo but was unable
+> to build the kernel (on Alpha) with this patch applied.
+> 
+> I made the following changes in order to get it to build on Alpha:
 
-[auto build test ERROR on deller-parisc/for-next]
-[also build test ERROR on uml/next tip/x86/core akpm-mm/mm-everything linus/master v6.18-rc5 next-20251114]
-[cannot apply to uml/fixes vgupta-arc/for-next vgupta-arc/for-curr]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+Thanks! Will fix it in the next version.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Qi-Zheng/alpha-mm-enable-MMU_GATHER_RCU_TABLE_FREE/20251114-191543
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git for-next
-patch link:    https://lore.kernel.org/r/0a4d1e6f0bf299cafd1fc624f965bd1ca542cea8.1763117269.git.zhengqi.arch%40bytedance.com
-patch subject: [PATCH 7/7] mm: make PT_RECLAIM depend on MMU_GATHER_RCU_TABLE_FREE && 64BIT
-config: arm64-randconfig-002-20251115 (https://download.01.org/0day-ci/archive/20251115/202511150832.iAyO0SAW-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251115/202511150832.iAyO0SAW-lkp@intel.com/reproduce)
+> 
+> diff --git a/mm/pt_reclaim.c b/mm/pt_reclaim.c
+> index 7e9455a18aae..6761b0c282bf 100644
+> --- a/mm/pt_reclaim.c
+> +++ b/mm/pt_reclaim.c
+> @@ -1,7 +1,7 @@
+>   // SPDX-License-Identifier: GPL-2.0
+>   #include <linux/hugetlb.h>
+> -#include <asm-generic/tlb.h>
+>   #include <asm/pgalloc.h>
+> +#include <asm/tlb.h>
+> 
+>   #include "internal.h"
+> 
+> 
+> /Magnus
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202511150832.iAyO0SAW-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> mm/pt_reclaim.c:31:2: error: call to undeclared function '__pte_free_tlb'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      31 |         pte_free_tlb(tlb, pmd_pgtable(pmdval), addr);
-         |         ^
-   include/asm-generic/tlb.h:731:3: note: expanded from macro 'pte_free_tlb'
-     731 |                 __pte_free_tlb(tlb, ptep, address);             \
-         |                 ^
-   1 error generated.
-
-
-vim +/__pte_free_tlb +31 mm/pt_reclaim.c
-
-6375e95f381e3d Qi Zheng 2024-12-04  27  
-6375e95f381e3d Qi Zheng 2024-12-04  28  void free_pte(struct mm_struct *mm, unsigned long addr, struct mmu_gather *tlb,
-6375e95f381e3d Qi Zheng 2024-12-04  29  	      pmd_t pmdval)
-6375e95f381e3d Qi Zheng 2024-12-04  30  {
-6375e95f381e3d Qi Zheng 2024-12-04 @31  	pte_free_tlb(tlb, pmd_pgtable(pmdval), addr);
-6375e95f381e3d Qi Zheng 2024-12-04  32  	mm_dec_nr_ptes(mm);
-6375e95f381e3d Qi Zheng 2024-12-04  33  }
-6375e95f381e3d Qi Zheng 2024-12-04  34  
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
