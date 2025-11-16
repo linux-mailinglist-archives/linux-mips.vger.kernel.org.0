@@ -1,107 +1,137 @@
-Return-Path: <linux-mips+bounces-12259-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12260-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 72BD0C60A58
-	for <lists+linux-mips@lfdr.de>; Sat, 15 Nov 2025 20:08:46 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id A1FE4C60F55
+	for <lists+linux-mips@lfdr.de>; Sun, 16 Nov 2025 04:09:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 56E5A4E201E
-	for <lists+linux-mips@lfdr.de>; Sat, 15 Nov 2025 19:07:01 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id EB36E361044
+	for <lists+linux-mips@lfdr.de>; Sun, 16 Nov 2025 03:09:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2721730595F;
-	Sat, 15 Nov 2025 19:06:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3478321CA0D;
+	Sun, 16 Nov 2025 03:09:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=draconx-ca.20230601.gappssmtp.com header.i=@draconx-ca.20230601.gappssmtp.com header.b="YW6QLwFH"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X12iNoLd"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-qv1-f44.google.com (mail-qv1-f44.google.com [209.85.219.44])
+Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EFBC3043B7
-	for <linux-mips@vger.kernel.org>; Sat, 15 Nov 2025 19:06:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73ADD7494
+	for <linux-mips@vger.kernel.org>; Sun, 16 Nov 2025 03:09:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763233617; cv=none; b=ieAdeH0yQKlOJVuqL7sdA1jRs9TZYq/hMINO9U1+pLrRtCgHkjYoQr93V4T4GlbBPM9Vf8cxWwdGUNFn3QcE90iU5c3WtQ7m5RP4rwqqom5gDI2xYGkXmGzJZLOzrkioBtpxOP52osJGpuLZX2r/P7nXzjtWs3ZOHaZ7JvoNZ8U=
+	t=1763262582; cv=none; b=E1oPYk6Dx5Z7xR7BJiS8IzU31PY5ZfJrRcvYLoTJP5nSZjVjAFM9p3bf7LlmglSddpWpsxapfCWzyg0vorYR9PJzk5tpFoKxZCsIEZIrRChDKQw9AljKaxhUrXsdkloVTF12eeLnAKIjvA8lGIKqX1k0Te7OkGlGP1SRIYrOIWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763233617; c=relaxed/simple;
-	bh=UAn1DCgzkUmzEfBjN6konaTygi+H/ALwSzVfPpb2m1A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WR/+hqm4lLr7n/7MTuBKQBohlB2w/831lXCZ5hsras899CYp9NM+7VXA9fy3HRq0fPd8qr4pPJa45v9A46zD6MBbaNQDZqEwK32g/4RJPVOCW/gin+v9Fnz5y/WRf2M8R4FtE3p4n4nfyNq0czO1VveYHJqmxl4wqMeNjD0Wt94=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=draconx.ca; spf=none smtp.mailfrom=draconx.ca; dkim=pass (2048-bit key) header.d=draconx-ca.20230601.gappssmtp.com header.i=@draconx-ca.20230601.gappssmtp.com header.b=YW6QLwFH; arc=none smtp.client-ip=209.85.219.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=draconx.ca
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=draconx.ca
-Received: by mail-qv1-f44.google.com with SMTP id 6a1803df08f44-8823cde292eso35764506d6.2
-        for <linux-mips@vger.kernel.org>; Sat, 15 Nov 2025 11:06:55 -0800 (PST)
+	s=arc-20240116; t=1763262582; c=relaxed/simple;
+	bh=atY9y7GGqa2zG7tebr9XLxy0ggIrfaOaHDHwyEx2Zhk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CHiqZCLOvCsO+z+HG7DF7GzdOBMmLtDXZ6tQwgmSSlYHy4CJu6K7JMjPbZcVCkTbm60wxxqpiXCDxJuhstscH8OxQeE0TzAD1cJ3FQ51PvSeZZrIXQyBtZuZNH5UHEyacuSjPtVyxqYACV7jCG9C16Q2i6C78nrwjEHKVGC3pqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X12iNoLd; arc=none smtp.client-ip=209.85.167.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5957753e0efso3536502e87.1
+        for <linux-mips@vger.kernel.org>; Sat, 15 Nov 2025 19:09:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=draconx-ca.20230601.gappssmtp.com; s=20230601; t=1763233614; x=1763838414; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=0r42ycPq4ii0n+Y30U+z7Vd805r5WgIurS0x2hT0WZ4=;
-        b=YW6QLwFHExrR14P7qfXIB1G/jHBjaoXm5UNLSsI1RyvbroXF7g/5spEpUoqFz+uYIN
-         n541Wf+VkLEHkq2ILiZZvIrQnkwr4m5+bo9GQCztq7yqhODHgT0FtgTSmhGkbXp2NODY
-         EBcKFPYUzWNKDCq4oresfcDzgbafz7zSBF6mJaoCl5HIMGY6ldB1dtcIR/3dcR866UJL
-         W4WQIS3qkrtv0uoX2hXYWw3V3qkeWQ65fC9XqZhVKicOm1AGIelYPRtnKqYALz5oT8aW
-         DdB3MOWuD+KkY1XM6OC0SvqhbugP7rQkGrS6qSLKYQ4uiUB3N7NWMIIpp9e5BsR3A9gS
-         Ue7w==
+        d=gmail.com; s=20230601; t=1763262579; x=1763867379; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DwhoLl9bGZVzUZ+/CJVXxclpRGhyNNTcXAG5DCFxERM=;
+        b=X12iNoLdKuexKcPsKI0PpospksomFKThI3J9aa54e1Pdj7iwT6gIfkYDPRpAaR/6RX
+         bXJ3DZFLSh/2XOFKk69UqYLOcbubTnWV8idQZo84o5q983mgpc2gNp0kJc+kWCAUZzaC
+         978cHhIlEazYMZhAg+DoxmNF1lPKZj/++IDgD7PLEINhrHmq/2+YqPg55+X/6u/Xffw5
+         /Q2nn1/7kcos4mkLdeNqIaIEGidRktBIS4/gQAISAKJUqEcIKjO+gbflMZx5T66k39Kb
+         h69iTwaljlwHCS/2se9HyamTzkvgzwaVU53lUSCPKg9VoNFw45KZjrzAWgZsSR3S2lP3
+         zI+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763233614; x=1763838414;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=0r42ycPq4ii0n+Y30U+z7Vd805r5WgIurS0x2hT0WZ4=;
-        b=Rcf6qJIqKrs0Ml+ywHkyEaXGQCZ0KTgzBVaTKWGXE8gd5KC7armyRj3rt1LWCA7dTl
-         F7vBVHpeOKwv8OT/vqmNO8yXCjF3Q1eXXfmQ3oof3SG/r0mfqIhrBqIBlja5Cml2fLYD
-         5G2riyJZbq+IDWKoiObjC/1R8hpooYnMHjkpEPnvpyM+TSux/HPSLkzcMawvXwc8fZUY
-         OuQ0Kp3ki0fxOicZG8kDzA/CIAUiNL8Nutbx3Mm6w0Ns8zwI1NFJAse64Dx1+afaSqUJ
-         dv+QAeW5a1fI//hu1dUnqYo1VCQfz1WReyXjkqx9c9prHFa6pHo2RlrIdpmbYmWgx3gb
-         +KLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXYSpZl2WhY+PXH0/wqxAjFJ8hovxuTAoS8YDR3A+hicluSl51MNuBrU2VB5pV/pXZlI4lFqPmMzlyv@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyb3owkFFjR8Sdkk3Xnqr3KRv0Ih9bEgcWHqi0dz6HM74IIB4pJ
-	QA1jPaQnwQT40RCnekdyZGzf89HudbMk20j0bH76ZmC/zw9f5tEGN9NdXJW/w0rRqos=
-X-Gm-Gg: ASbGncsaRUhVP0FW0bNdqafGg7WxU3aDYcNn9WN2PbEACYZlV/JlwQ5oGSmScz8dJP5
-	E3OwltqGTsSGQlZTo7AJEYSDoAVc75h2+1+TlFPLNKQ+BxQyYo5J/TSs1BBonMRieUz3a4CiH8w
-	Jt2ZBCo0ko/tEMUNn/uwXST7LH4TTEvrESIw2kpK+sNBh+SNgfHZklcEQFedSDg13NEHNcy2hgO
-	fAJkhiN/vjOw+Ox005MY54tVuF1FZv8h4xRJzAf1yCA+KtAvKCgwHTaDJFu0Cj568DddoCiudr9
-	JdeT2uEKHlt0j8vT/InjaZ2pXWMQ+GpWs1WQ8ygJXmiPSBgmg4Mml/hUMwNhr03b/5OyGzm2Cu8
-	lDos431Gr0JVqOikhd5FH3OEsC+/CJm2jl7Jn/L5bCSLeqmoqfLSt1axZY0upF9pGrNtlb4Rp8R
-	jF9qGgokgBqLDjiQkEsFB3N/quTlKdLk5vRMzyog5xhld6n5mijNo=
-X-Google-Smtp-Source: AGHT+IHu4RhRGyRo+jdrPPsz+MGV1wJZLYoA1CRkUq72ARJlZpYIbr7nMmp0RSFox1ocrbkWXvAt7w==
-X-Received: by 2002:a05:6214:cab:b0:87c:f64:7571 with SMTP id 6a1803df08f44-88292604aefmr85886336d6.23.1763233614235;
-        Sat, 15 Nov 2025 11:06:54 -0800 (PST)
-Received: from localhost (ip-24-156-181-135.user.start.ca. [24.156.181.135])
-        by smtp.gmail.com with UTF8SMTPSA id 6a1803df08f44-882863138c0sm57763566d6.16.2025.11.15.11.06.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Nov 2025 11:06:53 -0800 (PST)
-Date: Sat, 15 Nov 2025 14:06:52 -0500
-From: Nick Bowler <nbowler@draconx.ca>
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] MIPS: mm: Prevent a TLB shutdown on initial
- uniquification
-Message-ID: <a3z7inhvpbss7mbcef2pdoyeiu652mrtaasjmjuo6bul2rufmj@vlkvbbkj6jus>
-References: <alpine.DEB.2.21.2511130507110.25436@angie.orcam.me.uk>
+        d=1e100.net; s=20230601; t=1763262579; x=1763867379;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=DwhoLl9bGZVzUZ+/CJVXxclpRGhyNNTcXAG5DCFxERM=;
+        b=IroqEYVa/1lljZFqSdSJz463VD78kUSop6OSG0Tp5xOQOgZWOAxY8M1eTmR2ra36W+
+         PXPDIT6ovp75Py2kKOW8qsZw69hMVv81JVAY1k+g1Du1O8L025G0QZylUeWYacdC+Gpi
+         H8eqb0ACGiRDqw/9ZbJlRJ4IxhbXajaRSL48X7nmVuavszJoB/aHMWof2Tjcs4eERuDu
+         B5/ypNDucnm9GkajTbNW5sAKHdQrQBCsSqgrSEQMf2kY9psHgmtNRqL1IwMWG/nO9CPI
+         TbsehK64vjahsYUIBFayT4QYA0+KL2XhjAh4jhl0EVcXRv7dLuK/aF6wcJqTlRrBRRA4
+         Wdkg==
+X-Forwarded-Encrypted: i=1; AJvYcCWr8yolBMc8HP88Jdg1w2rUcyQPNeq/z6/LJcxW3IRPAnUeH0J276D8S3mLnevLCNgvRW7c0F/PFngS@vger.kernel.org
+X-Gm-Message-State: AOJu0YxVR8cFO+pnIQHGn/CM66YAf0uUZNOaPtXcUZq0Ytk/KP72/6iV
+	l4tYbXzEVBa4p2BxMtpqdSBvRB3a3RlWzmliFJdd4+HK5CvMm/TErxLGEKlUjG9oq1ZLGIVKDWD
+	fivY2SdqCw5oZnjv+v7G2BUowuVobecXMqov7FIQ=
+X-Gm-Gg: ASbGncvgbpvAZQyXYro6873MVFrn1C2VduxNx/sUT4w/nb98w4OqWDUe245wnyXC32T
+	L7UU/VNTSulklFTZixA3GzIhRCNB0QhrRSAXr7pKS0Bzr7dMEX2pwzHlcUL0y0ZXunwgurU3sah
+	DwV6tOH7Q6Uwgl+B+Ho/1PvZZDbM5GLRYnR/3u2h3KlJe3D0qBGs3ViFPic29g5V0Et1TDPPhvA
+	1ZLXzFqPi88n7glszMX0jxwJYOUh+exQGs4zrfdBk0YAVJSFZv96IZPPheNfr0EvoAiT5YtW09v
+	2hgdhoxQEDve8NPHHA==
+X-Google-Smtp-Source: AGHT+IEMXhC4/qX8p01/4TItyFnrogOzpqPwRybEBfpc44Xyxht8M6N1UsPhSPX/Oyg+xuOzQOZsEoLboGF6Av/haqg=
+X-Received: by 2002:a05:6512:3192:b0:595:7e8e:3bc4 with SMTP id
+ 2adb3069b0e04-59584211818mr2654334e87.42.1763262578367; Sat, 15 Nov 2025
+ 19:09:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2511130507110.25436@angie.orcam.me.uk>
+References: <20251110085159.754528-1-zilin@seu.edu.cn>
+In-Reply-To: <20251110085159.754528-1-zilin@seu.edu.cn>
+From: Keguang Zhang <keguang.zhang@gmail.com>
+Date: Sun, 16 Nov 2025 11:09:01 +0800
+X-Gm-Features: AWmQ_bkLJ1jhy0aBouMS-dTUr7ncXyD2QQ0NKv_GX7HBxZMzzqqIiRSxFciIXCM
+Message-ID: <CAJhJPsWaa+PN--YV3TXwquW1qLBF-Q=0a7z4kX6pLDyU-JKQ1Q@mail.gmail.com>
+Subject: Re: [PATCH] dmaengine: Loongson1: Fix memory leak in ls1x_dma_prep_dma_cyclic()
+To: Zilin Guan <zilin@seu.edu.cn>
+Cc: vkoul@kernel.org, linux-mips@vger.kernel.org, dmaengine@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, jianhao.xu@seu.edu.cn
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 13, 2025 at 05:21:10AM +0000, Maciej W. Rozycki wrote:
-[...]
-> Changes from v2 (at 
-> <https://lore.kernel.org/r/alpine.DEB.2.21.2511122032400.25436@angie.orcam.me.uk/>):
-> 
-> - Revert the v2 update to include wired entries while reading original 
->   contents of TLB.
+On Mon, Nov 10, 2025 at 4:52=E2=80=AFPM Zilin Guan <zilin@seu.edu.cn> wrote=
+:
+>
+> In ls1x_dma_prep_dma_cyclic(), a descriptor is allocated with
+> ls1x_dma_alloc_desc(). If the subsequent allocation for the scatterlist
+> fails, the function returns NULL without freeing the descriptor, which
+> causes a memory leak.
+>
+> Fix this by calling ls1x_dma_free_desc() in the error path to ensure
+> the descriptor is freed.
+>
+> Fixes: e06c432312148 ("dmaengine: Loongson1: Add Loongson-1 APB DMA drive=
+r")
+> Signed-off-by: Zilin Guan <zilin@seu.edu.cn>
+> ---
+>  drivers/dma/loongson1-apb-dma.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> diff --git a/drivers/dma/loongson1-apb-dma.c b/drivers/dma/loongson1-apb-=
+dma.c
+> index 255fe7eca212..5ee829bc5c77 100644
+> --- a/drivers/dma/loongson1-apb-dma.c
+> +++ b/drivers/dma/loongson1-apb-dma.c
+> @@ -336,8 +336,10 @@ ls1x_dma_prep_dma_cyclic(struct dma_chan *dchan, dma=
+_addr_t buf_addr,
+>         /* allocate the scatterlist */
+>         sg_len =3D buf_len / period_len;
+>         sgl =3D kmalloc_array(sg_len, sizeof(*sgl), GFP_NOWAIT);
+> -       if (!sgl)
+> +       if (!sgl) {
+> +               ls1x_dma_free_desc(&desc->vd);
+>                 return NULL;
+> +       }
+>
+>         sg_init_table(sgl, sg_len);
+>         for (i =3D 0; i < sg_len; ++i) {
+> --
+> 2.34.1
+>
+Reviewed-by: Keguang Zhang <keguang.zhang@gmail.com>
 
-Everything seems fine on my R4400SC Indy with v3 too (or v2 or v1).
+--=20
+Best regards,
 
-Thanks,
-  Nick
+Keguang Zhang
 
