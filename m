@@ -1,137 +1,173 @@
-Return-Path: <linux-mips+bounces-12260-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12261-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1FE4C60F55
-	for <lists+linux-mips@lfdr.de>; Sun, 16 Nov 2025 04:09:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCAD0C61259
+	for <lists+linux-mips@lfdr.de>; Sun, 16 Nov 2025 11:09:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id EB36E361044
-	for <lists+linux-mips@lfdr.de>; Sun, 16 Nov 2025 03:09:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E6463B10E5
+	for <lists+linux-mips@lfdr.de>; Sun, 16 Nov 2025 10:09:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3478321CA0D;
-	Sun, 16 Nov 2025 03:09:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5618323507C;
+	Sun, 16 Nov 2025 10:09:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X12iNoLd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BAEOfpH0"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73ADD7494
-	for <linux-mips@vger.kernel.org>; Sun, 16 Nov 2025 03:09:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2943417A2E6;
+	Sun, 16 Nov 2025 10:09:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763262582; cv=none; b=E1oPYk6Dx5Z7xR7BJiS8IzU31PY5ZfJrRcvYLoTJP5nSZjVjAFM9p3bf7LlmglSddpWpsxapfCWzyg0vorYR9PJzk5tpFoKxZCsIEZIrRChDKQw9AljKaxhUrXsdkloVTF12eeLnAKIjvA8lGIKqX1k0Te7OkGlGP1SRIYrOIWw=
+	t=1763287780; cv=none; b=rWw6v/vzZCwF758ENk3ZjlbbQjtRD3wUM4450b1AAkJROBB5ip2xejPzwMvCP+Ik69rLbxQq9phRFTvPW3TcKYc0HbiA3Jz0X6j7lJ/Uh2DuFlAlZjM0v//VjNS4Up8tqsGJ2omNQ2cpN0HPP2JvxT5u/P6iKAccZEgYEll1a9E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763262582; c=relaxed/simple;
-	bh=atY9y7GGqa2zG7tebr9XLxy0ggIrfaOaHDHwyEx2Zhk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CHiqZCLOvCsO+z+HG7DF7GzdOBMmLtDXZ6tQwgmSSlYHy4CJu6K7JMjPbZcVCkTbm60wxxqpiXCDxJuhstscH8OxQeE0TzAD1cJ3FQ51PvSeZZrIXQyBtZuZNH5UHEyacuSjPtVyxqYACV7jCG9C16Q2i6C78nrwjEHKVGC3pqk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X12iNoLd; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-5957753e0efso3536502e87.1
-        for <linux-mips@vger.kernel.org>; Sat, 15 Nov 2025 19:09:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763262579; x=1763867379; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DwhoLl9bGZVzUZ+/CJVXxclpRGhyNNTcXAG5DCFxERM=;
-        b=X12iNoLdKuexKcPsKI0PpospksomFKThI3J9aa54e1Pdj7iwT6gIfkYDPRpAaR/6RX
-         bXJ3DZFLSh/2XOFKk69UqYLOcbubTnWV8idQZo84o5q983mgpc2gNp0kJc+kWCAUZzaC
-         978cHhIlEazYMZhAg+DoxmNF1lPKZj/++IDgD7PLEINhrHmq/2+YqPg55+X/6u/Xffw5
-         /Q2nn1/7kcos4mkLdeNqIaIEGidRktBIS4/gQAISAKJUqEcIKjO+gbflMZx5T66k39Kb
-         h69iTwaljlwHCS/2se9HyamTzkvgzwaVU53lUSCPKg9VoNFw45KZjrzAWgZsSR3S2lP3
-         zI+Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763262579; x=1763867379;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=DwhoLl9bGZVzUZ+/CJVXxclpRGhyNNTcXAG5DCFxERM=;
-        b=IroqEYVa/1lljZFqSdSJz463VD78kUSop6OSG0Tp5xOQOgZWOAxY8M1eTmR2ra36W+
-         PXPDIT6ovp75Py2kKOW8qsZw69hMVv81JVAY1k+g1Du1O8L025G0QZylUeWYacdC+Gpi
-         H8eqb0ACGiRDqw/9ZbJlRJ4IxhbXajaRSL48X7nmVuavszJoB/aHMWof2Tjcs4eERuDu
-         B5/ypNDucnm9GkajTbNW5sAKHdQrQBCsSqgrSEQMf2kY9psHgmtNRqL1IwMWG/nO9CPI
-         TbsehK64vjahsYUIBFayT4QYA0+KL2XhjAh4jhl0EVcXRv7dLuK/aF6wcJqTlRrBRRA4
-         Wdkg==
-X-Forwarded-Encrypted: i=1; AJvYcCWr8yolBMc8HP88Jdg1w2rUcyQPNeq/z6/LJcxW3IRPAnUeH0J276D8S3mLnevLCNgvRW7c0F/PFngS@vger.kernel.org
-X-Gm-Message-State: AOJu0YxVR8cFO+pnIQHGn/CM66YAf0uUZNOaPtXcUZq0Ytk/KP72/6iV
-	l4tYbXzEVBa4p2BxMtpqdSBvRB3a3RlWzmliFJdd4+HK5CvMm/TErxLGEKlUjG9oq1ZLGIVKDWD
-	fivY2SdqCw5oZnjv+v7G2BUowuVobecXMqov7FIQ=
-X-Gm-Gg: ASbGncvgbpvAZQyXYro6873MVFrn1C2VduxNx/sUT4w/nb98w4OqWDUe245wnyXC32T
-	L7UU/VNTSulklFTZixA3GzIhRCNB0QhrRSAXr7pKS0Bzr7dMEX2pwzHlcUL0y0ZXunwgurU3sah
-	DwV6tOH7Q6Uwgl+B+Ho/1PvZZDbM5GLRYnR/3u2h3KlJe3D0qBGs3ViFPic29g5V0Et1TDPPhvA
-	1ZLXzFqPi88n7glszMX0jxwJYOUh+exQGs4zrfdBk0YAVJSFZv96IZPPheNfr0EvoAiT5YtW09v
-	2hgdhoxQEDve8NPHHA==
-X-Google-Smtp-Source: AGHT+IEMXhC4/qX8p01/4TItyFnrogOzpqPwRybEBfpc44Xyxht8M6N1UsPhSPX/Oyg+xuOzQOZsEoLboGF6Av/haqg=
-X-Received: by 2002:a05:6512:3192:b0:595:7e8e:3bc4 with SMTP id
- 2adb3069b0e04-59584211818mr2654334e87.42.1763262578367; Sat, 15 Nov 2025
- 19:09:38 -0800 (PST)
+	s=arc-20240116; t=1763287780; c=relaxed/simple;
+	bh=5kUmgilcmGpbmCeuJnOjgcZwywaUiuDJFZ7OJOkKnx0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=MRaBELQjKUztnvdV64XRPDF5Y4KehDGZL/sNA9IKSj4+Dbg8rxWAwGO8iJVEQGjTE4iX8kahMBVNnHIj6eUzfJfiGZcHpl+63FjpKqACD3hei1CflpzJ31cRBvHDfhb50ij5wg2b0XI0EdfMA2SMTchTUpfCAMtJ8ZCFgvECluw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BAEOfpH0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 9A37BC4CEFB;
+	Sun, 16 Nov 2025 10:09:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763287779;
+	bh=5kUmgilcmGpbmCeuJnOjgcZwywaUiuDJFZ7OJOkKnx0=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=BAEOfpH0eiWE4hWI+0Mkyc+erer6K0jnuqqUtjFsBOp1AASvU8PkwY7gFI9RBzPxP
+	 0wU1+a+WjLq4J78XzKeC6ihhcD1OTTiIbl/i0Gaf+HZnYqYhmmCUlEI3zbrVmXf3em
+	 U23d0vqXI+fAFzBRqi1VpSlVTzpy7L6Jhod6n269G5xUSnqePSyhr76wUrloUg32vQ
+	 BFkXTvqGHpwFUpUjgbZ44/KRhRGVRanmU5l5z0cpFi2yeP46zBVzILxIFuCNundeG+
+	 2uLF3xvx28KCh85dtGZhLUS2K/npCeyr3X9w9N4NIEsP5VS20UTzMQ0jdTBvS5YmmG
+	 qQJ+GAbAg1H0g==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 87EC6CEBF61;
+	Sun, 16 Nov 2025 10:09:39 +0000 (UTC)
+From: Keguang Zhang via B4 Relay <devnull+keguang.zhang.gmail.com@kernel.org>
+Date: Sun, 16 Nov 2025 18:08:33 +0800
+Subject: [PATCH] mips: configs: loongson1: Update defconfig
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251110085159.754528-1-zilin@seu.edu.cn>
-In-Reply-To: <20251110085159.754528-1-zilin@seu.edu.cn>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20251116-loongson1_defconfig-v1-1-e1d546e00bb4@gmail.com>
+X-B4-Tracking: v=1; b=H4sIAKCiGWkC/x3MQQqEMAxA0atI1hYmGSrqVUSkaNoJSCItiCDe3
+ TLLt/j/hsJZuMDY3JD5lCKmFdg2sP6CJnayVQN9yCNi53YzTcUUl43jaholuUDB45cIh76HWh6
+ Zo1z/6zQ/zwvrkaq6ZQAAAA==
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Miquel Raynal <miquel.raynal@bootlin.com>, 
+ Binbin Zhou <zhoubinbin@loongson.cn>, 
+ Vladimir Oltean <vladimir.oltean@nxp.com>, 
+ Faizal Rahim <faizal.abdul.rahim@linux.intel.com>, 
+ Choong Yong Liang <yong.liang.choong@linux.intel.com>, 
+ Tony Nguyen <anthony.l.nguyen@intel.com>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Keguang Zhang <keguang.zhang@gmail.com>
+X-Mailer: b4 0.14.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1763287778; l=3001;
+ i=keguang.zhang@gmail.com; s=20231129; h=from:subject:message-id;
+ bh=8uojbtslaA91YSaKby/lQsU31Nd5Xc8jz2Khpi1aP5g=;
+ b=VTZ+bmwzeVFKL3xuqgpkkEjvNaI4somzCXdkzidJ4N69wFFP0IDgubCkPac4T4S7bIKDnZtjV
+ vSXXY0/sl/FCJWDkSn28/6bNJBwY82KN9yNDEGCvFXbgjAuvNzXT2iF
+X-Developer-Key: i=keguang.zhang@gmail.com; a=ed25519;
+ pk=FMKGj/JgKll/MgClpNZ3frIIogsh5e5r8CeW2mr+WLs=
+X-Endpoint-Received: by B4 Relay for keguang.zhang@gmail.com/20231129 with
+ auth_id=102
+X-Original-From: Keguang Zhang <keguang.zhang@gmail.com>
+Reply-To: keguang.zhang@gmail.com
+
 From: Keguang Zhang <keguang.zhang@gmail.com>
-Date: Sun, 16 Nov 2025 11:09:01 +0800
-X-Gm-Features: AWmQ_bkLJ1jhy0aBouMS-dTUr7ncXyD2QQ0NKv_GX7HBxZMzzqqIiRSxFciIXCM
-Message-ID: <CAJhJPsWaa+PN--YV3TXwquW1qLBF-Q=0a7z4kX6pLDyU-JKQ1Q@mail.gmail.com>
-Subject: Re: [PATCH] dmaengine: Loongson1: Fix memory leak in ls1x_dma_prep_dma_cyclic()
-To: Zilin Guan <zilin@seu.edu.cn>
-Cc: vkoul@kernel.org, linux-mips@vger.kernel.org, dmaengine@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, jianhao.xu@seu.edu.cn
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Nov 10, 2025 at 4:52=E2=80=AFPM Zilin Guan <zilin@seu.edu.cn> wrote=
-:
->
-> In ls1x_dma_prep_dma_cyclic(), a descriptor is allocated with
-> ls1x_dma_alloc_desc(). If the subsequent allocation for the scatterlist
-> fails, the function returns NULL without freeing the descriptor, which
-> causes a memory leak.
->
-> Fix this by calling ls1x_dma_free_desc() in the error path to ensure
-> the descriptor is freed.
->
-> Fixes: e06c432312148 ("dmaengine: Loongson1: Add Loongson-1 APB DMA drive=
-r")
-> Signed-off-by: Zilin Guan <zilin@seu.edu.cn>
-> ---
->  drivers/dma/loongson1-apb-dma.c | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/dma/loongson1-apb-dma.c b/drivers/dma/loongson1-apb-=
-dma.c
-> index 255fe7eca212..5ee829bc5c77 100644
-> --- a/drivers/dma/loongson1-apb-dma.c
-> +++ b/drivers/dma/loongson1-apb-dma.c
-> @@ -336,8 +336,10 @@ ls1x_dma_prep_dma_cyclic(struct dma_chan *dchan, dma=
-_addr_t buf_addr,
->         /* allocate the scatterlist */
->         sg_len =3D buf_len / period_len;
->         sgl =3D kmalloc_array(sg_len, sizeof(*sgl), GFP_NOWAIT);
-> -       if (!sgl)
-> +       if (!sgl) {
-> +               ls1x_dma_free_desc(&desc->vd);
->                 return NULL;
-> +       }
->
->         sg_init_table(sgl, sg_len);
->         for (i =3D 0; i < sg_len; ++i) {
-> --
-> 2.34.1
->
-Reviewed-by: Keguang Zhang <keguang.zhang@gmail.com>
+Update loongson1_defconfig to reflect recent Kconfig changes:
+- Replace CONFIG_MTD_NAND_LOONGSON1 with CONFIG_MTD_NAND_LOONGSON,
+  since commit 7a1e3a452a57 ("mtd: rawnand: loongson1: Rename the
+  prefix from ls1x to loongson").
+- Enable CONFIG_ETHTOOL_NETLINK, since commit 9ff2aa4206ef ("net:
+  ethtool: mm: extract stmmac verification logic into common library")
+  makes STMMAC_ETH depend on it.
 
---=20
+In addition:
+- Enable CONFIG_JUMP_LABEL to allow optimized static branch handling.
+- Disable unnecessary options.
+- Enable CONFIG_TEST_DHRY as a module.
+
+Fixes: 7a1e3a452a57 ("mtd: rawnand: loongson1: Rename the prefix from ls1x to loongson")
+Fixes: 9ff2aa4206ef ("net: ethtool: mm: extract stmmac verification logic into common library")
+Signed-off-by: Keguang Zhang <keguang.zhang@gmail.com>
+---
+ arch/mips/configs/loongson1_defconfig | 16 +++++++---------
+ 1 file changed, 7 insertions(+), 9 deletions(-)
+
+diff --git a/arch/mips/configs/loongson1_defconfig b/arch/mips/configs/loongson1_defconfig
+index 81acae6f61c8..02d29110f702 100644
+--- a/arch/mips/configs/loongson1_defconfig
++++ b/arch/mips/configs/loongson1_defconfig
+@@ -13,6 +13,7 @@ CONFIG_EXPERT=y
+ CONFIG_PERF_EVENTS=y
+ CONFIG_MACH_LOONGSON32=y
+ # CONFIG_SUSPEND is not set
++CONFIG_JUMP_LABEL=y
+ # CONFIG_SECCOMP is not set
+ # CONFIG_GCC_PLUGINS is not set
+ CONFIG_MODULES=y
+@@ -30,8 +31,8 @@ CONFIG_IP_PNP_DHCP=y
+ CONFIG_SYN_COOKIES=y
+ # CONFIG_INET_DIAG is not set
+ # CONFIG_IPV6 is not set
++# CONFIG_BQL is not set
+ # CONFIG_WIRELESS is not set
+-# CONFIG_ETHTOOL_NETLINK is not set
+ CONFIG_DEVTMPFS=y
+ CONFIG_DEVTMPFS_MOUNT=y
+ # CONFIG_STANDALONE is not set
+@@ -39,7 +40,7 @@ CONFIG_MTD=y
+ CONFIG_MTD_CMDLINE_PARTS=y
+ CONFIG_MTD_BLOCK=y
+ CONFIG_MTD_RAW_NAND=y
+-CONFIG_MTD_NAND_LOONGSON1=y
++CONFIG_MTD_NAND_LOONGSON=y
+ CONFIG_MTD_UBI=y
+ CONFIG_BLK_DEV_LOOP=y
+ CONFIG_SCSI=m
+@@ -72,6 +73,7 @@ CONFIG_NETDEVICES=y
+ # CONFIG_NET_VENDOR_MICROCHIP is not set
+ # CONFIG_NET_VENDOR_MICROSEMI is not set
+ # CONFIG_NET_VENDOR_MICROSOFT is not set
++# CONFIG_NET_VENDOR_MUCSE is not set
+ # CONFIG_NET_VENDOR_NI is not set
+ # CONFIG_NET_VENDOR_NATSEMI is not set
+ # CONFIG_NET_VENDOR_NETRONOME is not set
+@@ -166,15 +168,11 @@ CONFIG_ROOT_NFS=y
+ CONFIG_NLS_CODEPAGE_437=m
+ CONFIG_NLS_ISO8859_1=m
+ # CONFIG_CRYPTO_HW is not set
+-# CONFIG_XZ_DEC_X86 is not set
+-# CONFIG_XZ_DEC_POWERPC is not set
+-# CONFIG_XZ_DEC_ARM is not set
+-# CONFIG_XZ_DEC_ARMTHUMB is not set
+-# CONFIG_XZ_DEC_ARM64 is not set
+-# CONFIG_XZ_DEC_SPARC is not set
+-# CONFIG_XZ_DEC_RISCV is not set
+ CONFIG_DYNAMIC_DEBUG=y
+ # CONFIG_DEBUG_MISC is not set
+ CONFIG_MAGIC_SYSRQ=y
++# CONFIG_SLUB_DEBUG is not set
++# CONFIG_RCU_TRACE is not set
+ # CONFIG_FTRACE is not set
+ # CONFIG_EARLY_PRINTK is not set
++CONFIG_TEST_DHRY=m
+
+---
+base-commit: e9a6fb0bcdd7609be6969112f3fbfcce3b1d4a7c
+change-id: 20251116-loongson1_defconfig-a2a513221988
+
 Best regards,
+-- 
+Keguang Zhang <keguang.zhang@gmail.com>
 
-Keguang Zhang
+
 
