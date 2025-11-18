@@ -1,163 +1,146 @@
-Return-Path: <linux-mips+bounces-12270-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12271-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFCF6C693F8
-	for <lists+linux-mips@lfdr.de>; Tue, 18 Nov 2025 13:05:23 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6DB5CC6C031
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Nov 2025 00:31:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sin.lore.kernel.org (Postfix) with ESMTPS id BAB422AFF3
-	for <lists+linux-mips@lfdr.de>; Tue, 18 Nov 2025 12:04:43 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTPS id DBF93291F6
+	for <lists+linux-mips@lfdr.de>; Tue, 18 Nov 2025 23:31:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0E4D3546E0;
-	Tue, 18 Nov 2025 12:03:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 499BC314D00;
+	Tue, 18 Nov 2025 23:31:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="Z9Rbcq7i"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OML4MOKh"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from out-183.mta1.migadu.com (out-183.mta1.migadu.com [95.215.58.183])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f73.google.com (mail-pj1-f73.google.com [209.85.216.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 772DB3538AF
-	for <linux-mips@vger.kernel.org>; Tue, 18 Nov 2025 12:03:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.183
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 843762E11BC
+	for <linux-mips@vger.kernel.org>; Tue, 18 Nov 2025 23:31:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763467431; cv=none; b=dXXAZpy2Ti1VAfoVEBynA0HPPiLpj6BeSh4mVdqef+tEmrWf7aGsRRigRrs7DCBLDNgD6AlrWPTMFve+eFeMj0yXHk5xjRt4+aAkrhBMDxHIXtjgwTiS0L/yL5OP8wl6+aPfxN6xNDPwqBFWqUaIFEYc5iQlgBxh49lz50vYCVo=
+	t=1763508687; cv=none; b=BDv7xh+SbhgyjJVh3oXZvk0q0vw9STZs6rx+ENtjtq6DwDdS8oL9h81BcdA6mulIyk81NszaP3sbVPIHjBLIoI+MmXXhiosWEWb5hfnCw6Bzwtcl8gpva1qJhGCbjzGI1jEUNpijhHI2S8btclPY9X/eW+LfPiC7krJZ9PHRGBc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763467431; c=relaxed/simple;
-	bh=r19qXNtm3urYqAimszpeFMMBfwkKku5yTeyTyto+D7w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kQveE0JgU4AdHEhBGijzVOqQozBXPwtrnvOUqZi+QpMASahx8nzEiQCk834eIA5M71TF7cxS9gsuLg/YSLG0tIWvSEro6JmtKwLPJZqKokzRGHp9R7GViavY/1wV23t+EGW2IuTijJ3t1jbTurpjWb7WPK665v+GRosdIO/3YUg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=Z9Rbcq7i; arc=none smtp.client-ip=95.215.58.183
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
-Message-ID: <195baf7c-1f4e-46a4-a4aa-e68e7d00c0f9@linux.dev>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-	t=1763467417;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=YSfDkQJHByC5W64S3r1RZBfV7l+QzHRtZt5IkHkWjXM=;
-	b=Z9Rbcq7i2Y1LGHCoUGuTi6ppSLunSulmRKUQ4pjayjy42viyJ+DcXrTYmImrfSRJw+UKR4
-	UVTRGLFHLTlNdVaXnjT3ixLkagqhNZyq0Aqov/I7FCpMijq/fe4cVtkKv+q+YaHP5txxbN
-	qqqQe//KpgfJbRYA+2BGf/imvJ4aYQ4=
-Date: Tue, 18 Nov 2025 20:02:30 +0800
+	s=arc-20240116; t=1763508687; c=relaxed/simple;
+	bh=5WBwqUVhmKiZfIpTpsQTwtOFw21J/JhhQ4L/zj7meTg=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=TwQhawweoGDKQ29kPR4P5F7TRXaOmqJ3rUImjGR2YcN0NGixOQ06xhB9rKsk/ATsxUxDvhVXGC+vY4grqiS/jBym70ZN8O4XPxTfrlUmKCLpYykKS/UUW0i8mmSJL9VYxcMlk+zanVUSi1oYL5ZWEDS3DbH9+dBQKR9FitH5FNA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OML4MOKh; arc=none smtp.client-ip=209.85.216.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pj1-f73.google.com with SMTP id 98e67ed59e1d1-343daf0f488so7358882a91.1
+        for <linux-mips@vger.kernel.org>; Tue, 18 Nov 2025 15:31:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1763508685; x=1764113485; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vhbmIaudy7FUgPhz41c9iiSjQeSWp1bqqQI5ni0zcdI=;
+        b=OML4MOKheSLDFF5wGADYxfgglixk1AIVnESB8GaZBfnXuNmzX16983P1seK/f1eu8m
+         0a7ZpeGt9riD9v9/I+na3/LQVZXpDoEGJaau4BgBiurJmGy5cdj+HO/9zqCuIugCd9M0
+         gdW2K4Ak8zmQ8ci9juoLItHcK1Zyj6j5bzmDNW1KCaGvf/oECwpX55lOhfnUBeRctEMe
+         +hnba2fW99QeI5oSa8yKuHzhQPyNkvOyJVgHUwhQieUuo7QaeHXuHdGvfeZtp5bFPDnq
+         2/9sNG5Rc2Fst6CUwSGDem+/1Zxmf2ylYYJrwA1Tb6IqRw4iuJEVU+V6ywNfh/7U6yeS
+         HYZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763508685; x=1764113485;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=vhbmIaudy7FUgPhz41c9iiSjQeSWp1bqqQI5ni0zcdI=;
+        b=Ap8ldbFlNrGBb7bu3f7FEUrcIWxH6BvGD/nuirxm4VVKbO6ICxglyjEHaOb0vGsJia
+         bYcRTIRCwltRJb3lSMz5WC9rSCPE7R4iK60RMQbbn421qR9oFwxhUzz5/eJzjq1Ne85Y
+         pBJ4BtqbxsAntVMqV8h0bGWzQJY+kja/102BlMgmvKIuHHYZwTPTbswqK5L7VGx6a/EV
+         gfSeFZgfHWFRkQAp4aYuNIcDX7hjIMGJhENsdvcJE/HBBlqgEcEY+Cd6hlIQdj9xgEe+
+         9CNBNNTWqJAEwu4+QL0AHSkQVGJ8HBMK5Yg9tZc5a8fjtL4BqDrgvI2p2G2X1g+94bps
+         omXw==
+X-Forwarded-Encrypted: i=1; AJvYcCV0UMJasbH1CyvgDGrOWzzfZdelPp+XKgt0j6NRkrwrjTqG5VtXvmB6lNqFoQphO2uJozquPPZeQ0dA@vger.kernel.org
+X-Gm-Message-State: AOJu0YwreGQ5ayRDW+DcTCs5ic1lJ8YUaVFqG2KtECxW3HEX4OLBLx3u
+	UlqFPjS83/Roa6V6eTFCoZFLJ/1m9Oaqgi9UJn6W7Gy/Yllg7gmDcnv4//nv0ejMiCJvJdlxWfg
+	mCY8Hgw==
+X-Google-Smtp-Source: AGHT+IE1o3OuDgEYh+WwImWCZtj32ss/bDTcBxOCjrPrz1sqG0DLMNd/QRhOEpFCg6/bq23FewNy3cS6Bik=
+X-Received: from pjbpd18.prod.google.com ([2002:a17:90b:1dd2:b0:340:e8f7:1b44])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:5484:b0:341:124f:474f
+ with SMTP id 98e67ed59e1d1-343fa6390cfmr19214010a91.32.1763508684387; Tue, 18
+ Nov 2025 15:31:24 -0800 (PST)
+Date: Tue, 18 Nov 2025 15:31:22 -0800
+In-Reply-To: <20251028002824.1470939-1-rick.p.edgecombe@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Subject: Re: [PATCH 7/7] mm: make PT_RECLAIM depend on
- MMU_GATHER_RCU_TABLE_FREE && 64BIT
-To: "David Hildenbrand (Red Hat)" <david@kernel.org>, will@kernel.org,
- aneesh.kumar@kernel.org, npiggin@gmail.com, peterz@infradead.org,
- dev.jain@arm.com, akpm@linux-foundation.org, ioworker0@gmail.com
-Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-mm@kvack.org, linux-alpha@vger.kernel.org,
- linux-snps-arc@lists.infradead.org, loongarch@lists.linux.dev,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- linux-um@lists.infradead.org, Qi Zheng <zhengqi.arch@bytedance.com>
-References: <cover.1763117269.git.zhengqi.arch@bytedance.com>
- <0a4d1e6f0bf299cafd1fc624f965bd1ca542cea8.1763117269.git.zhengqi.arch@bytedance.com>
- <355d3bf3-c6bc-403e-9f19-89259d868611@kernel.org>
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Qi Zheng <qi.zheng@linux.dev>
-In-Reply-To: <355d3bf3-c6bc-403e-9f19-89259d868611@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Migadu-Flow: FLOW_OUT
+Mime-Version: 1.0
+References: <aP-1qlTkmFUgTld-@google.com> <20251028002824.1470939-1-rick.p.edgecombe@intel.com>
+Message-ID: <aR0Byu3bd3URxzhu@google.com>
+Subject: Re: [PATCH] KVM: TDX: Take MMU lock around tdh_vp_init()
+From: Sean Christopherson <seanjc@google.com>
+To: Rick Edgecombe <rick.p.edgecombe@intel.com>
+Cc: ackerleytng@google.com, anup@brainfault.org, aou@eecs.berkeley.edu, 
+	binbin.wu@linux.intel.com, borntraeger@linux.ibm.com, chenhuacai@kernel.org, 
+	frankja@linux.ibm.com, imbrenda@linux.ibm.com, ira.weiny@intel.com, 
+	kai.huang@intel.com, kas@kernel.org, kvm-riscv@lists.infradead.org, 
+	kvm@vger.kernel.org, kvmarm@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-coco@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
+	loongarch@lists.linux.dev, maddy@linux.ibm.com, maobibo@loongson.cn, 
+	maz@kernel.org, michael.roth@amd.com, oliver.upton@linux.dev, 
+	palmer@dabbelt.com, pbonzini@redhat.com, pjw@kernel.org, 
+	vannapurve@google.com, x86@kernel.org, yan.y.zhao@intel.com, 
+	zhaotianrui@loongson.cn
+Content-Type: text/plain; charset="us-ascii"
 
-
-
-On 11/18/25 12:57 AM, David Hildenbrand (Red Hat) wrote:
-> On 14.11.25 12:11, Qi Zheng wrote:
->> From: Qi Zheng <zhengqi.arch@bytedance.com>
+On Mon, Oct 27, 2025, Rick Edgecombe wrote:
+> Take MMU lock around tdh_vp_init() in KVM_TDX_INIT_VCPU to prevent
+> meeting contention during retries in some no-fail MMU paths.
 > 
-> Subject: s/&&/&/
-
-will do.
-
+> The TDX module takes various try-locks internally, which can cause
+> SEAMCALLs to return an error code when contention is met. Dealing with
+> an error in some of the MMU paths that make SEAMCALLs is not straight
+> forward, so KVM takes steps to ensure that these will meet no contention
+> during a single BUSY error retry. The whole scheme relies on KVM to take
+> appropriate steps to avoid making any SEAMCALLs that could contend while
+> the retry is happening.
 > 
->>
->> Make PT_RECLAIM depend on MMU_GATHER_RCU_TABLE_FREE so that PT_RECLAIM 
->> can
->> be enabled by default on all architectures that support
->> MMU_GATHER_RCU_TABLE_FREE.
->>
->> Considering that a large number of PTE page table pages (such as 100GB+)
->> can only be caused on a 64-bit system, let PT_RECLAIM also depend on
->> 64BIT.
->>
->> Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
->> ---
->>   arch/x86/Kconfig | 1 -
->>   mm/Kconfig       | 6 +-----
->>   2 files changed, 1 insertion(+), 6 deletions(-)
->>
->> diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
->> index eac2e86056902..96bff81fd4787 100644
->> --- a/arch/x86/Kconfig
->> +++ b/arch/x86/Kconfig
->> @@ -330,7 +330,6 @@ config X86
->>       select FUNCTION_ALIGNMENT_4B
->>       imply IMA_SECURE_AND_OR_TRUSTED_BOOT    if EFI
->>       select HAVE_DYNAMIC_FTRACE_NO_PATCHABLE
->> -    select ARCH_SUPPORTS_PT_RECLAIM        if X86_64
->>       select ARCH_SUPPORTS_SCHED_SMT        if SMP
->>       select SCHED_SMT            if SMP
->>       select ARCH_SUPPORTS_SCHED_CLUSTER    if SMP
->> diff --git a/mm/Kconfig b/mm/Kconfig
->> index a5a90b169435d..e795fbd69e50c 100644
->> --- a/mm/Kconfig
->> +++ b/mm/Kconfig
->> @@ -1440,14 +1440,10 @@ config ARCH_HAS_USER_SHADOW_STACK
->>         The architecture has hardware support for userspace shadow call
->>             stacks (eg, x86 CET, arm64 GCS or RISC-V Zicfiss).
->> -config ARCH_SUPPORTS_PT_RECLAIM
->> -    def_bool n
->> -
->>   config PT_RECLAIM
->>       bool "reclaim empty user page table pages"
->>       default y
->> -    depends on ARCH_SUPPORTS_PT_RECLAIM && MMU && SMP
->> -    select MMU_GATHER_RCU_TABLE_FREE
->> +    depends on MMU_GATHER_RCU_TABLE_FREE && MMU && SMP && 64BIT
+> Unfortunately, there is a case where contention could be met if userspace
+> does something unusual. Specifically, hole punching a gmem fd while
+> initializing the TD vCPU. The impact would be triggering a KVM_BUG_ON().
 > 
-> Who would we have MMU_GATHER_RCU_TABLE_FREE without MMU? (can we drop 
-> the MMU part)
-
-OK.
-
+> The resource being contended is called the "TDR resource" in TDX docs 
+> parlance. The tdh_vp_init() can take this resource as exclusive if the 
+> 'version' passed is 1, which happens to be version the kernel passes. The 
+> various MMU operations (tdh_mem_range_block(), tdh_mem_track() and 
+> tdh_mem_page_remove()) take it as shared.
 > 
-> Why do we care about SMP in the first place? (can we frop SMP)
-
-OK.
-
+> There isn't a KVM lock that maps conceptually and in a lock order friendly 
+> way to the TDR lock. So to minimize infrastructure, just take MMU lock 
+> around tdh_vp_init(). This makes the operations we care about mutually 
+> exclusive. Since the other operations are under a write mmu_lock, the code 
+> could just take the lock for read, however this is weirdly inverted from 
+> the actual underlying resource being contended. Since this is covering an 
+> edge case that shouldn't be hit in normal usage, be a little less weird 
+> and take the mmu_lock for write around the call.
 > 
-> But I also wonder why we need "MMU_GATHER_RCU_TABLE_FREE && 64BIT":
+> Fixes: 02ab57707bdb ("KVM: TDX: Implement hooks to propagate changes of TDP MMU mirror page table")
+> Reported-by: Yan Zhao <yan.y.zhao@intel.com>
+> Suggested-by: Yan Zhao <yan.y.zhao@intel.com>
+> Signed-off-by: Rick Edgecombe <rick.p.edgecombe@intel.com>
+> ---
+> Hi,
 > 
-> Would it be harmful on 32bit (sure, we might not reclaim as much, but 
-> still there is memory to be reclaimed?)?
-
-This is also fine on 32bit, but the benefits are not significant, So I
-chose to enable it only on 64-bit.
-
-I actually tried enabling MMU_GATHER_RCU_TABLE_FREE on all
-architectures, and apart from sparc32 being a bit troublesome (because
-it uses mm->page_table_lock for synchronization within
-__pte_free_tlb()), the modifications were relatively simple.
-
+> It was indeed awkward, as Sean must have sniffed. But seems ok enough to
+> close the issue.
 > 
-> If all 64BIT support MMU_GATHER_RCU_TABLE_FREE (as you previously 
-> state), why can't we only check for 64BIT?
-
-OK, will do.
-
-Thanks,
-Qi
-
+> Yan, can you give it a look?
 > 
+> Posted here, but applies on top of this series.
 
+In the future, please don't post in-reply-to, as it mucks up my b4 workflow.
+
+Applied to kvm-x86 tdx, with a more verbose comment as suggested by Binbin.
+
+[1/1] KVM: TDX: Take MMU lock around tdh_vp_init()
+      https://github.com/kvm-x86/linux/commit/9a89894f30d5
 
