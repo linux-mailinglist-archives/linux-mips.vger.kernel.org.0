@@ -1,114 +1,139 @@
-Return-Path: <linux-mips+bounces-12268-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12269-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61299C66D15
-	for <lists+linux-mips@lfdr.de>; Tue, 18 Nov 2025 02:17:28 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5A0C5C6936E
+	for <lists+linux-mips@lfdr.de>; Tue, 18 Nov 2025 12:55:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C63FE3472F6
-	for <lists+linux-mips@lfdr.de>; Tue, 18 Nov 2025 01:16:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTPS id 18BD42AA1E
+	for <lists+linux-mips@lfdr.de>; Tue, 18 Nov 2025 11:55:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F59921FF4A;
-	Tue, 18 Nov 2025 01:16:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25C6A34FF66;
+	Tue, 18 Nov 2025 11:55:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FwdOiWdJ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="I6KXI7E3"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f193.google.com (mail-pl1-f193.google.com [209.85.214.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A8342116E0
-	for <linux-mips@vger.kernel.org>; Tue, 18 Nov 2025 01:16:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DA7134F46C
+	for <linux-mips@vger.kernel.org>; Tue, 18 Nov 2025 11:55:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763428562; cv=none; b=CZuiekRrE+E+0Oi73xEdUvIAEOLc+kz6AeTJDdKNxEkhyv3UuXn5iBqnDYym7Ax9bkV0mgGAOpIq7p63HWBB+IwDPew9HIzHOnxS2N24KM0+VNDYzhIIZp1x0aL9qsLvo5Vwtpsq4EFpyxjXHsTr7aZTUgJWDL4A4xDoRpvFU9E=
+	t=1763466919; cv=none; b=VV4109ggjaGgEPTQhOa/RUpSGBDVU/Y/Sd/duTPp+j96bE9YYLgb409WdNws+O9VenZSH11NEeaoh0+KMah2giNl5qB/0mFZmCvlxBGzDwf2SRS+nClMijmFUCxJlUjHvSl6bmULMScTDD9/huzwvM5i7/4jB5clGWHlEDYgCqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763428562; c=relaxed/simple;
-	bh=lj+Kd4aABU6pcKOupiretCwiMi++9jTSBYm3y7bemBQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XaQeIsnR+/oB+233eRZTMqF6pnRSPvrCsQgCsmYQS4gjDLyVotHwbbnNvgqbYC3Ssn/S/6e9hXT4ZDNlwvwDuVVLosp9ZZfjZJJbbV14xafoI0eChjAWTfE8zoR6aySn01CL4EkhlOfhUviI1+4yIrMI7dCKcYORwOMpkXijWBM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FwdOiWdJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AADE9C4AF0D
-	for <linux-mips@vger.kernel.org>; Tue, 18 Nov 2025 01:16:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763428560;
-	bh=lj+Kd4aABU6pcKOupiretCwiMi++9jTSBYm3y7bemBQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=FwdOiWdJrW9ky4y9OTzYVIhdJKma1wE0CM1yxa7sLpE8rB96w7rZ/73++sMALE+Ej
-	 l43nSnwumXeqcV3Lsfzpko90YMEMwhOAoSTdjVgbEwLyhZdFHRiUbla8rrZP32R+Ok
-	 JY25des3dhxTGoJ/fz+GYWpI2n3+nEg3Uwc5uYszaajOKQjmazVknmwT3H4FyHpiBf
-	 nuugdpNrzD3AfLLGJoVe7J5soV5lo/PxU5yuKnyp4/WvhoDk2A6OVTgfiioetp9Ei4
-	 gMxvSvTknK/z6stsfHVBOeaKFiISLK+RdoYHk1FugtArkoghXp7juGF0O3jhR6SaX3
-	 J0/70Irni2aJQ==
-Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-b737cd03d46so381691166b.0
-        for <linux-mips@vger.kernel.org>; Mon, 17 Nov 2025 17:16:00 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCX7zdLEYU1BEuV0cKR2w4clOatEkPJoQNC2kGrl0/QeaQLaL+EjECqoOBgWvpBXYLoJEKrauB1Ysvj0@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz2g1h9DTLk/9W+cEL8vdJc7d10ibosLhdcLWlZ6KcxqwizOewd
-	QoYsUb+zGyIBOWrtQRm5Hq5OJ8uPjRsyK4M4DntPly3X3KC2fLB1126nTofePi0fWEETjLGfkCi
-	R2cOsD7sEx+n6tsGUOvxDIEzBGxOA+KU=
-X-Google-Smtp-Source: AGHT+IFHun9xYZ0Ze6tRyh+Cq7hoCly7+LvtG9T3NoH7i7Y25bIWCoOz3NrEUduWJ6JFlkIzjXeyMxFN5zCsFyTdVw0=
-X-Received: by 2002:a17:907:1c82:b0:b73:4006:1884 with SMTP id
- a640c23a62f3a-b7367b8d999mr1505271366b.37.1763428558551; Mon, 17 Nov 2025
- 17:15:58 -0800 (PST)
+	s=arc-20240116; t=1763466919; c=relaxed/simple;
+	bh=jneRGbDx8iaCsHjcSO3LMYs6xm0P9/PiTsbxJnh68lY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=DvR5wvbfSezxRTgTVZbTVox/IECP9xRWvNgjvOKCSdY4EiZheMw3n2qPsJ28FLAW1fwBt81rwQsVaOebli6fJwCwn2lM6FrWq8BZOTwuf4CHYj115S0y2BAETiHgNc1aPSuXHe3BkkRnxX7BN217VCxVeyYbncFt/OBHTq6EFok=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=I6KXI7E3; arc=none smtp.client-ip=209.85.214.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f193.google.com with SMTP id d9443c01a7336-29568d93e87so48598985ad.2
+        for <linux-mips@vger.kernel.org>; Tue, 18 Nov 2025 03:55:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1763466917; x=1764071717; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9v8UiKRyyvD16t4ENb8APUiQmIzVsGi/FebBj0lOkJ4=;
+        b=I6KXI7E3s+zxub0ZQ8DsKJnuOVjMhxwRG1aNuLxcBoUfiTvnon5mLGucGki0piBkZy
+         4x6EIJhKAVqNx5p0F3BA+RKBVamh+XetjdT128/kPHI5nxiC8p3Yb8kbniJnbmPlSL0n
+         Yr5Tr/JcYUk/X1P5cL8hI8MEx761x9YPnBURS3SllkAFBC2RA6ughuNysbBCCnT94HNX
+         UfGJ7XUBidSBM+rr6WFaK2omGalqaHA6VQFPSVWBwL0dLrMMdE00U0Y2IWb9CxBSw0lK
+         nQYpXqKaeNJEOHMRtPwfUq23h9h3alGc3Vn/nADz5k7Fw4erwAEuKls0Cfq8UO0Du/BD
+         TMgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1763466917; x=1764071717;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
+         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=9v8UiKRyyvD16t4ENb8APUiQmIzVsGi/FebBj0lOkJ4=;
+        b=D5TRU043RRwTeLNMA9lY+gJaO5SI13GHOXOZ3HBdEsSeqBNIc2iH7GBi1gQpPYLzy8
+         8obIjUqBk14+n3CviDR3DOrq8KxtM95zxRZlRdIWxi9Q44O+5yhDk+ZUsHN7xUnuk98i
+         tQiEcET1L8T/9dvqSspGRD2VfhDkr/EkgWyqs4wEQOBVW1VHW9Xbwb21DOPVmgFpqsma
+         amtPubrncaVIYsCz+c+aGys+1LGfrR0H5aLnQj9fL+O2DI9CQWqMzev83BuG+9diQg0d
+         GW3bqzkfeTu5QT0pXlbjRHxTyORCouyAcNLloUWFofjW1s7XztgyhReD+Go/uf4WkaUz
+         aT8A==
+X-Forwarded-Encrypted: i=1; AJvYcCWaJSvUax9aaKJGNJrtETQXz0/7RsNIh9NWtcm/mKGXcBz0lat1KRlM9ZM0NjuSxzbeX7lI0VRn5Y68@vger.kernel.org
+X-Gm-Message-State: AOJu0YwCVQoe5IzI4WmPjkzF9uet8X5djLEtqC/c9DJpDtXrUQbG3wOp
+	var0dIKOBGwrHAJsHWtUsegR0esdpjykHzVOOqzq+LokzpSaj0KSmr00
+X-Gm-Gg: ASbGnctlpRI8AE2hJVJo8xeVbXtPOJd/Kr7JoRnxUoC/PWXpaKf0ILE1VyKUhzfJiCr
+	LGQR86OUC8GdaTYgQjtUBJIdBuUWuMjotL/Bic93o+KN8nLnh8szbqGmhWUjKqRUn1acMFYMsc6
+	cNCR3ZeKbaRRRb+lJqvJQdX0z1oD1Ixn2CkrfV0jf3PgUAvK3Z99QtYguW7Kf3Wvi7UyxWX0Ksv
+	y5JS3CsHmdHkyPf3z05pQMvu/9Z71UXwSm1kRhYbge0AoQggDxpUroleS9zb8MLw8KkfxZtuNXy
+	niq/2kCCW9Quok9Zxs3zGqAbNQIAhyyqHTq3Nvs9NVs8dpYbbnE82AaDBXdEsx/Hes1Mp7ptty/
+	ImPu0XsGz+VG5t+MbrE99F+WZFZbAXN2mF9vuiSWU5HP1tWNpUeeOiAMZOoLpT3Gl5XL399CReT
+	Ofdn55vboMZKmbuFN22CCK8dy4rjZqUlxGD38P6X1WZf1xvw==
+X-Google-Smtp-Source: AGHT+IGaNSdLxRla9oY02zDdWZQ+dAcjdxohCbg81uqIYBMI/Z6QJtGDDVm6vwOhGnWyaCl6P1ztwQ==
+X-Received: by 2002:a17:903:1b2f:b0:295:3f35:a312 with SMTP id d9443c01a7336-2986a6cfeefmr183341175ad.20.1763466916628;
+        Tue, 18 Nov 2025 03:55:16 -0800 (PST)
+Received: from [10.255.206.79] ([139.177.225.255])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2985c2b0d17sm172235585ad.72.2025.11.18.03.55.08
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Nov 2025 03:55:16 -0800 (PST)
+Message-ID: <f7f0ca8d-bca2-4a3e-8c45-85cba1b0ff18@gmail.com>
+Date: Tue, 18 Nov 2025 19:53:50 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251117191815.69556-1-tsbogend@alpha.franken.de>
-In-Reply-To: <20251117191815.69556-1-tsbogend@alpha.franken.de>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Tue, 18 Nov 2025 09:15:59 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7eoKgCWRVGWzgM55YOM9V8TRXe6Ax6-XQJF-STTpNpOg@mail.gmail.com>
-X-Gm-Features: AWmQ_bmWGvSoi0Ymxi2vbF61_x7K7lUcTiyIK6KGxUIztwEgmPXhVWRkjZjhY2Y
-Message-ID: <CAAhV-H7eoKgCWRVGWzgM55YOM9V8TRXe6Ax6-XQJF-STTpNpOg@mail.gmail.com>
-Subject: Re: [PATCH] MIPS: kernel: Fix reservation for VDSO area
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Nam Cao <namcao@linutronix.de>, 
-	=?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
-	Thomas Gleixner <tglx@linutronix.de>, linux-mips@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 0/7] enable PT_RECLAIM on all 64-bit architectures
+To: "David Hildenbrand (Red Hat)" <david@kernel.org>,
+ Qi Zheng <qi.zheng@linux.dev>, will@kernel.org, aneesh.kumar@kernel.org,
+ npiggin@gmail.com, peterz@infradead.org, dev.jain@arm.com,
+ akpm@linux-foundation.org, ioworker0@gmail.com
+Cc: linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, linux-alpha@vger.kernel.org,
+ linux-snps-arc@lists.infradead.org, loongarch@lists.linux.dev,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linux-um@lists.infradead.org, Qi Zheng <zhengqi.arch@bytedance.com>
+References: <cover.1763117269.git.zhengqi.arch@bytedance.com>
+ <83e88171-54cb-4112-a344-f6a7d7f13784@kernel.org>
+From: Qi Zheng <arch0.zheng@gmail.com>
+In-Reply-To: <83e88171-54cb-4112-a344-f6a7d7f13784@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi, Thomas,
 
-I think 69896119dc9d ("MIPS: vdso: Switch to generic storage
-implementation") changes the size of VDSO data from one page to
-VDSO_NR_PAGES pages, so here we need to remove "top -=3D PAGE_SIZE".
 
-Huacai
+On 11/18/25 12:53 AM, David Hildenbrand (Red Hat) wrote:
+> On 14.11.25 12:11, Qi Zheng wrote:
+>> From: Qi Zheng <zhengqi.arch@bytedance.com>
+>>
+>> Hi all,
+>>
+>> This series aims to enable PT_RECLAIM on all 64-bit architectures.
+>>
+>> On a 64-bit system, madvise(MADV_DONTNEED) may cause a large number of 
+>> empty PTE
+>> page table pages (such as 100GB+). To resolve this problem, we need to 
+>> enable
+>> PT_RECLAIM, which depends on MMU_GATHER_RCU_TABLE_FREE.
+>>
+> 
+> Makes sense!
+> 
+>> Therefore, this series first enables MMU_GATHER_RCU_TABLE_FREE on all 
+>> 64-bit
+>> architectures, and finally makes PT_RECLAIM depend on 
+>> MMU_GATHER_RCU_TABLE_FREE
+>> && 64BIT. This way, PT_RECLAIM can be enabled by default on all 64-bit
+>> architectures.
+> 
+> Could we then even go ahead and stop making PT_RECLAIM user-selectable?
 
-On Tue, Nov 18, 2025 at 3:19=E2=80=AFAM Thomas Bogendoerfer
-<tsbogend@alpha.franken.de> wrote:
->
-> Commit 69896119dc9d ("MIPS: vdso: Switch to generic storage
-> implementation") switches to a generic vdso storage, but missed to adapt
-> the max stack top by the number of generic VDSO pages.
->
-> Fixes: 69896119dc9d ("MIPS: vdso: Switch to generic storage implementatio=
-n")
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> ---
->  arch/mips/kernel/process.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
-> index 29191fa1801e..9eb5b26d4b5f 100644
-> --- a/arch/mips/kernel/process.c
-> +++ b/arch/mips/kernel/process.c
-> @@ -693,6 +693,7 @@ unsigned long mips_stack_top(void)
->         if (current->thread.abi) {
->                 top -=3D PAGE_ALIGN(current->thread.abi->vdso->size);
->                 top -=3D PAGE_SIZE;
-> +               top -=3D VDSO_NR_PAGES * PAGE_SIZE;
->                 top -=3D mips_gic_present() ? PAGE_SIZE : 0;
->
->                 /* Space to randomize the VDSO base */
-> --
-> 2.43.0
->
->
+OK, will change to:
+
+config PT_RECLAIM
+	def_bool y
+	depends on MMU_GATHER_RCU_TABLE_FREE && MMU && SMP && 64BIT
+
+> 
+
 
