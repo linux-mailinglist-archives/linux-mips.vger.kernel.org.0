@@ -1,34 +1,34 @@
-Return-Path: <linux-mips+bounces-12284-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12285-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id E214EC6DDFC
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Nov 2025 11:04:43 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id BDD5EC6DE8F
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Nov 2025 11:12:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by tor.lore.kernel.org (Postfix) with ESMTPS id DBFC92C839
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Nov 2025 10:04:42 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTPS id 0FA0B2F074
+	for <lists+linux-mips@lfdr.de>; Wed, 19 Nov 2025 10:04:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3533A342C8E;
-	Wed, 19 Nov 2025 10:04:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D30E347BA3;
+	Wed, 19 Nov 2025 10:04:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="q3ul+T+8"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="P3p760nG"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79E60336ED1;
-	Wed, 19 Nov 2025 10:04:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE021346FA1;
+	Wed, 19 Nov 2025 10:04:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763546679; cv=none; b=ClKF8Q586T7MBCeaWAo8aD8wpraxH52eWxR4jvQoJkeOndxonb1NNH1eVVNAlvh+r7M+ngz+wc+ezgJE2CWFY/c1ePgCapkLZWVCtPA7r9a+iT6kYR0Sm663RDlyHqGVAe6s8FTIaN/0Rr10QTSoM8QBBgn2QmP4B2ct0zPiIe4=
+	t=1763546683; cv=none; b=seKQgIGBCHOBK707gpzLC/8ZcxReKJhzK6/vuADo2fPKpUjLVWaD8dmBBqpcSjDVAFWBWK3qVItl6cbqkeFsENPJ1KVUeqmqArbKnx5X9L8lQVZQbSMVQoU6aAFQ2kYcH398FprTWTfKSLyJsxsi039pyj8It2TaLcB60V6oqOI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763546679; c=relaxed/simple;
-	bh=R1W+D2JRPWwarJ7l+JsNREKcQeUaSc9NN24K0kJrUOs=;
+	s=arc-20240116; t=1763546683; c=relaxed/simple;
+	bh=c5vxSj7Z2Nde56EIvWVCelJqZRjjXCKwnrJ4Nn1JDus=;
 	h=In-Reply-To:References:From:To:Cc:Subject:MIME-Version:
-	 Content-Disposition:Content-Type:Message-Id:Date; b=VYh3lsYuT8KlNkIhz6wpYkoRzaz5FQNvfKMrWS1Mq6wFQvw5Jq5ETn+v2Pra13xTwPsEkylO1plP4BarzqwJsD7YSb9SkBePbh38eWMcXfRCNNbhc4S3hA2P9EuPfg26oNGHp50dBqLLnwCna6zukDHx5tmTCbq3VN68lubi0+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=q3ul+T+8; arc=none smtp.client-ip=78.32.30.218
+	 Content-Disposition:Content-Type:Message-Id:Date; b=mf5termIczzaRS6BWJCspxY+kP6dnBsX0XI+6ft4Fobbl+3weTM1xTNIk7UBLHH0qNsWM3abkqkFQk8vk81wK6KMEgG8C9F5kLmSHg4tT02V0kAar5nV1Fw7uj/4TsycLpFbUxvSKITbiyX62MMFliwJOiG27j/Dr+MsI9mmE2E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=P3p760nG; arc=none smtp.client-ip=78.32.30.218
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
@@ -37,22 +37,22 @@ DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
 	In-Reply-To:Reply-To:Content-ID:Content-Description:Resent-Date:Resent-From:
 	Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:
 	List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=KPfsu59Yt0PWFOvEro80t5AXlzEkyAnGNmZkqzrwQ08=; b=q3ul+T+81Zi9zcWuHHvUgADgER
-	BzFveuxWasUnltUsKMhFpZ3ESyIvg1/o3u9GqFegfprpHjcL6COj2PiuZuyrVRfgv8UfqOtTyqiRp
-	1SLApR2bWJpjEEtniaNAAzGc8ectQSfqS6eczI0+DFQtK2XEU/m2rlWCoN+4fNUM+DQ8eD86f4OfR
-	NJ/rl0935lL0UzWKz90hTr96PekeMW01mU1zdKi9Um/sh2CwkBOAgbQe3m9H9PANphlT0Tp4WlUI1
-	NjYsJX994DlxriT3keDjr5mkBJU6q6i6MQ/al/IMEbN6jlstqMO42C9cFeuOMNwNpITbB/kUWNCWi
-	nN8VjxdQ==;
-Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:35848 helo=rmk-PC.armlinux.org.uk)
+	bh=5V2uzI+1et/pfg0laFa3ARS/PjNLaLny1e5YwBh3QzM=; b=P3p760nGwF+ypC/xZA4/96ZX7u
+	kImF96bFCQenuZWCzfFehLqSMqNHzwfb0wdKBv8VQMhMNXohcdS8+ESSF++scFbKyRRactdaxrkWe
+	DNqSKkbamd90NDaM5w7t8T09k+vJR78DfSjACLIqS7HJ/mb73tT2rqKNe+CHZ50Sz8l8m4ey8oV5W
+	Ox/MQ03dXae5BzH+XK0NkOrRBFymUusjVXe0idFtM0XAznCUee9hTJnHZMPVA60LHp1vek1ZXZLvO
+	DfY/PDbU6RgvIlWl1Grlj6LgJCJvGnpj6Q4IFBfMVrcyBHSrNmy0emM23xCbxRd2vA+FT5Ac9wSYp
+	E1uMIW+Q==;
+Received: from e0022681537dd.dyn.armlinux.org.uk ([fd8f:7570:feb6:1:222:68ff:fe15:37dd]:45658 helo=rmk-PC.armlinux.org.uk)
 	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.98.2)
 	(envelope-from <rmk@armlinux.org.uk>)
-	id 1vLf2a-000000004RB-1cM3;
-	Wed, 19 Nov 2025 10:03:56 +0000
+	id 1vLf2h-000000004RN-0FF2;
+	Wed, 19 Nov 2025 10:04:03 +0000
 Received: from rmk by rmk-PC.armlinux.org.uk with local (Exim 4.98.2)
 	(envelope-from <rmk@rmk-PC.armlinux.org.uk>)
-	id 1vLf2Z-0000000FMNH-0xPV;
-	Wed, 19 Nov 2025 10:03:55 +0000
+	id 1vLf2e-0000000FMNN-1Xnh;
+	Wed, 19 Nov 2025 10:04:00 +0000
 In-Reply-To: <aR2V0Kib7j0L4FNN@shell.armlinux.org.uk>
 References: <aR2V0Kib7j0L4FNN@shell.armlinux.org.uk>
 From: "Russell King (Oracle)" <rmk+kernel@armlinux.org.uk>
@@ -85,8 +85,8 @@ Cc: Alexandre Torgue <alexandre.torgue@foss.st.com>,
 	Paolo Abeni <pabeni@redhat.com>,
 	s32@nxp.com,
 	Samuel Holland <samuel@sholland.org>
-Subject: [PATCH net-next 2/3] net: stmmac: move probe/remove calling of
- init/exit
+Subject: [PATCH net-next 3/3] net: stmmac: rk: convert to init()/exit()
+ methods
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -96,138 +96,98 @@ MIME-Version: 1.0
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain; charset="utf-8"
-Message-Id: <E1vLf2Z-0000000FMNH-0xPV@rmk-PC.armlinux.org.uk>
+Message-Id: <E1vLf2e-0000000FMNN-1Xnh@rmk-PC.armlinux.org.uk>
 Sender: Russell King <rmk@armlinux.org.uk>
-Date: Wed, 19 Nov 2025 10:03:55 +0000
+Date: Wed, 19 Nov 2025 10:04:00 +0000
 
-Move the probe/remove time calling of the init()/exit() methods in
-the platform data to the main driver probe/remove functions. This
-allows them to be used by non-platform_device based drivers.
+Convert rk to use the init() and exit() methods for powering up and
+down the device. This allows us to use the pltfr versions of probe()
+and remove().
 
 Signed-off-by: Russell King (Oracle) <rmk+kernel@armlinux.org.uk>
 ---
- .../net/ethernet/stmicro/stmmac/stmmac_main.c | 47 ++++++++++++++-----
- .../ethernet/stmicro/stmmac/stmmac_platform.c | 23 +--------
- 2 files changed, 36 insertions(+), 34 deletions(-)
+ .../net/ethernet/stmicro/stmmac/dwmac-rk.c    | 47 ++++++++-----------
+ 1 file changed, 19 insertions(+), 28 deletions(-)
 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-index 644dccb29f75..aac8188248ff 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_main.c
-@@ -7593,19 +7593,9 @@ struct plat_stmmacenet_data *stmmac_plat_dat_alloc(struct device *dev)
+diff --git a/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c b/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
+index 6e75da577af5..6bfe82d7001a 100644
+--- a/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
++++ b/drivers/net/ethernet/stmicro/stmmac/dwmac-rk.c
+@@ -1763,6 +1763,22 @@ static int rk_gmac_resume(struct device *dev, void *bsp_priv_)
+ 	return 0;
  }
- EXPORT_SYMBOL_GPL(stmmac_plat_dat_alloc);
  
--/**
-- * stmmac_dvr_probe
-- * @device: device pointer
-- * @plat_dat: platform data pointer
-- * @res: stmmac resource pointer
-- * Description: this is the main probe function used to
-- * call the alloc_etherdev, allocate the priv structure.
-- * Return:
-- * returns 0 on success, otherwise errno.
-- */
--int stmmac_dvr_probe(struct device *device,
--		     struct plat_stmmacenet_data *plat_dat,
--		     struct stmmac_resources *res)
-+static int __stmmac_dvr_probe(struct device *device,
-+			      struct plat_stmmacenet_data *plat_dat,
-+			      struct stmmac_resources *res)
- {
- 	struct net_device *ndev = NULL;
- 	struct stmmac_priv *priv;
-@@ -7912,6 +7902,34 @@ int stmmac_dvr_probe(struct device *device,
- 
- 	return ret;
- }
-+
-+/**
-+ * stmmac_dvr_probe
-+ * @dev: device pointer
-+ * @plat_dat: platform data pointer
-+ * @res: stmmac resource pointer
-+ * Description: this is the main probe function used to
-+ * call the alloc_etherdev, allocate the priv structure.
-+ * Return:
-+ * returns 0 on success, otherwise errno.
-+ */
-+int stmmac_dvr_probe(struct device *dev, struct plat_stmmacenet_data *plat_dat,
-+		     struct stmmac_resources *res)
++static int rk_gmac_init(struct device *dev, void *bsp_priv)
 +{
-+	int ret;
-+
-+	if (plat_dat->init) {
-+		ret = plat_dat->init(dev, plat_dat->bsp_priv);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	ret = __stmmac_dvr_probe(dev, plat_dat, res);
-+	if (ret && plat_dat->exit)
-+		plat_dat->exit(dev, plat_dat->bsp_priv);
-+
-+	return ret;
++	return rk_gmac_powerup(bsp_priv);
 +}
- EXPORT_SYMBOL_GPL(stmmac_dvr_probe);
- 
- /**
-@@ -7950,6 +7968,9 @@ void stmmac_dvr_remove(struct device *dev)
- 
- 	pm_runtime_disable(dev);
- 	pm_runtime_put_noidle(dev);
 +
-+	if (priv->plat->exit)
-+		priv->plat->exit(dev, priv->plat->bsp_priv);
- }
- EXPORT_SYMBOL_GPL(stmmac_dvr_remove);
- 
-diff --git a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-index feccb8a3e7e8..9015b7f80d1b 100644
---- a/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-+++ b/drivers/net/ethernet/stmicro/stmmac/stmmac_platform.c
-@@ -804,25 +804,12 @@ int stmmac_pltfr_probe(struct platform_device *pdev,
- 		       struct plat_stmmacenet_data *plat,
- 		       struct stmmac_resources *res)
++static void rk_gmac_exit(struct device *dev, void *bsp_priv_)
++{
++	struct stmmac_priv *priv = netdev_priv(dev_get_drvdata(dev));
++	struct rk_priv_data *bsp_priv = bsp_priv_;
++
++	rk_gmac_powerdown(bsp_priv);
++
++	if (priv->plat->phy_node && bsp_priv->integrated_phy)
++		clk_put(bsp_priv->clk_phy);
++}
++
+ static int rk_gmac_probe(struct platform_device *pdev)
  {
--	struct device *dev = &pdev->dev;
--	int ret;
--
- 	if (!plat->suspend && plat->exit)
- 		plat->suspend = stmmac_plat_suspend;
- 	if (!plat->resume && plat->init)
- 		plat->resume = stmmac_plat_resume;
+ 	struct plat_stmmacenet_data *plat_dat;
+@@ -1795,6 +1811,8 @@ static int rk_gmac_probe(struct platform_device *pdev)
  
--	ret = stmmac_pltfr_init(dev, plat);
+ 	plat_dat->get_interfaces = rk_get_interfaces;
+ 	plat_dat->set_clk_tx_rate = rk_set_clk_tx_rate;
++	plat_dat->init = rk_gmac_init;
++	plat_dat->exit = rk_gmac_exit;
+ 	plat_dat->suspend = rk_gmac_suspend;
+ 	plat_dat->resume = rk_gmac_resume;
+ 
+@@ -1806,33 +1824,7 @@ static int rk_gmac_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = rk_gmac_powerup(plat_dat->bsp_priv);
 -	if (ret)
 -		return ret;
 -
--	ret = stmmac_dvr_probe(dev, plat, res);
--	if (ret) {
--		stmmac_pltfr_exit(dev, plat);
--		return ret;
--	}
+-	ret = stmmac_dvr_probe(&pdev->dev, plat_dat, &stmmac_res);
+-	if (ret)
+-		goto err_gmac_powerdown;
+-
+-	return 0;
+-
+-err_gmac_powerdown:
+-	rk_gmac_powerdown(plat_dat->bsp_priv);
 -
 -	return ret;
-+	return stmmac_dvr_probe(&pdev->dev, plat, res);
- }
- EXPORT_SYMBOL_GPL(stmmac_pltfr_probe);
- 
-@@ -864,13 +851,7 @@ EXPORT_SYMBOL_GPL(devm_stmmac_pltfr_probe);
-  */
- void stmmac_pltfr_remove(struct platform_device *pdev)
- {
--	struct net_device *ndev = platform_get_drvdata(pdev);
--	struct stmmac_priv *priv = netdev_priv(ndev);
--	struct plat_stmmacenet_data *plat = priv->plat;
--	struct device *dev = &pdev->dev;
+-}
 -
--	stmmac_dvr_remove(dev);
--	stmmac_pltfr_exit(dev, plat);
-+	stmmac_dvr_remove(&pdev->dev);
+-static void rk_gmac_remove(struct platform_device *pdev)
+-{
+-	struct stmmac_priv *priv = netdev_priv(platform_get_drvdata(pdev));
+-	struct rk_priv_data *bsp_priv = priv->plat->bsp_priv;
+-
+-	stmmac_dvr_remove(&pdev->dev);
+-
+-	rk_gmac_powerdown(bsp_priv);
+-
+-	if (priv->plat->phy_node && bsp_priv->integrated_phy)
+-		clk_put(bsp_priv->clk_phy);
++	return devm_stmmac_pltfr_probe(pdev, plat_dat, &stmmac_res);
  }
- EXPORT_SYMBOL_GPL(stmmac_pltfr_remove);
  
+ static const struct of_device_id rk_gmac_dwmac_match[] = {
+@@ -1858,7 +1850,6 @@ MODULE_DEVICE_TABLE(of, rk_gmac_dwmac_match);
+ 
+ static struct platform_driver rk_gmac_dwmac_driver = {
+ 	.probe  = rk_gmac_probe,
+-	.remove = rk_gmac_remove,
+ 	.driver = {
+ 		.name           = "rk_gmac-dwmac",
+ 		.pm		= &stmmac_simple_pm_ops,
 -- 
 2.47.3
 
