@@ -1,74 +1,123 @@
-Return-Path: <linux-mips+bounces-12309-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12310-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAB33C7092F
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Nov 2025 19:07:44 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC240C73E69
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Nov 2025 13:11:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by tor.lore.kernel.org (Postfix) with ESMTPS id 801EC2D591
-	for <lists+linux-mips@lfdr.de>; Wed, 19 Nov 2025 18:07:36 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTPS id B484E2A789
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Nov 2025 12:10:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0E3B365A09;
-	Wed, 19 Nov 2025 18:07:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pKbOQFww"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB35133121F;
+	Thu, 20 Nov 2025 12:10:37 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA23830ACEE;
-	Wed, 19 Nov 2025 18:07:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A66582E4266
+	for <linux-mips@vger.kernel.org>; Thu, 20 Nov 2025 12:10:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763575629; cv=none; b=s06fjS5IGAahMbSjbPdNo+cvlBNZbTyQT0BaUcTV8TwAJ4E8NSv4+MXipVFT/pVpLCjl4584a0Ai4Ml0aFz+aRjl8XbMDahYrCHfUtnvzlDMHULuq3HScisKSFU/DwY3pOv8FaycJhHr2ZK77BI4RZVWMcTrkYrxFpLuD3vuJ2E=
+	t=1763640637; cv=none; b=TYrDIZSl7OO/tRY2XoWfWbSSTNK/JYA87vP4bd8fGOLW/M6A8Vz9fIm2YF16ztBeJZk6yci0eXgUFBQFwGbyXd10dJsXmM5PiH+V22RkyyMd0ZTq9cW8kAPrGv2zpXm+JtLvSpFxL+j8oYV/bBshA1X9mPsFvVHpWrFvH8m5CgY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763575629; c=relaxed/simple;
-	bh=4d5rcTTQrqxAwHFaEaXz/InkRKSrlbPARDoNksmiCEg=;
-	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
-	 To:Date:Message-ID; b=KvXEJA4gUR8FWhRH3hiNN2/8vNj3Zpt000Ndod34wtZCdTEtWPR4n0VIZNV/2YL5h+N2Mi5OVP8B62ZmOOL4QrCel85NiNUQ3zyVWwYQNUDW4o7gKOLQItX8ns7yL4+1rAI1AE23doXY061U0bknYfNcNWbrMirNBPEEX3+nRek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pKbOQFww; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A69EC4CEF5;
-	Wed, 19 Nov 2025 18:07:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763575626;
-	bh=4d5rcTTQrqxAwHFaEaXz/InkRKSrlbPARDoNksmiCEg=;
-	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-	b=pKbOQFwwmhYoWDKR/2FuVI6VMRMd2zKEVIsN/acQhKxl93XDSD8FvrTjPG6ihhTIy
-	 guT6Ut5ihv5Fhtcy9iUQK4WG2TSkhRNhyV1NjhouV8/GS0LJ11Zr9rOueb2PWiwm28
-	 pncSlYGs7R4Jr/X5Vy6cBOxI4ApYpSPkiY0ypF529Pevez9JJtjHhFXUg1+XG/ny9T
-	 bzU6ZwsCslyUwjbQ5QE3y4rNMifQH0uySdwkIZYSkY5Pesl4tagnEkDk7YzAMIOsS5
-	 OTDalcGxrUW/2FL4Zy/dKaCJomPx/UdfRuQDDpXoYv55z7uhQwIrHRWzT2BCbjn4aL
-	 2z+Si8wQvktwA==
-Content-Type: text/plain; charset="utf-8"
+	s=arc-20240116; t=1763640637; c=relaxed/simple;
+	bh=g2pbcwnCtVpY/dI33xZ0tKBwAc6vnRi7cq8RordWA2c=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=ksZfVqzS1aPsLGK2csfayvK49kghc09Naf6Sbrn99l0PhMjGwBXm+3VzCYgIG+sJ7NPj37RsB5Cb6YLeX1a5eESq996r3EHOkRPjnzNHrzMXI1FSKxH/YOw/+KU+iQg8hGBPfE2wdjzyPDSAlZd5X2NawYVxUxmzu7yPFde6eNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=fail smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=195.135.223.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=alpha.franken.de
+Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out1.suse.de (Postfix) with ESMTPS id 983882127A;
+	Thu, 20 Nov 2025 12:10:31 +0000 (UTC)
+Authentication-Results: smtp-out1.suse.de;
+	none
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 84B6D3EA61;
+	Thu, 20 Nov 2025 12:10:31 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id u71GIDcFH2mYQAAAD6G6ig
+	(envelope-from <tsbogend@alpha.franken.de>); Thu, 20 Nov 2025 12:10:31 +0000
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Nam Cao <namcao@linutronix.de>,
+	linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2] MIPS: kernel: Fix random segmentation faults
+Date: Thu, 20 Nov 2025 13:10:29 +0100
+Message-ID: <20251120121030.28524-1-tsbogend@alpha.franken.de>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20251119-macb-phy-v3-3-e9a7be186a33@bootlin.com>
-References: <20251119-macb-phy-v3-0-e9a7be186a33@bootlin.com> <20251119-macb-phy-v3-3-e9a7be186a33@bootlin.com>
-Subject: Re: [PATCH v3 3/7] clk: eyeq: use the auxiliary device creation helper
-From: Stephen Boyd <sboyd@kernel.org>
-Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org, linux-clk@vger.kernel.org, =?utf-8?q?Beno=C3=AEt?= Monin <benoit.monin@bootlin.com>, Maxime Chevallier <maxime.chevallier@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, =?utf-8?q?Th=C3=A9o?= Lebrun <theo.lebrun@bootlin.com>, Jerome Brunet <jbrunet@baylibre.com>
-To: Conor Dooley <conor+dt@kernel.org>, =?utf-8?q?Gr=C3=A9gory?= Clement <gregory.clement@bootlin.com>, Kishon Vijay Abraham I <kishon@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Michael Turquette <mturquette@baylibre.com>, Philipp Zabel <p.zabel@pengutronix.de>, Rob Herring <robh@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, =?utf-8?q?Th=C3=A9o?= Lebrun <theo.lebrun@bootlin.com>, Vinod Koul <vkoul@kernel.org>, Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
-Date: Wed, 19 Nov 2025 10:07:04 -0800
-Message-ID: <176357562473.11952.15433192921239262065@lazor>
-User-Agent: alot/0.11
+Content-Transfer-Encoding: 8bit
+X-Spamd-Result: default: False [-2.80 / 50.00];
+	BAYES_HAM(-3.00)[100.00%];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	ARC_NA(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[franken.de:email,imap1.dmz-prg2.suse.org:helo,alpha.franken.de:mid];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_EQ_ENVFROM(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	RCVD_COUNT_TWO(0.00)[2];
+	RCPT_COUNT_FIVE(0.00)[5];
+	RCVD_TLS_ALL(0.00)[]
+X-Spam-Flag: NO
+X-Spam-Score: -2.80
+X-Spam-Level: 
 
-Quoting Th=C3=A9o Lebrun (2025-11-19 07:51:11)
-> From: Jerome Brunet <jbrunet@baylibre.com>
->=20
-> The auxiliary device creation of this driver is simple enough to
-> use the available auxiliary device creation helper.
->=20
-> Use it and remove some boilerplate code.
->=20
-> Tested-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>  # On Mobileye EyeQ5
-> Signed-off-by: Jerome Brunet <jbrunet@baylibre.com>
+Commit 69896119dc9d ("MIPS: vdso: Switch to generic storage
+implementation") switches to a generic vdso storage, which increases
+the number of data pages from 1 to 4. But there is only one page
+reserved, which causes segementation faults depending where the VDSO
+area is randomized to. To fix this use the same size of reservation
+and allocation of the VDSO data pages.
 
-You need to add your SoB here.
+Fixes: 69896119dc9d ("MIPS: vdso: Switch to generic storage implementation")
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+---
+v2: Don't reserve additionnal VDSO_NR_PAGES, but reserve VDSO_NR_PAGES
+    instead of the one page before.
+    Reworked description
+v1: https://lore.kernel.org/all/20251117191815.69556-1-tsbogend@alpha.franken.de/
+
+ arch/mips/kernel/process.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
+index 29191fa1801e..a3101f2268c6 100644
+--- a/arch/mips/kernel/process.c
++++ b/arch/mips/kernel/process.c
+@@ -692,7 +692,7 @@ unsigned long mips_stack_top(void)
+ 	/* Space for the VDSO, data page & GIC user page */
+ 	if (current->thread.abi) {
+ 		top -= PAGE_ALIGN(current->thread.abi->vdso->size);
+-		top -= PAGE_SIZE;
++		top -= VDSO_NR_PAGES * PAGE_SIZE;
+ 		top -= mips_gic_present() ? PAGE_SIZE : 0;
+ 
+ 		/* Space to randomize the VDSO base */
+-- 
+2.43.0
+
 
