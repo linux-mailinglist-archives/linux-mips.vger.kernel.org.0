@@ -1,123 +1,69 @@
-Return-Path: <linux-mips+bounces-12310-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12313-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC240C73E69
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Nov 2025 13:11:10 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEB40C73FFD
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Nov 2025 13:38:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sin.lore.kernel.org (Postfix) with ESMTPS id B484E2A789
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Nov 2025 12:10:45 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTPS id C759B2ABD7
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Nov 2025 12:38:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB35133121F;
-	Thu, 20 Nov 2025 12:10:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41FED335577;
+	Thu, 20 Nov 2025 12:38:37 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A66582E4266
-	for <linux-mips@vger.kernel.org>; Thu, 20 Nov 2025 12:10:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10BA33370EC;
+	Thu, 20 Nov 2025 12:38:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763640637; cv=none; b=TYrDIZSl7OO/tRY2XoWfWbSSTNK/JYA87vP4bd8fGOLW/M6A8Vz9fIm2YF16ztBeJZk6yci0eXgUFBQFwGbyXd10dJsXmM5PiH+V22RkyyMd0ZTq9cW8kAPrGv2zpXm+JtLvSpFxL+j8oYV/bBshA1X9mPsFvVHpWrFvH8m5CgY=
+	t=1763642317; cv=none; b=dQHbOipC2dSYtTHz3Qs/BWPL/VWGVXEJQ7gNb1YxGIB8OYIg21dl2kDPY7tQwN5cv7dQzaAkPbJv7iHAJ7kIQEFtrIeB/ZYJNO30WDU9GizE1wCMblSNbkGfQJoCtfCy+0miEduAzFfC/Fk3lezHD0v58+NQBWInvcEDFmFpKLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763640637; c=relaxed/simple;
-	bh=g2pbcwnCtVpY/dI33xZ0tKBwAc6vnRi7cq8RordWA2c=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=ksZfVqzS1aPsLGK2csfayvK49kghc09Naf6Sbrn99l0PhMjGwBXm+3VzCYgIG+sJ7NPj37RsB5Cb6YLeX1a5eESq996r3EHOkRPjnzNHrzMXI1FSKxH/YOw/+KU+iQg8hGBPfE2wdjzyPDSAlZd5X2NawYVxUxmzu7yPFde6eNQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=fail smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=195.135.223.130
+	s=arc-20240116; t=1763642317; c=relaxed/simple;
+	bh=FB/I4vkd0SLVXGGvejhBwNCufCVbW8MzeHmaQUfFnhY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MD8nAVX7m/EC7D031+BCdvRrpIw44097oXPhj/GBD6R0sANvPNrX5ukBxx9fN2eqCqghZAFIZyPaImMdOXf5JJa8tkqngdK2/gae5c+qfAkseicOI95Rbk1k1kdDT7qEy4rErQjqCahbPedaWzzYBEZIkB22thl7VnlEbIckUbk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=alpha.franken.de
-Received: from imap1.dmz-prg2.suse.org (unknown [10.150.64.97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 983882127A;
-	Thu, 20 Nov 2025 12:10:31 +0000 (UTC)
-Authentication-Results: smtp-out1.suse.de;
-	none
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 84B6D3EA61;
-	Thu, 20 Nov 2025 12:10:31 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id u71GIDcFH2mYQAAAD6G6ig
-	(envelope-from <tsbogend@alpha.franken.de>); Thu, 20 Nov 2025 12:10:31 +0000
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1vM3Xs-0002VH-00; Thu, 20 Nov 2025 13:13:52 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 50243C0256; Thu, 20 Nov 2025 13:13:44 +0100 (CET)
+Date: Thu, 20 Nov 2025 13:13:44 +0100
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Nam Cao <namcao@linutronix.de>,
-	linux-mips@vger.kernel.org,
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: Nam Cao <namcao@linutronix.de>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>,
+	Thomas Gleixner <tglx@linutronix.de>, linux-mips@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2] MIPS: kernel: Fix random segmentation faults
-Date: Thu, 20 Nov 2025 13:10:29 +0100
-Message-ID: <20251120121030.28524-1-tsbogend@alpha.franken.de>
-X-Mailer: git-send-email 2.43.0
+Subject: Re: [PATCH] MIPS: kernel: Fix reservation for VDSO area
+Message-ID: <aR8F-F41MOHi2edk@alpha.franken.de>
+References: <20251117191815.69556-1-tsbogend@alpha.franken.de>
+ <CAAhV-H7eoKgCWRVGWzgM55YOM9V8TRXe6Ax6-XQJF-STTpNpOg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spamd-Result: default: False [-2.80 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	ARC_NA(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[franken.de:email,imap1.dmz-prg2.suse.org:helo,alpha.franken.de:mid];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	FUZZY_RATELIMITED(0.00)[rspamd.com];
-	RCVD_COUNT_TWO(0.00)[2];
-	RCPT_COUNT_FIVE(0.00)[5];
-	RCVD_TLS_ALL(0.00)[]
-X-Spam-Flag: NO
-X-Spam-Score: -2.80
-X-Spam-Level: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAhV-H7eoKgCWRVGWzgM55YOM9V8TRXe6Ax6-XQJF-STTpNpOg@mail.gmail.com>
 
-Commit 69896119dc9d ("MIPS: vdso: Switch to generic storage
-implementation") switches to a generic vdso storage, which increases
-the number of data pages from 1 to 4. But there is only one page
-reserved, which causes segementation faults depending where the VDSO
-area is randomized to. To fix this use the same size of reservation
-and allocation of the VDSO data pages.
+On Tue, Nov 18, 2025 at 09:15:59AM +0800, Huacai Chen wrote:
+> Hi, Thomas,
+> 
+> I think 69896119dc9d ("MIPS: vdso: Switch to generic storage
+> implementation") changes the size of VDSO data from one page to
+> VDSO_NR_PAGES pages, so here we need to remove "top -= PAGE_SIZE".
 
-Fixes: 69896119dc9d ("MIPS: vdso: Switch to generic storage implementation")
-Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
----
-v2: Don't reserve additionnal VDSO_NR_PAGES, but reserve VDSO_NR_PAGES
-    instead of the one page before.
-    Reworked description
-v1: https://lore.kernel.org/all/20251117191815.69556-1-tsbogend@alpha.franken.de/
+you are right, thank you. Sent v2 of the patch.
 
- arch/mips/kernel/process.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Thomas.
 
-diff --git a/arch/mips/kernel/process.c b/arch/mips/kernel/process.c
-index 29191fa1801e..a3101f2268c6 100644
---- a/arch/mips/kernel/process.c
-+++ b/arch/mips/kernel/process.c
-@@ -692,7 +692,7 @@ unsigned long mips_stack_top(void)
- 	/* Space for the VDSO, data page & GIC user page */
- 	if (current->thread.abi) {
- 		top -= PAGE_ALIGN(current->thread.abi->vdso->size);
--		top -= PAGE_SIZE;
-+		top -= VDSO_NR_PAGES * PAGE_SIZE;
- 		top -= mips_gic_present() ? PAGE_SIZE : 0;
- 
- 		/* Space to randomize the VDSO base */
 -- 
-2.43.0
-
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
