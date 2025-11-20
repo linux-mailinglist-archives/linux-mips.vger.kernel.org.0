@@ -1,86 +1,134 @@
-Return-Path: <linux-mips+bounces-12314-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12315-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99E54C74DFF
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Nov 2025 16:21:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6AE13C763A3
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Nov 2025 21:47:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id CAD17358242
-	for <lists+linux-mips@lfdr.de>; Thu, 20 Nov 2025 15:08:42 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 68C50352E11
+	for <lists+linux-mips@lfdr.de>; Thu, 20 Nov 2025 20:47:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF21A2F0681;
-	Thu, 20 Nov 2025 15:06:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7A6C630149C;
+	Thu, 20 Nov 2025 20:47:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="OLz+tdlO";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="D02NC6YP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fZVbHn60"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A3E22E5B0E;
-	Thu, 20 Nov 2025 15:06:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 409AC2F6928;
+	Thu, 20 Nov 2025 20:47:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763651165; cv=none; b=nimX1YKZvcQwFN+cXplxGIXPA463rsc3CulqTimqkX9Fsr67Fnwj/Ulvit0L9HjChQ3uMIrZXPrb8O6UvFOEWcOzwb83A23GP86VjwWTup2JweBCeUbBSQKKAlC604+e+aK9MyNxpZNLxUUTGv9bBf22bQJcPzevyyq9MkpZFLk=
+	t=1763671653; cv=none; b=WXicuu1DxjZ357Ms2aR6SFOZipXKyhXtwZpdOgxVtouWt7YFEKZavEMM31UBHRh8bMVZs/KmG5JWUMaElgooxF5GQBFqKhrK3kculgbDHOS8wYtkVucmUCP8iWcSdC4ymsBa00m399kCRKHabR17XVR57IS/Tjaktc0tWtQBV0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763651165; c=relaxed/simple;
-	bh=TRZgnWWhWokNCTh21dPzITYdwFXz/FKAuKLA1pr/dFI=;
-	h=From:To:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=kuiWCRlbacIs966bw4QLGgu4tYoLUMLi7RIUU7v9z3ozc+sryC3bSRgN03KIrl/8/Kcb4xpbhSgxTPj/0G/sZXHPlRs6BgjhPPRwHFDmDbs7zP/NzVi1h2H7aoWSSbsdG4Xfo8Ii4haq484WI3Uyyzk1JYjc+qHczXS0B5VMlHU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=OLz+tdlO; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=D02NC6YP; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-From: Thomas Gleixner <tglx@linutronix.de>
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1763651159;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TRZgnWWhWokNCTh21dPzITYdwFXz/FKAuKLA1pr/dFI=;
-	b=OLz+tdlO+QXMQ4yPIk4iwDyGTubdTlbgyslhf+7+bcfswopBbDCyBcY4+bZ/GZ/wbOkXnt
-	p3jWy92QiMoNroMZLY9jh/NQSJl9fDKZ6tJMfhfWq+J13br5UQFBeEA2KisqrtsA+ZmnfK
-	uOtX3KTCH2+5veFZsuV0PjV1SOpXMHj7oVeUNBynLdQIu68h75NQLS7R0w8T6q7Cog4o9d
-	Ziq5HvwDB/mb7/3F9orfH1HluGmsC2bxI7pLTpDw2VnzQq+ISn/YXjvvd6JpiG+jDfWjqy
-	eb7yOfptjQt+DLuU55GJPHFBbe3igDuuYfmQE7hcINY69eiPev5kR9/CEY7Ing==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1763651159;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=TRZgnWWhWokNCTh21dPzITYdwFXz/FKAuKLA1pr/dFI=;
-	b=D02NC6YPM0KbO03bsfmWoG0gijLbuR/phmkjhYlOLEYCXG2DatGCYkdckHpBsR/gC68Syv
-	ivyW5jJ/QH3TzPCA==
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Thomas =?utf-8?Q?Wei?=
- =?utf-8?Q?=C3=9Fschuh?=
- <thomas.weissschuh@linutronix.de>, Nam Cao <namcao@linutronix.de>,
- linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] MIPS: kernel: Fix random segmentation faults
-In-Reply-To: <20251120121030.28524-1-tsbogend@alpha.franken.de>
-References: <20251120121030.28524-1-tsbogend@alpha.franken.de>
-Date: Thu, 20 Nov 2025 16:05:58 +0100
-Message-ID: <87qztskall.ffs@tglx>
+	s=arc-20240116; t=1763671653; c=relaxed/simple;
+	bh=jr09kTz/vPoYXzoascQ6RRUxCvMuEo5/bEh1N99uRxs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=aYIC663ZKzsEchl1JAA48X5v3BQ81ZnFuE5/e+EYTSM23tMhwX/QkqQUOSnVlW6f2bLpX+vVFWloImyY1AwzNt0kPPtZk6e1AQIXXZHSL3KFPqDQDThA4505aCfzeZP5Am0n2DUlimpd82rzOewfYWvroYwJW/wCL3fq9BlyMzU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fZVbHn60; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B512EC116B1;
+	Thu, 20 Nov 2025 20:47:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763671652;
+	bh=jr09kTz/vPoYXzoascQ6RRUxCvMuEo5/bEh1N99uRxs=;
+	h=From:To:Cc:Subject:Date:From;
+	b=fZVbHn608JP6IMyXIPCAq/gFmcPRJo/D5be3pzh4tkm21D365umzuB2llfnhEv0hi
+	 VPVyB4c772eZZWHIc2xtIRVWujCf0IACxgSD8SW2Bu24uGTSzYKGKH4jJi3WlkQhoS
+	 1qS8QCdvdFmzuP9Vjq+4Iu90U7iUWXP//xa8+vxjhH1zzHUz90H76D0TQ2TaVlgEJo
+	 etjv0bN9pI77XAl2hrUJHw9f6jizjI6zHkuumDkNMDJyHmA110CXfRVgFNF7ojfAjd
+	 KwtFGfkagtwkMVdjF9BhAwYhIpv/QoBDCjzyZMVIUvohlIo3HQvEsdDg45kzXX0dJn
+	 3XUxpu+TP/Glg==
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: devicetree@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] MIPS: dts: Always descend vendor subdirectories
+Date: Thu, 20 Nov 2025 14:47:16 -0600
+Message-ID: <20251120204717.1982418-1-robh@kernel.org>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
 
-On Thu, Nov 20 2025 at 13:10, Thomas Bogendoerfer wrote:
-> Commit 69896119dc9d ("MIPS: vdso: Switch to generic storage
-> implementation") switches to a generic vdso storage, which increases
-> the number of data pages from 1 to 4. But there is only one page
-> reserved, which causes segementation faults depending where the VDSO
-> area is randomized to. To fix this use the same size of reservation
-> and allocation of the VDSO data pages.
->
-> Fixes: 69896119dc9d ("MIPS: vdso: Switch to generic storage implementation")
-> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Commit 41528ba6afe6 ("MIPS: DTS: Only build subdir of current platform")
+broke building of all DTBs when CONFIG_OF_ALL_DTBS is enabled unless all
+the various kconfig options were also enabled. The only effect that commit
+had was getting rid of some harmless build lines such as:
 
-I assume this goes through the MIPS tree to Linus.
+      AR      arch/mips/boot/dts/mti/built-in.a
 
-Reviewed-by: Thomas Gleixner <tglx@linutronix.de>
+Those lines were part of the built-in DTB support. Since commit
+04e4ec98e405 ("MIPS: migrate to generic rule for built-in DTBs"), how the
+built-in DTBs are handled has changed and those lines are no longer
+generated, so revert to the prior behavior.
+
+Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+---
+ arch/mips/boot/dts/Makefile         | 35 +++++++++++++----------------
+ arch/mips/boot/dts/realtek/Makefile |  4 ++--
+ 2 files changed, 18 insertions(+), 21 deletions(-)
+
+diff --git a/arch/mips/boot/dts/Makefile b/arch/mips/boot/dts/Makefile
+index 6d9dbe945541..36c5e4c6e640 100644
+--- a/arch/mips/boot/dts/Makefile
++++ b/arch/mips/boot/dts/Makefile
+@@ -1,20 +1,17 @@
+ # SPDX-License-Identifier: GPL-2.0
+-subdir-$(CONFIG_BMIPS_GENERIC)		+= brcm
+-subdir-$(CONFIG_CAVIUM_OCTEON_SOC)	+= cavium-octeon
+-subdir-$(CONFIG_ECONET)			+= econet
+-subdir-$(CONFIG_EYEQ)			+= mobileye
+-subdir-$(CONFIG_FIT_IMAGE_FDT_MARDUK)   += img
+-subdir-$(CONFIG_FIT_IMAGE_FDT_BOSTON)	+= img
+-subdir-$(CONFIG_MACH_INGENIC)		+= ingenic
+-subdir-$(CONFIG_LANTIQ)			+= lantiq
+-subdir-$(CONFIG_MACH_LOONGSON64)	+= loongson
+-subdir-$(CONFIG_MACH_LOONGSON32)	+= loongson
+-subdir-$(CONFIG_SOC_VCOREIII)		+= mscc
+-subdir-$(CONFIG_MIPS_MALTA)		+= mti
+-subdir-$(CONFIG_LEGACY_BOARD_SEAD3)	+= mti
+-subdir-$(CONFIG_FIT_IMAGE_FDT_NI169445)	+= ni
+-subdir-$(CONFIG_MACH_PIC32)		+= pic32
+-subdir-$(CONFIG_ATH79)			+= qca
+-subdir-$(CONFIG_RALINK)			+= ralink
+-subdir-$(CONFIG_MACH_REALTEK_RTL)	+= realtek
+-subdir-$(CONFIG_FIT_IMAGE_FDT_XILFPGA)	+= xilfpga
++subdir-y	+= brcm
++subdir-y	+= cavium-octeon
++subdir-y	+= econet
++subdir-y	+= mobileye
++subdir-y	+= img
++subdir-y	+= ingenic
++subdir-y	+= lantiq
++subdir-y	+= loongson
++subdir-y	+= mscc
++subdir-y	+= mti
++subdir-y	+= ni
++subdir-y	+= pic32
++subdir-y	+= qca
++subdir-y	+= ralink
++subdir-y	+= realtek
++subdir-y	+= xilfpga
+diff --git a/arch/mips/boot/dts/realtek/Makefile b/arch/mips/boot/dts/realtek/Makefile
+index d2709798763f..3ac795d85236 100644
+--- a/arch/mips/boot/dts/realtek/Makefile
++++ b/arch/mips/boot/dts/realtek/Makefile
+@@ -1,3 +1,3 @@
+ # SPDX-License-Identifier: GPL-2.0
+-dtb-y	+= cisco_sg220-26.dtb
+-dtb-y	+= cameo-rtl9302c-2x-rtl8224-2xge.dtb
++dtb-$(CONFIG_MACH_REALTEK_RTL)	+= cisco_sg220-26.dtb
++dtb-$(CONFIG_MACH_REALTEK_RTL)	+= cameo-rtl9302c-2x-rtl8224-2xge.dtb
+-- 
+2.51.0
+
 
