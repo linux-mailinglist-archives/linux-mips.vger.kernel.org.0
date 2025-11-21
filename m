@@ -1,143 +1,251 @@
-Return-Path: <linux-mips+bounces-12320-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12321-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F2C6C79096
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Nov 2025 13:41:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EE2BAC7B94E
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Nov 2025 20:47:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 60E954E85FA
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Nov 2025 12:41:04 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9151C3A54C3
+	for <lists+linux-mips@lfdr.de>; Fri, 21 Nov 2025 19:47:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A56F3314D2F;
-	Fri, 21 Nov 2025 12:40:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 921D33054DD;
+	Fri, 21 Nov 2025 19:47:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HS/I0gDR"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92C463F9D2;
-	Fri, 21 Nov 2025 12:40:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63AF92BE05F;
+	Fri, 21 Nov 2025 19:47:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763728857; cv=none; b=rDa3peJtNe2DS25ZPA9rfanj1fvZADADnEmDDqcO3SnLHflTUANmDgvVJk9Oq/Rwdm0nRCNS9+LNcmf6KjLjCfSwnAAQCU3DBEPQgke6w+7hBhgllwtyfb9ehY2ON13pGMJHN4XXmzIhKnAwTJQoTvx/clePjE3Pk3ereOAS1JU=
+	t=1763754427; cv=none; b=rl0fLG7aBDA7qaw9+XQhkg4iP/lwAq2tU540DNF8EzHjei6RNQ0pph6KYh9t29osyWSJWTdvnHPgerLh2RFDi6Egx8yGtFmmkhE0lKLtB5GedzS9Eb7POBJBfdOxz/N6XpHhuUo5l3KJyfoGlxr/299FVBRdOGFZ/oHm6MOv/DQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763728857; c=relaxed/simple;
-	bh=Irk4BhrrIH79QspeneUzYjiXLSyf7WdKzZSwCfjvALk=;
+	s=arc-20240116; t=1763754427; c=relaxed/simple;
+	bh=Vg/9WM4svuJxXmTZGYFyYyC/fQlAZAwS2uwXY2DgmR8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LojouKcFev6d/9zy4XLKFt9q31ur7tSU46oxQeM8KmBetQI1pa1d/XbKifxoEB9SmM/Guzy85MOF5yxpcRFZQf/f0pcO5C5fleMRDr0ggMgcAI1vtGVQW8p72/Wrhz0AAsKjmp46S714cggWR4+hxQNAgX8da/4zdQuaili2tL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1vMQRQ-0005wA-00; Fri, 21 Nov 2025 13:40:44 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 75D48C06A7; Fri, 21 Nov 2025 13:26:02 +0100 (CET)
-Date: Fri, 21 Nov 2025 13:26:02 +0100
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: Nick Bowler <nbowler@draconx.ca>, Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] MIPS: mm: Prevent a TLB shutdown on initial
- uniquification
-Message-ID: <aSBaWtlPi99lTlPA@alpha.franken.de>
-References: <alpine.DEB.2.21.2511130507110.25436@angie.orcam.me.uk>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Jij1M28UKimHRs0r9FLeSa36bn+/Q2z3zP9iIQwBi/JWfinmmIihg/vacAinSuGCdO39s2wvhEGyDOqs216yiPIs9iMCDEU/CuXR6SNuMkkkIudPQnAXcF/b1M4+iXFeS2HhDS/4FRbTmaKrvIsp2HE9E6i8togBA9FUYkayE7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HS/I0gDR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 690D2C4CEF1;
+	Fri, 21 Nov 2025 19:47:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1763754426;
+	bh=Vg/9WM4svuJxXmTZGYFyYyC/fQlAZAwS2uwXY2DgmR8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=HS/I0gDRR5ulP8YpCKhY0pGoC//uLtHpesK93QeLmDwHiWXgVF9PfspYCcY8YDa4e
+	 QnodNPzsMmpz6DkDpNNgHyqQ4J63bUI2MoW12ViGmehzqFp9bWDuPmjnkp6kS0CvQS
+	 oabcR2BgJpsitAfB7NNHtgePHZblvY8fPs4S/l4KvQHoem1aliLIO4FMggaYN6eqI6
+	 PBCyKmFVL2E/c1ntLJU+gYavkSwA05ILhv6s7pKH1j6Mz7QkiodmlCv7istGTUFffJ
+	 ANaSC6cjqLNnAtUDr7Ap7skCr6YQHKCThhTudU1ChxaK3UZVeoVpj46DLusTf2ly+o
+	 VswKi+rmdKN6Q==
+Date: Fri, 21 Nov 2025 20:42:34 +0100
+From: Nicolas Schier <nsc@kernel.org>
+To: Nathan Chancellor <nathan@kernel.org>
+Cc: "Rob Herring (Arm)" <robh@kernel.org>,
+	Russell King <linux@armlinux.org.uk>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
+	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: Re: [PATCH v2] kbuild: Support directory targets for building DTBs
+Message-ID: <aSDAqhUb8_76IP0Y@derry.ads.avm.de>
+References: <20251120204812.1983452-4-robh@kernel.org>
+ <20251121063033.GA571346@ax162>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="AfpfqPLkSPOJGvv9"
+Content-Disposition: inline
+In-Reply-To: <20251121063033.GA571346@ax162>
+
+
+--AfpfqPLkSPOJGvv9
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2511130507110.25436@angie.orcam.me.uk>
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Nov 13, 2025 at 05:21:10AM +0000, Maciej W. Rozycki wrote:
-> Depending on the particular CPU implementation a TLB shutdown may occur 
-> if multiple matching entries are detected upon the execution of a TLBP 
-> or the TLBWI/TLBWR instructions.  Given that we don't know what entries 
-> we have been handed we need to be very careful with the initial TLB 
-> setup and avoid all these instructions.
-> 
-> Therefore read all the TLB entries one by one with the TLBR instruction, 
-> bypassing the content addressing logic, and truncate any large pages in 
-> place so as to avoid a case in the second step where an incoming entry 
-> for a large page at a lower address overlaps with a replacement entry 
-> chosen at another index.  Then preinitialize the TLB using addresses 
-> outside our usual unique range and avoiding clashes with any entries 
-> received, before making the usual call to local_flush_tlb_all().
-> 
-> This fixes (at least) R4x00 cores if TLBP hits multiple matching TLB 
-> entries (SGI IP22 PROM for examples sets up all TLBs to the same virtual 
-> address).
-> 
-> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-> Fixes: 35ad7e181541 ("MIPS: mm: tlb-r4k: Uniquify TLB entries on init")
-> Cc: stable@vger.kernel.org # v6.17+
-> ---
-> Hi,
-> 
->  On second thoughts I decided against including wired entries in our VPN 
-> matching discovery for clash avoidance.  The reason is as I wrote before 
-> it makes no sense to have wired entries for KSEG0 addresses, so it should 
-> be safe to assume we won't ever make one, and then if a wired entry maps a 
-> large page, which is quite likely, then our clash avoidance logic won't 
-> handle an overlap where the two VPN values of a clashing pair don't match, 
-> so it makes no sense to pretend we can handle wired entries with the code 
-> as proposed.
-> 
->  Pasting v2 discussion below verbatim as it still applies.
-> 
->  Verified the same way as before, also with some diagnostics added so as 
-> to make sure things get set up correctly, with my Malta/74Kf system for a 
-> 32-bit configuration and with my SWARM/BCM1250 system for a 64-bit one.
-> 
->  In addition to the Wired register setup discussed with v1 I have realised 
-> the incoming entries may include large pages, possibly exceeding the size 
-> of KSEG0 even.  Such entries may overlap with our temporary entries added 
-> in the second step, so truncate any large pages in place as this ensures 
-> no clash happens with the received contents of the TLB.
-> 
->  NB this doesn't handle incoming PageGrain.ESP having been set, but it's 
-> an unrelated preexisting issue that would have to be handled elsewhere.  
-> Possibly it doesn't matter in reality.
-> 
->  Additionally PageMask is left set at what has been retrieved from the 
-> last incoming TLB entry in the first step and has to be reset to our page 
-> size before proceeding with the second step.
-> 
->  And last but not least the comparator function returned 0 incorrectly 
-> when the difference between 64-bit elements was positive but with none of 
-> the high-order 32 bits set.  Fixed with a branchless sequence of 3 machine 
-> instructions, which I think is the minimum here (only the sign and zero 
-> matter here, but this sequence actually produces -1/0/1, because why not).
-> No change for the 32-bit case, the difference is returned as is.
-> 
->   Maciej
-> 
-> Changes from v2 (at 
-> <https://lore.kernel.org/r/alpine.DEB.2.21.2511122032400.25436@angie.orcam.me.uk/>):
-> 
-> - Revert the v2 update to include wired entries while reading original 
->   contents of TLB.
-> 
-> Changes from v1 (at 
-> <https://lore.kernel.org/r/alpine.DEB.2.21.2511110547430.25436@angie.orcam.me.uk/>):
-> 
-> - Also include wired entries while reading original contents of TLB.
-> 
-> - Truncate any large pages in place while reading original TLB entries.
-> 
-> - Reset PageMask to PM_DEFAULT_MASK after reading in TLB entries.
-> 
-> - Fix the 64-bit case for the sort comparator.
-> ---
->  arch/mips/mm/tlb-r4k.c |  100 ++++++++++++++++++++++++++++++-------------------
->  1 file changed, 63 insertions(+), 37 deletions(-)
+On Thu, Nov 20, 2025 at 11:30:33PM -0700, Nathan Chancellor wrote:
+> On Thu, Nov 20, 2025 at 02:48:13PM -0600, Rob Herring (Arm) wrote:
+> > It is useful to be able to build all the DTBs for a vendor. One can list
+> > all the .dts files in a directory and convert those to %.dtb targets,
+> > but that doesn't work for base+overlay DTB targets.
+> >=20
+> > Adding the dts subdirectory is straight-forward, but building the
+> > DTBs should only happen for certain targets (dtbs, dtbs_check, %.dtb,
+> > %.dtbo, and the directory target(s)).
+> >=20
+> > The 'scripts_dtc' rule doesn't really depend on 'dt_binding_schemas',
+> > but the directory target only depends on 'scripts' which depends on
+> > 'scripts_dtc'.
+> >=20
+> > Signed-off-by: Rob Herring (Arm) <robh@kernel.org>
+> > ---
+> > Please ack and I'll take this in the DT tree.
+> >=20
+> > I don't really like looking at MAKECMDGOALS, but that's the only way I
+> > could come up with that works. Maybe someone knows a better way.
+>=20
+> Yeah, I do worry that just looking for "dtb" in MAKECMDGOALS could
+> result in some false positives but in the tree now, I only see one .c
+> file that would trigger this logic, so maybe it is not that big of a
+> deal?
+>=20
+>   $ fd dtb
+>   arch/microblaze/boot/dts/linked_dtb.S
+>   arch/mips/include/asm/mach-loongson64/builtin_dtbs.h
+>   arch/um/kernel/dtb.c
+>   drivers/gpu/drm/ci/dtbs-check.sh
+>   scripts/Makefile.dtbinst
+>   scripts/Makefile.dtbs
+>=20
+> Unfortunately, my Make-fu is pretty weak right now so I do not have any
+> immediate suggestions but Nicolas might... otherwise, we could probably
+> ride this for right now and either revert it or forward fix it if
+> problems come up in further testing, since this does seem rather useful
+> for folks working on device tree files.
 
-applied to mips-fixes.
+well, evaluating MAKECMDGOALS does not look that bad to me.  But I'd
+rather like to reduce the use of findstring, see below.
 
-Thomas.
+>=20
+> > v2:
+> >  - Convert arm, mips and riscv. The other DT enabled arches don't have=
+=20
+> >    vendor directories.
+> >  - Link to v1: https://lore.kernel.org/all/20251113225952.867138-1-robh=
+@kernel.org/=20
+> >=20
+> > ---
+> >  Makefile              | 2 +-
+> >  arch/arm/Kbuild       | 2 ++
+> >  arch/arm64/Kbuild     | 2 ++
+> >  arch/mips/Kbuild      | 2 ++
+> >  arch/riscv/Kbuild     | 2 ++
+> >  scripts/Makefile.dtbs | 3 +++
+> >  6 files changed, 12 insertions(+), 1 deletion(-)
+> >=20
+> > diff --git a/Makefile b/Makefile
+> > index 17cfa11ca716..85018d461575 100644
+> > --- a/Makefile
+> > +++ b/Makefile
+> > @@ -1494,7 +1494,7 @@ export CHECK_DTBS=3Dy
+> >  endif
+> > =20
+> >  ifneq ($(CHECK_DTBS),)
+> > -dtbs_prepare: dt_binding_schemas
+> > +scripts_dtc: dt_binding_schemas
+> >  endif
+> > =20
+> >  dtbs_check: dtbs
+> > diff --git a/arch/arm/Kbuild b/arch/arm/Kbuild
+> > index 69de6b6243c7..af7dd53585c3 100644
+> > --- a/arch/arm/Kbuild
+> > +++ b/arch/arm/Kbuild
+> > @@ -10,5 +10,7 @@ obj-y				+=3D probes/
+> >  obj-y				+=3D net/
+> >  obj-y				+=3D crypto/
+> > =20
+> > +subdir-y +=3D boot/dts
+> > +
+> >  # for cleaning
+> >  subdir- +=3D boot
+> > diff --git a/arch/arm64/Kbuild b/arch/arm64/Kbuild
+> > index 5bfbf7d79c99..9e9820af48c9 100644
+> > --- a/arch/arm64/Kbuild
+> > +++ b/arch/arm64/Kbuild
+> > @@ -5,5 +5,7 @@ obj-$(CONFIG_XEN)	+=3D xen/
+> >  obj-$(subst m,y,$(CONFIG_HYPERV))	+=3D hyperv/
+> >  obj-$(CONFIG_CRYPTO)	+=3D crypto/
+> > =20
+> > +subdir-y +=3D boot/dts
+> > +
+> >  # for cleaning
+> >  subdir- +=3D boot
+> > diff --git a/arch/mips/Kbuild b/arch/mips/Kbuild
+> > index e901bf554483..6125d00cdcef 100644
+> > --- a/arch/mips/Kbuild
+> > +++ b/arch/mips/Kbuild
+> > @@ -21,5 +21,7 @@ ifdef CONFIG_KVM
+> >  obj-y +=3D kvm/
+> >  endif
+> > =20
+> > +subdir-y +=3D boot/dts
+> > +
+> >  # for cleaning
+> >  subdir- +=3D boot
+> > diff --git a/arch/riscv/Kbuild b/arch/riscv/Kbuild
+> > index 126fb738fc44..3cf7f84eb287 100644
+> > --- a/arch/riscv/Kbuild
+> > +++ b/arch/riscv/Kbuild
+> > @@ -7,5 +7,7 @@ obj-$(CONFIG_KVM) +=3D kvm/
+> > =20
+> >  obj-$(CONFIG_ARCH_SUPPORTS_KEXEC_PURGATORY) +=3D purgatory/
+> > =20
+> > +subdir-y +=3D boot/dts
+> > +
+> >  # for cleaning
+> >  subdir- +=3D boot
+> > diff --git a/scripts/Makefile.dtbs b/scripts/Makefile.dtbs
+> > index 2d321b813600..4d0d164df275 100644
+> > --- a/scripts/Makefile.dtbs
+> > +++ b/scripts/Makefile.dtbs
+> > @@ -14,7 +14,10 @@ dtb-y           :=3D $(addprefix $(obj)/, $(dtb-y))
+> >  multi-dtb-y     :=3D $(addprefix $(obj)/, $(multi-dtb-y))
+> >  real-dtb-y      :=3D $(addprefix $(obj)/, $(real-dtb-y))
+> > =20
+> > +ifneq ($(findstring /dts/,$(MAKECMDGOALS))$(findstring dtb,$(MAKECMDGO=
+ALS)),)
 
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+Using '$(filter )' instead of '$(findstring )' reduces the risk of false
+positives, e.g.:
+
+dtb-targets :=3D %/dts %.dtb %.dtbo dtbs dtbs_check
+ifneq ($(findstring /dts/,$(MAKECMDGOALS))$(filter $(dtb-targets),$(MAKECMD=
+GOALS)),)
+
+
+With (something like) that:
+Tested-by: Nicolas Schier <nsc@kernel.org>
+Acked-by: Nicolas Schier <nsc@kernel.org>
+
+But [1] seems to break this patch.
+
+[1]: https://lore.kernel.org/linux-kbuild/20251120140645.478623-1-thomas.de=
+_schampheleire@nokia.com
+
+Kind regards,
+Nicolas
+
+--AfpfqPLkSPOJGvv9
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEh0E3p4c3JKeBvsLGB1IKcBYmEmkFAmkgwKoACgkQB1IKcBYm
+Emm8Qw/+MwI0xujbY4z6kH8eqisZOdw3rGVbln1KTIUnNXmON6raX7XFOnAxqaHI
+BhYiwbUYWUHKeHApq1XCTR4WKNtzMYiID+zA0HuwxuqOlzdPwl35Xn+nvBw/Mmfw
+xUF9nqlmFu7MH9xIOfbWotGMIgqBc5FKAflHwHGpjW009mvPQ5hnMqiXk0DVu8oz
+rVLhviLqgjsx2ESl0sgkfiOBt0ygtzFKvUrqSVixl/sB5nI7sOhU190u8qvpZ/bV
+Pc6s9+IUhTv5+iaxhTUcsQjZTgHp5KJSrlmcIUY5eLdwFQRFAB3w4Kx8xNY8NO02
+xLPZSQ28FcJaBuRyLTYFy4CaVOMKV2r2JW5DUdkUxuIwh9UdEkOjCQSWfomRALGc
+PlZzKpsUp7p76fW2WkbjN9r45qCRFdaWEN3olr9vBh0Y5u+1AnZh7Ej/lws7Cj4z
+sEBo6QdAlP0ofjB1JrNP98MMOQu1Tr3fOwkadCmyRtuYqJG72Tj7t6EBrC/JRoS0
+MFl/XEPHgQcjRgVIWEfFtCwrflq2jO/f2fbfTZHPxbMbj99CATyDDTy+QWzB8bhT
+RqrzlrejhI4WV27fReo4wMk/Og8ewO0/h2mloIi1hrORFClz5M+aU3CCEvFu2hfY
++hBhCWYDLSN4n5mUhA6nH/RFdZoNohijzS15aqmkCNWx1yM/g5I=
+=pv6m
+-----END PGP SIGNATURE-----
+
+--AfpfqPLkSPOJGvv9--
 
