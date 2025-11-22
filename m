@@ -1,64 +1,42 @@
-Return-Path: <linux-mips+bounces-12322-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12323-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6C8BC7BD8D
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Nov 2025 23:23:19 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75E2AC7D7A1
+	for <lists+linux-mips@lfdr.de>; Sat, 22 Nov 2025 21:48:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0776E3A87B5
-	for <lists+linux-mips@lfdr.de>; Fri, 21 Nov 2025 22:21:43 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 3C72D4E07D3
+	for <lists+linux-mips@lfdr.de>; Sat, 22 Nov 2025 20:48:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0924C30DD21;
-	Fri, 21 Nov 2025 22:20:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GJesF9+6"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B1C121C9E5;
+	Sat, 22 Nov 2025 20:48:15 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA8F430CDAB;
-	Fri, 21 Nov 2025 22:20:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 368691F5858;
+	Sat, 22 Nov 2025 20:48:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763763635; cv=none; b=Ucwewh0q4MC/Bx6Ppkpv0LsxHcvmjvo5tt0d6t1g6RhWhr425Ep9MGeCgOxCeng7aRlZkdQJs7T/WFe2U4Y8bYHoxWy/sdbXH6heg/K3Q8Tjca4vSF2ZxYrJpbGo8pvZbrItlKzDofVijgyHtLmACvlujIdt8dSpTyfqnNsDujA=
+	t=1763844495; cv=none; b=ulZTzImMhUWBfy4jaL7lLrpXyJjjoYjKQSXd98W7xgtNi/QwiZbxwYbccdnWSYT8HQcMjMLXsl2ffN1ybwBsnD0FC9/VRgNgZEKvr7pNzz7JTQE4eKBGNu21sQf3cWLI5ETy4aQYBgd2PhaJhrtdxBxAxA9Fbu01KHY9YO79lJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763763635; c=relaxed/simple;
-	bh=IA7dRYfgmLM6hh4dPmzDRF9cilrSQigzy922nod1WPA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=u8kTp9N8lQJFDxCaFc2JBxzMh3sT+ljOZWEqfdswtK/svZfA3XfZLYpotiVCxkj1ClgM/gb7S55iXeBTuYfxsJWEA9TJYMnBaU/OsAzg3gXlO1Z3xkfVYmE2KVXNJxgLlRqTXu0A49MVOiSPiT14xpORTmdLZfdxIkrvk2TUl2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GJesF9+6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4F6DEC4CEF1;
-	Fri, 21 Nov 2025 22:20:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1763763635;
-	bh=IA7dRYfgmLM6hh4dPmzDRF9cilrSQigzy922nod1WPA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=GJesF9+6JXaHzGISpMpsgsByjjJRM0QtCtvm2qL3gNgta24CuCZbdho3/MCwy/6rm
-	 wTEygSGamPSDbl3LFobWCmgI0rPTUqF1eXo3FPj74vkKRYzqfWP8cE0MgKC7IQoIH1
-	 Z8PuCzaUKBcT+azvdSyjcMzK7TM21it/2mqnGZILw9g6yIpTZxkntKATJijxGupIy+
-	 cjOXjavQ62AwFHXfiyG1RyjkAMXVuPdgEH8aFq4snwjSQDUU2NkQJfkILhOEHJggNM
-	 RO6mCyvbw2bYilLbZKOHaF3d/PsO61RNb9mtw3RWYiN1EPtvTQ2jO37K3rML5gd/Yc
-	 +CNi7KS/9M9SA==
-Date: Fri, 21 Nov 2025 15:20:29 -0700
-From: Nathan Chancellor <nathan@kernel.org>
-To: Nicolas Schier <nsc@kernel.org>
-Cc: "Rob Herring (Arm)" <robh@kernel.org>,
-	Russell King <linux@armlinux.org.uk>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>,
-	linux-kbuild@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-mips@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2] kbuild: Support directory targets for building DTBs
-Message-ID: <20251121222029.GA1674270@ax162>
-References: <20251120204812.1983452-4-robh@kernel.org>
- <20251121063033.GA571346@ax162>
- <aSDAqhUb8_76IP0Y@derry.ads.avm.de>
+	s=arc-20240116; t=1763844495; c=relaxed/simple;
+	bh=i1UWevb9o1kQXVkncYPOdFDymHqA4jy/qMAlR7RQpU4=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=muhePAWUCMILgf7An26Y2g62Z4sl7XIN3Op7VtORaMaH4jKlFkBnE4p0jFeCGq+PE55ncAjYOvQ/PO+dgdO5hF5ozwSYatZHbsy1npmqicLYmYjaFlQbDTCq38wlfxGALn42LplnqxT7wZMib+VVHEMmfyl5WylO1LtT5n3UX6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1vMuWZ-0004gJ-00; Sat, 22 Nov 2025 21:48:03 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 99B2BC0256; Sat, 22 Nov 2025 21:47:53 +0100 (CET)
+Date: Sat, 22 Nov 2025 21:47:53 +0100
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: torvalds@linux-foundation.org
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] MIPS fixes for v6.18
+Message-ID: <aSIhefXIXrLpMaC5@alpha.franken.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -67,32 +45,43 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aSDAqhUb8_76IP0Y@derry.ads.avm.de>
 
-On Fri, Nov 21, 2025 at 08:42:34PM +0100, Nicolas Schier wrote:
-> Using '$(filter )' instead of '$(findstring )' reduces the risk of false
-> positives, e.g.:
-> 
-> dtb-targets := %/dts %.dtb %.dtbo dtbs dtbs_check
-> ifneq ($(findstring /dts/,$(MAKECMDGOALS))$(filter $(dtb-targets),$(MAKECMDGOALS)),)
+The following changes since commit e9a6fb0bcdd7609be6969112f3fbfcce3b1d4a7c:
 
-Oh yeah, that would seem to clear up my concerns.
+  Linux 6.18-rc5 (2025-11-09 15:10:19 -0800)
 
-> With (something like) that:
-> Tested-by: Nicolas Schier <nsc@kernel.org>
-> Acked-by: Nicolas Schier <nsc@kernel.org>
+are available in the Git repository at:
 
-Agreed.
+  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips-fixes_6.18_1
 
-Acked-by: Nathan Chancellor <nathan@kernel.org>
+for you to fetch changes up to 14b46ba92bf547508b4a49370c99aba76cb53b53:
 
-> But [1] seems to break this patch.
-> 
-> [1]: https://lore.kernel.org/linux-kbuild/20251120140645.478623-1-thomas.de_schampheleire@nokia.com
+  MIPS: kernel: Fix random segmentation faults (2025-11-21 13:24:05 +0100)
 
-Yeah, that will need to be coordinated, I cc'd Rob on that change for
-him to take a look as well.
+----------------------------------------------------------------
+- Fix CPU type in DT for econet
+- Fix for Malta PCI MMIO breakage for SOC-it
+- Fix TLB shutdown caused by iniital uniquification
+- Fix random seg faults
 
-Cheers,
-Nathan
+----------------------------------------------------------------
+Aleksander Jan Bajkowski (1):
+      mips: dts: econet: fix EN751221 core type
+
+Maciej W. Rozycki (2):
+      MIPS: Malta: Fix !EVA SOC-it PCI MMIO
+      MIPS: mm: Prevent a TLB shutdown on initial uniquification
+
+Thomas Bogendoerfer (1):
+      MIPS: kernel: Fix random segmentation faults
+
+ arch/mips/boot/dts/econet/en751221.dtsi |   2 +-
+ arch/mips/kernel/process.c              |   2 +-
+ arch/mips/mm/tlb-r4k.c                  | 100 ++++++++++++++++++++------------
+ arch/mips/mti-malta/malta-init.c        |  20 ++++---
+ 4 files changed, 78 insertions(+), 46 deletions(-)
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
