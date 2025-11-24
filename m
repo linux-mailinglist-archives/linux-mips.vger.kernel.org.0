@@ -1,259 +1,484 @@
-Return-Path: <linux-mips+bounces-12339-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12341-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 303A3C81643
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Nov 2025 16:40:52 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9363DC81697
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Nov 2025 16:46:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 049483A3963
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Nov 2025 15:40:50 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id BDF5834265B
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Nov 2025 15:46:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73F61313E2A;
-	Mon, 24 Nov 2025 15:40:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DCDA283FD4;
+	Mon, 24 Nov 2025 15:46:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="B71CXKXG"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="Je9RL/4o"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B6C0311C1F
-	for <linux-mips@vger.kernel.org>; Mon, 24 Nov 2025 15:40:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4509F1459F6
+	for <linux-mips@vger.kernel.org>; Mon, 24 Nov 2025 15:46:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1763998845; cv=none; b=Oy4fVa/GgzgPpx4rdFhlGMXsv2sOU5IkDm+S+3/wv8VQKGqwNmMc4HN6Xm+VckRz88uTmmtuTfswGLKtPJ6V0JIfk0WOErwCXRESWxy3vZRK2Q6bXdz5apFQ5OI94g88BkIRXhwOfKQPyRxAr+fGXw06qL98Lyf5pnoKYstG9I0=
+	t=1763999213; cv=none; b=arww2u1vvlcxCWXlEGx3EWPNGBoUxiFrlpZbVsojZdTkFxGeElcqB2Zk9q9vXG31QhDwJM7QPG4bNqyh1SEBgUDDW2AtVcLYQLwqk0+qYHeUwvpn64lwrlCiUQQiu1EOISE8vmNsiOP8etMAYb6GM+FqB7U4pHWFOBpZAu5am+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1763998845; c=relaxed/simple;
-	bh=Ur80bf67IWJP9P3NyHLEyhZMGM2yEXjoM26RAeQoVDY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Q+Q3aLvKHmccVAD7zH6ddVn6sAIlMON1eyHkFvksbYpNGkLogPhOjRhjJGodNI7WDdXLfib3DUg8nuFYgBeUx3jN1PPnR4XwsQQLJxAcb28AXcDn8RIFzmC+3WyQGlqRrCiFO7OQ85W9b3hxY81gVCf/ameLi1/A6LoVa2towHo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=B71CXKXG; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-341988c720aso3748118a91.3
-        for <linux-mips@vger.kernel.org>; Mon, 24 Nov 2025 07:40:43 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1763998842; x=1764603642; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=Llp8FG6WVJOxC42YZnLNsTS0zXwdgkxLlwBk+kzHwR8=;
-        b=B71CXKXGRfl4sO0Qd4Bp3nwb2CR0DYeEU05+DJf3VB2iALLwOVrDANowFVPuyt8jG4
-         P4f3SEx9KrnIV6opSeFm2y6TfC2DlzsPscmZ0T8EPXWIhBVazs8GtRmLgVFVOtQy9bgM
-         bBJmEF3TYWU8z8ykZIhO8383OYuNk/paUf+6e5g18cg8M+jBwy7Ip15szx1CoTS2UPDP
-         F0XtWn9XSpSeUt59CEndLHW9k97WQQ+snM/q7pu7aH/asJGE46znCRvh8b8STAUgvm+A
-         hcKZbIMlwdPPMBHXy3Yc9kFdiqfGq1TiWRHf8nq/9tN8VW7Ag7aRkDmPdYRAsjXfc1He
-         8urA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1763998842; x=1764603642;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Llp8FG6WVJOxC42YZnLNsTS0zXwdgkxLlwBk+kzHwR8=;
-        b=jyosigBWAcR5+yjlf29lQTQieThqAFkVIs9BXawgBAA+3Q0cZYfDw9oZP+L4kjEYFE
-         hnNAZIMunpRQDjbRho0eOhoEhFm8wDNIF2alUsY0O/oDiOFOGz5qZCJJEtPJ5JO6oMYu
-         sGN7X63S4pQuX4yto8dpSXFJYTO2G36TNeRHu1KIxmVOeYWmpqP53gB6fTso9lf0WjCj
-         E5+lg6Zh02QIrT8P8OrLNz/Rg9oDAYLzUMpuqU/LSqfR6D5e719nngvaZ833nip12l+i
-         SEyL+Z7ipLQSxEwwDY1llrUXBkdb2v2+kxTuLX0D7JSx4x41XLfSEAzb2a/HupgliEbF
-         EJ6Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUwTkrH5tbOD7oJ2u2RJC9YUOC+Ce/ghMzbar7eYzu8MjtNgiOkU9P76YNwxly9Tx/Hg3MXZpX8tbMv@vger.kernel.org
-X-Gm-Message-State: AOJu0YxniBY/wpyvb8pvW8Lij2mN8MlqkMuzoNyqfFS1RAMu16x+V1PP
-	uuRQGcgK7cdjE2sr5o5c2DOWxBMoK+gGzS7u90XxfS0HP4jJe4onCKqG
-X-Gm-Gg: ASbGncsXnaXf2If79YwTvRadH1dqsQJdVix0IXUB3lifh/BYlMBdlrDVXzSerAOjOGJ
-	CN4jfFeoBy9jVUr2pLJANr1RvUOpXHpYBSYZV2tMAZyfYyEf39psNyHK39hTHF4yyGY8X8qzqjk
-	sRNmFnLah4PdAFaJVfDzIYS1+z/rnz6muxBzzz7L9myNRqPAw0JY36y5IaXzYYGBshbtZi/GCsm
-	3kZDDsJpl64IK/1LJD0GDa9GtYtuAWw+JKuiwwEEicJyCXItJl01sor3oQVVd0YLeq8gsA/BY2/
-	yggCV1GQJ7Nf9HZmHibesC8szPbAm0V22/v8owj0BPDXBh+ftCO20vKXI99PxlZZgokum9SyMg2
-	bpL3ahumAMKcBYAjg3KUKBzA7XtGL4FuXlC7u1LZkKxWLyBP9EojLPLx+uCAzkImXAJu1HLvLoa
-	oezVHug8jtRzkAVjSznrhiQ3KWzMqWU5ZDTiZqLY7RBsA7V7VfXrFq5kQJ6mc=
-X-Google-Smtp-Source: AGHT+IEFPQhBfCYRI3nTm1u+iQCIbAQZlcFtON++Fnq7DdJGduD9vDQYDBrSvMWcgiV0KUw17gd6Yw==
-X-Received: by 2002:a17:90b:5112:b0:340:bde5:c9e3 with SMTP id 98e67ed59e1d1-34733f2d207mr11198788a91.23.1763998842365;
-        Mon, 24 Nov 2025 07:40:42 -0800 (PST)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-3472692e5c8sm14034703a91.11.2025.11.24.07.40.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Nov 2025 07:40:41 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <da5457ea-c1ed-4c90-8743-fc982a02ed88@roeck-us.net>
-Date: Mon, 24 Nov 2025 07:40:37 -0800
+	s=arc-20240116; t=1763999213; c=relaxed/simple;
+	bh=NM+/IJ3k2efwhCRL/mYIf5Q1RTRtXNvy6paCoAqLJnU=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=c3FhOukxgDWUcpDP8Fmxw1Jc72TWUavfw6nasVOrJbi2KEbBsLrfxRX8O1ijdv56ASAdaMeDntUB417MYqW7i0vT2Ug4ezO7Ya5YmQTH8f7h4ivNC2HLSiK3mqP7nYkCLe2EgSA82ghNytObr1sQJfqf3evHEgxxXaS+LlQ8Z+k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=Je9RL/4o; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 3957D1A1D0A;
+	Mon, 24 Nov 2025 15:46:47 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 0F002606FC;
+	Mon, 24 Nov 2025 15:46:47 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id C873110371D33;
+	Mon, 24 Nov 2025 16:46:45 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1763999206; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=6EiACZU1mBs645knlMFbn73G0SdeX/wH9rAyVZjZHE8=;
+	b=Je9RL/4ofSZX+sph6azZzgW0KhiBVvQP150CvD5gOk9luAuntUT8N3JEbz//du/8mmEYX5
+	00ch+y6bgWsUmqlyuysSxAEaqT2HGRnJV/KZd3ukQv626AoyWG+G54IMSGh6MIjEXclTbj
+	bgbhbE5LG84L4SCjvGC5yF2fEBe0wvZ9VUpaQBZBw1JW/lf8GSFoKRiK3kI7dT+RbIgoDS
+	qDPtGcO6Qj/HCpPpFAjE2m6GaKJndXNXyfiB7VeODwqmdy0e/ClqvSHbN5rxRQkvYsQJCT
+	X4M6Hbrj5vq1fp675sHRSmo8GfjFGSFlRYdXjdpFL65V1WEiQgVHljUuwY4PfA==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ torvalds@linux-foundation.org
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] MIPS fixes for v6.18
+In-Reply-To: <aSIhefXIXrLpMaC5@alpha.franken.de>
+References: <aSIhefXIXrLpMaC5@alpha.franken.de>
+Date: Mon, 24 Nov 2025 16:46:44 +0100
+Message-ID: <87wm3f8mcb.fsf@BLaptop.bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 0/6] Add support for the LTM8054 voltage regulator
-To: Romain Gantois <romain.gantois@bootlin.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
- David Lechner <dlechner@baylibre.com>, =?UTF-8?Q?Nuno_S=C3=A1?=
- <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>
-Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-iio@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>,
- MyungJoo Ham <myungjoo.ham@samsung.com>, Chanwoo Choi
- <cw00.choi@samsung.com>, Peter Rosin <peda@axentia.se>,
- Mariel Tinaco <Mariel.Tinaco@analog.com>,
- Lars-Peter Clausen <lars@metafoo.de>,
- Michael Hennerich <Michael.Hennerich@analog.com>,
- Kevin Tsai <ktsai@capellamicro.com>, Linus Walleij
- <linus.walleij@linaro.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Eugen Hristev <eugen.hristev@linaro.org>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>,
- Sebastian Reichel <sre@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
- Support Opensource <support.opensource@diasemi.com>,
- Paul Cercueil <paul@crapouillou.net>, Iskren Chernev <me@iskren.info>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Matheus Castello <matheus@castello.eng.br>,
- Saravanan Sekar <sravanhome@gmail.com>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Casey Connolly <casey.connolly@linaro.org>, =?UTF-8?Q?Pali_Roh=C3=A1r?=
- <pali@kernel.org>, Orson Zhai <orsonzhai@gmail.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- Chunyan Zhang <zhang.lyra@gmail.com>, Amit Kucheria <amitk@kernel.org>,
- Thara Gopinath <thara.gopinath@gmail.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
- Sylwester Nawrocki <s.nawrocki@samsung.com>,
- Olivier Moysan <olivier.moysan@foss.st.com>,
- Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Dixit Parmar <dixitparmar19@gmail.com>, linux-hwmon@vger.kernel.org,
- linux-input@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-pm@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- Andy Shevchenko <andriy.shevchenko@intel.com>
-References: <20251124-ltm8054-driver-v4-0-107a8a814abe@bootlin.com>
- <24527d76-4f6a-4008-a369-23510d492a94@roeck-us.net>
- <23111366.EfDdHjke4D@fw-rgant>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- np3900V20aS7eD9K8GTU0TGC1pyz6IVJwIE=
-In-Reply-To: <23111366.EfDdHjke4D@fw-rgant>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Last-TLS-Session-Version: TLSv1.3
 
-On 11/24/25 07:13, Romain Gantois wrote:
-> Hello Guenter,
-> 
-> 
-> On Monday, 24 November 2025 15:57:41 CET Guenter Roeck wrote:
-> 
->  > On 11/24/25 06:48, Romain Gantois wrote:
-> 
->  > > Hello everyone,
-> 
->  > >
-> 
->  > > This is version four of my series which adds initial support of the Linear
-> 
->  > > Technology LTM8054 voltage regulator. The driver supports a fixed voltage
-> 
->  > > and a tunable output current limit using a DAC-controlled pin.
-> 
->  > >
-> 
->  > > I'd say that the most unusual part of this series is the usage of the IIO
-> 
->  > > consumer API in a regulator driver. I think this makes sense here, since
-> 
->  > > the regulator driver has to access a DAC to read/set the output current
-> 
->  > > limit.
-> 
->  >
-> 
->  > I don't think that is a valid reason. Literally every driver measuring
-> 
->  > voltages or current uses a DAC to do it. How else would one convert an
-> 
->  > analog value into a digital value ?
-> 
-> 
-> Sorry, I don't quite understand your remark. To integrate this voltage
-> 
-> regulator component into the Linux regulator abstraction, I'm providing a
-> 
-> current limit control function. To provide such a function, the voltage level
-> 
-> on a pin has to be controlled. AFAIK, the kernel abstraction used to set
-> 
-> precise voltages on lines is an IO channel.
-> 
-> 
-> Do you think that using the IIO consumer API is not correct here? What other
-> 
-> method do you think I should use?
-> 
+Hello Thomas,
 
-Ok, I had a look into the datasheet. Unless I am missing something, the chip doesn't
-have a digital control or monitoring interface such as I2C or SPI.
+> The following changes since commit e9a6fb0bcdd7609be6969112f3fbfcce3b1d4a=
+7c:
+>
+>   Linux 6.18-rc5 (2025-11-09 15:10:19 -0800)
+>
+> are available in the Git repository at:
+>
+>   git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips=
+-fixes_6.18_1
+>
+> for you to fetch changes up to 14b46ba92bf547508b4a49370c99aba76cb53b53:
+>
+>   MIPS: kernel: Fix random segmentation faults (2025-11-21 13:24:05 +0100)
+>
+> ----------------------------------------------------------------
+> - Fix CPU type in DT for econet
+> - Fix for Malta PCI MMIO breakage for SOC-it
+> - Fix TLB shutdown caused by iniital uniquification
+> - Fix random seg faults
+>
+> ----------------------------------------------------------------
+> Aleksander Jan Bajkowski (1):
+>       mips: dts: econet: fix EN751221 core type
+>
+> Maciej W. Rozycki (2):
+>       MIPS: Malta: Fix !EVA SOC-it PCI MMIO
+>       MIPS: mm: Prevent a TLB shutdown on initial uniquification
 
-At the same time, you copied the hardware monitoring mailing list on this summary and
-on (at least) one of the patches, but apparently not on all of them. This lead to my
-apparently wrong assumption that iio is used to monitor (not [just] control) something
-on the chip. I wrongly assumed that IIO is used to report chip status (voltage, current,
-temperature) using an internal DAC. Obviously that was a wrong assumption.
-Sorry for that.
+Today, the kernel v6.18-rc7 no longer boots on EyeQ5 and EyeQ6H (MIPS
+I6500)-based boards. After a git bisect between v6.18-rc6 and v6.18-rc7,
+we found that the culprit is the commit "MIPS: mm: Prevent a TLB
+shutdown on initial uniquification".
 
-Apparently you copied the hwmon mailing list for the introduction of an IIO namespace
-and its use in a couple of hwmon drivers in one of the patches. My personal opinion
-is that this should not be part of this series but a series of its own. That is just
-my personal opinion, though.
+Here is the log from a vanilla v6.18-rc7:
 
-Guenter
+Linux version 6.18.0-rc7 (gclement@BLaptop) (mips-img-linux-gnu-gcc (Codesc=
+ape GNU Tools 2021.09-01 for MIPS IMG Linux) 11.2.0, GNU ld (Codescape GNU =
+Tools 2021.09-01 for MIPS IMG Linux) 2.31.1) #1015 SMP Mon Nov 24 14:48:06 =
+CET 2025
+CPU0 revision is: 0001b031 (MIPS I6500)
+FPU revision is: 20f30320
+MSA revision is: 00000320
+MIPS: machine is Mobile EyeQ6H MP6 Evaluation board
+earlycon: pl11 at MMIO32 0x00000000d3331000 (options '921600n8')
+printk: legacy bootconsole [pl11] enabled
+Initrd not found or empty - disabling initrd
+OF: reserved mem: Reserved memory: No reserved-memory node in the DT
+VP topology {4,4,4,4},{4,4,4,4} total 32
+VP Local Reset Exception Base support 47 bits address
+Primary instruction cache 64kB, VIPT, 4-way, linesize 64 bytes.
+Primary data cache 32kB, 4-way, PIPT, no aliases, linesize 64 bytes
+MIPS secondary cache 1024kB, 16-way, linesize 64 bytes.
+Zone ranges:
+  Normal   [mem 0x0000000100000000-0x00000001ffffffff]
+Movable zone start for each node
+Early memory node ranges
+  node   0: [mem 0x0000000100000000-0x00000001ffffffff]
+Initmem setup node 0 [mem 0x0000000100000000-0x00000001ffffffff]
+percpu: Embedded 6 pages/cpu s46496 r8192 d43616 u98304
+Kernel command line: earlycon
+printk: log buffer data + meta data: 131072 + 458752 =3D 589824 bytes
+Dentry cache hash table entries: 524288 (order: 8, 4194304 bytes, linear)
+Inode-cache hash table entries: 262144 (order: 7, 2097152 bytes, linear)
 
+and with the commit reverted:
+
+Linux version 6.18.0-rc7-00001-g67a4ac15d5c5 (gclement@BLaptop) (mips-img-l=
+inux-gnu-gcc (Codescape GNU Tools 2021.09-01 for MIPS IMG Linux) 11.2.0, GN=
+U ld (Codescape GNU Tools 2021.09-01 for MIPS IMG Linux) 2.31.1) #1016 SMP =
+Mon Nov 24 16:17:40 CET 2025
+CPU0 revision is: 0001b031 (MIPS I6500)
+FPU revision is: 20f30320
+MSA revision is: 00000320
+MIPS: machine is Mobile EyeQ6H MP6 Evaluation board
+earlycon: pl11 at MMIO32 0x00000000d3331000 (options '921600n8')
+printk: legacy bootconsole [pl11] enabled
+Initrd not found or empty - disabling initrd
+OF: reserved mem: Reserved memory: No reserved-memory node in the DT
+VP topology {4,4,4,4},{4,4,4,4} total 32
+VP Local Reset Exception Base support 47 bits address
+Primary instruction cache 64kB, VIPT, 4-way, linesize 64 bytes.
+Primary data cache 32kB, 4-way, PIPT, no aliases, linesize 64 bytes
+MIPS secondary cache 1024kB, 16-way, linesize 64 bytes.
+Zone ranges:
+  Normal   [mem 0x0000000100000000-0x00000001ffffffff]
+Movable zone start for each node
+Early memory node ranges
+  node   0: [mem 0x0000000100000000-0x00000001ffffffff]
+Initmem setup node 0 [mem 0x0000000100000000-0x00000001ffffffff]
+percpu: Embedded 6 pages/cpu s46496 r8192 d43616 u98304
+Kernel command line: earlycon
+printk: log buffer data + meta data: 131072 + 458752 =3D 589824 bytes
+Dentry cache hash table entries: 524288 (order: 8, 4194304 bytes, linear)
+Inode-cache hash table entries: 262144 (order: 7, 2097152 bytes, linear)
+ebase(0x0000000100610000) should better be in KSeg0
+Cache parity protection enabled
+MAAR configuration:
+  [0]: 0x0000000100000000-0x00000001ffffffff speculate
+  [1]: disabled
+  [2]: disabled
+Built 1 zonelists, mobility grouping on.  Total pages: 262144
+mem auto-init: stack:off, heap alloc:off, heap free:off
+SLUB: HWalign=3D128, Order=3D0-3, MinObjects=3D0, CPUs=3D16, Nodes=3D1
+rcu: Hierarchical RCU implementation.
+        Tracing variant of Tasks RCU enabled.
+rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+RCU Tasks Trace: Setting shift to 4 and lim to 1 rcu_task_cb_adjust=3D1 rcu=
+_task_cpu_ids=3D16.
+NR_IRQS: 256
+rcu: srcu_init: Setting srcu_struct sizes based on contention.
+clocksource: GIC: mask: 0xffffffffffffffff max_cycles: 0x19e832f0bf5, max_i=
+dle_ns: 440795257573 ns
+sched_clock: 64 bits at 1797MHz, resolution 0ns, wraps every 4398046511103ns
+clocksource: MIPS: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 21=
+26812937 ns
+Console: colour dummy device 80x25
+printk: legacy console [tty0] enabled
+printk: legacy bootconsole [pl11] disabled
+Linux version 6.18.0-rc7-00001-g67a4ac15d5c5 (gclement@BLaptop) (mips-img-l=
+inux-gnu-gcc (Codescape GNU Tools 2021.09-01 for MIPS IMG Linux) 11.2.0, GN=
+U ld (Codescape GNU Tools 2021.09-01 for MIPS IMG Linux) 2.31.1) #1016 SMP =
+Mon Nov 24 16:17:40 CET 2025
+CPU0 revision is: 0001b031 (MIPS I6500)
+FPU revision is: 20f30320
+MSA revision is: 00000320
+MIPS: machine is Mobile EyeQ6H MP6 Evaluation board
+earlycon: pl11 at MMIO32 0x00000000d3331000 (options '921600n8')
+printk: legacy bootconsole [pl11] enabled
+Initrd not found or empty - disabling initrd
+OF: reserved mem: Reserved memory: No reserved-memory node in the DT
+VP topology {4,4,4,4},{4,4,4,4} total 32
+VP Local Reset Exception Base support 47 bits address
+Primary instruction cache 64kB, VIPT, 4-way, linesize 64 bytes.
+Primary data cache 32kB, 4-way, PIPT, no aliases, linesize 64 bytes
+MIPS secondary cache 1024kB, 16-way, linesize 64 bytes.
+Zone ranges:
+  Normal   [mem 0x0000000100000000-0x00000001ffffffff]
+Movable zone start for each node
+Early memory node ranges
+  node   0: [mem 0x0000000100000000-0x00000001ffffffff]
+Initmem setup node 0 [mem 0x0000000100000000-0x00000001ffffffff]
+percpu: Embedded 6 pages/cpu s46496 r8192 d43616 u98304
+Kernel command line: earlycon
+printk: log buffer data + meta data: 131072 + 458752 =3D 589824 bytes
+Dentry cache hash table entries: 524288 (order: 8, 4194304 bytes, linear)
+Inode-cache hash table entries: 262144 (order: 7, 2097152 bytes, linear)
+ebase(0x0000000100610000) should better be in KSeg0
+Cache parity protection enabled
+MAAR configuration:
+  [0]: 0x0000000100000000-0x00000001ffffffff speculate
+  [1]: disabled
+  [2]: disabled
+Built 1 zonelists, mobility grouping on.  Total pages: 262144
+mem auto-init: stack:off, heap alloc:off, heap free:off
+SLUB: HWalign=3D128, Order=3D0-3, MinObjects=3D0, CPUs=3D16, Nodes=3D1
+rcu: Hierarchical RCU implementation.
+        Tracing variant of Tasks RCU enabled.
+rcu: RCU calculated value of scheduler-enlistment delay is 25 jiffies.
+RCU Tasks Trace: Setting shift to 4 and lim to 1 rcu_task_cb_adjust=3D1 rcu=
+_task_cpu_ids=3D16.
+NR_IRQS: 256
+rcu: srcu_init: Setting srcu_struct sizes based on contention.
+clocksource: GIC: mask: 0xffffffffffffffff max_cycles: 0x19e832f0bf5, max_i=
+dle_ns: 440795257573 ns
+sched_clock: 64 bits at 1797MHz, resolution 0ns, wraps every 4398046511103ns
+clocksource: MIPS: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 21=
+26812937 ns
+Console: colour dummy device 80x25
+printk: legacy console [tty0] enabled
+printk: legacy bootconsole [pl11] disabled
+Calibrating delay loop... 1795.07 BogoMIPS (lpj=3D3590144)
+pid_max: default: 32768 minimum: 301
+Mount-cache hash table entries: 8192 (order: 2, 65536 bytes, linear)
+Mountpoint-cache hash table entries: 8192 (order: 2, 65536 bytes, linear)
+HCI (Hardware Cache Init for the L2 cache) in GCR_L2_RAM_CONFIG from the CM=
+3 is broken
+MMID support disabled due to hardware support issue
+rcu: Hierarchical SRCU implementation.
+rcu:    Max phase no-delay instances is 1000.
+Timer migration: 2 hierarchy levels; 8 children per group; 2 crossnode level
+smp: Bringing up secondary CPUs ...
+Primary instruction cache 64kB, VIPT, 4-way, linesize 64 bytes.
+Primary data cache 32kB, 4-way, PIPT, no aliases, linesize 64 bytes
+MIPS secondary cache 1024kB, 16-way, linesize 64 bytes.
+CPU4 revision is: 0001b031 (MIPS I6500)
+FPU revision is: 20f30320
+MSA revision is: 00000320
+Primary instruction cache 64kB, VIPT, 4-way, linesize 64 bytes.
+Primary data cache 32kB, 4-way, PIPT, no aliases, linesize 64 bytes
+MIPS secondary cache 1024kB, 16-way, linesize 64 bytes.
+CPU8 revision is: 0001b031 (MIPS I6500)
+FPU revision is: 20f30320
+MSA revision is: 00000320
+Primary instruction cache 64kB, VIPT, 4-way, linesize 64 bytes.
+Primary data cache 32kB, 4-way, PIPT, no aliases, linesize 64 bytes
+MIPS secondary cache 1024kB, 16-way, linesize 64 bytes.
+CPU12 revision is: 0001b031 (MIPS I6500)
+FPU revision is: 20f30320
+MSA revision is: 00000320
+Counter synchronization [CPU#0 -> CPU#4]: passed
+Counter synchronization [CPU#0 -> CPU#8]: passed
+Counter synchronization [CPU#0 -> CPU#12]: passed
+Primary instruction cache 64kB, VIPT, 4-way, linesize 64 bytes.
+Primary data cache 32kB, 4-way, PIPT, no aliases, linesize 64 bytes
+MIPS secondary cache 1024kB, 16-way, linesize 64 bytes.
+CPU1 revision is: 0001b031 (MIPS I6500)
+FPU revision is: 20f30320
+MSA revision is: 00000320
+Primary instruction cache 64kB, VIPT, 4-way, linesize 64 bytes.
+Primary data cache 32kB, 4-way, PIPT, no aliases, linesize 64 bytes
+MIPS secondary cache 1024kB, 16-way, linesize 64 bytes.
+CPU2 revision is: 0001b031 (MIPS I6500)
+FPU revision is: 20f30320
+MSA revision is: 00000320
+Primary instruction cache 64kB, VIPT, 4-way, linesize 64 bytes.
+Primary data cache 32kB, 4-way, PIPT, no aliases, linesize 64 bytes
+MIPS secondary cache 1024kB, 16-way, linesize 64 bytes.
+CPU3 revision is: 0001b031 (MIPS I6500)
+FPU revision is: 20f30320
+MSA revision is: 00000320
+Primary instruction cache 64kB, VIPT, 4-way, linesize 64 bytes.
+Primary data cache 32kB, 4-way, PIPT, no aliases, linesize 64 bytes
+MIPS secondary cache 1024kB, 16-way, linesize 64 bytes.
+CPU5 revision is: 0001b031 (MIPS I6500)
+FPU revision is: 20f30320
+MSA revision is: 00000320
+Primary instruction cache 64kB, VIPT, 4-way, linesize 64 bytes.
+Primary data cache 32kB, 4-way, PIPT, no aliases, linesize 64 bytes
+MIPS secondary cache 1024kB, 16-way, linesize 64 bytes.
+CPU6 revision is: 0001b031 (MIPS I6500)
+FPU revision is: 20f30320
+MSA revision is: 00000320
+Primary instruction cache 64kB, VIPT, 4-way, linesize 64 bytes.
+Primary data cache 32kB, 4-way, PIPT, no aliases, linesize 64 bytes
+MIPS secondary cache 1024kB, 16-way, linesize 64 bytes.
+CPU7 revision is: 0001b031 (MIPS I6500)
+FPU revision is: 20f30320
+MSA revision is: 00000320
+Primary instruction cache 64kB, VIPT, 4-way, linesize 64 bytes.
+Primary data cache 32kB, 4-way, PIPT, no aliases, linesize 64 bytes
+MIPS secondary cache 1024kB, 16-way, linesize 64 bytes.
+CPU9 revision is: 0001b031 (MIPS I6500)
+FPU revision is: 20f30320
+MSA revision is: 00000320
+Primary instruction cache 64kB, VIPT, 4-way, linesize 64 bytes.
+Primary data cache 32kB, 4-way, PIPT, no aliases, linesize 64 bytes
+MIPS secondary cache 1024kB, 16-way, linesize 64 bytes.
+CPU10 revision is: 0001b031 (MIPS I6500)
+FPU revision is: 20f30320
+MSA revision is: 00000320
+Primary instruction cache 64kB, VIPT, 4-way, linesize 64 bytes.
+Primary data cache 32kB, 4-way, PIPT, no aliases, linesize 64 bytes
+MIPS secondary cache 1024kB, 16-way, linesize 64 bytes.
+CPU11 revision is: 0001b031 (MIPS I6500)
+FPU revision is: 20f30320
+MSA revision is: 00000320
+Primary instruction cache 64kB, VIPT, 4-way, linesize 64 bytes.
+Primary data cache 32kB, 4-way, PIPT, no aliases, linesize 64 bytes
+MIPS secondary cache 1024kB, 16-way, linesize 64 bytes.
+CPU13 revision is: 0001b031 (MIPS I6500)
+FPU revision is: 20f30320
+MSA revision is: 00000320
+Primary instruction cache 64kB, VIPT, 4-way, linesize 64 bytes.
+Primary data cache 32kB, 4-way, PIPT, no aliases, linesize 64 bytes
+MIPS secondary cache 1024kB, 16-way, linesize 64 bytes.
+CPU14 revision is: 0001b031 (MIPS I6500)
+FPU revision is: 20f30320
+MSA revision is: 00000320
+Primary instruction cache 64kB, VIPT, 4-way, linesize 64 bytes.
+Primary data cache 32kB, 4-way, PIPT, no aliases, linesize 64 bytes
+MIPS secondary cache 1024kB, 16-way, linesize 64 bytes.
+CPU15 revision is: 0001b031 (MIPS I6500)
+FPU revision is: 20f30320
+MSA revision is: 00000320
+Counter synchronization [CPU#0 -> CPU#1]:
+Measured 3 cycles counter warp between CPUs
+Counter synchronization [CPU#0 -> CPU#2]:
+Measured 19 cycles counter warp between CPUs
+Counter synchronization [CPU#0 -> CPU#3]:
+Measured 8 cycles counter warp between CPUs
+Counter synchronization [CPU#0 -> CPU#5]: passed
+Counter synchronization [CPU#0 -> CPU#6]: passed
+Counter synchronization [CPU#0 -> CPU#7]: passed
+Counter synchronization [CPU#0 -> CPU#9]: passed
+Counter synchronization [CPU#0 -> CPU#10]: passed
+Counter synchronization [CPU#0 -> CPU#11]:
+Measured 6 cycles counter warp between CPUs
+Counter synchronization [CPU#0 -> CPU#13]: passed
+Counter synchronization [CPU#0 -> CPU#14]: passed
+Counter synchronization [CPU#0 -> CPU#15]: passed
+smp: Brought up 1 node, 16 CPUs
+Memory: 4143504K/4194304K available (11084K kernel code, 918K rwdata, 1976K=
+ rodata, 5776K init, 344K bss, 44288K reserved, 0K cma-reserved)
+devtmpfs: initialized
+clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns:=
+ 7645041785100000 ns
+posixtimers hash table entries: 8192 (order: 3, 131072 bytes, linear)
+futex hash table entries: 4096 (524288 bytes on 1 NUMA nodes, total 512 KiB=
+, linear).
+pinctrl core: initialized pinctrl subsystem
+NET: Registered PF_NETLINK/PF_ROUTE protocol family
+Serial: AMBA PL011 UART driver
+d3331000.serial: ttyAMA0 at MMIO 0xd3331000 (irq =3D 42, base_baud =3D 0) i=
+s a PL011 rev3
+printk: console [ttyAMA0] enabled
+SCSI subsystem initialized
+vgaarb: loaded
+clocksource: Switched to clocksource GIC
+NET: Registered PF_INET protocol family
+IP idents hash table entries: 65536 (order: 5, 524288 bytes, linear)
+tcp_listen_portaddr_hash hash table entries: 2048 (order: 1, 32768 bytes, l=
+inear)
+Table-perturb hash table entries: 65536 (order: 4, 262144 bytes, linear)
+TCP established hash table entries: 32768 (order: 4, 262144 bytes, linear)
+TCP bind hash table entries: 32768 (order: 6, 1048576 bytes, linear)
+TCP: Hash tables configured (established 32768 bind 32768)
+UDP hash table entries: 2048 (order: 3, 131072 bytes, linear)
+UDP-Lite hash table entries: 2048 (order: 3, 131072 bytes, linear)
+NET: Registered PF_UNIX/PF_LOCAL protocol family
+RPC: Registered named UNIX socket transport module.
+RPC: Registered udp transport module.
+RPC: Registered tcp transport module.
+RPC: Registered tcp-with-tls transport module.
+RPC: Registered tcp NFSv4.1 backchannel transport module.
+PCI: CLS 0 bytes, default 64
+workingset: timestamp_bits=3D46 max_order=3D18 bucket_order=3D0
+NFS: Registering the id_resolver key type
+Key type id_resolver registered
+Key type id_legacy registered
+nfs4filelayout_init: NFSv4 File Layout Driver Registering...
+nfs4flexfilelayout_init: NFSv4 Flexfile Layout Driver Registering...
+fuse: init (API version 7.45)
+Block layer SCSI generic (bsg) driver version 0.4 loaded (major 253)
+io scheduler mq-deadline registered
+io scheduler kyber registered
+io scheduler bfq registered
+pinctrl-single d3337000.pinctrl: 44 pins, size 176
+pinctrl-single d3357000.pinctrl: 44 pins, size 176
+pinctrl-single d8014000.pinctrl: 62 pins, size 248
+Serial: 8250/16550 driver, 4 ports, IRQ sharing disabled
+CAN device driver interface
+i2c_dev: i2c /dev entries driver
+sdhci: Secure Digital Host Controller Interface driver
+sdhci: Copyright(c) Pierre Ossman
+sdhci-pltfm: SDHCI platform and OF driver helper
+NET: Registered PF_INET6 protocol family
+Segment Routing with IPv6
+In-situ OAM (IOAM) with IPv6
+sit: IPv6, IPv4 and MPLS over IPv4 tunneling driver
+NET: Registered PF_PACKET protocol family
+NET: Registered PF_KEY protocol family
+can: controller area network core
+NET: Registered PF_CAN protocol family
+can: raw protocol
+can: broadcast manager protocol
+can: netlink gateway - max_hops=3D1
+Key type dns_resolver registered
+registered taskstats version 1
+Key type .fscrypt registered
+Key type fscrypt-provisioning registered
+clk: Disabling unused clocks
+mmc0: SDHCI controller on d8010000.mmc [d8010000.mmc] using ADMA 64-bit
+Freeing unused kernel image (initmem) memory: 5776K
+This architecture does not have kernel memory protection.
+Run /init as init process
+mmc0: new HS400 Enhanced strobe MMC card at address 0001
+mmcblk0: mmc0:0001 G1M15N 119 GiB
+GPT:Primary header thinks Alt. header is not at the end of the disk.
+GPT:31 !=3D 248643583
+GPT:Alternate GPT header not at the end of the disk.
+GPT:31 !=3D 248643583
+GPT: Use GNU Parted to correct GPT errors.
+ mmcblk0: p1 p2 p3
+mmcblk0boot0: mmc0:0001 G1M15N 31.5 MiB
+mmcblk0boot1: mmc0:0001 G1M15N 31.5 MiB
+mmcblk0rpmb: mmc0:0001 G1M15N 4.00 MiB, chardev (252:0)
+Starting syslogd: OK
+Starting klogd: OK
+Running sysctl: OK
+Saving 256 bits of non-creditable seed for next boot
+Starting network: OK
+
+Welcome to Buildroot
+buildroot login:=20
+
+We are working on a fix for this issue. If no solution is identified by
+version 6.18, the changes may need to be reverted.
+
+Gregory
+
+
+>
+> Thomas Bogendoerfer (1):
+>       MIPS: kernel: Fix random segmentation faults
+>
+>  arch/mips/boot/dts/econet/en751221.dtsi |   2 +-
+>  arch/mips/kernel/process.c              |   2 +-
+>  arch/mips/mm/tlb-r4k.c                  | 100 ++++++++++++++++++++------=
+------
+>  arch/mips/mti-malta/malta-init.c        |  20 ++++---
+>  4 files changed, 78 insertions(+), 46 deletions(-)
+>
+> --=20
+> Crap can work. Given enough thrust pigs will fly, but it's not necessaril=
+y a
+> good idea.                                                [ RFC1925, 2.3 ]
+>
+
+--=20
+Gr=C3=A9gory CLEMENT, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
