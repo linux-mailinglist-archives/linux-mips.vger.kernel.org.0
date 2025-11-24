@@ -1,43 +1,43 @@
-Return-Path: <linux-mips+bounces-12345-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12346-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id 768A6C827A8
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Nov 2025 22:07:20 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A0A1C829A2
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Nov 2025 22:55:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id EE965349AF0
-	for <lists+linux-mips@lfdr.de>; Mon, 24 Nov 2025 21:07:19 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id B55234E2878
+	for <lists+linux-mips@lfdr.de>; Mon, 24 Nov 2025 21:55:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 544262EC0A5;
-	Mon, 24 Nov 2025 21:07:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3B893321B1;
+	Mon, 24 Nov 2025 21:53:42 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6620C318136;
-	Mon, 24 Nov 2025 21:07:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C94A283FE5;
+	Mon, 24 Nov 2025 21:53:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764018436; cv=none; b=fDNE9qaH5Q+nDI3FpctrAFFMigAbWksBafKUi3+fl9cBYoobzNDbyecDcSAGOuJQHbGYfxLOh5Smb/Ws7A0rMGGQ17JHDKX9fKUgIFtNKmud9ZlFBxQG2XM1cn5D2U4cjA8UKlSQGknbbkG2q/WWN864vi2eRuvLlS7R8lcxo9I=
+	t=1764021222; cv=none; b=iGdlq44xbOkInb+g1EZ1/GZPKF4FqufTqA7LXR+7s8PYygtc1NCF2l1G9B+8YjtvS6jcdF+3d98ZOX7Xd2BGcQRA9E6KRvOX2VcQuLcHeP7YilKheGvl8/+RMpN3ZqlElIIR8XkRdcmNL1TVl2CQLgfF0HL0Zy/8Xs9WTjcvx1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764018436; c=relaxed/simple;
-	bh=Jz0hVHmZtTtcauy6vpRUsaL64wpIUcvZym8CvXHXmcA=;
+	s=arc-20240116; t=1764021222; c=relaxed/simple;
+	bh=l1HIKVEmowrpcKHihVHNlEIGIHwP1yHfzbEM1d33l5I=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=s2TXBmuPDL/an4xnhCW7HNG0B6CtjDgZpwQgGgvApdS8Abd7LhNFrpuHO5/yBIq6NamkzHKdxFmcQfN3zEiDZJIXOInfPKDxdOYqEj9it7nevva7YpB534/5eDzyA3Yxui7NJvygrGwwWdGB5WrIWV/IGCKq4LrM1v12UIzvXy8=
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZOnUltwE9UCeCXFb+yleDTex+PZ8OcI4ey1WyevuhoTfQzbZ22NCJ4VA6kEbHBJBTD+PTs8ZUYBcrhZCaxr9EFQRTZ6FFqQVHg36xqh4etKcYTW47R2LB92DO6iMEset6ikysxvwEQiT3a894f4/Qg92M53X70jjY+H0ejAIq8A=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
 Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1vNdm2-0002Rp-00; Mon, 24 Nov 2025 22:07:02 +0100
+	id 1vNeV5-0002pE-00; Mon, 24 Nov 2025 22:53:35 +0100
 Received: by alpha.franken.de (Postfix, from userid 1000)
-	id AFBD5C0256; Mon, 24 Nov 2025 22:06:53 +0100 (CET)
-Date: Mon, 24 Nov 2025 22:06:53 +0100
+	id 780A3C0256; Mon, 24 Nov 2025 22:53:22 +0100 (CET)
+Date: Mon, 24 Nov 2025 22:53:22 +0100
 From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 To: Gregory CLEMENT <gregory.clement@bootlin.com>
 Cc: torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org, macro@orcam.me.uk
+	linux-kernel@vger.kernel.org
 Subject: Re: [GIT PULL] MIPS fixes for v6.18
-Message-ID: <aSTI7RHnKXkoxWw-@alpha.franken.de>
+Message-ID: <aSTT0gbH-NkDOH8A@alpha.franken.de>
 References: <aSIhefXIXrLpMaC5@alpha.franken.de>
  <87wm3f8mcb.fsf@BLaptop.bootlin.com>
 Precedence: bulk
@@ -85,42 +85,64 @@ On Mon, Nov 24, 2025 at 04:46:44PM +0100, Gregory CLEMENT wrote:
 > shutdown on initial uniquification".
 > 
 > Here is the log from a vanilla v6.18-rc7:
-> 
-> Linux version 6.18.0-rc7 (gclement@BLaptop) (mips-img-linux-gnu-gcc (Codescape GNU Tools 2021.09-01 for MIPS IMG Linux) 11.2.0, GNU ld (Codescape GNU Tools 2021.09-01 for MIPS IMG Linux) 2.31.1) #1015 SMP Mon Nov 24 14:48:06 CET 2025
-> CPU0 revision is: 0001b031 (MIPS I6500)
-> FPU revision is: 20f30320
-> MSA revision is: 00000320
-> MIPS: machine is Mobile EyeQ6H MP6 Evaluation board
-> earlycon: pl11 at MMIO32 0x00000000d3331000 (options '921600n8')
-> printk: legacy bootconsole [pl11] enabled
-> Initrd not found or empty - disabling initrd
-> OF: reserved mem: Reserved memory: No reserved-memory node in the DT
-> VP topology {4,4,4,4},{4,4,4,4} total 32
-> VP Local Reset Exception Base support 47 bits address
-> Primary instruction cache 64kB, VIPT, 4-way, linesize 64 bytes.
-> Primary data cache 32kB, 4-way, PIPT, no aliases, linesize 64 bytes
-> MIPS secondary cache 1024kB, 16-way, linesize 64 bytes.
-> Zone ranges:
->   Normal   [mem 0x0000000100000000-0x00000001ffffffff]
-> Movable zone start for each node
-> Early memory node ranges
->   node   0: [mem 0x0000000100000000-0x00000001ffffffff]
-> Initmem setup node 0 [mem 0x0000000100000000-0x00000001ffffffff]
-> percpu: Embedded 6 pages/cpu s46496 r8192 d43616 u98304
-> Kernel command line: earlycon
-> printk: log buffer data + meta data: 131072 + 458752 = 589824 bytes
-> Dentry cache hash table entries: 524288 (order: 8, 4194304 bytes, linear)
-> Inode-cache hash table entries: 262144 (order: 7, 2097152 bytes, linear)
-> 
-> and with the commit reverted:
 
-I see something similair on a Octeon board with the addition
+[..]
 
-Kernel panic - not syncing: stack-protector: Kernel stack is corrupted in: r4k_tlb_uniquify+0x31c/0x320
-
-Maciej, any idea ?
+I guess your cores have more than 64 TLB entries. The Octeon CPU has
+256 entries... Patch below fixes the issue there.
 
 Thomas.
+
+From b74abcb21103519ae48726c715d39a6aa3f57462 Mon Sep 17 00:00:00 2001
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Date: Mon, 24 Nov 2025 22:46:43 +0100
+Subject: [PATCH] MIPS: mm: kmalloc tlb_vpn array to avoid stack overflow
+
+Latest MIPS cores could have much more than 64 TLB entries, therefore
+allocate array for unification instead of placing a too small array
+on stack.
+
+Fixes: 9f048fa48740 ("MIPS: mm: Prevent a TLB shutdown on initial uniquification")
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+---
+ arch/mips/mm/tlb-r4k.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
+
+diff --git a/arch/mips/mm/tlb-r4k.c b/arch/mips/mm/tlb-r4k.c
+index 3facf7cc6c7d..577055b50c41 100644
+--- a/arch/mips/mm/tlb-r4k.c
++++ b/arch/mips/mm/tlb-r4k.c
+@@ -524,15 +524,19 @@ static int r4k_vpn_cmp(const void *a, const void *b)
+  */
+ static void r4k_tlb_uniquify(void)
+ {
+-	unsigned long tlb_vpns[1 << MIPS_CONF1_TLBS_SIZE];
+ 	int tlbsize = current_cpu_data.tlbsize;
+ 	int start = num_wired_entries();
++	unsigned long *tlb_vpns;
+ 	unsigned long vpn_mask;
+ 	int cnt, ent, idx, i;
+ 
+ 	vpn_mask = GENMASK(cpu_vmbits - 1, 13);
+ 	vpn_mask |= IS_ENABLED(CONFIG_64BIT) ? 3ULL << 62 : 1 << 31;
+ 
++	tlb_vpns = kmalloc_array(tlbsize, sizeof(unsigned long), GFP_KERNEL);
++	if (!tlb_vpns)
++		return; /* pray local_flush_tlb_all() is good enough */
++
+ 	htw_stop();
+ 
+ 	for (i = start, cnt = 0; i < tlbsize; i++, cnt++) {
+@@ -585,6 +589,7 @@ static void r4k_tlb_uniquify(void)
+ 	tlbw_use_hazard();
+ 	htw_start();
+ 	flush_micro_tlb();
++	kfree(tlb_vpns);
+ }
+ 
+ /*
+-- 
+2.43.0
 
 -- 
 Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
