@@ -1,271 +1,193 @@
-Return-Path: <linux-mips+bounces-12349-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12350-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16BCAC840DD
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Nov 2025 09:49:35 +0100 (CET)
+Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [IPv6:2605:f480:58:1:0:1994:3:14])
+	by mail.lfdr.de (Postfix) with ESMTPS id F0248C84623
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Nov 2025 11:11:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id C22AF34BA3D
-	for <lists+linux-mips@lfdr.de>; Tue, 25 Nov 2025 08:49:30 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id DDF544E2DC5
+	for <lists+linux-mips@lfdr.de>; Tue, 25 Nov 2025 10:11:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B1862D2388;
-	Tue, 25 Nov 2025 08:49:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69CD8CA4E;
+	Tue, 25 Nov 2025 10:11:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="W8ePq99o"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="G/FxfQfd"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9E0318C332;
-	Tue, 25 Nov 2025 08:49:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 859B62DC76C
+	for <linux-mips@vger.kernel.org>; Tue, 25 Nov 2025 10:10:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764060567; cv=none; b=PVJXP6rfN1KEW5rI9Ex7XZrHsgLw/TXH7PbifW6TtpS2dsLawTOtISaQIjShTWWu8RYF4DAh+gRxxmhROHIosAselL0YG9i5NMLOArXeigO0Zum91T6L4XZz6aa0Mf51G93DxZYQzzNTctyO21EpEYgN5F15SYaA4N6gL49d04M=
+	t=1764065460; cv=none; b=hHUq1Jn5SZTVRaWfDYEIm2q88qWzxSVREIrnre+PbEO1pRP6b1Gtxb3xShED+KpMCuwbpHl0nK6ue6JH5BZST6PRtrV/7V/ogEqY1ePQHeJrJbZYw2c4GSUUtSUDbjVWfXaK6Yj6pF9CFCdZfS8a5XaJPkzr4iR47i6YC8spTfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764060567; c=relaxed/simple;
-	bh=HuMSYGIDhMghJy5e91DhSwAve9AYXs6y5j/c+i75skY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=kGQA9HnUKj2eSKTgLEOhJEFDMQURaSlDLU4+cTxPIA700wk8Cm+zowUh7/E3P/3AI5VAKfpYv8KqgnYCE5dByeuGL02Wws6sX5+JR+ntSmi3tJEQRTLnKayrLs2/HLKjFbGQX0RLxX9XEHKsmAnRbKUfR6n4O47Ai6oExSWKWok=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=W8ePq99o; arc=none smtp.client-ip=185.246.84.56
+	s=arc-20240116; t=1764065460; c=relaxed/simple;
+	bh=XtnIAqr9zd1hk0LhUNWlp/z0zwrbGoy9rjJyDbHFDAU=;
+	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
+	 MIME-Version:Content-Type; b=id/i1gquI50w3FIJHJUb4pIzKcmY2BaYaKy7yW/ITpQ53TvThiU8LcXYAaYcNFHjujMPHV+7Obgr1joXWYl8eZYig/J1R7zantd2S/sWhHy+s5r2Ej+CTpGVnYrjAQeCu/xlkWYtdLL3G44nYye5Gfl0tKABSm6fXFBGVXdAXEg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=G/FxfQfd; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id 5CE4C1A1D40;
-	Tue, 25 Nov 2025 08:49:23 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id E8953C15D47;
+	Tue, 25 Nov 2025 10:10:30 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 1AC6160706;
-	Tue, 25 Nov 2025 08:49:23 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id AC3511037149D;
-	Tue, 25 Nov 2025 09:49:04 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 98E1260705;
+	Tue, 25 Nov 2025 10:10:53 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 6D889102F07FD;
+	Tue, 25 Nov 2025 11:10:50 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1764060560; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 in-reply-to:references; bh=HuMSYGIDhMghJy5e91DhSwAve9AYXs6y5j/c+i75skY=;
-	b=W8ePq99oVgQ2uOhAUVduhMvpCSXIAoY+0yVa1mbwp1VdL8dko43eVADbIkwLEo/9T4klxf
-	cOHZHbCYxkbFZKzwYcsAV0MplbMQBGfxqbi8NHWPE1hI/2RdGU1320tO0+n2I2vAPU7TRr
-	zeqkiOKvhUSBhsjnyr8bW+E1eANm32KvV6h32TNOCwJHL37JfmE0NSohpsx8aXUMgwfLqf
-	lx4OkrhMWjOOJFQ1gVMv//rYccFZ96Ub5IKcXq252JnvGotvhT4jzy3ydQOAA4+ytNAXQR
-	HX0lQg+C3HV6XUvm89BY4fLtzKcSbLhkr3v6E7n0Cs3tAhGaoobXAOaL+QCrJQ==
-From: Romain Gantois <romain.gantois@bootlin.com>
-To: "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
- David Lechner <dlechner@baylibre.com>,
- Nuno =?UTF-8?B?U8Oh?= <nuno.sa@analog.com>,
- Andy Shevchenko <andy@kernel.org>, Guenter Roeck <linux@roeck-us.net>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
- linux-iio@vger.kernel.org, Conor Dooley <conor.dooley@microchip.com>,
- MyungJoo Ham <myungjoo.ham@samsung.com>,
- Chanwoo Choi <cw00.choi@samsung.com>, Peter Rosin <peda@axentia.se>,
- Mariel Tinaco <Mariel.Tinaco@analog.com>,
- Lars-Peter Clausen <lars@metafoo.de>,
- Michael Hennerich <Michael.Hennerich@analog.com>,
- Kevin Tsai <ktsai@capellamicro.com>,
- Linus Walleij <linus.walleij@linaro.org>,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Eugen Hristev <eugen.hristev@linaro.org>, Vinod Koul <vkoul@kernel.org>,
- Kishon Vijay Abraham I <kishon@kernel.org>,
- Sebastian Reichel <sre@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
- Support Opensource <support.opensource@diasemi.com>,
- Paul Cercueil <paul@crapouillou.net>, Iskren Chernev <me@iskren.info>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Matheus Castello <matheus@castello.eng.br>,
- Saravanan Sekar <sravanhome@gmail.com>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Casey Connolly <casey.connolly@linaro.org>,
- Pali =?UTF-8?B?Um9ow6Fy?= <pali@kernel.org>,
- Orson Zhai <orsonzhai@gmail.com>,
- Baolin Wang <baolin.wang@linux.alibaba.com>,
- Chunyan Zhang <zhang.lyra@gmail.com>, Amit Kucheria <amitk@kernel.org>,
- Thara Gopinath <thara.gopinath@gmail.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
- Sylwester Nawrocki <s.nawrocki@samsung.com>,
- Olivier Moysan <olivier.moysan@foss.st.com>,
- Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
- Maxime Coquelin <mcoquelin.stm32@gmail.com>,
- Alexandre Torgue <alexandre.torgue@foss.st.com>,
- Dixit Parmar <dixitparmar19@gmail.com>, linux-hwmon@vger.kernel.org,
- linux-input@vger.kernel.org, linux-phy@lists.infradead.org,
- linux-pm@vger.kernel.org, linux-mips@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- Andy Shevchenko <andriy.shevchenko@intel.com>
-Subject: Re: [PATCH v4 0/6] Add support for the LTM8054 voltage regulator
-Date: Tue, 25 Nov 2025 09:49:03 +0100
-Message-ID: <22915450.EfDdHjke4D@fw-rgant>
-In-Reply-To: <732D3F12-0361-4800-8981-EF629B4C491F@goldelico.com>
-References:
- <20251124-ltm8054-driver-v4-0-107a8a814abe@bootlin.com>
- <4053840.MHq7AAxBmi@fw-rgant>
- <732D3F12-0361-4800-8981-EF629B4C491F@goldelico.com>
+	t=1764065451; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=lbMMNB8WhA7HpMZcBDX/qpRsZTnhD+MyyTYvyVLWGQo=;
+	b=G/FxfQfduxbaHpP2QDONj1LwwQA5eocRHPWn3510CtDnJJLfMy1lE+C9V/CWTzj5tyVwKv
+	UgTwbRSFojVP3cqHA3kyreB0OfFonaDETC/DcJZLczyMDwXqQTKlu8cNKHmg5IKTtGxb06
+	bLrBss+hvS92RjzINpYZnpT89dvOU3SXxA5Dw+eERN5iSL27tZAgFb8/DTiJv4sEC/F+ey
+	s4zVo69TlKIyOeCZx6by6HRC4AQPBk9lA/5hIbK4HyVC6ROJTyw80LakwnT+GbjznDK1ax
+	qUHv2y+U8JJe+1qXazXqGmzm8CBdR1WGAmRfBzG4IXzjpwxAJV59yK5NpK8lgg==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: torvalds@linux-foundation.org, linux-mips@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Subject: Re: [GIT PULL] MIPS fixes for v6.18
+In-Reply-To: <aSTT0gbH-NkDOH8A@alpha.franken.de>
+References: <aSIhefXIXrLpMaC5@alpha.franken.de>
+ <87wm3f8mcb.fsf@BLaptop.bootlin.com> <aSTT0gbH-NkDOH8A@alpha.franken.de>
+Date: Tue, 25 Nov 2025 11:10:49 +0100
+Message-ID: <87tsyi8lsm.fsf@BLaptop.bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="nextPart7880843.EvYhyI6sBW";
- micalg="pgp-sha512"; protocol="application/pgp-signature"
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 X-Last-TLS-Session-Version: TLSv1.3
 
---nextPart7880843.EvYhyI6sBW
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"; protected-headers="v1"
-From: Romain Gantois <romain.gantois@bootlin.com>
-To: "H. Nikolaus Schaller" <hns@goldelico.com>
-Date: Tue, 25 Nov 2025 09:49:03 +0100
-Message-ID: <22915450.EfDdHjke4D@fw-rgant>
-In-Reply-To: <732D3F12-0361-4800-8981-EF629B4C491F@goldelico.com>
-MIME-Version: 1.0
+Hello Thomas,
 
-Re-sending this because my mailer messed up the formatting on the first try...
-Sorry if you're receiving this twice.
-
-On Monday, 24 November 2025 17:19:45 CET H. Nikolaus Schaller wrote:
-...
-> > The LTM8054's feedback pin can be driven by a different DAC, which allows
-> > for dynamic output voltage control. This is a more complex upstreaming
-> > topic however, so I've left it out of this initial series. There are
-> > other component functions which fit in squarely into the regulator
-> > framework, such as input current limit control and soft-start. But I
-> > understand that the current driver might look a bit "bare".
+> On Mon, Nov 24, 2025 at 04:46:44PM +0100, Gregory CLEMENT wrote:
+>> Hello Thomas,
+>>=20
+>> > The following changes since commit e9a6fb0bcdd7609be6969112f3fbfcce3b1=
+d4a7c:
+>> >
+>> >   Linux 6.18-rc5 (2025-11-09 15:10:19 -0800)
+>> >
+>> > are available in the Git repository at:
+>> >
+>> >   git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/m=
+ips-fixes_6.18_1
+>> >
+>> > for you to fetch changes up to 14b46ba92bf547508b4a49370c99aba76cb53b5=
+3:
+>> >
+>> >   MIPS: kernel: Fix random segmentation faults (2025-11-21 13:24:05 +0=
+100)
+>> >
+>> > ----------------------------------------------------------------
+>> > - Fix CPU type in DT for econet
+>> > - Fix for Malta PCI MMIO breakage for SOC-it
+>> > - Fix TLB shutdown caused by iniital uniquification
+>> > - Fix random seg faults
+>> >
+>> > ----------------------------------------------------------------
+>> > Aleksander Jan Bajkowski (1):
+>> >       mips: dts: econet: fix EN751221 core type
+>> >
+>> > Maciej W. Rozycki (2):
+>> >       MIPS: Malta: Fix !EVA SOC-it PCI MMIO
+>> >       MIPS: mm: Prevent a TLB shutdown on initial uniquification
+>>=20
+>> Today, the kernel v6.18-rc7 no longer boots on EyeQ5 and EyeQ6H (MIPS
+>> I6500)-based boards. After a git bisect between v6.18-rc6 and v6.18-rc7,
+>> we found that the culprit is the commit "MIPS: mm: Prevent a TLB
+>> shutdown on initial uniquification".
+>>=20
+>> Here is the log from a vanilla v6.18-rc7:
 >
-> So you just want to have some user-space mechanism to control voltage
-> and current limits? Can't this be done by directly controlling them through
-> the iio API?
+> [..]
 >
-> Is this for a device that is already in kernel or planned to be supported?
-> Or is it "application support" for some SBC?
->
-
-This is planned support for a voltage regulator chip.
-
-> Are you looking for a virtual "glue" driver to logically combine several low
-> level functions?
->
-
-I'm looking for a clean userspace abstraction for this component, the low-
-level functions in this case are those of a voltage regulator.
-
-> > > What could be necessary is if you really want to be able to "regulate"
-> > > the current going to Vout, some bridge between regulator API and some
-> > > IIO DAC.
-> > >
-> > > And enabling/disabling the regulator by some GPIO can be described in
-> > > the DT already through a "regulator-fixed".
-> >
-> > This is a possibility, but when you bring in all of these other hardware
-> > functions that I mentionned e.g. output voltage control and stepping,
-> > you'll end up with several different devices which look unrelated from
-> > userspace, but actually control the same chip.
->
-> That is quite usual... I have often heard: user space must fix this as
-> kernel just provides basic functions in a harmonized way and integration
-> has to be tailored to the device anyways :)
+> I guess your cores have more than 64 TLB entries. The Octeon CPU has
+> 256 entries... Patch below fixes the issue there.
 >
 
+I have applied this patch and tested it on EyeQ5 and EyeQ6H-based
+boards, and it booted successfully.
 
-IMHO this is not integration, it's BSP work. As far as regulator functions are
-concerned, the current status quo is that the kernel handles getting/setting
-voltage levels, applying current and voltage constraints and other basic
-regulator features.
+you can add my
 
-
-> > Userspace will also have to know about some hardware details to properly
-> > control the DACs, such as the values of the sense and feedback resistors.
-> > In my opinion, this bypasses the kernel's abstraction of hardware.
->
-> I came up with this argument several times in the part and got a lot of
-> contrary :)
->
-
-> What I still wonder: does your hardware warrant an upstream driver for a
-> non-programable chip if a different solution (with help of user-space)
-> already exist?
->
-
-
-A different solution does not currently exist (although a userspace-based
-solution could be designed). I just think that a kernel-based solution is more
-desirable here.
-
-
-> Another question: is your scheme generic enough so that it can be expected
-> that other devices are using it in the same way?
->
-
-
-Yes, the LTM8054 has a fairly common design as far as buck-boost chips go.
-Things like feedback dividers on the output voltage pin are standard practice.
-And since the driver doesn't rely on a particular way of integrating the
-LTM8054 with other components, it can be reused wherever the same regulator
-chip is used.
-
-
-> Or could the power controller framework (/sys/class/power_supply) fit
-> better?
->
-
-
-I don't think the power supply abstraction is relevant here. The LTM8054 is a
-voltage regulator, it doesn't have charge, capacity, temperature monitoring,
-power limitation, or other power supply class features.
-
-
-> There is an API to ask chargers etc. for battery voltage and current limits
-> or even write them.
->
-> There is also "generic-adc-battery" which allows to hook up with arbitrary
-> iio-adcs for measurements - although you need a DAC in your setup. Maybe an
-> extension here is a better strategy than a dedicated ltm8054 driver?
-
-
-
-What if the LTM8054 is not used to supply a battery?
+Tested-by: Gregory CLEMENT <gregory.clement@bootlin.com>
 
 Thanks,
 
+Gregory
 
---
+> Thomas.
+>
+> From b74abcb21103519ae48726c715d39a6aa3f57462 Mon Sep 17 00:00:00 2001
+> From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> Date: Mon, 24 Nov 2025 22:46:43 +0100
+> Subject: [PATCH] MIPS: mm: kmalloc tlb_vpn array to avoid stack overflow
+>
+> Latest MIPS cores could have much more than 64 TLB entries, therefore
+> allocate array for unification instead of placing a too small array
+> on stack.
+>
+> Fixes: 9f048fa48740 ("MIPS: mm: Prevent a TLB shutdown on initial uniquif=
+ication")
+> Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> ---
+>  arch/mips/mm/tlb-r4k.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+>
+> diff --git a/arch/mips/mm/tlb-r4k.c b/arch/mips/mm/tlb-r4k.c
+> index 3facf7cc6c7d..577055b50c41 100644
+> --- a/arch/mips/mm/tlb-r4k.c
+> +++ b/arch/mips/mm/tlb-r4k.c
+> @@ -524,15 +524,19 @@ static int r4k_vpn_cmp(const void *a, const void *b)
+>   */
+>  static void r4k_tlb_uniquify(void)
+>  {
+> -	unsigned long tlb_vpns[1 << MIPS_CONF1_TLBS_SIZE];
+>  	int tlbsize =3D current_cpu_data.tlbsize;
+>  	int start =3D num_wired_entries();
+> +	unsigned long *tlb_vpns;
+>  	unsigned long vpn_mask;
+>  	int cnt, ent, idx, i;
+>=20=20
+>  	vpn_mask =3D GENMASK(cpu_vmbits - 1, 13);
+>  	vpn_mask |=3D IS_ENABLED(CONFIG_64BIT) ? 3ULL << 62 : 1 << 31;
+>=20=20
+> +	tlb_vpns =3D kmalloc_array(tlbsize, sizeof(unsigned long), GFP_KERNEL);
+> +	if (!tlb_vpns)
+> +		return; /* pray local_flush_tlb_all() is good enough */
+> +
+>  	htw_stop();
+>=20=20
+>  	for (i =3D start, cnt =3D 0; i < tlbsize; i++, cnt++) {
+> @@ -585,6 +589,7 @@ static void r4k_tlb_uniquify(void)
+>  	tlbw_use_hazard();
+>  	htw_start();
+>  	flush_micro_tlb();
+> +	kfree(tlb_vpns);
+>  }
+>=20=20
+>  /*
+> --=20
+> 2.43.0
+>
+> --=20
+> Crap can work. Given enough thrust pigs will fly, but it's not necessaril=
+y a
+> good idea.                                                [ RFC1925, 2.3 ]
 
-Romain Gantois, Bootlin
-
+--=20
+Gr=C3=A9gory CLEMENT, Bootlin
 Embedded Linux and Kernel engineering
-
 https://bootlin.com
---nextPart7880843.EvYhyI6sBW
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part.
-Content-Transfer-Encoding: 7Bit
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEIcCsAScRrtr7W0x0KCYAIARzeA4FAmklbX8ACgkQKCYAIARz
-eA6Qag/+O307fHl9Wqb40t4WIdZsKqQP0PcYGNlhz4T+SyyyFetdu7Un665acsjg
-MdEMkudNxDehZTnsfTlNKsGzpu2OIAsiIlD9XKJFaAA1kAzdWA9xb8mT7lwnadD3
-sa0EX7LtIT8x4BLkaCyTkCioE3FgLPhQCXC3fALmNojilfwl2Y5QXUuKUB230sPo
-8ihY8Yj2rc5QmYZV9fSsC/HSQwVkXSU3T5Q7SjwfFSIRL2ZajuPycLU9QmHnOWGi
-R02esa/1vRdYlVGcCwKSDG5JHzsRCRfsbXZAkIyMc3hQ6LgizTUyKQ+FM2w/68/w
-1pn2H5N0D8uR/+WxXWPMMZ9hpklLkDec5lOlf3ZA4DOa8m6nDKROBx/eV/aLlgHp
-imI2qqqmBqJjzO+x5ubkm/v5QP75ikGusNxuXcUACwQTNaif8z6YEekKvGd89taO
-jvhQnSOWtFfYZRgVzpjbjgm+OZy+f6bACCzGI/KZ/KhAb1vwCz6hBkmg0Zh2c/hP
-Wa3dcDp/pn5j3yP1E10jdA9G9AkxmSWN9VxNtRrGKynSiz3Z2ilWvze2SxlSN0vZ
-tdlEhNz1/r/fZWcDyFgDwaCs/R6+RHtQoYnG/A+5aatiGdnE9/tngpQXOkjpr/ft
-VMDXkLH4+MDGHExDw3PIBbSfWqmFssAmfriPh3xsAUUXcR/LvIU=
-=eMhj
------END PGP SIGNATURE-----
-
---nextPart7880843.EvYhyI6sBW--
-
-
-
 
