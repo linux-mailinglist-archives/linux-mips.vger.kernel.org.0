@@ -1,48 +1,44 @@
-Return-Path: <linux-mips+bounces-12358-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12359-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [IPv6:2a01:60a::1994:3:14])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0252C8BE67
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Nov 2025 21:45:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33D99C8CD0C
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Nov 2025 05:54:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 3EBDD357531
-	for <lists+linux-mips@lfdr.de>; Wed, 26 Nov 2025 20:45:28 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C8C113A6225
+	for <lists+linux-mips@lfdr.de>; Thu, 27 Nov 2025 04:54:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3CDE340DB0;
-	Wed, 26 Nov 2025 20:45:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5969C2D5948;
+	Thu, 27 Nov 2025 04:54:18 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1CB5341051;
-	Wed, 26 Nov 2025 20:45:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1AF8E23EA94;
+	Thu, 27 Nov 2025 04:54:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764189920; cv=none; b=eMP1VxeS53RSZqgStLTrkLw+LVgq9sfWMjc9P/DEaHtXVP/cxMrT+u6dtpXbs8jAWga55kzRPq020u8lRszBNVqla8U+jl9roeYcXr4bKZFfDstlHgu0gQuSQicQ5m/rqD6hfZho7cQT841lL2fWC8mda6KimTnzipmcboKDwTQ=
+	t=1764219258; cv=none; b=ZJc/4D3tgue6+hdRrWqKVLvGDKplk1HnBesWGwDow1gmfYu8gpyNBkfaOP/EDTL+skjLuHLhR0N5V+yoxWbuq20AFlI2FZpn0G5o2XIBK0n9LkalOASW44oZFYzr4AYLinSco6mqIlSju4kHpRa29a1+jP9smqNTrpeiwkixt+g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764189920; c=relaxed/simple;
-	bh=QCVg/2gIxJSACNZyeiPCc4TpLtqaDNFf+wk6RkvV4gk=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=kiOIOzBxI4TGwoh6/e5OVzTEFwhJ46cU6qzNIyfb4faVUBOHVForo/H2NOT/p8wK8K7BARqKSOjY3wAvNkwmmwEr4ixRaXSlLI1/GeIuBZyrfAihI8GEVMPBsXM3a9JKK1wTOC7+Idg/YPU2wG4ANSvu3Sf7hOuf3+DYQlyZpGM=
+	s=arc-20240116; t=1764219258; c=relaxed/simple;
+	bh=J8IKZV7LQQSu/SQ9N6nxGmTKp9Zl9MYHNhaRvZoBHeQ=;
+	h=Date:From:To:cc:Subject:Message-ID:MIME-Version:Content-Type; b=PHl+8Kh5WHSXr5m90Chl5EfWfVBYGkQ17p5olFGdzxpQgIHJdDigwKTrrDhC63lR5B5juJx43FxD2R/Z0hMJPabSM7D6+DFqymovv3FrnfzumGqZbFq0+LCLuftuZljvtuDq1ovL53o5oAjJoTZqPAjZjiJZOSzZYfk4aFDMr/Q=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
 Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 810A392009C; Wed, 26 Nov 2025 21:45:15 +0100 (CET)
+	id 5495192009C; Thu, 27 Nov 2025 05:54:10 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 7B5A092009B;
-	Wed, 26 Nov 2025 20:45:15 +0000 (GMT)
-Date: Wed, 26 Nov 2025 20:45:15 +0000 (GMT)
+	by angie.orcam.me.uk (Postfix) with ESMTP id 4E8F992009B;
+	Thu, 27 Nov 2025 04:54:10 +0000 (GMT)
+Date: Thu, 27 Nov 2025 04:54:10 +0000 (GMT)
 From: "Maciej W. Rozycki" <macro@orcam.me.uk>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-cc: Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org, 
-    linux-kernel@vger.kernel.org, 
-    Gregory CLEMENT <gregory.clement@bootlin.com>
-Subject: Re: [PATCH v2] MIPS: mm: kmalloc tlb_vpn array to avoid stack
- overflow
-In-Reply-To: <aSdShmTVEmmGQ5v1@alpha.franken.de>
-Message-ID: <alpine.DEB.2.21.2511262043590.36486@angie.orcam.me.uk>
-References: <20251125213942.125599-1-tsbogend@alpha.franken.de> <alpine.DEB.2.21.2511261847410.36486@angie.orcam.me.uk> <aSdShmTVEmmGQ5v1@alpha.franken.de>
+cc: Jiaxun Yang <jiaxun.yang@flygoat.com>, 
+    Gregory CLEMENT <gregory.clement@bootlin.com>, linux-mips@vger.kernel.org, 
+    linux-kernel@vger.kernel.org
+Subject: [PATCH v3] MIPS: mm: kmalloc tlb_vpn array to avoid stack overflow
+Message-ID: <alpine.DEB.2.21.2511270406020.36486@angie.orcam.me.uk>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -52,49 +48,87 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
 
-On Wed, 26 Nov 2025, Thomas Bogendoerfer wrote:
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 
-> > > Latest MIPS cores could have much more than 64 TLB entries, therefore
-> > > allocate array for unification instead of placing a too small array
-> > > on stack.
-> > 
-> >  Hmm, I get:
-> > 
-> > ------------[ cut here ]------------
-> > WARNING: CPU: 0 PID: 0 at arch/mips/mm/tlb-r4k.c:540 tlb_init+0x2a0/0x4bc
-> > Modules linked in:
-> > CPU: 0 UID: 0 PID: 0 Comm: swapper Not tainted 6.18.0-rc1-dirty #60 NONE
-> > Hardware name: mti,malta
-> > Stack : 00000000 00000004 00000000 0000001d 809d1d2c 00000000 00000100 80944048
-> >         809d91bc 80944048 80a16a73 00000000 80b634a4 00000001 809d1ce0 809f7bc8
-> >         00000000 00000000 80944048 0000001f 00000001 809d1c14 00000000 653a206d
-> >         00000000 80b656d4 80b6570b 00000000 00000000 00000000 80944048 00000000
-> >         00000000 0000021c 80a40000 00000000 00000000 00000020 00000000 800472a4
-> >         ...
-> > Call Trace:
-> > [<80112bd8>] show_stack+0x28/0xf0
-> > [<8010a69c>] dump_stack_lvl+0x48/0x7c
-> > [<8012fedc>] __warn+0x9c/0x118
-> > [<801015e8>] warn_slowpath_fmt+0x58/0xa4
-> > [<8012ba84>] tlb_init+0x2a0/0x4bc
-> > [<80114738>] per_cpu_trap_init+0x17c/0x27c
-> > [<80a1d0f8>] trap_init+0xf0/0x794
-> > [<80a19ae4>] start_kernel+0x3c4/0x598
-> > 
-> > ---[ end trace 0000000000000000 ]---
-> > 
-> > exactly here:
-> > 
-> > > +	tlb_vpns = kmalloc_array(tlbsize, sizeof(unsigned long), GFP_KERNEL);
-> > > +	if (WARN_ON(!tlb_vpns))
-> > > +		return; /* Pray local_flush_tlb_all() is good enough. */
-> > 
-> > I'll try to find out more, but right now this doesn't appear to work.
-> 
-> kmalloc() doesn't work at that point :-( It only fixed the problem, because
-> we skip unification... d'oh
+Owing to Config4.MMUSizeExt and VTLB/FTLB MMU features later MIPSr2+ 
+cores can have more than 64 TLB entries.  Therefore allocate an array 
+for uniquification instead of placing too small an array on the stack.
 
- Correct, I have a fix in the works.
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+Fixes: 9f048fa48740 ("MIPS: mm: Prevent a TLB shutdown on initial uniquification")
+Cc: stable@vger.kernel.org
+---
+ Verified with Malta/74Kf and Malta/interAptiv for initial and secondary 
+CPU bootstrap.  The PM path hasn't been covered, but is expected to be 
+the same as secondary CPU bootstrap.
 
-  Maciej
+ NB Malta/interAptiv has issues later on in SMP boot (boots fine UP) and 
+hangs with repeated:
+
+irq 23: nobody cared (try booting with the "irqpoll" option)
+CPU: 1 UID: 0 PID: 0 Comm: swapper/1 Not tainted 6.18.0-rc1-dirty #2 NONE
+
+messages (for the CP0 timer interrupt AFAICT; GIC timer is supposed to 
+be used instead).  This will have to be bisected.
+
+Changes from v2:
+
+- Use the bootmem allocator for early calls (CPU #0 bootstrap).
+
+- Update the change description; mark for stable backporting.
+---
+ arch/mips/mm/tlb-r4k.c |   16 +++++++++++++++-
+ 1 file changed, 15 insertions(+), 1 deletion(-)
+
+linux-mips-tlb-r4k-uniquify-tlbsize.diff
+Index: linux-macro/arch/mips/mm/tlb-r4k.c
+===================================================================
+--- linux-macro.orig/arch/mips/mm/tlb-r4k.c
++++ linux-macro/arch/mips/mm/tlb-r4k.c
+@@ -12,6 +12,7 @@
+ #include <linux/init.h>
+ #include <linux/sched.h>
+ #include <linux/smp.h>
++#include <linux/memblock.h>
+ #include <linux/mm.h>
+ #include <linux/hugetlb.h>
+ #include <linux/export.h>
+@@ -524,15 +525,24 @@ static int r4k_vpn_cmp(const void *a, co
+  */
+ static void r4k_tlb_uniquify(void)
+ {
+-	unsigned long tlb_vpns[1 << MIPS_CONF1_TLBS_SIZE];
+ 	int tlbsize = current_cpu_data.tlbsize;
++	bool use_slab = slab_is_available();
+ 	int start = num_wired_entries();
++	phys_addr_t tlb_vpn_size;
++	unsigned long *tlb_vpns;
+ 	unsigned long vpn_mask;
+ 	int cnt, ent, idx, i;
+ 
+ 	vpn_mask = GENMASK(cpu_vmbits - 1, 13);
+ 	vpn_mask |= IS_ENABLED(CONFIG_64BIT) ? 3ULL << 62 : 1 << 31;
+ 
++	tlb_vpn_size = tlbsize * sizeof(*tlb_vpns);
++	tlb_vpns = (use_slab ?
++		    kmalloc(tlb_vpn_size, GFP_KERNEL) :
++		    memblock_alloc_raw(tlb_vpn_size, sizeof(*tlb_vpns)));
++	if (WARN_ON(!tlb_vpns))
++		return; /* Pray local_flush_tlb_all() is good enough. */
++
+ 	htw_stop();
+ 
+ 	for (i = start, cnt = 0; i < tlbsize; i++, cnt++) {
+@@ -585,6 +595,10 @@ static void r4k_tlb_uniquify(void)
+ 	tlbw_use_hazard();
+ 	htw_start();
+ 	flush_micro_tlb();
++	if (use_slab)
++		kfree(tlb_vpns);
++	else
++		memblock_free(tlb_vpns, tlb_vpn_size);
+ }
+ 
+ /*
 
