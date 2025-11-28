@@ -1,111 +1,167 @@
-Return-Path: <linux-mips+bounces-12365-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12366-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id ADFF9C91013
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Nov 2025 08:12:09 +0100 (CET)
+Received: from ams.mirrors.kernel.org (ams.mirrors.kernel.org [213.196.21.55])
+	by mail.lfdr.de (Postfix) with ESMTPS id D3222C9125C
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Nov 2025 09:30:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 512CD3A7BFA
-	for <lists+linux-mips@lfdr.de>; Fri, 28 Nov 2025 07:12:08 +0000 (UTC)
+	by ams.mirrors.kernel.org (Postfix) with ESMTPS id 770DD347283
+	for <lists+linux-mips@lfdr.de>; Fri, 28 Nov 2025 08:30:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C23132BE622;
-	Fri, 28 Nov 2025 07:12:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3415627BF93;
+	Fri, 28 Nov 2025 08:30:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="JViFz/5V"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDE44243954;
-	Fri, 28 Nov 2025 07:12:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24D4C2571A0;
+	Fri, 28 Nov 2025 08:30:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764313926; cv=none; b=MV6dXeePNevXXOofH5DeH35F7doFnMx1UCguzDNLvjq0N8wEl+niZo/qP02/t/5RceoIfB0gNAZFKQKhmz0gEugz+I+NVE6eRP++aKL42U9b/kOPNmZPubfTDqsJTWF0tNR/XN2zP20pvNQd9Oy8focLTGaC66MVRFrIPkpYU6E=
+	t=1764318616; cv=none; b=pdHOc7zkQ4RkV3zvHJucGFiayVW4LdRV9EFCcESq2hxlkCSUadxSdAU7eMgKePjwVtTM2Mhavb3+qHDpiRRAxWpBlPck5kt/VBRGHmNiU8L4/vtmgann9S1CCL5g09QRsjcE9WdVblB6i5Uv1i9BQuagCEMuzh3jT7x2/Iag6Ec=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764313926; c=relaxed/simple;
-	bh=rb2DjSyzHs6jvb9wPywMlMgLcHYy8IXZBYvwBVxBkJE=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=Uk9lgWOgGVmScPGOwUoHUu2GrsSmNyAksye3r/5P6XBLAqSJlIphjnntpI3aQsIPcD6zHfKeHgwXwLsSIqEpFVTOmkpOM/H5/3RpT7yirCbVTfjhOmQoP3J0Q150DXzkYrkfJhirV0joofSPns49uvYOTzqQts0mGEUWqWPKb3g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 235B592009C; Fri, 28 Nov 2025 08:12:02 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 1552492009B;
-	Fri, 28 Nov 2025 07:12:02 +0000 (GMT)
-Date: Fri, 28 Nov 2025 07:12:02 +0000 (GMT)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Klara Modin <klarasmodin@gmail.com>
-cc: Nick Bowler <nbowler@draconx.ca>, 
-    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-    Jiaxun Yang <jiaxun.yang@flygoat.com>, linux-mips@vger.kernel.org, 
-    linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] MIPS: mm: Prevent a TLB shutdown on initial
- uniquification
-In-Reply-To: <umdusxatsxf5g7x4jhwvf75w3k2265x5dbg3w5wcdxikomjnk5@ver4ackawk2v>
-Message-ID: <alpine.DEB.2.21.2511280646310.36486@angie.orcam.me.uk>
-References: <alpine.DEB.2.21.2511130507110.25436@angie.orcam.me.uk> <umdusxatsxf5g7x4jhwvf75w3k2265x5dbg3w5wcdxikomjnk5@ver4ackawk2v>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1764318616; c=relaxed/simple;
+	bh=MpMcHD2tp5uuKwb5c+sfdkPhGUuflywsKRBHkJYCeP4=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=RvodLSW+b/umgFLONrL2/9GZfWtSilT3NtxEUI+N+4NqXlCBdbcfHAWxauGVLYndhLdFbVfH/HDePws3AsABMaH+OEAQf6LWRuzeiq97Kb38dTvScV3INpY8xaWz7X29ufVJI/czPhr5ujQ8C5ENXnoBIFDEQ6QA2qpRwL60AyI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=JViFz/5V; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 77E761A1DA0;
+	Fri, 28 Nov 2025 08:30:11 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 45F5560706;
+	Fri, 28 Nov 2025 08:30:11 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A38F4103C8EF1;
+	Fri, 28 Nov 2025 09:30:07 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1764318610; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=Cq+xlD9USMJsrxvq8O+HZTXWZMa79CT1USg//Gkx7R8=;
+	b=JViFz/5VcrUwXMeNG7zxowcDJm5b1tIc2Rm/98Cy3UutNOC+KiWlPOBkjQ1br//GAnq1+T
+	QibxW4GYxCW5HdOwVks5zYGWaxhfN+owYfuVgeNX2dbFxbvBH0nRrO5mXGqyCiSU5S/xnA
+	cxUjS/bazmcaZl6nqX9dAX4FVl3KtvALk1twhS/ZJtYND+nVKwdpq0oSt1FXQ8yZnyLatK
+	c9jTCBYRGq64D6vQUbDqc0PQxRHODTDkHmm26w0NQbCpt43o0p6ozjYTGt/A5Tnc10l/cq
+	oR+iV9pdZPBGz2pUKQSC98ZkdDm0YgNMjraopMua2KBzZl/0ZECj0kExvWPsfg==
+From: Gregory CLEMENT <gregory.clement@bootlin.com>
+Date: Fri, 28 Nov 2025 09:30:06 +0100
+Subject: [PATCH] MIPS: ftrace: Fix memory corruption when kernel is located
+ beyond 32 bits
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+Message-Id: <20251128-fix_mips_ftrace-v1-1-e6169f8777f2@bootlin.com>
+X-B4-Tracking: v=1; b=H4sIAI1dKWkC/x2MQQqAIBAAvyJ7TkgrrL4SEVuttYdMNCII/550H
+ JiZFyIFpgi9eCHQzZFPl0EVApYd3UaS18ygS90oVdbS8jMd7ONkr4ALSYOIc9tRZY2BXPlAWfm
+ Pw5jSB7nYEBFhAAAA
+X-Change-ID: 20251104-fix_mips_ftrace-7aaab89e3f77
+To: Steven Rostedt <rostedt@goodmis.org>, 
+ Masami Hiramatsu <mhiramat@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
+ =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
+ linux-mips@vger.kernel.org, Gregory CLEMENT <gregory.clement@bootlin.com>
+X-Mailer: b4 0.14.3
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Fri, 28 Nov 2025, Klara Modin wrote:
+Since commit e424054000878 ("MIPS: Tracing: Reduce the overhead of
+dynamic Function Tracer"), the macro UASM_i_LA_mostly has been used,
+and this macro can generate more than 2 instructions. At the same
+time, the code in ftrace assumes that no more than 2 instructions can
+be generated, which is why it stores them in an int[2] array. However,
+as previously noted, the macro UASM_i_LA_mostly (and now UASM_i_LA)
+causes a buffer overflow when _mcount is beyond 32 bits. This leads to
+corruption of the variables located in the __read_mostly section.
 
-> > +/*
-> > + * Initialise all TLB entries with unique values that do not clash with
-> > + * what we have been handed over and what we'll be using ourselves.
-> > + */
-> >  static void r4k_tlb_uniquify(void)
-> >  {
-> > -	int entry = num_wired_entries();
-> > +	unsigned long tlb_vpns[1 << MIPS_CONF1_TLBS_SIZE];
-> > +	int tlbsize = current_cpu_data.tlbsize;
-> > +	int start = num_wired_entries();
-> 
-> It seems that for my Edgerouter 6P (identifies itself as "CPU0 revision
-> is: 000d9602 (Cavium Octeon III)") current_cpu_data.tlbsize is larger
-> than 1 << MIPS_CONF1_TLBS_SIZE (256 rather than 64) and
-> num_wired_entries() returns 0 so the loop will overwrite part of the
-> stack and hangs the system.
+This corruption was observed because the variable
+__cpu_primary_thread_mask was corrupted, causing a hang very early
+during boot.
 
- Thank you for the report.  A fix is in review already, please try it: 
-<https://lore.kernel.org/r/alpine.DEB.2.21.2511280544050.36486@angie.orcam.me.uk/>.
+This fix prevents the corruption by avoiding the generation of
+instructions if they could exceed 2 instructions in
+length. Fortunately, insn_la_mcount is only used if the instrumented
+code is located outside the kernel code section, so dynamic ftrace can
+still be used, albeit in a more limited scope. This is still
+preferable to corrupting memory and/or crashing the kernel.
 
-> Although it boots if I remove the call to r4k_tlb_uniquify(), I have run
-> into issues when enabling transparent hugepages and hugetlb in the past
-> but not sure if that's related to this, and I still seem to be able to
-> trigger that issue sometimes with this patch. Attaching the panic for
-> that just in case, though.
+Signed-off-by: Gregory CLEMENT <gregory.clement@bootlin.com>
+---
+To go further and remove the limitations of dynamic trace support, the
+ftrace implementation for MIPS should be completely rewritten and
+inspired by what was done for arm64. This approach was chosen by
+Loongson: instead of trying to manage multiple instructions added on
+the fly, the support relies on a breakpoint, which is more robust.
 
- Unrelated.  There's an obvious clash here:
+However, this effort is significant, so I’ll leave it to those who are
+motivated to work on it. If needed, I can provide some guidance on the
+topic.
+---
+ arch/mips/kernel/ftrace.c | 25 +++++++++++++++++++++----
+ 1 file changed, 21 insertions(+), 4 deletions(-)
 
-[   23.341961] Index    : 80000000
-[   23.345104] PageMask : 1fe000
-[   23.348073] EntryHi  : c0000000000c609b
-[   23.351911] EntryLo0 : 000000000014afc7
-[   23.355749] EntryLo1 : 0000000000000001
-[   23.359587] Wired    : 0
-[   23.362122] PageGrain: e8000000
+diff --git a/arch/mips/kernel/ftrace.c b/arch/mips/kernel/ftrace.c
+index f39e85fd58fa9..b15615b285690 100644
+--- a/arch/mips/kernel/ftrace.c
++++ b/arch/mips/kernel/ftrace.c
+@@ -54,10 +54,20 @@ static inline void ftrace_dyn_arch_init_insns(void)
+ 	u32 *buf;
+ 	unsigned int v1;
+ 
+-	/* la v1, _mcount */
+-	v1 = 3;
+-	buf = (u32 *)&insn_la_mcount[0];
+-	UASM_i_LA(&buf, v1, MCOUNT_ADDR);
++	/* If we are not in compat space, the number of generated
++	 * instructions will exceed the maximum expected limit of 2.
++	 * To prevent buffer overflow, we avoid generating them.
++	 * insn_la_mcount will not be used later in ftrace_make_call.
++	 */
++	if (uasm_in_compat_space_p(MCOUNT_ADDR)) {
++		/* la v1, _mcount */
++		v1 = 3;
++		buf = (u32 *)&insn_la_mcount[0];
++		UASM_i_LA(&buf, v1, MCOUNT_ADDR);
++	} else {
++		pr_warn("ftrace: mcount address beyond 32 bits is not supported (%lX)\n",
++			MCOUNT_ADDR);
++	}
+ 
+ 	/* jal (ftrace_caller + 8), jump over the first two instruction */
+ 	buf = (u32 *)&insn_jal_ftrace_caller;
+@@ -189,6 +199,13 @@ int ftrace_make_call(struct dyn_ftrace *rec, unsigned long addr)
+ 	unsigned int new;
+ 	unsigned long ip = rec->ip;
+ 
++	/* When the code to patch does not belong to the kernel code
++	 * space, we must use insn_la_mcount. However, if MCOUNT_ADDR
++	 * is not in compat space, insn_la_mcount is not usable.
++	 */
++	if (!core_kernel_text(ip) && !uasm_in_compat_space_p(MCOUNT_ADDR))
++		return -EFAULT;
++
+ 	new = core_kernel_text(ip) ? insn_jal_ftrace_caller : insn_la_mcount[0];
+ 
+ #ifdef CONFIG_64BIT
 
--- so this is an attempt to create a TLB entry for a pair of 1MiB pages at 
-0xc0000000000c6000 (which is already suspicious as the VPN is obviously 
-not 2MiB-aligned, but the extraneous bits will be masked by hardware), and 
-it collides with all these entries:
+---
+base-commit: 3a8660878839faadb4f1a6dd72c3179c1df56787
+change-id: 20251104-fix_mips_ftrace-7aaab89e3f77
 
-[   25.918311] Index: 193 pgmask=4kb va=c00000000005a000 asid=9b
-[   25.918311] 	[ri=0 xi=0 pa=0000593d000 c=0 d=1 v=1 g=1] [ri=0 xi=0 pa=0000593e000 c=0 d=1 v=1 g=1]
-[   25.933035] Index: 194 pgmask=4kb va=c000000000072000 asid=9b
-[   25.933035] 	[ri=0 xi=0 pa=00005955000 c=0 d=1 v=1 g=1] [ri=0 xi=0 pa=00005956000 c=0 d=1 v=1 g=1]
-[   25.947760] Index: 195 pgmask=4kb va=c000000000016000 asid=9b
-[   25.947760] 	[ri=0 xi=0 pa=00000000000 c=0 d=0 v=0 g=1] [ri=0 xi=0 pa=00005886000 c=0 d=1 v=1 g=1]
-[   25.962483] Index: 196 pgmask=4kb va=c00000000001a000 asid=9b
-[   25.962483] 	[ri=0 xi=0 pa=00005888000 c=0 d=1 v=1 g=1] [ri=0 xi=0 pa=00005889000 c=0 d=1 v=1 g=1]
+Best regards,
+-- 
+Grégory CLEMENT, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
- HTH,
-
-  Maciej
 
