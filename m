@@ -1,206 +1,138 @@
-Return-Path: <linux-mips+bounces-12399-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12400-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0552ACA3FFD
-	for <lists+linux-mips@lfdr.de>; Thu, 04 Dec 2025 15:25:47 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CBE7CA4984
+	for <lists+linux-mips@lfdr.de>; Thu, 04 Dec 2025 17:52:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id E607630C76ED
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Dec 2025 14:22:20 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3B340310562A
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Dec 2025 16:44:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C24F833508C;
-	Thu,  4 Dec 2025 14:21:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADC8C313E39;
+	Thu,  4 Dec 2025 16:36:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y+bDJ+oB"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="OVvsT/qR"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC3A3335089;
-	Thu,  4 Dec 2025 14:21:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D398313E07;
+	Thu,  4 Dec 2025 16:36:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764858115; cv=none; b=bDZjnP32u9ykCEtKlcytkRYWG+y9sWQYtyYOAXA0IQ8KqEz5Zu/MbCEae89s5IssygNbLzLbUV+TxK2CTq9z1xzXdtb1UcJEpdTffjsVxWf9nZ3UDoOxLo/7k7Z2JLsXwHaDDT/UqvdLMRbfIOLy4bXhEdEMglGOgmmkM5kedhA=
+	t=1764866173; cv=none; b=IZB4K5wPoOanU9Befx+jQGpIcQjWy8sW1CNobGLL1kwOwT1dvcqw3qq01fEHJiimXiwSr09nS5guDpJ6M/2RWHjHg0mnm+7z/TN8RUv/1MS9Y5uLdmw3VPP/hKIVKTHJ1jk5Nm8lj7LfvQAdrvbL+EH51fMjdj/Gdz1LzWnGo0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764858115; c=relaxed/simple;
-	bh=Ix4HAjzi2WlFfbJt7VTMxHQfAkw4id96Xxu6hbqhPmA=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=DiJ/M2jOTEX/0mPRDIf7E80+W4TtU2QzA2TIz6mptkvjHLxQhmg95ZwrdSaukFFBXYXJpC5eGOL0rUQuZkzjyYabCcpMK4HvpGLJ0imKvGuyiNNnNpcO1MGXh7V82O6B9iVBboCinUefLmFPYUsYhbCjSXoCIEcHWvzz1G0eAuY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y+bDJ+oB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5353C4CEFB;
-	Thu,  4 Dec 2025 14:21:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764858114;
-	bh=Ix4HAjzi2WlFfbJt7VTMxHQfAkw4id96Xxu6hbqhPmA=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Y+bDJ+oBSuytrRGrA1/IeWKGjwOp/ZGF7vweh2xg2gWzgCyssqRjWsrI41ZAUass8
-	 0ZyjkEcxeEDfLkb8i3ZjzGBGRr1z3eCHdOmLi9qeeF4uh3KuI6kGjS6flpdv+sWhCE
-	 x058GGYzauOameSVw86ITd5aIngE+grBP6RBIUiwkDvmf/t8T/YdwyhIgZmMugFbs0
-	 9+dyM2PjIsQ+yA6mhL+qjZoDlOHQD1xyKRBzJWAXo/3GaeyKLE0ftRUOIbQH6kHaxM
-	 rTVM7WMh1EvKMT20Ynl+pQ/dSXo9mj5YJunSM/lfEAdsFwT5rzaCSywiOvSp6AaBBD
-	 c35yjxCXPdknA==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1vRADQ-0000000AT9t-1T1w;
-	Thu, 04 Dec 2025 14:21:52 +0000
-Date: Thu, 04 Dec 2025 14:21:51 +0000
-Message-ID: <867bv2pbsw.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Daniel Thompson <danielt@kernel.org>
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-acpi@vger.kernel.org,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Will Deacon <will@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Saravana Kannan <saravanak@google.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Sven Peter <sven@kernel.org>,
-	Janne Grunau <j@jannau.net>,
-	Suzuki K Poulose <suzuki.poulose@arm.com>,
-	James Clark <james.clark@linaro.org>,
-	Jonathan Cameron <jonathan.cameron@huawei.com>,
-	Jinjie Ruan <ruanjinjie@huawei.com>,
-	Alexandru Elisei <alexandru.elisei@arm.com>,
-	linux-mips@vger.kernel.org
-Subject: Re: [PATCH v4 16/26] genirq: Allow per-cpu interrupt sharing for non-overlapping affinities
-In-Reply-To: <aTFozefMQRg7lYxh@aspen.lan>
-References: <20251020122944.3074811-1-maz@kernel.org>
-	<20251020122944.3074811-17-maz@kernel.org>
-	<aTFozefMQRg7lYxh@aspen.lan>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1764866173; c=relaxed/simple;
+	bh=QLA4FZzgbXjsYI+l2C36P4TGIK8Zp5+dxYpW28/AI3w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fBNV/nIqrxbUhbhUrE2WwTe+CE0za1VyFqCSjbaGwGnFAh6nInDfu6QDCfw0N1fzYfFOiTugUuLdOsfxCtzDDu74N8IXrMd+Qvofn3jRfsTFHxyi/kRGdC5u4NoA1rWRzp4p0l9NpQ7LkCsZnzB0tLKJF3VHS55qVfNhQNqJfQ8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=OVvsT/qR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 955C6C4CEFB;
+	Thu,  4 Dec 2025 16:36:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1764866173;
+	bh=QLA4FZzgbXjsYI+l2C36P4TGIK8Zp5+dxYpW28/AI3w=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=OVvsT/qRwMLLko60/eJAuCFaJbfoMhmF08IrWhinJQIFVfoBSYtAltxLtDskYOR6M
+	 Kfi6FiExQTIC4qUNeyXmEJjG58nnGGvCoHEG8cyVWl3AyHYWsaqL77CQrcG1jDrtMl
+	 kM0KgwOU4sChXd3oN0qu+gYgY5L5E7TH6Fsl3SJU=
+Date: Thu, 4 Dec 2025 17:36:10 +0100
+From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To: Naresh Kamboju <naresh.kamboju@linaro.org>
+Cc: stable@vger.kernel.org, patches@lists.linux.dev,
+	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+	jonathanh@nvidia.com, f.fainelli@gmail.com,
+	sudipm.mukherjee@gmail.com, rwarsow@gmx.de, conor@kernel.org,
+	hargar@microsoft.com, broonie@kernel.org, achill@achill.org,
+	sr@sladewatkins.com, Vlastimil Babka <vbabka@suse.cz>,
+	"Fabio M. De Francesco" <fabio.maria.de.francesco@linux.intel.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Svyatoslav Ryhel <clamor95@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Dan Carpenter <dan.carpenter@linaro.org>,
+	Anders Roxell <anders.roxell@linaro.org>,
+	Ben Copeland <benjamin.copeland@linaro.org>,
+	Ian Rogers <irogers@google.com>, linux-mips@vger.kernel.org,
+	linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Subject: Re: [PATCH 5.15 000/392] 5.15.197-rc1 review
+Message-ID: <2025120428-manly-squatting-f3eb@gregkh>
+References: <20251203152414.082328008@linuxfoundation.org>
+ <CA+G9fYvmhQs9qx-XpLiaOUZQKj=gR=-X5MoJ1auRmbC7cC+AXw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: danielt@kernel.org, tsbogend@alpha.franken.de, linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-acpi@vger.kernel.org, tglx@linutronix.de, mark.rutland@arm.com, will@kernel.org, rafael@kernel.org, robh@kernel.org, saravanak@google.com, gregkh@linuxfoundation.org, sven@kernel.org, j@jannau.net, suzuki.poulose@arm.com, james.clark@linaro.org, jonathan.cameron@huawei.com, ruanjinjie@huawei.com, alexandru.elisei@arm.com, linux-mips@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CA+G9fYvmhQs9qx-XpLiaOUZQKj=gR=-X5MoJ1auRmbC7cC+AXw@mail.gmail.com>
 
-On Thu, 04 Dec 2025 10:56:13 +0000,
-Daniel Thompson <danielt@kernel.org> wrote:
-> 
-> On Mon, Oct 20, 2025 at 01:29:33PM +0100, Marc Zyngier wrote:
-> > Interrupt sharing for percpu-devid interrupts is forbidden, and
-> > for good reasons. These are interrupts generated *from* a CPU and
-> > handled by itself (timer, for example). Nobody in their right mind
-> > would put two devices on the same pin (and if they have, they get to
-> > keep the pieces...).
+On Thu, Dec 04, 2025 at 02:08:24PM +0530, Naresh Kamboju wrote:
+> On Wed, 3 Dec 2025 at 21:27, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
 > >
-> > But this also prevents more benign cases, where devices are connected
-> > to groups of CPUs, and for which the affinities are not overlapping.
-> > Effectively, the only thing they share is the interrupt number, and
-> > nothing else.
+> > This is the start of the stable review cycle for the 5.15.197 release.
+> > There are 392 patches in this series, all will be posted as a response
+> > to this one.  If anyone has any issues with these being applied, please
+> > let me know.
 > >
-> > Let's tweak the definition of IRQF_SHARED applied to percpu_devid
-> > interrupts to allow this particular case. This results in extra
-> > validation at the point of the interrupt being setup and freed,
-> > as well as a tiny bit of extra complexity for interrupts at handling
-> > time (to pick the correct irqaction).
+> > Responses should be made by Fri, 05 Dec 2025 15:23:16 +0000.
+> > Anything received after that time might be too late.
 > >
-> > Tested-by: Will Deacon <will@kernel.org>
-> > Signed-off-by: Marc Zyngier <maz@kernel.org>
+> > The whole patch series can be found in one patch at:
+> >         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.197-rc1.gz
+> > or in the git tree and branch at:
+> >         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> > and the diffstat can be found below.
+> >
+> > thanks,
+> >
+> > greg k-h
 > 
-> I picked up this patch via linux-next and it appears be causing boot
-> regressions on MIPS/qemu. This patch was identified with a bisect and
-> a git revert of this patch from the linux-next tip resolves the problem
-> (specifically, next-20251204 with git revert bdf4e2ac295f).
+> The arm, mips and powerpc builds failed on the stable-rc 5.15.197-rc1.
 > 
-> I'm running the code as part of the kgdb test suite but the system
-> doesn't survive long enough for kgdb to be involved. In fact I was able
-> to reduce things to the following reproduction with all the kgdb pieces
-> removed:
+> Build regressions: arm, fuse-tegra30.c:250:10: error: 'const struct
+> tegra_fuse_soc' has no member named 'cells'
+> Build regressions: arm, fuse-tegra30.c:250:18: error: initialization
+> of 'const struct attribute_group *' from incompatible pointer type
+> 'const struct nvmem_cell_info *' [-Werror=incompatible-pointer-types]
+> Build regressions: arm, fuse-tegra30.c:251:10: error: 'const struct
+> tegra_fuse_soc' has no member named 'num_cells'
 > 
->     make malta_kvm_defconfig generic/64r6.config
->     ../scripts/config \
->         --enable WERROR --enable CPU_MIPS64_R6 --enable MIPS_CPS \
-> 	--enable BLK_DEV_INITRD --set-val FRAME_WARN 2048
->     make olddefconfig
->     make -j$(nproc) all
->     qemu-system-mips64el -cpu I6400 -M malta -m 1G -smp 2 \
->         -kernel vmlinux -nographic \
-> 	-append " console=ttyS0,115200 clk_ignore_unused"
+> Build regressions: mips, tlb-r4k.c:591:31: error: passing argument 1
+> of 'memblock_free' makes integer from pointer without a cast
+> [-Werror=int-conversion]
+> 
+> Build regressions: powerpc, mm/mempool.c:68:17: error: 'for' loop
+> initial declarations are only allowed in C99 or C11 mode
+> 
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+> 
+> ARM build regressions are due to,
+> 
+>   soc/tegra: fuse: Add Tegra114 nvmem cells and fuse lookups
+>   [ Upstream commit b9c01adedf38c69abb725a60a05305ef70dbce03 ]
 
-Many thanks for the minimal reproducer, that really helped a lot!
+dropped.
 
-[...]
+> MIPS build regressions are due to,
+> 
+>   MIPS: mm: kmalloc tlb_vpn array to avoid stack overflow
+>   commit 841ecc979b18d3227fad5e2d6a1e6f92688776b5 upstream.
 
-> CPU 0 Unable to handle kernel paging request at virtual address 0000000000000000, epc == ffffffff801c2398, ra == ffffffff801bab00
-> Oops[#1]:
-> CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted 6.18.0-next-20251204 #20 NONE
-> Hardware name: mti,malta
-> $ 0   : 0000000000000000 0000000000000001 0000000000000000 0000000000000000
-> $ 4   : 0000000000000001 a8000000020e8008 0000000000000000 ffffffff80c23b80
-> $ 8   : 0000000000000004 0000000000000000 0000000000000000 000000000000002f
-> $12   : a8000000020f4000 0000000000003ff0 0000000000003000 0000000000000003
-> $16   : ffffffff80d095c0 ffffffff80ceb410 0000000000000019 ffffffff80c378c0
-> $20   : ffffffff80c4bec8 0000000000000000 ffffffff80e00000 ffffffff80de0000
-> $24   : 0000000000000000 0000000000000010
-> $28   : ffffffff80c20000 a8000000020f7ec0 a800000000e12fcd ffffffff801bab00
-> epc   : ffffffff801c2398 handle_percpu_devid_irq+0xb8/0x250
-> ra    : ffffffff801bab00 handle_irq_desc+0x48/0x88
-> Status: 1400a4e2	KX SX UX KERNEL EXL
-> Cause : 00800408 (ExcCode 02)
-> BadVA : 0000000000000000
-> PrId  : 0001a900 (MIPS I6400)
-> Modules linked in:
-> Process swapper/0 (pid: 0, threadinfo=(____ptrval____), task=(____ptrval____), tls=0000000000000000)
-> Stack : ffffffff80c35a2c 0000000000000002 ffffffff80e00000 0fffffffffffffff
->         ffffffff80c50000 0000000000000001 0000000000000003 ffffffff801bab00
->         0000000000000000 ffffffff805d82a8 0000000000000000 0000000000000008
->         0000000000000000 0000000000000000 0000000000000000 5189d95a7a4f4800
->         a800000002014300 0000000000000002 0000000000000001 000000000000001f
->         ffffffff80e00000 0000000000000004 0000000000000000 ffffffff801bab00
->         0000000000000000 ffffffff809ec128 0000000000000001 fffffffffffffffb
->         0000000000000001 ffffffff805d7ebc 0000000000000000 0000000000000000
->         ffffffff80c23c80 ffffffff80c50000 ffffffff80de0000 ffffffff80db0000
->         0000000000000000 ffffffff80112f10 ffffffff80c23c80 0000000000000000
-> Call Trace:
-> [<ffffffff801c2398>] handle_percpu_devid_irq+0xb8/0x250
-> [<ffffffff801bab00>] handle_irq_desc+0x48/0x88
-> [<ffffffff805d82a8>] gic_irq_dispatch+0xc0/0x288
-> [<ffffffff801bab00>] handle_irq_desc+0x48/0x88
-> [<ffffffff809ec128>] do_domain_IRQ+0x28/0x40
-> [<ffffffff805d7ebc>] plat_irq_dispatch+0x64/0xe8
-> [<ffffffff80112f10>] handle_int+0x134/0x140
-> [<ffffffff80110dc8>] calibrate_delay+0x158/0x290
-> [<ffffffff80d58e48>] start_kernel+0x754/0x7a4
+dropped.
 
-This hack fixes it for me, but really, mips needs to grow up and stop
-using these antiquated APIs.
+> Powerpc build regressions are due to,
+> 
+>   mm/mempool: replace kmap_atomic() with kmap_local_page()
+>   [ Upstream commit f2bcc99a5e901a13b754648d1dbab60f4adf9375 ]
 
-Can please you give it a go?
+dropped.
 
-Thanks,
+thanks!
 
-	M.
-
-diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
-index 0bb29316b4362..8b1b4c8a4f54c 100644
---- a/kernel/irq/manage.c
-+++ b/kernel/irq/manage.c
-@@ -2470,6 +2470,9 @@ int setup_percpu_irq(unsigned int irq, struct irqaction *act)
- 	if (retval < 0)
- 		return retval;
- 
-+	if (!act->affinity)
-+		act->affinity = cpu_online_mask;
-+
- 	retval = __setup_irq(irq, desc, act);
- 
- 	if (retval)
-
--- 
-Without deviation from the norm, progress is not possible.
+greg k-h
 
