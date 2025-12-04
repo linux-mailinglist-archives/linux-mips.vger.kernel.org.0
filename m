@@ -1,335 +1,345 @@
-Return-Path: <linux-mips+bounces-12395-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12396-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 139C9CA2A89
-	for <lists+linux-mips@lfdr.de>; Thu, 04 Dec 2025 08:39:19 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E85C9CA2D83
+	for <lists+linux-mips@lfdr.de>; Thu, 04 Dec 2025 09:38:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 3BC123022B5B
-	for <lists+linux-mips@lfdr.de>; Thu,  4 Dec 2025 07:39:14 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D33F93006622
+	for <lists+linux-mips@lfdr.de>; Thu,  4 Dec 2025 08:38:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB4A73074AA;
-	Thu,  4 Dec 2025 07:39:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54975309EFF;
+	Thu,  4 Dec 2025 08:38:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="naH7XhYE"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QaO9nUzK"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f175.google.com (mail-pg1-f175.google.com [209.85.215.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 991292FFFAB;
-	Thu,  4 Dec 2025 07:39:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E93D33254AD
+	for <linux-mips@vger.kernel.org>; Thu,  4 Dec 2025 08:38:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1764833953; cv=none; b=ANEZTFl2fcsLSE8sH8aEQe6iy85gVZnorQsvbb4iAnr+CZ1wulqm7tRTOONwOu0DrPLfV+AmkSdRTNHox5ekwsEGKHR0h4l27mGO4d87Rr151yUYbgzrd7w5ylv8pwekQ9/VTOpG8BAzuh5vYYPbgGHtyptZkAqahYXOkYjg++0=
+	t=1764837520; cv=none; b=nSCfVpV6KXrcPrVyDJd19nWgHvooBsSi9LXQmXWNM/D9DXEvgDwWf5n1TwAR0WAXVYoohfD73wUyW3zNDLSejtMwWxELjdklOluw0KZ3+zNMf6BkF/WY3uBBv4LGoHvmFQ4O0H6Fk7qOCRJ0bK6IALXXKnw9mjQVA9YMJQAPFwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1764833953; c=relaxed/simple;
-	bh=Qq0GWTvBPgCqUz9m3+8fVUgJ9uPY8K9dp5GcVDT/CYE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=URYYkqvs83gcP86hkm6dd0j6hkXsLDYoowumaSbfkSU8KiWYb3WI2X7UoMJQ4XJwN2/SfHilKJ1fCRlrWoLqKabVZGHEgZbJyQ5did8Pwt7MB3qBNmqh68Re9cjLK3J2Ho9MPydvoiRGFiwD5JcPnuJJqSwBN+YiiPgPwMDe7dg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=naH7XhYE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F690C113D0;
-	Thu,  4 Dec 2025 07:39:05 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1764833953;
-	bh=Qq0GWTvBPgCqUz9m3+8fVUgJ9uPY8K9dp5GcVDT/CYE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=naH7XhYEsEkbtlW6bsr51zK1N3fr04bg7n2X9YlcuhrVgKW+16Y+Zb8p2vXqWEOvm
-	 p9IJks1elvXfDM72avZm44WkyA6S6axvsOO9yKOt107nN/XGV+syj1R0x2FySHa/dS
-	 ZsLnhKU8Vrt4l32kXkLXUT30bZaMTIP+zLvWVRwtijoZXIbe12bkkdIac79lyYcg7w
-	 KpKF8/bwnuwzXk75yU4uqCdpd7Ts3Cbb2sc+bOrThfJ9ZF+OuZIbCZk4chVYq1nAXF
-	 eBYKxcJR0XQctjXiK1mK01OaMZU6amOD6yjnjSy2A5qlDw9gZJxrPmhRDDX2kCtYNA
-	 8L5PdBOJKtD1g==
-Message-ID: <b896d109-d707-4651-8bb0-6cf5071e46bf@kernel.org>
-Date: Thu, 4 Dec 2025 08:39:03 +0100
+	s=arc-20240116; t=1764837520; c=relaxed/simple;
+	bh=mqhXiD/NpVQgpF5pRnCUAPxzIeECRU0KQVh4dg8DiKU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=rrWuRzO3hj0gTzq5FP2uQf7D5wDQ7cVFcGTI9XkIHbHV4SacA2U0JzmrJQ94xQFHbZ45lzseKSmCCe7L1Jn0H0XMhR6m5LLSOaxrp+vygfsAEF3HpsZULrwMdkiOlr+JsW4h4g19N6+2IJVIq6yHg3URfX+CkaWjcXFGB2vxYQ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QaO9nUzK; arc=none smtp.client-ip=209.85.215.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pg1-f175.google.com with SMTP id 41be03b00d2f7-bf5ac50827dso455205a12.2
+        for <linux-mips@vger.kernel.org>; Thu, 04 Dec 2025 00:38:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1764837517; x=1765442317; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=0JlKi5Mxej8/+ZcumeV18Yc+KKJCP9ofTFD7HkIbArE=;
+        b=QaO9nUzKXLmW5DjnepNYuJFMmVJGSTqsSkR3dzx1VMm5rH4Wupe157F5H1G9ZCL3Go
+         OEq2qlEOpO2bi+J/R5mgX/Gm2/d/u4QgazmWp7PsF4QecgwkzEd2vSrbz79r5zSXThkr
+         ZHyvUpufah7xWA0vyaRR8+Q0jUJp3EDTQAo/2ZaLPM0NB+ysnvs22pkalZr1fgcOS28+
+         88mQcorzLZ7EIYeuNquUtcK0ZOltiOXWVfxKG2d4q8LYMx0k9otU31zTTv/PUi57RbKk
+         Cq8qkZfwyNV7MSro/FsvXXljFZJzZ5rV1JhEPA8tbamo41v6ZhPLJs6sJ+lNDgzNEciQ
+         HoKA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1764837517; x=1765442317;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0JlKi5Mxej8/+ZcumeV18Yc+KKJCP9ofTFD7HkIbArE=;
+        b=lAVevVwhTSw7BgOhCH0b9r38eEkjXa8WFTB4yp/U3gdn17VDlHh1UfZuT5C2Y4+KKB
+         gxE8eJDQaaBnF/0uKKE84ApHL5OmRRvhnCP8i4aNjqEaAOjI0q9AbBAQH6KIDWqsW1e9
+         50kPHf6VwoeenJHUpiYoRrV8rEN6cgKE0TyFtvs3dG3meqYgnB9H1q3MKlRcwaenCX+v
+         G3UH8zknxGJqFDK1LrKHUCI4Gs+Tg138UK7Zk3DV4dAHi1rPsnCfayZDaISRPLf+snWQ
+         g6FPUNwYb6ogpPUmuoc8m6rnlduRPESKTPZDUpdGF6GK0LB2WOy7uUMDUXhHrE2L0Y2Z
+         PcKA==
+X-Forwarded-Encrypted: i=1; AJvYcCUCJ8eF7f5skE6Ardc3uZ6Fj0ejI0HauiDuIFnZW3CefvLkYjYzNnbLNh7GxskSmwXBF8BO6t15Rexm@vger.kernel.org
+X-Gm-Message-State: AOJu0YwdDQC0zLlaWrKVBLKDjngaWInttQqhWinXpi+pL8eNtFtTWPjv
+	TEnPckPfBCYBYsAq4P/ajY7xbilGTTLuDhnPcjw26U3+J6VdAbN7ImKuBjjTj3FwiNX3Bfay6Bf
+	qjl0hWGKxXeVPDYTsZYKiZ22zr3WFAE/KvLwwyJ2n/A==
+X-Gm-Gg: ASbGncveFlHmXGBU4kFo1ydKtKBqTZoHGT9xOUI5zh9fNmMPFIt5SK2bwe530CCnbwX
+	9POfu6346jvOryX06j4rStyH5nBMMJHbZdJUUL23+4XFQvbm8ivFVC96yyVvWGniMdzjGySeL9A
+	P7c7stw0CjrFRfF/aRQSVRPMcxn65crjYYmhn8+33sVEuEtw8N0atTpTQQ9gtmOEuS6P0+tN6ch
+	u7D2la6LNFLTAlLRrUfiQlQlfUkYoRbWfgiWrkIiALR4Vktyk7d2iKt1x5iiN3ziyfOJDmQfpzk
+	VJo6dnjEjfnCDG+7fTQtgHXm3ZF6
+X-Google-Smtp-Source: AGHT+IFZEAv1ezVPCker9GLaQZImi3N5jH6VXIGomJJWxOm3zS/LZIZssrCOD1GSIIbrPIuYSxinKKQkE6vNP8MxkPE=
+X-Received: by 2002:a05:693c:3111:b0:2a4:3592:c5fb with SMTP id
+ 5a478bee46e88-2aba424d110mr1567722eec.12.1764837517021; Thu, 04 Dec 2025
+ 00:38:37 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] ALSA: Do not build obsolete API
-To: david@ixit.cz, Russell King <linux@armlinux.org.uk>,
- Vladimir Zapolskiy <vz@mleia.com>,
- Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
- Aaro Koskinen <aaro.koskinen@iki.fi>,
- Janusz Krzysztofik <jmkrzyszt@gmail.com>, Tony Lindgren <tony@atomide.com>,
- Thierry Reding <thierry.reding@gmail.com>,
- Jonathan Hunter <jonathanh@nvidia.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Keguang Zhang <keguang.zhang@gmail.com>,
- Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>,
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>
-Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-omap@vger.kernel.org, linux-tegra@vger.kernel.org,
- linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
- linux-sh@vger.kernel.org, linux-sound@vger.kernel.org
-References: <20251203-old-alsa-v1-1-ac80704f52c3@ixit.cz>
-Content-Language: fr-FR
-From: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-In-Reply-To: <20251203-old-alsa-v1-1-ac80704f52c3@ixit.cz>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20251203152414.082328008@linuxfoundation.org>
+In-Reply-To: <20251203152414.082328008@linuxfoundation.org>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Thu, 4 Dec 2025 14:08:24 +0530
+X-Gm-Features: AWmQ_bnogH29i6myZ_z674xGj0T3c_RPNdGl1-x_I57yUAyVvG1sIUwN6973xXs
+Message-ID: <CA+G9fYvmhQs9qx-XpLiaOUZQKj=gR=-X5MoJ1auRmbC7cC+AXw@mail.gmail.com>
+Subject: Re: [PATCH 5.15 000/392] 5.15.197-rc1 review
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: stable@vger.kernel.org, patches@lists.linux.dev, 
+	linux-kernel@vger.kernel.org, torvalds@linux-foundation.org, 
+	akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org, 
+	patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de, 
+	jonathanh@nvidia.com, f.fainelli@gmail.com, sudipm.mukherjee@gmail.com, 
+	rwarsow@gmx.de, conor@kernel.org, hargar@microsoft.com, broonie@kernel.org, 
+	achill@achill.org, sr@sladewatkins.com, Vlastimil Babka <vbabka@suse.cz>, 
+	"Fabio M. De Francesco" <fabio.maria.de.francesco@linux.intel.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Svyatoslav Ryhel <clamor95@gmail.com>, 
+	Arnd Bergmann <arnd@arndb.de>, Dan Carpenter <dan.carpenter@linaro.org>, 
+	Anders Roxell <anders.roxell@linaro.org>, Ben Copeland <benjamin.copeland@linaro.org>, 
+	Ian Rogers <irogers@google.com>, linux-mips@vger.kernel.org, 
+	linuxppc-dev <linuxppc-dev@lists.ozlabs.org>
+Content-Type: text/plain; charset="UTF-8"
+
+On Wed, 3 Dec 2025 at 21:27, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 5.15.197 release.
+> There are 392 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 05 Dec 2025 15:23:16 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.197-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
+
+The arm, mips and powerpc builds failed on the stable-rc 5.15.197-rc1.
+
+Build regressions: arm, fuse-tegra30.c:250:10: error: 'const struct
+tegra_fuse_soc' has no member named 'cells'
+Build regressions: arm, fuse-tegra30.c:250:18: error: initialization
+of 'const struct attribute_group *' from incompatible pointer type
+'const struct nvmem_cell_info *' [-Werror=incompatible-pointer-types]
+Build regressions: arm, fuse-tegra30.c:251:10: error: 'const struct
+tegra_fuse_soc' has no member named 'num_cells'
+
+Build regressions: mips, tlb-r4k.c:591:31: error: passing argument 1
+of 'memblock_free' makes integer from pointer without a cast
+[-Werror=int-conversion]
+
+Build regressions: powerpc, mm/mempool.c:68:17: error: 'for' loop
+initial declarations are only allowed in C99 or C11 mode
+
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+ARM build regressions are due to,
+
+  soc/tegra: fuse: Add Tegra114 nvmem cells and fuse lookups
+  [ Upstream commit b9c01adedf38c69abb725a60a05305ef70dbce03 ]
+
+MIPS build regressions are due to,
+
+  MIPS: mm: kmalloc tlb_vpn array to avoid stack overflow
+  commit 841ecc979b18d3227fad5e2d6a1e6f92688776b5 upstream.
+
+Powerpc build regressions are due to,
+
+  mm/mempool: replace kmap_atomic() with kmap_local_page()
+  [ Upstream commit f2bcc99a5e901a13b754648d1dbab60f4adf9375 ]
+
+### arm build error
+drivers/soc/tegra/fuse/fuse-tegra30.c:250:10: error: 'const struct
+tegra_fuse_soc' has no member named 'cells'
+  250 |         .cells = tegra114_fuse_cells,
+      |          ^~~~~
+drivers/soc/tegra/fuse/fuse-tegra30.c:250:18: error: initialization of
+'const struct attribute_group *' from incompatible pointer type 'const
+struct nvmem_cell_info *' [-Werror=incompatible-pointer-types]
+  250 |         .cells = tegra114_fuse_cells,
+      |                  ^~~~~~~~~~~~~~~~~~~
+drivers/soc/tegra/fuse/fuse-tegra30.c:250:18: note: (near
+initialization for 'tegra114_fuse_soc.soc_attr_group')
+drivers/soc/tegra/fuse/fuse-tegra30.c:251:10: error: 'const struct
+tegra_fuse_soc' has no member named 'num_cells'
+  251 |         .num_cells = ARRAY_SIZE(tegra114_fuse_cells),
+      |          ^~~~~~~~~
+cc1: some warnings being treated as errors
+
+### mips Build error
+arch/mips/mm/tlb-r4k.c: In function 'r4k_tlb_uniquify':
+arch/mips/mm/tlb-r4k.c:591:31: error: passing argument 1 of
+'memblock_free' makes integer from pointer without a cast
+[-Werror=int-conversion]
+  591 |                 memblock_free(tlb_vpns, tlb_vpn_size);
+      |                               ^~~~~~~~
+      |                               |
+      |                               long unsigned int *
+In file included from arch/mips/mm/tlb-r4k.c:15:
+include/linux/memblock.h:107:31: note: expected 'phys_addr_t' {aka
+'unsigned int'} but argument is of type 'long unsigned int *'
+  107 | int memblock_free(phys_addr_t base, phys_addr_t size);
+      |                   ~~~~~~~~~~~~^~~~
+cc1: all warnings being treated as errors
+
+### powerpc build error
+mm/mempool.c: In function 'check_element':
+mm/mempool.c:68:17: error: 'for' loop initial declarations are only
+allowed in C99 or C11 mode
+   68 |                 for (int i = 0; i < (1 << order); i++) {
+      |                 ^~~
+mm/mempool.c:68:17: note: use option '-std=c99', '-std=gnu99',
+'-std=c11' or '-std=gnu11' to compile your code
+mm/mempool.c: In function 'poison_element':
+mm/mempool.c:101:17: error: 'for' loop initial declarations are only
+allowed in C99 or C11 mode
+  101 |                 for (int i = 0; i < (1 << order); i++) {
+      |                 ^~~
+make[2]: *** [scripts/Makefile.build:289: mm/mempool.o] Error 1
+
+## Build
+* kernel: 5.15.197-rc1
+* git: https://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
+* git commit: d6138097171ea16c4b0e51c3414d51c473f820cc
+* git describe: v5.15.196-393-gd6138097171e
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-5.15.y/build/v5.15.196-393-gd6138097171e
+
+## Test Regressions (compared to v5.15.195-118-g59a59821e6b5)
+* arm, build
+  - clang-21-defconfig
+  - clang-21-lkftconfig
+  - clang-21-lkftconfig-no-kselftest-frag
+  - clang-nightly-lkftconfig-kselftest
+  - gcc-12-defconfig
+  - gcc-12-lkftconfig
+  - gcc-12-lkftconfig-debug
+  - gcc-12-lkftconfig-kasan
+  - gcc-12-lkftconfig-kunit
+  - gcc-12-lkftconfig-libgpiod
+  - gcc-12-lkftconfig-no-kselftest-frag
+  - gcc-12-lkftconfig-perf
+  - gcc-12-lkftconfig-rcutorture
+  - gcc-8-defconfig
+
+* mips, build
+  - clang-21-allnoconfig
+  - clang-21-defconfig
+  - clang-21-tinyconfig
+  - gcc-12-allnoconfig
+  - gcc-12-ath79_defconfig
+  - gcc-12-bcm47xx_defconfig
+  - gcc-12-bcm63xx_defconfig
+  - gcc-12-cavium_octeon_defconfig
+  - gcc-12-defconfig
+  - gcc-12-e55_defconfig
+  - gcc-12-malta_defconfig
+  - gcc-12-rt305x_defconfig
+  - gcc-12-tinyconfig
+  - gcc-8-allnoconfig
+  - gcc-8-ath79_defconfig
+  - gcc-8-bcm47xx_defconfig
+  - gcc-8-bcm63xx_defconfig
+  - gcc-8-cavium_octeon_defconfig
+  - gcc-8-defconfig
+  - gcc-8-malta_defconfig
+  - gcc-8-rt305x_defconfig
+  - gcc-8-tinyconfig
+
+* powerpc, build
+  - gcc-12-ppc6xx_defconfig
+  - gcc-8-allnoconfig
+  - gcc-8-ppc6xx_defconfig
 
 
+## Metric Regressions (compared to v5.15.195-118-g59a59821e6b5)
 
-Le 03/12/2025 à 23:34, David Heidelberg via B4 Relay a écrit :
-> [Vous ne recevez pas souvent de courriers de devnull+david.ixit.cz@kernel.org. Découvrez pourquoi ceci est important à https://aka.ms/LearnAboutSenderIdentification ]
-> 
-> From: David Heidelberg <david@ixit.cz>
-> 
-> ALSA 0.9.0-rc3 is from 2002, 23 years old.
-> 
-> Signed-off-by: David Heidelberg <david@ixit.cz>
-> ---
-> Maybe I could drop also the code and Kconfig option?
-> 
-> David
-> ---
->   arch/arm/configs/am200epdkit_defconfig    | 1 -
->   arch/arm/configs/lpc32xx_defconfig        | 1 -
->   arch/arm/configs/omap1_defconfig          | 1 -
->   arch/arm/configs/tegra_defconfig          | 1 -
->   arch/mips/configs/gcw0_defconfig          | 1 -
->   arch/mips/configs/loongson1_defconfig     | 1 -
->   arch/mips/configs/qi_lb60_defconfig       | 1 -
->   arch/mips/configs/rbtx49xx_defconfig      | 1 -
->   arch/mips/configs/rs90_defconfig          | 1 -
->   arch/powerpc/configs/85xx-hw.config       | 1 -
->   arch/powerpc/configs/86xx-hw.config       | 1 -
->   arch/powerpc/configs/mpc5200_defconfig    | 1 -
->   arch/powerpc/configs/ppc6xx_defconfig     | 1 -
+## Test Fixes (compared to v5.15.195-118-g59a59821e6b5)
 
-For powerpc:
+## Metric Fixes (compared to v5.15.195-118-g59a59821e6b5)
 
-Reviewed-by: Christophe Leroy (CS GROUP) <chleroy@kernel.org>
-Acked-by: Christophe Leroy (CS GROUP) <chleroy@kernel.org>
+## Test result summary
+total: 28764, pass: 21862, fail: 2212, skip: 4511, xfail: 179
 
+## Build Summary
+* arc: 5 total, 5 passed, 0 failed
+* arm: 101 total, 86 passed, 15 failed
+* arm64: 28 total, 28 passed, 0 failed
+* i386: 18 total, 18 passed, 0 failed
+* mips: 22 total, 0 passed, 22 failed
+* parisc: 3 total, 3 passed, 0 failed
+* powerpc: 22 total, 19 passed, 3 failed
+* riscv: 8 total, 8 passed, 0 failed
+* s390: 9 total, 9 passed, 0 failed
+* sh: 10 total, 10 passed, 0 failed
+* sparc: 6 total, 6 passed, 0 failed
+* x86_64: 24 total, 24 passed, 0 failed
 
+## Test suites summary
+* boot
+* kselftest-arm64
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-clone3
+* kselftest-core
+* kselftest-cpu-hotplug
+* kselftest-exec
+* kselftest-fpu
+* kselftest-futex
+* kselftest-intel_pstate
+* kselftest-kcmp
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-mincore
+* kselftest-mqueue
+* kselftest-openat2
+* kselftest-ptrace
+* kselftest-rseq
+* kselftest-rtc
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user_events
+* kselftest-vDSO
+* kselftest-x86
+* kunit
+* lava
+* libgpiod
+* libhugetlbfs
+* log-parser-boot
+* log-parser-build-clang
+* log-parser-build-gcc
+* log-parser-test
+* ltp-capability
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-hugetlb
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-pty
+* ltp-sched
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* perf
+* rcutorture
 
->   arch/sh/configs/edosk7760_defconfig       | 1 -
->   arch/sh/configs/se7724_defconfig          | 1 -
->   arch/sh/configs/sh7785lcr_32bit_defconfig | 1 -
->   sound/core/Kconfig                        | 2 +-
->   17 files changed, 1 insertion(+), 17 deletions(-)
-> 
-> diff --git a/arch/arm/configs/am200epdkit_defconfig b/arch/arm/configs/am200epdkit_defconfig
-> index 134a559aba3dd..2367b1685c1cf 100644
-> --- a/arch/arm/configs/am200epdkit_defconfig
-> +++ b/arch/arm/configs/am200epdkit_defconfig
-> @@ -68,7 +68,6 @@ CONFIG_SOUND=m
->   CONFIG_SND=m
->   CONFIG_SND_MIXER_OSS=m
->   CONFIG_SND_PCM_OSS=m
-> -# CONFIG_SND_SUPPORT_OLD_API is not set
->   # CONFIG_SND_VERBOSE_PROCFS is not set
->   CONFIG_SND_PXA2XX_AC97=m
->   CONFIG_USB_GADGET=y
-> diff --git a/arch/arm/configs/lpc32xx_defconfig b/arch/arm/configs/lpc32xx_defconfig
-> index 2bddb0924a8c0..b9e2e603cd95e 100644
-> --- a/arch/arm/configs/lpc32xx_defconfig
-> +++ b/arch/arm/configs/lpc32xx_defconfig
-> @@ -113,7 +113,6 @@ CONFIG_LOGO=y
->   # CONFIG_LOGO_LINUX_VGA16 is not set
->   CONFIG_SOUND=y
->   CONFIG_SND=y
-> -# CONFIG_SND_SUPPORT_OLD_API is not set
->   # CONFIG_SND_VERBOSE_PROCFS is not set
->   CONFIG_SND_DEBUG=y
->   CONFIG_SND_DEBUG_VERBOSE=y
-> diff --git a/arch/arm/configs/omap1_defconfig b/arch/arm/configs/omap1_defconfig
-> index dee820474f444..df88763fc7c3d 100644
-> --- a/arch/arm/configs/omap1_defconfig
-> +++ b/arch/arm/configs/omap1_defconfig
-> @@ -148,7 +148,6 @@ CONFIG_SOUND=y
->   CONFIG_SND=y
->   CONFIG_SND_MIXER_OSS=y
->   CONFIG_SND_PCM_OSS=y
-> -# CONFIG_SND_SUPPORT_OLD_API is not set
->   # CONFIG_SND_VERBOSE_PROCFS is not set
->   CONFIG_SND_DUMMY=y
->   CONFIG_SND_USB_AUDIO=y
-> diff --git a/arch/arm/configs/tegra_defconfig b/arch/arm/configs/tegra_defconfig
-> index ce70ff07c978a..68aedaf92667a 100644
-> --- a/arch/arm/configs/tegra_defconfig
-> +++ b/arch/arm/configs/tegra_defconfig
-> @@ -219,7 +219,6 @@ CONFIG_FRAMEBUFFER_CONSOLE_ROTATION=y
->   CONFIG_LOGO=y
->   CONFIG_SOUND=y
->   CONFIG_SND=y
-> -# CONFIG_SND_SUPPORT_OLD_API is not set
->   # CONFIG_SND_DRIVERS is not set
->   CONFIG_SND_HDA_TEGRA=y
->   CONFIG_SND_HDA_INPUT_BEEP=y
-> diff --git a/arch/mips/configs/gcw0_defconfig b/arch/mips/configs/gcw0_defconfig
-> index fda9971bdd8d9..adb9fd62ddb0d 100644
-> --- a/arch/mips/configs/gcw0_defconfig
-> +++ b/arch/mips/configs/gcw0_defconfig
-> @@ -79,7 +79,6 @@ CONFIG_LOGO=y
->   # CONFIG_LOGO_LINUX_VGA16 is not set
->   CONFIG_SOUND=y
->   CONFIG_SND=y
-> -# CONFIG_SND_SUPPORT_OLD_API is not set
->   # CONFIG_SND_PROC_FS is not set
->   # CONFIG_SND_DRIVERS is not set
->   # CONFIG_SND_SPI is not set
-> diff --git a/arch/mips/configs/loongson1_defconfig b/arch/mips/configs/loongson1_defconfig
-> index 02d29110f7024..1d9781ff96986 100644
-> --- a/arch/mips/configs/loongson1_defconfig
-> +++ b/arch/mips/configs/loongson1_defconfig
-> @@ -119,7 +119,6 @@ CONFIG_WATCHDOG_SYSFS=y
->   CONFIG_LOONGSON1_WDT=y
->   CONFIG_SOUND=y
->   CONFIG_SND=y
-> -# CONFIG_SND_SUPPORT_OLD_API is not set
->   # CONFIG_SND_DRIVERS is not set
->   # CONFIG_SND_MIPS is not set
->   # CONFIG_SND_USB is not set
-> diff --git a/arch/mips/configs/qi_lb60_defconfig b/arch/mips/configs/qi_lb60_defconfig
-> index 5f5b0254d75e7..a1bb0792f6eb1 100644
-> --- a/arch/mips/configs/qi_lb60_defconfig
-> +++ b/arch/mips/configs/qi_lb60_defconfig
-> @@ -81,7 +81,6 @@ CONFIG_LOGO=y
->   # CONFIG_LOGO_LINUX_CLUT224 is not set
->   CONFIG_SOUND=y
->   CONFIG_SND=y
-> -# CONFIG_SND_SUPPORT_OLD_API is not set
->   # CONFIG_SND_VERBOSE_PROCFS is not set
->   # CONFIG_SND_DRIVERS is not set
->   # CONFIG_SND_SPI is not set
-> diff --git a/arch/mips/configs/rbtx49xx_defconfig b/arch/mips/configs/rbtx49xx_defconfig
-> index 03a7bbe28a532..49c709d663beb 100644
-> --- a/arch/mips/configs/rbtx49xx_defconfig
-> +++ b/arch/mips/configs/rbtx49xx_defconfig
-> @@ -53,7 +53,6 @@ CONFIG_TXX9_WDT=m
->   # CONFIG_VGA_ARB is not set
->   CONFIG_SOUND=m
->   CONFIG_SND=m
-> -# CONFIG_SND_SUPPORT_OLD_API is not set
->   # CONFIG_SND_VERBOSE_PROCFS is not set
->   # CONFIG_SND_DRIVERS is not set
->   # CONFIG_SND_PCI is not set
-> diff --git a/arch/mips/configs/rs90_defconfig b/arch/mips/configs/rs90_defconfig
-> index a53dd66e9b864..8382d535e6dc1 100644
-> --- a/arch/mips/configs/rs90_defconfig
-> +++ b/arch/mips/configs/rs90_defconfig
-> @@ -105,7 +105,6 @@ CONFIG_LOGO=y
->   CONFIG_SOUND=y
->   CONFIG_SND=y
->   # CONFIG_SND_PCM_TIMER is not set
-> -# CONFIG_SND_SUPPORT_OLD_API is not set
->   # CONFIG_SND_PROC_FS is not set
->   # CONFIG_SND_DRIVERS is not set
->   # CONFIG_SND_MIPS is not set
-> diff --git a/arch/powerpc/configs/85xx-hw.config b/arch/powerpc/configs/85xx-hw.config
-> index 8aff832173977..2b19c20a9a2c4 100644
-> --- a/arch/powerpc/configs/85xx-hw.config
-> +++ b/arch/powerpc/configs/85xx-hw.config
-> @@ -117,7 +117,6 @@ CONFIG_SND_INTEL8X0=y
->   CONFIG_SND_POWERPC_SOC=y
->   # CONFIG_SND_PPC is not set
->   CONFIG_SND_SOC=y
-> -# CONFIG_SND_SUPPORT_OLD_API is not set
->   # CONFIG_SND_USB is not set
->   CONFIG_SND=y
->   CONFIG_SOUND=y
-> diff --git a/arch/powerpc/configs/86xx-hw.config b/arch/powerpc/configs/86xx-hw.config
-> index e7bd265fae5a4..07f30ab881e59 100644
-> --- a/arch/powerpc/configs/86xx-hw.config
-> +++ b/arch/powerpc/configs/86xx-hw.config
-> @@ -80,7 +80,6 @@ CONFIG_SERIO_LIBPS2=y
->   CONFIG_SND_INTEL8X0=y
->   CONFIG_SND_MIXER_OSS=y
->   CONFIG_SND_PCM_OSS=y
-> -# CONFIG_SND_SUPPORT_OLD_API is not set
->   CONFIG_SND=y
->   CONFIG_SOUND=y
->   CONFIG_ULI526X=y
-> diff --git a/arch/powerpc/configs/mpc5200_defconfig b/arch/powerpc/configs/mpc5200_defconfig
-> index c0fe5e76604a0..617650cea56a9 100644
-> --- a/arch/powerpc/configs/mpc5200_defconfig
-> +++ b/arch/powerpc/configs/mpc5200_defconfig
-> @@ -75,7 +75,6 @@ CONFIG_FB_SM501=m
->   CONFIG_LOGO=y
->   CONFIG_SOUND=y
->   CONFIG_SND=y
-> -# CONFIG_SND_SUPPORT_OLD_API is not set
->   # CONFIG_SND_DRIVERS is not set
->   # CONFIG_SND_PCI is not set
->   # CONFIG_SND_PPC is not set
-> diff --git a/arch/powerpc/configs/ppc6xx_defconfig b/arch/powerpc/configs/ppc6xx_defconfig
-> index b082c1fae13c9..787d707f64a42 100644
-> --- a/arch/powerpc/configs/ppc6xx_defconfig
-> +++ b/arch/powerpc/configs/ppc6xx_defconfig
-> @@ -726,7 +726,6 @@ CONFIG_SND_OSSEMUL=y
->   CONFIG_SND_MIXER_OSS=m
->   CONFIG_SND_PCM_OSS=m
->   CONFIG_SND_DYNAMIC_MINORS=y
-> -# CONFIG_SND_SUPPORT_OLD_API is not set
->   CONFIG_SND_VERBOSE_PRINTK=y
->   CONFIG_SND_DEBUG=y
->   CONFIG_SND_DEBUG_VERBOSE=y
-> diff --git a/arch/sh/configs/edosk7760_defconfig b/arch/sh/configs/edosk7760_defconfig
-> index abeae220606a3..905fac1072845 100644
-> --- a/arch/sh/configs/edosk7760_defconfig
-> +++ b/arch/sh/configs/edosk7760_defconfig
-> @@ -79,7 +79,6 @@ CONFIG_FB_TILEBLITTING=y
->   CONFIG_FB_SH_MOBILE_LCDC=m
->   CONFIG_SOUND=y
->   CONFIG_SND=y
-> -# CONFIG_SND_SUPPORT_OLD_API is not set
->   # CONFIG_SND_VERBOSE_PROCFS is not set
->   CONFIG_SND_VERBOSE_PRINTK=y
->   CONFIG_SND_SOC=y
-> diff --git a/arch/sh/configs/se7724_defconfig b/arch/sh/configs/se7724_defconfig
-> index 9e3a54936f76f..8ca46d704c8ba 100644
-> --- a/arch/sh/configs/se7724_defconfig
-> +++ b/arch/sh/configs/se7724_defconfig
-> @@ -83,7 +83,6 @@ CONFIG_LOGO=y
->   # CONFIG_LOGO_SUPERH_VGA16 is not set
->   CONFIG_SOUND=y
->   CONFIG_SND=m
-> -# CONFIG_SND_SUPPORT_OLD_API is not set
->   # CONFIG_SND_DRIVERS is not set
->   # CONFIG_SND_SPI is not set
->   # CONFIG_SND_SUPERH is not set
-> diff --git a/arch/sh/configs/sh7785lcr_32bit_defconfig b/arch/sh/configs/sh7785lcr_32bit_defconfig
-> index eb63aa61b0465..5468cc53cddb4 100644
-> --- a/arch/sh/configs/sh7785lcr_32bit_defconfig
-> +++ b/arch/sh/configs/sh7785lcr_32bit_defconfig
-> @@ -93,7 +93,6 @@ CONFIG_SND_PCM_OSS=y
->   CONFIG_SND_SEQUENCER_OSS=y
->   CONFIG_SND_HRTIMER=y
->   CONFIG_SND_DYNAMIC_MINORS=y
-> -# CONFIG_SND_SUPPORT_OLD_API is not set
->   # CONFIG_SND_VERBOSE_PROCFS is not set
->   CONFIG_SND_VERBOSE_PRINTK=y
->   CONFIG_SND_DEBUG=y
-> diff --git a/sound/core/Kconfig b/sound/core/Kconfig
-> index 48db44fa56feb..4e7bc370ffd7f 100644
-> --- a/sound/core/Kconfig
-> +++ b/sound/core/Kconfig
-> @@ -155,7 +155,7 @@ config SND_MAX_CARDS
-> 
->   config SND_SUPPORT_OLD_API
->          bool "Support old ALSA API"
-> -       default y
-> +       default n
->          help
->            Say Y here to support the obsolete ALSA PCM API (ver.0.9.0 rc3
->            or older).
-> 
-> ---
-> base-commit: b2c27842ba853508b0da00187a7508eb3a96c8f7
-> change-id: 20251203-old-alsa-fa2c2cb038e1
-> 
-> Best regards,
-> --
-> David Heidelberg <david@ixit.cz>
-> 
-> 
-
+--
+Linaro LKFT
+https://lkft.linaro.org
 
