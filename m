@@ -1,123 +1,182 @@
-Return-Path: <linux-mips+bounces-12407-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12408-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF8B0CAB1A1
-	for <lists+linux-mips@lfdr.de>; Sun, 07 Dec 2025 06:14:31 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id F27DBCAB40F
+	for <lists+linux-mips@lfdr.de>; Sun, 07 Dec 2025 13:18:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id B5861300766A
-	for <lists+linux-mips@lfdr.de>; Sun,  7 Dec 2025 05:14:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9A1C830542C1
+	for <lists+linux-mips@lfdr.de>; Sun,  7 Dec 2025 12:18:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EEFE2DBF47;
-	Sun,  7 Dec 2025 05:14:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA4DC28C5AA;
+	Sun,  7 Dec 2025 12:18:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b="OTM2ss6s"
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="ptJ+j6YP";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="VkgzOLXv";
+	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="0YuJJ3XF";
+	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="yM/pJrbc"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ot1-f44.google.com (mail-ot1-f44.google.com [209.85.210.44])
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA88B2DAFBF
-	for <linux-mips@vger.kernel.org>; Sun,  7 Dec 2025 05:14:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B3D63B8D52
+	for <linux-mips@vger.kernel.org>; Sun,  7 Dec 2025 12:18:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765084466; cv=none; b=u/AkdwvAVbATtd34WtM11GLhdFHi7bEolK2896iwUBThu4KLcE3gjNv/7AU+MC8jQwCzU4BkWHOv2sD2h++i49zzJ+cl3OYLBZxmDkM2yKZ9Ugb+AadCJ20Qm+BSR9u1wcMxkORg21PowU7qol4FU71Gnhd2psTf95j00xtNAIs=
+	t=1765109882; cv=none; b=uTUkpKj0LVtGJGV902foBkNeWfWiuxglEGVPLxTJTn9MfTdFj2xVxxa4J80O0/3rJdopix7BM2snAOk3VlVizAoQUrO4qWLnI+l5Ukt5jj61pRdCqQTbEfdhkIjIcBFtYzXjqw8Vm9GpF82DIqmI32Q7cIVbzomtGS74m9Lcfi8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765084466; c=relaxed/simple;
-	bh=RLy871nN+PF6G/1eKPJpSvOsrDqcrcKVOdz8yZpUqkY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Sz8lAbEtUpWmNEl1rMqEtRu0mx7mpmLrqk1SpA671axe2wiS4v1Muv71eB1mk2JZwbSaGjIfXFzIGdUoVwgDeMrdoz/6GbIl7Ie+Gep/UZyIi3yCgNZJsjt9nBM5TBN2Y43BSbkRghsLCRyNvtnVDnD8vFiNamkENM3oUjqph1Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org; spf=none smtp.mailfrom=brainfault.org; dkim=pass (2048-bit key) header.d=brainfault-org.20230601.gappssmtp.com header.i=@brainfault-org.20230601.gappssmtp.com header.b=OTM2ss6s; arc=none smtp.client-ip=209.85.210.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=brainfault.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=brainfault.org
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-7c76f65feb5so2868349a34.0
-        for <linux-mips@vger.kernel.org>; Sat, 06 Dec 2025 21:14:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=brainfault-org.20230601.gappssmtp.com; s=20230601; t=1765084464; x=1765689264; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gIr6vMU+1WXTpE+kuQ5XIOvR7lhOKuME2h0aehuNw7U=;
-        b=OTM2ss6sG5EV1MeWI5Rv1Yw+E0pgoq5XVSlHWAby5BG+pZxolfd1iIeA1Ie9qwhFRh
-         vPjW1XEy5VguHfcSxfmGe7OyreMSUTBR4xiAbIRGkLjik/Avzuu7NNIQa90VGF3go5EP
-         GECcpOKUXl7EG9lEz7DZ3Mwl8cYVXh04C4gUE76d807KZqklls6BCzQU96DlzOT9pDB9
-         Wv7rVFgzRoM/DCEtWhpwUWC6Joa3wmkiY8lspX43UzCVVo52zx5xsMmzQfFnASndNDK0
-         dTdBlP9vXnMfAt9rd56sXEV5UWcWxoKF7bp5VDwcbI+lEWAib2pQ5JCR5Lk1kZpIFmxX
-         gcrQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765084464; x=1765689264;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=gIr6vMU+1WXTpE+kuQ5XIOvR7lhOKuME2h0aehuNw7U=;
-        b=V/V84dUn8G4JbcEttIv+ZMWMoL6A5rFQYmM9q5pMxUrvSsKjKwfRRCeobSs7RFLZf6
-         mpy4M33k1h1Br7uBhhmgWK9Tc1TcX7s9WpObqiGCdotMkB9MOYZq9zhsr/7jXAbCbGa2
-         BUiBt4biGjUbvCJiHrX+yWMt7g0CLTz+/qTFIjUCaLuAbWlEuN0irPggrCjSwH7vKdqc
-         Iwe+OowQpTY+nGuJ7TeD6/KtwGUJR3G1elnN0ChgzbAZ5lNALA6JSgxgCPum/qPIACzn
-         kuheG7nBpzYpvY2qvd+f32ZXExeN8XfGP8Sm/W0nO0QF7LwoPLjYRh70ohXCmGsZrhYf
-         I0rw==
-X-Forwarded-Encrypted: i=1; AJvYcCUR3uQVGXwzouwwZS4T72S+MlHG2tC5Gz+58fvTEMWg+uEKgZJITTJoZSe/2rEoXkAR3ayyFgc3556T@vger.kernel.org
-X-Gm-Message-State: AOJu0YzCVWSUPI98VFB6QEVGZkf8MLUB8QJoHCKqkEPK009SuToKs24t
-	pcR4gcDvSqS7Ha1kj4tOWoWvl2cRn3imBPStny5ZVb1qdKiCy7laMxKjrfv55jZhdCqX0ACy/az
-	AsugUZHfYj6yEnD1nFWPf0duie4hMi3fnZfaPNe2p2A==
-X-Gm-Gg: ASbGncsE1ud7QfVLpBaUMBtfMAbWhYEV8U8Mio0aWAZF6GvkUgkDhhfrnE7LkeiWFif
-	6Jm5qixzFnM0pRkfJUiQz5/WYyYuplP4DY1ginwzRiTjrsF4pc9tlY5rrBgMhsgtDJ0zBPmcvR+
-	MshwcJi+tREzdPyWeORJjulR4FVp599p3yW2KHRg7M9DovvDuKgjNiNUeG8ATL/hjjT7IlKGr3k
-	S+XpKDjN6oFLgEW8sXXhh/+hNL5ek7c9hWR60U0cQ/67yvL12XyyktL2VR636OLHaI4zo1M
-X-Google-Smtp-Source: AGHT+IH3teezYiglKMW0l9sCwPDXKzHK/uYMVzLl99zBL+8tY4BEmXzPQzc7f6ucWRYnVm2fOg07KrRcgASdUHrgci4=
-X-Received: by 2002:a05:6820:f030:b0:659:9a49:8f73 with SMTP id
- 006d021491bc7-6599a973da4mr2018657eaf.56.1765084463840; Sat, 06 Dec 2025
- 21:14:23 -0800 (PST)
+	s=arc-20240116; t=1765109882; c=relaxed/simple;
+	bh=eHHuk8EuA0OkibycrFyOsApgYPoSZn1CWZpS/ijvq0Y=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=cVtRpTbmKm+NKbO3CaZlWA3wGmTvaDvcDXWjFPdTQHwC3qtOVzoqPdMcbGLzXLk4ECRuSwvd3tG2csfxBfB/eoOGPMVUr4x1mdDE78BlgyWwN8EeKe67HiA7MVoOu3X3WeMw82QTzUBsY1dSQ9UwRt7N/GZ+5Bi3CUJxlBdZNpM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=ptJ+j6YP; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=VkgzOLXv; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=0YuJJ3XF; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=yM/pJrbc; arc=none smtp.client-ip=195.135.223.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
+Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by smtp-out2.suse.de (Postfix) with ESMTPS id 16A455BCFD;
+	Sun,  7 Dec 2025 12:17:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1765109879; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cBd0eFWa3WTOx819+QWxAtcmpEF3LgSjzGKmJhb1WOc=;
+	b=ptJ+j6YPX4g+bVfgoE8ZGTjROuh8vTpSPNCv/qp0Q1ZljH1k6a8NBRAl9PuRb/OAq+XIDy
+	Ms3IQNYL1UGQXarbvyUzIeXgSBkeivNsvAZU9knIC1uAehc4VZSgwD6WyKttisOejkucd4
+	wsZ8RlWhvRqiXF3CkmGsZ4ILGDkvVZo=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1765109879;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cBd0eFWa3WTOx819+QWxAtcmpEF3LgSjzGKmJhb1WOc=;
+	b=VkgzOLXvVzmsNyshw1DtVQoAoqZnxBQbXa/ajCsN5DdEWhfMRf3OddfIE276hMSQ5nWGvz
+	qgzw3pUkeCxWoFDw==
+Authentication-Results: smtp-out2.suse.de;
+	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=0YuJJ3XF;
+	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b="yM/pJrbc"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+	t=1765109878; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cBd0eFWa3WTOx819+QWxAtcmpEF3LgSjzGKmJhb1WOc=;
+	b=0YuJJ3XFWR17M6QyJQov2+FyIAhSdoGYPfrmbxb1xuXppPswhnxE1s6EE+4EqIbTRZu8Bp
+	8EX1Rjq6OSEDARqS9qICqkYEYcKjU0uA/07KnY5JMh6XQQnbIagxjjj5mgDtxZuknqyCQ7
+	S6z6B7TTfVPYuJuL+MrjDPCS+IZkj04=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+	s=susede2_ed25519; t=1765109878;
+	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+	 mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=cBd0eFWa3WTOx819+QWxAtcmpEF3LgSjzGKmJhb1WOc=;
+	b=yM/pJrbcO/dEmDdgL7ZVTAFBtzM7UxjjJqeIgGuIINwlyBUV6fSD7Tb1eGcAL+4S1SR8dQ
+	ln3+ze8SfTkZ/GCA==
+Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 67A4E3EA63;
+	Sun,  7 Dec 2025 12:17:57 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
+	by imap1.dmz-prg2.suse.org with ESMTPSA
+	id gID+FnVwNWl9JAAAD6G6ig
+	(envelope-from <tiwai@suse.de>); Sun, 07 Dec 2025 12:17:57 +0000
+Date: Sun, 07 Dec 2025 13:17:57 +0100
+Message-ID: <87pl8qv62y.wl-tiwai@suse.de>
+From: Takashi Iwai <tiwai@suse.de>
+To: david@ixit.cz,
+	David Heidelberg via B4 Relay <devnull+david.ixit.cz@kernel.org>
+Cc: Russell King <linux@armlinux.org.uk>,
+	Vladimir Zapolskiy <vz@mleia.com>,
+	Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
+	Aaro Koskinen <aaro.koskinen@iki.fi>,
+	Janusz Krzysztofik <jmkrzyszt@gmail.com>,
+	Tony Lindgren <tony@atomide.com>,
+	Thierry Reding <thierry.reding@gmail.com>,
+	Jonathan Hunter <jonathanh@nvidia.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Keguang Zhang <keguang.zhang@gmail.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Yoshinori Sato <ysato@users.sourceforge.jp>,
+	Rich Felker <dalias@libc.org>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Jaroslav Kysela <perex@perex.cz>,
+	Takashi Iwai <tiwai@suse.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux-omap@vger.kernel.org,
+	linux-tegra@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	linux-sh@vger.kernel.org,
+	linux-sound@vger.kernel.org
+Subject: Re: [PATCH] ALSA: Do not build obsolete API
+In-Reply-To: <20251203-old-alsa-v1-1-ac80704f52c3@ixit.cz>
+References: <20251203-old-alsa-v1-1-ac80704f52c3@ixit.cz>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/30.1 Mule/6.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20251205232655.445294-1-seanjc@google.com>
-In-Reply-To: <20251205232655.445294-1-seanjc@google.com>
-From: Anup Patel <anup@brainfault.org>
-Date: Sun, 7 Dec 2025 10:44:13 +0530
-X-Gm-Features: AQt7F2qP99gde5P8lRQoinF2DOSDMpaUpigWBx6hvnDvXPL66vGpk9e2egXMZ2I
-Message-ID: <CAAhSdy1cPnxjntaR=cwZqG+oVgFpZKM0rKYAEdkHUCToMvN0Ag@mail.gmail.com>
-Subject: Re: [PATCH] KVM: Remove subtle "struct kvm_stats_desc" pseudo-overlay
-To: Sean Christopherson <seanjc@google.com>
-Cc: Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
-	Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>, 
-	Huacai Chen <chenhuacai@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
-	Claudio Imbrenda <imbrenda@linux.ibm.com>, Paolo Bonzini <pbonzini@redhat.com>, 
-	linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
-	kvm@vger.kernel.org, loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
-	linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, 
-	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
-	"Gustavo A . R . Silva" <gustavoars@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Flag: NO
+X-Spam-Score: -2.01
+X-Rspamd-Queue-Id: 16A455BCFD
+X-Spamd-Result: default: False [-2.01 / 50.00];
+	BAYES_HAM(-3.00)[99.99%];
+	SUSPICIOUS_RECIPS(1.50)[];
+	NEURAL_HAM_LONG(-1.00)[-1.000];
+	MID_CONTAINS_FROM(1.00)[];
+	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	NEURAL_HAM_SHORT(-0.20)[-1.000];
+	MIME_GOOD(-0.10)[text/plain];
+	MX_GOOD(-0.01)[];
+	TO_MATCH_ENVRCPT_ALL(0.00)[];
+	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
+	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
+	RCPT_COUNT_TWELVE(0.00)[29];
+	MIME_TRACE(0.00)[0:+];
+	ARC_NA(0.00)[];
+	FUZZY_RATELIMITED(0.00)[rspamd.com];
+	FREEMAIL_ENVRCPT(0.00)[gmail.com];
+	FREEMAIL_CC(0.00)[armlinux.org.uk,mleia.com,timesys.com,iki.fi,gmail.com,atomide.com,nvidia.com,alpha.franken.de,linux.ibm.com,ellerman.id.au,kernel.org,users.sourceforge.jp,libc.org,physik.fu-berlin.de,perex.cz,suse.com,lists.infradead.org,vger.kernel.org,lists.ozlabs.org];
+	RCVD_COUNT_TWO(0.00)[2];
+	FROM_EQ_ENVFROM(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	TAGGED_RCPT(0.00)[david.ixit.cz];
+	R_RATELIMIT(0.00)[to_ip_from(RLin1spj7ezzoz4e1zj94tyerm)];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCVD_TLS_ALL(0.00)[];
+	DKIM_TRACE(0.00)[suse.de:+];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:mid]
+X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
+X-Rspamd-Action: no action
+X-Spam-Level: 
 
-On Sat, Dec 6, 2025 at 4:57=E2=80=AFAM Sean Christopherson <seanjc@google.c=
-om> wrote:
->
-> Remove KVM's internal pseudo-overlay of kvm_stats_desc, which subtly
-> aliases the flexible name[] in the uAPI definition with a fixed-size arra=
-y
-> of the same name.  The unusual embedded structure results in compiler
-> warnings due to -Wflex-array-member-not-at-end, and also necessitates an
-> extra level of dereferencing in KVM.  To avoid the "overlay", define the
-> uAPI structure to have a fixed-size name when building for the kernel.
->
-> Opportunistically clean up the indentation for the stats macros, and
-> replace spaces with tabs.
->
-> No functional change intended.
->
-> Reported-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> Closes: https://lore.kernel.org/all/aPfNKRpLfhmhYqfP@kspp
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
+On Wed, 03 Dec 2025 23:34:10 +0100,
+David Heidelberg via B4 Relay wrote:
+> 
+> From: David Heidelberg <david@ixit.cz>
+> 
+> ALSA 0.9.0-rc3 is from 2002, 23 years old.
+> 
+> Signed-off-by: David Heidelberg <david@ixit.cz>
+> ---
+> Maybe I could drop also the code and Kconfig option?
 
-For KVM RISC-V:
-Acked-by: Anup Patel <anup@brainfault.org>
+Thanks, applied now.
 
-Thanks,
-Anup
+I believe it's safer to have this default only off for 6.19, then
+disable for 6.20, eventually drop the dead code later.
+
+
+Takashi
 
