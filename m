@@ -1,80 +1,50 @@
-Return-Path: <linux-mips+bounces-12420-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12422-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2010CADF8D
-	for <lists+linux-mips@lfdr.de>; Mon, 08 Dec 2025 19:16:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DE3F0CAE02E
+	for <lists+linux-mips@lfdr.de>; Mon, 08 Dec 2025 19:40:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id ED637301D666
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Dec 2025 18:16:37 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 89AA03063910
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Dec 2025 18:40:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E8AB27FD40;
-	Mon,  8 Dec 2025 18:16:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 91ABD221543;
+	Mon,  8 Dec 2025 18:40:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LbWJ4/wL"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="CLnNfxgB"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-qv1-f51.google.com (mail-qv1-f51.google.com [209.85.219.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8287826738C
-	for <linux-mips@vger.kernel.org>; Mon,  8 Dec 2025 18:16:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5F7F18C2C;
+	Mon,  8 Dec 2025 18:40:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765217797; cv=none; b=VfcFAEsoDfsLsklQrkrpKLTMYktE16aIVfN2eHfmSuxZTdv3SgK4FzhcL407A2rBGkglZfAOp1ogAyA0slKpLQ/zyXBPj/SSFcEUuogYEZeJRFZIlxj4HrM1gZYuJl8VzF/FjEq5lTGKIHGogehB09JT/+W0whBTNDClbJcFhhg=
+	t=1765219208; cv=none; b=bFmUQbkxzuC4IEH8SN4DIxFJuYrUPq9U7p+ie9/UKWdOkz3K9Ih4xbQ/FFnI/pXXT8aqZ29qiGQVCbTn4C4Rut86LNLHGwuBiBH5ikOnke+hYv7M46Y+9LtzHsizYQ55NuEO8cnIG61/6l1freVlnwrkY/43yT2dPZoD3rX32pM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765217797; c=relaxed/simple;
-	bh=GaTGIUsHCRbA+CJvEJnX3R4M2tslrnRiQxBWt8LUJYk=;
+	s=arc-20240116; t=1765219208; c=relaxed/simple;
+	bh=Br0gR5xX7Wu9kNG4+1L4NZYaktjSOXP24yfPQlZXH0M=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d0NkV76C+mBKTg909eatEgEy/UWEj4TMrdRncPumT0Q62IFGkvhcJJQFVGA8dkxxXza1bo7xf3QguupszNXAgK+OIJbYbZJ3TQYlQjealFf+YcUEQqrZXtwSTzwN5psXsY776JFUHWM+G8rkV5v1HtGgis+y4BEyd1dw+4jlg0c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LbWJ4/wL; arc=none smtp.client-ip=209.85.219.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f51.google.com with SMTP id 6a1803df08f44-88043139c35so47256546d6.0
-        for <linux-mips@vger.kernel.org>; Mon, 08 Dec 2025 10:16:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765217794; x=1765822594; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=y76x02r0ebrJlFwjzgT6mGE9kYNZrDiEUslU7gRuUv0=;
-        b=LbWJ4/wLq/4sPizwnXeI0r39oijDzTr6JPN4+LStpLZwKAUMjG99PZxc9aNxO9K8jO
-         H//p5L7NX+d5S5Zi/pq5yMyRnsTaOlpFABlhRsIyPar9sT+/uQe21sQB4JeYo7IPpwKK
-         mjTt8G0Fx8GUvzzzjxdg+9ZogsRHZonykvgxZn4aXGleZxx5DI1hiWleFeu2vlW1z6Qn
-         r+1KWKgssoTrawkDkBe0BXzprQmYv8YDZZ20uQPHaTzekZ+1eAM9rEWNt2pX8YxCRjpI
-         vxYdDF1IQKgrxaIBWKrgwkZ7zJt8npY32KB4MIwM/Hiejx7VMoX95+21+9xqO/Zq2OQ1
-         bQog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765217794; x=1765822594;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=y76x02r0ebrJlFwjzgT6mGE9kYNZrDiEUslU7gRuUv0=;
-        b=HDgSHYxpEfLfIejHskatXKt+83JZdIdGTFPWaKO15yMHLuGDTwlMZZ/3yjKR9LNYPL
-         OCuG7lLDEJ/VOG5MPp7N8WkHwZTk8fSrSlP7tBcBoM054vP0luYpZtca12kS/B7HB3Wc
-         eMZKlkABvFgNmeALTUtAjTWxfg4Yg6ED5dUUWMNcQEM5Yw7b+WOAJrnaVutdlop3aQIh
-         cfvJPuPNO/QlS4SLVKdN9gqsoa7tBfXUEmS1AMwsDFIJASJmpCZGjDG6dTGzFN3yS5ta
-         kHqMONFdwC8SMHThlKzJatvmd74FYQQIB8aERwR3F6sZ1fQcqDM1hOPHQ5mSXUQA8CtY
-         R65g==
-X-Forwarded-Encrypted: i=1; AJvYcCUW337FprBKcnDXTYt7v53Ey1KdNjRqGh7nq5emC9Wcbq4PH+3NbYApEypB2JGfLExbIgiAK+1omfrM@vger.kernel.org
-X-Gm-Message-State: AOJu0YyEBv4wqXkom5Yknk1vFQBQeuIdJoD2u/mz5DzYrkGOci9bA0P3
-	yjk4p2lSDLQv0EWJi8Paj9CjCAY0cej/5VK4uy9WtI5VML/1m3RU4dGZ
-X-Gm-Gg: ASbGncujrhi+jHuLkwrEByKhlw1g1/BEwOAu3iGzyg1O829flltK2EJ089c3LLiu9hu
-	vdoQmz+wvh1EkaApvePxb9T9CAS0+zbzP1QwnYMpGjho9Pi3+lryke7Y8YS+LMOpaZd82q9w2hf
-	88NWU72lUFNkolUbVrrd+P+lIkEJs9tJRaLbbDceCQu5cYldgcBzO2fcc/+98r/DSnpBfuJi+Lh
-	Bjya3eZg7CwZaodhpstG/tdD0v7TeVCX3a6w5Ik8q5RgUFePfltMey9E0Lr3VFYimoPkNHvElsd
-	A2tUb+IBISB1195NWnytPChF6m3v4hxFx1MJYaxa0J73MZiUM26TB4Wcg5Zokt7DBIHzti63SDi
-	27Z4MbKUC4cqTjKwfF/GAxSrcZlmC4hbjNtz29UY4S7Gvyju0b5fszthY1E4PJdIjcdMOZgwNdr
-	DFpRbVz/ZRlTSNUS9pGu0VGZgFb6GeQa5t5nzcLA==
-X-Google-Smtp-Source: AGHT+IHEg4/6Vqw7yuQ3zfLX/YIBI83Nsv/wJ8Aksjqr8LGVJxCG87bHmM2kXzaltnLZbv6mj/Yi5A==
-X-Received: by 2002:a05:6214:c48:b0:875:ffef:682 with SMTP id 6a1803df08f44-8883dc30771mr144840076d6.32.1765217794378;
-        Mon, 08 Dec 2025 10:16:34 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-888288013e2sm104539936d6.55.2025.12.08.10.16.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 08 Dec 2025 10:16:32 -0800 (PST)
-Message-ID: <c4212b4d-4728-4e01-b12f-43c1dc85436d@gmail.com>
-Date: Mon, 8 Dec 2025 10:16:29 -0800
+	 In-Reply-To:Content-Type; b=Qja17p1+DoXasNvV7Ku0Z+uWVJ9lf4cQhnCj5EFkVGMVrigAMigsj/qB4Wzjo0RhbHft4EXU68C7ce1YmIegWzJ/JhqN8Q2X9rGIhjsQjXSUKbLs78YKl9IKipEU+EVwgq4kMUwftJ6s2hdu5aOo3Oyac5M4FrrcvzBcDyBXX6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=CLnNfxgB; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+	bh=yLzKuVB9SRbRu6KABlxK9U/BOBG3oxrbOo+OTMvlotw=; b=CLnNfxgBY0q5YgCfYzG3Dlh34b
+	EEtmJtTusDTKsZbTYzaXhcu0062Ml+ROgkjDjvTdVCGOyI1WiqRal51qFDhJku9JOUdVEgOoDzDvZ
+	FmxiWs9IpvtAnwnVt9QhEaz94qttqk9HtlYcwgT9XnjH/nZJaOPdL+/weryaY/RvWkRN6m6m+LWVL
+	vOlh2ZpvnEm5cjAi8QGFaorWBMCjGSiewTGrxtA6zy3SM4XDLPQSA6e7KPHYOjKG/wQ1R9pDzaszP
+	fkakMEtmCiLYQBRpi+HMs3PVPUdX8nQCYgcBRU3ydDbye0g0QWoyOcsIQCvVqF5ATGtmMIDIZQH0A
+	ZaaML9ww==;
+Received: from [50.53.43.113] (helo=[192.168.254.34])
+	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
+	id 1vSg9Q-0000000DR7O-2RyS;
+	Mon, 08 Dec 2025 18:40:01 +0000
+Message-ID: <873236c8-4dab-4f1e-a2bf-d233ec74bd49@infradead.org>
+Date: Mon, 8 Dec 2025 10:39:58 -0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -82,37 +52,63 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] MIPS: Alchemy: Remove bogus static/inline specifiers
-To: Thierry Reding <thierry.reding@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, linux-mips@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20251029150316.2522555-1-thierry.reding@gmail.com>
-Content-Language: en-US, fr-FR
-From: Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20251029150316.2522555-1-thierry.reding@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Subject: Re: Kconfig dangling references (BZ 216748)
+To: Paul Kocialkowski <paulk@sys-base.io>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+ Andy Shevchenko <andy.shevchenko@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
+ andrew.jones@linux.dev, linux-omap@vger.kernel.org,
+ openbmc@lists.ozlabs.org, linux-sound@vger.kernel.org,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ linux-mips@vger.kernel.org, asahi@lists.linux.dev,
+ "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+ chrome-platform@lists.linux.dev, Paul Cercueil <paul@crapouillou.net>,
+ linux-stm32@st-md-mailman.stormreply.com,
+ Linux ARM <linux-arm-kernel@lists.infradead.org>,
+ linux-gpio@vger.kernel.org, Srinivas Kandagatla <srini@kernel.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>,
+ Matti Vaittinen <mazziesaccount@gmail.com>,
+ Jonathan Cameron <jic23@kernel.org>,
+ Vaibhav Hiremath <hvaibhav.linux@gmail.com>, linux-sh@vger.kernel.org,
+ x86@kernel.org, Max Filippov <jcmvbkbc@gmail.com>
+References: <22b92ddf-6321-41b5-8073-f9c7064d3432@infradead.org>
+ <aTcVXrUXVsyjaT22@shepard>
+Content-Language: en-US
+From: Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <aTcVXrUXVsyjaT22@shepard>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 10/29/25 08:03, Thierry Reding wrote:
-> From: Thierry Reding <treding@nvidia.com>
+
+
+On 12/8/25 10:13 AM, Paul Kocialkowski wrote:
+> Hi Randy,
 > 
-> The recent io_remap_pfn_range() rework applied the static and inline
-> specifiers to the implementation of io_remap_pfn_range_pfn() on MIPS
-> Alchemy, mirroring the same change on other platforms. However, this
-> function is defined in a source file and that definition causes a
-> conflict with its declaration. Fix this by dropping the specifiers.
+> On Sun 07 Dec 25, 18:04, Randy Dunlap wrote:
+>> from  https://bugzilla.kernel.org/show_bug.cgi?id=216748
+>>
+>> The bugzilla entry includes a Perl script and a shell script.
+>> This is the edited result of running them (I removed some entries that were noise).
 > 
-> Fixes: 8efb51ad1b05 ("mm: abstract io_remap_pfn_range() based on PFN")
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
+> [...]
+> 
+>> DRM_KMS_DMA_HELPER ---
+>> drivers/gpu/drm/adp/Kconfig:9:	select DRM_KMS_DMA_HELPER
+>> drivers/gpu/drm/logicvc/Kconfig:7:	select DRM_KMS_DMA_HELPER
+> 
+> For these two, the symbol was removed in commit
+> 09717af7d13d63df141ae6e71686289989d17efd but these two drivers either were
+> missed by the batch rename or were introduced a bit later.
+> 
+> Since the symbol selected DRM_GEM_CMA_HELPER (which is still needed by the
+> drivers), it should be replaced with DRM_GEM_CMA_HELPER.
+> 
+> Are you expecting to craft a patch for fixing this or should I do it myself?
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
-Reviewed-by: Florian Fainelli <f.fainelli@gmail.com>
+Hi Paul,
+Please take care of it yourself.
 
-Thanks!
-
-Thomas, can you pick this up so we have working alchemy builds again? 
-Thanks!
+Thanks.
 -- 
-Florian
+~Randy
+
 
