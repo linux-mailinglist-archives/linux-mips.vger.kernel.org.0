@@ -1,118 +1,138 @@
-Return-Path: <linux-mips+bounces-12419-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12421-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E89DCACE78
-	for <lists+linux-mips@lfdr.de>; Mon, 08 Dec 2025 11:42:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id ECE56CADFA4
+	for <lists+linux-mips@lfdr.de>; Mon, 08 Dec 2025 19:24:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 5A5343034637
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Dec 2025 10:42:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C8BDB304FB95
+	for <lists+linux-mips@lfdr.de>; Mon,  8 Dec 2025 18:24:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0AF53115B1;
-	Mon,  8 Dec 2025 10:42:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X39h8sTJ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21DC528541A;
+	Mon,  8 Dec 2025 18:24:09 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from leonov.paulk.fr (leonov.paulk.fr [185.233.101.22])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB5A5286891;
-	Mon,  8 Dec 2025 10:42:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87798281532;
+	Mon,  8 Dec 2025 18:24:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.233.101.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765190539; cv=none; b=t4nbCn4wLHVbxbR62MHDyWgFu3anmVDopwpyqFA91R79eNsHbBHgDi1njV4i68NLvwoEA/UhNfHi6dGzoUYXW4PRaF21w6SdAdi47iAxIs2B0pBcCgqK29xHRi4LkLnOywnY0Zlpi5qwHX0w/ktz/lgBBY/wOzJDGrLKV4ftbIE=
+	t=1765218248; cv=none; b=RCc0Lu3UyTZWLDCGLdyNe9+9WIuoiN3hXvFbbztYMuXJDTFnCexxh/FYo4cDs5ae8h71vHAqnSCv0OrM0uLByEivfrPc5hHTseicVMpRwwe7+Aab2CG1bR1DtahgpMtCp50PPtAgBgZE9pcS5c1xWvDcgCpLQ6yDyKmS/bH+oT4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765190539; c=relaxed/simple;
-	bh=TAnDl6sPhcy+IUlbX2x8cziKUCBVlmn2sw/09aCCSsI=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=B924UxaXOUjijxYwhnmdQaAFYc/Bnk+hUuky+Y+6CiDGUYkHlPxWP2c/1TwfepD+5vPoA2m91RR3AZdOZxp3uZybjdTfgojeKtj1xGccX5KpdLQvRM3hj4xprDRiuaAVTeyXu7/tuHrjCJseUIV1KgIpFJ3kFVCbvtpBHXLuuLk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X39h8sTJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDA12C4CEF1;
-	Mon,  8 Dec 2025 10:42:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765190538;
-	bh=TAnDl6sPhcy+IUlbX2x8cziKUCBVlmn2sw/09aCCSsI=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=X39h8sTJnWGPt8aAvzjUIiETMHFCA3RazvKyqIgwrxEc58CgplJjrACjAAoXNDu9v
-	 Mf4FaQLF71Mpzddiqh8kUrRua4Tc83Ql8bVBgkYb1NwV/s948y0TBK6H1F/bs9Ola/
-	 sZu+jSyI5iZIZdEKwdjRFL1iArddlpoE9LJVlY5w70w1lpY2RFr5VT3HWhCLjjqgO/
-	 7UHZkgAfe6RkxZmmdW+6fR624bPxRz7mmacB9JWaHHKj3qGDASLOxRB1uz0L/yo7E6
-	 bJOkeoaduri8FaD9L2jy/l1FCprmQ0KANGIOHDqKa2svuZK9Ni4EKDeVCuLiDQBGK1
-	 trQavZzLM6zlg==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <maz@kernel.org>)
-	id 1vSYh6-0000000BGKA-1nWA;
-	Mon, 08 Dec 2025 10:42:16 +0000
-Date: Mon, 08 Dec 2025 10:42:15 +0000
-Message-ID: <865xahp854.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Sean Christopherson <seanjc@google.com>
-Cc: Oliver Upton <oupton@kernel.org>,
-	Tianrui Zhao <zhaotianrui@loongson.cn>,
-	Bibo Mao <maobibo@loongson.cn>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Anup Patel <anup@brainfault.org>,
-	Paul Walmsley <pjw@kernel.org>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Christian Borntraeger <borntraeger@linux.ibm.com>,
-	Janosch Frank <frankja@linux.ibm.com>,
-	Claudio Imbrenda <imbrenda@linux.ibm.com>,
-	Paolo Bonzini <pbonzini@redhat.com>,
-	linux-arm-kernel@lists.infradead.org,
-	kvmarm@lists.linux.dev,
-	kvm@vger.kernel.org,
-	loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org,
-	kvm-riscv@lists.infradead.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org,
-	"Gustavo A . R . Silva" <gustavoars@kernel.org>
-Subject: Re: [PATCH] KVM: Remove subtle "struct kvm_stats_desc" pseudo-overlay
-In-Reply-To: <20251205232655.445294-1-seanjc@google.com>
-References: <20251205232655.445294-1-seanjc@google.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/30.1
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1765218248; c=relaxed/simple;
+	bh=W+NLJSeImOKki1mt9PgOe3q9Sm0BkibwAiwXq+bh4gg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Fn0UnnhhBcOro3RbfbVBGZM0UlUBz3qBIeAe5Aq00MTbYN7185IIZ5PjuRS1P6tMzDjJl9lOB684ZbTyefrO/1d5t1LGOjzubRTJqPGf+ole35I1Yg3uD+RAPSMbDX6AHAW+iNjRrtPKfqNl4RiYshaODLrIyWs/pFQfVcN5IiQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sys-base.io; spf=pass smtp.mailfrom=sys-base.io; arc=none smtp.client-ip=185.233.101.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sys-base.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sys-base.io
+Received: from laika.paulk.fr (12.234.24.109.rev.sfr.net [109.24.234.12])
+	by leonov.paulk.fr (Postfix) with ESMTPS id 585021F8005F;
+	Mon,  8 Dec 2025 18:13:59 +0000 (UTC)
+Received: by laika.paulk.fr (Postfix, from userid 65534)
+	id BE08DB121CD; Mon,  8 Dec 2025 18:13:56 +0000 (UTC)
+X-Spam-Level: 
+Received: from shepard (unknown [192.168.1.1])
+	by laika.paulk.fr (Postfix) with ESMTPSA id 74EE8B121BB;
+	Mon,  8 Dec 2025 18:13:53 +0000 (UTC)
+Date: Mon, 8 Dec 2025 19:13:50 +0100
+From: Paul Kocialkowski <paulk@sys-base.io>
+To: Randy Dunlap <rdunlap@infradead.org>
+Cc: Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+	Andy Shevchenko <andy.shevchenko@gmail.com>,
+	Arnd Bergmann <arnd@arndb.de>, andrew.jones@linux.dev,
+	linux-omap@vger.kernel.org, openbmc@lists.ozlabs.org,
+	linux-sound@vger.kernel.org,
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+	linux-mips@vger.kernel.org, asahi@lists.linux.dev,
+	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+	chrome-platform@lists.linux.dev,
+	Paul Cercueil <paul@crapouillou.net>,
+	linux-stm32@st-md-mailman.stormreply.com,
+	Linux ARM <linux-arm-kernel@lists.infradead.org>,
+	linux-gpio@vger.kernel.org, Srinivas Kandagatla <srini@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Matti Vaittinen <mazziesaccount@gmail.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Vaibhav Hiremath <hvaibhav.linux@gmail.com>,
+	linux-sh@vger.kernel.org, x86@kernel.org,
+	Max Filippov <jcmvbkbc@gmail.com>
+Subject: Re: Kconfig dangling references (BZ 216748)
+Message-ID: <aTcVXrUXVsyjaT22@shepard>
+References: <22b92ddf-6321-41b5-8073-f9c7064d3432@infradead.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: seanjc@google.com, oupton@kernel.org, zhaotianrui@loongson.cn, maobibo@loongson.cn, chenhuacai@kernel.org, maddy@linux.ibm.com, anup@brainfault.org, pjw@kernel.org, palmer@dabbelt.com, aou@eecs.berkeley.edu, borntraeger@linux.ibm.com, frankja@linux.ibm.com, imbrenda@linux.ibm.com, pbonzini@redhat.com, linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, kvm@vger.kernel.org, loongarch@lists.linux.dev, linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, gustavoars@kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="z9eEZ2V8rb9VqsSG"
+Content-Disposition: inline
+In-Reply-To: <22b92ddf-6321-41b5-8073-f9c7064d3432@infradead.org>
 
-On Fri, 05 Dec 2025 23:26:55 +0000,
-Sean Christopherson <seanjc@google.com> wrote:
-> 
-> Remove KVM's internal pseudo-overlay of kvm_stats_desc, which subtly
-> aliases the flexible name[] in the uAPI definition with a fixed-size array
-> of the same name.  The unusual embedded structure results in compiler
-> warnings due to -Wflex-array-member-not-at-end, and also necessitates an
-> extra level of dereferencing in KVM.  To avoid the "overlay", define the
-> uAPI structure to have a fixed-size name when building for the kernel.
-> 
-> Opportunistically clean up the indentation for the stats macros, and
-> replace spaces with tabs.
-> 
-> No functional change intended.
-> 
-> Reported-by: Gustavo A. R. Silva <gustavoars@kernel.org>
-> Closes: https://lore.kernel.org/all/aPfNKRpLfhmhYqfP@kspp
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
 
-Acked-by: Marc Zyngier <maz@kernel.org>
+--z9eEZ2V8rb9VqsSG
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-	M.
+Hi Randy,
 
--- 
-Without deviation from the norm, progress is not possible.
+On Sun 07 Dec 25, 18:04, Randy Dunlap wrote:
+> from  https://bugzilla.kernel.org/show_bug.cgi?id=3D216748
+>=20
+> The bugzilla entry includes a Perl script and a shell script.
+> This is the edited result of running them (I removed some entries that we=
+re noise).
+
+[...]
+
+> DRM_KMS_DMA_HELPER ---
+> drivers/gpu/drm/adp/Kconfig:9:	select DRM_KMS_DMA_HELPER
+> drivers/gpu/drm/logicvc/Kconfig:7:	select DRM_KMS_DMA_HELPER
+
+For these two, the symbol was removed in commit
+09717af7d13d63df141ae6e71686289989d17efd but these two drivers either were
+missed by the batch rename or were introduced a bit later.
+
+Since the symbol selected DRM_GEM_CMA_HELPER (which is still needed by the
+drivers), it should be replaced with DRM_GEM_CMA_HELPER.
+
+Are you expecting to craft a patch for fixing this or should I do it myself?
+
+All the best,
+
+Paul
+
+--=20
+Paul Kocialkowski,
+
+Independent contractor - sys-base - https://www.sys-base.io/
+Free software developer - https://www.paulk.fr/
+
+Expert in multimedia, graphics and embedded hardware support with Linux.
+
+--z9eEZ2V8rb9VqsSG
+Content-Type: application/pgp-signature; name=signature.asc
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCgAdFiEEAbcMXZQMtj1fphLChP3B6o/ulQwFAmk3FV4ACgkQhP3B6o/u
+lQxHMA/9EINPzAC/mNsqKqe+ejzVAFDvbkqgtj46jdHchIRyg5QqUNEoQvUKACwR
+bZftHenlJS3ho4n0eejvmJG9LkV6HYA4X0vXrPKGJTBCMgy1CUl7j7v8ZFn7qhcc
+KmyK3klG9hxRNAFrMTlxaE3uzNZWaZ56eEINuq5RkJWv5ieiadTkXR03L4x2l++z
+B1RqTh3yh5d57Ckfs7lLGfmiDUQAkhdAm1CASv6bO1jKRiyhuSN95aOZFZ94DV+m
+oV44vbSx4aXyh1lb07PxtPMa+WITGI6/mW0+TKhRNd0eAoO19K0zkSNA18KjgiOw
+3m/4Vs1pdWSKCTDIgtcymufTpdjqWt5LEpxEuzLprgUXrpoQbS7paAfhB4Ex6yIR
+CcQfarVp0SM0/OI5kZc40xoz6UEHrCjw7+loxHuUV+2KHAhfRlQhLcScrQXUO/X3
+L2vzAFURuGyVpPbZnq2ftkMT4h6o+W93ZtKP8vIHJjDijdwM3NAt90FT9byKXAYP
+AvVBPERmf9+savPI0eDYuO825wAcF3D2rvF4ZElPj4+OD6sq93Z52bDN3CUFHsMD
+tKp3GKwBxZ0ENUxQZvrIINzLx40EXOq/MDI1JZd4Nl89W5BBk6QGIRE4hj0FNctf
++4gCjq9z339Ik0u6aVtzq/jdewPuTo2wZ5DVPxsH1RyPX2cBWAg=
+=azY3
+-----END PGP SIGNATURE-----
+
+--z9eEZ2V8rb9VqsSG--
 
