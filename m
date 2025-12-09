@@ -1,163 +1,200 @@
-Return-Path: <linux-mips+bounces-12423-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12424-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1E3BBCAE22A
-	for <lists+linux-mips@lfdr.de>; Mon, 08 Dec 2025 21:06:13 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46141CAF475
+	for <lists+linux-mips@lfdr.de>; Tue, 09 Dec 2025 09:26:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EA249302437A
-	for <lists+linux-mips@lfdr.de>; Mon,  8 Dec 2025 20:06:08 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 415F730095DB
+	for <lists+linux-mips@lfdr.de>; Tue,  9 Dec 2025 08:26:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AE182FD1D3;
-	Mon,  8 Dec 2025 20:06:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB424263F34;
+	Tue,  9 Dec 2025 08:26:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b="RCw4MYw+";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="voCV257E"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="fHyy3p3R"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from flow-a6-smtp.messagingengine.com (flow-a6-smtp.messagingengine.com [103.168.172.141])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 10D461A9FA8;
-	Mon,  8 Dec 2025 20:06:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.141
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77CE22417DE;
+	Tue,  9 Dec 2025 08:26:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765224366; cv=none; b=eQmLTNVd//YxF6eO4bOE3Nu7foDN8UVZPDdRgkpPiAnbuCmmgO59tksH3TslcovX7f0snJiyWVmIYsQda8/BSCy4GPNkVJOiiK+Q1cw302Eqe4Qme4EIJXdFxGMX8l0stQgL6Zp7VkmIzzZqTM9fBkuheMYwkI9UVMdMGKK4nfY=
+	t=1765268791; cv=none; b=FFJjBmIil68vtJY8j4aZvYs3UYQlysTwUP/Do/4he3miY0tNOcq03NyzBx9TtRrGqKFKGJOSM+q5Ffh8BAt8TjPRk/D+LN2zV799jb7dMW5mJ6rWGyZ0HCkvy/iG1HE/E4+EJjYcAfvRI94gJNhRBOwPCfoZyzYm+nd+mVHmM4A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765224366; c=relaxed/simple;
-	bh=jr5/ZXHHETObVyfq2xnDJTDvOshfBwx+krGl3v0gYC4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O3rj2taSf8oYlgAYyzL4Dd64gsp7B2PYtGzSz1SDmlUnRbTIgqYCYeDMp7+9YBLK4A6iz+hMxmoJq7HFgRz29c9wCujHcz9etE7EaDN3m7rLDJugm3sf7068piHEHzC0MhpSqM7XM7874XJGiKj7/OJB7fxuU4e0mkLF7ArEktQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net; spf=pass smtp.mailfrom=jannau.net; dkim=pass (2048-bit key) header.d=jannau.net header.i=@jannau.net header.b=RCw4MYw+; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=voCV257E; arc=none smtp.client-ip=103.168.172.141
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=jannau.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=jannau.net
-Received: from phl-compute-06.internal (phl-compute-06.internal [10.202.2.46])
-	by mailflow.phl.internal (Postfix) with ESMTP id 15BE51380418;
-	Mon,  8 Dec 2025 15:06:00 -0500 (EST)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-06.internal (MEProxy); Mon, 08 Dec 2025 15:06:00 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=jannau.net; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm3; t=1765224360; x=1765231560; bh=geGVe3G5SB
-	gEZ59+oVuK/Iwq85pb8lTkLlayLey8xSA=; b=RCw4MYw+7ZLDHkj305wxxjCRSX
-	rMrdbrBgi9f25g/3it320zvhMNV1ZQKoK4HMoVtdSMCSQxa3T1NtQGZK2ji7FaB+
-	4EAMXj2Z/18fg18HLzgIp1Xd2gaRaVf6aOd9tq+17uy6+b25gxNy3mnV9680Kb9/
-	5tqHVF1j8ty4YqRtlzJwDQD/AFabZMuWlqsu+ivO0qERdUZBTsbfvToLgDReiU2c
-	Lh/Eba71Uo99rQNJKXg+dWVZlsvVZ4EEWaxpUn0pfDgHeJqy1Ci7jT91cm3WjvPy
-	sTJxo0O0i2VTRszFsHu9XlHbQZYuMm/iGITipFRODxC1B8IcWm5/KrQbrMbg==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=
-	1765224360; x=1765231560; bh=geGVe3G5SBgEZ59+oVuK/Iwq85pb8lTkLla
-	yLey8xSA=; b=voCV257E8ExI8LRf6UdVA7F02TYLxADA60npChdBR6Y21xs0tRA
-	C1uw+AV9CLSaNfK6RAUV6AE1RZBKQaSh2/pgZThaQt1P282do/o12nWenujxz3Pg
-	/tdhnCFD0X7RQQSdVppzFajbBlqF0NSSuk+kHONsZxH3CEBuJYx+4gBEMsH+gyIP
-	razXamAr0cLJLucn4Z8U6ZvWzmg4VLNRkI8fW7bkvNN/o41lmXQ/g0VAlsbl0p+c
-	9kOr6shetIpWgA2fAxvQUSRm6uEgMj9wjThm4m3EyfuK4xRaW/GPDonriBPihui9
-	NKID6dEU3zuG8C0j+xnEP0PQag6LUCS0h3A==
-X-ME-Sender: <xms:pi83aTQUBBxxcwI8Ju7BapuF7LwulYjYQpKe7sWAR0r_uWtzDdDwRg>
-    <xme:pi83aebVHsxrKMEuQywvzdXSDZHpM9MK2UiluZkdXAVmh0J0nNZu6U6gfkZg9j0Ga
-    Ut53OsW7mEjA55oME3b-thugVKSe0_5Tbewl2mI88XfPPTSUxekmw>
-X-ME-Received: <xmr:pi83acQeu23D1kI1rLhQ4wr0x5rXNlW92yKuzfJ9DXbmbyD1PnQo3LIx3zAyL52iJBsHs4oNCdPXZZnY0nx-sHu7J1Hs6kJCHtU>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddujeehlecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpeffhffvvefukfhfgggtuggjsehttdertddttdejnecuhfhrohhmpeflrghnnhgvucfi
-    rhhunhgruhcuoehjsehjrghnnhgruhdrnhgvtheqnecuggftrfgrthhtvghrnhepgfduue
-    ffleefkeegueektdehkeejtedtffdtudejhfdvheetgfeigfeltdeufeejnecuffhomhgr
-    ihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehjsehjrghnnhgruhdrnhgvthdpnhgspghrtghpthhtohepvdei
-    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehprghulhhksehshihsqdgsrghsvg
-    drihhopdhrtghpthhtoheprhguuhhnlhgrphesihhnfhhrrgguvggrugdrohhrghdprhgt
-    phhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprh
-    gtphhtthhopegrnhguhidrshhhvghvtghhvghnkhhosehgmhgrihhlrdgtohhmpdhrtghp
-    thhtoheprghrnhgusegrrhhnuggsrdguvgdprhgtphhtthhopegrnhgurhgvfidrjhhonh
-    gvsheslhhinhhugidruggvvhdprhgtphhtthhopehlihhnuhigqdhomhgrphesvhhgvghr
-    rdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehophgvnhgsmhgtsehlihhsthhsrdhoii
-    hlrggsshdrohhrghdprhgtphhtthhopehlihhnuhigqdhsohhunhgusehvghgvrhdrkhgv
-    rhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:pi83aZ4RCJmeDa-VR1cQPG2ul73JR-gGDUFjKdpu-22mFdL9oWUOfw>
-    <xmx:pi83aXrSwaSszaHmCrk55lMdmsGtmyEQHQ1s-QpJy4Rt1_cXfEHipg>
-    <xmx:pi83aUR5DbLatVwQOF8-uRLn9TImi_QeLc8Ti5pE_VqfQwUHqh1VcA>
-    <xmx:pi83aTtoeQfXbJumEOlxloGR9zkRk3a07od05eZIJLIDpzutEw-WGg>
-    <xmx:qC83aQtVE-oT3QFyD3EhDToVHKkkvo2HfKm_z0WZaMfBkC3mxyGDZ6m_>
-Feedback-ID: i47b949f6:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 8 Dec 2025 15:05:57 -0500 (EST)
-Date: Mon, 8 Dec 2025 21:05:55 +0100
-From: Janne Grunau <j@jannau.net>
-To: Paul Kocialkowski <paulk@sys-base.io>
-Cc: Randy Dunlap <rdunlap@infradead.org>,
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-	Andy Shevchenko <andy.shevchenko@gmail.com>,
-	Arnd Bergmann <arnd@arndb.de>, andrew.jones@linux.dev,
-	linux-omap@vger.kernel.org, openbmc@lists.ozlabs.org,
-	linux-sound@vger.kernel.org,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	linux-mips@vger.kernel.org, asahi@lists.linux.dev,
-	"dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-	chrome-platform@lists.linux.dev,
-	Paul Cercueil <paul@crapouillou.net>,
-	linux-stm32@st-md-mailman.stormreply.com,
-	Linux ARM <linux-arm-kernel@lists.infradead.org>,
-	linux-gpio@vger.kernel.org, Srinivas Kandagatla <srini@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Matti Vaittinen <mazziesaccount@gmail.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Vaibhav Hiremath <hvaibhav.linux@gmail.com>,
-	linux-sh@vger.kernel.org, x86@kernel.org,
-	Max Filippov <jcmvbkbc@gmail.com>
-Subject: Re: Kconfig dangling references (BZ 216748)
-Message-ID: <20251208200555.GA333481@robin.jannau.net>
-References: <22b92ddf-6321-41b5-8073-f9c7064d3432@infradead.org>
- <aTcVXrUXVsyjaT22@shepard>
+	s=arc-20240116; t=1765268791; c=relaxed/simple;
+	bh=MT/qY8MX0ozkYBW0qMvzRIWzDIZmrsZJkEszJ+YNa54=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=JTSswe2sptiOaNA8T/suUN1DV06cT3eRuvdbFxNWAHJUxM5YiluEj0XwfE3lNLF3I9zWyTZsgOY9gJiEGwJH8gaHcpEqMGmSZdVnwmvb5I1CX/7tMoec5oBtg/mpiZf0tJoiCodeAQH5kcXaKvWMZJMT3XIfOog6C1V0xD9zyvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=fHyy3p3R; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 4FE444E41B17;
+	Tue,  9 Dec 2025 08:26:26 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 0BFF760714;
+	Tue,  9 Dec 2025 08:26:26 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 0CD79102F0BF6;
+	Tue,  9 Dec 2025 09:26:03 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1765268783; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=wcg04tlEy44VWHetyJPa6vtgrSi9hQkJ8Wr3ssO16Z0=;
+	b=fHyy3p3RXDvWm/ScQ573O19lBfA7i99dTtnNMKIgZo6j5P27qUaUjbhNTv08DA8IFMfpHy
+	AgxHwoL/NW76FusS9uDh40xSgmfteD+0AIKiUzKm6X50QBH9u+CGQe/shfCBYk6cYKg2TZ
+	8gN2cTM7D1TIOGI5CBJ9VtNcRcbmeEPaK0KH5amKURGuYmw9NosAHrgGe3H35kv5rwXRKw
+	4FLoSOslR05puLB4/PTfDmvtHxQZ+eNY+xwyZu7eIBJfZyxeM1KAbSzgzSDiYTjCGWaCLA
+	VyDhDTs5Dy0D0lluZeF/pIm4ZgCjPNF9eHgaCtNllGMYqa2jowZM4WLyZc41kQ==
+From: Romain Gantois <romain.gantois@bootlin.com>
+Subject: [PATCH v2 0/2] iio: inkern: Use namespaced exports
+Date: Tue, 09 Dec 2025 09:25:54 +0100
+Message-Id: <20251209-iio-inkern-use-namespaced-exports-v2-0-9799a33c4b7f@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <aTcVXrUXVsyjaT22@shepard>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIABLdN2kC/42NQQ6CMBAAv0J6dk13gRA8+Q/DoZRFNkpLWiQYw
+ t+t+AGPM4eZTUUOwlFdsk0FXiSKdwnolCk7GHdnkC6xIk0lIlUg4kHcg4ODV2RwZuQ4Gcsd8Dr
+ 5MEcosLe6JsrbklXqTIF7WY/HrUk8SJx9eB/LBb/2VyeNf9QXBITOYJ2XfaWpyK+t9/NT3Nn6U
+ TX7vn8Avu6Bn9QAAAA=
+X-Change-ID: 20251127-iio-inkern-use-namespaced-exports-41fc09223b5e
+To: MyungJoo Ham <myungjoo.ham@samsung.com>, 
+ Chanwoo Choi <cw00.choi@samsung.com>, Guenter Roeck <linux@roeck-us.net>, 
+ Peter Rosin <peda@axentia.se>, Jonathan Cameron <jic23@kernel.org>, 
+ David Lechner <dlechner@baylibre.com>, 
+ =?utf-8?q?Nuno_S=C3=A1?= <nuno.sa@analog.com>, 
+ Andy Shevchenko <andy@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, 
+ Michael Hennerich <Michael.Hennerich@analog.com>, 
+ Mariel Tinaco <Mariel.Tinaco@analog.com>, 
+ Kevin Tsai <ktsai@capellamicro.com>, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+ Eugen Hristev <eugen.hristev@linaro.org>, Vinod Koul <vkoul@kernel.org>, 
+ Kishon Vijay Abraham I <kishon@kernel.org>, 
+ Sebastian Reichel <sre@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
+ Hans de Goede <hansg@kernel.org>, 
+ Support Opensource <support.opensource@diasemi.com>, 
+ Paul Cercueil <paul@crapouillou.net>, Iskren Chernev <me@iskren.info>, 
+ Krzysztof Kozlowski <krzk@kernel.org>, 
+ Marek Szyprowski <m.szyprowski@samsung.com>, 
+ Matheus Castello <matheus@castello.eng.br>, 
+ Saravanan Sekar <sravanhome@gmail.com>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Casey Connolly <casey.connolly@linaro.org>, 
+ =?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>, 
+ Orson Zhai <orsonzhai@gmail.com>, 
+ Baolin Wang <baolin.wang@linux.alibaba.com>, 
+ Chunyan Zhang <zhang.lyra@gmail.com>, Amit Kucheria <amitk@kernel.org>, 
+ Thara Gopinath <thara.gopinath@gmail.com>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>, 
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, 
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+ Sylwester Nawrocki <s.nawrocki@samsung.com>, 
+ Olivier Moysan <olivier.moysan@foss.st.com>, 
+ Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>, 
+ Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+ Alexandre Torgue <alexandre.torgue@foss.st.com>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+ linux-iio@vger.kernel.org, linux-input@vger.kernel.org, 
+ linux-phy@lists.infradead.org, linux-pm@vger.kernel.org, 
+ linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org, 
+ linux-arm-msm@vger.kernel.org, linux-sound@vger.kernel.org, 
+ linux-stm32@st-md-mailman.stormreply.com, 
+ Romain Gantois <romain.gantois@bootlin.com>, 
+ Sebastian Reichel <sebastian.reichel@collabora.com>, 
+ Andy Shevchenko <andriy.shevchenko@intel.com>
+X-Mailer: b4 0.14.3
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Mon, Dec 08, 2025 at 07:13:50PM +0100, Paul Kocialkowski wrote:
-> Hi Randy,
-> 
-> On Sun 07 Dec 25, 18:04, Randy Dunlap wrote:
-> > from  https://bugzilla.kernel.org/show_bug.cgi?id=216748
-> > 
-> > The bugzilla entry includes a Perl script and a shell script.
-> > This is the edited result of running them (I removed some entries that were noise).
-> 
-> [...]
-> 
-> > DRM_KMS_DMA_HELPER ---
-> > drivers/gpu/drm/adp/Kconfig:9:	select DRM_KMS_DMA_HELPER
-> > drivers/gpu/drm/logicvc/Kconfig:7:	select DRM_KMS_DMA_HELPER
-> 
-> For these two, the symbol was removed in commit
-> 09717af7d13d63df141ae6e71686289989d17efd
+Hello everyone,
 
-That commit removed DRM_KMS_CMA_HELPER. Later commit 6bcfe8eaeef0
-("drm/fb: rename FB CMA helpers to FB DMA helpers") renamed
-DRM_KMS_CMA_HELPER erroneously to DRM_KMS_DMA_HELPER.
+This is version two of my series which introduces namespaced exports for
+the IIO consumer API.
 
-> but these two drivers either were
-> missed by the batch rename or were introduced a bit later.
+Best Regards,
 
-In the case of drivers/gpu/drm/adp/Kconfig it was missed much later
-during review (but iirc went through the same rename out of tree).
+Romain
 
-> Since the symbol selected DRM_GEM_CMA_HELPER (which is still needed by the
-> drivers), it should be replaced with DRM_GEM_CMA_HELPER.
+Signed-off-by: Romain Gantois <romain.gantois@bootlin.com>
+---
+Changes in v2:
+- Separated out ds4424 changes.
+- Improved commit descriptions.
+- Link to v1: https://lore.kernel.org/r/20251201-iio-inkern-use-namespaced-exports-v1-1-da1935f70243@bootlin.com
 
-That symbol doesn't exist anymore either. It's now DRM_GEM_DMA_HELPER
-which is already present in both files.
+---
+Romain Gantois (2):
+      iio: dac: ds4424: drop unused include IIO consumer header
+      iio: inkern: Use namespaced exports
 
-So the "select DRM_KMS_DMA_HELPER" lines can be removed from both files.
+ drivers/extcon/extcon-adc-jack.c                |  1 +
+ drivers/hwmon/iio_hwmon.c                       |  1 +
+ drivers/hwmon/ntc_thermistor.c                  |  1 +
+ drivers/iio/adc/envelope-detector.c             |  1 +
+ drivers/iio/afe/iio-rescale.c                   |  1 +
+ drivers/iio/buffer/industrialio-buffer-cb.c     |  1 +
+ drivers/iio/buffer/industrialio-hw-consumer.c   |  1 +
+ drivers/iio/dac/ad8460.c                        |  1 +
+ drivers/iio/dac/dpot-dac.c                      |  1 +
+ drivers/iio/dac/ds4424.c                        |  1 -
+ drivers/iio/inkern.c                            | 54 ++++++++++++-------------
+ drivers/iio/light/cm3605.c                      |  1 +
+ drivers/iio/light/gp2ap002.c                    |  1 +
+ drivers/iio/multiplexer/iio-mux.c               |  1 +
+ drivers/iio/potentiostat/lmp91000.c             |  1 +
+ drivers/input/joystick/adc-joystick.c           |  1 +
+ drivers/input/keyboard/adc-keys.c               |  1 +
+ drivers/input/touchscreen/colibri-vf50-ts.c     |  1 +
+ drivers/input/touchscreen/resistive-adc-touch.c |  1 +
+ drivers/phy/motorola/phy-cpcap-usb.c            |  1 +
+ drivers/power/supply/ab8500_btemp.c             |  1 +
+ drivers/power/supply/ab8500_charger.c           |  1 +
+ drivers/power/supply/ab8500_fg.c                |  1 +
+ drivers/power/supply/axp20x_ac_power.c          |  1 +
+ drivers/power/supply/axp20x_battery.c           |  1 +
+ drivers/power/supply/axp20x_usb_power.c         |  1 +
+ drivers/power/supply/axp288_fuel_gauge.c        |  1 +
+ drivers/power/supply/cpcap-battery.c            |  1 +
+ drivers/power/supply/cpcap-charger.c            |  1 +
+ drivers/power/supply/da9150-charger.c           |  1 +
+ drivers/power/supply/generic-adc-battery.c      |  1 +
+ drivers/power/supply/ingenic-battery.c          |  1 +
+ drivers/power/supply/intel_dc_ti_battery.c      |  1 +
+ drivers/power/supply/lego_ev3_battery.c         |  1 +
+ drivers/power/supply/lp8788-charger.c           |  1 +
+ drivers/power/supply/max17040_battery.c         |  1 +
+ drivers/power/supply/mp2629_charger.c           |  1 +
+ drivers/power/supply/mt6370-charger.c           |  1 +
+ drivers/power/supply/qcom_smbx.c                |  1 +
+ drivers/power/supply/rn5t618_power.c            |  1 +
+ drivers/power/supply/rx51_battery.c             |  1 +
+ drivers/power/supply/sc27xx_fuel_gauge.c        |  1 +
+ drivers/power/supply/twl4030_charger.c          |  1 +
+ drivers/power/supply/twl4030_madc_battery.c     |  1 +
+ drivers/power/supply/twl6030_charger.c          |  1 +
+ drivers/thermal/qcom/qcom-spmi-adc-tm5.c        |  1 +
+ drivers/thermal/qcom/qcom-spmi-temp-alarm.c     |  1 +
+ drivers/thermal/renesas/rzg3s_thermal.c         |  1 +
+ drivers/thermal/thermal-generic-adc.c           |  1 +
+ sound/soc/codecs/audio-iio-aux.c                |  1 +
+ sound/soc/samsung/aries_wm8994.c                |  1 +
+ sound/soc/samsung/midas_wm1811.c                |  1 +
+ sound/soc/stm/stm32_adfsdm.c                    |  1 +
+ 53 files changed, 78 insertions(+), 28 deletions(-)
+---
+base-commit: 99fece7ab29c9654d7945312b275b527757ac4b3
+change-id: 20251127-iio-inkern-use-namespaced-exports-41fc09223b5e
 
-Janne
+Best regards,
+-- 
+Romain Gantois <romain.gantois@bootlin.com>
+
 
