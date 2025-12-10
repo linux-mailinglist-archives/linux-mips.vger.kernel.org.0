@@ -1,49 +1,49 @@
-Return-Path: <linux-mips+bounces-12432-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12435-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2168ECB262F
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Dec 2025 09:23:24 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 544F6CB2647
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Dec 2025 09:23:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 8C5F83005AB1
-	for <lists+linux-mips@lfdr.de>; Wed, 10 Dec 2025 08:23:22 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 10E23309161C
+	for <lists+linux-mips@lfdr.de>; Wed, 10 Dec 2025 08:23:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 966283002BB;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDE8330170E;
 	Wed, 10 Dec 2025 08:23:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hhPaRhrg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gKDNQAen"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 605F82FE593;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4A003016E0;
 	Wed, 10 Dec 2025 08:23:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765355001; cv=none; b=ZWMqEKXFwWsPKvLRIX+ORIXKjL1Q+eBLuI7IgAku0RwbFUF4krvTE+7RQ2cvsFfpYTxJWKEHkQ53k5lmkT0bfhgKFL19/OwO0kqoAC1ybP2mI/R+RVBsvOgK5A2z/Tk1jGc6x/ois3KYeBJZlUWZGncr4oKsSemHhTmnP5isFiQ=
+	t=1765355001; cv=none; b=RGjhxf8HCr2HHtrA/Rm86E9G801mtYxFP3y5LxVwcSsX+ZjeJIW9j+ciFdMOPTUXUm7B1St10hUBFg8i7mKU7/UHhq0wsuNwOH3tP0PI2KdbQo5aYnlQNjlGGnoKPdifCZUoRTXpLn2DV2U6u8VUHb+eiFgcjUOi99F3ECxQoAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1765355001; c=relaxed/simple;
-	bh=WI1RGflSqZT0wUnH19O2lHW2JJfkBMQcqBhs77Ks0qQ=;
+	bh=p34uPiDat/+Do+y+VDu1EDx7vU3qivFgecNeyfl4jkU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Ixk/HXbyd60EWK4KUzIPr4dTnHe7XurHhPJlxFy/oon8CWw/ZpcFSd6J6P64Z4tKyOcsDjUwMVylC8aA5c70zyu3/RlOhgStnlSe3qaD4dEAF5coNF2V9AYdsAKcjbe1zLfJqDVAfK7yyNZvj+22sNinVfn25CISpQ4fvkTl8/Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hhPaRhrg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D23AC16AAE;
+	 MIME-Version; b=SMNXNZ2RXruBtmIC8FwM9V7KBDyjAG8/vMfAEi3PlwgAnxtzsmZjItOR6BwbyrQp4fVnxKDNX1DbXwsx65jkKjVrfe0uAba5RZbxWDng9yBwkVIn8vBc/BOG5ETbc24K0jfarTfn27ZY6uwKIEUehm4t/HOQTpJ0tTrLH9miJRA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gKDNQAen; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4FAD8C116B1;
 	Wed, 10 Dec 2025 08:23:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1765355001;
-	bh=WI1RGflSqZT0wUnH19O2lHW2JJfkBMQcqBhs77Ks0qQ=;
+	bh=p34uPiDat/+Do+y+VDu1EDx7vU3qivFgecNeyfl4jkU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=hhPaRhrgKZo8ZlK/gGxRKlD5k+N8knjlyrk66hBsHqcjSWjf7T2K0jl/ccjvFGiB+
-	 7d12GVgBcI34QiNzw4mRF6c3oFsoQUp0oNyWOeDlMH5MtHp05P3YsIzKl7Vb0eTHvw
-	 /iBwe0tqhleAMuROynKMtTTHpXJ/XBKKX8GYMKalpuy7nv4iwnqcXqIe13m3Op9osc
-	 DgjHdF5SqPhihBhxWhVinSLnGKTYcQ2LzwX74as1sn71BmfB8ivVvjnDwSAaOt92O4
-	 NRCIX6ZC2RN+lBlqybmlpanQLvql0OR0uByL6sl4z6+StRXgzgIMnvSw7ndkxKCNGZ
-	 nLg8bBPaD2tOA==
+	b=gKDNQAenr52zwhLUeEpo4qGeYablyqR+kuSD1SnJrkL2eJhPkeCvHK4at6th2oUn0
+	 KL34j3CrbdXYrRYFfBX+BNi8l01lBlzKYZKZDCvWvtoDCY75dGhOils1NwOFMAv4aB
+	 t1g4w0uDj2WjSnsaEtGWoroD4VHe5A4+1u7GMPpxXqbLqWF6T3lLHzO1DKvrC8SgxR
+	 uWiBOpbSxORKzHbWUPBWaCcS5zJ8nE0QN+MfCCdloeaUBOZ2vbQqGmp2Wok8h47e3a
+	 chHYEZXpfPMCD7Mab3lpVNJLNshPK9xrsk8C3SKZxftuOBhnRNlDX7vEF3DDgUHYZb
+	 iQ/SW5Lf492UQ==
 Received: from sofa.misterjones.org ([185.219.108.64] helo=valley-girl.lan)
 	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.98.2)
 	(envelope-from <maz@kernel.org>)
-	id 1vTFTj-0000000BhIm-0k1y;
+	id 1vTFTj-0000000BhIm-1RCu;
 	Wed, 10 Dec 2025 08:23:19 +0000
 From: Marc Zyngier <maz@kernel.org>
 To: linux-kernel@vger.kernel.org,
@@ -52,9 +52,9 @@ Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
 	Thomas Gleixner <tglx@linutronix.de>,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
 	Joshua Kinard <kumba@gentoo.org>
-Subject: [PATCH 2/6] genirq: Remove __request_percpu_irq() helper
-Date: Wed, 10 Dec 2025 08:22:38 +0000
-Message-ID: <20251210082242.360936-3-maz@kernel.org>
+Subject: [PATCH 3/6] mips: Move IP30 timer to request_percpu_irq()
+Date: Wed, 10 Dec 2025 08:22:39 +0000
+Message-ID: <20251210082242.360936-4-maz@kernel.org>
 X-Mailer: git-send-email 2.47.3
 In-Reply-To: <20251210082242.360936-1-maz@kernel.org>
 References: <20251210082242.360936-1-maz@kernel.org>
@@ -70,106 +70,68 @@ X-SA-Exim-Rcpt-To: linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org, dan
 X-SA-Exim-Mail-From: maz@kernel.org
 X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-With the IRQ timing stuff being gone, there is no need to specify
-a flag when requesting a percpu interrupt. Not only IRQF_TIMER was
-the only flag (set of flags actually) allowed, but nobody ever
-passed it.
-
-Get rid of __request_percpu_irq(), which was only getting 0 as flags,
-and promote request_percpu_irq_affinity() as its replacement.
+Teach the SGI IP30 timer about request_percpu_irq(), which ultimately
+will allow for the removal of the antiquated setup_percpu_irq() API.
 
 Signed-off-by: Marc Zyngier <maz@kernel.org>
 ---
- include/linux/interrupt.h | 18 ++++--------------
- kernel/irq/manage.c       | 16 ++++++----------
- 2 files changed, 10 insertions(+), 24 deletions(-)
+ arch/mips/include/asm/cevt-r4k.h |  1 -
+ arch/mips/kernel/cevt-r4k.c      | 11 -----------
+ arch/mips/sgi-ip30/ip30-timer.c  |  5 ++---
+ 3 files changed, 2 insertions(+), 15 deletions(-)
 
-diff --git a/include/linux/interrupt.h b/include/linux/interrupt.h
-index 44e335b17ed64..00c01b0a43be1 100644
---- a/include/linux/interrupt.h
-+++ b/include/linux/interrupt.h
-@@ -181,9 +181,8 @@ request_any_context_irq(unsigned int irq, irq_handler_t handler,
- 			unsigned long flags, const char *name, void *dev_id);
+diff --git a/arch/mips/include/asm/cevt-r4k.h b/arch/mips/include/asm/cevt-r4k.h
+index 2e13a038d2600..5229eb34f28a4 100644
+--- a/arch/mips/include/asm/cevt-r4k.h
++++ b/arch/mips/include/asm/cevt-r4k.h
+@@ -23,7 +23,6 @@ void mips_event_handler(struct clock_event_device *dev);
+ int c0_compare_int_usable(void);
+ irqreturn_t c0_compare_interrupt(int, void *);
  
- extern int __must_check
--__request_percpu_irq(unsigned int irq, irq_handler_t handler,
--		     unsigned long flags, const char *devname,
--		     const cpumask_t *affinity, void __percpu *percpu_dev_id);
-+request_percpu_irq_affinity(unsigned int irq, irq_handler_t handler, const char *devname,
-+			    const cpumask_t *affinity, void __percpu *percpu_dev_id);
+-extern struct irqaction c0_compare_irqaction;
+ extern int cp0_timer_irq_installed;
  
- extern int __must_check
- request_nmi(unsigned int irq, irq_handler_t handler, unsigned long flags,
-@@ -193,17 +192,8 @@ static inline int __must_check
- request_percpu_irq(unsigned int irq, irq_handler_t handler,
- 		   const char *devname, void __percpu *percpu_dev_id)
- {
--	return __request_percpu_irq(irq, handler, 0,
--				    devname, NULL, percpu_dev_id);
--}
+ #endif /* __ASM_CEVT_R4K_H */
+diff --git a/arch/mips/kernel/cevt-r4k.c b/arch/mips/kernel/cevt-r4k.c
+index 5f6e9e2ebbdbb..f58325f9bd2bc 100644
+--- a/arch/mips/kernel/cevt-r4k.c
++++ b/arch/mips/kernel/cevt-r4k.c
+@@ -159,17 +159,6 @@ irqreturn_t c0_compare_interrupt(int irq, void *dev_id)
+ 	return IRQ_NONE;
+ }
+ 
+-struct irqaction c0_compare_irqaction = {
+-	.handler = c0_compare_interrupt,
+-	/*
+-	 * IRQF_SHARED: The timer interrupt may be shared with other interrupts
+-	 * such as perf counter and FDC interrupts.
+-	 */
+-	.flags = IRQF_PERCPU | IRQF_TIMER | IRQF_SHARED,
+-	.name = "timer",
+-};
 -
--static inline int __must_check
--request_percpu_irq_affinity(unsigned int irq, irq_handler_t handler,
--			    const char *devname, const cpumask_t *affinity,
--			    void __percpu *percpu_dev_id)
--{
--	return __request_percpu_irq(irq, handler, 0,
--				    devname, affinity, percpu_dev_id);
-+	return request_percpu_irq_affinity(irq, handler, devname,
-+					   NULL, percpu_dev_id);
- }
- 
- extern int __must_check
-diff --git a/kernel/irq/manage.c b/kernel/irq/manage.c
-index 7b25ffc5c43a4..1c858be09ba13 100644
---- a/kernel/irq/manage.c
-+++ b/kernel/irq/manage.c
-@@ -2510,10 +2510,9 @@ struct irqaction *create_percpu_irqaction(irq_handler_t handler, unsigned long f
- }
- 
- /**
-- * __request_percpu_irq - allocate a percpu interrupt line
-+ * request_percpu_irq_affinity - allocate a percpu interrupt line
-  * @irq:	Interrupt line to allocate
-  * @handler:	Function to be called when the IRQ occurs.
-- * @flags:	Interrupt type flags (IRQF_TIMER only)
-  * @devname:	An ascii name for the claiming device
-  * @affinity:	A cpumask describing the target CPUs for this interrupt
-  * @dev_id:	A percpu cookie passed back to the handler function
-@@ -2526,9 +2525,9 @@ struct irqaction *create_percpu_irqaction(irq_handler_t handler, unsigned long f
-  * the handler gets called with the interrupted CPU's instance of
-  * that variable.
-  */
--int __request_percpu_irq(unsigned int irq, irq_handler_t handler,
--			 unsigned long flags, const char *devname,
--			 const cpumask_t *affinity, void __percpu *dev_id)
-+int request_percpu_irq_affinity(unsigned int irq, irq_handler_t handler,
-+				const char *devname, const cpumask_t *affinity,
-+				void __percpu *dev_id)
- {
- 	struct irqaction *action;
- 	struct irq_desc *desc;
-@@ -2542,10 +2541,7 @@ int __request_percpu_irq(unsigned int irq, irq_handler_t handler,
- 	    !irq_settings_is_per_cpu_devid(desc))
- 		return -EINVAL;
- 
--	if (flags && flags != IRQF_TIMER)
--		return -EINVAL;
 -
--	action = create_percpu_irqaction(handler, flags, devname, affinity, dev_id);
-+	action = create_percpu_irqaction(handler, 0, devname, affinity, dev_id);
- 	if (!action)
- 		return -ENOMEM;
- 
-@@ -2564,7 +2560,7 @@ int __request_percpu_irq(unsigned int irq, irq_handler_t handler,
- 
- 	return retval;
+ void mips_event_handler(struct clock_event_device *dev)
+ {
  }
--EXPORT_SYMBOL_GPL(__request_percpu_irq);
-+EXPORT_SYMBOL(request_percpu_irq_affinity);
+diff --git a/arch/mips/sgi-ip30/ip30-timer.c b/arch/mips/sgi-ip30/ip30-timer.c
+index 7652f72f0daf6..294e1f7e6d8a6 100644
+--- a/arch/mips/sgi-ip30/ip30-timer.c
++++ b/arch/mips/sgi-ip30/ip30-timer.c
+@@ -52,11 +52,10 @@ void __init plat_time_init(void)
+ 	int irq = get_c0_compare_int();
  
- /**
-  * request_percpu_nmi - allocate a percpu interrupt line for NMI delivery
+ 	cp0_timer_irq_installed = 1;
+-	c0_compare_irqaction.percpu_dev_id = &mips_clockevent_device;
+-	c0_compare_irqaction.flags &= ~IRQF_SHARED;
+ 	irq_set_handler(irq, handle_percpu_devid_irq);
+ 	irq_set_percpu_devid(irq);
+-	setup_percpu_irq(irq, &c0_compare_irqaction);
++	WARN_ON(request_percpu_irq(irq, c0_compare_interrupt,
++				   "timer", &mips_clockevent_device));
+ 	enable_percpu_irq(irq, IRQ_TYPE_NONE);
+ 
+ 	ip30_heart_clocksource_init();
 -- 
 2.47.3
 
