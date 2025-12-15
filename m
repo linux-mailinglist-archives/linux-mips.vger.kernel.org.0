@@ -1,122 +1,85 @@
-Return-Path: <linux-mips+bounces-12475-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12477-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91AE7CBEE82
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Dec 2025 17:30:51 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65B38CBF39D
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Dec 2025 18:25:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id E41AB3001BFC
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Dec 2025 16:30:50 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 04C58302D295
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Dec 2025 17:18:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1877F32827F;
-	Mon, 15 Dec 2025 16:30:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="b/2TsJQC"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E1D72C0F9A;
+	Mon, 15 Dec 2025 17:18:41 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 697EF31AF10;
-	Mon, 15 Dec 2025 16:30:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B7FB30DD22;
+	Mon, 15 Dec 2025 17:18:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765816249; cv=none; b=FhovpihTwS1nkqP4XorozD8lghogLcWPLdCPFCw/1wVur9TNeNoXioVBhPQr2j7sCtWbtVNRDCZtoKjA4t0Kee3bIPmBtLVliB+jYpYc4oYJ3vkbsQIBivuLs5iUC6FqMREVzW8FMgfDU/jyKwIK7AfCWmT6EbIh5UQfwkKJ7uA=
+	t=1765819120; cv=none; b=U0fOTSU1xeUkx7s3svLt+7e7KSW2eeLXQqpTahBZHlS5iUxFne4eZ9v73osOvTuVJ3AlnvFT7s4iStFo/dSl6Sl4aysRat65zgap9KMS8doUDt+ZqCqGWiylfYOq4/u24vcH2cOUNJ0Lz5SEILCM1F+YKKVKvZC17TwcbjTtyB8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765816249; c=relaxed/simple;
-	bh=7VUjNg7fMgXMDTFrTqFIf9IV02ig+00RrRe5m1yyOlY=;
-	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
-	 References:In-Reply-To; b=YG3b8vEckO9GoB8tnOinue3WrGmduCTSvk4zVVCn6EZgMrZ9+gNAr0JbZ+qPAMtUOH6qXUoAjNgkT10LBU1oUDejZ4OvXgWaWsoNM+ZJ2ZAYLAdpHs0MuBcomhAf8K1NbRVelXrK5XsU0srvz9M7+3mmEwsw3IO1qtDtJNIYj/E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=b/2TsJQC; arc=none smtp.client-ip=185.171.202.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 785E5C19D1E;
-	Mon, 15 Dec 2025 16:30:21 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id CE22D60664;
-	Mon, 15 Dec 2025 16:30:45 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 64EAD119426BE;
-	Mon, 15 Dec 2025 17:30:41 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1765816244; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=QF0a2d33ceWGEkE+JlJ9v7Vx9rNUh7hXKpLn5YyCvvc=;
-	b=b/2TsJQCxsrDCyqAit+mCBvkpYAvhFDHIWx/MS8yXW6MI6gytG1BbV0q2aipA/pULv8mq8
-	yXqpyd5/KmToROssOh1ypUWoVWuMVs/NhwnEbUcEvrVngLLjFZkEv6h3xqMUTHw8TEGKN5
-	MlyLBQdacKRzQkpshouWWv5WBTvTp90YJHQkfpbNjxpn+GIWTyUrAKKM0sHbSpkuE8dt6l
-	M6h2WhI901vGItG3UiwTTjOOuM6MhmwzuIw3Zg+tvlQ6ytiAcesHHeqQlU3CTrE5tp5bpQ
-	s6OAIunOjGUaNZukMcJVuEjlRPTS9eNDrAZiYe5MsLTQdkoFfYHcCAXUDIsyaw==
+	s=arc-20240116; t=1765819120; c=relaxed/simple;
+	bh=db2VVQs3dRMlF7Uetw6hK9XZa6LQ54LWidtipvEMZp0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mHoqGPBB39koReObj+aNDJy4+hZ3kJ0ezC8qQ1PAg7QsaMvUy9oWb2eCNJ78CnXBiJfuVtTTJR7jY1pRyw5TnThOm8ksw8VbJ0P/kGsVkD8Oi7ZgsDBaCtvWFxGrBXfW/en5dyC4lYeLr+5FRX2BMvV/FfhGaOZCqiA4N+u7YRs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1vVCDP-0007vy-00; Mon, 15 Dec 2025 18:18:31 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id 56755C06A7; Mon, 15 Dec 2025 18:17:37 +0100 (CET)
+Date: Mon, 15 Dec 2025 18:17:37 +0100
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: Haoxiang Li <haoxiang_li2024@163.com>
+Cc: FlorianSchandinat@gmx.de, linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Fix a reference leak bug in ip22_check_gio()
+Message-ID: <aUBCsTeplCT6oNO-@alpha.franken.de>
+References: <20251204103618.89502-1-haoxiang_li2024@163.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset=UTF-8
-Date: Mon, 15 Dec 2025 17:30:41 +0100
-Message-Id: <DEYXM6CGJULV.1KKA37ZLEIW1K@bootlin.com>
-From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: Re: [PATCH v4 2/7] phy: Add driver for EyeQ5 Ethernet PHY wrapper
-Cc: <linux-mips@vger.kernel.org>, <devicetree@vger.kernel.org>,
- <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
- <linux-clk@vger.kernel.org>, =?utf-8?q?Beno=C3=AEt_Monin?=
- <benoit.monin@bootlin.com>, "Maxime Chevallier"
- <maxime.chevallier@bootlin.com>, "Tawfik Bayouk"
- <tawfik.bayouk@mobileye.com>, "Thomas Petazzoni"
- <thomas.petazzoni@bootlin.com>
-To: "Luca Ceresoli" <luca.ceresoli@bootlin.com>,
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, "Vladimir
- Kondratiev" <vladimir.kondratiev@mobileye.com>,
- =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, "Rob
- Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
- "Conor Dooley" <conor+dt@kernel.org>, "Vinod Koul" <vkoul@kernel.org>,
- "Kishon Vijay Abraham I" <kishon@kernel.org>, "Michael Turquette"
- <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>, "Philipp
- Zabel" <p.zabel@pengutronix.de>, "Thomas Bogendoerfer"
- <tsbogend@alpha.franken.de>
-X-Mailer: aerc 0.21.0-0-g5549850facc2
-References: <20251124-macb-phy-v4-0-955c625a81a7@bootlin.com>
- <20251124-macb-phy-v4-2-955c625a81a7@bootlin.com>
- <DEUNYYW0Y23E.2SA0SOCS99NA0@bootlin.com>
- <DEYVVCWBOZSH.2ZY41YCHLS8FU@bootlin.com>
- <DEYVXJI90AA7.KPDEQCNZOOXI@bootlin.com>
-In-Reply-To: <DEYVXJI90AA7.KPDEQCNZOOXI@bootlin.com>
-X-Last-TLS-Session-Version: TLSv1.3
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20251204103618.89502-1-haoxiang_li2024@163.com>
 
-On Mon Dec 15, 2025 at 4:11 PM CET, Luca Ceresoli wrote:
-> On Mon Dec 15, 2025 at 4:08 PM CET, Th=C3=A9o Lebrun wrote:
->> On Wed Dec 10, 2025 at 5:06 PM CET, Luca Ceresoli wrote:
->>> On Mon Nov 24, 2025 at 3:41 PM CET, Th=C3=A9o Lebrun wrote:
->>>> +	provider =3D devm_of_phy_provider_register(dev, eq5_phy_xlate);
->>>> +	if (IS_ERR(provider)) {
->>>> +		dev_err(dev, "registering provider failed\n");
->>>> +		return PTR_ERR(provider);
->>>> +	}
->>>
->>> As above, why not dev_err_probe()?
->>
->> Good idea once again.
->>
->>> Other than the above minor issues, LGTM. This driver looks cleanly
->>> implemented.
->>
->> Thanks for the review. Does that imply I can append your Rb trailer?
->
-> If you apply all the changes I have mention, yes, but in doubt you can
-> avoid it and I'll review your next version. Re-reviewing is much faster
-> than reviewing the first time (last famous words).
+On Thu, Dec 04, 2025 at 06:36:18PM +0800, Haoxiang Li wrote:
+> If gio_device_register fails, gio_dev_put() is required to
+> drop the gio_dev device reference.
+> 
+> Fixes: e84de0c61905 ("MIPS: GIO bus support for SGI IP22/28")
+> Cc: stable@vger.kernel.org
+> Signed-off-by: Haoxiang Li <haoxiang_li2024@163.com>
+> ---
+>  arch/mips/sgi-ip22/ip22-gio.c | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/mips/sgi-ip22/ip22-gio.c b/arch/mips/sgi-ip22/ip22-gio.c
+> index 5893ea4e382c..19b70928d6dc 100644
+> --- a/arch/mips/sgi-ip22/ip22-gio.c
+> +++ b/arch/mips/sgi-ip22/ip22-gio.c
+> @@ -372,7 +372,8 @@ static void ip22_check_gio(int slotno, unsigned long addr, int irq)
+>  		gio_dev->resource.flags = IORESOURCE_MEM;
+>  		gio_dev->irq = irq;
+>  		dev_set_name(&gio_dev->dev, "%d", slotno);
+> -		gio_device_register(gio_dev);
+> +		if (gio_device_register(gio_dev))
+> +			gio_dev_put(gio_dev);
+>  	} else
+>  		printk(KERN_INFO "GIO: slot %d : Empty\n", slotno);
+>  }
+> -- 
+> 2.25.1
 
-I've taken the Rb trailer, hoping everything is to your taste.
+applied to mips-fixes
 
-https://lore.kernel.org/lkml/20251215-macb-phy-v5-0-a9dfea39da34@bootlin.co=
-m/
+Thomas.
 
-Thanks,
-
---
-Th=C3=A9o Lebrun, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
