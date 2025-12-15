@@ -1,55 +1,55 @@
-Return-Path: <linux-mips+bounces-12473-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12474-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 693CECBEE52
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Dec 2025 17:28:24 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id E156CCBEE5E
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Dec 2025 17:28:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 41ACA301AB1E
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Dec 2025 16:27:22 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 61099302E964
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Dec 2025 16:27:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41FAE31329B;
-	Mon, 15 Dec 2025 16:27:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7312532827F;
+	Mon, 15 Dec 2025 16:27:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="xvXizGIQ"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="h0VhN5qd"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87BDC31A04D
-	for <linux-mips@vger.kernel.org>; Mon, 15 Dec 2025 16:27:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91BD4322B8A;
+	Mon, 15 Dec 2025 16:27:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765816033; cv=none; b=G39YXzSqefoCKL4pBdbI3utW9oLPtzSmFTExujfu02pbathN7URj6lGYaSP3bi7WMTK9oLTjGZdSK3pVVorajkWQpmHdB2czyG2KnhWcWlbUwTYDeCAIEWnMYSHAYVRs9AA+iU9VoPvIqY4WdMPkJVQCmGgbrrHjo2PUEY5Tq5E=
+	t=1765816035; cv=none; b=DgjSGCe1Ywlfibbgzz+FT5lAI9JZw/S/eazqf50Th5xU/CLDwW89qF+kwWSKNVFPMlU0WTg4gBK5tOqoQN4u8Tf2fXoqZ4mlBtIgJh/4Fxr2i805EiOGspRpcsVnM6igrJx6DqbEEtCfxI2IJOixC+3f2tXfj/6pbZnJaCMZlu8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765816033; c=relaxed/simple;
-	bh=lv6WeHOLzN4/qsaLqmD30sEVGUM+jW6HmTJ9zT06aPY=;
+	s=arc-20240116; t=1765816035; c=relaxed/simple;
+	bh=z1kakQ9LaR6Mmp/D9XparO7zsqYpwomJgOpObaNr6CQ=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=kLHpUCUxhWLLi3l3QwHg+BqAKQ+HtZ0wgGWhhA6m3fo8R0MS0LVhy5LlJRSJvR8kOEjGZdKPG20/PB9cYLm4ugInT6VckV/NT6k334Er8EQLbjKnfplecbAuyeQOtD7fy9E1Ow572cGNdaS7q86wI96jDLO7N5WMTVH7fYFDTzo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=xvXizGIQ; arc=none smtp.client-ip=185.246.85.4
+	 In-Reply-To:To:Cc; b=jTTRuLzRMuGdr9fQGs1SBCRNv7oaNNrOhX2Ji2oo71AB6+833TsuypZSoQhkifx7uxfLMvUYcYj02EotrfsuY+rcmhTDY2mdcfDmgZc/mHTYQxkTHn3n5MdAqC0unFcLtw1WZyJG+JWzMKZaJmzhgQA1IX9ALJDq4y0CToqQzzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=h0VhN5qd; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 1ABBB4E41C1B;
-	Mon, 15 Dec 2025 16:27:09 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 23F911A21E9;
+	Mon, 15 Dec 2025 16:27:12 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id E4B5A60664;
-	Mon, 15 Dec 2025 16:27:08 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id C1AED119427CC;
-	Mon, 15 Dec 2025 17:27:05 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id E7BC060664;
+	Mon, 15 Dec 2025 16:27:11 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3C705119427CD;
+	Mon, 15 Dec 2025 17:27:08 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1765816027; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1765816030; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=j3DTItJWdi9LPxqF5IOPQvF/znTVfYmJgIlAc45vP7g=;
-	b=xvXizGIQOp/xY/60TITOZkpz1O7Q7Z2JF65bPYluAuPI/TvTrTCpFwFdo4I8srQsnD/okC
-	Mr+4Ywe1KxNnsWcf8LVyCj+MPOW6IgnaMqZPS8vSu/9EHtE3t48gtNBvMDQKPR4B2q7nwK
-	Xir4W2DR3jWtf3RchXBbt1pGo74a0GK6rlrOaDL76wLKgSKGGuGlbsaMBDE4vHcypS0JmK
-	q6TmbVZceQ1d31PyNDyQMMQHVC0kpFTp/QaaYK26Jq34A9CgqKSI0VjHh7U2ikKLmRRDFY
-	aXYc0FNCw4fAD4X4xocM9ImzOBI5YZ16xR1lZAZTEHMm+PQRW6YDRVb9X9cseQ==
+	bh=BVCjO3PiJ96hjbVyejrX+9TN3cIt/NAX8/w5F1wcAmA=;
+	b=h0VhN5qdNhRa6cG9oqMlSmJFGlKLMXZFM+slK/OMQ6nCQxKhrXNsnlo8/uDZQs0Kt6YZP3
+	nBZjsrH7zP/NP1yTq/c7ugbK3rUkXgowC2XZ27vDe3oTmnqz9n7KCQ+7g12iU2LiFpC7/J
+	Z4TuxPJXkZe/usPO4luywI5fBE2XzX3izhvIv1AfzbS6DvF5G8Z7bVWItxcMYSikp3u+R1
+	UZSd2t8N+B+6op8pDG8afsJVS1T9H4Y6BTQqwne/zBhxCC4x2SL9x7cBGbigurHmKazOCg
+	hRW+sW/Y91s/M3ZqF0m4IbPmdKwSrm7tzjyP7aNGS+/fYneGMIQf3Y1bitMdkw==
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Date: Mon, 15 Dec 2025 17:26:40 +0100
-Subject: [PATCH v5 6/7] MIPS: mobileye: eyeq5: add two Cadence GEM Ethernet
- controllers
+Date: Mon, 15 Dec 2025 17:26:41 +0100
+Subject: [PATCH v5 7/7] MIPS: mobileye: eyeq5-epm: add two Cadence GEM
+ Ethernet PHYs
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -58,7 +58,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251215-macb-phy-v5-6-a9dfea39da34@bootlin.com>
+Message-Id: <20251215-macb-phy-v5-7-a9dfea39da34@bootlin.com>
 References: <20251215-macb-phy-v5-0-a9dfea39da34@bootlin.com>
 In-Reply-To: <20251215-macb-phy-v5-0-a9dfea39da34@bootlin.com>
 To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
@@ -77,88 +77,54 @@ Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
  Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
  Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
  Luca Ceresoli <luca.ceresoli@bootlin.com>, 
- =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
+ Andrew Lunn <andrew@lunn.ch>
 X-Mailer: b4 0.14.3
 X-Last-TLS-Session-Version: TLSv1.3
 
-Add both MACB/GEM instances found in the Mobileye EyeQ5 SoC.
+The Mobileye EyeQ5 eval board (EPM) embeds two MDIO PHYs.
 
+Reviewed-by: Andrew Lunn <andrew@lunn.ch>
 Acked-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
 Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 ---
- arch/mips/boot/dts/mobileye/eyeq5.dtsi | 45 ++++++++++++++++++++++++++++++++++
- 1 file changed, 45 insertions(+)
+ arch/mips/boot/dts/mobileye/eyeq5-epm5.dts | 26 ++++++++++++++++++++++++++
+ 1 file changed, 26 insertions(+)
 
-diff --git a/arch/mips/boot/dts/mobileye/eyeq5.dtsi b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-index 36a73e8a63a1..cec5ad875228 100644
---- a/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-+++ b/arch/mips/boot/dts/mobileye/eyeq5.dtsi
-@@ -77,6 +77,8 @@ aliases {
- 		serial0 = &uart0;
- 		serial1 = &uart1;
- 		serial2 = &uart2;
-+		ethernet0 = &macb0;
-+		ethernet1 = &macb1;
- 	};
- 
- 	cpu_intc: interrupt-controller {
-@@ -231,6 +233,7 @@ olb: system-controller@e00000 {
- 			#clock-cells = <1>;
- 			clocks = <&xtal>;
- 			clock-names = "ref";
-+			#phy-cells = <1>;
- 		};
- 
- 		gic: interrupt-controller@140000 {
-@@ -305,6 +308,48 @@ gpio1: gpio@1500000 {
- 			#interrupt-cells = <2>;
- 			resets = <&olb 0 26>;
- 		};
-+
-+		iocu-bus {
-+			compatible = "simple-bus";
-+			#address-cells = <2>;
-+			#size-cells = <2>;
-+			ranges;
-+			dma-coherent;
-+			dma-ranges = <0x10 0x00000000 0x0 0x0 0x10 0>;
-+
-+			macb0: ethernet@2a00000 {
-+				compatible = "mobileye,eyeq5-gem";
-+				reg = <0x0 0x02a00000 0x0 0x4000>;
-+				interrupt-parent = <&gic>;
-+				/* One interrupt per queue */
-+				interrupts = <GIC_SHARED 23 IRQ_TYPE_LEVEL_HIGH>,
-+					     <GIC_SHARED 23 IRQ_TYPE_LEVEL_HIGH>,
-+					     <GIC_SHARED 23 IRQ_TYPE_LEVEL_HIGH>,
-+					     <GIC_SHARED 23 IRQ_TYPE_LEVEL_HIGH>;
-+				clock-names = "pclk", "hclk", "tsu_clk";
-+				clocks = <&pclk>, <&pclk>, <&tsu_clk>;
-+				nvmem-cells = <&eth0_mac>;
-+				nvmem-cell-names = "mac-address";
-+				phys = <&olb 0>;
-+			};
-+
-+			macb1: ethernet@2b00000 {
-+				compatible = "mobileye,eyeq5-gem";
-+				reg = <0x0 0x02b00000 0x0 0x4000>;
-+				interrupt-parent = <&gic>;
-+				/* One interrupt per queue */
-+				interrupts = <GIC_SHARED 24 IRQ_TYPE_LEVEL_HIGH>,
-+					     <GIC_SHARED 24 IRQ_TYPE_LEVEL_HIGH>,
-+					     <GIC_SHARED 24 IRQ_TYPE_LEVEL_HIGH>,
-+					     <GIC_SHARED 24 IRQ_TYPE_LEVEL_HIGH>;
-+				clock-names = "pclk", "hclk", "tsu_clk";
-+				clocks = <&pclk>, <&pclk>, <&tsu_clk>;
-+				nvmem-cells = <&eth1_mac>;
-+				nvmem-cell-names = "mac-address";
-+				phys = <&olb 1>;
-+			};
-+		};
-+
+diff --git a/arch/mips/boot/dts/mobileye/eyeq5-epm5.dts b/arch/mips/boot/dts/mobileye/eyeq5-epm5.dts
+index 9fc1a1b0a81b..babf52731ea6 100644
+--- a/arch/mips/boot/dts/mobileye/eyeq5-epm5.dts
++++ b/arch/mips/boot/dts/mobileye/eyeq5-epm5.dts
+@@ -29,3 +29,29 @@ temperature-sensor@48 {
+ 		label = "U60";
  	};
  };
- 
++
++&macb0 {
++	phy-mode = "sgmii";
++	phy-handle = <&macb0_phy>;
++
++	mdio {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		macb0_phy: ethernet-phy@e {
++			reg = <0xe>;
++		};
++	};
++};
++
++&macb1 {
++	phy-mode = "rgmii-id";
++	phy-handle = <&macb1_phy>;
++
++	mdio {
++		#address-cells = <1>;
++		#size-cells = <0>;
++		macb1_phy: ethernet-phy@e {
++			reg = <0xe>;
++		};
++	};
++};
 
 -- 
 2.52.0
