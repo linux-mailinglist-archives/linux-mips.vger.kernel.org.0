@@ -1,208 +1,194 @@
-Return-Path: <linux-mips+bounces-12459-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12460-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9B04CBD2C1
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Dec 2025 10:32:27 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92AD2CBDE31
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Dec 2025 13:52:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A87253003538
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Dec 2025 09:32:26 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 6F5D3301F5E9
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Dec 2025 12:47:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E2D529A9C8;
-	Mon, 15 Dec 2025 09:32:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9965B3375AA;
+	Mon, 15 Dec 2025 12:47:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b="MlyuHyeG"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="oaKtIV8p";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Ch7K4PUS"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f48.google.com (mail-ed1-f48.google.com [209.85.208.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-b6-smtp.messagingengine.com (fout-b6-smtp.messagingengine.com [202.12.124.149])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E8B155C97
-	for <linux-mips@vger.kernel.org>; Mon, 15 Dec 2025 09:32:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B7102C026E
+	for <linux-mips@vger.kernel.org>; Mon, 15 Dec 2025 12:47:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.149
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765791144; cv=none; b=jqGUBBBri4DXx72+ekk1oNaDU8Thdq7HEqZi/xtap8/WvA5VloXBq1gwWiUhUjwH6mCYrfS5uqh/URwFoqifUP1AOxrf3X5Y6saq+TgtqqYwBzm7M/gCxm7PV9Oe1De/u2xxhOpBdP3/HBa+BFR48mfdrejfKhG4OwT9rLGN6RE=
+	t=1765802877; cv=none; b=OFhMfyAJSpMdSqJ0kP/p/Xg2ocPVQACRKQs//BsFC8eOglXOgP7J2BMKU2A3NWOcAcs5mkHUHCXNzNMRhpCtUWQ+BgQRd92vi8SWfYDc1uPBrFkL0rN8JhNZqtMmu5HaPnjXiHIWP2YDxZpEm6lmdg+SUUZq98MXlTaWOxiTpfA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765791144; c=relaxed/simple;
-	bh=3u9umm7/VPjetaVInDHrnL/zR8rzXm2g3nThmHm+BUU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=pOcA5ld3IlY+lW0FK2FDEAzucr0W1jX6obBgtema5Rjg5/6AMq39V+kJ0Lrn9xnH5kslGsVA3dNr4zZjEzNdTfyIq2U/mvmkOhilxMefGTOkziYoYVYvCidbLgva3Bc782vBZ098zB+NZRyWkyx4YP7i4U65H7oDo1qRtediKs8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com; spf=pass smtp.mailfrom=baylibre.com; dkim=pass (2048-bit key) header.d=baylibre-com.20230601.gappssmtp.com header.i=@baylibre-com.20230601.gappssmtp.com header.b=MlyuHyeG; arc=none smtp.client-ip=209.85.208.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=baylibre.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=baylibre.com
-Received: by mail-ed1-f48.google.com with SMTP id 4fb4d7f45d1cf-6419b7b4b80so4876917a12.2
-        for <linux-mips@vger.kernel.org>; Mon, 15 Dec 2025 01:32:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20230601.gappssmtp.com; s=20230601; t=1765791140; x=1766395940; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pMgRQp2NAuNDw0Pr8DKsFpJ1DQmsliJUNJj+b1nHdRA=;
-        b=MlyuHyeGNU/hwfhc8TNJZIHkuMZvDLYkHIG0aKz8n4YJGzOpXjNR9ltFG2r3GqnLDm
-         UZh2qsTa72lAtxe0DW8o2maHEGuJfrYFtaF2+qlVDnEVhvA8vwU2gGW6eXd11YSLAGNX
-         TSNdgOJQClkV8kFYPZ0L/Ypi6+kLiCZEKXU7ACAOu8jLElWimU/caMAIM9drAPmK2sHz
-         rW2m0xh6Jt7MCUfJSzm8l+5kQ91OvQDKZJTcHmq0Y0DyDpeQZxsGxr1eEir1C940C4ma
-         h6knkXpR0A4VkeXeeOlLiqfVXVprYK0XBBvBKNbnsnMEWiZTPq+O9abnX77iAt8Ox3u7
-         IcAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765791140; x=1766395940;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pMgRQp2NAuNDw0Pr8DKsFpJ1DQmsliJUNJj+b1nHdRA=;
-        b=rZjJ4a2CKPGq+GYnTTo1goCbw9/2d/f7kYbiXzYM+a2/EQHebDrXhz+qO4GWJe0zBB
-         PC8KuN1S8mfrKexAXRSWYq6QubzDxxwSZM/AILRCuhSe0iZBaCfHyd+ZRZ5upaPHkGQm
-         x8G89dVeeskGWfyPGDaAHpxzISVVqHHt6Y/l/UPtrE3euTtfB68/dnCt43J0Q3Sf6I4w
-         8/iMFaQBRMkXnxV6spc2WhD8huei6oxZhMREvnWWe4tsBXkuxksMccL8XFGF6gsZ5vU0
-         O7vT+Xf99/DX21xoWS7niTrtwGHRcfssj8s5l11PA8m8HN44Vk8CjsSTDQSLi8D/gaV7
-         b+ug==
-X-Forwarded-Encrypted: i=1; AJvYcCWWRZOCy1xEGLAPMbF4ky3c2WnBFBuosZ2jzUPucVwJB88KYSFc+K9F+7lKthgVxPSJ47+vG0cEuC2w@vger.kernel.org
-X-Gm-Message-State: AOJu0YyR58B9ZATiZt5mvswESZo8lJnW2sQHu5zaDmdeO4XnE/Bvz+CT
-	9ZhPmrWiQNjXpX6rvy1sS9PfrFgcL2dVfd/nfA4IdiF462ulECxXvGe60zSq3RBwrO0=
-X-Gm-Gg: AY/fxX4OBdEQiXCctoHzqp+aIJor7FgS2zsaUMV3pYbo/tmeNc11MHqhipdBXubbZkr
-	CwtnUsHcHiyNQoElxcrg+buBk4KW/86zusHjRU3nTjAG+mWUSiOFUP8CqCraERUySR685wzfvr9
-	I76VYvlHonm3kq8vjxyrw2P6EmePm+j6a6oSGZDpRhHzRcYufwXGs3N+RCD5Ij5WnXhzeme/1R7
-	PUx1tKZBzA1zEvahb9jmr0HgWkh23cMksr/48WJ0vHlZpDTd6HFHDoqQn12zLUwHpxHzUY/EROR
-	P7vaYfrOu2TLcxjo16xWsQLQFxZ550bqvS2hc9rUPik2Hn4Kt7Hmvmh8JjKkgUvNpMJTOe174io
-	OPUfVSDSbr4/hz3YmUtbsyyv/B+6gqxBo04URO+fmgJ1cEpwCEQ7T8Yvl+HZwyFZR8+ntD1GWzd
-	UNLw89LgS9lBgS28H1uQO+zTrc53VKP+NjcFSTIYCoz/y/a5lDkuCBBbPv3gpABH3LDhLyy1j/w
-	R8=
-X-Google-Smtp-Source: AGHT+IEaCg0quo15SNx/nGnta9oq72ocRWkg5l3SHsMTaK2wohhdkzDoQR/uDt0uWt8Scz8Vq184Fw==
-X-Received: by 2002:a17:907:1c0b:b0:b7a:1be1:984 with SMTP id a640c23a62f3a-b7d23a912c7mr930197866b.64.1765791140272;
-        Mon, 15 Dec 2025 01:32:20 -0800 (PST)
-Received: from localhost (p200300f65f006608181e6e27368f7e86.dip0.t-ipconnect.de. [2003:f6:5f00:6608:181e:6e27:368f:7e86])
-        by smtp.gmail.com with UTF8SMTPSA id a640c23a62f3a-b7cfa56a7f9sm1329836266b.51.2025.12.15.01.32.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 15 Dec 2025 01:32:19 -0800 (PST)
-Date: Mon, 15 Dec 2025 10:32:18 +0100
-From: Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>
-To: Sumit Garg <sumit.garg@kernel.org>
-Cc: Jens Wiklander <jens.wiklander@linaro.org>, 
-	Olivia Mackall <olivia@selenic.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
-	=?utf-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>, Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
-	Alexandre Torgue <alexandre.torgue@foss.st.com>, Sumit Garg <sumit.garg@oss.qualcomm.com>, 
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Jan Kiszka <jan.kiszka@siemens.com>, 
-	Sudeep Holla <sudeep.holla@arm.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
-	Michael Chan <michael.chan@broadcom.com>, Pavan Chebbi <pavan.chebbi@broadcom.com>, 
-	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>, James Bottomley <James.Bottomley@hansenpartnership.com>, 
-	Jarkko Sakkinen <jarkko@kernel.org>, Mimi Zohar <zohar@linux.ibm.com>, 
-	David Howells <dhowells@redhat.com>, Paul Moore <paul@paul-moore.com>, 
-	James Morris <jmorris@namei.org>, "Serge E. Hallyn" <serge@hallyn.com>, 
-	Peter Huewe <peterhuewe@gmx.de>, op-tee@lists.trustedfirmware.org, linux-kernel@vger.kernel.org, 
-	linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org, linux-efi@vger.kernel.org, 
-	linux-stm32@st-md-mailman.stormreply.com, linux-arm-kernel@lists.infradead.org, 
-	Cristian Marussi <cristian.marussi@arm.com>, arm-scmi@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-mips@vger.kernel.org, linux-integrity@vger.kernel.org, keyrings@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>
-Subject: Re: [PATCH v1 00/17] tee: Use bus callbacks instead of driver
- callbacks
-Message-ID: <dhunzydod4d7vj73llpuqemxb5er2ja4emxusr66irwf77jhhb@es4yd2axzl25>
-References: <cover.1765472125.git.u.kleine-koenig@baylibre.com>
- <aT--ox375kg2Mzh-@sumit-X1>
+	s=arc-20240116; t=1765802877; c=relaxed/simple;
+	bh=RVlHnLAJaXFO+PADss9hcOPaqSSXvUMW/m7iIGTK+b0=;
+	h=MIME-Version:Date:From:To:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=LfNPFLIQjL+9B70C2QvqZgMuKXrTknnSPRj7GcrumBSvBls/eo/vlP8NTOWKGu7CypmX7OzcSIfMBt1R8pdp6axPOT22SfCnm3FffQHzssh2y7R+5eeE0zTtfh+OEtPGI58lPi+V4eYW7vIxOEm232prIQ5nuHD7Rc/VvsRGmuU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=oaKtIV8p; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Ch7K4PUS; arc=none smtp.client-ip=202.12.124.149
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
+	by mailfout.stl.internal (Postfix) with ESMTP id 912941D0008E;
+	Mon, 15 Dec 2025 07:47:54 -0500 (EST)
+Received: from phl-imap-08 ([10.202.2.84])
+  by phl-compute-03.internal (MEProxy); Mon, 15 Dec 2025 07:47:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:content-transfer-encoding:content-type:content-type:date:date
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1765802874;
+	 x=1765889274; bh=2pkuf7V4XXyJ2jsazFvzvzdXLOMfnnAzbXSg1zL5E3Y=; b=
+	oaKtIV8pV3Mp8W4Pijl5i2tydYqpyzH9bKvmLz6NCqSQXNkYQxi3eacce5/lJVu6
+	g80v0stL1CTLNvq9gMo4n9fXWd4MvaZAk5XQZZsbKVYIoIqzljh7xtl+/m2vUtpn
+	UAoJW19SItEc/DatMTltsfhlmRq6yKkaCtJ4+9QN2hnln1b89Y/rAweFMPC0OufE
+	Tceut5k07zInk8B/+bma9kb3g1KJzEqeha+JLaZliyousfzSePSDECj8y8N4+1ic
+	vey9yHa5k06G+KqWRPq3bOi+BxV2EkkT80n4Kr1q0+/NcppeXEGq7OWYINyyxEYh
+	zl8DNwW9f46v8umM8ItdQA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:content-transfer-encoding:content-type
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
+	:x-me-sender:x-sasl-enc; s=fm1; t=1765802874; x=1765889274; bh=2
+	pkuf7V4XXyJ2jsazFvzvzdXLOMfnnAzbXSg1zL5E3Y=; b=Ch7K4PUSo+lL40+5N
+	UN494OTe9Y9OhmYp25erTobo+mEOt+aIf03roKOC3LCCDUFXZmYxatxknIV/S31h
+	Nd9sb4RRKBvN04+BooNb33lOqNR5en9itQIXiNou+4OKf0dw2a+l/ph6cZOboYcK
+	me3PG28nwri6mNTI3Ud8PdOHRdqUnv7PMHQM0ZSH2eHt2Rf4vUFF+vtJz1uUhNXL
+	ZdYYHJAYMzYovfdceIwXbJ9X485BbUqJHz5uaAkyFeg6q+bsACrz8nsKP95/+dSk
+	YhLgq5od0VZPsr4DvGpWp3Do+WbiCA/6SsS+ttbQj+QJ/0rrrhyJ1dXOJcxUmZUB
+	SMC2w==
+X-ME-Sender: <xms:eQNAaXeplYZ01t-zQJFHn_FEsnuHGKuLqxlDmfQAVhAAFzJAIn5lPA>
+    <xme:eQNAaYDlPAvC98vZWQlnsPIVmzTnWzdq_XWR3lfdhGU0hYlULIuycuGuiFyoibF6y
+    NsVjShji8vVd-jFqqd4ARpiVp7zpsjQj_KJctGkhZQ_tHF-JnPXnw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdefieekhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedflfhirgiguhhn
+    ucgjrghnghdfuceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecugg
+    ftrfgrthhtvghrnhepjeehuefgheekkeegueekieelteetvdeltdfgheeufefhgfeffeet
+    ffehtedvffelnecuffhomhgrihhnpehgihhthhhusgdrtghomhenucevlhhushhtvghruf
+    hiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehf
+    lhihghhorghtrdgtohhmpdhnsggprhgtphhtthhopeegpdhmohguvgepshhmthhpohhuth
+    dprhgtphhtthhopehtshgsohhgvghnugesrghlphhhrgdrfhhrrghnkhgvnhdruggvpdhr
+    tghpthhtohephhgruhhkvgeshhgruhhkvgdqmhdruggvpdhrtghpthhtohepmhgrtghroh
+    esohhrtggrmhdrmhgvrdhukhdprhgtphhtthhopehlihhnuhigqdhmihhpshesvhhgvghr
+    rdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:eQNAaZLLGkuKScqDKlLZ_FbDonmm3NhhRN72HG7IiChkpJEy6G-HvA>
+    <xmx:eQNAacC_Em-gNWwaZxVzwYbnHgYLvwos3Zp53ZiG4PwpGT4MYqivNw>
+    <xmx:eQNAaaC3VAt4UzTPU07MhuO5ROu0pzHvCpCt7duOrkhUf4wWm3MMmQ>
+    <xmx:eQNAaWAZLX11Pzg7ZXvxK5k8Hr8eIbO0IP6PZwTpm3ItjnaNeetsxQ>
+    <xmx:egNAaSyWbIds00DAh8SM_2fXjjMSQyoTsqZLgNEu6T7XHHXgai1Pv8oI>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 4FEEE2CE0072; Mon, 15 Dec 2025 07:47:53 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="yi4htjinth7u7w6q"
-Content-Disposition: inline
-In-Reply-To: <aT--ox375kg2Mzh-@sumit-X1>
+Date: Mon, 15 Dec 2025 20:47:33 +0800
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Hauke Mehrtens" <hauke@hauke-m.de>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Maciej W. Rozycki" <macro@orcam.me.uk>
+Message-Id: <c892961b-ee77-4cae-8249-e4797c3ccb5e@app.fastmail.com>
+In-Reply-To: <b35fe4b3-8f42-49f4-a6bf-9f0e56d4050c@hauke-m.de>
+References: <b35fe4b3-8f42-49f4-a6bf-9f0e56d4050c@hauke-m.de>
+Subject: Re: Realtek rtl838x MIPS boot hangs since 6.6.119
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
 
---yi4htjinth7u7w6q
-Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v1 00/17] tee: Use bus callbacks instead of driver
- callbacks
-MIME-Version: 1.0
 
-Hello Sumit,
+On Mon, 15 Dec 2025, at 9:11 AM, Hauke Mehrtens wrote:
+> Hi,
+>
+> Linux 6.6.119 does not boot on my Zyxel GS1900-8 v1 Switch (rtl838x SoC) 
+> any more.
+>
+> When I revert these two patches the system boots up again:
 
-On Mon, Dec 15, 2025 at 04:54:11PM +0900, Sumit Garg wrote:
-> On Thu, Dec 11, 2025 at 06:14:54PM +0100, Uwe Kleine-K=F6nig wrote:
-> > Hello,
-> >=20
-> > the objective of this series is to make tee driver stop using callbacks
-> > in struct device_driver. These were superseded by bus methods in 2006
-> > (commit 594c8281f905 ("[PATCH] Add bus_type probe, remove, shutdown
-> > methods.")) but nobody cared to convert all subsystems accordingly.
-> >=20
-> > Here the tee drivers are converted. The first commit is somewhat
-> > unrelated, but simplifies the conversion (and the drivers). It
-> > introduces driver registration helpers that care about setting the bus
-> > and owner. (The latter is missing in all drivers, so by using these
-> > helpers the drivers become more correct.)
-> >=20
-> > The patches #4 - #17 depend on the first two, so if they should be
-> > applied to their respective subsystem trees these must contain the first
-> > two patches first.
->=20
-> Thanks Uwe for your efforts to clean up the boilerplate code for TEE bus
-> drivers.
+Seems to be another unification issue.
 
-Thanks for your feedback. I will prepare a v2 and address your comments
-(whitespace issues and wrong callback in the shutdown method).
+4KEc should have very small number of TLB entries, so unlikely to be sorting
+space allocation issue...
 
-> > Note that after patch #2 is applied, unconverted drivers provoke a
-> > warning in driver_register(), so it would be good for the user
-> > experience if the whole series goes in during a single merge window.
->=20
-> +1
->=20
-> I suggest the whole series goes via the Jens tree since there shouldn't
-> be any chances for conflict here.
->=20
-> > So
-> > I guess an immutable branch containing the frist three patches that can
-> > be merged into the other subsystem trees would be sensible.
-> >=20
-> > After all patches are applied, tee_bus_type can be made private to
-> > drivers/tee as it's not used in other places any more.
-> >=20
->=20
-> Feel free to make the tee_bus_type private as the last patch in the series
-> such that any followup driver follows this clean approach.
+>
+> MIPS: mm: Prevent a TLB shutdown on initial uniquification
+> commit 9f048fa upstream.
+> https://github.com/gregkh/linux/commit/135713cd0751bf296e515f5fdec234320f73bbd8
+>
+> MIPS: mm: kmalloc tlb_vpn array to avoid stack overflow
+> commit 841ecc9 upstream.
+> https://github.com/gregkh/linux/commit/231ac951fabae2aaed8b2c00b4a097107be49c8c
+>
+> Someone reported the same for kernel 6.12.61, see:
+> https://github.com/openwrt/openwrt/pull/21065#issuecomment-3622531763
+>
+> This was seen in OpenWrt, we have some additional patches on top of the 
+> Linux kernel.
+>
+> The bootup hangs here:
+> ```
+> U-Boot Version: 2.0.0.59413 (Jul 08 2015 - 09:57:29)
+>
+> CPU:   500MHz
+> DRAM:  128 MB
+> FLASH: 16 MB
+> Model: ZyXEL_GS1900_8
+> SN:    S203C15000307
+> MAC:   98:0D:67:06:9A:40 - 98:0D:67:06:9A:48
+>
+> Press SPACE to abort boot script:  0
+> ## Booting image from partition ... 0
+>     Version:   MIPS OpenWrt Linux-6.6.119
+>     Created:   2025-12-14  21:51:17 UTC
+>     Size:      3788916 Bytes = 3.6 MB
+>     Verifying Checksum ... OK
+>     Uncompressing Image ... OK
+>
+> Starting ...
+>
+> [    0.000000] Linux version 6.6.119 (hauke@hauke-p14s) 
+> (mips-openwrt-linux-musl-gcc (OpenWrt GCC 13.3.0 r28784-155eea44e7) 
+> 13.3.0, GNU ld (GNU Binutils) 2.42) #0 Sun Dec 14 21:51:17 2025
+> [    0.000000] RTL838X model is 83806800
+> [    0.000000] SoC Type: RTL8380
+> [    0.000000] printk: bootconsole [early0] enabled
+> [    0.000000] CPU0 revision is: 00019070 (MIPS 4KEc)
+> [    0.000000] MIPS: machine is Zyxel GS1900-8 v1 Switch
+> [    0.000000] earlycon: ns16550a0 at MMIO 0x18002000 (options '115200n8')
+> [    0.000000] printk: bootconsole [ns16550a0] enabled
+> [    0.000000] Initrd not found or empty - disabling initrd
+> [    0.000000] Using appended Device Tree.
+> [    0.000000] Primary instruction cache 16kB, VIPT, 4-way, linesize 16 
+> bytes.
+> [    0.000000] Primary data cache 16kB, 2-way, VIPT, cache aliases, 
+> linesize 16 bytes
+> [    0.000000] Zone ranges:
+> [    0.000000]   Normal   [mem 0x0000000000000000-0x0000000007ffffff]
+> [    0.000000] Movable zone start for each node
+> [    0.000000] Early memory node ranges
+> [    0.000000]   node   0: [mem 0x0000000000000000-0x0000000007ffffff]
+> [    0.000000] Initmem setup node 0 [mem 
+> 0x0000000000000000-0x0000000007ffffff]
+> [    0.000000] pcpu-alloc: s0 r0 d32768 u32768 alloc=1*32768
+> [    0.000000] pcpu-alloc: [0] 0
+> [    0.000000] Kernel command line: earlycon
+> [    0.000000] Dentry cache hash table entries: 16384 (order: 4, 65536 
+> bytes, linear)
+> [    0.000000] Inode-cache hash table entries: 8192 (order: 3, 32768 
+> bytes, linear)
+>
+> ```
+>
+> Hauke
 
-There is a bit more to do for that than I'm willing to invest. With my
-patch series applied `tee_bus_type` is still used in
-drivers/tee/optee/device.c and drivers/tee/tee_core.c. Maybe it's
-sensible to merge these two files into a single one.
-
-The things I wonder about additionally are:
-
- - if CONFIG_OPTEE=3Dn and CONFIG_TEE=3Dy|m the tee bus is only used for
-   drivers but not devices.
-
- - optee_register_device() calls device_create_file() on
-   &optee_device->dev after device_register(&optee_device->dev).
-   (Attention half-knowledge!) I think device_create_file() should not
-   be called on an already registered device (or you have to send a
-   uevent afterwards). This should probably use type attribute groups.
-   (Or the need_supplicant attribute should be dropped as it isn't very
-   useful. This would maybe be considered an ABI change however.)
-
- - Why does optee_probe() in drivers/tee/optee/smc_abi.c unregister all
-   optee devices in its error path (optee_unregister_devices())?
-
-Best regards
-Uwe
-
---yi4htjinth7u7w6q
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEP4GsaTp6HlmJrf7Tj4D7WH0S/k4FAmk/1ZQACgkQj4D7WH0S
-/k5/qQf+NMGu64faecGn5WH+D12Iy/zqcfwRwh4Jv5/z/9n8f9SRKuXtH6kM3hvA
-3qOp/DbN1aDIomzFdgcPUq9OJEeC51ry33uJW7UWHl5lUk4UawAR28vX/1R3nV7t
-tz6suQjR2YkY2a/sAxZTSKZZ/A6RTGDxePvozHzuElCmEYDDbNhZpHsvgsLqs3T+
-Cso9zyEM2is8g673w2FcAnlW3JL/8jKClvZfcm9JEIRlx48uP6uCqbWeRcYS3rrt
-JBUGmWSMNEfYbD3cQbhybixsTPLzfKqkGrbJSyVRkJ2AUAQuRS14sbv7uSGhFw3B
-QWGugzTdTxcSdC0SqkOUZrCXgVUKmA==
-=VNEB
------END PGP SIGNATURE-----
-
---yi4htjinth7u7w6q--
+-- 
+- Jiaxun
 
