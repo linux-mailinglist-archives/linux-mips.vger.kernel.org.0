@@ -1,140 +1,116 @@
-Return-Path: <linux-mips+bounces-12455-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12456-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7C8ACBC2B2
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Dec 2025 02:11:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5362DCBCD09
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Dec 2025 08:42:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 57A903007601
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Dec 2025 01:11:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0C40330274D3
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Dec 2025 07:40:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1A192E06EF;
-	Mon, 15 Dec 2025 01:11:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59049330B13;
+	Mon, 15 Dec 2025 07:33:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=hauke-m.de header.i=@hauke-m.de header.b="1LL1eALr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dxSfLzdO"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mout-p-102.mailbox.org (mout-p-102.mailbox.org [80.241.56.152])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B08D3287516
-	for <linux-mips@vger.kernel.org>; Mon, 15 Dec 2025 01:11:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.152
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29D4B330B0F;
+	Mon, 15 Dec 2025 07:33:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765761113; cv=none; b=uYS6zdAgzTq2PVuilxJlOCJGIyifF8eRv1AOPj+cRBT7EWak83z86yX3KLwK44IKsI/iT3LbzphaOMc1QmCf2MkAVhJspltRjpFA8gg/zcmXvi5Fdz9C4teCZ/fIalYK3GjVGz3GuJJnNQJxbijHAIAuL5j84VSzPF0ofzM5JRw=
+	t=1765784024; cv=none; b=LyG1ogHMeDp3TSuFh1BIUu2SXumDCZCaAIiadgJuSPx4SycUQubhw/AS6aqETsXJ+h3uhMMfo54uokVUb4OzHWHVeST+jN9Z0WFwrdmnN9RouJmKaAWU60xtXrR+CYtx/AL8wskdv87gGeB3OBlmmeR+WBPc/AZPctXXHWgcGZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765761113; c=relaxed/simple;
-	bh=evAFBSAxBiMwARAMmPxNV3IaDjVgtfrTlaLgt6Hoj08=;
-	h=Message-ID:Date:MIME-Version:To:From:Subject:Content-Type; b=nyTp/0dwaIqjfP15x2xSGkuCgAWoyk8coKA0pcnwRi7m7wdh7RczAKnQwWITYqWyn2NuGcM969nDO2a0yospWJpJmVdV6NxtmKIKjeLKKKSUBCmoRY42NL3BjwasEc4IP1mZNnChTZseNMJv0tspiheGBEp0INZq2xJc/NfabEg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hauke-m.de; spf=pass smtp.mailfrom=hauke-m.de; dkim=pass (2048-bit key) header.d=hauke-m.de header.i=@hauke-m.de header.b=1LL1eALr; arc=none smtp.client-ip=80.241.56.152
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=hauke-m.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hauke-m.de
-Received: from smtp202.mailbox.org (smtp202.mailbox.org [10.196.197.202])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-102.mailbox.org (Postfix) with ESMTPS id 4dV28D65sRz9tWn;
-	Mon, 15 Dec 2025 02:11:40 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hauke-m.de; s=MBO0001;
-	t=1765761100;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=SuRilBiHaO8h+FVd4fyOG+krAwJG09xv9fqTvn1sxVM=;
-	b=1LL1eALrVe39m1vLjk16hPcLx6itJPLk/xi98qeA7WWSngQ9VMRErMvJUeFRnk8T8RRBc6
-	E8i7PGjVq7GTAzWjNnX3tfEjX+w9ka0magSzyWYIzb8YN5caoOZNMHSuFwtuPJnPvNXGxG
-	GLW0La04Dl1VQTkCZQfbyrDAhdJjRWl7kIRO8Uz2Mq+vTpsOe+KjZa42j/C4sDCfHOycJ8
-	k0FE2KBfMxFQLIJFSXr/lmzeo0qjpV2tcqRPgPKg9zsj6q1e2X7KlfP7cbtD2vZi942M6N
-	t1TuUgI0pHQcVqF9QFI1VQ7lruyfPMMsZf3UHior4urEdOe/XAoWI9DAOsg2mQ==
-Message-ID: <b35fe4b3-8f42-49f4-a6bf-9f0e56d4050c@hauke-m.de>
-Date: Mon, 15 Dec 2025 02:11:39 +0100
+	s=arc-20240116; t=1765784024; c=relaxed/simple;
+	bh=5820ngv824z9uIu9EV45nBDdVf0Jn6z4pOSe9nMQUgA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WgxukrCVWHYZbEqZL9Gk0mCYAQR7Hj0hlnAOLu8LmZSWvNUcXZiHZr6zOfXU69zMXhISO34jUlMQu/PCpitOWYtFaLmLAwhODMeLC/FOP8sLj93YCp7qwNRlhG6LhunYP8srzsso4tqZwBNfl7IaJEaVK3Luc1iZ/qteiPNfUYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dxSfLzdO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3C11C4CEF5;
+	Mon, 15 Dec 2025 07:33:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1765784023;
+	bh=5820ngv824z9uIu9EV45nBDdVf0Jn6z4pOSe9nMQUgA=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=dxSfLzdOgHpYOIjRNV+fICOTTU2fO1BZMdnpYaK5H994otGjw1ARZSr5IJbXGUYQR
+	 DZEI4PJp2L5sJ8RxOT2hc0W2CENFG6paMyA3/inlUwRMkYB+AWQp0n6ryuOJyMYkcQ
+	 dUy+vEzD7/WJrbHKswIq2Zq18iIuWeV+v/agisbgggBDfDKZL1i5sdkCUXeGT8Z4nX
+	 UNzgNxuqZc0aGn0p7343OZcxE/hso0D9N3kq5isU6C6YHvDTOTgWONqgc+M9TgZN4v
+	 kcvUQSMnOgm1AipiVMVATsJ7wZ9ePdxkREc7MXVp+Vv42UFf8pT4nJ8sA1L6soETqP
+	 c9QesQEL1OVyg==
+Date: Mon, 15 Dec 2025 16:33:37 +0900
+From: Sumit Garg <sumit.garg@kernel.org>
+To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
+Cc: Jens Wiklander <jens.wiklander@linaro.org>,
+	Michael Chan <michael.chan@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+	op-tee@lists.trustedfirmware.org, netdev@vger.kernel.org,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1 12/17] firmware: tee_bnxt: Make use of
+ module_tee_client_driver()
+Message-ID: <aT-50by9eHqHQIYH@sumit-X1>
+References: <cover.1765472125.git.u.kleine-koenig@baylibre.com>
+ <5b520fd96f8b385acc280226f548913c9ee98011.1765472125.git.u.kleine-koenig@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Language: en-US
-To: linux-mips@vger.kernel.org,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, macro@orcam.me.uk
-From: Hauke Mehrtens <hauke@hauke-m.de>
-Subject: Realtek rtl838x MIPS boot hangs since 6.6.119
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <5b520fd96f8b385acc280226f548913c9ee98011.1765472125.git.u.kleine-koenig@baylibre.com>
 
-Hi,
+On Thu, Dec 11, 2025 at 06:15:06PM +0100, Uwe Kleine-König wrote:
+> Reduce boilerplate by using the newly introduced module_tee_client_driver().
+> That takes care of assigning the driver's bus, so the explicit assigning
+> in this driver can be dropped.
+> 
+> Signed-off-by: Uwe Kleine-König <u.kleine-koenig@baylibre.com>
+> ---
+>  drivers/firmware/broadcom/tee_bnxt_fw.c | 14 +-------------
+>  1 file changed, 1 insertion(+), 13 deletions(-)
 
-Linux 6.6.119 does not boot on my Zyxel GS1900-8 v1 Switch (rtl838x SoC) 
-any more.
+Reviewed-by: Sumit Garg <sumit.garg@oss.qualcomm.com>
 
-When I revert these two patches the system boots up again:
+-Sumit
 
-MIPS: mm: Prevent a TLB shutdown on initial uniquification
-commit 9f048fa upstream.
-https://github.com/gregkh/linux/commit/135713cd0751bf296e515f5fdec234320f73bbd8
-
-MIPS: mm: kmalloc tlb_vpn array to avoid stack overflow
-commit 841ecc9 upstream.
-https://github.com/gregkh/linux/commit/231ac951fabae2aaed8b2c00b4a097107be49c8c
-
-Someone reported the same for kernel 6.12.61, see:
-https://github.com/openwrt/openwrt/pull/21065#issuecomment-3622531763
-
-This was seen in OpenWrt, we have some additional patches on top of the 
-Linux kernel.
-
-The bootup hangs here:
-```
-U-Boot Version: 2.0.0.59413 (Jul 08 2015 - 09:57:29)
-
-CPU:   500MHz
-DRAM:  128 MB
-FLASH: 16 MB
-Model: ZyXEL_GS1900_8
-SN:    S203C15000307
-MAC:   98:0D:67:06:9A:40 - 98:0D:67:06:9A:48
-
-Press SPACE to abort boot script:  0
-## Booting image from partition ... 0
-    Version:   MIPS OpenWrt Linux-6.6.119
-    Created:   2025-12-14  21:51:17 UTC
-    Size:      3788916 Bytes = 3.6 MB
-    Verifying Checksum ... OK
-    Uncompressing Image ... OK
-
-Starting ...
-
-[    0.000000] Linux version 6.6.119 (hauke@hauke-p14s) 
-(mips-openwrt-linux-musl-gcc (OpenWrt GCC 13.3.0 r28784-155eea44e7) 
-13.3.0, GNU ld (GNU Binutils) 2.42) #0 Sun Dec 14 21:51:17 2025
-[    0.000000] RTL838X model is 83806800
-[    0.000000] SoC Type: RTL8380
-[    0.000000] printk: bootconsole [early0] enabled
-[    0.000000] CPU0 revision is: 00019070 (MIPS 4KEc)
-[    0.000000] MIPS: machine is Zyxel GS1900-8 v1 Switch
-[    0.000000] earlycon: ns16550a0 at MMIO 0x18002000 (options '115200n8')
-[    0.000000] printk: bootconsole [ns16550a0] enabled
-[    0.000000] Initrd not found or empty - disabling initrd
-[    0.000000] Using appended Device Tree.
-[    0.000000] Primary instruction cache 16kB, VIPT, 4-way, linesize 16 
-bytes.
-[    0.000000] Primary data cache 16kB, 2-way, VIPT, cache aliases, 
-linesize 16 bytes
-[    0.000000] Zone ranges:
-[    0.000000]   Normal   [mem 0x0000000000000000-0x0000000007ffffff]
-[    0.000000] Movable zone start for each node
-[    0.000000] Early memory node ranges
-[    0.000000]   node   0: [mem 0x0000000000000000-0x0000000007ffffff]
-[    0.000000] Initmem setup node 0 [mem 
-0x0000000000000000-0x0000000007ffffff]
-[    0.000000] pcpu-alloc: s0 r0 d32768 u32768 alloc=1*32768
-[    0.000000] pcpu-alloc: [0] 0
-[    0.000000] Kernel command line: earlycon
-[    0.000000] Dentry cache hash table entries: 16384 (order: 4, 65536 
-bytes, linear)
-[    0.000000] Inode-cache hash table entries: 8192 (order: 3, 32768 
-bytes, linear)
-
-```
-
-Hauke
+> 
+> diff --git a/drivers/firmware/broadcom/tee_bnxt_fw.c b/drivers/firmware/broadcom/tee_bnxt_fw.c
+> index 40e3183a3d11..fbdf1aa97c82 100644
+> --- a/drivers/firmware/broadcom/tee_bnxt_fw.c
+> +++ b/drivers/firmware/broadcom/tee_bnxt_fw.c
+> @@ -261,25 +261,13 @@ static struct tee_client_driver tee_bnxt_fw_driver = {
+>  	.id_table	= tee_bnxt_fw_id_table,
+>  	.driver		= {
+>  		.name		= KBUILD_MODNAME,
+> -		.bus		= &tee_bus_type,
+>  		.probe		= tee_bnxt_fw_probe,
+>  		.remove		= tee_bnxt_fw_remove,
+>  		.shutdown	= tee_bnxt_fw_shutdown,
+>  	},
+>  };
+>  
+> -static int __init tee_bnxt_fw_mod_init(void)
+> -{
+> -	return driver_register(&tee_bnxt_fw_driver.driver);
+> -}
+> -
+> -static void __exit tee_bnxt_fw_mod_exit(void)
+> -{
+> -	driver_unregister(&tee_bnxt_fw_driver.driver);
+> -}
+> -
+> -module_init(tee_bnxt_fw_mod_init);
+> -module_exit(tee_bnxt_fw_mod_exit);
+> +module_tee_client_driver(tee_bnxt_fw_driver);
+>  
+>  MODULE_AUTHOR("Vikas Gupta <vikas.gupta@broadcom.com>");
+>  MODULE_DESCRIPTION("Broadcom bnxt firmware manager");
+> -- 
+> 2.47.3
+> 
 
