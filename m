@@ -1,143 +1,126 @@
-Return-Path: <linux-mips+bounces-12478-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12479-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34A8CCBF51E
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Dec 2025 18:55:16 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3C17CCBF674
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Dec 2025 19:21:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 039773000948
-	for <lists+linux-mips@lfdr.de>; Mon, 15 Dec 2025 17:55:15 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 8CC7B301338D
+	for <lists+linux-mips@lfdr.de>; Mon, 15 Dec 2025 18:15:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA950322B8E;
-	Mon, 15 Dec 2025 17:55:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA5123254BB;
+	Mon, 15 Dec 2025 18:15:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="a5/gTm2q"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B556E3242B4
-	for <linux-mips@vger.kernel.org>; Mon, 15 Dec 2025 17:55:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4223E322537
+	for <linux-mips@vger.kernel.org>; Mon, 15 Dec 2025 18:15:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765821313; cv=none; b=g8Ks5uTSHgVogLTK7JOuFnl1gVnJ0jL0B6D8i5o0ZTZrHCpoNR74gNvQk9wRBm9sX8Dk3xOqPOK7EylTuSTmNX7XXGWwWJDTnITnlONyvmG4yuX6rs/6EhZ8ZC8Ey9TSltJ3E1mrdSFf5NRMG4Yd0zts608tSykcRKOmW+HTxk4=
+	t=1765822550; cv=none; b=jf1ZIRvPHMCXRUe2k4pLT5cdAKj1JYwfGTDPItYyAukQmVybg/kzcH709603OBpW7N/UUZbUEiA1T43bb1hCdrfcP9DoVE6CKOIMo9X6wiMCGvutpYOcPoWtCruNdxwqICQBEkGp8BJviHRFdc42aPSIyqG5v9bODPZ4HxUzJGo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765821313; c=relaxed/simple;
-	bh=fIfWTO7EZ/tNSzgVoDIbwQCc/akNTQHCJxVpm8Ss1h0=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=X0eybIBU54dBE9yzypn4QWRfqPzjF6nnScQve2bm/b4J6sovZ+aUuFrJYxIGEEN1nUqdenWKDNZM0PdDm6waz1pplLFgBE82ssMN7goFzYQDRk2D3/1OrjVrUdyMc8KFqerkGH5sbjiWhzJ/JDSuhXlCISbMK7VyNTVTIvkjWVg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id D2FD892009C; Mon, 15 Dec 2025 18:55:01 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id CB9A992009B;
-	Mon, 15 Dec 2025 17:55:01 +0000 (GMT)
-Date: Mon, 15 Dec 2025 17:55:01 +0000 (GMT)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Hauke Mehrtens <hauke@hauke-m.de>
-cc: linux-mips@vger.kernel.org, 
-    Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: Re: Realtek rtl838x MIPS boot hangs since 6.6.119
-In-Reply-To: <b35fe4b3-8f42-49f4-a6bf-9f0e56d4050c@hauke-m.de>
-Message-ID: <alpine.DEB.2.21.2512151706150.31276@angie.orcam.me.uk>
-References: <b35fe4b3-8f42-49f4-a6bf-9f0e56d4050c@hauke-m.de>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1765822550; c=relaxed/simple;
+	bh=c/PjK3MK1keVLcHji+RqTLxS8TEtW+tU/vQ1gsPWmFw=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Cc:To:From:Subject:
+	 References:In-Reply-To; b=UYVPiveiDv6bpsaBAKG0mTXRh/5QbR8ukcJisko5yw4VFNAUYjiBfOdwEG53RE5+7+SiUNTkFAFE5jIASupYWGDUPiXBValC31OviuOtlURvyWvtxIIU9k6v7Snt9YvNN38LHWf/NdGM3x5i/n6Tptn7QV2Pr1aCCPSqhUvx3qA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=a5/gTm2q; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id 8F9484E41C1E;
+	Mon, 15 Dec 2025 18:15:46 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 4FA7160664;
+	Mon, 15 Dec 2025 18:15:46 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9381311940441;
+	Mon, 15 Dec 2025 19:15:40 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1765822545; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=2me3Ljn4gfmMgfkqKAj40oeX1P+gfTzAJLA5BMsltrI=;
+	b=a5/gTm2qjBEjpF77m0/AebIsh0AMWFDxUBJndGfo8gqphxBM/xne0JolHsTWrIWoBW4uFF
+	zkQUxQaqPH7c3Jcc9x8rV1LEHNjEmY0HhlR/LTOePWxQaPj3lglMC1kL50xCGNNu/NuWjj
+	VbD1K3vFp2sDbpBtxvsVrAEG+sOespBORcsI1E/BP2XR2qo81EjpObRpNs9Mulv3NxKYXk
+	IDU5LMofzpB4Y3KF0lLcoYY9c3j5d71qTM2XcrriiI+6brLfFHstUNIfUVxDF5MbVnN8Z0
+	5n7Ji6HtLVAsEkyZth6KveMNi24V/BWnPDlRXywh+3yPeFjXphK8+KUrd9RW/g==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 15 Dec 2025 19:15:38 +0100
+Message-Id: <DEYZUJHYWKF7.1D7N8XSD46NKC@bootlin.com>
+Cc: <linux-mips@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+ <linux-clk@vger.kernel.org>, =?utf-8?q?Beno=C3=AEt_Monin?=
+ <benoit.monin@bootlin.com>, "Maxime Chevallier"
+ <maxime.chevallier@bootlin.com>, "Tawfik Bayouk"
+ <tawfik.bayouk@mobileye.com>, "Thomas Petazzoni"
+ <thomas.petazzoni@bootlin.com>
+To: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, "Vladimir
+ Kondratiev" <vladimir.kondratiev@mobileye.com>,
+ =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, "Rob
+ Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+ "Conor Dooley" <conor+dt@kernel.org>, "Vinod Koul" <vkoul@kernel.org>,
+ "Kishon Vijay Abraham I" <kishon@kernel.org>, "Michael Turquette"
+ <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>, "Philipp
+ Zabel" <p.zabel@pengutronix.de>, "Thomas Bogendoerfer"
+ <tsbogend@alpha.franken.de>
+From: "Luca Ceresoli" <luca.ceresoli@bootlin.com>
+Subject: Re: [PATCH v4 2/7] phy: Add driver for EyeQ5 Ethernet PHY wrapper
+X-Mailer: aerc 0.20.1
+References: <20251124-macb-phy-v4-0-955c625a81a7@bootlin.com>
+ <20251124-macb-phy-v4-2-955c625a81a7@bootlin.com>
+ <DEUNYYW0Y23E.2SA0SOCS99NA0@bootlin.com>
+ <DEYVVCWBOZSH.2ZY41YCHLS8FU@bootlin.com>
+ <DEYVXJI90AA7.KPDEQCNZOOXI@bootlin.com>
+ <DEYXM6CGJULV.1KKA37ZLEIW1K@bootlin.com>
+In-Reply-To: <DEYXM6CGJULV.1KKA37ZLEIW1K@bootlin.com>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On Mon, 15 Dec 2025, Hauke Mehrtens wrote:
+Hi Th=C3=A9o,
 
-> Linux 6.6.119 does not boot on my Zyxel GS1900-8 v1 Switch (rtl838x SoC) any
-> more.
-> 
-> When I revert these two patches the system boots up again:
-> 
-> MIPS: mm: Prevent a TLB shutdown on initial uniquification
-> commit 9f048fa upstream.
-> https://github.com/gregkh/linux/commit/135713cd0751bf296e515f5fdec234320f73bbd8
-> 
-> MIPS: mm: kmalloc tlb_vpn array to avoid stack overflow
-> commit 841ecc9 upstream.
-> https://github.com/gregkh/linux/commit/231ac951fabae2aaed8b2c00b4a097107be49c8c
+On Mon Dec 15, 2025 at 5:30 PM CET, Th=C3=A9o Lebrun wrote:
+> On Mon Dec 15, 2025 at 4:11 PM CET, Luca Ceresoli wrote:
+>> On Mon Dec 15, 2025 at 4:08 PM CET, Th=C3=A9o Lebrun wrote:
+>>> On Wed Dec 10, 2025 at 5:06 PM CET, Luca Ceresoli wrote:
+>>>> On Mon Nov 24, 2025 at 3:41 PM CET, Th=C3=A9o Lebrun wrote:
+>>>>> +	provider =3D devm_of_phy_provider_register(dev, eq5_phy_xlate);
+>>>>> +	if (IS_ERR(provider)) {
+>>>>> +		dev_err(dev, "registering provider failed\n");
+>>>>> +		return PTR_ERR(provider);
+>>>>> +	}
+>>>>
+>>>> As above, why not dev_err_probe()?
+>>>
+>>> Good idea once again.
+>>>
+>>>> Other than the above minor issues, LGTM. This driver looks cleanly
+>>>> implemented.
+>>>
+>>> Thanks for the review. Does that imply I can append your Rb trailer?
+>>
+>> If you apply all the changes I have mention, yes, but in doubt you can
+>> avoid it and I'll review your next version. Re-reviewing is much faster
+>> than reviewing the first time (last famous words).
+>
+> I've taken the Rb trailer, hoping everything is to your taste.
+>
+> https://lore.kernel.org/lkml/20251215-macb-phy-v5-0-a9dfea39da34@bootlin.=
+com/
 
- Thank you for the report and apologies to cause you trouble.  This area 
-seems quite model-specific in a subtle way, as we have both CPU and the 
-way firmware has initialised it to take into account.
+I checked the delta, looks correct, R-by confirmed.
 
- Can you please try the debug patch included below (which I used to verify 
-the correct operation of the changes referred above) and report the output 
-produced?
+Luca
 
-  Maciej
----
- arch/mips/mm/tlb-r4k.c |   17 ++++++++++++++---
- 1 file changed, 14 insertions(+), 3 deletions(-)
-
-linux-mips-tlb-r4k-uniquify-fix-debug.diff
-Index: linux-macro/arch/mips/mm/tlb-r4k.c
-===================================================================
---- linux-macro.orig/arch/mips/mm/tlb-r4k.c
-+++ linux-macro/arch/mips/mm/tlb-r4k.c
-@@ -516,7 +516,10 @@ static int r4k_vpn_cmp(const void *a, co
- {
- 	long v = *(unsigned long *)a - *(unsigned long *)b;
- 	int s = sizeof(long) > sizeof(int) ? sizeof(long) * 8 - 1: 0;
--	return s ? (v != 0) | v >> s : v;
-+	int w = s ? (v != 0) | v >> s : v;
-+	printk("a: %08lx, b: %08lx, w: %2d",
-+	       *(unsigned long *)a, *(unsigned long *)b, w);
-+	return w;
- }
- 
- /*
-@@ -532,6 +535,7 @@ static void r4k_tlb_uniquify(void)
- 	unsigned long vpn_mask;
- 	int cnt, ent, idx, i;
- 
-+	printk("r4k_tlb_uniquify: %d\n", slab_is_available());
- 	vpn_mask = GENMASK(cpu_vmbits - 1, 13);
- 	vpn_mask |= IS_ENABLED(CONFIG_64BIT) ? 3ULL << 62 : 1 << 31;
- 
-@@ -545,15 +549,17 @@ static void r4k_tlb_uniquify(void)
- 	htw_stop();
- 
- 	for (i = start, cnt = 0; i < tlbsize; i++, cnt++) {
--		unsigned long vpn;
-+		unsigned long entryhi, vpn;
- 
- 		write_c0_index(i);
- 		mtc0_tlbr_hazard();
- 		tlb_read();
- 		tlb_read_hazard();
--		vpn = read_c0_entryhi();
-+		entryhi = vpn = read_c0_entryhi();
- 		vpn &= vpn_mask & PAGE_MASK;
- 		tlb_vpns[cnt] = vpn;
-+		printk("[%02x/%02x]: %08lx/%08lx/%08x\n", i, cnt, entryhi, vpn,
-+		       read_c0_pagemask());
- 
- 		/* Prevent any large pages from overlapping regular ones.  */
- 		write_c0_pagemask(read_c0_pagemask() & PM_DEFAULT_MASK);
-@@ -564,6 +570,9 @@ static void r4k_tlb_uniquify(void)
- 
- 	sort(tlb_vpns, cnt, sizeof(tlb_vpns[0]), r4k_vpn_cmp, NULL);
- 
-+	for (idx = 0; idx < cnt; idx++)
-+		printk("[%02x]: %08lx\n", idx, tlb_vpns[idx]);
-+
- 	write_c0_pagemask(PM_DEFAULT_MASK);
- 	write_c0_entrylo0(0);
- 	write_c0_entrylo1(0);
-@@ -577,6 +586,8 @@ static void r4k_tlb_uniquify(void)
- 			entryhi = UNIQUE_ENTRYHI(ent);
- 			vpn = entryhi & vpn_mask & PAGE_MASK;
- 
-+			printk("[%02x/%02x/%02x]: %08lx/%08lx\n", i, idx, ent,
-+			       vpn, tlb_vpns[idx]);
- 			if (idx >= cnt || vpn < tlb_vpns[idx]) {
- 				write_c0_entryhi(entryhi);
- 				write_c0_index(i);
+--
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
