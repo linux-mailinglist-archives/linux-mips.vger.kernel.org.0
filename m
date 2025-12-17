@@ -1,54 +1,54 @@
-Return-Path: <linux-mips+bounces-12509-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12510-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3C7F7CC7EC7
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Dec 2025 14:45:26 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id E0163CC895C
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Dec 2025 16:51:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id AB2FD3016C6F
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Dec 2025 13:45:25 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 37BB9309AEC5
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Dec 2025 15:40:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B180935C186;
-	Wed, 17 Dec 2025 13:36:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29DCD35F8CE;
+	Wed, 17 Dec 2025 13:36:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="1zVS5GxA"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="XGNV5C/3"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E44133587D6;
-	Wed, 17 Dec 2025 13:36:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E1035503C;
+	Wed, 17 Dec 2025 13:36:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765978601; cv=none; b=fnPJ8sy08tTeClkP28krI2AomKAWU9w2CVy0vPCFtBLM21Wl1G9hdpHI+760ZaHTR8Dspk6hIRkNn5O6fKWAvdkWqN+X24xSPhIw3p2Pr6fKOzoRyXLqKmOAtrgKjQoPePq0KZgFQqIndxtDCIVDJByQju0KswjPOOoWgQoiUIw=
+	t=1765978607; cv=none; b=PZfoHjFwruw1lEzxncoHL0SIgg6f7Urzb6cO8cYio6Vq1QOO22Nfaklbgrq7Ej/vz4apS9X3lnRgikT7wYlBMfgGVKbFayZRSHLYYIqf1uh6YrOyCfghb5FXKbnREBC2HfxIfBjYS/kJb6JgIDl4EDOvyejMjliMj8CyDySNJ5U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765978601; c=relaxed/simple;
-	bh=aEGZB9dbzCDIkpskD+RbNa9/u8hFNPvaVZr+hfUUYhI=;
+	s=arc-20240116; t=1765978607; c=relaxed/simple;
+	bh=LIkfmsbB41k+9MsbsTLxVnGV4T9iI8gQK3V6MzvEhm0=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=quSnskl56ZzCP9Rv2jrdo06Ixz+3TG8KIwE1UpBCE7Tqi0BowM8n5HrCs6KXM14+Wav2lQ2GQXSqtR2wAAmp4BIVQynHS/vy/vKEp/RIp5rF8ytWzNc8g1QV1XOnCjJYWt4NHlRh1M3PoWFHS7Duvnm6FPT5O+I8gWNEa5Kwyc8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=1zVS5GxA; arc=none smtp.client-ip=185.246.85.4
+	 In-Reply-To:To:Cc; b=RqaWj27SKuatp5FqYI4wLxyjRbMQJPy3pnzr3opKBZXMBoKpcDvJU68zAsoR5UJHsjbAkUwiqdE9NSmhIw4lHSGnvpuY0VzDe2KKBECiWIE+638ekvcGDfct9jV0mxkEHISfHk2EVLDE/zSrVd0X11A4Cf8ScdgfZ4tTB2K+mSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=XGNV5C/3; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id A59264E41C60;
-	Wed, 17 Dec 2025 13:36:38 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 8B6DBC1A59D;
+	Wed, 17 Dec 2025 13:36:19 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 7A4D86072F;
-	Wed, 17 Dec 2025 13:36:38 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 23E3E102F0ACF;
-	Wed, 17 Dec 2025 14:36:36 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 1C7596072F;
+	Wed, 17 Dec 2025 13:36:44 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D5222102F0ACC;
+	Wed, 17 Dec 2025 14:36:37 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1765978597; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1765978599; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=p2gTeNSYVX7Yiw3WAxs+iLX7qDNvKdngDfWHsbEhhP8=;
-	b=1zVS5GxAJOrE7KYss+uFJtHA4a5+n4RheiXsKHyxd4qUwLgoc49PHts0Ch2a3c1SoFXC/a
-	CgdD5dkBlTf4gcWQV9/iQ8u4bikDCQ8tQiEg9QEbhXiZCLfyAar/edAmpYYRy4M/ldcxVA
-	++m0RGtopjmVSwggLXSHlbSBLIz7zd0er+5rjFej7c6qtC8/1htgBI86ic+oMaroy+iCwh
-	Ts9j4rIFlUsG4V/+UFneM2siv4JW+dUOLZO4goL7lLNE19vVg1Ju/iyR54u8+KcWC7b1kl
-	+bFf4nxhhOpsLsyJe3XQJ8jJl1hSAeo9c1oXcEasmFyjMwONDqIH9BzWALnWtA==
+	bh=CPXK4xPFSHub2GLu8DYY2PFIxvuvqeXwLRAJB3rF6Zg=;
+	b=XGNV5C/37zt5xJYUbV5+er/pOUhqxWDp/E+zg87FeA0jrvhyQhwwVGGZxM20RzyDKhp0Z0
+	NTbwNURB9XUiJa3dz060QeAPYZl0z4hKKucFHd2F43RBBEhfAn0fKaUimGpJX5hNX6ykf3
+	oT1gXXu+LqcBHY1eyM32QKRMGv1m7o/8l+9TisBEkaoyPazJ1erbPJ33SAsrWn4anEZcV6
+	eEdL6i+8aWnVuIVSl9/EniQorjqgPiTwaEBivlPic7anlAFb24CE83CGwAPQ7XKC0YOJ9w
+	H9sXQvz7SjzHC0hlq4Dx1C8NJgUXVsu9o99ULkA0HR9xNFpKzkQhL8aLCjNnmg==
 From: =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
-Date: Wed, 17 Dec 2025 14:36:02 +0100
-Subject: [PATCH 12/13] MIPS: config: add eyeq6lplus_defconfig
+Date: Wed, 17 Dec 2025 14:36:03 +0100
+Subject: [PATCH 13/13] MAINTAINERS: Mobileye: Add EyeQ6Lplus files
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20251217-eyeq6lplus-v1-12-e9cdbd3af4c2@bootlin.com>
+Message-Id: <20251217-eyeq6lplus-v1-13-e9cdbd3af4c2@bootlin.com>
 References: <20251217-eyeq6lplus-v1-0-e9cdbd3af4c2@bootlin.com>
 In-Reply-To: <20251217-eyeq6lplus-v1-0-e9cdbd3af4c2@bootlin.com>
 To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
@@ -77,138 +77,44 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 X-Mailer: b4 0.14.3
 X-Last-TLS-Session-Version: TLSv1.3
 
-Add a default configuration for Mobileye EyeQ6Lplus evaluation board.
+Use wildcard to match all EyeQ defconfigs under arch/mips. This covers
+the newly added defconfig, and the EyeQ5 and EyeQ6H ones. Add an entry
+for the dt-bindings header of the EyeQ6Lplus clocks.
+
+While at it, add myself to the maintainers of Mobileye MIPS SoCs.
 
 Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
 ---
- arch/mips/configs/eyeq6lplus_defconfig | 119 +++++++++++++++++++++++++++++++++
- 1 file changed, 119 insertions(+)
+ MAINTAINERS | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/arch/mips/configs/eyeq6lplus_defconfig b/arch/mips/configs/eyeq6lplus_defconfig
-new file mode 100644
-index 000000000000..dc54c3fd1b8a
---- /dev/null
-+++ b/arch/mips/configs/eyeq6lplus_defconfig
-@@ -0,0 +1,119 @@
-+CONFIG_SYSVIPC=y
-+CONFIG_NO_HZ_IDLE=y
-+CONFIG_HIGH_RES_TIMERS=y
-+CONFIG_BPF_SYSCALL=y
-+CONFIG_TASKSTATS=y
-+CONFIG_IKCONFIG=y
-+CONFIG_IKCONFIG_PROC=y
-+CONFIG_MEMCG=y
-+CONFIG_BLK_CGROUP=y
-+CONFIG_CFS_BANDWIDTH=y
-+CONFIG_RT_GROUP_SCHED=y
-+CONFIG_CGROUP_PIDS=y
-+CONFIG_CGROUP_FREEZER=y
-+CONFIG_CPUSETS=y
-+CONFIG_CGROUP_DEVICE=y
-+CONFIG_CGROUP_CPUACCT=y
-+CONFIG_NAMESPACES=y
-+CONFIG_USER_NS=y
-+CONFIG_SCHED_AUTOGROUP=y
-+CONFIG_BLK_DEV_INITRD=y
-+CONFIG_EXPERT=y
-+CONFIG_EYEQ=y
-+CONFIG_MACH_EYEQ6LPLUS=y
-+CONFIG_MIPS_CPS=y
-+CONFIG_CPU_HAS_MSA=y
-+CONFIG_NR_CPUS=16
-+CONFIG_MIPS_RAW_APPENDED_DTB=y
-+CONFIG_JUMP_LABEL=y
-+CONFIG_PAGE_SIZE_16KB=y
-+CONFIG_COMPAT_32BIT_TIME=y
-+CONFIG_MODULES=y
-+CONFIG_MODULE_UNLOAD=y
-+CONFIG_TRIM_UNUSED_KSYMS=y
-+# CONFIG_COMPAT_BRK is not set
-+CONFIG_USERFAULTFD=y
-+CONFIG_NET=y
-+CONFIG_PACKET=y
-+CONFIG_UNIX=y
-+CONFIG_NET_KEY=y
-+CONFIG_INET=y
-+CONFIG_IP_PNP=y
-+CONFIG_IP_PNP_DHCP=y
-+CONFIG_NETFILTER=y
-+CONFIG_CAN=y
-+CONFIG_PCI=y
-+CONFIG_PCI_MSI=y
-+CONFIG_PCI_DEBUG=y
-+CONFIG_PCI_ENDPOINT=y
-+CONFIG_DEVTMPFS=y
-+CONFIG_DEVTMPFS_MOUNT=y
-+CONFIG_CONNECTOR=y
-+CONFIG_MTD=y
-+CONFIG_MTD_SPI_NAND=y
-+CONFIG_MTD_UBI=y
-+CONFIG_MTD_UBI_BLOCK=y
-+CONFIG_SCSI=y
-+CONFIG_NETDEVICES=y
-+CONFIG_MACVLAN=y
-+CONFIG_IPVLAN=y
-+CONFIG_MACB=y
-+CONFIG_MARVELL_PHY=y
-+CONFIG_MICREL_PHY=y
-+CONFIG_CAN_M_CAN=y
-+CONFIG_SERIAL_8250=y
-+CONFIG_SERIAL_8250_CONSOLE=y
-+CONFIG_SERIAL_8250_DW=y
-+CONFIG_HW_RANDOM=y
-+CONFIG_I2C=y
-+CONFIG_I2C_CHARDEV=y
-+CONFIG_I2C_DESIGNWARE_CORE=y
-+CONFIG_SPI=y
-+CONFIG_SPI_CADENCE_QUADSPI=y
-+CONFIG_SPI_DESIGNWARE=y
-+CONFIG_SPI_DW_MMIO=y
-+CONFIG_SPI_SPIDEV=y
-+CONFIG_SPI_SLAVE=y
-+# CONFIG_PTP_1588_CLOCK is not set
-+CONFIG_PINCTRL=y
-+CONFIG_GPIOLIB=y
-+CONFIG_GPIO_DWAPB=y
-+CONFIG_MFD_SYSCON=y
-+CONFIG_HID_A4TECH=y
-+CONFIG_HID_BELKIN=y
-+CONFIG_HID_CHERRY=y
-+CONFIG_HID_CYPRESS=y
-+CONFIG_HID_EZKEY=y
-+CONFIG_HID_ITE=y
-+CONFIG_HID_KENSINGTON=y
-+CONFIG_HID_REDRAGON=y
-+CONFIG_HID_MICROSOFT=y
-+CONFIG_HID_MONTEREY=y
-+CONFIG_MMC=y
-+CONFIG_MMC_SDHCI=y
-+CONFIG_MMC_SDHCI_PLTFM=y
-+CONFIG_MMC_SDHCI_CADENCE=y
-+# CONFIG_IOMMU_SUPPORT is not set
-+CONFIG_RESET_CONTROLLER=y
-+# CONFIG_NVMEM is not set
-+CONFIG_EXT4_FS=y
-+CONFIG_EXT4_FS_POSIX_ACL=y
-+CONFIG_EXT4_FS_SECURITY=y
-+CONFIG_FS_ENCRYPTION=y
-+CONFIG_FUSE_FS=y
-+CONFIG_CUSE=y
-+CONFIG_MSDOS_FS=y
-+CONFIG_VFAT_FS=y
-+CONFIG_TMPFS=y
-+CONFIG_TMPFS_POSIX_ACL=y
-+CONFIG_UBIFS_FS=y
-+CONFIG_NFS_FS=y
-+CONFIG_NFS_V3_ACL=y
-+CONFIG_NFS_V4=y
-+CONFIG_NFS_V4_1=y
-+CONFIG_NFS_V4_2=y
-+CONFIG_ROOT_NFS=y
-+CONFIG_FRAME_WARN=1024
-+CONFIG_DEBUG_FS=y
-+# CONFIG_RCU_TRACE is not set
-+# CONFIG_FTRACE is not set
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 5b11839cba9d..d9ad70501278 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -17595,6 +17595,7 @@ F:	drivers/media/dvb-frontends/mn88473*
+ 
+ MOBILEYE MIPS SOCS
+ M:	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
++M:	Benoît Monin <benoit.monin@bootlin.com>
+ M:	Gregory CLEMENT <gregory.clement@bootlin.com>
+ M:	Théo Lebrun <theo.lebrun@bootlin.com>
+ L:	linux-mips@vger.kernel.org
+@@ -17602,12 +17603,13 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/mips/mobileye.yaml
+ F:	Documentation/devicetree/bindings/soc/mobileye/
+ F:	arch/mips/boot/dts/mobileye/
+-F:	arch/mips/configs/eyeq5_defconfig
++F:	arch/mips/configs/eyeq*_defconfig
+ F:	arch/mips/mobileye/board-epm5.its.S
+ F:	drivers/clk/clk-eyeq.c
+ F:	drivers/pinctrl/pinctrl-eyeq5.c
+ F:	drivers/reset/reset-eyeq.c
+ F:	include/dt-bindings/clock/mobileye,eyeq5-clk.h
++F:	include/dt-bindings/clock/mobileye,eyeq6lplus-clk.h
+ 
+ MODULE SUPPORT
+ M:	Luis Chamberlain <mcgrof@kernel.org>
 
 -- 
 2.52.0
