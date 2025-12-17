@@ -1,168 +1,177 @@
-Return-Path: <linux-mips+bounces-12496-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12497-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B81ECC794A
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Dec 2025 13:23:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0755FCC7FB1
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Dec 2025 14:52:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2C137305A804
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Dec 2025 12:17:45 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 5378B30974AD
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Dec 2025 13:46:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35D023446D0;
-	Wed, 17 Dec 2025 12:17:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA73733C522;
+	Wed, 17 Dec 2025 13:36:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KOrJ2PN+"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="to6fZldY"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-dl1-f41.google.com (mail-dl1-f41.google.com [74.125.82.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9ED693451AA
-	for <linux-mips@vger.kernel.org>; Wed, 17 Dec 2025 12:17:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AC2C335091;
+	Wed, 17 Dec 2025 13:36:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765973864; cv=none; b=oAGrrEpGPBYxtAS5g7tRxfX/fRj/6mUEtxAt7Akp5oSIQu3MEpQ6u7rh9y3lJMeIMy1dDHPOUvMqBN7XmAnY/8JsPdmJp5XlE7Qu0TtEd8ZQc3/RUHmu2kbOzdmltPfxoHQp19Y51RMm73qE8NETjLz/7ZO5GpiB3nlYaS/hVoA=
+	t=1765978580; cv=none; b=hSiOk12UeCMr5j2H+bMyzJqYPzuwv/DDn5COpZHpWs5eyNDyBib8dkIPHO62h9Yp8FoK/Cx7kV2bIoq5FxjnKFvwnAJFBG6++O4PmoG0yHUugif4Xb9bOjdpGO7Kao2FVcseDCoCGaK2CnBLjBc9x/DHCuC3LIqqDr2pBP08XWY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765973864; c=relaxed/simple;
-	bh=Us0yFCBAjwxulhriZ3mYjriGCty2jScVl7WxuOuzAMU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=hTt2E68u4BZjL4tdtIoUDGmLslnubXRJxBYwhdRa4lG/YI3clHHSXTGhVOKLjHXB7wKMcFiusIst3dteqCgA3Gjn18DuWxbJEcrsKwscKdCyWlL5vv04ftDuIuqcsNpmYqodNMSjVLzIjlKtZaeeXk8y7nmECimrmlLkNFAr9n8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KOrJ2PN+; arc=none smtp.client-ip=74.125.82.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-dl1-f41.google.com with SMTP id a92af1059eb24-11b6bc976d6so746738c88.0
-        for <linux-mips@vger.kernel.org>; Wed, 17 Dec 2025 04:17:41 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1765973861; x=1766578661; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TA4hyyTWjoyEecRU+tFTEv8TY8OLq5jN3IBQEP1dw+M=;
-        b=KOrJ2PN+L6+TbVO7KqCSD2+r7pEofzuJHbxAc+gzotDkkNRcYSGqQmMFOThGciI5CK
-         MkyLyf35dMHDxGr4kmnb8kCFXTSHXE9m6kmfctGOMf/4eKFaujEP4LY8gThUsF/qnr5R
-         IrqEhZU7Ofen7fSR7WxBRcfWqsflOkCGNjynaRGVtMxidG0zLgW/lehgVvW90GJwFdjc
-         lyDA+hgct4lwqEG28OC6hS4prII9m7tWioQa+xUrTubsddQWaZRjUEh/QjYHSpdTd0EB
-         81l8YYCQSTLXnUfdHMteczWSqQBSl9V5ARBEgyrnjwn1j155TGGY3uP5iyx3TepXFdBN
-         3Lvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1765973861; x=1766578661;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=TA4hyyTWjoyEecRU+tFTEv8TY8OLq5jN3IBQEP1dw+M=;
-        b=i7tjUtShRdVfVq8VKyq2TIr8ktuCLONIzzBr81RsKiGg7w+mH2ROU6J5LRwhz2GT4F
-         cpCqoFnLBYatYbfHF7Cu20BFVmBWJfpyt0la5dFfPw8sJfbtDqZv2cCz606m3dch7CX4
-         FVB/OhxfshkzZGqpa5RiCao5e5DR9hDtwL0uv2MbEV/wuXB3k5oFhzzWhgkJJEjbocas
-         mWuIaPo1B0eM3vdQsUuJY9OBCk89xSoBXPPIZ+FqZu6wqlOrGvSR+2Erd7XNZiG3dO13
-         UovFzeFNlPw9JwJsZG6sJWAXFmNEDZQm7y/WvBRW8bkbeRP4FiRgN1y6tWNRS97jocse
-         /aCg==
-X-Forwarded-Encrypted: i=1; AJvYcCUtfB/rAFXxNPL6ORmIG8o9l27vWjpgO6vAT6+OTIlPiovADuMm5Pb4bFPyJZU7f3SimZSXGMZoq+Ns@vger.kernel.org
-X-Gm-Message-State: AOJu0YzmKyH7xhpu4k6lFX+h6Ik4/tG3bQ2Tm5XA21WFPjxRpDyIhbR3
-	XedOmosxIFCMvhNDTni4DQLQ123S0KDtlNQ3EtFZf8c4g4g+JrRkFXzl
-X-Gm-Gg: AY/fxX6lIvUXkRGh8v/VhlP6MIKWAFwJ4n3VJlsMGk1CQi9gIdgD5YA9D493MM6YOoo
-	eRuxsccsErlRro5cXVisPuHjsqJy2Krn12XwgnSR7uRyjrS2zO9pgeteU0IKrKqmdrkvZU/1xAW
-	JRVTczrnMZ+bxntTkZhdRiEhEjXCTR1+4TFNhPKPj4JWGTgsdSdO0yh4DZPLUkhTakOQDp6VdNl
-	WUP9z7uKJLzRip4Ie+A1wqnqRVFBb/qgLIVs84qfN2VHZz/uJn882c+ytjDMc1z398U7rIsruV9
-	f7nm+Hv9GXA9Sx8n6UhTlpgbMzgLaAqf2HP7OxHQ/yLb+AJSxYbj+vUwDfjlPvpHvxwgetMsniH
-	zF9VdpEaICgdBePSxnNguOwMqxPD3idId/wfFVkLCi+3UELpLN+jd+5ovl0bA1twCVQbpW5uoLA
-	swPZs86Jspy1Isr45Jiqb+ZAkp
-X-Google-Smtp-Source: AGHT+IHtTckxV0BrLKUtwEMMlG/KT0X6JCzQ/eEGNn1nvrPgi11fSB7RRA3IhgmdXndE9lBsM2aS9w==
-X-Received: by 2002:a05:7022:e806:b0:119:e569:f86a with SMTP id a92af1059eb24-11f34c29cefmr11289687c88.7.1765973860378;
-        Wed, 17 Dec 2025 04:17:40 -0800 (PST)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id a92af1059eb24-11f2e30b799sm60713771c88.17.2025.12.17.04.17.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 17 Dec 2025 04:17:39 -0800 (PST)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date: Wed, 17 Dec 2025 04:17:38 -0800
-From: Guenter Roeck <linux@roeck-us.net>
-To: Leon Romanovsky <leon@kernel.org>
-Cc: Marek Szyprowski <m.szyprowski@samsung.com>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Russell King <linux@armlinux.org.uk>,
-	Juergen Gross <jgross@suse.com>,
-	Stefano Stabellini <sstabellini@kernel.org>,
-	Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>,
-	Richard Henderson <richard.henderson@linaro.org>,
-	Matt Turner <mattst88@gmail.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
-	Helge Deller <deller@gmx.de>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Geoff Levand <geoff@infradead.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Andreas Larsson <andreas@gaisler.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	"H. Peter Anvin" <hpa@zytor.com>, iommu@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	xen-devel@lists.xenproject.org, linux-alpha@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
-	Jason Gunthorpe <jgg@ziepe.ca>, Jason Gunthorpe <jgg@nvidia.com>
-Subject: Re: [PATCH v5 09/14] parisc: Convert DMA map_page to map_phys
- interface [qemu test failure]
-Message-ID: <b184f1bf-96dc-4546-8512-9cba5ecb58f7@roeck-us.net>
-References: <20251015-remove-map-page-v5-0-3bbfe3a25cdf@kernel.org>
- <20251015-remove-map-page-v5-9-3bbfe3a25cdf@kernel.org>
+	s=arc-20240116; t=1765978580; c=relaxed/simple;
+	bh=BG5WjneFUAcYerU4QAtzF9PfZciUrUH9GPXPrWL5Ik4=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=HUAI0u92aCyKkPLnDigMSQhir9M9ZFUPnT1sWm3p1ZIFyJwH+0m6yXn9NvWSgbIAFkoUD/yZPD10PsldVLLa9mWErd5PL6I9woORcP/4KpCgunOC3tlCaerA+xYyV/wAiuyRIGjRVmMu9OVd73X7PglbffDZjXJx9Oq6V/d5DVk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=to6fZldY; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id B5031C1A59D;
+	Wed, 17 Dec 2025 13:35:46 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 344F56072F;
+	Wed, 17 Dec 2025 13:36:11 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8C6A3102F0AD2;
+	Wed, 17 Dec 2025 14:36:03 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1765978566; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=YMEO4XGsTesQV2me7FMOZ81Y5IcMWo887Z9CgZajqyk=;
+	b=to6fZldYjVFS4arTIkGZex72ttLVnNNpfUGa584NixIVwN7a7kXWOZMiRxziZQsBlEagSL
+	dm7P9SGxgVlCyVv721R+SHWBIArFuAvHswn1BYuNI1vXIc/hcpg0de79GfdCLAgQ5U0WnP
+	g3nddTawnOi04/IwJFMN0r5bOU0AeKDEu3RDXIWkdgH4YsU+aRFy2mH9mSZBXZyHFfIDKS
+	wkhf5kVJ7WZTY8OrnU1gEYsaJQoJ2roJBYJ0mRqzxivTdN4NUfto9Mrq3Y/EMQN3I9G36T
+	nvIpFNoZgU1rSVoSTh15GNM3KbOgFZ53+JmBsf8ca9fyIkD79bFfQH5pNKQvEw==
+From: =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
+Subject: [PATCH 00/13] Introducing the Mobileye EyeQ6Lplus SoC
+Date: Wed, 17 Dec 2025 14:35:50 +0100
+Message-Id: <20251217-eyeq6lplus-v1-0-e9cdbd3af4c2@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20251015-remove-map-page-v5-9-3bbfe3a25cdf@kernel.org>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIALaxQmkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1NDQyML3dTK1EKznIKc0mJdSzPDZDNjgzQDSxMDJaCGgqLUtMwKsGHRsbW
+ 1AHIwZwhcAAAA
+X-Change-ID: 20251128-eyeq6lplus-961c630f0940
+To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ Gregory CLEMENT <gregory.clement@bootlin.com>, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
+ Linus Walleij <linusw@kernel.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, linux-mips@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
+X-Mailer: b4 0.14.3
+X-Last-TLS-Session-Version: TLSv1.3
 
-Hi,
+The Eyeq6Lplus is a new system-on-chip part of Mobileye's EyeQ family
+of SoC aimed at Advanced Driver Assistance Systems (ADAS). It is built
+around a multicore MIPS I6500 with 2 cores and 8 threads and integrates
+controllers and accelerators dedicated to driving assistance.
 
-On Wed, Oct 15, 2025 at 12:12:55PM +0300, Leon Romanovsky wrote:
-> From: Leon Romanovsky <leonro@nvidia.com>
-> 
-> Perform mechanical conversion from .map_page to .map_phys callback.
-> 
-> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-> Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
+This patchset adds the initial support for the EyeQ6Lplus and its
+evaluation board with the following list of controllers:
+* The OLB ("Other Logic Block") providing clocks, resets and pin controls.
+* One UART from DesignWare.
+* One GPIO controller from DesignWare.
+* Two SPI controllers from DesignWare, one in host mode and one in target
+  mode.
+* One octoSPI flash controller from Cadence, identical to the one found
+  in the EyeQ5.
+* Two I2C controllers from Designware.
 
-This patch causes all my 32-bit parisc qemu tests with C3700 machine
-to fail. Network interface tests fail, and all boot attempts from
-any kind of hard drive (scsi, usb) fail with this patch in the tree.
+The support for the particularities of the I2C controllers is 
+currently under review[1], but basic operations (single read,
+single write, write-then-read) work with the compatible fallback to
+"snps,designware-i2c".
 
-Guenter
+The patch series adds the device tree bindings for the SoC and the OLB. It
+also adds the Kconfig entry for the EyeQ6Lplus, the SoC and evaluation
+board device tree, and the defconfig. For the OLB, the series adds the
+match data to the clk-eyeq, reset-eyeq and pinctrl-eyeq5 drivers.
 
+It also brings three other changes. One for the pinctrl-eyeq5 driver to
+access the pin descriptions, pin functions and pin bank register via
+the match data instead of directly. This is needed to add support for
+the EyeQ6Lplus alongside the EyeQ5 to the pinctrl driver.
+
+To be able to match against compatible entries, An OF node is needed
+but the pinctrl-eyeq5 does not have one as it is an auxiliary device
+of clk-eyeq. As part of his MACB phy series[2], Théo switched to
+devm_auxiliary_device_create() to register the auxiliary devices and this
+helper sets the OF node of the auxiliary device. To avoid a dependency
+between the patch series, eq5p_probe() is able to handle both cases,
+having the of_node field already set in the device structure or getting
+it from the parent device. After both series are merged, a cleanup of
+the pinctrl-eyeq5 probe function can be done.
+
+The two other changes are in the clk-eyeq driver. First we skip the
+post-divisor when computing the PLL frequency in the clk-eyeq driver,
+to match how the clock signal is wired internally in all EyeQ PLL and
+compute the correct frequency for the PLL of the EyeQ6Lplus. Second we
+adjust the accuracy and down spreading computation of the PLL frequency
+as the spread spectrum of all EyeQ PLL is in 1/1024 and not in 1/1000
+as previously thought.
+
+[1]: https://lore.kernel.org/all/20251126-i2c-dw-v4-0-b0654598e7c5@bootlin.com/
+[2]: https://lore.kernel.org/all/20251215-macb-phy-v5-0-a9dfea39da34@bootlin.com/
+
+Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
 ---
-# bad: [8f0b4cce4481fb22653697cced8d0d04027cb1e8] Linux 6.19-rc1
-# good: [7d0a66e4bb9081d75c82ec4957c50034cb0ea449] Linux 6.18
-git bisect start 'HEAD' 'v6.18'
-# good: [6dfafbd0299a60bfb5d5e277fdf100037c7ded07] Merge tag 'drm-next-2025-12-03' of https://gitlab.freedesktop.org/drm/kernel
-git bisect good 6dfafbd0299a60bfb5d5e277fdf100037c7ded07
-# good: [09cab48db950b6fb8c114314a20c0fd5a80cf990] Merge tag 'soc-arm-6.19' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
-git bisect good 09cab48db950b6fb8c114314a20c0fd5a80cf990
-# bad: [701d7d782d98242a64cdeed90750f88ff733bc39] Merge tag 'spdx-6.19-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/spdx
-git bisect bad 701d7d782d98242a64cdeed90750f88ff733bc39
-# good: [66a1025f7f0bc00404ec6357af68815c70dadae2] Merge tag 'soc-newsoc-6.19' of git://git.kernel.org/pub/scm/linux/kernel/git/soc/soc
-git bisect good 66a1025f7f0bc00404ec6357af68815c70dadae2
-# good: [c84d574698bad2c02aad506dfe712f83cbe3b771] Merge tag 'modules-6.19-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/modules/linux
-git bisect good c84d574698bad2c02aad506dfe712f83cbe3b771
-# bad: [b0319c4642638bad4b36974055b1c0894b2c7aa9] Merge tag 'nfsd-6.19' of git://git.kernel.org/pub/scm/linux/kernel/git/cel/linux
-git bisect bad b0319c4642638bad4b36974055b1c0894b2c7aa9
-# bad: [e637b37a520513a04d00f4add07ec25f357e6c6d] Merge tag 'rproc-v6.19' of git://git.kernel.org/pub/scm/linux/kernel/git/remoteproc/linux
-git bisect bad e637b37a520513a04d00f4add07ec25f357e6c6d
-# bad: [56a1a04dc9bf252641c622aad525894dadc61a07] Merge tag 'libnvdimm-for-6.19' of git://git.kernel.org/pub/scm/linux/kernel/git/nvdimm/nvdimm
-git bisect bad 56a1a04dc9bf252641c622aad525894dadc61a07
-# good: [d0cf6512bbcf77afb6102f886fcd7fd48b7ae043] rust: bitmap: add BitmapVec::new_inline()
-git bisect good d0cf6512bbcf77afb6102f886fcd7fd48b7ae043
-# bad: [936a9f0cb16b0646143f8e05afab458adc51d0a0] xen: swiotlb: Convert mapping routine to rely on physical address
-git bisect bad 936a9f0cb16b0646143f8e05afab458adc51d0a0
-# good: [14cb413af00c5d3950d1a339dd2b6f01ce313fce] dma-mapping: remove unused mapping resource callbacks
-git bisect good 14cb413af00c5d3950d1a339dd2b6f01ce313fce
-# bad: [96ddf2ef58ec070afa8275f371b619462cd8fb2c] parisc: Convert DMA map_page to map_phys interface
-git bisect bad 96ddf2ef58ec070afa8275f371b619462cd8fb2c
-# good: [e4e3fff66a57a7aee048e0737a16874aeaffe9f4] MIPS/jazzdma: Provide physical address directly
-git bisect good e4e3fff66a57a7aee048e0737a16874aeaffe9f4
-# first bad commit: [96ddf2ef58ec070afa8275f371b619462cd8fb2c] parisc: Convert DMA map_page to map_phys interface
+Benoît Monin (13):
+      dt-bindings: mips: Add Mobileye EyeQ6Lplus SoC
+      dt-bindings: soc: mobileye: Add EyeQ6Lplus OLB
+      MIPS: Add Mobileye eyeQ6Lplus support
+      reset: eyeq: Add Mobileye EyeQ6Lplus OLB
+      pinctrl: eyeq5: Use match data
+      pinctrl: eyeq5: Add Mobileye EyeQ6Lplus OLB
+      clk: eyeq: Skip post-divisor when computing PLL frequency
+      clk: eyeq: Adjust PLL accuracy computation
+      clk: eyeq: Add Mobileye EyeQ6Lplus OLB
+      MIPS: Add Mobileye EyeQ6Lplus SoC dtsi
+      MIPS: Add Mobileye EyeQ6Lplus evaluation board dts
+      MIPS: config: add eyeq6lplus_defconfig
+      MAINTAINERS: Mobileye: Add EyeQ6Lplus files
+
+ .../devicetree/bindings/mips/mobileye.yaml         |   5 +
+ .../soc/mobileye/mobileye,eyeq6lplus-olb.yaml      | 208 ++++++++++
+ MAINTAINERS                                        |   4 +-
+ arch/mips/boot/dts/mobileye/Makefile               |   1 +
+ arch/mips/boot/dts/mobileye/eyeq6lplus-epm6.dts    | 112 +++++
+ arch/mips/boot/dts/mobileye/eyeq6lplus-pins.dtsi   |  84 ++++
+ arch/mips/boot/dts/mobileye/eyeq6lplus.dtsi        | 169 ++++++++
+ arch/mips/configs/eyeq6lplus_defconfig             | 119 ++++++
+ arch/mips/mobileye/Kconfig                         |   3 +
+ arch/mips/mobileye/Platform                        |   1 +
+ drivers/clk/Kconfig                                |   4 +-
+ drivers/clk/clk-eyeq.c                             |  90 +++-
+ drivers/pinctrl/Kconfig                            |   4 +-
+ drivers/pinctrl/pinctrl-eyeq5.c                    | 462 +++++++++++++++------
+ drivers/reset/Kconfig                              |   4 +-
+ drivers/reset/reset-eyeq.c                         |  31 ++
+ .../dt-bindings/clock/mobileye,eyeq6lplus-clk.h    |  37 ++
+ 17 files changed, 1192 insertions(+), 146 deletions(-)
+---
+base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
+change-id: 20251128-eyeq6lplus-961c630f0940
+
+Best regards,
+-- 
+Benoît Monin, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 
