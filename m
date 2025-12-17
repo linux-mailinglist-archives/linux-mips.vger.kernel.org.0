@@ -1,128 +1,136 @@
-Return-Path: <linux-mips+bounces-12487-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12489-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4EA67CC6B87
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Dec 2025 10:11:19 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11B77CC701E
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Dec 2025 11:15:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A3F7530EB602
-	for <lists+linux-mips@lfdr.de>; Wed, 17 Dec 2025 09:03:52 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 273E030CB808
+	for <lists+linux-mips@lfdr.de>; Wed, 17 Dec 2025 10:10:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B96A533A016;
-	Wed, 17 Dec 2025 09:02:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 631AB33DEDF;
+	Wed, 17 Dec 2025 09:47:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mvAWqDTY"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="MRO4qPIx"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-178.mta1.migadu.com (out-178.mta1.migadu.com [95.215.58.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64C80327790;
-	Wed, 17 Dec 2025 09:02:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4517B33D6DE
+	for <linux-mips@vger.kernel.org>; Wed, 17 Dec 2025 09:47:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1765962140; cv=none; b=jjjN4fWc0lHP6MvxJvcOvjFdQjCvzVKohMSxSZKTjPZ+z4J5wcZOfQ7Vp6Cky9LNeGaL3jNS4Lb9tlcSReCbnBxzc4YUpKLYW2Zt717sgJLFew49fg7C/p+PQAnrMZExRAOJTUwY4bmGnRfSei0+7cCHBUJis6t+kQone5hKNms=
+	t=1765964829; cv=none; b=bf207zZkvTl6r4TcObVuk2b9lF7dItkFP5URhr8q5OT+e7H8u4pa3McyX1UUbUca7Be66SRSPODgjSy8uHTeISP0mpBuvHdFyhikPJBvFikqveJ3081TwoszP5IjMYQ/+jDN39EVr9zt+jAZ1E6GKQz4XXS5NTc+gOJ1P7LbfBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1765962140; c=relaxed/simple;
-	bh=TqhCN05lIjCwKdoNH7O27Ib5W/fzrsm853qYAbg7qEk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GjhQnJ8eVabyu1/cxfl34XHrVRjyhqmoO5eucRgV3MDJaEzESp5uYYIa51XRMlkW1iQ5tgM4pGIK4kEdwuWAl1NGBtyTwzE5fYiQcGvltb1+IvuhaR3q4jEbLlP0ZIsPMpl2T/QAtYjnWPGkQNkSPsxdvtDLLDp2K1ZWlDKvxu8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mvAWqDTY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF8E2C19421;
-	Wed, 17 Dec 2025 09:02:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1765962140;
-	bh=TqhCN05lIjCwKdoNH7O27Ib5W/fzrsm853qYAbg7qEk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=mvAWqDTYEQLPIjasUrs0D/Ze97eatlfyL0mi6O0MGmE1SvVn8YHYiQ1hDIZZ4oE8K
-	 aFHFHT2tvqpmtTdxeiwwsKJeoEVwVelMoe4qdWjAQvcLtXTPchbIZ+ReSJGYbTCzr1
-	 qqsGRlLlswi0jMZNei2mTasXnvX0lpJbqMF7UmTpaAoqX1N9T1UOPYMMpKw8Gfqhqh
-	 UjNPCvimUrrUtTiIKv9N5Ccmev+XKHhu1cfOPYdPmfSUBm4ahYUsPiFyqCCGB8H6UA
-	 JpzEUlNfSO+k+Tl5V8osBsBwXeYIjSzePF5a/zlMumvvZfIBKHX3GrTd0HYyuz9UeN
-	 OzpkhIbfzPmTw==
-Date: Wed, 17 Dec 2025 14:32:02 +0530
-From: Sumit Garg <sumit.garg@kernel.org>
-To: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>
-Cc: Sumit Garg <sumit.garg@oss.qualcomm.com>,
-	Jens Wiklander <jens.wiklander@linaro.org>,
-	Olivia Mackall <olivia@selenic.com>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Ard Biesheuvel <ardb@kernel.org>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
-	Jan Kiszka <jan.kiszka@siemens.com>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Michael Chan <michael.chan@broadcom.com>,
-	Pavan Chebbi <pavan.chebbi@broadcom.com>,
-	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
-	James Bottomley <James.Bottomley@hansenpartnership.com>,
-	Jarkko Sakkinen <jarkko@kernel.org>,
-	Mimi Zohar <zohar@linux.ibm.com>,
-	David Howells <dhowells@redhat.com>,
-	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
-	"Serge E. Hallyn" <serge@hallyn.com>,
-	Peter Huewe <peterhuewe@gmx.de>, op-tee@lists.trustedfirmware.org,
-	linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
-	linux-rtc@vger.kernel.org, linux-efi@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	Cristian Marussi <cristian.marussi@arm.com>,
-	arm-scmi@vger.kernel.org, netdev@vger.kernel.org,
-	linux-mips@vger.kernel.org, linux-integrity@vger.kernel.org,
-	keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
-	Jason Gunthorpe <jgg@ziepe.ca>
-Subject: Re: [PATCH v1 00/17] tee: Use bus callbacks instead of driver
- callbacks
-Message-ID: <aUJxiioKnDVSC34H@sumit-xelite>
-References: <cover.1765472125.git.u.kleine-koenig@baylibre.com>
- <aT--ox375kg2Mzh-@sumit-X1>
- <dhunzydod4d7vj73llpuqemxb5er2ja4emxusr66irwf77jhhb@es4yd2axzl25>
- <CAGptzHOOqLhBnAXDURAzkgckUvRr__UuF1S_7MLV0u-ZxYEdyA@mail.gmail.com>
- <ayebinxqpcnl7hpa35ytrudiy7j75u5bdk3enlirkp5pevppeg@6mx6a5fwymwf>
- <aUJh--HGVeJWIilS@sumit-xelite>
- <max5wxkcjjvnftwfwgymybwbnvf5s3ytwpy4oo5i74kfvnav4m@m2wasqyxsf4h>
+	s=arc-20240116; t=1765964829; c=relaxed/simple;
+	bh=2TdWibhf5ZP3VSAv96FB5mOfcfdZyF1zBRAuRMzN4h4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=tnmiZDMCOVgY+ac/mBrN1ul7zMFa1lwVmTu73iH17buI3GVpmXG3LWLTQPPwqR4antOQILJTuBcbOD6l8Puk+CqgDSLsbsbc7oMtcVmAKvzMD7hh7+Qvf9fCaNuFj80iLaBxJHtrpPaMm3scGsSwh/Z80DRpuNHAWyJIn7EBfkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=MRO4qPIx; arc=none smtp.client-ip=95.215.58.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1765964813;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=oN9R7byRGmHEs6T0OtpuwOuRpbJv46Zq9CpZBf5+XJg=;
+	b=MRO4qPIxxsVdDqwXzC7u9PLqRjNXx7wnrDSDf1lYyiYd50PIXjJACLh+SJDhboDde2AFBp
+	xudEn7lhZost3Ms/RAgSJ4rwmF9QHLUnd5iBfmp1YPdZeHPAwkC3Dg4lXkpK8Qt3kXk60G
+	KOm9TW1XYyMer/EiQIPn82zf46FXx9c=
+From: Qi Zheng <qi.zheng@linux.dev>
+To: will@kernel.org,
+	aneesh.kumar@kernel.org,
+	npiggin@gmail.com,
+	peterz@infradead.org,
+	dev.jain@arm.com,
+	akpm@linux-foundation.org,
+	david@kernel.org,
+	ioworker0@gmail.com,
+	linmag7@gmail.com
+Cc: linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-alpha@vger.kernel.org,
+	loongarch@lists.linux.dev,
+	linux-mips@vger.kernel.org,
+	linux-parisc@vger.kernel.org,
+	linux-um@lists.infradead.org,
+	Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: [PATCH v3 0/7] enable PT_RECLAIM on all 64-bit architectures
+Date: Wed, 17 Dec 2025 17:45:41 +0800
+Message-ID: <cover.1765963770.git.zhengqi.arch@bytedance.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <max5wxkcjjvnftwfwgymybwbnvf5s3ytwpy4oo5i74kfvnav4m@m2wasqyxsf4h>
+X-Migadu-Flow: FLOW_OUT
 
-On Wed, Dec 17, 2025 at 09:21:41AM +0100, Uwe Kleine-König wrote:
-> Hello Sumit,
-> 
-> On Wed, Dec 17, 2025 at 01:25:39PM +0530, Sumit Garg wrote:
-> > On Tue, Dec 16, 2025 at 12:08:38PM +0100, Uwe Kleine-König wrote:
-> > > On Tue, Dec 16, 2025 at 01:08:38PM +0530, Sumit Garg wrote:
-> > > > On Mon, Dec 15, 2025 at 3:02 PM Uwe Kleine-König
-> > > > <u.kleine-koenig@baylibre.com> wrote:
-> > > > >  - Why does optee_probe() in drivers/tee/optee/smc_abi.c unregister all
-> > > > >    optee devices in its error path (optee_unregister_devices())?
-> > > > 
-> > > > This is mostly to take care of if any device got registered before the
-> > > > failure occured. Let me know if you have a better way to address that.
-> > > 
-> > > Without understanding the tee stuff, I'd say: Don't bother and only undo
-> > > the things that probe did before the failure.
-> > 
-> > True, but this is special case where if there is any leftover device
-> > registered from the TEE implementation then it is likely going to cause
-> > the corresponding kernel client driver crash.
-> 
-> You are aware that this is racy? So if a driver crashes e.g. after
-> teedev_close_context() it might happen that it is registered just after
-> optee_unregister_devices() returns.
-> 
+From: Qi Zheng <zhengqi.arch@bytedance.com>
 
-I see your point about the unavoidable race. Maybe it's better to not
-try anything and let the kernel client driver fail.
+Changes in v3:
+ - modify the commit message in [PATCH v3 1/7] (suggested by David Hildenbrand)
+ - make PT_RECLAIM depends on MMU_GATHER_RCU_TABLE_FREE instead of 64BIT
+ - collect Acked-by
+ - rebase onto the next-20251217
 
--Sumit
+Changelog in v2:
+ - fix compilation errors (reported by Magnus Lindholm and kernel test robot)
+ - adjust some code style (suggested by Huacai Chen)
+ - make PT_RECLAIM user-unselectable (suggested by David Hildenbrand)
+ - rebase onto the next-20251119
+
+Hi all,
+
+This series aims to enable PT_RECLAIM on all 64-bit architectures.
+
+On a 64-bit system, madvise(MADV_DONTNEED) may cause a large number of empty PTE
+page table pages (such as 100GB+). To resolve this problem, we need to enable
+PT_RECLAIM, which depends on MMU_GATHER_RCU_TABLE_FREE.
+
+Therefore, this series first enables MMU_GATHER_RCU_TABLE_FREE on all 64-bit
+architectures, and finally makes PT_RECLAIM depend on MMU_GATHER_RCU_TABLE_FREE.
+This way, PT_RECLAIM can be enabled by default on all 64-bit architectures.
+
+Of course, this will also be enabled on some 32-bit architectures that already
+support MMU_GATHER_RCU_TABLE_FREE. That's fine, PT_RECLAIM works well on all
+32-bit architectures as well. Although the benefit isn't significant, there's
+still memory that can be reclaimed. Perhaps PT_RECLAIM can be enabled on all
+32-bit architectures in the future.
+
+Comments and suggestions are welcome!
+
+Thanks,
+Qi
+
+Qi Zheng (7):
+  mm: change mm/pt_reclaim.c to use asm/tlb.h instead of
+    asm-generic/tlb.h
+  alpha: mm: enable MMU_GATHER_RCU_TABLE_FREE
+  LoongArch: mm: enable MMU_GATHER_RCU_TABLE_FREE
+  mips: mm: enable MMU_GATHER_RCU_TABLE_FREE
+  parisc: mm: enable MMU_GATHER_RCU_TABLE_FREE
+  um: mm: enable MMU_GATHER_RCU_TABLE_FREE
+  mm: make PT_RECLAIM depends on MMU_GATHER_RCU_TABLE_FREE
+
+ arch/alpha/Kconfig                   | 1 +
+ arch/alpha/include/asm/tlb.h         | 6 +++---
+ arch/loongarch/Kconfig               | 1 +
+ arch/loongarch/include/asm/pgalloc.h | 7 +++----
+ arch/mips/Kconfig                    | 1 +
+ arch/mips/include/asm/pgalloc.h      | 7 +++----
+ arch/parisc/Kconfig                  | 1 +
+ arch/parisc/include/asm/tlb.h        | 4 ++--
+ arch/um/Kconfig                      | 1 +
+ arch/x86/Kconfig                     | 1 -
+ mm/Kconfig                           | 9 ++-------
+ mm/pt_reclaim.c                      | 2 +-
+ 12 files changed, 19 insertions(+), 22 deletions(-)
+
+-- 
+2.20.1
+
 
