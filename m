@@ -1,154 +1,192 @@
-Return-Path: <linux-mips+bounces-12513-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12514-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8C0F1CCBBFA
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Dec 2025 13:14:45 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id AFB78CCC1DB
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Dec 2025 14:54:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id BB7E33021064
-	for <lists+linux-mips@lfdr.de>; Thu, 18 Dec 2025 12:11:59 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id A95BA30484FD
+	for <lists+linux-mips@lfdr.de>; Thu, 18 Dec 2025 13:54:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 031B332E14F;
-	Thu, 18 Dec 2025 12:11:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3BD1345CA1;
+	Thu, 18 Dec 2025 13:53:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pbfm1N29"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="qFohZZY8"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4A1C328248;
-	Thu, 18 Dec 2025 12:11:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A33234575D;
+	Thu, 18 Dec 2025 13:53:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766059918; cv=none; b=nLfCHDAE7ABNOXlZV7dxcqDdIkqUC4bbEkVj/wQoGasmSk7An4Dl1ITHKdF1qOO86gWQiCr10kBi1EjB9uGaYsV3FlXdaSQKzsW8nMRxWuIAKDO3vAXAjeGDvgVAouWdh7lDjExirFVOr4eCJ/ZSgxiZLUlkf5SQTYNes4/jNMY=
+	t=1766066038; cv=none; b=eI5ADYikyc0fxPNycKcTExm/eeVmYVzo4teAikHb7yw2LWooZsALzMNCI8X+rejqflaRm5jmRxK1mMJigM0zLZmHWgstzDLpD/ViyazerspP1TIGgyD3FuSSynVyp0cT6rfRaVhgw+D+0gNhCiHzWIeGUU6ecJl38Fe8LhBX6i0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766059918; c=relaxed/simple;
-	bh=XGQ+7SgEew4iClGYURs+C9L0stXJTBsZbjZ2oG7UIc0=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=IMrgPo37uRPotPPg1cWjhvzfxdPdASEvFLw5frKAwIF2GSHVQ9zTYuLtIl6qcW6AWtYaYaIPQcp4ELXX4W6cMYymJmYyd2iY5qDXhBqHTnT27Df+QiQ0RkWONG5sL66LYNWasfKBNfxSPi8xK0b+EehL9P1S8Kuv488GwrHuzMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pbfm1N29; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD324C4CEFB;
-	Thu, 18 Dec 2025 12:11:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766059918;
-	bh=XGQ+7SgEew4iClGYURs+C9L0stXJTBsZbjZ2oG7UIc0=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=Pbfm1N29OV600qM6UTmHFrWBgKAAPaEIi8H31U8/D7Fy4/yQH7DtTr8fjL1JU2ZGr
-	 6nwz3dwH1V2m2ot6sPml3YHiTkco7la+c2nu+l+SxzciJta8kjjah21YI0wd4vAeV1
-	 isA2l1yKhqypiDWu4LQeHt4ykcmpaBp/ImSwyvJVre9a3pRs4GXVsIRHvw6x+1fCZ3
-	 aTjQTA27ccRELqk9h2L0kraeNtbMTR5EzRmpbnJomxT+NeArdctTyUhXcuNcwN7S86
-	 MwPNLvKu3CLTwt2KbzjkGo2I4spjFwLzTY0Numflrkc7wTVrfPPFNtqzCFaA++T+6a
-	 inlbyNZVWvrqA==
-Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
-	by mailfauth.phl.internal (Postfix) with ESMTP id BD61AF40069;
-	Thu, 18 Dec 2025 07:11:56 -0500 (EST)
-Received: from phl-imap-08 ([10.202.2.84])
-  by phl-compute-04.internal (MEProxy); Thu, 18 Dec 2025 07:11:56 -0500
-X-ME-Sender: <xms:jO9DafeY02D3zYoswm455JApvwyXo9N__fUotOJi51wAZtuEx-h72w>
-    <xme:jO9DaQDfyGYFoXV11b_RfSRExwBkMCEzZBimiIe7NMQwesYYigYemrJGclZL6-nUN
-    5nH6_xmiiK7evyXwi9tI-nHYYwNuyJSE2e3okgtOjc_KJ6UT8WLB40>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdegheeflecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
-    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
-    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdfnvghonhcu
-    tfhomhgrnhhovhhskhihfdcuoehlvghonheskhgvrhhnvghlrdhorhhgqeenucggtffrrg
-    htthgvrhhnpeekgfduveffueffveduleefgfejhfevfeduueeiueetleeugeeivdfhfedv
-    geeuhfenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecuvehluhhsthgvrhfuihiivg
-    eptdenucfrrghrrghmpehmrghilhhfrhhomheplhgvohhnodhmvghsmhhtphgruhhthhhp
-    vghrshhonhgrlhhithihqdduvdeftdehfeelkeegqddvjeejleejjedvkedqlhgvohhnpe
-    epkhgvrhhnvghlrdhorhhgsehlvghonhdrnhhupdhnsggprhgtphhtthhopeefiedpmhho
-    uggvpehsmhhtphhouhhtpdhrtghpthhtohepsghpsegrlhhivghnkedruggvpdhrtghpth
-    htohepthhssghoghgvnhgusegrlhhphhgrrdhfrhgrnhhkvghnrdguvgdprhgtphhtthho
-    pehrohgsihhnrdhmuhhrphhhhiesrghrmhdrtghomhdprhgtphhtthhopehlihhnuhigse
-    grrhhmlhhinhhugidrohhrghdruhhkpdhrtghpthhtoheptghhrhhishhtohhphhgvrdhl
-    vghrohihsegtshhgrhhouhhprdgvuhdprhgtphhtthhopegurghvvghmsegurghvvghmlh
-    hofhhtrdhnvghtpdhrtghpthhtohepmhhpvgesvghllhgvrhhmrghnrdhiugdrrghupdhr
-    tghpthhtohepohhlvghkshgrnhgurhgpthihshhhtghhvghnkhhosegvphgrmhdrtghomh
-    dprhgtphhtthhopegrnhgurhgvrghssehgrghishhlvghrrdgtohhm
-X-ME-Proxy: <xmx:jO9DaW3ei8lQ9gcPxNPUeQZve5kN2H4YDdliFX36bDRD9uMeDsZ4KA>
-    <xmx:jO9DaUpMFxuOPj7_hGyyy_s579il17M-kR5TgcqcXniyOzdDRg_9ow>
-    <xmx:jO9DaWJBfSyOkp-S-guhU4sCQMQj21t9ZeDTKlB6MTu_eAniobrx8g>
-    <xmx:jO9DaQMmPwxjAIxGEGDyRXW1Dza8HIb57oy-5TquwYRW4FNWdPdjfg>
-    <xmx:jO9DaU3nohCadRXkzPkJY71Xjbbz3hpclv3AJ-2YED3d89Ht1quCx0PH>
-Feedback-ID: i927946fb:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 7DD622CE0072; Thu, 18 Dec 2025 07:11:56 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1766066038; c=relaxed/simple;
+	bh=Gb408fVHMLonuRAakmkxdDWU8SK3ZsmJh94vFt7tIrA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TGVO+XP6VbRdyuLwLPMZoaNKrpo/oZDXsRpcJ1y10oaIsjgdwiHQcscZkD6drQmZ+pNW8AvgeNKRD5oR5zzHGa/C1IUH8Ol6AOCxaYo9iWtQcPXWWjTs5lc13+ADMMXUwR+aaTpaElccSd+TuFnQeP6HxxgMeo4gVJSSvIfqUuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=qFohZZY8; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id DECB91A22CD;
+	Thu, 18 Dec 2025 13:53:48 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id A4BEE606B6;
+	Thu, 18 Dec 2025 13:53:48 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 66249102F0B2D;
+	Thu, 18 Dec 2025 14:53:33 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1766066026; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=RhgSGQYStNGcdPoB3dTlM/CB5TE2tva/NS/z3ptd3wM=;
+	b=qFohZZY8adtmwbRo28+tcgXOIuD5T9ZV6GmStiiS0ZAEXQPvVe9Zcnoe53YsCQv7j9c1kT
+	pTrvVf3pcUkunP7HW/oQvdBg/Lk3nsGsCiYCx3SHIHn49cINe+SDypYYTUNdpwsJxK0JVh
+	ocSroqcU2Nk7str55AMgKkPgbWDRxk2+yhvbttnAqOzQlGRqdP2i4+xde+ODjyK3Zpm5be
+	ZSBh2N3dOdtUob6QOjlSHuVExl0oaNjoD8HBgFGaCPqRDPAFBwnRVvZxfM0UXeEISM/0Op
+	YG/ULfUWn7tCLkV8LWmaP9dHfiDTFdsnlQ2sM6hNfJi3OczZvwptkZvMOkvVJQ==
+Date: Thu, 18 Dec 2025 14:53:32 +0100
+From: Alexandre Belloni <alexandre.belloni@bootlin.com>
+To: Jens Wiklander <jens.wiklander@linaro.org>
+Cc: Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Sumit Garg <sumit.garg@kernel.org>,
+	Olivia Mackall <olivia@selenic.com>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	=?iso-8859-1?Q?Cl=E9ment_L=E9ger?= <clement.leger@bootlin.com>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Sumit Garg <sumit.garg@oss.qualcomm.com>,
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>,
+	Jan Kiszka <jan.kiszka@siemens.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	=?utf-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>,
+	Michael Chan <michael.chan@broadcom.com>,
+	Pavan Chebbi <pavan.chebbi@broadcom.com>,
+	James Bottomley <James.Bottomley@hansenpartnership.com>,
+	Jarkko Sakkinen <jarkko@kernel.org>,
+	Mimi Zohar <zohar@linux.ibm.com>,
+	David Howells <dhowells@redhat.com>,
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>,
+	"Serge E. Hallyn" <serge@hallyn.com>,
+	Peter Huewe <peterhuewe@gmx.de>, op-tee@lists.trustedfirmware.org,
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org,
+	linux-efi@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com,
+	linux-arm-kernel@lists.infradead.org,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	arm-scmi@vger.kernel.org, linux-mips@vger.kernel.org,
+	netdev@vger.kernel.org, linux-integrity@vger.kernel.org,
+	keyrings@vger.kernel.org, linux-security-module@vger.kernel.org,
+	Jason Gunthorpe <jgg@ziepe.ca>
+Subject: Re: [PATCH v2 00/17] tee: Use bus callbacks instead of driver
+ callbacks
+Message-ID: <20251218135332f323fa91@mail.local>
+References: <cover.1765791463.git.u.kleine-koenig@baylibre.com>
+ <CAHUa44FrDZbvRvfN8obf80_k=Eqxe9YxHpjaE5jU7nkxPUwfag@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: AsrGuGndWMm3
-Date: Thu, 18 Dec 2025 14:11:35 +0200
-From: "Leon Romanovsky" <leon@kernel.org>
-To: "Guenter Roeck" <linux@roeck-us.net>
-Cc: "Marek Szyprowski" <m.szyprowski@samsung.com>,
- "Robin Murphy" <robin.murphy@arm.com>,
- "Russell King" <linux@armlinux.org.uk>,
- "Juergen Gross" <jgross@suse.com>,
- "Stefano Stabellini" <sstabellini@kernel.org>,
- "Oleksandr Tyshchenko" <oleksandr_tyshchenko@epam.com>,
- "Richard Henderson" <richard.henderson@linaro.org>,
- "Matt Turner" <mattst88@gmail.com>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- "Helge Deller" <deller@gmx.de>,
- "Madhavan Srinivasan" <maddy@linux.ibm.com>,
- "Michael Ellerman" <mpe@ellerman.id.au>,
- "Nicholas Piggin" <npiggin@gmail.com>,
- "Christophe Leroy" <christophe.leroy@csgroup.eu>,
- "Geoff Levand" <geoff@infradead.org>,
- "David Miller" <davem@davemloft.net>,
- "Andreas Larsson" <andreas@gaisler.com>,
- "Thomas Gleixner" <tglx@linutronix.de>, "Ingo Molnar" <mingo@redhat.com>,
- "Borislav Petkov" <bp@alien8.de>,
- "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
- "H. Peter Anvin" <hpa@zytor.com>, iommu@lists.linux.dev,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- xen-devel@lists.xenproject.org, linux-alpha@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
- linuxppc-dev@lists.ozlabs.org, sparclinux@vger.kernel.org,
- "Jason Gunthorpe" <jgg@ziepe.ca>, "Jason Gunthorpe" <jgg@nvidia.com>
-Message-Id: <77e73a01-9f7e-475b-a810-278f931910ed@app.fastmail.com>
-In-Reply-To: <20251218084002.GD39046@unreal>
-References: <20251015-remove-map-page-v5-0-3bbfe3a25cdf@kernel.org>
- <20251015-remove-map-page-v5-9-3bbfe3a25cdf@kernel.org>
- <b184f1bf-96dc-4546-8512-9cba5ecb58f7@roeck-us.net>
- <20251218084002.GD39046@unreal>
-Subject: Re: [PATCH v5 09/14] parisc: Convert DMA map_page to map_phys interface [qemu
- test failure]
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAHUa44FrDZbvRvfN8obf80_k=Eqxe9YxHpjaE5jU7nkxPUwfag@mail.gmail.com>
+X-Last-TLS-Session-Version: TLSv1.3
 
+On 18/12/2025 08:21:27+0100, Jens Wiklander wrote:
+> Hi,
+> 
+> On Mon, Dec 15, 2025 at 3:17 PM Uwe Kleine-König
+> <u.kleine-koenig@baylibre.com> wrote:
+> >
+> > Hello,
+> >
+> > the objective of this series is to make tee driver stop using callbacks
+> > in struct device_driver. These were superseded by bus methods in 2006
+> > (commit 594c8281f905 ("[PATCH] Add bus_type probe, remove, shutdown
+> > methods.")) but nobody cared to convert all subsystems accordingly.
+> >
+> > Here the tee drivers are converted. The first commit is somewhat
+> > unrelated, but simplifies the conversion (and the drivers). It
+> > introduces driver registration helpers that care about setting the bus
+> > and owner. (The latter is missing in all drivers, so by using these
+> > helpers the drivers become more correct.)
+> >
+> > v1 of this series is available at
+> > https://lore.kernel.org/all/cover.1765472125.git.u.kleine-koenig@baylibre.com
+> >
+> > Changes since v1:
+> >
+> >  - rebase to v6.19-rc1 (no conflicts)
+> >  - add tags received so far
+> >  - fix whitespace issues pointed out by Sumit Garg
+> >  - fix shutdown callback to shutdown and not remove
+> >
+> > As already noted in v1's cover letter, this series should go in during a
+> > single merge window as there are runtime warnings when the series is
+> > only applied partially. Sumit Garg suggested to apply the whole series
+> > via Jens Wiklander's tree.
+> > If this is done the dependencies in this series are honored, in case the
+> > plan changes: Patches #4 - #17 depend on the first two.
+> >
+> > Note this series is only build tested.
+> >
+> > Uwe Kleine-König (17):
+> >   tee: Add some helpers to reduce boilerplate for tee client drivers
+> >   tee: Add probe, remove and shutdown bus callbacks to tee_client_driver
+> >   tee: Adapt documentation to cover recent additions
+> >   hwrng: optee - Make use of module_tee_client_driver()
+> >   hwrng: optee - Make use of tee bus methods
+> >   rtc: optee: Migrate to use tee specific driver registration function
+> >   rtc: optee: Make use of tee bus methods
+> >   efi: stmm: Make use of module_tee_client_driver()
+> >   efi: stmm: Make use of tee bus methods
+> >   firmware: arm_scmi: optee: Make use of module_tee_client_driver()
+> >   firmware: arm_scmi: Make use of tee bus methods
+> >   firmware: tee_bnxt: Make use of module_tee_client_driver()
+> >   firmware: tee_bnxt: Make use of tee bus methods
+> >   KEYS: trusted: Migrate to use tee specific driver registration
+> >     function
+> >   KEYS: trusted: Make use of tee bus methods
+> >   tpm/tpm_ftpm_tee: Make use of tee specific driver registration
+> >   tpm/tpm_ftpm_tee: Make use of tee bus methods
+> >
+> >  Documentation/driver-api/tee.rst             | 18 +----
+> >  drivers/char/hw_random/optee-rng.c           | 26 ++----
+> >  drivers/char/tpm/tpm_ftpm_tee.c              | 31 +++++---
+> >  drivers/firmware/arm_scmi/transports/optee.c | 32 +++-----
+> >  drivers/firmware/broadcom/tee_bnxt_fw.c      | 30 ++-----
+> >  drivers/firmware/efi/stmm/tee_stmm_efi.c     | 25 ++----
+> >  drivers/rtc/rtc-optee.c                      | 27 ++-----
+> >  drivers/tee/tee_core.c                       | 84 ++++++++++++++++++++
+> >  include/linux/tee_drv.h                      | 12 +++
+> >  security/keys/trusted-keys/trusted_tee.c     | 17 ++--
+> >  10 files changed, 164 insertions(+), 138 deletions(-)
+> >
+> > base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
+> > --
+> > 2.47.3
+> >
+> 
+> Thank you for the nice cleanup, Uwe.
+> 
+> I've applied patch 1-3 to the branch tee_bus_callback_for_6.20 in my
+> tree at https://git.kernel.org/pub/scm/linux/kernel/git/jenswi/linux-tee.git/
+> 
+> The branch is based on v6.19-rc1, and I'll try to keep it stable for
+> others to depend on, if needed. Let's see if we can agree on taking
+> the remaining patches via that branch.
 
+6 and 7 can go through your branch.
 
-On Thu, Dec 18, 2025, at 10:40, Leon Romanovsky wrote:
-> On Wed, Dec 17, 2025 at 04:17:38AM -0800, Guenter Roeck wrote:
->> Hi,
->> 
->> On Wed, Oct 15, 2025 at 12:12:55PM +0300, Leon Romanovsky wrote:
->> > From: Leon Romanovsky <leonro@nvidia.com>
->> > 
->> > Perform mechanical conversion from .map_page to .map_phys callback.
->> > 
->> > Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
->> > Signed-off-by: Leon Romanovsky <leonro@nvidia.com>
->> 
->> This patch causes all my 32-bit parisc qemu tests with C3700 machine
->> to fail. Network interface tests fail, and all boot attempts from
->> any kind of hard drive (scsi, usb) fail with this patch in the tree.
->
-> Thanks for the report. I have a fix ready; I'll clean it up and send it out
-> by EOD.
-
-The fix is available here
-https://lore.kernel.org/all/20251218-fix-parisc-conversion-v1-1-4a04d26b0168@nvidia.com/T/#u
-
-Thanks
-
->
->> 
->> Guenter
+-- 
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
