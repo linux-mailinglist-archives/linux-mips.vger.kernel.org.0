@@ -1,144 +1,148 @@
-Return-Path: <linux-mips+bounces-12535-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12536-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19220CD2ECA
-	for <lists+linux-mips@lfdr.de>; Sat, 20 Dec 2025 13:47:02 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 242D5CD2FE5
+	for <lists+linux-mips@lfdr.de>; Sat, 20 Dec 2025 14:47:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C00AA300DBA0
-	for <lists+linux-mips@lfdr.de>; Sat, 20 Dec 2025 12:47:00 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 4FDE63001636
+	for <lists+linux-mips@lfdr.de>; Sat, 20 Dec 2025 13:47:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 747FD2080C8;
-	Sat, 20 Dec 2025 12:46:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED3D026ED29;
+	Sat, 20 Dec 2025 13:47:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b="Y80MlP0f"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HCmLMJOG"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C5851684A4
-	for <linux-mips@vger.kernel.org>; Sat, 20 Dec 2025 12:46:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 117642641FC;
+	Sat, 20 Dec 2025 13:46:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766234818; cv=none; b=jTY05CliVbwqCWkH3yo9R/NX/NMpcsbhl69xVQJu2vMIEufLGvi41Itu2nXBzxD56/eVTtS3Iy+tFe2U6ct7FIk5eYmIC4SCL54HHuYPzeJXdVwb3YfWbRFQfloNLnjOZmFEJYCb9urM2Yg2RGIwKcA9gmLRGmEaowUs2rUBHl4=
+	t=1766238422; cv=none; b=sBwzXjOO3OikQQ++9x4Gx91Muqnve6p/nfjGOd+V2lwGjl71S7GsK60jMzfBZWVbRuRfHMmG6vC4g4nKXXRiNFqMSqmD9sp9Ee1UARKYqINZDJTkPxsMj9cFZgxc7ReynW1OGmj09MDzh1Bu/hCbVYybUK9FObFi5yvnublXZg4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766234818; c=relaxed/simple;
-	bh=BMqWG7tVLRpE0d5CCcucZYfHD30N453xL0DULNwoUjE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qh0SwQZFuMdn5F8nogtD1r+/rH/8FSr94wSB0rbWAyoZodrx1ycgedNX+GbbhGV0R52Gtx0vskpDLSTCXaYqiQsNW3sRfe36/XF295tMJvNj1SDBhWgs/zUAfS4kSEIqJNmi//nmicJCTjXoYcBBhbRlCKvoptZkMhwtfV8Y4Qc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com; spf=pass smtp.mailfrom=googlemail.com; dkim=pass (2048-bit key) header.d=googlemail.com header.i=@googlemail.com header.b=Y80MlP0f; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=googlemail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=googlemail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2a0c09bb78cso18163945ad.0
-        for <linux-mips@vger.kernel.org>; Sat, 20 Dec 2025 04:46:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=googlemail.com; s=20230601; t=1766234814; x=1766839614; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PnLeQHT6gKO5LrS+1ND5Ys5FEsU3x/z5LzPcGERhZEM=;
-        b=Y80MlP0fmDp8tm4zieU3AulAPFsuZnuiz+9owEEQqyJqTATrexNsDnR76R4JpTFEyG
-         D589R+STSY6H58P+zUmUonSEQOPIihahjMibqy7il6/G/yl9m5FxjuP0NO2VA7AJR2B4
-         ANrZ8WfbRm5zJI7HsdBWwBZ3WNSlGT/WnjGTXCPCTszc2V5jcPB58ADfOEXna1r1d+QX
-         dIUAZ7JjUtEZUv8/qoIzP4o7BuMRoBE0SjyeqSu2Zqv35Zf5ciVGE+QLao3y/wd8EPvh
-         cfHz42rxGzucWgI6TZh4ZA0Jd7EkEkm+V18BwdgCNfCTBQsZqR73SD3ecY6HKLmygYGA
-         m2hg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766234814; x=1766839614;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=PnLeQHT6gKO5LrS+1ND5Ys5FEsU3x/z5LzPcGERhZEM=;
-        b=rOs8PKzMh4hn4EdyCtwmoJInffJo+8ZkRBMeeKprO6lshfUORaU0uGYbbxjcjypB6H
-         KmHHnt0y+bHhSHTDS00LCtdd/C4OH+tbzxiPJUVS7LlOMxcSR5pzQi3/ddt49F6KF1mN
-         s7KCFv3J5CV/Fts6ZhaY+zKJS3ALkN2RAev7rT+9eGg5CAqdfpPPDqjqllXvL92SSJ46
-         jpXPNPon6MYz79/P0lSbuuhJg/hWBJI8lF11wuUdJOUj7i9LDDnziIexibAOMJwmisQ9
-         FLupGOOXqvfyjBHIwGaPbOsPxLdztZoF+FITwXk5Ea8A+UoM/2NqoalwgiJmpwe0Szc7
-         p1WQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWAsiCNlws64MQ43ZWpVliVkojkdocnn5yrBDIGARKeeH1fGK08WZ+ksdAkrDh9BjKVtSvIh8bdFKwD@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2uhBbCSl4rwxcOaxoVXMNdsXuggHTI5zjvlYwl5YDSUqtiAZu
-	a2DtzZSmRxlVvhl3CWuZG/doAldCkt4BktUjxiWVGBG4RNCeOhQQfcxTO7dTxXn6WcZApLsx7yQ
-	6ZiKBUWG7DdcJanMF3MCLbPvlBT7cZyw=
-X-Gm-Gg: AY/fxX6nPnOpvOFUVBF3XgP1XJf7BNzcqY3zIh5ORuB4EBVZiAus9Ht0PipqpmEJ3qN
-	C8xhn3q83jpTalVJmZTpLlb8nIfk2jRpep2wXH9UkPklCiDEsEAqeDxqgN7awHbsTrJWO8vufDF
-	FJ8jFl0X5Koc6UODwgVGko8JzGxR2nuquAYZQUJVxaeMW5/R1Qwl7yc4yv5mGKiyPs3Jf8doSlm
-	8xhg/m4Sk2OXfsdul7y3jctb15e4tynDIZ8/CNSEndRokzSNBJA2Sppb8euE2lI7EtmD/WTRqFu
-	kaNwLbeUA+nkk3HBsArQ8VgB32Jt46An/+yLCDU=
-X-Google-Smtp-Source: AGHT+IGTZVFXf6rAC1bEGZmO7YaQs0mj72/Bxua6dbMs1yZR8CidcfGRl/4LVrNe9mb+pBaCXI6UiiHmEjBYB9UahrA=
-X-Received: by 2002:a17:903:198e:b0:2a0:99f7:67b4 with SMTP id
- d9443c01a7336-2a2f0cbc904mr55199135ad.8.1766234813931; Sat, 20 Dec 2025
- 04:46:53 -0800 (PST)
+	s=arc-20240116; t=1766238422; c=relaxed/simple;
+	bh=mg0C+4JvGjCoIqDQ0gw+w3ko0LP3L+QMx2EtAcbTWXY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KrGLdBTjDOrsIsypJgEvMqw/Og7pM4YifghpEjnUxsnmW8UI2YNii+nx+FVGynUGlr/CpK79LgjebeP51lB5X0d53RqyO8lSe12Ch5vYqd0thg3FOXA35S1hW3N95T7Wcgo+Wu4F0mnLAAtxDABIriUKu/XbHy7zd3f8qA1ozKM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HCmLMJOG; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1766238420; x=1797774420;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=mg0C+4JvGjCoIqDQ0gw+w3ko0LP3L+QMx2EtAcbTWXY=;
+  b=HCmLMJOGeoCo08qxNOAkg2DxY5JB+UBfcp45M/u9lxUkEY391IRIj3Ck
+   BLaYzn5LU5nIDQY8dFwGNWBjwQaWv4wmB7jivW8cao3zrqZKaz6+vyrvT
+   SzBZi/AUOEZICVlZ1tlu9F1f/5OXZ50R7R4iTDRKw1VGqr/ltqNQP8RUV
+   3cYNbzPA2A6U/TmbhCyT+NjTk2oYd1wW3BW6fiKR2Z7/Lqsnw5LPE4rrP
+   W4AdrFV4f2pwp8k2AcpyrFHRdQzILw0GkmZVuM3tPRqgwkICO6G4TIqMQ
+   Ik9+mCoFHpY82avNPUmzp+OMTLfqCSRV9LV4QJGOhFFHnk0qdICCvm56r
+   g==;
+X-CSE-ConnectionGUID: joPC7Y9AScGl8/HQJU1WGg==
+X-CSE-MsgGUID: oRoN9JEcRWGaQOUb77GIbw==
+X-IronPort-AV: E=McAfee;i="6800,10657,11635"; a="68110717"
+X-IronPort-AV: E=Sophos;i="6.20,256,1758610800"; 
+   d="scan'208";a="68110717"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Dec 2025 05:47:00 -0800
+X-CSE-ConnectionGUID: JzUVON0yTAWl/bhgOMz6qg==
+X-CSE-MsgGUID: uPZuWzmvSUCYCu6PZRn0bQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,164,1763452800"; 
+   d="scan'208";a="198864810"
+Received: from lkp-server01.sh.intel.com (HELO 0d09efa1b85f) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 20 Dec 2025 05:46:55 -0800
+Received: from kbuild by 0d09efa1b85f with local (Exim 4.98.2)
+	(envelope-from <lkp@intel.com>)
+	id 1vWxIK-000000004Zt-3NbM;
+	Sat, 20 Dec 2025 13:46:52 +0000
+Date: Sat, 20 Dec 2025 21:46:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: =?iso-8859-1?Q?Beno=EEt?= Monin <benoit.monin@bootlin.com>,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	=?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Linus Walleij <linusw@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+	linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+	linux-gpio@vger.kernel.org,
+	=?iso-8859-1?Q?Beno=EEt?= Monin <benoit.monin@bootlin.com>
+Subject: Re: [PATCH 05/13] pinctrl: eyeq5: Use match data
+Message-ID: <202512202102.TqCsNdqY-lkp@intel.com>
+References: <20251217-eyeq6lplus-v1-5-e9cdbd3af4c2@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251219-qcom-sa8255p-emac-v6-0-487f1082461e@oss.qualcomm.com> <20251219-qcom-sa8255p-emac-v6-1-487f1082461e@oss.qualcomm.com>
-In-Reply-To: <20251219-qcom-sa8255p-emac-v6-1-487f1082461e@oss.qualcomm.com>
-From: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-Date: Sat, 20 Dec 2025 13:46:43 +0100
-X-Gm-Features: AQt7F2qpxOToWQKPYlABMJwLqho0Xychdf9rQln23uKf9MMkpqj4U-v6YeXkrYo
-Message-ID: <CAFBinCAXb87FKwA_=UEx5YTekevVUun1gieUfMux=oQAgjZS7w@mail.gmail.com>
-Subject: Re: [PATCH v6 1/7] dt-bindings: net: qcom: document the ethqos device
- for SCMI-based systems
-To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Cc: Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Richard Cochran <richardcochran@gmail.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
-	Vinod Koul <vkoul@kernel.org>, Giuseppe Cavallaro <peppe.cavallaro@st.com>, 
-	Jose Abreu <joabreu@synopsys.com>, Chen-Yu Tsai <wens@kernel.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
-	Matthew Gerlach <matthew.gerlach@altera.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
-	Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
-	Keguang Zhang <keguang.zhang@gmail.com>, Shawn Guo <shawnguo@kernel.org>, 
-	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
-	Fabio Estevam <festevam@gmail.com>, Jan Petrous <jan.petrous@oss.nxp.com>, s32@nxp.com, 
-	Romain Gantois <romain.gantois@bootlin.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, Heiko Stuebner <heiko@sntech.de>, 
-	Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@gmail.com>, 
-	Emil Renner Berthing <kernel@esmil.dk>, Minda Chen <minda.chen@starfivetech.com>, 
-	Drew Fustini <fustini@kernel.org>, Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, 
-	Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>, 
-	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
-	Maxime Ripard <mripard@kernel.org>, Shuang Liang <liangshuang@eswincomputing.com>, 
-	Zhi Li <lizhi2@eswincomputing.com>, Shangjuan Wei <weishangjuan@eswincomputing.com>, 
-	"G. Jaya Kumaran" <vineetha.g.jaya.kumaran@intel.com>, Clark Wang <xiaoning.wang@nxp.com>, 
-	Linux Team <linux-imx@nxp.com>, Frank Li <Frank.Li@nxp.com>, David Wu <david.wu@rock-chips.com>, 
-	Samin Guo <samin.guo@starfivetech.com>, 
-	Christophe Roullier <christophe.roullier@foss.st.com>, Swathi K S <swathi.ks@samsung.com>, 
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
-	linux-stm32@st-md-mailman.stormreply.com, 
-	linux-arm-kernel@lists.infradead.org, Drew Fustini <dfustini@tenstorrent.com>, 
-	linux-sunxi@lists.linux.dev, linux-amlogic@lists.infradead.org, 
-	linux-mips@vger.kernel.org, imx@lists.linux.dev, 
-	linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org, 
-	sophgo@lists.linux.dev, linux-riscv@lists.infradead.org, 
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20251217-eyeq6lplus-v1-5-e9cdbd3af4c2@bootlin.com>
 
-On Fri, Dec 19, 2025 at 12:42=E2=80=AFPM Bartosz Golaszewski
-<bartosz.golaszewski@oss.qualcomm.com> wrote:
->
-> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
->
-> Describe the firmware-managed variant of the QCom DesignWare MAC. As the
-> properties here differ a lot from the HLOS-managed variant, lets put it
-> in a separate file. Since we need to update the maximum number of power
-> domains, let's update existing bindings referencing the top-level
-> snps,dwmac.yaml and limit their maxItems for power-domains to 1.
->
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-> ---
->  .../bindings/net/allwinner,sun7i-a20-gmac.yaml     |  3 +
->  .../bindings/net/altr,socfpga-stmmac.yaml          |  3 +
->  .../bindings/net/amlogic,meson-dwmac.yaml          |  3 +
-Amlogic SoCs have up to one power domain, so for the Amlogic part:
-Reviewed-by: Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+Hi Benoît,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on 8f0b4cce4481fb22653697cced8d0d04027cb1e8]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Beno-t-Monin/dt-bindings-mips-Add-Mobileye-EyeQ6Lplus-SoC/20251217-214926
+base:   8f0b4cce4481fb22653697cced8d0d04027cb1e8
+patch link:    https://lore.kernel.org/r/20251217-eyeq6lplus-v1-5-e9cdbd3af4c2%40bootlin.com
+patch subject: [PATCH 05/13] pinctrl: eyeq5: Use match data
+config: parisc-randconfig-r051-20251218 (https://download.01.org/0day-ci/archive/20251220/202512202102.TqCsNdqY-lkp@intel.com/config)
+compiler: hppa-linux-gcc (GCC) 15.1.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20251220/202512202102.TqCsNdqY-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202512202102.TqCsNdqY-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from include/linux/bits.h:5,
+                    from include/linux/ratelimit_types.h:5,
+                    from include/linux/ratelimit.h:5,
+                    from include/linux/dev_printk.h:16,
+                    from include/linux/device.h:15,
+                    from include/linux/auxiliary_bus.h:11,
+                    from drivers/pinctrl/pinctrl-eyeq5.c:21:
+   drivers/pinctrl/pinctrl-eyeq5.c: In function 'eq5p_pinconf_set':
+>> include/vdso/bits.h:7:40: warning: 'offset' is used uninitialized [-Wuninitialized]
+       7 | #define BIT(nr)                 (UL(1) << (nr))
+         |                                 ~~~~~~~^~~~~~~~
+   drivers/pinctrl/pinctrl-eyeq5.c:533:19: note: in expansion of macro 'BIT'
+     533 |         u32 val = BIT(offset);
+         |                   ^~~
+   drivers/pinctrl/pinctrl-eyeq5.c:532:22: note: 'offset' declared here
+     532 |         unsigned int offset;
+         |                      ^~~~~~
+
+
+vim +/offset +7 include/vdso/bits.h
+
+3945ff37d2f48d Vincenzo Frascino 2020-03-20  6  
+3945ff37d2f48d Vincenzo Frascino 2020-03-20 @7  #define BIT(nr)			(UL(1) << (nr))
+cbdb1f163af2bb Andy Shevchenko   2022-11-28  8  #define BIT_ULL(nr)		(ULL(1) << (nr))
+3945ff37d2f48d Vincenzo Frascino 2020-03-20  9  
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
