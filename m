@@ -1,77 +1,77 @@
-Return-Path: <linux-mips+bounces-12598-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12599-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EAA7FCDDA91
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Dec 2025 11:28:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CF44CDDA98
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Dec 2025 11:28:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D69B8305B920
-	for <lists+linux-mips@lfdr.de>; Thu, 25 Dec 2025 10:26:24 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 2876F3063437
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Dec 2025 10:26:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CDAA31A800;
-	Thu, 25 Dec 2025 10:26:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74C6731AA85;
+	Thu, 25 Dec 2025 10:26:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gCj6forG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="haN5wIAG"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89DCD31A554
-	for <linux-mips@vger.kernel.org>; Thu, 25 Dec 2025 10:26:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E04931A7E6
+	for <linux-mips@vger.kernel.org>; Thu, 25 Dec 2025 10:26:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766658383; cv=none; b=Yt60eCQ/FKPu7/6Eub0PGnJz3RmV/RLe6nqMUuFO2n0g0i6Af5AfGKDJupeSc7m0d4lI8Q55rwJGm9DZ+iOSExsVSX/yJS/KL4R82nnReGu+DeinQp5gfLU4trw7+/Ir4jtcAfAvNbeOVwCkursGcevkmv61aRRPDlGz4A56gd8=
+	t=1766658384; cv=none; b=In9TqPnA74Zaf5A0Iad7T/Az11eMfgJEzIbhM5hNGD27kEL3UcEefh30pXxxBTcMKdky1FfxjQTJkCafZkxl8VNqtWO2wVGXpOSOMX0O5qs8arJilYFr4RletiI1FbCTkvjMCWayI9U83Y6ag7/7DC8t6wYf2tFKfoyGwBGKpUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766658383; c=relaxed/simple;
-	bh=XgiT7o9sIoPT2NxgqWtaJ1fVJAjUOhvncV6lWTyMGlA=;
+	s=arc-20240116; t=1766658384; c=relaxed/simple;
+	bh=XDw0CicUcDyUIbwIo5vVTd2jTNcmyLEasGp4m1GbB4k=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=qbSMjDgWa7cc66PUSpgTn7Ew26ebbIELnhQdXbwkFsaFB6bsv0fqvn4bs5XFThOSW9ZTwDfxp3E+rzqp6XB+NNqzpBMNfqZvF6EUMq31CyljU1ANkE4NULyBKzBGyuWfmnZqWqh43f0Y+xcdPK9I2QLYASBdYD4F7OXbva2/+2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gCj6forG; arc=none smtp.client-ip=209.85.208.52
+	 MIME-Version; b=pWKoAeY2fLhPLPRCckT+tGPQMMcsS2/d8hOP5FmRc98CnK4d5xN+4MQAGxYgdpYaV6StbNKnU9o/y8Xhwbkq5qEIRPEqAC+nS2eO0HPdJVEXdStDElFc8RxCKyocHCNcQgYWyxnVAh6OS69FCjTveXCO/W3o4HnekY7fozgxajI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=haN5wIAG; arc=none smtp.client-ip=209.85.208.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-64ba74e6892so8248124a12.2
-        for <linux-mips@vger.kernel.org>; Thu, 25 Dec 2025 02:26:20 -0800 (PST)
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-64b7a38f07eso8274718a12.0
+        for <linux-mips@vger.kernel.org>; Thu, 25 Dec 2025 02:26:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766658379; x=1767263179; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1766658380; x=1767263180; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=p98EHDrlfxc1Mpcl2fjHHNglQmuITwMNLij1fvJce3I=;
-        b=gCj6forGu+11yn43QRuT6IyURWvReDv1Bn+YPennC8x1qFCWP6Qp1klTSeNCutp5d4
-         epSLvsRu7KD8H3ktxllN9YrgGQsij409W/x8GCp24dlD4gpIo+LFe6Res0/q+SW6GruL
-         ygsRd6MXc1nYJhv38phU0JPs73A/173q+4Da1XYPuYnxW7ZhYxBDX5odnR9lBPprwwFO
-         9+XO9ICBcYIKlRnwyMy3iK/P3rftcfocLGnrvHwlMkrCx6VXgrFPSi5ziASRnchncLrM
-         2wrnfDhHBeleTJXjyrXJKspObDr4spuxsWH6I1CATjYFRBRaFu5BwD7ZzFgZsww5AL4t
-         miug==
+        bh=bbdavY/KGPzS+o6sMh5gv5dV0PnkFU7uBfyVWtnqgmE=;
+        b=haN5wIAGmIrPGmfirNaQHf+y8vIG8KfOrBx/mCeVC8Zg5UIkeJR1MmVWjiJylOjQv9
+         RA6IUdN7hMIWoI1LQXOo/xv/ymf+MgtWWjNkBCWGMJ1UJHO3gEi78kv9dEjdcI5pWGoK
+         3HnURzEKEiNNexq6bnjyTLaaWt+W4kd2bgytA7cn5IaIxTcH1mQPvh2DAp0EWXdKeVqn
+         dYpKadiLtDXACoT7nLmHB7hbsKqDBLKvcQM5+1XiLwXKTWR4ogdc7/VHPsmhtL3X8Hyx
+         2tbuZzvTFsL8hhpdLrZ2BO8J/G1khzE7wo8oDSSgfm/hFVDly4RpOKQLauPWvlPI9CNB
+         5CgQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766658379; x=1767263179;
+        d=1e100.net; s=20230601; t=1766658380; x=1767263180;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-gg:x-gm-message-state:from
          :to:cc:subject:date:message-id:reply-to;
-        bh=p98EHDrlfxc1Mpcl2fjHHNglQmuITwMNLij1fvJce3I=;
-        b=KJEUGvRXuArGemNxBnB+AGFvrnU1IdljRZH7gxskLz1zh8Ba8Q9GH2Y0Qp6FCxgLx9
-         mzj/TXzPgeidMJTqke+7TnzqmTIFfKtzIR9drgLjZvrU27L+cncj2BozARsjXqaRsB1J
-         YE7icxcWw/RuwLM5z39ufZeu9uLHTPgddomqqBsaLLfreKOQNerw28b4ZvFtfC76XNFd
-         47VK1jJe5HDYFzj9pLe1FOWEPedFIAUpVj6HJV5OZbpXC2ZRrju9w/VX+JelSG40jlOY
-         anrGR9+blWobtZLjbRbD76qvkxObVTCIASdvwAIrnadoXXtatVeB26oYY45W7wQ3zN/9
-         dH7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXVM5xvmgDi2jEUPxZr4MpEE9jk3tGBEXHDavigoMSJ0K+7o5zSwqCIRna5qy6+TVBipeBASgQZ98+9@vger.kernel.org
-X-Gm-Message-State: AOJu0YwaNc9sOWyazMf0OMl9GWN1oVeLFkKqBhUyqOv9wEO21blOYDvY
-	zi9VJcMsYMRLMOYLab5HV9qfOe8txbdXeENzJd4JDVMRicfE/MaTMfDn
-X-Gm-Gg: AY/fxX5NTilmg1FmpZmeamJvf/G4uNjR50pg5S0uslKNdKUt0qan5ldcblQ8HQFLPxi
-	FX4qsJRPPyC9hesGoQJ+SbIzP03L6bPX4UHUG+HCsiIiYYQLWoYM2Q/kpwjMxaGhzJe9YGiIQI9
-	ZJlr/a+XZ4Z4d9g+lJYh1bn+3prUelk5tMZSE6P9Eju7GD+09EE4KTLtvLShr6+jXYjzCRRsjQB
-	dTIksjR/bx9SSqOWLzJ/Og8nWshQLcjxYimA3RPV9GACwEN8NfhOTngsMNEM/hGv4wJlc3KtVq8
-	9PT2xd/1c4n8yvJ5xg5PsFOAYV54WdS8GFs9Uk3p1oEUpxc/ASCzB0AkifwBb7ShXTz+TQDMZ1C
-	9kNP2O0JJOeNLqtXWXParjKF41nB1eoYP8NuLEKCyeJhzeLS4SNUu+r6p/uqeSwF22wNjqfsvLb
-	kXbTfujbPORZ2NzECglBVhveFsIP0yERWxa4VjtaaOlzBnWVVlKGAbt3R/QHJjXIDsQOI=
-X-Google-Smtp-Source: AGHT+IGYBVpw0kYjxRt40avCFzl/pEbNgLZr1f0D8xUD5sov7X5pMtkVIPJug9QMK9TGrHu2t5/Nsg==
-X-Received: by 2002:a17:907:7f89:b0:b73:8f33:eee2 with SMTP id a640c23a62f3a-b80371d3877mr2123485766b.48.1766658378448;
-        Thu, 25 Dec 2025 02:26:18 -0800 (PST)
+        bh=bbdavY/KGPzS+o6sMh5gv5dV0PnkFU7uBfyVWtnqgmE=;
+        b=pM5ieEl5wA35gkLphO3WLXK5nBdfZBr2eIWqR8r8sXfWbRDclT6jeCsGlRfsnUhUB2
+         92OVmwnJPPNcJ/SpCnSWG5q74+O5FNTyepWAmeLbfguWL8opWsBwwJSJSAbJcgUb5Cdt
+         lRgHo+F+nuINYkWsNiIldHVu1mfM+gqi+aLC0zy5M1FqXxzy+4e6/kQisubRw3HIaVx1
+         1nGWejXjNOL1nDUlOJAZ1VD2N9A7O0omAqVK0jnkYrLAhKkeovcYb0iJZCvYDUZ9DMD+
+         ByRbYb5CaeqTpN05wToHxNJtAqPj1yJph/LX1hWb5LJwCkZgUrhlmQOw0KPA7C9ybUh4
+         ve/w==
+X-Forwarded-Encrypted: i=1; AJvYcCXPhZhHpE42WUUW9Lfptw7msgIyT9uVEhAKXN9mYSuImk6vurIjqxBqAuu6+QJcnEFPgo9IZg/6OvY0@vger.kernel.org
+X-Gm-Message-State: AOJu0YxCwCRucmulr0fcP47rDpMCMJc5N17XkWvtGqYuWaPFyNribtCO
+	CrIqxgD9vV03BPr/3mdnf10y6jKSj4ol9WSp50QUU5Ssmfh9LzGgNSOu
+X-Gm-Gg: AY/fxX41DEuNypR63DLa8lqZjLms3fKCNFltDLQfii5JRa32wKBb1WXNvlgoDanTPMA
+	OUugGXBD1Bl3SnzU7TljkSOfv8B5YwgLzQpyK04Fn7F3JBrOuZnRD8pWobMec+GBMAl7yWpX4+x
+	1NZNmP8oLO3Wk+9cl4js6XrJgnSzwONfBbagWZumhyeqwEyV7RzfyGypYZlakpfpv+A6RMzqAps
+	ABZO3rHOutP8uRAJcOdhPYq17Ui6KOBBrbD/V+CeRKPjmgyaaFWcRz0iBL7+gGOYzc4uyJHcMTl
+	1gd4Rn/22jgC7KVP4uS9kzqN8fq92H8LFUL8GhCvVjN1p9RRg/r+v+HpGR/vLaj+9WazWewIRYA
+	mg31bhXhg+Rc7VYmsEuMec3R+gOSsZ4OdXTUzCRZQJz7wBWQIjKoLVtfq+pMzTp5qtNSr0Ge+me
+	zRNzB+WDWWWw2jdvoqWgOCDy6M4Z9iI3fO3vZLo9ifdWIaxMMU4V2pXZPFTFs5e6or54Y=
+X-Google-Smtp-Source: AGHT+IGlygVhnf4kK96SyejVfTPYWiK9b3dzlGY8ni6rseZRXIsqfMGNRAnZDGe710l1R5Y4qNze3w==
+X-Received: by 2002:a17:907:7393:b0:b80:40d3:1fc6 with SMTP id a640c23a62f3a-b8040d3232cmr1371363266b.54.1766658379530;
+        Thu, 25 Dec 2025 02:26:19 -0800 (PST)
 Received: from localhost (dslb-002-205-018-238.002.205.pools.vodafone-ip.de. [2.205.18.238])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8037a5c4dfsm2028659666b.14.2025.12.25.02.26.17
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8037ab86cesm2034844566b.19.2025.12.25.02.26.18
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 25 Dec 2025 02:26:17 -0800 (PST)
+        Thu, 25 Dec 2025 02:26:19 -0800 (PST)
 From: Jonas Gorski <jonas.gorski@gmail.com>
 To: Kamal Dasu <kamal.dasu@broadcom.com>,
 	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
@@ -87,9 +87,9 @@ Cc: Kamal Dasu <kdasu.kdev@gmail.com>,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
 	linux-mips@vger.kernel.org
-Subject: [PATCH 3/4] mips: bmips: dts: fix qspi interrupt order
-Date: Thu, 25 Dec 2025 11:25:32 +0100
-Message-ID: <20251225102533.30772-4-jonas.gorski@gmail.com>
+Subject: [PATCH 4/4] mips: bmips: dts: fix qspi register order
+Date: Thu, 25 Dec 2025 11:25:33 +0100
+Message-ID: <20251225102533.30772-5-jonas.gorski@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20251225102533.30772-1-jonas.gorski@gmail.com>
 References: <20251225102533.30772-1-jonas.gorski@gmail.com>
@@ -101,235 +101,147 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The binding for brcm,spi-bcm-qspi requires the interrupt-names in a
-certain order, so reorder the interrupts to match it.
+Align the register order to the schema. Fixes warnings like:
 
-Fixes warnings like:
-
-arch/mips/boot/dts/brcm/bcm97435svmb.dtb: spi@41d200 (brcm,spi-brcmstb-qspi): interrupt-names: 'oneOf' conditional failed, one must be fixed:
-	['spi_lr_fullness_reached', 'spi_lr_session_aborted', 'spi_lr_impatient', 'spi_lr_session_done', 'spi_lr_overread', 'mspi_done', 'mspi_halted'] is too long
-	'mspi_done' was expected
-	'spi_l1_intr' was expected
-	'mspi_halted' was expected
-	'spi_lr_fullness_reached' was expected
-	'spi_lr_session_aborted' was expected
-	'spi_lr_impatient' was expected
-	'spi_lr_session_done' was expected
-	'spi_lr_overread' was expected
+arch/mips/boot/dts/brcm/bcm97435svmb.dtb: spi@41d200 (brcm,spi-brcmstb-qspi): reg-names:0: 'cs_reg' is not one of ['hif_mspi', 'mspi']
+	from schema $id: http://devicetree.org/schemas/spi/brcm,spi-bcm-qspi.yaml
+arch/mips/boot/dts/brcm/bcm97435svmb.dtb: spi@41d200 (brcm,spi-brcmstb-qspi): reg-names:1: 'bspi' was expected
+	from schema $id: http://devicetree.org/schemas/spi/brcm,spi-bcm-qspi.yaml
+arch/mips/boot/dts/brcm/bcm97435svmb.dtb: spi@41d200 (brcm,spi-brcmstb-qspi): reg-names:2: 'bspi' is not one of ['intr_regs', 'intr_status_reg', 'cs_reg']
 	from schema $id: http://devicetree.org/schemas/spi/brcm,spi-bcm-qspi.yaml
 
 Signed-off-by: Jonas Gorski <jonas.gorski@gmail.com>
 ---
- arch/mips/boot/dts/brcm/bcm7125.dtsi | 10 +++++-----
- arch/mips/boot/dts/brcm/bcm7346.dtsi | 10 +++++-----
- arch/mips/boot/dts/brcm/bcm7358.dtsi | 10 +++++-----
- arch/mips/boot/dts/brcm/bcm7360.dtsi | 10 +++++-----
- arch/mips/boot/dts/brcm/bcm7362.dtsi | 10 +++++-----
- arch/mips/boot/dts/brcm/bcm7420.dtsi | 10 +++++-----
- arch/mips/boot/dts/brcm/bcm7425.dtsi | 10 +++++-----
- arch/mips/boot/dts/brcm/bcm7435.dtsi | 10 +++++-----
- 8 files changed, 40 insertions(+), 40 deletions(-)
+ arch/mips/boot/dts/brcm/bcm7125.dtsi | 4 ++--
+ arch/mips/boot/dts/brcm/bcm7346.dtsi | 4 ++--
+ arch/mips/boot/dts/brcm/bcm7358.dtsi | 4 ++--
+ arch/mips/boot/dts/brcm/bcm7360.dtsi | 4 ++--
+ arch/mips/boot/dts/brcm/bcm7362.dtsi | 4 ++--
+ arch/mips/boot/dts/brcm/bcm7420.dtsi | 4 ++--
+ arch/mips/boot/dts/brcm/bcm7425.dtsi | 4 ++--
+ arch/mips/boot/dts/brcm/bcm7435.dtsi | 4 ++--
+ 8 files changed, 16 insertions(+), 16 deletions(-)
 
 diff --git a/arch/mips/boot/dts/brcm/bcm7125.dtsi b/arch/mips/boot/dts/brcm/bcm7125.dtsi
-index 92963a1998b7..dd1cc3cda694 100644
+index dd1cc3cda694..81ee0f49b645 100644
 --- a/arch/mips/boot/dts/brcm/bcm7125.dtsi
 +++ b/arch/mips/boot/dts/brcm/bcm7125.dtsi
-@@ -252,15 +252,15 @@ qspi: spi@443000 {
+@@ -250,8 +250,8 @@ qspi: spi@443000 {
+ 			compatible = "brcm,spi-brcmstb-qspi",
+ 				     "brcm,spi-bcm-qspi";
  			clocks = <&upg_clk>;
- 			reg = <0x440920 0x4 0x443200 0x188 0x443000 0x50>;
- 			reg-names = "cs_reg", "hif_mspi", "bspi";
--			interrupts = <0x0 0x1 0x2 0x3 0x4 0x5 0x6>;
-+			interrupts = <0x5 0x6 0x0 0x1 0x2 0x3 0x4>;
+-			reg = <0x440920 0x4 0x443200 0x188 0x443000 0x50>;
+-			reg-names = "cs_reg", "hif_mspi", "bspi";
++			reg = <0x443200 0x188 0x443000 0x50 0x440920 0x4>;
++			reg-names = "hif_mspi", "bspi", "cs_reg";
+ 			interrupts = <0x5 0x6 0x0 0x1 0x2 0x3 0x4>;
  			interrupt-parent = <&spi_l2_intc>;
--			interrupt-names = "spi_lr_fullness_reached",
-+			interrupt-names = "mspi_done",
-+					  "mspi_halted",
-+					  "spi_lr_fullness_reached",
- 					  "spi_lr_session_aborted",
- 					  "spi_lr_impatient",
- 					  "spi_lr_session_done",
--					  "spi_lr_overread",
--					  "mspi_done",
--					  "mspi_halted";
-+					  "spi_lr_overread";
- 			status = "disabled";
- 		};
- 
+ 			interrupt-names = "mspi_done",
 diff --git a/arch/mips/boot/dts/brcm/bcm7346.dtsi b/arch/mips/boot/dts/brcm/bcm7346.dtsi
-index 42125684b523..21c7418aaf0d 100644
+index 21c7418aaf0d..6efb6347a2e4 100644
 --- a/arch/mips/boot/dts/brcm/bcm7346.dtsi
 +++ b/arch/mips/boot/dts/brcm/bcm7346.dtsi
-@@ -476,15 +476,15 @@ qspi: spi@413000 {
+@@ -474,8 +474,8 @@ qspi: spi@413000 {
+ 			compatible = "brcm,spi-brcmstb-qspi",
+ 				     "brcm,spi-bcm-qspi";
  			clocks = <&upg_clk>;
- 			reg = <0x410920 0x4 0x413200 0x188 0x413000 0x50>;
- 			reg-names = "cs_reg", "hif_mspi", "bspi";
--			interrupts = <0x0 0x1 0x2 0x3 0x4 0x5 0x6>;
-+			interrupts = <0x5 0x6 0x0 0x1 0x2 0x3 0x4>;
+-			reg = <0x410920 0x4 0x413200 0x188 0x413000 0x50>;
+-			reg-names = "cs_reg", "hif_mspi", "bspi";
++			reg = <0x413200 0x188 0x413000 0x50 0x410920 0x4>;
++			reg-names = "hif_mspi", "bspi", "cs_reg";
+ 			interrupts = <0x5 0x6 0x0 0x1 0x2 0x3 0x4>;
  			interrupt-parent = <&spi_l2_intc>;
--			interrupt-names = "spi_lr_fullness_reached",
-+			interrupt-names = "mspi_done",
-+					  "mspi_halted",
-+					  "spi_lr_fullness_reached",
- 					  "spi_lr_session_aborted",
- 					  "spi_lr_impatient",
- 					  "spi_lr_session_done",
--					  "spi_lr_overread",
--					  "mspi_done",
--					  "mspi_halted";
-+					  "spi_lr_overread";
- 			status = "disabled";
- 		};
- 
+ 			interrupt-names = "mspi_done",
 diff --git a/arch/mips/boot/dts/brcm/bcm7358.dtsi b/arch/mips/boot/dts/brcm/bcm7358.dtsi
-index fdc52acab8c8..63b3a42a8dc6 100644
+index 63b3a42a8dc6..527406a5fa4d 100644
 --- a/arch/mips/boot/dts/brcm/bcm7358.dtsi
 +++ b/arch/mips/boot/dts/brcm/bcm7358.dtsi
-@@ -344,15 +344,15 @@ qspi: spi@413000 {
+@@ -342,8 +342,8 @@ qspi: spi@413000 {
+ 			compatible = "brcm,spi-brcmstb-qspi",
+ 				     "brcm,spi-bcm-qspi";
  			clocks = <&upg_clk>;
- 			reg = <0x410920 0x4 0x413200 0x188 0x413000 0x50>;
- 			reg-names = "cs_reg", "hif_mspi", "bspi";
--			interrupts = <0x0 0x1 0x2 0x3 0x4 0x5 0x6>;
-+			interrupts = <0x5 0x6 0x0 0x1 0x2 0x3 0x4>;
+-			reg = <0x410920 0x4 0x413200 0x188 0x413000 0x50>;
+-			reg-names = "cs_reg", "hif_mspi", "bspi";
++			reg = <0x413200 0x188 0x413000 0x50 0x410920 0x4>;
++			reg-names = "hif_mspi", "bspi", "cs_reg";
+ 			interrupts = <0x5 0x6 0x0 0x1 0x2 0x3 0x4>;
  			interrupt-parent = <&spi_l2_intc>;
--			interrupt-names = "spi_lr_fullness_reached",
-+			interrupt-names = "mspi_done",
-+					  "mspi_halted",
-+					  "spi_lr_fullness_reached",
- 					  "spi_lr_session_aborted",
- 					  "spi_lr_impatient",
- 					  "spi_lr_session_done",
--					  "spi_lr_overread",
--					  "mspi_done",
--					  "mspi_halted";
-+					  "spi_lr_overread";
- 			status = "disabled";
- 		};
- 
+ 			interrupt-names = "mspi_done",
 diff --git a/arch/mips/boot/dts/brcm/bcm7360.dtsi b/arch/mips/boot/dts/brcm/bcm7360.dtsi
-index e8b0b0ff7588..9d89da400104 100644
+index 9d89da400104..7ed6dbd145bf 100644
 --- a/arch/mips/boot/dts/brcm/bcm7360.dtsi
 +++ b/arch/mips/boot/dts/brcm/bcm7360.dtsi
-@@ -395,15 +395,15 @@ qspi: spi@413000 {
+@@ -393,8 +393,8 @@ qspi: spi@413000 {
+ 			compatible = "brcm,spi-brcmstb-qspi",
+ 				     "brcm,spi-bcm-qspi";
  			clocks = <&upg_clk>;
- 			reg = <0x410920 0x4 0x413200 0x188 0x413000 0x50>;
- 			reg-names = "cs_reg", "hif_mspi", "bspi";
--			interrupts = <0x0 0x1 0x2 0x3 0x4 0x5 0x6>;
-+			interrupts = <0x5 0x6 0x0 0x1 0x2 0x3 0x4>;
+-			reg = <0x410920 0x4 0x413200 0x188 0x413000 0x50>;
+-			reg-names = "cs_reg", "hif_mspi", "bspi";
++			reg = <0x413200 0x188 0x413000 0x50 0x410920 0x4>;
++			reg-names = "hif_mspi", "bspi", "cs_reg";
+ 			interrupts = <0x5 0x6 0x0 0x1 0x2 0x3 0x4>;
  			interrupt-parent = <&spi_l2_intc>;
--			interrupt-names = "spi_lr_fullness_reached",
-+			interrupt-names = "mspi_done",
-+					  "mspi_halted",
-+					  "spi_lr_fullness_reached",
- 					  "spi_lr_session_aborted",
- 					  "spi_lr_impatient",
- 					  "spi_lr_session_done",
--					  "spi_lr_overread",
--					  "mspi_done",
--					  "mspi_halted";
-+					  "spi_lr_overread";
- 			status = "disabled";
- 		};
- 
+ 			interrupt-names = "mspi_done",
 diff --git a/arch/mips/boot/dts/brcm/bcm7362.dtsi b/arch/mips/boot/dts/brcm/bcm7362.dtsi
-index a1ed0b193389..a0d15fcd3b81 100644
+index a0d15fcd3b81..194b6dd34eab 100644
 --- a/arch/mips/boot/dts/brcm/bcm7362.dtsi
 +++ b/arch/mips/boot/dts/brcm/bcm7362.dtsi
-@@ -391,15 +391,15 @@ qspi: spi@413000 {
+@@ -389,8 +389,8 @@ qspi: spi@413000 {
+ 			compatible = "brcm,spi-brcmstb-qspi",
+ 				     "brcm,spi-bcm-qspi";
  			clocks = <&upg_clk>;
- 			reg = <0x410920 0x4 0x413200 0x188 0x413000 0x50>;
- 			reg-names = "cs_reg", "hif_mspi", "bspi";
--			interrupts = <0x0 0x1 0x2 0x3 0x4 0x5 0x6>;
-+			interrupts = <0x5 0x6 0x0 0x1 0x2 0x3 0x4>;
+-			reg = <0x410920 0x4 0x413200 0x188 0x413000 0x50>;
+-			reg-names = "cs_reg", "hif_mspi", "bspi";
++			reg = <0x413200 0x188 0x413000 0x50 0x410920 0x4>;
++			reg-names = "hif_mspi", "bspi", "cs_reg";
+ 			interrupts = <0x5 0x6 0x0 0x1 0x2 0x3 0x4>;
  			interrupt-parent = <&spi_l2_intc>;
--			interrupt-names = "spi_lr_fullness_reached",
-+			interrupt-names = "mspi_done",
-+					  "mspi_halted",
-+					  "spi_lr_fullness_reached",
- 					  "spi_lr_session_aborted",
- 					  "spi_lr_impatient",
- 					  "spi_lr_session_done",
--					  "spi_lr_overread",
--					  "mspi_done",
--					  "mspi_halted";
-+					  "spi_lr_overread";
- 			status = "disabled";
- 		};
- 
+ 			interrupt-names = "mspi_done",
 diff --git a/arch/mips/boot/dts/brcm/bcm7420.dtsi b/arch/mips/boot/dts/brcm/bcm7420.dtsi
-index 62e7e1602d4e..a38041451faf 100644
+index a38041451faf..be4c9ba3d509 100644
 --- a/arch/mips/boot/dts/brcm/bcm7420.dtsi
 +++ b/arch/mips/boot/dts/brcm/bcm7420.dtsi
-@@ -313,15 +313,15 @@ qspi: spi@443000 {
+@@ -311,8 +311,8 @@ qspi: spi@443000 {
+ 			compatible = "brcm,spi-brcmstb-qspi",
+ 				     "brcm,spi-bcm-qspi";
  			clocks = <&upg_clk>;
- 			reg = <0x440920 0x4 0x443200 0x188 0x443000 0x50>;
- 			reg-names = "cs_reg", "hif_mspi", "bspi";
--			interrupts = <0x0 0x1 0x2 0x3 0x4 0x5 0x6>;
-+			interrupts = <0x5 0x6 0x0 0x1 0x2 0x3 0x4>;
+-			reg = <0x440920 0x4 0x443200 0x188 0x443000 0x50>;
+-			reg-names = "cs_reg", "hif_mspi", "bspi";
++			reg = <0x443200 0x188 0x443000 0x50 0x440920 0x4>;
++			reg-names = "hif_mspi", "bspi", "cs_reg";
+ 			interrupts = <0x5 0x6 0x0 0x1 0x2 0x3 0x4>;
  			interrupt-parent = <&spi_l2_intc>;
--			interrupt-names = "spi_lr_fullness_reached",
-+			interrupt-names = "mspi_done",
-+					  "mspi_halted",
-+					  "spi_lr_fullness_reached",
- 					  "spi_lr_session_aborted",
- 					  "spi_lr_impatient",
- 					  "spi_lr_session_done",
--					  "spi_lr_overread",
--					  "mspi_done",
--					  "mspi_halted";
-+					  "spi_lr_overread";
- 			status = "disabled";
- 		};
- 
+ 			interrupt-names = "mspi_done",
 diff --git a/arch/mips/boot/dts/brcm/bcm7425.dtsi b/arch/mips/boot/dts/brcm/bcm7425.dtsi
-index 71422fd2ecc9..c2b3ea21410d 100644
+index c2b3ea21410d..8c476a20aea5 100644
 --- a/arch/mips/boot/dts/brcm/bcm7425.dtsi
 +++ b/arch/mips/boot/dts/brcm/bcm7425.dtsi
-@@ -487,15 +487,15 @@ qspi: spi@41c000 {
+@@ -485,8 +485,8 @@ qspi: spi@41c000 {
+ 			compatible = "brcm,spi-brcmstb-qspi",
+ 				     "brcm,spi-bcm-qspi";
  			clocks = <&upg_clk>;
- 			reg = <0x419920 0x4 0x41c200 0x188 0x41c000 0x50>;
- 			reg-names = "cs_reg", "hif_mspi", "bspi";
--			interrupts = <0x0 0x1 0x2 0x3 0x4 0x5 0x6>;
-+			interrupts = <0x5 0x6 0x0 0x1 0x2 0x3 0x4>;
+-			reg = <0x419920 0x4 0x41c200 0x188 0x41c000 0x50>;
+-			reg-names = "cs_reg", "hif_mspi", "bspi";
++			reg = <0x41c200 0x188 0x41c000 0x50 0x419920 0x4>;
++			reg-names = "hif_mspi", "bspi", "cs_reg";
+ 			interrupts = <0x5 0x6 0x0 0x1 0x2 0x3 0x4>;
  			interrupt-parent = <&spi_l2_intc>;
--			interrupt-names = "spi_lr_fullness_reached",
-+			interrupt-names = "mspi_done",
-+					  "mspi_halted",
-+					  "spi_lr_fullness_reached",
- 					  "spi_lr_session_aborted",
- 					  "spi_lr_impatient",
- 					  "spi_lr_session_done",
--					  "spi_lr_overread",
--					  "mspi_done",
--					  "mspi_halted";
-+					  "spi_lr_overread";
- 			status = "disabled";
- 		};
- 
+ 			interrupt-names = "mspi_done",
 diff --git a/arch/mips/boot/dts/brcm/bcm7435.dtsi b/arch/mips/boot/dts/brcm/bcm7435.dtsi
-index 38eea5373b66..826731515f0b 100644
+index 826731515f0b..328fafe7519b 100644
 --- a/arch/mips/boot/dts/brcm/bcm7435.dtsi
 +++ b/arch/mips/boot/dts/brcm/bcm7435.dtsi
-@@ -503,15 +503,15 @@ qspi: spi@41d200 {
+@@ -501,8 +501,8 @@ qspi: spi@41d200 {
+ 			compatible = "brcm,spi-brcmstb-qspi",
+ 				     "brcm,spi-bcm-qspi";
  			clocks = <&upg_clk>;
- 			reg = <0x41a920 0x4 0x41d400 0x188 0x41d200 0x50>;
- 			reg-names = "cs_reg", "hif_mspi", "bspi";
--			interrupts = <0x0 0x1 0x2 0x3 0x4 0x5 0x6>;
-+			interrupts = <0x5 0x6 0x0 0x1 0x2 0x3 0x4>;
+-			reg = <0x41a920 0x4 0x41d400 0x188 0x41d200 0x50>;
+-			reg-names = "cs_reg", "hif_mspi", "bspi";
++			reg = <0x41d400 0x188 0x41d200 0x50 0x41a920 0x4>;
++			reg-names = "hif_mspi", "bspi", "cs_reg";
+ 			interrupts = <0x5 0x6 0x0 0x1 0x2 0x3 0x4>;
  			interrupt-parent = <&spi_l2_intc>;
--			interrupt-names = "spi_lr_fullness_reached",
-+			interrupt-names = "mspi_done",
-+					  "mspi_halted",
-+					  "spi_lr_fullness_reached",
- 					  "spi_lr_session_aborted",
- 					  "spi_lr_impatient",
- 					  "spi_lr_session_done",
--					  "spi_lr_overread",
--					  "mspi_done",
--					  "mspi_halted";
-+					  "spi_lr_overread";
- 			status = "disabled";
- 		};
- 
+ 			interrupt-names = "mspi_done",
 -- 
 2.43.0
 
