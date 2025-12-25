@@ -1,161 +1,135 @@
-Return-Path: <linux-mips+bounces-12594-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12595-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3D322CDCDCC
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Dec 2025 17:30:02 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 09BAACDDA67
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Dec 2025 11:26:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 197B530072B0
-	for <lists+linux-mips@lfdr.de>; Wed, 24 Dec 2025 16:30:01 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 787BA30021EB
+	for <lists+linux-mips@lfdr.de>; Thu, 25 Dec 2025 10:26:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2AB231A81F;
-	Wed, 24 Dec 2025 16:29:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14B0131985D;
+	Thu, 25 Dec 2025 10:26:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="D+OgRvDO"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dbtRzZmj"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A3F132863C;
-	Wed, 24 Dec 2025 16:29:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AC35314A83
+	for <linux-mips@vger.kernel.org>; Thu, 25 Dec 2025 10:26:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766593799; cv=none; b=ez4P+QgfUiCsfXweZcOcT2GZLbrGZBwem4Mzj8D/n+fMsE9EiHPms9pSQxS2b3xg562vwL2MsGWkr/Blx14x1edlU4DfgPGaJNySJokUciCf1wXoaCxZ/CkECYuTM/dhx3c66B8N/RxU1wvNMD4n34cbrCZ5FzIxR6MvKJej98M=
+	t=1766658378; cv=none; b=j4JcU+Rd4ltBpO7tAPwRsLGxxD3uK5Me8swsSAZKaKcZwAnDZwkLTZJOnkjJg9CIBsNRc70HAv+wApdC+blPU49MDLG5KbMpznbA5byCwKANjOsgNQUmDv2hQe8PUgZqzhOVS/8t8npmvfHzgTXCo42KfEWT53XiwZGxIkPeP40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766593799; c=relaxed/simple;
-	bh=xnT+EvR0s5oIZp/3XXt4XA68h5snb9BsA7e9vL/N/vM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=oRVwG3ZO08jS3lhaoV+DqhSYL9Y4GMq9xObZ4ErotgEOZo1btY4eCrr9sJm1yx8Bd4kTcIwZhdN3JcMKf4DTyeWSWDA5Sg1wKPhzMALcHw7cgewYleAWOO5/ckPGq86X0a4A3cm67ro1cc9rlevmBalQBlpSGKDRtjlhGr45jZc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=D+OgRvDO; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1766593796; x=1798129796;
-  h=message-id:date:mime-version:subject:to:references:from:
-   in-reply-to:content-transfer-encoding;
-  bh=xnT+EvR0s5oIZp/3XXt4XA68h5snb9BsA7e9vL/N/vM=;
-  b=D+OgRvDOSFxUZW3xGPuf0uqDQGlYJAs6OQjkwPNspoIsEddO3K0zN9jh
-   yMQY4jZ4VMYsbYNdsqv5SyM1Swg3Vqqwsed3/87K8X8EU817d3fytOc/0
-   ecFVoI7VuXSw6U5GJtnh8od/ly6z6s0CY8jB/kHzbOacpDKn/vRdBKWWV
-   47p6mHEDrr0UXZxzknomMojFozSP7eYxCWgkpAYWUVy9NrfEgJRPvMfHB
-   TOu+fjCXVy7GX3CY4JcTRj/k4wewOgzQiOup7mrqt0fCP4bn85PXSRRHE
-   h77KuMLBs80ALOlfe7YHy3SBVG+UnUX88nRhNnPEe0eEBW36Z0gICGFo8
-   A==;
-X-CSE-ConnectionGUID: 1mpAtqqvTWKDWP3ouM+OuA==
-X-CSE-MsgGUID: bJulCPQ/SGmZ0iD/Mn03NA==
-X-IronPort-AV: E=Sophos;i="6.21,174,1763449200"; 
-   d="scan'208";a="51495333"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 24 Dec 2025 09:29:48 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.58; Wed, 24 Dec 2025 09:29:25 -0700
-Received: from [10.171.248.28] (10.10.85.11) by chn-vm-ex02.mchp-main.com
- (10.10.85.144) with Microsoft SMTP Server id 15.1.2507.58 via Frontend
- Transport; Wed, 24 Dec 2025 09:29:20 -0700
-Message-ID: <9faff0a3-0f3d-4e51-ab5b-0cf0204ee4fd@microchip.com>
-Date: Wed, 24 Dec 2025 17:29:19 +0100
+	s=arc-20240116; t=1766658378; c=relaxed/simple;
+	bh=SskP52viYAiPHMk+t2yoCn8PRqn+AvUQds8WzbQsWwQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ddDD9O0xMiYy6FNAkzcuLbUGHOpcK5cNikCplfDEb62tUNNt+LK2lQK9GrT7aXH9Aw2HhctSONH74H+uMrCjdqpzOhIAkGylDxNB81UxTUaAcUuPTB6rWQWhCWqaylQJHz0hUILdKSnZAHJrz74LiY7zXhf2yKIXwK1AbMi31KA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dbtRzZmj; arc=none smtp.client-ip=209.85.218.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-b832c65124cso48758866b.0
+        for <linux-mips@vger.kernel.org>; Thu, 25 Dec 2025 02:26:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1766658374; x=1767263174; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=GU0KhzuEHH4lhNRVWa2X41dhcyghoa/RGYWJsiR27yY=;
+        b=dbtRzZmjX8JaIwkWPRQwHbxkB2/cz0rO85GroudlHicNJHFhVsOV0qWtdrKymBYLo9
+         2mLGRA4CaSQMYbgBsbhrHDsrqNbZCRQfq3vM7HQGfmm3koNu/jfMImoY7l7U+hactA41
+         0H2g66+q8+C5E8sgy+udO4Sc/m7sWwYOvI/dUu3mjEfzCF+X3ettMcz2Ef+gEpFP9rxR
+         IhYNHzhHQQ6jVQHTh4i5pAQRH9qGseBymsVFLMTRIwg0VoN25r9MZpnSmVhJif5UczXB
+         6MmWaRfsfycnTikvrx8d0AMOwCrndmO2sT2SY/6xZQ8EtZSYO27QPscz06Fgx80g04zz
+         ipGg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1766658374; x=1767263174;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GU0KhzuEHH4lhNRVWa2X41dhcyghoa/RGYWJsiR27yY=;
+        b=cXY/dzWYsTIjXxN/EaaSLyOfCuk6+/IpnmqPRptFX5GtfK+N7zofu9rb+M967XZGhs
+         1PCl6CJXS41Q3y6PFd4MAqgLHkRX9Dj3BXsu2WiX+X3azKzkA+bRbwTz4nU4hfcvdkBw
+         JSlbZVM4LfTWNK+rU33qHfpXQv3kOqYksHZ4P7Ql3r/vpdyJAuF0ZvkPLodA2rjWfpOP
+         Ft1/yDFEm4QtupQtsz1gDaTA3w4dV/n5ScHrgKT9A7Zr0zgElZmT2WGUxKQTLOCE2AVq
+         HmnP7FgnkuvC9soMw0JhLao2ngoMRy55WUIdkkrydqcV82ag5+L69l8LrlV66rCZjXI9
+         tLGA==
+X-Forwarded-Encrypted: i=1; AJvYcCUpgSmXabVMLC+ZRxXvxpBzrPxY3KiUKoHXNp4MDK7fU2R5LGDr0SZXr+uA60BCRjM2GdCKtI7VrMF/@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOjx56wY2YtxGRuO8Pjy7s6YwkD65IHTC5wuUeV9L3ROlVCWlq
+	OaMUyQ14LpLu7KlPtAImqhwPBf9Q9bvWERSDHa427phXxOAFQjxgBjFm
+X-Gm-Gg: AY/fxX7nG6j/Wz7ByXaizn/kUz1rvyeZ0k9K/M0SjIiex6z1qNbtgtJfTOas+6iKB2i
+	19fsMgGXoDbkAjpnzoekyMy1M1I9Ep3voNYJ/7Ipx4nb0GGXI/X5+ojG5SdJkrX/cCHZRMLOja4
+	eUOpIiBJc0wJAGkKQFtmNoEFqe1nPyrIK0KnFaswz/RiwJQfX97zHRFyFBI7HQLTbzRcAJ9Gtsd
+	kjs6eoZm506Fa8SY4IWYbXcYe8RfSmBpT/ClPwVc13KJKIIKVl5fdlm6qXgy5LSNu3kDPg7At70
+	6DuLKfSkcjmUgDcDRWcx6PVT1wsBOKlBI4On/XBrOsM21pGs/gojE4Wo6BgQ6GOWAWGVReahDci
+	n1bCVT5EGAy0hy8rZccA3uS9b+Kypm54cV0laGXGtlAnEddtbWKlqonFSE6UUZ5fmARzrWQU3Bo
+	tTTq3Ogf+cs9ZKkiCcFTSTSJjO0DQm30N6lnyMPeJWNbAi4MAcWQeapYCw4bNAiva0jlc=
+X-Google-Smtp-Source: AGHT+IGNgfPbdGBV4OsErCl8w1/y2EjJW2lfmR2JyTl+ckx6GipUwr/AyVUz9oTZgzcfzvxDxGdNrQ==
+X-Received: by 2002:a17:906:ee8e:b0:b83:2c51:bc36 with SMTP id a640c23a62f3a-b832c520299mr120919366b.3.1766658374259;
+        Thu, 25 Dec 2025 02:26:14 -0800 (PST)
+Received: from localhost (dslb-002-205-018-238.002.205.pools.vodafone-ip.de. [2.205.18.238])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b8037f48606sm2055396766b.62.2025.12.25.02.26.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 25 Dec 2025 02:26:13 -0800 (PST)
+From: Jonas Gorski <jonas.gorski@gmail.com>
+To: Kamal Dasu <kamal.dasu@broadcom.com>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	Mark Brown <broonie@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	=?UTF-8?q?Rafa=C5=82=20Mi=C5=82ecki?= <rafal@milecki.pl>
+Cc: Kamal Dasu <kdasu.kdev@gmail.com>,
+	linux-spi@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org
+Subject: [PATCH 0/4] mips: bmips: fix brcm,spi-bcm-qspi devicetree usage
+Date: Thu, 25 Dec 2025 11:25:29 +0100
+Message-ID: <20251225102533.30772-1-jonas.gorski@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/4] mmc: atmel-mci: Simplify with scoped for each OF
- child loop
-To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, Aubin Constans
-	<aubin.constans@microchip.com>, Ulf Hansson <ulf.hansson@linaro.org>,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, Claudiu Beznea
-	<claudiu.beznea@tuxon.dev>, Robert Richter <rric@kernel.org>, Paul Cercueil
-	<paul@crapouillou.net>, Andrew Jeffery <andrew@codeconstruct.com.au>, "Adrian
- Hunter" <adrian.hunter@intel.com>, Joel Stanley <joel@jms.id.au>, "Nathan
- Chancellor" <nathan@kernel.org>, Nick Desaulniers
-	<nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, "Justin
- Stitt" <justinstitt@google.com>, <linux-mmc@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-	<linux-mips@vger.kernel.org>, <linux-aspeed@lists.ozlabs.org>,
-	<openbmc@lists.ozlabs.org>, <llvm@lists.linux.dev>
-References: <20251224124431.208434-5-krzysztof.kozlowski@oss.qualcomm.com>
-From: Nicolas Ferre <nicolas.ferre@microchip.com>
-Content-Language: en-US, fr
-Organization: microchip
-In-Reply-To: <20251224124431.208434-5-krzysztof.kozlowski@oss.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 24/12/2025 at 13:44, Krzysztof Kozlowski wrote:
-> Use scoped for-each loop when iterating over device nodes to make code a
-> bit simpler.
-> 
-> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+Currently running dtbs_check for BMIPS produces a lot of warnings. Start
+addressing those by cleaning up the {q,m}spi nodes:
 
-Reviewed-by: Nicolas Ferre <nicolas.ferre@microchip.com>
+* allow the in-use hif_mspi as alternative register name
+* fix compatible order from most to least specific
+* reorder interrupt names matching the binding
+* reorder register names matching the binding
 
-Thanks Krzysztof, best regards,
-   Nicolas
+This fixes all warnings issues by dtbs_check for the {q,m}spi nodes
+themselves, and reduces the total amount of warnings generated from 416
+to 368. I plan to address more in subsequent submissions.
 
-> ---
->   drivers/mmc/host/atmel-mci.c | 12 +++---------
->   1 file changed, 3 insertions(+), 9 deletions(-)
-> 
-> diff --git a/drivers/mmc/host/atmel-mci.c b/drivers/mmc/host/atmel-mci.c
-> index fdf6926ea468..3b4928f5b9b2 100644
-> --- a/drivers/mmc/host/atmel-mci.c
-> +++ b/drivers/mmc/host/atmel-mci.c
-> @@ -629,14 +629,13 @@ static int atmci_of_init(struct atmel_mci *host)
->   {
->          struct device *dev = host->dev;
->          struct device_node *np = dev->of_node;
-> -       struct device_node *cnp;
->          u32 slot_id;
->          int err;
-> 
->          if (!np)
->                  return dev_err_probe(dev, -EINVAL, "device node not found\n");
-> 
-> -       for_each_child_of_node(np, cnp) {
-> +       for_each_child_of_node_scoped(np, cnp) {
->                  if (of_property_read_u32(cnp, "reg", &slot_id)) {
->                          dev_warn(dev, "reg property is missing for %pOF\n", cnp);
->                          continue;
-> @@ -645,7 +644,6 @@ static int atmci_of_init(struct atmel_mci *host)
->                  if (slot_id >= ATMCI_MAX_NR_SLOTS) {
->                          dev_warn(dev, "can't have more than %d slots\n",
->                                   ATMCI_MAX_NR_SLOTS);
-> -                       of_node_put(cnp);
->                          break;
->                  }
-> 
-> @@ -658,10 +656,8 @@ static int atmci_of_init(struct atmel_mci *host)
->                                                "cd", GPIOD_IN, "cd-gpios");
->                  err = PTR_ERR_OR_ZERO(host->pdata[slot_id].detect_pin);
->                  if (err) {
-> -                       if (err != -ENOENT) {
-> -                               of_node_put(cnp);
-> +                       if (err != -ENOENT)
->                                  return err;
-> -                       }
->                          host->pdata[slot_id].detect_pin = NULL;
->                  }
-> 
-> @@ -673,10 +669,8 @@ static int atmci_of_init(struct atmel_mci *host)
->                                                "wp", GPIOD_IN, "wp-gpios");
->                  err = PTR_ERR_OR_ZERO(host->pdata[slot_id].wp_pin);
->                  if (err) {
-> -                       if (err != -ENOENT) {
-> -                               of_node_put(cnp);
-> +                       if (err != -ENOENT)
->                                  return err;
-> -                       }
->                          host->pdata[slot_id].wp_pin = NULL;
->                  }
->          }
-> --
-> 2.51.0
-> 
+No functional changes intended (I can't test them, since I don't have
+any BCM7XXX boards at hand).
+
+Jonas Gorski (4):
+  dt-bindings: brcm,spi-bcm-qspi: allow hif_mspi as alternative for mspi
+  mips: bmips: dts: fix {m,q}spi compatible order
+  mips: bmips: dts: fix qspi interrupt order
+  mips: bmips: dts: fix qspi register order
+
+ .../bindings/spi/brcm,spi-bcm-qspi.yaml       |  2 +-
+ arch/mips/boot/dts/brcm/bcm7125.dtsi          | 22 +++++++++----------
+ arch/mips/boot/dts/brcm/bcm7346.dtsi          | 22 +++++++++----------
+ arch/mips/boot/dts/brcm/bcm7358.dtsi          | 22 +++++++++----------
+ arch/mips/boot/dts/brcm/bcm7360.dtsi          | 22 +++++++++----------
+ arch/mips/boot/dts/brcm/bcm7362.dtsi          | 22 +++++++++----------
+ arch/mips/boot/dts/brcm/bcm7420.dtsi          | 22 +++++++++----------
+ arch/mips/boot/dts/brcm/bcm7425.dtsi          | 22 +++++++++----------
+ arch/mips/boot/dts/brcm/bcm7435.dtsi          | 22 +++++++++----------
+ 9 files changed, 89 insertions(+), 89 deletions(-)
+
+-- 
+2.43.0
 
 
