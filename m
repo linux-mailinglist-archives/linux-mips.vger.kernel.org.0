@@ -1,132 +1,130 @@
-Return-Path: <linux-mips+bounces-12603-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12604-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D5CDCDE915
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Dec 2025 11:04:07 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 321ABCDFC45
+	for <lists+linux-mips@lfdr.de>; Sat, 27 Dec 2025 13:53:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D98CE3006583
-	for <lists+linux-mips@lfdr.de>; Fri, 26 Dec 2025 10:04:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A9991301C92A
+	for <lists+linux-mips@lfdr.de>; Sat, 27 Dec 2025 12:51:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17E1A280A51;
-	Fri, 26 Dec 2025 10:04:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47157230D35;
+	Sat, 27 Dec 2025 12:43:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="F4pAphAH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YLWk2ary"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 53B78163
-	for <linux-mips@vger.kernel.org>; Fri, 26 Dec 2025 10:04:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 174D621CC58;
+	Sat, 27 Dec 2025 12:42:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766743445; cv=none; b=Ye5TqcPVFNhW9Fag8vozXPZNixiHuuqm0WavzfE7IuC2DkllUx5jatD54lXSWYXldXIFllVzBnMNluHtWZDqx9pQHio0J81IFiQ4EZSUy1WJYqsOlSuuBk0CTVjpZwATYGakPX+6LbKm2LiVB7q+x5rTaIgPo3KLJE8YtQvkiYs=
+	t=1766839382; cv=none; b=khQd0mMw8g6EnjsBx8J9Fpk7LeGAk3RNNNvaBHins0zdQZ0vj2GjcMCowyK8Ircggh0/saAcNsGEaZfGMJx9/qJHi+cBUYJF2EPBxjLu17N8Ok2YQHJkEDqHkz2BVhQetzrKHjnyO6RJE79TAlVqqIBUQZOnovsvDRAXYmzNZEE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766743445; c=relaxed/simple;
-	bh=bsPlTRK85fjjyDDqOcgY783Uyn44b4lPb1UUHMFZ/co=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XvGR1GYl7NWvY5qod4FJ/7RbR7jn9URYhetqK4uLRX78koaWiXf0Oe1drALWqWd+Ijoek2DYT3d4MgHw+32VXBwoce4nFV2ujaISVq352hx++bApPWkJDwdexDOnGjMYNo3kKrWygvgwzd9xbudA+rD1rVGKWdhmUL0DTbWdNMo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=F4pAphAH; arc=none smtp.client-ip=209.85.167.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-59911cb8c3cso7865126e87.2
-        for <linux-mips@vger.kernel.org>; Fri, 26 Dec 2025 02:04:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1766743441; x=1767348241; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c56xVey+/P0K5DvPpIeRFr1NM6R9NaOEhrxube/Xe6M=;
-        b=F4pAphAHLtPt1+EInHb/X79ez2KY7kAuFDM9wt93bNd1lNSNWQj+qVE0vgK8hRnWHT
-         ZJFkPfMqZ7fSeL0GAtpCUdPGMm2bWr9/7XcmEEjHB5LBI3wVsntDxD/h411GwcODFDmk
-         6rdSGXWBQCwBVhEzgvSQ9VnYE3ghuTI+tFT+v4MBVzoz4zCzWaf7PNl+JWLVfJfkwPYL
-         0Bq7itlnd1N0u/oT4QhAh6Ephwy4TKPlogzrzlPzyptsT3c9wRcFZu0rofat10/a5TOa
-         qXiT4jJ3/45iV5hfhnmp0zOtyYIP6IulEq+0qS1CmC/MJV+E/KyFccyhD/3sCyphuzZC
-         azAA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1766743441; x=1767348241;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=c56xVey+/P0K5DvPpIeRFr1NM6R9NaOEhrxube/Xe6M=;
-        b=guV/aMQxuXNLGa9EsppQ8u4rE5G++4hVUbSr6wbBuWPUNTej0BH5N3vrBW0s4Hvg9D
-         ktrHQHosroOmn5CBeCNebkPoV5/E90j/8XE87uA8Vxz89XUt7fM2Hc/MxqVF1jflxk0q
-         NKuwFTPpLc/ncUUhEAJn51bekWYOwRNzq7gsJlUOmCZPJgTSwHepmjBmSSzA36u5vnye
-         kItkK6+vxE5YTIlCUF7/JWeWicNtoiY0r9W3Y4e+STnwDBRDvS4M/kWENDI8srzf/IfU
-         69TBUoOJexdhpjK2PX2dJsTxycwibOeFLJQZSKyIykqwPnKnsXjjPkdBZ0wa6EVJM36x
-         AWIQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWowDatEKXzvYn1SKCwrSnl2wskKytJ6ZNNDvkx5yqmlDMFjk8Ga7DE8RKHnvGwXorZaOIf2zZ9rXM4@vger.kernel.org
-X-Gm-Message-State: AOJu0YyAzF+ByZydSYYCZYGh/X162YKvqPIe3V1OLLrGRXDOictXPdvd
-	GjwjO4I9pkPEhaoCDJJhwQNf7zcEqmCh0c/SRRbGfqAKBWqfT6+Jhi8ytz4xbZBTsVQNuoRC7cQ
-	xl1qmZG+p7NLb73k0+unlrSCq6c7VvQc=
-X-Gm-Gg: AY/fxX5ynpTGdX0VXwaEX/6cdHl6hFTEMvX8Cfo92O3g9Co0emviHlUjfLmGH0Lwv/9
-	bCQbDPYRkNJLDIdptftkUfBIX2O46RWKtu0DyqLqT1r26WTlPRakZFwogiZac0opwutLQwmwuPa
-	slkWj4mZIKWMYP5mK3h48ETddXMGKTSd9jOiB7tT1ILWxBZatUWSDm/HdXFe2aXsiwLNpl+QXay
-	pWl27eLDaVykMxwTjQ4WIQ4mFW6Mn6XPgriT7tqNnqwu03uavBe23nmQPZ/RHUWD1K9n5BzT147
-	N6/eTjk=
-X-Google-Smtp-Source: AGHT+IEeJtzsXB++6IhxWCem8I/iqi6tN+vUyXQQj7sGJYC2SPWAV++ictVP2fCKp10Wj5G66giWAcJxanY8UYAXGPk=
-X-Received: by 2002:a05:6512:e9a:b0:595:81c1:c57 with SMTP id
- 2adb3069b0e04-59a17d1813emr7434587e87.11.1766743441289; Fri, 26 Dec 2025
- 02:04:01 -0800 (PST)
+	s=arc-20240116; t=1766839382; c=relaxed/simple;
+	bh=evZsjUyJHrxkPefhOiZUy0dqWLUa+4V2/GdjlFkFNnI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=F1oQEl+gdUo7JreASseRQfNRctXfBeAeJsgSeqNNKFgwMKYA2JTgDvo/12LHdSNgBxwp5u0jfy4Z3K4wutntRaN3iRJJh3cCnuLGYSk2eU4prK/9YyagKwZnbMJMOf6We3GqB5GGpe5x4C/b1i/ZYb4WLKcu1P8RDUqLYuMbyB4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YLWk2ary; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FB05C4CEF1;
+	Sat, 27 Dec 2025 12:42:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1766839379;
+	bh=evZsjUyJHrxkPefhOiZUy0dqWLUa+4V2/GdjlFkFNnI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=YLWk2arydbLSzy/AnZ2BZ6imA8M4zOPW9cm9RSS0dwJnJK4ULnLL/1TPCAPkz3ylQ
+	 NYdeQeLd2rn6Ml1t+VkRE6fJ+vD32YTbNo1rEI6jETciiq65AMpCiIqI23MRgMUrJ9
+	 pg2AeobEuaaT1wKWM99ISpLpG7nwiQDrg1ZF7y61h5fRSkzB8vXDN/MjeQBfbFYtRv
+	 QUnOA1btcsORE9l0zGDnBQNmnaXnOKQc3E5ZogduThQlf6MwYrdjKfoBL/g6K8LEUT
+	 D6p28pqUbT7T4zz2MAFErlYavypbulKlZDNoS7LQSFMJE+RUDomQhVM86g0GpYa9ns
+	 wyI1hA+OPxoAA==
+Date: Sat, 27 Dec 2025 13:42:57 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: =?utf-8?Q?Beno=C3=AEt?= Monin <benoit.monin@bootlin.com>
+Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+	Gregory CLEMENT <gregory.clement@bootlin.com>, =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-clk@vger.kernel.org, linux-mips@vger.kernel.org
+Subject: Re: [PATCH v2 01/10] dt-bindings: soc: mobileye: Add EyeQ7H OLB
+Message-ID: <20251227-bipedal-wombat-of-correction-d71fd8@quoll>
+References: <20251224-clk-eyeq7-v2-0-81744d1025d9@bootlin.com>
+ <20251224-clk-eyeq7-v2-1-81744d1025d9@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1766471839.git.zhoubinbin@loongson.cn>
-In-Reply-To: <cover.1766471839.git.zhoubinbin@loongson.cn>
-From: Keguang Zhang <keguang.zhang@gmail.com>
-Date: Fri, 26 Dec 2025 18:03:24 +0800
-X-Gm-Features: AQt7F2qiUK1mpU25DWjs_X4oGOorQ76rYhxJTsfWZSC-loYSKF2H28Cd9YxqJXs
-Message-ID: <CAJhJPsVMsWmiaghsyvfwGzBOoKR0Tn9gGwaT+tpeW7q+qfZN3A@mail.gmail.com>
-Subject: Re: [PATCH v1 0/2] RTC: Add Loongson-2K0300 support
-To: Binbin Zhou <zhoubinbin@loongson.cn>
-Cc: Binbin Zhou <zhoubb.aaron@gmail.com>, Huacai Chen <chenhuacai@loongson.cn>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, linux-rtc@vger.kernel.org, 
-	Xiaochuang Mao <maoxiaochuan@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
-	Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev, devicetree@vger.kernel.org, 
-	linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20251224-clk-eyeq7-v2-1-81744d1025d9@bootlin.com>
 
-For the whole series:
+On Wed, Dec 24, 2025 at 11:07:14AM +0100, Beno=C3=AEt Monin wrote:
+> +  '#reset-cells':
+> +    description:
+> +      First cell is domain and optional if compatible has a single reset=
+ domain.
+> +      Second cell is reset index inside that domain.
+> +    enum: [ 1, 2 ]
+> +
+> +  '#clock-cells':
+> +    const: 1
+> +
+> +  clocks:
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +  clock-names:
+> +    minItems: 1
+> +    maxItems: 2
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - '#clock-cells'
+> +  - clocks
+> +  - clock-names
+> +
+> +additionalProperties: false
 
-Reviewed-by: Keguang Zhang <keguang.zhang@gmail.com>
-Tested-by: Keguang Zhang <keguang.zhang@gmail.com> # on LS1B & LS1C
+This goes before examples section.
 
-On Tue, Dec 23, 2025 at 2:42=E2=80=AFPM Binbin Zhou <zhoubinbin@loongson.cn=
-> wrote:
->
-> Hi all:
->
-> This patch set introduces the Loongson-2K0300 RTC, which has a similar
-> hardware design to the Loongson-1B, but without the alarm feature.
->
-> To Keguang:
-> Would you have time to test the driver on a Loongson-1?
->
-> Thanks.
-> Binbin
->
-> Binbin Zhou (2):
->   dt-binding: rtc: loongson: Document Loongson-2K0300 compatible
->   rtc: loongson: Add Loongson-2K0300 support
->
->  .../devicetree/bindings/rtc/loongson,rtc.yaml | 13 ++++
->  drivers/rtc/rtc-loongson.c                    | 65 +++++++++++++------
->  2 files changed, 57 insertions(+), 21 deletions(-)
->
->
-> base-commit: 16bd954c93360145bc77cc601e350913fc28182d
-> --
-> 2.47.3
->
+> +
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            enum:
+> +              - mobileye,eyeq7h-ddr0-olb
+> +              - mobileye,eyeq7h-ddr1-olb
+> +              - mobileye,eyeq7h-mips0-olb
+> +              - mobileye,eyeq7h-mips1-olb
+> +              - mobileye,eyeq7h-mips2-olb
+> +              - mobileye,eyeq7h-periph-east-olb
+> +              - mobileye,eyeq7h-south-olb
+> +    then:
+> +      properties:
+> +        clocks:
+> +          maxItems: 1
+> +          description:
+> +            Reference input clock.
 
+Just use items with description syntax, like everywhere else.
 
---=20
+With these fixed:
+
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
+
 Best regards,
+Krzysztof
 
-Keguang Zhang
 
