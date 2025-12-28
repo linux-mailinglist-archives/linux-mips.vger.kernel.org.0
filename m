@@ -1,146 +1,258 @@
-Return-Path: <linux-mips+bounces-12605-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12606-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id C375FCE4AA0
-	for <lists+linux-mips@lfdr.de>; Sun, 28 Dec 2025 10:54:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 799B8CE4BD0
+	for <lists+linux-mips@lfdr.de>; Sun, 28 Dec 2025 13:40:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 4F1603004CB0
-	for <lists+linux-mips@lfdr.de>; Sun, 28 Dec 2025 09:54:25 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 789533004F1E
+	for <lists+linux-mips@lfdr.de>; Sun, 28 Dec 2025 12:40:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74E5118DB37;
-	Sun, 28 Dec 2025 09:54:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 234012C17A0;
+	Sun, 28 Dec 2025 12:40:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S2ph8a/f"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JXSMQI8l"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DC717081E
-	for <linux-mips@vger.kernel.org>; Sun, 28 Dec 2025 09:54:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B784121255A;
+	Sun, 28 Dec 2025 12:40:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766915664; cv=none; b=cASjw8UHVGFVGjKbR/qI6jU0zH2ACUwSl/hihKWelN0kuwc81awQmTB1Mldosd/lZJHuK/8mFmLYLJbEhEetnGMwIuFRWCaiY5CNsoAj5EqRMq7RM2ccNwJw+o4ZV3AajK3wR5xvFe2Pt6mCeKaFSdI5HNmH5GUJ/AOiIevNfoU=
+	t=1766925624; cv=none; b=X2HZV9Iuko6s/BNZuTmVM66nt2NiPYES/2qmCj8aHDG7SRqOcXycCBb2ICNZ7m05yr8GDmEmKJ+l8woutCL1CxUCtvHGIahij3BsQ8A/Z26CAsoTyiLPLqTLcXb+3pYZV6eqSwCp18Msdf1X0nnCwQCUq3c7CFANq4zJCYvQm7g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766915664; c=relaxed/simple;
-	bh=d1HWZ/gra3XXbf0pSMqW8Xa2iv1be8XgnIpd86Sciu8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DR8V2mCFwDVMtJm8it6WBl9BQ9xGM0krvnNutHNuWG4KQq1ZvbEasB9Nwmj5Y8lWvqjqAc6YMWopHYHjEUQKGgaUGuElj1ThDTHalShz4rB3h5IZhFJlOj9dA8f8hqqrCE9GCfRYfTMe0ChDa2Ca4DzcrkbzC4hpiYesk0BYagM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S2ph8a/f; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 397ECC4CEFB;
-	Sun, 28 Dec 2025 09:54:20 +0000 (UTC)
+	s=arc-20240116; t=1766925624; c=relaxed/simple;
+	bh=sXg/eGtpStxuOg/YYnTnKHLFWH8EKXy5iyUYi++8khY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LCa3M84ks60a5JEOomiBQNej45J6/L6c73MsDDKjciijINA2eiXuxkS4NucSSmiU1V7uiEFpVCTHKkVN+4GqSudCYjNnhJYIMl6ogH+n98uoktSSCMl7mn7/FIGNGL3Nt9C9/0Qd0Q0x0UkK0pmIL2ZXMoXJ3/iYnSfKnLnvgH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JXSMQI8l; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6F68C4CEFB;
+	Sun, 28 Dec 2025 12:40:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766915663;
-	bh=d1HWZ/gra3XXbf0pSMqW8Xa2iv1be8XgnIpd86Sciu8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=S2ph8a/fJAc0B+NhCYlZUvwtKpNEb86xETF+DEYN/ePGkRtbnyFHSSRtsbNuMUpUN
-	 mlEmKNBxtFukASa1Gn4h0UHnkv0Fjaf8MraIitOIAF1I7gSNpiBNEzHD9O+Rn5L7+1
-	 MwYl18Qfq24Hed1kWmbD8VuQiTqblZcpkIlPtsQWMP+ERZLPmQzlhwy/qCDblJi57J
-	 LDqqKw3VdO437xnP+6aixjn/7iL9IyZXq+ho1aL3ffovZO7GTjpvZ0R/ykifDE6Lki
-	 Z6danE2z94A4ZabQG6omWIlwQEhU5hGB7VaSCGZ+EXw3bNHYhDrjKhXsfr62tmttbb
-	 n4Y/HYbursIxA==
-Date: Sun, 28 Dec 2025 11:54:17 +0200
+	s=k20201202; t=1766925623;
+	bh=sXg/eGtpStxuOg/YYnTnKHLFWH8EKXy5iyUYi++8khY=;
+	h=From:To:Cc:Subject:Date:From;
+	b=JXSMQI8l5FZolejTk5mJv6quraHJlKmuF8twD40ZAWMOQZK+U7pyVygxOROMFe1B0
+	 tr8vJLMrqIcrt++LIAENoYcVcJb437aztawcxW2Ryt48u9sfI48SxSG0pjE0ivfh5n
+	 65ZIVAkGJycQK0LAPdjNnYFxj6kv4hkgMf38zWq6L2c161HN/YenbghDeWTPGysWbw
+	 SFyckrxDWUHpRNZNS/PPTejvpAV5uJxzs8W19ji6hxViDYqKZqU23ZM1n/3rjhokjT
+	 6QAFreOcfXfdT+EBPFCtGE3JapCzoxuwD9DDmvJ5sANYode+bX0kc9S3wM1fu5EwB5
+	 pxYkAtiZ4jyJQ==
 From: Mike Rapoport <rppt@kernel.org>
-To: markus.stockhausen@gmx.de
-Cc: tglx@linutronix.de, linux-mm@kvack.org, linux-mips@vger.kernel.org,
-	jelonek.jonas@gmail.com,
-	'Chris Packham' <Chris.Packham@alliedtelesis.co.nz>,
-	hauke@hauke-m.de
-Subject: Re: HIGHMEM freeing patch breaks Realtek RTL930x builds
-Message-ID: <aVD-SaGkj7lG91pT@kernel.org>
-References: <00bc01dc718e$b4108af0$1c31a0d0$@gmx.de>
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: Alex Shi <alexs@kernel.org>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Brian Cain <bcain@kernel.org>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	David Hildenbrand <david@kernel.org>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>,
+	Heiko Carstens <hca@linux.ibm.com>,
+	Helge Deller <deller@gmx.de>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Jonathan Corbet <corbet@lwn.net>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Magnus Lindholm <linmag7@gmail.com>,
+	Matt Turner <mattst88@gmail.com>,
+	Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Hocko <mhocko@suse.com>,
+	Michal Simek <monstr@monstr.eu>,
+	Mike Rapoport <rppt@kernel.org>,
+	Muchun Song <muchun.song@linux.dev>,
+	Oscar Salvador <osalvador@suse.de>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>,
+	Stafford Horne <shorne@gmail.com>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vasily Gorbik <gor@linux.ibm.com>,
+	Vineet Gupta <vgupta@kernel.org>,
+	Vlastimil Babka <vbabka@suse.cz>,
+	Will Deacon <will@kernel.org>,
+	x86@kernel.org,
+	linux-alpha@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-csky@vger.kernel.org,
+	linux-cxl@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-hexagon@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-m68k@lists.linux-m68k.org,
+	linux-mips@vger.kernel.org,
+	linux-mm@kvack.org,
+	linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org,
+	linux-sh@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org,
+	linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org,
+	loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org
+Subject: [PATCH 00/28] arch, mm: consolidate hugetlb early reservation
+Date: Sun, 28 Dec 2025 14:39:30 +0200
+Message-ID: <20251228124001.3624742-1-rppt@kernel.org>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <00bc01dc718e$b4108af0$1c31a0d0$@gmx.de>
+Content-Transfer-Encoding: 8bit
 
-Hi Markus,
+From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-On Sat, Dec 20, 2025 at 09:57:40AM +0100, markus.stockhausen@gmx.de wrote:
-> Hi,
-> 
-> sorry for being late on this topic but downstream OpenWrt just started
-> kernel
-> conversion from 6.12 to 6.18 these days. During preparation of the PR
-> https://github.com/openwrt/openwrt/pull/21181 we noticed that Realtek 
-> RTL930x soc based devices with more than 256MB (highmem) do not boot 
-> any longer. 
-> 
-> These are MIPS 34k 32bit multithreaded SoC with layout 
-> <0x00000000 0x10000000>, /* 256 MiB lowmem */
-> <0x20000000 0x10000000>; /* 256 MiB highmem */
-> 
-> Bisecting the issue gave " arch, mm: streamline HIGHMEM freeing" 
-> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/
-> ?h=v6.15-rc1&id=6faea3422e3b4e8de44a55aa3e6e843320da66d2
-> as the first bad commit. This is back from the 6.15 times.
-> 
-> I have no real idea why removing mem_init_free_highmem() and letting
-> __free_memory_core() work on the whole memory range gives issues.
-> 
-> We are aligning to upstream very slowly and are still in need of 
-> downstream patches so here some additional info.
-> 
-> - Until now we never cared about FLATMEM/SPARSEMEM configs
-> 
-> - We are still using dedicated prom.c/setup.c for the devices
-> https://git.openwrt.org/?p=openwrt/openwrt.git;a=tree;f=target/linux/
-> realtek/files-6.12/arch/mips/rtl838x;hb=HEAD
-> 
-> Any idea or hint is appreciated.
+Hi,
 
-Can you please send logs from a working kernel and a failing kernel with
-"memblock=debug" added to the kernel command line?
+Order in which early memory reservation for hugetlb happens depends on
+architecture, on configuration options and on command line parameters.
 
-Another thing I think worth checking is will the system boot with a partial
-revert of 6faea3422e3b ("arch, mm: streamline HIGHMEM freeing") for mips:
+Some architectures rely on the core MM to call hugetlb_bootmem_alloc()
+while others call it very early to allow pre-allocation of HVO-style
+vmemmap.
 
-diff --git a/arch/mips/mm/init.c b/arch/mips/mm/init.c
-index cd04200d0573..be5985155509 100644
---- a/arch/mips/mm/init.c
-+++ b/arch/mips/mm/init.c
-@@ -419,6 +419,23 @@ void __init arch_zone_limits_init(unsigned long *max_zone_pfns)
- static struct kcore_list kcore_kseg0;
- #endif
- 
-+static inline void __init mem_init_free_highmem(void)
-+{
-+#ifdef CONFIG_HIGHMEM
-+	unsigned long tmp;
-+
-+	if (cpu_has_dc_aliases)
-+		return;
-+
-+	for (tmp = highstart_pfn; tmp < highend_pfn; tmp++) {
-+		struct page *page = pfn_to_page(tmp);
-+
-+		if (!memblock_is_memory(PFN_PHYS(tmp)))
-+			SetPageReserved(page);
-+	}
-+#endif
-+}
-+
- void __init arch_mm_preinit(void)
- {
- 	/*
-@@ -429,6 +446,7 @@ void __init arch_mm_preinit(void)
- 
- 	maar_init();
- 	setup_zero_pages();	/* Setup zeroed pages.  */
-+	mem_init_free_highmem();
- 
- #ifdef CONFIG_64BIT
- 	if ((unsigned long) &_text > (unsigned long) CKSEG0)
- 
-> Thanks in advance.
-> Markus
+When hugetlb_cma is supported by an architecture it is initialized during
+setup_arch() and then later hugetlb_init code needs to understand did it
+happen or not.
 
+To make everything consistent and unified, both reservation of hugetlb
+memory from bootmem and creation of CMA areas for hugetlb must be called
+from core MM initialization and it would have been a simple change.
+However, HVO-style pre-initialization ordering requirements slightly
+complicate things and for HVO pre-init to work sparse and memory map should
+be initialized after hugetlb reservations.
+
+This required pulling out the call to free_area_init() out of setup_arch()
+path and moving it MM initialization and this is what the first 23 patches
+do.
+
+These changes are deliberately split into per-arch patches that change how
+the zone limits are calculated for each architecture and the patches 22 and
+23 just remove the calls to free_area_init() and sprase_init() from arch/*.
+
+Patch 24 is a simple cleanup for MIPS.
+
+Patches 25 and 26 actually consolidate hugetlb reservations and patches 27
+and 28 perform some aftermath cleanups.
+
+I tried to trim the distribution list and although it's still quite long
+if you feel that someone was wrongly excluded please add them back.
+
+The changes also available in git:
+https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/log/?h=hugetlb-init/v1
+
+Mike Rapoport (Microsoft) (28):
+  alpha: introduce arch_zone_limits_init()
+  arc: introduce arch_zone_limits_init()
+  arm: introduce arch_zone_limits_init()
+  arm64: introduce arch_zone_limits_init()
+  csky: introduce arch_zone_limits_init()
+  hexagon: introduce arch_zone_limits_init()
+  loongarch: introduce arch_zone_limits_init()
+  m68k: introduce arch_zone_limits_init()
+  microblaze: introduce arch_zone_limits_init()
+  mips: introduce arch_zone_limits_init()
+  nios2: introduce arch_zone_limits_init()
+  openrisc: introduce arch_zone_limits_init()
+  parisc: introduce arch_zone_limits_init()
+  powerpc: introduce arch_zone_limits_init()
+  riscv: introduce arch_zone_limits_init()
+  s390: introduce arch_zone_limits_init()
+  sh: introduce arch_zone_limits_init()
+  sparc: introduce arch_zone_limits_init()
+  um: introduce arch_zone_limits_init()
+  x86: introduce arch_zone_limits_init()
+  xtensa: introduce arch_zone_limits_init()
+  arch, mm: consolidate initialization of nodes, zones and memory map
+  arch, mm: consolidate initialization of SPARSE memory model
+  mips: drop paging_init()
+  x86: don't reserve hugetlb memory in setup_arch()
+  mm, arch: consolidate hugetlb CMA reservation
+  mm/hugetlb: drop hugetlb_cma_check()
+  Revert "mm/hugetlb: deal with multiple calls to hugetlb_bootmem_alloc"
+
+ .../driver-api/cxl/linux/early-boot.rst       |  2 +-
+ Documentation/mm/memory-model.rst             |  3 -
+ .../translations/zh_CN/mm/memory-model.rst    |  2 -
+ arch/alpha/kernel/setup.c                     |  1 -
+ arch/alpha/mm/init.c                          | 16 ++--
+ arch/arc/mm/init.c                            | 37 ++++----
+ arch/arm/mm/init.c                            | 25 +----
+ arch/arm64/include/asm/hugetlb.h              |  2 -
+ arch/arm64/mm/hugetlbpage.c                   | 10 +-
+ arch/arm64/mm/init.c                          | 39 ++++----
+ arch/csky/kernel/setup.c                      | 16 ++--
+ arch/hexagon/mm/init.c                        | 19 +---
+ arch/loongarch/include/asm/pgtable.h          |  2 -
+ arch/loongarch/kernel/setup.c                 | 10 --
+ arch/loongarch/mm/init.c                      |  6 +-
+ arch/m68k/mm/init.c                           |  8 +-
+ arch/m68k/mm/mcfmmu.c                         |  3 -
+ arch/m68k/mm/motorola.c                       |  6 +-
+ arch/m68k/mm/sun3mmu.c                        |  9 --
+ arch/microblaze/mm/init.c                     | 22 ++---
+ arch/mips/include/asm/pgalloc.h               |  2 -
+ arch/mips/include/asm/pgtable.h               |  2 +-
+ arch/mips/kernel/setup.c                      | 15 +--
+ arch/mips/loongson64/numa.c                   | 10 +-
+ arch/mips/mm/init.c                           |  8 +-
+ arch/mips/sgi-ip27/ip27-memory.c              |  8 +-
+ arch/nios2/mm/init.c                          | 12 +--
+ arch/openrisc/mm/init.c                       | 10 +-
+ arch/parisc/mm/init.c                         | 11 +--
+ arch/powerpc/include/asm/hugetlb.h            |  5 -
+ arch/powerpc/include/asm/setup.h              |  4 +
+ arch/powerpc/kernel/setup-common.c            |  1 -
+ arch/powerpc/mm/hugetlbpage.c                 | 11 +--
+ arch/powerpc/mm/mem.c                         | 27 ++----
+ arch/powerpc/mm/numa.c                        |  2 -
+ arch/riscv/mm/hugetlbpage.c                   |  8 ++
+ arch/riscv/mm/init.c                          | 10 +-
+ arch/s390/kernel/setup.c                      |  2 -
+ arch/s390/mm/hugetlbpage.c                    |  8 ++
+ arch/s390/mm/init.c                           | 13 ++-
+ arch/sh/mm/init.c                             | 12 +--
+ arch/sparc/mm/init_64.c                       | 17 +---
+ arch/sparc/mm/srmmu.c                         | 17 ++--
+ arch/um/kernel/mem.c                          | 10 +-
+ arch/x86/kernel/setup.c                       |  5 -
+ arch/x86/mm/hugetlbpage.c                     |  8 ++
+ arch/x86/mm/init.c                            |  8 +-
+ arch/x86/mm/init_32.c                         |  2 -
+ arch/x86/mm/init_64.c                         |  4 -
+ arch/x86/mm/mm_internal.h                     |  1 -
+ arch/xtensa/mm/init.c                         | 14 +--
+ include/linux/hugetlb.h                       | 12 +--
+ include/linux/mm.h                            |  5 +-
+ include/linux/mmzone.h                        |  2 -
+ init/main.c                                   |  1 +
+ mm/hugetlb.c                                  | 13 ---
+ mm/hugetlb_cma.c                              | 33 ++++---
+ mm/hugetlb_cma.h                              |  5 -
+ mm/hugetlb_vmemmap.c                          | 11 ---
+ mm/internal.h                                 |  6 ++
+ mm/mm_init.c                                  | 94 +++++++++++--------
+ 61 files changed, 263 insertions(+), 424 deletions(-)
+
+
+base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
 -- 
-Sincerely yours,
-Mike.
+2.51.0
+
 
