@@ -1,44 +1,44 @@
-Return-Path: <linux-mips+bounces-12632-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12633-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 753DECE4E14
-	for <lists+linux-mips@lfdr.de>; Sun, 28 Dec 2025 13:53:09 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE21CCE4F66
+	for <lists+linux-mips@lfdr.de>; Sun, 28 Dec 2025 14:00:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id E670C300984D
-	for <lists+linux-mips@lfdr.de>; Sun, 28 Dec 2025 12:52:34 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 0F8DD3010E53
+	for <lists+linux-mips@lfdr.de>; Sun, 28 Dec 2025 12:56:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB0EE303CAB;
-	Sun, 28 Dec 2025 12:46:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 95C013074BA;
+	Sun, 28 Dec 2025 12:46:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OwEIoXJd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qdL0kS/S"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A15C7303A12;
-	Sun, 28 Dec 2025 12:46:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4EE37306B05;
+	Sun, 28 Dec 2025 12:46:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766925988; cv=none; b=OxJ1/WcDpGUbDNc8bG4UlbgsQH08pR14xX9jvgMMbmA8Rl5D2w/qNr1ktl5sNf4hPTFc8lJWwVH9liRIncDIgJk8YTIEXnGcEikQinSjQQ5vUCKfpVBGOurtprdOZFQTPwoG0Yv1sxrj7j4n3Asyowb3un//0NASKDfPIGROlLY=
+	t=1766926002; cv=none; b=G7FH+/vAJLysMYAj5YqqqlWf7DIQboozkgF2Kuwq5l7urcp8TromdB5L1IYwKggk6dDT3sah5SNt5D2RHfKA8Ak3bykeJc2AMGEsx9A59WSryRPEWbVBVxjNlXQl/VGd0ropoIgFsyi0fwby56+B333vCTdNRHgWUWXB8q4gaDY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766925988; c=relaxed/simple;
-	bh=7E0qVjEGwP0IKHJeUAaXMmWVvlYzyxOQxwuX/DFLLew=;
+	s=arc-20240116; t=1766926002; c=relaxed/simple;
+	bh=HLFdL0b2vHYE2Es8eysIP16cx1LQEF5ywfNPEf+XyUQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=NBFrmlHeOXB8yfR6MHjZ4TUSPxHOtId4uH23bZ8cUV3OihWfP9DuXEBXUdMo9wrsjZE+GQ3SeSIgQAb2dTQJShGRnGFkF3zh3j/mVX89QgtMbqRBt3ycSAj71eYuj5do5lbRsDVKU9ixLkHbkrnVEnXZ42js0KMxvbOfocrbK+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OwEIoXJd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF4D2C16AAE;
-	Sun, 28 Dec 2025 12:46:14 +0000 (UTC)
+	 MIME-Version; b=n6yPLfJJSe+N6Izgzfu0PljjAtFq1OHavCNgtB3eTeN7aBcfdqL9CREvtlRfYD3e5qV2JYwQYRVXvsSA2KIAgK2mSTKp9KJ7JyiwD82uvMMdUU48pgkqQN/SJLXrP80yk5jK2CrRpAqCEFsiR/XhaahzlJZmagySuwvzYk6cgrA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qdL0kS/S; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC499C4CEFB;
+	Sun, 28 Dec 2025 12:46:28 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766925988;
-	bh=7E0qVjEGwP0IKHJeUAaXMmWVvlYzyxOQxwuX/DFLLew=;
+	s=k20201202; t=1766926002;
+	bh=HLFdL0b2vHYE2Es8eysIP16cx1LQEF5ywfNPEf+XyUQ=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=OwEIoXJdG98YiePXRGSvSaM/guhCtt9DqYoehJs1kmgrNdayLYZb98bmE2YCUEnZo
-	 Qmwm9yA77o0Hd59obimn44eoWTie7X51oQoLGl9XRfkPcj8PWgUK6EZkY1JRvNoyfI
-	 +qP6lNoHzCEIxlRl0twSJ8HMk3S0SF2AkD+uls/HtvaTB/qHSSGlgUNLlpAyVfPx5D
-	 TBncDmleiJGcsoaqlhl73ePx82LMo88bZBVoG0HHFv4tFzDX/pLwXsxnMSA+bo4Y4r
-	 P+xDdd53+vztiArILfckiQ6J9lZqmoFoTR9u4HTUeE5UzCrkjOzbejvgGi/1OTwmTA
-	 elVGJMvE42DMg==
+	b=qdL0kS/SmoVKxl3WK0KKH+Jldx6Q7XCWF4V+7VX9pSzxoVIkAcP2FPqqmEDdDdypd
+	 cLaoKUTUDB4h90YuoSE8146Xk14NH6RwNwsudZVlWBJbL+a4t2Nqpsbk3k2ARV3+N2
+	 eID7ge2FU6TWbxLFJUWNUQEm0iiU1l23JkDPBTcH2jJtDq6J+FeokyJzunQW8y6L+G
+	 6DbBTj4JSTeBjvfu66zvi0Ev+Vp1cGy39Y078vptGbfRjWTon98SfWpDR6jBxZ0QHk
+	 a5h2+rfUr8yvB4s2JvJiV3TjJJQjjmTYiv3y8i2jyTIREdfgCO9d8lClaXU31YpnjS
+	 AuacBCA8hM+Vw==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: Alex Shi <alexs@kernel.org>,
@@ -105,9 +105,9 @@ Cc: Alex Shi <alexs@kernel.org>,
 	linuxppc-dev@lists.ozlabs.org,
 	loongarch@lists.linux.dev,
 	sparclinux@vger.kernel.org
-Subject: [PATCH 26/28] mm, arch: consolidate hugetlb CMA reservation
-Date: Sun, 28 Dec 2025 14:39:56 +0200
-Message-ID: <20251228124001.3624742-27-rppt@kernel.org>
+Subject: [PATCH 27/28] mm/hugetlb: drop hugetlb_cma_check()
+Date: Sun, 28 Dec 2025 14:39:57 +0200
+Message-ID: <20251228124001.3624742-28-rppt@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20251228124001.3624742-1-rppt@kernel.org>
 References: <20251228124001.3624742-1-rppt@kernel.org>
@@ -121,341 +121,105 @@ Content-Transfer-Encoding: 8bit
 
 From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Every architecture that supports hugetlb_cma command line parameter
-reserves CMA areas for hugetlb during setup_arch().
+hugetlb_cma_check() was required when the ordering of hugetlb_cma_reserve()
+and hugetlb_bootmem_alloc() was architecture depended.
 
-This obfuscates the ordering of hugetlb CMA initialization with resepect to
-the rest initalization of the core MM.
+Since hugetlb_cma_reserve() is always called before hugetlb_bootmem_alloc()
+there is no need to check whether hugetlb_cma_reserve() was already called.
 
-Introduce arch_hugetlb_cma_order() callback to allow arhictectures report
-the desired order-per-bit of CMA areas and provive a week implementation of
-arch_hugetlb_cma_order() for architectures that don't support hugetlb with
-CMA.
-
-Use this callback in hugetlb_cma_reserve() instead if passing the order as
-parameter and call hugetlb_cma_reserve() from mm_core_init rather than have
-it spead over arcihtecture specific code.
+Drop unneeded hugetlb_cma_check() function.
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- .../driver-api/cxl/linux/early-boot.rst       |  2 +-
- arch/arm64/include/asm/hugetlb.h              |  2 --
- arch/arm64/mm/hugetlbpage.c                   | 10 +++-------
- arch/arm64/mm/init.c                          |  9 ---------
- arch/powerpc/include/asm/hugetlb.h            |  5 -----
- arch/powerpc/kernel/setup-common.c            |  1 -
- arch/powerpc/mm/hugetlbpage.c                 | 11 ++++-------
- arch/riscv/mm/hugetlbpage.c                   |  8 ++++++++
- arch/riscv/mm/init.c                          |  2 --
- arch/s390/kernel/setup.c                      |  2 --
- arch/s390/mm/hugetlbpage.c                    |  8 ++++++++
- arch/x86/kernel/setup.c                       |  4 ----
- arch/x86/mm/hugetlbpage.c                     |  8 ++++++++
- include/linux/hugetlb.h                       |  6 ++++--
- mm/hugetlb_cma.c                              | 19 ++++++++++++++-----
- mm/mm_init.c                                  |  2 ++
- 16 files changed, 52 insertions(+), 47 deletions(-)
+ mm/hugetlb.c     |  1 -
+ mm/hugetlb_cma.c | 16 +++-------------
+ mm/hugetlb_cma.h |  5 -----
+ 3 files changed, 3 insertions(+), 19 deletions(-)
 
-diff --git a/Documentation/driver-api/cxl/linux/early-boot.rst b/Documentation/driver-api/cxl/linux/early-boot.rst
-index a7fc6fc85fbe..414481f33819 100644
---- a/Documentation/driver-api/cxl/linux/early-boot.rst
-+++ b/Documentation/driver-api/cxl/linux/early-boot.rst
-@@ -125,7 +125,7 @@ The contiguous memory allocator (CMA) enables reservation of contiguous memory
- regions on NUMA nodes during early boot.  However, CMA cannot reserve memory
- on NUMA nodes that are not online during early boot. ::
+diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+index 51273baec9e5..82b322ae3fdc 100644
+--- a/mm/hugetlb.c
++++ b/mm/hugetlb.c
+@@ -4159,7 +4159,6 @@ static int __init hugetlb_init(void)
+ 		}
+ 	}
  
--  void __init hugetlb_cma_reserve(int order) {
-+  void __init hugetlb_cma_reserve(void) {
-     if (!node_online(nid))
-       /* do not allow reservations */
-   }
-diff --git a/arch/arm64/include/asm/hugetlb.h b/arch/arm64/include/asm/hugetlb.h
-index 44c1f757bfcf..e6f8ff3cc630 100644
---- a/arch/arm64/include/asm/hugetlb.h
-+++ b/arch/arm64/include/asm/hugetlb.h
-@@ -56,8 +56,6 @@ extern void huge_pte_clear(struct mm_struct *mm, unsigned long addr,
- #define __HAVE_ARCH_HUGE_PTEP_GET
- extern pte_t huge_ptep_get(struct mm_struct *mm, unsigned long addr, pte_t *ptep);
- 
--void __init arm64_hugetlb_cma_reserve(void);
--
- #define huge_ptep_modify_prot_start huge_ptep_modify_prot_start
- extern pte_t huge_ptep_modify_prot_start(struct vm_area_struct *vma,
- 					 unsigned long addr, pte_t *ptep);
-diff --git a/arch/arm64/mm/hugetlbpage.c b/arch/arm64/mm/hugetlbpage.c
-index 1d90a7e75333..f8dd58ab67a8 100644
---- a/arch/arm64/mm/hugetlbpage.c
-+++ b/arch/arm64/mm/hugetlbpage.c
-@@ -36,16 +36,12 @@
-  * huge pages could still be served from those areas.
-  */
- #ifdef CONFIG_CMA
--void __init arm64_hugetlb_cma_reserve(void)
-+unsigned int arch_hugetlb_cma_order(void)
- {
--	int order;
--
- 	if (pud_sect_supported())
--		order = PUD_SHIFT - PAGE_SHIFT;
--	else
--		order = CONT_PMD_SHIFT - PAGE_SHIFT;
-+		return PUD_SHIFT - PAGE_SHIFT;
- 
--	hugetlb_cma_reserve(order);
-+	return CONT_PMD_SHIFT - PAGE_SHIFT;
- }
- #endif /* CONFIG_CMA */
- 
-diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
-index 9d271aff7652..96711b8578fd 100644
---- a/arch/arm64/mm/init.c
-+++ b/arch/arm64/mm/init.c
-@@ -311,15 +311,6 @@ void __init bootmem_init(void)
- 
- 	arch_numa_init();
- 
--	/*
--	 * must be done after arch_numa_init() which calls numa_init() to
--	 * initialize node_online_map that gets used in hugetlb_cma_reserve()
--	 * while allocating required CMA size across online nodes.
--	 */
--#if defined(CONFIG_HUGETLB_PAGE) && defined(CONFIG_CMA)
--	arm64_hugetlb_cma_reserve();
--#endif
--
- 	kvm_hyp_reserve();
- 	dma_limits_init();
- 
-diff --git a/arch/powerpc/include/asm/hugetlb.h b/arch/powerpc/include/asm/hugetlb.h
-index 86326587e58d..6d32a4299445 100644
---- a/arch/powerpc/include/asm/hugetlb.h
-+++ b/arch/powerpc/include/asm/hugetlb.h
-@@ -68,7 +68,6 @@ int huge_ptep_set_access_flags(struct vm_area_struct *vma,
- 			       unsigned long addr, pte_t *ptep,
- 			       pte_t pte, int dirty);
- 
--void gigantic_hugetlb_cma_reserve(void) __init;
- #include <asm-generic/hugetlb.h>
- 
- #else /* ! CONFIG_HUGETLB_PAGE */
-@@ -77,10 +76,6 @@ static inline void flush_hugetlb_page(struct vm_area_struct *vma,
- {
+-	hugetlb_cma_check();
+ 	hugetlb_init_hstates();
+ 	gather_bootmem_prealloc();
+ 	report_hugepages();
+diff --git a/mm/hugetlb_cma.c b/mm/hugetlb_cma.c
+index b1eb5998282c..f5e79103e110 100644
+--- a/mm/hugetlb_cma.c
++++ b/mm/hugetlb_cma.c
+@@ -85,9 +85,6 @@ hugetlb_cma_alloc_bootmem(struct hstate *h, int *nid, bool node_exact)
+ 	return m;
  }
  
--static inline void __init gigantic_hugetlb_cma_reserve(void)
+-
+-static bool cma_reserve_called __initdata;
+-
+ static int __init cmdline_parse_hugetlb_cma(char *p)
+ {
+ 	int nid, count = 0;
+@@ -149,8 +146,10 @@ void __init hugetlb_cma_reserve(void)
+ 		return;
+ 
+ 	order = arch_hugetlb_cma_order();
+-	if (!order)
++	if (!order) {
++		pr_warn("hugetlb_cma: the option isn't supported by current arch\n");
+ 		return;
++	}
+ 
+ 	/*
+ 	 * HugeTLB CMA reservation is required for gigantic
+@@ -159,7 +158,6 @@ void __init hugetlb_cma_reserve(void)
+ 	 * breaking this assumption.
+ 	 */
+ 	VM_WARN_ON(order <= MAX_PAGE_ORDER);
+-	cma_reserve_called = true;
+ 
+ 	hugetlb_bootmem_set_nodes();
+ 
+@@ -253,14 +251,6 @@ void __init hugetlb_cma_reserve(void)
+ 		hugetlb_cma_size = 0;
+ }
+ 
+-void __init hugetlb_cma_check(void)
+-{
+-	if (!hugetlb_cma_size || cma_reserve_called)
+-		return;
+-
+-	pr_warn("hugetlb_cma: the option isn't supported by current arch\n");
+-}
+-
+ bool hugetlb_cma_exclusive_alloc(void)
+ {
+ 	return hugetlb_cma_only;
+diff --git a/mm/hugetlb_cma.h b/mm/hugetlb_cma.h
+index 2c2ec8a7e134..78186839df3a 100644
+--- a/mm/hugetlb_cma.h
++++ b/mm/hugetlb_cma.h
+@@ -8,7 +8,6 @@ struct folio *hugetlb_cma_alloc_folio(int order, gfp_t gfp_mask,
+ 				      int nid, nodemask_t *nodemask);
+ struct huge_bootmem_page *hugetlb_cma_alloc_bootmem(struct hstate *h, int *nid,
+ 						    bool node_exact);
+-void hugetlb_cma_check(void);
+ bool hugetlb_cma_exclusive_alloc(void);
+ unsigned long hugetlb_cma_total_size(void);
+ void hugetlb_cma_validate_params(void);
+@@ -31,10 +30,6 @@ struct huge_bootmem_page *hugetlb_cma_alloc_bootmem(struct hstate *h, int *nid,
+ 	return NULL;
+ }
+ 
+-static inline void hugetlb_cma_check(void)
 -{
 -}
 -
- static inline void __init hugetlbpage_init_defaultsize(void)
+ static inline bool hugetlb_cma_exclusive_alloc(void)
  {
- }
-diff --git a/arch/powerpc/kernel/setup-common.c b/arch/powerpc/kernel/setup-common.c
-index c8c42b419742..cb5b73adc250 100644
---- a/arch/powerpc/kernel/setup-common.c
-+++ b/arch/powerpc/kernel/setup-common.c
-@@ -1003,7 +1003,6 @@ void __init setup_arch(char **cmdline_p)
- 	fadump_cma_init();
- 	kdump_cma_reserve();
- 	kvm_cma_reserve();
--	gigantic_hugetlb_cma_reserve();
- 
- 	early_memtest(min_low_pfn << PAGE_SHIFT, max_low_pfn << PAGE_SHIFT);
- 
-diff --git a/arch/powerpc/mm/hugetlbpage.c b/arch/powerpc/mm/hugetlbpage.c
-index d3c1b749dcfc..558fafb82b8a 100644
---- a/arch/powerpc/mm/hugetlbpage.c
-+++ b/arch/powerpc/mm/hugetlbpage.c
-@@ -200,18 +200,15 @@ static int __init hugetlbpage_init(void)
- 
- arch_initcall(hugetlbpage_init);
- 
--void __init gigantic_hugetlb_cma_reserve(void)
-+unsigned int __init arch_hugetlb_cma_order(void)
- {
--	unsigned long order = 0;
--
- 	if (radix_enabled())
--		order = PUD_SHIFT - PAGE_SHIFT;
-+		return PUD_SHIFT - PAGE_SHIFT;
- 	else if (!firmware_has_feature(FW_FEATURE_LPAR) && mmu_psize_defs[MMU_PAGE_16G].shift)
- 		/*
- 		 * For pseries we do use ibm,expected#pages for reserving 16G pages.
- 		 */
--		order = mmu_psize_to_shift(MMU_PAGE_16G) - PAGE_SHIFT;
-+		return mmu_psize_to_shift(MMU_PAGE_16G) - PAGE_SHIFT;
- 
--	if (order)
--		hugetlb_cma_reserve(order);
-+	return 0;
- }
-diff --git a/arch/riscv/mm/hugetlbpage.c b/arch/riscv/mm/hugetlbpage.c
-index 375dd96bb4a0..a6d217112cf4 100644
---- a/arch/riscv/mm/hugetlbpage.c
-+++ b/arch/riscv/mm/hugetlbpage.c
-@@ -447,3 +447,11 @@ static __init int gigantic_pages_init(void)
- }
- arch_initcall(gigantic_pages_init);
- #endif
-+
-+unsigned int __init arch_hugetlb_cma_order(void)
-+{
-+	if (IS_ENABLED(CONFIG_64BIT))
-+		return PUD_SHIFT - PAGE_SHIFT;
-+
-+	return 0;
-+}
-diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
-index 11ac4041afc0..848efeb9e163 100644
---- a/arch/riscv/mm/init.c
-+++ b/arch/riscv/mm/init.c
-@@ -311,8 +311,6 @@ static void __init setup_bootmem(void)
- 		memblock_reserve(dtb_early_pa, fdt_totalsize(dtb_early_va));
- 
- 	dma_contiguous_reserve(dma32_phys_limit);
--	if (IS_ENABLED(CONFIG_64BIT))
--		hugetlb_cma_reserve(PUD_SHIFT - PAGE_SHIFT);
- }
- 
- #ifdef CONFIG_RELOCATABLE
-diff --git a/arch/s390/kernel/setup.c b/arch/s390/kernel/setup.c
-index c1fe0b53c5ac..b60284328fe3 100644
---- a/arch/s390/kernel/setup.c
-+++ b/arch/s390/kernel/setup.c
-@@ -963,8 +963,6 @@ void __init setup_arch(char **cmdline_p)
- 	setup_uv();
- 	dma_contiguous_reserve(ident_map_size);
- 	vmcp_cma_reserve();
--	if (cpu_has_edat2())
--		hugetlb_cma_reserve(PUD_SHIFT - PAGE_SHIFT);
- 
- 	reserve_crashkernel();
- #ifdef CONFIG_CRASH_DUMP
-diff --git a/arch/s390/mm/hugetlbpage.c b/arch/s390/mm/hugetlbpage.c
-index d42e61c7594e..d93417d1e53c 100644
---- a/arch/s390/mm/hugetlbpage.c
-+++ b/arch/s390/mm/hugetlbpage.c
-@@ -255,3 +255,11 @@ bool __init arch_hugetlb_valid_size(unsigned long size)
- 	else
- 		return false;
- }
-+
-+unsigned int __init arch_hugetlb_cma_order(void)
-+{
-+	if (cpu_has_edat2())
-+		return PUD_SHIFT - PAGE_SHIFT;
-+
-+	return 0;
-+}
-diff --git a/arch/x86/kernel/setup.c b/arch/x86/kernel/setup.c
-index e2318fa9b1bb..e1efe3975aa0 100644
---- a/arch/x86/kernel/setup.c
-+++ b/arch/x86/kernel/setup.c
-@@ -1189,10 +1189,6 @@ void __init setup_arch(char **cmdline_p)
- 	initmem_init();
- 	dma_contiguous_reserve(max_pfn_mapped << PAGE_SHIFT);
- 
--	if (boot_cpu_has(X86_FEATURE_GBPAGES)) {
--		hugetlb_cma_reserve(PUD_SHIFT - PAGE_SHIFT);
--	}
--
- 	/*
- 	 * Reserve memory for crash kernel after SRAT is parsed so that it
- 	 * won't consume hotpluggable memory.
-diff --git a/arch/x86/mm/hugetlbpage.c b/arch/x86/mm/hugetlbpage.c
-index 58f7f2bd535d..3b26621c9128 100644
---- a/arch/x86/mm/hugetlbpage.c
-+++ b/arch/x86/mm/hugetlbpage.c
-@@ -42,3 +42,11 @@ static __init int gigantic_pages_init(void)
- arch_initcall(gigantic_pages_init);
- #endif
- #endif
-+
-+unsigned int __init arch_hugetlb_cma_order(void)
-+{
-+	if (boot_cpu_has(X86_FEATURE_GBPAGES))
-+		return PUD_SHIFT - PAGE_SHIFT;
-+
-+	return 0;
-+}
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index 019a1c5281e4..08fc332e88a7 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -279,6 +279,8 @@ void fixup_hugetlb_reservations(struct vm_area_struct *vma);
- void hugetlb_split(struct vm_area_struct *vma, unsigned long addr);
- int hugetlb_vma_lock_alloc(struct vm_area_struct *vma);
- 
-+unsigned int arch_hugetlb_cma_order(void);
-+
- #else /* !CONFIG_HUGETLB_PAGE */
- 
- static inline void hugetlb_dup_vma_private(struct vm_area_struct *vma)
-@@ -1316,9 +1318,9 @@ static inline spinlock_t *huge_pte_lock(struct hstate *h,
- }
- 
- #if defined(CONFIG_HUGETLB_PAGE) && defined(CONFIG_CMA)
--extern void __init hugetlb_cma_reserve(int order);
-+extern void __init hugetlb_cma_reserve(void);
- #else
--static inline __init void hugetlb_cma_reserve(int order)
-+static inline __init void hugetlb_cma_reserve(void)
- {
- }
- #endif
-diff --git a/mm/hugetlb_cma.c b/mm/hugetlb_cma.c
-index e8e4dc7182d5..b1eb5998282c 100644
---- a/mm/hugetlb_cma.c
-+++ b/mm/hugetlb_cma.c
-@@ -134,12 +134,24 @@ static int __init cmdline_parse_hugetlb_cma_only(char *p)
- 
- early_param("hugetlb_cma_only", cmdline_parse_hugetlb_cma_only);
- 
--void __init hugetlb_cma_reserve(int order)
-+unsigned int __weak arch_hugetlb_cma_order(void)
- {
--	unsigned long size, reserved, per_node;
-+	return 0;
-+}
-+
-+void __init hugetlb_cma_reserve(void)
-+{
-+	unsigned long size, reserved, per_node, order;
- 	bool node_specific_cma_alloc = false;
- 	int nid;
- 
-+	if (!hugetlb_cma_size)
-+		return;
-+
-+	order = arch_hugetlb_cma_order();
-+	if (!order)
-+		return;
-+
- 	/*
- 	 * HugeTLB CMA reservation is required for gigantic
- 	 * huge pages which could not be allocated via the
-@@ -149,9 +161,6 @@ void __init hugetlb_cma_reserve(int order)
- 	VM_WARN_ON(order <= MAX_PAGE_ORDER);
- 	cma_reserve_called = true;
- 
--	if (!hugetlb_cma_size)
--		return;
--
- 	hugetlb_bootmem_set_nodes();
- 
- 	for (nid = 0; nid < MAX_NUMNODES; nid++) {
-diff --git a/mm/mm_init.c b/mm/mm_init.c
-index 027d53073393..11491e455d17 100644
---- a/mm/mm_init.c
-+++ b/mm/mm_init.c
-@@ -2701,6 +2701,8 @@ void __init mm_core_init_early(void)
- void __init mm_core_init(void)
- {
- 	arch_mm_preinit();
-+
-+	hugetlb_cma_reserve();
- 	hugetlb_bootmem_alloc();
- 
- 	free_area_init();
+ 	return false;
 -- 
 2.51.0
 
