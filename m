@@ -1,130 +1,146 @@
-Return-Path: <linux-mips+bounces-12604-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12605-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 321ABCDFC45
-	for <lists+linux-mips@lfdr.de>; Sat, 27 Dec 2025 13:53:21 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C375FCE4AA0
+	for <lists+linux-mips@lfdr.de>; Sun, 28 Dec 2025 10:54:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A9991301C92A
-	for <lists+linux-mips@lfdr.de>; Sat, 27 Dec 2025 12:51:33 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 4F1603004CB0
+	for <lists+linux-mips@lfdr.de>; Sun, 28 Dec 2025 09:54:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47157230D35;
-	Sat, 27 Dec 2025 12:43:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74E5118DB37;
+	Sun, 28 Dec 2025 09:54:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YLWk2ary"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="S2ph8a/f"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 174D621CC58;
-	Sat, 27 Dec 2025 12:42:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DC717081E
+	for <linux-mips@vger.kernel.org>; Sun, 28 Dec 2025 09:54:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1766839382; cv=none; b=khQd0mMw8g6EnjsBx8J9Fpk7LeGAk3RNNNvaBHins0zdQZ0vj2GjcMCowyK8Ircggh0/saAcNsGEaZfGMJx9/qJHi+cBUYJF2EPBxjLu17N8Ok2YQHJkEDqHkz2BVhQetzrKHjnyO6RJE79TAlVqqIBUQZOnovsvDRAXYmzNZEE=
+	t=1766915664; cv=none; b=cASjw8UHVGFVGjKbR/qI6jU0zH2ACUwSl/hihKWelN0kuwc81awQmTB1Mldosd/lZJHuK/8mFmLYLJbEhEetnGMwIuFRWCaiY5CNsoAj5EqRMq7RM2ccNwJw+o4ZV3AajK3wR5xvFe2Pt6mCeKaFSdI5HNmH5GUJ/AOiIevNfoU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1766839382; c=relaxed/simple;
-	bh=evZsjUyJHrxkPefhOiZUy0dqWLUa+4V2/GdjlFkFNnI=;
+	s=arc-20240116; t=1766915664; c=relaxed/simple;
+	bh=d1HWZ/gra3XXbf0pSMqW8Xa2iv1be8XgnIpd86Sciu8=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=F1oQEl+gdUo7JreASseRQfNRctXfBeAeJsgSeqNNKFgwMKYA2JTgDvo/12LHdSNgBxwp5u0jfy4Z3K4wutntRaN3iRJJh3cCnuLGYSk2eU4prK/9YyagKwZnbMJMOf6We3GqB5GGpe5x4C/b1i/ZYb4WLKcu1P8RDUqLYuMbyB4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YLWk2ary; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2FB05C4CEF1;
-	Sat, 27 Dec 2025 12:42:58 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=DR8V2mCFwDVMtJm8it6WBl9BQ9xGM0krvnNutHNuWG4KQq1ZvbEasB9Nwmj5Y8lWvqjqAc6YMWopHYHjEUQKGgaUGuElj1ThDTHalShz4rB3h5IZhFJlOj9dA8f8hqqrCE9GCfRYfTMe0ChDa2Ca4DzcrkbzC4hpiYesk0BYagM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=S2ph8a/f; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 397ECC4CEFB;
+	Sun, 28 Dec 2025 09:54:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1766839379;
-	bh=evZsjUyJHrxkPefhOiZUy0dqWLUa+4V2/GdjlFkFNnI=;
+	s=k20201202; t=1766915663;
+	bh=d1HWZ/gra3XXbf0pSMqW8Xa2iv1be8XgnIpd86Sciu8=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=YLWk2arydbLSzy/AnZ2BZ6imA8M4zOPW9cm9RSS0dwJnJK4ULnLL/1TPCAPkz3ylQ
-	 NYdeQeLd2rn6Ml1t+VkRE6fJ+vD32YTbNo1rEI6jETciiq65AMpCiIqI23MRgMUrJ9
-	 pg2AeobEuaaT1wKWM99ISpLpG7nwiQDrg1ZF7y61h5fRSkzB8vXDN/MjeQBfbFYtRv
-	 QUnOA1btcsORE9l0zGDnBQNmnaXnOKQc3E5ZogduThQlf6MwYrdjKfoBL/g6K8LEUT
-	 D6p28pqUbT7T4zz2MAFErlYavypbulKlZDNoS7LQSFMJE+RUDomQhVM86g0GpYa9ns
-	 wyI1hA+OPxoAA==
-Date: Sat, 27 Dec 2025 13:42:57 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: =?utf-8?Q?Beno=C3=AEt?= Monin <benoit.monin@bootlin.com>
-Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
-	Gregory CLEMENT <gregory.clement@bootlin.com>, =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
-	Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>, Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
-	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-mips@vger.kernel.org
-Subject: Re: [PATCH v2 01/10] dt-bindings: soc: mobileye: Add EyeQ7H OLB
-Message-ID: <20251227-bipedal-wombat-of-correction-d71fd8@quoll>
-References: <20251224-clk-eyeq7-v2-0-81744d1025d9@bootlin.com>
- <20251224-clk-eyeq7-v2-1-81744d1025d9@bootlin.com>
+	b=S2ph8a/fJAc0B+NhCYlZUvwtKpNEb86xETF+DEYN/ePGkRtbnyFHSSRtsbNuMUpUN
+	 mlEmKNBxtFukASa1Gn4h0UHnkv0Fjaf8MraIitOIAF1I7gSNpiBNEzHD9O+Rn5L7+1
+	 MwYl18Qfq24Hed1kWmbD8VuQiTqblZcpkIlPtsQWMP+ERZLPmQzlhwy/qCDblJi57J
+	 LDqqKw3VdO437xnP+6aixjn/7iL9IyZXq+ho1aL3ffovZO7GTjpvZ0R/ykifDE6Lki
+	 Z6danE2z94A4ZabQG6omWIlwQEhU5hGB7VaSCGZ+EXw3bNHYhDrjKhXsfr62tmttbb
+	 n4Y/HYbursIxA==
+Date: Sun, 28 Dec 2025 11:54:17 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: markus.stockhausen@gmx.de
+Cc: tglx@linutronix.de, linux-mm@kvack.org, linux-mips@vger.kernel.org,
+	jelonek.jonas@gmail.com,
+	'Chris Packham' <Chris.Packham@alliedtelesis.co.nz>,
+	hauke@hauke-m.de
+Subject: Re: HIGHMEM freeing patch breaks Realtek RTL930x builds
+Message-ID: <aVD-SaGkj7lG91pT@kernel.org>
+References: <00bc01dc718e$b4108af0$1c31a0d0$@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <20251224-clk-eyeq7-v2-1-81744d1025d9@bootlin.com>
+In-Reply-To: <00bc01dc718e$b4108af0$1c31a0d0$@gmx.de>
 
-On Wed, Dec 24, 2025 at 11:07:14AM +0100, Beno=C3=AEt Monin wrote:
-> +  '#reset-cells':
-> +    description:
-> +      First cell is domain and optional if compatible has a single reset=
- domain.
-> +      Second cell is reset index inside that domain.
-> +    enum: [ 1, 2 ]
-> +
-> +  '#clock-cells':
-> +    const: 1
-> +
-> +  clocks:
-> +    minItems: 1
-> +    maxItems: 2
-> +
-> +  clock-names:
-> +    minItems: 1
-> +    maxItems: 2
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - '#clock-cells'
-> +  - clocks
-> +  - clock-names
-> +
-> +additionalProperties: false
+Hi Markus,
 
-This goes before examples section.
+On Sat, Dec 20, 2025 at 09:57:40AM +0100, markus.stockhausen@gmx.de wrote:
+> Hi,
+> 
+> sorry for being late on this topic but downstream OpenWrt just started
+> kernel
+> conversion from 6.12 to 6.18 these days. During preparation of the PR
+> https://github.com/openwrt/openwrt/pull/21181 we noticed that Realtek 
+> RTL930x soc based devices with more than 256MB (highmem) do not boot 
+> any longer. 
+> 
+> These are MIPS 34k 32bit multithreaded SoC with layout 
+> <0x00000000 0x10000000>, /* 256 MiB lowmem */
+> <0x20000000 0x10000000>; /* 256 MiB highmem */
+> 
+> Bisecting the issue gave " arch, mm: streamline HIGHMEM freeing" 
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/
+> ?h=v6.15-rc1&id=6faea3422e3b4e8de44a55aa3e6e843320da66d2
+> as the first bad commit. This is back from the 6.15 times.
+> 
+> I have no real idea why removing mem_init_free_highmem() and letting
+> __free_memory_core() work on the whole memory range gives issues.
+> 
+> We are aligning to upstream very slowly and are still in need of 
+> downstream patches so here some additional info.
+> 
+> - Until now we never cared about FLATMEM/SPARSEMEM configs
+> 
+> - We are still using dedicated prom.c/setup.c for the devices
+> https://git.openwrt.org/?p=openwrt/openwrt.git;a=tree;f=target/linux/
+> realtek/files-6.12/arch/mips/rtl838x;hb=HEAD
+> 
+> Any idea or hint is appreciated.
 
-> +
-> +allOf:
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - mobileye,eyeq7h-ddr0-olb
-> +              - mobileye,eyeq7h-ddr1-olb
-> +              - mobileye,eyeq7h-mips0-olb
-> +              - mobileye,eyeq7h-mips1-olb
-> +              - mobileye,eyeq7h-mips2-olb
-> +              - mobileye,eyeq7h-periph-east-olb
-> +              - mobileye,eyeq7h-south-olb
-> +    then:
-> +      properties:
-> +        clocks:
-> +          maxItems: 1
-> +          description:
-> +            Reference input clock.
+Can you please send logs from a working kernel and a failing kernel with
+"memblock=debug" added to the kernel command line?
 
-Just use items with description syntax, like everywhere else.
+Another thing I think worth checking is will the system boot with a partial
+revert of 6faea3422e3b ("arch, mm: streamline HIGHMEM freeing") for mips:
 
-With these fixed:
+diff --git a/arch/mips/mm/init.c b/arch/mips/mm/init.c
+index cd04200d0573..be5985155509 100644
+--- a/arch/mips/mm/init.c
++++ b/arch/mips/mm/init.c
+@@ -419,6 +419,23 @@ void __init arch_zone_limits_init(unsigned long *max_zone_pfns)
+ static struct kcore_list kcore_kseg0;
+ #endif
+ 
++static inline void __init mem_init_free_highmem(void)
++{
++#ifdef CONFIG_HIGHMEM
++	unsigned long tmp;
++
++	if (cpu_has_dc_aliases)
++		return;
++
++	for (tmp = highstart_pfn; tmp < highend_pfn; tmp++) {
++		struct page *page = pfn_to_page(tmp);
++
++		if (!memblock_is_memory(PFN_PHYS(tmp)))
++			SetPageReserved(page);
++	}
++#endif
++}
++
+ void __init arch_mm_preinit(void)
+ {
+ 	/*
+@@ -429,6 +446,7 @@ void __init arch_mm_preinit(void)
+ 
+ 	maar_init();
+ 	setup_zero_pages();	/* Setup zeroed pages.  */
++	mem_init_free_highmem();
+ 
+ #ifdef CONFIG_64BIT
+ 	if ((unsigned long) &_text > (unsigned long) CKSEG0)
+ 
+> Thanks in advance.
+> Markus
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
-
-Best regards,
-Krzysztof
-
+-- 
+Sincerely yours,
+Mike.
 
