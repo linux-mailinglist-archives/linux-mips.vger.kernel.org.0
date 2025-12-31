@@ -1,172 +1,190 @@
-Return-Path: <linux-mips+bounces-12655-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12656-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 55D30CEC000
-	for <lists+linux-mips@lfdr.de>; Wed, 31 Dec 2025 13:43:55 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id BB780CEC31E
+	for <lists+linux-mips@lfdr.de>; Wed, 31 Dec 2025 16:49:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 1E4823009F92
-	for <lists+linux-mips@lfdr.de>; Wed, 31 Dec 2025 12:43:54 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 27BF83000979
+	for <lists+linux-mips@lfdr.de>; Wed, 31 Dec 2025 15:49:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B45E7314B77;
-	Wed, 31 Dec 2025 12:43:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B118299952;
+	Wed, 31 Dec 2025 15:49:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=markus.stockhausen@gmx.de header.b="jl1TY5nj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="k2mBtzVR"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0446D24A046;
-	Wed, 31 Dec 2025 12:43:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7D5A28A72F
+	for <linux-mips@vger.kernel.org>; Wed, 31 Dec 2025 15:49:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767185032; cv=none; b=ChxvwHXiJz+Ki+fGgVpXs+ooczu4jFaa7v+F1c/XfxaSWA9oNdJBDgzXYCMlaGWt24OgAAHXJksjyuE1yoaldkP8quYpq1osD5FU2yX6+ptLLkCoYeLcN250IN/c1ji0l5ibnxD0li8JemG2PZ1L7YU2go5MsxCs3oanfLB9tHU=
+	t=1767196187; cv=none; b=G03Co6zfKODbn9wLmYBYJtT0eQ+WEk5TM6e3lwMtvzQmVmhLlx8VNJHkoBe79pHwrzWyGSzh5Q4SqCzzvmQPsjHBazxi6c8p4O+3f2iQsXcVn5UZN9eFu3DqA/llEzZOEFEbzkuPekjRtKI1CJYZQmCchQBJh6E6ygE8NciBTTY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767185032; c=relaxed/simple;
-	bh=dEhQpMsPCVwotTFTae/WubHmXa2WQBBzYVtdZc3TZ+M=;
-	h=From:To:Cc:References:In-Reply-To:Subject:Date:Message-ID:
-	 MIME-Version:Content-Type; b=l51/q4282TGUyQXr6TUqBQntI9TpG+CWA0+Z/o3AsATPKMcyBeZHrrQ36A+N6Q+dWvGDkF22pbjBXzxU6x3Nu6rUAA+EmSFW6lo2J4qgpEhMT6NRgKklBqa+CN/a0ViTt/EG0KFhC0CRgj1SZNWnUjx1jaWDBX0kF2OW3agVHps=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=markus.stockhausen@gmx.de header.b=jl1TY5nj; arc=none smtp.client-ip=212.227.17.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1767185024; x=1767789824;
-	i=markus.stockhausen@gmx.de;
-	bh=dEhQpMsPCVwotTFTae/WubHmXa2WQBBzYVtdZc3TZ+M=;
-	h=X-UI-Sender-Class:From:To:Cc:References:In-Reply-To:Subject:Date:
-	 Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:cc:
-	 content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=jl1TY5njcMeEzXSUlYL/bNu0N3GvgkBvX7N32dR2LK415Tbw+SxYna2gqVdyJ2JS
-	 DXYdpzz4dLzORA3lJNA4KypNMXo+rsouTXbAphehNzJ4kQBivNfPQGTyQevUisfZf
-	 ZnQAiP6tASwe9aWs/0kICPBBUkItziB+ThXcMex06499/UAdrEti9wi7ortEskW+q
-	 MMdRBiyCQ+quVZAwNOhB7R1AtPhaPDGnKly+/TOFLunT7WW4CJGQ4x3kACnD78NMC
-	 pdgj0BGjZl0RQG+tchKJBVYhXEZKemFtrI1tZGTLHbqc9vNA99p2xdvD4j8LmcRT7
-	 kEkXhdPex8TxhIpWIw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from colnote55 ([94.31.93.28]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MmlTC-1wIY5h3V9K-00kS7W; Wed, 31
- Dec 2025 13:43:43 +0100
-From: <markus.stockhausen@gmx.de>
-To: "'Mike Rapoport'" <rppt@kernel.org>,
-	"'Thomas Bogendoerfer'" <tsbogend@alpha.franken.de>
-Cc: "'Andrew Morton'" <akpm@linux-foundation.org>,
-	"'Chris Packham'" <Chris.Packham@alliedtelesis.co.nz>,
-	"'Thomas Gleixner'" <tglx@linutronix.de>,
-	<hauke@hauke-m.de>,
-	<jelonek.jonas@gmail.com>,
-	<linux-mips@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>,
-	<linux-mm@kvack.org>
-References: <20251231105701.519711-1-rppt@kernel.org>
-In-Reply-To: <20251231105701.519711-1-rppt@kernel.org>
-Subject: AW: [PATCH] mips: fix HIGHMEM initialization
-Date: Wed, 31 Dec 2025 13:43:41 +0100
-Message-ID: <010f01dc7a53$1906e9f0$4b14bdd0$@gmx.de>
+	s=arc-20240116; t=1767196187; c=relaxed/simple;
+	bh=3O2pKoi3Hwirhh0+J04ChOJnDVUiP3w0hlE8zKMOybs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CkrMlli2FL76Q7PGpGsR4MK8Wn6DfO2Y5wO1KUX38a3N3+NARWC1wHt+Esy899zW/famE2bDlVYxu2e87ljcJuSH6Mk5kWTAUb4O23i4uCj7w8a4iYv4RR9z0ROpImJieWpRZdqzkuTzVbz/0WDLgDWa9PI6yGwOIF+7Pte5Cv4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=k2mBtzVR; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-64b9d01e473so15471423a12.2
+        for <linux-mips@vger.kernel.org>; Wed, 31 Dec 2025 07:49:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767196183; x=1767800983; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H6r7yw9l553CBnZ0Oq6/Kvj3e3aIbXAlTRdm8Qc8sow=;
+        b=k2mBtzVRSH1v+FGKxeSAlmrpoWJXHRrGk48w1hRSCCe+VJ02bBPiRZANqhLbXR2hOY
+         21EyUlifjsLEM1xVf7OaJZ4iu4dIVgA20ZoP7Cq8CpTWrjZWh1QDQ1BWcQjTafZgZEqG
+         x6ytaO0jlKRb6Mf+R/ITTbD0YqfAkioqr0gj4YHlF4ga4ax0mckcgaZE4aljhudBNybJ
+         KOKmnhZiYOw4i8T9WFUm2qI08zlv1FS9OSrj2KblI4Ym88f7dxhWmAhoUlxE0sjMDeCY
+         8AIReZEkVs2R+Y/ApvqNJsTv5vZot/ZOaI2Hk/ccXAtkHRBXtm9S44o2QsdjPbWS2YRi
+         C5Qw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767196183; x=1767800983;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=H6r7yw9l553CBnZ0Oq6/Kvj3e3aIbXAlTRdm8Qc8sow=;
+        b=flsQ/hXebZZnxGrA/du1hgXXJoYJXUGaDHlJvvbq5uxMyI12KtjHSO2I5jcYsEMoBv
+         Dw1aAHNaEXTAUSHMQSbqc7PECCkgV7/QTbIRmy9ce1g6Cm3DKznHb8Q73C80dtYLpf83
+         xvlVYji0ovynkZ73zJdvixavf8lcoZ8xKl3cL7gURtfFAoSbcw3T1raGlva+woAXqCUF
+         WLm5MO3nSLfWxrZf6VaDX7R/W+rJeU0YqB/2+/07fO42mY1jeBPPtVJPLFCa9h7uzFsY
+         Yn5EggCCODkImXA0sPtXNM6L+k93p8n2CXtGKfEe8fpwD8Qz3xcEyXdCAGDA+4su93kr
+         htqA==
+X-Forwarded-Encrypted: i=1; AJvYcCXhwDrt9viXwpo8yPQ13cWHCv9FQXANb+io8br4/01kRDfdJmy4zSDPyqqYonUmHMqTbdkQO0jTRyJt@vger.kernel.org
+X-Gm-Message-State: AOJu0YzggdPSRmc0YAyS1swjM17xvZ3UPFgqQ+rPZ6x8fNxznsJOxEPe
+	QK6/xHcJFf6zEcePCokWTGnBCmkPEEBE3NCp3dzzt8xdYnC0kTbTIDm3NXgiLWMM6D/nYsxleMg
+	aC5KJka/iUFSrTVARjUBOxI4pVbLFE5U=
+X-Gm-Gg: AY/fxX65Vs59E/csXiAMOuJ3H6KgugYAtWRapa10dhdGv+ux6y+oIBdgi/e72+EaRER
+	TVbyxTq9NkBWvTA+iAeYogJdh4/BgIQOrDOzV2yEbB9GklIBktW6XbSf7jxSla2p2/OpxBV2745
+	Pb8UHm4Ob+mVmRtc9HqaQ3yDVQY0CQllelJ1eRm70GsczssbFf73stQCG3LTY4swzzWFB7RVbF8
+	AlxQ1vVH8np+8SpEAvOoLWyi20m+vbwggkhVJbXnwdCEcC6rSm7hnl9TkU/2/+OR9YMh8uK
+X-Google-Smtp-Source: AGHT+IFWPXcZKnGq0Krk9SV9S7c2h0pNtpTmEWv1Brc1vDiv5zIRm5JUQPWxix5qBNEZM9fT8eFcchz/mGnlgfTZ7QQ=
+X-Received: by 2002:a05:6402:430d:b0:64d:170:7976 with SMTP id
+ 4fb4d7f45d1cf-64d01707bacmr33060451a12.16.1767196183052; Wed, 31 Dec 2025
+ 07:49:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="us-ascii"
+References: <20251228124001.3624742-1-rppt@kernel.org> <20251228124001.3624742-2-rppt@kernel.org>
+In-Reply-To: <20251228124001.3624742-2-rppt@kernel.org>
+From: Magnus Lindholm <linmag7@gmail.com>
+Date: Wed, 31 Dec 2025 16:49:31 +0100
+X-Gm-Features: AQt7F2rayRHt2K_8t_heYN2h4Fxse0t-QPEGBzoKWlAlrWu2fr6sWsAyLE9oYEU
+Message-ID: <CA+=Fv5TDfwnu7Qf2y=PLWWN1EvNpNbr8habnTO7R4_caAySDzw@mail.gmail.com>
+Subject: Re: [PATCH 01/28] alpha: introduce arch_zone_limits_init()
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Alex Shi <alexs@kernel.org>, 
+	Alexander Gordeev <agordeev@linux.ibm.com>, Andreas Larsson <andreas@gaisler.com>, 
+	Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@kernel.org>, 
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	"David S. Miller" <davem@davemloft.net>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	David Hildenbrand <david@kernel.org>, Dinh Nguyen <dinguyen@kernel.org>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>, 
+	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Johannes Berg <johannes@sipsolutions.net>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Jonathan Corbet <corbet@lwn.net>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Michal Hocko <mhocko@suse.com>, Michal Simek <monstr@monstr.eu>, 
+	Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Pratyush Yadav <pratyush@kernel.org>, 
+	Richard Weinberger <richard@nod.at>, Russell King <linux@armlinux.org.uk>, 
+	Stafford Horne <shorne@gmail.com>, Suren Baghdasaryan <surenb@google.com>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Thomas Gleixner <tglx@linutronix.de>, 
+	Vasily Gorbik <gor@linux.ibm.com>, Vineet Gupta <vgupta@kernel.org>, Vlastimil Babka <vbabka@suse.cz>, 
+	Will Deacon <will@kernel.org>, x86@kernel.org, linux-alpha@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org, 
+	linux-cxl@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org, 
+	linux-mm@kvack.org, linux-openrisc@vger.kernel.org, 
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org, 
+	linux-snps-arc@lists.infradead.org, linux-um@lists.infradead.org, 
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
+	sparclinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-Mailer: Microsoft Outlook 16.0
-Thread-Index: AQFbU2A2go5FJtG2va65UoMCofaSGLY9/u2A
-Content-Language: de
-X-Provags-ID: V03:K1:wwFhKEUocOJ6FCHJ7aKv9Y4avZFmC2ueczsXeDWPicyBUwYiyQO
- ofU8yeVjTFk2d3dbeEgP9IgDFrtngRt9D/vhliIvum/O7SQFhfqItwWaRFgiZ3HBpFs2rdr
- zMCnmIzyJS9j5hcX0xxZjQIO7a0Tfy9E6E6Ls/UNNPg2ZY9xdEF3Z+v4iDj7rh6lRiThcvm
- e6U7Apn2hG2+oFyBGt8lA==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:sbfn/S1eGzQ=;5ljjIn35YIU7y3TMdf5amfKIwUX
- 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
 
-Hi Mike,=20
-
-> Von: Mike Rapoport <rppt@kernel.org>=20
-> Betreff: [PATCH] mips: fix HIGHMEM initialization
+On Sun, Dec 28, 2025 at 1:40=E2=80=AFPM Mike Rapoport <rppt@kernel.org> wro=
+te:
 >
-> Commit 6faea3422e3b ("arch, mm: streamline HIGHMEM freeing") overzealous=
-ly
-> removed mem_init_free_highmem() function that beside freeing high memory
-> pages checked for CPU support for high memory as a prerequisite.
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+>
+> Move calculations of zone limits to a dedicated arch_zone_limits_init()
+> function.
+>
+> Later MM core will use this function as an architecture specific callback
+> during nodes and zones initialization and thus there won't be a need to
+> call free_area_init() from every architecture.
+>
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> ---
+>  arch/alpha/mm/init.c | 15 ++++++++++-----
+>  include/linux/mm.h   |  1 +
+>  2 files changed, 11 insertions(+), 5 deletions(-)
+>
+> diff --git a/arch/alpha/mm/init.c b/arch/alpha/mm/init.c
+> index 4c5ab9cd8a0a..cd0cb1abde5f 100644
+> --- a/arch/alpha/mm/init.c
+> +++ b/arch/alpha/mm/init.c
+> @@ -208,12 +208,8 @@ callback_init(void * kernel_end)
+>         return kernel_end;
+>  }
+>
+> -/*
+> - * paging_init() sets up the memory map.
+> - */
+> -void __init paging_init(void)
+> +void __init arch_zone_limits_init(unsigned long *max_zone_pfn)
+>  {
+> -       unsigned long max_zone_pfn[MAX_NR_ZONES] =3D {0, };
+>         unsigned long dma_pfn;
+>
+>         dma_pfn =3D virt_to_phys((char *)MAX_DMA_ADDRESS) >> PAGE_SHIFT;
+> @@ -221,8 +217,17 @@ void __init paging_init(void)
+>
+>         max_zone_pfn[ZONE_DMA] =3D dma_pfn;
+>         max_zone_pfn[ZONE_NORMAL] =3D max_pfn;
+> +}
+> +
+> +/*
+> + * paging_init() sets up the memory map.
+> + */
+> +void __init paging_init(void)
+> +{
+> +       unsigned long max_zone_pfn[MAX_NR_ZONES] =3D {0, };
+>
+>         /* Initialize mem_map[].  */
+> +       arch_zone_limits_init(max_zone_pfn);
+>         free_area_init(max_zone_pfn);
+>
+>         /* Initialize the kernel's ZERO_PGE. */
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 15076261d0c2..628c0e0ac313 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -3552,6 +3552,7 @@ static inline unsigned long get_num_physpages(void)
+>   * free_area_init(max_zone_pfns);
+>   */
+>  void free_area_init(unsigned long *max_zone_pfn);
+> +void arch_zone_limits_init(unsigned long *max_zone_pfn);
+>  unsigned long node_map_pfn_alignment(void);
+>  extern unsigned long absent_pages_in_range(unsigned long start_pfn,
+>                                                 unsigned long end_pfn);
+> --
+> 2.51.0
+>
 
-Ah, that gives a little insight to the issue.
+This looks fine to me from the Alpha side.
 
-Thanks for the patch.
-
-Markus
-
+Acked-by: Magnus Lindholm <linmag7@gmail.com>
 
