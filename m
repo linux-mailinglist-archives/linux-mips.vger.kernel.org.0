@@ -1,103 +1,95 @@
-Return-Path: <linux-mips+bounces-12664-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12665-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 185AACED7A1
-	for <lists+linux-mips@lfdr.de>; Thu, 01 Jan 2026 23:42:51 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E333CED893
+	for <lists+linux-mips@lfdr.de>; Fri, 02 Jan 2026 00:06:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id CD98B3004F28
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Jan 2026 22:42:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 06C553005BAB
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Jan 2026 23:06:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B17D8285CB8;
-	Thu,  1 Jan 2026 22:42:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7C9A21CC64;
+	Thu,  1 Jan 2026 23:06:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ryZxsXkX"
+	dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b="cG6qI1vN"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx4.wp.pl (mx4.wp.pl [212.77.101.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A92521D5BC
-	for <linux-mips@vger.kernel.org>; Thu,  1 Jan 2026 22:42:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33E13CA5A
+	for <linux-mips@vger.kernel.org>; Thu,  1 Jan 2026 23:06:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.77.101.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767307368; cv=none; b=C1nmZqh89GKoXjWqKpjKFmXIwni/6g83wFTsGR1T6Xuq7GCCqg9EDIWaguuwkBwEhnQPNYy4ZPOrX9z7iWMBmdZJYpQvw/6yoMwOu/sgmFWercGcbAuugvoMQLSllrdaUgsZGPJCcmZJ7brzJKngtPXE6P/uC1xicfzKLMDdo4w=
+	t=1767308803; cv=none; b=p0fkLVKcx/MZ6diGLFPLSHSHPx/fqfFY/3yEL87hZzwAfofL512aHAHL+mcmP+zKftszbzv8ATAdbk7Oodyi9mUCPX94uUpfzPCPBA7SPIrhDdqEwWS97kjooGbKBhdeM5/YeGmp7e4/RwauhwLStZwQ8o/FSSbzyiDbtbsJDFo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767307368; c=relaxed/simple;
-	bh=c03Ouoop/OW3SvavreidSQNFjtJjTLM/VhWkUCy+XCA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TETU+3vkE4Spja/r9dZCpDIKeZJo9MJsU49YZxud+VBfpQ0nJudlN55dLjkEr8XgqYubggVlLJ0Rl/U6lkQ+hGn8hMUj2+AWlk2iDXjqFXuFqeiUGFhop2d1e+uBh67ZTlNTOxe2c0q0aK7QpR78aB1BS0h492f3rWJOUrA2jVE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ryZxsXkX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4101EC2BCB2
-	for <linux-mips@vger.kernel.org>; Thu,  1 Jan 2026 22:42:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767307368;
-	bh=c03Ouoop/OW3SvavreidSQNFjtJjTLM/VhWkUCy+XCA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ryZxsXkX2A5BlERIpG9p4sMf7Xbu47Iqut65LWm5eoubtMgGNIUccUg6ms6KoagMJ
-	 0GlUPPWrdl15h/CIYeyzFV8GziyNOl6LhZHjywiGqqkNugSfhsWCUQiHk3D3QpwkWd
-	 a2v2agOk0F94oWc2GlRnZSG5PHXvq8owxhrDRrP0XdOxD26mmW6dLhoKS5Tzlsul6J
-	 ArOMjy5fN/ZKU9/y3RCSRFju5Enz0uJzCX2q7qnzhrdrEXvRZ5IS4KuR3ykWzw9ig3
-	 cq+ygrD/7y/MqBrQWz55srKZq1GpZm3nSqze6Fd3woh6J1lPUMLodL1+w8oJ1A7N5R
-	 +B5Aki8T2hbzg==
-Received: by mail-yx1-f49.google.com with SMTP id 956f58d0204a3-640c9c85255so11532526d50.3
-        for <linux-mips@vger.kernel.org>; Thu, 01 Jan 2026 14:42:48 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU4SUTWxEHMjFNX6N3G8Si5jXTDVA3PBWyBCjiXQhWYMPKrqwdtsDkBTgqLeOjisFDhbMudt3ofAkpG@vger.kernel.org
-X-Gm-Message-State: AOJu0YzaOjAvOe8uFiSZRtVadcxRjKTgDp16VR0iTzKI1PLVTi6VS+yY
-	+jSMZj3l4aNHcFcbK97IN77fGltXx6ybDIniEL0iOcSxPJipS6f8lvF12Z1hL5PWRwNrs/pe52h
-	WB6+r5cBcO0QwCNiwwrBOd7LHDUTa/vk=
-X-Google-Smtp-Source: AGHT+IGuCSdWh+iJDmbFEBp3W61sWvSWqQfdLVlCzvdLNew329ciqVsgcnUXKXJoXSwcIcnZqwOTDxMTLToTAL+paPw=
-X-Received: by 2002:a53:b701:0:b0:641:f5bc:68d6 with SMTP id
- 956f58d0204a3-6466a8c5275mr26057369d50.83.1767307367560; Thu, 01 Jan 2026
- 14:42:47 -0800 (PST)
+	s=arc-20240116; t=1767308803; c=relaxed/simple;
+	bh=US7g0fT2WrFWVNstxMf1pZ+HNijOdD3MvUsgtVB6Eww=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=vDcEm5VzSlMQ4zpSTcq/koWn7PtzNoxYGKKnhqhLAi0UkriW+nDkZv1QkwNlJShUcKqFwtlcYYvyW/fcMeufe/Ycqn1JxTMNYHuQGAEE1c4AHPwDUdhf5/CgissT5Kq02qQ6VUqIBMzynpP7RYqlhGOyqbWEjvSBGWWXGoJcltQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl; spf=pass smtp.mailfrom=wp.pl; dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b=cG6qI1vN; arc=none smtp.client-ip=212.77.101.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wp.pl
+Received: (wp-smtpd smtp.wp.pl 27093 invoked from network); 2 Jan 2026 00:06:37 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=20241105;
+          t=1767308797; bh=US7g0fT2WrFWVNstxMf1pZ+HNijOdD3MvUsgtVB6Eww=;
+          h=Subject:To:Cc:From;
+          b=cG6qI1vN+bCCYwiSGOjPS9N+FTsDwrZ5n5qwudU3dXzot8rEQPURSiI52gS1EJSXy
+           4F/9AqI6COotC7x+CXH/hWRJzLcIHEtdS2a8n9Uyv4vd82yfB45K5cUcuXWxBQnPvQ
+           ldcXtbNgSTrpJp/by3YjkOk4gPTmREIZ6IvRlReZfrrdqfKvg8XKQ7XikEfJ4byx53
+           7oTFoz+WfFBBw5Clip9hJn+GRSZSMsCA3ykBgyT92sx+fkwoocytIGuWP78wfMxqqB
+           72oBRnvkxJm0VjMeWbk0U2PSYUqJqpzsJFXitfYQ8/gdzgFGE7+mw4xTR2vK7sjj5K
+           pWLKjC7SvUoEA==
+Received: from 83.5.157.18.ipv4.supernova.orange.pl (HELO [192.168.3.246]) (olek2@wp.pl@[83.5.157.18])
+          (envelope-sender <olek2@wp.pl>)
+          by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <sergio.paracuellos@gmail.com>; 2 Jan 2026 00:06:37 +0100
+Message-ID: <53dc4786-a6c3-471a-acc4-67486b8cdea9@wp.pl>
+Date: Fri, 2 Jan 2026 00:06:36 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20251217-eyeq6lplus-v1-0-e9cdbd3af4c2@bootlin.com>
- <20251217-eyeq6lplus-v1-11-e9cdbd3af4c2@bootlin.com> <38f097cb-5329-4b91-b1a8-3eb5fed05ad4@kernel.org>
- <fe9e594f-9718-48b5-8208-fb567a54cae9@bootlin.com>
-In-Reply-To: <fe9e594f-9718-48b5-8208-fb567a54cae9@bootlin.com>
-From: Linus Walleij <linusw@kernel.org>
-Date: Thu, 1 Jan 2026 23:42:36 +0100
-X-Gmail-Original-Message-ID: <CAD++jL=7eU+jSHn0t2KKzHjipXYKoQreOdaHH8OcyriPmwHJQw@mail.gmail.com>
-X-Gm-Features: AQt7F2pQQoDMhu8lNy4TdUpYluCLS90ViEjybo-mgp7DpUhoLaNeRiZuGoShcsE
-Message-ID: <CAD++jL=7eU+jSHn0t2KKzHjipXYKoQreOdaHH8OcyriPmwHJQw@mail.gmail.com>
-Subject: Re: [PATCH 11/13] MIPS: Add Mobileye EyeQ6Lplus evaluation board dts
-To: =?UTF-8?Q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>, 
-	Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzk@kernel.org>, Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
-	Gregory CLEMENT <gregory.clement@bootlin.com>, =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>, linux-mips@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 2/2] mips: dts: ralink: mt7621: add crypto offload
+ support
+To: Sergio Paracuellos <sergio.paracuellos@gmail.com>
+Cc: ansuelsmth@gmail.com, herbert@gondor.apana.org.au, davem@davemloft.net,
+ chester.a.unal@arinc9.com, robh@kernel.org, krzk+dt@kernel.org,
+ conor+dt@kernel.org, matthias.bgg@gmail.com, tsbogend@alpha.franken.de,
+ angelogioacchino.delregno@collabora.com, linux-crypto@vger.kernel.org,
+ linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, benjamin.larsson@genexis.eu
+References: <20260101172052.1862252-1-olek2@wp.pl>
+ <20260101172052.1862252-2-olek2@wp.pl>
+ <CAMhs-H_iN7pWsis2HbeJ-xr+9JoMa+EF-+7z9e21DJ1dyNNtuw@mail.gmail.com>
+Content-Language: en-US
+From: Aleksander Jan Bajkowski <olek2@wp.pl>
+In-Reply-To: <CAMhs-H_iN7pWsis2HbeJ-xr+9JoMa+EF-+7z9e21DJ1dyNNtuw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-WP-MailID: 2fbea3525d83cf2a46a1adb43f9685ce
+X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
+X-WP-SPAM: NO 0000009 [oVr0]                               
 
-On Fri, Dec 19, 2025 at 4:57=E2=80=AFPM Beno=C3=AEt Monin <benoit.monin@boo=
-tlin.com> wrote:
+Hi Sergio,
 
-> In my particular case of a microcontroller acting as an SPI "relay" on th=
-e
-> evaluation board, what would be the best way to describe it? It connects
-> the two SPI controllers of the SoC, one is a host and one is a target, so
-> it behave as an SPI target on one side and as an SPI host on the other.
+On 1/1/26 22:46, Sergio Paracuellos wrote:
+> AFAICS, the crypto engine for mt7621 has also a clock gate[0] and a
+> reset line[1]. These two are not present in this binding.
 >
-> The trivial devices bindings seems to be dedicated to devices, thus not f=
-or
-> SPI hosts. Do I need a dedicated binding or did I miss something I could
-> use for a trivial spidev slave?
+> [0]: https://elixir.bootlin.com/linux/v6.18.2/source/include/dt-bindings/clock/mt7621-clk.h#L36
+> [1]: https://elixir.bootlin.com/linux/v6.18.2/source/include/dt-bindings/reset/mt7621-reset.h#L33
 
-That needs to be detailed and discussed with the SPI maintainer on the SPI
-devel list. (Added.)
+Will add reset and clock gate in the next iteration. It looks like
+the crypto engine in AN7581 also has a clock gate[0] and reset line[1].
+Just not sure if these definitions are correct.
 
-Can you illustrate with a picture or so what is going on here?
+CC: Benjamin Larsson
 
-Yours,
-Linus Walleij
+[0] https://elixir.bootlin.com/linux/v6.19-rc3/source/include/dt-bindings/clock/en7523-clk.h#L12
+[1] https://elixir.bootlin.com/linux/v6.19-rc3/source/include/dt-bindings/reset/airoha,en7581-reset.h#L45
+
 
