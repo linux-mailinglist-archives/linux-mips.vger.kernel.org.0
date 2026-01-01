@@ -1,48 +1,47 @@
-Return-Path: <linux-mips+bounces-12659-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12661-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 635C5CED360
-	for <lists+linux-mips@lfdr.de>; Thu, 01 Jan 2026 18:12:26 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B628CED386
+	for <lists+linux-mips@lfdr.de>; Thu, 01 Jan 2026 18:21:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8FFD63006F76
-	for <lists+linux-mips@lfdr.de>; Thu,  1 Jan 2026 17:12:23 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id C7B493001010
+	for <lists+linux-mips@lfdr.de>; Thu,  1 Jan 2026 17:21:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08EA02EFD9E;
-	Thu,  1 Jan 2026 17:12:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 780F42F0678;
+	Thu,  1 Jan 2026 17:20:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b="q+c+ZCfM"
+	dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b="PUksjmM4"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx3.wp.pl (mx3.wp.pl [212.77.101.10])
+Received: from mx4.wp.pl (mx4.wp.pl [212.77.101.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B443F2EF660
-	for <linux-mips@vger.kernel.org>; Thu,  1 Jan 2026 17:12:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.77.101.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89A9D27F724
+	for <linux-mips@vger.kernel.org>; Thu,  1 Jan 2026 17:20:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.77.101.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767287542; cv=none; b=ro2Cl0Hb/zF83jizr345q8CZ2BawoP2hR6xKpqinMPuDAqnUfsVDikNgLtez3/VzLOCw4gYMhThRFTJ/va6tuuYPOiBmyNl9AyTR/quVK/8VMev5zXFBZ0VZkv3AqE5bn/50+O3NwyTvosHGQsVYqYaYj83dLIuP4jMbEVLCDeM=
+	t=1767288059; cv=none; b=LwvbP7XYw8y0HqlqRiHouHlejIVMh2PJ8Hpmvk/H9uvLKJgqDksc6dlGTQbwoHNSGPUd2uVAhECiHEUw/xR6VcaByBxeZIHn1cu5spD5+OISqOB4a1FUx0OL9f8u+B1HER6rJnQw/fUwDAVp4hqr7baVedpQzmbVCFgFdoDyb2c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767287542; c=relaxed/simple;
-	bh=oR0HUQkJ0g46vbysFl5WWvNBEbq3cfaE+xUpADAqJWk=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Qmnc0GdRfl7nAi8AR9fOU06Okk5Oz2+yTCHeVgnJzHedgv8DpzR1e3LDSeqZocRLe1GC0vdXBHlPT9LBL5sJTTAkBjoog/o29Y8aHL3U3khafXfeWzRT0koytLdvSOHiJrglJvRHKgmzjrXhsClB10PYtCu7vusT+akaoGKERac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl; spf=pass smtp.mailfrom=wp.pl; dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b=q+c+ZCfM; arc=none smtp.client-ip=212.77.101.10
+	s=arc-20240116; t=1767288059; c=relaxed/simple;
+	bh=90htk7bfuWYRnjVIKKUjR+1kSEJaZ/Trtv5/TNJly5w=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=R8emf9Z6vLDKPR4E7WNd28qy59L0521WBhy+grxuDehr8tyCRNDZr0InkLOiqDFxQQhcfL2EI0t12Vtw53F+6uOWaARnQviyeuma3SsiiN71AuE5SY6eBtbTlmPOOwuXRkRD8DsmZucOL87Ifh2F3mo7wNPUkSXmqkH2Nx8+TJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl; spf=pass smtp.mailfrom=wp.pl; dkim=pass (2048-bit key) header.d=wp.pl header.i=@wp.pl header.b=PUksjmM4; arc=none smtp.client-ip=212.77.101.12
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=wp.pl
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wp.pl
-Received: (wp-smtpd smtp.wp.pl 27779 invoked from network); 1 Jan 2026 18:12:17 +0100
+Received: (wp-smtpd smtp.wp.pl 29140 invoked from network); 1 Jan 2026 18:20:54 +0100
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wp.pl; s=20241105;
-          t=1767287537; bh=gELqvaeQlWG+ETN/6/E6ceX26B6xTdepXFs8chq3lOw=;
+          t=1767288055; bh=VFxRYh+8coogy2GN8owHTs5aoW2sEqq+/fQszUYZvNs=;
           h=From:To:Cc:Subject;
-          b=q+c+ZCfMwmoMr40O6OZZL4mlaFRc3m1X7Lpsk7bclHMpZAZemj5bK3aJhxlwWiFyF
-           fEZt4KhGEQdVyFpZjkIOVO/2sXTQmFhIgd7B2PcM+fFzVNdS91wJrvV8cm8v9zFTHy
-           zT3CpBjHjx9+PzaG2LuqzCgyQt+1ltWC69/V6Y0PXyR2ykLEkn0XvnUj3Mu4zWeQNP
-           xENaaAbQlIsjHD/4VAGcnQPIDdoCOszlrWonYi6RpEZDF7rj4n3VISq8BZKu9Z/Tkk
-           9h0Tk4VUbF6MLn+xdpx1kzMpUYgY341v6cdr8JrE7+wPRQLGBJUuH9EYBYR3XLtW/3
-           VZP76n17O0vdg==
+          b=PUksjmM42K510nffF/6GK+kvx7CdnCnS56eZTJklUOwp0Zw7OqAzzqX60uBMZKvW7
+           Htq+VwYtGAW5Pudk/OiQSuLpMZQ6FuPuy/PP+Qcbni7mVA22RPXw/N2WmoyXxXbMo8
+           hLdTnpMQSEXaqTkGwS34GCEt+5xNEmz5cB+PvKYwQfGrBjzhIg7cFEOO49EMQvt4Mu
+           Grblq3QVX/f9nncGM6MaPaONF/mimYpMF/w+dLNpP62Z0qvrZET/HEJ5f5POWFAYW2
+           jhQABDOERVIWBlX+KIsxfImrBhs2V953QGOh4lmDfh55XQlCsy/sph83WCb5bHtiPF
+           7oZ81vJGstqwg==
 Received: from 83.5.157.18.ipv4.supernova.orange.pl (HELO laptop-olek.lan) (olek2@wp.pl@[83.5.157.18])
           (envelope-sender <olek2@wp.pl>)
           by smtp.wp.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
-          for <ansuelsmth@gmail.com>; 1 Jan 2026 18:12:17 +0100
+          for <ansuelsmth@gmail.com>; 1 Jan 2026 18:20:54 +0100
 From: Aleksander Jan Bajkowski <olek2@wp.pl>
 To: ansuelsmth@gmail.com,
 	herbert@gondor.apana.org.au,
@@ -62,12 +61,10 @@ To: ansuelsmth@gmail.com,
 	linux-arm-kernel@lists.infradead.org,
 	linux-mediatek@lists.infradead.org
 Cc: Aleksander Jan Bajkowski <olek2@wp.pl>
-Subject: [PATCH 2/2] mips: dts: ralink: mt7621: add crypto offload support
-Date: Thu,  1 Jan 2026 18:12:05 +0100
-Message-ID: <20260101171212.1861241-2-olek2@wp.pl>
+Subject: [PATCH v2 1/2] dt-bindings: crypto: Add support for Mediatek MT7621 SoC
+Date: Thu,  1 Jan 2026 18:20:04 +0100
+Message-ID: <20260101172052.1862252-1-olek2@wp.pl>
 X-Mailer: git-send-email 2.47.3
-In-Reply-To: <20260101171212.1861241-1-olek2@wp.pl>
-References: <20260101171212.1861241-1-olek2@wp.pl>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -76,39 +73,35 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-WP-DKIM-Status: good (id: wp.pl)                                                      
-X-WP-MailID: 7243962c3d223ce7c88e29ac0c0c40f2
+X-WP-MailID: df73573d01c56ae3faa788a124db769a
 X-WP-AV: skaner antywirusowy Poczty Wirtualnej Polski
-X-WP-SPAM: NO 0000009 [wSpU]                               
+X-WP-SPAM: NO 0000007 [ccSx]                               
 
-Add support for the built-in cryptographic accelerator. This accelerator
-supports 3DES, AES (128/192/256 bit), ARC4, MD5, SHA1, SHA224, and SHA256.
-It also supports full IPSEC and TLS offload, but this feature isn't
-implemented in the driver.
+Add compatible for Mediatek MT7621 SoC. The implementation is exactly the
+same os in the Airoha SoC.
 
 Signed-off-by: Aleksander Jan Bajkowski <olek2@wp.pl>
 ---
- arch/mips/boot/dts/ralink/mt7621.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
+v2:
+ - Corrected commit description
+---
+ .../bindings/crypto/inside-secure,safexcel-eip93.yaml          | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/arch/mips/boot/dts/ralink/mt7621.dtsi b/arch/mips/boot/dts/ralink/mt7621.dtsi
-index 0704eab4a80b..9ba28fa016fb 100644
---- a/arch/mips/boot/dts/ralink/mt7621.dtsi
-+++ b/arch/mips/boot/dts/ralink/mt7621.dtsi
-@@ -361,6 +361,14 @@ cdmm: cdmm@1fbf8000 {
- 		reg = <0x1fbf8000 0x8000>;
- 	};
- 
-+	crypto@1e004000 {
-+		compatible = "mediatek,mt7621-eip93", "inside-secure,safexcel-eip93ies";
-+		reg = <0x1e004000 0x1000>;
-+
-+		interrupt-parent = <&gic>;
-+		interrupts = <GIC_SHARED 19 IRQ_TYPE_LEVEL_HIGH>;
-+	};
-+
- 	ethernet: ethernet@1e100000 {
- 		compatible = "mediatek,mt7621-eth";
- 		reg = <0x1e100000 0x10000>;
+diff --git a/Documentation/devicetree/bindings/crypto/inside-secure,safexcel-eip93.yaml b/Documentation/devicetree/bindings/crypto/inside-secure,safexcel-eip93.yaml
+index 997bf9717f9e..8ccff64f5c1c 100644
+--- a/Documentation/devicetree/bindings/crypto/inside-secure,safexcel-eip93.yaml
++++ b/Documentation/devicetree/bindings/crypto/inside-secure,safexcel-eip93.yaml
+@@ -33,6 +33,9 @@ properties:
+       - items:
+           - const: airoha,en7581-eip93
+           - const: inside-secure,safexcel-eip93ies
++      - items:
++          - const: mediatek,mt7621-eip93
++          - const: inside-secure,safexcel-eip93ies
+       - items:
+           - not: {}
+             description: Need a SoC specific compatible
 -- 
 2.47.3
 
