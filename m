@@ -1,44 +1,44 @@
-Return-Path: <linux-mips+bounces-12680-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12682-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99C7ECEDE05
-	for <lists+linux-mips@lfdr.de>; Fri, 02 Jan 2026 08:11:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D5D4CEDD39
+	for <lists+linux-mips@lfdr.de>; Fri, 02 Jan 2026 08:07:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 76D69300B83B
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Jan 2026 07:11:37 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0A03E3006A56
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Jan 2026 07:04:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBF122DF12E;
-	Fri,  2 Jan 2026 07:03:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 747DE2E424F;
+	Fri,  2 Jan 2026 07:04:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c+po2WfJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sOxNgN6O"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E7E52DF126;
-	Fri,  2 Jan 2026 07:03:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 391192E3397;
+	Fri,  2 Jan 2026 07:04:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767337411; cv=none; b=r5HOzKPYnV64UsdzeoD2KIaaNPzqRnRYJocyQTli3vvop2ZKhTwtMOQdgBF/wDJkbamtP7wKME4IIvw0Sx6mcewpPX0TWs6g0GgM6rmDXgx13iaOH8gj5AUKeweQ93eHevMJmAPIt97+YpfT/2iqqMnOZeKdJB9xc1BrW2fVlJw=
+	t=1767337440; cv=none; b=VqQ3DQIC78YF/mP4cQ8iCFyB0zNLWZgFJddkYs2RtQStDVCGoD6ztaie+F26+xU4UIpEbd9cGZp+aKXPU/86EsVWh57guzw2RTBR5xzHhuDzwHUBjHPF90urt6n50QaSgNte17pk8Yodprpb2j5aueS+k+RUXeJ9eiwx2Tdl5EA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767337411; c=relaxed/simple;
-	bh=QDpPHL1GPSMeFEARdEipDTbBSW8I0pBG6cArIIAQB88=;
+	s=arc-20240116; t=1767337440; c=relaxed/simple;
+	bh=qZJ/kX6852xy97RGj2L4BqvkwDGVySCnfrT6X/8ZHF4=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=X7mONTk7oM/Id+eKGFGIQww+WtXE6Fd7Y+qtCNRmgymKDTOapEclJ3PhGCRt/8kZZuicstZsyQpOOJgfOHTM8UjdQJv/KpgOGOJx9rLquA9Nu6Yc8ivQnq5CGFyI+xKsXOwN+QWwbTq5U5HAw933gBxlNKssGwvA0idkGNSujSI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c+po2WfJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86A1FC116D0;
-	Fri,  2 Jan 2026 07:03:17 +0000 (UTC)
+	 MIME-Version; b=dBpkv+xl8aFJB34QnWccIezc4UxCHGwyxzgezfabpvdZ4vsvEHELefe+hGgrKjIgCdc8ZjM/6xH8yzLgU9NHyncm8r1qfnSEw+727I+JlUiZSd4rJYlSmYvgbg6t4Fg/1SbBcI6QSuCiTMDRLnc9JWFG5CKWDqJC1fQKBW8QruI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sOxNgN6O; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3EB77C116D0;
+	Fri,  2 Jan 2026 07:03:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767337411;
-	bh=QDpPHL1GPSMeFEARdEipDTbBSW8I0pBG6cArIIAQB88=;
+	s=k20201202; t=1767337440;
+	bh=qZJ/kX6852xy97RGj2L4BqvkwDGVySCnfrT6X/8ZHF4=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=c+po2WfJ5cf6Y//AOAe02jsKCXLL1vmZoxuQ1QHcBvThXBKTFEQQ2OnGwxTOkmmIw
-	 j4tzubZIqYEK7dRkiyIikFmnnyvXkd7McLgLBkp+K2QPwvdpxhnyk05gqTi34xwrvH
-	 AUQTsnMF8v0vz/rUkG/myY/O6NPP9P6zB5AvSlXDH0jyaAXOaCAmujV+5S9z64t+Zc
-	 z1uw8GcOCKnLIlwsVK2vFCMVLFiCIxxqeq7T4jQ6ku69bwg4Bo+lmmqqz+ng+UMbt1
-	 xT/vHjxJBRXmMHCojw/k2DTg6RnLsqUbGkQVdt0owk5pNwGBzW2iAePwwxGNIYhBx6
-	 z4vj6qkfA9hdg==
+	b=sOxNgN6OxtsnaYgnDLzUYrAYFYyADUY11Yh+tEH+dcdMl9gt5qcaKLXDyLZdpxPkH
+	 ZsoNpPJXB9RxVLR2u3dPQnvAw4HtfdHQNMiYV+Lt2AoNYuX/a5yuatZR7XSwb6LC/M
+	 31CTS3ZnrAOkhmQMEa0ob3gvNpQzz+og2EL2L1n8pn/XpsDAGAxtdMaDR5l7wLa2sR
+	 zjP4bAdaKXqEInAeZEAYgq0LKXfmnb4xkodXbn/BQnjvu4jdKyiT5I8depNd4fiBAT
+	 M3xCEoxnLREi+xwHjLHBz8KBkVu1CT6/LfBAiGV5C6nzSCefhTXY6MzfJvVsB9dWNq
+	 WGBYdl2odF8LQ==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: Alex Shi <alexs@kernel.org>,
@@ -105,9 +105,9 @@ Cc: Alex Shi <alexs@kernel.org>,
 	linuxppc-dev@lists.ozlabs.org,
 	loongarch@lists.linux.dev,
 	sparclinux@vger.kernel.org
-Subject: [PATCH v2 13/28] parisc: introduce arch_zone_limits_init()
-Date: Fri,  2 Jan 2026 08:59:49 +0200
-Message-ID: <20260102070005.65328-14-rppt@kernel.org>
+Subject: [PATCH v2 15/28] riscv: introduce arch_zone_limits_init()
+Date: Fri,  2 Jan 2026 08:59:51 +0200
+Message-ID: <20260102070005.65328-16-rppt@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260102070005.65328-1-rppt@kernel.org>
 References: <20260102070005.65328-1-rppt@kernel.org>
@@ -129,32 +129,35 @@ during nodes and zones initialization and thus there won't be a need to
 call free_area_init() from every architecture.
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-Acked-by: Helge Deller <deller@gmx.de>
 ---
- arch/parisc/mm/init.c | 8 ++++++--
- 1 file changed, 6 insertions(+), 2 deletions(-)
+ arch/riscv/mm/init.c | 10 +++++++---
+ 1 file changed, 7 insertions(+), 3 deletions(-)
 
-diff --git a/arch/parisc/mm/init.c b/arch/parisc/mm/init.c
-index 14270715d754..dc5bd3efe738 100644
---- a/arch/parisc/mm/init.c
-+++ b/arch/parisc/mm/init.c
-@@ -693,12 +693,16 @@ static void __init fixmap_init(void)
- 	} while (addr < end);
- }
+diff --git a/arch/riscv/mm/init.c b/arch/riscv/mm/init.c
+index addb8a9305be..97e8661fbcff 100644
+--- a/arch/riscv/mm/init.c
++++ b/arch/riscv/mm/init.c
+@@ -79,15 +79,19 @@ uintptr_t _dtb_early_pa __initdata;
  
+ phys_addr_t dma32_phys_limit __initdata;
+ 
+-static void __init zone_sizes_init(void)
 +void __init arch_zone_limits_init(unsigned long *max_zone_pfns)
-+{
-+	max_zone_pfns[ZONE_NORMAL] = PFN_DOWN(memblock_end_of_DRAM());
+ {
+-	unsigned long max_zone_pfns[MAX_NR_ZONES] = { 0, };
+-
+ #ifdef CONFIG_ZONE_DMA32
+ 	max_zone_pfns[ZONE_DMA32] = PFN_DOWN(dma32_phys_limit);
+ #endif
+ 	max_zone_pfns[ZONE_NORMAL] = max_low_pfn;
 +}
 +
- static void __init parisc_bootmem_free(void)
- {
- 	unsigned long max_zone_pfn[MAX_NR_ZONES] = { 0, };
++static void __init zone_sizes_init(void)
++{
++	unsigned long max_zone_pfns[MAX_NR_ZONES] = { 0, };
  
--	max_zone_pfn[0] = memblock_end_of_DRAM();
--
-+	arch_zone_limits_init(max_zone_pfn);
- 	free_area_init(max_zone_pfn);
++	arch_zone_limits_init(max_zone_pfns);
+ 	free_area_init(max_zone_pfns);
  }
  
 -- 
