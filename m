@@ -1,134 +1,182 @@
-Return-Path: <linux-mips+bounces-12718-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12719-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D85B7CEF6E0
-	for <lists+linux-mips@lfdr.de>; Fri, 02 Jan 2026 23:31:28 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 15D2BCEF6F8
+	for <lists+linux-mips@lfdr.de>; Fri, 02 Jan 2026 23:37:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 94270301174F
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Jan 2026 22:31:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B007A300EA2D
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Jan 2026 22:37:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6F5022F772;
-	Fri,  2 Jan 2026 22:31:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DACF2D5925;
+	Fri,  2 Jan 2026 22:37:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b="gPi+yOgI"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="hfYSmihR";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="oRwf2bX6"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from aposti.net (aposti.net [185.119.170.32])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-a5-smtp.messagingengine.com (fout-a5-smtp.messagingengine.com [103.168.172.148])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E894224FA;
-	Fri,  2 Jan 2026 22:31:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.119.170.32
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E26922405ED;
+	Fri,  2 Jan 2026 22:37:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.148
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767393086; cv=none; b=nMy5w/oOhFwLIzsGqP6SU9DzFI8SKTts3VSjTSAJZE6JaPB8lwnqIaGlTrcuBwWXQJAjzBguf7LNG+vG/7zunJOVwX8S7Cc0cBvSBV4mz665DVdOBbnvBD/CofFu4ntTGza5T3NYdvwlre0/RMipcD1+ii9MJxRlM7j4Tl0OLAs=
+	t=1767393441; cv=none; b=L7dKkbpLeSxVNNfGHg3FtLVcpAzskZAVTuEnYj0WlknY5V72BpJ74Ya1cgG2tp49fwE3Q/B6W/wCd8el8dBpJZeg6G2VnlL+9vEtaclKNKkdn4LxMrRapbJRb9Hl/D2mvWZOGPnpBG1fZHG5CjnVuSqg6JMX1Zyr8myhtkbMKsQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767393086; c=relaxed/simple;
-	bh=Ayzy4d12cCBIDnDvxTp6pffsaMCVkd33OsiCXsJGxJc=;
-	h=Message-ID:Subject:From:To:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=UMWePh7hPmppI4xXrfHebUDnfkRMMIuHjghWMHxAsM4U6A4hX/fSTHA4mvW1h4dWSEc0h0v/iOSdzZRI3PDq4USQ7Zh33ctTEmV6xzRQnsYejm+mKpgBwl9iBRVoT+gpNRizIqfgY0SfFMshbF6WPwlgvvC3KHDK4M0za3DlE/g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net; spf=pass smtp.mailfrom=crapouillou.net; dkim=pass (1024-bit key) header.d=crapouillou.net header.i=@crapouillou.net header.b=gPi+yOgI; arc=none smtp.client-ip=185.119.170.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=crapouillou.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=crapouillou.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=crapouillou.net;
-	s=mail; t=1767392595;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references:autocrypt:autocrypt;
-	bh=61H6RqsGuCa4a5uaIvZ0gNRDCPUVUQgGp5iWxLp0eXQ=;
-	b=gPi+yOgIHaXxLndZNYkjdzjFO/QcOh/jMHayuu23Slzgml8v5JJMwuqOPjlcwB2noz0hn+
-	ufbyGL8LfP4mlYZyYQWhThU0cBtTESAvYHK2/TUIL/P8P9tQG5fJ6/10eWfHi134RLMUPE
-	TWgRuO4+cEfKFN9diizuZMUOvfPqzlg=
-Message-ID: <5f4f0697622ee26db9c3e09b1a8b64157666eb0b.camel@crapouillou.net>
-Subject: Re: [PATCH 3/7] mtd: rawnand: ingenic: Simplify with scoped for
- each OF child loop
-From: Paul Cercueil <paul@crapouillou.net>
-To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, Brian Norris
-	 <computersforpeace@gmail.com>, Kamal Dasu <kamal.dasu@broadcom.com>, 
- Broadcom internal kernel review list	
- <bcm-kernel-feedback-list@broadcom.com>, Miquel Raynal	
- <miquel.raynal@bootlin.com>, Richard Weinberger <richard@nod.at>, Vignesh
- Raghavendra <vigneshr@ti.com>, Harvey Hunt <harveyhuntnexus@gmail.com>,
- Manivannan Sadhasivam	 <mani@kernel.org>, Stefan Agner <stefan@agner.ch>,
- Tudor Ambarus	 <tudor.ambarus@linaro.org>, Pratyush Yadav
- <pratyush@kernel.org>, Michael Walle	 <mwalle@kernel.org>, Nathan
- Chancellor <nathan@kernel.org>, Nick Desaulniers	
- <nick.desaulniers+lkml@gmail.com>, Bill Wendling <morbo@google.com>, Justin
- Stitt <justinstitt@google.com>, linux-mtd@lists.infradead.org,
- linux-kernel@vger.kernel.org, 	linux-mips@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, llvm@lists.linux.dev
-Date: Fri, 02 Jan 2026 23:22:12 +0100
-In-Reply-To: <20260102124927.64703-10-krzysztof.kozlowski@oss.qualcomm.com>
-References: <20260102124927.64703-8-krzysztof.kozlowski@oss.qualcomm.com>
-	 <20260102124927.64703-10-krzysztof.kozlowski@oss.qualcomm.com>
-Autocrypt: addr=paul@crapouillou.net; prefer-encrypt=mutual;
- keydata=mQENBF0KhcEBCADkfmrzdTOp/gFOMQX0QwKE2WgeCJiHPWkpEuPH81/HB2dpjPZNW03ZM
- LQfECbbaEkdbN4YnPfXgcc1uBe5mwOAPV1MBlaZcEt4M67iYQwSNrP7maPS3IaQJ18ES8JJ5Uf5Uz
- FZaUawgH+oipYGW+v31cX6L3k+dGsPRM0Pyo0sQt52fsopNPZ9iag0iY7dGNuKenaEqkYNjwEgTtN
- z8dt6s3hMpHIKZFL3OhAGi88wF/21isv0zkF4J0wlf9gYUTEEY3Eulx80PTVqGIcHZzfavlWIdzhe
- +rxHTDGVwseR2Y1WjgFGQ2F+vXetAB8NEeygXee+i9nY5qt9c07m8mzjABEBAAG0JFBhdWwgQ2VyY
- 3VlaWwgPHBhdWxAY3JhcG91aWxsb3UubmV0PokBTgQTAQoAOBYhBNdHYd8OeCBwpMuVxnPua9InSr
- 1BBQJdCoXBAhsDBQsJCAcCBhUKCQgLAgQWAgMBAh4BAheAAAoJEHPua9InSr1BgvIH/0kLyrI3V0f
- 33a6D3BJwc1grbygPVYGuC5l5eMnAI+rDmLR19E2yvibRpgUc87NmPEQPpbbtAZt8On/2WZoE5OIP
- dlId/AHNpdgAtGXo0ZX4LGeVPjxjdkbrKVHxbcdcnY+zzaFglpbVSvp76pxqgVg8PgxkAAeeJV+ET
- 4t0823Gz2HzCL/6JZhvKAEtHVulOWoBh368SYdolp1TSfORWmHzvQiCCCA+j0cMkYVGzIQzEQhX7U
- rf9N/nhU5/SGLFEi9DcBfXoGzhyQyLXflhJtKm3XGB1K/pPulbKaPcKAl6rIDWPuFpHkSbmZ9r4KF
- lBwgAhlGy6nqP7O3u7q23hRU=
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1767393441; c=relaxed/simple;
+	bh=tsTJJQJoqy93O9/uvm41/seu3eu3Du6oDAogevtOBnA=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=IwLfCQI2tZyYpORnZIZQ8YQm8ES6NyQE3yg8UAHE9cy1CKde/Cda6I9lHSrz2ZyMTJkuveufKsz3bi1ML0geO/gKrXnCApmNLVILYXMottK4Oewh3BJr3J9snyjXq9X4qz986HfYCK5ffZPV05XJUFaz1M/VPzwRaizg9gYUWLE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=hfYSmihR; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=oRwf2bX6; arc=none smtp.client-ip=103.168.172.148
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
+	by mailfout.phl.internal (Postfix) with ESMTP id 027D7EC011D;
+	Fri,  2 Jan 2026 17:37:18 -0500 (EST)
+Received: from phl-imap-08 ([10.202.2.84])
+  by phl-compute-03.internal (MEProxy); Fri, 02 Jan 2026 17:37:18 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1767393437;
+	 x=1767479837; bh=+8ctVAnu0yjFr1RzDJ3byhbEvs4eon+8GJcR3h7Onqs=; b=
+	hfYSmihRuX0g2f2Ksuu7kL6FYN5+qX1QH8M1wdw4ERZLGyDFimU+ZBCrWYDW0Ow2
+	NDOFnex57VTszrcEpqRmiBDQSJbBYJZvLj97g4SUxFaQ/OSUKMdswMn34Ep8hg32
+	eO5s0yfLMtuCdlytBwHsdxR1HExMANHIcMeUsdAey9RRcBDtKfqAmTbpTjYADFHY
+	WaIYJ9DaaU3xpNEOZ0OruJshirFcsXuerj35Akt/7gdRt5Ie547g4X0CC76cvfPD
+	tFlaX+mLjTuR1a8q8AwFE0VSQgXZmBckGgOIDSNvhvbjsOYZcEKHIzE54LkiPTYs
+	i7OaXm+PNX1DELo258ThQg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=1767393437; x=
+	1767479837; bh=+8ctVAnu0yjFr1RzDJ3byhbEvs4eon+8GJcR3h7Onqs=; b=o
+	Rwf2bX6c/BBdCGz4DpEpHAvFBglqYnVGMqkaHYEU4E/43uYplZikRd4ec6Ybdar4
+	/dNA+2vXiod1GElE8mPTdbKTlKM+EtI8gXjYC6tZrwTc4rvyEmixKLzZLugYcEsz
+	ifS5vkFgISFCm6B0YaJcFvJ6PgyKRI5bPErwxXbGWlrCXj6lhNyoGMAkrLK7NBXf
+	OFe2nNgvZOqx3pwXmHkp/bDqljN6+A/oZWUeF2Gn8bRCMxnmzsACHcc7AU1SSK+v
+	HRGqU+ZYNbBb53+YEqUj73FY2Ut1m8j0wOL4L2KuLsBVZFyeZQb5+Do23Ui8JVsi
+	ozrZ5SFas1nrJ4jKuy1Lw==
+X-ME-Sender: <xms:nUhYaa3iFzL-9x_A2xEad9zBDAg7C19LuNN4TWy8BCqM6RmsY8fhVA>
+    <xme:nUhYaX7F3aLFQ4VkO-4-VctcHdcRKfShlo3RRp-sAhn34K87pbG4gG7NNJBWed8bJ
+    JWoskob9Scz8R33iA5NGSfh0a8xiBPBqklQtUcTws8pJ63nyIigkkk>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgdekleekkecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpuffrtefokffrpgfnqfghnecuuegr
+    ihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjug
+    hrpefoggffhffvvefkjghfufgtgfesthejredtredttdenucfhrhhomhepfdflihgrgihu
+    nhcujggrnhhgfdcuoehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmqeenuc
+    ggtffrrghtthgvrhhnpefhtefhuddtieegleeuiedttdehheduveffjeettdekvdeuiedt
+    udejfeeijeeifeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmpdhnsggprhgtphht
+    thhopedutddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepthhssghoghgvnhguse
+    grlhhphhgrrdhfrhgrnhhkvghnrdguvgdprhgtphhtthhopeiihhgvnhhggihinhhguggr
+    sehishgtrghsrdgrtgdrtghnpdhrtghpthhtoheptghhvghnhhhurggtrghisehkvghrnh
+    gvlhdrohhrghdprhgtphhtthhopegtohhnohhrodgutheskhgvrhhnvghlrdhorhhgpdhr
+    tghpthhtohepkhhriihkodgutheskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhhosg
+    hhsehkvghrnhgvlhdrohhrghdprhgtphhtthhopeguvghvihgtvghtrhgvvgesvhhgvghr
+    rdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvg
+    hrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhmihhpshesvhhgvghr
+    rdhkvghrnhgvlhdrohhrgh
+X-ME-Proxy: <xmx:nUhYaZjHDWhTNhvJkxfqIFPwQJEa9RXsYUl3o_qKX0NnwB93vtJ48w>
+    <xmx:nUhYaSbFoUdxwY1LYThiFVPmINNA2tbPhkj1cK0Te35ArjhCbp0Ufw>
+    <xmx:nUhYaW9St7wir5AiIHOYEUl7mG8Z5Wptkb81rTr2Q8W23BiBOBzhQg>
+    <xmx:nUhYacNp_JT4dqBTkbO_fV388zuJGQj9NKLI3g6jZMa-Q64X9C9MnQ>
+    <xmx:nUhYaVEvm4Tp6VO-bMC0iy7YKOSIIYpREfLegaOzNuIRssJLIYt7JpBW>
+Feedback-ID: ifd894703:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 041D52CE0072; Fri,  2 Jan 2026 17:37:17 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+X-ThreadId: A-FbFKnD6fMB
+Date: Fri, 02 Jan 2026 22:36:56 +0000
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Icenowy Zheng" <zhengxingda@iscas.ac.cn>,
+ "Rob Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+ "Conor Dooley" <conor+dt@kernel.org>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Huacai Chen" <chenhuacai@kernel.org>
+Cc: devicetree@vger.kernel.org,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ linux-kernel@vger.kernel.org,
+ "stable@vger.kernel.org" <stable@vger.kernel.org>
+Message-Id: <d1a0e0ca-22d3-4d58-beb1-88eae19c9a2e@app.fastmail.com>
+In-Reply-To: <20260102155243.3639731-1-zhengxingda@iscas.ac.cn>
+References: <20260102155243.3639731-1-zhengxingda@iscas.ac.cn>
+Subject: Re: [PATCH] MIPS: Loongson64: dts: fix phy-related definition of LS7A GMAC
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Hi Krzysztof,
 
-Le vendredi 02 janvier 2026 =C3=A0 13:49 +0100, Krzysztof Kozlowski a
-=C3=A9crit=C2=A0:
-> Use scoped for-each loop when iterating over device nodes to make
-> code a
-> bit simpler.
->=20
-> Signed-off-by: Krzysztof Kozlowski
-> <krzysztof.kozlowski@oss.qualcomm.com>
 
-Reviewed-by: Paul Cercueil <paul@crapouillou.net>
+On Fri, 2 Jan 2026, at 3:52 PM, Icenowy Zheng wrote:
+> Currently the LS7A GMAC device tree node lacks a proper phy-handle
+> property pointing to the PHY node.
+>
+> In addition, the phy-mode property specifies "rgmii" without any
+> internal delay information, which means the board trace needs to add 2ns
+> delay to the RGMII data lines; but that isn't known to happen on any
+> Loongson board. The ACPI-based initialization codepath, which is used on
+> LoongArch-based 3A5000 + 7A1000 hardwares, specifies "rgmii-id" phy
+> mode, which should be the one we are using.
+>
+> Add the lacking phy-handle property and set proper phy-mode.
+>
+> Tested on a LS3A4000_7A1000_NUC_BOARD_V2.1 board with YT8521S PHY.
+>
+> Signed-off-by: Icenowy Zheng <zhengxingda@iscas.ac.cn>
 
-Cheers,
--Paul
+Good catch! This with fine with realtek phy chips but YT8521S seems
+to be picky.
+
+Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+
+Also maybe:
+
+Cc: stable@vger.kernel.org
+
+Given those boards rely on built-in DT.
+
+Thanks
 
 > ---
-> =C2=A0drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c | 4 +---
-> =C2=A01 file changed, 1 insertion(+), 3 deletions(-)
->=20
-> diff --git a/drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c
-> b/drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c
-> index 47dc3efcee92..f1e2c82936b3 100644
-> --- a/drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c
-> +++ b/drivers/mtd/nand/raw/ingenic/ingenic_nand_drv.c
-> @@ -438,7 +438,6 @@ static int ingenic_nand_init_chips(struct
-> ingenic_nfc *nfc,
-> =C2=A0				=C2=A0=C2=A0 struct platform_device *pdev)
-> =C2=A0{
-> =C2=A0	struct device *dev =3D &pdev->dev;
-> -	struct device_node *np;
-> =C2=A0	int i =3D 0;
-> =C2=A0	int ret;
-> =C2=A0	int num_chips =3D of_get_child_count(dev->of_node);
-> @@ -449,11 +448,10 @@ static int ingenic_nand_init_chips(struct
-> ingenic_nfc *nfc,
-> =C2=A0		return -EINVAL;
-> =C2=A0	}
-> =C2=A0
-> -	for_each_child_of_node(dev->of_node, np) {
-> +	for_each_child_of_node_scoped(dev->of_node, np) {
-> =C2=A0		ret =3D ingenic_nand_init_chip(pdev, nfc, np, i);
-> =C2=A0		if (ret) {
-> =C2=A0			ingenic_nand_cleanup_chips(nfc);
-> -			of_node_put(np);
-> =C2=A0			return ret;
-> =C2=A0		}
-> =C2=A0
+>  arch/mips/boot/dts/loongson/ls7a-pch.dtsi | 6 ++++--
+>  1 file changed, 4 insertions(+), 2 deletions(-)
+>
+> diff --git a/arch/mips/boot/dts/loongson/ls7a-pch.dtsi 
+> b/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
+> index ee71045883e7e..6dee85909f5a6 100644
+> --- a/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
+> +++ b/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
+> @@ -199,7 +199,8 @@ gmac@3,0 {
+>  					     <13 IRQ_TYPE_LEVEL_HIGH>;
+>  				interrupt-names = "macirq", "eth_lpi";
+>  				interrupt-parent = <&pic>;
+> -				phy-mode = "rgmii";
+> +				phy-mode = "rgmii-id";
+> +				phy-handle = <&phy0>;
+>  				mdio {
+>  					#address-cells = <1>;
+>  					#size-cells = <0>;
+> @@ -222,7 +223,8 @@ gmac@3,1 {
+>  					     <15 IRQ_TYPE_LEVEL_HIGH>;
+>  				interrupt-names = "macirq", "eth_lpi";
+>  				interrupt-parent = <&pic>;
+> -				phy-mode = "rgmii";
+> +				phy-mode = "rgmii-id";
+> +				phy-handle = <&phy1>;
+>  				mdio {
+>  					#address-cells = <1>;
+>  					#size-cells = <0>;
+> -- 
+> 2.52.0
+
+-- 
+- Jiaxun
 
