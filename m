@@ -1,44 +1,44 @@
-Return-Path: <linux-mips+bounces-12672-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12673-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 268B7CEDEB9
-	for <lists+linux-mips@lfdr.de>; Fri, 02 Jan 2026 08:13:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 39E7DCEDF3E
+	for <lists+linux-mips@lfdr.de>; Fri, 02 Jan 2026 08:17:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 94B993026BE0
-	for <lists+linux-mips@lfdr.de>; Fri,  2 Jan 2026 07:11:47 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 478743013574
+	for <lists+linux-mips@lfdr.de>; Fri,  2 Jan 2026 07:12:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C20AA2D6E6B;
-	Fri,  2 Jan 2026 07:01:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3795C2D73BE;
+	Fri,  2 Jan 2026 07:01:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jKMirO/V"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BpS/vYy/"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DABE2D6E44;
-	Fri,  2 Jan 2026 07:01:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E95B8186E58;
+	Fri,  2 Jan 2026 07:01:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767337296; cv=none; b=QdsjT4nf1a4pnVmnamSeYW6+ukAdBkgIMO3nendtf+TgZ08SuZjfcA3vg/G4mRTIuXDlB9EPgQur2bvS8JgNMgsp77w5feoOFBfsviXKVuOJeGj/gPGMNwD8PpTRtg6Rno01m08Hr9qOJZNlPke+DkFsxOtYDJao+Me+e7HBTsk=
+	t=1767337311; cv=none; b=hXY8lmLU2PcZqOCcv1yzZldZqOyT7JRyI/6zQm/BI+VO3DMLs66utJv1eRRd+Bxy9ablDqhSWzq4uvFqfy2Vpek5VGGhlz6S8fyigJbNf+4BnZMib96aS2SNW72d79CHEbvgr8us3OcXhLSW9r0mj/IsfH0ZqEhF5ab7RQ28kMw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767337296; c=relaxed/simple;
-	bh=beem9LtRR1HHqRgL6PattJCY9S8i8ATD31bTRr88sn8=;
+	s=arc-20240116; t=1767337311; c=relaxed/simple;
+	bh=eqWldmxLZQ+MuA70zzUt7CpIfBT1PwNgoY4RoneYtY0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=ZvxX0rvpHMF8YDGL28d6i1D/uyX3eB0nqVP880WEHVstmtZIfGaAqkufN3n4cKEjvK4Is3OUGD4URI9gr8RzFcgyNn0CJfHXFQmZ5rMz8bufsneX5ul4w1o2ONKiPoHpCIy7HFCUFefE9JiAwd3XreA/uPkDao3SUwd/acPZWrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jKMirO/V; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 626DBC19421;
-	Fri,  2 Jan 2026 07:01:22 +0000 (UTC)
+	 MIME-Version; b=WX/hH/c3pEYeiN6+rFqYNhAZL8l4QKcUyRKKWWUYTzQPQtIoiVbHmrHMZJvZ1B3w22GwGrtaWxh2wLCC/ssibZnYRkb9Wg0+jZYqdzgoDEpt4DuHlYgytRBX45l+sxQGz/78TumIA1w63EbcIRcPtu3V8/UmtdFCwzmmmG6Fcvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BpS/vYy/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B87CDC116B1;
+	Fri,  2 Jan 2026 07:01:36 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1767337296;
-	bh=beem9LtRR1HHqRgL6PattJCY9S8i8ATD31bTRr88sn8=;
+	s=k20201202; t=1767337310;
+	bh=eqWldmxLZQ+MuA70zzUt7CpIfBT1PwNgoY4RoneYtY0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=jKMirO/VuTg7k/DrwUhdWDqifrgFVKcZxjR3ngObsepKAUunHyot4zCyt4dbuSd/r
-	 e8hg+giPXhpyeaesjjegSYPKpxLKNutC6OgDnsUOcv9WekXd+NB/AKiimQ9/mqBlv8
-	 KlScv9DH/Nq3I8tdNl74MxiqcD3aAM6FCfxhT4H7mKg7ixaPZ+3fILSKwLRmLkM5hx
-	 kysdZHAQiUMqmxsOZVYFQkemEYLKJWnM1VBLRTbuj7W90M9DavJ9z5GCk3Ez3M75pA
-	 nX597Xg69ltfgiS52uEQG5kNsR9io22pRfGDTHSAzWoLyLsgooMbRZSv3J+2WVEAAS
-	 pKICEEyQYsm7Q==
+	b=BpS/vYy/9nyGIKafFE9V+r4HIaDTnoFUO6BTxQPGX0+fK6kCr7xShS1cvyBf0N0yT
+	 CerQRZQXT7MbCqIrnCsgOrgv2Ia55RleKWDmaMs2irjPc6GjTnGGw+wLnXomD+vLNI
+	 KSkl/U2dJXx7h9eXgJ0JskjtaWXluWjpg/x0JjdxvJeKsUnPXMXMkszXrGJ82oXAX3
+	 YZWN0c2pAwx8Alfig8i8HbWRbmXbfiG8GoDVdegQc0Cg6X09COblKfsTjZPB14TFdd
+	 QC/bQ1qfR0BgMcXAOfnQocx9hjiqjc4+pk0Vmnp+5k7ZzBLlasAVGNh5Q2wgUjvSxI
+	 GMTmo8jn11Vdw==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: Alex Shi <alexs@kernel.org>,
@@ -105,9 +105,9 @@ Cc: Alex Shi <alexs@kernel.org>,
 	linuxppc-dev@lists.ozlabs.org,
 	loongarch@lists.linux.dev,
 	sparclinux@vger.kernel.org
-Subject: [PATCH v2 05/28] csky: introduce arch_zone_limits_init()
-Date: Fri,  2 Jan 2026 08:59:41 +0200
-Message-ID: <20260102070005.65328-6-rppt@kernel.org>
+Subject: [PATCH v2 06/28] hexagon: introduce arch_zone_limits_init()
+Date: Fri,  2 Jan 2026 08:59:42 +0200
+Message-ID: <20260102070005.65328-7-rppt@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260102070005.65328-1-rppt@kernel.org>
 References: <20260102070005.65328-1-rppt@kernel.org>
@@ -129,51 +129,51 @@ during nodes and zones initialization and thus there won't be a need to
 call free_area_init() from every architecture.
 
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-Acked-by: Guo Ren <guoren@kernel.org>
 ---
- arch/csky/kernel/setup.c | 12 +++++++++---
- 1 file changed, 9 insertions(+), 3 deletions(-)
+ arch/hexagon/mm/init.c | 23 +++++++++++++----------
+ 1 file changed, 13 insertions(+), 10 deletions(-)
 
-diff --git a/arch/csky/kernel/setup.c b/arch/csky/kernel/setup.c
-index e0d6ca86ea8c..8968815d93e6 100644
---- a/arch/csky/kernel/setup.c
-+++ b/arch/csky/kernel/setup.c
-@@ -51,6 +51,14 @@ static void __init setup_initrd(void)
+diff --git a/arch/hexagon/mm/init.c b/arch/hexagon/mm/init.c
+index 34eb9d424b96..e2c9487d8d34 100644
+--- a/arch/hexagon/mm/init.c
++++ b/arch/hexagon/mm/init.c
+@@ -54,6 +54,18 @@ void sync_icache_dcache(pte_t pte)
+ 	__vmcache_idsync(addr, PAGE_SIZE);
  }
- #endif
  
 +void __init arch_zone_limits_init(unsigned long *max_zone_pfns)
 +{
++	/*
++	 *  This is not particularly well documented anywhere, but
++	 *  give ZONE_NORMAL all the memory, including the big holes
++	 *  left by the kernel+bootmem_map which are already left as reserved
++	 *  in the bootmem_map; free_area_init should see those bits and
++	 *  adjust accordingly.
++	 */
 +	max_zone_pfns[ZONE_NORMAL] = max_low_pfn;
-+#ifdef CONFIG_HIGHMEM
-+	max_zone_pfns[ZONE_HIGHMEM] = max_pfn;
-+#endif
 +}
 +
- static void __init csky_memblock_init(void)
+ /*
+  * In order to set up page allocator "nodes",
+  * somebody has to call free_area_init() for UMA.
+@@ -65,16 +77,7 @@ static void __init paging_init(void)
  {
- 	unsigned long lowmem_size = PFN_DOWN(LOWMEM_LIMIT - PHYS_OFFSET_OFFSET);
-@@ -83,12 +91,9 @@ static void __init csky_memblock_init(void)
- 	setup_initrd();
- #endif
+ 	unsigned long max_zone_pfn[MAX_NR_ZONES] = {0, };
  
+-	/*
+-	 *  This is not particularly well documented anywhere, but
+-	 *  give ZONE_NORMAL all the memory, including the big holes
+-	 *  left by the kernel+bootmem_map which are already left as reserved
+-	 *  in the bootmem_map; free_area_init should see those bits and
+-	 *  adjust accordingly.
+-	 */
+-
 -	max_zone_pfn[ZONE_NORMAL] = max_low_pfn;
 -
- 	mmu_init(min_low_pfn, max_low_pfn);
- 
- #ifdef CONFIG_HIGHMEM
--	max_zone_pfn[ZONE_HIGHMEM] = max_pfn;
- 
- 	highstart_pfn = max_low_pfn;
- 	highend_pfn   = max_pfn;
-@@ -97,6 +102,7 @@ static void __init csky_memblock_init(void)
- 
- 	dma_contiguous_reserve(0);
- 
 +	arch_zone_limits_init(max_zone_pfn);
- 	free_area_init(max_zone_pfn);
- }
+ 	free_area_init(max_zone_pfn);  /*  sets up the zonelists and mem_map  */
  
+ 	/*
 -- 
 2.51.0
 
