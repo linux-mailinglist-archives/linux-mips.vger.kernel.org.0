@@ -1,81 +1,183 @@
-Return-Path: <linux-mips+bounces-12722-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12723-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C1D2CCEFA97
-	for <lists+linux-mips@lfdr.de>; Sat, 03 Jan 2026 05:24:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C586CEFB48
+	for <lists+linux-mips@lfdr.de>; Sat, 03 Jan 2026 06:36:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9C7AC300D14A
-	for <lists+linux-mips@lfdr.de>; Sat,  3 Jan 2026 04:24:01 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id BABAD3012DEE
+	for <lists+linux-mips@lfdr.de>; Sat,  3 Jan 2026 05:36:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15C802744F;
-	Sat,  3 Jan 2026 04:24:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B82D19258E;
+	Sat,  3 Jan 2026 05:36:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="Y6nUZk1J"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gDXMiTxx"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7D222A95E;
-	Sat,  3 Jan 2026 04:23:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A8A3E26D4F9
+	for <linux-mips@vger.kernel.org>; Sat,  3 Jan 2026 05:36:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767414240; cv=none; b=DjwG74MkGr5qgP0Zm1YkDT3k4ELpAUPB28gL5J/tjnPdwkDLoZY7e8PmeOFRQ9ebXdS1h/m3Ts2HoYNozbBjJJ2MXDFuBH4DsMMaFFYxgjdGyEOAE1Rya4KIb7Hrf8hW95Tmpi7lVoAc04dnQmM4Ord/50oDN+DGR6ISrIxVmeU=
+	t=1767418596; cv=none; b=KFPNEpQaUBDKyv7mcz6a6Qq61DX7Y3UyEPuMxRIWz9eaeBVhzWKL1Z7xo0FmWISVFh8HXyFbc5pIE2t+cukr/1PJmym7hRziExLrAoEa12ebqYWCXIertvd/Vkktwnw5I2eIbxjMxjZ8+krWthd5MLLThtSzfGAFTR8cOeOB/o4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767414240; c=relaxed/simple;
-	bh=uQ1VqyX8c/iF2ar2ZmdgvfzpUGlESZeCWAK7LbgRWjU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZkNpffr0hqxTTyLVR/Uds8CmPbUCP8HyvZVZIedAnA1AAIS5TXio+NYxNDpcXZeI0dbYo6/GQ9aqcOkKm1xBjYJQCknWXdL5AZHGTiC13fR4Nn9EUnAcB300kBoXZy4hevstmN3m13AVsLrYQvUe5oY0uV4t/nnTthy4wqFw7pw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=Y6nUZk1J; arc=none smtp.client-ip=198.137.202.133
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-	Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-	Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-	bh=HMNxrDlb/w2uoB7nldApUtArlcx6S0iegHQUn3dycmw=; b=Y6nUZk1JhWWprmGvf/cBGxQmRe
-	e+6CT6I6mVgSTuSy9EbCSo5iiDX/brpGoHSoZRkjdSYZ9hzlFcxNtpLNcHWgDsoCRHYWxNwoP/11R
-	m6WmN+R2gE1p++qxJ73+BBLBM6HA1OBKmpTzFkdETZg/R4SFC1mlJJ4Xf082JR+E6bo2U7x44fGAJ
-	yazo6gyQGq2X4xgHeGx7T97tMjCgBw9bPBKPSeoFDpPF2Ub9Dq/69DvL/AQra8VhRQkKpkzN96asy
-	10Uj822CNdPbHCQ02stmBjB3t/ihvI1x2GDOK5v2fEOo+AeR2ICMnqoMwYGx5aUKiqs7w0Cc0MPV2
-	rXc8VfNg==;
-Received: from [50.53.43.113] (helo=[192.168.254.34])
-	by bombadil.infradead.org with esmtpsa (Exim 4.98.2 #2 (Red Hat Linux))
-	id 1vbtB9-00000008xt8-1eoQ;
-	Sat, 03 Jan 2026 04:23:51 +0000
-Message-ID: <a0868d32-f164-40fe-a095-8bfb322e68a1@infradead.org>
-Date: Fri, 2 Jan 2026 20:23:49 -0800
+	s=arc-20240116; t=1767418596; c=relaxed/simple;
+	bh=ATXYUvNs1r7k2R+QkRXiglU8qywdgmSoPgsNlVWS4pc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=up7CjDlbVo4DnjYhYZ2Gwif69H8cA8VmwhnUpt67q3tAQfgPEKZw6u0V6wfs5EED2Tx17HMn6yOWQFUItzxvOF+i5pAG7366YhcFalYs/4vpZCtuF9fz9L/7gtg4G3NxTUWzOnughoCU0CmKU0psAW1ygatRiV5ruZ6ingsJSDc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gDXMiTxx; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-430f5ecaa08so5117846f8f.3
+        for <linux-mips@vger.kernel.org>; Fri, 02 Jan 2026 21:36:32 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1767418591; x=1768023391; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=10gk4kIzv5viXrYP6wsblohOaaYzL8Wh9uCfOfLAyTE=;
+        b=gDXMiTxxJbSjZSyFQUB6T5kBrvh2LsNE97UOkAmZYirAEl0yRraTfieWvOhBoqRUqm
+         FIHLEGPxujyCQ7b66gUmIrAfOBp7ZQQM3oo59+R2v2NQ6TSeJYwC1+sItTOs92L+mPC0
+         YOyKfOGX7SpTHcnTlGt7O7cRpP7+e1ku6+iHq6X7qBAfXhq/5C14HOJ86NOU1aIrYiYH
+         eCgLhdjtCLh/ZPCiL4WZX3EZAkiX1RxBgsaDDWflHrVLWdoHDOG4GK6ARhzE6uUQrbGT
+         SxBpM24mo+zNzRAf3+4C+lNZlydg1P+21uuT1rhnmXBZLBRxqG5dbSIdSV7mOFxyqUk6
+         b+mA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1767418591; x=1768023391;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=10gk4kIzv5viXrYP6wsblohOaaYzL8Wh9uCfOfLAyTE=;
+        b=qy96XL/jYW6TruigMSWC/2yc8r1J5DQEUUJ+pp5tPbbLRl7ZzntQ/MGt/FYTQWb3aD
+         OVfcvIjjG5ymKZqs/xdCvuO/p9+TJYWzT3vuy+GPO5dxofteacfusMNt4W97ici0OOP4
+         U0zPqvbLnveD2Kr8MMx9jmlV/YFo/zrQItiRrB0UFpte1n4nAPuDX85tNkSZiXdmqWrY
+         JmT/joFVqbC0vx4lSD2aAEKTFyaiTt3/AGAuA61g7V8zezSzS+icyoyPHEPhl77fmFWr
+         +Jgw8BCqSsUv1J5QJxkT8YVGyKuSYh33iMg6NJc352+TQX6vDnWmwAUA9mMpsqCjewsY
+         DXHw==
+X-Forwarded-Encrypted: i=1; AJvYcCU7w3wXcSSzyVtJY9HId3nAXP1fGIuigYy++uDGFvHenr+jSp4OEruTKFsExG7uC+8pgeWit+E6CqM2@vger.kernel.org
+X-Gm-Message-State: AOJu0YwY7cziYoeKtrgQXW1dHvTGxTCNPOUYinBeJo8NUpXCyhiX1C3O
+	nJlgIQu4krrWuQL79JkNDy/zvsPGOdalROxt0OMk3HD5kZgnhR4IS/75
+X-Gm-Gg: AY/fxX4XI/cV1pf4mrlc+1B/7W26mxtluqtMnFsLwsCDlAUrUpmkqZfsA+bbaGl8DmA
+	PoO1EQx5TGoDXhlpmtgcI0nIT8L1xbv1s/1Q28JKjteZgMTkTteFUJYyHZDqzQdizeNy5oYXpI1
+	p3wY1kmZrCy9I/5CVIr1JHVp2jaaUgUpvmabclogrwV1rvxJf4l5be/gX3TUREwiasHcLWIa0It
+	43eJbt2Vnrwokrv0lPgt+tgNZBkhsQTVjQk5VvKjUhTktYna6BzedaHYQjLfvNOdXQK8uQ9boli
+	a0c2U7DkSlT4V/FdXzoQKxSmg8sZTGrMTrA+Owh6dfz1sTD+Gg3Zz8iMNJ8y13kK8siQhwGT5Va
+	PKrCkgNOvNq+jh7X2nEJDfiiw1TmQH9laCYaljOFk2CnfjmcxsEHGRoIuppfDwXvMe3AwcH2jkR
+	loY2CpBp1mRqPFammvo8r5A9EPSuRdeRKEk1Jxqotzvy92kTlROeqH9I8+xVNzIUmZ
+X-Google-Smtp-Source: AGHT+IGVfFhDmvRzquITceR9a5MtoKyW2aPxvUx0HbCgVxiLGpVVcSZGOqzt3JsoKLBzXfIUaXLywg==
+X-Received: by 2002:a05:6000:178f:b0:430:fd84:317a with SMTP id ffacd0b85a97d-4324e4fb825mr53362620f8f.38.1767418590643;
+        Fri, 02 Jan 2026 21:36:30 -0800 (PST)
+Received: from localhost (brnt-04-b2-v4wan-170138-cust2432.vm7.cable.virginm.net. [94.175.9.129])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4324eaa4749sm89007161f8f.37.2026.01.02.21.36.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 02 Jan 2026 21:36:28 -0800 (PST)
+Date: Sat, 3 Jan 2026 05:36:26 +0000
+From: Stafford Horne <shorne@gmail.com>
+To: Mike Rapoport <rppt@kernel.org>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Alex Shi <alexs@kernel.org>,
+	Alexander Gordeev <agordeev@linux.ibm.com>,
+	Andreas Larsson <andreas@gaisler.com>,
+	Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@kernel.org>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	"David S. Miller" <davem@davemloft.net>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	David Hildenbrand <david@kernel.org>,
+	Dinh Nguyen <dinguyen@kernel.org>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	Guo Ren <guoren@kernel.org>, Heiko Carstens <hca@linux.ibm.com>,
+	Helge Deller <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+	Jonathan Corbet <corbet@lwn.net>,
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>,
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+	Magnus Lindholm <linmag7@gmail.com>,
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Michal Hocko <mhocko@suse.com>, Michal Simek <monstr@monstr.eu>,
+	Muchun Song <muchun.song@linux.dev>,
+	Oscar Salvador <osalvador@suse.de>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Pratyush Yadav <pratyush@kernel.org>,
+	Richard Weinberger <richard@nod.at>,
+	Russell King <linux@armlinux.org.uk>,
+	Suren Baghdasaryan <surenb@google.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Vasily Gorbik <gor@linux.ibm.com>, Vineet Gupta <vgupta@kernel.org>,
+	Vlastimil Babka <vbabka@suse.cz>, Will Deacon <will@kernel.org>,
+	x86@kernel.org, linux-alpha@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+	linux-cxl@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+	linux-mm@kvack.org, linux-openrisc@vger.kernel.org,
+	linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+	linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+	linux-snps-arc@lists.infradead.org, linux-um@lists.infradead.org,
+	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+	sparclinux@vger.kernel.org
+Subject: Re: [PATCH v2 12/28] openrisc: introduce arch_zone_limits_init()
+Message-ID: <aViq2vsMk5tltK0f@antec>
+References: <20260102070005.65328-1-rppt@kernel.org>
+ <20260102070005.65328-13-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] mips: LOONGSON32: drop a dangling Kconfig symbol
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: linux-kernel@vger.kernel.org, Keguang Zhang <keguang.zhang@gmail.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org
-References: <20251228190443.2479978-1-rdunlap@infradead.org>
- <alpine.DEB.2.21.2601030126020.14570@angie.orcam.me.uk>
-Content-Language: en-US
-From: Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <alpine.DEB.2.21.2601030126020.14570@angie.orcam.me.uk>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260102070005.65328-13-rppt@kernel.org>
 
-
-
-On 1/2/26 5:26 PM, Maciej W. Rozycki wrote:
-> On Sun, 28 Dec 2025, Randy Dunlap wrote:
+On Fri, Jan 02, 2026 at 08:59:48AM +0200, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 > 
->> CPU_GAS_LOAD_STORE_LR is not used anywhere in the kernel sources,
+> Move calculations of zone limits to a dedicated arch_zone_limits_init()
+> function.
 > 
-> s/CPU_GAS_LOAD_STORE_LR/CPU_HAS_LOAD_STORE_LR/
+> Later MM core will use this function as an architecture specific callback
+> during nodes and zones initialization and thus there won't be a need to
+> call free_area_init() from every architecture.
+> 
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> ---
+>  arch/openrisc/mm/init.c | 12 ++++++++----
+>  1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/arch/openrisc/mm/init.c b/arch/openrisc/mm/init.c
+> index 9382d9a0ec78..67de93e7a685 100644
+> --- a/arch/openrisc/mm/init.c
+> +++ b/arch/openrisc/mm/init.c
+> @@ -39,15 +39,19 @@
+>  
+>  int mem_init_done;
+>  
+> -static void __init zone_sizes_init(void)
+> +void __init arch_zone_limits_init(unsigned long *max_zone_pfns)
+>  {
+> -	unsigned long max_zone_pfn[MAX_NR_ZONES] = { 0 };
+> -
+>  	/*
+>  	 * We use only ZONE_NORMAL
+>  	 */
+> -	max_zone_pfn[ZONE_NORMAL] = max_low_pfn;
+> +	max_zone_pfns[ZONE_NORMAL] = max_low_pfn;
+> +}
+> +
+> +static void __init zone_sizes_init(void)
+> +{
+> +	unsigned long max_zone_pfn[MAX_NR_ZONES] = { 0 };
+>  
+> +	arch_zone_limits_init(max_zone_pfn);
+>  	free_area_init(max_zone_pfn);
+>  }
 
-Aye, thanks. Will send v2.
+Thanks, this looks like a good cleanup.
 
--- 
-~Randy
 
+Acked-by: Stafford Horne <shorne@gmail.com>
 
