@@ -1,59 +1,47 @@
-Return-Path: <linux-mips+bounces-12742-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12743-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFD72CF14DF
-	for <lists+linux-mips@lfdr.de>; Sun, 04 Jan 2026 21:58:20 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12DE0CF1676
+	for <lists+linux-mips@lfdr.de>; Sun, 04 Jan 2026 23:07:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 929F83000937
-	for <lists+linux-mips@lfdr.de>; Sun,  4 Jan 2026 20:58:17 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 63100300C0C4
+	for <lists+linux-mips@lfdr.de>; Sun,  4 Jan 2026 22:07:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B2E62EDD7E;
-	Sun,  4 Jan 2026 20:58:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48C9B304BB8;
+	Sun,  4 Jan 2026 22:07:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b="PQx51yTY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gScty2Ff"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [78.32.30.218])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69A792882C9;
-	Sun,  4 Jan 2026 20:58:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.32.30.218
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFB512820A4;
+	Sun,  4 Jan 2026 22:07:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767560295; cv=none; b=qnMn9eamLCpFD6BxK3hZGkdop7vnrfrK6p2whspqtdYZaQjRvCi66Vf/BNbTIvSdtvzxGuV8ne07J355dfetbkZ/G2USdA4xfM9JlDGpf+aya8XLONx4BKnA4dER5oHTpDWVXlkhHHS7pxMoGWYZ0QShOo/TTXqz/HR8WH3gpWc=
+	t=1767564465; cv=none; b=rdVQCrfIebnfhOvwYUnOgEeVlBV45L2zHwbO1xOg9UWPP6OPZ5qXuv9kFxUy5+P30Voxk1bMhAsNdDiQ+0YiDs2qKgClyl7Cfc1+QoSYvAB50huimiWF7Sa3PABLn9/7/a/2KypUf3Iism/Jb4+HGeGVNLMEUgMs5KvcftP6/Gs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767560295; c=relaxed/simple;
-	bh=zsNkllQtFPstvC0JmaISPDmi9Nm6BaIOMpzu48l2M4M=;
+	s=arc-20240116; t=1767564465; c=relaxed/simple;
+	bh=Ee42W97PW2cmqfwn1Sv3QlRj9Q5zCvDbUSuBQxv/Op0=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JWpgyKogkSBdeXAxjUY+YGtxQRdLpCCH/rtDi/GSNse3nUsyw71gnUWlNrYHjvqScVYmfpu3n9KrjIJ9UIsPmDkukVUnkDtU6o1gW72hsfRroQ6zUfMgh0zFxbCk7ZAmJYnRR8ixqNcQzLwAEmZjL/7ZHwZY2PZQyOtPobL6uDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk; spf=none smtp.mailfrom=armlinux.org.uk; dkim=pass (2048-bit key) header.d=armlinux.org.uk header.i=@armlinux.org.uk header.b=PQx51yTY; arc=none smtp.client-ip=78.32.30.218
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=armlinux.org.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=armlinux.org.uk
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
-	MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
-	Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
-	List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=I1gCbeyIrlCt5J2/Bjwg6Lr/ehCAIvx4DrMKPGr0mIk=; b=PQx51yTYkgAaIUXq0xW7qPDXV/
-	l2XTuAum3C4YTdjh59Zd9jjet7ae799URg+ZV8rmTkWl+kVHfkxUYw1s/dRjs9aTXD7D6Ho4syQaF
-	UUWur1xKtbiRo01UTGcAE17bVwa7Q1raKrI86aomWrm1nziVTW376kzGUJt7sSCvBg/iJuo8+kzDd
-	nyMzCE7bdEmvI/HMHy4otFSPHCGqcEajEQ2/jkcO2mu5bn1Ymv/9fmd0dXa7MO9wYyaIe2D76FfaF
-	n5lZTtrjJRF5D9eduOTkj4eWKLscCmoWno8MdEQ6ghyWUX2t1zONW89YiFsB5z/4C0opIIXPgMGiC
-	0kKrZFQA==;
-Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:60852)
-	by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.98.2)
-	(envelope-from <linux@armlinux.org.uk>)
-	id 1vcV9l-000000007Jz-1ZeD;
-	Sun, 04 Jan 2026 20:56:57 +0000
-Received: from linux by shell.armlinux.org.uk with local (Exim 4.98.2)
-	(envelope-from <linux@shell.armlinux.org.uk>)
-	id 1vcV9Z-000000007Df-1tyX;
-	Sun, 04 Jan 2026 20:56:45 +0000
-Date: Sun, 4 Jan 2026 20:56:45 +0000
-From: "Russell King (Oracle)" <linux@armlinux.org.uk>
-To: Mike Rapoport <rppt@kernel.org>
+	 Content-Type:Content-Disposition:In-Reply-To; b=O8HLYx1cMog07vD01vHXdwUj3X2izcGioc9f5SKQh/C8I1Hub+vYP0RJ0dFxRKxIiQPwcG4lr0pSwdOCZiH+lIakQ/j04VG9RclpTr1/z/oGe/AoGWScdG41Mnnq0bI2VErkh4dOsIN+C5PmuAgzqfjOIu65LJ3LgcxrKlDtfrk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gScty2Ff; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E756CC4CEF7;
+	Sun,  4 Jan 2026 22:07:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1767564464;
+	bh=Ee42W97PW2cmqfwn1Sv3QlRj9Q5zCvDbUSuBQxv/Op0=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gScty2FfULdESXHMa7hr8G8loXGEUlcQN5S80gDD5UqJ9suJ3KSg5EBnAfBmPbN4t
+	 9i+loVAvbh0AVx5Yk4Koh1k8IXcYongXSPkBU/coQveXqy9HIob5+WjT9N8n85Gjtm
+	 QC1qHBE6xVD7AdKk4C44SLTYTxRO2wXx2AsAtG8JDeEhyiIAC6f2WQDRBjpGsCOR0w
+	 FS8iQ8IYIJkUJd7l21ONO+cGDEowjKvrtTSsbbdAQreKdAJdoXpAyGIgxSjm5iGWsN
+	 P4fDUybYnndFC6q8lAflfYkDiUy/1o2TDN1ho6i4H4kKv0NoHgcQix3vta1Wo/qJz4
+	 ESWpk4nesfdDw==
+Date: Mon, 5 Jan 2026 00:07:22 +0200
+From: Mike Rapoport <rppt@kernel.org>
+To: "Russell King (Oracle)" <linux@armlinux.org.uk>
 Cc: Klara Modin <klarasmodin@gmail.com>,
 	Andrew Morton <akpm@linux-foundation.org>,
 	Alex Shi <alexs@kernel.org>,
@@ -104,13 +92,14 @@ Cc: Klara Modin <klarasmodin@gmail.com>,
 Subject: Re: [PATCH 3.5] arm: make initialization of zero page independent of
  the memory map (was Re: [PATCH v2 22/28] arch, mm: consolidate
  initialization of nodes, zones and memory map)
-Message-ID: <aVrUDeSkqqY9ZCtS@shell.armlinux.org.uk>
+Message-ID: <aVrkmnzgwM5i1VqX@kernel.org>
 References: <20260102070005.65328-1-rppt@kernel.org>
  <20260102070005.65328-23-rppt@kernel.org>
  <aVhN2NgQEKe0yzva@soda.int.kasm.eu>
  <aVll339wim7dCIaQ@kernel.org>
  <aVlwOyicOLPB9SOa@parmesan.int.kasm.eu>
  <aVpWpLV4Dut5Muo2@kernel.org>
+ <aVrUDeSkqqY9ZCtS@shell.armlinux.org.uk>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -119,41 +108,47 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <aVpWpLV4Dut5Muo2@kernel.org>
-Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+In-Reply-To: <aVrUDeSkqqY9ZCtS@shell.armlinux.org.uk>
 
-On Sun, Jan 04, 2026 at 02:01:40PM +0200, Mike Rapoport wrote:
-> From 35d016bbf5da7c08cc5c5547c85558fc50cb63aa Mon Sep 17 00:00:00 2001
-> From: Klara Modin <klarasmodin@gmail.com>
-> Date: Sat, 3 Jan 2026 20:40:09 +0200
-> Subject: [PATCH] arm: make initialization of zero page independent of the
->  memory map
+On Sun, Jan 04, 2026 at 08:56:45PM +0000, Russell King (Oracle) wrote:
+> On Sun, Jan 04, 2026 at 02:01:40PM +0200, Mike Rapoport wrote:
+> > From 35d016bbf5da7c08cc5c5547c85558fc50cb63aa Mon Sep 17 00:00:00 2001
+> > From: Klara Modin <klarasmodin@gmail.com>
+> > Date: Sat, 3 Jan 2026 20:40:09 +0200
+> > Subject: [PATCH] arm: make initialization of zero page independent of the
+> >  memory map
+> > 
+> > Unlike most architectures, arm keeps a struct page pointer to the
+> > empty_zero_page and to initialize it requires conversion of a virtual
+> > address to page which makes it necessary to have memory map initialized
+> > before creating the empty_zero_page.
+> > 
+> > Make empty_zero_page a stataic array in BSS to decouple it's
+> > initialization from the initialization of the memory map.
 > 
-> Unlike most architectures, arm keeps a struct page pointer to the
-> empty_zero_page and to initialize it requires conversion of a virtual
-> address to page which makes it necessary to have memory map initialized
-> before creating the empty_zero_page.
+> I see you haven't considered _why_ ARM does this.
 > 
-> Make empty_zero_page a stataic array in BSS to decouple it's
-> initialization from the initialization of the memory map.
+> You are getting rid of the flush_dcache_page() call, which ensures
+> that the zeroed contents of the page are pushed out of the cache
+> into memory. This is necessary.
+> 
+> BSS is very similar. It's memset() during the kernel boot _after_
+> the caches are enabled. Without an explicit flush, nothing
+> guarantees that those writes will be visible to userspace.
 
-I see you haven't considered _why_ ARM does this.
+There's a call to flush_cache_all() paging_init()->devicemaps_init() that
+will guarantee that those writes are flushed long before userspace starts.
+ 
+> To me, this seems like a bad idea, which will cause userspace to
+> break.
+> 
+> We need to call flush_dcache_page(), and _that_ requires a struct
+> page.
 
-You are getting rid of the flush_dcache_page() call, which ensures
-that the zeroed contents of the page are pushed out of the cache
-into memory. This is necessary.
-
-BSS is very similar. It's memset() during the kernel boot _after_
-the caches are enabled. Without an explicit flush, nothing
-guarantees that those writes will be visible to userspace.
-
-To me, this seems like a bad idea, which will cause userspace to
-break.
-
-We need to call flush_dcache_page(), and _that_ requires a struct
-page.
+Right now there's __flush_dcache_folio() that will break anyway when folio
+divorces from struct page.   
 
 -- 
-RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
-FTTP is here! 80Mbps down 10Mbps up. Decent connectivity at last!
+Sincerely yours,
+Mike.
 
