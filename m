@@ -1,157 +1,143 @@
-Return-Path: <linux-mips+bounces-12739-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12740-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id F390ECF072C
-	for <lists+linux-mips@lfdr.de>; Sun, 04 Jan 2026 00:58:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 74C74CF0AF3
+	for <lists+linux-mips@lfdr.de>; Sun, 04 Jan 2026 08:06:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A2CD83009579
-	for <lists+linux-mips@lfdr.de>; Sat,  3 Jan 2026 23:58:01 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1A05D300ACD3
+	for <lists+linux-mips@lfdr.de>; Sun,  4 Jan 2026 07:06:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BE18296BDF;
-	Sat,  3 Jan 2026 23:58:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IcmhY4Q1"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CE6E2E7179;
+	Sun,  4 Jan 2026 07:06:14 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cstnet.cn (smtp81.cstnet.cn [159.226.251.81])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CE0E1C84D0
-	for <linux-mips@vger.kernel.org>; Sat,  3 Jan 2026 23:57:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 292081E3DED;
+	Sun,  4 Jan 2026 07:06:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767484681; cv=none; b=OtHltW2FVbo1oAzDtDDg5ki7raH9aUC++/Vxm6Ks6HW3Vw3Nca8k/d+uPmzPpdIrC//qPc2kVjhWCP/NDkh1y1ZUfsJahBuceG4U9cW09yrArhxPupx4hWMb7/41FMVCsdZsv/Kxdz0W37zqnCuh27/UL5xjxtrMgKD12wxhS5Q=
+	t=1767510374; cv=none; b=Hp++zUIbB9Rh+77CqOINMFyGYpbPiZxo5VwQpmkV48OhlmFBYfZlitysRm/KTDqCDDTcsW5WOXgn7WWM/qavb/y/c6BHmVYjyXuFdj/oo/K+0A6epU3WT1Ab/VphbIx348fibDgRgYlW6MfQjUVq56paYvMZK6WjwmlgZdbaito=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767484681; c=relaxed/simple;
-	bh=Nc0bv4pj2jQS1zXWwXvjiUVnCrXsy+PQZzamWQEOi/Q=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=osbTzp3lAeeGG1melGaaP9qs6AX10OZkxga29TO/rZ85hnvHz+kyYEP2HkIkIayDNgUcQVXdpbmJuP8LhcrqjYul662F0037GSQmywalwPnU2NOkaaQa4vbj0opX9GbQbxukKmCYrllM/eCn4OInHLUOTUOR6mSTM+gs6ha9SbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IcmhY4Q1; arc=none smtp.client-ip=209.85.167.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5957a623c7fso1660839e87.0
-        for <linux-mips@vger.kernel.org>; Sat, 03 Jan 2026 15:57:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1767484677; x=1768089477; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=dB1LagwegptwwLHmXyd1osJA27FSZTcIsYt0ExTrUgg=;
-        b=IcmhY4Q1VROUpEIn0PP0vEUnJ3UnOVKso3pWBHmiMrDJtyunw54KWFgXkpxy15saTO
-         9SiOAl71hK3KC9gstLtRuPRgvhP3HzHHwAnlwR5OxnJGFZU5WJR0NYosfRdqxobgzuvF
-         HXDipGhaxZsfx34XxO3j2X9ABG7ogtHl3WBnnB+xcI7kq5JfBpVDt97ztu9gc4pLsRgs
-         pNc3pfO8kfpBc1tx/WSioIqY+SmKxvCjIWr7Ej8p31hM9uQIv90FMZUlDbzEnkUqvgJh
-         MTkUoDiKLk4HVlCmDnVIoqFAcktaJAAolg08LtoeCbMOHCLTx/lb33+7vzGuJ122SkMs
-         rWYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767484677; x=1768089477;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to:subject
-         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=dB1LagwegptwwLHmXyd1osJA27FSZTcIsYt0ExTrUgg=;
-        b=MThb58fbkVQkWlJtvj934BA4HwQi2WlVxvK1TSjQPOwvZaAMdPEJ/iVWO4IrhMAOrX
-         KM9qNFDt1sBChYeEFCzeGBy9aNEQBCPYkujtkW/MfR+/b7uer6MTkgWgZ6BIkAOYx8De
-         PlMvvkhHkT/ufVTWgDQYxtl2KKq5cXPdmH2Gz0rRUGnvbgoPWU3XLCbSL7vi/wugoSxj
-         sK4rQdL9yWFx1IXNHMIfRBtMeyJWSAyf+RWfU+/vddRhJGRX1n3S4UGxOpy0I1LIQbLT
-         /ySvPT0qO1vwEHqTd/V8dBeMM83GZoVyOxpVHFwnNAu3WXtdjkNxFDCDGJT2k6zkHH13
-         xrww==
-X-Forwarded-Encrypted: i=1; AJvYcCUCb756MpJ3l7HVuTEnTn2cd8KsMo1colbZxIwLPV+MrVulmE4WxFs+jRHZcZCoH187jwttruFyJbUg@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBQmdEHdVd2BS5nn09kmriHav9i2/EKUK4uhgoR1GkJfRGR/Zl
-	k/TcGLVV3XVOBlhSJzx8u/ks+Ve6uPOCJh9lUEKt1V5AUlaiVlt9RAStifFyGv2aD18=
-X-Gm-Gg: AY/fxX4Jsnnk0V8HBfy7ugxVD4V2JAq1KqpiI559BOEELlg3FgmaKBIMS5f3jcmic3I
-	EpgjMno2AUhPwYebQLDynB5Kloacwc9P0EvCos2E1vktELtpGlgWonQYaI5SqWPt86HqSygphSl
-	jydO2E4Zuakn2vbIgjCBvRG6DIkz410w+CB4Rs+8CcoZbtE7ORJ/zvElk28Upj4HiOXxFD5b5yv
-	+VZtUyFNVFurdElQGe5H7lNhJVtGFZ+kEqAmKlWpmhgWhz6khewVfZj4Qz8C90javjGyio0iNzy
-	39q3fy9fkflQO6Po3iX2c8pfCylpa/Flh+eq5hTcyVLsGbAAhQ5z1WQMh/hRy6vEoZfDxwTOtL2
-	ey4Mt7Ti1yiHfnLb7adA/CTBdTjtC8rdjy+wFX7EIDwC2x2jG/jFNevyl+TJzVJZOo1Gf9WwDsB
-	lk7XD+SM24kDp5KVed1+gaD5HKuC//VOE+gk6Aq6m3VMpJWtHsvWzAIhqCObu7Slareg==
-X-Google-Smtp-Source: AGHT+IHsnTa0hbn+0Wh1C3VR25cgPSQ44uvQseVE0kXGNojATuxFAd6n7Pd80xTUUipMQpgZdEmtvQ==
-X-Received: by 2002:a05:6512:3ba3:b0:597:d7d6:eae1 with SMTP id 2adb3069b0e04-59a17d74eb7mr10048358e87.2.1767484677292;
-        Sat, 03 Jan 2026 15:57:57 -0800 (PST)
-Received: from [192.168.1.100] (91-159-24-186.elisa-laajakaista.fi. [91.159.24.186])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59a185dd90esm13558109e87.31.2026.01.03.15.57.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 03 Jan 2026 15:57:55 -0800 (PST)
-Message-ID: <ad801501-cd9f-41f5-97b3-bf8b628d6e1d@linaro.org>
-Date: Sun, 4 Jan 2026 01:57:48 +0200
+	s=arc-20240116; t=1767510374; c=relaxed/simple;
+	bh=U/drjaec94vByEJRrQZRJ0ugpd1FPnND4TRh+yCdSL8=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=qW17ivurE02h+iftac03SkCov5Wg77XoKzZpEroBQO/aW0MZPwEtCHsAk6ZPMS1u82qljbm8DIY1Gagb7kpvSlOZPqA+lLeLkGyLTp0j6wCDaDdMheTHHznBvMfvX0FtJTp+WlkQbjuuo0+FkLt0rbZK/NGZ/eH+v0WklAtuBN0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from edelgard.fodlan.icenowy.me (unknown [112.94.103.158])
+	by APP-03 (Coremail) with SMTP id rQCowADX4chVEVppyh5TAw--.52S2;
+	Sun, 04 Jan 2026 15:05:58 +0800 (CST)
+Message-ID: <1ad2f826e1537884dfac40287cfee286b2ef63fb.camel@iscas.ac.cn>
+Subject: Re: [PATCH] MIPS: Loongson64: dts: fix phy-related definition of
+ LS7A GMAC
+From: Icenowy Zheng <zhengxingda@iscas.ac.cn>
+To: Jiaxun Yang <jiaxun.yang@flygoat.com>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Huacai Chen <chenhuacai@kernel.org>
+Cc: devicetree@vger.kernel.org, "linux-mips@vger.kernel.org"
+	 <linux-mips@vger.kernel.org>, linux-kernel@vger.kernel.org, 
+	"stable@vger.kernel.org"
+	 <stable@vger.kernel.org>
+Date: Sun, 04 Jan 2026 15:05:57 +0800
+In-Reply-To: <d1a0e0ca-22d3-4d58-beb1-88eae19c9a2e@app.fastmail.com>
+References: <20260102155243.3639731-1-zhengxingda@iscas.ac.cn>
+	 <d1a0e0ca-22d3-4d58-beb1-88eae19c9a2e@app.fastmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: base64
+User-Agent: Evolution 3.44.4 
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 7/7] mtd: spi-nor: hisi-sfc: Simplify with scoped for each
- OF child loop
-To: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>,
- Pratyush Yadav <pratyush@kernel.org>,
- Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: Brian Norris <computersforpeace@gmail.com>,
- Kamal Dasu <kamal.dasu@broadcom.com>,
- Broadcom internal kernel review list
- <bcm-kernel-feedback-list@broadcom.com>,
- Miquel Raynal <miquel.raynal@bootlin.com>,
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
- Harvey Hunt <harveyhuntnexus@gmail.com>, Paul Cercueil
- <paul@crapouillou.net>, Manivannan Sadhasivam <mani@kernel.org>,
- Stefan Agner <stefan@agner.ch>, Tudor Ambarus <tudor.ambarus@linaro.org>,
- Michael Walle <mwalle@kernel.org>, Nathan Chancellor <nathan@kernel.org>,
- Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
- Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>,
- linux-mtd@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- llvm@lists.linux.dev
-References: <20260102124927.64703-8-krzysztof.kozlowski@oss.qualcomm.com>
- <20260102124927.64703-14-krzysztof.kozlowski@oss.qualcomm.com>
- <86a4yw87g8.fsf@kernel.org>
- <e2e72720-5541-44cc-a000-c469d7873c06@oss.qualcomm.com>
-From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
-In-Reply-To: <e2e72720-5541-44cc-a000-c469d7873c06@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-CM-TRANSID:rQCowADX4chVEVppyh5TAw--.52S2
+X-Coremail-Antispam: 1UD129KBjvJXoWxCryfCr4xZryUJF1fKr1UGFg_yoWrGw4xpr
+	18Jr1UJryUJr18Jr1UJr1UJryUJr1UJw1UJr1UJF1UJr1UXr1jqr1UXr1jgr1UJr48Jr1U
+	Xr1Utr1UZr1UJrUanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUPlb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4
+	A2jsIEc7CjxVAFwI0_GcCE3s1le2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IE
+	w4CE5I8CrVC2j2WlYx0E2Ix0cI8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26r1j6r4UMc
+	vjeVCFs4IE7xkEbVWUJVW8JwACjcxG0xvEwIxGrwACY4xI67k04243AVAKzVAKj4xxM4xv
+	F2IEb7IF0Fy26I8I3I1lFIxGxcIEc7CjxVA2Y2ka0xkIwI1lc7CjxVAaw2AFwI0_Jw0_GF
+	yl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWU
+	JVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7V
+	AKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j
+	6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42
+	IY6I8E87Iv6xkF7I0E14v26r4j6r4UJwCE64xvF2IEb7IF0Fy7YxBIdaVFxhVjvjDU0xZF
+	pf9x07bnVb9UUUUU=
+X-CM-SenderInfo: x2kh0wp0lqwv3d6l2u1dvotugofq/
 
-On 1/3/26 14:38, Krzysztof Kozlowski wrote:
-> On 02/01/2026 14:33, Pratyush Yadav wrote:
->> Hi Kyzystof,
->>
->> Thanks for the cleanup.
->>
->> On Fri, Jan 02 2026, Krzysztof Kozlowski wrote:
->>
->>> Use scoped for-each loop when iterating over device nodes to make code a
->>> bit simpler.
->>
->> Nit: the commit message is a bit too dry. I had to go and look what the
->> difference between the two variants was. I could make an educated guess
->> by looking at the patch, but still.
-> 
-> Really? That's old and widely used syntax, replaced so many times and
-> sorry, but really obvious.
+5ZyoIDIwMjYtMDEtMDLmmJ/mnJ/kupTnmoQgMjI6MzYgKzAwMDDvvIxKaWF4dW4gWWFuZ+WGmemB
+k++8mgo+IAo+IAo+IE9uIEZyaSwgMiBKYW4gMjAyNiwgYXQgMzo1MiBQTSwgSWNlbm93eSBaaGVu
+ZyB3cm90ZToKPiA+IEN1cnJlbnRseSB0aGUgTFM3QSBHTUFDIGRldmljZSB0cmVlIG5vZGUgbGFj
+a3MgYSBwcm9wZXIgcGh5LWhhbmRsZQo+ID4gcHJvcGVydHkgcG9pbnRpbmcgdG8gdGhlIFBIWSBu
+b2RlLgo+ID4gCj4gPiBJbiBhZGRpdGlvbiwgdGhlIHBoeS1tb2RlIHByb3BlcnR5IHNwZWNpZmll
+cyAicmdtaWkiIHdpdGhvdXQgYW55Cj4gPiBpbnRlcm5hbCBkZWxheSBpbmZvcm1hdGlvbiwgd2hp
+Y2ggbWVhbnMgdGhlIGJvYXJkIHRyYWNlIG5lZWRzIHRvCj4gPiBhZGQgMm5zCj4gPiBkZWxheSB0
+byB0aGUgUkdNSUkgZGF0YSBsaW5lczsgYnV0IHRoYXQgaXNuJ3Qga25vd24gdG8gaGFwcGVuIG9u
+Cj4gPiBhbnkKPiA+IExvb25nc29uIGJvYXJkLiBUaGUgQUNQSS1iYXNlZCBpbml0aWFsaXphdGlv
+biBjb2RlcGF0aCwgd2hpY2ggaXMKPiA+IHVzZWQgb24KPiA+IExvb25nQXJjaC1iYXNlZCAzQTUw
+MDAgKyA3QTEwMDAgaGFyZHdhcmVzLCBzcGVjaWZpZXMgInJnbWlpLWlkIiBwaHkKPiA+IG1vZGUs
+IHdoaWNoIHNob3VsZCBiZSB0aGUgb25lIHdlIGFyZSB1c2luZy4KPiA+IAo+ID4gQWRkIHRoZSBs
+YWNraW5nIHBoeS1oYW5kbGUgcHJvcGVydHkgYW5kIHNldCBwcm9wZXIgcGh5LW1vZGUuCj4gPiAK
+PiA+IFRlc3RlZCBvbiBhIExTM0E0MDAwXzdBMTAwMF9OVUNfQk9BUkRfVjIuMSBib2FyZCB3aXRo
+IFlUODUyMVMgUEhZLgo+ID4gCj4gPiBTaWduZWQtb2ZmLWJ5OiBJY2Vub3d5IFpoZW5nIDx6aGVu
+Z3hpbmdkYUBpc2Nhcy5hYy5jbj4KPiAKPiBHb29kIGNhdGNoISBUaGlzIHdpdGggZmluZSB3aXRo
+IHJlYWx0ZWsgcGh5IGNoaXBzIGJ1dCBZVDg1MjFTIHNlZW1zCj4gdG8gYmUgcGlja3kuCgpJIHRo
+aW5rIHRoZXkgbWlnaHQgbm90IHdvcmsgd2l0aCBSZWFsdGVrIFBIWXMgbm93IGVpdGhlciwgY29u
+c2lkZXJpbmcKZGVsYXkgb3ZlcnJpZGUgY29kZSBmb3IgUlRMODIxMUUvRiBlbnRlcmVkIG1haW5s
+aW5lIFJlYWx0ZWsgUEhZIGRyaXZlci4KKFByZXZpb3VzbHkgaXQganVzdCBpZ25vcmVzIHRoZSBw
+aHktbW9kZSBpbnRlcm5hbCBkZWxheSBpbmZvcm1hdGlvbiBhbmQKcmVseSBvbiB3aGF0IGl0cyBz
+dHJhcCBwaW4gZGVmaW5lcykKCj4gCj4gUmV2aWV3ZWQtYnk6IEppYXh1biBZYW5nIDxqaWF4dW4u
+eWFuZ0BmbHlnb2F0LmNvbT4KPiAKPiBBbHNvIG1heWJlOgo+IAo+IENjOiBzdGFibGVAdmdlci5r
+ZXJuZWwub3JnCj4gCj4gR2l2ZW4gdGhvc2UgYm9hcmRzIHJlbHkgb24gYnVpbHQtaW4gRFQuCj4g
+Cj4gVGhhbmtzCj4gCj4gPiAtLS0KPiA+IMKgYXJjaC9taXBzL2Jvb3QvZHRzL2xvb25nc29uL2xz
+N2EtcGNoLmR0c2kgfCA2ICsrKystLQo+ID4gwqAxIGZpbGUgY2hhbmdlZCwgNCBpbnNlcnRpb25z
+KCspLCAyIGRlbGV0aW9ucygtKQo+ID4gCj4gPiBkaWZmIC0tZ2l0IGEvYXJjaC9taXBzL2Jvb3Qv
+ZHRzL2xvb25nc29uL2xzN2EtcGNoLmR0c2kgCj4gPiBiL2FyY2gvbWlwcy9ib290L2R0cy9sb29u
+Z3Nvbi9sczdhLXBjaC5kdHNpCj4gPiBpbmRleCBlZTcxMDQ1ODgzZTdlLi42ZGVlODU5MDlmNWE2
+IDEwMDY0NAo+ID4gLS0tIGEvYXJjaC9taXBzL2Jvb3QvZHRzL2xvb25nc29uL2xzN2EtcGNoLmR0
+c2kKPiA+ICsrKyBiL2FyY2gvbWlwcy9ib290L2R0cy9sb29uZ3Nvbi9sczdhLXBjaC5kdHNpCj4g
+PiBAQCAtMTk5LDcgKzE5OSw4IEBAIGdtYWNAMywwIHsKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqAgPDEzCj4gPiBJUlFfVFlQRV9MRVZFTF9ISUdIPjsKPiA+IMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpbnRl
+cnJ1cHQtbmFtZXMgPSAibWFjaXJxIiwKPiA+ICJldGhfbHBpIjsKPiA+IMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBpbnRlcnJ1
+cHQtcGFyZW50ID0gPCZwaWM+Owo+ID4gLcKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcGh5LW1vZGUgPSAicmdtaWkiOwo+ID4gK8Kg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgcGh5LW1vZGUgPSAicmdtaWktaWQiOwo+ID4gK8KgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgcGh5LWhhbmRsZSA9IDwmcGh5MD47
+Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgbWRpbyB7Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCNhZGRyZXNzLWNl
+bGxzID0gPDE+Owo+ID4gwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqAjc2l6ZS1jZWxscyA9IDwwPjsK
+PiA+IEBAIC0yMjIsNyArMjIzLDggQEAgZ21hY0AzLDEgewo+ID4gwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoCA8MTUKPiA+IElSUV9UWVBFX0xFVkVMX0hJR0g+Owo+ID4gwqDCoMKgwqDC
+oMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGlu
+dGVycnVwdC1uYW1lcyA9ICJtYWNpcnEiLAo+ID4gImV0aF9scGkiOwo+ID4gwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoGludGVy
+cnVwdC1wYXJlbnQgPSA8JnBpYz47Cj4gPiAtwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBwaHktbW9kZSA9ICJyZ21paSI7Cj4gPiAr
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDC
+oMKgwqBwaHktbW9kZSA9ICJyZ21paS1pZCI7Cj4gPiArwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqBwaHktaGFuZGxlID0gPCZwaHkx
+PjsKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqBtZGlvIHsKPiA+IMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgI2FkZHJlc3Mt
+Y2VsbHMgPSA8MT47Cj4gPiDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKg
+wqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoMKgwqDCoCNzaXplLWNlbGxzID0gPDA+
+Owo+ID4gLS0gCj4gPiAyLjUyLjAKPiAKCg==
 
-The made conversion changes are not exactly the ones, which were asked to
-be done.
-
-Commit 34af4554fb0c ("of: Introduce for_each_*_child_of_node_scoped()
-to automate of_node_put() handling") says it clearly:
-
-     Note that, in the vast majority of cases, the _available_ form should be
-     used and as code is converted to these scoped handers, we should confirm
-     that any cases that do not check for available have a good reason not
-     to.
-
-So, likely this and many other similar changes miss information in their
-commit messages, why for_each_available_child_of_node_scoped() form is
-inapplicable, thus it still could be improved.
-
-> We should not explain core kernel API in commit msgs, except maybe first
-> months of usage.
-> 
->>
->> If you end up doing a v2, a one-liner explanation of the difference
->> between the two loop variants would be nice to have.
-> 
-
--- 
-Best wishes,
-Vladimir
 
