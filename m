@@ -1,271 +1,312 @@
-Return-Path: <linux-mips+bounces-12755-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12756-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6573CF430E
-	for <lists+linux-mips@lfdr.de>; Mon, 05 Jan 2026 15:42:26 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68200CF4AEA
+	for <lists+linux-mips@lfdr.de>; Mon, 05 Jan 2026 17:29:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DDB00311CB4F
-	for <lists+linux-mips@lfdr.de>; Mon,  5 Jan 2026 14:36:40 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 5629F3034FA8
+	for <lists+linux-mips@lfdr.de>; Mon,  5 Jan 2026 16:24:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D54EB342C9A;
-	Mon,  5 Jan 2026 14:10:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 072C4334695;
+	Mon,  5 Jan 2026 16:24:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="TnsRu8r+";
-	dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b="r7Ut4Cf5"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="wiwfgUos"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08412342CA2;
-	Mon,  5 Jan 2026 14:10:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=205.220.177.32
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767622202; cv=fail; b=tNmOFnwjjgJG9iMrV1GUB7jk7A7lp6GOG0i1yxKD7TcCmGdHRaJiwEP2fOd7M6PCKCf0QddKFTQ4ye9E+hGzkx75tVUHJe5/La2o4r7T4K6WdkNuxlsbI7lTSGLux/X2ujnhxTWhMFCuB1j45It8qdt9iyhcPrA1RIdMppcJW14=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767622202; c=relaxed/simple;
-	bh=xqzjJCcujZeFNJzDwvqNPdhZIueDuJs/s0th0T29LQc=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=hExK6ko8ePKVFGwejW4U/RjlVPCXmPlmdz+ukylB8xCA9FkMFG6Y8iiK8FcV2b7nzHQ5Tww0AJClm5/f1g6v5PUnRIQEQfMcmyrMNxGekKf/SA9RSGEvofonbpZxwzDuBXJfAMApJos91hKUn6B2lEgJlcd/e/fR5jV4guQGDbs=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=TnsRu8r+; dkim=pass (1024-bit key) header.d=oracle.onmicrosoft.com header.i=@oracle.onmicrosoft.com header.b=r7Ut4Cf5; arc=fail smtp.client-ip=205.220.177.32
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-	by mx0b-00069f02.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 6050RPq6328332;
-	Mon, 5 Jan 2026 14:09:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=
-	corp-2025-04-25; bh=RYAUYyqe2lDuuWSeq6ZbF5i5s0Ne8XGCqzS5PafUdkM=; b=
-	TnsRu8r+AFXKrvrpe5Jd5SlU21GFWEyd2HQvO8BWI6vztq6GNHZ4sofG7ocD/BxW
-	gt3MJjZ2ncsBRf8+/+FdDyxP6aVV6UiBkY9oarSCNOOu61WWq2wh1S7tvu5KMXgs
-	WFsVi6arWkAnPorxFcePn4/piRi4C6uHqFNukad6ZTyTIUazq0Mi76CoCkZzgbQR
-	e8vecFigUsKHHTVjtI7pMRolE7kdWcj5+b418RHhb1cbwt1yfMaKOKWMIR/Ry52w
-	Ri3f+d4inTddlP2ag8a2StipZxnxxNghgCNUpx8Wm8Iby69Kcp6pCgO1Yi1enhyQ
-	fTtyRKe56RFWFvgcyuDCBw==
-Received: from phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta02.appoci.oracle.com [147.154.114.232])
-	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 4bev1qss41-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 05 Jan 2026 14:09:28 +0000 (GMT)
-Received: from pps.filterd (phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 605D05Rd003234;
-	Mon, 5 Jan 2026 14:09:27 GMT
-Received: from dm5pr21cu001.outbound.protection.outlook.com (mail-centralusazon11011002.outbound.protection.outlook.com [52.101.62.2])
-	by phxpaimrmta02.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 4besj75jf9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Mon, 05 Jan 2026 14:09:27 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=bqL7jO3m3CREV9Sq7+VCwNqs9LWVlfBwCZS/XiezSQ4+8+KLiJkHTMw9S3KFJrTC6m46sTI7+rpdWHO7cKI128pQP3Xir6JIHzytHxh8FNi/whfh+jJO99w6eAzE++8jHUMmk2Y4JUkf8skl0qKQmNez9k3GkUSKL4y/dhwCyGWaks13u+IF1e7ToVM+Mn3kXdXV4MWx8EfaWF1g6GM/o14GnZACSsNOcZxOVlGARAAId0AFAkqgnTtnS+ho3fD5Ke074rW1upaBQRl8Vu6g9/h2/u0aLOlkfQS9vTRPI6bYNrpzg6VAgEdAMLoNfQFBz+AvoriXKE+EYLydn5HC/g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=RYAUYyqe2lDuuWSeq6ZbF5i5s0Ne8XGCqzS5PafUdkM=;
- b=eIZGAf2ZEYNCfeEoPpB2+1Aak69vGaiLKGejEDr2YafiTmn8VflaZsbsKcH6XlmVAjG3Obgtbyv9IuDXmM+oZew8cR5+pU/Q8rXJDFzTPNlczV16HNjUafk6b63HYgpNA8ycDfdadoBg87nAUJpDGXf+s7oF/oxEmJywbgETUNhlrQoEJMPNU4kXEw7BUYVe0Z0VDGyIKpAE2j+HegOz78cXuggqIgcVHgFBHNY//Eyo9v+qHzxhd3y7eiYTrD8jlN9/W7FLhONjvbuUNEHo82BGndove+DIJGXKi/dYQQ6v5GUwMRFEWa+hn9VNWK9b6eM1mI7GRKGSFt75M7rRbA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=RYAUYyqe2lDuuWSeq6ZbF5i5s0Ne8XGCqzS5PafUdkM=;
- b=r7Ut4Cf5L7GOthh1thWoFrVZog9LCz92Axqj5c/Rf3Zz1PGkx0YYXhD3+eCEa3ws/DmYD6mnfWL+XS4q4R7nE53QeNE/xL+JZynXeMx4n01El+aFjE9RROSUxDy6bzJrXW15THtaQLyC181VPttadsZFZL1fesJNj6CkQLlHpqM=
-Received: from DS4PPFEAFA21C69.namprd10.prod.outlook.com
- (2603:10b6:f:fc00::d54) by CH0PR10MB5081.namprd10.prod.outlook.com
- (2603:10b6:610:c2::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9478.4; Mon, 5 Jan
- 2026 14:09:24 +0000
-Received: from DS4PPFEAFA21C69.namprd10.prod.outlook.com
- ([fe80::ba87:9589:750c:6861]) by DS4PPFEAFA21C69.namprd10.prod.outlook.com
- ([fe80::ba87:9589:750c:6861%8]) with mapi id 15.20.9478.004; Mon, 5 Jan 2026
- 14:09:24 +0000
-Message-ID: <e5dbec93-8400-4e20-a6f6-b245765144f5@oracle.com>
-Date: Mon, 5 Jan 2026 14:09:18 +0000
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/4] LoongArch: Make cpumask_of_node() robust against
- NUMA_NO_NODE
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: kernel@xen0n.name, jiaxun.yang@flygoat.com, tsbogend@alpha.franken.de,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, luto@kernel.org,
-        peterz@infradead.org, arnd@arndb.de, x86@kernel.org,
-        loongarch@lists.linux.dev, linux-kernel@vger.kernel.org,
-        linux-mips@vger.kernel.org, linux-arch@vger.kernel.org,
-        vulab@iscas.ac.cn, gregkh@linuxfoundation.org, rafael@kernel.org,
-        dakr@kernel.org
-References: <20260105100547.287332-1-john.g.garry@oracle.com>
- <20260105100547.287332-3-john.g.garry@oracle.com>
- <CAAhV-H4e9NOuO0ZyYfa1W1CyDnJVuuUDNEOavMS9o+h-u8PzLw@mail.gmail.com>
-Content-Language: en-US
-From: John Garry <john.g.garry@oracle.com>
-Organization: Oracle Corporation
-In-Reply-To: <CAAhV-H4e9NOuO0ZyYfa1W1CyDnJVuuUDNEOavMS9o+h-u8PzLw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: FR3P281CA0182.DEUP281.PROD.OUTLOOK.COM
- (2603:10a6:d10:a4::17) To DS4PPFEAFA21C69.namprd10.prod.outlook.com
- (2603:10b6:f:fc00::d54)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0692733291A;
+	Mon,  5 Jan 2026 16:24:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1767630264; cv=none; b=QMcaDaBk4DNMJinPrg9lWj4lo3EnW6q+EitUAMy7biU1JC/oPiGAmiCIev6kmoH2qmUEYcxx9g6D/Rrg+fms645V6pdneT2Yv8G29BWnKke0OjeyxlDqNdEBcnmiOwEdmX75y29e4wm1JwqK2Unp3ufxVSmPAVSElrRmMXjso3s=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1767630264; c=relaxed/simple;
+	bh=ZF375abMaqPcCosbr7HThENC1dI3rMKv9Td3V3QBTUc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=DCUXHHSiPPtuqByqHzUm7QQ48cyR2inSHtPIQeR9I6UdyWRCLnj5NG7RKNsUPIB9csQMPklrRY957tIvUdm3I8L8mDy8O6JZ4jzphkms0CEpdLo5N3uXqdU7q6x+Sl4+XtJmkSKU4OLBk7zLEk7Jvnfv7eNB54/AN0keP6dBqVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=wiwfgUos; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 2C093C1E48A;
+	Mon,  5 Jan 2026 16:23:51 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 1F2BD60726;
+	Mon,  5 Jan 2026 16:24:17 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 04C34103C84AA;
+	Mon,  5 Jan 2026 17:24:11 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1767630255; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=wmAT0T9ABuwHAf6f+472JmLmotK1cUNIQRvscL78Si8=;
+	b=wiwfgUos9MN+41ojRE2Afdk860+ixAWP0mMipfgftY8bfriiGODeIcNdsxpSEyxSzZuFJa
+	/ainyHboytM31BdO6DwPeUAdCWVwmTT2dmK1QgCmhf1rblhzkcKWE34hWiu4CZCaBzpA4k
+	zvYPutcJjurtbcSdNtsSf5IxXetg/3xZ9i6XBgqQ9GzGrOj1A41xb/1AfYHG4l5vSLjtg8
+	bAgrdxFHJsFVQztX8r+3KfCNYlP9TP0gLQ5N+OvP2QC1uszibhEe5U/Vi3CZV4pQ3ADf2A
+	GbZdubbRrJ3aTaVd1bVKNCKFbyDfTtjVDECyFrqQtuMpK3UtzTLVLQPw9fHe2g==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS4PPFEAFA21C69:EE_|CH0PR10MB5081:EE_
-X-MS-Office365-Filtering-Correlation-Id: df9c0c7b-1c26-4bca-201e-08de4c640797
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?VkJqLzRDcXlrZENnbmR2V1FHVDIwdkZ0Z2NVbUtkMHNPcUlmMDdlSTMvZmhH?=
- =?utf-8?B?VTY1Rmo0WTAxbzc3Q0VXdUV2cnhmT3VBUFd4dit1Z1BKZmljSjVIWDVtZHpG?=
- =?utf-8?B?T2p0RmtZYnV3Vlh5dytSY1VzRFlML1F0amhrVlM1Sm85Zis5akhyZUNaRzRD?=
- =?utf-8?B?ajJUSXUvLzdTSHIrcEJKNTRIQ2RWTEZKeVk5WW1FSVJmOE1QSkVwQlRscm1Y?=
- =?utf-8?B?emlMQ1NWbXNLZjFhNENkc3cxVTdxMm95OUE5WUd3MWpjNjIzcjFEeDFnYlhQ?=
- =?utf-8?B?djVRaUdKbmVQN1NRSTVYelRmc21Pa2JJRnlKTUFYdmVMaGcvemltZmR2ZkJB?=
- =?utf-8?B?TWQ3eHBrNlREeXZWY0RabkNKNzdmcVluTVRYYUh3eloybEhXWGhqVGdVSCtF?=
- =?utf-8?B?ajFvY0RTSVA2RTVyeHByMzIxS2l4ckJmeGU1cHJ2bEdMQjhjbXIzeHlJR2VX?=
- =?utf-8?B?Wlp6K3N0c25QTjlzeEQ3N3g5a3RWU1hoWWFCVXVhYjFVTWNPZ25LeFloOURT?=
- =?utf-8?B?SXRMbFNGSU1UWWVhaWZoenlWdHhEemwwa1lLcHY4MmxyTVpQdFVmaVhWK05r?=
- =?utf-8?B?YjJJektoOU9yZUlGVVZibFowS21BcE5XSGZIUEIwTitVK0R6V2ZTMXZURUlz?=
- =?utf-8?B?cGFDYVRLUjFzK255MmVybndPNUdkM3BoNWVuMTljeDFsMEpmYVNpQjZ0OGdM?=
- =?utf-8?B?dDE1dnowaHFwbFVOTWdGUlVjNzVNL3JqRWNZNmZKZ0NvditBZXpseFQyODBk?=
- =?utf-8?B?NTFPV1JmdzhobVYyby93TG51OWxiN1Nzc2hZd3lKOHB1Z3lWb09IMUNZOXNk?=
- =?utf-8?B?dzJoa0FjY1plWUUweWVNclRuSnBKMFRHb2F1ZnVzekpNaUJnamZpejN1L1RY?=
- =?utf-8?B?Y0pQSTZqZkVJNjVoRGVnSUdZblBUcm52UzFjZWd5dUk3SzlQUkJtYURDUURD?=
- =?utf-8?B?bnRIRWVVdEkrZDY1R2w1SDJLVVdWS3NMMnVzdEp5OHdHaU40S29zSXlNMDJQ?=
- =?utf-8?B?YXdTcGNlWGJ2YVFaRTMrWTllSFFMaGh4RnlWTy8zbCs0OURoRjYxdXlEWWlp?=
- =?utf-8?B?aUc5czlnREpUWWMyR0s5bnR2YnJsKzJoelduVXU5UVBJcjBZRnZjbWdYSS92?=
- =?utf-8?B?ZEhsZ1puN1c4NjJhNkVOY3BGcm12azFVVno4ZDI5b0xHaEhodmNyTk1MZytz?=
- =?utf-8?B?SHBTKzk5Wm12cllUS2hSMXlpQm41TUxzKzR2R0g3bDl1T0VOYkZ6WnE3SVhw?=
- =?utf-8?B?RlhjNlFJb3dNVDljK0s3QUI2UXY0M1dpZkI4S1lVeGNreUQ4Z1NiS0VQOXJC?=
- =?utf-8?B?eTg1TDlxS1RjekIwdERMVytIek1HL1JhQzY4RVArYkd6VDByV3FsZ1d5Nncr?=
- =?utf-8?B?VzFGMllHdWQrblhlNGIxNS9pL1BiSVV2UllMQjJ6QStvUDgzOENoMDNvMm1n?=
- =?utf-8?B?S2w2Q2V3SndoTWlHTGZtZXFVdHpTL3lZekdxQXdYY1ljUnhqTnp5YUxUUmh0?=
- =?utf-8?B?Q0FaNlU3SERhZWxyVUU0bi8zUHhmSUV3dFFTZWcvL2llSjByTHhpbllpRUg5?=
- =?utf-8?B?OStlVTBGSEtGN3FKVGtrWE50dzBxQU84aGV3cVRxNWxBWXhOV2t5YTRjTTQx?=
- =?utf-8?B?ZVEwa0dWemEzOG1kZGdwRmhmZG0rcFBGN2RpMFphSVpMQ3k2ZjhLMllMOW02?=
- =?utf-8?B?OWNPMngxNmcvbks4RC9IUmpNaWxuNkNpYnJ0aWs1R2F1ai83bkFPdjIrOFRY?=
- =?utf-8?B?bllxTFNjaE12MGk0Rm9KamprWlVmRnlLdG9xNUJlSllTWngrcS9xcWs2dU15?=
- =?utf-8?B?TmwwRE42NzlEK2NXU282RWg5VnVtdjZYQ1hwVnpscWt1TlZYYm1zSlZaenVC?=
- =?utf-8?B?VUFoQmVjU3Aya2tOL3FleXJYVjU5OVVZdGtJUVBWTmFhT1pFeDVQZng1dkVy?=
- =?utf-8?Q?wlioBiA7SKvSOnXKwS+QxVuyAsVWTwWr?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS4PPFEAFA21C69.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?RHhHZmhuZU05bDB3WE9WUUQ1Q3ZSYkFyZlBLRzJ2REtUZUxXTWUrd2htK1pY?=
- =?utf-8?B?TkwzMnRlckFtWHlyTS93RzJxdGhnSFBSSzBpTU1VUjVkYzFxMUt6Tlpod1Fr?=
- =?utf-8?B?cGkzdmVibDZCdy9kUnJtMTJpU2RHWUJUcUhDc0NlZm55SDh0MCtCa0RhQ0V5?=
- =?utf-8?B?TW50b0F6UVcrZjVDZEM5cCtSMk1BZmFuRG5BeXhKcm9PVWpJNndVd2w3dWcx?=
- =?utf-8?B?eU9McXdQUThwZC9ENXBLNUdwZ0p0elZPUXVjRkNGaVAzWFhVbTNVKzhVY0R5?=
- =?utf-8?B?MU5reTNqMjZ1NHgwaUEzRHhieFBXSk5scUx6d1orbHU3UkdnNzNwS3dvQlZu?=
- =?utf-8?B?cTROd2ZsQ2UzMEt1NS9zQU9BYXB6SGpLWWJOK1p4WWx0YUJnUGhzUkJ1SHNR?=
- =?utf-8?B?NTNwRTVIWUsvMk1PWGFwaldZMEVId1BMdnJhRzlDS1d2UVg1V2xndmY4M1Ry?=
- =?utf-8?B?dGFtM0JVV0ZEMmRSQU51cDVlRVdRa1ZZWlJZUGR1bkRvTVF0NTlSbWM1UkZm?=
- =?utf-8?B?d0NDMW42QldzK0VjQnc3VWJhZzl1T01VZ2grazRXVS9FQjBBc0xRcFNmM1U1?=
- =?utf-8?B?cnNjVDh6R1hhQXQ2NWNBTnRScGJ1eXVhV25VaWxncGlaRnRSZE9tdStXRDVH?=
- =?utf-8?B?WjRmMTRuQ0hZc0xZUEJBVkppeURzZTlIZU5LcHBiT1FGTnlHbE5oSWQxaTNx?=
- =?utf-8?B?TTdjMTU1YU1ETEVjVG9ZUzNsM0ZjSlZUeWthU2k2a2RhbHJUUjI0NzFxRy9i?=
- =?utf-8?B?enltTFMxTUFBcWtTRU94NWZtVis2blFtSk9aeWRYbmo5ZjVVMmp3MWRjOFA3?=
- =?utf-8?B?anp4RS9tN1d1S0U0NTFCYzdmZ2JMQVk0cTZaMm84U05qenV1WXhLbFhlcFdz?=
- =?utf-8?B?STM2OGsyakpYUk44UEJ0Mkp4dmhQZms3NE1FeEJVRmZlYjQ0TkhhaFI5MmRj?=
- =?utf-8?B?aVFUS1dQbnh3OFhBMzI0V0x5aXlXS0x2YUFqYm1MVzNoQjg4U2s2ZUdERzhu?=
- =?utf-8?B?SnU4MDFTM3dKRVB1dWZIWEVLck1ZclVITTJQTTd2LzFBUnBsQTlsdk5YdTNm?=
- =?utf-8?B?RHRFeGxiRlNCQjhDbkpJUkdidkVhRFJ1d0NDcVFRUDhDS1pCdWxKL25HRmd6?=
- =?utf-8?B?NUxsaE5vUVJ4NlE4bGZVVVFoRVdJZmYxM1MvR0RUSm02SkwzTGNWREJWMkxX?=
- =?utf-8?B?UUlkQVFkWjhoV0tHSW5ud0M5TGlDSXAyTm1HdzNsZHdHa0hselBmY0hydU5m?=
- =?utf-8?B?T0I5cUlnU29ET0lZUTloQ1pHQlhMUWR3TUZKRGQxellVZzZHRUR3RUUrSGJa?=
- =?utf-8?B?V1pYR1Vha2ZLT003N2pnWEVLQ2NWR1pnWHYxTlNDd08rbnlUZFl5bitGNitr?=
- =?utf-8?B?Q2FFbkg5TGVWRFAzTkFtT2xnWDJzLzB0V0NDUjVCMnV3U2NBc2ZpTTRpOGp0?=
- =?utf-8?B?VVJwT0l4Z2xsby9UVlNnZndrVG1SQ1RWMWdSOGg3bzVZNVNvL1B2SW1DYmZD?=
- =?utf-8?B?WEdSakJvcWtLUzN6OTlDdmt4SEUrajR3ZjVFQVJNcGVRS0lUbk11N0NoY3RW?=
- =?utf-8?B?Q3JCaythbzdEanJXQ1VmdGRzdTFMZjlSK0M3eTlUTkFqNVdsSXV2VkVIMnZP?=
- =?utf-8?B?VndyQnR5K1ZCYjh6eWZQRUIvZmNaNUVNVnBTMHRrSi9KRWNMMDNxVTdqb1F4?=
- =?utf-8?B?SHNCYXVOVWc3NTV0SGlncDBaV2NyOHNiVTFGblJEWmhiWE1JN1N4QmkvSy9V?=
- =?utf-8?B?dGpyMGJpZVJ5MWRVclJYRFdDUmlWdjh6cHA1OGhsaEtrR25KbXpGU0U2TSt0?=
- =?utf-8?B?Q1RtMjBYWUY4aWxoOWZKMXFhUndua0xDdzhKNzJvejV5a3UxdXBTSDlpUFNl?=
- =?utf-8?B?R1ByVzNTLzhIaVBCUVR0aHNNbDl4NHBabTZ0QzUyL3k1TE02REV1a0IwUXJ4?=
- =?utf-8?B?NG1Dek9GVmoweHovNk5QVUwzQ1h2aC9NWFdQZEVFcjF3WkVJTkFsZTZRU0Zp?=
- =?utf-8?B?R1VjQ3JmYXN0aGpSeGVPM0F5QUdHRU94WDU4ZDVSNUIvSU1BMEJrUWF3R1RS?=
- =?utf-8?B?bERHMEF1SHR5a0U2dVdKOWNDdUYwR3dadllUVWdhekxhQ1VjSXdGa1NaUnZv?=
- =?utf-8?B?dWpsUy9leEhVZjZGanZXSTk3VlNiUnpNL1FHbDg5SGJ0dnFpZGovZUhMZ1N1?=
- =?utf-8?B?VFVsdUZrUEd3OXd5V0dPY2tSa1lITXRETHhNR0dhVld2L3VtcGdTdXREeTF4?=
- =?utf-8?B?SUNObkE0OXBoQXMzdWFEYmJhQmJaYzFGWkgrNGNZTm55QloyWkNvQVNSLzlG?=
- =?utf-8?B?STI0Q0J0VHhVQmxHNFpKaGQ5anhoRS9LUGN3Qy9IQ0orNzl0VFBSRGxVcHBk?=
- =?utf-8?Q?+AerqiI/hFJaEOoY=3D?=
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-ExternalHop-MessageData-0:
-	uRK/pAzHIb4Q3TquKTJolazUkZ3x/4Yk5Tp4jn7d8HYhg9sU3LR2rrn9uT/mWsehaLuarnu+g2ueX1ibZo2zjN7tequ2voOX87YN96Lr+bk2CQUW1iL5NR/b6MmNHhxhvyvRwVjpLXS5bVUgMyhmU/Koy4qzJ8Yy+mRSTcSSL0t32135CyD1e220FV+ZEJJf/thkyOUDuWrU9046vXJF8wjxZUeI5MIxm/KXSmsCvHHIAo0o8uQhv/Qu2SfrXPKtDsVhj/j9icaj7MpLL9/Sxnva9r7c96WU56ONZdE0vVen3gcihDGGGPJqXEMwLlHmzEQ6KXTIXt/2VU9Mik219TiX78AKwFQ2TcqGTl+KUj0iUz63/LUJJegnvEuyYsPZk2W59P+6N4q+EG/h7fD8JcLL5mqzxZO55J5zVx1sOBYY/GdVxtSczY9t/Erohdt35CQ8//aUCU/02VpO4IDltLXWiQzVuML55C2QiorOP0YLXRjc9Q3qrNYbjl5NLlNdSbFv/ILJb4G21M+CNrjpx+Sa5zicXdYsCXTPshGccHqKQG1j0wYq17YycVkEYEUJBN8+annrWukh2Ttda1At/LwSKGRHT85Unijyhxi5TQI=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: df9c0c7b-1c26-4bca-201e-08de4c640797
-X-MS-Exchange-CrossTenant-AuthSource: DS4PPFEAFA21C69.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 05 Jan 2026 14:09:24.3444
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: aFZPley2iE81L0GcKMI1Hz8pWV8e7FhLno7WLnMHmqifR/EOALyYt0A5fTn5l/pB5srvsSA1hka7gjCFUAMHlg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH0PR10MB5081
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1121,Hydra:6.1.9,FMLib:17.12.100.49
- definitions=2026-01-05_01,2026-01-05_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 bulkscore=0 suspectscore=0
- mlxscore=0 spamscore=0 mlxlogscore=999 adultscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2512120000
- definitions=main-2601050124
-X-Proofpoint-GUID: CEZOcSAb51Zc2qAQZhecaxpULGivuJx_
-X-Authority-Analysis: v=2.4 cv=Ec7FgfmC c=1 sm=1 tr=0 ts=695bc618 cx=c_pps
- a=OOZaFjgC48PWsiFpTAqLcw==:117 a=OOZaFjgC48PWsiFpTAqLcw==:17
- a=6eWqkTHjU83fiwn7nKZWdM+Sl24=:19 a=z/mQ4Ysz8XfWz/Q5cLBRGdckG28=:19
- a=lCpzRmAYbLLaTzLvsPZ7Mbvzbb8=:19 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=vUbySO9Y5rIA:10 a=GoEa3M9JfhUA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=yPCof4ZbAAAA:8 a=sIHEVLj31ub637hHCCAA:9 a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10
-X-Proofpoint-ORIG-GUID: CEZOcSAb51Zc2qAQZhecaxpULGivuJx_
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMTA1MDEyMyBTYWx0ZWRfX9Pcx/jNp2jaW
- xUWGRUUdu7A8/JPNCzBv9sAKNi5rrejBs2ke9dEIb3ue6gvJVhG8ib5KjomuzBb2omB3DMNUDF7
- bt4jOSB6UkK6s6rfR86rb32LYX1Iw+/lr1O58KMiXylLHIWniGw5jHAdnjNTL05q+Rtr8qSctxU
- RjVIz4BUf5j7SN7kvQn4yJHrpbA+UxBrdux+4LyywNUeUCpU8jMVOG2DpwPndLU4C52m+hV9iMS
- kWDY/UDu07LZcrRazpBrW4AeWOxVgyUBFndaEXB8DvfBQdHYRzJrfe3l0eVyaFWCvK5Seqh1chh
- 74P//9wIAZtXNkNGb6VzHvSkJAeJ8zZtgybqlC58dKBnAnvQWLZvZ96tuACznr21FenY394yfr6
- 7OpbUG//Ho5fqc0E+5XCLyS6HBPPg/BJ5Q0OGHWV5DIRhTfpRr21K4R795nOv8Fo9//Kb1QI40j
- DP/CA21HlQorQGODJkA==
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Mon, 05 Jan 2026 17:24:11 +0100
+Message-Id: <DFGSMN8268O0.33TYCQDBVHUHZ@bootlin.com>
+Subject: Re: [PATCH v5 2/7] phy: Add driver for EyeQ5 Ethernet PHY wrapper
+Cc: "Vladimir Kondratiev" <vladimir.kondratiev@mobileye.com>,
+ =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, "Rob
+ Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+ "Conor Dooley" <conor+dt@kernel.org>, "Kishon Vijay Abraham I"
+ <kishon@kernel.org>, "Michael Turquette" <mturquette@baylibre.com>,
+ "Stephen Boyd" <sboyd@kernel.org>, "Philipp Zabel"
+ <p.zabel@pengutronix.de>, "Thomas Bogendoerfer"
+ <tsbogend@alpha.franken.de>, "Neil Armstrong" <neil.armstrong@linaro.org>,
+ <linux-mips@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+ <linux-clk@vger.kernel.org>, =?utf-8?q?Beno=C3=AEt_Monin?=
+ <benoit.monin@bootlin.com>, "Tawfik Bayouk" <tawfik.bayouk@mobileye.com>,
+ "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>, "Luca Ceresoli"
+ <luca.ceresoli@bootlin.com>
+To: "Vinod Koul" <vkoul@kernel.org>, =?utf-8?q?Th=C3=A9o_Lebrun?=
+ <theo.lebrun@bootlin.com>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20251215-macb-phy-v5-0-a9dfea39da34@bootlin.com>
+ <20251215-macb-phy-v5-2-a9dfea39da34@bootlin.com> <aUq7E4yh0OgTfdxF@vaman>
+In-Reply-To: <aUq7E4yh0OgTfdxF@vaman>
+X-Last-TLS-Session-Version: TLSv1.3
 
-On 05/01/2026 12:54, Huacai Chen wrote:
-> Hi, John,
-> 
-> On Mon, Jan 5, 2026 at 6:07 PM John Garry <john.g.garry@oracle.com> wrote:
->>
->> The arch definition of cpumask_of_node() cannot handle NUMA_NO_NODE - which
->> is a valid index - so add a check for this.
->>
->> Signed-off-by: John Garry <john.g.garry@oracle.com>
+Hello Vinod,
+
+On Tue Dec 23, 2025 at 4:53 PM CET, Vinod Koul wrote:
+> On 15-12-25, 17:26, Th=C3=A9o Lebrun wrote:
+>> EyeQ5 embeds a system-controller called OLB. It features many unrelated
+>> registers, and some of those are registers used to configure the
+>> integration of the RGMII/SGMII Cadence PHY used by MACB/GEM instances.
+>>=20
+>> Wrap in a neat generic PHY provider, exposing two PHYs with standard
+>> phy_init() / phy_set_mode() / phy_power_on() operations.
+>>=20
+>> Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+>> Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
 >> ---
->>   arch/loongarch/include/asm/topology.h | 4 +++-
->>   1 file changed, 3 insertions(+), 1 deletion(-)
->>
->> diff --git a/arch/loongarch/include/asm/topology.h b/arch/loongarch/include/asm/topology.h
->> index f06e7ff25bb7c..9857e4c20023c 100644
->> --- a/arch/loongarch/include/asm/topology.h
->> +++ b/arch/loongarch/include/asm/topology.h
->> @@ -12,7 +12,9 @@
->>
->>   extern cpumask_t cpus_on_node[];
->>
->> -#define cpumask_of_node(node)  (&cpus_on_node[node])
->> +#define cpumask_of_node(node)  ((node) == NUMA_NO_NODE ?       \
->> +                               cpu_all_mask :                  \
->> +                               &cpus_on_node[node])
-> You can define it in one line, so does the MIPS version.
-> 
+>>  MAINTAINERS                 |   1 +
+>>  drivers/phy/Kconfig         |  13 +++
+>>  drivers/phy/Makefile        |   1 +
+>>  drivers/phy/phy-eyeq5-eth.c | 249 +++++++++++++++++++++++++++++++++++++=
++++++++
+>>  4 files changed, 264 insertions(+)
+>>=20
+>> diff --git a/MAINTAINERS b/MAINTAINERS
+>> index 5b11839cba9d..2f67ec9fad57 100644
+>> --- a/MAINTAINERS
+>> +++ b/MAINTAINERS
+>> @@ -17605,6 +17605,7 @@ F:	arch/mips/boot/dts/mobileye/
+>>  F:	arch/mips/configs/eyeq5_defconfig
+>>  F:	arch/mips/mobileye/board-epm5.its.S
+>>  F:	drivers/clk/clk-eyeq.c
+>> +F:	drivers/phy/phy-eyeq5-eth.c
+>>  F:	drivers/pinctrl/pinctrl-eyeq5.c
+>>  F:	drivers/reset/reset-eyeq.c
+>>  F:	include/dt-bindings/clock/mobileye,eyeq5-clk.h
+>> diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
+>> index 678dd0452f0a..1aa6eff12dbc 100644
+>> --- a/drivers/phy/Kconfig
+>> +++ b/drivers/phy/Kconfig
+>> @@ -101,6 +101,19 @@ config PHY_NXP_PTN3222
+>>  	  schemes. It supports all three USB 2.0 data rates: Low Speed, Full
+>>  	  Speed and High Speed.
+>> =20
+>> +config PHY_EYEQ5_ETH
+>
+> sorted please
 
-ok, I can do it that way if you prefer. The reason I had it in flow was:
-- a single line will overflow 80 characters, which some people still 
-prefer not doing
-- following example of other archs and general coding style to split 
-macros functions across multiple lines.
+I wouldn't mind, but entries are currently (v6.19-rc4) not sorted:
 
-Thanks,
-John
+$ diff -U100 <(grep ^config drivers/phy/Kconfig) \
+             <(grep ^config drivers/phy/Kconfig | sort)
+--- /dev/fd/63 2026-01-05 15:55:53.891922890 +0100
++++ /dev/fd/62 2026-01-05 15:55:53.891922890 +0100
+@@ -1,11 +1,11 @@
+ config GENERIC_PHY
+ config GENERIC_PHY_MIPI_DPHY
++config PHY_AIROHA_PCIE
++config PHY_CAN_TRANSCEIVER
++config PHY_EYEQ5_ETH
+ config PHY_LPC18XX_USB_OTG
++config PHY_NXP_PTN3222
+ config PHY_PISTACHIO_USB
+ config PHY_SNPS_EUSB2
+ config PHY_XGENE
+ config USB_LGM_PHY
+-config PHY_CAN_TRANSCEIVER
+-config PHY_AIROHA_PCIE
+-config PHY_NXP_PTN3222
+-config PHY_EYEQ5_ETH
+
+This is why I appended. In V2, I'll send a first patch to reorder
+entries to then be able to add PHY_EYEQ5_ETH in the correct location.
+
+>> +	tristate "Ethernet PHY Driver on EyeQ5"
+>> +	depends on OF
+>> +	depends on MACH_EYEQ5 || COMPILE_TEST
+>> +	select AUXILIARY_BUS
+>> +	select GENERIC_PHY
+>> +	default MACH_EYEQ5
+>
+> hmmm why should it be default? Maybe add this is respective defconfig for
+> platform instead..?
+
+We have been doing this for other parts of OLB. If you are doing a
+config for EyeQ5, most probably you want this enabled.
+
+One example usecase this default field makes config easier: when you
+migrate an eyeq* config to eyeq5 without resetting the full config by
+applying eyeq5_defconfig. With default field you get this driver
+enabled, otherwise you don't and Ethernet doesn't work.
+
+I'd prefer keeping this default but we can drop it if you lean strongly
+against it.
+
+>> +	help
+>> +	  Enable this to support the Ethernet PHY integrated on EyeQ5.
+>> +	  It supports both RGMII and SGMII. Registers are located in a
+>> +	  shared register region called OLB. If M is selected, the
+>> +	  module will be called phy-eyeq5-eth.
+>> +
+>>  source "drivers/phy/allwinner/Kconfig"
+>>  source "drivers/phy/amlogic/Kconfig"
+>>  source "drivers/phy/broadcom/Kconfig"
+>> diff --git a/drivers/phy/Makefile b/drivers/phy/Makefile
+>> index bfb27fb5a494..8289497ece55 100644
+>> --- a/drivers/phy/Makefile
+>> +++ b/drivers/phy/Makefile
+>> @@ -13,6 +13,7 @@ obj-$(CONFIG_PHY_SNPS_EUSB2)		+=3D phy-snps-eusb2.o
+>>  obj-$(CONFIG_USB_LGM_PHY)		+=3D phy-lgm-usb.o
+>>  obj-$(CONFIG_PHY_AIROHA_PCIE)		+=3D phy-airoha-pcie.o
+>>  obj-$(CONFIG_PHY_NXP_PTN3222)		+=3D phy-nxp-ptn3222.o
+>> +obj-$(CONFIG_PHY_EYEQ5_ETH)		+=3D phy-eyeq5-eth.o
+>
+> sorted please
+
+Same as for Kconfig. Will do it in two steps: first sort, then add the
+CONFIG_PHY_EYEQ5_ETH line.
+
+$ diff -U100 <(grep ^obj-\\$ drivers/phy/Makefile) \
+             <(grep ^obj-\\$ drivers/phy/Makefile | sort)
+--- /dev/fd/63 2026-01-05 16:11:10.977537425 +0100
++++ /dev/fd/62 2026-01-05 16:11:10.978537396 +0100
+@@ -1,11 +1,11 @@
+-obj-$(CONFIG_GENERIC_PHY)              +=3D phy-core.o
+ obj-$(CONFIG_GENERIC_PHY_MIPI_DPHY)    +=3D phy-core-mipi-dphy.o
++obj-$(CONFIG_GENERIC_PHY)              +=3D phy-core.o
++obj-$(CONFIG_PHY_AIROHA_PCIE)          +=3D phy-airoha-pcie.o
+ obj-$(CONFIG_PHY_CAN_TRANSCEIVER)      +=3D phy-can-transceiver.o
++obj-$(CONFIG_PHY_EYEQ5_ETH)            +=3D phy-eyeq5-eth.o
+ obj-$(CONFIG_PHY_LPC18XX_USB_OTG)      +=3D phy-lpc18xx-usb-otg.o
+-obj-$(CONFIG_PHY_XGENE)                +=3D phy-xgene.o
++obj-$(CONFIG_PHY_NXP_PTN3222)          +=3D phy-nxp-ptn3222.o
+ obj-$(CONFIG_PHY_PISTACHIO_USB)        +=3D phy-pistachio-usb.o
+ obj-$(CONFIG_PHY_SNPS_EUSB2)           +=3D phy-snps-eusb2.o
++obj-$(CONFIG_PHY_XGENE)                +=3D phy-xgene.o
+ obj-$(CONFIG_USB_LGM_PHY)              +=3D phy-lgm-usb.o
+-obj-$(CONFIG_PHY_AIROHA_PCIE)          +=3D phy-airoha-pcie.o
+-obj-$(CONFIG_PHY_NXP_PTN3222)          +=3D phy-nxp-ptn3222.o
+-obj-$(CONFIG_PHY_EYEQ5_ETH)            +=3D phy-eyeq5-eth.o
+
+[...]
+
+>> +static int eq5_phy_exit(struct phy *phy)
+>> +{
+>> +	struct eq5_phy_inst *inst =3D phy_get_drvdata(phy);
+>> +	struct eq5_phy_private *priv =3D inst->priv;
+>> +	struct device *dev =3D priv->dev;
+>> +
+>> +	dev_dbg(dev, "phy_exit(inst=3D%td)\n", inst - priv->phys);
+>> +
+>> +	writel(0, inst->gp);
+>> +	writel(0, inst->sgmii);
+>> +	udelay(5);
+>
+> this is same patter in init as well...?
+
+Yes! phy_ops::init() must reinit the HW to ensure its config fields
+are well taken into account. We might inherit an already initialised
+PHY from the bootloader.
+
+We could in theory move those three ops (writel+writel+udelay) into a
+helper function but I feel like it would decrease readability without
+increasing code quality.
+
+>> +
+>> +	return 0;
+>> +}
+>> +
+>> +static int eq5_phy_set_mode(struct phy *phy, enum phy_mode mode, int su=
+bmode)
+>> +{
+>> +	struct eq5_phy_inst *inst =3D phy_get_drvdata(phy);
+>> +	struct eq5_phy_private *priv =3D inst->priv;
+>> +	struct device *dev =3D priv->dev;
+>> +
+>> +	dev_dbg(dev, "phy_set_mode(inst=3D%td, mode=3D%d, submode=3D%d)\n",
+>> +		inst - priv->phys, mode, submode);
+>
+> these are good for debug but not for upstream, please drop
+
+Ah this is surprising! They helped me debug this driver and fix one bug
+or two so I thought I'd leave them in. They get compiled out by
+default. And there is no ftrace events equivalent which would make
+those dev_dbg() moot.
+
+=E2=9F=A9 git grep -F dev_dbg\( drivers/ | wc -l
+25174
+=E2=9F=A9 git grep -F dev_dbg\( drivers/phy/ | wc -l
+260
+
+[...]
+
+>> +static int eq5_phy_probe(struct auxiliary_device *adev,
+>> +			 const struct auxiliary_device_id *id)
+>> +{
+>> +	struct device *dev =3D &adev->dev;
+>> +	struct phy_provider *provider;
+>> +	struct eq5_phy_private *priv;
+>> +	void __iomem *base;
+>> +	int ret;
+>> +
+>> +	priv =3D devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+>> +	if (!priv)
+>> +		return -ENOMEM;
+>> +
+>> +	priv->dev =3D dev;
+>> +	dev_set_drvdata(dev, priv);
+>> +
+>> +	base =3D (void __iomem *)dev_get_platdata(dev);
+>
+> no need to cast for void *
+
+Yes! My initial goal was to prevent a sparse warning about the implicit
+cast from `void *` as returned by dev_get_platdata() and
+`void __iomem *base`.
+
+But it does not matter in our case (and the correct solution for
+explicit cast would have implied __force).
+
+--
+
+I'll wait for feedback on `default MACH_EYEQ5` and `dev_dbg()` before
+sending the next revision.
+
+Thanks for the review!
+
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
+
 
