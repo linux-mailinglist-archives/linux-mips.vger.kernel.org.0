@@ -1,196 +1,203 @@
-Return-Path: <linux-mips+bounces-12772-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12773-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F6E8CFCE53
-	for <lists+linux-mips@lfdr.de>; Wed, 07 Jan 2026 10:37:01 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8E533CFCF2C
+	for <lists+linux-mips@lfdr.de>; Wed, 07 Jan 2026 10:44:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 0F9BD305A45C
-	for <lists+linux-mips@lfdr.de>; Wed,  7 Jan 2026 09:36:40 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1B1BD30C6CA8
+	for <lists+linux-mips@lfdr.de>; Wed,  7 Jan 2026 09:39:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D094301701;
-	Wed,  7 Jan 2026 09:29:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A18F82F2914;
+	Wed,  7 Jan 2026 09:36:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jIlItCdC"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PhseDA4r"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-yx1-f45.google.com (mail-yx1-f45.google.com [74.125.224.45])
+Received: from mail-oo1-f52.google.com (mail-oo1-f52.google.com [209.85.161.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1721314B6D
-	for <linux-mips@vger.kernel.org>; Wed,  7 Jan 2026 09:29:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.224.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C9362F5485
+	for <linux-mips@vger.kernel.org>; Wed,  7 Jan 2026 09:36:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767778160; cv=none; b=P2p1YHJthuim0OH9KdBaFTJSSVkRLqT1ISkDqIO9gbn/AMmNax/rOoePS/zwhRKQkBP+HndDKHdkglh13cl3D1yBZLh44gvLCPZtIKBngs/L/F53apqBaCOJNddYAeWw6G4FfqDg9AjIcoH6++mEwnjyN5a7y+4y+QqrVJY6n5U=
+	t=1767778592; cv=none; b=SL3GMdiPjnLbbECbJUEBgMdeWymrNfPjlTZBpArE1CtcNj8vng5kmZ0tK5xTMgiLh19zQqcNqEE09C45HufvDLDtWZsrkTQKMXllVanSDEwBMz3O7Zm0canPXmENr6dvHh3n8I8oM2zzkHSNkGXBie/sBHvxf2JoZfnevPX6Ob8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767778160; c=relaxed/simple;
-	bh=YskUE8ivh/0bvl2ccHBh6Q13s6fd7XMp1/zObXA0Cvc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IUIf7CyI/hy0z4dV5PfLWzU3PtCp7n5s7mcSLxYUtizyB1bvEqARFYRx2xZeltqL9IjQWTD6Lw5/fRbYeFwptoiOabubdPZhRex3912TOycuZZ9AivbG/IaFlW5dYgFEKyBnHSk/J1DJJikxxg0jwtv/3NOTry8qTSuL09mo/BA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jIlItCdC; arc=none smtp.client-ip=74.125.224.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yx1-f45.google.com with SMTP id 956f58d0204a3-6467bed0d2fso1850647d50.0
-        for <linux-mips@vger.kernel.org>; Wed, 07 Jan 2026 01:29:18 -0800 (PST)
+	s=arc-20240116; t=1767778592; c=relaxed/simple;
+	bh=BvNOm3NYbiU+ikXbwLgo3IoCKmUPU46BKkQ49BFiqJ8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=moOMAQn4bbiAqd9Tln2FMh2i0gJjZ2Re25Bbo4vaLnk6YGyie7PUsfdDX5EnmfpWqTyw8XxcwBJZ079gKJYn6oIGoG0MyUCtgkXrdluDuAYD2hlnWe2Zm9R28VdUyFkimxBQcmySHYaUBuowipB8QmZIjetoekTfVtS98G4CN/w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PhseDA4r; arc=none smtp.client-ip=209.85.161.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-65745a436f7so1073500eaf.3
+        for <linux-mips@vger.kernel.org>; Wed, 07 Jan 2026 01:36:27 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767778158; x=1768382958; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=wk512LwmO/uZGHz1Ojwhz3Ek5WphQWvtFTpjZjwnzlQ=;
-        b=jIlItCdCO+29xFklzf+kYmWbmp9vEkdwKe4DgaGTN5PvbI14G7qGJ9fwL/BxrTiVUf
-         hYxurE7YuZivK5W2RabpAX2WpTXF0ajn0kVmzKSpGhTAA0cZov58Okejo7QPUQ/txNrB
-         gPt5EZAYu+PhFi9OPeVJRP6v/Dc8PnsPA53SULfBoSsNprlf8NXMVwxEWSseavRrg/0p
-         Kd7ArR9HUnk8S0GAsbRnQCTD7uC0bOlLlnkn3SMiVNabPr6LesfkN3bR0MUJfJDxckkS
-         uehEHp4k0vWtnd+4asRC3kDGiAhZ/sybWaF+MZs+kX2noA6zaLKzcwwhEeDbg/Tp0rsX
-         oUrQ==
+        d=linaro.org; s=google; t=1767778587; x=1768383387; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GAJ5e65k3z1Bl84v4hSYV5jHbNZ5QqotFXMyK4sLylU=;
+        b=PhseDA4rqOuGczQm8OI6ScQU96wNFWhck5YtuZvI3HSw+b+MsyyRb890d3laSxoB3e
+         QFMpjN6aTvp+kbwyhLQo2J9od15tVdqXeg59qbxlSb2KYBiiePlcD4da/NZp15pAKkBy
+         Mk1tudHrk3NEZlkxU0REHb8ECZjHYoNl+keMpMdQ8J1+7BWavYQN1EE+0Q2ZubgyH3cb
+         9q7tX7boJlgSoFQqNjwa2K7JwHtBqMT7CB+3UG+mFjwSA01TAfkwDnk4noi5e4tQfzrH
+         kz3GB4HSeiNTKvHacsIsX4s+4xZ7qV5xS1hoE6TuLlj8MomLoCEBFuyuvnfIZdE9Vpkz
+         rY3w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767778158; x=1768382958;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wk512LwmO/uZGHz1Ojwhz3Ek5WphQWvtFTpjZjwnzlQ=;
-        b=v4fqBKGO8UWLMJQVoe5RKiO3XM4LdmQ4LO/DEbQEuS3l2WRwTeGNFoIGW5nleAVunW
-         aOa6s39AWVKY/AlXyNYnscfCjjiIwDd9KrmlsS2roWUlX9gu9VRQqrPUrMZqfLS9/k0+
-         iAU7pd/RRxgmE8HF5mqGOQnthciDmOAtkvjj8hwsjGlDxU6qm1TAi+6AVpwxHjXKiVbm
-         hReUZSkzKtNm3+v+oWhlI5lTWmqU1CPvccjFiB07NKF7TPot8XsbA4ATuPstGPHV/LMB
-         O/Ac+Q4gU2qtcC8kH8X+DOd1w9IVVmuIQ0rqLrJpqFgw2+xTII0kEIloqowlmJGYGpN+
-         QXqw==
-X-Forwarded-Encrypted: i=1; AJvYcCULOr99X8bgnuqlacYzdiRzzRBC6vetdCqw/1U3eY3ffAEwDLNHNRA4fiLEXK/mH/it5XVdoXsP0O9C@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx5zs9b7T7DK2waZKMpO36ztkOdEHvLAhCss/RtpVsNIQw02v2o
-	h98AIOTPwJOLPxjEakXkjbcoxR4tQ1AEIymKL/BkUwSyDOO50NV1vDAQ
-X-Gm-Gg: AY/fxX7oJ+/PNodxBe8Kzv3lIMiYG1DcYbXym2mxcdediTJdzcugX6Z8XmE/ig+otyC
-	E7xzKurowqaDUCVuzfOxo0PAmS39bQ4Yy4eXLSUOnbm7TV/i6TJXemKuLMYxzIuCzwXLpavz+pE
-	bYN36qfxBqXhqPNoY7cZwNsPMt13pLIjK//iuLTXMS1F7PLhUh8gZUZbCpeYBs3jFgMXZSgNzR5
-	evpuIiDJiFuF+j2SZLOMitk1PuCNJg+C3SgAmgeB9JNExMStBzr3bfKtLeyychsWrF558CtQxUQ
-	B+4W+ZBCInxz+iESVdFYdtnM/SuI4JDuYpST1YiJrb786i568e85kU3rCJ/GVNSL4dmU4SPXoL7
-	LMrWQ/JIs5GwPB2pvjJLGLzUIpjhFmIfUk9yLdygkA1sn/ICmsh5BJf9IRHR0Rq28j3+duWXebb
-	zz0gHaKh1F33EBwE2kgaE2ke2YnpXKeo+HziOEwg==
-X-Google-Smtp-Source: AGHT+IGPYSkTJQTXRdeZJNO0Ptp1UF4C4ZvN+4Y+pwY9mfVj1KcuNobxA+hhEKXT47wj8D4Ny+QBYg==
-X-Received: by 2002:a05:690e:1483:b0:644:60d9:8654 with SMTP id 956f58d0204a3-64716c69eccmr1598952d50.87.1767778157608;
-        Wed, 07 Jan 2026 01:29:17 -0800 (PST)
-Received: from [192.168.2.226] (104.194.78.75.16clouds.com. [104.194.78.75])
-        by smtp.gmail.com with ESMTPSA id 956f58d0204a3-6470d80be64sm1865006d50.6.2026.01.07.01.28.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 07 Jan 2026 01:29:16 -0800 (PST)
-Message-ID: <080e493a-e4f1-4c97-a3e1-f76f126b5213@gmail.com>
-Date: Wed, 7 Jan 2026 17:28:36 +0800
+        d=1e100.net; s=20230601; t=1767778587; x=1768383387;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=GAJ5e65k3z1Bl84v4hSYV5jHbNZ5QqotFXMyK4sLylU=;
+        b=kPoHkERHBLtPVGGoF4/Bucnq/LOlLpYBn+IXNbCTtR+NGwdjqx6nkxboQgxQRAxUAY
+         DBSC5Or1V8UxiIEjkdnviQuH/cOqduC0D/D5QL0peVgdlrI6+p6Ka1SlPlz19b4GlTrD
+         076NY/XUx9WO0pIg3UJ3iNHGAx3A+zBWAFV7d3bIVpUKSfJwp3npltRPOXBWUt/ZlyoT
+         qUNlTwM2HePX80a6MXKxgyK+fIsLddWpWBikYNWtfgeaLV2or3d5pHmIFeyMnpL9KC6Z
+         xiebVcbvhkYnSYDexM3D2UBvmDmFeeXzIAEk0u/XA7OqDr1Mxa9RBzHElQv9JMvKBqHp
+         UVeg==
+X-Forwarded-Encrypted: i=1; AJvYcCVb1VGwaYYFkNVte6agdZ+Ztf1hMRw0tz9PGNqQSYimbmbD1PzPAEKCZowJE7XFp4m/NIMlfhCE4n11@vger.kernel.org
+X-Gm-Message-State: AOJu0YxruIK/gkJrjyWVYixNdikf4JnrlhhBJY11mJt9dwT9R2P+9mvK
+	wWqJuvJRo8ZJAyymMybywaOna4VP8JyowulX0NzXTASwDGeFfGE+oiS0fFx4bfj0OkbmQ/n9Xrr
+	K0Zvy0R6XxkvCw92sZtShLwpk2UpRThib/vn8ayYRMw==
+X-Gm-Gg: AY/fxX6hF0IwVCW1G6vtPu/LTRwddxdcu+tGa44kkjzcw4aEjHDXHH+gKbmulMOvGFP
+	CbV4kPN36dx7j6PO5uRLeXrfq0AiyUxWycd2gG66Q1fjkaaCnoc/kOgI2RHctg1e9g5xHqn7ltb
+	np5zOXVhqv6AWo3ejv8dLhi47xJoJ5OJUt08nBpUfz8dmgUwXmVo/OTOMS1VcKajab5wN46jx/I
+	/6mWpnr+5wdECshx0I80HFtQC/+MBVY7F/Vm+kh2AF5XUkDkedha26zu+RFXKxg0v1WOhNuBFms
+	aHSVgR2dsgDfs4Igc/ZnP3s/tQ==
+X-Google-Smtp-Source: AGHT+IH8mMrbtH032ZDWJFlkRThntfnwmPEqUqd2JDeL8NGsufG7LDpL42U7yHJF4QJdKPnzDUAc6fHTBjr7gAIIOLU=
+X-Received: by 2002:a4a:ba13:0:b0:659:9a49:8f89 with SMTP id
+ 006d021491bc7-65f55085418mr579167eaf.78.1767778586821; Wed, 07 Jan 2026
+ 01:36:26 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] mm/pgtable: convert pgtable_t to ptdesc pointer
-To: Mike Rapoport <rppt@kernel.org>, alexs@kernel.org
-Cc: Richard Henderson <richard.henderson@linaro.org>,
- Matt Turner <mattst88@gmail.com>, Magnus Lindholm <linmag7@gmail.com>,
- Vineet Gupta <vgupta@kernel.org>, Russell King <linux@armlinux.org.uk>,
- Will Deacon <will@kernel.org>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Nick Piggin <npiggin@gmail.com>,
- Peter Zijlstra <peterz@infradead.org>,
- Catalin Marinas <catalin.marinas@arm.com>, Guo Ren <guoren@kernel.org>,
- Brian Cain <bcain@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
- WANG Xuerui <kernel@xen0n.name>, Geert Uytterhoeven <geert@linux-m68k.org>,
- Michal Simek <monstr@monstr.eu>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>,
- Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
- Stafford Horne <shorne@gmail.com>,
- "James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>,
- Helge Deller <deller@gmx.de>, Paul Walmsley <pjw@kernel.org>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- Alexandre Ghiti <alex@ghiti.fr>, Yoshinori Sato
- <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>,
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- Richard Weinberger <richard@nod.at>,
- Anton Ivanov <anton.ivanov@cambridgegreys.com>,
- Johannes Berg <johannes@sipsolutions.net>,
- Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
- Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
- "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
- "H. Peter Anvin" <hpa@zytor.com>, Andy Lutomirski <luto@kernel.org>,
- Chris Zankel <chris@zankel.net>, Max Filippov <jcmvbkbc@gmail.com>,
- Arnd Bergmann <arnd@arndb.de>, David Hildenbrand <david@kernel.org>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>, Vlastimil Babka
- <vbabka@suse.cz>, Suren Baghdasaryan <surenb@google.com>,
- Michal Hocko <mhocko@suse.com>,
- "open list:ALPHA PORT" <linux-alpha@vger.kernel.org>,
- open list <linux-kernel@vger.kernel.org>,
- "open list:SYNOPSYS ARC ARCHITECTURE" <linux-snps-arc@lists.infradead.org>,
- "moderated list:ARM PORT" <linux-arm-kernel@lists.infradead.org>,
- "open list:MMU GATHER AND TLB INVALIDATION" <linux-arch@vger.kernel.org>,
- "open list:MMU GATHER AND TLB INVALIDATION" <linux-mm@kvack.org>,
- "open list:C-SKY ARCHITECTURE" <linux-csky@vger.kernel.org>,
- "open list:QUALCOMM HEXAGON ARCHITECTURE" <linux-hexagon@vger.kernel.org>,
- "open list:LOONGARCH" <loongarch@lists.linux.dev>,
- "open list:M68K ARCHITECTURE" <linux-m68k@lists.linux-m68k.org>,
- "open list:MIPS" <linux-mips@vger.kernel.org>,
- "open list:OPENRISC ARCHITECTURE" <linux-openrisc@vger.kernel.org>,
- "open list:PARISC ARCHITECTURE" <linux-parisc@vger.kernel.org>,
- "open list:RISC-V ARCHITECTURE" <linux-riscv@lists.infradead.org>,
- "open list:SUPERH" <linux-sh@vger.kernel.org>,
- "open list:USER-MODE LINUX (UML)" <linux-um@lists.infradead.org>
-References: <20260107064642.15771-1-alexs@kernel.org>
- <aV4h5vQUNXn5cpMY@kernel.org>
-Content-Language: en-US
-From: Alex Shi <seakeel@gmail.com>
-In-Reply-To: <aV4h5vQUNXn5cpMY@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <cover.1765791463.git.u.kleine-koenig@baylibre.com> <d14a9c41-9df7-438f-bb58-097644d5d93f@nvidia.com>
+In-Reply-To: <d14a9c41-9df7-438f-bb58-097644d5d93f@nvidia.com>
+From: Jens Wiklander <jens.wiklander@linaro.org>
+Date: Wed, 7 Jan 2026 10:36:15 +0100
+X-Gm-Features: AQt7F2pWAOmWwJm8vdt2KOCYOYr18EvzYgjBZjv21zyTW_ttRjt9UA8BFElgUTo
+Message-ID: <CAHUa44Hhyz_zF5JtCz00YqbgoPTLK2iS7NBT8UwOLpAz=3VZAA@mail.gmail.com>
+Subject: Re: [PATCH v2 00/17] tee: Use bus callbacks instead of driver callbacks
+To: Jon Hunter <jonathanh@nvidia.com>
+Cc: =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
+	Jonathan Corbet <corbet@lwn.net>, Sumit Garg <sumit.garg@kernel.org>, 
+	Olivia Mackall <olivia@selenic.com>, Herbert Xu <herbert@gondor.apana.org.au>, 
+	=?UTF-8?B?Q2zDqW1lbnQgTMOpZ2Vy?= <clement.leger@bootlin.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Ard Biesheuvel <ardb@kernel.org>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+	Sumit Garg <sumit.garg@oss.qualcomm.com>, 
+	Ilias Apalodimas <ilias.apalodimas@linaro.org>, Jan Kiszka <jan.kiszka@siemens.com>, 
+	Sudeep Holla <sudeep.holla@arm.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
+	=?UTF-8?B?UmFmYcWCIE1pxYJlY2tp?= <zajec5@gmail.com>, 
+	Michael Chan <michael.chan@broadcom.com>, Pavan Chebbi <pavan.chebbi@broadcom.com>, 
+	James Bottomley <James.Bottomley@hansenpartnership.com>, Jarkko Sakkinen <jarkko@kernel.org>, 
+	Mimi Zohar <zohar@linux.ibm.com>, David Howells <dhowells@redhat.com>, 
+	Paul Moore <paul@paul-moore.com>, James Morris <jmorris@namei.org>, 
+	"Serge E. Hallyn" <serge@hallyn.com>, Peter Huewe <peterhuewe@gmx.de>, op-tee@lists.trustedfirmware.org, 
+	linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+	linux-crypto@vger.kernel.org, linux-rtc@vger.kernel.org, 
+	linux-efi@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
+	linux-arm-kernel@lists.infradead.org, 
+	Cristian Marussi <cristian.marussi@arm.com>, arm-scmi@vger.kernel.org, 
+	linux-mips@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-integrity@vger.kernel.org, keyrings@vger.kernel.org, 
+	linux-security-module@vger.kernel.org, Jason Gunthorpe <jgg@ziepe.ca>, 
+	"linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+Hi Jon,
 
+On Tue, Jan 6, 2026 at 10:40=E2=80=AFAM Jon Hunter <jonathanh@nvidia.com> w=
+rote:
+>
+> Hi Uwe,
+>
+> On 15/12/2025 14:16, Uwe Kleine-K=C3=B6nig wrote:
+> > Hello,
+> >
+> > the objective of this series is to make tee driver stop using callbacks
+> > in struct device_driver. These were superseded by bus methods in 2006
+> > (commit 594c8281f905 ("[PATCH] Add bus_type probe, remove, shutdown
+> > methods.")) but nobody cared to convert all subsystems accordingly.
+> >
+> > Here the tee drivers are converted. The first commit is somewhat
+> > unrelated, but simplifies the conversion (and the drivers). It
+> > introduces driver registration helpers that care about setting the bus
+> > and owner. (The latter is missing in all drivers, so by using these
+> > helpers the drivers become more correct.)
+> >
+> > v1 of this series is available at
+> > https://lore.kernel.org/all/cover.1765472125.git.u.kleine-koenig@baylib=
+re.com
+> >
+> > Changes since v1:
+> >
+> >   - rebase to v6.19-rc1 (no conflicts)
+> >   - add tags received so far
+> >   - fix whitespace issues pointed out by Sumit Garg
+> >   - fix shutdown callback to shutdown and not remove
+> >
+> > As already noted in v1's cover letter, this series should go in during =
+a
+> > single merge window as there are runtime warnings when the series is
+> > only applied partially. Sumit Garg suggested to apply the whole series
+> > via Jens Wiklander's tree.
+> > If this is done the dependencies in this series are honored, in case th=
+e
+> > plan changes: Patches #4 - #17 depend on the first two.
+> >
+> > Note this series is only build tested.
+> >
+> > Uwe Kleine-K=C3=B6nig (17):
+> >    tee: Add some helpers to reduce boilerplate for tee client drivers
+> >    tee: Add probe, remove and shutdown bus callbacks to tee_client_driv=
+er
+> >    tee: Adapt documentation to cover recent additions
+> >    hwrng: optee - Make use of module_tee_client_driver()
+> >    hwrng: optee - Make use of tee bus methods
+> >    rtc: optee: Migrate to use tee specific driver registration function
+> >    rtc: optee: Make use of tee bus methods
+> >    efi: stmm: Make use of module_tee_client_driver()
+> >    efi: stmm: Make use of tee bus methods
+> >    firmware: arm_scmi: optee: Make use of module_tee_client_driver()
+> >    firmware: arm_scmi: Make use of tee bus methods
+> >    firmware: tee_bnxt: Make use of module_tee_client_driver()
+> >    firmware: tee_bnxt: Make use of tee bus methods
+> >    KEYS: trusted: Migrate to use tee specific driver registration
+> >      function
+> >    KEYS: trusted: Make use of tee bus methods
+> >    tpm/tpm_ftpm_tee: Make use of tee specific driver registration
+> >    tpm/tpm_ftpm_tee: Make use of tee bus methods
+>
+>
+> On the next-20260105 I am seeing the following warnings ...
+>
+>   WARNING KERN Driver 'optee-rng' needs updating - please use bus_type me=
+thods
+>   WARNING KERN Driver 'scmi-optee' needs updating - please use bus_type m=
+ethods
+>   WARNING KERN Driver 'tee_bnxt_fw' needs updating - please use bus_type =
+methods
+>
+> I bisected the first warning and this point to the following
+> commit ...
+>
+> # first bad commit: [a707eda330b932bcf698be9460e54e2f389e24b7] tee: Add s=
+ome helpers to reduce boilerplate for tee client drivers
+>
+> I have not bisected the others, but guess they are related
+> to this series. Do you observe the same?
 
-On 2026/1/7 17:05, Mike Rapoport wrote:
-> On Wed, Jan 07, 2026 at 02:46:35PM +0800,alexs@kernel.org wrote:
->> From: Alex Shi<alexs@kernel.org>
->>
->> After struct ptdesc introduced, pgtable_t should used it instead of old
->> struct page pointer. The only thing in the way for this change is just
->> pgtable->lru in pgtable_trans_huge_deposit/withdraw.
->>
->> Let's convert them into ptdesc and use struct ptdesc* as pgtable_t.
->> Thanks testing support from kernel test robot<lkp@intel.com>
->>
->> Signed-off-by: Alex Shi<alexs@kernel.org>
->> ---
-> ...
-> 
->> diff --git a/arch/arm/include/asm/pgalloc.h b/arch/arm/include/asm/pgalloc.h
->> index a17f01235c29..1a3484c2df4c 100644
->> --- a/arch/arm/include/asm/pgalloc.h
->> +++ b/arch/arm/include/asm/pgalloc.h
->> @@ -96,12 +96,12 @@ pte_alloc_one(struct mm_struct *mm)
->>   {
->>   	struct page *pte;
->>   
->> -	pte = __pte_alloc_one(mm, GFP_PGTABLE_USER | PGTABLE_HIGHMEM);
->> +	pte = ptdesc_page(__pte_alloc_one(mm, GFP_PGTABLE_USER | PGTABLE_HIGHMEM));
-> When ptdesc will be separated from struct page, ptdesc_page() would fail if the
-> allocation failed. This line should be split into something like
-> 
-> 	struct ptdesc *ptdesc = __pte_alloc_one(...);
-> 	if (!ptesc)
-> 		return NULL;
-> 	pte = ptdesc_page(ptdesc);
-> 
-> 
+Yes, I see the same.
 
-Right, I will fix this. and sent the 2nd version.
-Thanks a lot!
+I'm sorry, I didn't realize that someone might bisect this when I took
+only a few of the patches into next. I've applied all the patches in
+this series now.
 
->>   	if (!pte)
->>   		return NULL;
->>   	if (!PageHighMem(pte))
->>   		clean_pte_table(page_address(pte));
->> -	return pte;
->> +	return page_ptdesc(pte);
->>   }
->>   
->>   static inline void __pmd_populate(pmd_t *pmdp, phys_addr_t pte,
-> -- Sincerely yours, Mike.
-> 
-
+Thanks,
+Jens
 
