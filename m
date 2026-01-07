@@ -1,156 +1,195 @@
-Return-Path: <linux-mips+bounces-12768-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12769-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 566FACFB965
-	for <lists+linux-mips@lfdr.de>; Wed, 07 Jan 2026 02:25:52 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CAC34CFC06E
+	for <lists+linux-mips@lfdr.de>; Wed, 07 Jan 2026 05:58:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8910F30111B8
-	for <lists+linux-mips@lfdr.de>; Wed,  7 Jan 2026 01:22:59 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 7416030034A1
+	for <lists+linux-mips@lfdr.de>; Wed,  7 Jan 2026 04:58:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6EEE8182D0;
-	Wed,  7 Jan 2026 01:22:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1B6C25BEE5;
+	Wed,  7 Jan 2026 04:58:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="AfE20v5h"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="XE9OHB7K"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E0FF7260D
-	for <linux-mips@vger.kernel.org>; Wed,  7 Jan 2026 01:22:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 804BA24E4A8
+	for <linux-mips@vger.kernel.org>; Wed,  7 Jan 2026 04:58:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767748978; cv=none; b=tub6VFT6Y4VSHKCG+DWBBYFrYGn0ARRJqrA2ErSHycoZWXGY07QCe6OQkp6f6s5EIoi4lcF/CT9HMCtUqWnCswRPFXlmtjJSBY69Ra1BwP1v+yw59mMjHZOFF9ytERFp5Afo4HJCyapKw535JCMm8YWYu2N4O5os09+33a+iqzw=
+	t=1767761904; cv=none; b=mjGK4JrF0aq+0TFFXxYXLHV7xhPC+F2Lj0a8vNIdfCtkwXdYB7QzMFnmrDztleUT9JMpQ9nHuTe1EsZr0OZwjYzE0Hd1e4e0yihZ83u9YjYEUrtPsx3Tk6EgGXvbcit1lAxo1L+7kDWRyMk2CiwlwPSFxulXVyBbWQQPaGON0Fw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767748978; c=relaxed/simple;
-	bh=w68wXr5ticdVcWVVKaG3ZzO4fx1vzPS9uhBCrz5e59U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=RFultv2ewEPIGP/yOfbcZChYg+J3g5gAZ8t6ds4ECz2aFU1kU/jfSRamsnpQDR7lfkYLenP5InCrvIIBRyu3sxiL3Ro9mp8yT9NMYBR8UBLgte7OJcD/ULW82RMw0bCdwcdSKKi5ozXT/WSaMQpDHMxFFGwAaPKfotmgOAbVD20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=AfE20v5h; arc=none smtp.client-ip=209.85.218.43
+	s=arc-20240116; t=1767761904; c=relaxed/simple;
+	bh=u52IYXtkIGi8sisrJ2GXaZQiFovGjOBhfJtTiCU+FIM=;
+	h=From:To:Cc:Subject:In-Reply-To:Date:Message-ID:References:
+	 MIME-Version:Content-Type; b=WOX6jIUJGg12PfiVl9JMLOyRCkNBVc3nFdpKAlzJor9AhLKlvNJGLbhVry5BWcr8IkU6Madz9CB9oC01U3l2SNK878hht2hfmRFC6PS7AHjMl5rVi0QYMmJ7XZ4G1eGehzPHFWK3zrH2qrGPpjOt2hvUnIPFnH+4ytGv4FZRuVM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=XE9OHB7K; arc=none smtp.client-ip=209.85.216.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-b843e8a4fbfso114198666b.0
-        for <linux-mips@vger.kernel.org>; Tue, 06 Jan 2026 17:22:55 -0800 (PST)
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-34c9edf63a7so1496596a91.1
+        for <linux-mips@vger.kernel.org>; Tue, 06 Jan 2026 20:58:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1767748974; x=1768353774; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=0tsd9UwM4vLqBKUeV9xw/hj4H2ka06I0/7uWJwrkW5U=;
-        b=AfE20v5hY4zXpvqBPLdiBoaZIs/i0+NHPNy0ghWxy7ZLenzS/fgYrVOFzST6frSBzN
-         jx0NC4Ss45cCKeVdlv+MHCrrU0jJ4+b/j1speO5cuq4zTFRZY3ZfvrAeWb/gg6ZNNDbI
-         flUxocJKhnOQ+q4sDOV4cyXETHZaFJcba2teT9Tg2Qfdp29CTiaCL8X/tKHdo8CKVgOL
-         qqbanC2uA68VH16Mr0sCDBMYbr/nf0qoAW9Q/MzjxR5fNFctwoDkkvpWEgpUqbLhcQr0
-         O7Au1xBBvAgt9lZ2mzGywp7LFlCD/ANH1XR7EXCwtneiOv3vtsySXQWgpmsxd28e56Lr
-         XJOQ==
+        d=gmail.com; s=20230601; t=1767761902; x=1768366702; darn=vger.kernel.org;
+        h=mime-version:references:message-id:date:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=nurUXHNs091EaceKYt0jtxQiBJ2IaAdTDr7CGJ+zWBU=;
+        b=XE9OHB7Kl+IegOavGwsCniq7IfH569pyWSwOB3GH4IFakEzMoVU0qTAM99Htm/LTZa
+         oIrdXqofABAYlYf0vbgd+n0GUNiJzVIPiyO8CScU6yhPMURk/UDM/RVMGFEztgjtLPNS
+         WRPiIEJnD0Ff9/Z8WNMKc7Anw6/nMx8MAbq3s3xv9xn+5m1oNJCX1ktobB6O3+C+tCKf
+         0dT43+gSNEm71HVEC9CZgI8klLsPbgoiQqrHQwigH/O6I0GQ3Ti8owh0piXgvhZN4xe2
+         1m7D9Rr/nZ33sxwqrbUB/YINiEIurizt1znhUcLNHdGYLs9ErvXCDeFUGjhnGu4pVoK6
+         wLTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767748974; x=1768353774;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=0tsd9UwM4vLqBKUeV9xw/hj4H2ka06I0/7uWJwrkW5U=;
-        b=di5ISTWefc6QV/wWwigsGPlNPf12GdsQFxhTCXKF6YEUmLeXL9+MBA+q5OV08Q3BcC
-         I+tx3o1dOQege6kbHBKzG9DK+xjn5B+SXx99uDu3z0CGlGpOdM01YGSb+CEOEJ+D2GFv
-         yh1pG0RJE4jJ4N1AWa6ROZe6hYqct10pPUwq1R0QAOf3JNIJZjFKYaJFcALLmKI25Exg
-         wqa8s53DQUnjqEwUbUpXqn/nFWlpdaPQcZU7M4znjg0KPMtUe1Y8BSsxORPd22VbFWZZ
-         xoDVvzXCMaopiqPAq0zxIcX5KjFRZIOl8mBkUeYTxUe7TOHRbfyJSS6yP71DXfVoUau+
-         Y/HA==
-X-Forwarded-Encrypted: i=1; AJvYcCWkKC33xN3DKJ72b+RViZtnzIM0gOdpoVw14ax5w7Ua7ZcACMDYLqDNU3SP+juiwCvGOGU6PdZgsluT@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKg9G1Ayw8NmnbdfqQ2stgpLA657J86OVCXvX6JZlS9lFXSwOL
-	XLMlcpOFa6KOzWDlA0eofwJh86QgMIOgHvtTn43QEdVTnASS0LibVr/dd4mZSyRm9pJaM6oFRu9
-	skqquvu33reCdkAKVzcONDTPbE0Z+iO4=
-X-Gm-Gg: AY/fxX4iDh48ZtBng/MblSxpZxpWToBK6JdQB26cZ6V/jy5KL9dh9DnrMCCAT2ZK0RM
-	pn2RvJnRzRgwJ5g+rYwtxgBxntEunn2GC9+I8ypf6AE0jqoganAwqLay5hLPTVhvwybW2BRu8st
-	qO7W954jnwmj/QevF7OwJy7TW4NRZ6BhZq4+WZAb6++fLpp6Ag+KrrCB71Vne1UOlu8jztnSMt2
-	AILZwkMyD1DEfTPNj+C05AJLx4Jw/ho03/lKAA/cUkhgo8GmzmGCkl2NHlkpstUksg4oY5F
-X-Google-Smtp-Source: AGHT+IHAqq5ImNkLGtB8Y1d2kLRKMdYzQ9MRuExrpqABDFBjUdXj3NxrF87jFkiZlC4Jeb6TBNib1kZQOqxBCF1a1Z8=
-X-Received: by 2002:a17:907:70e:b0:b73:758c:c96f with SMTP id
- a640c23a62f3a-b844539fc89mr86070866b.52.1767748974057; Tue, 06 Jan 2026
- 17:22:54 -0800 (PST)
+        d=1e100.net; s=20230601; t=1767761902; x=1768366702;
+        h=mime-version:references:message-id:date:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=nurUXHNs091EaceKYt0jtxQiBJ2IaAdTDr7CGJ+zWBU=;
+        b=vXaquO7EAypaRAph9qvQkA4ybbtFgYuhnn0rv9iThu5sHM5A8azOYHPZ0W+6jsC7j9
+         w7BiGWVOEuztIYRdfVU1X1/PJBizWAhWbB3jkVIj0yuotwEOp64rxjeyUvgukN/6eG/0
+         OMlkvibGpEhZRmFAcRavaM+Ulfuv5+C5rjqQWxH3ibLYrjbCtIWZiUIXk9GWD00si9d3
+         69jNlmSyKB+F5cT6YkRyWexCvfe0wpeFUibEBPQNpBCVtSQf7AXLxZKIfGfqVJsn51Rk
+         uzoM1v2SW2+m8C2647lUAPuvX+Lbg8lxhuY0n48FyatHNbIgyBvxA7+5ArVvGJsF3EIA
+         GWXA==
+X-Forwarded-Encrypted: i=1; AJvYcCVUjwDfBfRjxkLhZoAy4m9zaaZFhD89QsuXWGzJloPLloHAx5lt6NtzgeoBTQGJ8DSobCrpFjhl/Ce7@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy42LtXt7MDs129xg8yBryDgRsv0ez+sS21d38cLp03pppup0fV
+	CCS7qfsba39LxbHnJrmvzc0XuHhUucUw3dmKO0BtvCNvt+egnNs6b7w7
+X-Gm-Gg: AY/fxX4QpdfDdC0ECWoNsyAb3hCysLqj0caCrmkr3mK2FgNmpR5AokotIQwDANBBR1x
+	1t5xqAy+x4NXoJpeFZj2Z496Yyo5++vrR/ABx4bqXxi+5RHd/7z6AYBee6CIaQm9HCbAetjVflB
+	EKMgfA7/8lLKiTPnD3RIGGGHPLD4SAH/fO8FQrvnnPaQ/yDsGW0LWIASMtwxwGn2cSYAMugEgCB
+	X7hoo7xOTE0MwM2B+rGVOLIugZY/b8/WMwen1GuNaO8SGXGy6kKDTMLiSmrehSMQeK205BqBORj
+	z312J5ttjFliMR14H2Vf3yGEVMmucOO2hf92eHAWwHjeKxHJTMN0erg1TyTKKkvw7Fjf0Ad71w0
+	izZqrJhwBlrPpESb2juUqTuFZfnGnkgCcWX8GnAiIeL50J1A4nfHY08HJudn+OrOwqtw/KOkqoq
+	PpwhGSSw==
+X-Google-Smtp-Source: AGHT+IE3iEJ4twso46GOnqJPDopUox2qFLaKHiDPKI95vlPPxjV/F7mxvaI/CeOE2s8GrRHRScEd6Q==
+X-Received: by 2002:a17:90b:6c7:b0:335:2eef:4ca8 with SMTP id 98e67ed59e1d1-34f68d3b4a4mr1191743a91.33.1767761901762;
+        Tue, 06 Jan 2026 20:58:21 -0800 (PST)
+Received: from dw-tp ([49.207.192.172])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-34f5fb75902sm3622895a91.16.2026.01.06.20.58.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 06 Jan 2026 20:58:20 -0800 (PST)
+From: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+To: Mike Rapoport <rppt@kernel.org>, Andrew Morton <akpm@linux-foundation.org>
+Cc: Alex Shi <alexs@kernel.org>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Andreas Larsson <andreas@gaisler.com>, Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@kernel.org>, 
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	"David S. Miller" <davem@davemloft.net>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	David Hildenbrand <david@kernel.org>, Dinh Nguyen <dinguyen@kernel.org>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>, 
+	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Johannes Berg <johannes@sipsolutions.net>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Jonathan Corbet <corbet@lwn.net>, 
+	"Liam R. Howlett" <Liam.Howlett@oracle.com>, Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, 
+	Magnus Lindholm <linmag7@gmail.com>, Matt Turner <mattst88@gmail.com>, 
+	Max Filippov <jcmvbkbc@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>, Michal Hocko <mhocko@suse.com>, 
+	Michal Simek <monstr@monstr.eu>, Mike Rapoport <rppt@kernel.org>, Muchun Song <muchun.song@linux.dev>, 
+	Oscar Salvador <osalvador@suse.de>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Pratyush Yadav <pratyush@kernel.org>, Richard Weinberger <richard@nod.at>, 
+	Russell King <linux@armlinux.org.uk>, Stafford Horne <shorne@gmail.com>, 
+	Suren Baghdasaryan <surenb@google.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Thomas Gleixner <tglx@linutronix.de>, Vasily Gorbik <gor@linux.ibm.com>, Vineet Gupta <vgupta@kernel.org>, 
+	Vlastimil Babka <vbabka@suse.cz>, Will Deacon <will@kernel.org>, x86@kernel.org, 
+	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-csky@vger.kernel.org, linux-cxl@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-hexagon@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
+	linux-mips@vger.kernel.org, linux-mm@kvack.org, 
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org, 
+	linux-um@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
+	loongarch@lists.linux.dev, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v2 14/28] powerpc: introduce arch_zone_limits_init()
+In-Reply-To: <20260102070005.65328-15-rppt@kernel.org>
+Date: Wed, 07 Jan 2026 09:57:34 +0530
+Message-ID: <87ldia9he1.ritesh.list@gmail.com>
+References: <20260102070005.65328-1-rppt@kernel.org> <20260102070005.65328-15-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1767663073.git.zhoubinbin@loongson.cn> <8876bebaf08121bb5edd2500f5289284b75df011.1767663073.git.zhoubinbin@loongson.cn>
- <20260106191314.GA2568583-robh@kernel.org>
-In-Reply-To: <20260106191314.GA2568583-robh@kernel.org>
-From: Binbin Zhou <zhoubb.aaron@gmail.com>
-Date: Wed, 7 Jan 2026 09:22:41 +0800
-X-Gm-Features: AQt7F2rx2FP62gHMLs01g481K6zXg39jS3zpWijBpVZVQd9ZycV4AZkWto4-qZQ
-Message-ID: <CAMpQs4LpKSLGKySmzHeysS3x78inUQy9DF4dShneNymDvAi4Ew@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] dt-binding: rtc: loongson: Document
- Loongson-2K0300 compatible
-To: Rob Herring <robh@kernel.org>
-Cc: Binbin Zhou <zhoubinbin@loongson.cn>, Huacai Chen <chenhuacai@loongson.cn>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, linux-rtc@vger.kernel.org, 
-	Xiaochuang Mao <maoxiaochuan@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
-	Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev, devicetree@vger.kernel.org, 
-	linux-mips@vger.kernel.org, Keguang Zhang <keguang.zhang@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain
 
-Hi Rob:
+Mike Rapoport <rppt@kernel.org> writes:
 
-Thanks for your review.
-
-On Wed, Jan 7, 2026 at 3:13=E2=80=AFAM Rob Herring <robh@kernel.org> wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 >
-> On Tue, Jan 06, 2026 at 09:33:32AM +0800, Binbin Zhou wrote:
-> > Add "loongson,ls2k0300-rtc" dedicated compatible to represent the RTC
-> > interface of the Loongson-2K0300 chip.
-> >
-> > Its hardware design is similar to that of the Loongson-1B, but it does
-> > not support the alarm feature.
+> Move calculations of zone limits to a dedicated arch_zone_limits_init()
+> function.
 >
-> But you are requiring the interrupt property for it? Isn't it no alarm
-> feature means no interrupt?
-
-Yes, the `interrupts` attribute is not required without the alarm feature.
-
-But my judgment condition is `not contains` (added in patch-1[1]).
-There are only a few SoCs on the Loongson platform that don't support
-the RTC alarm feature, so I think `not contains` looks cleaner and
-simpler.
-
-[1]: https://lore.kernel.org/all/8876bebaf08121bb5edd2500f5289284b75df011.1=
-767663073.git.zhoubinbin@loongson.cn/
-
+> Later MM core will use this function as an architecture specific callback
+> during nodes and zones initialization and thus there won't be a need to
+> call free_area_init() from every architecture.
 >
-> >
-> > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
-> > ---
-> >  Documentation/devicetree/bindings/rtc/loongson,rtc.yaml | 2 ++
-> >  1 file changed, 2 insertions(+)
-> >
-> > diff --git a/Documentation/devicetree/bindings/rtc/loongson,rtc.yaml b/=
-Documentation/devicetree/bindings/rtc/loongson,rtc.yaml
-> > index 8a2520f963d8..b62419c33fd5 100644
-> > --- a/Documentation/devicetree/bindings/rtc/loongson,rtc.yaml
-> > +++ b/Documentation/devicetree/bindings/rtc/loongson,rtc.yaml
-> > @@ -23,6 +23,7 @@ properties:
-> >            - loongson,ls1b-rtc
-> >            - loongson,ls1c-rtc
-> >            - loongson,ls7a-rtc
-> > +          - loongson,ls2k0300-rtc
-> >            - loongson,ls2k1000-rtc
-> >        - items:
-> >            - enum:
-> > @@ -49,6 +50,7 @@ if:
-> >          contains:
-> >            enum:
-> >              - loongson,ls1c-rtc
-> > +            - loongson,ls2k0300-rtc
-> >
-> >  then:
-> >    required:
-> > --
-> > 2.47.3
-> >
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> ---
+>  arch/powerpc/mm/mem.c | 22 ++++++++++++----------
+>  1 file changed, 12 insertions(+), 10 deletions(-)
+>
+> diff --git a/arch/powerpc/mm/mem.c b/arch/powerpc/mm/mem.c
+> index 3ddbfdbfa941..32c496bfab4f 100644
+> --- a/arch/powerpc/mm/mem.c
+> +++ b/arch/powerpc/mm/mem.c
+> @@ -221,13 +221,23 @@ static int __init mark_nonram_nosave(void)
+>   * anyway) will take a first dip into ZONE_NORMAL and get otherwise served by
+>   * ZONE_DMA.
+>   */
+> -static unsigned long max_zone_pfns[MAX_NR_ZONES];
+> +void __init arch_zone_limits_init(unsigned long *max_zone_pfns)
+> +{
+> +#ifdef CONFIG_ZONE_DMA
+> +	max_zone_pfns[ZONE_DMA]	= min(zone_dma_limit, max_low_pfn - 1) + 1;
 
---=20
-Thanks.
-Binbin
+Hi Mike, 
+
+This doesn't look correct. Isn't the zone_dma_limit value in bytes actually?
+Shouldn't it be -
+
+     max_zone_pfns[ZONE_DMA] = min((zone_dma_limit >> PAGE_SHIFT) + 1, max_low_pfn);
+
+
+-ritesh
+
+
+> +#endif
+> +	max_zone_pfns[ZONE_NORMAL] = max_low_pfn;
+> +#ifdef CONFIG_HIGHMEM
+> +	max_zone_pfns[ZONE_HIGHMEM] = max_pfn;
+> +#endif
+> +}
+>  
+>  /*
+>   * paging_init() sets up the page tables - in fact we've already done this.
+>   */
+>  void __init paging_init(void)
+>  {
+> +	unsigned long max_zone_pfns[MAX_NR_ZONES];
+>  	unsigned long long total_ram = memblock_phys_mem_size();
+>  	phys_addr_t top_of_ram = memblock_end_of_DRAM();
+>  	int zone_dma_bits;
+> @@ -259,15 +269,7 @@ void __init paging_init(void)
+>  
+>  	zone_dma_limit = DMA_BIT_MASK(zone_dma_bits);
+>  
+> -#ifdef CONFIG_ZONE_DMA
+> -	max_zone_pfns[ZONE_DMA]	= min(max_low_pfn,
+> -				      1UL << (zone_dma_bits - PAGE_SHIFT));
+> -#endif
+> -	max_zone_pfns[ZONE_NORMAL] = max_low_pfn;
+> -#ifdef CONFIG_HIGHMEM
+> -	max_zone_pfns[ZONE_HIGHMEM] = max_pfn;
+> -#endif
+> -
+> +	arch_zone_limits_init(max_zone_pfns);
+>  	free_area_init(max_zone_pfns);
+>  
+>  	mark_nonram_nosave();
+> -- 
+> 2.51.0
+
 
