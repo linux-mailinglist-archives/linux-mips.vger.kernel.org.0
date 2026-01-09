@@ -1,99 +1,99 @@
-Return-Path: <linux-mips+bounces-12798-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12796-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11E34D0B56E
-	for <lists+linux-mips@lfdr.de>; Fri, 09 Jan 2026 17:44:59 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 244ECD0B52C
+	for <lists+linux-mips@lfdr.de>; Fri, 09 Jan 2026 17:42:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 593BF307B80C
-	for <lists+linux-mips@lfdr.de>; Fri,  9 Jan 2026 16:42:25 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id A2F7F301D175
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Jan 2026 16:42:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7633364E8B;
-	Fri,  9 Jan 2026 16:42:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD8D33644D1;
+	Fri,  9 Jan 2026 16:42:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OqAIXZ1M";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="qBmGT5am"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="J1p6aCF2";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="q8kAgnnV"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 700BB3644A7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8FE83644BD
 	for <linux-mips@vger.kernel.org>; Fri,  9 Jan 2026 16:42:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767976940; cv=none; b=P6q4Q1LOFtBmXVlRyL1Jl/qYoglV6eGW6vGupbdeT6PYGzulk9Pqq+q1JhGBuFBwH8rez3bysHPLz2aDIhbL/lHR27cVGljyzOZFB8luKg8sWhmNTwZyzXpwjDF8nIiic6wp3XNRmFyfXtzv1ML0a5pAmVq440/p6deY+/fUdRw=
+	t=1767976939; cv=none; b=XTPH9/xB0U/6/ibYAEa5BU4CfF/HweQQ9O4b/AnR0rdn2R+U1KpKjQJShFDfMbby1LCif+yENMhezViEZGZKwOYgX4w9U8w5F8cz/FAJ2tcBKj9SeXetTN9GBtTWY3nsU2782vgUYPSkrwotWzizY40HIOG7s5AZhyF3veDl7eY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767976940; c=relaxed/simple;
-	bh=nmpgAjLfAC87GKkiTxsZXklsE6NiSn+AfRFX+0wMF08=;
+	s=arc-20240116; t=1767976939; c=relaxed/simple;
+	bh=A4IyjiuETdtKqekO7CrVMzxJYv+C5eM8OE3bwQ5VTqU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=IoxS5SleqRqM/x6tEQKFCj3A/0S/8Z0eYDmbtN/VNj2irItZdHr9m5MgANiMicfguASIef6jvSa4JA2HLC45PsS4ThSTjTjGm2pR8trzU++jLWp0wcbLi4TPunVahq8QbvxmIlMdQRdKP/Koi+tOOLCUabKcuf1OuIwN7hrn/vE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OqAIXZ1M; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=qBmGT5am; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:To:Cc; b=EYVVH3JwC7fu2EK0QlGfmHN7qVQ2ZRlwcI49eoIVO4n7TQhZoBMpyqz8L0uO18FrMoAITLNMdmugZhNyVvtiEIaNvxkxv6Er5ZoijToD7OGTPT+zk494A20rl++YxpixF2EQ7kP5byl8np3T4FmceYgptYIm2CYTsomoVX6P/1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=J1p6aCF2; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=q8kAgnnV; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1767976922;
+	s=mimecast20190719; t=1767976926;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=Vb+ZCk79JFofYy0opP2TBb2dghQqxeyzmNW11i1RuaE=;
-	b=OqAIXZ1MsHV1hu4lmC7rJ8zDDZs6G2XgPsQgGB5qz1VwEkZdM8lRoUbyP71SQp7Y0SIrS/
-	AbuDhEH+FSOO9oN2t455+EyXHPo3au/rK7zQEcvFC5/Y1qcAYr/rsUXZIPCC6gwGCMEBOA
-	IA1M9KlxTi2O63ffY1JB55A68Ysbr98=
+	bh=BUeF2oJGFj/TVxz7XlmmyJLItFmPD8ejdDLxRDE0rIE=;
+	b=J1p6aCF2mBTo36LBjyRdNgFO+ghCFn9W/HTX51zgeClwVb9ZaH1TKazGqZWyg2ilkpfLty
+	/oKny1xiv8GvHdt2VBrFvs2Lrrg7CO17bXeKSuGnWtITw81lbNJAPpPBX+lEIJ4HMJjmhI
+	itMu/niwN4K6M/L68O+4v/A3BOGmiEo=
 Received: from mail-vk1-f200.google.com (mail-vk1-f200.google.com
  [209.85.221.200]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-600-Oe9GRWUfNIO7rGYHwnWCnA-1; Fri, 09 Jan 2026 11:42:00 -0500
-X-MC-Unique: Oe9GRWUfNIO7rGYHwnWCnA-1
-X-Mimecast-MFC-AGG-ID: Oe9GRWUfNIO7rGYHwnWCnA_1767976920
-Received: by mail-vk1-f200.google.com with SMTP id 71dfb90a1353d-56366d7c469so1482182e0c.0
-        for <linux-mips@vger.kernel.org>; Fri, 09 Jan 2026 08:42:00 -0800 (PST)
+ us-mta-249-1AnYdu9tPPqy4eTtrO2rzQ-1; Fri, 09 Jan 2026 11:42:05 -0500
+X-MC-Unique: 1AnYdu9tPPqy4eTtrO2rzQ-1
+X-Mimecast-MFC-AGG-ID: 1AnYdu9tPPqy4eTtrO2rzQ_1767976924
+Received: by mail-vk1-f200.google.com with SMTP id 71dfb90a1353d-5634dbbc1a2so1993289e0c.3
+        for <linux-mips@vger.kernel.org>; Fri, 09 Jan 2026 08:42:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1767976920; x=1768581720; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1767976924; x=1768581724; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Vb+ZCk79JFofYy0opP2TBb2dghQqxeyzmNW11i1RuaE=;
-        b=qBmGT5amxp28x4orcOX8/cbbkPRmDAzQ5jux6n0HagBjuWGH7EWMi2V+UQUqAx2kFx
-         bKrp+DE4pKORqCuCXZXVoLewbOpjsNaUHhhmQUScQFS7RZ9V/TFHGnMyPgWauSPO2XzL
-         fQrHi1VTCyVhLbn4xsszsRDqlfGUv4OVHrtb0Ekr/ZRzcAGhwmLpE0k22bhYX28MUwqd
-         ATfOOHEgIkpT5IXD1J5Q5BZ8GE5DNqBkixzIAGhEtZoCigFxY5Gdw7It6OZ8wQPBqy+1
-         7YjrHmrItL24cY4Uc3h6598Etn3yC1nfYUpiAqB3RtAWoCv0eaAItIXj4dBCgoLQsEGF
-         s3GA==
+        bh=BUeF2oJGFj/TVxz7XlmmyJLItFmPD8ejdDLxRDE0rIE=;
+        b=q8kAgnnVu5ujaugpZCaJQBJl8GjfdBuktbKVkTV4iQcsenuN8D+K2uP424dk9bZoFB
+         sL0LnAB9gJAfJL6yR8PersW2qoWaLh/m4kqtC+uu4QPt6NLCRN+eEqzEh4RyFVy8UbeF
+         MvottZhPIMP2EF4nOoO0bUj0x08idGBOa8IwjTYcbvKfYDlnB1ds2EHL5dSFOaOQ9wNp
+         kPZOcO+J+71ZCmW/1BQqJpkkrDZIe+et/iqspvFPht1CXVK5xjpfKFcnJwX1vdMp/XLZ
+         LTQqN63PZN8wji3xQ8x5Luo+SlIssfqQBZSwWLG2msPi/MAcD8OG6KL6bA0XYzyy5A+i
+         bJoQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767976920; x=1768581720;
+        d=1e100.net; s=20230601; t=1767976924; x=1768581724;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=Vb+ZCk79JFofYy0opP2TBb2dghQqxeyzmNW11i1RuaE=;
-        b=r5QS6J+HyyRfLHEWj3pgaiSnSxKrW5SVMXHUxtQVukX7SQ4qvkFFSuZd62D6YTzK6O
-         8W/R4IoqZpjPRzdn5ci1V6pVSvBAOPJjQ1u3kfFl3do+MhjQfcmEFwLdww0OuxmqA4a/
-         KNHQwh5tT9/EpVtCEsbCoxyRiaja1eKpgAnJDWrYFUOdn70y4taKm7YBzFaunUKJroO8
-         ZwWzq7erZuceYYH1gM5tFdC0i5aeyNd1vQIe9fXClj1TBg3CI3PaUnJM+X8cHSLiMmtP
-         +y6sJ0b82aAZFnz+z2/OQ+xzyXa8ZDByiZrHFHmPexR+yYRG3Y1DVycaFyUO8euf0Uil
-         Zd1A==
-X-Gm-Message-State: AOJu0YzpINivc105hACvUM3c6G99Cu4JLM4egX++uu+ExNoHJ8/xocI1
-	x4VfBRRPfWg7t7fW/2JIcYaaphSIrkAKeUuAyiiKRpKU7jUremtgep4SZghhnuTxjA1OhKCR7C4
-	gsOVFmZ+VC5YNPnDUItT7hcdTEtBsQpIsDhucl7Q+mH1yKrUiBpo5UGFyNQSbu6c=
-X-Gm-Gg: AY/fxX7+xYd1WDFKegslQcAFHLNCW+YHQ4cJo+DEHhXJEH1vpCAmP0GVBhUsB69ACEZ
-	wh9bPKtduimsXcLSDXHIOzMuIj4iaX5lZxHkZ4BgyoWe5RWW7txWTuEaPrkK3MdjP5OoYR+OEyt
-	CBFXHpB6W7gGWDb0MlK9RficKEV0FYdSueollcQt7aXIQp2YAuWTplXpkQQ57D2qR5ueX/CMW0v
-	Cu4dv2ENMgUnlrjqeLpk0HetEO23QOmWqlsn4AXF+xghsC6F42uly4hGMAcquGLXfyjDslA8fF0
-	nLCCO2ft3JfCDyyIwbdgjWcb9Bfzap+7SvZxZh0hmM/Dz9AscbaLl+OC6NgXOv6PwKNosHtWVT5
-	+6UtaO6ZsbeYnbVe+5LlOEACqAWv/mXg8JaPXudIRqCgzq7pd
-X-Received: by 2002:a05:6122:459a:b0:55b:305b:4e31 with SMTP id 71dfb90a1353d-56347ffbc74mr4032654e0c.17.1767976919998;
-        Fri, 09 Jan 2026 08:41:59 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGdbScE9hXL2bKfmWaAIXgFKPZqtXyC/ZOYmGZRdu0PyNqNvoiVsgbd2DT32FJ5mEiTwd7eWw==
-X-Received: by 2002:a05:6122:459a:b0:55b:305b:4e31 with SMTP id 71dfb90a1353d-56347ffbc74mr4032646e0c.17.1767976919541;
-        Fri, 09 Jan 2026 08:41:59 -0800 (PST)
+        bh=BUeF2oJGFj/TVxz7XlmmyJLItFmPD8ejdDLxRDE0rIE=;
+        b=rVF9skHlopUDZmWcZUpSo363yG6P5p8Sh9VSFeKUqj8t75joUnpX6ZA3pdTxzsAFQM
+         HGT0iYaKHAZu/odLU9KfTajF6zakjxvlcJJyQJXQwujT5hP2cwiI116nw+yF3PoljqyK
+         U3//bM95sc/ilv9gDG9D/z36FdYjhQwenkNcXm5m4QRiAfajrxo3QOrpp6jkS93PeYVT
+         ELQ132SHG4x0hH9wz2sv+kvM58/TvHkSJgiq/Kht2aZtvpmD5rk+7KzW12n9xfXq7DcX
+         yl0sEedY9zFg7h6YCCC8zkfAv1dqJA5zsquErR+LTvZ2fu6kQyeJEAn9VI3eihXAbSAD
+         0fpA==
+X-Gm-Message-State: AOJu0YxCJPavG1os52k+em/pMngCI1DQL9HaWnKybAUIU55z9DcFxIl1
+	EHc+GzAD5I9yaWXayzTJeaqrTGfQkWPdZUiJEHGQiiefJXey1Z3Msm/XT6Xt6lCWxcyKpHjUCHI
+	hJYz8vZk5fyB4TKFe/2tsY19RxE3yVvMo+peaYwQRGKhS+Rpz2Zj3OW6mEhhz5xg=
+X-Gm-Gg: AY/fxX7gTVUPWTVjUIUYMt2vnRkWWKxy4rdLVmt6U+Yr4XzMFaJGBlj0PXpYd658hUn
+	18m5/mtKqzDAQi7z2QSElFRlr9J1e0FdYFnbGwFCpC379pMk3WuHIayrGARim09DkTCqgsPZ6gT
+	1jH8Q6R2UJtWtV3vO6toVx99qSkM0eLveQnQNdyECSUJ3ddsdtLLc6lPZEywj7t9TLGgWfb1f1c
+	DCd99UsfPQq0Sxj4QmJlEeIjkzw+CdLUYQXw4vZGXIJg+NWC7kmpTiokARg4qfOA3Qujvx4gHtn
+	MTdyCAIyrW5sQm/LywOuejA553wgfF0l64sahvtBY+4+nuJL9/xjptqOR0dbGhdRZcOZWJhgXaa
+	mFa4eyUBF9nXWB53EbFwZZIWbtAn6olFK/Upu13WTxDItRp4V
+X-Received: by 2002:a05:6122:16a0:b0:55f:f2f3:699b with SMTP id 71dfb90a1353d-56347fad3demr3720447e0c.11.1767976924132;
+        Fri, 09 Jan 2026 08:42:04 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IECTMP2WdNP/X05k4GGX0gpofUA/Q2s4pXh/s/FckrwzYXb/WBdeFiwzvWFe5RcdR+ny5C0kQ==
+X-Received: by 2002:a05:6122:16a0:b0:55f:f2f3:699b with SMTP id 71dfb90a1353d-56347fad3demr3720437e0c.11.1767976923705;
+        Fri, 09 Jan 2026 08:42:03 -0800 (PST)
 Received: from [192.168.1.3] (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5636c753392sm1267752e0c.6.2026.01.09.08.41.56
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5636c753392sm1267752e0c.6.2026.01.09.08.42.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jan 2026 08:41:59 -0800 (PST)
+        Fri, 09 Jan 2026 08:42:03 -0800 (PST)
 From: Brian Masney <bmasney@redhat.com>
-Date: Fri, 09 Jan 2026 11:41:16 -0500
-Subject: [PATCH 03/13] MIPS: update include to use pic32.h from
- platform_data
+Date: Fri, 09 Jan 2026 11:41:17 -0500
+Subject: [PATCH 04/13] clk: microchip: core: update include to use pic32.h
+ from platform_data
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -102,21 +102,23 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260109-mips-pic32-header-move-v1-3-99859c55783d@redhat.com>
+Message-Id: <20260109-mips-pic32-header-move-v1-4-99859c55783d@redhat.com>
 References: <20260109-mips-pic32-header-move-v1-0-99859c55783d@redhat.com>
 In-Reply-To: <20260109-mips-pic32-header-move-v1-0-99859c55783d@redhat.com>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
  Claudiu Beznea <claudiu.beznea@tuxon.dev>
 Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Brian Masney <bmasney@redhat.com>
+ Brian Masney <bmasney@redhat.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2900; i=bmasney@redhat.com;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1046; i=bmasney@redhat.com;
  s=20250903; h=from:subject:message-id;
- bh=nmpgAjLfAC87GKkiTxsZXklsE6NiSn+AfRFX+0wMF08=;
- b=owGbwMvMwCW2/dJd9di6A+2Mp9WSGDIT9Y+wx+9cGSC6TVJ8yZST0+QrZPYuV5kl7/BNydBD3
- 6X1X+jSjlIWBjEuBlkxRZYluUYFEamrbO/d0WSBmcPKBDKEgYtTACbys5Dhn2ag56XDD65yGV2f
- Z2m2z6LgL99KzVuqn7T0X0Z/2/JizlaG/zn6C4zVxa5UpHcVbZugsihKbNWCowKyola66uu9+gz
- +cQEA
+ bh=A4IyjiuETdtKqekO7CrVMzxJYv+C5eM8OE3bwQ5VTqU=;
+ b=owGbwMvMwCW2/dJd9di6A+2Mp9WSGDIT9Y+8YF58d3Ln3cJLPxLehJa9v7Ta+6+4ceelKN27F
+ Wzpzv37OkpZGMS4GGTFFFmW5BoVRKSusr13R5MFZg4rE8gQBi5OAZhIx0aGf1qOU9rmRJd+lP2z
+ N73z/a6zD3LeVqx6uK/2AOcL2Y3GtxoYfrM94kze5LRom8aVFpkKVc6CPka1/7M1zDWVxd98/6t
+ Qyw8A
 X-Developer-Key: i=bmasney@redhat.com; a=openpgp;
  fpr=A46D32705865AA3DDEDC2904B7D2DD275D7EC087
 
@@ -128,75 +130,27 @@ architectures with COMPILE_TEST enabled.
 Signed-off-by: Brian Masney <bmasney@redhat.com>
 
 ---
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org
+To: Michael Turquette <mturquette@baylibre.com>
+To: Stephen Boyd <sboyd@kernel.org>
+Cc: linux-clk@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 ---
- arch/mips/pic32/common/reset.c            | 2 +-
- arch/mips/pic32/pic32mzda/config.c        | 3 +--
- arch/mips/pic32/pic32mzda/early_clk.c     | 2 +-
- arch/mips/pic32/pic32mzda/early_console.c | 2 +-
- 4 files changed, 4 insertions(+), 5 deletions(-)
+ drivers/clk/microchip/clk-core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/mips/pic32/common/reset.c b/arch/mips/pic32/common/reset.c
-index a5fd7a8e2800ff06cfe8c0ed91c8ff6f5996750f..d4ad5dbd61c0d06fee2c9fef2af5c3a7c4312209 100644
---- a/arch/mips/pic32/common/reset.c
-+++ b/arch/mips/pic32/common/reset.c
-@@ -4,9 +4,9 @@
-  * Copyright (C) 2015 Microchip Technology Inc.  All rights reserved.
-  */
- #include <linux/init.h>
-+#include <linux/platform_data/pic32.h>
- #include <linux/pm.h>
- #include <asm/reboot.h>
--#include <asm/mach-pic32/pic32.h>
- 
- #define PIC32_RSWRST		0x10
- 
-diff --git a/arch/mips/pic32/pic32mzda/config.c b/arch/mips/pic32/pic32mzda/config.c
-index 73be5689e0dfb8b18c0a44ee860ca2786201471e..fc21cbc11f7d6b75b15e5c6747a1a5f34c1d5d8e 100644
---- a/arch/mips/pic32/pic32mzda/config.c
-+++ b/arch/mips/pic32/pic32mzda/config.c
-@@ -5,10 +5,9 @@
-  */
- #include <linux/init.h>
+diff --git a/drivers/clk/microchip/clk-core.c b/drivers/clk/microchip/clk-core.c
+index b34348d491f3e1b576b2b9a8a66bfddd8c2296ea..891bec5fe1bedea826ff9c3bd4099c90e2528ff9 100644
+--- a/drivers/clk/microchip/clk-core.c
++++ b/drivers/clk/microchip/clk-core.c
+@@ -9,7 +9,7 @@
+ #include <linux/interrupt.h>
  #include <linux/io.h>
-+#include <linux/platform_data/pic32.h>
- #include <linux/spinlock.h>
- 
--#include <asm/mach-pic32/pic32.h>
--
- #include "pic32mzda.h"
- 
- #define PIC32_CFGCON	0x0000
-diff --git a/arch/mips/pic32/pic32mzda/early_clk.c b/arch/mips/pic32/pic32mzda/early_clk.c
-index 6001e507d8e398dee77eed071f0e53f708b57a61..ed8fa6e68b7b814bc184ee9bebddca08c20623c0 100644
---- a/arch/mips/pic32/pic32mzda/early_clk.c
-+++ b/arch/mips/pic32/pic32mzda/early_clk.c
-@@ -3,7 +3,7 @@
-  * Joshua Henderson <joshua.henderson@microchip.com>
-  * Copyright (C) 2015 Microchip Technology Inc.  All rights reserved.
-  */
+ #include <linux/iopoll.h>
 -#include <asm/mach-pic32/pic32.h>
 +#include <linux/platform_data/pic32.h>
+ #include <asm/traps.h>
  
- #include "pic32mzda.h"
- 
-diff --git a/arch/mips/pic32/pic32mzda/early_console.c b/arch/mips/pic32/pic32mzda/early_console.c
-index 3cd1b408fa1cb039f917f2d92e82fd00d8a44574..1349c783cb640d1c0940db6deda77da882ff97fe 100644
---- a/arch/mips/pic32/pic32mzda/early_console.c
-+++ b/arch/mips/pic32/pic32mzda/early_console.c
-@@ -3,9 +3,9 @@
-  * Joshua Henderson <joshua.henderson@microchip.com>
-  * Copyright (C) 2015 Microchip Technology Inc.  All rights reserved.
-  */
--#include <asm/mach-pic32/pic32.h>
- #include <asm/fw/fw.h>
- #include <asm/setup.h>
-+#include <linux/platform_data/pic32.h>
- 
- #include "pic32mzda.h"
- #include "early_pin.h"
+ #include "clk-core.h"
 
 -- 
 2.52.0
