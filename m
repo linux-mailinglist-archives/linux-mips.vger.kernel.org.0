@@ -1,98 +1,98 @@
-Return-Path: <linux-mips+bounces-12802-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12803-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 072D2D0B5D1
-	for <lists+linux-mips@lfdr.de>; Fri, 09 Jan 2026 17:47:48 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1069D0B5D4
+	for <lists+linux-mips@lfdr.de>; Fri, 09 Jan 2026 17:48:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id A317830A7936
-	for <lists+linux-mips@lfdr.de>; Fri,  9 Jan 2026 16:42:56 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 4A76230407EF
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Jan 2026 16:42:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47DAF364E93;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 965CE364E9B;
 	Fri,  9 Jan 2026 16:42:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Dl9Tf/fw";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="uMwjU8C+"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="BWdl+UWm";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="qdT2WcNa"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C640364029
-	for <linux-mips@vger.kernel.org>; Fri,  9 Jan 2026 16:42:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 370D4364E95
+	for <linux-mips@vger.kernel.org>; Fri,  9 Jan 2026 16:42:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767976959; cv=none; b=aESCZoxTyE8bD50o3XrEmhsWMNfXaiKpZ5sHak+cPqrFg+oYWPkUdmyTd0nBIQYZrKYA8lqNGyZPgfURr6olNAmdoNneCnnfw5qikIu2j1oZaaOR/JNDlPyLw363Nux7+1znKj2Fcs985+ThE/0f5TFqInK1LGbY4QhFJ4awsXM=
+	t=1767976959; cv=none; b=QPt/E2yBFm0cEpHMFpwBrNSloi2YDahgq9u5+a/FM98OnbFueJwaWln2t0tnuZbxm66RsLilU/SAIBh94BtrFahzUoPNRmi0wabaYXV2tbTYNskJxCJrZK/GIR+Uvlty1dhRr8Yg6FynlDKMvxZssUMyG/gHZq1y8mBS4O1a0sI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1767976959; c=relaxed/simple;
-	bh=DRbOK5RwsYU6XFWfVMOEiIAoh+ZHNz8ulaOIBWnK4J8=;
+	bh=2qjQra2EFD3Y/w4pfPSWGJZIKlGX3lfdWrzzclhHb+w=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=torK+HlAz3W1JBJairl4r6d7ZPJIiry+Po8joGleQ+DEMFmpVnAP7i5p2ShYE6yyhu9nSueR9lnlwFdrmsk15uHlPG0gCi14A6mJ7r5P7LLxiZBo52XT2sYnISLBYMP8Nv2cyJe64etsV4IQDnoYANjouv7+RufUr8ht0eORnBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Dl9Tf/fw; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=uMwjU8C+; arc=none smtp.client-ip=170.10.133.124
+	 In-Reply-To:To:Cc; b=VgFxj31EpIeCOV2r2QIaic2nSrS1UbLR29L2inYGmZhAJxqx/hwb1rmRBxYgTt22GOMWhyj17VGWls6mbd4kFbo4oY93x/m+BziaWMne+S0ifoQlfKEnWF5zcZVZpSdRqIprFGTGVSR0qu/xt305CTxfOnxiV2u977qYP52n+eo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=BWdl+UWm; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=qdT2WcNa; arc=none smtp.client-ip=170.10.129.124
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1767976951;
+	s=mimecast20190719; t=1767976953;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=+5x7D+IP18D3heNoU5HsOr8RG106ujJD8y+92pAU9sY=;
-	b=Dl9Tf/fw2Nb5FtZkG7Lm8qUsuQAXJa1hDAA2TBvsGtlARKlNp6TGT1+mwdSpYXwoYgJpKn
-	LoUXwdEIsrOXQ3/JlXtA2XJ2weNLvhvwvXDpbez5PA6odj1mmuKzqTSpAU/wgtpa+uAc1s
-	LDEfFUFS1wRLlXnJvn6mWVfqx02gsYI=
-Received: from mail-ua1-f72.google.com (mail-ua1-f72.google.com
- [209.85.222.72]) by relay.mimecast.com with ESMTP with STARTTLS
+	bh=VAn+XKuQ47D8yqbQ/yZIHjXY5+WjSACZGHAy4LHu/3Y=;
+	b=BWdl+UWmWUDINq4x0C7Cv4sVyCoCIkut+Ium7UpBV0IztZ3OwjuiZDScZMyfIdxI7b2rBh
+	h6gahE4nBJPtd5sfEWovH2iL0po1vroEbgykZwKhkD/WmxR2EBNfHbSScskBPJ2wjFEzIX
+	QYQZF1lYQ+lhXyJnuUvZIFmdoKZCGq4=
+Received: from mail-vk1-f199.google.com (mail-vk1-f199.google.com
+ [209.85.221.199]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-696-Qysa1JYcP8aj7C8gwfqQVw-1; Fri, 09 Jan 2026 11:42:28 -0500
-X-MC-Unique: Qysa1JYcP8aj7C8gwfqQVw-1
-X-Mimecast-MFC-AGG-ID: Qysa1JYcP8aj7C8gwfqQVw_1767976948
-Received: by mail-ua1-f72.google.com with SMTP id a1e0cc1a2514c-93f5e6c2110so4730268241.2
-        for <linux-mips@vger.kernel.org>; Fri, 09 Jan 2026 08:42:28 -0800 (PST)
+ us-mta-641-AICkti9PNP2e_IsydyIBzQ-1; Fri, 09 Jan 2026 11:42:32 -0500
+X-MC-Unique: AICkti9PNP2e_IsydyIBzQ-1
+X-Mimecast-MFC-AGG-ID: AICkti9PNP2e_IsydyIBzQ_1767976952
+Received: by mail-vk1-f199.google.com with SMTP id 71dfb90a1353d-56366d9ed8dso607125e0c.0
+        for <linux-mips@vger.kernel.org>; Fri, 09 Jan 2026 08:42:32 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1767976948; x=1768581748; darn=vger.kernel.org;
+        d=redhat.com; s=google; t=1767976952; x=1768581752; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=+5x7D+IP18D3heNoU5HsOr8RG106ujJD8y+92pAU9sY=;
-        b=uMwjU8C+16BPh4N1VLTS9eN2xV60i3dxADDjtm6M2+WKXsGi4gmCDXBQ3wZLohXkHY
-         Xg58aM8k30lEfIf2ybDkFldy0LVvBzRNPu1LJVCldDYcFABnZU+LpkKve3Wl0e6UQiwl
-         OnKaUrApwKM4Quse1D2sJ/iD4UeoSXARAqNcTB27Wv3jRRFG0ZjAjnWn+IpZCS994PeG
-         1Q6hbQXf4Vl7/0f+N3U4+AmTJD1B4DdiIPSoz+WZXe6D/AohzgoV6pp8590tH2j2UXbt
-         TuwIhmWs3dRPNjBSVmoUjFchVMoMQC68UNn4OnZ6ad9EhDQepgaXQNL+7PIPvGp5kYu0
-         iYXA==
+        bh=VAn+XKuQ47D8yqbQ/yZIHjXY5+WjSACZGHAy4LHu/3Y=;
+        b=qdT2WcNakaH3vxmudHPdextYLdAL4xeQhFgbDmLd0cFirltMMS6DQ3ZNGZbu96it7u
+         TYFfvqvFXhCPh4lvHkh2BqQs0+QKs9g594a2TlSayUuwK2PZxvtX/ufgZQrdtgqxAM6v
+         oOAdiWLZh4YLqKWMN4lXvivDKBf275W6tv3GtLilA8sZpicaIc7J3wUtRHNi4SdT+AJo
+         m/LhWvrGRIqf5tg5g/0u4lHBobFOAGGouYcPdXtMqBQEKe0BN//JVgeinTKAVHK9Y56o
+         MvunDN0a7t5gXN+Q+SogszObQ7DkhFbQdszOv93hFSysau+iTNDAGcy3lZjCAwHPRgwC
+         nD9w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767976948; x=1768581748;
+        d=1e100.net; s=20230601; t=1767976952; x=1768581752;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=+5x7D+IP18D3heNoU5HsOr8RG106ujJD8y+92pAU9sY=;
-        b=EJ7h9cbTjNidZhWbMkdOXVDCThy1JdUjmeQqLWxDn5XrKZu2SYLC7hBP49mG3QaHo9
-         xAyj5JY9zuuQ9L9QwBzpfLN6KRN2vULq2uYc0rV3TrwtWJjcmzljgOnZQQtyjLWvKKQ7
-         egUL4Kn+7hBFcHAIRkxO1GZApsVQ5MGlGRw3LttY3NniNtuVvp5DTfd3eyfFrCAgYVHq
-         nLtOsr2wpvYfLuFNpxHR2dHVVMR6dtqy7y7kZ/RPQxSvsALmKU0nyam9pk0cL3f2Qcn/
-         bziZVYV3sAYOsqeRrRT7ibvS7UqtcwVjzfjUudXQf8f/USGqe/b5+ipMxc7ikiSerDdY
-         Q2uw==
-X-Gm-Message-State: AOJu0YykW7c4ok/XbjFYpsqUbW7Cam1oeSzMCz+fJZE5986nVGjQ1oEx
-	bxQHXST7CY823ZSWg/vS1e8CVKLHOU6aS4fFjnW/vmnozVEYh2cDFZSawY5WU6kbkCv7ahpwYwD
-	KdIbQQRuiYoaEExrSRyG8j+TwEXsm8bgE5jzDjvc1vbWsH2c4KB1X/B3VXi7QPuM=
-X-Gm-Gg: AY/fxX6OPin9l2JobVgQmlBGMxpVQsHE+OD/P5ua81IJ6Qp4l7dky25I2EMI/9ZFv/h
-	k2Mkqg+xvP2aECSaI8sAC7X4HXr/DCdpUWHdk4+uvVOQW/I86svHl4XBm0GXKFcdo5de7V7lWb6
-	px9Ox4ejWPYzsg98ofRm2CzGCUH36EHrpSerQUR0Y3QrPJ5qsIqBU3r398VAdv8PHkLt23utqdx
-	ENYvlYM8v9MclHeW6nd8GGl51JvmfkEIXWxWD5T1F8iEIjjnYYhHR70+8ZKAcqS6U0MYPwPCtUD
-	/18nvUGLoAf/a3YlBe537xO/iIHyt9FkTz0KrttGigwzieU9gPIKPzMSvVBqcA+eoxdVnVfypoi
-	xNuIVvA+GWbszdHplVCLC8z+2q/IJ8D+Y965M1UYIQIBnYmnI
-X-Received: by 2002:a05:6122:221d:b0:563:4416:a0aa with SMTP id 71dfb90a1353d-56347ffba03mr3750460e0c.21.1767976947742;
-        Fri, 09 Jan 2026 08:42:27 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEVEDN+tqrnIiLABY/j988WSa2acdIYRDjShsirXH/cCw81AeqGpIol7AsEzjoFpyT0Ef8DGw==
-X-Received: by 2002:a05:6122:221d:b0:563:4416:a0aa with SMTP id 71dfb90a1353d-56347ffba03mr3750447e0c.21.1767976947337;
-        Fri, 09 Jan 2026 08:42:27 -0800 (PST)
+        bh=VAn+XKuQ47D8yqbQ/yZIHjXY5+WjSACZGHAy4LHu/3Y=;
+        b=XVW//x5Xv3vu+fxk518514KdAkfO2xT/oHa3Vs41bXdy5kJAkbUyERJ0vZ+zbaRS5u
+         xtGKiSLgQAtYTSAIqZwEPe+NBitBG1GKn2HVDu6vwp0DFaYV0E/xbHsI8aApoUKKbSDu
+         I/XOjaNEbsOCwj5M0MuJNepDQuXhCs5f9oBnX8QYQuOj2gOVVLejalBJdFgbkFUE+cva
+         /VrZ/tP3glosMcMvVDVIPlIdd3XLnDLYWS4767a2Hi4BSEqXG3FZ5ZuJ9kMc78hqRSjL
+         F0Wz1J40KBwlpjKI6JL+zGNgNRX9F81VuLA7ZQ1BDgYQFaXsC3PsSsHUxDR3iURLezPl
+         s78A==
+X-Gm-Message-State: AOJu0YyOz8OUWJJWfTI75lFtjwhx7p/3HsFyKcF5cpbba4u7gBEKOHsZ
+	XfGZSqRbIdd/ugfPyLkElfdMrap3+A7LUUMK8L97hsChydFbwaowMzX36MiOxUPneCMwXb0h0MZ
+	2hKEivXBHKi+izHuo3OAfNeKvo1m/+522wEphFLMdMT2LnRbhg4FJNbZ0x6biEsw=
+X-Gm-Gg: AY/fxX4BR7EdzCkL07c3GWG/z6KAn27ohi0Rq7V63Io1YHTFpgc9imc7fayRN/xSFGh
+	m4HvhO5xK4Rmx3fNTLPGL4tVB9HlO5ak5PQPCi0MZFHbcZFhP2SoeRtlJl40vCTcyyWShRRig1P
+	jHorKXOVQ8/xdyd8mbUvNsnL4MLp5ycV8MVCtjh/0e7mMyOgGlKuMKDcer0ZrfoNv8CVgqoG8Q3
+	HbjedMqCIaaYpcHwCodn+aYqK0EEC2Qo1PumvwLt+XcD4rEpueQU2bimslVF6993R6Yne3xA9r9
+	q4jcxXZ46sZTpwZcxp0B3JE6HWLAy7YQttp8Cu0MFUvWUoUIXmP4CUk/Bd/AHqTssy4dlUFL0Fm
+	xDEE75dEsH/g0NFR0Dz0l/Umv9j+VEuOMdQLSnJh044uE/fXR
+X-Received: by 2002:a05:6122:9001:b0:54a:721a:e4db with SMTP id 71dfb90a1353d-56347c2dd4bmr3914797e0c.3.1767976951897;
+        Fri, 09 Jan 2026 08:42:31 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEKIttTOylcFmdXlFSY6YzzA98a4l4SwTeUyaxFjkv8WhPZktN4h7/RtAemrct0fT9ia7xpgQ==
+X-Received: by 2002:a05:6122:9001:b0:54a:721a:e4db with SMTP id 71dfb90a1353d-56347c2dd4bmr3914788e0c.3.1767976951556;
+        Fri, 09 Jan 2026 08:42:31 -0800 (PST)
 Received: from [192.168.1.3] (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5636c753392sm1267752e0c.6.2026.01.09.08.42.23
+        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5636c753392sm1267752e0c.6.2026.01.09.08.42.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jan 2026 08:42:26 -0800 (PST)
+        Fri, 09 Jan 2026 08:42:31 -0800 (PST)
 From: Brian Masney <bmasney@redhat.com>
-Date: Fri, 09 Jan 2026 11:41:23 -0500
-Subject: [PATCH 10/13] watchdog: pic32-dmt: update include to use pic32.h
+Date: Fri, 09 Jan 2026 11:41:24 -0500
+Subject: [PATCH 11/13] watchdog: pic32-wdt: update include to use pic32.h
  from platform_data
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -102,7 +102,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20260109-mips-pic32-header-move-v1-10-99859c55783d@redhat.com>
+Message-Id: <20260109-mips-pic32-header-move-v1-11-99859c55783d@redhat.com>
 References: <20260109-mips-pic32-header-move-v1-0-99859c55783d@redhat.com>
 In-Reply-To: <20260109-mips-pic32-header-move-v1-0-99859c55783d@redhat.com>
 To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
@@ -112,13 +112,13 @@ Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
  Wim Van Sebroeck <wim@linux-watchdog.org>, 
  Guenter Roeck <linux@roeck-us.net>, linux-watchdog@vger.kernel.org
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1162; i=bmasney@redhat.com;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1143; i=bmasney@redhat.com;
  s=20250903; h=from:subject:message-id;
- bh=DRbOK5RwsYU6XFWfVMOEiIAoh+ZHNz8ulaOIBWnK4J8=;
- b=owGbwMvMwCW2/dJd9di6A+2Mp9WSGDIT9Y+2zXNcVTUzg+3666TtbEcXHJXX3XQxW3T6vfstE
- a9vRxXM6yhlYRDjYpAVU2RZkmtUEJG6yvbeHU0WmDmsTCBDGLg4BWAiM/4w/NNQdL82c8kJX4H9
- K/JabnCZcCw3kJdrmFM1qaUnJcDy8g6G/0Vr31n/55PV4mT4YpK1k03/fZDpu+9dH2+sTGhconr
- 8MQcA
+ bh=2qjQra2EFD3Y/w4pfPSWGJZIKlGX3lfdWrzzclhHb+w=;
+ b=owGbwMvMwCW2/dJd9di6A+2Mp9WSGDIT9Y9+31s+d2larE9y08S5P9K8HjPskYpyOcj6vTT1+
+ OFpDXtbOkpZGMS4GGTFFFmW5BoVRKSusr13R5MFZg4rE8gQBi5OAZiI/0xGhpZw7ujW1+/2t7Ed
+ KjT7Z/fu6V8upSbJiV23Z/yKWKIv+oXhv/eSsE2PH8w/crRk9Xt99aLOu6oiFu6dK/7yr64Pevn
+ 5MS8A
 X-Developer-Key: i=bmasney@redhat.com; a=openpgp;
  fpr=A46D32705865AA3DDEDC2904B7D2DD275D7EC087
 
@@ -135,13 +135,13 @@ To: Guenter Roeck <linux@roeck-us.net>
 Cc: linux-watchdog@vger.kernel.org
 Cc: linux-kernel@vger.kernel.org
 ---
- drivers/watchdog/pic32-dmt.c | 3 +--
+ drivers/watchdog/pic32-wdt.c | 3 +--
  1 file changed, 1 insertion(+), 2 deletions(-)
 
-diff --git a/drivers/watchdog/pic32-dmt.c b/drivers/watchdog/pic32-dmt.c
-index ab0682492c85ad63160bb7da61cc74336698a4e9..12e3a8f63589862e3ed674ffb71ee4798755e56f 100644
---- a/drivers/watchdog/pic32-dmt.c
-+++ b/drivers/watchdog/pic32-dmt.c
+diff --git a/drivers/watchdog/pic32-wdt.c b/drivers/watchdog/pic32-wdt.c
+index 1d282de312ef1bd683529088fc88456983e8efb9..2e7186b85194645d40f32e69f198514fca83b601 100644
+--- a/drivers/watchdog/pic32-wdt.c
++++ b/drivers/watchdog/pic32-wdt.c
 @@ -12,12 +12,11 @@
  #include <linux/kernel.h>
  #include <linux/module.h>
@@ -153,9 +153,9 @@ index ab0682492c85ad63160bb7da61cc74336698a4e9..12e3a8f63589862e3ed674ffb71ee479
  
 -#include <asm/mach-pic32/pic32.h>
 -
- /* Deadman Timer Regs */
- #define DMTCON_REG	0x00
- #define DMTPRECLR_REG	0x10
+ /* Watchdog Timer Registers */
+ #define WDTCON_REG		0x00
+ 
 
 -- 
 2.52.0
