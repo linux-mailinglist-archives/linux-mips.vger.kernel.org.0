@@ -1,100 +1,56 @@
-Return-Path: <linux-mips+bounces-12790-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12791-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78744D0642C
-	for <lists+linux-mips@lfdr.de>; Thu, 08 Jan 2026 22:20:23 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2EF25D0876F
+	for <lists+linux-mips@lfdr.de>; Fri, 09 Jan 2026 11:14:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id E60F53079D15
-	for <lists+linux-mips@lfdr.de>; Thu,  8 Jan 2026 21:18:20 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 09B1D304DAFA
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Jan 2026 10:09:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 54D83337BBC;
-	Thu,  8 Jan 2026 21:18:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 648A733557C;
+	Fri,  9 Jan 2026 10:08:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="eg6hT7FG";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="YQ12ZwiP"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="ecrM2OLC";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="/Vr3oD+I"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C94EC3358D3
-	for <linux-mips@vger.kernel.org>; Thu,  8 Jan 2026 21:17:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4B4E2D878D;
+	Fri,  9 Jan 2026 10:08:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767907082; cv=none; b=nfyLTRFXlcvlEt9ve/hHw2qdY/FhqQPcliZwFNQumkhS62AZmksd5N+SvVHJzSVsfyS4O/GNTyag6ak37XZfVhBqba2w65dMe4LWB2hdH3zbtTqiC4cfBJWXuSLX7aX/vzP+kDDZKcIVvVEkshn84qud33610YtwSRqobqMAXks=
+	t=1767953335; cv=none; b=pYe9i9HXSzu6kSaGB0r71RGZ5KwpGDA1IaQ+0bj9z3Gb4ETrTXW1/CGA9PmiMMluqrwg9wfk6H73SSh6stXg9KX250Ys5i7bMdlng5zGGShZY1yFAx0QaN/ulqa8mppwAEauTfzGM2GXvHy5cRetmdnIUmPnUktbTwttjRwse3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767907082; c=relaxed/simple;
-	bh=POUeZsY+F8+kUE271cgqQ9Np90bcd9LYX6PjbgvcBJw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=mnldJZUF/LJw2yitAK0H4Km8xS4LTbC4087LTjpOxHkaoqb7J722NCw77+59XrfMQSyLFe0uSK8kLT/UiHt7k3X/sxcTut7EqrHjC/kUKBsPEFAdvHb2fGvyL2lhZpXmTDwbplPd1i7OYdZ2ND2IsxOm8J3KvZ7EEdzpjNQk5C0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=eg6hT7FG; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=YQ12ZwiP; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1767907074;
+	s=arc-20240116; t=1767953335; c=relaxed/simple;
+	bh=2Ot3+P3TK5IGco1MKfvx/Pr9OQeUrqrUxlYQQRZTzdE=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=JuSK04NqRyHspFlgvRaWevCTi/3K1K2GoDqV0Ep/QImLCB/8/M93MsLMETex1qF/vTO8S9FFMoZCjlSHRPJ/Q06SKKw/jVUB7qDvG9GVRwxTcozt/5UPWki6ObXz5IEX8NzoBoOLXlAaj3UmaLmkrWo9U9s/sBXWzPrXtQgGESQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=ecrM2OLC; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=/Vr3oD+I; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1767953332;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=kJHSitOCa2lb+eZDZlB0ZfwPqPo8SqKK/IbMApuY5hc=;
-	b=eg6hT7FGLDQiqhk2+jxS6UYyQTlP9oPPUbL9EfCXJvO42tEoeG141kM5qDSaBTMtzqPEb/
-	qGZTgVOckK+xIW+tWZLdE4nm3tkoW9IlFuDRh9+2F9SUQDKNpjwYhqpYBud/ApIv/7UyQ0
-	pxW25phzVPw4Sb55OPzZ50VrcT+kyBk=
-Received: from mail-ua1-f69.google.com (mail-ua1-f69.google.com
- [209.85.222.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-295-_9uCYTVkOjWoervE3kRRwQ-1; Thu, 08 Jan 2026 16:17:53 -0500
-X-MC-Unique: _9uCYTVkOjWoervE3kRRwQ-1
-X-Mimecast-MFC-AGG-ID: _9uCYTVkOjWoervE3kRRwQ_1767907073
-Received: by mail-ua1-f69.google.com with SMTP id a1e0cc1a2514c-93f69d06fe4so3664202241.0
-        for <linux-mips@vger.kernel.org>; Thu, 08 Jan 2026 13:17:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1767907073; x=1768511873; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=kJHSitOCa2lb+eZDZlB0ZfwPqPo8SqKK/IbMApuY5hc=;
-        b=YQ12ZwiPe0hsyVJRobJQAkaPljKvKXxRnQG5ZJYlS/B9gyFCYFW1IVQ6iE2ssZXdg+
-         JYccZkuZyK38+EF89bfwoliW7TVUsIzO/DUkQGCrJabbi97jlDQqm+Mp4K56uPGRqf/m
-         TTRnBc0oe2NyIXyXJqgreeVteQlvhV5Qt+S+dJXggwxUpMiOUne1ih/TIvpItlvtNkJE
-         F3yv88+qs/d13KBlbUmWZKtQ0Hef/yN5P7PYGnYZg+fgLYHJZFQeynPJhqdtGIrgfrjU
-         UAxcI4/k3AuwVvX6ij0FqfoaFEnUbyeSdxJzYHnnpTQleR1P2IQXkHabC8Qaf0fQncX7
-         eaXw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767907073; x=1768511873;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=kJHSitOCa2lb+eZDZlB0ZfwPqPo8SqKK/IbMApuY5hc=;
-        b=e8AOQSh28QUkktT+Z77pRX9ElbfjXjivBzUsX3qZouvlLiXGiY2GIHqvu71MltcBqn
-         BsGKSks247CO08Zr9I+Tm1QQEvWh/x35M8ZOIc94eiPeDtizDUXzh0FXrZaSCVASG1Jc
-         WP3R5XYmZ9eC1UwTD/w38pV+RW3Hzsrm7qFC4qFC3ZAl5tlYy3+eEhScrljP8BSeoFAM
-         hed/hMlBy2Ayxio9TWFDM9+e0ayP1ZFY399P5+Fny5lTQAFp5dvCh7VrMsHkbfdtwwFl
-         gWCL+jXwsadnL50/4/TJeqn1szwNFqSXH1x1vkOJgwW905GkyQMdaVoSI86mcErjYVB2
-         CZzA==
-X-Forwarded-Encrypted: i=1; AJvYcCWIc2eDOEGmHZMlnjusfNcuTGFWJsto1GzTWrK+axIioomzAuAPo2G0kmmxIL/cx27TDQMy1gBv3sTp@vger.kernel.org
-X-Gm-Message-State: AOJu0YzqYdvQ7WxMl2Op2vFc9BCqeWqoyiGfNuy6sj8Kwlt1K/PLZ6j8
-	4UbRIpLnikXGgA5S35G7Rkfb+zui4FCe0HeSKDy7+JTrhox9+YKWuU9/BU3/hROXh0GvAxNRzuG
-	tLOq5X8T6okNh0dZJ+ezqgiI3gwlWXsZUHOs6Z6TpVLXOv8tcDu90TrjTsIlqw1fYSf4uT3U=
-X-Gm-Gg: AY/fxX4XuInX7qiImBWzcXiLGUx3FMa9Ux3xrAks86f/1l8aIGuwGIPo1Xf1BjUa/P8
-	d6lx4zoJ3fMbI9z/th4fyEplBhJGPYJGuJdYvXsY8x5mA9x0MPjjomm4bP/iLwU+/+h2cFRhN8d
-	KK1nSp//zao2pJpo3WpPBOXmyhziqVn51OqmYw9El5CLrcWmrLFxc152jhbbogbOyeL9/kaT7Ug
-	gYvffpvkrdXpWfFlXIFqT7RZucT+4l894/VGwpn0zl9qWX13zFkPJGVGR5E8uU+5m5ucf00eGGF
-	DLsCBFFgUygx6nz7qwlqe8tRKew79s2QQNgDUCAxqAJBjeJ/AtvSw1F76M11iF+iSOl3PNhV4J/
-	9vQEQl/tteCdh6GI=
-X-Received: by 2002:a05:6102:38ca:b0:5db:f352:afc0 with SMTP id ada2fe7eead31-5ecb1e72945mr2984427137.2.1767907072885;
-        Thu, 08 Jan 2026 13:17:52 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IG8lwBGoZzalWApFS6fBt0yhs9PqwqWvGlooSRhdR5zfpfZTC31pKCqamm2uqiTNXnx/ioL4Q==
-X-Received: by 2002:a05:6102:38ca:b0:5db:f352:afc0 with SMTP id ada2fe7eead31-5ecb1e72945mr2984416137.2.1767907072569;
-        Thu, 08 Jan 2026 13:17:52 -0800 (PST)
-Received: from [10.30.226.224] ([2600:382:811f:d757:daa5:b867:12a3:9d12])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-5ec77064e86sm7623329137.7.2026.01.08.13.17.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 08 Jan 2026 13:17:51 -0800 (PST)
-From: Brian Masney <bmasney@redhat.com>
-Date: Thu, 08 Jan 2026 16:16:27 -0500
-Subject: [PATCH 09/27] clk: loongson1: convert from divider_round_rate() to
- divider_determine_rate()
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=hiWnSWZMqvtFwCijTWDIW4H2LrOeKESwb+4fOEG4YhY=;
+	b=ecrM2OLClVWukRuY6OzAVicbQZO5OWtPUZpKX35SvEnkDjdDMlpuq6uOYae4JPqpu811uR
+	jxpu60SXSVJw45kaUXTriYfeKaOn4WZv8wumV+Nl5TZCvjpQmm0MOy/05hOPY5IFFPWj/y
+	gLyLo0AiZxsM4RwLNiubj3AcZP0gyEfgmoPfQuTIecDs+pjqslJlBidcAMvwcWojxRzrcN
+	h5Dg/eG4Zkec82C5hktNjhI1JhcjqTMD9PZpPV4KSWH07Y6W1Crh9hj9dPT1N3NSD3mucN
+	JeQ5j8pfdFG2N3UgLkSQ+B3V7tJeMrproMOxv8w9tPnVw2wy2c6bnWZGacX2YA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1767953332;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=hiWnSWZMqvtFwCijTWDIW4H2LrOeKESwb+4fOEG4YhY=;
+	b=/Vr3oD+IXhKyGNsdyg4cC1B0DMKHtCCSLK3ThhruY3RTy7Ix90hLdkZmXiypdsS6IcoBO8
+	592Wn2f4uMVIlfAA==
+Date: Fri, 09 Jan 2026 11:08:49 +0100
+Subject: [PATCH v2] MIPS: Implement ARCH_HAS_CC_CAN_LINK
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -102,66 +58,99 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260108-clk-divider-round-rate-v1-9-535a3ed73bf3@redhat.com>
-References: <20260108-clk-divider-round-rate-v1-0-535a3ed73bf3@redhat.com>
-In-Reply-To: <20260108-clk-divider-round-rate-v1-0-535a3ed73bf3@redhat.com>
-To: Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>
-Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Brian Masney <bmasney@redhat.com>, Keguang Zhang <keguang.zhang@gmail.com>, 
- linux-mips@vger.kernel.org
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1454; i=bmasney@redhat.com;
- s=20250903; h=from:subject:message-id;
- bh=POUeZsY+F8+kUE271cgqQ9Np90bcd9LYX6PjbgvcBJw=;
- b=owGbwMvMwCW2/dJd9di6A+2Mp9WSGDIT5LYHN79l2mZlWP1eiTViw4Ffutcmduqz/1K/Y61xg
- F8n5L1lRykLgxgXg6yYIsuSXKOCiNRVtvfuaLLAzGFlAhnCwMUpABNZ4sfwT1n/t8Kspn/BRVU7
- 7qxqL3ExZ2mqzJCLlr+ruXvP9skd4Qz/bNpEnLodlkwyLqjufyw1RS4xw3lR4du3G9bM/2G0/v8
- KPgA=
-X-Developer-Key: i=bmasney@redhat.com; a=openpgp;
- fpr=A46D32705865AA3DDEDC2904B7D2DD275D7EC087
+Content-Transfer-Encoding: 8bit
+Message-Id: <20260109-cc-can-link-mips-v2-1-38123bfc5628@linutronix.de>
+X-B4-Tracking: v=1; b=H4sIALDTYGkC/32NQQ6CMBBFr0Jm7Rg6QUBX3MOwqO1UJmpLWiQYw
+ t2tHMDl+z///RUSR+EEl2KFyLMkCT4DHQowg/Z3RrGZgUo6KSJCY9Boj0/xD3zJmNCcTcllfau
+ VayDPxshOll157TMPkqYQP/vDrH7pH9msUGFt20a32nFVUZe79xSDl+VoGfpt277E5XvCtAAAA
+ A==
+X-Change-ID: 20251222-cc-can-link-mips-c9c0e06b61f7
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: "Maciej W. Rozycki" <macro@orcam.me.uk>, linux-mips@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1767953331; l=2849;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=2Ot3+P3TK5IGco1MKfvx/Pr9OQeUrqrUxlYQQRZTzdE=;
+ b=oplmTeLR4X1pZF75Y9hB8jAvJd3PPgKw25DVTQdiP5H+CKGzkEgXkBOYfu43GbH0X89Nxn7mR
+ UnYyM6Ja8v4CIMv2fisntdvDRRRBxdxujah2ctN8thQ5tsnEzgycwEM
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-The divider_round_rate() function is now deprecated, so let's migrate
-to divider_determine_rate() instead so that this deprecated API can be
-removed.
+The generic CC_CAN_LINK detection does not handle different byte orders
+or ABIs. This may lead to userprogs which are not actually runnable on
+the target kernel.
 
-Note that when the main function itself was migrated to use
-determine_rate, this was mistakenly converted to:
+Use architecture-specific logic supporting byte orders instead.
 
-    req->rate = divider_round_rate(...)
+Modern 64-bit toolchains default to a n32 libc, which are not
+supported by all kernel configurations, as MIPS32_N32 is optional.
+On 64-bit, test for a n32 ABI libc first and fall back to o64 and
+o32 if necessary.
 
-This is invalid in the case when an error occurs since it can set the
-rate to a negative value.
+Link: https://lore.kernel.org/lkml/20260105100507-14db55e3-aa71-48bf-a6ac-33b186bd082f@linutronix.de/
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+Changes in v2:
+- Use -mabi= over -m32/-m64
+- Link to v1: https://lore.kernel.org/r/20251222-cc-can-link-mips-v1-1-6d87a8afe442@linutronix.de
+---
+ arch/mips/Kconfig | 28 ++++++++++++++++++++++++++++
+ 1 file changed, 28 insertions(+)
 
-Fixes: bb40a2ef4fc9 ("clk: loongson1: convert from round_rate() to determine_rate()")
-Signed-off-by: Brian Masney <bmasney@redhat.com>
+diff --git a/arch/mips/Kconfig b/arch/mips/Kconfig
+index b88b97139fa8..862a86cec501 100644
+--- a/arch/mips/Kconfig
++++ b/arch/mips/Kconfig
+@@ -4,6 +4,7 @@ config MIPS
+ 	default y
+ 	select ARCH_32BIT_OFF_T if !64BIT
+ 	select ARCH_BINFMT_ELF_STATE if MIPS_FP_SUPPORT
++	select ARCH_HAS_CC_CAN_LINK
+ 	select ARCH_HAS_CPU_CACHE_ALIASING
+ 	select ARCH_HAS_CPU_FINALIZE_INIT
+ 	select ARCH_HAS_CURRENT_STACK_POINTER
+@@ -3126,6 +3127,33 @@ config CC_HAS_MNO_BRANCH_LIKELY
+ config CC_HAS_BROKEN_INLINE_COMPAT_BRANCH
+ 	def_bool y if CC_IS_CLANG
+ 
++config ARCH_CC_CAN_LINK_N32
++	bool
++	default $(cc_can_link_user,-mabi=n32 -EL) if MIPS32_N32 && CPU_LITTLE_ENDIAN
++	default $(cc_can_link_user,-mabi=n32 -EB) if MIPS32_N32 && CPU_BIG_ENDIAN
++
++config ARCH_CC_CAN_LINK_N64
++	bool
++	default $(cc_can_link_user,-mabi=64 -EL) if 64BIT && CPU_LITTLE_ENDIAN
++	default $(cc_can_link_user,-mabi=64 -EB) if 64BIT && CPU_BIG_ENDIAN
++
++config ARCH_CC_CAN_LINK_O32
++	bool
++	default $(cc_can_link_user,-mabi=32 -EL) if (32BIT || MIPS32_O32) && CPU_LITTLE_ENDIAN
++	default $(cc_can_link_user,-mabi=32 -EB) if (32BIT || MIPS32_O32) && CPU_BIG_ENDIAN
++
++config ARCH_CC_CAN_LINK
++	def_bool ARCH_CC_CAN_LINK_N32 || ARCH_CC_CAN_LINK_N64 || ARCH_CC_CAN_LINK_O32
++
++config ARCH_USERFLAGS
++	string
++	default "-mabi=n32 -EL" if ARCH_CC_CAN_LINK_N32 && CPU_LITTLE_ENDIAN
++	default "-mabi=n32 -EB" if ARCH_CC_CAN_LINK_N32 && CPU_BIG_ENDIAN
++	default "-mabi=64 -EL" if ARCH_CC_CAN_LINK_N64 && CPU_LITTLE_ENDIAN
++	default "-mabi=64 -EB" if ARCH_CC_CAN_LINK_N64 && CPU_BIG_ENDIAN
++	default "-mabi=32 -EL" if ARCH_CC_CAN_LINK_O32 && CPU_LITTLE_ENDIAN
++	default "-mabi=32 -EB" if ARCH_CC_CAN_LINK_O32 && CPU_BIG_ENDIAN
++
+ menu "Power management options"
+ 
+ config ARCH_HIBERNATION_POSSIBLE
 
 ---
-To: Keguang Zhang <keguang.zhang@gmail.com>
-Cc: linux-mips@vger.kernel.org
----
- drivers/clk/clk-loongson1.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
+base-commit: 8f0b4cce4481fb22653697cced8d0d04027cb1e8
+change-id: 20251222-cc-can-link-mips-c9c0e06b61f7
 
-diff --git a/drivers/clk/clk-loongson1.c b/drivers/clk/clk-loongson1.c
-index f9f060d08a5fae3291a9408c6dc93531b435609f..1674181a1107dc4f30e78ee410a55a49b6d0b4b5 100644
---- a/drivers/clk/clk-loongson1.c
-+++ b/drivers/clk/clk-loongson1.c
-@@ -99,10 +99,7 @@ static int ls1x_divider_determine_rate(struct clk_hw *hw,
- 	struct ls1x_clk *ls1x_clk = to_ls1x_clk(hw);
- 	const struct ls1x_clk_div_data *d = ls1x_clk->data;
- 
--	req->rate = divider_round_rate(hw, req->rate, &req->best_parent_rate,
--				       d->table, d->width, d->flags);
--
--	return 0;
-+	return divider_determine_rate(hw, req, d->table, d->width, d->flags);
- }
- 
- static int ls1x_divider_set_rate(struct clk_hw *hw, unsigned long rate,
-
+Best regards,
 -- 
-2.52.0
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 
 
