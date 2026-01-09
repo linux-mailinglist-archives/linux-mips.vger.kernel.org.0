@@ -1,184 +1,147 @@
-Return-Path: <linux-mips+bounces-12805-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12806-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7010D0B55C
-	for <lists+linux-mips@lfdr.de>; Fri, 09 Jan 2026 17:44:09 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12A97D0B911
+	for <lists+linux-mips@lfdr.de>; Fri, 09 Jan 2026 18:15:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 37DF33028733
-	for <lists+linux-mips@lfdr.de>; Fri,  9 Jan 2026 16:43:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 13ABC315EF2B
+	for <lists+linux-mips@lfdr.de>; Fri,  9 Jan 2026 17:08:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F34A1364E97;
-	Fri,  9 Jan 2026 16:42:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 492C6364E92;
+	Fri,  9 Jan 2026 17:08:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WC2E78kv";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="k6OB1OqE"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="JXyugClR"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-dl1-f50.google.com (mail-dl1-f50.google.com [74.125.82.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 088CD3644C9
-	for <linux-mips@vger.kernel.org>; Fri,  9 Jan 2026 16:42:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A53CB23817E
+	for <linux-mips@vger.kernel.org>; Fri,  9 Jan 2026 17:08:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=74.125.82.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1767976966; cv=none; b=LxEZglYtrCIAlojXM+l9n1QG0xwk4Kk7X345HzQNlQQgAfI47MOy87sAJQZIaWm5EmEqF51clw2BUpQn8B+YwSI4uuFrAyYNPnphElW2mlGJCaeQffO0KeUtIul7Cn4w0Muo8aI5XHuHqKnbyEe19fmEa/pUPtqrR+pw1P7ijfU=
+	t=1767978523; cv=none; b=XbWV7DUYolBeQl8xryye4Z7o3A0kkmvvUY7XVpi/1vOJh5zd6wK6KGeH9cjOCR1nSORLgZeuKxZl75VbrrOtqnHPNLxJ4Y7VsC6nvhNay9M4e1HTdfbqF7eyct7clsXURa7pEyobIinwlz7kNg+6yYvtDJdI6Oi0hM5FK2VlGd8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1767976966; c=relaxed/simple;
-	bh=y5Wna2uuT+TyZLNT2wjyR7itI0mAOICA1O/5yDz9N8g=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=rkZU+dSkQ9QEHpZpGBZPTmoKvKkTLpcM+1PmoFgj7y0HwgJWoUx928/Tyob69gRtRe0TuVAj90ZMm3MyWmjouz3H7fj7m0JiMLUikTd5pMs4EVGZbnzBEaA+vU0UKhWwE+IXOvCs81dxU1PG4Y6PL6+xyqxHN08zM2xX9V7FhZg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WC2E78kv; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=k6OB1OqE; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1767976962;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=7A0SVSsJLLrH3UzeGVYQj7XUlswlx8l5i5D50nZwrq0=;
-	b=WC2E78kvO6sTx5G7/wez2G2cJy8/FSOvuFAGW+RjB+/r+tM9v2i4P19Yz+m5vnASj7k18m
-	kb2Rafgb/X8Xi2pLnpDeM3WQaDBdOYXqP+LPxoXOIVO/G12Rk/qDNnw0ROPKfPeH0qkdtB
-	lrMeMpWvZ3VJSP4fms7n7Z5zZ4FTRvE=
-Received: from mail-vk1-f200.google.com (mail-vk1-f200.google.com
- [209.85.221.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-464-ckInPws8O5yNYb0dynYpqA-1; Fri, 09 Jan 2026 11:42:40 -0500
-X-MC-Unique: ckInPws8O5yNYb0dynYpqA-1
-X-Mimecast-MFC-AGG-ID: ckInPws8O5yNYb0dynYpqA_1767976959
-Received: by mail-vk1-f200.google.com with SMTP id 71dfb90a1353d-56346eb4afeso2226887e0c.1
-        for <linux-mips@vger.kernel.org>; Fri, 09 Jan 2026 08:42:39 -0800 (PST)
+	s=arc-20240116; t=1767978523; c=relaxed/simple;
+	bh=Oj5XT7gzz6V+mgFqjrRZNuY8ClDDS/vylEH+eVJ2xkE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=dd2fQOSu26UJzVkJF6FRYJKhKeBmrLEqYn9bajfJzblWGyc8/WvAUhVwmhpKYJRYBf1uqfEbZi2xALSDNPwSdayGi6iixn4wJLvT96jZdQXx199baHpwL7p5p64dP/DCVy5trZuPBRHeyMafoR/jrrPtX+p+ooDYMP9cmskBYeQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=JXyugClR; arc=none smtp.client-ip=74.125.82.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-dl1-f50.google.com with SMTP id a92af1059eb24-122008d3936so1985947c88.1
+        for <linux-mips@vger.kernel.org>; Fri, 09 Jan 2026 09:08:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1767976959; x=1768581759; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1767978520; x=1768583320; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=7A0SVSsJLLrH3UzeGVYQj7XUlswlx8l5i5D50nZwrq0=;
-        b=k6OB1OqEOSf6beho1ldQ9OeNHEbSxdMaBb9fAfJrxxHnJ3zOCwTlMT8LDe260D01EV
-         Aco4UxodfoAIFkBdtTmn/N1gxgxTajXfMnSGx5SRTbVomCiqkjXjVPbN9MbEk9Og9Bgd
-         c2TbjCFEJ4jJpKEofdQHftubkcoprs+C6hQGb1LUu4ztwEwVCFHZ2znpAmSelyengHbf
-         oFEPKhnUdafHNRKKhz+8oKIwBYfSBWx62nQEzaRlOw229+16q6jEtZkCCEqApV5AR+zt
-         pOxvXyvSUfakHNaNNca0TFTFD9LwBALP0r1hFSfu4+yPcjifDQt9qrTi2AYAPM8elytc
-         El8w==
+        bh=fhwhqtJUa1G9Nx32o/FtP8XZe5o3pLenUR9s9//PqGM=;
+        b=JXyugClRzPxv+gINuTmXSJQ8EcE0P/Gvpr64+kGOVYQyzasJOJYZ1hhkDqyhQIvGUS
+         61VvHcyt3YwNnVz2QbdF+HTR68Z+n5jQo5ZPWFJUn9P5IKM2imFCmGfSRKqLngwxR1hM
+         BqSHKCbnSC0JGsT9kfhti+l3+si6R5aQ+Y4lhyaXu8SzBCyoTnDjsczU3LTNjGCmwvYh
+         AyMnsjgwLWPah8+t7jBdV4weWPcUMlTr/fxUNUAr6Mtwn1MLa4CVErbdDUaUs+S2R9YN
+         p36naihle0z+xsWPak+Hu232/Hg9nmNQCGInGqRf7JUNd79GSGdeFQKtLz5tY3tyEx3p
+         FXTw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1767976959; x=1768581759;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-gg:x-gm-message-state:from:to
+        d=1e100.net; s=20230601; t=1767978520; x=1768583320;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-gg:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=7A0SVSsJLLrH3UzeGVYQj7XUlswlx8l5i5D50nZwrq0=;
-        b=JX6FrbTYCZspc7vo7Kf2X+0JOzM1df9djuKLSPY/YGtcsX1MlgvNR/9NVZmf0v1MJy
-         7eUWB6dmjHfiYS9rTzYHCsO57uFBgquaRY7x4x6FG8aJ6JWX6sIxx1P6qvuuF/AxDt18
-         sRVpbCwbPZeKYCEj8uaCbdoEc5tAJbf1/qTj9f6/8H9D3K8TWgFwYVjJEGU/FBo9DGRC
-         H+YosqRERgMPX/m1vJOCJKH1hPAGmmJRwz7uN8bkRyPFO3wnwXmUaPXycaGR18QxUj16
-         +HRMHv3X+bj9kzgrk/aYtzkWRzbDk5twnL4LoWRbcOm50YCB/4jnD96Xpm4Nd6lajMd5
-         Z7BQ==
-X-Gm-Message-State: AOJu0Yw+EPvipesf3gG0pZhVSSkwCQDXvVdOBeCshnlSxm0DPtmQnuk9
-	849cD8uBCVjW6cgRSlwc3VrAINoTy5jp+3DycSaRHqBpp3TpFVr2HtFZLOxKKh/ASVaMlQd4z2d
-	/WJSYWDG12Vou+Ux1DCx7KDTIYyf3MujlvC1o8FdGttrWDJD8OE87sOJKbCeQae4=
-X-Gm-Gg: AY/fxX4H7GdoQVj4Dy9La05Z5cumgrNsgKNBwbygv/3cHKQcH//PahjgPLzBBnuQB4m
-	kRIZ0gM+bDeDa8nZ5MOi1BOO+ohd2tAPKFnXvXwmKDMRyOmwAXMLUmM5kpged5HwMmhBFO0qIlz
-	u2cOeGqoJh1uPKl3TWOW1R3tUcmqxdGjbhEUpF54Uz5ntEbyGa8fdJl7Le06hI0oDCXP6AUQ9VU
-	/rTAcl+TXmTnj43ZzK/xtdVHpbRbuLXY7/2R/kAtw9VqzmOfz1kw+CPyqCjVXeNySz+Wks9R/BH
-	kV0sLgAePi+T1VQhqrFSh/rdTv+it66qyGT10f660zGYMbNTS0e1CWhb3He3kHv/Ci/O+FVXtu9
-	qRbrGYYyZpEGqLwJr1vhmOn54kLE89si373Ky8x6Ot21GYXpx
-X-Received: by 2002:a05:6122:9001:b0:54a:721a:e4db with SMTP id 71dfb90a1353d-56347c2dd4bmr3914921e0c.3.1767976959399;
-        Fri, 09 Jan 2026 08:42:39 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IGJZfDuXwb+miLpR98+49SXHQt8lhYkMxJKQiFPAELqpF136U6IBPhdPXrGcs+iek854k4JIA==
-X-Received: by 2002:a05:6122:9001:b0:54a:721a:e4db with SMTP id 71dfb90a1353d-56347c2dd4bmr3914904e0c.3.1767976958934;
-        Fri, 09 Jan 2026 08:42:38 -0800 (PST)
-Received: from [192.168.1.3] (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5636c753392sm1267752e0c.6.2026.01.09.08.42.35
+        bh=fhwhqtJUa1G9Nx32o/FtP8XZe5o3pLenUR9s9//PqGM=;
+        b=H/PpRq/kwsqIxWhRo8tuBKzJTEQqMPh0Kg4BnNt9Cuvso0GfRnX2swoiePSDylzjDX
+         RxLcyjkmSKuwY5jOFk8Oms1HCE5RUbwB6DTbdyKg9arr0NVcxsZZfOk8fxoyd+ickrYY
+         kk5nz1PMNrnXPDXAaqSF8qS6bcWjYK2sKu7fzkmd6/kAkQjH88aPPWoctsvdMyprarPX
+         QQU9yDIqHnAnTW8kfc/Bxb/FpslNYECimso7eSnLsrEvEMf/lYU5J3hV/t+yuG6l3CBV
+         0CqQuUXP9x5Fez+jbswO/5L1xebZur7vhi7mldlzADkybxJzV8Y26Cl2CiLn2GxThmvf
+         aXIg==
+X-Forwarded-Encrypted: i=1; AJvYcCVNFQOyFLuGwt2cHcR6fpTxA5kcPUsZlH4wMpl/ypdRI+Fa/5gSKjNTIFWNa3VqcdZA9BGPbOMJxIsK@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyaxs1wQLxHcenPL+16GgwOIfxLy+SH3YIq2U02SDYvk4vh8ngR
+	k5IbIikgNq2RwmFcXmt/+7Ub45cTDMVMbyjFDpg7aTFY0osbExWQ9ADR
+X-Gm-Gg: AY/fxX5lHZ8pOxfCOv89a1KV2ZDwhOl1AWq/QkjYTF09dMIwp6XOcA69ZIn9FTdWy0j
+	UV5VQmnq4DqnrJqECBZc/iE3JXe01EQWrDD0U5rG3h1Lgpw2woXU8wZXWRd/poiSjzjxoKp2t3C
+	hA2PCv5Z8uiOI12+hu/xzKiwL+mpohENkrPu1LrWGU40CwfGd4qmGY4Gx4gACJp4YeDlvVsy/He
+	0VjPI8FLt7kV7KLrB0Ty6Pnlaorg2fsg9BoF4u2kT6K8URnAMcsrnuKuCOcTLHzCTKAMd34e03M
+	yTAj9z9X/PkTzKZ6CKYqrBO4GbNDQi400QpMc/2bhJNCALBjet+6EEtDkd0JB8xmOI7QOjaUT1Q
+	rXY2WZ2ThO74KHBJTMV+pQzE+a74HEIpeqbHkY6WU2khTlaSBFnVb9ff065QjrlJMRQDcERA/cU
+	6u1UsUM0y6qfYQneEgJrNemjejo1HMC61AY6Y=
+X-Google-Smtp-Source: AGHT+IF0XYbVCtQZkYft+0Wps7/tAcEc9PTYImYZJiepdGfxjC1QwtTJOXR0bcfPsOOi+CQ4RicAtA==
+X-Received: by 2002:a05:7022:927:b0:119:e55a:9c04 with SMTP id a92af1059eb24-121f8b7b3e4mr9012115c88.32.1767978519349;
+        Fri, 09 Jan 2026 09:08:39 -0800 (PST)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2b1707b16e4sm11246399eec.26.2026.01.09.09.08.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 09 Jan 2026 08:42:38 -0800 (PST)
-From: Brian Masney <bmasney@redhat.com>
-Date: Fri, 09 Jan 2026 11:41:26 -0500
-Subject: [PATCH 13/13] clk: microchip: core: allow driver to be compiled
- with COMPILE_TEST
+        Fri, 09 Jan 2026 09:08:38 -0800 (PST)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date: Fri, 9 Jan 2026 09:08:37 -0800
+From: Guenter Roeck <linux@roeck-us.net>
+To: Brian Masney <bmasney@redhat.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	linux-watchdog@vger.kernel.org
+Subject: Re: [PATCH 10/13] watchdog: pic32-dmt: update include to use pic32.h
+ from platform_data
+Message-ID: <76129cc9-345b-4866-8cb9-b36e4374cf8b@roeck-us.net>
+References: <20260109-mips-pic32-header-move-v1-0-99859c55783d@redhat.com>
+ <20260109-mips-pic32-header-move-v1-10-99859c55783d@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260109-mips-pic32-header-move-v1-13-99859c55783d@redhat.com>
-References: <20260109-mips-pic32-header-move-v1-0-99859c55783d@redhat.com>
-In-Reply-To: <20260109-mips-pic32-header-move-v1-0-99859c55783d@redhat.com>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Brian Masney <bmasney@redhat.com>, 
- Michael Turquette <mturquette@baylibre.com>, 
- Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2005; i=bmasney@redhat.com;
- s=20250903; h=from:subject:message-id;
- bh=y5Wna2uuT+TyZLNT2wjyR7itI0mAOICA1O/5yDz9N8g=;
- b=owGbwMvMwCW2/dJd9di6A+2Mp9WSGDIT9Y9O482SvrL1tfTJpCab6vciztK9s09URkddX3mg2
- mBWerpXRykLgxgXg6yYIsuSXKOCiNRVtvfuaLLAzGFlAhnCwMUpABPZtZqRYfGLSU/Ng+84fV/1
- Vm2/Y/VCu/Mf1zSXT9/RmH3oy6LmHzEM/x1yP6/0CX43233WtsX7LcQVzrl7exzl1Zt9vWpV7Jf
- FDBwA
-X-Developer-Key: i=bmasney@redhat.com; a=openpgp;
- fpr=A46D32705865AA3DDEDC2904B7D2DD275D7EC087
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260109-mips-pic32-header-move-v1-10-99859c55783d@redhat.com>
 
-This driver currently only supports builds against a PIC32 target. To
-avoid future breakage in the future, let's update the Kconfig and the
-driver so that it can be built with CONFIG_COMPILE_TEST enabled.
+On Fri, Jan 09, 2026 at 11:41:23AM -0500, Brian Masney wrote:
+> Use the linux/platform_data/pic32.h include instead of
+> asm/mach-pic32/pic32.h so that the asm variant can be dropped. This
+> is in preparation for allowing some drivers to be compiled on other
+> architectures with COMPILE_TEST enabled.
+> 
+> Signed-off-by: Brian Masney <bmasney@redhat.com>
+> 
 
-Note that with the existing asm calls is not how I'd want to do this
-today if this was a new driver, however I don't have access to this
-hardware. To avoid any breakage, let's keep the existing behavior.
+linux/platform_data/pic32.h doesn't exist upstream, and I was not
+copied on the patch introducing it, so I'll just blindly asume that
+this works.
 
-Signed-off-by: Brian Masney <bmasney@redhat.com>
+Acked-by: Guenter Roeck <linux@roeck-us.net>
 
----
-To: Michael Turquette <mturquette@baylibre.com>
-To: Stephen Boyd <sboyd@kernel.org>
-Cc: linux-clk@vger.kernel.org
-Cc: linux-kernel@vger.kernel.org
----
- drivers/clk/microchip/Kconfig    | 2 +-
- drivers/clk/microchip/clk-core.c | 4 ++++
- 2 files changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/clk/microchip/Kconfig b/drivers/clk/microchip/Kconfig
-index 1b9e43eb54976b219a0277cc971f353fd6af226a..1e56a057319d97e20440fe4e107d26fa85c95ab1 100644
---- a/drivers/clk/microchip/Kconfig
-+++ b/drivers/clk/microchip/Kconfig
-@@ -1,7 +1,7 @@
- # SPDX-License-Identifier: GPL-2.0
- 
- config COMMON_CLK_PIC32
--	def_bool COMMON_CLK && MACH_PIC32
-+	def_bool (COMMON_CLK && MACH_PIC32) || COMPILE_TEST
- 
- config MCHP_CLK_MPFS
- 	bool "Clk driver for PolarFire SoC"
-diff --git a/drivers/clk/microchip/clk-core.c b/drivers/clk/microchip/clk-core.c
-index 891bec5fe1bedea826ff9c3bd4099c90e2528ff9..ce3a24e061d145934c84843008efadc3b0e2cffa 100644
---- a/drivers/clk/microchip/clk-core.c
-+++ b/drivers/clk/microchip/clk-core.c
-@@ -75,6 +75,7 @@
- /* SoC specific clock needed during SPLL clock rate switch */
- static struct clk_hw *pic32_sclk_hw;
- 
-+#ifdef CONFIG_MATCH_PIC32
- /* add instruction pipeline delay while CPU clock is in-transition. */
- #define cpu_nop5()			\
- do {					\
-@@ -84,6 +85,9 @@ do {					\
- 	__asm__ __volatile__("nop");	\
- 	__asm__ __volatile__("nop");	\
- } while (0)
-+#else
-+#define cpu_nop5()
-+#endif
- 
- /* Perpheral bus clocks */
- struct pic32_periph_clk {
-
--- 
-2.52.0
-
+Guenter
+> ---
+> To: Wim Van Sebroeck <wim@linux-watchdog.org>
+> To: Guenter Roeck <linux@roeck-us.net>
+> Cc: linux-watchdog@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> ---
+>  drivers/watchdog/pic32-dmt.c | 3 +--
+>  1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/watchdog/pic32-dmt.c b/drivers/watchdog/pic32-dmt.c
+> index ab0682492c85ad63160bb7da61cc74336698a4e9..12e3a8f63589862e3ed674ffb71ee4798755e56f 100644
+> --- a/drivers/watchdog/pic32-dmt.c
+> +++ b/drivers/watchdog/pic32-dmt.c
+> @@ -12,12 +12,11 @@
+>  #include <linux/kernel.h>
+>  #include <linux/module.h>
+>  #include <linux/of.h>
+> +#include <linux/platform_data/pic32.h>
+>  #include <linux/platform_device.h>
+>  #include <linux/pm.h>
+>  #include <linux/watchdog.h>
+>  
+> -#include <asm/mach-pic32/pic32.h>
+> -
+>  /* Deadman Timer Regs */
+>  #define DMTCON_REG	0x00
+>  #define DMTPRECLR_REG	0x10
+> 
+> -- 
+> 2.52.0
+> 
+> 
 
