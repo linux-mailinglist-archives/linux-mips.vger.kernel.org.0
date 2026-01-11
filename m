@@ -1,44 +1,44 @@
-Return-Path: <linux-mips+bounces-12819-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12820-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF06DD0E32A
-	for <lists+linux-mips@lfdr.de>; Sun, 11 Jan 2026 09:23:49 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3ACAED0E376
+	for <lists+linux-mips@lfdr.de>; Sun, 11 Jan 2026 09:24:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 087D4301CEAF
-	for <lists+linux-mips@lfdr.de>; Sun, 11 Jan 2026 08:22:27 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A02D63020CFE
+	for <lists+linux-mips@lfdr.de>; Sun, 11 Jan 2026 08:22:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69A49318152;
-	Sun, 11 Jan 2026 08:22:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDAEA3176EB;
+	Sun, 11 Jan 2026 08:22:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c7lICoEa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lw1lU3Ew"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E048F22B8B6;
-	Sun, 11 Jan 2026 08:22:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5C7C1A254E;
+	Sun, 11 Jan 2026 08:22:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768119745; cv=none; b=SgV5SirQbwXTIOt9t6lJhU4WVVJ2aBFwHY91zq1j3/UGyxf1amxMiw+ayl5CHcvnW2ugPOZHB5M3dIU+CfKQhqoKymlwwfGraZANn5H/7QATfQHQwNFBRawj0KzyzgjHMH7ypET0sN5KzDH+XV6EMsZCJMGta2IDHuxlL1OQE6o=
+	t=1768119759; cv=none; b=bXkHb01YrkCcYw5s+8cs/eyxzET9RDjGIxVdbrnTEj0eEqI5SYwx4S07v57E4Qa7wZsfKIVml+rRp7HIO8sjykNSN8jeIBfrB9wbBBg75q0QiNU7kLibEkx9QofGPWZcl9+EOVXB8uESUudh+4sPdCX+DSolUdEiHmUtDwhdkNg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768119745; c=relaxed/simple;
-	bh=tQxK3c7Hkef7Ih3mT/PwmwcYPHyFic1JpOQ4F9wr//s=;
+	s=arc-20240116; t=1768119759; c=relaxed/simple;
+	bh=djQarGwsnsMGImsgSQVJ5sD5jo+ZigjiDeQZakHIJZw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=YbwbLV8n7Ux43a3/I4f1SYEvePtIgS27wErNxJQqdFLGxvVQEg4XqWAui+IHK6H8u6IaKT4SVO79H11lyGOVg+lvH6X/LRhpdbUCNYJVQpRKKag8QPtlHf9E30yMt4qQ6QaVIX9UStmtnmhmAqg9QXG+coMPHE6m9+ssv0tWBBk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c7lICoEa; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9A5B3C4CEF7;
-	Sun, 11 Jan 2026 08:22:09 +0000 (UTC)
+	 MIME-Version; b=MoUNbkYihg1Fr0H4racIXkEFCseMTHQxmHPQJCUloHP0H8jpLWcVkKpVhA44EaSvRY9L8UuvTHP3IL9Prd7Gffe/sdVEF4GVo3PDRXz2OQCAW9FCKLsGA38gavFIvLDceEi+Rqx4g+QJ0WZV1tHCidX2OcpH6wu1+eXJkOwBuIE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lw1lU3Ew; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA77CC16AAE;
+	Sun, 11 Jan 2026 08:22:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768119744;
-	bh=tQxK3c7Hkef7Ih3mT/PwmwcYPHyFic1JpOQ4F9wr//s=;
+	s=k20201202; t=1768119759;
+	bh=djQarGwsnsMGImsgSQVJ5sD5jo+ZigjiDeQZakHIJZw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=c7lICoEawjuGlfAsC2qFFo0dYZjPTTHf6ZsKHEUok91SlgxJeaE0+xUcEvDNupyt3
-	 5Br9cYXmHoDXcMAya3BF4ypvrXlUGSih9s9+iBDKvjwhuneZTRDmN8ONDbWct/rDHQ
-	 5QoYlxyIJuLHIwjKBtJvt0vr+DnaCDPdkgGm0WnDnqGt5kiFGneMx+DwA0ClLjLb/V
-	 /wEtIezdVvzMPd8UCllgRT69ka6QmeOMOK8t6oMkgPq8KwqkbxZp11vTvUC5GGqoAl
-	 ayAX9QigC5taTQ49Jj6N2sxw6qFmAMp9L7M3/3wbbjKYkatCZdLZOULWFYtqCB5Eas
-	 /JSzikIr1W04w==
+	b=lw1lU3Ewc+dtv3vDYJfQvcR3SFOO3fNdQZbUcukOU8uBYk43EPjoMNLHvS+ZVTXFY
+	 kFiAwsUS0cL97IqVcj9lfrxTQhOT2vwhsvZsYZ978UiUZIG/ymSeKzXUMCvGav2t3T
+	 vM5MZTJCCtREKdgx/Ctorld3QmD4G38UlxAV/FKOUGToSqJ9W/z041Qg3ZqaKRg0C6
+	 0pqyd0jXlvxFbMeJVINiPfxlP57E5VlMoy0DwyzLHcSHXAWp+XP+b3aDLtpYYqQcns
+	 gv9MGzAi0TPrvCroxyxabPW1rlLFsb8P84S1OTpkxsCAf7ZizWZpxO+8YyP01fxPJX
+	 jR8BRtnoVff+g==
 From: Mike Rapoport <rppt@kernel.org>
 To: Andrew Morton <akpm@linux-foundation.org>
 Cc: Alex Shi <alexs@kernel.org>,
@@ -107,9 +107,9 @@ Cc: Alex Shi <alexs@kernel.org>,
 	linuxppc-dev@lists.ozlabs.org,
 	loongarch@lists.linux.dev,
 	sparclinux@vger.kernel.org
-Subject: [PATCH v3 04/29] arm: make initialization of zero page independent of the memory map
-Date: Sun, 11 Jan 2026 10:20:38 +0200
-Message-ID: <20260111082105.290734-5-rppt@kernel.org>
+Subject: [PATCH v3 05/29] arm64: introduce arch_zone_limits_init()
+Date: Sun, 11 Jan 2026 10:20:39 +0200
+Message-ID: <20260111082105.290734-6-rppt@kernel.org>
 X-Mailer: git-send-email 2.51.0
 In-Reply-To: <20260111082105.290734-1-rppt@kernel.org>
 References: <20260111082105.290734-1-rppt@kernel.org>
@@ -121,109 +121,78 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Klara Modin <klarasmodin@gmail.com>
+From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 
-Unlike most architectures, arm keeps a struct page pointer to the
-empty_zero_page and to initialize it requires conversion of a virtual
-address to page which makes it necessary to have memory map initialized
-before creating the empty_zero_page.
+Move calculations of zone limits to a dedicated arch_zone_limits_init()
+function.
 
-Make empty_zero_page a stataic array in BSS to decouple it's
-initialization from the initialization of the memory map.
+Later MM core will use this function as an architecture specific callback
+during nodes and zones initialization and thus there won't be a need to
+call free_area_init() from every architecture.
 
-This also aligns arm with vast majorty of architectures.
+While on it rename zone_sizes_init() to dma_limits_init() to better
+reflect what that function does.
 
-Signed-off-by: Klara Modin <klarasmodin@gmail.com>
 Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 ---
- arch/arm/include/asm/pgtable.h |  4 ++--
- arch/arm/mm/mmu.c              | 10 +---------
- arch/arm/mm/nommu.c            | 10 +---------
- 3 files changed, 4 insertions(+), 20 deletions(-)
+ arch/arm64/mm/init.c | 22 +++++++++++++++++-----
+ 1 file changed, 17 insertions(+), 5 deletions(-)
 
-diff --git a/arch/arm/include/asm/pgtable.h b/arch/arm/include/asm/pgtable.h
-index 86378eec7757..6fa9acd6a7f5 100644
---- a/arch/arm/include/asm/pgtable.h
-+++ b/arch/arm/include/asm/pgtable.h
-@@ -15,8 +15,8 @@
-  * ZERO_PAGE is a global shared page that is always zero: used
-  * for zero-mapped memory areas etc..
-  */
--extern struct page *empty_zero_page;
--#define ZERO_PAGE(vaddr)	(empty_zero_page)
-+extern unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)];
-+#define ZERO_PAGE(vaddr)	(virt_to_page(empty_zero_page))
+diff --git a/arch/arm64/mm/init.c b/arch/arm64/mm/init.c
+index 524d34a0e921..06815d34cc11 100644
+--- a/arch/arm64/mm/init.c
++++ b/arch/arm64/mm/init.c
+@@ -118,7 +118,21 @@ static phys_addr_t __init max_zone_phys(phys_addr_t zone_limit)
+ 	return min(zone_limit, memblock_end_of_DRAM() - 1) + 1;
+ }
+ 
+-static void __init zone_sizes_init(void)
++void __init arch_zone_limits_init(unsigned long *max_zone_pfns)
++{
++	phys_addr_t __maybe_unused dma32_phys_limit =
++		max_zone_phys(DMA_BIT_MASK(32));
++
++#ifdef CONFIG_ZONE_DMA
++	max_zone_pfns[ZONE_DMA] = PFN_DOWN(max_zone_phys(zone_dma_limit));
++#endif
++#ifdef CONFIG_ZONE_DMA32
++	max_zone_pfns[ZONE_DMA32] = PFN_DOWN(dma32_phys_limit);
++#endif
++	max_zone_pfns[ZONE_NORMAL] = max_pfn;
++}
++
++static void __init dma_limits_init(void)
+ {
+ 	unsigned long max_zone_pfns[MAX_NR_ZONES]  = {0};
+ 	phys_addr_t __maybe_unused acpi_zone_dma_limit;
+@@ -139,17 +153,15 @@ static void __init zone_sizes_init(void)
+ 	if (memblock_start_of_DRAM() < U32_MAX)
+ 		zone_dma_limit = min(zone_dma_limit, U32_MAX);
+ 	arm64_dma_phys_limit = max_zone_phys(zone_dma_limit);
+-	max_zone_pfns[ZONE_DMA] = PFN_DOWN(arm64_dma_phys_limit);
  #endif
+ #ifdef CONFIG_ZONE_DMA32
+-	max_zone_pfns[ZONE_DMA32] = PFN_DOWN(dma32_phys_limit);
+ 	if (!arm64_dma_phys_limit)
+ 		arm64_dma_phys_limit = dma32_phys_limit;
+ #endif
+ 	if (!arm64_dma_phys_limit)
+ 		arm64_dma_phys_limit = PHYS_MASK + 1;
+-	max_zone_pfns[ZONE_NORMAL] = max_pfn;
  
- #include <asm-generic/pgtable-nopud.h>
-diff --git a/arch/arm/mm/mmu.c b/arch/arm/mm/mmu.c
-index 8bac96e205ac..518def8314e7 100644
---- a/arch/arm/mm/mmu.c
-+++ b/arch/arm/mm/mmu.c
-@@ -45,7 +45,7 @@ extern unsigned long __atags_pointer;
-  * empty_zero_page is a special page that is used for
-  * zero-initialized data and COW.
-  */
--struct page *empty_zero_page;
-+unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)] __page_aligned_bss;
- EXPORT_SYMBOL(empty_zero_page);
- 
- /*
-@@ -1754,8 +1754,6 @@ static void __init early_fixmap_shutdown(void)
-  */
- void __init paging_init(const struct machine_desc *mdesc)
- {
--	void *zero_page;
--
- #ifdef CONFIG_XIP_KERNEL
- 	/* Store the kernel RW RAM region start/end in these variables */
- 	kernel_sec_start = CONFIG_PHYS_OFFSET & SECTION_MASK;
-@@ -1781,13 +1779,7 @@ void __init paging_init(const struct machine_desc *mdesc)
- 
- 	top_pmd = pmd_off_k(0xffff0000);
- 
--	/* allocate the zero page. */
--	zero_page = early_alloc(PAGE_SIZE);
--
- 	bootmem_init();
--
--	empty_zero_page = virt_to_page(zero_page);
--	__flush_dcache_folio(NULL, page_folio(empty_zero_page));
++	arch_zone_limits_init(max_zone_pfns);
+ 	free_area_init(max_zone_pfns);
  }
  
- void __init early_mm_init(const struct machine_desc *mdesc)
-diff --git a/arch/arm/mm/nommu.c b/arch/arm/mm/nommu.c
-index d638cc87807e..7e42d8accec6 100644
---- a/arch/arm/mm/nommu.c
-+++ b/arch/arm/mm/nommu.c
-@@ -31,7 +31,7 @@ unsigned long vectors_base;
-  * empty_zero_page is a special page that is used for
-  * zero-initialized data and COW.
-  */
--struct page *empty_zero_page;
-+unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)] __page_aligned_bss;
- EXPORT_SYMBOL(empty_zero_page);
+@@ -319,7 +331,7 @@ void __init bootmem_init(void)
+ 	 * done after the fixed reservations
+ 	 */
+ 	sparse_init();
+-	zone_sizes_init();
++	dma_limits_init();
  
- #ifdef CONFIG_ARM_MPU
-@@ -156,18 +156,10 @@ void __init adjust_lowmem_bounds(void)
-  */
- void __init paging_init(const struct machine_desc *mdesc)
- {
--	void *zero_page;
--
- 	early_trap_init((void *)vectors_base);
- 	mpu_setup();
- 
--	/* allocate the zero page. */
--	zero_page = (void *)memblock_alloc_or_panic(PAGE_SIZE, PAGE_SIZE);
--
- 	bootmem_init();
--
--	empty_zero_page = virt_to_page(zero_page);
--	flush_dcache_page(empty_zero_page);
- }
- 
- /*
+ 	/*
+ 	 * Reserve the CMA area after arm64_dma_phys_limit was initialised.
 -- 
 2.51.0
 
