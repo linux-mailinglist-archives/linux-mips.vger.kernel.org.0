@@ -1,137 +1,109 @@
-Return-Path: <linux-mips+bounces-12862-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12863-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 036ECD12F96
-	for <lists+linux-mips@lfdr.de>; Mon, 12 Jan 2026 15:01:45 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADC4ED1471F
+	for <lists+linux-mips@lfdr.de>; Mon, 12 Jan 2026 18:43:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B80CC301C929
-	for <lists+linux-mips@lfdr.de>; Mon, 12 Jan 2026 13:55:04 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 63F5B301C578
+	for <lists+linux-mips@lfdr.de>; Mon, 12 Jan 2026 17:39:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19E0135B143;
-	Mon, 12 Jan 2026 13:55:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AA2437E2FD;
+	Mon, 12 Jan 2026 17:39:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b="kgNgbCQO"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="kHbzdGMl"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f201.google.com (mail-pg1-f201.google.com [209.85.215.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B85D5274FC2;
-	Mon, 12 Jan 2026 13:55:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.67.10.101
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C9D6D29BDAB
+	for <linux-mips@vger.kernel.org>; Mon, 12 Jan 2026 17:39:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768226104; cv=none; b=Ur/laPr67xdG6SywYWUNrPpU1SdkscZzfoihWZegLvmIrGGUucyu8futIC6O75r1kxj134X1YTPnEyiOT2ogydvwQlNUzDfjnf03hSK5jAlEy/s8HVcQBW3FgeL6bYtZr9aGzEI112gkJFyWQMKdxzpDAOjFylVgv0IfPY0y1g0=
+	t=1768239591; cv=none; b=plK2BZcQBFiG8YmFfTkI1yRr9FzjN8cRoz+mxeYgfnWgiShiNL56+NIKHK1kAcIzvHJ/jpi9E52/OMpyO5zELSTbh2sYTTJimdZaQNNJpkIrGi3xw1WIMdHeSUsD/rTXx4YX57BICbOYBUQAlMWWfEWr6BPxowT41MSYy8GXMz4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768226104; c=relaxed/simple;
-	bh=upzgR2xmeRa7U3D4c4yVBMn/OAGVUS/BTHUTWOPwm4k=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tUO/UsaZvGGH7InUYoW0HK0fg5PNWHNjt9Jofm+tljIw/PYMPIrXhCdFyNOA7JzlXdQVu1pcZylTgJBInUEKjCGzxDzcVaZv/VKQYUFhsY8g6MbLLRQtHpr+PeGSiwd603hXPkfMCcSkf/1EdvLtg+YX473WBFnmHG6coy5HbGc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch; spf=pass smtp.mailfrom=lunn.ch; dkim=pass (1024-bit key) header.d=lunn.ch header.i=@lunn.ch header.b=kgNgbCQO; arc=none smtp.client-ip=156.67.10.101
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lunn.ch
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lunn.ch
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
-	s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
-	Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
-	Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
-	bh=KcNdXwaHO43/aWmYkdmTrvgXq9snCOwCBSSp5/oIhoc=; b=kgNgbCQOQpcxZ/lVrAiQj4C4vu
-	YuAuThNoJKE1rGB2sQ0V+KcD41At13B/KCqU7SyakYddsVifUkzgIbx3P3ODIeF7OzhIWNvkduCQk
-	+KbVOi44ZIkmI3gQYtKR0mhMF4YOPb9FYqVFScnxbA9/FBnlGbYWwwudqEttD7PUJgGU=;
-Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
-	(envelope-from <andrew@lunn.ch>)
-	id 1vfIN8-002U0Q-Vs; Mon, 12 Jan 2026 14:54:18 +0100
-Date: Mon, 12 Jan 2026 14:54:18 +0100
-From: Andrew Lunn <andrew@lunn.ch>
-To: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>
-Cc: Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Richard Cochran <richardcochran@gmail.com>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Vinod Koul <vkoul@kernel.org>,
-	Giuseppe Cavallaro <peppe.cavallaro@st.com>,
-	Jose Abreu <joabreu@synopsys.com>, Chen-Yu Tsai <wens@kernel.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Matthew Gerlach <matthew.gerlach@altera.com>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	Kevin Hilman <khilman@baylibre.com>,
-	Jerome Brunet <jbrunet@baylibre.com>,
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-	Keguang Zhang <keguang.zhang@gmail.com>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>,
-	Jan Petrous <jan.petrous@oss.nxp.com>, s32@nxp.com,
-	Romain Gantois <romain.gantois@bootlin.com>,
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	Heiko Stuebner <heiko@sntech.de>,
-	Chen Wang <unicorn_wang@outlook.com>,
-	Inochi Amaoto <inochiama@gmail.com>,
-	Emil Renner Berthing <kernel@esmil.dk>,
-	Minda Chen <minda.chen@starfivetech.com>,
-	Drew Fustini <fustini@kernel.org>, Guo Ren <guoren@kernel.org>,
-	Fu Wei <wefu@redhat.com>,
-	Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>,
-	Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Maxime Ripard <mripard@kernel.org>,
-	Shuang Liang <liangshuang@eswincomputing.com>,
-	Zhi Li <lizhi2@eswincomputing.com>,
-	Shangjuan Wei <weishangjuan@eswincomputing.com>,
-	"G. Jaya Kumaran" <vineetha.g.jaya.kumaran@intel.com>,
-	Clark Wang <xiaoning.wang@nxp.com>, Linux Team <linux-imx@nxp.com>,
-	Frank Li <Frank.Li@nxp.com>, David Wu <david.wu@rock-chips.com>,
-	Samin Guo <samin.guo@starfivetech.com>,
-	Christophe Roullier <christophe.roullier@foss.st.com>,
-	Swathi K S <swathi.ks@samsung.com>,
-	Bartosz Golaszewski <brgl@kernel.org>,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-arm-kernel@lists.infradead.org,
-	Drew Fustini <dfustini@tenstorrent.com>,
-	linux-sunxi@lists.linux.dev, linux-amlogic@lists.infradead.org,
-	linux-mips@vger.kernel.org, imx@lists.linux.dev,
-	linux-renesas-soc@vger.kernel.org,
-	linux-rockchip@lists.infradead.org, sophgo@lists.linux.dev,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH RESEND net-next v6 7/7] net: stmmac: qcom-ethqos: add
- support for sa8255p
-Message-ID: <41b9a414-55a0-4602-9be5-54137a691d9f@lunn.ch>
-References: <20260112-qcom-sa8255p-emac-v6-0-86a3d4b2ad83@oss.qualcomm.com>
- <20260112-qcom-sa8255p-emac-v6-7-86a3d4b2ad83@oss.qualcomm.com>
+	s=arc-20240116; t=1768239591; c=relaxed/simple;
+	bh=5WOjJJi9GshJrzbNszTXOCjQ/WC3CHWW6Rm24QuGEGg=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=YFWRVkbTDvyoQaKrF5/pcHEcFARqt4R+TDSbuvOrNHFSLmN9R5/tF7eFtSLag1PVUo9at93T7IBCnwaBskYuIFMy5uHdBAYAgiOB6gihv0U+OdQWBAbLhO82UHpnAmwOhP3//wLN10xixLLYN9CTCsJZ81e28xVvV8SKSOPPbvA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=kHbzdGMl; arc=none smtp.client-ip=209.85.215.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--seanjc.bounces.google.com
+Received: by mail-pg1-f201.google.com with SMTP id 41be03b00d2f7-c52ebdd2d43so2370291a12.0
+        for <linux-mips@vger.kernel.org>; Mon, 12 Jan 2026 09:39:49 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1768239589; x=1768844389; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+PjBpIA3ZO3sQJJLy61/+UM/sv023xJCPIJTeEkES88=;
+        b=kHbzdGMlyTjsX1hA7hobxNse43C70DQ8vJR+f/0PqsaVlk5DjGoZIbvLo9+k9F+jpW
+         SNV9o4dyJV7w1jCWy2ZIux+kxfWPsiZ6rmTNSUmLJLd3VBB92jLYAKOGAwQZSOwDpZsw
+         DFKbAcdAM0FJsFNhOzNawApO8ds3PaHDr4IVl+71b8S26lzYx83rq6q60rqo7wLpJjrP
+         J38A+9VLkQjYzdfJCmhWngXGsPKcky5kB1ehukTnH6Zele/+o2Ewk1IsGG2yFegVEZ8q
+         BemeJJBIWwAU5JfOkiPUjMuOeEM+NFbM7np0W2+LyG+LGSwxSPFgM/6SY+0cEOK9QieG
+         vSEA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768239589; x=1768844389;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=+PjBpIA3ZO3sQJJLy61/+UM/sv023xJCPIJTeEkES88=;
+        b=GDTrH+rzYamCiMqPKqWYrsr/Q3SWoGCraVzC0Qsy1FMKRnSlsGAqR8Yys42FJH/vmy
+         MMpamB5SbVHx3T/gMqnEWHwXniJ7LZVOX+thzNkLNxdEn+oWGBiGDiE28rrzHNhbiuPL
+         TzTdSNAlkQjgKBGK4xB5wGzxawJzs/8X5jz/J3nSQWX3s/uopjLhbroneZx5bvZHt3SS
+         ZkVmChYkfO6rgAFuWLdD2XWnRhOSrKNs/3hPalBg/03JnbFFASlSkLOcUriTGidnXGjb
+         HFe1flJ/LLgfEZwWnHjHlx2bChElDesJzafKESkvU9XXtCT+w7obVg5QQ8S6Wm69Hd6Z
+         XoYg==
+X-Forwarded-Encrypted: i=1; AJvYcCX6x76xSaZ9AfV51G6FCu3j+P4n7qjPK/KazKU7v9Q91Q5eRCxt+lqZ8dwByGs7SP2xOa7y30h3T0wF@vger.kernel.org
+X-Gm-Message-State: AOJu0YzyzVpMN935ft1yWnOZWt5qbW77DQib2AEIGdYLwX+tr+dzWv99
+	MeOmfwIaTqnqoiyBJLz13YsryU+uqEG3oWx9Nj+GVQG3iiRni9l110rpHXmurnq6uaMOebGIQ07
+	2v6Ha3g==
+X-Google-Smtp-Source: AGHT+IF668cUxxhKhGHv90tNvsIeTkhAR6ns6JG1hxt5u/yIlrpHwYKq8uhAaCwc/umnpMOixfg8y4oIB3A=
+X-Received: from pjbgk17.prod.google.com ([2002:a17:90b:1191:b0:34c:489a:f4c9])
+ (user=seanjc job=prod-delivery.src-stubby-dispatcher) by 2002:a17:90b:2251:b0:33e:30e8:81cb
+ with SMTP id 98e67ed59e1d1-34f68b65ff0mr15047069a91.13.1768239588965; Mon, 12
+ Jan 2026 09:39:48 -0800 (PST)
+Date: Mon, 12 Jan 2026 09:38:38 -0800
+In-Reply-To: <20251205232655.445294-1-seanjc@google.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260112-qcom-sa8255p-emac-v6-7-86a3d4b2ad83@oss.qualcomm.com>
+Mime-Version: 1.0
+References: <20251205232655.445294-1-seanjc@google.com>
+X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
+Message-ID: <176823927133.1374677.16641795988105461817.b4-ty@google.com>
+Subject: Re: [PATCH] KVM: Remove subtle "struct kvm_stats_desc" pseudo-overlay
+From: Sean Christopherson <seanjc@google.com>
+To: Sean Christopherson <seanjc@google.com>, Marc Zyngier <maz@kernel.org>, Oliver Upton <oupton@kernel.org>, 
+	Tianrui Zhao <zhaotianrui@loongson.cn>, Bibo Mao <maobibo@loongson.cn>, 
+	Huacai Chen <chenhuacai@kernel.org>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+	Anup Patel <anup@brainfault.org>, Paul Walmsley <pjw@kernel.org>, 
+	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Janosch Frank <frankja@linux.ibm.com>, 
+	Claudio Imbrenda <imbrenda@linux.ibm.com>, Paolo Bonzini <pbonzini@redhat.com>
+Cc: linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev, 
+	kvm@vger.kernel.org, loongarch@lists.linux.dev, linux-mips@vger.kernel.org, 
+	linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org, 
+	linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	"Gustavo A . R . Silva" <gustavoars@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 
-On Mon, Jan 12, 2026 at 11:15:46AM +0100, Bartosz Golaszewski wrote:
-> From: Bartosz Golaszewski <brgl@kernel.org>
+On Fri, 05 Dec 2025 15:26:55 -0800, Sean Christopherson wrote:
+> Remove KVM's internal pseudo-overlay of kvm_stats_desc, which subtly
+> aliases the flexible name[] in the uAPI definition with a fixed-size array
+> of the same name.  The unusual embedded structure results in compiler
+> warnings due to -Wflex-array-member-not-at-end, and also necessitates an
+> extra level of dereferencing in KVM.  To avoid the "overlay", define the
+> uAPI structure to have a fixed-size name when building for the kernel.
 > 
-> Extend the driver to support a new model - sa8255p. Unlike the
-> previously supported variants, this one's power management is done in
-> the firmware using SCMI. This is modeled in linux using power domains so
-> add support for them.
+> [...]
 
->  static const struct of_device_id qcom_ethqos_match[] = {
->  	{ .compatible = "qcom,qcs404-ethqos", .data = &emac_qcs404_data},
-> +	{ .compatible = "qcom,sa8255p-ethqos", .data = &emac_sa8255p_data},
+Applied to kvm-x86 generic, thanks!
 
-Is this device being probed via DT or ACPI?
+[1/1] KVM: Remove subtle "struct kvm_stats_desc" pseudo-overlay
+      https://github.com/kvm-x86/linux/commit/da142f3d373a
 
-	Andrew
+--
+https://github.com/kvm-x86/linux/tree/next
 
