@@ -1,154 +1,199 @@
-Return-Path: <linux-mips+bounces-12893-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12894-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 40E84D18828
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Jan 2026 12:35:57 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3818D18B4A
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Jan 2026 13:28:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 5580D3008155
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Jan 2026 11:35:54 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id EFADC3030D95
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Jan 2026 12:28:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A10122A4FC;
-	Tue, 13 Jan 2026 11:35:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88C7B38F252;
+	Tue, 13 Jan 2026 12:28:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="empt09En";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="BirJaMY5"
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="NC76RtxI"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp-out3.simply.com (smtp-out3.simply.com [94.231.106.210])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D7B2346ADB
-	for <linux-mips@vger.kernel.org>; Tue, 13 Jan 2026 11:35:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8B203314DE;
+	Tue, 13 Jan 2026 12:28:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.231.106.210
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768304153; cv=none; b=dlS/YDhQ3BYCnti3de8iV1kSwZpIXF2Eb2YKpDZZi4jy3HhLYZEJ15b52LucCJ8hWCj6LCNVrj0CsGa9C0wFL9Av6WKfbqn2+OOZ4rWyrBhWz5vrXEA2kHBN4P4zxjQNvfl/9UmY3okt1G2FXAuZTvWIpyNdjSUFv8YycFIx9XI=
+	t=1768307303; cv=none; b=JNA+RLjS5Y8SZOBzhmSgH3Fy+wZwbHWQt//YzfZjR9tsQkbD5XHOh0zOCEFNQPJVSfNg9lMFCAo+YGzTSlO6AjLB73t2Xs1kZ7JFC1Hz+qVWGBTTt2Mn4lINIfATerFs2gUgUceF9ZlujHYK2jLHQA8ec1i2p7GcKqhiHuGu35U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768304153; c=relaxed/simple;
-	bh=GhniXQQx5pz3sodmRh6+sRp7+YRRsdoq4CZz9gmkCwg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uGJnEY7ls/PQOGLS2OVHJWgL9y0vhPqo8rhkFobSdfds+cxX2/pllQ5oVIr8w1JMTHTql0JEntVsYuy+H3FxdLh8lcKEvz80r2dvyjrQB9fdZpI+StMEcTRNNHpCUXYyrDga5NJ5qFVRGGqzSQ4F+xEmAwLB725dLcsktA52VdM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=empt09En; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=BirJaMY5; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1768304148;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=juIsOkxFx+cUSDS0VP6Yi0iHExwrV6WSs6Rqrp0hnaQ=;
-	b=empt09EnjDzchTVg4716YqUdzrFhiV+4JzooPFcjEoYWNHcdltXxAFUJh8t2qKm2+ioZoZ
-	05fmrTxjWVeCmbK2KVgesvdFLMjUCw1v8seTSgixgVk+5Vc3dE+6CWf+ATO7tx65SgQzAv
-	NvUAt3EMGzbuUHZwuuzN7kPeG+SrCeA=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-549-Z8WgruXBOkKojRDyW3540w-1; Tue, 13 Jan 2026 06:35:47 -0500
-X-MC-Unique: Z8WgruXBOkKojRDyW3540w-1
-X-Mimecast-MFC-AGG-ID: Z8WgruXBOkKojRDyW3540w_1768304146
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-8804b991976so193883866d6.2
-        for <linux-mips@vger.kernel.org>; Tue, 13 Jan 2026 03:35:47 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1768304146; x=1768908946; darn=vger.kernel.org;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=juIsOkxFx+cUSDS0VP6Yi0iHExwrV6WSs6Rqrp0hnaQ=;
-        b=BirJaMY5ov7zyLiIBWC0YbVy+ZcEGQDAMvV49OggzMuu+615z/nfkk6W44c1uN7MWn
-         kBI45cFneoNTq5iEVizik3poC9BvCDKMFjKp6bYwMTdrcJXj8u+EeNGoiBUeUNsIFYYC
-         IZEskGlruMO2gI1D0vCcAHO07AxDHqsLK1O+l0z6uiYBPkCuVtsIhn47nE6VrV0WNy5S
-         1czwpvovQbX6nxtIst2xRHZboTne4R2NNojTeCxZEjYPHciq4QG0BV/dCirrh1oFviYe
-         UpL034xtYCoEDsoGndG4p6C7UnnUf1PWDj4NbZNMIPXe0uzdq3HGKVlsLCjL2svSYP6O
-         Oz1g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768304146; x=1768908946;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=juIsOkxFx+cUSDS0VP6Yi0iHExwrV6WSs6Rqrp0hnaQ=;
-        b=D8W61cmCF6Dg4wvPd0I1ALMe0z9341465w418k0dU4WW/eUqRyuQSnbLHAC/AOvdXD
-         VntzxjfkCQg9WmhixfpUII0RrTGj3lAHGUZL0n08oW4gkeO7hcpsAixjabcZuDWBYBpc
-         1ArpSfTn4uiUuOKwheyJh3LuV26myldL60Ti1kdBLqe02p58OfjfYJqHfzxsmqCzBfCM
-         GQi+E8leGzCcKq/GMSuXUIAN2cTENamVZ7T051HaReCA/CQjewZCkttgbFOzHKU3VMGw
-         8ktzckDKx7R76ujax23BqC4GCp5HaKKP95XKR49rbBSE0FqZv9UYzI4/r27f3mvr1rFe
-         P0Aw==
-X-Forwarded-Encrypted: i=1; AJvYcCUl16+H6niCBlRxe5s4yAoYC3hP0pMV8l7u6M24ReV2rq5GBDdI7AAaIWmu80Rd6Cx4d0f0NHJCuIv2@vger.kernel.org
-X-Gm-Message-State: AOJu0YyvAiiCWQ5gladAwtgg+57c8wW1rme+R1awIN17iXMYzvOC3Ux7
-	bk8dU31psW/mt7JFTFzFXJXyq64bRMkpmi2oiI5lcDqoGxYvop/8MJdBctZWN34COag7IZ3EhHm
-	q1hI+VGJfMnetvlh00jnTZ874qlWrHNlZoZt4lVoMwvEakZbepFoqey4NMBTrxDM=
-X-Gm-Gg: AY/fxX5dMhjOHxhOXSUQ2SqxtXfu9bl+l/yF1AHGUhfc5FqGKGemYTe3uvcuXP3BKHB
-	nEDQCLsjHY6tNVbggPjrIzEg1+9qyhI0MrkouiR3ARkM3R+/05E9HfjFMrMMI39enO5RYoaTrP7
-	2SMZ7dnGl9nZ7Mg3+W7nd+v7c+dLHzaDP1lV3H6sL1RiPs5zYyXOUTHUngxD9Ugigw57lU+uhUh
-	Np46zVEhyYXFs0fP6JnXorfgUkgoOtmCj7MD2iJ6HpIO5t85KCahVU6Dt5834GYQQ/7X6ngimC2
-	vG3SJ3+YebcXGMeum1pG2qb2JiGLCx6YhwkXyr1Fafpum/784N3R/HkzNFfnvQ9OUAEaBY5ev2K
-	eltsVRFJwpzdvYLESllP4WV+EMOI6zulJijowhKCXZ6Xn
-X-Received: by 2002:a05:6214:d0f:b0:88a:2f7f:e936 with SMTP id 6a1803df08f44-89084185816mr347411206d6.2.1768304146021;
-        Tue, 13 Jan 2026 03:35:46 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFzo0uppLbk/PCtIlWD/jdmbPhxx6qOCx3tl4mcCeMJFRw6/FZUdNL++K5+FCupwRFrHnhjTA==
-X-Received: by 2002:a05:6214:d0f:b0:88a:2f7f:e936 with SMTP id 6a1803df08f44-89084185816mr347410866d6.2.1768304145542;
-        Tue, 13 Jan 2026 03:35:45 -0800 (PST)
-Received: from redhat.com (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-890770e2833sm149831326d6.18.2026.01.13.03.35.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jan 2026 03:35:45 -0800 (PST)
-Date: Tue, 13 Jan 2026 06:35:43 -0500
-From: Brian Masney <bmasney@redhat.com>
-To: Stephen Boyd <sboyd@kernel.org>
-Cc: Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Michael Turquette <mturquette@baylibre.com>,
-	linux-clk@vger.kernel.org
-Subject: Re: [PATCH v2 16/16] clk: microchip: core: allow driver to be
- compiled with COMPILE_TEST
-Message-ID: <aWYuD6koAp_rDJ29@redhat.com>
-References: <20260112-mips-pic32-header-move-v2-0-927d516b1ff9@redhat.com>
- <20260112-mips-pic32-header-move-v2-16-927d516b1ff9@redhat.com>
- <176828328795.4027.16644210192638742005@lazor>
+	s=arc-20240116; t=1768307303; c=relaxed/simple;
+	bh=21w0GG0eda5bCVdiXvdOHRzVIFvjNUj4U9+O+neqMZg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UY5Y1Gh9c1lzUpnzfUi9x4+9c7CsQBhRGyZmGT44Yg0Dr4G2+xqYlVA6Mjsnm5yOokth1FtvRnuyBu4bFV8uVFXv0DOwM6y/dTgWSvMlJce3Vh/nNOyuEIqLqaiPZ5zzSajU4yioFounomIUtC7WM3ZRecQDpkEIBdHeyH1oZ0g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=fail (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=NC76RtxI reason="key not found in DNS"; arc=none smtp.client-ip=94.231.106.210
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gaisler.com
+Received: from localhost (localhost [127.0.0.1])
+	by smtp.simply.com (Simply.com) with ESMTP id 4dr7nT4CQCz1DR2r;
+	Tue, 13 Jan 2026 13:28:13 +0100 (CET)
+Received: from [192.168.0.25] (h-98-128-223-123.NA.cust.bahnhof.se [98.128.223.123])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by smtp.simply.com (Simply.com) with ESMTPSA id 4dr7nQ25vMz1DDgf;
+	Tue, 13 Jan 2026 13:28:10 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gaisler.com;
+	s=simplycom2; t=1768307293;
+	bh=guD8ZDnRvesT5KvXlXi5P5IpxaFCA5kIle2X5/2VdEk=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To;
+	b=NC76RtxIq9CvKMBZ8e8fqDdeh4TXwyvNkvf30sHXNOLOnEVZmRBj+bHCDi8FufU/c
+	 kWfZWHOIxSWOKL03enthax76m8YsczdRizVAQDjKjHPFRaRl/L5Y0iqK2UA8boHs2h
+	 YUuM9qT6Ba/QEyyAn4GTFzIGpGi10RKIEp9TlTeLGd8zC+Hr/coq6gBL6LosZXZTF1
+	 gt8Mie1XHzB/bpnFnld9TZavLmhYmlgBWFsXaCVZw4vobFyvtSEkURaEmNJU94ewFm
+	 w3pY4SkxqHFB/QXGBXfUllqNu8tQIWuZ/XTNBQs4TvEhLsgrM+Wzf2b59+1+UOXxo8
+	 bJQ987lvmGGqA==
+Message-ID: <7566eef3-bce4-4100-8a11-d88ef1e887a9@gaisler.com>
+Date: Tue, 13 Jan 2026 13:28:09 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <176828328795.4027.16644210192638742005@lazor>
-User-Agent: Mutt/2.2.14 (2025-02-20)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 19/29] sparc: introduce arch_zone_limits_init()
+To: Mike Rapoport <rppt@kernel.org>, Andrew Morton <akpm@linux-foundation.org>
+Cc: Alex Shi <alexs@kernel.org>, Alexander Gordeev <agordeev@linux.ibm.com>,
+ Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@kernel.org>,
+ "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+ Catalin Marinas <catalin.marinas@arm.com>,
+ "David S. Miller" <davem@davemloft.net>,
+ Dave Hansen <dave.hansen@linux.intel.com>,
+ David Hildenbrand <david@kernel.org>, Dinh Nguyen <dinguyen@kernel.org>,
+ Geert Uytterhoeven <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>,
+ Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
+ Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
+ Johannes Berg <johannes@sipsolutions.net>,
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
+ Jonathan Corbet <corbet@lwn.net>, Klara Modin <klarasmodin@gmail.com>,
+ "Liam R. Howlett" <Liam.Howlett@oracle.com>,
+ Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
+ Magnus Lindholm <linmag7@gmail.com>, Matt Turner <mattst88@gmail.com>,
+ Max Filippov <jcmvbkbc@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>,
+ Michal Hocko <mhocko@suse.com>, Michal Simek <monstr@monstr.eu>,
+ Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>,
+ Palmer Dabbelt <palmer@dabbelt.com>, Pratyush Yadav <pratyush@kernel.org>,
+ Richard Weinberger <richard@nod.at>, Ritesh Harjani <ritesh.list@gmail.com>,
+ Russell King <linux@armlinux.org.uk>, Stafford Horne <shorne@gmail.com>,
+ Suren Baghdasaryan <surenb@google.com>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Thomas Gleixner <tglx@linutronix.de>, Vasily Gorbik <gor@linux.ibm.com>,
+ Vineet Gupta <vgupta@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
+ Will Deacon <will@kernel.org>, x86@kernel.org, linux-alpha@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+ linux-cxl@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
+ linux-mm@kvack.org, linux-openrisc@vger.kernel.org,
+ linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
+ linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+ linux-snps-arc@lists.infradead.org, linux-um@lists.infradead.org,
+ linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
+ sparclinux@vger.kernel.org
+References: <20260111082105.290734-1-rppt@kernel.org>
+ <20260111082105.290734-20-rppt@kernel.org>
+Content-Language: en-US
+From: Andreas Larsson <andreas@gaisler.com>
+In-Reply-To: <20260111082105.290734-20-rppt@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Jan 12, 2026 at 10:48:07PM -0700, Stephen Boyd wrote:
-> Quoting Brian Masney (2026-01-12 15:48:10)
-> > diff --git a/drivers/clk/microchip/Kconfig b/drivers/clk/microchip/Kconfig
-> > index 1b9e43eb54976b219a0277cc971f353fd6af226a..1e56a057319d97e20440fe4e107d26fa85c95ab1 100644
-> > --- a/drivers/clk/microchip/Kconfig
-> > +++ b/drivers/clk/microchip/Kconfig
-> > @@ -1,7 +1,7 @@
-> >  # SPDX-License-Identifier: GPL-2.0
-> >  
-> >  config COMMON_CLK_PIC32
-> > -       def_bool COMMON_CLK && MACH_PIC32
-> > +       def_bool (COMMON_CLK && MACH_PIC32) || COMPILE_TEST
-> >  
-> >  config MCHP_CLK_MPFS
-> >         bool "Clk driver for PolarFire SoC"
-> > diff --git a/drivers/clk/microchip/clk-core.c b/drivers/clk/microchip/clk-core.c
-> > index 891bec5fe1bedea826ff9c3bd4099c90e2528ff9..ce3a24e061d145934c84843008efadc3b0e2cffa 100644
-> > --- a/drivers/clk/microchip/clk-core.c
-> > +++ b/drivers/clk/microchip/clk-core.c
-> > @@ -75,6 +75,7 @@
-> >  /* SoC specific clock needed during SPLL clock rate switch */
-> >  static struct clk_hw *pic32_sclk_hw;
-> >  
-> > +#ifdef CONFIG_MATCH_PIC32
+On 2026-01-11 09:20, Mike Rapoport wrote:
+> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
 > 
-> CONFIG_MACH_PIC32?
+> Move calculations of zone limits to a dedicated arch_zone_limits_init()
+> function.
+> 
+> Later MM core will use this function as an architecture specific callback
+> during nodes and zones initialization and thus there won't be a need to
+> call free_area_init() from every architecture.
+> 
+> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
+> ---
+>  arch/sparc/mm/init_64.c |  6 ++++++
+>  arch/sparc/mm/srmmu.c   | 12 ++++++++----
+>  2 files changed, 14 insertions(+), 4 deletions(-)
 
-Ugh... :/ This compiles on arm64 since nop is a valid assembly
-instruction.
+Hi Mike,
 
-I'm going to hold off on posting a v3 for now unless there's an issue
-with one of the earlier patches. This patch can't go in until all of
-the other patches in this series land in Linus's tree.
+Thanks for this nice cleanup series.
 
-Brian
+
+> diff --git a/arch/sparc/mm/init_64.c b/arch/sparc/mm/init_64.c
+> index df9f7c444c39..fbaad449dfc9 100644
+> --- a/arch/sparc/mm/init_64.c
+> +++ b/arch/sparc/mm/init_64.c
+> @@ -2279,6 +2279,11 @@ static void __init reduce_memory(phys_addr_t limit_ram)
+>  	memblock_enforce_memory_limit(limit_ram);
+>  }
+>  
+> +void __init arch_zone_limits_init(unsigned long *max_zone_pfns)
+> +{
+> +	max_zone_pfns[ZONE_NORMAL] = last_valid_pfn;
+> +}
+> +
+>  void __init paging_init(void)
+>  {
+>  	unsigned long end_pfn, shift, phys_base;
+> @@ -2461,6 +2466,7 @@ void __init paging_init(void)
+>  
+>  		max_zone_pfns[ZONE_NORMAL] = end_pfn;
+
+This old initialization of max_zone_pfns[ZONE_NORMAL] should also be
+removed, right? With that removed it makes the local end_pfn variable
+set but unused, so could you please also remove that one?
+
+I know that this whole code block gets removed later, but the cleanup
+max_zone_pfns[ZONE_NORMAL] and the removal of end_pfn (that is not done
+later in this version of the series) fits logically in this patch.
+
+>  
+> +		arch_zone_limits_init(max_zone_pfns);
+>  		free_area_init(max_zone_pfns);
+>  	}
+>  
+> diff --git a/arch/sparc/mm/srmmu.c b/arch/sparc/mm/srmmu.c
+> index f8fb4911d360..81e90151db90 100644
+> --- a/arch/sparc/mm/srmmu.c
+> +++ b/arch/sparc/mm/srmmu.c
+> @@ -884,6 +884,13 @@ static void __init map_kernel(void)
+>  
+>  void (*poke_srmmu)(void) = NULL;
+>  
+> +void __init arch_zone_limits_init(unsigned long *max_zone_pfns)
+> +{
+> +	max_zone_pfns[ZONE_DMA] = max_low_pfn;
+> +	max_zone_pfns[ZONE_NORMAL] = max_low_pfn;
+> +	max_zone_pfns[ZONE_HIGHMEM] = highend_pfn;
+> +}
+> +
+>  void __init srmmu_paging_init(void)
+>  {
+>  	int i;
+> @@ -967,10 +974,7 @@ void __init srmmu_paging_init(void)
+>  	{
+>  		unsigned long max_zone_pfn[MAX_NR_ZONES] = { 0 };
+>  
+> -		max_zone_pfn[ZONE_DMA] = max_low_pfn;
+> -		max_zone_pfn[ZONE_NORMAL] = max_low_pfn;
+> -		max_zone_pfn[ZONE_HIGHMEM] = highend_pfn;
+> -
+> +		arch_zone_limits_init(max_zone_pfn);
+>  		free_area_init(max_zone_pfn);
+>  	}
+>  }
+
+With the feedback for arch/sparc/mm/init_64.c addressed:
+
+Acked-by: Andreas Larsson <andreas@gaisler.com>
+
+Cheers,
+Andreas
 
 
