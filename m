@@ -1,53 +1,54 @@
-Return-Path: <linux-mips+bounces-12896-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12897-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 416D5D18C3A
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Jan 2026 13:37:35 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA041D18E95
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Jan 2026 13:49:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 4179C300E3D5
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Jan 2026 12:37:09 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id E57E630F759B
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Jan 2026 12:41:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F74038A9D6;
-	Tue, 13 Jan 2026 12:37:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9FF13904C2;
+	Tue, 13 Jan 2026 12:38:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="djdbXGFB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DMKO3wDO"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C169318BBE
-	for <linux-mips@vger.kernel.org>; Tue, 13 Jan 2026 12:37:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2697C3904C8
+	for <linux-mips@vger.kernel.org>; Tue, 13 Jan 2026 12:38:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768307828; cv=none; b=kVgTvPIXFlHpMUnENG0ZVibS/pVALDWFISPmcrobTDuDsZLeCyfEfNM2vOqznQv2W3CuZNQI+IeJFh3MfM2MVoXXIoPOfMFlO+5q8nIvoMDb5KAkMt6BNnwqZQHjFXlzwljbuisDvtNhYZwF7RJXKXkiLyy+XAvHa/U4tPOXgbs=
+	t=1768307902; cv=none; b=Fh/vb3v746W2IJXjWktcwtdOgIAFhUQZxRVqBn/k+We1ZH0ll6EKNr53xTgCXdRfug3OdTiBUy/pFmmN81huCNsHa/Hqm5qIqjJ448mNFa672pR3zC6Fp4SQEy+olyQ841OFnLPFSTIJTOvhPcFu0qef/BlLwx3KB5xwhGO7Jbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768307828; c=relaxed/simple;
-	bh=/jEbcQNNf+2y5DghSoCRU+Htja2/wQhqeKPPtGlgrS8=;
+	s=arc-20240116; t=1768307902; c=relaxed/simple;
+	bh=qXScHYuCzd215t8hnmVMyfAJzYu9LaTDkfUenYtogos=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tMHVqS9JAuO95UmhiMkrzvYLzJLZO7RH/i/i7c6ks9L75KzUIzZ7EhhDXJwQ+Ajp80BpbHTlWw0xbCb2TaiapH16kcYeYX90SfktvnV/tXb1mqCkWCNLVhT/d4vBefOwAACf87bko9F3iGXvqSCc+P7q1wFGLEjoLe6F2h/tgQ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=djdbXGFB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0822C16AAE
-	for <linux-mips@vger.kernel.org>; Tue, 13 Jan 2026 12:37:07 +0000 (UTC)
+	 To:Cc:Content-Type; b=mGnl+pYnqDZTrhubotv7FS8qyUEYK31FTWE/X40Hz2P8FyEeroQRU6jiiuicDP55tQbD3/lBA6CgP4KGY8zW5mzUntRWebt2n6SD+vpH9ZT2kkc8jGfszIN5ZuFB9jLnqySj82sHL9qdVO8QLAia3KZre6SXrvbMg+oEvEr/oSM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DMKO3wDO; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D8A7C2BD00
+	for <linux-mips@vger.kernel.org>; Tue, 13 Jan 2026 12:38:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768307827;
-	bh=/jEbcQNNf+2y5DghSoCRU+Htja2/wQhqeKPPtGlgrS8=;
+	s=k20201202; t=1768307901;
+	bh=qXScHYuCzd215t8hnmVMyfAJzYu9LaTDkfUenYtogos=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=djdbXGFB/0vFYnxrpHaPDsmzQQ20F7Osv04XDibZ2U163NlSPT6o1qMPl+o0mVNbP
-	 +bJYC/uONDGWEOcsPMDaJW6nsYc+VkjK795U4Il/TEvVcY1W9Y5QaKATY7Syf5Pn/S
-	 K2NEgIZSD6lIohY1OEP4eJkee0IH2jlvRpfZz1cTjBCyl2ePRW8Xy1r+EKGgnUmqhR
-	 Y5p2hkTY8XmCFhTtDYEybg3wOd3X3vfFDnANyXDKYeO8LD70k1+8jhfS1623TFn+Ov
-	 GW9pnukDXb1nmpYWUO9sFSrv0u1kusskQNElUZ4sA94yQDoIS4w9IWKnG844y3NboS
-	 mOgETq9y0Eh8A==
-Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-38301bf7864so56412791fa.0
-        for <linux-mips@vger.kernel.org>; Tue, 13 Jan 2026 04:37:07 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWrjOBaaFD9eFeiU0AtckGCbv+6WBHR/GvnTqjmV6PhYdH7xlFqEla4+CARj5MNFJ3PIjGGeBbRRdBo@vger.kernel.org
-X-Gm-Message-State: AOJu0YxmTPm9kSrm3iFAnSz5uf9D/UnjM4IBxD4+Hl0BTW4kKhgFfupZ
-	3FAko2QCabuZvVJeHuROUWX37L/IqAmPUnuLewz32B8u+TLfFyZNzLBHE//OXimXc4/T77UNQMG
-	H67h98iBCIGGjgdHmA1sPLFOE3pQiU3Atnl62m9/cuA==
-X-Received: by 2002:a2e:ab19:0:b0:37b:9361:711d with SMTP id
- 38308e7fff4ca-38350a55384mr8601501fa.8.1768307826023; Tue, 13 Jan 2026
- 04:37:06 -0800 (PST)
+	b=DMKO3wDOQyqAMkRsF3KjP1QgKWLmG/bIgkwkqikQWX7/JxeRnNe7RTYQnbhOkMfPE
+	 G+G+GVnK7BcA67OKp/w9uYGtoDKb6gYsPJFta0W9o3WbrjYSxf+gdK+PIoWXEDVRpB
+	 Q5EBZu76fgMusQwSmXX/liK7piEEVzbTmPGCiEh5Np1ueLICoCxv+JeymLWcnk+8zE
+	 HJZlIdI9MFRGAndmHTk7bTK8js1iFU5lIaAW8gyi5nhPAB7QNOe9kboOVP1zt4i3+k
+	 wUKGh42sKh+F35XHH38iMuMWdGE+RTZk9+LCDvYE3jVMx6N3ZypoG2kBxgAbxjzKHh
+	 WESRwPJzz6AdA==
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-382fb535b73so59720401fa.0
+        for <linux-mips@vger.kernel.org>; Tue, 13 Jan 2026 04:38:20 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVLzYpZn/LC+inKE9w7sTN9wv6Os8ln/8J46QXNiOC8Vo18Mu4QxfEiUoYPcenXYagummwTgDUPShn0@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywd318w1F3c5fLvnvjl+DJP0splia3LqOrl3ee3HnQlYBS+kYif
+	KOBM1o+G+AhudCALxa0JwljI0O0RzoyPW4vSyamjtC/LpiWE8TXWdnH1f5rkSWT8iTsjlnbQFpm
+	mTqeaLtjCFh2lL5VVsPITNLXN3fk6WVMr8WVRo1KOAw==
+X-Google-Smtp-Source: AGHT+IHqazDCuLxwH7Iu/G2PkGJgVTJ7/k1UTcZwajhZd9YF9n/CenHYLasZcuGAB0SV4lL43Mgtox5RINYhxwkIRxc=
+X-Received: by 2002:a05:651c:30c9:b0:37b:967e:d73 with SMTP id
+ 38308e7fff4ca-382ff8115efmr73607701fa.29.1768307899461; Tue, 13 Jan 2026
+ 04:38:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -55,15 +56,15 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20260112-qcom-sa8255p-emac-v6-0-86a3d4b2ad83@oss.qualcomm.com>
- <20260112-qcom-sa8255p-emac-v6-2-86a3d4b2ad83@oss.qualcomm.com> <a2a610a3-aead-4e85-8a4c-7b83ccf276dc@lunn.ch>
-In-Reply-To: <a2a610a3-aead-4e85-8a4c-7b83ccf276dc@lunn.ch>
+ <20260112-qcom-sa8255p-emac-v6-7-86a3d4b2ad83@oss.qualcomm.com> <41b9a414-55a0-4602-9be5-54137a691d9f@lunn.ch>
+In-Reply-To: <41b9a414-55a0-4602-9be5-54137a691d9f@lunn.ch>
 From: Bartosz Golaszewski <brgl@kernel.org>
-Date: Tue, 13 Jan 2026 13:36:53 +0100
-X-Gmail-Original-Message-ID: <CAMRc=Mf8TTTcU9A3gc_LQF3Ow6Ww0omVJH6x-DQEnOSPXfaUQw@mail.gmail.com>
-X-Gm-Features: AZwV_QhI9rebW3ffX0n9A2EUYniK94gLsNSjXRbzl9peLeeXv9eI-nHhZ9l6ybY
-Message-ID: <CAMRc=Mf8TTTcU9A3gc_LQF3Ow6Ww0omVJH6x-DQEnOSPXfaUQw@mail.gmail.com>
-Subject: Re: [PATCH RESEND net-next v6 2/7] net: stmmac: qcom-ethqos: use
- generic device properties
+Date: Tue, 13 Jan 2026 13:38:07 +0100
+X-Gmail-Original-Message-ID: <CAMRc=McP7vt2VS=2FpzYcXNG_+beb9O0AAvAJ9E2g8DT2WTfPA@mail.gmail.com>
+X-Gm-Features: AZwV_QhJCTDCGsC5t4RHVGQlo_Vyd1Okk9vVsia2jA5DJVHGvVefyoWQdJ752O4
+Message-ID: <CAMRc=McP7vt2VS=2FpzYcXNG_+beb9O0AAvAJ9E2g8DT2WTfPA@mail.gmail.com>
+Subject: Re: [PATCH RESEND net-next v6 7/7] net: stmmac: qcom-ethqos: add
+ support for sa8255p
 To: Andrew Lunn <andrew@lunn.ch>
 Cc: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, 
 	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
@@ -105,21 +106,28 @@ Cc: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>,
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 12, 2026 at 2:45=E2=80=AFPM Andrew Lunn <andrew@lunn.ch> wrote:
+On Mon, Jan 12, 2026 at 2:55=E2=80=AFPM Andrew Lunn <andrew@lunn.ch> wrote:
 >
-> On Mon, Jan 12, 2026 at 11:15:41AM +0100, Bartosz Golaszewski wrote:
+> On Mon, Jan 12, 2026 at 11:15:46AM +0100, Bartosz Golaszewski wrote:
 > > From: Bartosz Golaszewski <brgl@kernel.org>
 > >
-> > In order to drop the dependency on CONFIG_OF, convert all device proper=
-ty
-> > getters from OF-specific to generic device properties and stop pulling
-> > in any linux/of.h symbols.
+> > Extend the driver to support a new model - sa8255p. Unlike the
+> > previously supported variants, this one's power management is done in
+> > the firmware using SCMI. This is modeled in linux using power domains s=
+o
+> > add support for them.
 >
-> Is the intention to read these properties from ACPI tables?
+> >  static const struct of_device_id qcom_ethqos_match[] =3D {
+> >       { .compatible =3D "qcom,qcs404-ethqos", .data =3D &emac_qcs404_da=
+ta},
+> > +     { .compatible =3D "qcom,sa8255p-ethqos", .data =3D &emac_sa8255p_=
+data},
+>
+> Is this device being probed via DT or ACPI?
 >
 
-No. Other than a couple property getters which can use the fwnode
-abstraction, there's nothing here that requires the OF dependence.
+On the sa8255p it's probed via DT but all its resources are managed in
+firmware over SCMI.
 
 Bartosz
 
