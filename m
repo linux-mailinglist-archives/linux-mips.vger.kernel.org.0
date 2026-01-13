@@ -1,149 +1,149 @@
-Return-Path: <linux-mips+bounces-12887-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12888-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B4E0D16D7C
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Jan 2026 07:30:26 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06813D16DCD
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Jan 2026 07:38:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 2379B302A38A
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Jan 2026 06:28:58 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 20C853014AE3
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Jan 2026 06:38:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAA6C366571;
-	Tue, 13 Jan 2026 06:28:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C208C3570BD;
+	Tue, 13 Jan 2026 06:38:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QtrD6kXt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aTZeqwj0"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 478DB36828E
-	for <linux-mips@vger.kernel.org>; Tue, 13 Jan 2026 06:28:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D4EA255F2C;
+	Tue, 13 Jan 2026 06:38:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768285737; cv=none; b=OHat9R5cycQsM5eloYe2D0S8GPOfzf6O5KL5Ai3TnAB/MPfyME7KSfPob4V5Sb+a1fmBxpi9rZuNJbENIJOmWbSOdFq1FMfkMkYzgZG++ociKkGMzh4u9dsK7O0bGfDwTfw3mBK/mGCIO74wO3/R+cDsWSO3cwgT11TmV+gqfWQ=
+	t=1768286311; cv=none; b=AwoIpdMl+xguAMVYuuvewCCbdi2GcZtnqI4Cs+bZ7++CPucKKJF2aup1XpI6K2Opk0+3iqDq75epF8mNmX+rpxfEu6qjmNW6v+r5WKhkxgVCPbZMrfdyCPlYbSuNhI2Jm9nr/QAaWXtorslrV4oOQBBvaEZfm7gyYo4BFxE7BD0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768285737; c=relaxed/simple;
-	bh=49Xtuu1beNUg9QlwNiHN6EBbAr4oftfRASjMhDj6J/s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=O7b3jnVe048qPSIiAGNs/uN/4W6RW3AdkZd+eeiRdQ4FBghCoIQ/W/bLyKSk6gSY1E4wKctyzFPZR6fvsBbQeQ+NyIXn2Zm7FFCPlIqjDgPmsVGA1UfiQ+P0j4sdKasLFlq0h3Sx4btYCo75cRsnNbXEF2bkpvsqVWUbwS0z6N4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QtrD6kXt; arc=none smtp.client-ip=209.85.208.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-382f9930e54so43891421fa.1
-        for <linux-mips@vger.kernel.org>; Mon, 12 Jan 2026 22:28:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768285734; x=1768890534; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JiUmV1eprmnhg37r9cMuLPaBFu+xlgYzvvvG7aZcdkk=;
-        b=QtrD6kXtgDPukrxP/rH1IgFE5ZR8VwmNR4vA6G7gppucdNYoxYVIHf6rDmVi59m7B8
-         qhrqcuXP1/2Tc9jr/Ihp9T94WyllHVUj92E0xJZ8Mx3oqsZePHHeepmURRFmKvAME2gQ
-         1vVP6RXFt+cg2BBSAmH+9pLBs9p0uLVfX+BdZueiWkWb2ZUa0jwdMkdHXoh3uom9sH87
-         FCitru2fghHG7tAB0OHlslGsZHW+nhIbgzz8S15+takbiYy0kynnHmT9twdY8mB3J9gE
-         iLXImB9ySbP6Q9is9UuqlwiPV9A8sJ67UO6pk8JcVNHbsvZ3rUjgUEZ+aocWZI4oD16U
-         IeXQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768285734; x=1768890534;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=JiUmV1eprmnhg37r9cMuLPaBFu+xlgYzvvvG7aZcdkk=;
-        b=DQs3RaY4hr5wdn3YaOJjygGlBCIJFH+IJ9G3jzXs9tprvzFxZqt5cVwQ2gM+GMXm6x
-         T31G4ihbZztTCdoghoceMgpi6Y9AWrhG7XOgDww/oGofWQilJKUBBqdeuaDdt+gJGZyv
-         hfaHSZpKl3OL6Dflhiw6xCt1KYt8eMhXWsR/uwT/UVmIoxTeElgYL93BzG3S+YGZAB0c
-         xM1uPkrQvTJMTJz9t75H2hLjQepvfa/oMEZt4kgNaNoe+F+iYxGJsEWFsaZO6f27EmZQ
-         MBM/WlVgn2w1PaILxyArJY54AvKW+3x0lQo3ppFnDKW9ymH4uHJvmuuzbYdPplfIDDCI
-         Gn/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWbgyxENrvZlux/yAF5SAlkS4lExEbqZjn6sqd4jVMFzv8/J8QL1qeAF8uzLpYcaZ8ECj7Ig/I+rBV7@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz/UsX09wNLhTakZcqQ+thM0xFWFZtDYV8MI6SrKxkxF/xFkGar
-	8zlaS/JF374avErmFO9mgRIk6joPkQfRRXJ9hCA+cTioo+lGAQYdUDcLwkc8nMw2+0cFsVLkg3w
-	kNdPXI/+tIv4sNymidun7LafrwJbmuJ4=
-X-Gm-Gg: AY/fxX7Ll5qkoIM1dmNnDJokJrIPTrIRQvC38UammOu4A1BiAybCLbkg4rgrcmezIci
-	fd2XtM8Cl6Qha2CBPYmYnMPtsZFOsS1UxprWq5wp34okAFkEs/fL+GRGaQtj5NhTvPPQE7bwY1J
-	zTzJxjhbuhT9VARiLvfiHPlVDdl/au5I+xPtH8h0p/kRY9ksqqe5vkPGZFI6COO19Vhr/1/6TKj
-	9Bfu83yZpFI8+QGzIRT8mN8k1l4g50ltKbaq3LGHOInFZXoW7QpV8XYodoHPGLqKD8wvowQtdB2
-	mw/hL0g06sF5uDuIru/70dncQ1iCiTUmzgYY6v2ftsGTvrmGYWVyxBZ4jJ6qYtPdt0p6
-X-Received: by 2002:a05:651c:31d2:b0:382:fccd:f99b with SMTP id
- 38308e7fff4ca-38350c03886mr5317011fa.15.1768285734277; Mon, 12 Jan 2026
- 22:28:54 -0800 (PST)
+	s=arc-20240116; t=1768286311; c=relaxed/simple;
+	bh=65kaRvRFKRSZNCeNFIZ2zaIQZD+xNuxFfmHbWLwdlLM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PLvUyy2tqISo8eddKaLcAOrqlWvFsTKkOJvZhHBiezEk8W+2gV2BmiPyc0nzqt3HiGpRLtNt9+1vpUbGC4M4pJ1oeCiYGNWl6AH2tKuXJwGDJfFi31l1jPgKaOc5HKOWUy7fSH+ha5jBmGrzKjPAyXYVM7DBQlcXfsz3AACuOi0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aTZeqwj0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B7AB2C116C6;
+	Tue, 13 Jan 2026 06:38:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768286311;
+	bh=65kaRvRFKRSZNCeNFIZ2zaIQZD+xNuxFfmHbWLwdlLM=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=aTZeqwj0/pFttQTe/tt59+g7XCdZSBH66xMUWTBwJZjpscKVS54inI40zBFaLLb6n
+	 H3fCfXb7gv09P5sTYi2sgVbyPfoQwQEkPM9RqgmZ8U9t517i1b7DaZujosgLscywsN
+	 JsWuA6A9zN9FMjY25J25Nx8nxvifURVRY1c4lpadbaYazcN4Bb6XkpUdCflCWiZOZO
+	 woEqYuU74xfhF1pnlMscGVxIrdWrmcQS/ztAgArdtrLEcHX0rSuvbv08Dci2833Z+m
+	 dTLUxHF4+Y3m1rYqq3y3rUb5tgNAftS1acERNTnxDaMBBxoW7a5Osa963o3zoK2axi
+	 ATBDtfRLMo0VA==
+Message-ID: <d5b5942e-74ac-4b9b-b850-2417576d946b@kernel.org>
+Date: Tue, 13 Jan 2026 07:38:27 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260108-clk-divider-round-rate-v1-0-535a3ed73bf3@redhat.com> <20260108-clk-divider-round-rate-v1-9-535a3ed73bf3@redhat.com>
-In-Reply-To: <20260108-clk-divider-round-rate-v1-9-535a3ed73bf3@redhat.com>
-From: Keguang Zhang <keguang.zhang@gmail.com>
-Date: Tue, 13 Jan 2026 14:28:17 +0800
-X-Gm-Features: AZwV_QjXA3_FExPm1PeZJleY4KCWVtWfl5lLiACQHtAnheJostrobrRWjaNB7bU
-Message-ID: <CAJhJPsXG_UKnVk7RypkKuM8M87+1DNvJND1PRxoPVzAm=P2Rbg@mail.gmail.com>
-Subject: Re: [PATCH 09/27] clk: loongson1: convert from divider_round_rate()
- to divider_determine_rate()
-To: Brian Masney <bmasney@redhat.com>
-Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 12/16] serial: pic32_uart: update include to use
+ pic32.h from platform_data
+To: Brian Masney <bmasney@redhat.com>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-serial@vger.kernel.org
+References: <20260112-mips-pic32-header-move-v2-0-927d516b1ff9@redhat.com>
+ <20260112-mips-pic32-header-move-v2-12-927d516b1ff9@redhat.com>
+Content-Language: en-US
+From: Jiri Slaby <jirislaby@kernel.org>
+Autocrypt: addr=jirislaby@kernel.org; keydata=
+ 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
+In-Reply-To: <20260112-mips-pic32-header-move-v2-12-927d516b1ff9@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Reviewed-by: Keguang Zhang <keguang.zhang@gmail.com>
-Tested-by: Keguang Zhang <keguang.zhang@gmail.com> # on LS1B & LS1C
+On 12. 01. 26, 23:48, Brian Masney wrote:
+> Use the linux/platform_data/pic32.h include instead of
+> asm/mach-pic32/pic32.h so that the asm variant can be dropped. This
+> is in preparation for allowing some drivers to be compiled on other
+> architectures with COMPILE_TEST enabled.
 
-On Fri, Jan 9, 2026 at 5:17=E2=80=AFAM Brian Masney <bmasney@redhat.com> wr=
-ote:
->
-> The divider_round_rate() function is now deprecated, so let's migrate
-> to divider_determine_rate() instead so that this deprecated API can be
-> removed.
->
-> Note that when the main function itself was migrated to use
-> determine_rate, this was mistakenly converted to:
->
->     req->rate =3D divider_round_rate(...)
->
-> This is invalid in the case when an error occurs since it can set the
-> rate to a negative value.
->
-> Fixes: bb40a2ef4fc9 ("clk: loongson1: convert from round_rate() to determ=
-ine_rate()")
+LGTM. Will you also enable the driver to be compiled?
+
+Reviewed-by: Jiri Slaby <jirislaby@kernel.org>
+
 > Signed-off-by: Brian Masney <bmasney@redhat.com>
->
+> 
 > ---
-> To: Keguang Zhang <keguang.zhang@gmail.com>
-> Cc: linux-mips@vger.kernel.org
+> To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+> To: Jiri Slaby <jirislaby@kernel.org>
+> Cc: linux-kernel@vger.kernel.org
+> Cc: linux-serial@vger.kernel.org
 > ---
->  drivers/clk/clk-loongson1.c | 5 +----
->  1 file changed, 1 insertion(+), 4 deletions(-)
->
-> diff --git a/drivers/clk/clk-loongson1.c b/drivers/clk/clk-loongson1.c
-> index f9f060d08a5fae3291a9408c6dc93531b435609f..1674181a1107dc4f30e78ee41=
-0a55a49b6d0b4b5 100644
-> --- a/drivers/clk/clk-loongson1.c
-> +++ b/drivers/clk/clk-loongson1.c
-> @@ -99,10 +99,7 @@ static int ls1x_divider_determine_rate(struct clk_hw *=
-hw,
->         struct ls1x_clk *ls1x_clk =3D to_ls1x_clk(hw);
->         const struct ls1x_clk_div_data *d =3D ls1x_clk->data;
->
-> -       req->rate =3D divider_round_rate(hw, req->rate, &req->best_parent=
-_rate,
-> -                                      d->table, d->width, d->flags);
+>   drivers/tty/serial/pic32_uart.c | 3 +--
+>   1 file changed, 1 insertion(+), 2 deletions(-)
+> 
+> diff --git a/drivers/tty/serial/pic32_uart.c b/drivers/tty/serial/pic32_uart.c
+> index 14d50bd7f1bd3575e60e51783bf5b2d821f9168d..8407f85776c07a7495688fc4f95b8672b1543bd0 100644
+> --- a/drivers/tty/serial/pic32_uart.c
+> +++ b/drivers/tty/serial/pic32_uart.c
+> @@ -22,8 +22,7 @@
+>   #include <linux/tty_flip.h>
+>   #include <linux/serial_core.h>
+>   #include <linux/delay.h>
 > -
-> -       return 0;
-> +       return divider_determine_rate(hw, req, d->table, d->width, d->fla=
-gs);
->  }
->
->  static int ls1x_divider_set_rate(struct clk_hw *hw, unsigned long rate,
->
-> --
-> 2.52.0
->
+> -#include <asm/mach-pic32/pic32.h>
+> +#include <linux/platform_data/pic32.h>
+>   
+>   /* UART name and device definitions */
+>   #define PIC32_DEV_NAME		"pic32-uart"
+> 
 
 
---=20
-Best regards,
-
-Keguang Zhang
+-- 
+js
+suse labs
 
