@@ -1,167 +1,132 @@
-Return-Path: <linux-mips+bounces-12891-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12892-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AA49D17F12
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Jan 2026 11:17:54 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA7A5D187EF
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Jan 2026 12:31:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id DB5CF30081BB
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Jan 2026 10:14:25 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 8A9033004421
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Jan 2026 11:30:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8FDC5313550;
-	Tue, 13 Jan 2026 10:14:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB21038BF9E;
+	Tue, 13 Jan 2026 11:30:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a3gRe+rr"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Rc+7fh/u";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Oh0CiN9y"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-lf1-f46.google.com (mail-lf1-f46.google.com [209.85.167.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 067B5389E0B
-	for <linux-mips@vger.kernel.org>; Tue, 13 Jan 2026 10:14:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20FDE346ADB
+	for <linux-mips@vger.kernel.org>; Tue, 13 Jan 2026 11:30:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768299265; cv=none; b=C7xyPv8WQb/Oo0EV4bIwaDa16BU0XZs4wP5k4iu9NrkZt0fJKyQOyxD2iy6aTfiSxuNirHVc8SmiE9mIbio8mIstgLpw3jNNnlq1ey5BF+b6VvDu9wIQkd7DVjX1RWxg5emdWniiqOhU8+YfO0ioJQoRlcqj5HAJ0fhsyWBXqDI=
+	t=1768303842; cv=none; b=L2MzYQxInzAfD0Ke6BPYH5qyOxn4Q5XW4C6dld8Qm37Zw3qXG0032S011SlTxbNtwqOt7sZXpz5KgL42CkLmRulAc3y2qsIz+ra8freWxpZtWPaNKniZ8eEgaVx4q3t0U+V5FG5nXoI/3I1T4SYBTM6Qbcl6GcbM449YWDyGuxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768299265; c=relaxed/simple;
-	bh=39NtxAeqpXvhawaLycQSgS8a7QXmm9U/xmb9EyW+PGc=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=AnKp037Ue9E8G86r6jvv1ubs/7ZIeGZfdP8o8nhz/n00xoZ6xLGYAPK7JTvvUjFDj1NQ4dTx//UzBBhPsMxzD8/y7n0bUpfyDV+hX3ceOGu5oqbF5ht0DKDreSe1PXeXi78MvA339giP9wwfyYC7ElquEYtRbNsHdYTkpiWu6zI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a3gRe+rr; arc=none smtp.client-ip=209.85.167.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f46.google.com with SMTP id 2adb3069b0e04-59b72a1e2f0so7210789e87.0
-        for <linux-mips@vger.kernel.org>; Tue, 13 Jan 2026 02:14:23 -0800 (PST)
+	s=arc-20240116; t=1768303842; c=relaxed/simple;
+	bh=GFbBe1FKiFwXNqlrC/vrxH7BKrvDogX+HkFJiNJXIbo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z0mV+PNRC4fkLh3ofXglfDwFxNGE+TO7Hx5D/LVaY3XQT7DXzaASPEqDe2LlTYjiw5JHQuTeiXqy9Ie3iASA1amn0VUD26Ghk01r30C2SO1TxyQrkwY6Rg3+p+L7mbvvd1wqI0yi/GjHsbEsw8rwbBDgJF8OdSPEnZGJbkW8IR4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Rc+7fh/u; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Oh0CiN9y; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1768303840;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=6mZitFPZXaFAwgzzbiC1drztWEtu5YGVE+S8D2GI5aA=;
+	b=Rc+7fh/usF5P65kEan79nOZO8qsYdJoKJdpW52yo1iRnNjIZ2fI5CXfgLex+ar/8+YXMOU
+	FRxyosdci9xHyPNShU/xn9NDy97/1M5luT4TyA1Jbdm+0F8XOuc3ZXdZtcww/16Zr/Zo3O
+	1DfVxy9QzpdCQPXUbUxAfqyIwV/nMgk=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-411-ErVifvcWNMOoykqXZvuE8A-1; Tue, 13 Jan 2026 06:30:39 -0500
+X-MC-Unique: ErVifvcWNMOoykqXZvuE8A-1
+X-Mimecast-MFC-AGG-ID: ErVifvcWNMOoykqXZvuE8A_1768303838
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-8c52af6855fso26357885a.1
+        for <linux-mips@vger.kernel.org>; Tue, 13 Jan 2026 03:30:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768299262; x=1768904062; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=VgnN5gtqEe3Q1O0kTTet9lBrugKrM6JP8dsQeWrl1xo=;
-        b=a3gRe+rrNGrlKDHBgSQasRnqSlGIDYnd6wmXjmP5+FdEbFKDgDiRChpYM5yhtVdXZA
-         fkeyLzUVXUEvejpqwvtTnyB483YAwXVwqQkB0/GHjP0SgJf9OYnuWwFWd+oVwneAaKFj
-         QIwxqe/ba0Abzs8ry+CO5AMk5v1BA53JT7sT7e8mVvyN5G+D5P0mKegMLYhjbSEq5E7l
-         z73PA/pov84m/7ivZ4egy6/TmU5GX9RIVwko4U1WpI7wW6X9LBDVFCFusE6H0n05wuoN
-         CmIEGtQOHfZflw8KTbE3O9URZYNuQcU5kzJTGRSUSgoCIosoHumq5Bbu32+1LeEUgh9M
-         KfBg==
+        d=redhat.com; s=google; t=1768303838; x=1768908638; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6mZitFPZXaFAwgzzbiC1drztWEtu5YGVE+S8D2GI5aA=;
+        b=Oh0CiN9yXrjdAqrVC7T6WR4rjjHUEZP9QhtCiDipfiZpAJgT8e5T/g0Bb4/1gHryw4
+         nC4c7h8hpoG/xTY5Z1eOrWcs8BhCm9TEeXMtkXP+BvurSkF7+QpbAvbVw6bEFA5MA+m5
+         KMiUa8qyKdvt5d9jKGF0TizYJWhaiwygNV0y5AtbPXEW+/8gMKPJcR5LoYcT4clno68D
+         gt54KYN+GYasBcNuvKZU96Ej8xY67du3GNxKyGyv5YqDDYLWGL4ybslliioTNqcd6OQi
+         DqgbYNMzJFP51CK2JxM+5Hj4wfy72erUvgcmehtLgU1/S/Iw8+v798YiCHi6tJldFs3g
+         r5mA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768299262; x=1768904062;
-        h=content-transfer-encoding:in-reply-to:content-language:references
-         :cc:to:from:subject:user-agent:mime-version:date:message-id:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VgnN5gtqEe3Q1O0kTTet9lBrugKrM6JP8dsQeWrl1xo=;
-        b=eKhelDNSXzcrhOlTzZ3zVNZvGRPKARczDvAaMTqXsjFfGVGOYJVthbBB31c/kY9Xtj
-         5KlWVhKhnWDWPL7Ot6DJrr3RvlYmMTmzETP/lKZoBgXNXmCEMbKIQns0vYzKwnvJoT9q
-         I1IvN5gtZdynfNZ4YdqkuANCQ5ueEpOj6ZTUZQs5BPhbwbyc0t7BUoJAdIGrZyZbOwu0
-         j/xdx+mrDTYOs4CRTCZ+dxzZ56Qc1i2aEvxo5OpE8r1KN+gTIhFz2bSqLlxfpGcSwTVu
-         5ieFnAGua1F1WRCwrMoAZaXAmlwKhtOdsuJ41rkNVYe2jWDKijPAsa+2dtPljpRtyixt
-         mh3g==
-X-Forwarded-Encrypted: i=1; AJvYcCV9qLmeEjqQCpslQgMZyyi06uIoaBVCMaGLIgjK3rGquN6VTSQ/c9yPvU5esLxQjUwiFTsf2LGCP05E@vger.kernel.org
-X-Gm-Message-State: AOJu0YxdG5jED3rhep0z8qQUS/Ulu5KgCdU0vUkEgoCjldi+ONBQyHQd
-	ELJzJP9/plTJXriSq4FQq7CmcB4Ha/gLOsop8WXx4TtOq6CawrGc+Ps7HA82pw==
-X-Gm-Gg: AY/fxX6Wb6FGy8LqWJ1nlI2oDUlDQRTjdnjDSw2WHBBUTKZYil5jKZOnvRJEc05tis4
-	DUITV8EpEzCFTV1/c3hFex0VhjwJhsm5ONmuf/vLa/nGgvhu59Vtoj4FawnudmZZxy1uuxBLRBj
-	abeCySqlV3XRk7CL9AzTTPDV5jEMnDBNe0ofpQRauYkVzNYsBxQ+zgRiNiaGiIi1Zy2AHxZuA0j
-	1yskujIpZj1dTMyo8f7frKHZQ3oaOzshHFnRJa9YSRmQuaq8VUowwFr6NYwyCtEOqd+SskGEZB0
-	/z44MW0KX0Pt04QShm+YZRk2aL8lFxTDBBWI00366M/BpCHyNaxQ6pvdNuqC53QvUrgvsNfW81X
-	QiPM2accVVW5M0ZR/Ltc8705fCQK5hdiU1mYSL2DWJ0gQFknwX349YujqOygM+pS9VCKmV4Tln4
-	558y3BHcg7GMcBR/OXLOiAOHvPL/gdASTYPTq2FGe3QCtV3b2XQ6ZPWGewsQ==
-X-Google-Smtp-Source: AGHT+IEOoK2sWcGzQ5k4NJjsFR/RmdeWAB9vvZrFfNJ0u+S6dsEFK74/fdYnqiqEV2XmHMt6sJ390w==
-X-Received: by 2002:a05:6512:138b:b0:598:e851:1db3 with SMTP id 2adb3069b0e04-59b6ef05760mr8236951e87.11.1768293628066;
-        Tue, 13 Jan 2026 00:40:28 -0800 (PST)
-Received: from [172.20.10.9] (mobile-access-c1d2ca-216.dhcp.inet.fi. [193.210.202.216])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-59b72f3ae82sm4416299e87.71.2026.01.13.00.40.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 13 Jan 2026 00:40:27 -0800 (PST)
-Message-ID: <f861a1c6-7ec7-477c-bc42-f9aaf6724bed@gmail.com>
-Date: Tue, 13 Jan 2026 10:40:22 +0200
+        d=1e100.net; s=20230601; t=1768303838; x=1768908638;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=6mZitFPZXaFAwgzzbiC1drztWEtu5YGVE+S8D2GI5aA=;
+        b=YPCw6tzQT6b0/AZXV7i5oqeRRuyG0T1K2Ax985vGgtCvPQFzY10lBKzOttY0eNXsIv
+         6iZFj6SS0PIjyyjkUb8DSQagCrc76Hm12rY58kroRsesEUIO6ppYhZmdS/XnXIyFz0iT
+         FZO2NY2TXacDCob55OP2YdmjC2whUPLC/rp6fIC072Di0qFHQsY6MVfKeM8OJerkIYzi
+         UaGk4L3xh8sRbepgyx5WR2eX3dmvxvrxtrojoEBjzzMHWaLrstxUUNz889gM8RQubvr6
+         hJE+2s/0LTADiQUdeJwG0uPTrgaQd9p7lMkZ5tuTdLvEtETPlizgT4b67vHIrv5F7UD+
+         cGjw==
+X-Forwarded-Encrypted: i=1; AJvYcCUZp0kthagVw4tvXWuZB4/nL2AsHx+ZHXbyOLlPSijNu0c9DtMqx6LF/nBfUJy7HJamO2nTfBiUFkVk@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx17td6zLQ/g5LYp8Ejn0d5hHctBYpu8dtOZ6GMil8fe8mtly8v
+	3l+mISXWKTCH319EmwGpUR9lV405ZkZu2c9n+sUWq/uwiHt1lBjmPWRxBRD+AAamCA4TRy2Fpyc
+	WpjZhYKDm5hfqwj7KLm+lqD/sC8HE8Nm/tx5ydIXCfWGb1yHe464Ixs5K26Xh410=
+X-Gm-Gg: AY/fxX7QRZO7u6dGaCe8xH77x27ZcLVmsDUosQAHs9JBnpCvuJFwQKmg4ZTCWpxb3sh
+	8hGOHv7MlQS7P3n76rPIw8iddSAF281j7BAnKbK0Meu0shGCUTFetKqTAzVkw7CGYl2OAq4Xgki
+	IfqrCZx31yPao6Szx805hQe9H0rORbtnVYKt7P23T2fwNuCPyvoT6alimJKQmBqNE+8D8nNGHLT
+	6IWM8V3zmNlum0996Eo0nZcYGnCTxdbqgnwHh4DDRsZPciZYVbyd/0auU+tz4MqMuLmjc7W6hL7
+	dOrIJ1rvDBHZjSzQDfl+/1AJBAwDtjNyF/1dUxFoNU+qQQOmoZdi17ekDgfnBVp2/ZNs+3nT/cY
+	dwjW6viXmvsWF41Y/PmpqCZWzw5qUb64XQZQ6oCk/NS5B
+X-Received: by 2002:a05:620a:404b:b0:8b2:d2c9:f6a with SMTP id af79cd13be357-8c38940d09emr2936023485a.89.1768303838438;
+        Tue, 13 Jan 2026 03:30:38 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHBP/cb2/Ccnmcjxtit9ZlBPwyv14/S7B3W8jqKWuMSTmdJjyszN2LnYWy4PzHWa3vlkgJkoA==
+X-Received: by 2002:a05:620a:404b:b0:8b2:d2c9:f6a with SMTP id af79cd13be357-8c38940d09emr2936018485a.89.1768303837929;
+        Tue, 13 Jan 2026 03:30:37 -0800 (PST)
+Received: from redhat.com (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-890772682besm154938746d6.50.2026.01.13.03.30.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jan 2026 03:30:37 -0800 (PST)
+Date: Tue, 13 Jan 2026 06:30:35 -0500
+From: Brian Masney <bmasney@redhat.com>
+To: Jiri Slaby <jirislaby@kernel.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-serial@vger.kernel.org
+Subject: Re: [PATCH v2 12/16] serial: pic32_uart: update include to use
+ pic32.h from platform_data
+Message-ID: <aWYs26SLZdk4_386@redhat.com>
+References: <20260112-mips-pic32-header-move-v2-0-927d516b1ff9@redhat.com>
+ <20260112-mips-pic32-header-move-v2-12-927d516b1ff9@redhat.com>
+ <d5b5942e-74ac-4b9b-b850-2417576d946b@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 00/29] arch, mm: consolidate hugetlb early reservation
-From: Kalle Niemi <kaleposti@gmail.com>
-To: Andrew Morton <akpm@linux-foundation.org>, Mike Rapoport <rppt@kernel.org>
-Cc: Alex Shi <alexs@kernel.org>, Alexander Gordeev <agordeev@linux.ibm.com>,
- Andreas Larsson <andreas@gaisler.com>, Borislav Petkov <bp@alien8.de>,
- Brian Cain <bcain@kernel.org>,
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
- Catalin Marinas <catalin.marinas@arm.com>,
- "David S. Miller" <davem@davemloft.net>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- David Hildenbrand <david@kernel.org>, Dinh Nguyen <dinguyen@kernel.org>,
- Geert Uytterhoeven <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>,
- Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
- Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Johannes Berg <johannes@sipsolutions.net>,
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- Jonathan Corbet <corbet@lwn.net>, Klara Modin <klarasmodin@gmail.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Magnus Lindholm <linmag7@gmail.com>, Matt Turner <mattst88@gmail.com>,
- Max Filippov <jcmvbkbc@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>,
- Michal Hocko <mhocko@suse.com>, Michal Simek <monstr@monstr.eu>,
- Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>,
- Palmer Dabbelt <palmer@dabbelt.com>, Pratyush Yadav <pratyush@kernel.org>,
- Richard Weinberger <richard@nod.at>, Ritesh Harjani <ritesh.list@gmail.com>,
- Russell King <linux@armlinux.org.uk>, Stafford Horne <shorne@gmail.com>,
- Suren Baghdasaryan <surenb@google.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Thomas Gleixner <tglx@linutronix.de>, Vasily Gorbik <gor@linux.ibm.com>,
- Vineet Gupta <vgupta@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
- Will Deacon <will@kernel.org>, x86@kernel.org, linux-alpha@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
- linux-cxl@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
- linux-mm@kvack.org, linux-openrisc@vger.kernel.org,
- linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
- linux-snps-arc@lists.infradead.org, linux-um@lists.infradead.org,
- linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
- sparclinux@vger.kernel.org
-References: <20260111082105.290734-1-rppt@kernel.org>
- <20260112142323.495fc43e662e7d276b0fa371@linux-foundation.org>
- <86b974d7-cabd-4913-b5f2-5b62b520e023@gmail.com>
-Content-Language: en-US
-In-Reply-To: <86b974d7-cabd-4913-b5f2-5b62b520e023@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <d5b5942e-74ac-4b9b-b850-2417576d946b@kernel.org>
+User-Agent: Mutt/2.2.14 (2025-02-20)
 
-On 1/13/26 08:50, Kalle Niemi wrote:
-> On 1/13/26 00:23, Andrew Morton wrote:
->> On Sun, 11 Jan 2026 10:20:34 +0200 Mike Rapoport <rppt@kernel.org> wrote:
->>
->>> v3 changes:
->>> * fix empty_zero_page initialization on arm
->>> * fix ZONE_DMA limit calculation on powerpc
->>> * add Acks
->>
->> updated, thanks.  I'll suppress the ensuing email flood.
->>
->> Kalle, can you please retest sometime, see if the BeagleBone Black boot
->> failure was fixed?
->>
->> Seems we haven't heard back from rmk regarding
->> https://lkml.kernel.org/r/aVrUDeSkqqY9ZCtS@shell.armlinux.org.uk.
+On Tue, Jan 13, 2026 at 07:38:27AM +0100, Jiri Slaby wrote:
+> On 12. 01. 26, 23:48, Brian Masney wrote:
+> > Use the linux/platform_data/pic32.h include instead of
+> > asm/mach-pic32/pic32.h so that the asm variant can be dropped. This
+> > is in preparation for allowing some drivers to be compiled on other
+> > architectures with COMPILE_TEST enabled.
 > 
-> Hello!
-> 
-> I will test this v3 patch ASAP and reply results here.
-> Collective sorry for the delay; I have been busy!
-> 
-> BR
-> Kalle
+> LGTM. Will you also enable the driver to be compiled?
 
-Hello!
+Yes, probably in a month. I'm going to wait for this series to land in
+Linus's tree first though.
 
-I tried this patch by cloning 
-https://git.kernel.org/pub/scm/linux/kernel/git/rppt/linux.git/log/?h=hugetlb-init/v3
+Brian
 
-Boots succesfully on BeagleBone Black!
-
-BR
-Kalle
 
