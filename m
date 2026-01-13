@@ -1,199 +1,141 @@
-Return-Path: <linux-mips+bounces-12894-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12895-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3818D18B4A
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Jan 2026 13:28:45 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B04E2D18BE1
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Jan 2026 13:34:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EFADC3030D95
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Jan 2026 12:28:24 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 31CBB3013D47
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Jan 2026 12:33:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88C7B38F252;
-	Tue, 13 Jan 2026 12:28:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A5E438FEF5;
+	Tue, 13 Jan 2026 12:33:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b="NC76RtxI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GCrBvpZe"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp-out3.simply.com (smtp-out3.simply.com [94.231.106.210])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8B203314DE;
-	Tue, 13 Jan 2026 12:28:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=94.231.106.210
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D9C338E5E8
+	for <linux-mips@vger.kernel.org>; Tue, 13 Jan 2026 12:33:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768307303; cv=none; b=JNA+RLjS5Y8SZOBzhmSgH3Fy+wZwbHWQt//YzfZjR9tsQkbD5XHOh0zOCEFNQPJVSfNg9lMFCAo+YGzTSlO6AjLB73t2Xs1kZ7JFC1Hz+qVWGBTTt2Mn4lINIfATerFs2gUgUceF9ZlujHYK2jLHQA8ec1i2p7GcKqhiHuGu35U=
+	t=1768307611; cv=none; b=BZqP1NeIXVKhwRYPAdU1TY0hUer96p+XN3Ox6/hMTSwfTAa9i6zfYWmWccttfxCYrgjNwWk+Gc7ZI7zll3VE4UqfvLb0xuz8dDGLadi1F8CetGjVUa5o6lm/AObhW35yPu/5YoMjHURjrl4036wE8NxZ+71NFxj1Yu1UfDymZZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768307303; c=relaxed/simple;
-	bh=21w0GG0eda5bCVdiXvdOHRzVIFvjNUj4U9+O+neqMZg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UY5Y1Gh9c1lzUpnzfUi9x4+9c7CsQBhRGyZmGT44Yg0Dr4G2+xqYlVA6Mjsnm5yOokth1FtvRnuyBu4bFV8uVFXv0DOwM6y/dTgWSvMlJce3Vh/nNOyuEIqLqaiPZ5zzSajU4yioFounomIUtC7WM3ZRecQDpkEIBdHeyH1oZ0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com; spf=pass smtp.mailfrom=gaisler.com; dkim=fail (0-bit key) header.d=gaisler.com header.i=@gaisler.com header.b=NC76RtxI reason="key not found in DNS"; arc=none smtp.client-ip=94.231.106.210
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gaisler.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gaisler.com
-Received: from localhost (localhost [127.0.0.1])
-	by smtp.simply.com (Simply.com) with ESMTP id 4dr7nT4CQCz1DR2r;
-	Tue, 13 Jan 2026 13:28:13 +0100 (CET)
-Received: from [192.168.0.25] (h-98-128-223-123.NA.cust.bahnhof.se [98.128.223.123])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(Client did not present a certificate)
-	by smtp.simply.com (Simply.com) with ESMTPSA id 4dr7nQ25vMz1DDgf;
-	Tue, 13 Jan 2026 13:28:10 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gaisler.com;
-	s=simplycom2; t=1768307293;
-	bh=guD8ZDnRvesT5KvXlXi5P5IpxaFCA5kIle2X5/2VdEk=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To;
-	b=NC76RtxIq9CvKMBZ8e8fqDdeh4TXwyvNkvf30sHXNOLOnEVZmRBj+bHCDi8FufU/c
-	 kWfZWHOIxSWOKL03enthax76m8YsczdRizVAQDjKjHPFRaRl/L5Y0iqK2UA8boHs2h
-	 YUuM9qT6Ba/QEyyAn4GTFzIGpGi10RKIEp9TlTeLGd8zC+Hr/coq6gBL6LosZXZTF1
-	 gt8Mie1XHzB/bpnFnld9TZavLmhYmlgBWFsXaCVZw4vobFyvtSEkURaEmNJU94ewFm
-	 w3pY4SkxqHFB/QXGBXfUllqNu8tQIWuZ/XTNBQs4TvEhLsgrM+Wzf2b59+1+UOXxo8
-	 bJQ987lvmGGqA==
-Message-ID: <7566eef3-bce4-4100-8a11-d88ef1e887a9@gaisler.com>
-Date: Tue, 13 Jan 2026 13:28:09 +0100
+	s=arc-20240116; t=1768307611; c=relaxed/simple;
+	bh=c2pQGNsmx4TXSTG4ks/OmiO2LMby6F7I6nhF1Yls93E=;
+	h=From:To:Cc:Subject:In-Reply-To:Date:Message-ID:References:
+	 MIME-Version:Content-Type; b=SaSpDAINQi4pLmN/DaBV55SA1IWyeAEMCdOBe6RemLf0b3dLCbGztruYElSmG6kV5QOdt3vR18ELZmJagTUmuelY1iGF8+fzzpn9v6TQ6M1xqfeKLLzzsSmVcnjupLcRbsxqG2dqFVWeW4lKzhODzJ/fbfhdQxgmaPPWoJx2eDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GCrBvpZe; arc=none smtp.client-ip=209.85.215.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-c525de78ebaso2161381a12.3
+        for <linux-mips@vger.kernel.org>; Tue, 13 Jan 2026 04:33:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1768307607; x=1768912407; darn=vger.kernel.org;
+        h=mime-version:references:message-id:date:in-reply-to:subject:cc:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=j4BCb4tuwUydlXX/lekB/MWAbo5xTWmBY98lhxIZgCk=;
+        b=GCrBvpZeucBOdNpJseUbRKNa77J3jEjSKSr2rQltUiOSzioURb4448Kr9GVdc4A4M6
+         EeRxRTsOfiRVNkUEGN4mkvBWr7+cqibFBBnbNCpse52V2sMsMNI9lEm95Cnlek63otZl
+         syjrb7MRSUA4zfswNNSYnSNoKl7QdqKysebTzPHBsCeNlTTSfvgjmp0e0FuW/B95Alst
+         oe/iuaWn7B8uGt+o/gTqlwZd0wTuqVGIQR6mFwzUCdAVrz2qHLtEl1u3M5lND7sa/YIo
+         WJVxnqKjY+DdRZteDSadMj1yuf/MI2IqhwEjkDmLAD+876PYUwT4dDvY2csrpor9dpk1
+         na4g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768307607; x=1768912407;
+        h=mime-version:references:message-id:date:in-reply-to:subject:cc:to
+         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=j4BCb4tuwUydlXX/lekB/MWAbo5xTWmBY98lhxIZgCk=;
+        b=k+C7DE7B3ygP3cOJVL02uYSKpTRGCoNpZTFBxxoDIorVdXQjNCFbfb26IUyVsnkd2h
+         hevM4XqaeAE5jdzERpPVJzqc2R5HAUoU2/nSjQNStMJ5lcdWde0sWpXPUQFJN3HHKjQi
+         Gs0mdh3neQFVTRNtrUgCEWOjc3cMUj2RNoNw7lVmdzWIlcY4P9OsxRK+tb4LrHcqaX8M
+         vxgUQPGClwXw8J0pZ9/niJfMW2ZxSzWK9HvNKhv384Ew6z1UW5EHRWjDRT22/rDdEqA7
+         ZPQg4SJXzILKBl2xkltdECHTiS8yls7azgKSgv9lrMltqkD0Vr/BBPANwEdjZb8xNKUC
+         TH1Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUlt9Fc5cqRPrNEkjaer3RnGbW8v04h52HD1HXf67BC+zwFtufxaVMuMhmB6WXlAt/m7zx4Asbos90B@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxe11/37L4X5QmUBZzpjn8ONSF6XOjJRXkeC4B6SHo+6DET7p9N
+	uLEPgawtMD/umej7ulH/oL7W3zmgPlqpGzRCwj2rUhoPBfPj6JYGzOW4
+X-Gm-Gg: AY/fxX4Bk+3ZkQ2S5XcUE5j6egUN8tAEe62DFMe6PHvEvIFzjgelcAqehmZyKBtWlNg
+	SmYk4tXPWAo9e8iq7GBfNOiTXymrCEDjgk+Qe/OXj5vKrRvv3hP3MiQi3tY/ZGS+5losbAxsRbm
+	X1OnGDt9Yze6zxWgAe4c1Jgu2TI4sPQeBeaP6J+a1kyEP/6oa2deFY8sIn6lwp9iMEpfTpt0+2Z
+	tCaQPzJhm8MUqiUsIriG2HNUib2o6aUtWfCMf/2Ca39YHh7rFGWsQS5SPs9wb8rXg/ugUILVvi7
+	ELAXb1WRgt/o3tijlQNKCVGjSRHgrTl4CiuG2p+XTtPjTHPe1J47b2CUWTmdtdihfpMbp929h0G
+	JD4mNxLxjWxMf/3yCmOpdaF4dMA/308tKK09dgDwYCYsiPMQPrNu5sAaLU6oiB968M6I5fj7wNV
+	f3vRlR
+X-Google-Smtp-Source: AGHT+IFw8NQUhXWsNFLNcy9VnhtaeqSccMp4bageDierszWlx1Kxyih6osyfD1+uAcqTN4o2oK4SYQ==
+X-Received: by 2002:a17:90b:3ccc:b0:340:9ba6:8af4 with SMTP id 98e67ed59e1d1-34f68c47f0amr18570023a91.35.1768307607428;
+        Tue, 13 Jan 2026 04:33:27 -0800 (PST)
+Received: from dw-tp ([49.205.216.49])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-350fd6e343bsm1428958a91.1.2026.01.13.04.33.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 13 Jan 2026 04:33:26 -0800 (PST)
+From: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+To: Mike Rapoport <rppt@kernel.org>, Andrew Morton <akpm@linux-foundation.org>
+Cc: Alex Shi <alexs@kernel.org>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Andreas Larsson <andreas@gaisler.com>, Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@kernel.org>, 
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	"David S. Miller" <davem@davemloft.net>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	David Hildenbrand <david@kernel.org>, Dinh Nguyen <dinguyen@kernel.org>, 
+	Geert Uytterhoeven <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>, 
+	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>, 
+	Ingo Molnar <mingo@redhat.com>, Johannes Berg <johannes@sipsolutions.net>, 
+	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Jonathan Corbet <corbet@lwn.net>, 
+	Klara Modin <klarasmodin@gmail.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
+	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Magnus Lindholm <linmag7@gmail.com>, 
+	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Michal Hocko <mhocko@suse.com>, Michal Simek <monstr@monstr.eu>, 
+	Mike Rapoport <rppt@kernel.org>, Muchun Song <muchun.song@linux.dev>, 
+	Oscar Salvador <osalvador@suse.de>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Pratyush Yadav <pratyush@kernel.org>, Richard Weinberger <richard@nod.at>, 
+	Russell King <linux@armlinux.org.uk>, Stafford Horne <shorne@gmail.com>, 
+	Suren Baghdasaryan <surenb@google.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	Thomas Gleixner <tglx@linutronix.de>, Vasily Gorbik <gor@linux.ibm.com>, Vineet Gupta <vgupta@kernel.org>, 
+	Vlastimil Babka <vbabka@suse.cz>, Will Deacon <will@kernel.org>, x86@kernel.org, 
+	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-csky@vger.kernel.org, linux-cxl@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-hexagon@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
+	linux-mips@vger.kernel.org, linux-mm@kvack.org, 
+	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
+	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org, 
+	linux-um@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
+	loongarch@lists.linux.dev, sparclinux@vger.kernel.org
+Subject: Re: [PATCH v3 15/29] powerpc: introduce arch_zone_limits_init()
+In-Reply-To: <20260111082105.290734-16-rppt@kernel.org>
+Date: Tue, 13 Jan 2026 17:59:49 +0530
+Message-ID: <87zf6hu24i.ritesh.list@gmail.com>
+References: <20260111082105.290734-1-rppt@kernel.org> <20260111082105.290734-16-rppt@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 19/29] sparc: introduce arch_zone_limits_init()
-To: Mike Rapoport <rppt@kernel.org>, Andrew Morton <akpm@linux-foundation.org>
-Cc: Alex Shi <alexs@kernel.org>, Alexander Gordeev <agordeev@linux.ibm.com>,
- Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@kernel.org>,
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
- Catalin Marinas <catalin.marinas@arm.com>,
- "David S. Miller" <davem@davemloft.net>,
- Dave Hansen <dave.hansen@linux.intel.com>,
- David Hildenbrand <david@kernel.org>, Dinh Nguyen <dinguyen@kernel.org>,
- Geert Uytterhoeven <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>,
- Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>,
- Huacai Chen <chenhuacai@kernel.org>, Ingo Molnar <mingo@redhat.com>,
- Johannes Berg <johannes@sipsolutions.net>,
- John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>,
- Jonathan Corbet <corbet@lwn.net>, Klara Modin <klarasmodin@gmail.com>,
- "Liam R. Howlett" <Liam.Howlett@oracle.com>,
- Lorenzo Stoakes <lorenzo.stoakes@oracle.com>,
- Magnus Lindholm <linmag7@gmail.com>, Matt Turner <mattst88@gmail.com>,
- Max Filippov <jcmvbkbc@gmail.com>, Michael Ellerman <mpe@ellerman.id.au>,
- Michal Hocko <mhocko@suse.com>, Michal Simek <monstr@monstr.eu>,
- Muchun Song <muchun.song@linux.dev>, Oscar Salvador <osalvador@suse.de>,
- Palmer Dabbelt <palmer@dabbelt.com>, Pratyush Yadav <pratyush@kernel.org>,
- Richard Weinberger <richard@nod.at>, Ritesh Harjani <ritesh.list@gmail.com>,
- Russell King <linux@armlinux.org.uk>, Stafford Horne <shorne@gmail.com>,
- Suren Baghdasaryan <surenb@google.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Thomas Gleixner <tglx@linutronix.de>, Vasily Gorbik <gor@linux.ibm.com>,
- Vineet Gupta <vgupta@kernel.org>, Vlastimil Babka <vbabka@suse.cz>,
- Will Deacon <will@kernel.org>, x86@kernel.org, linux-alpha@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
- linux-cxl@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-hexagon@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-m68k@lists.linux-m68k.org, linux-mips@vger.kernel.org,
- linux-mm@kvack.org, linux-openrisc@vger.kernel.org,
- linux-parisc@vger.kernel.org, linux-riscv@lists.infradead.org,
- linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
- linux-snps-arc@lists.infradead.org, linux-um@lists.infradead.org,
- linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
- sparclinux@vger.kernel.org
-References: <20260111082105.290734-1-rppt@kernel.org>
- <20260111082105.290734-20-rppt@kernel.org>
-Content-Language: en-US
-From: Andreas Larsson <andreas@gaisler.com>
-In-Reply-To: <20260111082105.290734-20-rppt@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain
 
-On 2026-01-11 09:20, Mike Rapoport wrote:
+Mike Rapoport <rppt@kernel.org> writes:
+
 > From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
-> 
+>
 > Move calculations of zone limits to a dedicated arch_zone_limits_init()
 > function.
-> 
+>
 > Later MM core will use this function as an architecture specific callback
 > during nodes and zones initialization and thus there won't be a need to
 > call free_area_init() from every architecture.
-> 
+>
 > Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
 > ---
->  arch/sparc/mm/init_64.c |  6 ++++++
->  arch/sparc/mm/srmmu.c   | 12 ++++++++----
->  2 files changed, 14 insertions(+), 4 deletions(-)
+>  arch/powerpc/mm/mem.c | 22 ++++++++++++----------
+>  1 file changed, 12 insertions(+), 10 deletions(-)
 
-Hi Mike,
+This v2 looks good to me. 
+I have also done a basic bootup testing using Linux PPC CI.
 
-Thanks for this nice cleanup series.
+Please feel free to add:
 
-
-> diff --git a/arch/sparc/mm/init_64.c b/arch/sparc/mm/init_64.c
-> index df9f7c444c39..fbaad449dfc9 100644
-> --- a/arch/sparc/mm/init_64.c
-> +++ b/arch/sparc/mm/init_64.c
-> @@ -2279,6 +2279,11 @@ static void __init reduce_memory(phys_addr_t limit_ram)
->  	memblock_enforce_memory_limit(limit_ram);
->  }
->  
-> +void __init arch_zone_limits_init(unsigned long *max_zone_pfns)
-> +{
-> +	max_zone_pfns[ZONE_NORMAL] = last_valid_pfn;
-> +}
-> +
->  void __init paging_init(void)
->  {
->  	unsigned long end_pfn, shift, phys_base;
-> @@ -2461,6 +2466,7 @@ void __init paging_init(void)
->  
->  		max_zone_pfns[ZONE_NORMAL] = end_pfn;
-
-This old initialization of max_zone_pfns[ZONE_NORMAL] should also be
-removed, right? With that removed it makes the local end_pfn variable
-set but unused, so could you please also remove that one?
-
-I know that this whole code block gets removed later, but the cleanup
-max_zone_pfns[ZONE_NORMAL] and the removal of end_pfn (that is not done
-later in this version of the series) fits logically in this patch.
-
->  
-> +		arch_zone_limits_init(max_zone_pfns);
->  		free_area_init(max_zone_pfns);
->  	}
->  
-> diff --git a/arch/sparc/mm/srmmu.c b/arch/sparc/mm/srmmu.c
-> index f8fb4911d360..81e90151db90 100644
-> --- a/arch/sparc/mm/srmmu.c
-> +++ b/arch/sparc/mm/srmmu.c
-> @@ -884,6 +884,13 @@ static void __init map_kernel(void)
->  
->  void (*poke_srmmu)(void) = NULL;
->  
-> +void __init arch_zone_limits_init(unsigned long *max_zone_pfns)
-> +{
-> +	max_zone_pfns[ZONE_DMA] = max_low_pfn;
-> +	max_zone_pfns[ZONE_NORMAL] = max_low_pfn;
-> +	max_zone_pfns[ZONE_HIGHMEM] = highend_pfn;
-> +}
-> +
->  void __init srmmu_paging_init(void)
->  {
->  	int i;
-> @@ -967,10 +974,7 @@ void __init srmmu_paging_init(void)
->  	{
->  		unsigned long max_zone_pfn[MAX_NR_ZONES] = { 0 };
->  
-> -		max_zone_pfn[ZONE_DMA] = max_low_pfn;
-> -		max_zone_pfn[ZONE_NORMAL] = max_low_pfn;
-> -		max_zone_pfn[ZONE_HIGHMEM] = highend_pfn;
-> -
-> +		arch_zone_limits_init(max_zone_pfn);
->  		free_area_init(max_zone_pfn);
->  	}
->  }
-
-With the feedback for arch/sparc/mm/init_64.c addressed:
-
-Acked-by: Andreas Larsson <andreas@gaisler.com>
-
-Cheers,
-Andreas
-
+Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
 
