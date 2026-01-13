@@ -1,141 +1,125 @@
-Return-Path: <linux-mips+bounces-12895-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12896-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B04E2D18BE1
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Jan 2026 13:34:13 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 416D5D18C3A
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Jan 2026 13:37:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 31CBB3013D47
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Jan 2026 12:33:49 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4179C300E3D5
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Jan 2026 12:37:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A5E438FEF5;
-	Tue, 13 Jan 2026 12:33:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F74038A9D6;
+	Tue, 13 Jan 2026 12:37:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GCrBvpZe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="djdbXGFB"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pg1-f173.google.com (mail-pg1-f173.google.com [209.85.215.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D9C338E5E8
-	for <linux-mips@vger.kernel.org>; Tue, 13 Jan 2026 12:33:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C169318BBE
+	for <linux-mips@vger.kernel.org>; Tue, 13 Jan 2026 12:37:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768307611; cv=none; b=BZqP1NeIXVKhwRYPAdU1TY0hUer96p+XN3Ox6/hMTSwfTAa9i6zfYWmWccttfxCYrgjNwWk+Gc7ZI7zll3VE4UqfvLb0xuz8dDGLadi1F8CetGjVUa5o6lm/AObhW35yPu/5YoMjHURjrl4036wE8NxZ+71NFxj1Yu1UfDymZZg=
+	t=1768307828; cv=none; b=kVgTvPIXFlHpMUnENG0ZVibS/pVALDWFISPmcrobTDuDsZLeCyfEfNM2vOqznQv2W3CuZNQI+IeJFh3MfM2MVoXXIoPOfMFlO+5q8nIvoMDb5KAkMt6BNnwqZQHjFXlzwljbuisDvtNhYZwF7RJXKXkiLyy+XAvHa/U4tPOXgbs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768307611; c=relaxed/simple;
-	bh=c2pQGNsmx4TXSTG4ks/OmiO2LMby6F7I6nhF1Yls93E=;
-	h=From:To:Cc:Subject:In-Reply-To:Date:Message-ID:References:
-	 MIME-Version:Content-Type; b=SaSpDAINQi4pLmN/DaBV55SA1IWyeAEMCdOBe6RemLf0b3dLCbGztruYElSmG6kV5QOdt3vR18ELZmJagTUmuelY1iGF8+fzzpn9v6TQ6M1xqfeKLLzzsSmVcnjupLcRbsxqG2dqFVWeW4lKzhODzJ/fbfhdQxgmaPPWoJx2eDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GCrBvpZe; arc=none smtp.client-ip=209.85.215.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f173.google.com with SMTP id 41be03b00d2f7-c525de78ebaso2161381a12.3
-        for <linux-mips@vger.kernel.org>; Tue, 13 Jan 2026 04:33:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768307607; x=1768912407; darn=vger.kernel.org;
-        h=mime-version:references:message-id:date:in-reply-to:subject:cc:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=j4BCb4tuwUydlXX/lekB/MWAbo5xTWmBY98lhxIZgCk=;
-        b=GCrBvpZeucBOdNpJseUbRKNa77J3jEjSKSr2rQltUiOSzioURb4448Kr9GVdc4A4M6
-         EeRxRTsOfiRVNkUEGN4mkvBWr7+cqibFBBnbNCpse52V2sMsMNI9lEm95Cnlek63otZl
-         syjrb7MRSUA4zfswNNSYnSNoKl7QdqKysebTzPHBsCeNlTTSfvgjmp0e0FuW/B95Alst
-         oe/iuaWn7B8uGt+o/gTqlwZd0wTuqVGIQR6mFwzUCdAVrz2qHLtEl1u3M5lND7sa/YIo
-         WJVxnqKjY+DdRZteDSadMj1yuf/MI2IqhwEjkDmLAD+876PYUwT4dDvY2csrpor9dpk1
-         na4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768307607; x=1768912407;
-        h=mime-version:references:message-id:date:in-reply-to:subject:cc:to
-         :from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j4BCb4tuwUydlXX/lekB/MWAbo5xTWmBY98lhxIZgCk=;
-        b=k+C7DE7B3ygP3cOJVL02uYSKpTRGCoNpZTFBxxoDIorVdXQjNCFbfb26IUyVsnkd2h
-         hevM4XqaeAE5jdzERpPVJzqc2R5HAUoU2/nSjQNStMJ5lcdWde0sWpXPUQFJN3HHKjQi
-         Gs0mdh3neQFVTRNtrUgCEWOjc3cMUj2RNoNw7lVmdzWIlcY4P9OsxRK+tb4LrHcqaX8M
-         vxgUQPGClwXw8J0pZ9/niJfMW2ZxSzWK9HvNKhv384Ew6z1UW5EHRWjDRT22/rDdEqA7
-         ZPQg4SJXzILKBl2xkltdECHTiS8yls7azgKSgv9lrMltqkD0Vr/BBPANwEdjZb8xNKUC
-         TH1Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUlt9Fc5cqRPrNEkjaer3RnGbW8v04h52HD1HXf67BC+zwFtufxaVMuMhmB6WXlAt/m7zx4Asbos90B@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxe11/37L4X5QmUBZzpjn8ONSF6XOjJRXkeC4B6SHo+6DET7p9N
-	uLEPgawtMD/umej7ulH/oL7W3zmgPlqpGzRCwj2rUhoPBfPj6JYGzOW4
-X-Gm-Gg: AY/fxX4Bk+3ZkQ2S5XcUE5j6egUN8tAEe62DFMe6PHvEvIFzjgelcAqehmZyKBtWlNg
-	SmYk4tXPWAo9e8iq7GBfNOiTXymrCEDjgk+Qe/OXj5vKrRvv3hP3MiQi3tY/ZGS+5losbAxsRbm
-	X1OnGDt9Yze6zxWgAe4c1Jgu2TI4sPQeBeaP6J+a1kyEP/6oa2deFY8sIn6lwp9iMEpfTpt0+2Z
-	tCaQPzJhm8MUqiUsIriG2HNUib2o6aUtWfCMf/2Ca39YHh7rFGWsQS5SPs9wb8rXg/ugUILVvi7
-	ELAXb1WRgt/o3tijlQNKCVGjSRHgrTl4CiuG2p+XTtPjTHPe1J47b2CUWTmdtdihfpMbp929h0G
-	JD4mNxLxjWxMf/3yCmOpdaF4dMA/308tKK09dgDwYCYsiPMQPrNu5sAaLU6oiB968M6I5fj7wNV
-	f3vRlR
-X-Google-Smtp-Source: AGHT+IFw8NQUhXWsNFLNcy9VnhtaeqSccMp4bageDierszWlx1Kxyih6osyfD1+uAcqTN4o2oK4SYQ==
-X-Received: by 2002:a17:90b:3ccc:b0:340:9ba6:8af4 with SMTP id 98e67ed59e1d1-34f68c47f0amr18570023a91.35.1768307607428;
-        Tue, 13 Jan 2026 04:33:27 -0800 (PST)
-Received: from dw-tp ([49.205.216.49])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-350fd6e343bsm1428958a91.1.2026.01.13.04.33.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 13 Jan 2026 04:33:26 -0800 (PST)
-From: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
-To: Mike Rapoport <rppt@kernel.org>, Andrew Morton <akpm@linux-foundation.org>
-Cc: Alex Shi <alexs@kernel.org>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Andreas Larsson <andreas@gaisler.com>, Borislav Petkov <bp@alien8.de>, Brian Cain <bcain@kernel.org>, 
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	"David S. Miller" <davem@davemloft.net>, Dave Hansen <dave.hansen@linux.intel.com>, 
-	David Hildenbrand <david@kernel.org>, Dinh Nguyen <dinguyen@kernel.org>, 
-	Geert Uytterhoeven <geert@linux-m68k.org>, Guo Ren <guoren@kernel.org>, 
-	Heiko Carstens <hca@linux.ibm.com>, Helge Deller <deller@gmx.de>, Huacai Chen <chenhuacai@kernel.org>, 
-	Ingo Molnar <mingo@redhat.com>, Johannes Berg <johannes@sipsolutions.net>, 
-	John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, Jonathan Corbet <corbet@lwn.net>, 
-	Klara Modin <klarasmodin@gmail.com>, "Liam R. Howlett" <Liam.Howlett@oracle.com>, 
-	Lorenzo Stoakes <lorenzo.stoakes@oracle.com>, Magnus Lindholm <linmag7@gmail.com>, 
-	Matt Turner <mattst88@gmail.com>, Max Filippov <jcmvbkbc@gmail.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Michal Hocko <mhocko@suse.com>, Michal Simek <monstr@monstr.eu>, 
-	Mike Rapoport <rppt@kernel.org>, Muchun Song <muchun.song@linux.dev>, 
-	Oscar Salvador <osalvador@suse.de>, Palmer Dabbelt <palmer@dabbelt.com>, 
-	Pratyush Yadav <pratyush@kernel.org>, Richard Weinberger <richard@nod.at>, 
-	Russell King <linux@armlinux.org.uk>, Stafford Horne <shorne@gmail.com>, 
-	Suren Baghdasaryan <surenb@google.com>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	Thomas Gleixner <tglx@linutronix.de>, Vasily Gorbik <gor@linux.ibm.com>, Vineet Gupta <vgupta@kernel.org>, 
-	Vlastimil Babka <vbabka@suse.cz>, Will Deacon <will@kernel.org>, x86@kernel.org, 
-	linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-csky@vger.kernel.org, linux-cxl@vger.kernel.org, 
-	linux-doc@vger.kernel.org, linux-hexagon@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-m68k@lists.linux-m68k.org, 
-	linux-mips@vger.kernel.org, linux-mm@kvack.org, 
-	linux-openrisc@vger.kernel.org, linux-parisc@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
-	linux-sh@vger.kernel.org, linux-snps-arc@lists.infradead.org, 
-	linux-um@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, 
-	loongarch@lists.linux.dev, sparclinux@vger.kernel.org
-Subject: Re: [PATCH v3 15/29] powerpc: introduce arch_zone_limits_init()
-In-Reply-To: <20260111082105.290734-16-rppt@kernel.org>
-Date: Tue, 13 Jan 2026 17:59:49 +0530
-Message-ID: <87zf6hu24i.ritesh.list@gmail.com>
-References: <20260111082105.290734-1-rppt@kernel.org> <20260111082105.290734-16-rppt@kernel.org>
+	s=arc-20240116; t=1768307828; c=relaxed/simple;
+	bh=/jEbcQNNf+2y5DghSoCRU+Htja2/wQhqeKPPtGlgrS8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tMHVqS9JAuO95UmhiMkrzvYLzJLZO7RH/i/i7c6ks9L75KzUIzZ7EhhDXJwQ+Ajp80BpbHTlWw0xbCb2TaiapH16kcYeYX90SfktvnV/tXb1mqCkWCNLVhT/d4vBefOwAACf87bko9F3iGXvqSCc+P7q1wFGLEjoLe6F2h/tgQ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=djdbXGFB; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0822C16AAE
+	for <linux-mips@vger.kernel.org>; Tue, 13 Jan 2026 12:37:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768307827;
+	bh=/jEbcQNNf+2y5DghSoCRU+Htja2/wQhqeKPPtGlgrS8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=djdbXGFB/0vFYnxrpHaPDsmzQQ20F7Osv04XDibZ2U163NlSPT6o1qMPl+o0mVNbP
+	 +bJYC/uONDGWEOcsPMDaJW6nsYc+VkjK795U4Il/TEvVcY1W9Y5QaKATY7Syf5Pn/S
+	 K2NEgIZSD6lIohY1OEP4eJkee0IH2jlvRpfZz1cTjBCyl2ePRW8Xy1r+EKGgnUmqhR
+	 Y5p2hkTY8XmCFhTtDYEybg3wOd3X3vfFDnANyXDKYeO8LD70k1+8jhfS1623TFn+Ov
+	 GW9pnukDXb1nmpYWUO9sFSrv0u1kusskQNElUZ4sA94yQDoIS4w9IWKnG844y3NboS
+	 mOgETq9y0Eh8A==
+Received: by mail-lj1-f181.google.com with SMTP id 38308e7fff4ca-38301bf7864so56412791fa.0
+        for <linux-mips@vger.kernel.org>; Tue, 13 Jan 2026 04:37:07 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWrjOBaaFD9eFeiU0AtckGCbv+6WBHR/GvnTqjmV6PhYdH7xlFqEla4+CARj5MNFJ3PIjGGeBbRRdBo@vger.kernel.org
+X-Gm-Message-State: AOJu0YxmTPm9kSrm3iFAnSz5uf9D/UnjM4IBxD4+Hl0BTW4kKhgFfupZ
+	3FAko2QCabuZvVJeHuROUWX37L/IqAmPUnuLewz32B8u+TLfFyZNzLBHE//OXimXc4/T77UNQMG
+	H67h98iBCIGGjgdHmA1sPLFOE3pQiU3Atnl62m9/cuA==
+X-Received: by 2002:a2e:ab19:0:b0:37b:9361:711d with SMTP id
+ 38308e7fff4ca-38350a55384mr8601501fa.8.1768307826023; Tue, 13 Jan 2026
+ 04:37:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+References: <20260112-qcom-sa8255p-emac-v6-0-86a3d4b2ad83@oss.qualcomm.com>
+ <20260112-qcom-sa8255p-emac-v6-2-86a3d4b2ad83@oss.qualcomm.com> <a2a610a3-aead-4e85-8a4c-7b83ccf276dc@lunn.ch>
+In-Reply-To: <a2a610a3-aead-4e85-8a4c-7b83ccf276dc@lunn.ch>
+From: Bartosz Golaszewski <brgl@kernel.org>
+Date: Tue, 13 Jan 2026 13:36:53 +0100
+X-Gmail-Original-Message-ID: <CAMRc=Mf8TTTcU9A3gc_LQF3Ow6Ww0omVJH6x-DQEnOSPXfaUQw@mail.gmail.com>
+X-Gm-Features: AZwV_QhI9rebW3ffX0n9A2EUYniK94gLsNSjXRbzl9peLeeXv9eI-nHhZ9l6ybY
+Message-ID: <CAMRc=Mf8TTTcU9A3gc_LQF3Ow6Ww0omVJH6x-DQEnOSPXfaUQw@mail.gmail.com>
+Subject: Re: [PATCH RESEND net-next v6 2/7] net: stmmac: qcom-ethqos: use
+ generic device properties
+To: Andrew Lunn <andrew@lunn.ch>
+Cc: Bartosz Golaszewski <bartosz.golaszewski@oss.qualcomm.com>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Richard Cochran <richardcochran@gmail.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, 
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue <alexandre.torgue@foss.st.com>, 
+	Vinod Koul <vkoul@kernel.org>, Giuseppe Cavallaro <peppe.cavallaro@st.com>, 
+	Jose Abreu <joabreu@synopsys.com>, Chen-Yu Tsai <wens@kernel.org>, 
+	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
+	Matthew Gerlach <matthew.gerlach@altera.com>, Neil Armstrong <neil.armstrong@linaro.org>, 
+	Kevin Hilman <khilman@baylibre.com>, Jerome Brunet <jbrunet@baylibre.com>, 
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, 
+	Keguang Zhang <keguang.zhang@gmail.com>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Jan Petrous <jan.petrous@oss.nxp.com>, s32@nxp.com, 
+	Romain Gantois <romain.gantois@bootlin.com>, 
+	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, Heiko Stuebner <heiko@sntech.de>, 
+	Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto <inochiama@gmail.com>, 
+	Emil Renner Berthing <kernel@esmil.dk>, Minda Chen <minda.chen@starfivetech.com>, 
+	Drew Fustini <fustini@kernel.org>, Guo Ren <guoren@kernel.org>, Fu Wei <wefu@redhat.com>, 
+	Nobuhiro Iwamatsu <nobuhiro.iwamatsu.x90@mail.toshiba>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, Magnus Damm <magnus.damm@gmail.com>, 
+	Maxime Ripard <mripard@kernel.org>, Shuang Liang <liangshuang@eswincomputing.com>, 
+	Zhi Li <lizhi2@eswincomputing.com>, Shangjuan Wei <weishangjuan@eswincomputing.com>, 
+	"G. Jaya Kumaran" <vineetha.g.jaya.kumaran@intel.com>, Clark Wang <xiaoning.wang@nxp.com>, 
+	Linux Team <linux-imx@nxp.com>, Frank Li <Frank.Li@nxp.com>, David Wu <david.wu@rock-chips.com>, 
+	Samin Guo <samin.guo@starfivetech.com>, 
+	Christophe Roullier <christophe.roullier@foss.st.com>, Swathi K S <swathi.ks@samsung.com>, 
+	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, netdev@vger.kernel.org, 
+	linux-stm32@st-md-mailman.stormreply.com, 
+	linux-arm-kernel@lists.infradead.org, Drew Fustini <dfustini@tenstorrent.com>, 
+	linux-sunxi@lists.linux.dev, linux-amlogic@lists.infradead.org, 
+	linux-mips@vger.kernel.org, imx@lists.linux.dev, 
+	linux-renesas-soc@vger.kernel.org, linux-rockchip@lists.infradead.org, 
+	sophgo@lists.linux.dev, linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Mike Rapoport <rppt@kernel.org> writes:
-
-> From: "Mike Rapoport (Microsoft)" <rppt@kernel.org>
+On Mon, Jan 12, 2026 at 2:45=E2=80=AFPM Andrew Lunn <andrew@lunn.ch> wrote:
 >
-> Move calculations of zone limits to a dedicated arch_zone_limits_init()
-> function.
+> On Mon, Jan 12, 2026 at 11:15:41AM +0100, Bartosz Golaszewski wrote:
+> > From: Bartosz Golaszewski <brgl@kernel.org>
+> >
+> > In order to drop the dependency on CONFIG_OF, convert all device proper=
+ty
+> > getters from OF-specific to generic device properties and stop pulling
+> > in any linux/of.h symbols.
 >
-> Later MM core will use this function as an architecture specific callback
-> during nodes and zones initialization and thus there won't be a need to
-> call free_area_init() from every architecture.
+> Is the intention to read these properties from ACPI tables?
 >
-> Signed-off-by: Mike Rapoport (Microsoft) <rppt@kernel.org>
-> ---
->  arch/powerpc/mm/mem.c | 22 ++++++++++++----------
->  1 file changed, 12 insertions(+), 10 deletions(-)
 
-This v2 looks good to me. 
-I have also done a basic bootup testing using Linux PPC CI.
+No. Other than a couple property getters which can use the fwnode
+abstraction, there's nothing here that requires the OF dependence.
 
-Please feel free to add:
-
-Reviewed-by: Ritesh Harjani (IBM) <ritesh.list@gmail.com>
+Bartosz
 
