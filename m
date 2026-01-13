@@ -1,89 +1,92 @@
-Return-Path: <linux-mips+bounces-12885-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12886-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94AEFD15E04
-	for <lists+linux-mips@lfdr.de>; Tue, 13 Jan 2026 00:50:25 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E635D16BB9
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Jan 2026 06:48:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 15AC630019C4
-	for <lists+linux-mips@lfdr.de>; Mon, 12 Jan 2026 23:50:25 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 93339300A7A1
+	for <lists+linux-mips@lfdr.de>; Tue, 13 Jan 2026 05:48:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C9FD2BE03D;
-	Mon, 12 Jan 2026 23:50:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ADFC3624D8;
+	Tue, 13 Jan 2026 05:48:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Ro92BfaD"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5181A284880;
-	Mon, 12 Jan 2026 23:50:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65DCC3624D1;
+	Tue, 13 Jan 2026 05:48:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768261823; cv=none; b=LIeykvq4udoqtGXK+V/qCPUFTvj1OEKx3Q3VaH5ZBXiFNUBggeKo/qaaGtWSk+6Ki4NhKI/LFXnkm3Py6Xv4+o2bYO9txk0wjhRWgU+4DaNYjHSeqKcCxzTf4fODbkfWTFH+Q0TgTMJk3aEuMuT3fHN3S2HHEmYHctQy946ppEY=
+	t=1768283291; cv=none; b=HsQX7hIPTh/r8QAQP0nTCZAh4Wm0glWMHy5BTiLjQzvi74L5P7rVmXORz5ZK+jNL8n3l5cl1LCqhapoFVEWHv3ZR/TIEqdBn3fdGD7DJXtFVbfm/I5czV05hzN4GfKxSmI/bFQHqCfQsP6WiLmqpOzGVNEBPXtfvbOMzZsFnaes=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768261823; c=relaxed/simple;
-	bh=CyjhGPbOwqxuAQzxV+Lja9SyFNFJ71LWX49/T8QSXq8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kOWWl3X9COJFt1vpqIpn/bBWy4m1f3BCVpBRGBZfNCckgkLQ9fS1kNZGc7IRt7azinPPaDWF61HTPt+fhFx7K2dI4ttFxIdXOKMnKx6hr7k8EaYo9iBqVQqM9wLnB5KSCq5saN/Hpuf92Ju8Z33hawmbmjceDYcBL+K3MvfdHoA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
-Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
-	id 1vfQmH-0006Lj-00; Mon, 12 Jan 2026 23:52:49 +0100
-Received: by alpha.franken.de (Postfix, from userid 1000)
-	id 6CD93C0113; Mon, 12 Jan 2026 23:09:05 +0100 (CET)
-Date: Mon, 12 Jan 2026 23:09:05 +0100
-From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: Simon Horman <horms@kernel.org>,
-	Ethan Nelson-Moore <enelsonmoore@gmail.com>,
-	linux-mips@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH net-next] pcnet32: remove VLB support
-Message-ID: <aWVxAVHWTOgEcwAD@alpha.franken.de>
-References: <20260107071831.32895-1-enelsonmoore@gmail.com>
- <20260109180443.GO345651@kernel.org>
- <alpine.DEB.2.21.2601110027520.30566@angie.orcam.me.uk>
+	s=arc-20240116; t=1768283291; c=relaxed/simple;
+	bh=zz0pkRd2L6te/psZRBm1AB7/etjwcUmL1ixtZQ+ZJ6s=;
+	h=Content-Type:MIME-Version:In-Reply-To:References:Subject:From:Cc:
+	 To:Date:Message-ID; b=cNYx4/tnWoWnMqjX7eQoMytwDFznkntRZ7h8ELXni35aCCMnBype9Na5U6jzm6pcWk8arr9Y0T/mFcMkmfQcrmN2OV0mbU8ag859u81BbbdJDqVmQagFNI3RNC2fAG6WniqI6FoJ/2xdjoNfbzrQAfJxFLkJxTFyEnKdMYwe1fE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Ro92BfaD; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B2E11C116C6;
+	Tue, 13 Jan 2026 05:48:10 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1768283290;
+	bh=zz0pkRd2L6te/psZRBm1AB7/etjwcUmL1ixtZQ+ZJ6s=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=Ro92BfaD337jFdowNFOfSGZxG5Zp6AsCEK4k5YEJmqUjBF+AwG9C/cR0Sp4F0F7Cg
+	 aa/uWHnd78K9PCR0z1jzJuw2NBujQWaIDKV8StrzfwdkSFsLkZh1oRIjrMGpCquvRh
+	 GQpoxVsqAeye83TpLVgt30TaOWhhw5B90JsrucBVCn/bwAbQdicSGshbn2e+/eGah4
+	 Y91v56FS9/YTb6qrc/1eBlwu9mxbLA7/z3T9NrB0JGadBs1OJLiRvR6r6FMJQxLUrI
+	 hdlq/IydwRb2naeGtD10cqleZkioBhDJeNxQIVX3+TkWI1/SSsQLxi1NGLKgU5uV+t
+	 p8vY+4LWnJd+Q==
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2601110027520.30566@angie.orcam.me.uk>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20260112-mips-pic32-header-move-v2-16-927d516b1ff9@redhat.com>
+References: <20260112-mips-pic32-header-move-v2-0-927d516b1ff9@redhat.com> <20260112-mips-pic32-header-move-v2-16-927d516b1ff9@redhat.com>
+Subject: Re: [PATCH v2 16/16] clk: microchip: core: allow driver to be compiled with COMPILE_TEST
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, Brian Masney <bmasney@redhat.com>, Michael Turquette <mturquette@baylibre.com>, linux-clk@vger.kernel.org
+To: Brian Masney <bmasney@redhat.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Date: Mon, 12 Jan 2026 22:48:07 -0700
+Message-ID: <176828328795.4027.16644210192638742005@lazor>
+User-Agent: alot/0.11
 
-On Sun, Jan 11, 2026 at 12:40:56AM +0000, Maciej W. Rozycki wrote:
-> [+cc Thomas, linux-mips]
-> 
-> On Fri, 9 Jan 2026, Simon Horman wrote:
-> 
-> > > This allows the code managing device instances to be simplified
-> > > significantly. The VLB bus is very obsolete and last appeared on
-> > > P5 Pentium-era hardware. Support for it has been removed from
-> > > other drivers, and it is highly unlikely anyone is using it with
-> > > modern Linux kernels.
-> > > 
-> > > Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
-> > 
-> > Hi Ethan,
-> > 
-> > I don't think this driver has received much attention for some time.
-> > So, unless you have hardware to test changes on, I would suggest
-> > either leaving it alone or, if we suspect there are no users,
-> > removing it.
-> 
->  You mean discarding the whole of drivers/net/ethernet/amd/pcnet32.c?  If 
-> so, then it's a hard NAK from me.  It's the onboard/netboot interface of 
-> the MIPS Malta platform and it continues being used regularly, primarily 
-> with QEMU setups, although I have actual Malta hardware in my lab too, 
-> usually running 24/7.  It's one of the primary MIPS plaforms, cf. 
-> arch/mips/configs/malta_defconfig.
+Quoting Brian Masney (2026-01-12 15:48:10)
+> diff --git a/drivers/clk/microchip/Kconfig b/drivers/clk/microchip/Kconfig
+> index 1b9e43eb54976b219a0277cc971f353fd6af226a..1e56a057319d97e20440fe4e1=
+07d26fa85c95ab1 100644
+> --- a/drivers/clk/microchip/Kconfig
+> +++ b/drivers/clk/microchip/Kconfig
+> @@ -1,7 +1,7 @@
+>  # SPDX-License-Identifier: GPL-2.0
+> =20
+>  config COMMON_CLK_PIC32
+> -       def_bool COMMON_CLK && MACH_PIC32
+> +       def_bool (COMMON_CLK && MACH_PIC32) || COMPILE_TEST
+> =20
+>  config MCHP_CLK_MPFS
+>         bool "Clk driver for PolarFire SoC"
+> diff --git a/drivers/clk/microchip/clk-core.c b/drivers/clk/microchip/clk=
+-core.c
+> index 891bec5fe1bedea826ff9c3bd4099c90e2528ff9..ce3a24e061d145934c8484300=
+8efadc3b0e2cffa 100644
+> --- a/drivers/clk/microchip/clk-core.c
+> +++ b/drivers/clk/microchip/clk-core.c
+> @@ -75,6 +75,7 @@
+>  /* SoC specific clock needed during SPLL clock rate switch */
+>  static struct clk_hw *pic32_sclk_hw;
+> =20
+> +#ifdef CONFIG_MATCH_PIC32
 
-I have a few more MIPS systems with PCnet32 chip on board. And this
-driver was the first network driver for VMware. I see no reason to
-remove it as it simply works.
+CONFIG_MACH_PIC32?
 
-Thomas.
-
--- 
-Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
-good idea.                                                [ RFC1925, 2.3 ]
+>  /* add instruction pipeline delay while CPU clock is in-transition. */
+>  #define cpu_nop5()                     \
+>  do {                                   \
 
