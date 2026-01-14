@@ -1,59 +1,59 @@
-Return-Path: <linux-mips+bounces-12909-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12910-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2B07D1D024
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Jan 2026 09:04:44 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47B92D1D02A
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Jan 2026 09:04:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 371663069283
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Jan 2026 08:01:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 52049301274A
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Jan 2026 08:02:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 016D837E2E5;
-	Wed, 14 Jan 2026 08:01:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9619237E2EE;
+	Wed, 14 Jan 2026 08:01:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="vCWAQtiI";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="WNTKAX2W"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="kFqoqabH";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="uZ3P/Kny"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 99CC93793CC;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6FBA37418A;
 	Wed, 14 Jan 2026 08:01:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768377715; cv=none; b=bc5ZmaKZtDh6SIQ8vYM1DyDX/08wh35jbg4WfK8DB4tVWrF/BV/WPcDRxmxbO9+kvHcYgihai3aYsEUIVtFEUkKXOn/EEo2c7RLC0tKc37ausNd7+R15y8/PolaftB4S2bT3L6DtL9Z1w2kTArs/noLR04ZbtINtC7g7nWogeBs=
+	t=1768377715; cv=none; b=iOvqCOL9T3nNHaswEYESudvbSh0jNKvkKwoROq0nUj/SGq9DYbToa9BQ+l532AAwIDUz1pCp/MV5N5A12GhRPTAJwSCq5yG9U43zuH3qLhTIlKufo6wXPH73p5UN6WCXhtTRuKHB652l7SdcEmvmOOcqV2pfXT7G6S7FjqLrovo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1768377715; c=relaxed/simple;
-	bh=+Wcy7WXtx6fsZm7eFBJhy/yoGaqdcT1tYaHgYzL2d5g=;
+	bh=89K8mUiVvMvCZCKWls9fZ44jvFGy0m8pQ8qbm4twTa8=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=brU70uwa+JHlEYFs6H2AczDU+UpF+HL+134dm2ZEeU3W0aw7bS5Y7zOuXooIVtz7Sx3lfKySoWlJY7/NhlY7eW9InQHG/0rz+ynHFt4k9DunxYaEYp/3yqxsFGbhUEnuKK5//3t9KHWM0EWoDix67+420wVMZrrlQkL+XU8rVW8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=vCWAQtiI; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=WNTKAX2W; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=aUgFpGoMnuZcoU1xk3Y9vDrIHD31kk00n7+c1xAkXPZUiQVAE04kCnzCq0vOgAJh1plMNzG+zuSMC45F33GvaR/i9QEY5knLHVXmgl2BFWsZQAYNaKszk6qlvwkSf/lvdAlDOV6z2pZz5L2aww4VO5pLRQBOD+Jl7oc0Qf/PjDI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=kFqoqabH; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=uZ3P/Kny; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1768377706;
+	s=2020; t=1768377707;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=OgvUl7fZvLFsRnGSveNl7/DD5eX3IjONlFG6m4/kXis=;
-	b=vCWAQtiIU3Wxd7rFg02B2t0bIwqjqYkHndYy0Uyf79vYVMslcQTzhvVeE/m1SfCrUa6FRE
-	PTXOMQSrPT21K13gKvoKnLFS6KWiUUnxHw4DxKaOZYu5Zbe1tmfYSXXYDgc/bGLldbvAnu
-	ULOdWef2He95wORAmod/Pj7zZDZ2+kzm0d36ogkQks9TqbicVqe1gNyLKdt/K9n921BqBi
-	4p7Z6HVJB/GSk9mBLx/3F4JCu/YzF5WyIQrTsm9WYIOpjSdyXHuE7BzUVId2VjLXeUrcaR
-	5Ei2h5lm33wqW3y3GQvmk3bg2Z2loHh+L0F//ZCGIre229a4CFoZ6rTlPkvteQ==
+	bh=SoyAobvtAA9UQIKcVjt4/vpR3BEv5id0iFKUdJTluTk=;
+	b=kFqoqabHpDV3T9wPA9bmEv8kDqQYgyBf/ZZfxqDBpt+1iIEV/ozQJr3tRvH2CdmuUPEtmn
+	OVZtQ50rFQDY8XWV0AjmFsYSPR6iwKjL19NrTeS1RvFEyJh6cQiGgiM7bZTE5Frq9LMdny
+	Jq7q7MzaEsO/BHoFqPtjbFPhh89yzhV5ybYXZyHy8xlNG9OAUT3biLb1AppNWp+bNg/N3V
+	Acvvvd3BW2iv7bb+kbuY7/lT1aQwwpCGoI5OgbxXScoV5Rp4sC8FQkvUxeSx1Nc9NnX74A
+	k4j7Ae+6q126t8Yqf1PKJ3fWPB2BBYH8w9b49fiT3ilHr1YzbD2cqHIWJFVbgg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1768377706;
+	s=2020e; t=1768377707;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=OgvUl7fZvLFsRnGSveNl7/DD5eX3IjONlFG6m4/kXis=;
-	b=WNTKAX2WolqSRqQ6QiWJZQ4MY5tUqvJ6en8554tAfOvxm5SzOyi17gkoAypgq2gQnMkBtg
-	YHldIiL/6Bppe0Cw==
-Date: Wed, 14 Jan 2026 09:01:39 +0100
-Subject: [PATCH 07/15] MIPS: vdso: Add include guard to asm/vdso/vdso.h
+	bh=SoyAobvtAA9UQIKcVjt4/vpR3BEv5id0iFKUdJTluTk=;
+	b=uZ3P/KnyGuUf0Nz8DcxWhm7MR3FURfwdGnxivNhb+GuDV1TNbVTSIOATNT/FHtFN44972t
+	YczMt0bOwRA1ATAQ==
+Date: Wed, 14 Jan 2026 09:01:40 +0100
+Subject: [PATCH 08/15] MIPS: vdso: Explicitly include asm/vdso/vdso.h
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -62,7 +62,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260114-vdso-header-cleanups-v1-7-803b80ee97b4@linutronix.de>
+Message-Id: <20260114-vdso-header-cleanups-v1-8-803b80ee97b4@linutronix.de>
 References: <20260114-vdso-header-cleanups-v1-0-803b80ee97b4@linutronix.de>
 In-Reply-To: <20260114-vdso-header-cleanups-v1-0-803b80ee97b4@linutronix.de>
 To: Catalin Marinas <catalin.marinas@arm.com>, 
@@ -79,44 +79,37 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
  linux-mips@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1768377702; l=915;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1768377702; l=696;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=+Wcy7WXtx6fsZm7eFBJhy/yoGaqdcT1tYaHgYzL2d5g=;
- b=t7XGfclDQVcut4P0uQIZeoIZKH/awyXF/occ/9y7qxL+ZenmO6IU5vAWHxRt0qNMOD8MGLdlE
- GxhqnmdA1gsDUk6bg/wL5RRsr1MJ+aaQuEuZcbesWv+QXVekjQFNfF1
+ bh=89K8mUiVvMvCZCKWls9fZ44jvFGy0m8pQ8qbm4twTa8=;
+ b=FSiu8UiGSl/Aaf2eVHxCWSFtrEdYyGw5+eoDFFvTdy8XTx/6gLGZt62GT7CmMMb0UEm6+GLmY
+ 7hN9XerTfMXCXKMzaGcSXECibAYr028LLgbUS0JbuJ5Xbboxu6aqhEx
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-An upcomming patch will lead to the header file being included multiple
-times from the same source file.
+The usage of __VDSO_PAGES requires asm/vdso/vdso.h. Currently this header
+is included transitively, but that transitive inclusion is about to go
+away.
 
-Add an include guard so this is possible.
+Explicitly include the header.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
 ---
- arch/mips/include/asm/vdso/vdso.h | 5 +++++
- 1 file changed, 5 insertions(+)
+ arch/mips/kernel/vdso.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/mips/include/asm/vdso/vdso.h b/arch/mips/include/asm/vdso/vdso.h
-index 6889e0f2e5db..ef50d33f3439 100644
---- a/arch/mips/include/asm/vdso/vdso.h
-+++ b/arch/mips/include/asm/vdso/vdso.h
-@@ -4,6 +4,9 @@
-  * Author: Alex Smith <alex.smith@imgtec.com>
-  */
+diff --git a/arch/mips/kernel/vdso.c b/arch/mips/kernel/vdso.c
+index de096777172f..2fa4df3e46e4 100644
+--- a/arch/mips/kernel/vdso.c
++++ b/arch/mips/kernel/vdso.c
+@@ -21,6 +21,7 @@
+ #include <asm/mips-cps.h>
+ #include <asm/page.h>
+ #include <asm/vdso.h>
++#include <asm/vdso/vdso.h>
+ #include <vdso/helpers.h>
+ #include <vdso/vsyscall.h>
  
-+#ifndef __ASM_VDSO_VDSO_H
-+#define __ASM_VDSO_VDSO_H
-+
- #include <asm/sgidefs.h>
- #include <vdso/page.h>
- 
-@@ -70,3 +73,5 @@ static inline void __iomem *get_gic(const struct vdso_time_data *data)
- #endif /* CONFIG_CLKSRC_MIPS_GIC */
- 
- #endif /* __ASSEMBLER__ */
-+
-+#endif /* __ASM_VDSO_VDSO_H */
 
 -- 
 2.52.0
