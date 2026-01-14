@@ -1,96 +1,146 @@
-Return-Path: <linux-mips+bounces-12901-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12904-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52A44D1CA7A
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Jan 2026 07:19:19 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id EDFC1D1D000
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Jan 2026 09:03:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id B940B3007F1C
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Jan 2026 06:19:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 4B60C305655D
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Jan 2026 08:01:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6736A36C599;
-	Wed, 14 Jan 2026 06:19:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EF00937BE98;
+	Wed, 14 Jan 2026 08:01:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="B/iA5OeX";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="6k4Q9ySm"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6025A3557E2;
-	Wed, 14 Jan 2026 06:19:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44D712FB977;
+	Wed, 14 Jan 2026 08:01:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768371556; cv=none; b=uIApsvKK7gETwGI6Rw0zY2EaTsYkG6LU5a3iacRKvbKRFG4tsGF8iygHHBp0VuzUQRIoYuji8EyvS5wRcBUHaIf4bZfvP9adFrapL61yHtSSoODcWZWhk5jF7Gax98gOiIVGPo8HAcNd6HdXlRFRMekjhMBIkXJh7aykmg/AA+s=
+	t=1768377709; cv=none; b=mDTFGyoplrjF8WFAi8VOPOEWBpXSXN1C3yazyvozFTpMZl5qeMekflF3HRBHMWxyA7j6nkzZJmjbwBYaBnvTOEXbsAIf7p19iewj+rmDruMX9475DQQC85iqKwKpeMNhaKSu8hkC8quBgynF3aYCAWCDeoQWwtpNxZ9jHEq0iXA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768371556; c=relaxed/simple;
-	bh=GiT36aDrXhRnQSF0R052K+a8lgv9jLl4XPf3kpNrUh4=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=Uc0fn22pMOe1dE0TnT1ygGRMK+DvO1FzDFdkB0tvnp/htV6XDdQa45zTsymQOeOsu5n2RceYcCjCZoNUqSK40u67PukZA2N0kBnEImO64O5or97dMnjV8r19S8etwEh7TEETOKdmgsRUno01bunW3zoTcvVDb6+OmD3CGSx8DfU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id 3824192009D; Wed, 14 Jan 2026 07:19:02 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id 361CE92009C;
-	Wed, 14 Jan 2026 06:19:02 +0000 (GMT)
-Date: Wed, 14 Jan 2026 06:19:02 +0000 (GMT)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: David Laight <david.laight.linux@gmail.com>
-cc: kernel test robot <lkp@intel.com>, oe-kbuild-all@lists.linux.dev, 
-    linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>, 
-    Linux Memory Management List <linux-mm@kvack.org>, 
-    Nicolas Pitre <npitre@baylibre.com>, linux-mips@vger.kernel.org, 
-    Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Subject: Re: mips64-linux-ld: div64.c:undefined reference to `__multi3'
-In-Reply-To: <20260113200455.3dffe121@pumpkin>
-Message-ID: <alpine.DEB.2.21.2601140453090.6421@angie.orcam.me.uk>
-References: <202601140146.hMLODc6v-lkp@intel.com> <20260113200455.3dffe121@pumpkin>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1768377709; c=relaxed/simple;
+	bh=wxh/lZEHTjkANuO+cr6cQs6D3XRXTHRzPbOQhCiCkSU=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=L3f+z7l7jSNLxBgXHX2n0l29dZnArecYGcntPVxK4yc5NpYALD8K/CPoU+xS/q9elZXvpZjm5dhIRGsbIlDZH5Wab3iFAE+JnaZE1m6+r5SOO3b3S1cOzo5wcAubg8dOkOSOBhNx08qnDFhcl1m+70GoGRSR2IuCLEaflE1G6qA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=B/iA5OeX; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=6k4Q9ySm; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1768377702;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=2Wh4jYBxUbDqkNC1LyZsqlM3fF48oaskW5vtJOy/5AE=;
+	b=B/iA5OeXAur8JmwDoCwohBXj5/k5Yo2gcwe3o0RJcEBOSn/c0XpOiJi0QLEvYKosn458Tm
+	lVHPdt5F+3Msn1ECJoqAN+FfS7Vxyn55S0455CCZjOuzojBHKsJ39ozWk3UcnPPKMZNqS7
+	hZXYeN8TRkyHg53+0YVQ4XI+QModRkQW/Z7UPTtcbkhhS8nQdgRvxgFEj3jb1sFNWPijE1
+	qYMBxuWTbMEIs82a0u5lvSBQ/StTql8GWBzttqhP2sOYFTW+SH9bXeHaupsEPaboOnL7aY
+	IfVBwGvuCJJwxXhwXqlJ/W6KaI7TSdQXwS/5zdDLtb8JIrmWg4nM4Ir2c2BP/g==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1768377702;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=2Wh4jYBxUbDqkNC1LyZsqlM3fF48oaskW5vtJOy/5AE=;
+	b=6k4Q9ySmGiSqe/Wl/g53J8lWw1+8PDQYKK+d0zSkhvLtA0LQzcuuswimj1Nc/vJOsrR6i/
+	7K3kM09t27bybADQ==
+Subject: [PATCH 00/15] vDSO: header file cleanups
+Date: Wed, 14 Jan 2026 09:01:32 +0100
+Message-Id: <20260114-vdso-header-cleanups-v1-0-803b80ee97b4@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAF1NZ2kC/x3MQQqDMBBG4auEWXfABLXiVaSL4PzqQImSwVAQ7
+ 97g8lu8d5EhK4xGd1FGUdM9VfiXo3mLaQWrVFNoQt9433IR23lDFGSev4jpPIwlLDH0724AhGp
+ 6ZCz6e7bT577/RIWjG2YAAAA=
+X-Change-ID: 20260114-vdso-header-cleanups-d2fa26758eed
+To: Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Russell King <linux@armlinux.org.uk>, 
+ Madhavan Srinivasan <maddy@linux.ibm.com>, 
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+ "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
+ Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+ Vincenzo Frascino <vincenzo.frascino@arm.com>, 
+ Theodore Ts'o <tytso@mit.edu>, "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+ linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
+ linux-mips@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>, 
+ Christophe Leroy <chleroy@kernel.org>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1768377702; l=2638;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=wxh/lZEHTjkANuO+cr6cQs6D3XRXTHRzPbOQhCiCkSU=;
+ b=GPjYp3y0vRDRH/x6JUzAXDk5XmpceiZ98m4XhE7M/WdobqKe6qNt7YHiUbFhKtNSYJ+eDaEQW
+ OhhAcGtQ/qyC4aVLK5G++gEsO5qqE8nHuOLHAnTHs83uq+LCjyDkzD6
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 
-On Tue, 13 Jan 2026, David Laight wrote:
+The vDSO header files are a bit of a mess, relying on transitive
+includes and pulling in much more definitions than necessary.
 
-> > All errors (new ones prefixed by >>):
-> > 
-> >    mips64-linux-ld: lib/math/div64.o: in function `mul_u64_add_u64_div_u64':
-> >    div64.c:(.text+0x84): undefined reference to `__multi3'
-> > >> mips64-linux-ld: div64.c:(.text+0x11c): undefined reference to `__multi3'  
-> > 
-> 
-> This looks like a bug in the mips 'port'.
-> arch/mips/lib/multi3.c has the comment:
-> 
-> /*
->  * GCC 7 & older can suboptimally generate __multi3 calls for mips64r6, so for
->  * that specific case only we implement that intrinsic here.
->  *
->  * See https://gcc.gnu.org/bugzilla/show_bug.cgi?id=82981
->  */
-> #if defined(CONFIG_64BIT) && defined(CONFIG_CPU_MIPSR6) && (__GNUC__ < 8)
-> 
-> So this code is excluded for gcc 8.5 but the compiler is generating the call.
-> 
-> Looking at the git log for that file there is a comment that includes:
-> 	"we wouldn't expect any calls to __multi3 to be generated from
-> 	 kernel code".
-> Not true....
-> Not sure why the link didn't fail before though, something subtle must
-> have changed.
-> 
-> I think the fix is just to remove the gcc version check.
+Clean up the headers and remove some ifdeffery in the rng core.
 
- Or rather fix the version check.  The GCC fix went in with GCC 10:
+This was originally part of my SPARC generic vDSO patch series [0].
+After feedback I am reworking that series and it may not require these
+cleanups anymore. But as the code is already written I am submitting it
+here standalone.
 
-$ git log -1 --pretty=oneline 48b2123f6336
-48b2123f6336ba6c06846d7c8b60bd14eaeae7ec re PR target/82981 (unnecessary __multi3 call for mips64r6 linux kernel)
-$ git show 48b2123f6336:gcc/BASE-VER
-10.0.0
-$ 
+Based on tip/timers/vdso.
 
-I don't know why the PR got it all wrong; I've fixed it now.
+[0] https://lore.kernel.org/lkml/20251106-vdso-sparc64-generic-2-v5-0-97ff2b6542f7@linutronix.de/
 
-  Maciej
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+Thomas Weißschuh (15):
+      arm64: vDSO: gettimeofday: Explicitly include vdso/clocksource.h
+      arm64: vDSO: compat_gettimeofday: Add explicit includes
+      ARM: vdso: gettimeofday: Add explicit includes
+      powerpc/vdso/gettimeofday: Explicitly include vdso/time32.h
+      powerpc/vdso: Explicitly include asm/cputable.h and asm/feature-fixups.h
+      LoongArch: vDSO: Explicitly include asm/vdso/vdso.h
+      MIPS: vdso: Add include guard to asm/vdso/vdso.h
+      MIPS: vdso: Explicitly include asm/vdso/vdso.h
+      random: vDSO: Add explicit includes
+      vdso/gettimeofday: Add explicit includes
+      vdso/helpers: Explicitly include vdso/processor.h
+      vdso/datapage: Remove inclusion of gettimeofday.h
+      vdso/datapage: Trim down unnecessary includes
+      random: vDSO: trim vDSO includes
+      random: vDSO: remove ifdeffery
+
+ arch/arm/include/asm/vdso/gettimeofday.h          |  2 ++
+ arch/arm64/include/asm/vdso/compat_gettimeofday.h |  3 +++
+ arch/arm64/include/asm/vdso/gettimeofday.h        |  2 ++
+ arch/loongarch/kernel/process.c                   |  1 +
+ arch/loongarch/kernel/vdso.c                      |  1 +
+ arch/mips/include/asm/vdso/vdso.h                 |  5 +++++
+ arch/mips/kernel/vdso.c                           |  1 +
+ arch/powerpc/include/asm/vdso/gettimeofday.h      |  1 +
+ arch/powerpc/include/asm/vdso/processor.h         |  3 +++
+ drivers/char/random.c                             | 16 ++++++----------
+ include/vdso/datapage.h                           | 23 ++---------------------
+ include/vdso/helpers.h                            |  1 +
+ lib/vdso/getrandom.c                              |  3 +++
+ lib/vdso/gettimeofday.c                           | 17 +++++++++++++++++
+ 14 files changed, 48 insertions(+), 31 deletions(-)
+---
+base-commit: dcf5b55ca66160879205b1ee7b9b711751070edd
+change-id: 20260114-vdso-header-cleanups-d2fa26758eed
+
+Best regards,
+-- 
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+
 
