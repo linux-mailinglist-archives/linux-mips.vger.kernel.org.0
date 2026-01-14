@@ -1,205 +1,176 @@
-Return-Path: <linux-mips+bounces-12932-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12933-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2605AD2063C
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Jan 2026 18:01:38 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 635EBD20931
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Jan 2026 18:36:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 48E56301EFC3
-	for <lists+linux-mips@lfdr.de>; Wed, 14 Jan 2026 17:00:18 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 9EC07300305F
+	for <lists+linux-mips@lfdr.de>; Wed, 14 Jan 2026 17:34:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB98627F72C;
-	Wed, 14 Jan 2026 17:00:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43F592D322E;
+	Wed, 14 Jan 2026 17:34:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cdVIeaZx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="l7rOqzn0"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F09A155C82
-	for <linux-mips@vger.kernel.org>; Wed, 14 Jan 2026 17:00:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E23FA302151
+	for <linux-mips@vger.kernel.org>; Wed, 14 Jan 2026 17:34:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768410016; cv=none; b=AUAcgO2Afg0qc0HYHHV7idw7JcOaFT6L2ErLax7Mg8+PPqL0HQmSKHBY9X39Mnv9ozE8K5Uoh1iFeHAN+GNQRywWMur6GZZrEPNtm8OV6CQcjSxe0DjPBM0dRFcV4n6atU00b526k2q7spM6aK/BzAJKGrLZEmO3Z91iZ5PpsBI=
+	t=1768412081; cv=none; b=DsNyKZ8dszLM66sLBko6YnOtJcnIM1gA+KMC6tVeELYi+3lu4/9li0D6vPA9avbHTja/trC8IUjYytdMzmXAWm+FmFMw1NRjaKGDHOVreagKlaCMBen0siAUeR+lEXYWdTdqV7jlN6BIyyqTy1Rmu3rDf9HoxRTkcAvmfFBQieY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768410016; c=relaxed/simple;
-	bh=TdQ1PxnixZuTqBgDjCx71BraKAPrKTU04PfdZhnHF8I=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CRxKXlzkbXTEC+0gDtl3h8jPGxkpIP9o8Iz9MKx9LX+qTz4Os3QhcQu1x3a9KiJ2SuV/lqNhU7vIE9OUfyn2dbKxm+mAAjag2/Jc8lh1rR+pJ/Q0tvZzJ2wlL4FkJW0wV/jzb15pT+5rcF54B9SZaAJY940sWmReC9YC5GSejqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cdVIeaZx; arc=none smtp.client-ip=209.85.216.54
+	s=arc-20240116; t=1768412081; c=relaxed/simple;
+	bh=kObkP2DRo5mXrlxriPjEDWheb0/mwzFmw+8s1z659rQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=GV/qPRlePD/HWzMyr7sZNoWtxDOD2xZ0EGynL6xhLUoikDYCIQ3Syq3W3QGN7hQ63NEONb6ocbS99KiGMdiXcOSogJfQCiK25pDh5JLy/XvZyaDThHObao6PVdRR56bPy3B5VS3C35AQi9pPYYkwKIoKYpr0XS8rNl8BjrjDMTA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=l7rOqzn0; arc=none smtp.client-ip=209.85.128.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-34ccbf37205so4926886a91.2
-        for <linux-mips@vger.kernel.org>; Wed, 14 Jan 2026 09:00:14 -0800 (PST)
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-47f3b7ef761so494915e9.0
+        for <linux-mips@vger.kernel.org>; Wed, 14 Jan 2026 09:34:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1768410013; x=1769014813; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=GagbSgLZicpSoO4nWTcoXi5mvyUj9ai6yjSI7MoALoI=;
-        b=cdVIeaZxZUHKN1VeQr+Zx00nbmrlRRwqwP3IOaVM2EosKnBdUIuabZfrdC68jlPKb+
-         jjyA5dzIiUU9hYSr26nieu9Ek4re7BTl0DflkC1zm/p095lNKRJddLuXlQcxV95ftBDn
-         oKrop6AZ4zGTpMfqPRzwXRENmQltG4oXwp6USF9/7+FDdPrCds36m4+ZB3NwTQg3t4aV
-         chI8gtNd4IrWs/jYE5LyHjoskY5ZgH0HiP88UQZt5aL9t/Pc9Jbydkd+d0PWQdDJplrI
-         bhcwpLpaKlIUiNinWj0CFHA0EpHJYOXTvMcA4ThGx7x6SSYeS4mnbPs6xPRngkAtHacU
-         dSaw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768410013; x=1769014813;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1768412077; x=1769016877; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=GagbSgLZicpSoO4nWTcoXi5mvyUj9ai6yjSI7MoALoI=;
-        b=t/dObq2LzglrblV4mDz5klMcSQndqB7LCDdBTQ+QzUw2EhkW+mikjbQEiRuc1iTGSU
-         GCZbg/+fDYDEyHddRVc/tfTNUlNFHkrDM0KszeINpW2lvBLPRKuvxIHL6fOJtirU3PFD
-         mBLWi6ELfwNNnkumrozO1JNSYqtqz/j5XgSVB6rmst5vZW0frLAdm8kG2hyWwYNSuxad
-         +IA5Qf8TxxyscplbkDLPaT+MMXODxKounjI1zDHr6DRPcQSNZazhu1+wI7MVSvBqz2XB
-         MegwUGaR0QCb6n49T/uFwZ50Cdq5PoDJHT5v6ZoQVdaHkdEsOhY1N54+sy6SoHoZEzwP
-         4PlA==
-X-Forwarded-Encrypted: i=1; AJvYcCV4T4FoSnX0Q+qge3EKz7VbI3hFr3VNUQ7kh/+3WLO/puqOQywZtLsj4VAwlzBJ91Fw6T9pgbEcyAli@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQMvJwFxk/3hjK0dRUdjnntOAkk4sLPFHyxHmCj0xR8f1Dzmpe
-	YcXn9Q8Qo2y3vPOKXI0TLuu22482+6cqnXFC2wceP5zF29Xx/EiHYMcG
-X-Gm-Gg: AY/fxX72HRnP4zfZYo3UCSwfOhxnK5D47e4BgSUyckCqq1uttLCaLhiVDaY8NXjZwSh
-	um6DpGsxWeKP1IPomWePEVPicMHW47JY0tPhpJO5PsK1UdWEyZZCYzyXi3a5d3HtTRcvEvLycj4
-	DOGG6Ktc6qbQHbIYpL3+DxkAjrEYChkOGhEuNv0sO+fghYYfToQHHR3tmnsqorTFm7OVmPHVZKy
-	AsdLZ8JBUCXVQAKn4e5FgUe22IaFPZoCITWynIG6MxAYlu3wJ5B+Go25MqtAkaAmZ65jBoGCitj
-	KKqY/NKhfvZuNkqqHUJin9IvlPJBPFt18j0Vn+9ZAJpve1vlkLaq9mFEGvuK297yTOfw3msvnBx
-	bSBnEomq/nChoRTuDA6ySKnlzIZJQGRClPULIyCe9sm8SCMULcaVhNojQhYvtmNbYk4eYmROO9j
-	xY3YwiEiK9IiYHpvclcaYVGyg=
-X-Received: by 2002:a17:90b:4a52:b0:340:e8e9:cc76 with SMTP id 98e67ed59e1d1-351090da00fmr3612320a91.11.1768410013265;
-        Wed, 14 Jan 2026 09:00:13 -0800 (PST)
-Received: from karthik.bbrouter ([103.215.237.249])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-352677c9315sm32098a91.2.2026.01.14.09.00.09
+        bh=WJ7m2Kae0rt7KDMZbiJnTHcyU/qgip1RiScuagqlCWo=;
+        b=l7rOqzn0s98s9MB2RKh1QOdNVoZwqowXwuRhj0ttHsgh4OEWHGT5D1yGEOYlSCiad4
+         KCc8ZRuL+JqV2kSNEA/qMbGeDDTFJ7Q4JvEW8PTku+NMctiIJsaCc17ttuITW48fFCb3
+         1gJKIvap4KfNBzzvVMFKpL07rKWcfqKWDCMOz02/BB7VngETXA8V0TWDazKEPjjoKuPB
+         uHRyrE18wk0IsQolpbZGjM5Di0rqB4qsxU+F8fkcd/C5vBdwLMAkoDNihGhcUqy+KTqc
+         1M+rqr6C65BOyA4B10Gkm8DryGY0XwTNDAKp9fjvZntpUjEbH8n4+uUM6lSQDj7JI8ce
+         i/Xg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768412077; x=1769016877;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=WJ7m2Kae0rt7KDMZbiJnTHcyU/qgip1RiScuagqlCWo=;
+        b=jRPnzPV5s9hA6kJ5+uObCu5La/HgjEFOOSoTrLXNKCgooBoIgMGjOmD+G075oMk7UO
+         g9NWg8ZADX6ztQ4IEMNldEdrKSdj3eCDg2e3skA3UKA8k1WRH8yxCYGUK4+167f2DusG
+         PmycgvpIZ8nk8NrwIqZXvXyyTczEvOp3fPe8NtJjYT2yM2Rw60/UnNTw/r7ekLEY3MQ2
+         2EUaZXXo83axZnSDFDIq02HWOpzb61kDi6pfFzFqskBfjk7heq+Cg0tYBmAsMpTn9UsT
+         NZ96osp6Mor71S55rKDrxaT+MouyX76eB4AbPuSYc+2AxtzT3mT8krqBGdcBwiaibLRn
+         TqyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV72HJ5D+wvQmfvUwEvo4SiGssw/DA8cqFyGVaPyi3nuOn/aDlsS7o3eRm8ULenQXPJ8cSvmbuEIrqs@vger.kernel.org
+X-Gm-Message-State: AOJu0YxghdhdxGN+5nL41+E+cFFPjfhYpnCfn1scN5KvoOREXZmBCr0t
+	dRhsT1giOmeYQqbD0Ub4VYXeU7jALG+RoGGpmqPEkiAF+cbLldvqd57O
+X-Gm-Gg: AY/fxX6Vd7UasvZnuCysAEmcwbYPdVzeNtzLRQl9tXwixzMLIUD9bF1OuJxOnR7ynV+
+	AkBok0v9boPaSMwKo0u3gAd6yS7TQnDzdjpkkHpbzLrIABLEX7Z5FF8lTYJxqczsLbugHQTxGn7
+	UGQbiNX9WEH0XqV4ohSD0nsivrdWHE5F/GClnlP131x5ijeittmCuvFEG2q0vR6mu9xSw5piLty
+	kfPTtPckqomrA2hBrvm6xpXEWroyCCCzvBibQgNrjdeRkOBY9TyPIy98z8q50vrgM+QUB7HM9rh
+	gzm/tgUe0B+lAhLH1a/lA5f/NyarhsaSMAjc+9kd6vMxT5Bq9IzULwULDjUXMmtQJKDLzCIQmMx
+	5IhUJ6viv3ur+cs9AM4752ftLgynfCWrigvKHUWnHPm/axzqsfQVn1tnHKV0tSQuXJweG1q745A
+	3QJPGat1DaFU3tF0LGecRfyinTqnjtfv78iT+/H8macGE+WJTDrEdF
+X-Received: by 2002:a05:600c:a46:b0:477:73e9:dc17 with SMTP id 5b1f17b1804b1-47ee338c00cmr46093135e9.35.1768412076765;
+        Wed, 14 Jan 2026 09:34:36 -0800 (PST)
+Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-47ee2725b54sm27307345e9.1.2026.01.14.09.34.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 14 Jan 2026 09:00:12 -0800 (PST)
-From: Karthikey Kadati <karthikey3608@gmail.com>
-To: gregkh@linuxfoundation.org,
-	tsbogend@alpha.franken.de
-Cc: linux-staging@lists.linux.dev,
-	linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	karthikey3608@gmail.com,
-	kernel test robot <lkp@intel.com>
-Subject: [PATCH v3] staging: octeon: Remove port status typedefs
-Date: Wed, 14 Jan 2026 22:28:34 +0530
-Message-ID: <20260114165834.33387-1-karthikey3608@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        Wed, 14 Jan 2026 09:34:36 -0800 (PST)
+Date: Wed, 14 Jan 2026 17:34:35 +0000
+From: David Laight <david.laight.linux@gmail.com>
+To: "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc: kernel test robot <lkp@intel.com>, oe-kbuild-all@lists.linux.dev,
+ linux-kernel@vger.kernel.org, Andrew Morton <akpm@linux-foundation.org>,
+ Linux Memory Management List <linux-mm@kvack.org>, Nicolas Pitre
+ <npitre@baylibre.com>, linux-mips@vger.kernel.org, Thomas Bogendoerfer
+ <tsbogend@alpha.franken.de>
+Subject: Re: mips64-linux-ld: div64.c:undefined reference to `__multi3'
+Message-ID: <20260114173435.51cf556d@pumpkin>
+In-Reply-To: <alpine.DEB.2.21.2601141530510.6421@angie.orcam.me.uk>
+References: <202601140146.hMLODc6v-lkp@intel.com>
+	<20260113200455.3dffe121@pumpkin>
+	<alpine.DEB.2.21.2601140453090.6421@angie.orcam.me.uk>
+	<20260114103103.216aa122@pumpkin>
+	<alpine.DEB.2.21.2601141530510.6421@angie.orcam.me.uk>
+X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Remove cvmx_pip_port_status_t and cvmx_pko_port_status_t typedefs and
-replace them with struct cvmx_pip_port_status and struct cvmx_pko_port_status
-to match Linux kernel coding style.
+On Wed, 14 Jan 2026 15:50:09 +0000 (GMT)
+"Maciej W. Rozycki" <macro@orcam.me.uk> wrote:
 
-This also updates the MIPS architecture headers to name the anonymous
-structs so they can be referenced by the staging driver.
+> On Wed, 14 Jan 2026, David Laight wrote:
+> 
+> > > > Looking at the git log for that file there is a comment that includes:
+> > > > 	"we wouldn't expect any calls to __multi3 to be generated from
+> > > > 	 kernel code".
+> > > > Not true....
+> > > > Not sure why the link didn't fail before though, something subtle must
+> > > > have changed.
+> > > > 
+> > > > I think the fix is just to remove the gcc version check.    
+> > > 
+> > >  Or rather fix the version check.  The GCC fix went in with GCC 10:  
+> > 
+> > Does that mean the GCC 10 generates the multiply instructions and never calls
+> > __multi3?
+> > (Rather than just not using __multi3() for that specific example.)  
+> 
+>  Of course it still does call `__multi3' for 128x128bit multiplication.  
+> It doesn't for widening 64x64bit one though, which was a missed case for 
+> MIPS64r6 only, having been supported by GCC ever since MIPS III ISA.  I 
+> think we do want to fail link in the 128x128bit case.
 
-Reported-by: kernel test robot <lkp@intel.com>
-Closes: https://lore.kernel.org/oe-kbuild-all/202601131108.A90iCRFi-lkp@intel.com/
-Signed-off-by: Karthikey Kadati <karthikey3608@gmail.com>
----
-v3:
-  - Fix build failure by naming anonymous structs in MIPS headers
-    (Reported by kernel test robot).
-  - Add Reported-by and Closes tags.
-v2:
-  - Remove invalid "Unix Antigravity" Signed-off-by.
-  - Submit as standalone patch (detached from unrelated series).
+That's fine by me.
+I only get blamed for the widening one :-)
 
- arch/mips/include/asm/octeon/cvmx-pip.h |  2 +-
- arch/mips/include/asm/octeon/cvmx-pko.h |  2 +-
- drivers/staging/octeon/ethernet.c       |  4 ++--
- drivers/staging/octeon/octeon-stubs.h   | 12 ++++++------
- 4 files changed, 10 insertions(+), 10 deletions(-)
+...
+>  Distinct RTL insns are produced, so all the usual RTL optimisations 
+> apply (in addition to any tree optimisations already made):
+> 
+> mul_u64_u64_add_u64:
+> 	.frame	$sp,0,$31		# vars= 0, regs= 0/0, args= 0, gp= 0
+> 	.mask	0x00000000,0
+> 	.fmask	0x00000000,0
+> 	.set	noreorder
+> 	.set	nomacro
+> 	dmul	$2,$5,$6	 # 9	[c=20 l=4]  muldi3_mul3_nohilo
+> 	dmuhu	$5,$5,$6	 # 10	[c=44 l=4]  umuldi3_highpart_r6
+> 	daddu	$7,$2,$7	 # 14	[c=4 l=4]  *adddi3/1
+> 	sltu	$2,$7,$2	 # 16	[c=4 l=4]  *sltu_didi
+> 	sd	$7,0($4)	 # 21	[c=4 l=4]  *movdi_64bit/4
+> 	jr	$31	 # 44	[c=0 l=4]  *simple_return
+> 	daddu	$2,$2,$5	 # 29	[c=4 l=4]  *adddi3/1
+> 
+> (hmm, I wonder why the cost for the high-part RTX is over twice that for 
+> the low-part one; this seems outright wrong, also taking the possibility 
+> of fusing into account).
 
-diff --git a/arch/mips/include/asm/octeon/cvmx-pip.h b/arch/mips/include/asm/octeon/cvmx-pip.h
-index 01ca7267a..cb3342313 100644
---- a/arch/mips/include/asm/octeon/cvmx-pip.h
-+++ b/arch/mips/include/asm/octeon/cvmx-pip.h
-@@ -180,7 +180,7 @@ typedef union {
- /**
-  * Status statistics for a port
-  */
--typedef struct {
-+typedef struct cvmx_pip_port_status {
- 	/* Inbound octets marked to be dropped by the IPD */
- 	uint32_t dropped_octets;
- 	/* Inbound packets marked to be dropped by the IPD */
-diff --git a/arch/mips/include/asm/octeon/cvmx-pko.h b/arch/mips/include/asm/octeon/cvmx-pko.h
-index f18a7f24d..46bb5ddcb 100644
---- a/arch/mips/include/asm/octeon/cvmx-pko.h
-+++ b/arch/mips/include/asm/octeon/cvmx-pko.h
-@@ -114,7 +114,7 @@ typedef enum {
- 	CVMX_PKO_LOCK_CMD_QUEUE = 2,
- } cvmx_pko_lock_t;
- 
--typedef struct {
-+typedef struct cvmx_pko_port_status {
- 	uint32_t packets;
- 	uint64_t octets;
- 	uint64_t doorbell;
-diff --git a/drivers/staging/octeon/ethernet.c b/drivers/staging/octeon/ethernet.c
-index eadb74fc1..6d03d2346 100644
---- a/drivers/staging/octeon/ethernet.c
-+++ b/drivers/staging/octeon/ethernet.c
-@@ -201,8 +201,8 @@ EXPORT_SYMBOL(cvm_oct_free_work);
-  */
- static struct net_device_stats *cvm_oct_common_get_stats(struct net_device *dev)
- {
--	cvmx_pip_port_status_t rx_status;
--	cvmx_pko_port_status_t tx_status;
-+	struct cvmx_pip_port_status rx_status;
-+	struct cvmx_pko_port_status tx_status;
- 	struct octeon_ethernet *priv = netdev_priv(dev);
- 
- 	if (priv->port < CVMX_PIP_NUM_INPUT_PORTS) {
-diff --git a/drivers/staging/octeon/octeon-stubs.h b/drivers/staging/octeon/octeon-stubs.h
-index 35b5078ba..f6d502193 100644
---- a/drivers/staging/octeon/octeon-stubs.h
-+++ b/drivers/staging/octeon/octeon-stubs.h
-@@ -386,7 +386,7 @@ union cvmx_ipd_sub_port_qos_cnt {
- 	} s;
- };
- 
--typedef struct {
-+struct cvmx_pip_port_status {
- 	uint32_t dropped_octets;
- 	uint32_t dropped_packets;
- 	uint32_t pci_raw_packets;
-@@ -409,13 +409,13 @@ typedef struct {
- 	uint32_t inb_packets;
- 	uint64_t inb_octets;
- 	uint16_t inb_errors;
--} cvmx_pip_port_status_t;
-+};
- 
--typedef struct {
-+struct cvmx_pko_port_status {
- 	uint32_t packets;
- 	uint64_t octets;
- 	uint64_t doorbell;
--} cvmx_pko_port_status_t;
-+};
- 
- union cvmx_pip_frm_len_chkx {
- 	uint64_t u64;
-@@ -1260,11 +1260,11 @@ static inline int octeon_is_simulation(void)
- }
- 
- static inline void cvmx_pip_get_port_status(uint64_t port_num, uint64_t clear,
--					    cvmx_pip_port_status_t *status)
-+					    struct cvmx_pip_port_status *status)
- { }
- 
- static inline void cvmx_pko_get_port_status(uint64_t port_num, uint64_t clear,
--					    cvmx_pko_port_status_t *status)
-+					    struct cvmx_pko_port_status *status)
- { }
- 
- static inline cvmx_helper_interface_mode_t cvmx_helper_interface_get_mode(int
--- 
-2.43.0
+They might be different, if the wide multiply is implemented with multiple
+narrow ones then the high result bits don't need to be generated if only
+the low result bits are needed.
+If the data is clocked through a single multiplier that might be significant,
+but probably not double (I think you need 3/4 of the products).
+If the results of separate narrow multipliers have to be added together
+then the carry-ripple of all the adds might make a small difference, but I'd
+only expect 1 (perhaps 2) clocks for that.
+If those are gcc's costs I suspect they may not match reality, after all they
+usually only have to be 'good enough' or 'reasonable'.
+
+I nearly got the 32x32 multiply to run in a single clock on my Nios-II
+re-implementation, but the 64bit ripple carry delayed things too much for
+the other logic that needed to happen to feed the product back into the ALU.
+The product itself could be latched - so it wasn't far off.
+I think I could have fed back the low bits, but that would have been
+complicated. Detecting 'short' (18bit by 18bit) unsigned multiplies
+would have been more use - they are common for array indexes.
+(That was a 'fun' project... Nios-II is, AFICT, basically MIPS 32.)
+
+	David
+
+> 
+>   Maciej
+> 
 
 
