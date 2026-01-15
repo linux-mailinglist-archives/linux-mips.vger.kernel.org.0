@@ -1,156 +1,109 @@
-Return-Path: <linux-mips+bounces-12938-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12939-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2643D26051
-	for <lists+linux-mips@lfdr.de>; Thu, 15 Jan 2026 18:02:29 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EC6CD26398
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Jan 2026 18:17:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 757973010F9C
-	for <lists+linux-mips@lfdr.de>; Thu, 15 Jan 2026 17:00:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 14CC730EF20B
+	for <lists+linux-mips@lfdr.de>; Thu, 15 Jan 2026 17:07:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20F012C11F8;
-	Thu, 15 Jan 2026 17:00:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 506B03BC4DB;
+	Thu, 15 Jan 2026 17:07:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZYSxEI+O"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BYom4D7c"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1FF02C028F
-	for <linux-mips@vger.kernel.org>; Thu, 15 Jan 2026 17:00:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 200E53195F9;
+	Thu, 15 Jan 2026 17:07:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768496424; cv=none; b=g5mQAQA6Ivu29QvLOaMSTTHy4HVhxXu+G95eB4GEpI8/hKAFStvo+R+NjXC4C9wx/yA0kWFrD5ak+1ccPBauybUrdGozTeKLNpDjqkCaFC0e+v4pPHuqJkCDXGqPeazve/f8MT598zG3K82f/av6H6Etrh4YBO2wJbkVurdrHpw=
+	t=1768496833; cv=none; b=gNZaQ3SNxao8Cmm+sl2Ps1Y+G2x/0U8B9XoO86bmx+rH3IgXigDU2jikCHCk4xQj+Xtfwfn0Ld3GG8XZDgj7pTItY3kS5gcgolbtQE0lsQYZeET0wqqg9im6W41vtHUrhWvYOOygvuGGgR+AyGzhqQKITY8PIn6LPtVNmYAUcVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768496424; c=relaxed/simple;
-	bh=ZXnoivxVBUQa2U3uRATn/SAEZubNzQew1oqA4+pLE1I=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PoeECos4HzWrJq2s+y3tLnO2CHGShWO62aa+9oDEB7PcZk9F+CF4pRskR5G9uYvkKeovpRMUhzQXG7uHKXUEjTeHS8Z4RCryemDRICQ4dl7WuXGyHEGP04au2BiQ3Oy2cES2Sd+9f83mZ9qjU+CubMBDfI5i+J+8KofRfzZij0g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZYSxEI+O; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C404EC2BC9E
-	for <linux-mips@vger.kernel.org>; Thu, 15 Jan 2026 17:00:23 +0000 (UTC)
+	s=arc-20240116; t=1768496833; c=relaxed/simple;
+	bh=/aw7GfMERdmsHUNFNCeK6HNG4sQzWmjkXp2ilRMVj+Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=al9n/o6EttVHRV+bZpYloif6Uhi7b33gm97Zlilq7//4uaVlskNioSSibMqUghyaMdkKVcW/8lf0tg70jkoAOXsiwoNblHKu8BMaqerdvncLnj+3rfXB4LrgDz4umiNOIcZeS/NbJEnI9h6tUodxl91sejSTEm4+DW3P5KJ5xtI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BYom4D7c; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD6AFC16AAE;
+	Thu, 15 Jan 2026 17:07:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1768496423;
-	bh=ZXnoivxVBUQa2U3uRATn/SAEZubNzQew1oqA4+pLE1I=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ZYSxEI+OeX2Pwcx1nci3AJUY55IvoCBETLJht1XB9aHytEC3TsGCNIMnG0FQaQ5Oe
-	 kJk46Oil1uQzFqnx2LNcu2/JDnznDXQktK7KUp7Du9UbNMwIF0au2hPCXwqm28lmmm
-	 pXjZvzjuntHxiNkxUyVO98vsUp6QqT4+rTbasD9iDQY/NJ6F49pKRlVR5zUMUj5OWc
-	 Si2J6ioWLf1T9b5uIF4mTsLmtSDfeQn8dBXfFyLBrZx7xGdiM35ToWSQg65X1XhA+X
-	 hbixT05QHZkBf2xjhgDC6Z6HEukWFo5BR3wnf9dhxZ+X+w7jdWTnPfWSVN8jC7q3v/
-	 ci1Ur/JFcY0eQ==
-Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-b8765be29d6so164898466b.0
-        for <linux-mips@vger.kernel.org>; Thu, 15 Jan 2026 09:00:23 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWA+lMPRhfMbd58u01gmSRuhR9ZEaPZ4tzIGRugqKxEJLPDvhABuRRQZ6h4+9F8TlLChuA3IImAWiTn@vger.kernel.org
-X-Gm-Message-State: AOJu0YxuMXtbV5gAEWYHdGMO2EyroOukvE5rkD1yr8PDXxj2JyVFZFQO
-	fKAl1erUQwPEm+IyCSkwGPQ3hksYiZQNHl1lNa/e8yrCHXC9EEJ5c7A3Hwt7YCUz1BgDRxcU9+n
-	O3sEXL/++getPgKg3CTSbE27YABVnBw==
-X-Received: by 2002:a17:907:a48:b0:b87:2f29:2062 with SMTP id
- a640c23a62f3a-b8792dcdf4amr22448466b.19.1768496422244; Thu, 15 Jan 2026
- 09:00:22 -0800 (PST)
+	s=k20201202; t=1768496832;
+	bh=/aw7GfMERdmsHUNFNCeK6HNG4sQzWmjkXp2ilRMVj+Y=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=BYom4D7cU/fM8xqNhFAhtyv/PAUmyyd46rS9pk290NOnn0J8dPNEu8HJz/de7QrFh
+	 Cv/uM6vD0XVyelut9eC6i6BrjleoREyp2158NcbSq9vtjtr4/FoGpZMux95PPDGw2m
+	 CAlqDTupPhli4bAhqKaOrfwqI9As10GnrY8ZL50EvdGowcrkcLGmTAVEVcotVDLtCe
+	 1HbAJIND4dn6mEG9zlfOAy3m133o0aZlsmSbPJqeXUuYOSI0jc4zG8DjxDAjgSOLHq
+	 FCiK58G5Lg/qcwhZxOFv/Ce74W1EumV9HEyPuBpmzufxdQqEWdopy2sbaCfDzHqVHk
+	 nBQisuQRoSeYA==
+Date: Thu, 15 Jan 2026 17:07:09 +0000
+From: Simon Horman <horms@kernel.org>
+To: "Maciej W. Rozycki" <macro@orcam.me.uk>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Ethan Nelson-Moore <enelsonmoore@gmail.com>,
+	linux-mips@vger.kernel.org, netdev@vger.kernel.org
+Subject: Re: [PATCH net-next] pcnet32: remove VLB support
+Message-ID: <aWkevTP15h30IC6N@horms.kernel.org>
+References: <20260107071831.32895-1-enelsonmoore@gmail.com>
+ <20260109180443.GO345651@kernel.org>
+ <alpine.DEB.2.21.2601110027520.30566@angie.orcam.me.uk>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1767663073.git.zhoubinbin@loongson.cn> <8876bebaf08121bb5edd2500f5289284b75df011.1767663073.git.zhoubinbin@loongson.cn>
- <20260106191314.GA2568583-robh@kernel.org> <CAMpQs4LpKSLGKySmzHeysS3x78inUQy9DF4dShneNymDvAi4Ew@mail.gmail.com>
- <20260114205855.GA3190839-robh@kernel.org> <CAMpQs4+v=KhLW_Cru801p06vmpjJFotvyDfKBALg6mbwxFU5-A@mail.gmail.com>
-In-Reply-To: <CAMpQs4+v=KhLW_Cru801p06vmpjJFotvyDfKBALg6mbwxFU5-A@mail.gmail.com>
-From: Rob Herring <robh@kernel.org>
-Date: Thu, 15 Jan 2026 11:00:10 -0600
-X-Gmail-Original-Message-ID: <CAL_JsqJVD3o41Zch6fMY6s-qmyd9cQg6CJ+iya+3kdtuqvNMoA@mail.gmail.com>
-X-Gm-Features: AZwV_QhH7fbAW1uy00b0PiEt9cxyR0HtWiRhvd3H6Ah7cjw_EUJkNE0JYevgxT8
-Message-ID: <CAL_JsqJVD3o41Zch6fMY6s-qmyd9cQg6CJ+iya+3kdtuqvNMoA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/3] dt-binding: rtc: loongson: Document
- Loongson-2K0300 compatible
-To: Binbin Zhou <zhoubb.aaron@gmail.com>
-Cc: Binbin Zhou <zhoubinbin@loongson.cn>, Huacai Chen <chenhuacai@loongson.cn>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, linux-rtc@vger.kernel.org, 
-	Xiaochuang Mao <maoxiaochuan@loongson.cn>, Huacai Chen <chenhuacai@kernel.org>, 
-	Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev, devicetree@vger.kernel.org, 
-	linux-mips@vger.kernel.org, Keguang Zhang <keguang.zhang@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.21.2601110027520.30566@angie.orcam.me.uk>
 
-On Thu, Jan 15, 2026 at 1:39=E2=80=AFAM Binbin Zhou <zhoubb.aaron@gmail.com=
-> wrote:
->
-> Hi Rob:
->
-> Thanks for your reply.
->
-> On Thu, Jan 15, 2026 at 4:58=E2=80=AFAM Rob Herring <robh@kernel.org> wro=
-te:
-> >
-> > On Wed, Jan 07, 2026 at 09:22:41AM +0800, Binbin Zhou wrote:
-> > > Hi Rob:
-> > >
-> > > Thanks for your review.
-> > >
-> > > On Wed, Jan 7, 2026 at 3:13=E2=80=AFAM Rob Herring <robh@kernel.org> =
-wrote:
-> > > >
-> > > > On Tue, Jan 06, 2026 at 09:33:32AM +0800, Binbin Zhou wrote:
-> > > > > Add "loongson,ls2k0300-rtc" dedicated compatible to represent the=
- RTC
-> > > > > interface of the Loongson-2K0300 chip.
-> > > > >
-> > > > > Its hardware design is similar to that of the Loongson-1B, but it=
- does
-> > > > > not support the alarm feature.
-> > > >
-> > > > But you are requiring the interrupt property for it? Isn't it no al=
-arm
-> > > > feature means no interrupt?
-> > >
-> > > Yes, the `interrupts` attribute is not required without the alarm fea=
-ture.
-> > >
-> > > But my judgment condition is `not contains` (added in patch-1[1]).
-> > > There are only a few SoCs on the Loongson platform that don't support
-> > > the RTC alarm feature, so I think `not contains` looks cleaner and
-> > > simpler.
-> >
-> > I should have said allowing rather than requiring.
-> >
-> > You are allowing (though not requiring) 'interrupts' for Loongson-1B an=
-d
-> > Loongson-2K0300. In patch 1, you made it required for other platforms
-> > which is an ABI change. That's fine if it was a mistake and is truly
-> > required.
->
-> Emm, it's true that for the binding interface, Patch-1 is indeed an
-> ABI change, but it's more of a fixed patch.
->
-> Throughout all existing Loongson DTS{i}, RTC nodes decide whether to
-> include the `interrupts` property or not based on the alarm feature.
-> Loongson-1c rtc nodes do not include the `interrupts` attribute [1],
-> while all other Loongson chip rtc nodes do [2].
->
-> So, while this is an ABI change, I don't think it affects existing
-> Loongson DTS{i} rtc nodes. Also, it more accurately describes the
-> features of the corresponding RTC device.
->
-> Therefore, I would like to clarify it in the Patch-1 commit message of
-> the next patch version and fix the error in the commit title:
-> dt-binding -> dt-bindings.
->
-> How do you feel about that?
+On Sun, Jan 11, 2026 at 12:40:56AM +0000, Maciej W. Rozycki wrote:
+> [+cc Thomas, linux-mips]
+> 
+> On Fri, 9 Jan 2026, Simon Horman wrote:
+> 
+> > > This allows the code managing device instances to be simplified
+> > > significantly. The VLB bus is very obsolete and last appeared on
+> > > P5 Pentium-era hardware. Support for it has been removed from
+> > > other drivers, and it is highly unlikely anyone is using it with
+> > > modern Linux kernels.
+> > > 
+> > > Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+> > 
+> > Hi Ethan,
+> > 
+> > I don't think this driver has received much attention for some time.
+> > So, unless you have hardware to test changes on, I would suggest
+> > either leaving it alone or, if we suspect there are no users,
+> > removing it.
+> 
+>  You mean discarding the whole of drivers/net/ethernet/amd/pcnet32.c?  If 
+> so, then it's a hard NAK from me.  It's the onboard/netboot interface of 
+> the MIPS Malta platform and it continues being used regularly, primarily 
+> with QEMU setups, although I have actual Malta hardware in my lab too, 
+> usually running 24/7.  It's one of the primary MIPS plaforms, cf. 
+> arch/mips/configs/malta_defconfig.
 
-That's fine, but you also need:
+Thanks, that is valuable feedback.
 
-else:
-  properties:
-    interrupts: false
+I'm certainly not advocating removing drivers that have an active user-base.
 
-So that on the 2 platforms without an interrupt(alarm), 'interrupts'
-is not allowed.
+> 
+>  No attention means the driver just works, why wouldn't it?  It's no 
+> rocket science.  FWIW I continue using several drivers that saw little to 
+> no change recently across various platforms.
 
-With that, you might as well just drop the 'not' and flip the 'then'
-and 'else' schemas around.
+Interesting. Subjectively, I'd say that Networking drivers it can be a sign
+that the devices aren't being used in the wild. But clearly that signal was
+incorrect in this case.
 
-Rob
+>  As to VLB support, I guess nobody cares nowadays.  I used to have such a 
+> system, but haven't seen one in some three decades now and never used this 
+> driver with one.
+
+That is also valuable feedback, thanks.
+
 
