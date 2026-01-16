@@ -1,67 +1,67 @@
-Return-Path: <linux-mips+bounces-12946-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12948-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EBE8D2ECFD
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Jan 2026 10:34:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D50A6D2ED35
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Jan 2026 10:35:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 226353007EC3
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Jan 2026 09:34:25 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id D3B9A305B6D0
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Jan 2026 09:34:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3FE5B357729;
-	Fri, 16 Jan 2026 09:34:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE50B357A53;
+	Fri, 16 Jan 2026 09:34:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="RmD3dzY/"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lzFJui4M"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wm1-f74.google.com (mail-wm1-f74.google.com [209.85.128.74])
+Received: from mail-wr1-f74.google.com (mail-wr1-f74.google.com [209.85.221.74])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C8843570BA
-	for <linux-mips@vger.kernel.org>; Fri, 16 Jan 2026 09:34:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 581B1357718
+	for <linux-mips@vger.kernel.org>; Fri, 16 Jan 2026 09:34:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768556064; cv=none; b=FEf9rYOAZr8hoD0qAQ0Obha0RN+sMw/SrEAs6jagBADqQs2feY8F+YJSYJPr5BAsZ4gV88S9aOXcRTbU2LccOVCfyYzpgX20fr3+9EyjfIA4jzn2ulMCXzTr2retnuBUuvv/q764cNMeahM49LxC4YZxugg4hVRzqQ235Zv5HPE=
+	t=1768556066; cv=none; b=no2Ou8zdNEDB7R+d3cSAUfNhY6w+YiwMV91t8+Olsnct84dGpUo9/hkE1MjkTABafBK4zmr6LP6pXdn7k+6ApA7W/7HRuOgrZ2KCoUFvSUOmLWZ3CPJk4ylVfEEoP/2AVOsOeUNX2Xrhhnmcqagzr5Nx1ExP9gnqOMpna18nwUc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768556064; c=relaxed/simple;
-	bh=Y/JLcurrP7hYPL4AV5l4OWDyDh1zMqiBUjyu5CelejU=;
+	s=arc-20240116; t=1768556066; c=relaxed/simple;
+	bh=NM6q4F+2pfcBZpE6P1Uc+XKD9LINZOumvQNalN1oIgQ=;
 	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=lFKh+uhh1zDBhKuEfIB6FFr1q1n8lAcH1wkbRGo/yUkNiUK5mh+AkT+znkNxElP4fKVkpO79yq6TGlDKXk+QcDzJLLLTFSScupFhEwCeiiOLpFaM5FtmrJozWCpXI3Tq23ha3O6RHpL4Rndsaup/K3jC4EjsO99Lk9qdlcGrsig=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=RmD3dzY/; arc=none smtp.client-ip=209.85.128.74
+	 To:Cc:Content-Type; b=YPJBRNOvlQO2yWATRCWWDSrd1kpQMO+HxP9yyUMQfkliblt1APh/YnyY/iQjLJqfrNrR5Pp8f05YnyBIXfK+pXApT8RplOsqJrBJOd92ravG0zNgcySibQ0ldAe3bz6HQdg5J0AmLrMsZvFewtwXlmAiS/wuasjN/k+JKcIHkqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lzFJui4M; arc=none smtp.client-ip=209.85.221.74
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
-Received: by mail-wm1-f74.google.com with SMTP id 5b1f17b1804b1-4801e3aab32so3554105e9.3
-        for <linux-mips@vger.kernel.org>; Fri, 16 Jan 2026 01:34:22 -0800 (PST)
+Received: by mail-wr1-f74.google.com with SMTP id ffacd0b85a97d-430ffa9fccaso1641611f8f.1
+        for <linux-mips@vger.kernel.org>; Fri, 16 Jan 2026 01:34:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1768556060; x=1769160860; darn=vger.kernel.org;
+        d=google.com; s=20230601; t=1768556062; x=1769160862; darn=vger.kernel.org;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dobnQlzcQXndjhDiBs5Er5oWRxsPFXQMWQBLT95H/Xg=;
-        b=RmD3dzY/W8C3I6tJGDoFsy5rUuH/R1aAelNstbe8H2DptFvQvGPksFgYGBv4+H25w2
-         AEtP6o2EZEXce9dC6Fknkuq3Tmx2xZXymyJBPrCNW1wr8MFDZuuypGZkz7Xvc3U+TBAn
-         4m7v/c9c+PtFjRqpaXA62RmuNBfnnQaPO+t7Hz8VkmevoXbsChDYyD5UDvA8XqiiI//3
-         viN0iF/VAft7ymznWtNYQXhGLhnT6mTIfYUHuEe0YR704HT8M9d7ZV0ker+Wjd0AKu81
-         9TPPcBhnL8eGgiBTP9+C81X01I9P4dGeCjjnIFC2Je8k4yA4nFo9hACiZD9Hgw8837DG
-         eg/w==
+        bh=Xv9mZehuSWKkpgnhRisn4d35nxKH/bJdH2uCguWaEG0=;
+        b=lzFJui4Mw5H/414z3TduY3YIUTKQTjGP1MIH86qtIX8kBcxMG3ZtPJzSqEbb0/TnZM
+         8eaeRI5qnaGyzLdtLUCBh2wy1A47sq+86+zAA8JCJmASHBTM6U8STCGAV9YfUqKbA8pe
+         G4WzjJ3GRqMBEMBRGAFxJFmLmCroWM6PvUHR1mwcAmZpir627OAr33azTM+Av2YIauV+
+         9WPc/T+JNPm18A709Elnk2ZZcZcEx9eA0oXCGCVpuNdfTGBYq1wUYfo4HBibp0sBBf2/
+         uC3Mrbhcjhy+YUCHEWZkX+PnlMPAU+1SusqegcscqRvMMNQMu5Hgh0eiV2eXGIfVudzE
+         1I/g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768556061; x=1769160861;
+        d=1e100.net; s=20230601; t=1768556062; x=1769160862;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=dobnQlzcQXndjhDiBs5Er5oWRxsPFXQMWQBLT95H/Xg=;
-        b=qFmgeDlu1UrwPv2HiZ8t9w+DY50puOkRM5regfZfbdZ6h9H3W4zD+rIarMgg2LDjlb
-         aMdFZkIf0q62amD+9GmPU7h7Q8F/f67cewHaxCOHrQG5YYr7rrABj1HLmqz+Qqy+TbYx
-         zOze+ovyGtozD9PNBsaqsIjzpK4Oa6H0G+d74vIPfsjcdKBbJon19lMcFw6h7JttRMqz
-         LVrjg+Gsra7XYeCD1E28PZIDDEKJoBTX/n20hyia6bNFBDRlitR7FeTuFcJyeJoT2n76
-         5eMxOJAjGAQ/h/yjCUOTx2fdcwUJHt82U9IbP3RA/Nw2TDr6UPFE2HaUZMZtcRMMMcdL
-         MXnQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVCSErMgp6nEOtRczZjgj9eodZrzu2xb7BkTpFOlFOa8YR8Z2TNY4czvfL9Qk4OQZ56xjiM7y9FJsaS@vger.kernel.org
-X-Gm-Message-State: AOJu0Yytt5cAzx5f/4iEkNx3ZAYG4Xy7b5spBEGlQt5JVmzlk2i9v1ec
-	pNEc2681Ae61IVPOBl1fvhLWGn2AZ4Gh1ExqmpvSNj9U9S87zKNu2feevzJPsrT5t0q6gLaTTg=
+        bh=Xv9mZehuSWKkpgnhRisn4d35nxKH/bJdH2uCguWaEG0=;
+        b=cxVOoJwhXUNZe4fzXmf8fScxpUgxc/EI9LNIpHqXUu7tP24h70IOnCsT6XG6pp/W62
+         qd9BlcO/VZ8f+CcgVznlrfS4dUULqVXAemfb4LWld+40JSTHLgCXPS5YiabDT2BCt21z
+         7Wr3vVOu+dbE+HFVSnzbh3vPR8bai3zhMNAbaKW8ah1pAY3bLeTXz7IZINFNC55nXPi1
+         MdftsW74VOU8NTkb7LojKUGhiZIUET1XteWxlpElosbSx2m+quEYpAJPQYAn7oJApeX6
+         DWr06NTtbVzeVVaxkSwEcmeFtYtgQnxsNett74Z8S5iat4g6UYRGrfSDHXiYtMp8H2hk
+         /Nrg==
+X-Forwarded-Encrypted: i=1; AJvYcCWMRPFgYikNJ5vXby4qHEvrYlNJmqw5Sk0vqd0mP8f2+lviiHbdtROimj9J34bqUn7Zy+PL3ci1UYsb@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+GC6FBVFMfbZduyJVadbLIOua7/FBxEyCW8BNXYYEMWSpaffG
+	IjKKK2b94xnUQZHi6JC047BISvVXH4wl0ZItQVH24Qg+wVQ5Zo6D+aNav1Mwq6euMJoWa86CQg=
 	=
-X-Received: from wmco13.prod.google.com ([2002:a05:600c:a30d:b0:475:decb:4c4d])
- (user=ardb job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:5248:b0:477:b642:9dc9
- with SMTP id 5b1f17b1804b1-4801e3459d3mr25659335e9.28.1768556060718; Fri, 16
- Jan 2026 01:34:20 -0800 (PST)
-Date: Fri, 16 Jan 2026 10:34:01 +0100
+X-Received: from wrbcp41.prod.google.com ([2002:a05:6000:4029:b0:432:c0b9:b553])
+ (user=ardb job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6000:238a:b0:432:e00b:8680
+ with SMTP id ffacd0b85a97d-43569bc54a2mr2781711f8f.31.1768556061745; Fri, 16
+ Jan 2026 01:34:21 -0800 (PST)
+Date: Fri, 16 Jan 2026 10:34:02 +0100
 In-Reply-To: <20260116093359.2442297-4-ardb+git@google.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -71,14 +71,14 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0
 References: <20260116093359.2442297-4-ardb+git@google.com>
 X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1741; i=ardb@kernel.org;
- h=from:subject; bh=DUkB/GIoROOowZ3yMGbRxpDeWaywIuqMepfO7ycB2TA=;
- b=owGbwMvMwCVmkMcZplerG8N4Wi2JITOLjeO/9crlrv6HHGMT1oTLXg3eZzZ7nocCV6f7nuPX/
- H9kFH/pKGVhEONikBVTZBGY/ffdztMTpWqdZ8nCzGFlAhnCwMUpABOZvJThn2Lwjg8vrmw/smH9
- xV9lbhIhKZINZ+5MZ7adumSKbY3FIyeG/3WHvRslAtJvO5p8KszUeGCoFxvEUeDP7nDx6+0uS5W J3AA=
+X-Developer-Signature: v=1; a=openpgp-sha256; l=8138; i=ardb@kernel.org;
+ h=from:subject; bh=IzuRsXHQD94wcxsjT6y4DYYcBMPmDTwaoDoXh1QUfu4=;
+ b=owGbwMvMwCVmkMcZplerG8N4Wi2JITOLjSPiQMaxrCMB6Uu8GkoEGs2PnZy9uGy2Zrt466nW3
+ Vs5J63rKGVhEONikBVTZBGY/ffdztMTpWqdZ8nCzGFlAhnCwMUpABMxOMvwTyVgneejezK/z7x+
+ FnKp9NvhrAAVm13sqauL5c9tYp8r5sXI0Jx//8dFnsUpV7l0r/nqf0kTf1Iz31bc13/5vMJnrA/ 5GAA=
 X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
-Message-ID: <20260116093359.2442297-5-ardb+git@google.com>
-Subject: [PATCH v2 1/2] mips: Add support for PC32 relocations in vmlinux
+Message-ID: <20260116093359.2442297-6-ardb+git@google.com>
+Subject: [PATCH v2 2/2] kallsyms: Get rid of kallsyms relative base
 From: Ard Biesheuvel <ardb+git@google.com>
 To: linux-kernel@vger.kernel.org
 Cc: Ard Biesheuvel <ardb@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
@@ -89,52 +89,238 @@ Content-Type: text/plain; charset="UTF-8"
 
 From: Ard Biesheuvel <ardb@kernel.org>
 
-MIPS supports PC32 relocations like most other architectures, which will
-be used by kallsyms to make its symbol references visible to the linker.
+When the kallsyms relative base was introduced, per-CPU variable
+references on x86_64 SMP were implemented as offsets into the respective
+per-CPU region, rather than offsets relative to the location of the
+variable's template in the kernel image, which is how other
+architectures implement it.
 
-Given that these are place-relative, they can be ignored by the 'relocs'
-tool, just like other PC type relocations.
+This required kallsyms to reason about the difference between the two,
+and the sign of the value in the kallsyms_offsets[] array was used to
+distinguish them. This meant that negative offsets were not permitted
+for ordinary variables, and so it was crucial that the relative base was
+chosen such that all offsets were positive numbers.
 
-Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+This is no longer needed: instead, the offsets can simply be encoded as
+values in the range -/+ 2 GiB, which is precisely what PC32 relocations
+provide on most architectures. So it is possible to simplify the logic,
+and just use _text as the anchor directly, and let the linker calculate
+the final value based on the location of the entry itself.
+
+Some architectures (nios2, extensa) do not support place-relative
+relocations at all, but these are all 32-bit and non-relocatable, and so
+there is no need for place-relative relocations in the first place, and
+the actual symbol values can just be stored directly.
+
+This makes all entries in the kallsyms_offsets[] array visible as
+place-relative references in the ELF metadata, which will be important
+when implementing ELF-based fg-kaslr.
+
+Reviewed-by: Kees Cook <kees@kernel.org>
 Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
 ---
- arch/mips/boot/tools/relocs.c | 2 ++
- arch/mips/include/asm/elf.h   | 2 ++
- 2 files changed, 4 insertions(+)
+ kernel/kallsyms.c                   |  6 +-
+ kernel/kallsyms_internal.h          |  1 -
+ kernel/vmcore_info.c                |  1 -
+ scripts/kallsyms.c                  | 64 ++++++--------------
+ scripts/link-vmlinux.sh             |  4 ++
+ tools/perf/tests/vmlinux-kallsyms.c |  1 -
+ 6 files changed, 25 insertions(+), 52 deletions(-)
 
-diff --git a/arch/mips/boot/tools/relocs.c b/arch/mips/boot/tools/relocs.c
-index 9863e1d5c62e..30809f47415a 100644
---- a/arch/mips/boot/tools/relocs.c
-+++ b/arch/mips/boot/tools/relocs.c
-@@ -79,6 +79,7 @@ static const char *rel_type(unsigned type)
- 		REL_TYPE(R_MIPS_HIGHEST),
- 		REL_TYPE(R_MIPS_PC21_S2),
- 		REL_TYPE(R_MIPS_PC26_S2),
-+		REL_TYPE(R_MIPS_PC32),
- #undef REL_TYPE
- 	};
- 	const char *name = "unknown type rel type name";
-@@ -522,6 +523,7 @@ static int do_reloc(struct section *sec, Elf_Rel *rel, Elf_Sym *sym,
- 	case R_MIPS_PC16:
- 	case R_MIPS_PC21_S2:
- 	case R_MIPS_PC26_S2:
-+	case R_MIPS_PC32:
- 		/*
- 		 * NONE can be ignored and PC relative relocations don't
- 		 * need to be adjusted.
-diff --git a/arch/mips/include/asm/elf.h b/arch/mips/include/asm/elf.h
-index dc8d2863752c..aaef0eaa68d5 100644
---- a/arch/mips/include/asm/elf.h
-+++ b/arch/mips/include/asm/elf.h
-@@ -123,6 +123,8 @@
- #define R_MIPS_LOVENDOR		100
- #define R_MIPS_HIVENDOR		127
+diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+index 049e296f586c..6125724aadb1 100644
+--- a/kernel/kallsyms.c
++++ b/kernel/kallsyms.c
+@@ -151,8 +151,10 @@ static unsigned int get_symbol_offset(unsigned long pos)
  
-+#define R_MIPS_PC32		248
+ unsigned long kallsyms_sym_address(int idx)
+ {
+-	/* values are unsigned offsets */
+-	return kallsyms_relative_base + (u32)kallsyms_offsets[idx];
++	/* non-relocatable 32-bit kernels just embed the value directly */
++	if (!IS_ENABLED(CONFIG_64BIT) && !IS_ENABLED(CONFIG_RELOCATABLE))
++		return (u32)kallsyms_offsets[idx];
++	return (unsigned long)offset_to_ptr(kallsyms_offsets + idx);
+ }
+ 
+ static unsigned int get_symbol_seq(int index)
+diff --git a/kernel/kallsyms_internal.h b/kernel/kallsyms_internal.h
+index 9633782f8250..81a867dbe57d 100644
+--- a/kernel/kallsyms_internal.h
++++ b/kernel/kallsyms_internal.h
+@@ -8,7 +8,6 @@ extern const int kallsyms_offsets[];
+ extern const u8 kallsyms_names[];
+ 
+ extern const unsigned int kallsyms_num_syms;
+-extern const unsigned long kallsyms_relative_base;
+ 
+ extern const char kallsyms_token_table[];
+ extern const u16 kallsyms_token_index[];
+diff --git a/kernel/vmcore_info.c b/kernel/vmcore_info.c
+index fe9bf8db1922..f114719f6cb5 100644
+--- a/kernel/vmcore_info.c
++++ b/kernel/vmcore_info.c
+@@ -238,7 +238,6 @@ static int __init crash_save_vmcoreinfo_init(void)
+ 	VMCOREINFO_SYMBOL(kallsyms_token_table);
+ 	VMCOREINFO_SYMBOL(kallsyms_token_index);
+ 	VMCOREINFO_SYMBOL(kallsyms_offsets);
+-	VMCOREINFO_SYMBOL(kallsyms_relative_base);
+ #endif /* CONFIG_KALLSYMS */
+ 
+ 	arch_crash_save_vmcoreinfo();
+diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
+index 4b0234e4b12f..37d5c095ad22 100644
+--- a/scripts/kallsyms.c
++++ b/scripts/kallsyms.c
+@@ -46,7 +46,6 @@ struct addr_range {
+ };
+ 
+ static unsigned long long _text;
+-static unsigned long long relative_base;
+ static struct addr_range text_ranges[] = {
+ 	{ "_stext",     "_etext"     },
+ 	{ "_sinittext", "_einittext" },
+@@ -57,6 +56,7 @@ static struct addr_range text_ranges[] = {
+ static struct sym_entry **table;
+ static unsigned int table_size, table_cnt;
+ static int all_symbols;
++static int pc_relative;
+ 
+ static int token_profit[0x10000];
+ 
+@@ -280,7 +280,7 @@ static void read_map(const char *in)
+ static void output_label(const char *label)
+ {
+ 	printf(".globl %s\n", label);
+-	printf("\tALGN\n");
++	printf("\t.balign 4\n");
+ 	printf("%s:\n", label);
+ }
+ 
+@@ -343,15 +343,6 @@ static void write_src(void)
+ 	unsigned int *markers, markers_cnt;
+ 	char buf[KSYM_NAME_LEN];
+ 
+-	printf("#include <asm/bitsperlong.h>\n");
+-	printf("#if BITS_PER_LONG == 64\n");
+-	printf("#define PTR .quad\n");
+-	printf("#define ALGN .balign 8\n");
+-	printf("#else\n");
+-	printf("#define PTR .long\n");
+-	printf("#define ALGN .balign 4\n");
+-	printf("#endif\n");
+-
+ 	printf("\t.section .rodata, \"a\"\n");
+ 
+ 	output_label("kallsyms_num_syms");
+@@ -434,34 +425,24 @@ static void write_src(void)
+ 	output_label("kallsyms_offsets");
+ 
+ 	for (i = 0; i < table_cnt; i++) {
+-		/*
+-		 * Use the offset relative to the lowest value
+-		 * encountered of all relative symbols, and emit
+-		 * non-relocatable fixed offsets that will be fixed
+-		 * up at runtime.
+-		 */
+-
+-		long long offset;
+-
+-		offset = table[i]->addr - relative_base;
+-		if (offset < 0 || offset > UINT_MAX) {
+-			fprintf(stderr, "kallsyms failure: "
+-				"relative symbol value %#llx out of range\n",
+-				table[i]->addr);
+-			exit(EXIT_FAILURE);
++		if (pc_relative) {
++			long long offset = table[i]->addr - _text;
 +
- #define SHN_MIPS_ACCOMON	0xff00		/* Allocated common symbols */
- #define SHN_MIPS_TEXT		0xff01		/* Allocated test symbols.  */
- #define SHN_MIPS_DATA		0xff02		/* Allocated data symbols.  */
++			if (offset < INT_MIN || offset > INT_MAX) {
++				fprintf(stderr, "kallsyms failure: "
++					"relative symbol value %#llx out of range\n",
++					table[i]->addr);
++				exit(EXIT_FAILURE);
++			}
++			printf("\t.long\t_text - . + (%d)\t/* %s */\n",
++			       (int)offset, table[i]->sym);
++		} else {
++			printf("\t.long\t%#x\t/* %s */\n",
++			       (unsigned int)table[i]->addr, table[i]->sym);
+ 		}
+-		printf("\t.long\t%#x\t/* %s */\n", (int)offset, table[i]->sym);
+ 	}
+ 	printf("\n");
+ 
+-	output_label("kallsyms_relative_base");
+-	/* Provide proper symbols relocatability by their '_text' relativeness. */
+-	if (_text <= relative_base)
+-		printf("\tPTR\t_text + %#llx\n", relative_base - _text);
+-	else
+-		printf("\tPTR\t_text - %#llx\n", _text - relative_base);
+-	printf("\n");
+-
+ 	sort_symbols_by_name();
+ 	output_label("kallsyms_seqs_of_names");
+ 	for (i = 0; i < table_cnt; i++)
+@@ -701,22 +682,12 @@ static void sort_symbols(void)
+ 	qsort(table, table_cnt, sizeof(table[0]), compare_symbols);
+ }
+ 
+-/* find the minimum non-absolute symbol address */
+-static void record_relative_base(void)
+-{
+-	/*
+-	 * The table is sorted by address.
+-	 * Take the first symbol value.
+-	 */
+-	if (table_cnt)
+-		relative_base = table[0]->addr;
+-}
+-
+ int main(int argc, char **argv)
+ {
+ 	while (1) {
+ 		static const struct option long_options[] = {
+ 			{"all-symbols",     no_argument, &all_symbols,     1},
++			{"pc-relative",     no_argument, &pc_relative,     1},
+ 			{},
+ 		};
+ 
+@@ -734,7 +705,6 @@ int main(int argc, char **argv)
+ 	read_map(argv[optind]);
+ 	shrink_table();
+ 	sort_symbols();
+-	record_relative_base();
+ 	optimize_token_table();
+ 	write_src();
+ 
+diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
+index 4ab44c73da4d..73531cb63efc 100755
+--- a/scripts/link-vmlinux.sh
++++ b/scripts/link-vmlinux.sh
+@@ -143,6 +143,10 @@ kallsyms()
+ 		kallsymopt="${kallsymopt} --all-symbols"
+ 	fi
+ 
++	if is_enabled CONFIG_64BIT || is_enabled CONFIG_RELOCATABLE; then
++		kallsymopt="${kallsymopt} --pc-relative"
++	fi
++
+ 	info KSYMS "${2}.S"
+ 	scripts/kallsyms ${kallsymopt} "${1}" > "${2}.S"
+ 
+diff --git a/tools/perf/tests/vmlinux-kallsyms.c b/tools/perf/tests/vmlinux-kallsyms.c
+index 74cdbd2ce9d0..524d46478364 100644
+--- a/tools/perf/tests/vmlinux-kallsyms.c
++++ b/tools/perf/tests/vmlinux-kallsyms.c
+@@ -27,7 +27,6 @@ static bool is_ignored_symbol(const char *name, char type)
+ 		 * stable symbol list.
+ 		 */
+ 		"kallsyms_offsets",
+-		"kallsyms_relative_base",
+ 		"kallsyms_num_syms",
+ 		"kallsyms_names",
+ 		"kallsyms_markers",
 -- 
 2.52.0.457.g6b5491de43-goog
 
