@@ -1,327 +1,192 @@
-Return-Path: <linux-mips+bounces-12948-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12949-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D50A6D2ED35
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Jan 2026 10:35:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BFD31D30E5B
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Jan 2026 13:10:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D3B9A305B6D0
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Jan 2026 09:34:28 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id B0025303527C
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Jan 2026 12:10:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE50B357A53;
-	Fri, 16 Jan 2026 09:34:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15AE03876D6;
+	Fri, 16 Jan 2026 12:10:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="lzFJui4M"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="tcY57Ktk";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="RoLHU8R2"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wr1-f74.google.com (mail-wr1-f74.google.com [209.85.221.74])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 581B1357718
-	for <linux-mips@vger.kernel.org>; Fri, 16 Jan 2026 09:34:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.74
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29AC337BE8D;
+	Fri, 16 Jan 2026 12:10:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768556066; cv=none; b=no2Ou8zdNEDB7R+d3cSAUfNhY6w+YiwMV91t8+Olsnct84dGpUo9/hkE1MjkTABafBK4zmr6LP6pXdn7k+6ApA7W/7HRuOgrZ2KCoUFvSUOmLWZ3CPJk4ylVfEEoP/2AVOsOeUNX2Xrhhnmcqagzr5Nx1ExP9gnqOMpna18nwUc=
+	t=1768565449; cv=none; b=s/8XJzU+mGOClqYOqQFdQ7imOb32Sz5CboyZKl26OibW4UH4zrOPyvirYfNH4Yc7tMGlvzY4RuKo4lAlbtkuDdmEoiTedoSzoigSiDHHs0A314/xsPvS0QzhjAIneNZBzIKQG9f+/QauX54tvYwxcIOPyHzO3fVrG+rTSlGu9vU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768556066; c=relaxed/simple;
-	bh=NM6q4F+2pfcBZpE6P1Uc+XKD9LINZOumvQNalN1oIgQ=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=YPJBRNOvlQO2yWATRCWWDSrd1kpQMO+HxP9yyUMQfkliblt1APh/YnyY/iQjLJqfrNrR5Pp8f05YnyBIXfK+pXApT8RplOsqJrBJOd92ravG0zNgcySibQ0ldAe3bz6HQdg5J0AmLrMsZvFewtwXlmAiS/wuasjN/k+JKcIHkqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=lzFJui4M; arc=none smtp.client-ip=209.85.221.74
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
-Received: by mail-wr1-f74.google.com with SMTP id ffacd0b85a97d-430ffa9fccaso1641611f8f.1
-        for <linux-mips@vger.kernel.org>; Fri, 16 Jan 2026 01:34:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1768556062; x=1769160862; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xv9mZehuSWKkpgnhRisn4d35nxKH/bJdH2uCguWaEG0=;
-        b=lzFJui4Mw5H/414z3TduY3YIUTKQTjGP1MIH86qtIX8kBcxMG3ZtPJzSqEbb0/TnZM
-         8eaeRI5qnaGyzLdtLUCBh2wy1A47sq+86+zAA8JCJmASHBTM6U8STCGAV9YfUqKbA8pe
-         G4WzjJ3GRqMBEMBRGAFxJFmLmCroWM6PvUHR1mwcAmZpir627OAr33azTM+Av2YIauV+
-         9WPc/T+JNPm18A709Elnk2ZZcZcEx9eA0oXCGCVpuNdfTGBYq1wUYfo4HBibp0sBBf2/
-         uC3Mrbhcjhy+YUCHEWZkX+PnlMPAU+1SusqegcscqRvMMNQMu5Hgh0eiV2eXGIfVudzE
-         1I/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768556062; x=1769160862;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Xv9mZehuSWKkpgnhRisn4d35nxKH/bJdH2uCguWaEG0=;
-        b=cxVOoJwhXUNZe4fzXmf8fScxpUgxc/EI9LNIpHqXUu7tP24h70IOnCsT6XG6pp/W62
-         qd9BlcO/VZ8f+CcgVznlrfS4dUULqVXAemfb4LWld+40JSTHLgCXPS5YiabDT2BCt21z
-         7Wr3vVOu+dbE+HFVSnzbh3vPR8bai3zhMNAbaKW8ah1pAY3bLeTXz7IZINFNC55nXPi1
-         MdftsW74VOU8NTkb7LojKUGhiZIUET1XteWxlpElosbSx2m+quEYpAJPQYAn7oJApeX6
-         DWr06NTtbVzeVVaxkSwEcmeFtYtgQnxsNett74Z8S5iat4g6UYRGrfSDHXiYtMp8H2hk
-         /Nrg==
-X-Forwarded-Encrypted: i=1; AJvYcCWMRPFgYikNJ5vXby4qHEvrYlNJmqw5Sk0vqd0mP8f2+lviiHbdtROimj9J34bqUn7Zy+PL3ci1UYsb@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx+GC6FBVFMfbZduyJVadbLIOua7/FBxEyCW8BNXYYEMWSpaffG
-	IjKKK2b94xnUQZHi6JC047BISvVXH4wl0ZItQVH24Qg+wVQ5Zo6D+aNav1Mwq6euMJoWa86CQg=
-	=
-X-Received: from wrbcp41.prod.google.com ([2002:a05:6000:4029:b0:432:c0b9:b553])
- (user=ardb job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6000:238a:b0:432:e00b:8680
- with SMTP id ffacd0b85a97d-43569bc54a2mr2781711f8f.31.1768556061745; Fri, 16
- Jan 2026 01:34:21 -0800 (PST)
-Date: Fri, 16 Jan 2026 10:34:02 +0100
-In-Reply-To: <20260116093359.2442297-4-ardb+git@google.com>
+	s=arc-20240116; t=1768565449; c=relaxed/simple;
+	bh=M8rYp98Yrm3kjvDcLQr1N9Xzxwxh+1FYXNegcG1Z3gw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rdb5Lh8jQBTUpgTwWkf6zUtCKMbdhuaKu82uEMESFYRQXhNURt8OfcIfUa6vx9DmbRDE+Sy36//2hmAoOPcKFnExefMFnpJTZq/dvSwTA6yy2bU4tloxjcQbjXKNcLGtmjwz9wpTfYgdYlZOh8I2DWRUAgIVP7n8V9yM9D46dzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=tcY57Ktk; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=RoLHU8R2; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+Date: Fri, 16 Jan 2026 13:10:42 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1768565444;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=m4xj4CRpx5Rn02x3ca442JNSKW3N63XvSapnCzBXF8o=;
+	b=tcY57KtkxrC2Kv4y0HkpbJbC/pQS5RHj9Kp4rg1YyeKUZFPhAszR0J9jXDYqU8XKMRt5yy
+	/cxA+qFjtYuGq3R5ue0ASh4BzD6PkPogDxaC3NG7jOvQXfc6a8y1Mj7UjwdcpmtWm6QmMF
+	P4JSJneYYVjhf0ropRohWWEJusj5z7WghKS+mseOsE/SiZUELdvQaP4mmZXIUcYfG0KM1J
+	SyKqrKtvAZQtbn0EioFiC39BcksrufdUvJKV41PHxEM0/XUOhtZ5Su8mpUxN4BGoJ8QcpA
+	pDPq2VQryd3zYOIkU4e5rPmQSuL5HuVQPwsqa2yeFNGSwpwptypePDBSAzdFGA==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1768565444;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=m4xj4CRpx5Rn02x3ca442JNSKW3N63XvSapnCzBXF8o=;
+	b=RoLHU8R2m4lh+TOUGYaYUhiHbsJz60UbhmEfkq+Ri9skt252VpVK6rulxmT2CKH3E9ZPhM
+	NY+TbhTMPWk9blDA==
+From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+To: Andy Lutomirski <luto@kernel.org>
+Cc: Thomas Gleixner <tglx@linutronix.de>, 
+	Vincenzo Frascino <vincenzo.frascino@arm.com>, Arnd Bergmann <arnd@arndb.de>, 
+	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
+	Nick Alcock <nick.alcock@oracle.com>, John Stultz <jstultz@google.com>, 
+	Stephen Boyd <sboyd@kernel.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
+	Shuah Khan <shuah@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>, 
+	"Jason A. Donenfeld" <Jason@zx2c4.com>, "Russell King (Oracle)" <linux@armlinux.org.uk>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
+	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
+	Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Heiko Carstens <hca@linux.ibm.com>, 
+	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
+	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
+	Shannon Nelson <sln@onemain.com>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
+	linux-mips@vger.kernel.org, linux-s390@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>
+Subject: Re: [PATCH v5 00/34] sparc64: vdso: Switch to the generic vDSO
+ library
+Message-ID: <20260116124847-4bbc0b99-fa0c-4bd1-a229-1bd248ee8c6b@linutronix.de>
+References: <20251106-vdso-sparc64-generic-2-v5-0-97ff2b6542f7@linutronix.de>
+ <b870aa47-5ed4-4dcf-a407-eca83d1733d8@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20260116093359.2442297-4-ardb+git@google.com>
-X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
-X-Developer-Signature: v=1; a=openpgp-sha256; l=8138; i=ardb@kernel.org;
- h=from:subject; bh=IzuRsXHQD94wcxsjT6y4DYYcBMPmDTwaoDoXh1QUfu4=;
- b=owGbwMvMwCVmkMcZplerG8N4Wi2JITOLjSPiQMaxrCMB6Uu8GkoEGs2PnZy9uGy2Zrt466nW3
- Vs5J63rKGVhEONikBVTZBGY/ffdztMTpWqdZ8nCzGFlAhnCwMUpABMxOMvwTyVgneejezK/z7x+
- FnKp9NvhrAAVm13sqauL5c9tYp8r5sXI0Jx//8dFnsUpV7l0r/nqf0kTf1Iz31bc13/5vMJnrA/ 5GAA=
-X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
-Message-ID: <20260116093359.2442297-6-ardb+git@google.com>
-Subject: [PATCH v2 2/2] kallsyms: Get rid of kallsyms relative base
-From: Ard Biesheuvel <ardb+git@google.com>
-To: linux-kernel@vger.kernel.org
-Cc: Ard Biesheuvel <ardb@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
-	Kees Cook <kees@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
-	linux-kbuild@vger.kernel.org, linux-hardening@vger.kernel.org, 
-	linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <b870aa47-5ed4-4dcf-a407-eca83d1733d8@app.fastmail.com>
 
-From: Ard Biesheuvel <ardb@kernel.org>
+Hi Andy,
 
-When the kallsyms relative base was introduced, per-CPU variable
-references on x86_64 SMP were implemented as offsets into the respective
-per-CPU region, rather than offsets relative to the location of the
-variable's template in the kernel image, which is how other
-architectures implement it.
+sorry for the long delay.
 
-This required kallsyms to reason about the difference between the two,
-and the sign of the value in the kallsyms_offsets[] array was used to
-distinguish them. This meant that negative offsets were not permitted
-for ordinary variables, and so it was crucial that the relative base was
-chosen such that all offsets were positive numbers.
+On Fri, Nov 07, 2025 at 04:17:14PM -0800, Andy Lutomirski wrote:
+> On Thu, Nov 6, 2025, at 2:01 AM, Thomas Weißschuh wrote:
+> > The generic vDSO provides a lot common functionality shared between
+> > different architectures. SPARC is the last architecture not using it,
+> > preventing some necessary code cleanup.
+> >
+> > Make use of the generic infrastructure.
+> >
+> > Follow-up to and replacement for Arnd's SPARC vDSO removal patches:
+> > https://lore.kernel.org/lkml/20250707144726.4008707-1-arnd@kernel.org/
+> >
+> > SPARC64 can not map .bss into userspace, so the vDSO datapages are
+> > switched over to be allocated dynamically. This requires changes to the
+> > s390 and random subsystem vDSO initialization as preparation.
+> > The random subsystem changes in turn require some cleanup of the vDSO
+> > headers to not end up as ugly #ifdef mess.
+> >
+> 
+> I hate to say it, but this patch series seems like a step backwards.  You're
+> adding a whole lot of complexity and opportunity for screwups (boot failure?
+> corruption?) to support SPARC, where other architectures have no problem with
+> the existing code.  And this complexity appears to infect basically every
+> kernel subsystem that supplies data to the vDSO.
 
-This is no longer needed: instead, the offsets can simply be encoded as
-values in the range -/+ 2 GiB, which is precisely what PC32 relocations
-provide on most architectures. So it is possible to simplify the logic,
-and just use _text as the anchor directly, and let the linker calculate
-the final value based on the location of the entry itself.
+Ack.
 
-Some architectures (nios2, extensa) do not support place-relative
-relocations at all, but these are all 32-bit and non-relocatable, and so
-there is no need for place-relative relocations in the first place, and
-the actual symbol values can just be stored directly.
+> Can you at least explain what the problem is and maybe give some discussion
+> of why SPARC has no workaround available?  The closest I found was this bit
+> from "[PATCH v4 24/35] vdso/datastore: Allocate data pages dynamically":
+> 
+> > Allocating the datapages as part of the kernel image does not work on
+> SPARC. It is also problematic with regards to dcache aliasing as there is
+> no guarantee that the virtual addresses used by the kernel are compatible
+> with those used by userspace.
+> 
+> Now I'm not an expert on any architecture that has these aliasing (coloring?)
+> issues, but from my limited understanding, it ought to be possible to choose
+> a correctly colored address to map the vdso data given where it's being
+> mapped from.  If there's an issue with gathering a bunch of basically
+> arbitrarily relatively positioned physical pages into their necessary
+> arrangement in usermode, you could presumably fix it either with some linker
+> script magic or by rearranging the C code to stick everything into a
+> multipage structure.
 
-This makes all entries in the kallsyms_offsets[] array visible as
-place-relative references in the ELF metadata, which will be important
-when implementing ELF-based fg-kaslr.
+After I wrote that commit message it turned out to probably not be an
+aliasing issue. Even with matching alignments the error would persist.
+The real reason is unknown. Nobody came up with an explanatin so far.
 
-Reviewed-by: Kees Cook <kees@kernel.org>
-Signed-off-by: Ard Biesheuvel <ardb@kernel.org>
----
- kernel/kallsyms.c                   |  6 +-
- kernel/kallsyms_internal.h          |  1 -
- kernel/vmcore_info.c                |  1 -
- scripts/kallsyms.c                  | 64 ++++++--------------
- scripts/link-vmlinux.sh             |  4 ++
- tools/perf/tests/vmlinux-kallsyms.c |  1 -
- 6 files changed, 25 insertions(+), 52 deletions(-)
+But another advantage of this dynamic allocation is to enable mlockall()
+on these VMAs. This avoids unexpected page faults and latency spikes for
+realtime applications.
+ 
+> Or maybe you could arrange to allocate all these pages during early boot and
+> to fudge up some relocation to get all the existing generic code to find
+> them.  Or create some pointers that all the generic code will use that, on
+> non-sparc architectures, will be statically populated with the right
+> addresses by the linker.  IOW, conceptually,
+> 
+> struct the_type some_vdso_thing;
+> 
+> could change to:
+> 
+> const struct the_type some_vdso_thing = &the_actual_data;
+> 
+> and SPARC could fix up the initialization of the pointer. And generic code
+> would use the pointer instead of the_actual_data.
 
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index 049e296f586c..6125724aadb1 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -151,8 +151,10 @@ static unsigned int get_symbol_offset(unsigned long pos)
- 
- unsigned long kallsyms_sym_address(int idx)
- {
--	/* values are unsigned offsets */
--	return kallsyms_relative_base + (u32)kallsyms_offsets[idx];
-+	/* non-relocatable 32-bit kernels just embed the value directly */
-+	if (!IS_ENABLED(CONFIG_64BIT) && !IS_ENABLED(CONFIG_RELOCATABLE))
-+		return (u32)kallsyms_offsets[idx];
-+	return (unsigned long)offset_to_ptr(kallsyms_offsets + idx);
- }
- 
- static unsigned int get_symbol_seq(int index)
-diff --git a/kernel/kallsyms_internal.h b/kernel/kallsyms_internal.h
-index 9633782f8250..81a867dbe57d 100644
---- a/kernel/kallsyms_internal.h
-+++ b/kernel/kallsyms_internal.h
-@@ -8,7 +8,6 @@ extern const int kallsyms_offsets[];
- extern const u8 kallsyms_names[];
- 
- extern const unsigned int kallsyms_num_syms;
--extern const unsigned long kallsyms_relative_base;
- 
- extern const char kallsyms_token_table[];
- extern const u16 kallsyms_token_index[];
-diff --git a/kernel/vmcore_info.c b/kernel/vmcore_info.c
-index fe9bf8db1922..f114719f6cb5 100644
---- a/kernel/vmcore_info.c
-+++ b/kernel/vmcore_info.c
-@@ -238,7 +238,6 @@ static int __init crash_save_vmcoreinfo_init(void)
- 	VMCOREINFO_SYMBOL(kallsyms_token_table);
- 	VMCOREINFO_SYMBOL(kallsyms_token_index);
- 	VMCOREINFO_SYMBOL(kallsyms_offsets);
--	VMCOREINFO_SYMBOL(kallsyms_relative_base);
- #endif /* CONFIG_KALLSYMS */
- 
- 	arch_crash_save_vmcoreinfo();
-diff --git a/scripts/kallsyms.c b/scripts/kallsyms.c
-index 4b0234e4b12f..37d5c095ad22 100644
---- a/scripts/kallsyms.c
-+++ b/scripts/kallsyms.c
-@@ -46,7 +46,6 @@ struct addr_range {
- };
- 
- static unsigned long long _text;
--static unsigned long long relative_base;
- static struct addr_range text_ranges[] = {
- 	{ "_stext",     "_etext"     },
- 	{ "_sinittext", "_einittext" },
-@@ -57,6 +56,7 @@ static struct addr_range text_ranges[] = {
- static struct sym_entry **table;
- static unsigned int table_size, table_cnt;
- static int all_symbols;
-+static int pc_relative;
- 
- static int token_profit[0x10000];
- 
-@@ -280,7 +280,7 @@ static void read_map(const char *in)
- static void output_label(const char *label)
- {
- 	printf(".globl %s\n", label);
--	printf("\tALGN\n");
-+	printf("\t.balign 4\n");
- 	printf("%s:\n", label);
- }
- 
-@@ -343,15 +343,6 @@ static void write_src(void)
- 	unsigned int *markers, markers_cnt;
- 	char buf[KSYM_NAME_LEN];
- 
--	printf("#include <asm/bitsperlong.h>\n");
--	printf("#if BITS_PER_LONG == 64\n");
--	printf("#define PTR .quad\n");
--	printf("#define ALGN .balign 8\n");
--	printf("#else\n");
--	printf("#define PTR .long\n");
--	printf("#define ALGN .balign 4\n");
--	printf("#endif\n");
--
- 	printf("\t.section .rodata, \"a\"\n");
- 
- 	output_label("kallsyms_num_syms");
-@@ -434,34 +425,24 @@ static void write_src(void)
- 	output_label("kallsyms_offsets");
- 
- 	for (i = 0; i < table_cnt; i++) {
--		/*
--		 * Use the offset relative to the lowest value
--		 * encountered of all relative symbols, and emit
--		 * non-relocatable fixed offsets that will be fixed
--		 * up at runtime.
--		 */
--
--		long long offset;
--
--		offset = table[i]->addr - relative_base;
--		if (offset < 0 || offset > UINT_MAX) {
--			fprintf(stderr, "kallsyms failure: "
--				"relative symbol value %#llx out of range\n",
--				table[i]->addr);
--			exit(EXIT_FAILURE);
-+		if (pc_relative) {
-+			long long offset = table[i]->addr - _text;
-+
-+			if (offset < INT_MIN || offset > INT_MAX) {
-+				fprintf(stderr, "kallsyms failure: "
-+					"relative symbol value %#llx out of range\n",
-+					table[i]->addr);
-+				exit(EXIT_FAILURE);
-+			}
-+			printf("\t.long\t_text - . + (%d)\t/* %s */\n",
-+			       (int)offset, table[i]->sym);
-+		} else {
-+			printf("\t.long\t%#x\t/* %s */\n",
-+			       (unsigned int)table[i]->addr, table[i]->sym);
- 		}
--		printf("\t.long\t%#x\t/* %s */\n", (int)offset, table[i]->sym);
- 	}
- 	printf("\n");
- 
--	output_label("kallsyms_relative_base");
--	/* Provide proper symbols relocatability by their '_text' relativeness. */
--	if (_text <= relative_base)
--		printf("\tPTR\t_text + %#llx\n", relative_base - _text);
--	else
--		printf("\tPTR\t_text - %#llx\n", _text - relative_base);
--	printf("\n");
--
- 	sort_symbols_by_name();
- 	output_label("kallsyms_seqs_of_names");
- 	for (i = 0; i < table_cnt; i++)
-@@ -701,22 +682,12 @@ static void sort_symbols(void)
- 	qsort(table, table_cnt, sizeof(table[0]), compare_symbols);
- }
- 
--/* find the minimum non-absolute symbol address */
--static void record_relative_base(void)
--{
--	/*
--	 * The table is sorted by address.
--	 * Take the first symbol value.
--	 */
--	if (table_cnt)
--		relative_base = table[0]->addr;
--}
--
- int main(int argc, char **argv)
- {
- 	while (1) {
- 		static const struct option long_options[] = {
- 			{"all-symbols",     no_argument, &all_symbols,     1},
-+			{"pc-relative",     no_argument, &pc_relative,     1},
- 			{},
- 		};
- 
-@@ -734,7 +705,6 @@ int main(int argc, char **argv)
- 	read_map(argv[optind]);
- 	shrink_table();
- 	sort_symbols();
--	record_relative_base();
- 	optimize_token_table();
- 	write_src();
- 
-diff --git a/scripts/link-vmlinux.sh b/scripts/link-vmlinux.sh
-index 4ab44c73da4d..73531cb63efc 100755
---- a/scripts/link-vmlinux.sh
-+++ b/scripts/link-vmlinux.sh
-@@ -143,6 +143,10 @@ kallsyms()
- 		kallsymopt="${kallsymopt} --all-symbols"
- 	fi
- 
-+	if is_enabled CONFIG_64BIT || is_enabled CONFIG_RELOCATABLE; then
-+		kallsymopt="${kallsymopt} --pc-relative"
-+	fi
-+
- 	info KSYMS "${2}.S"
- 	scripts/kallsyms ${kallsymopt} "${1}" > "${2}.S"
- 
-diff --git a/tools/perf/tests/vmlinux-kallsyms.c b/tools/perf/tests/vmlinux-kallsyms.c
-index 74cdbd2ce9d0..524d46478364 100644
---- a/tools/perf/tests/vmlinux-kallsyms.c
-+++ b/tools/perf/tests/vmlinux-kallsyms.c
-@@ -27,7 +27,6 @@ static bool is_ignored_symbol(const char *name, char type)
- 		 * stable symbol list.
- 		 */
- 		"kallsyms_offsets",
--		"kallsyms_relative_base",
- 		"kallsyms_num_syms",
- 		"kallsyms_names",
- 		"kallsyms_markers",
--- 
-2.52.0.457.g6b5491de43-goog
+These pointers alread exist and are used by the generic code:
+vdso_k_time_data, vdso_k_rng_data, vdso_k_arch_data.
+As proposed elsewhere in this thread, these can point to statically allocated
+memory at first so they can be accessed by the other kernel subsystems.
+Then they after the dynamic allocation we do a mempcy from the static storage
+to the dynamic one and update the pointer. I have the code for that which
+does work nicely.
 
+While we could limit this treatment to SPARC, I prefer to keep the code
+aligned between the different architectures. Otherwise we would need
+duplicate implementations as one uses PFN maps and the other 'struct page'
+maps. Also the mlockall() usecase is architecture-agnostic.
+
+Does this sound acceptable?
+
+> If you really really really need to have non-arch-specific kernel C code
+> running before the vdso data is allocated, can you give a very clear
+> explanation of what, exactly, is wrong on sparc?  And maybe put that
+> explanation into an appropriate comment somewhere so that future kernel
+> programmers don't look at the headers and the code and think "wow, what I
+> mess -- I bet I can clean this up by using statically allocated data".
+
+Ack, will do. But as I mentioned, I do not have an actual root cause.
+
+> (Can SPARC really not map things that existed during early boot into userspace?)
+
+It looks like it.
+
+
+Thomas
 
