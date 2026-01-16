@@ -1,109 +1,122 @@
-Return-Path: <linux-mips+bounces-12945-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12947-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39113D2D05F
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Jan 2026 08:15:25 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17300D2ED02
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Jan 2026 10:34:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id BCA31302082C
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Jan 2026 07:15:23 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 51252300ACEF
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Jan 2026 09:34:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D4EE23815D;
-	Fri, 16 Jan 2026 07:15:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 700A43570C1;
+	Fri, 16 Jan 2026 09:34:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="bNk/LHLJ"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="OHqUGt+1"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
+Received: from mail-wm1-f73.google.com (mail-wm1-f73.google.com [209.85.128.73])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4C271DC9B5
-	for <linux-mips@vger.kernel.org>; Fri, 16 Jan 2026 07:15:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AACED352FB8
+	for <linux-mips@vger.kernel.org>; Fri, 16 Jan 2026 09:34:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768547721; cv=none; b=f/KEAl9Y4hR0jfk5q+nYHDQ3v7yG6wJUZ4BamnBtmJt5DDZulUGdasCo2IeZ8ApRhYze0FwOVYRSvhuuwTD/ZtbNHJIupKX0du8Y4QqlE91keODbOJJjUtngtOfcFTSoTBUIeH7h1V4oit9XW8ZyM332A7cA2NkrIt0OU9dEEYE=
+	t=1768556064; cv=none; b=q6a65cu2iWqk2pgc1XtXrW+1TS+156bZnSWAGrdGhtfHJlFOIeCR8iRT5rAND3mUW4HhaL37mSN5653pcLHultHG69DoUTKQHmgU+Q0bFWgbslDI1sVym7NFVHAqaYusq859lf7caHx8e3w+NM6gYmfonpm4JxqFljZ2hFA/31k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768547721; c=relaxed/simple;
-	bh=WOkNGd/6bhym7+utziG3ODS8msK2tF2yxZ4+2JhBkpk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Iz5ErzDojH2VH2uO1rxST7XJ9JPBGyxbbB3qvzN2yFww/J9w4lK/U5FABz4ODJZdJ+gK9Z41cKGZkfHjQgXHsc68hLa5CfYWTXQvp42Pc1F6Sv1LTJ9D4cVqShYKjYJCGT3W9T8iQJm3FGv7KVe5UDJz/EEw2fqKWTeKmaUJdmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=bNk/LHLJ; arc=none smtp.client-ip=209.85.221.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-42fed090e5fso877574f8f.1
-        for <linux-mips@vger.kernel.org>; Thu, 15 Jan 2026 23:15:19 -0800 (PST)
+	s=arc-20240116; t=1768556064; c=relaxed/simple;
+	bh=pbj3poqSA6w0rLBL9Xjc+o+0Qy8FGE4aZbcHYXFFjrA=;
+	h=Date:Mime-Version:Message-ID:Subject:From:To:Cc:Content-Type; b=Q75uF7WscNoqoB1ffoig8mHzS3FcHy28cX+Asr4cnuMC+m+MONxIbwJIkbRRyM5kXMF22O8Xfbhc6Ety+msPfMCx1OCEt4kBuV+398SA4aHFjd1h31ojHE9DaZ5DA1L1hzM1m6Z0Zh/jVr/er+ckZO2zY/BXhSKQJ9i9RWY+Jo8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=OHqUGt+1; arc=none smtp.client-ip=209.85.128.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--ardb.bounces.google.com
+Received: by mail-wm1-f73.google.com with SMTP id 5b1f17b1804b1-4801e2e3532so4446695e9.2
+        for <linux-mips@vger.kernel.org>; Fri, 16 Jan 2026 01:34:21 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1768547718; x=1769152518; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=g5QCORoMbkphC/1jrtqJnWhwyxakPAQDBnkju4ETcU4=;
-        b=bNk/LHLJpgvJTIhAEAHQH9CeQ51uBIvhdrm11UiuXO2WCY0fihEY76Fa5bNBhkq3M8
-         G4QhaVQevhohIbWho2ZkX0HqMLr5l43ICMWbzjseg4ws/FrtDKUc+/aWA5Cw4o8dwN9/
-         Ib8rQctdX/vF7E2SE+4buJ9oCKw6Rh6tbDLcnCo0kJaZNTtZwZaFuPm/rPyWQXigRcqC
-         PP0MnB8/N//dFHi82v6j04pbCmGSH0j9lFVqwnkpMoQtRPfUpQ2S9qCK04E7x59y02Tx
-         R8iRiWrLsBs8T9OA0qCeMwig1ixtE7ye4dKUGyWLmS+n060PXhYDPuE4Bljd1cKSKFj5
-         VQcg==
+        d=google.com; s=20230601; t=1768556060; x=1769160860; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=SM6NKFa+8czj9hhtBF0xXJOx+gqzzPlF6ypX+t4zEPw=;
+        b=OHqUGt+1xfUCMc++xzWDe3jQhdRFl8fI8g1rjZCFkBXSMGZfrmKJ6nmx0WWqz7qpzn
+         o52fygM3kCEjhXRwMiDqhFxsMVXWORC/jt95agXIVV+kxxJ4Aydo+kHLYLCrwE6GNvri
+         +4IB9eDcKbM9HO9ZrcoAhou7vyy0u5v+mntHx9TobjQsNGwRk7HIuqOGiLavKDkFNz+T
+         KAck+khopMfgBylKjpsUgWNDbiWuMEJDjE7hAQOVsezOnzXJWi99XyhS1+xzJ6IPteWN
+         6g/+AsskhBsq3eNs3G+JS3eLrHtv1FKtR0vNj29AEXRjGH1CLGOs7RUNRkEFBC7LfIpL
+         nyaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1768547718; x=1769152518;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=g5QCORoMbkphC/1jrtqJnWhwyxakPAQDBnkju4ETcU4=;
-        b=rM/1pEMPDqITGSpJPdPoGzr2YXEucrKnPLtHo53VPJszonS6UGKv7VTb5YNiX6TYUQ
-         6BWFrkUIuiuT3+Z0tDMxRLe5GAD1pPin4JlTOoKCgkcYGr9P2I4v1WQr8xfrnSkY1Qba
-         3MrITb+ilONwrHhYPIc5a5Np75Y9gJXs7RJGGR5HYpRdL3TUbVbzlFlMKf0jYQFSC1sg
-         fcxwy+2k6lhQMphSeLNcY4EmNkvQfqfc3yqrwccPIsWYfM4CMoKHVITAy5hYCrU5DIxS
-         Y6L3G2Ms/E8rzb2HpTPpBphExsF2y49qnJegDWEqJ0v7oQ2u0LzptO29vj/9ESCMKeLp
-         a8ww==
-X-Gm-Message-State: AOJu0Yw7F4e0KBsfcJ9wJ1VwaNsxxW/BiGIybGTNhHvYGxkVfqkddAZZ
-	k3rQaPCuy6w+JSqalD5cLJ/Di+0A0uQrLA8IAryqGyUF2ObCe3nsrayNk5GeMGYj4qo=
-X-Gm-Gg: AY/fxX4YfIkeOjhBeY2NfqyEXzAbc8XD+0xoZyP9PmtPshldsbVogYN7qLOpq2932+H
-	BaihaQfG1E35PPuk7TpO+a942dxSLvXj7Xbk33Lofd5jhjjv0ii2btlZO0ZENootdaTTnSAg6RD
-	ZG/fzmpUXBdkbGjbE6CzILpdF++kpcj48nw632yDF6RNcpPpJ8qOpeyoyVWVjsAyMPIQIgifPp/
-	goa7xZ3rhRHqZq4fvSxLHzNwjPmafdtmb13BAm6JNLBuElE91dOjYI+A+XzM3X11FTd4oBLEP29
-	QD4m52WN74YjngGKC2Azz8bBpjpv3uOwhBNLJCCnU5bxbK0ccsBVMoe7shhihHs4rYCJ9jPe7Zy
-	t846DYBnmL6vP6Fitcd+wZb2skAJ4Dg1lbRADiFBp/HioEINyXfZ8RNtXcJtIrMAIBmzXTHer/s
-	E7pbKZMU4fbO/kHdZWZQ==
-X-Received: by 2002:a05:6000:220d:b0:42f:b9c6:c89d with SMTP id ffacd0b85a97d-43569bcc1b9mr2254668f8f.52.1768547718155;
-        Thu, 15 Jan 2026 23:15:18 -0800 (PST)
-Received: from [10.31.13.216] ([82.77.28.160])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-4356992681esm3418486f8f.11.2026.01.15.23.15.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 15 Jan 2026 23:15:17 -0800 (PST)
-Message-ID: <bcaa0b6c-48e7-4407-b399-cb5b998dcfa3@tuxon.dev>
-Date: Fri, 16 Jan 2026 09:15:16 +0200
+        d=1e100.net; s=20230601; t=1768556060; x=1769160860;
+        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SM6NKFa+8czj9hhtBF0xXJOx+gqzzPlF6ypX+t4zEPw=;
+        b=ljHL6tkR2CPYLvd2j04ahPpX+tNpbupEIY739m2Lce3xYnSrMwQHlBdnzCF6wvk0eR
+         SboYZEbW41NGyB6QEr/EvI9/iMdnY+9X3uM1jQoXDHFKlAWiZ93r1o68FYk4C+dIXROF
+         puKB0AothvNe3PINaOCeKnofyI2w3E4i9RPQlm40CKLIDxTliTdHoEiHLzslCQkYQKPW
+         wkeStWAWeU5RPBfSiWBF2UulojuFo7FQwFtkvQ0LWMJqjMO9xfWzJH7576YMo4hmHD+h
+         pkrdpHwuMBkRc7zQ2EPsl8lNXcklKK+0MSsUYLNiTggKEcnmMYBsFweoblsYJ/9zU0eK
+         gb8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVZcj887DUjMzaqGz9InHc4qdyRAixsAGA8EUGK4/wXI+HhWbTqmEi869p0qn2G66uOAjpUBc9kKj60@vger.kernel.org
+X-Gm-Message-State: AOJu0YyOrT3wIZEeIdMKg78+9An5rjcIVB79WiEG1ppmspe8OXphUuSA
+	nImYqJFBNY3jpYwFTs61tGOmgcVtKsGChwpRfCmZOsmEWilzDuuGGQppohec+WgQvr6UV99uMA=
+	=
+X-Received: from wmol18.prod.google.com ([2002:a05:600c:47d2:b0:47d:56a1:4296])
+ (user=ardb job=prod-delivery.src-stubby-dispatcher) by 2002:a05:600c:474d:b0:477:7b16:5f77
+ with SMTP id 5b1f17b1804b1-4801eab5193mr17103645e9.3.1768556059765; Fri, 16
+ Jan 2026 01:34:19 -0800 (PST)
+Date: Fri, 16 Jan 2026 10:34:00 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 07/16] clk: microchip: core: update include to use
- pic32.h from platform_data
-To: Brian Masney <bmasney@redhat.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, linux-clk@vger.kernel.org
-References: <20260112-mips-pic32-header-move-v2-0-927d516b1ff9@redhat.com>
- <20260112-mips-pic32-header-move-v2-7-927d516b1ff9@redhat.com>
-Content-Language: en-US
-From: claudiu beznea <claudiu.beznea@tuxon.dev>
-In-Reply-To: <20260112-mips-pic32-header-move-v2-7-927d516b1ff9@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Mime-Version: 1.0
+X-Developer-Key: i=ardb@kernel.org; a=openpgp; fpr=F43D03328115A198C90016883D200E9CA6329909
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1149; i=ardb@kernel.org;
+ h=from:subject; bh=jkgJW8J3bxHcweCYNOTK5wmG7iWn+bGurzq2dxW/Ks8=;
+ b=owGbwMvMwCVmkMcZplerG8N4Wi2JITOLjd3oQEH61f11LpI9KzYYHPANVmiYrsv/3v7rZsYfj
+ RZvMg53lLIwiHExyIopsgjM/vtu5+mJUrXOs2Rh5rAygQxh4OIUgIms4mX479Qdzc256uPJqW3P
+ 9rDInFucu7B18r2/4n90uZf4nQ39kMnwT7/q+KQJdTaP7uf0nwvX2yLoXL9+j3jQOaNTjTrr37/ /wgIA
+X-Mailer: git-send-email 2.52.0.457.g6b5491de43-goog
+Message-ID: <20260116093359.2442297-4-ardb+git@google.com>
+Subject: [PATCH v2 0/2] Simplify kallsyms offset table generation
+From: Ard Biesheuvel <ardb+git@google.com>
+To: linux-kernel@vger.kernel.org
+Cc: Ard Biesheuvel <ardb@kernel.org>, Nathan Chancellor <nathan@kernel.org>, Nicolas Schier <nsc@kernel.org>, 
+	Kees Cook <kees@kernel.org>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+	linux-kbuild@vger.kernel.org, linux-hardening@vger.kernel.org, 
+	linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
+From: Ard Biesheuvel <ardb@kernel.org>
 
+v2:
+- implement minimal PC32 support for MIPS so it can tolerate the symbol
+  references emitted by kallsyms
+- use signed decimal to represent the offset, so that symbols appearing
+  before _text can be represented correctly.
+- add Kees's ack
 
-On 1/13/26 00:48, Brian Masney wrote:
-> Use the linux/platform_data/pic32.h include instead of
-> asm/mach-pic32/pic32.h so that the asm variant can be dropped. This
-> is in preparation for allowing some drivers to be compiled on other
-> architectures with COMPILE_TEST enabled.
-> 
-> Signed-off-by: Brian Masney<bmasney@redhat.com>
+Cc: Nathan Chancellor <nathan@kernel.org>
+Cc: Nicolas Schier <nsc@kernel.org>
+Cc: Kees Cook <kees@kernel.org>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc: Kees Cook <kees@kernel.org>
+Cc: linux-kbuild@vger.kernel.org 
+Cc: linux-hardening@vger.kernel.org
+Cc: linux-mips@vger.kernel.org
 
-Acked-by: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Ard Biesheuvel (2):
+  mips: Add support for PC32 relocations in vmlinux
+  kallsyms: Get rid of kallsyms relative base
+
+ arch/mips/boot/tools/relocs.c       |  2 +
+ arch/mips/include/asm/elf.h         |  2 +
+ kernel/kallsyms.c                   |  6 +-
+ kernel/kallsyms_internal.h          |  1 -
+ kernel/vmcore_info.c                |  1 -
+ scripts/kallsyms.c                  | 64 ++++++--------------
+ scripts/link-vmlinux.sh             |  4 ++
+ tools/perf/tests/vmlinux-kallsyms.c |  1 -
+ 8 files changed, 29 insertions(+), 52 deletions(-)
+
+-- 
+2.52.0.457.g6b5491de43-goog
+
 
