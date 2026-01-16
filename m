@@ -1,192 +1,148 @@
-Return-Path: <linux-mips+bounces-12949-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12950-lists+linux-mips=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-mips@lfdr.de
 Delivered-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFD31D30E5B
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Jan 2026 13:10:58 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5308FD33244
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Jan 2026 16:21:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B0025303527C
-	for <lists+linux-mips@lfdr.de>; Fri, 16 Jan 2026 12:10:49 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B5F10300986F
+	for <lists+linux-mips@lfdr.de>; Fri, 16 Jan 2026 15:14:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15AE03876D6;
-	Fri, 16 Jan 2026 12:10:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 946E12D661C;
+	Fri, 16 Jan 2026 15:14:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="tcY57Ktk";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="RoLHU8R2"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ToTB5LAW";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="prByHzcL"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29AC337BE8D;
-	Fri, 16 Jan 2026 12:10:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2575B241139
+	for <linux-mips@vger.kernel.org>; Fri, 16 Jan 2026 15:14:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1768565449; cv=none; b=s/8XJzU+mGOClqYOqQFdQ7imOb32Sz5CboyZKl26OibW4UH4zrOPyvirYfNH4Yc7tMGlvzY4RuKo4lAlbtkuDdmEoiTedoSzoigSiDHHs0A314/xsPvS0QzhjAIneNZBzIKQG9f+/QauX54tvYwxcIOPyHzO3fVrG+rTSlGu9vU=
+	t=1768576483; cv=none; b=hVY5oTWvPCxcJhWzi+jaciA8OM7qDICIiNuiN1A0Cbo5lCAf1gCqigNdncdGUBQBo2PRi7eh+pKgNysvoBHvRo1Q1MpqOtkAjODUBwZHItUbFZs+hlzvrCmgPpELLPn1KAa6e0NWIijzpC2O6Bhn3MteTE7kGNT0nUKned55KvI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1768565449; c=relaxed/simple;
-	bh=M8rYp98Yrm3kjvDcLQr1N9Xzxwxh+1FYXNegcG1Z3gw=;
+	s=arc-20240116; t=1768576483; c=relaxed/simple;
+	bh=McpfC188H2CvAHd4+BB7AxJkhXt9KS2RD0jkHVJ/lvs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rdb5Lh8jQBTUpgTwWkf6zUtCKMbdhuaKu82uEMESFYRQXhNURt8OfcIfUa6vx9DmbRDE+Sy36//2hmAoOPcKFnExefMFnpJTZq/dvSwTA6yy2bU4tloxjcQbjXKNcLGtmjwz9wpTfYgdYlZOh8I2DWRUAgIVP7n8V9yM9D46dzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=tcY57Ktk; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=RoLHU8R2; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Fri, 16 Jan 2026 13:10:42 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1768565444;
+	 Content-Type:Content-Disposition:In-Reply-To; b=tQrSN769r+LvOwkcB0GoC66z7y54/MKSlju+OvmOkCPvc4nL3eP2sDM4zmo5G/cCz5Q8lZDF501QJKS9JvRdJXApnFaPgFntRLdQpWbOsAUSy2jv9lUEiMM3t5yZoj6GQnSiujdc/KzFxZWCKHv21lu+LxK2AzqznP+8geBS9/0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ToTB5LAW; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=prByHzcL; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1768576481;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=m4xj4CRpx5Rn02x3ca442JNSKW3N63XvSapnCzBXF8o=;
-	b=tcY57KtkxrC2Kv4y0HkpbJbC/pQS5RHj9Kp4rg1YyeKUZFPhAszR0J9jXDYqU8XKMRt5yy
-	/cxA+qFjtYuGq3R5ue0ASh4BzD6PkPogDxaC3NG7jOvQXfc6a8y1Mj7UjwdcpmtWm6QmMF
-	P4JSJneYYVjhf0ropRohWWEJusj5z7WghKS+mseOsE/SiZUELdvQaP4mmZXIUcYfG0KM1J
-	SyKqrKtvAZQtbn0EioFiC39BcksrufdUvJKV41PHxEM0/XUOhtZ5Su8mpUxN4BGoJ8QcpA
-	pDPq2VQryd3zYOIkU4e5rPmQSuL5HuVQPwsqa2yeFNGSwpwptypePDBSAzdFGA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1768565444;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=m4xj4CRpx5Rn02x3ca442JNSKW3N63XvSapnCzBXF8o=;
-	b=RoLHU8R2m4lh+TOUGYaYUhiHbsJz60UbhmEfkq+Ri9skt252VpVK6rulxmT2CKH3E9ZPhM
-	NY+TbhTMPWk9blDA==
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-To: Andy Lutomirski <luto@kernel.org>
-Cc: Thomas Gleixner <tglx@linutronix.de>, 
-	Vincenzo Frascino <vincenzo.frascino@arm.com>, Arnd Bergmann <arnd@arndb.de>, 
-	"David S. Miller" <davem@davemloft.net>, Andreas Larsson <andreas@gaisler.com>, 
-	Nick Alcock <nick.alcock@oracle.com>, John Stultz <jstultz@google.com>, 
-	Stephen Boyd <sboyd@kernel.org>, John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
-	Shuah Khan <shuah@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
-	Will Deacon <will@kernel.org>, Theodore Ts'o <tytso@mit.edu>, 
-	"Jason A. Donenfeld" <Jason@zx2c4.com>, "Russell King (Oracle)" <linux@armlinux.org.uk>, 
-	Madhavan Srinivasan <maddy@linux.ibm.com>, Michael Ellerman <mpe@ellerman.id.au>, 
-	Nicholas Piggin <npiggin@gmail.com>, Christophe Leroy <christophe.leroy@csgroup.eu>, 
-	Huacai Chen <chenhuacai@kernel.org>, WANG Xuerui <kernel@xen0n.name>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Heiko Carstens <hca@linux.ibm.com>, 
-	Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev <agordeev@linux.ibm.com>, 
-	Christian Borntraeger <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, 
-	Shannon Nelson <sln@onemain.com>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	sparclinux@vger.kernel.org, linux-kselftest@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
-	linux-mips@vger.kernel.org, linux-s390@vger.kernel.org, Arnd Bergmann <arnd@kernel.org>
-Subject: Re: [PATCH v5 00/34] sparc64: vdso: Switch to the generic vDSO
- library
-Message-ID: <20260116124847-4bbc0b99-fa0c-4bd1-a229-1bd248ee8c6b@linutronix.de>
-References: <20251106-vdso-sparc64-generic-2-v5-0-97ff2b6542f7@linutronix.de>
- <b870aa47-5ed4-4dcf-a407-eca83d1733d8@app.fastmail.com>
+	bh=TXd78tLEXLfNJonJWIYvuTIRR+xmUZ49LsLId8Zx2R0=;
+	b=ToTB5LAW5kxxY03h+nbs6OcnG8PvIQeYopA6CvtXB93+NdLNHpdyG1B4DToZAXMGOzUt6m
+	1eiH1Lo+Aj8Z/MEDD1uvdbXo8FqlcCxvlKsnDGnWGAIrks1ZoKz1ybvRrngIXV1cfBurXL
+	7k46qzJVS+ym0JjdIbF/ai0goYVBpqs=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-120-TQgpE7L5NjCOHqVfvUtdKg-1; Fri, 16 Jan 2026 10:14:39 -0500
+X-MC-Unique: TQgpE7L5NjCOHqVfvUtdKg-1
+X-Mimecast-MFC-AGG-ID: TQgpE7L5NjCOHqVfvUtdKg_1768576479
+Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-8c6a5bc8c43so335199685a.2
+        for <linux-mips@vger.kernel.org>; Fri, 16 Jan 2026 07:14:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1768576479; x=1769181279; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TXd78tLEXLfNJonJWIYvuTIRR+xmUZ49LsLId8Zx2R0=;
+        b=prByHzcLsiFntUUxAUX5h5M189VnGyEY7ehOElpQVdMi5/HQGKafJDCC0xJHWz5ME7
+         MMZIkMS2NOZ+UtgNv6CFXF/BouDAobZKKeA+tzURKqkObUD1zdIOPNe/MifumuPktnPC
+         Fywj3hJrMjYs2292rRE9m/s82En7JreMBCF1ZJ6sjExQRemM61TwcohLMnEbu2ZgsbmE
+         2ShjExOHXfGYw4Sb54aSVhBtKWaATTqJNfYtP7slgYxOg8EffDd63yaH0RayC4kagOJd
+         1ExB6z8pj5qLbJmCA9IZAadxLs35oykBQlBHSsPZm5a92mpM0U0L4W+K8ceTZSzyVRwW
+         mdvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1768576479; x=1769181279;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=TXd78tLEXLfNJonJWIYvuTIRR+xmUZ49LsLId8Zx2R0=;
+        b=YenuQdphxtTGzQpoQCqJRiF8gDoRcUFgto+aP0QU11D0bl8h4DP1BrsIz9irkek7ec
+         xnxOan6YBmAaM9EXcUCtx578hAOg0CQd9u9A9TzH5MwAil87M1Dc796qWYbFMJecP9An
+         9Y4E3LiTx1rI0NEFJKSbB1hGctN5Hwpesv9CILd50WYex8kszEE8bk86MG+UWN4S7CSn
+         Kofsz6gAqFQJh/bpfhRQE5HvzBOZLzgRcj2UOglI0WBDTrbnKEJ13K4LfHgaSCdnl5WY
+         8nd5wUWo8mtd4FamIuVSPf2e4zXnkj9dmZLfIdvc93YmKNgGYpDe8wPd3r41IcZmEGjE
+         u3pA==
+X-Forwarded-Encrypted: i=1; AJvYcCWYMIb7NC7h8FEy2fH4GJN6nAQ89hMkEMILH/2yJMvart+gDPiRDPyFCdmhs28TYDsP1ncngP5Omviy@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzl6GRm7cAbRyktutiqztz+5kuhk0kDtecqs+K8qAK5plgycPM1
+	y1ayg/8IU7UFD6DF2pVnsB+Odl+9bp5lzwFP6OXwIjvbIhWWIlEBgYTBHIvHhe0fkVAs/TnUgtB
+	j4vXdJV41b+OUv3zSvHu+FRRKLV6VBiHgm2/1NvN0mb8AlPpMGZZhLJomIUE2clDXgK72oX0=
+X-Gm-Gg: AY/fxX6zzdj7to3q3vjx1wlbVEa3C0XHQuytBFKjUA/Mlbk8mxJnqYLZGYVVLko4yzq
+	L/UBvjUxNoEM8A/KMvL8IBrl+LtsDQhMnf0gaAHAs3KdEChvHLz8K78pc+z60/AeTL5VCf09bJO
+	MbMVLlWuFSS5MQzEKAjWm7wWyfU4w3LbVr73UXOPubmAwVkybJOcp70OdXaQDG3vQrvIHQBrAe3
+	jxDnvQMPaHodA5NCU8RrcQW7H7WqnxSGMcn457jdVxrftWLrnCWbctqI1kMehFpMZAqRh5buh1A
+	CRozhkbCCszbVC9abAHLW6apjQkhbfQ2keumjTYV6dGNxvFtq+BKN+5uwSZySUMQs1LPxn4umWO
+	xUxxq0xGRSeG8rNjMCgStsEupT05DyB5+/29rf9GXuBcZ
+X-Received: by 2002:a05:620a:28c3:b0:828:aff4:3c03 with SMTP id af79cd13be357-8c6a6789392mr413936185a.61.1768576477912;
+        Fri, 16 Jan 2026 07:14:37 -0800 (PST)
+X-Received: by 2002:a05:620a:28c3:b0:828:aff4:3c03 with SMTP id af79cd13be357-8c6a6789392mr413932385a.61.1768576477523;
+        Fri, 16 Jan 2026 07:14:37 -0800 (PST)
+Received: from redhat.com (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
+        by smtp.gmail.com with ESMTPSA id af79cd13be357-8c6a71ab272sm256477585a.2.2026.01.16.07.14.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 16 Jan 2026 07:14:36 -0800 (PST)
+Date: Fri, 16 Jan 2026 10:14:35 -0500
+From: Brian Masney <bmasney@redhat.com>
+To: claudiu beznea <claudiu.beznea@tuxon.dev>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 03/16] MIPS: pic32: drop unused include linux/io.h
+ from pic32.h
+Message-ID: <aWpV26weFAGboy5Q@redhat.com>
+References: <20260112-mips-pic32-header-move-v2-0-927d516b1ff9@redhat.com>
+ <20260112-mips-pic32-header-move-v2-3-927d516b1ff9@redhat.com>
+ <4a59d752-7aa8-4687-9618-3994efadebe2@tuxon.dev>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <b870aa47-5ed4-4dcf-a407-eca83d1733d8@app.fastmail.com>
+In-Reply-To: <4a59d752-7aa8-4687-9618-3994efadebe2@tuxon.dev>
+User-Agent: Mutt/2.2.14 (2025-02-20)
 
-Hi Andy,
-
-sorry for the long delay.
-
-On Fri, Nov 07, 2025 at 04:17:14PM -0800, Andy Lutomirski wrote:
-> On Thu, Nov 6, 2025, at 2:01 AM, Thomas Weißschuh wrote:
-> > The generic vDSO provides a lot common functionality shared between
-> > different architectures. SPARC is the last architecture not using it,
-> > preventing some necessary code cleanup.
-> >
-> > Make use of the generic infrastructure.
-> >
-> > Follow-up to and replacement for Arnd's SPARC vDSO removal patches:
-> > https://lore.kernel.org/lkml/20250707144726.4008707-1-arnd@kernel.org/
-> >
-> > SPARC64 can not map .bss into userspace, so the vDSO datapages are
-> > switched over to be allocated dynamically. This requires changes to the
-> > s390 and random subsystem vDSO initialization as preparation.
-> > The random subsystem changes in turn require some cleanup of the vDSO
-> > headers to not end up as ugly #ifdef mess.
-> >
+On Fri, Jan 16, 2026 at 09:12:45AM +0200, claudiu beznea wrote:
+> On 1/13/26 00:47, Brian Masney wrote:
+> > The linux/io.h include is not used, so let's drop it from pic32.h.
+> > 
+> > Signed-off-by: Brian Masney <bmasney@redhat.com>
+> > 
+> > ---
+> > To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+> > Cc: linux-mips@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > ---
+> >   arch/mips/include/asm/mach-pic32/pic32.h | 1 -
+> >   1 file changed, 1 deletion(-)
+> > 
+> > diff --git a/arch/mips/include/asm/mach-pic32/pic32.h b/arch/mips/include/asm/mach-pic32/pic32.h
+> > index e71c92a7bfde1342be6ea89a4bdf1389aa463b38..660fa4178b3e4e30977c8c4126df4266150062ce 100644
+> > --- a/arch/mips/include/asm/mach-pic32/pic32.h
+> > +++ b/arch/mips/include/asm/mach-pic32/pic32.h
+> > @@ -6,7 +6,6 @@
+> >   #ifndef _ASM_MACH_PIC32_H
+> >   #define _ASM_MACH_PIC32_H
+> > -#include <linux/io.h>
 > 
-> I hate to say it, but this patch series seems like a step backwards.  You're
-> adding a whole lot of complexity and opportunity for screwups (boot failure?
-> corruption?) to support SPARC, where other architectures have no problem with
-> the existing code.  And this complexity appears to infect basically every
-> kernel subsystem that supplies data to the vDSO.
+> Can't this be squashed this with patch 02/16 ?
 
-Ack.
+I made it a separate patch because generally if the commit message
+listing all of the changes has 'and' then that's maybe a hint that
+it should be split out into it's own commit.
 
-> Can you at least explain what the problem is and maybe give some discussion
-> of why SPARC has no workaround available?  The closest I found was this bit
-> from "[PATCH v4 24/35] vdso/datastore: Allocate data pages dynamically":
-> 
-> > Allocating the datapages as part of the kernel image does not work on
-> SPARC. It is also problematic with regards to dcache aliasing as there is
-> no guarantee that the virtual addresses used by the kernel are compatible
-> with those used by userspace.
-> 
-> Now I'm not an expert on any architecture that has these aliasing (coloring?)
-> issues, but from my limited understanding, it ought to be possible to choose
-> a correctly colored address to map the vdso data given where it's being
-> mapped from.  If there's an issue with gathering a bunch of basically
-> arbitrarily relatively positioned physical pages into their necessary
-> arrangement in usermode, you could presumably fix it either with some linker
-> script magic or by rearranging the C code to stick everything into a
-> multipage structure.
+That said, if people really want, I can push out a new series with
+it squashed.
 
-After I wrote that commit message it turned out to probably not be an
-aliasing issue. Even with matching alignments the error would persist.
-The real reason is unknown. Nobody came up with an explanatin so far.
+Brian
 
-But another advantage of this dynamic allocation is to enable mlockall()
-on these VMAs. This avoids unexpected page faults and latency spikes for
-realtime applications.
- 
-> Or maybe you could arrange to allocate all these pages during early boot and
-> to fudge up some relocation to get all the existing generic code to find
-> them.  Or create some pointers that all the generic code will use that, on
-> non-sparc architectures, will be statically populated with the right
-> addresses by the linker.  IOW, conceptually,
-> 
-> struct the_type some_vdso_thing;
-> 
-> could change to:
-> 
-> const struct the_type some_vdso_thing = &the_actual_data;
-> 
-> and SPARC could fix up the initialization of the pointer. And generic code
-> would use the pointer instead of the_actual_data.
-
-These pointers alread exist and are used by the generic code:
-vdso_k_time_data, vdso_k_rng_data, vdso_k_arch_data.
-As proposed elsewhere in this thread, these can point to statically allocated
-memory at first so they can be accessed by the other kernel subsystems.
-Then they after the dynamic allocation we do a mempcy from the static storage
-to the dynamic one and update the pointer. I have the code for that which
-does work nicely.
-
-While we could limit this treatment to SPARC, I prefer to keep the code
-aligned between the different architectures. Otherwise we would need
-duplicate implementations as one uses PFN maps and the other 'struct page'
-maps. Also the mlockall() usecase is architecture-agnostic.
-
-Does this sound acceptable?
-
-> If you really really really need to have non-arch-specific kernel C code
-> running before the vdso data is allocated, can you give a very clear
-> explanation of what, exactly, is wrong on sparc?  And maybe put that
-> explanation into an appropriate comment somewhere so that future kernel
-> programmers don't look at the headers and the code and think "wow, what I
-> mess -- I bet I can clean this up by using statically allocated data".
-
-Ack, will do. But as I mentioned, I do not have an actual root cause.
-
-> (Can SPARC really not map things that existed during early boot into userspace?)
-
-It looks like it.
-
-
-Thomas
 
