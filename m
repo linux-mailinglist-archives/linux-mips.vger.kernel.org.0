@@ -1,240 +1,203 @@
-Return-Path: <linux-mips+bounces-12981-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12982-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 4AXML6QvcWmcfAAAu9opvQ
-	(envelope-from <linux-mips+bounces-12981-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Jan 2026 20:57:24 +0100
+	id KCMVOxJZcWkNEwAAu9opvQ
+	(envelope-from <linux-mips+bounces-12982-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Jan 2026 23:54:10 +0100
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41F2C5CAEA
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Jan 2026 20:57:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D65F5F1C9
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Jan 2026 23:54:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id CA741B4B0CF
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Jan 2026 18:29:24 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 417E6902368
+	for <lists+linux-mips@lfdr.de>; Wed, 21 Jan 2026 22:54:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F359B3A1A33;
-	Wed, 21 Jan 2026 18:29:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DBD441B342;
+	Wed, 21 Jan 2026 22:54:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pNWsEkZ7"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iHOtLHV1";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="GtDoFVbf"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF31839B4BB;
-	Wed, 21 Jan 2026 18:29:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5C1A3D3CE8
+	for <linux-mips@vger.kernel.org>; Wed, 21 Jan 2026 22:53:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769020140; cv=none; b=rBje9tnhu7w67LTFnQ2yE3mYfd/wc3J3dOGg4dxQfTXNjYqXo2S00B47jXxzc5417M0JI3wTJF28xEd9vo7NXofsQpzDq1vdR/TNi56MD9s8/WfPm4kUZyZznrhSvFpAzrd6gDPdPB41ajYlbHaqCqIK7EJLytGminUJ1UtewoM=
+	t=1769036040; cv=none; b=kfqb7TuAh9JdJPLgefhzYHhuTs4pzl8j5/cI+3+yUTyFGKWXGmxyavK4uq012R2vhD+Ol2DiebkABdJ1eBdNcbGcDynoNqB6Gni+sxWDWhFaGKqJx5u3u8uz7hstKxFzKLteBVv0d+yUTs956vXSoUJhMA75/PVC9O+0q180VD4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769020140; c=relaxed/simple;
-	bh=l6+u6Dylp0WfC6wdeLiE99rgNBwsRoiJbYc85FgW5Fo=;
+	s=arc-20240116; t=1769036040; c=relaxed/simple;
+	bh=UiEPj0ZcSawildEgR+9wJ/AtCxMbPbzcmfyb7UYIQ4E=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CbvN3mqkRNEDZO4WMFGLcLPXprsfohaQZ+E0QMYgL8J7fLkF4JfmibTiPLFPPp9HsHWbY8ADZwOxD8/YZ/UoxF7bBU1cVnx35yLlSCxK+wnZmTELUT7CA/iAfEMvLr42E0l3oE5qL9lKWIZikxTY0KvjDqOZLly3JA3Xi7k4z5U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pNWsEkZ7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87027C4CEF1;
-	Wed, 21 Jan 2026 18:28:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769020140;
-	bh=l6+u6Dylp0WfC6wdeLiE99rgNBwsRoiJbYc85FgW5Fo=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pNWsEkZ7St50nxE07dRB0tDto39+JiwHq185jDR4NO8xP6EgsbhJohlntKIrEKYm1
-	 etWasqI2WlRnwHTinOziFVvUPQv9J5OdDk8Xq05bghdF+VUmy4SYdG7yr871dgfoUC
-	 pNmOTv3H6VaioaZ3cfIvePZLY5/nczx1uaneKaDzHmjD3jhgZ9yr15DTgi2UgQ4+yg
-	 IOIISPfDlKydxKEH0/zvhU6+CWGoDjzvtQzxYsOmUTm4tKH82uwDjNzafpILD4F6hV
-	 saPOq6fcNWWvE3KhYJ8/xx89NJcAJ/tf40mxTYvgB9DZ9KfAp0W9U1beU8U8HTBHmY
-	 8zFZ6ib5glnkA==
-Date: Wed, 21 Jan 2026 18:28:54 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Binbin Zhou <zhoubb.aaron@gmail.com>
-Cc: Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	Binbin Zhou <zhoubinbin@loongson.cn>,
-	Huacai Chen <chenhuacai@loongson.cn>, Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-rtc@vger.kernel.org,
-	Xiaochuang Mao <maoxiaochuan@loongson.cn>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev,
-	devicetree@vger.kernel.org, linux-mips@vger.kernel.org,
-	Keguang Zhang <keguang.zhang@gmail.com>
-Subject: Re: [PATCH v3 1/3] dt-bindings: rtc: loongson: Correct Loongson-1C
- interrupts property
-Message-ID: <20260121-sadness-operating-8bffd4250085@spud>
-References: <cover.1768616276.git.zhoubinbin@loongson.cn>
- <b6295c907410f6708115cba4df0959ee6629f8a5.1768616276.git.zhoubinbin@loongson.cn>
- <20260119-tricking-premiere-ada70700f804@spud>
- <20260120075045e7e864ba@mail.local>
- <20260120-cubical-harmonica-a7b7bbb26b08@spud>
- <20260120224920df0cf2ac@mail.local>
- <20260120-proposal-retry-d0a1f3de10ea@spud>
- <CAMpQs4Lm1Oq8L+dY8OnseV-NNUoD3+0QjnZATRkmR-sejCKAdA@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=uXd4W4WmXTAVy3l/POMq/vIr8go6I5IZY6CIbodhIB/u8JdPxYvuDjfNQoV3f0S2PZQkt2/uct8Nu1HWwtEnPoUB+lhh9DdUppVDmrmlC8v9JxtPgVNQF7E0CMUYqwEjXzd2yF0VWuhT6dWxhX66UXi3r35gHmry1po7Cf48hrc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iHOtLHV1; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=GtDoFVbf; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1769036032;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UiEPj0ZcSawildEgR+9wJ/AtCxMbPbzcmfyb7UYIQ4E=;
+	b=iHOtLHV1w7oSuPv+8F+UuBYkNIL+S59QcmkP0xKN1x8tnPUz2hkM9BDiW8ESUku4bt3n3V
+	7SjcjFWhdZdVwIE75Xlyu/3mmaYW2VXPTgmxbr2Szk2X59tO/1nrg90gCqlT+QtMgxZEZF
+	SqqmiRbwXzm/wY8vfNOt0LIgaJMzPk4=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-665-ZhsFwBJ8NTmVsiKaLDhrZg-1; Wed, 21 Jan 2026 17:53:51 -0500
+X-MC-Unique: ZhsFwBJ8NTmVsiKaLDhrZg-1
+X-Mimecast-MFC-AGG-ID: ZhsFwBJ8NTmVsiKaLDhrZg_1769036031
+Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-5019f8a18cdso11078641cf.2
+        for <linux-mips@vger.kernel.org>; Wed, 21 Jan 2026 14:53:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1769036031; x=1769640831; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UiEPj0ZcSawildEgR+9wJ/AtCxMbPbzcmfyb7UYIQ4E=;
+        b=GtDoFVbfPIev6Y45lnUj8xiA8GxcY4vLl7Zc+zcX/Z69kLArm87l/wSqn/UI7DCfSf
+         U30AimhGVESqjkpe/jreBjvHZgsNKn7docRbMu16NEBpLoFzCGFBxuqLQUgyXu5dVQis
+         HaT4reFMxuhHlp5vW+xnI6QoI8md1+lGBpH4Eb4H/yOGB69lkFRTa1lL7OKfKMCx8Ztb
+         SHjmUGudpNV/kOuCkjTFdlmS47bqkS46ZDIM4ORSaYcXzVvSvs2cwZCDSH5+19PCe80n
+         iObPgZrtysxGJfgmz4JJmJvBVw1Pbm/IW6vXLbEl2gCIfT251WTL2usfoDhuCbaPGo68
+         ebYA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769036031; x=1769640831;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=UiEPj0ZcSawildEgR+9wJ/AtCxMbPbzcmfyb7UYIQ4E=;
+        b=ijSAJ3pgXq3Wdpoq/dedb5zEqBB34e1JERSw01OL4999ZI0JRayvXiXoiQeI72CIT0
+         CXoFP/mGcc5mAofG+Qa+TELfE+S+LkAh3dhviLKm0aGaJ3TbRraudyEZgloZ8LaN+NZh
+         hLB1XEhvwwaSpumoT8spzI3ACOxh0JbptAKIAvM21o1do4Ea52ud9S/ft+vX1Hd3X4Lh
+         SjMP2hfF4Hp+lQATjRQH/xpYq8UeFVhpoSrcihuSUXW3lIvof7OvogBwMHfEu+QCnmFK
+         KxvNj38CXKI03ZNv8FXOf2phTqUlT7qhnS6WR7eHee2lsIZDEatLVroJxeyZtMATsVZG
+         K5fg==
+X-Forwarded-Encrypted: i=1; AJvYcCVMb8QB3EMvzZcHKVAC2vxvEfL1anszQ0Qlm8rBSFB/XtutEaj4Y96NxPkNfMPX9s5spP8vDdoc/KA4@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy27jSY4gqZNDwBEhmi7Ouun+xh3Q0k6dYfLKc/eg8wkRN93QJd
+	wJ/n1tdNH3G6cD0PFSrNdvn+rbwYIgM2SYhCti8273AMeYp9YzfzZP6TNFDM/1qyhVF9nXrTwb5
+	M0TqUaGCXQmM5pwb0Rs/oOkB6wcgnQEiAtLNUnMErJY35VnRwKliLQ3XH3OGXEJI=
+X-Gm-Gg: AZuq6aK61mjLfRuP+B0LcSuiwKMQClj4nA7dNx9SzuXwq7nyMSrawZmnTrPSh/Qg71/
+	7E//wxFBtlpIGTTiFG5pltYGyi91smy7tWqD56yGK2BpiUpNYgiWFGrsexpKkWF37aI6eZnARjn
+	SPuGd1VmSNkpBUCyvPmPPsmxUJ8EV1NIY9yTpZKJeCUWZDguDvcTl6qkl7FfCE34HyVBIFyQcHq
+	LW9J0MvzpgZmqWLdF+k2eMwEkSaNGWurgOrnNfH+2pCNmLcAHLVZeW+K0Qq2DdxpnTvCKd0daHO
+	ZtZFNGJzkzeYVIAI4PzPeXJ1qe59x6Jg/XY3hkLfcqZzpreQajcoNqc13eTUslDevYmubFTZoyd
+	a5NghTdbS
+X-Received: by 2002:ac8:5fca:0:b0:4e7:2210:295f with SMTP id d75a77b69052e-502d84b0ca5mr87957311cf.13.1769036030806;
+        Wed, 21 Jan 2026 14:53:50 -0800 (PST)
+X-Received: by 2002:ac8:5fca:0:b0:4e7:2210:295f with SMTP id d75a77b69052e-502d84b0ca5mr87956771cf.13.1769036030338;
+        Wed, 21 Jan 2026 14:53:50 -0800 (PST)
+Received: from redhat.com ([2600:382:8125:73a8:e201:8ac3:bd7d:6acd])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-502a1f1abb9sm117138811cf.30.2026.01.21.14.53.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 21 Jan 2026 14:53:49 -0800 (PST)
+Date: Wed, 21 Jan 2026 17:53:44 -0500
+From: Brian Masney <bmasney@redhat.com>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>
+Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Chen Wang <unicorn_wang@outlook.com>,
+	Inochi Amaoto <inochiama@gmail.com>, sophgo@lists.linux.dev,
+	Chen-Yu Tsai <wens@kernel.org>, Maxime Ripard <mripard@kernel.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	linux-rtc@vger.kernel.org,
+	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+	Manivannan Sadhasivam <mani@kernel.org>,
+	linux-actions@lists.infradead.org,
+	Keguang Zhang <keguang.zhang@gmail.com>, linux-mips@vger.kernel.org,
+	Taichi Sugaya <sugaya.taichi@socionext.com>,
+	Takao Orito <orito.takao@socionext.com>,
+	Jacky Huang <ychuang3@nuvoton.com>,
+	Shan-Chun Hung <schung@nuvoton.com>,
+	Vladimir Zapolskiy <vz@mleia.com>,
+	Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
+	Bjorn Andersson <andersson@kernel.org>,
+	linux-arm-msm@vger.kernel.org, Orson Zhai <orsonzhai@gmail.com>,
+	Baolin Wang <baolin.wang@linux.alibaba.com>,
+	Chunyan Zhang <zhang.lyra@gmail.com>,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	linux-stm32@st-md-mailman.stormreply.com,
+	Michal Simek <michal.simek@amd.com>,
+	Rob Clark <robin.clark@oss.qualcomm.com>,
+	Dmitry Baryshkov <lumag@kernel.org>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Abhinav Kumar <abhinav.kumar@linux.dev>,
+	Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+	Vinod Koul <vkoul@kernel.org>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	linux-phy@lists.infradead.org
+Subject: Re: [PATCH 00/27] clk: remove deprecated API divider_round_rate()
+ and friends
+Message-ID: <aXFY-FxqeBv4BsHd@redhat.com>
+References: <20260108-clk-divider-round-rate-v1-0-535a3ed73bf3@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="ytcyEvQbqLkTzetR"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAMpQs4Lm1Oq8L+dY8OnseV-NNUoD3+0QjnZATRkmR-sejCKAdA@mail.gmail.com>
-X-Spamd-Result: default: False [-2.06 / 15.00];
-	SIGNED_PGP(-2.00)[];
+In-Reply-To: <20260108-clk-divider-round-rate-v1-0-535a3ed73bf3@redhat.com>
+User-Agent: Mutt/2.2.14 (2025-02-20)
+X-Rspamd-Server: lfdr
+X-Spamd-Result: default: False [-0.46 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	MIME_GOOD(-0.20)[multipart/signed,text/plain];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
 	MAILLIST(-0.15)[generic];
+	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-12981-lists,linux-mips=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[48];
+	FREEMAIL_CC(0.00)[vger.kernel.org,outlook.com,gmail.com,lists.linux.dev,kernel.org,sholland.org,lists.infradead.org,bootlin.com,suse.de,socionext.com,nuvoton.com,mleia.com,timesys.com,linux.alibaba.com,foss.st.com,st-md-mailman.stormreply.com,amd.com,oss.qualcomm.com,ffwll.ch,linux.dev,poorly.run,somainline.org,lists.freedesktop.org,linaro.org];
+	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-12982-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_TO(0.00)[gmail.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	MIME_TRACE(0.00)[0:+,1:+,2:~];
-	FREEMAIL_CC(0.00)[bootlin.com,loongson.cn,kernel.org,vger.kernel.org,xen0n.name,lists.linux.dev,gmail.com];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	DMARC_POLICY_ALLOW(0.00)[redhat.com,quarantine];
+	DKIM_TRACE(0.00)[redhat.com:+];
+	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
 	R_SPF_SOFTFAIL(0.00)[~all:c];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[conor@kernel.org,linux-mips@vger.kernel.org];
-	DMARC_POLICY_ALLOW(0.00)[kernel.org,quarantine];
-	TAGGED_RCPT(0.00)[linux-mips,dt];
+	FROM_NEQ_ENVFROM(0.00)[bmasney@redhat.com,linux-mips@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_RCPT(0.00)[linux-mips];
+	MID_RHS_MATCH_FROM(0.00)[];
 	ASN(0.00)[asn:7979, ipnet:142.0.200.0/24, country:US];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TO_DN_SOME(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:rdns,dfw.mirrors.kernel.org:helo,loongson.cn:url]
-X-Rspamd-Queue-Id: 41F2C5CAEA
+	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:helo,dfw.mirrors.kernel.org:rdns]
+X-Rspamd-Queue-Id: 7D65F5F1C9
 X-Rspamd-Action: no action
-X-Rspamd-Server: lfdr
 
+Hi Stephen,
 
---ytcyEvQbqLkTzetR
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Thu, Jan 08, 2026 at 04:16:18PM -0500, Brian Masney wrote:
+> Here's a series that gets rid of the deprecated APIs
+> divider_round_rate(), divider_round_rate_parent(), and
+> divider_ro_round_rate_parent() since these functions are just wrappers
+> for the determine_rate variant.
 
-On Wed, Jan 21, 2026 at 02:52:06PM +0800, Binbin Zhou wrote:
-> Hi Conor & Alexandre:
->=20
-> Thanks for your reply.
->=20
-> On Wed, Jan 21, 2026 at 7:39=E2=80=AFAM Conor Dooley <conor@kernel.org> w=
-rote:
-> >
-> > On Tue, Jan 20, 2026 at 11:49:20PM +0100, Alexandre Belloni wrote:
-> > > On 20/01/2026 19:24:09+0000, Conor Dooley wrote:
-> > > > On Tue, Jan 20, 2026 at 08:50:45AM +0100, Alexandre Belloni wrote:
-> > > > > On 19/01/2026 18:24:36+0000, Conor Dooley wrote:
-> > > > > > On Sat, Jan 17, 2026 at 10:26:48AM +0800, Binbin Zhou wrote:
-> > > > > > > The `interrupts` property indicates an RTC alarm interrupt, w=
-hich is
-> > > > > > > required for RTCs that support the alarm feature, which is no=
-t supported
-> > > > > > > by the Loongson-1C RTC. We exclude it for a more accurate des=
-cription.
-> > > > > > >
-> > > > > > > Changing the `allowed` property is ABI-breaking behavior, but
-> > > > > > > throughout the existing Loongson DTS{i}, the description of t=
-he RTC
-> > > > > > > nodes conforms to the modified bingding rules.
-> > > > > >
-> > > > > > Right, changing properties is an ABI break, but when following =
-the ABI
-> > > > > > would've produced something non-functional, breaking it is not =
-really
-> > > > > > relevant.
-> > > > >
-> > > > >
-> > > > > But the HW has the interrupt, the fact that is not functional doe=
-sn't
-> > > > > mean it isn't there. I thought we should describe the hardware?
-> > > >
-> > > > Does the hardware have it? My interpretation of the commit message =
-was
-> > > > that it didn't have the alarm feature and thus no interrupt? Unless=
- the
-> > > > interrupt has some other purpose, in which case yeah we shouldn't a=
-ccept
-> > > > this change and only the new device should permit there being no
-> > > > interrupt.
-> > >
-> > > The datasheet shows the interrupt coming out of the RTC and it has the
-> > > proper registers. Why it is not functional is not clear to me.
-> >
-> > Right.. Perhaps Binbin can explain that then? If the interrupt is
-> > actually there then the dts should get fixed instead IMO.
->=20
-> I carefully reviewed the manual again and believe this patch is still nec=
-essary.
->=20
-> First, the Loongson-1C RTC does not define the timing interrupt
-> register (`TOY_MATCH0_REG`)[1], meaning it lacks hardware support for
+I sent you a GIT PULL for what can go to Linus for the upcoming merge
+window from this series:
 
-I don't understand Chinese, so I'll take your word for it that this
-particular model doesn't have this interrupt and that there's no other
-interrupt used by the rtc via a different register :) My ack for the
-patch remains valid.
+https://lore.kernel.org/linux-clk/aXFYU324yQ6uBmk0@redhat.com/T/#u
 
-Also, I looked at the existing binding again, and there's no ABI break
-anyway cos the interrupts property wasn't required in the first place,
-so any driver has to be written to permit the absence of an interrupts
-property. I think you should remove mention of ABI break from the commit
-message, since it's not actually one.
+Thanks,
 
-> alarms. Consequently, `interrupts` are also unnecessary.
-> The Loongson-2K0300 is different. It defines `TOY_MATCH0_REG`, but due
-> to a hardware design flaw, accessing this register causes system
-> crashes. Therefore, I must also classify it as lacking alarm support.
+Brian
 
-This logic also seems fair to me, assuming that this is the only
-interrupt that the device has.
-
-> Additionally, in patch-3 [2], I rewrote the alarm logic to decouple
-> the `interrupts` property from the alarm feature: I defined
-> corresponding workaround bits in `loongson_rtc_config->flags`. This
-> should be considered a SoC-specific attribute.
->=20
-> Finally, two thoughts:
-> 1. Retain this patch; it is correct for Loongson-1C.
-> 2. For Patch-2, still add the `interrupts` property to the
-> Loongson-2K0300 RTC node (as it exists in hardware), combined with the
-> workaround bit setting in patch-3 to avoid the hardware flaw.
-
-Personally, I think what you've done in patch 2 is okay, since that
-interrupt is non-functional.
-
->=20
-> Would this approach be acceptable?
->=20
-> [1]: https://www.loongson.cn/uploads/images/2022051616223977135.%E9%BE%99=
-%E8%8A%AF1C300%E5%A4%84%E7%90%86%E5%99%A8%E7%94%A8%E6%88%B7%E6%89%8B%E5%86%=
-8C.pdf
-> (section 21.2.1)
-> [2]: https://lore.kernel.org/linux-rtc/abff68dda2fe6a6601a9e58b31e278d941=
-297fce.1768616276.git.zhoubinbin@loongson.cn/
->=20
-> --
-> Thanks.
-> Binbin
-
---ytcyEvQbqLkTzetR
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYKAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCaXEa4wAKCRB4tDGHoIJi
-0r1UAPwNOFlUehj5qXpainyk5Vw+hUB3Cwtlc5EQxTrSF5q6IAD7BzUEiHUCKTUg
-z1kTbYXkiG5phJRz1IVmRBTWgLPA2wM=
-=zJht
------END PGP SIGNATURE-----
-
---ytcyEvQbqLkTzetR--
 
