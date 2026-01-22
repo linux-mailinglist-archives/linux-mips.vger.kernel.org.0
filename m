@@ -1,146 +1,104 @@
-Return-Path: <linux-mips+bounces-12982-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-12983-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id KCMVOxJZcWkNEwAAu9opvQ
-	(envelope-from <linux-mips+bounces-12982-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Jan 2026 23:54:10 +0100
+	id AMgCCBMycmmadwAAu9opvQ
+	(envelope-from <linux-mips+bounces-12983-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 22 Jan 2026 15:20:03 +0100
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from dfw.mirrors.kernel.org (dfw.mirrors.kernel.org [142.0.200.124])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D65F5F1C9
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Jan 2026 23:54:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 47A2467D62
+	for <lists+linux-mips@lfdr.de>; Thu, 22 Jan 2026 15:20:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id 417E6902368
-	for <lists+linux-mips@lfdr.de>; Wed, 21 Jan 2026 22:54:07 +0000 (UTC)
+	by dfw.mirrors.kernel.org (Postfix) with ESMTPS id EE324945D09
+	for <lists+linux-mips@lfdr.de>; Thu, 22 Jan 2026 14:01:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DBD441B342;
-	Wed, 21 Jan 2026 22:54:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 78959318B9D;
+	Thu, 22 Jan 2026 14:00:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="iHOtLHV1";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="GtDoFVbf"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mE3JzZyS"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f45.google.com (mail-ej1-f45.google.com [209.85.218.45])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5C1A3D3CE8
-	for <linux-mips@vger.kernel.org>; Wed, 21 Jan 2026 22:53:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31FE3345CC6
+	for <linux-mips@vger.kernel.org>; Thu, 22 Jan 2026 14:00:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769036040; cv=none; b=kfqb7TuAh9JdJPLgefhzYHhuTs4pzl8j5/cI+3+yUTyFGKWXGmxyavK4uq012R2vhD+Ol2DiebkABdJ1eBdNcbGcDynoNqB6Gni+sxWDWhFaGKqJx5u3u8uz7hstKxFzKLteBVv0d+yUTs956vXSoUJhMA75/PVC9O+0q180VD4=
+	t=1769090440; cv=none; b=ISDOOjjR5N7eRs95NIy1imUU54xQkV/yw3/yyeoQWtWE5V5Ur2XRzthIcbU5zcTJ+yTXzJ8bZb1Ja/FskeJfC9mWmF2+c0KHR8drtSXirEJXsQszgsXDN78NkSJgjnfa6dwcu0fqQZPnE41EFkUj1wt+bp5F9mbl1NOSlJZkkBE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769036040; c=relaxed/simple;
-	bh=UiEPj0ZcSawildEgR+9wJ/AtCxMbPbzcmfyb7UYIQ4E=;
+	s=arc-20240116; t=1769090440; c=relaxed/simple;
+	bh=AHSBEaRYfStLiqJd2Yrr0EQ+tzb5DiwinzVPHKX4hIs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uXd4W4WmXTAVy3l/POMq/vIr8go6I5IZY6CIbodhIB/u8JdPxYvuDjfNQoV3f0S2PZQkt2/uct8Nu1HWwtEnPoUB+lhh9DdUppVDmrmlC8v9JxtPgVNQF7E0CMUYqwEjXzd2yF0VWuhT6dWxhX66UXi3r35gHmry1po7Cf48hrc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=iHOtLHV1; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=GtDoFVbf; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1769036032;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=UiEPj0ZcSawildEgR+9wJ/AtCxMbPbzcmfyb7UYIQ4E=;
-	b=iHOtLHV1w7oSuPv+8F+UuBYkNIL+S59QcmkP0xKN1x8tnPUz2hkM9BDiW8ESUku4bt3n3V
-	7SjcjFWhdZdVwIE75Xlyu/3mmaYW2VXPTgmxbr2Szk2X59tO/1nrg90gCqlT+QtMgxZEZF
-	SqqmiRbwXzm/wY8vfNOt0LIgaJMzPk4=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-665-ZhsFwBJ8NTmVsiKaLDhrZg-1; Wed, 21 Jan 2026 17:53:51 -0500
-X-MC-Unique: ZhsFwBJ8NTmVsiKaLDhrZg-1
-X-Mimecast-MFC-AGG-ID: ZhsFwBJ8NTmVsiKaLDhrZg_1769036031
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-5019f8a18cdso11078641cf.2
-        for <linux-mips@vger.kernel.org>; Wed, 21 Jan 2026 14:53:51 -0800 (PST)
+	 Content-Type:Content-Disposition:In-Reply-To; b=TRccx2mpHHAr8bwESTaHYGMzHv1gDF2xYpHG13Ki4k0+e07iWD/Ukl81jPr5DmqOQ7lQTU4B32FKZjdg9ma9n73T/4vOzDu9X6P1pmK3vzXLdqoRVmbm7u7eHmgWaqNE1JaixLsEN5zhrY8Eii4SxEri42G0PwJKUUYjZ9X1n30=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mE3JzZyS; arc=none smtp.client-ip=209.85.218.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-b88455e6663so104717166b.1
+        for <linux-mips@vger.kernel.org>; Thu, 22 Jan 2026 06:00:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1769036031; x=1769640831; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1769090436; x=1769695236; darn=vger.kernel.org;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :reply-to:message-id:subject:cc:to:from:date:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UiEPj0ZcSawildEgR+9wJ/AtCxMbPbzcmfyb7UYIQ4E=;
-        b=GtDoFVbfPIev6Y45lnUj8xiA8GxcY4vLl7Zc+zcX/Z69kLArm87l/wSqn/UI7DCfSf
-         U30AimhGVESqjkpe/jreBjvHZgsNKn7docRbMu16NEBpLoFzCGFBxuqLQUgyXu5dVQis
-         HaT4reFMxuhHlp5vW+xnI6QoI8md1+lGBpH4Eb4H/yOGB69lkFRTa1lL7OKfKMCx8Ztb
-         SHjmUGudpNV/kOuCkjTFdlmS47bqkS46ZDIM4ORSaYcXzVvSvs2cwZCDSH5+19PCe80n
-         iObPgZrtysxGJfgmz4JJmJvBVw1Pbm/IW6vXLbEl2gCIfT251WTL2usfoDhuCbaPGo68
-         ebYA==
+        bh=KXXllTpn+4j3DQ+o0FpmjiZEdWUg34VA5GPm+3TDwac=;
+        b=mE3JzZySbsZNFXrazHRmfkLgXK1G6CICo/45BaSEMmri8qoPvELmkqlJUJuLq8r/cR
+         BZuBE98d600tezPM1Ev3Lv6/wgj1maHQPUX5UMH0X7Bb1TL3sUzOm4dc6Ly1PPaTjaqs
+         hDxR1qZKtGXBH67ziEpREgFLFgUdSeobUOgLHgZlfBxr0178fS+J4nD8OTVboWYl3pQt
+         VfUZvZP7nVL41fRWgaHUJ4aLvHkvxOcT8JiNj8YivRx/Teoe0yOHaPjpxbMoqspGXGs4
+         vz+mawD5KrfuWoRGegQ0STZROYkcYTyB9Mb6z3UbWWha+b7zhPD0i037Q32eJSQYTC72
+         KJtw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769036031; x=1769640831;
+        d=1e100.net; s=20230601; t=1769090436; x=1769695236;
         h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=UiEPj0ZcSawildEgR+9wJ/AtCxMbPbzcmfyb7UYIQ4E=;
-        b=ijSAJ3pgXq3Wdpoq/dedb5zEqBB34e1JERSw01OL4999ZI0JRayvXiXoiQeI72CIT0
-         CXoFP/mGcc5mAofG+Qa+TELfE+S+LkAh3dhviLKm0aGaJ3TbRraudyEZgloZ8LaN+NZh
-         hLB1XEhvwwaSpumoT8spzI3ACOxh0JbptAKIAvM21o1do4Ea52ud9S/ft+vX1Hd3X4Lh
-         SjMP2hfF4Hp+lQATjRQH/xpYq8UeFVhpoSrcihuSUXW3lIvof7OvogBwMHfEu+QCnmFK
-         KxvNj38CXKI03ZNv8FXOf2phTqUlT7qhnS6WR7eHee2lsIZDEatLVroJxeyZtMATsVZG
-         K5fg==
-X-Forwarded-Encrypted: i=1; AJvYcCVMb8QB3EMvzZcHKVAC2vxvEfL1anszQ0Qlm8rBSFB/XtutEaj4Y96NxPkNfMPX9s5spP8vDdoc/KA4@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy27jSY4gqZNDwBEhmi7Ouun+xh3Q0k6dYfLKc/eg8wkRN93QJd
-	wJ/n1tdNH3G6cD0PFSrNdvn+rbwYIgM2SYhCti8273AMeYp9YzfzZP6TNFDM/1qyhVF9nXrTwb5
-	M0TqUaGCXQmM5pwb0Rs/oOkB6wcgnQEiAtLNUnMErJY35VnRwKliLQ3XH3OGXEJI=
-X-Gm-Gg: AZuq6aK61mjLfRuP+B0LcSuiwKMQClj4nA7dNx9SzuXwq7nyMSrawZmnTrPSh/Qg71/
-	7E//wxFBtlpIGTTiFG5pltYGyi91smy7tWqD56yGK2BpiUpNYgiWFGrsexpKkWF37aI6eZnARjn
-	SPuGd1VmSNkpBUCyvPmPPsmxUJ8EV1NIY9yTpZKJeCUWZDguDvcTl6qkl7FfCE34HyVBIFyQcHq
-	LW9J0MvzpgZmqWLdF+k2eMwEkSaNGWurgOrnNfH+2pCNmLcAHLVZeW+K0Qq2DdxpnTvCKd0daHO
-	ZtZFNGJzkzeYVIAI4PzPeXJ1qe59x6Jg/XY3hkLfcqZzpreQajcoNqc13eTUslDevYmubFTZoyd
-	a5NghTdbS
-X-Received: by 2002:ac8:5fca:0:b0:4e7:2210:295f with SMTP id d75a77b69052e-502d84b0ca5mr87957311cf.13.1769036030806;
-        Wed, 21 Jan 2026 14:53:50 -0800 (PST)
-X-Received: by 2002:ac8:5fca:0:b0:4e7:2210:295f with SMTP id d75a77b69052e-502d84b0ca5mr87956771cf.13.1769036030338;
-        Wed, 21 Jan 2026 14:53:50 -0800 (PST)
-Received: from redhat.com ([2600:382:8125:73a8:e201:8ac3:bd7d:6acd])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-502a1f1abb9sm117138811cf.30.2026.01.21.14.53.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 21 Jan 2026 14:53:49 -0800 (PST)
-Date: Wed, 21 Jan 2026 17:53:44 -0500
-From: Brian Masney <bmasney@redhat.com>
-To: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>
-Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Chen Wang <unicorn_wang@outlook.com>,
-	Inochi Amaoto <inochiama@gmail.com>, sophgo@lists.linux.dev,
-	Chen-Yu Tsai <wens@kernel.org>, Maxime Ripard <mripard@kernel.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-rtc@vger.kernel.org,
-	Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
-	Manivannan Sadhasivam <mani@kernel.org>,
-	linux-actions@lists.infradead.org,
-	Keguang Zhang <keguang.zhang@gmail.com>, linux-mips@vger.kernel.org,
-	Taichi Sugaya <sugaya.taichi@socionext.com>,
-	Takao Orito <orito.takao@socionext.com>,
-	Jacky Huang <ychuang3@nuvoton.com>,
-	Shan-Chun Hung <schung@nuvoton.com>,
-	Vladimir Zapolskiy <vz@mleia.com>,
-	Piotr Wojtaszczyk <piotr.wojtaszczyk@timesys.com>,
-	Bjorn Andersson <andersson@kernel.org>,
-	linux-arm-msm@vger.kernel.org, Orson Zhai <orsonzhai@gmail.com>,
-	Baolin Wang <baolin.wang@linux.alibaba.com>,
-	Chunyan Zhang <zhang.lyra@gmail.com>,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	linux-stm32@st-md-mailman.stormreply.com,
-	Michal Simek <michal.simek@amd.com>,
-	Rob Clark <robin.clark@oss.qualcomm.com>,
-	Dmitry Baryshkov <lumag@kernel.org>,
-	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-	Abhinav Kumar <abhinav.kumar@linux.dev>,
-	Jessica Zhang <jesszhan0024@gmail.com>, Sean Paul <sean@poorly.run>,
-	Marijn Suijten <marijn.suijten@somainline.org>,
-	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-	Vinod Koul <vkoul@kernel.org>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	linux-phy@lists.infradead.org
-Subject: Re: [PATCH 00/27] clk: remove deprecated API divider_round_rate()
- and friends
-Message-ID: <aXFY-FxqeBv4BsHd@redhat.com>
-References: <20260108-clk-divider-round-rate-v1-0-535a3ed73bf3@redhat.com>
+         :reply-to:message-id:subject:cc:to:from:date:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=KXXllTpn+4j3DQ+o0FpmjiZEdWUg34VA5GPm+3TDwac=;
+        b=mXi7sOoNvx8EQl0cmVv4Wb/H1mNQbhMqZai63hM+msro2BFvWt3VH9ig6KUyJG1fLi
+         0stJdi0G2C+qV3Jv/FCaFqjLYCtppZZ13yYY8cCCvcLv+/nDo97+q6UGGmueHD6M7TkU
+         fae3X/EEvMdktgeJQzfn4Tz00ib92NESWBbCvUjS/iAMMftek/LBh1D9zxfk02edvKY+
+         i+L3YM65dOOBOAu3qRrv2WEhL4UWJXT51tl6Gp3bvZeZ54MR+d1TNzXl0Yk9vhsQSorN
+         Q7LgZbEWdz+VZK/dXsmSOXp3315/Izb4/0eQJEgyEWkIn/6FlT0ISIJO9RVQKdY+6rRY
+         z8Xg==
+X-Forwarded-Encrypted: i=1; AJvYcCW+T2fIGwETolFnxa3wsaRuxg3VIPeTJs/xOWh4ZddEqzXQ1CKPFBeRflI3nxEHZQTsQDcoWKsDjqpB@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDuhcKmN/EHGbOf4wQPRafu9a848HjwHm+E3NZWFg7it/yjVX1
+	5RnIZ678NPvImtyX2S2RHlQWs+31/J5B4mjX9KXs0uL4xK75/mnNfG6q
+X-Gm-Gg: AZuq6aL+SIJKInk1Ttewb8jXKKjejL4RC0c46HMiXC3DMfCLhDO9wQO6Bpac8eA9l/P
+	FKUaX8Ut5WSSHuSg2NqLOeiEn6NNNM8MHaZMTe83r6nAg9dLGiso1CB0ofyoKFQXmz4GATaAMYr
+	IA1SNMchJu6oCOJW8u2YqWNwYgvkyn6eumNc1AwNF0xjux0+XpCvaRJGEAv5oY9OAvBVng++SfD
+	2YuXdzWYB3ri21aqvTrThCgyZ359UnffSucuyhFZhvCcd9iUBW4RldGdkiw60Eikn5tQTF8jrRe
+	BsR/1smM9tsaIFHzv5AsvsV3lTDjpZLacW5WxQaeg1jx6XPfJ+FvgYzsL2uAG6l3JNi9s3ix43l
+	X8bH490xz0PlLh911OJiFJbXykEZDmGtlzqeCwsz55W+IYAREkiMNjpds2k0XxxS2OvDII2COLI
+	DYQXcBCZeamg==
+X-Received: by 2002:a17:907:84e:b0:b87:33f3:6042 with SMTP id a640c23a62f3a-b8792d3be6dmr1826205366b.9.1769090435585;
+        Thu, 22 Jan 2026 06:00:35 -0800 (PST)
+Received: from localhost ([185.92.221.13])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-b884006d3bbsm68748466b.32.2026.01.22.06.00.34
+        (version=TLS1_2 cipher=ECDHE-ECDSA-CHACHA20-POLY1305 bits=256/256);
+        Thu, 22 Jan 2026 06:00:35 -0800 (PST)
+Date: Thu, 22 Jan 2026 14:00:34 +0000
+From: Wei Yang <richard.weiyang@gmail.com>
+To: "David Hildenbrand (Red Hat)" <david@kernel.org>
+Cc: Wei Yang <richard.weiyang@gmail.com>, Qi Zheng <qi.zheng@linux.dev>,
+	will@kernel.org, aneesh.kumar@kernel.org, npiggin@gmail.com,
+	peterz@infradead.org, dev.jain@arm.com, akpm@linux-foundation.org,
+	ioworker0@gmail.com, linmag7@gmail.com, linux-arch@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+	linux-alpha@vger.kernel.org, loongarch@lists.linux.dev,
+	linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+	linux-um@lists.infradead.org, Qi Zheng <zhengqi.arch@bytedance.com>
+Subject: Re: [PATCH v3 7/7] mm: make PT_RECLAIM depends on
+ MMU_GATHER_RCU_TABLE_FREE
+Message-ID: <20260122140034.ymigrfppzwvmcjkr@master>
+Reply-To: Wei Yang <richard.weiyang@gmail.com>
+References: <cover.1765963770.git.zhengqi.arch@bytedance.com>
+ <ac2bdb2a66da1edb24f60d1da1099e2a0b734880.1765963770.git.zhengqi.arch@bytedance.com>
+ <20251231094243.zmjs7kgflm7q6k73@master>
+ <a3a60bbb-70b7-49ed-abc6-937e6c13d681@linux.dev>
+ <20260101020715.45wqnjgcklvjcth3@master>
+ <d38fcbe5-8b4a-40bc-b8c8-1c49ccaa9964@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -149,55 +107,162 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260108-clk-divider-round-rate-v1-0-535a3ed73bf3@redhat.com>
-User-Agent: Mutt/2.2.14 (2025-02-20)
+In-Reply-To: <d38fcbe5-8b4a-40bc-b8c8-1c49ccaa9964@kernel.org>
+User-Agent: NeoMutt/20170113 (1.7.2)
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.46 / 15.00];
+X-Spamd-Result: default: False [0.04 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW_WITH_FAILURES(-0.50)[];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCPT_COUNT_TWELVE(0.00)[48];
-	FREEMAIL_CC(0.00)[vger.kernel.org,outlook.com,gmail.com,lists.linux.dev,kernel.org,sholland.org,lists.infradead.org,bootlin.com,suse.de,socionext.com,nuvoton.com,mleia.com,timesys.com,linux.alibaba.com,foss.st.com,st-md-mailman.stormreply.com,amd.com,oss.qualcomm.com,ffwll.ch,linux.dev,poorly.run,somainline.org,lists.freedesktop.org,linaro.org];
-	MIME_TRACE(0.00)[0:+];
-	TAGGED_FROM(0.00)[bounces-12982-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DMARC_POLICY_ALLOW(0.00)[redhat.com,quarantine];
-	DKIM_TRACE(0.00)[redhat.com:+];
-	FROM_HAS_DN(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	TO_DN_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-12983-lists,linux-mips=lfdr.de];
+	FREEMAIL_REPLYTO(0.00)[gmail.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_TWELVE(0.00)[20];
+	FROM_HAS_DN(0.00)[];
+	DMARC_POLICY_ALLOW(0.00)[gmail.com,none];
+	HAS_REPLYTO(0.00)[richard.weiyang@gmail.com];
 	R_SPF_SOFTFAIL(0.00)[~all:c];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bmasney@redhat.com,linux-mips@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	FROM_NEQ_ENVFROM(0.00)[richardweiyang@gmail.com,linux-mips@vger.kernel.org];
+	FREEMAIL_CC(0.00)[gmail.com,linux.dev,kernel.org,infradead.org,arm.com,linux-foundation.org,vger.kernel.org,kvack.org,lists.linux.dev,lists.infradead.org,bytedance.com];
 	TAGGED_RCPT(0.00)[linux-mips];
-	MID_RHS_MATCH_FROM(0.00)[];
 	ASN(0.00)[asn:7979, ipnet:142.0.200.0/24, country:US];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[dfw.mirrors.kernel.org:helo,dfw.mirrors.kernel.org:rdns]
-X-Rspamd-Queue-Id: 7D65F5F1C9
+	DKIM_TRACE(0.00)[gmail.com:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	REPLYTO_EQ_FROM(0.00)[]
+X-Rspamd-Queue-Id: 47A2467D62
 X-Rspamd-Action: no action
 
-Hi Stephen,
+On Mon, Jan 19, 2026 at 11:18:52AM +0100, David Hildenbrand (Red Hat) wrote:
+>On 1/1/26 03:07, Wei Yang wrote:
+>> On Wed, Dec 31, 2025 at 05:52:57PM +0800, Qi Zheng wrote:
+>> > 
+>> > 
+>> > On 12/31/25 5:42 PM, Wei Yang wrote:
+>> > > On Wed, Dec 17, 2025 at 05:45:48PM +0800, Qi Zheng wrote:
+>> > > > From: Qi Zheng <zhengqi.arch@bytedance.com>
+>> > > > 
+>> > > > The PT_RECLAIM can work on all architectures that support
+>> > > > MMU_GATHER_RCU_TABLE_FREE, so make PT_RECLAIM depends on
+>> > > > MMU_GATHER_RCU_TABLE_FREE.
+>> > > > 
+>> > > > BTW, change PT_RECLAIM to be enabled by default, since nobody should want
+>> > > > to turn it off.
+>> > > > 
+>> > > > Signed-off-by: Qi Zheng <zhengqi.arch@bytedance.com>
+>> > > > ---
+>> > > > arch/x86/Kconfig | 1 -
+>> > > > mm/Kconfig       | 9 ++-------
+>> > > > 2 files changed, 2 insertions(+), 8 deletions(-)
+>> > > > 
+>> > > > diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+>> > > > index 80527299f859a..0d22da56a71b0 100644
+>> > > > --- a/arch/x86/Kconfig
+>> > > > +++ b/arch/x86/Kconfig
+>> > > > @@ -331,7 +331,6 @@ config X86
+>> > > > 	select FUNCTION_ALIGNMENT_4B
+>> > > > 	imply IMA_SECURE_AND_OR_TRUSTED_BOOT    if EFI
+>> > > > 	select HAVE_DYNAMIC_FTRACE_NO_PATCHABLE
+>> > > > -	select ARCH_SUPPORTS_PT_RECLAIM		if X86_64
+>> > > > 	select ARCH_SUPPORTS_SCHED_SMT		if SMP
+>> > > > 	select SCHED_SMT			if SMP
+>> > > > 	select ARCH_SUPPORTS_SCHED_CLUSTER	if SMP
+>> > > > diff --git a/mm/Kconfig b/mm/Kconfig
+>> > > > index bd0ea5454af82..fc00b429b7129 100644
+>> > > > --- a/mm/Kconfig
+>> > > > +++ b/mm/Kconfig
+>> > > > @@ -1447,14 +1447,9 @@ config ARCH_HAS_USER_SHADOW_STACK
+>> > > > 	  The architecture has hardware support for userspace shadow call
+>> > > >             stacks (eg, x86 CET, arm64 GCS or RISC-V Zicfiss).
+>> > > > 
+>> > > > -config ARCH_SUPPORTS_PT_RECLAIM
+>> > > > -	def_bool n
+>> > > > -
+>> > > > config PT_RECLAIM
+>> > > > -	bool "reclaim empty user page table pages"
+>> > > > -	default y
+>> > > > -	depends on ARCH_SUPPORTS_PT_RECLAIM && MMU && SMP
+>> > > > -	select MMU_GATHER_RCU_TABLE_FREE
+>> > > > +	def_bool y
+>> > > > +	depends on MMU_GATHER_RCU_TABLE_FREE
+>> > > > 	help
+>> > > > 	  Try to reclaim empty user page table pages in paths other than munmap
+>> > > > 	  and exit_mmap path.
+>> > > 
+>> > > Hi, Qi
+>> > > 
+>> > > I am new to PT_RECLAIM, when reading related code I got one question.
+>> > > 
+>> > > Before this patch,  we could have this config combination:
+>> > > 
+>> > >       CONFIG_MMU_GATHER_RCU_TABLE_FREE & !CONFIG_PT_RECLAIM
+>> > > 
+>> > > This means tlb_remove_table_free() is rcu version while tlb_remove_table_one()
+>> > > is semi rcu version.
+>> > > 
+>> > > I am curious could we use rcu version tlb_remove_table_one() for this case?
+>> > > Use rcu version tlb_remove_table_one() if CONFIG_MMU_GATHER_RCU_TABLE_FREE. Is
+>> > > there some limitation here?
+>> > 
+>> > I think there's no problem. The rcu version can also ensure that the
+>> > fast GUP works well.
+>> > 
+>> 
+>> Thanks for your quick response :-)
+>> 
+>> And Happy New Year
+>> 
+>> So my little suggestion is move the definition of __tlb_remove_table_one()
+>> under CONFIG_MMU_GATHER_RCU_TABLE_FREE. Do you thinks this would be more
+>> clear?
+>
+>
+>Do you mean
+>
+>diff --git a/mm/mmu_gather.c b/mm/mmu_gather.c
+>index 2faa23d7f8d42..6aeba4bae68d2 100644
+>--- a/mm/mmu_gather.c
+>+++ b/mm/mmu_gather.c
+>@@ -319,7 +319,7 @@ static inline void tlb_table_invalidate(struct mmu_gather
+>*tlb)
+>        }
+> }
+>
+>-#ifdef CONFIG_PT_RECLAIM
+>+#ifdef CONFIG_MMU_GATHER_RCU_TABLE_FREE
+> static inline void __tlb_remove_table_one_rcu(struct rcu_head *head)
+> {
+>        struct ptdesc *ptdesc;
+>
+>?
 
-On Thu, Jan 08, 2026 at 04:16:18PM -0500, Brian Masney wrote:
-> Here's a series that gets rid of the deprecated APIs
-> divider_round_rate(), divider_round_rate_parent(), and
-> divider_ro_round_rate_parent() since these functions are just wrappers
-> for the determine_rate variant.
+Sorry for the late reply.
 
-I sent you a GIT PULL for what can go to Linus for the upcoming merge
-window from this series:
+Yes, and maybe we can move the definition to the 
+#ifdef CONFIG_MMU_GATHER_RCU_TABLE_FREE code block above, then to be next to
+tlb_remove_table_free().
 
-https://lore.kernel.org/linux-clk/aXFYU324yQ6uBmk0@redhat.com/T/#u
+So that we always have rcu version when CONFIG_MMU_GATHER_RCU_TABLE_FREE.
 
-Thanks,
+>
+>-- 
+>Cheers
+>
+>David
 
-Brian
-
+-- 
+Wei Yang
+Help you, Help me
 
