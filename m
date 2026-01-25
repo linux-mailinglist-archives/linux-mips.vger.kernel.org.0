@@ -1,196 +1,140 @@
-Return-Path: <linux-mips+bounces-13002-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13003-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id I3u7KZNWdWm1EAEAu9opvQ
-	(envelope-from <linux-mips+bounces-13002-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Sun, 25 Jan 2026 00:32:35 +0100
+	id PfklID6UdWnOGQEAu9opvQ
+	(envelope-from <linux-mips+bounces-13003-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Sun, 25 Jan 2026 04:55:42 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 024097F417
-	for <lists+linux-mips@lfdr.de>; Sun, 25 Jan 2026 00:32:34 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id B79E77FB45
+	for <lists+linux-mips@lfdr.de>; Sun, 25 Jan 2026 04:55:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id AB55930071DC
-	for <lists+linux-mips@lfdr.de>; Sat, 24 Jan 2026 23:32:33 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id BA7FC3001459
+	for <lists+linux-mips@lfdr.de>; Sun, 25 Jan 2026 03:55:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 130692701CF;
-	Sat, 24 Jan 2026 23:32:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F5BC1FE44A;
+	Sun, 25 Jan 2026 03:55:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CaszhpSV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="un27DZ3l"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-qt1-f195.google.com (mail-qt1-f195.google.com [209.85.160.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6CA621E487
-	for <linux-mips@vger.kernel.org>; Sat, 24 Jan 2026 23:32:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.160.195
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769297552; cv=pass; b=d6uMfEY0ci3Bwcu0I4IWWsQoJGZd74vBPSM2qLdVz2Pzn5EkYbIJSfGuKJXfCQKU56oBwGKdGzLwyjXSBMcj0mnhOFduDqh7zso5lWErKa7cCC0XHSnGBIK/z6gIJwhEVjWdcEHj+0pVxdmyJLfxfiYIJkKj/+RkOPEDuCbZUbM=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769297552; c=relaxed/simple;
-	bh=62AUfn3TepYhzwErRqoDeLZjyZJQUDkNhXA5ssHqF2g=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AA4124B28
+	for <linux-mips@vger.kernel.org>; Sun, 25 Jan 2026 03:55:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769313337; cv=none; b=b+cHhH+ZuZEFBtMmA/xr5KScx9478b3nU3T2QSZzhSy/P7ZljqfFSt35J/Ay1Mnbal19swC0KTQKWWWjfz5JIfQNetbUzAspchTQqTrzK/f+K/oL0nT2TRNsf7JYX36D7aP7eAfYRTTXJoutnFHvCtVg0Jb9+VIY6C/jtzFVQ4o=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769313337; c=relaxed/simple;
+	bh=9skYrSElwzNljozXGmzQbmTB3X5ciFpsVvS1i3nXL5M=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Yo+neGOurrgy6xETQ+1XVECfDLhIu3iePthCLz6oPWdeuBtRwFj449haodxNT9QZ+W4LtXy65d3EOtvd9YsN8ddg9aILkSf0+ZSn5op/ippRs7dqQn53iud/pn7ok40EO/lM0K6MP8oTcOYSx3uersuuKErOpy4eR6tuUA0Dpz0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CaszhpSV; arc=pass smtp.client-ip=209.85.160.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f195.google.com with SMTP id d75a77b69052e-502b698e510so44189031cf.0
-        for <linux-mips@vger.kernel.org>; Sat, 24 Jan 2026 15:32:30 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1769297549; cv=none;
-        d=google.com; s=arc-20240605;
-        b=ZyU8knrU+6r3qmkofD+AeFzn7WAzTgJnG2RXvZG+HHpqBCQHAQ25yjFhHBrcaFur5z
-         6X+5cb7VAggg7GyP0s2h9XZEWx9G4p4UikiosG4GQRk8AzoL+v9HQhYxT+UL8m9jK6C1
-         NA/s4p0A1iLZgXDSj7n0cwDDC2PZIGSF+CYs0mOxosrMLz3YTL44VDPIDYFl5NFXzzqD
-         gyVhzkbONdoRouZNWi03msNam/P082mwRFgOIvOCedw/7Bhld8JWdtRWhbmBI9APEyYL
-         h+7jN6pHtzAktImZb7fv/i1gw3zh/9RLwMGsTmZsBpOB+xUPzV5RydTVWd9t6DW7ISmY
-         A55Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=62AUfn3TepYhzwErRqoDeLZjyZJQUDkNhXA5ssHqF2g=;
-        fh=lTqGu1fOs8089Lxm6q4IjcTFjzAlALH8kYhGXeu7xgQ=;
-        b=OHfg3U7uevxzP9aG4pEdu5fvggefBlK7OUuXJ++XgK8aPpS3CR3Dx0vhRYvwfR8xBx
-         hWi4oZEcYcSRftKu7YA3vxEZMQZ83X76M1FQIoIVbTOZveL7L4FSxPEFhiPvDPAPe8Hc
-         /AkioHCd6H+W0jLktdoISPcArONCpTLjvBQiXnuAsHmzsga0xmFbZqqJUtA3gbX6j4zM
-         kLQeUn1ORzzjPTNrg6lJlvlTgSvhOdy9PWLOxERXzwjsboBwgAc0LrjJu+3OKCBvXNDA
-         mQ9TYRwCZJOfMMw2XH00q7Lw0PtvrrkQrKz738l40yDJawnJSIIHBM185mCg3POD+zrd
-         bwBQ==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769297549; x=1769902349; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=62AUfn3TepYhzwErRqoDeLZjyZJQUDkNhXA5ssHqF2g=;
-        b=CaszhpSVDhvXzlO7i5v7MZuDpk3LEVYj90HYC5ggSo+i0hWCkXMXeL2ps/7SGClU0a
-         oagfcI+67P9PYN50vUA1FDHzyLylIVj//6r7kPr33pdWNZG7OetHNJmVqH+RLue2f4Ti
-         RyASq2nBsmRb82ZFGibxAdGiuiuySBj06PDEupDqzEYB0rBAYozg7/aJhtBCt3tt6xzL
-         65TaECbGBd8wY8fCaLeVtZ6Vi86EIj8CBo5Wd1ntGwAZjFi+XN1qJ13vy8y6CTYTO0X8
-         aN/lXBDHBZVyGzzEWqy6gkKrqikTEWYj1sr6AkDSoEB+QLGF5lPbzUj3fJXyyGRwSGcE
-         xU+g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769297549; x=1769902349;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=62AUfn3TepYhzwErRqoDeLZjyZJQUDkNhXA5ssHqF2g=;
-        b=aimAsrWEQUmgqLVF4BWRi0dFnttitlVhQDyPvpH3cVG7hluht7jNrnJsKTl5DBvmpu
-         tO7onjoXO8GxB7+yO2T2Ki13qzb8sx50Wmc2dKBaQ/bt0lsJdzxzg3AG+PFWduxLfItS
-         dp2sKEYu48YFMwfjHWCb9Xfocv+8rmflIAPzrfdS172cNYEf+DWl+kWHeNVi8gukdOF6
-         k23UGsG88fBixJrJ/wBYh6CpbC4lS0G6EZddsIUSA3NMY7sYJ2N3BnQqxVuIDIhajuk9
-         u8Iai7juJ47z7jEUAkJV9fzQ+qpTJhwfriGVY+Ds1suOoGoEO2iK/ZV1oKL2Gkiu9QyU
-         gFwQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVoev3FpNv0/zLAgxPkQ/3Kv3fXkqVo5+e/kvVVZaOWp6siNcVUcNFb09jR7Hn3kmabBGBIU8cMYuJh@vger.kernel.org
-X-Gm-Message-State: AOJu0YzO3lDNSVUIw+GGUZaZk3K8vFNubqXM1THIHtxfFzeycUyJZPbk
-	gn9Ladzl51hOg4xAvKt6hE+4ADz9HQ/TvaQVONGKslaCNUe1l1vO1i9i/Xs30VDvzj+qN1exLM7
-	38Ml7BJLlqfP/IhIoVLkfwgeB/YntC68=
-X-Gm-Gg: AZuq6aKncHl3eRg+Ojuy9XFrFL3hSZp3sM9Mwx7c7gfxpLmkc/EoOikmXDHXsRkUpHm
-	p7/GrbuKKwGwIwYdN1rTVBn4xGn8DfflwTgL6SW593+XyJPtZIFhJgHiHko2t1PMxraEjTCGz6N
-	0Z/UeusQz7vqywXOjFudDfaZ7ObyNp+Y08znzPGa88pdKJoVAoPs/IR57VJiZoWz6Xx0NvFiLbv
-	vmcpw9W3A9Wu8w8n1c+2itN2/BlKfc+l5KMT3LPBCBB99P/4inc6Bk77IVTymr1shnHV13e3tZf
-	VIUuv3B+VZ+kWQvGah3o//b1/6htJXIjUA3ghi/d+ZRoeI0rIGfLnjDZcYKc0x7qpa4+GLJUgJX
-	EPqnRtKvI9SplWv8=
-X-Received: by 2002:a05:622a:55:b0:502:6312:8d6 with SMTP id
- d75a77b69052e-50314b7a6e1mr2969171cf.12.1769297549164; Sat, 24 Jan 2026
- 15:32:29 -0800 (PST)
+	 To:Cc:Content-Type; b=T8QDnp6EAazauFNc3ZEYwueASGDqV97OJJXn/25NTOH5KQwKDSCp/MPkWmfi4IymZjEWFV6r8ViiPcfC3nlyoeo0z8DUkdF0EMOUJGjvIcCyllznBmh0TXg7zE28LbAsd+TPcC0QX9cfVj6CsdN/cN33xNBu7jrTBiXPKuf8ocI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=un27DZ3l; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 20974C2BCB0
+	for <linux-mips@vger.kernel.org>; Sun, 25 Jan 2026 03:55:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1769313337;
+	bh=9skYrSElwzNljozXGmzQbmTB3X5ciFpsVvS1i3nXL5M=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=un27DZ3lS6cVoBMtNgGY6Yzz/RynkWH/Lws/mNjUnkG71hIfRiHfJRWhzphdPk2Qr
+	 8YXeaUJsGdF7rys6SkIJsCGd+tdtDR/mUAg+/yyRB7hf+HTzWBf3NpnJpkbox5EOcD
+	 bl61CGa7TOnAAh7bjbGLkVKjd84/404Nj3eo/uLxL/dWiyFHO3YYhT0VEpFflPHLmE
+	 R5Q8cHR3TRNbZym+IVEWvCXwgW8XDrhG2z/5QW1aTYDakfz1taSMloOZ7gExxx7aJT
+	 vsqSkJYrl8An5lje3bzupwgXum9pLFovZTIa2lIAqaf8GFw7eMv51P+9NnUBkv5thk
+	 3QOIrnu+1P3bQ==
+Received: by mail-ej1-f52.google.com with SMTP id a640c23a62f3a-b885e8c6700so369719566b.0
+        for <linux-mips@vger.kernel.org>; Sat, 24 Jan 2026 19:55:37 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXIc6TV0ElNuaYWxNd7HGnvegb97y2XXyfvNIimPUmqngc2JSI4pCA4MNJpKVsz+/ndvIwTMSqCf/Bc@vger.kernel.org
+X-Gm-Message-State: AOJu0YwtdVOmL4eVb7mbxtV/IdLl52wUTga3pJWjiYEK+KQ6voay5R4s
+	gCKuwVPF/AqwrTs+4fjLcTHL/Ovlcx2pqH/j02UO/WM/RgfxgRbXOo3cE0KqFrGk7zNL8Me6fJg
+	GeIXb8tnjz9/4TUU8UxBLkD+ZNXdMIp4=
+X-Received: by 2002:a17:907:da9:b0:b88:783e:64f9 with SMTP id
+ a640c23a62f3a-b8d20d6ef05mr41531766b.25.1769313335629; Sat, 24 Jan 2026
+ 19:55:35 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260123033233.16906-1-enelsonmoore@gmail.com>
- <20260123181156.GA84531@bhelgaas> <CADkSEUg5EqpKg2_X3LRc1CaQ2RVFNucJbuxDcHQxvjdLq1Qg1A@mail.gmail.com>
- <8477da83-2441-440c-80f1-66dac9700523@kernel.org>
-In-Reply-To: <8477da83-2441-440c-80f1-66dac9700523@kernel.org>
-From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
-Date: Sat, 24 Jan 2026 15:32:17 -0800
-X-Gm-Features: AZwV_QgT7HJ5RzGZbmSKdUH5ZCEsN2PptDSPTNTy9vD6bN7Rq-MPZtQjsOmB-V8
-Message-ID: <CADkSEUjyXH74izTrsfhdAjh=n-jnGx=tXbqPx86M9OYqjXj0PA@mail.gmail.com>
-Subject: Re: [PATCH net-next] net: ethernet: neterion: s2io: remove unused driver
-To: "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>
-Cc: Bjorn Helgaas <helgaas@kernel.org>, netdev@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-pci@vger.kernel.org, linux-mips@vger.kernel.org, 
-	linux-s390@vger.kernel.org, rust-for-linux@vger.kernel.org, 
-	Jon Mason <jdmason@kudzu.us>, Jonathan Corbet <corbet@lwn.net>, 
-	Linas Vepstas <linasvepstas@gmail.com>, Mahesh J Salgaonkar <mahesh@linux.ibm.com>, 
-	"Oliver O'Halloran" <oohall@gmail.com>, Bjorn Helgaas <bhelgaas@google.com>, 
-	"David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, 
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
-	Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
-	Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
-	Alexander Gordeev <agordeev@linux.ibm.com>, Christian Borntraeger <borntraeger@linux.ibm.com>, 
-	Sven Schnelle <svens@linux.ibm.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-	Danilo Krummrich <dakr@kernel.org>, =?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kwilczynski@kernel.org>, 
-	Miguel Ojeda <ojeda@kernel.org>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Benno Lossin <lossin@kernel.org>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
-	Andrew Morton <akpm@linux-foundation.org>, 
-	=?UTF-8?Q?Martin_Kepplinger=2DNovakovi=C4=87?= <martink@posteo.de>, 
-	Pavel Machek <pavel@ucw.cz>, MD Danish Anwar <danishanwar@ti.com>, 
-	Mengyuan Lou <mengyuanlou@net-swift.com>, Pablo Neira Ayuso <pablo@netfilter.org>, 
-	Huacai Chen <chenhuacai@kernel.org>, "Theodore Ts'o" <tytso@mit.edu>, Takashi Iwai <tiwai@suse.de>, 
-	Eric Biggers <ebiggers@google.com>, Madadi Vineeth Reddy <vineethr@linux.ibm.com>, 
-	Ard Biesheuvel <ardb@kernel.org>, "Martin K. Petersen" <martin.petersen@oracle.com>, 
-	Frederic Barrat <fbarrat@linux.ibm.com>, Andrew Donnellan <ajd@linux.ibm.com>, 
-	Herbert Xu <herbert@gondor.apana.org.au>, Vadim Fedorenko <vadim.fedorenko@linux.dev>, 
-	Lorenzo Bianconi <lorenzo@kernel.org>, Dong Yibo <dong100@mucse.com>, 
-	Lukas Bulwahn <lukas.bulwahn@redhat.com>, Vivian Wang <wangruikang@iscas.ac.cn>, 
-	Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@kernel.org>
+References: <20260107094007.966496-1-john.g.garry@oracle.com> <20260107094007.966496-3-john.g.garry@oracle.com>
+In-Reply-To: <20260107094007.966496-3-john.g.garry@oracle.com>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Sun, 25 Jan 2026 11:55:32 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H6qAtsBF3jwxbYGEUytZXH2ZRPfzPtUZRBnXOiZ_K5bYg@mail.gmail.com>
+X-Gm-Features: AZwV_QjYWuO3o9bzEbS1XM5AmxKORXSwoxVWvGO08slAjXNfx2imuW1HbO_-Bes
+Message-ID: <CAAhV-H6qAtsBF3jwxbYGEUytZXH2ZRPfzPtUZRBnXOiZ_K5bYg@mail.gmail.com>
+Subject: Re: [PATCH v2 2/4] LoongArch: Make cpumask_of_node() robust against NUMA_NO_NODE
+To: John Garry <john.g.garry@oracle.com>
+Cc: kernel@xen0n.name, jiaxun.yang@flygoat.com, tsbogend@alpha.franken.de, 
+	tglx@linutronix.de, mingo@redhat.com, bp@alien8.de, 
+	dave.hansen@linux.intel.com, hpa@zytor.com, luto@kernel.org, 
+	peterz@infradead.org, arnd@arndb.de, x86@kernel.org, 
+	loongarch@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	linux-mips@vger.kernel.org, linux-arch@vger.kernel.org, vulab@iscas.ac.cn, 
+	gregkh@linuxfoundation.org, rafael@kernel.org, dakr@kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+X-Spamd-Result: default: False [-2.16 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13002-lists,linux-mips=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,vger.kernel.org,kudzu.us,lwn.net,gmail.com,linux.ibm.com,google.com,davemloft.net,redhat.com,alpha.franken.de,ellerman.id.au,lunn.ch,garyguo.net,protonmail.com,umich.edu,linux-foundation.org,posteo.de,ucw.cz,ti.com,net-swift.com,netfilter.org,mit.edu,suse.de,oracle.com,gondor.apana.org.au,linux.dev,mucse.com,iscas.ac.cn];
-	TO_DN_SOME(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[62];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[enelsonmoore@gmail.com,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	RCPT_COUNT_TWELVE(0.00)[21];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips];
 	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-mips,netdev];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,mail.gmail.com:mid]
-X-Rspamd-Queue-Id: 024097F417
+	RCVD_TLS_LAST(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[chenhuacai@kernel.org,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	TAGGED_FROM(0.00)[bounces-13003-lists,linux-mips=lfdr.de];
+	RCVD_COUNT_FIVE(0.00)[5];
+	DKIM_TRACE(0.00)[kernel.org:+]
+X-Rspamd-Queue-Id: B79E77FB45
 X-Rspamd-Action: no action
 
-On Fri, Jan 23, 2026 at 11:25=E2=80=AFPM Christophe Leroy (CS GROUP)
-<chleroy@kernel.org> wrote:
-> Yes and that's exactly the reason why removing unused IDs will be a probl=
-em.
+Reviewed-by: Huacai Chen <chenhuacai@loongson.cn>
+
+On Wed, Jan 7, 2026 at 5:48=E2=80=AFPM John Garry <john.g.garry@oracle.com>=
+ wrote:
 >
-> Let's take an exemple: some patch adds PCI_DEVICE_ID_ARECA_1682 after
-> PCI_DEVICE_ID_ARECA_1681 in pci_ids.h in the mainline. That patch needs
-> to be backported and it conflicts with PCI_VENDOR_ID_S2IO which is not
-> anymore in the mainline but is still in stable.
-
-Hi, Christophe,
-
-I understand your reasoning now. Thanks for clarifying. In my opinion,
-changes to pci_ids.h don't happen often enough for that to be a
-problem. Unused IDs have been removed from it before.
-
-Sincerely,
-Ethan
+> The arch definition of cpumask_of_node() cannot handle NUMA_NO_NODE - whi=
+ch
+> is a valid index - so add a check for this.
+>
+> Signed-off-by: John Garry <john.g.garry@oracle.com>
+> ---
+>  arch/loongarch/include/asm/topology.h | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/arch/loongarch/include/asm/topology.h b/arch/loongarch/inclu=
+de/asm/topology.h
+> index f06e7ff25bb7c..6b79d6183085a 100644
+> --- a/arch/loongarch/include/asm/topology.h
+> +++ b/arch/loongarch/include/asm/topology.h
+> @@ -12,7 +12,7 @@
+>
+>  extern cpumask_t cpus_on_node[];
+>
+> -#define cpumask_of_node(node)  (&cpus_on_node[node])
+> +#define cpumask_of_node(node)  ((node) =3D=3D NUMA_NO_NODE ? cpu_all_mas=
+k : &cpus_on_node[node])
+>
+>  struct pci_bus;
+>  extern int pcibus_to_node(struct pci_bus *);
+> --
+> 2.43.5
+>
 
