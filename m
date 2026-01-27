@@ -1,128 +1,151 @@
-Return-Path: <linux-mips+bounces-13009-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13010-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UMIyEHAwd2lVdAEAu9opvQ
-	(envelope-from <linux-mips+bounces-13009-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Jan 2026 10:14:24 +0100
+	id zDjmA7USeGkjnwEAu9opvQ
+	(envelope-from <linux-mips+bounces-13010-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Jan 2026 02:19:49 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B916C85E42
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Jan 2026 10:14:23 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 592158EA6B
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Jan 2026 02:19:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 149BE30238F1
-	for <lists+linux-mips@lfdr.de>; Mon, 26 Jan 2026 09:10:13 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 936043013691
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Jan 2026 01:19:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7950B3033C0;
-	Mon, 26 Jan 2026 09:10:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="g7UBSaQX"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14ED0239E7D;
+	Tue, 27 Jan 2026 01:19:46 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 568843002B3;
-	Mon, 26 Jan 2026 09:10:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2F0A1FF1B5;
+	Tue, 27 Jan 2026 01:19:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769418612; cv=none; b=PREIO7F8ejd573hlBjARYsdKsQ9JWyj8rHZrrRV0ZD2LgSmXBQnPHzPoRUIGVR0uzh1u+BRnygJXQHiYIcHEaZZUNwG0rdPKmen9IH3Cc01ozN6vO1Z3+S7Wc65cxuUdUncP+GVy3ufjdHGGAoLgedERCfMD+/oUbJrJ/aqhJSc=
+	t=1769476786; cv=none; b=Cu4z22h5TArDV7YOWUjeh2l1SZgIZk6hzBDfxDJQDCMeYu/vbovw8J5awEV1iGX0CP3uN7uet1y0mQHAiJ+ld95trSaxK17Fmj7ySAUdd8PajHp1tEQTMnf53/ck66tAJKCuI7hArro3R0gQy4DLWFoKz+ytShQ5fwbj/3wrFWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769418612; c=relaxed/simple;
-	bh=70Coq37tNuAOmdc8T4bFtPfgSfptlkbCGyRHWMoIVtg=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=eUZ3Sjrvl7TAhnMxolmW0c0kzBahp/B3td3dLLgJlpzv7a9jcPa9HMYBNrB7A+RqvWuGF1yByieaak8IMXChi4+gb+U3qLbOYaU6hxFyEWUrpQXd5XUpE9JzgRZLQPmzAeG1U8odesOVj7n/f4fI1fKS30ZTuP146vE1GpkjLe8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=g7UBSaQX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CFB4C116C6;
-	Mon, 26 Jan 2026 09:10:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769418612;
-	bh=70Coq37tNuAOmdc8T4bFtPfgSfptlkbCGyRHWMoIVtg=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=g7UBSaQXiTV/6aYU0u6iERp4Jn6mn9mZi2D6mTIduZP3Br5px8g9sHMt8ad180Vzz
-	 5ZYHT9JWvkQoi9HtzvMDpax7ULdfjJBMi/mW+ANfW9gRC7KQd4REkv5fXgqc1CZnu3
-	 SDRSVeLXjlpfy5tKxBb0qfvPF879gjyzFmvis67OFEwyd56z2sXfha0owUBA96CcCp
-	 YLDAEykesLtlQYM5mSo17oOqP+vgr1ZUwB4nSViYheJE8NOUoVlvF1NCg7m7i1xc8D
-	 jVA54gqW5ZThNglRmCpErlJWwG1Q4IYN+z+ZhlcgdUgGkhj6kgr1E5I2lwXBNVpPVl
-	 9TMtX8vHYJ3bA==
-From: Thomas Gleixner <tglx@kernel.org>
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: LKML <linux-kernel@vger.kernel.org>, "Paul E. McKenney"
- <paulmck@kernel.org>, John Stultz <jstultz@google.com>, Waiman Long
- <longman@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Daniel
- Lezcano <daniel.lezcano@linaro.org>, Stephen Boyd <sboyd@kernel.org>,
- x86@kernel.org, "Gautham R. Shenoy" <gautham.shenoy@amd.com>, Jiri Wiesner
- <jwiesner@suse.de>, Daniel J Blueman <daniel@quora.org>, Scott Hamilton
- <scott.hamilton@eviden.com>, Helge Deller <deller@gmx.de>,
- linux-parisc@vger.kernel.org, Thomas Bogendoerfer
- <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org
-Subject: Re: [patch 2/5] MIPS: Dont select CLOCKSOURCE_WATCHDOG
-In-Reply-To: <alpine.DEB.2.21.2601242221580.6421@angie.orcam.me.uk>
-References: <20260123230651.688818373@kernel.org>
- <20260123231521.723433371@kernel.org>
- <alpine.DEB.2.21.2601242221580.6421@angie.orcam.me.uk>
-Date: Mon, 26 Jan 2026 10:10:08 +0100
-Message-ID: <87ms20d9jj.ffs@tglx>
+	s=arc-20240116; t=1769476786; c=relaxed/simple;
+	bh=ssCiDavxKEbwZwVsjiEsnnR//r40IO9WyiCR/IKIQwg=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=tPXS0nAM2gcDjy7eD6b101Cg4JZHQOE6bvJyV5ExyGyqyW8q6tzixlhrnNr5ynylbbl306I/MriDn+/cdt1FQVyY+6JAl3Ryl1FNEoiJVUhT/RWSkUrit/X+L5pENJSt47JY8GBsuWpw08UGKFqNTJ+RK9pcj80u0UkEwznfMwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id 5922092009C; Tue, 27 Jan 2026 02:19:34 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id 5181F92009B;
+	Tue, 27 Jan 2026 01:19:34 +0000 (GMT)
+Date: Tue, 27 Jan 2026 01:19:34 +0000 (GMT)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+cc: netdev@vger.kernel.org, linux-doc@vger.kernel.org, 
+    linux-pci@vger.kernel.org, linux-mips@vger.kernel.org, 
+    linux-s390@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, 
+    Linas Vepstas <linasvepstas@gmail.com>, 
+    Mahesh J Salgaonkar <mahesh@linux.ibm.com>, 
+    Oliver O'Halloran <oohall@gmail.com>, Bjorn Helgaas <bhelgaas@google.com>, 
+    "David S. Miller" <davem@davemloft.net>, 
+    Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>, 
+    Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, 
+    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+    Madhavan Srinivasan <maddy@linux.ibm.com>, 
+    Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+    "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
+    Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+    Alexander Gordeev <agordeev@linux.ibm.com>, 
+    Christian Borntraeger <borntraeger@linux.ibm.com>, 
+    Sven Schnelle <svens@linux.ibm.com>, Andrew Lunn <andrew+netdev@lunn.ch>, 
+    Andrew Morton <akpm@linux-foundation.org>, 
+    =?UTF-8?Q?Martin_Kepplinger-Novakovi=C4=87?= <martink@posteo.de>, 
+    Pavel Machek <pavel@ucw.cz>, MD Danish Anwar <danishanwar@ti.com>, 
+    Mengyuan Lou <mengyuanlou@net-swift.com>, 
+    Pablo Neira Ayuso <pablo@netfilter.org>, Takashi Iwai <tiwai@suse.de>, 
+    Huacai Chen <chenhuacai@kernel.org>, Theodore Ts'o <tytso@mit.edu>, 
+    Eric Biggers <ebiggers@google.com>, 
+    Madadi Vineeth Reddy <vineethr@linux.ibm.com>, 
+    Shrikanth Hegde <sshegde@linux.ibm.com>, 
+    Geert Uytterhoeven <geert@linux-m68k.org>, 
+    Ard Biesheuvel <ardb@kernel.org>, 
+    "Martin K. Petersen" <martin.petersen@oracle.com>, 
+    Frederic Barrat <fbarrat@linux.ibm.com>, 
+    Andrew Donnellan <ajd@linux.ibm.com>, 
+    Herbert Xu <herbert@gondor.apana.org.au>, 
+    Konstantin Shkolnyy <kshk@linux.ibm.com>, 
+    Vadim Fedorenko <vadim.fedorenko@linux.dev>, 
+    Lorenzo Bianconi <lorenzo@kernel.org>, 
+    Lukas Bulwahn <lukas.bulwahn@redhat.com>, Dong Yibo <dong100@mucse.com>, 
+    Heiner Kallweit <hkallweit1@gmail.com>, Thomas Gleixner <tglx@kernel.org>, 
+    Ingo Molnar <mingo@kernel.org>, Lukas Wunner <lukas@wunner.de>, 
+    Giovanni Cabiddu <giovanni.cabiddu@intel.com>
+Subject: Re: [PATCH net-next v2] net: ethernet: neterion: s2io: remove unused
+ driver
+In-Reply-To: <20260126031352.22997-1-enelsonmoore@gmail.com>
+Message-ID: <alpine.DEB.2.21.2601270110590.40317@angie.orcam.me.uk>
+References: <20260126031352.22997-1-enelsonmoore@gmail.com>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=US-ASCII
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.84 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
+X-Spamd-Result: default: False [0.04 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13009-lists,linux-mips=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[17];
+	TAGGED_FROM(0.00)[bounces-13010-lists,linux-mips=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,google.com,redhat.com,infradead.org,linaro.org,amd.com,suse.de,quora.org,eviden.com,gmx.de,alpha.franken.de];
-	RCVD_COUNT_THREE(0.00)[4];
-	MISSING_XM_UA(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[vger.kernel.org,lwn.net,gmail.com,linux.ibm.com,google.com,davemloft.net,kernel.org,redhat.com,alpha.franken.de,ellerman.id.au,lunn.ch,linux-foundation.org,posteo.de,ucw.cz,ti.com,net-swift.com,netfilter.org,suse.de,mit.edu,linux-m68k.org,oracle.com,gondor.apana.org.au,linux.dev,mucse.com,wunner.de,intel.com];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	DMARC_NA(0.00)[orcam.me.uk];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.999];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[tglx@kernel.org,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-mips];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	FROM_HAS_DN(0.00)[];
 	TO_DN_SOME(0.00)[];
-	FROM_HAS_DN(0.00)[]
-X-Rspamd-Queue-Id: B916C85E42
+	RCVD_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[macro@orcam.me.uk,linux-mips@vger.kernel.org];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCPT_COUNT_GT_50(0.00)[55];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-mips,netdev];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 592158EA6B
 X-Rspamd-Action: no action
 
-On Sat, Jan 24 2026 at 22:28, Maciej W. Rozycki wrote:
-> On Sat, 24 Jan 2026, Thomas Gleixner wrote:
->
->> MIPS selects CLOCKSOURCE_WATCHDOG, but none of the clocksources actually
->> sets the MUST_VERIFY flag. So compiling the watchdog in is a pointless
->> exercise. Remove the selects.
->
->  Based on commit 385864280597 ("mips: csrc-r4k: Mark R4K timer as unstable 
-> if CPU freq changes") which added some of this stuff shouldn't the flag be 
-> set instead?
->
->  At first glance the situation seems analogous to that of the x86 TSC: 
-> just as the TSC the R4k timer is a CPU onchip free-running counter driven 
-> by the CPU clock (typically at half the rate).
+On Sun, 25 Jan 2026, Ethan Nelson-Moore wrote:
 
-On x86 the CPU frequency can be modified by the BIOS behind the kernels
-back, so the watchdog is required to catch this situation. So R4K only
-needs the watchdog when there is some magic going on even when the
-kernel itself does not manage the CPU frequency.
+> The s2io driver supports Exar (formerly Neterion and S2io) PCI-X 10
+> Gigabit Ethernet cards. Hardware supporting PCI-X has not been
+> manufactured in years. On x86, it was quickly replaced by PCIe. While
+> it stuck around longer on POWER hardware, the last POWER hardware to
+> support it was POWER7, which is not supported by ppc64le Linux
+> distributions. The last supported mainstream ppc64 Linux distribution
+> was RHEL 7; while it is still supported under ELS, ELS is only
+> available for x86 and IBM Z. It is possible to use many PCI-X cards in
+> standard PCI slots (which are still available on new motherboards), but
+> it does not make sense to do so for 10 Gigabit Ethernet because the
+> maximum bandwidth of standard PCI is only 1067 Mbps. It is therefore
 
-Thanks,
+ However 64-bit PCI at 66MHz will let you reach 4 times as much.  Also 
+PCI-X can be bridged from PCIe or HT.
 
-        tglx
+> highly unlikely that this driver is still being used. Remove the
+> driver, and move the former maintainer to the CREDITS file (restoring
+> credit for the vxge driver, which was removed in commit f05643a0f60b
+> ("eth: remove neterion/vxge").
+
+ How do you know it's not used?  What's the gain from removing a driver 
+unless say it's broken and does not build?
+
+  Maciej
 
