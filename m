@@ -1,197 +1,192 @@
-Return-Path: <linux-mips+bounces-13034-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13035-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OG+VNlIGeWk3ugEAu9opvQ
-	(envelope-from <linux-mips+bounces-13034-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Jan 2026 19:39:14 +0100
+	id UCklDDgkeWnmvgEAu9opvQ
+	(envelope-from <linux-mips+bounces-13035-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Jan 2026 21:46:48 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BD2B993C2
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Jan 2026 19:39:14 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65B2E9A713
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Jan 2026 21:46:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 594323066885
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Jan 2026 18:35:52 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 52A7E301DEE9
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Jan 2026 20:46:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB2C8326D75;
-	Tue, 27 Jan 2026 18:35:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24E7E2877F7;
+	Tue, 27 Jan 2026 20:46:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="PFrp9aEN"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD1492EA159;
-	Tue, 27 Jan 2026 18:35:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D400B28727D;
+	Tue, 27 Jan 2026 20:46:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769538950; cv=none; b=uAijtHq85Wyh0Zz2tV1vnQqYUA60HlcXqv1pPLEAbkGpQWos0XJD0po1UPEskcZTyDKFPooc4j9Gff0Ytu5HUeCajAIgDkgd/xJBg0d8KolklOH3L7/t7oR30DZqDqvmXXZyhaMkreBIcd7OyMN1+vuzFuVMnLSmu7FlJJhTLO8=
+	t=1769546805; cv=none; b=smuyXjGhqCyDsr1bHFjhP3UGo7VXw/S6pesmW7xDvsQjhY+1qgvTdUZGzxZh6V4lfUkAaQTVxHQ+F2LXAAXXIg94hhXviqTIiUAgYOOb0kLPYEraAKuRgMnmvtSBC21fTvwGJECiDShCUsHAwGww83NgZmXouqmP+kecmB5JLaw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769538950; c=relaxed/simple;
-	bh=JVkaCkXEPP9rJREsfqJ+MsShNTr1X42+rnTiGEB+b7A=;
-	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=kMNkzANLqN38ZqolvJtCK221PRNsMTjRtSVzILgvjqLMjJMskG6+73pAD4Je2CeaRsWk4q8Z/Yy6Yh8XZEt9c6FMQtlaQ9IwypoB9JqSKCXq1BTNkBnAVparFEDXgoweCF4BKXMgx44TfEB1wSGndZ3yr7XBnufIeMcA2B77vwQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
-Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id B757A92009C; Tue, 27 Jan 2026 19:35:45 +0100 (CET)
-Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id B37C892009B;
-	Tue, 27 Jan 2026 18:35:45 +0000 (GMT)
-Date: Tue, 27 Jan 2026 18:35:45 +0000 (GMT)
-From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-cc: netdev@vger.kernel.org, linux-mips@vger.kernel.org, 
-    Jakub Kicinski <kuba@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>, 
-    "David S. Miller" <davem@davemloft.net>, 
-    Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH net-next v2] declance: Remove IRQF_ONESHOT
-In-Reply-To: <20260127165430.7ui_LGkg@linutronix.de>
-Message-ID: <alpine.DEB.2.21.2601271739250.40317@angie.orcam.me.uk>
-References: <20260127135334.qUEaYP9G@linutronix.de> <alpine.DEB.2.21.2601271508160.40317@angie.orcam.me.uk> <20260127165430.7ui_LGkg@linutronix.de>
-User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
+	s=arc-20240116; t=1769546805; c=relaxed/simple;
+	bh=dPe4WO5V5xGcqbRrtLSrAnb6cZI7NA2TSDIlxEHcMg0=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=cY78r2aw1u30xMZeSq9X16/l1n2pWX9d64xv+P7N1XdwRWF62BdSWIP89tF4v38fDGfZ+Dh+hi6fxzO6iAD/ms6VIrSs+1Nd4Lx08NnpWpyW8HSEQrw0aE+mCCn58afRCvIGce7ayXqHnNnqIhlxj9vmNR3K0gXa3+Srmd73f8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=PFrp9aEN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id ABA31C116C6;
+	Tue, 27 Jan 2026 20:46:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1769546804;
+	bh=dPe4WO5V5xGcqbRrtLSrAnb6cZI7NA2TSDIlxEHcMg0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=PFrp9aENn8GkO3oMV5uU3fw/sDFm4fOIgmG6lOGNP6rxP54wuO7jQTZJOTnpGqGTk
+	 NB3Sv2FHYDDBA3dsblyvixrcw3tZ4kXXeRIcFlqab7TMCcctx5uC+lfxG1L0MdwWzA
+	 L7gQdZ4FA8nw9mzJUh2KfWM9LIGY8FgBJ+uk9/GM=
+Date: Tue, 27 Jan 2026 12:46:42 -0800
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Qi Zheng <qi.zheng@linux.dev>
+Cc: david@kernel.org, andreas@gaisler.com, richard.weiyang@gmail.com,
+ will@kernel.org, peterz@infradead.org, aneesh.kumar@kernel.org,
+ npiggin@gmail.com, dev.jain@arm.com, ioworker0@gmail.com,
+ linmag7@gmail.com, linux-arch@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+ linux-alpha@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linux-um@lists.infradead.org, sparclinux@vger.kernel.org, Qi Zheng
+ <zhengqi.arch@bytedance.com>
+Subject: Re: [PATCH v4 0/8] enable PT_RECLAIM on more 64-bit architectures
+Message-Id: <20260127124642.480123beb01ebb487f986a09@linux-foundation.org>
+In-Reply-To: <cover.1769515122.git.zhengqi.arch@bytedance.com>
+References: <cover.1769515122.git.zhengqi.arch@bytedance.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+Mime-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.04 / 15.00];
+X-Spamd-Result: default: False [0.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	MV_CASE(0.50)[];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	R_DKIM_ALLOW(-0.20)[linux-foundation.org:s=korg];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13034-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13035-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DMARC_NA(0.00)[orcam.me.uk];
-	FROM_NEQ_ENVFROM(0.00)[macro@orcam.me.uk,linux-mips@vger.kernel.org];
-	TAGGED_RCPT(0.00)[linux-mips,netdev];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	TO_DN_SOME(0.00)[];
+	DMARC_NA(0.00)[linux-foundation.org];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	RCPT_COUNT_TWELVE(0.00)[21];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[kernel.org,gaisler.com,gmail.com,infradead.org,arm.com,vger.kernel.org,kvack.org,lists.linux.dev,lists.infradead.org,bytedance.com];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	MID_RHS_MATCH_FROM(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[akpm@linux-foundation.org,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[linux-foundation.org:+];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	R_DKIM_NA(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,orcam.me.uk:email,angie.orcam.me.uk:mid]
-X-Rspamd-Queue-Id: 3BD2B993C2
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 65B2E9A713
 X-Rspamd-Action: no action
 
-On Tue, 27 Jan 2026, Sebastian Andrzej Siewior wrote:
+On Tue, 27 Jan 2026 20:12:53 +0800 Qi Zheng <qi.zheng@linux.dev> wrote:
 
-> >  Umm, are they?  It's been a while, but have I missed anything?  As I 
-> > recall ->irq_mask() is called exactly so that interrupts can be re-enabled 
-> > at the CPU level right way so as not to block other sources which may have 
-> > a low latency requirement while a hardirq handler is running.
+> This series aims to enable PT_RECLAIM on more 64-bit architectures.
+
+Thanks, I updated mm.git's mm-unstable branch to v4.
+
+> Changes in v4:
+>  - convert __HAVE_ARCH_TLB_REMOVE_TABLE to CONFIG_HAVE_ARCH_TLB_REMOVE_TABLE config
+>  - fix a WARN_ON_ONCE() on sparc64 (and on ppc)
+>    (reported by Andreas Larsson)
+>  - collect Acked-by (Hi David, I've kept your Acked-by, feel free to drop it)
+>  - rebase onto the v6.19-rc7
 > 
-> A hardirq is always serviced with disabled interrupts from CPU point of
-> view. There were exceptions in the IDE department as far as I remember
-> where it was possible to enable interrupts from CPUs point of view while
-> the interrupt was serviced. That was 2.2/2.4 time frame and edge
-> interrupts made it possible.
 
- Fair enough.
+Below is how v4 altered mm.git.
 
-> It is not required to mask the interrupt while the handler is invoked
-> unless it is required to properly ACK the interrupt from device's and
-> IRQ-chip point of view.
-> The sole purpose of IRQF_ONESHOT was to disable the interrupt source
-> while the threaded interrupt is running. This driver has none.
+I'm not seeing the WARN_ON_ONCE() fix.  I assume that was due to the
+Kconfig alterations?
 
- Ack.
 
-> >  Since this is a level-triggered interrupt unmasking it before the EOI 
-> > will make it retrigger right away and loop forever.  And as the 
-> > description of commit 0fabe1021f8b ("MIPS: DECstation I/O ASIC DMA 
-> > interrupt classes") says the interrupt must not be acked before EOI, as 
-> > the problematic transfer would restart while the IRQ handler is still 
-> > running:
-> 
-> If it is a level interrupt and MASK/ACK in the irq-chip then the device
-> will issue the interrupt again if the source of the interrupt (i.e. the
-> error) has not been solved. Since the handler does only a printk() it
-> should trigger again.
 
- It won't retrigger, as a memory read error event is transient, e.g. a bus 
-timeout or an uncorrected ECC error, and the resulting interrupt is only 
-recorded internally in the IOASIC.  IOW, the interrupt is edge-triggered 
-and the interrupt status bit is *the* origin of the outgoing interrupt to 
-the CPU.  Once cleared the IRQ is gone until the next error happens.  But 
-it cannot be cleared early as with ordinary edge-triggered interrupts, 
-because of the dual function of the interrupt status bit, as described in 
-the comment referring IRQF_ONESHOT in arch/mips/dec/ioasic-irq.c.
+--- a/arch/powerpc/include/asm/tlb.h~b
++++ a/arch/powerpc/include/asm/tlb.h
+@@ -37,7 +37,6 @@ extern void tlb_flush(struct mmu_gather
+  */
+ #define tlb_needs_table_invalidate()	radix_enabled()
+ 
+-#define __HAVE_ARCH_TLB_REMOVE_TABLE
+ /* Get the generic bits... */
+ #include <asm-generic/tlb.h>
+ 
+--- a/arch/powerpc/Kconfig~b
++++ a/arch/powerpc/Kconfig
+@@ -305,6 +305,7 @@ config PPC
+ 	select LOCK_MM_AND_FIND_VMA
+ 	select MMU_GATHER_PAGE_SIZE
+ 	select MMU_GATHER_RCU_TABLE_FREE
++	select HAVE_ARCH_TLB_REMOVE_TABLE
+ 	select MMU_GATHER_MERGE_VMAS
+ 	select MMU_LAZY_TLB_SHOOTDOWN		if PPC_BOOK3S_64
+ 	select MODULES_USE_ELF_RELA
+--- a/arch/sparc/include/asm/tlb_64.h~b
++++ a/arch/sparc/include/asm/tlb_64.h
+@@ -33,7 +33,6 @@ void flush_tlb_pending(void);
+ #define tlb_needs_table_invalidate()	(false)
+ #endif
+ 
+-#define __HAVE_ARCH_TLB_REMOVE_TABLE
+ #include <asm-generic/tlb.h>
+ 
+ #endif /* _SPARC64_TLB_H */
+--- a/arch/sparc/Kconfig~b
++++ a/arch/sparc/Kconfig
+@@ -74,6 +74,7 @@ config SPARC64
+ 	select HAVE_KRETPROBES
+ 	select HAVE_KPROBES
+ 	select MMU_GATHER_RCU_TABLE_FREE if SMP
++	select HAVE_ARCH_TLB_REMOVE_TABLE if SMP
+ 	select MMU_GATHER_MERGE_VMAS
+ 	select MMU_GATHER_NO_FLUSH_CACHE
+ 	select HAVE_ARCH_TRANSPARENT_HUGEPAGE
+--- a/include/asm-generic/tlb.h~b
++++ a/include/asm-generic/tlb.h
+@@ -213,7 +213,7 @@ struct mmu_table_batch {
+ #define MAX_TABLE_BATCH		\
+ 	((PAGE_SIZE - sizeof(struct mmu_table_batch)) / sizeof(void *))
+ 
+-#ifndef __HAVE_ARCH_TLB_REMOVE_TABLE
++#ifndef CONFIG_HAVE_ARCH_TLB_REMOVE_TABLE
+ static inline void __tlb_remove_table(void *table)
+ {
+ 	struct ptdesc *ptdesc = (struct ptdesc *)table;
+--- a/mm/Kconfig~b
++++ a/mm/Kconfig
+@@ -1448,9 +1448,12 @@ config ARCH_HAS_USER_SHADOW_STACK
+ 	  The architecture has hardware support for userspace shadow call
+           stacks (eg, x86 CET, arm64 GCS or RISC-V Zicfiss).
+ 
++config HAVE_ARCH_TLB_REMOVE_TABLE
++	def_bool n
++
+ config PT_RECLAIM
+ 	def_bool y
+-	depends on MMU_GATHER_RCU_TABLE_FREE
++	depends on MMU_GATHER_RCU_TABLE_FREE && !HAVE_ARCH_TLB_REMOVE_TABLE
+ 	help
+ 	  Try to reclaim empty user page table pages in paths other than munmap
+ 	  and exit_mmap path.
+_
 
- FWIW it seems at the very least the handler ought to report the offending 
-address and rate-limit the message.  Since this is a networking driver the 
-resulting data corruption is probably OK as that can happen to transferred 
-data anywhere en route and it's up to the high-level receiver to cope with 
-that.  Given that it is outgoing data there's little that can be done too.  
-Maybe the whole data transfer can be aborted, but I'm not familiar enough 
-with LANCE hardware to know off-hand how to do that.  As I say, this is 
-exceedingly rare an event, so I guess taking the path of least resistance 
-make sense.
-
-> > 16 R/W0C LANCE DMA memory read error
-> >          This bit is set to 1 and DMA disabled, when the LANCE DMA
-> >          encounters a memory read error. The LANCE then times out and
-> >          interrupts the processor, which handles the problem. The LPR can
-> >          read the address of the error. The bit may be cleared by writing a 0;
-> >          writing a 1 has no effect.
-> > 
-> > so a combined ACK-EOI is the only correct way to handle it.
-> 
-> Make sense. So first the driver needs to set this bit and then IRQ-chip
-> would need to see the EOI after the handler run. You would still need to
-> cancel/ tear down the transfer before that.
-
- This is R/W0C, that is read/write-zero-to-clear.  Only hardware can set 
-the bit to 1 and only software can set the bit to 0; any attempt made by 
-software to flip the bit from 0 to 1 is ignored.  This guarantees write 
-atomicity: you can ack any DMA interrupt(s) by just a single 32-bit write 
-to the register with no need to read it first.
-
- Upon a DMA error the hardware writes 1, which asserts the IRQ and stops 
-DMA.  Only having handled the situation the handler is supposed to write 
-0, which deasserts the IRQ and resumes DMA.
-
- FAOD the IOASIC has IRQ and (third-party) DMA controller features both on 
-chip, providing for the double function of the DMA interrupt status bits; 
-they are all handled internally.  Non-DMA interrupts work the usual way: 
-when the originating external device has deasserted its IRQ line, the 
-corresponding interrupt status bit, which is R/O rather than R/W0C, gets 
-cleared accordingly, deasserting the IOASIC's IRQ output for the CPU.
-
-> >  Yes, the handler is sort of a placeholder, but the structure of handling 
-> > ought to be correct regardless.
-> > 
-> >  One issue here is this is a recovery handler for an error scenario that 
-> > is not supposed to happen with a correctly operating system.  I've never 
-> > seen it actually fire, which is also why there's no actual recovery action 
-> > implemented.  Perhaps such an error could be induced for verification 
-> > purposes, I don't know.  All in all this code may have to rely solely on 
-> > hw specs.
-> > 
-> >  I need more data to conclude whether this is the right change to make I'm 
-> > afraid.  Thank you for looking into it though.
-> 
-> Fair enough. Would it work for you if we scratch this from net-next and
-> you route this or something else via the mips tree?
-
- No need to, I think I understand the situation now.  Surely the comment 
-referring IRQF_ONESHOT in arch/mips/dec/ioasic-irq.c needs to be removed, 
-but otherwise this is:
-
-Acked-by: Maciej W. Rozycki <macro@orcam.me.uk>
-
-Thank you for clarifying this to me, and doing the clean-up in the first 
-place!
-
-  Maciej
 
