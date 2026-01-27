@@ -1,189 +1,282 @@
-Return-Path: <linux-mips+bounces-13024-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13025-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wHc2GdLteGk6uAEAu9opvQ
-	(envelope-from <linux-mips+bounces-13024-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Jan 2026 17:54:42 +0100
+	id QMvFC3zxeGmGuAEAu9opvQ
+	(envelope-from <linux-mips+bounces-13025-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Jan 2026 18:10:20 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5762098072
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Jan 2026 17:54:37 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id A22C0983A2
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Jan 2026 18:10:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B9EDC301D076
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Jan 2026 16:54:35 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 1BD34300B99D
+	for <lists+linux-mips@lfdr.de>; Tue, 27 Jan 2026 17:09:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 590BB362135;
-	Tue, 27 Jan 2026 16:54:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 369613624B9;
+	Tue, 27 Jan 2026 17:09:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="H6dCryx1";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="blUgooW0"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="0YKLmkCm"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C00AE31328C;
-	Tue, 27 Jan 2026 16:54:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 099BD34F48C;
+	Tue, 27 Jan 2026 17:09:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769532875; cv=none; b=Uz5GZ5Pc91g0eoHlRwJw12wAU7vJk8lUHSKHrp5eDx3V5ckPKHAz8c7jC9dWWH8Z4j0Opp4GVTSxWFvz6ywQ5NaYn9mTWZkinQ+Z/rwQuRfCjsfIbYhcPnKupJIdKXmgnt4Cc+oZ882T8YQ4TwY/l22yoMNq+xo+s7EbC2reNtg=
+	t=1769533781; cv=none; b=LnjLJDsitac0fXOrN47CdFnkStAGc4I+e4fs9NPEyqMN1BknC2abqwzY8RhPDgxIeimi35Qo3RC7Ru0OhUnNjQGRR5Od/ZQVCF8Wp/zRg+E4qD6p3Gvnk7aI6Wgj1pntdvjpqefaC7GO7nwRmavweIqmJPq54UTSWwH3kXRfeiI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769532875; c=relaxed/simple;
-	bh=jJeGr3AEZZLhwBUcqwXf18TUbomahmCrVv+XKeQ1/JE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NWu9B/tSgUCDNU6p4oZE+brufMDWhig7y3zkp+oaB9CvivWW3PQexM6Ij28jZCyVd/ZWPq2uXqH0s9RARMsxDAxXHWhiOUvQicJkrGwcDUgcfPr/4/mTnIdklZERbRAvoRMUNQPN/IEs2A2TKBZceCps3dhDq+RgM7SYGZZH3ak=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=H6dCryx1; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=blUgooW0; arc=none smtp.client-ip=193.142.43.55
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
-Date: Tue, 27 Jan 2026 17:54:30 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1769532871;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=N7fcR1AvKm3ql6k8caDYfB9Iq3Onn9HmlZ0agYF2W0A=;
-	b=H6dCryx16kkd3zKXDMGtnq6nmXV7yCGqVJjtlsMV9TXay0d8Fwb7GARB6kbHyNVubcva2M
-	+FMj3hPSgDIKSwc8WL+6sKQ4ver6KHsAsxxG1Gvag+8011S5Bh9KtJPOM96h91CyjH5rUa
-	lHCILMOO9McLVwTuVGlY/myP6f/Dj6ezNhwR5mY4Pi7AR0Cw9GJUnQGAf85CLCXSduGqS6
-	Ao9Rs2nCHd5mKDiuhaKqn4YoYtTuxbFOreWlqKCOentGqLV//SbWD3YQz7BAjsLO3dgWV7
-	ujQh6rkwUU8/5idc05hlVoJ5exVcReIU7dvUOmRsLBDi0TFccbu9Pl3nYMn4qA==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1769532871;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=N7fcR1AvKm3ql6k8caDYfB9Iq3Onn9HmlZ0agYF2W0A=;
-	b=blUgooW0SrS3sXg0n7sBI1McAfFwdRJ6Ox8O+sCzjZSrJa6u7jUbHZUiYT6oP7XzcEImxL
-	GZbKgeJLFgPQM3Bg==
-From: Sebastian Andrzej Siewior <bigeasy@linutronix.de>
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: netdev@vger.kernel.org, linux-mips@vger.kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Paolo Abeni <pabeni@redhat.com>
-Subject: Re: [PATCH net-next v2] declance: Remove IRQF_ONESHOT
-Message-ID: <20260127165430.7ui_LGkg@linutronix.de>
-References: <20260127135334.qUEaYP9G@linutronix.de>
- <alpine.DEB.2.21.2601271508160.40317@angie.orcam.me.uk>
+	s=arc-20240116; t=1769533781; c=relaxed/simple;
+	bh=NubZnecZnkvp6ZJAITtFBvz3k1y+RVSeCCVQn9KFPcE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=fP2BqOIozMTS86x4lKq52ak1WT5EjjCmSGG5A6C5BZemlHMwiJ8Dn7saOfM2+bd7AqRRjtAXyy+bAVwZhxYgnIjrRF0AqHwnONrWftdWOOxicfbR44ULV1qhiMiZpRALHR2KrKDs1E1NLeNUDtX4NMHdf6AhiZtjdsXM38mDBIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=0YKLmkCm; arc=none smtp.client-ip=185.171.202.116
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-04.galae.net (Postfix) with ESMTPS id 40509C211C6;
+	Tue, 27 Jan 2026 17:09:39 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id E54DE606F5;
+	Tue, 27 Jan 2026 17:09:36 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 060AE119A8696;
+	Tue, 27 Jan 2026 18:09:30 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1769533775; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding; bh=cb8JTW51tEAAL3YsAmU++TZYGVfsW7jvVhSBEQLhIiE=;
+	b=0YKLmkCm845QEkg69rx5AG82RE4DpOFzdKQqT/lqRxxQDo7Jr4kCTBX6XRPqmkFffQDTE/
+	TzMsfnrzyAYlhlIElzF5cXmqh4WeoAYRLhPubJXs6yAao41wdHUe3/gvZLk/FxWUl7xTh/
+	Ts7LwvY86ArPr/btTu3QWZZnGVSdykro4w+BcB2zEVhPJonul41/YMjgQ/x/j0l0Sd14ys
+	d7y6iJxElzGvQmgTzJ0p9Ts/M6Np0U10nJx7jP+0rdVNw7itUXqI0qL85VkLFVgNsA1XeP
+	ZwaQ0Nbz7MxqnGDQ8VSBjFms03w8gbV9SfcB39F44AZrvpdJ9Vwyo9uDB72r2A==
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: [PATCH v6 0/8] Add generic PHY driver used by MACB/GEM on EyeQ5
+Date: Tue, 27 Jan 2026 18:09:28 +0100
+Message-Id: <20260127-macb-phy-v6-0-cdd840588188@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2601271508160.40317@angie.orcam.me.uk>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/23MwY7CIBDG8VcxnGXTGaAtnvY9Nh4GGCyJFtOaR
+ mP67otexOjxm8zvfxczT4lnsdvcxcRLmlMey2i3G+EHGg8sUyhbYIMGGkR5Iu/kebhJBOc1Q4j
+ OdaK8nyeO6fpM/e3LHtJ8ydPtWV7gcf0SWUA2MqKN2EfiDuHX5Xw5pvHH55N4ZBZ8UWigolioB
+ wOWOUIb1CdVFQVbUVUoW+ocQ9+S+kJ1RVFXVBdqjfEtGuqBuk9qXhTBVNQUSjZEJmUDKf1O13X
+ 9BwDegTGOAQAA
+X-Change-ID: 20251022-macb-phy-21bc4e1dfbb7
+To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
+ =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
+ Kishon Vijay Abraham I <kishon@kernel.org>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Neil Armstrong <neil.armstrong@linaro.org>
+Cc: linux-mips@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org, 
+ linux-clk@vger.kernel.org, 
+ =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>, 
+ Tawfik Bayouk <tawfik.bayouk@mobileye.com>, 
+ Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Luca Ceresoli <luca.ceresoli@bootlin.com>, 
+ =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
+ Conor Dooley <conor.dooley@microchip.com>, 
+ Jerome Brunet <jbrunet@baylibre.com>, Andrew Lunn <andrew@lunn.ch>
+X-Mailer: b4 0.14.3
+X-Last-TLS-Session-Version: TLSv1.3
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[linutronix.de,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[linutronix.de:s=2020,linutronix.de:s=2020e];
+	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
+	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13024-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13025-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[3];
-	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[linutronix.de:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	MISSING_XM_UA(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bigeasy@linutronix.de,linux-mips@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips,netdev];
-	RCPT_COUNT_SEVEN(0.00)[8];
+	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[25];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[bootlin.com:+];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 5762098072
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[theo.lebrun@bootlin.com,linux-mips@vger.kernel.org];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-mips,dt];
+	MID_RHS_MATCH_FROM(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[bootlin.com:email,bootlin.com:dkim,bootlin.com:mid,2a00000:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: A22C0983A2
 X-Rspamd-Action: no action
 
-On 2026-01-27 15:46:10 [+0000], Maciej W. Rozycki wrote:
-> On Tue, 27 Jan 2026, Sebastian Andrzej Siewior wrote:
-> 
-> > The IRQF_ONESHOT flag was added in commit 0fabe1021f8bc ("MIPS:
-> > DECstation I/O ASIC DMA interrupt classes"). It moved
-> > clear_ioasic_dma_irq() from the driver into the irq-chip.
-> > For EOI interrupts the clear_ioasic_dma_irq() callback is now invoked as
-> > ->irq_eoi() which is invoked after the IRQ was handled while the
-> > interrupt is masked due to IRQF_ONESHOT. Without IRQF_ONESHOT it would
-> > be invoked while interrupt is unmasked (but interrupts are disabled).
-> 
->  Umm, are they?  It's been a while, but have I missed anything?  As I 
-> recall ->irq_mask() is called exactly so that interrupts can be re-enabled 
-> at the CPU level right way so as not to block other sources which may have 
-> a low latency requirement while a hardirq handler is running.
+EyeQ5 SoCs integrate two GEM instances. A system-controller register
+region named "OLB" has some control over the Ethernet PHY integration.
 
-A hardirq is always serviced with disabled interrupts from CPU point of
-view. There were exceptions in the IDE department as far as I remember
-where it was possible to enable interrupts from CPUs point of view while
-the interrupt was serviced. That was 2.2/2.4 time frame and edge
-interrupts made it possible.
+Past iterations [0] touched those syscon registers directly from MACB.
+It was a bad idea. Extend the current OLB ecosystem with a new generic
+PHY driver.
+ - OLB is carried by one main platform driver: clk-eyeq.
+ - It instantiates auxiliary devices: reset-eyeq & pinctrl-eyeq5.
+ - We add a new one: phy-eyeq5-eth.
 
-It is not required to mask the interrupt while the handler is invoked
-unless it is required to properly ACK the interrupt from device's and
-IRQ-chip point of view.
-The sole purpose of IRQF_ONESHOT was to disable the interrupt source
-while the threaded interrupt is running. This driver has none.
+I always find devicetree the simplest way to understand device
+interactions, so here is a DT overview:
 
-> > If it is *required* to invoke EOI-ack while the interrupt is masked (and
-> > not a misunderstanding) due to irq-chip cascading/ hierarchical reasons
-> > then using handle_fasteoi_mask_irq() as flow-handler would be the right
-> > way to do so.
-> 
->  Since this is a level-triggered interrupt unmasking it before the EOI 
-> will make it retrigger right away and loop forever.  And as the 
-> description of commit 0fabe1021f8b ("MIPS: DECstation I/O ASIC DMA 
-> interrupt classes") says the interrupt must not be acked before EOI, as 
-> the problematic transfer would restart while the IRQ handler is still 
-> running:
+    olb: system-controller@e00000 {
+            compatible = "mobileye,eyeq5-olb", "syscon";
+            reg = <0 0xe00000 0x0 0x400>;
+            // ...
+            #reset-cells = <2>;
+            #clock-cells = <1>;
+            #phy-cells = <1>; // <- this is new
+    };
 
-If it is a level interrupt and MASK/ACK in the irq-chip then the device
-will issue the interrupt again if the source of the interrupt (i.e. the
-error) has not been solved. Since the handler does only a printk() it
-should trigger again.
+    macb0: ethernet@2a00000 {
+            compatible = "mobileye,eyeq5-gem";
+            phys = <&olb 0>; // <- GEM device consumes the PHY
+            // ...
+    };
 
-> 16 R/W0C LANCE DMA memory read error
->          This bit is set to 1 and DMA disabled, when the LANCE DMA
->          encounters a memory read error. The LANCE then times out and
->          interrupts the processor, which handles the problem. The LPR can
->          read the address of the error. The bit may be cleared by writing a 0;
->          writing a 1 has no effect.
-> 
-> so a combined ACK-EOI is the only correct way to handle it.
+    macb1: ethernet@2b00000 {
+            compatible = "mobileye,eyeq5-gem";
+            phys = <&olb 1>; // <- same thing for the second instance
+            // ...
+    };
 
-Make sense. So first the driver needs to set this bit and then IRQ-chip
-would need to see the EOI after the handler run. You would still need to
-cancel/ tear down the transfer before that.
+The Linux MACB driver already consumes a generic PHY for some other
+compatibles, this is nothing new. The MACB series [1] has been merged
+in v6.19-rc1.
 
-Again, with the interrupt handler setup as-is lance_dma_merr_int() will
-run with disabled interrupts.
+--
 
->  Yes, the handler is sort of a placeholder, but the structure of handling 
-> ought to be correct regardless.
-> 
->  One issue here is this is a recovery handler for an error scenario that 
-> is not supposed to happen with a correctly operating system.  I've never 
-> seen it actually fire, which is also why there's no actual recovery action 
-> implemented.  Perhaps such an error could be induced for verification 
-> purposes, I don't know.  All in all this code may have to rely solely on 
-> hw specs.
-> 
->  I need more data to conclude whether this is the right change to make I'm 
-> afraid.  Thank you for looking into it though.
+About merging, Philipp Zabel gave his ACK for [5/7] to go into
+linux-clk. The split is:
 
-Fair enough. Would it work for you if we scratch this from net-next and
-you route this or something else via the mips tree?
+ - [PATCH 1/7] dt-bindings: soc: mobileye: OLB is an Ethernet PHY provider on EyeQ5
+   [PATCH 6/7] MIPS: mobileye: eyeq5: add two Cadence GEM Ethernet controllers
+   [PATCH 7/7] MIPS: mobileye: eyeq5-epm: add two Cadence GEM Ethernet PHYs
+   => linux-mips
 
->   Maciej
+ - [PATCH 2/7] phy: Add driver for EyeQ5 Ethernet PHY wrapper
+   => linux-phy
 
-Sebastian
+ - [PATCH 3/7] clk: eyeq: use the auxiliary device creation helper
+   [PATCH 4/7] clk: eyeq: add EyeQ5 children auxiliary device for generic PHYs
+   [PATCH 5/7] reset: eyeq: drop device_set_of_node_from_dev() done by parent
+   => linux-clk
+
+Any objections to get it in before the next merge window?
+The new PHY driver has only seen tiny changes since V1.
+
+Have a nice day,
+Thanks!
+Théo
+
+[0]: https://lore.kernel.org/lkml/20250627-macb-v2-15-ff8207d0bb77@bootlin.com/
+[1]: https://lore.kernel.org/lkml/20251022-macb-eyeq5-v2-0-7c140abb0581@bootlin.com/
+
+Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+---
+Changes in v6:
+- Rebase upon v6.19-rc7; nothing to report.
+- Add new patch "phy: sort Kconfig and Makefile".
+- phy-eyeq5-eth: drop useless explicit __iomem cast to
+  dev_get_platdata() return value.
+- I did *not* drop the Kconfig `default MACH_EYEQ5` nor driver
+  `dev_dbg()`. I think both are useful and should be kept. See
+  last revision discussion here:
+  https://lore.kernel.org/lkml/DFGSMN8268O0.33TYCQDBVHUHZ@bootlin.com/
+- Link to v5: https://lore.kernel.org/r/20251215-macb-phy-v5-0-a9dfea39da34@bootlin.com
+
+Changes in v5:
+- phy-eyeq5-eth:
+  - fix #includes: add delay, gfp_types, module and drop array_size,
+    bug, cleanup, container_of, lockdep, mutex.
+  - eq5_phy_xlate(): avoid magic value, use EQ5_PHY_COUNT.
+  - use dev_err_probe() in error cases of devm_phy_create() and
+    devm_of_phy_provider_register().
+- 3x Reviewed-by: Luca Ceresoli.
+- Add Neil Armstrong to Cc as new PHY subsystem reviewer.
+- Rebase on v6.19-rc1, tested on hardware, no changes.
+- Link to v4: https://lore.kernel.org/r/20251124-macb-phy-v4-0-955c625a81a7@bootlin.com
+
+Changes in v4:
+- Append my SoB to Jerome's patch:
+  [PATCH v4 3/7] clk: eyeq: use the auxiliary device creation helper
+- Rebase on net-next & linux-{clk,mips,phy}. Nothing to report.
+- Link to v3: https://lore.kernel.org/r/20251119-macb-phy-v3-0-e9a7be186a33@bootlin.com
+
+Changes in v3:
+- Take Philipp Zabel's Reviewed-by & Acked-by trailers on reset patch.
+- Take Thomas Bogendoerfer's two Acked-by trailers on DT patches.
+- Rebase on net-next & test on target. Nothing to report.
+- Link to v2: https://lore.kernel.org/r/20251101-macb-phy-v2-0-c1519eef16d3@bootlin.com
+
+Changes in v2:
+- Take Acked-by: Conor Dooley on dt-bindings-patch.
+- s/%ld/%tu/ for printing ptrdiff_t; warnings on 32-bit archs.
+  Reported by NIPA's netdev/build_32bit test.
+  https://patchwork.kernel.org/project/netdevbpf/patch/20251021-macb-eyeq5-v1-7-3b0b5a9d2f85@bootlin.com/
+  https://netdev.bots.linux.dev/static/nipa/1014126/14277857/build_32bit/stderr
+- Link to v1: https://lore.kernel.org/r/20251022-macb-phy-v1-0-f29f28fae721@bootlin.com
+
+Changes since MACB V1:
+- Drop the old "mobileye,olb" properties from DT patches; found while
+  running dtbs_check and dt_binding_check.
+- Drop all patches targeting net-next. That is MACB dt-bindings patch
+  and MACB driver code. See there here [1].
+- Link to v1: https://lore.kernel.org/lkml/20251021-macb-eyeq5-v1-0-3b0b5a9d2f85@bootlin.com/
+
+Past versions of MACB patches:
+ - March 2025: [PATCH net-next 00/13] Support the Cadence MACB/GEM
+   instances on Mobileye EyeQ5 SoCs
+   https://lore.kernel.org/lkml/20250321-macb-v1-0-537b7e37971d@bootlin.com/
+ - June 2025: [PATCH net-next v2 00/18] Support the Cadence MACB/GEM
+   instances on Mobileye EyeQ5 SoCs
+   https://lore.kernel.org/lkml/20250627-macb-v2-0-ff8207d0bb77@bootlin.com/
+ - August 2025: [PATCH net v3 00/16] net: macb: various fixes & cleanup
+   https://lore.kernel.org/lkml/20250808-macb-fixes-v3-0-08f1fcb5179f@bootlin.com/
+
+---
+Jerome Brunet (1):
+      clk: eyeq: use the auxiliary device creation helper
+
+Théo Lebrun (7):
+      dt-bindings: soc: mobileye: OLB is an Ethernet PHY provider on EyeQ5
+      phy: sort Kconfig and Makefile
+      phy: Add driver for EyeQ5 Ethernet PHY wrapper
+      clk: eyeq: add EyeQ5 children auxiliary device for generic PHYs
+      reset: eyeq: drop device_set_of_node_from_dev() done by parent
+      MIPS: mobileye: eyeq5: add two Cadence GEM Ethernet controllers
+      MIPS: mobileye: eyeq5-epm: add two Cadence GEM Ethernet PHYs
+
+ .../bindings/soc/mobileye/mobileye,eyeq5-olb.yaml  |   7 +-
+ MAINTAINERS                                        |   1 +
+ arch/mips/boot/dts/mobileye/eyeq5-epm5.dts         |  26 +++
+ arch/mips/boot/dts/mobileye/eyeq5.dtsi             |  45 ++++
+ drivers/clk/clk-eyeq.c                             |  60 ++---
+ drivers/phy/Kconfig                                |  75 ++++---
+ drivers/phy/Makefile                               |   7 +-
+ drivers/phy/phy-eyeq5-eth.c                        | 249 +++++++++++++++++++++
+ drivers/reset/reset-eyeq.c                         |  24 +-
+ 9 files changed, 392 insertions(+), 102 deletions(-)
+---
+base-commit: aaae99475aaae1373d8bbdef6105e8ad2d4c75af
+change-id: 20251022-macb-phy-21bc4e1dfbb7
+
+Best regards,
+-- 
+Théo Lebrun <theo.lebrun@bootlin.com>
+
 
