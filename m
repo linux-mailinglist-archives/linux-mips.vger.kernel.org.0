@@ -1,53 +1,53 @@
-Return-Path: <linux-mips+bounces-13038-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13039-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IMsvDb0Eemlg1gEAu9opvQ
-	(envelope-from <linux-mips+bounces-13038-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Jan 2026 13:44:45 +0100
+	id 8NrJAfcEemlE1gEAu9opvQ
+	(envelope-from <linux-mips+bounces-13039-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Jan 2026 13:45:43 +0100
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8580DA1724
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Jan 2026 13:44:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 79C8AA17AD
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Jan 2026 13:45:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EA989300D300
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Jan 2026 12:43:59 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 97B8A30480EE
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Jan 2026 12:44:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9728D3502A6;
-	Wed, 28 Jan 2026 12:43:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7762F33F8C1;
+	Wed, 28 Jan 2026 12:44:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="O6iijq1U"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Oyf3ex5H"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7206B34FF70;
-	Wed, 28 Jan 2026 12:43:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 538FC13DDAE
+	for <linux-mips@vger.kernel.org>; Wed, 28 Jan 2026 12:44:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769604239; cv=none; b=hreaDKshBGhSW6Havk6EQb8tzj0v0T1A7eXBYFvqgz9ed1nbHn9ZLz05vGu46BYDrYc48xjcv+bV57xBDwaMhShTq0Xm/Eyrd7EyXDF1wHue4a+OiN+GAmYjlC82C+xO5aazv41f4pex9LgCHbYAEsdmxjHC/WiA23Dct76CM0c=
+	t=1769604265; cv=none; b=hQpk53Ibei2m30ASuzZGXliBgJCOQDSrYIecC/FQlU/HY6jjzrDE9yK/1EP86pIHZP0gNz1bXfsRqbfwhA7PtpV3+1W0k8aEGhDd45ByktTlftQdAi5+Cl20nSFpbR+p/tDl8G/9bir2veEaBI7h0JLQygXmR5KlDrs1ZSSVsR0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769604239; c=relaxed/simple;
-	bh=21o7Sk1LvcwFGTtlndbPMNt9Skdhx9N7m/IPcsY4r4I=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=dwo5Uhuv7S5NEVJBanJ9vGXx2YNKwd//r3f2ODYgZqaQdYgz6E11mB2OvBqrquULiC8kS8dmm5ZWQx3s7Va+JYHTe6aMj6/UXKDqft0G7jGTh7LQyccVsW/X04gs/GrWAhK5uHopj3PCn0ChKo3Z0u0YHj2TU6/lghBAZS9QBy8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=O6iijq1U; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8B149C4CEF1;
-	Wed, 28 Jan 2026 12:43:58 +0000 (UTC)
+	s=arc-20240116; t=1769604265; c=relaxed/simple;
+	bh=VXCiYzHy7nSv04/kjM9P2ZRVAoNaL8fo/ZIuYPOGdw0=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=eL+HnIQtKYYcfxf0yMnMzNXewLk30mxxQ0zeoXH4fJsVY2Ir6rdbqk4iB6XfBVFEVB8gybBplMACM70bJ0K/fEwLXOwaWVpgeKRAwy6CHIjYJePxllsXFpfkWxItE6f6Ci8/PzQ0jRGd3j1X5QUU3TpxPc9AuwfVPv7uh4FNugM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Oyf3ex5H; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9DE5EC116C6;
+	Wed, 28 Jan 2026 12:44:24 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769604239;
-	bh=21o7Sk1LvcwFGTtlndbPMNt9Skdhx9N7m/IPcsY4r4I=;
-	h=From:Subject:Date:To:Cc:From;
-	b=O6iijq1UXavDudl1Ma5LeKPtHarFTnU/sK32yJaRS7mIMrId2lF0cw1JHdrnfQHkj
-	 MRkIe6i4+u1fUkn1jg6nemXkpkFlAoV0/+vGwjf8AMLCYGU+3VVHL71uZmok3f9J6B
-	 czeoykWTutBy2D+kCQ2xJtF3B518S7HZaFgZCkLK3GGgCv5KFdcXSuf8UCqU3OSDdi
-	 SfRO79j+EYDNT48nW4wYBwRvxVT1631IxTFcShVnBAdSaL70QbLmIt5cLFWKYlRNNh
-	 G4pDbEuS9P+6gOxEBp2mJhQh7U6X7L0sZF4qTecGT+MiUNUJNQ/tIEC0Pouyt1OJKP
-	 6v7l7JqjMEZRg==
+	s=k20201202; t=1769604265;
+	bh=VXCiYzHy7nSv04/kjM9P2ZRVAoNaL8fo/ZIuYPOGdw0=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=Oyf3ex5HXnPYgU/AEpFm1QwVva3l59Nh/8uVpqeeekK8/iZ8QOA191zZjvcGcHkx7
+	 tC8SZlQc9zisZ+SfhLzelYh7XvUUL5vXtZytze0HerZtzbduEz2q0gCyOEMX2FarCY
+	 8HvMoa5jH2C+r8Mm/VMXrv+vIXsf5HdG2JUuzJt56aV2ol7V98EWVFT+dipm2CP5L9
+	 pIMAiJLgU5iIhiDDzSYNlBOWQWH9Fh2tMhkdeOhkG3XMzX71hNl2hZxmF3zDK3AfiC
+	 W+flgI79WnGadZbivHH8OOJgQYKY/Tv07R5YnZW/m13pcJPKH4Wr80aDBQ8yo7rdf8
+	 yw5yK3rIaiDGQ==
 From: Maxime Ripard <mripard@kernel.org>
-Subject: [PATCH v4 00/15] drm/atomic: Allocate drm_private_state through a
- callback
-Date: Wed, 28 Jan 2026 13:43:44 +0100
-Message-Id: <20260128-drm-private-obj-reset-v4-0-90891fa3d3b0@redhat.com>
+Date: Wed, 28 Jan 2026 13:43:53 +0100
+Subject: [PATCH v4 09/15] drm/ingenic: Switch private_obj initialization to
+ atomic_create_state
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -56,161 +56,235 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/4XN0WoCMRCF4VeRXDeSSTbrbq98j+LFrDm60bqRy
- RJaZN+9USgUinj5H5hvbipDIrJ6X92UoMQc01SjeVup/cjTETqG2soa68mYTge56KvEwjN0Gk5
- akDFrBsFuGjJ2w6reXgWH+PVwP3a1x5jnJN+PN4Xu6yuxkDa6M56HxjFaz9szZMLnOslR3cli/
- zDUPGNsZdoQWoO+8+jDP8b9Mq0h6p8xrjJD74gHOPZwW0EYeV7v00XtlmX5AZ8rZlVJAQAA
-X-Change-ID: 20251008-drm-private-obj-reset-ae1e2741027a
+Message-Id: <20260128-drm-private-obj-reset-v4-9-90891fa3d3b0@redhat.com>
+References: <20260128-drm-private-obj-reset-v4-0-90891fa3d3b0@redhat.com>
+In-Reply-To: <20260128-drm-private-obj-reset-v4-0-90891fa3d3b0@redhat.com>
 To: Maarten Lankhorst <maarten.lankhorst@linux.intel.com>, 
  Thomas Zimmermann <tzimmermann@suse.de>, David Airlie <airlied@gmail.com>, 
  Simona Vetter <simona@ffwll.ch>
 Cc: dri-devel@lists.freedesktop.org, Maxime Ripard <mripard@kernel.org>, 
- =?utf-8?q?Ville_Syrj=C3=A4l=C3=A4?= <ville.syrjala@linux.intel.com>, 
- Dmitry Baryshkov <dmitry.baryshkov@oss.qualcomm.com>, 
- Andrzej Hajda <andrzej.hajda@intel.com>, 
- Neil Armstrong <neil.armstrong@linaro.org>, Robert Foss <rfoss@kernel.org>, 
- Laurent Pinchart <Laurent.pinchart@ideasonboard.com>, 
- Jonas Karlman <jonas@kwiboo.se>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
- Harry Wentland <harry.wentland@amd.com>, Leo Li <sunpeng.li@amd.com>, 
- Rodrigo Siqueira <siqueira@igalia.com>, 
- Alex Deucher <alexander.deucher@amd.com>, 
- =?utf-8?q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>, 
- amd-gfx@lists.freedesktop.org, Liviu Dudau <liviu.dudau@arm.com>, 
- Paul Cercueil <paul@crapouillou.net>, linux-mips@vger.kernel.org, 
- Rob Clark <robin.clark@oss.qualcomm.com>, 
- Dmitry Baryshkov <lumag@kernel.org>, 
- Abhinav Kumar <abhinav.kumar@linux.dev>, Sean Paul <sean@poorly.run>, 
- Marijn Suijten <marijn.suijten@somainline.org>, 
- linux-arm-msm@vger.kernel.org, freedreno@lists.freedesktop.org, 
- Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>, 
- Thierry Reding <thierry.reding@gmail.com>, 
- Mikko Perttunen <mperttunen@nvidia.com>, 
- Jonathan Hunter <jonathanh@nvidia.com>, linux-tegra@vger.kernel.org, 
- Dave Stevenson <dave.stevenson@raspberrypi.com>, 
- =?utf-8?q?Ma=C3=ADra_Canal?= <mcanal@igalia.com>, 
- kernel-list@raspberrypi.com, Jessica Zhang <jesszhan0024@gmail.com>
+ Paul Cercueil <paul@crapouillou.net>, linux-mips@vger.kernel.org
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4027; i=mripard@redhat.com;
- h=from:subject:message-id; bh=21o7Sk1LvcwFGTtlndbPMNt9Skdhx9N7m/IPcsY4r4I=;
- b=owGbwMvMwCmsHn9OcpHtvjLG02pJDJlVLK32mTpTgmL9V12Jc+9d9CrJKaYuRyXpl7e10lSJE
- i/hnzs6prIwCHMyyIopsjyRCTu9vH1xlYP9yh8wc1iZQIYwcHEKwES+RDI2rDN7Ucwd3Tf/fPAM
- zh2dbQa+2ts3sD70ZWUI+8kUcjZAqfP71hsTuQ9k9i6JL3fbGD6bseGH6oeZExYrTXgkLn7rg/G
- Sv/a8xl9r/yuxMzFxX/f/sKLswid+111tjU1N/zflPfnPtxIA
+X-Developer-Signature: v=1; a=openpgp-sha256; l=6401; i=mripard@redhat.com;
+ h=from:subject:message-id; bh=VXCiYzHy7nSv04/kjM9P2ZRVAoNaL8fo/ZIuYPOGdw0=;
+ b=owGbwMvMwCmsHn9OcpHtvjLG02pJDJlVLJ1mpX4hJ/Z8UpZ2i8pyME+vnWAzvYz7veG2u8wG2
+ Ut7l3l2TGVhEOZkkBVTZHkiE3Z6efviKgf7lT9g5rAygQxh4OIUgInsi2Ks01k1Jb9+74wQicCd
+ fzTtlvx7evobo/dfx0WHEvyWHInVOL+OY+3KXdNCH+9rWLStMYjtBmN9lV3Z2ZXOsU2n8iUFStc
+ 9v7/vS9vzl9+FV+89/fXfi32aFywUzxou85vxb6n6eiH1DNEUAA==
 X-Developer-Key: i=mripard@redhat.com; a=openpgp;
  fpr=BE5675C37E818C8B5764241C254BCFC56BF6CE8D
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13038-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_TO(0.00)[linux.intel.com,suse.de,gmail.com,ffwll.ch];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	RCPT_COUNT_TWELVE(0.00)[39];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-13039-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[linux.intel.com,suse.de,gmail.com,ffwll.ch];
+	MIME_TRACE(0.00)[0:+];
 	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[mripard@kernel.org,linux-mips@vger.kernel.org];
-	FREEMAIL_CC(0.00)[lists.freedesktop.org,kernel.org,linux.intel.com,oss.qualcomm.com,intel.com,linaro.org,ideasonboard.com,kwiboo.se,gmail.com,amd.com,igalia.com,arm.com,crapouillou.net,vger.kernel.org,linux.dev,poorly.run,somainline.org,nvidia.com,raspberrypi.com];
-	TAGGED_RCPT(0.00)[linux-mips];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 8580DA1724
+	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-mips];
+	RCPT_COUNT_SEVEN(0.00)[8];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[crapouillou.net:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 79C8AA17AD
 X-Rspamd-Action: no action
 
-Hi,
+The ingenic driver relies on two drm_private_objs, that are initialized
+by allocating and initializing a state, and then passing it to
+drm_private_obj_init.
 
-This series started from my work on the hardware state readout[1], and
-was suggested by Dmitry[2].
-
-This series deal with the fact that drm_private_obj (and thus bridges)
-are not initialized using the same pattern than any other object. This
-series solves that inconsistency by aligning it to what we're doing for
-all the other objects.
-
-This was tested on a TI SK-AM62, with three bridges.
-
-Let me know what you think,
-Maxime
-
-1: https://lore.kernel.org/dri-devel/20250902-drm-state-readout-v1-0-14ad5315da3f@kernel.org/
-2: https://lore.kernel.org/dri-devel/zvqtehg66dbrrdmik6ylo2kdk74umfzo5hbfkizwsb352nlyqv@jgouvmbfwa4x/
+Since we're gradually moving away from that pattern to the more
+established one relying on a atomic_create_state implementation, let's
+migrate this instance to the new pattern.
 
 Signed-off-by: Maxime Ripard <mripard@kernel.org>
+Acked-by: Paul Cercueil <paul@crapouillou.net>
 ---
-Changes in v4:
-- Fix a circular dependencies between modules by calling
-  __drm_atomic_helper_private_obj_create_state from
-  __drm_atomic_helper_bridge_reset instead of
-  drm_bridge_atomic_create_priv_state()
-- Link to v3: https://lore.kernel.org/r/20260119-drm-private-obj-reset-v3-0-b931abe3a5e3@redhat.com
 
-Changes in v3:
-- EDITME: describe what is new in this series revision.
-- EDITME: use bulletpoints and terse descriptions.
-- Link to v2: https://lore.kernel.org/r/20251014-drm-private-obj-reset-v2-0-6dd60e985e9d@kernel.org
-
-Changes in v2:
-- Switch to a new hook instead of reset since some drm_private_objs want
-  to persist across suspends
-- Drop the call to drm_private_obj_funcs.reset in
-  drm_mode_config_reset()
-- Link to v1: https://lore.kernel.org/r/20251008-drm-private-obj-reset-v1-0-805ab43ae65a@kernel.org
-
+Cc: Paul Cercueil <paul@crapouillou.net>
+Cc: linux-mips@vger.kernel.org
 ---
-Maxime Ripard (15):
-      drm/atomic: Make drm_atomic_private_obj_init fallible
-      drm/atomic: Add new atomic_create_state callback to drm_private_obj
-      drm/atomic-helper: Add private_obj atomic_create_state helper
-      drm/bridge: Switch private_obj initialization to atomic_create_state
-      drm/dp_mst: Switch private_obj initialization to atomic_create_state
-      drm/dp_tunnel: Switch private_obj initialization to atomic_create_state
-      drm/amdgpu: Switch private_obj initialization to atomic_create_state
-      drm/arm: komeda: Switch private_obj initialization to atomic_create_state
-      drm/ingenic: Switch private_obj initialization to atomic_create_state
-      drm/msm: mdp5: Switch private_obj initialization to atomic_create_state
-      drm/msm: dpu1: Switch private_obj initialization to atomic_create_state
-      drm/omapdrm: Switch private_obj initialization to atomic_create_state
-      drm/tegra: Switch private_obj initialization to atomic_create_state
-      drm/vc4: Switch private_obj initialization to atomic_create_state
-      drm/atomic: Remove state argument to drm_atomic_private_obj_init
+ drivers/gpu/drm/ingenic/ingenic-drm-drv.c | 28 +++++++++++++++++-----------
+ drivers/gpu/drm/ingenic/ingenic-ipu.c     | 28 ++++++++++++++++------------
+ 2 files changed, 33 insertions(+), 23 deletions(-)
 
- drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c  |  51 ++---
- .../gpu/drm/arm/display/komeda/komeda_pipeline.h   |   2 +
- .../drm/arm/display/komeda/komeda_private_obj.c    | 208 ++++++++++++++-------
- drivers/gpu/drm/display/drm_dp_mst_topology.c      |  36 ++--
- drivers/gpu/drm/display/drm_dp_tunnel.c            |  25 ++-
- drivers/gpu/drm/drm_atomic.c                       |  22 ++-
- drivers/gpu/drm/drm_atomic_state_helper.c          |  23 +++
- drivers/gpu/drm/drm_bridge.c                       |  30 +--
- drivers/gpu/drm/ingenic/ingenic-drm-drv.c          |  28 +--
- drivers/gpu/drm/ingenic/ingenic-ipu.c              |  28 +--
- drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c            |  41 ++--
- drivers/gpu/drm/msm/disp/mdp5/mdp5_kms.c           |  40 ++--
- drivers/gpu/drm/omapdrm/omap_drv.c                 |  22 ++-
- drivers/gpu/drm/tegra/hub.c                        |  22 ++-
- drivers/gpu/drm/vc4/vc4_kms.c                      |  67 ++++---
- include/drm/drm_atomic.h                           |  20 +-
- include/drm/drm_atomic_state_helper.h              |   3 +
- 17 files changed, 436 insertions(+), 232 deletions(-)
----
-base-commit: 68b271a3a94cfd6c7695a96b6398b52feb89e2c2
-change-id: 20251008-drm-private-obj-reset-ae1e2741027a
+diff --git a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+index d3213fbf22be14b177fc1b7100c5b721d5f17924..862691991ed2770d30342bf531e828e34bd7080a 100644
+--- a/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
++++ b/drivers/gpu/drm/ingenic/ingenic-drm-drv.c
+@@ -952,10 +952,24 @@ static void ingenic_drm_destroy_state(struct drm_private_obj *obj,
+ 	struct ingenic_drm_private_state *priv_state = to_ingenic_drm_priv_state(state);
+ 
+ 	kfree(priv_state);
+ }
+ 
++static struct drm_private_state *
++ingenic_drm_create_state(struct drm_private_obj *obj)
++{
++	struct ingenic_drm_private_state *priv_state;
++
++	priv_state = kzalloc(sizeof(*priv_state), GFP_KERNEL);
++	if (!priv_state)
++		return ERR_PTR(-ENOMEM);
++
++	__drm_atomic_helper_private_obj_create_state(obj, &priv_state->base);
++
++	return &priv_state->base;
++}
++
+ DEFINE_DRM_GEM_DMA_FOPS(ingenic_drm_fops);
+ 
+ static const struct drm_driver ingenic_drm_driver_data = {
+ 	.driver_features	= DRIVER_MODESET | DRIVER_GEM | DRIVER_ATOMIC,
+ 	.name			= "ingenic-drm",
+@@ -1032,10 +1046,11 @@ static const struct drm_mode_config_funcs ingenic_drm_mode_config_funcs = {
+ static struct drm_mode_config_helper_funcs ingenic_drm_mode_config_helpers = {
+ 	.atomic_commit_tail = drm_atomic_helper_commit_tail,
+ };
+ 
+ static const struct drm_private_state_funcs ingenic_drm_private_state_funcs = {
++	.atomic_create_state = ingenic_drm_create_state,
+ 	.atomic_duplicate_state = ingenic_drm_duplicate_state,
+ 	.atomic_destroy_state = ingenic_drm_destroy_state,
+ };
+ 
+ static void ingenic_drm_unbind_all(void *d)
+@@ -1085,11 +1100,10 @@ static void ingenic_drm_atomic_private_obj_fini(struct drm_device *drm, void *pr
+ }
+ 
+ static int ingenic_drm_bind(struct device *dev, bool has_components)
+ {
+ 	struct platform_device *pdev = to_platform_device(dev);
+-	struct ingenic_drm_private_state *private_state;
+ 	const struct jz_soc_info *soc_info;
+ 	struct ingenic_drm *priv;
+ 	struct clk *parent_clk;
+ 	struct drm_plane *primary;
+ 	struct drm_bridge *bridge;
+@@ -1385,23 +1399,17 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
+ 	if (ret) {
+ 		dev_err(dev, "Unable to register clock notifier\n");
+ 		goto err_devclk_disable;
+ 	}
+ 
+-	private_state = kzalloc(sizeof(*private_state), GFP_KERNEL);
+-	if (!private_state) {
+-		ret = -ENOMEM;
+-		goto err_clk_notifier_unregister;
+-	}
+-
+-	drm_atomic_private_obj_init(drm, &priv->private_obj, &private_state->base,
++	drm_atomic_private_obj_init(drm, &priv->private_obj, NULL,
+ 				    &ingenic_drm_private_state_funcs);
+ 
+ 	ret = drmm_add_action_or_reset(drm, ingenic_drm_atomic_private_obj_fini,
+ 				       &priv->private_obj);
+ 	if (ret)
+-		goto err_private_state_free;
++		goto err_clk_notifier_unregister;
+ 
+ 	ret = drm_dev_register(drm, 0);
+ 	if (ret) {
+ 		dev_err(dev, "Failed to register DRM driver\n");
+ 		goto err_clk_notifier_unregister;
+@@ -1409,12 +1417,10 @@ static int ingenic_drm_bind(struct device *dev, bool has_components)
+ 
+ 	drm_client_setup(drm, NULL);
+ 
+ 	return 0;
+ 
+-err_private_state_free:
+-	kfree(private_state);
+ err_clk_notifier_unregister:
+ 	clk_notifier_unregister(parent_clk, &priv->clock_nb);
+ err_devclk_disable:
+ 	if (priv->lcd_clk)
+ 		clk_disable_unprepare(priv->lcd_clk);
+diff --git a/drivers/gpu/drm/ingenic/ingenic-ipu.c b/drivers/gpu/drm/ingenic/ingenic-ipu.c
+index 32638a713241abbd4eaed09f0aaec2b790650cc9..253a1ce30997308547b61339468d52e6875785d3 100644
+--- a/drivers/gpu/drm/ingenic/ingenic-ipu.c
++++ b/drivers/gpu/drm/ingenic/ingenic-ipu.c
+@@ -748,11 +748,26 @@ static void ingenic_ipu_destroy_state(struct drm_private_obj *obj,
+ 	struct ingenic_ipu_private_state *priv_state = to_ingenic_ipu_priv_state(state);
+ 
+ 	kfree(priv_state);
+ }
+ 
++static struct drm_private_state *
++ingenic_ipu_create_state(struct drm_private_obj *obj)
++{
++	struct ingenic_ipu_private_state *priv_state;
++
++	priv_state = kzalloc(sizeof(*priv_state), GFP_KERNEL);
++	if (!priv_state)
++		return ERR_PTR(-ENOMEM);
++
++	__drm_atomic_helper_private_obj_create_state(obj, &priv_state->base);
++
++	return &priv_state->base;
++}
++
+ static const struct drm_private_state_funcs ingenic_ipu_private_state_funcs = {
++	.atomic_create_state = ingenic_ipu_create_state,
+ 	.atomic_duplicate_state = ingenic_ipu_duplicate_state,
+ 	.atomic_destroy_state = ingenic_ipu_destroy_state,
+ };
+ 
+ static irqreturn_t ingenic_ipu_irq_handler(int irq, void *arg)
+@@ -791,11 +806,10 @@ static const struct regmap_config ingenic_ipu_regmap_config = {
+ };
+ 
+ static int ingenic_ipu_bind(struct device *dev, struct device *master, void *d)
+ {
+ 	struct platform_device *pdev = to_platform_device(dev);
+-	struct ingenic_ipu_private_state *private_state;
+ 	const struct soc_info *soc_info;
+ 	struct drm_device *drm = d;
+ 	struct drm_plane *plane;
+ 	struct ingenic_ipu *ipu;
+ 	void __iomem *base;
+@@ -885,24 +899,14 @@ static int ingenic_ipu_bind(struct device *dev, struct device *master, void *d)
+ 	if (err) {
+ 		dev_err(dev, "Unable to prepare clock\n");
+ 		return err;
+ 	}
+ 
+-	private_state = kzalloc(sizeof(*private_state), GFP_KERNEL);
+-	if (!private_state) {
+-		err = -ENOMEM;
+-		goto err_clk_unprepare;
+-	}
+-
+-	drm_atomic_private_obj_init(drm, &ipu->private_obj, &private_state->base,
++	drm_atomic_private_obj_init(drm, &ipu->private_obj, NULL,
+ 				    &ingenic_ipu_private_state_funcs);
+ 
+ 	return 0;
+-
+-err_clk_unprepare:
+-	clk_unprepare(ipu->clk);
+-	return err;
+ }
+ 
+ static void ingenic_ipu_unbind(struct device *dev,
+ 			       struct device *master, void *d)
+ {
 
-Best regards,
 -- 
-Maxime Ripard <mripard@redhat.com>
+2.52.0
 
 
