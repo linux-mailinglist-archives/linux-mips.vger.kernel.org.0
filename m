@@ -1,146 +1,210 @@
-Return-Path: <linux-mips+bounces-13036-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13037-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id AA6SCrxQeWnYwQEAu9opvQ
-	(envelope-from <linux-mips+bounces-13036-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Jan 2026 00:56:44 +0100
+	id uEozFbVveWmIxAEAu9opvQ
+	(envelope-from <linux-mips+bounces-13037-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Jan 2026 03:08:53 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE5939B8B0
-	for <lists+linux-mips@lfdr.de>; Wed, 28 Jan 2026 00:56:43 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0016A9C264
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Jan 2026 03:08:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 2E46F30431E5
-	for <lists+linux-mips@lfdr.de>; Tue, 27 Jan 2026 23:56:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 60AAF300B440
+	for <lists+linux-mips@lfdr.de>; Wed, 28 Jan 2026 02:07:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8F2E2F6562;
-	Tue, 27 Jan 2026 23:56:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8216284B58;
+	Wed, 28 Jan 2026 02:07:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DMD59OVp"
+	dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b="I3HQOiCH"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from out-186.mta0.migadu.com (out-186.mta0.migadu.com [91.218.175.186])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C35342F39A7;
-	Tue, 27 Jan 2026 23:56:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCB0F284B3B
+	for <linux-mips@vger.kernel.org>; Wed, 28 Jan 2026 02:07:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.186
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769558170; cv=none; b=SmrIlNKjSWIPShIhMGRVuTx8GFYhmaNKtRrM3Kk3L56dSRqNvlQ9ZhE63d32EvHbfPTZ+X5eaqL1OGAvGDpVceAuh4m0/nvJwlqbSsKB+FVs79xvWgwu9V5gZ6KvTpg6OtGsRaxVtDxIA8zO9102VHCwNvKcArQe0SoQM/W9Qp8=
+	t=1769566065; cv=none; b=CmRvc7tD8fyqHo/00vBFIfmyVeNZZcragOyp/XrEwufagorIMULWa4c9qbkf4SJh+OtwmzdbumUV5fcEUsuyB0BGyBMyn5AlwDh5selmULk7P/ZR7PbGg20w5JDGKZny3Xl+G5OCj+8WXqtYyVCtdM/8yxW4z/UcpqHM9llh/pI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769558170; c=relaxed/simple;
-	bh=j7KRe0raHrvtJFDpR+y3ObfH2IMsbuHrS5l2kNpyX/Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lokp4Hlha+Gc33ZNQVk6Wo44WFjSfllvabTOq0I1UjIw1hlB2JZbXiHaCRebaCi6WQbGgEzr1Yx5H0pksaT8v5XfU6oP7b5gL543slLub5vVb3MZy272aZwkAs1e0ygawd7e7igHsoWG+DcX3me3YR0J8nGskeX6T5Gl2o1Hju0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DMD59OVp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F847C116C6;
-	Tue, 27 Jan 2026 23:56:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769558170;
-	bh=j7KRe0raHrvtJFDpR+y3ObfH2IMsbuHrS5l2kNpyX/Q=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=DMD59OVpflIDwQkNqjQ+clVKyGxhb1vAoq4aj0kXeSP8U+WNUd+tg81w7kr+hayZM
-	 vfYHLKxmLFiYqumFrLmcnzUMPtnUh6P9I4QQkajSsaouMUGOkYzGkdrP2Y/i8zfFF1
-	 7vZifsBKatBiDssgLFwCSLw1ydmdJb+aDDcld4NMqH3I9BCyE04xSszi/XKj72DZPg
-	 YuM7fpaweU2oBDs1hrO6/UEhsRfgsxtiNrsZk4bkuiLRgHL7KL2bW0PswNG6j1BrBs
-	 6QEj1tfQiVenBDi8cKntmjB6AIN+MFo9mW0sILE9v6zzk1KraTvy7Xdpzur38sGtUa
-	 a+wyQypx3RA9A==
-Date: Tue, 27 Jan 2026 15:56:07 -0800
-From: Jakub Kicinski <kuba@kernel.org>
-To: "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>, netdev@vger.kernel.org,
- linux-doc@vger.kernel.org, linux-pci@vger.kernel.org,
- linux-mips@vger.kernel.org, linux-s390@vger.kernel.org, Jonathan Corbet
- <corbet@lwn.net>, Linas Vepstas <linasvepstas@gmail.com>, Mahesh J
- Salgaonkar <mahesh@linux.ibm.com>, Oliver O'Halloran <oohall@gmail.com>,
- Bjorn Helgaas <bhelgaas@google.com>, "David S. Miller"
- <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>, Paolo Abeni
- <pabeni@redhat.com>, Simon Horman <horms@kernel.org>, Thomas Bogendoerfer
- <tsbogend@alpha.franken.de>, Madhavan Srinivasan <maddy@linux.ibm.com>,
- Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>,
- "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, Heiko Carstens
- <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, Alexander Gordeev
- <agordeev@linux.ibm.com>, Christian Borntraeger
- <borntraeger@linux.ibm.com>, Sven Schnelle <svens@linux.ibm.com>, Andrew
- Lunn <andrew+netdev@lunn.ch>, Andrew Morton <akpm@linux-foundation.org>,
- Martin =?UTF-8?B?S2VwcGxpbmdlci1Ob3Zha292acSH?= <martink@posteo.de>, Pavel
- Machek <pavel@ucw.cz>, MD Danish Anwar <danishanwar@ti.com>, Mengyuan Lou
- <mengyuanlou@net-swift.com>, Pablo Neira Ayuso <pablo@netfilter.org>,
- Takashi Iwai <tiwai@suse.de>, Huacai Chen <chenhuacai@kernel.org>, Theodore
- Ts'o <tytso@mit.edu>, Eric Biggers <ebiggers@google.com>, Madadi Vineeth
- Reddy <vineethr@linux.ibm.com>, Shrikanth Hegde <sshegde@linux.ibm.com>,
- Geert Uytterhoeven <geert@linux-m68k.org>, Ard Biesheuvel
- <ardb@kernel.org>, "Martin K. Petersen" <martin.petersen@oracle.com>,
- Frederic Barrat <fbarrat@linux.ibm.com>, Andrew Donnellan
- <ajd@linux.ibm.com>, Herbert Xu <herbert@gondor.apana.org.au>, Konstantin
- Shkolnyy <kshk@linux.ibm.com>, Vadim Fedorenko <vadim.fedorenko@linux.dev>,
- Lorenzo Bianconi <lorenzo@kernel.org>, Lukas Bulwahn
- <lukas.bulwahn@redhat.com>, Dong Yibo <dong100@mucse.com>, Heiner Kallweit
- <hkallweit1@gmail.com>, Thomas Gleixner <tglx@kernel.org>, Ingo Molnar
- <mingo@kernel.org>, Lukas Wunner <lukas@wunner.de>, Giovanni Cabiddu
- <giovanni.cabiddu@intel.com>
-Subject: Re: [PATCH net-next v2] net: ethernet: neterion: s2io: remove
- unused driver
-Message-ID: <20260127155607.3f80ec99@kernel.org>
-In-Reply-To: <alpine.DEB.2.21.2601270110590.40317@angie.orcam.me.uk>
-References: <20260126031352.22997-1-enelsonmoore@gmail.com>
-	<alpine.DEB.2.21.2601270110590.40317@angie.orcam.me.uk>
+	s=arc-20240116; t=1769566065; c=relaxed/simple;
+	bh=iKNsG3jb0A1cc8Pzxzt7oiyA3XWv4pR1vlL+x9/L2x4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZJfnABmbroEgLVpnrDM2N0q6OWgiZifxLXPXsRTEVlSYK904RvDUCHE1+1PnpHWTutsEoJapN4P6HqWOjMyjANPsoxpMlp5d/L4L/PXh8g0+GfKoz55Ij5CXhGs9GbduVB7G/hgpI14Eod4joWdOovo7nXcO0UOl7+xbYJ3KGZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev; spf=pass smtp.mailfrom=linux.dev; dkim=pass (1024-bit key) header.d=linux.dev header.i=@linux.dev header.b=I3HQOiCH; arc=none smtp.client-ip=91.218.175.186
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.dev
+Message-ID: <4c171a25-e395-4f83-b767-18525fffbee3@linux.dev>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+	t=1769566051;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=n4t3b1mOfPtHigPq6Z2WHKbf3iNBrW17rXF/iuZKlWU=;
+	b=I3HQOiCHRK+ra8CKqHdI7J6UYtfRC6z7IH9vbCxNEd8HoqK7Tyx5NW2XzLCUbSdOwtEHCJ
+	PrvEUB70GyyRlx7g5xA0Csz7PDTqbdzG32WNgMGufhfuOIaPPVRKNpL+JiU8gfGGSpRv5N
+	IuXL9L87r74XS+4rqkFgpDIaGTmcayA=
+Date: Wed, 28 Jan 2026 10:07:22 +0800
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Subject: Re: [PATCH v4 0/8] enable PT_RECLAIM on more 64-bit architectures
+To: Andrew Morton <akpm@linux-foundation.org>
+Cc: david@kernel.org, andreas@gaisler.com, richard.weiyang@gmail.com,
+ will@kernel.org, peterz@infradead.org, aneesh.kumar@kernel.org,
+ npiggin@gmail.com, dev.jain@arm.com, ioworker0@gmail.com, linmag7@gmail.com,
+ linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-mm@kvack.org, linux-alpha@vger.kernel.org, loongarch@lists.linux.dev,
+ linux-mips@vger.kernel.org, linux-parisc@vger.kernel.org,
+ linux-um@lists.infradead.org, sparclinux@vger.kernel.org,
+ Qi Zheng <zhengqi.arch@bytedance.com>
+References: <cover.1769515122.git.zhengqi.arch@bytedance.com>
+ <20260127124642.480123beb01ebb487f986a09@linux-foundation.org>
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From: Qi Zheng <qi.zheng@linux.dev>
+In-Reply-To: <20260127124642.480123beb01ebb487f986a09@linux-foundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Migadu-Flow: FLOW_OUT
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[linux.dev,none];
+	R_DKIM_ALLOW(-0.20)[linux.dev:s=key1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FREEMAIL_CC(0.00)[gmail.com,vger.kernel.org,lwn.net,linux.ibm.com,google.com,davemloft.net,redhat.com,kernel.org,alpha.franken.de,ellerman.id.au,lunn.ch,linux-foundation.org,posteo.de,ucw.cz,ti.com,net-swift.com,netfilter.org,suse.de,mit.edu,linux-m68k.org,oracle.com,gondor.apana.org.au,linux.dev,mucse.com,wunner.de,intel.com];
-	TAGGED_FROM(0.00)[bounces-13036-lists,linux-mips=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
 	RCVD_TLS_LAST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-13037-lists,linux-mips=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[3];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[55];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[kuba@kernel.org,linux-mips@vger.kernel.org];
+	FREEMAIL_CC(0.00)[kernel.org,gaisler.com,gmail.com,infradead.org,arm.com,vger.kernel.org,kvack.org,lists.linux.dev,lists.infradead.org,bytedance.com];
+	RCPT_COUNT_TWELVE(0.00)[21];
+	MIME_TRACE(0.00)[0:+];
+	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-mips,netdev];
-	MID_RHS_MATCH_FROM(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: AE5939B8B0
+	NEURAL_HAM(-0.00)[-1.000];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[qi.zheng@linux.dev,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[linux.dev:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-mips];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linux.dev:email,linux.dev:dkim,linux.dev:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 0016A9C264
 X-Rspamd-Action: no action
 
-On Tue, 27 Jan 2026 01:19:34 +0000 (GMT) Maciej W. Rozycki wrote:
-> > highly unlikely that this driver is still being used. Remove the
-> > driver, and move the former maintainer to the CREDITS file (restoring
-> > credit for the vxge driver, which was removed in commit f05643a0f60b
-> > ("eth: remove neterion/vxge").  
+
+
+On 1/28/26 4:46 AM, Andrew Morton wrote:
+> On Tue, 27 Jan 2026 20:12:53 +0800 Qi Zheng <qi.zheng@linux.dev> wrote:
 > 
->  How do you know it's not used? 
+>> This series aims to enable PT_RECLAIM on more 64-bit architectures.
+> 
+> Thanks, I updated mm.git's mm-unstable branch to v4.
+> 
+>> Changes in v4:
+>>   - convert __HAVE_ARCH_TLB_REMOVE_TABLE to CONFIG_HAVE_ARCH_TLB_REMOVE_TABLE config
+>>   - fix a WARN_ON_ONCE() on sparc64 (and on ppc)
+>>     (reported by Andreas Larsson)
+>>   - collect Acked-by (Hi David, I've kept your Acked-by, feel free to drop it)
+>>   - rebase onto the v6.19-rc7
+>>
+> 
+> Below is how v4 altered mm.git.
+> 
+> I'm not seeing the WARN_ON_ONCE() fix.  I assume that was due to the
+> Kconfig alterations?
 
-Hard to prove a negative and whatnot.
+Yes, sparc64 and ppc will select HAVE_ARCH_TLB_REMOVE_TABLE, so
+PT_RECLAIM will not be enabled. This means it won't affect
+sparc64 and ppc, and will not trigger WARN_ON_ONCE().
 
-We deleted the vxge which I think(?) was for a newer version of this HW
-3+ years ago and nobody complained. 
+I don't have a testing environment for sparc64 and ppc, but I
+expect it should be able to fix the WARN_ON_ONCE().
 
-> What's the gain from removing a driver unless say it's broken and
-> does not build?
+Thanks,
+Qi
 
-People keep sending cleanups and fixes for these old drivers.
-It takes time to review that stuff.
+> 
+> 
+> 
+> --- a/arch/powerpc/include/asm/tlb.h~b
+> +++ a/arch/powerpc/include/asm/tlb.h
+> @@ -37,7 +37,6 @@ extern void tlb_flush(struct mmu_gather
+>    */
+>   #define tlb_needs_table_invalidate()	radix_enabled()
+>   
+> -#define __HAVE_ARCH_TLB_REMOVE_TABLE
+>   /* Get the generic bits... */
+>   #include <asm-generic/tlb.h>
+>   
+> --- a/arch/powerpc/Kconfig~b
+> +++ a/arch/powerpc/Kconfig
+> @@ -305,6 +305,7 @@ config PPC
+>   	select LOCK_MM_AND_FIND_VMA
+>   	select MMU_GATHER_PAGE_SIZE
+>   	select MMU_GATHER_RCU_TABLE_FREE
+> +	select HAVE_ARCH_TLB_REMOVE_TABLE
+>   	select MMU_GATHER_MERGE_VMAS
+>   	select MMU_LAZY_TLB_SHOOTDOWN		if PPC_BOOK3S_64
+>   	select MODULES_USE_ELF_RELA
+> --- a/arch/sparc/include/asm/tlb_64.h~b
+> +++ a/arch/sparc/include/asm/tlb_64.h
+> @@ -33,7 +33,6 @@ void flush_tlb_pending(void);
+>   #define tlb_needs_table_invalidate()	(false)
+>   #endif
+>   
+> -#define __HAVE_ARCH_TLB_REMOVE_TABLE
+>   #include <asm-generic/tlb.h>
+>   
+>   #endif /* _SPARC64_TLB_H */
+> --- a/arch/sparc/Kconfig~b
+> +++ a/arch/sparc/Kconfig
+> @@ -74,6 +74,7 @@ config SPARC64
+>   	select HAVE_KRETPROBES
+>   	select HAVE_KPROBES
+>   	select MMU_GATHER_RCU_TABLE_FREE if SMP
+> +	select HAVE_ARCH_TLB_REMOVE_TABLE if SMP
+>   	select MMU_GATHER_MERGE_VMAS
+>   	select MMU_GATHER_NO_FLUSH_CACHE
+>   	select HAVE_ARCH_TRANSPARENT_HUGEPAGE
+> --- a/include/asm-generic/tlb.h~b
+> +++ a/include/asm-generic/tlb.h
+> @@ -213,7 +213,7 @@ struct mmu_table_batch {
+>   #define MAX_TABLE_BATCH		\
+>   	((PAGE_SIZE - sizeof(struct mmu_table_batch)) / sizeof(void *))
+>   
+> -#ifndef __HAVE_ARCH_TLB_REMOVE_TABLE
+> +#ifndef CONFIG_HAVE_ARCH_TLB_REMOVE_TABLE
+>   static inline void __tlb_remove_table(void *table)
+>   {
+>   	struct ptdesc *ptdesc = (struct ptdesc *)table;
+> --- a/mm/Kconfig~b
+> +++ a/mm/Kconfig
+> @@ -1448,9 +1448,12 @@ config ARCH_HAS_USER_SHADOW_STACK
+>   	  The architecture has hardware support for userspace shadow call
+>             stacks (eg, x86 CET, arm64 GCS or RISC-V Zicfiss).
+>   
+> +config HAVE_ARCH_TLB_REMOVE_TABLE
+> +	def_bool n
+> +
+>   config PT_RECLAIM
+>   	def_bool y
+> -	depends on MMU_GATHER_RCU_TABLE_FREE
+> +	depends on MMU_GATHER_RCU_TABLE_FREE && !HAVE_ARCH_TLB_REMOVE_TABLE
+>   	help
+>   	  Try to reclaim empty user page table pages in paths other than munmap
+>   	  and exit_mmap path.
+> _
+> 
+
 
