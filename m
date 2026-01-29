@@ -1,966 +1,274 @@
-Return-Path: <linux-mips+bounces-13046-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13047-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qET0KGCWe2nOGAIAu9opvQ
-	(envelope-from <linux-mips+bounces-13046-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Jan 2026 18:18:24 +0100
+	id YKgcEpTle2n8JAIAu9opvQ
+	(envelope-from <linux-mips+bounces-13047-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Jan 2026 23:56:20 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 48ED3B2C00
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Jan 2026 18:18:24 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id A0299B58CE
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Jan 2026 23:56:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 8FDA9300490E
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Jan 2026 17:18:23 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 658F030137AE
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Jan 2026 22:56:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CC78304BDA;
-	Thu, 29 Jan 2026 17:18:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E4B736C0BB;
+	Thu, 29 Jan 2026 22:56:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="A0joNbhq"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nWvl1REc"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F19A2C0F7F
-	for <linux-mips@vger.kernel.org>; Thu, 29 Jan 2026 17:18:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769707102; cv=none; b=Jr/nAA5HYRQ06N9ijnwNVMa4gIB80ZzILWxOlAFYF/RW/COVz66SfK10KM19pxXcO4mLK3KOC7aggzwIoVc+OTPs8q1iWsa+a7cJApBXzah2MrB5tIXZ0ofT8pOLmkDC1p8K8T26HpDsy67pszff6IHhpcyOVT853SwotNcZVIQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769707102; c=relaxed/simple;
-	bh=554pWWQlQUlqHeVmXAilXixOBW+TR4XeL/cKhqnajuI=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:Content-Type; b=NJnoWXDD5RyoCx+STQMPMV1Vi+M0/Z9IpQbfFqrxC0UbQ7PhOVVlIp7KiXdAYmVEXrQEHX4XtIS6msfnnJ9AdjqfqYeJ2GhVa9fBYCURGhZ0xmJxQMBFhZ5gDqFdFoKwDsQxUD2lqcWw9ZxUV3mGwpegl9FKgyvV+gKtCI36Mjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=A0joNbhq; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-48039fdc8aeso7514465e9.3
-        for <linux-mips@vger.kernel.org>; Thu, 29 Jan 2026 09:18:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1769707099; x=1770311899; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:from:content-language
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=P947yepk6pUF5VyzqiHdBuUEvIXyMAxqe9Rqeqp2Ilg=;
-        b=A0joNbhqvu5Gorcyv76mrHw+utxgwLmWSFZkrSF3Ok2D5eEDP2Vd9P8JjxNHme07hn
-         XM7HvWOMCNd+6SdrGafBMvAT6ocUzygxp+ifUHeFJ8WUWvkT3ePqYcAfuS/r5rO1a08c
-         5SuxCOMp5CNrGts6EWl4GDuA+GJ5MHXkm9N5bq/cBiRf6iw3Ght0Nn8BdEf7V43U/iLt
-         mV0bP7DZAK085y41CzZXhBQ+XvvLP6Ei3L+9e0unx8wBFpvfk/H6RkpeNQXx/kOOLl09
-         7k7vA/BDokRD/oiBSJLVkS6cU/X7Fwb45XlfYymDChtuzYpl48tvcOT4dhnSG0s4ceV/
-         x7+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1769707099; x=1770311899;
-        h=content-transfer-encoding:cc:to:subject:from:content-language
-         :user-agent:mime-version:date:message-id:x-gm-gg:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=P947yepk6pUF5VyzqiHdBuUEvIXyMAxqe9Rqeqp2Ilg=;
-        b=wSZfQse1vtb4nWRr0qHRsFukdvR5zHDOshDJ8s/w9vZQNjuLL5e99bRwtptzARGfeI
-         VTelxIDJCc373MsLMsQX8DQYvi9tFSvGZ7oEGKEb/1Pm8rLWtP8rlqtwMPBnJzyQCMar
-         wuYzTnTkEpP2fKHGKt1uFDtMUFi/zw98Qq1qJZO3seBabMqvWhJ5/PFicRZSIbI2vzuN
-         GqBizwEA0LI2XJbEq+frEeiE+U6CriGXNryZtt+wOoGONK3jUytqCzPhn2yT/QvKXSQj
-         H2gDhtKOGksMB/rYXhYnzBv9AQzgnXhcBxoxdLmoK5XZcUmTM3H3146+rPPE+8uxtNff
-         e6ng==
-X-Forwarded-Encrypted: i=1; AJvYcCX+W7H5dlbFaXiM1nCEj6SCjTmRNqVdbahE3u8mljT1Sz7YqmlDxSIOnzz+0r1u/FdTMW29C0K+XBdR@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy2+5C94HSFqi0cM4Fc1d0D5/7Sfsu7WV49Irp7TgFKUIvGQa7v
-	pJTQskvTAvGyj5kwn256m8bnv8uVsSDCtIaqQPSkCHELkn/LyKxRsUmu
-X-Gm-Gg: AZuq6aIMmI9gshb+s9koEHsg0ysv5hEGtF9XY+HkSMsy59F7sxA5yuOwk1rngnMTnSW
-	dbxMfrHpcm13tmwFUOanm0HOz8G9GKnHechgXsPuMMJkzouOj23s6M7kRBMa6GVLyW7UekO8Mcc
-	dklSDg52JvwzoQwsLsigHYlRr7j2TeZo1C05vL903nvke0k21pUW8uPGQLCSdmcLk3iQ1Jzx/Vi
-	CpMpzTcssrve4+eSe2MluWlOSu8NWK6r5F8gh7BS/x/RLeUuTbLz4VND4Z+PBSUwiJUUZ8fbw/h
-	1rqYkMv+Df/2D4zy3raufcj+ClbVu2z8oOc8bc5wc/3aUTB5KIYp0R77/btXqw3ynusrWLYgoTb
-	rwv74nEyBjyNvo8ch5nFRLZYOrqGwXss0bHJa+/dx+jp+YVUrLY5689Sm8crsTnuX2OVV0k7u1r
-	LFgWEmKOrka4aRK8nO4ppr8vRMMAwUhI8brJdBXrDKoY4gCxnA+SSkmx6UG4WKeDG3NftW6Jczx
-	URpSyJtf6knDkDGF9SQECt7v1LTGDcuWIi5UAKH61o91NtNiFCayJuwsJ5UXhMm
-X-Received: by 2002:a05:600c:4fc4:b0:480:3338:292d with SMTP id 5b1f17b1804b1-48069c8b7demr138128205e9.31.1769707098257;
-        Thu, 29 Jan 2026 09:18:18 -0800 (PST)
-Received: from ?IPV6:2003:ea:8f0b:f500:2d0a:8724:17dc:1df1? (p200300ea8f0bf5002d0a872417dc1df1.dip0.t-ipconnect.de. [2003:ea:8f0b:f500:2d0a:8724:17dc:1df1])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-481a5dc81dcsm1283395e9.11.2026.01.29.09.18.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 29 Jan 2026 09:18:17 -0800 (PST)
-Message-ID: <7b2b53b6-d230-47bb-98d9-b7acfbfdd8ca@gmail.com>
-Date: Thu, 29 Jan 2026 18:18:15 +0100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C99542D46B3;
+	Thu, 29 Jan 2026 22:56:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.12
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1769727377; cv=fail; b=OsFV29oT5rCxGJIHundCTYknZCGWhcl3qZtg841b+QqGHLYqTg9qktY8ZOiRzu7kRkhG9HqKr5OcG5ad4xfAY1TQRBuRn1ESCWAXLERH6InRKO5jZLXPKuNmp5ZBfBVhZziTD9KMdMW7/fnkwStfXARPCghNy8YdqDfwp3yYTwg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1769727377; c=relaxed/simple;
+	bh=UzhxzI771WPipifNHBaRVDBrsNMPs2q/v3kpZkRnIaU=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=kvIIjKgAEa8YU7miL95iqe9A0Kh7pdblVsYj0z9++oXJ+0ZnOa2L9/5XcAbbiIQ6P24up4GzwFk5Ds4/lHiDaWbJV8tddCmxQ8cOvOExAuzQCuUz7zU+QliaJzI5hj8V+wK4r6qwuO7g13sOv4qCLnAgX8sbaeotToe40EiVBlw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nWvl1REc; arc=fail smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1769727376; x=1801263376;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=UzhxzI771WPipifNHBaRVDBrsNMPs2q/v3kpZkRnIaU=;
+  b=nWvl1REcwlsyPyYkCUlF23ylzZBK1bY3ut7OL3+bmNxYa1kdfCKFPLsF
+   QbZWYfQ0xYuwq8nrNWVyH1zpnaAMrX065/G83zTgE0Psj8S71BBLU09iM
+   N8lIcnuQN8RR3Z4sDh38T9G2/AXwuE3GwH4DaHU0U5L3dV18QmadldQBO
+   1kxEzxkmyGHlbWQkDsG2cNMnbA7vo/4qPdVxC9e4zC15CNQEr32f0FiCS
+   SDZVG34JiyDZyPJ0GD0jSF7DwuwXQUnM22UVgc7uplmGdHgbqVDrf6Lxz
+   6zg2L026oiLurRLXH0HlmrVkxzBAavfQOFbxDh7rCdyRpnbMov4FnI+bI
+   w==;
+X-CSE-ConnectionGUID: OcQib7/RQl2J8zZC6vnFzw==
+X-CSE-MsgGUID: cqisEePiR4GFn7UGvgNa/Q==
+X-IronPort-AV: E=McAfee;i="6800,10657,11686"; a="82408060"
+X-IronPort-AV: E=Sophos;i="6.21,261,1763452800"; 
+   d="scan'208";a="82408060"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2026 14:56:15 -0800
+X-CSE-ConnectionGUID: A/+K7FKlSvaiwzXJwgdwxA==
+X-CSE-MsgGUID: 01XpGIclR3eXe2OkCwZOIQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.21,261,1763452800"; 
+   d="scan'208";a="209122454"
+Received: from fmsmsx901.amr.corp.intel.com ([10.18.126.90])
+  by fmviesa009.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2026 14:56:15 -0800
+Received: from FMSMSX901.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx901.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Thu, 29 Jan 2026 14:56:14 -0800
+Received: from fmsedg903.ED.cps.intel.com (10.1.192.145) by
+ FMSMSX901.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35 via Frontend Transport; Thu, 29 Jan 2026 14:56:14 -0800
+Received: from BN1PR04CU002.outbound.protection.outlook.com (52.101.56.42) by
+ edgegateway.intel.com (192.55.55.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.2562.35; Thu, 29 Jan 2026 14:56:14 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=IpYEP/qc/MokftNTasKaF2JpT2YR6+ddq4ZcAA2Ifef62SwLTDbNHJJ51DOgE3b+jF/LciqAmeSkgZ11tzkD3nLxEzeWtW3km+jX9HEgBYd6/GDtQ/W3XlV6swAtKHOatcMVvyl4xJRuFO1RU3PbNT/NPo/gzKzJ8ny86xkuuJcrSTdszMI3CYVOeTTG9iAlYgTuLS1EueKXUyAPOWN5u5AQXLuVMj/il8RhWcDrDh++t/9cMacq23zYRKxurTwSJ3LPrEp0VrrDjQhlIJZzE4u3eq/8O72gQ0KKecJZ10GD/KWgHLhjplJdeEiS9ns7LsAO/fodHZLlMjXsQ2uLGQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=RxH/AvfuSQI9Z0kJwD2RlWlWtaYeSwVN1J+NUIdMfnc=;
+ b=uSpC9+Pqu5SE+tvs4N5ODadFfMdrbF0M6P04Mmgh8PE1L+doXixtc3l2ylvNsvzawgmlUbe6o7S7tVwp6jZhRcZagVuaLyip9rGJOnNN6AK4fbgLbpUdcSuIuBXQ2CC5hE8WlYlBph2B+Li7H7Ny5rVtI2qWHk4pQ4URD1yAKQ2OCnKDAWlnk+22t/sjK2NQwA5gVweshEd+D5U3p95tYMqkhIXHvfDyE5bC8HP/TUhuvA1JMK6RvzvzpBOmREgJBvox8U2xAb+2hfcmnMMNzTWktO8WlU8kl6l2HjAH+gipYh5Z/cqFkwkMflI+xjAeLeMxGor0PAm6bWTlqnlHpg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CO1PR11MB5089.namprd11.prod.outlook.com (2603:10b6:303:9b::16)
+ by DM4PR11MB6405.namprd11.prod.outlook.com (2603:10b6:8:b5::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.9564.10; Thu, 29 Jan
+ 2026 22:56:11 +0000
+Received: from CO1PR11MB5089.namprd11.prod.outlook.com
+ ([fe80::81f7:c6c0:ca43:11c3]) by CO1PR11MB5089.namprd11.prod.outlook.com
+ ([fe80::81f7:c6c0:ca43:11c3%3]) with mapi id 15.20.9542.010; Thu, 29 Jan 2026
+ 22:56:11 +0000
+Message-ID: <395bfe98-146c-4da3-9c2f-362f548da59f@intel.com>
+Date: Thu, 29 Jan 2026 14:56:10 -0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next] net: lantiq_etop: remove driver
+To: Heiner Kallweit <hkallweit1@gmail.com>, Jakub Kicinski <kuba@kernel.org>,
+	Paolo Abeni <pabeni@redhat.com>, David Miller <davem@davemloft.net>, "Eric
+ Dumazet" <edumazet@google.com>, Simon Horman <horms@kernel.org>, Andrew Lunn
+	<andrew+netdev@lunn.ch>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Vadim Fedorenko <vadim.fedorenko@linux.dev>, Lorenzo Bianconi
+	<lorenzo@kernel.org>, Hauke Mehrtens <hauke@hauke-m.de>
+CC: "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>, "OpenWrt
+ Development List" <openwrt-devel@lists.openwrt.org>, Daniel Golle
+	<daniel@makrotopia.org>
+References: <7b2b53b6-d230-47bb-98d9-b7acfbfdd8ca@gmail.com>
+Content-Language: en-US
+From: Jacob Keller <jacob.e.keller@intel.com>
+In-Reply-To: <7b2b53b6-d230-47bb-98d9-b7acfbfdd8ca@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: MW4PR04CA0151.namprd04.prod.outlook.com
+ (2603:10b6:303:85::6) To CO1PR11MB5089.namprd11.prod.outlook.com
+ (2603:10b6:303:9b::16)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-From: Heiner Kallweit <hkallweit1@gmail.com>
-Subject: [PATCH net-next] net: lantiq_etop: remove driver
-To: Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- David Miller <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Simon Horman <horms@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Vadim Fedorenko <vadim.fedorenko@linux.dev>,
- Lorenzo Bianconi <lorenzo@kernel.org>, Hauke Mehrtens <hauke@hauke-m.de>
-Cc: "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
- OpenWrt Development List <openwrt-devel@lists.openwrt.org>,
- Daniel Golle <daniel@makrotopia.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1PR11MB5089:EE_|DM4PR11MB6405:EE_
+X-MS-Office365-Filtering-Correlation-Id: c7cb4be5-3579-4194-533f-08de5f8998a5
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|366016|1800799024|376014|921020|7053199007;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?N0Rwb2Q3a2FEZ3pWQkVHOUFiRjFjWWF2Qm45emhtdG9CQ2p1U0Zwd3ZQcnFI?=
+ =?utf-8?B?dllWRzhxZ0JtbmFEMWthanJVYzhxeUdiWDBBdnV6VHZ3azJvUXh6eDlxSGFi?=
+ =?utf-8?B?YVAwbldmY2VqSUhMNjZHbVBCdmhPVFhhZjY2TWZtT3V6dllTWUdxZERVRzdx?=
+ =?utf-8?B?WG1TZE5WVjBOenBnNFd0a2V5YkhtUlRVYkt2VXE4TERzN3hzZ3Y1VUU4dVBG?=
+ =?utf-8?B?M3UzVVZBbjNEVnNxOHN2T3lWRWdFOTVtRmdGME9mS1ZGOVFaRkFXYXNTcnI1?=
+ =?utf-8?B?Zy83c3QyTXhTZ3YyZjkwRGt4Y3FhSXlYbU5kRGg4TWFta0E2UjgyQ3BwUUR6?=
+ =?utf-8?B?UGFuR2pUY3BUNnpWRm1xLzM1MXJ4elJ1cGFOQ3FKTVR3clhLaGtmNUhrMHNq?=
+ =?utf-8?B?M21SMis0VmtPSnVFc0V1R3M1ZmQ1cG9tQ2ExL2tIZkY4NXJ1NkRiTE1XTGo3?=
+ =?utf-8?B?am91VitCNDluUUVkQmxjQzJyQWhKdmE2M2VydjcvcHRlTTV4YlFRWGc0cDI1?=
+ =?utf-8?B?TlN0V21XamkzVXRGdmt2RFRoZ2VSdnFKVXcxY0t1RGc1VGZFU2RYcnQ5dGpM?=
+ =?utf-8?B?TTBIMFE4VTFGZTlmeHZyQWdac2R2MzlZUlFTdEJMc2lObFlQZnJhRFJERy9N?=
+ =?utf-8?B?dWVrVWRHK1VSZ3FQVE9GQ0lEOXdTRDhqRlFyeGZkSVhDRkZCRmRHMWo4aHFX?=
+ =?utf-8?B?Y05HbkJoaE52M3duTHZnMmIwNVMreGUyMjA1SmwwZTBUTE9ZdTA2SWRFTlNv?=
+ =?utf-8?B?UHl4cWs3ZUZaK3ZmR3dvUGNsbTNpdE5JZmZMWWlaWUlYcnpyTUVDTDdXajRv?=
+ =?utf-8?B?VzdTSVRiQTZlTEdzVHEzbnQyOC9QbFNibEtna3gyNTFnWHliMGxpY1Uwby94?=
+ =?utf-8?B?SkJybmtQVGc2VEY2SmpGOUJvQW05T3pHaFJ0N1pFVGJZd29UWXdQdlNhbjRo?=
+ =?utf-8?B?bnZEZ1VTamVybDVpYnN0eEIrQXE2Q3JwOEFTT09ReVNid2Q2a2NGV2pDbE5J?=
+ =?utf-8?B?aERVZFc1c0treTh0SU5EQVlhRFJXeC8rYS80dkFhV0tQdjdwV3h0citVVVJB?=
+ =?utf-8?B?UXpNb2FaUTVHaXllbnhhaDNLTmg1Q1VzVmFOUjQ0aC9Cc3ZRUUovWlVEaXNB?=
+ =?utf-8?B?NTFUT2N0dHhHSEsrZW9iUVVqUnh3bVgzSzE2V0pqNzdUM3ZhM1g3MmlJbUtt?=
+ =?utf-8?B?M0tmQXY5KzZ3ZUJWRm9QVnNmelQvWWgrMW5PZWRBa3BQZTBpNmJ3YWgxK0R3?=
+ =?utf-8?B?d3BUZWJ4dTRmSFpPdC9MMmFucWtDd0FXOE5WNGFqZDk4NENrVUtlUmh5MkZ2?=
+ =?utf-8?B?UkZDbmt1NGM0VlFKOFovN0NlcjZIbWk2UWZIaXdlakd3T3NYc0ZEeXkzL2kw?=
+ =?utf-8?B?anhCYVplbk12Znc5ODA3L09nZC8xU2NHbWF4ZEhQbWd5SHRNTHFJMlpiUkU2?=
+ =?utf-8?B?eHBoTTJPZ3lKYVlNc1JJUUtTdmpsYk5XSUpyOTBFRmxIcmsvSXpWSTc3YVd6?=
+ =?utf-8?B?dUt5aUxkOHZZbnVKSU9rcXlvWkhDY1VWUUxDcXFRZWY2b2prS0VvekJ0V00z?=
+ =?utf-8?B?UitEQytabHkwd2lnWWlYbzNJbmpSQ0FSbHZicTFLcjFFVkhZcHgzV2NrQTBj?=
+ =?utf-8?B?RGhUWUcwUFMyRWtvYlBZb0RCZkdWQ2lOMU5mSVZEaXRrSnJHSjh5N2Y2OEhw?=
+ =?utf-8?B?dTgwSVk3UkNRK1k2aGNIMUZRVWJqT1BOcEloTGk2SlZNZlovZjRpMHpINzRH?=
+ =?utf-8?B?aHp3alZVVlJTYkFqYnFyZWwvNnU4a0NpbG5sdFBmcWZnbU1jUGJhVkxONjVm?=
+ =?utf-8?B?MmNweUR1ckE2QUMrRS9lYVFRQzIzV0hneVQ4WDgzbUh3Zm9KakM5TkVuRHU5?=
+ =?utf-8?B?VVd6RHpUQnQzOEdjTmVJbkVrOWJPWjhYV2ZGNmZwQVNDb01WVkhjenlYZkZq?=
+ =?utf-8?B?TGFjZHd1R0hIQVE0NDRsYmNTSFhLSkdxM3pFQXVxUXdqbHJseiswYWdNYndk?=
+ =?utf-8?B?VkhyNnNROWdzRWNQNG5GbmpHT1Z1VFlya2VHL3lzWDlSWmV1N1JId2hMWCt0?=
+ =?utf-8?B?RllMSlR2VVJZeTlzYS84TytBbXNhSG5WemxmS3V1RUtCS0FFSy9rV2V0N0FO?=
+ =?utf-8?Q?G0Hw=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CO1PR11MB5089.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(366016)(1800799024)(376014)(921020)(7053199007);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?eEJ4NUZvUUE5Z1FtejVncldzSDFVUEt3MzRkemE3a1JkZVowN3FOclVBb1c0?=
+ =?utf-8?B?THQ5dmdxT2k0c3ZLRnV6SkozdTI4M2l2ZlVsWnlqQjVaZW5sSXZHSVpEb1pK?=
+ =?utf-8?B?eUtuTHZvRWR1Y24wNnVucHdZK0JxSjBMU0pnZFcvN2hYSE16cld6TndYQTRG?=
+ =?utf-8?B?eUpleHkrOE5yT0JSOHBYckFyTW1KUU5ndU5OcHd1bFdUQ05lMHExR01uVHdE?=
+ =?utf-8?B?Tk11L2VoWElSZi9vc3lTNkdiMkR0bFZVazRpbVdDZXJzbHhHMTB6bkhhQ0Qx?=
+ =?utf-8?B?emo3QWN4cTl0MFJKVXVaemVDeElhR1dRbVExOTdQemFWSklVQjRYMW5kYVVP?=
+ =?utf-8?B?eU9uN3JORDErdjhlYzJ6YWk5SVBvOHFwcmRZSnk0bENlRkNuRW1QRCtoN0FG?=
+ =?utf-8?B?ZXo3b3I1L09EdmkrQXpuclNldjJzTXNqTTBXSlgzU0RsMUx3UEpTdGl2dTgw?=
+ =?utf-8?B?MzJwRWN4MytMVGptd1RLeEt3eEtvYXRNSkFybmI2K3Z1M3hhMkdJYXgvLzRi?=
+ =?utf-8?B?ZEFXSjJaQWY1RzFwMThrajZwNEIwOGdjV1QrcFlUVmx2NkIrZVRGeURjSnNu?=
+ =?utf-8?B?N290Y1dsdHcydFlONGRHcU03VUZFZDE1blhZcTJTOWRzVm1EUjNuWXF6N0tv?=
+ =?utf-8?B?cVRZS01yRGZXU21BVEUzU0xCWXpveDMyRTVSRzFScnlRVUxYZXhGczE5RnRK?=
+ =?utf-8?B?QWtKMG45ckl3WWFmNHIxVitYQk93NHdxNStBUjRUYWRmeFlUSzZFeWsrV1Mz?=
+ =?utf-8?B?Zy9HUDFwV1dwYVVZb05WamtjeHlGUmZvUEFrbVU2bExxeE14ZUtsZ016dWFn?=
+ =?utf-8?B?TklzeTRmSXZWMHMwOE04WFBJa2xkUVBYTHJESThUOUpMNnpPYThuYVBkTkVy?=
+ =?utf-8?B?c2F4VWJaUmYxbTJHZXVMNmhsa1N6TmJHaURZRmk2UnEwT0JJWEJuNkI3M0w3?=
+ =?utf-8?B?WGcvcmordThrSDhmc09BeHJaUmR5SnozR1NQZzlxaVBQMWpyN2gvaDNoUFkv?=
+ =?utf-8?B?UjJVdXdhd3VMUks4ZCt6eE12emNtTENvKzVTMW1IRHh0cmlZalBsZWV3YVND?=
+ =?utf-8?B?R2Y0c1lmR1FuQ1pjTXdkNUlUQjRFYytvL04zbVJpai9lZUExZmdZaHUrYXFr?=
+ =?utf-8?B?SElLREppTlBrMXpEZUxIZUNqVWV0UjJ6ZllRWis3dnY3Vzc0ckg2MnNFd1Z1?=
+ =?utf-8?B?QUZzZDNoTlBsalpUc2h3L2xUSUM0QmV1WkhFaENCTHQ0RE1wL3ZrNVpiOFBM?=
+ =?utf-8?B?a0g5bnpxdlNBeVZkYlYwZ3N0QkVScmh4NzZ1M0toNUxvNmtXamVTTnRpZTV3?=
+ =?utf-8?B?MGRsR3pVU01jMVN6TDNUcXV6djQ5Z3hvd0s1T0dZOC9WR2lyTTAxVVpuYzM3?=
+ =?utf-8?B?b1lWa21qSjRyZ3Y0K1lVUlAweDVoMzNaNmdlK1g1RUtYenpjRW5aUmRqOTVo?=
+ =?utf-8?B?TVhxWGtsUUZqK0FJcU9LZU9lbk9QdnArdHNBRVF1MkhDbkRoMmx6M3ZBN3E0?=
+ =?utf-8?B?dE5BUkVzQm1YUnR3bWx4azBLT015U0t6cFRnekV0UDNpenhZT1RSNlhUTmdq?=
+ =?utf-8?B?Q2xKdG1FV2RkNk1xakpUdmkvYWNNa3ZxZnA0MlhWK1BJQXBVb3lEaHd2MXp3?=
+ =?utf-8?B?d0hkd0xrWXlDTkJRWE5Pb0R1UDcwb01WV0oyZjBSaEU1KzFwZTYwaDBTQXBu?=
+ =?utf-8?B?RnAyUUxRVjVMZ2tLK1pLYlZ5NXd4dTNQOTVFejNLQ1luU2JvRUxmUXhMK1d0?=
+ =?utf-8?B?Y01NVTVJUlRWTDJBYm0vazhiTHc0RXBLV3dNSTN6MHR4ZVlzRUpyeWZWeHRY?=
+ =?utf-8?B?S2dVY2lrV3h6ZUtxYStNemRlbzh3cEJUbERUNUV1ckcwZjhuM3BHV2tTelc2?=
+ =?utf-8?B?M1JSSzNvYVVFS1dWMklsbG1CWHAxZXcxaVdQSDc3YU1jRFhvTHFHR3dDY1Jo?=
+ =?utf-8?B?dTRVRmt2eXpLZHpyaWpXenZUWndVSjZoWTFsSW1kVldLZ2VTekpMVE1kWThk?=
+ =?utf-8?B?ME9ieWx0TENadVJ4Qi82M0N1SVJKbzRaZlRQbkVCQjZNT2ovNHRSdEdvUnl0?=
+ =?utf-8?B?cFVmRllyMjlNRWpKc2gyZEJuU0xiL3gzV1lvUXFpekFBalNMK1RVY1dOTGha?=
+ =?utf-8?B?d05kajRRT3FOOHpkWDlPMlU4RnFYNGphbkw1VjJFYmRNbEpNMkQxaWtkRjBK?=
+ =?utf-8?B?VG1IY3BnVU5tSHUyWndqWG1FUTloRnpBNDk4MGZyWHd0UFJjODFDVEZvVTZw?=
+ =?utf-8?B?dUlYb1lsQkovd0NCZThTamFuNzhtZGpWOUg5V3EzOVJXSDZsSFAxMENocjlY?=
+ =?utf-8?B?UEw3TlN6NDFVdnZ2Q29wZnhHZmFpMGdyMzZkWVRIOWNEQVM1Y2toUGxsalQ3?=
+ =?utf-8?Q?4oZBRb9rak4SMTG8=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: c7cb4be5-3579-4194-533f-08de5f8998a5
+X-MS-Exchange-CrossTenant-AuthSource: CO1PR11MB5089.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 29 Jan 2026 22:56:11.4158
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: HCVcSpFImL4x5h6EgQHHO0EkH4idEKkP7w6XQb3gmvJlDnQOrtxmGwUX7DLexr0GAuxJQJTon0AtYJR1r+9SuosTtWwaoJ5P6iTNicDWT0A=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR11MB6405
+X-OriginatorOrg: intel.com
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [1.34 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	ARC_REJECT(1.00)[cv is fail on i=2];
+	DMARC_POLICY_ALLOW(-0.50)[intel.com,none];
+	R_DKIM_ALLOW(-0.20)[intel.com:s=Intel];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	RCPT_COUNT_TWELVE(0.00)[14];
-	TAGGED_FROM(0.00)[bounces-13046-lists,linux-mips=lfdr.de];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	TAGGED_FROM(0.00)[bounces-13047-lists,linux-mips=lfdr.de];
 	TO_DN_EQ_ADDR_SOME(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
+	FREEMAIL_TO(0.00)[gmail.com,kernel.org,redhat.com,davemloft.net,google.com,lunn.ch,alpha.franken.de,linux.dev,hauke-m.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[intel.com:email,intel.com:dkim,intel.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hkallweit1@gmail.com,linux-mips@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[jacob.e.keller@intel.com,linux-mips@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
-	RCVD_COUNT_FIVE(0.00)[5];
+	DKIM_TRACE(0.00)[intel.com:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	MID_RHS_MATCH_FROM(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-mips,netdev];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[phrozen.org:email]
-X-Rspamd-Queue-Id: 48ED3B2C00
+	RCVD_COUNT_SEVEN(0.00)[10]
+X-Rspamd-Queue-Id: A0299B58CE
 X-Rspamd-Action: no action
 
-This driver in mainline lost its in-tree user with commit cd93b4895ea5
-("MIPS: lantiq: drop mips_machine support") in 2012. Since then it has
-had no in-tree user. Only user seems to be OpenWRT, with several changes
-to the in-tree driver version:
-target/linux/lantiq/patches-6.12/035-owrt-lantiq-wifi-and-ethernet-eeprom-handling.patch
-target/linux/lantiq/patches-6.12/028-NET-lantiq-various-etop-fixes.patch
-target/linux/lantiq/patches-6.12/701-NET-lantiq-etop-of-mido.patch
-So it seems the driver is maintained in OpenWrt only, except tree-wide
-in-tree changes. According to OpenWRT maintainers it would be ok to
-remove the driver in mainline and keep it downstream only (see linked
-conversation).
 
-Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
-Link: https://lore.kernel.org/netdev/d80fef86-ba14-4bd4-bce5-4d61a75d591b@hauke-m.de/T/#t
----
- .../include/asm/mach-lantiq/lantiq_platform.h |  18 -
- drivers/net/ethernet/Kconfig                  |   6 -
- drivers/net/ethernet/Makefile                 |   1 -
- drivers/net/ethernet/lantiq_etop.c            | 745 ------------------
- 4 files changed, 770 deletions(-)
- delete mode 100644 arch/mips/include/asm/mach-lantiq/lantiq_platform.h
- delete mode 100644 drivers/net/ethernet/lantiq_etop.c
 
-diff --git a/arch/mips/include/asm/mach-lantiq/lantiq_platform.h b/arch/mips/include/asm/mach-lantiq/lantiq_platform.h
-deleted file mode 100644
-index 70ebb4d6f05..00000000000
---- a/arch/mips/include/asm/mach-lantiq/lantiq_platform.h
-+++ /dev/null
-@@ -1,18 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- *
-- *  Copyright (C) 2010 John Crispin <john@phrozen.org>
-- */
--
--#ifndef _LANTIQ_PLATFORM_H__
--#define _LANTIQ_PLATFORM_H__
--
--#include <linux/socket.h>
--
--/* struct used to pass info to network drivers */
--struct ltq_eth_data {
--	struct sockaddr mac;
--	int mii_mode;
--};
--
--#endif
-diff --git a/drivers/net/ethernet/Kconfig b/drivers/net/ethernet/Kconfig
-index aa7103e7f47..9775fd401b0 100644
---- a/drivers/net/ethernet/Kconfig
-+++ b/drivers/net/ethernet/Kconfig
-@@ -93,12 +93,6 @@ config KORINA
- 	  If you have a Mikrotik RouterBoard 500 or IDT RC32434
- 	  based system say Y. Otherwise say N.
- 
--config LANTIQ_ETOP
--	tristate "Lantiq SoC ETOP driver"
--	depends on SOC_TYPE_XWAY
--	help
--	  Support for the MII0 inside the Lantiq SoC
--
- config LANTIQ_XRX200
- 	tristate "Lantiq / Intel xRX200 PMAC network driver"
- 	depends on SOC_TYPE_XWAY
-diff --git a/drivers/net/ethernet/Makefile b/drivers/net/ethernet/Makefile
-index 6615a67a63d..743ec1b7e5f 100644
---- a/drivers/net/ethernet/Makefile
-+++ b/drivers/net/ethernet/Makefile
-@@ -53,7 +53,6 @@ obj-$(CONFIG_NET_VENDOR_MICROSOFT) += microsoft/
- obj-$(CONFIG_NET_VENDOR_XSCALE) += xscale/
- obj-$(CONFIG_JME) += jme.o
- obj-$(CONFIG_KORINA) += korina.o
--obj-$(CONFIG_LANTIQ_ETOP) += lantiq_etop.o
- obj-$(CONFIG_LANTIQ_XRX200) += lantiq_xrx200.o
- obj-$(CONFIG_NET_VENDOR_LITEX) += litex/
- obj-$(CONFIG_NET_VENDOR_MARVELL) += marvell/
-diff --git a/drivers/net/ethernet/lantiq_etop.c b/drivers/net/ethernet/lantiq_etop.c
-deleted file mode 100644
-index 83ce3bfefa5..00000000000
---- a/drivers/net/ethernet/lantiq_etop.c
-+++ /dev/null
-@@ -1,745 +0,0 @@
--// SPDX-License-Identifier: GPL-2.0-only
--/*
-- *
-- *   Copyright (C) 2011 John Crispin <blogic@openwrt.org>
-- */
--
--#include <linux/kernel.h>
--#include <linux/slab.h>
--#include <linux/errno.h>
--#include <linux/types.h>
--#include <linux/interrupt.h>
--#include <linux/uaccess.h>
--#include <linux/in.h>
--#include <linux/netdevice.h>
--#include <linux/etherdevice.h>
--#include <linux/phy.h>
--#include <linux/ip.h>
--#include <linux/tcp.h>
--#include <linux/skbuff.h>
--#include <linux/mm.h>
--#include <linux/platform_device.h>
--#include <linux/ethtool.h>
--#include <linux/init.h>
--#include <linux/delay.h>
--#include <linux/io.h>
--#include <linux/dma-mapping.h>
--#include <linux/module.h>
--#include <linux/property.h>
--
--#include <asm/checksum.h>
--
--#include <lantiq_soc.h>
--#include <xway_dma.h>
--#include <lantiq_platform.h>
--
--#define LTQ_ETOP_MDIO		0x11804
--#define MDIO_REQUEST		0x80000000
--#define MDIO_READ		0x40000000
--#define MDIO_ADDR_MASK		0x1f
--#define MDIO_ADDR_OFFSET	0x15
--#define MDIO_REG_MASK		0x1f
--#define MDIO_REG_OFFSET		0x10
--#define MDIO_VAL_MASK		0xffff
--
--#define PPE32_CGEN		0x800
--#define LQ_PPE32_ENET_MAC_CFG	0x1840
--
--#define LTQ_ETOP_ENETS0		0x11850
--#define LTQ_ETOP_MAC_DA0	0x1186C
--#define LTQ_ETOP_MAC_DA1	0x11870
--#define LTQ_ETOP_CFG		0x16020
--#define LTQ_ETOP_IGPLEN		0x16080
--
--#define MAX_DMA_CHAN		0x8
--#define MAX_DMA_CRC_LEN		0x4
--#define MAX_DMA_DATA_LEN	0x600
--
--#define ETOP_FTCU		BIT(28)
--#define ETOP_MII_MASK		0xf
--#define ETOP_MII_NORMAL		0xd
--#define ETOP_MII_REVERSE	0xe
--#define ETOP_PLEN_UNDER		0x40
--#define ETOP_CGEN		0x800
--
--/* use 2 static channels for TX/RX */
--#define LTQ_ETOP_TX_CHANNEL	1
--#define LTQ_ETOP_RX_CHANNEL	6
--#define IS_TX(x)		((x) == LTQ_ETOP_TX_CHANNEL)
--#define IS_RX(x)		((x) == LTQ_ETOP_RX_CHANNEL)
--
--#define ltq_etop_r32(x)		ltq_r32(ltq_etop_membase + (x))
--#define ltq_etop_w32(x, y)	ltq_w32(x, ltq_etop_membase + (y))
--#define ltq_etop_w32_mask(x, y, z)	\
--		ltq_w32_mask(x, y, ltq_etop_membase + (z))
--
--#define DRV_VERSION	"1.0"
--
--static void __iomem *ltq_etop_membase;
--
--struct ltq_etop_chan {
--	int idx;
--	int tx_free;
--	struct net_device *netdev;
--	struct napi_struct napi;
--	struct ltq_dma_channel dma;
--	struct sk_buff *skb[LTQ_DESC_NUM];
--};
--
--struct ltq_etop_priv {
--	struct net_device *netdev;
--	struct platform_device *pdev;
--	struct ltq_eth_data *pldata;
--
--	struct mii_bus *mii_bus;
--
--	struct ltq_etop_chan ch[MAX_DMA_CHAN];
--
--	int tx_burst_len;
--	int rx_burst_len;
--
--	spinlock_t lock;
--};
--
--static int
--ltq_etop_alloc_skb(struct ltq_etop_chan *ch)
--{
--	struct ltq_etop_priv *priv = netdev_priv(ch->netdev);
--
--	ch->skb[ch->dma.desc] = netdev_alloc_skb(ch->netdev, MAX_DMA_DATA_LEN);
--	if (!ch->skb[ch->dma.desc])
--		return -ENOMEM;
--	ch->dma.desc_base[ch->dma.desc].addr =
--		dma_map_single(&priv->pdev->dev, ch->skb[ch->dma.desc]->data,
--			       MAX_DMA_DATA_LEN, DMA_FROM_DEVICE);
--	ch->dma.desc_base[ch->dma.desc].addr =
--		CPHYSADDR(ch->skb[ch->dma.desc]->data);
--	ch->dma.desc_base[ch->dma.desc].ctl =
--		LTQ_DMA_OWN | LTQ_DMA_RX_OFFSET(NET_IP_ALIGN) |
--		MAX_DMA_DATA_LEN;
--	skb_reserve(ch->skb[ch->dma.desc], NET_IP_ALIGN);
--	return 0;
--}
--
--static void
--ltq_etop_hw_receive(struct ltq_etop_chan *ch)
--{
--	struct ltq_etop_priv *priv = netdev_priv(ch->netdev);
--	struct ltq_dma_desc *desc = &ch->dma.desc_base[ch->dma.desc];
--	struct sk_buff *skb = ch->skb[ch->dma.desc];
--	int len = (desc->ctl & LTQ_DMA_SIZE_MASK) - MAX_DMA_CRC_LEN;
--	unsigned long flags;
--
--	spin_lock_irqsave(&priv->lock, flags);
--	if (ltq_etop_alloc_skb(ch)) {
--		netdev_err(ch->netdev,
--			   "failed to allocate new rx buffer, stopping DMA\n");
--		ltq_dma_close(&ch->dma);
--	}
--	ch->dma.desc++;
--	ch->dma.desc %= LTQ_DESC_NUM;
--	spin_unlock_irqrestore(&priv->lock, flags);
--
--	skb_put(skb, len);
--	skb->protocol = eth_type_trans(skb, ch->netdev);
--	netif_receive_skb(skb);
--}
--
--static int
--ltq_etop_poll_rx(struct napi_struct *napi, int budget)
--{
--	struct ltq_etop_chan *ch = container_of(napi,
--				struct ltq_etop_chan, napi);
--	int work_done = 0;
--
--	while (work_done < budget) {
--		struct ltq_dma_desc *desc = &ch->dma.desc_base[ch->dma.desc];
--
--		if ((desc->ctl & (LTQ_DMA_OWN | LTQ_DMA_C)) != LTQ_DMA_C)
--			break;
--		ltq_etop_hw_receive(ch);
--		work_done++;
--	}
--	if (work_done < budget) {
--		napi_complete_done(&ch->napi, work_done);
--		ltq_dma_ack_irq(&ch->dma);
--	}
--	return work_done;
--}
--
--static int
--ltq_etop_poll_tx(struct napi_struct *napi, int budget)
--{
--	struct ltq_etop_chan *ch =
--		container_of(napi, struct ltq_etop_chan, napi);
--	struct ltq_etop_priv *priv = netdev_priv(ch->netdev);
--	struct netdev_queue *txq =
--		netdev_get_tx_queue(ch->netdev, ch->idx >> 1);
--	unsigned long flags;
--
--	spin_lock_irqsave(&priv->lock, flags);
--	while ((ch->dma.desc_base[ch->tx_free].ctl &
--			(LTQ_DMA_OWN | LTQ_DMA_C)) == LTQ_DMA_C) {
--		dev_kfree_skb_any(ch->skb[ch->tx_free]);
--		ch->skb[ch->tx_free] = NULL;
--		memset(&ch->dma.desc_base[ch->tx_free], 0,
--		       sizeof(struct ltq_dma_desc));
--		ch->tx_free++;
--		ch->tx_free %= LTQ_DESC_NUM;
--	}
--	spin_unlock_irqrestore(&priv->lock, flags);
--
--	if (netif_tx_queue_stopped(txq))
--		netif_tx_start_queue(txq);
--	napi_complete(&ch->napi);
--	ltq_dma_ack_irq(&ch->dma);
--	return 1;
--}
--
--static irqreturn_t
--ltq_etop_dma_irq(int irq, void *_priv)
--{
--	struct ltq_etop_priv *priv = _priv;
--	int ch = irq - LTQ_DMA_CH0_INT;
--
--	napi_schedule(&priv->ch[ch].napi);
--	return IRQ_HANDLED;
--}
--
--static void
--ltq_etop_free_channel(struct net_device *dev, struct ltq_etop_chan *ch)
--{
--	struct ltq_etop_priv *priv = netdev_priv(dev);
--
--	ltq_dma_free(&ch->dma);
--	if (ch->dma.irq)
--		free_irq(ch->dma.irq, priv);
--	if (IS_RX(ch->idx)) {
--		struct ltq_dma_channel *dma = &ch->dma;
--
--		for (dma->desc = 0; dma->desc < LTQ_DESC_NUM; dma->desc++)
--			dev_kfree_skb_any(ch->skb[ch->dma.desc]);
--	}
--}
--
--static void
--ltq_etop_hw_exit(struct net_device *dev)
--{
--	struct ltq_etop_priv *priv = netdev_priv(dev);
--	int i;
--
--	ltq_pmu_disable(PMU_PPE);
--	for (i = 0; i < MAX_DMA_CHAN; i++)
--		if (IS_TX(i) || IS_RX(i))
--			ltq_etop_free_channel(dev, &priv->ch[i]);
--}
--
--static int
--ltq_etop_hw_init(struct net_device *dev)
--{
--	struct ltq_etop_priv *priv = netdev_priv(dev);
--	int i;
--	int err;
--
--	ltq_pmu_enable(PMU_PPE);
--
--	switch (priv->pldata->mii_mode) {
--	case PHY_INTERFACE_MODE_RMII:
--		ltq_etop_w32_mask(ETOP_MII_MASK, ETOP_MII_REVERSE,
--				  LTQ_ETOP_CFG);
--		break;
--
--	case PHY_INTERFACE_MODE_MII:
--		ltq_etop_w32_mask(ETOP_MII_MASK, ETOP_MII_NORMAL,
--				  LTQ_ETOP_CFG);
--		break;
--
--	default:
--		netdev_err(dev, "unknown mii mode %d\n",
--			   priv->pldata->mii_mode);
--		return -ENOTSUPP;
--	}
--
--	/* enable crc generation */
--	ltq_etop_w32(PPE32_CGEN, LQ_PPE32_ENET_MAC_CFG);
--
--	ltq_dma_init_port(DMA_PORT_ETOP, priv->tx_burst_len, priv->rx_burst_len);
--
--	for (i = 0; i < MAX_DMA_CHAN; i++) {
--		int irq = LTQ_DMA_CH0_INT + i;
--		struct ltq_etop_chan *ch = &priv->ch[i];
--
--		ch->dma.nr = i;
--		ch->idx = ch->dma.nr;
--		ch->dma.dev = &priv->pdev->dev;
--
--		if (IS_TX(i)) {
--			ltq_dma_alloc_tx(&ch->dma);
--			err = request_irq(irq, ltq_etop_dma_irq, 0, "etop_tx", priv);
--			if (err) {
--				netdev_err(dev,
--					   "Unable to get Tx DMA IRQ %d\n",
--					   irq);
--				return err;
--			}
--		} else if (IS_RX(i)) {
--			ltq_dma_alloc_rx(&ch->dma);
--			for (ch->dma.desc = 0; ch->dma.desc < LTQ_DESC_NUM;
--					ch->dma.desc++)
--				if (ltq_etop_alloc_skb(ch))
--					return -ENOMEM;
--			ch->dma.desc = 0;
--			err = request_irq(irq, ltq_etop_dma_irq, 0, "etop_rx", priv);
--			if (err) {
--				netdev_err(dev,
--					   "Unable to get Rx DMA IRQ %d\n",
--					   irq);
--				return err;
--			}
--		}
--		ch->dma.irq = irq;
--	}
--	return 0;
--}
--
--static void
--ltq_etop_get_drvinfo(struct net_device *dev, struct ethtool_drvinfo *info)
--{
--	strscpy(info->driver, "Lantiq ETOP", sizeof(info->driver));
--	strscpy(info->bus_info, "internal", sizeof(info->bus_info));
--	strscpy(info->version, DRV_VERSION, sizeof(info->version));
--}
--
--static const struct ethtool_ops ltq_etop_ethtool_ops = {
--	.get_drvinfo = ltq_etop_get_drvinfo,
--	.nway_reset = phy_ethtool_nway_reset,
--	.get_link_ksettings = phy_ethtool_get_link_ksettings,
--	.set_link_ksettings = phy_ethtool_set_link_ksettings,
--};
--
--static int
--ltq_etop_mdio_wr(struct mii_bus *bus, int phy_addr, int phy_reg, u16 phy_data)
--{
--	u32 val = MDIO_REQUEST |
--		((phy_addr & MDIO_ADDR_MASK) << MDIO_ADDR_OFFSET) |
--		((phy_reg & MDIO_REG_MASK) << MDIO_REG_OFFSET) |
--		phy_data;
--
--	while (ltq_etop_r32(LTQ_ETOP_MDIO) & MDIO_REQUEST)
--		;
--	ltq_etop_w32(val, LTQ_ETOP_MDIO);
--	return 0;
--}
--
--static int
--ltq_etop_mdio_rd(struct mii_bus *bus, int phy_addr, int phy_reg)
--{
--	u32 val = MDIO_REQUEST | MDIO_READ |
--		((phy_addr & MDIO_ADDR_MASK) << MDIO_ADDR_OFFSET) |
--		((phy_reg & MDIO_REG_MASK) << MDIO_REG_OFFSET);
--
--	while (ltq_etop_r32(LTQ_ETOP_MDIO) & MDIO_REQUEST)
--		;
--	ltq_etop_w32(val, LTQ_ETOP_MDIO);
--	while (ltq_etop_r32(LTQ_ETOP_MDIO) & MDIO_REQUEST)
--		;
--	val = ltq_etop_r32(LTQ_ETOP_MDIO) & MDIO_VAL_MASK;
--	return val;
--}
--
--static void
--ltq_etop_mdio_link(struct net_device *dev)
--{
--	/* nothing to do  */
--}
--
--static int
--ltq_etop_mdio_probe(struct net_device *dev)
--{
--	struct ltq_etop_priv *priv = netdev_priv(dev);
--	struct phy_device *phydev;
--
--	phydev = phy_find_first(priv->mii_bus);
--
--	if (!phydev) {
--		netdev_err(dev, "no PHY found\n");
--		return -ENODEV;
--	}
--
--	phydev = phy_connect(dev, phydev_name(phydev),
--			     &ltq_etop_mdio_link, priv->pldata->mii_mode);
--
--	if (IS_ERR(phydev)) {
--		netdev_err(dev, "Could not attach to PHY\n");
--		return PTR_ERR(phydev);
--	}
--
--	phy_set_max_speed(phydev, SPEED_100);
--
--	phy_attached_info(phydev);
--
--	return 0;
--}
--
--static int
--ltq_etop_mdio_init(struct net_device *dev)
--{
--	struct ltq_etop_priv *priv = netdev_priv(dev);
--	int err;
--
--	priv->mii_bus = mdiobus_alloc();
--	if (!priv->mii_bus) {
--		netdev_err(dev, "failed to allocate mii bus\n");
--		err = -ENOMEM;
--		goto err_out;
--	}
--
--	priv->mii_bus->priv = dev;
--	priv->mii_bus->read = ltq_etop_mdio_rd;
--	priv->mii_bus->write = ltq_etop_mdio_wr;
--	priv->mii_bus->name = "ltq_mii";
--	snprintf(priv->mii_bus->id, MII_BUS_ID_SIZE, "%s-%x",
--		 priv->pdev->name, priv->pdev->id);
--	if (mdiobus_register(priv->mii_bus)) {
--		err = -ENXIO;
--		goto err_out_free_mdiobus;
--	}
--
--	if (ltq_etop_mdio_probe(dev)) {
--		err = -ENXIO;
--		goto err_out_unregister_bus;
--	}
--	return 0;
--
--err_out_unregister_bus:
--	mdiobus_unregister(priv->mii_bus);
--err_out_free_mdiobus:
--	mdiobus_free(priv->mii_bus);
--err_out:
--	return err;
--}
--
--static void
--ltq_etop_mdio_cleanup(struct net_device *dev)
--{
--	struct ltq_etop_priv *priv = netdev_priv(dev);
--
--	phy_disconnect(dev->phydev);
--	mdiobus_unregister(priv->mii_bus);
--	mdiobus_free(priv->mii_bus);
--}
--
--static int
--ltq_etop_open(struct net_device *dev)
--{
--	struct ltq_etop_priv *priv = netdev_priv(dev);
--	int i;
--
--	for (i = 0; i < MAX_DMA_CHAN; i++) {
--		struct ltq_etop_chan *ch = &priv->ch[i];
--
--		if (!IS_TX(i) && (!IS_RX(i)))
--			continue;
--		ltq_dma_open(&ch->dma);
--		ltq_dma_enable_irq(&ch->dma);
--		napi_enable(&ch->napi);
--	}
--	phy_start(dev->phydev);
--	netif_tx_start_all_queues(dev);
--	return 0;
--}
--
--static int
--ltq_etop_stop(struct net_device *dev)
--{
--	struct ltq_etop_priv *priv = netdev_priv(dev);
--	int i;
--
--	netif_tx_stop_all_queues(dev);
--	phy_stop(dev->phydev);
--	for (i = 0; i < MAX_DMA_CHAN; i++) {
--		struct ltq_etop_chan *ch = &priv->ch[i];
--
--		if (!IS_RX(i) && !IS_TX(i))
--			continue;
--		napi_disable(&ch->napi);
--		ltq_dma_close(&ch->dma);
--	}
--	return 0;
--}
--
--static netdev_tx_t
--ltq_etop_tx(struct sk_buff *skb, struct net_device *dev)
--{
--	int queue = skb_get_queue_mapping(skb);
--	struct netdev_queue *txq = netdev_get_tx_queue(dev, queue);
--	struct ltq_etop_priv *priv = netdev_priv(dev);
--	struct ltq_etop_chan *ch = &priv->ch[(queue << 1) | 1];
--	struct ltq_dma_desc *desc = &ch->dma.desc_base[ch->dma.desc];
--	int len;
--	unsigned long flags;
--	u32 byte_offset;
--
--	if (skb_put_padto(skb, ETH_ZLEN))
--		return NETDEV_TX_OK;
--	len = skb->len;
--
--	if ((desc->ctl & (LTQ_DMA_OWN | LTQ_DMA_C)) || ch->skb[ch->dma.desc]) {
--		netdev_err(dev, "tx ring full\n");
--		netif_tx_stop_queue(txq);
--		return NETDEV_TX_BUSY;
--	}
--
--	/* dma needs to start on a burst length value aligned address */
--	byte_offset = CPHYSADDR(skb->data) % (priv->tx_burst_len * 4);
--	ch->skb[ch->dma.desc] = skb;
--
--	netif_trans_update(dev);
--
--	spin_lock_irqsave(&priv->lock, flags);
--	desc->addr = ((unsigned int)dma_map_single(&priv->pdev->dev, skb->data, len,
--						DMA_TO_DEVICE)) - byte_offset;
--	/* Make sure the address is written before we give it to HW */
--	wmb();
--	desc->ctl = LTQ_DMA_OWN | LTQ_DMA_SOP | LTQ_DMA_EOP |
--		LTQ_DMA_TX_OFFSET(byte_offset) | (len & LTQ_DMA_SIZE_MASK);
--	ch->dma.desc++;
--	ch->dma.desc %= LTQ_DESC_NUM;
--	spin_unlock_irqrestore(&priv->lock, flags);
--
--	if (ch->dma.desc_base[ch->dma.desc].ctl & LTQ_DMA_OWN)
--		netif_tx_stop_queue(txq);
--
--	return NETDEV_TX_OK;
--}
--
--static int
--ltq_etop_change_mtu(struct net_device *dev, int new_mtu)
--{
--	struct ltq_etop_priv *priv = netdev_priv(dev);
--	unsigned long flags;
--
--	WRITE_ONCE(dev->mtu, new_mtu);
--
--	spin_lock_irqsave(&priv->lock, flags);
--	ltq_etop_w32((ETOP_PLEN_UNDER << 16) | new_mtu, LTQ_ETOP_IGPLEN);
--	spin_unlock_irqrestore(&priv->lock, flags);
--
--	return 0;
--}
--
--static int
--ltq_etop_set_mac_address(struct net_device *dev, void *p)
--{
--	int ret = eth_mac_addr(dev, p);
--
--	if (!ret) {
--		struct ltq_etop_priv *priv = netdev_priv(dev);
--		unsigned long flags;
--
--		/* store the mac for the unicast filter */
--		spin_lock_irqsave(&priv->lock, flags);
--		ltq_etop_w32(*((u32 *)dev->dev_addr), LTQ_ETOP_MAC_DA0);
--		ltq_etop_w32(*((u16 *)&dev->dev_addr[4]) << 16,
--			     LTQ_ETOP_MAC_DA1);
--		spin_unlock_irqrestore(&priv->lock, flags);
--	}
--	return ret;
--}
--
--static void
--ltq_etop_set_multicast_list(struct net_device *dev)
--{
--	struct ltq_etop_priv *priv = netdev_priv(dev);
--	unsigned long flags;
--
--	/* ensure that the unicast filter is not enabled in promiscious mode */
--	spin_lock_irqsave(&priv->lock, flags);
--	if ((dev->flags & IFF_PROMISC) || (dev->flags & IFF_ALLMULTI))
--		ltq_etop_w32_mask(ETOP_FTCU, 0, LTQ_ETOP_ENETS0);
--	else
--		ltq_etop_w32_mask(0, ETOP_FTCU, LTQ_ETOP_ENETS0);
--	spin_unlock_irqrestore(&priv->lock, flags);
--}
--
--static int
--ltq_etop_init(struct net_device *dev)
--{
--	struct ltq_etop_priv *priv = netdev_priv(dev);
--	struct sockaddr mac;
--	int err;
--	bool random_mac = false;
--
--	dev->watchdog_timeo = 10 * HZ;
--	err = ltq_etop_hw_init(dev);
--	if (err)
--		goto err_hw;
--	ltq_etop_change_mtu(dev, 1500);
--
--	memcpy(&mac, &priv->pldata->mac, sizeof(struct sockaddr));
--	if (!is_valid_ether_addr(mac.sa_data)) {
--		pr_warn("etop: invalid MAC, using random\n");
--		eth_random_addr(mac.sa_data);
--		random_mac = true;
--	}
--
--	err = ltq_etop_set_mac_address(dev, &mac);
--	if (err)
--		goto err_netdev;
--
--	/* Set addr_assign_type here, ltq_etop_set_mac_address would reset it. */
--	if (random_mac)
--		dev->addr_assign_type = NET_ADDR_RANDOM;
--
--	ltq_etop_set_multicast_list(dev);
--	err = ltq_etop_mdio_init(dev);
--	if (err)
--		goto err_netdev;
--	return 0;
--
--err_netdev:
--	unregister_netdev(dev);
--	free_netdev(dev);
--err_hw:
--	ltq_etop_hw_exit(dev);
--	return err;
--}
--
--static void
--ltq_etop_tx_timeout(struct net_device *dev, unsigned int txqueue)
--{
--	int err;
--
--	ltq_etop_hw_exit(dev);
--	err = ltq_etop_hw_init(dev);
--	if (err)
--		goto err_hw;
--	netif_trans_update(dev);
--	netif_wake_queue(dev);
--	return;
--
--err_hw:
--	ltq_etop_hw_exit(dev);
--	netdev_err(dev, "failed to restart etop after TX timeout\n");
--}
--
--static const struct net_device_ops ltq_eth_netdev_ops = {
--	.ndo_open = ltq_etop_open,
--	.ndo_stop = ltq_etop_stop,
--	.ndo_start_xmit = ltq_etop_tx,
--	.ndo_change_mtu = ltq_etop_change_mtu,
--	.ndo_eth_ioctl = phy_do_ioctl,
--	.ndo_set_mac_address = ltq_etop_set_mac_address,
--	.ndo_validate_addr = eth_validate_addr,
--	.ndo_set_rx_mode = ltq_etop_set_multicast_list,
--	.ndo_select_queue = dev_pick_tx_zero,
--	.ndo_init = ltq_etop_init,
--	.ndo_tx_timeout = ltq_etop_tx_timeout,
--};
--
--static int __init
--ltq_etop_probe(struct platform_device *pdev)
--{
--	struct net_device *dev;
--	struct ltq_etop_priv *priv;
--	int err;
--	int i;
--
--	ltq_etop_membase = devm_platform_ioremap_resource(pdev, 0);
--	if (IS_ERR(ltq_etop_membase)) {
--		dev_err(&pdev->dev, "failed to remap etop engine %d\n",
--			pdev->id);
--		err = PTR_ERR(ltq_etop_membase);
--		goto err_out;
--	}
--
--	dev = alloc_etherdev_mq(sizeof(struct ltq_etop_priv), 4);
--	if (!dev) {
--		err = -ENOMEM;
--		goto err_out;
--	}
--	dev->netdev_ops = &ltq_eth_netdev_ops;
--	dev->ethtool_ops = &ltq_etop_ethtool_ops;
--	priv = netdev_priv(dev);
--	priv->pdev = pdev;
--	priv->pldata = dev_get_platdata(&pdev->dev);
--	priv->netdev = dev;
--	spin_lock_init(&priv->lock);
--	SET_NETDEV_DEV(dev, &pdev->dev);
--
--	err = device_property_read_u32(&pdev->dev, "lantiq,tx-burst-length", &priv->tx_burst_len);
--	if (err < 0) {
--		dev_err(&pdev->dev, "unable to read tx-burst-length property\n");
--		goto err_free;
--	}
--
--	err = device_property_read_u32(&pdev->dev, "lantiq,rx-burst-length", &priv->rx_burst_len);
--	if (err < 0) {
--		dev_err(&pdev->dev, "unable to read rx-burst-length property\n");
--		goto err_free;
--	}
--
--	for (i = 0; i < MAX_DMA_CHAN; i++) {
--		if (IS_TX(i))
--			netif_napi_add_weight(dev, &priv->ch[i].napi,
--					      ltq_etop_poll_tx, 8);
--		else if (IS_RX(i))
--			netif_napi_add_weight(dev, &priv->ch[i].napi,
--					      ltq_etop_poll_rx, 32);
--		priv->ch[i].netdev = dev;
--	}
--
--	err = register_netdev(dev);
--	if (err)
--		goto err_free;
--
--	platform_set_drvdata(pdev, dev);
--	return 0;
--
--err_free:
--	free_netdev(dev);
--err_out:
--	return err;
--}
--
--static void ltq_etop_remove(struct platform_device *pdev)
--{
--	struct net_device *dev = platform_get_drvdata(pdev);
--
--	if (dev) {
--		netif_tx_stop_all_queues(dev);
--		ltq_etop_hw_exit(dev);
--		ltq_etop_mdio_cleanup(dev);
--		unregister_netdev(dev);
--	}
--}
--
--static struct platform_driver ltq_mii_driver = {
--	.remove = ltq_etop_remove,
--	.driver = {
--		.name = "ltq_etop",
--	},
--};
--
--static int __init
--init_ltq_etop(void)
--{
--	int ret = platform_driver_probe(&ltq_mii_driver, ltq_etop_probe);
--
--	if (ret)
--		pr_err("ltq_etop: Error registering platform driver!");
--	return ret;
--}
--
--static void __exit
--exit_ltq_etop(void)
--{
--	platform_driver_unregister(&ltq_mii_driver);
--}
--
--module_init(init_ltq_etop);
--module_exit(exit_ltq_etop);
--
--MODULE_AUTHOR("John Crispin <blogic@openwrt.org>");
--MODULE_DESCRIPTION("Lantiq SoC ETOP");
--MODULE_LICENSE("GPL");
--- 
-2.52.0
+On 1/29/2026 9:18 AM, Heiner Kallweit wrote:
+> This driver in mainline lost its in-tree user with commit cd93b4895ea5
+> ("MIPS: lantiq: drop mips_machine support") in 2012. Since then it has
+> had no in-tree user. Only user seems to be OpenWRT, with several changes
+> to the in-tree driver version:
+> target/linux/lantiq/patches-6.12/035-owrt-lantiq-wifi-and-ethernet-eeprom-handling.patch
+> target/linux/lantiq/patches-6.12/028-NET-lantiq-various-etop-fixes.patch
+> target/linux/lantiq/patches-6.12/701-NET-lantiq-etop-of-mido.patch
+> So it seems the driver is maintained in OpenWrt only, except tree-wide
+> in-tree changes. According to OpenWRT maintainers it would be ok to
+> remove the driver in mainline and keep it downstream only (see linked
+> conversation).
+> 
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> Link: https://lore.kernel.org/netdev/d80fef86-ba14-4bd4-bce5-4d61a75d591b@hauke-m.de/T/#t
+> --- 
+Makes sense.
 
+Reviewed-by: Jacob Keller <jacob.e.keller@intel.com>
 
