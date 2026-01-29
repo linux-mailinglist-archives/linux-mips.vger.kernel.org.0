@@ -1,44 +1,44 @@
-Return-Path: <linux-mips+bounces-13044-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13045-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YLn4Gutje2l2EQIAu9opvQ
-	(envelope-from <linux-mips+bounces-13044-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Jan 2026 14:43:07 +0100
+	id eDdTOfxke2l2EQIAu9opvQ
+	(envelope-from <linux-mips+bounces-13045-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Jan 2026 14:47:40 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C7CBB0806
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Jan 2026 14:43:07 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56590B08F2
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Jan 2026 14:47:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 8F7A7300B191
-	for <lists+linux-mips@lfdr.de>; Thu, 29 Jan 2026 13:43:05 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 0F59F303AA93
+	for <lists+linux-mips@lfdr.de>; Thu, 29 Jan 2026 13:44:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C9DA3112B7;
-	Thu, 29 Jan 2026 13:43:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B7D7309F00;
+	Thu, 29 Jan 2026 13:44:48 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96A533A1CD;
-	Thu, 29 Jan 2026 13:43:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 39F912EBBA4;
+	Thu, 29 Jan 2026 13:44:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769694185; cv=none; b=HBSL6QnzSAWIk/T5qQC2Nh8HIM/VtOtX+ceu76LRjZBHpFDj7lFp11IQAqp7rjduFaxgznYGF/HXD7qjIhdJWGkJoJzlXgU2Fc0B30m9lEs7y/58Yt+3UnpS8VnhfH+D2oUtW2xO/mZlhN4RlSDFgrEb4KtH+CupfxprPlKbmOc=
+	t=1769694288; cv=none; b=WkMvCjEyOwP2GB5m1cWMT6a+lzBgsuvMIGxiIuOgiDpuourL3rLM8FIhK1ODj488YgUMeRJWQSPe7XmrIzZp046aB8LCuHgBGsXUWPSx5rWgf4mAGpBEKs1SB5LOb/pGACd2per1NHs3KQMEQG4HkhN/HgvVTzsDJeSMjq3TyUw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769694185; c=relaxed/simple;
-	bh=ibKK0IcqWngoOXa8EwyaZZK2r6ZumQd3dGbnqk2e2VM=;
+	s=arc-20240116; t=1769694288; c=relaxed/simple;
+	bh=TGYpPA+oEoj/iGBTPmevIonf4yZKGpNJK/MyC5lSJh0=;
 	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=RJVs3l0/HRnYT/1YLW8/RBfpuPYqDbpByeE91Iql2jTv8r9GcyAssuxk+zLfYs0cZAfdtPhzdyxnEF89vAmwV/3e5R/iGWmyvNDhAWFs2klVa2/yud5GochRilzupX5d18IZEIfnxJfnUgLDC+r5B6h59UnUQm53Qk4dRcAaoIE=
+	 MIME-Version:Content-Type; b=cEAuBPgZZX5IohkgYcO1E6gj7TYoR217CIiCz+4yq0UbrGV0cHOUwnwnbjh+bUS5QSiZJIfSHr+UKfOI7g0j5oM9yFEggVkPKt93Flk2D6jQKs9iusIi9h07kwmjHFPnCi1Jm+XYC8Pon/QUbGYuYyggUuknBOTkGmyY2n1Ib8Q=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
 Received: by angie.orcam.me.uk (Postfix, from userid 500)
-	id C51D492009C; Thu, 29 Jan 2026 14:42:53 +0100 (CET)
+	id 7F37392009C; Thu, 29 Jan 2026 14:44:44 +0100 (CET)
 Received: from localhost (localhost [127.0.0.1])
-	by angie.orcam.me.uk (Postfix) with ESMTP id C152692009B;
-	Thu, 29 Jan 2026 13:42:53 +0000 (GMT)
-Date: Thu, 29 Jan 2026 13:42:53 +0000 (GMT)
+	by angie.orcam.me.uk (Postfix) with ESMTP id 77BA392009B;
+	Thu, 29 Jan 2026 13:44:44 +0000 (GMT)
+Date: Thu, 29 Jan 2026 13:44:44 +0000 (GMT)
 From: "Maciej W. Rozycki" <macro@orcam.me.uk>
-To: Jakub Kicinski <kuba@kernel.org>
-cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>, netdev@vger.kernel.org, 
+To: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+cc: Jakub Kicinski <kuba@kernel.org>, netdev@vger.kernel.org, 
     linux-doc@vger.kernel.org, linux-pci@vger.kernel.org, 
     linux-mips@vger.kernel.org, linux-s390@vger.kernel.org, 
     Jonathan Corbet <corbet@lwn.net>, Linas Vepstas <linasvepstas@gmail.com>, 
@@ -79,9 +79,9 @@ cc: Ethan Nelson-Moore <enelsonmoore@gmail.com>, netdev@vger.kernel.org,
     Giovanni Cabiddu <giovanni.cabiddu@intel.com>
 Subject: Re: [PATCH net-next v2] net: ethernet: neterion: s2io: remove unused
  driver
-In-Reply-To: <20260127155607.3f80ec99@kernel.org>
-Message-ID: <alpine.DEB.2.21.2601290525150.40317@angie.orcam.me.uk>
-References: <20260126031352.22997-1-enelsonmoore@gmail.com> <alpine.DEB.2.21.2601270110590.40317@angie.orcam.me.uk> <20260127155607.3f80ec99@kernel.org>
+In-Reply-To: <CADkSEUjfBQLqibc2zrcWHhOwu7kUf8FceYDfevAFHV4rCqsUUQ@mail.gmail.com>
+Message-ID: <alpine.DEB.2.21.2601290525190.40317@angie.orcam.me.uk>
+References: <20260126031352.22997-1-enelsonmoore@gmail.com> <alpine.DEB.2.21.2601270110590.40317@angie.orcam.me.uk> <20260127155607.3f80ec99@kernel.org> <CADkSEUjfBQLqibc2zrcWHhOwu7kUf8FceYDfevAFHV4rCqsUUQ@mail.gmail.com>
 User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -94,64 +94,61 @@ X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.04 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
+	TAGGED_FROM(0.00)[bounces-13045-lists,linux-mips=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[gmail.com,vger.kernel.org,lwn.net,linux.ibm.com,google.com,davemloft.net,redhat.com,kernel.org,alpha.franken.de,ellerman.id.au,lunn.ch,linux-foundation.org,posteo.de,ucw.cz,ti.com,net-swift.com,netfilter.org,suse.de,mit.edu,linux-m68k.org,oracle.com,gondor.apana.org.au,linux.dev,mucse.com,wunner.de,intel.com];
-	DMARC_NA(0.00)[orcam.me.uk];
-	TAGGED_FROM(0.00)[bounces-13044-lists,linux-mips=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
 	RCVD_TLS_LAST(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,vger.kernel.org,lwn.net,gmail.com,linux.ibm.com,google.com,davemloft.net,redhat.com,alpha.franken.de,ellerman.id.au,lunn.ch,linux-foundation.org,posteo.de,ucw.cz,ti.com,net-swift.com,netfilter.org,suse.de,mit.edu,linux-m68k.org,oracle.com,gondor.apana.org.au,linux.dev,mucse.com,wunner.de,intel.com];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	DMARC_NA(0.00)[orcam.me.uk];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips,netdev];
+	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[macro@orcam.me.uk,linux-mips@vger.kernel.org];
-	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCPT_COUNT_GT_50(0.00)[55];
 	R_DKIM_NA(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
+	TAGGED_RCPT(0.00)[linux-mips,netdev];
 	MID_RHS_MATCH_FROMTLD(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 0C7CBB0806
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,angie.orcam.me.uk:mid]
+X-Rspamd-Queue-Id: 56590B08F2
 X-Rspamd-Action: no action
 
-On Tue, 27 Jan 2026, Jakub Kicinski wrote:
+On Wed, 28 Jan 2026, Ethan Nelson-Moore wrote:
 
-> > > highly unlikely that this driver is still being used. Remove the
-> > > driver, and move the former maintainer to the CREDITS file (restoring
-> > > credit for the vxge driver, which was removed in commit f05643a0f60b
-> > > ("eth: remove neterion/vxge").  
-> > 
-> >  How do you know it's not used? 
-> 
-> Hard to prove a negative and whatnot.
-> 
-> We deleted the vxge which I think(?) was for a newer version of this HW
-> 3+ years ago and nobody complained. 
+> > We deleted the vxge which I think(?) was for a newer version of this HW
+> > 3+ years ago and nobody complained.
+> Yes, it was for the newer PCIe version of this hardware. Since no one
+> complained about that (unlike when fealnx and sundance were removed
+> and then restored on request), it's even less likely someone is using
+> the PCI-X version. FWIW, 64-bit PCI and 66MHz PCI are even rarer than
+> PCI-X, so there's basically no way to use this card with reasonable
+> performance nowadays.
 
- It may or may not mean anything.  Overall I think it would be fair to 
-have a deprecation period of say a year with the affected code guarded 
-with CONFIG_DEPRECATED, giving a chance for people downstream to notice 
-and act.  That seems to work for the other projects I've been involved 
-with (GNU toolchain components and the policy for target removal).
+ Well, I have a system with 64-bit/66MHz 3.3V PCI slots, so I could use 
+the network card right away if I had one (I prefer FDDI though, works 
+nicely for my intranet).  Something being rare does not mean no one has a 
+use for it.
 
-> > What's the gain from removing a driver unless say it's broken and
-> > does not build?
-> 
-> People keep sending cleanups and fixes for these old drivers.
-> It takes time to review that stuff.
+> > > What's the gain from removing a driver unless say it's broken and
+> > > does not build?
+> It very well might be broken. When vxge was removed it emerged that
+> someone had reported it as having last worked in 4.1 and broken
+> somewhere between there and 4.4 - see:
+> https://bugzilla.kernel.org/show_bug.cgi?id=197881
 
- Fair point, however the driver has a maintainer listed who should be 
-taking care of that.  I can see he was cc'd on v1 but not this revision, 
-so does that mean the address bounces?  If so, it should be stated in an
-updated change description, and that would certainly be a good reason to 
-first deprecate a driver and if no one steps up, then discard it.
+ Now, that's surely a good argument in favour to removal, although a 
+single report might be too little, as it could be an odd combination of 
+the system and the option rather than the driver being outright broken.
+In any case I think it should be mentioned in the commit description.
 
   Maciej
 
