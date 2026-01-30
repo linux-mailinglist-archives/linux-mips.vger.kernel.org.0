@@ -1,132 +1,206 @@
-Return-Path: <linux-mips+bounces-13048-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13049-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id wMmMOQL3e2nWJgIAu9opvQ
-	(envelope-from <linux-mips+bounces-13048-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Fri, 30 Jan 2026 01:10:42 +0100
+	id hvbGBqtRfGmwLwIAu9opvQ
+	(envelope-from <linux-mips+bounces-13049-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Fri, 30 Jan 2026 07:37:31 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 492ECB5CCD
-	for <lists+linux-mips@lfdr.de>; Fri, 30 Jan 2026 01:10:42 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 669F3B7A5E
+	for <lists+linux-mips@lfdr.de>; Fri, 30 Jan 2026 07:37:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id C3F9D3016247
-	for <lists+linux-mips@lfdr.de>; Fri, 30 Jan 2026 00:10:35 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 1C70F300EFB6
+	for <lists+linux-mips@lfdr.de>; Fri, 30 Jan 2026 06:37:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35D741DF736;
-	Fri, 30 Jan 2026 00:10:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 769FB314B66;
+	Fri, 30 Jan 2026 06:37:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y+7Rhbzh"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CEWlIz8/"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 120A71BD9D0;
-	Fri, 30 Jan 2026 00:10:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3CB8303CA0
+	for <linux-mips@vger.kernel.org>; Fri, 30 Jan 2026 06:37:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769731834; cv=none; b=DN4pVLQlLaj4EKnj8K8jpH+5eJPXnYd3AweQPN4nx/ZIgwVYxRYMuK6EK8ZaqPYSPbW3MfFqjd4nNbEK3DWS6Oai/Ry+WKPUVwLl4GQlBLOUWo5kkz9LNcxO1uSLmuenJXEGvwYSzBgZGbw2b+LYIDUiHc6SoJBLXn3ESWO77rA=
+	t=1769755048; cv=none; b=rK3VfwFIFSyS30pBLPH0aQL+UPs7GzjoBMfPQjk9+zTgqwbYwAg1J6C2s6ehBqJtuLnTUyXXLWlOx5qo05vDJONoOcl/g1c4TXCzq1uc1GWbafCD3lQlvdenDviHixuWbO9i1Dugbf2Hf5xrFuRvPzLhVRwvCVN4weoRA/qp/Rk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769731834; c=relaxed/simple;
-	bh=PWynZwimuG+0Ms0GuPD3HOTG5tOoe7YputW33/OhNY4=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=AULTWd/iX6odKp+Te1/jL13BGGJM6Kda7VxQGW7GPKlgiRxVheuPUElupXVMYIIp0zzkGojwzYr/I+u6vQDZzgM0Y12BxyYV6/6oweHfRFIAIhiGdgXpZQW5nMHLMYlODD9sZKLKv4mFw58QlrMqmjUSob+YkjlP8o9/yJzNEtM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y+7Rhbzh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CFA01C16AAE;
-	Fri, 30 Jan 2026 00:10:31 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1769731833;
-	bh=PWynZwimuG+0Ms0GuPD3HOTG5tOoe7YputW33/OhNY4=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=Y+7RhbzhmvJRxWUvIZXRw5ufdxMQ0QAahrYsbPkquIfhRoFBzgmtuPGkp5rgnzuec
-	 MMoLFT2yOsnw7q8bm4dACBac8qJ12lzqwLyur68+1TNfrb9RRLap9eZWQiyuzjzzKw
-	 JP8JCLtPPfRYsPS7gaEvWfiC778X3Fd7d1EjH0o+C/1lKUUTGwpG2Y6gQPjSW2Fpas
-	 anBLnWK/R5XKE0TzZn6g8rPju/YMkSCvNyVa84uNGlJIGYJn0egdk+hBdGfgx5tT50
-	 AGFJUPDCigy/jEXDiOfXSzmM1BnbT3irezqdFgu9yy3Fos918LqSu7w3FHBJvQ2gm6
-	 IwRtialxxDlYg==
-From: Nathan Chancellor <nathan@kernel.org>
-To: linux-kernel@vger.kernel.org, Ard Biesheuvel <ardb+git@google.com>
-Cc: Ard Biesheuvel <ardb@kernel.org>, Nathan Chancellor <nathan@kernel.org>, 
- Nicolas Schier <nsc@kernel.org>, Kees Cook <kees@kernel.org>, 
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- linux-kbuild@vger.kernel.org, linux-hardening@vger.kernel.org, 
- linux-mips@vger.kernel.org
-In-Reply-To: <20260116093359.2442297-4-ardb+git@google.com>
-References: <20260116093359.2442297-4-ardb+git@google.com>
-Subject: Re: [PATCH v2 0/2] Simplify kallsyms offset table generation
-Message-Id: <176973183159.175491.9742885221630963935.b4-ty@kernel.org>
-Date: Thu, 29 Jan 2026 17:10:31 -0700
+	s=arc-20240116; t=1769755048; c=relaxed/simple;
+	bh=95v7NV8y8jvkm5MvFyZ3sn6LRDvHRfQIIUv1qPreNHc=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=negVy+wwZLGXZ/48sHIHYZRERAYJaFv/2W5UQqxA2f/OEcxRX7qs4GMcqap+qkB2AVhdZB5upYOZeWjV80Cc3evIBjlDixymfXIlzkK1gxXEqaMkyxLbayASrUDA6nop4He9ymSIqxqgijggJQp7cUNPGjvInvKlFQz1Zx9QNq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CEWlIz8/; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-47ee76e8656so22842625e9.0
+        for <linux-mips@vger.kernel.org>; Thu, 29 Jan 2026 22:37:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1769755045; x=1770359845; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=iaIL6hcZTlvS2jyO/4/sgFg+iA2PNPmH4knID0fBdVs=;
+        b=CEWlIz8/Ey8JQ76cky6LMxI2C+nzQavRmqmYHrq30lmWQcVJP+LvIv/A1Vslie0Yny
+         Ton3JKnUPImiUuMhoV0EPZ1ErfybmYB94YvV5OOZewvpZwBfNk+w4mLAOZpqM1vhV2GW
+         CRBGt92dAW6St1lFYEDYibAU3f3azFDxGTZxswiqf7kl/OTmKPHoLDWMQArl6FwHiZLC
+         v2MIqWkb+qPPhhTcs43Kxu6jda6lFhrf9DS3gtE1YBEmluzQ5KJkRQI5kmGOv28vgzjh
+         BfECj+5ceHA5UqDsDDCE9zG4nQOCDjns/s2fdik5y8fnBiS0kjRcNOd6PqrfrdMseTRP
+         ilaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1769755045; x=1770359845;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:x-gm-gg
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=iaIL6hcZTlvS2jyO/4/sgFg+iA2PNPmH4knID0fBdVs=;
+        b=nn6pZjnzpnWWBsIujg959VmMj8/ussMVoOczw8mtobBLIrLovtbc/pbsCLlX9Cb1UD
+         gCd5odqdvOuMa9ToO+B4mfoGmUdya/lLgzj8EN3+3S5q1fK7I46tkNj5cD1uz4KMLuDb
+         y4M0fPl/7NFNsxNBSk3LBQZQ/y0dVZIbGAql/cKuy+sOaZJYUXyKbdGyMCUL1KqKdcoH
+         eLt3ALVzL0m20G+HVZkIauW5txY6gBEq8wn+Uh+59AxDdlv1MivLOq1C+K27dy9nyglM
+         kv6IwoZU6GQapWiXJ5cCkVf+BhTqTW+tJU3ssNntegJscxWWuru0JmLml6TyhLtDLf0a
+         S2wA==
+X-Forwarded-Encrypted: i=1; AJvYcCWJYS9BKzms7klV5Wye69qz20SKIs8olH4itpWEtYLeX5ZoTv4tKn7M97ZD6FtD9fNYyXRCnghQRAYW@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJUezBnOV2QqlK17+fEObIv/qtbRUw1Wo7A2svJZaT6YEWW2pc
+	5/jwiCwT8Zs7PTXkjyOaSUWboeiNAmYY46YoFIB8PqTX5pmARYQQn+ow
+X-Gm-Gg: AZuq6aIYZm7u5Ac8x7bOwCK9h2wVGh6Py8Bb9GOaD4xtC1wgP9CqF0JxcDECrszNxyY
+	DHPECabIpEY1gGD8BebGajzA/wiIhC9sy2hTBYmEytHRQ1eHDnnutaVombBaSb3OfogzfxPljg4
+	IBXskRYeWuftsjXweHCJFzgFsmgTo7JCc/QbYG/yLxUJySRui3Q9u9iDhI/VtxOjwTuTrXNTYof
+	LmhI2VNA3K2vAFFLY9TFQjDbgtigv8xGwM5kvq3+wjjNb8aJyLF/JptpOXg/lCmdRp/sQ0O76ud
+	9nymJ84qMl/7WIEhZICUBQX21rLJW5WuPa9K18jC141u/IfiXJ1BZhLE+zlcdmYqia0zlZW3Ioa
+	AZkBhjh9dMZzOPdakcH0D0waKucsP9DzSPMGQlwJUc44OUghaI3ZdOOzBKh7FST0sjkH8rjvTXV
+	whyKLq7BvqqB+C3YqMlGFOPcRmjGn6GNraCiBkznQyg5lFwXtBsokuwMDg5XiUF0vvnfUT27mzU
+	AtpQS/fZAyUunVZfsLyGx00WyrhduWM145JLBnCtyE/xZe9ysXjiA==
+X-Received: by 2002:a05:600c:3e10:b0:477:fcb:2256 with SMTP id 5b1f17b1804b1-482db4922d1mr20017285e9.17.1769755045218;
+        Thu, 29 Jan 2026 22:37:25 -0800 (PST)
+Received: from ?IPV6:2003:ea:8f34:1500:a5ab:a2a5:28b0:fbf7? (p200300ea8f341500a5aba2a528b0fbf7.dip0.t-ipconnect.de. [2003:ea:8f34:1500:a5ab:a2a5:28b0:fbf7])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-482e2543dcdsm5069745e9.9.2026.01.29.22.37.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 29 Jan 2026 22:37:24 -0800 (PST)
+Message-ID: <63ecf47d-6702-49d0-b063-f2f2510ef45b@gmail.com>
+Date: Fri, 30 Jan 2026 07:37:23 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH net-next] net: lantiq_etop: remove driver
+From: Heiner Kallweit <hkallweit1@gmail.com>
+To: Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ David Miller <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Simon Horman <horms@kernel.org>, Andrew Lunn <andrew+netdev@lunn.ch>,
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+ Vadim Fedorenko <vadim.fedorenko@linux.dev>,
+ Lorenzo Bianconi <lorenzo@kernel.org>, Hauke Mehrtens <hauke@hauke-m.de>
+Cc: "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
+ OpenWrt Development List <openwrt-devel@lists.openwrt.org>,
+ Daniel Golle <daniel@makrotopia.org>
+References: <7b2b53b6-d230-47bb-98d9-b7acfbfdd8ca@gmail.com>
+Content-Language: en-US
+In-Reply-To: <7b2b53b6-d230-47bb-98d9-b7acfbfdd8ca@gmail.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13048-lists,linux-mips=lfdr.de];
-	DKIM_TRACE(0.00)[kernel.org:+];
+	FREEMAIL_FROM(0.00)[gmail.com];
+	RCPT_COUNT_TWELVE(0.00)[14];
+	TAGGED_FROM(0.00)[bounces-13049-lists,linux-mips=lfdr.de];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	DKIM_TRACE(0.00)[gmail.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[nathan@kernel.org,linux-mips@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	FROM_NEQ_ENVFROM(0.00)[hkallweit1@gmail.com,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_COUNT_FIVE(0.00)[5];
 	MID_RHS_MATCH_FROM(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips,git];
-	RCPT_COUNT_SEVEN(0.00)[10];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 492ECB5CCD
+	TAGGED_RCPT(0.00)[linux-mips,netdev];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 669F3B7A5E
 X-Rspamd-Action: no action
 
-On Fri, 16 Jan 2026 10:34:00 +0100, Ard Biesheuvel wrote:
-> From: Ard Biesheuvel <ardb@kernel.org>
+On 1/29/2026 6:18 PM, Heiner Kallweit wrote:
+> This driver in mainline lost its in-tree user with commit cd93b4895ea5
+> ("MIPS: lantiq: drop mips_machine support") in 2012. Since then it has
+> had no in-tree user. Only user seems to be OpenWRT, with several changes
+> to the in-tree driver version:
+> target/linux/lantiq/patches-6.12/035-owrt-lantiq-wifi-and-ethernet-eeprom-handling.patch
+> target/linux/lantiq/patches-6.12/028-NET-lantiq-various-etop-fixes.patch
+> target/linux/lantiq/patches-6.12/701-NET-lantiq-etop-of-mido.patch
+> So it seems the driver is maintained in OpenWrt only, except tree-wide
+> in-tree changes. According to OpenWRT maintainers it would be ok to
+> remove the driver in mainline and keep it downstream only (see linked
+> conversation).
 > 
-> v2:
-> - implement minimal PC32 support for MIPS so it can tolerate the symbol
->   references emitted by kallsyms
-> - use signed decimal to represent the offset, so that symbols appearing
->   before _text can be represented correctly.
-> - add Kees's ack
+> Signed-off-by: Heiner Kallweit <hkallweit1@gmail.com>
+> Link: https://lore.kernel.org/netdev/d80fef86-ba14-4bd4-bce5-4d61a75d591b@hauke-m.de/T/#t
+> ---
+>  .../include/asm/mach-lantiq/lantiq_platform.h |  18 -
+>  drivers/net/ethernet/Kconfig                  |   6 -
+>  drivers/net/ethernet/Makefile                 |   1 -
+>  drivers/net/ethernet/lantiq_etop.c            | 745 ------------------
+>  4 files changed, 770 deletions(-)
+>  delete mode 100644 arch/mips/include/asm/mach-lantiq/lantiq_platform.h
+>  delete mode 100644 drivers/net/ethernet/lantiq_etop.c
 > 
-> [...]
+> diff --git a/arch/mips/include/asm/mach-lantiq/lantiq_platform.h b/arch/mips/include/asm/mach-lantiq/lantiq_platform.h
+> deleted file mode 100644
+> index 70ebb4d6f05..00000000000
+> --- a/arch/mips/include/asm/mach-lantiq/lantiq_platform.h
+> +++ /dev/null
+> @@ -1,18 +0,0 @@
+> -/* SPDX-License-Identifier: GPL-2.0-only */
+> -/*
+> - *
+> - *  Copyright (C) 2010 John Crispin <john@phrozen.org>
+> - */
+> -
+> -#ifndef _LANTIQ_PLATFORM_H__
+> -#define _LANTIQ_PLATFORM_H__
+> -
+> -#include <linux/socket.h>
+> -
+> -/* struct used to pass info to network drivers */
+> -struct ltq_eth_data {
+> -	struct sockaddr mac;
+> -	int mii_mode;
+> -};
+> -
+> -#endif
+> diff --git a/drivers/net/ethernet/Kconfig b/drivers/net/ethernet/Kconfig
+> index aa7103e7f47..9775fd401b0 100644
+> --- a/drivers/net/ethernet/Kconfig
+> +++ b/drivers/net/ethernet/Kconfig
+> @@ -93,12 +93,6 @@ config KORINA
+>  	  If you have a Mikrotik RouterBoard 500 or IDT RC32434
+>  	  based system say Y. Otherwise say N.
+>  
+> -config LANTIQ_ETOP
+> -	tristate "Lantiq SoC ETOP driver"
+> -	depends on SOC_TYPE_XWAY
+> -	help
+> -	  Support for the MII0 inside the Lantiq SoC
+> -
+AI review complained that setting this config symbol should be
+removed from arch/mips/configs/xway_defconfig. So I'll submit a v2.
 
-Applied to
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/kbuild/linux.git kbuild-next
-
-Thanks!
-
-[1/2] mips: Add support for PC32 relocations in vmlinux
-      (no commit info)
-[2/2] kallsyms: Get rid of kallsyms relative base
-      (no commit info)
-
-Please look out for regression or issue reports or other follow up
-comments, as they may result in the patch/series getting dropped or
-reverted. Patches applied to an "unstable" branch are accepted pending
-wider testing in -next and any post-commit review; they will generally
-be moved to the main branch in a week if no issues are found.
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
-
+--
+pw-bot: cr
 
