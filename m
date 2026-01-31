@@ -1,40 +1,40 @@
-Return-Path: <linux-mips+bounces-13066-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13068-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kO4CKdzPfWlQTwIAu9opvQ
-	(envelope-from <linux-mips+bounces-13066-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Sat, 31 Jan 2026 10:48:12 +0100
+	id qNP4EgjQfWlQTwIAu9opvQ
+	(envelope-from <linux-mips+bounces-13068-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Sat, 31 Jan 2026 10:48:56 +0100
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08191C16A7
-	for <lists+linux-mips@lfdr.de>; Sat, 31 Jan 2026 10:48:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DE0E4C16DC
+	for <lists+linux-mips@lfdr.de>; Sat, 31 Jan 2026 10:48:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id D1B82303DA95
-	for <lists+linux-mips@lfdr.de>; Sat, 31 Jan 2026 09:46:20 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 62B0A30480CD
+	for <lists+linux-mips@lfdr.de>; Sat, 31 Jan 2026 09:46:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E03F532B99F;
-	Sat, 31 Jan 2026 09:46:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9157333D6C8;
+	Sat, 31 Jan 2026 09:46:18 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
 Received: from cstnet.cn (smtp84.cstnet.cn [159.226.251.84])
 	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A90E33FE12;
-	Sat, 31 Jan 2026 09:46:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D81633164BB;
+	Sat, 31 Jan 2026 09:46:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.84
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1769852776; cv=none; b=mq2FZXhPDqhmAebXZSC7prasXbz6dUOnVHFd8myBSB6/H2vJFCMSrW5ojAZymkxu9iYPXKnpKTk+CpRqJEMpJPHJg3IliIKAJ3SmTbgpbb0KmwRwZZJVQZ59hm6xhPAJ7m56jrJ/sAH9rXS10uXi2Rei0jXRGMWy9Z9qe+bAxEc=
+	t=1769852778; cv=none; b=MQ5jTUL9aLFHv4Nlw+iOCbzbuXrirO5C6qcjwJ7Z/Lw28PA0HDftH8ieK6W/5nuCasOeoWnHU4P6qjyt5oM1XdwKq0tirIeuglD0NGSdB+mfdYJTTPlggW/cGY+yd0O8Wrrlp9zI8RI2jKyCPPP4GfaP8sLyBnl0YDQfZRbzFAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1769852776; c=relaxed/simple;
-	bh=jmxURdJ/UF/4J4oKDQgJgN6DLn3C74LWfnmQNuu/FxA=;
+	s=arc-20240116; t=1769852778; c=relaxed/simple;
+	bh=N5kK6S8PFSPQelD+YvhxuXEvoRW1SeFvBRq1h2RAgeA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Z8gxA/+6RyVeOLDrRE+cOYLc5MCTiDqPIsMJ1nzxCo/xawNPcVnlkefALV7nS4zDDmOaRaeIVweglFhwtHKOJ28nS7UntlH3zK3BFzhb35vouaxwyT2XISRs/PGxysBjc9tB7VydUn7CpumIamGpy3TUqEBYDnoQn5EVArrsES8=
+	 MIME-Version; b=u4jFE3NkSVLLw/Sa05lxv31nepqkcR2sfw2b3FA4ARypJDPoI0dYBjXFJq8Z3eyyGGrnVOtucJWqmLhIDwuYJQM2B/H6HLX7hxJjEWGmNpgYze46FD8gqaZ6K3tuiJNqFxAZUrIldOhSGkfdR/ICE403lml+8qSImGLeSep1KNo=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.84
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
 Received: from edelgard.fodlan.icenowy.me (unknown [112.94.102.235])
-	by APP-05 (Coremail) with SMTP id zQCowAC3Sw9Rz31p9UgiBw--.57463S7;
-	Sat, 31 Jan 2026 17:46:09 +0800 (CST)
+	by APP-05 (Coremail) with SMTP id zQCowAC3Sw9Rz31p9UgiBw--.57463S8;
+	Sat, 31 Jan 2026 17:46:11 +0800 (CST)
 From: Icenowy Zheng <zhengxingda@iscas.ac.cn>
 To: Thomas Gleixner <tglx@kernel.org>,
 	Rob Herring <robh@kernel.org>,
@@ -47,9 +47,9 @@ Cc: linux-kernel@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-mips@vger.kernel.org,
 	Icenowy Zheng <zhengxingda@iscas.ac.cn>
-Subject: [PATCH 5/8] irqchip/loongson-pch-lpc: add OF init code
-Date: Sat, 31 Jan 2026 17:45:44 +0800
-Message-ID: <20260131094547.455916-6-zhengxingda@iscas.ac.cn>
+Subject: [PATCH 6/8] irqchip/loongson-pch-lpc: enable building on MIPS Loongson64
+Date: Sat, 31 Jan 2026 17:45:45 +0800
+Message-ID: <20260131094547.455916-7-zhengxingda@iscas.ac.cn>
 X-Mailer: git-send-email 2.52.0
 In-Reply-To: <20260131094547.455916-1-zhengxingda@iscas.ac.cn>
 References: <20260131094547.455916-1-zhengxingda@iscas.ac.cn>
@@ -60,24 +60,24 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:zQCowAC3Sw9Rz31p9UgiBw--.57463S7
-X-Coremail-Antispam: 1UD129KBjvJXoW7tr13ZFy8Zr48Jr4kGrWrAFb_yoW8AF1DpF
-	W5CayfAr4rGr129w1fCF18ArWayFs5GrW7trWxX3WfZw1DtrykGw1DCF1qvr4fArW3WFW5
-	uF4FgF45CFWUAF7anT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-	9KBjDU0xBIdaVrnRJUUUm214x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-	rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
-	kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
-	z4x0Y4vE2Ix0cI8IcVAFwI0_Gr0_Xr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr
-	1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0D
-	M2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjx
-	v20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1l
-	F7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2
-	IY04v7MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
-	6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
-	CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF
-	0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMI
-	IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVF
-	xhVjvjDU0xZFpf9x0JUQFxUUUUUU=
+X-CM-TRANSID:zQCowAC3Sw9Rz31p9UgiBw--.57463S8
+X-Coremail-Antispam: 1UD129KBjvdXoW7XF4DKr18CF47Jw43Jr4fKrg_yoW3ArgEk3
+	4j9Fs7XFy2kry7JryrWF4fZry2kayqgrn2kF4Fqw1fX3WIqw1xW3Wjva15Jr47Ga48WFna
+	v3yI9rn7Aw10yjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+	9fnUUIcSsGvfJTRUUUbv8FF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAVCq3wA2048vs2
+	IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28E
+	F7xvwVC0I7IYx2IY67AKxVW8JVW5JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr
+	1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_GcCE3s1l
+	e2I262IYc4CY6c8Ij28IcVAaY2xG8wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI
+	8IcVAFwI0_Jr0_Jr4lYx0Ex4A2jsIE14v26r1j6r4UMcvjeVCFs4IE7xkEbVWUJVW8JwAC
+	jcxG0xvY0x0EwIxGrwACjI8F5VA0II8E6IAqYI8I648v4I1lFIxGxcIEc7CjxVA2Y2ka0x
+	kIwI1lc7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_
+	Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1V
+	AY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_JFI_Gr1lIxAI
+	cVC0I7IYx2IY6xkF7I0E14v26F4j6r4UJwCI42IY6xAIw20EY4v20xvaj40_Jr0_JF4lIx
+	AIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUvcSsGvfC2
+	KfnxnUUI43ZEXa7VUbPC7UUUUUU==
 X-CM-SenderInfo: x2kh0wp0lqwv3d6l2u1dvotugofq/
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [1.54 / 15.00];
@@ -90,7 +90,7 @@ X-Spamd-Result: default: False [1.54 / 15.00];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13066-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13068-lists,linux-mips=lfdr.de];
 	DMARC_NA(0.00)[iscas.ac.cn];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -105,64 +105,33 @@ X-Spamd-Result: default: False [1.54 / 15.00];
 	RCPT_COUNT_SEVEN(0.00)[11];
 	TO_DN_SOME(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips,dt];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[flygoat.com:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,iscas.ac.cn:mid,iscas.ac.cn:email]
-X-Rspamd-Queue-Id: 08191C16A7
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,iscas.ac.cn:mid,iscas.ac.cn:email]
+X-Rspamd-Queue-Id: DE0E4C16DC
 X-Rspamd-Action: no action
 
-As the (kernel-internally) OF-based MIPS Loongson-3 systems can also
-have PCH LPC interrupt controller, add OF-based initialization code for
-the driver.
+As the driver can now support OF-based platforms, it's now possible to
+use it on MIPS Loongson64 machines.
 
-Co-developed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Drop the requirement of LOONGARCH for this driver, to allow build on
+both MIPS-based and LoongArch-based Loongson systems.
+
 Signed-off-by: Icenowy Zheng <zhengxingda@iscas.ac.cn>
 ---
- drivers/irqchip/irq-loongson-pch-lpc.c | 28 ++++++++++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ drivers/irqchip/Kconfig | 1 -
+ 1 file changed, 1 deletion(-)
 
-diff --git a/drivers/irqchip/irq-loongson-pch-lpc.c b/drivers/irqchip/irq-loongson-pch-lpc.c
-index 96489e031d34e..0baa93028abf4 100644
---- a/drivers/irqchip/irq-loongson-pch-lpc.c
-+++ b/drivers/irqchip/irq-loongson-pch-lpc.c
-@@ -13,6 +13,8 @@
- #include <linux/irqchip/chained_irq.h>
- #include <linux/irqdomain.h>
- #include <linux/kernel.h>
-+#include <linux/of_address.h>
-+#include <linux/of_irq.h>
- #include <linux/syscore_ops.h>
+diff --git a/drivers/irqchip/Kconfig b/drivers/irqchip/Kconfig
+index f334f49c9791f..80a3ec2fc2aed 100644
+--- a/drivers/irqchip/Kconfig
++++ b/drivers/irqchip/Kconfig
+@@ -754,7 +754,6 @@ config LOONGSON_PCH_MSI
  
- #include "irq-loongson.h"
-@@ -257,3 +259,29 @@ int __init pch_lpc_acpi_init(struct irq_domain *parent,
- 	return 0;
- }
- #endif /* CONFIG_ACPI */
-+
-+#ifdef CONFIG_OF
-+static int pch_lpc_of_init(struct device_node *node,
-+				struct device_node *parent)
-+{
-+	int parent_irq;
-+	struct fwnode_handle *irq_handle;
-+	struct resource res;
-+
-+	if (of_address_to_resource(node, 0, &res))
-+		return -EINVAL;
-+
-+	parent_irq = irq_of_parse_and_map(node, 0);
-+	if (!parent_irq) {
-+		pr_err("Failed to get the parent IRQ for LPC IRQs\n");
-+		return -EINVAL;
-+	}
-+
-+	irq_handle = of_fwnode_handle(node);
-+
-+	return pch_lpc_init(res.start, resource_size(&res), irq_handle,
-+			    parent_irq);
-+}
-+
-+IRQCHIP_DECLARE(pch_lpc, "loongson,pch-lpc-1.0", pch_lpc_of_init);
-+#endif /* CONFIG_OF */
+ config LOONGSON_PCH_LPC
+ 	bool "Loongson PCH LPC Controller"
+-	depends on LOONGARCH
+ 	depends on MACH_LOONGSON64
+ 	default MACH_LOONGSON64
+ 	select IRQ_DOMAIN_HIERARCHY
 -- 
 2.52.0
 
