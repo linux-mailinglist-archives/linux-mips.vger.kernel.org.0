@@ -1,73 +1,58 @@
-Return-Path: <linux-mips+bounces-13093-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13094-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qI60AD/AgGl3AgMAu9opvQ
-	(envelope-from <linux-mips+bounces-13093-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 02 Feb 2026 16:18:23 +0100
+	id EBmXA0kwgWkMEwMAu9opvQ
+	(envelope-from <linux-mips+bounces-13094-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 03 Feb 2026 00:16:25 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CF5ACE140
-	for <lists+linux-mips@lfdr.de>; Mon, 02 Feb 2026 16:18:22 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 607A9D29EB
+	for <lists+linux-mips@lfdr.de>; Tue, 03 Feb 2026 00:16:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 03FD6301372E
-	for <lists+linux-mips@lfdr.de>; Mon,  2 Feb 2026 15:08:19 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id AC9A5300460A
+	for <lists+linux-mips@lfdr.de>; Mon,  2 Feb 2026 23:07:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E16037475A;
-	Mon,  2 Feb 2026 15:08:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 556C738BF71;
+	Mon,  2 Feb 2026 23:07:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ziyao.cc header.i=me@ziyao.cc header.b="UcsB6VLP"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X2XqYk+U"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A913369979;
-	Mon,  2 Feb 2026 15:08:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770044898; cv=pass; b=a6cBmqPBQ5uN8Ka8hprJ9NrNo8rJVBVGKD8NQ6w1SfA4oQC1s55mO8RJc3++sjAK0d4tTxIS6tPBfYYN0aKT47mxDIPDuIjtN8tGWVBQVMlgRxiNjpK35V6LBslUvGfKtr2AhBtZJ1Q+tdg7XXgHMJck6y9C6J2rh9dei09s9fc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770044898; c=relaxed/simple;
-	bh=OHwglCci930h0BPeoKnfBXI07YfnmYvkYhe1czCXm5k=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02447389E09;
+	Mon,  2 Feb 2026 23:07:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770073654; cv=none; b=m4ffD8qQ7yAIsTUvVDBR+5SVNHL14vhquiCC7DfAWlxDuCR7QisZVX0BiMWqZRiQ0gdGyMgGK2Tv8pbWiPXaeYDhvejzIv1yZPfXvNhaVRO0SYqJqV1jlx3ZDTXJoTxnGveKSPpYVNTkX9gAt2YDlOSx490t7AnCydRJWGL3NIg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770073654; c=relaxed/simple;
+	bh=1IUHMVSty+s0+RWRI820k88LE05ne3kBIcZvwwVNqLk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mB9BRlBBmS3apJpzU57zYdvoLejHXqwCAXWmdglySn9I5irv4Z2hqIu2iEBnFL6beNPRJpVd0ODY7fIC3tGW5SLnBXWscBLQJg+we6jbP90Uhmrqivg6qatFBnwjMmgxDy8cHqpIwW6o8sPmn+Q7R+PhBvXfZ/12O5C7vSJeS6Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ziyao.cc; spf=pass smtp.mailfrom=ziyao.cc; dkim=pass (1024-bit key) header.d=ziyao.cc header.i=me@ziyao.cc header.b=UcsB6VLP; arc=pass smtp.client-ip=136.143.188.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ziyao.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziyao.cc
-ARC-Seal: i=1; a=rsa-sha256; t=1770044866; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=O1nsTu0Nm32KmUJcysdnX55vXY+nYlZU7sQyjU6a9F3DauNQDj5CMigQQjzvgBSMI7thc1O3L8ebT15IWw8HdV11S6fB4IzgJW2d34ZMqOq6CzZIuXEkzKU4rgIx4w9VCyK0ba//QqqlIypHPvB2GIhN7P1GoHNkiNEL58nqRlc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1770044866; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=dwVKuZddl4r/mV4Cr5AKUVYl+TwlSGWfy8J+FStd4oE=; 
-	b=mOXtWJt14DhbwjFFy0c8WGyLFmYcsPYaTWrhOySy3mFcXQ0byxP8hleo67JuQuGF9UezmLuy8fZh8fTIE/WznemS5FoEZ4h9RHS/EEBCrQGcRAyTXZWRdzgBD5j4FB+dqTu8oqkvkm9MMc0nyxRWkTglLo71BCFvYj5W050c2fI=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=ziyao.cc;
-	spf=pass  smtp.mailfrom=me@ziyao.cc;
-	dmarc=pass header.from=<me@ziyao.cc>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1770044866;
-	s=zmail; d=ziyao.cc; i=me@ziyao.cc;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=dwVKuZddl4r/mV4Cr5AKUVYl+TwlSGWfy8J+FStd4oE=;
-	b=UcsB6VLPIEf1abuUYSf6DiHKcwlu9vYf7bQdmpWemlpcN0982Z971L0f6CElyGuk
-	2iqGWjF95CmTb6wQAV0Fxj/KT4XUwbiO8NzZYytcAbqoRX4M40C65y3jd3XR63/UOIc
-	tve2HWHJVOIxARWTGcdWj7ZlDi4NqW/S/w4VZgVA=
-Received: by mx.zohomail.com with SMTPS id 1770044863450508.49955181658333;
-	Mon, 2 Feb 2026 07:07:43 -0800 (PST)
-Date: Mon, 2 Feb 2026 15:07:22 +0000
-From: Yao Zi <me@ziyao.cc>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev, stable@vger.kernel.org
-Subject: Re: [PATCH] MIPS: Work around LLVM bug when gp is used as global
- register variable
-Message-ID: <aYC9qgTdhnrWQ1zg@pie>
-References: <20260118090235.60670-1-me@ziyao.cc>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Jj77fhb9mL+oyTLpjD6op0++2tA/wfrfo0l0kUgc+MN1zZlLQIG4hTjEiSrQiA4NCyIScoKhVJzX64LN1wtb4FUWztdUXICfmu/C5cn+ZXkEQKHiWJZhnn79Zu2oI1Nl1ssgPqpmkyNMxkcaGUoCPvkEUxFhTAvmJ3VDcFNuuqE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X2XqYk+U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 479ACC116C6;
+	Mon,  2 Feb 2026 23:07:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770073653;
+	bh=1IUHMVSty+s0+RWRI820k88LE05ne3kBIcZvwwVNqLk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=X2XqYk+UvUQTANyJHngD9lE7mpiaSunu6OGkdZNlFmuDuxWAz+gRDuON1JAtRjKTe
+	 vHL9tdEI4zzzCpAsI0xV/7p16nhBsEo5KAIn2Wg1jPEx72n3i5WJtET2JmnxH0sZkj
+	 To5Cc9AyvFvNxkcPGj4Z7yhm87ODHCyh5mC2tM9AFC3I4gBo3a5DluYLX69w1ISWtw
+	 9jSpj6lnrDgmvHz+gdnT8lHw85pUHQYpLDZcs1PiMlCwAwBv0AUWMo5xdBxpNdCBjt
+	 9Sh9uaTbTBgsOso8MLqRRSnOdd6y7A4kVcCgN8DFdp2Wb6KvAzRY2suwc/PVXlarsJ
+	 MNbdINN0pOY6w==
+Date: Mon, 2 Feb 2026 16:07:29 -0700
+From: Nathan Chancellor <nathan@kernel.org>
+To: Ard Biesheuvel <ardb@kernel.org>
+Cc: Yao Zi <me@ziyao.cc>, Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: tools: relocs: Ship a definition of R_MIPS_PC32
+Message-ID: <20260202230729.GA2319189@ax162>
+References: <20260202041610.61389-1-me@ziyao.cc>
+ <99c54e93-fb8c-4bdb-ad40-a3161a42bb8b@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -76,107 +61,102 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20260118090235.60670-1-me@ziyao.cc>
-X-ZohoMailClient: External
+In-Reply-To: <99c54e93-fb8c-4bdb-ad40-a3161a42bb8b@app.fastmail.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [9.34 / 15.00];
-	URIBL_BLACK(7.50)[ziyao.cc:email,ziyao.cc:dkim];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [7.84 / 15.00];
+	URIBL_BLACK(7.50)[ziyao.cc:email];
 	MID_RHS_NOT_FQDN(0.50)[];
 	MAILLIST(-0.15)[generic];
-	BAD_REP_POLICIES(0.10)[];
 	MIME_GOOD(-0.10)[text/plain];
+	BAD_REP_POLICIES(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13093-lists,linux-mips=lfdr.de];
-	R_DKIM_ALLOW(0.00)[ziyao.cc:s=zmail];
-	FREEMAIL_TO(0.00)[alpha.franken.de,kernel.org,gmail.com,google.com,linutronix.de];
-	GREYLIST(0.00)[pass,body];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[ziyao.cc:+];
+	TAGGED_FROM(0.00)[bounces-13094-lists,linux-mips=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	R_DKIM_ALLOW(0.00)[kernel.org:s=k20201202];
+	GREYLIST(0.00)[pass,body];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
 	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[10];
-	TAGGED_RCPT(0.00)[linux-mips,lkml];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[me@ziyao.cc,linux-mips@vger.kernel.org];
-	DMARC_POLICY_ALLOW(0.00)[ziyao.cc,quarantine];
-	R_SPF_ALLOW(0.00)[+ip6:2600:3c09:e001:a7::/64:c];
-	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	MIME_TRACE(0.00)[0:+];
+	DMARC_POLICY_ALLOW(0.00)[kernel.org,quarantine];
+	DKIM_TRACE(0.00)[kernel.org:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	NEURAL_SPAM(0.00)[0.990];
+	TAGGED_RCPT(0.00)[linux-mips];
+	R_SPF_ALLOW(0.00)[+ip6:2600:3c0a:e001:db::/64:c];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[nathan@kernel.org,linux-mips@vger.kernel.org];
+	RCPT_COUNT_FIVE(0.00)[5];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	NEURAL_SPAM(0.00)[0.762];
 	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[gnu.org:url,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,ziyao.cc:email,ziyao.cc:dkim]
-X-Rspamd-Queue-Id: 7CF5ACE140
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sourceware.org:url,ziyao.cc:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 607A9D29EB
 X-Rspamd-Action: add header
 X-Spam: Yes
 
-On Sun, Jan 18, 2026 at 09:02:35AM +0000, Yao Zi wrote:
-> On MIPS, __current_thread_info is defined as global register variable
-> locating in $gp, and is simply assigned with new address during kernel
-> relocation.
+On Mon, Feb 02, 2026 at 10:17:53AM +0100, Ard Biesheuvel wrote:
 > 
-> This however is broken with LLVM, which always restores $gp if it finds
-> $gp is clobbered in any form, including when intentionally through a
-> global register variable. This is against GCC's documentation[1], which
-> requires a callee-saved register used as global register variable not to
-> be restored if it's clobbered.
+> On Mon, 2 Feb 2026, at 05:16, Yao Zi wrote:
+> > R_MIPS_PC32 is a GNU extension, its definition is available in glibc
+> > only since 2.39 (released in 2024), and not available in musl libc yet.
+> > Provide our own definition for R_MIPS_PC32 and use it if necessary to
+> > fix relocs tool building on musl and older glibc systems.
+> >
+> > Fixes: ff79d31eb536 ("mips: Add support for PC32 relocations in vmlinux")
+> > Signed-off-by: Yao Zi <me@ziyao.cc>
 > 
-> As a result, $gp will continue to point to the unrelocated kernel after
-> the epilog of relocate_kernel(), leading to an early crash in init_idle,
+> Thanks for fixing this.
 > 
-> [    0.000000] CPU 0 Unable to handle kernel paging request at virtual address 0000000000000000, epc == ffffffff81afada8, ra == ffffffff81afad90
-> [    0.000000] Oops[#1]:
-> [    0.000000] CPU: 0 UID: 0 PID: 0 Comm: swapper Tainted: G        W           6.19.0-rc5-00262-gd3eeb99bbc99-dirty #188 VOLUNTARY
-> [    0.000000] Tainted: [W]=WARN
-> [    0.000000] Hardware name: loongson,loongson64v-4core-virtio
-> [    0.000000] $ 0   : 0000000000000000 0000000000000000 0000000000000001 0000000000000000
-> [    0.000000] $ 4   : ffffffff80b80ec0 ffffffff80b53d48 0000000000000000 00000000000f4240
-> [    0.000000] $ 8   : 0000000000000100 ffffffff81d82f80 ffffffff81d82f80 0000000000000001
-> [    0.000000] $12   : 0000000000000000 ffffffff81776f58 00000000000005da 0000000000000002
-> [    0.000000] $16   : ffffffff80b80e40 0000000000000000 ffffffff80b81614 9800000005dfbe80
-> [    0.000000] $20   : 00000000540000e0 ffffffff81980000 0000000000000000 ffffffff80f81c80
-> [    0.000000] $24   : 0000000000000a26 ffffffff8114fb90
-> [    0.000000] $28   : ffffffff80b50000 ffffffff80b53d40 0000000000000000 ffffffff81afad90
-> [    0.000000] Hi    : 0000000000000000
-> [    0.000000] Lo    : 0000000000000000
-> [    0.000000] epc   : ffffffff81afada8 init_idle+0x130/0x270
-> [    0.000000] ra    : ffffffff81afad90 init_idle+0x118/0x270
-> [    0.000000] Status: 540000e2	KX SX UX KERNEL EXL
-> [    0.000000] Cause : 00000008 (ExcCode 02)
-> [    0.000000] BadVA : 0000000000000000
-> [    0.000000] PrId  : 00006305 (ICT Loongson-3)
-> [    0.000000] Process swapper (pid: 0, threadinfo=(____ptrval____), task=(____ptrval____), tls=0000000000000000)
-> [    0.000000] Stack : 9800000005dfbf00 ffffffff8178e950 0000000000000000 0000000000000000
-> [    0.000000]         0000000000000000 ffffffff81970000 000000000000003f ffffffff810a6528
-> [    0.000000]         0000000000000001 9800000005dfbe80 9800000005dfbf00 ffffffff81980000
-> [    0.000000]         ffffffff810a6450 ffffffff81afb6c0 0000000000000000 ffffffff810a2258
-> [    0.000000]         ffffffff81d82ec8 ffffffff8198d010 ffffffff81b67e80 ffffffff8197dd98
-> [    0.000000]         ffffffff81d81c80 ffffffff81930000 0000000000000040 0000000000000000
-> [    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
-> [    0.000000]         0000000000000000 000000000000009e ffffffff9fc01000 0000000000000000
-> [    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
-> [    0.000000]         0000000000000000 ffffffff81ae86dc ffffffff81b3c741 0000000000000002
-> [    0.000000]         ...
-> [    0.000000] Call Trace:
-> [    0.000000] [<ffffffff81afada8>] init_idle+0x130/0x270
-> [    0.000000] [<ffffffff81afb6c0>] sched_init+0x5c8/0x6c0
-> [    0.000000] [<ffffffff81ae86dc>] start_kernel+0x27c/0x7a8
-> 
-> This bug has been reported to LLVM[2] and affects version from (at
-> least) 18 to 21. Let's work around this by using inline assembly to
-> assign $gp before a fix is widely available.
-> 
-> Cc: stable@vger.kernel.org
-> Link: https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Global-Register-Variables.html # [1]
-> Link: https://github.com/llvm/llvm-project/issues/176546 # [2]
-> Signed-off-by: Yao Zi <me@ziyao.cc>
+> It does imply that the subsequent kallsyms patch will result in 32-bit MIPS no longer being buildable with older toolchains if CONFIG_RELOCATABLE=y.
 
-Gently ping on this patch. Thanks for your time and review.
+Doing a little research, it seems like R_MIPS_PC32 has been recognized
+by the toolchains for a long time, as I found these commits in binutils:
 
-Regards,
-Yao Zi
+  https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=092dcd755dcdcf664b25a7011fd15957f124c29f
+  https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=b47468a6dbd1b54c44c2edc0f7db64a073d894ea
+
+It seems like this relocation was not documented in glibc until
+recently, along with many other relocation types:
+
+  https://sourceware.org/git/gitweb.cgi?p=glibc.git;h=a6e8ceb3bb532236e1eecd0bb0ee8e4b7fd5ff7c
+
+I interpret that to mean that the kallsyms patch should work fine since
+the toolchain can handle these relocations? It is just building the
+relocs tool against an older glibc or musl that does not have the
+R_MIPS_PC32 definition that is broken? Or am I misunderstanding
+something?
+
+If we get an obvious build breakage report down the road, we can always
+add another forward fix or back out of the changes altogether.
+
+> Not sure if that is an issue, but it needs calling out. Nathan, any thoughts?
+> 
+> > ---
+> >  arch/mips/boot/tools/relocs.h | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> >
+> > diff --git a/arch/mips/boot/tools/relocs.h b/arch/mips/boot/tools/relocs.h
+> > index 607ff0103064..942981d9ce73 100644
+> > --- a/arch/mips/boot/tools/relocs.h
+> > +++ b/arch/mips/boot/tools/relocs.h
+> > @@ -29,6 +29,13 @@ void die(char *fmt, ...);
+> >  #define R_MIPS_PC26_S2		61
+> >  #endif
+> > 
+> > +/*
+> > + * GNU extension that available in glibc only since 2023, not 
+> > available on musl.
+> > + */
+> > +#ifndef R_MIPS_PC32
+> > +#define R_MIPS_PC32		248
+> > +#endif
+> > +
+> >  #define ARRAY_SIZE(x) (sizeof(x) / sizeof((x)[0]))
+> > 
+> >  enum symtype {
+> > -- 
+> > 2.52.0
 
