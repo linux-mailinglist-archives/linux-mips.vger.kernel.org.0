@@ -1,254 +1,182 @@
-Return-Path: <linux-mips+bounces-13092-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13093-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id QChwNiCKgGnO9wIAu9opvQ
-	(envelope-from <linux-mips+bounces-13092-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 02 Feb 2026 12:27:28 +0100
+	id qI60AD/AgGl3AgMAu9opvQ
+	(envelope-from <linux-mips+bounces-13093-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 02 Feb 2026 16:18:23 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
-	by mail.lfdr.de (Postfix) with ESMTPS id B86ECCB9CD
-	for <lists+linux-mips@lfdr.de>; Mon, 02 Feb 2026 12:27:28 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7CF5ACE140
+	for <lists+linux-mips@lfdr.de>; Mon, 02 Feb 2026 16:18:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sto.lore.kernel.org (Postfix) with ESMTP id 7A995300616C
-	for <lists+linux-mips@lfdr.de>; Mon,  2 Feb 2026 11:27:26 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 03FD6301372E
+	for <lists+linux-mips@lfdr.de>; Mon,  2 Feb 2026 15:08:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1CDC34E754;
-	Mon,  2 Feb 2026 11:27:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E16037475A;
+	Mon,  2 Feb 2026 15:08:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GVDSVaG5"
+	dkim=pass (1024-bit key) header.d=ziyao.cc header.i=me@ziyao.cc header.b="UcsB6VLP"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EA8A1B808;
-	Mon,  2 Feb 2026 11:27:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770031643; cv=none; b=ZvJluXCCBp92Ck91xl8LjMYTgLXEnDQIFj2o06FpWZKhLXPwnFY0t7ecKEU8Gp6NS3bX/4StKy1dh+TnsuRpH6LPFt0JWi6/umFoH9h4c/pLqIdHj5/Pm34X9HDGNLdaLv6+srOGwknrh4JkQXvaLRrmEwrtSefOeEcoqeXQ8aM=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770031643; c=relaxed/simple;
-	bh=3R5QQnBBB0vB5QimWQ0M/25ELK2ClHBBPXh5VdpSOb8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=Rqv3/SbJAUb6mU6g+siobWUljrLGxEhvI8Bbyc9+Mme+Be3r0e7da4clXG1pwCr9TpcBQKc8yW7z0gBjym6PNdgdCpg4/VNF38C/cbXZmUvEQw/MmmnYGTmwmUSHeqxhgFjorTSw2LUakc3R1+aovvaf8oStG7grVqwaG67BYFE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GVDSVaG5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5BAD0C116C6;
-	Mon,  2 Feb 2026 11:27:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770031643;
-	bh=3R5QQnBBB0vB5QimWQ0M/25ELK2ClHBBPXh5VdpSOb8=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=GVDSVaG5RWFRi3HGHn0mDxdcsOYrjoAIxDI17rLYPLM38jm603qboZOU/iELe0hCh
-	 F1cOnqoBTb/WRrisYsMr2IEgs1VAWZfcoXuNTN3cDkTqdOcmyhecyy+ymrgiwfOMUx
-	 V9+E6luPLp6uMAEfcf++6OneKsZQOfiMEsRa/9rxjhILADvznKAQ26F4Y2Y/SUW24N
-	 iNR+JR9Wk7ibBTuEiqVM+EmHmusX6a5d8B5PZrOlgbHFyIA0KoyILTFpNWi67S0Al9
-	 QdYLHy2xDfWc6h0rwkMLhrelKXN13f+i5kaApQyvp3M18M8QS9JPdsoVIwTPonTD7V
-	 S+ZICPvQYcnfQ==
-From: Thomas Gleixner <tglx@kernel.org>
-To: Daniel J Blueman <daniel@quora.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, "Paul E. McKenney"
- <paulmck@kernel.org>, John Stultz <jstultz@google.com>, Waiman Long
- <longman@redhat.com>, Peter Zijlstra <peterz@infradead.org>, Daniel
- Lezcano <daniel.lezcano@linaro.org>, Stephen Boyd <sboyd@kernel.org>,
- x86@kernel.org, "Gautham R. Shenoy" <gautham.shenoy@amd.com>, Jiri Wiesner
- <jwiesner@suse.de>, Scott Hamilton <scott.hamilton@eviden.com>, Helge
- Deller <deller@gmx.de>, linux-parisc@vger.kernel.org, Thomas Bogendoerfer
- <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org
-Subject: Re: [patch 5/5] clocksource: Rewrite watchdog code completely
-In-Reply-To: <CAMVG2ssXZKmw-YTKB5=CvhEofKeyEfaBCDZbyzfUcm2+P5rQsQ@mail.gmail.com>
-References: <20260123230651.688818373@kernel.org>
- <20260123231521.926490888@kernel.org>
- <CAMVG2ssXZKmw-YTKB5=CvhEofKeyEfaBCDZbyzfUcm2+P5rQsQ@mail.gmail.com>
-Date: Mon, 02 Feb 2026 12:27:19 +0100
-Message-ID: <87jywvfkrs.ffs@tglx>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A913369979;
+	Mon,  2 Feb 2026 15:08:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770044898; cv=pass; b=a6cBmqPBQ5uN8Ka8hprJ9NrNo8rJVBVGKD8NQ6w1SfA4oQC1s55mO8RJc3++sjAK0d4tTxIS6tPBfYYN0aKT47mxDIPDuIjtN8tGWVBQVMlgRxiNjpK35V6LBslUvGfKtr2AhBtZJ1Q+tdg7XXgHMJck6y9C6J2rh9dei09s9fc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770044898; c=relaxed/simple;
+	bh=OHwglCci930h0BPeoKnfBXI07YfnmYvkYhe1czCXm5k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mB9BRlBBmS3apJpzU57zYdvoLejHXqwCAXWmdglySn9I5irv4Z2hqIu2iEBnFL6beNPRJpVd0ODY7fIC3tGW5SLnBXWscBLQJg+we6jbP90Uhmrqivg6qatFBnwjMmgxDy8cHqpIwW6o8sPmn+Q7R+PhBvXfZ/12O5C7vSJeS6Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ziyao.cc; spf=pass smtp.mailfrom=ziyao.cc; dkim=pass (1024-bit key) header.d=ziyao.cc header.i=me@ziyao.cc header.b=UcsB6VLP; arc=pass smtp.client-ip=136.143.188.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ziyao.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziyao.cc
+ARC-Seal: i=1; a=rsa-sha256; t=1770044866; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=O1nsTu0Nm32KmUJcysdnX55vXY+nYlZU7sQyjU6a9F3DauNQDj5CMigQQjzvgBSMI7thc1O3L8ebT15IWw8HdV11S6fB4IzgJW2d34ZMqOq6CzZIuXEkzKU4rgIx4w9VCyK0ba//QqqlIypHPvB2GIhN7P1GoHNkiNEL58nqRlc=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1770044866; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=dwVKuZddl4r/mV4Cr5AKUVYl+TwlSGWfy8J+FStd4oE=; 
+	b=mOXtWJt14DhbwjFFy0c8WGyLFmYcsPYaTWrhOySy3mFcXQ0byxP8hleo67JuQuGF9UezmLuy8fZh8fTIE/WznemS5FoEZ4h9RHS/EEBCrQGcRAyTXZWRdzgBD5j4FB+dqTu8oqkvkm9MMc0nyxRWkTglLo71BCFvYj5W050c2fI=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=ziyao.cc;
+	spf=pass  smtp.mailfrom=me@ziyao.cc;
+	dmarc=pass header.from=<me@ziyao.cc>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1770044866;
+	s=zmail; d=ziyao.cc; i=me@ziyao.cc;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=dwVKuZddl4r/mV4Cr5AKUVYl+TwlSGWfy8J+FStd4oE=;
+	b=UcsB6VLPIEf1abuUYSf6DiHKcwlu9vYf7bQdmpWemlpcN0982Z971L0f6CElyGuk
+	2iqGWjF95CmTb6wQAV0Fxj/KT4XUwbiO8NzZYytcAbqoRX4M40C65y3jd3XR63/UOIc
+	tve2HWHJVOIxARWTGcdWj7ZlDi4NqW/S/w4VZgVA=
+Received: by mx.zohomail.com with SMTPS id 1770044863450508.49955181658333;
+	Mon, 2 Feb 2026 07:07:43 -0800 (PST)
+Date: Mon, 2 Feb 2026 15:07:22 +0000
+From: Yao Zi <me@ziyao.cc>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev, stable@vger.kernel.org
+Subject: Re: [PATCH] MIPS: Work around LLVM bug when gp is used as global
+ register variable
+Message-ID: <aYC9qgTdhnrWQ1zg@pie>
+References: <20260118090235.60670-1-me@ziyao.cc>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260118090235.60670-1-me@ziyao.cc>
+X-ZohoMailClient: External
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [2.84 / 15.00];
-	MID_END_EQ_FROM_USER_PART(4.00)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+X-Spamd-Result: default: False [9.34 / 15.00];
+	URIBL_BLACK(7.50)[ziyao.cc:email,ziyao.cc:dkim];
+	SUSPICIOUS_RECIPS(1.50)[];
 	MID_RHS_NOT_FQDN(0.50)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
+	BAD_REP_POLICIES(0.10)[];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13092-lists,linux-mips=lfdr.de];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[16];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,google.com,redhat.com,infradead.org,linaro.org,amd.com,suse.de,eviden.com,gmx.de,alpha.franken.de];
+	TAGGED_FROM(0.00)[bounces-13093-lists,linux-mips=lfdr.de];
+	R_DKIM_ALLOW(0.00)[ziyao.cc:s=zmail];
+	FREEMAIL_TO(0.00)[alpha.franken.de,kernel.org,gmail.com,google.com,linutronix.de];
+	GREYLIST(0.00)[pass,body];
 	RCVD_COUNT_THREE(0.00)[4];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[tglx@kernel.org,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	TAGGED_RCPT(0.00)[linux-mips];
-	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[ziyao.cc:+];
 	TO_DN_SOME(0.00)[];
-	FROM_HAS_DN(0.00)[]
-X-Rspamd-Queue-Id: B86ECCB9CD
-X-Rspamd-Action: no action
+	RCPT_COUNT_SEVEN(0.00)[10];
+	TAGGED_RCPT(0.00)[linux-mips,lkml];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[me@ziyao.cc,linux-mips@vger.kernel.org];
+	DMARC_POLICY_ALLOW(0.00)[ziyao.cc,quarantine];
+	R_SPF_ALLOW(0.00)[+ip6:2600:3c09:e001:a7::/64:c];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	NEURAL_SPAM(0.00)[0.990];
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[gnu.org:url,sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,ziyao.cc:email,ziyao.cc:dkim]
+X-Rspamd-Queue-Id: 7CF5ACE140
+X-Rspamd-Action: add header
+X-Spam: Yes
 
-On Mon, Feb 02 2026 at 14:45, Daniel J. Blueman wrote:
-> Great work Thomas!
+On Sun, Jan 18, 2026 at 09:02:35AM +0000, Yao Zi wrote:
+> On MIPS, __current_thread_info is defined as global register variable
+> locating in $gp, and is simply assigned with new address during kernel
+> relocation.
+> 
+> This however is broken with LLVM, which always restores $gp if it finds
+> $gp is clobbered in any form, including when intentionally through a
+> global register variable. This is against GCC's documentation[1], which
+> requires a callee-saved register used as global register variable not to
+> be restored if it's clobbered.
+> 
+> As a result, $gp will continue to point to the unrelocated kernel after
+> the epilog of relocate_kernel(), leading to an early crash in init_idle,
+> 
+> [    0.000000] CPU 0 Unable to handle kernel paging request at virtual address 0000000000000000, epc == ffffffff81afada8, ra == ffffffff81afad90
+> [    0.000000] Oops[#1]:
+> [    0.000000] CPU: 0 UID: 0 PID: 0 Comm: swapper Tainted: G        W           6.19.0-rc5-00262-gd3eeb99bbc99-dirty #188 VOLUNTARY
+> [    0.000000] Tainted: [W]=WARN
+> [    0.000000] Hardware name: loongson,loongson64v-4core-virtio
+> [    0.000000] $ 0   : 0000000000000000 0000000000000000 0000000000000001 0000000000000000
+> [    0.000000] $ 4   : ffffffff80b80ec0 ffffffff80b53d48 0000000000000000 00000000000f4240
+> [    0.000000] $ 8   : 0000000000000100 ffffffff81d82f80 ffffffff81d82f80 0000000000000001
+> [    0.000000] $12   : 0000000000000000 ffffffff81776f58 00000000000005da 0000000000000002
+> [    0.000000] $16   : ffffffff80b80e40 0000000000000000 ffffffff80b81614 9800000005dfbe80
+> [    0.000000] $20   : 00000000540000e0 ffffffff81980000 0000000000000000 ffffffff80f81c80
+> [    0.000000] $24   : 0000000000000a26 ffffffff8114fb90
+> [    0.000000] $28   : ffffffff80b50000 ffffffff80b53d40 0000000000000000 ffffffff81afad90
+> [    0.000000] Hi    : 0000000000000000
+> [    0.000000] Lo    : 0000000000000000
+> [    0.000000] epc   : ffffffff81afada8 init_idle+0x130/0x270
+> [    0.000000] ra    : ffffffff81afad90 init_idle+0x118/0x270
+> [    0.000000] Status: 540000e2	KX SX UX KERNEL EXL
+> [    0.000000] Cause : 00000008 (ExcCode 02)
+> [    0.000000] BadVA : 0000000000000000
+> [    0.000000] PrId  : 00006305 (ICT Loongson-3)
+> [    0.000000] Process swapper (pid: 0, threadinfo=(____ptrval____), task=(____ptrval____), tls=0000000000000000)
+> [    0.000000] Stack : 9800000005dfbf00 ffffffff8178e950 0000000000000000 0000000000000000
+> [    0.000000]         0000000000000000 ffffffff81970000 000000000000003f ffffffff810a6528
+> [    0.000000]         0000000000000001 9800000005dfbe80 9800000005dfbf00 ffffffff81980000
+> [    0.000000]         ffffffff810a6450 ffffffff81afb6c0 0000000000000000 ffffffff810a2258
+> [    0.000000]         ffffffff81d82ec8 ffffffff8198d010 ffffffff81b67e80 ffffffff8197dd98
+> [    0.000000]         ffffffff81d81c80 ffffffff81930000 0000000000000040 0000000000000000
+> [    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
+> [    0.000000]         0000000000000000 000000000000009e ffffffff9fc01000 0000000000000000
+> [    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
+> [    0.000000]         0000000000000000 ffffffff81ae86dc ffffffff81b3c741 0000000000000002
+> [    0.000000]         ...
+> [    0.000000] Call Trace:
+> [    0.000000] [<ffffffff81afada8>] init_idle+0x130/0x270
+> [    0.000000] [<ffffffff81afb6c0>] sched_init+0x5c8/0x6c0
+> [    0.000000] [<ffffffff81ae86dc>] start_kernel+0x27c/0x7a8
+> 
+> This bug has been reported to LLVM[2] and affects version from (at
+> least) 18 to 21. Let's work around this by using inline assembly to
+> assign $gp before a fix is widely available.
+> 
+> Cc: stable@vger.kernel.org
+> Link: https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Global-Register-Variables.html # [1]
+> Link: https://github.com/llvm/llvm-project/issues/176546 # [2]
+> Signed-off-by: Yao Zi <me@ziyao.cc>
 
-Thank you!
+Gently ping on this patch. Thanks for your time and review.
 
-> On Sat, 24 Jan 2026 at 07:18, Thomas Gleixner <tglx@kernel.org> wrote:
->>   2) Compare the TSCs of the other CPUs in a round robin fashion against
->>      the boot CPU in the same way the TSC synchronization on CPU hotplug
->>      works. This still can suffer from delayed reaction of the remote CPU
->>      to the SMP function call and the latency of the control variable cache
->>      line. But this latency is not affecting correctness. It only affects
->>      the accuracy. With low contention the readout latency is in the low
->>      nanoseconds range, which detects even slight skews between CPUs. Under
->>      high contention this becomes obviously less accurate, but still
->>      detects slow skews reliably as it solely relies on subsequent readouts
->>      being monotonically increasing. It just can take slightly longer to
->>      detect the issue.
->
-> On x86, I agree iterating at a per-thread level is needed rather than
-> one thread per NUMA node, since the TSC_ADJUST architectural MSR is
-> per-core and we want detection completeness.
-
-It's per thread not per core.
-
-But that aside the TSC_ADJUST integrity is already self monitored
-independent of the watchdog. See tsc_verify_tsc_adjust(). So we might
-get away with a per socket check as all threads of a socket are fed by
-the same ART (Always Running Timer) and the main concern is that the
-ARTs of sockets drift apart especially on systems with more than four
-sockets.
-
-> On other architectures, completeness could be traded off for lower
-> overhead if it is guaranteed each processor thread uses the same clock
-> value, though this is actually is what the clocksource watchdog seeks
-> to validate, so agreed on the current approach there too.
-
-x86 is the only one which actually utilizes the watchdog.
-
->> +/* Maximum time between two watchdog readouts */
->> +#define WATCHDOG_READOUT_MAX_NS                (50 * NSEC_PER_USEC)
-
-> At 1920 threads, the default timeout threshold of 20us triggers
-> continuous warnings at idle, however 1000us causes none under an 8
-> hour adverse workload [1]; no HPET fallback was seen. A 500us
-> threshold causes a low rate of timeouts [2] (overhead amplified due to
-> retries), thus 1000us adds margin and should prevent retries.
-
-Right. Idle is definitely an issue when the remote CPU is in a deep
-C-state.
-
-My concern is that the control CPU might spin there for a millisecond
-with interrupts disabled, which is not really desired especially not on
-RT systems.
-
-Something like the untested below delta patch should work.
-
-Thanks,
-
-        tglx
----
---- a/kernel/time/clocksource.c
-+++ b/kernel/time/clocksource.c
-@@ -7,6 +7,7 @@
- 
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
-+#include <linux/delay.h>
- #include <linux/device.h>
- #include <linux/clocksource.h>
- #include <linux/init.h>
-@@ -124,7 +125,8 @@ static atomic_t watchdog_reset_pending;
- #define WATCHDOG_INTERVAL_NS		(WATCHDOG_INTERVAL * (NSEC_PER_SEC / HZ))
- 
- /* Maximum time between two watchdog readouts */
--#define WATCHDOG_READOUT_MAX_NS		(50 * NSEC_PER_USEC)
-+#define WATCHDOG_READOUT_MAX_US		50
-+#define WATCHDOG_READOUT_MAX_NS		(WATCHDOG_READOUT_MAX_US * NSEC_PER_USEC)
- 
- /* Shift values to calculate the approximate $N ppm of a given delta. */
- #define SHIFT_500PPM			11
-@@ -136,6 +138,9 @@ static atomic_t watchdog_reset_pending;
- /* Five reads local and remote for inter CPU skew detection */
- #define WATCHDOG_REMOTE_MAX_SEQ		10
- 
-+/* Number of attempts to synchronize with a remote CPU */
-+#define WATCHDOG_REMOTE_RETRIES		10
-+
- static inline void clocksource_watchdog_lock(unsigned long *flags)
- {
- 	spin_lock_irqsave(&watchdog_lock, *flags);
-@@ -336,22 +341,17 @@ static void watchdog_check_skew_remote(v
- 	atomic_dec(&wd->remote_inprogress);
- }
- 
--static void watchdog_check_cpu_skew(struct clocksource *cs)
-+static inline bool wd_csd_locked(struct watchdog_cpu_data *wd)
- {
--	unsigned int cpu = cpumask_next_wrap(watchdog_data.curr_cpu, cpu_online_mask);
--	struct watchdog_cpu_data *wd;
--
--	watchdog_data.curr_cpu = cpu;
--	/* Skip the current CPU. Handles num_online_cpus() == 1 as well */
--	if (cpu == smp_processor_id())
--		return;
-+	return READ_ONCE(wd->csd.node.u_flags) & CSD_FLAG_LOCK;
-+}
- 
--	/* Don't interfere with the test mechanics */
--	if ((cs->flags & CLOCK_SOURCE_WDTEST) && !(cs->flags & CLOCK_SOURCE_WDTEST_PERCPU))
--		return;
-+static void __watchdog_check_cpu_skew(struct clocksource *cs, unsigned int cpu)
-+{
-+	struct watchdog_cpu_data *wd;
- 
- 	wd = per_cpu_ptr(&watchdog_cpu_data, cpu);
--	if (atomic_read(&wd->remote_inprogress)) {
-+	if (atomic_read(&wd->remote_inprogress) || wd_csd_locked(wd)) {
- 		watchdog_data.result = WD_CPU_TIMEOUT;
- 		return;
- 	}
-@@ -377,6 +377,29 @@ static void watchdog_check_cpu_skew(stru
- 	}
- }
- 
-+static void watchdog_check_cpu_skew(struct clocksource *cs)
-+{
-+	unsigned int cpu = cpumask_next_wrap(watchdog_data.curr_cpu, cpu_online_mask);
-+
-+	watchdog_data.curr_cpu = cpu;
-+	/* Skip the current CPU. Handles num_online_cpus() == 1 as well */
-+	if (cpu == smp_processor_id())
-+		return;
-+
-+	/* Don't interfere with the test mechanics */
-+	if ((cs->flags & CLOCK_SOURCE_WDTEST) && !(cs->flags & CLOCK_SOURCE_WDTEST_PERCPU))
-+		return;
-+
-+	for (int i = 0; i < WATCHDOG_REMOTE_RETRIES; i++) {
-+		__watchdog_check_cpu_skew(cs, cpu);
-+
-+		if (watchdog_data.result != WD_CPU_TIMEOUT)
-+			return;
-+
-+		udelay(WATCHDOG_READOUT_MAX_US);
-+	}
-+}
-+
- static bool watchdog_check_freq(struct clocksource *cs, bool reset_pending)
- {
- 	unsigned int ppm_shift = SHIFT_4000PPM;
+Regards,
+Yao Zi
 
