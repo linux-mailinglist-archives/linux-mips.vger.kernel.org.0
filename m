@@ -1,175 +1,165 @@
-Return-Path: <linux-mips+bounces-13102-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13104-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YJ0aJB4VgmmZPAMAu9opvQ
-	(envelope-from <linux-mips+bounces-13102-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 03 Feb 2026 16:32:46 +0100
+	id wMEvJp42gmmVQgMAu9opvQ
+	(envelope-from <linux-mips+bounces-13104-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 03 Feb 2026 18:55:42 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id B195EDB512
-	for <lists+linux-mips@lfdr.de>; Tue, 03 Feb 2026 16:32:45 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11BACDD2E6
+	for <lists+linux-mips@lfdr.de>; Tue, 03 Feb 2026 18:55:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B899A30FDD5D
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Feb 2026 15:28:41 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B0C72308CE04
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Feb 2026 17:55:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 907083B8D4D;
-	Tue,  3 Feb 2026 15:28:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7C0F3659F7;
+	Tue,  3 Feb 2026 17:54:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="e01qNo4r";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="VrR00ejl"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TmzMYPVx";
+	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="Rpw4/rGf"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fout-b7-smtp.messagingengine.com (fout-b7-smtp.messagingengine.com [202.12.124.150])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 096643B8BD9
-	for <linux-mips@vger.kernel.org>; Tue,  3 Feb 2026 15:28:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.150
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0942936655E
+	for <linux-mips@vger.kernel.org>; Tue,  3 Feb 2026 17:54:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770132521; cv=none; b=c3MBna+64TbDv0bvfOLXP8ej7BCY7c8qXJnH8v2AY3Z+eS546nVVWVY6D23ZrVTR7xjZoS+4fo//wEFa2tRJazqwEkKzaBEKqGv6fChONTmevjgVjsnJws9DSCT3EqyRp/aGeaW6QL3PkEhOxzyVbcGNuoA58pWY662lVuy2o2k=
+	t=1770141299; cv=none; b=cSHvlykjVHEAqkSmXKCJpnDhsJ4qoBnX8xdfNi4RpjSo5juJOfuR/HK+fAsZbFGmKgRoAMEacpDYWN0Ly4bBwYJC1dIk1zJpsLUILKUov7r+pdGxJQjzUVmIQ//tbY4R66UxmcLyqo16pWGCDYOAtsQx1mZeF3MmJAZeVF0C6s4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770132521; c=relaxed/simple;
-	bh=30vQMzXBU4V1GPKBgdGb2+JJvuZ/jvEXZ9DIlaOvP/M=;
-	h=MIME-Version:Date:From:To:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=HxK9jMoUCWj4p1HkO9VYhm3bpsvtrpS/J8og4w+1e4aKXEIdtVqiFJVf6CfIDwNqe7OpWxr9gFNS/JQDpGHQqJsEQmPHQlPUc8PfCxC6N9deYk7SNX4TNGMzNlVmELsGaQEPN5IT8Q47utsm21eYy/yT6DYZzXhFLlRD17QKWHI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=e01qNo4r; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=VrR00ejl; arc=none smtp.client-ip=202.12.124.150
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
-	by mailfout.stl.internal (Postfix) with ESMTP id 512921D0009A;
-	Tue,  3 Feb 2026 10:28:39 -0500 (EST)
-Received: from phl-imap-08 ([10.202.2.84])
-  by phl-compute-03.internal (MEProxy); Tue, 03 Feb 2026 10:28:39 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:content-transfer-encoding:content-type:content-type:date:date
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm1; t=1770132519;
-	 x=1770218919; bh=xzI+mVBJS8NXcwBBA86E/hqOK5/oybE4GLxEX7cZOlQ=; b=
-	e01qNo4rywhIgDeMlhlUAQ4sjBoUjGY3SnUi6G2X7AuRg7x4DxWJCEhkL0PSmJGY
-	hNlXAleYzfj8yfKlJ3uWAalgUBh3ppnHKAuT+fwx3jlALKW2ZnuQ93nIJS8UY0fk
-	qoeLIi29Wy4cXV6gwNGRXd41xPD9OxqBLuzwSIdY16XszPckXyqXoV/bSm+AVKmX
-	KO/p9bK91Yu2EUd3MiE9yr+7eMtp0xHZnqcftFKliJSlEX6GOSTafhX4WlMH1ScE
-	IFEWkj0kCAoQW936cRRYlbWJMb7paWfAluRR6aaLXVXWkiYmL5uipNe/C1QgeUl1
-	8F1KNc8ySiBvplqtxLmp/g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:content-transfer-encoding:content-type
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
-	:x-me-sender:x-sasl-enc; s=fm3; t=1770132519; x=1770218919; bh=x
-	zI+mVBJS8NXcwBBA86E/hqOK5/oybE4GLxEX7cZOlQ=; b=VrR00ejl94gjkBknl
-	PGR4Ras04HdKZkPdl6G7GFXIkoBru0HR3xhWIBONyDKAgrvDgmL5heMWpp6N8ZQz
-	yjlbt5uT9/SlVp81whRrv7/LVBxjKHbPGQRCsc0Y+YRyOXq94yfL+zciv0znZ4eF
-	pN5xfFykbEPxPfsHGXWF5UtKuligSBObHbcHsMirb8VVBu7t6Mb3t3QsFWUyA2Oo
-	m5Met1E3jiDaefx8sujfOGElwL5E1odcEomB3Wpf4mqH4w9odVk++WCbnXjZ6vIf
-	RhVIWnxZB3py0QkKSAvqeHDosiGTJVmECcGgyc5AoBMUh++/OC7H1sAYJ1RR5+yH
-	G90nw==
-X-ME-Sender: <xms:JxSCaekthvbjm2War2xFWfqJAOyTO9kQ0EjYjUbmVhEkzLaUDo4Yqw>
-    <xme:JxSCaQq2u8BFJ0_CXgkDoGqOi_xSr3WJb_fyJ1goYy7I0N_IPvnk1ozjQoZbyc7BD
-    ZWWcPhncZFP3HgmhLxKdUkh0dWibzr156k1vP4FQbEyWwEzbuxRQxk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddukedtgeduucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucenucfjughrpefoggffhffvkfgjfhfutgfgsehtjeertd
-    ertddtnecuhfhrohhmpedflfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghn
-    ghesfhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhepkeevvdduleehgfetfe
-    effeefieevfefgieelgfelveeujedvgeefheelffekhffgnecuvehluhhsthgvrhfuihii
-    vgeptdenucfrrghrrghmpehmrghilhhfrhhomhepjhhirgiguhhnrdihrghnghesfhhlhi
-    hgohgrthdrtghomhdpnhgspghrtghpthhtohepvddpmhhouggvpehsmhhtphhouhhtpdhr
-    tghpthhtohepfigsgiesohhpvghnrggukhdrohhrghdprhgtphhtthhopehlihhnuhigqd
-    hmihhpshesvhhgvghrrdhkvghrnhgvlhdrohhrgh
-X-ME-Proxy: <xmx:JxSCaVThS83cBXG9KEgiLWE_Zdd9cRakjLLUSZLOLm44iRskF3V0Yg>
-    <xmx:JxSCacuxCk9oqmjXYezM123dWUPjtQXBiEvRe3K3V3cHUvxDHK-5Zw>
-    <xmx:JxSCaSaTNB7bAKIW4B-B3Zdos_RgFIrEYBvaXt3IJCx7998D4jJpWg>
-    <xmx:JxSCaZu2NlFAuOxRHhfJ2GH5bLZ1SN_yOfDF8XZf2w4X-0JhWrV2_A>
-    <xmx:JxSCacn9bTo168NeiMy8Hgx9NzCFRkZsrKCqrF42I0J99DfQIpM2M9q_>
-Feedback-ID: ifd894703:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 0A11E2CE0072; Tue,  3 Feb 2026 10:28:39 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1770141299; c=relaxed/simple;
+	bh=EbeudItOUlxxdZ+A3AiWDVtDb3JqRGR++QR9pByKdSk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=HRGPPnY3BErQnPSQHBatEt7ur4fdNbXpJux9RwyPfp57HpJsLldkGVlREvOyltulw3md53+/m3M3r18SPcMxEJF5Z4ukWvN8MeffIQpLjL+m/clQ3+ss05kaPrHXZNkz4aCmcDP0JqhYqShtnCjmt0bk2QyFtz171gbdufyHXBA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TmzMYPVx; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=Rpw4/rGf; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1770141296;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=TH04C7HHcDm+vfuEaUs+pyru8FvGanMszlIgowU+sDs=;
+	b=TmzMYPVxEejfCspZQvKW7R+KFFTjBpS4zAdpC70UY+kGtDuuUUVNRMKunsCMGLtO7zXwlW
+	io56wC0WzH8cztOtS/c/JTLyPKCy62Pdg/yGwnRV8ojxXzzflAac0phGiBobdU7USgZMCU
+	ha4A/+c6pjZBT6Ih7ZlnitTqVtkEyW4=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-670-YEJyklxfM1awg47BFNj6ew-1; Tue, 03 Feb 2026 12:54:55 -0500
+X-MC-Unique: YEJyklxfM1awg47BFNj6ew-1
+X-Mimecast-MFC-AGG-ID: YEJyklxfM1awg47BFNj6ew_1770141295
+Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-503342386a8so240083401cf.0
+        for <linux-mips@vger.kernel.org>; Tue, 03 Feb 2026 09:54:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=redhat.com; s=google; t=1770141295; x=1770746095; darn=vger.kernel.org;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=TH04C7HHcDm+vfuEaUs+pyru8FvGanMszlIgowU+sDs=;
+        b=Rpw4/rGfWKFIxHQSKGNkXo3hrZtrNuAk2KG8uGJhMRWnVuHxtAuVTQuQnZjKLnEWUP
+         XkKo9nr9xGeW3hJwkIXjyeaNyDbO7Ymo8AnS9YOYLNC1eH81G8P/0YmsiBTsKDc1GxKX
+         aWHl61/zsEWxwAx54Zc+oxocL/7nKKJ6vIXFkZ88FNAgIfGIusm1Cr4ESI35azCEDN1e
+         2Zh9vNq2xG3rSrJsvw1k9v41KmuQmPVZUfQfPaG8zsHo9+hziJvjlEFsU86IY7P5AYjK
+         EmXpKNMF5GLT7fF9rqveOUfEevZ0fDPZM6t/b27lmdsdgtYFi34zT45/U63CnE9q8oet
+         lJTA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770141295; x=1770746095;
+        h=user-agent:in-reply-to:content-disposition:mime-version:references
+         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=TH04C7HHcDm+vfuEaUs+pyru8FvGanMszlIgowU+sDs=;
+        b=u8+uAnRsGS0KKLbO9xhHesf2O/fc5iuiHSJgIf/Bbx6zrkxokih8Tw00BvaPkAsBDO
+         Ef1sYHUeGK49hHYC80oAgqQneje/03ntYtRKCQlSGpPRxO5mQEWNFhZl9bBUjcOIIlx+
+         +aPD+DTQMBXCqVOwHa+vdaYUN0FpjAQLCKcaP4JJXMCpSxHjxpBzNhDQcO3PW4WEk0Bf
+         qpI8GnhNsAZZhrDi/528rTMQZQBE/VYI/0KWjmAPAZzUs4zv2lm1e90rADQ38sAycbA/
+         2aM2Xr2kEs3enxELA/ElMuz/ExjlfootHZM3vJ8ZRao/4BFfka6osyhV+6df+6bzixYh
+         wyFA==
+X-Forwarded-Encrypted: i=1; AJvYcCUCIlkUR2zqS3IIXwtmm3nn+RmZymxr3I++oReC1n3oLd7Nec7TefWr+H/nairzrNR4NGUytRXxJ4es@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxn4vcg7gl6de6oBTgmUdAB6EYmm+qbSGlFKBQqTQU5gCPNmrfc
+	C8bvwIc7QoF6C4YXmWVMuUrqreD7Bi7ZZ6LtKSIGp7OLO+ShIoCEBsFW1tSZHSGAvcb7I7AC7sF
+	R5kfPM44N5mOfAogCA2shn98EZmtGI44jIC9zOQtTaAyt+vxY1vNAoU+vcHNJeJM=
+X-Gm-Gg: AZuq6aK83ngNmMaLECG+3MI/C9AFRtjmxTqmg1TIhCegh/hLatTwV+mu4VZZ52jamRw
+	kFL/e9a4vUqhkzvgGyF/WT81NdBC6GwMN/AfIsKVhMUC82doge9HQ8BJGEzBch+8AmtA4pIiXNQ
+	qcKEqvSGdmhEpieg5HYdC7g8wDkoZHVMJSdVMg8oEYkeBbx1HjB3iZOtjfQ0ehuiQhJvOROKNBX
+	YTSls22hJmO79TjW8pyV2RFy9K8SftXi8jNtj3GtR4k8x5tB3w4aew8Wdd2eVq7ttxUe9LX02xF
+	sgFqWszSPQOYpzi0q7DeJvr8KQBBexR59nAS3Q0LtJ4PNFfCttXp0WqGYbJ8wlJuvSZai+PuVMv
+	m/70TcAMLLhJy2es7Vsnm1p2KHSSdFRsEKZHpeO/mg0Te
+X-Received: by 2002:a05:622a:5ca:b0:4f0:22df:9afe with SMTP id d75a77b69052e-5061c18db52mr1685131cf.51.1770141295391;
+        Tue, 03 Feb 2026 09:54:55 -0800 (PST)
+X-Received: by 2002:a05:622a:5ca:b0:4f0:22df:9afe with SMTP id d75a77b69052e-5061c18db52mr1684941cf.51.1770141294980;
+        Tue, 03 Feb 2026 09:54:54 -0800 (PST)
+Received: from redhat.com (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-5061c1e7f63sm658131cf.18.2026.02.03.09.54.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 03 Feb 2026 09:54:54 -0800 (PST)
+Date: Tue, 3 Feb 2026 12:54:52 -0500
+From: Brian Masney <bmasney@redhat.com>
+To: Lukas Bulwahn <lbulwahn@redhat.com>
+Cc: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-mips@vger.kernel.org,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
+	kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Lukas Bulwahn <lukas.bulwahn@redhat.com>
+Subject: Re: [PATCH] clk: microchip: fix typo in reference to a config option
+Message-ID: <aYI2bKIfRfoFQr2e@redhat.com>
+References: <20260203090101.348879-1-lukas.bulwahn@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: AVHZR4n_KsVg
-Date: Tue, 03 Feb 2026 15:28:18 +0000
-From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
-To: "Waldemar Brodkorb" <wbx@openadk.org>,
- "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Message-Id: <1e9086c1-0cec-4aa7-aab6-e1e605dd9ebf@app.fastmail.com>
-In-Reply-To: <f0413775-1a6f-49a6-841b-bf52214a2841@app.fastmail.com>
-References: <aX-d0ShTplHKZT33@waldemar-brodkorb.de>
- <f0413775-1a6f-49a6-841b-bf52214a2841@app.fastmail.com>
-Subject: Re: serial console on Mikrotik RB532 non-working
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260203090101.348879-1-lukas.bulwahn@redhat.com>
+User-Agent: Mutt/2.2.14 (2025-02-20)
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.15 / 15.00];
+X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[flygoat.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[flygoat.com:s=fm1,messagingengine.com:s=fm3];
+	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
+	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	XM_UA_NO_VERSION(0.01)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWO(0.00)[2];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13102-lists,linux-mips=lfdr.de];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	DKIM_TRACE(0.00)[redhat.com:+];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jiaxun.yang@flygoat.com,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[flygoat.com:+,messagingengine.com:+];
-	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_FROM(0.00)[bounces-13104-lists,linux-mips=lfdr.de];
+	MIME_TRACE(0.00)[0:+];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
-	NEURAL_HAM(-0.00)[-0.995];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[app.fastmail.com:mid,messagingengine.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,flygoat.com:dkim]
-X-Rspamd-Queue-Id: B195EDB512
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[bmasney@redhat.com,linux-mips@vger.kernel.org];
+	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[6];
+	MID_RHS_MATCH_FROM(0.00)[];
+	NEURAL_HAM(-0.00)[-1.000];
+	RCPT_COUNT_SEVEN(0.00)[9];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 11BACDD2E6
 X-Rspamd-Action: no action
 
+On Tue, Feb 03, 2026 at 10:01:01AM +0100, Lukas Bulwahn wrote:
+> From: Lukas Bulwahn <lukas.bulwahn@redhat.com>
+> 
+> Commit 026d70dcfe5d ("clk: microchip: core: allow driver to be compiled
+> with COMPILE_TEST") introduces a typo when referring to a config option in
+> an ifdef directive.
+> 
+> Fix this typo.
+> 
+> Fixes: 026d70dcfe5d ("clk: microchip: core: allow driver to be compiled with COMPILE_TEST")
+> Signed-off-by: Lukas Bulwahn <lukas.bulwahn@redhat.com>
 
+Ugh... thanks for catching that.
 
-On Tue, 3 Feb 2026, at 3:24 PM, Jiaxun Yang wrote:
-> On Sun, 1 Feb 2026, at 6:39 PM, Waldemar Brodkorb wrote:
->> Hi MIPS hackers,
->>
->> I want to use the latest Linux kernel on my Mikrotik RB532, but the
->> serial console is non working. I bisected the problem and the first
->> breaking change is this commit:
->
-> Hi,
->
-> Can you try this?
+Reviewed-by: Brian Masney <bmasney@redhat.com>
 
-Oops sorry I missed a flag, it should be:
-
-diff --git a/arch/mips/rb532/devices.c b/arch/mips/rb532/devices.c
-index 8ecb56be81ac..239018540221 100644
---- a/arch/mips/rb532/devices.c
-+++ b/arch/mips/rb532/devices.c
-@@ -213,11 +213,12 @@ static struct platform_device rb532_wdt = {
- static struct plat_serial8250_port rb532_uart_res[] = {
-        {
-                .type           = PORT_16550A,
--               .membase        = (char *)KSEG1ADDR(REGBASE + UART0BASE),
-+               .mapbase        = REGBASE + UART0BASE,
-+               .mapsize        = SZ_4K,
-                .irq            = UART0_IRQ,
-                .regshift       = 2,
-                .iotype         = UPIO_MEM,
--               .flags          = UPF_BOOT_AUTOCONF,
-+               .flags          = UPF_BOOT_AUTOCONF | UPF_IOREMAP,
-        },
-        {
-                .flags          = 0,
-
-Thanks
-- Jiaxun
 
