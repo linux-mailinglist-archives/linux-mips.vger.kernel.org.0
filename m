@@ -1,178 +1,180 @@
-Return-Path: <linux-mips+bounces-13100-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13101-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id +FpPMCS6gWm7JAMAu9opvQ
-	(envelope-from <linux-mips+bounces-13100-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 03 Feb 2026 10:04:36 +0100
+	id SOQAI3zwgWlAMwMAu9opvQ
+	(envelope-from <linux-mips+bounces-13101-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 03 Feb 2026 13:56:28 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 32FCDD68C5
-	for <lists+linux-mips@lfdr.de>; Tue, 03 Feb 2026 10:04:36 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3B1DD973E
+	for <lists+linux-mips@lfdr.de>; Tue, 03 Feb 2026 13:56:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 15B9B30D2E7D
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Feb 2026 09:01:11 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id C3B70310DBCA
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Feb 2026 12:32:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 798F830CD95;
-	Tue,  3 Feb 2026 09:01:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C91C63446CA;
+	Tue,  3 Feb 2026 12:32:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Fypj3eF0";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="UVgsiqeQ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D1fH615x"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14E8C2E03E4
-	for <linux-mips@vger.kernel.org>; Tue,  3 Feb 2026 09:01:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5AE6340A57
+	for <linux-mips@vger.kernel.org>; Tue,  3 Feb 2026 12:32:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770109269; cv=none; b=P3wVZcUcUtL8jhVk6gJGqxJdv5ZmNQDw4HwMF+rokWM3W6WIOGm2Myxd71vKe33dUZjXgSY/9giFREOh/wk88rK9UkI0+0OO8Jxa38uLbpaEOrANxcukrOtmTCEyWBgMIOxcDTKz2LrCtTEBz+qtnmZYyX/UKKeOTyV0F7aHPQA=
+	t=1770121931; cv=none; b=WBdh0GxMYKqNYWeoH3rVoX36eq9+h+WGOTGMZJkkC0o+9NIqthuoySChf1Ruwh7SzEIIpCGcmBq0v0NwuLMXSwNC8snQUz8Nc8qp+O1R+DAC9Q5YLfAbxeB7FHT8atPR9V8dWa89gXnzwkhMBje4ljUyNU3p8bRaM+LTui7RzMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770109269; c=relaxed/simple;
-	bh=HQZAdepWAAG05MGOKGf2DOLqH7+vCZeV4b/mfyGkkQU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=me1pxKAz1BwyAgGCapHbI7iTirobHmVJS0miNFzGEiVdjTWIkz34Gmwz4iv457xS9EWYhdNKN6T1tCVDmJ2+zNXRGmofsH+Yl70fZgSPa2zDhT9ZYUbBcSfpCeRyjSqXYn98JvjiKZwDi/WtkmMoaen6L1nJeg81tr//UYFkHW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Fypj3eF0; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=UVgsiqeQ; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1770109267;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=SAv0azhvB0PmgRRTCM2jkuECPq9Iw8iyDp3gTHX+1tM=;
-	b=Fypj3eF0ks2fTaLtBo2EUSea29fLBrysPX6IGY3TKvTY9duOQcoUr9cExEeHy8VJWwP2bE
-	QtD3AKwE3ppSlTsKoOeFApXP/z9CkFzld+XN5RdfkLhT0VjColYCDSE9Gnxi2l5SQ6Njtx
-	GdoJ+hFsXnrt4Qgj8dUhXOoifWamoGY=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-563-cVMWV4gjPUCBWG3noZjYDQ-1; Tue, 03 Feb 2026 04:01:05 -0500
-X-MC-Unique: cVMWV4gjPUCBWG3noZjYDQ-1
-X-Mimecast-MFC-AGG-ID: cVMWV4gjPUCBWG3noZjYDQ_1770109265
-Received: by mail-wr1-f72.google.com with SMTP id ffacd0b85a97d-430fcf10287so4937324f8f.0
-        for <linux-mips@vger.kernel.org>; Tue, 03 Feb 2026 01:01:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1770109265; x=1770714065; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=SAv0azhvB0PmgRRTCM2jkuECPq9Iw8iyDp3gTHX+1tM=;
-        b=UVgsiqeQLXUtbq/xlyg6Jkhi8eBsrMPB52HRom8wnDd9f+i83JNctmOu+YuwEL3W4N
-         nVl/USyprhlDE9LUkgztcF7RhSpNyPF3UVrje7hulFceW0OsJl4idJmBQjeVDVJ3rI9J
-         ONkoqmbAHCOkvQWWu/ZNSsnqnHTibkpar3LfbV66Yi/yU0iZVePqWgMSGwRSBLs9bew2
-         HdpaWQ0jGulQN/GcXnExxcTxQIYjSfbghb/sv4W3+uO4Uyxg+ZnyjZ7ttAhLG8iMsge5
-         SRwJVgq/8/lbyDl1xP8GHSyIE9KQc75BJYrIwYMet5tmp9J1XPqJVW4/3U7i3DSbYExy
-         5eUw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770109265; x=1770714065;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SAv0azhvB0PmgRRTCM2jkuECPq9Iw8iyDp3gTHX+1tM=;
-        b=r932GGAntu/Bu3AbfUXEy1Jeqn0Nzl7N98Tfe7SKb1idndutHkw0GysE+iBh8cvGG3
-         w1MvsMU4v+DhcT2lC11bCzJ+lX6wnS393UB8csjzEShEsPUj1aqTHdTsrzH7GSIsLKo5
-         ykUXfIMVGjjsmf4EhrR0hWlZlEEBVp7btMMAWhtl2Dwr5CMgEhBGJNJ1f8rGJoQBMHjd
-         9qZJobYKXef3gCGDwoW7ZB4EZDlyE4NzfcnXuJHva9faELjfrazyelAXS2+1VKsPYxkJ
-         fuBcf0P6xOhNuo5sGLNxCGEg32lIUCx9nKirfl9POml0+lfOoZPW1ReUNo642mmsUXCT
-         HLGQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXngQuHNKnkM6PAiKzQVhGpskzRhixchH+/ES68yY9hY1kfOJm9GCa8oU1k38QBk1b/Z9Z3t4/YgllA@vger.kernel.org
-X-Gm-Message-State: AOJu0YyF2ZkhuGA8MPZZZgn27Z+KMqcw1dINPLv+nEVm3EmezTmANDmZ
-	Ffw/kfhJ3cO54ChM4hywHU+itZSSZej6OdRSVf3Ny9+2isvrfknAwjlAIYEe6wnQFsyyAtBD7fg
-	W1mFQCvZY4nV8TUx1A+J29hzIadGW2bK4EzGyY1QJBCZAP/Lny8H0iannzSI1ONY=
-X-Gm-Gg: AZuq6aK37DOp+HwF24qWt1MXOoY/tH33xrO07Z9cbcB4w9oj5zH/k/TfQW6G8bPyWK9
-	FtOObzZQtZiYZ8AOAz1OiZhy7C/KMDSqic3i5lxblOg+l4yLq3n+bRBUMizYzyu2CcKlPcNZ3sb
-	pYzBKV/7pbJEVNEIGpkkbrlmxJW50xCXzOjHGwW4vFaft5U6cOIU5SKfjAU4KMFY0N/QG1t+aCP
-	bw3j3cF6W7FZ4G+I+71dM7IpWMC6ITI59U5POmIXothqI780vR+PXqsEbu2aG5Olzk7Nk9FoV/n
-	p8xqQ+oLmyRVxu1kYrCEmdXm1RCohHhcn8IeOiNAh9rjA1icX9KXG+xtcD2ZmuigTWASy1eEei9
-	xPvW33z3/GMPMQkoGmRo1uEBpNgyZKcRMq0CXrwZFsXa5xaIWnXp//pXNPMc=
-X-Received: by 2002:a05:600c:a00e:b0:477:a54a:acba with SMTP id 5b1f17b1804b1-482db481bffmr202564145e9.17.1770109264459;
-        Tue, 03 Feb 2026 01:01:04 -0800 (PST)
-X-Received: by 2002:a05:600c:a00e:b0:477:a54a:acba with SMTP id 5b1f17b1804b1-482db481bffmr202563795e9.17.1770109263990;
-        Tue, 03 Feb 2026 01:01:03 -0800 (PST)
-Received: from lbulwahn-thinkpadx1carbongen12.rmtde.csb ([2a02:810d:7e01:ef00:ff56:9b88:c93b:ed43])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-435e132368csm46856093f8f.31.2026.02.03.01.01.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 03 Feb 2026 01:01:03 -0800 (PST)
-From: Lukas Bulwahn <lbulwahn@redhat.com>
-X-Google-Original-From: Lukas Bulwahn <lukas.bulwahn@redhat.com>
-To: Brian Masney <bmasney@redhat.com>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	linux-mips@vger.kernel.org
-Cc: Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	linux-clk@vger.kernel.org,
-	kernel-janitors@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Lukas Bulwahn <lukas.bulwahn@redhat.com>
-Subject: [PATCH] clk: microchip: fix typo in reference to a config option
-Date: Tue,  3 Feb 2026 10:01:01 +0100
-Message-ID: <20260203090101.348879-1-lukas.bulwahn@redhat.com>
-X-Mailer: git-send-email 2.52.0
+	s=arc-20240116; t=1770121931; c=relaxed/simple;
+	bh=QST511wQ21zjJWktvSqUpl7l53NcCuAZYCXZsPCIGpw=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=H4enRU214+TeLBPUxNv6X5MFRG3IL783FrguIRSBlq/EWR94DZvvz3cP/NQ4j0CGo9meG6K6/mrBlPm/5Y8Bu/lF+cRctOo9kbejS8KS9t9vGPnq8I19Psg7Rq+uj+zTyRvcLTxjUuC6egkSXmQi8//qzr31QtBJ2DE0ynxGYp0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D1fH615x; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D555C19421
+	for <linux-mips@vger.kernel.org>; Tue,  3 Feb 2026 12:32:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770121931;
+	bh=QST511wQ21zjJWktvSqUpl7l53NcCuAZYCXZsPCIGpw=;
+	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
+	b=D1fH615xn68N8WNaLvieZ8KVEp7iOiXKcyp2ni69RBq7mTZAyC/IVQcjhLOn+o2qr
+	 9BgfIxzDqN23+VhURvuh5l1Ti5Ib6lKTG77O4nFYiPkJgMpzfSQ+MUdUmk5TBE1R5t
+	 ZiK0pVnDSjet+bWW81Pb76b5prgGb7Eokr22WbOw0YECBuSO6dtPBzRup7KOm2YaO4
+	 wPxCIlmvbnubWe3M/D1Rn1viAJw2F6IE/+yRGEJe7nkaXBcpTCzZfTweGpS3p6LnPl
+	 msIFZOfg7W+xljanhcGwSUkpU1G683ahIorQPrnkcepkbWZiKuynPEBqnJ8NP7iOSd
+	 Zj14ZQBGbcZ4Q==
+Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
+	by mailfauth.phl.internal (Postfix) with ESMTP id 2AC5FF4006A;
+	Tue,  3 Feb 2026 07:32:10 -0500 (EST)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-01.internal (MEProxy); Tue, 03 Feb 2026 07:32:10 -0500
+X-ME-Sender: <xms:yuqBafaJRXubEgY_S_1yT7rR5bxRrVOtXQWOfU5bseC0P0-yr65QGQ>
+    <xme:yuqBaZOV5VQbg8Ske7mlDZkKWu0FqEkomzXJLg9Xqt6OBVWn0fkybdAbGlTRDXREE
+    3RCRFPBxrd7cq6Mm79Wu3o38yuGEpr6vyGwrDGdVSv6RD_m40ogJyQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddukedttdekucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrugcu
+    uehivghshhgvuhhvvghlfdcuoegrrhgusgeskhgvrhhnvghlrdhorhhgqeenucggtffrrg
+    htthgvrhhnpefhhfeguedtgffgkeeigedvieegffeilefgleeftedtkeehudetiefhvefg
+    fedtteenucffohhmrghinhepshhouhhrtggvfigrrhgvrdhorhhgnecuvehluhhsthgvrh
+    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrugdomhgvshhmthhprghu
+    thhhphgvrhhsohhnrghlihhthidqudeijedthedttdejledqfeefvdduieegudehqdgrrh
+    gusgeppehkvghrnhgvlhdrohhrghesfihorhhkohhfrghrugdrtghomhdpnhgspghrtghp
+    thhtohephedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepthhssghoghgvnhguse
+    grlhhphhgrrdhfrhgrnhhkvghnrdguvgdprhgtphhtthhopehnrghthhgrnheskhgvrhhn
+    vghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrh
+    hnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqmhhiphhssehvghgvrhdrkhgvrhhn
+    vghlrdhorhhgpdhrtghpthhtohepmhgvseiiihihrghordgttg
+X-ME-Proxy: <xmx:yuqBaWOggf-WC5xrnjcAc8bolrep0nT0flywBS4AFfSG_IUs_J-d6g>
+    <xmx:yuqBaYp9_-w2fsgFpqPbKCL5F61P_bgNd_osMGzUIGyqbY74RR-oSw>
+    <xmx:yuqBaXHKjSNQ9PdfUBrJO8qDHusj7sM1Yl5ZfqlU8NnG_Qz2X-Lobg>
+    <xmx:yuqBadonWgms5uSTks_0wOSbBYtXnOznraQeYGd0oegfr5iU9ww8MA>
+    <xmx:yuqBaQajnir2Z8N3vU4yz-UhWblOh2wwZHQEmRu9F3ykkhJoC_NapAUu>
+Feedback-ID: ice86485a:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 02C56700065; Tue,  3 Feb 2026 07:32:10 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-ThreadId: A8lqlFeQHG57
+Date: Tue, 03 Feb 2026 13:31:48 +0100
+From: "Ard Biesheuvel" <ardb@kernel.org>
+To: "Yao Zi" <me@ziyao.cc>, "Nathan Chancellor" <nathan@kernel.org>
+Cc: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Message-Id: <aeca11fb-aa31-4fb2-b937-189626a81f81@app.fastmail.com>
+In-Reply-To: <aYFx5L2xC_u9t0IN@pie>
+References: <20260202041610.61389-1-me@ziyao.cc>
+ <99c54e93-fb8c-4bdb-ad40-a3161a42bb8b@app.fastmail.com>
+ <20260202230729.GA2319189@ax162> <aYFx5L2xC_u9t0IN@pie>
+Subject: Re: [PATCH] MIPS: tools: relocs: Ship a definition of R_MIPS_PC32
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+X-Spamd-Result: default: False [7.35 / 15.00];
+	URIBL_BLACK(7.50)[ziyao.cc:email];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	BAD_REP_POLICIES(0.10)[];
+	XM_UA_NO_VERSION(0.01)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_NEQ_ENVFROM(0.00)[lbulwahn@redhat.com,linux-mips@vger.kernel.org];
-	TAGGED_FROM(0.00)[bounces-13100-lists,linux-mips=lfdr.de];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sourceware.org:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,ziyao.cc:email,app.fastmail.com:mid];
+	TAGGED_FROM(0.00)[bounces-13101-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[redhat.com:+];
+	R_DKIM_ALLOW(0.00)[kernel.org:s=k20201202];
+	GREYLIST(0.00)[pass,body];
 	MIME_TRACE(0.00)[0:+];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	PRECEDENCE_BULK(0.00)[];
-	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_COUNT_FIVE(0.00)[6];
-	RCPT_COUNT_SEVEN(0.00)[9];
+	FORGED_SENDER_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
+	DMARC_POLICY_ALLOW(0.00)[kernel.org,quarantine];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[5];
+	PRECEDENCE_BULK(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
+	FROM_NEQ_ENVFROM(0.00)[ardb@kernel.org,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	R_SPF_ALLOW(0.00)[+ip6:2600:3c0a:e001:db::/64:c];
+	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 32FCDD68C5
-X-Rspamd-Action: no action
+	NEURAL_SPAM(0.00)[0.998];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_COUNT_SEVEN(0.00)[7]
+X-Rspamd-Queue-Id: F3B1DD973E
+X-Rspamd-Action: add header
+X-Spam: Yes
 
-From: Lukas Bulwahn <lukas.bulwahn@redhat.com>
 
-Commit 026d70dcfe5d ("clk: microchip: core: allow driver to be compiled
-with COMPILE_TEST") introduces a typo when referring to a config option in
-an ifdef directive.
 
-Fix this typo.
+On Tue, 3 Feb 2026, at 04:56, Yao Zi wrote:
+> On Mon, Feb 02, 2026 at 04:07:29PM -0700, Nathan Chancellor wrote:
+>> On Mon, Feb 02, 2026 at 10:17:53AM +0100, Ard Biesheuvel wrote:
+>> > 
+>> > On Mon, 2 Feb 2026, at 05:16, Yao Zi wrote:
+>> > > R_MIPS_PC32 is a GNU extension, its definition is available in glibc
+>> > > only since 2.39 (released in 2024), and not available in musl libc yet.
+>> > > Provide our own definition for R_MIPS_PC32 and use it if necessary to
+>> > > fix relocs tool building on musl and older glibc systems.
+>> > >
+>> > > Fixes: ff79d31eb536 ("mips: Add support for PC32 relocations in vmlinux")
+>> > > Signed-off-by: Yao Zi <me@ziyao.cc>
+>> > 
+>> > Thanks for fixing this.
+>> > 
+>> > It does imply that the subsequent kallsyms patch will result in 32-bit MIPS no longer being buildable with older toolchains if CONFIG_RELOCATABLE=y.
+>> 
+>> Doing a little research, it seems like R_MIPS_PC32 has been recognized
+>> by the toolchains for a long time, as I found these commits in binutils:
+>> 
+>>   https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=092dcd755dcdcf664b25a7011fd15957f124c29f
+>>   https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=b47468a6dbd1b54c44c2edc0f7db64a073d894ea
+>> 
+>> It seems like this relocation was not documented in glibc until
+>> recently, along with many other relocation types:
+>> 
+>>   https://sourceware.org/git/gitweb.cgi?p=glibc.git;h=a6e8ceb3bb532236e1eecd0bb0ee8e4b7fd5ff7c
+>> 
+>> I interpret that to mean that the kallsyms patch should work fine since
+>> the toolchain can handle these relocations? It is just building the
+>> relocs tool against an older glibc or musl that does not have the
+>> R_MIPS_PC32 definition that is broken? Or am I misunderstanding
+>> something?
+>
+> Yes, this patch is only meant to fix building of relocs tool. I don't
+> think there are problems about toolchain supporting since R_MIPS_PC32
+> has been in binutils for a long time, as Nathan found, since 2004. The
+> situation is that it's likely to have a toolchain supporting
+> R_MIPS_PC32, while elf.h on the build machine doesn't have its
+> definition. And after ff79d31eb536 ("mips: Add support for PC32
+> relocations in vmlinux"), the relocs tool started to require a
+> definition of R_MIPS_PC32 to build.
+>
 
-Fixes: 026d70dcfe5d ("clk: microchip: core: allow driver to be compiled with COMPILE_TEST")
-Signed-off-by: Lukas Bulwahn <lukas.bulwahn@redhat.com>
----
- drivers/clk/microchip/clk-core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/clk/microchip/clk-core.c b/drivers/clk/microchip/clk-core.c
-index 509cdc060c34..b764ca059e68 100644
---- a/drivers/clk/microchip/clk-core.c
-+++ b/drivers/clk/microchip/clk-core.c
-@@ -74,7 +74,7 @@
- /* SoC specific clock needed during SPLL clock rate switch */
- static struct clk_hw *pic32_sclk_hw;
- 
--#ifdef CONFIG_MATCH_PIC32
-+#ifdef CONFIG_MACH_PIC32
- /* add instruction pipeline delay while CPU clock is in-transition. */
- #define cpu_nop5()			\
- do {					\
--- 
-2.52.0
-
+OK, thanks for the clarification.
 
