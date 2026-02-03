@@ -1,80 +1,91 @@
-Return-Path: <linux-mips+bounces-13101-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13103-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id SOQAI3zwgWlAMwMAu9opvQ
-	(envelope-from <linux-mips+bounces-13101-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 03 Feb 2026 13:56:28 +0100
+	id mGg3O6gVgmmZPAMAu9opvQ
+	(envelope-from <linux-mips+bounces-13103-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 03 Feb 2026 16:35:04 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3B1DD973E
-	for <lists+linux-mips@lfdr.de>; Tue, 03 Feb 2026 13:56:27 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50ED3DB56D
+	for <lists+linux-mips@lfdr.de>; Tue, 03 Feb 2026 16:35:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id C3B70310DBCA
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Feb 2026 12:32:12 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 3464030AFA09
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Feb 2026 15:31:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C91C63446CA;
-	Tue,  3 Feb 2026 12:32:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 771603AEF4F;
+	Tue,  3 Feb 2026 15:31:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="D1fH615x"
+	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="hOkg8a/o";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="M+0KaPKZ"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fout-b7-smtp.messagingengine.com (fout-b7-smtp.messagingengine.com [202.12.124.150])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5AE6340A57
-	for <linux-mips@vger.kernel.org>; Tue,  3 Feb 2026 12:32:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 048C83AE705
+	for <linux-mips@vger.kernel.org>; Tue,  3 Feb 2026 15:31:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.150
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770121931; cv=none; b=WBdh0GxMYKqNYWeoH3rVoX36eq9+h+WGOTGMZJkkC0o+9NIqthuoySChf1Ruwh7SzEIIpCGcmBq0v0NwuLMXSwNC8snQUz8Nc8qp+O1R+DAC9Q5YLfAbxeB7FHT8atPR9V8dWa89gXnzwkhMBje4ljUyNU3p8bRaM+LTui7RzMg=
+	t=1770132696; cv=none; b=k+XozCUaa04wdoc8l9dluzu1nwcuP0BDaeMYI8JT29m09vw4mZtUBW8G2lKBZk3PQfafh0GbuCkh2/H6qwvQ1uJ6xc4KScbz+JUoCz12I7HELtx1qaTfDKaP050iLrMSYNuMa3nXp3x6nQaCTMPEfYCWVvR6bOBzDBLUtwhygdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770121931; c=relaxed/simple;
-	bh=QST511wQ21zjJWktvSqUpl7l53NcCuAZYCXZsPCIGpw=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=H4enRU214+TeLBPUxNv6X5MFRG3IL783FrguIRSBlq/EWR94DZvvz3cP/NQ4j0CGo9meG6K6/mrBlPm/5Y8Bu/lF+cRctOo9kbejS8KS9t9vGPnq8I19Psg7Rq+uj+zTyRvcLTxjUuC6egkSXmQi8//qzr31QtBJ2DE0ynxGYp0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=D1fH615x; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1D555C19421
-	for <linux-mips@vger.kernel.org>; Tue,  3 Feb 2026 12:32:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770121931;
-	bh=QST511wQ21zjJWktvSqUpl7l53NcCuAZYCXZsPCIGpw=;
-	h=Date:From:To:Cc:In-Reply-To:References:Subject:From;
-	b=D1fH615xn68N8WNaLvieZ8KVEp7iOiXKcyp2ni69RBq7mTZAyC/IVQcjhLOn+o2qr
-	 9BgfIxzDqN23+VhURvuh5l1Ti5Ib6lKTG77O4nFYiPkJgMpzfSQ+MUdUmk5TBE1R5t
-	 ZiK0pVnDSjet+bWW81Pb76b5prgGb7Eokr22WbOw0YECBuSO6dtPBzRup7KOm2YaO4
-	 wPxCIlmvbnubWe3M/D1Rn1viAJw2F6IE/+yRGEJe7nkaXBcpTCzZfTweGpS3p6LnPl
-	 msIFZOfg7W+xljanhcGwSUkpU1G683ahIorQPrnkcepkbWZiKuynPEBqnJ8NP7iOSd
-	 Zj14ZQBGbcZ4Q==
-Received: from phl-compute-01.internal (phl-compute-01.internal [10.202.2.41])
-	by mailfauth.phl.internal (Postfix) with ESMTP id 2AC5FF4006A;
-	Tue,  3 Feb 2026 07:32:10 -0500 (EST)
-Received: from phl-imap-02 ([10.202.2.81])
-  by phl-compute-01.internal (MEProxy); Tue, 03 Feb 2026 07:32:10 -0500
-X-ME-Sender: <xms:yuqBafaJRXubEgY_S_1yT7rR5bxRrVOtXQWOfU5bseC0P0-yr65QGQ>
-    <xme:yuqBaZOV5VQbg8Ske7mlDZkKWu0FqEkomzXJLg9Xqt6OBVWn0fkybdAbGlTRDXREE
-    3RCRFPBxrd7cq6Mm79Wu3o38yuGEpr6vyGwrDGdVSv6RD_m40ogJyQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddukedttdekucetufdoteggodetrf
+	s=arc-20240116; t=1770132696; c=relaxed/simple;
+	bh=OHt+pVC7XMy2S1m6DaDTjOVRlFgP4jtMkpHEDdIkP50=;
+	h=MIME-Version:Date:From:To:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=KGDpqK38HPoz43s0nXpht7btMMNqK1P74AlyLh36Uz58ObuUguSWR8GHSQYAeHTMPlx0Mjg1JKXQ82dU3oL1MScwJ4Ksq0VZiAttn2RhMuvq+9g3LicM9bY9KEQJaQjlCrtvmuAOn3puofLq+vQq7ewykfuK196/aPoES931aMc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=hOkg8a/o; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=M+0KaPKZ; arc=none smtp.client-ip=202.12.124.150
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
+Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
+	by mailfout.stl.internal (Postfix) with ESMTP id D7FCD1D00125;
+	Tue,  3 Feb 2026 10:24:39 -0500 (EST)
+Received: from phl-imap-08 ([10.202.2.84])
+  by phl-compute-03.internal (MEProxy); Tue, 03 Feb 2026 10:24:39 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
+	cc:content-transfer-encoding:content-type:content-type:date:date
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm1; t=1770132279;
+	 x=1770218679; bh=Ni60kKZ2JdSxIUCCQBi8jKP9pGHzTaAVCnbylWuKVxo=; b=
+	hOkg8a/olighjY9khJXwbXMDYLmdyclBg7U8VENicK/Bl7GLmAavZG7uzT7foilW
+	7/NzrDEf5d+vMeEYtrdMWsCPzm6zvT6+LfcU357rMnplF3MFWkkROyS3BQcif51V
+	3BvU5Mc9Cxu2RLiOGZl6On6jN6gQ6OxjVFqgwp+KmotsqHBxEWWWMHWR3M2PBeRd
+	Wn2oYVXBcCcLM9C4OdnBe+UzFGq0H8I0SgUjKgsXE3m8rTorxBBaIUk1DxApsLiD
+	jB8sSQUW0GI+v/ErUXrpt4ZZWyAOhtXYI+Hbt3itnNt0lKJCl6OOFe0TRcSNxvTt
+	etwAEk+lC1j9B27UH7lmEQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:content-transfer-encoding:content-type
+	:content-type:date:date:feedback-id:feedback-id:from:from
+	:in-reply-to:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to:x-me-proxy:x-me-sender
+	:x-me-sender:x-sasl-enc; s=fm3; t=1770132279; x=1770218679; bh=N
+	i60kKZ2JdSxIUCCQBi8jKP9pGHzTaAVCnbylWuKVxo=; b=M+0KaPKZzY88pHV0d
+	g2mgQ/aEv6JtvdkWtWvB3Z5pjrpFj9JoshRujl243hivLe3mHbYrhrt9KMtkG/Nz
+	THdA7iQhIlduqH8zHwlqpg3vKSbJaO+nI/10GRjoV6zs7P2OmEsifEvoiq76mcVy
+	+DY05JmMCYy6ZtTFnjMOiLTBYIZxRhFTdPuF5z6DqrAm/fC9i1jUwHgvCOfZWR/L
+	AUvYwd8b24NUSLbuKHKWzFBnk8lc5C8vWi1HDt/L9oNB5IjKb4Qx/H3MakeTVrC9
+	+fWdoUZWUjjuTYYMTrbIj3A4jnE5FdPcExuPZX+8Isttc9gWMUCHn1eMS3Uo1gG/
+	1JauA==
+X-ME-Sender: <xms:NxOCaX3lC8BrXjT9ek7itrw_diM-L0p0FNxk6riEGhYPgdtt94QHcQ>
+    <xme:NxOCaQ7YCUb7gcB53W9vbwXro9Jxye7EZIbPc3RFS0zieoohBPGJk1v0OGePr5c_z
+    dhUhQJ2gtlhMxtU69T1HngPdfNQWq2SYLYib72_Hx_0H_1SWLFCoFgr>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddukedtgeduucetufdoteggodetrf
     dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhepofggfffhvfevkfgjfhfutgfgsehtjeertdertddtnecuhfhrohhmpedftehrugcu
-    uehivghshhgvuhhvvghlfdcuoegrrhgusgeskhgvrhhnvghlrdhorhhgqeenucggtffrrg
-    htthgvrhhnpefhhfeguedtgffgkeeigedvieegffeilefgleeftedtkeehudetiefhvefg
-    fedtteenucffohhmrghinhepshhouhhrtggvfigrrhgvrdhorhhgnecuvehluhhsthgvrh
-    fuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrugdomhgvshhmthhprghu
-    thhhphgvrhhsohhnrghlihhthidqudeijedthedttdejledqfeefvdduieegudehqdgrrh
-    gusgeppehkvghrnhgvlhdrohhrghesfihorhhkohhfrghrugdrtghomhdpnhgspghrtghp
-    thhtohephedpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepthhssghoghgvnhguse
-    grlhhphhgrrdhfrhgrnhhkvghnrdguvgdprhgtphhtthhopehnrghthhgrnheskhgvrhhn
-    vghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrh
-    hnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqmhhiphhssehvghgvrhdrkhgvrhhn
-    vghlrdhorhhgpdhrtghpthhtohepmhgvseiiihihrghordgttg
-X-ME-Proxy: <xmx:yuqBaWOggf-WC5xrnjcAc8bolrep0nT0flywBS4AFfSG_IUs_J-d6g>
-    <xmx:yuqBaYp9_-w2fsgFpqPbKCL5F61P_bgNd_osMGzUIGyqbY74RR-oSw>
-    <xmx:yuqBaXHKjSNQ9PdfUBrJO8qDHusj7sM1Yl5ZfqlU8NnG_Qz2X-Lobg>
-    <xmx:yuqBadonWgms5uSTks_0wOSbBYtXnOznraQeYGd0oegfr5iU9ww8MA>
-    <xmx:yuqBaQajnir2Z8N3vU4yz-UhWblOh2wwZHQEmRu9F3ykkhJoC_NapAUu>
-Feedback-ID: ice86485a:Fastmail
+    rghilhhouhhtmecufedttdenucenucfjughrpefoggffhffvkfgjfhfutgfgsehtjeertd
+    ertddtnecuhfhrohhmpedflfhirgiguhhnucgjrghnghdfuceojhhirgiguhhnrdihrghn
+    ghesfhhlhihgohgrthdrtghomheqnecuggftrfgrthhtvghrnhephfdvffdvjeelvddvgf
+    ejieetueffhfelledtudejgeffiefhgfefieegtddvjeefnecuffhomhgrihhnpehkvghr
+    nhgvlhdrohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfh
+    hrohhmpehjihgrgihunhdrhigrnhhgsehflhihghhorghtrdgtohhmpdhnsggprhgtphht
+    thhopedvpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopeifsgigsehophgvnhgrug
+    hkrdhorhhgpdhrtghpthhtoheplhhinhhugidqmhhiphhssehvghgvrhdrkhgvrhhnvghl
+    rdhorhhg
+X-ME-Proxy: <xmx:NxOCaeilvrJV5si1GHIu59HyQNgoKRIiPvtloOjcN7ZYfABOYVipOQ>
+    <xmx:NxOCac9c9a3zGKGiiKdTz0DsBgaGWDA6DwRKRUX5dWd5OzdNQaVWyg>
+    <xmx:NxOCadr7dH2AII81Vl_UsEyOtD8n2DYaGkvMgGRweV8ilkBuxtfCPg>
+    <xmx:NxOCaT8DpVvc0FGVZ8d9mSzhv_c277SJfY40q86-HLTMknlWDZeUdQ>
+    <xmx:NxOCaa1xlLY0fUx8s4LUUYOdQdySVfyhHyI_TXyzxEeARoRHKRFk_Ib7>
+Feedback-ID: ifd894703:Fastmail
 Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id 02C56700065; Tue,  3 Feb 2026 07:32:10 -0500 (EST)
+	id 73D8C2CE0078; Tue,  3 Feb 2026 10:24:39 -0500 (EST)
 X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
@@ -82,99 +93,111 @@ List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-ThreadId: A8lqlFeQHG57
-Date: Tue, 03 Feb 2026 13:31:48 +0100
-From: "Ard Biesheuvel" <ardb@kernel.org>
-To: "Yao Zi" <me@ziyao.cc>, "Nathan Chancellor" <nathan@kernel.org>
-Cc: "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
- linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-Message-Id: <aeca11fb-aa31-4fb2-b937-189626a81f81@app.fastmail.com>
-In-Reply-To: <aYFx5L2xC_u9t0IN@pie>
-References: <20260202041610.61389-1-me@ziyao.cc>
- <99c54e93-fb8c-4bdb-ad40-a3161a42bb8b@app.fastmail.com>
- <20260202230729.GA2319189@ax162> <aYFx5L2xC_u9t0IN@pie>
-Subject: Re: [PATCH] MIPS: tools: relocs: Ship a definition of R_MIPS_PC32
+X-ThreadId: AVHZR4n_KsVg
+Date: Tue, 03 Feb 2026 15:24:19 +0000
+From: "Jiaxun Yang" <jiaxun.yang@flygoat.com>
+To: "Waldemar Brodkorb" <wbx@openadk.org>,
+ "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
+Message-Id: <f0413775-1a6f-49a6-841b-bf52214a2841@app.fastmail.com>
+In-Reply-To: <aX-d0ShTplHKZT33@waldemar-brodkorb.de>
+References: <aX-d0ShTplHKZT33@waldemar-brodkorb.de>
+Subject: Re: serial console on Mikrotik RB532 non-working
 Content-Type: text/plain
 Content-Transfer-Encoding: 7bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [7.35 / 15.00];
-	URIBL_BLACK(7.50)[ziyao.cc:email];
+X-Spamd-Result: default: False [-2.15 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[flygoat.com,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[flygoat.com:s=fm1,messagingengine.com:s=fm3];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	BAD_REP_POLICIES(0.10)[];
 	XM_UA_NO_VERSION(0.01)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sourceware.org:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,ziyao.cc:email,app.fastmail.com:mid];
-	TAGGED_FROM(0.00)[bounces-13101-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	R_DKIM_ALLOW(0.00)[kernel.org:s=k20201202];
-	GREYLIST(0.00)[pass,body];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWO(0.00)[2];
+	TO_DN_EQ_ADDR_SOME(0.00)[];
+	TAGGED_FROM(0.00)[bounces-13103-lists,linux-mips=lfdr.de];
 	TO_DN_SOME(0.00)[];
-	DMARC_POLICY_ALLOW(0.00)[kernel.org,quarantine];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips];
-	FROM_NEQ_ENVFROM(0.00)[ardb@kernel.org,linux-mips@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	R_SPF_ALLOW(0.00)[+ip6:2600:3c0a:e001:db::/64:c];
-	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	NEURAL_SPAM(0.00)[0.998];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	RCVD_COUNT_SEVEN(0.00)[7]
-X-Rspamd-Queue-Id: F3B1DD973E
-X-Rspamd-Action: add header
-X-Spam: Yes
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[jiaxun.yang@flygoat.com,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[flygoat.com:+,messagingengine.com:+];
+	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_RCPT(0.00)[linux-mips];
+	NEURAL_HAM(-0.00)[-0.987];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[flygoat.com:dkim,app.fastmail.com:mid,messagingengine.com:dkim,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,linuxfoundation.org:email]
+X-Rspamd-Queue-Id: 50ED3DB56D
+X-Rspamd-Action: no action
 
 
 
-On Tue, 3 Feb 2026, at 04:56, Yao Zi wrote:
-> On Mon, Feb 02, 2026 at 04:07:29PM -0700, Nathan Chancellor wrote:
->> On Mon, Feb 02, 2026 at 10:17:53AM +0100, Ard Biesheuvel wrote:
->> > 
->> > On Mon, 2 Feb 2026, at 05:16, Yao Zi wrote:
->> > > R_MIPS_PC32 is a GNU extension, its definition is available in glibc
->> > > only since 2.39 (released in 2024), and not available in musl libc yet.
->> > > Provide our own definition for R_MIPS_PC32 and use it if necessary to
->> > > fix relocs tool building on musl and older glibc systems.
->> > >
->> > > Fixes: ff79d31eb536 ("mips: Add support for PC32 relocations in vmlinux")
->> > > Signed-off-by: Yao Zi <me@ziyao.cc>
->> > 
->> > Thanks for fixing this.
->> > 
->> > It does imply that the subsequent kallsyms patch will result in 32-bit MIPS no longer being buildable with older toolchains if CONFIG_RELOCATABLE=y.
->> 
->> Doing a little research, it seems like R_MIPS_PC32 has been recognized
->> by the toolchains for a long time, as I found these commits in binutils:
->> 
->>   https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=092dcd755dcdcf664b25a7011fd15957f124c29f
->>   https://sourceware.org/git/?p=binutils-gdb.git;a=commit;h=b47468a6dbd1b54c44c2edc0f7db64a073d894ea
->> 
->> It seems like this relocation was not documented in glibc until
->> recently, along with many other relocation types:
->> 
->>   https://sourceware.org/git/gitweb.cgi?p=glibc.git;h=a6e8ceb3bb532236e1eecd0bb0ee8e4b7fd5ff7c
->> 
->> I interpret that to mean that the kallsyms patch should work fine since
->> the toolchain can handle these relocations? It is just building the
->> relocs tool against an older glibc or musl that does not have the
->> R_MIPS_PC32 definition that is broken? Or am I misunderstanding
->> something?
+On Sun, 1 Feb 2026, at 6:39 PM, Waldemar Brodkorb wrote:
+> Hi MIPS hackers,
 >
-> Yes, this patch is only meant to fix building of relocs tool. I don't
-> think there are problems about toolchain supporting since R_MIPS_PC32
-> has been in binutils for a long time, as Nathan found, since 2004. The
-> situation is that it's likely to have a toolchain supporting
-> R_MIPS_PC32, while elf.h on the build machine doesn't have its
-> definition. And after ff79d31eb536 ("mips: Add support for PC32
-> relocations in vmlinux"), the relocs tool started to require a
-> definition of R_MIPS_PC32 to build.
->
+> I want to use the latest Linux kernel on my Mikrotik RB532, but the
+> serial console is non working. I bisected the problem and the first
+> breaking change is this commit:
 
-OK, thanks for the clarification.
+Hi,
+
+Can you try this?
+
+diff --git a/arch/mips/rb532/devices.c b/arch/mips/rb532/devices.c
+index 8ecb56be81ac..030e0b41ff06 100644
+--- a/arch/mips/rb532/devices.c
++++ b/arch/mips/rb532/devices.c
+@@ -213,7 +213,8 @@ static struct platform_device rb532_wdt = {
+ static struct plat_serial8250_port rb532_uart_res[] = {
+        {
+                .type           = PORT_16550A,
+-               .membase        = (char *)KSEG1ADDR(REGBASE + UART0BASE),
++               .mapbase        = REGBASE + UART0BASE,
++               .mapsize        = SZ_4K,
+                .irq            = UART0_IRQ,
+                .regshift       = 2,
+                .iotype         = UPIO_MEM,
+
+Thanks
+Jiaxun
+
+>
+> 6e690d54cfa802f939cefbd2fa2c91bd0b8bd1b6 is the first bad commit
+> commit 6e690d54cfa802f939cefbd2fa2c91bd0b8bd1b6
+> Author: Yi Yang <yiyang13@huawei.com>
+> Date:   Tue Jun 28 16:35:15 2022 +0800
+>
+>     serial: 8250: fix return error code in serial8250_request_std_resource()
+>    
+>     If port->mapbase = NULL in serial8250_request_std_resource() , it need
+>     return a error code instead of 0. If uart_set_info() fail to request new
+>     regions by serial8250_request_std_resource() but the return value of
+>     serial8250_request_std_resource() is 0, The system incorrectly considers
+>     that the resource application is successful and does not attempt to
+>     restore the old setting. A null pointer reference is triggered when the
+>     port resource is later invoked.
+>    
+>     Signed-off-by: Yi Yang <yiyang13@huawei.com>
+>     Cc: stable <stable@kernel.org>
+>     Link: https://lore.kernel.org/r/20220628083515.64138-1-yiyang13@huawei.com
+>     Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+>
+>  drivers/tty/serial/8250/8250_port.c | 4 +++-
+>  1 file changed, 3 insertions(+), 1 deletion(-)
+>
+> When I compile the commit before this commit everything is fine.
+> When I just try to revert it on master I still get no output on my
+> serial console.
+>
+> Anyone here have an idea what is defect in arch/mips/rb532 nowadays?
+>
+> Thanks in advance,
+>  Waldemar
+
+-- 
+- Jiaxun
 
