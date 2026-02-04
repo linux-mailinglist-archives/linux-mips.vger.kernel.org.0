@@ -1,123 +1,134 @@
-Return-Path: <linux-mips+bounces-13106-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13107-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iEV0DgpFgmmERgMAu9opvQ
-	(envelope-from <linux-mips+bounces-13106-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 03 Feb 2026 19:57:14 +0100
+	id uER7Hs0Tg2nBhQMAu9opvQ
+	(envelope-from <linux-mips+bounces-13107-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 04 Feb 2026 10:39:25 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id A10BBDDF93
-	for <lists+linux-mips@lfdr.de>; Tue, 03 Feb 2026 19:57:13 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id D2CF7E3F48
+	for <lists+linux-mips@lfdr.de>; Wed, 04 Feb 2026 10:39:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id A45083014554
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Feb 2026 18:53:08 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 57CCF3010D9E
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Feb 2026 09:35:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4817D299AB3;
-	Tue,  3 Feb 2026 18:53:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD6C33AE6F4;
+	Wed,  4 Feb 2026 09:35:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BEfvu5kW"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="gI/B9DSi"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25BE721A459;
-	Tue,  3 Feb 2026 18:53:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B96383A1D01;
+	Wed,  4 Feb 2026 09:35:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770144788; cv=none; b=LVrAlLkitoQZnOKKu8YAld2gRxyWUYetN2ercuP57eTAQcwttsdu+K48wsArGFzSLEu13uzFPjbOWXZY4vhXeVADdIetGNQ8efZu4DeJmFBOP0UrI94N+gk5r34gW5Y0fimCFWpvFaJiW6qO4a/eQ/yHK4Tkam3lQIzJb7peAMQ=
+	t=1770197737; cv=none; b=qC3vVGZD/3v02RfV2lC9qWaFCmYMkquOz/uzqdgWGsRwsqkJyeKmOl+oYZCDHYOKsnZK9fL24qM4oCbFtZ0xBym41fO6Tw4vLuYxfDxE59LJeUM2q2JspJ4FjDY5veJnDFhiUoztv0RbjbKrMRG+NE2cDhZpIrJVHdxD9kHTshk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770144788; c=relaxed/simple;
-	bh=z5rIqdSgj70boeBRGQHk7eIU0hmDnFxqYUtdNGpPe/E=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=II9RG8Av77/po2+cvXY6S/1cXuhP9XoOSvgtYaufDyFe6LzH6EHI2nxWoEZ2sGMWCEh7Emihci3em4VpLfsBbrlRd65shaZpxhW4zFAk4fbrASi9Jzfm7PSh74QXYg700tdExuWxpPqtHu8Bg7rLz0whUgl2hbRgAQPXrJHP5bg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BEfvu5kW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 90D8FC116D0;
-	Tue,  3 Feb 2026 18:53:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1770144787;
-	bh=z5rIqdSgj70boeBRGQHk7eIU0hmDnFxqYUtdNGpPe/E=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=BEfvu5kWSPt/8GAPsSj7zAvL2qCuFo3sO+4QxWCi2iS5eG9LLees6fYV2FjHCX28X
-	 fIADg9vwmhyTj+JQMgxSVIJtWwusAiZ68qPHV3W26VFAjCn0mg9JeNVtScuDVB8r5v
-	 1p0A3ikHfqFdmRis1+bvDLVft3ZcDIF7/2J6JsKDq6XMONZmLJuJjONZuM6RCWC19F
-	 TiKw7ypZEKkFBeHBgtbWbe4oojnys5pIwU0RtIkUtbOCxU/bmPgD02exZcgGiPoCqP
-	 qbne6lPKgVKhQi41Etpfdmcj/9yAYvRRlGXGNiblOHcYrVbBVYf9tokwMchV5pMFN2
-	 TaYI7cPEWLztg==
-From: Nathan Chancellor <nathan@kernel.org>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Nathan Chancellor <nathan@kernel.org>, Ard Biesheuvel <ardb@kernel.org>, 
- Yao Zi <me@ziyao.cc>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
-In-Reply-To: <20260202041610.61389-1-me@ziyao.cc>
-References: <20260202041610.61389-1-me@ziyao.cc>
-Subject: Re: [PATCH] MIPS: tools: relocs: Ship a definition of R_MIPS_PC32
-Message-Id: <177014478629.2310701.14623005254080630046.b4-ty@kernel.org>
-Date: Tue, 03 Feb 2026 11:53:06 -0700
+	s=arc-20240116; t=1770197737; c=relaxed/simple;
+	bh=jf4RgzlGdwbUlzDUpBSHMOUi07m+ktoWuB1ArPzud1s=;
+	h=Mime-Version:Content-Type:Date:Message-Id:From:Subject:Cc:To:
+	 References:In-Reply-To; b=Nt7UVc7VdrOfbfWIUApTWcnZAEIkPzmahclwhHWQBOL3+CZo3+KMIh0JFdlOqPCJ2Y2J6oJL8LXPDZIpl0z72UlqcnbD4ZsydUYfIV4tn6aGwzGf5hLKoCQDuryJrQlk9MKcqXsWsUwnI4La4UoWSOcz0dLP8gRzYVFzxr9OFvY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=gI/B9DSi; arc=none smtp.client-ip=185.246.84.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 332361A2BE7;
+	Wed,  4 Feb 2026 09:35:35 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id F111160745;
+	Wed,  4 Feb 2026 09:35:34 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 62843119A88F7;
+	Wed,  4 Feb 2026 10:35:28 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1770197733; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=jf4RgzlGdwbUlzDUpBSHMOUi07m+ktoWuB1ArPzud1s=;
+	b=gI/B9DSiD6lHoSUUDety76BjmYRcoVrTdad7OK55xLgm9VECyd9yLcCSJfjEWVongW5vHU
+	RVB/mmg3SdU526tmo7jeUa7rGi2NU9M6fkDWYiyYB/skpem+AnO9UqdnYzOlJJb+wl29iC
+	RI4RUKnAr16Vl0dnEITApJuiAvK/+gc6Beo/DXjMbIiL0dmYgDh7yVUKd0wSj1t1e1nAYE
+	LZxhC7Es54T1lRSIVnuwGGRx6iItGi+3wzPbNdzd7yTJjxF2IFyETnPRMZk0QbZhGeaDw/
+	fkTbomwvIiTeYgZha5Zv2HudnPMw5xeegeO1m/fZC8Mu3OnqGT3OLBTAky4Pfg==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Wed, 04 Feb 2026 10:35:27 +0100
+Message-Id: <DG62Q1L5RK1Y.22BS02J31LJV4@bootlin.com>
+From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
+Subject: Re: [PATCH v6 0/8] Add generic PHY driver used by MACB/GEM on EyeQ5
+Cc: <linux-mips@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+ <linux-clk@vger.kernel.org>, =?utf-8?q?Beno=C3=AEt_Monin?=
+ <benoit.monin@bootlin.com>, "Tawfik Bayouk" <tawfik.bayouk@mobileye.com>,
+ "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>, "Luca Ceresoli"
+ <luca.ceresoli@bootlin.com>, "Conor Dooley" <conor.dooley@microchip.com>,
+ "Jerome Brunet" <jbrunet@baylibre.com>, "Andrew Lunn" <andrew@lunn.ch>
+To: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, "Vladimir
+ Kondratiev" <vladimir.kondratiev@mobileye.com>,
+ =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, "Rob
+ Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+ "Conor Dooley" <conor+dt@kernel.org>, "Vinod Koul" <vkoul@kernel.org>,
+ "Kishon Vijay Abraham I" <kishon@kernel.org>, "Michael Turquette"
+ <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>, "Philipp
+ Zabel" <p.zabel@pengutronix.de>, "Thomas Bogendoerfer"
+ <tsbogend@alpha.franken.de>, "Neil Armstrong" <neil.armstrong@linaro.org>
+X-Mailer: aerc 0.21.0-0-g5549850facc2
+References: <20260127-macb-phy-v6-0-cdd840588188@bootlin.com>
+In-Reply-To: <20260127-macb-phy-v6-0-cdd840588188@bootlin.com>
+X-Last-TLS-Session-Version: TLSv1.3
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
+	MV_CASE(0.50)[];
+	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13106-lists,linux-mips=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TO_DN_SOME(0.00)[];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCPT_COUNT_FIVE(0.00)[6];
+	RCPT_COUNT_TWELVE(0.00)[25];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-13107-lists,linux-mips=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[bootlin.com:+];
+	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[nathan@kernel.org,linux-mips@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[theo.lebrun@bootlin.com,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	TAGGED_RCPT(0.00)[linux-mips];
 	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips,dt];
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_SOME(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: A10BBDDF93
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,bootlin.com:dkim,bootlin.com:url,bootlin.com:mid]
+X-Rspamd-Queue-Id: D2CF7E3F48
 X-Rspamd-Action: no action
 
-On Mon, 02 Feb 2026 04:16:10 +0000, Yao Zi wrote:
-> R_MIPS_PC32 is a GNU extension, its definition is available in glibc
-> only since 2.39 (released in 2024), and not available in musl libc yet.
-> Provide our own definition for R_MIPS_PC32 and use it if necessary to
-> fix relocs tool building on musl and older glibc systems.
-> 
-> 
+On Tue Jan 27, 2026 at 6:09 PM CET, Th=C3=A9o Lebrun wrote:
+> EyeQ5 SoCs integrate two GEM instances. A system-controller register
+> region named "OLB" has some control over the Ethernet PHY integration.
 
-Applied to
-
-  https://git.kernel.org/pub/scm/linux/kernel/git/kbuild/linux.git kbuild-next
+Is the plan to take this for the v6.20 merge window or await v7.0?
+The driver has seldom changed since its first revision 3 months ago.
 
 Thanks!
+Have a nice day,
 
-[1/1] MIPS: tools: relocs: Ship a definition of R_MIPS_PC32
-      https://git.kernel.org/kbuild/c/87abe931fbc34
-
-Please look out for regression or issue reports or other follow up
-comments, as they may result in the patch/series getting dropped or
-reverted. Patches applied to an "unstable" branch are accepted pending
-wider testing in -next and any post-commit review; they will generally
-be moved to the main branch in a week if no issues are found.
-
-Best regards,
--- 
-Nathan Chancellor <nathan@kernel.org>
+--
+Th=C3=A9o Lebrun, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
 
