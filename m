@@ -1,205 +1,214 @@
-Return-Path: <linux-mips+bounces-13123-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13124-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id iMC0NEFshGmJ2wMAu9opvQ
-	(envelope-from <linux-mips+bounces-13123-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 05 Feb 2026 11:09:05 +0100
+	id gCxgL5y/hGnG4wMAu9opvQ
+	(envelope-from <linux-mips+bounces-13124-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 05 Feb 2026 17:04:44 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E87D6F12F0
-	for <lists+linux-mips@lfdr.de>; Thu, 05 Feb 2026 11:09:04 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 797B3F4F08
+	for <lists+linux-mips@lfdr.de>; Thu, 05 Feb 2026 17:04:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 567E53002B75
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Feb 2026 10:09:02 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 86C6930233C0
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Feb 2026 15:58:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A4F1F35CB71;
-	Thu,  5 Feb 2026 10:08:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD38C42DFE0;
+	Thu,  5 Feb 2026 15:58:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b="eit+b4Jq";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="VsEBAonz"
+	dkim=pass (1024-bit key) header.d=ziyao.cc header.i=me@ziyao.cc header.b="nY8tgY1t"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from fout-b1-smtp.messagingengine.com (fout-b1-smtp.messagingengine.com [202.12.124.144])
+Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0A9033B6F3;
-	Thu,  5 Feb 2026 10:08:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.144
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770286138; cv=none; b=SO8OzWBiZDEOpQXOMKJjrJ77rJcatNVGkY3yaaHOSKVOuwON4AdIsEqRuVEzyu0pzfuTPdNO0EaW25bQ73g78fOQcJfYjqCY2+OmIwMNGofHOv/D/p3z3bQocQUxiJqnY8rCO6bSI7r+NlLjtOFzlF1OWnEyGoHoBeOjK9+W7wo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770286138; c=relaxed/simple;
-	bh=ixCxdi41vK8VCutYBexrUwTUpNR4QEtn7rDGMBgLSNI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=ZJKY4Do4NxbiD284mxyx9LSiaZNuz3AkD8ek9wU56gBQqpQzQQG0s4R1QPg3HBCk5FrBKOfo6ztWlVtBDtsmankCMv/ggR520SuBfiU54Vg7lDw4jbJgwL6qjfvNtWqHN/Q1ycYbF8DYMd0BkmEEwOQwEDlN7dpFXnlHHv7nEx8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com; spf=pass smtp.mailfrom=flygoat.com; dkim=pass (2048-bit key) header.d=flygoat.com header.i=@flygoat.com header.b=eit+b4Jq; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=VsEBAonz; arc=none smtp.client-ip=202.12.124.144
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=flygoat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flygoat.com
-Received: from phl-compute-03.internal (phl-compute-03.internal [10.202.2.43])
-	by mailfout.stl.internal (Postfix) with ESMTP id 876671D00199;
-	Thu,  5 Feb 2026 05:08:56 -0500 (EST)
-Received: from phl-frontend-03 ([10.202.2.162])
-  by phl-compute-03.internal (MEProxy); Thu, 05 Feb 2026 05:08:57 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=flygoat.com; h=
-	cc:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:message-id:mime-version:reply-to
-	:subject:subject:to:to; s=fm1; t=1770286136; x=1770372536; bh=Lc
-	lXPKST+gI7ox8r4avoEEUttlMxiCLYezVoioHYyYc=; b=eit+b4Jq1MELoS2ZIa
-	K/qzGHobT9gCDo0wcBrGkDsHXbGpjU3wbMkpQ0AQDgxV57Ad6njTiK7XJ7DMyiZz
-	Azp3Uu8bZhtsGSYfzBYICs/0+u9DWh7+bWiuke7bxIYXYzd+0BFimEChSlAvBM5C
-	KAJwT8NXZ1pIhG7xLbqS7ovQf/g8W2aiQ+7YBiYeIUGv3aK2kFDrjHDMGXD4nw+4
-	PuU/RWQgiRhVDIApbGMRSi7EA+c3/GINeI9y7AoElvBb+huIxhdZ86U91S+8988c
-	K7USaUtRvB6i6DnvEh+FkH4qOqgODz1AsBQFXx7YxUwtGONIjxCrJZ6CRbe5uNWN
-	gKqQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-	fm3; t=1770286136; x=1770372536; bh=LclXPKST+gI7ox8r4avoEEUttlMx
-	iCLYezVoioHYyYc=; b=VsEBAonzvmh4r4ZZzJiSvmrrp8w6g9bXEBscAR+D/bY1
-	qRFdl9fjftA2uewvIeEbvJFiIjqpRP0RGzUNUsJWY7CavMrQ2XjIZGXIGu7yAsvE
-	WeSo2j32Cw9Pb6R8TX66vyLKTzx4RN+Y5ahabyA++TGw+uc+AUuY9fQHdZfociPf
-	9B8tKsBEFoeRfy5QB+lZwSfWXcfwGsoz+eG5aktUMuC87krFk51KfL6xv58dho8y
-	r22mgVhr3J/f2eDMO4OnkUfBfrdSOGxmpf+joB1ngOeQFVyVFeRQGmCP8aUVqlmh
-	oj+BplHMvAWR5Xi72Yclny5wfJ1gYBjcaqHY4sfB6g==
-X-ME-Sender: <xms:N2yEab1rGhAJAt_8aHcsXCDbHD6aSVFKAcT-XbqKh_gIaIe1aobsyw>
-    <xme:N2yEacqN-wJPRm_LQ2SR3aJRdQOzgUncZI3cjDwX_jLkxFMoEldg4AFAGj57YJfuo
-    CmdHZlOqBmaaCkysi2q6mv1LS9ElS58_SWA9h5WRIS1DukIfoa26uo>
-X-ME-Received: <xmr:N2yEafiv1K_9QbQOBS7ufSxV1GZynyEbSirGg2rQbs-iuSEqDq4-TsnPp-yRP0t7ThUzwzKl2dQIwqW-aRav2mVqsyT7MPXTwA8zf6c>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddukeehtddvucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
-    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
-    gurhephfffufggtgfgkffvvefosehtjeertdertdejnecuhfhrohhmpeflihgrgihunhcu
-    jggrnhhguceojhhirgiguhhnrdihrghnghesfhhlhihgohgrthdrtghomheqnecuggftrf
-    grthhtvghrnhephfffgeejgfejieeugffgudegvdekffevgeeuteetgeejveeiteeivedv
-    ffehlefgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlhhushhtvghrufhiii
-    gvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehjihgrgihunhdrhigrnhhgsehflhih
-    ghhorghtrdgtohhmpdhnsggprhgtphhtthhopeekpdhmohguvgepshhmthhpohhuthdprh
-    gtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdp
-    rhgtphhtthhopehtshgsohhgvghnugesrghlphhhrgdrfhhrrghnkhgvnhdruggvpdhrtg
-    hpthhtohephihihigrnhhgudefsehhuhgrfigvihdrtghomhdprhgtphhtthhopehsthgr
-    sghlvgesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehjihgrgihunhdrhi
-    grnhhgsehflhihghhorghtrdgtohhmpdhrtghpthhtoheplhhinhhugidqmhhiphhssehv
-    ghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepfigsgiesohhpvghnrggukhdroh
-    hrghdprhgtphhtthhopehgrhgvghhkhheslhhinhhugihfohhunhgurghtihhonhdrohhr
-    gh
-X-ME-Proxy: <xmx:N2yEaQ9y1EkJTeplgHokZR9YI7h5m29lGsFKTCZ5450jfI2CSxIz8g>
-    <xmx:N2yEaTU6Qvd4BNlQ5oqPnoEUIhd9ox9qmfEHwQ-muPsXWvkq3SEv9Q>
-    <xmx:N2yEacAc_HdEIEogOVVXXIv9DEyaUQ5YropO6a26sEJSwYj0To5XBQ>
-    <xmx:N2yEaQG6M2Izz7YJ00jFE--upK9Cj7uX8iT9ecd2_w-XrEzCd7OU6g>
-    <xmx:OGyEabdAj0gZxYlxpSk6B539eWm8z305RRVCQ2oXkNQkK6aDSQpAjjzr>
-Feedback-ID: ifd894703:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 5 Feb 2026 05:08:54 -0500 (EST)
-From: Jiaxun Yang <jiaxun.yang@flygoat.com>
-Date: Thu, 05 Feb 2026 10:08:42 +0000
-Subject: [PATCH] MIPS: rb532: Fix MMIO UART resource registration
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72BB7421F0C;
+	Thu,  5 Feb 2026 15:58:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770307126; cv=pass; b=FmDeH91We89OntnB9LlGPBzdP7yDpvBECGZEmNsATKM8dKwJ4yuQBYKa61KXzk7NV998naHc0cXO0wbLvkHP8Enu3KVKW+XkSSynvyFeMoEMCLoDDluISsTaIzXpGiJMAM4um1BTJmusOwptm4NkDmNrPwG23VWC38AG5td/Cyc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770307126; c=relaxed/simple;
+	bh=Fi4VXOVvvEEM9yWZmbVIB2tdGgQxZe5fTXPkIeISGP0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AWqENH64HNyi+v+AlPQ1XCcAMaYblpQss8MHemXmtmoRODe8pKhAjeKdgMuJafuNiD3gDicNuzGoX+OXnv6qEcSf07h7fVuq27rr5n0yUI8v+OPIClhPG+HD71x147jKlCLWVrDuRbbxasdE2mG1ZV77AnJeHAf95b90xp8/7Jc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ziyao.cc; spf=pass smtp.mailfrom=ziyao.cc; dkim=pass (1024-bit key) header.d=ziyao.cc header.i=me@ziyao.cc header.b=nY8tgY1t; arc=pass smtp.client-ip=136.143.188.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ziyao.cc
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziyao.cc
+ARC-Seal: i=1; a=rsa-sha256; t=1770307096; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=LQdDS0sD9D9Nnv/1Z9zKLRa2h2j0LzjEp7mXNBpdyDWKa+NqBvy4WWANgCCail15iuYliP0LX4bYoa56Q83RF7KOYP0VlihvWpnKUqPClgy4RSHyst7RUTaYwfpmeMKnq4vRq/UtDKKlvUq0LHKtof8DgYTIGbjq+OhYlZE53EM=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1770307096; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=JjgyVvQvDBdLV0lASR43tNdGfYV4elj5vN9l8aB40pM=; 
+	b=CZ5Cz66ShZvrQHbcPHMgkcJZapk+/APN60SeoFYszw+WZVajE9fzff7P/wCRQEjvKPQi+vvNhyIBR/hcpfFI4N4pwHUFOE/EXpGpM9nKzvOeaQCxBUj8uEVMy4iBEGGLHpE/CuHXnrqnqKB+3t2UGQINwmHaYG1iEMlDJCE4vm8=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=ziyao.cc;
+	spf=pass  smtp.mailfrom=me@ziyao.cc;
+	dmarc=pass header.from=<me@ziyao.cc>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1770307096;
+	s=zmail; d=ziyao.cc; i=me@ziyao.cc;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=JjgyVvQvDBdLV0lASR43tNdGfYV4elj5vN9l8aB40pM=;
+	b=nY8tgY1t/Dkhjz9KHtwgnxxqNL0p9D6mn0eW/qK4OPN1lDeF/9PdYpQw04p0eGUF
+	kZ/+6IgEhlXpDkX9a9/s1l3QP5X0UysbUaPDqBwUQ84dFPuBP1X5KuL4sq7Vbc7Q7A1
+	JvhO4qu/MjsXtEv2TXJ1h8dAn3l+KV/NMaUvcsHg=
+Received: by mx.zohomail.com with SMTPS id 1770307094687863.0131325581174;
+	Thu, 5 Feb 2026 07:58:14 -0800 (PST)
+From: Yao Zi <me@ziyao.cc>
+To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: Yao Zi <me@ziyao.cc>,
+	linux-mips@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	llvm@lists.linux.dev,
+	stable@vger.kernel.org
+Subject: [PATCH v2] MIPS: Work around LLVM bug when gp is used as global register variable
+Date: Thu,  5 Feb 2026 15:56:44 +0000
+Message-ID: <20260205155644.34421-1-me@ziyao.cc>
+X-Mailer: git-send-email 2.52.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20260205-rb532-uart-v1-1-334dbdfafa60@flygoat.com>
-X-B4-Tracking: v=1; b=H4sIAClshGkC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIzMDIwNT3aIkU2Mj3dLEohJd0zSjFKO0NCOL1CQLJaCGgqLUtMwKsGHRsbW
- 1AO0R9N1cAAAA
-X-Change-ID: 20260205-rb532-uart-5f2d2ff28eb8
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
- Yi Yang <yiyang13@huawei.com>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org, 
- stable@vger.kernel.org, Waldemar Brodkorb <wbx@openadk.org>, 
- Jiaxun Yang <jiaxun.yang@flygoat.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1761;
- i=jiaxun.yang@flygoat.com; h=from:subject:message-id;
- bh=ixCxdi41vK8VCutYBexrUwTUpNR4QEtn7rDGMBgLSNI=;
- b=owGbwMvMwCHmXMhTe71c8zDjabUkhsyWHFNzzrTQ7wYFn/kMZ6xPEjsU2S26ZFbePd9b9pJzP
- gq6pR/vKGVhEONgkBVTZAkRUOrb0HhxwfUHWX9g5rAygQxh4OIUgIn0lTL8T1+7v+HPsS1PNV/t
- dVx2qX6z6XzjiGVvHR8vtlh7hXWaTyojQ7PWzqL9E4JislXncgcbaG6YImx4aTcj0+K4mas588o
- jWQE=
-X-Developer-Key: i=jiaxun.yang@flygoat.com; a=openpgp;
- fpr=980379BEFEBFBF477EA04EF9C111949073FC0F67
+Content-Transfer-Encoding: 8bit
+X-ZohoMailClient: External
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[flygoat.com,none];
-	R_DKIM_ALLOW(-0.20)[flygoat.com:s=fm1,messagingengine.com:s=fm3];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+X-Spamd-Result: default: False [10.34 / 15.00];
+	URIBL_BLACK(7.50)[ziyao.cc:email,ziyao.cc:dkim,ziyao.cc:mid];
+	SUSPICIOUS_RECIPS(1.50)[];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
+	BAD_REP_POLICIES(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[flygoat.com:+,messagingengine.com:+];
-	FROM_HAS_DN(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13123-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13124-lists,linux-mips=lfdr.de];
+	R_DKIM_ALLOW(0.00)[ziyao.cc:s=zmail];
+	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jiaxun.yang@flygoat.com,linux-mips@vger.kernel.org];
+	GREYLIST(0.00)[pass,body];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	FREEMAIL_TO(0.00)[alpha.franken.de,kernel.org,gmail.com,google.com,linutronix.de];
+	DKIM_TRACE(0.00)[ziyao.cc:+];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
-	MID_RHS_MATCH_FROM(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCPT_COUNT_SEVEN(0.00)[8];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[messagingengine.com:dkim,openadk.org:email,sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: E87D6F12F0
-X-Rspamd-Action: no action
+	PRECEDENCE_BULK(0.00)[];
+	RCPT_COUNT_SEVEN(0.00)[11];
+	FROM_NEQ_ENVFROM(0.00)[me@ziyao.cc,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DMARC_POLICY_ALLOW(0.00)[ziyao.cc,quarantine];
+	TAGGED_RCPT(0.00)[linux-mips,lkml];
+	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	R_SPF_ALLOW(0.00)[+ip6:2600:3c04:e001:36c::/64:c];
+	NEURAL_SPAM(0.00)[0.996];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,ziyao.cc:email,ziyao.cc:dkim,ziyao.cc:mid,gnu.org:url]
+X-Rspamd-Queue-Id: 797B3F4F08
+X-Rspamd-Action: add header
+X-Spam: Yes
 
-Since commit 6e690d54cfa8 ("serial: 8250: fix return error code in
-serial8250_request_std_resource()"), registering an 8250 MMIO port
-without mapbase no longer works, as the resource range is derived from
-mapbase/mapsize.
+On MIPS, __current_thread_info is defined as global register variable
+locating in $gp, and is simply assigned with new address during kernel
+relocation.
 
-Populate mapbase and mapsize accordingly. Also drop ugly membase KSEG1
-pointer and set UPF_IOREMAP instead, letting the 8250 core perform the
-ioremap.
+This however is broken with LLVM, which always restores $gp if it finds
+$gp is clobbered in any form, including when intentionally through a
+global register variable. This is against GCC's documentation[1], which
+requires a callee-saved register used as global register variable not to
+be restored if it's clobbered.
 
-Fixes: 6e690d54cfa8 ("serial: 8250: fix return error code in serial8250_request_std_resource()")
+As a result, $gp will continue to point to the unrelocated kernel after
+the epilog of relocate_kernel(), leading to an early crash in init_idle,
+
+[    0.000000] CPU 0 Unable to handle kernel paging request at virtual address 0000000000000000, epc == ffffffff81afada8, ra == ffffffff81afad90
+[    0.000000] Oops[#1]:
+[    0.000000] CPU: 0 UID: 0 PID: 0 Comm: swapper Tainted: G        W           6.19.0-rc5-00262-gd3eeb99bbc99-dirty #188 VOLUNTARY
+[    0.000000] Tainted: [W]=WARN
+[    0.000000] Hardware name: loongson,loongson64v-4core-virtio
+[    0.000000] $ 0   : 0000000000000000 0000000000000000 0000000000000001 0000000000000000
+[    0.000000] $ 4   : ffffffff80b80ec0 ffffffff80b53d48 0000000000000000 00000000000f4240
+[    0.000000] $ 8   : 0000000000000100 ffffffff81d82f80 ffffffff81d82f80 0000000000000001
+[    0.000000] $12   : 0000000000000000 ffffffff81776f58 00000000000005da 0000000000000002
+[    0.000000] $16   : ffffffff80b80e40 0000000000000000 ffffffff80b81614 9800000005dfbe80
+[    0.000000] $20   : 00000000540000e0 ffffffff81980000 0000000000000000 ffffffff80f81c80
+[    0.000000] $24   : 0000000000000a26 ffffffff8114fb90
+[    0.000000] $28   : ffffffff80b50000 ffffffff80b53d40 0000000000000000 ffffffff81afad90
+[    0.000000] Hi    : 0000000000000000
+[    0.000000] Lo    : 0000000000000000
+[    0.000000] epc   : ffffffff81afada8 init_idle+0x130/0x270
+[    0.000000] ra    : ffffffff81afad90 init_idle+0x118/0x270
+[    0.000000] Status: 540000e2	KX SX UX KERNEL EXL
+[    0.000000] Cause : 00000008 (ExcCode 02)
+[    0.000000] BadVA : 0000000000000000
+[    0.000000] PrId  : 00006305 (ICT Loongson-3)
+[    0.000000] Process swapper (pid: 0, threadinfo=(____ptrval____), task=(____ptrval____), tls=0000000000000000)
+[    0.000000] Stack : 9800000005dfbf00 ffffffff8178e950 0000000000000000 0000000000000000
+[    0.000000]         0000000000000000 ffffffff81970000 000000000000003f ffffffff810a6528
+[    0.000000]         0000000000000001 9800000005dfbe80 9800000005dfbf00 ffffffff81980000
+[    0.000000]         ffffffff810a6450 ffffffff81afb6c0 0000000000000000 ffffffff810a2258
+[    0.000000]         ffffffff81d82ec8 ffffffff8198d010 ffffffff81b67e80 ffffffff8197dd98
+[    0.000000]         ffffffff81d81c80 ffffffff81930000 0000000000000040 0000000000000000
+[    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
+[    0.000000]         0000000000000000 000000000000009e ffffffff9fc01000 0000000000000000
+[    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
+[    0.000000]         0000000000000000 ffffffff81ae86dc ffffffff81b3c741 0000000000000002
+[    0.000000]         ...
+[    0.000000] Call Trace:
+[    0.000000] [<ffffffff81afada8>] init_idle+0x130/0x270
+[    0.000000] [<ffffffff81afb6c0>] sched_init+0x5c8/0x6c0
+[    0.000000] [<ffffffff81ae86dc>] start_kernel+0x27c/0x7a8
+
+This bug has been reported to LLVM[2] and affects version from (at
+least) 18 to 21. Let's work around this by using inline assembly to
+assign $gp before a fix is widely available.
+
 Cc: stable@vger.kernel.org
-Reported-by: Waldemar Brodkorb <wbx@openadk.org>
-Link: https://lore.kernel.org/linux-mips/aX-d0ShTplHKZT33@waldemar-brodkorb.de/
-Signed-off-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
+Link: https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Global-Register-Variables.html # [1]
+Link: https://github.com/llvm/llvm-project/issues/176546 # [2]
+Signed-off-by: Yao Zi <me@ziyao.cc>
+Acked-by: Nathan Chancellor <nathan@kernel.org>
 ---
-Since it's a partial fix to the issue report, I'll not use Closes
-tag. checkpatch is unhappy :-(
----
- arch/mips/rb532/devices.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/arch/mips/rb532/devices.c b/arch/mips/rb532/devices.c
-index 8ecb56be81acc36e39192dee9f5d2a4d19b3755c..4f027efbf27b05377ddac306ff16714b8764915b 100644
---- a/arch/mips/rb532/devices.c
-+++ b/arch/mips/rb532/devices.c
-@@ -213,11 +213,12 @@ static struct platform_device rb532_wdt = {
- static struct plat_serial8250_port rb532_uart_res[] = {
- 	{
- 		.type           = PORT_16550A,
--		.membase	= (char *)KSEG1ADDR(REGBASE + UART0BASE),
-+		.mapbase        = REGBASE + UART0BASE,
-+		.mapsize        = 0x1000,
- 		.irq		= UART0_IRQ,
- 		.regshift	= 2,
- 		.iotype		= UPIO_MEM,
--		.flags		= UPF_BOOT_AUTOCONF,
-+		.flags		= UPF_BOOT_AUTOCONF | UPF_IOREMAP,
- 	},
- 	{
- 		.flags		= 0,
+Changed from v1:
+- Include a link to LLVM upstream issue in comment
+- Collect tags
+- Link to v1: https://lore.kernel.org/linux-mips/20260118090235.60670-1-me@ziyao.cc/
 
----
-base-commit: 0f8a890c4524d6e4013ff225e70de2aed7e6d726
-change-id: 20260205-rb532-uart-5f2d2ff28eb8
+ arch/mips/kernel/relocate.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
 
-Best regards,
+diff --git a/arch/mips/kernel/relocate.c b/arch/mips/kernel/relocate.c
+index 7f1c136ad850..59833210542f 100644
+--- a/arch/mips/kernel/relocate.c
++++ b/arch/mips/kernel/relocate.c
+@@ -420,7 +420,20 @@ void *__init relocate_kernel(void)
+ 			goto out;
+ 
+ 		/* The current thread is now within the relocated image */
++#ifndef CONFIG_CC_IS_CLANG
+ 		__current_thread_info = RELOCATED(&init_thread_union);
++#else
++		/*
++		 * LLVM may wrongly restore $gp ($28) in epilog even if it's
++		 * intentionally modified. Work around this by using inline
++		 * assembly to assign $gp. $gp couldn't be listed as output or
++		 * clobber, or LLVM will still restore its original value.
++		 * See also LLVM upstream issue
++		 * https://github.com/llvm/llvm-project/issues/176546
++		 */
++		asm volatile("move $28, %0" : :
++			     "r" (RELOCATED(&init_thread_union)));
++#endif
+ 
+ 		/* Return the new kernel's entry point */
+ 		kernel_entry = RELOCATED(start_kernel);
 -- 
-Jiaxun Yang <jiaxun.yang@flygoat.com>
+2.52.0
 
 
