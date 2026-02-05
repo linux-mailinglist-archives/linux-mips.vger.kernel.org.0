@@ -1,115 +1,121 @@
-Return-Path: <linux-mips+bounces-13114-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13115-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id EFuSAkGIg2niowMAu9opvQ
-	(envelope-from <linux-mips+bounces-13114-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 04 Feb 2026 18:56:17 +0100
+	id MNJKOv/xg2mGwAMAu9opvQ
+	(envelope-from <linux-mips+bounces-13115-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 05 Feb 2026 02:27:27 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C63AEB437
-	for <lists+linux-mips@lfdr.de>; Wed, 04 Feb 2026 18:56:16 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52389EDA62
+	for <lists+linux-mips@lfdr.de>; Thu, 05 Feb 2026 02:27:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id B3778304208E
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Feb 2026 17:51:23 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 35E23300EF8F
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Feb 2026 01:26:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04CEE34DB6B;
-	Wed,  4 Feb 2026 17:51:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B9CC2882A1;
+	Thu,  5 Feb 2026 01:26:42 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60E7622154F;
-	Wed,  4 Feb 2026 17:51:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from angie.orcam.me.uk (angie.orcam.me.uk [78.133.224.34])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A5DE1A5B8B;
+	Thu,  5 Feb 2026 01:26:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=78.133.224.34
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770227482; cv=none; b=sxKrld6KgXfnKpE5wlDQi0iG9cvvMs4UKTzsx8pvQJpq5jB7icS9nDvZOl5cUbGUylOhrvkR/usAEd8ky90wbgpluvaZ9yyqN+iLlYvM/tvRQAxGU3mf3my7NQc6VPRcrePesq1f2Kx25WOy2gma9Mzj8QeTq1ARXYV1bPOc1T0=
+	t=1770254801; cv=none; b=aAza+f87qgdR2Jt05KsKh7JKIRibpkqwarVhopzEX8Kw1olV5TU32oK3lamiGtlQK0DVZUEPCfQd/cfejZPjwMpv09U5BAAOSYsjke2jRfDb6lihBkkIOy/rzdf3c2YfnlwhmV5BUzHrT1MziV1ZsTUbG4Rd1IOAOofYXloIUWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770227482; c=relaxed/simple;
-	bh=G1ls1ovLla0PwhNu7yYxNroPct7rquwUYRb7LHfE7+g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HpbEFxyY4Gx0L/2zx3GdfXWUUsotGy9j4u+1maEtyCam2rxkhRUEtvdyxXqxJgxg4Ew9kM7GJ/m3U7Cmvi6jL9S/SJtelbKjZn1nyIHNhvCHxK9/ag9rgHsx3PGeujKNjA/Q6KdV9jkjU96VVKOLSemNsnbsM3vV+ufznwqSQrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 678371516;
-	Wed,  4 Feb 2026 09:51:15 -0800 (PST)
-Received: from arm.com (arrakis.cambridge.arm.com [10.1.197.46])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5EC233F778;
-	Wed,  4 Feb 2026 09:51:18 -0800 (PST)
-Date: Wed, 4 Feb 2026 17:51:15 +0000
-From: Catalin Marinas <catalin.marinas@arm.com>
-To: Thomas =?iso-8859-1?Q?Wei=DFschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Will Deacon <will@kernel.org>, Russell King <linux@armlinux.org.uk>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
-	Huacai Chen <chenhuacai@kernel.org>,
-	WANG Xuerui <kernel@xen0n.name>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Andy Lutomirski <luto@kernel.org>,
-	Thomas Gleixner <tglx@kernel.org>,
-	Vincenzo Frascino <vincenzo.frascino@arm.com>,
-	Theodore Ts'o <tytso@mit.edu>,
-	"Jason A. Donenfeld" <Jason@zx2c4.com>,
-	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev,
-	linux-mips@vger.kernel.org
-Subject: Re: [PATCH 02/15] arm64: vDSO: compat_gettimeofday: Add explicit
- includes
-Message-ID: <aYOHEzX4Djcui5vO@arm.com>
-References: <20260114-vdso-header-cleanups-v1-0-803b80ee97b4@linutronix.de>
- <20260114-vdso-header-cleanups-v1-2-803b80ee97b4@linutronix.de>
+	s=arc-20240116; t=1770254801; c=relaxed/simple;
+	bh=sf82TcBq9fxxRcRPGqMm/UuledHRNRfbLaDgEbbES2g=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=nrvYIPzlUDOyLbLebAIXvPWWA1lJhVw9a3EM+vffg+i3KuB0UkaP0T4zHfee209A4e/Dvc2vERZye6N1PQR7smOIBLqkAkz9zWXqfWFyO1kCpk/wSwbI9aWia7vBqONX8LKFvXeaARcYHwIts++1O8HRYYLKvhWWfqECSnxaIqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk; spf=none smtp.mailfrom=orcam.me.uk; arc=none smtp.client-ip=78.133.224.34
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=orcam.me.uk
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=orcam.me.uk
+Received: by angie.orcam.me.uk (Postfix, from userid 500)
+	id EB85F92009C; Thu,  5 Feb 2026 02:26:39 +0100 (CET)
+Received: from localhost (localhost [127.0.0.1])
+	by angie.orcam.me.uk (Postfix) with ESMTP id E565B92009B;
+	Thu,  5 Feb 2026 01:26:39 +0000 (GMT)
+Date: Thu, 5 Feb 2026 01:26:39 +0000 (GMT)
+From: "Maciej W. Rozycki" <macro@orcam.me.uk>
+To: Yao Zi <me@ziyao.cc>
+cc: Nathan Chancellor <nathan@kernel.org>, Ard Biesheuvel <ardb@kernel.org>, 
+    Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+    linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] MIPS: tools: relocs: Ship a definition of R_MIPS_PC32
+In-Reply-To: <aYFx5L2xC_u9t0IN@pie>
+Message-ID: <alpine.DEB.2.21.2602050110020.17548@angie.orcam.me.uk>
+References: <20260202041610.61389-1-me@ziyao.cc> <99c54e93-fb8c-4bdb-ad40-a3161a42bb8b@app.fastmail.com> <20260202230729.GA2319189@ax162> <aYFx5L2xC_u9t0IN@pie>
+User-Agent: Alpine 2.21 (DEB 202 2017-01-01)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260114-vdso-header-cleanups-v1-2-803b80ee97b4@linutronix.de>
+Content-Type: text/plain; charset=US-ASCII
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.36 / 15.00];
+X-Spamd-Result: default: False [-1.46 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
-	DMARC_POLICY_SOFTFAIL(0.10)[arm.com : SPF not aligned (relaxed), No valid DKIM,none];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,armlinux.org.uk,linux.ibm.com,ellerman.id.au,gmail.com,xen0n.name,alpha.franken.de,arm.com,mit.edu,zx2c4.com,lists.infradead.org,vger.kernel.org,lists.ozlabs.org,lists.linux.dev];
-	URIBL_MULTI_FAIL(0.00)[linutronix.de:server fail,sea.lore.kernel.org:server fail,arm.com:server fail];
-	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13114-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13115-lists,linux-mips=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	DMARC_NA(0.00)[orcam.me.uk];
 	MIME_TRACE(0.00)[0:+];
-	MISSING_XM_UA(0.00)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[20];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[catalin.marinas@arm.com,linux-mips@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	NEURAL_HAM(-0.00)[-0.988];
-	MID_RHS_MATCH_FROM(0.00)[];
-	R_DKIM_NA(0.00)[];
+	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FROM_HAS_DN(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips];
-	TO_DN_SOME(0.00)[]
-X-Rspamd-Queue-Id: 5C63AEB437
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[macro@orcam.me.uk,linux-mips@vger.kernel.org];
+	RCPT_COUNT_FIVE(0.00)[6];
+	RCVD_COUNT_FIVE(0.00)[5];
+	R_DKIM_NA(0.00)[];
+	NEURAL_HAM(-0.00)[-0.966];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,geoffk.org:email,angie.orcam.me.uk:mid]
+X-Rspamd-Queue-Id: 52389EDA62
 X-Rspamd-Action: no action
 
-On Wed, Jan 14, 2026 at 09:01:34AM +0100, Thomas Weiﬂschuh wrote:
-> The reference to VDSO_CLOCKMODE_ARCHTIMER requires vdso/clocksource.h and
-> 'struct old_timespec32' requires vdso/time32.h. Currently these headers
-> are included transitively, but those transitive inclusions are about to go
-> away.
-> 
-> Explicitly include the headers.
-> 
-> Signed-off-by: Thomas Weiﬂschuh <thomas.weissschuh@linutronix.de>
+On Tue, 3 Feb 2026, Yao Zi wrote:
 
-Acked-by: Catalin Marinas <catalin.marinas@arm.com>
+> > I interpret that to mean that the kallsyms patch should work fine since
+> > the toolchain can handle these relocations? It is just building the
+> > relocs tool against an older glibc or musl that does not have the
+> > R_MIPS_PC32 definition that is broken? Or am I misunderstanding
+> > something?
+> 
+> Yes, this patch is only meant to fix building of relocs tool. I don't
+> think there are problems about toolchain supporting since R_MIPS_PC32
+> has been in binutils for a long time, as Nathan found, since 2004. The
+
+ Since Y2K to be exact:
+
+commit bb2d6cd7b19cd82313963d2d878a94e6e85a38b6
+Author: Geoffrey Keating <geoffk@geoffk.org>
+Date:   Sat Mar 11 02:16:25 2000 +0000
+
+[...]
+    In include/elf:
+    	* mips.h: Add R_MIPS_GNU_REL_HI16, R_MIPS_GNU_REL_LO16,
+     	R_MIPS_GNU_REL16_S2, R_MIPS_PC64 and R_MIPS_PC32 relocation
+     	numbers.
+
+> situation is that it's likely to have a toolchain supporting
+> R_MIPS_PC32, while elf.h on the build machine doesn't have its
+> definition. And after ff79d31eb536 ("mips: Add support for PC32
+> relocations in vmlinux"), the relocs tool started to require a
+> definition of R_MIPS_PC32 to build.
+
+ But where does ff79d31eb536 come from?  I can't see it on Linus's master 
+and you can't refer an SHA-1 ID from another repo in a 'Fixes:' tag AFAIK, 
+as it's going to change as a commit is merged.  Also can't you get the fix 
+folded into the offending commit since it hasn't been merged yet?
+
+  Maciej
 
