@@ -1,214 +1,135 @@
-Return-Path: <linux-mips+bounces-13124-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13125-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id gCxgL5y/hGnG4wMAu9opvQ
-	(envelope-from <linux-mips+bounces-13124-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 05 Feb 2026 17:04:44 +0100
+	id CAGkG86ohWnUEgQAu9opvQ
+	(envelope-from <linux-mips+bounces-13125-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Fri, 06 Feb 2026 09:39:42 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 797B3F4F08
-	for <lists+linux-mips@lfdr.de>; Thu, 05 Feb 2026 17:04:44 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id C9E3EFB9DA
+	for <lists+linux-mips@lfdr.de>; Fri, 06 Feb 2026 09:39:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 86C6930233C0
-	for <lists+linux-mips@lfdr.de>; Thu,  5 Feb 2026 15:58:48 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 7EDE7300E3A6
+	for <lists+linux-mips@lfdr.de>; Fri,  6 Feb 2026 08:39:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AD38C42DFE0;
-	Thu,  5 Feb 2026 15:58:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EBDC34BA56;
+	Fri,  6 Feb 2026 08:39:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ziyao.cc header.i=me@ziyao.cc header.b="nY8tgY1t"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="lt1/V6TF"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from sender4-op-o15.zoho.com (sender4-op-o15.zoho.com [136.143.188.15])
+Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 72BB7421F0C;
-	Thu,  5 Feb 2026 15:58:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.15
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770307126; cv=pass; b=FmDeH91We89OntnB9LlGPBzdP7yDpvBECGZEmNsATKM8dKwJ4yuQBYKa61KXzk7NV998naHc0cXO0wbLvkHP8Enu3KVKW+XkSSynvyFeMoEMCLoDDluISsTaIzXpGiJMAM4um1BTJmusOwptm4NkDmNrPwG23VWC38AG5td/Cyc=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770307126; c=relaxed/simple;
-	bh=Fi4VXOVvvEEM9yWZmbVIB2tdGgQxZe5fTXPkIeISGP0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=AWqENH64HNyi+v+AlPQ1XCcAMaYblpQss8MHemXmtmoRODe8pKhAjeKdgMuJafuNiD3gDicNuzGoX+OXnv6qEcSf07h7fVuq27rr5n0yUI8v+OPIClhPG+HD71x147jKlCLWVrDuRbbxasdE2mG1ZV77AnJeHAf95b90xp8/7Jc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ziyao.cc; spf=pass smtp.mailfrom=ziyao.cc; dkim=pass (1024-bit key) header.d=ziyao.cc header.i=me@ziyao.cc header.b=nY8tgY1t; arc=pass smtp.client-ip=136.143.188.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ziyao.cc
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ziyao.cc
-ARC-Seal: i=1; a=rsa-sha256; t=1770307096; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=LQdDS0sD9D9Nnv/1Z9zKLRa2h2j0LzjEp7mXNBpdyDWKa+NqBvy4WWANgCCail15iuYliP0LX4bYoa56Q83RF7KOYP0VlihvWpnKUqPClgy4RSHyst7RUTaYwfpmeMKnq4vRq/UtDKKlvUq0LHKtof8DgYTIGbjq+OhYlZE53EM=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1770307096; h=Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=JjgyVvQvDBdLV0lASR43tNdGfYV4elj5vN9l8aB40pM=; 
-	b=CZ5Cz66ShZvrQHbcPHMgkcJZapk+/APN60SeoFYszw+WZVajE9fzff7P/wCRQEjvKPQi+vvNhyIBR/hcpfFI4N4pwHUFOE/EXpGpM9nKzvOeaQCxBUj8uEVMy4iBEGGLHpE/CuHXnrqnqKB+3t2UGQINwmHaYG1iEMlDJCE4vm8=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=ziyao.cc;
-	spf=pass  smtp.mailfrom=me@ziyao.cc;
-	dmarc=pass header.from=<me@ziyao.cc>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1770307096;
-	s=zmail; d=ziyao.cc; i=me@ziyao.cc;
-	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:MIME-Version:Content-Transfer-Encoding:Message-Id:Reply-To;
-	bh=JjgyVvQvDBdLV0lASR43tNdGfYV4elj5vN9l8aB40pM=;
-	b=nY8tgY1t/Dkhjz9KHtwgnxxqNL0p9D6mn0eW/qK4OPN1lDeF/9PdYpQw04p0eGUF
-	kZ/+6IgEhlXpDkX9a9/s1l3QP5X0UysbUaPDqBwUQ84dFPuBP1X5KuL4sq7Vbc7Q7A1
-	JvhO4qu/MjsXtEv2TXJ1h8dAn3l+KV/NMaUvcsHg=
-Received: by mx.zohomail.com with SMTPS id 1770307094687863.0131325581174;
-	Thu, 5 Feb 2026 07:58:14 -0800 (PST)
-From: Yao Zi <me@ziyao.cc>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Nathan Chancellor <nathan@kernel.org>,
-	Nick Desaulniers <nick.desaulniers+lkml@gmail.com>,
-	Bill Wendling <morbo@google.com>,
-	Justin Stitt <justinstitt@google.com>,
-	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-Cc: Yao Zi <me@ziyao.cc>,
-	linux-mips@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	llvm@lists.linux.dev,
-	stable@vger.kernel.org
-Subject: [PATCH v2] MIPS: Work around LLVM bug when gp is used as global register variable
-Date: Thu,  5 Feb 2026 15:56:44 +0000
-Message-ID: <20260205155644.34421-1-me@ziyao.cc>
-X-Mailer: git-send-email 2.52.0
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5162034B40F;
+	Fri,  6 Feb 2026 08:39:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770367179; cv=none; b=JOzuyavDBTcDtzDLQWZWVoY5X8HoluAu5hLdJ5TNfsEnbImRMdYAOhv69N4b1ruEqqBoXJsrGh3actOxL5/lhYcbb9D27ydrchKK177fyefUq//EoFvRdGHY7B/Jn0U7eJU6vEJQPDxPjPPRznBkC9um2dcwYXEWgpdQQ9ltOsM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770367179; c=relaxed/simple;
+	bh=6EG2ZVse5t3N1h+fCLwoJA9mlaHFTyS2C7DbVA4PTBc=;
+	h=Mime-Version:Content-Type:Date:Message-Id:Subject:Cc:To:From:
+	 References:In-Reply-To; b=ZvLlBFTRO1Y62bm5HqBaqum/AlT30jAsO0iI2DbbmVYsYqlR+BrMDif2PKkxnirmj8jRPboQ/GdPPXFKyRcZIwCBrR2dt6hOpK4xuxfyanTN8lxsSHP+LJQFNyw2OMyqE59xHVndUfuDVFhpxXPp5OB5liHqgj5rnbBVepiUeGk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=lt1/V6TF; arc=none smtp.client-ip=185.246.85.4
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
+	by smtpout-03.galae.net (Postfix) with ESMTPS id CCD424E42431;
+	Fri,  6 Feb 2026 08:39:37 +0000 (UTC)
+Received: from mail.galae.net (mail.galae.net [212.83.136.155])
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 8F45D60729;
+	Fri,  6 Feb 2026 08:39:37 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 78C7E119D1A2E;
+	Fri,  6 Feb 2026 09:39:32 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
+	t=1770367176; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=8LWtPgYkehUGPg1kNULPv7XLbPo8VdSlKcb1ubBGmLY=;
+	b=lt1/V6TFv0RaFaLo1BBv5MPCB1/Pg1vDhdhTeQmBR/CHZzrV4o6SofEN4uk1HeqVFcqLM5
+	LyGTyx+O50Zm6mL6DQHX6SKls3zIlWaRAg7GnsutG9HeIl2FTWF/S04Rjnhdr+SeqWkLKQ
+	i35XYjVF6SXWkxmWdbZ+pKM01HKDDLVaO8SbIYgO0SDcLCVLpEOLSciHYuRLX7xwuTCKl5
+	lSYnqc3suWJuzP41tjL8CQsWSKrpeI9QHvO6hgMkp2hofBo6HgcFGBLWAckeT72Xi1R3xT
+	/uIeP11Wub99K4QBPiF6pBU2UgF5F2m87g78P/mI5nI1E9k/Plo5lZ1BcJ410g==
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-ZohoMailClient: External
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date: Fri, 06 Feb 2026 09:39:31 +0100
+Message-Id: <DG7QSB0600QO.1QHM7ULNVL3Q2@bootlin.com>
+Subject: Re: [PATCH v6 2/8] phy: sort Kconfig and Makefile
+Cc: <linux-mips@vger.kernel.org>, <devicetree@vger.kernel.org>,
+ <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
+ <linux-clk@vger.kernel.org>, =?utf-8?q?Beno=C3=AEt_Monin?=
+ <benoit.monin@bootlin.com>, "Tawfik Bayouk" <tawfik.bayouk@mobileye.com>,
+ "Thomas Petazzoni" <thomas.petazzoni@bootlin.com>
+To: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, "Vladimir
+ Kondratiev" <vladimir.kondratiev@mobileye.com>,
+ =?utf-8?q?Gr=C3=A9gory_Clement?= <gregory.clement@bootlin.com>, "Rob
+ Herring" <robh@kernel.org>, "Krzysztof Kozlowski" <krzk+dt@kernel.org>,
+ "Conor Dooley" <conor+dt@kernel.org>, "Vinod Koul" <vkoul@kernel.org>,
+ "Kishon Vijay Abraham I" <kishon@kernel.org>, "Michael Turquette"
+ <mturquette@baylibre.com>, "Stephen Boyd" <sboyd@kernel.org>, "Philipp
+ Zabel" <p.zabel@pengutronix.de>, "Thomas Bogendoerfer"
+ <tsbogend@alpha.franken.de>, "Neil Armstrong" <neil.armstrong@linaro.org>
+From: "Luca Ceresoli" <luca.ceresoli@bootlin.com>
+X-Mailer: aerc 0.20.1
+References: <20260127-macb-phy-v6-0-cdd840588188@bootlin.com>
+ <20260127-macb-phy-v6-2-cdd840588188@bootlin.com>
+In-Reply-To: <20260127-macb-phy-v6-2-cdd840588188@bootlin.com>
+X-Last-TLS-Session-Version: TLSv1.3
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [10.34 / 15.00];
-	URIBL_BLACK(7.50)[ziyao.cc:email,ziyao.cc:dkim,ziyao.cc:mid];
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
+	MV_CASE(0.50)[];
+	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
-	BAD_REP_POLICIES(0.10)[];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13124-lists,linux-mips=lfdr.de];
-	R_DKIM_ALLOW(0.00)[ziyao.cc:s=zmail];
-	RCVD_COUNT_THREE(0.00)[4];
-	MIME_TRACE(0.00)[0:+];
-	GREYLIST(0.00)[pass,body];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_TO(0.00)[alpha.franken.de,kernel.org,gmail.com,google.com,linutronix.de];
-	DKIM_TRACE(0.00)[ziyao.cc:+];
-	TO_DN_SOME(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[11];
-	FROM_NEQ_ENVFROM(0.00)[me@ziyao.cc,linux-mips@vger.kernel.org];
+	RCPT_COUNT_TWELVE(0.00)[21];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-13125-lists,linux-mips=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[bootlin.com:+];
 	FROM_HAS_DN(0.00)[];
-	DMARC_POLICY_ALLOW(0.00)[ziyao.cc,quarantine];
-	TAGGED_RCPT(0.00)[linux-mips,lkml];
-	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=2];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	RCVD_COUNT_FIVE(0.00)[6];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[luca.ceresoli@bootlin.com,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	R_SPF_ALLOW(0.00)[+ip6:2600:3c04:e001:36c::/64:c];
-	NEURAL_SPAM(0.00)[0.996];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,ziyao.cc:email,ziyao.cc:dkim,ziyao.cc:mid,gnu.org:url]
-X-Rspamd-Queue-Id: 797B3F4F08
-X-Rspamd-Action: add header
-X-Spam: Yes
+	MID_RHS_MATCH_FROM(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips,dt];
+	NEURAL_HAM(-0.00)[-1.000];
+	TO_DN_SOME(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[bootlin.com:dkim,bootlin.com:email,bootlin.com:url,bootlin.com:mid,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: C9E3EFB9DA
+X-Rspamd-Action: no action
 
-On MIPS, __current_thread_info is defined as global register variable
-locating in $gp, and is simply assigned with new address during kernel
-relocation.
+On Tue Jan 27, 2026 at 6:09 PM CET, Th=C3=A9o Lebrun wrote:
+> Neither Kconfig nor Makefile are sorted; reorder them.
+>
+> $ diff -U100 <(grep ^config drivers/phy/Kconfig) \
+>              <(grep ^config drivers/phy/Kconfig | sort)
+>
+> $ diff -U100 <(grep ^obj-\\$ drivers/phy/Makefile) \
+>              <(grep ^obj-\\$ drivers/phy/Makefile | sort)
+>
+> Signed-off-by: Th=C3=A9o Lebrun <theo.lebrun@bootlin.com>
 
-This however is broken with LLVM, which always restores $gp if it finds
-$gp is clobbered in any form, including when intentionally through a
-global register variable. This is against GCC's documentation[1], which
-requires a callee-saved register used as global register variable not to
-be restored if it's clobbered.
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 
-As a result, $gp will continue to point to the unrelocated kernel after
-the epilog of relocate_kernel(), leading to an early crash in init_idle,
-
-[    0.000000] CPU 0 Unable to handle kernel paging request at virtual address 0000000000000000, epc == ffffffff81afada8, ra == ffffffff81afad90
-[    0.000000] Oops[#1]:
-[    0.000000] CPU: 0 UID: 0 PID: 0 Comm: swapper Tainted: G        W           6.19.0-rc5-00262-gd3eeb99bbc99-dirty #188 VOLUNTARY
-[    0.000000] Tainted: [W]=WARN
-[    0.000000] Hardware name: loongson,loongson64v-4core-virtio
-[    0.000000] $ 0   : 0000000000000000 0000000000000000 0000000000000001 0000000000000000
-[    0.000000] $ 4   : ffffffff80b80ec0 ffffffff80b53d48 0000000000000000 00000000000f4240
-[    0.000000] $ 8   : 0000000000000100 ffffffff81d82f80 ffffffff81d82f80 0000000000000001
-[    0.000000] $12   : 0000000000000000 ffffffff81776f58 00000000000005da 0000000000000002
-[    0.000000] $16   : ffffffff80b80e40 0000000000000000 ffffffff80b81614 9800000005dfbe80
-[    0.000000] $20   : 00000000540000e0 ffffffff81980000 0000000000000000 ffffffff80f81c80
-[    0.000000] $24   : 0000000000000a26 ffffffff8114fb90
-[    0.000000] $28   : ffffffff80b50000 ffffffff80b53d40 0000000000000000 ffffffff81afad90
-[    0.000000] Hi    : 0000000000000000
-[    0.000000] Lo    : 0000000000000000
-[    0.000000] epc   : ffffffff81afada8 init_idle+0x130/0x270
-[    0.000000] ra    : ffffffff81afad90 init_idle+0x118/0x270
-[    0.000000] Status: 540000e2	KX SX UX KERNEL EXL
-[    0.000000] Cause : 00000008 (ExcCode 02)
-[    0.000000] BadVA : 0000000000000000
-[    0.000000] PrId  : 00006305 (ICT Loongson-3)
-[    0.000000] Process swapper (pid: 0, threadinfo=(____ptrval____), task=(____ptrval____), tls=0000000000000000)
-[    0.000000] Stack : 9800000005dfbf00 ffffffff8178e950 0000000000000000 0000000000000000
-[    0.000000]         0000000000000000 ffffffff81970000 000000000000003f ffffffff810a6528
-[    0.000000]         0000000000000001 9800000005dfbe80 9800000005dfbf00 ffffffff81980000
-[    0.000000]         ffffffff810a6450 ffffffff81afb6c0 0000000000000000 ffffffff810a2258
-[    0.000000]         ffffffff81d82ec8 ffffffff8198d010 ffffffff81b67e80 ffffffff8197dd98
-[    0.000000]         ffffffff81d81c80 ffffffff81930000 0000000000000040 0000000000000000
-[    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
-[    0.000000]         0000000000000000 000000000000009e ffffffff9fc01000 0000000000000000
-[    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
-[    0.000000]         0000000000000000 ffffffff81ae86dc ffffffff81b3c741 0000000000000002
-[    0.000000]         ...
-[    0.000000] Call Trace:
-[    0.000000] [<ffffffff81afada8>] init_idle+0x130/0x270
-[    0.000000] [<ffffffff81afb6c0>] sched_init+0x5c8/0x6c0
-[    0.000000] [<ffffffff81ae86dc>] start_kernel+0x27c/0x7a8
-
-This bug has been reported to LLVM[2] and affects version from (at
-least) 18 to 21. Let's work around this by using inline assembly to
-assign $gp before a fix is widely available.
-
-Cc: stable@vger.kernel.org
-Link: https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Global-Register-Variables.html # [1]
-Link: https://github.com/llvm/llvm-project/issues/176546 # [2]
-Signed-off-by: Yao Zi <me@ziyao.cc>
-Acked-by: Nathan Chancellor <nathan@kernel.org>
----
-
-Changed from v1:
-- Include a link to LLVM upstream issue in comment
-- Collect tags
-- Link to v1: https://lore.kernel.org/linux-mips/20260118090235.60670-1-me@ziyao.cc/
-
- arch/mips/kernel/relocate.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
-
-diff --git a/arch/mips/kernel/relocate.c b/arch/mips/kernel/relocate.c
-index 7f1c136ad850..59833210542f 100644
---- a/arch/mips/kernel/relocate.c
-+++ b/arch/mips/kernel/relocate.c
-@@ -420,7 +420,20 @@ void *__init relocate_kernel(void)
- 			goto out;
- 
- 		/* The current thread is now within the relocated image */
-+#ifndef CONFIG_CC_IS_CLANG
- 		__current_thread_info = RELOCATED(&init_thread_union);
-+#else
-+		/*
-+		 * LLVM may wrongly restore $gp ($28) in epilog even if it's
-+		 * intentionally modified. Work around this by using inline
-+		 * assembly to assign $gp. $gp couldn't be listed as output or
-+		 * clobber, or LLVM will still restore its original value.
-+		 * See also LLVM upstream issue
-+		 * https://github.com/llvm/llvm-project/issues/176546
-+		 */
-+		asm volatile("move $28, %0" : :
-+			     "r" (RELOCATED(&init_thread_union)));
-+#endif
- 
- 		/* Return the new kernel's entry point */
- 		kernel_entry = RELOCATED(start_kernel);
--- 
-2.52.0
-
+--
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
