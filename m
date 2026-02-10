@@ -1,305 +1,174 @@
-Return-Path: <linux-mips+bounces-13147-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13148-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IPJfOPbJiml+NwAAu9opvQ
-	(envelope-from <linux-mips+bounces-13147-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Feb 2026 07:02:30 +0100
+	id 8LtfFzjRimluOAAAu9opvQ
+	(envelope-from <linux-mips+bounces-13148-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Feb 2026 07:33:28 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5628F1173E3
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Feb 2026 07:02:30 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 95C26117623
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Feb 2026 07:33:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 260533014C6F
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Feb 2026 06:02:29 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id EC1C0300A31F
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Feb 2026 06:33:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9CF435958;
-	Tue, 10 Feb 2026 06:02:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DWEiVB6s"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C11C13126C1;
+	Tue, 10 Feb 2026 06:33:25 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
+	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5EB491E1DEC
-	for <linux-mips@vger.kernel.org>; Tue, 10 Feb 2026 06:02:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.218.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770703348; cv=pass; b=cqfmQUMaKkTEL098bWiKMDv87lieZE78sWT1IEzaFeaJNEJAPcP9Sc4TuKQUw4ckk8ImFhFudIIkbRZjTNqPa9AyL2WnnWS/XUPkfTop7JJ5ftNWMQeLt26cKvYz/0H1aOGLOis8bQWwxT3fRGR7nuzY6++hKBCTt90nDGwKTNs=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770703348; c=relaxed/simple;
-	bh=SBGRUJE27Sh9oreSO41Rbst3WAb+KnZAYy13PKJYLsU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HL1vcfUnIyETI5+BFvc8SHdDbSsYOiJ7c0B08FPh6t1XgUfwT1h7epr5I26X5mEjBnH7l2DEfE4S6w++QFom0dWTeNZ0hV7unXBfglKFcu+xX/Bo+r3xNd7N1/IUIjb/xjiPsPTjxhmp2u56A/v2XET+ZZCrCGy9fQjio0hiyEA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DWEiVB6s; arc=pass smtp.client-ip=209.85.218.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-b885e8c679bso504936466b.1
-        for <linux-mips@vger.kernel.org>; Mon, 09 Feb 2026 22:02:26 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1770703345; cv=none;
-        d=google.com; s=arc-20240605;
-        b=ZHashxfCCTa5vo2mLiPZ7oY+4YOgSmdz/jvP3RHqKno0PRY9v3sPO8FPnaWOCjZIpQ
-         tZmc0Zk7GBN7Hbwv6+zwwkYvGAx7SWeAzXiRWPWBFKbwNEZrMfl5hVu6ixu/OnTOy9vx
-         HmJeNqgH+CODjQsDFbFnddk9TXVBKM/IyfbN/OMJjjuqttzzK9+VqlvMQ/cdmTK9WXce
-         FuVNFXEQCRZCmbOY+kLcI/NDOfSFV+KZeXMTVmm75GriS36rj2R5mKwYVqac14AoKKkY
-         +9tPBdfGaO8Xcr1Iuu4VlturfntdNprx5IHzUrUHIMRwEZlGP0W9rAnaqN2RHz27UL9A
-         Qzhw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:dkim-signature;
-        bh=wdfQoNjE0A1x2BNxyqiUYamnhnBwjzLKcZCZB7uzUFA=;
-        fh=M7YRjquZoY69JZpEGyMyBuezszEWQhmaTUkAj6nucIw=;
-        b=FrvhWKhdVdb2fyoUmmSAGEbwAtSgtbmUl/VLJz12T4YlXASHIDH+6t3DjFh1HE98sb
-         g6kAIB2+VogjPWd823KPC4QvNqHUTtct97HqV4+7Spx7gwlBceC+x6EPYQd98OKPZuX6
-         Hm2cv4kaEI/C+wBAtnJalqW92AV9HySUx0Y8g8SvkYWmfTZITekNdjX6Rvmq+0XpYY3+
-         /6XwbKohJQWz2BWVIFOBuYXss61dQHBDaMyDotWAkDCy3ngq6nlt+huK+XkOwY2xFj05
-         +/bCJb+0C/mF2PfuG6wduac2gvLMAsOfmpkWghLQpTADDtoc/kFC29VYJ9MpYsgGa+V3
-         HmTA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770703345; x=1771308145; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wdfQoNjE0A1x2BNxyqiUYamnhnBwjzLKcZCZB7uzUFA=;
-        b=DWEiVB6s+Dg1EJEGZCfSSuBzdxpUF51eP+FIQpBUDAb/4ABWUCGGS2joZBY3zuiSh2
-         Q6DNoj6zy9VhpZ+s0LZz756c3V/ibI/TAG0qegxXYywKftP41Su4b9ZIiEM2PKeQCXsI
-         WvJAAYOPGT3PpdbIR3YaOdlAyGF5U0S21o2YM/c4JSj9++T+n/2kVgplN1UnfCK7zeNo
-         MKnMm+CEts811tSh4wXsZAGWvEjfgNYweP/U3guqF0se9aADgRGb3qNAeeJdllJo6MTu
-         qG6dGKv1fDKQeyQnEnlXF5LpIHtTRqlE620wpzLGrkoLRXtPsHDDQxrfGzhii9HeR+HR
-         kGlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770703345; x=1771308145;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=wdfQoNjE0A1x2BNxyqiUYamnhnBwjzLKcZCZB7uzUFA=;
-        b=gRYc7lvmFlt8L4SBnmTbLbO1bU6M25V5HawDgcPaa+XVQTELYg+6icsPjg/ZKYl4NE
-         QmTfUrotU+Ruc9z+tOCb5uUD7fV0lH6fWRrFvAQwKD4afFgLkp0Zv3TGOmZmlF+KrrW2
-         musbUyKqdY158i+GAh46JpVxmJU9KB8OlND2ufHOYeuvMitCJSxjMAqQQusU/9cWrJEI
-         sXCZJclMSJhUI5gPLhXbQ5cTArQ5pgoTKJRw4NYGSGB0/sKdDIyfM4oV8j9+0vE0HZQO
-         ecmxhbeWAexj3q+bioeGlys0j+abTPyHrYEzO3+Ez5cme7yU9Ezl7kFhSY0LwEGAk4TP
-         dTow==
-X-Forwarded-Encrypted: i=1; AJvYcCUhGdt1Ol7c8xlEIzBn/etA15tja/sWazfd7E4YNQdUYsbni190HOWXZqr9aoEk0bJVACSz8Hv3LJOj@vger.kernel.org
-X-Gm-Message-State: AOJu0YxSzj/ZVrtzqR879H/yD3WZuTD31NgjiHRn3bc7hSpUybSAwIK/
-	nwS9gUj2PdhOdNIPh99dA5yr/AqmBQ1+hu5UErTaiMgfassRUOlvxqAP4l5TnEBI5eYR3N3vFVO
-	+x+xe5dLSZBPHfQNz9q239BAeWQxINes=
-X-Gm-Gg: AZuq6aI47HreL7VRq4IEMA+W+loOMSLyHO+9JOTiSJ9y7LvaAPMko/ca7bESRX2LKDd
-	QXtpVSdDPzTxeDr/c1ZD9DIQKO7zXlNHkeDldjRMzTaafggwHCIUmFjuZKi0Q18bYlmUSxZxWsO
-	PvlynbickvwJXqshjCNornk2NuinFLz/zxQxYUJ3IiFnYAyQxMBDfElxpv/5Gnq7SgjamDNKPeP
-	TDghKGZCfyeUbSEiXuCAerRNbC0il6rpWl7zoPNsAJa2OqVqNyjhPUmAic73qBe2uZFZG3vOiCO
-	iwYgOedg
-X-Received: by 2002:a17:907:3dac:b0:b87:965:9078 with SMTP id
- a640c23a62f3a-b8edf14c39emr680666066b.7.1770703344240; Mon, 09 Feb 2026
- 22:02:24 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C218F24E4C4;
+	Tue, 10 Feb 2026 06:33:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1770705205; cv=none; b=ODWd9AEq3PrUlcBwCS9TrtWnOoCVTu7Y0S6O6kzeDhLYZGZ4weIt95M7Puy5TVW4gQ2Lnp5asSka/El9s7ttineoIItFJEBQHfmYlvIIhwwVe0eISgxFx7L7LDV+jTmods2uhK1xP+n/0qd+PZI3KbEYW5AeHqi20eRXsj2JreE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1770705205; c=relaxed/simple;
+	bh=ELNGn58lprTOE6DdQhIub5y+dHpwa3+JrVnKzyMSDjw=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=aEkXHbQ0p2TS7vJlCtR1UxFv+Bi9q2T/NVkKo2DBC4aOWLrtW0MvLmDjFUgpPGEN5SVXbdgiXwmht08eJdpfhaTnG/ZZYd+L0pR2N88mV6ahxaeZjevwmeSb42wZKiMAj5dOjM/AknvecuOWsR6xlBR5eNWZsuKfJYqDSL9Jhng=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
+Received: from edelgard.fodlan.icenowy.me (unknown [112.94.103.253])
+	by APP-01 (Coremail) with SMTP id qwCowABX_Gcg0Ypp6UCaBw--.59656S2;
+	Tue, 10 Feb 2026 14:33:06 +0800 (CST)
+Message-ID: <89d49eada6411c99fdf3ca389b1ff01c2694f954.camel@iscas.ac.cn>
+Subject: Re: [PATCH 2/8] dt-bindings: interrupt-controller: add LS7A PCH LPC
+From: Icenowy Zheng <zhengxingda@iscas.ac.cn>
+To: Rob Herring <robh@kernel.org>
+Cc: Thomas Gleixner <tglx@kernel.org>, Krzysztof Kozlowski
+ <krzk+dt@kernel.org>,  Conor Dooley <conor+dt@kernel.org>, Thomas
+ Bogendoerfer <tsbogend@alpha.franken.de>, Huacai Chen
+ <chenhuacai@kernel.org>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
+ linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-mips@vger.kernel.org
+Date: Tue, 10 Feb 2026 14:33:04 +0800
+In-Reply-To: <20260209234818.GA2119841-robh@kernel.org>
+References: <20260131094547.455916-1-zhengxingda@iscas.ac.cn>
+	 <20260131094547.455916-3-zhengxingda@iscas.ac.cn>
+	 <20260209234818.GA2119841-robh@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.44.4 
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1770605931.git.zhoubinbin@loongson.cn> <36cc977f0746095196354b631f0b158365208a0e.1770605931.git.zhoubinbin@loongson.cn>
- <20260210030346.GA2406064-robh@kernel.org>
-In-Reply-To: <20260210030346.GA2406064-robh@kernel.org>
-From: Binbin Zhou <zhoubb.aaron@gmail.com>
-Date: Tue, 10 Feb 2026 14:02:11 +0800
-X-Gm-Features: AZwV_QiqIfn7ZPx0x3V31tbQ_jX8n-lqXvq0szv7fUMgSdTmEq3QSZCxI0OoBUg
-Message-ID: <CAMpQs4JcnkmVM6B2rCQnFsdnMs9XnoV3EwO+0yA9XdXvVQg8cQ@mail.gmail.com>
-Subject: Re: [PATCH v2 3/4] dt-bindings: dmaengine: Add Loongson Multi-Channel
- DMA controller
-To: Rob Herring <robh@kernel.org>
-Cc: Binbin Zhou <zhoubinbin@loongson.cn>, Huacai Chen <chenhuacai@loongson.cn>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
-	dmaengine@vger.kernel.org, Xiaochuang Mao <maoxiaochuan@loongson.cn>, 
-	Huacai Chen <chenhuacai@kernel.org>, Xuerui Wang <kernel@xen0n.name>, loongarch@lists.linux.dev, 
-	devicetree@vger.kernel.org, Keguang Zhang <keguang.zhang@gmail.com>, 
-	linux-mips@vger.kernel.org, jeffbai@aosc.io
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+X-CM-TRANSID:qwCowABX_Gcg0Ypp6UCaBw--.59656S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7tr17ArWDJF48JryxCr1ftFb_yoW8uryUpF
+	4rC3ZxGFW8tr4fC3yIqa4UCF43ZrZ3JwnxGFsIqw1UCr9xWF92qrWa9r95Wa15ZrWxXFWU
+	ZFy09a18ur1DJaDanT9S1TB71UUUUU7qnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+	9KBjDU0xBIdaVrnRJUUUvqb7Iv0xC_Kw4lb4IE77IF4wAFF20E14v26r4j6ryUM7CY07I2
+	0VC2zVCF04k26cxKx2IYs7xG6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rw
+	A2F7IY1VAKz4vEj48ve4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_Xr0_Ar1l84ACjcxK6xII
+	jxv20xvEc7CjxVAFwI0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVWxJr0_GcWl84ACjcxK6I
+	8E87Iv6xkF7I0E14v26rxl6s0DM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI
+	64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8Jw
+	Am72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IY64vIr41lFIxGxcIEc7CjxVA2Y2ka0xkIwI1l
+	c7CjxVAaw2AFwI0_Jw0_GFyl42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_Gr
+	1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWwC2zVAF1VAY17CE
+	14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr0_JF4lIxAIcVC0I7
+	IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJVWUCwCI42IY6I8E
+	87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYxBIdaVFxhVjvjDU0x
+	ZFpf9x07betCcUUUUU=
+X-CM-SenderInfo: x2kh0wp0lqwv3d6l2u1dvotugofq/
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
+X-Spamd-Result: default: False [0.04 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c09:e001:a7::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13147-lists,linux-mips=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[15];
-	MIME_TRACE(0.00)[0:+];
-	FREEMAIL_FROM(0.00)[gmail.com];
-	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[gmail.com:+];
-	TO_DN_SOME(0.00)[];
-	MID_RHS_MATCH_FROMTLD(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[zhoubbaaron@gmail.com,linux-mips@vger.kernel.org];
-	FREEMAIL_CC(0.00)[loongson.cn,kernel.org,vger.kernel.org,xen0n.name,lists.linux.dev,gmail.com,aosc.io];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,iscas.ac.cn:mid,iscas.ac.cn:email];
 	TAGGED_RCPT(0.00)[linux-mips,dt];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,1612c000:email]
-X-Rspamd-Queue-Id: 5628F1173E3
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	RCPT_COUNT_SEVEN(0.00)[10];
+	DMARC_NA(0.00)[iscas.ac.cn];
+	TO_DN_SOME(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[zhengxingda@iscas.ac.cn,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	R_DKIM_NA(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	TAGGED_FROM(0.00)[bounces-13148-lists,linux-mips=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[]
+X-Rspamd-Queue-Id: 95C26117623
 X-Rspamd-Action: no action
 
-Hi Rob:
-
-Thanks for your reply.
-
-On Tue, Feb 10, 2026 at 11:03=E2=80=AFAM Rob Herring <robh@kernel.org> wrot=
-e:
->
-> On Mon, Feb 09, 2026 at 11:04:20AM +0800, Binbin Zhou wrote:
-> > The Loongson-2K0300/Loongson-2K3000 have built-in multi-channel DMA
-> > controllers, which are similar except for some of the register offsets
-> > and number of channels.
-> >
-> > Obviously, this is quite different from the APB DMA controller used in
-> > the Loongson-2K0500/Loongson-2K1000, such as the latter being a
-> > single-channel DMA controller.
-> >
-> > To avoid cluttering a single dt-binding file, add a new yaml file.
-> >
-> > Signed-off-by: Binbin Zhou <zhoubinbin@loongson.cn>
+=E5=9C=A8 2026-02-09=E6=98=9F=E6=9C=9F=E4=B8=80=E7=9A=84 17:48 -0600=EF=BC=
+=8CRob Herring=E5=86=99=E9=81=93=EF=BC=9A
+> On Sat, Jan 31, 2026 at 05:45:41PM +0800, Icenowy Zheng wrote:
+> > Loongson 7A series PCH contains an LPC controller with an interrupt
+> > controller.
+> >=20
+> > Add the device tree binding for the interrupt controller.
+> >=20
+> > Signed-off-by: Icenowy Zheng <zhengxingda@iscas.ac.cn>
 > > ---
-> >  .../bindings/dma/loongson,ls2k0300-dma.yaml   | 78 +++++++++++++++++++
-> >  MAINTAINERS                                   |  3 +-
-> >  2 files changed, 80 insertions(+), 1 deletion(-)
-> >  create mode 100644 Documentation/devicetree/bindings/dma/loongson,ls2k=
-0300-dma.yaml
-> >
-> > diff --git a/Documentation/devicetree/bindings/dma/loongson,ls2k0300-dm=
-a.yaml b/Documentation/devicetree/bindings/dma/loongson,ls2k0300-dma.yaml
+> > =C2=A0.../loongson,pch-lpc.yaml=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 | 52
+> > +++++++++++++++++++
+> > =C2=A01 file changed, 52 insertions(+)
+> > =C2=A0create mode 100644 Documentation/devicetree/bindings/interrupt-
+> > controller/loongson,pch-lpc.yaml
+> >=20
+> > diff --git a/Documentation/devicetree/bindings/interrupt-
+> > controller/loongson,pch-lpc.yaml
+> > b/Documentation/devicetree/bindings/interrupt-
+> > controller/loongson,pch-lpc.yaml
 > > new file mode 100644
-> > index 000000000000..77e5df47ec01
+> > index 0000000000000..c00fbf31f47f0
 > > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/dma/loongson,ls2k0300-dma.yaml
-> > @@ -0,0 +1,78 @@
+> > +++ b/Documentation/devicetree/bindings/interrupt-
+> > controller/loongson,pch-lpc.yaml
+> > @@ -0,0 +1,52 @@
 > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
 > > +%YAML 1.2
 > > +---
-> > +$id: http://devicetree.org/schemas/dma/loongson,ls2k0300-dma.yaml#
+> > +$id:
+> > http://devicetree.org/schemas/interrupt-controller/loongson,pch-lpc.yam=
+l#
 > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
 > > +
-> > +title: Looongson-2 Multi-Channel DMA controller
-> > +
-> > +description:
-> > +  The Loongson-2 Multi-Channel DMA controller is used for transferring=
- data
-> > +  between system memory and the peripherals on the APB bus.
+> > +title: Loongson PCH LPC Controller
 > > +
 > > +maintainers:
-> > +  - Binbin Zhou <zhoubinbin@loongson.cn>
+> > +=C2=A0 - Jiaxun Yang <jiaxun.yang@flygoat.com>
 > > +
-> > +allOf:
-> > +  - $ref: dma-controller.yaml#
+> > +description:
+> > +=C2=A0 This interrupt controller is found in the Loongson LS7A family
+> > of PCH for
+> > +=C2=A0 accepting interrupts sent by LPC-connected peripherals and
+> > signalling PIC
+> > +=C2=A0 via a single interrupt line when interrupts are available.
 > > +
 > > +properties:
-> > +  compatible:
-> > +    enum:
-> > +      - loongson,ls2k0300-dma
-> > +      - loongson,ls2k3000-dma
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    minItems: 4
-> > +    maxItems: 8
->
-> I'm assuming this is 1 interrupt per channel? If so, add a description
-> saying that.
+> > +=C2=A0 compatible:
+> > +=C2=A0=C2=A0=C2=A0 const: loongson,pch-lpc-1.0
+>=20
+> Where does 1.0 come from? We don't do version numbers generally
+> unless=20
+> you define where the versions come from (e.g. Soft IP releases for=20
+> FPGAs). I would have expected "ls7a" in the compatible instead.
 
-Yes. this part will be rewritten as:
+Well this replicates what's set on PCH PIC, although I am okay to
+change it to `7a1000-pch-lpc` .
+Thanks
+Icenowy
 
-  interrupts:
-    description:
-      Should contain all of the per-channel DMA interrupts in ascending ord=
-er
-      with respect to the DMA channel index.
-    minItems: 4
-    maxItems: 8
+>=20
+> Rob
+>=20
 
->
-> > +
-> > +  clocks:
-> > +    maxItems: 1
-> > +
-> > +  '#dma-cells':
-> > +    const: 2
-> > +    description: |
-> > +      DMA request from clients consists of 2 cells:
-> > +        1. Channel index
-> > +        2. Transfer request factor number, If no transfer factor, use =
-0.
-> > +           The number is SoC-specific, and this should be specified wi=
-th
-> > +           relation to the device to use the DMA controller.
-> > +
-> > +  dma-channels:
-> > +    enum: [4, 8]
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +  - clocks
-> > +  - '#dma-cells'
-> > +  - dma-channels
-> > +
-> > +unevaluatedProperties: false
-> > +
-> > +examples:
-> > +  - |
-> > +    #include <dt-bindings/interrupt-controller/irq.h>
-> > +    #include <dt-bindings/clock/loongson,ls2k-clk.h>
-> > +
-> > +    dma-controller@1612c000 {
-> > +        compatible =3D "loongson,ls2k0300-dma";
-> > +        reg =3D <0x1612c000 0xff>;
-> > +        interrupt-parent =3D <&liointc0>;
-> > +        interrupts =3D <23 IRQ_TYPE_LEVEL_HIGH>,
-> > +                     <24 IRQ_TYPE_LEVEL_HIGH>,
-> > +                     <25 IRQ_TYPE_LEVEL_HIGH>,
-> > +                     <26 IRQ_TYPE_LEVEL_HIGH>,
-> > +                     <27 IRQ_TYPE_LEVEL_HIGH>,
-> > +                     <28 IRQ_TYPE_LEVEL_HIGH>,
-> > +                     <29 IRQ_TYPE_LEVEL_HIGH>,
-> > +                     <30 IRQ_TYPE_LEVEL_HIGH>;
-> > +        clocks =3D <&clk LS2K0300_CLK_APB_GATE>;
-> > +        #dma-cells =3D <2>;
-> > +        dma-channels =3D <8>;
-> > +    };
-> > +...
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index 27f77b68d596..d3cb541aee2a 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -14772,10 +14772,11 @@ S:  Maintained
-> >  F:   Documentation/devicetree/bindings/gpio/loongson,ls-gpio.yaml
-> >  F:   drivers/gpio/gpio-loongson-64bit.c
-> >
-> > -LOONGSON-2 APB DMA DRIVER
-> > +LOONGSON-2 DMA DRIVER
-> >  M:   Binbin Zhou <zhoubinbin@loongson.cn>
-> >  L:   dmaengine@vger.kernel.org
-> >  S:   Maintained
-> > +F:   Documentation/devicetree/bindings/dma/loongson,ls2k0300-dma.yaml
-> >  F:   Documentation/devicetree/bindings/dma/loongson,ls2x-apbdma.yaml
-> >  F:   drivers/dma/loongson/loongson2-apb-dma.c
-> >
-> > --
-> > 2.52.0
-> >
-
---=20
-Thanks.
-Binbin
 
