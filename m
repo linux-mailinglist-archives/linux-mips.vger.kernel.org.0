@@ -1,215 +1,185 @@
-Return-Path: <linux-mips+bounces-13153-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13154-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6Cz2A8kni2m6QQAAu9opvQ
-	(envelope-from <linux-mips+bounces-13153-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Feb 2026 13:42:49 +0100
+	id oFAaJ+ooi2n1QQAAu9opvQ
+	(envelope-from <linux-mips+bounces-13154-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Feb 2026 13:47:38 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8300011AF07
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Feb 2026 13:42:46 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 120A611AFAA
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Feb 2026 13:47:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 9E3ED303E490
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Feb 2026 12:42:34 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 0172C303B4EE
+	for <lists+linux-mips@lfdr.de>; Tue, 10 Feb 2026 12:47:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFF191E9B37;
-	Tue, 10 Feb 2026 12:42:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03EEE30B529;
+	Tue, 10 Feb 2026 12:47:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="QJxAFGAy";
-	dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b="IFZWnSsK"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kJ4NGsDs"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 646C28632B
-	for <linux-mips@vger.kernel.org>; Tue, 10 Feb 2026 12:42:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4802248891
+	for <linux-mips@vger.kernel.org>; Tue, 10 Feb 2026 12:47:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770727353; cv=none; b=c3RxV1aeavw4BRbyo/8I9ZiEq9h48BYi8f9PoUd9Bzjbt8Mv0398CgRrLCKqRXAlaKqM69LtePU3g/STZSJw5YbweHe4b167HjVzkISHMZ8EOZBIZNfx7lzfcmBgER4gt6Oy9yRGDAqgJULTwcsufIFF9HQ4Qinow4+0FFUAVts=
+	t=1770727654; cv=none; b=RXV0Ekg/SYydRwA4zGN74gT/Jqv696rYArl+nohhiNKAAYVHgpdjsOco/AOG3+FosCeupWOW/yK2BNXbTPyNW4bQkIsfBXSA0G1juPUhtbcR8Ga6Y5i9OFev9aBz8tD/mpujjaKlE0pAb2NuV7JxYe5arps56Cpo6vfA4ELNr/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770727353; c=relaxed/simple;
-	bh=GlKpwAqt8FXcLxnYzpl9cDfIBN0bnkDbFsP/hLk3P+g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tlvt7oJsn5sOvhqyIJv4c6r1N3WMQgsm01HfF5fUwUoqjT9zUaoH8M7IxCdl5tIbB9YsIdjASR+kPwJTgLnRhwWn5QwUSctzJgM7sg0IxMwmqtRjime/rY8VCNu7367n8ipqG5311G8P0glOm1nHp9Cc4Yxg+GkSXcG6Ofk6c3k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=QJxAFGAy; dkim=pass (2048-bit key) header.d=redhat.com header.i=@redhat.com header.b=IFZWnSsK; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1770727350;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=WIPR0mr/henT5bqfT/DKonkyulUdL16MgQRnA6kCJNo=;
-	b=QJxAFGAyIKmrh2zuPDOEVxHSSsQ+Jf7L+htFf5vMa5tb/Cu2euhDMn8dx+Byo8R8Hudl9M
-	BpdK0u2HUQIRXeSHGclPm1/WNzXqAF5OCPAl4MHZCloX5odBLEeYrwFTZ/DjeyfEedxfHK
-	MqvZw5fHRmFufbcnVBE5rEz3/axQbn4=
-Received: from mail-qv1-f70.google.com (mail-qv1-f70.google.com
- [209.85.219.70]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-594-N1hgpssBPAuJGCZG5qqrkw-1; Tue, 10 Feb 2026 07:42:29 -0500
-X-MC-Unique: N1hgpssBPAuJGCZG5qqrkw-1
-X-Mimecast-MFC-AGG-ID: N1hgpssBPAuJGCZG5qqrkw_1770727349
-Received: by mail-qv1-f70.google.com with SMTP id 6a1803df08f44-8947d47793fso257695096d6.2
-        for <linux-mips@vger.kernel.org>; Tue, 10 Feb 2026 04:42:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=redhat.com; s=google; t=1770727349; x=1771332149; darn=vger.kernel.org;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WIPR0mr/henT5bqfT/DKonkyulUdL16MgQRnA6kCJNo=;
-        b=IFZWnSsKBQErk8CB8YJCIzGXGKhz4eZMSqPEtLSbj/uwH1A49Xj8LoEJhF6pcy7d2N
-         wlrMn9/Sn1Mo4z1rC+00Go3UA6lbA3d6Hv4jolfseNvy6ah3yscypptRH74J9Ncsk6t1
-         xD3mQC4Rnp8JTe0NG29vD8wdEU8kt24v6HpCcHydeRNMA6gp8lsgxaOr6upY/soKLji+
-         WQtuTUoh3cqzEHwDKL5M2UpPRLACMunCmNF26lRd+oRTofcRF95ITIIln15DqswXvFOc
-         rMsxu5C/5vi4M81xOYakJto56DcPPVPy8OmgVfkHCHCdcIFUSLgn67uLW3Z7ftTpq6R+
-         6NOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770727349; x=1771332149;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-gg:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=WIPR0mr/henT5bqfT/DKonkyulUdL16MgQRnA6kCJNo=;
-        b=H91TcNZC1XtBmEAJakoKxQWhErBAbmKd+e5xOsVpMk5XHvJKnrLwNmi236FETdAjEw
-         +RtEJwWHJ4dYaR98NB/aM3zu8HyXbPnBausPk3nsjO4M9DAAr3vy2JSiyiUvicyGhI6V
-         YpBuRsC9F2HNsGR7PDAYmrtuotnSKkizow5F1dIAiMBppB+4rcR1urhvOYBvg0/I4MiY
-         Vrt83d66GacKQIdJ9ZpEQn+ZXuzZxdGLKG6jsRT5M+KUXGNV+eehcu176aXxq6v7EgII
-         59VQE1oV5EeFewDdP+9l5s8vuzid8jCMisfCWD09ppdh54WqVnLS02amm8WmSjloBRi9
-         H3FA==
-X-Gm-Message-State: AOJu0YxOKMiCFVm64EZidc/6ISKP5LC+Ac2TZtY2dUY5YsyQcETjnynu
-	DyGRfotFqBnUBJHbsmGyktWl9tnr3s9ZDfrsC19QCg24io9zskLPxj5JjIuoDrHzijqTH7XLXYl
-	Ab63Ijacd/bmGegnlc7+fzpXFoEa4rizozxU+E4h/Ur5g3vWwUzWkY9vRgmSQd74=
-X-Gm-Gg: AZuq6aL2wT1iMEWL7fLpP8NjxLPZ8jhorufLrXLEJ4HQHhSlfZiF91xmBhXLDk/JcsG
-	hGmmCiGykh5bXsq8RLNINOW/2VL/JUDeTwnzq71y+OUc4ZTevktKPk2p60S+1zPlytoUP1BAFQc
-	TgxtdXdw4w8E1Ibz6JnNFN4+PDNC32k+Ej0k0OXGMfx3wnaKMIwQxSnCCLsGGApHuNnILj6h1Cu
-	QCXAK07vkBc+XCujLTsRu6HRBSMj3nn3yNA1KDwcUA+qaM6/nAjz+qFnrjF1h1WgB3/NySrE17+
-	WkxsM/SmF/QoJuAyVX6bAu5KRD+A8WXQ0MLhytU3Z+cgGfqD0U7XeApil4MHN4iCM6yJaowy75u
-	dI47Xy/Yat21OftNGGBYiW5UzvYszvqCTZLaXTdQfd+ExokSyTIgza5KB
-X-Received: by 2002:a0c:f952:0:b0:895:4cc2:8bfe with SMTP id 6a1803df08f44-8954cc28dc4mr97314036d6.48.1770727348930;
-        Tue, 10 Feb 2026 04:42:28 -0800 (PST)
-X-Received: by 2002:a0c:f952:0:b0:895:4cc2:8bfe with SMTP id 6a1803df08f44-8954cc28dc4mr97313856d6.48.1770727348578;
-        Tue, 10 Feb 2026 04:42:28 -0800 (PST)
-Received: from redhat.com (c-73-183-52-120.hsd1.pa.comcast.net. [73.183.52.120])
-        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-8953c0599b4sm99582176d6.41.2026.02.10.04.42.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Feb 2026 04:42:27 -0800 (PST)
-Date: Tue, 10 Feb 2026 07:42:25 -0500
-From: Brian Masney <bmasney@redhat.com>
-To: Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, linux-clk@vger.kernel.org,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>, linux-mmc@vger.kernel.org,
-	Linus Walleij <linusw@kernel.org>, linux-gpio@vger.kernel.org,
-	Alexandre Belloni <alexandre.belloni@bootlin.com>,
-	linux-rtc@vger.kernel.org,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jiri Slaby <jirislaby@kernel.org>, linux-serial@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	linux-watchdog@vger.kernel.org,
-	Lukas Bulwahn <lukas.bulwahn@redhat.com>
-Subject: Re: [PATCH v2 00/16] MIPS: move pic32.h header file from asm to
- platform_data
-Message-ID: <aYsnsecPa8bWMbaA@redhat.com>
-References: <20260112-mips-pic32-header-move-v2-0-927d516b1ff9@redhat.com>
+	s=arc-20240116; t=1770727654; c=relaxed/simple;
+	bh=3byUhG/m2c7E2GQCgSueOnUQ3LkrcuBr9TfT3+SL82U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tCve6765anSJtEkz4zS81+oCcM3UeXKjL8fSsEhlUcXC5sAqM4Vyi6FgebCc9qKO2/JGDtAxkbwaPsiJ3Zt3A2ptrXpZ7J2ZSY/GhGFJrPyKxasC5Hf4w1Bh8+FL7r/XZ5LRbbePp1exyFdKw1dhd/lmKB8WrVSSnW0d3ZfdVto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kJ4NGsDs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74B51C4AF09
+	for <linux-mips@vger.kernel.org>; Tue, 10 Feb 2026 12:47:34 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1770727654;
+	bh=3byUhG/m2c7E2GQCgSueOnUQ3LkrcuBr9TfT3+SL82U=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=kJ4NGsDs5qpD6oyGl1dylgz/c5K49OovvoIBkocz/k3lAMwC7YAQqcXMo11ZiyWJG
+	 ovtVdTkELC2W7QJfkVsFpG727Z2pVAR5jLyeMx9Is/oqvPc+Ve7zUD4QNCnAj7dqVh
+	 xakvhWAqM8inqXTbdlPysMFx7BEtFALNNBrc0MvBtVgxuIbQwZ/Dbx7jmLUE64NqDZ
+	 I5vpKTsiKOmHR9KKi0F4jjc/5KoC30EQGHnj01FcJ/FDZqGEk5COG72dK7MXg3sW82
+	 KzCBnX/xSSPZmSLNqoFInb4ZN+MYwEwZi7fbOsRzCrU0Md7iOmLekQdNIaatccxH3y
+	 wiGsN6Cgc3pPQ==
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-653780e9eb3so1049285a12.1
+        for <linux-mips@vger.kernel.org>; Tue, 10 Feb 2026 04:47:34 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCV/Jcvs1X1nVM68Fyzn0IRXgWuW8MDgSO/mc98D88cRYk+sl9DQZY+GSAbhsYFB/ADxk5wx1pTvEEkg@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzn1Blaf/qrC0hh/lXtTB5aQRK3EBWx6GhfGIqoSNRk11A9qD0x
+	6lFCVeFx6G07D1rFGuEQnY6R6XLSqzLLk5TDI4XuC8ots7aVugjX1/e88aoUD61BUY7vqhpLyAA
+	HQoaOI+IeQwoSxmOaxteZu6w9SaJt07A=
+X-Received: by 2002:a17:907:96a3:b0:b8e:d1f3:4744 with SMTP id
+ a640c23a62f3a-b8edf4139c7mr865102066b.55.1770727653004; Tue, 10 Feb 2026
+ 04:47:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20260112-mips-pic32-header-move-v2-0-927d516b1ff9@redhat.com>
-User-Agent: Mutt/2.2.14 (2025-02-20)
+References: <20260131094547.455916-1-zhengxingda@iscas.ac.cn>
+ <20260131094547.455916-3-zhengxingda@iscas.ac.cn> <20260209234818.GA2119841-robh@kernel.org>
+ <1f7b645328fb86d1097a80b224c39ca3ed07a4b2.camel@iscas.ac.cn>
+In-Reply-To: <1f7b645328fb86d1097a80b224c39ca3ed07a4b2.camel@iscas.ac.cn>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Tue, 10 Feb 2026 20:47:17 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5foQQFakDCYRDSM3vePZh-kECpTM+rwvs3jBvLgsjChQ@mail.gmail.com>
+X-Gm-Features: AZwV_QjCQ0H5HZWn3pR4DLUJociZMJIWnpAT2Ryiz-3zKCNbW_uonG7cG-yu01Y
+Message-ID: <CAAhV-H5foQQFakDCYRDSM3vePZh-kECpTM+rwvs3jBvLgsjChQ@mail.gmail.com>
+Subject: Re: [PATCH 2/8] dt-bindings: interrupt-controller: add LS7A PCH LPC
+To: Icenowy Zheng <zhengxingda@iscas.ac.cn>
+Cc: Rob Herring <robh@kernel.org>, Thomas Gleixner <tglx@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Jiaxun Yang <jiaxun.yang@flygoat.com>, 
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-mips@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[redhat.com,quarantine];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
-	R_DKIM_ALLOW(-0.20)[redhat.com:s=mimecast20190719,redhat.com:s=google];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13153-lists,linux-mips=lfdr.de];
-	RCPT_COUNT_TWELVE(0.00)[22];
+	FROM_HAS_DN(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_FROM(0.00)[bounces-13154-lists,linux-mips=lfdr.de];
 	MIME_TRACE(0.00)[0:+];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_TLS_LAST(0.00)[];
-	DKIM_TRACE(0.00)[redhat.com:+];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	FROM_HAS_DN(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[bmasney@redhat.com,linux-mips@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	RCVD_COUNT_FIVE(0.00)[6];
-	TAGGED_RCPT(0.00)[linux-mips];
-	MID_RHS_MATCH_FROM(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[chenhuacai@kernel.org,linux-mips@vger.kernel.org];
+	MISSING_XM_UA(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
+	TAGGED_RCPT(0.00)[linux-mips,dt];
+	RCPT_COUNT_SEVEN(0.00)[10];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: 8300011AF07
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,mail.gmail.com:mid,flygoat.com:email]
+X-Rspamd-Queue-Id: 120A611AFAA
 X-Rspamd-Action: no action
 
-Hi Thomas,
+On Tue, Feb 10, 2026 at 6:51=E2=80=AFPM Icenowy Zheng <zhengxingda@iscas.ac=
+.cn> wrote:
+>
+> =E5=9C=A8 2026-02-09=E6=98=9F=E6=9C=9F=E4=B8=80=E7=9A=84 17:48 -0600=EF=
+=BC=8CRob Herring=E5=86=99=E9=81=93=EF=BC=9A
+> > On Sat, Jan 31, 2026 at 05:45:41PM +0800, Icenowy Zheng wrote:
+> > > Loongson 7A series PCH contains an LPC controller with an interrupt
+> > > controller.
+> > >
+> > > Add the device tree binding for the interrupt controller.
+> > >
+> > > Signed-off-by: Icenowy Zheng <zhengxingda@iscas.ac.cn>
+> > > ---
+> > >  .../loongson,pch-lpc.yaml                     | 52
+> > > +++++++++++++++++++
+> > >  1 file changed, 52 insertions(+)
+> > >  create mode 100644 Documentation/devicetree/bindings/interrupt-
+> > > controller/loongson,pch-lpc.yaml
+> > >
+> > > diff --git a/Documentation/devicetree/bindings/interrupt-
+> > > controller/loongson,pch-lpc.yaml
+> > > b/Documentation/devicetree/bindings/interrupt-
+> > > controller/loongson,pch-lpc.yaml
+> > > new file mode 100644
+> > > index 0000000000000..c00fbf31f47f0
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/interrupt-
+> > > controller/loongson,pch-lpc.yaml
+> > > @@ -0,0 +1,52 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > +%YAML 1.2
+> > > +---
+> > > +$id:
+> > > http://devicetree.org/schemas/interrupt-controller/loongson,pch-lpc.y=
+aml#
+> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > > +
+> > > +title: Loongson PCH LPC Controller
+> > > +
+> > > +maintainers:
+> > > +  - Jiaxun Yang <jiaxun.yang@flygoat.com>
+> > > +
+> > > +description:
+> > > +  This interrupt controller is found in the Loongson LS7A family
+> > > of PCH for
+> > > +  accepting interrupts sent by LPC-connected peripherals and
+> > > signalling PIC
+> > > +  via a single interrupt line when interrupts are available.
+> > > +
+> > > +properties:
+> > > +  compatible:
+> > > +    const: loongson,pch-lpc-1.0
+> >
+> > Where does 1.0 come from? We don't do version numbers generally
+> > unless
+> > you define where the versions come from (e.g. Soft IP releases for
+> > FPGAs). I would have expected "ls7a" in the compatible instead.
+>
+> I originally followed the behavior of PCH PIC; however after asking
+> Jiaxun offlist, I was noticed about a register on the 7A1000 user
+> manual in the PIC that identifies the PIC version number; such version
+> number register does not exist for LPC part.
+>
+> I will switch to ls7a-lpc or ls7a1000-lpc. Newer compatible strings in
+> the 2K series (LoongArch ones) come with the whole model number, I
+> don't know whether this is needed for 7A1000 (although it looks like
+> that 7A2000 has the same
+Yes, they are the same, so I think ls7a-lpc is just OK.
 
-On Mon, Jan 12, 2026 at 05:47:54PM -0500, Brian Masney wrote:
-> There are currently some pic32 MIPS drivers that are in tree, and are
-> only configured to be compiled on the MIPS pic32 platform. There's a
-> risk of breaking some of these drivers when migrating drivers away from
-> legacy APIs. It happened to me with a pic32 clk driver.
-> 
-> Let's go ahead and move the pic32.h from the asm to the platform_data
-> include directory in the tree. This will make it easier, and cleaner to
-> enable COMPILE_TEST for some of these pic32 drivers. To do this requires
-> updating some includes, which I do at the beginning of this series.
-> 
-> This series was compile tested on a centos-stream-10 arm64 host in two
-> different configurations:
-> 
-> - native arm64 build with COMPILE_TEST (via make allmodconfig)
-> - MIPS cross compile on arm64 with:
->       ARCH=mips CROSS_COMPILE=mips64-linux-gnu- make pic32mzda_defconfig
-> 
-> Note that there is a separate MIPS compile error in linux-next, and I
-> reported it at https://lore.kernel.org/all/aWVs2gVB418WiMVa@redhat.com/
-> 
-> I included a patch at the end that shows enabling COMPILE_TEST for a
-> pic32 clk driver.
-> 
-> Merge Strategy
-> ==============
-> - Patches 1-15 can go through the MIPS tree.
-> - Patch 16 I can repost to Claudiu after patches 1-15 are in Linus's
->   tree after the next merge window. There is a separate patch set that
->   fixes a compiler error I unintentionally introduced via the clk tree.
->   https://lore.kernel.org/linux-clk/CABx5tq+eOocJ41X-GSgkGy6S+s+Am1yCS099wqP695NtwALTmg@mail.gmail.com/T/
+Huacai
 
-Sorry about the duplicate message. I just wanted to reply to the series
-with MIPS in the header so this message isn't lost.
-
-Can you back out these two patches from your tree in linux-next, and not
-send these to Linus?
-
-clk: microchip: core: allow driver to be compiled with COMPILE_TEST
-https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/commit/?id=026d70dcfe5de1543bb8edb8e50d22dc16863e6b
-
-clk: microchip: fix typo in reference to a config option
-https://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/commit/?id=a6ab150deb4b740334721d18e02ad400a9d888f5
-
-See
-https://lore.kernel.org/oe-kbuild-all/202602100954.BAVYq6aC-lkp@intel.com/
-
-All of the other patches with the include changes are good. I have
-patches queued to send out in two weeks to other subsystems once the
-include changes land in Linus's tree.
-
-Thanks,
-
-Brian
-
+> >
+> > Rob
+> >
+>
 
