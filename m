@@ -1,145 +1,159 @@
-Return-Path: <linux-mips+bounces-13159-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13169-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id OG5fBKdPjGmukgAAu9opvQ
-	(envelope-from <linux-mips+bounces-13159-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Feb 2026 10:45:11 +0100
+	id CD1HFE9wjGlsoAAAu9opvQ
+	(envelope-from <linux-mips+bounces-13169-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Feb 2026 13:04:31 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80CE5122DF0
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Feb 2026 10:45:10 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id C524412412C
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Feb 2026 13:04:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 41047302B3BC
-	for <lists+linux-mips@lfdr.de>; Wed, 11 Feb 2026 09:44:40 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id B6A213013720
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Feb 2026 12:04:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37B6035CB6A;
-	Wed, 11 Feb 2026 09:44:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2241F17B505;
+	Wed, 11 Feb 2026 12:04:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=dominikbrodowski.net header.i=@dominikbrodowski.net header.b="jTgTQfyk"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from cstnet.cn (smtp21.cstnet.cn [159.226.251.21])
-	(using TLSv1.2 with cipher DHE-RSA-AES256-SHA (256/256 bits))
+Received: from isilmar-4.linta.de (isilmar-4.linta.de [136.243.71.142])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA04935B65E;
-	Wed, 11 Feb 2026 09:44:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.226.251.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85E37280A5B;
+	Wed, 11 Feb 2026 12:04:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=136.243.71.142
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770803077; cv=none; b=dq34JsDNKgbWInj8JE8mMDqVP9pycEYRqypreLjfU24lG3dGeRxraJsFELfDrwDUyDnspfrH3fZSbQqs2pnRyVUW6zRMWkKpBuvGniS7QpRiP4Tw0CYLrepfAMHvfzmWgqoHo25c41fYyMLpjKqxyP002sRdlDTV9XU8X+m0+MA=
+	t=1770811469; cv=none; b=aRR0B+Ogps+uXFLqnB6PMbuSHGXJ6etpmWwS0OOo0SOPPdRtbBI/J9g0d3h6K8vYxp5Ywx1UVTKqFeu1nTRiPuEV89Z7Ocox6rjbsYpAeuAiVNxxirV7SSCLdrGWI77TeQF7IXlj05VNDkcIcdOhVxrTl/5YDCu93rAqlQLg4v8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770803077; c=relaxed/simple;
-	bh=yhICwmO9+4DcH8AQoGAZUzq3EQ/BjEbi5SQHou6/SGA=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=JvfrXU2Pab3Q8gRmE+xZXY3xnt0booTAlTr6e81kq8en5T9aE+xD5lPI3p8QOcQryr438OJ8/HctFrDZb6iDFzM8dyDV/Q261/sHMGI2EMGA3liUSlZJtYmlYia1rm88PJtwk1VeSmvv4HrLB6LsDEiYuYBdJ5EKKA5L1p9zDpo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn; spf=pass smtp.mailfrom=iscas.ac.cn; arc=none smtp.client-ip=159.226.251.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=iscas.ac.cn
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=iscas.ac.cn
-Received: from edelgard.fodlan.icenowy.me (unknown [112.94.101.168])
-	by APP-01 (Coremail) with SMTP id qwCowAAHsm1rT4xph_KtBw--.27918S9;
-	Wed, 11 Feb 2026 17:44:24 +0800 (CST)
-From: Icenowy Zheng <zhengxingda@iscas.ac.cn>
-To: Thomas Gleixner <tglx@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	s=arc-20240116; t=1770811469; c=relaxed/simple;
+	bh=F5ocLiFb5PagaCJNTCTkOoYR8su+CxhPpODAa4a2U68=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JQ3wsPDDyZIikXJcvV4Ndrm+it1q1XwnuGq1kZEdQ4aLbSy7SC9dOiggCy7MOAC+Ja+3oohVLZfFq1EkCeEi/eUVq8bT5Kia8mumZRnaQSCRvHXVAtcLvl740Tv1YfT75ibjwyTyOGVyGVvlfyKP7Gh3pzhJgxjWEAf4NRyqRS0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dominikbrodowski.net; spf=pass smtp.mailfrom=dominikbrodowski.net; dkim=pass (2048-bit key) header.d=dominikbrodowski.net header.i=@dominikbrodowski.net header.b=jTgTQfyk; arc=none smtp.client-ip=136.243.71.142
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=dominikbrodowski.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=dominikbrodowski.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=dominikbrodowski.net;
+	s=k25.isilmar-4; t=1770810959;
+	bh=F5ocLiFb5PagaCJNTCTkOoYR8su+CxhPpODAa4a2U68=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jTgTQfyk6DGXiB6SilnA7QB+cED1F8DbgS8ibkkK8UXVYDVfrN+rBg5r0xCVxDzkd
+	 9R976RUlE5fn1V7Rfw3wLoE1fDG0RRvgjjP0//vNgDu8Yh5xzyy7Ze7iLuA8oYpRPx
+	 36/DviW67q9k704KNQh5o5xadJHyLqAMzkuXppIHIvdwCX4gjpiC/GfVTQpDC3tkzO
+	 2znC1pjOuu/lJgsFL/KY2AtuLyJZC16qktwHOv3b7cZu4tle29uqd6NUitUM9VXCs5
+	 M1P4eeMaQ9FI3kLXWCusR8U9RT3pc0thP2a7ol/dcyvYk0xuhQHbkuQTLgAo8Qnk+6
+	 fSkTTJWf4Xy2g==
+Received: from scops.dominikbrodowski.net (unknown [10.2.0.113])
+	by isilmar-4.linta.de (Postfix) with ESMTPSA id 58AE020033E;
+	Wed, 11 Feb 2026 11:55:59 +0000 (UTC)
+Received: by scops.dominikbrodowski.net (Postfix, from userid 1000)
+	id 366CA80054; Wed, 11 Feb 2026 11:02:27 +0100 (CET)
+Date: Wed, 11 Feb 2026 11:02:27 +0100
+From: Dominik Brodowski <linux@dominikbrodowski.net>
+To: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+Cc: linux-mips@vger.kernel.org, linux-bluetooth@vger.kernel.org,
+	Ondrej Zary <linux@rainbow-software.org>,
+	Russell King <linux@armlinux.org.uk>,
 	Huacai Chen <chenhuacai@kernel.org>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>
-Cc: Yao Zi <me@ziyao.cc>,
-	linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	Icenowy Zheng <zhengxingda@iscas.ac.cn>
-Subject: [PATCH v2 7/7] MIPS: Loongson64: dts: add node for LS7A PCH LPC
-Date: Wed, 11 Feb 2026 17:44:08 +0800
-Message-ID: <20260211094408.3463916-8-zhengxingda@iscas.ac.cn>
-X-Mailer: git-send-email 2.52.0
-In-Reply-To: <20260211094408.3463916-1-zhengxingda@iscas.ac.cn>
-References: <20260211094408.3463916-1-zhengxingda@iscas.ac.cn>
+	WANG Xuerui <kernel@xen0n.name>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Marcel Holtmann <marcel@holtmann.org>,
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	Theodore Ts'o <tytso@mit.edu>,
+	=?iso-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Yosry Ahmed <yosry.ahmed@linux.dev>,
+	Jakub Kicinski <kuba@kernel.org>, Paul Moore <paul@paul-moore.com>,
+	Simon Horman <horms@kernel.org>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>
+Subject: Re: [RFC PATCH] bluetooth: remove all PCMCIA drivers
+Message-ID: <aYxTsxNj2NLj8I6y@scops.dominikbrodowski.net>
+References: <20260211082246.41148-1-enelsonmoore@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:qwCowAAHsm1rT4xph_KtBw--.27918S9
-X-Coremail-Antispam: 1UD129KBjvdXoW7Xw47JryxCrWftrWkGF17KFg_yoWftrX_Ar
-	12kan5WrZ3AasFk34kZrWDCFy7u3y7Awnak3ZrKr15XF9YyrnxGFWUZ3yUAF1fWrWYqr1r
-	t3yvqr4DCF4IkjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUIcSsGvfJTRUUUbvxFF20E14v26rWj6s0DM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-	6rWj6s0DM7CIcVAFz4kK6r1j6r18M28IrcIa0xkI8VA2jI8067AKxVWUAVCq3wA2048vs2
-	IY020Ec7CjxVAFwI0_Xr0E3s1l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28E
-	F7xvwVC0I7IYx2IY67AKxVW5JVW7JwA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr
-	1UM28EF7xvwVC2z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0D
-	M2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjx
-	v20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1l
-	F7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7M4IIrI8v6xkF7I0E8cxan2
-	IY04v7MxkF7I0En4kS14v26r1q6r43MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4AY
-	6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE17
-	CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I6r4UMIIF
-	0xvE2Ix0cI8IcVCY1x0267AKxVWxJVW8Jr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMI
-	IF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVF
-	xhVjvjDU0xZFpf9x0JUQFxUUUUUU=
-X-CM-SenderInfo: x2kh0wp0lqwv3d6l2u1dvotugofq/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20260211082246.41148-1-enelsonmoore@gmail.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [1.54 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_DKIM_ALLOW(-0.20)[dominikbrodowski.net:s=k25.isilmar-4];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	DMARC_NA(0.00)[iscas.ac.cn];
-	TAGGED_FROM(0.00)[bounces-13159-lists,linux-mips=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	RCPT_COUNT_TWELVE(0.00)[12];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	RCVD_COUNT_THREE(0.00)[4];
+	TAGGED_FROM(0.00)[bounces-13169-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
-	TO_DN_SOME(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[zhengxingda@iscas.ac.cn,linux-mips@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
+	FREEMAIL_TO(0.00)[gmail.com];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	DMARC_NA(0.00)[dominikbrodowski.net];
+	RCPT_COUNT_TWELVE(0.00)[28];
+	MIME_TRACE(0.00)[0:+];
+	FREEMAIL_CC(0.00)[vger.kernel.org,rainbow-software.org,armlinux.org.uk,kernel.org,xen0n.name,alpha.franken.de,linux.ibm.com,ellerman.id.au,gmail.com,holtmann.org,gondor.apana.org.au,oracle.com,mit.edu,linaro.org,linux-foundation.org,cmpxchg.org,linux.dev,paul-moore.com,schaufler-ca.com,google.com];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	R_DKIM_NA(0.00)[];
-	DBL_PROHIBIT(0.00)[0.153.207.0:email,0.152.150.128:email];
-	TAGGED_RCPT(0.00)[linux-mips,dt];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[iscas.ac.cn:mid,iscas.ac.cn:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,0.152.158.80:email]
-X-Rspamd-Queue-Id: 80CE5122DF0
+	FROM_NEQ_ENVFROM(0.00)[linux@dominikbrodowski.net,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[dominikbrodowski.net:+];
+	MID_RHS_MATCH_FROMTLD(0.00)[];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips];
+	TO_DN_SOME(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,dominikbrodowski.net:email,dominikbrodowski.net:dkim,scops.dominikbrodowski.net:mid]
+X-Rspamd-Queue-Id: C524412412C
 X-Rspamd-Action: no action
 
-Loongson 7A series PCH contain a LPC IRQ controller.
 
-Add the device tree node of it.
+Am Wed, Feb 11, 2026 at 12:22:04AM -0800 schrieb Ethan Nelson-Moore:
+> PCMCIA is almost completely obsolete (the last computers supporting it
+> natively were from ~2009), and the general consensus [1] seems to be
+> that support for it should be gradually removed from the kernel.
+> 
+> In 2023, an initial step of removing all the PCMCIA char drivers was
+> taken in commit 9b12f050c76f ("char: pcmcia: remove all the drivers"),
+> and that has not been reverted, so it seems logical to continue this
+> process by removing more low-hanging fruit.
+> 
+> These three Bluetooth drivers have had no meaningful changes since
+> their status was discussed in 2022 [2], and are unlikely to have any
+> remaining users. The latest functional change to any of them was a
+> patch to bluecard_cs to fix LED blinking behavior in 2017. The other
+> two drivers have not had any meaningful changes made since 2007. Remove
+> them.
+> 
+> Note that even with these drivers removed, it is still possible to use
+> other PCMCIA Bluetooth cards that present themselves as a standard
+> serial port via serial_cs and hciattach while the serial_cs driver is
+> still present.
+> 
+> [1] https://lore.kernel.org/all/c5b39544-a4fb-4796-a046-0b9be9853787@app.fastmail.com/
+> [2] https://lore.kernel.org/all/Y07d7rMvd5++85BJ@owl.dominikbrodowski.net/
+> 
+> Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
 
-Signed-off-by: Icenowy Zheng <zhengxingda@iscas.ac.cn>
----
- arch/mips/boot/dts/loongson/ls7a-pch.dtsi | 9 +++++++++
- 1 file changed, 9 insertions(+)
+Acked-by: Dominik Brodowski <linux@dominikbrodowski.net>
 
-diff --git a/arch/mips/boot/dts/loongson/ls7a-pch.dtsi b/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
-index 5269bf0f789b0..84546ebfaf443 100644
---- a/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
-+++ b/arch/mips/boot/dts/loongson/ls7a-pch.dtsi
-@@ -19,6 +19,15 @@ pic: interrupt-controller@10000000 {
- 			#interrupt-cells = <2>;
- 		};
- 
-+		lpc: interrupt-controller@10002000 {
-+			compatible = "loongson,ls7a-lpc";
-+			reg = <0 0x10002000 0 0x1000>;
-+			interrupt-controller;
-+			interrupt-parent = <&pic>;
-+			interrupts = <19 IRQ_TYPE_LEVEL_HIGH>;
-+			#interrupt-cells = <2>;
-+		};
-+
- 		ls7a_uart0: serial@10080000 {
- 			compatible = "ns16550a";
- 			reg = <0 0x10080000 0 0x100>;
--- 
-2.52.0
+Which tree will this go through?
 
+Thanks,
+	Dominik
 
