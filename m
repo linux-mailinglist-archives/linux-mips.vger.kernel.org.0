@@ -1,164 +1,2635 @@
-Return-Path: <linux-mips+bounces-13158-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13167-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id qpBvIgCJi2nUVgAAu9opvQ
-	(envelope-from <linux-mips+bounces-13158-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Feb 2026 20:37:36 +0100
+	id +BICKg1WjGnblAAAu9opvQ
+	(envelope-from <linux-mips+bounces-13167-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Feb 2026 11:12:29 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id D013511EB04
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Feb 2026 20:37:35 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id BDF50123395
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Feb 2026 11:12:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 26BF53023516
-	for <lists+linux-mips@lfdr.de>; Tue, 10 Feb 2026 19:37:34 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id 78D69301D6AC
+	for <lists+linux-mips@lfdr.de>; Wed, 11 Feb 2026 10:12:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F6F531283A;
-	Tue, 10 Feb 2026 19:37:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC366366DCE;
+	Wed, 11 Feb 2026 10:12:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="R5fefDvU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="c/HV7rZ2"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+Received: from mail-vs1-f65.google.com (mail-vs1-f65.google.com [209.85.217.65])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4B342EC562
-	for <linux-mips@vger.kernel.org>; Tue, 10 Feb 2026 19:37:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7826135B650
+	for <linux-mips@vger.kernel.org>; Wed, 11 Feb 2026 10:12:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.65
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770752253; cv=none; b=uoW8NWWGX84td9TwjoyVGs1YoNotvNr/6IToEcbsSaNeAHrzCxnBmZJg5ys/MLka08plDWifZ2GqVeh2kSo83YpPD2CrGknLIO5OJhpP/jXE/BKGuHDsR2wTKFFjAjEcnwaNpVW3tunEo1d6TNMKoZ/ACDFQmiQ72r6K9r6Fnn4=
+	t=1770804745; cv=none; b=R9DvgkDNKFOHpb0FozIJ7x0+uRwqHKKaocty2RCe/fTDzOdyIgHm8cHoaZkZ+5ASF0hwSV/i6eOi3hIOir1f1I1cG2NCTqb3rdiHYU0uM4UjC2unbe8MeyjB7fsWQBQatPWPhG9ZlDgtRwsrur0XEoliZoPb6K6VLiLLkPV0m5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770752253; c=relaxed/simple;
-	bh=fRur79AaHqNQV3fBr4hf5Rrc3u8CGGPgcbZLe1PvlTs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mY0sMlZrwo/lWKEDJ2qTYM//GFCq9/w/Tyqhxzj4qCCgdoF7QvKqEKKXMofz9taCsXKitJ/r+GOc7FfndyaUxzN7CNBgdOavUQs0dzkb9rJsnrVWUTZRf+sUfwqpB741Yju0qt/ixLxnOsQukulUiPHjqUFsOhNms4NYDjaWpOE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=R5fefDvU; arc=none smtp.client-ip=209.85.221.50
+	s=arc-20240116; t=1770804745; c=relaxed/simple;
+	bh=L2SmryuysY1VcTpbb4ekptm61Gub8uZkg8Gpwrx/gFs=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=B6FhNxf8N1PSuQbze4o43924LHQDyT1vX23O4HgKfns7ncEofounChL1hYHBQ7Rm235FB1T72/kZcY7mweORiFDeRw83L/EohuxSKVYe3vuVfik7uCUuI/JGh7ajUI5N7ckBj0qpBXrp261Jp88ERCACtmeGMt9c6C2Scu7/Ems=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=c/HV7rZ2; arc=none smtp.client-ip=209.85.217.65
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-4376bd50b01so307934f8f.3
-        for <linux-mips@vger.kernel.org>; Tue, 10 Feb 2026 11:37:31 -0800 (PST)
+Received: by mail-vs1-f65.google.com with SMTP id ada2fe7eead31-5f5418c40daso665816137.0
+        for <linux-mips@vger.kernel.org>; Wed, 11 Feb 2026 02:12:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1770752250; x=1771357050; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=fqDz8Drx8XjDtZc8LsAC+uLDhKgLLYdxTPVtiF/ij7I=;
-        b=R5fefDvUd00un7dIomu5/1O1/MvCC9JM8X4upAFz60c/ub91qrSPIuetKpbXV8gIqi
-         YFQIyDLbTcJi+H4iRKR98ib6Wi6unP8GBW2b0tXYrRr5GwVkJcLlqUfhi2p/ot3Qv61t
-         vurZ0WJYck/zenfGJSe0krk0uxKaQ4n9EfvIbRZYhbS6Ij42Bx47J/YbkWKXHOqvpyIq
-         UzCkfipCNL7e2mC6H4SRCiOWeuDoaSnAqpvZzDrXKQpwh7H+d/ZQQ57ImxsLihOgZw/D
-         ZxsJRacQL7ZMjkUamPG8ethuix9QCUOVfa/mWYeTh/25mymB0VRVXzFhZWaZznQmPEbC
-         un8g==
+        d=gmail.com; s=20230601; t=1770804741; x=1771409541; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mUDoGQUm2ZeXYNXaHTJcE+bHb9MuVnLgsxICqiD7EpQ=;
+        b=c/HV7rZ2KT4QJIXvYt+G2HCP43B8D3amUaVgkN+87ior+Tr5x9TbywHEZga+sUkhze
+         ODwxQCU6XVc19sPvFmntuxeOPS0QfvW+m7/TFd5pKCqWr5v6x6KDUo4xhTLaNVzR2svc
+         NXZIdQbIrqOF31PoNq4L1SXB6KycrEbIbGwbYYX6GFVUnGxUj9VRSLc/5RQqiU5Cd4Uv
+         KCDWZQ9P5SfaKlogqfdJGOKAyTTYjClK0kZ519WjPhUNy5ow4IDUPnufCXRYt1EsF1Ei
+         ovIFWllOi/MaLasWj18WokzxMx0MbhkCTnKET67AzpjAz16N7hyykSEjPJeep0LAWalX
+         HiEA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1770752250; x=1771357050;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:x-gm-gg
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fqDz8Drx8XjDtZc8LsAC+uLDhKgLLYdxTPVtiF/ij7I=;
-        b=dY+SGptaknooLqdoRf4rDf4eIIr8HLcveE3n6F4oV1YKVFG+92Z301kopKFrrO6r2k
-         QXlfEJgX2VP5H2lf63Mtjipe5EGREukn8IZYV2pj3sWe1+7jgGIjmr8uwvUmMkbPqPdT
-         C5pyPVV7MEvSPYxfGajxyFlF07V+l5xe3rOvQxjhoKVX7tjYp0scKDTsidNhElgYcok0
-         Y6ERydY9RzATAEvsO0X57PRF5l57vEDnmSMZpUVkE+7/lkBEjX6I7oqHa6RrXYam/n3h
-         RiR11RZv6TVZM3A1jGctcYEdKA0jvQitYP4JN1HInVcLlAxaIa2otGwhwwUN2XAcU8Cj
-         H7Mw==
-X-Forwarded-Encrypted: i=1; AJvYcCXH05SA+J38Ky7SLeN/17JsDCDXrvRIrF0YMVeFGniyyIfA4z9YRYgrNOikbas1WBPZKo5quKvsIRhd@vger.kernel.org
-X-Gm-Message-State: AOJu0YyY8YbaUvmlBgsK2sQqNEklKVKYQ29j/uPqhEI9i8kw+5k/dfex
-	LssF1/ljqXF73A+43ZogmC4Xykl7Qn3FXu3L0honmMB9DuGWd2qo65mNfJirug==
-X-Gm-Gg: AZuq6aLw2O66hmdGbmUqyO6WT9bW1f+b9Ows4Mr1QlL7CHg91+wrPJ42BLpGn0ER9zN
-	vOTi5a4WdNlxcCCPVud/P4aJpVrDWSBYlvxOEK+0Tm21GiyFYf9F2Z2qWZtyrAOZ8uCOGkGVpYr
-	UDi1lFNIAFUo4IWULKMBodAGjA0q3If2QnXpP52G9FnQQyBFFe8ul6Uk5KhmnOBfcR6AEKjDFbk
-	EUwDiaIhwRskjFTbwwjvvT4cz8xq90CLNxvuK+glhZDLU3TSQMGpWRgsvZ6zz0LNA6vqyErW3Dz
-	4nGn9sUCCbmGvvNuYHJIzOLNjvhvqPjV8gOyH1QxMjTTx0sLFZ/y7eFKJJtT2MLqfCUyNaUC1F5
-	LcBBR+YtVUKfhzhTS7Ml4vjNFe91jeHkdiyME8cCPvHAlLvruE5v3Djg2IlycnpTErI3YZr7ufa
-	MKxu+IziUt9d0PGF4=
-X-Received: by 2002:a05:6000:3104:b0:437:771e:9dbd with SMTP id ffacd0b85a97d-4377aba5bd2mr2497517f8f.0.1770752250206;
-        Tue, 10 Feb 2026 11:37:30 -0800 (PST)
-Received: from skbuf ([2a02:2f04:d501:d900:d8ac:c964:9b43:1b13])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-436296bd4a1sm36328520f8f.17.2026.02.10.11.37.28
+        d=1e100.net; s=20230601; t=1770804741; x=1771409541;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=mUDoGQUm2ZeXYNXaHTJcE+bHb9MuVnLgsxICqiD7EpQ=;
+        b=jdDs1G2W1Ny4rbEAgBmP5CMePw1n2nQc9fFJzScwWzEobe1VKyBGcCAJTvRut42DmR
+         h8agiRQxBLM+9GiZ6IsuGwgbC/Ui6ATEB4LY3nXtKI+ziGW2EgFMwrt0UYUIajsWetyx
+         94Q0aOkmt6qILVlLGzLk670VyRir5JdlsDj+v3ANy7+VISL3gZCYknbJV4AESTpmaNSd
+         Nyw6+Nr64AEoaSTOHdPHctJ/19pFtOYbOzsNq+RdX4Zq9wx8OZ+2TSGoTz7LQ3L2n4nT
+         7vqUKzxJoZZnfI/sSm/te+ChDsJZeRaPD/a+gJqx5kEtGFpl01axfpMUli1H9U7G1wIw
+         uvLA==
+X-Gm-Message-State: AOJu0Yz3dKNA7IsMVtFXpV96ZQ/ZtIpuuJx8bMGtb+YokiOO1BA1kVHj
+	Ygre1lFnfsQQeoVivFCK6CqcHoNrSGZpzk64o1TiKRuemfDRAkeL+VOqVDi1Vlj1
+X-Gm-Gg: AZuq6aItOGNNW/JywJbeTbMi2MtcnZpxy6n88JXhvGMUz0NFZM8e6JEKriIJv5lZYPD
+	DUt9VY8NEvmXR6p6YPGd8kH9xO71egUt8CD/lJVEObY2L3J5OVslemDwYUl4tyfnrdlP5bd5nF4
+	FP7iuza8FQDysT+JJTPTr7DoMyjOGGyksIMHG6OhRM6dcKDDTPDWtD9Dqm+tT2mX/lzQr/NMSnd
+	F5LzTTgoDL3VTmIGna/badmMVX1qdTY0aC7vfkoSXspSTrtek2CRgH7yruvTG74KpiZXYGrooDy
+	8SYnTVvFLlsXXPotL90k8Ikq8CTpD0nzc/BUIdVAPsa19E/zBmaopokqAN/V8u5YvaeP5MVIbq4
+	nZe+g6M6w38X84MA4wo58huWiM3OfCqFg20XNkg/XEE5yhjNl2oVP2ROtQ67v7B0/LunLTpZNi6
+	WZlBA4NfL5GZDK40a//GMloB0Hm2Li4KC7TxNaNBD5vDnsWpSpXeixUrsifQq0aMrrnp+7empzr
+	9XkNdWc1iTmH4faN5vrVw2/jppCxNQLYvvFoCz2gswstD9GnHlFXWwR45Bs7WOEk6d73PqWeCH8
+	3ZQxyGNHX4JPkqhebQ==
+X-Received: by 2002:a05:7300:d50c:b0:2b8:68cd:a7b1 with SMTP id 5a478bee46e88-2ba89af3208mr1754256eec.0.1770798185219;
+        Wed, 11 Feb 2026 00:23:05 -0800 (PST)
+Received: from ethan-latitude5420.. (host-127-24.cafrjco.fresno.ca.us.clients.pavlovmedia.net. [68.180.127.24])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ba9dcd00d2sm917323eec.20.2026.02.11.00.23.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 10 Feb 2026 11:37:29 -0800 (PST)
-Date: Tue, 10 Feb 2026 21:37:26 +0200
-From: Vladimir Oltean <olteanv@gmail.com>
-To: =?utf-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>
-Cc: =?utf-8?Q?Gr=C3=A9gory?= Clement <gregory.clement@bootlin.com>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
+        Wed, 11 Feb 2026 00:23:04 -0800 (PST)
+From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+To: linux-mips@vger.kernel.org,
+	linux-bluetooth@vger.kernel.org
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>,
+	Ondrej Zary <linux@rainbow-software.org>,
+	Ethan Nelson-Moore <enelsonmoore@gmail.com>,
+	Russell King <linux@armlinux.org.uk>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	WANG Xuerui <kernel@xen0n.name>,
 	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-	Neil Armstrong <neil.armstrong@linaro.org>,
-	linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-	linux-clk@vger.kernel.org,
-	=?utf-8?Q?Beno=C3=AEt?= Monin <benoit.monin@bootlin.com>,
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
-	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-	Luca Ceresoli <luca.ceresoli@bootlin.com>
-Subject: Re: [PATCH v6 2/8] phy: sort Kconfig and Makefile
-Message-ID: <20260210193726.h6fc65gekida65la@skbuf>
-References: <20260127-macb-phy-v6-0-cdd840588188@bootlin.com>
- <20260127-macb-phy-v6-2-cdd840588188@bootlin.com>
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Marcel Holtmann <marcel@holtmann.org>,
+	Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
+	Eric Biggers <ebiggers@kernel.org>,
+	Ard Biesheuvel <ardb@kernel.org>,
+	Herbert Xu <herbert@gondor.apana.org.au>,
+	"Martin K. Petersen" <martin.petersen@oracle.com>,
+	"Theodore Ts'o" <tytso@mit.edu>,
+	=?UTF-8?q?Andr=C3=A9=20Draszik?= <andre.draszik@linaro.org>,
+	Andrew Morton <akpm@linux-foundation.org>,
+	Johannes Weiner <hannes@cmpxchg.org>,
+	Yosry Ahmed <yosry.ahmed@linux.dev>,
+	Jakub Kicinski <kuba@kernel.org>,
+	Paul Moore <paul@paul-moore.com>,
+	Simon Horman <horms@kernel.org>,
+	Casey Schaufler <casey@schaufler-ca.com>,
+	Kuniyuki Iwashima <kuniyu@google.com>
+Subject: [RFC PATCH] bluetooth: remove all PCMCIA drivers
+Date: Wed, 11 Feb 2026 00:22:04 -0800
+Message-ID: <20260211082246.41148-1-enelsonmoore@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260127-macb-phy-v6-2-cdd840588188@bootlin.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_RHS_NOT_FQDN(0.50)[];
+	MID_CONTAINS_FROM(1.00)[];
 	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_MISSING_CHARSET(0.50)[];
 	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13158-lists,linux-mips=lfdr.de];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[21];
+	FREEMAIL_CC(0.00)[dominikbrodowski.net,rainbow-software.org,gmail.com,armlinux.org.uk,kernel.org,xen0n.name,alpha.franken.de,linux.ibm.com,ellerman.id.au,holtmann.org,gondor.apana.org.au,oracle.com,mit.edu,linaro.org,linux-foundation.org,cmpxchg.org,linux.dev,paul-moore.com,schaufler-ca.com,google.com];
 	MIME_TRACE(0.00)[0:+];
 	FREEMAIL_FROM(0.00)[gmail.com];
-	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[29];
+	TAGGED_FROM(0.00)[bounces-13167-lists,linux-mips=lfdr.de];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[olteanv@gmail.com,linux-mips@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[enelsonmoore@gmail.com,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
 	DKIM_TRACE(0.00)[gmail.com:+];
-	TAGGED_RCPT(0.00)[linux-mips,dt];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	RCVD_COUNT_FIVE(0.00)[5];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	MISSING_XM_UA(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,bootlin.com:email]
-X-Rspamd-Queue-Id: D013511EB04
+	TAGGED_RCPT(0.00)[linux-mips];
+	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[nsh.zero:url,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: BDF50123395
 X-Rspamd-Action: no action
 
-Hi Theo,
+PCMCIA is almost completely obsolete (the last computers supporting it
+natively were from ~2009), and the general consensus [1] seems to be
+that support for it should be gradually removed from the kernel.
 
-On Tue, Jan 27, 2026 at 06:09:30PM +0100, Théo Lebrun wrote:
-> Neither Kconfig nor Makefile are sorted; reorder them.
-> 
-> $ diff -U100 <(grep ^config drivers/phy/Kconfig) \
->              <(grep ^config drivers/phy/Kconfig | sort)
-> 
-> $ diff -U100 <(grep ^obj-\\$ drivers/phy/Makefile) \
->              <(grep ^obj-\\$ drivers/phy/Makefile | sort)
-> 
-> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
-> ---
+In 2023, an initial step of removing all the PCMCIA char drivers was
+taken in commit 9b12f050c76f ("char: pcmcia: remove all the drivers"),
+and that has not been reverted, so it seems logical to continue this
+process by removing more low-hanging fruit.
 
-This patch is appreciated, however it no longer applies on top of
-current linux-phy/next.
+These three Bluetooth drivers have had no meaningful changes since
+their status was discussed in 2022 [2], and are unlikely to have any
+remaining users. The latest functional change to any of them was a
+patch to bluecard_cs to fix LED blinking behavior in 2017. The other
+two drivers have not had any meaningful changes made since 2007. Remove
+them.
 
-Since we are in the merge window currently, would you mind reposting in
-2 weeks (or as RFC in the meantime)?
+Note that even with these drivers removed, it is still possible to use
+other PCMCIA Bluetooth cards that present themselves as a standard
+serial port via serial_cs and hciattach while the serial_cs driver is
+still present.
+
+[1] https://lore.kernel.org/all/c5b39544-a4fb-4796-a046-0b9be9853787@app.fastmail.com/
+[2] https://lore.kernel.org/all/Y07d7rMvd5++85BJ@owl.dominikbrodowski.net/
+
+Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+---
+ arch/arm/configs/pxa_defconfig              |   3 -
+ arch/arm/configs/spitz_defconfig            |   3 -
+ arch/loongarch/configs/loongson32_defconfig |   3 -
+ arch/loongarch/configs/loongson64_defconfig |   3 -
+ arch/mips/configs/mtx1_defconfig            |   3 -
+ arch/powerpc/configs/ppc6xx_defconfig       |   3 -
+ drivers/bluetooth/Kconfig                   |  40 -
+ drivers/bluetooth/Makefile                  |   3 -
+ drivers/bluetooth/bluecard_cs.c             | 908 --------------------
+ drivers/bluetooth/bt3c_cs.c                 | 749 ----------------
+ drivers/bluetooth/dtl1_cs.c                 | 614 -------------
+ 11 files changed, 2332 deletions(-)
+ delete mode 100644 drivers/bluetooth/bluecard_cs.c
+ delete mode 100644 drivers/bluetooth/bt3c_cs.c
+ delete mode 100644 drivers/bluetooth/dtl1_cs.c
+
+diff --git a/arch/arm/configs/pxa_defconfig b/arch/arm/configs/pxa_defconfig
+index eacd08fd87ad..ec06f41b9df0 100644
+--- a/arch/arm/configs/pxa_defconfig
++++ b/arch/arm/configs/pxa_defconfig
+@@ -77,9 +77,6 @@ CONFIG_BT_HCIUART_BCSP=y
+ CONFIG_BT_HCIBCM203X=m
+ CONFIG_BT_HCIBPA10X=m
+ CONFIG_BT_HCIBFUSB=m
+-CONFIG_BT_HCIDTL1=m
+-CONFIG_BT_HCIBT3C=m
+-CONFIG_BT_HCIBLUECARD=m
+ CONFIG_BT_HCIBTUART=m
+ CONFIG_BT_HCIVHCI=m
+ CONFIG_BT_MRVL=m
+diff --git a/arch/arm/configs/spitz_defconfig b/arch/arm/configs/spitz_defconfig
+index c130af6d44d4..a071f579b87d 100644
+--- a/arch/arm/configs/spitz_defconfig
++++ b/arch/arm/configs/spitz_defconfig
+@@ -62,9 +62,6 @@ CONFIG_BT_HCIUART_BCSP=y
+ CONFIG_BT_HCIBCM203X=m
+ CONFIG_BT_HCIBPA10X=m
+ CONFIG_BT_HCIBFUSB=m
+-CONFIG_BT_HCIDTL1=m
+-CONFIG_BT_HCIBT3C=m
+-CONFIG_BT_HCIBLUECARD=m
+ CONFIG_BT_HCIBTUART=m
+ CONFIG_BT_HCIVHCI=m
+ CONFIG_PCCARD=y
+diff --git a/arch/loongarch/configs/loongson32_defconfig b/arch/loongarch/configs/loongson32_defconfig
+index 276b1577e0be..62e16600a987 100644
+--- a/arch/loongarch/configs/loongson32_defconfig
++++ b/arch/loongarch/configs/loongson32_defconfig
+@@ -383,9 +383,6 @@ CONFIG_BT_HCIUART_AG6XX=y
+ CONFIG_BT_HCIBCM203X=m
+ CONFIG_BT_HCIBPA10X=m
+ CONFIG_BT_HCIBFUSB=m
+-CONFIG_BT_HCIDTL1=m
+-CONFIG_BT_HCIBT3C=m
+-CONFIG_BT_HCIBLUECARD=m
+ CONFIG_BT_HCIVHCI=m
+ CONFIG_BT_MRVL=m
+ CONFIG_BT_ATH3K=m
+diff --git a/arch/loongarch/configs/loongson64_defconfig b/arch/loongarch/configs/loongson64_defconfig
+index a14db1a95e7e..0124be356b8c 100644
+--- a/arch/loongarch/configs/loongson64_defconfig
++++ b/arch/loongarch/configs/loongson64_defconfig
+@@ -399,9 +399,6 @@ CONFIG_BT_HCIUART_AG6XX=y
+ CONFIG_BT_HCIBCM203X=m
+ CONFIG_BT_HCIBPA10X=m
+ CONFIG_BT_HCIBFUSB=m
+-CONFIG_BT_HCIDTL1=m
+-CONFIG_BT_HCIBT3C=m
+-CONFIG_BT_HCIBLUECARD=m
+ CONFIG_BT_HCIVHCI=m
+ CONFIG_BT_MRVL=m
+ CONFIG_BT_ATH3K=m
+diff --git a/arch/mips/configs/mtx1_defconfig b/arch/mips/configs/mtx1_defconfig
+index c58d1a61d528..8ed504f80530 100644
+--- a/arch/mips/configs/mtx1_defconfig
++++ b/arch/mips/configs/mtx1_defconfig
+@@ -200,9 +200,6 @@ CONFIG_BT_HCIUART_BCSP=y
+ CONFIG_BT_HCIBCM203X=m
+ CONFIG_BT_HCIBPA10X=m
+ CONFIG_BT_HCIBFUSB=m
+-CONFIG_BT_HCIDTL1=m
+-CONFIG_BT_HCIBT3C=m
+-CONFIG_BT_HCIBLUECARD=m
+ CONFIG_BT_HCIVHCI=m
+ CONFIG_CONNECTOR=m
+ CONFIG_MTD=y
+diff --git a/arch/powerpc/configs/ppc6xx_defconfig b/arch/powerpc/configs/ppc6xx_defconfig
+index 787d707f64a4..86812dbb4318 100644
+--- a/arch/powerpc/configs/ppc6xx_defconfig
++++ b/arch/powerpc/configs/ppc6xx_defconfig
+@@ -287,9 +287,6 @@ CONFIG_BT_HCIUART_BCSP=y
+ CONFIG_BT_HCIBCM203X=m
+ CONFIG_BT_HCIBPA10X=m
+ CONFIG_BT_HCIBFUSB=m
+-CONFIG_BT_HCIDTL1=m
+-CONFIG_BT_HCIBT3C=m
+-CONFIG_BT_HCIBLUECARD=m
+ CONFIG_BT_HCIVHCI=m
+ CONFIG_CFG80211=m
+ CONFIG_MAC80211=m
+diff --git a/drivers/bluetooth/Kconfig b/drivers/bluetooth/Kconfig
+index c5d45cf91f88..c94e8833ac8e 100644
+--- a/drivers/bluetooth/Kconfig
++++ b/drivers/bluetooth/Kconfig
+@@ -337,46 +337,6 @@ config BT_HCIBFUSB
+ 	  Say Y here to compile support for HCI BFUSB devices into the
+ 	  kernel or say M to compile it as module (bfusb).
+ 
+-config BT_HCIDTL1
+-	tristate "HCI DTL1 (PC Card) driver"
+-	depends on PCMCIA && HAS_IOPORT
+-	help
+-	  Bluetooth HCI DTL1 (PC Card) driver.
+-	  This driver provides support for Bluetooth PCMCIA devices with
+-	  Nokia DTL1 interface:
+-	     Nokia Bluetooth Card
+-	     Socket Bluetooth CF Card
+-
+-	  Say Y here to compile support for HCI DTL1 devices into the
+-	  kernel or say M to compile it as module (dtl1_cs).
+-
+-config BT_HCIBT3C
+-	tristate "HCI BT3C (PC Card) driver"
+-	depends on PCMCIA && HAS_IOPORT
+-	select FW_LOADER
+-	help
+-	  Bluetooth HCI BT3C (PC Card) driver.
+-	  This driver provides support for Bluetooth PCMCIA devices with
+-	  3Com BT3C interface:
+-	     3Com Bluetooth Card (3CRWB6096)
+-	     HP Bluetooth Card
+-
+-	  Say Y here to compile support for HCI BT3C devices into the
+-	  kernel or say M to compile it as module (bt3c_cs).
+-
+-config BT_HCIBLUECARD
+-	tristate "HCI BlueCard (PC Card) driver"
+-	depends on PCMCIA && HAS_IOPORT
+-	help
+-	  Bluetooth HCI BlueCard (PC Card) driver.
+-	  This driver provides support for Bluetooth PCMCIA devices with
+-	  Anycom BlueCard interface:
+-	     Anycom Bluetooth PC Card
+-	     Anycom Bluetooth CF Card
+-
+-	  Say Y here to compile support for HCI BlueCard devices into the
+-	  kernel or say M to compile it as module (bluecard_cs).
+-
+ config BT_HCIVHCI
+ 	tristate "HCI VHCI (Virtual HCI device) driver"
+ 	select WANT_DEV_COREDUMP
+diff --git a/drivers/bluetooth/Makefile b/drivers/bluetooth/Makefile
+index 81856512ddd0..bafc26250b63 100644
+--- a/drivers/bluetooth/Makefile
++++ b/drivers/bluetooth/Makefile
+@@ -9,9 +9,6 @@ obj-$(CONFIG_BT_HCIBCM203X)	+= bcm203x.o
+ obj-$(CONFIG_BT_HCIBCM4377)	+= hci_bcm4377.o
+ obj-$(CONFIG_BT_HCIBPA10X)	+= bpa10x.o
+ obj-$(CONFIG_BT_HCIBFUSB)	+= bfusb.o
+-obj-$(CONFIG_BT_HCIDTL1)	+= dtl1_cs.o
+-obj-$(CONFIG_BT_HCIBT3C)	+= bt3c_cs.o
+-obj-$(CONFIG_BT_HCIBLUECARD)	+= bluecard_cs.o
+ 
+ obj-$(CONFIG_BT_HCIBTUSB)	+= btusb.o
+ obj-$(CONFIG_BT_HCIBTSDIO)	+= btsdio.o
+diff --git a/drivers/bluetooth/bluecard_cs.c b/drivers/bluetooth/bluecard_cs.c
+deleted file mode 100644
+index 1e3a56e9b139..000000000000
+--- a/drivers/bluetooth/bluecard_cs.c
++++ /dev/null
+@@ -1,908 +0,0 @@
+-/*
+- *
+- *  Bluetooth driver for the Anycom BlueCard (LSE039/LSE041)
+- *
+- *  Copyright (C) 2001-2002  Marcel Holtmann <marcel@holtmann.org>
+- *
+- *
+- *  This program is free software; you can redistribute it and/or modify
+- *  it under the terms of the GNU General Public License version 2 as
+- *  published by the Free Software Foundation;
+- *
+- *  Software distributed under the License is distributed on an "AS
+- *  IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+- *  implied. See the License for the specific language governing
+- *  rights and limitations under the License.
+- *
+- *  The initial developer of the original code is David A. Hinds
+- *  <dahinds@users.sourceforge.net>.  Portions created by David A. Hinds
+- *  are Copyright (C) 1999 David A. Hinds.  All Rights Reserved.
+- *
+- */
+-
+-#include <linux/module.h>
+-
+-#include <linux/kernel.h>
+-#include <linux/init.h>
+-#include <linux/slab.h>
+-#include <linux/types.h>
+-#include <linux/sched.h>
+-#include <linux/delay.h>
+-#include <linux/timer.h>
+-#include <linux/errno.h>
+-#include <linux/ptrace.h>
+-#include <linux/ioport.h>
+-#include <linux/spinlock.h>
+-#include <linux/moduleparam.h>
+-#include <linux/wait.h>
+-
+-#include <linux/skbuff.h>
+-#include <linux/io.h>
+-
+-#include <pcmcia/cistpl.h>
+-#include <pcmcia/ciscode.h>
+-#include <pcmcia/ds.h>
+-#include <pcmcia/cisreg.h>
+-
+-#include <net/bluetooth/bluetooth.h>
+-#include <net/bluetooth/hci_core.h>
+-
+-
+-
+-/* ======================== Module parameters ======================== */
+-
+-
+-MODULE_AUTHOR("Marcel Holtmann <marcel@holtmann.org>");
+-MODULE_DESCRIPTION("Bluetooth driver for the Anycom BlueCard (LSE039/LSE041)");
+-MODULE_LICENSE("GPL");
+-
+-
+-
+-/* ======================== Local structures ======================== */
+-
+-
+-struct bluecard_info {
+-	struct pcmcia_device *p_dev;
+-
+-	struct hci_dev *hdev;
+-
+-	spinlock_t lock;		/* For serializing operations */
+-	struct timer_list timer;	/* For LED control */
+-
+-	struct sk_buff_head txq;
+-	unsigned long tx_state;
+-
+-	unsigned long rx_state;
+-	unsigned long rx_count;
+-	struct sk_buff *rx_skb;
+-
+-	unsigned char ctrl_reg;
+-	unsigned long hw_state;		/* Status of the hardware and LED control */
+-};
+-
+-
+-static int bluecard_config(struct pcmcia_device *link);
+-static void bluecard_release(struct pcmcia_device *link);
+-
+-static void bluecard_detach(struct pcmcia_device *p_dev);
+-
+-
+-/* Default baud rate: 57600, 115200, 230400 or 460800 */
+-#define DEFAULT_BAUD_RATE  230400
+-
+-
+-/* Hardware states */
+-#define CARD_READY             1
+-#define CARD_ACTIVITY	       2
+-#define CARD_HAS_PCCARD_ID     4
+-#define CARD_HAS_POWER_LED     5
+-#define CARD_HAS_ACTIVITY_LED  6
+-
+-/* Transmit states  */
+-#define XMIT_SENDING         1
+-#define XMIT_WAKEUP          2
+-#define XMIT_BUFFER_NUMBER   5	/* unset = buffer one, set = buffer two */
+-#define XMIT_BUF_ONE_READY   6
+-#define XMIT_BUF_TWO_READY   7
+-#define XMIT_SENDING_READY   8
+-
+-/* Receiver states */
+-#define RECV_WAIT_PACKET_TYPE   0
+-#define RECV_WAIT_EVENT_HEADER  1
+-#define RECV_WAIT_ACL_HEADER    2
+-#define RECV_WAIT_SCO_HEADER    3
+-#define RECV_WAIT_DATA          4
+-
+-/* Special packet types */
+-#define PKT_BAUD_RATE_57600   0x80
+-#define PKT_BAUD_RATE_115200  0x81
+-#define PKT_BAUD_RATE_230400  0x82
+-#define PKT_BAUD_RATE_460800  0x83
+-
+-
+-/* These are the register offsets */
+-#define REG_COMMAND     0x20
+-#define REG_INTERRUPT   0x21
+-#define REG_CONTROL     0x22
+-#define REG_RX_CONTROL  0x24
+-#define REG_CARD_RESET  0x30
+-#define REG_LED_CTRL    0x30
+-
+-/* REG_COMMAND */
+-#define REG_COMMAND_TX_BUF_ONE  0x01
+-#define REG_COMMAND_TX_BUF_TWO  0x02
+-#define REG_COMMAND_RX_BUF_ONE  0x04
+-#define REG_COMMAND_RX_BUF_TWO  0x08
+-#define REG_COMMAND_RX_WIN_ONE  0x00
+-#define REG_COMMAND_RX_WIN_TWO  0x10
+-
+-/* REG_CONTROL */
+-#define REG_CONTROL_BAUD_RATE_57600   0x00
+-#define REG_CONTROL_BAUD_RATE_115200  0x01
+-#define REG_CONTROL_BAUD_RATE_230400  0x02
+-#define REG_CONTROL_BAUD_RATE_460800  0x03
+-#define REG_CONTROL_RTS               0x04
+-#define REG_CONTROL_BT_ON             0x08
+-#define REG_CONTROL_BT_RESET          0x10
+-#define REG_CONTROL_BT_RES_PU         0x20
+-#define REG_CONTROL_INTERRUPT         0x40
+-#define REG_CONTROL_CARD_RESET        0x80
+-
+-/* REG_RX_CONTROL */
+-#define RTS_LEVEL_SHIFT_BITS  0x02
+-
+-
+-
+-/* ======================== LED handling routines ======================== */
+-
+-
+-static void bluecard_activity_led_timeout(struct timer_list *t)
+-{
+-	struct bluecard_info *info = timer_container_of(info, t, timer);
+-	unsigned int iobase = info->p_dev->resource[0]->start;
+-
+-	if (test_bit(CARD_ACTIVITY, &(info->hw_state))) {
+-		/* leave LED in inactive state for HZ/10 for blink effect */
+-		clear_bit(CARD_ACTIVITY, &(info->hw_state));
+-		mod_timer(&(info->timer), jiffies + HZ / 10);
+-	}
+-
+-	/* Disable activity LED, enable power LED */
+-	outb(0x08 | 0x20, iobase + 0x30);
+-}
+-
+-
+-static void bluecard_enable_activity_led(struct bluecard_info *info)
+-{
+-	unsigned int iobase = info->p_dev->resource[0]->start;
+-
+-	/* don't disturb running blink timer */
+-	if (timer_pending(&(info->timer)))
+-		return;
+-
+-	set_bit(CARD_ACTIVITY, &(info->hw_state));
+-
+-	if (test_bit(CARD_HAS_ACTIVITY_LED, &(info->hw_state))) {
+-		/* Enable activity LED, keep power LED enabled */
+-		outb(0x18 | 0x60, iobase + 0x30);
+-	} else {
+-		/* Disable power LED */
+-		outb(0x00, iobase + 0x30);
+-	}
+-
+-	/* Stop the LED after HZ/10 */
+-	mod_timer(&(info->timer), jiffies + HZ / 10);
+-}
+-
+-
+-
+-/* ======================== Interrupt handling ======================== */
+-
+-
+-static int bluecard_write(unsigned int iobase, unsigned int offset, __u8 *buf, int len)
+-{
+-	int i, actual;
+-
+-	actual = (len > 15) ? 15 : len;
+-
+-	outb_p(actual, iobase + offset);
+-
+-	for (i = 0; i < actual; i++)
+-		outb_p(buf[i], iobase + offset + i + 1);
+-
+-	return actual;
+-}
+-
+-
+-static void bluecard_write_wakeup(struct bluecard_info *info)
+-{
+-	if (!info) {
+-		BT_ERR("Unknown device");
+-		return;
+-	}
+-
+-	if (!test_bit(XMIT_SENDING_READY, &(info->tx_state)))
+-		return;
+-
+-	if (test_and_set_bit(XMIT_SENDING, &(info->tx_state))) {
+-		set_bit(XMIT_WAKEUP, &(info->tx_state));
+-		return;
+-	}
+-
+-	do {
+-		unsigned int iobase = info->p_dev->resource[0]->start;
+-		unsigned int offset;
+-		unsigned char command;
+-		unsigned long ready_bit;
+-		register struct sk_buff *skb;
+-		int len;
+-
+-		clear_bit(XMIT_WAKEUP, &(info->tx_state));
+-
+-		if (!pcmcia_dev_present(info->p_dev))
+-			return;
+-
+-		if (test_bit(XMIT_BUFFER_NUMBER, &(info->tx_state))) {
+-			if (!test_bit(XMIT_BUF_TWO_READY, &(info->tx_state)))
+-				break;
+-			offset = 0x10;
+-			command = REG_COMMAND_TX_BUF_TWO;
+-			ready_bit = XMIT_BUF_TWO_READY;
+-		} else {
+-			if (!test_bit(XMIT_BUF_ONE_READY, &(info->tx_state)))
+-				break;
+-			offset = 0x00;
+-			command = REG_COMMAND_TX_BUF_ONE;
+-			ready_bit = XMIT_BUF_ONE_READY;
+-		}
+-
+-		skb = skb_dequeue(&(info->txq));
+-		if (!skb)
+-			break;
+-
+-		if (hci_skb_pkt_type(skb) & 0x80) {
+-			/* Disable RTS */
+-			info->ctrl_reg |= REG_CONTROL_RTS;
+-			outb(info->ctrl_reg, iobase + REG_CONTROL);
+-		}
+-
+-		/* Activate LED */
+-		bluecard_enable_activity_led(info);
+-
+-		/* Send frame */
+-		len = bluecard_write(iobase, offset, skb->data, skb->len);
+-
+-		/* Tell the FPGA to send the data */
+-		outb_p(command, iobase + REG_COMMAND);
+-
+-		/* Mark the buffer as dirty */
+-		clear_bit(ready_bit, &(info->tx_state));
+-
+-		if (hci_skb_pkt_type(skb) & 0x80) {
+-			DECLARE_WAIT_QUEUE_HEAD_ONSTACK(wq);
+-			DEFINE_WAIT(wait);
+-
+-			unsigned char baud_reg;
+-
+-			switch (hci_skb_pkt_type(skb)) {
+-			case PKT_BAUD_RATE_460800:
+-				baud_reg = REG_CONTROL_BAUD_RATE_460800;
+-				break;
+-			case PKT_BAUD_RATE_230400:
+-				baud_reg = REG_CONTROL_BAUD_RATE_230400;
+-				break;
+-			case PKT_BAUD_RATE_115200:
+-				baud_reg = REG_CONTROL_BAUD_RATE_115200;
+-				break;
+-			case PKT_BAUD_RATE_57600:
+-			default:
+-				baud_reg = REG_CONTROL_BAUD_RATE_57600;
+-				break;
+-			}
+-
+-			/* Wait until the command reaches the baseband */
+-			mdelay(100);
+-
+-			/* Set baud on baseband */
+-			info->ctrl_reg &= ~0x03;
+-			info->ctrl_reg |= baud_reg;
+-			outb(info->ctrl_reg, iobase + REG_CONTROL);
+-
+-			/* Enable RTS */
+-			info->ctrl_reg &= ~REG_CONTROL_RTS;
+-			outb(info->ctrl_reg, iobase + REG_CONTROL);
+-
+-			/* Wait before the next HCI packet can be send */
+-			mdelay(1000);
+-		}
+-
+-		if (len == skb->len) {
+-			kfree_skb(skb);
+-		} else {
+-			skb_pull(skb, len);
+-			skb_queue_head(&(info->txq), skb);
+-		}
+-
+-		info->hdev->stat.byte_tx += len;
+-
+-		/* Change buffer */
+-		change_bit(XMIT_BUFFER_NUMBER, &(info->tx_state));
+-
+-	} while (test_bit(XMIT_WAKEUP, &(info->tx_state)));
+-
+-	clear_bit(XMIT_SENDING, &(info->tx_state));
+-}
+-
+-
+-static int bluecard_read(unsigned int iobase, unsigned int offset, __u8 *buf, int size)
+-{
+-	int i, n, len;
+-
+-	outb(REG_COMMAND_RX_WIN_ONE, iobase + REG_COMMAND);
+-
+-	len = inb(iobase + offset);
+-	n = 0;
+-	i = 1;
+-
+-	while (n < len) {
+-
+-		if (i == 16) {
+-			outb(REG_COMMAND_RX_WIN_TWO, iobase + REG_COMMAND);
+-			i = 0;
+-		}
+-
+-		buf[n] = inb(iobase + offset + i);
+-
+-		n++;
+-		i++;
+-
+-	}
+-
+-	return len;
+-}
+-
+-
+-static void bluecard_receive(struct bluecard_info *info,
+-			     unsigned int offset)
+-{
+-	unsigned int iobase;
+-	unsigned char buf[31];
+-	int i, len;
+-
+-	if (!info) {
+-		BT_ERR("Unknown device");
+-		return;
+-	}
+-
+-	iobase = info->p_dev->resource[0]->start;
+-
+-	if (test_bit(XMIT_SENDING_READY, &(info->tx_state)))
+-		bluecard_enable_activity_led(info);
+-
+-	len = bluecard_read(iobase, offset, buf, sizeof(buf));
+-
+-	for (i = 0; i < len; i++) {
+-
+-		/* Allocate packet */
+-		if (!info->rx_skb) {
+-			info->rx_state = RECV_WAIT_PACKET_TYPE;
+-			info->rx_count = 0;
+-			info->rx_skb = bt_skb_alloc(HCI_MAX_FRAME_SIZE, GFP_ATOMIC);
+-			if (!info->rx_skb) {
+-				BT_ERR("Can't allocate mem for new packet");
+-				return;
+-			}
+-		}
+-
+-		if (info->rx_state == RECV_WAIT_PACKET_TYPE) {
+-
+-			hci_skb_pkt_type(info->rx_skb) = buf[i];
+-
+-			switch (hci_skb_pkt_type(info->rx_skb)) {
+-
+-			case 0x00:
+-				/* init packet */
+-				if (offset != 0x00) {
+-					set_bit(XMIT_BUF_ONE_READY, &(info->tx_state));
+-					set_bit(XMIT_BUF_TWO_READY, &(info->tx_state));
+-					set_bit(XMIT_SENDING_READY, &(info->tx_state));
+-					bluecard_write_wakeup(info);
+-				}
+-
+-				kfree_skb(info->rx_skb);
+-				info->rx_skb = NULL;
+-				break;
+-
+-			case HCI_EVENT_PKT:
+-				info->rx_state = RECV_WAIT_EVENT_HEADER;
+-				info->rx_count = HCI_EVENT_HDR_SIZE;
+-				break;
+-
+-			case HCI_ACLDATA_PKT:
+-				info->rx_state = RECV_WAIT_ACL_HEADER;
+-				info->rx_count = HCI_ACL_HDR_SIZE;
+-				break;
+-
+-			case HCI_SCODATA_PKT:
+-				info->rx_state = RECV_WAIT_SCO_HEADER;
+-				info->rx_count = HCI_SCO_HDR_SIZE;
+-				break;
+-
+-			default:
+-				/* unknown packet */
+-				BT_ERR("Unknown HCI packet with type 0x%02x received",
+-				       hci_skb_pkt_type(info->rx_skb));
+-				info->hdev->stat.err_rx++;
+-
+-				kfree_skb(info->rx_skb);
+-				info->rx_skb = NULL;
+-				break;
+-
+-			}
+-
+-		} else {
+-
+-			skb_put_u8(info->rx_skb, buf[i]);
+-			info->rx_count--;
+-
+-			if (info->rx_count == 0) {
+-
+-				int dlen;
+-				struct hci_event_hdr *eh;
+-				struct hci_acl_hdr *ah;
+-				struct hci_sco_hdr *sh;
+-
+-				switch (info->rx_state) {
+-
+-				case RECV_WAIT_EVENT_HEADER:
+-					eh = hci_event_hdr(info->rx_skb);
+-					info->rx_state = RECV_WAIT_DATA;
+-					info->rx_count = eh->plen;
+-					break;
+-
+-				case RECV_WAIT_ACL_HEADER:
+-					ah = hci_acl_hdr(info->rx_skb);
+-					dlen = __le16_to_cpu(ah->dlen);
+-					info->rx_state = RECV_WAIT_DATA;
+-					info->rx_count = dlen;
+-					break;
+-
+-				case RECV_WAIT_SCO_HEADER:
+-					sh = hci_sco_hdr(info->rx_skb);
+-					info->rx_state = RECV_WAIT_DATA;
+-					info->rx_count = sh->dlen;
+-					break;
+-
+-				case RECV_WAIT_DATA:
+-					hci_recv_frame(info->hdev, info->rx_skb);
+-					info->rx_skb = NULL;
+-					break;
+-
+-				}
+-
+-			}
+-
+-		}
+-
+-
+-	}
+-
+-	info->hdev->stat.byte_rx += len;
+-}
+-
+-
+-static irqreturn_t bluecard_interrupt(int irq, void *dev_inst)
+-{
+-	struct bluecard_info *info = dev_inst;
+-	unsigned int iobase;
+-	unsigned char reg;
+-
+-	if (!info || !info->hdev)
+-		/* our irq handler is shared */
+-		return IRQ_NONE;
+-
+-	if (!test_bit(CARD_READY, &(info->hw_state)))
+-		return IRQ_HANDLED;
+-
+-	iobase = info->p_dev->resource[0]->start;
+-
+-	spin_lock(&(info->lock));
+-
+-	/* Disable interrupt */
+-	info->ctrl_reg &= ~REG_CONTROL_INTERRUPT;
+-	outb(info->ctrl_reg, iobase + REG_CONTROL);
+-
+-	reg = inb(iobase + REG_INTERRUPT);
+-
+-	if ((reg != 0x00) && (reg != 0xff)) {
+-
+-		if (reg & 0x04) {
+-			bluecard_receive(info, 0x00);
+-			outb(0x04, iobase + REG_INTERRUPT);
+-			outb(REG_COMMAND_RX_BUF_ONE, iobase + REG_COMMAND);
+-		}
+-
+-		if (reg & 0x08) {
+-			bluecard_receive(info, 0x10);
+-			outb(0x08, iobase + REG_INTERRUPT);
+-			outb(REG_COMMAND_RX_BUF_TWO, iobase + REG_COMMAND);
+-		}
+-
+-		if (reg & 0x01) {
+-			set_bit(XMIT_BUF_ONE_READY, &(info->tx_state));
+-			outb(0x01, iobase + REG_INTERRUPT);
+-			bluecard_write_wakeup(info);
+-		}
+-
+-		if (reg & 0x02) {
+-			set_bit(XMIT_BUF_TWO_READY, &(info->tx_state));
+-			outb(0x02, iobase + REG_INTERRUPT);
+-			bluecard_write_wakeup(info);
+-		}
+-
+-	}
+-
+-	/* Enable interrupt */
+-	info->ctrl_reg |= REG_CONTROL_INTERRUPT;
+-	outb(info->ctrl_reg, iobase + REG_CONTROL);
+-
+-	spin_unlock(&(info->lock));
+-
+-	return IRQ_HANDLED;
+-}
+-
+-
+-
+-/* ======================== Device specific HCI commands ======================== */
+-
+-
+-static int bluecard_hci_set_baud_rate(struct hci_dev *hdev, int baud)
+-{
+-	struct bluecard_info *info = hci_get_drvdata(hdev);
+-	struct sk_buff *skb;
+-
+-	/* Ericsson baud rate command */
+-	unsigned char cmd[] = { HCI_COMMAND_PKT, 0x09, 0xfc, 0x01, 0x03 };
+-
+-	skb = bt_skb_alloc(HCI_MAX_FRAME_SIZE, GFP_KERNEL);
+-	if (!skb) {
+-		BT_ERR("Can't allocate mem for new packet");
+-		return -1;
+-	}
+-
+-	switch (baud) {
+-	case 460800:
+-		cmd[4] = 0x00;
+-		hci_skb_pkt_type(skb) = PKT_BAUD_RATE_460800;
+-		break;
+-	case 230400:
+-		cmd[4] = 0x01;
+-		hci_skb_pkt_type(skb) = PKT_BAUD_RATE_230400;
+-		break;
+-	case 115200:
+-		cmd[4] = 0x02;
+-		hci_skb_pkt_type(skb) = PKT_BAUD_RATE_115200;
+-		break;
+-	case 57600:
+-	default:
+-		cmd[4] = 0x03;
+-		hci_skb_pkt_type(skb) = PKT_BAUD_RATE_57600;
+-		break;
+-	}
+-
+-	skb_put_data(skb, cmd, sizeof(cmd));
+-
+-	skb_queue_tail(&(info->txq), skb);
+-
+-	bluecard_write_wakeup(info);
+-
+-	return 0;
+-}
+-
+-
+-
+-/* ======================== HCI interface ======================== */
+-
+-
+-static int bluecard_hci_flush(struct hci_dev *hdev)
+-{
+-	struct bluecard_info *info = hci_get_drvdata(hdev);
+-
+-	/* Drop TX queue */
+-	skb_queue_purge(&(info->txq));
+-
+-	return 0;
+-}
+-
+-
+-static int bluecard_hci_open(struct hci_dev *hdev)
+-{
+-	struct bluecard_info *info = hci_get_drvdata(hdev);
+-	unsigned int iobase = info->p_dev->resource[0]->start;
+-
+-	if (test_bit(CARD_HAS_PCCARD_ID, &(info->hw_state)))
+-		bluecard_hci_set_baud_rate(hdev, DEFAULT_BAUD_RATE);
+-
+-	/* Enable power LED */
+-	outb(0x08 | 0x20, iobase + 0x30);
+-
+-	return 0;
+-}
+-
+-
+-static int bluecard_hci_close(struct hci_dev *hdev)
+-{
+-	struct bluecard_info *info = hci_get_drvdata(hdev);
+-	unsigned int iobase = info->p_dev->resource[0]->start;
+-
+-	bluecard_hci_flush(hdev);
+-
+-	/* Stop LED timer */
+-	timer_delete_sync(&(info->timer));
+-
+-	/* Disable power LED */
+-	outb(0x00, iobase + 0x30);
+-
+-	return 0;
+-}
+-
+-
+-static int bluecard_hci_send_frame(struct hci_dev *hdev, struct sk_buff *skb)
+-{
+-	struct bluecard_info *info = hci_get_drvdata(hdev);
+-
+-	switch (hci_skb_pkt_type(skb)) {
+-	case HCI_COMMAND_PKT:
+-		hdev->stat.cmd_tx++;
+-		break;
+-	case HCI_ACLDATA_PKT:
+-		hdev->stat.acl_tx++;
+-		break;
+-	case HCI_SCODATA_PKT:
+-		hdev->stat.sco_tx++;
+-		break;
+-	}
+-
+-	/* Prepend skb with frame type */
+-	memcpy(skb_push(skb, 1), &hci_skb_pkt_type(skb), 1);
+-	skb_queue_tail(&(info->txq), skb);
+-
+-	bluecard_write_wakeup(info);
+-
+-	return 0;
+-}
+-
+-
+-
+-/* ======================== Card services HCI interaction ======================== */
+-
+-
+-static int bluecard_open(struct bluecard_info *info)
+-{
+-	unsigned int iobase = info->p_dev->resource[0]->start;
+-	struct hci_dev *hdev;
+-	unsigned char id;
+-
+-	spin_lock_init(&(info->lock));
+-
+-	timer_setup(&info->timer, bluecard_activity_led_timeout, 0);
+-
+-	skb_queue_head_init(&(info->txq));
+-
+-	info->rx_state = RECV_WAIT_PACKET_TYPE;
+-	info->rx_count = 0;
+-	info->rx_skb = NULL;
+-
+-	/* Initialize HCI device */
+-	hdev = hci_alloc_dev();
+-	if (!hdev) {
+-		BT_ERR("Can't allocate HCI device");
+-		return -ENOMEM;
+-	}
+-
+-	info->hdev = hdev;
+-
+-	hdev->bus = HCI_PCCARD;
+-	hci_set_drvdata(hdev, info);
+-	SET_HCIDEV_DEV(hdev, &info->p_dev->dev);
+-
+-	hdev->open  = bluecard_hci_open;
+-	hdev->close = bluecard_hci_close;
+-	hdev->flush = bluecard_hci_flush;
+-	hdev->send  = bluecard_hci_send_frame;
+-
+-	id = inb(iobase + 0x30);
+-
+-	if ((id & 0x0f) == 0x02)
+-		set_bit(CARD_HAS_PCCARD_ID, &(info->hw_state));
+-
+-	if (id & 0x10)
+-		set_bit(CARD_HAS_POWER_LED, &(info->hw_state));
+-
+-	if (id & 0x20)
+-		set_bit(CARD_HAS_ACTIVITY_LED, &(info->hw_state));
+-
+-	/* Reset card */
+-	info->ctrl_reg = REG_CONTROL_BT_RESET | REG_CONTROL_CARD_RESET;
+-	outb(info->ctrl_reg, iobase + REG_CONTROL);
+-
+-	/* Turn FPGA off */
+-	outb(0x80, iobase + 0x30);
+-
+-	/* Wait some time */
+-	msleep(10);
+-
+-	/* Turn FPGA on */
+-	outb(0x00, iobase + 0x30);
+-
+-	/* Activate card */
+-	info->ctrl_reg = REG_CONTROL_BT_ON | REG_CONTROL_BT_RES_PU;
+-	outb(info->ctrl_reg, iobase + REG_CONTROL);
+-
+-	/* Enable interrupt */
+-	outb(0xff, iobase + REG_INTERRUPT);
+-	info->ctrl_reg |= REG_CONTROL_INTERRUPT;
+-	outb(info->ctrl_reg, iobase + REG_CONTROL);
+-
+-	if ((id & 0x0f) == 0x03) {
+-		/* Disable RTS */
+-		info->ctrl_reg |= REG_CONTROL_RTS;
+-		outb(info->ctrl_reg, iobase + REG_CONTROL);
+-
+-		/* Set baud rate */
+-		info->ctrl_reg |= 0x03;
+-		outb(info->ctrl_reg, iobase + REG_CONTROL);
+-
+-		/* Enable RTS */
+-		info->ctrl_reg &= ~REG_CONTROL_RTS;
+-		outb(info->ctrl_reg, iobase + REG_CONTROL);
+-
+-		set_bit(XMIT_BUF_ONE_READY, &(info->tx_state));
+-		set_bit(XMIT_BUF_TWO_READY, &(info->tx_state));
+-		set_bit(XMIT_SENDING_READY, &(info->tx_state));
+-	}
+-
+-	/* Start the RX buffers */
+-	outb(REG_COMMAND_RX_BUF_ONE, iobase + REG_COMMAND);
+-	outb(REG_COMMAND_RX_BUF_TWO, iobase + REG_COMMAND);
+-
+-	/* Signal that the hardware is ready */
+-	set_bit(CARD_READY, &(info->hw_state));
+-
+-	/* Drop TX queue */
+-	skb_queue_purge(&(info->txq));
+-
+-	/* Control the point at which RTS is enabled */
+-	outb((0x0f << RTS_LEVEL_SHIFT_BITS) | 1, iobase + REG_RX_CONTROL);
+-
+-	/* Timeout before it is safe to send the first HCI packet */
+-	msleep(1250);
+-
+-	/* Register HCI device */
+-	if (hci_register_dev(hdev) < 0) {
+-		BT_ERR("Can't register HCI device");
+-		info->hdev = NULL;
+-		hci_free_dev(hdev);
+-		return -ENODEV;
+-	}
+-
+-	return 0;
+-}
+-
+-
+-static int bluecard_close(struct bluecard_info *info)
+-{
+-	unsigned int iobase = info->p_dev->resource[0]->start;
+-	struct hci_dev *hdev = info->hdev;
+-
+-	if (!hdev)
+-		return -ENODEV;
+-
+-	bluecard_hci_close(hdev);
+-
+-	clear_bit(CARD_READY, &(info->hw_state));
+-
+-	/* Reset card */
+-	info->ctrl_reg = REG_CONTROL_BT_RESET | REG_CONTROL_CARD_RESET;
+-	outb(info->ctrl_reg, iobase + REG_CONTROL);
+-
+-	/* Turn FPGA off */
+-	outb(0x80, iobase + 0x30);
+-
+-	hci_unregister_dev(hdev);
+-	hci_free_dev(hdev);
+-
+-	return 0;
+-}
+-
+-static int bluecard_probe(struct pcmcia_device *link)
+-{
+-	struct bluecard_info *info;
+-
+-	/* Create new info device */
+-	info = devm_kzalloc(&link->dev, sizeof(*info), GFP_KERNEL);
+-	if (!info)
+-		return -ENOMEM;
+-
+-	info->p_dev = link;
+-	link->priv = info;
+-
+-	link->config_flags |= CONF_ENABLE_IRQ;
+-
+-	return bluecard_config(link);
+-}
+-
+-
+-static void bluecard_detach(struct pcmcia_device *link)
+-{
+-	bluecard_release(link);
+-}
+-
+-
+-static int bluecard_config(struct pcmcia_device *link)
+-{
+-	struct bluecard_info *info = link->priv;
+-	int i, n;
+-
+-	link->config_index = 0x20;
+-
+-	link->resource[0]->flags |= IO_DATA_PATH_WIDTH_8;
+-	link->resource[0]->end = 64;
+-	link->io_lines = 6;
+-
+-	for (n = 0; n < 0x400; n += 0x40) {
+-		link->resource[0]->start = n ^ 0x300;
+-		i = pcmcia_request_io(link);
+-		if (i == 0)
+-			break;
+-	}
+-
+-	if (i != 0)
+-		goto failed;
+-
+-	i = pcmcia_request_irq(link, bluecard_interrupt);
+-	if (i != 0)
+-		goto failed;
+-
+-	i = pcmcia_enable_device(link);
+-	if (i != 0)
+-		goto failed;
+-
+-	if (bluecard_open(info) != 0)
+-		goto failed;
+-
+-	return 0;
+-
+-failed:
+-	bluecard_release(link);
+-	return -ENODEV;
+-}
+-
+-
+-static void bluecard_release(struct pcmcia_device *link)
+-{
+-	struct bluecard_info *info = link->priv;
+-
+-	bluecard_close(info);
+-
+-	timer_delete_sync(&(info->timer));
+-
+-	pcmcia_disable_device(link);
+-}
+-
+-static const struct pcmcia_device_id bluecard_ids[] = {
+-	PCMCIA_DEVICE_PROD_ID12("BlueCard", "LSE041", 0xbaf16fbf, 0x657cc15e),
+-	PCMCIA_DEVICE_PROD_ID12("BTCFCARD", "LSE139", 0xe3987764, 0x2524b59c),
+-	PCMCIA_DEVICE_PROD_ID12("WSS", "LSE039", 0x0a0736ec, 0x24e6dfab),
+-	PCMCIA_DEVICE_NULL
+-};
+-MODULE_DEVICE_TABLE(pcmcia, bluecard_ids);
+-
+-static struct pcmcia_driver bluecard_driver = {
+-	.owner		= THIS_MODULE,
+-	.name		= "bluecard_cs",
+-	.probe		= bluecard_probe,
+-	.remove		= bluecard_detach,
+-	.id_table	= bluecard_ids,
+-};
+-module_pcmcia_driver(bluecard_driver);
+diff --git a/drivers/bluetooth/bt3c_cs.c b/drivers/bluetooth/bt3c_cs.c
+deleted file mode 100644
+index 54713833951a..000000000000
+--- a/drivers/bluetooth/bt3c_cs.c
++++ /dev/null
+@@ -1,749 +0,0 @@
+-/*
+- *
+- *  Driver for the 3Com Bluetooth PCMCIA card
+- *
+- *  Copyright (C) 2001-2002  Marcel Holtmann <marcel@holtmann.org>
+- *                           Jose Orlando Pereira <jop@di.uminho.pt>
+- *
+- *
+- *  This program is free software; you can redistribute it and/or modify
+- *  it under the terms of the GNU General Public License version 2 as
+- *  published by the Free Software Foundation;
+- *
+- *  Software distributed under the License is distributed on an "AS
+- *  IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+- *  implied. See the License for the specific language governing
+- *  rights and limitations under the License.
+- *
+- *  The initial developer of the original code is David A. Hinds
+- *  <dahinds@users.sourceforge.net>.  Portions created by David A. Hinds
+- *  are Copyright (C) 1999 David A. Hinds.  All Rights Reserved.
+- *
+- */
+-
+-#include <linux/module.h>
+-
+-#include <linux/kernel.h>
+-#include <linux/init.h>
+-#include <linux/slab.h>
+-#include <linux/types.h>
+-#include <linux/delay.h>
+-#include <linux/errno.h>
+-#include <linux/ptrace.h>
+-#include <linux/ioport.h>
+-#include <linux/spinlock.h>
+-#include <linux/moduleparam.h>
+-
+-#include <linux/skbuff.h>
+-#include <linux/string.h>
+-#include <linux/serial.h>
+-#include <linux/serial_reg.h>
+-#include <linux/bitops.h>
+-#include <asm/io.h>
+-
+-#include <linux/device.h>
+-#include <linux/firmware.h>
+-
+-#include <pcmcia/cistpl.h>
+-#include <pcmcia/ciscode.h>
+-#include <pcmcia/ds.h>
+-#include <pcmcia/cisreg.h>
+-
+-#include <net/bluetooth/bluetooth.h>
+-#include <net/bluetooth/hci_core.h>
+-
+-
+-
+-/* ======================== Module parameters ======================== */
+-
+-
+-MODULE_AUTHOR("Marcel Holtmann <marcel@holtmann.org>");
+-MODULE_DESCRIPTION("Bluetooth driver for the 3Com Bluetooth PCMCIA card");
+-MODULE_LICENSE("GPL");
+-MODULE_FIRMWARE("BT3CPCC.bin");
+-
+-
+-
+-/* ======================== Local structures ======================== */
+-
+-
+-struct bt3c_info {
+-	struct pcmcia_device *p_dev;
+-
+-	struct hci_dev *hdev;
+-
+-	spinlock_t lock;		/* For serializing operations */
+-
+-	struct sk_buff_head txq;
+-	unsigned long tx_state;
+-
+-	unsigned long rx_state;
+-	unsigned long rx_count;
+-	struct sk_buff *rx_skb;
+-};
+-
+-
+-static int bt3c_config(struct pcmcia_device *link);
+-static void bt3c_release(struct pcmcia_device *link);
+-
+-static void bt3c_detach(struct pcmcia_device *p_dev);
+-
+-
+-/* Transmit states  */
+-#define XMIT_SENDING  1
+-#define XMIT_WAKEUP   2
+-#define XMIT_WAITING  8
+-
+-/* Receiver states */
+-#define RECV_WAIT_PACKET_TYPE   0
+-#define RECV_WAIT_EVENT_HEADER  1
+-#define RECV_WAIT_ACL_HEADER    2
+-#define RECV_WAIT_SCO_HEADER    3
+-#define RECV_WAIT_DATA          4
+-
+-
+-
+-/* ======================== Special I/O functions ======================== */
+-
+-
+-#define DATA_L   0
+-#define DATA_H   1
+-#define ADDR_L   2
+-#define ADDR_H   3
+-#define CONTROL  4
+-
+-
+-static inline void bt3c_address(unsigned int iobase, unsigned short addr)
+-{
+-	outb(addr & 0xff, iobase + ADDR_L);
+-	outb((addr >> 8) & 0xff, iobase + ADDR_H);
+-}
+-
+-
+-static inline void bt3c_put(unsigned int iobase, unsigned short value)
+-{
+-	outb(value & 0xff, iobase + DATA_L);
+-	outb((value >> 8) & 0xff, iobase + DATA_H);
+-}
+-
+-
+-static inline void bt3c_io_write(unsigned int iobase, unsigned short addr, unsigned short value)
+-{
+-	bt3c_address(iobase, addr);
+-	bt3c_put(iobase, value);
+-}
+-
+-
+-static inline unsigned short bt3c_get(unsigned int iobase)
+-{
+-	unsigned short value = inb(iobase + DATA_L);
+-
+-	value |= inb(iobase + DATA_H) << 8;
+-
+-	return value;
+-}
+-
+-
+-static inline unsigned short bt3c_read(unsigned int iobase, unsigned short addr)
+-{
+-	bt3c_address(iobase, addr);
+-
+-	return bt3c_get(iobase);
+-}
+-
+-
+-
+-/* ======================== Interrupt handling ======================== */
+-
+-
+-static int bt3c_write(unsigned int iobase, int fifo_size, __u8 *buf, int len)
+-{
+-	int actual = 0;
+-
+-	bt3c_address(iobase, 0x7080);
+-
+-	/* Fill FIFO with current frame */
+-	while (actual < len) {
+-		/* Transmit next byte */
+-		bt3c_put(iobase, buf[actual]);
+-		actual++;
+-	}
+-
+-	bt3c_io_write(iobase, 0x7005, actual);
+-
+-	return actual;
+-}
+-
+-
+-static void bt3c_write_wakeup(struct bt3c_info *info)
+-{
+-	if (!info) {
+-		BT_ERR("Unknown device");
+-		return;
+-	}
+-
+-	if (test_and_set_bit(XMIT_SENDING, &(info->tx_state)))
+-		return;
+-
+-	do {
+-		unsigned int iobase = info->p_dev->resource[0]->start;
+-		register struct sk_buff *skb;
+-		int len;
+-
+-		if (!pcmcia_dev_present(info->p_dev))
+-			break;
+-
+-		skb = skb_dequeue(&(info->txq));
+-		if (!skb) {
+-			clear_bit(XMIT_SENDING, &(info->tx_state));
+-			break;
+-		}
+-
+-		/* Send frame */
+-		len = bt3c_write(iobase, 256, skb->data, skb->len);
+-
+-		if (len != skb->len)
+-			BT_ERR("Very strange");
+-
+-		kfree_skb(skb);
+-
+-		info->hdev->stat.byte_tx += len;
+-
+-	} while (0);
+-}
+-
+-
+-static void bt3c_receive(struct bt3c_info *info)
+-{
+-	unsigned int iobase;
+-	int size = 0, avail;
+-
+-	if (!info) {
+-		BT_ERR("Unknown device");
+-		return;
+-	}
+-
+-	iobase = info->p_dev->resource[0]->start;
+-
+-	avail = bt3c_read(iobase, 0x7006);
+-
+-	bt3c_address(iobase, 0x7480);
+-	while (size < avail) {
+-		size++;
+-		info->hdev->stat.byte_rx++;
+-
+-		/* Allocate packet */
+-		if (!info->rx_skb) {
+-			info->rx_state = RECV_WAIT_PACKET_TYPE;
+-			info->rx_count = 0;
+-			info->rx_skb = bt_skb_alloc(HCI_MAX_FRAME_SIZE, GFP_ATOMIC);
+-			if (!info->rx_skb) {
+-				BT_ERR("Can't allocate mem for new packet");
+-				return;
+-			}
+-		}
+-
+-
+-		if (info->rx_state == RECV_WAIT_PACKET_TYPE) {
+-
+-			hci_skb_pkt_type(info->rx_skb) = inb(iobase + DATA_L);
+-			inb(iobase + DATA_H);
+-
+-			switch (hci_skb_pkt_type(info->rx_skb)) {
+-
+-			case HCI_EVENT_PKT:
+-				info->rx_state = RECV_WAIT_EVENT_HEADER;
+-				info->rx_count = HCI_EVENT_HDR_SIZE;
+-				break;
+-
+-			case HCI_ACLDATA_PKT:
+-				info->rx_state = RECV_WAIT_ACL_HEADER;
+-				info->rx_count = HCI_ACL_HDR_SIZE;
+-				break;
+-
+-			case HCI_SCODATA_PKT:
+-				info->rx_state = RECV_WAIT_SCO_HEADER;
+-				info->rx_count = HCI_SCO_HDR_SIZE;
+-				break;
+-
+-			default:
+-				/* Unknown packet */
+-				BT_ERR("Unknown HCI packet with type 0x%02x received",
+-				       hci_skb_pkt_type(info->rx_skb));
+-				info->hdev->stat.err_rx++;
+-
+-				kfree_skb(info->rx_skb);
+-				info->rx_skb = NULL;
+-				break;
+-
+-			}
+-
+-		} else {
+-
+-			__u8 x = inb(iobase + DATA_L);
+-
+-			skb_put_u8(info->rx_skb, x);
+-			inb(iobase + DATA_H);
+-			info->rx_count--;
+-
+-			if (info->rx_count == 0) {
+-
+-				int dlen;
+-				struct hci_event_hdr *eh;
+-				struct hci_acl_hdr *ah;
+-				struct hci_sco_hdr *sh;
+-
+-				switch (info->rx_state) {
+-
+-				case RECV_WAIT_EVENT_HEADER:
+-					eh = hci_event_hdr(info->rx_skb);
+-					info->rx_state = RECV_WAIT_DATA;
+-					info->rx_count = eh->plen;
+-					break;
+-
+-				case RECV_WAIT_ACL_HEADER:
+-					ah = hci_acl_hdr(info->rx_skb);
+-					dlen = __le16_to_cpu(ah->dlen);
+-					info->rx_state = RECV_WAIT_DATA;
+-					info->rx_count = dlen;
+-					break;
+-
+-				case RECV_WAIT_SCO_HEADER:
+-					sh = hci_sco_hdr(info->rx_skb);
+-					info->rx_state = RECV_WAIT_DATA;
+-					info->rx_count = sh->dlen;
+-					break;
+-
+-				case RECV_WAIT_DATA:
+-					hci_recv_frame(info->hdev, info->rx_skb);
+-					info->rx_skb = NULL;
+-					break;
+-
+-				}
+-
+-			}
+-
+-		}
+-
+-	}
+-
+-	bt3c_io_write(iobase, 0x7006, 0x0000);
+-}
+-
+-
+-static irqreturn_t bt3c_interrupt(int irq, void *dev_inst)
+-{
+-	struct bt3c_info *info = dev_inst;
+-	unsigned int iobase;
+-	int iir;
+-	irqreturn_t r = IRQ_NONE;
+-
+-	if (!info || !info->hdev)
+-		/* our irq handler is shared */
+-		return IRQ_NONE;
+-
+-	iobase = info->p_dev->resource[0]->start;
+-
+-	spin_lock(&(info->lock));
+-
+-	iir = inb(iobase + CONTROL);
+-	if (iir & 0x80) {
+-		int stat = bt3c_read(iobase, 0x7001);
+-
+-		if ((stat & 0xff) == 0x7f) {
+-			BT_ERR("Very strange (stat=0x%04x)", stat);
+-		} else if ((stat & 0xff) != 0xff) {
+-			if (stat & 0x0020) {
+-				int status = bt3c_read(iobase, 0x7002) & 0x10;
+-				bt_dev_info(info->hdev, "Antenna %s",
+-							status ? "out" : "in");
+-			}
+-			if (stat & 0x0001)
+-				bt3c_receive(info);
+-			if (stat & 0x0002) {
+-				clear_bit(XMIT_SENDING, &(info->tx_state));
+-				bt3c_write_wakeup(info);
+-			}
+-
+-			bt3c_io_write(iobase, 0x7001, 0x0000);
+-
+-			outb(iir, iobase + CONTROL);
+-		}
+-		r = IRQ_HANDLED;
+-	}
+-
+-	spin_unlock(&(info->lock));
+-
+-	return r;
+-}
+-
+-
+-
+-/* ======================== HCI interface ======================== */
+-
+-
+-static int bt3c_hci_flush(struct hci_dev *hdev)
+-{
+-	struct bt3c_info *info = hci_get_drvdata(hdev);
+-
+-	/* Drop TX queue */
+-	skb_queue_purge(&(info->txq));
+-
+-	return 0;
+-}
+-
+-
+-static int bt3c_hci_open(struct hci_dev *hdev)
+-{
+-	return 0;
+-}
+-
+-
+-static int bt3c_hci_close(struct hci_dev *hdev)
+-{
+-	bt3c_hci_flush(hdev);
+-
+-	return 0;
+-}
+-
+-
+-static int bt3c_hci_send_frame(struct hci_dev *hdev, struct sk_buff *skb)
+-{
+-	struct bt3c_info *info = hci_get_drvdata(hdev);
+-	unsigned long flags;
+-
+-	switch (hci_skb_pkt_type(skb)) {
+-	case HCI_COMMAND_PKT:
+-		hdev->stat.cmd_tx++;
+-		break;
+-	case HCI_ACLDATA_PKT:
+-		hdev->stat.acl_tx++;
+-		break;
+-	case HCI_SCODATA_PKT:
+-		hdev->stat.sco_tx++;
+-		break;
+-	}
+-
+-	/* Prepend skb with frame type */
+-	memcpy(skb_push(skb, 1), &hci_skb_pkt_type(skb), 1);
+-	skb_queue_tail(&(info->txq), skb);
+-
+-	spin_lock_irqsave(&(info->lock), flags);
+-
+-	bt3c_write_wakeup(info);
+-
+-	spin_unlock_irqrestore(&(info->lock), flags);
+-
+-	return 0;
+-}
+-
+-
+-
+-/* ======================== Card services HCI interaction ======================== */
+-
+-
+-static int bt3c_load_firmware(struct bt3c_info *info,
+-			      const unsigned char *firmware,
+-			      int count)
+-{
+-	char *ptr = (char *) firmware;
+-	char b[9];
+-	unsigned int iobase, tmp, tn;
+-	unsigned long size, addr, fcs;
+-	int i, err = 0;
+-
+-	iobase = info->p_dev->resource[0]->start;
+-
+-	/* Reset */
+-	bt3c_io_write(iobase, 0x8040, 0x0404);
+-	bt3c_io_write(iobase, 0x8040, 0x0400);
+-
+-	udelay(1);
+-
+-	bt3c_io_write(iobase, 0x8040, 0x0404);
+-
+-	udelay(17);
+-
+-	/* Load */
+-	while (count) {
+-		if (ptr[0] != 'S') {
+-			BT_ERR("Bad address in firmware");
+-			err = -EFAULT;
+-			goto error;
+-		}
+-
+-		memset(b, 0, sizeof(b));
+-		memcpy(b, ptr + 2, 2);
+-		if (kstrtoul(b, 16, &size) < 0)
+-			return -EINVAL;
+-
+-		memset(b, 0, sizeof(b));
+-		memcpy(b, ptr + 4, 8);
+-		if (kstrtoul(b, 16, &addr) < 0)
+-			return -EINVAL;
+-
+-		memset(b, 0, sizeof(b));
+-		memcpy(b, ptr + (size * 2) + 2, 2);
+-		if (kstrtoul(b, 16, &fcs) < 0)
+-			return -EINVAL;
+-
+-		memset(b, 0, sizeof(b));
+-		for (tmp = 0, i = 0; i < size; i++) {
+-			memcpy(b, ptr + (i * 2) + 2, 2);
+-			if (kstrtouint(b, 16, &tn))
+-				return -EINVAL;
+-			tmp += tn;
+-		}
+-
+-		if (((tmp + fcs) & 0xff) != 0xff) {
+-			BT_ERR("Checksum error in firmware");
+-			err = -EILSEQ;
+-			goto error;
+-		}
+-
+-		if (ptr[1] == '3') {
+-			bt3c_address(iobase, addr);
+-
+-			memset(b, 0, sizeof(b));
+-			for (i = 0; i < (size - 4) / 2; i++) {
+-				memcpy(b, ptr + (i * 4) + 12, 4);
+-				if (kstrtouint(b, 16, &tmp))
+-					return -EINVAL;
+-				bt3c_put(iobase, tmp);
+-			}
+-		}
+-
+-		ptr   += (size * 2) + 6;
+-		count -= (size * 2) + 6;
+-	}
+-
+-	udelay(17);
+-
+-	/* Boot */
+-	bt3c_address(iobase, 0x3000);
+-	outb(inb(iobase + CONTROL) | 0x40, iobase + CONTROL);
+-
+-error:
+-	udelay(17);
+-
+-	/* Clear */
+-	bt3c_io_write(iobase, 0x7006, 0x0000);
+-	bt3c_io_write(iobase, 0x7005, 0x0000);
+-	bt3c_io_write(iobase, 0x7001, 0x0000);
+-
+-	return err;
+-}
+-
+-
+-static int bt3c_open(struct bt3c_info *info)
+-{
+-	const struct firmware *firmware;
+-	struct hci_dev *hdev;
+-	int err;
+-
+-	spin_lock_init(&(info->lock));
+-
+-	skb_queue_head_init(&(info->txq));
+-
+-	info->rx_state = RECV_WAIT_PACKET_TYPE;
+-	info->rx_count = 0;
+-	info->rx_skb = NULL;
+-
+-	/* Initialize HCI device */
+-	hdev = hci_alloc_dev();
+-	if (!hdev) {
+-		BT_ERR("Can't allocate HCI device");
+-		return -ENOMEM;
+-	}
+-
+-	info->hdev = hdev;
+-
+-	hdev->bus = HCI_PCCARD;
+-	hci_set_drvdata(hdev, info);
+-	SET_HCIDEV_DEV(hdev, &info->p_dev->dev);
+-
+-	hdev->open  = bt3c_hci_open;
+-	hdev->close = bt3c_hci_close;
+-	hdev->flush = bt3c_hci_flush;
+-	hdev->send  = bt3c_hci_send_frame;
+-
+-	/* Load firmware */
+-	err = request_firmware(&firmware, "BT3CPCC.bin", &info->p_dev->dev);
+-	if (err < 0) {
+-		BT_ERR("Firmware request failed");
+-		goto error;
+-	}
+-
+-	err = bt3c_load_firmware(info, firmware->data, firmware->size);
+-
+-	release_firmware(firmware);
+-
+-	if (err < 0) {
+-		BT_ERR("Firmware loading failed");
+-		goto error;
+-	}
+-
+-	/* Timeout before it is safe to send the first HCI packet */
+-	msleep(1000);
+-
+-	/* Register HCI device */
+-	err = hci_register_dev(hdev);
+-	if (err < 0) {
+-		BT_ERR("Can't register HCI device");
+-		goto error;
+-	}
+-
+-	return 0;
+-
+-error:
+-	info->hdev = NULL;
+-	hci_free_dev(hdev);
+-	return err;
+-}
+-
+-
+-static int bt3c_close(struct bt3c_info *info)
+-{
+-	struct hci_dev *hdev = info->hdev;
+-
+-	if (!hdev)
+-		return -ENODEV;
+-
+-	bt3c_hci_close(hdev);
+-
+-	hci_unregister_dev(hdev);
+-	hci_free_dev(hdev);
+-
+-	return 0;
+-}
+-
+-static int bt3c_probe(struct pcmcia_device *link)
+-{
+-	struct bt3c_info *info;
+-
+-	/* Create new info device */
+-	info = devm_kzalloc(&link->dev, sizeof(*info), GFP_KERNEL);
+-	if (!info)
+-		return -ENOMEM;
+-
+-	info->p_dev = link;
+-	link->priv = info;
+-
+-	link->config_flags |= CONF_ENABLE_IRQ | CONF_AUTO_SET_VPP |
+-		CONF_AUTO_SET_IO;
+-
+-	return bt3c_config(link);
+-}
+-
+-
+-static void bt3c_detach(struct pcmcia_device *link)
+-{
+-	bt3c_release(link);
+-}
+-
+-static int bt3c_check_config(struct pcmcia_device *p_dev, void *priv_data)
+-{
+-	int *try = priv_data;
+-
+-	if (!try)
+-		p_dev->io_lines = 16;
+-
+-	if ((p_dev->resource[0]->end != 8) || (p_dev->resource[0]->start == 0))
+-		return -EINVAL;
+-
+-	p_dev->resource[0]->end = 8;
+-	p_dev->resource[0]->flags &= ~IO_DATA_PATH_WIDTH;
+-	p_dev->resource[0]->flags |= IO_DATA_PATH_WIDTH_8;
+-
+-	return pcmcia_request_io(p_dev);
+-}
+-
+-static int bt3c_check_config_notpicky(struct pcmcia_device *p_dev,
+-				      void *priv_data)
+-{
+-	static unsigned int base[5] = { 0x3f8, 0x2f8, 0x3e8, 0x2e8, 0x0 };
+-	int j;
+-
+-	if (p_dev->io_lines > 3)
+-		return -ENODEV;
+-
+-	p_dev->resource[0]->flags &= ~IO_DATA_PATH_WIDTH;
+-	p_dev->resource[0]->flags |= IO_DATA_PATH_WIDTH_8;
+-	p_dev->resource[0]->end = 8;
+-
+-	for (j = 0; j < 5; j++) {
+-		p_dev->resource[0]->start = base[j];
+-		p_dev->io_lines = base[j] ? 16 : 3;
+-		if (!pcmcia_request_io(p_dev))
+-			return 0;
+-	}
+-	return -ENODEV;
+-}
+-
+-static int bt3c_config(struct pcmcia_device *link)
+-{
+-	struct bt3c_info *info = link->priv;
+-	int i;
+-	unsigned long try;
+-
+-	/* First pass: look for a config entry that looks normal.
+-	 * Two tries: without IO aliases, then with aliases
+-	 */
+-	for (try = 0; try < 2; try++)
+-		if (!pcmcia_loop_config(link, bt3c_check_config, (void *) try))
+-			goto found_port;
+-
+-	/* Second pass: try to find an entry that isn't picky about
+-	 * its base address, then try to grab any standard serial port
+-	 * address, and finally try to get any free port.
+-	 */
+-	if (!pcmcia_loop_config(link, bt3c_check_config_notpicky, NULL))
+-		goto found_port;
+-
+-	BT_ERR("No usable port range found");
+-	goto failed;
+-
+-found_port:
+-	i = pcmcia_request_irq(link, &bt3c_interrupt);
+-	if (i != 0)
+-		goto failed;
+-
+-	i = pcmcia_enable_device(link);
+-	if (i != 0)
+-		goto failed;
+-
+-	if (bt3c_open(info) != 0)
+-		goto failed;
+-
+-	return 0;
+-
+-failed:
+-	bt3c_release(link);
+-	return -ENODEV;
+-}
+-
+-
+-static void bt3c_release(struct pcmcia_device *link)
+-{
+-	struct bt3c_info *info = link->priv;
+-
+-	bt3c_close(info);
+-
+-	pcmcia_disable_device(link);
+-}
+-
+-
+-static const struct pcmcia_device_id bt3c_ids[] = {
+-	PCMCIA_DEVICE_PROD_ID13("3COM", "Bluetooth PC Card", 0xefce0a31, 0xd4ce9b02),
+-	PCMCIA_DEVICE_NULL
+-};
+-MODULE_DEVICE_TABLE(pcmcia, bt3c_ids);
+-
+-static struct pcmcia_driver bt3c_driver = {
+-	.owner		= THIS_MODULE,
+-	.name		= "bt3c_cs",
+-	.probe		= bt3c_probe,
+-	.remove		= bt3c_detach,
+-	.id_table	= bt3c_ids,
+-};
+-module_pcmcia_driver(bt3c_driver);
+diff --git a/drivers/bluetooth/dtl1_cs.c b/drivers/bluetooth/dtl1_cs.c
+deleted file mode 100644
+index 2adfe4fade76..000000000000
+--- a/drivers/bluetooth/dtl1_cs.c
++++ /dev/null
+@@ -1,614 +0,0 @@
+-/*
+- *
+- *  A driver for Nokia Connectivity Card DTL-1 devices
+- *
+- *  Copyright (C) 2001-2002  Marcel Holtmann <marcel@holtmann.org>
+- *
+- *
+- *  This program is free software; you can redistribute it and/or modify
+- *  it under the terms of the GNU General Public License version 2 as
+- *  published by the Free Software Foundation;
+- *
+- *  Software distributed under the License is distributed on an "AS
+- *  IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+- *  implied. See the License for the specific language governing
+- *  rights and limitations under the License.
+- *
+- *  The initial developer of the original code is David A. Hinds
+- *  <dahinds@users.sourceforge.net>.  Portions created by David A. Hinds
+- *  are Copyright (C) 1999 David A. Hinds.  All Rights Reserved.
+- *
+- */
+-
+-#include <linux/module.h>
+-
+-#include <linux/kernel.h>
+-#include <linux/init.h>
+-#include <linux/slab.h>
+-#include <linux/types.h>
+-#include <linux/delay.h>
+-#include <linux/errno.h>
+-#include <linux/ptrace.h>
+-#include <linux/ioport.h>
+-#include <linux/spinlock.h>
+-#include <linux/moduleparam.h>
+-
+-#include <linux/skbuff.h>
+-#include <linux/string.h>
+-#include <linux/serial.h>
+-#include <linux/serial_reg.h>
+-#include <linux/bitops.h>
+-#include <asm/io.h>
+-
+-#include <pcmcia/cistpl.h>
+-#include <pcmcia/ciscode.h>
+-#include <pcmcia/ds.h>
+-#include <pcmcia/cisreg.h>
+-
+-#include <net/bluetooth/bluetooth.h>
+-#include <net/bluetooth/hci_core.h>
+-
+-
+-
+-/* ======================== Module parameters ======================== */
+-
+-
+-MODULE_AUTHOR("Marcel Holtmann <marcel@holtmann.org>");
+-MODULE_DESCRIPTION("Bluetooth driver for Nokia Connectivity Card DTL-1");
+-MODULE_LICENSE("GPL");
+-
+-
+-
+-/* ======================== Local structures ======================== */
+-
+-
+-struct dtl1_info {
+-	struct pcmcia_device *p_dev;
+-
+-	struct hci_dev *hdev;
+-
+-	spinlock_t lock;		/* For serializing operations */
+-
+-	unsigned long flowmask;		/* HCI flow mask */
+-	int ri_latch;
+-
+-	struct sk_buff_head txq;
+-	unsigned long tx_state;
+-
+-	unsigned long rx_state;
+-	unsigned long rx_count;
+-	struct sk_buff *rx_skb;
+-};
+-
+-
+-static int dtl1_config(struct pcmcia_device *link);
+-
+-
+-/* Transmit states  */
+-#define XMIT_SENDING  1
+-#define XMIT_WAKEUP   2
+-#define XMIT_WAITING  8
+-
+-/* Receiver States */
+-#define RECV_WAIT_NSH   0
+-#define RECV_WAIT_DATA  1
+-
+-
+-struct nsh {
+-	u8 type;
+-	u8 zero;
+-	u16 len;
+-} __packed;	/* Nokia Specific Header */
+-
+-#define NSHL  4				/* Nokia Specific Header Length */
+-
+-
+-
+-/* ======================== Interrupt handling ======================== */
+-
+-
+-static int dtl1_write(unsigned int iobase, int fifo_size, __u8 *buf, int len)
+-{
+-	int actual = 0;
+-
+-	/* Tx FIFO should be empty */
+-	if (!(inb(iobase + UART_LSR) & UART_LSR_THRE))
+-		return 0;
+-
+-	/* Fill FIFO with current frame */
+-	while ((fifo_size-- > 0) && (actual < len)) {
+-		/* Transmit next byte */
+-		outb(buf[actual], iobase + UART_TX);
+-		actual++;
+-	}
+-
+-	return actual;
+-}
+-
+-
+-static void dtl1_write_wakeup(struct dtl1_info *info)
+-{
+-	if (!info) {
+-		BT_ERR("Unknown device");
+-		return;
+-	}
+-
+-	if (test_bit(XMIT_WAITING, &(info->tx_state))) {
+-		set_bit(XMIT_WAKEUP, &(info->tx_state));
+-		return;
+-	}
+-
+-	if (test_and_set_bit(XMIT_SENDING, &(info->tx_state))) {
+-		set_bit(XMIT_WAKEUP, &(info->tx_state));
+-		return;
+-	}
+-
+-	do {
+-		unsigned int iobase = info->p_dev->resource[0]->start;
+-		register struct sk_buff *skb;
+-		int len;
+-
+-		clear_bit(XMIT_WAKEUP, &(info->tx_state));
+-
+-		if (!pcmcia_dev_present(info->p_dev))
+-			return;
+-
+-		skb = skb_dequeue(&(info->txq));
+-		if (!skb)
+-			break;
+-
+-		/* Send frame */
+-		len = dtl1_write(iobase, 32, skb->data, skb->len);
+-
+-		if (len == skb->len) {
+-			set_bit(XMIT_WAITING, &(info->tx_state));
+-			kfree_skb(skb);
+-		} else {
+-			skb_pull(skb, len);
+-			skb_queue_head(&(info->txq), skb);
+-		}
+-
+-		info->hdev->stat.byte_tx += len;
+-
+-	} while (test_bit(XMIT_WAKEUP, &(info->tx_state)));
+-
+-	clear_bit(XMIT_SENDING, &(info->tx_state));
+-}
+-
+-
+-static void dtl1_control(struct dtl1_info *info, struct sk_buff *skb)
+-{
+-	u8 flowmask = *(u8 *)skb->data;
+-	int i;
+-
+-	printk(KERN_INFO "Bluetooth: Nokia control data =");
+-	for (i = 0; i < skb->len; i++)
+-		printk(" %02x", skb->data[i]);
+-
+-	printk("\n");
+-
+-	/* transition to active state */
+-	if (((info->flowmask & 0x07) == 0) && ((flowmask & 0x07) != 0)) {
+-		clear_bit(XMIT_WAITING, &(info->tx_state));
+-		dtl1_write_wakeup(info);
+-	}
+-
+-	info->flowmask = flowmask;
+-
+-	kfree_skb(skb);
+-}
+-
+-
+-static void dtl1_receive(struct dtl1_info *info)
+-{
+-	unsigned int iobase;
+-	struct nsh *nsh;
+-	int boguscount = 0;
+-
+-	if (!info) {
+-		BT_ERR("Unknown device");
+-		return;
+-	}
+-
+-	iobase = info->p_dev->resource[0]->start;
+-
+-	do {
+-		info->hdev->stat.byte_rx++;
+-
+-		/* Allocate packet */
+-		if (info->rx_skb == NULL) {
+-			info->rx_skb = bt_skb_alloc(HCI_MAX_FRAME_SIZE, GFP_ATOMIC);
+-			if (!info->rx_skb) {
+-				BT_ERR("Can't allocate mem for new packet");
+-				info->rx_state = RECV_WAIT_NSH;
+-				info->rx_count = NSHL;
+-				return;
+-			}
+-		}
+-
+-		skb_put_u8(info->rx_skb, inb(iobase + UART_RX));
+-		nsh = (struct nsh *)info->rx_skb->data;
+-
+-		info->rx_count--;
+-
+-		if (info->rx_count == 0) {
+-
+-			switch (info->rx_state) {
+-			case RECV_WAIT_NSH:
+-				info->rx_state = RECV_WAIT_DATA;
+-				info->rx_count = nsh->len + (nsh->len & 0x0001);
+-				break;
+-			case RECV_WAIT_DATA:
+-				hci_skb_pkt_type(info->rx_skb) = nsh->type;
+-
+-				/* remove PAD byte if it exists */
+-				if (nsh->len & 0x0001) {
+-					info->rx_skb->tail--;
+-					info->rx_skb->len--;
+-				}
+-
+-				/* remove NSH */
+-				skb_pull(info->rx_skb, NSHL);
+-
+-				switch (hci_skb_pkt_type(info->rx_skb)) {
+-				case 0x80:
+-					/* control data for the Nokia Card */
+-					dtl1_control(info, info->rx_skb);
+-					break;
+-				case 0x82:
+-				case 0x83:
+-				case 0x84:
+-					/* send frame to the HCI layer */
+-					hci_skb_pkt_type(info->rx_skb) &= 0x0f;
+-					hci_recv_frame(info->hdev, info->rx_skb);
+-					break;
+-				default:
+-					/* unknown packet */
+-					BT_ERR("Unknown HCI packet with type 0x%02x received",
+-					       hci_skb_pkt_type(info->rx_skb));
+-					kfree_skb(info->rx_skb);
+-					break;
+-				}
+-
+-				info->rx_state = RECV_WAIT_NSH;
+-				info->rx_count = NSHL;
+-				info->rx_skb = NULL;
+-				break;
+-			}
+-
+-		}
+-
+-		/* Make sure we don't stay here too long */
+-		if (boguscount++ > 32)
+-			break;
+-
+-	} while (inb(iobase + UART_LSR) & UART_LSR_DR);
+-}
+-
+-
+-static irqreturn_t dtl1_interrupt(int irq, void *dev_inst)
+-{
+-	struct dtl1_info *info = dev_inst;
+-	unsigned int iobase;
+-	unsigned char msr;
+-	int boguscount = 0;
+-	int iir, lsr;
+-	irqreturn_t r = IRQ_NONE;
+-
+-	if (!info || !info->hdev)
+-		/* our irq handler is shared */
+-		return IRQ_NONE;
+-
+-	iobase = info->p_dev->resource[0]->start;
+-
+-	spin_lock(&(info->lock));
+-
+-	iir = inb(iobase + UART_IIR) & UART_IIR_ID;
+-	while (iir) {
+-
+-		r = IRQ_HANDLED;
+-		/* Clear interrupt */
+-		lsr = inb(iobase + UART_LSR);
+-
+-		switch (iir) {
+-		case UART_IIR_RLSI:
+-			BT_ERR("RLSI");
+-			break;
+-		case UART_IIR_RDI:
+-			/* Receive interrupt */
+-			dtl1_receive(info);
+-			break;
+-		case UART_IIR_THRI:
+-			if (lsr & UART_LSR_THRE) {
+-				/* Transmitter ready for data */
+-				dtl1_write_wakeup(info);
+-			}
+-			break;
+-		default:
+-			BT_ERR("Unhandled IIR=%#x", iir);
+-			break;
+-		}
+-
+-		/* Make sure we don't stay here too long */
+-		if (boguscount++ > 100)
+-			break;
+-
+-		iir = inb(iobase + UART_IIR) & UART_IIR_ID;
+-
+-	}
+-
+-	msr = inb(iobase + UART_MSR);
+-
+-	if (info->ri_latch ^ (msr & UART_MSR_RI)) {
+-		info->ri_latch = msr & UART_MSR_RI;
+-		clear_bit(XMIT_WAITING, &(info->tx_state));
+-		dtl1_write_wakeup(info);
+-		r = IRQ_HANDLED;
+-	}
+-
+-	spin_unlock(&(info->lock));
+-
+-	return r;
+-}
+-
+-
+-
+-/* ======================== HCI interface ======================== */
+-
+-
+-static int dtl1_hci_open(struct hci_dev *hdev)
+-{
+-	return 0;
+-}
+-
+-
+-static int dtl1_hci_flush(struct hci_dev *hdev)
+-{
+-	struct dtl1_info *info = hci_get_drvdata(hdev);
+-
+-	/* Drop TX queue */
+-	skb_queue_purge(&(info->txq));
+-
+-	return 0;
+-}
+-
+-
+-static int dtl1_hci_close(struct hci_dev *hdev)
+-{
+-	dtl1_hci_flush(hdev);
+-
+-	return 0;
+-}
+-
+-
+-static int dtl1_hci_send_frame(struct hci_dev *hdev, struct sk_buff *skb)
+-{
+-	struct dtl1_info *info = hci_get_drvdata(hdev);
+-	struct sk_buff *s;
+-	struct nsh nsh;
+-
+-	switch (hci_skb_pkt_type(skb)) {
+-	case HCI_COMMAND_PKT:
+-		hdev->stat.cmd_tx++;
+-		nsh.type = 0x81;
+-		break;
+-	case HCI_ACLDATA_PKT:
+-		hdev->stat.acl_tx++;
+-		nsh.type = 0x82;
+-		break;
+-	case HCI_SCODATA_PKT:
+-		hdev->stat.sco_tx++;
+-		nsh.type = 0x83;
+-		break;
+-	default:
+-		return -EILSEQ;
+-	}
+-
+-	nsh.zero = 0;
+-	nsh.len = skb->len;
+-
+-	s = bt_skb_alloc(NSHL + skb->len + 1, GFP_ATOMIC);
+-	if (!s)
+-		return -ENOMEM;
+-
+-	skb_reserve(s, NSHL);
+-	skb_copy_from_linear_data(skb, skb_put(s, skb->len), skb->len);
+-	if (skb->len & 0x0001)
+-		skb_put_u8(s, 0);	/* PAD */
+-
+-	/* Prepend skb with Nokia frame header and queue */
+-	memcpy(skb_push(s, NSHL), &nsh, NSHL);
+-	skb_queue_tail(&(info->txq), s);
+-
+-	dtl1_write_wakeup(info);
+-
+-	kfree_skb(skb);
+-
+-	return 0;
+-}
+-
+-
+-
+-/* ======================== Card services HCI interaction ======================== */
+-
+-
+-static int dtl1_open(struct dtl1_info *info)
+-{
+-	unsigned long flags;
+-	unsigned int iobase = info->p_dev->resource[0]->start;
+-	struct hci_dev *hdev;
+-
+-	spin_lock_init(&(info->lock));
+-
+-	skb_queue_head_init(&(info->txq));
+-
+-	info->rx_state = RECV_WAIT_NSH;
+-	info->rx_count = NSHL;
+-	info->rx_skb = NULL;
+-
+-	set_bit(XMIT_WAITING, &(info->tx_state));
+-
+-	/* Initialize HCI device */
+-	hdev = hci_alloc_dev();
+-	if (!hdev) {
+-		BT_ERR("Can't allocate HCI device");
+-		return -ENOMEM;
+-	}
+-
+-	info->hdev = hdev;
+-
+-	hdev->bus = HCI_PCCARD;
+-	hci_set_drvdata(hdev, info);
+-	SET_HCIDEV_DEV(hdev, &info->p_dev->dev);
+-
+-	hdev->open  = dtl1_hci_open;
+-	hdev->close = dtl1_hci_close;
+-	hdev->flush = dtl1_hci_flush;
+-	hdev->send  = dtl1_hci_send_frame;
+-
+-	spin_lock_irqsave(&(info->lock), flags);
+-
+-	/* Reset UART */
+-	outb(0, iobase + UART_MCR);
+-
+-	/* Turn off interrupts */
+-	outb(0, iobase + UART_IER);
+-
+-	/* Initialize UART */
+-	outb(UART_LCR_WLEN8, iobase + UART_LCR);	/* Reset DLAB */
+-	outb((UART_MCR_DTR | UART_MCR_RTS | UART_MCR_OUT2), iobase + UART_MCR);
+-
+-	info->ri_latch = inb(info->p_dev->resource[0]->start + UART_MSR)
+-				& UART_MSR_RI;
+-
+-	/* Turn on interrupts */
+-	outb(UART_IER_RLSI | UART_IER_RDI | UART_IER_THRI, iobase + UART_IER);
+-
+-	spin_unlock_irqrestore(&(info->lock), flags);
+-
+-	/* Timeout before it is safe to send the first HCI packet */
+-	msleep(2000);
+-
+-	/* Register HCI device */
+-	if (hci_register_dev(hdev) < 0) {
+-		BT_ERR("Can't register HCI device");
+-		info->hdev = NULL;
+-		hci_free_dev(hdev);
+-		return -ENODEV;
+-	}
+-
+-	return 0;
+-}
+-
+-
+-static int dtl1_close(struct dtl1_info *info)
+-{
+-	unsigned long flags;
+-	unsigned int iobase = info->p_dev->resource[0]->start;
+-	struct hci_dev *hdev = info->hdev;
+-
+-	if (!hdev)
+-		return -ENODEV;
+-
+-	dtl1_hci_close(hdev);
+-
+-	spin_lock_irqsave(&(info->lock), flags);
+-
+-	/* Reset UART */
+-	outb(0, iobase + UART_MCR);
+-
+-	/* Turn off interrupts */
+-	outb(0, iobase + UART_IER);
+-
+-	spin_unlock_irqrestore(&(info->lock), flags);
+-
+-	hci_unregister_dev(hdev);
+-	hci_free_dev(hdev);
+-
+-	return 0;
+-}
+-
+-static int dtl1_probe(struct pcmcia_device *link)
+-{
+-	struct dtl1_info *info;
+-
+-	/* Create new info device */
+-	info = devm_kzalloc(&link->dev, sizeof(*info), GFP_KERNEL);
+-	if (!info)
+-		return -ENOMEM;
+-
+-	info->p_dev = link;
+-	link->priv = info;
+-
+-	link->config_flags |= CONF_ENABLE_IRQ | CONF_AUTO_SET_IO;
+-
+-	return dtl1_config(link);
+-}
+-
+-
+-static void dtl1_detach(struct pcmcia_device *link)
+-{
+-	struct dtl1_info *info = link->priv;
+-
+-	dtl1_close(info);
+-	pcmcia_disable_device(link);
+-}
+-
+-static int dtl1_confcheck(struct pcmcia_device *p_dev, void *priv_data)
+-{
+-	if ((p_dev->resource[1]->end) || (p_dev->resource[1]->end < 8))
+-		return -ENODEV;
+-
+-	p_dev->resource[0]->flags &= ~IO_DATA_PATH_WIDTH;
+-	p_dev->resource[0]->flags |= IO_DATA_PATH_WIDTH_8;
+-
+-	return pcmcia_request_io(p_dev);
+-}
+-
+-static int dtl1_config(struct pcmcia_device *link)
+-{
+-	struct dtl1_info *info = link->priv;
+-	int ret;
+-
+-	/* Look for a generic full-sized window */
+-	link->resource[0]->end = 8;
+-	ret = pcmcia_loop_config(link, dtl1_confcheck, NULL);
+-	if (ret)
+-		goto failed;
+-
+-	ret = pcmcia_request_irq(link, dtl1_interrupt);
+-	if (ret)
+-		goto failed;
+-
+-	ret = pcmcia_enable_device(link);
+-	if (ret)
+-		goto failed;
+-
+-	ret = dtl1_open(info);
+-	if (ret)
+-		goto failed;
+-
+-	return 0;
+-
+-failed:
+-	dtl1_detach(link);
+-	return ret;
+-}
+-
+-static const struct pcmcia_device_id dtl1_ids[] = {
+-	PCMCIA_DEVICE_PROD_ID12("Nokia Mobile Phones", "DTL-1", 0xe1bfdd64, 0xe168480d),
+-	PCMCIA_DEVICE_PROD_ID12("Nokia Mobile Phones", "DTL-4", 0xe1bfdd64, 0x9102bc82),
+-	PCMCIA_DEVICE_PROD_ID12("Socket", "CF", 0xb38bcc2e, 0x44ebf863),
+-	PCMCIA_DEVICE_PROD_ID12("Socket", "CF+ Personal Network Card", 0xb38bcc2e, 0xe732bae3),
+-	PCMCIA_DEVICE_NULL
+-};
+-MODULE_DEVICE_TABLE(pcmcia, dtl1_ids);
+-
+-static struct pcmcia_driver dtl1_driver = {
+-	.owner		= THIS_MODULE,
+-	.name		= "dtl1_cs",
+-	.probe		= dtl1_probe,
+-	.remove		= dtl1_detach,
+-	.id_table	= dtl1_ids,
+-};
+-module_pcmcia_driver(dtl1_driver);
+-- 
+2.43.0
+
 
