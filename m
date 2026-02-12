@@ -1,386 +1,3457 @@
-Return-Path: <linux-mips+bounces-13173-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13174-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 6MnjKNWCjWkw3gAAu9opvQ
-	(envelope-from <linux-mips+bounces-13173-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Feb 2026 08:35:49 +0100
+	id kA3MGMqmjWkK5wAAu9opvQ
+	(envelope-from <linux-mips+bounces-13174-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Feb 2026 11:09:14 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA5C012AF76
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Feb 2026 08:35:48 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EA2212C456
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Feb 2026 11:09:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 83C08305ED1F
-	for <lists+linux-mips@lfdr.de>; Thu, 12 Feb 2026 07:35:47 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 6FC673099514
+	for <lists+linux-mips@lfdr.de>; Thu, 12 Feb 2026 10:08:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D49F41760;
-	Thu, 12 Feb 2026 07:35:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 21AFE2DE6F3;
+	Thu, 12 Feb 2026 10:08:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=openadk.org header.i=@openadk.org header.b="twHYNbCr"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QEr18O2d"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from helium.openadk.org (helium.openadk.org [89.238.66.15])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qk1-f193.google.com (mail-qk1-f193.google.com [209.85.222.193])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EA6D4C81
-	for <linux-mips@vger.kernel.org>; Thu, 12 Feb 2026 07:35:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=89.238.66.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7A8ED2C0F83
+	for <linux-mips@vger.kernel.org>; Thu, 12 Feb 2026 10:08:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.193
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1770881747; cv=none; b=MfU6ygYc5wAmv7jqkU0sN6dmGIWzgVd8VUW4q2Gj7bS7y4sjXPhLLY/7OOP1ezudW7XZItOWJTRNEHQT66TOBBKEOMW6oJBlco4FXZd3kHgx8chrYGwkdz2zxb4l7AAxFAMbx/ROWaIudOFIkwYwxryMdgLPPRxhmFs/KZC70V8=
+	t=1770890908; cv=none; b=jOn4Jj/NmD3ER77pnCshfJ25C8EsVuBFJNxbC98hydQ+FRbVJ8KKCCHkcZzvJFAt1cNvYasztztM5zJmEi6oaFkA//up2i6TG/YZ7JHizyxsWGJg1RY8LG4ZXl7xmNXgQlojcSxB9fbuMTpKMZw8cKda0j9mjkLAniTozY+I+yc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1770881747; c=relaxed/simple;
-	bh=1nECUq3/i4vS53MxUHV0iksK7E1k69rKV/COVpMNWTg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LMRqu3PIdl+HAIQehk3FCrKg6ltqCy8a2vSlcQ1BF5+fyJIogyMtJHz7ETFHNkRjDnufQemHfHU5UpHdFUignVHFvFgcyTYXB2N8VE0ikuhO0ztECv1T40FKgBhOXm9ijDrrrQFvi+PX5bswSmJrwGWEgEnf9eagTEXP1DpWNWQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openadk.org; spf=pass smtp.mailfrom=openadk.org; dkim=fail (0-bit key) header.d=openadk.org header.i=@openadk.org header.b=twHYNbCr reason="key not found in DNS"; arc=none smtp.client-ip=89.238.66.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=openadk.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=openadk.org
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=openadk.org; s=2022;
-	t=1770881736; bh=1nECUq3/i4vS53MxUHV0iksK7E1k69rKV/COVpMNWTg=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=twHYNbCrjWOxZvIRofOCB2BtDGR3azXMq9tedoUHrFlppzVpZSQlW0khyiM8kNj2+
-	 SSRmCmmz5ctCJtQzzFJOdWkXaT0EgiIRoj7Gh6KZXJ0HZ/w2tkGMt0hFUoDGd0aZLt
-	 TGLfqEoL/H9bD9p/yF5p+zpggsQn1yhdUh6mV/Yqs0Qt1UkH8mqGFlCyAbEgxqt3EX
-	 +mRXP5Iwmvc2QN6uVxqJ9fXc9V4VDKpiOH5MI5jJZKsdZx3htULQsCBvYBjpvSen21
-	 brWnr2SO2QbqTJqVu3gJJGUqbYA6Y1JCkzYSrzM38Rr0PG24vNCkB8v2xbBjmwwk8C
-	 LxGd14nxtIBZQ==
-Received: by helium.openadk.org (Postfix, from userid 1000)
-	id 747B231E0B9B; Thu, 12 Feb 2026 08:35:36 +0100 (CET)
-Date: Thu, 12 Feb 2026 08:35:36 +0100
-From: Waldemar Brodkorb <wbx@openadk.org>
-To: Waldemar Brodkorb <wbx@openadk.org>
-Cc: Jonas Gorski <jonas.gorski@gmail.com>,
-	Jiaxun Yang <jiaxun.yang@flygoat.com>,
-	"linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>
-Subject: Re: serial console on Mikrotik RB532 non-working
-Message-ID: <aY2CyAcH7jM_QdsR@waldemar-brodkorb.de>
-References: <aX-d0ShTplHKZT33@waldemar-brodkorb.de>
- <f0413775-1a6f-49a6-841b-bf52214a2841@app.fastmail.com>
- <1e9086c1-0cec-4aa7-aab6-e1e605dd9ebf@app.fastmail.com>
- <aYI9jVbCU-RI2gv2@waldemar-brodkorb.de>
- <CAOiHx=kU_kNSatruew1FQk2s=nmOanLB3tXjTi9tQ8je2mk2FQ@mail.gmail.com>
- <aYMrN3EhBM0Ip7b3@waldemar-brodkorb.de>
- <CAOiHx=nJN9suqTV7XfuTmO1X9QZv0wn=VqwkEzGmPctAF09v9Q@mail.gmail.com>
- <aYN1_mED5-IiKC4E@waldemar-brodkorb.de>
+	s=arc-20240116; t=1770890908; c=relaxed/simple;
+	bh=GpRIiiwNHkHgKNRdhuzH2ZFZEvxhvoSyfpS0WIQoCWE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZjruV00aE+1PfzTWIFL7N+3XcsiqDE1H+yL94sIwMJ/EPS79nSqBptPcwglKOpuxoYZtsbijNzAv0+My5R9faAQQ+PSbnsH1wXxTQdee7FhElGEHlZNUiSakBA5C5E7OdeyHeVr7FewcAofXPFuvmS9Yb5OIoknRemIV24hubag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QEr18O2d; arc=none smtp.client-ip=209.85.222.193
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f193.google.com with SMTP id af79cd13be357-8c9f6b78ca4so824447485a.0
+        for <linux-mips@vger.kernel.org>; Thu, 12 Feb 2026 02:08:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1770890902; x=1771495702; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=lzc0MNP6v6+KWm0pp47xOoKCDDQxyUdDMOlX63wuH4Y=;
+        b=QEr18O2dMWvamAs9xBcovraEWATJxLxhVa/hNDLtxApHQgnIJRPYpsmF8by5ZUD/SG
+         UJDFjH3CVPlvg/P5lwnnZx/mqMx81HGdIlRnWX/Copf0qljeyIn/OxBR+aZTLI1pzWOi
+         KO4Ua7ru3WdhiM5m4OqXZTIHVUkp7F4GiE8MntofpRCR9k6kx6OQcNgzsoFTHSUyfRpS
+         pV7D0PyRVqjM8KX60tj8leJ0p4ra+ugEXfvbihu7lKqArt2ldQHGv/mhHL+mY1WSqiqZ
+         2L3VbxV59j4OnIdbv69j1TpjnXHQ1zLj56zyofIqhIgBWkNxoamaOIjd1U3xAdCAqtTj
+         Uv1Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1770890902; x=1771495702;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lzc0MNP6v6+KWm0pp47xOoKCDDQxyUdDMOlX63wuH4Y=;
+        b=fcrbU0vCHVUZ+MN5K9QQD6z+GPKoTRB9AowDrx0BC08FC038d7oLSahLnjaJGKnKoQ
+         R0zhevMBgnHmTMynr5uohHAUk0iGEOG565zw+fVdrh6mnxG3365KG1+aZeyquef6dSKs
+         EQ/28nzDrjCS6dnGOQ1zV0F6yOuNZ2U8SIsXC5OhyLsl1IKJqnLgyCFUKCVdcZxNKHiO
+         UGtgbYoxjkLnTPyxwSDEHGvF4GlP/BsZkHA5k+Ad/iosEG0V9cJSzoJYmTkXzqgnYSIk
+         3sps6oPiQPq5LlZGp5i24ZnBp/L1eS2+xLoj3q4OteLYt8AG1bkvgpC7YiocPgEc6dz+
+         V9RA==
+X-Forwarded-Encrypted: i=1; AJvYcCWhnd9LFnHUTStjOB11aBKki1FyVd5wi+cWQIxBJCeN5g/ThMLusFVAkz8VCTxAAUIlJGMb/kppfOsr@vger.kernel.org
+X-Gm-Message-State: AOJu0YxiShbJA162oBI2CGKGwEMyHl1L7DOgUNwCafsi6ZBXZpS2ROsF
+	EAN3XPEZpw/sMOK8oBsEzqCUTXQbD65zazpFeVff3JzKHr7lnlLK1sDn2NgwGiEm
+X-Gm-Gg: AZuq6aJDesPYY/pVeJVv6Wf99aUdvaVv2OVbdaPjNcz/cnG59DCeGYfM3jCcUpYfdJa
+	FxWFwfa9sx3aAUTud4VSlPVkWguqAuvwzRrgaEllM5UQXU3LJr/wKgVKm8ieIH+JwxJXE5OIVaP
+	WGxue2pKYQp6e5fmA/9T4f4COETD2CySqM3u8D20e5lecxtRF64dHxJSpVh3MRL0KoFoRp8jjPr
+	+9UzvPei4AwaUG+3Vx9Ijc2PMpF/UlKbFp2f8l+pp4GUEqBUTyJkU9V3bznsY7vhPNCouaRibc9
+	ijpKT4s+QPnlWCl/3faPyxoFb9TmqBnvQb8+oRdD/s5VfonzNpL4w3EeL405W+DJHmwQMnA1HQE
+	Zh5diDNjCwLfVvaUeKQd0llLp1KNpHzNlW7Zaxncjv3I3pwPq5GZiUDh29AHBsTe2IYroT/2l94
+	7qfuTVRlP8uasYjZ2eQTLH5annnup0jVXnHDMOPUbFP+mJIGQKXqHLs4FFrffJeg7pDZDwpz0fv
+	n3Vjwsv4RqKXF9+daSKl9rPYt1n2qkjRoY0pPwpA2L1lEMgkeN3hOf2oB+Pr/AUAt/uQf13gAvg
+	SAKZcYQbHZ58SaGBbA==
+X-Received: by 2002:a05:7022:618:b0:119:e569:f61e with SMTP id a92af1059eb24-1272f78b5b1mr646357c88.23.1770884950789;
+        Thu, 12 Feb 2026 00:29:10 -0800 (PST)
+Received: from ethan-latitude5420.. (host-127-24.cafrjco.fresno.ca.us.clients.pavlovmedia.net. [68.180.127.24])
+        by smtp.gmail.com with ESMTPSA id 5a478bee46e88-2ba9dcd0614sm3478895eec.22.2026.02.12.00.29.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 12 Feb 2026 00:29:10 -0800 (PST)
+From: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+To: linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	linux-pci@vger.kernel.org
+Cc: Dominik Brodowski <linux@dominikbrodowski.net>,
+	Ethan Nelson-Moore <enelsonmoore@gmail.com>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	"Christophe Leroy (CS GROUP)" <chleroy@kernel.org>,
+	Thomas Gleixner <tglx@kernel.org>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	x86@kernel.org,
+	"H. Peter Anvin" <hpa@zytor.com>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Jakub Kicinski <kuba@kernel.org>,
+	"Theodore Ts'o" <tytso@mit.edu>,
+	Eric Biggers <ebiggers@google.com>,
+	Simon Horman <horms@kernel.org>,
+	Lukas Bulwahn <lukas.bulwahn@redhat.com>
+Subject: [RFC PATCH] drivers: pcmcia: remove obsolete host controller drivers
+Date: Thu, 12 Feb 2026 00:26:59 -0800
+Message-ID: <20260212082841.62233-1-enelsonmoore@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <aYN1_mED5-IiKC4E@waldemar-brodkorb.de>
-X-Operating-System: Linux 6.12.63+deb13-amd64 x86_64
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.04 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-0.66 / 15.00];
+	MID_CONTAINS_FROM(1.00)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[gmail.com,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_DKIM_ALLOW(-0.20)[gmail.com:s=20230601];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DMARC_NA(0.00)[openadk.org];
-	RCVD_COUNT_THREE(0.00)[4];
-	R_DKIM_PERMFAIL(0.00)[openadk.org:s=2022];
-	TAGGED_FROM(0.00)[bounces-13173-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13174-lists,linux-mips=lfdr.de];
+	FREEMAIL_CC(0.00)[dominikbrodowski.net,gmail.com,alpha.franken.de,linux.ibm.com,ellerman.id.au,kernel.org,redhat.com,alien8.de,linux.intel.com,zytor.com,google.com,mit.edu];
+	RCPT_COUNT_TWELVE(0.00)[22];
+	FREEMAIL_FROM(0.00)[gmail.com];
 	MIME_TRACE(0.00)[0:+];
-	TO_DN_EQ_ADDR_SOME(0.00)[];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_THREE(0.00)[4];
-	DKIM_TRACE(0.00)[openadk.org:~];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[wbx@openadk.org,linux-mips@vger.kernel.org];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[gmail.com,flygoat.com,vger.kernel.org];
-	TAGGED_RCPT(0.00)[linux-mips];
-	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,waldemar-brodkorb.de:mid,openadk.org:email,flygoat.com:email]
-X-Rspamd-Queue-Id: CA5C012AF76
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[enelsonmoore@gmail.com,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[gmail.com:+];
+	RCVD_COUNT_FIVE(0.00)[5];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	TAGGED_RCPT(0.00)[linux-mips];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns,socket.dev:url,io.map:url]
+X-Rspamd-Queue-Id: 8EA2212C456
 X-Rspamd-Action: no action
 
-Hi, 
+PCMCIA is almost completely obsolete (the last computers supporting it
+natively were from ~2009), and the general consensus [1] seems to be
+that support for it should be gradually removed from the kernel.
 
-friendly ping.
+In 2023, an initial step of removing all the PCMCIA char drivers was
+taken in commit 9b12f050c76f ("char: pcmcia: remove all the drivers"),
+and that has not been reverted, so it seems logical to continue this
+process by removing more low-hanging fruit.
 
-Nobody has an idea how to fix it without revert?
+These host controller drivers have had no meaningful changes since
+their status was discussed in 2022 [2], and are unlikely to have any
+remaining users. Remove them and a couple references to them
+in comments.
 
-best regards
- Waldemar
+The i82365 and tcic drivers are for ISA-attached host controllers,
+which are even less likely to be used nowadays than ones on other buses.
 
-Waldemar Brodkorb wrote,
+The i82092 driver has almost certainly not been used in over 20 years.
+It was broken by a null pointer dereference since the dawn of Git
+history (2.6.12-rc2 in 2005) until someone fixed it in 2021 in commit
+e39cdacf2f66 ("pcmcia: i82092: fix a null pointer dereference bug").
+From their dmesg log [3], it is clear they were testing in an emulated
+environment and not on real hardware.
 
-> Hi Mips people,
-> Jonas Gorski wrote,
-> 
-> > On Wed, Feb 4, 2026 at 12:19 PM Waldemar Brodkorb <wbx@openadk.org> wrote:
-> > >
-> > > Hi Jonas,
-> > > Jonas Gorski wrote,
-> > >
-> > > > Hi,
-> > > >
-> > > > On Tue, Feb 3, 2026 at 7:25 PM Waldemar Brodkorb <wbx@openadk.org> wrote:
-> > > > >
-> > > > > Hi Jiaxun,
-> > > > > Jiaxun Yang wrote,
-> > > > > >
-> > > > > > On Tue, 3 Feb 2026, at 3:24 PM, Jiaxun Yang wrote:
-> > > > > > > On Sun, 1 Feb 2026, at 6:39 PM, Waldemar Brodkorb wrote:
-> > > > > > >> Hi MIPS hackers,
-> > > > > > >>
-> > > > > > >> I want to use the latest Linux kernel on my Mikrotik RB532, but the
-> > > > > > >> serial console is non working. I bisected the problem and the first
-> > > > > > >> breaking change is this commit:
-> > > > > > >
-> > > > > > > Hi,
-> > > > > > >
-> > > > > > > Can you try this?
-> > > > > >
-> > > > > > Oops sorry I missed a flag, it should be:
-> > > > > >
-> > > > > > diff --git a/arch/mips/rb532/devices.c b/arch/mips/rb532/devices.c
-> > > > > > index 8ecb56be81ac..239018540221 100644
-> > > > > > --- a/arch/mips/rb532/devices.c
-> > > > > > +++ b/arch/mips/rb532/devices.c
-> > > > > > @@ -213,11 +213,12 @@ static struct platform_device rb532_wdt = {
-> > > > > >  static struct plat_serial8250_port rb532_uart_res[] = {
-> > > > > >         {
-> > > > > >                 .type           = PORT_16550A,
-> > > > > > -               .membase        = (char *)KSEG1ADDR(REGBASE + UART0BASE),
-> > > > > > +               .mapbase        = REGBASE + UART0BASE,
-> > > > > > +               .mapsize        = SZ_4K,
-> > > > > >                 .irq            = UART0_IRQ,
-> > > > > >                 .regshift       = 2,
-> > > > > >                 .iotype         = UPIO_MEM,
-> > > > > > -               .flags          = UPF_BOOT_AUTOCONF,
-> > > > > > +               .flags          = UPF_BOOT_AUTOCONF | UPF_IOREMAP,
-> > > > > >         },
-> > > > > >         {
-> > > > > >                 .flags          = 0,
-> > > > > >
-> > > > >
-> > > > > I tried the patch, but it still hangs here:
-> > > > >
-> > > > > RouterBOOT booter 2.18
-> > > > >
-> > > > > RouterBoard 532
-> > > > >
-> > > > > CPU frequency: 399 MHz
-> > > > >   Memory size:  32 MB
-> > > > >
-> > > > > Press any key within 3 seconds to enter setup...
-> > > > > trying dhcp protocol... OK
-> > > > > resolved mac address 9C:BF:0D:00:D6:4E
-> > > > > Gateway: 192.168.1.254
-> > > > > transfer started ........................................ transfer ok, time=525.70s
-> > > > > setting up elf image... OK
-> > > > > jumping to kernel code
-> > > > >
-> > > > > Nothing in tcpdump tries to mount nfs, so I believe serial console
-> > > > > breakage is not the only problem here.
-> > > >
-> > > > Have you tried the patch on top of master or
-> > > > 6e690d54cfa802f939cefbd2fa2c91bd0b8bd1b6?
-> > > >
-> > > > If it works on top of 6e690d54cfa802f939cefbd2fa2c91bd0b8bd1b6, then
-> > > > it fixes the serial issue, and you can do a new git bisect between
-> > > > 6e690d54cfa802f939cefbd2fa2c91bd0b8bd1b6 and master to find the next
-> > > > breakage, with the patch re-applied on top each step (so serial stays
-> > > > working).
-> > >
-> > > Yes, thanks for the idea. I already had this idea in mind and I am 9
-> > > steps before I get the next breakage :)
-> > >
-> > > Thanks for the heads up,
-> > 
-> > Also a small warning when doing a bisect with git am'd patches on top:
-> > always (git) reset to the original tested commit before doing git
-> > bisect <bood|bad>, else git bisect will account for these commits on
-> > top in calculating the next revision to test and may suggest the very
-> > same commit again you were originally testing.
-> > 
-> > It took a me a few steps until I noticed I was running in circles when
-> > I had to bisect with a few patches on top.
-> 
-> I just used patch and git stash for the job :)
-> So here is the result, the failing commit is:
-> commit 9f048fa487409e364cf866c957cf0b0d782ca5a3 (HEAD)
-> Author: Maciej W. Rozycki <macro@orcam.me.uk>
-> Date:   Thu Nov 13 05:21:10 2025 +0000
-> 
->     MIPS: mm: Prevent a TLB shutdown on initial uniquification
-> 
->     Depending on the particular CPU implementation a TLB shutdown may occur
->     if multiple matching entries are detected upon the execution of a TLBP
->     or the TLBWI/TLBWR instructions.  Given that we don't know what entries
->     we have been handed we need to be very careful with the initial TLB
->     setup and avoid all these instructions.
-> 
->     Therefore read all the TLB entries one by one with the TLBR instruction,
->     bypassing the content addressing logic, and truncate any large pages in
->     place so as to avoid a case in the second step where an incoming entry
->     for a large page at a lower address overlaps with a replacement entry
->     chosen at another index.  Then preinitialize the TLB using addresses
->     outside our usual unique range and avoiding clashes with any entries
->     received, before making the usual call to local_flush_tlb_all().
-> 
->     This fixes (at least) R4x00 cores if TLBP hits multiple matching TLB
->     entries (SGI IP22 PROM for examples sets up all TLBs to the same virtual
->     address).
-> 
->     Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
->     Fixes: 35ad7e181541 ("MIPS: mm: tlb-r4k: Uniquify TLB entries on init")
->     Cc: stable@vger.kernel.org
->     Reviewed-by: Jiaxun Yang <jiaxun.yang@flygoat.com>
->     Tested-by: Jiaxun Yang <jiaxun.yang@flygoat.com> # Boston I6400, M5150 sim
->     Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-> 
-> Reverting this commit, make the RB532 boot. I need the UART patch, too.
-> 
-> Attached is the dmesg from the device.
-> 
-> Anyone knows how to fix this issue?
-> 
-> best regards
->  Waldemar
-> 
-> 
+i82365.h is used by drivers other than i82365 and is therefore retained.
 
-> [    0.000000] Linux version 6.19.0-rc8+ (wbx@fluor) (mipsel-openadk-linux-uclibc-gcc (GCC) 15.2.0, GNU ld (GNU Binutils) 2.45.1) #50 Wed Feb  4 16:41:19 CET 2026
-> [    0.000000] CPU0 revision is: 0001800a (MIPS 4Kc)
-> [    0.000000] User-defined physical RAM map overwrite
-> [    0.000000] Primary instruction cache 8kB, VIPT, 4-way, linesize 16 bytes.
-> [    0.000000] Primary data cache 8kB, 4-way, VIPT, no aliases, linesize 16 bytes
-> [    0.000000] Zone ranges:
-> [    0.000000]   Normal   [mem 0x0000000000000000-0x0000000001ffffff]
-> [    0.000000] Movable zone start for each node
-> [    0.000000] Early memory node ranges
-> [    0.000000]   node   0: [mem 0x0000000000000000-0x0000000001ffffff]
-> [    0.000000] Initmem setup node 0 [mem 0x0000000000000000-0x0000000001ffffff]
-> [    0.000000] pcpu-alloc: s0 r0 d32768 u32768 alloc=1*32768
-> [    0.000000] pcpu-alloc: [0] 0 
-> [    0.000000] Kernel command line: console=ttyS0,115200 gpio=16383 mem=32M kmac=00:0C:42:0A:7D:D3 board=500 boot=1   console=ttyS0,115200 rw root=/dev/nfs ip=dhcp nfsroot=192.168.1.254:/srv/nfs/rb532
-> [    0.000000] korina mac = 00:0C:42:0A:7D:D3
-> [    0.000000] Unknown kernel command line parameters "gpio=16383 board=500 boot=1", will be passed to user space.
-> [    0.000000] printk: log buffer data + meta data: 131072 + 409600 = 540672 bytes
-> [    0.000000] Dentry cache hash table entries: 4096 (order: 2, 16384 bytes, linear)
-> [    0.000000] Inode-cache hash table entries: 2048 (order: 1, 8192 bytes, linear)
-> [    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 8192
-> [    0.000000] mem auto-init: stack:all(zero), heap alloc:off, heap free:off
-> [    0.000000] SLUB: HWalign=16, Order=0-3, MinObjects=0, CPUs=1, Nodes=1
-> [    0.000000] NR_IRQS: 256
-> [    0.000000] Initializing IRQ's: 168 out of 256
-> [    0.000000] calculating r4koff... 
-> [    0.000000] 000c34f8(799992)
-> [    0.000000] CPU frequency 400.00 MHz
-> [    0.000000] clocksource: MIPS: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 9556397797 ns
-> [    0.000010] sched_clock: 32 bits at 200MHz, resolution 5ns, wraps every 10737525757ns
-> [    0.000236] Calibrating delay loop... 397.82 BogoMIPS (lpj=795648)
-> [    0.032139] pid_max: default: 32768 minimum: 301
-> [    0.033029] Mount-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
-> [    0.033136] Mountpoint-cache hash table entries: 1024 (order: 0, 4096 bytes, linear)
-> [    0.042812] Memory: 26612K/32768K available (3993K kernel code, 542K rwdata, 548K rodata, 152K init, 188K bss, 5760K reserved, 0K cma-reserved)
-> [    0.044819] devtmpfs: initialized
-> [    0.053484] clocksource: jiffies: mask: 0xffffffff max_cycles: 0xffffffff, max_idle_ns: 7645041785100000 ns
-> [    0.053636] posixtimers hash table entries: 512 (order: 0, 2048 bytes, linear)
-> [    0.053740] futex hash table entries: 256 (4096 bytes on 1 NUMA nodes, total 4 KiB, linear).
-> [    0.060069] NET: Registered PF_NETLINK/PF_ROUTE protocol family
-> [    0.062045] gpio gpiochip0: Static allocation of GPIO base is deprecated, use dynamic allocation.
-> [    0.064668] PCI: Initializing PCI
-> [    0.070830] SCSI subsystem initialized
-> [    0.071977] libata version 3.00 loaded.
-> [    0.074816] PCI host bridge to bus 0000:00
-> [    0.074882] pci_bus 0000:00: root bus resource [mem 0x50000000-0x5fffffff]
-> [    0.074978] pci_bus 0000:00: root bus resource [io  0x18800000-0x188fffff]
-> [    0.075066] pci_bus 0000:00: No busn resource found for root bus, will use [bus 00-ff]
-> [    0.075217] pci 0000:00:00.0: [111d:0000] type 00 class 0x000000 conventional PCI endpoint
-> [    0.075353] pci 0000:00:00.0: BAR 0 [mem 0x00000000-0x07ffffff pref]
-> [    0.075449] pci 0000:00:00.0: [Firmware Bug]: BAR 1: invalid; can't size
-> [    0.075512] pci 0000:00:00.0: [Firmware Bug]: BAR 2: invalid; can't size
-> [    0.101583] pci 0000:00:02.0: [1106:3106] type 00 class 0x020000 conventional PCI endpoint
-> [    0.101736] pci 0000:00:02.0: BAR 0 [io  0x0000-0x00ff]
-> [    0.101831] pci 0000:00:02.0: BAR 1 [mem 0x00000000-0x000000ff]
-> [    0.102022] pci 0000:00:02.0: supports D1 D2
-> [    0.102087] pci 0000:00:02.0: PME# supported from D1 D2 D3hot D3cold
-> [    0.102883] pci 0000:00:03.0: [1106:3106] type 00 class 0x020000 conventional PCI endpoint
-> [    0.103036] pci 0000:00:03.0: BAR 0 [io  0x0000-0x00ff]
-> [    0.103131] pci 0000:00:03.0: BAR 1 [mem 0x00000000-0x000000ff]
-> [    0.103322] pci 0000:00:03.0: supports D1 D2
-> [    0.103386] pci 0000:00:03.0: PME# supported from D1 D2 D3hot D3cold
-> [    0.104215] pci 0000:00:04.0: [13a3:0020] type 00 class 0x0b4000 conventional PCI endpoint
-> [    0.104368] pci 0000:00:04.0: BAR 0 [mem 0x00000000-0x00000fff]
-> [    0.104463] pci 0000:00:04.0: BAR 1 [mem 0x00000000-0x00001fff]
-> [    0.104553] pci 0000:00:04.0: BAR 2 [mem 0x00000000-0x00007fff]
-> [    0.584389] pci_bus 0000:00: busn_res: [bus 00-ff] end is updated to 00
-> [    0.584536] pci 0000:00:04.0: BAR 2 [mem 0x50000000-0x50007fff]: assigned
-> [    0.584656] pci 0000:00:04.0: BAR 1 [mem 0x50008000-0x50009fff]: assigned
-> [    0.584771] pci 0000:00:04.0: BAR 0 [mem 0x5000a000-0x5000afff]: assigned
-> [    0.584887] pci 0000:00:02.0: BAR 0 [io  0x18800000-0x188000ff]: assigned
-> [    0.585003] pci 0000:00:02.0: BAR 1 [mem 0x5000b000-0x5000b0ff]: assigned
-> [    0.585119] pci 0000:00:03.0: BAR 0 [io  0x18800400-0x188004ff]: assigned
-> [    0.585235] pci 0000:00:03.0: BAR 1 [mem 0x5000b100-0x5000b1ff]: assigned
-> [    0.586040] clocksource: Switched to clocksource MIPS
-> [    0.595022] NET: Registered PF_INET protocol family
-> [    0.596277] IP idents hash table entries: 2048 (order: 2, 16384 bytes, linear)
-> [    0.599075] tcp_listen_portaddr_hash hash table entries: 1024 (order: 0, 4096 bytes, linear)
-> [    0.599207] Table-perturb hash table entries: 65536 (order: 6, 262144 bytes, linear)
-> [    0.599357] TCP established hash table entries: 1024 (order: 0, 4096 bytes, linear)
-> [    0.599483] TCP bind hash table entries: 1024 (order: 1, 8192 bytes, linear)
-> [    0.599665] TCP: Hash tables configured (established 1024 bind 1024)
-> [    0.600026] UDP hash table entries: 256 (order: 1, 8192 bytes, linear)
-> [    0.600186] UDP-Lite hash table entries: 256 (order: 1, 8192 bytes, linear)
-> [    0.601161] NET: Registered PF_UNIX/PF_LOCAL protocol family
-> [    0.603686] RPC: Registered named UNIX socket transport module.
-> [    0.603736] RPC: Registered udp transport module.
-> [    0.603769] RPC: Registered tcp transport module.
-> [    0.603802] RPC: Registered tcp-with-tls transport module.
-> [    0.603835] RPC: Registered tcp NFSv4.1 backchannel transport module.
-> [    0.603971] PCI: CLS 16 bytes, default 16
-> [    0.607134] workingset: timestamp_bits=30 max_order=13 bucket_order=0
-> [    0.613358] Serial: 8250/16550 driver, 4 ports, IRQ sharing disabled
-> [    0.621159] printk: legacy console [ttyS0] disabled
-> [    0.622542] serial8250.0: ttyS0 at MMIO 0x18058000 (irq = 104, base_baud = 12499875) is a 16550A
-> [    0.622738] printk: legacy console [ttyS0] enabled
-> [    1.299755] scsi host0: pata-rb532-cf
-> [    1.305007] ata1: PATA max PIO4 irq 149 lpm-pol 0
-> [    1.313888] eth0: korina-0.20 15Sep2017
-> [    1.318861] via-rhine 0000:00:02.0: enabling device (0080 -> 0083)
-> [    1.334840] via-rhine 0000:00:02.0 eth1: VIA Rhine III at (ptrval), 00:0c:42:0a:7d:d4, IRQ 142
-> [    1.345448] via-rhine 0000:00:02.0 eth1: MII PHY found at address 1, status 0x7849 advertising 05e1 Link 0000
-> [    1.356989] via-rhine 0000:00:03.0: enabling device (0080 -> 0083)
-> [    1.372559] via-rhine 0000:00:03.0 eth2: VIA Rhine III at (ptrval), 00:0c:42:0a:7d:d5, IRQ 143
-> [    1.383162] via-rhine 0000:00:03.0 eth2: MII PHY found at address 1, status 0x7849 advertising 05e1 Link 0000
-> [    1.395174] rc32434_wdt: Stopped watchdog timer
-> [    1.401166] rc32434_wdt: Watchdog Timer version 1.0, timer margin: 20 sec
-> [    1.410007] NET: Registered PF_PACKET protocol family
-> [    1.488756] korina korina eth0: link up, 100Mbps, full-duplex, lpa 0xFFFFFF6F
-> [    1.514213] Sending DHCP requests ., OK
-> [    1.542622] IP-Config: Got DHCP answer from 192.168.1.254, my address is 192.168.1.9
-> [    1.551409] IP-Config: Complete:
-> [    1.555148]      device=eth0, hwaddr=00:0c:42:0a:7d:d3, ipaddr=192.168.1.9, mask=255.255.255.0, gw=192.168.1.254
-> [    1.566657]      host=192.168.1.9, domain=, nis-domain=(none)
-> [    1.573201]      bootserver=192.168.1.254, rootserver=192.168.1.254, rootpath=
-> [    1.573275]      nameserver0=192.168.1.254
-> [    1.588787] check access for rdinit=/init failed: -2, ignoring
-> [    1.658499] VFS: Mounted root (nfs filesystem) on device 0:13.
-> [    1.667866] devtmpfs: mounted
-> [    1.671780] Freeing unused kernel image (initmem) memory: 152K
-> [    1.677854] This architecture does not have kernel memory protection.
-> [    1.684548] Run /sbin/init as init process
-> [    1.688861]   with arguments:
-> [    1.688920]     /sbin/init
-> [    1.688977]   with environment:
-> [    1.689027]     HOME=/
-> [    1.689082]     TERM=linux
-> [    1.689137]     gpio=16383
-> [    1.689193]     board=500
-> [    1.689248]     boot=1
-> [    1.723116] process '/bin/busybox' started with executable stack
-> [  208.334338] random: crng init done
+[1] https://lore.kernel.org/all/c5b39544-a4fb-4796-a046-0b9be9853787@app.fastmail.com/
+[2] https://lore.kernel.org/all/Y07d7rMvd5++85BJ@owl.dominikbrodowski.net/
+[3] https://lore.kernel.org/all/1624345891-4215-1-git-send-email-zheyuma97@gmail.com/
+
+Signed-off-by: Ethan Nelson-Moore <enelsonmoore@gmail.com>
+---
+ arch/mips/configs/mtx1_defconfig      |    1 -
+ arch/powerpc/configs/ppc6xx_defconfig |    2 -
+ arch/x86/kernel/resource.c            |    2 +-
+ drivers/pci/quirks.c                  |    4 +-
+ drivers/pcmcia/Kconfig                |   30 -
+ drivers/pcmcia/Makefile               |    3 -
+ drivers/pcmcia/i82092.c               |  679 -------------
+ drivers/pcmcia/i82092aa.h             |   24 -
+ drivers/pcmcia/i82365.c               | 1347 -------------------------
+ drivers/pcmcia/tcic.c                 |  805 ---------------
+ drivers/pcmcia/tcic.h                 |  266 -----
+ 11 files changed, 2 insertions(+), 3161 deletions(-)
+ delete mode 100644 drivers/pcmcia/i82092.c
+ delete mode 100644 drivers/pcmcia/i82092aa.h
+ delete mode 100644 drivers/pcmcia/i82365.c
+ delete mode 100644 drivers/pcmcia/tcic.c
+ delete mode 100644 drivers/pcmcia/tcic.h
+
+diff --git a/arch/mips/configs/mtx1_defconfig b/arch/mips/configs/mtx1_defconfig
+index 77050ae3945f..fdfc6ec3f22f 100644
+--- a/arch/mips/configs/mtx1_defconfig
++++ b/arch/mips/configs/mtx1_defconfig
+@@ -15,7 +15,6 @@ CONFIG_PCI=y
+ CONFIG_PCCARD=m
+ CONFIG_YENTA=m
+ CONFIG_PD6729=m
+-CONFIG_I82092=m
+ CONFIG_MODULES=y
+ CONFIG_MODULE_UNLOAD=y
+ CONFIG_MODVERSIONS=y
+diff --git a/arch/powerpc/configs/ppc6xx_defconfig b/arch/powerpc/configs/ppc6xx_defconfig
+index 3c08f46f3d41..e03fb26e0e63 100644
+--- a/arch/powerpc/configs/ppc6xx_defconfig
++++ b/arch/powerpc/configs/ppc6xx_defconfig
+@@ -72,8 +72,6 @@ CONFIG_PCI_MSI=y
+ CONFIG_PCCARD=y
+ CONFIG_YENTA=y
+ CONFIG_PD6729=m
+-CONFIG_I82092=m
+-CONFIG_I82365=m
+ CONFIG_ADVANCED_OPTIONS=y
+ CONFIG_NET=y
+ CONFIG_PACKET=y
+diff --git a/arch/x86/kernel/resource.c b/arch/x86/kernel/resource.c
+index 79bc8a97a083..44d4b2c538b0 100644
+--- a/arch/x86/kernel/resource.c
++++ b/arch/x86/kernel/resource.c
+@@ -62,7 +62,7 @@ void arch_remove_reservations(struct resource *avail)
+ 	/*
+ 	 * Trim out BIOS area (high 2MB) and E820 regions. We do not remove
+ 	 * the low 1MB unconditionally, as this area is needed for some ISA
+-	 * cards requiring a memory range, e.g. the i82365 PCMCIA controller.
++	 * cards requiring a memory range.
+ 	 */
+ 	if (avail->flags & IORESOURCE_MEM) {
+ 		resource_clip(avail, BIOS_ROM_BASE, BIOS_ROM_END);
+diff --git a/drivers/pci/quirks.c b/drivers/pci/quirks.c
+index 48946cca4be7..638e4d30998f 100644
+--- a/drivers/pci/quirks.c
++++ b/drivers/pci/quirks.c
+@@ -1296,9 +1296,7 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_VIA,	PCI_DEVICE_ID_VIA_82C597_0,	quirk_vt
+ 
+ /*
+  * CardBus controllers have a legacy base address that enables them to
+- * respond as i82365 pcmcia controllers.  We don't want them to do this
+- * even if the Linux CardBus driver is not loaded, because the Linux i82365
+- * driver does not (and should not) handle CardBus.
++ * respond as i82365 PCMCIA controllers.  We don't want them to do this.
+  */
+ static void quirk_cardbus_legacy(struct pci_dev *dev)
+ {
+diff --git a/drivers/pcmcia/Kconfig b/drivers/pcmcia/Kconfig
+index 660a95805524..d1d25aa296ad 100644
+--- a/drivers/pcmcia/Kconfig
++++ b/drivers/pcmcia/Kconfig
+@@ -119,36 +119,6 @@ config PD6729
+ 	  This provides support for the Cirrus PD6729 PCI-to-PCMCIA bridge
+ 	  device, found in some older laptops and PCMCIA card readers.
+ 
+-config I82092
+-	tristate "i82092 compatible bridge support"
+-	depends on PCMCIA && PCI && HAS_IOPORT
+-	select PCCARD_NONSTATIC
+-	help
+-	  This provides support for the Intel I82092AA PCI-to-PCMCIA bridge device,
+-	  found in some older laptops and more commonly in evaluation boards for the
+-	  chip.
+-
+-config I82365
+-	tristate "i82365 compatible bridge support"
+-	depends on PCMCIA && ISA
+-	select PCCARD_NONSTATIC
+-	help
+-	  Say Y here to include support for ISA-bus PCMCIA host bridges that
+-	  are register compatible with the Intel i82365.  These are found on
+-	  older laptops and ISA-bus card readers for desktop systems.  A
+-	  "bridge" is the hardware inside your computer that PCMCIA cards are
+-	  plugged into. If unsure, say N.
+-
+-config TCIC
+-	tristate "Databook TCIC host bridge support"
+-	depends on PCMCIA && ISA
+-	select PCCARD_NONSTATIC
+-	help
+-	  Say Y here to include support for the Databook TCIC family of PCMCIA
+-	  host bridges. These are only found on a handful of old systems.
+-	  "Bridge" is the name used for the hardware inside your computer that
+-	  PCMCIA cards are plugged into. If unsure, say N.
+-
+ config PCMCIA_ALCHEMY_DEVBOARD
+ 	tristate "Alchemy Db/Pb1xxx PCMCIA socket services"
+ 	depends on MIPS_DB1XXX && PCMCIA
+diff --git a/drivers/pcmcia/Makefile b/drivers/pcmcia/Makefile
+index d16a0317ce43..ee2f204cbc21 100644
+--- a/drivers/pcmcia/Makefile
++++ b/drivers/pcmcia/Makefile
+@@ -20,9 +20,6 @@ obj-$(CONFIG_PCCARD)				+= pcmcia_rsrc.o
+ obj-$(CONFIG_YENTA) 				+= yenta_socket.o
+ 
+ obj-$(CONFIG_PD6729)				+= pd6729.o
+-obj-$(CONFIG_I82365)				+= i82365.o
+-obj-$(CONFIG_I82092)				+= i82092.o
+-obj-$(CONFIG_TCIC)				+= tcic.o
+ obj-$(CONFIG_PCMCIA_SOC_COMMON)			+= soc_common.o
+ obj-$(CONFIG_PCMCIA_SA11XX_BASE)		+= sa11xx_base.o
+ obj-$(CONFIG_PCMCIA_SA1100)			+= sa1100_cs.o
+diff --git a/drivers/pcmcia/i82092.c b/drivers/pcmcia/i82092.c
+deleted file mode 100644
+index a947ffb2df55..000000000000
+--- a/drivers/pcmcia/i82092.c
++++ /dev/null
+@@ -1,679 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-only
+-/*
+- * Driver for Intel I82092AA PCI-PCMCIA bridge.
+- *
+- * (C) 2001 Red Hat, Inc.
+- *
+- * Author: Arjan Van De Ven <arjanv@redhat.com>
+- * Loosly based on i82365.c from the pcmcia-cs package
+- */
+-
+-#include <linux/kernel.h>
+-#include <linux/module.h>
+-#include <linux/pci.h>
+-#include <linux/init.h>
+-#include <linux/workqueue.h>
+-#include <linux/interrupt.h>
+-#include <linux/device.h>
+-
+-#include <pcmcia/ss.h>
+-
+-#include <linux/io.h>
+-
+-#include "i82092aa.h"
+-#include "i82365.h"
+-
+-MODULE_DESCRIPTION("Driver for Intel I82092AA PCI-PCMCIA bridge");
+-MODULE_LICENSE("GPL");
+-
+-/* PCI core routines */
+-static const struct pci_device_id i82092aa_pci_ids[] = {
+-	{ PCI_DEVICE(PCI_VENDOR_ID_INTEL, PCI_DEVICE_ID_INTEL_82092AA_0) },
+-	{ }
+-};
+-MODULE_DEVICE_TABLE(pci, i82092aa_pci_ids);
+-
+-static struct pci_driver i82092aa_pci_driver = {
+-	.name		= "i82092aa",
+-	.id_table	= i82092aa_pci_ids,
+-	.probe		= i82092aa_pci_probe,
+-	.remove	= i82092aa_pci_remove,
+-};
+-
+-
+-/* the pccard structure and its functions */
+-static struct pccard_operations i82092aa_operations = {
+-	.init			= i82092aa_init,
+-	.get_status		= i82092aa_get_status,
+-	.set_socket		= i82092aa_set_socket,
+-	.set_io_map		= i82092aa_set_io_map,
+-	.set_mem_map		= i82092aa_set_mem_map,
+-};
+-
+-/* The card can do up to 4 sockets, allocate a structure for each of them */
+-
+-struct socket_info {
+-	int	number;
+-	int	card_state;
+-		/* 0 = no socket,
+-		 * 1 = empty socket,
+-		 * 2 = card but not initialized,
+-		 * 3 = operational card
+-		 */
+-	unsigned int io_base;	/* base io address of the socket */
+-
+-	struct pcmcia_socket socket;
+-	struct pci_dev *dev;	/* The PCI device for the socket */
+-};
+-
+-#define MAX_SOCKETS 4
+-static struct socket_info sockets[MAX_SOCKETS];
+-static int socket_count;	/* shortcut */
+-
+-
+-static int i82092aa_pci_probe(struct pci_dev *dev,
+-			      const struct pci_device_id *id)
+-{
+-	unsigned char configbyte;
+-	int i, ret;
+-
+-	ret = pci_enable_device(dev);
+-	if (ret)
+-		return ret;
+-
+-	/* PCI Configuration Control */
+-	pci_read_config_byte(dev, 0x40, &configbyte);
+-
+-	switch (configbyte&6) {
+-	case 0:
+-		socket_count = 2;
+-		break;
+-	case 2:
+-		socket_count = 1;
+-		break;
+-	case 4:
+-	case 6:
+-		socket_count = 4;
+-		break;
+-
+-	default:
+-		dev_err(&dev->dev,
+-			"Oops, you did something we didn't think of.\n");
+-		ret = -EIO;
+-		goto err_out_disable;
+-	}
+-	dev_info(&dev->dev, "configured as a %d socket device.\n",
+-		 socket_count);
+-
+-	if (!request_region(pci_resource_start(dev, 0), 2, "i82092aa")) {
+-		ret = -EBUSY;
+-		goto err_out_disable;
+-	}
+-
+-	for (i = 0; i < socket_count; i++) {
+-		sockets[i].card_state = 1; /* 1 = present but empty */
+-		sockets[i].io_base = pci_resource_start(dev, 0);
+-		sockets[i].dev = dev;
+-		sockets[i].socket.features |= SS_CAP_PCCARD;
+-		sockets[i].socket.map_size = 0x1000;
+-		sockets[i].socket.irq_mask = 0;
+-		sockets[i].socket.pci_irq  = dev->irq;
+-		sockets[i].socket.cb_dev  = dev;
+-		sockets[i].socket.owner = THIS_MODULE;
+-
+-		sockets[i].number = i;
+-
+-		if (card_present(i)) {
+-			sockets[i].card_state = 3;
+-			dev_dbg(&dev->dev, "slot %i is occupied\n", i);
+-		} else {
+-			dev_dbg(&dev->dev, "slot %i is vacant\n", i);
+-		}
+-	}
+-
+-	/* Now, specifiy that all interrupts are to be done as PCI interrupts
+-	 * bitmask, one bit per event, 1 = PCI interrupt, 0 = ISA interrupt
+-	 */
+-	configbyte = 0xFF;
+-
+-	/* PCI Interrupt Routing Register */
+-	pci_write_config_byte(dev, 0x50, configbyte);
+-
+-	/* Register the interrupt handler */
+-	dev_dbg(&dev->dev, "Requesting interrupt %i\n", dev->irq);
+-	ret = request_irq(dev->irq, i82092aa_interrupt, IRQF_SHARED,
+-			  "i82092aa", i82092aa_interrupt);
+-	if (ret) {
+-		dev_err(&dev->dev, "Failed to register IRQ %d, aborting\n",
+-			dev->irq);
+-		goto err_out_free_res;
+-	}
+-
+-	for (i = 0; i < socket_count; i++) {
+-		sockets[i].socket.dev.parent = &dev->dev;
+-		sockets[i].socket.ops = &i82092aa_operations;
+-		sockets[i].socket.resource_ops = &pccard_nonstatic_ops;
+-		ret = pcmcia_register_socket(&sockets[i].socket);
+-		if (ret)
+-			goto err_out_free_sockets;
+-	}
+-
+-	return 0;
+-
+-err_out_free_sockets:
+-	if (i) {
+-		for (i--; i >= 0; i--)
+-			pcmcia_unregister_socket(&sockets[i].socket);
+-	}
+-	free_irq(dev->irq, i82092aa_interrupt);
+-err_out_free_res:
+-	release_region(pci_resource_start(dev, 0), 2);
+-err_out_disable:
+-	pci_disable_device(dev);
+-	return ret;
+-}
+-
+-static void i82092aa_pci_remove(struct pci_dev *dev)
+-{
+-	int i;
+-
+-	free_irq(dev->irq, i82092aa_interrupt);
+-
+-	for (i = 0; i < socket_count; i++)
+-		pcmcia_unregister_socket(&sockets[i].socket);
+-}
+-
+-static DEFINE_SPINLOCK(port_lock);
+-
+-/* basic value read/write functions */
+-
+-static unsigned char indirect_read(int socket, unsigned short reg)
+-{
+-	unsigned short int port;
+-	unsigned char val;
+-	unsigned long flags;
+-
+-	spin_lock_irqsave(&port_lock, flags);
+-	reg += socket * 0x40;
+-	port = sockets[socket].io_base;
+-	outb(reg, port);
+-	val = inb(port+1);
+-	spin_unlock_irqrestore(&port_lock, flags);
+-	return val;
+-}
+-
+-static void indirect_write(int socket, unsigned short reg, unsigned char value)
+-{
+-	unsigned short int port;
+-	unsigned long flags;
+-
+-	spin_lock_irqsave(&port_lock, flags);
+-	reg = reg + socket * 0x40;
+-	port = sockets[socket].io_base;
+-	outb(reg, port);
+-	outb(value, port+1);
+-	spin_unlock_irqrestore(&port_lock, flags);
+-}
+-
+-static void indirect_setbit(int socket, unsigned short reg, unsigned char mask)
+-{
+-	unsigned short int port;
+-	unsigned char val;
+-	unsigned long flags;
+-
+-	spin_lock_irqsave(&port_lock, flags);
+-	reg = reg + socket * 0x40;
+-	port = sockets[socket].io_base;
+-	outb(reg, port);
+-	val = inb(port+1);
+-	val |= mask;
+-	outb(reg, port);
+-	outb(val, port+1);
+-	spin_unlock_irqrestore(&port_lock, flags);
+-}
+-
+-
+-static void indirect_resetbit(int socket,
+-			      unsigned short reg, unsigned char mask)
+-{
+-	unsigned short int port;
+-	unsigned char val;
+-	unsigned long flags;
+-
+-	spin_lock_irqsave(&port_lock, flags);
+-	reg = reg + socket * 0x40;
+-	port = sockets[socket].io_base;
+-	outb(reg, port);
+-	val = inb(port+1);
+-	val &= ~mask;
+-	outb(reg, port);
+-	outb(val, port+1);
+-	spin_unlock_irqrestore(&port_lock, flags);
+-}
+-
+-static void indirect_write16(int socket,
+-			     unsigned short reg, unsigned short value)
+-{
+-	unsigned short int port;
+-	unsigned char val;
+-	unsigned long flags;
+-
+-	spin_lock_irqsave(&port_lock, flags);
+-	reg = reg + socket * 0x40;
+-	port = sockets[socket].io_base;
+-
+-	outb(reg, port);
+-	val = value & 255;
+-	outb(val, port+1);
+-
+-	reg++;
+-
+-	outb(reg, port);
+-	val = value>>8;
+-	outb(val, port+1);
+-	spin_unlock_irqrestore(&port_lock, flags);
+-}
+-
+-/* simple helper functions */
+-/* External clock time, in nanoseconds.  120 ns = 8.33 MHz */
+-static int cycle_time = 120;
+-
+-static int to_cycles(int ns)
+-{
+-	if (cycle_time != 0)
+-		return ns/cycle_time;
+-	else
+-		return 0;
+-}
+-
+-
+-/* Interrupt handler functionality */
+-
+-static irqreturn_t i82092aa_interrupt(int irq, void *dev)
+-{
+-	int i;
+-	int loopcount = 0;
+-	int handled = 0;
+-
+-	unsigned int events, active = 0;
+-
+-	while (1) {
+-		loopcount++;
+-		if (loopcount > 20) {
+-			pr_err("i82092aa: infinite eventloop in interrupt\n");
+-			break;
+-		}
+-
+-		active = 0;
+-
+-		for (i = 0; i < socket_count; i++) {
+-			int csc;
+-
+-			/* Inactive socket, should not happen */
+-			if (sockets[i].card_state == 0)
+-				continue;
+-
+-			/* card status change register */
+-			csc = indirect_read(i, I365_CSC);
+-
+-			if (csc == 0)  /* no events on this socket */
+-				continue;
+-			handled = 1;
+-			events = 0;
+-
+-			if (csc & I365_CSC_DETECT) {
+-				events |= SS_DETECT;
+-				dev_info(&sockets[i].dev->dev,
+-					 "Card detected in socket %i!\n", i);
+-			}
+-
+-			if (indirect_read(i, I365_INTCTL) & I365_PC_IOCARD) {
+-				/* For IO/CARDS, bit 0 means "read the card" */
+-				if (csc & I365_CSC_STSCHG)
+-					events |= SS_STSCHG;
+-			} else {
+-				/* Check for battery/ready events */
+-				if (csc & I365_CSC_BVD1)
+-					events |= SS_BATDEAD;
+-				if (csc & I365_CSC_BVD2)
+-					events |= SS_BATWARN;
+-				if (csc & I365_CSC_READY)
+-					events |= SS_READY;
+-			}
+-
+-			if (events)
+-				pcmcia_parse_events(&sockets[i].socket, events);
+-			active |= events;
+-		}
+-
+-		if (active == 0) /* no more events to handle */
+-			break;
+-	}
+-	return IRQ_RETVAL(handled);
+-}
+-
+-
+-
+-/* socket functions */
+-
+-static int card_present(int socketno)
+-{
+-	unsigned int val;
+-
+-	if ((socketno < 0) || (socketno >= MAX_SOCKETS))
+-		return 0;
+-	if (sockets[socketno].io_base == 0)
+-		return 0;
+-
+-
+-	val = indirect_read(socketno, 1); /* Interface status register */
+-	if ((val&12) == 12)
+-		return 1;
+-
+-	return 0;
+-}
+-
+-static void set_bridge_state(int sock)
+-{
+-	indirect_write(sock, I365_GBLCTL, 0x00);
+-	indirect_write(sock, I365_GENCTL, 0x00);
+-
+-	indirect_setbit(sock, I365_INTCTL, 0x08);
+-}
+-
+-
+-static int i82092aa_init(struct pcmcia_socket *sock)
+-{
+-	int i;
+-	struct resource res = { .start = 0, .end = 0x0fff };
+-	pccard_io_map io = { 0, 0, 0, 0, 1 };
+-	pccard_mem_map mem = { .res = &res, };
+-
+-	for (i = 0; i < 2; i++) {
+-		io.map = i;
+-		i82092aa_set_io_map(sock, &io);
+-	}
+-	for (i = 0; i < 5; i++) {
+-		mem.map = i;
+-		i82092aa_set_mem_map(sock, &mem);
+-	}
+-
+-	return 0;
+-}
+-
+-static int i82092aa_get_status(struct pcmcia_socket *socket, u_int *value)
+-{
+-	unsigned int sock = container_of(socket,
+-				struct socket_info, socket)->number;
+-	unsigned int status;
+-
+-	/* Interface Status Register */
+-	status = indirect_read(sock, I365_STATUS);
+-
+-	*value = 0;
+-
+-	if ((status & I365_CS_DETECT) == I365_CS_DETECT)
+-		*value |= SS_DETECT;
+-
+-	/* IO cards have a different meaning of bits 0,1 */
+-	/* Also notice the inverse-logic on the bits */
+-	if (indirect_read(sock, I365_INTCTL) & I365_PC_IOCARD) {
+-		/* IO card */
+-		if (!(status & I365_CS_STSCHG))
+-			*value |= SS_STSCHG;
+-	} else { /* non I/O card */
+-		if (!(status & I365_CS_BVD1))
+-			*value |= SS_BATDEAD;
+-		if (!(status & I365_CS_BVD2))
+-			*value |= SS_BATWARN;
+-	}
+-
+-	if (status & I365_CS_WRPROT)
+-		(*value) |= SS_WRPROT;	/* card is write protected */
+-
+-	if (status & I365_CS_READY)
+-		(*value) |= SS_READY;    /* card is not busy */
+-
+-	if (status & I365_CS_POWERON)
+-		(*value) |= SS_POWERON;  /* power is applied to the card */
+-
+-	return 0;
+-}
+-
+-
+-static int i82092aa_set_socket(struct pcmcia_socket *socket,
+-			       socket_state_t *state)
+-{
+-	struct socket_info *sock_info = container_of(socket, struct socket_info,
+-						     socket);
+-	unsigned int sock = sock_info->number;
+-	unsigned char reg;
+-
+-	/* First, set the global controller options */
+-
+-	set_bridge_state(sock);
+-
+-	/* Values for the IGENC register */
+-
+-	reg = 0;
+-
+-	/* The reset bit has "inverse" logic */
+-	if (!(state->flags & SS_RESET))
+-		reg = reg | I365_PC_RESET;
+-	if (state->flags & SS_IOCARD)
+-		reg = reg | I365_PC_IOCARD;
+-
+-	/* IGENC, Interrupt and General Control Register */
+-	indirect_write(sock, I365_INTCTL, reg);
+-
+-	/* Power registers */
+-
+-	reg = I365_PWR_NORESET; /* default: disable resetdrv on resume */
+-
+-	if (state->flags & SS_PWR_AUTO) {
+-		dev_info(&sock_info->dev->dev, "Auto power\n");
+-		reg |= I365_PWR_AUTO;	/* automatic power mngmnt */
+-	}
+-	if (state->flags & SS_OUTPUT_ENA) {
+-		dev_info(&sock_info->dev->dev, "Power Enabled\n");
+-		reg |= I365_PWR_OUT;	/* enable power */
+-	}
+-
+-	switch (state->Vcc) {
+-	case 0:
+-		break;
+-	case 50:
+-		dev_info(&sock_info->dev->dev,
+-			 "setting voltage to Vcc to 5V on socket %i\n",
+-			 sock);
+-		reg |= I365_VCC_5V;
+-		break;
+-	default:
+-		dev_err(&sock_info->dev->dev,
+-			"%s called with invalid VCC power value: %i",
+-			__func__, state->Vcc);
+-		return -EINVAL;
+-	}
+-
+-	switch (state->Vpp) {
+-	case 0:
+-		dev_info(&sock_info->dev->dev,
+-			 "not setting Vpp on socket %i\n", sock);
+-		break;
+-	case 50:
+-		dev_info(&sock_info->dev->dev,
+-			 "setting Vpp to 5.0 for socket %i\n", sock);
+-		reg |= I365_VPP1_5V | I365_VPP2_5V;
+-		break;
+-	case 120:
+-		dev_info(&sock_info->dev->dev, "setting Vpp to 12.0\n");
+-		reg |= I365_VPP1_12V | I365_VPP2_12V;
+-		break;
+-	default:
+-		dev_err(&sock_info->dev->dev,
+-			"%s called with invalid VPP power value: %i",
+-			__func__, state->Vcc);
+-		return -EINVAL;
+-	}
+-
+-	if (reg != indirect_read(sock, I365_POWER)) /* only write if changed */
+-		indirect_write(sock, I365_POWER, reg);
+-
+-	/* Enable specific interrupt events */
+-
+-	reg = 0x00;
+-	if (state->csc_mask & SS_DETECT)
+-		reg |= I365_CSC_DETECT;
+-	if (state->flags & SS_IOCARD) {
+-		if (state->csc_mask & SS_STSCHG)
+-			reg |= I365_CSC_STSCHG;
+-	} else {
+-		if (state->csc_mask & SS_BATDEAD)
+-			reg |= I365_CSC_BVD1;
+-		if (state->csc_mask & SS_BATWARN)
+-			reg |= I365_CSC_BVD2;
+-		if (state->csc_mask & SS_READY)
+-			reg |= I365_CSC_READY;
+-
+-	}
+-
+-	/* now write the value and clear the (probably bogus) pending stuff
+-	 * by doing a dummy read
+-	 */
+-
+-	indirect_write(sock, I365_CSCINT, reg);
+-	(void)indirect_read(sock, I365_CSC);
+-
+-	return 0;
+-}
+-
+-static int i82092aa_set_io_map(struct pcmcia_socket *socket,
+-			       struct pccard_io_map *io)
+-{
+-	struct socket_info *sock_info = container_of(socket, struct socket_info,
+-						     socket);
+-	unsigned int sock = sock_info->number;
+-	unsigned char map, ioctl;
+-
+-	map = io->map;
+-
+-	/* Check error conditions */
+-	if (map > 1)
+-		return -EINVAL;
+-
+-	if ((io->start > 0xffff) || (io->stop > 0xffff)
+-				 || (io->stop < io->start))
+-		return -EINVAL;
+-
+-	/* Turn off the window before changing anything */
+-	if (indirect_read(sock, I365_ADDRWIN) & I365_ENA_IO(map))
+-		indirect_resetbit(sock, I365_ADDRWIN, I365_ENA_IO(map));
+-
+-	/* write the new values */
+-	indirect_write16(sock, I365_IO(map)+I365_W_START, io->start);
+-	indirect_write16(sock, I365_IO(map)+I365_W_STOP, io->stop);
+-
+-	ioctl = indirect_read(sock, I365_IOCTL) & ~I365_IOCTL_MASK(map);
+-
+-	if (io->flags & (MAP_16BIT|MAP_AUTOSZ))
+-		ioctl |= I365_IOCTL_16BIT(map);
+-
+-	indirect_write(sock, I365_IOCTL, ioctl);
+-
+-	/* Turn the window back on if needed */
+-	if (io->flags & MAP_ACTIVE)
+-		indirect_setbit(sock, I365_ADDRWIN, I365_ENA_IO(map));
+-
+-	return 0;
+-}
+-
+-static int i82092aa_set_mem_map(struct pcmcia_socket *socket,
+-				struct pccard_mem_map *mem)
+-{
+-	struct socket_info *sock_info = container_of(socket, struct socket_info,
+-						     socket);
+-	unsigned int sock = sock_info->number;
+-	struct pci_bus_region region;
+-	unsigned short base, i;
+-	unsigned char map;
+-
+-	pcibios_resource_to_bus(sock_info->dev->bus, &region, mem->res);
+-
+-	map = mem->map;
+-	if (map > 4)
+-		return -EINVAL;
+-
+-	if ((mem->card_start > 0x3ffffff) || (region.start > region.end) ||
+-	     (mem->speed > 1000)) {
+-		dev_err(&sock_info->dev->dev,
+-			"invalid mem map for socket %i: %llx to %llx with a start of %x\n",
+-			sock,
+-			(unsigned long long)region.start,
+-			(unsigned long long)region.end,
+-			mem->card_start);
+-		return -EINVAL;
+-	}
+-
+-	/* Turn off the window before changing anything */
+-	if (indirect_read(sock, I365_ADDRWIN) & I365_ENA_MEM(map))
+-		indirect_resetbit(sock, I365_ADDRWIN, I365_ENA_MEM(map));
+-
+-	/* write the start address */
+-	base = I365_MEM(map);
+-	i = (region.start >> 12) & 0x0fff;
+-	if (mem->flags & MAP_16BIT)
+-		i |= I365_MEM_16BIT;
+-	if (mem->flags & MAP_0WS)
+-		i |= I365_MEM_0WS;
+-	indirect_write16(sock, base+I365_W_START, i);
+-
+-	/* write the stop address */
+-
+-	i = (region.end >> 12) & 0x0fff;
+-	switch (to_cycles(mem->speed)) {
+-	case 0:
+-		break;
+-	case 1:
+-		i |= I365_MEM_WS0;
+-		break;
+-	case 2:
+-		i |= I365_MEM_WS1;
+-		break;
+-	default:
+-		i |= I365_MEM_WS1 | I365_MEM_WS0;
+-		break;
+-	}
+-
+-	indirect_write16(sock, base+I365_W_STOP, i);
+-
+-	/* card start */
+-
+-	i = ((mem->card_start - region.start) >> 12) & 0x3fff;
+-	if (mem->flags & MAP_WRPROT)
+-		i |= I365_MEM_WRPROT;
+-	if (mem->flags & MAP_ATTRIB)
+-		i |= I365_MEM_REG;
+-	indirect_write16(sock, base+I365_W_OFF, i);
+-
+-	/* Enable the window if necessary */
+-	if (mem->flags & MAP_ACTIVE)
+-		indirect_setbit(sock, I365_ADDRWIN, I365_ENA_MEM(map));
+-
+-	return 0;
+-}
+-
+-static int __init i82092aa_module_init(void)
+-{
+-	return pci_register_driver(&i82092aa_pci_driver);
+-}
+-
+-static void __exit i82092aa_module_exit(void)
+-{
+-	pci_unregister_driver(&i82092aa_pci_driver);
+-	if (sockets[0].io_base > 0)
+-		release_region(sockets[0].io_base, 2);
+-}
+-
+-module_init(i82092aa_module_init);
+-module_exit(i82092aa_module_exit);
+-
+diff --git a/drivers/pcmcia/i82092aa.h b/drivers/pcmcia/i82092aa.h
+deleted file mode 100644
+index 0f851acab7e5..000000000000
+--- a/drivers/pcmcia/i82092aa.h
++++ /dev/null
+@@ -1,24 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-#ifndef _INCLUDE_GUARD_i82092aa_H_
+-#define _INCLUDE_GUARD_i82092aa_H_
+-
+-#include <linux/interrupt.h>
+-
+-/* prototypes */
+-
+-static int  i82092aa_pci_probe(struct pci_dev *dev, const struct pci_device_id *id);
+-static void i82092aa_pci_remove(struct pci_dev *dev);
+-static int card_present(int socketno);
+-static irqreturn_t i82092aa_interrupt(int irq, void *dev);
+-
+-
+-
+-
+-static int i82092aa_get_status(struct pcmcia_socket *socket, u_int *value);
+-static int i82092aa_set_socket(struct pcmcia_socket *socket, socket_state_t *state);
+-static int i82092aa_set_io_map(struct pcmcia_socket *socket, struct pccard_io_map *io);
+-static int i82092aa_set_mem_map(struct pcmcia_socket *socket, struct pccard_mem_map *mem);
+-static int i82092aa_init(struct pcmcia_socket *socket);
+-
+-#endif
+-
+diff --git a/drivers/pcmcia/i82365.c b/drivers/pcmcia/i82365.c
+deleted file mode 100644
+index 1e464b951ed2..000000000000
+--- a/drivers/pcmcia/i82365.c
++++ /dev/null
+@@ -1,1347 +0,0 @@
+-/*======================================================================
+-
+-    Device driver for Intel 82365 and compatible PC Card controllers.
+-
+-    i82365.c 1.265 1999/11/10 18:36:21
+-
+-    The contents of this file are subject to the Mozilla Public
+-    License Version 1.1 (the "License"); you may not use this file
+-    except in compliance with the License. You may obtain a copy of
+-    the License at http://www.mozilla.org/MPL/
+-
+-    Software distributed under the License is distributed on an "AS
+-    IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+-    implied. See the License for the specific language governing
+-    rights and limitations under the License.
+-
+-    The initial developer of the original code is David A. Hinds
+-    <dahinds@users.sourceforge.net>.  Portions created by David A. Hinds
+-    are Copyright (C) 1999 David A. Hinds.  All Rights Reserved.
+-
+-    Alternatively, the contents of this file may be used under the
+-    terms of the GNU General Public License version 2 (the "GPL"), in which
+-    case the provisions of the GPL are applicable instead of the
+-    above.  If you wish to allow the use of your version of this file
+-    only under the terms of the GPL and not to allow others to use
+-    your version of this file under the MPL, indicate your decision
+-    by deleting the provisions above and replace them with the notice
+-    and other provisions required by the GPL.  If you do not delete
+-    the provisions above, a recipient may use your version of this
+-    file under either the MPL or the GPL.
+-    
+-======================================================================*/
+-
+-#include <linux/module.h>
+-#include <linux/moduleparam.h>
+-#include <linux/init.h>
+-#include <linux/types.h>
+-#include <linux/fcntl.h>
+-#include <linux/string.h>
+-#include <linux/kernel.h>
+-#include <linux/errno.h>
+-#include <linux/timer.h>
+-#include <linux/ioport.h>
+-#include <linux/delay.h>
+-#include <linux/workqueue.h>
+-#include <linux/interrupt.h>
+-#include <linux/platform_device.h>
+-#include <linux/bitops.h>
+-#include <asm/irq.h>
+-#include <asm/io.h>
+-
+-#include <pcmcia/ss.h>
+-
+-#include <linux/isapnp.h>
+-
+-/* ISA-bus controllers */
+-#include "i82365.h"
+-#include "cirrus.h"
+-#include "vg468.h"
+-#include "ricoh.h"
+-
+-
+-static irqreturn_t i365_count_irq(int, void *);
+-static inline int _check_irq(int irq, int flags)
+-{
+-    if (request_irq(irq, i365_count_irq, flags, "x", i365_count_irq) != 0)
+-	return -1;
+-    free_irq(irq, i365_count_irq);
+-    return 0;
+-}
+-
+-/*====================================================================*/
+-
+-/* Parameters that can be set with 'insmod' */
+-
+-/* Default base address for i82365sl and other ISA chips */
+-static unsigned long i365_base = 0x3e0;
+-/* Should we probe at 0x3e2 for an extra ISA controller? */
+-static int extra_sockets = 0;
+-/* Specify a socket number to ignore */
+-static int ignore = -1;
+-/* Bit map or list of interrupts to choose from */
+-static u_int irq_mask = 0xffff;
+-static int irq_list[16];
+-static unsigned int irq_list_count;
+-/* The card status change interrupt -- 0 means autoselect */
+-static int cs_irq = 0;
+-
+-/* Probe for safe interrupts? */
+-static int do_scan = 1;
+-/* Poll status interval -- 0 means default to interrupt */
+-static int poll_interval = 0;
+-/* External clock time, in nanoseconds.  120 ns = 8.33 MHz */
+-static int cycle_time = 120;
+-
+-/* Cirrus options */
+-static int has_dma = -1;
+-static int has_led = -1;
+-static int has_ring = -1;
+-static int dynamic_mode = 0;
+-static int freq_bypass = -1;
+-static int setup_time = -1;
+-static int cmd_time = -1;
+-static int recov_time = -1;
+-
+-/* Vadem options */
+-static int async_clock = -1;
+-static int cable_mode = -1;
+-static int wakeup = 0;
+-
+-module_param_hw(i365_base, ulong, ioport, 0444);
+-module_param(ignore, int, 0444);
+-module_param(extra_sockets, int, 0444);
+-module_param_hw(irq_mask, int, other, 0444);
+-module_param_hw_array(irq_list, int, irq, &irq_list_count, 0444);
+-module_param_hw(cs_irq, int, irq, 0444);
+-module_param(async_clock, int, 0444);
+-module_param(cable_mode, int, 0444);
+-module_param(wakeup, int, 0444);
+-
+-module_param(do_scan, int, 0444);
+-module_param(poll_interval, int, 0444);
+-module_param(cycle_time, int, 0444);
+-module_param(has_dma, int, 0444);
+-module_param(has_led, int, 0444);
+-module_param(has_ring, int, 0444);
+-module_param(dynamic_mode, int, 0444);
+-module_param(freq_bypass, int, 0444);
+-module_param(setup_time, int, 0444);
+-module_param(cmd_time, int, 0444);
+-module_param(recov_time, int, 0444);
+-
+-/*====================================================================*/
+-
+-struct cirrus_state {
+-    u_char		misc1, misc2;
+-    u_char		timer[6];
+-};
+-
+-struct vg46x_state {
+-    u_char		ctl, ema;
+-};
+-
+-struct i82365_socket {
+-    u_short		type, flags;
+-    struct pcmcia_socket	socket;
+-    unsigned int	number;
+-    unsigned int	ioaddr;
+-    u_short		psock;
+-    u_char		cs_irq, intr;
+-    union {
+-	struct cirrus_state		cirrus;
+-	struct vg46x_state		vg46x;
+-    } state;
+-};
+-
+-/* Where we keep track of our sockets... */
+-static int sockets = 0;
+-static struct i82365_socket socket[8] = {
+-    { 0, }, /* ... */
+-};
+-
+-/* Default ISA interrupt mask */
+-#define I365_MASK	0xdeb8	/* irq 15,14,12,11,10,9,7,5,4,3 */
+-
+-static int grab_irq;
+-static DEFINE_SPINLOCK(isa_lock);
+-#define ISA_LOCK(n, f) spin_lock_irqsave(&isa_lock, f)
+-#define ISA_UNLOCK(n, f) spin_unlock_irqrestore(&isa_lock, f)
+-
+-static struct timer_list poll_timer;
+-
+-/*====================================================================*/
+-
+-/* These definitions must match the pcic table! */
+-enum pcic_id {
+-    IS_I82365A, IS_I82365B, IS_I82365DF,
+-    IS_IBM, IS_RF5Cx96, IS_VLSI, IS_VG468, IS_VG469,
+-    IS_PD6710, IS_PD672X, IS_VT83C469,
+-};
+-
+-/* Flags for classifying groups of controllers */
+-#define IS_VADEM	0x0001
+-#define IS_CIRRUS	0x0002
+-#define IS_VIA		0x0010
+-#define IS_UNKNOWN	0x0400
+-#define IS_VG_PWR	0x0800
+-#define IS_DF_PWR	0x1000
+-#define IS_REGISTERED	0x2000
+-#define IS_ALIVE	0x8000
+-
+-struct pcic {
+-    char		*name;
+-    u_short		flags;
+-};
+-
+-static struct pcic pcic[] = {
+-    { "Intel i82365sl A step", 0 },
+-    { "Intel i82365sl B step", 0 },
+-    { "Intel i82365sl DF", IS_DF_PWR },
+-    { "IBM Clone", 0 },
+-    { "Ricoh RF5C296/396", 0 },
+-    { "VLSI 82C146", 0 },
+-    { "Vadem VG-468", IS_VADEM },
+-    { "Vadem VG-469", IS_VADEM|IS_VG_PWR },
+-    { "Cirrus PD6710", IS_CIRRUS },
+-    { "Cirrus PD672x", IS_CIRRUS },
+-    { "VIA VT83C469", IS_CIRRUS|IS_VIA },
+-};
+-
+-#define PCIC_COUNT	ARRAY_SIZE(pcic)
+-
+-/*====================================================================*/
+-
+-static DEFINE_SPINLOCK(bus_lock);
+-
+-static u_char i365_get(u_short sock, u_short reg)
+-{
+-    unsigned long flags;
+-    spin_lock_irqsave(&bus_lock,flags);
+-    {
+-	unsigned int port = socket[sock].ioaddr;
+-	u_char val;
+-	reg = I365_REG(socket[sock].psock, reg);
+-	outb(reg, port); val = inb(port+1);
+-	spin_unlock_irqrestore(&bus_lock,flags);
+-	return val;
+-    }
+-}
+-
+-static void i365_set(u_short sock, u_short reg, u_char data)
+-{
+-    unsigned long flags;
+-    spin_lock_irqsave(&bus_lock,flags);
+-    {
+-	unsigned int port = socket[sock].ioaddr;
+-	u_char val = I365_REG(socket[sock].psock, reg);
+-	outb(val, port); outb(data, port+1);
+-	spin_unlock_irqrestore(&bus_lock,flags);
+-    }
+-}
+-
+-static void i365_bset(u_short sock, u_short reg, u_char mask)
+-{
+-    u_char d = i365_get(sock, reg);
+-    d |= mask;
+-    i365_set(sock, reg, d);
+-}
+-
+-static void i365_bclr(u_short sock, u_short reg, u_char mask)
+-{
+-    u_char d = i365_get(sock, reg);
+-    d &= ~mask;
+-    i365_set(sock, reg, d);
+-}
+-
+-static void i365_bflip(u_short sock, u_short reg, u_char mask, int b)
+-{
+-    u_char d = i365_get(sock, reg);
+-    if (b)
+-	d |= mask;
+-    else
+-	d &= ~mask;
+-    i365_set(sock, reg, d);
+-}
+-
+-static u_short i365_get_pair(u_short sock, u_short reg)
+-{
+-    u_short a, b;
+-    a = i365_get(sock, reg);
+-    b = i365_get(sock, reg+1);
+-    return (a + (b<<8));
+-}
+-
+-static void i365_set_pair(u_short sock, u_short reg, u_short data)
+-{
+-    i365_set(sock, reg, data & 0xff);
+-    i365_set(sock, reg+1, data >> 8);
+-}
+-
+-/*======================================================================
+-
+-    Code to save and restore global state information for Cirrus
+-    PD67xx controllers, and to set and report global configuration
+-    options.
+-
+-    The VIA controllers also use these routines, as they are mostly
+-    Cirrus lookalikes, without the timing registers.
+-    
+-======================================================================*/
+-
+-#define flip(v,b,f) (v = ((f)<0) ? v : ((f) ? ((v)|(b)) : ((v)&(~b))))
+-
+-static void cirrus_get_state(u_short s)
+-{
+-    int i;
+-    struct cirrus_state *p = &socket[s].state.cirrus;
+-    p->misc1 = i365_get(s, PD67_MISC_CTL_1);
+-    p->misc1 &= (PD67_MC1_MEDIA_ENA | PD67_MC1_INPACK_ENA);
+-    p->misc2 = i365_get(s, PD67_MISC_CTL_2);
+-    for (i = 0; i < 6; i++)
+-	p->timer[i] = i365_get(s, PD67_TIME_SETUP(0)+i);
+-}
+-
+-static void cirrus_set_state(u_short s)
+-{
+-    int i;
+-    u_char misc;
+-    struct cirrus_state *p = &socket[s].state.cirrus;
+-
+-    misc = i365_get(s, PD67_MISC_CTL_2);
+-    i365_set(s, PD67_MISC_CTL_2, p->misc2);
+-    if (misc & PD67_MC2_SUSPEND) mdelay(50);
+-    misc = i365_get(s, PD67_MISC_CTL_1);
+-    misc &= ~(PD67_MC1_MEDIA_ENA | PD67_MC1_INPACK_ENA);
+-    i365_set(s, PD67_MISC_CTL_1, misc | p->misc1);
+-    for (i = 0; i < 6; i++)
+-	i365_set(s, PD67_TIME_SETUP(0)+i, p->timer[i]);
+-}
+-
+-static u_int __init cirrus_set_opts(u_short s, char *buf)
+-{
+-    struct i82365_socket *t = &socket[s];
+-    struct cirrus_state *p = &socket[s].state.cirrus;
+-    u_int mask = 0xffff;
+-
+-    if (has_ring == -1) has_ring = 1;
+-    flip(p->misc2, PD67_MC2_IRQ15_RI, has_ring);
+-    flip(p->misc2, PD67_MC2_DYNAMIC_MODE, dynamic_mode);
+-    flip(p->misc2, PD67_MC2_FREQ_BYPASS, freq_bypass);
+-    if (p->misc2 & PD67_MC2_IRQ15_RI)
+-	strcat(buf, " [ring]");
+-    if (p->misc2 & PD67_MC2_DYNAMIC_MODE)
+-	strcat(buf, " [dyn mode]");
+-    if (p->misc2 & PD67_MC2_FREQ_BYPASS)
+-	strcat(buf, " [freq bypass]");
+-    if (p->misc1 & PD67_MC1_INPACK_ENA)
+-	strcat(buf, " [inpack]");
+-    if (p->misc2 & PD67_MC2_IRQ15_RI)
+-	mask &= ~0x8000;
+-    if (has_led > 0) {
+-	strcat(buf, " [led]");
+-	mask &= ~0x1000;
+-    }
+-    if (has_dma > 0) {
+-	strcat(buf, " [dma]");
+-	mask &= ~0x0600;
+-    }
+-    if (!(t->flags & IS_VIA)) {
+-	if (setup_time >= 0)
+-	    p->timer[0] = p->timer[3] = setup_time;
+-	if (cmd_time > 0) {
+-	    p->timer[1] = cmd_time;
+-	    p->timer[4] = cmd_time*2+4;
+-	}
+-	if (p->timer[1] == 0) {
+-	    p->timer[1] = 6; p->timer[4] = 16;
+-	    if (p->timer[0] == 0)
+-		p->timer[0] = p->timer[3] = 1;
+-	}
+-	if (recov_time >= 0)
+-	    p->timer[2] = p->timer[5] = recov_time;
+-	buf += strlen(buf);
+-	sprintf(buf, " [%d/%d/%d] [%d/%d/%d]", p->timer[0], p->timer[1],
+-		p->timer[2], p->timer[3], p->timer[4], p->timer[5]);
+-    }
+-    return mask;
+-}
+-
+-/*======================================================================
+-
+-    Code to save and restore global state information for Vadem VG468
+-    and VG469 controllers, and to set and report global configuration
+-    options.
+-    
+-======================================================================*/
+-
+-static void vg46x_get_state(u_short s)
+-{
+-    struct vg46x_state *p = &socket[s].state.vg46x;
+-    p->ctl = i365_get(s, VG468_CTL);
+-    if (socket[s].type == IS_VG469)
+-	p->ema = i365_get(s, VG469_EXT_MODE);
+-}
+-
+-static void vg46x_set_state(u_short s)
+-{
+-    struct vg46x_state *p = &socket[s].state.vg46x;
+-    i365_set(s, VG468_CTL, p->ctl);
+-    if (socket[s].type == IS_VG469)
+-	i365_set(s, VG469_EXT_MODE, p->ema);
+-}
+-
+-static u_int __init vg46x_set_opts(u_short s, char *buf)
+-{
+-    struct vg46x_state *p = &socket[s].state.vg46x;
+-    
+-    flip(p->ctl, VG468_CTL_ASYNC, async_clock);
+-    flip(p->ema, VG469_MODE_CABLE, cable_mode);
+-    if (p->ctl & VG468_CTL_ASYNC)
+-	strcat(buf, " [async]");
+-    if (p->ctl & VG468_CTL_INPACK)
+-	strcat(buf, " [inpack]");
+-    if (socket[s].type == IS_VG469) {
+-	u_char vsel = i365_get(s, VG469_VSELECT);
+-	if (vsel & VG469_VSEL_EXT_STAT) {
+-	    strcat(buf, " [ext mode]");
+-	    if (vsel & VG469_VSEL_EXT_BUS)
+-		strcat(buf, " [isa buf]");
+-	}
+-	if (p->ema & VG469_MODE_CABLE)
+-	    strcat(buf, " [cable]");
+-	if (p->ema & VG469_MODE_COMPAT)
+-	    strcat(buf, " [c step]");
+-    }
+-    return 0xffff;
+-}
+-
+-/*======================================================================
+-
+-    Generic routines to get and set controller options
+-    
+-======================================================================*/
+-
+-static void get_bridge_state(u_short s)
+-{
+-    struct i82365_socket *t = &socket[s];
+-    if (t->flags & IS_CIRRUS)
+-	cirrus_get_state(s);
+-    else if (t->flags & IS_VADEM)
+-	vg46x_get_state(s);
+-}
+-
+-static void set_bridge_state(u_short s)
+-{
+-    struct i82365_socket *t = &socket[s];
+-    if (t->flags & IS_CIRRUS)
+-	cirrus_set_state(s);
+-    else {
+-	i365_set(s, I365_GBLCTL, 0x00);
+-	i365_set(s, I365_GENCTL, 0x00);
+-    }
+-    i365_bflip(s, I365_INTCTL, I365_INTR_ENA, t->intr);
+-    if (t->flags & IS_VADEM)
+-	vg46x_set_state(s);
+-}
+-
+-static u_int __init set_bridge_opts(u_short s, u_short ns)
+-{
+-    u_short i;
+-    u_int m = 0xffff;
+-    char buf[128];
+-
+-    for (i = s; i < s+ns; i++) {
+-	if (socket[i].flags & IS_ALIVE) {
+-	    printk(KERN_INFO "    host opts [%d]: already alive!\n", i);
+-	    continue;
+-	}
+-	buf[0] = '\0';
+-	get_bridge_state(i);
+-	if (socket[i].flags & IS_CIRRUS)
+-	    m = cirrus_set_opts(i, buf);
+-	else if (socket[i].flags & IS_VADEM)
+-	    m = vg46x_set_opts(i, buf);
+-	set_bridge_state(i);
+-	printk(KERN_INFO "    host opts [%d]:%s\n", i,
+-	       (*buf) ? buf : " none");
+-    }
+-    return m;
+-}
+-
+-/*======================================================================
+-
+-    Interrupt testing code, for ISA and PCI interrupts
+-    
+-======================================================================*/
+-
+-static volatile u_int irq_hits;
+-static u_short irq_sock;
+-
+-static irqreturn_t i365_count_irq(int irq, void *dev)
+-{
+-    i365_get(irq_sock, I365_CSC);
+-    irq_hits++;
+-    pr_debug("i82365: -> hit on irq %d\n", irq);
+-    return IRQ_HANDLED;
+-}
+-
+-static u_int __init test_irq(u_short sock, int irq)
+-{
+-    pr_debug("i82365:  testing ISA irq %d\n", irq);
+-    if (request_irq(irq, i365_count_irq, IRQF_PROBE_SHARED, "scan",
+-			i365_count_irq) != 0)
+-	return 1;
+-    irq_hits = 0; irq_sock = sock;
+-    msleep(10);
+-    if (irq_hits) {
+-	free_irq(irq, i365_count_irq);
+-	pr_debug("i82365:    spurious hit!\n");
+-	return 1;
+-    }
+-
+-    /* Generate one interrupt */
+-    i365_set(sock, I365_CSCINT, I365_CSC_DETECT | (irq << 4));
+-    i365_bset(sock, I365_GENCTL, I365_CTL_SW_IRQ);
+-    udelay(1000);
+-
+-    free_irq(irq, i365_count_irq);
+-
+-    /* mask all interrupts */
+-    i365_set(sock, I365_CSCINT, 0);
+-    pr_debug("i82365:    hits = %d\n", irq_hits);
+-    
+-    return (irq_hits != 1);
+-}
+-
+-static u_int __init isa_scan(u_short sock, u_int mask0)
+-{
+-    u_int mask1 = 0;
+-    int i;
+-
+-#ifdef __alpha__
+-#define PIC 0x4d0
+-    /* Don't probe level-triggered interrupts -- reserved for PCI */
+-    mask0 &= ~(inb(PIC) | (inb(PIC+1) << 8));
+-#endif
+-    
+-    if (do_scan) {
+-	set_bridge_state(sock);
+-	i365_set(sock, I365_CSCINT, 0);
+-	for (i = 0; i < 16; i++)
+-	    if ((mask0 & (1 << i)) && (test_irq(sock, i) == 0))
+-		mask1 |= (1 << i);
+-	for (i = 0; i < 16; i++)
+-	    if ((mask1 & (1 << i)) && (test_irq(sock, i) != 0))
+-		mask1 ^= (1 << i);
+-    }
+-    
+-    printk(KERN_INFO "    ISA irqs (");
+-    if (mask1) {
+-	printk("scanned");
+-    } else {
+-	/* Fallback: just find interrupts that aren't in use */
+-	for (i = 0; i < 16; i++)
+-	    if ((mask0 & (1 << i)) && (_check_irq(i, IRQF_PROBE_SHARED) == 0))
+-		mask1 |= (1 << i);
+-	printk("default");
+-	/* If scan failed, default to polled status */
+-	if (!cs_irq && (poll_interval == 0)) poll_interval = HZ;
+-    }
+-    printk(") = ");
+-    
+-    for (i = 0; i < 16; i++)
+-	if (mask1 & (1<<i))
+-	    printk("%s%d", ((mask1 & ((1<<i)-1)) ? "," : ""), i);
+-    if (mask1 == 0) printk("none!");
+-    
+-    return mask1;
+-}
+-
+-/*====================================================================*/
+-
+-/* Time conversion functions */
+-
+-static int to_cycles(int ns)
+-{
+-    return ns/cycle_time;
+-}
+-
+-/*====================================================================*/
+-
+-static int __init identify(unsigned int port, u_short sock)
+-{
+-    u_char val;
+-    int type = -1;
+-
+-    /* Use the next free entry in the socket table */
+-    socket[sockets].ioaddr = port;
+-    socket[sockets].psock = sock;
+-    
+-    /* Wake up a sleepy Cirrus controller */
+-    if (wakeup) {
+-	i365_bclr(sockets, PD67_MISC_CTL_2, PD67_MC2_SUSPEND);
+-	/* Pause at least 50 ms */
+-	mdelay(50);
+-    }
+-    
+-    if ((val = i365_get(sockets, I365_IDENT)) & 0x70)
+-	return -1;
+-    switch (val) {
+-    case 0x82:
+-	type = IS_I82365A; break;
+-    case 0x83:
+-	type = IS_I82365B; break;
+-    case 0x84:
+-	type = IS_I82365DF; break;
+-    case 0x88: case 0x89: case 0x8a:
+-	type = IS_IBM; break;
+-    }
+-    
+-    /* Check for Vadem VG-468 chips */
+-    outb(0x0e, port);
+-    outb(0x37, port);
+-    i365_bset(sockets, VG468_MISC, VG468_MISC_VADEMREV);
+-    val = i365_get(sockets, I365_IDENT);
+-    if (val & I365_IDENT_VADEM) {
+-	i365_bclr(sockets, VG468_MISC, VG468_MISC_VADEMREV);
+-	type = ((val & 7) >= 4) ? IS_VG469 : IS_VG468;
+-    }
+-
+-    /* Check for Ricoh chips */
+-    val = i365_get(sockets, RF5C_CHIP_ID);
+-    if ((val == RF5C_CHIP_RF5C296) || (val == RF5C_CHIP_RF5C396))
+-	type = IS_RF5Cx96;
+-    
+-    /* Check for Cirrus CL-PD67xx chips */
+-    i365_set(sockets, PD67_CHIP_INFO, 0);
+-    val = i365_get(sockets, PD67_CHIP_INFO);
+-    if ((val & PD67_INFO_CHIP_ID) == PD67_INFO_CHIP_ID) {
+-	val = i365_get(sockets, PD67_CHIP_INFO);
+-	if ((val & PD67_INFO_CHIP_ID) == 0) {
+-	    type = (val & PD67_INFO_SLOTS) ? IS_PD672X : IS_PD6710;
+-	    i365_set(sockets, PD67_EXT_INDEX, 0xe5);
+-	    if (i365_get(sockets, PD67_EXT_INDEX) != 0xe5)
+-		type = IS_VT83C469;
+-	}
+-    }
+-    return type;
+-} /* identify */
+-
+-/*======================================================================
+-
+-    See if a card is present, powered up, in IO mode, and already
+-    bound to a (non PC Card) Linux driver.  We leave these alone.
+-
+-    We make an exception for cards that seem to be serial devices.
+-    
+-======================================================================*/
+-
+-static int __init is_alive(u_short sock)
+-{
+-    u_char stat;
+-    unsigned int start, stop;
+-    
+-    stat = i365_get(sock, I365_STATUS);
+-    start = i365_get_pair(sock, I365_IO(0)+I365_W_START);
+-    stop = i365_get_pair(sock, I365_IO(0)+I365_W_STOP);
+-    if ((stat & I365_CS_DETECT) && (stat & I365_CS_POWERON) &&
+-	(i365_get(sock, I365_INTCTL) & I365_PC_IOCARD) &&
+-	(i365_get(sock, I365_ADDRWIN) & I365_ENA_IO(0)) &&
+-	((start & 0xfeef) != 0x02e8)) {
+-	if (!request_region(start, stop-start+1, "i82365"))
+-	    return 1;
+-	release_region(start, stop-start+1);
+-    }
+-
+-    return 0;
+-}
+-
+-/*====================================================================*/
+-
+-static void __init add_socket(unsigned int port, int psock, int type)
+-{
+-    socket[sockets].ioaddr = port;
+-    socket[sockets].psock = psock;
+-    socket[sockets].type = type;
+-    socket[sockets].flags = pcic[type].flags;
+-    if (is_alive(sockets))
+-	socket[sockets].flags |= IS_ALIVE;
+-    sockets++;
+-}
+-
+-static void __init add_pcic(int ns, int type)
+-{
+-    u_int mask = 0, i, base;
+-    int isa_irq = 0;
+-    struct i82365_socket *t = &socket[sockets-ns];
+-
+-    base = sockets-ns;
+-    if (base == 0) printk("\n");
+-    printk(KERN_INFO "  %s", pcic[type].name);
+-    printk(" ISA-to-PCMCIA at port %#x ofs 0x%02x",
+-	       t->ioaddr, t->psock*0x40);
+-    printk(", %d socket%s\n", ns, ((ns > 1) ? "s" : ""));
+-
+-    /* Set host options, build basic interrupt mask */
+-    if (irq_list_count == 0)
+-	mask = irq_mask;
+-    else
+-	for (i = mask = 0; i < irq_list_count; i++)
+-	    mask |= (1<<irq_list[i]);
+-    mask &= I365_MASK & set_bridge_opts(base, ns);
+-    /* Scan for ISA interrupts */
+-    mask = isa_scan(base, mask);
+-        
+-    /* Poll if only two interrupts available */
+-    if (!poll_interval) {
+-	u_int tmp = (mask & 0xff20);
+-	tmp = tmp & (tmp-1);
+-	if ((tmp & (tmp-1)) == 0)
+-	    poll_interval = HZ;
+-    }
+-    /* Only try an ISA cs_irq if this is the first controller */
+-    if (!grab_irq && (cs_irq || !poll_interval)) {
+-	/* Avoid irq 12 unless it is explicitly requested */
+-	u_int cs_mask = mask & ((cs_irq) ? (1<<cs_irq) : ~(1<<12));
+-	for (cs_irq = 15; cs_irq > 0; cs_irq--)
+-	    if ((cs_mask & (1 << cs_irq)) &&
+-		(_check_irq(cs_irq, IRQF_PROBE_SHARED) == 0))
+-		break;
+-	if (cs_irq) {
+-	    grab_irq = 1;
+-	    isa_irq = cs_irq;
+-	    printk(" status change on irq %d\n", cs_irq);
+-	}
+-    }
+-    
+-    if (!isa_irq) {
+-	if (poll_interval == 0)
+-	    poll_interval = HZ;
+-	printk(" polling interval = %d ms\n",
+-	       poll_interval * 1000 / HZ);
+-	
+-    }
+-    
+-    /* Update socket interrupt information, capabilities */
+-    for (i = 0; i < ns; i++) {
+-	t[i].socket.features |= SS_CAP_PCCARD;
+-	t[i].socket.map_size = 0x1000;
+-	t[i].socket.irq_mask = mask;
+-	t[i].cs_irq = isa_irq;
+-    }
+-
+-} /* add_pcic */
+-
+-/*====================================================================*/
+-
+-#ifdef CONFIG_PNP
+-static struct isapnp_device_id id_table[] __initdata = {
+-	{ 	ISAPNP_ANY_ID, ISAPNP_ANY_ID, ISAPNP_VENDOR('P', 'N', 'P'),
+-		ISAPNP_FUNCTION(0x0e00), (unsigned long) "Intel 82365-Compatible" },
+-	{ 	ISAPNP_ANY_ID, ISAPNP_ANY_ID, ISAPNP_VENDOR('P', 'N', 'P'),
+-		ISAPNP_FUNCTION(0x0e01), (unsigned long) "Cirrus Logic CL-PD6720" },
+-	{ 	ISAPNP_ANY_ID, ISAPNP_ANY_ID, ISAPNP_VENDOR('P', 'N', 'P'),
+-		ISAPNP_FUNCTION(0x0e02), (unsigned long) "VLSI VL82C146" },
+-	{	0 }
+-};
+-MODULE_DEVICE_TABLE(isapnp, id_table);
+-
+-static struct pnp_dev *i82365_pnpdev;
+-#endif
+-
+-static void __init isa_probe(void)
+-{
+-    int i, j, sock, k, ns, id;
+-    unsigned int port;
+-#ifdef CONFIG_PNP
+-    struct isapnp_device_id *devid;
+-    struct pnp_dev *dev;
+-
+-    for (devid = id_table; devid->vendor; devid++) {
+-	if ((dev = pnp_find_dev(NULL, devid->vendor, devid->function, NULL))) {
+-	
+-	    if (pnp_device_attach(dev) < 0)
+-	    	continue;
+-
+-	    if (pnp_activate_dev(dev) < 0) {
+-		printk("activate failed\n");
+-		pnp_device_detach(dev);
+-		break;
+-	    }
+-
+-	    if (!pnp_port_valid(dev, 0)) {
+-		printk("invalid resources ?\n");
+-		pnp_device_detach(dev);
+-		break;
+-	    }
+-	    i365_base = pnp_port_start(dev, 0);
+-	    i82365_pnpdev = dev;
+-	    break;
+-	}
+-    }
+-#endif
+-
+-    if (!request_region(i365_base, 2, "i82365")) {
+-	if (sockets == 0)
+-	    printk("port conflict at %#lx\n", i365_base);
+-	return;
+-    }
+-
+-    id = identify(i365_base, 0);
+-    if ((id == IS_I82365DF) && (identify(i365_base, 1) != id)) {
+-	for (i = 0; i < 4; i++) {
+-	    if (i == ignore) continue;
+-	    port = i365_base + ((i & 1) << 2) + ((i & 2) << 1);
+-	    sock = (i & 1) << 1;
+-	    if (identify(port, sock) == IS_I82365DF) {
+-		add_socket(port, sock, IS_VLSI);
+-		add_pcic(1, IS_VLSI);
+-	    }
+-	}
+-    } else {
+-	for (i = 0; i < 8; i += 2) {
+-	    if (sockets && !extra_sockets && (i == 4))
+-		break;
+-	    port = i365_base + 2*(i>>2);
+-	    sock = (i & 3);
+-	    id = identify(port, sock);
+-	    if (id < 0) continue;
+-
+-	    for (j = ns = 0; j < 2; j++) {
+-		/* Does the socket exist? */
+-		if ((ignore == i+j) || (identify(port, sock+j) < 0))
+-		    continue;
+-		/* Check for bad socket decode */
+-		for (k = 0; k <= sockets; k++)
+-		    i365_set(k, I365_MEM(0)+I365_W_OFF, k);
+-		for (k = 0; k <= sockets; k++)
+-		    if (i365_get(k, I365_MEM(0)+I365_W_OFF) != k)
+-			break;
+-		if (k <= sockets) break;
+-		add_socket(port, sock+j, id); ns++;
+-	    }
+-	    if (ns != 0) add_pcic(ns, id);
+-	}
+-    }
+-}
+-
+-/*====================================================================*/
+-
+-static irqreturn_t pcic_interrupt(int irq, void *dev)
+-{
+-    int i, j, csc;
+-    u_int events, active;
+-    u_long flags = 0;
+-    int handled = 0;
+-
+-    pr_debug("pcic_interrupt(%d)\n", irq);
+-
+-    for (j = 0; j < 20; j++) {
+-	active = 0;
+-	for (i = 0; i < sockets; i++) {
+-	    if (socket[i].cs_irq != irq)
+-		continue;
+-	    handled = 1;
+-	    ISA_LOCK(i, flags);
+-	    csc = i365_get(i, I365_CSC);
+-	    if ((csc == 0) || (i365_get(i, I365_IDENT) & 0x70)) {
+-		ISA_UNLOCK(i, flags);
+-		continue;
+-	    }
+-	    events = (csc & I365_CSC_DETECT) ? SS_DETECT : 0;
+-
+-	    if (i365_get(i, I365_INTCTL) & I365_PC_IOCARD)
+-		events |= (csc & I365_CSC_STSCHG) ? SS_STSCHG : 0;
+-	    else {
+-		events |= (csc & I365_CSC_BVD1) ? SS_BATDEAD : 0;
+-		events |= (csc & I365_CSC_BVD2) ? SS_BATWARN : 0;
+-		events |= (csc & I365_CSC_READY) ? SS_READY : 0;
+-	    }
+-	    ISA_UNLOCK(i, flags);
+-	    pr_debug("socket %d event 0x%02x\n", i, events);
+-
+-	    if (events)
+-		pcmcia_parse_events(&socket[i].socket, events);
+-
+-	    active |= events;
+-	}
+-	if (!active) break;
+-    }
+-    if (j == 20)
+-	printk(KERN_NOTICE "i82365: infinite loop in interrupt handler\n");
+-
+-    pr_debug("pcic_interrupt done\n");
+-    return IRQ_RETVAL(handled);
+-} /* pcic_interrupt */
+-
+-static void pcic_interrupt_wrapper(struct timer_list *unused)
+-{
+-    pcic_interrupt(0, NULL);
+-    poll_timer.expires = jiffies + poll_interval;
+-    add_timer(&poll_timer);
+-}
+-
+-/*====================================================================*/
+-
+-static int i365_get_status(u_short sock, u_int *value)
+-{
+-    u_int status;
+-    
+-    status = i365_get(sock, I365_STATUS);
+-    *value = ((status & I365_CS_DETECT) == I365_CS_DETECT)
+-	? SS_DETECT : 0;
+-	
+-    if (i365_get(sock, I365_INTCTL) & I365_PC_IOCARD)
+-	*value |= (status & I365_CS_STSCHG) ? 0 : SS_STSCHG;
+-    else {
+-	*value |= (status & I365_CS_BVD1) ? 0 : SS_BATDEAD;
+-	*value |= (status & I365_CS_BVD2) ? 0 : SS_BATWARN;
+-    }
+-    *value |= (status & I365_CS_WRPROT) ? SS_WRPROT : 0;
+-    *value |= (status & I365_CS_READY) ? SS_READY : 0;
+-    *value |= (status & I365_CS_POWERON) ? SS_POWERON : 0;
+-
+-    if (socket[sock].type == IS_VG469) {
+-	status = i365_get(sock, VG469_VSENSE);
+-	if (socket[sock].psock & 1) {
+-	    *value |= (status & VG469_VSENSE_B_VS1) ? 0 : SS_3VCARD;
+-	    *value |= (status & VG469_VSENSE_B_VS2) ? 0 : SS_XVCARD;
+-	} else {
+-	    *value |= (status & VG469_VSENSE_A_VS1) ? 0 : SS_3VCARD;
+-	    *value |= (status & VG469_VSENSE_A_VS2) ? 0 : SS_XVCARD;
+-	}
+-    }
+-    
+-    pr_debug("GetStatus(%d) = %#4.4x\n", sock, *value);
+-    return 0;
+-} /* i365_get_status */
+-
+-/*====================================================================*/
+-
+-static int i365_set_socket(u_short sock, socket_state_t *state)
+-{
+-    struct i82365_socket *t = &socket[sock];
+-    u_char reg;
+-    
+-    pr_debug("SetSocket(%d, flags %#3.3x, Vcc %d, Vpp %d, "
+-	  "io_irq %d, csc_mask %#2.2x)\n", sock, state->flags,
+-	  state->Vcc, state->Vpp, state->io_irq, state->csc_mask);
+-    
+-    /* First set global controller options */
+-    set_bridge_state(sock);
+-    
+-    /* IO card, RESET flag, IO interrupt */
+-    reg = t->intr;
+-    reg |= state->io_irq;
+-    reg |= (state->flags & SS_RESET) ? 0 : I365_PC_RESET;
+-    reg |= (state->flags & SS_IOCARD) ? I365_PC_IOCARD : 0;
+-    i365_set(sock, I365_INTCTL, reg);
+-    
+-    reg = I365_PWR_NORESET;
+-    if (state->flags & SS_PWR_AUTO) reg |= I365_PWR_AUTO;
+-    if (state->flags & SS_OUTPUT_ENA) reg |= I365_PWR_OUT;
+-
+-    if (t->flags & IS_CIRRUS) {
+-	if (state->Vpp != 0) {
+-	    if (state->Vpp == 120)
+-		reg |= I365_VPP1_12V;
+-	    else if (state->Vpp == state->Vcc)
+-		reg |= I365_VPP1_5V;
+-	    else return -EINVAL;
+-	}
+-	if (state->Vcc != 0) {
+-	    reg |= I365_VCC_5V;
+-	    if (state->Vcc == 33)
+-		i365_bset(sock, PD67_MISC_CTL_1, PD67_MC1_VCC_3V);
+-	    else if (state->Vcc == 50)
+-		i365_bclr(sock, PD67_MISC_CTL_1, PD67_MC1_VCC_3V);
+-	    else return -EINVAL;
+-	}
+-    } else if (t->flags & IS_VG_PWR) {
+-	if (state->Vpp != 0) {
+-	    if (state->Vpp == 120)
+-		reg |= I365_VPP1_12V;
+-	    else if (state->Vpp == state->Vcc)
+-		reg |= I365_VPP1_5V;
+-	    else return -EINVAL;
+-	}
+-	if (state->Vcc != 0) {
+-	    reg |= I365_VCC_5V;
+-	    if (state->Vcc == 33)
+-		i365_bset(sock, VG469_VSELECT, VG469_VSEL_VCC);
+-	    else if (state->Vcc == 50)
+-		i365_bclr(sock, VG469_VSELECT, VG469_VSEL_VCC);
+-	    else return -EINVAL;
+-	}
+-    } else if (t->flags & IS_DF_PWR) {
+-	switch (state->Vcc) {
+-	case 0:		break;
+-	case 33:   	reg |= I365_VCC_3V; break;
+-	case 50:	reg |= I365_VCC_5V; break;
+-	default:	return -EINVAL;
+-	}
+-	switch (state->Vpp) {
+-	case 0:		break;
+-	case 50:   	reg |= I365_VPP1_5V; break;
+-	case 120:	reg |= I365_VPP1_12V; break;
+-	default:	return -EINVAL;
+-	}
+-    } else {
+-	switch (state->Vcc) {
+-	case 0:		break;
+-	case 50:	reg |= I365_VCC_5V; break;
+-	default:	return -EINVAL;
+-	}
+-	switch (state->Vpp) {
+-	case 0:		break;
+-	case 50:	reg |= I365_VPP1_5V | I365_VPP2_5V; break;
+-	case 120:	reg |= I365_VPP1_12V | I365_VPP2_12V; break;
+-	default:	return -EINVAL;
+-	}
+-    }
+-    
+-    if (reg != i365_get(sock, I365_POWER))
+-	i365_set(sock, I365_POWER, reg);
+-
+-    /* Chipset-specific functions */
+-    if (t->flags & IS_CIRRUS) {
+-	/* Speaker control */
+-	i365_bflip(sock, PD67_MISC_CTL_1, PD67_MC1_SPKR_ENA,
+-		   state->flags & SS_SPKR_ENA);
+-    }
+-    
+-    /* Card status change interrupt mask */
+-    reg = t->cs_irq << 4;
+-    if (state->csc_mask & SS_DETECT) reg |= I365_CSC_DETECT;
+-    if (state->flags & SS_IOCARD) {
+-	if (state->csc_mask & SS_STSCHG) reg |= I365_CSC_STSCHG;
+-    } else {
+-	if (state->csc_mask & SS_BATDEAD) reg |= I365_CSC_BVD1;
+-	if (state->csc_mask & SS_BATWARN) reg |= I365_CSC_BVD2;
+-	if (state->csc_mask & SS_READY) reg |= I365_CSC_READY;
+-    }
+-    i365_set(sock, I365_CSCINT, reg);
+-    i365_get(sock, I365_CSC);
+-    
+-    return 0;
+-} /* i365_set_socket */
+-
+-/*====================================================================*/
+-
+-static int i365_set_io_map(u_short sock, struct pccard_io_map *io)
+-{
+-    u_char map, ioctl;
+-    
+-    pr_debug("SetIOMap(%d, %d, %#2.2x, %d ns, "
+-	  "%#llx-%#llx)\n", sock, io->map, io->flags, io->speed,
+-	  (unsigned long long)io->start, (unsigned long long)io->stop);
+-    map = io->map;
+-    if ((map > 1) || (io->start > 0xffff) || (io->stop > 0xffff) ||
+-	(io->stop < io->start)) return -EINVAL;
+-    /* Turn off the window before changing anything */
+-    if (i365_get(sock, I365_ADDRWIN) & I365_ENA_IO(map))
+-	i365_bclr(sock, I365_ADDRWIN, I365_ENA_IO(map));
+-    i365_set_pair(sock, I365_IO(map)+I365_W_START, io->start);
+-    i365_set_pair(sock, I365_IO(map)+I365_W_STOP, io->stop);
+-    ioctl = i365_get(sock, I365_IOCTL) & ~I365_IOCTL_MASK(map);
+-    if (io->speed) ioctl |= I365_IOCTL_WAIT(map);
+-    if (io->flags & MAP_0WS) ioctl |= I365_IOCTL_0WS(map);
+-    if (io->flags & MAP_16BIT) ioctl |= I365_IOCTL_16BIT(map);
+-    if (io->flags & MAP_AUTOSZ) ioctl |= I365_IOCTL_IOCS16(map);
+-    i365_set(sock, I365_IOCTL, ioctl);
+-    /* Turn on the window if necessary */
+-    if (io->flags & MAP_ACTIVE)
+-	i365_bset(sock, I365_ADDRWIN, I365_ENA_IO(map));
+-    return 0;
+-} /* i365_set_io_map */
+-
+-/*====================================================================*/
+-
+-static int i365_set_mem_map(u_short sock, struct pccard_mem_map *mem)
+-{
+-    u_short base, i;
+-    u_char map;
+-    
+-    pr_debug("SetMemMap(%d, %d, %#2.2x, %d ns, %#llx-%#llx, "
+-	  "%#x)\n", sock, mem->map, mem->flags, mem->speed,
+-	  (unsigned long long)mem->res->start,
+-	  (unsigned long long)mem->res->end, mem->card_start);
+-
+-    map = mem->map;
+-    if ((map > 4) || (mem->card_start > 0x3ffffff) ||
+-	(mem->res->start > mem->res->end) || (mem->speed > 1000))
+-	return -EINVAL;
+-    if ((mem->res->start > 0xffffff) || (mem->res->end > 0xffffff))
+-	return -EINVAL;
+-	
+-    /* Turn off the window before changing anything */
+-    if (i365_get(sock, I365_ADDRWIN) & I365_ENA_MEM(map))
+-	i365_bclr(sock, I365_ADDRWIN, I365_ENA_MEM(map));
+-    
+-    base = I365_MEM(map);
+-    i = (mem->res->start >> 12) & 0x0fff;
+-    if (mem->flags & MAP_16BIT) i |= I365_MEM_16BIT;
+-    if (mem->flags & MAP_0WS) i |= I365_MEM_0WS;
+-    i365_set_pair(sock, base+I365_W_START, i);
+-    
+-    i = (mem->res->end >> 12) & 0x0fff;
+-    switch (to_cycles(mem->speed)) {
+-    case 0:	break;
+-    case 1:	i |= I365_MEM_WS0; break;
+-    case 2:	i |= I365_MEM_WS1; break;
+-    default:	i |= I365_MEM_WS1 | I365_MEM_WS0; break;
+-    }
+-    i365_set_pair(sock, base+I365_W_STOP, i);
+-    
+-    i = ((mem->card_start - mem->res->start) >> 12) & 0x3fff;
+-    if (mem->flags & MAP_WRPROT) i |= I365_MEM_WRPROT;
+-    if (mem->flags & MAP_ATTRIB) i |= I365_MEM_REG;
+-    i365_set_pair(sock, base+I365_W_OFF, i);
+-    
+-    /* Turn on the window if necessary */
+-    if (mem->flags & MAP_ACTIVE)
+-	i365_bset(sock, I365_ADDRWIN, I365_ENA_MEM(map));
+-    return 0;
+-} /* i365_set_mem_map */
+-
+-#if 0 /* driver model ordering issue */
+-/*======================================================================
+-
+-    Routines for accessing socket information and register dumps via
+-    /sys/class/pcmcia_socket/...
+-    
+-======================================================================*/
+-
+-static ssize_t show_info(struct class_device *class_dev, char *buf)
+-{
+-	struct i82365_socket *s = container_of(class_dev, struct i82365_socket, socket.dev);
+-	return sprintf(buf, "type:     %s\npsock:    %d\n",
+-		       pcic[s->type].name, s->psock);
+-}
+-
+-static ssize_t show_exca(struct class_device *class_dev, char *buf)
+-{
+-	struct i82365_socket *s = container_of(class_dev, struct i82365_socket, socket.dev);
+-	unsigned short sock;
+-	int i;
+-	ssize_t ret = 0;
+-	unsigned long flags = 0;
+-
+-	sock = s->number;
+-
+-	ISA_LOCK(sock, flags);
+-	for (i = 0; i < 0x40; i += 4) {
+-		ret += sprintf(buf, "%02x %02x %02x %02x%s",
+-			       i365_get(sock,i), i365_get(sock,i+1),
+-			       i365_get(sock,i+2), i365_get(sock,i+3),
+-			       ((i % 16) == 12) ? "\n" : " ");
+-		buf += ret;
+-	}
+-	ISA_UNLOCK(sock, flags);
+-
+-	return ret;
+-}
+-
+-static CLASS_DEVICE_ATTR(exca, S_IRUGO, show_exca, NULL);
+-static CLASS_DEVICE_ATTR(info, S_IRUGO, show_info, NULL);
+-#endif
+-
+-/*====================================================================*/
+-
+-/* this is horribly ugly... proper locking needs to be done here at 
+- * some time... */
+-#define LOCKED(x) do { \
+-	int retval; \
+-	unsigned long flags; \
+-	spin_lock_irqsave(&isa_lock, flags); \
+-	retval = x; \
+-	spin_unlock_irqrestore(&isa_lock, flags); \
+-	return retval; \
+-} while (0)
+-	
+-
+-static int pcic_get_status(struct pcmcia_socket *s, u_int *value)
+-{
+-	unsigned int sock = container_of(s, struct i82365_socket, socket)->number;
+-
+-	if (socket[sock].flags & IS_ALIVE) {
+-		*value = 0;
+-		return -EINVAL;
+-	}
+-
+-	LOCKED(i365_get_status(sock, value));
+-}
+-
+-static int pcic_set_socket(struct pcmcia_socket *s, socket_state_t *state)
+-{
+-	unsigned int sock = container_of(s, struct i82365_socket, socket)->number;
+-
+-	if (socket[sock].flags & IS_ALIVE)
+-		return -EINVAL;
+-
+-	LOCKED(i365_set_socket(sock, state));
+-}
+-
+-static int pcic_set_io_map(struct pcmcia_socket *s, struct pccard_io_map *io)
+-{
+-	unsigned int sock = container_of(s, struct i82365_socket, socket)->number;
+-	if (socket[sock].flags & IS_ALIVE)
+-		return -EINVAL;
+-
+-	LOCKED(i365_set_io_map(sock, io));
+-}
+-
+-static int pcic_set_mem_map(struct pcmcia_socket *s, struct pccard_mem_map *mem)
+-{
+-	unsigned int sock = container_of(s, struct i82365_socket, socket)->number;
+-	if (socket[sock].flags & IS_ALIVE)
+-		return -EINVAL;
+-
+-	LOCKED(i365_set_mem_map(sock, mem));
+-}
+-
+-static int pcic_init(struct pcmcia_socket *s)
+-{
+-	int i;
+-	struct resource res = { .start = 0, .end = 0x1000 };
+-	pccard_io_map io = { 0, 0, 0, 0, 1 };
+-	pccard_mem_map mem = { .res = &res, };
+-
+-	for (i = 0; i < 2; i++) {
+-		io.map = i;
+-		pcic_set_io_map(s, &io);
+-	}
+-	for (i = 0; i < 5; i++) {
+-		mem.map = i;
+-		pcic_set_mem_map(s, &mem);
+-	}
+-	return 0;
+-}
+-
+-
+-static struct pccard_operations pcic_operations = {
+-	.init			= pcic_init,
+-	.get_status		= pcic_get_status,
+-	.set_socket		= pcic_set_socket,
+-	.set_io_map		= pcic_set_io_map,
+-	.set_mem_map		= pcic_set_mem_map,
+-};
+-
+-/*====================================================================*/
+-
+-static struct platform_driver i82365_driver = {
+-	.driver = {
+-		.name = "i82365",
+-	},
+-};
+-
+-static struct platform_device *i82365_device;
+-
+-static int __init init_i82365(void)
+-{
+-    int i, ret;
+-
+-    ret = platform_driver_register(&i82365_driver);
+-    if (ret)
+-	goto err_out;
+-
+-    i82365_device = platform_device_alloc("i82365", 0);
+-    if (i82365_device) {
+-	    ret = platform_device_add(i82365_device);
+-	    if (ret)
+-		    platform_device_put(i82365_device);
+-    } else
+-	    ret = -ENOMEM;
+-
+-    if (ret)
+-	goto err_driver_unregister;
+-
+-    printk(KERN_INFO "Intel ISA PCIC probe: ");
+-    sockets = 0;
+-
+-    isa_probe();
+-
+-    if (sockets == 0) {
+-	printk("not found.\n");
+-	ret = -ENODEV;
+-	goto err_dev_unregister;
+-    }
+-
+-    /* Set up interrupt handler(s) */
+-    if (grab_irq != 0)
+-	ret = request_irq(cs_irq, pcic_interrupt, 0, "i82365", pcic_interrupt);
+-
+-    if (ret)
+-	goto err_socket_release;
+-
+-    /* register sockets with the pcmcia core */
+-    for (i = 0; i < sockets; i++) {
+-	    socket[i].socket.dev.parent = &i82365_device->dev;
+-	    socket[i].socket.ops = &pcic_operations;
+-	    socket[i].socket.resource_ops = &pccard_nonstatic_ops;
+-	    socket[i].socket.owner = THIS_MODULE;
+-	    socket[i].number = i;
+-	    ret = pcmcia_register_socket(&socket[i].socket);
+-	    if (!ret)
+-		    socket[i].flags |= IS_REGISTERED;
+-    }
+-
+-    /* Finally, schedule a polling interrupt */
+-    if (poll_interval != 0) {
+-	timer_setup(&poll_timer, pcic_interrupt_wrapper, 0);
+-    	poll_timer.expires = jiffies + poll_interval;
+-	add_timer(&poll_timer);
+-    }
+-    
+-    return 0;
+-err_socket_release:
+-    for (i = 0; i < sockets; i++) {
+-	/* Turn off all interrupt sources! */
+-	i365_set(i, I365_CSCINT, 0);
+-	release_region(socket[i].ioaddr, 2);
+-    }
+-err_dev_unregister:
+-    platform_device_unregister(i82365_device);
+-    release_region(i365_base, 2);
+-#ifdef CONFIG_PNP
+-    if (i82365_pnpdev)
+-	pnp_disable_dev(i82365_pnpdev);
+-#endif
+-err_driver_unregister:
+-    platform_driver_unregister(&i82365_driver);
+-err_out:
+-    return ret;
+-} /* init_i82365 */
+-
+-static void __exit exit_i82365(void)
+-{
+-    int i;
+-
+-    for (i = 0; i < sockets; i++) {
+-	    if (socket[i].flags & IS_REGISTERED)
+-		    pcmcia_unregister_socket(&socket[i].socket);
+-    }
+-    platform_device_unregister(i82365_device);
+-    if (poll_interval != 0)
+-	timer_delete_sync(&poll_timer);
+-    if (grab_irq != 0)
+-	free_irq(cs_irq, pcic_interrupt);
+-    for (i = 0; i < sockets; i++) {
+-	/* Turn off all interrupt sources! */
+-	i365_set(i, I365_CSCINT, 0);
+-	release_region(socket[i].ioaddr, 2);
+-    }
+-    release_region(i365_base, 2);
+-#ifdef CONFIG_PNP
+-    if (i82365_pnpdev)
+-    		pnp_disable_dev(i82365_pnpdev);
+-#endif
+-    platform_driver_unregister(&i82365_driver);
+-} /* exit_i82365 */
+-
+-module_init(init_i82365);
+-module_exit(exit_i82365);
+-MODULE_DESCRIPTION("Driver for Intel 82365 and compatible PC Card controllers");
+-MODULE_LICENSE("Dual MPL/GPL");
+-/*====================================================================*/
+diff --git a/drivers/pcmcia/tcic.c b/drivers/pcmcia/tcic.c
+deleted file mode 100644
+index 060aed0edc65..000000000000
+--- a/drivers/pcmcia/tcic.c
++++ /dev/null
+@@ -1,805 +0,0 @@
+-/*======================================================================
+-
+-    Device driver for Databook TCIC-2 PCMCIA controller
+-
+-    tcic.c 1.111 2000/02/15 04:13:12
+-
+-    The contents of this file are subject to the Mozilla Public
+-    License Version 1.1 (the "License"); you may not use this file
+-    except in compliance with the License. You may obtain a copy of
+-    the License at http://www.mozilla.org/MPL/
+-
+-    Software distributed under the License is distributed on an "AS
+-    IS" basis, WITHOUT WARRANTY OF ANY KIND, either express or
+-    implied. See the License for the specific language governing
+-    rights and limitations under the License.
+-
+-    The initial developer of the original code is David A. Hinds
+-    <dahinds@users.sourceforge.net>.  Portions created by David A. Hinds
+-    are Copyright (C) 1999 David A. Hinds.  All Rights Reserved.
+-
+-    Alternatively, the contents of this file may be used under the
+-    terms of the GNU General Public License version 2 (the "GPL"), in which
+-    case the provisions of the GPL are applicable instead of the
+-    above.  If you wish to allow the use of your version of this file
+-    only under the terms of the GPL and not to allow others to use
+-    your version of this file under the MPL, indicate your decision
+-    by deleting the provisions above and replace them with the notice
+-    and other provisions required by the GPL.  If you do not delete
+-    the provisions above, a recipient may use your version of this
+-    file under either the MPL or the GPL.
+-    
+-======================================================================*/
+-
+-#include <linux/module.h>
+-#include <linux/moduleparam.h>
+-#include <linux/init.h>
+-#include <linux/types.h>
+-#include <linux/fcntl.h>
+-#include <linux/string.h>
+-#include <linux/errno.h>
+-#include <linux/interrupt.h>
+-#include <linux/timer.h>
+-#include <linux/ioport.h>
+-#include <linux/delay.h>
+-#include <linux/workqueue.h>
+-#include <linux/platform_device.h>
+-#include <linux/bitops.h>
+-
+-#include <asm/io.h>
+-
+-#include <pcmcia/ss.h>
+-#include "tcic.h"
+-
+-MODULE_AUTHOR("David Hinds <dahinds@users.sourceforge.net>");
+-MODULE_DESCRIPTION("Databook TCIC-2 PCMCIA socket driver");
+-MODULE_LICENSE("Dual MPL/GPL");
+-
+-/*====================================================================*/
+-
+-/* Parameters that can be set with 'insmod' */
+-
+-/* The base port address of the TCIC-2 chip */
+-static unsigned long tcic_base = TCIC_BASE;
+-
+-/* Specify a socket number to ignore */
+-static int ignore = -1;
+-
+-/* Probe for safe interrupts? */
+-static int do_scan = 1;
+-
+-/* Bit map of interrupts to choose from */
+-static u_int irq_mask = 0xffff;
+-static int irq_list[16];
+-static unsigned int irq_list_count;
+-
+-/* The card status change interrupt -- 0 means autoselect */
+-static int cs_irq;
+-
+-/* Poll status interval -- 0 means default to interrupt */
+-static int poll_interval;
+-
+-/* Delay for card status double-checking */
+-static int poll_quick = HZ/20;
+-
+-/* CCLK external clock time, in nanoseconds.  70 ns = 14.31818 MHz */
+-static int cycle_time = 70;
+-
+-module_param_hw(tcic_base, ulong, ioport, 0444);
+-module_param(ignore, int, 0444);
+-module_param(do_scan, int, 0444);
+-module_param_hw(irq_mask, int, other, 0444);
+-module_param_hw_array(irq_list, int, irq, &irq_list_count, 0444);
+-module_param_hw(cs_irq, int, irq, 0444);
+-module_param(poll_interval, int, 0444);
+-module_param(poll_quick, int, 0444);
+-module_param(cycle_time, int, 0444);
+-
+-/*====================================================================*/
+-
+-static irqreturn_t tcic_interrupt(int irq, void *dev);
+-static void tcic_timer(struct timer_list *unused);
+-static struct pccard_operations tcic_operations;
+-
+-struct tcic_socket {
+-    u_short	psock;
+-    u_char	last_sstat;
+-    u_char	id;
+-    struct pcmcia_socket	socket;
+-};
+-
+-static struct timer_list poll_timer;
+-static int tcic_timer_pending;
+-
+-static int sockets;
+-static struct tcic_socket socket_table[2];
+-
+-/*====================================================================*/
+-
+-/* Trick when selecting interrupts: the TCIC sktirq pin is supposed
+-   to map to irq 11, but is coded as 0 or 1 in the irq registers. */
+-#define TCIC_IRQ(x) ((x) ? (((x) == 11) ? 1 : (x)) : 15)
+-
+-#ifdef DEBUG_X
+-static u_char tcic_getb(u_char reg)
+-{
+-    u_char val = inb(tcic_base+reg);
+-    printk(KERN_DEBUG "tcic_getb(%#lx) = %#x\n", tcic_base+reg, val);
+-    return val;
+-}
+-
+-static u_short tcic_getw(u_char reg)
+-{
+-    u_short val = inw(tcic_base+reg);
+-    printk(KERN_DEBUG "tcic_getw(%#lx) = %#x\n", tcic_base+reg, val);
+-    return val;
+-}
+-
+-static void tcic_setb(u_char reg, u_char data)
+-{
+-    printk(KERN_DEBUG "tcic_setb(%#lx, %#x)\n", tcic_base+reg, data);
+-    outb(data, tcic_base+reg);
+-}
+-
+-static void tcic_setw(u_char reg, u_short data)
+-{
+-    printk(KERN_DEBUG "tcic_setw(%#lx, %#x)\n", tcic_base+reg, data);
+-    outw(data, tcic_base+reg);
+-}
+-#else
+-#define tcic_getb(reg) inb(tcic_base+reg)
+-#define tcic_getw(reg) inw(tcic_base+reg)
+-#define tcic_setb(reg, data) outb(data, tcic_base+reg)
+-#define tcic_setw(reg, data) outw(data, tcic_base+reg)
+-#endif
+-
+-static void tcic_setl(u_char reg, u_int data)
+-{
+-#ifdef DEBUG_X
+-    printk(KERN_DEBUG "tcic_setl(%#x, %#lx)\n", tcic_base+reg, data);
+-#endif
+-    outw(data & 0xffff, tcic_base+reg);
+-    outw(data >> 16, tcic_base+reg+2);
+-}
+-
+-static void tcic_aux_setb(u_short reg, u_char data)
+-{
+-    u_char mode = (tcic_getb(TCIC_MODE) & TCIC_MODE_PGMMASK) | reg;
+-    tcic_setb(TCIC_MODE, mode);
+-    tcic_setb(TCIC_AUX, data);
+-}
+-
+-static u_short tcic_aux_getw(u_short reg)
+-{
+-    u_char mode = (tcic_getb(TCIC_MODE) & TCIC_MODE_PGMMASK) | reg;
+-    tcic_setb(TCIC_MODE, mode);
+-    return tcic_getw(TCIC_AUX);
+-}
+-
+-static void tcic_aux_setw(u_short reg, u_short data)
+-{
+-    u_char mode = (tcic_getb(TCIC_MODE) & TCIC_MODE_PGMMASK) | reg;
+-    tcic_setb(TCIC_MODE, mode);
+-    tcic_setw(TCIC_AUX, data);
+-}
+-
+-/*====================================================================*/
+-
+-/* Time conversion functions */
+-
+-static int to_cycles(int ns)
+-{
+-    if (ns < 14)
+-	return 0;
+-    else
+-	return 2*(ns-14)/cycle_time;
+-}
+-
+-/*====================================================================*/
+-
+-static volatile u_int irq_hits;
+-
+-static irqreturn_t __init tcic_irq_count(int irq, void *dev)
+-{
+-    irq_hits++;
+-    return IRQ_HANDLED;
+-}
+-
+-static u_int __init try_irq(int irq)
+-{
+-    u_short cfg;
+-
+-    irq_hits = 0;
+-    if (request_irq(irq, tcic_irq_count, 0, "irq scan", tcic_irq_count) != 0)
+-	return -1;
+-    mdelay(10);
+-    if (irq_hits) {
+-	free_irq(irq, tcic_irq_count);
+-	return -1;
+-    }
+-
+-    /* Generate one interrupt */
+-    cfg = TCIC_SYSCFG_AUTOBUSY | 0x0a00;
+-    tcic_aux_setw(TCIC_AUX_SYSCFG, cfg | TCIC_IRQ(irq));
+-    tcic_setb(TCIC_IENA, TCIC_IENA_ERR | TCIC_IENA_CFG_HIGH);
+-    tcic_setb(TCIC_ICSR, TCIC_ICSR_ERR | TCIC_ICSR_JAM);
+-
+-    udelay(1000);
+-    free_irq(irq, tcic_irq_count);
+-
+-    /* Turn off interrupts */
+-    tcic_setb(TCIC_IENA, TCIC_IENA_CFG_OFF);
+-    while (tcic_getb(TCIC_ICSR))
+-	tcic_setb(TCIC_ICSR, TCIC_ICSR_JAM);
+-    tcic_aux_setw(TCIC_AUX_SYSCFG, cfg);
+-    
+-    return (irq_hits != 1);
+-}
+-
+-static u_int __init irq_scan(u_int mask0)
+-{
+-    u_int mask1;
+-    int i;
+-
+-#ifdef __alpha__
+-#define PIC 0x4d0
+-    /* Don't probe level-triggered interrupts -- reserved for PCI */
+-    int level_mask = inb_p(PIC) | (inb_p(PIC+1) << 8);
+-    if (level_mask)
+-	mask0 &= ~level_mask;
+-#endif
+-
+-    mask1 = 0;
+-    if (do_scan) {
+-	for (i = 0; i < 16; i++)
+-	    if ((mask0 & (1 << i)) && (try_irq(i) == 0))
+-		mask1 |= (1 << i);
+-	for (i = 0; i < 16; i++)
+-	    if ((mask1 & (1 << i)) && (try_irq(i) != 0)) {
+-		mask1 ^= (1 << i);
+-	    }
+-    }
+-    
+-    if (mask1) {
+-	printk("scanned");
+-    } else {
+-	/* Fallback: just find interrupts that aren't in use */
+-	for (i = 0; i < 16; i++)
+-	    if ((mask0 & (1 << i)) &&
+-		(request_irq(i, tcic_irq_count, 0, "x", tcic_irq_count) == 0)) {
+-		mask1 |= (1 << i);
+-		free_irq(i, tcic_irq_count);
+-	    }
+-	printk("default");
+-    }
+-    
+-    printk(") = ");
+-    for (i = 0; i < 16; i++)
+-	if (mask1 & (1<<i))
+-	    printk("%s%d", ((mask1 & ((1<<i)-1)) ? "," : ""), i);
+-    printk(" ");
+-    
+-    return mask1;
+-}
+-
+-/*======================================================================
+-
+-    See if a card is present, powered up, in IO mode, and already
+-    bound to a (non-PCMCIA) Linux driver.
+-
+-    We make an exception for cards that look like serial devices.
+-    
+-======================================================================*/
+-
+-static int __init is_active(int s)
+-{
+-    u_short scf1, ioctl, base, num;
+-    u_char pwr, sstat;
+-    u_int addr;
+-    
+-    tcic_setl(TCIC_ADDR, (s << TCIC_ADDR_SS_SHFT)
+-	      | TCIC_ADDR_INDREG | TCIC_SCF1(s));
+-    scf1 = tcic_getw(TCIC_DATA);
+-    pwr = tcic_getb(TCIC_PWR);
+-    sstat = tcic_getb(TCIC_SSTAT);
+-    addr = TCIC_IWIN(s, 0);
+-    tcic_setw(TCIC_ADDR, addr + TCIC_IBASE_X);
+-    base = tcic_getw(TCIC_DATA);
+-    tcic_setw(TCIC_ADDR, addr + TCIC_ICTL_X);
+-    ioctl = tcic_getw(TCIC_DATA);
+-
+-    if (ioctl & TCIC_ICTL_TINY)
+-	num = 1;
+-    else {
+-	num = (base ^ (base-1));
+-	base = base & (base-1);
+-    }
+-
+-    if ((sstat & TCIC_SSTAT_CD) && (pwr & TCIC_PWR_VCC(s)) &&
+-	(scf1 & TCIC_SCF1_IOSTS) && (ioctl & TCIC_ICTL_ENA) &&
+-	((base & 0xfeef) != 0x02e8)) {
+-	struct resource *res = request_region(base, num, "tcic-2");
+-	if (!res) /* region is busy */
+-	    return 1;
+-	release_region(base, num);
+-    }
+-
+-    return 0;
+-}
+-
+-/*======================================================================
+-
+-    This returns the revision code for the specified socket.
+-    
+-======================================================================*/
+-
+-static int __init get_tcic_id(void)
+-{
+-    u_short id;
+-    
+-    tcic_aux_setw(TCIC_AUX_TEST, TCIC_TEST_DIAG);
+-    id = tcic_aux_getw(TCIC_AUX_ILOCK);
+-    id = (id & TCIC_ILOCKTEST_ID_MASK) >> TCIC_ILOCKTEST_ID_SH;
+-    tcic_aux_setw(TCIC_AUX_TEST, 0);
+-    return id;
+-}
+-
+-/*====================================================================*/
+-
+-static struct platform_driver tcic_driver = {
+-	.driver = {
+-		.name = "tcic-pcmcia",
+-	},
+-};
+-
+-static struct platform_device tcic_device = {
+-	.name = "tcic-pcmcia",
+-	.id = 0,
+-};
+-
+-
+-static int __init init_tcic(void)
+-{
+-    int i, sock, ret = 0;
+-    u_int mask, scan;
+-
+-    if (platform_driver_register(&tcic_driver))
+-	return -1;
+-    
+-    printk(KERN_INFO "Databook TCIC-2 PCMCIA probe: ");
+-    sock = 0;
+-
+-    if (!request_region(tcic_base, 16, "tcic-2")) {
+-	printk("could not allocate ports,\n ");
+-	platform_driver_unregister(&tcic_driver);
+-	return -ENODEV;
+-    }
+-    else {
+-	tcic_setw(TCIC_ADDR, 0);
+-	if (tcic_getw(TCIC_ADDR) == 0) {
+-	    tcic_setw(TCIC_ADDR, 0xc3a5);
+-	    if (tcic_getw(TCIC_ADDR) == 0xc3a5) sock = 2;
+-	}
+-	if (sock == 0) {
+-	    /* See if resetting the controller does any good */
+-	    tcic_setb(TCIC_SCTRL, TCIC_SCTRL_RESET);
+-	    tcic_setb(TCIC_SCTRL, 0);
+-	    tcic_setw(TCIC_ADDR, 0);
+-	    if (tcic_getw(TCIC_ADDR) == 0) {
+-		tcic_setw(TCIC_ADDR, 0xc3a5);
+-		if (tcic_getw(TCIC_ADDR) == 0xc3a5) sock = 2;
+-	    }
+-	}
+-    }
+-    if (sock == 0) {
+-	printk("not found.\n");
+-	release_region(tcic_base, 16);
+-	platform_driver_unregister(&tcic_driver);
+-	return -ENODEV;
+-    }
+-
+-    sockets = 0;
+-    for (i = 0; i < sock; i++) {
+-	if ((i == ignore) || is_active(i)) continue;
+-	socket_table[sockets].psock = i;
+-	socket_table[sockets].id = get_tcic_id();
+-
+-	socket_table[sockets].socket.owner = THIS_MODULE;
+-	/* only 16-bit cards, memory windows must be size-aligned */
+-	/* No PCI or CardBus support */
+-	socket_table[sockets].socket.features = SS_CAP_PCCARD | SS_CAP_MEM_ALIGN;
+-	/* irq 14, 11, 10, 7, 6, 5, 4, 3 */
+-	socket_table[sockets].socket.irq_mask = 0x4cf8;
+-	/* 4K minimum window size */
+-	socket_table[sockets].socket.map_size = 0x1000;		
+-	sockets++;
+-    }
+-
+-    switch (socket_table[0].id) {
+-    case TCIC_ID_DB86082:
+-	printk("DB86082"); break;
+-    case TCIC_ID_DB86082A:
+-	printk("DB86082A"); break;
+-    case TCIC_ID_DB86084:
+-	printk("DB86084"); break;
+-    case TCIC_ID_DB86084A:
+-	printk("DB86084A"); break;
+-    case TCIC_ID_DB86072:
+-	printk("DB86072"); break;
+-    case TCIC_ID_DB86184:
+-	printk("DB86184"); break;
+-    case TCIC_ID_DB86082B:
+-	printk("DB86082B"); break;
+-    default:
+-	printk("Unknown ID 0x%02x", socket_table[0].id);
+-    }
+-    
+-    /* Set up polling */
+-    timer_setup(&poll_timer, tcic_timer, 0);
+-
+-    /* Build interrupt mask */
+-    printk(KERN_CONT ", %d sockets\n", sockets);
+-    printk(KERN_INFO "  irq list (");
+-    if (irq_list_count == 0)
+-	mask = irq_mask;
+-    else
+-	for (i = mask = 0; i < irq_list_count; i++)
+-	    mask |= (1<<irq_list[i]);
+-
+-    /* irq 14, 11, 10, 7, 6, 5, 4, 3 */
+-    mask &= 0x4cf8;
+-    /* Scan interrupts */
+-    mask = irq_scan(mask);
+-    for (i=0;i<sockets;i++)
+-	    socket_table[i].socket.irq_mask = mask;
+-    
+-    /* Check for only two interrupts available */
+-    scan = (mask & (mask-1));
+-    if (((scan & (scan-1)) == 0) && (poll_interval == 0))
+-	poll_interval = HZ;
+-    
+-    if (poll_interval == 0) {
+-	/* Avoid irq 12 unless it is explicitly requested */
+-	u_int cs_mask = mask & ((cs_irq) ? (1<<cs_irq) : ~(1<<12));
+-	for (i = 15; i > 0; i--)
+-	    if ((cs_mask & (1 << i)) &&
+-		(request_irq(i, tcic_interrupt, 0, "tcic",
+-			     tcic_interrupt) == 0))
+-		break;
+-	cs_irq = i;
+-	if (cs_irq == 0) poll_interval = HZ;
+-    }
+-    
+-    if (socket_table[0].socket.irq_mask & (1 << 11))
+-	printk("sktirq is irq 11, ");
+-    if (cs_irq != 0)
+-	printk("status change on irq %d\n", cs_irq);
+-    else
+-	printk("polled status, interval = %d ms\n",
+-	       poll_interval * 1000 / HZ);
+-    
+-    for (i = 0; i < sockets; i++) {
+-	tcic_setw(TCIC_ADDR+2, socket_table[i].psock << TCIC_SS_SHFT);
+-	socket_table[i].last_sstat = tcic_getb(TCIC_SSTAT);
+-    }
+-    
+-    /* jump start interrupt handler, if needed */
+-    tcic_interrupt(0, NULL);
+-
+-    platform_device_register(&tcic_device);
+-
+-    for (i = 0; i < sockets; i++) {
+-	    socket_table[i].socket.ops = &tcic_operations;
+-	    socket_table[i].socket.resource_ops = &pccard_nonstatic_ops;
+-	    socket_table[i].socket.dev.parent = &tcic_device.dev;
+-	    ret = pcmcia_register_socket(&socket_table[i].socket);
+-	    if (ret && i)
+-		    pcmcia_unregister_socket(&socket_table[0].socket);
+-    }
+-    
+-    return ret;
+-
+-    return 0;
+-    
+-} /* init_tcic */
+-
+-/*====================================================================*/
+-
+-static void __exit exit_tcic(void)
+-{
+-    int i;
+-
+-    timer_delete_sync(&poll_timer);
+-    if (cs_irq != 0) {
+-	tcic_aux_setw(TCIC_AUX_SYSCFG, TCIC_SYSCFG_AUTOBUSY|0x0a00);
+-	free_irq(cs_irq, tcic_interrupt);
+-    }
+-    release_region(tcic_base, 16);
+-
+-    for (i = 0; i < sockets; i++) {
+-	    pcmcia_unregister_socket(&socket_table[i].socket);	    
+-    }
+-
+-    platform_device_unregister(&tcic_device);
+-    platform_driver_unregister(&tcic_driver);
+-} /* exit_tcic */
+-
+-/*====================================================================*/
+-
+-static irqreturn_t tcic_interrupt(int irq, void *dev)
+-{
+-    int i, quick = 0;
+-    u_char latch, sstat;
+-    u_short psock;
+-    u_int events;
+-    static volatile int active = 0;
+-
+-    if (active) {
+-	printk(KERN_NOTICE "tcic: reentered interrupt handler!\n");
+-	return IRQ_NONE;
+-    } else
+-	active = 1;
+-
+-    pr_debug("tcic_interrupt()\n");
+-    
+-    for (i = 0; i < sockets; i++) {
+-	psock = socket_table[i].psock;
+-	tcic_setl(TCIC_ADDR, (psock << TCIC_ADDR_SS_SHFT)
+-		  | TCIC_ADDR_INDREG | TCIC_SCF1(psock));
+-	sstat = tcic_getb(TCIC_SSTAT);
+-	latch = sstat ^ socket_table[psock].last_sstat;
+-	socket_table[i].last_sstat = sstat;
+-	if (tcic_getb(TCIC_ICSR) & TCIC_ICSR_CDCHG) {
+-	    tcic_setb(TCIC_ICSR, TCIC_ICSR_CLEAR);
+-	    quick = 1;
+-	}
+-	if (latch == 0)
+-	    continue;
+-	events = (latch & TCIC_SSTAT_CD) ? SS_DETECT : 0;
+-	events |= (latch & TCIC_SSTAT_WP) ? SS_WRPROT : 0;
+-	if (tcic_getw(TCIC_DATA) & TCIC_SCF1_IOSTS) {
+-	    events |= (latch & TCIC_SSTAT_LBAT1) ? SS_STSCHG : 0;
+-	} else {
+-	    events |= (latch & TCIC_SSTAT_RDY) ? SS_READY : 0;
+-	    events |= (latch & TCIC_SSTAT_LBAT1) ? SS_BATDEAD : 0;
+-	    events |= (latch & TCIC_SSTAT_LBAT2) ? SS_BATWARN : 0;
+-	}
+-	if (events) {
+-		pcmcia_parse_events(&socket_table[i].socket, events);
+-	}
+-    }
+-
+-    /* Schedule next poll, if needed */
+-    if (((cs_irq == 0) || quick) && (!tcic_timer_pending)) {
+-	poll_timer.expires = jiffies + (quick ? poll_quick : poll_interval);
+-	add_timer(&poll_timer);
+-	tcic_timer_pending = 1;
+-    }
+-    active = 0;
+-    
+-    pr_debug("interrupt done\n");
+-    return IRQ_HANDLED;
+-} /* tcic_interrupt */
+-
+-static void tcic_timer(struct timer_list *unused)
+-{
+-    pr_debug("tcic_timer()\n");
+-    tcic_timer_pending = 0;
+-    tcic_interrupt(0, NULL);
+-} /* tcic_timer */
+-
+-/*====================================================================*/
+-
+-static int tcic_get_status(struct pcmcia_socket *sock, u_int *value)
+-{
+-    u_short psock = container_of(sock, struct tcic_socket, socket)->psock;
+-    u_char reg;
+-
+-    tcic_setl(TCIC_ADDR, (psock << TCIC_ADDR_SS_SHFT)
+-	      | TCIC_ADDR_INDREG | TCIC_SCF1(psock));
+-    reg = tcic_getb(TCIC_SSTAT);
+-    *value  = (reg & TCIC_SSTAT_CD) ? SS_DETECT : 0;
+-    *value |= (reg & TCIC_SSTAT_WP) ? SS_WRPROT : 0;
+-    if (tcic_getw(TCIC_DATA) & TCIC_SCF1_IOSTS) {
+-	*value |= (reg & TCIC_SSTAT_LBAT1) ? SS_STSCHG : 0;
+-    } else {
+-	*value |= (reg & TCIC_SSTAT_RDY) ? SS_READY : 0;
+-	*value |= (reg & TCIC_SSTAT_LBAT1) ? SS_BATDEAD : 0;
+-	*value |= (reg & TCIC_SSTAT_LBAT2) ? SS_BATWARN : 0;
+-    }
+-    reg = tcic_getb(TCIC_PWR);
+-    if (reg & (TCIC_PWR_VCC(psock)|TCIC_PWR_VPP(psock)))
+-	*value |= SS_POWERON;
+-    dev_dbg(&sock->dev, "GetStatus(%d) = %#2.2x\n", psock, *value);
+-    return 0;
+-} /* tcic_get_status */
+-
+-/*====================================================================*/
+-
+-static int tcic_set_socket(struct pcmcia_socket *sock, socket_state_t *state)
+-{
+-    u_short psock = container_of(sock, struct tcic_socket, socket)->psock;
+-    u_char reg;
+-    u_short scf1, scf2;
+-
+-    dev_dbg(&sock->dev, "SetSocket(%d, flags %#3.3x, Vcc %d, Vpp %d, "
+-	  "io_irq %d, csc_mask %#2.2x)\n", psock, state->flags,
+-	  state->Vcc, state->Vpp, state->io_irq, state->csc_mask);
+-    tcic_setw(TCIC_ADDR+2, (psock << TCIC_SS_SHFT) | TCIC_ADR2_INDREG);
+-
+-    reg = tcic_getb(TCIC_PWR);
+-    reg &= ~(TCIC_PWR_VCC(psock) | TCIC_PWR_VPP(psock));
+-
+-    if (state->Vcc == 50) {
+-	switch (state->Vpp) {
+-	case 0:   reg |= TCIC_PWR_VCC(psock) | TCIC_PWR_VPP(psock); break;
+-	case 50:  reg |= TCIC_PWR_VCC(psock); break;
+-	case 120: reg |= TCIC_PWR_VPP(psock); break;
+-	default:  return -EINVAL;
+-	}
+-    } else if (state->Vcc != 0)
+-	return -EINVAL;
+-
+-    if (reg != tcic_getb(TCIC_PWR))
+-	tcic_setb(TCIC_PWR, reg);
+-
+-    reg = TCIC_ILOCK_HOLD_CCLK | TCIC_ILOCK_CWAIT;
+-    if (state->flags & SS_OUTPUT_ENA) {
+-	tcic_setb(TCIC_SCTRL, TCIC_SCTRL_ENA);
+-	reg |= TCIC_ILOCK_CRESENA;
+-    } else
+-	tcic_setb(TCIC_SCTRL, 0);
+-    if (state->flags & SS_RESET)
+-	reg |= TCIC_ILOCK_CRESET;
+-    tcic_aux_setb(TCIC_AUX_ILOCK, reg);
+-    
+-    tcic_setw(TCIC_ADDR, TCIC_SCF1(psock));
+-    scf1 = TCIC_SCF1_FINPACK;
+-    scf1 |= TCIC_IRQ(state->io_irq);
+-    if (state->flags & SS_IOCARD) {
+-	scf1 |= TCIC_SCF1_IOSTS;
+-	if (state->flags & SS_SPKR_ENA)
+-	    scf1 |= TCIC_SCF1_SPKR;
+-	if (state->flags & SS_DMA_MODE)
+-	    scf1 |= TCIC_SCF1_DREQ2 << TCIC_SCF1_DMA_SHIFT;
+-    }
+-    tcic_setw(TCIC_DATA, scf1);
+-
+-    /* Some general setup stuff, and configure status interrupt */
+-    reg = TCIC_WAIT_ASYNC | TCIC_WAIT_SENSE | to_cycles(250);
+-    tcic_aux_setb(TCIC_AUX_WCTL, reg);
+-    tcic_aux_setw(TCIC_AUX_SYSCFG, TCIC_SYSCFG_AUTOBUSY|0x0a00|
+-		  TCIC_IRQ(cs_irq));
+-    
+-    /* Card status change interrupt mask */
+-    tcic_setw(TCIC_ADDR, TCIC_SCF2(psock));
+-    scf2 = TCIC_SCF2_MALL;
+-    if (state->csc_mask & SS_DETECT) scf2 &= ~TCIC_SCF2_MCD;
+-    if (state->flags & SS_IOCARD) {
+-	if (state->csc_mask & SS_STSCHG) reg &= ~TCIC_SCF2_MLBAT1;
+-    } else {
+-	if (state->csc_mask & SS_BATDEAD) reg &= ~TCIC_SCF2_MLBAT1;
+-	if (state->csc_mask & SS_BATWARN) reg &= ~TCIC_SCF2_MLBAT2;
+-	if (state->csc_mask & SS_READY) reg &= ~TCIC_SCF2_MRDY;
+-    }
+-    tcic_setw(TCIC_DATA, scf2);
+-    /* For the ISA bus, the irq should be active-high totem-pole */
+-    tcic_setb(TCIC_IENA, TCIC_IENA_CDCHG | TCIC_IENA_CFG_HIGH);
+-
+-    return 0;
+-} /* tcic_set_socket */
+-  
+-/*====================================================================*/
+-
+-static int tcic_set_io_map(struct pcmcia_socket *sock, struct pccard_io_map *io)
+-{
+-    u_short psock = container_of(sock, struct tcic_socket, socket)->psock;
+-    u_int addr;
+-    u_short base, len, ioctl;
+-    
+-    dev_dbg(&sock->dev, "SetIOMap(%d, %d, %#2.2x, %d ns, "
+-	  "%#llx-%#llx)\n", psock, io->map, io->flags, io->speed,
+-	  (unsigned long long)io->start, (unsigned long long)io->stop);
+-    if ((io->map > 1) || (io->start > 0xffff) || (io->stop > 0xffff) ||
+-	(io->stop < io->start)) return -EINVAL;
+-    tcic_setw(TCIC_ADDR+2, TCIC_ADR2_INDREG | (psock << TCIC_SS_SHFT));
+-    addr = TCIC_IWIN(psock, io->map);
+-
+-    base = io->start; len = io->stop - io->start;
+-    /* Check to see that len+1 is power of two, etc */
+-    if ((len & (len+1)) || (base & len)) return -EINVAL;
+-    base |= (len+1)>>1;
+-    tcic_setw(TCIC_ADDR, addr + TCIC_IBASE_X);
+-    tcic_setw(TCIC_DATA, base);
+-    
+-    ioctl  = (psock << TCIC_ICTL_SS_SHFT);
+-    ioctl |= (len == 0) ? TCIC_ICTL_TINY : 0;
+-    ioctl |= (io->flags & MAP_ACTIVE) ? TCIC_ICTL_ENA : 0;
+-    ioctl |= to_cycles(io->speed) & TCIC_ICTL_WSCNT_MASK;
+-    if (!(io->flags & MAP_AUTOSZ)) {
+-	ioctl |= TCIC_ICTL_QUIET;
+-	ioctl |= (io->flags & MAP_16BIT) ? TCIC_ICTL_BW_16 : TCIC_ICTL_BW_8;
+-    }
+-    tcic_setw(TCIC_ADDR, addr + TCIC_ICTL_X);
+-    tcic_setw(TCIC_DATA, ioctl);
+-    
+-    return 0;
+-} /* tcic_set_io_map */
+-
+-/*====================================================================*/
+-
+-static int tcic_set_mem_map(struct pcmcia_socket *sock, struct pccard_mem_map *mem)
+-{
+-    u_short psock = container_of(sock, struct tcic_socket, socket)->psock;
+-    u_short addr, ctl;
+-    u_long base, len, mmap;
+-
+-    dev_dbg(&sock->dev, "SetMemMap(%d, %d, %#2.2x, %d ns, "
+-	  "%#llx-%#llx, %#x)\n", psock, mem->map, mem->flags,
+-	  mem->speed, (unsigned long long)mem->res->start,
+-	  (unsigned long long)mem->res->end, mem->card_start);
+-    if ((mem->map > 3) || (mem->card_start > 0x3ffffff) ||
+-	(mem->res->start > 0xffffff) || (mem->res->end > 0xffffff) ||
+-	(mem->res->start > mem->res->end) || (mem->speed > 1000))
+-	return -EINVAL;
+-    tcic_setw(TCIC_ADDR+2, TCIC_ADR2_INDREG | (psock << TCIC_SS_SHFT));
+-    addr = TCIC_MWIN(psock, mem->map);
+-
+-    base = mem->res->start; len = mem->res->end - mem->res->start;
+-    if ((len & (len+1)) || (base & len)) return -EINVAL;
+-    if (len == 0x0fff)
+-	base = (base >> TCIC_MBASE_HA_SHFT) | TCIC_MBASE_4K_BIT;
+-    else
+-	base = (base | (len+1)>>1) >> TCIC_MBASE_HA_SHFT;
+-    tcic_setw(TCIC_ADDR, addr + TCIC_MBASE_X);
+-    tcic_setw(TCIC_DATA, base);
+-    
+-    mmap = mem->card_start - mem->res->start;
+-    mmap = (mmap >> TCIC_MMAP_CA_SHFT) & TCIC_MMAP_CA_MASK;
+-    if (mem->flags & MAP_ATTRIB) mmap |= TCIC_MMAP_REG;
+-    tcic_setw(TCIC_ADDR, addr + TCIC_MMAP_X);
+-    tcic_setw(TCIC_DATA, mmap);
+-
+-    ctl  = TCIC_MCTL_QUIET | (psock << TCIC_MCTL_SS_SHFT);
+-    ctl |= to_cycles(mem->speed) & TCIC_MCTL_WSCNT_MASK;
+-    ctl |= (mem->flags & MAP_16BIT) ? 0 : TCIC_MCTL_B8;
+-    ctl |= (mem->flags & MAP_WRPROT) ? TCIC_MCTL_WP : 0;
+-    ctl |= (mem->flags & MAP_ACTIVE) ? TCIC_MCTL_ENA : 0;
+-    tcic_setw(TCIC_ADDR, addr + TCIC_MCTL_X);
+-    tcic_setw(TCIC_DATA, ctl);
+-    
+-    return 0;
+-} /* tcic_set_mem_map */
+-
+-/*====================================================================*/
+-
+-static int tcic_init(struct pcmcia_socket *s)
+-{
+-	int i;
+-	struct resource res = { .start = 0, .end = 0x1000 };
+-	pccard_io_map io = { 0, 0, 0, 0, 1 };
+-	pccard_mem_map mem = { .res = &res, };
+-
+-	for (i = 0; i < 2; i++) {
+-		io.map = i;
+-		tcic_set_io_map(s, &io);
+-	}
+-	for (i = 0; i < 5; i++) {
+-		mem.map = i;
+-		tcic_set_mem_map(s, &mem);
+-	}
+-	return 0;
+-}
+-
+-static struct pccard_operations tcic_operations = {
+-	.init		   = tcic_init,
+-	.get_status	   = tcic_get_status,
+-	.set_socket	   = tcic_set_socket,
+-	.set_io_map	   = tcic_set_io_map,
+-	.set_mem_map	   = tcic_set_mem_map,
+-};
+-
+-/*====================================================================*/
+-
+-module_init(init_tcic);
+-module_exit(exit_tcic);
+diff --git a/drivers/pcmcia/tcic.h b/drivers/pcmcia/tcic.h
+deleted file mode 100644
+index 2c0b8f65ad6c..000000000000
+--- a/drivers/pcmcia/tcic.h
++++ /dev/null
+@@ -1,266 +0,0 @@
+-/*
+- * tcic.h 1.13 1999/10/25 20:03:34
+- *
+- * The contents of this file are subject to the Mozilla Public License
+- * Version 1.1 (the "License"); you may not use this file except in
+- * compliance with the License. You may obtain a copy of the License
+- * at http://www.mozilla.org/MPL/
+- *
+- * Software distributed under the License is distributed on an "AS IS"
+- * basis, WITHOUT WARRANTY OF ANY KIND, either express or implied. See
+- * the License for the specific language governing rights and
+- * limitations under the License. 
+- *
+- * The initial developer of the original code is David A. Hinds
+- * <dahinds@users.sourceforge.net>.  Portions created by David A. Hinds
+- * are Copyright (C) 1999 David A. Hinds.  All Rights Reserved.
+- *
+- * Alternatively, the contents of this file may be used under the
+- * terms of the GNU General Public License version 2 (the "GPL"), in which
+- * case the provisions of the GPL are applicable instead of the
+- * above.  If you wish to allow the use of your version of this file
+- * only under the terms of the GPL and not to allow others to use
+- * your version of this file under the MPL, indicate your decision by
+- * deleting the provisions above and replace them with the notice and
+- * other provisions required by the GPL.  If you do not delete the
+- * provisions above, a recipient may use your version of this file
+- * under either the MPL or the GPL.
+- */
+-
+-#ifndef _LINUX_TCIC_H
+-#define _LINUX_TCIC_H
+-
+-#define TCIC_BASE		0x240
+-
+-/* offsets of registers from TCIC_BASE */
+-#define TCIC_DATA		0x00
+-#define TCIC_ADDR		0x02
+-#define TCIC_SCTRL		0x06
+-#define TCIC_SSTAT		0x07
+-#define TCIC_MODE		0x08
+-#define TCIC_PWR		0x09
+-#define TCIC_EDC		0x0A
+-#define TCIC_ICSR		0x0C
+-#define TCIC_IENA		0x0D
+-#define TCIC_AUX		0x0E
+-
+-#define TCIC_SS_SHFT		12
+-#define TCIC_SS_MASK		0x7000
+-
+-/* Flags for TCIC_ADDR */
+-#define TCIC_ADR2_REG		0x8000
+-#define TCIC_ADR2_INDREG	0x0800
+-
+-#define TCIC_ADDR_REG		0x80000000
+-#define TCIC_ADDR_SS_SHFT	(TCIC_SS_SHFT+16)
+-#define TCIC_ADDR_SS_MASK	(TCIC_SS_MASK<<16)
+-#define TCIC_ADDR_INDREG	0x08000000
+-#define TCIC_ADDR_IO		0x04000000
+-#define TCIC_ADDR_MASK		0x03ffffff
+-
+-/* Flags for TCIC_SCTRL */
+-#define TCIC_SCTRL_ENA		0x01
+-#define TCIC_SCTRL_INCMODE	0x18
+-#define TCIC_SCTRL_INCMODE_HOLD	0x00
+-#define TCIC_SCTRL_INCMODE_WORD	0x08
+-#define TCIC_SCTRL_INCMODE_REG	0x10
+-#define TCIC_SCTRL_INCMODE_AUTO	0x18
+-#define TCIC_SCTRL_EDCSUM	0x20
+-#define TCIC_SCTRL_RESET	0x80
+-
+-/* Flags for TCIC_SSTAT */
+-#define TCIC_SSTAT_6US		0x01
+-#define TCIC_SSTAT_10US		0x02
+-#define TCIC_SSTAT_PROGTIME	0x04
+-#define TCIC_SSTAT_LBAT1	0x08
+-#define TCIC_SSTAT_LBAT2	0x10
+-#define TCIC_SSTAT_RDY		0x20	/* Inverted */
+-#define TCIC_SSTAT_WP		0x40
+-#define TCIC_SSTAT_CD		0x80	/* Card detect */
+-
+-/* Flags for TCIC_MODE */
+-#define TCIC_MODE_PGMMASK	0x1f
+-#define TCIC_MODE_NORMAL	0x00
+-#define TCIC_MODE_PGMWR		0x01
+-#define TCIC_MODE_PGMRD		0x02
+-#define TCIC_MODE_PGMCE		0x04
+-#define TCIC_MODE_PGMDBW	0x08
+-#define TCIC_MODE_PGMWORD	0x10
+-#define TCIC_MODE_AUXSEL_MASK	0xe0
+-
+-/* Registers accessed through TCIC_AUX, by setting TCIC_MODE */
+-#define TCIC_AUX_TCTL		(0<<5)
+-#define TCIC_AUX_PCTL		(1<<5)
+-#define TCIC_AUX_WCTL		(2<<5)
+-#define TCIC_AUX_EXTERN		(3<<5)
+-#define TCIC_AUX_PDATA		(4<<5)
+-#define TCIC_AUX_SYSCFG		(5<<5)
+-#define TCIC_AUX_ILOCK		(6<<5)
+-#define TCIC_AUX_TEST		(7<<5)
+-
+-/* Flags for TCIC_PWR */
+-#define TCIC_PWR_VCC(sock)	(0x01<<(sock))
+-#define TCIC_PWR_VCC_MASK	0x03
+-#define TCIC_PWR_VPP(sock)	(0x08<<(sock))
+-#define TCIC_PWR_VPP_MASK	0x18
+-#define TCIC_PWR_CLIMENA	0x40
+-#define TCIC_PWR_CLIMSTAT	0x80
+-
+-/* Flags for TCIC_ICSR */
+-#define TCIC_ICSR_CLEAR		0x01
+-#define TCIC_ICSR_SET		0x02
+-#define TCIC_ICSR_JAM		(TCIC_ICSR_CLEAR|TCIC_ICSR_SET)
+-#define TCIC_ICSR_STOPCPU	0x04
+-#define TCIC_ICSR_ILOCK		0x08
+-#define TCIC_ICSR_PROGTIME	0x10
+-#define TCIC_ICSR_ERR		0x20
+-#define TCIC_ICSR_CDCHG		0x40
+-#define TCIC_ICSR_IOCHK		0x80
+-
+-/* Flags for TCIC_IENA */
+-#define TCIC_IENA_CFG_MASK	0x03
+-#define TCIC_IENA_CFG_OFF	0x00	/* disabled */
+-#define TCIC_IENA_CFG_OD	0x01	/* active low, open drain */
+-#define TCIC_IENA_CFG_LOW	0x02	/* active low, totem pole */
+-#define TCIC_IENA_CFG_HIGH	0x03	/* active high, totem pole */
+-#define TCIC_IENA_ILOCK		0x08
+-#define TCIC_IENA_PROGTIME	0x10
+-#define TCIC_IENA_ERR		0x20	/* overcurrent or iochk */
+-#define TCIC_IENA_CDCHG		0x40
+-
+-/* Flags for TCIC_AUX_WCTL */
+-#define TCIC_WAIT_COUNT_MASK	0x001f
+-#define TCIC_WAIT_ASYNC		0x0020
+-#define TCIC_WAIT_SENSE		0x0040
+-#define TCIC_WAIT_SRC		0x0080
+-#define TCIC_WCTL_WR		0x0100
+-#define TCIC_WCTL_RD		0x0200
+-#define TCIC_WCTL_CE		0x0400
+-#define TCIC_WCTL_LLBAT1	0x0800
+-#define TCIC_WCTL_LLBAT2	0x1000
+-#define TCIC_WCTL_LRDY		0x2000
+-#define TCIC_WCTL_LWP		0x4000
+-#define TCIC_WCTL_LCD		0x8000
+-
+-/* Flags for TCIC_AUX_SYSCFG */
+-#define TCIC_SYSCFG_IRQ_MASK	0x000f
+-#define TCIC_SYSCFG_MCSFULL	0x0010
+-#define TCIC_SYSCFG_IO1723	0x0020
+-#define TCIC_SYSCFG_MCSXB	0x0040
+-#define TCIC_SYSCFG_ICSXB	0x0080
+-#define TCIC_SYSCFG_NOPDN	0x0100
+-#define TCIC_SYSCFG_MPSEL_SHFT	9
+-#define TCIC_SYSCFG_MPSEL_MASK	0x0e00
+-#define TCIC_SYSCFG_MPSENSE	0x2000
+-#define TCIC_SYSCFG_AUTOBUSY	0x4000
+-#define TCIC_SYSCFG_ACC		0x8000
+-
+-#define TCIC_ILOCK_OUT		0x01
+-#define TCIC_ILOCK_SENSE	0x02
+-#define TCIC_ILOCK_CRESET	0x04
+-#define TCIC_ILOCK_CRESENA	0x08
+-#define TCIC_ILOCK_CWAIT	0x10
+-#define TCIC_ILOCK_CWAITSNS	0x20
+-#define TCIC_ILOCK_HOLD_MASK	0xc0
+-#define TCIC_ILOCK_HOLD_CCLK	0xc0
+-
+-#define TCIC_ILOCKTEST_ID_SH	8
+-#define TCIC_ILOCKTEST_ID_MASK	0x7f00
+-#define TCIC_ILOCKTEST_MCIC_1	0x8000
+-
+-#define TCIC_ID_DB86082		0x02
+-#define TCIC_ID_DB86082A	0x03
+-#define TCIC_ID_DB86084		0x04
+-#define TCIC_ID_DB86084A	0x08
+-#define TCIC_ID_DB86072		0x15
+-#define TCIC_ID_DB86184		0x14
+-#define TCIC_ID_DB86082B	0x17
+-
+-#define TCIC_TEST_DIAG		0x8000
+-
+-/*
+- * Indirectly addressed registers
+- */
+-
+-#define TCIC_SCF1(sock)	((sock)<<3)
+-#define TCIC_SCF2(sock) (((sock)<<3)+2)
+-
+-/* Flags for SCF1 */
+-#define TCIC_SCF1_IRQ_MASK	0x000f
+-#define TCIC_SCF1_IRQ_OFF	0x0000
+-#define TCIC_SCF1_IRQOC		0x0010
+-#define TCIC_SCF1_PCVT		0x0020
+-#define TCIC_SCF1_IRDY		0x0040
+-#define TCIC_SCF1_ATA		0x0080
+-#define TCIC_SCF1_DMA_SHIFT	8
+-#define TCIC_SCF1_DMA_MASK	0x0700
+-#define TCIC_SCF1_DMA_OFF	0
+-#define TCIC_SCF1_DREQ2		2
+-#define TCIC_SCF1_IOSTS		0x0800
+-#define TCIC_SCF1_SPKR		0x1000
+-#define TCIC_SCF1_FINPACK	0x2000
+-#define TCIC_SCF1_DELWR		0x4000
+-#define TCIC_SCF1_HD7IDE	0x8000
+-
+-/* Flags for SCF2 */
+-#define TCIC_SCF2_RI		0x0001
+-#define TCIC_SCF2_IDBR		0x0002
+-#define TCIC_SCF2_MDBR		0x0004
+-#define TCIC_SCF2_MLBAT1	0x0008
+-#define TCIC_SCF2_MLBAT2	0x0010
+-#define TCIC_SCF2_MRDY		0x0020
+-#define TCIC_SCF2_MWP		0x0040
+-#define TCIC_SCF2_MCD		0x0080
+-#define TCIC_SCF2_MALL		0x00f8
+-
+-/* Indirect addresses for memory window registers */
+-#define TCIC_MWIN(sock,map)	(0x100+(((map)+((sock)<<2))<<3))
+-#define TCIC_MBASE_X		2
+-#define TCIC_MMAP_X		4
+-#define TCIC_MCTL_X		6
+-
+-#define TCIC_MBASE_4K_BIT	0x4000
+-#define TCIC_MBASE_HA_SHFT	12
+-#define TCIC_MBASE_HA_MASK	0x0fff
+-
+-#define TCIC_MMAP_REG		0x8000
+-#define TCIC_MMAP_CA_SHFT	12
+-#define TCIC_MMAP_CA_MASK	0x3fff
+-
+-#define TCIC_MCTL_WSCNT_MASK	0x001f
+-#define TCIC_MCTL_WCLK		0x0020
+-#define TCIC_MCTL_WCLK_CCLK	0x0000
+-#define TCIC_MCTL_WCLK_BCLK	0x0020
+-#define TCIC_MCTL_QUIET		0x0040
+-#define TCIC_MCTL_WP		0x0080
+-#define TCIC_MCTL_ACC		0x0100
+-#define TCIC_MCTL_KE		0x0200
+-#define TCIC_MCTL_EDC		0x0400
+-#define TCIC_MCTL_B8		0x0800
+-#define TCIC_MCTL_SS_SHFT	TCIC_SS_SHFT
+-#define TCIC_MCTL_SS_MASK	TCIC_SS_MASK
+-#define TCIC_MCTL_ENA		0x8000
+-
+-/* Indirect addresses for I/O window registers */
+-#define TCIC_IWIN(sock,map)	(0x200+(((map)+((sock)<<1))<<2))
+-#define TCIC_IBASE_X		0
+-#define TCIC_ICTL_X		2
+-
+-#define TCIC_ICTL_WSCNT_MASK	TCIC_MCTL_WSCNT_MASK
+-#define TCIC_ICTL_QUIET		TCIC_MCTL_QUIET
+-#define TCIC_ICTL_1K		0x0080
+-#define TCIC_ICTL_PASS16	0x0100
+-#define TCIC_ICTL_ACC		TCIC_MCTL_ACC
+-#define TCIC_ICTL_TINY		0x0200
+-#define TCIC_ICTL_B16		0x0400
+-#define TCIC_ICTL_B8		TCIC_MCTL_B8
+-#define TCIC_ICTL_BW_MASK	(TCIC_ICTL_B16|TCIC_ICTL_B8)
+-#define TCIC_ICTL_BW_DYN	0
+-#define TCIC_ICTL_BW_8		TCIC_ICTL_B8
+-#define TCIC_ICTL_BW_16		TCIC_ICTL_B16
+-#define TCIC_ICTL_BW_ATA	(TCIC_ICTL_B16|TCIC_ICTL_B8)
+-#define TCIC_ICTL_SS_SHFT	TCIC_SS_SHFT
+-#define TCIC_ICTL_SS_MASK	TCIC_SS_MASK
+-#define TCIC_ICTL_ENA		TCIC_MCTL_ENA
+-
+-#endif /* _LINUX_TCIC_H */
+-- 
+2.43.0
 
 
