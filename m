@@ -1,211 +1,173 @@
-Return-Path: <linux-mips+bounces-13175-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13176-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id lHYyN665kWnslgEAu9opvQ
-	(envelope-from <linux-mips+bounces-13175-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Sun, 15 Feb 2026 13:18:54 +0100
+	id yBnJNjjnkmlSzwEAu9opvQ
+	(envelope-from <linux-mips+bounces-13176-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Feb 2026 10:45:28 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id E4E8213EA45
-	for <lists+linux-mips@lfdr.de>; Sun, 15 Feb 2026 13:18:53 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 75277142095
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Feb 2026 10:45:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id BAB2B3002514
-	for <lists+linux-mips@lfdr.de>; Sun, 15 Feb 2026 12:18:50 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 454F5300AEE9
+	for <lists+linux-mips@lfdr.de>; Mon, 16 Feb 2026 09:45:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 437E3224AEF;
-	Sun, 15 Feb 2026 12:18:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=quora.org header.i=@quora.org header.b="nZ1+6L6h"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3CF3284B25;
+	Mon, 16 Feb 2026 09:45:25 +0000 (UTC)
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2506C1FC7
-	for <linux-mips@vger.kernel.org>; Sun, 15 Feb 2026 12:18:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=209.85.216.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1771157928; cv=pass; b=Sew3IAa5w43uF2wcMWKdL9ogdMY+KZY+0JjtIQrul/aWGpQDhaXlGaVEXHV2fd7l0XrE6reORdMiLr0+xHOoB5CB3dPFtOZGCxuYuMo0dsv+6NWAQsXVSkBTLWtzLuHQlBSTyCBPi1S3ME0q3Lgl73dsVfBYVkNdg00VGuJYI68=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1771157928; c=relaxed/simple;
-	bh=fmPgLwEbHTQWL0mymkVyx43se3jeqRMBQgj0gxScimQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=f6KiryPc9idtZyPZFsF5cFNO1NbN4qxYtQYvGrN+JJeGgPzFt/Z1jfhvUKprITBtJVwqZIpo9M00HDGolSAd0g7bL83Wq/x4u+y+FDSM2eW6UPWUVx+5a05m85Yg3jhQsc3Noz7mEA7IoYoEe9mmIoFuZssYeXcz1zn3c1/5ShE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=quora.org; spf=pass smtp.mailfrom=quora.org; dkim=pass (1024-bit key) header.d=quora.org header.i=@quora.org header.b=nZ1+6L6h; arc=pass smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=quora.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quora.org
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-354b79a9ad5so969036a91.1
-        for <linux-mips@vger.kernel.org>; Sun, 15 Feb 2026 04:18:46 -0800 (PST)
-ARC-Seal: i=1; a=rsa-sha256; t=1771157926; cv=none;
-        d=google.com; s=arc-20240605;
-        b=CftXrxmwRcjTNxGItAvdtZufXUQH2amHUkwgqA1dX3kqwYPf5mNHzkA3kphKw2JfLg
-         LIzFrmEIELzDSoa/27O/JNDjGLihcdX08DIl+ya3rITzHEAiovb2NSGaFlFZkVF/Bzfv
-         pyxNmD+dLZsgBE/5DgZZtcDqZtruv7VmbnjfksEKV6W1KmVzc2tX+NQJYUPt+/ZjhID8
-         AAbZa5eMJbi0UMcKrrcc6Q5ZwtqWyJgoYy4bxt4wZgNmI2KX1z1niZp7eREIajBhtrxy
-         kH2b580Be+4Pzj2Cdv7AmYinPe7Mhw3SCrA+uCNxoSBShrwYzfwusnRw+AI7bJMKu5Ch
-         Y63g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=google.com; s=arc-20240605;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:dkim-signature;
-        bh=YvJM/myYoGRZXx3gFIucEsRFfTWcy4DBPC1OXwlubIc=;
-        fh=GFz/ZDDyO1YJb4DYNYyzSH84uQ6fzcQqc2/eGvueHeE=;
-        b=QYQiXZ6veN61G9q1VM0zpKNnEXcMfeY40+hW/lbRQm7rsl9vf9fR5D0nz7HmDCEquV
-         aegVh7mOpPOlzvmLSiJnawnFgyTLWalzF7X5qei4p7++1fN3nn3sdz/rH9S6giwtwCvP
-         txvQakEmWwI3zqkSfej7LfzBFf8yHTOEdpKHNShp3hVEXsL/QAuKSx1iH1MgVrT7WXh+
-         lbXsbM37gDJfexaX1NE3OjxnyYYlNm4mZCpJuwLrfv7rCm0/hyzLwPvAE8lHls5KE1O8
-         6QZ/jO5uyvGRdPzyz0f1z1wEPmaWWBkiyHmPUJRmTafb/ne6q9IUzNe46J5B3mFZqh39
-         r0VA==;
-        darn=vger.kernel.org
-ARC-Authentication-Results: i=1; mx.google.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=quora.org; s=google; t=1771157926; x=1771762726; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=YvJM/myYoGRZXx3gFIucEsRFfTWcy4DBPC1OXwlubIc=;
-        b=nZ1+6L6h/tO0grsWaLZ3on2rXhCLLi6ua9rPqCNUN2ORZwSscinQ1LSpkLMAKq3due
-         zbTiWQF+aIPVlt/ABJXEq26PemJLtYv4bldNOVgZLmlr3H2cI2DCaSatvKXN5HrINIr5
-         JnvViocylfqPAuEGFH3G35nU3U8gGqPFRuEYg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1771157926; x=1771762726;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-gg:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YvJM/myYoGRZXx3gFIucEsRFfTWcy4DBPC1OXwlubIc=;
-        b=qLLkFXr/Z0LJAxRjvOtO6s9qpoXzm7ctRBnCavHZoE0TXlK7ss0lb9SdVx05ucvZjY
-         A2AIBXO8sRGSpWJ799irYGxFrlHXAtJPqaeAo+Q76uWOofROm484Ky/cJfq0+OicRM94
-         n86UySCPA9BEBQqq7yZxQ4861fNkGJY4dAiLXvFw88s6xvyck41Od+x6Fdh0S+xWWqTb
-         iIOBWx4qLz0e15ZCpwIfgIS/K3wumOxESHn1bzpDwdy/793v/qpZPeRKeA2fu05v2/gg
-         Xp2nE2bgv+KUhsfanLNmoWGrbLWbdesl6Axzr2nO4KNfEwCrrXrdDe1An+reg3Icnkx5
-         Z+iQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWQD1DkCd6WGaeZc6aGdZ18es2zU8XnbN7LD+ZJXac2S5YexLhStoRd1nMwmLU/YoKGhE33+x+8fA1u@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/ppoy9T9Sf9zfzNjiGAIRThyMudjBkOnBCkvDUJtQpraddNjG
-	G/qH0nluVW04HTGnt5AGPLZSVgSiR9zZcOwI9RQ24C5Isr+4KM9d9kAus/U0nJLc8cAR+HCIXkc
-	2xFlGz/Edsxrpz1BqaAOtpsUcQalTvnBeCVxxEvc61A==
-X-Gm-Gg: AZuq6aLnSHalpVOLbglEIQGHM8X1lkeyn9EvVU15aGaMbckHUKyB5iwJu6eTQPerSQI
-	28vSwNH7NjTgAweD5RuOzBx4JIdYRidEaxnInO8SCDsmI3r5cPr8VJhOCCCSO9Ciu2FijOdHj2D
-	taAyKLNm4lfoh3CR2KwHFK625qgBfyrVeIiF3YLlev/D0CtHpVv5E5Xz0xk6SkvXcOvWOrzfowb
-	Ekvt93XWYFhzOgOSWUQOcquRKEM0RVV/HO+1e6kQeVzhcNW+Cb+lQVl5A2Gq27asv/tF38e9AX7
-	YCtDe960vtzHAzA6xkQGBHOiXabrM3jR31eg+JkeLoIqC6Nn18kfkRI/OMB+wGC3OP62IieTxjj
-	NTY+w2n/8XKZZOkYXQHzla1e0q/eWOF1yLGHNr22t5micdAtv/5958cOwN4vOdEhkhRHuVoW0Di
-	9gGgEOVNrkWN0VbHjgZkCiQ5q4HtxNldlf2Kq3izUM847XzDP8
-X-Received: by 2002:a17:90b:3912:b0:336:b60f:3936 with SMTP id
- 98e67ed59e1d1-35844a4e94dmr4937619a91.12.1771157926489; Sun, 15 Feb 2026
- 04:18:46 -0800 (PST)
+Received: from elvis.franken.de (elvis.franken.de [193.175.24.41])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C972A1DDC2B;
+	Mon, 16 Feb 2026 09:45:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.175.24.41
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1771235125; cv=none; b=KWlEE9PoU40CxC7XLBPkXPa3T3o9HFHTiSPJsF+UjkX9U0SCSldv1dS3jy8jRf2jb4WGVEDrhidpLkmw8D4DYKpuv4nd1ArOfu+thLmHet7+MnKfrds1Q9nI5QSnxVELG5zqGKA+L3Y2tzgX63oE578ubYyCafaJ8Qev4uIMNd0=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1771235125; c=relaxed/simple;
+	bh=tpyvw3bDkR5AhgE/mlaxxf8wb/hhj6Q7Co0Anf6uM/s=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=kSXGxgmRSQjFjmXTTKFRg9WX80lsJy8yVDgPd3nnbyQghjc5rubog68gupjGjjhMFYm1X5xYIH21D/I+d/GKLE6/keNHW9j5SMjCgX+uPKOJZrWFYue0Ehmr89ctNG1sOdh3LLN6thSLgR6HRckxzd4RzFm3eszgY2KdGJ/L5+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de; spf=pass smtp.mailfrom=alpha.franken.de; arc=none smtp.client-ip=193.175.24.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=alpha.franken.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alpha.franken.de
+Received: from uucp by elvis.franken.de with local-rmail (Exim 3.36 #1)
+	id 1vrvAH-0005a0-00; Mon, 16 Feb 2026 10:45:13 +0100
+Received: by alpha.franken.de (Postfix, from userid 1000)
+	id F0648C00EE; Mon, 16 Feb 2026 10:45:06 +0100 (CET)
+Date: Mon, 16 Feb 2026 10:45:06 +0100
+From: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+To: torvalds@linux-foundation.org
+Cc: linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [GIT PULL] MIPS changes for v7.0
+Message-ID: <aZLnItNUtfDgKenO@alpha.franken.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260123230651.688818373@kernel.org> <20260123231521.926490888@kernel.org>
- <CAMVG2ssXZKmw-YTKB5=CvhEofKeyEfaBCDZbyzfUcm2+P5rQsQ@mail.gmail.com> <87jywvfkrs.ffs@tglx>
-In-Reply-To: <87jywvfkrs.ffs@tglx>
-From: Daniel J Blueman <daniel@quora.org>
-Date: Sun, 15 Feb 2026 20:18:35 +0800
-X-Gm-Features: AZwV_QibZJ9E9YhQcsvR295f2r9bTa2GDpaXK9QqRhlPq-MsVfR97oWCo6vVVEU
-Message-ID: <CAMVG2ssvadzUUoZw9xdYdZ4T5Sz+xdcQnXmU2NkR0N_yqieT=w@mail.gmail.com>
-Subject: Re: [patch 5/5] clocksource: Rewrite watchdog code completely
-To: Thomas Gleixner <tglx@kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
-	John Stultz <jstultz@google.com>, Waiman Long <longman@redhat.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Stephen Boyd <sboyd@kernel.org>, x86@kernel.org, 
-	"Gautham R. Shenoy" <gautham.shenoy@amd.com>, Jiri Wiesner <jwiesner@suse.de>, 
-	Scott Hamilton <scott.hamilton@eviden.com>, Helge Deller <deller@gmx.de>, linux-parisc@vger.kernel.org, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, linux-mips@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=2];
-	R_DKIM_ALLOW(-0.20)[quora.org:s=google];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64];
+X-Spamd-Result: default: False [-1.46 / 15.00];
+	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	DMARC_NA(0.00)[quora.org];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[16];
-	TAGGED_FROM(0.00)[bounces-13175-lists,linux-mips=lfdr.de];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[quora.org:+];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[daniel@quora.org,linux-mips@vger.kernel.org];
-	FREEMAIL_CC(0.00)[vger.kernel.org,kernel.org,google.com,redhat.com,infradead.org,linaro.org,amd.com,suse.de,eviden.com,gmx.de,alpha.franken.de];
-	TAGGED_RCPT(0.00)[linux-mips];
+	R_DKIM_NA(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[mail.gmail.com:mid,quora.org:dkim]
-X-Rspamd-Queue-Id: E4E8213EA45
+	MIME_TRACE(0.00)[0:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	TAGGED_RCPT(0.00)[linux-mips];
+	DMARC_NA(0.00)[franken.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TO_DN_NONE(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[tsbogend@alpha.franken.de,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	RCPT_COUNT_THREE(0.00)[3];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-13176-lists,linux-mips=lfdr.de];
+	RCVD_COUNT_FIVE(0.00)[5];
+	RCVD_TLS_LAST(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 75277142095
 X-Rspamd-Action: no action
 
-On Mon, 2 Feb 2026 at 19:27, Thomas Gleixner <tglx@kernel.org> wrote:
-> >> +/* Maximum time between two watchdog readouts */
-> >> +#define WATCHDOG_READOUT_MAX_NS                (50 * NSEC_PER_USEC)
->
-> > At 1920 threads, the default timeout threshold of 20us triggers
-> > continuous warnings at idle, however 1000us causes none under an 8
-> > hour adverse workload [1]; no HPET fallback was seen. A 500us
-> > threshold causes a low rate of timeouts [2] (overhead amplified due to
-> > retries), thus 1000us adds margin and should prevent retries.
->
-> Right. Idle is definitely an issue when the remote CPU is in a deep
-> C-state.
->
-> My concern is that the control CPU might spin there for a millisecond
-> with interrupts disabled, which is not really desired especially not on
-> RT systems.
->
-> Something like the untested below delta patch should work.
+The following changes since commit 63804fed149a6750ffd28610c5c1c98cce6bd377:
 
-Good step forward! We can also reduce remote cacheline invalidation by
-putting 'seq' into the cacheline after 'cpu_ts' by reordering:
+  Linux 6.19-rc7 (2026-01-25 14:11:24 -0800)
 
-struct watchdog_cpu_data {
-       atomic_t                remote_inprogress;
-       struct clocksource      *cs;
-       enum wd_result          result;
-       u64 cpu_ts[2];
-       call_single_data_t      csd;
-       atomic_t        seq; /* Keep in second cacheline to elide
-unnecessary invalidation */
-};
+are available in the Git repository at:
 
-and reordering the inner loop:
+  git://git.kernel.org/pub/scm/linux/kernel/git/mips/linux.git/ tags/mips_7.0
 
-        for (int seq = local + 2; seq < WATCHDOG_REMOTE_MAX_SEQ; seq += 2) {
-                if (!watchdog_wait_seq(wd, start, seq))
-                        return;
+for you to fetch changes up to 720452a6d0fdc94ec3301f31ea10b43102eaeeef:
 
-               /* Capture local timestamp before possible non-local
-coherency overhead */
-               now = cs->read(cs);
+  Revert "clk: microchip: core: allow driver to be compiled with COMPILE_TEST" (2026-02-10 16:48:59 +0100)
 
-               /* Store local timestamp before reading remote to limit
-coherency stalls */
-               wd->cpu_ts[local] = now;
-               prev = wd->cpu_ts[remote];
-               delta = (now - prev) & cs->mask;
+----------------------------------------------------------------
+cleanups and fixes
 
-                if (delta > cs->max_raw_delta) {
-                        watchdog_set_result(wd, WD_CPU_SKEWED);
+----------------------------------------------------------------
+Brian Masney (16):
+      MIPS: pic32: include linux/io.h header on several files
+      MIPS: pic32: include linux/types.h on pic32.h
+      MIPS: pic32: drop unused include linux/io.h from pic32.h
+      MIPS: copy pic32.h header file from asm/mach-pic32/ to include/platform-data/
+      MAINTAINERS: add include/linux/platform_data/pic32.h to MIPS entry
+      MIPS: update include to use pic32.h from platform_data
+      clk: microchip: core: update include to use pic32.h from platform_data
+      irqchip/irq-pic32-evic: update include to use pic32.h from platform_data
+      mmc: sdhci-pic32: update include to use pic32.h from platform_data
+      pinctrl: pic32: update include to use pic32.h from platform_data
+      rtc: pic32: update include to use pic32.h from platform_data
+      serial: pic32_uart: update include to use pic32.h from platform_data
+      watchdog: pic32-dmt: update include to use pic32.h from platform_data
+      watchdog: pic32-wdt: update include to use pic32.h from platform_data
+      MIPS: drop unused pic32.h header
+      clk: microchip: core: allow driver to be compiled with COMPILE_TEST
 
-With that said, with your latest change on the 1920 thread setup,
-WATCHDOG_READOUT_MAX_US 1000 is still needed to avoid timeouts during
-the previous adverse workload, however some timeouts are still seen
-during massive parallel process teardowns.
+Icenowy Zheng (1):
+      MIPS: Loongson64: dts: fix phy-related definition of LS7A GMAC
 
-To limit overhead, perhaps it is sufficient to set the timeout to
-100us, avoid retries (as the hardware thread may continue to be busy
-and will be rechecked later anyway), and log timeouts at the debug
-level if at all.
+Jiaxun Yang (1):
+      MIPS: rb532: Fix MMIO UART resource registration
 
-Thanks,
-  Dan
---
-Daniel J Blueman
+John Garry (1):
+      MIPS: Loongson: Make cpumask_of_node() robust against NUMA_NO_NODE
+
+Lukas Bulwahn (1):
+      clk: microchip: fix typo in reference to a config option
+
+Randy Dunlap (1):
+      mips: LOONGSON32: drop a dangling Kconfig symbol
+
+Rong Zhang (2):
+      MIPS: Loongson2ef: Register PCI controller in early stage
+      MIPS: Loongson2ef: Use pcibios_align_resource() to block io range
+
+Thomas Bogendoerfer (2):
+      Revert "clk: microchip: fix typo in reference to a config option"
+      Revert "clk: microchip: core: allow driver to be compiled with COMPILE_TEST"
+
+Thomas Weißschuh (1):
+      MIPS: Implement ARCH_HAS_CC_CAN_LINK
+
+Yao Zi (2):
+      MIPS: Loongson64: env: Fixup serial clock-frequency when using LEFI
+      MIPS: Work around LLVM bug when gp is used as global register variable
+
+ MAINTAINERS                                        |  1 +
+ arch/mips/Kconfig                                  | 29 ++++++-
+ arch/mips/boot/dts/loongson/ls7a-pch.dtsi          |  6 +-
+ arch/mips/include/asm/mach-loongson2ef/loongson.h  |  6 ++
+ arch/mips/include/asm/mach-loongson64/topology.h   |  2 +-
+ arch/mips/kernel/relocate.c                        | 13 +++
+ arch/mips/loongson2ef/common/pci.c                 | 18 ++--
+ arch/mips/loongson2ef/common/setup.c               |  1 +
+ arch/mips/loongson64/env.c                         | 98 ++++++++++++++++++++++
+ arch/mips/pic32/common/reset.c                     |  3 +-
+ arch/mips/pic32/pic32mzda/config.c                 |  3 +-
+ arch/mips/pic32/pic32mzda/early_clk.c              |  3 +-
+ arch/mips/pic32/pic32mzda/early_console.c          |  3 +-
+ arch/mips/rb532/devices.c                          |  5 +-
+ drivers/clk/microchip/clk-core.c                   |  2 +-
+ drivers/irqchip/irq-pic32-evic.c                   |  2 +-
+ drivers/mmc/host/sdhci-pic32.c                     |  2 +-
+ drivers/pinctrl/pinctrl-pic32.c                    |  3 +-
+ drivers/rtc/rtc-pic32.c                            |  3 +-
+ drivers/tty/serial/pic32_uart.c                    |  3 +-
+ drivers/watchdog/pic32-dmt.c                       |  3 +-
+ drivers/watchdog/pic32-wdt.c                       |  3 +-
+ .../linux/platform_data}/pic32.h                   | 17 ++--
+ 23 files changed, 191 insertions(+), 38 deletions(-)
+ rename {arch/mips/include/asm/mach-pic32 => include/linux/platform_data}/pic32.h (70%)
+
+-- 
+Crap can work. Given enough thrust pigs will fly, but it's not necessarily a
+good idea.                                                [ RFC1925, 2.3 ]
 
