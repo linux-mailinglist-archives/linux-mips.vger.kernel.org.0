@@ -1,59 +1,59 @@
-Return-Path: <linux-mips+bounces-13215-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13216-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id GGrlOF4pn2kOZQQAu9opvQ
-	(envelope-from <linux-mips+bounces-13215-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Feb 2026 17:54:54 +0100
+	id gKhSIF8pn2kOZQQAu9opvQ
+	(envelope-from <linux-mips+bounces-13216-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Feb 2026 17:54:55 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 03AFC19B063
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Feb 2026 17:54:53 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 512A119B070
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Feb 2026 17:54:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 4E388300515C
-	for <lists+linux-mips@lfdr.de>; Wed, 25 Feb 2026 16:54:51 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 370523011368
+	for <lists+linux-mips@lfdr.de>; Wed, 25 Feb 2026 16:54:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F4F43D349B;
-	Wed, 25 Feb 2026 16:54:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B814E3DA7D9;
+	Wed, 25 Feb 2026 16:54:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="hLMMIkE8"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="OmNwfNk0"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE5361C5D44;
-	Wed, 25 Feb 2026 16:54:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 366173B8BCC
+	for <linux-mips@vger.kernel.org>; Wed, 25 Feb 2026 16:54:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772038488; cv=none; b=OOMNaKUl11FOAc0pKib6JTGR9y6JriVECQs5tvTbkyhghlpsV89V56IqtPttMrm3s6L15Ef3kpfwtaCor+LxyJ/MIUYpIOP6xB6QhrhzOpRoRAPDTo4d8Qt3LgVmXniGI3e463G0smeub4gOOo4GfUbyHa60LA/WQM07jLJdA9s=
+	t=1772038489; cv=none; b=BOLBoGc3StPNr5TmvsC8RD4PU3AL9UFJUHqV2u1n1pNeGckZsdyvGWizTGWeySslbY2ARP8p81AMzDTGUcra80Zmx96MOIAZfWwuG8MY6VlkopS0YUJ4pj6Lv+I5V/us62HjOJLXjEt0CLUAlZsd0QCwAwjFkxMK8+cLpKcLGe8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772038488; c=relaxed/simple;
-	bh=qcoKkpOij8lGP4oDPUdMLxW4Ldjjm97EZ2LaF7TS8aY=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=T52isRJd1SWbBeGucRxBeZ7CrmpJv69cKMNJ8GqLOG+COHZXmMJOtUA5FOEpb3sDH21axhd767JSOZ37L0LRS1+9nfxx3DHaWnOzmbQJOOwvYIHRTEEG7e0GEF1SQRBIUckBFFt5BFWUHrHxZLIUnEXEydEPez4DclYfNHaZuBc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=hLMMIkE8; arc=none smtp.client-ip=185.246.85.4
+	s=arc-20240116; t=1772038489; c=relaxed/simple;
+	bh=ufUABGpy4hR1rGO7WgLF9OemUTbkWSkTTO97JHlCGhU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=U5jXbptQsejRhyMZDcRUu1hDLA3vwD4aRr+gKpGsXUuMPkRqN6/DQnzzEsEKtGNM/BZryOeibz6ekV46g17op5VvTcpXgws1fqVTC5ZZdrlfAr0WlT4UzAhwMbjEGvigsg5fTKN6YYEEzYRLfAR3rjE4A7MjxqbNWaIW3fCGrCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=OmNwfNk0; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 92DDB4E41120;
-	Wed, 25 Feb 2026 16:54:45 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id D0E241A1327;
+	Wed, 25 Feb 2026 16:54:46 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 5F31E5FDE6;
-	Wed, 25 Feb 2026 16:54:45 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B83A4103692E2;
-	Wed, 25 Feb 2026 17:54:42 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id A14825FDE6;
+	Wed, 25 Feb 2026 16:54:46 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id C6CAB103692EB;
+	Wed, 25 Feb 2026 17:54:44 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1772038484; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=z/vByWy80ot0oFA/GD5W5SVkm10noTVZiksJvKYaJNQ=;
-	b=hLMMIkE8qZwRLYiO/2cyYDwf0GyBQ+A4AWYxHzmpj8mYKjfTbfRumxIJQV23+iOx4WEZjO
-	wwUTuiUut0ZLkyjyI2EGMr6JRRgCqnetXMW62nNSLfCxaa25VXNOQ9lYADhNoJXwnUR8C0
-	32Sext+ai6y+I9SanMfOANMvk3fhk0bPAY9nLH5InTcKkyS1oluEDUAK3RtAa0/b0ECycR
-	9r/sVu8By1RkAcLWlI5rBh4g5EpyC2+iQXV70qGbm3TmHNknuhmhBU/mqKi0C+zkszZIWR
-	5+NOmUVhmhKycIT9AJX4RLBVB7DBxUC3MODkOWqtU2FGggw7/1sP+IrGZKI9hg==
+	t=1772038485; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=hbExuNjBmOZ0ueVI/B5TUXeiS72262HZyYO7x1vORsE=;
+	b=OmNwfNk0NE7xAdszNtvkxZECy8O4L6biwVMA2UYIQbB9+9wFfLu+vTe2rWqCJ9xttY6xbB
+	cg84Pwjtt6BvzU2c8cTbdo0HpfukEps4hhEKqW28xxegAT0cF4DjNV1sJs4rHpo2VugfRM
+	44Hsz/iDqtGDbVwcwtB9gG+MY0wEdK8uvVtz8x8ZRrZkeo2wcpSFIey4R7ZrzzBXavPJKp
+	DI5cnSDlwRvQoRg5BbwMtVhJuiA6ztOu9VHAh7g1C8IBtDmZ1SiDD4XsEQJ0FYctU/PymC
+	8HfQ6XR5jDDkH7g76mazvCMKkZVh7ohoMJFiBCyyvUZvZILNLDK29THJ6302GA==
 From: =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>
-Subject: [PATCH v7 0/2] phy: Add generic PHY driver used by MACB/GEM on
- EyeQ5
-Date: Wed, 25 Feb 2026 17:54:39 +0100
-Message-Id: <20260225-macb-phy-v7-0-e5211a61db56@bootlin.com>
+Date: Wed, 25 Feb 2026 17:54:40 +0100
+Subject: [PATCH v7 1/2] phy: sort Kconfig and Makefile
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -62,12 +62,9 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAAAAAAAC/23Py2rDMBCF4VcJWldFM7p31fcoXegyqgVNHOxgG
- oLfvXKgRMVZnkHfD7qxmaZKM3s73NhES53reGrDvhxYGsLpi3jNbTMUqEEg8mNIkZ+HK0eISRH
- kEqNl7fl5olJ/7qmPz7aHOl/G6XovL7Bdn0QW4IIX9AVdCWQR3uM4Xr7r6TWNR7ZlFnxQENBRb
- DSBBk9UwGS5p7Kj4DsqGyUfbCRwJsgnVHUUVUdVo17rZFAHB8HuqX5QBN1R3WjwuVCQPgep9tT
- 8USMAbUfN9tecnRLaOXDuP13X9RfdNKesyQEAAA==
-X-Change-ID: 20251022-macb-phy-21bc4e1dfbb7
+Message-Id: <20260225-macb-phy-v7-1-e5211a61db56@bootlin.com>
+References: <20260225-macb-phy-v7-0-e5211a61db56@bootlin.com>
+In-Reply-To: <20260225-macb-phy-v7-0-e5211a61db56@bootlin.com>
 To: Vinod Koul <vkoul@kernel.org>, 
  Neil Armstrong <neil.armstrong@linaro.org>
 Cc: linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org, 
@@ -85,12 +82,12 @@ X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13215-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13216-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -103,143 +100,178 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[theo.lebrun@bootlin.com,linux-mips@vger.kernel.org];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-mips];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,linux.dev:url,bootlin.com:mid,bootlin.com:dkim,bootlin.com:email]
-X-Rspamd-Queue-Id: 03AFC19B063
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,bootlin.com:mid,bootlin.com:dkim,bootlin.com:email]
+X-Rspamd-Queue-Id: 512A119B070
 X-Rspamd-Action: no action
 
-EyeQ5 SoCs integrate two GEM instances. A system-controller register
-region named "OLB" has some control over the Ethernet PHY integration.
+Neither Kconfig nor Makefile are sorted; reorder them.
 
-Extend the current OLB ecosystem with a new generic PHY driver.
- - OLB is carried by one main platform driver: clk-eyeq.
- - It instantiates auxiliary devices: reset-eyeq & pinctrl-eyeq5.
- - We add a new one: phy-eyeq5-eth.
+$ diff -U100 <(grep ^config drivers/phy/Kconfig) \
+             <(grep ^config drivers/phy/Kconfig | sort)
 
-About related patches:
+$ diff -U100 <(grep ^obj-\\$ drivers/phy/Makefile) \
+             <(grep ^obj-\\$ drivers/phy/Makefile | sort)
 
- - The MACB series [1] has been merged in v6.19-rc1. It makes MACB
-   consume a generic PHY from devicetree with the EyeQ5 compatible.
+PHY_COMMON_PROPS{,_TEST} are kept at the top which does not respect
+sorting order.
 
- - clk patches are incoming to make clk-eyeq instantiate this new
-   auxiliary device. They also ensure we get a dev->of_node assigned.
-   Patches used to be [2] in the same series.
-
- - MIPS patches are incoming to add MACB/GEM instances in devicetree and
-   their associated PHYs. They also update dt-bindings to reflect this
-   new feature OLB provides. Patches used to be [2] in the same series.
-
-Have a nice day,
-Thanks!
-Théo
-
-[0]: https://lore.kernel.org/lkml/20250627-macb-v2-15-ff8207d0bb77@bootlin.com/
-[1]: https://lore.kernel.org/lkml/20251022-macb-eyeq5-v2-0-7c140abb0581@bootlin.com/
-[2]: https://lore.kernel.org/all/20260127-macb-phy-v6-0-cdd840588188@bootlin.com/
-
+Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
 Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
 ---
-Changes in v7:
-- Separate PHY / clk / MIPS patches into three series.
-- Implement phy_validate().
-- phy_power_on() now supports being called without a prior
-  phy_set_mode() because at probe we read the hardware state to
-  initialise inst->phy_instance.
-- phy_set_mode() now support being called while the PHY is powered on.
-- Add sgmii_support bool for each PHY instance to reject SGMII
-  configuration on PHY 1 which only supports RGMII.
-- Drop dev_dbg() calls.
-- Drop readl(gp) in phy_init().
-- Replace inst->priv field by inst->dev; that is the only value we need
-  from the driver private data. Drop priv->dev field that is unused.
-- Call into phy_exit() from phy_init() as the sequence is the same.
-  Add comment to explain the reasoning.
-- Take Reviewed-by: Luca on "phy: sort Kconfig and Makefile".
-- Rebase onto v7.0-rc1 and test on EyeQ5. Only diff to report:
-  PHY_COMMON_PROPS and PHY_COMMON_PROPS_TEST are kept at the top in the
-  sorting patch; we do not strictly respect an alphabetical ordering.
-- Link to v6: https://lore.kernel.org/r/20260127-macb-phy-v6-0-cdd840588188@bootlin.com
+ drivers/phy/Kconfig  | 86 ++++++++++++++++++++++++++--------------------------
+ drivers/phy/Makefile |  8 ++---
+ 2 files changed, 47 insertions(+), 47 deletions(-)
 
-Changes in v6:
-- Rebase upon v6.19-rc7; nothing to report.
-- Add new patch "phy: sort Kconfig and Makefile".
-- phy-eyeq5-eth: drop useless explicit __iomem cast to
-  dev_get_platdata() return value.
-- I did *not* drop the Kconfig `default MACH_EYEQ5` nor driver
-  `dev_dbg()`. I think both are useful and should be kept. See
-  last revision discussion here:
-  https://lore.kernel.org/lkml/DFGSMN8268O0.33TYCQDBVHUHZ@bootlin.com/
-- Link to v5: https://lore.kernel.org/r/20251215-macb-phy-v5-0-a9dfea39da34@bootlin.com
+diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
+index 02467dfd4fb0..c86e90027443 100644
+--- a/drivers/phy/Kconfig
++++ b/drivers/phy/Kconfig
+@@ -47,6 +47,26 @@ config GENERIC_PHY_MIPI_DPHY
+ 	  Provides a number of helpers a core functions for MIPI D-PHY
+ 	  drivers to us.
+ 
++config PHY_AIROHA_PCIE
++	tristate "Airoha PCIe-PHY Driver"
++	depends on ARCH_AIROHA || COMPILE_TEST
++	depends on OF
++	select GENERIC_PHY
++	help
++	  Say Y here to add support for Airoha PCIe PHY driver.
++	  This driver create the basic PHY instance and provides initialize
++	  callback for PCIe GEN3 port.
++
++config PHY_CAN_TRANSCEIVER
++	tristate "CAN transceiver PHY"
++	select GENERIC_PHY
++	select MULTIPLEXER
++	help
++	  This option enables support for CAN transceivers as a PHY. This
++	  driver provides function for putting the transceivers in various
++	  functional modes using gpios and sets the attribute max link
++	  rate, for CAN drivers.
++
+ config PHY_GOOGLE_USB
+ 	tristate "Google Tensor SoC USB PHY driver"
+ 	select GENERIC_PHY
+@@ -69,6 +89,17 @@ config PHY_LPC18XX_USB_OTG
+ 	  This driver is need for USB0 support on LPC18xx/43xx and takes
+ 	  care of enabling and clock setup.
+ 
++config PHY_NXP_PTN3222
++	tristate "NXP PTN3222 1-port eUSB2 to USB2 redriver"
++	depends on I2C
++	depends on OF
++	select GENERIC_PHY
++	help
++	  Enable this to support NXP PTN3222 1-port eUSB2 to USB2 Redriver.
++	  This redriver performs translation between eUSB2 and USB2 signalling
++	  schemes. It supports all three USB 2.0 data rates: Low Speed, Full
++	  Speed and High Speed.
++
+ config PHY_PISTACHIO_USB
+ 	tristate "IMG Pistachio USB2.0 PHY driver"
+ 	depends on MIPS || COMPILE_TEST
+@@ -84,6 +115,18 @@ config PHY_SNPS_EUSB2
+ 	  Enable support for the USB high-speed SNPS eUSB2 phy on select
+ 	  SoCs. The PHY is usually paired with a Synopsys DWC3 USB controller.
+ 
++config PHY_SPACEMIT_K1_PCIE
++	tristate "PCIe and combo PHY driver for the SpacemiT K1 SoC"
++	depends on ARCH_SPACEMIT || COMPILE_TEST
++	depends on COMMON_CLK
++	depends on HAS_IOMEM
++	depends on OF
++	select GENERIC_PHY
++	default ARCH_SPACEMIT
++	help
++	  Enable support for the PCIe and USB 3 combo PHY and two
++	  PCIe-only PHYs used in the SpacemiT K1 SoC.
++
+ config PHY_XGENE
+ 	tristate "APM X-Gene 15Gbps PHY support"
+ 	depends on HAS_IOMEM && OF && (ARCH_XGENE || COMPILE_TEST)
+@@ -103,49 +146,6 @@ config USB_LGM_PHY
+ 	  interface to interact with USB GEN-II and USB 3.x PHY that is part
+ 	  of the Intel network SOC.
+ 
+-config PHY_CAN_TRANSCEIVER
+-	tristate "CAN transceiver PHY"
+-	select GENERIC_PHY
+-	select MULTIPLEXER
+-	help
+-	  This option enables support for CAN transceivers as a PHY. This
+-	  driver provides function for putting the transceivers in various
+-	  functional modes using gpios and sets the attribute max link
+-	  rate, for CAN drivers.
+-
+-config PHY_AIROHA_PCIE
+-	tristate "Airoha PCIe-PHY Driver"
+-	depends on ARCH_AIROHA || COMPILE_TEST
+-	depends on OF
+-	select GENERIC_PHY
+-	help
+-	  Say Y here to add support for Airoha PCIe PHY driver.
+-	  This driver create the basic PHY instance and provides initialize
+-	  callback for PCIe GEN3 port.
+-
+-config PHY_NXP_PTN3222
+-	tristate "NXP PTN3222 1-port eUSB2 to USB2 redriver"
+-	depends on I2C
+-	depends on OF
+-	select GENERIC_PHY
+-	help
+-	  Enable this to support NXP PTN3222 1-port eUSB2 to USB2 Redriver.
+-	  This redriver performs translation between eUSB2 and USB2 signalling
+-	  schemes. It supports all three USB 2.0 data rates: Low Speed, Full
+-	  Speed and High Speed.
+-
+-config PHY_SPACEMIT_K1_PCIE
+-	tristate "PCIe and combo PHY driver for the SpacemiT K1 SoC"
+-	depends on ARCH_SPACEMIT || COMPILE_TEST
+-	depends on COMMON_CLK
+-	depends on HAS_IOMEM
+-	depends on OF
+-	select GENERIC_PHY
+-	default ARCH_SPACEMIT
+-	help
+-	  Enable support for the PCIe and USB 3 combo PHY and two
+-	  PCIe-only PHYs used in the SpacemiT K1 SoC.
+-
+ source "drivers/phy/allwinner/Kconfig"
+ source "drivers/phy/amlogic/Kconfig"
+ source "drivers/phy/apple/Kconfig"
+diff --git a/drivers/phy/Makefile b/drivers/phy/Makefile
+index a648c2e02a83..4c07926bc47b 100644
+--- a/drivers/phy/Makefile
++++ b/drivers/phy/Makefile
+@@ -7,16 +7,16 @@ obj-$(CONFIG_PHY_COMMON_PROPS)		+= phy-common-props.o
+ obj-$(CONFIG_PHY_COMMON_PROPS_TEST)	+= phy-common-props-test.o
+ obj-$(CONFIG_GENERIC_PHY)		+= phy-core.o
+ obj-$(CONFIG_GENERIC_PHY_MIPI_DPHY)	+= phy-core-mipi-dphy.o
++obj-$(CONFIG_PHY_AIROHA_PCIE)		+= phy-airoha-pcie.o
+ obj-$(CONFIG_PHY_CAN_TRANSCEIVER)	+= phy-can-transceiver.o
+ obj-$(CONFIG_PHY_GOOGLE_USB)		+= phy-google-usb.o
+ obj-$(CONFIG_PHY_LPC18XX_USB_OTG)	+= phy-lpc18xx-usb-otg.o
+-obj-$(CONFIG_PHY_XGENE)			+= phy-xgene.o
++obj-$(CONFIG_PHY_NXP_PTN3222)		+= phy-nxp-ptn3222.o
+ obj-$(CONFIG_PHY_PISTACHIO_USB)		+= phy-pistachio-usb.o
+ obj-$(CONFIG_PHY_SNPS_EUSB2)		+= phy-snps-eusb2.o
+-obj-$(CONFIG_USB_LGM_PHY)		+= phy-lgm-usb.o
+-obj-$(CONFIG_PHY_AIROHA_PCIE)		+= phy-airoha-pcie.o
+-obj-$(CONFIG_PHY_NXP_PTN3222)		+= phy-nxp-ptn3222.o
+ obj-$(CONFIG_PHY_SPACEMIT_K1_PCIE)	+= phy-spacemit-k1-pcie.o
++obj-$(CONFIG_PHY_XGENE)			+= phy-xgene.o
++obj-$(CONFIG_USB_LGM_PHY)		+= phy-lgm-usb.o
+ obj-$(CONFIG_GENERIC_PHY)		+= allwinner/	\
+ 					   amlogic/	\
+ 					   apple/	\
 
-Changes in v5:
-- phy-eyeq5-eth:
-  - fix #includes: add delay, gfp_types, module and drop array_size,
-    bug, cleanup, container_of, lockdep, mutex.
-  - eq5_phy_xlate(): avoid magic value, use EQ5_PHY_COUNT.
-  - use dev_err_probe() in error cases of devm_phy_create() and
-    devm_of_phy_provider_register().
-- 3x Reviewed-by: Luca Ceresoli.
-- Add Neil Armstrong to Cc as new PHY subsystem reviewer.
-- Rebase on v6.19-rc1, tested on hardware, no changes.
-- Link to v4: https://lore.kernel.org/r/20251124-macb-phy-v4-0-955c625a81a7@bootlin.com
-
-Changes in v4:
-- Append my SoB to Jerome's patch:
-  [PATCH v4 3/7] clk: eyeq: use the auxiliary device creation helper
-- Rebase on net-next & linux-{clk,mips,phy}. Nothing to report.
-- Link to v3: https://lore.kernel.org/r/20251119-macb-phy-v3-0-e9a7be186a33@bootlin.com
-
-Changes in v3:
-- Take Philipp Zabel's Reviewed-by & Acked-by trailers on reset patch.
-- Take Thomas Bogendoerfer's two Acked-by trailers on DT patches.
-- Rebase on net-next & test on target. Nothing to report.
-- Link to v2: https://lore.kernel.org/r/20251101-macb-phy-v2-0-c1519eef16d3@bootlin.com
-
-Changes in v2:
-- Take Acked-by: Conor Dooley on dt-bindings-patch.
-- s/%ld/%tu/ for printing ptrdiff_t; warnings on 32-bit archs.
-  Reported by NIPA's netdev/build_32bit test.
-  https://patchwork.kernel.org/project/netdevbpf/patch/20251021-macb-eyeq5-v1-7-3b0b5a9d2f85@bootlin.com/
-  https://netdev.bots.linux.dev/static/nipa/1014126/14277857/build_32bit/stderr
-- Link to v1: https://lore.kernel.org/r/20251022-macb-phy-v1-0-f29f28fae721@bootlin.com
-
-Changes since MACB V1:
-- Drop the old "mobileye,olb" properties from DT patches; found while
-  running dtbs_check and dt_binding_check.
-- Drop all patches targeting net-next. That is MACB dt-bindings patch
-  and MACB driver code. See there here [1].
-- Link to v1: https://lore.kernel.org/lkml/20251021-macb-eyeq5-v1-0-3b0b5a9d2f85@bootlin.com/
-
-Past versions of MACB patches:
- - March 2025: [PATCH net-next 00/13] Support the Cadence MACB/GEM
-   instances on Mobileye EyeQ5 SoCs
-   https://lore.kernel.org/lkml/20250321-macb-v1-0-537b7e37971d@bootlin.com/
- - June 2025: [PATCH net-next v2 00/18] Support the Cadence MACB/GEM
-   instances on Mobileye EyeQ5 SoCs
-   https://lore.kernel.org/lkml/20250627-macb-v2-0-ff8207d0bb77@bootlin.com/
- - August 2025: [PATCH net v3 00/16] net: macb: various fixes & cleanup
-   https://lore.kernel.org/lkml/20250808-macb-fixes-v3-0-08f1fcb5179f@bootlin.com/
-
----
-Théo Lebrun (2):
-      phy: sort Kconfig and Makefile
-      phy: Add driver for EyeQ5 Ethernet PHY wrapper
-
- MAINTAINERS                 |   1 +
- drivers/phy/Kconfig         |  99 +++++++++--------
- drivers/phy/Makefile        |   9 +-
- drivers/phy/phy-eyeq5-eth.c | 261 ++++++++++++++++++++++++++++++++++++++++++++
- 4 files changed, 323 insertions(+), 47 deletions(-)
----
-base-commit: 6de23f81a5e08be8fbf5e8d7e9febc72a5b5f27f
-change-id: 20251022-macb-phy-21bc4e1dfbb7
-
-Best regards,
 -- 
-Théo Lebrun <theo.lebrun@bootlin.com>
+2.53.0
 
 
