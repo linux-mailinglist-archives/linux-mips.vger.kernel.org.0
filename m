@@ -1,65 +1,76 @@
-Return-Path: <linux-mips+bounces-13287-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13288-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cDkABnqioWnEvAQAu9opvQ
-	(envelope-from <linux-mips+bounces-13287-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Feb 2026 14:56:10 +0100
+	id YB++IYSpoWm1vQQAu9opvQ
+	(envelope-from <linux-mips+bounces-13288-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Feb 2026 15:26:12 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 296571B800A
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Feb 2026 14:56:09 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id EFE4F1B8E1C
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Feb 2026 15:26:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id C64933011D68
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Feb 2026 13:56:01 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id A347A31F645D
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Feb 2026 14:11:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B0FA3F23A5;
-	Fri, 27 Feb 2026 13:55:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA97B4219EF;
+	Fri, 27 Feb 2026 14:08:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="guoTrA3t"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gDgpHXgu"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75B4E265621;
-	Fri, 27 Feb 2026 13:55:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B064C3EFD0A;
+	Fri, 27 Feb 2026 14:08:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772200559; cv=none; b=nGDbETCQmgEpjYX1iFs+QUfmagMrrnIqdOcqrT3+MquWOa/wAWldKBoSZthOO56fuqFkULgPP77sOtkkziHBDgsiYb1ATKHgiYQFxsAoRcaEs0NL1ilejh/79tpwDACsHPnCsnwlJEicD7iUmtooiMA/8r2ix1q/UtgCZfTCpFM=
+	t=1772201298; cv=none; b=RLp5BJpj6Hb5dWMi5YCY8xuXSlx8n+SjvorgKaCZDkWw+SRaY4UE/szlLNTtaJzIHeQ1hY15skNQilN5JUBtNig+RtY+IKaKdq/Utj96tOb/6xPQWFCNXsaDVam0OYJHobzHF+QIwxhI7bAAEPMXgLDpS3S1kvgCL7NBQmjiu54=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772200559; c=relaxed/simple;
-	bh=Z5NdvmHFpqWASNhjEw3AnhNyfE+IsWtjKqCNA37tD2g=;
+	s=arc-20240116; t=1772201298; c=relaxed/simple;
+	bh=TiA19B2029SlmlVMXMVhf5Vhssf3HDX9ajqPqZqlpZ4=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iSfPHTpXwDp2uWCi4afecvqRQwFifOzNWTlM+IbUbN6dXjdH65Cjef6bLy/yuGj8zCAyupt1rctLxLLfOHnWZf9eQg4+QzKLHTcv0diIYxkQQMSusQT+oPeRsRm4HBbGeZw7hUV9cN04Mus6T5xUIkGxR7SErr9VMrDdgJVgqKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=guoTrA3t; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A027AC116C6;
-	Fri, 27 Feb 2026 13:55:58 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=maQHIu2uJ5ARnTXcvEgHCGMtncKROKsiug3kmHaWnl8wiMSqoN6m2jJaGf1vsYSLCEOzKL/oIOLvjYwmb3JdJR9ljlTbUgxIhgvahH4V+fE37CJ7HqiGqacJycf+05wdmshyVW4WdJeQS0H6rlszUBs0Ala5bsoKTN1SfYuwW/M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gDgpHXgu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6710EC116C6;
+	Fri, 27 Feb 2026 14:08:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772200559;
-	bh=Z5NdvmHFpqWASNhjEw3AnhNyfE+IsWtjKqCNA37tD2g=;
+	s=k20201202; t=1772201298;
+	bh=TiA19B2029SlmlVMXMVhf5Vhssf3HDX9ajqPqZqlpZ4=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=guoTrA3tySUNzy2jisrkqGd2k4FHDS4iIngYwHJYw9pTwrkQ/ryB4iixO2moZuzpX
-	 TacRL9UlkHBSre+N18XIpNM6QnlDnKF2lhK50sxk22DUsItoTexaeq4KwJiTd1enNz
-	 UK/63+NILl7z3Pk6yiKXypP7Mm6A0Ge5qIuBYB5jMnqeYawdBTypdlxKlRmt10vm1x
-	 dmKx4ofeYN446GJt1mkmS8xKuaW540FXZKBffx7CpoqoUEXyHVu41QyJCDKqw5UgGu
-	 tRELXuDIvdOcc9zS566aKbuwkOb49Td3MgxD2kPz4FgrmldyNAMQdfMc2AgoVqLY0P
-	 yzUjBQzrC2PfA==
-Date: Fri, 27 Feb 2026 19:25:55 +0530
+	b=gDgpHXguuDtFsPLvt5L9lwMfiCQOf/4HSL46ZN/ED0LkW0DDIeeNy0IcBYLH3G+zt
+	 Xy+JzTjYjLuzYkpyESSr6Pe0x7jw/epDMI3WmgXLUUDhX/Zy98NE1+6Keli7o9uujt
+	 8Lj4oI5UgrgmKV4goxcXJGzjiHm+9ATKk8ZOgE1aj5eukLpIgbe/lBikFD0Cf+7jGZ
+	 ogHin5ey692vHtyNAV982Sxha7gL+0r07DiHjFxe7qzSIGsYQjjx/xaiDutXe+ZZwU
+	 XYgZ9U8HIc83spzcoBHQ9dDqr790NXaAOan3kyYMd2xTsR06HUYN9kJ8/TCPvIVNFk
+	 AQkVA5GPcKwYw==
+Date: Fri, 27 Feb 2026 19:38:14 +0530
 From: Vinod Koul <vkoul@kernel.org>
 To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
-Cc: Neil Armstrong <neil.armstrong@linaro.org>,
-	linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
-	linux-mips@vger.kernel.org,
-	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>,
+Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	=?iso-8859-1?Q?Gr=E9gory?= Clement <gregory.clement@bootlin.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	Neil Armstrong <neil.armstrong@linaro.org>,
+	linux-mips@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+	linux-clk@vger.kernel.org,
 	=?iso-8859-1?Q?Beno=EEt?= Monin <benoit.monin@bootlin.com>,
 	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
 	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
 	Luca Ceresoli <luca.ceresoli@bootlin.com>
-Subject: Re: [PATCH v7 1/2] phy: sort Kconfig and Makefile
-Message-ID: <aaGia-MYCsRYCPT6@vaman>
-References: <20260225-macb-phy-v7-0-e5211a61db56@bootlin.com>
- <20260225-macb-phy-v7-1-e5211a61db56@bootlin.com>
+Subject: Re: [PATCH v6 3/8] phy: Add driver for EyeQ5 Ethernet PHY wrapper
+Message-ID: <aaGlTqjgRgIvB_O5@vaman>
+References: <20260127-macb-phy-v6-0-cdd840588188@bootlin.com>
+ <20260127-macb-phy-v6-3-cdd840588188@bootlin.com>
+ <aZ8OkJ4BH0-sVSHS@vaman>
+ <DGO5XYKELMA3.14FPOZ2FCD8NN@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -69,125 +80,67 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20260225-macb-phy-v7-1-e5211a61db56@bootlin.com>
+In-Reply-To: <DGO5XYKELMA3.14FPOZ2FCD8NN@bootlin.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-1.66 / 15.00];
+X-Spamd-Result: default: False [-0.16 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	MID_RHS_NOT_FQDN(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13287-lists,linux-mips=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-13288-lists,linux-mips=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
-	MISSING_XM_UA(0.00)[];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[21];
+	FROM_HAS_DN(0.00)[];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
 	FROM_NEQ_ENVFROM(0.00)[vkoul@kernel.org,linux-mips@vger.kernel.org];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	RCPT_COUNT_SEVEN(0.00)[11];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	TAGGED_RCPT(0.00)[linux-mips,dt];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,bootlin.com:email]
-X-Rspamd-Queue-Id: 296571B800A
+	MISSING_XM_UA(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: EFE4F1B8E1C
 X-Rspamd-Action: no action
 
-On 25-02-26, 17:54, Théo Lebrun wrote:
-> Neither Kconfig nor Makefile are sorted; reorder them.
+On 25-02-26, 16:54, Théo Lebrun wrote:
+> On Wed Feb 25, 2026 at 4:00 PM CET, Vinod Koul wrote:
+> > On 27-01-26, 18:09, Théo Lebrun wrote:
+> >> EyeQ5 embeds a system-controller called OLB. It features many unrelated
+> >> registers, and some of those are registers used to configure the
+> >> integration of the RGMII/SGMII Cadence PHY used by MACB/GEM instances.
+> >> 
+> >> Wrap in a neat generic PHY provider, exposing two PHYs with standard
+> >> phy_init() / phy_set_mode() / phy_power_on() operations.
+> >
+> > Is there a dependency of this patch with rest of the series. If not
+> > please post different series for subsystems.
 > 
-> $ diff -U100 <(grep ^config drivers/phy/Kconfig) \
->              <(grep ^config drivers/phy/Kconfig | sort)
-> 
-> $ diff -U100 <(grep ^obj-\\$ drivers/phy/Makefile) \
->              <(grep ^obj-\\$ drivers/phy/Makefile | sort)
-> 
-> PHY_COMMON_PROPS{,_TEST} are kept at the top which does not respect
-> sorting order.
-> 
-> Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
-> ---
->  drivers/phy/Kconfig  | 86 ++++++++++++++++++++++++++--------------------------
->  drivers/phy/Makefile |  8 ++---
->  2 files changed, 47 insertions(+), 47 deletions(-)
-> 
-> diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
-> index 02467dfd4fb0..c86e90027443 100644
-> --- a/drivers/phy/Kconfig
-> +++ b/drivers/phy/Kconfig
-> @@ -47,6 +47,26 @@ config GENERIC_PHY_MIPI_DPHY
->  	  Provides a number of helpers a core functions for MIPI D-PHY
->  	  drivers to us.
->  
-> +config PHY_AIROHA_PCIE
-> +	tristate "Airoha PCIe-PHY Driver"
-> +	depends on ARCH_AIROHA || COMPILE_TEST
-> +	depends on OF
-> +	select GENERIC_PHY
-> +	help
-> +	  Say Y here to add support for Airoha PCIe PHY driver.
-> +	  This driver create the basic PHY instance and provides initialize
-> +	  callback for PCIe GEN3 port.
-> +
-> +config PHY_CAN_TRANSCEIVER
-> +	tristate "CAN transceiver PHY"
-> +	select GENERIC_PHY
-> +	select MULTIPLEXER
-> +	help
-> +	  This option enables support for CAN transceivers as a PHY. This
-> +	  driver provides function for putting the transceivers in various
-> +	  functional modes using gpios and sets the attribute max link
-> +	  rate, for CAN drivers.
-> +
->  config PHY_GOOGLE_USB
->  	tristate "Google Tensor SoC USB PHY driver"
->  	select GENERIC_PHY
-> @@ -69,6 +89,17 @@ config PHY_LPC18XX_USB_OTG
->  	  This driver is need for USB0 support on LPC18xx/43xx and takes
->  	  care of enabling and clock setup.
->  
-> +config PHY_NXP_PTN3222
-> +	tristate "NXP PTN3222 1-port eUSB2 to USB2 redriver"
-> +	depends on I2C
-> +	depends on OF
-> +	select GENERIC_PHY
-> +	help
-> +	  Enable this to support NXP PTN3222 1-port eUSB2 to USB2 Redriver.
-> +	  This redriver performs translation between eUSB2 and USB2 signalling
-> +	  schemes. It supports all three USB 2.0 data rates: Low Speed, Full
-> +	  Speed and High Speed.
-> +
->  config PHY_PISTACHIO_USB
->  	tristate "IMG Pistachio USB2.0 PHY driver"
->  	depends on MIPS || COMPILE_TEST
-> @@ -84,6 +115,18 @@ config PHY_SNPS_EUSB2
->  	  Enable support for the USB high-speed SNPS eUSB2 phy on select
->  	  SoCs. The PHY is usually paired with a Synopsys DWC3 USB controller.
->  
-> +config PHY_SPACEMIT_K1_PCIE
-> +	tristate "PCIe and combo PHY driver for the SpacemiT K1 SoC"
-> +	depends on ARCH_SPACEMIT || COMPILE_TEST
-> +	depends on COMMON_CLK
-> +	depends on HAS_IOMEM
-> +	depends on OF
-> +	select GENERIC_PHY
-> +	default ARCH_SPACEMIT
-> +	help
-> +	  Enable support for the PCIe and USB 3 combo PHY and two
-> +	  PCIe-only PHYs used in the SpacemiT K1 SoC.
+> ACK. It felt sensible to keep patches close together to understand their
+> reasoning.
+>  - clk patches are there because they imply we get a dev->of_node.
+>    Without them we don't and therefore the driver is useless.
+>  - DTS/MIPS patches are there because they exploit this new driver.
+>    They show the first users of this driver.
 
-I moved this into spacemit directory and while at it notice the file is
-not sorted and patched that up.20260223065743.395539-1-vkoul@kernel.org
-Sorry I missed this and earlier one
+You can add that in cover letter for people interested to read. It is
+easy for me to pick a series rather than find which patches to review
+and apply
+
+> 
+> Will split for next revision.
+
+Thanks
 
 -- 
 ~Vinod
