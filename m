@@ -1,64 +1,64 @@
-Return-Path: <linux-mips+bounces-13262-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13264-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YLwAJMk9oWkyrgQAu9opvQ
-	(envelope-from <linux-mips+bounces-13262-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Feb 2026 07:46:33 +0100
+	id GOIIG6U9oWkyrgQAu9opvQ
+	(envelope-from <linux-mips+bounces-13264-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Feb 2026 07:45:57 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3ADB1B36F2
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Feb 2026 07:46:32 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C94A1B36B6
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Feb 2026 07:45:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 66D45305B053
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Feb 2026 06:45:19 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id F263F305EE42
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Feb 2026 06:45:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F13533EF0B0;
-	Fri, 27 Feb 2026 06:44:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CD683EF0D1;
+	Fri, 27 Feb 2026 06:44:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="dCLNqQkf";
-	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="eVLtN9AW"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="JXAhG55Y";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="wmHm6p+d"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32CAC3ED12B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D36E33EDABA;
 	Fri, 27 Feb 2026 06:44:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772174689; cv=none; b=i+zEypRFFQHvqT02FoJPuEdyBbE0bWa3pleV6UcW5tnQuhJcEAkBrzLl+o0tdDxMA8+zayekx2kBE88ZGhTbi/KsB/2vR7i753FGDrNrJknoz41GG7/vawJ5BUGECiydCT23aN2q+kxjhnFPqXZLsqgp91LHCq0wq8yDIzzY78s=
+	t=1772174690; cv=none; b=g5D6o7Di/4YeQgzXv13/hTzceniYWwnXegKotPixMjTdMAQ8bblzBWmA4IMlE6+QNJMYCsb8sEIZkZAaYTpAsIpS65Krf7tH78GLKNA2DN7lYmNJoLpNU0q+nM85+Pf0G3xqetb7+fPxkHUxi4qB+R0FczyRrWz2usnOs1QcGw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772174689; c=relaxed/simple;
-	bh=JcvE3kQiMg07X05oSReGQNnDSkDG6pLjGh3SaRJFDSk=;
+	s=arc-20240116; t=1772174690; c=relaxed/simple;
+	bh=Z1rsUOjTxHpAm9idXz4lwom94XpR6Wby8PI4ObfdrdU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=BB3mbiahFdTUTrfxzzwrRyunlK0Rm0fWlq5Mr44S30LRylEk+geX2qfTBBPr+CsQP/wW53oO1c8Mj/rRCApElx2h/NEQ4z9E7NgSyI+4UVe9FWTrTpDqZZcXmBBPcPTE755zvin4jyXFintUdOJBrcq9vNYNxrqRVi93HxVjXAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=dCLNqQkf; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=eVLtN9AW; arc=none smtp.client-ip=193.142.43.55
+	 In-Reply-To:To:Cc; b=k2Xnm8Sxgkv0BX/Gfqb9kCeYI22aNHkPUTkOucn7agxyvovh+aCqbHshm1ifKKUbSSMqxDmC2OV9DjixKrT+jR94dfDoFY2cTgBAYCdOMkGlKBjP+uSiQSbx2npoaXi1dbkagbNZWZVaTLGekLmQR/+r7+QygDnL/3X1cpEkvSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=JXAhG55Y; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=wmHm6p+d; arc=none smtp.client-ip=193.142.43.55
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
 From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020; t=1772174686;
+	s=2020; t=1772174687;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=NLji6Amx+w4gkoyKP87sApLv4hbvr/R4BbROA9mF7Qw=;
-	b=dCLNqQkfH1i//wSvIpnoq3xDDTzR2xeibPPMp/z9eZz64hGWimn0Lzumwy5pZBFei6FZLf
-	G1v7mQUgTptwXQOorAhU4ZJk6uoK4C6efBUGJuSSMAW+9LwDA65lAhe7BLSk1GcozF7A+h
-	ZlAAYWN/CSrxWHeMBVbf0yTx1gerVfh7lptz5Ry5V2dWHSqH2M2TME6HCKkyYogti0sP2G
-	P6tZEdTPnz+Ch4F3lgRI/UyLbXCV97/qFf8eP3ybFVgQsdVbUJOJHabtbAoOaVU3QyEflS
-	7DG9IaKYRC6xXbioku99cIA+Ibmq04T5oJ9d97OkF/WEyLWHLQ4myVt0QjtBUA==
+	bh=wtU5hK3AFCtp7e7ArBuMhyX7A6DwHWhZv3v1MOsSUw8=;
+	b=JXAhG55Ye9xFA2tmKl7w6J4bqiKAv+vQ754S9WErM0VRyY3ANGBjK8AASP7xwooWFZ0Jn6
+	o4Z4SPg7f7GdqkOYQ5z/Rn+MbKeNV4SCt47FNYK9tWE7DfNkCmlRkLQQ7aFOve9E3qnxm8
+	jemC6tzAZuw5/ZMf6vAASYTukTZ569XDrYKGLOpBePlafepqe45YJjSgWXgIqFYsCrBbTY
+	TmmPFf2N2HIDJQhthOu4yXAhXoU0pMX1LhDgaqXe0FCrJHZKZXGe0m3SaLh04KmnytBx2T
+	3qKCcKdG1QaQou69/dMRg3TsC4MigquS484EO+uWk8GB+okebf0WZVCa+R1KJA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-	s=2020e; t=1772174686;
+	s=2020e; t=1772174687;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=NLji6Amx+w4gkoyKP87sApLv4hbvr/R4BbROA9mF7Qw=;
-	b=eVLtN9AWbevcPEHUTybrUg+PUlahm/LpMjWb5A6zQ6iJSsUcLh5Op7xSCyS6qNu2Uawows
-	K8JJTt0JPIDm1MBg==
-Date: Fri, 27 Feb 2026 07:44:35 +0100
-Subject: [PATCH v2 09/15] random: vDSO: add explicit includes
+	bh=wtU5hK3AFCtp7e7ArBuMhyX7A6DwHWhZv3v1MOsSUw8=;
+	b=wmHm6p+dnm1/6UlQnhYWe7W3upLKAxVWFiiGhGzDo+78/bwR9mXpX/lAd/KTZRW/vZ7Iiy
+	2qZjG7dDR6pJ+vDg==
+Date: Fri, 27 Feb 2026 07:44:36 +0100
+Subject: [PATCH v2 10/15] vdso/gettimeofday: Add explicit includes
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -67,7 +67,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260227-vdso-header-cleanups-v2-9-35d60acf7410@linutronix.de>
+Message-Id: <20260227-vdso-header-cleanups-v2-10-35d60acf7410@linutronix.de>
 References: <20260227-vdso-header-cleanups-v2-0-35d60acf7410@linutronix.de>
 In-Reply-To: <20260227-vdso-header-cleanups-v2-0-35d60acf7410@linutronix.de>
 To: Catalin Marinas <catalin.marinas@arm.com>, 
@@ -84,11 +84,11 @@ Cc: linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
  linuxppc-dev@lists.ozlabs.org, loongarch@lists.linux.dev, 
  linux-mips@vger.kernel.org, 
  =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1772174681; l=844;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1772174681; l=905;
  i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
- bh=JcvE3kQiMg07X05oSReGQNnDSkDG6pLjGh3SaRJFDSk=;
- b=RZXvHH2HxCYtijPWzFmGuHR3sRa73ICHOAJnT8sgpwEldcg8giFkj0QCEeXbaQyeRwjE8NIZG
- 3G4L52NK7P+AtsNoMk77ybqM5aiSaWAXCceP66bohc97O91JdCE0VU8
+ bh=Z1rsUOjTxHpAm9idXz4lwom94XpR6Wby8PI4ObfdrdU=;
+ b=/ihgwmqVGHSXOW2w9sDXnfI1fc+/Ms133fsL8i7XjeqF8wz/6chK3CLXrDji6enZnSnVKOJLk
+ t/C/jHA7n8cCVYeqjm96zLj83lq+i7NypNhfwXehHaxlv/KRJlhOUMu
 X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
  pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 X-Rspamd-Server: lfdr
@@ -96,7 +96,7 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[linutronix.de,none];
 	R_DKIM_ALLOW(-0.20)[linutronix.de:s=2020,linutronix.de:s=2020e];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -104,7 +104,7 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	RCVD_COUNT_THREE(0.00)[3];
 	FREEMAIL_TO(0.00)[arm.com,kernel.org,armlinux.org.uk,linux.ibm.com,ellerman.id.au,gmail.com,xen0n.name,alpha.franken.de,mit.edu,zx2c4.com];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13262-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13264-lists,linux-mips=lfdr.de];
 	RCPT_COUNT_TWELVE(0.00)[21];
 	MIME_TRACE(0.00)[0:+];
 	FROM_HAS_DN(0.00)[];
@@ -115,11 +115,11 @@ X-Spamd-Result: default: False [-2.16 / 15.00];
 	FROM_NEQ_ENVFROM(0.00)[thomas.weissschuh@linutronix.de,linux-mips@vger.kernel.org];
 	DKIM_TRACE(0.00)[linutronix.de:+];
 	MID_RHS_MATCH_FROM(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
 	TAGGED_RCPT(0.00)[linux-mips];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,zx2c4.com:email,linutronix.de:mid,linutronix.de:dkim,linutronix.de:email]
-X-Rspamd-Queue-Id: D3ADB1B36F2
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:helo,sto.lore.kernel.org:rdns,linutronix.de:mid,linutronix.de:dkim,linutronix.de:email]
+X-Rspamd-Queue-Id: 1C94A1B36B6
 X-Rspamd-Action: no action
 
 Various used symbols are only visible through transitive includes.
@@ -128,27 +128,29 @@ These transitive includes are about to go away.
 Explicitly include the necessary headers.
 
 Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
-Acked-by: Jason A. Donenfeld <Jason@zx2c4.com>
 ---
- lib/vdso/getrandom.c | 3 +++
- 1 file changed, 3 insertions(+)
+ lib/vdso/gettimeofday.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/lib/vdso/getrandom.c b/lib/vdso/getrandom.c
-index 440f8a6203a6..7e29005aa208 100644
---- a/lib/vdso/getrandom.c
-+++ b/lib/vdso/getrandom.c
-@@ -7,8 +7,11 @@
- #include <linux/minmax.h>
+diff --git a/lib/vdso/gettimeofday.c b/lib/vdso/gettimeofday.c
+index 4399e143d43a..73b079eb4511 100644
+--- a/lib/vdso/gettimeofday.c
++++ b/lib/vdso/gettimeofday.c
+@@ -3,8 +3,14 @@
+  * Generic userspace implementations of gettimeofday() and similar.
+  */
+ #include <vdso/auxclock.h>
++#include <vdso/clocksource.h>
  #include <vdso/datapage.h>
- #include <vdso/getrandom.h>
+ #include <vdso/helpers.h>
++#include <vdso/ktime.h>
 +#include <vdso/limits.h>
- #include <vdso/unaligned.h>
-+#include <asm/barrier.h>
- #include <asm/vdso/getrandom.h>
-+#include <uapi/linux/errno.h>
- #include <uapi/linux/mman.h>
- #include <uapi/linux/random.h>
++#include <vdso/math64.h>
++#include <vdso/time32.h>
++#include <vdso/time64.h>
  
+ /* Bring in default accessors */
+ #include <vdso/vsyscall.h>
 
 -- 
 2.53.0
