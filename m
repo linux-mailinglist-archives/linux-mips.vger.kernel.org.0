@@ -1,143 +1,194 @@
-Return-Path: <linux-mips+bounces-13286-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13287-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kBP1EQqioWnEvAQAu9opvQ
-	(envelope-from <linux-mips+bounces-13286-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Feb 2026 14:54:18 +0100
+	id cDkABnqioWnEvAQAu9opvQ
+	(envelope-from <linux-mips+bounces-13287-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Feb 2026 14:56:10 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC3EB1B7F4E
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Feb 2026 14:54:17 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 296571B800A
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Feb 2026 14:56:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id D90FF3020851
-	for <lists+linux-mips@lfdr.de>; Fri, 27 Feb 2026 13:54:15 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id C64933011D68
+	for <lists+linux-mips@lfdr.de>; Fri, 27 Feb 2026 13:56:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC3693F0776;
-	Fri, 27 Feb 2026 13:54:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B0FA3F23A5;
+	Fri, 27 Feb 2026 13:55:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="usTixHt5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="guoTrA3t"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84FCF239E7E;
-	Fri, 27 Feb 2026 13:54:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75B4E265621;
+	Fri, 27 Feb 2026 13:55:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772200453; cv=none; b=X9KVv72jvyjEZPKnXNpM0sy9dOsaWsdHhTvxs1piKt5HC+/2SZ9GWvnRk7jIC1j3YSbfnjMbVkzhtnUUKZGTNQycLoU6NY2FzhlBgzDMB289b2DMfOFKg+4mqA9taX6Jmvn6GLWN9pP2891GAuxQ3Ijdiv4DZXOmGwz9OwupRSs=
+	t=1772200559; cv=none; b=nGDbETCQmgEpjYX1iFs+QUfmagMrrnIqdOcqrT3+MquWOa/wAWldKBoSZthOO56fuqFkULgPP77sOtkkziHBDgsiYb1ATKHgiYQFxsAoRcaEs0NL1ilejh/79tpwDACsHPnCsnwlJEicD7iUmtooiMA/8r2ix1q/UtgCZfTCpFM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772200453; c=relaxed/simple;
-	bh=HsjLgo8nupcZsn81ESLUwM7KBpJUSJar+k7ZGZ1dnoo=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=msBuWaPy4vQ7t5QPiXemF+8OIDrkCISSBl0OGtTjjJ2jVF27rXJqpJJ6OeNjXXm19dpLgE42A7WUb48t6wQ+hVwXnm26jmb+gMc6EVSGBFwz83qYjb2pA6NFdTS+NSy3xuoHzaFu7TwZ+17i0nvwnsdlhK1KsT5NGHAIFMFRHos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=usTixHt5; arc=none smtp.client-ip=185.246.84.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-02.galae.net (Postfix) with ESMTPS id A5B851A1830;
-	Fri, 27 Feb 2026 13:54:09 +0000 (UTC)
-Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 7A9AC5FE46;
-	Fri, 27 Feb 2026 13:54:09 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 1896A1036945B;
-	Fri, 27 Feb 2026 14:54:04 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1772200448; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=678J9mnuEHgouwiIbacSQJNgyLiVuCk4U+ok8i9vyDw=;
-	b=usTixHt596HcttfoqUxtD1TpRqMCOhEObhRjOotEMCvFQC4458MhyCKKV/U33bO0QSsDYX
-	4qtwDmQ7mk6WaJS6fTo0fTXmaT2sO/Jmyu83avYqKxbe3GZg56nWAsD7NhE36g1Oq7QMOI
-	PzsKyHkJUOAioDteoszuHoEqayj9JgHqWFuKWHetbTVJk17q9VyYadXdkWGPg1we3+yf9Q
-	oS5N5YY6rjpcD+sPIzva5tWEzRizelfbO5iSvFYmccxxpPMhs6+cNvHfEsIvBqke5+3y6s
-	b9WWqsGYQzu0l1Ob1CzPBfbkLy5NlIBaoki5IIr9LptONk3mRsX/JyqVKpegLg==
-From: =?UTF-8?B?QmVub8OudA==?= Monin <benoit.monin@bootlin.com>
-To: Linus Walleij <linusw@kernel.org>
-Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
- Gregory CLEMENT <gregory.clement@bootlin.com>,
- =?UTF-8?B?VGjDqW8=?= Lebrun <theo.lebrun@bootlin.com>,
- Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>,
- Philipp Zabel <p.zabel@pengutronix.de>,
- Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
- Tawfik Bayouk <tawfik.bayouk@mobileye.com>, linux-mips@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org
-Subject: Re: [PATCH v3 00/13] Introducing the Mobileye EyeQ6Lplus SoC
-Date: Fri, 27 Feb 2026 14:54:04 +0100
-Message-ID: <5262868.Qq0lBPeGtt@benoit.monin>
-In-Reply-To:
- <CAD++jLmEU=PkmsPOksF9dtV5UpH3S9X=VJey8ZEf5wdsPbsNvg@mail.gmail.com>
-References:
- <20260226-eyeq6lplus-v3-0-9cbeb59268b0@bootlin.com>
- <CAD++jLmEU=PkmsPOksF9dtV5UpH3S9X=VJey8ZEf5wdsPbsNvg@mail.gmail.com>
+	s=arc-20240116; t=1772200559; c=relaxed/simple;
+	bh=Z5NdvmHFpqWASNhjEw3AnhNyfE+IsWtjKqCNA37tD2g=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iSfPHTpXwDp2uWCi4afecvqRQwFifOzNWTlM+IbUbN6dXjdH65Cjef6bLy/yuGj8zCAyupt1rctLxLLfOHnWZf9eQg4+QzKLHTcv0diIYxkQQMSusQT+oPeRsRm4HBbGeZw7hUV9cN04Mus6T5xUIkGxR7SErr9VMrDdgJVgqKU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=guoTrA3t; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A027AC116C6;
+	Fri, 27 Feb 2026 13:55:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772200559;
+	bh=Z5NdvmHFpqWASNhjEw3AnhNyfE+IsWtjKqCNA37tD2g=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=guoTrA3tySUNzy2jisrkqGd2k4FHDS4iIngYwHJYw9pTwrkQ/ryB4iixO2moZuzpX
+	 TacRL9UlkHBSre+N18XIpNM6QnlDnKF2lhK50sxk22DUsItoTexaeq4KwJiTd1enNz
+	 UK/63+NILl7z3Pk6yiKXypP7Mm6A0Ge5qIuBYB5jMnqeYawdBTypdlxKlRmt10vm1x
+	 dmKx4ofeYN446GJt1mkmS8xKuaW540FXZKBffx7CpoqoUEXyHVu41QyJCDKqw5UgGu
+	 tRELXuDIvdOcc9zS566aKbuwkOb49Td3MgxD2kPz4FgrmldyNAMQdfMc2AgoVqLY0P
+	 yzUjBQzrC2PfA==
+Date: Fri, 27 Feb 2026 19:25:55 +0530
+From: Vinod Koul <vkoul@kernel.org>
+To: =?iso-8859-1?Q?Th=E9o?= Lebrun <theo.lebrun@bootlin.com>
+Cc: Neil Armstrong <neil.armstrong@linaro.org>,
+	linux-phy@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-mips@vger.kernel.org,
+	Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>,
+	Gregory CLEMENT <gregory.clement@bootlin.com>,
+	=?iso-8859-1?Q?Beno=EEt?= Monin <benoit.monin@bootlin.com>,
+	Tawfik Bayouk <tawfik.bayouk@mobileye.com>,
+	Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
+	Luca Ceresoli <luca.ceresoli@bootlin.com>
+Subject: Re: [PATCH v7 1/2] phy: sort Kconfig and Makefile
+Message-ID: <aaGia-MYCsRYCPT6@vaman>
+References: <20260225-macb-phy-v7-0-e5211a61db56@bootlin.com>
+ <20260225-macb-phy-v7-1-e5211a61db56@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="utf-8"
-X-Last-TLS-Session-Version: TLSv1.3
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20260225-macb-phy-v7-1-e5211a61db56@bootlin.com>
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.66 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-1.66 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
+	MID_RHS_NOT_FQDN(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	FROM_HAS_DN(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13286-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
-	MIME_TRACE(0.00)[0:+];
+	TAGGED_FROM(0.00)[bounces-13287-lists,linux-mips=lfdr.de];
+	FROM_HAS_DN(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[18];
-	DKIM_TRACE(0.00)[bootlin.com:+];
+	RCVD_COUNT_THREE(0.00)[4];
+	MIME_TRACE(0.00)[0:+];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	MISSING_XM_UA(0.00)[];
-	TO_DN_SOME(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[6];
+	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[benoit.monin@bootlin.com,linux-mips@vger.kernel.org];
+	FROM_NEQ_ENVFROM(0.00)[vkoul@kernel.org,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-0.998];
+	RCPT_COUNT_SEVEN(0.00)[11];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips,dt];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[bootlin.com:dkim,bootlin.com:url,bootlin.com:email,tor.lore.kernel.org:helo,tor.lore.kernel.org:rdns]
-X-Rspamd-Queue-Id: AC3EB1B7F4E
+	TAGGED_RCPT(0.00)[linux-mips];
+	TO_DN_SOME(0.00)[];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,bootlin.com:email]
+X-Rspamd-Queue-Id: 296571B800A
 X-Rspamd-Action: no action
 
-Hi Linus,
+On 25-02-26, 17:54, Théo Lebrun wrote:
+> Neither Kconfig nor Makefile are sorted; reorder them.
+> 
+> $ diff -U100 <(grep ^config drivers/phy/Kconfig) \
+>              <(grep ^config drivers/phy/Kconfig | sort)
+> 
+> $ diff -U100 <(grep ^obj-\\$ drivers/phy/Makefile) \
+>              <(grep ^obj-\\$ drivers/phy/Makefile | sort)
+> 
+> PHY_COMMON_PROPS{,_TEST} are kept at the top which does not respect
+> sorting order.
+> 
+> Reviewed-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+> Signed-off-by: Théo Lebrun <theo.lebrun@bootlin.com>
+> ---
+>  drivers/phy/Kconfig  | 86 ++++++++++++++++++++++++++--------------------------
+>  drivers/phy/Makefile |  8 ++---
+>  2 files changed, 47 insertions(+), 47 deletions(-)
+> 
+> diff --git a/drivers/phy/Kconfig b/drivers/phy/Kconfig
+> index 02467dfd4fb0..c86e90027443 100644
+> --- a/drivers/phy/Kconfig
+> +++ b/drivers/phy/Kconfig
+> @@ -47,6 +47,26 @@ config GENERIC_PHY_MIPI_DPHY
+>  	  Provides a number of helpers a core functions for MIPI D-PHY
+>  	  drivers to us.
+>  
+> +config PHY_AIROHA_PCIE
+> +	tristate "Airoha PCIe-PHY Driver"
+> +	depends on ARCH_AIROHA || COMPILE_TEST
+> +	depends on OF
+> +	select GENERIC_PHY
+> +	help
+> +	  Say Y here to add support for Airoha PCIe PHY driver.
+> +	  This driver create the basic PHY instance and provides initialize
+> +	  callback for PCIe GEN3 port.
+> +
+> +config PHY_CAN_TRANSCEIVER
+> +	tristate "CAN transceiver PHY"
+> +	select GENERIC_PHY
+> +	select MULTIPLEXER
+> +	help
+> +	  This option enables support for CAN transceivers as a PHY. This
+> +	  driver provides function for putting the transceivers in various
+> +	  functional modes using gpios and sets the attribute max link
+> +	  rate, for CAN drivers.
+> +
+>  config PHY_GOOGLE_USB
+>  	tristate "Google Tensor SoC USB PHY driver"
+>  	select GENERIC_PHY
+> @@ -69,6 +89,17 @@ config PHY_LPC18XX_USB_OTG
+>  	  This driver is need for USB0 support on LPC18xx/43xx and takes
+>  	  care of enabling and clock setup.
+>  
+> +config PHY_NXP_PTN3222
+> +	tristate "NXP PTN3222 1-port eUSB2 to USB2 redriver"
+> +	depends on I2C
+> +	depends on OF
+> +	select GENERIC_PHY
+> +	help
+> +	  Enable this to support NXP PTN3222 1-port eUSB2 to USB2 Redriver.
+> +	  This redriver performs translation between eUSB2 and USB2 signalling
+> +	  schemes. It supports all three USB 2.0 data rates: Low Speed, Full
+> +	  Speed and High Speed.
+> +
+>  config PHY_PISTACHIO_USB
+>  	tristate "IMG Pistachio USB2.0 PHY driver"
+>  	depends on MIPS || COMPILE_TEST
+> @@ -84,6 +115,18 @@ config PHY_SNPS_EUSB2
+>  	  Enable support for the USB high-speed SNPS eUSB2 phy on select
+>  	  SoCs. The PHY is usually paired with a Synopsys DWC3 USB controller.
+>  
+> +config PHY_SPACEMIT_K1_PCIE
+> +	tristate "PCIe and combo PHY driver for the SpacemiT K1 SoC"
+> +	depends on ARCH_SPACEMIT || COMPILE_TEST
+> +	depends on COMMON_CLK
+> +	depends on HAS_IOMEM
+> +	depends on OF
+> +	select GENERIC_PHY
+> +	default ARCH_SPACEMIT
+> +	help
+> +	  Enable support for the PCIe and USB 3 combo PHY and two
+> +	  PCIe-only PHYs used in the SpacemiT K1 SoC.
 
-On Friday, 27 February 2026 at 01:14:32 CET, Linus Walleij wrote:
-> Hi Benoit,
->=20
-> On Thu, Feb 26, 2026 at 2:34=E2=80=AFPM Beno=C3=AEt Monin <benoit.monin@b=
-ootlin.com> wrote:
->=20
-> >       pinctrl: eyeq5: Use match data
-> >       pinctrl: eyeq5: Add Mobileye EyeQ6Lplus OLB
->=20
-> Can I just apply these two to the pinctrl tree?
->=20
-> Yours,
-> Linus Walleij
->=20
-Yes you can, they apply and build cleanly on their own.
+I moved this into spacemit directory and while at it notice the file is
+not sorted and patched that up.20260223065743.395539-1-vkoul@kernel.org
+Sorry I missed this and earlier one
 
-Best regards,
-=2D-=20
-Beno=C3=AEt Monin, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
-
-
-
+-- 
+~Vinod
 
