@@ -1,178 +1,212 @@
-Return-Path: <linux-mips+bounces-13292-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13293-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id cEjKGO9do2myBQUAu9opvQ
-	(envelope-from <linux-mips+bounces-13292-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Sat, 28 Feb 2026 22:28:15 +0100
+	id cBcEKaKYo2neHgUAu9opvQ
+	(envelope-from <linux-mips+bounces-13293-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Sun, 01 Mar 2026 02:38:42 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id B566A1C9188
-	for <lists+linux-mips@lfdr.de>; Sat, 28 Feb 2026 22:28:14 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [IPv6:2600:3c09:e001:a7::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4526B1CB368
+	for <lists+linux-mips@lfdr.de>; Sun, 01 Mar 2026 02:38:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id EFE28375DE60
-	for <lists+linux-mips@lfdr.de>; Sat, 28 Feb 2026 19:49:24 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id C259730244DD
+	for <lists+linux-mips@lfdr.de>; Sun,  1 Mar 2026 01:27:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F0D1377014;
-	Sat, 28 Feb 2026 18:00:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 999AD2848BA;
+	Sun,  1 Mar 2026 01:27:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y5Ww6oOt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="feVXWRbQ"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CE41375AC1;
-	Sat, 28 Feb 2026 18:00:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 763F172631;
+	Sun,  1 Mar 2026 01:27:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772301630; cv=none; b=rFTlUPOFZTmzY/wAFlCykNOe8FDBZBPC6rFo0BidI5M0Gba6gmvINod3X3BjEAm2I+OtBIe3o6lKES9IXetb2/KFQHz/J/98MAtHRbuMHaVXZN3hqtIV28zfxrU4pCWgQIgTB3MXh1R/Vo9j/dpFZkrmRRA4fk7LHvIVCSbCX5c=
+	t=1772328443; cv=none; b=Ukgak7MES+leYmlZ49KVlfvTzJ/2kB5uRSRUx4PlrRgZs6M0UTjodbjoJNHhC4Y3MvlBjw5v1+d65hYS8pZ8oc/kqZiBGh4Xf7SQwuAPYlxYbaCBq/EOv9X5NZG/08zL5Ier9T25TzBGj79VkkXjkwPGPqizy4gXnuZi4RiZmrg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772301630; c=relaxed/simple;
-	bh=kHCRe4FxCpKOmGTFDbEGFmwKc5c1cbzYW9mRrhA/2zM=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rEYsZCofNJjF/T3285U3LlOis4c1wDyVX/PkfMVlaCbthc76U3iB3CXMhDGqCj3Xe9+EZ4q61wPbsUYsU17H9RzmC5UkfL5Ve4gdw94DrnOx+jVH0mEq316O1qD7A9UDeDJf4YuDMBqRARkApBnVGfbean2Pu+i3fFir8NizyAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y5Ww6oOt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ED299C19423;
-	Sat, 28 Feb 2026 17:59:59 +0000 (UTC)
+	s=arc-20240116; t=1772328443; c=relaxed/simple;
+	bh=vHlfXKP4STHsyltdJ0BcHQuWVBexJc45oEKsBZ+V0Ko=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=IaOFcnmmNyvpJZONO8jq2cUll3qxBdKfayRZLv43shkfyg90RHHVy22i0zvFJ00mMSFWdkMO2Sw6zGlmON/Kh4a3sCl9vRGq3Gkm8+d0hnm2kc7SY+9zV3EruimtrXUnOoHxJcT6s3ggSivZojsRe43nTp1aj5c9xME/OdFEZxI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=feVXWRbQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 550B7C19421;
+	Sun,  1 Mar 2026 01:27:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772301629;
-	bh=kHCRe4FxCpKOmGTFDbEGFmwKc5c1cbzYW9mRrhA/2zM=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=Y5Ww6oOt+Lwkhhw6KzkZzqCLx2GB5Y6V/naeD+g/YVnGDnFJykP4eczgV77pSo6aG
-	 MwceHNzWz3tTt2nQUPDrqo4OH/XpY1QPEj4j2coQSntozKAfKLK4GkW1a2dH8TyfFX
-	 5fZRLH0VdmJrHIj0bW/2HmeVqQPjJBYdjnqVErnT7/OV5v8nL9A1bM8hWX1+RqOS8L
-	 j+1xUXhbGCwz3WIiQx9BfetTOcQFR4X46hu07hQziT4+MpACIMVHSm6kKP/vnmJT2+
-	 XJSlGPNpWjGSFDy3clti8s912U34ZnWDCJSJbRQ//cNsZce6q9IlsPUYRVrZhQYnRM
-	 3szaWx8Sycbcw==
-Date: Sat, 28 Feb 2026 17:59:54 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: David Lechner <dlechner@baylibre.com>
-Cc: Francesco Lavra <flavra@baylibre.com>, Jonathan Corbet <corbet@lwn.net>,
- Shuah Khan <skhan@linuxfoundation.org>, Lars-Peter Clausen
- <lars@metafoo.de>, Michael Hennerich <Michael.Hennerich@analog.com>, Lucas
- Stankus <lucas.p.stankus@gmail.com>, Nuno =?UTF-8?B?U8Oh?=
- <nuno.sa@analog.com>, Andy Shevchenko <andy@kernel.org>, Puranjay Mohan
- <puranjay@kernel.org>, Cosmin Tanislav <cosmin.tanislav@analog.com>, Ramona
- Gradinariu <ramona.gradinariu@analog.com>, Antoniu Miclaus
- <antoniu.miclaus@analog.com>, Petre Rodan <petre.rodan@subdimension.ro>,
- Dan Robertson <dan@dlrobertson.com>, Benson Leung <bleung@chromium.org>,
- Guenter Roeck <groeck@chromium.org>, Jiri Kosina <jikos@kernel.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Matti Vaittinen
- <mazziesaccount@gmail.com>, Marcelo Schmitt <marcelo.schmitt@analog.com>,
- Esteban Blanc <eblanc@baylibre.com>, Jorge Marques
- <jorge.marques@analog.com>, Sergiu Cuciurean <sergiu.cuciurean@analog.com>,
- Dragos Bogdan <dragos.bogdan@analog.com>, Alisa-Dariana Roman
- <alisa.roman@analog.com>, Trevor Gamblin <tgamblin@baylibre.com>, Renato
- Lui Geh <renatogeh@gmail.com>, Eugen Hristev <eugen.hristev@linaro.org>,
- Nicolas Ferre <nicolas.ferre@microchip.com>, Alexandre Belloni
- <alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>,
- Andreas Klinger <ak@it-klinger.de>, Paul Cercueil <paul@crapouillou.net>,
- Ramona Bolboaca <ramona.bolboaca@analog.com>, Marcus Folkesson
- <marcus.folkesson@gmail.com>, Kent Gustavsson <kent@minoris.se>, Matthias
- Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
- <angelogioacchino.delregno@collabora.com>, Frank Li <Frank.Li@nxp.com>,
- Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team
- <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Matteo
- Martelli <matteomartelli3@gmail.com>, Marius Cristea
- <marius.cristea@microchip.com>, Heiko Stuebner <heiko@sntech.de>, Maxime
- Coquelin <mcoquelin.stm32@gmail.com>, Alexandre Torgue
- <alexandre.torgue@foss.st.com>, Kurt Borja <kuurtb@gmail.com>, Francesco
- Dolcini <francesco@dolcini.it>, =?UTF-8?B?Sm/Do28=?= Paulo =?UTF-8?B?R29u?=
- =?UTF-8?B?w6dhbHZlcw==?= <jpaulo.silvagoncalves@gmail.com>, Leonard
- =?UTF-8?B?R8O2aHJz?= <l.goehrs@pengutronix.de>, Oleksij Rempel
- <o.rempel@pengutronix.de>, Haibo Chen <haibo.chen@nxp.com>, Salih Erim
- <salih.erim@amd.com>, Conall O'Griofa <conall.ogriofa@amd.com>, Michal
- Simek <michal.simek@amd.com>, Gustavo Silva <gustavograzs@gmail.com>,
- Tomasz Duszynski <tduszyns@gmail.com>, Roan van Dijk <roan@protonic.nl>,
- Jyoti Bhayana <jbhayana@google.com>, Mariel Tinaco
- <Mariel.Tinaco@analog.com>, Nishant Malpani <nish.malpani25@gmail.com>, Rui
- Miguel Silva <rmfrfs@gmail.com>, Linus Walleij <linusw@kernel.org>, Lorenzo
- Bianconi <lorenzo@kernel.org>, Alex Lanzano <lanzano.alex@gmail.com>,
- Jagath Jog J <jagathjog1996@gmail.com>, Jean-Baptiste Maneyrol
- <jean-baptiste.maneyrol@tdk.com>, Remi Buisson <remi.buisson@tdk.com>,
- Christian Eggers <ceggers@arri.de>, Mudit Sharma
- <muditsharma.info@gmail.com>, Javier Carrasco
- <javier.carrasco.cruz@gmail.com>, =?UTF-8?B?T25kxZllag==?= Jirman
- <megi@xff.cz>, Song Qiang <songqiang1304521@gmail.com>, Dixit Parmar
- <dixitparmar19@gmail.com>, Gerald Loacker <gerald.loacker@wolfvision.net>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-iio@vger.kernel.org, chrome-platform@lists.linux.dev,
- linux-input@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mips@vger.kernel.org, linux-mediatek@lists.infradead.org,
- imx@lists.linux.dev, linux-rockchip@lists.infradead.org,
- linux-stm32@st-md-mailman.stormreply.com
-Subject: Re: [PATCH v6 4/7] iio: Rename 'sign' field to `format` in struct
- iio_scan_type
-Message-ID: <20260228175954.1f0950a1@jic23-huawei>
-In-Reply-To: <120c7f33-4ca1-4d35-ac1b-b65362f1adfc@baylibre.com>
-References: <20260225100421.2366864-1-flavra@baylibre.com>
-	<20260225101735.2368252-1-flavra@baylibre.com>
-	<120c7f33-4ca1-4d35-ac1b-b65362f1adfc@baylibre.com>
-X-Mailer: Claws Mail 4.3.1 (GTK 3.24.51; x86_64-pc-linux-gnu)
+	s=k20201202; t=1772328443;
+	bh=vHlfXKP4STHsyltdJ0BcHQuWVBexJc45oEKsBZ+V0Ko=;
+	h=From:To:Cc:Subject:Date:From;
+	b=feVXWRbQnY9gWosBXubSw6Tu6IVySBLbfXrT0LfUyLPvPS8gSuuXd/B57pRgQq8Nb
+	 M8iEXC1vqyiAILj+l1zprBy7pw2LXnYFL/fG4gITiB4lwm4QO1HzRhmOrtu2BhWnG1
+	 Joj/DhMr8mXnXb7Z0LvQF9ech+BSRmIX0beYOTBl30MJ+7oqtlJwnD7VwihFVnZrXa
+	 WaEydvxPN2V5xqEbsodHwh6MxI5Cp88EfencnObtPHZS0JSt42/8+R31SzA1yVRsh6
+	 EOYMHFB16VMDZ0Alk5YaMQYIOh0u2VOVuvsrEaBXKSl6QZ3uBf+6JIkFMmj3Klu1PP
+	 Ism7rfH5UnDbA==
+From: Sasha Levin <sashal@kernel.org>
+To: stable@vger.kernel.org,
+	me@ziyao.cc
+Cc: Nathan Chancellor <nathan@kernel.org>,
+	Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+	linux-mips@vger.kernel.org,
+	llvm@lists.linux.dev
+Subject: FAILED: Patch "MIPS: Work around LLVM bug when gp is used as global register variable" failed to apply to 6.12-stable tree
+Date: Sat, 28 Feb 2026 20:27:20 -0500
+Message-ID: <20260301012721.1684830-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.51.0
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
+X-Patchwork-Hint: ignore
+X-stable: review
+Content-Transfer-Encoding: 8bit
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-0.16 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
-	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	MID_RHS_NOT_FQDN(0.50)[];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
+X-Spamd-Result: default: False [8.84 / 15.00];
+	URIBL_BLACK(7.50)[ziyao.cc:email];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
 	MAILLIST(-0.15)[generic];
+	BAD_REP_POLICIES(0.10)[];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13292-lists,linux-mips=lfdr.de];
-	MIME_TRACE(0.00)[0:+];
-	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-13293-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
-	FREEMAIL_CC(0.00)[baylibre.com,lwn.net,linuxfoundation.org,metafoo.de,analog.com,gmail.com,kernel.org,subdimension.ro,dlrobertson.com,chromium.org,linux.intel.com,linaro.org,microchip.com,bootlin.com,tuxon.dev,it-klinger.de,crapouillou.net,minoris.se,collabora.com,nxp.com,pengutronix.de,sntech.de,foss.st.com,dolcini.it,amd.com,protonic.nl,google.com,tdk.com,arri.de,xff.cz,wolfvision.net,vger.kernel.org,lists.linux.dev,lists.infradead.org,st-md-mailman.stormreply.com];
-	RCVD_COUNT_THREE(0.00)[4];
-	FROM_HAS_DN(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	R_DKIM_ALLOW(0.00)[kernel.org:s=k20201202];
 	TO_DN_SOME(0.00)[];
-	RCPT_COUNT_GT_50(0.00)[88];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[jic23@kernel.org,linux-mips@vger.kernel.org];
+	MIME_TRACE(0.00)[0:+];
+	RCVD_COUNT_THREE(0.00)[4];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	GREYLIST(0.00)[pass,body];
 	DKIM_TRACE(0.00)[kernel.org:+];
-	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
+	RCPT_COUNT_FIVE(0.00)[6];
 	TAGGED_RCPT(0.00)[linux-mips];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns,baylibre.com:email]
-X-Rspamd-Queue-Id: B566A1C9188
-X-Rspamd-Action: no action
+	R_SPF_ALLOW(0.00)[+ip6:2600:3c09:e001:a7::/64:c];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[sashal@kernel.org,linux-mips@vger.kernel.org];
+	DMARC_POLICY_ALLOW(0.00)[kernel.org,quarantine];
+	RCVD_VIA_SMTP_AUTH(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:2600:3c09::/32, country:SG];
+	ARC_ALLOW(0.00)[subspace.kernel.org:s=arc-20240116:i=1];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	NEURAL_SPAM(0.00)[0.964];
+	FROM_HAS_DN(0.00)[]
+X-Rspamd-Queue-Id: 4526B1CB368
+X-Rspamd-Action: add header
+X-Spam: Yes
 
-On Wed, 25 Feb 2026 15:27:01 -0600
-David Lechner <dlechner@baylibre.com> wrote:
+The patch below does not apply to the 6.12-stable tree.
+If someone wants it applied there, or to any other stable or longterm
+tree, then please email the backport, including the original git commit
+id to <stable@vger.kernel.org>.
 
-> On 2/25/26 4:17 AM, Francesco Lavra wrote:
-> > This field is used to differentiate between signed and unsigned integers.
-> > A following commit will extend its use to in order to add support for non-
-> > integer scan elements; therefore, change its name from 'sign' to a more
-> > generic 'format'.
-> >   
-> 
-> Maybe Jonathan is OK with doing this all at once, but another alternative
-> could be to introduce a union to allow both names at the same time, then
-> we could make the change more gradually.
+Thanks,
+Sasha
 
-Please do the union for v7.  Not so much because I mind a global change, but
-more because the chances of merge conflicts are too high.
+------------------ original commit in Linus's tree ------------------
 
-Perhaps for this series just introduce the union and use it in the driver
-here. We can then chase it through the rest of the tree as a separate step.
+From 30bfc2d6a1132a89a5f1c3b96c59cf3e4d076ea3 Mon Sep 17 00:00:00 2001
+From: Yao Zi <me@ziyao.cc>
+Date: Thu, 5 Feb 2026 15:56:44 +0000
+Subject: [PATCH] MIPS: Work around LLVM bug when gp is used as global register
+ variable
 
-Alternatively leave it with a misleading name for now (so allow 'f' to be a
-magic sign value) and we can do the rename as a follow up.
+On MIPS, __current_thread_info is defined as global register variable
+locating in $gp, and is simply assigned with new address during kernel
+relocation.
 
-Jonathan
+This however is broken with LLVM, which always restores $gp if it finds
+$gp is clobbered in any form, including when intentionally through a
+global register variable. This is against GCC's documentation[1], which
+requires a callee-saved register used as global register variable not to
+be restored if it's clobbered.
+
+As a result, $gp will continue to point to the unrelocated kernel after
+the epilog of relocate_kernel(), leading to an early crash in init_idle,
+
+[    0.000000] CPU 0 Unable to handle kernel paging request at virtual address 0000000000000000, epc == ffffffff81afada8, ra == ffffffff81afad90
+[    0.000000] Oops[#1]:
+[    0.000000] CPU: 0 UID: 0 PID: 0 Comm: swapper Tainted: G        W           6.19.0-rc5-00262-gd3eeb99bbc99-dirty #188 VOLUNTARY
+[    0.000000] Tainted: [W]=WARN
+[    0.000000] Hardware name: loongson,loongson64v-4core-virtio
+[    0.000000] $ 0   : 0000000000000000 0000000000000000 0000000000000001 0000000000000000
+[    0.000000] $ 4   : ffffffff80b80ec0 ffffffff80b53d48 0000000000000000 00000000000f4240
+[    0.000000] $ 8   : 0000000000000100 ffffffff81d82f80 ffffffff81d82f80 0000000000000001
+[    0.000000] $12   : 0000000000000000 ffffffff81776f58 00000000000005da 0000000000000002
+[    0.000000] $16   : ffffffff80b80e40 0000000000000000 ffffffff80b81614 9800000005dfbe80
+[    0.000000] $20   : 00000000540000e0 ffffffff81980000 0000000000000000 ffffffff80f81c80
+[    0.000000] $24   : 0000000000000a26 ffffffff8114fb90
+[    0.000000] $28   : ffffffff80b50000 ffffffff80b53d40 0000000000000000 ffffffff81afad90
+[    0.000000] Hi    : 0000000000000000
+[    0.000000] Lo    : 0000000000000000
+[    0.000000] epc   : ffffffff81afada8 init_idle+0x130/0x270
+[    0.000000] ra    : ffffffff81afad90 init_idle+0x118/0x270
+[    0.000000] Status: 540000e2	KX SX UX KERNEL EXL
+[    0.000000] Cause : 00000008 (ExcCode 02)
+[    0.000000] BadVA : 0000000000000000
+[    0.000000] PrId  : 00006305 (ICT Loongson-3)
+[    0.000000] Process swapper (pid: 0, threadinfo=(____ptrval____), task=(____ptrval____), tls=0000000000000000)
+[    0.000000] Stack : 9800000005dfbf00 ffffffff8178e950 0000000000000000 0000000000000000
+[    0.000000]         0000000000000000 ffffffff81970000 000000000000003f ffffffff810a6528
+[    0.000000]         0000000000000001 9800000005dfbe80 9800000005dfbf00 ffffffff81980000
+[    0.000000]         ffffffff810a6450 ffffffff81afb6c0 0000000000000000 ffffffff810a2258
+[    0.000000]         ffffffff81d82ec8 ffffffff8198d010 ffffffff81b67e80 ffffffff8197dd98
+[    0.000000]         ffffffff81d81c80 ffffffff81930000 0000000000000040 0000000000000000
+[    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
+[    0.000000]         0000000000000000 000000000000009e ffffffff9fc01000 0000000000000000
+[    0.000000]         0000000000000000 0000000000000000 0000000000000000 0000000000000000
+[    0.000000]         0000000000000000 ffffffff81ae86dc ffffffff81b3c741 0000000000000002
+[    0.000000]         ...
+[    0.000000] Call Trace:
+[    0.000000] [<ffffffff81afada8>] init_idle+0x130/0x270
+[    0.000000] [<ffffffff81afb6c0>] sched_init+0x5c8/0x6c0
+[    0.000000] [<ffffffff81ae86dc>] start_kernel+0x27c/0x7a8
+
+This bug has been reported to LLVM[2] and affects version from (at
+least) 18 to 21. Let's work around this by using inline assembly to
+assign $gp before a fix is widely available.
+
+Cc: stable@vger.kernel.org
+Link: https://gcc.gnu.org/onlinedocs/gcc-15.2.0/gcc/Global-Register-Variables.html # [1]
+Link: https://github.com/llvm/llvm-project/issues/176546 # [2]
+Signed-off-by: Yao Zi <me@ziyao.cc>
+Acked-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+---
+ arch/mips/kernel/relocate.c | 13 +++++++++++++
+ 1 file changed, 13 insertions(+)
+
+diff --git a/arch/mips/kernel/relocate.c b/arch/mips/kernel/relocate.c
+index 7f1c136ad8506..59833210542ff 100644
+--- a/arch/mips/kernel/relocate.c
++++ b/arch/mips/kernel/relocate.c
+@@ -420,7 +420,20 @@ void *__init relocate_kernel(void)
+ 			goto out;
+ 
+ 		/* The current thread is now within the relocated image */
++#ifndef CONFIG_CC_IS_CLANG
+ 		__current_thread_info = RELOCATED(&init_thread_union);
++#else
++		/*
++		 * LLVM may wrongly restore $gp ($28) in epilog even if it's
++		 * intentionally modified. Work around this by using inline
++		 * assembly to assign $gp. $gp couldn't be listed as output or
++		 * clobber, or LLVM will still restore its original value.
++		 * See also LLVM upstream issue
++		 * https://github.com/llvm/llvm-project/issues/176546
++		 */
++		asm volatile("move $28, %0" : :
++			     "r" (RELOCATED(&init_thread_union)));
++#endif
+ 
+ 		/* Return the new kernel's entry point */
+ 		kernel_entry = RELOCATED(start_kernel);
+-- 
+2.51.0
+
+
 
 
 
