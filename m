@@ -1,140 +1,182 @@
-Return-Path: <linux-mips+bounces-13302-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13305-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id MGFoCzNWpWnR9AUAu9opvQ
-	(envelope-from <linux-mips+bounces-13302-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Mon, 02 Mar 2026 10:19:47 +0100
+	id 2EkUC8OCpWltCwYAu9opvQ
+	(envelope-from <linux-mips+bounces-13305-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Mon, 02 Mar 2026 13:29:55 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2DDBE1D56F9
-	for <lists+linux-mips@lfdr.de>; Mon, 02 Mar 2026 10:19:45 +0100 (CET)
+Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88F1F1D8721
+	for <lists+linux-mips@lfdr.de>; Mon, 02 Mar 2026 13:29:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id 6DE6E3007A7F
-	for <lists+linux-mips@lfdr.de>; Mon,  2 Mar 2026 09:19:41 +0000 (UTC)
+	by sea.lore.kernel.org (Postfix) with ESMTP id E33E630AECB8
+	for <lists+linux-mips@lfdr.de>; Mon,  2 Mar 2026 12:25:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31BEF38D01D;
-	Mon,  2 Mar 2026 09:19:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F14F636C9DE;
+	Mon,  2 Mar 2026 12:25:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NaSaYEwv"
+	dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="XTq/Qbds";
+	dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b="f3MlQqxs"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E76338D006
-	for <linux-mips@vger.kernel.org>; Mon,  2 Mar 2026 09:19:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D2BD36C5AF;
+	Mon,  2 Mar 2026 12:25:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.142.43.55
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772443180; cv=none; b=gt69IiZidRq+odg7QrQHDZa/ohv2wEX87i4HLH5hWBWq6YCo6b9Udrd7/99Du+Q+ecShLN4Fh2vREdB+zNI86fTYSA3LLcNJGOAeQ/meIzsnAtu+cqC/3kK2egLp/3g0ldkKfkNBodzHd+nFJ5wy62+M1mv/+r97lHj/Ig0NAdE=
+	t=1772454348; cv=none; b=rNziUHNU2F1QIcZ0L5nK0Lfhz+OHIhIIupjiu0+XYr9zYlZRNagDiGtVBJRU/9Otg9O92KLzqp3KTbbzs5z9kAiUeCQG1qqsE66iKBkkyGhlwoy4H/pp1OtXkJvFJPtfCGor/KE9L8MsjXMgYBUVwTQybpTw7vuieMwzbVIVNtk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772443180; c=relaxed/simple;
-	bh=7ckUxNu6Er/vlKjRLTGYQicGp10gUC8i4ulwH0qnW6Q=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tiB6hG3YBX7qYO50wK0PPfuaPKVZEWrjiEPPH+GagZCvRM90N1QjV1pGmaiwCmnMNxgCXdrwW2qP1C9PTOrUC8TPHhNgiQ/48GdVuaSIBXmdre/bQXlNKx79aSrhDKs+opj2CdK0TQ14EC/eulqQR1gyONj1xcCsbTAdyp1S4Lg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NaSaYEwv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1FFEC2BCB7
-	for <linux-mips@vger.kernel.org>; Mon,  2 Mar 2026 09:19:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1772443179;
-	bh=7ckUxNu6Er/vlKjRLTGYQicGp10gUC8i4ulwH0qnW6Q=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=NaSaYEwv6W5X/DgCkkxrsPmp/GhAulMTl+hZiRTxUxtDDakDwwhsiq+R5pTeHAsZM
-	 OIbDNM1DveCGwTAONAxVOu/KcPk0lRkgP8WI72/xqx6lOfBbBbU7RSaOQijai8aXqE
-	 Iph6v21mAHpkVFT2/v4EuO4Hhul4HjChQ0pU6S5v1tJDVMm/uPsy5B3zye42S5H+L/
-	 zwlbLDCwfPC/QUd2hC418X1y4CHEeXuHxZmckZMzg2mhCGvn6A7YncTJHd8Xnsxo18
-	 hpZQvhGk41Vg43V6LhnmHFk3tZjPopY4U+BtxJI2mm4cH+mtHH+mP3OJ27P/d5fZMb
-	 f6zFXUS0FBF8g==
-Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-7982c3b7da9so39310587b3.1
-        for <linux-mips@vger.kernel.org>; Mon, 02 Mar 2026 01:19:39 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU1Obv6Chba5TVT1EwtULsIsmmcZu+TpubgyMwTsboRED6hPIP2sUKrF0g1VG4iU+rBFhia0Z1+ObmM@vger.kernel.org
-X-Gm-Message-State: AOJu0YxNIc2cqDb7RrwZT3fpW/+BwZ1lt3/E5d2TeuHzVqWJM6JLFPAi
-	45vvgDDAYeSAq36ZrLoWaxV3brs/SYvUzpWDTQVayRK9I0+dDZHWNeL6KwQqp7E6XoyLzaVJp1R
-	egJ/LhwLlyUAhZN1X4Vz4H/BuAVEOe4Y=
-X-Received: by 2002:a05:690c:385:b0:798:6c28:dd57 with SMTP id
- 00721157ae682-7988554de07mr102205297b3.28.1772443179061; Mon, 02 Mar 2026
- 01:19:39 -0800 (PST)
+	s=arc-20240116; t=1772454348; c=relaxed/simple;
+	bh=JDTHLUTBRhLdtWzI+cYwcXmhsRHrVsJSh1vwEnoNL54=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=p0BguTxadWStzSHRJiW1z1PlslEB1GwYpoy5I292zgVad4yQTmLWR0avTWeQqAMSfcJJZ+arEEhlpGRW2DnVEiRcpH6nFhfYoytXZFuNOy5rr9+bg7IPVO49o7EzSCYYKhz5JUViwaA9C29oQmCBGCRBpXVf8no7sVIOoOJPW3s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de; spf=pass smtp.mailfrom=linutronix.de; dkim=pass (2048-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=XTq/Qbds; dkim=permerror (0-bit key) header.d=linutronix.de header.i=@linutronix.de header.b=f3MlQqxs; arc=none smtp.client-ip=193.142.43.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linutronix.de
+From: =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020; t=1772454344;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Q8M0BzYT+8nDvDRpeOPQrwaX+SE1r8gh99dGV2h1fFk=;
+	b=XTq/Qbdsmdrjjgi15d+mbxPv7MA1pmSdTxIgk0x+7gQ1SBn3Qk50BPvaiHTGQy/qTkOET0
+	CGc+OMjOeQ/n2dA3JdyCWwjrdxy0uscngADbfRLK8WmqnacdFL6h4HVWXe+3LbMBHdWR9X
+	qZ74nUVL9W2j3VLfwuTKczYIjFgmRo5MMH5f83HQtqnIdi+gp6yskGE9pemAt/5epkD38A
+	sdonFKgtjJGoOsIGmpIH2kKpN+TtX6hvt/oaC/e+zE3Kp4IcFO+phZTmHZCNcZy7Qe9ryj
+	DSBSapJLSRTcmYCf4GVgZP161CF/lM2AnixGVHOK2waHFibtLc9ifGRmcjG1Rw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+	s=2020e; t=1772454344;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Q8M0BzYT+8nDvDRpeOPQrwaX+SE1r8gh99dGV2h1fFk=;
+	b=f3MlQqxsNMwSdSaceDHlFwzKoTlTmrVShpKlZNDhQVk9O7AG1ihqK0Tpn92+Xr2oztP91Z
+	NrP6Rmm8D/oDiRBw==
+Subject: [PATCH 00/15] exec: Remove AT_VECTOR_SIZE_ARCH from UAPI
+Date: Mon, 02 Mar 2026 13:25:24 +0100
+Message-Id: <20260302-at-vector-size-arch-v1-0-a11f03ba2ca8@linutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20260226-eyeq6lplus-v3-0-9cbeb59268b0@bootlin.com>
- <CAD++jLmEU=PkmsPOksF9dtV5UpH3S9X=VJey8ZEf5wdsPbsNvg@mail.gmail.com> <5262868.Qq0lBPeGtt@benoit.monin>
-In-Reply-To: <5262868.Qq0lBPeGtt@benoit.monin>
-From: Linus Walleij <linusw@kernel.org>
-Date: Mon, 2 Mar 2026 10:19:27 +0100
-X-Gmail-Original-Message-ID: <CAD++jL=aQwj3vfGQcJQGoFGneKyDPTMWik1zVhhoH3BM42odug@mail.gmail.com>
-X-Gm-Features: AaiRm52IPrnZjaOF5tFQCgs0uPwRGDpKCfSWJ4D7JFeg9UWmQRrGRVgXGFakAgc
-Message-ID: <CAD++jL=aQwj3vfGQcJQGoFGneKyDPTMWik1zVhhoH3BM42odug@mail.gmail.com>
-Subject: Re: [PATCH v3 00/13] Introducing the Mobileye EyeQ6Lplus SoC
-To: =?UTF-8?Q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
-Cc: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
-	Gregory CLEMENT <gregory.clement@bootlin.com>, =?UTF-8?B?VGjDqW8gTGVicnVu?= <theo.lebrun@bootlin.com>, 
-	Thomas Bogendoerfer <tsbogend@alpha.franken.de>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
-	Tawfik Bayouk <tawfik.bayouk@mobileye.com>, linux-mips@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-clk@vger.kernel.org, linux-gpio@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAAAAAAAC/x3MQQ5AMBBG4avIrE1SXTS4ilhU/WU2yFRESO+us
+ fwW772UoIJEffWS4pIk+1bQ1BWF1W8LWOZissY605iO/ckXwrkrJ3nAXsPKDiZadDG2k6NSHoo
+ o938dxpw/BDR+BWUAAAA=
+X-Change-ID: 20260109-at-vector-size-arch-6e0f2e9ff8b6
+To: Kees Cook <kees@kernel.org>, Arnd Bergmann <arnd@arndb.de>
+Cc: linux-mm@kvack.org, linux-kernel@vger.kernel.org, 
+ linux-arch@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-riscv@lists.infradead.org, loongarch@lists.linux.dev, 
+ linux-s390@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+ linux-mips@vger.kernel.org, sparclinux@vger.kernel.org, 
+ linux-sh@vger.kernel.org, linux-alpha@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1772454343; l=2953;
+ i=thomas.weissschuh@linutronix.de; s=20240209; h=from:subject:message-id;
+ bh=JDTHLUTBRhLdtWzI+cYwcXmhsRHrVsJSh1vwEnoNL54=;
+ b=J6CYW4wsSS52A+nGxs9gwUdPdfHUZDIYWEVVGw/G+GXj/VTqu7W4L6C1R+uvBZbzZsf4FisCc
+ r+YyP25hcjyC3G9P+jLo1JOj2qTAaURruN7qUwKyoqSA+FQdhvM39MD
+X-Developer-Key: i=thomas.weissschuh@linutronix.de; a=ed25519;
+ pk=pfvxvpFUDJV2h2nY0FidLUml22uGLSjByFbM6aqQQws=
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
-	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
+	DMARC_POLICY_ALLOW(-0.50)[linutronix.de,none];
+	R_DKIM_ALLOW(-0.20)[linutronix.de:s=2020,linutronix.de:s=2020e];
+	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13302-lists,linux-mips=lfdr.de];
-	FROM_HAS_DN(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[18];
+	TAGGED_FROM(0.00)[bounces-13305-lists,linux-mips=lfdr.de];
+	RCVD_COUNT_THREE(0.00)[3];
 	MIME_TRACE(0.00)[0:+];
-	DKIM_TRACE(0.00)[kernel.org:+];
-	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[15];
+	FROM_HAS_DN(0.00)[];
 	MISSING_XM_UA(0.00)[];
-	RCVD_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[linusw@kernel.org,linux-mips@vger.kernel.org];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips,dt];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[thomas.weissschuh@linutronix.de,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[linutronix.de:+];
+	MID_RHS_MATCH_FROM(0.00)[];
+	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	TAGGED_RCPT(0.00)[linux-mips];
 	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:helo,sin.lore.kernel.org:rdns,mail.gmail.com:mid,bootlin.com:email]
-X-Rspamd-Queue-Id: 2DDBE1D56F9
+	DBL_BLOCKED_OPENRESOLVER(0.00)[linutronix.de:mid,linutronix.de:dkim,linutronix.de:email,sea.lore.kernel.org:helo,sea.lore.kernel.org:rdns]
+X-Rspamd-Queue-Id: 88F1F1D8721
 X-Rspamd-Action: no action
 
-On Fri, Feb 27, 2026 at 2:54=E2=80=AFPM Beno=C3=AEt Monin <benoit.monin@boo=
-tlin.com> wrote:
-> On Friday, 27 February 2026 at 01:14:32 CET, Linus Walleij wrote:
-> > Hi Benoit,
-> >
-> > On Thu, Feb 26, 2026 at 2:34=E2=80=AFPM Beno=C3=AEt Monin <benoit.monin=
-@bootlin.com> wrote:
-> >
-> > >       pinctrl: eyeq5: Use match data
-> > >       pinctrl: eyeq5: Add Mobileye EyeQ6Lplus OLB
-> >
-> > Can I just apply these two to the pinctrl tree?
-> >
-> > Yours,
-> > Linus Walleij
-> >
-> Yes you can, they apply and build cleanly on their own.
+There is nothing userspace can do with this value. In the kernel is
+always combined with AT_VECTOR_SIZE_BASE, which is not exposed to
+userspace and also changes from time to time.
 
-I applied patches 5 & 6 to the pin control tree.
+Move the symbol to kernel-internal headers.
 
-The corresponding DT binding is in patch 1, and since that
-is already ACKed by Rob I positively expect it to be merged
-for v7.1.
+Meant to be applied through the asm-generic tree.
+The default recipient list was huge. I trimmed it to only the
+architecture lists.
 
-Yours,
-Linus Walleij
+Signed-off-by: Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+---
+Thomas Weißschuh (15):
+      MAINTAINERS: exec: Add more auxvec.h variants
+      auxvec.h: Move AT_VECTOR_SIZE definitions to linux/auxvec.h
+      asm-generic: add an in-kernel auxvec.h header
+      ARM: drop custom asm/auxvec.h
+      x86: Remove AT_VECTOR_SIZE_ARCH from UAPI
+      arm64: Remove AT_VECTOR_SIZE_ARCH from UAPI
+      RISC-V: Remove AT_VECTOR_SIZE_ARCH from UAPI
+      LoongArch: Remove AT_VECTOR_SIZE_ARCH from UAPI
+      s390: Remove AT_VECTOR_SIZE_ARCH from UAPI
+      powerpc: Remove AT_VECTOR_SIZE_ARCH from UAPI
+      MIPS: Remove AT_VECTOR_SIZE_ARCH from UAPI
+      sparc: Remove AT_VECTOR_SIZE_ARCH from UAPI
+      sh: Remove AT_VECTOR_SIZE_ARCH from UAPI
+      alpha: remove AT_VECTOR_SIZE_ARCH from UAPI
+      auxvec.h: Drop fallback AT_VECTOR_SIZE_ARCH
+
+ MAINTAINERS                              |  5 +++++
+ arch/alpha/include/asm/auxvec.h          |  7 +++++++
+ arch/alpha/include/uapi/asm/auxvec.h     |  8 +++-----
+ arch/arm/include/asm/auxvec.h            |  1 -
+ arch/arm64/include/asm/auxvec.h          |  7 +++++++
+ arch/arm64/include/uapi/asm/auxvec.h     |  6 ++----
+ arch/loongarch/include/asm/auxvec.h      | 14 ++++++++++++++
+ arch/loongarch/include/uapi/asm/auxvec.h |  8 +++-----
+ arch/mips/include/asm/auxvec.h           | 17 +++++++++++++++++
+ arch/mips/include/uapi/asm/auxvec.h      |  8 +++-----
+ arch/powerpc/include/asm/auxvec.h        |  7 +++++++
+ arch/powerpc/include/uapi/asm/auxvec.h   |  6 ++----
+ arch/riscv/include/asm/auxvec.h          | 13 +++++++++++++
+ arch/riscv/include/uapi/asm/auxvec.h     |  2 --
+ arch/s390/include/asm/auxvec.h           |  7 +++++++
+ arch/s390/include/uapi/asm/auxvec.h      |  6 ++----
+ arch/sh/include/asm/auxvec.h             |  7 +++++++
+ arch/sh/include/uapi/asm/auxvec.h        |  8 +++-----
+ arch/sparc/include/asm/auxvec.h          |  6 ++++++
+ arch/sparc/include/uapi/asm/auxvec.h     |  8 +++-----
+ arch/x86/include/asm/auxvec.h            | 12 ++++++++++++
+ arch/x86/include/uapi/asm/auxvec.h       | 13 +++----------
+ include/asm-generic/Kbuild               |  1 +
+ include/asm-generic/auxvec.h             |  7 +++++++
+ include/linux/auxvec.h                   |  5 +++++
+ include/linux/mm_types.h                 |  6 ------
+ 26 files changed, 139 insertions(+), 56 deletions(-)
+---
+base-commit: f6b3b0a4c85882ad75bce3b093173203e3f39f28
+change-id: 20260109-at-vector-size-arch-6e0f2e9ff8b6
+
+Best regards,
+-- 
+Thomas Weißschuh <thomas.weissschuh@linutronix.de>
+
 
