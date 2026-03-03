@@ -1,321 +1,202 @@
-Return-Path: <linux-mips+bounces-13332-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13333-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id yC6DDaQyp2k/fwAAu9opvQ
-	(envelope-from <linux-mips+bounces-13332-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 03 Mar 2026 20:12:36 +0100
+	id 0A0UO85Jp2n2gQAAu9opvQ
+	(envelope-from <linux-mips+bounces-13333-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 03 Mar 2026 21:51:26 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
-	by mail.lfdr.de (Postfix) with ESMTPS id A96071F5BC7
-	for <lists+linux-mips@lfdr.de>; Tue, 03 Mar 2026 20:12:35 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00B471F6F69
+	for <lists+linux-mips@lfdr.de>; Tue, 03 Mar 2026 21:51:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 5B05B3096DAD
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Mar 2026 19:11:10 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id C501A306ABE6
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Mar 2026 20:51:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 625FF48C8CD;
-	Tue,  3 Mar 2026 19:11:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DB78386C00;
+	Tue,  3 Mar 2026 20:51:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="bRsYtwyu"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="pLDSmkoG";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="YTVlBjzR"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.cjdns.fr (mail.cjdns.fr [5.135.140.105])
+Received: from fout-b2-smtp.messagingengine.com (fout-b2-smtp.messagingengine.com [202.12.124.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ADC2230EF92;
-	Tue,  3 Mar 2026 19:11:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.135.140.105
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0D41335F179;
+	Tue,  3 Mar 2026 20:51:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772565069; cv=none; b=p4ljKp+c4T0opJG8oJmnRhFXen7WH9b13op0L/wOx7R+sZYn60BRnc1QHRuetVRzEziWmZTsIL+gkkKtM5zfvEeAjdRqAr2gPHL6+VxnVCgktKmVcruGY1mM5pRp1jYw7rK8DrP3+Nm5klQgneNObTW4PsE6dz7unHiFS9QRvfg=
+	t=1772571069; cv=none; b=Phk+NVibkSuhMVkbSDIiZaBCjellrnwtVKEXBF876aUpYmQ/Hvy30iyrZoyiDE69sWNOdPeidtqkH8150rvFLxfiyrDvynPDFFYCDlDIL5RP+Ji2ISu5zpJsF67OtiaA2nC3q4Qs9q9eQLveWOhq4lxMgDERFbEBjT7Ne8V+Oq4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772565069; c=relaxed/simple;
-	bh=YYdCNmICXyoE9G4Y7GKLEAq2DFORBQxJvXK7jOn4rz4=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ke9kMvo7p5qY98j3ibVeeq19jeqgNZkjccSZe/0Z5R12gEHbRaS0PK9juWYbdgq9USQ6Mz60gLxbNLiHLvyzO+yIxdjM3FKbvvtdOt+GSYzU4/m7N9/JNsbhfizmD10kYBzdDw0DAK24I4LTwDcmR1wnfNZh64wHnK8wf0fcdpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=none smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=bRsYtwyu; arc=none smtp.client-ip=5.135.140.105
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cjdns.fr
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 23B5F20DC57;
-	Tue,  3 Mar 2026 20:11:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjdns.fr; s=dkim;
-	t=1772565064; h=from:subject:date:message-id:to:cc:mime-version:
-	 content-transfer-encoding:in-reply-to:references;
-	bh=K0no2injFDHLVnfrCxmhoW8zcILT+gNWAee+yl4dH+g=;
-	b=bRsYtwyu5VOOa4UQxgN/usRqhBSbS3J6drtmNGBxPTeANU5YzXDljSFJJ8rLS8OpMbDtNK
-	oS76OoD2SqpVQWjBcgnyRqarWGk7adiHEP16ZsNH2XKgDXJ/P4A+O3ldqKi1TM/9FA7+Sh
-	SdpLD45P/mk9GBRl0Wvf6bNGIMi8hlfI+nzl6iJPkcgX8Y90/0mdvwdJNmSxH/5+cljoR6
-	gw9Nf7DGaOxctHbNWfHHavjgmD92r4dLX96wCwvC6u+A95NjzAKY71BsFaGoZhCf8cwJSS
-	xDgvGZVK8eYH+D1ZbQ63Q4cTarjv9cMBKy5Q/0CiKRGuIqtiHFnCXD8CFG12IA==
-From: Caleb James DeLisle <cjd@cjdns.fr>
-To: linux-mips@vger.kernel.org
-Cc: naseefkm@gmail.com,
-	mturquette@baylibre.com,
-	sboyd@kernel.org,
-	robh@kernel.org,
-	krzk+dt@kernel.org,
-	conor+dt@kernel.org,
-	cjd@cjdns.fr,
-	tsbogend@alpha.franken.de,
-	ryder.lee@mediatek.com,
-	jianjun.wang@mediatek.com,
-	lpieralisi@kernel.org,
-	kwilczynski@kernel.org,
-	mani@kernel.org,
-	bhelgaas@google.com,
-	vkoul@kernel.org,
-	neil.armstrong@linaro.org,
-	p.zabel@pengutronix.de,
-	matthias.bgg@gmail.com,
-	angelogioacchino.delregno@collabora.com,
-	nbd@nbd.name,
-	ansuelsmth@gmail.com,
-	linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pci@vger.kernel.org,
-	linux-mediatek@lists.infradead.org,
-	linux-phy@lists.infradead.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 8/8] mips: dts: Add PCIe to EcoNet EN751221
-Date: Tue,  3 Mar 2026 19:09:48 +0000
-Message-Id: <20260303190948.694783-9-cjd@cjdns.fr>
-In-Reply-To: <20260303190948.694783-1-cjd@cjdns.fr>
-References: <20260303190948.694783-1-cjd@cjdns.fr>
+	s=arc-20240116; t=1772571069; c=relaxed/simple;
+	bh=UETo54LCAdRyr1VDe/7jjjWKgtGXvc43LN9M+ho0yQg=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=Mxk9lJ/egFKrdmxqbMpQFtV4M0I8LiOqI1SICrd+0q96D3eFdTQq/BYbYj/B4QSseFViqcf86Xu1xaqEMBA6FK3NiJVx9vjF6Dd19GxehV30vVgmViNoEZOMxRDJ//A0LcDdQvg1l+2jiT7Sn5RVH8py+ckgOqewwLT+hr30MCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=pLDSmkoG; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=YTVlBjzR; arc=none smtp.client-ip=202.12.124.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-04.internal (phl-compute-04.internal [10.202.2.44])
+	by mailfout.stl.internal (Postfix) with ESMTP id 4CC3D1D00091;
+	Tue,  3 Mar 2026 15:51:06 -0500 (EST)
+Received: from phl-imap-02 ([10.202.2.81])
+  by phl-compute-04.internal (MEProxy); Tue, 03 Mar 2026 15:51:07 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm3; t=1772571066;
+	 x=1772657466; bh=W4+9AyMIj1WDxYgl7TvopUa7BgXQ+cJMbbNJ/Z/1ir4=; b=
+	pLDSmkoGAjS8lnVtR1khysjif4VTY5cRWo9PIxyDJiT28SEFPnk1yXN58zkVxEMh
+	GFW1phu55AtGZbKUNoh3VcX9JTNkCzW7xIACqKccu9Yi2xgImIbaihihSab3Ybcy
+	ZvzdJ9KnUtHX1L96Lz7VaETXaw0WUeq2GiwLcE6rz6wfW+eI9zJX585FXdCVD7tl
+	X/ZMK3WFoNbmP0JCWCs6+hhgv/UQvUhqfxQhQnXjEDrZ2LaRSAzKVL24K3PzJhIn
+	rqjjxOu2ekH2xWndLoEQtcbD8+ZX+k3wfPuxfVMI3M5Nh4HTdK7tar6AT4OhAaVE
+	NNHUNEpsd4v5NMVnDGl1cw==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1772571066; x=
+	1772657466; bh=W4+9AyMIj1WDxYgl7TvopUa7BgXQ+cJMbbNJ/Z/1ir4=; b=Y
+	TVlBjzRPOIJet/lh3awFNLl+wSE9XarGY7dyctHiw5tGwZ6LRJ3BrauySyy4mzo0
+	b0+dmt15Vi2YI3e9F9TlBU30QCqEG5DY1aVhkCoxyCw1e9CyBFJ1RYuMAgn+NGDb
+	6jVVcHqBihXYHtfSXv2h/C0REEUlC4kpEOGjzIHLx3Pd90Iw46MOeQyLcV/cFl+E
+	5dZqAzFlk60ZLRCJhmu+gRhtmD+V3HzFy3GlHl8IKJ69OzkPyaZFRzxeRWMWHXa3
+	0ck/5T/lVenCbLgUVMTqHhaKndC/nJbyDoy1H5u/Y2BPqio99jPYioYRMJHI3mjS
+	S58LoC5QRY0ZI/dbjZyuQ==
+X-ME-Sender: <xms:t0mnaTNMr7HRS--AuI8r-Sjs0TE5jFMLYGjK3yJPu0GcoqGNF90Dww>
+    <xme:t0mnaYwXrHoghs8YGSaKStp_jMggeks5AVkqXKoty1d9tlJzn8unKKfyiC4rOp_Hx
+    1VCQixKCnYpCwvpJMpvifb4MBADS_tOIRySc2OTiVe2hw8vnsMqbhs>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefgedrtddtgddvieduiedtucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfurfetoffkrfgpnffqhgenuceu
+    rghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujf
+    gurhepofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehrnhgu
+    uceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnuggsrdguvgeqnecuggftrfgrthhtvg
+    hrnhepvdfhvdekueduveffffetgfdvveefvdelhedvvdegjedvfeehtdeggeevheefleej
+    necuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprghrnh
+    gusegrrhhnuggsrdguvgdpnhgspghrtghpthhtohepvddupdhmohguvgepshhmthhpohhu
+    thdprhgtphhtthhopegsphesrghlihgvnhekrdguvgdprhgtphhtthhopehtshgsohhgvg
+    hnugesrghlphhhrgdrfhhrrghnkhgvnhdruggvpdhrtghpthhtoheptggrthgrlhhinhdr
+    mhgrrhhinhgrshesrghrmhdrtghomhdprhgtphhtthhopehvihhntggvnhiiohdrfhhrrg
+    hstghinhhosegrrhhmrdgtohhmpdhrtghpthhtoheplhhinhhugiesrghrmhhlihhnuhig
+    rdhorhhgrdhukhdprhgtphhtthhopehmphgvsegvlhhlvghrmhgrnhdrihgurdgruhdprh
+    gtphhtthhopehnphhighhgihhnsehgmhgrihhlrdgtohhmpdhrtghpthhtoheptghhlhgv
+    rhhohieskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhuthhosehkvghrnhgvlhdroh
+    hrgh
+X-ME-Proxy: <xmx:uEmnaTovlr41bMOoG-myb6wYD6yoZjgMxJaD4C1IsznfOvQliSGM7A>
+    <xmx:uEmnaZPe6a9Yagzc6v8dA-19Wn_ba6NmwvRIUy5a__y8EQwCklW78Q>
+    <xmx:uEmnaQNzCnwjn_-woKHF5KKnpyufa8dxgdgTmaQq9JlXYt8CehqaaQ>
+    <xmx:uEmnab2d3NaeSyTEJISJaVuDlDdHY35r82elxjQMDUg6M0f0aHZDjQ>
+    <xmx:ukmnaaN0mkEav7UlHMX3vyXNihfd1xX8twV1ttpCy-ygb33aiA8wnMPB>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id E3624700065; Tue,  3 Mar 2026 15:51:03 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Last-TLS-Session-Version: TLSv1.3
-X-Rspamd-Queue-Id: A96071F5BC7
+X-ThreadId: ARwL1vy566MZ
+Date: Tue, 03 Mar 2026 21:50:33 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "H. Peter Anvin" <hpa@zytor.com>,
+ =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>
+Cc: "Andy Lutomirski" <luto@kernel.org>, "Thomas Gleixner" <tglx@kernel.org>,
+ "Ingo Molnar" <mingo@redhat.com>, "Borislav Petkov" <bp@alien8.de>,
+ "Dave Hansen" <dave.hansen@linux.intel.com>, x86@kernel.org,
+ "Russell King" <linux@armlinux.org.uk>,
+ "Catalin Marinas" <catalin.marinas@arm.com>, "Will Deacon" <will@kernel.org>,
+ "Madhavan Srinivasan" <maddy@linux.ibm.com>,
+ "Michael Ellerman" <mpe@ellerman.id.au>,
+ "Nicholas Piggin" <npiggin@gmail.com>,
+ "Christophe Leroy" <chleroy@kernel.org>,
+ "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>,
+ "Vincenzo Frascino" <vincenzo.frascino@arm.com>,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org
+Message-Id: <2b1ac7b9-fcc8-4aa3-a0ad-eb37e4bce030@app.fastmail.com>
+In-Reply-To: <49b7c9f9-198a-49f7-880b-6ae74d7bd985@zytor.com>
+References: <20260227-vdso-compat_32bit_time-v1-0-3f0286a7bac3@linutronix.de>
+ <20260227-vdso-compat_32bit_time-v1-1-3f0286a7bac3@linutronix.de>
+ <c29f5e70-bd17-4e1b-a005-5a3282e70075@app.fastmail.com>
+ <03cd1e21-a2f2-46a1-a674-cbaef9712016@app.fastmail.com>
+ <20260227103226-cc3bb32c-0107-4c09-b81a-ca33ea03ad5c@linutronix.de>
+ <49b7c9f9-198a-49f7-880b-6ae74d7bd985@zytor.com>
+Subject: Re: [PATCH 1/7] x86/vdso: Respect COMPAT_32BIT_TIME
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Rspamd-Queue-Id: 00B471F6F69
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [0.84 / 15.00];
-	SUSPICIOUS_RECIPS(1.50)[];
+X-Spamd-Result: default: False [-2.15 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	DMARC_POLICY_ALLOW(-0.50)[cjdns.fr,none];
-	R_DKIM_ALLOW(-0.20)[cjdns.fr:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
+	DMARC_POLICY_ALLOW(-0.50)[arndb.de,none];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64];
+	R_DKIM_ALLOW(-0.20)[arndb.de:s=fm3,messagingengine.com:s=fm1];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_COUNT_THREE(0.00)[4];
-	FREEMAIL_CC(0.00)[gmail.com,baylibre.com,kernel.org,cjdns.fr,alpha.franken.de,mediatek.com,google.com,linaro.org,pengutronix.de,collabora.com,nbd.name,vger.kernel.org,lists.infradead.org];
+	XM_UA_NO_VERSION(0.01)[];
+	TAGGED_FROM(0.00)[bounces-13333-lists,linux-mips=lfdr.de];
 	RCVD_TLS_LAST(0.00)[];
+	RCPT_COUNT_TWELVE(0.00)[21];
 	MIME_TRACE(0.00)[0:+];
-	RECEIVED_HELO_LOCALHOST(0.00)[];
+	FREEMAIL_CC(0.00)[kernel.org,redhat.com,alien8.de,linux.intel.com,armlinux.org.uk,arm.com,linux.ibm.com,ellerman.id.au,gmail.com,alpha.franken.de,vger.kernel.org,lists.infradead.org,lists.ozlabs.org];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13332-lists,linux-mips=lfdr.de];
-	MISSING_XM_UA(0.00)[];
-	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	PRECEDENCE_BULK(0.00)[];
-	TO_DN_NONE(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[cjd@cjdns.fr,linux-mips@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
-	DKIM_TRACE(0.00)[cjdns.fr:+];
+	FORGED_RECIPIENTS_MAILLIST(0.00)[];
+	TO_DN_SOME(0.00)[];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[arnd@arndb.de,linux-mips@vger.kernel.org];
+	DKIM_TRACE(0.00)[arndb.de:+,messagingengine.com:+];
+	RCVD_COUNT_FIVE(0.00)[6];
+	TAGGED_RCPT(0.00)[linux-mips];
 	NEURAL_HAM(-0.00)[-1.000];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips,dt];
-	RCPT_COUNT_TWELVE(0.00)[29];
-	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
+	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,app.fastmail.com:mid,messagingengine.com:dkim,arndb.de:dkim]
 X-Rspamd-Action: no action
 
-Add PCIe based on EN7528 PCIe driver, also add two MT76 wifi devices
-to SmartFiber XP8421-B.
+On Tue, Mar 3, 2026, at 19:11, H. Peter Anvin wrote:
+> On 2026-02-27 01:34, Thomas Wei=C3=9Fschuh wrote:
+>>>>
+>>> The thing about gettimeofday() and time() is that they don't have
+>>> a 64-bit version and libc implementations are expected to call
+>>> clock_gettime() instead. The result was that there was never a
+>>> patch to turn the off either.
+>>=20
+>> gettimeofday() is currently the only way to get the timezone of the k=
+ernel.
+>> But I guess this is a legacy thing anyways. If you say we should drop=
+ it,
+>> let's drop it.
+>>=20
+>
+> The time zone in the kernel has never worked anyway, as it would requi=
+re the
+> kernel to contain at least the forward portion of the zoneinfo/tzdata =
+table in
+> order to actually work correctly. The only plausible use of it would b=
+e for
+> local time-based filesystems like FAT, but I don't think we bother.
+>
+> A bigger question is whether or not we should omit these from the vDSO
+> completely (potentially causing link failures) or replace them with st=
+ubs
+> returning -ENOSYS.
 
-Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
----
- arch/mips/boot/dts/econet/en751221.dtsi       | 114 ++++++++++++++++++
- .../econet/en751221_smartfiber_xp8421-b.dts   |  21 ++++
- arch/mips/econet/Kconfig                      |   2 +
- 3 files changed, 137 insertions(+)
+I see no harm in keeping gettimeofday() in the vdso when
+COMPAT_32BIT_TIME is turned on, as existing code will call it
+no matter whether it's in the vdso or the syscall.
 
-diff --git a/arch/mips/boot/dts/econet/en751221.dtsi b/arch/mips/boot/dts/econet/en751221.dtsi
-index 2abeef5b744a..5568486ad8b5 100644
---- a/arch/mips/boot/dts/econet/en751221.dtsi
-+++ b/arch/mips/boot/dts/econet/en751221.dtsi
-@@ -1,6 +1,8 @@
- // SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
- /dts-v1/;
- 
-+#include <dt-bindings/clock/econet,en751221-scu.h>
-+
- / {
- 	compatible = "econet,en751221";
- 	#address-cells = <1>;
-@@ -30,6 +32,30 @@ cpuintc: interrupt-controller {
- 		#interrupt-cells = <1>;
- 	};
- 
-+	chip_scu: syscon@1fa20000 {
-+		compatible = "econet,en751221-chip-scu", "syscon";
-+		reg = <0x1fa20000 0x388>;
-+	};
-+
-+	pcie_phy1: pcie-phy@1fac0000 {
-+		compatible = "econet,en751221-pcie-phy1";
-+		reg = <0x1fac0000 0x1000>;
-+		#phy-cells = <0>;
-+	};
-+
-+	pcie_phy0: pcie-phy@1faf2000 {
-+		compatible = "econet,en751221-pcie-phy0";
-+		reg = <0x1faf2000 0x1000>;
-+		#phy-cells = <0>;
-+	};
-+
-+	scuclk: clock-controller@1fb00000 {
-+		compatible = "econet,en751221-scu", "syscon";
-+		reg = <0x1fb00000 0x970>;
-+		#clock-cells = <1>;
-+		#reset-cells = <1>;
-+	};
-+
- 	intc: interrupt-controller@1fb40000 {
- 		compatible = "econet,en751221-intc";
- 		reg = <0x1fb40000 0x100>;
-@@ -41,6 +67,94 @@ intc: interrupt-controller@1fb40000 {
- 		econet,shadow-interrupts = <7 2>, <8 3>, <13 12>, <30 29>;
- 	};
- 
-+	pciecfg: pciecfg@1fb80000 {
-+		compatible = "mediatek,generic-pciecfg", "syscon";
-+		reg = <0x1fb80000 0x1000>;
-+	};
-+
-+	pcie0: pcie@1fb81000 {
-+		compatible = "econet,en7528-pcie";
-+		device_type = "pci";
-+		reg = <0x1fb81000 0x1000>;
-+		reg-names = "port0";
-+		linux,pci-domain = <0>;
-+		#address-cells = <3>;
-+		#size-cells = <2>;
-+		interrupt-parent = <&intc>;
-+		interrupts = <23>;
-+		interrupt-names = "pcie_irq";
-+		clocks = <&scuclk EN751221_CLK_PCIE>;
-+		clock-names = "sys_ck0";
-+		phys = <&pcie_phy0>;
-+		phy-names = "pcie-phy0";
-+		bus-range = <0x00 0xff>;
-+		ranges = <0x01000000 0 0x00000000 0x1f600000 0 0x00008000>,
-+			 <0x82000000 0 0x20000000 0x20000000 0 0x08000000>;
-+		status = "disabled";
-+
-+		#interrupt-cells = <1>;
-+		interrupt-map-mask = <0 0 0 7>;
-+		interrupt-map = <0 0 0 1 &pcie_intc0 0>,
-+				<0 0 0 2 &pcie_intc0 1>,
-+				<0 0 0 3 &pcie_intc0 2>,
-+				<0 0 0 4 &pcie_intc0 3>;
-+
-+		pcie_intc0: interrupt-controller {
-+			interrupt-controller;
-+			#address-cells = <0>;
-+			#interrupt-cells = <1>;
-+		};
-+
-+		slot0: pcie@0,0 {
-+			reg = <0x0000 0 0 0 0>;
-+			device_type = "pci";
-+			#address-cells = <3>;
-+			#size-cells = <2>;
-+			ranges;
-+		};
-+	};
-+
-+	pcie1: pcie@1fb83000 {
-+		compatible = "econet,en7528-pcie";
-+		device_type = "pci";
-+		reg = <0x1fb83000 0x1000>;
-+		reg-names = "port1";
-+		linux,pci-domain = <1>;
-+		#address-cells = <3>;
-+		#size-cells = <2>;
-+		interrupt-parent = <&intc>;
-+		interrupts = <24>;
-+		interrupt-names = "pcie_irq";
-+		clocks = <&scuclk EN751221_CLK_PCIE>;
-+		clock-names = "sys_ck1";
-+		phys = <&pcie_phy1>;
-+		phy-names = "pcie-phy1";
-+		bus-range = <0x00 0xff>;
-+		ranges = <0x81000000 0 0x00000000 0x1f608000 0 0x00008000>,
-+			 <0x82000000 0 0x28000000 0x28000000 0 0x08000000>;
-+		status = "disabled";
-+
-+		#interrupt-cells = <1>;
-+		interrupt-map-mask = <0 0 0 7>;
-+		interrupt-map = <0 0 0 1 &pcie_intc1 0>,
-+				<0 0 0 2 &pcie_intc1 1>,
-+				<0 0 0 3 &pcie_intc1 2>,
-+				<0 0 0 4 &pcie_intc1 3>;
-+
-+		pcie_intc1: interrupt-controller {
-+			interrupt-controller;
-+			#address-cells = <0>;
-+			#interrupt-cells = <1>;
-+		};
-+
-+		slot1: pcie@1,0 {
-+			reg = <0x0800 0 0 0 0>;
-+			#address-cells = <3>;
-+			#size-cells = <2>;
-+			ranges;
-+		};
-+	};
-+
- 	uart: serial@1fbf0000 {
- 		compatible = "ns16550";
- 		reg = <0x1fbf0000 0x30>;
-diff --git a/arch/mips/boot/dts/econet/en751221_smartfiber_xp8421-b.dts b/arch/mips/boot/dts/econet/en751221_smartfiber_xp8421-b.dts
-index 8223c5bce67f..c633bf73add6 100644
---- a/arch/mips/boot/dts/econet/en751221_smartfiber_xp8421-b.dts
-+++ b/arch/mips/boot/dts/econet/en751221_smartfiber_xp8421-b.dts
-@@ -17,3 +17,24 @@ chosen {
- 		linux,usable-memory-range = <0x00020000 0x1bfe0000>;
- 	};
- };
-+
-+&pcie0 {
-+	status = "okay";
-+};
-+&slot0 {
-+	wifi@0,0 {
-+		/* MT7612E */
-+		compatible = "mediatek,mt76";
-+		reg = <0x0000 0 0 0 0>;
-+	};
-+};
-+&pcie1 {
-+	status = "okay";
-+};
-+&slot1 {
-+	wifi@0,0 {
-+		/* MT7592 */
-+		compatible = "mediatek,mt76";
-+		reg = <0x0000 0 0 0 0>;
-+	};
-+};
-diff --git a/arch/mips/econet/Kconfig b/arch/mips/econet/Kconfig
-index fd69884cc9a8..b37b9d25d5a4 100644
---- a/arch/mips/econet/Kconfig
-+++ b/arch/mips/econet/Kconfig
-@@ -13,7 +13,9 @@ choice
- 		bool "EN751221 family"
- 		select COMMON_CLK
- 		select ECONET_EN751221_INTC
-+		select HAVE_PCI
- 		select IRQ_MIPS_CPU
-+		select PCI_DRIVERS_GENERIC
- 		select SMP
- 		select SMP_UP
- 		select SYS_SUPPORTS_SMP
--- 
-2.39.5
+Equally, I see no point in having either version of
+gettimeofday() or settimeofday() when COMPAT_32BIT_TIME is
+disabled, as clearly anything calling it would pass incorrect
+data for times past 2038.
 
+Neither glibc nor musl support actually returning the kernel
+timezone to callers of gettimeofday in modern versions that
+support time64 syscalls.
+
+      Arnd
 
