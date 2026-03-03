@@ -1,143 +1,171 @@
-Return-Path: <linux-mips+bounces-13323-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13324-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id YKfvHMssp2mbfgAAu9opvQ
-	(envelope-from <linux-mips+bounces-13323-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 03 Mar 2026 19:47:39 +0100
+	id 6J27Ihoyp2kjfwAAu9opvQ
+	(envelope-from <linux-mips+bounces-13324-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 03 Mar 2026 20:10:18 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [IPv6:2600:3c0a:e001:db::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD6341F5712
-	for <lists+linux-mips@lfdr.de>; Tue, 03 Mar 2026 19:47:38 +0100 (CET)
+Received: from sto.lore.kernel.org (sto.lore.kernel.org [172.232.135.74])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F4D71F5ADC
+	for <lists+linux-mips@lfdr.de>; Tue, 03 Mar 2026 20:10:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 8CB69300A639
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Mar 2026 18:47:37 +0000 (UTC)
+	by sto.lore.kernel.org (Postfix) with ESMTP id 489653021956
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Mar 2026 19:10:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 301DC377EAB;
-	Tue,  3 Mar 2026 18:47:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 55472423A6B;
+	Tue,  3 Mar 2026 19:10:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b="UDipitNJ"
+	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="Oy4kMsIK"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mail.zytor.com (terminus.zytor.com [198.137.202.136])
+Received: from mail.cjdns.fr (mail.cjdns.fr [5.135.140.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 976693C2777;
-	Tue,  3 Mar 2026 18:47:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 008E53D75AB;
+	Tue,  3 Mar 2026 19:10:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.135.140.105
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772563657; cv=none; b=PIj64Y00GNpwyCgjPbwuYxHatibSAYFpEl+ENIbi9lXcC6MiD8CpWK9U6JH5Rl4MH6Y3Nb/3a61ylO4mxPkBcG7cTL+U2+x8V6LRJ2c1qyPHUkSNWtdMgLgNvF0y6R4Ib675u9ZBQQtXijVki6ilG/VPOWNNZfra0dtFkA+BGcs=
+	t=1772565016; cv=none; b=tiYJSPVjGAV4sv2YebmA15LQI3xjy1DmZ3DToZ8XMhd24h+2yMaAO31V05kNFF0qVeYidIdO7F3xge5C/FkNZyHvH4IUQvx/v8DOmtZ5UYLpilYZ08YZDCMfCiJ8eWhE1X4rCxBls2/BUxi9VgBcVKkwso0/Pxx797/hg+QwFgU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772563657; c=relaxed/simple;
-	bh=3PofZTAvVQAv4OAWJVKhH176jHRRXNqNT56zXvZKpNY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QPCC2ZrDURUljHLJeDEDTAV1JXQywpIZPid+IXPxsHkhGtQ525eyNvC2pYctsyYwhlDcplFA0HqWjUEsoJMFKVMRrAGQrxpqynkpZOYg8Lxpa/hRUL6+BC83k6BLSjRdV9XpHrXEB7CooOKz06dd6i1UfvQu/KwORB0ZKmqRlMw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com; spf=pass smtp.mailfrom=zytor.com; dkim=pass (2048-bit key) header.d=zytor.com header.i=@zytor.com header.b=UDipitNJ; arc=none smtp.client-ip=198.137.202.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=zytor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=zytor.com
-Received: from [IPV6:2601:646:8081:9481:7d9f:6fce:330c:4416] ([IPv6:2601:646:8081:9481:7d9f:6fce:330c:4416])
-	(authenticated bits=0)
-	by mail.zytor.com (8.18.1/8.17.1) with ESMTPSA id 623IBwxb3007270
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
-	Tue, 3 Mar 2026 10:12:19 -0800
-DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 623IBwxb3007270
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
-	s=2026022301; t=1772561541;
-	bh=+zVA5SdbXqXmCBN/Z5gDUy/tneGY24otJLTMGQOtDJc=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=UDipitNJ+TnURncz+4axXj5t727f1dxWqKkdtf58mQoedGdBe2o6JBVgdoP8CO7Ry
-	 9CB3uFtQMRRW/yGu8Wm5Nr3ezlS0W7fWzd4ec6e+CvnVrSml2ZkMkpW+vdbh8cdE4A
-	 UWnWgRW5FF9zmA6VgvCm+uj0SnRi673RqA2gPwRn/NJknbzRxdD/hYAo9y3Ucezhr6
-	 yRzBTg3CHgnlPltD5GKLMqCzYLrOu80yOIJAODFtsiiesImNH+wMjPboHoThWc7fx9
-	 1tt7EA7eKrLMpdA0tuDDV81GNoJTInNE2aLg9ZprcxHpNhQk18AhMWWmmMkbRDsUvm
-	 OxPHbOmqHIh2g==
-Message-ID: <49b7c9f9-198a-49f7-880b-6ae74d7bd985@zytor.com>
-Date: Tue, 3 Mar 2026 10:11:52 -0800
+	s=arc-20240116; t=1772565016; c=relaxed/simple;
+	bh=o0Z85w/VI1CVGaEoDBkl1+BDW5F3aK86mCE2F+k5prQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=X1B+NpxqxFwcwqSKm+521lJbRuAwjyE2bLb49YxGibLnqEHQcleGkKz8QYxdfG687hoCk09qEQ7gDjxwdnyMaVDTtY++iX/MNe7qeQpwa691nMzLj96p+6HQxg8yFOpJEqcbGecAU9rDwThJtT3sdSxAq44O1KzZpfpfx0pbMDw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=none smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=Oy4kMsIK; arc=none smtp.client-ip=5.135.140.105
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cjdns.fr
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 6B8F120D516;
+	Tue,  3 Mar 2026 20:10:05 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjdns.fr; s=dkim;
+	t=1772565011; h=from:subject:date:message-id:to:cc:mime-version:
+	 content-transfer-encoding; bh=YeYcHOU6O1PcxMMN13wZpxAP+6Z+ixxDNPaLXhkt61M=;
+	b=Oy4kMsIKUpN1ifXgxMapAw9eWZUzib2dteeWem3sYhWyzFArKtUyf3n1hZsmH9IaTWEhV+
+	qPdtEvGKXnQOI+lDMeRoep+jsXV9Ya/XcNOY1r/bcjAbzjLiMQ8/KlJE7CmOVdDNVUOT8h
+	cDB0BJvRwLk3aTYOlu4wJaAc1s2L8z8qa0IzCemII+0ANfi56E8OqGT6ddYuocq6vNGHGU
+	uInyDrfuf93mq1wycS0x2/dHLdx751rIU1qQ03Yn08tWvIFAqIS5MP66vvn1tIs1QfPjX4
+	/1Yl4egPmk/AwaZJOJXUrulS8+zzWDOfb+m7Id0lV8qZzUHSHIHhIFyE26hc/g==
+From: Caleb James DeLisle <cjd@cjdns.fr>
+To: linux-mips@vger.kernel.org
+Cc: naseefkm@gmail.com,
+	mturquette@baylibre.com,
+	sboyd@kernel.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	conor+dt@kernel.org,
+	cjd@cjdns.fr,
+	tsbogend@alpha.franken.de,
+	ryder.lee@mediatek.com,
+	jianjun.wang@mediatek.com,
+	lpieralisi@kernel.org,
+	kwilczynski@kernel.org,
+	mani@kernel.org,
+	bhelgaas@google.com,
+	vkoul@kernel.org,
+	neil.armstrong@linaro.org,
+	p.zabel@pengutronix.de,
+	matthias.bgg@gmail.com,
+	angelogioacchino.delregno@collabora.com,
+	nbd@nbd.name,
+	ansuelsmth@gmail.com,
+	linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	linux-mediatek@lists.infradead.org,
+	linux-phy@lists.infradead.org,
+	linux-arm-kernel@lists.infradead.org
+Subject: [PATCH 0/8] mips: econet: Add clk/reset and PCIe support
+Date: Tue,  3 Mar 2026 19:09:40 +0000
+Message-Id: <20260303190948.694783-1-cjd@cjdns.fr>
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/7] x86/vdso: Respect COMPAT_32BIT_TIME
-To: =?UTF-8?Q?Thomas_Wei=C3=9Fschuh?= <thomas.weissschuh@linutronix.de>,
-        Arnd Bergmann <arnd@arndb.de>
-Cc: Andy Lutomirski <luto@kernel.org>, Thomas Gleixner <tglx@kernel.org>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Russell King <linux@armlinux.org.uk>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Madhavan Srinivasan <maddy@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <chleroy@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Vincenzo Frascino <vincenzo.frascino@arm.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linuxppc-dev@lists.ozlabs.org, linux-mips@vger.kernel.org
-References: <20260227-vdso-compat_32bit_time-v1-0-3f0286a7bac3@linutronix.de>
- <20260227-vdso-compat_32bit_time-v1-1-3f0286a7bac3@linutronix.de>
- <c29f5e70-bd17-4e1b-a005-5a3282e70075@app.fastmail.com>
- <03cd1e21-a2f2-46a1-a674-cbaef9712016@app.fastmail.com>
- <20260227103226-cc3bb32c-0107-4c09-b81a-ca33ea03ad5c@linutronix.de>
-Content-Language: en-US, sv-SE
-From: "H. Peter Anvin" <hpa@zytor.com>
-In-Reply-To: <20260227103226-cc3bb32c-0107-4c09-b81a-ca33ea03ad5c@linutronix.de>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: CD6341F5712
+X-Last-TLS-Session-Version: TLSv1.3
+X-Rspamd-Queue-Id: 2F4D71F5ADC
 X-Rspamd-Server: lfdr
-X-Spamd-Result: default: False [-2.16 / 15.00];
+X-Spamd-Result: default: False [0.84 / 15.00];
+	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[zytor.com,none];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c0a:e001:db::/64:c];
-	R_DKIM_ALLOW(-0.20)[zytor.com:s=2026022301];
+	MID_CONTAINS_FROM(1.00)[];
+	R_MISSING_CHARSET(0.50)[];
+	DMARC_POLICY_ALLOW(-0.50)[cjdns.fr,none];
+	R_SPF_ALLOW(-0.20)[+ip4:172.232.135.74:c];
+	R_DKIM_ALLOW(-0.20)[cjdns.fr:s=dkim];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13323-lists,linux-mips=lfdr.de];
 	RCVD_COUNT_THREE(0.00)[4];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	FREEMAIL_CC(0.00)[kernel.org,redhat.com,alien8.de,linux.intel.com,armlinux.org.uk,arm.com,linux.ibm.com,ellerman.id.au,gmail.com,alpha.franken.de,vger.kernel.org,lists.infradead.org,lists.ozlabs.org];
-	RCPT_COUNT_TWELVE(0.00)[21];
+	FREEMAIL_CC(0.00)[gmail.com,baylibre.com,kernel.org,cjdns.fr,alpha.franken.de,mediatek.com,google.com,linaro.org,pengutronix.de,collabora.com,nbd.name,vger.kernel.org,lists.infradead.org];
+	RCVD_TLS_LAST(0.00)[];
 	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	ASN(0.00)[asn:63949, ipnet:2600:3c0a::/32, country:SG];
+	TAGGED_FROM(0.00)[bounces-13324-lists,linux-mips=lfdr.de];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	RECEIVED_HELO_LOCALHOST(0.00)[];
+	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	NEURAL_HAM(-0.00)[-1.000];
 	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[hpa@zytor.com,linux-mips@vger.kernel.org];
-	DKIM_TRACE(0.00)[zytor.com:+];
-	MID_RHS_MATCH_FROM(0.00)[];
+	TO_DN_NONE(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[cjd@cjdns.fr,linux-mips@vger.kernel.org];
+	FROM_HAS_DN(0.00)[];
+	DKIM_TRACE(0.00)[cjdns.fr:+];
+	NEURAL_HAM(-0.00)[-1.000];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	TAGGED_RCPT(0.00)[linux-mips];
-	TO_DN_SOME(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo]
+	TAGGED_RCPT(0.00)[linux-mips,dt];
+	RCPT_COUNT_TWELVE(0.00)[29];
+	ASN(0.00)[asn:63949, ipnet:172.232.128.0/19, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sto.lore.kernel.org:rdns,sto.lore.kernel.org:helo,cjdns.fr:dkim,cjdns.fr:mid]
 X-Rspamd-Action: no action
 
-On 2026-02-27 01:34, Thomas Weißschuh wrote:
->>>
->> The thing about gettimeofday() and time() is that they don't have
->> a 64-bit version and libc implementations are expected to call
->> clock_gettime() instead. The result was that there was never a
->> patch to turn the off either.
-> 
-> gettimeofday() is currently the only way to get the timezone of the kernel.
-> But I guess this is a legacy thing anyways. If you say we should drop it,
-> let's drop it.
-> 
+Add clock/reset and PCIe support to EcoNet EN751221 and related SoCs.
+This builds on the Airoha EN7523 clock driver and the Mediatek PCIe driver.
 
-The time zone in the kernel has never worked anyway, as it would require the
-kernel to contain at least the forward portion of the zoneinfo/tzdata table in
-order to actually work correctly. The only plausible use of it would be for
-local time-based filesystems like FAT, but I don't think we bother.
+Patch 6 is upstreaming of Ahmed Naseef's work on EcoNet PCIe, which was
+developed to support the EN7528, but which works equally on the EN751221.
 
-A bigger question is whether or not we should omit these from the vDSO
-completely (potentially causing link failures) or replace them with stubs
-returning -ENOSYS.
+There is also a workaround in patch 7 to gracefully handle PCI hardware
+which does not advertize a bridge window and instead always reads zero.
 
-	-hpa
+Caleb James DeLisle (8):
+  dt-bindings: clock, reset: Add econet EN751221 bindings
+  clk: airoha: Add econet EN751221 clock/reset support to en7523-scu
+  dt-bindings: phy: Document PCIe PHY in EcoNet EN751221 and EN7528
+  phy: econet: Add PCIe PHY driver for EcoNet EN751221 and EN7528 SoCs.
+  dt-bindings: PCI: mediatek: Add support for EcoNet EN7528
+  PCI: mediatek: Add support for EcoNet EN7528 SoC
+  PCI: Skip bridge window reads when window is not supported
+  mips: dts: Add PCIe to EcoNet EN751221
+
+ .../bindings/clock/airoha,en7523-scu.yaml     |  19 +-
+ .../mips/econet,en751221-chip-scu.yaml        |  41 +++
+ .../bindings/pci/mediatek-pcie.yaml           |   1 +
+ .../phy/econet,en751221-pcie-phy.yaml         |  57 +++++
+ MAINTAINERS                                   |  10 +
+ arch/mips/boot/dts/econet/en751221.dtsi       | 114 +++++++++
+ .../econet/en751221_smartfiber_xp8421-b.dts   |  21 ++
+ arch/mips/econet/Kconfig                      |   2 +
+ drivers/clk/Kconfig                           |   6 +-
+ drivers/clk/clk-en7523.c                      | 236 +++++++++++++++++-
+ drivers/pci/controller/Kconfig                |   2 +-
+ drivers/pci/controller/pcie-mediatek.c        | 107 ++++++++
+ drivers/pci/probe.c                           |   6 +
+ drivers/phy/Kconfig                           |  12 +
+ drivers/phy/Makefile                          |   1 +
+ drivers/phy/phy-econet-pcie.c                 | 180 +++++++++++++
+ .../dt-bindings/clock/econet,en751221-scu.h   |  15 ++
+ .../dt-bindings/reset/econet,en751221-scu.h   |  49 ++++
+ 18 files changed, 869 insertions(+), 10 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/mips/econet,en751221-chip-scu.yaml
+ create mode 100644 Documentation/devicetree/bindings/phy/econet,en751221-pcie-phy.yaml
+ create mode 100644 drivers/phy/phy-econet-pcie.c
+ create mode 100644 include/dt-bindings/clock/econet,en751221-scu.h
+ create mode 100644 include/dt-bindings/reset/econet,en751221-scu.h
+
+
+base-commit: 3fa5e5702a82d259897bd7e209469bc06368bf31
+-- 
+2.39.5
 
 
