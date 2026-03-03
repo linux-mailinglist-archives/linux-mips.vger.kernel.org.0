@@ -1,50 +1,50 @@
-Return-Path: <linux-mips+bounces-13326-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13327-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id kO5dBTEyp2kjfwAAu9opvQ
-	(envelope-from <linux-mips+bounces-13326-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Tue, 03 Mar 2026 20:10:41 +0100
+	id gC/DFDcyp2k8fwAAu9opvQ
+	(envelope-from <linux-mips+bounces-13327-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Tue, 03 Mar 2026 20:10:47 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8CB751F5B0A
-	for <lists+linux-mips@lfdr.de>; Tue, 03 Mar 2026 20:10:37 +0100 (CET)
+Received: from tor.lore.kernel.org (tor.lore.kernel.org [172.105.105.114])
+	by mail.lfdr.de (Postfix) with ESMTPS id 08A6B1F5B28
+	for <lists+linux-mips@lfdr.de>; Tue, 03 Mar 2026 20:10:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 916123024458
-	for <lists+linux-mips@lfdr.de>; Tue,  3 Mar 2026 19:10:32 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 6BF443030D0B
+	for <lists+linux-mips@lfdr.de>; Tue,  3 Mar 2026 19:10:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8449E42F561;
-	Tue,  3 Mar 2026 19:10:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62506480DE0;
+	Tue,  3 Mar 2026 19:10:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="U1A+MQ3x"
+	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="GHJGkMtv"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from mail.cjdns.fr (mail.cjdns.fr [5.135.140.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6F684301D6;
-	Tue,  3 Mar 2026 19:10:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1CBF47DF89;
+	Tue,  3 Mar 2026 19:10:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.135.140.105
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772565031; cv=none; b=ooDXijqwpXL4qni1nS65hurx8zYt79xqb9KdSIlDDP3HfpOxehMxbeKgJSVu2YSA1zYo+GoM8ArhoXtAv+jAFDzZ2dbtggdLHzJCahNsGyKGmpEspiEmGxEzvOpArX3HnVfPZX/UaNvUWzgsDfowDTIJ05Qz1dPltWWnQX1Kl2U=
+	t=1772565036; cv=none; b=M6u+TWMeb4kQXusNGiaPN3wiEl4uHyM367eUTsYv3QzY7yCxwRXS9IejHA/IYOJ7FpmdfxhxMmw+zWw6EC3unzS+a8kFqYjLgkMKZ/nvmbIjEiDIYZMWcXOQBg03spQ53F5htNZqWNrOeJ/zFyxzGsXP0uwJ8VD5R8eEvMGsi1k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772565031; c=relaxed/simple;
-	bh=OvntRFQQo39Yee1CjHtDO2eXn5V3xkLUobtvw5tEAaA=;
+	s=arc-20240116; t=1772565036; c=relaxed/simple;
+	bh=+lpd82yBu94qD0lQL25zmQu+4yzWjVsYve7GCBkR+Hc=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=lhlFVXi97j9SAwRnyhAHvYHvKgMj4TZKGCrAhCu2RtWqCSmrhWNC/D2WRhSANZ3Tuj8RqziwKdbv49NAe0UDO5+nj02afr4MV9cPuWiaSCka8Q0xkfNvEZ4jaDAw2XahLb8rz0+vfPSoWFUfKeuKHd6wq5zsVFc5hdXEHz2zr+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=none smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=U1A+MQ3x; arc=none smtp.client-ip=5.135.140.105
+	 MIME-Version; b=QNHZL2fHfIsu/wP1cMV7lC+PhK0KMzoCfj4UY3xgFPYxuKJfQLRd9GuWDQ606tzBWZ8WmIcjmFYyqV9vKLlJVO6RToTULn9D+iLZZqhWorppy5ZbRRo/07CGg1M7/1GTxKcoVipdkaoOb+1EoUzYbyWREhzvstGGJo6sZsFudL4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=none smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=GHJGkMtv; arc=none smtp.client-ip=5.135.140.105
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cjdns.fr
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A9A6120BBC1;
-	Tue,  3 Mar 2026 20:10:24 +0100 (CET)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 9DAD320CD2C;
+	Tue,  3 Mar 2026 20:10:29 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjdns.fr; s=dkim;
-	t=1772565027; h=from:subject:date:message-id:to:cc:mime-version:
+	t=1772565032; h=from:subject:date:message-id:to:cc:mime-version:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=jqsFTmrAn4reeYegNeY+JXGZXrLXmau1zMZPmhu+RF8=;
-	b=U1A+MQ3x0UscWVMDm+Z5hdKSHK1p6ea12ut565au6npiHo8Eiiz642XNnDO++TNCQrGtbd
-	XWoumiOd3z7Q7yK2Pom4FtIYicYsncjYjCFslQGpcahdzk+9p0vSvSg/+GQp0cRoIDkeCk
-	vnZ7PU0iZYHDIItnwaeDu4Dvqo9RJb+9kzcJWD7dt8NndDtFbLIX5U2ZszX7Ew89scKbQP
-	wsrPygEVXlLiNhoa8YAx1hh2zS2BmFZQj5TKVFl/3b8xveNRp17soFCIwQzvroc7zWbZgQ
-	En5RyThQ+i/+scU1V6xMy3f6RjOhGllqjK//bvhmHDs7v/uuGfpgHwvbAFYxKw==
+	bh=LgrYHxVXH/xqbEM9i5EqdtYKP15yv6x7HKPpgK2Wkrw=;
+	b=GHJGkMtvnNl2cmtaoQ1Z/zMMaO1HyObR1QEJaMV9RDVDwbXL3oTGV9EINSP+D31Lu9biDi
+	ISBBmgpVc1f0JPiazHno/zORqpJXmk/WI9hiUJNJw/LjA5kM4RWvnTGppTOsYoxcYLkdR+
+	J0vk1g1Y0K/O4J6QaLkKZCD29DRS9O2z3FSgOn1/sDf/yFmjhp4x8EOpCJeO4d2ngwYFDm
+	esfm1Jmo91OSB/n7unBYCjq5aaFifzof6rLrYlFXeTxwpihIFw2eO5TrCxLF6nlJV+92yH
+	fo82CsPT6owY0q+NpvzSR6Jzh+JnoSiV8aNjqP1QkUK8F6TTCC2eikcpCmHmJA==
 From: Caleb James DeLisle <cjd@cjdns.fr>
 To: linux-mips@vger.kernel.org
 Cc: naseefkm@gmail.com,
@@ -75,9 +75,9 @@ Cc: naseefkm@gmail.com,
 	linux-mediatek@lists.infradead.org,
 	linux-phy@lists.infradead.org,
 	linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 2/8] clk: airoha: Add econet EN751221 clock/reset support to en7523-scu
-Date: Tue,  3 Mar 2026 19:09:42 +0000
-Message-Id: <20260303190948.694783-3-cjd@cjdns.fr>
+Subject: [PATCH 3/8] dt-bindings: phy: Document PCIe PHY in EcoNet EN751221 and EN7528
+Date: Tue,  3 Mar 2026 19:09:43 +0000
+Message-Id: <20260303190948.694783-4-cjd@cjdns.fr>
 In-Reply-To: <20260303190948.694783-1-cjd@cjdns.fr>
 References: <20260303190948.694783-1-cjd@cjdns.fr>
 Precedence: bulk
@@ -88,7 +88,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Last-TLS-Session-Version: TLSv1.3
-X-Rspamd-Queue-Id: 8CB751F5B0A
+X-Rspamd-Queue-Id: 08A6B1F5B28
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [0.84 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
@@ -97,7 +97,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	R_MISSING_CHARSET(0.50)[];
 	DMARC_POLICY_ALLOW(-0.50)[cjdns.fr,none];
 	R_DKIM_ALLOW(-0.20)[cjdns.fr:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip4:172.105.105.114:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
@@ -107,7 +107,7 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	MIME_TRACE(0.00)[0:+];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13326-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13327-lists,linux-mips=lfdr.de];
 	MISSING_XM_UA(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
 	PRECEDENCE_BULK(0.00)[];
@@ -119,372 +119,101 @@ X-Spamd-Result: default: False [0.84 / 15.00];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips,dt];
 	RCPT_COUNT_TWELVE(0.00)[29];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,cjdns.fr:dkim,cjdns.fr:email,cjdns.fr:mid]
+	ASN(0.00)[asn:63949, ipnet:172.105.96.0/20, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[1faf2000:email,tyhicks.com:email,devicetree.org:url,1fac0000:email,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,cjdns.fr:dkim,cjdns.fr:email,cjdns.fr:mid]
 X-Rspamd-Action: no action
 
-EcoNet EN751221 clock/reset driver is significantly similar to the
-EN7523 / EN7581, however the EN751221 does not have a neat batch of clock
-divider registers so there are fewer known clocks, and the frequency of
-each clock is derived differently. This clock driver will probably work
-correctly on EN751627, EN7528, and EN7580.
+EN751221 and EN7528 SoCs have two PCIe slots, and each one has a
+PHY which behaves slightly differently because one slot is Gen1/Gen2
+while the other is Gen1 only.
 
 Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
 ---
- drivers/clk/Kconfig      |   6 +-
- drivers/clk/clk-en7523.c | 236 ++++++++++++++++++++++++++++++++++++++-
- 2 files changed, 234 insertions(+), 8 deletions(-)
+ .../phy/econet,en751221-pcie-phy.yaml         | 57 +++++++++++++++++++
+ MAINTAINERS                                   |  6 ++
+ 2 files changed, 63 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/phy/econet,en751221-pcie-phy.yaml
 
-diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-index 3d803b4cf5c1..47df6073a72b 100644
---- a/drivers/clk/Kconfig
-+++ b/drivers/clk/Kconfig
-@@ -218,13 +218,13 @@ config COMMON_CLK_CS2000_CP
- 	  If you say yes here you get support for the CS2000 clock multiplier.
+diff --git a/Documentation/devicetree/bindings/phy/econet,en751221-pcie-phy.yaml b/Documentation/devicetree/bindings/phy/econet,en751221-pcie-phy.yaml
+new file mode 100644
+index 000000000000..8e1d3c791c6e
+--- /dev/null
++++ b/Documentation/devicetree/bindings/phy/econet,en751221-pcie-phy.yaml
+@@ -0,0 +1,57 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/phy/econet,en751221-pcie-phy.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: EcoNet PCI-Express PHY for EcoNet EN751221 and EN7528
++
++maintainers:
++  - Caleb James DeLisle <cjd@cjdns.fr>
++
++description:
++  The PCIe PHY supports physical layer functionality for PCIe Gen1 and
++  Gen1/Gen2 ports. On these SoCs, port 0 is a Gen1-only port while
++  port 1 is Gen1/Gen2 capable.
++
++properties:
++  compatible:
++    enum:
++      - econet,en751221-pcie-phy0
++      - econet,en751221-pcie-phy1
++      - econet,en7528-pcie-phy0
++      - econet,en7528-pcie-phy1
++
++  reg:
++    maxItems: 1
++
++  "#phy-cells":
++    const: 0
++
++required:
++  - compatible
++  - reg
++  - '#phy-cells'
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/phy/phy.h>
++    soc {
++      #address-cells = <1>;
++      #size-cells = <1>;
++
++      pcie_phy0: pcie-phy@1faf2000 {
++        compatible = "econet,en7528-pcie-phy0";
++        reg = <0x1faf2000 0x1000>;
++        #phy-cells = <0>;
++      };
++
++      pcie_phy1: pcie-phy@1fac0000 {
++        compatible = "econet,en7528-pcie-phy1";
++        reg = <0x1fac0000 0x1000>;
++        #phy-cells = <0>;
++      };
++    };
++...
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 56cf73ce91b8..ae053b1f174f 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -9123,6 +9123,12 @@ F:	drivers/irqchip/irq-econet-en751221.c
+ F:	include/dt-bindings/clock/econet,en751221-scu.h
+ F:	include/dt-bindings/reset/econet,en751221-scu.h
  
- config COMMON_CLK_EN7523
--	bool "Clock driver for Airoha EN7523 SoC system clocks"
-+	bool "Clock driver for Airoha/EcoNet SoC system clocks"
- 	depends on OF
--	depends on ARCH_AIROHA || COMPILE_TEST
-+	depends on ARCH_AIROHA || ECONET || COMPILE_TEST
- 	default ARCH_AIROHA
- 	help
- 	  This driver provides the fixed clocks and gates present on Airoha
--	  ARM silicon.
-+	  and EcoNet silicon.
- 
- config COMMON_CLK_EP93XX
- 	tristate "Clock driver for Cirrus Logic ep93xx SoC"
-diff --git a/drivers/clk/clk-en7523.c b/drivers/clk/clk-en7523.c
-index 08cc8e5acf43..b31e6d3c91a2 100644
---- a/drivers/clk/clk-en7523.c
-+++ b/drivers/clk/clk-en7523.c
-@@ -1,5 +1,6 @@
- // SPDX-License-Identifier: GPL-2.0-only
- 
-+#include <linux/bitfield.h>
- #include <linux/delay.h>
- #include <linux/clk-provider.h>
- #include <linux/io.h>
-@@ -11,6 +12,8 @@
- #include <dt-bindings/clock/en7523-clk.h>
- #include <dt-bindings/reset/airoha,en7523-reset.h>
- #include <dt-bindings/reset/airoha,en7581-reset.h>
-+#include <dt-bindings/clock/econet,en751221-scu.h>
-+#include <dt-bindings/reset/econet,en751221-scu.h>
- 
- #define RST_NR_PER_BANK			32
- 
-@@ -33,15 +36,47 @@
- #define   REG_RESET_CONTROL_PCIEHB	BIT(29)
- #define   REG_RESET_CONTROL_PCIE1	BIT(27)
- #define   REG_RESET_CONTROL_PCIE2	BIT(26)
-+#define REG_HIR				0x064
-+#define   REG_HIR_MASK			GENMASK(31, 16)
- /* EN7581 */
- #define REG_NP_SCU_PCIC			0x88
- #define REG_NP_SCU_SSTR			0x9c
- #define REG_PCIE_XSI0_SEL_MASK		GENMASK(14, 13)
- #define REG_PCIE_XSI1_SEL_MASK		GENMASK(12, 11)
- #define REG_CRYPTO_CLKSRC2		0x20c
-+/* EN751221 */
-+#define EN751221_REG_SPI_DIV		0x0cc
-+#define EN751221_REG_SPI_DIV_MASK	GENMASK(31, 8)
-+#define EN751221_SPI_BASE		500000000
-+#define EN751221_SPI_BASE_EN7526C	400000000
-+#define EN751221_REG_BUS		0x284
-+#define EN751221_REG_BUS_MASK		GENMASK(21, 12)
-+#define EN751221_REG_SSR3		0x094
-+#define EN751221_REG_SSR3_GSW_MASK	GENMASK(9, 8)
- 
- #define REG_RST_CTRL2			0x830
- #define REG_RST_CTRL1			0x834
-+#define EN751221_REG_RST_DMT		0x84
-+#define EN751221_REG_RST_USB		0xec
++ECONET PCIE PHY DRIVER
++M:	Caleb James DeLisle <cjd@cjdns.fr>
++L:	linux-mips@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/phy/econet,en751221-pcie-phy.yaml
 +
-+enum en_hir {
-+	HIR_UNKNOWN	= -1,
-+	HIR_TC3169	= 0,
-+	HIR_TC3182	= 1,
-+	HIR_RT65168	= 2,
-+	HIR_RT63165	= 3,
-+	HIR_RT63365	= 4,
-+	HIR_MT751020	= 5,
-+	HIR_MT7505	= 6,
-+	HIR_EN751221	= 7,
-+	HIR_EN7526C	= 8,
-+	HIR_EN751627	= 9,
-+	HIR_EN7580	= 10,
-+	HIR_EN7528	= 11,
-+	HIR_EN7523	= 12,
-+	HIR_EN7581	= 13,
-+	HIR_MAX		= 14,
-+};
- 
- struct en_clk_desc {
- 	int id;
-@@ -93,6 +128,8 @@ static const u32 bus7581_base[] = { 600000000, 540000000 };
- static const u32 npu7581_base[] = { 800000000, 750000000, 720000000, 600000000 };
- static const u32 crypto_base[] = { 540000000, 480000000 };
- static const u32 emmc7581_base[] = { 200000000, 150000000 };
-+/* EN751221 */
-+static const u32 gsw751221_base[] = { 500000000, 250000000, 400000000, 200000000 };
- 
- static const struct en_clk_desc en7523_base_clks[] = {
- 	{
-@@ -300,6 +337,13 @@ static const u16 en7581_rst_ofs[] = {
- 	REG_RST_CTRL1,
- };
- 
-+static const u16 en751221_rst_ofs[] = {
-+	REG_RST_CTRL2,
-+	REG_RST_CTRL1,
-+	EN751221_REG_RST_DMT,
-+	EN751221_REG_RST_USB,
-+};
-+
- static const u16 en7523_rst_map[] = {
- 	/* RST_CTRL2 */
- 	[EN7523_XPON_PHY_RST]		= 0,
-@@ -405,8 +449,61 @@ static const u16 en7581_rst_map[] = {
- 	[EN7581_XPON_MAC_RST]		= RST_NR_PER_BANK + 31,
- };
- 
-+static const u16 en751221_rst_map[] = {
-+	/* RST_CTRL2 */
-+	[EN751221_XPON_PHY_RST]		= 0,
-+	[EN751221_GFAST_RST]		= 1,
-+	[EN751221_CPU_TIMER2_RST]	= 2,
-+	[EN751221_UART3_RST]		= 3,
-+	[EN751221_UART4_RST]		= 4,
-+	[EN751221_UART5_RST]		= 5,
-+	[EN751221_I2C2_RST]		= 6,
-+	[EN751221_XSI_MAC_RST]		= 7,
-+	[EN751221_XSI_PHY_RST]		= 8,
-+
-+	/* RST_CTRL1 */
-+	[EN751221_PCM1_ZSI_ISI_RST]	= RST_NR_PER_BANK + 0,
-+	[EN751221_FE_QDMA1_RST]		= RST_NR_PER_BANK + 1,
-+	[EN751221_FE_QDMA2_RST]		= RST_NR_PER_BANK + 2,
-+	[EN751221_FE_UNZIP_RST]		= RST_NR_PER_BANK + 3,
-+	[EN751221_PCM2_RST]		= RST_NR_PER_BANK + 4,
-+	[EN751221_PTM_MAC_RST]		= RST_NR_PER_BANK + 5,
-+	[EN751221_CRYPTO_RST]		= RST_NR_PER_BANK + 6,
-+	[EN751221_SAR_RST]		= RST_NR_PER_BANK + 7,
-+	[EN751221_TIMER_RST]		= RST_NR_PER_BANK + 8,
-+	[EN751221_INTC_RST]		= RST_NR_PER_BANK + 9,
-+	[EN751221_BONDING_RST]		= RST_NR_PER_BANK + 10,
-+	[EN751221_PCM1_RST]		= RST_NR_PER_BANK + 11,
-+	[EN751221_UART_RST]		= RST_NR_PER_BANK + 12,
-+	[EN751221_GPIO_RST]		= RST_NR_PER_BANK + 13,
-+	[EN751221_GDMA_RST]		= RST_NR_PER_BANK + 14,
-+	[EN751221_I2C_MASTER_RST]	= RST_NR_PER_BANK + 16,
-+	[EN751221_PCM2_ZSI_ISI_RST]	= RST_NR_PER_BANK + 17,
-+	[EN751221_SFC_RST]		= RST_NR_PER_BANK + 18,
-+	[EN751221_UART2_RST]		= RST_NR_PER_BANK + 19,
-+	[EN751221_GDMP_RST]		= RST_NR_PER_BANK + 20,
-+	[EN751221_FE_RST]		= RST_NR_PER_BANK + 21,
-+	[EN751221_USB_HOST_P0_RST]	= RST_NR_PER_BANK + 22,
-+	[EN751221_GSW_RST]		= RST_NR_PER_BANK + 23,
-+	[EN751221_SFC2_PCM_RST]		= RST_NR_PER_BANK + 25,
-+	[EN751221_PCIE0_RST]		= RST_NR_PER_BANK + 26,
-+	[EN751221_PCIE1_RST]		= RST_NR_PER_BANK + 27,
-+	[EN751221_CPU_TIMER_RST]	= RST_NR_PER_BANK + 28,
-+	[EN751221_PCIE_HB_RST]		= RST_NR_PER_BANK + 29,
-+	[EN751221_SIMIF_RST]		= RST_NR_PER_BANK + 30,
-+	[EN751221_XPON_MAC_RST]		= RST_NR_PER_BANK + 31,
-+
-+	/* RST_DMT */
-+	[EN751221_DMT_RST]		= 2 * RST_NR_PER_BANK + 0,
-+
-+	/* RST_USB */
-+	[EN751221_USB_PHY_P0_RST]	= 3 * RST_NR_PER_BANK + 6,
-+	[EN751221_USB_PHY_P1_RST]	= 3 * RST_NR_PER_BANK + 7,
-+};
-+
- static int en7581_reset_register(struct device *dev, void __iomem *base,
--				 const u16 *rst_map, int nr_resets);
-+				 const u16 *rst_map, int nr_resets,
-+				 const u16 *rst_reg_ofs);
- 
- static u32 en7523_get_base_rate(const struct en_clk_desc *desc, u32 val)
- {
-@@ -604,7 +701,8 @@ static int en7523_clk_hw_init(struct platform_device *pdev,
- 	en7523_register_clocks(&pdev->dev, clk_data, base, np_base);
- 
- 	return en7581_reset_register(&pdev->dev, np_base, en7523_rst_map,
--				     ARRAY_SIZE(en7523_rst_map));
-+				     ARRAY_SIZE(en7523_rst_map),
-+				     en7581_rst_ofs);
- }
- 
- static void en7581_register_clocks(struct device *dev, struct clk_hw_onecell_data *clk_data,
-@@ -705,7 +803,8 @@ static const struct reset_control_ops en7581_reset_ops = {
- };
- 
- static int en7581_reset_register(struct device *dev, void __iomem *base,
--				 const u16 *rst_map, int nr_resets)
-+				 const u16 *rst_map, int nr_resets,
-+				 const u16 *rst_reg_ofs)
- {
- 	struct en_rst_data *rst_data;
- 
-@@ -713,7 +812,7 @@ static int en7581_reset_register(struct device *dev, void __iomem *base,
- 	if (!rst_data)
- 		return -ENOMEM;
- 
--	rst_data->bank_ofs = en7581_rst_ofs;
-+	rst_data->bank_ofs = rst_reg_ofs;
- 	rst_data->idx_map = rst_map;
- 	rst_data->base = base;
- 
-@@ -752,7 +851,123 @@ static int en7581_clk_hw_init(struct platform_device *pdev,
- 	writel(val | 3, base + REG_NP_SCU_PCIC);
- 
- 	return en7581_reset_register(&pdev->dev, base, en7581_rst_map,
--				     ARRAY_SIZE(en7581_rst_map));
-+				     ARRAY_SIZE(en7581_rst_map),
-+				     en7581_rst_ofs);
-+}
-+
-+static enum en_hir get_hw_id(void __iomem *np_base)
-+{
-+	u32 val = FIELD_GET(REG_HIR_MASK, readl(np_base + REG_HIR));
-+
-+	if (val < HIR_MAX)
-+		return (enum en_hir) val;
-+
-+	return HIR_UNKNOWN;
-+}
-+
-+static void en751221_try_register_clk(struct device *dev, int key,
-+				      struct clk_hw_onecell_data *clk_data,
-+				      const char *name, u32 rate)
-+{
-+	struct clk_hw *hw;
-+
-+	hw = clk_hw_register_fixed_rate(dev, name, NULL, 0, rate);
-+	if (IS_ERR(hw))
-+		pr_err("Failed to register clk %s: %pe\n", name, hw);
-+	else
-+		clk_data->hws[key] = hw;
-+}
-+
-+static void en751221_register_clocks(struct device *dev,
-+				     struct clk_hw_onecell_data *clk_data,
-+				     struct regmap *map, void __iomem *np_base)
-+{
-+	enum en_hir hid = get_hw_id(np_base);
-+	struct clk_hw *hw;
-+	u32 rate;
-+	u32 div;
-+	int err;
-+
-+	/* PCI */
-+	hw = en7523_register_pcie_clk(dev, np_base);
-+	clk_data->hws[EN751221_CLK_PCIE] = hw;
-+
-+	/* SPI */
-+	rate = EN751221_SPI_BASE;
-+	if (hid == HIR_EN7526C)
-+		rate = EN751221_SPI_BASE_EN7526C;
-+
-+	err = regmap_read(map, EN751221_REG_SPI_DIV, &div);
-+	if (err) {
-+		pr_err("Failed reading fixed clk div %s: %d\n",
-+		       "spi", err);
-+	} else {
-+		div = FIELD_GET(EN751221_REG_SPI_DIV_MASK, div) * 2;
-+		if (!div)
-+			div = 40;
-+
-+		en751221_try_register_clk(dev, EN751221_CLK_SPI, clk_data,
-+					  "spi", rate / div);
-+	}
-+
-+	/* BUS */
-+	rate = FIELD_GET(EN751221_REG_BUS_MASK,
-+			 readl(np_base + EN751221_REG_BUS));
-+	rate *= 1000000;
-+	en751221_try_register_clk(dev, EN751221_CLK_BUS, clk_data, "bus",
-+				  rate);
-+
-+	/* CPU */
-+	en751221_try_register_clk(dev, EN751221_CLK_CPU, clk_data, "cpu",
-+				  rate * 4);
-+
-+	/* HPT */
-+	switch (hid) {
-+	case HIR_EN751221:
-+	case HIR_EN751627:
-+	case HIR_EN7526C:
-+	case HIR_EN7580:
-+	case HIR_EN7528:
-+		rate = 200000000;
-+		break;
-+	case HIR_MT7505:
-+		rate = 100000000;
-+		break;
-+	case HIR_MT751020:
-+		rate = 800000000 / 3;
-+		break;
-+	default:
-+		rate = 250000000;
-+	}
-+	en751221_try_register_clk(dev, EN751221_CLK_HPT, clk_data, "hpt",
-+				  rate);
-+
-+	/* GSW */
-+	rate = FIELD_GET(EN751221_REG_SSR3_GSW_MASK,
-+			 readl(np_base + EN751221_REG_SSR3));
-+	en751221_try_register_clk(dev, EN751221_CLK_GSW, clk_data, "gsw",
-+				  gsw751221_base[rate]);
-+}
-+
-+static int en751221_clk_hw_init(struct platform_device *pdev,
-+				struct clk_hw_onecell_data *clk_data)
-+{
-+	struct regmap *map;
-+	void __iomem *base;
-+
-+	map = syscon_regmap_lookup_by_compatible("econet,en751221-chip-scu");
-+	if (IS_ERR(map))
-+		return PTR_ERR(map);
-+
-+	base = devm_platform_ioremap_resource(pdev, 0);
-+	if (IS_ERR(base))
-+		return PTR_ERR(base);
-+
-+	en751221_register_clocks(&pdev->dev, clk_data, map, base);
-+
-+	return en7581_reset_register(&pdev->dev, base, en751221_rst_map,
-+				     ARRAY_SIZE(en751221_rst_map),
-+				     en751221_rst_ofs);
- }
- 
- static int en7523_clk_probe(struct platform_device *pdev)
-@@ -799,9 +1014,20 @@ static const struct en_clk_soc_data en7581_data = {
- 	.hw_init = en7581_clk_hw_init,
- };
- 
-+static const struct en_clk_soc_data en751221_data = {
-+	.num_clocks = EN751221_MAX_CLKS,
-+	.pcie_ops = {
-+		.is_enabled = en7523_pci_is_enabled,
-+		.prepare = en7523_pci_prepare,
-+		.unprepare = en7523_pci_unprepare,
-+	},
-+	.hw_init = en751221_clk_hw_init,
-+};
-+
- static const struct of_device_id of_match_clk_en7523[] = {
- 	{ .compatible = "airoha,en7523-scu", .data = &en7523_data },
- 	{ .compatible = "airoha,en7581-scu", .data = &en7581_data },
-+	{ .compatible = "econet,en751221-scu", .data = &en751221_data },
- 	{ /* sentinel */ }
- };
- 
+ ECRYPT FILE SYSTEM
+ M:	Tyler Hicks <code@tyhicks.com>
+ L:	ecryptfs@vger.kernel.org
 -- 
 2.39.5
 
