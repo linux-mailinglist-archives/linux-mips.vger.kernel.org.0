@@ -1,58 +1,59 @@
-Return-Path: <linux-mips+bounces-13366-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13367-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 0ME/Gl5RqGmztAAAu9opvQ
-	(envelope-from <linux-mips+bounces-13366-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 04 Mar 2026 16:35:58 +0100
+	id oDUzLmNRqGnUtAAAu9opvQ
+	(envelope-from <linux-mips+bounces-13367-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 04 Mar 2026 16:36:03 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FF28202E0E
-	for <lists+linux-mips@lfdr.de>; Wed, 04 Mar 2026 16:35:57 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6C4F202E1C
+	for <lists+linux-mips@lfdr.de>; Wed, 04 Mar 2026 16:36:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sin.lore.kernel.org (Postfix) with ESMTP id BF4AC3010777
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Mar 2026 15:26:02 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 9A48C3013C75
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Mar 2026 15:26:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC01A32F751;
-	Wed,  4 Mar 2026 15:26:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 267E533C19E;
+	Wed,  4 Mar 2026 15:26:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="TOKnlZwD"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="pGco7t5F"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpout-03.galae.net (smtpout-03.galae.net [185.246.85.4])
+Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 086C633A6E0
-	for <linux-mips@vger.kernel.org>; Wed,  4 Mar 2026 15:25:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.85.4
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FF7E33C1BD
+	for <linux-mips@vger.kernel.org>; Wed,  4 Mar 2026 15:26:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772637961; cv=none; b=IyQBo8YhDugm/GO5JAyQqPqWLvAo+cX+eC4taTJ8aGWDVSFp2Fqgk1ca+p7NtKw0m0cKyli9KZfz4I5wuAc5CVQ/lF3TkMaboN99o3xZz4FppOkmhxO1BEnQPhohQjjoaipx/H8F8gO0bVgTeQKkqE7nYwAuu63JRJmNFlC9AKE=
+	t=1772637964; cv=none; b=L7C2Xp3wCcPM3YbkxbxHbQwrdFS4UFfHRjFyNyWGjcUES9qweOpicQja+4ffrO2+AvpjKSshUBBYhjY2DeXEU9zeokLtdzN5bhhy0WZ5WaTMGXXZ/2t3/WwjkvPkXhIdJvoOyuKAQiBwU9xoni4rTsbVcWYinhrqK1RvZqa9tHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772637961; c=relaxed/simple;
-	bh=2zTJepp9PeAUecvd2FD/sQLoC97yP4rS/9I24SeT0Y4=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=F9r8qxx9h6ttv+IrTDwWph77LSb5OyDXs4RJQ8t4MY1a0rH+612wq+UL4zhfYK/gVQh5DAqRVLgv/HYD6C66gNJNgKCtGHfcqWzPBFeSKGmCNsvWH/PMgQzJrUZQ0qNswoWpEL85m72mS2ch8KuITn5bpO8tdm4FohCGnCXrV9M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=TOKnlZwD; arc=none smtp.client-ip=185.246.85.4
+	s=arc-20240116; t=1772637964; c=relaxed/simple;
+	bh=F8JawxO+mIIoZ8mYoUUc54WkUzEr4ysxEtWr9HwiTXA=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=SHeR9NgXP22XfiDPU9nRHKXTRgTzpaOz2W2Yaa9L7HeTQFEVk8+YelJAnOy+u6XNJEqgpE+vLgelZEqcAsj9/BYmT8pEdxjYZbq/sXIaDKAeLSK/UgJrmNkvCsfqMBJUfRiibAN+hc8Vvm5kv4ept08KlhMtJNweFHfCXP4w8Q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=pGco7t5F; arc=none smtp.client-ip=185.171.202.116
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-03.galae.net (Postfix) with ESMTPS id 770AB4E42542;
-	Wed,  4 Mar 2026 15:25:58 +0000 (UTC)
+	by smtpout-04.galae.net (Postfix) with ESMTPS id C0276C143D8;
+	Wed,  4 Mar 2026 15:26:18 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 411C75FF5C;
-	Wed,  4 Mar 2026 15:25:58 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 1AC3A103697AE;
-	Wed,  4 Mar 2026 16:25:50 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 989ED5FF5C;
+	Wed,  4 Mar 2026 15:26:00 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 8067C103697E4;
+	Wed,  4 Mar 2026 16:25:57 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1772637957; h=from:subject:date:message-id:to:cc:mime-version:content-type:
-	 content-transfer-encoding; bh=stR+fiQn44jXAiWKBJzbsxfh8q0GGnEp7PRkh3gMa3I=;
-	b=TOKnlZwD7v8PFZeNSuQC0M3oyEv2h5CRUZYCZV1ZPAYMootLlr79pikYpmZmTaW3+H6iL5
-	gNdCDzS7liY6Xt7o1VI0Y0K6U5ZesH8lqM+WhFOyQLxS6XtJzr9+xhaIArayuHNcYUULFP
-	mdyi8LlAGZZUCnGB6DHwUD0pGUcrielhMPiyISYLktBrH2NEgkbyHMW8Nxe+pJs1Bxhd2I
-	VOeHF3rbjy0H9xiIX3qCfxAa0BilBSwU8K8JId9JpFaDMRndTJiSie2B1BpBLMAYbOFoDd
-	IuiL4uBLW4Yj/GiBG5bi78vjwVA+sYbIaXmX0rm22dx87DDRgPoFKmA9g9ZAnA==
+	t=1772637959; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	 content-transfer-encoding:in-reply-to:references;
+	bh=9UHr3CNt/FyTmL3vNkKdZbRX+TRoGerGvEUkQpApgYA=;
+	b=pGco7t5FG/VkYl7tIFmtq733OHgXy/Sn8nJr2IHmt2wxIjK4aJpKz0Y3rVmgSv+3IudBvp
+	gQ3pojUDJyUXE9n/2I2ZtaUqwGkmx+fQsY0Pjo8FpMhAdvKP2GJR+C46dth2SvElbnQTlD
+	E6qXuzUQ1PKg8p2beOgD6XxISABeoh3vp5insMpIb1LTwI2D+MxmXBFPVMIcQ8sQw7R/sh
+	G58Q1hQsIBQOkpSAh8HntU/3AoTZBcTBhQYwVdExK9YArNB1XdMaQkRMCYVFxhfzfS2rEw
+	eO1O0IXHTCSaQSsxBLq9P7hTcsDe4DPD9Sp4ymFLM68XU/fer3ba0PKopXbuiA==
 From: =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
-Subject: [PATCH v4 00/10] Add clock and reset support for Mobileye EyeQ7H
-Date: Wed, 04 Mar 2026 16:25:14 +0100
-Message-Id: <20260304-clk-eyeq7-v4-0-9d6bd9d24bec@bootlin.com>
+Date: Wed, 04 Mar 2026 16:25:15 +0100
+Subject: [PATCH v4 01/10] dt-bindings: soc: mobileye: Add EyeQ7H OLB
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -61,13 +62,9 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIANtOqGkC/2WQ2WrDMBBFf8XouQoabV4Ipf9R+mBJ40bUWyxH1
- IT8e2WbFoc+XmnO4c7cScDJYyBVdicTRh/80KcgXzJiL3X/idS7lAlnXLGC5dS2XxQXvOa0Ka3
- GWgoHoiBpfpyw8d+b6/0j5YsP8zAtmzrC+rpbSiYOlgiUUdEoxqVRTiN/M8Mwt74/2aEjqyfyP
- xY4l0eWJ7aAXEoH6deV/1nxy2oG8MSKlUXjTJ0bBkI8s499oQmvt3STed+KdBhCvd2kys6blHN
- Fu9oaOl4WGvPk1FoZV2gonYKj85Ucb1pl2z7Ai62Pbsf2FmipwWrBGlZKVqXuiTB1QJrwzs9VF
- vMTo5OF1O/xA8qeP7e7AQAA
-X-Change-ID: 20250807-clk-eyeq7-f9c6ea43d138
+Message-Id: <20260304-clk-eyeq7-v4-1-9d6bd9d24bec@bootlin.com>
+References: <20260304-clk-eyeq7-v4-0-9d6bd9d24bec@bootlin.com>
+In-Reply-To: <20260304-clk-eyeq7-v4-0-9d6bd9d24bec@bootlin.com>
 To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
  Gregory CLEMENT <gregory.clement@bootlin.com>, 
  =?utf-8?q?Th=C3=A9o_Lebrun?= <theo.lebrun@bootlin.com>, 
@@ -82,30 +79,29 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-clk@vger.kernel.org, linux-mips@vger.kernel.org, 
  =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>, 
- Sari Khoury <sari.khoury@mobileye.com>
+ Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 X-Mailer: b4 0.14.3
 X-Last-TLS-Session-Version: TLSv1.3
-X-Rspamd-Queue-Id: 8FF28202E0E
+X-Rspamd-Queue-Id: B6C4F202E1C
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
 	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13366-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13367-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
 	RCVD_TLS_LAST(0.00)[];
-	RCPT_COUNT_TWELVE(0.00)[23];
+	RCPT_COUNT_TWELVE(0.00)[22];
 	MIME_TRACE(0.00)[0:+];
 	DKIM_TRACE(0.00)[bootlin.com:+];
-	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
 	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
@@ -115,129 +111,358 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-mips,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[bootlin.com:dkim,bootlin.com:email,bootlin.com:url,bootlin.com:mid,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[bootlin.com:dkim,bootlin.com:email,bootlin.com:mid,mobileye.com:email,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,qualcomm.com:email,2.174.165.64:email]
 X-Rspamd-Action: no action
 
-This patchset brings the support of the Other Logic Blocks (OLB)
-found in the first Mobileye SoC based on the RISC-V architecture, the
-EyeQ7H. Despite the change from MIPS to RISC-V, the Other Logic Blocks
-provide similar clock and reset functions to the controllers of the
-chip. This series introduces the device tree bindings of the SoC and
-the necessary changes to the clock and reset eyeq drivers.
+The Other Logic Blocks (OLB) found in Mobileye SoCs contain hardware
+sub-functions grouped in a logical device.
 
-Since this series affects drivers used on Mobileye MIPS SoCs, mainly
-clk-eyeq, I tested that it does not introduce regressions on EyeQ5,
-EyeQ6H, and EyeQ6Lplus evaluation boards.
-    
-In detail, the first patch adds the dt-bindings yaml and headers for
-the EyeQ7H OLB.
+The EyeQ7H features 14 such OLB. The main differences with the previous
+generation of SoC are that some blocks have two clock sources instead
+of one and that the clock source can be the one of the clock output of
+another OLB instead of the main oscillator.
 
-Patch 2 adds the compatible entries to the reset-eyeq driver, and the
-necessary changes for the reset domains found in the EyeQ7H OLB.
+For the blocks with a single parent clock, the name of that clock is
+"ref", similar to what is done for the OLB of the previous SoC. The
+blocks with two parent clocks use either "ref" for the main oscillator,
+"ref_100p0" for a 100MHz reference clock or "ref_106p6" for 106.6MHz
+reference clock.
 
-Patches 3 and 4 rework the handling of parent clocks in
-__clk_hw_register_fixed_factor() to make it identical to other clock types
-like divider or gate. This allows simplifying the registration functions
-built on top of the now exported __clk_hw_register_fixed_factor(). A
-new clk_hw_register_fixed_factor_pdata() is added that will be used in
-clk-eyeq later in the series.
+Some OLB also contain a reset controller with one or more reset domain,
+like the blocks found in the EyeQ6H.
 
-Patch 5 renames the defines and functions related to the PLL with the
-PLL type fracg, to make room for the other types of PLL found the in
-EyeQ7H OLB.
-
-Patch 6 introduces a new generic type of clock structure that can
-represents all clocks found in OLB. Then patch 7 and 8 converts all
-clocks defined in the driver to the new struct eqc_clock and remove all
-the previous separate clocks structures.
-
-Patch 9 adds the list of clocks as match data for the 14 OLB present
-in the EyeQ7H SoC, and the functions needed to probe the two PLL types
-found in the chip.
-
-Finally patch 10 adds an entry for Mobileye RISC-V SoCs to the MAINTAINERS
-file for the newly added dt-bindings files.
-
-This series depends on the EyeQ6Lplus support patchset posted
-previously[1], which in turn depends on Théo's series[2]. In particular,
-the changes made to the clk-eyeq driver in this patchset depend on the
-changes done in these two series.
-
-[1]: https://lore.kernel.org/all/20260226-eyeq6lplus-v3-0-9cbeb59268b0@bootlin.com/
-[2]: https://lore.kernel.org/lkml/20260225-macb-phy-v7-0-665bd8619d51@bootlin.com/
-
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@oss.qualcomm.com>
 Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
 ---
-Changes in v4:
-- Rebased on v7.0-rc1 + version 3 of eyeq6plus series.
-- Link to v3: https://lore.kernel.org/r/20260114-clk-eyeq7-v3-0-8ebdba7b0133@bootlin.com
+ .../bindings/soc/mobileye/mobileye,eyeq7h-olb.yaml | 192 +++++++++++++++++++++
+ include/dt-bindings/clock/mobileye,eyeq7h-clk.h    | 119 +++++++++++++
+ 2 files changed, 311 insertions(+)
 
-Changes in v3:
-- Fix eyeq7h-olb DT bindings following Krzysztof review.
-- Link to v2: https://lore.kernel.org/r/20251224-clk-eyeq7-v2-0-81744d1025d9@bootlin.com
+diff --git a/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq7h-olb.yaml b/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq7h-olb.yaml
+new file mode 100644
+index 000000000000..2958ca9e330b
+--- /dev/null
++++ b/Documentation/devicetree/bindings/soc/mobileye/mobileye,eyeq7h-olb.yaml
+@@ -0,0 +1,192 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/soc/mobileye/mobileye,eyeq7h-olb.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Mobileye EyeQ7H SoC system controller
++
++maintainers:
++  - Benoît Monin <benoit.monin@bootlin.com>
++  - Grégory Clement <gregory.clement@bootlin.com>
++  - Théo Lebrun <theo.lebrun@bootlin.com>
++  - Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>
++
++description:
++  OLB ("Other Logic Block") is a hardware system controller grouping
++  smaller blocks. Clocks and resets are generated by those blocks and
++  used by internal controllers of the SoC. The EyeQ7H SoC hosts 14
++  different OLB.
++
++properties:
++  compatible:
++    items:
++      - enum:
++          - mobileye,eyeq7h-acc0-olb
++          - mobileye,eyeq7h-acc1-olb
++          - mobileye,eyeq7h-ddr0-olb
++          - mobileye,eyeq7h-ddr1-olb
++          - mobileye,eyeq7h-east-olb
++          - mobileye,eyeq7h-mips0-olb
++          - mobileye,eyeq7h-mips1-olb
++          - mobileye,eyeq7h-mips2-olb
++          - mobileye,eyeq7h-periph-east-olb
++          - mobileye,eyeq7h-periph-west-olb
++          - mobileye,eyeq7h-south-olb
++          - mobileye,eyeq7h-west-olb
++          - mobileye,eyeq7h-xnn0-olb
++          - mobileye,eyeq7h-xnn1-olb
++      - const: syscon
++
++  reg:
++    maxItems: 1
++
++  '#reset-cells':
++    description:
++      First cell is domain and optional if compatible has a single reset domain.
++      Second cell is reset index inside that domain.
++    enum: [ 1, 2 ]
++
++  '#clock-cells':
++    const: 1
++
++  clocks:
++    minItems: 1
++    maxItems: 2
++
++  clock-names:
++    minItems: 1
++    maxItems: 2
++
++required:
++  - compatible
++  - reg
++  - '#clock-cells'
++  - clocks
++  - clock-names
++
++allOf:
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - mobileye,eyeq7h-ddr0-olb
++              - mobileye,eyeq7h-ddr1-olb
++              - mobileye,eyeq7h-mips0-olb
++              - mobileye,eyeq7h-mips1-olb
++              - mobileye,eyeq7h-mips2-olb
++              - mobileye,eyeq7h-periph-east-olb
++              - mobileye,eyeq7h-south-olb
++    then:
++      properties:
++        clocks:
++          items:
++            - description: Reference input clock.
++        clock-names:
++          items:
++            - const: ref
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - mobileye,eyeq7h-east-olb
++              - mobileye,eyeq7h-west-olb
++    then:
++      properties:
++        clocks:
++          items:
++            - description: Reference input clock from the main oscillator.
++            - description: 100MHz reference input clock.
++        clock-names:
++          items:
++            - const: ref
++            - const: ref_100p0
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - mobileye,eyeq7h-acc0-olb
++              - mobileye,eyeq7h-acc1-olb
++              - mobileye,eyeq7h-periph-west-olb
++              - mobileye,eyeq7h-xnn0-olb
++              - mobileye,eyeq7h-xnn1-olb
++    then:
++      properties:
++        clocks:
++          items:
++            - description: 100MHz reference input clock.
++            - description: 106.6MHz reference input clock.
++        clock-names:
++          items:
++            - const: ref_100p0
++            - const: ref_106p6
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - mobileye,eyeq7h-ddr0-olb
++              - mobileye,eyeq7h-ddr1-olb
++              - mobileye,eyeq7h-east-olb
++              - mobileye,eyeq7h-periph-east-olb
++              - mobileye,eyeq7h-periph-west-olb
++              - mobileye,eyeq7h-west-olb
++    then:
++      properties:
++        '#reset-cells':
++          const: 1
++      required:
++        - '#reset-cells'
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - mobileye,eyeq7h-acc0-olb
++              - mobileye,eyeq7h-acc1-olb
++              - mobileye,eyeq7h-south-olb
++              - mobileye,eyeq7h-xnn0-olb
++              - mobileye,eyeq7h-xnn1-olb
++    then:
++      properties:
++        '#reset-cells':
++          const: 2
++      required:
++        - '#reset-cells'
++
++  - if:
++      properties:
++        compatible:
++          contains:
++            enum:
++              - mobileye,eyeq7h-mips0-olb
++              - mobileye,eyeq7h-mips1-olb
++              - mobileye,eyeq7h-mips2-olb
++    then:
++      properties:
++        '#reset-cells': false
++
++additionalProperties: false
++
++examples:
++  - |
++    soc {
++      #address-cells = <2>;
++      #size-cells = <2>;
++
++      system-controller0@45000000 {
++        compatible = "mobileye,eyeq7h-acc0-olb", "syscon";
++        reg = <0x0 0x45000000 0x0 0x1000>;
++        #reset-cells = <2>;
++        #clock-cells = <1>;
++        clocks = <&olb_south 7>, <&olb_east 5>;
++        clock-names = "ref_100p0", "ref_106p6";
++      };
++    };
+diff --git a/include/dt-bindings/clock/mobileye,eyeq7h-clk.h b/include/dt-bindings/clock/mobileye,eyeq7h-clk.h
+new file mode 100644
+index 000000000000..76e06a0abd02
+--- /dev/null
++++ b/include/dt-bindings/clock/mobileye,eyeq7h-clk.h
+@@ -0,0 +1,119 @@
++/* SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause) */
++/*
++ * Copyright (C) 2025 Mobileye Vision Technologies Ltd.
++ */
++
++#ifndef _DT_BINDINGS_CLOCK_MOBILEYE_EYEQ7H_CLK_H
++#define _DT_BINDINGS_CLOCK_MOBILEYE_EYEQ7H_CLK_H
++
++/* ACC0 and ACC1 OLBs PLL and dividers */
++#define EQ7HC_ACC_PLL_VMP	0
++#define EQ7HC_ACC_PLL_MPC	1
++#define EQ7HC_ACC_PLL_PMA	2
++#define EQ7HC_ACC_PLL_NOC	3
++#define EQ7HC_ACC_DIV_PMA	4
++#define EQ7HC_ACC_DIV_NCORE	5
++#define EQ7HC_ACC_DIV_CFG	6
++
++/* DDR0 and DDR1 OLBs PLL and dividers */
++#define EQ7HC_DDR_PLL		0
++#define EQ7HC_DDR_DIV_APB	1
++#define EQ7HC_DDR_DIV_PLLREF	2
++#define EQ7HC_DDR_DIV_DFI	3
++
++/* east OLB PLL and dividers */
++#define EQ7HC_EAST_PLL_106P6		0
++#define EQ7HC_EAST_DIV_REF_106P6	1
++#define EQ7HC_EAST_PLL_NOC		2
++#define EQ7HC_EAST_PLL_ISP		3
++#define EQ7HC_EAST_PLL_VEU		4
++#define EQ7HC_EAST_DIV_REF_DDR_PHY	5
++#define EQ7HC_EAST_DIV_CORE		6
++#define EQ7HC_EAST_DIV_CORE_MBIST	7
++#define EQ7HC_EAST_DIV_ISRAM_MBIST	8
++#define EQ7HC_EAST_DIV_CFG		9
++#define EQ7HC_EAST_DIV_VEU_CORE		10
++#define EQ7HC_EAST_DIV_VEU_MBIST	11
++#define EQ7HC_EAST_DIV_VEU_OCP		12
++#define EQ7HC_EAST_DIV_LBITS		13
++#define EQ7HC_EAST_DIV_ISP0_CORE	14
++
++/* MIPS0, MIPS1 and MIPS2 OLBs PLL and dividers */
++#define EQ7HC_MIPS_PLL_CPU	0
++#define EQ7HC_MIPS_DIV_CM	1
++
++/* periph east OLB PLL and dividers */
++#define EQ7HC_PERIPH_EAST_PLL_PER	0
++#define EQ7HC_PERIPH_EAST_DIV_PER	1
++
++/* periph west OLB PLL and dividers */
++#define EQ7HC_PERIPH_WEST_PLL_PER	0
++#define EQ7HC_PERIPH_WEST_PLL_I2S	1
++#define EQ7HC_PERIPH_WEST_DIV_PER	2
++#define EQ7HC_PERIPH_WEST_DIV_I2S	3
++
++/* south OLB PLL and dividers */
++#define EQ7HC_SOUTH_PLL_100P0		0
++#define EQ7HC_SOUTH_DIV_REF_100P0	1
++#define EQ7HC_SOUTH_PLL_XSPI		2
++#define EQ7HC_SOUTH_PLL_VDIO		3
++#define EQ7HC_SOUTH_PLL_PER		4
++#define EQ7HC_SOUTH_DIV_VDO_DSI_SYS	5
++#define EQ7HC_SOUTH_DIV_PMA_CMN_REF	6
++#define EQ7HC_SOUTH_DIV_REF_UFS		7
++#define EQ7HC_SOUTH_DIV_XSPI_SYS	8
++#define EQ7HC_SOUTH_DIV_XSPI_MBIST	9
++#define EQ7HC_SOUTH_DIV_NOC_S		10
++#define EQ7HC_SOUTH_DIV_PCIE_SYS	11
++#define EQ7HC_SOUTH_DIV_PCIE_SYS_MBIST	12
++#define EQ7HC_SOUTH_DIV_PCIE_GBE_PHY	13
++#define EQ7HC_SOUTH_DIV_UFS_CORE	14
++#define EQ7HC_SOUTH_DIV_UFS_SMS		15
++#define EQ7HC_SOUTH_DIV_UFS_ROM_SMS	16
++#define EQ7HC_SOUTH_DIV_ETH_SYS		17
++#define EQ7HC_SOUTH_DIV_ETH_MBIST	18
++#define EQ7HC_SOUTH_DIV_CFG_S		19
++#define EQ7HC_SOUTH_DIV_TSU		20
++#define EQ7HC_SOUTH_DIV_VDIO		21
++#define EQ7HC_SOUTH_DIV_VDIO_CORE	22
++#define EQ7HC_SOUTH_DIV_VDIO_CORE_MBIST	23
++#define EQ7HC_SOUTH_DIV_VDO_CORE_MBIST	24
++#define EQ7HC_SOUTH_DIV_VDO_P		25
++#define EQ7HC_SOUTH_DIV_VDIO_CFG	26
++#define EQ7HC_SOUTH_DIV_VDIO_TXCLKESC	27
++
++/* west OLB PLL and dividers */
++#define EQ7HC_WEST_PLL_106P6		0
++#define EQ7HC_WEST_DIV_REF_106P6	1
++#define EQ7HC_WEST_PLL_NOC		2
++#define EQ7HC_WEST_PLL_GPU		3
++#define EQ7HC_WEST_PLL_SSI		4
++#define EQ7HC_WEST_DIV_GPU		5
++#define EQ7HC_WEST_DIV_GPU_MBIST	6
++#define EQ7HC_WEST_DIV_LBITS		7
++#define EQ7HC_WEST_DIV_MIPS_TIMER	8
++#define EQ7HC_WEST_DIV_SSI_CORE		9
++#define EQ7HC_WEST_DIV_SSI_CORE_MBIST	10
++#define EQ7HC_WEST_DIV_SSI_ROM		11
++#define EQ7HC_WEST_DIV_SSI_ROM_MBIST	12
++#define EQ7HC_WEST_DIV_REF_DDR_PHY	13
++#define EQ7HC_WEST_DIV_CORE		14
++#define EQ7HC_WEST_DIV_CORE_MBIST	15
++#define EQ7HC_WEST_DIV_CFG		16
++#define EQ7HC_WEST_DIV_CAU		17
++#define EQ7HC_WEST_DIV_CAU_MBIST	18
++
++/* XNN0 and XNN1 OLBs PLL and dividers */
++#define EQ7HC_XNN_PLL_XNN0	0
++#define EQ7HC_XNN_PLL_XNN1	1
++#define EQ7HC_XNN_PLL_XNN2	2
++#define EQ7HC_XNN_PLL_CLSTR	3
++#define EQ7HC_XNN_DIV_XNN0	4
++#define EQ7HC_XNN_DIV_XNN1	5
++#define EQ7HC_XNN_DIV_XNN2	6
++#define EQ7HC_XNN_DIV_CLSTR	7
++#define EQ7HC_XNN_DIV_I2	8
++#define EQ7HC_XNN_DIV_I2_SMS	9
++#define EQ7HC_XNN_DIV_CFG	10
++
++#endif
 
-Changes in v2:
-- Move the dt-bindings to their own files and sort the compatibles.
-- Reorder the changes in reset-eyeq and make the register access more
-  readable.
-- Drop the validity check on even divider. Unnecessary since it is
-  always called from a clock .set_rate().
-- Drop the parameters check on divider registration. Will be posted
-  separately.
-- Switch to a new generic struct for describing the clocks.
-- Add an entry to MAINTAINERS.
-- Link to v1: https://lore.kernel.org/r/20250903-clk-eyeq7-v1-0-3f5024b5d6e2@bootlin.com
-
----
-Benoît Monin (10):
-      dt-bindings: soc: mobileye: Add EyeQ7H OLB
-      reset: eyeq: Add EyeQ7H compatibles
-      clk: fixed-factor: Rework initialization with parent clocks
-      clk: fixed-factor: Export __clk_hw_register_fixed_factor()
-      clk: eyeq: Prefix the PLL registers with the PLL type
-      clk: eyeq: Introduce a generic clock type
-      clk: eyeq: Convert clocks declaration to eqc_clock
-      clk: eyeq: Drop PLL, dividers, and fixed factors structs
-      clk: eyeq: Add EyeQ7H compatibles
-      MAINTAINERS: Add entry for Mobileye RISC-V SoCs
-
- .../bindings/soc/mobileye/mobileye,eyeq7h-olb.yaml |  192 +++
- MAINTAINERS                                        |   13 +-
- drivers/clk/clk-eyeq.c                             | 1245 +++++++++++++-------
- drivers/clk/clk-fixed-factor.c                     |   72 +-
- drivers/reset/reset-eyeq.c                         |  268 ++++-
- include/dt-bindings/clock/mobileye,eyeq7h-clk.h    |  119 ++
- include/linux/clk-provider.h                       |   56 +-
- 7 files changed, 1468 insertions(+), 497 deletions(-)
----
-base-commit: 559f264e403e4d58d56a17595c60a1de011c5e20
-change-id: 20250807-clk-eyeq7-f9c6ea43d138
-prerequisite-message-id: <20260225-macb-phy-v7-0-665bd8619d51@bootlin.com>
-prerequisite-patch-id: 68a9ce9820cf78e8a0705505ea29ff981b518570
-prerequisite-patch-id: 40a406305a44a0ea0d0b861d34c199907750f84c
-prerequisite-patch-id: dda6d7c3d7d7d8e49b31015887d1a7308f65559a
-prerequisite-change-id: 20251128-eyeq6lplus-961c630f0940:v3
-prerequisite-patch-id: 68a9ce9820cf78e8a0705505ea29ff981b518570
-prerequisite-patch-id: 40a406305a44a0ea0d0b861d34c199907750f84c
-prerequisite-patch-id: dda6d7c3d7d7d8e49b31015887d1a7308f65559a
-prerequisite-patch-id: ee24f0dcdb893f3850e9dd0d54e848782a1b9ed7
-prerequisite-patch-id: 781c4ae465c2af54c28ef4ad7a3c142da8390cf0
-prerequisite-patch-id: 5de50e537525f326cd3478f8cf88df947c66a7ee
-prerequisite-patch-id: cbb05dadd49dbf4ef54548b1016bba1e80c90805
-prerequisite-patch-id: 07021e7be37e3c14ef2950f2ca176a69b3be3ded
-prerequisite-patch-id: 1ee9fc5cf027bc9211c1a5e1547036e33d30fcf7
-prerequisite-patch-id: 30f092cffaae6e2adc8f6520af6073b9cd20c59e
-prerequisite-patch-id: 90361e8b03b1160a73257cc7d69e32435f319423
-prerequisite-patch-id: 5db4ab27d470485e90f50a95ab7fc423ae63f5c8
-prerequisite-patch-id: 571f8eb779bcad13ac8762519dafc2d0c260d6c7
-prerequisite-patch-id: 27c86e0ecfdabca4bca4bdc44e1bc9db8c27634a
-prerequisite-patch-id: 40a5ae6831ec4107ae32d74e948636837fa9e076
-prerequisite-patch-id: a8952e1ae521fd6f757ebed446f15523791003ac
-
-Best regards,
 -- 
-Benoît Monin, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.53.0
 
 
