@@ -1,52 +1,52 @@
-Return-Path: <linux-mips+bounces-13362-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13363-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id 2A/EEl74p2mtmwAAu9opvQ
-	(envelope-from <linux-mips+bounces-13362-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 04 Mar 2026 10:16:14 +0100
+	id 4LSbGmT7p2mtmwAAu9opvQ
+	(envelope-from <linux-mips+bounces-13363-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 04 Mar 2026 10:29:08 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id AFEE31FD6A2
-	for <lists+linux-mips@lfdr.de>; Wed, 04 Mar 2026 10:16:13 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [IPv6:2600:3c15:e001:75::12fc:5321])
+	by mail.lfdr.de (Postfix) with ESMTPS id 67B0A1FD910
+	for <lists+linux-mips@lfdr.de>; Wed, 04 Mar 2026 10:29:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id AEFE7308C74D
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Mar 2026 09:09:35 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 41CE43008630
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Mar 2026 09:29:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 838B8394781;
-	Wed,  4 Mar 2026 09:09:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3E4603976A0;
+	Wed,  4 Mar 2026 09:29:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="d5U8vb6p"
+	dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b="ncHzYAwC"
 X-Original-To: linux-mips@vger.kernel.org
 Received: from mail.cjdns.fr (mail.cjdns.fr [5.135.140.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA64139184B;
-	Wed,  4 Mar 2026 09:09:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DAB73976A4;
+	Wed,  4 Mar 2026 09:29:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.135.140.105
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772615374; cv=none; b=OVuhpzkaSj8XGWHvZkyNhuSSI61wL4Rw81JB7KajB3jREai+5oIgbZQ9KWZ6L4iNey90PyNX+I6mfI1Y4UZ5LpBcswSSFIVrlNgtUVkZ8jLiuGsuTGY5NE1qeQqFPYBcnDo2DZX7iJI2HwJaRPScjM2/+mOp9KG0CdbmVxpWgSM=
+	t=1772616543; cv=none; b=AQAfQW1erjD8u1rWnXJKmkrzXEhcEq7iLzFIBkSVhZOlaofVlrVSjpZ9X6Fl0NzwRYBM7PGX6g5MFIgDfqAMsbJwBwD132ZLhDVwBELNnR+AVhbhMvFSksYqj0T5BImqd8FHrfVv7GKAXHxPWcsUABlJatgUTP8VWGA3+lYQ7/A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772615374; c=relaxed/simple;
-	bh=yftRdM8nyWQsdJ2/EVnd712szefjtMJ1WAaLClGC6a4=;
+	s=arc-20240116; t=1772616543; c=relaxed/simple;
+	bh=Jcr0tn3DZiSPoeHfUwIDLAFM+lK8CgOCHgpZwOJ4tVs=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pagGXb9kjdSqHUo3ycPtJls1a23YbVscC5YxOway7o5DFzjBMTnfxvNe18P//J0I5OGOUrvig438TG3oQ6iF60OC/9BHuzpsDPsuRMSbmcM1hyTZqsm34or7UEVE2eUQe37Bsxw8A6TUFx+jZ1qDY2xwT2ChUztTK1VbO2ZUbQI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=none smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=d5U8vb6p; arc=none smtp.client-ip=5.135.140.105
+	 In-Reply-To:Content-Type; b=iPRy2JIq9f4PdG8DL6BimQ7G4Cb/0bYp/EoZewn7Abuk8C7uSlHMMfGDHQz5cUqZOUiE3TiMxI4Rm88SQ64r8ZQRPsAcnL2VWkPXjulydkM6ABkQoWCkS+LKRG6UrRnVaLSdqFkLLSj5eXGYFbCiQ0Ka2Vpt47hZsMZV4Ul1o+I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr; spf=none smtp.mailfrom=cjdns.fr; dkim=pass (2048-bit key) header.d=cjdns.fr header.i=@cjdns.fr header.b=ncHzYAwC; arc=none smtp.client-ip=5.135.140.105
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=cjdns.fr
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cjdns.fr
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 6471B22953A;
-	Wed,  4 Mar 2026 10:09:21 +0100 (CET)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 3F58322A039;
+	Wed,  4 Mar 2026 10:28:50 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cjdns.fr; s=dkim;
-	t=1772615369; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1772616537; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:content-language:in-reply-to:references;
-	bh=0QOY3SwlDPrGm+6EJVdxOMdbUCm/cndSMZI5zzeh0dI=;
-	b=d5U8vb6pBn5ABOYJsTtCnPXgqoJsbhO0uLtdRutCR/zeXaC+BKOEY1MZg+X7cB00LZyYD/
-	tvls+YGM9G4/i15SovrHmKK1Ikt3mBp74ZiRxlqgP3qHBkfHoSyOWFrwghYZBtpA/Toc13
-	0JxoAEscHkZYZjS7H8KC05CD1oe2Oth1w2lNxtCGmrH7e3FJYRhDaqPYEMR39Y/EgT4rJ+
-	How3mchqTzXemRlWZO/2TEax9ylq46DxosIW80V8jvyRuSpff48d0/WpVVq/cDjHKfehlC
-	K+/DzLb4pbYKJFIWkec2nvS7YUVsQgGgC5UuYMpPHcoCqyJR7GoBKq+3Rm+MXQ==
-Message-ID: <7888e449-fec9-4a23-8133-ad0c9651a354@cjdns.fr>
-Date: Wed, 4 Mar 2026 10:09:20 +0100
+	bh=xn/i0N8EgAKuwuM15FDiV4PZjdt7rsAySJLonN4COK8=;
+	b=ncHzYAwCogixHNVPZGRZuZBlCM11hw7NxKf1wlD/bw1xMbPi831jWfcgUfJU1SGpwp0cuN
+	Rx2yqoJ/z4sL4VfWI0kLPehzjMcSF8eyL5zN2dHW7EJs38wYdXg7tYbpKLoccnxYqVBrO3
+	rXGLP9iEhH2S+4/L2Q9mtYc8JR6Kj2LgowV0a0KvCrQ0sGg5HuYtoBhLpnzCb5PR0Zy+1C
+	OCqlAhCLilI7JHL3nlXFdGJZsZruj//g7V1c9fs+C4s8N7lIRnhtTNAiQCNgu8RFvY38zP
+	BtHLrE155jwkaELLPVa+tjzFSXjFq9YJJ+z2qaKnJvb8zr2xNEx4Kt/bixTrqw==
+Message-ID: <63cd305f-e76f-4ed3-bb4d-d6b1dec8c92e@cjdns.fr>
+Date: Wed, 4 Mar 2026 10:28:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -54,8 +54,8 @@ List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird Beta
-Subject: Re: [PATCH 1/8] dt-bindings: clock, reset: Add econet EN751221
- bindings
+Subject: Re: [PATCH 3/8] dt-bindings: phy: Document PCIe PHY in EcoNet
+ EN751221 and EN7528
 To: Krzysztof Kozlowski <krzk@kernel.org>
 Cc: linux-mips@vger.kernel.org, naseefkm@gmail.com, mturquette@baylibre.com,
  sboyd@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
@@ -69,27 +69,27 @@ Cc: linux-mips@vger.kernel.org, naseefkm@gmail.com, mturquette@baylibre.com,
  linux-mediatek@lists.infradead.org, linux-phy@lists.infradead.org,
  linux-arm-kernel@lists.infradead.org
 References: <20260303190948.694783-1-cjd@cjdns.fr>
- <20260303190948.694783-2-cjd@cjdns.fr>
- <20260304-accomplished-helpful-orca-5d6b81@quoll>
+ <20260303190948.694783-4-cjd@cjdns.fr>
+ <20260304-proficient-coati-of-lightning-df2cab@quoll>
 Content-Language: en-US
 From: Caleb James DeLisle <cjd@cjdns.fr>
-In-Reply-To: <20260304-accomplished-helpful-orca-5d6b81@quoll>
+In-Reply-To: <20260304-proficient-coati-of-lightning-df2cab@quoll>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Last-TLS-Session-Version: TLSv1.3
-X-Rspamd-Queue-Id: AFEE31FD6A2
+X-Rspamd-Queue-Id: 67B0A1FD910
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[cjdns.fr,none];
 	R_DKIM_ALLOW(-0.20)[cjdns.fr:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
+	R_SPF_ALLOW(-0.20)[+ip6:2600:3c15:e001:75::/64:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
 	RCVD_TLS_LAST(0.00)[];
-	TAGGED_FROM(0.00)[bounces-13362-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13363-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RCVD_COUNT_THREE(0.00)[4];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -106,172 +106,134 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
 	TAGGED_RCPT(0.00)[linux-mips,dt];
-	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[1fa20000:email,bootlin.com:url,devicetree.org:url,tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,cjdns.fr:dkim,cjdns.fr:email,cjdns.fr:mid,1fb00000:email]
+	ASN(0.00)[asn:63949, ipnet:2600:3c15::/32, country:SG];
+	DBL_BLOCKED_OPENRESOLVER(0.00)[sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo,devicetree.org:url,cjdns.fr:dkim,cjdns.fr:email,cjdns.fr:mid,1faf2000:email,1fac0000:email]
 X-Rspamd-Action: no action
 
 
-On 04/03/2026 09:39, Krzysztof Kozlowski wrote:
-> On Tue, Mar 03, 2026 at 07:09:41PM +0000, Caleb James DeLisle wrote:
->> Add clock and reset bindings for EN751221 as well as
->> a "chip-scu" which is an additional regmap that is used
->> by the clock driver as well as others. This split of the
->> SCU across two register areas is the same as the Airoha
->> AN758x family.
-> Please wrap commit message according to Linux coding style / submission
-> process (neither too early nor over the limit):
-> https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/submitting-patches.rst#L597
-OK
-> A nit, subject: drop second/last, redundant "bindings". The
-> "dt-bindings" prefix is already stating that these are bindings.
-> See also:
-> https://elixir.bootlin.com/linux/v6.17-rc3/source/Documentation/devicetree/bindings/submitting-patches.rst#L18
-OK
+On 04/03/2026 09:44, Krzysztof Kozlowski wrote:
+> On Tue, Mar 03, 2026 at 07:09:43PM +0000, Caleb James DeLisle wrote:
+>> EN751221 and EN7528 SoCs have two PCIe slots, and each one has a
+>> PHY which behaves slightly differently because one slot is Gen1/Gen2
+>> while the other is Gen1 only.
+>>
 >> Signed-off-by: Caleb James DeLisle <cjd@cjdns.fr>
 >> ---
->>   .../bindings/clock/airoha,en7523-scu.yaml     | 19 ++++++-
->>   .../mips/econet,en751221-chip-scu.yaml        | 41 ++++++++++++++++
->>   MAINTAINERS                                   |  3 ++
->>   .../dt-bindings/clock/econet,en751221-scu.h   | 15 ++++++
->>   .../dt-bindings/reset/econet,en751221-scu.h   | 49 +++++++++++++++++++
->>   5 files changed, 126 insertions(+), 1 deletion(-)
->>   create mode 100644 Documentation/devicetree/bindings/mips/econet,en751221-chip-scu.yaml
->>   create mode 100644 include/dt-bindings/clock/econet,en751221-scu.h
->>   create mode 100644 include/dt-bindings/reset/econet,en751221-scu.h
->>
->> diff --git a/Documentation/devicetree/bindings/clock/airoha,en7523-scu.yaml b/Documentation/devicetree/bindings/clock/airoha,en7523-scu.yaml
->> index a8471367175b..e60e54273393 100644
->> --- a/Documentation/devicetree/bindings/clock/airoha,en7523-scu.yaml
->> +++ b/Documentation/devicetree/bindings/clock/airoha,en7523-scu.yaml
->> @@ -32,6 +32,7 @@ properties:
->>         - enum:
->>             - airoha,en7523-scu
->>             - airoha,en7581-scu
->> +          - econet,en751221-scu
->>   
->>     reg:
->>       items:
->> @@ -67,7 +68,10 @@ allOf:
->>     - if:
->>         properties:
->>           compatible:
->> -          const: airoha,en7581-scu
->> +          items:
-> Drop items, it's just enum
+>>   .../phy/econet,en751221-pcie-phy.yaml         | 57 +++++++++++++++++++
+> Why are you mixing multiple subsystems in the same patchset? That's
+> like three or four different ones. Don't, just make it difficult to
+> apply pieces and understand the dependencies.
+
+
+Please pardon my ignorance, I was under the impression that a patch 
+should be specific to a subsystem but a patchset should accomplish a 
+goal and avoid introducing unused code. In this case the goal is PCIe 
+support. If you prefer it, I can resend as a PHY patchset and a CLK 
+patchset, and then after those are merged, send the PCIe patchset to use 
+them.
+
+
 >
->> +            - enum:
->> +                - airoha,en7581-scu
->> +                - econet,en751221-scu
->>       then:
->>         properties:
->>           reg:
->> @@ -98,3 +102,16 @@ examples:
->>                 #reset-cells = <1>;
->>         };
->>       };
->> +
->> +  - |
->> +    soc {
->> +      #address-cells = <1>;
->> +      #size-cells = <1>;
-> No need for new example, especially without any differences. You already
-> have there two.
-OK
->> +
->> +      scuclk2: clock-controller@1fb00000 {
->> +        compatible = "econet,en751221-scu";
->> +        reg = <0x1fb00000 0x970>;
->> +        #clock-cells = <1>;
->> +        #reset-cells = <1>;
->> +      };
->> +    };
->> diff --git a/Documentation/devicetree/bindings/mips/econet,en751221-chip-scu.yaml b/Documentation/devicetree/bindings/mips/econet,en751221-chip-scu.yaml
+>>   MAINTAINERS                                   |  6 ++
+>>   2 files changed, 63 insertions(+)
+>>   create mode 100644 Documentation/devicetree/bindings/phy/econet,en751221-pcie-phy.yaml
+>>
+>> diff --git a/Documentation/devicetree/bindings/phy/econet,en751221-pcie-phy.yaml b/Documentation/devicetree/bindings/phy/econet,en751221-pcie-phy.yaml
 >> new file mode 100644
->> index 000000000000..7c7c8cf8d2a5
+>> index 000000000000..8e1d3c791c6e
 >> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/mips/econet,en751221-chip-scu.yaml
->> @@ -0,0 +1,41 @@
+>> +++ b/Documentation/devicetree/bindings/phy/econet,en751221-pcie-phy.yaml
+>> @@ -0,0 +1,57 @@
 >> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
 >> +%YAML 1.2
 >> +---
->> +$id: http://devicetree.org/schemas/mips/econet,en751221-chip-scu.yaml#
+>> +$id: http://devicetree.org/schemas/phy/econet,en751221-pcie-phy.yaml#
 >> +$schema: http://devicetree.org/meta-schemas/core.yaml#
 >> +
->> +title: EcoNet Chip SCU Controller for EN751221 SoC
+>> +title: EcoNet PCI-Express PHY for EcoNet EN751221 and EN7528
 >> +
 >> +maintainers:
 >> +  - Caleb James DeLisle <cjd@cjdns.fr>
 >> +
 >> +description:
->> +  The EcoNet chip-scu block provides a configuration interface for clock,
->> +  io-muxing and other functionalities used by multiple controllers (e.g. clock,
->> +  pinctrl, ecc) on EN751221 SoC.
+>> +  The PCIe PHY supports physical layer functionality for PCIe Gen1 and
+>> +  Gen1/Gen2 ports. On these SoCs, port 0 is a Gen1-only port while
+>> +  port 1 is Gen1/Gen2 capable.
 >> +
 >> +properties:
 >> +  compatible:
->> +    items:
->> +      - const: econet,en751221-chip-scu
->> +      - const: syscon
-> And it does not fit existing syscon bindings file, because ... ?
+>> +    enum:
+>> +      - econet,en751221-pcie-phy0
+>> +      - econet,en751221-pcie-phy1
+> What is the difference between phy0 and phy1? This must be explicitly
+> explained in the description.
+>
+> If phy1 means "port 1" (although first sentence disagrees, because it
+> says that THE SAME phy supports two ports), then the names aren't -gen1
+> and -gen2? Or what are other differences?
 
 
-If you're asking why it needs to be named "econet,en751221-chip-scu" and 
-not just "syscon", it's because the actual clock/scu searches for it by 
-compatible. This is patterned after "airoha,en7581-chip-scu" ( 
-https://lore.kernel.org/20241023-en7581-pinctrl-v9-1-afb0cbcab0ec@kernel.org 
-).
+In practice, port0 is gen1 only and port1 is gen1/2. But I suppose it 
+makes sense to specify them as gen1 and gen2, so that fact is documented 
+in the DT.
 
-I could drop this file and use "airoha,en7581-chip-scu" in the DT and 
-clk driver, but I do not think it is identical to the actual EN7581 chip 
-scu.
 
-I could also drop the file and add "econet,en751221-chip-scu" as a 
-compatible to airoha,en7581-chip-scu.yaml, but that file lives in /arm 
-and this is a MIPS.
-
-I chose this route because it seemed least hackish, but I would defer to 
-your judgement on the matter.
-
+>
+>> +      - econet,en7528-pcie-phy0
+>> +      - econet,en7528-pcie-phy1
 >> +
 >> +  reg:
 >> +    maxItems: 1
 >> +
+>> +  "#phy-cells":
+>> +    const: 0
+>> +
 >> +required:
 >> +  - compatible
 >> +  - reg
+>> +  - '#phy-cells'
+> Use consisent quotes.
+
+OK
+
+>
 >> +
 >> +additionalProperties: false
 >> +
 >> +examples:
 >> +  - |
+>> +    #include <dt-bindings/phy/phy.h>
+> Where do you use it here?
+Whoops, I think I daydreamed that it was needed for "#phy-cells", will 
+drop.
+>
 >> +    soc {
 >> +      #address-cells = <1>;
 >> +      #size-cells = <1>;
->> +      syscon@1fa20000 {
->> +        compatible = "econet,en751221-chip-scu", "syscon";
->> +        reg = <0x1fa20000 0x388>;
->> +      };
->> +    };
-> ...
->
 >> +
->> +#define EN751221_MAX_CLKS	6
-> Drop, not a binding.
+>> +      pcie_phy0: pcie-phy@1faf2000 {
+> Drop unused label.
 OK
 >
+>> +        compatible = "econet,en7528-pcie-phy0";
+>> +        reg = <0x1faf2000 0x1000>;
+>> +        #phy-cells = <0>;
+>> +      };
 >> +
->> +#endif /* _DT_BINDINGS_CLOCK_ECONET_EN751221_SCU_H_ */
->> diff --git a/include/dt-bindings/reset/econet,en751221-scu.h b/include/dt-bindings/reset/econet,en751221-scu.h
->> new file mode 100644
+>> +      pcie_phy1: pcie-phy@1fac0000 {
+>> +        compatible = "econet,en7528-pcie-phy1";
+> Drop node, same as previous one.
+
+OK
 
 
-Thank you kindly for the prompt review.
+Thanks for the review.
 
 Caleb
 
 
+>
 > Best regards,
 > Krzysztof
->
 >
 
