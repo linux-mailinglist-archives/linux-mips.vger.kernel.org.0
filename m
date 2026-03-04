@@ -1,60 +1,60 @@
-Return-Path: <linux-mips+bounces-13373-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13374-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id UOBFDLtQqGnUtAAAu9opvQ
-	(envelope-from <linux-mips+bounces-13373-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 04 Mar 2026 16:33:15 +0100
+	id eGQxM+tRqGnUtAAAu9opvQ
+	(envelope-from <linux-mips+bounces-13374-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Wed, 04 Mar 2026 16:38:19 +0100
 X-Original-To: lists+linux-mips@lfdr.de
-Received: from sea.lore.kernel.org (sea.lore.kernel.org [172.234.253.10])
-	by mail.lfdr.de (Postfix) with ESMTPS id C67D3202C8B
-	for <lists+linux-mips@lfdr.de>; Wed, 04 Mar 2026 16:33:14 +0100 (CET)
+Received: from sin.lore.kernel.org (sin.lore.kernel.org [104.64.211.4])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3501202ED6
+	for <lists+linux-mips@lfdr.de>; Wed, 04 Mar 2026 16:38:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by sea.lore.kernel.org (Postfix) with ESMTP id 54FA3319BED4
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Mar 2026 15:26:56 +0000 (UTC)
+	by sin.lore.kernel.org (Postfix) with ESMTP id 59EC23053F35
+	for <lists+linux-mips@lfdr.de>; Wed,  4 Mar 2026 15:27:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C640934574B;
-	Wed,  4 Mar 2026 15:26:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6A1634676D;
+	Wed,  4 Mar 2026 15:26:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="27ZQJdit"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="z3xwlXst"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from smtpout-04.galae.net (smtpout-04.galae.net [185.171.202.116])
+Received: from smtpout-02.galae.net (smtpout-02.galae.net [185.246.84.56])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3559344DB6;
-	Wed,  4 Mar 2026 15:26:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.171.202.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 00A06345CA2;
+	Wed,  4 Mar 2026 15:26:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.246.84.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772637975; cv=none; b=K7n+/cA7M6Z07EIC2/tydTL9EpsbanCWwF0RkztIMf8FsVrMcbu2cHbni6fp+BAwwhdFOKwU2eI3shD05x83TE/0U8Rc3vQqmOhLlEJJlV9OqyId3lknGZFB0jw7G6aWt67vsDbyXz3YQ7GpmrKNizQKHUD3+78hW/T4MdlMcpk=
+	t=1772637977; cv=none; b=d7dYbUQne977WkdGfxTpq22wwfcYwTz+MJV+xiKClndEziAtLZ/84sGLP03Svdanjft3nYr40t3Gp8PAXIbMElvOiX7rk5EazjoAKsGgx33UXHWP9iAh9ZKS/NjWdEn9TDmMVgUO2qjH/I2i7tYk2upAwZzrPL671xZOkjhhJVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772637975; c=relaxed/simple;
-	bh=SGp8w+BficYHO7a2Mudr7CsHQw+9zgg5XylVp0D6w9M=;
+	s=arc-20240116; t=1772637977; c=relaxed/simple;
+	bh=mU8ekUTdHkYgIVzsjccTrmzOF82uulxU2fGc/NOA8YU=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=cZmhPKwqf2MMC/7mDJdR45J8qyO/nMmju+6osylgy5tgNJp595SEiiMYaseV+htO/up9VUB6RL+2ml8e6EylJ+leRTuIDGD3Lo+5rp1eq3L3VxUzGzFFcOceqjI7ooQSnfJ+cbAcykYGjn4vlkhZ470oAWC/qRRGIEC87vaEPjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=27ZQJdit; arc=none smtp.client-ip=185.171.202.116
+	 In-Reply-To:To:Cc; b=mmzERC4LhoUj2SgqlGsbMaOZ46H160xpJ2Xr3Q0yiwmj9QVSkWhs7R2/3eblwdV1flNVY7J7lt6cPoRRGsDRcFnuVIruPQTbySWW8wXFdfXS5hfRESnbe6sFjCAZJCuI5/eJSe+XvvwfTIUpVAJjrjT5btH2gA7Rr/awTHRnvjw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=z3xwlXst; arc=none smtp.client-ip=185.246.84.56
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
 Received: from smtpout-01.galae.net (smtpout-01.galae.net [212.83.139.233])
-	by smtpout-04.galae.net (Postfix) with ESMTPS id 9850AC143ED;
-	Wed,  4 Mar 2026 15:26:30 +0000 (UTC)
+	by smtpout-02.galae.net (Postfix) with ESMTPS id 8B5A51A2C96;
+	Wed,  4 Mar 2026 15:26:14 +0000 (UTC)
 Received: from mail.galae.net (mail.galae.net [212.83.136.155])
-	by smtpout-01.galae.net (Postfix) with ESMTPS id 6F7EA5FF5C;
-	Wed,  4 Mar 2026 15:26:12 +0000 (UTC)
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id E2D68103697AE;
-	Wed,  4 Mar 2026 16:26:09 +0100 (CET)
+	by smtpout-01.galae.net (Postfix) with ESMTPS id 5FF295FF5C;
+	Wed,  4 Mar 2026 15:26:14 +0000 (UTC)
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id C8061103697E4;
+	Wed,  4 Mar 2026 16:26:11 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=dkim;
-	t=1772637971; h=from:subject:date:message-id:to:cc:mime-version:content-type:
+	t=1772637973; h=from:subject:date:message-id:to:cc:mime-version:content-type:
 	 content-transfer-encoding:in-reply-to:references;
-	bh=dXTSa7BaT59UEneJorn5bp8FmJZ+icUDt/kGdiKrt48=;
-	b=27ZQJditsQPnSlpvnD+SRTNqOYpXgaqWRiCDHeBzHp7mM3JyjVRsKbTG5THB1HSHae4X0s
-	FHndPQV+U1uRU9iIOzotflCBAyollqYyGIiH0IDEIHMDJEDbqof4NZHviUx1g2lWYr21N6
-	91pOKqEBTF3ftoMzuU0CL11suhfOA3gpHL0boJftiPrGOdfyFpXgrCj6kpOlkhRIu1Cjdy
-	8Vylmkk9zcK/kQ98cwSpBcMuKYmNVXHcDFFfNpOC+8zBXNaA4FJxOa/Zx0meIyFzJz3Y6q
-	GrDyoVTop0ZSaXiQoftqpTbXrL8Eo/yObXwchqj4e+MsZswKo+TKSm/zj2PTwA==
+	bh=0cM+6IDy1jw+gjzAoKZGHr/Y6If8ERVEGxyphiG9HKY=;
+	b=z3xwlXst4od0NVOG5D8Dj1vLGVYd/2KBNBOQiQq1I+EEvk7ZuMhdIzomfI4XijVXqS3rRF
+	860l4EraGnZxe7sPOPvGIS1ni9g9UGH2s5BZaQHLIsEppLjQBblbI7Q95G5eiqG0zLaUjU
+	kuYvJlKtR3+9leAUJbjjNI8WmWeJjgSbHu5bQV1fL1+bTztHvnFGyBCtTTrao0/h/Oho1n
+	1C044dOiKqcYf6Vm5TFIMQKJTVMmTC1Z0goVPhYTTOEVUiPwZ6xhda3S/q/KyH4WAHIaCS
+	e/1rt4+YbSPh3ObhGQ8M8RTnwxLsDv+x9zCKrPbA+h6+3QkJU6EK5oYyuftBgw==
 From: =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
-Date: Wed, 04 Mar 2026 16:25:21 +0100
-Subject: [PATCH v4 07/10] clk: eyeq: Convert clocks declaration to
- eqc_clock
+Date: Wed, 04 Mar 2026 16:25:22 +0100
+Subject: [PATCH v4 08/10] clk: eyeq: Drop PLL, dividers, and fixed factors
+ structs
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
@@ -63,7 +63,7 @@ List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20260304-clk-eyeq7-v4-7-9d6bd9d24bec@bootlin.com>
+Message-Id: <20260304-clk-eyeq7-v4-8-9d6bd9d24bec@bootlin.com>
 References: <20260304-clk-eyeq7-v4-0-9d6bd9d24bec@bootlin.com>
 In-Reply-To: <20260304-clk-eyeq7-v4-0-9d6bd9d24bec@bootlin.com>
 To: Vladimir Kondratiev <vladimir.kondratiev@mobileye.com>, 
@@ -82,18 +82,18 @@ Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
  =?utf-8?q?Beno=C3=AEt_Monin?= <benoit.monin@bootlin.com>
 X-Mailer: b4 0.14.3
 X-Last-TLS-Session-Version: TLSv1.3
-X-Rspamd-Queue-Id: C67D3202C8B
+X-Rspamd-Queue-Id: F3501202ED6
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-0.66 / 15.00];
 	SUSPICIOUS_RECIPS(1.50)[];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
 	DMARC_POLICY_ALLOW(-0.50)[bootlin.com,reject];
 	R_DKIM_ALLOW(-0.20)[bootlin.com:s=dkim];
-	R_SPF_ALLOW(-0.20)[+ip4:172.234.253.10:c];
+	R_SPF_ALLOW(-0.20)[+ip4:104.64.211.4:c];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13373-lists,linux-mips=lfdr.de];
+	TAGGED_FROM(0.00)[bounces-13374-lists,linux-mips=lfdr.de];
 	FROM_HAS_DN(0.00)[];
 	RECEIVED_HELO_LOCALHOST(0.00)[];
 	FORGED_SENDER_MAILLIST(0.00)[];
@@ -101,7 +101,7 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	RCPT_COUNT_TWELVE(0.00)[21];
 	MIME_TRACE(0.00)[0:+];
 	DKIM_TRACE(0.00)[bootlin.com:+];
-	ASN(0.00)[asn:63949, ipnet:172.234.224.0/19, country:SG];
+	ASN(0.00)[asn:63949, ipnet:104.64.192.0/19, country:SG];
 	TO_DN_SOME(0.00)[];
 	RCVD_COUNT_FIVE(0.00)[6];
 	PRECEDENCE_BULK(0.00)[];
@@ -111,492 +111,280 @@ X-Spamd-Result: default: False [-0.66 / 15.00];
 	TAGGED_RCPT(0.00)[linux-mips,dt];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[sea.lore.kernel.org:rdns,sea.lore.kernel.org:helo,bootlin.com:dkim,bootlin.com:email,bootlin.com:mid]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[bootlin.com:dkim,bootlin.com:email,bootlin.com:mid,sin.lore.kernel.org:rdns,sin.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-Convert all declarations of PLLs, dividers, and fixed factors to struct
-eqc_clock for the EyeQ5, EyeQ6H, EyeQ6L, and EyeQ6Lplus, both for the
-match data used during probe and the early match data used in early
+Now that there are no users of the eqc_pll, eqc_div, and eqc_fixed_factor
+structures since they have been converted to eqc_clock, remove these
+structs and the code related to their parsing in probe and early
 initialization.
-
-Tested on the EyeQ5, EyeQ6H and EyeQ6Lplus evaluation boards. For the
-EyeQ6Lplus and EyeQ6H, the clock tree is unchanged. For the EyeQ5,
-this change allows us to set the parent of some probed dividers and
-fixed factors by name as they refer to clocks registered in early
-init. While these clocks were previously orphaned, they were not yet
-used by a peripheral.
 
 Signed-off-by: Benoît Monin <benoit.monin@bootlin.com>
 ---
- drivers/clk/clk-eyeq.c | 354 +++++++++++++++++++------------------------------
- 1 file changed, 135 insertions(+), 219 deletions(-)
+ drivers/clk/clk-eyeq.c | 192 +------------------------------------------------
+ 1 file changed, 3 insertions(+), 189 deletions(-)
 
 diff --git a/drivers/clk/clk-eyeq.c b/drivers/clk/clk-eyeq.c
-index 623b1d3f041d..7f9f4f68366e 100644
+index 7f9f4f68366e..83c6f5002451 100644
 --- a/drivers/clk/clk-eyeq.c
 +++ b/drivers/clk/clk-eyeq.c
-@@ -572,23 +572,6 @@ static int eqc_probe(struct platform_device *pdev)
- 		.pll.reg = _reg,					\
+@@ -78,33 +78,6 @@
+ #define PARENT_BY_FWNAME			(-1)
+ #define PARENT_BY_NAME				(-2)
+ 
+-struct eqc_pll {
+-	unsigned int	index;
+-	const char	*name;
+-	unsigned int	reg64;
+-};
+-
+-/*
+- * Divider clock. Divider is 2*(v+1), with v the register value.
+- * Min divider is 2, max is 2*(2^width).
+- */
+-struct eqc_div {
+-	unsigned int	index;
+-	const char	*name;
+-	unsigned int	parent;
+-	unsigned int	reg;
+-	u8		shift;
+-	u8		width;
+-};
+-
+-struct eqc_fixed_factor {
+-	unsigned int	index;
+-	const char	*name;
+-	unsigned int	mult;
+-	unsigned int	div;
+-	unsigned int	parent;
+-};
+-
+ struct eqc_clock {
+ 	int		index;
+ 	int		parent_idx;
+@@ -132,15 +105,6 @@ struct eqc_clock {
+ };
+ 
+ struct eqc_match_data {
+-	unsigned int		pll_count;
+-	const struct eqc_pll	*plls;
+-
+-	unsigned int		div_count;
+-	const struct eqc_div	*divs;
+-
+-	unsigned int			fixed_factor_count;
+-	const struct eqc_fixed_factor	*fixed_factors;
+-
+ 	unsigned int		clk_count;
+ 	const struct eqc_clock	*clks;
+ 
+@@ -152,12 +116,6 @@ struct eqc_match_data {
+ };
+ 
+ struct eqc_early_match_data {
+-	unsigned int		early_pll_count;
+-	const struct eqc_pll	*early_plls;
+-
+-	unsigned int			early_fixed_factor_count;
+-	const struct eqc_fixed_factor	*early_fixed_factors;
+-
+ 	unsigned int		early_clk_count;
+ 	const struct eqc_clock	*early_clks;
+ 
+@@ -270,97 +228,6 @@ static int eqc_pll_parse_fracg(void __iomem *base, unsigned long *mult,
+ 	return 0;
+ }
+ 
+-static void eqc_probe_init_plls(struct device *dev, const struct eqc_match_data *data,
+-				void __iomem *base, struct clk_hw_onecell_data *cells)
+-{
+-	unsigned long mult, div, acc;
+-	const struct eqc_pll *pll;
+-	struct clk_hw *hw;
+-	unsigned int i;
+-	int ret;
+-
+-	for (i = 0; i < data->pll_count; i++) {
+-		pll = &data->plls[i];
+-
+-		ret = eqc_pll_parse_fracg(base + pll->reg64, &mult, &div, &acc);
+-		if (ret) {
+-			dev_warn(dev, "failed parsing state of %s\n", pll->name);
+-			cells->hws[pll->index] = ERR_PTR(ret);
+-			continue;
+-		}
+-
+-		hw = clk_hw_register_fixed_factor_with_accuracy_fwname(dev,
+-				dev->of_node, pll->name, "ref", 0, mult, div, acc);
+-		cells->hws[pll->index] = hw;
+-		if (IS_ERR(hw))
+-			dev_warn(dev, "failed registering %s: %pe\n", pll->name, hw);
+-	}
+-}
+-
+-static void eqc_probe_init_divs(struct device *dev, const struct eqc_match_data *data,
+-				void __iomem *base, struct clk_hw_onecell_data *cells)
+-{
+-	struct clk_parent_data parent_data = { };
+-	const struct eqc_div *div;
+-	struct clk_hw *parent;
+-	void __iomem *reg;
+-	struct clk_hw *hw;
+-	unsigned int i;
+-
+-	for (i = 0; i < data->div_count; i++) {
+-		div = &data->divs[i];
+-		reg = base + div->reg;
+-		parent = cells->hws[div->parent];
+-
+-		if (IS_ERR(parent)) {
+-			/* Parent is in early clk provider. */
+-			parent_data.index = div->parent;
+-			parent_data.hw = NULL;
+-		} else {
+-			/* Avoid clock lookup when we already have the hw reference. */
+-			parent_data.index = 0;
+-			parent_data.hw = parent;
+-		}
+-
+-		hw = clk_hw_register_divider_table_parent_data(dev, div->name,
+-				&parent_data, 0, reg, div->shift, div->width,
+-				CLK_DIVIDER_EVEN_INTEGERS, NULL, NULL);
+-		cells->hws[div->index] = hw;
+-		if (IS_ERR(hw))
+-			dev_warn(dev, "failed registering %s: %pe\n",
+-				 div->name, hw);
+-	}
+-}
+-
+-static void eqc_probe_init_fixed_factors(struct device *dev,
+-					 const struct eqc_match_data *data,
+-					 struct clk_hw_onecell_data *cells)
+-{
+-	const struct eqc_fixed_factor *ff;
+-	struct clk_hw *hw, *parent_hw;
+-	unsigned int i;
+-
+-	for (i = 0; i < data->fixed_factor_count; i++) {
+-		ff = &data->fixed_factors[i];
+-		parent_hw = cells->hws[ff->parent];
+-
+-		if (IS_ERR(parent_hw)) {
+-			/* Parent is in early clk provider. */
+-			hw = clk_hw_register_fixed_factor_index(dev, ff->name,
+-					ff->parent, 0, ff->mult, ff->div);
+-		} else {
+-			/* Avoid clock lookup when we already have the hw reference. */
+-			hw = clk_hw_register_fixed_factor_parent_hw(dev, ff->name,
+-					parent_hw, 0, ff->mult, ff->div);
+-		}
+-
+-		cells->hws[ff->index] = hw;
+-		if (IS_ERR(hw))
+-			dev_warn(dev, "failed registering %s: %pe\n",
+-				 ff->name, hw);
+-	}
+-}
+-
+ static void eqc_auxdev_create_optional(struct device *dev, void __iomem *base,
+ 				       const char *name)
+ {
+@@ -498,12 +365,10 @@ static int eqc_probe(struct platform_device *pdev)
+ 	eqc_auxdev_create_optional(dev, base, data->pinctrl_auxdev_name);
+ 	eqc_auxdev_create_optional(dev, base, data->eth_phy_auxdev_name);
+ 
+-	if (data->pll_count + data->div_count + data->fixed_factor_count + data->clk_count == 0)
++	if (data->clk_count == 0)
+ 		return 0; /* Zero clocks, we are done. */
+ 
+-	clk_count = data->pll_count + data->div_count +
+-		    data->fixed_factor_count + data->clk_count +
+-		    data->early_clk_count;
++	clk_count = data->clk_count + data->early_clk_count;
+ 	cells = kzalloc_flex(*cells, hws, clk_count);
+ 	if (!cells)
+ 		return -ENOMEM;
+@@ -514,12 +379,6 @@ static int eqc_probe(struct platform_device *pdev)
+ 	for (i = 0; i < clk_count; i++)
+ 		cells->hws[i] = ERR_PTR(-EINVAL);
+ 
+-	eqc_probe_init_plls(dev, data, base, cells);
+-
+-	eqc_probe_init_divs(dev, data, base, cells);
+-
+-	eqc_probe_init_fixed_factors(dev, data, cells);
+-
+ 	for (i = 0; i < data->clk_count; i++) {
+ 		const struct eqc_clock *clk = &data->clks[i];
+ 
+@@ -869,8 +728,7 @@ static void __init eqc_early_init(struct device_node *np,
+ 	void __iomem *base;
+ 	int ret;
+ 
+-	clk_count = early_data->early_pll_count + early_data->early_fixed_factor_count +
+-		    early_data->early_clk_count + early_data->late_clk_count;
++	clk_count = early_data->early_clk_count + early_data->late_clk_count;
+ 	cells = kzalloc_flex(*cells, hws, clk_count);
+ 	if (!cells) {
+ 		ret = -ENOMEM;
+@@ -896,42 +754,6 @@ static void __init eqc_early_init(struct device_node *np,
+ 		goto err;
  	}
  
--/* Required early for GIC timer (pll-cpu) and UARTs (pll-per). */
--static const struct eqc_pll eqc_eyeq5_early_plls[] = {
--	{ .index = EQ5C_PLL_CPU, .name = "pll-cpu",  .reg64 = 0x02C },
--	{ .index = EQ5C_PLL_PER, .name = "pll-per",  .reg64 = 0x05C },
--};
+-	for (i = 0; i < early_data->early_pll_count; i++) {
+-		const struct eqc_pll *pll = &early_data->early_plls[i];
+-		unsigned long mult, div, acc;
+-		struct clk_hw *hw;
 -
--static const struct eqc_pll eqc_eyeq5_plls[] = {
--	{ .index = EQ5C_PLL_VMP,  .name = "pll-vmp",  .reg64 = 0x034 },
--	{ .index = EQ5C_PLL_PMA,  .name = "pll-pma",  .reg64 = 0x03C },
--	{ .index = EQ5C_PLL_VDI,  .name = "pll-vdi",  .reg64 = 0x044 },
--	{ .index = EQ5C_PLL_DDR0, .name = "pll-ddr0", .reg64 = 0x04C },
--	{ .index = EQ5C_PLL_PCI,  .name = "pll-pci",  .reg64 = 0x054 },
--	{ .index = EQ5C_PLL_PMAC, .name = "pll-pmac", .reg64 = 0x064 },
--	{ .index = EQ5C_PLL_MPC,  .name = "pll-mpc",  .reg64 = 0x06C },
--	{ .index = EQ5C_PLL_DDR1, .name = "pll-ddr1", .reg64 = 0x074 },
--};
+-		ret = eqc_pll_parse_fracg(base + pll->reg64, &mult, &div, &acc);
+-		if (ret) {
+-			pr_err("failed parsing state of %s\n", pll->name);
+-			goto err;
+-		}
 -
- enum {
- 	/*
- 	 * EQ5C_PLL_CPU children.
-@@ -626,263 +609,206 @@ enum {
- 	EQ5C_PER_FCMU_A,
- };
- 
--static const struct eqc_fixed_factor eqc_eyeq5_early_fixed_factors[] = {
--	/* EQ5C_PLL_CPU children */
--	{ EQ5C_CPU_OCC,		"occ-cpu",	1, 1,	EQ5C_PLL_CPU },
--	{ EQ5C_CPU_SI_CSS0,	"si-css0",	1, 1,	EQ5C_CPU_OCC },
--	{ EQ5C_CPU_CORE0,	"core0",	1, 1,	EQ5C_CPU_SI_CSS0 },
--	{ EQ5C_CPU_CORE1,	"core1",	1, 1,	EQ5C_CPU_SI_CSS0 },
--	{ EQ5C_CPU_CORE2,	"core2",	1, 1,	EQ5C_CPU_SI_CSS0 },
--	{ EQ5C_CPU_CORE3,	"core3",	1, 1,	EQ5C_CPU_SI_CSS0 },
-+/* Required early for GIC timer (pll-cpu) and UARTs (pll-per). */
-+static const struct eqc_clock eqc_eyeq5_early_clks[] = {
-+	PLL_FRACG(EQ5C_PLL_CPU, PARENT_BY_FWNAME, "pll-cpu", "ref", 0x02C),
-+	PLL_FRACG(EQ5C_PLL_PER, PARENT_BY_FWNAME, "pll-per", "ref", 0x05C),
- 
--	/* EQ5C_PLL_PER children */
--	{ EQ5C_PER_OCC,		"occ-periph",	1, 16,	EQ5C_PLL_PER },
--	{ EQ5C_PER_UART,	"uart",		1, 1,	EQ5C_PER_OCC },
-+	FF(EQ5C_CPU_OCC, EQ5C_PLL_CPU, "occ-cpu", NULL, 1, 1),
-+	FF(EQ5C_CPU_SI_CSS0, EQ5C_CPU_OCC, "si-css0", NULL, 1, 1),
-+	FF(EQ5C_CPU_CORE0, EQ5C_CPU_SI_CSS0, "core0", NULL, 1, 1),
-+	FF(EQ5C_CPU_CORE1, EQ5C_CPU_SI_CSS0, "core1", NULL, 1, 1),
-+	FF(EQ5C_CPU_CORE2, EQ5C_CPU_SI_CSS0, "core2", NULL, 1, 1),
-+	FF(EQ5C_CPU_CORE3, EQ5C_CPU_SI_CSS0, "core3", NULL, 1, 1),
-+
-+	FF(EQ5C_PER_OCC, EQ5C_PLL_PER, "occ-periph", NULL, 1, 16),
-+	FF(EQ5C_PER_UART, EQ5C_PER_OCC, "uart", NULL, 1, 1),
- };
- 
--static const struct eqc_fixed_factor eqc_eyeq5_fixed_factors[] = {
--	/* EQ5C_PLL_CPU children */
--	{ EQ5C_CPU_CPC,		"cpc",		1, 1,	EQ5C_CPU_SI_CSS0 },
--	{ EQ5C_CPU_CM,		"cm",		1, 1,	EQ5C_CPU_SI_CSS0 },
--	{ EQ5C_CPU_MEM,		"mem",		1, 1,	EQ5C_CPU_SI_CSS0 },
--	{ EQ5C_CPU_OCC_ISRAM,	"occ-isram",	1, 2,	EQ5C_PLL_CPU },
--	{ EQ5C_CPU_ISRAM,	"isram",	1, 1,	EQ5C_CPU_OCC_ISRAM },
--	{ EQ5C_CPU_OCC_DBU,	"occ-dbu",	1, 10,	EQ5C_PLL_CPU },
--	{ EQ5C_CPU_SI_DBU_TP,	"si-dbu-tp",	1, 1,	EQ5C_CPU_OCC_DBU },
-+static const struct eqc_clock eqc_eyeq5_clks[] = {
-+	PLL_FRACG(EQ5C_PLL_VMP, PARENT_BY_FWNAME, "pll-vmp", "ref", 0x034),
-+	PLL_FRACG(EQ5C_PLL_PMA, PARENT_BY_FWNAME, "pll-pma", "ref", 0x03C),
-+	PLL_FRACG(EQ5C_PLL_VDI, PARENT_BY_FWNAME, "pll-vdi", "ref", 0x044),
-+	PLL_FRACG(EQ5C_PLL_DDR0, PARENT_BY_FWNAME, "pll-ddr0", "ref", 0x04C),
-+	PLL_FRACG(EQ5C_PLL_PCI, PARENT_BY_FWNAME, "pll-pci", "ref", 0x054),
-+	PLL_FRACG(EQ5C_PLL_PMAC, PARENT_BY_FWNAME, "pll-pmac", "ref", 0x064),
-+	PLL_FRACG(EQ5C_PLL_MPC, PARENT_BY_FWNAME, "pll-mpc", "ref", 0x06C),
-+	PLL_FRACG(EQ5C_PLL_DDR1, PARENT_BY_FWNAME, "pll-ddr1", "ref", 0x074),
- 
--	/* EQ5C_PLL_VDI children */
--	{ EQ5C_VDI_OCC_VDI,	"occ-vdi",	1, 2,	EQ5C_PLL_VDI },
--	{ EQ5C_VDI_VDI,		"vdi",		1, 1,	EQ5C_VDI_OCC_VDI },
--	{ EQ5C_VDI_OCC_CAN_SER,	"occ-can-ser",	1, 16,	EQ5C_PLL_VDI },
--	{ EQ5C_VDI_CAN_SER,	"can-ser",	1, 1,	EQ5C_VDI_OCC_CAN_SER },
--	{ EQ5C_VDI_I2C_SER,	"i2c-ser",	1, 20,	EQ5C_PLL_VDI },
-+	DIV(EQ5C_DIV_OSPI, PARENT_BY_NAME, "div-ospi", "pll-per", 0x11C, 0, 4, NULL),
- 
--	/* EQ5C_PLL_PER children */
--	{ EQ5C_PER_PERIPH,	"periph",	1, 1,	EQ5C_PER_OCC },
--	{ EQ5C_PER_CAN,		"can",		1, 1,	EQ5C_PER_OCC },
--	{ EQ5C_PER_SPI,		"spi",		1, 1,	EQ5C_PER_OCC },
--	{ EQ5C_PER_I2C,		"i2c",		1, 1,	EQ5C_PER_OCC },
--	{ EQ5C_PER_TIMER,	"timer",	1, 1,	EQ5C_PER_OCC },
--	{ EQ5C_PER_GPIO,	"gpio",		1, 1,	EQ5C_PER_OCC },
--	{ EQ5C_PER_EMMC,	"emmc-sys",	1, 10,	EQ5C_PLL_PER },
--	{ EQ5C_PER_CCF,		"ccf-ctrl",	1, 4,	EQ5C_PLL_PER },
--	{ EQ5C_PER_OCC_MJPEG,	"occ-mjpeg",	1, 2,	EQ5C_PLL_PER },
--	{ EQ5C_PER_HSM,		"hsm",		1, 1,	EQ5C_PER_OCC_MJPEG },
--	{ EQ5C_PER_MJPEG,	"mjpeg",	1, 1,	EQ5C_PER_OCC_MJPEG },
--	{ EQ5C_PER_FCMU_A,	"fcmu-a",	1, 20,	EQ5C_PLL_PER },
--	{ EQ5C_PER_OCC_PCI,	"occ-pci-sys",	1, 8,	EQ5C_PLL_PER },
--};
-+	FF(EQ5C_CPU_CPC, PARENT_BY_NAME, "cpc", "si-css0", 1, 1),
-+	FF(EQ5C_CPU_CM, PARENT_BY_NAME, "cm", "si-css0", 1, 1),
-+	FF(EQ5C_CPU_MEM, PARENT_BY_NAME, "mem", "si-css0", 1, 1),
-+	FF(EQ5C_CPU_OCC_ISRAM, PARENT_BY_NAME, "occ-isram", "pll-cpu", 1, 2),
-+	FF(EQ5C_CPU_ISRAM, EQ5C_CPU_OCC_ISRAM, "isram", NULL, 1, 1),
-+	FF(EQ5C_CPU_OCC_DBU, PARENT_BY_NAME, "occ-dbu", "pll-cpu", 1, 10),
-+	FF(EQ5C_CPU_SI_DBU_TP, EQ5C_CPU_OCC_DBU, "si-dbu-tp", NULL, 1, 1),
- 
--static const struct eqc_div eqc_eyeq5_divs[] = {
--	{
--		.index = EQ5C_DIV_OSPI,
--		.name = "div-ospi",
--		.parent = EQ5C_PLL_PER,
--		.reg = 0x11C,
--		.shift = 0,
--		.width = 4,
--	},
-+	FF(EQ5C_VDI_OCC_VDI, PARENT_BY_NAME, "occ-vdi", "pll-vdi", 1, 2),
-+	FF(EQ5C_VDI_VDI, EQ5C_VDI_OCC_VDI, "vdi", NULL, 1, 1),
-+	FF(EQ5C_VDI_OCC_CAN_SER, PARENT_BY_NAME, "occ-can-ser", "pll-vdi", 1, 16),
-+	FF(EQ5C_VDI_CAN_SER, EQ5C_VDI_OCC_CAN_SER, "can-ser", NULL, 1, 1),
-+	FF(EQ5C_VDI_I2C_SER, PARENT_BY_NAME, "i2c-ser", "pll-vdi", 1, 20),
-+
-+	FF(EQ5C_PER_PERIPH, PARENT_BY_NAME, "periph", "occ-periph", 1, 1),
-+	FF(EQ5C_PER_CAN, PARENT_BY_NAME, "can", "occ-periph", 1, 1),
-+	FF(EQ5C_PER_SPI, PARENT_BY_NAME, "spi", "occ-periph", 1, 1),
-+	FF(EQ5C_PER_I2C, PARENT_BY_NAME, "i2c", "occ-periph", 1, 1),
-+	FF(EQ5C_PER_TIMER, PARENT_BY_NAME, "timer", "occ-periph", 1, 1),
-+	FF(EQ5C_PER_GPIO, PARENT_BY_NAME, "gpio", "occ-periph", 1, 1),
-+	FF(EQ5C_PER_EMMC, PARENT_BY_NAME, "emmc-sys", "pll-per", 1, 10),
-+	FF(EQ5C_PER_CCF, PARENT_BY_NAME, "ccf-ctrl", "pll-per", 1, 4),
-+	FF(EQ5C_PER_OCC_MJPEG, PARENT_BY_NAME, "occ-mjpeg", "pll-per", 1, 2),
-+	FF(EQ5C_PER_HSM, EQ5C_PER_OCC_MJPEG, "hsm", NULL, 1, 1),
-+	FF(EQ5C_PER_MJPEG, EQ5C_PER_OCC_MJPEG, "mjpeg", NULL, 1, 1),
-+	FF(EQ5C_PER_FCMU_A, PARENT_BY_NAME, "fcmu-a", "pll-per", 1, 20),
-+	FF(EQ5C_PER_OCC_PCI, PARENT_BY_NAME, "occ-pci-sys", "pll-per", 1, 8),
- };
- 
- static const struct eqc_early_match_data eqc_eyeq5_early_match_data __initconst = {
--	.early_pll_count	= ARRAY_SIZE(eqc_eyeq5_early_plls),
--	.early_plls		= eqc_eyeq5_early_plls,
-+	.early_clk_count	= ARRAY_SIZE(eqc_eyeq5_early_clks),
-+	.early_clks		= eqc_eyeq5_early_clks,
- 
--	.early_fixed_factor_count	= ARRAY_SIZE(eqc_eyeq5_early_fixed_factors),
--	.early_fixed_factors		= eqc_eyeq5_early_fixed_factors,
+-		hw = clk_hw_register_fixed_factor_with_accuracy_fwname(NULL,
+-				np, pll->name, "ref", 0, mult, div, acc);
+-		cells->hws[pll->index] = hw;
+-		if (IS_ERR(hw)) {
+-			pr_err("failed registering %s: %pe\n", pll->name, hw);
+-			ret = PTR_ERR(hw);
+-			goto err;
+-		}
+-	}
 -
--	.late_clk_count		= ARRAY_SIZE(eqc_eyeq5_plls) + ARRAY_SIZE(eqc_eyeq5_divs) +
--				  ARRAY_SIZE(eqc_eyeq5_fixed_factors),
-+	.late_clk_count		= ARRAY_SIZE(eqc_eyeq5_clks),
- };
- 
- static const struct eqc_match_data eqc_eyeq5_match_data = {
--	.pll_count	= ARRAY_SIZE(eqc_eyeq5_plls),
--	.plls		= eqc_eyeq5_plls,
+-	for (i = 0; i < early_data->early_fixed_factor_count; i++) {
+-		const struct eqc_fixed_factor *ff = &early_data->early_fixed_factors[i];
+-		struct clk_hw *parent_hw = cells->hws[ff->parent];
+-		struct clk_hw *hw;
 -
--	.div_count	= ARRAY_SIZE(eqc_eyeq5_divs),
--	.divs		= eqc_eyeq5_divs,
+-		hw = clk_hw_register_fixed_factor_parent_hw(NULL, ff->name,
+-				parent_hw, 0, ff->mult, ff->div);
+-		cells->hws[ff->index] = hw;
+-		if (IS_ERR(hw)) {
+-			pr_err("failed registering %s: %pe\n", ff->name, hw);
+-			ret = PTR_ERR(hw);
+-			goto err;
+-		}
+-	}
 -
--	.fixed_factor_count	= ARRAY_SIZE(eqc_eyeq5_fixed_factors),
--	.fixed_factors		= eqc_eyeq5_fixed_factors,
-+	.clk_count	= ARRAY_SIZE(eqc_eyeq5_clks),
-+	.clks		= eqc_eyeq5_clks,
+ 	for (i = 0; i < early_data->early_clk_count; i++) {
+ 		const struct eqc_clock *clk = &early_data->early_clks[i];
  
- 	.reset_auxdev_name = "reset",
- 	.pinctrl_auxdev_name = "pinctrl",
- 	.eth_phy_auxdev_name = "phy",
+@@ -966,14 +788,6 @@ static void __init eqc_early_init(struct device_node *np,
+ 	if (cells) {
+ 		of_clk_del_provider(np);
  
--	.early_clk_count = ARRAY_SIZE(eqc_eyeq5_early_plls) +
--			   ARRAY_SIZE(eqc_eyeq5_early_fixed_factors),
-+	.early_clk_count = ARRAY_SIZE(eqc_eyeq5_early_clks),
- };
- 
--static const struct eqc_pll eqc_eyeq6l_plls[] = {
--	{ .index = EQ6LC_PLL_DDR, .name = "pll-ddr", .reg64 = 0x02C },
--	{ .index = EQ6LC_PLL_CPU, .name = "pll-cpu", .reg64 = 0x034 }, /* also acc */
--	{ .index = EQ6LC_PLL_PER, .name = "pll-per", .reg64 = 0x03C },
--	{ .index = EQ6LC_PLL_VDI, .name = "pll-vdi", .reg64 = 0x044 },
-+static const struct eqc_clock eqc_eyeq6l_clks[] = {
-+	PLL_FRACG(EQ6LC_PLL_DDR, PARENT_BY_FWNAME, "pll-ddr", "ref", 0x02C),
-+	PLL_FRACG(EQ6LC_PLL_CPU, PARENT_BY_FWNAME, "pll-cpu", "ref", 0x034),
-+	PLL_FRACG(EQ6LC_PLL_PER, PARENT_BY_FWNAME, "pll-per", "ref", 0x03C),
-+	PLL_FRACG(EQ6LC_PLL_VDI, PARENT_BY_FWNAME, "pll-vdi", "ref", 0x044),
- };
- 
- static const struct eqc_match_data eqc_eyeq6l_match_data = {
--	.pll_count	= ARRAY_SIZE(eqc_eyeq6l_plls),
--	.plls		= eqc_eyeq6l_plls,
-+	.clk_count	= ARRAY_SIZE(eqc_eyeq6l_clks),
-+	.clks		= eqc_eyeq6l_clks,
- 
- 	.reset_auxdev_name = "reset",
- };
- 
--static const struct eqc_pll eqc_eyeq6lplus_early_plls[] = {
--	{ .index = EQ6LPC_PLL_CPU, .name = "pll-cpu", .reg64 = 0x058 },
-+static const struct eqc_clock eqc_eyeq6lplus_early_clks[] = {
-+	PLL_FRACG(EQ6LPC_PLL_CPU, PARENT_BY_FWNAME, "pll-cpu", "ref", 0x058),
-+
-+	FF(EQ6LPC_CPU_OCC, EQ6LPC_PLL_CPU, "occ-cpu", NULL, 1, 1),
- };
- 
--static const struct eqc_pll eqc_eyeq6lplus_plls[] = {
--	{ .index = EQ6LPC_PLL_DDR, .name = "pll-ddr", .reg64 = 0x02C },
--	{ .index = EQ6LPC_PLL_ACC, .name = "pll-acc", .reg64 = 0x034 },
--	{ .index = EQ6LPC_PLL_PER, .name = "pll-per", .reg64 = 0x03C },
--	{ .index = EQ6LPC_PLL_VDI, .name = "pll-vdi", .reg64 = 0x044 },
--};
-+static const struct eqc_clock eqc_eyeq6lplus_clks[] = {
-+	PLL_FRACG(EQ6LPC_PLL_DDR, PARENT_BY_FWNAME, "pll-ddr", "ref", 0x02C),
-+	PLL_FRACG(EQ6LPC_PLL_ACC, PARENT_BY_FWNAME, "pll-acc", "ref", 0x034),
-+	PLL_FRACG(EQ6LPC_PLL_PER, PARENT_BY_FWNAME, "pll-per", "ref", 0x03C),
-+	PLL_FRACG(EQ6LPC_PLL_VDI, PARENT_BY_FWNAME, "pll-vdi", "ref", 0x044),
- 
--static const struct eqc_fixed_factor eqc_eyeq6lplus_early_fixed_factors[] = {
--	{ EQ6LPC_CPU_OCC,	"occ-cpu",	1, 1,	EQ6LPC_PLL_CPU },
--};
-+	FF(EQ6LPC_DDR_OCC, EQ6LPC_PLL_DDR, "occ-ddr", NULL, 1, 1),
- 
--static const struct eqc_fixed_factor eqc_eyeq6lplus_fixed_factors[] = {
--	{ EQ6LPC_DDR_OCC,	"occ-ddr",	1, 1,	EQ6LPC_PLL_DDR },
-+	FF(EQ6LPC_ACC_VDI, EQ6LPC_PLL_ACC, "vdi-div", NULL, 1, 10),
-+	FF(EQ6LPC_ACC_OCC, EQ6LPC_PLL_ACC, "occ-acc", NULL, 1, 1),
-+	FF(EQ6LPC_ACC_FCMU, EQ6LPC_ACC_OCC, "fcmu-a-clk", NULL, 1, 10),
- 
--	{ EQ6LPC_ACC_VDI,	"vdi-div",	1, 10,	EQ6LPC_PLL_ACC },
--	{ EQ6LPC_ACC_OCC,	"occ-acc",	1, 1,	EQ6LPC_PLL_ACC },
--	{ EQ6LPC_ACC_FCMU,	"fcmu-a-clk",	1, 10,	EQ6LPC_ACC_OCC },
-+	FF(EQ6LPC_PER_OCC, EQ6LPC_PLL_PER, "occ-per", NULL, 1, 1),
-+	FF(EQ6LPC_PER_I2C_SER, EQ6LPC_PER_OCC, "i2c-ser-clk", NULL, 1, 10),
-+	FF(EQ6LPC_PER_PCLK, EQ6LPC_PER_OCC, "pclk", NULL, 1, 4),
-+	FF(EQ6LPC_PER_TSU, EQ6LPC_PER_OCC, "tsu-clk", NULL, 1, 8),
-+	FF(EQ6LPC_PER_OSPI, EQ6LPC_PER_OCC, "ospi-ref-clk", NULL, 1, 10),
-+	FF(EQ6LPC_PER_GPIO, EQ6LPC_PER_OCC, "gpio-clk", NULL, 1, 4),
-+	FF(EQ6LPC_PER_TIMER, EQ6LPC_PER_OCC, "timer-clk", NULL, 1, 4),
-+	FF(EQ6LPC_PER_I2C, EQ6LPC_PER_OCC, "i2c-clk", NULL, 1, 4),
-+	FF(EQ6LPC_PER_UART, EQ6LPC_PER_OCC, "uart-clk", NULL, 1, 4),
-+	FF(EQ6LPC_PER_SPI, EQ6LPC_PER_OCC, "spi-clk", NULL, 1, 4),
-+	FF(EQ6LPC_PER_PERIPH, EQ6LPC_PER_OCC, "periph-clk", NULL, 1, 1),
- 
--	{ EQ6LPC_PER_OCC,	"occ-per",	1, 1,	EQ6LPC_PLL_PER },
--	{ EQ6LPC_PER_I2C_SER,	"i2c-ser-clk",	1, 10,	EQ6LPC_PER_OCC },
--	{ EQ6LPC_PER_PCLK,	"pclk",		1, 4,	EQ6LPC_PER_OCC },
--	{ EQ6LPC_PER_TSU,	"tsu-clk",	1, 8,	EQ6LPC_PER_OCC },
--	{ EQ6LPC_PER_OSPI,	"ospi-ref-clk",	1, 10,	EQ6LPC_PER_OCC },
--	{ EQ6LPC_PER_GPIO,	"gpio-clk",	1, 4,	EQ6LPC_PER_OCC },
--	{ EQ6LPC_PER_TIMER,	"timer-clk",	1, 4,	EQ6LPC_PER_OCC },
--	{ EQ6LPC_PER_I2C,	"i2c-clk",	1, 4,	EQ6LPC_PER_OCC },
--	{ EQ6LPC_PER_UART,	"uart-clk",	1, 4,	EQ6LPC_PER_OCC },
--	{ EQ6LPC_PER_SPI,	"spi-clk",	1, 4,	EQ6LPC_PER_OCC },
--	{ EQ6LPC_PER_PERIPH,	"periph-clk",	1, 1,	EQ6LPC_PER_OCC },
+-		for (i = 0; i < early_data->early_pll_count; i++) {
+-			const struct eqc_pll *pll = &early_data->early_plls[i];
+-			struct clk_hw *hw = cells->hws[pll->index];
 -
--	{ EQ6LPC_VDI_OCC,	"occ-vdi",	1, 1,	EQ6LPC_PLL_VDI },
-+	FF(EQ6LPC_VDI_OCC, EQ6LPC_PLL_VDI, "occ-vdi", NULL, 1, 1),
- };
- 
- static const struct eqc_early_match_data eqc_eyeq6lplus_early_match_data __initconst = {
--	.early_pll_count        = ARRAY_SIZE(eqc_eyeq6lplus_early_plls),
--	.early_plls             = eqc_eyeq6lplus_early_plls,
-+	.early_clk_count	= ARRAY_SIZE(eqc_eyeq6lplus_early_clks),
-+	.early_clks		= eqc_eyeq6lplus_early_clks,
- 
--	.early_fixed_factor_count       = ARRAY_SIZE(eqc_eyeq6lplus_early_fixed_factors),
--	.early_fixed_factors            = eqc_eyeq6lplus_early_fixed_factors,
+-			if (!IS_ERR_OR_NULL(hw))
+-				clk_hw_unregister_fixed_factor(hw);
+-		}
 -
--	.late_clk_count         = ARRAY_SIZE(eqc_eyeq6lplus_plls) +
--	ARRAY_SIZE(eqc_eyeq6lplus_fixed_factors),
-+	.late_clk_count		= ARRAY_SIZE(eqc_eyeq6lplus_clks),
- };
- 
- static const struct eqc_match_data eqc_eyeq6lplus_match_data = {
--	.pll_count      = ARRAY_SIZE(eqc_eyeq6lplus_plls),
--	.plls           = eqc_eyeq6lplus_plls,
--
--	.fixed_factor_count     = ARRAY_SIZE(eqc_eyeq6lplus_fixed_factors),
--	.fixed_factors          = eqc_eyeq6lplus_fixed_factors,
-+	.clk_count	= ARRAY_SIZE(eqc_eyeq6lplus_clks),
-+	.clks		= eqc_eyeq6lplus_clks,
- 
- 	.reset_auxdev_name = "reset",
- 	.pinctrl_auxdev_name = "pinctrl",
- 
--	.early_clk_count = ARRAY_SIZE(eqc_eyeq6lplus_early_plls) +
--	ARRAY_SIZE(eqc_eyeq6lplus_early_fixed_factors),
-+	.early_clk_count = ARRAY_SIZE(eqc_eyeq6lplus_early_clks),
- };
- 
- static const struct eqc_match_data eqc_eyeq6h_west_match_data = {
- 	.reset_auxdev_name = "reset_west",
- };
- 
--static const struct eqc_pll eqc_eyeq6h_east_plls[] = {
--	{ .index = 0, .name = "pll-east", .reg64 = 0x074 },
-+static const struct eqc_clock eqc_eyeq6h_east_clks[] = {
-+	PLL_FRACG(0, PARENT_BY_FWNAME, "pll-east", "ref", 0x074),
- };
- 
- static const struct eqc_match_data eqc_eyeq6h_east_match_data = {
--	.pll_count	= ARRAY_SIZE(eqc_eyeq6h_east_plls),
--	.plls		= eqc_eyeq6h_east_plls,
-+	.clk_count	= ARRAY_SIZE(eqc_eyeq6h_east_clks),
-+	.clks		= eqc_eyeq6h_east_clks,
- 
- 	.reset_auxdev_name = "reset_east",
- };
- 
--static const struct eqc_pll eqc_eyeq6h_south_plls[] = {
--	{ .index = EQ6HC_SOUTH_PLL_VDI,  .name = "pll-vdi",  .reg64 = 0x000 },
--	{ .index = EQ6HC_SOUTH_PLL_PCIE, .name = "pll-pcie", .reg64 = 0x008 },
--	{ .index = EQ6HC_SOUTH_PLL_PER,  .name = "pll-per",  .reg64 = 0x010 },
--	{ .index = EQ6HC_SOUTH_PLL_ISP,  .name = "pll-isp",  .reg64 = 0x018 },
--};
-+static const struct eqc_clock eqc_eyeq6h_south_clks[] = {
-+	PLL_FRACG(EQ6HC_SOUTH_PLL_VDI, PARENT_BY_FWNAME, "pll-vdi", "ref", 0x000),
-+	PLL_FRACG(EQ6HC_SOUTH_PLL_PCIE, PARENT_BY_FWNAME, "pll-pcie", "ref", 0x008),
-+	PLL_FRACG(EQ6HC_SOUTH_PLL_PER, PARENT_BY_FWNAME, "pll-per", "ref", 0x010),
-+	PLL_FRACG(EQ6HC_SOUTH_PLL_ISP, PARENT_BY_FWNAME, "pll-isp", "ref", 0x018),
- 
--static const struct eqc_div eqc_eyeq6h_south_divs[] = {
--	{
--		.index = EQ6HC_SOUTH_DIV_EMMC,
--		.name = "div-emmc",
--		.parent = EQ6HC_SOUTH_PLL_PER,
--		.reg = 0x070,
--		.shift = 4,
--		.width = 4,
--	},
--	{
--		.index = EQ6HC_SOUTH_DIV_OSPI_REF,
--		.name = "div-ospi-ref",
--		.parent = EQ6HC_SOUTH_PLL_PER,
--		.reg = 0x090,
--		.shift = 4,
--		.width = 4,
--	},
--	{
--		.index = EQ6HC_SOUTH_DIV_OSPI_SYS,
--		.name = "div-ospi-sys",
--		.parent = EQ6HC_SOUTH_PLL_PER,
--		.reg = 0x090,
--		.shift = 8,
--		.width = 1,
--	},
--	{
--		.index = EQ6HC_SOUTH_DIV_TSU,
--		.name = "div-tsu",
--		.parent = EQ6HC_SOUTH_PLL_PCIE,
--		.reg = 0x098,
--		.shift = 4,
--		.width = 8,
--	},
-+	DIV(EQ6HC_SOUTH_DIV_EMMC, EQ6HC_SOUTH_PLL_PER, "div-emmc", NULL, 0x070, 4, 4, NULL),
-+	DIV(EQ6HC_SOUTH_DIV_OSPI_REF, EQ6HC_SOUTH_PLL_PER, "div-ospi-ref", NULL, 0x090, 4, 4, NULL),
-+	DIV(EQ6HC_SOUTH_DIV_OSPI_SYS, EQ6HC_SOUTH_PLL_PER, "div-ospi-sys", NULL, 0x090, 8, 1, NULL),
-+	DIV(EQ6HC_SOUTH_DIV_TSU, EQ6HC_SOUTH_PLL_PCIE, "div-tsu", NULL, 0x098, 4, 8, NULL),
- };
- 
- static const struct eqc_match_data eqc_eyeq6h_south_match_data = {
--	.pll_count	= ARRAY_SIZE(eqc_eyeq6h_south_plls),
--	.plls		= eqc_eyeq6h_south_plls,
--
--	.div_count	= ARRAY_SIZE(eqc_eyeq6h_south_divs),
--	.divs		= eqc_eyeq6h_south_divs,
-+	.clk_count	= ARRAY_SIZE(eqc_eyeq6h_south_clks),
-+	.clks		= eqc_eyeq6h_south_clks,
- };
- 
--static const struct eqc_pll eqc_eyeq6h_ddr0_plls[] = {
--	{ .index = 0, .name = "pll-ddr0", .reg64 = 0x074 },
-+static const struct eqc_clock eqc_eyeq6h_ddr0_clks[] = {
-+	PLL_FRACG(0, PARENT_BY_FWNAME, "pll-ddr0", "ref", 0x074),
- };
- 
- static const struct eqc_match_data eqc_eyeq6h_ddr0_match_data = {
--	.pll_count	= ARRAY_SIZE(eqc_eyeq6h_ddr0_plls),
--	.plls		= eqc_eyeq6h_ddr0_plls,
-+	.clk_count	= ARRAY_SIZE(eqc_eyeq6h_ddr0_clks),
-+	.clks		= eqc_eyeq6h_ddr0_clks,
- };
- 
--static const struct eqc_pll eqc_eyeq6h_ddr1_plls[] = {
--	{ .index = 0, .name = "pll-ddr1", .reg64 = 0x074 },
-+static const struct eqc_clock eqc_eyeq6h_ddr1_clks[] = {
-+	PLL_FRACG(0, PARENT_BY_FWNAME, "pll-ddr1", "ref", 0x074),
- };
- 
- static const struct eqc_match_data eqc_eyeq6h_ddr1_match_data = {
--	.pll_count	= ARRAY_SIZE(eqc_eyeq6h_ddr1_plls),
--	.plls		= eqc_eyeq6h_ddr1_plls,
-+	.clk_count	= ARRAY_SIZE(eqc_eyeq6h_ddr1_clks),
-+	.clks		= eqc_eyeq6h_ddr1_clks,
- };
- 
--static const struct eqc_pll eqc_eyeq6h_acc_plls[] = {
--	{ .index = EQ6HC_ACC_PLL_XNN, .name = "pll-xnn", .reg64 = 0x040 },
--	{ .index = EQ6HC_ACC_PLL_VMP, .name = "pll-vmp", .reg64 = 0x050 },
--	{ .index = EQ6HC_ACC_PLL_PMA, .name = "pll-pma", .reg64 = 0x05C },
--	{ .index = EQ6HC_ACC_PLL_MPC, .name = "pll-mpc", .reg64 = 0x068 },
--	{ .index = EQ6HC_ACC_PLL_NOC, .name = "pll-noc", .reg64 = 0x070 },
-+static const struct eqc_clock eqc_eyeq6h_acc_clks[] = {
-+	PLL_FRACG(EQ6HC_ACC_PLL_XNN, PARENT_BY_FWNAME, "pll-xnn", "ref", 0x040),
-+	PLL_FRACG(EQ6HC_ACC_PLL_VMP, PARENT_BY_FWNAME, "pll-vmp", "ref", 0x050),
-+	PLL_FRACG(EQ6HC_ACC_PLL_PMA, PARENT_BY_FWNAME, "pll-pma", "ref", 0x05C),
-+	PLL_FRACG(EQ6HC_ACC_PLL_MPC, PARENT_BY_FWNAME, "pll-mpc", "ref", 0x068),
-+	PLL_FRACG(EQ6HC_ACC_PLL_NOC, PARENT_BY_FWNAME, "pll-noc", "ref", 0x070),
- };
- 
- static const struct eqc_match_data eqc_eyeq6h_acc_match_data = {
--	.pll_count	= ARRAY_SIZE(eqc_eyeq6h_acc_plls),
--	.plls		= eqc_eyeq6h_acc_plls,
-+	.clk_count	= ARRAY_SIZE(eqc_eyeq6h_acc_clks),
-+	.clks		= eqc_eyeq6h_acc_clks,
- 
- 	.reset_auxdev_name = "reset_acc",
- };
-@@ -911,38 +837,28 @@ static struct platform_driver eqc_driver = {
- builtin_platform_driver(eqc_driver);
- 
- /* Required early for GIC timer. */
--static const struct eqc_pll eqc_eyeq6h_central_early_plls[] = {
--	{ .index = EQ6HC_CENTRAL_PLL_CPU, .name = "pll-cpu", .reg64 = 0x02C },
--};
-+static const struct eqc_clock eqc_eyeq6h_central_early_clks[] = {
-+	PLL_FRACG(EQ6HC_CENTRAL_PLL_CPU, PARENT_BY_FWNAME, "pll-cpu", "ref", 0x02C),
- 
--static const struct eqc_fixed_factor eqc_eyeq6h_central_early_fixed_factors[] = {
--	{ EQ6HC_CENTRAL_CPU_OCC, "occ-cpu", 1, 1, EQ6HC_CENTRAL_PLL_CPU },
-+	FF(EQ6HC_CENTRAL_CPU_OCC, EQ6HC_CENTRAL_PLL_CPU, "occ-cpu", NULL, 1, 1),
- };
- 
- static const struct eqc_early_match_data eqc_eyeq6h_central_early_match_data __initconst = {
--	.early_pll_count	= ARRAY_SIZE(eqc_eyeq6h_central_early_plls),
--	.early_plls		= eqc_eyeq6h_central_early_plls,
--
--	.early_fixed_factor_count = ARRAY_SIZE(eqc_eyeq6h_central_early_fixed_factors),
--	.early_fixed_factors = eqc_eyeq6h_central_early_fixed_factors,
-+	.early_clk_count	= ARRAY_SIZE(eqc_eyeq6h_central_early_clks),
-+	.early_clks		= eqc_eyeq6h_central_early_clks,
- };
- 
- /* Required early for UART. */
--static const struct eqc_pll eqc_eyeq6h_west_early_plls[] = {
--	{ .index = EQ6HC_WEST_PLL_PER, .name = "pll-west", .reg64 = 0x074 },
--};
-+static const struct eqc_clock eqc_eyeq6h_west_early_clks[] = {
-+	PLL_FRACG(EQ6HC_WEST_PLL_PER, PARENT_BY_FWNAME, "pll-west", "ref", 0x074),
- 
--static const struct eqc_fixed_factor eqc_eyeq6h_west_early_fixed_factors[] = {
--	{ EQ6HC_WEST_PER_OCC,  "west-per-occ",  1, 10, EQ6HC_WEST_PLL_PER },
--	{ EQ6HC_WEST_PER_UART, "west-per-uart", 1, 1,  EQ6HC_WEST_PER_OCC },
-+	FF(EQ6HC_WEST_PER_OCC, EQ6HC_WEST_PLL_PER, "west-per-occ", NULL, 1, 10),
-+	FF(EQ6HC_WEST_PER_UART, EQ6HC_WEST_PER_OCC, "west-per-uart", NULL, 1, 1),
- };
- 
- static const struct eqc_early_match_data eqc_eyeq6h_west_early_match_data __initconst = {
--	.early_pll_count	= ARRAY_SIZE(eqc_eyeq6h_west_early_plls),
--	.early_plls		= eqc_eyeq6h_west_early_plls,
--
--	.early_fixed_factor_count = ARRAY_SIZE(eqc_eyeq6h_west_early_fixed_factors),
--	.early_fixed_factors = eqc_eyeq6h_west_early_fixed_factors,
-+	.early_clk_count	= ARRAY_SIZE(eqc_eyeq6h_west_early_clks),
-+	.early_clks		= eqc_eyeq6h_west_early_clks,
- };
- 
- static void __init eqc_early_init(struct device_node *np,
+ 		for (i = 0; i < early_data->early_clk_count; i++) {
+ 			const struct eqc_clock *clk = &early_data->early_clks[i];
+ 			struct clk_hw *hw = cells->hws[clk->index];
 
 -- 
 2.53.0
