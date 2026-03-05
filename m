@@ -1,243 +1,168 @@
-Return-Path: <linux-mips+bounces-13379-lists+linux-mips=lfdr.de@vger.kernel.org>
+Return-Path: <linux-mips+bounces-13380-lists+linux-mips=lfdr.de@vger.kernel.org>
 Delivered-To: lists+linux-mips@lfdr.de
 Received: from mail.lfdr.de
 	by lfdr with LMTP
-	id IA7sEmiCqGmYvAAAu9opvQ
-	(envelope-from <linux-mips+bounces-13379-lists+linux-mips=lfdr.de@vger.kernel.org>)
-	for <lists+linux-mips@lfdr.de>; Wed, 04 Mar 2026 20:05:12 +0100
+	id cP1+MSHQqGlOxgAAu9opvQ
+	(envelope-from <linux-mips+bounces-13380-lists+linux-mips=lfdr.de@vger.kernel.org>)
+	for <lists+linux-mips@lfdr.de>; Thu, 05 Mar 2026 01:36:49 +0100
 X-Original-To: lists+linux-mips@lfdr.de
 Received: from tor.lore.kernel.org (tor.lore.kernel.org [IPv6:2600:3c04:e001:36c::12fc:5321])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC718206DC5
-	for <lists+linux-mips@lfdr.de>; Wed, 04 Mar 2026 20:05:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 888E32097F0
+	for <lists+linux-mips@lfdr.de>; Thu, 05 Mar 2026 01:36:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (conduit.subspace.kernel.org [100.90.174.1])
-	by tor.lore.kernel.org (Postfix) with ESMTP id 90F6330985B9
-	for <lists+linux-mips@lfdr.de>; Wed,  4 Mar 2026 18:59:40 +0000 (UTC)
+	by tor.lore.kernel.org (Postfix) with ESMTP id 650FB3014747
+	for <lists+linux-mips@lfdr.de>; Thu,  5 Mar 2026 00:36:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 678793DA5BB;
-	Wed,  4 Mar 2026 18:58:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CFAB1DC985;
+	Thu,  5 Mar 2026 00:36:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="bZZ8nL2n";
-	dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b="SY4DiDF1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KToGiCmv"
 X-Original-To: linux-mips@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2549C3DA5A4
-	for <linux-mips@vger.kernel.org>; Wed,  4 Mar 2026 18:58:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12AF81494C3;
+	Thu,  5 Mar 2026 00:36:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1772650739; cv=none; b=CGkWYj25fyce3Zp99iRLpc86Nt33BxyH79VzzFYcyPNjrLWlP1aYV6rrBISqW4WLPifdlvxIuhOYydE4OiYKhisDsUQYKcrf03cMFqfr9lacRRM1Ka8lSIXlCOOFzF9+C2/9VGJxIK7bJdqOdufOOE4u/p5W3X5fXyHdXzamTsg=
+	t=1772671005; cv=none; b=kdXvbGDuaaQjD/NHVqe/mk7Gzp4vuKenXGmkVXZLiFIm0UompskYwsk/yk1Q919syQiQbi2v87Wg06apPFRxe/h488j+QT5u1sarXVM6ODP64I/uNi/2vr/p/Ol2EECPOz28L/cNm5JJPBgEVjUTRi/zEOxxyN19olScvgIkEvI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1772650739; c=relaxed/simple;
-	bh=zSn22tjdeIeOLGs64yWM2fNeD/NW/mW0XYa+8q48zQk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=uaPA7QGwGnzEUR1vLTsvA7VY6WwaYQSrEjvpL4UAQTuKxTRdd8vjzBmuW2/QKeWeiqHhyiWR+kzyoAMZyreZA0OiS9wZvLPaS/3mtyAqU1SaZBHjeY+adOnPyi9wIUy2v2Vl8yxDA2WqLZC8Ag28d94ojKVNKpYuhaWXF0TVaS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=bZZ8nL2n; dkim=pass (2048-bit key) header.d=oss.qualcomm.com header.i=@oss.qualcomm.com header.b=SY4DiDF1; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.11/8.18.1.11) with ESMTP id 624DAQBD1421868
-	for <linux-mips@vger.kernel.org>; Wed, 4 Mar 2026 18:58:57 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	n29JUwbnURoI2InyjPVpCKRl1dJO4t33ZBTzppV/ZUU=; b=bZZ8nL2nMHv24pHz
-	8eZY/lLJ8sa73YbhCqp70W7HXLustRoINTYMXqNY/zn4MlmRS7ncLshmTjle1vPs
-	j0tXq/DnXwElnsS+1B9r4z02YEdiKgLetJoP8eyCCiWPyXG1V6VwsGLqWvxXF/AW
-	vs8KBO4ahB6x3FxcCko8JuoGWd3ntyHgrCT2o19Bb1scx+kOqGYSbkbn28WYZ3Sm
-	ZLQGgLhi6H2GEDL2XXsprP/WhhsgWIeXv7scAejyU7TGAEW3BOKLvyd7ywlUEO4F
-	u46S789ArZsY6lQiID0cz+poGLZfD9P1hR8y9lzBTrYr8MChevk6k3dvvZFEFc/l
-	G6Ljuw==
-Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com [209.85.222.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4cpe8u2kvn-1
-	(version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NOT)
-	for <linux-mips@vger.kernel.org>; Wed, 04 Mar 2026 18:58:56 +0000 (GMT)
-Received: by mail-qk1-f198.google.com with SMTP id af79cd13be357-8cb3d11b913so4358923085a.1
-        for <linux-mips@vger.kernel.org>; Wed, 04 Mar 2026 10:58:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=oss.qualcomm.com; s=google; t=1772650736; x=1773255536; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=n29JUwbnURoI2InyjPVpCKRl1dJO4t33ZBTzppV/ZUU=;
-        b=SY4DiDF1dmt15YRi4OADAMutHMwd3kibVgla3HOq8cN6pcpsTyNFGoZOoes4ZA9yQZ
-         2/T6YhudNOxzy42oGI1OlVzNX1HCCy/+j/DGFcMoF6jUqa+cQY+M5GUcgR7rUsZrIdce
-         Ilt4VEN5u2qdfzX3wWazkRzA7tq1azFTyWqLYYkKwjGNSRua6LmrElRrD1hxtkBp7WON
-         kfBUBcsHO5mDHUXU8Ky6mGNpRVRUZ0fRXNYLl9/1W8O1vNcJ8mJbRisoCgh+bMnE0MCW
-         t+nsomaSPTmOYtLjO1o7duwli7eTgnPKBgoAyIdrmLIE3WMjCWU2aNbHnO0sjjxBTWnx
-         W24A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1772650736; x=1773255536;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-gg:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=n29JUwbnURoI2InyjPVpCKRl1dJO4t33ZBTzppV/ZUU=;
-        b=nHoOKF1DdHrDSaoeCgIpOecjYJWf8p30+KqCXTw+szdKWftFXy+7ZLqEM8wRMgpoq1
-         kOJp3cQmknYfrKvP2yKx/myZH0Yp5u4B62rCO3QPZRv0gNZ/QzphvAkfDGgkaezCzpMr
-         su8fsFSJnhAuRCMAEyjGH68avQZHUF2PV2PqoCFR9sWC0/emT6xnm+LZoIumfZb9iwYJ
-         11uV7GvFjQqzhSX8tccBxAcnXimMs80nPoZs0pdWoQFqiYVGdjglwNBWMRqhAy0naVJb
-         jcLdOIea8acpfkHwb1h7fzzoc5XVtKdydpNWkCdXMITEg8cZRGK63rDHwbys4v/Nj+2v
-         X3UQ==
-X-Forwarded-Encrypted: i=1; AJvYcCX7p4kjK0aWF80JoT4pXfBZEx4ca2tyABVDth7I8yZ6EijvwZwGb62ZQiOS6TJGRmWfot+ckqzMIQtf@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGUgBnhEjf/CKD0dQ9N1ZQlMsmtIEe9vY5SrJ0D+D5VF+5p+NW
-	W+R9gdkJF/wJyhltoyo+8GZzUcRSpU0W6gtj7AIokkpGikSFbSvRdvp+cHo5uh4vtSkXPChZZjG
-	LDUYJKuGf1jTJOIQb4nPIilX/cQGYPJyFsnG/03g8LHPzNsTiwqC33Ej8DZNNJtthlyO0jwh+BX
-	A=
-X-Gm-Gg: ATEYQzyZC+qFfe/rzTl8zupt60FgTPPr+sVWOPU92ouBF03GVPwbsGGd66fs77HeXTt
-	uiQ+4loqKzFKQW6v92zgmyWlvadpjeQAXIvJCtQLnFfl58Iyg0zk8xXSCEtHL0OXmJ0m6gJCWQY
-	9488tZj/3fajOdeaEovKGYWXUilzbQm1bK3JchdoV00ZOcl26N6ORlXsYjzPwUruUqleLd1LsZh
-	Koaq3iNfDxKwO1XXq/EjW/VILglj1cPZm1cx8KeRlHU5wTsf8BU9VMC2V0l348js3+MxEaBrzL4
-	UyydHfupYKlB2POWHV97QzWZ84uyme2lXfzYYio/cgYtfFOgwTXCfLRlBU7PdBFatai+swcp5aq
-	EpI6xWMao/He29G/lFBuY3m1ZCyo6v0XHVFKvWL+VfqyuS6fXBz3oAQ1qXuA2LbuJ8y0NGQ==
-X-Received: by 2002:a05:620a:3195:b0:8c9:fb0e:ca43 with SMTP id af79cd13be357-8cd5af1a395mr386836785a.24.1772650736183;
-        Wed, 04 Mar 2026 10:58:56 -0800 (PST)
-X-Received: by 2002:a05:620a:3195:b0:8c9:fb0e:ca43 with SMTP id af79cd13be357-8cd5af1a395mr386833585a.24.1772650735662;
-        Wed, 04 Mar 2026 10:58:55 -0800 (PST)
-Received: from ?IPV6:2a05:6e02:1041:c10:ee0b:246c:2dae:77b9? ([2a05:6e02:1041:c10:ee0b:246c:2dae:77b9])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-485188923c2sm69730925e9.14.2026.03.04.10.58.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 04 Mar 2026 10:58:55 -0800 (PST)
-Message-ID: <b84dc28a-34ca-4243-a0ae-3b61db04fcd5@oss.qualcomm.com>
-Date: Wed, 4 Mar 2026 19:58:54 +0100
+	s=arc-20240116; t=1772671005; c=relaxed/simple;
+	bh=dufxbUIyr7d8ExFT8JscxBc90VyX6BXpvMXaMHirGFY=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=NuB/2colSWq/IScSq18GNiHE9njLfWu1FVHPyCKCfmAb6AmgXUadRwqUf50X1RmW/1rsLk2jtZO5xkdokw2u1nz0C6TxUfd60zK7ai+EisGPgfYxcymmEq5W9xrVF8c5AeTab/97dQitXFTA8IhdeHrMUVAAH0BGU7V1LwlRAZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KToGiCmv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70C0CC4CEF7;
+	Thu,  5 Mar 2026 00:36:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1772671004;
+	bh=dufxbUIyr7d8ExFT8JscxBc90VyX6BXpvMXaMHirGFY=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=KToGiCmvRjrVNqFH9bmGJHeZ38P88LzG7roLZL+LfIaWcpEiN2r+2cd8LeoKKP35z
+	 U1kZMnp2GF5lnZ/nU+B3HGi0hmJYpifkPnaIttjOzC0p4MJWgdE7whcAtStb71A/hR
+	 PWMEoeZUETbXXgqKLd947UqscZTCqE7PdSGVXWHEJVzdsA5P/GL+TYntigcrzmPu9S
+	 bwFDNJowrmaquHt0GQepYaacF/aqErDIPLaR1+ZJBBxnDoRwltgCLkyg6X/do1S70f
+	 /t3wS/hkSXMAn5Ptc3L2X59NGkKMvuLeUJNxpcdH9xAkM1JdLfqBeN7u7tjz5Udo9K
+	 2yvhogx3J8MSA==
+From: Nathan Chancellor <nathan@kernel.org>
+To: Nicolas Schier <nsc@kernel.org>, Nathan Chancellor <nathan@kernel.org>
+Cc: Richard Henderson <richard.henderson@linaro.org>, 
+ Matt Turner <mattst88@gmail.com>, Magnus Lindholm <linmag7@gmail.com>, 
+ Vineet Gupta <vgupta@kernel.org>, Catalin Marinas <catalin.marinas@arm.com>, 
+ Will Deacon <will@kernel.org>, Guo Ren <guoren@kernel.org>, 
+ Brian Cain <bcain@kernel.org>, Huacai Chen <chenhuacai@kernel.org>, 
+ WANG Xuerui <kernel@xen0n.name>, Geert Uytterhoeven <geert@linux-m68k.org>, 
+ Sam Creasey <sammy@sammy.net>, 
+ Thomas Bogendoerfer <tsbogend@alpha.franken.de>, 
+ Dinh Nguyen <dinguyen@kernel.org>, Jonas Bonn <jonas@southpole.se>, 
+ Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>, 
+ Stafford Horne <shorne@gmail.com>, 
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+ Helge Deller <deller@gmx.de>, Madhavan Srinivasan <maddy@linux.ibm.com>, 
+ Michael Ellerman <mpe@ellerman.id.au>, Nicholas Piggin <npiggin@gmail.com>, 
+ "Christophe Leroy (CS GROUP)" <chleroy@kernel.org>, 
+ Paul Walmsley <pjw@kernel.org>, Palmer Dabbelt <palmer@dabbelt.com>, 
+ Albert Ou <aou@eecs.berkeley.edu>, Alexandre Ghiti <alex@ghiti.fr>, 
+ Heiko Carstens <hca@linux.ibm.com>, Vasily Gorbik <gor@linux.ibm.com>, 
+ Alexander Gordeev <agordeev@linux.ibm.com>, 
+ Christian Borntraeger <borntraeger@linux.ibm.com>, 
+ Sven Schnelle <svens@linux.ibm.com>, 
+ Yoshinori Sato <ysato@users.sourceforge.jp>, Rich Felker <dalias@libc.org>, 
+ John Paul Adrian Glaubitz <glaubitz@physik.fu-berlin.de>, 
+ "David S. Miller" <davem@davemloft.net>, 
+ Andreas Larsson <andreas@gaisler.com>, Richard Weinberger <richard@nod.at>, 
+ Anton Ivanov <anton.ivanov@cambridgegreys.com>, 
+ Johannes Berg <johannes@sipsolutions.net>, 
+ Thomas Gleixner <tglx@kernel.org>, Ingo Molnar <mingo@redhat.com>, 
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+ x86@kernel.org, "H. Peter Anvin" <hpa@zytor.com>, 
+ Kees Cook <kees@kernel.org>, Arnd Bergmann <arnd@arndb.de>, 
+ Masahiro Yamada <masahiroy@kernel.org>, Alexey Gladkov <legion@kernel.org>, 
+ linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-snps-arc@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+ linux-csky@vger.kernel.org, linux-hexagon@vger.kernel.org, 
+ loongarch@lists.linux.dev, linux-m68k@lists.linux-m68k.org, 
+ linux-mips@vger.kernel.org, linux-openrisc@vger.kernel.org, 
+ linux-parisc@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+ linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org, 
+ linux-sh@vger.kernel.org, sparclinux@vger.kernel.org, 
+ linux-um@lists.infradead.org, linux-kbuild@vger.kernel.org, 
+ stable@vger.kernel.org, Ed W <lists@wildgooses.com>
+In-Reply-To: <20260225-separate-modinfo-from-elf-details-v1-1-387ced6baf4b@kernel.org>
+References: <20260225-separate-modinfo-from-elf-details-v1-1-387ced6baf4b@kernel.org>
+Subject: Re: [PATCH] kbuild: Split .modinfo out from ELF_DETAILS
+Message-Id: <177267099220.1730256.13119170390082704508.b4-ty@kernel.org>
+Date: Wed, 04 Mar 2026 17:36:32 -0700
 Precedence: bulk
 X-Mailing-List: linux-mips@vger.kernel.org
 List-Id: <linux-mips.vger.kernel.org>
 List-Subscribe: <mailto:linux-mips+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-mips+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: drivers/clocksource/mips-gic-timer.c:283 looks suspicious: ret !=
- clk
-To: Philipp Matthias Hahn <phahn-oss@avm.de>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Daniel Lezcano <daniel.lezcano@kernel.org>,
-        Thomas Gleixner
- <tglx@kernel.org>, linux-mips@vger.kernel.org
-References: <aahwZ3iJVbo55int@mail-auth.avm.de>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@oss.qualcomm.com>
-In-Reply-To: <aahwZ3iJVbo55int@mail-auth.avm.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: V3u-tPr28Ao2sjOe74I6chBryrfKeUO0
-X-Proofpoint-Spam-Details-Enc: AW1haW4tMjYwMzA0MDE1NCBTYWx0ZWRfX8QpKv5thXvk+
- SkohhXbXe/vXElo6xulj300sunQebdYbJA7EWHMXTj2ggMf5FpqQbJmtPngUThXV7fMq8w05+XZ
- jWAZTuNj3rkUay1zqV1leW1uysovUn6uytVEF+E0UCobnDLPPPAO21m/ka/gzo7229oH+w3oLmU
- K2LoIYWNdG8ZSfYZkj7sfurbWEZnBLcm+55Nhk8USqvvXfxRRFI9DELvpeFiT+kYi+5emLm4ezZ
- FWJgq/XpN4Ngy19NawIbbL5B0F10mexcMJKpUw6fXRCNW+yE4lVWVlA2ue0005Vmumd4CO84elw
- 9as0UgflgT7whxisaMVpXcb8e2cOqp7XArD9Zh0oeGWF0fBSeDeJ5KykTC/7FcIaxZuDxR7+9e5
- eZjHgysSeTufF+X5+7nIFi3uYvEx4xa/UA+Yej2SnUKzHZUNFjCM8VB9VoTlRJ6niQTBZ9vejcQ
- 03coG8lS980bZRGDFxg==
-X-Authority-Analysis: v=2.4 cv=FpAIPmrq c=1 sm=1 tr=0 ts=69a880f0 cx=c_pps
- a=qKBjSQ1v91RyAK45QCPf5w==:117 a=xqWC_Br6kY4A:10 a=IkcTkHD0fZMA:10
- a=Yq5XynenixoA:10 a=s4-Qcg_JpJYA:10 a=VkNPw1HP01LnGYTKEx00:22
- a=u7WPNUs3qKkmUXheDGA7:22 a=yx91gb_oNiZeI1HMLzn7:22 a=C8qH3MpB5dsiSMWhk_MA:9
- a=3ZKOabzyN94A:10 a=QEXdDO2ut3YA:10 a=NFOGd7dJGGMPyQGDc5-O:22
-X-Proofpoint-GUID: V3u-tPr28Ao2sjOe74I6chBryrfKeUO0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1143,Hydra:6.1.51,FMLib:17.12.100.49
- definitions=2026-03-04_07,2026-03-04_01,2025-10-01_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0
- priorityscore=1501 bulkscore=0 suspectscore=0 spamscore=0 lowpriorityscore=0
- adultscore=0 phishscore=0 malwarescore=0 clxscore=1011 impostorscore=0
- classifier=typeunknown authscore=0 authtc= authcc= route=outbound adjust=0
- reason=mlx scancount=1 engine=8.22.0-2602130000 definitions=main-2603040154
-X-Rspamd-Queue-Id: BC718206DC5
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev
+X-Rspamd-Queue-Id: 888E32097F0
 X-Rspamd-Server: lfdr
 X-Spamd-Result: default: False [-2.16 / 15.00];
 	ARC_ALLOW(-1.00)[subspace.kernel.org:s=arc-20240116:i=1];
-	DMARC_POLICY_ALLOW(-0.50)[qualcomm.com,reject];
+	DMARC_POLICY_ALLOW(-0.50)[kernel.org,quarantine];
 	R_SPF_ALLOW(-0.20)[+ip6:2600:3c04:e001:36c::/64:c];
-	R_DKIM_ALLOW(-0.20)[qualcomm.com:s=qcppdkim1,oss.qualcomm.com:s=google];
+	R_DKIM_ALLOW(-0.20)[kernel.org:s=k20201202];
 	MAILLIST(-0.15)[generic];
 	MIME_GOOD(-0.10)[text/plain];
 	HAS_LIST_UNSUB(-0.01)[];
-	TAGGED_FROM(0.00)[bounces-13379-lists,linux-mips=lfdr.de];
-	RCVD_TLS_LAST(0.00)[];
-	SUBJECT_HAS_EXCLAIM(0.00)[];
-	FORGED_SENDER_MAILLIST(0.00)[];
-	DKIM_TRACE(0.00)[qualcomm.com:+,oss.qualcomm.com:+];
-	TO_DN_SOME(0.00)[];
+	RCVD_COUNT_THREE(0.00)[4];
+	FREEMAIL_CC(0.00)[linaro.org,gmail.com,kernel.org,arm.com,xen0n.name,linux-m68k.org,sammy.net,alpha.franken.de,southpole.se,saunalahti.fi,HansenPartnership.com,gmx.de,linux.ibm.com,ellerman.id.au,dabbelt.com,eecs.berkeley.edu,ghiti.fr,users.sourceforge.jp,libc.org,physik.fu-berlin.de,davemloft.net,gaisler.com,nod.at,cambridgegreys.com,sipsolutions.net,redhat.com,alien8.de,linux.intel.com,zytor.com,arndb.de,vger.kernel.org,lists.infradead.org,lists.linux.dev,lists.linux-m68k.org,lists.ozlabs.org,wildgooses.com];
 	MIME_TRACE(0.00)[0:+];
+	FORGED_SENDER_MAILLIST(0.00)[];
+	TAGGED_FROM(0.00)[bounces-13380-lists,linux-mips=lfdr.de];
+	DKIM_TRACE(0.00)[kernel.org:+];
+	RCVD_TLS_LAST(0.00)[];
 	FORGED_RECIPIENTS_MAILLIST(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo,qualcomm.com:dkim,oss.qualcomm.com:dkim,oss.qualcomm.com:mid];
-	RCPT_COUNT_FIVE(0.00)[5];
-	PRECEDENCE_BULK(0.00)[];
-	FROM_NEQ_ENVFROM(0.00)[daniel.lezcano@oss.qualcomm.com,linux-mips@vger.kernel.org];
 	FROM_HAS_DN(0.00)[];
+	TO_DN_SOME(0.00)[];
+	RCPT_COUNT_GT_50(0.00)[72];
+	PRECEDENCE_BULK(0.00)[];
+	FROM_NEQ_ENVFROM(0.00)[nathan@kernel.org,linux-mips@vger.kernel.org];
 	ASN(0.00)[asn:63949, ipnet:2600:3c04::/32, country:SG];
 	NEURAL_HAM(-0.00)[-1.000];
 	TAGGED_RCPT(0.00)[linux-mips];
 	MID_RHS_MATCH_FROM(0.00)[];
 	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RCVD_COUNT_SEVEN(0.00)[7]
+	DBL_BLOCKED_OPENRESOLVER(0.00)[tor.lore.kernel.org:rdns,tor.lore.kernel.org:helo]
 X-Rspamd-Action: no action
 
-
-Hi Philipp,
-
-thanks for reporting a potential issue
-
-Actually, the code seems correct.
-
-AFAICT, there are two configurations with the clock. One is a dynamic 
-clock connected with the clock framework which can change the frequency 
-and the other is a static clock described in the device tree.
-
-If the clk is managed by the clock framework the code subscribes to the 
-clock notifier to get the information of the clock frequency change. So 
-it is the condition (!IS_ERR(clk))
-
-On 3/4/26 18:48, Philipp Matthias Hahn wrote:
-> Hello,
+On Wed, 25 Feb 2026 15:02:51 -0700, Nathan Chancellor wrote:
+> Commit 3e86e4d74c04 ("kbuild: keep .modinfo section in
+> vmlinux.unstripped") added .modinfo to ELF_DETAILS while removing it
+> from DISCARDS, as it was needed in vmlinux.unstripped and ELF_DETAILS
+> was present in all architecture specific vmlinux linker scripts. While
+> this shuffle is fine for vmlinux, ELF_DETAILS and DISCARDS may be used
+> by other linker scripts, such as the s390 and x86 compressed boot
+> images, which may not expect to have a modinfo section. In certain
+> circumstances, this could result in a bootloader failing to load the
+> compressed kernel [1].
 > 
-> while looking where IS_ERR(…) plus a manual NULL check can be converted
-> to IS_ERR_OR_NULL(…) I stumbled by accident over
-> gic_clocksource_of_init() line 283, where `IS_ERR(clk)` is used combined
-> with `!ret`:
-> 
-> static int __init gic_clocksource_of_init(struct device_node *node)
-> {
-> 	struct clk *clk;
-> 	int ret;
-> 	…
-> 	clk = of_clk_get(node, 0);
-> 	if (!IS_ERR(clk)) {
-> 		ret = clk_prepare_enable(clk);
+> [...]
 
-Clock is managed by the clock framework -> (IS_ERR(clk) == false)
+Applied to
 
-> 		if (ret < 0) {
-> 			pr_err("Failed to enable clock\n");
-> 			clk_put(clk);
-> 			return ret;
-> 		}
-> 		gic_frequency = clk_get_rate(clk);
-> 	} else {
-> 		…
+  https://git.kernel.org/pub/scm/linux/kernel/git/kbuild/linux.git kbuild-fixes
 
-Clock is statically described in the DT -> (IS_ERR(clk) == true)
+Thanks!
 
-> 	}
-> 	ret = gic_clockevent_init();
-> 	if (!ret && !IS_ERR(clk)) {
-> 	     ^^^            ^^^
+[1/1] kbuild: Split .modinfo out from ELF_DETAILS
+      https://git.kernel.org/kbuild/c/8678591b47469
 
-Adding the missing line:
+Please look out for regression or issue reports or other follow up
+comments, as they may result in the patch/series getting dropped or
+reverted. Patches applied to an "unstable" branch are accepted pending
+wider testing in -next and any post-commit review; they will generally
+be moved to the main branch in a week if no issues are found.
 
-	if (clk_notifier_register(clk, &gic_clk_nb) < 0)
-
-So the condition is 'the clockevent successfully registered' and 'the 
-clock is managed by the clock framework, IOW frequency can change'
-	--> register a notifier callback to track the freq changes
-
-> 
-> If this right or should with be changed to
-> 	if (!ret && !IS_ERR(ret)) {
-> or even better
-> 	if (!IS_ERR_OR_NULL(ret)) {
-> 
-> Philipp Hahn
+Best regards,
+-- 
+Nathan Chancellor <nathan@kernel.org>
 
 
